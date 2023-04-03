@@ -1,0 +1,5 @@
+17000107;1709195349;Anaguano Lema Jeronima Hermenegilda;Jornalero Agricola;NAYON;JANAGUANO@PUCE.EDU.EC
+999;1709338071;javier;Auxiliar de Gestion Academica;unidad;example@example.com
+;1709195349;Anaguano Lema Jeronima Hermenegilda;Jornalero Agricola;NAYON2;JANAGUANO@PUCE.EDU.EC
+;1709195349;Anaguano Lema Jeronima Hermenegilda;Jornalero Agricola;NAYON;JANAGUANO@PUCE.EDU.EC
+17001354;999999999;SANDOVAL SUÁREZ GALO RODRIGO;admin;unidad;example@example.com

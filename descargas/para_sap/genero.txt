@@ -1,0 +1,2 @@
+1;METAL
+9999999;prueba genero
