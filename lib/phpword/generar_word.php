@@ -148,11 +148,11 @@ class generar_word
     $fecha = strftime("%A %d de %B del %Y");
 
 
-    $seccion->addText("En la ciudad de Quito, ".$fecha.", comparece por una parte la Dirección de Control de Activos Fijos y seguros de la Pontificia Universidad Católica del Ecuador, y por otra parte ".strtoupper($parametros['to'])."; como benefactor, celebran y suscriben la presente acta de ENTREGA – DONACION del bien o los bienes detallado en el listado adjunto.", $fuente,$alineacionC);
+    $seccion->addText("En la ciudad de Quito, ".$fecha.", comparece por una parte la Dirección de Control de Activos Fijos y seguros de la Pontificia Universidad Católica del Ecuador, y por otra parte ".strtoupper($parametros['to'])."; con numero de Ruc ".$parametros['ci']." como benefactor, celebran y suscriben la presente acta de ENTREGA – DONACION del bien o los bienes detallado en el listado adjunto.", $fuente,$alineacionC);
 
     $seccion->addTextBreak(1);
 
-    $seccion->addText("La Dirección de Control de Activos Fijos y seguros de la Pontificia Universidad Católica del Ecuador en calidad de DONANTE, declara entregar en su totalidad del bien o los bienes antes descritos, la misma que cuenta con la autorización correspondiente.",$fuente,$alineacionC);
+    $seccion->addText(htmlspecialchars("La Dirección de Control de Activos Fijos y seguros de la Pontificia Universidad Católica del Ecuador en calidad de DONANTE, declara entregar en su totalidad del bien o los bienes antes descritos, la misma que cuenta con la autorización correspondiente."),$fuente,$alineacionC);
 
     $seccion->addTextBreak(1);
 
@@ -177,8 +177,27 @@ class generar_word
     $table->addCell(3000, $alineacionCenter)->addText(strtoupper($parametros['to']), $fuente,$alineacionCenter);
     $table->addRow();
     $table->addCell(3000, $alineacionCenter)->addText('Diana Espín Aguirre', $fuente,$alineacionCenter);
+    $table->addCell(3000, $alineacionCenter)->addText('', $fuente);
+    $table->addCell(3000, $alineacionCenter)->addText(strtoupper($parametros['ci']), $fuente,$alineacionCenter);
+    
+
+    /* $seccion->addImage(
+            '../../img/sello.jpeg',
+            array(
+            'width' => 150,
+            'height' =>100,
+            'positioning' => \PhpOffice\PhpWord\Style\Image::POSITION_ABSOLUTE,
+            'posHorizontal' => \PhpOffice\PhpWord\Style\Image::POSITION_ABSOLUTE,
+            'posVertical' => \PhpOffice\PhpWord\Style\Image::POSITION_ABSOLUTE,
+            'marginLeft' => 10,
+            'marginTop'=>-125,
+            'wrappingStyle'=> 'behind'
+           )
+        );
 
 
+
+*/
 
 
          $fuenteFooter = [
@@ -261,25 +280,30 @@ class generar_word
         $table = $seccion->addTable('estilo2');
         $table->addRow();
         $table->addCell(3000, $alineacionCenter)->addText('Asset',$fuente,$alineacionCenter);
+        $table->addCell(7000, $alineacionCenter)->addText('Orig Asset',$fuente,$alineacionCenter);
         $table->addCell(7000, $alineacionCenter)->addText('Activo',$fuente,$alineacionCenter);
         $table->addCell(2000, $alineacionCenter)->addText('RFID', $fuente,$alineacionCenter);
         $table->addCell(2000, $alineacionCenter)->addText('Serie', $fuente,$alineacionCenter);
         $table->addCell(2000, $alineacionCenter)->addText('Modelo', $fuente,$alineacionCenter);
-        $table->addCell(7000, $alineacionCenter)->addText('Custodio', $fuente,$alineacionCenter);
-        $table->addCell(7000, $alineacionCenter)->addText('Emplazamiento', $fuente,$alineacionCenter);
+        $table->addCell(7000, $alineacionCenter)->addText('Fecha Capitalizacion', $fuente,$alineacionCenter);
         $table->addCell(2000, $alineacionCenter)->addText('Valor', $fuente,$alineacionCenter);
 
         $total = 0;
         foreach ($lista as $key => $value) {
+            $compra = '';
+            if($value["FECHA_COMPRA"]!='')
+            {
+                $compra = $value["FECHA_COMPRA"]->format('Y-m-d');
+            }
             // print_r($value);die();
             $table->addRow();
             $table->addCell(3000)->addText($value["asset"],$fuente2);
+            $table->addCell(3000)->addText($value["origin_asset"],$fuente2);
             $table->addCell(7000)->addText($value["articulo"],$fuente2);
             $table->addCell(7000)->addText($value["TAG_UNIQUE"],$fuente2);
             $table->addCell(7000)->addText($value["SERIE"],$fuente2);
             $table->addCell(7000)->addText($value["MODELO"],$fuente2);
-            $table->addCell(7000)->addText($value["PERSON_NOM"],$fuente2);
-            $table->addCell(7000)->addText($value["DENOMINACION"],$fuente2);
+            $table->addCell(7000)->addText($compra,$fuente2);
             $table->addCell(2000)->addText(floatval(str_replace(',','', $value["valor"])),$fuente2,$alineacionRIGHT);
             $total = $total+number_format(floatval(str_replace(',','', $value["valor"])),2,'.','');
         }
@@ -287,7 +311,12 @@ class generar_word
         $cellColSpan = ['gridSpan' => 6, 'valign' => 'center'];
 
         $table->addRow();
-        $table->addCell(null, $cellColSpan);
+        $table->addCell(3000)->addText('',$fuente2);
+        $table->addCell(3000)->addText('',$fuente2);
+        $table->addCell(7000)->addText('',$fuente2);
+        $table->addCell(7000)->addText('',$fuente2);
+        $table->addCell(7000)->addText('',$fuente2);
+        $table->addCell(7000)->addText('',$fuente2);
         $table->addCell(7000, $alineacionCenter)->addText('Total', $fuente,$alineacionRIGHT);
         $table->addCell(2000, $alineacionCenter)->addText($total, $fuente,$alineacionRIGHT);
 
@@ -372,7 +401,7 @@ class generar_word
                 'marginTop' => \PhpOffice\PhpWord\Shared\Converter::cmToPixel(1.55),
                 )
         );
-        $seccion->addTextBreak(4);
+        $seccion->addTextBreak(2);
          # Títulos.
         $fuenteTitulo = [
             "name" => "Montserrat ExtraBold",
@@ -397,6 +426,13 @@ class generar_word
             "italic" => false,
             "bold" => false,
         ];
+        $bold = [
+            "name" => "Montserrat",
+            "size" => 10,
+            "color" => "000000",
+            "italic" => false,
+            "bold" => true,
+        ];
         $alineacionC = [
             "alignment" => Jc::BOTH,
             "lineHeight" => 1.5,
@@ -406,8 +442,8 @@ class generar_word
             "alignment" => Jc::CENTER,
             // "lineHeight" => 1.5,
         ];
-
-         $lista = $this->actas->lista_actas();
+        $usuario = $_SESSION['INICIO']['ID_USUARIO'];
+        $lista = $this->actas->lista_actas($usuario);
          $total = 0;
          foreach ($lista as $key => $value) {
             $total = $total+number_format(floatval(str_replace(',','', $value["valor"])),2,'.','');
@@ -431,32 +467,51 @@ class generar_word
             "size" => 11);
 
         $textrun = $seccion->addTextRun($alineacionC);
-        $textrun->addText(htmlspecialchars('En la ciudad de Quito, '.$fecha.', comparece por una parte la Dirección de Control de Activos Fijos y seguros de la Pontificia Universidad Católica del Ecuador, y por otra parte '),$fuente);
-        $textrun->addText(htmlspecialchars(strtoupper($parametros['cus']).', '),$subrayado);
-        $textrun->addText(htmlspecialchars('como custodio temporal, celebran y suscriben la presente acta de ENTREGA - RECEPCIÓN del bien o bienes  '),$fuente);
-         $textrun->addText(htmlspecialchars('detallado en el listado adjunto. '),$subrayado);
-         $textrun->addText(htmlspecialchars('Valorados en $'.$total.' de conformidad a lo establecido en los lineamientos internos de con-trol de Activos de la Universidad Católica del Ecuador debidamente etiquetados.'),$fuente);
+        $textrun->addText(htmlspecialchars('En la ciudad de Quito, '.$fecha.', comparece, por una parte, la Dirección de Control de Activos Fijos y seguros de la Pontificia Universidad Católica del Ecuador y, por otra parte '),$fuente);
+        $textrun->addText(htmlspecialchars(strtoupper($parametros['cus'])),$subrayado);
+         $textrun->addText(htmlspecialchars(', como '),$fuente);
+
+        $textrun->addText(htmlspecialchars('custodio temporal '),$bold);
+
+        $textrun->addText(htmlspecialchars(', celebran y suscriben la presente acta de ENTREGA - RECEPCIÓN del bien o bienes detallado en el listado adjunto '),$fuente);
+         $textrun->addText(htmlspecialchars('valorados en $'.$total.' de conformidad a lo establecido en los lineamientos internos de control de Activos de la Universidad Católica del Ecuador debidamente etiquetados.'),$fuente);
          $textrun->addTextBreak(2); 
          $textrun->addText(htmlspecialchars(strtoupper($parametros['cus']).', '),$subrayado); 
-         $textrun->addText(htmlspecialchars(', en calidad de custodio temporal, declara recibir en su totalidad del bien o los bienes antes descritos en perfectas condiciones los mismos que están ubicados en la '),$fuente);
-         $textrun->addText(htmlspecialchars(strtoupper($parametros['empla']).', '),$subrayado); 
-         $textrun->addText(htmlspecialchars('y acepta por medio de este instrumento, someterse a todas y cada una de las disposiciones.'),$fuente);
+         $textrun->addText(htmlspecialchars(', en calidad de '));
+        $textrun->addText(htmlspecialchars('custodio temporal '),$bold);
+
+        $textrun->addText(htmlspecialchars('declara recibir en su totalidad el bien o los bienes antes descritos, en condiciones de uso, los mismos que están localizados en '),$fuente);
+         $textrun->addText(htmlspecialchars(strtoupper($parametros['empla'])),$subrayado); 
+         $textrun->addText(htmlspecialchars(', y acepta, por medio de este instrumento, cumplir todas y cada una de las siguientes obligaciones:'),$fuente);
          
-        $seccion->addListItem(htmlspecialchars('Responsable de dar buen uso de los bienes asignados'));
+        $seccion->addListItem(htmlspecialchars('Dar buen uso de los bienes asignados'));
         $seccion->addListItem(htmlspecialchars('Comunicar y solicitar autorización para el movimiento dentro y fuera de la PUCE de los bienes.'));
         $seccion->addListItem(htmlspecialchars('Verificar el estado y ubicación de los bienes por constataciones aleatorias que se realizarán.'));
         $seccion->addListItem(htmlspecialchars('Notificar en caso de tener algún siniestro con los bienes.'));
         $seccion->addListItem(htmlspecialchars('Informar si la etiqueta de control de bienes PUCE se ha deteriorado o perdido.'));
-        $seccion->addListItem(htmlspecialchars('Informar donaciones que reciba la PUCE.'));
+        $seccion->addListItem(htmlspecialchars('Notificar oportunamente cuando se realice la entrega del bien o bienes al custodio definitivo responsable'));
 
 
         $textrun = $seccion->addTextRun($alineacionC);
-        $textrun->addText(htmlspecialchars('Es importante la notificación oportuna cuando se realice la entrega del bien o bienes al custodio definitivo responsable.'),$negrita);
-
-        
+        $textrun->addText(htmlspecialchars('De conformidad con el literal b) del artículo 45 y literal f) del artículo 46 del Código del Trabajo, el custodio autoriza a que se descuente de su rol de pagos o de su liquidación, según corresponda, el valor del bien o bienes, en caso de que, durante su periodo de custodia, ocurra la pérdida o destrucción del mismo o de los mismos, al igual que si sufrieran un deterioro mayor al generado por su uso normal.  '),$fuente);       
 
 
-        $seccion->addTextBreak(3);
+        $seccion->addTextBreak(1);
+
+          $seccion->addImage(
+            '../../img/sello.jpeg',
+            array(
+            'width' => 150,
+            'height' =>100,
+            'positioning' => \PhpOffice\PhpWord\Style\Image::POSITION_ABSOLUTE,
+            'posHorizontal' => \PhpOffice\PhpWord\Style\Image::POSITION_ABSOLUTE,
+            'posVertical' => \PhpOffice\PhpWord\Style\Image::POSITION_ABSOLUTE,
+            'marginLeft' => 10,
+            'marginTop'=>-40,
+            'wrappingStyle'=> 'behind'
+           )
+        );
+
 
         ///secion firmas 
 
@@ -481,8 +536,6 @@ class generar_word
         $table->addCell(3000, $alineacionCenter)->addText('Dir. De Control de Activo', $fuente,$alineacionCenter);
         $table->addCell(3000, $alineacionCenter)->addText('', $fuente);
         $table->addCell(3000, $alineacionCenter)->addText(strtoupper($parametros['cus']), $fuente,$alineacionCenter);
-        $table->addRow();
-        $table->addCell(3000, $alineacionCenter)->addText('Diana Espín Aguirre', $fuente,$alineacionCenter);
 
 
          $fuenteFooter = [
@@ -564,10 +617,12 @@ class generar_word
 
 
        
+          
         $documento->addTableStyle('estilo2',$estiloTabla2);
         $table = $seccion->addTable('estilo2');
         $table->addRow();
         $table->addCell(3000, $alineacionCenter)->addText('Asset',$fuente,$alineacionCenter);
+        $table->addCell(7000, $alineacionCenter)->addText('Orig Asset',$fuente,$alineacionCenter);
         $table->addCell(7000, $alineacionCenter)->addText('Activo',$fuente,$alineacionCenter);
         $table->addCell(2000, $alineacionCenter)->addText('RFID', $fuente,$alineacionCenter);
         $table->addCell(2000, $alineacionCenter)->addText('Serie', $fuente,$alineacionCenter);
@@ -581,6 +636,7 @@ class generar_word
             // print_r($value);die();
             $table->addRow();
             $table->addCell(3000)->addText($value["asset"],$fuente2);
+            $table->addCell(3000)->addText($value["origin_asset"],$fuente2);
             $table->addCell(7000)->addText($value["articulo"],$fuente2);
             $table->addCell(7000)->addText($value["TAG_UNIQUE"],$fuente2);
             $table->addCell(7000)->addText($value["SERIE"],$fuente2);
@@ -589,12 +645,18 @@ class generar_word
             $table->addCell(7000)->addText($value["DENOMINACION"],$fuente2);
             $table->addCell(2000)->addText(floatval(str_replace(',','', $value["valor"])),$fuente2,$alineacionRIGHT);
             $total = $total+number_format(floatval(str_replace(',','', $value["valor"])),2,'.','');
-       }
+        }
 
         $cellColSpan = ['gridSpan' => 6, 'valign' => 'center'];
 
         $table->addRow();
-        $table->addCell(null, $cellColSpan);
+        $table->addCell(3000)->addText('',$fuente2);
+        $table->addCell(3000)->addText('',$fuente2);
+        $table->addCell(7000)->addText('',$fuente2);
+        $table->addCell(7000)->addText('',$fuente2);
+        $table->addCell(7000)->addText('',$fuente2);
+        $table->addCell(7000)->addText('',$fuente2);
+        $table->addCell(7000)->addText('',$fuente2);
         $table->addCell(7000, $alineacionCenter)->addText('Total', $fuente,$alineacionRIGHT);
         $table->addCell(2000, $alineacionCenter)->addText($total, $fuente,$alineacionRIGHT);
 
@@ -682,7 +744,7 @@ class generar_word
                 'marginTop' => \PhpOffice\PhpWord\Shared\Converter::cmToPixel(1.55),
                 )
         );
-        $seccion->addTextBreak(4);
+        $seccion->addTextBreak(2);
          # Títulos.
         $fuenteTitulo = [
             "name" => "Montserrat ExtraBold",
@@ -720,6 +782,7 @@ class generar_word
 
 
 
+        $usuario = $_SESSION['INICIO']['ID_USUARIO'];
          $lista = $this->actas->lista_actas($usuario);
          $total = 0;
          foreach ($lista as $key => $value) {
@@ -746,25 +809,47 @@ class generar_word
             "size" => 11);
 
         $textrun = $seccion->addTextRun($alineacionC);
-        $textrun->addText(htmlspecialchars('En la ciudad de Quito, '.$fecha.', comparece por una parte la Dirección de Control de Activos Fijos y seguros de la Pontificia Universidad Católica del Ecuador, y por otra parte '),$fuente);
-        $textrun->addText(htmlspecialchars(strtoupper($parametros['cus']).' ,'),$subrayado);
+        $textrun->addText(htmlspecialchars('En la ciudad de Quito, '.$fecha.', comparece, por una parte, la Dirección de Control de Activos Fijos y seguros de la Pontificia Universidad Católica del Ecuador y, por otra parte, '),$fuente);
+        $textrun->addText(htmlspecialchars(strtoupper($parametros['cus'])),$subrayado);
 
-        $textrun->addText(htmlspecialchars('como custodio responsable del buen uso, cuidado y notificación, del bien  o bienes detallados en el listado adjunto valorados en $'.$total.' celebran y suscriben la presente acta de ENTREGA - RECEPCIÓN de la de conformidad a lo establecido en los lineamientos de Activos de la Universidad Católica del Ecuador, debidamente etiquetados.'),$fuente);
+        $textrun->addText(htmlspecialchars(', como '),$fuente);
+        $textrun->addText(htmlspecialchars('custodio responsable'),$subrayado);
+        $textrun->addText(htmlspecialchars(' del buen uso y cuidado del bien o bienes detallados en el listado adjunto valorados en $'.$total.' y debidamente etiquetados, quienes celebran y suscriben la presente acta de ENTREGA - RECEPCIÓN de conformidad a lo establecido en los lineamientos de Activos de la Universidad Católica del Ecuador.'),$fuente);
 
         $textrun = $seccion->addTextRun($alineacionC);
-        $textrun->addText(htmlspecialchars(strtoupper($parametros['cus']).' ,'),$subrayado);
-        $textrun->addText(htmlspecialchars('en calidad de custodio responsable, declara recibir en su totalidad del bien o los bienes antes descritos en condiciones de uso que están ubicados en '),$fuente);
-        $textrun->addText(htmlspecialchars(strtoupper($parametros['empla']).' ,'),$subrayado); 
-        $textrun->addText(htmlspecialchars('y acepta por medio de este instrumento, someterse a todas y cada una de las disposiciones.'),$fuente);
+        $textrun->addText(htmlspecialchars(strtoupper($parametros['cus'])),$subrayado);
+        $textrun->addText(htmlspecialchars(', en calidad de'),$fuente);
+        $textrun->addText(htmlspecialchars(' custodio responsable'),$subrayado);
+        $textrun->addText(htmlspecialchars(', declara recibir en su totalidad el bien o los bienes antes descritos, en condiciones de uso, que están localizados en '),$fuente);
+        $textrun->addText(htmlspecialchars(strtoupper($parametros['empla'])),$subrayado); 
+        $textrun->addText(htmlspecialchars(', y acepta, por medio de este instrumento, cumplir a todas y cada una de las siguientes obligaciones:'),$fuente);
 
-        $seccion->addListItem(htmlspecialchars('Responsable de dar buen uso de los bienes asignados'));
+        $seccion->addListItem(htmlspecialchars('Dar buen uso de los bienes asignados'));
         $seccion->addListItem(htmlspecialchars('Comunicar y solicitar autorización para el movimiento dentro y fuera de la PUCE de los bienes.'));
         $seccion->addListItem(htmlspecialchars('Verificar el estado y ubicación de los bienes por constataciones aleatorias que se realizarán.'));
         $seccion->addListItem(htmlspecialchars('Notificar en caso de tener algún siniestro con los bienes.'));
         $seccion->addListItem(htmlspecialchars('Informar si la etiqueta de control de bienes PUCE se ha deteriorado o perdido.'));
-        $seccion->addListItem(htmlspecialchars('Informar donaciones que reciba la PUCE.'));
+       
+        $textrun = $seccion->addTextRun($alineacionC);
+        $textrun->addText(htmlspecialchars('De conformidad con el literal b) del artículo 45 y literal f) del artículo 46 del Código del Trabajo, el custodio autoriza a que se descuente de su rol de pagos o de su liquidación, según corresponda, el valor del bien o bienes, en caso de que, durante su periodo de custodia, ocurra la pérdida o destrucción del mismo o de los mismos, al igual que si sufrieran un deterioro mayor al generado por su uso normal.  '),$fuente);       
 
-        $seccion->addTextBreak(3);
+
+        $seccion->addTextBreak(2);
+
+
+         $seccion->addImage(
+            '../../img/sello.jpeg',
+            array(
+            'width' => 150,
+            'height' =>100,
+            'positioning' => \PhpOffice\PhpWord\Style\Image::POSITION_ABSOLUTE,
+            'posHorizontal' => \PhpOffice\PhpWord\Style\Image::POSITION_ABSOLUTE,
+            'posVertical' => \PhpOffice\PhpWord\Style\Image::POSITION_ABSOLUTE,
+            'marginLeft' => 10,
+            'marginTop'=>-40,
+            'wrappingStyle'=> 'behind'
+           )
+        );
 
         ///secion firmas 
 
@@ -789,9 +874,6 @@ class generar_word
         $table->addCell(3000, $alineacionCenter)->addText('Dir. De Control de Activo', $fuente,$alineacionCenter);
         $table->addCell(3000, $alineacionCenter)->addText('', $fuente);
         $table->addCell(3000, $alineacionCenter)->addText(strtoupper($parametros['cus']), $fuente,$alineacionCenter);
-        $table->addRow();
-        $table->addCell(3000, $alineacionCenter)->addText('Diana Espín Aguirre', $fuente,$alineacionCenter);
-
 
          $fuenteFooter = [
             "name" => "Calibri",
@@ -872,10 +954,12 @@ class generar_word
 
 
        
+       
         $documento->addTableStyle('estilo2',$estiloTabla2);
         $table = $seccion->addTable('estilo2');
         $table->addRow();
         $table->addCell(3000, $alineacionCenter)->addText('Asset',$fuente,$alineacionCenter);
+        $table->addCell(7000, $alineacionCenter)->addText('Orig Asset',$fuente,$alineacionCenter);
         $table->addCell(7000, $alineacionCenter)->addText('Activo',$fuente,$alineacionCenter);
         $table->addCell(2000, $alineacionCenter)->addText('RFID', $fuente,$alineacionCenter);
         $table->addCell(2000, $alineacionCenter)->addText('Serie', $fuente,$alineacionCenter);
@@ -889,6 +973,7 @@ class generar_word
             // print_r($value);die();
             $table->addRow();
             $table->addCell(3000)->addText($value["asset"],$fuente2);
+            $table->addCell(3000)->addText($value["origin_asset"],$fuente2);
             $table->addCell(7000)->addText($value["articulo"],$fuente2);
             $table->addCell(7000)->addText($value["TAG_UNIQUE"],$fuente2);
             $table->addCell(7000)->addText($value["SERIE"],$fuente2);
@@ -897,12 +982,18 @@ class generar_word
             $table->addCell(7000)->addText($value["DENOMINACION"],$fuente2);
             $table->addCell(2000)->addText(floatval(str_replace(',','', $value["valor"])),$fuente2,$alineacionRIGHT);
             $total = $total+number_format(floatval(str_replace(',','', $value["valor"])),2,'.','');
-       }
+        }
 
         $cellColSpan = ['gridSpan' => 6, 'valign' => 'center'];
 
         $table->addRow();
-        $table->addCell(null, $cellColSpan);
+        $table->addCell(3000)->addText('',$fuente2);
+        $table->addCell(3000)->addText('',$fuente2);
+        $table->addCell(7000)->addText('',$fuente2);
+        $table->addCell(7000)->addText('',$fuente2);
+        $table->addCell(7000)->addText('',$fuente2);
+        $table->addCell(7000)->addText('',$fuente2);
+        $table->addCell(7000)->addText('',$fuente2);
         $table->addCell(7000, $alineacionCenter)->addText('Total', $fuente,$alineacionRIGHT);
         $table->addCell(2000, $alineacionCenter)->addText($total, $fuente,$alineacionRIGHT);
 
@@ -986,7 +1077,7 @@ class generar_word
                 'marginTop' => \PhpOffice\PhpWord\Shared\Converter::cmToPixel(1.55),
                 )
         );
-        $seccion->addTextBreak(4);
+        $seccion->addTextBreak(1);
          # Títulos.
         $fuenteTitulo = [
             "name" => "Montserrat ExtraBold",
@@ -1048,27 +1139,45 @@ class generar_word
             "size" => 11);
 
         $textrun = $seccion->addTextRun($alineacionC);
-        $textrun->addText(htmlspecialchars('En la ciudad de Quito, '.$fecha.' comparece por una parte la Dirección de Control de Activos Fijos y seguros de la Pontificia Universidad Católica del Ecuador, y por otra parte '),$fuente);
-        $textrun->addText(htmlspecialchars( strtoupper($parametros['cusS']).' , '),$subrayado);
-        $textrun->addText(htmlspecialchars(' Como Custodio Saliente del buen uso, cuidado y notificación, del bien o bienes detallados en el listado adjunto valorados en $ '.$total.'celebran y suscriben la presente acta de ENTREGA - RECEPCIÓN de la de conformidad a lo establecido en los lineamientos de Activos de la Universidad Católica del Ecuador, debidamente etiquetados.'),$fuente);
-         // $textrun->addText(htmlspecialchars( strtoupper($parametros['emplaS']).', '),$subrayado);
-         // $textrun->addText(htmlspecialchars('conjuntamente con personal del área y el delegado de la dirección de control de activos se ha ejecutado la revisión de los bienes, no se presentaron novedades debidamente etiquetados.'),$fuente);
-         $textrun->addTextBreak(2); 
-         $textrun->addText(htmlspecialchars(strtoupper($parametros['cusE']).', '),$subrayado); 
-         $textrun->addText(htmlspecialchars(' en calidad de  '),$fuente);
-         $textrun->addText(htmlspecialchars('custodio responsable, '),$subrayado); 
-         $textrun->addText(htmlspecialchars('declara recibir en su totalidad del bien o los bienes antes descritos en condiciones de uso que están ubicados en '),$fuente);
-         $textrun->addText(htmlspecialchars(strtoupper($parametros['emplaE']).', '),$subrayado);
-         $textrun->addText(htmlspecialchars(' y acepta por medio de este instrumento, someterse a todas y cada una de las disposiciones'),$fuente); 
+        $textrun->addText(htmlspecialchars('En la ciudad de Quito, '.$fecha.', comparece por una parte, la Dirección de Control de Activos Fijos y seguros de la Pontificia Universidad Católica del Ecuador y, por otra parte '),$fuente);
+        $textrun->addText(htmlspecialchars( strtoupper($parametros['cusS'])),$subrayado);
+        $textrun->addText(htmlspecialchars(' y ')); 
+        $textrun->addText(htmlspecialchars(strtoupper($parametros['cusE'])),$subrayado);
+        $textrun->addText(htmlspecialchars(' Como Custodio Saliente  y custodio Entrante, respectivamente, del buen uso, cuidado y notificación del bien o bienes detallados en el listado adjunto valorados en $ '.$total.' y debidamente etiquetados, quienes celebran y suscriben la presente acta de ENTREGA - RECEPCIÓN de conformidad a lo establecido en los lineamientos de Activos de la Universidad Católica del Ecuador. '),$fuente);
+         $textrun->addTextBreak(1);
 
-          $seccion->addListItem(htmlspecialchars('Responsable de dar buen uso de los bienes asignados'));
+         $textrun->addText(htmlspecialchars(strtoupper($parametros['cusE'])),$subrayado); 
+         $textrun->addText(htmlspecialchars(', en calidad de '),$fuente);
+         $textrun->addText(htmlspecialchars('custodio responsable'),$subrayado); 
+         $textrun->addText(htmlspecialchars(', declara recibir en su totalidad el bien o los bienes antes descritos, en condiciones de uso, que están localizados en '),$fuente);
+         $textrun->addText(htmlspecialchars(strtoupper($parametros['emplaE'])),$subrayado);
+         $textrun->addText(htmlspecialchars(', y acepta, por medio de este instrumento, cumplir todas y cada una de las disposiciones:'),$fuente); 
+
+        $seccion->addListItem(htmlspecialchars('Dar buen uso de los bienes asignados'));
         $seccion->addListItem(htmlspecialchars('Comunicar y solicitar autorización para el movimiento dentro y fuera de la PUCE de los bienes.'));
         $seccion->addListItem(htmlspecialchars('Verificar el estado y ubicación de los bienes por constataciones aleatorias que se realizarán.'));
         $seccion->addListItem(htmlspecialchars('Notificar en caso de tener algún siniestro con los bienes.'));
         $seccion->addListItem(htmlspecialchars('Informar si la etiqueta de control de bienes PUCE se ha deteriorado o perdido.'));
-        $seccion->addListItem(htmlspecialchars('Informar donaciones que reciba la PUCE.'));
 
-        $seccion->addTextBreak(1);
+        $textrun->addTextBreak(1);
+        $textrun = $seccion->addTextRun($alineacionC);
+        $textrun->addText(htmlspecialchars('De conformidad con el literal b) del artículo 45 y literal f) del artículo 46 del Código del Trabajo, el custodio autoriza a que se descuente de su rol de pagos o de su liquidación, según corresponda, el valor del bien o bienes, en caso de que, durante su periodo de custodia, ocurra la pérdida o destrucción del mismo o de los mismos, al igual que si sufrieran un deterioro mayor al generado por su uso normal.  '),$fuente);
+
+
+
+         $seccion->addImage(
+            '../../img/sello.jpeg',
+            array(
+            'width' => 150,
+            'height' =>100,
+            'positioning' => \PhpOffice\PhpWord\Style\Image::POSITION_ABSOLUTE,
+            'posHorizontal' => \PhpOffice\PhpWord\Style\Image::POSITION_ABSOLUTE,
+            'posVertical' => \PhpOffice\PhpWord\Style\Image::POSITION_ABSOLUTE,
+            'marginLeft' => 160,
+            'marginTop'=>10,
+            'wrappingStyle'=> 'behind'
+           )
+        );
 
         ///secion firmas 
         $estiloTabla = [
@@ -1095,10 +1204,6 @@ class generar_word
         $table->addRow();
         $table->addCell(3000, $alineacionCenter)->addText('', $fuente,$alineacionCenter);
         $table->addCell(3000, $alineacionCenter)->addText('Dir. De Control De Activo', $fuente,$alineacionCenter);
-        $table->addCell(3000, $alineacionCenter)->addText('', $fuente,$alineacionCenter);
-        $table->addRow();
-        $table->addCell(3000, $alineacionCenter)->addText('', $fuente,$alineacionCenter);
-        $table->addCell(3000, $alineacionCenter)->addText('Diana Espín Aguirre', $fuente,$alineacionCenter);
         $table->addCell(3000, $alineacionCenter)->addText('', $fuente,$alineacionCenter);
 
 
@@ -1180,11 +1285,12 @@ class generar_word
         ];
 
 
-       
+        
         $documento->addTableStyle('estilo2',$estiloTabla2);
         $table = $seccion->addTable('estilo2');
         $table->addRow();
         $table->addCell(3000, $alineacionCenter)->addText('Asset',$fuente,$alineacionCenter);
+        $table->addCell(7000, $alineacionCenter)->addText('Orig Asset',$fuente,$alineacionCenter);
         $table->addCell(7000, $alineacionCenter)->addText('Activo',$fuente,$alineacionCenter);
         $table->addCell(2000, $alineacionCenter)->addText('RFID', $fuente,$alineacionCenter);
         $table->addCell(2000, $alineacionCenter)->addText('Serie', $fuente,$alineacionCenter);
@@ -1198,6 +1304,7 @@ class generar_word
             // print_r($value);die();
             $table->addRow();
             $table->addCell(3000)->addText($value["asset"],$fuente2);
+            $table->addCell(3000)->addText($value["origin_asset"],$fuente2);
             $table->addCell(7000)->addText($value["articulo"],$fuente2);
             $table->addCell(7000)->addText($value["TAG_UNIQUE"],$fuente2);
             $table->addCell(7000)->addText($value["SERIE"],$fuente2);
@@ -1206,15 +1313,20 @@ class generar_word
             $table->addCell(7000)->addText($value["DENOMINACION"],$fuente2);
             $table->addCell(2000)->addText(floatval(str_replace(',','', $value["valor"])),$fuente2,$alineacionRIGHT);
             $total = $total+number_format(floatval(str_replace(',','', $value["valor"])),2,'.','');
-       }
+        }
 
         $cellColSpan = ['gridSpan' => 6, 'valign' => 'center'];
 
         $table->addRow();
-        $table->addCell(null, $cellColSpan);
+        $table->addCell(3000)->addText('',$fuente2);
+        $table->addCell(3000)->addText('',$fuente2);
+        $table->addCell(7000)->addText('',$fuente2);
+        $table->addCell(7000)->addText('',$fuente2);
+        $table->addCell(7000)->addText('',$fuente2);
+        $table->addCell(7000)->addText('',$fuente2);
+        $table->addCell(7000)->addText('',$fuente2);
         $table->addCell(7000, $alineacionCenter)->addText('Total', $fuente,$alineacionRIGHT);
         $table->addCell(2000, $alineacionCenter)->addText($total, $fuente,$alineacionRIGHT);
-
 
         $header = $seccion->addHeader();
         $header->addImage(
@@ -1478,10 +1590,12 @@ class generar_word
 
 
        
+      
         $documento->addTableStyle('estilo2',$estiloTabla2);
         $table = $seccion->addTable('estilo2');
         $table->addRow();
-        $table->addCell(4000, $alineacionCenter)->addText('Asset',$fuente,$alineacionCenter);
+        $table->addCell(3000, $alineacionCenter)->addText('Asset',$fuente,$alineacionCenter);
+        $table->addCell(7000, $alineacionCenter)->addText('Orig Asset',$fuente,$alineacionCenter);
         $table->addCell(7000, $alineacionCenter)->addText('Activo',$fuente,$alineacionCenter);
         $table->addCell(2000, $alineacionCenter)->addText('RFID', $fuente,$alineacionCenter);
         $table->addCell(2000, $alineacionCenter)->addText('Serie', $fuente,$alineacionCenter);
@@ -1494,21 +1608,28 @@ class generar_word
         foreach ($lista as $key => $value) {
             // print_r($value);die();
             $table->addRow();
-            $table->addCell(4000)->addText($value["asset"],$fuente2);
+            $table->addCell(3000)->addText($value["asset"],$fuente2);
+            $table->addCell(3000)->addText($value["origin_asset"],$fuente2);
             $table->addCell(7000)->addText($value["articulo"],$fuente2);
             $table->addCell(7000)->addText($value["TAG_UNIQUE"],$fuente2);
             $table->addCell(7000)->addText($value["SERIE"],$fuente2);
             $table->addCell(7000)->addText($value["MODELO"],$fuente2);
             $table->addCell(7000)->addText($value["PERSON_NOM"],$fuente2);
             $table->addCell(7000)->addText($value["DENOMINACION"],$fuente2);
-             $table->addCell(2000)->addText(floatval(str_replace(',','', $value["valor"])),$fuente2,$alineacionRIGHT);
+            $table->addCell(2000)->addText(floatval(str_replace(',','', $value["valor"])),$fuente2,$alineacionRIGHT);
             $total = $total+number_format(floatval(str_replace(',','', $value["valor"])),2,'.','');
-       }
+        }
 
         $cellColSpan = ['gridSpan' => 6, 'valign' => 'center'];
 
         $table->addRow();
-        $table->addCell(null, $cellColSpan);
+        $table->addCell(3000)->addText('',$fuente2);
+        $table->addCell(3000)->addText('',$fuente2);
+        $table->addCell(7000)->addText('',$fuente2);
+        $table->addCell(7000)->addText('',$fuente2);
+        $table->addCell(7000)->addText('',$fuente2);
+        $table->addCell(7000)->addText('',$fuente2);
+        $table->addCell(7000)->addText('',$fuente2);
         $table->addCell(7000, $alineacionCenter)->addText('Total', $fuente,$alineacionRIGHT);
         $table->addCell(2000, $alineacionCenter)->addText($total, $fuente,$alineacionRIGHT);
 

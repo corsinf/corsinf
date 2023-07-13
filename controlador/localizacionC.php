@@ -45,6 +45,12 @@ if(isset($_GET['numero_localizaciones']))
 	echo json_encode($controlador->buscar_localizacion_cant());
 }
 
+if(isset($_GET['localizacion_masivos']))
+{
+	$parametros = $_POST['parametros'];
+   echo json_encode($controlador->localizacion_masivos($parametros));
+}
+
 class localizacionC
 {
 	private $modelo;
@@ -179,6 +185,32 @@ class localizacionC
 	{
 		$datos = $this->modelo->buscar_localizacion_cant();
 		return $datos;
+	}
+
+	function localizacion_masivos($parametros)
+	{
+	 		$query = preg_replace("[\n|\r|\n\r| ]", "-",$parametros['localizacion']);
+			$query = explode('-',$query);
+			$query = array_filter($query);
+			$query = array_unique($query);
+
+			// print_r($query);die();
+
+			$lista = array();
+			$sms ='';
+			foreach ($query as $key => $value) {
+				 $cus = $this->modelo->buscar_localizacion_codigo($value);
+				 if(count($cus)>0)
+				 {
+				 	 $lista[] = array('id'=>$cus[0]['ID_LOCATION'],'text'=>$cus[0]['DENOMINACION']);
+				 }else
+				 {
+				 	 $sms.= 'Emplazamiento: '.$value.' No Encontrado ';
+				 }
+			}
+
+			return array('localizacion'=>$lista,'mensaje'=>$sms);
+	 		// print_r($query);die();
 	}
 }
 ?>

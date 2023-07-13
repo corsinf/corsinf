@@ -54,9 +54,9 @@ class usuariosM
 
 	function lista_usuarios($id=false,$query=false,$tipo=false,$ci=false,$email=false)
 	{
-		$sql="SELECT id_usuarios as 'id',ci_ruc as 'ci',nombres,apellidos as 'ape',nombres +' '+apellidos as 'nom', direccion as 'dir',telefono as 'tel',password as 'pass',email as 'email', T.ID_TIPO as 'idt',DESCRIPCION as 'tipo',foto,link_web as 'web',link_tw as 'tw',link_ins as 'ins',link_fb as 'fb' FROM USUARIO_TIPO_USUARIO UT
-			LEFT JOIN USUARIOS U ON UT.ID_USUARIO = U.id_usuarios 
-			INNER JOIN TIPO_USUARIO T ON UT.ID_TIPO_USUARIO = T.ID_TIPO
+		$sql="SELECT id_usuarios as 'id',ci_ruc as 'ci',nombres,apellidos as 'ape',nombres +' '+apellidos as 'nom', direccion as 'dir',telefono as 'tel',password as 'pass',email as 'email', T.ID_TIPO as 'idt',DESCRIPCION as 'tipo',foto FROM USUARIO_TIPO_USUARIO UT
+			RIGHT JOIN USUARIOS U ON UT.ID_USUARIO = U.id_usuarios 
+			LEFT JOIN TIPO_USUARIO T ON UT.ID_TIPO_USUARIO = T.ID_TIPO
 			WHERE 1 = 1 ";
 		if($id)
 		{

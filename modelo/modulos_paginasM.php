@@ -44,19 +44,29 @@ class modulos_paginasM
 
 	function paginas($query=false,$modulo=false)
 	{
-		$sql = "SELECT P.id_paginas,nombre_pagina,detalle_pagina,estado_pagina,link_pagina,icono_paginas,P.id_modulo,M.nombre_modulo,P.default_pag,subpagina 
-		FROM PAGINAS P
-		INNER JOIN ACCESOS AC ON P.id_paginas = AC.id_paginas
-		LEFT JOIN MODULOS M ON P.id_modulo = M.id_modulo WHERE 1 = 1  AND subpagina =0 AND AC.id_tipo_usu = '".$_SESSION['INICIO']['PERFIL']."' ";
-		if($query)
+		if($_SESSION['INICIO']['TIPO']!='DBA')
 		{
-			$sql.=" AND nombre_pagina like '%".$query."%'";
-		}
-		if($modulo)
+			$sql = "SELECT P.id_paginas,nombre_pagina,detalle_pagina,estado_pagina,link_pagina,icono_paginas,P.id_modulo,M.nombre_modulo,P.default_pag,subpagina 
+			FROM PAGINAS P
+			INNER JOIN ACCESOS AC ON P.id_paginas = AC.id_paginas
+			LEFT JOIN MODULOS M ON P.id_modulo = M.id_modulo WHERE estado_pagina = 'A'  AND subpagina = 0 AND AC.id_tipo_usu = '".$_SESSION['INICIO']['PERFIL']."' ";
+			if($query)
+			{
+				$sql.=" AND nombre_pagina like '%".$query."%'";
+			}
+			if($modulo)
+			{
+				$sql.=" AND M.id_modulo = '".$modulo."'";
+			}
+			$sql.='AND AC.Ver = 1';
+		}else
 		{
-			$sql.=" AND M.id_modulo = '".$modulo."'";
+			$sql = "SELECT P.id_paginas,nombre_pagina,detalle_pagina,estado_pagina,link_pagina,icono_paginas,P.id_modulo,M.nombre_modulo,P.default_pag,subpagina 
+			FROM PAGINAS P 
+			LEFT JOIN MODULOS M ON P.id_modulo = M.id_modulo
+			WHERE 1 = 1  AND subpagina =0 AND estado_pagina = 'A' AND P.id_modulo = '".$modulo."'";
+
 		}
-		$sql.='AND AC.Ver = 1';
 
 		// print_r($_SESSION['INICIO']);
 		// print_r($sql);die();
@@ -102,12 +112,21 @@ class modulos_paginasM
 	{
 		$sql = "SELECT * FROM ACCESOS A
 		INNER JOIN PAGINAS P ON A.id_paginas = P.id_paginas
+		INNER JOIN MODULOS M ON P.id_modulo = M.id_modulo
 		WHERE link_pagina ='".$pagina."' AND id_tipo_usu = '".$perfil."'";
 
 		// print_r($sql);die();
 		$datos = $this->db->datos($sql);
 		return $datos;
 
+	}
+
+
+	function modulos_sis()
+	{
+		$sql = "SELECT  * FROM MODULOS_SISTEMA WHERE 1=1";
+		$datos = $this->db->datos($sql);
+		return $datos;
 	}
 }
 

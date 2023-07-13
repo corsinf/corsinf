@@ -10,7 +10,7 @@ function restriccion()
     
        $.ajax({
          data:  {pagina:pag},
-         url:   '../controlador/loginC.php?restriccion=true',
+         url:   '../../controlador/loginC.php?restriccion=true',
          type:  'post',
          dataType: 'json',
          /*beforeSend: function () {   
@@ -25,7 +25,7 @@ function restriccion()
               $('#ver').val(response.ver);
               $('#editar').val(response.editar);                
               $('#eliminar').val(response.eliminar);
-              console.log(response);
+
               if(response.ver ==1 && response.editar==0)
               {
                 $('#btn_editar').hide();
@@ -35,9 +35,18 @@ function restriccion()
               {
                 $('#btn_eliminar').hide();
               }
+              // console.log(mod);
+              console.log(response.mod);
+              if(response.modulo != mod && response.pag!='index.php')
+              {
+                 Swal.fire('Se a cambiado de modulo','','info').then(function()
+                  {
+                     location.href = '../modulos_sistema.php';
+                  });
+              }
             }else
             {
-              location.href = 'pagina_error.php';
+               location.href = '../pagina_error.php';
             }
 
           } 

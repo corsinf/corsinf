@@ -50,5 +50,21 @@ class loginM
 		return $datos;
 	}
 
+	function modulos_sistema()
+	{
+		if($_SESSION['INICIO']['TIPO']=="DBA")
+		{
+			$sql = "SELECT id_modulos as 'id',nombre_modulo,link,icono FROM MODULOS_SISTEMA";
+		}else
+		{
+			$sql = "SELECT DISTINCT(modulo_sistema) as 'id',MS.nombre_modulo,MS.icono,MS.link  FROM ACCESOS A
+			INNER JOIN PAGINAS P ON A.id_paginas = P.id_paginas
+			INNER JOIN MODULOS_SISTEMA MS ON P.modulo_sistema = MS.id_modulos 
+			WHERE id_tipo_usu = '".$_SESSION['INICIO']['PERFIL']."'";
+		}
+		$datos = $this->db->datos($sql);
+		return $datos;
+	}
+
 }
 ?>

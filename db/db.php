@@ -16,7 +16,7 @@ class db
 	    $this->usuario = "sa";
 	    $this->password = "Tango456";  // en mi caso tengo contraseña pero en casa caso introducidla aquí.
 	    $this->servidor = "186.4.219.172, 1487";
-	    $this->database = "PUCE_2";
+	    $this->database = "PUCE_V3";
 	    // $this->database = "PUCE 2.0";
 
 		
@@ -92,7 +92,13 @@ class db
  			$campos.=$value['campo'].',';
  			if(is_numeric($value['dato']))
  			{
- 			  $valores.=$value['dato'].',';
+ 				if(isset($value['tipo']) && strtoupper($value['tipo'])=='STRING')
+ 				{
+ 					$valores.="'".$value['dato']."',";
+ 				}else
+ 				{
+	 			  $valores.=$value['dato'].',';
+ 				}
  			}else
  			{
  				$valores.="'".$value['dato']."',";
@@ -102,6 +108,8 @@ class db
  		$campos = substr($campos, 0, -1);
  		$valores = substr($valores, 0, -1);
  		$sql.='('.$campos.')values('.$valores.');'; 
+
+ 		// print_r($sql);die();
 		 $stmt = sqlsrv_query($conn, $sql);
 		if(!$stmt)
 		{

@@ -32,6 +32,15 @@ if(isset($_GET['menu_lateral']))
 {
   echo json_encode($controlador->menu_lateral());
 }
+if(isset($_GET['modulos_sistema']))
+{
+  echo json_encode($controlador->modulos_sistema());
+}
+if(isset($_GET['modulos_sistema_selected']))
+{
+	$_SESSION['INICIO']['MODULO_SISTEMA'] = $_POST['modulo_sistema'];
+	 echo json_encode(1);
+}
 if(isset($_GET['reseteo']))
 {
 	 $parametros = $_POST['parametros'];
@@ -98,28 +107,39 @@ class loginC
 		// print_r($proyecto);die();
 		$path = 'http://'.$server.'/'.$proyecto[0];
 		$p = explode('?',$pagina);
+		// print_r($p);die();
 		if(count($p)>0){$pagina= $p[0];}
 		$pagina = str_replace($path,'../', $pagina);
 
+		$pagina = explode('/',$pagina);
+		$num = count($pagina);
+		$pagina = $pagina[$num-1];
+
+		// print_r($pagina);die();
+		if(stripos($pagina,'#')!==false)
+		{
+			 $pagina = explode('#', $pagina);
+			 $pagina = $pagina[0];
+		}
+
 		$termino = substr($pagina,-1,1);
+		// print_r($termino);die();
 		if($termino=='#')
 		{
 			$pagina = substr($pagina,0,-1);
 		}
 
-		// print_r($pagina);die();
-
-
+		// print_r($pagina);
 		$accesos = $this->modulos->accesos($pagina,$_SESSION['INICIO']['PERFIL']);
 		if(count($accesos)>0)
 		{
-			$datos = array('ver'=>$accesos[0]['Ver'],'editar'=>$accesos[0]['editar'],'eliminar'=>$accesos[0]['eliminar'],'dba'=>'');
+			$datos = array('ver'=>$accesos[0]['Ver'],'editar'=>$accesos[0]['editar'],'eliminar'=>$accesos[0]['eliminar'],'dba'=>'','modulo'=>$accesos[0]['modulos_sistema'],'pag'=>$pagina,'sistema'=>$_SESSION['INICIO']['MODULO_SISTEMA']);
 			$_SESSION['INICIO']['EDITAR'] = $accesos[0]['editar'];
 			$_SESSION['INICIO']['ELIMINAR'] = $accesos[0]['eliminar'];
 			$_SESSION['INICIO']['VER'] = $accesos[0]['Ver'];
 		}else
 		{
-			$datos = array('ver'=>0,'editar'=>0,'eliminar'=>0,'dba'=>0);
+			$datos = array('ver'=>0,'editar'=>0,'eliminar'=>0,'dba'=>0,'modulo'=>0,'pag'=>$pagina);
 		}
 		// print_r($accesos);die();
 		return $datos;
@@ -129,7 +149,7 @@ class loginC
 	function menu_lateral()
 	{
 		$opciones = '';
-		$sin_modulo = $this->tipo->lista_modulos('sin modulo');
+		$sin_modulo = $this->tipo->lista_modulos('sin modulo',false,$_SESSION['INICIO']['MODULO_SISTEMA']);
 		if(count($sin_modulo)>0)
 		{
 		  $paginas = $this->modulos->paginas($query=false,$sin_modulo[0]['id']);
@@ -145,14 +165,19 @@ class loginC
 		}
 
 
-		$modulo = $this->tipo->lista_modulos();
+		$modulo = $this->tipo->lista_modulos(false,false,$_SESSION['INICIO']['MODULO_SISTEMA']);
+
+		// print_r($modulo);die();
+
 		if(count($modulo)>0)
 		{
 				foreach($modulo as $key => $value)
 				{
 						if($value['modulo']!='Sin modulo')
 						{
-							  $paginas = $this->modulos->paginas($query=false,$value['id']);							 
+							  $paginas = $this->modulos->paginas($query=false,$value['id']);						 
+
+						// print_r($paginas);die();
 								if(count($paginas)>0)
 								{
 									 $opciones.='<li>
@@ -160,13 +185,13 @@ class loginC
 									              <div class="parent-icon"><i class="bx">'.$value['icono'].'</i></div>
 									              <div class="menu-title">'.$value['modulo'].'</div>
 									            </a> <ul>';
-											foreach ($paginas as $key => $value) 
+											foreach ($paginas as $key2 => $value2) 
 											{
 												// print_r($value);die();
 											$opciones.= '<li>
-												            <a href="'.$value['link_pagina'].'" id="'.$value['id_paginas'].'">
-												              <i class="bx">'.$value['icono_paginas'].'</i>
-												              '.$value['nombre_pagina'].'
+												            <a href="'.$value2['link_pagina'].'" id="'.$value2['id_paginas'].'">
+												              <i class="bx">'.$value2['icono_paginas'].'</i>
+												              '.$value2['nombre_pagina'].'
 												            </a>
 												          </li>';
 												// $opciones.='<li> <a href="table-basic-table.html"><i class="bx bx-right-arrow-alt"></i>Basic Table</a></li>';
@@ -177,24 +202,53 @@ class loginC
 				}
 		}
 
+		// print_r($opciones);die();
+
 		return $opciones;
 	}
 
-// '<li>
-// 					<a class="has-arrow" href="javascript:;">
-// 						<div class="parent-icon"><i class="bx bx-grid-alt"></i>
-// 						</div>
-// 						<div class="menu-title">Tables</div>
-// 					</a>
-// 					<ul>
-// 						<li> <a href="table-basic-table.html"><i class="bx bx-right-arrow-alt"></i>Basic Table</a>
-// 						</li>
-// 						<li> <a href="table-datatable.html"><i class="bx bx-right-arrow-alt"></i>Data Table</a>
-// 						</li>
-// 					</ul>
-// 				</li>
-// '
-
+	function modulos_sistema()
+	{		
+		
+		$mod = '';
+		$datos = $this->login->modulos_sistema();
+		foreach ($datos as $key => $value) {
+			$num = rand(1, 5);
+		switch ($num) {
+		case '1':		
+			$estilo = 'bg-light-danger text-danger';
+			break;
+		case '2':
+			$estilo = 'bg-light-info text-info';
+			break;
+		case '3':
+		  $estilo = 'bg-light-success text-success';
+			break;
+		case '4':
+			$estilo = 'bg-light-warning text-warning';
+			break;
+		case '5':
+			$estilo = 'bg-light-primary text-primary';
+			break;
+		}
+				$mod.='
+					<div class="col">
+							<div class="card radius-10">
+								<div class="card-body" onclick="modulo_seleccionado(\''.$value['id'].'\',\''.$value['link'].'\')">
+									<div class="text-center">
+										<div class="widgets-icons rounded-circle mx-auto '.$estilo.' mb-3">'.$value['icono'].'
+										</div>
+										<h4 class="my-1">'.$value['nombre_modulo'].'</h4>
+										<p class="mb-0 text-secondary">INGRESAR</p>
+									</div>
+								</div>
+							</div>
+						</div>
+				';
+		}
+		return $mod;
+		 print_r($datos);die();
+	}
 
 	function resetear($parametros)
 	{

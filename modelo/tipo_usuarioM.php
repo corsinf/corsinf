@@ -61,9 +61,9 @@ class tipo_usuarioM
 	}
 
 
-	function lista_modulos($query=false,$id=false)
+	function lista_modulos($query=false,$id=false,$modulo_sis=false)
 	{
-		$sql = "SELECT id_modulo as 'id',nombre_modulo as 'modulo',icono_modulo as 'icono',descripcion_modulo as 'detalle' FROM modulos WHERE 1=1";
+		$sql = "SELECT id_modulo as 'id',nombre_modulo as 'modulo',icono_modulo as 'icono',descripcion_modulo as 'detalle',modulos_sistema FROM modulos WHERE 1=1";
 		if($query)
 		{
 			$sql.=" AND nombre_modulo LIKE '%".$query."%'";
@@ -72,11 +72,21 @@ class tipo_usuarioM
 		{
 			$sql.=" AND id_modulo = '".$id."'";
 		}
+		if($modulo_sis)
+		{
+			$sql.=" AND modulos_sistema = '".$modulo_sis."'";
+		}
 		$sql.=" ORDER BY nombre_modulo ASC";
 		// print_r($sql);die();
 		$datos = $this->db->datos($sql);
 		return $datos ;
+	}
 
+	function modulos_sis()
+	{
+		$sql = "SELECT  * FROM MODULOS_SISTEMA WHERE 1=1";
+		$datos = $this->db->datos($sql);
+		return $datos;
 	}
 
 	function lista_paginas($query =false,$modulo=false,$idpag=false)
@@ -244,6 +254,26 @@ class tipo_usuarioM
 		$datos = $this->db->datos($sql);
 		return $datos;
 	}
+
+	function eliminar_usuario_tipo($id)
+	{
+		$sql = "DELETE FROM  USUARIO_TIPO_USUARIO WHERE ID='".$id."'";
+		// print_r($sql);die();
+		$datos = $this->db->sql_string_cod_error($sql);
+		if($datos==1)
+		{
+			return 1;
+		}else if($datos=='547')
+		{
+			return -2;
+		}else
+		{
+			return -1;
+		}
+		return $datos;
+
+	}
+
 
 
 }

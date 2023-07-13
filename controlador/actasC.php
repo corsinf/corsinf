@@ -86,9 +86,51 @@ class actasC
 	function lista_articulos($parametros)
 	{
 		// print_r($parametros);die();
-		$query = $parametros['query'];
+		$query = $parametros['query'];		
+		$masivo = $parametros['masivo'];
+		$masivo_loc = $parametros['masivo_lo'];
+		$masivo_cus = $parametros['masivo_cu'];
+		if (strpos($query, ',') !== false) {
+   
+			$masivo = 1;
+		}
+		if($parametros['masivo']==1)
+		{
+			$query = preg_replace("[\n|\r|\n\r| ]", "-",$parametros['query2']);
+			$query = explode('-',$query);
+			$query = array_filter($query);
+			$query2 = '';
+			foreach ($query as $key => $value) {
+				$query2.= "'".$value."',";
+			}
+			$query2 = substr($query2,0,-1);
+			$query = $query2;
+		}
+		
 		$loc = $parametros['localizacion'];
+		if($parametros['masivo_lo']==1)
+		{
+			$lista_loc = $parametros['empla_masivo'];
+			$lista = ''; 
+			foreach ($lista_loc as $key => $value) {
+				$lista.= "'".$value."',";
+			}
+			$lista = substr($lista,0,-1);
+			// print_r($lista);die();
+			$loc = $lista;
+		}
 		$cus = $parametros['custodio'];
+		if($parametros['masivo_cu']==1)
+		{
+			$lista_cus = $parametros['custodio_masivo'];
+			$lista = ''; 
+			foreach ($lista_cus as $key => $value) {
+				$lista.= "'".$value."',";
+			}
+			$lista = substr($lista,0,-1);
+			// print_r($lista);die();
+			$cus = $lista;
+		}
 		$pag = $parametros['pag'];
 		$exacto=0;
 		$bajas = false;$terceros=false;$patrimoniales = false;
@@ -123,19 +165,39 @@ class actasC
 			$terceros = 1;
 		}
 
+		// print_r($loc);
 		// print_r($parametros);die();	
-		$datos = $this->modelo->cantidad_registros($query,$loc,$cus,false,false,$bajas,$patrimoniales,$terceros);
+		$datos = $this->modelo->cantidad_registros($query,$loc,$cus,false,false,$bajas,$patrimoniales,$terceros,$asset,$exacto,$masivo,$masivo_cus,$masivo_loc);
 		$total_reg = $datos[0]['numreg'];
 		if($total_reg >25)
 		{		
-		   $datos = $this->modelo->lista_articulos($query,$loc,$cus,$pag,false,$exacto,$asset,$bajas,$terceros,$patrimoniales);
+			$pag=false;
+		   $datos = $this->modelo->lista_articulos($query,$loc,$cus,$pag,false,$exacto,$asset,$bajas=false,$terceros=false,$patrimoniales=false,false,false,$masivo,$masivo_cus,$masivo_loc);
+		   if($bajas)
+		   {
+		   	$bajas = $this->modelo->lista_articulos($query,$loc,$cus,$pag,false,$exacto,$asset,$bajas,$terceros=false,$patrimoniales=false,false,false,$masivo,$masivo_cus,$masivo_loc);
+		   	array_merge($datos,$bajas);
+		   }
+		   if($terceros)
+		   {
+		   	$terce = $this->modelo->lista_articulos($query,$loc,$cus,$pag,false,$exacto,$asset,$bajas=false,$terceros,$patrimoniales=false,false,false,$masivo,$masivo_cus,$masivo_loc);
+		   	array_merge($datos,$terce);
+		   }
+		   if($patrimoniales)
+		   {
+		   	// print_r($patrimoniales);die();
+		   	$patri = $this->modelo->lista_articulos($query,$loc,$cus,$pag,false,$exacto,$asset,$bajas=false,$terceros=false,$patrimoniales,false,false,$masivo,$masivo_cus,$masivo_loc);
+		   	array_merge($datos,$patri);
+		   }
+
+		   // print_r($datos);die();
 		}else
 		{
-		   $datos = $this->modelo->lista_articulos($query,$loc,$cus,false,false,$exacto,$asset,$bajas,$terceros,$patrimoniales);
+		   $datos = $this->modelo->lista_articulos($query,$loc,$cus,false,false,$exacto,$asset,$bajas,$terceros,$patrimoniales,false,false,$masivo,$masivo_cus,$masivo_loc);
 		}
 		
 		//$datos = array_map(array($this->cod_global, 'transformar_array_encode'), $datos);
-		$datos2 = array('datos'=>$datos,'cant'=>$total_reg);
+		$datos2 = array('datos'=>$datos,'cant'=>$total_reg,'buscar'=>$query);
 
 		// print_r($datos2);die();
 		return $datos2;
@@ -402,12 +464,29 @@ class actasC
 
 	function add_masivo($parametros)
 	{
+		// print_r($parametros);die();
 		$usuario = $_SESSION['INICIO']['ID_USUARIO'];
 		$query = $parametros['query'];
 		$loc = $parametros['localizacion'];
 		$cus = $parametros['custodio'];
-		$pag = $parametros['pag'];
-		$exacto=0;
+		$pag = $parametros['pag'];	
+		$masivo = $parametros['masivo'];
+		if (strpos($query, ',') !== false) {
+   
+			$masivo = 1;
+		}
+		if($parametros['masivo']==1)
+		{
+			$query = preg_replace("[\n|\r|\n\r| ]", "-",$parametros['query2']);
+			$query = explode('-',$query);
+			$query = array_filter($query);
+			$query2 = '';
+			foreach ($query as $key => $value) {
+				$query2.= "'".$value."',";
+			}
+			$query2 = substr($query2,0,-1);
+			$query = $query2;
+		}
 		if(isset($parametros['exacto']) && $parametros['exacto']=='true')
 		{
 		 $exacto = 1;
@@ -425,7 +504,7 @@ class actasC
 		{
 			$asset = 0;
 		}
-		$datosart = $this->modelo->lista_articulos($query,$loc,$cus,false,false,$exacto,$asset);
+		$datosart = $this->modelo->lista_articulos($query,$loc,$cus,false,false,$exacto,$asset,false,false,false,false,false,$masivo);
 
 
 		$respuesta = 1;

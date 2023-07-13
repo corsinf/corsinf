@@ -55,7 +55,7 @@
 
            }else if(response == 1)
            {
-             window.location.href = "vista/index.php";
+             window.location.href = "vista/modulos_sistema.php";
            }        
          }
        });

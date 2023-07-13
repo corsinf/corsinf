@@ -1,4 +1,4 @@
-<?php include('./header2.php'); ?>
+<?php include('../cabeceras/header3.php'); ?>
 <div class="content">
     <br>
     <section class="content">
@@ -9,5 +9,5 @@
     </section>
     <!-- /.content -->
   </div>
-<?php include('./footer.php'); ?>
+<?php include('../cabeceras/footer.php'); ?>
      

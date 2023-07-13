@@ -15,7 +15,8 @@ if(isset($_GET['reporte_pdf_total']))
 }
 if(isset($_GET['reporte_pdf_bajas']))
 {
-	$reporte->reporte_normal_bajas();
+	$parametros = $_GET;
+	$reporte->reporte_normal_bajas($parametros);
 }
 if(isset($_GET['reporte_pdf_terceros']))
 {
@@ -331,52 +332,107 @@ class Reporte_pdf
 		$tablaHTML[0]['datos']=array('Tag','Decripcion','Modelo','Serie','Localizacion','Custodio','Marca','Estado','Genero','Color','Observacion','Fecha inventario');
 		$tablaHTML[0]['estilo']='BI';
 		$tablaHTML[0]['borde'] = '1';
-		$datos = $this->articulo->lista_articulos();
 
-		foreach ($datos as $key => $value) {
-			$fecha='';
-			if($value['fecha_in'] !='')
-			{
-				$fecha =$value['fecha_in']->format('Y-m-d'); 
+
+		$bloque = 5000;
+		$inicio = 0;
+		$total = $this->articulo->total_activos();
+		$total_act = ($total[0]['total']/$bloque);
+
+		while ($total_act>0) {
+			$limite = $inicio.'-'.$bloque;
+
+			$datos = $this->articulo->lista_articulos_sap_codigos($query=false,$loc=false,$cus=false,$limite);
+			foreach ($datos as $key => $value) {
+				$fecha='';
+				if($value['FECHA_INV_DATE'] !='')
+				{
+					$fecha =$value['FECHA_INV_DATE']->format('Y-m-d'); 
+				}
+				$tablaHTML[$pos]['medidas']=$tablaHTML[0]['medidas'];
+			    $tablaHTML[$pos]['alineado']=$tablaHTML[0]['alineado'];
+			    $tablaHTML[$pos]['datos']=array($value['TAG_SERIE'],$value['DESCRIPT'],$value['MODELO'],$value['SERIE'],$value['EMPLAZAMIENTO'],$value['PERSON_NOM'],$value['marca'],$value['estado'],$value['genero'],$value['color'],$value['OBSERVACION'],$fecha);
+			    $tablaHTML[$pos]['estilo']='I';
+			    $tablaHTML[$pos]['borde'] = 'T';  
+			    $pos+=1;  
 			}
-			$tablaHTML[$pos]['medidas']=$tablaHTML[0]['medidas'];
-		    $tablaHTML[$pos]['alineado']=$tablaHTML[0]['alineado'];
-		    $tablaHTML[$pos]['datos']=array($value['tag'],$value['nom'],$value['modelo'],$value['serie'],$value['localizacion'],$value['custodio'],$value['marca'],$value['estado'],$value['genero'],$value['color'],$value['OBSERVACION'],$fecha);
-		    $tablaHTML[$pos]['estilo']='I';
-		    $tablaHTML[$pos]['borde'] = 'T';  
-		    $pos+=1;  
-		}		
+				$total_act--;
+				$inicio = $inicio+$bloque;
+				unset($datos);		
+		}
 
 		$this->pdf->cabecera_reporte_MC($titulo,$tablaHTML,$contenido=false,$image=false,'fecha','fecha',$sizetable,true,$sal_hea_body=30,$orientacion='H');
 
 
 	}
 
-	function reporte_normal_bajas()
+	function reporte_normal_bajas($parametros)
 	{
-		$sizetable = 8;
+		$desde = false;$hasta = false;
+		if(isset($parametros['desde']) && $parametros['desde']!='' && isset($parametros['hasta']) && $parametros['hasta']!='')
+		{
+			$desde = str_replace('-','',$parametros['desde']);
+			$hasta = str_replace('-','',$parametros['hasta']);
+		}
+		$sizetable = 3.8;
 		$titulo="R E P O R T E   D E   B A J A S";		
-		$pos=1;
+		$pos=3;
 
 		$tablaHTML = array();
-		$tablaHTML[0]['medidas']=array(20,49,22,20,28,28,23,16,16,16,20,20);
-		$tablaHTML[0]['alineado']=array('L','L','L','L','L','L','L','L','L','L','L');
-		$tablaHTML[0]['datos']=array('Tag','Decripcion','Modelo','Serie','Localizacion','Custodio','Marca','Estado','Genero','Color','Observacion','Fecha inventario');
-		$tablaHTML[0]['estilo']='BI';
-		$tablaHTML[0]['borde'] = '1';
-		$datos = $this->articulo->lista_articulos($query=false,$loc=false,$cus=false,$pag=false,$whereid=false,$exacto=false,$asset=false,$bajas=1,$terceros=false,$patrimoniales=false);
+		$tablaHTML[0]['medidas']=array(100);
+		$tablaHTML[0]['alineado']=array('C');
+		$tablaHTML[0]['datos']=array('REPORTE DE BAJAS');
+		$tablaHTML[0]['estilo']='B';
+		$tablaHTML[0]['borde'] = 0;
+
+
+		$tablaHTML[1]['medidas']=array(7,8,6,13,13,11,11,12,9,6,6,10,13,8,13,6,6,6,6,9,6,9,9,6,8,5,9,9,9,9,7,7,10);
+		$tablaHTML[1]['alineado']=array('L','L','L','L','L','L','L','L','L','L','L','L','L','L','L','L','L','L','L','L','L','L','L','L','L','L','L','L','L','L','L');
+		$tablaHTML[1]['datos']=array('BUKRS','ANLN1','ANLN2','TXT50','TXTA50','ANLHTXT','SERNR','INVNR','IVDAT','MERGE','MEINS','STORT','KTEXT',	'PERNR','PERNP_TXT','ORD41','ORD42','ORD43','ORD44','GDLGRP','ANLUE','AIBN1','AKTIV','URWRT','','BAJA','ACTUALIZADO POR','BLDAT','BUDAT','BZDAT','MONAT','BWASL','');
+		$tablaHTML[1]['estilo']='B';
+		$tablaHTML[1]['borde'] = '1';
+
+		$tablaHTML[2]['medidas']=$tablaHTML[1]['medidas'];
+		$tablaHTML[2]['alineado']=$tablaHTML[1]['alineado'];
+		$tablaHTML[2]['datos']=array('COMPA','ASSET','SUBNU','DESCRIPCION','DESCRIPCION 2','MODELO','SERIE','RFID','ULTI. INVE.','CANT','UNI.MED','COD EMPL.','EMPLAZAMIEN.','ID CUS','CUSTODIO','MARCA','ESTAD','GENER','COLOR','PROYECTO',	'SUPRA','TAG ANTI','FEC COMP','VALOR','OBSER.','BAJA','ACTUALIZADO POR','FEC BAJA','FEC. CON','FEC. REF','PERIO','CLAS MOV','MOVIMIENTO');
+		$tablaHTML[2]['estilo']='B';
+		$tablaHTML[2]['borde'] = '1';
+		$datos = $this->articulo->lista_articulos_sap_codigos($query=false,$loc=false,$cus=false,$pag=false,$whereid=false,$mes=false,$desde,$hasta,$bajas=1,$terceros=false,$patrimoniales=false);
 
 		foreach ($datos as $key => $value) {
+
+			// print_r($value);die();
 			$fecha='';
-			if($value['fecha_in'] !='')
+			$fecha_compra = '';
+			$fecha_baja = '';
+			$fecha_conta = '';
+			$fecha_ref = '';
+			if($value['FECHA_INV_DATE'] !='')
 			{
-				$fecha =$value['fecha_in']->format('Y-m-d'); 
+				$fecha =$value['FECHA_INV_DATE']->format('Y-m-d'); 
 			}
-			$tablaHTML[$pos]['medidas']=$tablaHTML[0]['medidas'];
-		    $tablaHTML[$pos]['alineado']=$tablaHTML[0]['alineado'];
-		    $tablaHTML[$pos]['datos']=array($value['tag'],$value['nom'],$value['modelo'],$value['serie'],$value['localizacion'],$value['custodio'],$value['marca'],$value['estado'],$value['genero'],$value['color'],$value['OBSERVACION'],$fecha);
+			if($value['FECHA_INV_DATE'] !='')
+			{
+				$fecha_compra =$value['ORIG_ACQ_YR']->format('Y-m-d'); 
+			}
+			if($value['FECHA_BAJA'] !='')
+			{
+				$fecha_baja =$value['FECHA_BAJA']->format('Y-m-d'); 
+			}
+			if($value['FECHA_CONTA'] !='')
+			{
+				$fecha_conta =$value['FECHA_CONTA']->format('Y-m-d'); 
+			}
+			if($value['FECHA_REFERENCIA'] !='')
+			{
+				$fecha_ref =$value['FECHA_REFERENCIA']->format('Y-m-d'); 
+			}
+
+			$tablaHTML[$pos]['medidas']=$tablaHTML[1]['medidas'];
+		    $tablaHTML[$pos]['alineado']=$tablaHTML[1]['alineado'];
+		    $tablaHTML[$pos]['datos']=array($value['COMPANYCODE'],$value['TAG_SERIE'],$value['SUBNUMBER'],$value['DESCRIPT'],$value['DESCRIPT2'],$value['MODELO'],$value['SERIE'],$value['TAG_UNIQUE'],$fecha,$value['QUANTITY'],$value['BASE_UOM'],$value['EMPLAZAMIENTO'],$value['DENOMINACION'],$value['PERSON_NO'],$value['PERSON_NOM'],$value['marca'],$value['estado'],$value['genero'],$value['color'],$value['criterio'],$value['ASSETSUPNO'],$value['TAG_ANT'],$fecha_compra,$value['ORIG_VALUE'],$value['OBSERVACION'],$value['BAJAS'],$value['ACTU_POR'],$fecha_baja,$fecha_conta,$fecha_ref,$value['PERIODO'],$value['CLASE_MOVIMIENTO'],$value['MOVIMIENTO']);
 		    $tablaHTML[$pos]['estilo']='I';
-		    $tablaHTML[$pos]['borde'] = 'T';  
+		    $tablaHTML[$pos]['borde'] = '1';  
 		    $pos+=1;  
 		}		
 

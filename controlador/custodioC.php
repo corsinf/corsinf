@@ -59,6 +59,12 @@ if(isset($_GET['numero_custodios']))
    echo json_encode($controlador->numero_custodios());
 }
 
+if(isset($_GET['custodios_masivos']))
+{
+	$parametros = $_POST['parametros'];
+   echo json_encode($controlador->custodios_masivos($parametros));
+}
+
 class custodioC
 {
 	private $modelo;
@@ -282,6 +288,28 @@ class custodioC
  {
  	 $datos = $this->modelo->lista_custodio_count();
  	 return $datos;
+ }
+  function custodios_masivos($parametros)
+ {
+ 		$query = preg_replace("[\n|\r|\n\r| ]", "-",$parametros['custodios']);
+		$query = explode('-',$query);
+		$query = array_unique($query);
+
+		$lista = array();
+		$sms ='';
+		foreach ($query as $key => $value) {
+			 $cus = $this->modelo->buscar_custodio_todo($id=false,$value,$person_nom=false);
+			 if(count($cus)>0)
+			 {
+			 	 $lista[] = array('id'=>$cus[0]['ID_PERSON'],'text'=>$cus[0]['PERSON_NOM']);
+			 }else
+			 {
+			 	 $sms.= 'Custodio con codigo: '.$value.'No Encontrado \n ';
+			 }
+		}
+
+		return array('custodios'=>$lista,'mensaje'=>$sms);
+ 		// print_r($query);die();
  }
 
 

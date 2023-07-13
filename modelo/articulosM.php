@@ -82,6 +82,11 @@ class articulosM
 			if($bajas)
 			{
 				$sql.=' AND  BAJAS = 1';
+
+				if($desde  && $hasta)
+				{
+					$sql.=" AND FECHA_BAJA BETWEEN '".$desde."' AND '".$hasta."'";
+				}
 			}
 			if($terceros)
 			{
@@ -91,9 +96,13 @@ class articulosM
 			{
 				$sql.=' AND  PATRIMONIALES = 1';
 			}
-			if($desde  && $hasta)
+
+			if(!$bajas)
 			{
-				$sql.=' AND FECHA_INV_DATE BETWEEN '.$desde.' AND '.$hasta;
+				if($desde  && $hasta)
+				{
+					$sql.=' AND FECHA_INV_DATE BETWEEN '.$desde.' AND '.$hasta;
+				}
 			}
 			$sql.= " ORDER BY id_plantilla ";
 			if($pag)
@@ -338,9 +347,65 @@ class articulosM
 	}
 
 
-	function lista_articulos_sap_codigos($query=false,$loc,$cus,$pag=false,$whereid=false,$mes=false,$desde=false,$hasta=false,$bajas=false,$terceros=false,$patrimoniales=false)
+	function total_activos($query=false,$loc=false,$cus=false,$pag=false,$whereid=false,$desde=false,$hasta=false,$bajas=false,$terceros=false,$patrimoniales=false)
 	{
-		$sql = "SELECT id_plantilla,COMPANYCODE,A.TAG_SERIE,DESCRIPT,DESCRIPT2,MODELO,SERIE,EMPLAZAMIENTO,L.DENOMINACION,PE.PERSON_NO,PE.PERSON_NOM,M.CODIGO as 'marca',E.CODIGO as 'estado',G.CODIGO as 'genero',C.CODIGO as 'color',FECHA_INV_DATE,ASSETSUPNO,ASSETSUPNO,TAG_ANT,QUANTITY,BASE_UOM,ORIG_ASSET,ORIG_ACQ_YR,ORIG_VALUE,CARACTERISTICA,PROYECTO.programa_financiacion as 'criterio',TAG_UNIQUE,SUBNUMBER,OBSERVACION,IMAGEN,ACTU_POR,BAJAS,FECHA_BAJA,FECHA_CONTA,FECHA_REFERENCIA,PERIODO,P.CLASE_MOVIMIENTO,CM.DESCRIPCION AS 'MOVIMIENTO'  FROM PLANTILLA_MASIVA P
+		$sql="SELECT COUNT(*) as 'total' FROM PLANTILLA_MASIVA P
+			LEFT JOIN ASSET A ON P.ID_ASSET = A.ID_ASSET
+			LEFT JOIN LOCATION L ON P.LOCATION = L.ID_LOCATION
+			LEFT JOIN PERSON_NO PE ON P.PERSON_NO = PE.ID_PERSON
+			LEFT JOIN MARCAS M ON P.EVALGROUP1 = M.ID_MARCA
+			LEFT JOIN ESTADO E ON P.EVALGROUP2 = E.ID_ESTADO
+			LEFT JOIN GENERO G ON P.EVALGROUP3 = G.ID_GENERO
+			LEFT JOIN COLORES C ON P.EVALGROUP4 = C.ID_COLORES
+			LEFT JOIN PROYECTO ON P.EVALGROUP5 = PROYECTO.ID_PROYECTO
+			LEFT JOIN CLASE_MOVIMIENTO CM ON P.CLASE_MOVIMIENTO = CM.CODIGO
+			WHERE 1=1 ";
+
+			if($query)
+			{
+			  $sql.="A.TAG_SERIE +' '+P.DESCRIPT LIKE '%".$query."%' ";
+			}
+			if($loc !='')
+			{
+				$sql.=" AND L.ID_LOCATION = '".$loc."' ";
+			}
+			if($cus != '')
+			{
+				$sql.=" AND PE.ID_PERSON = '".$cus."' ";
+			}
+			if($whereid)
+			{
+				$sql.='  AND id_plantilla = '.$whereid.' ';
+			}
+			if($desde!='' && $hasta!='')
+			{
+				$sql.=" AND FECHA_INV_DATE BETWEEN '".$desde."' AND '".$hasta."' ";
+			}
+			if($bajas)
+			{
+				$sql.=" AND BAJAS =1";
+				if($desde  && $hasta)
+				{
+					$sql.=" AND FECHA_BAJA BETWEEN '".$desde."' AND '".$hasta."'";
+				}
+			}
+			if($patrimoniales)
+			{
+				$sql.=" AND PATRIMONIALES = '1' ";
+			}
+			if($terceros)
+			{
+				$sql.=" AND TERCEROS = '1' ";
+			}
+			// print_r($sql);die();
+			$datos = $this->db->datos($sql);
+			// print_r($datos);die();
+			return $datos;
+	}
+
+	function lista_articulos_sap_codigos($query=false,$loc=false,$cus=false,$pag=false,$whereid=false,$mes=false,$desde=false,$hasta=false,$bajas=false,$terceros=false,$patrimoniales=false)
+	{
+		$sql = "SELECT id_plantilla,COMPANYCODE,A.TAG_SERIE,DESCRIPT,DESCRIPT2,MODELO,SERIE,EMPLAZAMIENTO,L.DENOMINACION,PE.PERSON_NO,PE.PERSON_NOM,M.CODIGO as 'marca',E.CODIGO as 'estado',G.CODIGO as 'genero',C.CODIGO as 'color',FECHA_INV_DATE,ASSETSUPNO,ASSETSUPNO,TAG_ANT,QUANTITY,BASE_UOM,ORIG_ASSET,ORIG_ACQ_YR,ORIG_VALUE,CARACTERISTICA,PROYECTO.programa_financiacion as 'criterio',TAG_UNIQUE,SUBNUMBER,OBSERVACION,IMAGEN,ACTU_POR,BAJAS,FECHA_BAJA,FECHA_CONTA,FECHA_REFERENCIA,PERIODO,P.CLASE_MOVIMIENTO,CM.DESCRIPCION AS 'MOVIMIENTO',FECHA_INV_DATE  FROM PLANTILLA_MASIVA P
 			LEFT JOIN ASSET A ON P.ID_ASSET = A.ID_ASSET
 			LEFT JOIN LOCATION L ON P.LOCATION = L.ID_LOCATION
 			LEFT JOIN PERSON_NO PE ON P.PERSON_NO = PE.ID_PERSON
@@ -370,13 +435,20 @@ class articulosM
 			}
 			if($mes)
 			{
-				$desde = str_replace('-','',$desde);
-				$hasta = str_replace('-','',$hasta);
-				$sql.=" AND FECHA_INV_DATE BETWEEN '".$desde."' AND '".$hasta."' ";
+				if($desde!='' && $hasta!='')
+				{
+					$desde = str_replace('-','',$desde);
+					$hasta = str_replace('-','',$hasta);
+					$sql.=" AND FECHA_INV_DATE BETWEEN '".$desde."' AND '".$hasta."' ";
+				}
 			}
 			if($bajas)
 			{
 				$sql.=" AND BAJAS ='1'";
+				if($desde!=''  && $hasta !='')
+				{
+					$sql.=" AND FECHA_BAJA BETWEEN '".$desde."' AND '".$hasta."'";
+				}
 			}
 			if($patrimoniales)
 			{

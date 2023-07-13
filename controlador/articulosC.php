@@ -282,43 +282,55 @@ class articulosC
 		$v = $this->modelo->existe_datos();	
 		if($v == -1)
 		{
-		// print_r('expression');die();
 
+		$asset = strtoupper($parametros['query']);
+		$asset = str_replace('ASSET:','',$asset);
+		$parametros['query'] = $asset;
 		$query = $parametros['query'];
 		$loc = $parametros['localizacion'];
 		$cus = $parametros['custodio'];
 		$pag = $parametros['pag'];
 		$datos = $this->modelo->lista_articulos($query,$loc,$cus,$pag);
 		foreach ($datos as $key => $value) {
-			$rand = $this->generarCodigo(8);
-			$rand = "5002000100070028".$rand;
-			if($this->modelo->existe($rand)==-1)
-			{
-				$datoss[0]['campo']='TAG_Unique';
-				$datoss[0]['dato'] =$rand;
-				$where[0]['campo']='ID_ASSET';
-				$where[0]['dato']= $value['ID_ASSET'];
-				$this->modelo->editar_asser($datoss,$where);
-				$datoss2[0]['campo']='RFID';
-				$datoss2[0]['dato']=$rand;
-				$datoss2[1]['campo']='SERIE';
-				$datoss2[1]['dato'] = $value['tag'];
-				$this->modelo->insertar($datoss2,'IMPRIMIR_TAGS');
-			}else
+			if($value['RFID']=='')
 			{
 				$rand = $this->generarCodigo(8);
 				$rand = "5002000100070028".$rand;
-				$datoss[0]['campo']='TAG_Unique';
-				$datoss[0]['dato'] =$rand;
-				$where[0]['campo']='ID_ASSET';
-				$where[0]['dato']= $value['ID_ASSET'];
-				$this->modelo->editar_asser($datoss,$where);
+				if($this->modelo->existe($rand)==-1)
+				{
+					$datoss[0]['campo']='TAG_Unique';
+					$datoss[0]['dato'] =$rand;
+					$where[0]['campo']='ID_ASSET';
+					$where[0]['dato']= $value['ID_ASSET'];
+					$this->modelo->editar_asser($datoss,$where);
+					$datoss2[0]['campo']='RFID';
+					$datoss2[0]['dato']=$rand;
+					$datoss2[1]['campo']='SERIE';
+					$datoss2[1]['dato'] = $value['tag'];
+					$this->modelo->insertar($datoss2,'IMPRIMIR_TAGS');
+				}else
+				{
+					$rand = $this->generarCodigo(8);
+					$rand = "5002000100070028".$rand;
+					$datoss[0]['campo']='TAG_Unique';
+					$datoss[0]['dato'] =$rand;
+					$where[0]['campo']='ID_ASSET';
+					$where[0]['dato']= $value['ID_ASSET'];
+					$this->modelo->editar_asser($datoss,$where);
+					$datoss2[0]['campo']='RFID';
+					$datoss2[0]['dato']=$rand;
+					$datoss2[1]['campo']='SERIE';
+					$datoss2[1]['dato'] = $value['tag'];
+					$this->modelo->insertar($datoss2,'IMPRIMIR_TAGS');
+
+				}
+			}else
+			{
 				$datoss2[0]['campo']='RFID';
-				$datoss2[0]['dato']=$rand;
+				$datoss2[0]['dato']=$value['RFID'];
 				$datoss2[1]['campo']='SERIE';
 				$datoss2[1]['dato'] = $value['tag'];
 				$this->modelo->insertar($datoss2,'IMPRIMIR_TAGS');
-
 			}
 		}
 

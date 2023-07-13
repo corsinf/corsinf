@@ -1,7 +1,7 @@
 <?php 
 
 date_default_timezone_set('America/Guayaquil'); 
-require 'vendor/autoload.php';
+require 'lib_excel/vendor/autoload.php';
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 include('../modelo/ArticulosM.php');

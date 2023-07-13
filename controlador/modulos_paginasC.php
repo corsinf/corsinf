@@ -46,6 +46,21 @@ if(isset($_GET['guardar_paginas']))
 	$parametros = $_POST['parametros'];
 	echo json_encode($controlador->guardar_paginas($parametros));
 }
+if(isset($_GET['modulos_sis_tabla']))
+{
+	$parametros = $_POST['parametros'];
+	echo json_encode($controlador->modulos_sis_tabla($parametros));
+}
+if(isset($_GET['editar_modulo_sis']))
+{
+	$parametros = $_POST['parametros'];
+	echo json_encode($controlador->editar_modulo_sis($parametros));
+}
+
+if(isset($_GET['modulos_sis_ddl']))
+{
+	echo json_encode($controlador->modulos_sis_ddl());
+}
 class modulos_paginasC
 {
 	private $modelo;
@@ -61,16 +76,19 @@ class modulos_paginasC
 	}
 	function lista_paginas($parametros)
 	{
+		// print_r($parametros);die();
 		 $query = $parametros['query'];
 		 $modulo = $parametros['modulo'];
 		 $datos = $this->modelo->paginas_all($query,$modulo);
 		 $tr = '';
 		 foreach ($datos as $key => $value) {
+		 	$mod_sis = $this->opciones_modulo_sistema($value['id_modulo']);
 		 	$tr.='<tr>
+		 	<td><select class="form-select form-select-sm" id="ddl_modulos_sis_pag_ing'.$value['id_paginas'].'" name="ddl_modulos_sis_pag_ing'.$value['id_paginas'].'" onchange="cargar_modulos_ddl_ing(\''.$value['id_paginas'].'\')">'.$mod_sis['opciones'].'</select></td>
 		 	<td><input id="txt_pagina_new'.$value['id_paginas'].'" name="txt_pagina_new'.$value['id_paginas'].'" class="form-control form-control-sm" value="'.$value['nombre_pagina'].'" /></td>
 		 	<td><input id="txt_detalle_pag'.$value['id_paginas'].'" name="txt_detalle_pag'.$value['id_paginas'].'" class="form-control form-control-sm" value="'.$value['detalle_pagina'].'" /></td>
 		 	<td><input id="txt_url'.$value['id_paginas'].'" name="txt_url'.$value['id_paginas'].'" class="form-control form-control-sm" value="'.$value['link_pagina'].'" /></td>
-		 	<td><select class="form-select form-select-sm" id="ddl_modulos_pag'.$value['id_paginas'].'" name="ddl_modulos_pag'.$value['id_paginas'].'">'.$this->opciones_tipo($value['id_modulo']).'</select></td>';
+		 	<td><select class="form-select form-select-sm" id="ddl_modulos_pag_ing'.$value['id_paginas'].'" name="ddl_modulos_pag_ing'.$value['id_paginas'].'">'.$this->opciones_tipo($value['id_modulo'],$mod_sis['modulo_sis']).'</select></td>';
 		 	if($value['default_pag']==1)
 		 	{
 		 		$tr.='<td width="15px" class="text-center"><input type="checkbox" onclick="default_pag(\''.$value['id_paginas'].'\')" name="rbl_defaul'.$value['id_paginas'].'" id="rbl_defaul'.$value['id_paginas'].'" checked></td>';
@@ -139,6 +157,8 @@ class modulos_paginasC
 		$datos[1]['dato']=$parametros['detalle'];
 		$datos[2]['campo']='icono_modulo';
 		$datos[2]['dato']= '&#x'.$parametros['icono'].';';
+		$datos[3]['campo']='modulos_sistema';
+		$datos[3]['dato']= $parametros['modulo_sis'];
 
 		$where[0]['campo']='id_modulo';
 		$where[0]['dato'] = $parametros['id'];
@@ -246,9 +266,9 @@ class modulos_paginasC
 		return $this->modelo->update('PAGINAS',$datos,$where);
 	}
 
-	function opciones_tipo($modulo)
+	function opciones_tipo($modulo,$modulos_sis= false)
 	{
-		$mod = $this->tipo->lista_modulos($query=false,false);
+		$mod = $this->tipo->lista_modulos($query=false,false,$modulos_sis);
 		// print_r($mod); 
 		// print_r($modulo);
 		// die();
@@ -264,6 +284,106 @@ class modulos_paginasC
 		}
 		return $op;
 
+	}
+
+	function opciones_modulo_sistema($menu)
+	{
+		$mod = $this->tipo->lista_modulos($query=false,$menu);
+		$sis = $this->tipo->modulos_sis();
+		// print_r($mod); 
+		// print_r($modulo);
+		// die();
+		$op = '';
+		foreach ($sis as $key => $value) {
+			if($value['id_modulos']==$mod[0]['modulos_sistema'])
+			{
+				$op.="<option class='bx' value='".$value['id_modulos']."' selected>".$value['nombre_modulo']."</option>"; 
+			}else
+			{
+				$op.="<option class='bx' value='".$value['id_modulos']."'>".$value['nombre_modulo']."</option>"; 
+			}
+		}
+		return  array('opciones'=>$op,'modulo_sis'=>$mod[0]['modulos_sistema']);
+
+	}
+
+	function modulos_sis_tabla($parametros)
+	{
+		$modulos_sis = $this->modelo->modulos_sis();
+		$tr='';
+		foreach ($modulos_sis as $key => $value) {
+			$tr.="<tr>
+				<td>
+					<input class='form-control form-control-sm' id='txt_modulo_sis".$value['id_modulos']."' name='txt_modulo_sis".$value['id_modulos']."' value='".$value['nombre_modulo']."'>
+				</td>
+				<td>
+					<input class='form-control form-control-sm' id='txt_link_sis".$value['id_modulos']."' name='txt_link_sis".$value['id_modulos']."'  value='".$value['link']."' >
+				</td>
+				<td>
+					<div class='input-group input-group-sm mb-3'> 
+						<span class='input-group-text' id='inputGroup-sizing-sm'>".$value['icono']."</span>
+						<input class = 'form-control form-control-sm' id='txt_icono_sis".$value['id_modulos']."' name='txt_icono_sis".$value['id_modulos']."' value='".$value['icono']."'
+					</div>
+				</td>
+				<td class='text-center'>";
+				if($value['estado']=='A')
+				{
+					$tr.="<input type='checkbox' class='' id='rbl_estado".$value['id_modulos']."' name='rbl_estado".$value['id_modulos']."' checked>";
+				}else
+				{
+					$tr.="<input type='checkbox' class='' id='rbl_estado".$value['id_modulos']."' name='rbl_estado".$value['id_modulos']."'>";					
+				}
+				$tr.="</td>
+				<td>
+				 	<button class='btn btn-primary btn-sm' onclick='editar_modulo(".$value['id_modulos'].")'><i class='bx bx-pencil'></i></button>
+				</td>
+			</tr>";
+		}
+
+		return $tr;
+
+		print_r($modulos_sis);die();
+	}
+
+
+	function editar_modulo_sis($parametros)
+	{
+		$datos[0]['campo'] = 'nombre_modulo';
+		$datos[0]['dato'] = $parametros['nombre'];
+		$datos[1]['campo'] = 'link';
+		$datos[1]['dato'] = $parametros['link'];
+		$datos[2]['campo'] = 'icono';
+		$datos[2]['dato'] = $parametros['icono'];
+		$datos[3]['campo'] = 'estado';
+		$datos[3]['dato'] = 'A';
+		if($parametros['estado']=='false')
+		{
+			$datos[3]['dato'] = 'I';
+		}
+
+		// print_r($parametros);
+		// print_r($datos);die();
+		if($parametros['id']!='')
+		{
+
+			$where[0]['campo'] = 'id_modulos';
+			$where[0]['dato'] = $parametros['id'];
+			return $this->modelo->update('MODULOS_SISTEMA',$datos,$where);
+
+		}else
+		{
+			return $this->modelo->guardar($datos,'MODULOS_SISTEMA');
+		}
+	}
+
+	function modulos_sis_ddl()
+	{
+		$modulos_sis = $this->modelo->modulos_sis();
+		$op = '';
+		foreach ($modulos_sis as $key => $value) {
+			$op.='<option value="'.$value['id_modulos'].'">'.$value['nombre_modulo'].'</option>';
+		}
+		return $op;
 	}
 	
 }

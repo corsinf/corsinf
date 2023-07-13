@@ -28,8 +28,13 @@ if(isset($_GET['lista_usuarios_asignados']))
 }
 
 if(isset($_GET['modulos']))
-{
-	echo json_encode($controlador->lista_modulos());
+{ 
+	$parametros = '';
+	if(isset($_POST['parametros']))
+	{
+		$parametros = $_POST['parametros'];
+	}
+	echo json_encode($controlador->lista_modulos($parametros));
 }
 
 if(isset($_GET['modulos_tabla']))
@@ -63,7 +68,11 @@ if(isset($_GET['eliminar_tipo']))
 	$id = $_POST['id'];
 	echo json_encode($controlador->eliminar_tipo($id));
 }
-
+if(isset($_GET['eliminar_usuario_tipo']))
+{
+	$id = $_POST['id'];
+	echo json_encode($controlador->eliminar_usuario_tipo($id));
+}
 if(isset($_GET['accesos_asignados']))
 {
 	$parametros = $_POST['parametros'];
@@ -232,7 +241,7 @@ class tipo_usuarioC
 				                  foreach ($usuarios as $key => $value) {
 				                  	$html.='<tr>
 				                      <td>'.$value['nom'].'</td>                      
-				                      <td><button class="btn btn-sm btn-danger"><i class="bx bx-trash"></i> </button></td>
+				                      <td><button class="btn btn-sm btn-danger" onclick="eliminar_usuario_tipo('.$value['ID'].')"><i class="bx bx-trash"></i> </button></td>
 				                    </tr>';
 				                  }                    
 				          $html.='</tbody>
@@ -251,16 +260,27 @@ class tipo_usuarioC
 
 
 
-	function lista_modulos($tipo= false)
+	function lista_modulos($parametros)
 	{
-		if($tipo==false){$tipo['tipo']=false;}
+
+		$tr ='<option value="" selected>Todos</option>';
+	  if(isset($parametros['tipo']))
+	  {
+	  	if($parametros['tipo']==2)
+	  	{
+	  		$tr ='';
+	  	}
+	  }		
 		$datos= $this->modelo->lista_modulos();
-		$tr ='<option value="">Todos</option>';
-		foreach ($datos as $key => $value) {
-			$tr.='<option value="'.$value['id'].'">'.$value['modulo'].'</option>';
+		if($parametros!='')
+		{
+			$datos= $this->modelo->lista_modulos(false,false,$parametros['modulo_sis']);
 		}
-		return $tr;
-	
+		foreach ($datos as $key => $value) {
+			
+				$tr.='<option value="'.$value['id'].'">'.$value['modulo'].'</option>';				
+		}
+		return $tr;	
 	}
 
 		function lista_modulos_tabla($tipo= false)
@@ -337,8 +357,24 @@ class tipo_usuarioC
 			}
 		}
 
+		$modulos_sis = $this->modelo->modulos_sis();
+		$op = '';
+		foreach ($modulos_sis as $key2 => $value2) {
+			if($value2['id_modulos']==$value['modulos_sistema'])
+			{
+				$op.="<option value='".$value2['id_modulos']."' selected>".$value2['nombre_modulo']."</option>";
+			}else
+			{
+				$op.="<option value='".$value2['id_modulos']."'>".$value2['nombre_modulo']."</option>";				
+			}
+		}
+
 			$tr.='
 			<tr>
+			<td>
+					<select class="form-select form-select-sm" id="ddl_modulos_sis'.$value['id'].'">'.$op.'
+					</select>
+			</td>
 			<td><input name="txt_modulo'.$value['id'].'" id="txt_modulo'.$value['id'].'" value="'.$value['modulo'].'" class="form-control form-control-sm"></td>
 			<td><input name="txt_detalle'.$value['id'].'" id="txt_detalle'.$value['id'].'" value="'.$value['detalle'].'" class="form-control form-control-sm"></td>
 			<td>
@@ -554,6 +590,13 @@ class tipo_usuarioC
 		 	</tr>';
 		 }
 		 return $tr;
+	}
+
+	function eliminar_usuario_tipo($id)
+	{
+		$resp = $this->modelo->eliminar_usuario_tipo($id);
+		return $resp;
+
 	}
 	
 }

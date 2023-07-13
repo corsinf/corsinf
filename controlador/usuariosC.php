@@ -197,7 +197,7 @@ class usuariosC
             <div class="card radius-15">
               <div class="card-body text-center">
                 <div class="p-4 border radius-15">
-                  <img src="'.$value['foto'].'" width="110" height="110" class="rounded-circle shadow" alt="">
+                  <img src="../'.$value['foto'].'" width="110" height="110" class="rounded-circle shadow" alt="">
                   <h5 class="mb-0 mt-5">'.$value['nombres'].' '.$value['ape'].'</h5>
                   <p class="mb-3">'.$value['tipo'].'</p>
                   <div class="list-inline contacts-social mt-3 mb-3"> <a href="javascript:;" class="list-inline-item bg-facebook text-white border-0"><i class="bx bxl-facebook"></i></a>
@@ -256,7 +256,7 @@ class usuariosC
             <div class="card radius-15">
               <div class="card-body text-center">
                 <div class="p-4 border radius-15">
-                  <img src="'.$value['foto'].'" width="110" height="110" class="rounded-circle shadow" alt="">
+                  <img src="../'.$value['foto'].'" width="110" height="110" class="rounded-circle shadow" alt="">
                   <h5 class="mb-0 mt-5">'.$value['nombres'].' '.$value['ape'].'</h5>
                   <p class="mb-3">'.$value['tipo'].'</p>
                   <div class="list-inline contacts-social mt-3 mb-3"> <a href="javascript:;" class="list-inline-item bg-facebook text-white border-0"><i class="bx bxl-facebook"></i></a>
