@@ -117,13 +117,14 @@
 													 <input type="password" class="form-control" id="pass" name="pass" placeholder="Password"> <a href="javascript:;" class="input-group-text bg-transparent"><i class='bx bx-hide'></i></a>
 												</div>
 											</div>
-											<div class="col-md-6">
-												<!-- <div class="form-check form-switch">
+											<!-- <div class="col-md-6">
+												<div class="form-check form-switch">
 													<input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" checked>
 													<label class="form-check-label" for="flexSwitchCheckChecked">Remember Me</label>
-												</div> -->
-											</div>
-											<div class="col-md-6 text-end">	<a href="reset.php">Olvido su password ?</a>
+												</div>
+											</div> -->
+											<div class="col-md-12 text-end">	<a href="reset.php">Olvido su password ?</a>
+											<div class="col-md-12 text-end">	<a href="vista/SEGUROS/formulario_prestamos.php">Solicitar Salida de bienes</a>
 											</div>
 											<div class="col-12">
 												<div class="d-grid">

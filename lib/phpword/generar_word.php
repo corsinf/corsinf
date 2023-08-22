@@ -47,6 +47,11 @@ if(isset($_GET['word_acta5']))
     $parametros = $_GET;
     $reporte->acta_entrega_donacion($parametros);
 }
+if(isset($_GET['solicitud_salida']))
+{
+    $parametros = $_GET;
+    $reporte->solicitud_salida($parametros);
+}
 
 /**
  * 
@@ -1686,7 +1691,250 @@ class generar_word
         header('Expires: 0');
         $xmlWriter = \PhpOffice\PhpWord\IOFactory::createWriter($documento, 'Word2007');
         $xmlWriter->save("php://output");
+    }
 
+    function solicitud_salida($parametros)
+    {
+
+             // print_r($parametros);die();
+    $documento = new \PhpOffice\PhpWord\PhpWord();
+    $propiedades = $documento->getDocInfo();
+    $propiedades->setCreator("Luis Cabrera Benito");
+    $propiedades->setTitle("Texto");
+
+    # Agregar texto...
+    /*
+    Todos los textos deben estar dentro de una sección
+     */
+
+    $seccion = $documento->addSection();
+
+    //imagen cabecera
+    $header = $seccion->addHeader();
+    $header->addImage(
+        '../../img/cabecera_puce_acta.png',
+        array(
+        'width' => 595,
+        'height' => 100,
+        'positioning' => \PhpOffice\PhpWord\Style\Image::POSITION_ABSOLUTE,
+        'posHorizontal' => \PhpOffice\PhpWord\Style\Image::POSITION_HORIZONTAL_RIGHT,
+        'posHorizontalRel' => \PhpOffice\PhpWord\Style\Image::POSITION_RELATIVE_TO_PAGE,
+        'posVerticalRel' => \PhpOffice\PhpWord\Style\Image::POSITION_RELATIVE_TO_PAGE,
+        'marginLeft' => \PhpOffice\PhpWord\Shared\Converter::cmToPixel(15.5),
+        'marginTop' => \PhpOffice\PhpWord\Shared\Converter::cmToPixel(1.55),
+        )
+    );
+
+    $seccion->addTextBreak(4);
+
+
+    # Títulos.
+    $fuenteTitulo = [
+        "name" => "Montserrat ExtraBold",
+        "size" => 11,
+        "color" => "000000",
+        "bold" => true,
+    ];
+
+    $alineacion = [
+        "alignment" => Jc::CENTER,
+        // "lineHeight" => 0.7,
+    ];
+    $alineacionEND = [
+        "alignment" => Jc::END,
+        // "lineHeight" => 0.7,
+    ];
+
+    // $documento->addParagraphStyle('myStyle', array('align'=>'center', 'spaceAfter'=>100));
+    $documento->addTitleStyle(1, $fuenteTitulo,$alineacion);
+    $seccion->addTitle("ACTA DE SALIDA DE BIENES DEL CAMPUS", 1);
+
+    
+    //cuerpo del documento
+    $fuente = [
+        "name" => "Montserrat",
+        "size" => 10,
+        "color" => "000000",
+        "italic" => false,
+        "bold" => false,
+    ];
+    $fuenteN = [
+        "name" => "Montserrat",
+        "size" => 10,
+        "color" => "000000",
+        "italic" => false,
+        "bold" => true,
+    ];
+    $alineacionC = [
+        "alignment" => Jc::BOTH,
+        "lineHeight" => 1.5,
+    ];
+
+    $alineacionCenter = [
+        "alignment" => Jc::CENTER,
+        // "lineHeight" => 1.5,
+    ];
+    $alineacionRIGHT = [
+        "alignment" => Jc::RIGHT,
+        // "lineHeight" => 1.5,
+    ];
+    $alineacionLEFT = [
+        "alignment" => Jc::LEFT,
+        // "lineHeight" => 1.5,
+    ];
+
+
+    $fecha = strftime("%A %d de %B del %Y");
+
+    $textrun = $seccion->addTextRun($alineacionC);
+    $textrun->addText("En la ciudad de Quito, ".$fecha.", comparece, por una parte, la Direccion de Control de  Activos Fijos y seguros de la  Pontificia Universidad Católica del Ecuador y, por otra parte,_________________________________",$fuente);
+    $textrun->addText("como custodio responsable del buen uso y cuidado del bien o bienes de la unidad ".strtoupper($parametros['unidad'])." mediante el siguiente documento realiza la notificación de la salida de los bienes de conformidad  a lo establecido en los lineamiento de la salida de los bienes de conformidad a lo establecido enlos lineamientos de activo de la Pontificia Universidad católica del ecuador ",$fuente);
+    $textrun->addTextBreak(1);
+
+        $estiloTabla2 = [
+            'border'=>1,
+            "borderColor" => "080808",
+            "alignment" => Jc::LEFT,
+            "borderSize" => 2,
+            "cellMargin" => 10,
+        ];       
+
+            $fuente2 = [
+                "name" => "Arial",
+                "size" => 8,
+                "color" => "000000",
+                'Bold'=>false,
+            ];
+
+        $documento->addTableStyle('estilo2',$estiloTabla2);
+        $table = $seccion->addTable('estilo2');
+        $table->addRow();
+        $table->addCell(3000, $alineacionLEFT)->addText('Responsable',$fuente,$alineacionLEFT);
+        $table->addCell(7000, $alineacionCenter)->addText('',$fuente2,$alineacionCenter);
+
+        $table->addRow();
+        $table->addCell(3000, $alineacionLEFT)->addText('Destino',$fuente2,$alineacionLEFT);
+        $table->addCell(2000, $alineacionCenter)->addText('RFID', $fuente,$alineacionCenter);
+
+        $table->addRow();
+        $table->addCell(3000, $alineacionLEFT)->addText('Fecha de Salida', $fuente2,$alineacionLEFT);
+        $table->addCell(2000, $alineacionCenter)->addText('Modelo', $fuente,$alineacionCenter);
+
+        $table->addRow();
+        $table->addCell(3000, $alineacionLEFT)->addText('Fecha de entrada', $fuente2,$alineacionLEFT);
+        $table->addCell(7000, $alineacionCenter)->addText('', $fuente,$alineacionCenter);
+
+        $table->addRow();
+        $table->addCell(3000, $alineacionLEFT)->addText('duracion / tiempo Estimado', $fuente2,$alineacionLEFT);
+        $table->addCell(2000, $alineacionCenter)->addText('Valor', $fuente,$alineacionCenter);
+
+         $table->addRow();
+        $table->addCell(3000, $alineacionLEFT)->addText('Motivo de movilizacion', $fuente2,$alineacionLEFT);
+        $table->addCell(2000, $alineacionCenter)->addText('Valor', $fuente,$alineacionCenter);
+
+
+        $textrun = $seccion->addTextRun($alineacionC);
+        $textrun->addTextBreak(1);
+        $textrun->addText(" De conformidad con el literal b) del artículo 45 y literal f) del artículo 46 del Código del Trabajo, el custodio autoriza a que se descuente de su rol de pagos o de su liquidación, según corresponda, el valor del bien o bienes, en caso de que, durante su periodo de custodia, ocurra la pérdida o destrucción del mismo o de los mismos, al igual que si sufrieran un deterioro mayor al generado por su uso normal.  ",$fuente);
+        $textrun->addTextBreak(1);
+        $textrun->addText("Notas:",$fuenteN);
+
+         $seccion->addListItem(htmlspecialchars('En el caso de existir extensiones de tiempo en la salida del bien, se debe notificar oportunamente el alcance.'),0,$fuente);
+         $seccion->addListItem(htmlspecialchars('En la  fecha de retorno del/los/ bien/es a la PUCE se realizará un levantamiento físico por control interno de la unidad.'),0,$fuente);
+
+
+         $textrun = $seccion->addTextRun($alineacionC);
+        $textrun->addTextBreak(1);
+
+        $fancyTableStyle = ['borderSize' =>2, 'borderColor' => 'FFFFFF'];  
+
+
+        $documento->addTableStyle('estilo1', $fancyTableStyle);
+        $table = $seccion->addTable('estilo1');        
+        $table->addRow();
+        $table->addCell(3000, $alineacionCenter)->addText('------------------------------------',$fuente,$alineacionCenter);
+        $table->addCell(3000, $alineacionCenter)->addText('', $fuente);
+        $table->addCell(3000, $alineacionCenter)->addText('------------------------------------', $fuente,$alineacionCenter);
+        $table->addRow();
+        $table->addCell(3000, $alineacionCenter)->addText('CUSTODIO RESPONSABLE', $fuente,$alineacionCenter);
+        $table->addCell(3000, $alineacionCenter)->addText('', $fuente,$alineacionCenter);
+        $table->addCell(3000, $alineacionCenter)->addText('CONTROL DE ACTIVOS FIJOS', $fuente,$alineacionCenter);
+
+       
+
+
+    $seccion = $documento->addSection(
+        array(
+        'orientation'=>'landscape')
+    );
+
+    $seccion->addTextBreak(2);
+    $usuario = $_SESSION['INICIO']['ID_USUARIO'];
+    $lista = $this->actas->lista_actas($usuario);
+        # Otra tabla
+        $estiloTabla2 = [
+            'border'=>1,
+            "borderColor" => "080808",
+            "alignment" => Jc::LEFT,
+            "borderSize" => 2,
+            "cellMargin" => 10,
+        ];        
+       # Encabezados
+        $fuente = [
+            "name" => "Arial",
+            "size" => 8,
+            "color" => "000000",
+            'Bold'=>true,
+        ];
+
+        $fuente2 = [
+            "name" => "Arial",
+            "size" => 8,
+            "color" => "000000",
+            'Bold'=>false,
+        ];
+
+
+
+        $textrun = $seccion->addTextRun($alineacionLEFT);
+        $textrun->addText("EQUIPOS SOLICITADOS: ",$fuenteN);
+        $textrun->addTextBreak(1);
+
+        $documento->addTableStyle('estilo2',$estiloTabla2);
+        $table = $seccion->addTable('estilo2');
+        $table->addRow();
+        $table->addCell(3000, $alineacionCenter)->addText('#',$fuente,$alineacionLEFT);
+        $table->addCell(3000, $alineacionCenter)->addText('CÓDIGO SAP (Posee 8 dígitos y no empieza con 0)',$fuente,$alineacionCenter);
+        $table->addCell(3000, $alineacionCenter)->addText('CÓDIGO ORIGINAL (Es el código de bien que empieza con 0) ',$fuente,$alineacionCenter);
+        $table->addCell(3000, $alineacionCenter)->addText('CÓDIGO RFID (Control de bienes de 24 caracteres, empieza con 5)',$fuente,$alineacionCenter);
+        $table->addCell(3000, $alineacionCenter)->addText('Descripción',$fuente,$alineacionCenter);
+        $table->addCell(3000, $alineacionCenter)->addText('Marca',$fuente,$alineacionCenter);
+        $table->addCell(3000, $alineacionCenter)->addText('Modelo',$fuente,$alineacionCenter); 
+        $table->addCell(3000, $alineacionCenter)->addText('Serie',$fuente,$alineacionCenter);    
+        $table->addCell(3000, $alineacionCenter)->addText('Observaciones',$fuente,$alineacionCenter);   
+
+
+
+
+  
+        # Para que no diga que se abre en modo de compatibilidad
+        $documento->getCompatibility()->setOoxmlVersion(15);
+        # Idioma español de México
+        $documento->getSettings()->setThemeFontLang(new Language("ES-MX"));
+
+        # Guardarlo
+        // $objWriter = \PhpOffice\PhpWord\IOFactory::createWriter($documento, "Word2007");
+
+        // $objWriter->save("ACTA DONACION.docx");
+
+        header("Content-Description: File Transfer");
+        header('Content-Disposition: attachment; filename="SALIDA DE BIENES.docx"');
+        header('Content-Type: application/vnd.openxmlformats-officedocument.wordprocessingml.document');
+        header('Content-Transfer-Encoding: binary');
+        header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
+        header('Expires: 0');
+        $xmlWriter = \PhpOffice\PhpWord\IOFactory::createWriter($documento, 'Word2007');
+        $xmlWriter->save("php://output");
 
 
     }

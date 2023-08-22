@@ -132,6 +132,230 @@ class cabecera_pdf
 	}
 
 
+	function cedula_reporte_lista($titulo,$tablaHTML,$contenido=false,$image=false,$fechaini,$fechafin,$sizetable,$mostrar=false,$sal_hea_body=30,$orientacion='P')
+	{	
+
+	    $this->pdftable->fechaini = $fechaini; 
+	    $this->pdftable->fechafin = $fechafin; 
+	    $this->pdftable->titulo = $titulo;
+	    $this->pdftable->salto_header_cuerpo = $sal_hea_body;
+	    $this->pdftable->orientacion = $orientacion;
+	    	$estiloRow='';
+		 $this->pdftable->AddPage($orientacion);
+		 if($image)
+		 {
+		  foreach ($image as $key => $value) {
+		  	//print_r($value);		 	
+		 	 	 $this->pdftable->Image($value['url'], $value['x'],$value['y'],$value['width'],$value['height']);
+		 	 	 $this->pdftable->Ln(5);		 	 
+		 }
+		}
+
+		if($contenido)
+		{
+		 foreach ($contenido as $key => $value) {
+		 	 if($value['tipo'] == 'texto' && $value['posicion']=='top-tabla')
+		 	 {
+		 	 	//print_r($value);
+		 	 	$this->pdftable->SetFont('Arial','',11);
+		 	 	$this->pdftable->MultiCell(0,3,$value['valor']);
+		 	 	$this->pdftable->Ln(5);
+
+		 	 }else if($value['tipo'] == 'titulo' && $value['posicion']=='top-tabla')
+		 	 {
+		 	 	$this->pdftable->SetFont('Arial','',18);
+		 	 	$this->pdftable->Cell(0,3,$value['valor'],0,0,'C');
+		 	 	$this->pdftable->Ln(5);
+
+		 	 }
+		 }
+        }
+                $this->pdftable->SetFont('Arial','',$sizetable);
+		    foreach ($tablaHTML as $key => $value){
+		    	if(isset($value['estilo']) && $value['estilo']!='')
+		    	{
+		    		$this->pdftable->SetFont('Arial',$value['estilo'],$sizetable);
+		    		$estiloRow = $value['estilo'];
+		    	}else
+		    	{
+		    		$this->pdftable->SetFont('Arial','',$sizetable);
+		    		$estiloRow ='';
+		    	}
+		    	if(isset($value['borde']) && $value['borde']!='0')
+		    	{
+		    		$borde=$value['borde'];
+		    	}else
+		    	{
+		    		$borde =0;
+		    	}
+
+		    //print_r($value['medida']);
+		       $this->pdftable->SetWidths($value['medidas']);
+			   $this->pdftable->SetAligns($value['alineado']);
+			   //print_r($value['datos']);
+			   $arr= $value['datos'];
+			   $this->pdftable->Row($arr,4,$borde,$estiloRow);
+
+			   // print_r($tablaHTML[$key+1]);die();
+			   if(isset($tablaHTML[$key+1]['datos'][0]) && $tablaHTML[$key+1]['datos'][0]=='PONTIFICIA UNIVERSIDAD CATOLICA DEL ECUADOR')
+			   {
+			   	$this->pdftable->AddPage($orientacion);
+			   	if($image)
+				 {
+				  foreach ($image as $key => $value) {
+				  	//print_r($value);		 	
+				 	 	 $this->pdftable->Image($value['url'], $value['x'],$value['y'],$value['width'],$value['height']);
+				 	 	 $this->pdftable->Ln(5);		 	 
+				 }
+				}
+			   }
+		    }
+		
+
+		  if($contenido)
+		  {
+		 foreach ($contenido as $key => $value) {
+		 	 if($value['tipo'] == 'texto' && $value['posicion']=='button-tabla')
+		 	 {
+		 	 	$this->pdftable->SetFont('Arial','',11);
+		 	 	$this->pdftable->MultiCell(0,3,$value['valor']);
+		 	 	$this->pdftable->Ln(5);
+		 	 }else if($value['tipo'] == 'titulo' && $value['posicion']=='button-tabla')
+		 	 {
+		 	 	$this->pdftable->SetFont('Arial','',18);
+		 	 	$this->pdftable->Cell(0,3,$value['valor'],0,0,'C');
+		 	 	$this->pdftable->Ln(5);
+		 	 }
+		 }
+		}
+
+		 
+
+
+		 if($mostrar==true)
+	       {
+		    $this->pdftable->Output();
+
+	       }else
+	       {
+		     $this->pdftable->Output('D',$titulo.'.pdf',false);
+
+	      }
+
+	}
+
+	function solicitud_acta($img_header=false,$img_foot=false,$titulo,$cuerpo=false,$fechaini=false,$fechafin=false,$sizetable,$mostrar=false,$sal_hea_body=30,$orientacion='P',$descargar=0)
+	{	
+
+	    $this->pdftable->fechaini = $fechaini; 
+	    $this->pdftable->fechafin = $fechafin; 
+	    $this->pdftable->titulo = $titulo;
+	    $this->pdftable->salto_header_cuerpo = $sal_hea_body;
+	    $this->pdftable->orientacion = $orientacion;
+	    	$estiloRow='';
+		 $this->pdftable->AddPage($orientacion);
+		 $url ="../img/cabecera_puce_acta.png";$H_x = 0;$H_y = 0;$H_w = 220;$H_h = 30;
+		 $url2 ="../img/footer_puce_actaH.png";$F_x = 10;$F_y = 268;$F_w = 195;$F_h = 25;
+
+		 if($img_header)
+		 {
+	 	     foreach ($img_header as $key => $value) 
+	 	      {	 	
+	 	        $this->pdftable->Image($value['url'], $value['x'],$value['y'],$value['w'],$value['h']);
+	 	   	$this->pdftable->Ln(5);		 	 
+	 	      }
+
+		 }else
+		 {
+		      $img_header[0] = array('url'=>$url, 'x'=>$H_x,'y'=>$H_y,'w'=>$H_w,'h'=>$H_h);
+		      // print_r($img_header);die();
+		      if(file_exists($url))
+		      {
+			   foreach ($img_header as $key => $value) 
+		 	   {	 	
+		 	     $this->pdftable->Image($value['url'], $value['x'],$value['y'],$value['w'],$value['h']);
+		 	     $this->pdftable->Ln(5);		 	 
+		 	   }
+	 	      }
+
+		 }
+
+
+		$this->pdftable->Ln($sal_hea_body);
+
+		if($titulo)
+		{
+		 foreach ($titulo as $key => $value) {
+		     $this->pdftable->SetFont('Arial','',$value['size']);
+	 	     $this->pdftable->MultiCell(0,3,$value['dato'],0,$value['alineado']);
+	 	     $this->pdftable->Ln($value['salto']);
+		 }
+		}
+
+		if($cuerpo)
+		{
+		 foreach ($cuerpo as $key => $value) {
+
+		 	// print_r($value);die();
+		 	$borde =0;$estilo = '';$size = 11;$salto = 4;
+		 	if(isset($value['estilo']) && $value['estilo']!=''){$estilo = $value['estilo']; }
+		 	if(isset($value['size']) && $value['size']!=''){ $size = $value['size']; }
+		    	if(isset($value['borde']) && $value['borde']!='0'){$borde=$value['borde'];}
+		    	if(isset($value['salto']) && $value['salto']!='0'){$salto=$value['salto'];}
+		    	
+		    	
+
+		     $this->pdftable->SetFont('Arial',$estilo,$size);
+    	             $this->pdftable->SetWidths($value['medidas']);
+		     $this->pdftable->SetAligns($value['alineado']);
+		     $this->pdftable->Row($value['datos'],4,$borde,$estilo);
+	 	     // $this->pdftable->MultiCell(0,3,$value['dato'],0,$value['alineado']);
+	 	     if(isset($value['salto'])){
+	 		     $this->pdftable->Ln($salto);
+	 	     }
+		 }
+		}
+		
+               
+		 if($img_foot)
+		 {
+	 	     foreach ($img_foot as $key => $value) 
+	 	      {	 	
+	 	        $this->pdftable->Image($value['url'], $value['x'],$value['y'],$value['w'],$value['h']);
+	 	   	$this->pdftable->Ln(5);		 	 
+	 	      }
+
+		 }else
+		 {
+		      $img_foot[0] = array('url'=>$url2, 'x'=>$F_x,'y'=>$F_y,'w'=>$F_w,'h'=>$F_h);
+		      // print_r($img_header);die();
+		      if(file_exists($url))
+		      {
+			   foreach ($img_foot as $key => $value) 
+		 	   {	 	
+		 	     $this->pdftable->Image($value['url'], $value['x'],$value['y'],$value['w'],$value['h']);
+		 	     $this->pdftable->Ln(5);		 	 
+		 	   }
+	 	      }
+
+		 }
+
+
+	      if($mostrar==1)
+	       {
+		    $this->pdftable->Output();
+
+	       }else{
+	       	  if($descargar)
+	       	  {
+		     $this->pdftable->Output('D',str_replace(' ','_',$titulo[0]['dato']).'.pdf',false);
+		  }else{
+
+		     $this->pdftable->Output('F',dirname(__DIR__,2).'/TEMP/'.str_replace(' ','_',$titulo[0]['dato']).'.pdf');
+		  }
+	       }
+
+	}
 
 	function cabecera_reporte($titulo,$tablaHTML,$contenido=false,$image=false,$fechaini,$fechafin,$sizetable,$mostrar=false,$sal_hea_body=30,$orientacion='P')
 	{	

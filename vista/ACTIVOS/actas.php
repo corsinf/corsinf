@@ -119,6 +119,7 @@
    var url = '../../lib/phpword/generar_word.php?word_acta5=true&donante='+donante+'&ci='+ci+'&director='+director+'&unidad='+unidad+'&sub='+sub;    
    window.open(url, '_blank');
  }
+
   function lista_articulos()
   {
      var query = $('#txt_buscar').val();

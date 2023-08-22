@@ -47,6 +47,20 @@ if(isset($_GET['reporte_cedula']))
 	// $reporte-> ejemplo();
 }
 
+if(isset($_GET['reporte_cedula_lista']))
+{
+	$parametros = $_GET;
+	$reporte->reporte_cedula_lista($parametros);
+	// $reporte-> ejemplo();
+}
+
+if(isset($_GET['reporte_solicitud']))
+{
+	$parametros = $_GET;
+	$reporte->reporte_solicitud($parametros);
+	// $reporte-> ejemplo();
+}
+
 
 class Reporte_pdf
 {
@@ -275,6 +289,471 @@ class Reporte_pdf
 
 
 	}
+
+	function reporte_cedula_lista($parametros)
+	{
+		$sizetable = 8;
+		$titulo="Reporte inventario";
+
+		$ids = explode(',',$parametros['id']);
+		$list = array();
+
+		foreach ($ids as $key => $value) {
+			$activos = $this->articulo->lista_articulos($query=false,$loc=false,$cus=false,$pag=false,$value,$exacto=false,$asset=false,$bajas=false,$terceros=false,$patrimoniales=false,$desde=false,$hasta=false,$multiple=false);	
+			array_push($list,$activos[0]);
+		}
+		// print_r($list);die();	
+		$tablaHTML = array();
+		$pos = 0;
+				
+
+		foreach ($list as $key => $activos) {
+				$image[0]['url'] = '../img/de_sistema/puce_logo.png';
+				$image[0]['x'] = 10;
+				$image[0]['y'] = 5;
+				$image[0]['width'] = 30;
+				$image[0]['height'] = 30;	
+
+				$tablaHTML[$pos]['medidas']=array(190);
+				$tablaHTML[$pos]['alineado']=array('C');
+				$tablaHTML[$pos]['datos']=array('PONTIFICIA UNIVERSIDAD CATOLICA DEL ECUADOR');
+				$tablaHTML[$pos]['estilo']='BI';
+				$pos+=1;
+
+				$tablaHTML[$pos]['medidas']=array(190);
+				$tablaHTML[$pos]['alineado']=array('C');
+				$tablaHTML[$pos]['datos']=array('DIRECCION GENERAL FINANCIERA');
+				$tablaHTML[$pos]['estilo']='BI';
+				$pos+=1;
+
+				$tablaHTML[$pos]['medidas']=array(190);
+				$tablaHTML[$pos]['alineado']=array('C');
+				$tablaHTML[$pos]['datos']=array('DIRECCION DE CONTROL DE ACTIVOS');
+				$tablaHTML[$pos]['estilo']='BI';
+				$pos+=1;
+
+				$tablaHTML[$pos]['medidas']=array(190);
+				$tablaHTML[$pos]['alineado']=array('C');
+				$tablaHTML[$pos]['datos']=array('CEDULA DE INVENTARIOS');
+				$tablaHTML[$pos]['estilo']='BI';
+				$pos+=1;
+
+				$tablaHTML[$pos]['medidas']=array(100,90);
+				$tablaHTML[$pos]['alineado']=array('L','R');
+				$tablaHTML[$pos]['datos']=array('',date('Y-m-d'));
+				$tablaHTML[$pos]['estilo']='B';
+				$pos+=1;
+
+				$tablaHTML[$pos]['medidas']=array(30,30,130);
+				$tablaHTML[$pos]['alineado']=array('L','L','L');
+				$tablaHTML[$pos]['datos']=array('<b>Codigo de activo',$activos['tag'],$activos['nom']);
+				$tablaHTML[$pos]['estilo']='';
+				$tablaHTML[$pos]['borde']='T';
+				$pos+=1;
+
+				$tablaHTML[$pos]['medidas']=array(30,25,30,50,30,25);
+				$tablaHTML[$pos]['alineado']=array('L','L','L','L','L','L');
+				$tablaHTML[$pos]['datos']=array('<b>Secuencial:','','<b>Numero Etiqueta:','','<b>Estado:',$activos['estado']);
+				$tablaHTML[$pos]['estilo']='';
+				// $tablaHTML[$pos]['borde']='1';
+				$pos+=1;
+
+
+				$tablaHTML[$pos]['medidas']=array(30,15,90,30,25);
+				$tablaHTML[$pos]['alineado']=array('L','L','L','L','L');
+				$tablaHTML[$pos]['datos']=array('<b>Categoria:','','','<b>Fecha Compra:',$activos['ORIG_ACQ_YR']->format('Y-m-d'));
+				$tablaHTML[$pos]['estilo']='';		
+				// $tablaHTML[$pos]['borde']='1';
+				$pos+=1;
+
+				$tablaHTML[$pos]['medidas']=array(30,15,90,30,25);
+				$tablaHTML[$pos]['alineado']=array('L','L','L','L','L');
+				$tablaHTML[$pos]['datos']=array('<b>SubCategoria:','','','<b>Fecha servicio:','');
+				$tablaHTML[$pos]['estilo']='';		
+				// $tablaHTML[$pos]['borde']='1';
+				$pos+=1;
+
+				$tablaHTML[$pos]['medidas']=array(35,100,30,25);
+				$tablaHTML[$pos]['alineado']=array('L','L','L','L');
+				$tablaHTML[$pos]['datos']=array('<b>Cod. Grupo Activos:','','<b>Periodo contable:','');
+				$tablaHTML[$pos]['estilo']='';		
+				// $tablaHTML[$pos]['borde']='1';
+				$pos+=1;
+
+				$propi = 'PROPIO';
+				if($activos['TERCEROS']==1)
+				{
+					$propi = 'TERCEROS';
+				}
+				if($activos['PATRIMONIALES']==1)
+				{
+					$propi = 'PATRIMONIALES';
+				}
+
+
+				$tablaHTML[$pos]['medidas']=array(30,105,25,30);
+				$tablaHTML[$pos]['alineado']=array('L','L','L','L');
+				$tablaHTML[$pos]['datos']=array('<b>Propietario:',$propi,'<b>Año:','');
+				$tablaHTML[$pos]['estilo']='';
+				// $tablaHTML[$pos]['borde']='1';
+				$pos+=1;
+
+
+				$tablaHTML[$pos]['medidas']=array(190);
+				$tablaHTML[$pos]['alineado']=array('L');
+				$tablaHTML[$pos]['datos']=array('');
+				$tablaHTML[$pos]['estilo']='';
+				$tablaHTML[$pos]['borde']='TB';
+				$pos+=1;
+
+				$tablaHTML[$pos]['medidas']=array(30,30,25,30,20,55);
+				$tablaHTML[$pos]['alineado']=array('L','L','L','L','L','L');
+				$tablaHTML[$pos]['datos']=array('<b>Marca:',$activos['marca'],'<b>Modelo',$activos['MODELO'],'<b>Serie',$activos['serie']);
+				$tablaHTML[$pos]['estilo']='';
+				// $tablaHTML[$pos]['borde']='1';
+				$pos+=1;
+
+				$tablaHTML[$pos]['medidas']=array(30,30,25,30,20,55);
+				$tablaHTML[$pos]['alineado']=array('L','L','L','L','L','L');
+				$tablaHTML[$pos]['datos']=array('<b>Color:',$activos['color'],'<b>Adjetivo',$activos['genero'],'<b>Unidad', $activos['localizacion']);
+				$tablaHTML[$pos]['estilo']='';
+				// $tablaHTML[$pos]['borde']='1';
+				$pos+=1;
+
+				$tablaHTML[$pos]['medidas']=array(30,30,25,30,20,55);
+				$tablaHTML[$pos]['alineado']=array('L','L','L','L','L','L');
+				$tablaHTML[$pos]['datos']=array('<b>Factura:','','<b>vida Activo:','','<b>Oficina','');
+				$tablaHTML[$pos]['estilo']='';
+				// $tablaHTML[$pos]['borde']='1';
+				$pos+=1;
+
+				$tablaHTML[$pos]['medidas']=array(30,30,25,30,20,55);
+				$tablaHTML[$pos]['alineado']=array('L','L','L','L','L','L');
+				$tablaHTML[$pos]['datos']=array('<b>Costo Original:','$'.$activos['ORIG_VALUE'],'','','<b>Custodio',$activos['custodio']);
+				$tablaHTML[$pos]['estilo']='';
+				// $tablaHTML[$pos]['borde']='1';
+				$pos+=1;
+
+
+				$tablaHTML[$pos]['medidas']=array(190);
+				$tablaHTML[$pos]['alineado']=array('L');
+				$tablaHTML[$pos]['datos']=array('');
+				$tablaHTML[$pos]['borde']='T';
+				$pos+=1;
+				$tablaHTML[$pos]['medidas']=array(190);
+				$tablaHTML[$pos]['alineado']=array('L');
+				$tablaHTML[$pos]['datos']=array('');
+				// $tablaHTML[$pos]['borde']='TB';
+				$pos+=1;
+
+				$tablaHTML[$pos]['medidas']=array(190);
+				$tablaHTML[$pos]['alineado']=array('L');
+				$tablaHTML[$pos]['datos']=array('<b>Anexos:');
+				$pos+=1;
+				$tablaHTML[$pos]['medidas']=array(190);
+				$tablaHTML[$pos]['alineado']=array('L');
+				$tablaHTML[$pos]['datos']=array('');
+				$pos+=1;
+
+				$tablaHTML[$pos]['medidas']=array(190);
+				$tablaHTML[$pos]['alineado']=array('L');
+				$tablaHTML[$pos]['datos']=array('<b>Caracteristicas:');
+				$pos+=1;
+				$tablaHTML[$pos]['medidas']=array(190);
+				$tablaHTML[$pos]['alineado']=array('L');
+				$tablaHTML[$pos]['datos']=array($activos['CARACTERISTICA']);
+				$pos+=1;
+
+				$tablaHTML[$pos]['medidas']=array(190);
+				$tablaHTML[$pos]['alineado']=array('L');
+				$tablaHTML[$pos]['datos']=array('<b>Trayectoria:');
+				$pos+=1;
+				$tablaHTML[$pos]['medidas']=array(190);
+				$tablaHTML[$pos]['alineado']=array('L');
+				$tablaHTML[$pos]['datos']=array('');
+				$pos+=1;
+
+				$tablaHTML[$pos]['medidas']=array(40,40,35,40,35);
+				$tablaHTML[$pos]['alineado']=array('C','C','C','C','C');
+				$tablaHTML[$pos]['datos']=array('<b>Ultima depreciacion:','<b>Costo Original','<b>Depreciacion','<b>Depreciacion Acumulada','<b>Saldo en libro');
+				$tablaHTML[$pos]['estilo']='';
+				$tablaHTML[$pos]['borde']='1';
+				$pos+=1;
+
+				$contabilidad = '';
+				if($activos['FECHA_CONTA']!='' && $activos['FECHA_CONTA']!=null){$contabilidad = $activos['FECHA_CONTA']->format('Y-m-d');}
+				$tablaHTML[$pos]['medidas']=array(40,40,35,40,35);
+				$tablaHTML[$pos]['alineado']=array('C','C','C','C','C');
+				$tablaHTML[$pos]['datos']=array($contabilidad,'$'.$activos['ORIG_VALUE'],'','','');
+				$tablaHTML[$pos]['estilo']='';
+				$tablaHTML[$pos]['borde']='1';
+				$pos+=1;
+			}
+
+
+		$this->pdf->cedula_reporte_lista($titulo,$tablaHTML,$contenido=false,$image,'fecha','fecha',$sizetable,true,$sal_hea_body=30);
+	}
+
+	function reporte_solicitud($parametros)
+	{
+		$sizetable = 8;
+		$titulo[0]['dato'] = "ACTA SALIDA DE BIENES DEL CAMPUS";
+		$titulo[0]['size'] = 11;
+		$titulo[0]['salto'] = 15;
+		$titulo[0]['borde'] = 0;
+		$titulo[0]['alineado'] = 'C';
+
+		$ids = explode(',',$parametros['id']);
+		$list = array();
+
+		foreach ($ids as $key => $value) {
+			$activos = $this->articulo->lista_articulos($query=false,$loc=false,$cus=false,$pag=false,$value,$exacto=false,$asset=false,$bajas=false,$terceros=false,$patrimoniales=false,$desde=false,$hasta=false,$multiple=false);	
+			array_push($list,$activos[0]);
+		}
+		// print_r($list);die();	
+
+
+		$tablaHTML[0]['alineado'] = array('J');
+		$tablaHTML[0]['medidas']=array(190);
+		$tablaHTML[0]['datos'] = array("En la ciudad de Quito, 15 de agosto de 2023, comparece, por una parte, la Dirección de Control de Activos Fijos y seguros de la Pontificia Universidad Católica del Ecuador y, por otra parte, ___________________________________________, como custodio responsable del buen uso y cuidado del bien o bienes de la unidad ____________________________________, mediante el siguiente documento realiza la notificación de la salida de los bienes de conformidad a lo establecido en los lineamientos de Activos de la Pontificia Universidad Católica del Ecuador.");
+		$tablaHTML[0]['size'] = 11;
+		$tablaHTML[0]['salto'] = 15;
+		$tablaHTML[0]['borde'] = 0;
+		$tablaHTML[0]['estilo'] = '';
+
+		$tablaHTML = array();
+		$pos = 1;	
+
+		foreach ($list as $key => $activos) {
+				
+				$tablaHTML[$pos]['medidas']=array(190);
+				$tablaHTML[$pos]['alineado']=array('C');
+				$tablaHTML[$pos]['datos']=array('PONTIFICIA UNIVERSIDAD CATOLICA DEL ECUADOR');
+				$tablaHTML[$pos]['estilo']='BI';
+				$tablaHTML[$pos]['size'] = 8;
+				$pos+=1;
+
+				$tablaHTML[$pos]['medidas']=array(190);
+				$tablaHTML[$pos]['alineado']=array('C');
+				$tablaHTML[$pos]['datos']=array('DIRECCION GENERAL FINANCIERA');
+				$tablaHTML[$pos]['estilo']='BI';
+
+				$tablaHTML[$pos]['size'] = 8;
+				$pos+=1;
+
+				$tablaHTML[$pos]['medidas']=array(190);
+				$tablaHTML[$pos]['alineado']=array('C');
+				$tablaHTML[$pos]['datos']=array('DIRECCION DE CONTROL DE ACTIVOS');
+				$tablaHTML[$pos]['estilo']='BI';
+
+				$tablaHTML[$pos]['size'] = 8;
+				$pos+=1;
+
+				$tablaHTML[$pos]['medidas']=array(190);
+				$tablaHTML[$pos]['alineado']=array('C');
+				$tablaHTML[$pos]['datos']=array('CEDULA DE INVENTARIOS');
+				$tablaHTML[$pos]['estilo']='BI';
+
+				$tablaHTML[$pos]['size'] = 8;
+				$pos+=1;
+
+				$tablaHTML[$pos]['medidas']=array(100,90);
+				$tablaHTML[$pos]['alineado']=array('L','R');
+				$tablaHTML[$pos]['datos']=array('',date('Y-m-d'));
+				$tablaHTML[$pos]['estilo']='B';
+
+				$tablaHTML[$pos]['size'] = 8;
+				$pos+=1;
+
+				$tablaHTML[$pos]['medidas']=array(30,30,130);
+				$tablaHTML[$pos]['alineado']=array('L','L','L');
+				$tablaHTML[$pos]['datos']=array('<b>Codigo de activo',$activos['tag'],$activos['nom']);
+				$tablaHTML[$pos]['estilo']='';
+				$tablaHTML[$pos]['borde']='T';
+
+				$tablaHTML[$pos]['size'] = 8;
+				$pos+=1;
+
+				$tablaHTML[$pos]['medidas']=array(30,25,30,50,30,25);
+				$tablaHTML[$pos]['alineado']=array('L','L','L','L','L','L');
+				$tablaHTML[$pos]['datos']=array('<b>Secuencial:','','<b>Numero Etiqueta:','','<b>Estado:',$activos['estado']);
+				$tablaHTML[$pos]['estilo']='';
+
+				$tablaHTML[$pos]['size'] = 8;
+				// $tablaHTML[$pos]['borde']='1';
+				$pos+=1;
+
+
+				$tablaHTML[$pos]['medidas']=array(30,15,90,30,25);
+				$tablaHTML[$pos]['alineado']=array('L','L','L','L','L');
+				$tablaHTML[$pos]['datos']=array('<b>Categoria:','','','<b>Fecha Compra:',$activos['ORIG_ACQ_YR']->format('Y-m-d'));
+				$tablaHTML[$pos]['estilo']='';
+
+				$tablaHTML[$pos]['size'] = 8;		
+				// $tablaHTML[$pos]['borde']='1';
+				$pos+=1;
+
+				$tablaHTML[$pos]['medidas']=array(30,15,90,30,25);
+				$tablaHTML[$pos]['alineado']=array('L','L','L','L','L');
+				$tablaHTML[$pos]['datos']=array('<b>SubCategoria:','','','<b>Fecha servicio:','');
+				$tablaHTML[$pos]['estilo']='';
+
+				$tablaHTML[$pos]['size'] = 8;		
+				// $tablaHTML[$pos]['borde']='1';
+				$pos+=1;
+
+				$tablaHTML[$pos]['medidas']=array(35,100,30,25);
+				$tablaHTML[$pos]['alineado']=array('L','L','L','L');
+				$tablaHTML[$pos]['datos']=array('<b>Cod. Grupo Activos:','','<b>Periodo contable:','');
+				$tablaHTML[$pos]['estilo']='';	
+
+				$tablaHTML[$pos]['size'] = 8;	
+				// $tablaHTML[$pos]['borde']='1';
+				$pos+=1;
+
+				$propi = 'PROPIO';
+				if($activos['TERCEROS']==1)
+				{
+					$propi = 'TERCEROS';
+				}
+				if($activos['PATRIMONIALES']==1)
+				{
+					$propi = 'PATRIMONIALES';
+				}
+
+
+				$tablaHTML[$pos]['medidas']=array(30,105,25,30);
+				$tablaHTML[$pos]['alineado']=array('L','L','L','L');
+				$tablaHTML[$pos]['datos']=array('<b>Propietario:',$propi,'<b>Año:','');
+				$tablaHTML[$pos]['estilo']='';
+
+				$tablaHTML[$pos]['size'] = 8;
+				// $tablaHTML[$pos]['borde']='1';
+				$pos+=1;
+
+
+				$tablaHTML[$pos]['medidas']=array(190);
+				$tablaHTML[$pos]['alineado']=array('L');
+				$tablaHTML[$pos]['datos']=array('');
+				$tablaHTML[$pos]['estilo']='';
+				$tablaHTML[$pos]['borde']='TB';
+
+				$tablaHTML[$pos]['size'] = 8;
+				$pos+=1;
+
+				$tablaHTML[$pos]['medidas']=array(30,30,25,30,20,55);
+				$tablaHTML[$pos]['alineado']=array('L','L','L','L','L','L');
+				$tablaHTML[$pos]['datos']=array('<b>Marca:',$activos['marca'],'<b>Modelo',$activos['MODELO'],'<b>Serie',$activos['serie']);
+				$tablaHTML[$pos]['estilo']='';
+
+				$tablaHTML[$pos]['size'] = 8;
+				// $tablaHTML[$pos]['borde']='1';
+				$pos+=1;
+
+				$tablaHTML[$pos]['medidas']=array(30,30,25,30,20,55);
+				$tablaHTML[$pos]['alineado']=array('L','L','L','L','L','L');
+				$tablaHTML[$pos]['datos']=array('<b>Color:',$activos['color'],'<b>Adjetivo',$activos['genero'],'<b>Unidad', $activos['localizacion']);
+				$tablaHTML[$pos]['estilo']='';
+
+				$tablaHTML[$pos]['size'] = 8;
+				// $tablaHTML[$pos]['borde']='1';
+				$pos+=1;
+
+				$tablaHTML[$pos]['medidas']=array(30,30,25,30,20,55);
+				$tablaHTML[$pos]['alineado']=array('L','L','L','L','L','L');
+				$tablaHTML[$pos]['datos']=array('<b>Factura:','','<b>vida Activo:','','<b>Oficina','');
+				$tablaHTML[$pos]['estilo']='';
+
+				$tablaHTML[$pos]['size'] = 8;
+				// $tablaHTML[$pos]['borde']='1';
+				$pos+=1;
+
+				$tablaHTML[$pos]['medidas']=array(30,30,25,30,20,55);
+				$tablaHTML[$pos]['alineado']=array('L','L','L','L','L','L');
+				$tablaHTML[$pos]['datos']=array('<b>Costo Original:','$'.$activos['ORIG_VALUE'],'','','<b>Custodio',$activos['custodio']);
+				$tablaHTML[$pos]['estilo']='';
+
+				$tablaHTML[$pos]['size'] = 8;
+				// $tablaHTML[$pos]['borde']='1';
+				$pos+=1;
+
+
+				$tablaHTML[$pos]['medidas']=array(190);
+				$tablaHTML[$pos]['alineado']=array('L');
+				$tablaHTML[$pos]['datos']=array('');
+				$tablaHTML[$pos]['borde']='T';
+				$tablaHTML[$pos]['size'] = 8;
+				$pos+=1;
+				$tablaHTML[$pos]['medidas']=array(190);
+				$tablaHTML[$pos]['alineado']=array('L');
+				$tablaHTML[$pos]['datos']=array('');
+				$tablaHTML[$pos]['size'] = 8;
+				// $tablaHTML[$pos]['borde']='TB';
+				$pos+=1;
+
+				$tablaHTML[$pos]['medidas']=array(190);
+				$tablaHTML[$pos]['alineado']=array('L');
+				$tablaHTML[$pos]['datos']=array('<b>Anexos:');
+				$tablaHTML[$pos]['size'] = 8;
+				$pos+=1;
+				$tablaHTML[$pos]['medidas']=array(190);
+				$tablaHTML[$pos]['alineado']=array('L');
+				$tablaHTML[$pos]['datos']=array('');
+				$tablaHTML[$pos]['size'] = 8;
+				$pos+=1;
+
+				$tablaHTML[$pos]['medidas']=array(190);
+				$tablaHTML[$pos]['alineado']=array('L');
+				$tablaHTML[$pos]['size'] = 8;
+				$tablaHTML[$pos]['datos']=array('<b>Caracteristicas:');
+				$pos+=1;
+				$tablaHTML[$pos]['medidas']=array(190);
+				$tablaHTML[$pos]['alineado']=array('L');
+				$tablaHTML[$pos]['datos']=array($activos['CARACTERISTICA']);
+				$tablaHTML[$pos]['size'] = 8;
+				$pos+=1;
+
+				$tablaHTML[$pos]['medidas']=array(190);
+				$tablaHTML[$pos]['alineado']=array('L');
+				$tablaHTML[$pos]['datos']=array('<b>Trayectoria:');
+				$tablaHTML[$pos]['size'] = 8;
+				$pos+=1;
+				$tablaHTML[$pos]['medidas']=array(190);
+				$tablaHTML[$pos]['alineado']=array('L');
+				$tablaHTML[$pos]['datos']=array('');
+				$tablaHTML[$pos]['size'] = 8;
+				$pos+=1;
+
+				$tablaHTML[$pos]['medidas']=array(40,40,35,40,35);
+				$tablaHTML[$pos]['alineado']=array('C','C','C','C','C');
+				$tablaHTML[$pos]['datos']=array('<b>Ultima depreciacion:','<b>Costo Original','<b>Depreciacion','<b>Depreciacion Acumulada','<b>Saldo en libro');
+				$tablaHTML[$pos]['estilo']='';
+				$tablaHTML[$pos]['borde']='1';
+				$tablaHTML[$pos]['size'] = 8;
+				$pos+=1;
+
+				$contabilidad = '';
+				if($activos['FECHA_CONTA']!='' && $activos['FECHA_CONTA']!=null){$contabilidad = $activos['FECHA_CONTA']->format('Y-m-d');}
+				$tablaHTML[$pos]['medidas']=array(40,40,35,40,35);
+				$tablaHTML[$pos]['alineado']=array('C','C','C','C','C');
+				$tablaHTML[$pos]['datos']=array($contabilidad,'$'.$activos['ORIG_VALUE'],'','','');
+				$tablaHTML[$pos]['estilo']='';
+				$tablaHTML[$pos]['borde']='1';
+				$tablaHTML[$pos]['size'] = 8;
+				$pos+=1;
+			}
+
+
+			$this->pdf->solicitud_acta($img_header=false,$img_foot=false,$titulo,$tablaHTML,$fechaini=false,$fechafin=false,$sizetable,$mostrar=0,$sal_hea_body=20,$orientacion='P',$descargar_o_temp=0);
+			
+
+
+		///$this->pdf->solicitud_acta($titulo,$tablaHTML,$contenido=false,$image,'fecha','fecha',$sizetable,true,$sal_hea_body=30);
+
+
+	}
+
+
 
 	function reporte_normal($query,$loc,$cus,$desde,$hasta)
 	{
