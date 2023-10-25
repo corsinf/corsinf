@@ -9,6 +9,7 @@ if(!class_exists('db'))
 class articulosM
 {
 	private $db;
+	private $sql_busqueda; 
 	
 	function __construct()
 	{
@@ -16,8 +17,128 @@ class articulosM
 
 	}
 
-	function lista_articulos($query=false,$loc=false,$cus=false,$pag=false,$whereid=false,$exacto=false,$asset=false,$bajas=false,$terceros=false,$patrimoniales=false,$desde=false,$hasta=false,$multiple=false)
+	// function lista_articulos($query=false,$loc=false,$cus=false,$pag=false,$whereid=false,$exacto=false,$asset=false,$desde=false,$hasta=false,$multiple=false)
+	// {
+
+	// 	// print_r($exacto);die();
+	// 	$sql = "SELECT id_plantilla as 'id',A.TAG_SERIE as 'tag',A.ID_ASSET,DESCRIPT as 'nom',MODELO as 'modelo',A.TAG_UNIQUE AS 'RFID',SERIE as 'serie',L.ID_LOCATION AS 'IDL',L.DENOMINACION as 'localizacion',PE.ID_PERSON AS 'IDC',PE.PERSON_NOM as 'custodio',M.DESCRIPCION as 'marca',E.DESCRIPCION as 'estado',G.DESCRIPCION as 'genero',C.DESCRIPCION as 'color',IMAGEN,OBSERVACION,FECHA_INV_DATE as 'fecha_in',BAJAS,TERCEROS,PATRIMONIALES,* FROM PLANTILLA_MASIVA P
+	// 		LEFT JOIN ASSET A ON P.ID_ASSET = A.ID_ASSET
+	// 		LEFT JOIN LOCATION L ON P.LOCATION = L.ID_LOCATION
+	// 		LEFT JOIN PERSON_NO PE ON P.PERSON_NO = PE.ID_PERSON
+	// 		LEFT JOIN MARCAS M ON P.EVALGROUP1 = M.ID_MARCA
+	// 		LEFT JOIN ESTADO E ON P.EVALGROUP2 = E.ID_ESTADO
+	// 		LEFT JOIN GENERO G ON P.EVALGROUP3 = G.ID_GENERO
+	// 		LEFT JOIN COLORES C ON P.EVALGROUP4 = C.ID_COLORES
+	// 		WHERE BAJAS = 0 AND TERCEROS = 0 AND PATRIMONIALES = 0  ";
+
+	// 				// print_r('dd'.$query.'-');die();
+	// 		if($query!='')
+	// 		{
+	// 			$especifico = 0;
+	// 			if($exacto)
+	// 			{
+					
+	// 				switch ($asset) {
+	// 					case '1':
+	// 						if($query)
+	// 						{						   
+	// 							$sql.=" AND A.TAG_SERIE LIKE '".$query."%'";
+	// 							$especifico = 1;
+	// 						}
+	// 						break;
+	// 					case '2':
+	// 						if($query)
+	// 						{
+	// 							$sql.=" AND P.ORIG_ASSET LIKE '".$query."%'";
+	// 							$especifico = 1;
+	// 						}
+	// 						break;
+	// 					case '3':
+	// 						if($query)
+	// 						{
+	// 							$sql.=" AND A.TAG_UNIQUE LIKE '%".$query."%'";
+	// 							$especifico = 1;
+	// 						}
+	// 						break;						
+	// 					default:
+	// 						// code...
+	// 						break;
+	// 				}					
+
+	// 			}
+	// 			if($multiple)
+	// 			{
+	// 				switch ($asset) {
+	// 					case '1':
+	// 						if($query)
+	// 						{						   
+	// 							$sql.=" AND A.TAG_SERIE in (".$query.")";
+	// 							$especifico = 1;
+	// 						}
+	// 						break;
+	// 					case '2':
+	// 						if($query)
+	// 						{
+	// 							$sql.=" AND P.ORIG_ASSET in (".$query.")";
+	// 							$especifico = 1;
+	// 						}
+	// 						break;
+	// 					case '3':
+	// 						if($query)
+	// 						{
+	// 							$sql.=" AND A.TAG_UNIQUE in (".$query.")";
+	// 							$especifico = 1;
+	// 						}
+	// 						break;						
+	// 					default:
+	// 						// code...
+	// 						break;
+	// 				}					
+
+	// 			}
+	// 			if($especifico==0)
+	// 			{
+	// 				$sql.=" AND A.TAG_SERIE +' '+P.DESCRIPT+' '+P.ORIG_ASSET +' '+A.TAG_UNIQUE LIKE '%".$query."%'";
+	// 			}
+
+
+	// 		}
+
+	// 		if($loc)
+	// 		{
+	// 			$sql.=" AND P.LOCATION = '".$loc."' ";
+	// 		}
+	// 		if($cus)
+	// 		{
+	// 			$sql.=" AND PE.ID_PERSON = '".$cus."' ";
+	// 		}
+	// 		if($whereid)
+	// 		{
+	// 			$sql.='  AND id_plantilla = '.$whereid.' ';
+	// 		}
+	// 		if($desde  && $hasta)
+	// 		{
+	// 			$sql.=" AND FECHA_INV_DATE BETWEEN '".str_replace('-','',$desde)."' AND '".str_replace('-','',$hasta)."'";
+	// 		}
+	// 		$sql.= " ORDER BY id_plantilla ";
+	// 		if($pag)
+	// 		{
+	// 		     $pagi = explode('-',$pag);
+	// 		     $ini =$pagi[0];
+	// 		     $fin = $pagi[1];
+	// 		     $sql.= "OFFSET ".$ini." ROWS FETCH NEXT ".$fin." ROWS ONLY;";
+	// 		}
+	//       // print_r($sql);die();
+
+	// 	$this->sql_busqueda = $sql;
+	// 	$datos = $this->db->datos($sql);
+	// 	return $datos;
+	// }
+
+	function lista_articulos_new($query=false,$loc=false,$cus=false,$pag=false,$desde=false,$hasta=false,$coincidencia=false,$multiple=false,$buscar_por=false)
 	{
+
+		// print_r($exacto);die();
 		$sql = "SELECT id_plantilla as 'id',A.TAG_SERIE as 'tag',A.ID_ASSET,DESCRIPT as 'nom',MODELO as 'modelo',A.TAG_UNIQUE AS 'RFID',SERIE as 'serie',L.ID_LOCATION AS 'IDL',L.DENOMINACION as 'localizacion',PE.ID_PERSON AS 'IDC',PE.PERSON_NOM as 'custodio',M.DESCRIPCION as 'marca',E.DESCRIPCION as 'estado',G.DESCRIPCION as 'genero',C.DESCRIPCION as 'color',IMAGEN,OBSERVACION,FECHA_INV_DATE as 'fecha_in',BAJAS,TERCEROS,PATRIMONIALES,* FROM PLANTILLA_MASIVA P
 			LEFT JOIN ASSET A ON P.ID_ASSET = A.ID_ASSET
 			LEFT JOIN LOCATION L ON P.LOCATION = L.ID_LOCATION
@@ -26,46 +147,9 @@ class articulosM
 			LEFT JOIN ESTADO E ON P.EVALGROUP2 = E.ID_ESTADO
 			LEFT JOIN GENERO G ON P.EVALGROUP3 = G.ID_GENERO
 			LEFT JOIN COLORES C ON P.EVALGROUP4 = C.ID_COLORES
-			WHERE 1 = 1 ";
-
-					// print_r('dd'.$multiple);die();
-			if($exacto)
-			{
-				if($asset)
-				{
-					if($query && $multiple==false || $multiple==0)
-					{
-					   $sql.=" AND A.TAG_SERIE LIKE '".$query."%'";
-					}else
-					{
-						$sql.=" AND A.TAG_SERIE in (".$query.")";
-					}
-				}else if($asset==2)
-				{
-					if($query && $multiple==false || $multiple==0)
-					{
-						$sql.=" AND P.ORIG_ASSET LIKE '".$query."%'";
-					}else
-					{
-						$sql.=" AND P.ORIG_ASSET in (".$query.")";
-					}
-				}else
-				{
-					if($query && $multiple==false || $multiple==0)
-					{
-						$sql.=" AND A.TAG_UNIQUE LIKE '%".$query."%'";
-					}else
-					{
-						$sql.=" AND A.TAG_UNIQUE in (".$query.")";
-					}
-				}
-
-			}else{
-				if($query)
-				{
-					$sql.=" AND A.TAG_SERIE +' '+P.DESCRIPT+' '+P.ORIG_ASSET +' '+A.TAG_UNIQUE LIKE '%".$query."%'";
-				}
-			}
+			LEFT JOIN PROYECTO PR ON P.EVALGROUP5 = PR.ID_PROYECTO
+			LEFT JOIN CLASE_MOVIMIENTO CL ON P.CLASE_MOVIMIENTO = CL.CODIGO
+			WHERE BAJAS = 0 AND TERCEROS = 0 AND PATRIMONIALES = 0  ";
 
 			if($loc)
 			{
@@ -75,47 +159,490 @@ class articulosM
 			{
 				$sql.=" AND PE.ID_PERSON = '".$cus."' ";
 			}
-			if($whereid)
+			if($desde && $hasta)
 			{
-				$sql.='  AND id_plantilla = '.$whereid.' ';
+				$sql.=" AND FECHA_INV_DATE BETWEEN '".str_replace('-','',$desde)."' AND '".str_replace('-','',$hasta)."'";
 			}
-			if($bajas)
+			if($coincidencia)
 			{
-				$sql.=' AND  BAJAS = 1';
-
-				if($desde  && $hasta)
+				//coincidencia exacta
+				if($multiple)
 				{
-					$sql.=" AND FECHA_BAJA BETWEEN '".$desde."' AND '".$hasta."'";
+					switch ($buscar_por) {
+						case '1':
+							// por asset
+							$query = explode(',',$query);
+							if(count($query)>1)
+							{
+								$in = '';
+								foreach ($query as $key => $value) {
+									if($value!='')
+									{
+										$in.= "'".$value."',";
+									}
+								}
+								$in = substr($in,0,-1);
+								$sql.=" AND A.TAG_SERIE in (".$in.")";
+							}else{
+								$sql.= " AND A.TAG_SERIE = '".$query[0]."'";
+							}
+							break;
+						case '2':
+							// por Aset original
+							$query = explode(',',$query);
+							if(count($query)>1)
+							{
+								$in = '';
+								foreach ($query as $key => $value) {
+									if($value!='')
+									{
+										$in.= "'".$value."',";
+									}
+								}
+								$in = substr($in,0,-1);
+								$sql.=" AND  P.ORIG_ASSET in (".$in.")";
+							}else{
+								$sql.= " AND  P.ORIG_ASSET = '".$query[0]."'";
+							}
+							break;
+						case '3':
+							// por RFID
+							$query = explode(',',$query);
+							if(count($query)>1)
+							{
+								$in = '';
+								foreach ($query as $key => $value) {
+									if($value!='')
+									{
+										$in.= "'".$value."',";
+									}
+								}
+								$in = substr($in,0,-1);
+								$sql.=" AND A.TAG_UNIQUE in (".$in.")";
+							}else{
+								$sql.= " AND A.TAG_UNIQUE = '".$query[0]."'";
+							}
+							break;
+						
+						default:
+							//por detalle (opcion ninguno)
+							$query = explode(',',$query);
+							if(count($query)>1)
+							{
+								$in = '';
+								foreach ($query as $key => $value) {
+									if($value!='')
+									{
+										$in.= "'".$value."',";
+									}
+								}
+								$in = substr($in,0,-1);
+								$sql.=" AND DESCRIPT in (".$in.")";
+							}else{
+								$sql.= " AND DESCRIPT = '".$query[0]."'";
+							}
+							break;
+					}
+
+				}else{
+					// coincidencia exacta unico dato
+					switch ($buscar_por) {
+						case '1':
+							// por asset
+						 	$sql.= " AND A.TAG_SERIE = '".$query."'";
+							break;
+						case '2':
+							// por Aset original						
+						 	$sql.= " AND P.ORIG_ASSET = '".$query."'";
+							break;
+						case '3':
+							// por RFID
+							$sql.= " AND A.TAG_UNIQUE = '".$query."'";
+							break;
+						
+						default:
+							//por detalle (opcion ninguno)
+						    $sql.= " AND DESCRIPT = '".$query."'";
+							break;
+					}
+
 				}
-			}
-			if($terceros)
+
+			}else
 			{
-				$sql.=' AND  TERCEROS= 1';
-			}
-			if($patrimoniales)
-			{
-				$sql.=' AND  PATRIMONIALES = 1';
+				// coincidencia aproximada
+				if($multiple)
+				{
+					// coincidencia aproximada dato multiple
+					switch ($buscar_por) {
+						case '1':
+							// por asset
+							$query = explode(',',$query);
+							if(count($query)>1)
+							{
+								$like = '';
+								foreach ($query as $key => $value) {
+									if($value!='')
+									{
+										$like.= " A.TAG_SERIE like '%".$value."%'  or";
+									}
+								}
+								$like = substr($like,0,-2);
+								$sql.=" AND ".$like;
+							}else{
+								$sql.= " AND A.TAG_SERIE like '%".$query[0]."%'";
+							}
+							break;
+						case '2':
+							// por Aset original
+							$query = explode(',',$query);
+								if(count($query)>1)
+								{
+									$like = '';
+									foreach ($query as $key => $value) {
+										if($value!='')
+										{
+											$like.= " P.ORIG_ASSET like '%".$value."%'  or";
+										}
+									}
+									$like = substr($like,0,-2);
+									$sql.=" AND ".$like;
+								}else{
+									$sql.= " AND P.ORIG_ASSET like '%".$query[0]."%'";
+								}
+							break;
+						case '3':
+							//por RFID
+							$query = explode(',',$query);
+							if(count($query)>1)
+							{
+								$like = '';
+								foreach ($query as $key => $value) {
+									if($value!='')
+									{
+										$like.= " A.TAG_UNIQUE like '%".$value."%'  or";
+									}
+								}
+								$like = substr($like,0,-2);
+								$sql.=" AND ".$like;
+							}else{
+								$sql.= " AND A.TAG_UNIQUE like '%".$query[0]."%'";
+							}
+							break;
+						
+						default:
+							$query = explode(',',$query);
+							if(count($query)>1)
+							{
+								$like = '';
+								foreach ($query as $key => $value) {
+									if($value!='')
+									{
+										$like.= " DESCRIPT like '%".$value."%'  or";
+									}
+								}
+								$like = substr($like,0,-2);
+								$sql.=" AND ".$like;
+							}else{
+								$sql.= " AND DESCRIPT like '%".$query[0]."%'";
+							}
+							break;
+					}
+
+
+				}else
+				{
+					// coincidencia aproximada unico dato
+					switch ($buscar_por) {
+						case '1':
+							// por asset
+						 	$sql.= " AND A.TAG_SERIE like '%".$query."%'";
+							break;
+						case '2':
+							// por Aset original						
+						 	$sql.= " AND P.ORIG_ASSET like '%".$query."%'";
+							break;
+						case '3':
+							// por RFID
+							$sql.= " AND A.TAG_UNIQUE like '%".$query."%'";
+							break;
+						
+						default:
+							//por detalle (opcion ninguno)
+						    $sql.= " AND DESCRIPT like '%".$query."%'";
+							break;
+					}
+				}
+
 			}
 
-			if(!$bajas)
-			{
-				if($desde  && $hasta)
-				{
-					$sql.=' AND FECHA_INV_DATE BETWEEN '.$desde.' AND '.$hasta;
-				}
-			}
+
+
 			$sql.= " ORDER BY id_plantilla ";
+
 			if($pag)
 			{
 			     $pagi = explode('-',$pag);
 			     $ini =$pagi[0];
 			     $fin = $pagi[1];
 			     $sql.= "OFFSET ".$ini." ROWS FETCH NEXT ".$fin." ROWS ONLY;";
+			}else{
+			     $sql.= "OFFSET 0 ROWS FETCH NEXT 50 ROWS ONLY;";
 			}
-	      // print_r($sql);die();
+
+			// print_r($sql);die();
+
+		$this->sql_busqueda = $sql;
 		$datos = $this->db->datos($sql);
 		return $datos;
 	}
+
+
+	function cantidad_registros_new($query=false,$loc=false,$cus=false,$pag=false,$desde=false,$hasta=false,$coincidencia=false,$multiple=false,$buscar_por=false)
+	{
+
+		// print_r($exacto);die();
+		$sql = "SELECT count(id_plantilla) as numreg FROM PLANTILLA_MASIVA P
+			LEFT JOIN ASSET A ON P.ID_ASSET = A.ID_ASSET
+			LEFT JOIN LOCATION L ON P.LOCATION = L.ID_LOCATION
+			LEFT JOIN PERSON_NO PE ON P.PERSON_NO = PE.ID_PERSON
+			LEFT JOIN MARCAS M ON P.EVALGROUP1 = M.ID_MARCA
+			LEFT JOIN ESTADO E ON P.EVALGROUP2 = E.ID_ESTADO
+			LEFT JOIN GENERO G ON P.EVALGROUP3 = G.ID_GENERO
+			LEFT JOIN COLORES C ON P.EVALGROUP4 = C.ID_COLORES
+			LEFT JOIN PROYECTO PR ON P.EVALGROUP5 = PR.ID_PROYECTO
+			LEFT JOIN CLASE_MOVIMIENTO CL ON P.CLASE_MOVIMIENTO = CL.CODIGO
+			WHERE BAJAS = 0 AND TERCEROS = 0 AND PATRIMONIALES = 0  ";
+
+			if($loc)
+			{
+				$sql.=" AND P.LOCATION = '".$loc."' ";
+			}
+			if($cus)
+			{
+				$sql.=" AND PE.ID_PERSON = '".$cus."' ";
+			}
+			if($desde && $hasta)
+			{
+				$sql.=" AND FECHA_INV_DATE BETWEEN '".str_replace('-','',$desde)."' AND '".str_replace('-','',$hasta)."'";
+			}
+			if($coincidencia)
+			{
+				//coincidencia exacta
+				if($multiple)
+				{
+					switch ($buscar_por) {
+						case '1':
+							// por asset
+							$query = explode(',',$query);
+							if(count($query)>1)
+							{
+								$in = '';
+								foreach ($query as $key => $value) {
+									if($value!='')
+									{
+										$in.= "'".$value."',";
+									}
+								}
+								$in = substr($in,0,-1);
+								$sql.=" AND A.TAG_SERIE in (".$in.")";
+							}else{
+								$sql.= " AND A.TAG_SERIE = '".$query[0]."'";
+							}
+							break;
+						case '2':
+							// por Aset original
+							$query = explode(',',$query);
+							if(count($query)>1)
+							{
+								$in = '';
+								foreach ($query as $key => $value) {
+									if($value!='')
+									{
+										$in.= "'".$value."',";
+									}
+								}
+								$in = substr($in,0,-1);
+								$sql.=" AND  P.ORIG_ASSET in (".$in.")";
+							}else{
+								$sql.= " AND  P.ORIG_ASSET = '".$query[0]."'";
+							}
+							break;
+						case '3':
+							// por RFID
+							$query = explode(',',$query);
+							if(count($query)>1)
+							{
+								$in = '';
+								foreach ($query as $key => $value) {
+									if($value!='')
+									{
+										$in.= "'".$value."',";
+									}
+								}
+								$in = substr($in,0,-1);
+								$sql.=" AND A.TAG_UNIQUE in (".$in.")";
+							}else{
+								$sql.= " AND A.TAG_UNIQUE = '".$query[0]."'";
+							}
+							break;
+						
+						default:
+							//por detalle (opcion ninguno)
+							$query = explode(',',$query);
+							if(count($query)>1)
+							{
+								$in = '';
+								foreach ($query as $key => $value) {
+									if($value!='')
+									{
+										$in.= "'".$value."',";
+									}
+								}
+								$in = substr($in,0,-1);
+								$sql.=" AND DESCRIPT in (".$in.")";
+							}else{
+								$sql.= " AND DESCRIPT = '".$query[0]."'";
+							}
+							break;
+					}
+
+				}else{
+					// coincidencia exacta unico dato
+					switch ($buscar_por) {
+						case '1':
+							// por asset
+						 	$sql.= " AND A.TAG_SERIE = '".$query."'";
+							break;
+						case '2':
+							// por Aset original						
+						 	$sql.= " AND P.ORIG_ASSET = '".$query."'";
+							break;
+						case '3':
+							// por RFID
+							$sql.= " AND A.TAG_UNIQUE = '".$query."'";
+							break;
+						
+						default:
+							//por detalle (opcion ninguno)
+						    $sql.= " AND DESCRIPT = '".$query."'";
+							break;
+					}
+
+				}
+
+			}else
+			{
+				// coincidencia aproximada
+				if($multiple)
+				{
+					// coincidencia aproximada dato multiple
+					switch ($buscar_por) {
+						case '1':
+							// por asset
+							$query = explode(',',$query);
+							if(count($query)>1)
+							{
+								$like = '';
+								foreach ($query as $key => $value) {
+									if($value!='')
+									{
+										$like.= " A.TAG_SERIE like '%".$value."%'  or";
+									}
+								}
+								$like = substr($like,0,-2);
+								$sql.=" AND ".$like;
+							}else{
+								$sql.= " AND A.TAG_SERIE like '%".$query[0]."%'";
+							}
+							break;
+						case '2':
+							// por Aset original
+							$query = explode(',',$query);
+								if(count($query)>1)
+								{
+									$like = '';
+									foreach ($query as $key => $value) {
+										if($value!='')
+										{
+											$like.= " P.ORIG_ASSET like '%".$value."%'  or";
+										}
+									}
+									$like = substr($like,0,-2);
+									$sql.=" AND ".$like;
+								}else{
+									$sql.= " AND P.ORIG_ASSET like '%".$query[0]."%'";
+								}
+							break;
+						case '3':
+							//por RFID
+							$query = explode(',',$query);
+							if(count($query)>1)
+							{
+								$like = '';
+								foreach ($query as $key => $value) {
+									if($value!='')
+									{
+										$like.= " A.TAG_UNIQUE like '%".$value."%'  or";
+									}
+								}
+								$like = substr($like,0,-2);
+								$sql.=" AND ".$like;
+							}else{
+								$sql.= " AND A.TAG_UNIQUE like '%".$query[0]."%'";
+							}
+							break;
+						
+						default:
+							$query = explode(',',$query);
+							if(count($query)>1)
+							{
+								$like = '';
+								foreach ($query as $key => $value) {
+									if($value!='')
+									{
+										$like.= " DESCRIPT like '%".$value."%'  or";
+									}
+								}
+								$like = substr($like,0,-2);
+								$sql.=" AND ".$like;
+							}else{
+								$sql.= " AND DESCRIPT like '%".$query[0]."%'";
+							}
+							break;
+					}
+
+
+				}else
+				{
+					// coincidencia aproximada unico dato
+					switch ($buscar_por) {
+						case '1':
+							// por asset
+						 	$sql.= " AND A.TAG_SERIE like '%".$query."%'";
+							break;
+						case '2':
+							// por Aset original						
+						 	$sql.= " AND P.ORIG_ASSET like '%".$query."%'";
+							break;
+						case '3':
+							// por RFID
+							$sql.= " AND A.TAG_UNIQUE like '%".$query."%'";
+							break;
+						
+						default:
+							//por detalle (opcion ninguno)
+						    $sql.= " AND DESCRIPT like '%".$query."%'";
+							break;
+					}
+				}
+
+			}
+		$datos = $this->db->datos($sql);
+		return $datos;
+	}
+
+
 
 	function lista_kit($id_activo)
 	{
@@ -124,7 +651,7 @@ class articulosM
 		$datos = $this->db->datos($sql);
 		return $datos;
 	}
-	function cantidad_registros($query=false,$loc=false,$cus=false,$pag=false,$whereid=false)
+	function cantidad_registros($query=false,$loc=false,$cus=false,$pag=false,$whereid=false,$desde=false,$hasta=false)
 	{
 		$sql="SELECT COUNT(id_plantilla) as 'numreg' FROM PLANTILLA_MASIVA P
 			LEFT JOIN ASSET A ON P.ID_ASSET = A.ID_ASSET
@@ -134,7 +661,11 @@ class articulosM
 			LEFT JOIN ESTADO E ON P.EVALGROUP2 = E.ID_ESTADO
 			LEFT JOIN GENERO G ON P.EVALGROUP3 = G.ID_GENERO
 			LEFT JOIN COLORES C ON P.EVALGROUP4 = C.ID_COLORES
-			WHERE 1=1";
+			WHERE BAJAS = 0 AND TERCEROS = 0 AND PATRIMONIALES = 0 ";
+			if($desde!='' && $hasta!='' && $desde!=false && $hasta!=false)
+			{
+				$sql.=" AND FECHA_INV_DATE BETWEEN '".str_replace('-','',$desde)."' AND '".str_replace('-','',$hasta)."' ";
+			}
 			if($query)
 			{ 
 			   $sql.=" AND A.TAG_SERIE +' '+P.DESCRIPT+' '+P.ORIG_ASSET LIKE '%".$query."%'";
@@ -169,6 +700,34 @@ class articulosM
 		$sql = "SELECT count(*) as 'eti' FROM ASSET WHERE TAG_UNIQUE <>''";
 		$datos = $this->db->datos($sql);
 		return $datos;
+	}
+
+	function total_activo()
+	{
+		$sql = "SELECT COUNT(id_plantilla) as 'cantidad' FROM PLANTILLA_MASIVA WHERE BAJAS=0 AND TERCEROS = 0 and PATRIMONIALES = 0";
+		$datos = $this->db->datos($sql);
+		return $datos;
+	}
+	function total_bajas()
+	{
+		$sql = "SELECT COUNT(id_plantilla) as 'cantidad' FROM PLANTILLA_MASIVA WHERE BAJAS=1 AND TERCEROS = 0 and PATRIMONIALES = 0";
+		$datos = $this->db->datos($sql);
+		return $datos;
+	}
+
+	function total_patrimoniales()
+	{
+		$sql = "SELECT COUNT(id_plantilla) as 'cantidad' FROM PLANTILLA_MASIVA WHERE BAJAS=0 AND TERCEROS = 0 and PATRIMONIALES = 1";
+		$datos = $this->db->datos($sql);
+		return $datos;
+
+	}
+	function total_terceros()
+	{
+		$sql = "SELECT COUNT(id_plantilla) as 'cantidad' FROM PLANTILLA_MASIVA WHERE BAJAS=0 AND TERCEROS = 1 and PATRIMONIALES = 0";
+		$datos = $this->db->datos($sql);
+		return $datos;
+
 	}
 
 	function cantidad_registros_patrimoniales($query,$loc,$cus,$pag=false,$whereid=false)
@@ -597,6 +1156,25 @@ class articulosM
 		// print_r($sql);die();
 		$re = $this->db->datos($sql);
 		return $re;
+	}
+
+
+
+	function set_get_sql()
+	{
+		// print_r($this->sql_busqueda);die();
+		return $this->sql_busqueda;
+	}
+
+	function tabla_campo($campo)
+	{
+		return $this->db->en_tabla($campo);
+	}
+
+	function ejecutar_sql($sql)
+	{
+		// print_r($sql);die();
+		return $this->db->datos($sql);
 	}
 }
 

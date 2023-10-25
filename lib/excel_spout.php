@@ -11,8 +11,27 @@ use Box\Spout\Common\Entity\Style\CellAlignment;
 use Box\Spout\Common\Entity\Style\Color;
 
 
-include('../modelo/reportesM.php');
+if(!class_exists('reportesM'))
+{
+	include('../modelo/reportesM.php');
+}
+if(!class_exists('ArticulosM'))
+{
+	include('../modelo/ArticulosM.php');
+}
+
+
 include('../funciones/funciones.php');
+include('../modelo/localizacionM.php');
+include('../modelo/marcasM.php');
+include('../modelo/custodioM.php');
+include('../modelo/proyectosM.php');
+include('../modelo/estadoM.php');
+include('../modelo/generoM.php');
+include('../modelo/coloresM.php');
+include('../modelo/clase_movimientoM.php');
+include('../modelo/detalle_articuloM.php');
+include('../modelo/cargar_datosM.php');
 
 
 /**
@@ -24,6 +43,11 @@ if(isset($_GET['reporte_dinamico']))
 	$datos = $_GET;
 	$reporte->generar_excel($datos);
 }
+if(isset($_GET['reporte_marca']))
+{
+	$reporte->reporte_marca();
+	// $reporte-> ejemplo();
+}
 
 class excel_spout
 {
@@ -34,6 +58,19 @@ class excel_spout
 	{
 		$this->reportes = new reportesM();
 		$this->funciones = new funciones();
+
+		$this->articulos = new ArticulosM();
+		$this->localizacion = new localizacionM();
+		$this->marcas = new marcasM();
+		$this->custodio = new custodioM();
+		$this->proyectos = new proyectosM();
+
+		$this->estado = new estadoM();
+		$this->genero = new generoM();
+		$this->colores = new coloresM();	
+		$this->mov = new clase_movimientoM();		
+		$this->detalle_art = new detalle_articuloM();		
+		$this->carga_datos = new cargar_datosM();		
 		
 	}
 
@@ -326,6 +363,50 @@ class excel_spout
 				}
 	
 	   	$writer->close();
+    }
+
+
+    function basic_excel($header,$datos,$titulo)
+    {
+    	$writer = WriterEntityFactory::createXLSXWriter();
+		$fileName = $titulo.'.xlsx';
+		$writer->openToBrowser($fileName);
+
+    	//print_r($datos);die();
+    	$CABECERA2= $header;
+		$rowFromValues = WriterEntityFactory::createRowFromArray($CABECERA2);
+		$writer->addRow($rowFromValues);
+		
+		foreach ($datos as $key => $value) {
+		    $rowFromValues = WriterEntityFactory::createRowFromArray($value);
+		    $writer->addRow($rowFromValues);
+		}
+		
+		$writer->close();
+
+    }
+
+
+    function reporte_marca()
+    {
+    	$datos = $this->marcas->lista_marcas_todo();
+
+    	$writer = WriterEntityFactory::createXLSXWriter();
+		$fileName = 'TOTAL_MARCAS.xlsx';
+		$writer->openToBrowser($fileName);
+
+    	//print_r($datos);die();
+    	$CABECERA2= array('CODIGO SAP','DESCRIPCION SAP','ESTADO');
+		$rowFromValues = WriterEntityFactory::createRowFromArray($CABECERA2);
+		$writer->addRow($rowFromValues);
+		
+		foreach ($datos as $key => $value) {
+			$SALIDA = array($value['CODIGO'],$value['DESCRIPCION'],$value['ESTADO']);
+		    $rowFromValues = WriterEntityFactory::createRowFromArray($SALIDA);
+		    $writer->addRow($rowFromValues);
+		}
+		
+		$writer->close();
     }
 
 

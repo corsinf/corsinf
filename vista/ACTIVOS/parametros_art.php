@@ -1,4 +1,4 @@
-<?php include('../../cabeceras/header.php'); ?>
+<?php //include('../cabeceras/header.php'); ?>
 <div class="page-wrapper">
       <div class="page-content">
         <!--breadcrumb-->
@@ -70,27 +70,27 @@
                 <div class="tab-content py-3">
                   <div class="tab-pane fade show active" id="dangerhome" role="tabpanel">
                      <div class="container-iframe"> 
-                        <iframe class="responsive-iframe" style="width:100%;border: 0px; height: 500px;" src="marcas.php"></iframe>
+                        <iframe class="responsive-iframe" style="width:100%;border: 0px; height: 500px;" src="ACTIVOS/marcas.php"></iframe>
                       </div>
                   </div>
                   <div class="tab-pane fade" id="dangerprofile" role="tabpanel">
                      <div class="container-iframe"> 
-                        <iframe class="responsive-iframe" style="width:100%;border: 0px; height: 500px;" src="estado.php"></iframe>
+                        <iframe class="responsive-iframe" style="width:100%;border: 0px; height: 500px;" src="ACTIVOS/estado.php"></iframe>
                       </div>
                   </div>
                   <div class="tab-pane fade" id="dangercontact" role="tabpanel">
                     <div class="container-iframe"> 
-                      <iframe class="responsive-iframe" style="width:100%;border: 0px; height: 500px;" src="genero.php"></iframe>
+                      <iframe class="responsive-iframe" style="width:100%;border: 0px; height: 500px;" src="ACTIVOS/genero.php"></iframe>
                     </div>
                   </div>
                   <div class="tab-pane fade" id="dangercolor" role="tabpanel">
                     <div class="container-iframe"> 
-                      <iframe class="responsive-iframe" style="width:100%;border: 0px; height: 500px;" src="colores.php"></iframe>
+                      <iframe class="responsive-iframe" style="width:100%;border: 0px; height: 500px;" src="ACTIVOS/colores.php"></iframe>
                     </div>
                   </div>
                   <div class="tab-pane fade" id="dangerfamily" role="tabpanel">
                     <div class="container-iframe"> 
-                      <iframe class="responsive-iframe" style="width:100%;border: 0px; height: 500px;" src="familias.php"></iframe>
+                      <iframe class="responsive-iframe" style="width:100%;border: 0px; height: 500px;" src="ACTIVOS/familias.php"></iframe>
                     </div>
                   </div>
                 </div>
@@ -102,4 +102,4 @@
       </div>
     </div>
 
-<?php include('../../cabeceras/footer.php'); ?>
+<?php //include('../cabeceras/footer.php'); ?>

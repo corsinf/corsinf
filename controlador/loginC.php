@@ -46,7 +46,18 @@ if(isset($_GET['reseteo']))
 	 $parametros = $_POST['parametros'];
   echo json_encode($controlador->resetear($parametros));
 }
-
+if(isset($_GET['change_settings']))
+{
+	 $_SESSION['INICIO']['MODULO_SISTEMA_ANT'] =  $_SESSION['INICIO']['MODULO_SISTEMA']; 
+	 $_SESSION['INICIO']['MODULO_SISTEMA'] = '1';
+	echo json_encode('1');
+}
+if(isset($_GET['regresar_modulo']))
+{
+	 $_SESSION['INICIO']['MODULO_SISTEMA'] =  $_SESSION['INICIO']['MODULO_SISTEMA_ANT']; 
+	 // $_SESSION['INICIO']['MODULO_SISTEMA'] = '1';
+	echo json_encode($_SESSION['INICIO']['MODULO_SISTEMA']);
+}
 class loginC
 {
 	private $login;
@@ -80,6 +91,10 @@ class loginC
 				$_SESSION["INICIO"]['TIPO'] = $datos[0]['tipo'];
 				$_SESSION["INICIO"]['PERFIL'] = $datos[0]['perfil'];				
 				$_SESSION["INICIO"]['FOTO'] = $datos[0]['foto'];
+				$_SESSION["INICIO"]['NO_CONCURENTE'] = '';
+				$_SESSION["INICIO"]['NO_CONCURENTE_NOM'] ='';
+				$_SESSION["INICIO"]['MODULO_SISTEMA_ANT'] ='';
+				$_SESSION["INICIO"]['LISTA_ART'] =1;
 				return 1;
 
 			}else
@@ -89,6 +104,28 @@ class loginC
 
 		}else
 		{
+			// busca en no concurrentes que es en custodios
+
+			$datos = $this->login->datos_login_no_concurentes($parametros['email'],$parametros['pass']);
+			// print_r($datos);die();
+			if(count($datos)>0)
+			{
+					$_SESSION["INICIO"]['VER'] = $datos[0]['Ver'];
+					$_SESSION["INICIO"]['EDITAR'] = $datos[0]['editar'];
+					$_SESSION["INICIO"]['ELIMINAR'] = $datos[0]['eliminar'];
+					$_SESSION["INICIO"]['DBA'] = $datos[0]['dba'];
+					$_SESSION["INICIO"]['USUARIO'] = $datos[0]['nombres'].' '.$datos[0]['apellidos'];
+					$_SESSION["INICIO"]['ID_USUARIO'] = $datos[0]['id'];
+					$_SESSION["INICIO"]['EMAIL'] = $datos[0]['email'];
+					$_SESSION["INICIO"]['TIPO'] = $datos[0]['tipo'];
+					$_SESSION["INICIO"]['PERFIL'] = $datos[0]['perfil'];				
+					$_SESSION["INICIO"]['FOTO'] = $datos[0]['foto'];			
+					$_SESSION["INICIO"]['NO_CONCURENTE'] = $datos[0]['PERSON_NO'];
+					$_SESSION["INICIO"]['NO_CONCURENTE_NOM'] = $datos[0]['PERSON_NOM'];
+				  $_SESSION["INICIO"]['MODULO_SISTEMA_ANT'] ='';
+					$_SESSION["INICIO"]['LISTA_ART'] =1;
+					return 1;
+			}
 			return -2;
 		}
 
@@ -102,9 +139,11 @@ class loginC
 	}
 	function restriccion($pagina)
 	{
+	
+	/*
 		$server = $_SERVER['HTTP_HOST'];
 		$proyecto =explode('controlador',substr(dirname($_SERVER['PHP_SELF']),1));
-		// print_r($proyecto);die();
+		print_r($proyecto);die();
 		$path = 'http://'.$server.'/'.$proyecto[0];
 		$p = explode('?',$pagina);
 		// print_r($p);die();
@@ -127,9 +166,15 @@ class loginC
 		if($termino=='#')
 		{
 			$pagina = substr($pagina,0,-1);
-		}
+		}*/
 
-		// print_r($pagina);
+		$pagina = explode('acc=',$pagina);
+		$pagina = explode('?',$pagina[1]);
+		$pagina = explode('&',$pagina[0]);
+		$pagina = $pagina[0];
+		$pagina = $pagina.'.php';
+		
+		// print_r($pagina);die();
 		$accesos = $this->modulos->accesos($pagina,$_SESSION['INICIO']['PERFIL']);
 		if(count($accesos)>0)
 		{
@@ -139,7 +184,29 @@ class loginC
 			$_SESSION['INICIO']['VER'] = $accesos[0]['Ver'];
 		}else
 		{
-			$datos = array('ver'=>0,'editar'=>0,'eliminar'=>0,'dba'=>0,'modulo'=>0,'pag'=>$pagina);
+			if(strpos($pagina, 'index')!==false)
+			{
+				/*$pag = $this->login->paginas($pagina);
+				print_r($pag);die();
+				if(count($pag)>0)
+				{
+					$tabla = 'ACCESOS';
+					$datos[0]['campo'] = 'id_tipo_usu';
+					$datos[0]['dato'] = $_SESSION['INICIO']['PERFIL'];
+					$datos[1]['campo'] = 'ver';
+					$datos[1]['dato'] = 1;
+					$datos[2]['campo'] = 'editar';
+					$datos[2]['dato'] = 1;
+					$datos[3]['campo'] = 'eliminar';
+					$datos[3]['dato'] = 1;
+					$datos[4]['campo'] = 'id_paginas';
+					$datos[4]['dato'] = $pag[0]['id_paginas'];
+					$this->login->add($tabla,$datos);*/
+					$datos = array('ver'=>1,'editar'=>1,'eliminar'=>1,'dba'=>1,'modulo'=>1,'pag'=>$pagina);
+				// }
+			}else{
+				$datos = array('ver'=>0,'editar'=>0,'eliminar'=>0,'dba'=>0,'modulo'=>0,'pag'=>$pagina);
+			}
 		}
 		// print_r($accesos);die();
 		return $datos;
@@ -187,9 +254,10 @@ class loginC
 									            </a> <ul>';
 											foreach ($paginas as $key2 => $value2) 
 											{
+												$link = str_replace('.php','', $value2['link_pagina']);
 												// print_r($value);die();
-											$opciones.= '<li>
-												            <a href="'.$value2['link_pagina'].'" id="'.$value2['id_paginas'].'">
+												$opciones.= '<li>
+												            <a href="inicio.php?mod='.$value['modulos_sistema'].'&acc='.$link.'" id="'.$value2['id_paginas'].'">
 												              <i class="bx">'.$value2['icono_paginas'].'</i>
 												              '.$value2['nombre_pagina'].'
 												            </a>
@@ -212,29 +280,34 @@ class loginC
 		
 		$mod = '';
 		$datos = $this->login->modulos_sistema();
+		$num_mod = count($datos);
+		$id = '';
+		$link = '';
+		$pagina = '';
 		foreach ($datos as $key => $value) {
 			$num = rand(1, 5);
+			$pagina = str_replace('.php','', $value['link']);
 		switch ($num) {
-		case '1':		
-			$estilo = 'bg-light-danger text-danger';
-			break;
-		case '2':
-			$estilo = 'bg-light-info text-info';
-			break;
-		case '3':
-		  $estilo = 'bg-light-success text-success';
-			break;
-		case '4':
-			$estilo = 'bg-light-warning text-warning';
-			break;
-		case '5':
-			$estilo = 'bg-light-primary text-primary';
-			break;
-		}
+				case '1':		
+					$estilo = 'bg-light-danger text-danger';
+					break;
+				case '2':
+					$estilo = 'bg-light-info text-info';
+					break;
+				case '3':
+				  $estilo = 'bg-light-success text-success';
+					break;
+				case '4':
+					$estilo = 'bg-light-warning text-warning';
+					break;
+				case '5':
+					$estilo = 'bg-light-primary text-primary';
+					break;
+				}
 				$mod.='
 					<div class="col">
 							<div class="card radius-10">
-								<div class="card-body" onclick="modulo_seleccionado(\''.$value['id'].'\',\''.$value['link'].'\')">
+								<div class="card-body" onclick="modulo_seleccionado(\''.$value['id'].'\',\''.$pagina.'\')">
 									<div class="text-center">
 										<div class="widgets-icons rounded-circle mx-auto '.$estilo.' mb-3">'.$value['icono'].'
 										</div>
@@ -243,11 +316,16 @@ class loginC
 									</div>
 								</div>
 							</div>
-						</div>
-				';
+						</div>';
+						if($key==0)
+							{
+								$id = $value['id'];
+								$link = $value['link'];
+							}
 		}
-		return $mod;
-		 print_r($datos);die();
+
+		 // print_r($mod);die();
+		return array('num'=>$num_mod,'html'=>$mod,'id'=>$id,'link'=>$pagina);
 	}
 
 	function resetear($parametros)

@@ -1,4 +1,4 @@
-<?php include('../../cabeceras/header.php');  $id = ''; if(isset($_GET['id'])){$id=$_GET['id'];} ?>
+<?php /*include('../cabeceras/header.php');*/ $id = ''; if(isset($_GET['id'])){$id=$_GET['id'];} ?>
 <script type="text/javascript">
 $( document ).ready(function() {
 	var id = '<?php echo $id; ?>';
@@ -17,11 +17,11 @@ $( document ).ready(function() {
 
     $.ajax({
       data:  {id:id},
-      url:   '../../controlador/clase_movimientoC.php?lista=true',
+      url:   '../controlador/clase_movimientoC.php?lista=true',
       type:  'post',
       dataType: 'json',
       /*beforeSend: function () {   
-           var spiner = '<div class="text-center"><img src="../../img/gif/proce.gif" width="100" height="100"></div>'     
+           var spiner = '<div class="text-center"><img src="../img/gif/proce.gif" width="100" height="100"></div>'     
          $('#tabla_').html(spiner);
       },*/
         success:  function (response) {
@@ -77,18 +77,18 @@ $( document ).ready(function() {
   {
      $.ajax({
       data:  {parametros:parametros},
-      url:   '../../controlador/clase_movimientoC.php?insertar=true',
+      url:   '../controlador/clase_movimientoC.php?insertar=true',
       type:  'post',
       dataType: 'json',
       /*beforeSend: function () {   
-           var spiner = '<div class="text-center"><img src="../../img/gif/proce.gif" width="100" height="100"></div>'     
+           var spiner = '<div class="text-center"><img src="../img/gif/proce.gif" width="100" height="100"></div>'     
          $('#tabla_').html(spiner);
       },*/
         success:  function (response) {  
          if(response == 1)
         {
           Swal.fire('','Operacion realizada con exito.','success').then(function(){          
-          location.href = 'clase_movimiento.php';
+          location.href = 'inicio.php?mod=<?php echo $_SESSION['INICIO']['MODULO_SISTEMA'];?>&acc=clase_movimiento';
          });
         }else if(response==-2)
         {
@@ -124,14 +124,14 @@ $( document ).ready(function() {
   {
      $.ajax({
       data:  {id:id},
-      url:   '../../controlador/clase_movimientoC.php?eliminar=true',
+      url:   '../controlador/clase_movimientoC.php?eliminar=true',
       type:  'post',
       dataType: 'json',
       success:  function (response) {  
         if(response == 1)
         {
          Swal.fire('Eliminado!','Registro Eliminado.','success').then(function(){          
-          location.href = 'clase_movimiento.php';
+          location.href = 'inicio.php?mod=<?php echo $_SESSION['INICIO']['MODULO_SISTEMA'];?>&acc=clase_movimiento';
          });
         }  
                
@@ -163,7 +163,7 @@ $( document ).ready(function() {
                 <div class="container-fluid">
                     <div class="row">
                       <div class="col-sm-12">
-                        <a href="clase_movimiento.php" class="btn btn-outline-secondary btn-sm"><i class="bx bx-arrow-back"></i> Regresar</a>
+                        <a href="inicio.php?mod=<?php echo $_SESSION['INICIO']['MODULO_SISTEMA'];?>&acc=clase_movimiento" class="btn btn-outline-secondary btn-sm"><i class="bx bx-arrow-back"></i> Regresar</a>
                       </div>
                     </div>
                     <div class="row">
@@ -196,4 +196,4 @@ $( document ).ready(function() {
       </div>
     </div>
 
-<?php include('../../cabeceras/footer.php'); ?>
+<?php //include('../cabeceras/footer.php'); ?>

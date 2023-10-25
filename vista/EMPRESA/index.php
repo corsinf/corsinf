@@ -1,4 +1,4 @@
-<?php include('../../cabeceras/header.php'); ?> 
+<?php //include('../cabeceras/header.php'); ?> 
  <script type="text/javascript">
   $( document ).ready(function() {
     usuarios();
@@ -58,11 +58,11 @@
 
        $.ajax({
          // data:  {parametros:parametros},
-         url:   '../../controlador/usuariosC.php?usuarios=true',
+         url:   '../controlador/usuariosC.php?usuarios=true',
          type:  'post',
          dataType: 'json',
          /*beforeSend: function () {   
-              var spiner = '<div class="text-center"><img src="../../img/gif/proce.gif" width="100" height="100"></div>'     
+              var spiner = '<div class="text-center"><img src="../img/gif/proce.gif" width="100" height="100"></div>'     
             $('#tabla_').html(spiner);
          },*/
            success:  function (response) {  
@@ -78,7 +78,7 @@
 
        $.ajax({
          // data:  {parametros:parametros},
-         url:   '../../controlador/custodioC.php?numero_custodios=true',
+         url:   '../controlador/custodioC.php?numero_custodios=true',
          type:  'post',
          dataType: 'json',
            success:  function (response) {  
@@ -94,7 +94,7 @@
 
        $.ajax({
          // data:  {parametros:parametros},
-         url:   '../../controlador/localizacionC.php?numero_localizaciones=true',
+         url:   '../controlador/localizacionC.php?numero_localizaciones=true',
          type:  'post',
          dataType: 'json',
            success:  function (response) {  
@@ -112,7 +112,7 @@
 
        $.ajax({
          // data:  {parametros:parametros},
-         url:   '../../controlador/vinculacionC.php?numero_custodios=true',
+         url:   '../controlador/vinculacionC.php?numero_custodios=true',
          type:  'post',
          dataType: 'json',
            success:  function (response) {  
@@ -130,7 +130,7 @@
 
        $.ajax({
          // data:  {parametros:parametros},
-         url:   '../../controlador/vinculacionC.php?numero_localizaciones=true',
+         url:   '../controlador/vinculacionC.php?numero_localizaciones=true',
          type:  'post',
          dataType: 'json',
            success:  function (response) {  
@@ -155,11 +155,11 @@
       }
         $.ajax({
          data:  {parametros:parametros},
-         url:   '../../controlador/articulosC.php?articulos_especiales=true',
+         url:   '../controlador/articulosC.php?articulos_especiales=true',
          type:  'post',
          dataType: 'json',
          /*beforeSend: function () {   
-              var spiner = '<div class="text-center"><img src="../../img/gif/proce.gif" width="100" height="100"></div>'     
+              var spiner = '<div class="text-center"><img src="../img/gif/proce.gif" width="100" height="100"></div>'     
             $('#tabla_').html(spiner);
          },*/
            success:  function (response) {  
@@ -183,11 +183,11 @@
       }
         $.ajax({
          data:  {parametros:parametros},
-         url:   '../../controlador/articulosC.php?articulos_especiales=true',
+         url:   '../controlador/articulosC.php?articulos_especiales=true',
          type:  'post',
          dataType: 'json',
          /*beforeSend: function () {   
-              var spiner = '<div class="text-center"><img src="../../img/gif/proce.gif" width="100" height="100"></div>'     
+              var spiner = '<div class="text-center"><img src="../img/gif/proce.gif" width="100" height="100"></div>'     
             $('#tabla_').html(spiner);
          },*/
            success:  function (response) {  
@@ -211,11 +211,11 @@
       }
         $.ajax({
          data:  {parametros:parametros},
-         url:   '../../controlador/articulosC.php?articulos_especiales=true',
+         url:   '../controlador/articulosC.php?articulos_especiales=true',
          type:  'post',
          dataType: 'json',
          /*beforeSend: function () {   
-              var spiner = '<div class="text-center"><img src="../../img/gif/proce.gif" width="100" height="100"></div>'     
+              var spiner = '<div class="text-center"><img src="../img/gif/proce.gif" width="100" height="100"></div>'     
             $('#tabla_').html(spiner);
          },*/
            success:  function (response) {  
@@ -239,11 +239,11 @@
       }
         $.ajax({
          data:  {parametros:parametros},
-         url:   '../../controlador/articulosC.php?articulos_especiales=true',
+         url:   '../controlador/articulosC.php?articulos_especiales=true',
          type:  'post',
          dataType: 'json',
          /*beforeSend: function () {   
-              var spiner = '<div class="text-center"><img src="../../img/gif/proce.gif" width="100" height="100"></div>'     
+              var spiner = '<div class="text-center"><img src="../img/gif/proce.gif" width="100" height="100"></div>'     
             $('#tabla_').html(spiner);
          },*/
            success:  function (response) {  
@@ -273,7 +273,7 @@
      
         $.ajax({
          // data:  {parametros:parametros},
-         url:   '../../controlador/contratoC.php?datos_seguros=true',
+         url:   '../controlador/contratoC.php?datos_seguros=true',
          type:  'post',
          dataType: 'json',        
            success:  function (response) {  
@@ -324,52 +324,13 @@
                   <div class="col-md-7">
                     <div class="row">
                         <!-- /.col -->
+                        <?php //print_r($_SESSION['INICIO']);die(); ?>
 
-                      <div class="col-6" onclick="location.href='usuarios.php'">
-                        <div class="card radius-10">
-                          <div class="card-body">
-                            <div class="d-flex align-items-center">
-                              <div>
-                                <p class="mb-0 text-secondary">Usuarios de sistema</p>
-                                <h4 class="my-1" id="lbl_usuarios">0</h4>
-                                <!-- <p class="mb-0 font-13 text-success"><i class="bx bxs-up-arrow align-middle"></i>$34 from last week</p> -->
-                              </div>
-                              <div class="widgets-icons bg-light-success text-primary ms-auto"><i class="bx bx-user"></i>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="col-6" onclick="location.href='custodio.php'">
-                        <div class="card radius-10">
-                          <div class="card-body">
-                            <div class="d-flex align-items-center">
-                              <div>
-                                <p class="mb-0 text-secondary">Custodios</p>
-                                <h4 class="my-1" id="lbl_custodios">0</h4>
-                                <!-- <p class="mb-0 font-13 text-success"><i class="bx bxs-up-arrow align-middle"></i>$34 from last week</p> -->
-                              </div>
-                              <div class="widgets-icons bg-light-success text-primary ms-auto"><i class="bx bx-user-circle"></i>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="col-12" onclick="location.href='localizacion.php'">
-                        <div class="card radius-10">
-                          <div class="card-body">
-                            <div class="d-flex align-items-center">
-                              <div>
-                                <p class="mb-0 text-secondary">Localizaciones / Emplazamiento</p>
-                                <h4 class="my-1" id="lbl_localizaciones">0</h4>
-                                <!-- <p class="mb-0 font-13 text-success"><i class="bx bxs-up-arrow align-middle"></i>$34 from last week</p> -->
-                              </div>
-                              <div class="widgets-icons bg-light-success text-primary ms-auto"><i class="bx bx-map"></i>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
+                      
+
+
+
+                      
                     </div>
                   </div>
                   <!-- /.col -->
@@ -469,4 +430,4 @@
     <!-- /.content -->
   </div>
   
-<?php include('../../cabeceras/footer.php'); ?>
+<?php //include('../cabeceras/footer.php'); ?>

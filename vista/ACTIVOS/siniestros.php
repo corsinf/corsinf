@@ -1,4 +1,4 @@
-<?php include('../../cabeceras/header.php'); ?>
+<?php //include('../cabeceras/header.php'); ?>
 <script type="text/javascript">
   $(document).ready(function() {
     lista_articulos();    
@@ -14,7 +14,7 @@
     };
     $.ajax({
       data:  {parametros:parametros},
-      url:   '../../controlador/contratoC.php?historial=true',
+      url:   '../controlador/contratoC.php?historial=true',
       type:  'post',
       dataType: 'json',
         success:  function (response) {    
@@ -39,7 +39,7 @@
 
     $.ajax({
       data:  {id:id},
-      url:   '../../controlador/estadoC.php?lista=true',
+      url:   '../controlador/estadoC.php?lista=true',
       type:  'post',
       dataType: 'json',
         success:  function (response) {    
@@ -63,7 +63,7 @@
     }
     $.ajax({
       data:  {parametros:parametros},
-      url:   '../../controlador/contratoC.php?detalle_siniestro=true',
+      url:   '../controlador/contratoC.php?detalle_siniestro=true',
       type:  'post',
       dataType: 'json',
         success:  function (response) {    
@@ -90,7 +90,7 @@
         placeholder: 'Seleccione articulo / activo para ver detalle de seguro',
         width:'100%',
         ajax: {
-          url:   '../../controlador/contratoC.php?lista_articulos=true',
+          url:   '../controlador/contratoC.php?lista_articulos=true',
           dataType: 'json',
           delay: 250,
           processResults: function (data) {
@@ -113,11 +113,11 @@
     }
         $.ajax({
           data:  {parametros:parametros},
-          url:   '../../controlador/contratoC.php?cargar_datos_seguro_art=true',
+          url:   '../controlador/contratoC.php?cargar_datos_seguro_art=true',
           type:  'post',
           dataType: 'json',
           /*beforeSend: function () {   
-               var spiner = '<div class="text-center"><img src="../../img/gif/proce.gif" width="100" height="100"></div>'     
+               var spiner = '<div class="text-center"><img src="../img/gif/proce.gif" width="100" height="100"></div>'     
              $('#tabla_').html(spiner);
           },*/
             success:  function (response) {
@@ -368,11 +368,11 @@
             }
             $.ajax({
               data:  {parametros:parametros},
-              url:   '../../controlador/contratoC.php?guardar_datos_siniestro=true',
+              url:   '../controlador/contratoC.php?guardar_datos_siniestro=true',
               type:  'post',
               dataType: 'json',
               /*beforeSend: function () {   
-                   var spiner = '<div class="text-center"><img src="../../img/gif/proce.gif" width="100" height="100"></div>'     
+                   var spiner = '<div class="text-center"><img src="../img/gif/proce.gif" width="100" height="100"></div>'     
                  $('#tabla_').html(spiner);
               },*/
                 success:  function (response) {
@@ -401,4 +401,4 @@
 
          
 
-<?php include('../../cabeceras/footer.php'); ?>
+<?php //include('../cabeceras/footer.php'); ?>

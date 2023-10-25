@@ -1,5 +1,8 @@
 <?php 
 
+///se debe pasar todas las funciones de a qui al documento excel_spout
+
+
 date_default_timezone_set('America/Guayaquil'); 
 require 'lib_excel/vendor/autoload.php';
 use PhpOffice\PhpSpreadsheet\Spreadsheet;

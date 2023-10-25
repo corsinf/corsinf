@@ -1,4 +1,4 @@
-<?php include('../../cabeceras/header.php'); ?>
+<?php //include('../cabeceras/header.php'); ?>
 <script type="text/javascript">
   $( document ).ready(function() {
     consultar_datos();
@@ -10,18 +10,18 @@
 
     $.ajax({
       data:  {id:id},
-      url:   '../../controlador/proyectosC.php?lista=true',
+      url:   '../controlador/proyectosC.php?lista=true',
       type:  'post',
       dataType: 'json',
       /*beforeSend: function () {   
-           var spiner = '<div class="text-center"><img src="../../img/gif/proce.gif" width="100" height="100"></div>'     
+           var spiner = '<div class="text-center"><img src="../img/gif/proce.gif" width="100" height="100"></div>'     
          $('#tabla_').html(spiner);
       },*/
         success:  function (response) {    
         // console.log(response);   
         $.each(response, function(i, item){
           console.log(item);
-        proyectos+='<tr><td>'+item.id+'</td><td><a href="detalle_proyectos.php?id='+item.id+'">'+item.pro+'</a></td><td>'+item.enti+'</td><td>'+item.deno+'</td><td>'+item.desc+'</td><td>'+item.valde.date.substr(0,10)+'</td><td>'+item.vala.date.substr(0,10)+'</td><td>'+item.exp.date.substr(0,10)+'</td><td>';
+        proyectos+='<tr><td>'+item.id+'</td><td><a href="inicio.php?acc=detalle_proyectos&id='+item.id+'">'+item.pro+'</a></td><td>'+item.enti+'</td><td>'+item.deno+'</td><td>'+item.desc+'</td><td>'+item.valde.date.substr(0,10)+'</td><td>'+item.vala.date.substr(0,10)+'</td><td>'+item.exp.date.substr(0,10)+'</td><td>';
         });      
         $('#tbl_datos').html(proyectos);            
       }
@@ -36,11 +36,11 @@
 
     $.ajax({
       data:  {id:id},
-      url:   '../../controlador/proyectosC.php?lista=true',
+      url:   '../controlador/proyectosC.php?lista=true',
       type:  'post',
       dataType: 'json',
       /*beforeSend: function () {   
-           var spiner = '<div class="text-center"><img src="../../img/gif/proce.gif" width="100" height="100"></div>'     
+           var spiner = '<div class="text-center"><img src="../img/gif/proce.gif" width="100" height="100"></div>'     
          $('#tabla_').html(spiner);
       },*/
         success:  function (response) {
@@ -80,18 +80,18 @@
 
     $.ajax({
       data:  {buscar:buscar},
-      url:   '../../controlador/proyectosC.php?buscar=true',
+      url:   '../controlador/proyectosC.php?buscar=true',
       type:  'post',
       dataType: 'json',
       /*beforeSend: function () {   
-           var spiner = '<div class="text-center"><img src="../../img/gif/proce.gif" width="100" height="100"></div>'     
+           var spiner = '<div class="text-center"><img src="../img/gif/proce.gif" width="100" height="100"></div>'     
          $('#tabla_').html(spiner);
       },*/
         success:  function (response) {    
         // console.log(response);   
         $.each(response, function(i, item){
           console.log(item);
-         proyectos+='<tr><td>'+item.id+'</td><td><a href="detalle_proyectos.php?id='+item.id+'">'+item.pro+'</a></td><td>'+item.enti+'</td><td>'+item.deno+'</td><td>'+item.desc+'</td><td>'+item.valde.date.substr(0,10)+'</td><td>'+item.vala.date.substr(0,10)+'</td><td>'+item.exp.date.substr(0,10)+'</td><td>';
+         proyectos+='<tr><td>'+item.id+'</td><td><a href="inicio.php?acc=detalle_proyectos.php&id='+item.id+'">'+item.pro+'</a></td><td>'+item.enti+'</td><td>'+item.deno+'</td><td>'+item.desc+'</td><td>'+item.valde.date.substr(0,10)+'</td><td>'+item.vala.date.substr(0,10)+'</td><td>'+item.exp.date.substr(0,10)+'</td><td>';
         });      
         $('#tbl_datos').html(proyectos);                    
       }
@@ -102,11 +102,11 @@
   {
      $.ajax({
       data:  {parametros:parametros},
-      url:   '../../controlador/proyectosC.php?insertar=true',
+      url:   '../controlador/proyectosC.php?insertar=true',
       type:  'post',
       dataType: 'json',
       /*beforeSend: function () {   
-           var spiner = '<div class="text-center"><img src="../../img/gif/proce.gif" width="100" height="100"></div>'     
+           var spiner = '<div class="text-center"><img src="../img/gif/proce.gif" width="100" height="100"></div>'     
          $('#tabla_').html(spiner);
       },*/
         success:  function (response) {  
@@ -145,11 +145,11 @@
   {
      $.ajax({
       data:  {id:id},
-      url:   '../../controlador/proyectosC.php?eliminar=true',
+      url:   '../controlador/proyectosC.php?eliminar=true',
       type:  'post',
       dataType: 'json',
       /*beforeSend: function () {   
-           var spiner = '<div class="text-center"><img src="../../img/gif/proce.gif" width="100" height="100"></div>'     
+           var spiner = '<div class="text-center"><img src="../img/gif/proce.gif" width="100" height="100"></div>'     
          $('#tabla_').html(spiner);
       },*/
         success:  function (response) {  
@@ -311,4 +311,4 @@
 </div>
 
      
-<?php include('../../cabeceras/footer.php'); ?>
+<?php //include('../cabeceras/footer.php'); ?>

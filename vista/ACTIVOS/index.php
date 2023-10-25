@@ -1,13 +1,14 @@
-<?php include('../../cabeceras/header.php'); //print_r($_SESSION['INICIO']); ?>
+<?php //include('../cabeceras/header.php'); 
+//print_r($_SESSION['INICIO']); die(); ?>
   <!-- Content Wrapper. Contains page content -->
 
   <script type="text/javascript">
   $( document ).ready(function() {
     usuarios();
-    patrimoniales();
-    bajas();
-    terceros();
-    articulos();
+    // patrimoniales();
+    // bajas();
+    // terceros();
+    info_articulos();
     custodio();
     localizacion();
     datos_seguros();
@@ -60,11 +61,11 @@
 
        $.ajax({
          // data:  {parametros:parametros},
-         url:   '../../controlador/usuariosC.php?usuarios=true',
+         url:   '../controlador/usuariosC.php?usuarios=true',
          type:  'post',
          dataType: 'json',
          /*beforeSend: function () {   
-              var spiner = '<div class="text-center"><img src="../../img/gif/proce.gif" width="100" height="100"></div>'     
+              var spiner = '<div class="text-center"><img src="../img/gif/proce.gif" width="100" height="100"></div>'     
             $('#tabla_').html(spiner);
          },*/
            success:  function (response) {  
@@ -80,7 +81,7 @@
 
        $.ajax({
          // data:  {parametros:parametros},
-         url:   '../../controlador/custodioC.php?numero_custodios=true',
+         url:   '../controlador/custodioC.php?numero_custodios=true',
          type:  'post',
          dataType: 'json',
            success:  function (response) {  
@@ -96,7 +97,7 @@
 
        $.ajax({
          // data:  {parametros:parametros},
-         url:   '../../controlador/localizacionC.php?numero_localizaciones=true',
+         url:   '../controlador/localizacionC.php?numero_localizaciones=true',
          type:  'post',
          dataType: 'json',
            success:  function (response) {  
@@ -114,7 +115,7 @@
 
        $.ajax({
          // data:  {parametros:parametros},
-         url:   '../../controlador/vinculacionC.php?numero_custodios=true',
+         url:   '../controlador/vinculacionC.php?numero_custodios=true',
          type:  'post',
          dataType: 'json',
            success:  function (response) {  
@@ -132,7 +133,7 @@
 
        $.ajax({
          // data:  {parametros:parametros},
-         url:   '../../controlador/vinculacionC.php?numero_localizaciones=true',
+         url:   '../controlador/vinculacionC.php?numero_localizaciones=true',
          type:  'post',
          dataType: 'json',
            success:  function (response) {  
@@ -146,123 +147,133 @@
        });
     }
 
-    function patrimoniales()
-    { 
-      var parametros = 
-      {
-        'bajas':0,
-        'terceros':0,
-        'patrimoniales':1,
-        'articulos':0,
-      }
-        $.ajax({
-         data:  {parametros:parametros},
-         url:   '../../controlador/articulosC.php?articulos_especiales=true',
-         type:  'post',
-         dataType: 'json',
-         /*beforeSend: function () {   
-              var spiner = '<div class="text-center"><img src="../../img/gif/proce.gif" width="100" height="100"></div>'     
-            $('#tabla_').html(spiner);
-         },*/
-           success:  function (response) {  
-            var res = response.length;
-            $('#lbl_patrimoniales').text(res);
-            // console.log(res)
+    // function patrimoniales()
+    // { 
+    //   var parametros = 
+    //   {
+    //     'bajas':0,
+    //     'terceros':0,
+    //     'patrimoniales':1,
+    //     'articulos':0,
+    //   }
+    //     $.ajax({
+    //      data:  {parametros:parametros},
+    //      url:   '../controlador/articulosC.php?articulos_especiales=true',
+    //      type:  'post',
+    //      dataType: 'json',
+    //      /*beforeSend: function () {   
+    //           var spiner = '<div class="text-center"><img src="../img/gif/proce.gif" width="100" height="100"></div>'     
+    //         $('#tabla_').html(spiner);
+    //      },*/
+    //        success:  function (response) {  
+    //         var res = response.length;
+    //         $('#lbl_patrimoniales').text(res);
+    //         // console.log(res)
           
-          } 
+    //       } 
           
-       });
+    //    });
 
-    }
+    // }
 
-    function bajas()
-    { var parametros = 
-      {
-        'bajas':1,
-        'terceros':0,
-        'patrimoniales':0,
-        'articulos':0,
-      }
-        $.ajax({
-         data:  {parametros:parametros},
-         url:   '../../controlador/articulosC.php?articulos_especiales=true',
-         type:  'post',
-         dataType: 'json',
-         /*beforeSend: function () {   
-              var spiner = '<div class="text-center"><img src="../../img/gif/proce.gif" width="100" height="100"></div>'     
-            $('#tabla_').html(spiner);
-         },*/
-           success:  function (response) {  
-            var res = response.length;
-            $('#lbl_bajas').text(res);
-            // console.log(res)
+    // function bajas()
+    // { var parametros = 
+    //   {
+    //     'bajas':1,
+    //     'terceros':0,
+    //     'patrimoniales':0,
+    //     'articulos':0,
+    //   }
+    //     $.ajax({
+    //      data:  {parametros:parametros},
+    //      url:   '../controlador/articulosC.php?articulos_especiales=true',
+    //      type:  'post',
+    //      dataType: 'json',
+    //      /*beforeSend: function () {   
+    //           var spiner = '<div class="text-center"><img src="../img/gif/proce.gif" width="100" height="100"></div>'     
+    //         $('#tabla_').html(spiner);
+    //      },*/
+    //        success:  function (response) {  
+    //         var res = response.length;
+    //         $('#lbl_bajas').text(res);
+    //         // console.log(res)
           
-          } 
+    //       } 
           
-       });
+    //    });
 
-    }
+    // }
 
-    function terceros()
-    { var parametros = 
-      {
-        'bajas':0,
-        'terceros':1,
-        'patrimoniales':0,
-        'articulos':0,
-      }
-        $.ajax({
-         data:  {parametros:parametros},
-         url:   '../../controlador/articulosC.php?articulos_especiales=true',
-         type:  'post',
-         dataType: 'json',
-         /*beforeSend: function () {   
-              var spiner = '<div class="text-center"><img src="../../img/gif/proce.gif" width="100" height="100"></div>'     
-            $('#tabla_').html(spiner);
-         },*/
-           success:  function (response) {  
-            var res = response.length;
-            $('#lbl_terceros').text(res);
-            // console.log(res)
+    // function terceros()
+    // { var parametros = 
+    //   {
+    //     'bajas':0,
+    //     'terceros':1,
+    //     'patrimoniales':0,
+    //     'articulos':0,
+    //   }
+    //     $.ajax({
+    //      data:  {parametros:parametros},
+    //      url:   '../controlador/articulosC.php?articulos_especiales=true',
+    //      type:  'post',
+    //      dataType: 'json',
+    //      /*beforeSend: function () {   
+    //           var spiner = '<div class="text-center"><img src="../img/gif/proce.gif" width="100" height="100"></div>'     
+    //         $('#tabla_').html(spiner);
+    //      },*/
+    //        success:  function (response) {  
+    //         var res = response.length;
+    //         $('#lbl_terceros').text(res);
+    //         // console.log(res)
           
-          } 
+    //       } 
           
-       });      
-    }
+    //    });      
+    // }
 
-    function articulos()
+    function info_articulos()
     {
-      var parametros = 
-      {
-        'bajas':0,
-        'terceros':0,
-        'patrimoniales':0,
-        'articulos':1,
-      }
+      // var parametros = 
+      // {
+      //   'bajas':0,
+      //   'terceros':0,
+      //   'patrimoniales':0,
+      //   'articulos':1,
+      // }
         $.ajax({
-         data:  {parametros:parametros},
-         url:   '../../controlador/articulosC.php?articulos_especiales=true',
+         // data:  {parametros:parametros},
+         url:   '../controlador/articulosC.php?articulos_especiales=true',
          type:  'post',
          dataType: 'json',
          /*beforeSend: function () {   
-              var spiner = '<div class="text-center"><img src="../../img/gif/proce.gif" width="100" height="100"></div>'     
+              var spiner = '<div class="text-center"><img src="../img/gif/proce.gif" width="100" height="100"></div>'     
             $('#tabla_').html(spiner);
          },*/
            success:  function (response) {  
-            var res = response[0]['numreg'];
-            var res1 = response[1]['eti'];
-            console.log(response);
-            $('#lbl_articulos').text(res);
-            $('#lbl_articulos1').text(res);
-            $('#lbl_etiqueta').text(res1);
 
-            var b = parseInt(res1*100/res);
+
+            console.log(response);
+           
+
+
+            // var res = response[0]['numreg'];
+            // var res1 = response[1]['eti'];
+            // console.log(response);
+            $('#lbl_articulos').text(response.activos);
+            $('#lbl_articulos1').text(response.activos);
+            $('#lbl_etiqueta').text(response.etiquetados);
+
+            $('#lbl_terceros').text(response.terceros);
+            $('#lbl_patrimoniales').text(response.patrimoniales);
+            $('#lbl_bajas').text(response.bajas);
+
+            var b = parseInt(response.etiquetados*100/response.activos);
             $('#lbl_porcen').html('<b>'+b+'</b>/100');
             $('#progres').css('width',b+'%');
             $('#lbl_porce').html('<i class="bx bxs-up-arrow align-middle"></i> '+b+'%');
 
 
-            console.log(b)
+            // console.log(b)
           
           } 
           
@@ -275,7 +286,7 @@
      
         $.ajax({
          // data:  {parametros:parametros},
-         url:   '../../controlador/contratoC.php?datos_seguros=true',
+         url:   '../controlador/contratoC.php?datos_seguros=true',
          type:  'post',
          dataType: 'json',        
            success:  function (response) {  
@@ -333,13 +344,12 @@
               </div>
             </div>
           </div> -->
-
           <div class="col-3" onclick="location.href='articulos.php'">
             <div class="card radius-10">
               <div class="card-body">
                 <div class="d-flex align-items-center">
                   <div>
-                    <p class="mb-0 text-secondary">Total de Activos</p>
+                    <p class="mb-0 text-secondary">Activos</p>
                     <h4 class="my-1" id="lbl_articulos">0</h4>
                     <!-- <p class="mb-0 font-13 text-success"><i class="bx bxs-up-arrow align-middle"></i>$34 from last week</p> -->
                   </div>
@@ -355,7 +365,7 @@
               <div class="card-body">
                 <div class="d-flex align-items-center">
                   <div>
-                    <p class="mb-0 text-secondary">Activos en Bajas.</p>
+                    <p class="mb-0 text-secondary">Bajas</p>
                     <h4 class="my-1" id="lbl_bajas">0</h4>
                     <!-- <p class="mb-0 font-13 text-success"><i class="bx bxs-up-arrow align-middle"></i>$34 from last week</p> -->
                   </div>
@@ -371,7 +381,7 @@
               <div class="card-body">
                 <div class="d-flex align-items-center">
                   <div>
-                    <p class="mb-0 text-secondary">Patrimoniales.</p>
+                    <p class="mb-0 text-secondary">Patrimoniales</p>
                     <h4 class="my-1" id="lbl_patrimoniales">0</h4>
                     <!-- <p class="mb-0 font-13 text-success"><i class="bx bxs-up-arrow align-middle"></i>$34 from last week</p> -->
                   </div>
@@ -387,7 +397,7 @@
               <div class="card-body">
                 <div class="d-flex align-items-center">
                   <div>
-                    <p class="mb-0 text-secondary">Terceros.</p>
+                    <p class="mb-0 text-secondary">Terceros</p>
                     <h4 class="my-1" id="lbl_terceros">0</h4>
                     <!-- <p class="mb-0 font-13 text-success"><i class="bx bxs-up-arrow align-middle"></i>$34 from last week</p> -->
                   </div>
@@ -420,12 +430,12 @@
                   <div class="col-md-7">
                     <div class="row">
 
-                      <div class="col-12">
+                      <div class="col-6">
                         <div class="card radius-10">
                           <div class="card-body">
                             <div class="d-flex align-items-center">
                               <div>
-                                <p class="mb-0 text-secondary">Numero de seguros</p>
+                                <p class="mb-0 text-secondary">Seguros registrados</p>
                                 <h4 class="my-1" id="lbl_num_seguros">0</h4>
                                 <!-- <p class="mb-0 font-13 text-warning" id="lbl_porce"><i class="bx bxs-up-arrow align-middle"></i>0% </p> -->
                               </div>
@@ -435,26 +445,24 @@
                           </div>
                         </div>
                       </div>
-                    </div>
-
-
-                     <div class="row">
-                      <di v class="col-6">
+                      <div class="col-6">
                         <div class="card radius-10">
                           <div class="card-body">
                             <div class="d-flex align-items-center">
                               <div>
-                                <p class="mb-0 text-secondary">Articulos sin seguro</p>
-                                <h4 class="my-1" id="lbl_sin_seguro">0</h4>
-                                <p class="mb-0 font-13 text-danger" id="lbl_porce_sin_seguro"><i class="bx bxs-up-arrow align-middle"></i>0% </p>
+                                <p class="mb-0 text-secondary">Total de Activos</p>
+                                <h4 class="my-1" id="lbl_articulos2">0</h4>
+                                <!-- <p class="mb-0 font-13 text-primary" id="lbl_porce_asegurados"><i class="bx bx-circle align-middle"></i>100% </p> -->
                               </div>
-                              <div class="widgets-icons bg-light-danger text-danger ms-auto"><i class="bx bx-lock-open"></i>
+                              <div class="widgets-icons bg-light-primary text-primary ms-auto"><i class="bx bx-package"></i>
                               </div>
                             </div>
                           </div>
                         </div>
-                      </div>
+                      </div>        
+                    </div>
 
+                     <div class="row">
                       <div class="col-6">
                         <div class="card radius-10">
                           <div class="card-body">
@@ -470,22 +478,25 @@
                           </div>
                         </div>
                       </div>
-
-                      <div class="col-12">
+                      <div class="col-6">
                         <div class="card radius-10">
                           <div class="card-body">
                             <div class="d-flex align-items-center">
                               <div>
-                                <p class="mb-0 text-secondary">Total de Activos</p>
-                                <h4 class="my-1" id="lbl_articulos2">0</h4>
-                                <p class="mb-0 font-13 text-primary" id="lbl_porce_asegurados"><i class="bx bx-circle align-middle"></i>100% </p>
+                                <p class="mb-0 text-secondary">Articulos sin seguro</p>
+                                <h4 class="my-1" id="lbl_sin_seguro">0</h4>
+                                <p class="mb-0 font-13 text-danger" id="lbl_porce_sin_seguro"><i class="bx bxs-up-arrow align-middle"></i>0% </p>
                               </div>
-                              <div class="widgets-icons bg-light-primary text-primary ms-auto"><i class="bx bx-package"></i>
+                              <div class="widgets-icons bg-light-danger text-danger ms-auto"><i class="bx bx-lock-open"></i>
                               </div>
                             </div>
                           </div>
                         </div>
-                      </div>                  
+                      </div>
+
+                      
+
+                      
                       
                     
                     </div>
@@ -543,6 +554,6 @@
   </div>
 
  
-<?php include('../../cabeceras/footer.php'); ?>
+<?php //include('../cabeceras/footer.php'); ?>
 
 

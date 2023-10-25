@@ -1,4 +1,4 @@
-<?php include('../../cabeceras/header.php'); $id='';if(isset($_GET['id'])){ $id = $_GET['id'];} ?>
+<?php /*include('../cabeceras/header.php');*/ $id='';if(isset($_GET['id'])){ $id = $_GET['id'];} ?>
 <script type="text/javascript">
   $( document ).ready(function() {
   	var id = '<?php echo $id; ?>';
@@ -20,14 +20,14 @@
 
         var formData = new FormData(document.getElementById("form_img"));
          $.ajax({
-            url: '../../controlador/custodioC.php?cargar_imagen=true',
+            url: '../controlador/custodioC.php?cargar_imagen=true',
             type: 'post',
             data: formData,
             contentType: false,
             processData: false,
             dataType:'json',
          // beforeSend: function () {
-         //        $("#foto_alumno").attr('src',"../../img/gif/proce.gif");
+         //        $("#foto_alumno").attr('src',"../img/gif/proce.gif");
          //     },
             success: function(response) {
                if(response==-1)
@@ -64,11 +64,11 @@
 
     $.ajax({
       data:  {id:id},
-      url:   '../../controlador/custodioC.php?listar=true',
+      url:   '../controlador/custodioC.php?listar=true',
       type:  'post',
       dataType: 'json',
       /*beforeSend: function () {   
-           var spiner = '<div class="text-center"><img src="../../img/gif/proce.gif" width="100" height="100"></div>'     
+           var spiner = '<div class="text-center"><img src="../img/gif/proce.gif" width="100" height="100"></div>'     
          $('#tabla_').html(spiner);
       },*/
         success:  function (response) {
@@ -115,11 +115,11 @@
   {
      $.ajax({
       data:  {parametros:parametros},
-      url:   '../../controlador/custodioC.php?insertar=true',
+      url:   '../controlador/custodioC.php?insertar=true',
       type:  'post',
       dataType: 'json',
       /*beforeSend: function () {   
-           var spiner = '<div class="text-center"><img src="../../img/gif/proce.gif" width="100" height="100"></div>'     
+           var spiner = '<div class="text-center"><img src="../img/gif/proce.gif" width="100" height="100"></div>'     
          $('#tabla_').html(spiner);
       },*/
         success:  function (response) {  
@@ -156,11 +156,11 @@
   {
      $.ajax({
       data:  {id:id},
-      url:   '../../controlador/custodioC.php?eliminar=true',
+      url:   '../controlador/custodioC.php?eliminar=true',
       type:  'post',
       dataType: 'json',
       /*beforeSend: function () {   
-           var spiner = '<div class="text-center"><img src="../../img/gif/proce.gif" width="100" height="100"></div>'     
+           var spiner = '<div class="text-center"><img src="../img/gif/proce.gif" width="100" height="100"></div>'     
          $('#tabla_').html(spiner);
       },*/
         success:  function (response) {  
@@ -304,8 +304,8 @@ function guias_pag(tipo)
                     <input type="hidden" id="txt_numpag" name="">
                     <div class="row">
                       <div class="col-sm-12" id="btn_nuevo">
-                        <a href="custodio.php" class="btn btn-outline-secondary btn-sm"><i class="bx bx-arrow-back"></i> Regresar</a>
-                          <a href="#" class="btn btn-primary btn-sm" onclick="location.href = 'custodio_detalle.php'"><i class="bx bx-plus"></i>  Nuevo</a>              
+                        <a href="inicio.php?mod=<?php echo $_SESSION['INICIO']['MODULO_SISTEMA']; ?>&acc=custodio" class="btn btn-outline-secondary btn-sm"><i class="bx bx-arrow-back"></i> Regresar</a>
+                          <!-- <a href="#" class="btn btn-primary btn-sm" onclick="inicio.php?acc=custodio_detalle.php"><i class="bx bx-plus"></i>  Nuevo</a>               -->
                       </div>
                     </div>
 
@@ -324,7 +324,7 @@ function guias_pag(tipo)
                           Codigo <br>
                         <input type="input" name="txt_per_no" id="txt_per_no" class="form-control form-control-sm" readonly> <br>          
                           <div class="widget-user-image text-center">
-                            <img  class="rounded-circle p-1 bg-primary" src="../../img/sin_imagen.jpg" alt="User Avatar" width="110" height="110" id="img_foto">
+                            <img  class="rounded-circle p-1 bg-primary" src="../img/sin_imagen.jpg" alt="User Avatar" width="110" height="110" id="img_foto">
                          </div><br>
                           <input type="file" name="file_img" id="file_img" class="form-control form-control-sm">
                           <input type="hidden" name="txt_nom_img" id="txt_nom_img">
@@ -429,5 +429,5 @@ function guias_pag(tipo)
   </div>
 
 
-<?php include('../../cabeceras/footer.php'); ?>
+<?php //include('../cabeceras/footer.php'); ?>
      

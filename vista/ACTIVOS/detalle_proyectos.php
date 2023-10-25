@@ -1,4 +1,4 @@
-<?php include('../../cabeceras/header.php');  $id =''; if(isset($_GET['id'])){$id= $_GET['id'];}?>
+<?php /*include('../cabeceras/header.php'); */ $id =''; if(isset($_GET['id'])){$id= $_GET['id'];}?>
 <script type="text/javascript">
   $( document ).ready(function() {
   	var id = '<?php echo $id;?>';
@@ -14,11 +14,11 @@
 
   //   $.ajax({
   //     data:  {id:id},
-  //     url:   '../../controlador/proyectosC.php?lista=true',
+  //     url:   '../controlador/proyectosC.php?lista=true',
   //     type:  'post',
   //     dataType: 'json',
   //     /*beforeSend: function () {   
-  //          var spiner = '<div class="text-center"><img src="../../img/gif/proce.gif" width="100" height="100"></div>'     
+  //          var spiner = '<div class="text-center"><img src="../img/gif/proce.gif" width="100" height="100"></div>'     
   //        $('#tabla_').html(spiner);
   //     },*/
   //       success:  function (response) {    
@@ -48,11 +48,11 @@
 
     $.ajax({
       data:  {id:id},
-      url:   '../../controlador/proyectosC.php?lista=true',
+      url:   '../controlador/proyectosC.php?lista=true',
       type:  'post',
       dataType: 'json',
       /*beforeSend: function () {   
-           var spiner = '<div class="text-center"><img src="../../img/gif/proce.gif" width="100" height="100"></div>'     
+           var spiner = '<div class="text-center"><img src="../img/gif/proce.gif" width="100" height="100"></div>'     
          $('#tabla_').html(spiner);
       },*/
         success:  function (response) {
@@ -98,11 +98,11 @@
 
   //   $.ajax({
   //     data:  {buscar:buscar},
-  //     url:   '../../controlador/proyectosC.php?buscar=true',
+  //     url:   '../controlador/proyectosC.php?buscar=true',
   //     type:  'post',
   //     dataType: 'json',
   //     /*beforeSend: function () {   
-  //          var spiner = '<div class="text-center"><img src="../../img/gif/proce.gif" width="100" height="100"></div>'     
+  //          var spiner = '<div class="text-center"><img src="../img/gif/proce.gif" width="100" height="100"></div>'     
   //        $('#tabla_').html(spiner);
   //     },*/
   //       success:  function (response) {    
@@ -127,11 +127,11 @@
   {
      $.ajax({
       data:  {parametros:parametros},
-      url:   '../../controlador/proyectosC.php?insertar=true',
+      url:   '../controlador/proyectosC.php?insertar=true',
       type:  'post',
       dataType: 'json',
       /*beforeSend: function () {   
-           var spiner = '<div class="text-center"><img src="../../img/gif/proce.gif" width="100" height="100"></div>'     
+           var spiner = '<div class="text-center"><img src="../img/gif/proce.gif" width="100" height="100"></div>'     
          $('#tabla_').html(spiner);
       },*/
         success:  function (response) {  
@@ -176,11 +176,11 @@
   {
      $.ajax({
       data:  {id:id},
-      url:   '../../controlador/proyectosC.php?eliminar=true',
+      url:   '../controlador/proyectosC.php?eliminar=true',
       type:  'post',
       dataType: 'json',
       /*beforeSend: function () {   
-           var spiner = '<div class="text-center"><img src="../../img/gif/proce.gif" width="100" height="100"></div>'     
+           var spiner = '<div class="text-center"><img src="../img/gif/proce.gif" width="100" height="100"></div>'     
          $('#tabla_').html(spiner);
       },*/
         success:  function (response) {  
@@ -271,8 +271,8 @@
               <div class="card-body">
                 <div class="row">
                     <div class="col-sm-12" id="btn_nuevo">              
-                      <a href="proyectos.php" class="btn btn-outline-secondary btn-sm"><i class="bx bx-arrow-back"></i> Regresar</a>
-                        <a href="#" class="btn btn-success btn-sm" onclick="location.href = 'detalle_proyectos.php'"><i class="bx bx-plus"></i> Nuevo</a>
+                      <a href="inicio.php?mod=<?php echo $_SESSION['INICIO']['MODULO_SISTEMA']; ?>&acc=proyectos" class="btn btn-outline-secondary btn-sm"><i class="bx bx-arrow-back"></i> Regresar</a>
+                        <a href="#" class="btn btn-success btn-sm" onclick="location.href = 'inicio.php?acc=detalle_proyectos'"><i class="bx bx-plus"></i> Nuevo</a>
                     </div>
                   </div>
                   <div class="row mb-3">
@@ -318,5 +318,5 @@
         <!--end row-->
       </div>
     </div>
-<?php include('../../cabeceras/footer.php'); ?>
+<?php //include('../cabeceras/footer.php'); ?>
      

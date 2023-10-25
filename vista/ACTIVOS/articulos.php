@@ -1,5 +1,5 @@
 <?php 
-include('../../cabeceras/header.php');
+//include('../cabeceras/header.php');
   $tipo_lista = 1;
   if(isset($_SESSION['INICIO']["LISTA_ART"])){$tipo_lista = $_SESSION['INICIO']["LISTA_ART"]; } 
 
@@ -9,6 +9,8 @@ include('../../cabeceras/header.php');
   $('body').addClass('sidebar-collapse');
   $( document ).ready(function() {
      ddl_meses();
+
+    informes();
   	autocmpletar();
   	autocmpletar_l();
     var fil1 = '<?php if(isset($_GET["fil1"])){echo $_GET["fil1"];} ?>';
@@ -26,92 +28,39 @@ include('../../cabeceras/header.php');
         $('#ddl_custodio').append($('<option>',{value: cus[0], text:cus[1],selected: true }));
     }
 
-    var tipo_lista = '<?php echo $tipo_lista; ?>';
-    console.log(tipo_lista);
-    if(tipo_lista==1)
-    {
-      lista();
-    }else
-    {
-      grilla();
-    }
+    buscar_art();
 
 
-      // $('#imprimir_excel').click(function(){
-      //  var url = '../../lib/Reporte_excel.php?reporte_normal&query='+$('#txt_buscar').val()+'&loc='+$('#ddl_localizacion').val()+'&cus='+$('#ddl_custodio').val();                 
-      //      window.open(url, '_blank');
-      //  });
-      $('#imprimir_excel_sap').click(function(){
-        if($('#txt_desde').val()=='' || $('#txt_hasta').val()=='')
-      {
-        Swal.fire('Rango de fechas no validos','Asegurese de que los rangos de fecha esten bien seleccionados','info');
-        return false;
-      }
-       var url = '../../lib/Reporte_excel.php?reporte_sap&query='+$('#txt_buscar').val()+'&loc='+$('#ddl_localizacion').val()+'&cus='+$('#ddl_custodio').val()+'&desde='+$('#txt_desde').val()+'&hasta='+$('#txt_hasta').val();                 
-           window.open(url, '_blank');
-       });
-
-      $('#imprimir_excel_bajas_sap').click(function(){
-        if($('#txt_desde').val()=='' || $('#txt_hasta').val()=='')
-      {
-        Swal.fire('Rango de fechas no validos','Asegurese de que los rangos de fecha esten bien seleccionados','info');
-        return false;
-      }
-       var url = '../../lib/Reporte_excel.php?reporte_sap_bajas_rangos&query='+$('#txt_buscar').val()+'&loc='+$('#ddl_localizacion').val()+'&cus='+$('#ddl_custodio').val()+'&desde='+$('#txt_desde').val()+'&hasta='+$('#txt_hasta').val();                 
-           window.open(url, '_blank');
-       });
-
-      
-
-       $('#imprimir_excel_actual').click(function(){
-        var parametros = '&query='+$('#txt_buscar').val()+'&localizacion='+$('#ddl_localizacion').val()+'&custodio='+ $('#ddl_custodio').val()+'&pag='+$('#txt_pag').val()+'&exacto='+$('#rbl_exacto').prop('checked')+'&asset='+$('#rbl_aset').prop('checked')+
-      '&asset_org='+$('#rbl_aset_ori').prop('checked')+'&rfid='+$('#rbl_rfid').prop('checked')+'&multiple='+$('#rbl_multiple').prop('checked');
-       var url = '../../lib/Reporte_excel.php?reporte_actual=true'+parametros;                 
-           window.open(url, '_blank');
-       });
-
-
-       
-
-       $('#imprimir_excel_cambios').click(function(){
-       var url = '../../lib/Reporte_excel.php?reporte_cambios';                 
-           window.open(url, '_blank');
-       });
-
-        $('#imprimir_excel_cambios_rango').click(function(){
-       var url = '../../lib/Reporte_excel.php?reporte_cambios=true&desde='+$('#txt_desde').val()+'&hasta='+$('#txt_hasta').val();                 
-           window.open(url, '_blank');
-       });
-
-
-
-
-     $('#imprimir_pdf').click(function(){
-      if($('#txt_desde').val()=='' || $('#txt_hasta').val()=='')
-      {
-        Swal.fire('Coleque fechas validas','','info');
-        return false;
-      }
-      var url='../../lib/Reporte_pdf.php?reporte_pdf&query='+$('#txt_buscar').val()+'&loc='+$('#ddl_localizacion').val()+'&cus='+$('#ddl_custodio').val()+'&desde='+$('#txt_desde').val()+'&hasta='+$('#txt_hasta').val();
-      window.open(url, '_blank');
-       });
-      // $('#imprimir_pdf_sap').click(function(){
-      // var url='../../lib/Reporte_pdf.php?reporte_pdf_sap&query='+$('#txt_buscar').val()+'&loc='+$('#ddl_localizacion').val()+'&cus='+$('#ddl_custodio').val();
-      // window.open(url, '_blank');
-      //  });
-
-     
      
 
 
 });
 
+function informes()
+{
+
+   $.ajax({
+      // data:  {id:id},
+      url:  '../controlador/reportesC.php?informes_activos=true',
+      type:  'post',
+      dataType: 'json',
+      /*beforeSend: function () {   
+           var spiner = '<div class="text-center"><img src="../img/gif/proce.gif" width="100" height="100"></div>'     
+         $('#tabla_').html(spiner);
+      },*/
+        success:  function (response) {
+         
+           $('#ddl_informes').html(response); 
+      }
+    });
+
+}
  function autocmpletar(){
       $('#ddl_custodio').select2({
         placeholder: 'Seleccione una custodio',
         width:'90%',
         ajax: {
-          url: '../../controlador/custodioC.php?lista=true',
+          url: '../controlador/custodioC.php?lista=true',
           dataType: 'json',
           delay: 250,
           processResults: function (data) {
@@ -128,7 +77,7 @@ include('../../cabeceras/header.php');
         placeholder: 'Seleccione una localizacion',
         width:'90%',
         ajax: {
-          url: '../../controlador/localizacionC.php?lista=true',
+          url: '../controlador/localizacionC.php?lista=true',
           dataType: 'json',
           delay: 250,
           processResults: function (data) {
@@ -140,30 +89,31 @@ include('../../cabeceras/header.php');
         }
       });
   }
-    function lista_articulos()
+  
+  function lista_articulos()
   {
-     var query = $('#txt_buscar').val();
      var parametros = 
      {
       'query':$('#txt_buscar').val(),
       'localizacion':  $('#ddl_localizacion').val(),
       'custodio': $('#ddl_custodio').val(),
       'pag':$('#txt_pag').val(),
-      'exacto':$('#rbl_exacto').prop('checked'),
-      'asset':$('#rbl_aset').prop('checked'),
-      'asset_org':$('#rbl_aset_ori').prop('checked'),
-      'rfid':$('#rbl_rfid').prop('checked'),
-      'multiple':$('#rbl_multiple').prop('checked'),
+      'exacto':$('input[type="radio"][name="rbl_exacto"]:checked').val(),
+      'buscar_por':$('input[type="radio"][name="buscar_por"]:checked').val(),
+      'multiple':$('input[type="radio"][name="rbl_multiple"]:checked').val(),
       'lista':'1',
+      'desde':$('#txt_desde').val(),
+      'hasta':$('#txt_hasta').val(),
      }
+
      var lineas = '';
     $.ajax({
       data:  {parametros:parametros},
-      url:   '../../controlador/articulosC.php?lista=true',
+      url:   '../controlador/articulosC.php?lista=true',
       type:  'post',
       dataType: 'json',
       beforeSend: function () {   
-           // var spiner = '<div class="text-center"><img src="../../../../img/gif/proce.gif" width="100" height="100"></div>'     
+           // var spiner = '<div class="text-center"><img src="../img/gif/proce.gif" width="100" height="100"></div>'     
          $('#pag').html('');
       },
         success:  function (response) { 
@@ -241,7 +191,7 @@ include('../../cabeceras/header.php');
           if(item.PATRIMONIALES==1){baja = 'background-color: #ffc108a6; /*bg-warning*/';}
           if(item.TERCEROS==1){baja ='background-color: #007bffa8;; /*bg-blue*/'}
           if(item.RFID==null){item.RFID='';}
-          lineas+= '<tr style="'+baja+'"><td>'+item.id+'</td><td style="color: #1467e2; cursor: pointer;"  onclick="redireccionar(\''+item.id+'\')"><u>'+item.tag+'</u></td><td>'+item.nom+'</td><td>'+item.modelo+'</td><td>'+item.serie+'</td><td>'+item.RFID+'</td><td>'+item.localizacion+'</td><td>'+item.custodio+'</td><td>'+item.marca+'</td><td>'+item.estado+'</td><td>'+item.genero+'</td><td>'+item.color+'</td><td>'+item.fecha_in+'</td><td>'+item.OBSERVACION+'</td></tr>';
+          lineas+= '<tr style="'+baja+'"><td style="color: #1467e2; cursor: pointer;"  onclick="redireccionar(\''+item.id+'\')"><u>'+item.tag+'</u></td><td>'+item.nom+'</td><td>'+item.modelo+'</td><td>'+item.serie+'</td><td>'+item.RFID+'</td><td>'+item.localizacion+'</td><td>'+item.custodio+'</td><td>'+item.marca+'</td><td>'+item.estado+'</td><td>'+item.genero+'</td><td>'+item.color+'</td><td>'+formato_fecha(item.fecha_in.date)+'</td><td>'+item.OBSERVACION+'</td></tr>';
           // console.log(item);
        
         });       
@@ -256,28 +206,28 @@ include('../../cabeceras/header.php');
 
   function lista_articulos_grid()
   {
-  	 var query = $('#txt_buscar').val();
   	 var parametros = 
-  	 {
-  	 	'query':$('#txt_buscar').val(),
-  	 	'localizacion':  $('#ddl_localizacion').val(),
-  	 	'custodio': $('#ddl_custodio').val(),
+     {
+      'query':$('#txt_buscar').val(),
+      'localizacion':  $('#ddl_localizacion').val(),
+      'custodio': $('#ddl_custodio').val(),
       'pag':$('#txt_pag').val(),
-      'exacto':$('#rbl_exacto').prop('checked'),
-      'asset':$('#rbl_aset').prop('checked'),
-      'asset_org':$('#rbl_aset_ori').prop('checked'),
-      'rfid':$('#rbl_rfid').prop('checked'),
-      'multiple':$('#rbl_multiple').prop('checked'),      
+      'exacto':$('input[type="radio"][name="rbl_exacto"]:checked').val(),
+      'buscar_por':$('input[type="radio"][name="buscar_por"]:checked').val(),
+      'multiple':$('input[type="radio"][name="rbl_multiple"]:checked').val(),
       'lista':'0',
-  	 }
+      'desde':$('#txt_desde').val(),
+      'hasta':$('#txt_hasta').val(),
+     }
+
   	 var lineas = '';
     $.ajax({
       data:  {parametros:parametros},
-      url:   '../../controlador/articulosC.php?lista=true',
+      url:   '../controlador/articulosC.php?lista=true',
       type:  'post',
       dataType: 'json',
       beforeSend: function () {   
-           // var spiner = '<div class="text-center"><img src="../../../../img/gif/proce.gif" width="100" height="100"></div>'     
+           // var spiner = '<div class="text-center"><img src="../img/gif/proce.gif" width="100" height="100"></div>'     
          $('#pag').html('');
       },
         success:  function (response) { 
@@ -380,7 +330,7 @@ include('../../cabeceras/header.php');
                   '<i class="bx bxs-star text-secondary"></i>';
           }
 
-          imagen = '../../img/sin_imagen.jpg';
+          imagen = '../img/sin_imagen.jpg';
           if(item.IMAGEN!='' && item.IMAGEN!=null)
           {
             imagen = item.IMAGEN;
@@ -388,7 +338,7 @@ include('../../cabeceras/header.php');
 
           lineas+='<div class="col">'+
             '<div class="card" onclick="redireccionar(\''+item.id+'\')">'+
-              '<img src="../../img/'+imagen+'" class="card-img-top" alt="..." style="width: 100%;height: 200px;">'+
+              '<img src="../img/'+imagen+'" class="card-img-top" alt="..." style="width: 100%;height: 200px;">'+
               '<div class="">'
                if(baja!='')
                 {
@@ -407,7 +357,7 @@ include('../../cabeceras/header.php');
                   '<div class="cursor-pointer">Estado<br>'+
                   estado+
                   '</div>'+  
-                  '<p class="mb-0 ms-auto font-13"><b>Fecha Inv.</b><br>'+item.fecha_in+'</p>'+
+                  '<p class="mb-0 ms-auto font-13"><b>Fecha Inv.</b><br>'+formatoDate(item.fecha_in.date)+'</p>'+
                 '</div>'+
               '</div>'+
             '</div>'+
@@ -430,14 +380,23 @@ include('../../cabeceras/header.php');
 
   function buscar_art()
   {
-    var tipo_lista = '<?php echo $tipo_lista; ?>';
-    if(tipo_lista==1)
-    {
-      lista_articulos();
-    }else
-    {
-      lista_articulos_grid();
-    }
+    $.ajax({
+      // data:  {id:id},
+      url:  '../controlador/articulosC.php?tipo_view=true',
+      type:  'post',
+      dataType: 'json',      
+        success:  function (response) {
+           if(response==1)
+          {
+            lista_articulos();
+            lista();
+          }else
+          {
+            lista_articulos_grid();
+            grilla();
+          }          
+      }
+    });
   }
 
 
@@ -455,7 +414,7 @@ include('../../cabeceras/header.php');
     {
       cus = $('#ddl_custodio').select2('data')[0].text;
     }
-  	 window.location.href="detalle_articulo.php?id="+id+'&fil1='+$('#ddl_localizacion').val()+'--'+loc+'&fil2='+$('#ddl_custodio').val()+'--'+cus;
+  	 window.location.href="inicio.php?acc=detalle_articulo&id="+id+'&fil1='+$('#ddl_localizacion').val()+'--'+loc+'&fil2='+$('#ddl_custodio').val()+'--'+cus;
     }
 function paginacion(num)
 {
@@ -538,11 +497,11 @@ function activar()
     var opcion = '<option value="">seleccione un mes</option>';
     $.ajax({
       // data:  {id:id},
-      url:  '../../controlador/articulosC.php?meses=true',
+      url:  '../controlador/articulosC.php?meses=true',
       type:  'post',
       dataType: 'json',
       /*beforeSend: function () {   
-           var spiner = '<div class="text-center"><img src="../../../../img/gif/proce.gif" width="100" height="100"></div>'     
+           var spiner = '<div class="text-center"><img src="../img/gif/proce.gif" width="100" height="100"></div>'     
          $('#tabla_').html(spiner);
       },*/
         success:  function (response) {
@@ -559,10 +518,26 @@ function activar()
   function busqued_multiple()
   {
      check = $('#rbl_multiple').prop('checked');
+     valid_check = $('input[name="rbl_aset"]:checked').val();
+     exacto = $('#rbl_exacto').prop('checked');
+
+     query = $('#txt_buscar').val();
+     if(exacto)
+     {
+          $('#rbl_exacto').prop('checked',false);
+         $('#rbl_aset').prop('disabled',false);
+         $('#rbl_aset_ori').prop('disabled',false);
+         $('#rbl_rfid').prop('disabled',false);
+     }
+
      if(check)
      {
-       $('#rbl_exacto').prop('checked',true);
+      Swal.fire('Asegurese que el separador sea una coma (,)','','info')
+       // $('#rbl_exacto').prop('checked',true);
        $('#rbl_exacto').attr('disabled',true);
+       $('#rbl_aset').prop('disabled',false);
+       $('#rbl_aset_ori').prop('disabled',false);
+       $('#rbl_rfid').prop('disabled',false);
        // alert('actyivo');
      }else
      {
@@ -593,6 +568,40 @@ function activar()
     lista_articulos();
   }
 
+function ver_informe_pdf(id)
+{   
+  var filtros = $('#pnl_filtros').serialize();
+  var url =  '../controlador/articulosC.php?ver_pdf=true&'+filtros+'&informe='+id+'&pag='+$('#txt_pag').val();                 
+  window.open(url, '_blank');
+}
+function ver_informe_excel(id)
+{   
+  var filtros = $('#pnl_filtros').serialize();
+  var url =  '../controlador/articulosC.php?ver_excel=true&'+filtros+'&informe='+id+'&pag='+$('#txt_pag').val();                 
+  window.open(url, '_blank');
+}
+
+function mostrar_mas_filtros()
+{
+   if($('#mas_filtros').is(':visible'))
+   {
+      $('#mas_filtros').css('display','none');
+      ocultar_mas_filtros();
+   }else
+   {
+      $('#mas_filtros').css('display','flex');
+   }
+}
+function ocultar_mas_filtros()
+{
+
+  $('input[type="radio"][name="rbl_exacto"][value="0"]').prop('checked', true);
+  $('input[type="radio"][name="rbl_multiple"][value="0"]').prop('checked', true);
+  $('input[type="radio"][name="buscar_por"][value="0"]').prop('checked', true);
+
+  $('#mas_filtros').css('display','none');
+}
+
 
 
 </script>
@@ -600,9 +609,9 @@ function activar()
 <div class="page-wrapper">
       <div class="page-content">
         <!--breadcrumb-->
-        <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
-          <div class="breadcrumb-title pe-3">Articulos</div>
-          <div class="ps-3">
+        <!-- <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3"> -->
+          <!-- <div class="breadcrumb-title pe-3">Articulos</div> -->
+          <!-- <div class="ps-3">
             <nav aria-label="breadcrumb">
               <ol class="breadcrumb mb-0 p-0">
                 <li class="breadcrumb-item"><a href="javascript:;"><i class="bx bx-home-alt"></i></a>
@@ -610,8 +619,9 @@ function activar()
                 <li class="breadcrumb-item active" aria-current="page">Articulos</li>
               </ol>
             </nav>
-          </div>
-           <div class="ms-auto">
+          </div> -->
+           <!-- <div class="ms-auto">
+
             <div class="btn-group">
               <button type="button" class="btn btn-primary">Opciones</button>
               <button type="button" class="btn btn-primary split-bg-primary dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown"> <span class="visually-hidden">Toggle Dropdown</span>
@@ -621,124 +631,123 @@ function activar()
                 <button type="button" class="dropdown-item" id="btn_lista" onclick="lista()" style="display: none;"><i class="bx bx-list-ul"></i> Lista</button>
               </div>
             </div>
-          </div>
-        </div>
+          </div> -->
+        <!-- </div> -->
         <!--end breadcrumb-->
         <div class="row">
           <div class="col-xl-12 mx-auto">
-            <hr>
+            <!-- <hr> -->
             <div class="card">
               <div class="card-body">
-                <div class="row row-cols-auto g-1">
-                  <div class="col">
-                    <div class="dropdown">
-                      <button class="btn btn-outline-secondary dropdown-toggle btn-sm" type="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="bx bx-file"></i> Busq. Actual</button>
-                      <ul class="dropdown-menu" style="">
-                        <li><a class="dropdown-item" href="#" id="imprimir_excel_actual">Informe en EXCEL</a></li>
-                      </ul>                                               
-                    </div>
+                <div class="row row-cols-auto g-1">         
+                      <div class="col-sm-12 text-end">
+                        <div class="dropdown">
+                          <button class="btn btn-outline-secondary dropdown-toggle btn-sm" type="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="bx bx-file"></i> Imprimir / Exportar</button>
+                          <ul class="dropdown-menu" id="ddl_informes">                               
+                          </ul>
+                          <div class="btn-group">
+                              <button type="button" class="btn btn-primary btn-sm">Opciones</button>
+                              <button type="button" class="btn btn-primary btn-sm split-bg-primary dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown"> <span class="visually-hidden">Toggle Dropdown</span>
+                              </button>
+                              <div class="dropdown-menu dropdown-menu-right dropdown-menu-lg-end">
+                                <button type="button" class="dropdown-item" id="btn_grid" onclick="grilla()"><i class="bx bx-grid-alt"></i> Grilla</button>
+                                <button type="button" class="dropdown-item" id="btn_lista" onclick="lista()" style="display: none;"><i class="bx bx-list-ul"></i> Lista</button>
+                              </div>
+                            </div>
+                        </div>                     
+                      </div>                      
                   </div>
-                  <div class="col">
-                    <div class="dropdown">
-                      <button class="btn btn-outline-secondary dropdown-toggle btn-sm" type="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="bx bx-file"></i>Activos</button>
-                      <ul class="dropdown-menu" style="">
-                        <li class=""><a class="dropdown-item" href="#" id="reporte_pdf_total"><i class="bx bx-file"></i>  Informe total en PDF</a></li>
-                        <li class=""><a class="dropdown-item" href="#" id="imprimir_excel_tot"><i class="bx bx-file"></i>  Informe total en EXCEL</a></li>
-
-                      </ul>                                               
-                    </div>
-                  </div>
-                  <div class="col">
-                    <div class="dropdown">
-                      <button class="btn btn-outline-secondary dropdown-toggle btn-sm" type="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="bx bx-file"></i> Bajas</button>
-                      <ul class="dropdown-menu" style="">
-                          <li><a  class="dropdown-item" href="#" id="reporte_pdf_bajas"><i class="bx bx-file"></i> Informe total en PDF</a></li>
-                          <li><a  class="dropdown-item" href="#" id="imprimir_excel_bajas"><i class="bx bx-file"></i> Informe total en EXCEL</a></li>
-                      </ul>                                               
-                    </div>
-                  </div>
-                  <div class="col">
-                    <div class="dropdown">
-                      <button class="btn btn-outline-secondary dropdown-toggle btn-sm" type="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="bx bx-file"></i> Patrimoniales.</button>
-                      <ul class="dropdown-menu" style="">
-                          <li><a  class="dropdown-item" href="#" id="reporte_pdf_patrimoniales"><i class="bx bx-file"></i> Informe total en PDF</a></li>
-                          <li><a  class="dropdown-item" href="#" id="imprimir_excel_patrimoniales"><i class="bx bx-file"></i> Informe total en EXCEL</a></li>
-                      </ul>                                               
-                    </div>
-                  </div>
-                  <div class="col">
-                    <div class="dropdown">
-                      <button class="btn btn-outline-secondary dropdown-toggle btn-sm" type="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="bx bx-file"></i> Terceros</button>
-                      <ul class="dropdown-menu" style="">
-                         <li><a class="dropdown-item" href="#" id="reporte_pdf_terceros"><i class="bx bx-file"></i> Informe total en PDF</a></li>
-                         <li><a class="dropdown-item" href="#" id="imprimir_excel_terceros"><i class="bx bx-file"></i> Informe total en EXCEL</a></li>
-                      </ul>                                               
-                    </div>
-                  </div>
-                  <div class="col">
-                    <div class="dropdown">
-                      <button class="btn btn-outline-secondary dropdown-toggle btn-sm" type="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="bx bx-file"></i> Informe Cambios</button>
-                      <ul class="dropdown-menu" style="">
-                        <li><a class="dropdown-item" href="#" id="imprimir_excel_cambios"><i class="bx bx-file"></i> Informe en EXCEL</a></li>
-                        <li><a class="dropdown-item" href="#" id="" onclick="$('#myModal1').modal('show')"><i class="bx bx-calendar"></i> Por Fecha</a></li>
-                      </ul>                                               
-                    </div>
-                  </div>
-                  
-                  <!-- <div class="col">
-                    <button class="btn btn-primary btn-sm" onclick="$('#myModal1').modal('show')"><i class="bx bx-calendar"></i>Por fechas</button> 
-                  </div> -->
-                    
-                </div>
                 <hr>
+
+                <form id="pnl_filtros">
+                                  
                 <div class="row">
-                   <div class="col-sm-5">
-                      <div class="row row-cols-auto g-1">                        
-                        <div class="col-sm-12 text-end">
-                          <label class="checkbox-inline" style="margin: 0px;"><input type="checkbox" name="" id="rbl_multiple" onclick="busqued_multiple()"> Busqueda Multiple</label>
-                        </div>
+                   <div class="col-sm-5">        
+                      <b>Buscar</b><br>              
+                      <div class="input-group">
+                        <input type="" name="txt_buscar" id="txt_buscar" onkeyup="buscar_art();" class="form-control form-control-sm" placeholder="Buscar Descripcion o tag">
+                         <button type="button" class="btn btn-outline-secondary btn-sm me-0 p-1" onclick="mostrar_mas_filtros()" title="Filtros de busqueda"><i class="bx bx-slider"></i></button>                                        
                       </div>
-                      <input type="" name="" id="txt_buscar" onkeyup="buscar_art();/*lista_articulos()*/" class="form-control form-control-sm" placeholder="Buscar Descripcion o tag">
-                      <div class="row row-cols-auto g-1">
-                        <div class="col-sm-6">
-                          <label class="checkbox-inline" style="margin: 0px;"><input type="checkbox" name="" id="rbl_exacto" onclick="activar()" checked=""> Busqueda exacta</label> 
-                        </div>
-                        <div class="col-sm-6">
-                          <label class="checkbox-inline" style="margin: 0px;"><input type="radio" name="rbl_aset" id="rbl_aset"  onclick="buscar_art(); /*lista_articulos()*/" checked=""> Asset</label>
-                          <label class="checkbox-inline" style="margin: 0px;"><input type="radio" name="rbl_aset" id="rbl_aset_ori"  onclick="buscar_art(); /*lista_articulos()*/"> Orig Asset</label>
-                          <label class="checkbox-inline" style="margin: 0px;"><input type="radio" name="rbl_aset" id="rbl_rfid"  onclick="buscar_art(); /*lista_articulos()*/"> RFID</label>                                           
-                        </div>
-                      </div>
+                      
+                      
                    </div>
                    <div class="col-sm-4">
-                    <label class="form-label"><b>Busqueda por custodio</b></label>
+                    <b>Custodio</b><br>
                     <div class="input-group">                 
-                      <select class="form-select" id="ddl_custodio"  onchange="$('#txt_pag').val('0-25');buscar_art();/*lista_articulos()*/">
+                      <select class="form-select" id="ddl_custodio" name="ddl_custodio"  onchange="$('#txt_pag').val('0-25');buscar_art();/*lista_articulos()*/">
                         <option value="">Seleccione custodio</option>                            
                       </select>
-                      <button type="button" style="padding:0px" class="btn btn-outline-secondary btn-sm" onclick="limpiar('ddl_custodio')"><i class="bx bx-x"></i></button>                
+                      <button type="button" style="padding:0px" class="btn btn-outline-secondary btn-sm" onclick="limpiar('ddl_custodio')"><i class="bx bx-x me-0"></i></button>                
                     </div>
                    </div>
                    <div class="col-sm-3">
-                      <label class="form-label"><b> Busqueda por Localizacion</b></label>
+                      <b>Localizacion</b></br>
                       <div class="input-group">
-                          <select class="form-select" id="ddl_localizacion" onchange="$('#txt_pag').val('0-25');buscar_art();/*lista_articulos()*/">
+                          <select class="form-select" name="ddl_localizacion" id="ddl_localizacion" onchange="$('#txt_pag').val('0-25');buscar_art();/*lista_articulos()*/">
                             <option value="">Seleccione custodio</option>                            
                           </select>
-                          <button type="button" style="padding:0px" class="btn btn-outline-secondary btn-sm" onclick="limpiar('ddl_localizacion')" title="Limpiar localizacion"><i class="bx bx-x"></i></button>                                    
+                          <button type="button" style="padding:0px" class="btn btn-outline-secondary btn-sm" onclick="limpiar('ddl_localizacion')" title="Limpiar localizacion"><i class="bx bx-x me-0"></i></button>
                       </div>                     
-                    </div>                  
+                    </div>       
                 </div>
+                <div class="row" id="mas_filtros" style="display: none;">
+                  <hr class="m-2">
+                   <div class="col-sm-2 border-end">
+                      <b>Coincidencia:</b>
+                      <label class="checkbox-inline" style="margin: 0px;"><input type="radio" name="rbl_exacto" id="rbl_aproximado" value="0" onclick="buscar_art()" checked> Aproximada </label> 
+                      <label class="checkbox-inline" style="margin: 0px;"><input type="radio" name="rbl_exacto" id="rbl_exacta" value="1" onclick="buscar_art()"> Exacta</label> 
+                   </div>
+                       
+                  <div class="col-sm-2 border-end">
+                    <b>Tipo de busqueda</b>
+                    <br>
+                        <label class="checkbox-inline" style="margin: 0px;"><input type="radio" value="0" name="rbl_multiple" onclick="buscar_art();" checked> Unica</label>
+                        <br>
+                        <label class="checkbox-inline" style="margin: 0px;"><input type="radio" value="1" name="rbl_multiple" onclick="buscar_art();"> Multiple</label>
+                    </div>
+                    <div class="col-sm-4 border-end">                      
+                      <b>Busqueda por:</b><br>
+                      <div class="row">
+                        <div class="col-sm-6">
+                           <label class="checkbox-inline" style="margin: 0px;"><input type="radio" name="buscar_por" value="0"   onclick="buscar_art();" checked=""> Ninguno</label>
+                          <br>
+                          <label class="checkbox-inline" style="margin: 0px;"><input type="radio" name="buscar_por" value="1"   onclick="buscar_art();"> Asset</label>                          
+                        </div>
+                        <div class="col-sm-6">
+                           <label class="checkbox-inline" style="margin: 0px;"><input type="radio" name="buscar_por" value="2" onclick="buscar_art();"> Orig Asset</label>
+                          <br>
+                          <label class="checkbox-inline" style="margin: 0px;"><input type="radio" name="buscar_por" value="3"   onclick="buscar_art();"> RFID</label>                          
+                        </div>
+                      </div>                        
+                                                                    
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="row">
+                          <div class="col-sm-6">
+                          <b>Desde</b>         
+                              <input type="date" class="form-control form-control-sm" id="txt_desde" name="txt_desde">
+                          </div>
+                          <div class="col-sm-6"> 
+                          <b>Hasta</b>  
+                              <input type="date" class="form-control form-control-sm" id="txt_hasta" name="txt_hasta">
+                          </div>                            
+                        </div>  
+                        <p class="font-10">Fecha de Inventario</p>
+                    </div>
+                    <div class="col-sm-12 text-end">
+                      <button type="button" class="btn btn-primary btn-sm" onclick="buscar_art()">Buscar</button>
+                      <!-- <button type="button" class="btn btn-primary btn-sm" onclick="ocultar_mas_filtros()">Cerrar</button> -->
+                    </div>
+              </div>
+              </form>  
                 <hr>
                 <div class="row">
-                  <div class="col-sm-6 col-md-8">
-                    <label class="bg-danger"> Bajas </label>
-                    <label class="bg-warning"> Patrimonial</label>
-                    <label class="bg-primary"> Terceros </label>       
+                  <div class="col-sm-6 col-md-8">                    
+
                   </div>
                   <div class="col-sm-6 col-md-4">
                       <div class="dataTables_paginate paging_simple_numbers" id="example2_paginate">
-                        <ul class="pagination pagination-sm justify-content-end" id="pag">
+                        <ul class="pagination pagination-sm justify-content-end mb-1" id="pag">
                         </ul>
                       </div>
                     </div>
@@ -764,11 +773,10 @@ function activar()
                -->
                   <div class="table-responsive" id="lista_art">
                       <div id="example_wrapper" class="dataTables_wrapper dt-bootstrap5">
-                            <div class="col-sm-12">
+                            <div class="col-sm-12">                                
                               <table id="example" class="table table-striped table-bordered dataTable" role="grid">
                                 <thead>
                                   <tr role="row">
-                                    <th>Id</th>
                                     <th>Tag Serie</th>
                                     <th>Descripcion</th>
                                     <th>Modelo</th>
@@ -790,7 +798,7 @@ function activar()
                                   
                                 </tbody>
                                 <tfoot>
-                                  <tr><th>Id</th>
+                                  <tr>
                                     <th>Tag Serie</th>
                                     <th>Descripcion</th>
                                     <th>Modelo</th>
@@ -857,4 +865,4 @@ function activar()
 </div>
 
      
-<?php include('../../cabeceras/footer.php'); ?>
+<?php //include('../cabeceras/footer.php'); ?>

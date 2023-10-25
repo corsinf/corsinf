@@ -1,4 +1,4 @@
-<?php include('../../cabeceras/header.php'); ?>
+<?php //include('../cabeceras/header.php'); ?>
 <script type="text/javascript">
   $( document ).ready(function() {
     consultar_datos();
@@ -16,11 +16,11 @@
 
     $.ajax({
       data:  {parametros:parametros},
-      url:   '../../controlador/localizacionC.php?buscar=true',
+      url:   '../controlador/localizacionC.php?buscar=true',
       type:  'post',
       dataType: 'json',
       /*beforeSend: function () {   
-           var spiner = '<div class="text-center"><img src="../../img/gif/proce.gif" width="100" height="100"></div>'     
+           var spiner = '<div class="text-center"><img src="../img/gif/proce.gif" width="100" height="100"></div>'     
          $('#tabla_').html(spiner);
       },*/
         success:  function (response) {    
@@ -92,7 +92,7 @@
 
         $.each(response.datos, function(i, item){
           // console.log(item);
-        localizacion+='<tr><td>'+item.ID_LOCATION+'</td><td>'+item.CENTRO+'</td><td><a href="localizacion_detalle.php?id='+item.ID_LOCATION+'">'+item.EMPLAZAMIENTO+'</a></td><td>'+item.DENOMINACION+'</td><td>';
+        localizacion+='<tr><td>'+item.ID_LOCATION+'</td><td>'+item.CENTRO+'</td><td><a href="inicio.php?acc=localizacion_detalle&id='+item.ID_LOCATION+'">'+item.EMPLAZAMIENTO+'</a></td><td>'+item.DENOMINACION+'</td><td>';
       //    if($('#elimina').val()==1 || $('#dba').val()==1)
       //   {
       //   localizacion+='<button class="btn btn-danger" tittle="Eliminar" onclick="delete_datos(\''+item.ID_LOCATION+'\')"><i class="fa fa-trash"></i></button>';
@@ -115,11 +115,11 @@
 
     $.ajax({
       data:  {id:id},
-      url:   '../../controlador/localizacionC.php?listar=true',
+      url:   '../controlador/localizacionC.php?listar=true',
       type:  'post',
       dataType: 'json',
       /*beforeSend: function () {   
-           var spiner = '<div class="text-center"><img src="../../img/gif/proce.gif" width="100" height="100"></div>'     
+           var spiner = '<div class="text-center"><img src="../img/gif/proce.gif" width="100" height="100"></div>'     
          $('#tabla_').html(spiner);
       },*/
         success:  function (response) {
@@ -158,17 +158,17 @@
      {
     $.ajax({
       data:  {busca:busca},
-      url:   '../../controlador/localizacionC.php?buscar=true',
+      url:   '../controlador/localizacionC.php?buscar=true',
       type:  'post',
       dataType: 'json',
       beforeSend: function () {   
-           // var spiner = '<div class="text-center"><img src="../../img/gif/proce.gif" width="100" height="100"></div>'     
+           // var spiner = '<div class="text-center"><img src="../img/gif/proce.gif" width="100" height="100"></div>'     
          $('#pag').html('');
       },
         success:  function (response) {    
         // console.log(response);   
          $.each(response.datos, function(i, item){
-           localizacion+='<tr><td>'+item.ID_LOCATION+'</td><td>'+item.CENTRO+'</td><td><a href="localizacion_detalle.php?id='+item.ID_LOCATION+'">'+item.EMPLAZAMIENTO+'</a></td><td>'+item.DENOMINACION+'</td><td>';
+           localizacion+='<tr><td>'+item.ID_LOCATION+'</td><td>'+item.CENTRO+'</td><td><a href="inicio.php?acc=localizacion_detalle&id='+item.ID_LOCATION+'">'+item.EMPLAZAMIENTO+'</a></td><td>'+item.DENOMINACION+'</td><td>';
       //    if($('#elimina').val()==1 || $('#dba').val()==1)
       //   {
       //   localizacion+='<button class="btn btn-danger" tittle="Eliminar" onclick="delete_datos(\''+item.ID_LOCATION+'\')"><i class="fa fa-trash"></i></button>';
@@ -191,11 +191,11 @@
   {
      $.ajax({
       data:  {parametros:parametros},
-      url:   '../../controlador/localizacionC.php?insertar=true',
+      url:   '../controlador/localizacionC.php?insertar=true',
       type:  'post',
       dataType: 'json',
       /*beforeSend: function () {   
-           var spiner = '<div class="text-center"><img src="../../img/gif/proce.gif" width="100" height="100"></div>'     
+           var spiner = '<div class="text-center"><img src="../img/gif/proce.gif" width="100" height="100"></div>'     
          $('#tabla_').html(spiner);
       },*/
         success:  function (response) {  
@@ -229,11 +229,11 @@
   {
      $.ajax({
       data:  {id:id},
-      url:   '../../controlador/localizacionC.php?eliminar=true',
+      url:   '../controlador/localizacionC.php?eliminar=true',
       type:  'post',
       dataType: 'json',
       /*beforeSend: function () {   
-           var spiner = '<div class="text-center"><img src="../../img/gif/proce.gif" width="100" height="100"></div>'     
+           var spiner = '<div class="text-center"><img src="../img/gif/proce.gif" width="100" height="100"></div>'     
          $('#tabla_').html(spiner);
       },*/
         success:  function (response) {  
@@ -446,4 +446,4 @@ function guias_pag(tipo)
 
 
      
-<?php include('../../cabeceras/footer.php'); ?>
+<?php //include('../cabeceras/footer.php'); ?>

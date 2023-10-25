@@ -49,6 +49,10 @@ if(isset($_GET['lista_solicitudes_all']))
 {
 	echo json_encode($controlador->lista_solicitudes_all());
 }
+if(isset($_GET['lista_notificaciones']))
+{
+	echo json_encode($controlador->lista_notificaciones());
+}
 
 class prestamos_bienesC
 {
@@ -63,10 +67,11 @@ class prestamos_bienesC
 
 	function cargar_lineas($parametros)
 	{
+		// print_r($parametros);die();
 		$datos = $this->modelo->lineas_solicitud($parametros['id']);
 		$soli = $this->modelo->datos_solicitud_all($parametros['id']);
 
-		print_r($soli);die();
+		// print_r($datos);die();
 		$tr='';
 		foreach ($datos as $key => $value) {
 			$tr.="<tr>
@@ -77,6 +82,7 @@ class prestamos_bienesC
 			<td>".$value["MODELO"]."</td>
 			</tr>";
 		}
+		// print_r($tr);die();
 		return $tr;
 	}
 
@@ -111,10 +117,24 @@ class prestamos_bienesC
 	function lista_bienes($query)
 	{		
 		$datos = $this->modelo->buscar_bien($query);
+		$activos_fuera = $this->modelo->lineas_salidas();
 		// print_r($datos);die();
 		$list = array();
+		$fuera = 0;
 		foreach ($datos as $key => $value) {
-			$list[] = array('id'=>$value['id'],'text'=>$value['TAG_SERIE'].'-'.$value['DESCRIPT']);
+			$fuera = 0;
+			foreach ($activos_fuera as $key1 => $value1) {
+				if($value1['id_activo']==$value['id'])
+				{
+					$list[] = array('id'=>$value['id'],'text'=>$value['TAG_SERIE'].'-'.$value['DESCRIPT'],"disabled"=>true);
+					$fuera = 1;
+					break;
+				}
+			}
+			if($fuera==0)
+			{
+				$list[] = array('id'=>$value['id'],'text'=>$value['TAG_SERIE'].'-'.$value['DESCRIPT']);
+			}
 		}
 		return $list;
 	}
@@ -122,6 +142,9 @@ class prestamos_bienesC
 	function add_linea($parametros)
 	{
 		//ingresar solicitud
+
+		// print_r($parametros);die();
+
 		$id = $parametros['id'];
 		if($id=='')
 		{
@@ -135,6 +158,10 @@ class prestamos_bienesC
 			$datos[3]['dato'] = $parametros['fecha3'];
 			$datos[4]['campo'] = 'observacion';
 			$datos[4]['dato'] = $parametros['observacion'];
+			$datos[5]['campo'] = 'destino';
+			$datos[5]['dato'] = $parametros['destino'];
+			$datos[6]['campo'] = 'duracion';
+			$datos[6]['dato'] = $parametros['duracion'];
 			$this->modelo->add('SOLICITUD_SALIDA',$datos);
 			$soli = $this->modelo->datos_solicitud($id=false,$parametros['solicitante'],$parametros['fecha'],$fecha_salida=false,$fecha_regreso=false,$observacion=false,$estado ='null');
 			$id = $soli[0]['id_solicitud']; 
@@ -156,6 +183,12 @@ class prestamos_bienesC
 	{
 		return  $this->modelo->datos_solicitud_all($id=false,$solicitante=false,$fecha=false,$fecha_salida=false,$fecha_regreso=false,$observacion=false,true,$paso=false);
 	}
+	function lista_notificaciones()
+	{
+		$fecha = date('Y-m-d');
+		return  $this->modelo->lista_notificaciones($fecha);
+	}
+
 
 
 }

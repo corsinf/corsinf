@@ -1,4 +1,4 @@
-<?php include ('../cabeceras/header3.php');?>
+<?php include ('../cabeceras/header3.php'); //print_r($_SESSION['INICIO']);die(); ?>
 <script type="text/javascript">
  $( document ).ready(function() {
   // restriccion();    
@@ -13,15 +13,20 @@ function consultar_datos()
      type:  'post',
      dataType: 'json',
        success:  function (response) {    
-       if (response=='') 
+       if (response.num==0) 
        {
           Swal.fire( '','Su perfil no esta asignado a ningun modulo.','error').then(function(){
           	window.location.href = "../login.php";
           });
-
        }else
        {
-       		$('#modulos_sis').html(response);
+       		if(response.num==1)
+       		{
+       			modulo_seleccionado(response.id,response.link)
+       		}else
+       		{
+       			$('#modulos_sis').html(response.html);
+       		}
        } 
      }
    });
@@ -34,8 +39,9 @@ function consultar_datos()
      url:   '../controlador/loginC.php?modulos_sistema_selected=true',
      type:  'post',
      dataType: 'json',
-       success:  function (response) {    
-      	location.href = link;         
+       success:  function (response) { 
+       	   
+      	location.href = 'inicio.php?mod='+modulo+'&acc='+link;         
      }
    });
   }

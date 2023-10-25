@@ -1,10 +1,10 @@
-<?php include('../../cabeceras/header.php'); ?>
+<?php //include('../cabeceras/header.php'); ?>
 <script type="text/javascript">
     $( document ).ready(function() {      
   // navegacion();
 
    $('#imprimir_cedula').click(function(){
-        var url = '../../lib/Reporte_pdf.php?reporte_cedula=true&id='+$('#txt_id').val();
+        var url = '../lib/Reporte_pdf.php?reporte_cedula=true&id='+$('#txt_id').val();
         window.open(url, '_blank');
     });
 
@@ -14,14 +14,14 @@
         formData.append('file',files);
        // formData.append('curso',curso);
         $.ajax({
-            url: '../../controlador/detalle_articuloC.php?cargar_imagen=true',
+            url: '../controlador/detalle_articuloC.php?cargar_imagen=true',
             type: 'post',
             data: formData,
             contentType: false,
             processData: false,
             dataType:'json',
          // beforeSend: function () {
-         //        $("#foto_alumno").attr('src',"../../img/gif/proce.gif");
+         //        $("#foto_alumno").attr('src',"../img/gif/proce.gif");
          //     },
             success: function(response) {
                if(response==-1)
@@ -114,11 +114,11 @@
 
     $.ajax({
       data:  {id:id},
-      url:   '../../controlador/marcasC.php?lista=true',
+      url:   '../controlador/marcasC.php?lista=true',
       type:  'post',
       dataType: 'json',
       /*beforeSend: function () {   
-           var spiner = '<div class="text-center"><img src="../../img/gif/proce.gif" width="100" height="100"></div>'     
+           var spiner = '<div class="text-center"><img src="../img/gif/proce.gif" width="100" height="100"></div>'     
          $('#tabla_').html(spiner);
       },*/
         success:  function (response) {    
@@ -139,11 +139,11 @@
     }
     $.ajax({
       data:  {parametros:parametros},
-      url:   '../../controlador/articulosC.php?lista_kit=true',
+      url:   '../controlador/articulosC.php?lista_kit=true',
       type:  'post',
       dataType: 'json',
       /*beforeSend: function () {   
-           var spiner = '<div class="text-center"><img src="../../img/gif/proce.gif" width="100" height="100"></div>'     
+           var spiner = '<div class="text-center"><img src="../img/gif/proce.gif" width="100" height="100"></div>'     
          $('#tabla_').html(spiner);
       },*/
         success:  function (response) {    
@@ -188,11 +188,11 @@ function kit_eliminar(id)
     }
     $.ajax({
       data:  {parametros:parametros},
-      url:   '../../controlador/articulosC.php?delete_kit=true',
+      url:   '../controlador/articulosC.php?delete_kit=true',
       type:  'post',
       dataType: 'json',
       /*beforeSend: function () {   
-           var spiner = '<div class="text-center"><img src="../../img/gif/proce.gif" width="100" height="100"></div>'     
+           var spiner = '<div class="text-center"><img src="../img/gif/proce.gif" width="100" height="100"></div>'     
          $('#tabla_').html(spiner);
       },*/
         success:  function (response) {    
@@ -221,11 +221,11 @@ function guardar_kit()
     }
     $.ajax({
       data:  {parametros:parametros},
-      url:   '../../controlador/articulosC.php?guardar_kit=true',
+      url:   '../controlador/articulosC.php?guardar_kit=true',
       type:  'post',
       dataType: 'json',
       /*beforeSend: function () {   
-           var spiner = '<div class="text-center"><img src="../../img/gif/proce.gif" width="100" height="100"></div>'     
+           var spiner = '<div class="text-center"><img src="../img/gif/proce.gif" width="100" height="100"></div>'     
          $('#tabla_').html(spiner);
       },*/
         success:  function (response) {    
@@ -245,7 +245,7 @@ function guardar_kit()
       $('#ddl_custodio').select2({
         placeholder: 'Seleccione una custodio',
         ajax: {
-          url: '../../controlador/custodioC.php?lista=true',
+          url: '../controlador/custodioC.php?lista=true',
           dataType: 'json',
           delay: 250,
           processResults: function (data) {
@@ -262,7 +262,7 @@ function guardar_kit()
       $('#ddl_familia').select2({
         placeholder: 'Seleccione una familia',
         ajax: {
-          url: '../../controlador/familiasC.php?lista_drop=true',
+          url: '../controlador/familiasC.php?lista_drop=true',
           dataType: 'json',
           delay: 250,
           processResults: function (data) {
@@ -279,7 +279,7 @@ function guardar_kit()
       $('#ddl_clase_mov').select2({
         placeholder: 'Seleccione una familia',
         ajax: {
-          url: '../../controlador/clase_movimientoC.php?buscar_auto=true',
+          url: '../controlador/clase_movimientoC.php?buscar_auto=true',
           dataType: 'json',
           delay: 250,
           processResults: function (data) {
@@ -299,7 +299,7 @@ function guardar_kit()
       $('#ddl_subfamilia').select2({
         placeholder: 'Seleccione una Subfamilia',
         ajax: {
-          url: '../../controlador/familiasC.php?lista_subfamilia=true&fam='+fa,
+          url: '../controlador/familiasC.php?lista_subfamilia=true&fam='+fa,
           dataType: 'json',
           delay: 250,
           processResults: function (data) {
@@ -316,7 +316,7 @@ function guardar_kit()
       $('#ddl_localizacion').select2({
         placeholder: 'Seleccione una localizacion',
         ajax: {
-          url: '../../controlador/localizacionC.php?lista=true',
+          url: '../controlador/localizacionC.php?lista=true',
           dataType: 'json',
           delay: 250,
           processResults: function (data) {
@@ -332,7 +332,7 @@ function guardar_kit()
       $('#ddl_color').select2({
         placeholder: 'Seleccione un color',
         ajax: {
-          url:  '../../controlador/detalle_articuloC.php?colores=true',
+          url:  '../controlador/detalle_articuloC.php?colores=true',
           dataType: 'json',
           delay: 250,
           processResults: function (data) {
@@ -348,7 +348,7 @@ function guardar_kit()
       $('#ddl_marca').select2({
         placeholder: 'Seleccione una marca',
         ajax: {
-          url: '../../controlador/detalle_articuloC.php?marca=true',
+          url: '../controlador/detalle_articuloC.php?marca=true',
           dataType: 'json',
           delay: 250,
           processResults: function (data) {
@@ -364,7 +364,7 @@ function guardar_kit()
       $('#ddl_genero').select2({
         placeholder: 'Seleccione una custodio',
         ajax: {
-          url: '../../controlador/detalle_articuloC.php?genero=true',
+          url: '../controlador/detalle_articuloC.php?genero=true',
           dataType: 'json',
           delay: 250,
           processResults: function (data) {
@@ -383,7 +383,7 @@ function guardar_kit()
 
  //    $.ajax({
  //      data:  {id:id},
- //      url:   '../../controlador/estadoC.php?lista=true',
+ //      url:   '../controlador/estadoC.php?lista=true',
  //      type:  'post',
  //      dataType: 'json',
  //        success:  function (response) {    
@@ -401,7 +401,7 @@ function guardar_kit()
       $('#ddl_estado').select2({
         placeholder: 'Seleccione Estado',
         ajax: {
-          url: '../../controlador/estadoC.php?lista_drop=true',
+          url: '../controlador/estadoC.php?lista_drop=true',
           dataType: 'json',
           delay: 250,
           processResults: function (data) {
@@ -417,7 +417,7 @@ function guardar_kit()
       $('#ddl_proyecto').select2({
         placeholder: 'Seleccione una Proyecto',
         ajax: {
-          url: '../../controlador/detalle_articuloC.php?proyecto=true',
+          url: '../controlador/detalle_articuloC.php?proyecto=true',
           dataType: 'json',
           delay: 250,
           processResults: function (data) {
@@ -451,7 +451,7 @@ function guardar_kit()
   {
     $.ajax({
       data:  {id:id},
-      url:   '../../controlador/detalle_articuloC.php?cargar_datos=true',
+      url:   '../controlador/detalle_articuloC.php?cargar_datos=true',
       type:  'post',
       dataType: 'json',
         success:  function (response) {   
@@ -486,7 +486,7 @@ function guardar_kit()
         $('#txt_observacion').val(response[0].OBSERVACION);
         if(response[0].IMAGEN!='' && response[0].IMAGEN!=null)
         {
-      	 $("#img_articulo").attr("src","../../img/"+response[0].IMAGEN);
+      	 $("#img_articulo").attr("src","../img/"+response[0].IMAGEN);
         }
         $('#txt_nom_img').val(response[0].tag_s);
         $('#txt_cant').val(response[0].QUANTY);
@@ -550,7 +550,7 @@ function guardar_kit()
   {
     $.ajax({
       data:  {id:id},
-      url:   '../../controlador/detalle_articuloC.php?cargar_datos=true',
+      url:   '../controlador/detalle_articuloC.php?cargar_datos=true',
       type:  'post',
       dataType: 'json',
         success:  function (response) {   
@@ -593,7 +593,7 @@ function guardar_kit()
         }
         if(response[0].IMAGEN!='' && response[0].IMAGEN!=null)
         {
-         $("#img_articulo").attr("src","../../img/"+response[0].IMAGEN);
+         $("#img_articulo").attr("src","../img/"+response[0].IMAGEN);
         }
         // $('#txt_nom_img').val(response[0].tag_s);
         $('#lbl_unidad').text('/'+response[0].BASE_UOM);
@@ -670,7 +670,7 @@ function guardar_kit()
     }
     $.ajax({
       data:  {parametros:parametros},
-      url:   '../../controlador/detalle_articuloC.php?movimientos=true',
+      url:   '../controlador/detalle_articuloC.php?movimientos=true',
       type:  'post',
       dataType: 'json',
         success:  function (response) {   
@@ -728,7 +728,7 @@ function guardar_kit()
     var id =$('#txt_id').val();
     $.ajax({
       data:  {parametros:parametros},
-      url:   '../../controlador/detalle_articuloC.php?guardarArticulo=true',
+      url:   '../controlador/detalle_articuloC.php?guardarArticulo=true',
       type:  'post',
       dataType: 'json',
         success:  function (response) { 
@@ -770,7 +770,7 @@ function guardar_kit()
 
     $.ajax({
       data:  {parametros:parametros},
-      url:   '../../controlador/detalle_articuloC.php?navegacion=true',
+      url:   '../controlador/detalle_articuloC.php?navegacion=true',
       type:  'post',
       dataType: 'json',
         success:  function (response) {
@@ -798,11 +798,11 @@ function guardar_kit()
 
     $.ajax({
       data:  {id:id},
-      url:   '../../controlador/custodioC.php?listar_todo=true',
+      url:   '../controlador/custodioC.php?listar_todo=true',
       type:  'post',
       dataType: 'json',
       /*beforeSend: function () {   
-           var spiner = '<div class="text-center"><img src="../../img/gif/proce.gif" width="100" height="100"></div>'     
+           var spiner = '<div class="text-center"><img src="../img/gif/proce.gif" width="100" height="100"></div>'     
          $('#tabla_').html(spiner);
       },*/
         success:  function (response) {
@@ -848,11 +848,11 @@ function guardar_kit()
 
     $.ajax({
       data:  {parametros:parametros},
-      url:   '../../controlador/familiasC.php?insertar=true',
+      url:   '../controlador/familiasC.php?insertar=true',
       type:  'post',
       dataType: 'json',
       /*beforeSend: function () {   
-           var spiner = '<div class="text-center"><img src="../../img/gif/proce.gif" width="100" height="100"></div>'     
+           var spiner = '<div class="text-center"><img src="../img/gif/proce.gif" width="100" height="100"></div>'     
          $('#tabla_').html(spiner);
       },*/
         success:  function (response) {
@@ -882,11 +882,11 @@ function guardar_kit()
 
     $.ajax({
       data:  {parametros:parametros},
-      url:   '../../controlador/familiasC.php?insertar_sub=true',
+      url:   '../controlador/familiasC.php?insertar_sub=true',
       type:  'post',
       dataType: 'json',
       /*beforeSend: function () {   
-           var spiner = '<div class="text-center"><img src="../../img/gif/proce.gif" width="100" height="100"></div>'     
+           var spiner = '<div class="text-center"><img src="../img/gif/proce.gif" width="100" height="100"></div>'     
          $('#tabla_').html(spiner);
       },*/
         success:  function (response) {
@@ -962,7 +962,7 @@ function guardar_kit()
       datos = datos+'&id='+$('#txt_id').val();
        $.ajax({
         data:  datos,
-        url:   '../../controlador/articulosC.php?guardar_it=true',
+        url:   '../controlador/articulosC.php?guardar_it=true',
         type:  'post',
         dataType: 'json',
         success:  function (response) { 
@@ -988,11 +988,11 @@ function guardar_kit()
      var lineas = '';
     $.ajax({
       data:  {parametros:parametros},
-      url:   '../../controlador/articulosC.php?lista_imprimir=true',
+      url:   '../controlador/articulosC.php?lista_imprimir=true',
       type:  'post',
       dataType: 'json',
       /*beforeSend: function () {   
-           var spiner = '<div class="text-center"><img src="../../img/gif/proce.gif" width="100" height="100"></div>'     
+           var spiner = '<div class="text-center"><img src="../img/gif/proce.gif" width="100" height="100"></div>'     
          $('#tabla_').html(spiner);
       },*/
         success:  function (response) {    
@@ -1028,7 +1028,7 @@ function guardar_kit()
   {
      $.ajax({
       // data:  {parametros:parametros},
-      url:   '../../controlador/articulosC.php?vaciar=true',
+      url:   '../controlador/articulosC.php?vaciar=true',
       type:  'post',
       dataType: 'json',
       success:  function (response) {
@@ -1072,7 +1072,7 @@ function guardar_kit()
           <div class="card-body">
             <div class="row row-cols-auto g-1">
                <div class="col">
-                <a class="btn btn-outline-secondary btn-sm" href="articulos.php"><i class="bx bx-left-arrow-alt"></i> Regresar</a>         
+                <a class="btn btn-outline-secondary btn-sm" href="inicio.php?mod=<?php echo $_SESSION['INICIO']['MODULO_SISTEMA']; ?>&acc=articulos"><i class="bx bx-left-arrow-alt"></i> Regresar</a>         
               </div> 
               <div class="col">
                 <button class="btn btn-outline-secondary btn-sm" type="button" id="imprimir_cedula"><i class="bx bx-file"></i> Cedula activo</button> 
@@ -1085,7 +1085,7 @@ function guardar_kit()
             <div class="image-zoom-section">
               <div class="product-gallery owl-carousel owl-theme border mb-3 p-3" data-slider-id="1">
                 <div class="item">
-                  <img src="../../img/sin_imagen.jpg" class="img-fluid" id="img_articulo" alt=""> 
+                  <img src="../img/sin_imagen.jpg" class="img-fluid" id="img_articulo" alt=""> 
                 </div>
               </div>
               <form enctype="multipart/form-data" id="form_img" method="post" style="display:none;">
@@ -1733,5 +1733,5 @@ function guardar_kit()
  
 
 
-<?php include('../../cabeceras/footer.php'); ?>
+<?php //include('../cabeceras/footer.php'); ?>
      

@@ -109,6 +109,15 @@ class prestamos_bienesM
 		return $this->db->datos($sql);
 	}
 
+	function lista_notificaciones($fecha)
+	{
+		$sql = "SELECT * FROM SOLICITUD_SALIDA SS 
+		INNER JOIN PERSON_NO PE ON SS.solicitante = PE.PERSON_NO 
+		WHERE fecha_regreso <= '".$fecha."' AND paso = 4 AND SS.estado = 0";
+		return $this->db->datos($sql);
+
+	}
+
 
 	function lineas_solicitud($id)
 	{
@@ -153,6 +162,15 @@ class prestamos_bienesM
 		$sql2="DELETE FROM LINEAS_SOLICITUD WHERE id_linea_salida = '".$id."';";
 		// print_r($sql);die();
 		return $this->db->sql_string($sql2);
+	}
+
+	function lineas_salidas()
+	{
+		$sql="SELECT LS.* FROM LINEAS_SOLICITUD LS
+		INNER JOIN SOLICITUD_SALIDA SS ON LS.id_solicitud = SS.id_solicitud
+		WHERE salida_verificada = 1 AND entrada_verificada = 0";
+		return $this->db->datos($sql);
+		
 	}
 	
 }

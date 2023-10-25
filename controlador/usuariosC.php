@@ -207,44 +207,12 @@ class usuariosC
                   </div>
                   <div class="d-grid"> <a href="#" class="btn btn-outline-primary radius-15">Contact Me</a>
                   </div>
-                  <div class="d-grid"><a href="detalle_usuario.php?usuario='.$value['id'].'" class="btn btn-outline-primary radius-15"> Ver Perfil </a>
+                  <div class="d-grid"><a href="inicio.php?acc=detalle_usuario&usuario='.$value['id'].'" class="btn btn-outline-primary radius-15"> Ver Perfil </a>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
-          '; 
-
-						// $tabla.='<div class="col-12 col-sm-6 col-md-4 d-flex align-items-stretch">
-            //           <div class="card bg-light">
-            //             <div class="card-header text-muted border-bottom-0">
-            //               CI: '.$value['ci'].'
-            //             </div>
-            //             <div class="card-body pt-0">
-            //               <div class="row">
-            //                 <div class="col-7">
-            //                   <h2 class="lead"><b>'.$value['nombres'].' '.$value['ape'].'</b></h2>
-            //                   <p class="text-muted text-sm"><b>Tipo de usuario: </b> '.$value['tipo'].' </p>
-            //                   <ul class="ml-4 mb-0 fa-ul text-muted">
-            //                     <li class="small"><span class="fa-li"><i class="fas fa-lg fa-building"></i></span> Direccion: '.$value['dir'].'</li>
-            //                     <li class="small"><span class="fa-li"><i class="fas fa-lg fa-phone"></i></span> Telefono : '.$value['tel'].'</li>
-            //                     <li class="small"><span class="fa-li"><i class="fas fa-lg fa-envelope"></i></span> Email : '.$value['email'].'</li>
-            //                   </ul>
-            //                 </div>
-            //                 <div class="col-5 text-center">
-            //                   <img src="'.$value['foto'].'" alt="" class="img-circle img-fluid" style="width:100%;height:112px">
-            //                 </div>
-            //               </div>
-            //             </div>
-            //             <div class="card-footer">
-            //               <div class="text-right">                            
-            //                 <a href="detalle_usuario.php?usuario='.$value['id'].'" class="btn btn-sm btn-primary">
-            //                   <i class="fas fa-user"></i> Ver Perfil
-            //                 </a>
-            //               </div>
-            //             </div>
-            //           </div>
-            //         </div>';
+          </div>'; 
 						
 					}
 				}else
@@ -256,7 +224,7 @@ class usuariosC
             <div class="card radius-15">
               <div class="card-body text-center">
                 <div class="p-4 border radius-15">
-                  <img src="../'.$value['foto'].'" width="110" height="110" class="rounded-circle shadow" alt="">
+                  <img src="'.$value['foto'].'" width="110" height="110" class="rounded-circle shadow" alt="">
                   <h5 class="mb-0 mt-5">'.$value['nombres'].' '.$value['ape'].'</h5>
                   <p class="mb-3">'.$value['tipo'].'</p>
                   <div class="list-inline contacts-social mt-3 mb-3"> <a href="javascript:;" class="list-inline-item bg-facebook text-white border-0"><i class="bx bxl-facebook"></i></a>
@@ -266,7 +234,7 @@ class usuariosC
                   </div>
                   <div class="d-grid"> <a href="#" class="btn btn-outline-primary radius-15">Contactame</a>
                   </div>
-                  <div class="d-grid"><a href="detalle_usuario.php?usuario='.$value['id'].'" class="btn btn-outline-primary radius-15">Ver Perfil</a>
+                  <div class="d-grid"><a href="inicio.php?acc=detalle_usuario&usuario='.$value['id'].'" class="btn btn-outline-primary radius-15">Ver Perfil</a>
                   </div>
                 </div>
               </div>
@@ -274,47 +242,10 @@ class usuariosC
           </div>
           '; 
 
-					// $tabla.='<div class="col-12 col-sm-6 col-md-4 d-flex align-items-stretch">
-          //             <div class="card bg-light">
-          //               <div class="card-header text-muted border-bottom-0">
-          //                 CI: '.$value['ci'].'
-          //               </div>
-          //               <div class="card-body pt-0">
-          //                 <div class="row">
-          //                   <div class="col-7">
-          //                     <h2 class="lead"><b>'.$value['nombres'].' '.$value['ape'].'</b></h2>
-          //                     <p class="text-muted text-sm"><b>Tipo de usuario: </b> '.$value['tipo'].' </p>
-          //                     <ul class="ml-4 mb-0 fa-ul text-muted">
-          //                       <li class="small"><span class="fa-li"><i class="fas fa-lg fa-building"></i></span> Direccion: '.$value['dir'].'</li>
-          //                       <li class="small"><span class="fa-li"><i class="fas fa-lg fa-phone"></i></span> Telefono : '.$value['tel'].'</li>
-          //                       <li class="small"><span class="fa-li"><i class="fas fa-lg fa-envelope"></i></span> Email : '.$value['email'].'</li>
-          //                     </ul>
-          //                   </div>
-          //                   <div class="col-5 text-center">
-          //                     <img src="'.$value['foto'].'" alt="" class="img-circle img-fluid" style="width:100%;height:112px">
-          //                   </div>
-          //                 </div>
-          //               </div>
-          //               <div class="card-footer">
-          //                 <div class="text-right">                            
-          //                   <a href="detalle_usuario.php?usuario='.$value['id'].'" class="btn btn-sm btn-primary">
-          //                     <i class="fas fa-user"></i> Ver Perfil
-          //                   </a>
-          //                 </div>
-          //               </div>
-          //             </div>
-          //           </div>';
 					
 				}
 		}
-		// $botones[0] = array('boton'=>'Editar','icono'=>'<i class="fas fa-pen nav-icon"></i>','tipo'=>'primary','id'=>'id');
-		// $botones[1] = array('boton'=>'Eliminar','icono'=>'<i class="fas fa-trash nav-icon"></i>','tipo'=>'danger','id'=>'id');
-		// $ocultar = array('id','idt','maestro','dir','tipo','pass','estado','nom');
-		// $cabecera = array('CI','Nombre','Apellido','telefono','Email');
-		// $enlace[0] = array('posicion'=>2,'link'=>'detalle_usuario.php','get'=>array('nombre'=>'usuario','valor'=>'id'));
 		
-		// $tabla = $this->pagina->tabla_generica($datos,$cabecera,$botones=false,false,$ocultar,false,false,$enlace);
-
 		return $tabla;
 	}
 
@@ -350,22 +281,43 @@ class usuariosC
 
 	function guardar_perfil($parametros)
 	{
-				$datos[0]['campo']='nombres';
-		    $datos[0]['dato']=$parametros['nombre'];
-		    $datos[2]['campo']='apellidos';
-		    $datos[2]['dato']=$parametros['apellido'];
-		    $datos[3]['campo']='direccion';
-		    $datos[3]['dato']=$parametros['direccion'];
-		    $datos[4]['campo']='telefono';
-		    $datos[4]['dato']=$parametros['telefono'];
-		    $datos[7]['campo']='ci_ruc';
-		    $datos[7]['dato']=$parametros['ci'];			
-		    $datos[8]['campo']='email';
-		    $datos[8]['dato']=$parametros['email'];	    
+		// print_r($parametros);die();
+		if($_SESSION['INICIO']['NO_CONCURENTE']=='')
+		{
+			$datos[0]['campo']='nombres';
+	    $datos[0]['dato']=$parametros['nombre'];
+	    $datos[2]['campo']='apellidos';
+	    $datos[2]['dato']=$parametros['apellido'];
+	    $datos[3]['campo']='direccion';
+	    $datos[3]['dato']=$parametros['direccion'];
+	    $datos[4]['campo']='telefono';
+	    $datos[4]['dato']=$parametros['telefono'];
+	    $datos[7]['campo']='ci_ruc';
+	    $datos[7]['dato']=$parametros['ci'];			
+	    $datos[8]['campo']='email';
+	    $datos[8]['dato']=$parametros['email'];	    
 
-		 $where[0]['campo']='id_usuarios';
-		 $where[0]['dato'] = $parametros['id'];
-		 return $this->modelo->update('USUARIOS',$datos,$where);
+		  $where[0]['campo']='id_usuarios';
+		  $where[0]['dato'] = $parametros['id'];
+		  return $this->modelo->update('USUARIOS',$datos,$where);
+		}else
+		{
+			$datos[0]['campo']='PERSON_NOM';
+	    $datos[0]['dato']=$parametros['nombre'];
+	    $datos[3]['campo']='DIRECCION';
+	    $datos[3]['dato']=$parametros['direccion'];
+	    $datos[4]['campo']='TELEFONO';
+	    $datos[4]['dato']=$parametros['telefono'];
+	    $datos[7]['campo']='PERSON_CI';
+	    $datos[7]['dato']=$parametros['ci'];			
+	    $datos[8]['campo']='PERSON_CORREO';
+	    $datos[8]['dato']=$parametros['email'];	    
+
+		  $where[0]['campo']='PERSON_NO';
+		  $where[0]['dato'] = $parametros['id'];
+		  return $this->modelo->update('PERSON_NO',$datos,$where);
+
+		}
 
 	}
 
@@ -472,8 +424,17 @@ class usuariosC
 	// }
 	function usuario_datos($parametros)
 	{
-		$datos  = $this->modelo->lista_usuarios($parametros['id'],$parametros['query']);
-		return $datos;
+		if($_SESSION['INICIO']['NO_CONCURENTE']=='')
+		{
+			$datos  = $this->modelo->lista_usuarios($parametros['id'],$parametros['query']);
+			return $datos;
+		}else
+		{
+			$datos  = $this->modelo->no_concurente_custodios($_SESSION['INICIO']['NO_CONCURENTE']);
+			// print_r($datos);die();
+			return $datos;
+		}
+
 	}
 
 

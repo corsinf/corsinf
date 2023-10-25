@@ -1,5 +1,5 @@
 <?php 
-include('../../cabeceras/header.php');?>
+//include('../cabeceras/header.php');?>
 <script type="text/javascript">
 	$( document ).ready(function() {
     lista_usuario();
@@ -12,7 +12,7 @@ include('../../cabeceras/header.php');?>
         placeholder: 'Seleccione una tipo de usuario',
         width:'90%',
         ajax: {
-          url:   '../../controlador/usuariosC.php?tipo=true',
+          url:   '../controlador/usuariosC.php?tipo=true',
           dataType: 'json',
           delay: 250,
           processResults: function (data) {
@@ -39,11 +39,11 @@ include('../../cabeceras/header.php');?>
    }
     $.ajax({
          data:  {parametros:parametros},
-         url:   '../../controlador/usuariosC.php?lista_usuarios=true',
+         url:   '../controlador/usuariosC.php?lista_usuarios=true',
          type:  'post',
          dataType: 'json',
          /*beforeSend: function () {   
-              var spiner = '<div class="text-center"><img src="../../img/gif/proce.gif" width="100" height="100"></div>'     
+              var spiner = '<div class="text-center"><img src="../img/gif/proce.gif" width="100" height="100"></div>'     
             $('#tabla_').html(spiner);
          },*/
            success:  function (response) {  
@@ -70,11 +70,11 @@ include('../../cabeceras/header.php');?>
    }
     $.ajax({
          data:  {parametros:parametros},
-         url:   '../../controlador/usuariosC.php?lista_usuarios_ina=true',
+         url:   '../controlador/usuariosC.php?lista_usuarios_ina=true',
          type:  'post',
          dataType: 'json',
          /*beforeSend: function () {   
-              var spiner = '<div class="text-center"><img src="../../img/gif/proce.gif" width="100" height="100"></div>'     
+              var spiner = '<div class="text-center"><img src="../img/gif/proce.gif" width="100" height="100"></div>'     
             $('#tabla_').html(spiner);
          },*/
            success:  function (response) {  
@@ -118,11 +118,11 @@ include('../../cabeceras/header.php');?>
     var datos = $('#form_usuario_new').serialize();
     $.ajax({
          data:  datos,
-         url:   '../../controlador/usuariosC.php?guardar_usuario=true',
+         url:   '../controlador/usuariosC.php?guardar_usuario=true',
          type:  'post',
          dataType: 'json',
          /*beforeSend: function () {   
-              var spiner = '<div class="text-center"><img src="../../img/gif/proce.gif" width="100" height="100"></div>'     
+              var spiner = '<div class="text-center"><img src="../img/gif/proce.gif" width="100" height="100"></div>'     
             $('#tabla_').html(spiner);
          },*/
            success:  function (response) {  
@@ -191,11 +191,11 @@ include('../../cabeceras/header.php');?>
   	}
     $.ajax({
          data:  {parametros:parametros},
-         url:   '../../controlador/usuariosC.php?datos_usuarios=true',
+         url:   '../controlador/usuariosC.php?datos_usuarios=true',
          type:  'post',
          dataType: 'json',
          /*beforeSend: function () {   
-              var spiner = '<div class="text-center"><img src="../../img/gif/proce.gif" width="100" height="100"></div>'     
+              var spiner = '<div class="text-center"><img src="../img/gif/proce.gif" width="100" height="100"></div>'     
             $('#tabla_').html(spiner);
          },*/
            success:  function (response) { 
@@ -229,11 +229,11 @@ include('../../cabeceras/header.php');?>
 
     $.ajax({
          data:  {id:id},
-         url:   '../../controlador/usuariosC.php?eliminar_tipo=true',
+         url:   '../controlador/usuariosC.php?eliminar_tipo=true',
          type:  'post',
          dataType: 'json',
          /*beforeSend: function () {   
-              var spiner = '<div class="text-center"><img src="../../img/gif/proce.gif" width="100" height="100"></div>'     
+              var spiner = '<div class="text-center"><img src="../img/gif/proce.gif" width="100" height="100"></div>'     
             $('#tabla_').html(spiner);
          },*/
            success:  function (response) { 
@@ -287,11 +287,11 @@ include('../../cabeceras/header.php');?>
    {
     $.ajax({
          data:  {id:id},
-         url:   '../../controlador/usuariosC.php?usuario_estado=true',
+         url:   '../controlador/usuariosC.php?usuario_estado=true',
          type:  'post',
          dataType: 'json',
          /*beforeSend: function () {   
-              var spiner = '<div class="text-center"><img src="../../img/gif/proce.gif" width="100" height="100"></div>'     
+              var spiner = '<div class="text-center"><img src="../img/gif/proce.gif" width="100" height="100"></div>'     
             $('#tabla_').html(spiner);
          },*/
            success:  function (response) { 
@@ -315,11 +315,11 @@ include('../../cabeceras/header.php');?>
    {
     $.ajax({
          data:  {id:id},
-         url:   '../../controlador/usuariosC.php?usuario_estado_=true',
+         url:   '../controlador/usuariosC.php?usuario_estado_=true',
          type:  'post',
          dataType: 'json',
          /*beforeSend: function () {   
-              var spiner = '<div class="text-center"><img src="../../img/gif/proce.gif" width="100" height="100"></div>'     
+              var spiner = '<div class="text-center"><img src="../img/gif/proce.gif" width="100" height="100"></div>'     
             $('#tabla_').html(spiner);
          },*/
            success:  function (response) { 
@@ -365,7 +365,7 @@ include('../../cabeceras/header.php');?>
                 <div class="row">
                   <div class="col-sm-12 col-md-6">
                     <div class="dt-buttons btn-group"> 
-                      <a class="btn btn-outline-secondary buttons-copy buttons-html5 " href="detalle_usuario.php">Nuevo</a>     
+                      <a class="btn btn-outline-secondary buttons-copy buttons-html5 " href="inicio.php?acc=detalle_usuario">Nuevo</a>     
                       <!-- <button class="btn btn-outline-secondary buttons-copy buttons-html5" tabindex="0" aria-controls="example2" type="button"><span>Copy</span></button>  -->
                       
                     </div>
@@ -391,4 +391,4 @@ include('../../cabeceras/header.php');?>
         <!--end row-->
       </div>
     </div>
-<?php include('../../cabeceras/footer.php'); ?>
+<?php //include('../cabeceras/footer.php'); ?>

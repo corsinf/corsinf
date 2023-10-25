@@ -1,4 +1,4 @@
-<?php include('../../cabeceras/header.php'); $id=''; ?>
+<?php //include('../cabeceras/header.php'); $id=''; ?>
 <script type="text/javascript">
    $( document ).ready(function() {
      autocoplet_tipo();
@@ -29,14 +29,14 @@
 
         var formData = new FormData(document.getElementById("form_img"));
          $.ajax({
-            url: '../../controlador/usuariosC.php?cargar_imagen=true',
+            url: '../controlador/usuariosC.php?cargar_imagen=true',
             type: 'post',
             data: formData,
             contentType: false,
             processData: false,
             dataType:'json',
          // beforeSend: function () {
-         //        $("#foto_alumno").attr('src',"../../img/gif/proce.gif");
+         //        $("#foto_alumno").attr('src',"../img/gif/proce.gif");
          //     },
             success: function(response) {
                if(response==-1)
@@ -69,7 +69,7 @@
       $('#ddl_tipo_usuario').select2({
         placeholder: 'Seleccione una tipo de usuario',
         ajax: {
-          url:   '../../controlador/usuariosC.php?tipo=true',
+          url:   '../controlador/usuariosC.php?tipo=true',
           dataType: 'json',
           delay: 250,
           processResults: function (data) {
@@ -98,11 +98,11 @@
   	}
     $.ajax({
          data:  {parametros:parametros},
-         url:   '../../controlador/usuariosC.php?datos_usuarios=true',
+         url:   '../controlador/usuariosC.php?datos_usuarios=true',
          type:  'post',
          dataType: 'json',
          /*beforeSend: function () {   
-              var spiner = '<div class="text-center"><img src="../../img/gif/proce.gif" width="100" height="100"></div>'     
+              var spiner = '<div class="text-center"><img src="../img/gif/proce.gif" width="100" height="100"></div>'     
             $('#tabla_').html(spiner);
          },*/
            success:  function (response) { 
@@ -126,7 +126,7 @@
   	       $('#txt_pass').val(response[0].pass);
   	       $('#txt_dir').val(response[0].dir);
            $('#txt_usuario_update').val(response[0].id);
-           $('#img_foto').attr('src','../'+response[0].foto+'?'+Math.random());
+           $('#img_foto').attr('src',response[0].foto+'?'+Math.random());
            // link
 
            $('#txt_link_web').val(response[0].web);
@@ -156,11 +156,11 @@
 
     $.ajax({
          data:  {id:id},
-         url:   '../../controlador/usuariosC.php?eliminar_tipo=true',
+         url:   '../controlador/usuariosC.php?eliminar_tipo=true',
          type:  'post',
          dataType: 'json',
          /*beforeSend: function () {   
-              var spiner = '<div class="text-center"><img src="../../img/gif/proce.gif" width="100" height="100"></div>'     
+              var spiner = '<div class="text-center"><img src="../img/gif/proce.gif" width="100" height="100"></div>'     
             $('#tabla_').html(spiner);
          },*/
            success:  function (response) { 
@@ -241,11 +241,11 @@
     datos = datos+'&web='+web+'&tw='+tw+'&ins='+ins+'&fb='+fb
     $.ajax({
          data:  datos,
-         url:   '../../controlador/usuariosC.php?guardar_usuario=true',
+         url:   '../controlador/usuariosC.php?guardar_usuario=true',
          type:  'post',
          dataType: 'json',
          /*beforeSend: function () {   
-              var spiner = '<div class="text-center"><img src="../../img/gif/proce.gif" width="100" height="100"></div>'     
+              var spiner = '<div class="text-center"><img src="../img/gif/proce.gif" width="100" height="100"></div>'     
             $('#tabla_').html(spiner);
          },*/
            success:  function (response) {  
@@ -313,7 +313,7 @@ function checkKey(e) {
         placeholder: 'Buscar cliente',
         width:'90%',
         ajax: {
-          url:  '../../controlador/usuariosC.php?lista_usuarios_ddl2=true',
+          url:  '../controlador/usuariosC.php?lista_usuarios_ddl2=true',
           dataType: 'json',
           delay: 250,
           processResults: function (data) {
@@ -483,4 +483,4 @@ function checkKey(e) {
       </div>
     </div>
 
-<?php  include('../../cabeceras/footer.php'); ?>
+<?php  //include('../cabeceras/footer.php'); ?>

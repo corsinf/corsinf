@@ -1,9 +1,16 @@
-<?php include ('../../cabeceras/header4.php');?>
+<?php /*include ('../cabeceras/header4.php');  print_r($_SESSION['INICIO']);die(); */?>
 <script type="text/javascript">
+	noconcurente = '<?php echo $_SESSION['INICIO']['NO_CONCURENTE']; ?>';
+	noconcurente_nom = '<?php echo $_SESSION['INICIO']['NO_CONCURENTE_NOM']; ?>';
 $( document ).ready(function() {
 	eliminar_solicitud();
 	autocompletar_custodio();
 	autocompletar_bien();
+	if(noconcurente!='')
+	{
+		$('#ddl_custodio').prop('disabled',true);
+		$('#ddl_custodio').append($('<option>',{value: noconcurente, text:noconcurente_nom,selected: true }));
+	}
 })
 
 function eliminar_solicitud()
@@ -15,7 +22,7 @@ function eliminar_solicitud()
   	}
     $.ajax({
          // data:  {parametros:parametros},
-         url:   '../../controlador/prestamos_bienesC.php?eliminar_solicitud=true',
+         url:   '../controlador/prestamos_bienesC.php?eliminar_solicitud=true',
          type:  'post',
          dataType: 'json',
          success:  function (response) { 
@@ -27,7 +34,7 @@ function autocompletar_custodio(){
         placeholder: 'Seleccione una solicitante',
         width:'100%',
         ajax: {
-          url: '../../controlador/custodioC.php?lista_acta=true',
+          url: '../controlador/custodioC.php?lista_acta=true',
           dataType: 'json',
           delay: 250,
           processResults: function (data) {
@@ -45,7 +52,7 @@ function autocompletar_bien(){
     placeholder: 'Seleccione una solicitante',
     width:'100%',
     ajax: {
-      url: '../../controlador/prestamos_bienesC.php?lista_bienes=true',
+      url: '../controlador/prestamos_bienesC.php?lista_bienes=true',
       dataType: 'json',
       delay: 250,
       processResults: function (data) {
@@ -62,13 +69,23 @@ function validar_fecha_salida()
 {
 	var fecha = $('#txt_fecha').val();
 	var fecha_s = $('#txt_fecha_salida').val();
+	var fecha_r = $('#txt_fecha_regreso').val();
 	contadorFinesDeSemana = 0;
 	
 	let fecha1 = new Date(fecha);
 	let fecha2 = new Date(fecha_s);
+	let fecha3 = new Date(fecha_r);
 
 	let diferencia = fecha2.getTime()-fecha1.getTime();
 	let diasDeDiferencia = (diferencia/86400)/1000;
+
+	//dias de diferencia entre regreso y salida
+	if(fecha_r!='' && fecha_s!='')
+	{
+		let diferencia2 = fecha3.getTime()-fecha2.getTime();
+		let diasDeDiferencia2 = (diferencia2/86400)/1000;	
+		$('#txt_duracion').val(diasDeDiferencia2);
+	}
 
 	while (fecha1 <= fecha2) {
 	    var diaSemana = fecha1.getDay();
@@ -80,9 +97,9 @@ function validar_fecha_salida()
 	}
 
 	var Totaldias = diasDeDiferencia - contadorFinesDeSemana;   
-	console.log(diasDeDiferencia);
-	console.log(contadorFinesDeSemana);
-	console.log(Totaldias); 
+	// console.log(diasDeDiferencia);
+	// console.log(contadorFinesDeSemana);
+	// console.log(Totaldias); 
 	if(Totaldias<3)
 	{
 		Swal.fire('Fecha invalida','Fecha de salida debe ser mayor a 3 dias laborables','info').then(function(){
@@ -133,10 +150,12 @@ function agregar_solicitud()
   		'fecha2':$('#txt_fecha_salida').val() ,
   		'fecha3':$('#txt_fecha_regreso').val(),
   		'observacion':$('#txt_observacion').val(),
+  		'duracion':$('#txt_duracion').val(),
+  		'destino':$('#txt_destino').val(),
   	}
     $.ajax({
          data:  {parametros:parametros},
-         url:   '../../controlador/prestamos_bienesC.php?add_linea=true',
+         url:   '../controlador/prestamos_bienesC.php?add_linea=true',
          type:  'post',
          dataType: 'json',
          success:  function (response) { 
@@ -156,7 +175,7 @@ function cargar_lineas_solicitud()
   	}
     $.ajax({
          data:  {parametros:parametros},
-         url:   '../../controlador/prestamos_bienesC.php?cargar_lineas=true',
+         url:   '../controlador/prestamos_bienesC.php?cargar_lineas=true',
          type:  'post',
          dataType: 'json',
          success:  function (response) { 
@@ -174,14 +193,14 @@ function generar_solicitud()
   	}
     $.ajax({
          data:  {parametros:parametros},
-         url:   '../../controlador/prestamos_bienesC.php?generar_solicitud=true',
+         url:   '../controlador/prestamos_bienesC.php?generar_solicitud=true',
          type:  'post',
          dataType: 'json',
          success:  function (response) { 
          	if(response==1)
          	{
          		Swal.fire("Solicitud Generado","","success").then(function(){
-         			 location.href = "../../login.php";
+         			 location.reload();
          		});
          	}
         }          
@@ -196,7 +215,7 @@ function elimnar_linea(id)
   	}
     $.ajax({
          data:  {parametros:parametros},
-         url:   '../../controlador/prestamos_bienesC.php?eliminar_linea=true',
+         url:   '../controlador/prestamos_bienesC.php?eliminar_linea=true',
          type:  'post',
          dataType: 'json',
          success:  function (response) { 
@@ -205,7 +224,111 @@ function elimnar_linea(id)
     });
 }
 </script>
-<div class="container">
+<div class="page-wrapper">
+	<div class="page-content">
+	    <!--breadcrumb-->
+	    <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
+	      <div class="breadcrumb-title pe-3">Inicio</div>
+	      <div class="ps-3">
+	        <nav aria-label="breadcrumb">
+	          <ol class="breadcrumb mb-0 p-0">
+	            <li class="breadcrumb-item"><a href="javascript:;"><i class="bx bx-home-alt"></i></a>
+	            </li>
+	            <li class="breadcrumb-item active" aria-current="page"></li>
+	          </ol>
+	        </nav>
+	      </div>     
+	    </div>
+	    <!--end breadcrumb-->
+	    <hr>
+	    <div class="card">
+	    	<div class="card-body">
+	    		
+							<form class="row g-3">
+								<div class="col-sm-6">
+									<input type="hidden" name="txt_id" id="txt_id">
+									<b>Solicitante</b>
+									<select class="form-select" id="ddl_custodio"  name="ddl_custodio" onchange="solicitante()" >
+										<option value="">Seleccione Solicitante</option>
+									</select>
+								</div>
+								<div class="col-sm-2">
+									<b>Fecha de solicitud</b>
+									<input type="date" class="form-control form-control-sm" id="txt_fecha" name="txt_fecha"value="<?php echo date('Y-m-d') ?>" readonly>
+								</div>
+								<div class="col-sm-2">
+									<b>Fecha de Salida</b>
+									<input type="date" class="form-control form-control-sm" id="txt_fecha_salida" name="txt_fecha_salida" onblur="validar_fecha_salida()">
+								</div>
+								<div class="col-sm-2">
+									<b>Fecha de Regreso</b>
+									<input type="date" class="form-control form-control-sm" id="txt_fecha_regreso" name="txt_fecha_regreso" onblur="validar_fecha_salida()">
+								</div>
+								<div class="col-sm-2">
+									<b>Duracion (Dias)</b>
+									<input type="input" class="form-control form-control-sm" id="txt_duracion" name="txt_duracion" readonly >
+								</div>
+								<div class="col-sm-10">
+									<b>Destino</b>
+									<input type="input" class="form-control form-control-sm" id="txt_destino" name="txt_destino">
+								</div>
+								<div class="col-12">
+									<b>Motivo de la movilizacion</b>
+									<textarea class="form-control form-control-sm" style="resize:none;" rows="3" placeholder="Observacion" id="txt_observacion" ></textarea>
+								</div>
+								<div class="col-sm-11">
+									<b>Bien</b>
+									<select class="form-select form-select-sm" id="ddl_producto" name="ddl_producto">
+										<option value="">Seleccione bien</option>
+									</select>
+								</div>								
+								<div class="col-sm-1 text-end">
+									<br>
+									<button type="button" class="btn btn-primary btn-sm" onclick="agregar_solicitud()">Agregar</button>
+								</div>
+								<div class="col-12">
+									<div class="table-responsive">
+										<table class="table table-hover table-sm">
+											<thead>
+												<th></th>												
+												<th>Asset</th>
+												<th>Bien</th>
+												<th>Serie</th>
+												<th>Modelo</th>
+											</thead>
+											<tbody id="tbl_body">
+												<tr>
+													<td></td>
+													<td></td>
+													<td></td>
+													<td></td>
+													<td></td>
+												</tr>
+											</tbody>
+										</table>
+									</div>
+								</div>
+							
+								<div class="col-sm-12">
+									<div class="row">
+										<div class="col-sm-12 text-end">
+													<button type="button" onclick="generar_solicitud()" class="btn btn-primary"><i class='bx bx-user'></i>Generar solicitud</button>
+								
+										</div>
+									</div>
+								</div>
+							</form>
+
+
+	    	</div>
+	    </div>
+
+	   
+	</div>
+</div>
+
+
+<!-- <div class="container">
 	<div class="row row-cols-1 row-cols-lg-2 row-cols-xl-2">
 		<div class="col mx-auto">
 			<div class="card mt-5">
@@ -271,27 +394,6 @@ function elimnar_linea(id)
 										</table>
 									</div>
 								</div>
-								<!-- <div class="col-12">
-									<label for="inputChoosePassword" class="form-label">Password</label>
-									<div class="input-group" id="show_hide_password">
-										<input type="password" class="form-control border-end-0" id="inputChoosePassword" value="12345678" placeholder="Enter Password"> <a href="javascript:;" class="input-group-text bg-transparent"><i class='bx bx-hide'></i></a>
-									</div>
-								</div>
-								<div class="col-12">
-									<label for="inputSelectCountry" class="form-label">Country</label>
-									<select class="form-select" id="inputSelectCountry" aria-label="Default select example">
-										<option selected>India</option>
-										<option value="1">United Kingdom</option>
-										<option value="2">America</option>
-										<option value="3">Dubai</option>
-									</select>
-								</div>
-								<div class="col-12">
-									<div class="form-check form-switch">
-										<input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked">
-										<label class="form-check-label" for="flexSwitchCheckChecked">I read and agree to Terms & Conditions</label>
-									</div>
-								</div> -->
 								<div class="col-12">
 									<div class="d-grid">
 										<button type="button" onclick="generar_solicitud()" class="btn btn-primary"><i class='bx bx-user'></i>Generar solicitud</button>
@@ -304,6 +406,5 @@ function elimnar_linea(id)
 			</div>
 		</div>
 	</div>
-	<!--end row-->
-</div>
-<?php include ('../../cabeceras/footer4.php');?>
+</div> -->
+<?php //include ('../cabeceras/footer4.php');?>

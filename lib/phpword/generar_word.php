@@ -1702,6 +1702,13 @@ class generar_word
     $propiedades->setCreator("Luis Cabrera Benito");
     $propiedades->setTitle("Texto");
 
+
+    $datos_soli = $this->actas->solicitud($parametros['id']);
+    $lineas_soli = $this->actas->lineas_solicitud($parametros['id']);
+
+    // print_r($datos_soli);
+    // print_r($lineas_soli);die();
+
     # Agregar texto...
     /*
     Todos los textos deben estar dentro de una sección
@@ -1787,8 +1794,8 @@ class generar_word
     $fecha = strftime("%A %d de %B del %Y");
 
     $textrun = $seccion->addTextRun($alineacionC);
-    $textrun->addText("En la ciudad de Quito, ".$fecha.", comparece, por una parte, la Direccion de Control de  Activos Fijos y seguros de la  Pontificia Universidad Católica del Ecuador y, por otra parte,_________________________________",$fuente);
-    $textrun->addText("como custodio responsable del buen uso y cuidado del bien o bienes de la unidad ".strtoupper($parametros['unidad'])." mediante el siguiente documento realiza la notificación de la salida de los bienes de conformidad  a lo establecido en los lineamiento de la salida de los bienes de conformidad a lo establecido enlos lineamientos de activo de la Pontificia Universidad católica del ecuador ",$fuente);
+    $textrun->addText("En la ciudad de Quito, ".$fecha.", comparece, por una parte, la Direccion de Control de  Activos Fijos y seguros de la  Pontificia Universidad Católica del Ecuador y, por otra parte, ".$datos_soli[0]['PERSON_NOM'] ,$fuente);
+    $textrun->addText(" como custodio responsable del buen uso y cuidado del bien o bienes de la unidad ".strtoupper($datos_soli[0]['UNIDAD_ORG'])." mediante el siguiente documento realiza la notificación de la salida de los bienes de conformidad  a lo establecido en los lineamiento de la salida de los bienes de conformidad a lo establecido enlos lineamientos de activo de la Pontificia Universidad católica del ecuador ",$fuente);
     $textrun->addTextBreak(1);
 
         $estiloTabla2 = [
@@ -1810,27 +1817,27 @@ class generar_word
         $table = $seccion->addTable('estilo2');
         $table->addRow();
         $table->addCell(3000, $alineacionLEFT)->addText('Responsable',$fuente,$alineacionLEFT);
-        $table->addCell(7000, $alineacionCenter)->addText('',$fuente2,$alineacionCenter);
+        $table->addCell(7000, $alineacionCenter)->addText($datos_soli[0]['PERSON_NOM'],$fuente,$alineacionLEFT);
 
         $table->addRow();
-        $table->addCell(3000, $alineacionLEFT)->addText('Destino',$fuente2,$alineacionLEFT);
-        $table->addCell(2000, $alineacionCenter)->addText('RFID', $fuente,$alineacionCenter);
+        $table->addCell(3000, $alineacionLEFT)->addText('Destino',$fuente,$alineacionLEFT);
+        $table->addCell(2000, $alineacionCenter)->addText($datos_soli[0]['destino'], $fuente,$alineacionLEFT);
 
         $table->addRow();
-        $table->addCell(3000, $alineacionLEFT)->addText('Fecha de Salida', $fuente2,$alineacionLEFT);
-        $table->addCell(2000, $alineacionCenter)->addText('Modelo', $fuente,$alineacionCenter);
+        $table->addCell(3000, $alineacionLEFT)->addText('Fecha de Salida', $fuente,$alineacionLEFT);
+        $table->addCell(2000, $alineacionCenter)->addText($datos_soli[0]['fecha_salida']->format('Y-m-d'), $fuente,$alineacionLEFT);
 
         $table->addRow();
-        $table->addCell(3000, $alineacionLEFT)->addText('Fecha de entrada', $fuente2,$alineacionLEFT);
-        $table->addCell(7000, $alineacionCenter)->addText('', $fuente,$alineacionCenter);
+        $table->addCell(3000, $alineacionLEFT)->addText('Fecha de entrada', $fuente,$alineacionLEFT);
+        $table->addCell(7000, $alineacionCenter)->addText($datos_soli[0]['fecha_regreso']->format('Y-m-d'), $fuente,$alineacionLEFT);
 
         $table->addRow();
-        $table->addCell(3000, $alineacionLEFT)->addText('duracion / tiempo Estimado', $fuente2,$alineacionLEFT);
-        $table->addCell(2000, $alineacionCenter)->addText('Valor', $fuente,$alineacionCenter);
+        $table->addCell(3000, $alineacionLEFT)->addText('duracion / tiempo Estimado', $fuente,$alineacionLEFT);
+        $table->addCell(2000, $alineacionCenter)->addText($datos_soli[0]['duracion'], $fuente,$alineacionLEFT);
 
          $table->addRow();
-        $table->addCell(3000, $alineacionLEFT)->addText('Motivo de movilizacion', $fuente2,$alineacionLEFT);
-        $table->addCell(2000, $alineacionCenter)->addText('Valor', $fuente,$alineacionCenter);
+        $table->addCell(3000, $alineacionLEFT)->addText('Motivo de movilizacion', $fuente,$alineacionLEFT);
+        $table->addCell(2000, $alineacionCenter)->addText($datos_soli[0]['observacion'], $fuente,$alineacionLEFT);
 
 
         $textrun = $seccion->addTextRun($alineacionC);
@@ -1912,6 +1919,23 @@ class generar_word
         $table->addCell(3000, $alineacionCenter)->addText('Modelo',$fuente,$alineacionCenter); 
         $table->addCell(3000, $alineacionCenter)->addText('Serie',$fuente,$alineacionCenter);    
         $table->addCell(3000, $alineacionCenter)->addText('Observaciones',$fuente,$alineacionCenter);   
+
+        $count = 1;
+        foreach ($lineas_soli as $key => $value) {
+
+        // print_r($value);die();
+            $table->addRow();
+            $table->addCell(3000, $alineacionCenter)->addText($count,$fuente2,$alineacionLEFT);
+            $table->addCell(3000, $alineacionCenter)->addText($value['codigo'],$fuente2,$alineacionLEFT);
+            $table->addCell(3000, $alineacionCenter)->addText($value['ori'],$fuente2,$alineacionLEFT);
+            $table->addCell(3000, $alineacionCenter)->addText($value['rfid'],$fuente2,$alineacionLEFT);
+            $table->addCell(3000, $alineacionCenter)->addText($value['item'],$fuente2,$alineacionLEFT);
+            $table->addCell(3000, $alineacionCenter)->addText($value['marca'],$fuente2,$alineacionLEFT);
+            $table->addCell(3000, $alineacionCenter)->addText($value['modelo'],$fuente2,$alineacionLEFT); 
+            $table->addCell(3000, $alineacionCenter)->addText($value['serie'],$fuente2,$alineacionLEFT);    
+            $table->addCell(3000, $alineacionCenter)->addText($value['salida'],$fuente2,$alineacionLEFT);   
+            $count+1;            
+        }
 
 
 

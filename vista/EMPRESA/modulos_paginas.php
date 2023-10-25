@@ -1,4 +1,4 @@
-<?php include('../../cabeceras/header.php');  ?>
+<?php //include('../cabeceras/header.php');  ?>
 <script type="text/javascript">
   $( document ).ready(function() {
     cargar_modulos_sis();
@@ -22,7 +22,7 @@
 
     $.ajax({
          data:  {parametros:parametros},
-         url:   '../../controlador/modulos_paginasC.php?lista_paginas=true',
+         url:   '../controlador/modulos_paginasC.php?lista_paginas=true',
          type:  'post',
          dataType: 'json',
          async:false,
@@ -45,7 +45,7 @@ function cargar_modulos_ddl()
   }
   $.ajax({
        data:  {parametros:parametros},
-       url:   '../../controlador/tipo_usuarioC.php?modulos=true',
+       url:   '../controlador/tipo_usuarioC.php?modulos=true',
        type:  'post',
        dataType: 'json',
          success:  function (response) {  
@@ -61,7 +61,7 @@ function cargar_modulos_sis_ddl()
 {   
   $.ajax({
        // data:  {parametros:parametros},
-       url:   '../../controlador/modulos_paginasC.php?modulos_sis_ddl=true',
+       url:   '../controlador/modulos_paginasC.php?modulos_sis_ddl=true',
        type:  'post',
        dataType: 'json',
          success:  function (response) {  
@@ -79,7 +79,7 @@ function cargar_modulos_sis_ddl_pag()
 {   
   $.ajax({
        // data:  {parametros:parametros},
-       url:   '../../controlador/modulos_paginasC.php?modulos_sis_ddl=true',
+       url:   '../controlador/modulos_paginasC.php?modulos_sis_ddl=true',
        type:  'post',
        dataType: 'json',
          success:  function (response) {  
@@ -98,7 +98,7 @@ function cargar_modulos_sis_ddl_pag_ing()
 {   
   $.ajax({
        // data:  {parametros:parametros},
-       url:   '../../controlador/modulos_paginasC.php?modulos_sis_ddl=true',
+       url:   '../controlador/modulos_paginasC.php?modulos_sis_ddl=true',
        type:  'post',
        dataType: 'json',
          success:  function (response) {  
@@ -122,7 +122,7 @@ function cargar_modulos_ddl_ing(id='')
   }
   $.ajax({
        data:  {parametros:parametros},
-       url:   '../../controlador/tipo_usuarioC.php?modulos=true',
+       url:   '../controlador/tipo_usuarioC.php?modulos=true',
        type:  'post',
        dataType: 'json',
          success:  function (response) {  
@@ -139,11 +139,11 @@ function cargar_modulos_sis()
   var parametros = {'query':''};   
     $.ajax({
          data:  {parametros:parametros},
-         url:   '../../controlador/modulos_paginasC.php?modulos_sis_tabla=true',
+         url:   '../controlador/modulos_paginasC.php?modulos_sis_tabla=true',
          type:  'post',
          dataType: 'json',
          /*beforeSend: function () {   
-              var spiner = '<div class="text-center"><img src="../../img/gif/proce.gif" width="100" height="100"></div>'     
+              var spiner = '<div class="text-center"><img src="../img/gif/proce.gif" width="100" height="100"></div>'     
             $('#tabla_').html(spiner);
          },*/
            success:  function (response) {  
@@ -162,11 +162,11 @@ function cargar_modulos()
   {   
     $.ajax({
          // data:  {parametros:parametros},
-         url:   '../../controlador/tipo_usuarioC.php?modulos_tabla=true',
+         url:   '../controlador/tipo_usuarioC.php?modulos_tabla=true',
          type:  'post',
          dataType: 'json',
          /*beforeSend: function () {   
-              var spiner = '<div class="text-center"><img src="../../img/gif/proce.gif" width="100" height="100"></div>'     
+              var spiner = '<div class="text-center"><img src="../img/gif/proce.gif" width="100" height="100"></div>'     
             $('#tabla_').html(spiner);
          },*/
            success:  function (response) {  
@@ -184,11 +184,11 @@ function cargar_modulos()
   {   
     $.ajax({
          // data:  {parametros:parametros},
-         url:   '../../controlador/tipo_usuarioC.php?modulos=true',
+         url:   '../controlador/tipo_usuarioC.php?modulos=true',
          type:  'post',
          dataType: 'json',
          /*beforeSend: function () {   
-              var spiner = '<div class="text-center"><img src="../../img/gif/proce.gif" width="100" height="100"></div>'     
+              var spiner = '<div class="text-center"><img src="../img/gif/proce.gif" width="100" height="100"></div>'     
             $('#tabla_').html(spiner);
          },*/
            success:  function (response) {  
@@ -221,11 +221,11 @@ function cargar_modulos()
     }
      $.ajax({
          data:  {parametros:parametros},
-         url:   '../../controlador/modulos_paginasC.php?guardar_modulos=true',
+         url:   '../controlador/modulos_paginasC.php?guardar_modulos=true',
          type:  'post',
          dataType: 'json',
          /*beforeSend: function () {   
-              var spiner = '<div class="text-center"><img src="../../img/gif/proce.gif" width="100" height="100"></div>'     
+              var spiner = '<div class="text-center"><img src="../img/gif/proce.gif" width="100" height="100"></div>'     
             $('#tabla_').html(spiner);
          },*/
            success:  function (response) {  
@@ -260,7 +260,7 @@ function cargar_modulos()
   {    
      $.ajax({
          data:  {id:id},
-         url:   '../../controlador/modulos_paginasC.php?eliminar_modulos=true',
+         url:   '../controlador/modulos_paginasC.php?eliminar_modulos=true',
          type:  'post',
          dataType: 'json',
            success:  function (response) {  
@@ -296,7 +296,7 @@ function cargar_modulos()
   {    
      $.ajax({
          data:  {id:id},
-         url:   '../../controlador/modulos_paginasC.php?eliminar_pagina=true',
+         url:   '../controlador/modulos_paginasC.php?eliminar_pagina=true',
          type:  'post',
          dataType: 'json',
            success:  function (response) {  
@@ -351,11 +351,11 @@ function guardar_pagina(id='')
     }
      $.ajax({
          data:  {parametros:parametros},
-         url:   '../../controlador/modulos_paginasC.php?guardar_paginas=true',
+         url:   '../controlador/modulos_paginasC.php?guardar_paginas=true',
          type:  'post',
          dataType: 'json',
          /*beforeSend: function () {   
-              var spiner = '<div class="text-center"><img src="../../img/gif/proce.gif" width="100" height="100"></div>'     
+              var spiner = '<div class="text-center"><img src="../img/gif/proce.gif" width="100" height="100"></div>'     
             $('#tabla_').html(spiner);
          },*/
            success:  function (response) {  
@@ -382,7 +382,7 @@ function guardar_pagina(id='')
     }
      $.ajax({
          data:  {parametros:parametros},
-         url:   '../../controlador/modulos_paginasC.php?defaul_paginas=true',
+         url:   '../controlador/modulos_paginasC.php?defaul_paginas=true',
          type:  'post',
          dataType: 'json',        
            success:  function (response) {  
@@ -403,7 +403,7 @@ function guardar_pagina(id='')
     }
      $.ajax({
          data:  {parametros:parametros},
-         url:   '../../controlador/modulos_paginasC.php?sub_pagina=true',
+         url:   '../controlador/modulos_paginasC.php?sub_pagina=true',
          type:  'post',
          dataType: 'json',        
            success:  function (response) {  
@@ -422,11 +422,11 @@ function guardar_pagina(id='')
     }
      $.ajax({
          data:  {parametros:parametros},
-         url:   '../../controlador/modulos_paginasC.php?activo_paginas=true',
+         url:   '../controlador/modulos_paginasC.php?activo_paginas=true',
          type:  'post',
          dataType: 'json',
          /*beforeSend: function () {   
-              var spiner = '<div class="text-center"><img src="../../img/gif/proce.gif" width="100" height="100"></div>'     
+              var spiner = '<div class="text-center"><img src="../img/gif/proce.gif" width="100" height="100"></div>'     
             $('#tabla_').html(spiner);
          },*/
            success:  function (response) {  
@@ -468,11 +468,11 @@ function guardar_pagina(id='')
     }
     $.ajax({
        data:  {parametros:parametros},
-       url:   '../../controlador/modulos_paginasC.php?editar_modulo_sis=true',
+       url:   '../controlador/modulos_paginasC.php?editar_modulo_sis=true',
        type:  'post',
        dataType: 'json',
        /*beforeSend: function () {   
-            var spiner = '<div class="text-center"><img src="../../img/gif/proce.gif" width="100" height="100"></div>'     
+            var spiner = '<div class="text-center"><img src="../img/gif/proce.gif" width="100" height="100"></div>'     
           $('#tabla_').html(spiner);
        },*/
          success:  function (response) {  
@@ -767,4 +767,4 @@ function guardar_pagina(id='')
     </div>
 
 
-<?php  include('../../cabeceras/footer.php');?>
+<?php //include('../cabeceras/footer.php');?>

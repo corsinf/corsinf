@@ -10,7 +10,7 @@ function restriccion()
     
        $.ajax({
          data:  {pagina:pag},
-         url:   '../../controlador/loginC.php?restriccion=true',
+         url:   '../controlador/loginC.php?restriccion=true',
          type:  'post',
          dataType: 'json',
          /*beforeSend: function () {   
@@ -18,6 +18,8 @@ function restriccion()
             $('#tabla_').html(spiner);
          },*/
            success:  function (response) {
+
+              // console.log(response);
 
            if(response.ver!=0)
            { 
@@ -37,19 +39,39 @@ function restriccion()
               }
               // console.log(mod);
               console.log(response.mod);
-              if(response.modulo != mod && response.pag!='index.php')
+              if(response.sistema != mod && response.pag!='index.php')
               {
                  Swal.fire('Se a cambiado de modulo','','info').then(function()
                   {
-                     location.href = '../modulos_sistema.php';
+                     location.href = 'modulos_sistema.php';
                   });
               }
             }else
             {
-               location.href = '../pagina_error.php';
+                if(response.pag!='pagina_error.php')
+                {
+                    // location.href = 'inicio.php?acc=pagina_error';
+                }
             }
 
           } 
           
        });
   }
+
+   function formato_fecha(date) {
+      var formattedDate = new Date(date);
+      var d = formattedDate.getDate();
+      var m = formattedDate.getMonth();
+      m += 1; // javascript months are 0-11
+      if (m < 10) {
+        m = '0' + m;
+      }
+      if (d < 10) {
+        d = '0' + d;
+      }
+      var y = formattedDate.getFullYear();
+      var Fecha = y + "-" + m + "-" + d;
+      console.log(Fecha);
+      return Fecha;
+    }

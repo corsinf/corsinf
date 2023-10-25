@@ -1,4 +1,4 @@
-<?php include ('../../cabeceras/header.php');?>
+<?php //include ('../cabeceras/header.php');?>
 <script type="text/javascript">
  $( document ).ready(function() {
 
@@ -52,7 +52,7 @@
       placeholder: 'Seleccione una familia',      
       dropdownParent: $('#modal_tipo_baja'),
       ajax: {
-        url: '../../controlador/clase_movimientoC.php?buscar_auto=true',
+        url: '../controlador/clase_movimientoC.php?buscar_auto=true',
         dataType: 'json',
         delay: 250,
         processResults: function (data) {
@@ -71,7 +71,7 @@
   var person = $('#txt_person').val();
    var sub = $('#txt_subtitulo1').val();
    var ci = $('#txt_person_ci').val();
-   var url = '../../lib/phpword/generar_word.php?word_acta1=true&to='+person+'&sub='+sub+'&ci='+ci;                 
+   var url = '../lib/phpword/generar_word.php?word_acta1=true&to='+person+'&sub='+sub+'&ci='+ci;                 
    window.open(url, '_blank');
  }
 
@@ -81,7 +81,7 @@
     var cus = $('#ddl_custodio_modal2 option:selected').text();
     var empla = $('#ddl_emplazamiento_modal2 option:selected').text();
     var sub = $('#txt_subtitulo2').val();
-    var url = '../../lib/phpword/generar_word.php?word_acta2=true&tipo=2&cus='+cus+'&cus_no='+cus_no+'&empla='+empla+'&sub='+sub;                 
+    var url = '../lib/phpword/generar_word.php?word_acta2=true&tipo=2&cus='+cus+'&cus_no='+cus_no+'&empla='+empla+'&sub='+sub;                 
     window.open(url, '_blank');  
  }
 
@@ -91,7 +91,7 @@
    var cus = $('#ddl_custodio_modal2 option:selected').text();
    var empla = $('#ddl_emplazamiento_modal2 option:selected').text();
    var sub = $('#txt_subtitulo2').val();
-    var url = '../../lib/phpword/generar_word.php?word_acta2=true&tipo=3&cus='+cus+'&cus_no='+cus_no+'&empla='+empla+'&sub='+sub;       
+    var url = '../lib/phpword/generar_word.php?word_acta2=true&tipo=3&cus='+cus+'&cus_no='+cus_no+'&empla='+empla+'&sub='+sub;       
     window.open(url, '_blank');  
  }
 
@@ -104,7 +104,7 @@
     var emplaS = $('#ddl_emplazamiento_modal4 option:selected').text();
     var emplaE = $('#ddl_emplazamiento_modal_4 option:selected').text();
     var sub = $('#txt_subtitulo4').val();
-    var url = '../../lib/phpword/generar_word.php?word_acta4=true&cusS='+cusS+'&cusE='+cusE+'&emplaS='+emplaS+'&emplaE='+emplaE+'&cS='+cusS_no+'&cE='+cusE_no+'&sub='+sub;                 
+    var url = '../lib/phpword/generar_word.php?word_acta4=true&cusS='+cusS+'&cusE='+cusE+'&emplaS='+emplaS+'&emplaE='+emplaE+'&cS='+cusS_no+'&cE='+cusE_no+'&sub='+sub;                 
     window.open(url, '_blank');  
  }
 
@@ -116,7 +116,7 @@
    var unidad = $('#txt_nom_unidad').val();
    var sub = $('#txt_subtitulo5').val();
 
-   var url = '../../lib/phpword/generar_word.php?word_acta5=true&donante='+donante+'&ci='+ci+'&director='+director+'&unidad='+unidad+'&sub='+sub;    
+   var url = '../lib/phpword/generar_word.php?word_acta5=true&donante='+donante+'&ci='+ci+'&director='+director+'&unidad='+unidad+'&sub='+sub;    
    window.open(url, '_blank');
  }
 
@@ -151,11 +151,11 @@
      var lineas = '';
     $.ajax({
       data:  {parametros:parametros},
-      url:   '../../controlador/actasC.php?lista=true',
+      url:   '../controlador/actasC.php?lista=true',
       type:  'post',
       dataType: 'json',
       beforeSend: function () {   
-         $('#tbl_datos').html('<tr><td colspan="6"><img src="../../img/de_sistema/loader_puce.gif" width="100" height="100"></td></tr>');        
+         $('#tbl_datos').html('<tr><td colspan="6"><img src="../img/de_sistema/loader_puce.gif" width="100" height="100"></td></tr>');        
            // var spiner = '<div class="text-center"></div>'     
          $('#pag').html('');
       },
@@ -253,7 +253,7 @@
       $('#ddl_custodio').select2({
         placeholder: 'Seleccione una custodio',
         ajax: {
-          url: '../../controlador/custodioC.php?lista=true',
+          url: '../controlador/custodioC.php?lista=true',
           dataType: 'json',
           delay: 250,
           processResults: function (data) {
@@ -272,7 +272,7 @@
         dropdownParent: $('#busqueda_masiva_custodio'),
         width:'100%',
         ajax: {
-          url: '../../controlador/custodioC.php?lista=true',
+          url: '../controlador/custodioC.php?lista=true',
           dataType: 'json',
           delay: 250,
           processResults: function (data) {
@@ -307,7 +307,7 @@ function autocmpletar_lo_masivo(){
          dropdownParent: $('#busqueda_masiva_localizacion'),
         width:'100%',
         ajax: {
-          url: '../../controlador/localizacionC.php?lista=true&custodio='+cus+'&masivo='+$('#txt_masivo_cus').val(),
+          url: '../controlador/localizacionC.php?lista=true&custodio='+cus+'&masivo='+$('#txt_masivo_cus').val(),
           dataType: 'json',
           delay: 250,
           processResults: function (data) {
@@ -326,7 +326,7 @@ function autocmpletar_lo_masivo(){
         dropdownParent: $('#modal_actas2'),
         width:'100%',
         ajax: {
-          url: '../../controlador/custodioC.php?lista_acta=true',
+          url: '../controlador/custodioC.php?lista_acta=true',
           dataType: 'json',
           delay: 250,
           processResults: function (data) {
@@ -345,7 +345,7 @@ function autocmpletar_lo_masivo(){
         dropdownParent: $('#modal_actas4'),
         width:'100%',
         ajax: {
-          url: '../../controlador/custodioC.php?lista_acta=true',
+          url: '../controlador/custodioC.php?lista_acta=true',
           dataType: 'json',
           delay: 250,
           processResults: function (data) {
@@ -364,7 +364,7 @@ function autocmpletar_lo_masivo(){
         dropdownParent: $('#modal_actas4'),
         width:'100%',
         ajax: {
-          url: '../../controlador/custodioC.php?lista_acta=true',
+          url: '../controlador/custodioC.php?lista_acta=true',
           dataType: 'json',
           delay: 250,
           processResults: function (data) {
@@ -382,7 +382,7 @@ function autocmpletar_lo_masivo(){
       $('#ddl_localizacion').select2({
         placeholder: 'Seleccione una localizacion',
         ajax: {
-          url: '../../controlador/localizacionC.php?lista=true',
+          url: '../controlador/localizacionC.php?lista=true',
           dataType: 'json',
           delay: 250,
           processResults: function (data) {
@@ -401,7 +401,7 @@ function autocmpletar_lo_masivo(){
          dropdownParent: $('#modal_actas2'),
         width:'100%',
         ajax: {
-          url: '../../controlador/localizacionC.php?lista=true',
+          url: '../controlador/localizacionC.php?lista=true',
           dataType: 'json',
           delay: 250,
           processResults: function (data) {
@@ -420,7 +420,7 @@ function autocmpletar_lo_masivo(){
          dropdownParent: $('#modal_actas4'),
         width:'100%',
         ajax: {
-          url: '../../controlador/localizacionC.php?lista=true',
+          url: '../controlador/localizacionC.php?lista=true',
           dataType: 'json',
           delay: 250,
           processResults: function (data) {
@@ -439,7 +439,7 @@ function autocmpletar_lo_masivo(){
          dropdownParent: $('#modal_actas4'),
         width:'100%',
         ajax: {
-          url: '../../controlador/localizacionC.php?lista=true',
+          url: '../controlador/localizacionC.php?lista=true',
           dataType: 'json',
           delay: 250,
           processResults: function (data) {
@@ -463,7 +463,7 @@ function autocmpletar_lo_masivo(){
      var lineas = '';
     $.ajax({
       data:  {parametros:parametros},
-      url:   '../../controlador/actasC.php?addacta=true',
+      url:   '../controlador/actasC.php?addacta=true',
       type:  'post',
       dataType: 'json',
         success:  function (response) { 
@@ -492,7 +492,7 @@ function autocmpletar_lo_masivo(){
      }
     $.ajax({
       data:  {parametros:parametros},
-      url:   '../../controlador/actasC.php?eliminar_lista=true',
+      url:   '../controlador/actasC.php?eliminar_lista=true',
       type:  'post',
       dataType: 'json',
         success:  function (response) { 
@@ -515,7 +515,7 @@ function autocmpletar_lo_masivo(){
      var lineas = '';
     $.ajax({
       // data:  {parametros:parametros},
-      url:   '../../controlador/actasC.php?lista_actas=true',
+      url:   '../controlador/actasC.php?lista_actas=true',
       type:  'post',
       dataType: 'json',
         success:  function (response) { 
@@ -547,7 +547,7 @@ function autocmpletar_lo_masivo(){
 
       $.ajax({
         data:  datos,
-        url:   '../../controlador/actasC.php?add_selected=true',
+        url:   '../controlador/actasC.php?add_selected=true',
         type:  'post',
         dataType: 'json',
           success:  function (response) { 
@@ -602,7 +602,7 @@ function autocmpletar_lo_masivo(){
      }
       $.ajax({
         data:  {parametros:parametros},
-        url:   '../../controlador/actasC.php?add_masivo=true',
+        url:   '../controlador/actasC.php?add_masivo=true',
         type:  'post',
         dataType: 'json',
           success:  function (response) { 
@@ -630,7 +630,7 @@ function autocmpletar_lo_masivo(){
     
       $.ajax({
         // data:  {parametros:parametros},
-        url:   '../../controlador/actasC.php?delete_masivo=true',
+        url:   '../controlador/actasC.php?delete_masivo=true',
         type:  'post',
         dataType: 'json',
           success:  function (response) { 
@@ -652,7 +652,7 @@ function autocmpletar_lo_masivo(){
     }
      $.ajax({
         data:  {parametros:parametros},
-        url:   '../../controlador/actasC.php?dar_baja=true',
+        url:   '../controlador/actasC.php?dar_baja=true',
         type:  'post',
         dataType: 'json',
           success:  function (response) { 
@@ -679,7 +679,7 @@ function autocmpletar_lo_masivo(){
     }
      $.ajax({
         data:  {parametros:parametros},
-        url:   '../../controlador/actasC.php?cambiar_custodio=true',
+        url:   '../controlador/actasC.php?cambiar_custodio=true',
         type:  'post',
         dataType: 'json',
           success:  function (response) { 
@@ -709,7 +709,7 @@ function autocmpletar_lo_masivo(){
     }
      $.ajax({
         data:  {parametros:parametros},
-        url:   '../../controlador/actasC.php?cambiar_E_S=true',
+        url:   '../controlador/actasC.php?cambiar_E_S=true',
         type:  'post',
         dataType: 'json',
           success:  function (response) { 
@@ -1213,7 +1213,7 @@ function reiniciar_filtros()
      }
     $.ajax({
       data:  {parametros:parametros},
-      url:   '../../controlador/custodioC.php?custodios_masivos=true',
+      url:   '../controlador/custodioC.php?custodios_masivos=true',
       type:  'post',
       dataType: 'json',
         success:  function (response) { 
@@ -1264,7 +1264,7 @@ function reiniciar_filtros()
      }
     $.ajax({
       data:  {parametros:parametros},
-      url:   '../../controlador/localizacionC.php?localizacion_masivos=true',
+      url:   '../controlador/localizacionC.php?localizacion_masivos=true',
       type:  'post',
       dataType: 'json',
         success:  function (response) { 
@@ -1366,4 +1366,4 @@ function reiniciar_filtros()
   </div>
 </div>
 
-<?php include ('../../cabeceras/footer.php');?>
+<?php //include ('../cabeceras/footer.php');?>

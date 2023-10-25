@@ -1,4 +1,4 @@
-<?php include('../../cabeceras/header.php'); ?>
+<?php //include('../cabeceras/header.php'); ?>
 <script type="text/javascript">
     $( document ).ready(function() {  
       log_activos();
@@ -12,14 +12,14 @@
 
             var formData = new FormData(document.getElementById("form_img"));
             $.ajax({
-                url: '../../controlador/cargar_datosC.php?subir_archivo_server=true',
+                url: '../controlador/cargar_datosC.php?subir_archivo_server=true',
                 type: 'post',
                 data: formData,
                 contentType: false,
                 processData: false,
                 dataType:'json',
              // beforeSend: function () {
-             //        $("#foto_alumno").attr('src',"../../img/gif/proce.gif");
+             //        $("#foto_alumno").attr('src',"../img/gif/proce.gif");
              //     },
                 success: function(response) {
                   if(response == 1)
@@ -53,7 +53,7 @@
      $('#myModal').modal('show');
 		 $.ajax({
          data:  {parametros:parametros},
-         url: '../../controlador/cargar_datosC.php?ejecutar_sp=true',
+         url: '../controlador/cargar_datosC.php?ejecutar_sp=true',
          type:  'post',
          dataType: 'json',
           success:  function (response) {  
@@ -100,12 +100,12 @@
     }
      $.ajax({
        data:  {parametros:parametros},
-       url: '../../controlador/cargar_datosC.php?log_activos=true',
+       url: '../controlador/cargar_datosC.php?log_activos=true',
        type:  'post',
        dataType: 'json',
         beforeSend: function () {
-               // $("#foto_alumno").attr('src',"../../img/gif/proce.gif");
-          $('#tbl_datos').html('<tr class="text-center"><td colspan="6"><img src="../../img/de_sistema/loader_puce.gif" style="width:10%"></td></tr>');
+               // $("#foto_alumno").attr('src',"../img/gif/proce.gif");
+          $('#tbl_datos').html('<tr class="text-center"><td colspan="6"><img src="../img/de_sistema/loader_puce.gif" style="width:10%"></td></tr>');
         },
         success:  function (response) {
 
@@ -120,12 +120,12 @@
   {    
      $.ajax({
        // data:  {parametros:parametros},
-       url: '../../controlador/carga_datos/cargar_controlador.php?leer=true',
+       url: '../controlador/carga_datos/cargar_controlador.php?leer=true',
        type:  'post',
        dataType: 'json',
         // beforeSend: function () {
-        //        // $("#foto_alumno").attr('src',"../../img/gif/proce.gif");
-        //   $('#tbl_datos').html('<tr class="text-center"><td colspan="6"><img src="../../img/de_sistema/loader_puce.gif" style="width:10%"></td></tr>');
+        //        // $("#foto_alumno").attr('src',"../img/gif/proce.gif");
+        //   $('#tbl_datos').html('<tr class="text-center"><td colspan="6"><img src="../img/de_sistema/loader_puce.gif" style="width:10%"></td></tr>');
         // },
         success:  function (response) {
 
@@ -184,8 +184,8 @@
                       <label id="lbl_check"><input type="checkbox" name="rbl_primera" id="rbl_primera"> Como primera vez</label>
                     </div>
                      <div class="col-sm-3">
-                      <button class="btn btn-primary" id="btn_carga">Actualizar archivos</button>
-                      <button class="btn btn-primary" onclick="leer_datos()">Leer datos</button>
+                      <button class="btn btn-sm btn-primary" id="btn_carga">Actualizar archivos</button>
+                      <button class="btn btn-sm btn-primary" onclick="leer_datos()">Leer datos</button>
                     </div>
                 </div>
               </div>
@@ -273,4 +273,4 @@
   </div>
 </div>
 
-<?php include('../../cabeceras/footer.php'); ?>
+<?php //include('../cabeceras/footer.php'); ?>

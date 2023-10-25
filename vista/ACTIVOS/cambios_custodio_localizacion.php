@@ -1,4 +1,4 @@
-<?php  include('../../cabeceras/header.php'); ?>
+<?php // include('../cabeceras/header.php'); ?>
 <script type="text/javascript">
   // $('body').addClass('sidebar-collapse');
   $( document ).ready(function() {
@@ -12,7 +12,7 @@
       $('#ddl_custodio').select2({
         placeholder: 'Seleccione una custodio',
         ajax: {
-          url: '../../controlador/custodioC.php?lista=true',
+          url: '../controlador/custodioC.php?lista=true',
           dataType: 'json',
           delay: 250,
           processResults: function (data) {
@@ -29,7 +29,7 @@
       $('#ddl_custodio2').select2({
         placeholder: 'Seleccione una custodio',
         ajax: {
-          url: '../../controlador/custodioC.php?lista=true',
+          url: '../controlador/custodioC.php?lista=true',
           dataType: 'json',
           delay: 250,
           processResults: function (data) {
@@ -46,7 +46,7 @@
       $('#ddl_localizacion').select2({
         placeholder: 'Seleccione una localizacion',
         ajax: {
-          url: '../../controlador/localizacionC.php?lista=true',
+          url: '../controlador/localizacionC.php?lista=true',
           dataType: 'json',
           delay: 250,
           processResults: function (data) {
@@ -63,7 +63,7 @@ function autocmpletar_loc(){
       $('#ddl_localizacion2').select2({
         placeholder: 'Seleccione una localizacion',
         ajax: {
-          url: '../../controlador/localizacionC.php?lista=true',
+          url: '../controlador/localizacionC.php?lista=true',
           dataType: 'json',
           delay: 250,
           processResults: function (data) {
@@ -93,11 +93,11 @@ function autocmpletar_loc(){
      var lineas = '';
     $.ajax({
       data:  {parametros:parametros},
-      url:   '../../controlador/cambios_custodio_localizacionC.php?lista=true',
+      url:   '../controlador/cambios_custodio_localizacionC.php?lista=true',
       type:  'post',
       dataType: 'json',
       beforeSend: function () {   
-           // var spiner = '<div class="text-center"><img src="../../img/gif/proce.gif" width="100" height="100"></div>'     
+           // var spiner = '<div class="text-center"><img src="../img/gif/proce.gif" width="100" height="100"></div>'     
          $('#pag').html('');
       },
         success:  function (response) { 
@@ -320,7 +320,7 @@ function autocmpletar_loc(){
   }
   $.ajax({
          data:  {parametros,parametros},
-         url:   '../../controlador/cambios_custodio_localizacionC.php?cambiar=true',
+         url:   '../controlador/cambios_custodio_localizacionC.php?cambiar=true',
          type:  'post',
          dataType: 'json',
            success:  function (response) { 
@@ -461,6 +461,6 @@ function autocmpletar_loc(){
       </div>
     </div>
 
-<?php include('../../cabeceras/footer.php');?>
+<?php //include('../cabeceras/footer.php');?>
 
      

@@ -1,4 +1,4 @@
-<?php include('../../cabeceras/header.php'); ?>
+<?php //include('../cabeceras/header.php'); ?>
 
     <link rel="stylesheet" type="text/css" href="../css/estilos.css">
     <script src="../js/filesaver.js" type="text/javascript"></script>
@@ -40,7 +40,7 @@ var parametros = {
     }
    $.ajax({
     data:  {parametros:parametros},
-    url:   '../../controlador/formato_tagsC.php?guardar_camvas=true',
+    url:   '../controlador/formato_tagsC.php?guardar_camvas=true',
     type:  'post',
     dataType: 'json',
     success:  function (response) {   
@@ -56,11 +56,11 @@ var parametros = {
      lineas = '<option value="">Seleccione formato</option>';
     $.ajax({
       data:  {id:id},
-      url:   '../../controlador/formato_tagsC.php?formato=true',
+      url:   '../controlador/formato_tagsC.php?formato=true',
       type:  'post',
       dataType: 'json',
       /*beforeSend: function () {   
-           var spiner = '<div class="text-center"><img src="../../img/gif/proce.gif" width="100" height="100"></div>'     
+           var spiner = '<div class="text-center"><img src="../img/gif/proce.gif" width="100" height="100"></div>'     
          $('#tabla_').html(spiner);
       },*/
         success:  function (response) {    
@@ -79,7 +79,7 @@ var parametros = {
       $('#ddl_custodio').select2({
         placeholder: 'Seleccione una custodio',
         ajax: {
-          url: '../../controlador/custodioC.php?lista=true',
+          url: '../controlador/custodioC.php?lista=true',
           dataType: 'json',
           delay: 250,
           processResults: function (data) {
@@ -95,7 +95,7 @@ var parametros = {
       $('#ddl_localizacion').select2({
         placeholder: 'Seleccione una localizacion',
         ajax: {
-          url: '../../controlador/localizacionC.php?lista=true',
+          url: '../controlador/localizacionC.php?lista=true',
           dataType: 'json',
           delay: 250,
           processResults: function (data) {
@@ -112,19 +112,20 @@ var parametros = {
      var query = $('#txt_buscar').val();
      var parametros = 
      {
-      'query':$('#txt_buscar').val(),
-      'localizacion':  $('#ddl_localizacion').val(),
-      'custodio': $('#ddl_custodio').val(),
-      'pag':$('#txt_pag').val(),
+      'query':'', //$('#txt_buscar').val(),
+      'localizacion':'', //  $('#ddl_localizacion').val(),
+      'custodio':'', // $('#ddl_custodio').val(),
+      'pag':'0-25', //$('#txt_pag').val(),
      }
      var lineas = '';
+     console.log(parametros);
     $.ajax({
       data:  {parametros:parametros},
-      url:   '../../controlador/articulosC.php?lista=true',
-      type:  'post',
+      url:   '../controlador/articulosC.php?lista=true',
+      type:  'POST',
       dataType: 'json',
       /*beforeSend: function () {   
-           var spiner = '<div class="text-center"><img src="../../img/gif/proce.gif" width="100" height="100"></div>'     
+           var spiner = '<div class="text-center"><img src="../img/gif/proce.gif" width="100" height="100"></div>'     
          $('#tabla_').html(spiner);
       },*/
         success:  function (response) {    
@@ -158,11 +159,11 @@ var parametros = {
      var lineas = '';
     $.ajax({
       data:  {parametros:parametros},
-      url:   '../../controlador/articulosC.php?lista_imprimir=true',
+      url:   '../controlador/articulosC.php?lista_imprimir=true',
       type:  'post',
       dataType: 'json',
       /*beforeSend: function () {   
-           var spiner = '<div class="text-center"><img src="../../img/gif/proce.gif" width="100" height="100"></div>'     
+           var spiner = '<div class="text-center"><img src="../img/gif/proce.gif" width="100" height="100"></div>'     
          $('#tabla_').html(spiner);
       },*/
         success:  function (response) {    
@@ -205,11 +206,11 @@ var parametros = {
      var lineas = '';
     $.ajax({
       data:  {parametros:parametros},
-      url:   '../../controlador/articulosC.php?lista_imprimir_=true',
+      url:   '../controlador/articulosC.php?lista_imprimir_=true',
       type:  'post',
       dataType: 'json',
       /*beforeSend: function () {   
-           var spiner = '<div class="text-center"><img src="../../img/gif/proce.gif" width="100" height="100"></div>'     
+           var spiner = '<div class="text-center"><img src="../img/gif/proce.gif" width="100" height="100"></div>'     
          $('#tabla_').html(spiner);
       },*/
         success:  function (response) {    
@@ -248,7 +249,7 @@ var parametros = {
   {
      $.ajax({
       // data:  {parametros:parametros},
-      url:   '../../controlador/articulosC.php?vaciar=true',
+      url:   '../controlador/articulosC.php?vaciar=true',
       type:  'post',
       dataType: 'json',
       success:  function (response) {
@@ -262,7 +263,7 @@ var parametros = {
   {
      $.ajax({
       // data:  {parametros:parametros},
-      url:   '../../controlador/articulosC.php?vaciar=true',
+      url:   '../controlador/articulosC.php?vaciar=true',
       type:  'post',
       dataType: 'json',
       success:  function (response) {
@@ -292,7 +293,7 @@ function generar_vista()
   codigos ='';    
   $.ajax({
       data:  {parametros:parametros},
-      url:   '../../controlador/impresion_tagC.php?generarT=true',
+      url:   '../controlador/impresion_tagC.php?generarT=true',
       type:  'post',
       dataType: 'json',
         success:  function (response) {
@@ -348,7 +349,7 @@ function generar_vista()
    
   $.ajax({
       // data:  {parametros:parametros},
-      url:   '../../controlador/impresion_tagC.php?abrir_impresora=true',
+      url:   '../controlador/impresion_tagC.php?abrir_impresora=true',
       type:  'post',
       dataType: 'json',
       success:  function (response) {
@@ -584,5 +585,5 @@ function generar_vista()
 </script>
 
 
-<?php include('../../cabeceras/footer.php'); ?>
+<?php //include('../cabeceras/footer.php'); ?>
      

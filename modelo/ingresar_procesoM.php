@@ -40,9 +40,10 @@ class ingresar_procesoM
 
 	function cargar_lineas($id)
 	{
-		$sql = "SELECT LS.id_linea_salida as idls,P.id_plantilla as id,A.TAG_SERIE as codigo ,P.DESCRIPT as item,P.SERIE as serie,P.MODELO as modelo,observacion_salida as 'salida',observacion_entrada as 'entrada' FROM LINEAS_SOLICITUD LS 
+		$sql = "SELECT LS.id_linea_salida as idls,P.id_plantilla as id,A.TAG_SERIE as codigo,A.TAG_ANT AS ori ,A.TAG_UNIQUE as 'rfid',M.DESCRIPCION as marca,P.DESCRIPT as item,P.SERIE as serie,P.MODELO as modelo,observacion_salida as 'salida',observacion_entrada as 'entrada' FROM LINEAS_SOLICITUD LS 
 		INNER JOIN PLANTILLA_MASIVA P ON LS.id_activo = P.id_plantilla
 		INNER JOIN ASSET A ON P.ID_ASSET = A.ID_ASSET 
+		INNER JOIN MARCAS M ON P.EVALGROUP1 = M.ID_MARCA
 		WHERE id_solicitud = '".$id."'";
 		return $this->db->datos($sql);
 	}

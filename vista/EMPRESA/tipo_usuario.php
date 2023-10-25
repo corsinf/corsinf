@@ -1,5 +1,5 @@
 <?php 
-include('../../cabeceras/header.php');?>
+//include('../cabeceras/header.php');?>
 <script type="text/javascript">
   $( document ).ready(function() {
     lista_tipo_usuario();
@@ -7,8 +7,8 @@ include('../../cabeceras/header.php');?>
     lista_usuarios_asignados();
     usuarios();
     lista_paginas();
-    cargar_modulos();
     lista_tipo_usuario_drop_pagina();
+    lista_modulos();  
     // modulos_acceso('1');
   });
 
@@ -16,11 +16,11 @@ include('../../cabeceras/header.php');?>
   {
     $.ajax({
          // data:  {parametros:parametros},
-         url:   '../../controlador/tipo_usuarioC.php?lista_usuarios=true',
+         url:   '../controlador/tipo_usuarioC.php?lista_usuarios=true',
          type:  'post',
          dataType: 'json',
          /*beforeSend: function () {   
-              var spiner = '<div class="text-center"><img src="../../img/gif/proce.gif" width="100" height="100"></div>'     
+              var spiner = '<div class="text-center"><img src="../img/gif/proce.gif" width="100" height="100"></div>'     
             $('#tabla_').html(spiner);
          },*/
            success:  function (response) {  
@@ -36,11 +36,11 @@ include('../../cabeceras/header.php');?>
   {
     $.ajax({
          // data:  {parametros:parametros},
-         url:   '../../controlador/tipo_usuarioC.php?lista_usuarios_drop=true',
+         url:   '../controlador/tipo_usuarioC.php?lista_usuarios_drop=true',
          type:  'post',
          dataType: 'json',
          /*beforeSend: function () {   
-              var spiner = '<div class="text-center"><img src="../../img/gif/proce.gif" width="100" height="100"></div>'     
+              var spiner = '<div class="text-center"><img src="../img/gif/proce.gif" width="100" height="100"></div>'     
             $('#tabla_').html(spiner);
          },*/
            success:  function (response) {  
@@ -57,11 +57,11 @@ include('../../cabeceras/header.php');?>
   {
     $.ajax({
          // data:  {parametros:parametros},
-         url:   '../../controlador/tipo_usuarioC.php?lista_usuarios_drop=true',
+         url:   '../controlador/tipo_usuarioC.php?lista_usuarios_drop=true',
          type:  'post',
          dataType: 'json',
          /*beforeSend: function () {   
-              var spiner = '<div class="text-center"><img src="../../img/gif/proce.gif" width="100" height="100"></div>'     
+              var spiner = '<div class="text-center"><img src="../img/gif/proce.gif" width="100" height="100"></div>'     
             $('#tabla_').html(spiner);
          },*/
            success:  function (response) {  
@@ -81,11 +81,11 @@ include('../../cabeceras/header.php');?>
   {
     $.ajax({
          // data:  {parametros:parametros},
-         url:   '../../controlador/tipo_usuarioC.php?lista_usuarios_asignados=true',
+         url:   '../controlador/tipo_usuarioC.php?lista_usuarios_asignados=true',
          type:  'post',
          dataType: 'json',
          /*beforeSend: function () {   
-              var spiner = '<div class="text-center"><img src="../../img/gif/proce.gif" width="100" height="100"></div>'     
+              var spiner = '<div class="text-center"><img src="../img/gif/proce.gif" width="100" height="100"></div>'     
             $('#tabla_').html(spiner);
          },*/
            success:  function (response) {  
@@ -114,11 +114,11 @@ include('../../cabeceras/header.php');?>
 
     $.ajax({
          data:  {id:id},
-         url:   '../../controlador/tipo_usuarioC.php?eliminar_usuario_tipo=true',
+         url:   '../controlador/tipo_usuarioC.php?eliminar_usuario_tipo=true',
          type:  'post',
          dataType: 'json',
          /*beforeSend: function () {   
-              var spiner = '<div class="text-center"><img src="../../img/gif/proce.gif" width="100" height="100"></div>'     
+              var spiner = '<div class="text-center"><img src="../img/gif/proce.gif" width="100" height="100"></div>'     
             $('#tabla_').html(spiner);
          },*/
            success:  function (response) { 
@@ -145,7 +145,7 @@ include('../../cabeceras/header.php');?>
       width:'100%',
       placeholder: 'Seleccione una usuario',
       ajax: {
-        url: '../../controlador/usuariosC.php?lista_usuarios_ddl2=true',
+        url: '../controlador/usuariosC.php?lista_usuarios_ddl2=true',
         dataType: 'json',
         delay: 250,
         processResults: function (data) {
@@ -158,18 +158,43 @@ include('../../cabeceras/header.php');?>
     });
   }
 
+  function lista_modulos()
+  {
+    //  var parametros = 
+    // {
+    //   'perfil':$('#ddl_perfil').val(),
+    //   'query':$('#txt_pagina').val(),
+    // }
+
+    $.ajax({
+         // data:  {parametros:parametros},
+         url:   '../controlador/tipo_usuarioC.php?modulo_sistema=true',
+         type:  'post',
+         dataType: 'json',
+           success:  function (response) {  
+            console.log(response);
+           
+            $('#ddl_modulos').html(response);
+            // accesos_asignados();
+           
+          } 
+          
+       });
+  }
+
   function lista_paginas()
   {
     var parametros = 
     {
       'perfil':$('#ddl_perfil').val(),
-      'modulo':$('#ddl_modulos').val(),
+      'modulo_sis':$('#ddl_modulos').val(),
+      'modulo':$('#ddl_menu').val(),
       'query':$('#txt_pagina').val(),
     }
 
     $.ajax({
          data:  {parametros:parametros},
-         url:   '../../controlador/tipo_usuarioC.php?lista_paginas=true',
+         url:   '../controlador/tipo_usuarioC.php?lista_paginas=true',
          type:  'post',
          dataType: 'json',
            success:  function (response) {  
@@ -189,7 +214,7 @@ include('../../cabeceras/header.php');?>
 
     $.ajax({
          data:  {tipo:tipo},
-         url:   '../../controlador/tipo_usuarioC.php?lista_usuarios_perfil_accesos=true',
+         url:   '../controlador/tipo_usuarioC.php?lista_usuarios_perfil_accesos=true',
          type:  'post',
          dataType: 'json',
            success:  function (response) {  
@@ -207,22 +232,26 @@ include('../../cabeceras/header.php');?>
 
   }
 
-  function cargar_modulos()
+  function cargar_menu()
   {   
+    parametros = 
+    {
+      'modulo_sis':$('#ddl_modulos').val(),
+    }
     $.ajax({
-         // data:  {parametros:parametros},
-         url:   '../../controlador/tipo_usuarioC.php?modulos=true',
+         data:  {parametros:parametros},
+         url:   '../controlador/tipo_usuarioC.php?modulos=true',
          type:  'post',
          dataType: 'json',
          /*beforeSend: function () {   
-              var spiner = '<div class="text-center"><img src="../../img/gif/proce.gif" width="100" height="100"></div>'     
+              var spiner = '<div class="text-center"><img src="../img/gif/proce.gif" width="100" height="100"></div>'     
             $('#tabla_').html(spiner);
          },*/
            success:  function (response) {  
             // console.log(response);
            if (response) 
            {
-            $('#ddl_modulos').html(response);
+            $('#ddl_menu').html(response);
            } 
           } 
           
@@ -240,7 +269,7 @@ include('../../cabeceras/header.php');?>
     }   
     $.ajax({
          data:  {parametros:parametros},
-         url:   '../../controlador/tipo_usuarioC.php?accesos_asignados=true',
+         url:   '../controlador/tipo_usuarioC.php?accesos_asignados=true',
          type:  'post',
          dataType: 'json',
            success:  function (response) {  
@@ -278,11 +307,11 @@ include('../../cabeceras/header.php');?>
     } 
     $.ajax({
          data:  parametros,
-         url:   '../../controlador/tipo_usuarioC.php?accesos_guardar_edi=true',
+         url:   '../controlador/tipo_usuarioC.php?accesos_guardar_edi=true',
          type:  'post',
          dataType: 'json',
          // beforeSend: function () {   
-         //      var spiner = '<div class="text-center"><img src="../../img/gif/proce.gif" width="100" height="100"></div>'     
+         //      var spiner = '<div class="text-center"><img src="../img/gif/proce.gif" width="100" height="100"></div>'     
          //    $('#tabla_').html(spiner);
          // },
            success:  function (response) {  
@@ -300,11 +329,11 @@ include('../../cabeceras/header.php');?>
     $('#usuarios_con_tipo').modal('show');
     $.ajax({
          data:  {id:id},
-         url:   '../../controlador/tipo_usuarioC.php?cargar_usuarios=true',
+         url:   '../controlador/tipo_usuarioC.php?cargar_usuarios=true',
          type:  'post',
          dataType: 'json',
          /*beforeSend: function () {   
-              var spiner = '<div class="text-center"><img src="../../img/gif/proce.gif" width="100" height="100"></div>'     
+              var spiner = '<div class="text-center"><img src="../img/gif/proce.gif" width="100" height="100"></div>'     
             $('#tabla_').html(spiner);
          },*/
            success:  function (response) {  
@@ -330,11 +359,11 @@ include('../../cabeceras/header.php');?>
 
     $.ajax({
          data:  {id:id},
-         url:   '../../controlador/tipo_usuarioC.php?eliminar_tipo=true',
+         url:   '../controlador/tipo_usuarioC.php?eliminar_tipo=true',
          type:  'post',
          dataType: 'json',
          /*beforeSend: function () {   
-              var spiner = '<div class="text-center"><img src="../../img/gif/proce.gif" width="100" height="100"></div>'     
+              var spiner = '<div class="text-center"><img src="../img/gif/proce.gif" width="100" height="100"></div>'     
             $('#tabla_').html(spiner);
          },*/
            success:  function (response) { 
@@ -382,11 +411,11 @@ include('../../cabeceras/header.php');?>
     };
     $.ajax({
          data:  {parametros,parametros},
-         url:   '../../controlador/tipo_usuarioC.php?guardar_tipo=true',
+         url:   '../controlador/tipo_usuarioC.php?guardar_tipo=true',
          type:  'post',
          dataType: 'json',
          /*beforeSend: function () {   
-              var spiner = '<div class="text-center"><img src="../../img/gif/proce.gif" width="100" height="100"></div>'     
+              var spiner = '<div class="text-center"><img src="../img/gif/proce.gif" width="100" height="100"></div>'     
             $('#tabla_').html(spiner);
          },*/
            success:  function (response) {  
@@ -453,7 +482,7 @@ include('../../cabeceras/header.php');?>
      }
       $.ajax({
          data:  {parametros:parametros},
-         url:   '../../controlador/tipo_usuarioC.php?guardar_modulos=true',
+         url:   '../controlador/tipo_usuarioC.php?guardar_modulos=true',
          type:  'post',
          dataType: 'json',
            success:  function (response) { 
@@ -475,7 +504,7 @@ include('../../cabeceras/header.php');?>
      }
       $.ajax({
          data:  {parametros:parametros},
-         url:   '../../controlador/tipo_usuarioC.php?guardar_en_perfil=true',
+         url:   '../controlador/tipo_usuarioC.php?guardar_en_perfil=true',
          type:  'post',
          dataType: 'json',
            success:  function (response) { 
@@ -610,8 +639,15 @@ include('../../cabeceras/header.php');?>
                           </select>                      
                         </div>
                         <div class="col-sm-2">
-                          <b>Modulos</b>
-                          <select class="form-control form-control-sm" id="ddl_modulos" name="ddl_modulos" onchange="lista_paginas()">
+                          <b>Modulo </b>
+                          <select class="form-control form-control-sm" id="ddl_modulos" name="ddl_modulos" onchange="cargar_menu();lista_paginas()">
+                            <option value="">Modulos</option>
+                          </select>                    
+                        </div>
+
+                        <div class="col-sm-2">
+                          <b>Menu</b>
+                          <select class="form-control form-control-sm" id="ddl_menu" name="ddl_menu" onchange="lista_paginas()">
                             <option value="">Modulos</option>
                           </select>                    
                         </div>
@@ -623,7 +659,7 @@ include('../../cabeceras/header.php');?>
                             <th>Pagina</th>
                             <th>Detalle</th>
                             <th>Estado</th>
-                            <th>Modulo</th>
+                            <th>Menu</th>
                             <th>Default</th>
                             <th>Leer</th>
                             <th class="text-center"><input type="checkbox" name="" id="">Editar</th>
@@ -700,4 +736,4 @@ include('../../cabeceras/header.php');?>
 
 
 
-<?php include('../../cabeceras/footer.php');  ?>
+<?php //include('../cabeceras/footer.php');  ?>

@@ -2,53 +2,53 @@
 
  		// total de activos
 	 	 $('#reporte_pdf_total').click(function(){
-	      var url='../../lib/Reporte_pdf.php?reporte_pdf_total';
+	      var url='../lib/Reporte_pdf.php?reporte_pdf_total';
 	      window.open(url, '_blank');
 	    });
 
 	 	  $('#imprimir_excel_tot').click(function(){
-       var url = '../../lib/Reporte_excel_spout.php?reporte_total';                 
+       var url = '../lib/Reporte_excel_spout.php?reporte_total';                 
            window.open(url, '_blank');
        });
 
 	 	//bajar
 	 	   $('#reporte_pdf_bajas').click(function(){
 	 	   	  var rangos = '&desde='+$('#txt_desde').val()+'&hasta='+$('#txt_hasta').val();
-		      var url='../../lib/Reporte_pdf.php?reporte_pdf_bajas'+rangos;
+		      var url='../lib/Reporte_pdf.php?reporte_pdf_bajas'+rangos;
 		      window.open(url, '_blank');
        });
        $('#imprimir_excel_bajas').click(function(){
        	 var rangos = '&desde='+$('#txt_desde').val()+'&hasta='+$('#txt_hasta').val();
-       		var url = '../../lib/Reporte_excel_spout.php?reporte_sap_bajas'+rangos;                 
+       		var url = '../lib/Reporte_excel_spout.php?reporte_sap_bajas'+rangos;                 
           window.open(url, '_blank');
        });
        
 	 	// patrimoniales	 	   
         $('#reporte_pdf_patrimoniales').click(function(){
         	var rangos = '&desde='+$('#txt_desde').val()+'&hasta='+$('#txt_hasta').val();
-		      var url='../../lib/Reporte_pdf.php?reporte_pdf_patrimoniales'+rangos;  
+		      var url='../lib/Reporte_pdf.php?reporte_pdf_patrimoniales'+rangos;  
 		      window.open(url, '_blank');
        	});       
        $('#imprimir_excel_patrimoniales').click(function(){
 	 	   	  var rangos = '&desde='+$('#txt_desde').val()+'&hasta='+$('#txt_hasta').val();
-       		var url = '../../lib/Reporte_excel_spout.php?reporte_sap_patrimoniales'+rangos;                 
+       		var url = '../lib/Reporte_excel_spout.php?reporte_sap_patrimoniales'+rangos;                 
           window.open(url, '_blank');
        });
 	 	// terceros
         $('#reporte_pdf_terceros').click(function(){
-		      var url='../../lib/Reporte_pdf.php?reporte_pdf_terceros';
+		      var url='../lib/Reporte_pdf.php?reporte_pdf_terceros';
 		      window.open(url, '_blank');
        	});
        		$('#imprimir_excel_terceros').click(function(){
 	 	   	  var rangos = '&desde='+$('#txt_desde').val()+'&hasta='+$('#txt_hasta').val();
-       		var url = '../../lib/Reporte_excel_spout.php?reporte_sap_terceros'+rangos;                 
+       		var url = '../lib/Reporte_excel_spout.php?reporte_sap_terceros'+rangos;                 
           window.open(url, '_blank');
        });
 
     // informes dinamicos
      $('#Generar_excel').click(function(){
  	   	  var filtros = $('#form_filtro').serialize();
-     		var url = '../../lib/excel_spout.php?reporte_dinamico=true&id='+id+'&'+filtros;                 
+     		var url = '../lib/excel_spout.php?reporte_dinamico=true&id='+id+'&'+filtros;                 
         window.open(url, '_blank');
      });
 
@@ -65,11 +65,11 @@
  		var opcion = '<option value="">seleccione tipo de reporte</option>';
     $.ajax({
       // data:  {id:id},
-      url:  '../../controlador/reportesC.php?tipo_reporte=true',
+      url:  '../controlador/reportesC.php?tipo_reporte=true',
       type:  'post',
       dataType: 'json',
       /*beforeSend: function () {   
-           var spiner = '<div class="text-center"><img src="../../../../img/gif/proce.gif" width="100" height="100"></div>'     
+           var spiner = '<div class="text-center"><img src="../img/gif/proce.gif" width="100" height="100"></div>'     
          $('#tabla_').html(spiner);
       },*/
         success:  function (response) {
@@ -101,17 +101,17 @@
 	}
 	$.ajax({
 	  data:  {parametros:parametros},
-	  url:  '../../controlador/reportesC.php?crear_reporte=true',
+	  url:  '../controlador/reportesC.php?crear_reporte=true',
 	  type:  'post',
 	  dataType: 'json',
 	  /*beforeSend: function () {   
-	       var spiner = '<div class="text-center"><img src="../../../../img/gif/proce.gif" width="100" height="100"></div>'     
+	       var spiner = '<div class="text-center"><img src="../img/gif/proce.gif" width="100" height="100"></div>'     
 	     $('#tabla_').html(spiner);
 	  },*/
 	    success:  function (response) {
 	    	if(response.respuesta==1)
 	    	{
-	    		location.href = 'nuevo_reporte.php?id='+response.id;
+	    		location.href = 'inicio.php?acc=nuevo_reporte&id='+response.id;
 	    	}else if(response.respuesta ==-2)
 	    	{
 	    		Swal.fire('','Ya existe un reporte con este nombre y tipo de reporte','info');
@@ -130,11 +130,11 @@
 			}
 			$.ajax({
 			  data:  {parametros:parametros},
-			  url:  '../../controlador/reportesC.php?datos_reporte=true',
+			  url:  '../controlador/reportesC.php?datos_reporte=true',
 			  type:  'post',
 			  dataType: 'json',
 			  /*beforeSend: function () {   
-			       var spiner = '<div class="text-center"><img src="../../../../img/gif/proce.gif" width="100" height="100"></div>'     
+			       var spiner = '<div class="text-center"><img src="../img/gif/proce.gif" width="100" height="100"></div>'     
 			     $('#tabla_').html(spiner);
 			  },*/
 			    success:  function (response) {
@@ -161,11 +161,11 @@
 		campos+= '&id='+id;
 		$.ajax({
 			  data:  campos,
-			  url:  '../../controlador/reportesC.php?guardar_campos=true',
+			  url:  '../controlador/reportesC.php?guardar_campos=true',
 			  type:  'post',
 			  dataType: 'json',
 			  /*beforeSend: function () {   
-			       var spiner = '<div class="text-center"><img src="../../../../img/gif/proce.gif" width="100" height="100"></div>'     
+			       var spiner = '<div class="text-center"><img src="../img/gif/proce.gif" width="100" height="100"></div>'     
 			     $('#tabla_').html(spiner);
 			  },*/
 			    success:  function (response) {
@@ -173,7 +173,7 @@
 			    	{
 			    		Swal.fire('','Reporte Generado','success').then(function()
 			    		{
-			    			location.href = 'reporte_detalle.php?id='+id;
+			    			location.href = 'inicio.php?acc=reporte_detalle&id='+id;
 			    		})			    		
 			    	}
 			  }
@@ -190,11 +190,11 @@
 		filtros+='&id='+id+'&pag='+pag+'&pag2='+pag2;
 		$.ajax({
 			  data:  filtros,
-			  url:  '../../controlador/reportesC.php?detalle_reporte=true',
+			  url:  '../controlador/reportesC.php?detalle_reporte=true',
 			  type:  'post',
 			  dataType: 'json',
 			  /*beforeSend: function () {   
-			       var spiner = '<div class="text-center"><img src="../../../../img/gif/proce.gif" width="100" height="100"></div>'     
+			       var spiner = '<div class="text-center"><img src="../img/gif/proce.gif" width="100" height="100"></div>'     
 			     $('#tabla_').html(spiner);
 			  },*/
 			    success:  function (response) {
@@ -234,11 +234,11 @@
 		filtros+='&id='+id;
 		$.ajax({
 			  data:  filtros,
-			  url:  '../../controlador/reportesC.php?filtro_reporte=true',
+			  url:  '../controlador/reportesC.php?filtro_reporte=true',
 			  type:  'post',
 			  dataType: 'json',
 			  /*beforeSend: function () {   
-			       var spiner = '<div class="text-center"><img src="../../../../img/gif/proce.gif" width="100" height="100"></div>'     
+			       var spiner = '<div class="text-center"><img src="../img/gif/proce.gif" width="100" height="100"></div>'     
 			     $('#tabla_').html(spiner);
 			  },*/
 			    success:  function (response) {
@@ -256,11 +256,11 @@
 	{
 		$.ajax({
 		  // data:  filtros,
-		  url:  '../../controlador/reportesC.php?lista_reportes=true',
+		  url:  '../controlador/reportesC.php?lista_reportes=true',
 		  type:  'post',
 		  dataType: 'json',
 		  /*beforeSend: function () {   
-		       var spiner = '<div class="text-center"><img src="../../../../img/gif/proce.gif" width="100" height="100"></div>'     
+		       var spiner = '<div class="text-center"><img src="../img/gif/proce.gif" width="100" height="100"></div>'     
 		     $('#tabla_').html(spiner);
 		  },*/
 		    success:  function (response) {
@@ -278,6 +278,8 @@ function paginacion(num)
   $('#txt_pag').val(num);
   detalle_reporte(id);  
 }
+
+
 
 
 

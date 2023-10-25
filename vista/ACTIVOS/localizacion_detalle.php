@@ -1,4 +1,4 @@
-<?php include('../../cabeceras/header.php'); $id = ''; if(isset($_GET['id'])){ $id = $_GET['id'];} ?>
+<?php /*include('../cabeceras/header.php'); */ $id = ''; if(isset($_GET['id'])){ $id = $_GET['id'];} ?>
 <script type="text/javascript">
   $( document ).ready(function() {
     var id = '<?php  echo $id; ?>';
@@ -20,11 +20,11 @@
 
     $.ajax({
       data:  {parametros:parametros},
-      url:   '../../controlador/localizacionC.php?buscar=true',
+      url:   '../controlador/localizacionC.php?buscar=true',
       type:  'post',
       dataType: 'json',
       /*beforeSend: function () {   
-           var spiner = '<div class="text-center"><img src="../../img/gif/proce.gif" width="100" height="100"></div>'     
+           var spiner = '<div class="text-center"><img src="../img/gif/proce.gif" width="100" height="100"></div>'     
          $('#tabla_').html(spiner);
       },*/
         success:  function (response) {    
@@ -119,11 +119,11 @@
 
     $.ajax({
       data:  {id:id},
-      url:   '../../controlador/localizacionC.php?listar=true',
+      url:   '../controlador/localizacionC.php?listar=true',
       type:  'post',
       dataType: 'json',
       /*beforeSend: function () {   
-           var spiner = '<div class="text-center"><img src="../../img/gif/proce.gif" width="100" height="100"></div>'     
+           var spiner = '<div class="text-center"><img src="../img/gif/proce.gif" width="100" height="100"></div>'     
          $('#tabla_').html(spiner);
       },*/
         success:  function (response) {
@@ -169,11 +169,11 @@
      {
     $.ajax({
       data:  {busca:busca},
-      url:   '../../controlador/localizacionC.php?buscar=true',
+      url:   '../controlador/localizacionC.php?buscar=true',
       type:  'post',
       dataType: 'json',
       beforeSend: function () {   
-           // var spiner = '<div class="text-center"><img src="../../img/gif/proce.gif" width="100" height="100"></div>'     
+           // var spiner = '<div class="text-center"><img src="../img/gif/proce.gif" width="100" height="100"></div>'     
          $('#pag').html('');
       },
         success:  function (response) {    
@@ -202,11 +202,11 @@
   {
      $.ajax({
       data:  {parametros:parametros},
-      url:   '../../controlador/localizacionC.php?insertar=true',
+      url:   '../controlador/localizacionC.php?insertar=true',
       type:  'post',
       dataType: 'json',
       /*beforeSend: function () {   
-           var spiner = '<div class="text-center"><img src="../../img/gif/proce.gif" width="100" height="100"></div>'     
+           var spiner = '<div class="text-center"><img src="../img/gif/proce.gif" width="100" height="100"></div>'     
          $('#tabla_').html(spiner);
       },*/
         success:  function (response) {  
@@ -240,11 +240,11 @@
   {
      $.ajax({
       data:  {id:id},
-      url:   '../../controlador/localizacionC.php?eliminar=true',
+      url:   '../controlador/localizacionC.php?eliminar=true',
       type:  'post',
       dataType: 'json',
       /*beforeSend: function () {   
-           var spiner = '<div class="text-center"><img src="../../img/gif/proce.gif" width="100" height="100"></div>'     
+           var spiner = '<div class="text-center"><img src="../img/gif/proce.gif" width="100" height="100"></div>'     
          $('#tabla_').html(spiner);
       },*/
         success:  function (response) {  
@@ -376,7 +376,7 @@ function guias_pag(tipo)
                   <input type="hidden" id="txt_numpag" name="">
                   <div class="row">
                     <div class="col-sm-12" id="btn_nuevo">
-                      <a href="localizacion.php" class="btn btn-outline-secondary btn-sm"><i class="bx bx-arrow-back"></i> Regresar</a>
+                      <a href="inicio.php?mod=<?php echo $_SESSION['INICIO']['MODULO_SISTEMA']; ?>&acc=localizacion" class="btn btn-outline-secondary btn-sm"><i class="bx bx-arrow-back"></i> Regresar</a>
                         <a href="#" class="btn btn-success btn-sm" onclick="location.href = 'localizacion_detalle.php'"><i class="bx bx-plus"></i>Nuevo</a>              
                     </div>
                   </div>
@@ -407,5 +407,5 @@ function guias_pag(tipo)
       </div>
     </div>
 
-<?php include('../../cabeceras/footer.php'); ?>
+<?php //include('../cabeceras/footer.php'); ?>
      

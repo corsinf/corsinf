@@ -1,4 +1,4 @@
-<?php include('../../cabeceras/header.php'); ?>
+<?php //include('../cabeceras/header.php'); ?>
 <script type="text/javascript">
 
   $( document ).ready(function() {
@@ -11,18 +11,18 @@
 
     $.ajax({
       data:  {id:id},
-      url:   '../../controlador/clase_movimientoC.php?lista=true',
+      url:   '../controlador/clase_movimientoC.php?lista=true',
       type:  'post',
       dataType: 'json',
       /*beforeSend: function () {   
-           var spiner = '<div class="text-center"><img src="../../img/gif/proce.gif" width="100" height="100"></div>'     
+           var spiner = '<div class="text-center"><img src="../img/gif/proce.gif" width="100" height="100"></div>'     
          $('#tabla_').html(spiner);
       },*/
         success:  function (response) {    
         // console.log(response);   
         $.each(response, function(i, item){
           console.log(item);
-        clase_movimiento+='<tr><td>'+item.CODIGO+'</td><td><a href="detalle_clase_movimiento.php?id='+item.ID_MOVIMIENTO+'"><u>'+item.DESCRIPCION+'</u></a></td><td>';
+        clase_movimiento+='<tr><td>'+item.CODIGO+'</td><td><a href="inicio.php?acc=detalle_clase_movimiento&id='+item.ID_MOVIMIENTO+'"><u>'+item.DESCRIPCION+'</u></a></td><td>';
       //   if($('#eliminar').val()==1 || $('#dba').val()==1)
       //   {
       //   clase_movimiento+='<button class="btn btn-danger" tittle="Eliminar" onclick="delete_datos(\''+item.ID_clase_movimiento+'\')"><i class="fa fa-trash"></i></button>';
@@ -46,11 +46,11 @@
 
 //     $.ajax({
 //       data:  {id:id},
-//       url:   '../../controlador/clase_movimientoC.php?lista=true',
+//       url:   '../controlador/clase_movimientoC.php?lista=true',
 //       type:  'post',
 //       dataType: 'json',
 //       /*beforeSend: function () {   
-//            var spiner = '<div class="text-center"><img src="../../img/gif/proce.gif" width="100" height="100"></div>'     
+//            var spiner = '<div class="text-center"><img src="../img/gif/proce.gif" width="100" height="100"></div>'     
 //          $('#tabla_').html(spiner);
 //       },*/
 //         success:  function (response) {
@@ -85,18 +85,18 @@
 
     $.ajax({
       data:  {buscar:buscar},
-      url:   '../../controlador/clase_movimientoC.php?buscar=true',
+      url:   '../controlador/clase_movimientoC.php?buscar=true',
       type:  'post',
       dataType: 'json',
       /*beforeSend: function () {   
-           var spiner = '<div class="text-center"><img src="../../img/gif/proce.gif" width="100" height="100"></div>'     
+           var spiner = '<div class="text-center"><img src="../img/gif/proce.gif" width="100" height="100"></div>'     
          $('#tabla_').html(spiner);
       },*/
         success:  function (response) {    
         // console.log(response);   
         $.each(response, function(i, item){
           console.log(item);
-       clase_movimiento+='<tr><td>'+item.CODIGO+'</td><td><a href="detalle_clase_movimiento.php?id='+item.ID_MOVIMIENTO+'"><u>'+item.DESCRIPCION+'</u></a></td><td>';
+       clase_movimiento+='<tr><td>'+item.CODIGO+'</td><td><a href="inicio.php?acc=detalle_clase_movimiento&id='+item.ID_MOVIMIENTO+'"><u>'+item.DESCRIPCION+'</u></a></td><td>';
       //   if($('#eliminar').val()==1 || $('#dba').val()==1)
       //   {
       //   clase_movimiento+='<button class="btn btn-danger" tittle="Eliminar" onclick="delete_datos(\''+item.ID_clase_movimiento+'\')"><i class="fa fa-trash"></i></button>';
@@ -116,11 +116,11 @@
   // {
   //    $.ajax({
   //     data:  {parametros:parametros},
-  //     url:   '../../controlador/clase_movimientoC.php?insertar=true',
+  //     url:   '../controlador/clase_movimientoC.php?insertar=true',
   //     type:  'post',
   //     dataType: 'json',
   //     beforeSend: function () {   
-  //          var spiner = '<div class="text-center"><img src="../../img/gif/proce.gif" width="100" height="100"></div>'     
+  //          var spiner = '<div class="text-center"><img src="../img/gif/proce.gif" width="100" height="100"></div>'     
   //        $('#tabla_').html(spiner);
   //     },
   //       success:  function (response) {  
@@ -153,11 +153,11 @@
   // {
   //    $.ajax({
   //     data:  {id:id},
-  //     url:   '../../controlador/clase_movimientoC.php?eliminar=true',
+  //     url:   '../controlador/clase_movimientoC.php?eliminar=true',
   //     type:  'post',
   //     dataType: 'json',
   //     beforeSend: function () {   
-  //          var spiner = '<div class="text-center"><img src="../../img/gif/proce.gif" width="100" height="100"></div>'     
+  //          var spiner = '<div class="text-center"><img src="../img/gif/proce.gif" width="100" height="100"></div>'     
   //        $('#tabla_').html(spiner);
   //     },
   //       success:  function (response) {  
@@ -239,7 +239,7 @@
               <div class="card-body">
                  <div class="row">
                     <div class="col-sm-12" id="btn_nuevo">
-                      <a href="detalle_clase_movimiento.php?" class="btn btn-success btn-sm"><i class="bx bx-plus"></i> Nuevo</a>
+                      <a href="inicio.php?mod=<?php echo $_SESSION['INICIO']['MODULO_SISTEMA'];?>&acc=detalle_clase_movimiento" class="btn btn-success btn-sm"><i class="bx bx-plus"></i> Nuevo</a>
                        <a href="#" class="btn btn-outline-secondary btn-sm" id="excel_clase_movimientos" title="Informe en excel del total de clase_movimientos"><i class="bx bx-file"></i>Clase movimientos</a>
                     </div>  
                   </div>
@@ -296,4 +296,4 @@
 </div>
 
      
-<?php include('../../cabeceras/footer.php'); ?>
+<?php //include('../cabeceras/footer.php'); ?>

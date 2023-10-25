@@ -84,7 +84,7 @@ class tipo_usuarioM
 
 	function modulos_sis()
 	{
-		$sql = "SELECT  * FROM MODULOS_SISTEMA WHERE 1=1";
+		$sql = "SELECT  * FROM MODULOS_SISTEMA WHERE estado = 'A'";
 		$datos = $this->db->datos($sql);
 		return $datos;
 	}
@@ -104,7 +104,7 @@ class tipo_usuarioM
 		{
 			$sql.=" AND id_paginas ='".$idpag."'";
 		}
-		// print_r($sql);die();
+		print_r($sql);die();
 		$datos = $this->db->datos($sql);
 		return $datos;
 	}
@@ -216,18 +216,23 @@ class tipo_usuarioM
 		return $datos;
 	}
 
-	function paginas($query=false,$modulo=false)
+	function paginas($query=false,$modulo=false,$menu=false)
 	{
 		$sql = "SELECT id_paginas,nombre_pagina,detalle_pagina,estado_pagina,M.nombre_modulo,P.default_pag 
 		FROM PAGINAS P
-		LEFT JOIN MODULOS M ON P.id_modulo = M.id_modulo WHERE 1 = 1";
+		LEFT JOIN MODULOS M ON P.id_modulo = M.id_modulo 
+		INNER JOIN MODULOS_SISTEMA MS ON M.modulos_sistema = MS.id_modulos WHERE 1 = 1";
 		if($query)
 		{
 			$sql.=" AND nombre_pagina like '%".$query."%'";
 		}
 		if($modulo)
 		{
-			$sql.=" AND M.id_modulo = '".$modulo."'";
+			$sql.=" AND M.modulos_sistema ='".$modulo."'";
+		}
+		if($menu)
+		{
+			$sql.=" AND M.id_modulo = '".$menu."'";
 		}
 
 		// print_r($sql);die();
@@ -251,6 +256,7 @@ class tipo_usuarioM
 	function lista_accesos_asignados($perfil)
 	{
 		$sql = "SELECT Ver,editar,eliminar,id_paginas as 'pag' FROM ACCESOS WHERE id_tipo_usu = '".$perfil."'";
+		// print_r($sql);die();
 		$datos = $this->db->datos($sql);
 		return $datos;
 	}

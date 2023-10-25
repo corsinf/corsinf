@@ -1,4 +1,4 @@
-<?php include('../../cabeceras/header.php'); $id = '';if(isset($_GET['id'])){$id=$_GET['id'];} ?>
+<?php /*include('../cabeceras/header.php'); */ $id = '';if(isset($_GET['id'])){$id=$_GET['id'];} ?>
 <script type="text/javascript">
   $(document).ready(function() {
 
@@ -24,7 +24,7 @@
         placeholder: 'Seleccione Cobertura',
         width:'85%',
         ajax: {
-          url:   '../../controlador/contratoC.php?lista_cobertura=true',
+          url:   '../controlador/contratoC.php?lista_cobertura=true',
           dataType: 'json',
           delay: 250,
           processResults: function (data) {
@@ -46,7 +46,7 @@
         placeholder: 'Seleccione Siniestros',
         width:'80%',
         ajax: {
-          url:   '../../controlador/contratoC.php?lista_siniestros=true&cob='+cob,
+          url:   '../controlador/contratoC.php?lista_siniestros=true&cob='+cob,
           dataType: 'json',
           delay: 250,
           processResults: function (data) {
@@ -65,7 +65,7 @@
         placeholder: 'Seleccione Proveedor',
         width:'87%',
         ajax: {
-          url:   '../../controlador/contratoC.php?lista_proveedores=true',
+          url:   '../controlador/contratoC.php?lista_proveedores=true',
           dataType: 'json',
           delay: 250,
           processResults: function (data) {
@@ -85,7 +85,7 @@
         placeholder: 'Seleccione Proveedor',
         width:'100%',
         ajax: {
-          url:   '../../controlador/contratoC.php?lista_articulos=true',
+          url:   '../controlador/contratoC.php?lista_articulos=true',
           dataType: 'json',
           delay: 250,
           processResults: function (data) {
@@ -149,11 +149,11 @@
     }
         $.ajax({
           data:  {parametros:parametros},
-          url:   '../../controlador/contratoC.php?seguroSave=true',
+          url:   '../controlador/contratoC.php?seguroSave=true',
           type:  'post',
           dataType: 'json',
           /*beforeSend: function () {   
-               var spiner = '<div class="text-center"><img src="../../img/gif/proce.gif" width="100" height="100"></div>'     
+               var spiner = '<div class="text-center"><img src="../img/gif/proce.gif" width="100" height="100"></div>'     
              $('#tabla_').html(spiner);
           },*/
             success:  function (response) {
@@ -177,11 +177,11 @@
     }
         $.ajax({
           data:  {parametros:parametros},
-          url:   '../../controlador/contratoC.php?coberturaSave=true',
+          url:   '../controlador/contratoC.php?coberturaSave=true',
           type:  'post',
           dataType: 'json',
           /*beforeSend: function () {   
-               var spiner = '<div class="text-center"><img src="../../img/gif/proce.gif" width="100" height="100"></div>'     
+               var spiner = '<div class="text-center"><img src="../img/gif/proce.gif" width="100" height="100"></div>'     
              $('#tabla_').html(spiner);
           },*/
             success:  function (response) {
@@ -202,7 +202,7 @@
 
         $.ajax({
           // data:  {parametros:parametros},
-          url:   '../../controlador/contratoC.php?forma_pago=true',
+          url:   '../controlador/contratoC.php?forma_pago=true',
           type:  'post',
           dataType: 'json',
             success:  function (response) {
@@ -225,11 +225,11 @@
     }
         $.ajax({
           data:  {parametros:parametros},
-          url:   '../../controlador/contratoC.php?cargar_datos_seguro=true',
+          url:   '../controlador/contratoC.php?cargar_datos_seguro=true',
           type:  'post',
           dataType: 'json',
           /*beforeSend: function () {   
-               var spiner = '<div class="text-center"><img src="../../img/gif/proce.gif" width="100" height="100"></div>'     
+               var spiner = '<div class="text-center"><img src="../img/gif/proce.gif" width="100" height="100"></div>'     
              $('#tabla_').html(spiner);
           },*/
             success:  function (response) {
@@ -286,7 +286,7 @@
       }
         $.ajax({
           data:  {parametros:parametros},
-          url:   '../../controlador/contratoC.php?siniestroSave=true',
+          url:   '../controlador/contratoC.php?siniestroSave=true',
           type:  'post',
           dataType: 'json',
           success:  function (response) {
@@ -324,7 +324,7 @@
       }
         $.ajax({
           data:  {parametros:parametros},
-          url:   '../../controlador/contratoC.php?proveSave=true',
+          url:   '../controlador/contratoC.php?proveSave=true',
           type:  'post',
           dataType: 'json',
           success:  function (response) {
@@ -365,7 +365,7 @@
       }
         $.ajax({
           data:  {parametros:parametros},
-          url:   '../../controlador/contratoC.php?Articulo_contrato_Save=true',
+          url:   '../controlador/contratoC.php?Articulo_contrato_Save=true',
           type:  'post',
           dataType: 'json',
           success:  function (response) {
@@ -395,7 +395,7 @@
       }
         $.ajax({
           data:  {parametros:parametros},
-          url:   '../../controlador/contratoC.php?Articulo_contrato_lista=true',
+          url:   '../controlador/contratoC.php?Articulo_contrato_lista=true',
           type:  'post',
           dataType: 'json',
           success:  function (response) {
@@ -428,7 +428,7 @@
   {
     $.ajax({
       data:  {id:id},
-      url:   '../../controlador/contratoC.php?Articulo_contrato_delete=true',
+      url:   '../controlador/contratoC.php?Articulo_contrato_delete=true',
       type:  'post',
       dataType: 'json',
       success:  function (response) {
@@ -466,7 +466,7 @@
           <div class="card-body p-4">
             <div class="row">
               <div class="col">
-                 <a href="lista_contratos.php" class="btn btn-outline-secondary btn-sm"><i class="bx bx-arrow-back"></i> Regresar</a>
+                 <a href="inicio.php?mod=<?php echo $_SESSION['INICIO']['MODULO_SISTEMA'];?>&acc=lista_contratos" class="btn btn-outline-secondary btn-sm"><i class="bx bx-arrow-back"></i> Regresar</a>
               </div>
               
             </div>
@@ -710,4 +710,4 @@
   </div>
 </div>
 
-<?php include('../../cabeceras/footer.php'); ?>
+<?php //include('../cabeceras/footer.php'); ?>

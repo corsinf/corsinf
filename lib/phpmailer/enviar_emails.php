@@ -34,7 +34,7 @@ class enviar_emails
     $respuesta = true;
     $correo_respaldo = 'soporte@corsinf.com';
 
-		$to =explode(',', $to_correo);
+		$to =explode(';', $to_correo);
     // print_r($to);die();
      foreach ($to as $key => $value) {
   		   $mail = new PHPMailer();

@@ -1,4 +1,4 @@
-<?php include('../../cabeceras/header.php'); ?>
+<?php //include('../cabeceras/header.php'); ?>
 <script type="text/javascript">
   $( document ).ready(function() {
     consultar_datos();
@@ -17,11 +17,11 @@
 
     $.ajax({
       data:  {parametros:parametros},
-      url:   '../../controlador/custodioC.php?buscar=true',
+      url:   '../controlador/custodioC.php?buscar=true',
       type:  'post',
       dataType: 'json',
       /*beforeSend: function () {   
-           var spiner = '<div class="text-center"><img src="../../img/gif/proce.gif" width="100" height="100"></div>'     
+           var spiner = '<div class="text-center"><img src="../img/gif/proce.gif" width="100" height="100"></div>'     
          $('#tabla_').html(spiner);
       },*/
         success:  function (response) {   
@@ -94,7 +94,7 @@
         $.each(response.datos, function(i, item){
           // console.log(item);
           if(item.FOTO=='' || item.FOTO== null)
-            { foto = '../../img/sin_imagen.jpg';}else{ foto = item.FOTO;}
+            { foto = '../img/sin_imagen.jpg';}else{ foto = item.FOTO;}
           let puesto = '';
           if(item.PUESTO!='' && item.PUESTO!=null)
           {
@@ -108,55 +108,14 @@
                   '<img src="'+foto+'" width="110" height="110" class="rounded-circle shadow" alt="">'+
                   '<h5 class="mb-0 mt-5">'+item.PERSON_NOM+'</h5>'+
                   '<p class="mb-3">'+puesto+'</p>'+
-                  '<div class="d-grid"><a href="custodio_detalle.php?id='+item.ID_PERSON+'" class="btn btn-outline-primary radius-15"> Ver Perfil </a>'+
+                  '<div class="d-grid"><a href="inicio.php?acc=custodio_detalle&id='+item.ID_PERSON+'" class="btn btn-outline-primary radius-15"> Ver Perfil </a>'+
                   '</div>'+
                 '</div>'+
               '</div>'+
             '</div>'+
           '</div>';
 
-        // custodio+=' <div class="col-12 col-sm-6 col-md-4 d-flex align-items-stretch">'+
-        //       '<div class="card bg-light">'+
-        //         '<div class="card-header text-muted border-bottom-0">Codigo: '+item.PERSON_NO+'</div>'+
-        //         '<div class="card-body pt-0">'+
-        //           '<div class="row">'+
-        //             '<div class="col-7">'+
-        //               '<h2 class="lead"><b>'+item.PERSON_NOM+'</b></h2>'+
-        //               '<p class="text-muted text-sm"><b>Puesto: </b> '+item.PUESTO+' </p>'+
-        //               '<ul class="ml-4 mb-0 fa-ul text-muted">'+
-        //                 '<li class="small"><span class="fa-li"><i class="fas fa-lg fa-building"></i></span> Direccion:'+item.DIRECCION+'</li>'+
-        //                 '<li class="small"><span class="fa-li"><i class="fas fa-lg fa-phone"></i></span> TELEFONO :'+item.TELEFONO+' </li>'+
-        //               '</ul>'+
-        //             '</div>'+
-        //             '<div class="col-5 text-center">'+
-        //               '<img src="'+item.FOTO+'" alt="" class="img-circle img-fluid" style="width: 100%;height: 112px;">'+
-        //             '</div>'+
-        //           '</div>'+
-        //         '</div>'+
-        //         '<div class="card-footer">'+
-        //           '<div class="text-right">'+                    
-        //             '<a href="custodio_detalle.php?id='+item.ID_PERSON+'" class="btn btn-sm btn-primary">'+
-        //               '<i class="fas fa-user"></i> Ver Perfil'+
-        //             '</a>'+
-        //           '</div>'+
-        //         '</div>'+
-        //       '</div>'+
-        //     '</div>';
-
-
-
-
-
-        // custodio1.='<tr><td>'+item.PERSON_NO+'</td><td>'+item.PERSON_NOM+'</td><td>'+item.PERSON_CI+'</td><td>'+item.PERSON_CORREO+'</td><td>'+item.PUESTO+'</td><td>'+item.UNIDAD_ORG+'</td><td>';
-        //   if($('#eliminar').val()==1 || $('#dba').val()==1)
-        // {
-        // custodio+='<button class="btn btn-danger" tittle="Eliminar" onclick="delete_datos(\''+item.ID_PERSON+'\')"><i class="fa fa-trash"></i></button>';
-        // }
-        // if($('#editar').val()==1 || $('#dba').val()==1)
-        // {
-        // custodio+='<button class="btn btn-primary" tittle="Editar" onclick="datos_col(\''+item.ID_PERSON+'\')" data-toggle="modal" data-target="#myModal"><i class="fa fa-paint-brush"></i></button>';
-        // }
-        // custodio+='</td></tr>';
+      
         });       
         $('#tbl_datos').html(custodio);        
       }
@@ -171,11 +130,11 @@
 
     $.ajax({
       data:  {id:id},
-      url:   '../../controlador/custodioC.php?listar=true',
+      url:   '../controlador/custodioC.php?listar=true',
       type:  'post',
       dataType: 'json',
       /*beforeSend: function () {   
-           var spiner = '<div class="text-center"><img src="../../img/gif/proce.gif" width="100" height="100"></div>'     
+           var spiner = '<div class="text-center"><img src="../img/gif/proce.gif" width="100" height="100"></div>'     
          $('#tabla_').html(spiner);
       },*/
         success:  function (response) {
@@ -215,11 +174,11 @@
   {
      $.ajax({
       data:  {parametros:parametros},
-      url:   '../../controlador/custodioC.php?insertar=true',
+      url:   '../controlador/custodioC.php?insertar=true',
       type:  'post',
       dataType: 'json',
       /*beforeSend: function () {   
-           var spiner = '<div class="text-center"><img src="../../img/gif/proce.gif" width="100" height="100"></div>'     
+           var spiner = '<div class="text-center"><img src="../img/gif/proce.gif" width="100" height="100"></div>'     
          $('#tabla_').html(spiner);
       },*/
         success:  function (response) {  
@@ -256,11 +215,11 @@
   {
      $.ajax({
       data:  {id:id},
-      url:   '../../controlador/custodioC.php?eliminar=true',
+      url:   '../controlador/custodioC.php?eliminar=true',
       type:  'post',
       dataType: 'json',
       /*beforeSend: function () {   
-           var spiner = '<div class="text-center"><img src="../../img/gif/proce.gif" width="100" height="100"></div>'     
+           var spiner = '<div class="text-center"><img src="../img/gif/proce.gif" width="100" height="100"></div>'     
          $('#tabla_').html(spiner);
       },*/
         success:  function (response) {  
@@ -397,7 +356,7 @@ function guias_pag(tipo)
                   <input type="hidden" id="txt_numpag" name="">
                   <div class="row">
                     <div class="col-sm-12" id="btn_nuevo">
-                      <a href="custodio_detalle.php" class="btn btn-primary btn-sm"><i class="bx bx-plus"></i>Nuevo</a>
+                      <a href="inicio.php?acc=custodio_detalle" class="btn btn-primary btn-sm"><i class="bx bx-plus"></i>Nuevo</a>
                        <a href="#" class="btn btn-outline-secondary btn-sm" id="excel_custodios" title="Informe en excel del total de custodios"><i class="bx bx-file"></i> Total custodios</a>
                     </div>            
                   </div>
@@ -486,5 +445,5 @@ function guias_pag(tipo)
     </section>
   </div>
 
-<?php include('../../cabeceras/footer.php'); ?>
+<?php //include('../cabeceras/footer.php'); ?>
      

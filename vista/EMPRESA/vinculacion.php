@@ -1,4 +1,4 @@
-<?php include('../../cabeceras/header.php'); //print_r($_SESSION['INICIO']); ?>
+<?php //include('../cabeceras/header.php'); //print_r($_SESSION['INICIO']); ?>
   <!-- Content Wrapper. Contains page content -->
 
   <script type="text/javascript">
@@ -24,7 +24,7 @@
         placeholder: 'Seleccione una custodio',
         width:'90%',
         ajax: {
-          url: '../../controlador/custodioC.php?lista=true',
+          url: '../controlador/custodioC.php?lista=true',
           dataType: 'json',
           delay: 250,
           processResults: function (data) {
@@ -42,7 +42,7 @@
         placeholder: 'Seleccione una custodio',
         width:'94%',
         ajax: {
-          url: '../../controlador/custodioC.php?lista=true',
+          url: '../controlador/custodioC.php?lista=true',
           dataType: 'json',
           delay: 250,
           processResults: function (data) {
@@ -59,7 +59,7 @@
         placeholder: 'Seleccione una custodio',
         width:'100%',
         ajax: {
-          url: '../../controlador/custodioC.php?lista=true',
+          url: '../controlador/custodioC.php?lista=true',
           dataType: 'json',
           delay: 250,
           processResults: function (data) {
@@ -76,7 +76,7 @@
         placeholder: 'Seleccione una custodio',
         width:'100%',
         ajax: {
-          url: '../../controlador/custodioC.php?lista=true',
+          url: '../controlador/custodioC.php?lista=true',
           dataType: 'json',
           delay: 250,
           processResults: function (data) {
@@ -93,7 +93,7 @@
       $('#ddl_localizacion').select2({
         placeholder: 'Seleccione una localizacion',
         ajax: {
-          url: '../../controlador/localizacionC.php?lista=true',
+          url: '../controlador/localizacionC.php?lista=true',
           dataType: 'json',
           delay: 250,
           processResults: function (data) {
@@ -110,7 +110,7 @@
       $('#ddl_localizacion_1').select2({
         placeholder: 'Seleccione una localizacion',
         ajax: {
-          url: '../../controlador/localizacionC.php?lista=true',
+          url: '../controlador/localizacionC.php?lista=true',
           dataType: 'json',
           delay: 250,
           processResults: function (data) {
@@ -127,7 +127,7 @@
         placeholder: 'Seleccione una localizacion',
         width:'100%',
         ajax: {
-          url: '../../controlador/localizacionC.php?lista=true',
+          url: '../controlador/localizacionC.php?lista=true',
           dataType: 'json',
           delay: 250,
           processResults: function (data) {
@@ -144,7 +144,7 @@
         placeholder: 'Seleccione una localizacion',
         width:'100%',
         ajax: {
-          url: '../../controlador/localizacionC.php?lista=true',
+          url: '../controlador/localizacionC.php?lista=true',
           dataType: 'json',
           delay: 250,
           processResults: function (data) {
@@ -177,7 +177,7 @@
     }
       $.ajax({
          data:  {parametros:parametros},
-         url:   '../../controlador/vinculacionC.php?lista_art=true',
+         url:   '../controlador/vinculacionC.php?lista_art=true',
          type:  'post',
          dataType: 'json',
          beforeSend: function () {   
@@ -234,11 +234,11 @@
     }
       $.ajax({
          data:  {parametros:parametros},
-         url:   '../../controlador/vinculacionC.php?desvincular_art=true',
+         url:   '../controlador/vinculacionC.php?desvincular_art=true',
          type:  'post',
          dataType: 'json',
          /*beforeSend: function () {   
-              var spiner = '<div class="text-center"><img src="../../img/gif/proce.gif" width="100" height="100"></div>'     
+              var spiner = '<div class="text-center"><img src="../img/gif/proce.gif" width="100" height="100"></div>'     
             $('#tabla_').html(spiner);
          },*/
            success:  function (response) {  
@@ -267,11 +267,11 @@
     }
       $.ajax({
          data:  {parametros:parametros},
-         url:   '../../controlador/vinculacionC.php?lista_desvinculados=true',
+         url:   '../controlador/vinculacionC.php?lista_desvinculados=true',
          type:  'post',
          dataType: 'json',
          /*beforeSend: function () {   
-              var spiner = '<div class="text-center"><img src="../../img/gif/proce.gif" width="100" height="100"></div>'     
+              var spiner = '<div class="text-center"><img src="../img/gif/proce.gif" width="100" height="100"></div>'     
             $('#tabla_').html(spiner);
          },*/
            success:  function (response) {  
@@ -291,11 +291,11 @@
     }
       $.ajax({
          data:  {parametros:parametros},
-         url:   '../../controlador/vinculacionC.php?lista_desvinculados=true',
+         url:   '../controlador/vinculacionC.php?lista_desvinculados=true',
          type:  'post',
          dataType: 'json',
          /*beforeSend: function () {   
-              var spiner = '<div class="text-center"><img src="../../img/gif/proce.gif" width="100" height="100"></div>'     
+              var spiner = '<div class="text-center"><img src="../img/gif/proce.gif" width="100" height="100"></div>'     
             $('#tabla_').html(spiner);
          },*/
            success:  function (response) {  
@@ -337,11 +337,11 @@
     }
       $.ajax({
          data:  {parametros:parametros},
-         url:   '../../controlador/vinculacionC.php?vincular_custodio=true',
+         url:   '../controlador/vinculacionC.php?vincular_custodio=true',
          type:  'post',
          dataType: 'json',
          /*beforeSend: function () {   
-              var spiner = '<div class="text-center"><img src="../../img/gif/proce.gif" width="100" height="100"></div>'     
+              var spiner = '<div class="text-center"><img src="../img/gif/proce.gif" width="100" height="100"></div>'     
             $('#tabla_').html(spiner);
          },*/
            success:  function (response) {  
@@ -376,11 +376,11 @@
     }
       $.ajax({
          data:  {parametros:parametros},
-         url:   '../../controlador/vinculacionC.php?vincular_custodio_todo=true',
+         url:   '../controlador/vinculacionC.php?vincular_custodio_todo=true',
          type:  'post',
          dataType: 'json',
          /*beforeSend: function () {   
-              var spiner = '<div class="text-center"><img src="../../img/gif/proce.gif" width="100" height="100"></div>'     
+              var spiner = '<div class="text-center"><img src="../img/gif/proce.gif" width="100" height="100"></div>'     
             $('#tabla_').html(spiner);
          },*/
            success:  function (response) {  
@@ -409,11 +409,11 @@
     }
       $.ajax({
          data:  {parametros:parametros},
-         url:   '../../controlador/vinculacionC.php?vincular_localizacion=true',
+         url:   '../controlador/vinculacionC.php?vincular_localizacion=true',
          type:  'post',
          dataType: 'json',
          /*beforeSend: function () {   
-              var spiner = '<div class="text-center"><img src="../../img/gif/proce.gif" width="100" height="100"></div>'     
+              var spiner = '<div class="text-center"><img src="../img/gif/proce.gif" width="100" height="100"></div>'     
             $('#tabla_').html(spiner);
          },*/
            success:  function (response) { 
@@ -446,11 +446,11 @@
     }
       $.ajax({
          data:  {parametros:parametros},
-         url:   '../../controlador/vinculacionC.php?vincular_localizacion_todo=true',
+         url:   '../controlador/vinculacionC.php?vincular_localizacion_todo=true',
          type:  'post',
          dataType: 'json',
          /*beforeSend: function () {   
-              var spiner = '<div class="text-center"><img src="../../img/gif/proce.gif" width="100" height="100"></div>'     
+              var spiner = '<div class="text-center"><img src="../img/gif/proce.gif" width="100" height="100"></div>'     
             $('#tabla_').html(spiner);
          },*/
            success:  function (response) {  
@@ -743,6 +743,6 @@
       </div><!-- /.container-fluid -->
 
  
-<?php include('../../cabeceras/footer.php'); ?>
+<?php //include('../cabeceras/footer.php'); ?>
 
 

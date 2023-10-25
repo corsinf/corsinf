@@ -1,4 +1,4 @@
-<?php include('../../cabeceras/header.php');  ?>
+<?php //include('../cabeceras/header.php');  ?>
 <script type="text/javascript">	
     $( document ).ready(function() {
     	lista_contratos();
@@ -14,7 +14,7 @@
    	}
     $.ajax({
          data:  {parametros,parametros},
-         url:   '../../controlador/contratoC.php?lista_contratos=true',
+         url:   '../controlador/contratoC.php?lista_contratos=true',
          type:  'post',
          dataType: 'json',
            success:  function (response) { 
@@ -51,7 +51,7 @@
               <div class="card-body">                
                 <div class="row">
                   <div class="col-sm-3">
-                    <a href="contratos.php" class="btn btn-sm btn-primary"><i class="bx bx-plus"></i>Nuevo</a>
+                    <a href="inicio.php?mod=<?php echo $_SESSION['INICIO']['MODULO_SISTEMA'];?>&acc=contratos" class="btn btn-sm btn-primary"><i class="bx bx-plus"></i>Nuevo</a>
                   </div>
                 </div>
                 <div class="row">
@@ -100,4 +100,4 @@
     </div>
 
 
-<?php include('../../cabeceras/footer.php'); ?>
+<?php //include('../cabeceras/footer.php'); ?>

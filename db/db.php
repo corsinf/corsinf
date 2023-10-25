@@ -61,7 +61,8 @@ class db
 	{	
 		set_time_limit(0);	
 
-		// print_r($sql);die()
+		// print_r($sql);
+		// die();
 		$conn = $this->conexion();
 		$stmt = sqlsrv_query($conn,$sql);
 		 // print_r($sql);die();
@@ -292,5 +293,17 @@ class db
 		    echo "Ocurrió un error con la base de datos: " . $e->getMessage();
 		}
 	}
+
+	function en_tabla($campo)
+	{
+		$sql = "select distinct t.name
+		from sys.tables t inner join sys.columns c
+			on t.object_id = c.object_id
+		where c.name = '".$campo."'";
+		// print_r($sql);
+		return $this->datos($sql); 
+	}
+
+	
 }
 ?>

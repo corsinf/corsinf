@@ -1,4 +1,4 @@
-<?php include('../../cabeceras/header.php'); include "../../lib/phpqrcode/qrlib.php";    $id = ''; if(isset($_GET['id'])){$id = $_GET['id'];} ?>
+<?php /*include('../../cabeceras/header.php');*/ include dirname(__DIR__,2)."/lib/phpqrcode/qrlib.php";    $id = ''; if(isset($_GET['id'])){$id = $_GET['id'];} ?>
 <script type="text/javascript">
     $( document ).ready(function() {      
   // navegacion();
@@ -891,9 +891,9 @@ function cargar_tarjeta_view(id)
           <div class="row row-cols-auto g-1">                  
             <div class="col">
               <?php if($_GET['fil1']=='null--null' && $_GET['fil1']=='null--null'){   ?>
-              <a class="btn btn-outline-secondary btn-sm" href="../vista/lista_patrimoniales.php"><i class="bx bx-arrow-back"></i>  Regresar</a>
+              <a class="btn btn-outline-secondary btn-sm"  href="inicio.php?mod=<?php echo $_SESSION['INICIO']['MODULO_SISTEMA']; ?>&acc=lista_patrimoniales"><i class="bx bx-arrow-back"></i>  Regresar</a>
             <?php }else{ ?>
-              <a class="btn btn-outline-secondary btn-sm" href="../vista/lista_patrimoniales.php?fil1=<?php echo $_GET['fil1']?>&fil2=<?php echo $_GET['fil2']?>"> Regresar</a><div id="na">                    
+              <a class="btn btn-outline-secondary btn-sm" href="inicio.php?mod=<?php echo $_SESSION['INICIO']['MODULO_SISTEMA']; ?>&acc=lista_patrimoniales&fil1=<?php echo $_GET['fil1']?>&fil2=<?php echo $_GET['fil2']?>"> Regresar</a><div id="na">                    
               </div>
             <?php } ?>
             </div>
@@ -1604,5 +1604,5 @@ function Guardar() {
 
 </script>
 
-<?php include('../../cabeceras/footer.php');?>
+<?php /*include('../../cabeceras/footer.php');*/ ?>
      

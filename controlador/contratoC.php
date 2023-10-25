@@ -344,7 +344,7 @@ class contratoC
 		$tr='';
 		foreach ($datos as $key => $value) {
 			$tr.='<tr>
-			<td><a href="contratos.php?id='.$value['id'].'">'.$value['nombre'].'</a></td>
+			<td><a href="inicio.php?acc=contratos&id='.$value['id'].'">'.$value['nombre'].'</a></td>
 			<td>'.$value['prima'].'</td>
 			<td>'.$value['desde']->format('Y-m-d').'</td>
 			<td>'.$value['hasta']->format('Y-m-d').'</td>

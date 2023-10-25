@@ -11,7 +11,7 @@ if(!class_exists('db'))
 class reportesM
 {
 	
-	private $db;
+	private $db;	
 	
 	function __construct()
 	{
@@ -48,7 +48,7 @@ class reportesM
 		$sql = "SELECT ID_TIPO_REPORTE as 'ID',DESCRIPCION as 'NOMBRE' FROM TIPO_REPORTE";
 		return $this->db->datos($sql);
 	}
-	function datos_reporte($id)
+	function datos_reporte($id=false)
 	{
 		$sql="SELECT R.ID_REPORTE,TR.TABLAS_ASOCIADAS,TABLA_PRINCIPAL,NOMBRE_REPORTE,CAMPOS,SQL,FILTROS_HTML,DETALLE FROM REPORTE R
 		INNER JOIN TIPO_REPORTE TR ON R.TIPO_REPORTE = TR.ID_TIPO_REPORTE 
@@ -57,6 +57,8 @@ class reportesM
 		{
 			$sql.=" AND R.ID_REPORTE = '".$id."'";
 		}
+		$this->sql_reporte = $sql;
+		// print_r($sql);die();
 		return $this->db->datos($sql);
 	}
 	function campos_tabla($tabla,$columna=false)
@@ -88,10 +90,12 @@ class reportesM
 	{
 		return $this->db->datos($sql);
 	}
+	
 	function total_consulta($sql)
 	{
 		return $this->db->datos($sql);
 	}
+
 }
 
 ?>

@@ -1,4 +1,4 @@
-<?php include ('../../cabeceras/header.php');?>
+<?php //include ('../../cabeceras/header.php');?>
 <script type="text/javascript">
   function descargar_app()
   {
@@ -109,4 +109,4 @@
         <!--end row-->
       </div>
     </div>
-<?php include ('../../cabeceras/footer.php');?>
+<?php //include ('../../cabeceras/footer.php');?>

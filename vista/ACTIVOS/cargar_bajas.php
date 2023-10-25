@@ -1,4 +1,4 @@
-<?php include('../../cabeceras/header.php'); ?>
+<?php //include('../cabeceras/header.php'); ?>
 <script type="text/javascript">
     $( document ).ready(function() {  
 
@@ -12,14 +12,14 @@
 
             var formData = new FormData(document.getElementById("form_img"));
             $.ajax({
-                url: '../../controlador/cargar_bajasC.php?subir_archivo_server=true',
+                url: '../controlador/cargar_bajasC.php?subir_archivo_server=true',
                 type: 'post',
                 data: formData,
                 contentType: false,
                 processData: false,
                 dataType:'json',
              // beforeSend: function () {
-             //        $("#foto_alumno").attr('src',"../../img/gif/proce.gif");
+             //        $("#foto_alumno").attr('src',"../img/gif/proce.gif");
              //     },
                 success: function(response) {
                   if(response == 1)
@@ -52,7 +52,7 @@
      $('#myModal').modal('show');
      $.ajax({
          data:  {parametros:parametros},
-         url: '../../controlador/cargar_bajasC.php?ejecutar_sp=true',
+         url: '../controlador/cargar_bajasC.php?ejecutar_sp=true',
          type:  'post',
          dataType: 'json',
           success:  function (response) {  
@@ -154,4 +154,4 @@
   </div>
 </div>
 
-<?php include('../../cabeceras/footer.php'); ?>
+<?php //include('../cabeceras/footer.php'); ?>

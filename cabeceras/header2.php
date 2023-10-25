@@ -34,7 +34,7 @@
   <link rel="stylesheet" href="../../assets/plugins/summernote/summernote-bs5.min.css">
   <!-- <link rel="stylesheet" href="../../assets/plugins/summernote/css/font-awesome.min.css"> -->
 
-  <script src="../../js/informes.js"></script>
+  <script src="../../js/informes_globales.js"></script>
   <script src="../../js/codigos_globales.js"></script>
   <script src="../../js/sweetalert2.all.min.js"></script>
 

@@ -1,5 +1,5 @@
-<?php include ('../../cabeceras/header.php');?>
-<script type="text/javascript" src="../../js/reportes.js"></script>
+<?php //include ('../cabeceras/header.php');?>
+<script type="text/javascript" src="../js/reportes.js"></script>
 <script type="text/javascript">  
   id = '<?php echo $_GET['id']; ?>';
  $( document ).ready(function() {
@@ -32,7 +32,7 @@
               <div class="card-body">
                 <div class="row row-cols-auto g-1">
                    <div class="col">                  
-                    <a class="btn btn-outline-dark btn-sm" href="reportes.php"><i class="bx bx-arrow-back"></i> Regresar</a>
+                    <a class="btn btn-outline-dark btn-sm" href="inicio.php?mod=<?php echo $_SESSION['INICIO']['MODULO_SISTEMA']; ?>&acc=reportes"><i class="bx bx-arrow-back"></i> Regresar</a>
                   </div>
                   <div class="col">
                     <button class="btn btn-success btn-sm" id="Generar_excel"><i class="bx bx-file"></i> Excel</button>
@@ -123,4 +123,4 @@
 
 
 
-<?php include ('../../cabeceras/footer.php');?>
+<?php //include ('../cabeceras/footer.php');?>

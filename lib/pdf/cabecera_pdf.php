@@ -446,6 +446,8 @@ class cabecera_pdf
 		 }
 		}
 
+		// print_r($this->pdftable->GetPageHeight());die();
+
 		if($contenido)
 		{
 		 foreach ($contenido as $key => $value) {

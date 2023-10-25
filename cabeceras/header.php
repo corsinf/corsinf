@@ -1,6 +1,6 @@
 <?php @session_start(); 
 // print_r($_SESSION['INICIO']);
-if(!isset($_SESSION['INICIO'])){header('Location: ../../login.php');}?> 
+if(!isset($_SESSION['INICIO'])){header('Location: ../login.php');}?> 
 <!doctype html>
 <html lang="en">
 
@@ -9,41 +9,41 @@ if(!isset($_SESSION['INICIO'])){header('Location: ../../login.php');}?>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<!--favicon-->
-	<link rel="icon" href="../../assets/images/favicon-32x32.png" type="image/png" />
+	<link rel="icon" href="../assets/images/favicon-32x32.png" type="image/png" />
 	<!--plugins-->
-	<link href="../../assets/plugins/simplebar/css/simplebar.css" rel="stylesheet" />
-	<link href="../../assets/plugins/perfect-scrollbar/css/perfect-scrollbar.css" rel="stylesheet" />
-	<link href="../../assets/plugins/metismenu/css/metisMenu.min.css" rel="stylesheet" />
+	<link href="../assets/plugins/OwlCarousel/css/owl.carousel.min.css" rel="stylesheet">
+		<link href="../assets/plugins/Drag-And-Drop/dist/imageuploadify.min.css" rel="stylesheet" />
+	<link href="../assets/plugins/simplebar/css/simplebar.css" rel="stylesheet" />
+	<link href="../assets/plugins/perfect-scrollbar/css/perfect-scrollbar.css" rel="stylesheet" />
+	<link href="../assets/plugins/metismenu/css/metisMenu.min.css" rel="stylesheet" />
 
-  <link href="../../assets/plugins/select2/css/select2.min.css" rel="stylesheet" />
-  <link href="../../assets/plugins/select2/css/select2-bootstrap4.css" rel="stylesheet" />
+  <link href="../assets/plugins/select2/css/select2.min.css" rel="stylesheet" />
+  <link href="../assets/plugins/select2/css/select2-bootstrap4.css" rel="stylesheet" />
 
 
-	<link href="../../assets/plugins/datatable/css/dataTables.bootstrap5.min.css" rel="stylesheet" />
+	<link href="../assets/plugins/datatable/css/dataTables.bootstrap5.min.css" rel="stylesheet" />
 
-	<link href="../../assets/plugins/smart-wizard/css/smart_wizard_all.min.css" rel="stylesheet" type="text/css" />
+	<link href="../assets/plugins/smart-wizard/css/smart_wizard_all.min.css" rel="stylesheet" type="text/css" />
 	<!-- loader-->
-	<link href="../../assets/css/pace.min.css" rel="stylesheet" />
-	<script src="../../assets/js/pace.min.js"></script>
-	<script src="../../assets/js/jquery.min.js"></script>
+	<link href="../assets/css/pace.min.css" rel="stylesheet" />
+	<script src="../assets/js/pace.min.js"></script>
+	<script src="../assets/js/jquery.min.js"></script>
 	<!-- Bootstrap CSS -->
-	<link href="../../assets/css/bootstrap.min.css" rel="stylesheet">
-	<link href="../../assets/css/bootstrap-extended.css" rel="stylesheet">
-	<link href="../../assets/css/app.css" rel="stylesheet">
-	<link href="../../assets/css/icons.css" rel="stylesheet">
+	<link href="../assets/css/bootstrap.min.css" rel="stylesheet">
+	<link href="../assets/css/bootstrap-extended.css" rel="stylesheet">
+	<link href="../assets/css/app.css" rel="stylesheet">
+	<link href="../assets/css/icons.css" rel="stylesheet">
 	<!-- Theme Style CSS -->
-	<link rel="stylesheet" href="../../assets/css/dark-theme.css" />
-	<link rel="stylesheet" href="../../assets/css/semi-dark.css" />
-	<link rel="stylesheet" href="../../assets/css/header-colors.css" />
 
-	<link rel="stylesheet" href="../../assets/plugins/summernote/summernote-lite.css">
-	<!-- <link rel="stylesheet" href="../../assets/plugins/summernote/css/styles_summernote.css"> -->
-  <link rel="stylesheet" href="../../assets/plugins/summernote/summernote-bs5.min.css">
-  <!-- <link rel="stylesheet" href="../../assets/plugins/summernote/css/font-awesome.min.css"> -->
+	<link rel="stylesheet" href="../assets/plugins/summernote/summernote-lite.css">
+	<!-- <link rel="stylesheet" href="../assets/plugins/summernote/css/styles_summernote.css"> -->
+  <link rel="stylesheet" href="../assets/plugins/summernote/summernote-bs5.min.css">
+  <!-- <link rel="stylesheet" href="../assets/plugins/summernote/css/font-awesome.min.css"> -->
 
-  <script src="../../js/informes.js"></script>
-  <script src="../../js/codigos_globales.js"></script>
-  <script src="../../js/sweetalert2.all.min.js"></script>
+  <script src="../js/informes_globales.js"></script>
+  <script src="../js/codigos_globales.js"></script>
+  <script src="../js/sweetalert2.all.min.js"></script>
+  <script src="../js/notificaciones_seguros.js"></script>
 
   <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
 
@@ -68,6 +68,8 @@ if(!isset($_SESSION['INICIO'])){header('Location: ../../login.php');}?>
     	menu_lateral();
     $( document ).ready(function() {
       restriccion();   
+      notificaciones();
+  	  solicitudes();  
     });
 
     function formatoDate(date)
@@ -89,23 +91,23 @@ if(!isset($_SESSION['INICIO'])){header('Location: ../../login.php');}?>
       console.log(Fecha);
       return Fecha;
     }
-     function cerrar_session()
+  function cerrar_session()
   {
     
        $.ajax({
          // data:  {parametros:parametros},
-         url:   '../../controlador/loginC.php?cerrar=true',
+         url:   '../controlador/loginC.php?cerrar=true',
          type:  'post',
          dataType: 'json',
          /*beforeSend: function () {   
-              var spiner = '<div class="text-center"><img src="../../../../img/gif/proce.gif" width="100" height="100"></div>'     
+              var spiner = '<div class="text-center"><img src="../img/gif/proce.gif" width="100" height="100"></div>'     
             $('#tabla_').html(spiner);
          },*/
            success:  function (response) {  
            // if (response==1) 
            // {
             // console.log(response);
-            // location.href = "../../login.php";
+            // location.href = "../login.php";
             location.reload();
            // } 
           } 
@@ -113,18 +115,36 @@ if(!isset($_SESSION['INICIO'])){header('Location: ../../login.php');}?>
        });
   }
 
-   function menu_lateral()
+  function regresar_modulo()
   {
     
        $.ajax({
-         url:   '../../controlador/loginC.php?menu_lateral=true',
+         // data:  {parametros:parametros},
+         url:   '../controlador/loginC.php?regresar_modulo=true',
+         type:  'post',
+         dataType: 'json',
+         /*beforeSend: function () {   
+              var spiner = '<div class="text-center"><img src="../img/gif/proce.gif" width="100" height="100"></div>'     
+            $('#tabla_').html(spiner);
+         },*/
+           success:  function (response) {  
+           	location.href = 'inicio.php?mod='+response+'&acc=index';
+          } 
+          
+       });
+  }
+
+   function menu_lateral()
+  {   
+       $.ajax({
+         url:   '../controlador/loginC.php?menu_lateral=true',
          type:  'post',
          dataType: 'json',
         
            success:  function (response) {  
            
              // console.log(response);
-           	var ini = '<li><a href="index.php"><div class="parent-icon"><i class="bx bx-home"></i></div>						<div class="menu-title">Inicio</div></a></li>';
+           	var ini = '<li><a href="inicio.php?acc=index"><div class="parent-icon"><i class="bx bx-home"></i></div>						<div class="menu-title">Inicio</div></a></li>';
 
              $('#menu').html(ini+response);
 
@@ -145,6 +165,36 @@ function num_caracteres(campo,num)
     return false;
   }
 
+}
+
+function cambiar_configuraciones()
+{
+	  // Swal.fire({
+    //   title: 'Esta apunto de ingresar a las configuraciones del sistema?',
+    //   text: "Esta seguro de Ingrear !",
+    //   icon: 'warning',
+    //   showCancelButton: true,
+    //   confirmButtonColor: '#3085d6',
+    //   cancelButtonColor: '#d33',
+    //   confirmButtonText: 'Si'
+    // }).then((result) => {
+    //     if (result.value) {
+        	
+        	$.ajax({
+		         url:   '../controlador/loginC.php?change_settings=true',
+		         type:  'post',
+		         dataType: 'json',		        
+		           success:  function (response) {  	
+		           	if(response==1)
+        					{	
+		           			location.href = 'inicio.php?mod=1&acc=index';
+		         			 }
+		         	}
+		       });
+
+    //     }
+
+    // })
 }
 
 // function navegacion(link)
@@ -170,7 +220,7 @@ function num_caracteres(campo,num)
 		<div class="sidebar-wrapper" data-simplebar="true">
 			<div class="sidebar-header">
 				<div>
-					<img src="../../img/de_sistema/puce_logo.png" class="logo-icon" alt="logo icon">
+					<img src="../img/de_sistema/puce_logo.png" class="logo-icon" alt="logo icon">
 				</div>
 				<div>
 					<h4 class="logo-text">Activos fijos</h4>
@@ -540,124 +590,27 @@ function num_caracteres(campo,num)
 								</div>
 							</li>
 							<li class="nav-item dropdown dropdown-large">
-								<a class="nav-link dropdown-toggle dropdown-toggle-nocaret position-relative" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"> <span class="alert-count">7</span>
+								<a class="nav-link dropdown-toggle dropdown-toggle-nocaret position-relative" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><span class="alert-count" style="display:none" id="pnl_noti"><b id="lbl_noti">0</b></span>
 									<i class='bx bx-bell'></i>
 								</a>
 								<div class="dropdown-menu dropdown-menu-end">
 									<a href="javascript:;">
 										<div class="msg-header">
-											<p class="msg-header-title">Notifications</p>
-											<p class="msg-header-clear ms-auto">Marks all as read</p>
+											<p class="msg-header-title">Notificationes</p>
+											<!-- <p class="msg-header-clear ms-auto">Marks all as read</p> -->
 										</div>
 									</a>
-									<div class="header-notifications-list">
-										<a class="dropdown-item" href="javascript:;">
-											<div class="d-flex align-items-center">
-												<div class="notify bg-light-primary text-primary"><i class="bx bx-group"></i>
-												</div>
-												<div class="flex-grow-1">
-													<h6 class="msg-name">New Customers<span class="msg-time float-end">14 Sec
-												ago</span></h6>
-													<p class="msg-info">5 new user registered</p>
-												</div>
-											</div>
-										</a>
-										<a class="dropdown-item" href="javascript:;">
-											<div class="d-flex align-items-center">
-												<div class="notify bg-light-danger text-danger"><i class="bx bx-cart-alt"></i>
-												</div>
-												<div class="flex-grow-1">
-													<h6 class="msg-name">New Orders <span class="msg-time float-end">2 min
-												ago</span></h6>
-													<p class="msg-info">You have recived new orders</p>
-												</div>
-											</div>
-										</a>
-										<a class="dropdown-item" href="javascript:;">
-											<div class="d-flex align-items-center">
-												<div class="notify bg-light-success text-success"><i class="bx bx-file"></i>
-												</div>
-												<div class="flex-grow-1">
-													<h6 class="msg-name">24 PDF File<span class="msg-time float-end">19 min
-												ago</span></h6>
-													<p class="msg-info">The pdf files generated</p>
-												</div>
-											</div>
-										</a>
-										<a class="dropdown-item" href="javascript:;">
-											<div class="d-flex align-items-center">
-												<div class="notify bg-light-warning text-warning"><i class="bx bx-send"></i>
-												</div>
-												<div class="flex-grow-1">
-													<h6 class="msg-name">Time Response <span class="msg-time float-end">28 min
-												ago</span></h6>
-													<p class="msg-info">5.1 min avarage time response</p>
-												</div>
-											</div>
-										</a>
-										<a class="dropdown-item" href="javascript:;">
-											<div class="d-flex align-items-center">
-												<div class="notify bg-light-info text-info"><i class="bx bx-home-circle"></i>
-												</div>
-												<div class="flex-grow-1">
-													<h6 class="msg-name">New Product Approved <span
-												class="msg-time float-end">2 hrs ago</span></h6>
-													<p class="msg-info">Your new product has approved</p>
-												</div>
-											</div>
-										</a>
-										<a class="dropdown-item" href="javascript:;">
-											<div class="d-flex align-items-center">
-												<div class="notify bg-light-danger text-danger"><i class="bx bx-message-detail"></i>
-												</div>
-												<div class="flex-grow-1">
-													<h6 class="msg-name">New Comments <span class="msg-time float-end">4 hrs
-												ago</span></h6>
-													<p class="msg-info">New customer comments recived</p>
-												</div>
-											</div>
-										</a>
-										<a class="dropdown-item" href="javascript:;">
-											<div class="d-flex align-items-center">
-												<div class="notify bg-light-success text-success"><i class='bx bx-check-square'></i>
-												</div>
-												<div class="flex-grow-1">
-													<h6 class="msg-name">Your item is shipped <span class="msg-time float-end">5 hrs
-												ago</span></h6>
-													<p class="msg-info">Successfully shipped your item</p>
-												</div>
-											</div>
-										</a>
-										<a class="dropdown-item" href="javascript:;">
-											<div class="d-flex align-items-center">
-												<div class="notify bg-light-primary text-primary"><i class='bx bx-user-pin'></i>
-												</div>
-												<div class="flex-grow-1">
-													<h6 class="msg-name">New 24 authors<span class="msg-time float-end">1 day
-												ago</span></h6>
-													<p class="msg-info">24 new authors joined last week</p>
-												</div>
-											</div>
-										</a>
-										<a class="dropdown-item" href="javascript:;">
-											<div class="d-flex align-items-center">
-												<div class="notify bg-light-warning text-warning"><i class='bx bx-door-open'></i>
-												</div>
-												<div class="flex-grow-1">
-													<h6 class="msg-name">Defense Alerts <span class="msg-time float-end">2 weeks
-												ago</span></h6>
-													<p class="msg-info">45% less alerts last 4 weeks</p>
-												</div>
-											</div>
-										</a>
+									<div class="header-notifications-list" id="pnl_notificaciones">
+										
+									
 									</div>
-									<a href="javascript:;">
+									<!-- <a href="javascript:;">
 										<div class="text-center msg-footer">View All Notifications</div>
-									</a>
+									</a> -->
 								</div>
 							</li>
 							<li class="nav-item dropdown dropdown-large">
-								<a class="nav-link dropdown-toggle dropdown-toggle-nocaret position-relative" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"> <span class="alert-count">8</span>
+								<a class="nav-link dropdown-toggle dropdown-toggle-nocaret position-relative" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"> <span class="alert-count" style="display:none;" id="pnl_soli"><b id="lbl_soli">0</b></span>
 									<i class='bx bx-comment'></i>
 								</a>
 								<div class="dropdown-menu dropdown-menu-end">
@@ -667,147 +620,13 @@ function num_caracteres(campo,num)
 											<p class="msg-header-clear ms-auto">Marks all as read</p>
 										</div>
 									</a>
-									<div class="header-message-list">
-										<a class="dropdown-item" href="javascript:;">
-											<div class="d-flex align-items-center">
-												<div class="user-online">
-													<img src="../../assets/images/avatars/avatar-1.png" class="msg-avatar" alt="user avatar">
-												</div>
-												<div class="flex-grow-1">
-													<h6 class="msg-name">Daisy Anderson <span class="msg-time float-end">5 sec
-												ago</span></h6>
-													<p class="msg-info">The standard chunk of lorem</p>
-												</div>
-											</div>
-										</a>
-										<a class="dropdown-item" href="javascript:;">
-											<div class="d-flex align-items-center">
-												<div class="user-online">
-													<img src="../../assets/images/avatars/avatar-2.png" class="msg-avatar" alt="user avatar">
-												</div>
-												<div class="flex-grow-1">
-													<h6 class="msg-name">Althea Cabardo <span class="msg-time float-end">14
-												sec ago</span></h6>
-													<p class="msg-info">Many desktop publishing packages</p>
-												</div>
-											</div>
-										</a>
-										<a class="dropdown-item" href="javascript:;">
-											<div class="d-flex align-items-center">
-												<div class="user-online">
-													<img src="../../assets/images/avatars/avatar-3.png" class="msg-avatar" alt="user avatar">
-												</div>
-												<div class="flex-grow-1">
-													<h6 class="msg-name">Oscar Garner <span class="msg-time float-end">8 min
-												ago</span></h6>
-													<p class="msg-info">Various versions have evolved over</p>
-												</div>
-											</div>
-										</a>
-										<a class="dropdown-item" href="javascript:;">
-											<div class="d-flex align-items-center">
-												<div class="user-online">
-													<img src="../../assets/images/avatars/avatar-4.png" class="msg-avatar" alt="user avatar">
-												</div>
-												<div class="flex-grow-1">
-													<h6 class="msg-name">Katherine Pechon <span class="msg-time float-end">15
-												min ago</span></h6>
-													<p class="msg-info">Making this the first true generator</p>
-												</div>
-											</div>
-										</a>
-										<a class="dropdown-item" href="javascript:;">
-											<div class="d-flex align-items-center">
-												<div class="user-online">
-													<img src="../../assets/images/avatars/avatar-5.png" class="msg-avatar" alt="user avatar">
-												</div>
-												<div class="flex-grow-1">
-													<h6 class="msg-name">Amelia Doe <span class="msg-time float-end">22 min
-												ago</span></h6>
-													<p class="msg-info">Duis aute irure dolor in reprehenderit</p>
-												</div>
-											</div>
-										</a>
-										<a class="dropdown-item" href="javascript:;">
-											<div class="d-flex align-items-center">
-												<div class="user-online">
-													<img src="../../assets/images/avatars/avatar-6.png" class="msg-avatar" alt="user avatar">
-												</div>
-												<div class="flex-grow-1">
-													<h6 class="msg-name">Cristina Jhons <span class="msg-time float-end">2 hrs
-												ago</span></h6>
-													<p class="msg-info">The passage is attributed to an unknown</p>
-												</div>
-											</div>
-										</a>
-										<a class="dropdown-item" href="javascript:;">
-											<div class="d-flex align-items-center">
-												<div class="user-online">
-													<img src="../../assets/images/avatars/avatar-7.png" class="msg-avatar" alt="user avatar">
-												</div>
-												<div class="flex-grow-1">
-													<h6 class="msg-name">James Caviness <span class="msg-time float-end">4 hrs
-												ago</span></h6>
-													<p class="msg-info">The point of using Lorem</p>
-												</div>
-											</div>
-										</a>
-										<a class="dropdown-item" href="javascript:;">
-											<div class="d-flex align-items-center">
-												<div class="user-online">
-													<img src="../../assets/images/avatars/avatar-8.png" class="msg-avatar" alt="user avatar">
-												</div>
-												<div class="flex-grow-1">
-													<h6 class="msg-name">Peter Costanzo <span class="msg-time float-end">6 hrs
-												ago</span></h6>
-													<p class="msg-info">It was popularised in the 1960s</p>
-												</div>
-											</div>
-										</a>
-										<a class="dropdown-item" href="javascript:;">
-											<div class="d-flex align-items-center">
-												<div class="user-online">
-													<img src="../../assets/images/avatars/avatar-9.png" class="msg-avatar" alt="user avatar">
-												</div>
-												<div class="flex-grow-1">
-													<h6 class="msg-name">David Buckley <span class="msg-time float-end">2 hrs
-												ago</span></h6>
-													<p class="msg-info">Various versions have evolved over</p>
-												</div>
-											</div>
-										</a>
-										<a class="dropdown-item" href="javascript:;">
-											<div class="d-flex align-items-center">
-												<div class="user-online">
-													<img src="../../assets/images/avatars/avatar-10.png" class="msg-avatar" alt="user avatar">
-												</div>
-												<div class="flex-grow-1">
-													<h6 class="msg-name">Thomas Wheeler <span class="msg-time float-end">2 days
-												ago</span></h6>
-													<p class="msg-info">If you are going to use a passage</p>
-												</div>
-											</div>
-										</a>
-										<a class="dropdown-item" href="javascript:;">
-											<div class="d-flex align-items-center">
-												<div class="user-online">
-													<img src="../../assets/images/avatars/avatar-11.png" class="msg-avatar" alt="user avatar">
-												</div>
-												<div class="flex-grow-1">
-													<h6 class="msg-name">Johnny Seitz <span class="msg-time float-end">5 days
-												ago</span></h6>
-													<p class="msg-info">All the Lorem Ipsum generators</p>
-												</div>
-											</div>
-										</a>
-									</div>
-									<a href="javascript:;">
-										<div class="text-center msg-footer">View All Messages</div>
-									</a>
+									<div class="header-message-list" id="pnl_solicitudes">
+													
+									</div>								
 								</div>
 							</li>
 							<li>
-									<a class="nav-link dropdown-toggle dropdown-toggle-nocaret position-relative" href="../modulos_sistema.php" role="button" aria-expanded="false" title="Salir del modulo">
+									<a class="nav-link dropdown-toggle dropdown-toggle-nocaret position-relative" href="modulos_sistema.php" role="button" aria-expanded="false" title="Salir del modulo">
 									<i class='bx bx-log-out'></i>
 									</a>								
 							</li>
@@ -815,27 +634,32 @@ function num_caracteres(campo,num)
 					</div>
 					<div class="user-box dropdown">
 						<a class="d-flex align-items-center nav-link dropdown-toggle dropdown-toggle-nocaret" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-							<img src="../<?php echo $_SESSION['INICIO']['FOTO']; ?>" class="user-img" alt="user avatar">
+							<img src="<?php echo $_SESSION['INICIO']['FOTO']; ?>" class="user-img" alt="user avatar">
 							<div class="user-info ps-3">
 								<p class="user-name mb-0"><?php echo $_SESSION['INICIO']['USUARIO']; ?></p>
 								<p class="designattion mb-0"><?php echo $_SESSION['INICIO']['TIPO']; ?></p>
 							</div>
 						</a>
 						<ul class="dropdown-menu dropdown-menu-end">
-							<li><a class="dropdown-item" href="perfil.php"><i class="bx bx-user"></i><span>Perfil</span></a>
+							<li><a class="dropdown-item" href="inicio.php?acc=perfil"><i class="bx bx-user"></i><span>Perfil</span></a>
 							</li>
-							<li><a class="dropdown-item" href="javascript:;"><i class="bx bx-cog"></i><span>Settings</span></a>
+							<?php if($_SESSION['INICIO']['TIPO']=='DBA'){ ?>
+							<li><a class="dropdown-item" href="javascript:;" onclick="cambiar_configuraciones()"><i class="bx bx-cog"></i><span>Configuraciones</span></a>
 							</li>
+							<?php } ?>
 							<li><a class="dropdown-item" href="javascript:;"><i class='bx bx-home-circle'></i><span>Dashboard</span></a>
 							</li>
 							<li><a class="dropdown-item" href="javascript:;"><i class='bx bx-dollar-circle'></i><span>Earnings</span></a>
 							</li>
-							<li><a class="dropdown-item" href="descargas.php"><i class='bx bx-download'></i><span>Descargas</span></a>
+							<li><a class="dropdown-item" href="inicio.php?mod=<?php echo $_SESSION['INICIO']['MODULO_SISTEMA']; ?>&acc=descargas"><i class='bx bx-download'></i><span>Descargas</span></a>
 							</li>
 							<li>
 								<div class="dropdown-divider mb-0"></div>
 							</li>
-							<li><a class="dropdown-item" href="javascript:;" onclick="cerrar_session();"><i class='bx bx-log-out-circle'></i><span>Logout</span></a>
+							<li><a class="dropdown-item" href="javascript:;" onclick="cerrar_session();"><i class='bx bx-log-out-circle'></i><span>Salir de sistema</span></a>
+								<?php if($_SESSION['INICIO']['MODULO_SISTEMA']==1){ ?>
+									<li><a class="dropdown-item" href="javascript:;" onclick="regresar_modulo();"><i class='bx bx-log-out-circle'></i><span>Salir de configuraciones</span></a>
+								<?php }?>
 							</li>
 						</ul>
 					</div>

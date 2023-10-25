@@ -113,7 +113,12 @@ class modulos_paginasM
 		$sql = "SELECT * FROM ACCESOS A
 		INNER JOIN PAGINAS P ON A.id_paginas = P.id_paginas
 		INNER JOIN MODULOS M ON P.id_modulo = M.id_modulo
-		WHERE link_pagina ='".$pagina."' AND id_tipo_usu = '".$perfil."'";
+		WHERE link_pagina ='".$pagina."' AND id_tipo_usu = '".$perfil."'"; 
+
+		if($pagina=='perfil')
+		{
+			$sql.=" AND modulos_sistema='".$_SESSION['INICIO']['MODULO_SISTEMA']."' ";
+		}
 
 		// print_r($sql);die();
 		$datos = $this->db->datos($sql);

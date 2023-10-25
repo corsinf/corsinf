@@ -83,6 +83,18 @@ class usuariosM
 		$datos = $this->db->datos($sql);
 		return $datos;
 	}
+	function no_concurente_custodios($codigo)
+	{
+		$sql = "SELECT ID_PERSON as 'id',PERSON_CI as 'ci',PERSON_NOM as 'nombres',DIRECCION as 'dir',TELEFONO as 'tel',PASS as 'pass',PERSON_CORREO as 'email',FOTO as 'foto'
+			 FROM PERSON_NO
+			 WHERE ESTADO = 'A' ";
+			 if($codigo)
+			 {
+			 	$sql.=" AND PERSON_NO = '".$codigo."'";
+			 }
+		$datos = $this->db->datos($sql);
+		return $datos;
+	}
 
 
 

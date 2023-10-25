@@ -1,5 +1,5 @@
-<?php include ('../../cabeceras/header.php');?>
-<script type="text/javascript" src="../../js/reportes.js"></script>
+<?php //include ('../cabeceras/header.php');?>
+<script type="text/javascript" src="../js/reportes.js"></script>
 <script type="text/javascript">
  $( document ).ready(function() {
  		lista_reportes();
@@ -94,4 +94,4 @@
 
 
 
-<?php include ('../../cabeceras/footer.php');?>
+<?php //include ('../cabeceras/footer.php');?>

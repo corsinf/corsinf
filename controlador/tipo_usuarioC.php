@@ -36,7 +36,15 @@ if(isset($_GET['modulos']))
 	}
 	echo json_encode($controlador->lista_modulos($parametros));
 }
-
+if(isset($_GET['modulo_sistema']))
+{ 
+	$parametros = '';
+	if(isset($_POST['parametros']))
+	{
+		$parametros = $_POST['parametros'];
+	}
+	echo json_encode($controlador->modulo_sistema($parametros));
+}
 if(isset($_GET['modulos_tabla']))
 {
 	echo json_encode($controlador->lista_modulos_tabla());
@@ -255,7 +263,17 @@ class tipo_usuarioC
 		}
 		return $html;
 	}
-
+	function modulo_sistema()
+	{
+		$tr ='<option value="" selected>Todos</option>';
+	 
+		$datos= $this->modelo->modulos_sis();
+		foreach ($datos as $key => $value) {
+			
+				$tr.='<option value="'.$value['id_modulos'].'">'.$value['nombre_modulo'].'</option>';				
+		}
+		return $tr;	
+	}
 
 
 
@@ -447,12 +465,14 @@ class tipo_usuarioC
 
 	function guardar_accesos_edi($parametros)
 	{
+		// print_r($parametros);die();
 		$ver = 0;	$edi =0;$eli =0;
 		if($parametros['ver']=='true'){ $ver = 1;}
 		if($parametros['edi']=='true'){ $edi = 1;} 
 		if($parametros['eli']=='true'){ $eli = 1;}
 
 		$dato = $this->modelo->existe_acceso($parametros['pag'],$parametros['perfil']);
+		// print_r($dato);die();
 		if(count($dato)>0)
 		{
 			$where[0]['campo'] = 'id_accesos';
@@ -574,8 +594,9 @@ class tipo_usuarioC
 	function lista_paginas($parametros)
 	{
 		 $query = $parametros['query'];
-		 $modulo = $parametros['modulo'];
-		 $datos = $this->modelo->paginas($query,$modulo);
+		 $modulo = $parametros['modulo_sis'];
+		 $menu = $parametros['modulo'];
+		 $datos = $this->modelo->paginas($query,$modulo,$menu);
 		 $tr = '';
 		 foreach ($datos as $key => $value) {
 		 	$tr.='<tr>

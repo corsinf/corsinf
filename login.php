@@ -124,8 +124,8 @@
 												</div>
 											</div> -->
 											<div class="col-md-12 text-end">	<a href="reset.php">Olvido su password ?</a>
-											<div class="col-md-12 text-end">	<a href="vista/SEGUROS/formulario_prestamos.php">Solicitar Salida de bienes</a>
-											</div>
+											<!-- <div class="col-md-12 text-end">	<a href="vista/SEGUROS/formulario_prestamos.php">Solicitar Salida de bienes</a>
+											</div> -->
 											<div class="col-12">
 												<div class="d-grid">
 													<button type="button" class="btn btn-primary" onclick="consultar_datos()" id="btn_inicio"><i class="bx bxs-lock-open"></i> Iniciar sesión</button>
