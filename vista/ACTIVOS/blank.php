@@ -1,4 +1,3 @@
-<?php include('./header.php'); ?>
 <script type="text/javascript">
  $( document ).ready(function() {
   
@@ -49,4 +48,3 @@
       </div>
     </div>
 
-<?php include('./footer.php'); ?>
