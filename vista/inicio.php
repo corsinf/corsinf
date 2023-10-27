@@ -152,8 +152,13 @@ if ($_GET['acc'] == 'registrar') {
 if ($_GET['acc'] == 'registrar_seccion') {
 	include('ENFERMERIA/cursos/registrar_seccion.php');
 }
+
 if ($_GET['acc'] == 'registrar_grado') {
-	include('ENFERMERIA/cursos/registrar_grado.php');
+	include('ENFERMERIA/cursos/seccion/registrar_grado.php');
+}
+
+if ($_GET['acc'] == 'registrar_grado') {
+	include('ENFERMERIA/cursos/seccion/registrar_grado.php');
 }
 
 if ($_GET['acc'] == 'registrar_paralelo') {

@@ -1,80 +1,75 @@
 <?php
-if(!class_exists('db'))
-{
-	include('../db/db.php');
+if (!class_exists('db_salud')) {
+	include('../db/db_salud.php');
 }
 /**
  * 
  */
 class seccionM
 {
-	private $db;
-	
+	private $db_salud;
+
 	function __construct()
 	{
-		$this->db = new db();
-
+		$this->db_salud = new db_salud();
 	}
 
-	function lista_seccion($id='')
+	function lista_seccion($id = '')
 	{
-		$sql = "SELECT ID_SECCION,CODIGO,DESCRIPCION FROM SECCION WHERE ESTADO='A' ";
-		if($id)
-		{
-			$sql.= ' and ID_SECCION= '.$id;
+		$sql = "SELECT * FROM cat_seccion WHERE estado = 1 ";
+		
+		if ($id) {
+			$sql .= ' and sa_sec_id = ' . $id;
 		}
-		$sql.=" ORDER BY ID_SECCION ";
-		$datos = $this->db->datos($sql);
+
+		$sql .= " ORDER BY ID_SECCION ";
+		$datos = $this->db_salud->datos($sql);
 		return $datos;
 	}
-	function lista_seccion_todo($id='')
+
+	function lista_seccion_todo($id = '')
 	{
-		$sql = "SELECT ID_SECCION,CODIGO,DESCRIPCION,ESTADO FROM SECCION WHERE 1=1 ";
-		if($id)
-		{
-			$sql.= ' and ID_SECCION= '.$id;
+		$sql = "SELECT ID_SECCION, CODIGO, DESCRIPCION, ESTADO FROM seccion WHERE 1 = 1 ";
+		
+		if ($id) {
+			$sql .= ' and ID_SECCION= ' . $id;
 		}
-		$sql.=" ORDER BY ID_SECCION ";
-		$datos = $this->db->datos($sql);
+
+		$sql .= " ORDER BY ID_SECCION ";
+		$datos = $this->db_salud->datos($sql);
 		return $datos;
 	}
 
 	function buscar_seccion($buscar)
 	{
-		$sql = "SELECT ID_SECCION,CODIGO,DESCRIPCION FROM SECCION WHERE ESTADO='A' and DESCRIPCION +' '+CODIGO LIKE '%".$buscar."%'";
-		$datos = $this->db->datos($sql);
+		$sql = "SELECT ID_SECCION, CODIGO, DESCRIPCION FROM seccion WHERE ESTADO='A' and DESCRIPCION + ' ' + CODIGO LIKE '%" . $buscar . "%'";
+		$datos = $this->db_salud->datos($sql);
 		return $datos;
 	}
 
 	function buscar_seccion_CODIGO($buscar)
 	{
-		$sql = "SELECT ID_SECCION,CODIGO,DESCRIPCION FROM SECCION WHERE CODIGO = '".$buscar."'";
-		$datos = $this->db->datos($sql);
+		$sql = "SELECT ID_SECCION,CODIGO,DESCRIPCION FROM seccion WHERE CODIGO = '" . $buscar . "'";
+		$datos = $this->db_salud->datos($sql);
 		return $datos;
 	}
 
 	function insertar($datos)
 	{
-		 $rest = $this->db->inserts('SECCION',$datos);
-	   
+		$rest = $this->db_salud->inserts('seccion', $datos);
 		return $rest;
 	}
-	function editar($datos,$where)
+
+	function editar($datos, $where)
 	{
-		
-	    $rest = $this->db->update('SECCION',$datos,$where);
+		$rest = $this->db_salud->update('seccion', $datos, $where);
 		return $rest;
 	}
+
 	function eliminar($datos)
 	{
-
-		$sql = "UPDATE SECCION SET ESTADO='I' WHERE ".$datos[0]['campo']."='".$datos[0]['dato']."';";
-		$datos = $this->db->sql_string($sql);
+		$sql = "UPDATE seccion SET ESTADO='I' WHERE " . $datos[0]['campo'] . "='" . $datos[0]['dato'] . "';";
+		$datos = $this->db_salud->sql_string($sql);
 		return $datos;
-
-	    //$rest = $this->db->delete('SECCION',$datos);
-		//return $rest;
 	}
 }
-
-?>
