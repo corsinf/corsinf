@@ -1,4 +1,8 @@
-<?php include('../../../../cabeceras/header.php');
+<?php //include('../../../../cabeceras/header.php');
+
+$dominio = $_SERVER['SERVER_NAME'];
+$url_general = 'http://'. $dominio . '/corsinf';
+
 $id = '';
 
 if (isset($_GET['id'])) {
@@ -27,7 +31,7 @@ if (isset($_GET['id'])) {
       data: {
         id: id
       },
-      url: 'http://localhost/corsinf_local/controlador/seccionC.php?lista=true',
+      url: '<?= $url_general ?>/controlador/seccionC.php?lista=true',
       type: 'post',
       dataType: 'json',
       /*beforeSend: function () {   
@@ -179,7 +183,7 @@ if (isset($_GET['id'])) {
               <h5 class="mb-0 text-primary">Registrar Sección</h5>
               <div class="row m-2">
                 <div class="col-sm-12">
-                  <a href="http://<?php echo $_SERVER['SERVER_NAME']; ?>/corsinf_local/vista/inicio.php?mod=7&acc=seccion" class="btn btn-outline-dark btn-sm"><i class="bx bx-arrow-back"></i> Regresar</a>
+                  <a href="<?= $url_general ?>/vista/inicio.php?mod=7&acc=seccion" class="btn btn-outline-dark btn-sm"><i class="bx bx-arrow-back"></i> Regresar</a>
                 </div>
               </div>
             </div>
@@ -212,4 +216,4 @@ if (isset($_GET['id'])) {
 <!--app JS-->
 <!-- <script src="assets/js/app.js"></script> -->
 
-<?php include('../../../../cabeceras/footer.php'); ?>
+<?php //include('../../../../cabeceras/footer.php'); ?>

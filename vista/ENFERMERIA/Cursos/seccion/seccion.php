@@ -1,3 +1,10 @@
+<?php
+
+$dominio = $_SERVER['SERVER_NAME'];
+$url_general = 'http://'. $dominio . '/corsinf';
+
+?>
+
 <script type="text/javascript">
     
     $(document).ready(function() {
@@ -11,7 +18,7 @@
             data: {
                 id: id
             },
-            url: 'http://localhost/corsinf_local/controlador/seccionC.php?lista=true',
+            url: '<?php echo $url_general ?>/controlador/seccionC.php?lista=true',
             type: 'post',
             dataType: 'json',
 
@@ -22,7 +29,7 @@
                     seccion +=
                         '<tr>' +
                         '<td>' + id_tabla + '</td>' +
-                        '<td><a href="http://<?php echo $_SERVER['SERVER_NAME']; ?>/corsinf_local/vista/enfermeria/cursos/seccion/registrar_seccion.php?id=' + item.sa_sec_id + '"><u>' + item.sa_sec_nombre + '</u></a></td>' +
+                        '<td><a href="<?= $url_general ?>/vista/inicio.php?mod=7&acc=registrar_seccion&id=' + item.sa_sec_id + '"><u>' + item.sa_sec_nombre + '</u></a></td>' +
                         '<td></td>' +
                         '</tr>';
 
@@ -52,7 +59,7 @@
                     genero +=
                         '<tr>' +
                         '<td>' + item.sa_sec_id + '</td>' +
-                        '<td><a href="http://<?php echo $_SERVER['SERVER_NAME']; ?>/corsinf_local/vista/enfermeria/cursos/seccion/registrar_seccion.php?id=' + item.sa_sec_nombre + '"><u>' + item.sa_sec_estado + '</u></a></td>' +
+                        '<td><a href="<?= $url_general ?>/vista/enfermeria/cursos/seccion/registrar_seccion.php?id=' + item.sa_sec_nombre + '"><u>' + item.sa_sec_estado + '</u></a></td>' +
                         '<td> </td>' +
                         '</tr>';
                 });
@@ -76,7 +83,7 @@
 
         <!--breadcrumb-->
         <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
-            <div class="breadcrumb-title pe-3">Enfermería</div>
+            <div class="breadcrumb-title pe-3">Enfermería  </div>
             <?php
             // print_r($_SESSION['INICIO']);die();
 
@@ -110,10 +117,10 @@
 
                             <section class="content">
                                 <div class="container-fluid">
-
+                             
                                     <div class="row">
                                         <div class="col-sm-12" id="btn_nuevo">
-                                            <a href="http://<?php echo $_SERVER['SERVER_NAME']; ?>/corsinf_local/vista/enfermeria/cursos/seccion/registrar_seccion.php" class="btn btn-success btn-sm"><i class="bx bx-plus"></i> Nuevo</a>
+                                            <a href="<?= $url_general ?>/vista/inicio.php?mod=7&acc=registrar_seccion" class="btn btn-success btn-sm"><i class="bx bx-plus"></i> Nuevo</a>
                                             <a href="#" class="btn btn-outline-secondary btn-sm" id="excel_seccion" title="Informe en excel del total de Secciones"><i class="bx bx-file"></i> Total Secciones</a>
                                         </div>
 

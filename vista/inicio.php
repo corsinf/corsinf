@@ -150,11 +150,15 @@ if ($_GET['acc'] == 'registrar') {
 
 //Cursos
 if ($_GET['acc'] == 'registrar_seccion') {
-	include('ENFERMERIA/cursos/registrar_seccion.php');
+	include('ENFERMERIA/cursos/seccion/registrar_seccion.php');
+}
+
+if ($_GET['acc'] == 'seccion') {
+	include('ENFERMERIA/cursos/seccion/seccion.php');
 }
 
 if ($_GET['acc'] == 'registrar_grado') {
-	include('ENFERMERIA/cursos/seccion/registrar_grado.php');
+	include('ENFERMERIA/cursos/grado/registrar_grado.php');
 }
 
 if ($_GET['acc'] == 'registrar_grado') {
