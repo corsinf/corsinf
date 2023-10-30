@@ -19,6 +19,8 @@ if (isset($_GET['eliminar'])) {
     echo json_encode($controlador->eliminar($_POST['id']));
 }
 
+//print_r($controlador->lista_seccion(''));
+
 class seccionC
 {
     private $modelo;

@@ -1,3 +1,152 @@
+<?php include('../../../../cabeceras/header.php');
+$id = '';
+
+if (isset($_GET['id'])) {
+  $id = $_GET['id'];
+}
+
+?>
+
+
+<script type="text/javascript">
+  $(document).ready(function() {
+    var id = '<?php echo $id; ?>';
+    if (id != '') {
+      datos_col(id);
+    }
+
+  });
+
+  //listo
+  function datos_col(id) {
+    $('#titulo').text('Editar Genero');
+    $('#op').text('Editar');
+    var genero = '';
+
+    $.ajax({
+      data: {
+        id: id
+      },
+      url: 'http://localhost/corsinf_local/controlador/seccionC.php?lista=true',
+      type: 'post',
+      dataType: 'json',
+      /*beforeSend: function () {   
+           var spiner = '<div class="text-center"><img src="../../img/gif/proce.gif" width="100" height="100"></div>'     
+         $('#tabla_').html(spiner);
+      },*/
+      success: function(response) {
+        $('#sa_sec_id').val(response[0].sa_sec_id);
+        $('#sa_sec_nombre').val(response[0].sa_sec_nombre);
+        //$('#sa_sec_estado').val(response[0].sa_sec_estado);
+      }
+    });
+  }
+
+
+
+  function editar_insertar() {
+    var codigo = $('#codigo').val();
+    var descri = $('#descripcion').val();
+    var id = $('#id').val();
+
+    var parametros = {
+      'cod': codigo,
+      'des': descri,
+      'id': id,
+    }
+    if (id == '') {
+      if (codigo == '' || descri == '') {
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: 'Asegurese de llenar todo los campos',
+        })
+      } else {
+        insertar(parametros)
+      }
+    } else {
+      if (codigo == '' || descri == '') {
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: 'Asegurese de llenar todo los campos',
+        })
+      } else {
+        insertar(parametros);
+      }
+    }
+  }
+
+  function insertar(parametros) {
+    $.ajax({
+      data: {
+        parametros: parametros
+      },
+      url: '../../controlador/generoC.php?insertar=true',
+      type: 'post',
+      dataType: 'json',
+      /*beforeSend: function () {   
+           var spiner = '<div class="text-center"><img src="../../img/gif/proce.gif" width="100" height="100"></div>'     
+         $('#tabla_').html(spiner);
+      },*/
+      success: function(response) {
+        if (response == 1) {
+          Swal.fire('', 'Operacion realizada con exito.', 'success').then(function() {
+            location.href = 'genero.php';
+          });
+        } else if (response == -2) {
+          Swal.fire('', 'codigo ya regitrado', 'success');
+        }
+
+      }
+    });
+
+  }
+
+  function delete_datos() {
+    var id = '<?php echo $id; ?>';
+    Swal.fire({
+      title: 'Eliminar Registro?',
+      text: "Esta seguro de eliminar este registro?",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Si'
+    }).then((result) => {
+      if (result.value) {
+        eliminar(id);
+      }
+    })
+
+  }
+
+  function eliminar(id) {
+    $.ajax({
+      data: {
+        id: id
+      },
+      url: '../../controlador/generoC.php?eliminar=true',
+      type: 'post',
+      dataType: 'json',
+      /*beforeSend: function () {   
+           var spiner = '<div class="text-center"><img src="../../img/gif/proce.gif" width="100" height="100"></div>'     
+         $('#tabla_').html(spiner);
+      },*/
+      success: function(response) {
+        if (response == 1) {
+          Swal.fire('Eliminado!', 'Registro Eliminado.', 'success').then(function() {
+            location.href = 'genero.php';
+          });
+        }
+
+      }
+    });
+
+  }
+</script>
+
+
 <div class="page-wrapper">
   <div class="page-content">
 
@@ -28,20 +177,27 @@
               <div><i class="bx bxs-user me-1 font-22 text-primary"></i>
               </div>
               <h5 class="mb-0 text-primary">Registrar Sección</h5>
+              <div class="row m-2">
+                <div class="col-sm-12">
+                  <a href="http://<?php echo $_SERVER['SERVER_NAME']; ?>/corsinf_local/vista/inicio.php?mod=7&acc=seccion" class="btn btn-outline-dark btn-sm"><i class="bx bx-arrow-back"></i> Regresar</a>
+                </div>
+              </div>
             </div>
             <hr>
 
             <form action="" method="post">
+              <input type="hidden" id="sa_sec_id" name="sa_sec_id">
 
               <div class="row pt-3">
                 <div class="col-md-12">
                   <label for="" class="form-label">Sección: <label style="color: red;">*</label> </label>
-                  <input type="text" class="form-control" id="" name="">
+                  <input type="text" class="form-control form-control-sm" id="sa_sec_nombre" name="sa_sec_nombre">
                 </div>
               </div>
 
-              <div class="col-12 pt-4">
-                <button type="submit" class="btn btn-primary px-5">Guardar</button>
+              <div class="modal-footer pt-4">
+                <button class="btn btn-primary btn-sm px-4 m-1" onclick="editar_insertar()" type="button"><i class="bx bx-save"></i> Guardar</button>
+                <button class="btn btn-danger btn-sm px-4 m-1" onclick="delete_datos()" type="button"><i class="bx bx-trash"></i> Eliminar</button>
               </div>
 
             </form>
@@ -55,3 +211,5 @@
 
 <!--app JS-->
 <!-- <script src="assets/js/app.js"></script> -->
+
+<?php include('../../../../cabeceras/footer.php'); ?>

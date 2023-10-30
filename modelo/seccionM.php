@@ -16,13 +16,13 @@ class seccionM
 
 	function lista_seccion($id = '')
 	{
-		$sql = "SELECT * FROM cat_seccion WHERE estado = 1 ";
+		$sql = "SELECT sa_sec_id, sa_sec_nombre, sa_sec_estado FROM cat_seccion WHERE sa_sec_estado = 1 ";
 		
 		if ($id) {
 			$sql .= ' and sa_sec_id = ' . $id;
 		}
 
-		$sql .= " ORDER BY ID_SECCION ";
+		$sql .= " ORDER BY sa_sec_id";
 		$datos = $this->db_salud->datos($sql);
 		return $datos;
 	}
