@@ -1,7 +1,7 @@
 <?php //include('../../../../cabeceras/header.php');
 
 $dominio = $_SERVER['SERVER_NAME'];
-$url_general = 'http://'. $dominio . '/corsinf';
+$url_general = 'http://' . $dominio . '/corsinf';
 
 $id = '';
 
@@ -11,10 +11,10 @@ if (isset($_GET['id'])) {
 
 ?>
 
-
 <script type="text/javascript">
   $(document).ready(function() {
     var id = '<?php echo $id; ?>';
+
     if (id != '') {
       datos_col(id);
     }
@@ -23,21 +23,13 @@ if (isset($_GET['id'])) {
 
   //listo
   function datos_col(id) {
-    $('#titulo').text('Editar Genero');
-    $('#op').text('Editar');
-    var genero = '';
-
     $.ajax({
       data: {
         id: id
       },
-      url: '<?= $url_general ?>/controlador/seccionC.php?lista=true',
+      url: '<?= $url_general ?>/controlador/seccionC.php?listar=true',
       type: 'post',
       dataType: 'json',
-      /*beforeSend: function () {   
-           var spiner = '<div class="text-center"><img src="../../img/gif/proce.gif" width="100" height="100"></div>'     
-         $('#tabla_').html(spiner);
-      },*/
       success: function(response) {
         $('#sa_sec_id').val(response[0].sa_sec_id);
         $('#sa_sec_nombre').val(response[0].sa_sec_nombre);
@@ -46,39 +38,42 @@ if (isset($_GET['id'])) {
     });
   }
 
-
-
   function editar_insertar() {
-    var codigo = $('#codigo').val();
-    var descri = $('#descripcion').val();
-    var id = $('#id').val();
+    var sa_sec_id = $('#sa_sec_id').val();
+    var sa_sec_nombre = $('#sa_sec_nombre').val();
 
     var parametros = {
-      'cod': codigo,
-      'des': descri,
-      'id': id,
+      'sa_sec_id': sa_sec_id,
+      'sa_sec_nombre': sa_sec_nombre,
     }
-    if (id == '') {
-      if (codigo == '' || descri == '') {
+
+    if (sa_sec_id == '') {
+      if (sa_sec_nombre == '') {
         Swal.fire({
           icon: 'error',
           title: 'Oops...',
           text: 'Asegurese de llenar todo los campos',
         })
+        //alert('error');
       } else {
         insertar(parametros)
       }
     } else {
-      if (codigo == '' || descri == '') {
+      if (sa_sec_nombre == '') {
         Swal.fire({
           icon: 'error',
           title: 'Oops...',
           text: 'Asegurese de llenar todo los campos',
         })
+        //alert('error');
       } else {
         insertar(parametros);
       }
     }
+
+    /*console.log(parametros);
+    insertar(parametros);*/
+
   }
 
   function insertar(parametros) {
@@ -86,7 +81,7 @@ if (isset($_GET['id'])) {
       data: {
         parametros: parametros
       },
-      url: '../../controlador/generoC.php?insertar=true',
+      url: '<?= $url_general ?>/controlador/seccionC.php?insertar=true',
       type: 'post',
       dataType: 'json',
       /*beforeSend: function () {   
@@ -96,15 +91,14 @@ if (isset($_GET['id'])) {
       success: function(response) {
         if (response == 1) {
           Swal.fire('', 'Operacion realizada con exito.', 'success').then(function() {
-            location.href = 'genero.php';
+              location.href = '<?= $url_general ?>/vista/inicio.php?mod=7&acc=seccion';
           });
+          //location.href = '<?= $url_general ?>/vista/inicio.php?mod=7&acc=seccion';
         } else if (response == -2) {
-          Swal.fire('', 'codigo ya regitrado', 'success');
+          //Swal.fire('', 'codigo ya regitrado', 'success');
         }
-
       }
     });
-
   }
 
   function delete_datos() {
@@ -123,6 +117,8 @@ if (isset($_GET['id'])) {
       }
     })
 
+    //eliminar(id);
+
   }
 
   function eliminar(id) {
@@ -130,23 +126,23 @@ if (isset($_GET['id'])) {
       data: {
         id: id
       },
-      url: '../../controlador/generoC.php?eliminar=true',
+      url: '<?= $url_general ?>/controlador/seccionC.php?eliminar=true',
       type: 'post',
       dataType: 'json',
-      /*beforeSend: function () {   
+      beforeSend: function () {   
            var spiner = '<div class="text-center"><img src="../../img/gif/proce.gif" width="100" height="100"></div>'     
          $('#tabla_').html(spiner);
-      },*/
+      },
       success: function(response) {
         if (response == 1) {
           Swal.fire('Eliminado!', 'Registro Eliminado.', 'success').then(function() {
-            location.href = 'genero.php';
+            location.href = '<?= $url_general ?>/vista/inicio.php?mod=7&acc=seccion';
           });
+          //location.href = '<?= $url_general ?>/vista/inicio.php?mod=7&acc=seccion';
         }
 
       }
     });
-
   }
 </script>
 
@@ -166,7 +162,15 @@ if (isset($_GET['id'])) {
           <ol class="breadcrumb mb-0 p-0">
             <li class="breadcrumb-item"><a href="javascript:;"><i class="bx bx-home-alt"></i></a>
             </li>
-            <li class="breadcrumb-item active" aria-current="page">Registrar Sección</li>
+            <li class="breadcrumb-item active" aria-current="page">
+              <?php
+              if ($id == '') {
+                echo 'Registrar Sección';
+              } else {
+                echo 'Modificar Sección';
+              }
+              ?>
+            </li>
           </ol>
         </nav>
       </div>
@@ -180,7 +184,15 @@ if (isset($_GET['id'])) {
             <div class="card-title d-flex align-items-center">
               <div><i class="bx bxs-user me-1 font-22 text-primary"></i>
               </div>
-              <h5 class="mb-0 text-primary">Registrar Sección</h5>
+              <h5 class="mb-0 text-primary">
+                <?php
+                if ($id == '') {
+                  echo 'Registrar Sección';
+                } else {
+                  echo 'Modificar Sección';
+                }
+                ?>
+              </h5>
               <div class="row m-2">
                 <div class="col-sm-12">
                   <a href="<?= $url_general ?>/vista/inicio.php?mod=7&acc=seccion" class="btn btn-outline-dark btn-sm"><i class="bx bx-arrow-back"></i> Regresar</a>
@@ -200,8 +212,13 @@ if (isset($_GET['id'])) {
               </div>
 
               <div class="modal-footer pt-4">
-                <button class="btn btn-primary btn-sm px-4 m-1" onclick="editar_insertar()" type="button"><i class="bx bx-save"></i> Guardar</button>
-                <button class="btn btn-danger btn-sm px-4 m-1" onclick="delete_datos()" type="button"><i class="bx bx-trash"></i> Eliminar</button>
+
+                <?php if ($id == '') { ?>
+                  <button class="btn btn-primary btn-sm px-4 m-1" onclick="editar_insertar()" type="button"><i class="bx bx-save"></i> Guardar</button>
+                <?php } else { ?>
+                  <button class="btn btn-primary btn-sm px-4 m-1" onclick="editar_insertar()" type="button"><i class="bx bx-save"></i> Guardar</button>
+                  <button class="btn btn-danger btn-sm px-4 m-1" onclick="delete_datos()" type="button"><i class="bx bx-trash"></i> Eliminar</button>
+                <?php } ?>
               </div>
 
             </form>
@@ -216,4 +233,5 @@ if (isset($_GET['id'])) {
 <!--app JS-->
 <!-- <script src="assets/js/app.js"></script> -->
 
-<?php //include('../../../../cabeceras/footer.php'); ?>
+<?php //include('../../../../cabeceras/footer.php'); 
+?>

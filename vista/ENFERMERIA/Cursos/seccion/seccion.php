@@ -13,12 +13,12 @@ $url_general = 'http://'. $dominio . '/corsinf';
 
     function consultar_datos(id = '') {
         var seccion = '';
-        var id_tabla = 1;
+  
         $.ajax({
             data: {
                 id: id
             },
-            url: '<?php echo $url_general ?>/controlador/seccionC.php?lista=true',
+            url: '<?php echo $url_general ?>/controlador/seccionC.php?listar=true',
             type: 'post',
             dataType: 'json',
 
@@ -28,12 +28,10 @@ $url_general = 'http://'. $dominio . '/corsinf';
                     console.log(item);
                     seccion +=
                         '<tr>' +
-                        '<td>' + id_tabla + '</td>' +
+                        '<td>' + 'COD - ' + item.sa_sec_id + '</td>' +
                         '<td><a href="<?= $url_general ?>/vista/inicio.php?mod=7&acc=registrar_seccion&id=' + item.sa_sec_id + '"><u>' + item.sa_sec_nombre + '</u></a></td>' +
                         '<td></td>' +
                         '</tr>';
-
-                        id_tabla++;
                 });
 
                 $('#tbl_datos').html(seccion);
@@ -42,13 +40,13 @@ $url_general = 'http://'. $dominio . '/corsinf';
     }
 
     function buscar(buscar) {
-        var genero = '';
+        var seccion = '';
 
         $.ajax({
             data: {
                 buscar: buscar
             },
-            url: '../../controlador/seccionC.php?buscar=true',
+            url: '<?= $url_general ?>/controlador/seccionC.php?buscar=true',
             type: 'post',
             dataType: 'json',
 
@@ -56,14 +54,14 @@ $url_general = 'http://'. $dominio . '/corsinf';
                 // console.log(response);   
                 $.each(response, function(i, item) {
                     console.log(item);
-                    genero +=
+                    seccion +=
                         '<tr>' +
-                        '<td>' + item.sa_sec_id + '</td>' +
-                        '<td><a href="<?= $url_general ?>/vista/enfermeria/cursos/seccion/registrar_seccion.php?id=' + item.sa_sec_nombre + '"><u>' + item.sa_sec_estado + '</u></a></td>' +
+                        '<td>' + 'COD - ' + item.sa_sec_id + '</td>' +
+                        '<td><a href="<?= $url_general ?>/vista/enfermeria/cursos/seccion/registrar_seccion.php?id=' + item.sa_sec_id + '"><u>' + item.sa_sec_nombre + '</u></a></td>' +
                         '<td> </td>' +
                         '</tr>';
                 });
-                $('#tbl_datos').html(genero);
+                $('#tbl_datos').html(seccion);
             }
         });
     }
@@ -126,8 +124,6 @@ $url_general = 'http://'. $dominio . '/corsinf';
 
                                     </div>
 
-                                    
-
                                     <div>
                                         <div class="col-sm-8 pt-3">
                                             <input type="" name="" id="txt_buscar" onkeyup="buscar($('#txt_buscar').val())" class="form-control form-control-sm" placeholder="Buscar Sección">
@@ -140,7 +136,7 @@ $url_general = 'http://'. $dominio . '/corsinf';
                                             <thead>
                                                 <tr>
                                                     <th>Codigo</th>
-                                                    <th>Descripcion</th>
+                                                    <th>Sección</th>
                                                     <th></th>
                                                 </tr>
                                             </thead>

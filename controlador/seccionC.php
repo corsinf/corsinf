@@ -3,7 +3,7 @@ include('../modelo/seccionM.php');
 
 $controlador = new seccionC();
 
-if (isset($_GET['lista'])) {
+if (isset($_GET['listar'])) {
     echo json_encode($controlador->lista_seccion($_POST['id']));
 }
 
@@ -21,6 +21,17 @@ if (isset($_GET['eliminar'])) {
 
 //print_r($controlador->lista_seccion(''));
 
+/*$parametros = array(
+    'sa_sec_id' => 1,
+    'sa_sec_nombre' => 'hola'
+);
+
+print_r($controlador->insertar_editar($parametros));*/
+
+/*$modelo = new seccionM();
+
+print_r($modelo->buscar_seccion_CODIGO(1));*/
+
 class seccionC
 {
     private $modelo;
@@ -28,7 +39,6 @@ class seccionC
     function __construct()
     {
         $this->modelo = new seccionM();
-   
     }
 
     function lista_seccion($id)
@@ -45,24 +55,23 @@ class seccionC
 
     function insertar_editar($parametros)
     {
-        $datos[0]['campo'] = 'CODIGO';
-        $datos[0]['dato'] = strval($parametros['cod']);
-        $datos[1]['campo'] = 'DESCRIPCION';
-        $datos[1]['dato'] = $parametros['des'];
-        if ($parametros['id'] == '') {
-            if (count($this->modelo->buscar_seccion_CODIGO($datos[0]['dato'])) == 0) {
+        $datos1[0]['campo'] = 'sa_sec_id';
+        $datos1[0]['dato'] = strval($parametros['sa_sec_id']);
+        $datos[1]['campo'] = 'sa_sec_nombre';
+        $datos[1]['dato'] = $parametros['sa_sec_nombre'];
+
+        if ($parametros['sa_sec_id'] == '') {
+            if (count($this->modelo->buscar_seccion_CODIGO($datos1[0]['dato'])) == 0) {
                 $datos = $this->modelo->insertar($datos);
-                $movimiento = 'Insertado nuevo registro en SECCION (' . $parametros['des'] . ')';
             } else {
                 return -2;
             }
         } else {
-            $movimiento = $this->compara_datos($parametros);
-            $where[0]['campo'] = 'ID_seccion';
-            $where[0]['dato'] = $parametros['id'];
+            $where[0]['campo'] = 'sa_sec_id';
+            $where[0]['dato'] = $parametros['sa_sec_id'];
             $datos = $this->modelo->editar($datos, $where);
         }
-
+        //$datos = $this->modelo->insertar($datos);
         return $datos;
     }
 
@@ -84,7 +93,7 @@ class seccionC
 
     function eliminar($id)
     {
-        $datos[0]['campo'] = 'ID_seccion';
+        $datos[0]['campo'] = 'sa_sec_id';
         $datos[0]['dato'] = $id;
         $datos = $this->modelo->eliminar($datos);
         return $datos;

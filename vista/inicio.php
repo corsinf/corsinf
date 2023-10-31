@@ -161,12 +161,16 @@ if ($_GET['acc'] == 'registrar_grado') {
 	include('ENFERMERIA/cursos/grado/registrar_grado.php');
 }
 
-if ($_GET['acc'] == 'registrar_grado') {
-	include('ENFERMERIA/cursos/seccion/registrar_grado.php');
+if ($_GET['acc'] == 'grado') {
+	include('ENFERMERIA/cursos/grado/grado.php');
 }
 
 if ($_GET['acc'] == 'registrar_paralelo') {
-	include('ENFERMERIA/cursos/registrar_paralelo.php');
+	include('ENFERMERIA/cursos/paralelo/registrar_paralelo.php');
+}
+
+if ($_GET['acc'] == 'paralelo') {
+	include('ENFERMERIA/cursos/paralelo/paralelo.php');
 }
 
 
