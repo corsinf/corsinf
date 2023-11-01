@@ -30,11 +30,9 @@ $url_general = 'http://'. $dominio . '/corsinf';
                         '<tr>' +
                         '<td>' + 'COD - ' + item.sa_gra_id + '</td>' +
                         '<td>' + item.sa_sec_nombre + '</td>' +
-                        '<td><a href="<?= $url_general ?>/vista/inicio.php?mod=7&acc=registrar_grado&id=' + item.sa_gra_id + '"><u>' + item.sa_gra_nombre + '</u></a></td>' +
+                        '<td><a href="<?= $url_general ?>/vista/inicio.php?mod=7&acc=registrar_grado&id=' + item.sa_gra_id + '&id_seccion=' + item.sa_sec_id +'"><u>' + item.sa_gra_nombre + '</u></a></td>' +
                         '<td></td>' +
                         '</tr>';
-
-                        id_tabla++;
                 });
 
                 $('#tbl_datos').html(grado);

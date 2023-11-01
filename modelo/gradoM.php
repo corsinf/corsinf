@@ -16,7 +16,7 @@ class gradoM
 
     function lista_grado($id = '')
     {
-        $sql = "SELECT cg.sa_gra_id, cg.sa_gra_nombre, cg.sa_gra_estado, cs.sa_sec_nombre
+        $sql = "SELECT cg.sa_gra_id, cg.sa_gra_nombre, cg.sa_gra_estado, cs.sa_sec_id, cs.sa_sec_nombre
         FROM cat_grado cg
         INNER JOIN cat_seccion cs ON cg.sa_id_seccion = cs.sa_sec_id
         WHERE cg.sa_gra_estado = 1";

@@ -4,9 +4,14 @@ $dominio = $_SERVER['SERVER_NAME'];
 $url_general = 'http://' . $dominio . '/corsinf';
 
 $id = '';
+$id_seccion = '';
 
 if (isset($_GET['id'])) {
   $id = $_GET['id'];
+}
+
+if (isset($_GET['id_seccion'])) {
+  $id_seccion = $_GET['id_seccion'];
 }
 
 ?>
@@ -14,17 +19,18 @@ if (isset($_GET['id'])) {
 <script type="text/javascript">
   $(document).ready(function() {
     var id = '<?php echo $id; ?>';
+    var id_seccion = '<?php echo $id_seccion; ?>';
 
     if (id != '') {
       datos_col(id);
     }
 
-    consultar_datos_seccion(id = '');
+    consultar_datos_seccion(id = '', id_seccion);
 
   });
 
   //Para cargar los datos en el select
-  function consultar_datos_seccion(id = '') {
+  function consultar_datos_seccion(id = '', id_seccion = '') {
     var seccion = '';
     seccion = '<option selected disabled>-- Seleccione --</option>'
     $.ajax({
@@ -39,14 +45,26 @@ if (isset($_GET['id'])) {
         // console.log(response);   
         $.each(response, function(i, item) {
           //console.log(item);
-          seccion +=
-            '<option value="' + item.sa_sec_id + '">' + item.sa_sec_nombre + '</option>'
+
+          if (id_seccion == item.sa_sec_id) {
+            // Marca la opción correspondiente con el atributo 'selected'
+            seccion += '<option value="' + item.sa_sec_id + '" selected>' + item.sa_sec_nombre + '</option>';
+          } else {
+            seccion += '<option value="' + item.sa_sec_id + '">' + item.sa_sec_nombre + '</option>';
+          }
+
         });
 
         $('#sa_id_seccion').html(seccion);
+
+        // Marca la opción correspondiente si el ID coincide
+
       }
     });
   }
+
+
+
 
   function datos_col(id) {
     $.ajax({
@@ -68,7 +86,7 @@ if (isset($_GET['id'])) {
     var sa_gra_id = $('#sa_gra_id').val();
     var sa_gra_nombre = $('#sa_gra_nombre').val();
     var sa_id_seccion = $('#sa_id_seccion').val();
-    
+
     var parametros = {
       'sa_gra_id': sa_gra_id,
       'sa_gra_nombre': sa_gra_nombre,
@@ -76,7 +94,7 @@ if (isset($_GET['id'])) {
     }
 
     if (sa_gra_id == '') {
-      if (sa_gra_nombre == '') {
+      if (sa_gra_nombre == '' || sa_id_seccion == null) {
         Swal.fire({
           icon: 'error',
           title: 'Oops...',
@@ -87,7 +105,7 @@ if (isset($_GET['id'])) {
         insertar(parametros)
       }
     } else {
-      if (sa_gra_nombre == '') {
+      if (sa_gra_nombre == '' || sa_id_seccion == null) {
         Swal.fire({
           icon: 'error',
           title: 'Oops...',
@@ -172,7 +190,6 @@ if (isset($_GET['id'])) {
       }
     });
   }
-
 </script>
 
 
