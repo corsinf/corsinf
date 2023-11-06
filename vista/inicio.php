@@ -144,8 +144,12 @@ if ($_GET['acc'] == 'admision') {
 }
 
 //Estudiantes
-if ($_GET['acc'] == 'registrar') {
-	include('ENFERMERIA/Estudiantes/registrar.php');
+if ($_GET['acc'] == 'estudiantes') {
+	include('ENFERMERIA/Estudiantes/estudiantes.php');
+}
+
+if ($_GET['acc'] == 'registrar_estudiantes') {
+	include('ENFERMERIA/Estudiantes/registrar_estudiantes.php');
 }
 
 //Cursos

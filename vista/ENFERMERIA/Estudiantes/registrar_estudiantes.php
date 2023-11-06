@@ -6,6 +6,7 @@ $url_general = 'http://' . $dominio . '/corsinf';
 $id = '';
 $id_seccion = '';
 $id_grado = '';
+$id_paralelo = '';
 
 if (isset($_GET['id'])) {
   $id = $_GET['id'];
@@ -19,6 +20,11 @@ if (isset($_GET['id_grado'])) {
   $id_grado = $_GET['id_grado'];
 }
 
+if (isset($_GET['id_paralelo'])) {
+  $id_paralelo = $_GET['id_paralelo'];
+}
+
+
 ?>
 
 <script type="text/javascript">
@@ -26,13 +32,14 @@ if (isset($_GET['id_grado'])) {
     var id = '<?php echo $id; ?>';
     var id_seccion = '<?php echo $id_seccion; ?>';
     var id_grado = '<?php echo $id_grado; ?>';
+    var id_paralelo = '<?php echo $id_paralelo; ?>';
 
     if (id != '') {
       datos_col(id);
     }
 
     consultar_datos_seccion(id = '', id_seccion);
-    consultar_datos_seccion_grado(id_grado, id_seccion);
+    //consultar_datos_seccion_grado();
 
   });
 
@@ -72,27 +79,23 @@ if (isset($_GET['id_grado'])) {
   }
 
 
-  function consultar_datos_seccion_grado(id_grado = '', id_seccion = '') {
+  function consultar_datos_seccion_grado() {
     /*///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         Para Buscar el Grado con la Seccion
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////*/
-    if (id_seccion == '') {
-      id_seccion = $("#sa_id_seccion").val();
-    }
 
-    if (id_grado == '') {
-      id_grado = $("#sa_id_grado").val();
-    }
+    var id_grado = $("#sa_id_seccion").val();
+    var id = '';
 
     var grado = '';
     grado = '<option selected disabled>-- Seleccione --</option>'
     $.ajax({
       data: {
-        "id_seccion": id_seccion
+        "id_grado": id_grado
       },
-      url: '<?php echo $url_general ?>/controlador/paraleloC.php?listar_seccion_grado=true',
+      url: '<?php echo $url_general ?>/controlador/estudiantesC.php?listar_seccion_grado=true',
       type: 'post',
       dataType: 'json',
 
@@ -102,7 +105,6 @@ if (isset($_GET['id_grado'])) {
           //console.log(item);
 
           if (id_grado == item.sa_gra_id) {
-            //alert(id_grado)
             // Marca la opción correspondiente con el atributo 'selected'
             grado += '<option value="' + item.sa_gra_id + '" selected>' + item.sa_gra_nombre + '</option>';
           } else {
@@ -115,6 +117,9 @@ if (isset($_GET['id_grado'])) {
 
       }
     });
+
+    //alert(id_grado)
+
   }
 
   function datos_col(id) {
@@ -122,13 +127,35 @@ if (isset($_GET['id_grado'])) {
       data: {
         id: id
       },
-      url: '<?= $url_general ?>/controlador/paraleloC.php?listar=true',
+      url: '<?= $url_general ?>/controlador/estudiantesC.php?listar=true',
       type: 'post',
       dataType: 'json',
       success: function(response) {
-        $('#sa_par_id').val(response[0].sa_par_id);
-        $('#sa_par_nombre').val(response[0].sa_par_nombre);
-        //$('#sa_par_estado').val(response[0].sa_par_estado);
+
+        $('#sa_est_id').val(response[0].sa_est_id);
+        $('#sa_est_primer_apellido').val(response[0].sa_est_primer_apellido);
+        $('#sa_est_segundo_apellido').val(response[0].sa_est_segundo_apellido);
+        $('#sa_est_primer_nombre').val(response[0].sa_est_primer_nombre);
+        $('#sa_est_segundo_nombre').val(response[0].sa_est_segundo_nombre);
+
+        $('#sa_est_cedula').val(response[0].sa_est_cedula);
+        $('#sa_est_sexo').val(response[0].sa_est_sexo); //p
+        $('#sa_est_fecha_nacimiento').val(response[0].sa_est_fecha_nacimiento);
+        $('#sa_est_correo').val(response[0].sa_est_correo);
+        $('#sa_id_representante').val(response[0].sa_id_representante);
+
+        $('#sa_id_seccion').val(response[0].sa_id_seccion);
+        $('#sa_id_grado').val(response[0].sa_id_grado);
+        $('#sa_id_paralelo').val(response[0].sa_id_paralelo);
+
+
+        $('#sa_sec_id').val(response[0].cs.sa_sec_id);
+        $('#sa_sec_nombre').val(response[0].cs.sa_sec_nombre);
+        $('#sa_gra_id').val(response[0].cg.sa_gra_id);
+        $('#sa_gra_nombre').val(response[0].cg.sa_gra_nombre);
+        $('#sa_par_id').val(response[0].pr.sa_par_id);
+        $('#sa_par_nombre').val(response[0].pr.sa_par_nombre);
+
       }
     });
   }
@@ -150,23 +177,23 @@ if (isset($_GET['id_grado'])) {
 
     if (sa_par_id == '') {
       if (sa_par_nombre == '' || sa_id_seccion == null || sa_id_grado == null) {
-        Swal.fire({
+        /*Swal.fire({
           icon: 'error',
           title: 'Oops...',
           text: 'Asegurese de llenar todo los campos',
-        })
-        //alert('error');
+        })*/
+        alert('error');
       } else {
         insertar(parametros)
       }
     } else {
       if (sa_par_nombre == '' || sa_id_seccion == null || sa_id_grado == null) {
-        Swal.fire({
+        /*Swal.fire({
           icon: 'error',
           title: 'Oops...',
           text: 'Asegurese de llenar todo los campos',
-        })
-        //alert('error');
+        })*/
+        alert('error');
       } else {
         insertar(parametros);
       }
@@ -182,7 +209,7 @@ if (isset($_GET['id_grado'])) {
       data: {
         parametros: parametros
       },
-      url: '<?= $url_general ?>/controlador/paraleloC.php?insertar=true',
+      url: '<?= $url_general ?>/controlador/estudiantesC.php?insertar=true',
       type: 'post',
       dataType: 'json',
       /*beforeSend: function () {   
@@ -191,10 +218,10 @@ if (isset($_GET['id_grado'])) {
       },*/
       success: function(response) {
         if (response == 1) {
-          Swal.fire('', 'Operacion realizada con exito.', 'success').then(function() {
-            location.href = '<?= $url_general ?>/vista/inicio.php?mod=7&acc=paralelo';
-          });
-          //location.href = '<?= $url_general ?>/vista/inicio.php?mod=7&acc=paralelo';
+          /*wal.fire('', 'Operacion realizada con exito.', 'success').then(function() {
+            location.href = '<?= $url_general ?>/vista/inicio.php?mod=7&acc=estudiantes';
+          });*/
+          location.href = '<?= $url_general ?>/vista/inicio.php?mod=7&acc=estudiantes';
         } else if (response == -2) {
           //Swal.fire('', 'codigo ya regitrado', 'success');
         }
@@ -204,7 +231,7 @@ if (isset($_GET['id_grado'])) {
 
   function delete_datos() {
     var id = '<?php echo $id; ?>';
-    Swal.fire({
+    /*Swal.fire({
       title: 'Eliminar Registro?',
       text: "Esta seguro de eliminar este registro?",
       icon: 'warning',
@@ -216,9 +243,9 @@ if (isset($_GET['id_grado'])) {
       if (result.value) {
         eliminar(id);
       }
-    })
+    })*/
 
-    //eliminar(id);
+    eliminar(id);
 
   }
 
@@ -227,7 +254,7 @@ if (isset($_GET['id_grado'])) {
       data: {
         id: id
       },
-      url: '<?= $url_general ?>/controlador/paraleloC.php?eliminar=true',
+      url: '<?= $url_general ?>/controlador/estudiantesC.php?eliminar=true',
       type: 'post',
       dataType: 'json',
       beforeSend: function() {
@@ -236,10 +263,10 @@ if (isset($_GET['id_grado'])) {
       },
       success: function(response) {
         if (response == 1) {
-          Swal.fire('Eliminado!', 'Registro Eliminado.', 'success').then(function() {
-            location.href = '<?= $url_general ?>/vista/inicio.php?mod=7&acc=paralelo';
-          });
-          //location.href = '<?= $url_general ?>/vista/inicio.php?mod=7&acc=paralelo';
+          /*Swal.fire('Eliminado!', 'Registro Eliminado.', 'success').then(function() {
+            location.href = '<?= $url_general ?>/vista/inicio.php?mod=7&acc=estudiantes';
+          });*/
+          location.href = '<?= $url_general ?>/vista/inicio.php?mod=7&acc=estudiantes';
         }
 
       }
@@ -266,9 +293,9 @@ if (isset($_GET['id_grado'])) {
             <li class="breadcrumb-item active" aria-current="page">
               <?php
               if ($id == '') {
-                echo 'Registrar Paralelo';
+                echo 'Registrar Estudiantes';
               } else {
-                echo 'Modificar Paralelo';
+                echo 'Modificar Estudiantes';
               }
               ?>
             </li>
@@ -288,15 +315,15 @@ if (isset($_GET['id_grado'])) {
               <h5 class="mb-0 text-primary">
                 <?php
                 if ($id == '') {
-                  echo 'Registrar Paralelo';
+                  echo 'Registrar Estudiantes';
                 } else {
-                  echo 'Modificar Paralelo';
+                  echo 'Modificar Estudiantes';
                 }
                 ?>
               </h5>
               <div class="row m-2">
                 <div class="col-sm-12">
-                  <a href="<?= $url_general ?>/vista/inicio.php?mod=7&acc=paralelo" class="btn btn-outline-dark btn-sm"><i class="bx bx-arrow-back"></i> Regresar</a>
+                  <a href="<?= $url_general ?>/vista/inicio.php?mod=7&acc=estudiantes" class="btn btn-outline-dark btn-sm"><i class="bx bx-arrow-back"></i> Regresar</a>
                 </div>
               </div>
             </div>
@@ -304,7 +331,54 @@ if (isset($_GET['id_grado'])) {
 
             <form action="" method="post">
 
-              <input type="hidden" id="sa_par_id" name="sa_par_id">
+              <input type="hidden" id="sa_est_id" name="sa_est_id">
+
+              <div class="row pt-3">
+                <div class="col-md-3">
+                  <label for="" class="form-label">Primer Apellido: <label style="color: red;">*</label> </label>
+                  <input type="text" class="form-control" id="sa_est_primer_apellido" name="sa_est_primer_apellido">
+                </div>
+                <div class="col-md-3">
+                  <label for="" class="form-label">Segundo Apellido: <label style="color: red;">*</label> </label>
+                  <input type="text" class="form-control" id="sa_est_segundo_apellido" name="sa_est_segundo_apellido">
+                </div>
+                <div class="col-md-3">
+                  <label for="" class="form-label">Primer Nombre: <label style="color: red;">*</label> </label>
+                  <input type="text" class="form-control" id="sa_est_primer_nombre" name="sa_est_primer_nombre">
+                </div>
+                <div class="col-md-3">
+                  <label for="" class="form-label">Segundo Nombre: <label style="color: red;">*</label> </label>
+                  <input type="text" class="form-control" id="sa_est_segundo_nombre" name="sa_est_segundo_nombre">
+                </div>
+              </div>
+
+              <div class="row pt-3">
+                <div class="col-md-3">
+                  <label for="" class="form-label">Cédula de Identidad <label style="color: red;">*</label> </label>
+                  <input type="text" class="form-control" id="sa_est_cedula" name="sa_est_cedula">
+                </div>
+
+                <div class="col-md-3">
+                  <label for="" class="form-label">Sexo: <label style="color: red;">*</label> </label>
+                  <select class="form-select" id="" name="">
+                    <option selected>-- Seleccione --</option>
+                    <option value="">Femenino</option>
+                    <option value="">Masculino</option>
+                  </select>
+                </div>
+
+                <div class="col-md-3">
+                  <label for="" class="form-label">Fecha de Nacimiento: <label style="color: red;">*</label> </label>
+                  <input type="date" class="form-control" id="sa_est_fecha_nacimiento" name="sa_est_fecha_nacimiento">
+                </div>
+
+                <div class="col-md-3">
+                  <label for="" class="form-label">Edad: <label style="color: red;">*</label> </label>
+                  <input type="text" class="form-control" id="" name="">
+                </div>
+
+              </div>
+
 
               <div class="row pt-3">
 

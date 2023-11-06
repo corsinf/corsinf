@@ -82,4 +82,38 @@ class paraleloM
         $datos = $this->db_salud->sql_string($sql);
         return $datos;
     }
+
+    /*/////////////////////////////////////////////////////////////////////
+
+    Para consultar en estudiantes y en cursos
+
+    /////////////////////////////////////////////////////////////////////*/
+
+
+    function buscar_seccion_grado($buscar)
+    {
+        // Asumo que $buscar contiene el valor que deseas buscar en cs.sa_sec_id
+        $sql = "SELECT cg.sa_gra_id, cg.sa_gra_nombre, cg.sa_gra_estado, cs.sa_sec_id, cs.sa_sec_nombre
+                FROM cat_grado cg
+                INNER JOIN cat_seccion cs ON cg.sa_id_seccion = cs.sa_sec_id
+                WHERE cg.sa_gra_estado = 1
+                AND cs.sa_sec_id = " . $buscar;
+
+        $datos = $this->db_salud->datos($sql);
+        return $datos;
+    }
+
+    function buscar_grado_paralelo($buscar)
+    {
+
+        $sql = "SELECT cp.sa_par_id, cp.sa_par_nombre, cp.sa_par_estado, cs.sa_sec_id, cs.sa_sec_nombre, cg.sa_gra_id, cg.sa_gra_nombre
+                FROM cat_paralelo cp
+                INNER JOIN cat_seccion cs ON cp.sa_id_seccion = cs.sa_sec_id
+                INNER JOIN cat_grado cg ON cp.sa_id_grado = cg.sa_gra_id
+                WHERE cp.sa_par_estado = 1
+                AND cg.sa_gra_id = " . $buscar;
+
+        $datos = $this->db_salud->datos($sql);
+        return $datos;
+    }
 }

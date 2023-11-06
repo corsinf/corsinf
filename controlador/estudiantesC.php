@@ -1,14 +1,14 @@
 <?php
-include('../modelo/paraleloM.php');
+include('../modelo/estudiantesM.php');
 
-$controlador = new paraleloC();
+$controlador = new estudiantesC();
 
 if (isset($_GET['listar'])) {
-    echo json_encode($controlador->lista_paralelo($_POST['id']));
+    echo json_encode($controlador->lista_estudiantes($_POST['id']));
 }
 
 if (isset($_GET['buscar'])) {
-    echo json_encode($controlador->buscar_paralelo($_POST['buscar']));
+    echo json_encode($controlador->buscar_estudiantes($_POST['buscar']));
 }
 
 if (isset($_GET['insertar'])) {
@@ -19,34 +19,26 @@ if (isset($_GET['eliminar'])) {
     echo json_encode($controlador->eliminar($_POST['id']));
 }
 
-if (isset($_GET['listar_seccion_grado'])) {
-    echo json_encode($controlador->listar_seccion_grado($_POST['id_seccion']));
-}
+//echo json_encode($controlador->buscar_estudiantes('Ejemplo1'));
 
-if (isset($_GET['listar_grado_paralelo'])) {
-    echo json_encode($controlador->eliminar($_POST['id']));
-}
-
-//echo json_encode($controlador->listar_seccion_grado(15));
-
-class paraleloC
+class estudiantesC
 {
     private $modelo;
 
     function __construct()
     {
-        $this->modelo = new paraleloM();
+        $this->modelo = new estudiantesM();
     }
 
-    function lista_paralelo($id)
+    function lista_estudiantes($id)
     {
-        $datos = $this->modelo->lista_paralelo($id);
+        $datos = $this->modelo->lista_estudiantes($id);
         return $datos;
     }
 
-    function buscar_paralelo($buscar)
+    function buscar_estudiantes($buscar)
     {
-        $datos = $this->modelo->buscar_paralelo($buscar);
+        $datos = $this->modelo->buscar_estudiantes($buscar);
         return $datos;
     }
 
@@ -62,7 +54,7 @@ class paraleloC
         $datos[3]['dato'] = $parametros['sa_id_grado'];
 
         if ($parametros['sa_par_id'] == '') {
-            if (count($this->modelo->buscar_paralelo_CODIGO($datos1[0]['dato'])) == 0) {
+            if (count($this->modelo->buscar_estudiantes_CODIGO($datos1[0]['dato'])) == 0) {
                 $datos = $this->modelo->insertar($datos);
             } else {
                 return -2;
@@ -87,7 +79,7 @@ class paraleloC
     function compara_datos($parametros)
     {
         $text = '';
-        $marca = $this->modelo->lista_paralelo($parametros['id']);
+        $marca = $this->modelo->lista_estudiantes($parametros['id']);
 
         if ($marca[0]['CODIGO'] != $parametros['cod']) {
             $text .= ' Se modifico CODIGO en SECCION de ' . $marca[0]['CODIGO'] . ' a ' . $parametros['cod'];
@@ -99,19 +91,5 @@ class paraleloC
 
         return $text;
     }
-
-
-    /*/////////////////////////////////////////////////////////////////////
-
-    Para consultar en estudiantes y en cursos
-
-    /////////////////////////////////////////////////////////////////////*/
-
-    function listar_seccion_grado($buscar)
-    {
-        $datos = $this->modelo->buscar_seccion_grado($buscar);
-        return $datos;
-    }
-
 
 }
