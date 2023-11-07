@@ -92,7 +92,6 @@ class paraleloM
 
     function buscar_seccion_grado($buscar)
     {
-        // Asumo que $buscar contiene el valor que deseas buscar en cs.sa_sec_id
         $sql = "SELECT cg.sa_gra_id, cg.sa_gra_nombre, cg.sa_gra_estado, cs.sa_sec_id, cs.sa_sec_nombre
                 FROM cat_grado cg
                 INNER JOIN cat_seccion cs ON cg.sa_id_seccion = cs.sa_sec_id
@@ -105,7 +104,6 @@ class paraleloM
 
     function buscar_grado_paralelo($buscar)
     {
-
         $sql = "SELECT cp.sa_par_id, cp.sa_par_nombre, cp.sa_par_estado, cs.sa_sec_id, cs.sa_sec_nombre, cg.sa_gra_id, cg.sa_gra_nombre
                 FROM cat_paralelo cp
                 INNER JOIN cat_seccion cs ON cp.sa_id_seccion = cs.sa_sec_id

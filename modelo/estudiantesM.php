@@ -64,19 +64,6 @@ class estudiantesM
         return $datos;
     }
 
-    function buscar_estudiantes1($buscar)
-    {
-        $sql = "SELECT est.sa_est_id, est.sa_est_nombre, est.sa_est_estado, cs.sa_sec_id, cs.sa_sec_nombre, cg.sa_gra_id, cg.sa_gra_nombre
-        FROM estudiantes est
-        INNER JOIN cat_seccion cs ON cp.sa_id_seccion = cs.sa_sec_id
-        INNER JOIN cat_grado cg ON cp.sa_id_grado = cg.sa_gra_id
-        WHERE est.sa_est_estado = 1 
-        and CONCAT(est.sa_est_nombre, ' ', est.sa_est_id, ' ', cs.sa_sec_nombre, ' ', cg.sa_gra_nombre) LIKE '%" . $buscar . "%'";
-
-        $datos = $this->db_salud->datos($sql);
-        return $datos;
-    }
-
     function buscar_estudiantes($buscar)
     {
         $sql = "SELECT est.sa_est_id, 
@@ -117,7 +104,7 @@ class estudiantesM
 
     function buscar_estudiantes_CODIGO($buscar)
     {
-        $sql = "SELECT sa_est_id, sa_par_nombre, sa_par_estado FROM estudiantes WHERE sa_est_id = '" . $buscar . "'";
+        $sql = "SELECT sa_est_id, sa_est_cedula, sa_est_primer_apellido, sa_est_primer_nombre FROM estudiantes WHERE sa_est_id = '" . $buscar . "'";
         $datos = $this->db_salud->datos($sql);
         return $datos;
     }

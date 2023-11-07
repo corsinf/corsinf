@@ -24,10 +24,10 @@ if (isset($_GET['listar_seccion_grado'])) {
 }
 
 if (isset($_GET['listar_grado_paralelo'])) {
-    echo json_encode($controlador->eliminar($_POST['id']));
+    echo json_encode($controlador->listar_grado_paralelo($_POST['id_grado']));
 }
 
-//echo json_encode($controlador->listar_seccion_grado(15));
+//echo json_encode($controlador->listar_grado_paralelo(5));
 
 class paraleloC
 {
@@ -110,6 +110,12 @@ class paraleloC
     function listar_seccion_grado($buscar)
     {
         $datos = $this->modelo->buscar_seccion_grado($buscar);
+        return $datos;
+    }
+
+    function listar_grado_paralelo($buscar)
+    {
+        $datos = $this->modelo->buscar_grado_paralelo($buscar);
         return $datos;
     }
 
