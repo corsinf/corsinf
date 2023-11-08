@@ -100,7 +100,7 @@ class estudiantesC
 
     function eliminar($id)
     {
-        $datos[0]['campo'] = 'sa_par_id';
+        $datos[0]['campo'] = 'sa_est_id';
         $datos[0]['dato'] = $id;
         $datos = $this->modelo->eliminar($datos);
         return $datos;

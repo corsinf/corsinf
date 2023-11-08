@@ -30,7 +30,7 @@ if (isset($_GET['id_paralelo'])) {
   $(document).ready(function() {
     var id = '<?php echo $id; ?>';
     var id_seccion = '<?php echo $id_seccion; ?>';
-    var id_grado = '<?php echo $id_paralelo; ?>';
+    var id_grado = '<?php echo $id_grado; ?>';
     var id_paralelo = '<?php echo $id_paralelo; ?>';
 
     if (id != '') {
@@ -46,6 +46,7 @@ if (isset($_GET['id_paralelo'])) {
   //Para cargar los datos en el select
   function consultar_datos_seccion(id = '', id_seccion) {
     var seccion = '';
+
     console.log(id_seccion);
     seccion = '<option selected disabled>-- Seleccione --</option>'
     $.ajax({
@@ -75,6 +76,10 @@ if (isset($_GET['id_paralelo'])) {
         // Marca la opción correspondiente si el ID coincide
       }
     });
+
+
+
+
   }
 
   function consultar_datos_seccion_grado(id_grado = '', id_seccion = '') {
@@ -83,8 +88,12 @@ if (isset($_GET['id_paralelo'])) {
         Para Buscar el Grado con la Seccion
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////*/
+    id_sec_varia = ''
+
     if (id_seccion == '') {
       id_seccion = $("#sa_id_seccion").val();
+
+      id_sec_varia = id_seccion;
     }
 
     if (id_grado == '') {
@@ -115,10 +124,15 @@ if (isset($_GET['id_paralelo'])) {
 
         });
 
+        //$('#sa_id_paralelo').html('<option selected disabled>-- Seleccione --</option>');
+
         $('#sa_id_grado').html(grado);
 
       }
     });
+
+
+
   }
 
   function consultar_datos_grado_paralelo(id_grado = '', id_paralelo = '') {
@@ -221,6 +235,10 @@ if (isset($_GET['id_paralelo'])) {
     });
   }
 
+  function edad_normal(fecha_nacimiento) {
+    $('#sa_est_edad').val(edad_fecha_nacimiento(fecha_nacimiento));
+  }
+
   function edad_fecha_nacimiento(fecha_nacimiento) {
     fechaNacimientoJson = fecha_nacimiento;
 
@@ -260,6 +278,22 @@ if (isset($_GET['id_paralelo'])) {
 
   }
 
+  function validar_email(sa_est_correo) {
+
+    var email = sa_est_correo;
+
+    // Define expresion regular
+    var validad_email = /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
+
+    if (validad_email.test(email)) {
+      //alert('Email valido');
+      return true;
+    } else {
+      //alert('Email no valido');
+      return false;
+    }
+  }
+
   function editar_insertar() {
 
     var sa_est_id = $('#sa_est_id').val();
@@ -292,7 +326,7 @@ if (isset($_GET['id_paralelo'])) {
       'sa_id_representante': sa_id_representante,
     };
 
-    
+    //alert(validar_email(sa_est_correo));
 
     if (sa_est_id == '') {
       if (
@@ -306,16 +340,16 @@ if (isset($_GET['id_paralelo'])) {
         sa_id_seccion == null ||
         sa_id_grado == null ||
         sa_id_paralelo == null ||
-        sa_est_correo === '' ||
+        validar_email(sa_est_correo) == false ||
         sa_id_representante == null
       ) {
-        /*Swal.fire({
+        Swal.fire({
           icon: 'error',
           title: 'Oops...',
           text: 'Asegurese de llenar todo los campos',
-        })*/
-        alert('error');
-        console.log(parametros);
+        })
+        //alert('error');
+        //console.log(parametros);
 
       } else {
         console.log(parametros);
@@ -333,15 +367,15 @@ if (isset($_GET['id_paralelo'])) {
         sa_id_seccion == null ||
         sa_id_grado == null ||
         sa_id_paralelo == null ||
-        sa_est_correo === '' ||
+        validar_email(sa_est_correo) == false ||
         sa_id_representante == null
       ) {
-        /*Swal.fire({
+        Swal.fire({
           icon: 'error',
           title: 'Oops...',
           text: 'Asegurese de llenar todo los campos',
-        })*/
-        alert('error');
+        })
+        //alert('error');
       } else {
         console.log(parametros);
         insertar(parametros);
@@ -367,23 +401,23 @@ if (isset($_GET['id_paralelo'])) {
       },*/
       success: function(response) {
         if (response == 1) {
-          /*wal.fire('', 'Operacion realizada con exito.', 'success').then(function() {
+          Swal.fire('', 'Operacion realizada con exito.', 'success').then(function() {
             location.href = '<?= $url_general ?>/vista/inicio.php?mod=7&acc=estudiantes';
-          });*/
-          location.href = '<?= $url_general ?>/vista/inicio.php?mod=7&acc=estudiantes';
+          });
+          //location.href = '<?= $url_general ?>/vista/inicio.php?mod=7&acc=estudiantes';
         } else if (response == -2) {
-          //Swal.fire('', 'codigo ya regitrado', 'success');
-          alert('registrado') 
+          Swal.fire('', 'codigo ya regitrado', 'success');
+          //alert('registrado')
         }
-        
-        console.log(response);
+
+        //console.log(response);
       }
     });
   }
 
   function delete_datos() {
     var id = '<?php echo $id; ?>';
-    /*Swal.fire({
+    Swal.fire({
       title: 'Eliminar Registro?',
       text: "Esta seguro de eliminar este registro?",
       icon: 'warning',
@@ -395,9 +429,9 @@ if (isset($_GET['id_paralelo'])) {
       if (result.value) {
         eliminar(id);
       }
-    })*/
+    })
 
-    eliminar(id);
+    //eliminar(id);
 
   }
 
@@ -409,16 +443,16 @@ if (isset($_GET['id_paralelo'])) {
       url: '<?= $url_general ?>/controlador/estudiantesC.php?eliminar=true',
       type: 'post',
       dataType: 'json',
-      beforeSend: function() {
+      /*beforeSend: function() {
         var spiner = '<div class="text-center"><img src="../../img/gif/proce.gif" width="100" height="100"></div>'
         $('#tabla_').html(spiner);
-      },
+      },*/
       success: function(response) {
         if (response == 1) {
-          /*Swal.fire('Eliminado!', 'Registro Eliminado.', 'success').then(function() {
+          Swal.fire('Eliminado!', 'Registro Eliminado.', 'success').then(function() {
             location.href = '<?= $url_general ?>/vista/inicio.php?mod=7&acc=estudiantes';
-          });*/
-          location.href = '<?= $url_general ?>/vista/inicio.php?mod=7&acc=estudiantes';
+          });
+          //location.href = '<?= $url_general ?>/vista/inicio.php?mod=7&acc=estudiantes';
         }
 
       }
@@ -484,7 +518,7 @@ if (isset($_GET['id_paralelo'])) {
             <form action="" method="post">
 
               <input type="hidden" id="sa_est_id" name="sa_est_id">
-              <input type="hidden" id="sa_sec_id" name="sa_sec_id" value="hola">
+              <input type="hidden" id="sa_sec_id" name="sa_sec_id">
               <input type="hidden" id="sa_gra_id" name="sa_gra_id">
               <input type="hidden" id="sa_par_id" name="sa_par_id">
 
@@ -510,7 +544,7 @@ if (isset($_GET['id_paralelo'])) {
               <div class="row pt-3">
                 <div class="col-md-3">
                   <label for="" class="form-label">Cédula de Identidad <label style="color: red;">*</label> </label>
-                  <input type="text" class="form-control" id="sa_est_cedula" name="sa_est_cedula">
+                  <input type="text" class="form-control" id="sa_est_cedula" name="sa_est_cedula" maxlength="10" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
                 </div>
 
                 <div class="col-md-3">
@@ -524,7 +558,7 @@ if (isset($_GET['id_paralelo'])) {
 
                 <div class="col-md-3">
                   <label for="" class="form-label">Fecha de Nacimiento: <label style="color: red;">*</label> </label>
-                  <input type="date" class="form-control" id="sa_est_fecha_nacimiento" name="sa_est_fecha_nacimiento">
+                  <input type="date" class="form-control" id="sa_est_fecha_nacimiento" name="sa_est_fecha_nacimiento" onchange="edad_normal(this.value);">
                 </div>
 
                 <div class="col-md-3">
@@ -537,7 +571,7 @@ if (isset($_GET['id_paralelo'])) {
               <div class="row pt-3">
                 <div class="col-md-12">
                   <label for="" class="form-label">Correo <label style="color: red;">*</label> </label>
-                  <input type="text" class="form-control" id="sa_est_correo" name="sa_est_correo">
+                  <input type="email" class="form-control" id="sa_est_correo" name="sa_est_correo">
                 </div>
               </div>
 
@@ -581,7 +615,6 @@ if (isset($_GET['id_paralelo'])) {
                 </div>
               </div>
 
-
               <div class="modal-footer pt-4">
 
                 <?php if ($id == '') { ?>
@@ -592,7 +625,6 @@ if (isset($_GET['id_paralelo'])) {
                 <?php } ?>
 
               </div>
-
 
             </form>
           </div>

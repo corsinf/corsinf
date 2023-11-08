@@ -11,12 +11,12 @@ $url_general = 'http://' . $dominio . '/corsinf';
     });
 
     function consultar_datos(id = '') {
-        var estudiantes = '';
+        var representantes = '';
         $.ajax({
             data: {
                 id: id
             },
-            url: '<?php echo $url_general ?>/controlador/estudiantesC.php?listar=true',
+            url: '<?php echo $url_general ?>/controlador/representantesC.php?listar=true',
             type: 'post',
             dataType: 'json',
 
@@ -25,16 +25,18 @@ $url_general = 'http://' . $dominio . '/corsinf';
                 $.each(response, function(i, item) {
                     console.log(item);
 
-                    estudiantes +=
+                    representantes +=
                         '<tr>' +
-                        '<td>' + item.sa_est_cedula + '</td>' +
-                        '<td><a href="<?= $url_general ?>/vista/inicio.php?mod=7&acc=registrar_estudiantes&id=' + item.sa_est_id + '&id_seccion=' + item.sa_id_seccion + '&id_grado=' + item.sa_id_grado + '&id_paralelo=' + item.sa_id_paralelo + '"><u>' + item.sa_est_primer_apellido + ' ' + item.sa_est_segundo_apellido + ' ' + item.sa_est_primer_nombre + ' ' + item.sa_est_segundo_nombre + '</u></a></td>' +
+                        '<td>' + item.sa_rep_cedula + '</td>' +
+                        '<td><a href="<?= $url_general ?>/vista/inicio.php?mod=7&acc=registrar_representantes&id=' + item.sa_rep_id + '&id_seccion=' + item.sa_id_seccion + '&id_grado=' + item.sa_id_grado + '&id_paralelo=' + item.sa_id_paralelo + '"><u>' + item.sa_rep_primer_apellido + ' ' + item.sa_rep_segundo_apellido + ' ' + item.sa_rep_primer_nombre + ' ' + item.sa_rep_segundo_nombre + '</u></a></td>' +
                         '<td>' + item.sa_sec_nombre + ' / ' + item.sa_gra_nombre + ' / ' + item.sa_par_nombre + '</td>' +
-                        '<td>' + edad_fecha_nacimiento(item.sa_est_fecha_nacimiento.date) + '</td>' +
+                        '<td>' + item.sa_rep_correo + '</td>' +
+                        '<td>' + item.sa_rep_telefono_1 + '</td>' +
+                        '<td>' + edad_fecha_nacimiento(item.sa_rep_fecha_nacimiento.date) + '</td>' +
                         '</tr>';
                 });
 
-                $('#tbl_datos').html(estudiantes);
+                $('#tbl_datos').html(representantes);
             }
         });
     }
@@ -64,13 +66,13 @@ $url_general = 'http://' . $dominio . '/corsinf';
     }
 
     function buscar(buscar) {
-        var estudiantes = '';
+        var representantes = '';
 
         $.ajax({
             data: {
                 buscar: buscar
             },
-            url: '<?= $url_general ?>/controlador/estudiantesC.php?buscar=true',
+            url: '<?= $url_general ?>/controlador/representantesC.php?buscar=true',
             type: 'post',
             dataType: 'json',
 
@@ -79,16 +81,18 @@ $url_general = 'http://' . $dominio . '/corsinf';
                 $.each(response, function(i, item) {
                     console.log(item);
 
-                    estudiantes +=
+                    representantes +=
                         '<tr>' +
-                        '<td>' + item.sa_est_cedula + '</td>' +
-                        '<td><a href="<?= $url_general ?>/vista/inicio.php?mod=7&acc=registrar_estudiantes&id=' + item.sa_est_id + '&id_seccion=' + item.sa_id_seccion + '&id_grado=' + item.sa_id_grado + '&id_paralelo=' + item.sa_id_paralelo + '"><u>' + item.sa_est_primer_apellido + ' ' + item.sa_est_segundo_apellido + ' ' + item.sa_est_primer_nombre + ' ' + item.sa_est_segundo_nombre + '</u></a></td>' +
+                        '<td>' + item.sa_rep_cedula + '</td>' +
+                        '<td><a href="<?= $url_general ?>/vista/inicio.php?mod=7&acc=registrar_representantes&id=' + item.sa_rep_id + '&id_seccion=' + item.sa_id_seccion + '&id_grado=' + item.sa_id_grado + '&id_paralelo=' + item.sa_id_paralelo + '"><u>' + item.sa_rep_primer_apellido + ' ' + item.sa_rep_segundo_apellido + ' ' + item.sa_rep_primer_nombre + ' ' + item.sa_rep_segundo_nombre + '</u></a></td>' +
                         '<td>' + item.sa_sec_nombre + ' / ' + item.sa_gra_nombre + ' / ' + item.sa_par_nombre + '</td>' +
-                        '<td>' + edad_fecha_nacimiento(item.sa_est_fecha_nacimiento.date) + '</td>' +
+                        '<td>' + item.sa_sec_correo + '</td>' +
+                        '<td>' + item.sa_sec_telefono_1 + '</td>' +
+                        '<td>' + edad_fecha_nacimiento(item.sa_rep_fecha_nacimiento.date) + '</td>' +
                         '</tr>';
                 });
 
-                $('#tbl_datos').html(estudiantes);
+                $('#tbl_datos').html(representantes);
             }
 
         });
@@ -101,7 +105,6 @@ $url_general = 'http://' . $dominio . '/corsinf';
         $('#titulo').text('Nueva Sección');
         $('#op').text('Guardar');
     }
-    
 </script>
 
 <div class="page-wrapper">
@@ -119,7 +122,7 @@ $url_general = 'http://' . $dominio . '/corsinf';
                     <ol class="breadcrumb mb-0 p-0">
                         <li class="breadcrumb-item"><a href="javascript:;"><i class="bx bx-home-alt"></i></a>
                         </li>
-                        <li class="breadcrumb-item active" aria-current="page">Estudiantes</li>
+                        <li class="breadcrumb-item active" aria-current="page">Representantes</li>
                     </ol>
                 </nav>
             </div>
@@ -133,7 +136,7 @@ $url_general = 'http://' . $dominio . '/corsinf';
                         <div class="card-title d-flex align-items-center">
                             <div><i class="bx bxs-user me-1 font-22 text-primary"></i>
                             </div>
-                            <h5 class="mb-0 text-primary">Estudiantes</h5>
+                            <h5 class="mb-0 text-primary">Representantes</h5>
                         </div>
                         <hr>
 
@@ -146,15 +149,15 @@ $url_general = 'http://' . $dominio . '/corsinf';
 
                                     <div class="row">
                                         <div class="col-sm-12" id="btn_nuevo">
-                                            <a href="<?= $url_general ?>/vista/inicio.php?mod=7&acc=registrar_estudiantes" class="btn btn-success btn-sm"><i class="bx bx-plus"></i> Nuevo</a>
-                                            <a href="#" class="btn btn-outline-secondary btn-sm" id="excel_estudiantes" title="Informe en excel del total de Estudiantes"><i class="bx bx-file"></i> Total Estudiantes</a>
+                                            <a href="<?= $url_general ?>/vista/inicio.php?mod=7&acc=registrar_representantes" class="btn btn-success btn-sm"><i class="bx bx-plus"></i> Nuevo</a>
+                                            <a href="#" class="btn btn-outline-secondary btn-sm" id="excel_representantes" title="Informe en excel del total de Representantes"><i class="bx bx-file"></i> Total Representantes</a>
                                         </div>
 
                                     </div>
 
                                     <div>
                                         <div class="col-sm-8 pt-3">
-                                            <input type="" name="" id="txt_buscar" onkeyup="buscar($('#txt_buscar').val())" class="form-control form-control-sm" placeholder="Buscar Estudiantes">
+                                            <input type="" name="" id="txt_buscar" onkeyup="buscar($('#txt_buscar').val())" class="form-control form-control-sm" placeholder="Buscar Representantes">
                                         </div>
                                     </div>
                                     <br>
@@ -166,6 +169,8 @@ $url_general = 'http://' . $dominio . '/corsinf';
                                                     <th>Cédula</th>
                                                     <th>Nombre</th>
                                                     <th>Sección/Grado/Paralelo</th>
+                                                    <th>Correo</th>
+                                                    <th>Teléfono</th>
                                                     <th>Edad</th>
                                                 </tr>
                                             </thead>

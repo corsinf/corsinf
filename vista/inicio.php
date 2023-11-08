@@ -177,6 +177,16 @@ if ($_GET['acc'] == 'paralelo') {
 	include('ENFERMERIA/cursos/paralelo/paralelo.php');
 }
 
+//Representantes
+if ($_GET['acc'] == 'registrar_representantes') {
+	include('ENFERMERIA/representantes/registrar_representantes.php');
+}
+
+if ($_GET['acc'] == 'representantes') {
+	include('ENFERMERIA/representantes/representantes.php');
+}
+
+
 
 if ($_GET['acc'] == 'index') {
 	// print_r($_SESSION['INICIO']);die();

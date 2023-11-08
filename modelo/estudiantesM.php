@@ -123,7 +123,7 @@ class estudiantesM
 
     function eliminar($datos)
     {
-        $sql = "UPDATE estudiantes SET sa_par_estado = 0 WHERE " . $datos[0]['campo'] . "='" . $datos[0]['dato'] . "';";
+        $sql = "UPDATE estudiantes SET sa_est_estado = 0 WHERE " . $datos[0]['campo'] . "='" . $datos[0]['dato'] . "';";
         $datos = $this->db_salud->sql_string($sql);
         return $datos;
     }
