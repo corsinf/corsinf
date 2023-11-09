@@ -80,8 +80,14 @@ class representantesC
         $datos[11]['campo'] = 'sa_rep_correo';
         $datos[11]['dato'] = $parametros['sa_rep_correo'];
 
-        $datos[12]['campo'] = 'sa_id_representante';
-        $datos[12]['dato'] = $parametros['sa_id_representante'];
+        $datos[12]['campo'] = 'sa_rep_parentesco';
+        $datos[12]['dato'] = $parametros['sa_rep_parentesco'];
+
+        $datos[13]['campo'] = 'sa_rep_telefono_1';
+        $datos[13]['dato'] = $parametros['sa_rep_telefono_1'];
+
+        $datos[14]['campo'] = 'sa_rep_telefono_2';
+        $datos[14]['dato'] = $parametros['sa_rep_telefono_2'];
 
         if ($parametros['sa_rep_id'] == '') {
             if (count($this->modelo->buscar_representantes_CODIGO($datos1[0]['dato'])) == 0) {

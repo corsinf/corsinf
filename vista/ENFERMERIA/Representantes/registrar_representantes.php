@@ -220,22 +220,52 @@ if (isset($_GET['id_paralelo'])) {
                 $('#sa_rep_edad').val(edad_fecha_nacimiento(response[0].sa_rep_fecha_nacimiento.date));
                 ///////////////////////////////////////////////////////////////////////////////////////////
 
+                //$('#sa_rep_parentesco').val(response[0].sa_rep_parentesco);Padre
 
-                //$('#sa_rep_parentesco').val(response[0].sa_rep_parentesco);
-
-                if (response[0].sa_rep_parentesco === 'parentesco') {
+                if (response[0].sa_rep_parentesco === 'Padre') {
                     selectElement = $('#sa_rep_parentesco');
-                    optionElement = selectElement.find('option[value="P"]');
+                    optionElement = selectElement.find('option[value="Padre"]');
                     if (optionElement.length > 0) {
                         optionElement.prop('selected', true); // Selecciona la opción 'Femenino'
                     }
-                } else if (response[0].sa_rep_parentesco === 'Padre') {
+                } else if (response[0].sa_rep_parentesco === 'Madre') {
                     selectElement = $('#sa_rep_parentesco');
-                    optionElement = selectElement.find('option[value="F"]');
+                    optionElement = selectElement.find('option[value="Madre"]');
+                    if (optionElement.length > 0) {
+                        optionElement.prop('selected', true); // Selecciona la opción 'Masculino'
+                    }
+                } else if (response[0].sa_rep_parentesco === 'Hermano') {
+                    selectElement = $('#sa_rep_parentesco');
+                    optionElement = selectElement.find('option[value="Hermano"]');
+                    if (optionElement.length > 0) {
+                        optionElement.prop('selected', true); // Selecciona la opción 'Masculino'
+                    }
+                } else if (response[0].sa_rep_parentesco === 'Tio') {
+                    selectElement = $('#sa_rep_parentesco');
+                    optionElement = selectElement.find('option[value="Tio"]');
+                    if (optionElement.length > 0) {
+                        optionElement.prop('selected', true); // Selecciona la opción 'Masculino'
+                    }
+                } else if (response[0].sa_rep_parentesco === 'Primo') {
+                    selectElement = $('#sa_rep_parentesco');
+                    optionElement = selectElement.find('option[value="Primo"]');
+                    if (optionElement.length > 0) {
+                        optionElement.prop('selected', true); // Selecciona la opción 'Masculino'
+                    }
+                } else if (response[0].sa_rep_parentesco === 'Abuelo') {
+                    selectElement = $('#sa_rep_parentesco');
+                    optionElement = selectElement.find('option[value="Abuelo"]');
+                    if (optionElement.length > 0) {
+                        optionElement.prop('selected', true); // Selecciona la opción 'Masculino'
+                    }
+                } else if (response[0].sa_rep_parentesco === 'Otro') {
+                    selectElement = $('#sa_rep_parentesco');
+                    optionElement = selectElement.find('option[value="Abuelo"]');
                     if (optionElement.length > 0) {
                         optionElement.prop('selected', true); // Selecciona la opción 'Masculino'
                     }
                 }
+
                 ///////////////////////////////////////////////////////////////////////////////////////////
 
                 $('#sa_rep_correo').val(response[0].sa_rep_correo);
@@ -314,7 +344,6 @@ if (isset($_GET['id_paralelo'])) {
     }
 
     function editar_insertar() {
-
         var sa_rep_id = $('#sa_rep_id').val();
         var sa_rep_primer_apellido = $('#sa_rep_primer_apellido').val();
         var sa_rep_segundo_apellido = $('#sa_rep_segundo_apellido').val();
@@ -327,7 +356,9 @@ if (isset($_GET['id_paralelo'])) {
         var sa_id_grado = $('#sa_id_grado').val();
         var sa_id_paralelo = $('#sa_id_paralelo').val();
         var sa_rep_correo = $('#sa_rep_correo').val();
-        //var sa_id_representante = $('#sa_id_representante').val();
+        var sa_rep_parentesco = $('#sa_rep_parentesco').val();
+        var sa_rep_telefono_1 = $('#sa_rep_telefono_1').val();
+        var sa_rep_telefono_2 = $('#sa_rep_telefono_2').val();
 
         var parametros = {
             'sa_rep_id': sa_rep_id,
@@ -342,10 +373,10 @@ if (isset($_GET['id_paralelo'])) {
             'sa_id_grado': sa_id_grado,
             'sa_id_paralelo': sa_id_paralelo,
             'sa_rep_correo': sa_rep_correo,
-            //'sa_id_representante': sa_id_representante,
+            'sa_rep_parentesco': sa_rep_parentesco,
+            'sa_rep_telefono_1': sa_rep_telefono_1,
+            'sa_rep_telefono_2': sa_rep_telefono_2,
         };
-
-        //alert(validar_email(sa_rep_correo));
 
         if (sa_rep_id == '') {
             if (
@@ -359,17 +390,16 @@ if (isset($_GET['id_paralelo'])) {
                 sa_id_seccion == null ||
                 sa_id_grado == null ||
                 sa_id_paralelo == null ||
-                validar_email(sa_rep_correo) == false 
-                //sa_id_representante == null
+                validar_email(sa_rep_correo) == false ||
+                sa_rep_parentesco == null ||
+                sa_rep_telefono_1 === '' ||
+                sa_rep_telefono_2 === ''
             ) {
                 Swal.fire({
                     icon: 'error',
                     title: 'Oops...',
                     text: 'Asegurese de llenar todo los campos',
                 })
-                //alert('error');
-                //console.log(parametros);
-
             } else {
                 console.log(parametros);
                 insertar(parametros)
@@ -386,24 +416,21 @@ if (isset($_GET['id_paralelo'])) {
                 sa_id_seccion == null ||
                 sa_id_grado == null ||
                 sa_id_paralelo == null ||
-                validar_email(sa_rep_correo) == false 
-                //sa_id_representante == null
+                validar_email(sa_rep_correo) == false ||
+                sa_rep_parentesco == null ||
+                sa_rep_telefono_1 === '' ||
+                sa_rep_telefono_2 === ''
             ) {
                 Swal.fire({
                     icon: 'error',
                     title: 'Oops...',
                     text: 'Asegurese de llenar todo los campos',
                 })
-                //alert('error');
             } else {
                 console.log(parametros);
                 insertar(parametros);
             }
         }
-
-        /*console.log(parametros);
-        insertar(parametros);*/
-
     }
 
     function insertar(parametros) {
@@ -423,13 +450,9 @@ if (isset($_GET['id_paralelo'])) {
                     Swal.fire('', 'Operacion realizada con exito.', 'success').then(function() {
                         location.href = '<?= $url_general ?>/vista/inicio.php?mod=7&acc=representantes';
                     });
-                    //location.href = '<?= $url_general ?>/vista/inicio.php?mod=7&acc=representantes';
                 } else if (response == -2) {
                     Swal.fire('', 'codigo ya regitrado', 'success');
-                    //alert('registrado')
                 }
-
-                //console.log(response);
             }
         });
     }
@@ -589,28 +612,36 @@ if (isset($_GET['id_paralelo'])) {
 
                             <div class="row pt-3">
                                 <div class="col-md-4">
-                                    <label for="" class="form-label">Parentesco <label style="color: red;">*</label> </label>
+                                    <label for="" class="form-label">Parentesco: <label style="color: red;">*</label> </label>
 
                                     <select class="form-select" id="sa_rep_parentesco" name="sa_rep_parentesco">
                                         <option selected disabled>-- Seleccione --</option>
-                                        <option value="P">Parentesco</option>
-                                        <option value="F">Padre</option>
+                                        <option value="Padre">Padre</option>
+                                        <option value="Madre">Madre</option>
+                                        <option value="Hermano">Hermano/a</option>
+                                        <option value="Tio">Tío/a</option>
+                                        <option value="Primo">Primo/a</option>
+                                        <option value="Abuelo">Abuelo/a</option>
+                                        <option value="Otro">Otro/a</option>
+
                                     </select>
 
                                 </div>
+
                                 <div class="col-md-4">
-                                    <label for="" class="form-label">Teléfono 1 <label style="color: red;">*</label> </label>
+                                    <label for="" class="form-label">Teléfono 1: <label style="color: red;">*</label> </label>
                                     <input type="text" class="form-control" id="sa_rep_telefono_1" name="sa_rep_telefono_1">
                                 </div>
+
                                 <div class="col-md-4">
-                                    <label for="" class="form-label">Teléfono 2 <label style="color: red;">*</label> </label>
+                                    <label for="" class="form-label">Teléfono 2: <label style="color: red;">*</label> </label>
                                     <input type="text" class="form-control" id="sa_rep_telefono_2" name="sa_rep_telefono_2">
                                 </div>
                             </div>
 
                             <div class="row pt-3">
                                 <div class="col-md-12">
-                                    <label for="" class="form-label">Correo <label style="color: red;">*</label> </label>
+                                    <label for="" class="form-label">Correo: <label style="color: red;">*</label> </label>
                                     <input type="email" class="form-control" id="sa_rep_correo" name="sa_rep_correo">
                                 </div>
                             </div>

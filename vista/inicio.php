@@ -152,6 +152,10 @@ if ($_GET['acc'] == 'registrar_estudiantes') {
 	include('ENFERMERIA/Estudiantes/registrar_estudiantes.php');
 }
 
+if ($_GET['acc'] == 'ficha_estudiante') {
+	include('ENFERMERIA/Estudiantes/ficha_estudiante.php');
+}
+
 //Cursos
 if ($_GET['acc'] == 'registrar_seccion') {
 	include('ENFERMERIA/cursos/seccion/registrar_seccion.php');
