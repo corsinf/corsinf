@@ -1,7 +1,7 @@
 <?php
 
 $dominio = $_SERVER['SERVER_NAME'];
-$url_general = 'http://' . $dominio . '/corsinf';
+$url_general = 'http://' . $dominio . '/corsinf_local';
 
 ?>
 
@@ -19,7 +19,7 @@ $url_general = 'http://' . $dominio . '/corsinf';
             url: '<?php echo $url_general ?>/controlador/estudiantesC.php?listar=true',
             type: 'post',
             dataType: 'json',
-
+            //Para el id representante tomar los datos con los de session
             success: function(response) {
                 // console.log(response);   
                 $.each(response, function(i, item) {
@@ -31,7 +31,7 @@ $url_general = 'http://' . $dominio . '/corsinf';
                         '<td><a href="<?= $url_general ?>/vista/inicio.php?mod=7&acc=registrar_estudiantes&id=' + item.sa_est_id + '&id_seccion=' + item.sa_id_seccion + '&id_grado=' + item.sa_id_grado + '&id_paralelo=' + item.sa_id_paralelo + '"><u>' + item.sa_est_primer_apellido + ' ' + item.sa_est_segundo_apellido + ' ' + item.sa_est_primer_nombre + ' ' + item.sa_est_segundo_nombre + '</u></a></td>' +
                         '<td>' + item.sa_sec_nombre + ' / ' + item.sa_gra_nombre + ' / ' + item.sa_par_nombre + '</td>' +
                         '<td>' + edad_fecha_nacimiento(item.sa_est_fecha_nacimiento.date) + '</td>' +
-                        '<td><a  class="btn btn-dark btn-sm" title="Ficha de Estudiante" href="<?= $url_general ?>/vista/inicio.php?mod=7&acc=ficha_estudiante&id_estudiante=' + item.sa_est_id + '&id_seccion=' + item.sa_id_seccion + '">' + '<i class="bx bx-file-blank me-0" ></i>' + '</a></td>' +
+                        '<td><a  class="btn btn-dark btn-sm" title="Ficha de Estudiante" href="<?= $url_general ?>/vista/inicio.php?mod=7&acc=ficha_estudiante&id_estudiante=' + item.sa_est_id + '&id_representante=' + item.sa_id_representante + '">' + '<i class="bx bx-file-blank me-0" ></i>' + '</a></td>' +
                         '</tr>';
                 });
 
@@ -86,6 +86,7 @@ $url_general = 'http://' . $dominio . '/corsinf';
                         '<td><a href="<?= $url_general ?>/vista/inicio.php?mod=7&acc=registrar_estudiantes&id=' + item.sa_est_id + '&id_seccion=' + item.sa_id_seccion + '&id_grado=' + item.sa_id_grado + '&id_paralelo=' + item.sa_id_paralelo + '"><u>' + item.sa_est_primer_apellido + ' ' + item.sa_est_segundo_apellido + ' ' + item.sa_est_primer_nombre + ' ' + item.sa_est_segundo_nombre + '</u></a></td>' +
                         '<td>' + item.sa_sec_nombre + ' / ' + item.sa_gra_nombre + ' / ' + item.sa_par_nombre + '</td>' +
                         '<td>' + edad_fecha_nacimiento(item.sa_est_fecha_nacimiento.date) + '</td>' +
+                        '<td><a  class="btn btn-dark btn-sm" title="Ficha de Estudiante" href="<?= $url_general ?>/vista/inicio.php?mod=7&acc=ficha_estudiante&id_estudiante=' + item.sa_est_id + '&id_representante=' + item.sa_id_representante + '">' + '<i class="bx bx-file-blank me-0" ></i>' + '</a></td>' +
                         '</tr>';
                 });
 
