@@ -19,7 +19,6 @@ if (isset($_GET['id_ficha'])) {
     $id_ficha = $_GET['id_ficha'];
 }
 
-
 ?>
 
 <script type="text/javascript">
@@ -39,6 +38,52 @@ if (isset($_GET['id_ficha'])) {
             datos_col_ficha_estudiante(id_ficha)
         }
 
+        //////////////////////////////////////////////////
+
+        $('input[name=sa_fice_pregunta_1]').change(function() {
+            if ($(this).val() === 'Si') {
+                $('#sa_fice_pregunta_1_obs').show();
+            } else if ($(this).val() === 'No') {
+                $('#sa_fice_pregunta_1_obs').hide();
+                $('#sa_fice_pregunta_1_obs').val('');
+            }
+        });
+
+        $('input[name=sa_fice_pregunta_2]').change(function() {
+            if ($(this).val() === 'Si') {
+                $('#sa_fice_pregunta_2_obs').show();
+            } else if ($(this).val() === 'No') {
+                $('#sa_fice_pregunta_2_obs').hide();
+                $('#sa_fice_pregunta_2_obs').val('');
+            }
+        });
+
+        $('input[name=sa_fice_pregunta_3]').change(function() {
+            if ($(this).val() === 'Si') {
+                $('#sa_fice_pregunta_3_obs').show();
+            } else if ($(this).val() === 'No') {
+                $('#sa_fice_pregunta_3_obs').hide();
+                $('#sa_fice_pregunta_3_obs').val('');
+            }
+        });
+
+        $('input[name=sa_fice_pregunta_4]').change(function() {
+            if ($(this).val() === 'Si') {
+                $('#sa_fice_pregunta_4_obs').show();
+            } else if ($(this).val() === 'No') {
+                $('#sa_fice_pregunta_4_obs').hide();
+                $('#sa_fice_pregunta_4_obs').val('');
+            }
+        });
+
+        $('#sa_fice_est_seguro_medico').change(function() {
+            if ($(this).val() === 'Si') {
+                $('#sa_fice_est_nombre_seguro').show();
+            } else if ($(this).val() === 'No') {
+                $('#sa_fice_est_nombre_seguro').hide();
+                $('#sa_fice_est_nombre_seguro').val('');
+            }
+        });
     });
 
     //Estudiante 
@@ -130,49 +175,49 @@ if (isset($_GET['id_ficha'])) {
 
                 ///////////////////////////////////////////////////////////////////////////////////////////
 
-                //$('#sa_rep_parentesco').val(response[0].sa_rep_parentesco);Padre
+                //$('#sa_rep_parentesco').val(response[0].sa_rep_parentesco);
 
                 if (response[0].sa_rep_parentesco === 'Padre') {
                     selectElement = $('#sa_fice_rep_1_parentesco');
                     optionElement = selectElement.find('option[value="Padre"]');
                     if (optionElement.length > 0) {
-                        optionElement.prop('selected', true); // Selecciona la opción 'Femenino'
+                        optionElement.prop('selected', true);
                     }
                 } else if (response[0].sa_rep_parentesco === 'Madre') {
                     selectElement = $('#sa_fice_rep_1_parentesco');
                     optionElement = selectElement.find('option[value="Madre"]');
                     if (optionElement.length > 0) {
-                        optionElement.prop('selected', true); // Selecciona la opción 'Masculino'
+                        optionElement.prop('selected', true);
                     }
                 } else if (response[0].sa_rep_parentesco === 'Hermano') {
                     selectElement = $('#sa_fice_rep_1_parentesco');
                     optionElement = selectElement.find('option[value="Hermano"]');
                     if (optionElement.length > 0) {
-                        optionElement.prop('selected', true); // Selecciona la opción 'Masculino'
+                        optionElement.prop('selected', true);
                     }
                 } else if (response[0].sa_rep_parentesco === 'Tio') {
                     selectElement = $('#sa_fice_rep_1_parentesco');
                     optionElement = selectElement.find('option[value="Tio"]');
                     if (optionElement.length > 0) {
-                        optionElement.prop('selected', true); // Selecciona la opción 'Masculino'
+                        optionElement.prop('selected', true);
                     }
                 } else if (response[0].sa_rep_parentesco === 'Primo') {
                     selectElement = $('#sa_fice_rep_1_parentesco');
                     optionElement = selectElement.find('option[value="Primo"]');
                     if (optionElement.length > 0) {
-                        optionElement.prop('selected', true); // Selecciona la opción 'Masculino'
+                        optionElement.prop('selected', true);
                     }
                 } else if (response[0].sa_rep_parentesco === 'Abuelo') {
                     selectElement = $('#sa_fice_rep_1_parentesco');
                     optionElement = selectElement.find('option[value="Abuelo"]');
                     if (optionElement.length > 0) {
-                        optionElement.prop('selected', true); // Selecciona la opción 'Masculino'
+                        optionElement.prop('selected', true);
                     }
                 } else if (response[0].sa_rep_parentesco === 'Otro') {
                     selectElement = $('#sa_fice_rep_1_parentesco');
-                    optionElement = selectElement.find('option[value="Abuelo"]');
+                    optionElement = selectElement.find('option[value="Otro"]');
                     if (optionElement.length > 0) {
-                        optionElement.prop('selected', true); // Selecciona la opción 'Masculino'
+                        optionElement.prop('selected', true);
                     }
                 }
 
@@ -201,27 +246,36 @@ if (isset($_GET['id_ficha'])) {
                 //Id de la ficha
                 $('#sa_fice_id').val(response[0].sa_fice_id);
 
-                // Datos del estudiante
+                /*// Datos del estudiante
                 $('#sa_fice_est_id').val(response[0].sa_fice_est_id);
                 $('#sa_fice_est_primer_apellido').val(response[0].sa_fice_est_primer_apellido);
                 $('#sa_fice_est_segundo_apellido').val(response[0].sa_fice_est_segundo_apellido);
                 $('#sa_fice_est_primer_nombre').val(response[0].sa_fice_est_primer_nombre);
                 $('#sa_fice_est_segundo_nombre').val(response[0].sa_fice_est_segundo_nombre);
-                $('#sa_fice_est_fecha_nacimiento').val(fecha_nacimiento_formateada(response[0].sa_fice_est_fecha_nacimiento.date));
+                $('#sa_fice_est_fecha_nacimiento').val(fecha_nacimiento_formateada(response[0].sa_fice_est_fecha_nacimiento.date));*/
+
+                //Probar con todos
                 $('#sa_fice_est_grupo_sangre').val(response[0].sa_fice_est_grupo_sangre);
                 $('#sa_fice_est_direccion_domicilio').val(response[0].sa_fice_est_direccion_domicilio);
                 $('#sa_fice_est_seguro_medico').val(response[0].sa_fice_est_seguro_medico);
                 $('#sa_fice_est_nombre_seguro').val(response[0].sa_fice_est_nombre_seguro);
 
-                // Datos del representante 1
-                $('#sa_fice_rep_1_id').val(response[0].sa_fice_rep_1_id);
-                $('#sa_fice_rep_1_primer_apellido').val(response[0].sa_fice_rep_1_primer_apellido);
-                $('#sa_fice_rep_1_segundo_apellido').val(response[0].sa_fice_rep_1_segundo_apellido);
-                $('#sa_fice_rep_1_primer_nombre').val(response[0].sa_fice_rep_1_primer_nombre);
-                $('#sa_fice_rep_1_segundo_nombre').val(response[0].sa_fice_rep_1_segundo_nombre);
-                $('#sa_fice_rep_1_parentesco').val(response[0].sa_fice_rep_1_parentesco);
-                $('#sa_fice_rep_1_telefono_1').val(response[0].sa_fice_rep_1_telefono_1);
-                $('#sa_fice_rep_1_telefono_2').val(response[0].sa_fice_rep_1_telefono_2);
+                /*if (response[0].sa_fice_est_nombre_seguro === 'Si') {
+                    $('#sa_fice_est_nombre_seguro').show();
+                } else if (response[0].sa_fice_est_nombre_seguro === 'No') {
+                    $('#sa_fice_est_nombre_seguro').hide();
+                    $('#sa_fice_est_nombre_seguro').val('');
+                }*/
+
+                /* // Datos del representante 1
+                 $('#sa_fice_rep_1_id').val(response[0].sa_fice_rep_1_id);
+                 $('#sa_fice_rep_1_primer_apellido').val(response[0].sa_fice_rep_1_primer_apellido);
+                 $('#sa_fice_rep_1_segundo_apellido').val(response[0].sa_fice_rep_1_segundo_apellido);
+                 $('#sa_fice_rep_1_primer_nombre').val(response[0].sa_fice_rep_1_primer_nombre);
+                 $('#sa_fice_rep_1_segundo_nombre').val(response[0].sa_fice_rep_1_segundo_nombre);
+                 $('#sa_fice_rep_1_parentesco').val(response[0].sa_fice_rep_1_parentesco);
+                 $('#sa_fice_rep_1_telefono_1').val(response[0].sa_fice_rep_1_telefono_1);
+                 $('#sa_fice_rep_1_telefono_2').val(response[0].sa_fice_rep_1_telefono_2);*/
 
                 // Datos del representante 2
                 $('#sa_fice_rep_2_id').val(response[0].sa_fice_rep_2_id);
@@ -234,14 +288,18 @@ if (isset($_GET['id_ficha'])) {
                 $('#sa_fice_rep_2_telefono_2').val(response[0].sa_fice_rep_2_telefono_2);
 
                 // Preguntas
-                $('#sa_fice_pregunta_1').val(response[0].sa_fice_pregunta_1);
+                $('input[name=sa_fice_pregunta_1][value=' + response[0].sa_fice_pregunta_1 + ']').prop('checked', true);
                 $('#sa_fice_pregunta_1_obs').val(response[0].sa_fice_pregunta_1_obs);
-                $('#sa_fice_pregunta_2').val(response[0].sa_fice_pregunta_2);
+
+                $('input[name=sa_fice_pregunta_2][value=' + response[0].sa_fice_pregunta_2 + ']').prop('checked', true);
                 $('#sa_fice_pregunta_2_obs').val(response[0].sa_fice_pregunta_2_obs);
-                $('#sa_fice_pregunta_3').val(response[0].sa_fice_pregunta_3);
+
+                $('input[name=sa_fice_pregunta_3][value=' + response[0].sa_fice_pregunta_3 + ']').prop('checked', true);
                 $('#sa_fice_pregunta_3_obs').val(response[0].sa_fice_pregunta_3_obs);
-                $('#sa_fice_pregunta_4').val(response[0].sa_fice_pregunta_4);
+
+                $('input[name=sa_fice_pregunta_4][value=' + response[0].sa_fice_pregunta_4 + ']').prop('checked', true);
                 $('#sa_fice_pregunta_4_obs').val(response[0].sa_fice_pregunta_4_obs);
+
                 $('#sa_fice_pregunta_5_obs').val(response[0].sa_fice_pregunta_5_obs);
 
                 // Otros campos
@@ -254,51 +312,151 @@ if (isset($_GET['id_ficha'])) {
         });
     }
 
-
     function editar_insertar() {
-        var sa_sec_id = $('#sa_sec_id').val();
-        var sa_sec_nombre = $('#sa_sec_nombre').val();
+        var sa_fice_id = $('#sa_fice_id').val();
 
+        // Datos del estudiante
+        var sa_fice_est_id = $('#sa_fice_est_id').val();
+        var sa_fice_est_primer_apellido = $('#sa_fice_est_primer_apellido').val();
+        var sa_fice_est_segundo_apellido = $('#sa_fice_est_segundo_apellido').val();
+        var sa_fice_est_primer_nombre = $('#sa_fice_est_primer_nombre').val();
+        var sa_fice_est_segundo_nombre = $('#sa_fice_est_segundo_nombre').val();
+        var sa_fice_est_fecha_nacimiento = $('#sa_fice_est_fecha_nacimiento').val();
+
+        // Resto de los campos del estudiante
+        var sa_fice_est_grupo_sangre = $('#sa_fice_est_grupo_sangre').val();
+        var sa_fice_est_direccion_domicilio = $('#sa_fice_est_direccion_domicilio').val();
+        var sa_fice_est_seguro_medico = $('#sa_fice_est_seguro_medico').val();
+        var sa_fice_est_nombre_seguro = $('#sa_fice_est_nombre_seguro').val();
+
+        // Datos del representante 1
+        var sa_fice_rep_1_id = $('#sa_fice_rep_1_id').val();
+        var sa_fice_rep_1_primer_apellido = $('#sa_fice_rep_1_primer_apellido').val();
+        var sa_fice_rep_1_segundo_apellido = $('#sa_fice_rep_1_segundo_apellido').val();
+        var sa_fice_rep_1_primer_nombre = $('#sa_fice_rep_1_primer_nombre').val();
+        var sa_fice_rep_1_segundo_nombre = $('#sa_fice_rep_1_segundo_nombre').val();
+        var sa_fice_rep_1_parentesco = $('#sa_fice_rep_1_parentesco').val();
+        var sa_fice_rep_1_telefono_1 = $('#sa_fice_rep_1_telefono_1').val();
+        var sa_fice_rep_1_telefono_2 = $('#sa_fice_rep_1_telefono_2').val();
+
+        // Datos del representante 2
+        var sa_fice_rep_2_primer_apellido = $('#sa_fice_rep_2_primer_apellido').val();
+        var sa_fice_rep_2_segundo_apellido = $('#sa_fice_rep_2_segundo_apellido').val();
+        var sa_fice_rep_2_primer_nombre = $('#sa_fice_rep_2_primer_nombre').val();
+        var sa_fice_rep_2_segundo_nombre = $('#sa_fice_rep_2_segundo_nombre').val();
+        var sa_fice_rep_2_parentesco = $('#sa_fice_rep_2_parentesco').val();
+        var sa_fice_rep_2_telefono_1 = $('#sa_fice_rep_2_telefono_1').val();
+        var sa_fice_rep_2_telefono_2 = $('#sa_fice_rep_2_telefono_2').val();
+
+        // Preguntas
+        var sa_fice_pregunta_1 = $('input[name=sa_fice_pregunta_1]:checked').val();
+        var sa_fice_pregunta_1_obs = $('#sa_fice_pregunta_1_obs').val();
+
+        var sa_fice_pregunta_2 = $('input[name=sa_fice_pregunta_2]:checked').val();
+        var sa_fice_pregunta_2_obs = $('#sa_fice_pregunta_2_obs').val();
+
+        var sa_fice_pregunta_3 = $('input[name=sa_fice_pregunta_3]:checked').val();
+        var sa_fice_pregunta_3_obs = $('#sa_fice_pregunta_3_obs').val();
+
+        var sa_fice_pregunta_4 = $('input[name=sa_fice_pregunta_4]:checked').val();
+        var sa_fice_pregunta_4_obs = $('#sa_fice_pregunta_4_obs').val();
+
+        var sa_fice_pregunta_5_obs = $('#sa_fice_pregunta_5_obs').val();
+
+        // Crear objeto de parámetros
         var parametros = {
-            'sa_sec_id': sa_sec_id,
-            'sa_sec_nombre': sa_sec_nombre,
-        }
+            'sa_fice_id': sa_fice_id,
+            'sa_fice_est_id': sa_fice_est_id,
+            'sa_fice_est_primer_apellido': sa_fice_est_primer_apellido,
+            'sa_fice_est_segundo_apellido': sa_fice_est_segundo_apellido,
+            'sa_fice_est_primer_nombre': sa_fice_est_primer_nombre,
+            'sa_fice_est_segundo_nombre': sa_fice_est_segundo_nombre,
+            'sa_fice_est_fecha_nacimiento': sa_fice_est_fecha_nacimiento,
+            'sa_fice_est_grupo_sangre': sa_fice_est_grupo_sangre,
+            'sa_fice_est_direccion_domicilio': sa_fice_est_direccion_domicilio,
+            'sa_fice_est_seguro_medico': sa_fice_est_seguro_medico,
+            'sa_fice_est_nombre_seguro': sa_fice_est_nombre_seguro,
+            'sa_fice_rep_1_id': sa_fice_rep_1_id,
+            'sa_fice_rep_1_primer_apellido': sa_fice_rep_1_primer_apellido,
+            'sa_fice_rep_1_segundo_apellido': sa_fice_rep_1_segundo_apellido,
+            'sa_fice_rep_1_primer_nombre': sa_fice_rep_1_primer_nombre,
+            'sa_fice_rep_1_segundo_nombre': sa_fice_rep_1_segundo_nombre,
+            'sa_fice_rep_1_parentesco': sa_fice_rep_1_parentesco,
+            'sa_fice_rep_1_telefono_1': sa_fice_rep_1_telefono_1,
+            'sa_fice_rep_1_telefono_2': sa_fice_rep_1_telefono_2,
+            'sa_fice_rep_2_primer_apellido': sa_fice_rep_2_primer_apellido,
+            'sa_fice_rep_2_segundo_apellido': sa_fice_rep_2_segundo_apellido,
+            'sa_fice_rep_2_primer_nombre': sa_fice_rep_2_primer_nombre,
+            'sa_fice_rep_2_segundo_nombre': sa_fice_rep_2_segundo_nombre,
+            'sa_fice_rep_2_parentesco': sa_fice_rep_2_parentesco,
+            'sa_fice_rep_2_telefono_1': sa_fice_rep_2_telefono_1,
+            'sa_fice_rep_2_telefono_2': sa_fice_rep_2_telefono_2,
+            'sa_fice_pregunta_1': sa_fice_pregunta_1,
+            'sa_fice_pregunta_1_obs': sa_fice_pregunta_1_obs,
+            'sa_fice_pregunta_2': sa_fice_pregunta_2,
+            'sa_fice_pregunta_2_obs': sa_fice_pregunta_2_obs,
+            'sa_fice_pregunta_3': sa_fice_pregunta_3,
+            'sa_fice_pregunta_3_obs': sa_fice_pregunta_3_obs,
+            'sa_fice_pregunta_4': sa_fice_pregunta_4,
+            'sa_fice_pregunta_4_obs': sa_fice_pregunta_4_obs,
+            'sa_fice_pregunta_5_obs': sa_fice_pregunta_5_obs,
+        };
 
-        if (sa_sec_id == '') {
-            if (sa_sec_nombre == '') {
-                /*Swal.fire({
-                  icon: 'error',
-                  title: 'Oops...',
-                  text: 'Asegurese de llenar todo los campos',
-                })*/
-                alert('error');
+        if (sa_fice_id == '') {
+            if (
+                sa_fice_est_grupo_sangre == null ||
+                sa_fice_est_seguro_medico == null ||
+                sa_fice_pregunta_1 == null ||
+                sa_fice_pregunta_2 == null ||
+                sa_fice_pregunta_3 == null ||
+                sa_fice_pregunta_4 == null ||
+                sa_fice_est_direccion_domicilio === ''
+            ) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Asegurese de llenar todo los campos',
+                })
+                //alert('error');
             } else {
                 insertar(parametros)
+                //alert('entra');
             }
         } else {
-            if (sa_sec_nombre == '') {
-                /*Swal.fire({
-                  icon: 'error',
-                  title: 'Oops...',
-                  text: 'Asegurese de llenar todo los campos',
-                })*/
-                alert('error');
+            if (
+                sa_fice_est_grupo_sangre == null ||
+                sa_fice_est_seguro_medico == null ||
+                sa_fice_pregunta_1 == null ||
+                sa_fice_pregunta_2 == null ||
+                sa_fice_pregunta_3 == null ||
+                sa_fice_pregunta_4 == null ||
+                sa_fice_est_direccion_domicilio === ''
+            ) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Asegurese de llenar todo los campos',
+                })
+                //alert('error');
             } else {
                 insertar(parametros);
+                //alert('entra');
             }
         }
-
-        /*console.log(parametros);
-        insertar(parametros);*/
-
+        console.log(parametros);
+        //insertar(parametros);
     }
 
     function insertar(parametros) {
+        var id_estudiante = '<?php echo $id_estudiante; ?>';
+        var id_representante = '<?php echo $id_representante; ?>';
+        var id_ficha = '<?php echo $id_ficha; ?>';
+
         $.ajax({
             data: {
                 parametros: parametros
             },
-            url: '<?= $url_general ?>/controlador/seccionC.php?insertar=true',
+            url: '<?= $url_general ?>/controlador/fichas_EstudianteC.php?insertar=true',
             type: 'post',
             dataType: 'json',
             /*beforeSend: function () {   
@@ -307,43 +465,44 @@ if (isset($_GET['id_ficha'])) {
             },*/
             success: function(response) {
                 if (response == 1) {
-                    /*Swal.fire('', 'Operacion realizada con exito.', 'success').then(function() {
-                        location.href = '<?= $url_general ?>/vista/inicio.php?mod=7&acc=seccion';
-                    });*/
-                    location.href = '<?= $url_general ?>/vista/inicio.php?mod=7&acc=seccion';
+                    Swal.fire('', 'Operacion realizada con exito.', 'success').then(function() {
+                        location.href = '<?= $url_general ?>/vista/inicio.php?mod=7&acc=ficha_estudiante&id_estudiante=' + id_estudiante + '&id_representante=' + id_representante;
+                    });
                 } else if (response == -2) {
-                    //Swal.fire('', 'codigo ya regitrado', 'success');
+                    Swal.fire('', 'codigo ya registrado', 'success');
                 }
+                console.log(response);
             }
         });
     }
 
     function delete_datos() {
         var id_ficha = '<?php echo $id_ficha; ?>';
-        /*Swal.fire({
-          title: 'Eliminar Registro?',
-          text: "Esta seguro de eliminar este registro?",
-          icon: 'warning',
-          showCancelButton: true,
-          confirmButtonColor: '#3085d6',
-          cancelButtonColor: '#d33',
-          confirmButtonText: 'Si'
+        Swal.fire({
+            title: 'Eliminar Registro?',
+            text: "Esta seguro de eliminar este registro?",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Si'
         }).then((result) => {
-          if (result.value) {
-            eliminar(id);
-          }
-        })*/
-
-        eliminar(id_ficha);
-
+            if (result.value) {
+                eliminar(id_ficha);
+            }
+        })
     }
 
     function eliminar(id) {
+        var id_estudiante = '<?php echo $id_estudiante; ?>';
+        var id_representante = '<?php echo $id_representante; ?>';
+        var id_ficha = '<?php echo $id_ficha; ?>';
+
         $.ajax({
             data: {
                 id: id
             },
-            url: '<?= $url_general ?>/controlador/seccionC.php?eliminar=true',
+            url: '<?= $url_general ?>/controlador/fichas_EstudianteC.php?eliminar=true',
             type: 'post',
             dataType: 'json',
             /*beforeSend: function () {   
@@ -352,12 +511,10 @@ if (isset($_GET['id_ficha'])) {
             },*/
             success: function(response) {
                 if (response == 1) {
-                    /*Swal.fire('Eliminado!', 'Registro Eliminado.', 'success').then(function() {
-                      location.href = '<?= $url_general ?>/vista/inicio.php?mod=7&acc=seccion';
-                    });*/
-                    location.href = '<?= $url_general ?>/vista/inicio.php?mod=7&acc=seccion';
+                    Swal.fire('Eliminado!', 'Registro Eliminado.', 'success').then(function() {
+                        location.href = '<?= $url_general ?>/vista/inicio.php?mod=7&acc=ficha_estudiante&id_estudiante=' + id_estudiante + '&id_representante=' + id_representante;
+                    });
                 }
-
             }
         });
     }
@@ -381,7 +538,7 @@ if (isset($_GET['id_ficha'])) {
                         </li>
                         <li class="breadcrumb-item active" aria-current="page">
                             <?php
-                            if ($id_estudiante == '') {
+                            if ($id_ficha == '') {
                                 echo 'Registrar Ficha del Estudiante';
                             } else {
                                 echo 'Modificar Ficha del Estudiante';
@@ -403,7 +560,7 @@ if (isset($_GET['id_ficha'])) {
                             </div>
                             <h5 class="mb-0 text-primary">
                                 <?php
-                                if ($id_estudiante == '') {
+                                if ($id_ficha == '') {
                                     echo 'Registrar Ficha del Estudiante';
                                 } else {
                                     echo 'Modificar Ficha del Estudiante';
@@ -412,7 +569,7 @@ if (isset($_GET['id_ficha'])) {
                             </h5>
                             <div class="row m-2">
                                 <div class="col-sm-12">
-                                    <a href="<?= $url_general ?>/vista/inicio.php?mod=7&acc=estudiantes" class="btn btn-outline-dark btn-sm"><i class="bx bx-arrow-back"></i> Regresar</a>
+                                    <a href="<?= $url_general ?>/vista/inicio.php?mod=7&acc=ficha_estudiante&id_estudiante=<?= $id_estudiante ?>&id_representante=<?= $id_representante ?>" class="btn btn-outline-dark btn-sm"><i class="bx bx-arrow-back"></i> Regresar</a>
                                 </div>
                             </div>
                         </div>
@@ -464,9 +621,15 @@ if (isset($_GET['id_ficha'])) {
                                 <div class="col-md-3">
                                     <label for="" class="form-label"> Grupo Sanguíneo y Factor Rh: <label style="color: red;">*</label> </label>
                                     <select class="form-select" id="sa_fice_est_grupo_sangre" name="sa_fice_est_grupo_sangre">
-                                        <option selected>-- Seleccione --</option>
-                                        <option value="">B</option>
-                                        <option value="">A</option>
+                                        <option selected disabled>-- Seleccione --</option>
+                                        <option value="A+">A+</option>
+                                        <option value="A-">A-</option>
+                                        <option value="B+">B+</option>
+                                        <option value="B-">B-</option>
+                                        <option value="AB+">AB+</option>
+                                        <option value="AB-">AB-</option>
+                                        <option value="O+">O+</option>
+                                        <option value="O-">O-</option>
                                     </select>
                                 </div>
 
@@ -474,27 +637,25 @@ if (isset($_GET['id_ficha'])) {
                                     <label for="" class="form-label">Dirección del Domicilio: <label style="color: red;">*</label> </label>
                                     <input type="text" class="form-control" id="sa_fice_est_direccion_domicilio" name="sa_fice_est_direccion_domicilio">
                                 </div>
-
                             </div>
-
-
 
                             <div class="row pt-3">
                                 <div class="col-md-3">
                                     <label for="" class="form-label">¿El estudiante posee seguro médico?: <label style="color: red;">*</label> </label>
                                     <select class="form-select" id="sa_fice_est_seguro_medico" name="sa_fice_est_seguro_medico">
-                                        <option selected>-- Seleccione --</option>
-                                        <option value="">Si</option>
-                                        <option value="">No</option>
+                                        <option selected disabled>-- Seleccione --</option>
+                                        <option value="Si">Si</option>
+                                        <option value="No">No</option>
                                     </select>
                                 </div>
 
                                 <div class="col-md-3">
                                     <label for="" class="form-label">Nombre del seguro: <label style="color: red;">*</label> </label>
                                     <select class="form-select" id="sa_fice_est_nombre_seguro" name="sa_fice_est_nombre_seguro">
-                                        <option selected>-- Seleccione --</option>
-                                        <option value="">IESS</option>
-                                        <option value="">ISSFA</option>
+                                        <option selected disabled value="">-- Seleccione --</option>
+                                        <option value="IESS">IESS</option>
+                                        <option value="ISSFA">ISSFA</option>
+                                        <option value="ISSPOL">ISSPOL</option>
                                     </select>
                                 </div>
                             </div>
@@ -511,19 +672,19 @@ if (isset($_GET['id_ficha'])) {
                                 <div class="row pt-2">
                                     <div class="col-md-3">
                                         <label for="" class="form-label">Primer Apellido: <label style="color: red;">*</label> </label>
-                                        <input type="text" class="form-control" id="sa_fice_rep_1_primer_apellido" name="sa_fice_rep_1_primer_apellido">
+                                        <input type="text" class="form-control" id="sa_fice_rep_1_primer_apellido" name="sa_fice_rep_1_primer_apellido" readonly>
                                     </div>
                                     <div class="col-md-3">
                                         <label for="" class="form-label">Segundo Apellido: <label style="color: red;">*</label> </label>
-                                        <input type="text" class="form-control" id="sa_fice_rep_1_segundo_apellido" name="sa_fice_rep_1_segundo_apellido">
+                                        <input type="text" class="form-control" id="sa_fice_rep_1_segundo_apellido" name="sa_fice_rep_1_segundo_apellido" readonly>
                                     </div>
                                     <div class="col-md-3">
                                         <label for="" class="form-label">Primer Nombre: <label style="color: red;">*</label> </label>
-                                        <input type="text" class="form-control" id="sa_fice_rep_1_primer_nombre" name="sa_fice_rep_1_primer_nombre">
+                                        <input type="text" class="form-control" id="sa_fice_rep_1_primer_nombre" name="sa_fice_rep_1_primer_nombre" readonly>
                                     </div>
                                     <div class="col-md-3">
                                         <label for="" class="form-label">Segundo Nombre: <label style="color: red;">*</label> </label>
-                                        <input type="text" class="form-control" id="sa_fice_rep_1_segundo_nombre" name="sa_fice_rep_1_segundo_nombre">
+                                        <input type="text" class="form-control" id="sa_fice_rep_1_segundo_nombre" name="sa_fice_rep_1_segundo_nombre" readonly>
                                     </div>
                                 </div>
 
@@ -531,8 +692,8 @@ if (isset($_GET['id_ficha'])) {
                                     <div class="col-md-4">
                                         <label for="" class="form-label">Parentesco: <label style="color: red;">*</label> </label>
 
-                                        <select class="form-select" id="sa_fice_rep_1_parentesco" name="sa_fice_rep_1_parentesco">
-                                            <option selected disabled>-- Seleccione --</option>
+                                        <select class="form-select" id="sa_fice_rep_1_parentesco" name="sa_fice_rep_1_parentesco" disabled>
+                                            <option selected disabled value="">-- Seleccione --</option>
                                             <option value="Padre">Padre</option>
                                             <option value="Madre">Madre</option>
                                             <option value="Hermano">Hermano/a</option>
@@ -547,12 +708,12 @@ if (isset($_GET['id_ficha'])) {
 
                                     <div class="col-md-4">
                                         <label for="" class="form-label">Teléfono Fijo: <label style="color: red;">*</label> </label>
-                                        <input type="text" class="form-control" id="sa_fice_rep_1_telefono_1" name="sa_fice_rep_1_telefono_1">
+                                        <input type="text" class="form-control" id="sa_fice_rep_1_telefono_1" name="sa_fice_rep_1_telefono_1" readonly>
                                     </div>
 
                                     <div class="col-md-4">
                                         <label for="" class="form-label">Teléfono Celular: <label style="color: red;">*</label> </label>
-                                        <input type="text" class="form-control" id="sa_fice_rep_1_telefono_2" name="sa_fice_rep_1_telefono_2">
+                                        <input type="text" class="form-control" id="sa_fice_rep_1_telefono_2" name="sa_fice_rep_1_telefono_2" readonly>
                                     </div>
                                 </div>
 
@@ -586,7 +747,7 @@ if (isset($_GET['id_ficha'])) {
                                         <label for="" class="form-label">Parentesco: <label style="color: red;">*</label> </label>
 
                                         <select class="form-select" id="sa_fice_rep_2_parentesco" name="sa_fice_rep_2_parentesco">
-                                            <option selected disabled>-- Seleccione --</option>
+                                            <option selected disabled value="">-- Seleccione --</option>
                                             <option value="Padre">Padre</option>
                                             <option value="Madre">Madre</option>
                                             <option value="Hermano">Hermano/a</option>
@@ -622,14 +783,16 @@ if (isset($_GET['id_ficha'])) {
                                     <label for="" class="form-label">1.- ¿Ha sido diagnosticado con alguna enfermedad?: <label style="color: red;">* OBLIGATORIO</label> </label>
                                     <div>
                                         <div class="form-check">
-                                            <input class="form-check-input" type="radio" name="sa_fice_pregunta_1" id="sa_fice_pregunta_1_1">
+                                            <input class="form-check-input" type="radio" name="sa_fice_pregunta_1" id="sa_fice_pregunta_1_1" value="Si">
                                             <label class="form-check-label" for="flexRadioDefault1">SI</label>
                                         </div>
                                         <div class="form-check">
-                                            <input class="form-check-input" type="radio" name="sa_fice_pregunta_1" id="sa_fice_pregunta_1_2">
+                                            <input class="form-check-input" type="radio" name="sa_fice_pregunta_1" id="sa_fice_pregunta_1_2" value="No">
                                             <label class="form-check-label" for="flexRadioDefault2">NO</label>
                                         </div>
-                                        <input type="text" class="form-control" id="sa_fice_pregunta_1_obs" name="sa_fice_pregunta_1_obs" placeholder="¿Cúal?">
+
+                                        <textarea name="sa_fice_pregunta_1_obs" id="sa_fice_pregunta_1_obs" cols="30" rows="1" class="form-control" placeholder="¿Cúal?"></textarea>
+
                                     </div>
                                 </div>
 
@@ -637,14 +800,16 @@ if (isset($_GET['id_ficha'])) {
                                     <label for="" class="form-label">2.- ¿Tiene algún antecedente familiar de importancia?: <label style="color: red;">* PADRES – HERMANOS – ABUELOS - TIOS </label> </label>
                                     <div>
                                         <div class="form-check">
-                                            <input class="form-check-input" type="radio" name="sa_fice_pregunta_2" id="sa_fice_pregunta_2_1">
+                                            <input class="form-check-input" type="radio" name="sa_fice_pregunta_2" id="sa_fice_pregunta_2_1" value="Si">
                                             <label class="form-check-label" for="flexRadioDefault1">SI</label>
                                         </div>
                                         <div class="form-check">
-                                            <input class="form-check-input" type="radio" name="sa_fice_pregunta_2" id="sa_fice_pregunta_2_2">
+                                            <input class="form-check-input" type="radio" name="sa_fice_pregunta_2" id="sa_fice_pregunta_2_2" value="No">
                                             <label class="form-check-label" for="flexRadioDefault2">NO</label>
                                         </div>
-                                        <input type="text" class="form-control" id="sa_fice_pregunta_2_obs" name="sa_fice_pregunta_2_obs" placeholder="¿Cúal?">
+
+                                        <textarea name="sa_fice_pregunta_2_obs" id="sa_fice_pregunta_2_obs" cols="30" rows="1" class="form-control" placeholder="¿Cúal?"></textarea>
+
                                     </div>
                                 </div>
 
@@ -652,14 +817,16 @@ if (isset($_GET['id_ficha'])) {
                                     <label for="" class="form-label">3.- ¿Ha sido sometido a cirugías previas?: <label style="color: red;">* OBLIGATORIO </label> </label>
                                     <div>
                                         <div class="form-check">
-                                            <input class="form-check-input" type="radio" name="sa_fice_pregunta_3" id="sa_fice_pregunta_3_1">
+                                            <input class="form-check-input" type="radio" name="sa_fice_pregunta_3" id="sa_fice_pregunta_3_1" value="Si">
                                             <label class="form-check-label" for="flexRadioDefault1">SI</label>
                                         </div>
                                         <div class="form-check">
-                                            <input class="form-check-input" type="radio" name="sa_fice_pregunta_3" id="sa_fice_pregunta_3_2">
+                                            <input class="form-check-input" type="radio" name="sa_fice_pregunta_3" id="sa_fice_pregunta_3_2" value="No">
                                             <label class="form-check-label" for="flexRadioDefault2">NO</label>
                                         </div>
-                                        <input type="text" class="form-control" id="sa_fice_pregunta_3_obs" name="sa_fice_pregunta_3_obs" placeholder="¿Cúal?">
+
+                                        <textarea name="sa_fice_pregunta_3_obs" id="sa_fice_pregunta_3_obs" cols="30" rows="1" class="form-control" placeholder="¿Cúal?"></textarea>
+
                                     </div>
                                 </div>
 
@@ -667,14 +834,16 @@ if (isset($_GET['id_ficha'])) {
                                     <label for="" class="form-label">4.- ¿Tiene alergias?: <label style="color: red;">* OBLIGATORIO </label> </label>
                                     <div>
                                         <div class="form-check">
-                                            <input class="form-check-input" type="radio" name="sa_fice_pregunta_4" id="sa_fice_pregunta_4_1">
+                                            <input class="form-check-input" type="radio" name="sa_fice_pregunta_4" id="sa_fice_pregunta_4_1" value="Si">
                                             <label class="form-check-label" for="flexRadioDefault1">SI</label>
                                         </div>
                                         <div class="form-check">
-                                            <input class="form-check-input" type="radio" name="sa_fice_pregunta_4" id="sa_fice_pregunta_4_2">
+                                            <input class="form-check-input" type="radio" name="sa_fice_pregunta_4" id="sa_fice_pregunta_4_2" value="No">
                                             <label class="form-check-label" for="flexRadioDefault2">NO</label>
                                         </div>
-                                        <input type="text" class="form-control" id="sa_fice_pregunta_4_obs" name="sa_fice_pregunta_4_obs" placeholder="¿Cúal?">
+
+                                        <textarea name="sa_fice_pregunta_4_obs" id="sa_fice_pregunta_4_obs" cols="30" rows="1" class="form-control" placeholder="¿Cúal?"></textarea>
+
                                     </div>
                                 </div>
 
@@ -684,8 +853,7 @@ if (isset($_GET['id_ficha'])) {
                                     <p style="color: red;">*Si el estudiante requiere algún tratamiento específico durante el horario escolar, el representante deberá enviar el medicamento con la indicación médica correspondiente por agenda a través del docente tutor</p>
 
                                     <div>
-
-                                        <textarea name="sa_fice_pregunta_4_obs" id="sa_fice_pregunta_4_obs" cols="30" rows="10" class="form-control"></textarea>
+                                        <textarea name="sa_fice_pregunta_5_obs" id="sa_fice_pregunta_5_obs" cols="30" rows="10" class="form-control"></textarea>
                                     </div>
                                 </div>
 

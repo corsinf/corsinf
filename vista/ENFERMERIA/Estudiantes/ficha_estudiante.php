@@ -8,11 +8,11 @@ $id_estudiante = '';
 $id_representante = '';
 
 if (isset($_GET['id_estudiante'])) {
-  $id_estudiante = $_GET['id_representante'];
+  $id_estudiante = $_GET['id_estudiante'];
 }
 
 if (isset($_GET['id_representante'])) {
-  $id_estudiante = $_GET['id_estudiante'];
+  $id_representante = $_GET['id_representante'];
 }
 
 
@@ -51,9 +51,9 @@ if (isset($_GET['id_representante'])) {
             '<td>' + item.sa_fice_fecha_creacion.date + '</td>' +
             '<td><a href="<?= $url_general ?>/vista/inicio.php?mod=7&acc=registrar_ficha_estudiante&id_ficha=' + item.sa_fice_id + '&id_estudiante=' + item.sa_fice_est_id + '&id_representante=' + item.sa_fice_rep_1_id + '"><u>' + item.sa_fice_est_primer_apellido + ' ' + item.sa_fice_est_segundo_apellido + ' ' + item.sa_fice_est_primer_nombre + ' ' + item.sa_fice_est_segundo_nombre + '</u></a></td>' +
             '<td>' + 'N' + '</td>' +
-            '<td><a  class="btn btn-dark btn-sm" title="Ficha de Estudiante" href="<?= $url_general ?>/vista/inicio.php?mod=7&acc=ficha_estudiante&id_estudiante=' + item.sa_fice_est_id + '&id_representante=' + item.sa_fice_rep_1_id + '">' + '<i class="bx bx-file-blank me-0" ></i>' + '</a></td>' +
+            '<td><a  class="btn btn-primary btn-sm" title="Ficha de Estudiante" href="<?= $url_general ?>/vista/inicio.php?mod=7&acc=ficha_estudiante&id_estudiante=' + item.sa_fice_est_id + '&id_representante=' + item.sa_fice_rep_1_id + '">' + '<i class="bx bx-file-blank me-0" ></i>' + '</a></td>' +
             '</tr>';
-            cont++;
+          cont++;
         });
 
         $('#tbl_datos').html(ficha_estudiante);
@@ -62,8 +62,8 @@ if (isset($_GET['id_representante'])) {
   }
 
   function buscar(buscar) {
-    var estudiantes = '';
-
+    var ficha_estudiante = '';
+    var cont = 1;
     $.ajax({
       data: {
         buscar: buscar
@@ -77,13 +77,15 @@ if (isset($_GET['id_representante'])) {
         $.each(response, function(i, item) {
           console.log(item);
 
-          estudiantes +=
+          ficha_estudiante +=
             '<tr>' +
-            '<td>' + item.sa_est_cedula + '</td>' +
-            '<td><a href="<?= $url_general ?>/vista/inicio.php?mod=7&acc=registrar_estudiantes&id=' + item.sa_est_id + '&id_seccion=' + item.sa_id_seccion + '&id_grado=' + item.sa_id_grado + '&id_paralelo=' + item.sa_id_paralelo + '"><u>' + item.sa_est_primer_apellido + ' ' + item.sa_est_segundo_apellido + ' ' + item.sa_est_primer_nombre + ' ' + item.sa_est_segundo_nombre + '</u></a></td>' +
-            '<td>' + item.sa_sec_nombre + ' / ' + item.sa_gra_nombre + ' / ' + item.sa_par_nombre + '</td>' +
-            '<td>' + edad_fecha_nacimiento(item.sa_est_fecha_nacimiento.date) + '</td>' +
+            '<td>' + cont + '</td>' +
+            '<td>' + item.sa_fice_fecha_creacion.date + '</td>' +
+            '<td><a href="<?= $url_general ?>/vista/inicio.php?mod=7&acc=registrar_ficha_estudiante&id_ficha=' + item.sa_fice_id + '&id_estudiante=' + item.sa_fice_est_id + '&id_representante=' + item.sa_fice_rep_1_id + '"><u>' + item.sa_fice_est_primer_apellido + ' ' + item.sa_fice_est_segundo_apellido + ' ' + item.sa_fice_est_primer_nombre + ' ' + item.sa_fice_est_segundo_nombre + '</u></a></td>' +
+            '<td>' + 'N' + '</td>' +
+            '<td><a  class="btn btn-primary btn-sm" title="Ficha de Estudiante" href="<?= $url_general ?>/vista/inicio.php?mod=7&acc=ficha_estudiante&id_estudiante=' + item.sa_fice_est_id + '&id_representante=' + item.sa_fice_rep_1_id + '">' + '<i class="bx bx-file-blank me-0" ></i>' + '</a></td>' +
             '</tr>';
+          cont++;
         });
 
         $('#tbl_datos').html(estudiantes);
@@ -149,10 +151,9 @@ if (isset($_GET['id_representante'])) {
 
                   <div class="row">
                     <div class="col-sm-12" id="btn_nuevo">
-                      <a href="<?= $url_general ?>/vista/inicio.php?mod=7&acc=registrar_ficha_estudiante" class="btn btn-success btn-sm"><i class="bx bx-plus"></i> Nuevo</a>
+                      <a href="<?= $url_general ?>/vista/inicio.php?mod=7&acc=registrar_ficha_estudiante&id_estudiante=<?= $id_estudiante ?>&id_representante=<?= $id_representante ?>" class="btn btn-success btn-sm"><i class="bx bx-plus"></i> Nuevo</a>
                       <a href="#" class="btn btn-outline-secondary btn-sm" id="excel_estudiantes" title="Informe en excel del total de Fichas del Estudiante"><i class="bx bx-file"></i> Total Fichas del Estudiante</a>
                     </div>
-
                   </div>
 
                   <div>

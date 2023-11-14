@@ -1,7 +1,7 @@
 <?php
 
 $dominio = $_SERVER['SERVER_NAME'];
-$url_general = 'http://' . $dominio . '/corsinf_local';
+$url_general = 'http://' . $dominio . '/corsinf';
 
 ?>
 
