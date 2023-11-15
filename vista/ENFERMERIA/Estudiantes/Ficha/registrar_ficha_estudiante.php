@@ -239,7 +239,7 @@ if (isset($_GET['id_ficha'])) {
             data: {
                 id: id_ficha
             },
-            url: '<?php echo $url_general ?>/controlador/fichas_EstudianteC.php?listar_solo_ficha=true',
+            url: '<?php echo $url_general ?>/controlador/ficha_MedicaC.php?listar_solo_ficha=true',
             type: 'post',
             dataType: 'json',
             success: function(response) {

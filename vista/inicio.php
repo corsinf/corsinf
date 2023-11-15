@@ -153,11 +153,19 @@ if ($_GET['acc'] == 'registrar_estudiantes') {
 }
 
 if ($_GET['acc'] == 'ficha_estudiante') {
-	include('ENFERMERIA/Estudiantes/ficha_estudiante.php');
+	include('ENFERMERIA/Estudiantes/Ficha/ficha_estudiante.php');
 }
 
 if ($_GET['acc'] == 'registrar_ficha_estudiante') {
-	include('ENFERMERIA/Estudiantes/registrar_ficha_estudiante.php');
+	include('ENFERMERIA/Estudiantes/Ficha/registrar_ficha_estudiante.php');
+}
+
+if ($_GET['acc'] == 'consulta_estudiante') {
+	include('ENFERMERIA/Estudiantes/Consultas/consulta_estudiante.php');
+}
+
+if ($_GET['acc'] == 'registrar_consulta_estudiante') {
+	include('ENFERMERIA/Estudiantes/Consultas/registrar_consulta_estudiante.php');
 }
 
 //Cursos

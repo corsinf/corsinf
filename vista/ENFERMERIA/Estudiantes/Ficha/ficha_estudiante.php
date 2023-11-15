@@ -36,7 +36,7 @@ if (isset($_GET['id_representante'])) {
       data: {
         id: id_estudiante
       },
-      url: '<?php echo $url_general ?>/controlador/fichas_EstudianteC.php?listar=true',
+      url: '<?php echo $url_general ?>/controlador/ficha_medicaC.php?listar=true',
       type: 'post',
       dataType: 'json',
       //Para el id representante tomar los datos con los de session
@@ -51,7 +51,7 @@ if (isset($_GET['id_representante'])) {
             '<td>' + item.sa_fice_fecha_creacion.date + '</td>' +
             '<td><a href="<?= $url_general ?>/vista/inicio.php?mod=7&acc=registrar_ficha_estudiante&id_ficha=' + item.sa_fice_id + '&id_estudiante=' + item.sa_fice_est_id + '&id_representante=' + item.sa_fice_rep_1_id + '"><u>' + item.sa_fice_est_primer_apellido + ' ' + item.sa_fice_est_segundo_apellido + ' ' + item.sa_fice_est_primer_nombre + ' ' + item.sa_fice_est_segundo_nombre + '</u></a></td>' +
             '<td>' + 'N' + '</td>' +
-            '<td><a  class="btn btn-primary btn-sm" title="Ficha de Estudiante" href="<?= $url_general ?>/vista/inicio.php?mod=7&acc=ficha_estudiante&id_estudiante=' + item.sa_fice_est_id + '&id_representante=' + item.sa_fice_rep_1_id + '">' + '<i class="bx bx-file-blank me-0" ></i>' + '</a></td>' +
+            '<td><a  class="btn btn-primary btn-sm" title="Ficha de Estudiante" href="<?= $url_general ?>/vista/inicio.php?mod=7&acc=consulta_estudiante&id_estudiante=' + item.sa_fice_est_id + '&id_representante=' + item.sa_fice_rep_1_id + '&id_ficha=' + item.sa_fice_id + '">' + '<i class="bx bx-file-blank me-0" ></i>' + '</a></td>' +
             '</tr>';
           cont++;
         });
@@ -68,14 +68,14 @@ if (isset($_GET['id_representante'])) {
       data: {
         buscar: buscar
       },
-      url: '<?= $url_general ?>/controlador/fichas_EstudianteC.php?buscar=true',
+      url: '<?= $url_general ?>/controlador/ficha_medicaC.php?buscar=true',
       type: 'post',
       dataType: 'json',
 
       success: function(response) {
         // console.log(response);   
         $.each(response, function(i, item) {
-          console.log(item);
+          //console.log(item);
 
           ficha_estudiante +=
             '<tr>' +
@@ -83,7 +83,7 @@ if (isset($_GET['id_representante'])) {
             '<td>' + item.sa_fice_fecha_creacion.date + '</td>' +
             '<td><a href="<?= $url_general ?>/vista/inicio.php?mod=7&acc=registrar_ficha_estudiante&id_ficha=' + item.sa_fice_id + '&id_estudiante=' + item.sa_fice_est_id + '&id_representante=' + item.sa_fice_rep_1_id + '"><u>' + item.sa_fice_est_primer_apellido + ' ' + item.sa_fice_est_segundo_apellido + ' ' + item.sa_fice_est_primer_nombre + ' ' + item.sa_fice_est_segundo_nombre + '</u></a></td>' +
             '<td>' + 'N' + '</td>' +
-            '<td><a  class="btn btn-primary btn-sm" title="Ficha de Estudiante" href="<?= $url_general ?>/vista/inicio.php?mod=7&acc=ficha_estudiante&id_estudiante=' + item.sa_fice_est_id + '&id_representante=' + item.sa_fice_rep_1_id + '">' + '<i class="bx bx-file-blank me-0" ></i>' + '</a></td>' +
+            '<td><a  class="btn btn-primary btn-sm" title="Ficha de Estudiante" href="<?= $url_general ?>/vista/inicio.php?mod=7&acc=consulta_estudiante&id_estudiante=' + item.sa_fice_est_id + '&id_representante=' + item.sa_fice_rep_1_id + '&id_ficha=' + item.sa_fice_id + '">' + '<i class="bx bx-file-blank me-0" ></i>' + '</a></td>' +
             '</tr>';
           cont++;
         });

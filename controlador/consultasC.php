@@ -1,14 +1,14 @@
 <?php
-include('../modelo/fichas_EstudianteM.php');
+include('../modelo/consultasM.php');
 
-$controlador = new fichas_EstudianteC();
+$controlador = new consultasC();
 
 if (isset($_GET['listar'])) {
-    echo json_encode($controlador->lista_fichas_Estudiante($_POST['id']));
+    echo json_encode($controlador->lista_consultas($_POST['id']));
 }
 
 if (isset($_GET['buscar'])) {
-    echo json_encode($controlador->buscar_fichas_Estudiante($_POST['buscar']));
+    echo json_encode($controlador->buscar_consultas($_POST['buscar']));
 }
 
 if (isset($_GET['insertar'])) {
@@ -20,10 +20,10 @@ if (isset($_GET['eliminar'])) {
 }
 
 if (isset($_GET['listar_solo_ficha'])) {
-    echo json_encode($controlador->lista_solo_ficha_Estudiante($_POST['id']));
+    echo json_encode($controlador->lista_solo_consultas($_POST['id']));
 }
 
-//print_r($controlador->lista_fichas_Estudiante(''));
+//print_r($controlador->lista_consultas(''));
 
 /*$parametros = array(
     'sa_sec_id' => 1,
@@ -32,34 +32,34 @@ if (isset($_GET['listar_solo_ficha'])) {
 
 print_r($controlador->insertar_editar($parametros));*/
 
-/*$modelo = new fichas_EstudianteM();
+/*$modelo = new consultasM();
 
-print_r($modelo->buscar_fichas_Estudiante_CODIGO(1));*/
+print_r($modelo->buscar_consultas_CODIGO(1));*/
 
-class fichas_EstudianteC
+class consultasC
 {
     private $modelo;
 
     function __construct()
     {
-        $this->modelo = new fichas_EstudianteM();
+        $this->modelo = new consultasM();
     }
 
-    function lista_fichas_Estudiante($id)
+    function lista_consultas($id)
     {
-        $datos = $this->modelo->lista_fichas_Estudiante($id);
+        $datos = $this->modelo->lista_consultas($id);
         return $datos;
     }
 
-    function lista_solo_ficha_Estudiante($id)
+    function lista_solo_consultas($id)
     {
-        $datos = $this->modelo->lista_solo_ficha_Estudiante($id);
+        $datos = $this->modelo->lista_solo_consultas($id);
         return $datos;
     }
 
-    function buscar_fichas_Estudiante($buscar)
+    function buscar_consultas($buscar)
     {
-        $datos = $this->modelo->buscar_fichas_Estudiante($buscar);
+        $datos = $this->modelo->buscar_consultas($buscar);
         return $datos;
     }
 
@@ -106,7 +106,7 @@ class fichas_EstudianteC
         );
 
         if ($parametros['sa_fice_id'] == '') {
-            if (count($this->modelo->buscar_fichas_Estudiante_CODIGO($datos1[0]['dato'])) == 0) {
+            if (count($this->modelo->buscar_consultas_CODIGO($datos1[0]['dato'])) == 0) {
                 $datos = $this->modelo->insertar($datos);
             } else {
                 return -2;
@@ -122,7 +122,7 @@ class fichas_EstudianteC
     function compara_datos($parametros)
     {
         $text = '';
-        $marca = $this->modelo->lista_fichas_Estudiante($parametros['id']);
+        $marca = $this->modelo->lista_consultas($parametros['id']);
 
         if ($marca[0]['CODIGO'] != $parametros['cod']) {
             $text .= ' Se modifico CODIGO en SECCION de ' . $marca[0]['CODIGO'] . ' a ' . $parametros['cod'];
