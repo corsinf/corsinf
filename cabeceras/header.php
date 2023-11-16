@@ -4,6 +4,7 @@ if (!isset($_SESSION['INICIO'])) {
 	header('Location: ../login.php');
 }
 
+//Pendiente para revisar, tener en cuenta 
 $dominio = $_SERVER['SERVER_NAME'];
 //$url_general = 'http://'. $dominio . '/corsinf';
 $url_general = 'http://' . $dominio . ':8087/corsinf';

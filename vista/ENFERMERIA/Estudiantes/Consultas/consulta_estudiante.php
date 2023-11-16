@@ -33,6 +33,34 @@ if (isset($_GET['id_ficha'])) {
     }
   });
 
+  function fecha_formateada(fecha) {
+    fechaYHora = fecha;
+    fecha = new Date(fechaYHora);
+    año = fecha.getFullYear();
+    mes = (fecha.getMonth() + 1).toString().padStart(2, '0'); // Añade un 0 si es necesario
+    dia = fecha.getDate().toString().padStart(2, '0'); // Añade un 0 si es necesario
+    fechaFormateada = `${año}-${mes}-${dia}`;
+
+    var salida = '';
+    salida = fechaFormateada;
+
+    return salida;
+
+  }
+
+  function obtener_hora_formateada(hora) {
+    var fechaActual = new Date(hora);
+    var hora = fechaActual.getHours();
+    var minutos = fechaActual.getMinutes();
+    var segundos = fechaActual.getSeconds();
+
+    // Formatear la hora como una cadena
+    var horaFormateada = (hora < 10 ? '0' : '') + hora + ':' +
+      (minutos < 10 ? '0' : '') + minutos;
+
+    return horaFormateada;
+  }
+
   function consultar_datos(id_estudiante = '') {
     var ficha_estudiante = '';
     var cont = 1;
@@ -52,15 +80,13 @@ if (isset($_GET['id_ficha'])) {
           ficha_estudiante +=
             '<tr>' +
             '<td>' + cont + '</td>' +
-            '<td>' + item.sa_conp_fecha_ingreso.date + '</td>' +
-            '<td>' + item.sa_conp_desde_hora.date + ' / ' + item.sa_conp_desde_hora.date + '</td>' +
-            '<td>' + item.sa_conp_nombres + '</td>' +
-            '<td><a href="<?= $url_general ?>/vista/inicio.php?mod=7&acc=registrar_ficha_estudiante&id_ficha=' + item.sa_fice_id + '&id_estudiante=' + item.sa_fice_id + '&id_representante=' + item.sa_fice_rep_1_id + '"><u>' + item.sa_fice_id + ' ' + item.sa_fice_id + ' ' + item.sa_fice_id + ' ' + item.sa_fice_id + '</u></a></td>' +
-            '<td>' + 'N' + '</td>' +
+            '<td>' + fecha_formateada(item.sa_conp_fecha_ingreso.date) + '</td>' +
+            '<td>' + obtener_hora_formateada(item.sa_conp_desde_hora.date) + ' / ' + obtener_hora_formateada(item.sa_conp_hasta_hora.date) + '</td>' +
+            '<td><a href="<?= $url_general ?>/vista/inicio.php?mod=7&acc=registrar_consulta_estudiante&id_ficha=' + item.sa_fice_id + '&id_estudiante=' + <?= $id_estudiante ?> + '&id_representante=' + <?= $id_representante ?> + '&id_consulta=' + item.sa_conp_id + '"><u>' + item.sa_conp_nombres + '</u></a></td>' +
+            '<td>' + item.sa_conp_tipo_consulta + '</td>' +
             '</tr>';
+
           cont++;
-
-
         });
 
         $('#tbl_datos').html(ficha_estudiante);
@@ -88,7 +114,8 @@ if (isset($_GET['id_ficha'])) {
             '<tr>' +
             '<td>' + cont + '</td>' +
             '<td>' + item.sa_fice_fecha_creacion.date + '</td>' +
-            '<td><a href="<?= $url_general ?>/vista/inicio.php?mod=7&acc=registrar_ficha_estudiante&id_ficha=' + item.sa_fice_id + '&id_estudiante=' + item.sa_fice_est_id + '&id_representante=' + item.sa_fice_rep_1_id + '"><u>' + item.sa_fice_est_primer_apellido + ' ' + item.sa_fice_est_segundo_apellido + ' ' + item.sa_fice_est_primer_nombre + ' ' + item.sa_fice_est_segundo_nombre + '</u></a></td>' +
+
+            '<td><a href="<?= $url_general ?>/vista/inicio.php?mod=7&acc=registrar_consulta_estudiante&id_ficha=' + item.sa_fice_id + '&id_estudiante=' + item.sa_fice_est_id + '&id_representante=' + item.sa_fice_rep_1_id + '"><u>' + item.sa_fice_est_primer_apellido + ' ' + item.sa_fice_est_segundo_apellido + ' ' + item.sa_fice_est_primer_nombre + ' ' + item.sa_fice_est_segundo_nombre + '</u></a></td>' +
             '<td>' + 'N' + '</td>' +
             '</tr>';
           cont++;
@@ -175,9 +202,9 @@ if (isset($_GET['id_ficha'])) {
                         <tr>
                           <th>#</th>
                           <th>Fecha de creación</th>
+                          <th>Hora Desde/Hasta</th>
                           <th>Estudiante</th>
-                          <th>Atenciones</th>
-                          <th>Consultas</th>
+                          <th>Tipo de Atención</th>
                         </tr>
                       </thead>
                       <tbody id="tbl_datos">

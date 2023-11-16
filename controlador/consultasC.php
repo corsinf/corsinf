@@ -19,7 +19,7 @@ if (isset($_GET['eliminar'])) {
     echo json_encode($controlador->eliminar($_POST['id']));
 }
 
-if (isset($_GET['listar_solo_ficha'])) {
+if (isset($_GET['listar_solo_consulta'])) {
     echo json_encode($controlador->lista_solo_consultas($_POST['id']));
 }
 

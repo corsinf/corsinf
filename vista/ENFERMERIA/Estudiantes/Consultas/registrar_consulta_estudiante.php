@@ -3,6 +3,7 @@
 $id_ficha = '';
 $id_estudiante = '';
 $id_representante = '';
+$id_consulta = '';
 
 if (isset($_GET['id_estudiante'])) {
     $id_estudiante = $_GET['id_estudiante'];
@@ -16,6 +17,10 @@ if (isset($_GET['id_ficha'])) {
     $id_ficha = $_GET['id_ficha'];
 }
 
+if (isset($_GET['id_consulta'])) {
+    $id_consulta = $_GET['id_consulta'];
+}
+
 ?>
 
 <script type="text/javascript">
@@ -23,7 +28,7 @@ if (isset($_GET['id_ficha'])) {
         var id_estudiante = '<?php echo $id_estudiante; ?>';
         var id_representante = '<?php echo $id_representante; ?>';
         var id_ficha = '<?php echo $id_ficha; ?>';
-        var id_consulta = '<?php echo $id_consulta ?? '' ; ?>';
+        var id_consulta = '<?php echo $id_consulta; ?>';
 
 
         //alert(id_estudiante + ' + ' + id_representante);
@@ -32,7 +37,7 @@ if (isset($_GET['id_ficha'])) {
             datos_col_estudiante(id_estudiante);
             datos_col_representante(id_representante);
         }
-
+        //alert(id_consulta)
         if (id_consulta != '') {
             datos_col_consulta_estudiante(id_consulta)
         }
@@ -64,7 +69,7 @@ if (isset($_GET['id_ficha'])) {
                 nombres = response[0].sa_est_primer_apellido + ' ' + response[0].sa_est_segundo_apellido + ' ' + response[0].sa_est_primer_nombre + ' ' + response[0].sa_est_segundo_apellido;
 
                 $('#sa_conp_nombres').val(nombres);
-                $('#sa_conp_fecha_nacimiento').val(fecha_nacimiento_formateada(response[0].sa_est_fecha_nacimiento.date));
+                $('#sa_conp_fecha_nacimiento').val(fecha_formateada(response[0].sa_est_fecha_nacimiento.date));
                 $('#sa_conp_edad').val(edad_fecha_nacimiento(response[0].sa_est_fecha_nacimiento.date));
                 $('#sa_conp_nivel').val(response[0].sa_gra_nombre);
                 $('#sa_conp_paralelo').val(response[0].sa_par_nombre);
@@ -95,7 +100,7 @@ if (isset($_GET['id_ficha'])) {
         return salida;
     }
 
-    function fecha_nacimiento_formateada(fecha) {
+    function fecha_formateada(fecha) {
         fechaYHora = fecha;
         fecha = new Date(fechaYHora);
         año = fecha.getFullYear();
@@ -108,6 +113,18 @@ if (isset($_GET['id_ficha'])) {
 
         return salida;
 
+    }
+
+    function obtener_hora_formateada(hora) {
+        var fechaActual = new Date(hora);
+        var hora = fechaActual.getHours();
+        var minutos = fechaActual.getMinutes();
+
+        // Formatear la hora como una cadena
+        var horaFormateada = (hora < 10 ? '0' : '') + hora + ':' +
+            (minutos < 10 ? '0' : '') + minutos;
+
+        return horaFormateada;
     }
 
     //Funciones para la consulta
@@ -187,24 +204,28 @@ if (isset($_GET['id_ficha'])) {
             data: {
                 id: id_consulta
             },
-            url: '<?php echo $url_general ?>/controlador/ficha_MedicaC.php?listar_solo_ficha=true',
+            url: '<?php echo $url_general ?>/controlador/consultasC.php?listar_solo_consulta=true',
             type: 'post',
             dataType: 'json',
             success: function(response) {
                 // Asignar valores del estudiante
                 $('#sa_conp_id').val(response[0].sa_conp_id);
                 $('#sa_fice_id').val(response[0].sa_fice_id);
-                $('#sa_conp_nombres').val(response[0].sa_conp_nombres);
+
+                /*$('#sa_conp_nombres').val(response[0].sa_conp_nombres);
                 $('#sa_conp_nivel').val(response[0].sa_conp_nivel);
                 $('#sa_conp_paralelo').val(response[0].sa_conp_paralelo);
                 $('#sa_conp_edad').val(response[0].sa_conp_edad);
                 $('#sa_conp_correo').val(response[0].sa_conp_correo);
-                $('#sa_conp_telefono').val(response[0].sa_conp_telefono);
+                $('#sa_conp_telefono').val(response[0].sa_conp_telefono);*/
 
                 // Asignar valores de fechas y horas
-                $('#sa_conp_fecha_ingreso').val(response[0].sa_conp_fecha_ingreso);
-                $('#sa_conp_desde_hora').val(response[0].sa_conp_desde_hora);
-                $('#sa_conp_hasta_hora').val(response[0].sa_conp_hasta_hora);
+                $('#sa_conp_fecha_ingreso').val(fecha_formateada(response[0].sa_conp_fecha_ingreso.date));
+
+               // alert(obtener_hora_formateada(response[0].sa_conp_desde_hora.date));
+
+                $('#sa_conp_desde_hora').val(obtener_hora_formateada(response[0].sa_conp_desde_hora.date));
+                $('#sa_conp_hasta_hora').val(obtener_hora_formateada(response[0].sa_conp_hasta_hora.date));
                 $('#sa_conp_tiempo_aten').val(response[0].sa_conp_tiempo_aten);
 
                 // Asignar valores de diagnósticos y medicamentos
@@ -224,14 +245,14 @@ if (isset($_GET['id_ficha'])) {
                 $('#sa_conp_motivo_certificado').val(response[0].sa_conp_motivo_certificado);
                 $('#sa_conp_CIE_10_certificado').val(response[0].sa_conp_CIE_10_certificado);
                 $('#sa_conp_diagnostico_certificado').val(response[0].sa_conp_diagnostico_certificado);
-                $('#sa_conp_fecha_entrega_certificado').val(response[0].sa_conp_fecha_entrega_certificado);
-                $('#sa_conp_fecha_inicio_falta_certificado').val(response[0].sa_conp_fecha_inicio_falta_certificado);
-                $('#sa_conp_fecha_fin_alta_certificado').val(response[0].sa_conp_fecha_fin_alta_certificado);
+                $('#sa_conp_fecha_entrega_certificado').val(fecha_formateada(response[0].sa_conp_fecha_entrega_certificado.date));
+                $('#sa_conp_fecha_inicio_falta_certificado').val(fecha_formateada(response[0].sa_conp_fecha_inicio_falta_certificado.date));
+                $('#sa_conp_fecha_fin_alta_certificado').val(fecha_formateada(response[0].sa_conp_fecha_fin_alta_certificado.date));
                 $('#sa_conp_dias_permiso_certificado').val(response[0].sa_conp_dias_permiso_certificado);
 
                 $('#sa_conp_permiso_salida').val(response[0].sa_conp_permiso_salida);
-                $('#sa_conp_fecha_permiso_salud_salida').val(response[0].sa_conp_fecha_permiso_salud_salida);
-                $('#sa_conp_hora_permiso_salida').val(response[0].sa_conp_hora_permiso_salida);
+                $('#sa_conp_fecha_permiso_salud_salida').val(fecha_formateada(response[0].sa_conp_fecha_permiso_salud_salida.date));
+                $('#sa_conp_hora_permiso_salida').val(obtener_hora_formateada(response[0].sa_conp_hora_permiso_salida.date));
 
                 // Asignar valores de notificaciones y observaciones
                 $('#sa_conp_notificacion_envio_representante').val(response[0].sa_conp_notificacion_envio_representante);
@@ -243,10 +264,10 @@ if (isset($_GET['id_ficha'])) {
 
                 // Asignar valores de estado y fechas de creación/modificación
                 $('#sa_conp_estado').val(response[0].sa_conp_estado);
-                $('#sa_conp_fecha_creacion').val(response[0].sa_conp_fecha_creacion);
-                $('#sa_conp_fecha_modificar').val(response[0].sa_conp_fecha_modificar);
+                //$('#sa_conp_fecha_creacion').val(response[0].sa_conp_fecha_creacion);
+                //$('#sa_conp_fecha_modificar').val(response[0].sa_conp_fecha_modificar);
 
-                //console.log(response);
+                console.log(response);
             }
         });
     }
@@ -508,7 +529,7 @@ if (isset($_GET['id_ficha'])) {
                             </h5>
                             <div class="row m-2">
                                 <div class="col-sm-12">
-                                    <a href="<?= $url_general ?>/vista/inicio.php?mod=7&acc=ficha_estudiante&id_estudiante=<?= $id_estudiante ?>&id_representante=<?= $id_representante ?>" class="btn btn-outline-dark btn-sm"><i class="bx bx-arrow-back"></i> Regresar</a>
+                                    <a href="<?= $url_general ?>/vista/inicio.php?mod=7&acc=consulta_estudiante&id_estudiante=<?= $id_estudiante ?>&id_representante=<?= $id_representante ?>&id_ficha=<?= $id_ficha ?>" class="btn btn-outline-dark btn-sm"><i class="bx bx-arrow-back"></i> Regresar</a>
                                 </div>
                             </div>
                         </div>
@@ -552,7 +573,7 @@ if (isset($_GET['id_ficha'])) {
                             <div class="tab-content py-3">
                                 <div class="tab-pane fade show active" id="consulta_tab" role="tabpanel">
 
-                                    <div class="accordion" id="consulta_acordeon">
+                                    <div class="accordion accordion-flush" id="consulta_acordeon">
                                         <div class="accordion-item">
                                             <h2 class="accordion-header" id="flush-headingOne">
                                                 <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#flush-estudiante" aria-expanded="true" aria-controls="flush-estudiante">
