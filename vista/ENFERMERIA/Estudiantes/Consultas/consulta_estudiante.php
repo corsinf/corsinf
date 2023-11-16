@@ -1,9 +1,5 @@
 <?php
 
-$dominio = $_SERVER['SERVER_NAME'];
-$url_general = 'http://' . $dominio . '/corsinf';
-
-
 $id_estudiante = '';
 $id_representante = '';
 $id_ficha = '';
@@ -32,11 +28,9 @@ if (isset($_GET['id_ficha'])) {
     var id_representante = '<?php echo $id_representante; ?>';
     var id_ficha = '<?php echo $id_ficha; ?>';
 
-    if (id_estudiante != '') {
-      
+    if (id_ficha != '') {
+      consultar_datos(id_ficha);
     }
-
-    consultar_datos();
   });
 
   function consultar_datos(id_estudiante = '') {
@@ -58,7 +52,9 @@ if (isset($_GET['id_ficha'])) {
           ficha_estudiante +=
             '<tr>' +
             '<td>' + cont + '</td>' +
-            '<td>' + item.sa_fice_id + '</td>' +
+            '<td>' + item.sa_conp_fecha_ingreso.date + '</td>' +
+            '<td>' + item.sa_conp_desde_hora.date + ' / ' + item.sa_conp_desde_hora.date + '</td>' +
+            '<td>' + item.sa_conp_nombres + '</td>' +
             '<td><a href="<?= $url_general ?>/vista/inicio.php?mod=7&acc=registrar_ficha_estudiante&id_ficha=' + item.sa_fice_id + '&id_estudiante=' + item.sa_fice_id + '&id_representante=' + item.sa_fice_rep_1_id + '"><u>' + item.sa_fice_id + ' ' + item.sa_fice_id + ' ' + item.sa_fice_id + ' ' + item.sa_fice_id + '</u></a></td>' +
             '<td>' + 'N' + '</td>' +
             '</tr>';

@@ -1,9 +1,5 @@
 <?php
 
-$dominio = $_SERVER['SERVER_NAME'];
-$url_general = 'http://' . $dominio . '/corsinf';
-
-
 $id_estudiante = '';
 $id_representante = '';
 

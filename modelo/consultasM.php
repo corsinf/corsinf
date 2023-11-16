@@ -63,7 +63,7 @@ class consultasM
         WHERE sa_conp_estado = 1";
 
         if ($id) {
-            $sql .= ' and sa_conp_id = ' . $id;
+            $sql .= ' and sa_fice_id = ' . $id;
         }
 
         $sql .= " ORDER BY sa_conp_id";

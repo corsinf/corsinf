@@ -1,8 +1,5 @@
 <?php //include('../../../../cabeceras/header.php');
 
-$dominio = $_SERVER['SERVER_NAME'];
-$url_general = 'http://' . $dominio . '/corsinf';
-
 $id = '';
 $id_seccion = '';
 $id_grado = '';
@@ -76,10 +73,6 @@ if (isset($_GET['id_paralelo'])) {
         // Marca la opción correspondiente si el ID coincide
       }
     });
-
-
-
-
   }
 
   function consultar_datos_seccion_grado(id_grado = '', id_seccion = '') {

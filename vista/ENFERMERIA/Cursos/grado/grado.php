@@ -1,10 +1,3 @@
-<?php
-
-$dominio = $_SERVER['SERVER_NAME'];
-$url_general = 'http://'. $dominio . '/corsinf';
-
-?>
-
 <script type="text/javascript">
     
     $(document).ready(function() {

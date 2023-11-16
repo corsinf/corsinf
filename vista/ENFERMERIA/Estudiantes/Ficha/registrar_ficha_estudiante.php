@@ -1,8 +1,5 @@
 <?php //include('../../../../cabeceras/header.php');
 
-$dominio = $_SERVER['SERVER_NAME'];
-$url_general = 'http://' . $dominio . '/corsinf';
-
 $id_ficha = '';
 $id_estudiante = '';
 $id_representante = '';

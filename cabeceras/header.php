@@ -1,6 +1,14 @@
-<?php @session_start(); 
+<?php @session_start();
 // print_r($_SESSION['INICIO']);
-if(!isset($_SESSION['INICIO'])){header('Location: ../login.php');}?> 
+if (!isset($_SESSION['INICIO'])) {
+	header('Location: ../login.php');
+}
+
+$dominio = $_SERVER['SERVER_NAME'];
+$url_general = 'http://'. $dominio . '/corsinf';
+//$url_general = 'http://' . $dominio . ':8087/corsinf';
+
+?>
 <!doctype html>
 <html lang="en">
 
@@ -12,13 +20,13 @@ if(!isset($_SESSION['INICIO'])){header('Location: ../login.php');}?>
 	<link rel="icon" href="../assets/images/favicon-32x32.png" type="image/png" />
 	<!--plugins-->
 	<link href="../assets/plugins/OwlCarousel/css/owl.carousel.min.css" rel="stylesheet">
-		<link href="../assets/plugins/Drag-And-Drop/dist/imageuploadify.min.css" rel="stylesheet" />
+	<link href="../assets/plugins/Drag-And-Drop/dist/imageuploadify.min.css" rel="stylesheet" />
 	<link href="../assets/plugins/simplebar/css/simplebar.css" rel="stylesheet" />
 	<link href="../assets/plugins/perfect-scrollbar/css/perfect-scrollbar.css" rel="stylesheet" />
 	<link href="../assets/plugins/metismenu/css/metisMenu.min.css" rel="stylesheet" />
 
-  <link href="../assets/plugins/select2/css/select2.min.css" rel="stylesheet" />
-  <link href="../assets/plugins/select2/css/select2-bootstrap4.css" rel="stylesheet" />
+	<link href="../assets/plugins/select2/css/select2.min.css" rel="stylesheet" />
+	<link href="../assets/plugins/select2/css/select2-bootstrap4.css" rel="stylesheet" />
 
 
 	<link href="../assets/plugins/datatable/css/dataTables.bootstrap5.min.css" rel="stylesheet" />
@@ -37,185 +45,176 @@ if(!isset($_SESSION['INICIO'])){header('Location: ../login.php');}?>
 
 	<link rel="stylesheet" href="../assets/plugins/summernote/summernote-lite.css">
 	<!-- <link rel="stylesheet" href="../assets/plugins/summernote/css/styles_summernote.css"> -->
-  <link rel="stylesheet" href="../assets/plugins/summernote/summernote-bs5.min.css">
-  <!-- <link rel="stylesheet" href="../assets/plugins/summernote/css/font-awesome.min.css"> -->
+	<link rel="stylesheet" href="../assets/plugins/summernote/summernote-bs5.min.css">
+	<!-- <link rel="stylesheet" href="../assets/plugins/summernote/css/font-awesome.min.css"> -->
 
-  <script src="../js/informes_globales.js"></script>
-  <script src="../js/codigos_globales.js"></script>
-  <script src="../js/sweetalert2.all.min.js"></script>
-  <script src="../js/notificaciones_seguros.js"></script>
+	<script src="../js/informes_globales.js"></script>
+	<script src="../js/codigos_globales.js"></script>
+	<script src="../js/sweetalert2.all.min.js"></script>
+	<script src="../js/notificaciones_seguros.js"></script>
 
-  <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+	<script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
 
-  <style>
-    .input-group > .select2-container--bootstrap {
-          width: auto;
-          flex: 1 1 auto;
-      }
-     .input-group-sm > .btn {
-			  padding: 1px;
+	<style>
+		.input-group>.select2-container--bootstrap {
+			width: auto;
+			flex: 1 1 auto;
+		}
+
+		.input-group-sm>.btn {
+			padding: 1px;
+		}
+	</style>
+
+
+
+
+	<script type="text/javascript">
+		// accesos();
+
+		var mod = '<?php echo $_SESSION['INICIO']['MODULO_SISTEMA']; ?>';
+
+		menu_lateral();
+		$(document).ready(function() {
+			restriccion();
+			notificaciones();
+			solicitudes();
+		});
+
+		function formatoDate(date) {
+			var formattedDate = new Date(date);
+			var d = formattedDate.getDate();
+			var m = formattedDate.getMonth();
+			m += 1; // javascript months are 0-11
+			if (m < 10) {
+				m = '0' + m;
 			}
-    </style>
+			if (d < 10) {
+				d = '0' + d;
+			}
+			var y = formattedDate.getFullYear();
+			var Fecha = y + "-" + m + "-" + d;
+			console.log(Fecha);
+			return Fecha;
+		}
 
+		function cerrar_session() {
 
+			$.ajax({
+				// data:  {parametros:parametros},
+				url: '../controlador/loginC.php?cerrar=true',
+				type: 'post',
+				dataType: 'json',
+				/*beforeSend: function () {   
+				     var spiner = '<div class="text-center"><img src="../img/gif/proce.gif" width="100" height="100"></div>'     
+				   $('#tabla_').html(spiner);
+				},*/
+				success: function(response) {
+					// if (response==1) 
+					// {
+					// console.log(response);
+					// location.href = "../login.php";
+					location.reload();
+					// } 
+				}
 
+			});
+		}
 
-   <script type="text/javascript">
-    // accesos();
+		function regresar_modulo() {
 
-    var mod = '<?php echo $_SESSION['INICIO']['MODULO_SISTEMA']; ?>';
+			$.ajax({
+				// data:  {parametros:parametros},
+				url: '../controlador/loginC.php?regresar_modulo=true',
+				type: 'post',
+				dataType: 'json',
+				/*beforeSend: function () {   
+				     var spiner = '<div class="text-center"><img src="../img/gif/proce.gif" width="100" height="100"></div>'     
+				   $('#tabla_').html(spiner);
+				},*/
+				success: function(response) {
+					location.href = 'inicio.php?mod=' + response + '&acc=index';
+				}
 
-    	menu_lateral();
-    $( document ).ready(function() {
-      restriccion();   
-      notificaciones();
-  	  solicitudes();  
-    });
+			});
+		}
 
-    function formatoDate(date)
-    {
-      var formattedDate = new Date(date); 
-      var d = formattedDate.getDate(); 
-      var m = formattedDate.getMonth(); 
-      m += 1; // javascript months are 0-11
-      if(m<10)
-      {
-        m = '0'+m;
-      } 
-      if(d<10)
-      {
-        d = '0'+d;
-      } 
-      var y = formattedDate.getFullYear(); 
-      var Fecha = y + "-" + m + "-" + d;
-      console.log(Fecha);
-      return Fecha;
-    }
-  function cerrar_session()
-  {
-    
-       $.ajax({
-         // data:  {parametros:parametros},
-         url:   '../controlador/loginC.php?cerrar=true',
-         type:  'post',
-         dataType: 'json',
-         /*beforeSend: function () {   
-              var spiner = '<div class="text-center"><img src="../img/gif/proce.gif" width="100" height="100"></div>'     
-            $('#tabla_').html(spiner);
-         },*/
-           success:  function (response) {  
-           // if (response==1) 
-           // {
-            // console.log(response);
-            // location.href = "../login.php";
-            location.reload();
-           // } 
-          } 
-          
-       });
-  }
+		function menu_lateral() {
+			$.ajax({
+				url: '../controlador/loginC.php?menu_lateral=true',
+				type: 'post',
+				dataType: 'json',
 
-  function regresar_modulo()
-  {
-    
-       $.ajax({
-         // data:  {parametros:parametros},
-         url:   '../controlador/loginC.php?regresar_modulo=true',
-         type:  'post',
-         dataType: 'json',
-         /*beforeSend: function () {   
-              var spiner = '<div class="text-center"><img src="../img/gif/proce.gif" width="100" height="100"></div>'     
-            $('#tabla_').html(spiner);
-         },*/
-           success:  function (response) {  
-           	location.href = 'inicio.php?mod='+response+'&acc=index';
-          } 
-          
-       });
-  }
+				success: function(response) {
 
-   function menu_lateral()
-  {   
-       $.ajax({
-         url:   '../controlador/loginC.php?menu_lateral=true',
-         type:  'post',
-         dataType: 'json',
-        
-           success:  function (response) {  
-           
-             // console.log(response);
-           	var ini = '<li><a href="inicio.php?acc=index"><div class="parent-icon"><i class="bx bx-home"></i></div>						<div class="menu-title">Inicio</div></a></li>';
+					// console.log(response);
+					var ini = '<li><a href="inicio.php?acc=index"><div class="parent-icon"><i class="bx bx-home"></i></div>						<div class="menu-title">Inicio</div></a></li>';
 
-             $('#menu').html(ini+response);
+					$('#menu').html(ini + response);
 
-          } 
-          
-       });
-  }
+				}
 
-function num_caracteres(campo,num)
-{
-  var val = $('#'+campo).val();
-  var cant = val.length;
-  console.log(cant+'-'+num);
+			});
+		}
 
-  if(cant>num)
-  {
-    $('#'+campo).val(val.substr(0,num));
-    return false;
-  }
+		function num_caracteres(campo, num) {
+			var val = $('#' + campo).val();
+			var cant = val.length;
+			console.log(cant + '-' + num);
 
-}
+			if (cant > num) {
+				$('#' + campo).val(val.substr(0, num));
+				return false;
+			}
 
-function cambiar_configuraciones()
-{
-	  // Swal.fire({
-    //   title: 'Esta apunto de ingresar a las configuraciones del sistema?',
-    //   text: "Esta seguro de Ingrear !",
-    //   icon: 'warning',
-    //   showCancelButton: true,
-    //   confirmButtonColor: '#3085d6',
-    //   cancelButtonColor: '#d33',
-    //   confirmButtonText: 'Si'
-    // }).then((result) => {
-    //     if (result.value) {
-        	
-        	$.ajax({
-		         url:   '../controlador/loginC.php?change_settings=true',
-		         type:  'post',
-		         dataType: 'json',		        
-		           success:  function (response) {  	
-		           	if(response==1)
-        					{	
-		           			location.href = 'inicio.php?mod=1&acc=index';
-		         			 }
-		         	}
-		       });
+		}
 
-    //     }
+		function cambiar_configuraciones() {
+			// Swal.fire({
+			//   title: 'Esta apunto de ingresar a las configuraciones del sistema?',
+			//   text: "Esta seguro de Ingrear !",
+			//   icon: 'warning',
+			//   showCancelButton: true,
+			//   confirmButtonColor: '#3085d6',
+			//   cancelButtonColor: '#d33',
+			//   confirmButtonText: 'Si'
+			// }).then((result) => {
+			//     if (result.value) {
 
-    // })
-}
+			$.ajax({
+				url: '../controlador/loginC.php?change_settings=true',
+				type: 'post',
+				dataType: 'json',
+				success: function(response) {
+					if (response == 1) {
+						location.href = 'inicio.php?mod=1&acc=index';
+					}
+				}
+			});
 
-// function navegacion(link)
-// {
-// 	var URLactual = window.location.pathname;
-// 	// console.log(URLactual);
-// 	pag = link.replace('.php','');
-// 	location.href = URLactual+'?pag='+pag
-// }
+			//     }
 
-  </script>
+			// })
+		}
+
+		// function navegacion(link)
+		// {
+		// 	var URLactual = window.location.pathname;
+		// 	// console.log(URLactual);
+		// 	pag = link.replace('.php','');
+		// 	location.href = URLactual+'?pag='+pag
+		// }
+	</script>
 </head>
 
 <body>
 	<!--wrapper-->
 	<div class="wrapper">
 
-	  <input type="hidden" name="" id="dba">
-	  <input type="hidden" name="" id="ver">
-	  <input type="hidden" name="" id="editar">
-	  <input type="hidden" name="" id="eliminar">
+		<input type="hidden" name="" id="dba">
+		<input type="hidden" name="" id="ver">
+		<input type="hidden" name="" id="editar">
+		<input type="hidden" name="" id="eliminar">
 		<!--sidebar wrapper -->
 		<div class="sidebar-wrapper" data-simplebar="true">
 			<div class="sidebar-header">
@@ -230,7 +229,7 @@ function cambiar_configuraciones()
 			</div>
 			<!--navigation-->
 			<ul class="metismenu" id="menu">
-				
+
 			</ul>
 			<!-- <ul class="metismenu" id="menu1">
 				
@@ -548,11 +547,11 @@ function cambiar_configuraciones()
 					<div class="top-menu ms-auto">
 						<ul class="navbar-nav align-items-center">
 							<li class="nav-item mobile-search-icon">
-								<a class="nav-link" href="#">	<i class='bx bx-search'></i>
+								<a class="nav-link" href="#"> <i class='bx bx-search'></i>
 								</a>
 							</li>
 							<li class="nav-item dropdown dropdown-large">
-								<a class="nav-link dropdown-toggle dropdown-toggle-nocaret" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">	<i class='bx bx-category'></i>
+								<a class="nav-link dropdown-toggle dropdown-toggle-nocaret" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"> <i class='bx bx-category'></i>
 								</a>
 								<div class="dropdown-menu dropdown-menu-end">
 									<div class="row row-cols-3 g-3 p-3">
@@ -601,8 +600,8 @@ function cambiar_configuraciones()
 										</div>
 									</a>
 									<div class="header-notifications-list" id="pnl_notificaciones">
-										
-									
+
+
 									</div>
 									<!-- <a href="javascript:;">
 										<div class="text-center msg-footer">View All Notifications</div>
@@ -621,14 +620,14 @@ function cambiar_configuraciones()
 										</div>
 									</a>
 									<div class="header-message-list" id="pnl_solicitudes">
-													
-									</div>								
+
+									</div>
 								</div>
 							</li>
 							<li>
-									<a class="nav-link dropdown-toggle dropdown-toggle-nocaret position-relative" href="modulos_sistema.php" role="button" aria-expanded="false" title="Salir del modulo">
+								<a class="nav-link dropdown-toggle dropdown-toggle-nocaret position-relative" href="modulos_sistema.php" role="button" aria-expanded="false" title="Salir del modulo">
 									<i class='bx bx-log-out'></i>
-									</a>								
+								</a>
 							</li>
 						</ul>
 					</div>
@@ -643,9 +642,9 @@ function cambiar_configuraciones()
 						<ul class="dropdown-menu dropdown-menu-end">
 							<li><a class="dropdown-item" href="inicio.php?acc=perfil"><i class="bx bx-user"></i><span>Perfil</span></a>
 							</li>
-							<?php if($_SESSION['INICIO']['TIPO']=='DBA'){ ?>
-							<li><a class="dropdown-item" href="javascript:;" onclick="cambiar_configuraciones()"><i class="bx bx-cog"></i><span>Configuraciones</span></a>
-							</li>
+							<?php if ($_SESSION['INICIO']['TIPO'] == 'DBA') { ?>
+								<li><a class="dropdown-item" href="javascript:;" onclick="cambiar_configuraciones()"><i class="bx bx-cog"></i><span>Configuraciones</span></a>
+								</li>
 							<?php } ?>
 							<li><a class="dropdown-item" href="javascript:;"><i class='bx bx-home-circle'></i><span>Dashboard</span></a>
 							</li>
@@ -657,13 +656,12 @@ function cambiar_configuraciones()
 								<div class="dropdown-divider mb-0"></div>
 							</li>
 							<li><a class="dropdown-item" href="javascript:;" onclick="cerrar_session();"><i class='bx bx-log-out-circle'></i><span>Salir de sistema</span></a>
-								<?php if($_SESSION['INICIO']['MODULO_SISTEMA']==1){ ?>
-									<li><a class="dropdown-item" href="javascript:;" onclick="regresar_modulo();"><i class='bx bx-log-out-circle'></i><span>Salir de configuraciones</span></a>
-								<?php }?>
+								<?php if ($_SESSION['INICIO']['MODULO_SISTEMA'] == 1) { ?>
+							<li><a class="dropdown-item" href="javascript:;" onclick="regresar_modulo();"><i class='bx bx-log-out-circle'></i><span>Salir de configuraciones</span></a>
+							<?php } ?>
 							</li>
 						</ul>
 					</div>
 				</nav>
 			</div>
 		</header>
-		
