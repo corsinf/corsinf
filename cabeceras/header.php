@@ -5,8 +5,8 @@ if (!isset($_SESSION['INICIO'])) {
 }
 
 $dominio = $_SERVER['SERVER_NAME'];
-$url_general = 'http://'. $dominio . '/corsinf';
-//$url_general = 'http://' . $dominio . ':8087/corsinf';
+//$url_general = 'http://'. $dominio . '/corsinf';
+$url_general = 'http://' . $dominio . ':8087/corsinf';
 
 ?>
 <!doctype html>
