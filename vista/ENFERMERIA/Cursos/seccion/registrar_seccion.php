@@ -1,7 +1,7 @@
 <?php //include('../../../../cabeceras/header.php');
 
 $dominio = $_SERVER['SERVER_NAME'];
-$url_general = 'http://' . $dominio . ':8087';
+$url_general = 'http://' . $dominio . ':8087/corsinf';
 
 $id = '';
 
