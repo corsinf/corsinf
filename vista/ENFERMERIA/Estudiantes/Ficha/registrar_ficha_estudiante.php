@@ -453,7 +453,7 @@ if (isset($_GET['id_ficha'])) {
             data: {
                 parametros: parametros
             },
-            url: '<?= $url_general ?>/controlador/fichas_EstudianteC.php?insertar=true',
+            url: '<?= $url_general ?>/controlador/ficha_medicaC.php?insertar=true',
             type: 'post',
             dataType: 'json',
             /*beforeSend: function () {   
@@ -499,7 +499,7 @@ if (isset($_GET['id_ficha'])) {
             data: {
                 id: id
             },
-            url: '<?= $url_general ?>/controlador/fichas_EstudianteC.php?eliminar=true',
+            url: '<?= $url_general ?>/controlador/ficha_medicaC.php?eliminar=true',
             type: 'post',
             dataType: 'json',
             /*beforeSend: function () {   
