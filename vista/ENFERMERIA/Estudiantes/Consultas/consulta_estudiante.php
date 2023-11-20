@@ -140,7 +140,7 @@ if (isset($_GET['id_ficha'])) {
   <div class="page-content">
 
     <!--breadcrumb-->
-    <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
+    <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3"> 
       <div class="breadcrumb-title pe-3">Enfermería </div>
       <?php
       // print_r($_SESSION['INICIO']);die();
@@ -184,7 +184,7 @@ if (isset($_GET['id_ficha'])) {
 
                   <div class="row">
                     <div class="col-sm-12" id="btn_nuevo">
-                      <a href="<?= $url_general ?>/vista/inicio.php?mod=7&acc=registrar_consulta_estudiante&id_estudiante=<?= $id_estudiante ?>&id_representante=<?= $id_representante ?>" class="btn btn-success btn-sm"><i class="bx bx-plus"></i> Nuevo</a>
+                      <a href="<?= $url_general ?>/vista/inicio.php?mod=7&acc=registrar_consulta_estudiante&id_estudiante=<?= $id_estudiante ?>&id_representante=<?= $id_representante ?>&id_ficha=<?= $id_ficha ?>" class="btn btn-success btn-sm"><i class="bx bx-plus"></i> Nuevo</a>
                       <a href="#" class="btn btn-outline-secondary btn-sm" id="excel_estudiantes" title="Informe en excel del total de Consultas del Estudiante"><i class="bx bx-file"></i> Total Consultas del Estudiante</a>
                     </div>
                   </div>

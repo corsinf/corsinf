@@ -33,6 +33,9 @@ if (isset($_GET['id_consulta'])) {
 
         //alert(id_estudiante + ' + ' + id_representante);
 
+        //Para cargar el id de la ficha del estudiante al momento de insertar
+        $('#sa_fice_id').val(id_ficha);
+
         if (id_estudiante != '') {
             datos_col_estudiante(id_estudiante);
             datos_col_representante(id_representante);
@@ -222,7 +225,7 @@ if (isset($_GET['id_consulta'])) {
                 // Asignar valores de fechas y horas
                 $('#sa_conp_fecha_ingreso').val(fecha_formateada(response[0].sa_conp_fecha_ingreso.date));
 
-               // alert(obtener_hora_formateada(response[0].sa_conp_desde_hora.date));
+                // alert(obtener_hora_formateada(response[0].sa_conp_desde_hora.date));
 
                 $('#sa_conp_desde_hora').val(obtener_hora_formateada(response[0].sa_conp_desde_hora.date));
                 $('#sa_conp_hasta_hora').val(obtener_hora_formateada(response[0].sa_conp_hasta_hora.date));
@@ -262,6 +265,7 @@ if (isset($_GET['id_consulta'])) {
                 $('#sa_conp_observaciones').val(response[0].sa_conp_observaciones);
                 $('#sa_conp_tipo_consulta').val(response[0].sa_conp_tipo_consulta);
 
+            
                 // Asignar valores de estado y fechas de creación/modificación
                 $('#sa_conp_estado').val(response[0].sa_conp_estado);
                 //$('#sa_conp_fecha_creacion').val(response[0].sa_conp_fecha_creacion);
@@ -272,105 +276,110 @@ if (isset($_GET['id_consulta'])) {
         });
     }
 
+    //falta estado para profesor
     function editar_insertar() {
+        var sa_conp_id = $('#sa_conp_id').val();
         var sa_fice_id = $('#sa_fice_id').val();
 
         // Datos del estudiante
-        var sa_fice_est_id = $('#sa_fice_est_id').val();
-        var sa_fice_est_primer_apellido = $('#sa_fice_est_primer_apellido').val();
-        var sa_fice_est_segundo_apellido = $('#sa_fice_est_segundo_apellido').val();
-        var sa_fice_est_primer_nombre = $('#sa_fice_est_primer_nombre').val();
-        var sa_fice_est_segundo_nombre = $('#sa_fice_est_segundo_nombre').val();
-        var sa_fice_est_fecha_nacimiento = $('#sa_fice_est_fecha_nacimiento').val();
+        var sa_conp_nombres = $('#sa_conp_nombres').val();
+        var sa_conp_nivel = $('#sa_conp_nivel').val();
+        var sa_conp_paralelo = $('#sa_conp_paralelo').val();
+        var sa_conp_edad = $('#sa_conp_edad').val();
+        var sa_conp_correo = $('#sa_conp_correo').val();
+        var sa_conp_telefono = $('#sa_conp_telefono').val();
 
-        // Resto de los campos del estudiante
-        var sa_fice_est_grupo_sangre = $('#sa_fice_est_grupo_sangre').val();
-        var sa_fice_est_direccion_domicilio = $('#sa_fice_est_direccion_domicilio').val();
-        var sa_fice_est_seguro_medico = $('#sa_fice_est_seguro_medico').val();
-        var sa_fice_est_nombre_seguro = $('#sa_fice_est_nombre_seguro').val();
+        // Fechas y horas
+        var sa_conp_fecha_ingreso = ($('#sa_conp_fecha_ingreso').val());
+        var sa_conp_desde_hora = ($('#sa_conp_desde_hora').val());
+        var sa_conp_hasta_hora = ($('#sa_conp_hasta_hora').val());
+        var sa_conp_tiempo_aten = $('#sa_conp_tiempo_aten').val();
 
-        // Datos del representante 1
-        var sa_fice_rep_1_id = $('#sa_fice_rep_1_id').val();
-        var sa_fice_rep_1_primer_apellido = $('#sa_fice_rep_1_primer_apellido').val();
-        var sa_fice_rep_1_segundo_apellido = $('#sa_fice_rep_1_segundo_apellido').val();
-        var sa_fice_rep_1_primer_nombre = $('#sa_fice_rep_1_primer_nombre').val();
-        var sa_fice_rep_1_segundo_nombre = $('#sa_fice_rep_1_segundo_nombre').val();
-        var sa_fice_rep_1_parentesco = $('#sa_fice_rep_1_parentesco').val();
-        var sa_fice_rep_1_telefono_1 = $('#sa_fice_rep_1_telefono_1').val();
-        var sa_fice_rep_1_telefono_2 = $('#sa_fice_rep_1_telefono_2').val();
+        // Diagnósticos y medicamentos
+        var sa_conp_CIE_10_1 = $('#sa_conp_CIE_10_1').val();
+        var sa_conp_diagnostico_1 = $('#sa_conp_diagnostico_1').val();
+        var sa_conp_CIE_10_2 = $('#sa_conp_CIE_10_2').val();
+        var sa_conp_diagnostico_2 = $('#sa_conp_diagnostico_2').val();
+        var sa_conp_medicina_1 = $('#sa_conp_medicina_1').val();
+        var sa_conp_dosis_1 = $('#sa_conp_dosis_1').val();
+        var sa_conp_medicina_2 = $('#sa_conp_medicina_2').val();
+        var sa_conp_dosis_2 = $('#sa_conp_dosis_2').val();
+        var sa_conp_medicina_3 = $('#sa_conp_medicina_3').val();
+        var sa_conp_dosis_3 = $('#sa_conp_dosis_3').val();
 
-        // Datos del representante 2
-        var sa_fice_rep_2_primer_apellido = $('#sa_fice_rep_2_primer_apellido').val();
-        var sa_fice_rep_2_segundo_apellido = $('#sa_fice_rep_2_segundo_apellido').val();
-        var sa_fice_rep_2_primer_nombre = $('#sa_fice_rep_2_primer_nombre').val();
-        var sa_fice_rep_2_segundo_nombre = $('#sa_fice_rep_2_segundo_nombre').val();
-        var sa_fice_rep_2_parentesco = $('#sa_fice_rep_2_parentesco').val();
-        var sa_fice_rep_2_telefono_1 = $('#sa_fice_rep_2_telefono_1').val();
-        var sa_fice_rep_2_telefono_2 = $('#sa_fice_rep_2_telefono_2').val();
+        // Certificados y permisos
+        var sa_conp_certificado_salud = $('#sa_conp_certificado_salud').val();
+        var sa_conp_motivo_certificado = $('#sa_conp_motivo_certificado').val();
+        var sa_conp_CIE_10_certificado = $('#sa_conp_CIE_10_certificado').val();
+        var sa_conp_diagnostico_certificado = $('#sa_conp_diagnostico_certificado').val();
+        var sa_conp_fecha_entrega_certificado = ($('#sa_conp_fecha_entrega_certificado').val());
+        var sa_conp_fecha_inicio_falta_certificado = ($('#sa_conp_fecha_inicio_falta_certificado').val());
+        var sa_conp_fecha_fin_alta_certificado = ($('#sa_conp_fecha_fin_alta_certificado').val());
+        var sa_conp_dias_permiso_certificado = $('#sa_conp_dias_permiso_certificado').val();
 
-        // Preguntas
-        var sa_fice_pregunta_1 = $('input[name=sa_fice_pregunta_1]:checked').val();
-        var sa_fice_pregunta_1_obs = $('#sa_fice_pregunta_1_obs').val();
+        // Permisos de salida
+        var sa_conp_permiso_salida = $('#sa_conp_permiso_salida').val();
+        var sa_conp_fecha_permiso_salud_salida = ($('#sa_conp_fecha_permiso_salud_salida').val());
+        var sa_conp_hora_permiso_salida = ($('#sa_conp_hora_permiso_salida').val());
 
-        var sa_fice_pregunta_2 = $('input[name=sa_fice_pregunta_2]:checked').val();
-        var sa_fice_pregunta_2_obs = $('#sa_fice_pregunta_2_obs').val();
+        // Notificaciones y observaciones
+        var sa_conp_notificacion_envio_representante = $('#sa_conp_notificacion_envio_representante').val();
+        var sa_conp_notificacion_envio_inspector = $('#sa_conp_notificacion_envio_inspector').val();
+        var sa_conp_notificacion_envio_guardia = $('#sa_conp_notificacion_envio_guardia').val();
 
-        var sa_fice_pregunta_3 = $('input[name=sa_fice_pregunta_3]:checked').val();
-        var sa_fice_pregunta_3_obs = $('#sa_fice_pregunta_3_obs').val();
+        var sa_conp_observaciones = $('#sa_conp_observaciones').val();
+        var sa_conp_tipo_consulta = $('#sa_conp_tipo_consulta').val();
 
-        var sa_fice_pregunta_4 = $('input[name=sa_fice_pregunta_4]:checked').val();
-        var sa_fice_pregunta_4_obs = $('#sa_fice_pregunta_4_obs').val();
-
-        var sa_fice_pregunta_5_obs = $('#sa_fice_pregunta_5_obs').val();
+        // Estado y fechas de creación/modificación
+        //var sa_conp_estado = $('#sa_conp_estado').val();
+        //var sa_conp_fecha_creacion = $('#sa_conp_fecha_creacion').val();
+        //var sa_conp_fecha_modificar = $('#sa_conp_fecha_modificar').val()
 
         // Crear objeto de parámetros
         var parametros = {
+            'sa_conp_id': sa_conp_id,
             'sa_fice_id': sa_fice_id,
-            'sa_fice_est_id': sa_fice_est_id,
-            'sa_fice_est_primer_apellido': sa_fice_est_primer_apellido,
-            'sa_fice_est_segundo_apellido': sa_fice_est_segundo_apellido,
-            'sa_fice_est_primer_nombre': sa_fice_est_primer_nombre,
-            'sa_fice_est_segundo_nombre': sa_fice_est_segundo_nombre,
-            'sa_fice_est_fecha_nacimiento': sa_fice_est_fecha_nacimiento,
-            'sa_fice_est_grupo_sangre': sa_fice_est_grupo_sangre,
-            'sa_fice_est_direccion_domicilio': sa_fice_est_direccion_domicilio,
-            'sa_fice_est_seguro_medico': sa_fice_est_seguro_medico,
-            'sa_fice_est_nombre_seguro': sa_fice_est_nombre_seguro,
-            'sa_fice_rep_1_id': sa_fice_rep_1_id,
-            'sa_fice_rep_1_primer_apellido': sa_fice_rep_1_primer_apellido,
-            'sa_fice_rep_1_segundo_apellido': sa_fice_rep_1_segundo_apellido,
-            'sa_fice_rep_1_primer_nombre': sa_fice_rep_1_primer_nombre,
-            'sa_fice_rep_1_segundo_nombre': sa_fice_rep_1_segundo_nombre,
-            'sa_fice_rep_1_parentesco': sa_fice_rep_1_parentesco,
-            'sa_fice_rep_1_telefono_1': sa_fice_rep_1_telefono_1,
-            'sa_fice_rep_1_telefono_2': sa_fice_rep_1_telefono_2,
-            'sa_fice_rep_2_primer_apellido': sa_fice_rep_2_primer_apellido,
-            'sa_fice_rep_2_segundo_apellido': sa_fice_rep_2_segundo_apellido,
-            'sa_fice_rep_2_primer_nombre': sa_fice_rep_2_primer_nombre,
-            'sa_fice_rep_2_segundo_nombre': sa_fice_rep_2_segundo_nombre,
-            'sa_fice_rep_2_parentesco': sa_fice_rep_2_parentesco,
-            'sa_fice_rep_2_telefono_1': sa_fice_rep_2_telefono_1,
-            'sa_fice_rep_2_telefono_2': sa_fice_rep_2_telefono_2,
-            'sa_fice_pregunta_1': sa_fice_pregunta_1,
-            'sa_fice_pregunta_1_obs': sa_fice_pregunta_1_obs,
-            'sa_fice_pregunta_2': sa_fice_pregunta_2,
-            'sa_fice_pregunta_2_obs': sa_fice_pregunta_2_obs,
-            'sa_fice_pregunta_3': sa_fice_pregunta_3,
-            'sa_fice_pregunta_3_obs': sa_fice_pregunta_3_obs,
-            'sa_fice_pregunta_4': sa_fice_pregunta_4,
-            'sa_fice_pregunta_4_obs': sa_fice_pregunta_4_obs,
-            'sa_fice_pregunta_5_obs': sa_fice_pregunta_5_obs,
+            'sa_conp_nombres': sa_conp_nombres,
+            'sa_conp_nivel': sa_conp_nivel,
+            'sa_conp_paralelo': sa_conp_paralelo,
+            'sa_conp_edad': sa_conp_edad,
+            'sa_conp_correo': sa_conp_correo,
+            'sa_conp_telefono': sa_conp_telefono,
+            'sa_conp_fecha_ingreso': sa_conp_fecha_ingreso,
+            'sa_conp_desde_hora': sa_conp_desde_hora,
+            'sa_conp_hasta_hora': sa_conp_hasta_hora,
+            'sa_conp_tiempo_aten': sa_conp_tiempo_aten,
+            'sa_conp_CIE_10_1': sa_conp_CIE_10_1,
+            'sa_conp_diagnostico_1': sa_conp_diagnostico_1,
+            'sa_conp_CIE_10_2': sa_conp_CIE_10_2,
+            'sa_conp_diagnostico_2': sa_conp_diagnostico_2,
+            'sa_conp_medicina_1': sa_conp_medicina_1,
+            'sa_conp_dosis_1': sa_conp_dosis_1,
+            'sa_conp_medicina_2': sa_conp_medicina_2,
+            'sa_conp_dosis_2': sa_conp_dosis_2,
+            'sa_conp_medicina_3': sa_conp_medicina_3,
+            'sa_conp_dosis_3': sa_conp_dosis_3,
+            'sa_conp_certificado_salud': sa_conp_certificado_salud,
+            'sa_conp_motivo_certificado': sa_conp_motivo_certificado,
+            'sa_conp_CIE_10_certificado': sa_conp_CIE_10_certificado,
+            'sa_conp_diagnostico_certificado': sa_conp_diagnostico_certificado,
+            'sa_conp_fecha_entrega_certificado': sa_conp_fecha_entrega_certificado,
+            'sa_conp_fecha_inicio_falta_certificado': sa_conp_fecha_inicio_falta_certificado,
+            'sa_conp_fecha_fin_alta_certificado': sa_conp_fecha_fin_alta_certificado,
+            'sa_conp_dias_permiso_certificado': sa_conp_dias_permiso_certificado,
+            'sa_conp_permiso_salida': sa_conp_permiso_salida,
+            'sa_conp_fecha_permiso_salud_salida': sa_conp_fecha_permiso_salud_salida,
+            'sa_conp_hora_permiso_salida': sa_conp_hora_permiso_salida,
+            'sa_conp_notificacion_envio_representante': sa_conp_notificacion_envio_representante,
+            'sa_conp_notificacion_envio_inspector': sa_conp_notificacion_envio_inspector,
+            'sa_conp_notificacion_envio_guardia': sa_conp_notificacion_envio_guardia,
+            'sa_conp_observaciones': sa_conp_observaciones,
+            'sa_conp_tipo_consulta': sa_conp_tipo_consulta
         };
 
-        if (sa_fice_id == '') {
+        if (sa_conp_id == '') {
             if (
-                sa_fice_est_grupo_sangre == null ||
-                sa_fice_est_seguro_medico == null ||
-                sa_fice_pregunta_1 == null ||
-                sa_fice_pregunta_2 == null ||
-                sa_fice_pregunta_3 == null ||
-                sa_fice_pregunta_4 == null ||
-                sa_fice_est_direccion_domicilio === ''
+                sa_conp_nombres == null
             ) {
                 Swal.fire({
                     icon: 'error',
@@ -381,16 +390,11 @@ if (isset($_GET['id_consulta'])) {
             } else {
                 insertar(parametros)
                 //alert('entra');
+                //console.log(parametros);
             }
         } else {
             if (
-                sa_fice_est_grupo_sangre == null ||
-                sa_fice_est_seguro_medico == null ||
-                sa_fice_pregunta_1 == null ||
-                sa_fice_pregunta_2 == null ||
-                sa_fice_pregunta_3 == null ||
-                sa_fice_pregunta_4 == null ||
-                sa_fice_est_direccion_domicilio === ''
+                sa_conp_nombres == null
             ) {
                 Swal.fire({
                     icon: 'error',
@@ -401,9 +405,10 @@ if (isset($_GET['id_consulta'])) {
             } else {
                 insertar(parametros);
                 //alert('entra');
+                //console.log(parametros);
             }
         }
-        console.log(parametros);
+        //console.log(parametros);
         //insertar(parametros);
     }
 
@@ -412,11 +417,13 @@ if (isset($_GET['id_consulta'])) {
         var id_representante = '<?php echo $id_representante; ?>';
         var id_ficha = '<?php echo $id_ficha; ?>';
 
+        console.log(parametros);
+
         $.ajax({
             data: {
                 parametros: parametros
             },
-            url: '<?= $url_general ?>/controlador/fichas_EstudianteC.php?insertar=true',
+            url: '<?= $url_general ?>/controlador/consultasC.php?insertar=true',
             type: 'post',
             dataType: 'json',
             /*beforeSend: function () {   
@@ -426,18 +433,19 @@ if (isset($_GET['id_consulta'])) {
             success: function(response) {
                 if (response == 1) {
                     Swal.fire('', 'Operacion realizada con exito.', 'success').then(function() {
-                        location.href = '<?= $url_general ?>/vista/inicio.php?mod=7&acc=ficha_estudiante&id_estudiante=' + id_estudiante + '&id_representante=' + id_representante;
+                        location.href = '<?= $url_general ?>/vista/inicio.php?mod=7&acc=consulta_estudiante&id_estudiante=' + id_estudiante + '&id_representante=' + id_representante + '&id_ficha=' + id_ficha;
                     });
                 } else if (response == -2) {
                     Swal.fire('', 'codigo ya registrado', 'success');
                 }
+
                 console.log(response);
             }
         });
     }
 
     function delete_datos() {
-        var id_ficha = '<?php echo $id_ficha; ?>';
+        var id_consulta = '<?php echo $id_consulta; ?>';
         Swal.fire({
             title: 'Eliminar Registro?',
             text: "Esta seguro de eliminar este registro?",
@@ -448,7 +456,7 @@ if (isset($_GET['id_consulta'])) {
             confirmButtonText: 'Si'
         }).then((result) => {
             if (result.value) {
-                eliminar(id_ficha);
+                eliminar(id_consulta);
             }
         })
     }
@@ -462,17 +470,17 @@ if (isset($_GET['id_consulta'])) {
             data: {
                 id: id
             },
-            url: '<?= $url_general ?>/controlador/fichas_EstudianteC.php?eliminar=true',
+            url: '<?= $url_general ?>/controlador/consultasC.php?eliminar=true',
             type: 'post',
             dataType: 'json',
             /*beforeSend: function () {   
-                 var spiner = '<div class="text-center"><img src="../../img/gif/proce.gif" width="100" height="100"></div>'     
+                 var spiner = '<div class="text-center"><img src="../../img/gif/proce.gif" width="100" height="100"></div>'      
                $('#tabla_').html(spiner);
             },*/
             success: function(response) {
                 if (response == 1) {
                     Swal.fire('Eliminado!', 'Registro Eliminado.', 'success').then(function() {
-                        location.href = '<?= $url_general ?>/vista/inicio.php?mod=7&acc=ficha_estudiante&id_estudiante=' + id_estudiante + '&id_representante=' + id_representante;
+                        location.href = '<?= $url_general ?>/vista/inicio.php?mod=7&acc=consulta_estudiante&id_estudiante=' + id_estudiante + '&id_representante=' + id_representante + '&id_ficha=' + id_ficha;
                     });
                 }
             }
@@ -538,6 +546,12 @@ if (isset($_GET['id_consulta'])) {
                         <form action="" method="post">
 
                             <input type="hidden" id="sa_conp_id" name="sa_conp_id">
+                            <input type="hidden" id="sa_fice_id" name="sa_fice_id">
+                            <input type="hidden" id="sa_conp_notificacion_envio_guardia" name="sa_conp_notificacion_envio_guardia">
+                            <input type="hidden" id="sa_conp_notificacion_envio_inspector" name="sa_conp_notificacion_envio_inspector">
+                            <input type="hidden" id="sa_conp_notificacion_envio_representante" name="sa_conp_notificacion_envio_representante">
+                            <input type="hidden" id="sa_conp_tipo_consulta" name="sa_conp_tipo_consulta">
+                            <input type="hidden" id="sa_conp_estado" name="sa_conp_estado" value="1">
 
 
 

@@ -150,55 +150,11 @@ class consultasM
 
     function buscar_consultas_CODIGO($buscar)
     {
-        $sql = "SELECT
-        sa_fice_id,
-        sa_fice_est_id,
-        sa_fice_est_primer_apellido,
-        sa_fice_est_segundo_apellido,
-        sa_fice_est_primer_nombre,
-        sa_fice_est_segundo_nombre,
-        sa_fice_est_fecha_nacimiento,
-        sa_fice_est_grupo_sangre,
-        sa_fice_est_direccion_domicilio,
-        sa_fice_est_seguro_medico,
-        sa_fice_est_nombre_seguro,
-    
-        sa_fice_rep_1_id,
-        sa_fice_rep_1_primer_apellido,
-        sa_fice_rep_1_segundo_apellido,
-        sa_fice_rep_1_primer_nombre,
-        sa_fice_rep_1_segundo_nombre,
-        sa_fice_rep_1_parentesco,
-        sa_fice_rep_1_telefono_1,
-        sa_fice_rep_1_telefono_2,
-    
-        sa_fice_rep_2_primer_apellido,
-        sa_fice_rep_2_segundo_apellido,
-        sa_fice_rep_2_primer_nombre,
-        sa_fice_rep_2_segundo_nombre,
-        sa_fice_rep_2_parentesco,
-        sa_fice_rep_2_telefono_1,
-        sa_fice_rep_2_telefono_2,
-    
-        sa_fice_pregunta_1,
-        sa_fice_pregunta_1_obs,
-    
-        sa_fice_pregunta_2,
-        sa_fice_pregunta_2_obs,
-    
-        sa_fice_pregunta_3,
-        sa_fice_pregunta_3_obs,
-    
-        sa_fice_pregunta_4,
-        sa_fice_pregunta_4_obs,
-        
-        sa_fice_pregunta_5_obs,
-        
-        sa_fice_fecha_creacion,
-        sa_fice_fecha_modificar
+        $sql = "SELECT 
+        sa_conp_id
         
         FROM consultas
-        WHERE sa_fice_id = '" . $buscar . "'";
+        WHERE sa_conp_estado = 1 and sa_conp_id = ' " . $buscar . "'";
 
         $datos = $this->db_salud->datos($sql);
         return $datos;
@@ -218,7 +174,7 @@ class consultasM
 
     function eliminar($datos)
     {
-        $sql = "UPDATE consultas SET sa_fice_estado = 0 WHERE " . $datos[0]['campo'] . "='" . $datos[0]['dato'] . "';";
+        $sql = "UPDATE consultas SET sa_conp_estado = 0 WHERE " . $datos[0]['campo'] . "='" . $datos[0]['dato'] . "';";
         $datos = $this->db_salud->sql_string($sql);
         return $datos;
     }
