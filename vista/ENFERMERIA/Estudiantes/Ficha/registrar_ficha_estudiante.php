@@ -75,9 +75,9 @@ if (isset($_GET['id_ficha'])) {
 
         $('#sa_fice_est_seguro_medico').change(function() {
             if ($(this).val() === 'Si') {
-                $('#sa_fice_est_nombre_seguro').show();
+                $('#sa_fice_est_nombre_seguro_div').show();
             } else if ($(this).val() === 'No') {
-                $('#sa_fice_est_nombre_seguro').hide();
+                $('#sa_fice_est_nombre_seguro_div').hide();
                 $('#sa_fice_est_nombre_seguro').val('');
             }
         });
@@ -257,6 +257,13 @@ if (isset($_GET['id_ficha'])) {
                 $('#sa_fice_est_seguro_medico').val(response[0].sa_fice_est_seguro_medico);
                 $('#sa_fice_est_nombre_seguro').val(response[0].sa_fice_est_nombre_seguro);
 
+                if (response[0].sa_fice_est_seguro_medico === "Si") {
+                    $("#sa_fice_est_nombre_seguro_div").show();
+                    $('#sa_fice_est_nombre_seguro').val(response[0].sa_fice_est_nombre_seguro);
+                } else if (response[0].sa_fice_est_seguro_medico === "No") {
+                    $("#sa_fice_est_nombre_seguro_div").hide();
+                }
+
                 /*if (response[0].sa_fice_est_nombre_seguro === 'Si') {
                     $('#sa_fice_est_nombre_seguro').show();
                 } else if (response[0].sa_fice_est_nombre_seguro === 'No') {
@@ -286,16 +293,36 @@ if (isset($_GET['id_ficha'])) {
 
                 // Preguntas
                 $('input[name=sa_fice_pregunta_1][value=' + response[0].sa_fice_pregunta_1 + ']').prop('checked', true);
-                $('#sa_fice_pregunta_1_obs').val(response[0].sa_fice_pregunta_1_obs);
+                if (response[0].sa_fice_pregunta_1 === "Si") {
+                    $("#sa_fice_pregunta_1_obs").show();
+                    $('#sa_fice_pregunta_1_obs').val(response[0].sa_fice_pregunta_1_obs);
+                } else if (response[0].sa_fice_pregunta_1 === "No") {
+                    $("#sa_fice_pregunta_1_obs").hide();
+                }
 
                 $('input[name=sa_fice_pregunta_2][value=' + response[0].sa_fice_pregunta_2 + ']').prop('checked', true);
-                $('#sa_fice_pregunta_2_obs').val(response[0].sa_fice_pregunta_2_obs);
+                if (response[0].sa_fice_pregunta_2 === "Si") {
+                    $("#sa_fice_pregunta_2_obs").show();
+                    $('#sa_fice_pregunta_2_obs').val(response[0].sa_fice_pregunta_2_obs);
+                } else if (response[0].sa_fice_pregunta_2 === "No") {
+                    $("#sa_fice_pregunta_2_obs").hide();
+                }
 
                 $('input[name=sa_fice_pregunta_3][value=' + response[0].sa_fice_pregunta_3 + ']').prop('checked', true);
-                $('#sa_fice_pregunta_3_obs').val(response[0].sa_fice_pregunta_3_obs);
+                if (response[0].sa_fice_pregunta_3 === "Si") {
+                    $("#sa_fice_pregunta_3_obs").show();
+                    $('#sa_fice_pregunta_3_obs').val(response[0].sa_fice_pregunta_3_obs);
+                } else if (response[0].sa_fice_pregunta_3 === "No") {
+                    $("#sa_fice_pregunta_3_obs").hide();
+                }
 
                 $('input[name=sa_fice_pregunta_4][value=' + response[0].sa_fice_pregunta_4 + ']').prop('checked', true);
-                $('#sa_fice_pregunta_4_obs').val(response[0].sa_fice_pregunta_4_obs);
+                if (response[0].sa_fice_pregunta_4 === "Si") {
+                    $("#sa_fice_pregunta_4_obs").show();
+                    $('#sa_fice_pregunta_4_obs').val(response[0].sa_fice_pregunta_4_obs);
+                } else if (response[0].sa_fice_pregunta_4 === "No") {
+                    $("#sa_fice_pregunta_4_obs").hide();
+                }
 
                 $('#sa_fice_pregunta_5_obs').val(response[0].sa_fice_pregunta_5_obs);
 
@@ -646,7 +673,7 @@ if (isset($_GET['id_ficha'])) {
                                     </select>
                                 </div>
 
-                                <div class="col-md-3">
+                                <div class="col-md-3" id="sa_fice_est_nombre_seguro_div">
                                     <label for="" class="form-label">Nombre del seguro: <label style="color: red;">*</label> </label>
                                     <select class="form-select" id="sa_fice_est_nombre_seguro" name="sa_fice_est_nombre_seguro">
                                         <option selected disabled value="">-- Seleccione --</option>

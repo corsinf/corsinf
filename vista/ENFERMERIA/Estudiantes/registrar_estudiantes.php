@@ -4,6 +4,7 @@ $id = '';
 $id_seccion = '';
 $id_grado = '';
 $id_paralelo = '';
+$id_representante = '';
 
 if (isset($_GET['id'])) {
   $id = $_GET['id'];
@@ -21,6 +22,10 @@ if (isset($_GET['id_paralelo'])) {
   $id_paralelo = $_GET['id_paralelo'];
 }
 
+if (isset($_GET['id_representante'])) {
+  $id_representante = $_GET['id_representante'];
+}
+
 ?>
 
 <script type="text/javascript">
@@ -29,6 +34,7 @@ if (isset($_GET['id_paralelo'])) {
     var id_seccion = '<?php echo $id_seccion; ?>';
     var id_grado = '<?php echo $id_grado; ?>';
     var id_paralelo = '<?php echo $id_paralelo; ?>';
+    var id_representante = '<?php echo $id_representante; ?>';
 
     if (id != '') {
       datos_col(id);
@@ -37,6 +43,7 @@ if (isset($_GET['id_paralelo'])) {
     consultar_datos_seccion(id = '', id_seccion);
     consultar_datos_seccion_grado(id_grado, id_seccion);
     consultar_datos_grado_paralelo(id_grado, id_paralelo);
+    consultar_datos_paralelo_representante(id_paralelo, id_representante);
 
   });
 
@@ -167,6 +174,52 @@ if (isset($_GET['id_paralelo'])) {
         });
 
         $('#sa_id_paralelo').html(paralelo);
+
+      }
+    });
+  }
+
+  function consultar_datos_paralelo_representante(id_paralelo = '', id_representante = '') {
+    /*///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        Para Buscar el Paralelo con la Grado
+
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////*/
+    if (id_paralelo == '') {
+      id_paralelo = $("#sa_id_paralelo").val();
+    }
+
+    if (id_representante == '') {
+      id_representante = $("#id_representante").val();
+    }
+
+    var representante = '';
+
+    representante = '<option selected disabled>-- Seleccione --</option>'
+    $.ajax({
+      data: {
+        "id_paralelo": id_paralelo
+      },
+      url: '<?php echo $url_general ?>/controlador/estudiantesC.php?listar_paralelo_representante=true',
+      type: 'post',
+      dataType: 'json',
+
+      success: function(response) {
+        //console.log(response);
+
+        $.each(response, function(i, item) {
+          //console.log(item);
+
+          if (id_representante == item.sa_rep_id) {
+            // Marca la opción correspondiente con el atributo 'selected'
+            representante += '<option value="' + item.sa_rep_id + '" selected>' + item.sa_rep_primer_apellido + ' ' + item.sa_rep_segundo_apellido + ' ' + item.sa_rep_primer_nombre + ' ' + item.sa_rep_segundo_nombre + '</option>';
+          } else {
+            representante += '<option value="' + item.sa_rep_id + '">' + item.sa_rep_primer_apellido + ' ' + item.sa_rep_segundo_apellido + ' ' + item.sa_rep_primer_nombre + ' ' + item.sa_rep_segundo_nombre + '</option>';
+          }
+
+        });
+
+        $('#sa_id_representante').html(representante);
 
       }
     });
@@ -590,7 +643,7 @@ if (isset($_GET['id_paralelo'])) {
               <div class="row pt-3">
                 <div class="col-md-6">
                   <label for="" class="form-label">Paralelo: <label style="color: red;">*</label> </label>
-                  <select class="form-select" id="sa_id_paralelo" name="sa_id_paralelo">
+                  <select class="form-select" id="sa_id_paralelo" name="sa_id_paralelo" onclick="consultar_datos_paralelo_representante();">
                     <option selected disabled>-- Seleccione --</option>
                   </select>
                 </div>
@@ -601,9 +654,6 @@ if (isset($_GET['id_paralelo'])) {
                   <label for="" class="form-label">Representante: <label style="color: red;">*</label> </label>
                   <select class="form-select" id="sa_id_representante" name="sa_id_representante">
                     <option selected disabled>-- Seleccione --</option>
-                    <option value="1">padre 1</option>
-                    <option value="2">padre 2</option>
-
                   </select>
                 </div>
               </div>

@@ -19,7 +19,11 @@ if (isset($_GET['eliminar'])) {
     echo json_encode($controlador->eliminar($_POST['id']));
 }
 
-//echo json_encode($controlador->insertar_editar('Ejemplo1'));
+if (isset($_GET['listar_paralelo_representante'])) {
+    echo json_encode($controlador->listar_paralelo_representante($_POST['id_paralelo']));
+}
+
+//echo json_encode($controlador->listar_paralelo_representante(17));
 
 class estudiantesC
 {
@@ -120,5 +124,11 @@ class estudiantesC
         }
 
         return $text;
+    }
+
+    function listar_paralelo_representante($buscar)
+    {
+        $datos = $this->modelo->buscar_paralelo_representante($buscar);
+        return $datos;
     }
 }

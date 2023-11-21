@@ -14,63 +14,40 @@ class ficha_MedicaM
         $this->db_salud = new db_salud();
     }
 
+    
+
+
     function lista_ficha_medica($id = '')
     {
         $sql = "SELECT
-        sa_fice_id,
-        sa_fice_est_id,
-        sa_fice_est_primer_apellido,
-        sa_fice_est_segundo_apellido,
-        sa_fice_est_primer_nombre,
-        sa_fice_est_segundo_nombre,
-        sa_fice_est_fecha_nacimiento,
-        sa_fice_est_grupo_sangre,
-        sa_fice_est_direccion_domicilio,
-        sa_fice_est_seguro_medico,
-        sa_fice_est_nombre_seguro,
-    
-        sa_fice_rep_1_id,
-        sa_fice_rep_1_primer_apellido,
-        sa_fice_rep_1_segundo_apellido,
-        sa_fice_rep_1_primer_nombre,
-        sa_fice_rep_1_segundo_nombre,
-        sa_fice_rep_1_parentesco,
-        sa_fice_rep_1_telefono_1,
-        sa_fice_rep_1_telefono_2,
-    
-        sa_fice_rep_2_primer_apellido,
-        sa_fice_rep_2_segundo_apellido,
-        sa_fice_rep_2_primer_nombre,
-        sa_fice_rep_2_segundo_nombre,
-        sa_fice_rep_2_parentesco,
-        sa_fice_rep_2_telefono_1,
-        sa_fice_rep_2_telefono_2,
-    
-        sa_fice_pregunta_1,
-        sa_fice_pregunta_1_obs,
-    
-        sa_fice_pregunta_2,
-        sa_fice_pregunta_2_obs,
-    
-        sa_fice_pregunta_3,
-        sa_fice_pregunta_3_obs,
-    
-        sa_fice_pregunta_4,
-        sa_fice_pregunta_4_obs,
-        
-        sa_fice_pregunta_5_obs,
-        
-        sa_fice_fecha_creacion,
-        sa_fice_fecha_modificar
-        
-        FROM ficha_medica
-        WHERE sa_fice_estado = 1";
+        fm.sa_fice_id,
+        fm.sa_fice_est_id,
+        fm.sa_fice_est_primer_apellido,
+        fm.sa_fice_est_segundo_apellido,
+        fm.sa_fice_est_primer_nombre,
+        fm.sa_fice_est_segundo_nombre,
+        fm.sa_fice_fecha_creacion,
+        COUNT(c.sa_conp_id) AS cantidad_consultas
+        FROM
+            ficha_medica fm
+        LEFT JOIN
+            consultas c ON fm.sa_fice_id = c.sa_fice_id
+        WHERE
+            fm.sa_fice_estado = 1 AND c.sa_conp_estado = 1";
 
         if ($id) {
             $sql .= ' and sa_fice_est_id = ' . $id;
         }
 
-        $sql .= " ORDER BY sa_fice_est_id";
+        $sql .= " GROUP BY
+        fm.sa_fice_id,
+        fm.sa_fice_est_id,
+        fm.sa_fice_est_primer_apellido,
+        fm.sa_fice_est_segundo_apellido,
+        fm.sa_fice_est_primer_nombre,
+        fm.sa_fice_est_segundo_nombre,
+        fm.sa_fice_fecha_creacion";
+        
         $datos = $this->db_salud->datos($sql);
         return $datos;
     }
@@ -138,13 +115,61 @@ class ficha_MedicaM
 
     function lista_ficha_medica_todo($id = '')
     {
-        $sql = "SELECT  sa_sec_id, sa_sec_nombre, sa_sec_estado FROM ficha_medica WHERE 1 = 1 ";
+        $sql = "SELECT
+        sa_fice_id,
+        sa_fice_est_id,
+        sa_fice_est_primer_apellido,
+        sa_fice_est_segundo_apellido,
+        sa_fice_est_primer_nombre,
+        sa_fice_est_segundo_nombre,
+        sa_fice_est_fecha_nacimiento,
+        sa_fice_est_grupo_sangre,
+        sa_fice_est_direccion_domicilio,
+        sa_fice_est_seguro_medico,
+        sa_fice_est_nombre_seguro,
+    
+        sa_fice_rep_1_id,
+        sa_fice_rep_1_primer_apellido,
+        sa_fice_rep_1_segundo_apellido,
+        sa_fice_rep_1_primer_nombre,
+        sa_fice_rep_1_segundo_nombre,
+        sa_fice_rep_1_parentesco,
+        sa_fice_rep_1_telefono_1,
+        sa_fice_rep_1_telefono_2,
+    
+        sa_fice_rep_2_primer_apellido,
+        sa_fice_rep_2_segundo_apellido,
+        sa_fice_rep_2_primer_nombre,
+        sa_fice_rep_2_segundo_nombre,
+        sa_fice_rep_2_parentesco,
+        sa_fice_rep_2_telefono_1,
+        sa_fice_rep_2_telefono_2,
+    
+        sa_fice_pregunta_1,
+        sa_fice_pregunta_1_obs,
+    
+        sa_fice_pregunta_2,
+        sa_fice_pregunta_2_obs,
+    
+        sa_fice_pregunta_3,
+        sa_fice_pregunta_3_obs,
+    
+        sa_fice_pregunta_4,
+        sa_fice_pregunta_4_obs,
+        
+        sa_fice_pregunta_5_obs,
+        
+        sa_fice_fecha_creacion,
+        sa_fice_fecha_modificar
+        
+        FROM ficha_medica
+        WHERE sa_fice_estado = 1";
 
         if ($id) {
-            $sql .= ' and sa_sec_id= ' . $id;
+            $sql .= ' and sa_fice_est_id = ' . $id;
         }
 
-        $sql .= " ORDER BY sa_sec_id ";
+        $sql .= " ORDER BY sa_fice_est_id";
         $datos = $this->db_salud->datos($sql);
         return $datos;
     }

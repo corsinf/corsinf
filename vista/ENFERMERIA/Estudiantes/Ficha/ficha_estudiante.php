@@ -46,7 +46,7 @@ if (isset($_GET['id_representante'])) {
             '<td>' + cont + '</td>' +
             '<td>' + item.sa_fice_fecha_creacion.date + '</td>' +
             '<td><a href="<?= $url_general ?>/vista/inicio.php?mod=7&acc=registrar_ficha_estudiante&id_ficha=' + item.sa_fice_id + '&id_estudiante=' + item.sa_fice_est_id + '&id_representante=' + item.sa_fice_rep_1_id + '"><u>' + item.sa_fice_est_primer_apellido + ' ' + item.sa_fice_est_segundo_apellido + ' ' + item.sa_fice_est_primer_nombre + ' ' + item.sa_fice_est_segundo_nombre + '</u></a></td>' +
-            '<td>' + 'N' + '</td>' +
+            '<td>' + item.cantidad_consultas + '</td>' +
             '<td><a  class="btn btn-primary btn-sm" title="Ficha de Estudiante" href="<?= $url_general ?>/vista/inicio.php?mod=7&acc=consulta_estudiante&id_estudiante=' + item.sa_fice_est_id + '&id_representante=' + item.sa_fice_rep_1_id + '&id_ficha=' + item.sa_fice_id + '">' + '<i class="bx bx-file-blank me-0" ></i>' + '</a></td>' +
             '</tr>';
           cont++;

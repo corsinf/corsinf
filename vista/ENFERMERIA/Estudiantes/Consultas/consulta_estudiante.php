@@ -73,9 +73,9 @@ if (isset($_GET['id_ficha'])) {
       dataType: 'json',
       //Para el id representante tomar los datos con los de session
       success: function(response) {
-        // console.log(response);   
+        console.log(response);   
         $.each(response, function(i, item) {
-          console.log(response);
+          //console.log(response);
 
           ficha_estudiante +=
             '<tr>' +

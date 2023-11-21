@@ -127,4 +127,33 @@ class estudiantesM
         $datos = $this->db_salud->sql_string($sql);
         return $datos;
     }
+
+    /*/////////////////////////////////////////////////////////////////////
+
+    Para consultar representante en paralelo
+
+    /////////////////////////////////////////////////////////////////////*/
+
+
+    function buscar_paralelo_representante($buscar)
+    {
+        $sql = "SELECT 
+                    rep.sa_rep_id, 
+                    rep.sa_rep_primer_apellido,
+                    rep.sa_rep_segundo_apellido,
+                    rep.sa_rep_primer_nombre,
+                    rep.sa_rep_segundo_nombre,
+                    rep.sa_rep_cedula,
+                    rep.sa_rep_sexo,
+                    rep.sa_rep_fecha_nacimiento,
+                    rep.sa_id_seccion,
+                    rep.sa_id_grado,
+                    rep.sa_id_paralelo
+                FROM representantes rep
+                WHERE rep.sa_rep_estado = 1
+                AND rep.sa_id_paralelo = " . $buscar;
+
+        $datos = $this->db_salud->datos($sql);
+        return $datos;
+    }
 }

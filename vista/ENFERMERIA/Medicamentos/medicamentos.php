@@ -5,13 +5,13 @@
     });
 
     function consultar_datos(id = '') {
-        var grado = '';
-        var id_tabla = 1;
+        var medicamentos = '';
+  
         $.ajax({
             data: {
                 id: id
             },
-            url: '<?php echo $url_general ?>/controlador/gradoC.php?listar=true',
+            url: '<?php echo $url_general ?>/controlador/medicamentosC.php?listar=true',
             type: 'post',
             dataType: 'json',
 
@@ -19,28 +19,27 @@
                 // console.log(response);   
                 $.each(response, function(i, item) {
                     console.log(item);
-                    grado +=
+                    medicamentos +=
                         '<tr>' +
-                        '<td>' + 'COD - ' + item.sa_gra_id + '</td>' +
-                        '<td>' + item.sa_sec_nombre + '</td>' +
-                        '<td><a href="<?= $url_general ?>/vista/inicio.php?mod=7&acc=registrar_grado&id=' + item.sa_gra_id + '&id_seccion=' + item.sa_sec_id +'"><u>' + item.sa_gra_nombre + '</u></a></td>' +
+                        '<td>' + 'COD - ' + item.sa_med_id + '</td>' +
+                        '<td><a href="<?= $url_general ?>/vista/inicio.php?mod=7&acc=registrar_medicamentos&id=' + item.sa_med_id + '"><u>' + item.sa_med_nombre + '</u></a></td>' +
                         '<td></td>' +
                         '</tr>';
                 });
 
-                $('#tbl_datos').html(grado);
+                $('#tbl_datos').html(medicamentos);
             }
         });
     }
 
     function buscar(buscar) {
-        var grado = '';
+        var medicamentos = '';
 
         $.ajax({
             data: {
                 buscar: buscar
             },
-            url: '<?= $url_general ?>/controlador/gradoC.php?buscar=true',
+            url: '<?= $url_general ?>/controlador/medicamentosC.php?buscar=true',
             type: 'post',
             dataType: 'json',
 
@@ -48,15 +47,14 @@
                 // console.log(response);   
                 $.each(response, function(i, item) {
                     console.log(item);
-                    grado +=
+                    medicamentos +=
                         '<tr>' +
-                        '<td>' + 'COD - ' + item.sa_gra_id + '</td>' +
-                        '<td>' + item.sa_sec_nombre + '</td>' +
-                        '<td><a href="<?= $url_general ?>/vista/inicio.php?mod=7&acc=registrar_grado&id=' + item.sa_gra_id + '&id_seccion=' + item.sa_sec_id +'"><u>' + item.sa_gra_nombre + '</u></a></td>' +
+                        '<td>' + 'COD - ' + item.sa_med_id + '</td>' +
+                        '<td><a href="<?= $url_general ?>/vista/inicio.php?mod=7&acc=registrar_medicamentos&id=' + item.sa_med_id + '"><u>' + item.sa_med_nombre + '</u></a></td>' +
                         '<td> </td>' +
                         '</tr>';
                 });
-                $('#tbl_datos').html(grado);
+                $('#tbl_datos').html(medicamentos);
             }
         });
     }
@@ -65,7 +63,7 @@
         $('#codigo').val('');
         $('#descripcion').val('');
         $('#id').val('');
-        $('#titulo').text('Nueva Sección');
+        $('#titulo').text('Nueva Medicamentos');
         $('#op').text('Guardar');
     }
     
@@ -86,7 +84,7 @@
                     <ol class="breadcrumb mb-0 p-0">
                         <li class="breadcrumb-item"><a href="javascript:;"><i class="bx bx-home-alt"></i></a>
                         </li>
-                        <li class="breadcrumb-item active" aria-current="page">Grado</li>
+                        <li class="breadcrumb-item active" aria-current="page">Medicamentos</li>
                     </ol>
                 </nav>
             </div>
@@ -100,7 +98,7 @@
                         <div class="card-title d-flex align-items-center">
                             <div><i class="bx bxs-user me-1 font-22 text-primary"></i>
                             </div>
-                            <h5 class="mb-0 text-primary">Grado</h5>
+                            <h5 class="mb-0 text-primary">Medicamentos</h5>
                         </div>
                         <hr>
 
@@ -113,15 +111,15 @@
                              
                                     <div class="row">
                                         <div class="col-sm-12" id="btn_nuevo">
-                                            <a href="<?= $url_general ?>/vista/inicio.php?mod=7&acc=registrar_grado" class="btn btn-success btn-sm"><i class="bx bx-plus"></i> Nuevo</a>
-                                            <a href="#" class="btn btn-outline-secondary btn-sm" id="excel_grado" title="Informe en excel del total de Grados"><i class="bx bx-file"></i> Total Grados</a>
+                                            <a href="<?= $url_general ?>/vista/inicio.php?mod=7&acc=registrar_medicamentos" class="btn btn-success btn-sm"><i class="bx bx-plus"></i> Nuevo</a>
+                                            <a href="#" class="btn btn-outline-secondary btn-sm" id="excel_medicamentos" title="Informe en excel del total de Secciones"><i class="bx bx-file"></i> Total Secciones</a>
                                         </div>
 
                                     </div>
 
                                     <div>
                                         <div class="col-sm-8 pt-3">
-                                            <input type="" name="" id="txt_buscar" onkeyup="buscar($('#txt_buscar').val())" class="form-control form-control-sm" placeholder="Buscar Sección">
+                                            <input type="" name="" id="txt_buscar" onkeyup="buscar($('#txt_buscar').val())" class="form-control form-control-sm" placeholder="Buscar Medicamentos">
                                         </div>
                                     </div>
                                     <br>
@@ -131,8 +129,7 @@
                                             <thead>
                                                 <tr>
                                                     <th>Codigo</th>
-                                                    <th>Sección</th>
-                                                    <th>Grado</th>
+                                                    <th>Medicamentos</th>
                                                     <th></th>
                                                 </tr>
                                             </thead>

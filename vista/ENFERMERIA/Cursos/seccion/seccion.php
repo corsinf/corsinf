@@ -50,7 +50,7 @@
                     seccion +=
                         '<tr>' +
                         '<td>' + 'COD - ' + item.sa_sec_id + '</td>' +
-                        '<td><a href="<?= $url_general ?>/vista/enfermeria/cursos/seccion/registrar_seccion.php?id=' + item.sa_sec_id + '"><u>' + item.sa_sec_nombre + '</u></a></td>' +
+                        '<td><a href="<?= $url_general ?>/vista/inicio.php?mod=7&acc=registrar_seccion&id=' + item.sa_sec_id + '"><u>' + item.sa_sec_nombre + '</u></a></td>' +
                         '<td> </td>' +
                         '</tr>';
                 });

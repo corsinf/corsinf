@@ -202,6 +202,15 @@ if ($_GET['acc'] == 'representantes') {
 	include('ENFERMERIA/representantes/representantes.php');
 }
 
+//Medicinas
+if ($_GET['acc'] == 'registrar_medicamentos') {
+	include('ENFERMERIA/Medicamentos/registrar_medicamentos.php');
+}
+
+if ($_GET['acc'] == 'medicamentos') {
+	include('ENFERMERIA/Medicamentos/medicamentos.php');
+}
+
 
 
 if ($_GET['acc'] == 'index') {
