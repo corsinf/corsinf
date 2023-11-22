@@ -26,14 +26,15 @@ class ficha_MedicaM
         fm.sa_fice_est_segundo_apellido,
         fm.sa_fice_est_primer_nombre,
         fm.sa_fice_est_segundo_nombre,
+        fm.sa_fice_rep_1_id,
         fm.sa_fice_fecha_creacion,
         COUNT(c.sa_conp_id) AS cantidad_consultas
         FROM
             ficha_medica fm
         LEFT JOIN
-            consultas c ON fm.sa_fice_id = c.sa_fice_id
+            consultas c ON fm.sa_fice_id = c.sa_fice_id AND c.sa_conp_estado = 1
         WHERE
-            fm.sa_fice_estado = 1 AND c.sa_conp_estado = 1";
+            fm.sa_fice_estado = 1";
 
         if ($id) {
             $sql .= ' and sa_fice_est_id = ' . $id;
@@ -46,6 +47,7 @@ class ficha_MedicaM
         fm.sa_fice_est_segundo_apellido,
         fm.sa_fice_est_primer_nombre,
         fm.sa_fice_est_segundo_nombre,
+        fm.sa_fice_rep_1_id,
         fm.sa_fice_fecha_creacion";
         
         $datos = $this->db_salud->datos($sql);

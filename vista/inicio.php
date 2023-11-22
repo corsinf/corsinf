@@ -211,6 +211,12 @@ if ($_GET['acc'] == 'medicamentos') {
 	include('ENFERMERIA/Medicamentos/medicamentos.php');
 }
 
+//Notificaciones
+
+if ($_GET['acc'] == 'notificaciones') {
+	include('ENFERMERIA/Notificaciones/notificaciones.php');
+}
+
 
 
 if ($_GET['acc'] == 'index') {
