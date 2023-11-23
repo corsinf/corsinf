@@ -1,5 +1,7 @@
 <?php
 include('../modelo/consultasM.php');
+include('../lib/phpmailer/enviar_emails.php');
+
 
 $controlador = new consultasC();
 
@@ -23,6 +25,10 @@ if (isset($_GET['listar_solo_consulta'])) {
     echo json_encode($controlador->lista_solo_consultas($_POST['id']));
 }
 
+if (isset($_GET['enviar_correo'])) {
+    echo json_encode($controlador->enviar_correo($_POST['parametros']));
+}
+
 //print_r($controlador->lista_consultas(''));
 
 /*$parametros = array(
@@ -39,10 +45,11 @@ print_r($modelo->buscar_consultas_CODIGO(1));*/
 class consultasC
 {
     private $modelo;
-
+    private $email;
     function __construct()
     {
         $this->modelo = new consultasM();
+        $this->email = new enviar_emails();
     }
 
     function lista_consultas($id)
@@ -116,8 +123,7 @@ class consultasC
             if (count($this->modelo->buscar_consultas_CODIGO($datos1[0]['dato'])) == 0) {
                 $datos = $this->modelo->insertar($datos);
             } else {
-                return -2 .' . '. $datos1[0]['dato'];
-
+                return -2 . ' . ' . $datos1[0]['dato'];
             }
         } else {
             $where[0]['campo'] = 'sa_conp_id';
@@ -153,5 +159,17 @@ class consultasC
         $datos[0]['dato'] = $id;
         $datos = $this->modelo->eliminar($datos);
         return $datos;
+    }
+
+    function enviar_correo($parametros)
+    {
+        // print_r($parametros);die();
+        $to_correo = $parametros['to'];
+        $titulo_correo = $parametros['sub'];
+        $cuerpo_correo = $parametros['men'];
+
+        //return $this->email->enviar_email($to_correo, $cuerpo_correo, $titulo_correo, $correo_respaldo = 'soporte@corsinf.com', $archivos = false, $titulo_correo, true);
+
+        return true;
     }
 }

@@ -47,6 +47,7 @@ if (isset($_GET['id_consulta'])) {
             datos_col_medicamentos_1();
             datos_col_medicamentos_2();
             datos_col_medicamentos_3();
+            $('#radio_tipo_atencion').show();
         }
 
         //////////////////////////////////
@@ -65,47 +66,61 @@ if (isset($_GET['id_consulta'])) {
         //$('#main_consulta').show();
         //$('#radio_tipo_atencion').hide();
 
+
         $('input[name=tipo_atencion_1]').change(function() {
-             if ($(this).val() === 'Consulta') {
-                 $('#main_consulta').show();
-
-                 $('#seccion_navtab_consulta').show();
-                 $('#seccion_navtab_certificado').hide();
-                 $('#seccion_navtab_salida').hide();
-
-                 $('#seccion_boton_consulta').show();
-                 $('#seccion_boton_certificado').hide();
-                 $('#seccion_boton_salida').hide();
-
-                 $('#radio_tipo_atencion').hide();
-             } else if ($(this).val() === 'Certificado') {
-                 $('#main_consulta').show();
-
-                 $('#seccion_navtab_consulta').show();
-                 $('#seccion_navtab_certificado').show();
-                 $('#seccion_navtab_salida').hide();
-
-                 $('#seccion_boton_consulta').hide();
-                 $('#seccion_boton_certificado').show();
-                 $('#seccion_boton_salida').hide();
-
-                 $('#radio_tipo_atencion').hide();
-             } else if ($(this).val() === 'Salida') {
-                 $('#main_consulta').show();
-
-                 $('#seccion_navtab_consulta').show();
-                 $('#seccion_navtab_certificado').hide();
-                 $('#seccion_navtab_salida').show();
-
-                 $('#seccion_boton_consulta').hide();
-                 $('#seccion_boton_certificado').hide();
-                 $('#seccion_boton_salida').show();
-
-                 $('#radio_tipo_atencion').hide();
-             }
-         });
-
+            if ($(this).val() === 'Consulta') {
+                opcion_Consulta();
+            } else if ($(this).val() === 'Certificado') {
+                opcion_Certificado();
+            } else if ($(this).val() === 'Salida') {
+                opcion_Salida();
+            }
+        });
     });
+
+    //Funciones para la calga del formulario para mostrar pestañas con el radio buton
+
+    function opcion_Consulta() {
+        $('#main_consulta').show();
+
+        $('#seccion_navtab_consulta').show();
+        $('#seccion_navtab_certificado').hide();
+        $('#seccion_navtab_salida').hide();
+
+        $('#seccion_boton_consulta').show();
+        $('#seccion_boton_certificado').hide();
+        $('#seccion_boton_salida').hide();
+
+        $('#radio_tipo_atencion').hide();
+    }
+
+    function opcion_Certificado() {
+        $('#main_consulta').show();
+
+        $('#seccion_navtab_consulta').show();
+        $('#seccion_navtab_certificado').show();
+        $('#seccion_navtab_salida').hide();
+
+        $('#seccion_boton_consulta').hide();
+        $('#seccion_boton_certificado').show();
+        $('#seccion_boton_salida').hide();
+
+        $('#radio_tipo_atencion').hide();
+    }
+
+    function opcion_Salida() {
+        $('#main_consulta').show();
+
+        $('#seccion_navtab_consulta').show();
+        $('#seccion_navtab_certificado').hide();
+        $('#seccion_navtab_salida').show();
+
+        $('#seccion_boton_consulta').hide();
+        $('#seccion_boton_certificado').hide();
+        $('#seccion_boton_salida').show();
+
+        $('#radio_tipo_atencion').hide();
+    }
 
     //Funciones para la consulta
     function cosnulta_hora_desde() {
@@ -409,6 +424,13 @@ if (isset($_GET['id_consulta'])) {
                 $('#sa_conp_observaciones').val(response[0].sa_conp_observaciones);
                 $('#sa_conp_tipo_consulta').val(response[0].sa_conp_tipo_consulta);
 
+                if (response[0].sa_conp_tipo_consulta === 'Consulta') {
+                    opcion_Consulta();
+                } else if (response[0].sa_conp_tipo_consulta === 'Certificado') {
+                    opcion_Certificado();
+                } else if (response[0].sa_conp_tipo_consulta === 'Salida') {
+                    opcion_Salida();
+                }
 
                 // Asignar valores de estado y fechas de creación/modificación
                 $('#sa_conp_estado').val(response[0].sa_conp_estado);
@@ -692,7 +714,8 @@ if (isset($_GET['id_consulta'])) {
                             </div>
                         </div>
 
-                        <div class="col-md-12 pt-4" id="radio_tipo_atencion">
+
+                        <div class="col-md-12 pt-4" id="radio_tipo_atencion" style="display: none;">
                             <label for="" class="form-label">Tipo de Atención: <label style="color: red;">* </label> </label>
                             <div>
                                 <div class="form-check">
@@ -998,9 +1021,9 @@ if (isset($_GET['id_consulta'])) {
 
                                             <div class="modal-footer pt-4" id="seccion_boton_certificado">
                                                 <?php if ($id_estudiante == '') { ?>
-                                                    <button class="btn btn-primary btn-sm px-4 m-1" onclick="editar_insertar('Certfificado', 0, 1, 1, 0)" type="button"><i class="bx bx-save"></i> Guardar</button>
+                                                    <button class="btn btn-primary btn-sm px-4 m-1" onclick="editar_insertar('Certificado', 0, 1, 1, 0)" type="button"><i class="bx bx-save"></i> Guardar</button>
                                                 <?php } else { ?>
-                                                    <button class="btn btn-primary btn-sm px-4 m-1" onclick="editar_insertar('Certfificado', 0, 1, 1, 0)" type="button"><i class="bx bx-save"></i> Guardar</button>
+                                                    <button class="btn btn-primary btn-sm px-4 m-1" onclick="editar_insertar('Certificado', 0, 1, 1, 0)" type="button"><i class="bx bx-save"></i> Guardar</button>
                                                     <button class="btn btn-danger btn-sm px-4 m-1" onclick="delete_datos()" type="button"><i class="bx bx-trash"></i> Eliminar</button>
                                                 <?php } ?>
                                             </div>

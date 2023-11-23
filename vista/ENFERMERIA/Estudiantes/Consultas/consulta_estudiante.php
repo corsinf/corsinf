@@ -62,7 +62,7 @@ if (isset($_GET['id_ficha'])) {
   }
 
   function consultar_datos(id_estudiante = '') {
-    var ficha_estudiante = '';
+    var consulta = '';
     var cont = 1;
     $.ajax({
       data: {
@@ -73,29 +73,30 @@ if (isset($_GET['id_ficha'])) {
       dataType: 'json',
       //Para el id representante tomar los datos con los de session
       success: function(response) {
-        console.log(response);   
+        console.log(response);
         $.each(response, function(i, item) {
           //console.log(response);
 
-          ficha_estudiante +=
+          consulta +=
             '<tr>' +
             '<td>' + cont + '</td>' +
             '<td>' + fecha_formateada(item.sa_conp_fecha_ingreso.date) + '</td>' +
             '<td>' + obtener_hora_formateada(item.sa_conp_desde_hora.date) + ' / ' + obtener_hora_formateada(item.sa_conp_hasta_hora.date) + '</td>' +
             '<td><a href="<?= $url_general ?>/vista/inicio.php?mod=7&acc=registrar_consulta_estudiante&id_ficha=' + item.sa_fice_id + '&id_estudiante=' + <?= $id_estudiante ?> + '&id_representante=' + <?= $id_representante ?> + '&id_consulta=' + item.sa_conp_id + '"><u>' + item.sa_conp_nombres + '</u></a></td>' +
             '<td>' + item.sa_conp_tipo_consulta + '</td>' +
+            '<td><a class="btn btn-primary btn-sm"  title="Enviar Mensaje" href="<?= $url_general ?>/vista/inicio.php?mod=7&acc=mensaje_atencion&id_ficha=' + item.sa_fice_id + '&id_estudiante=' + <?= $id_estudiante ?> + '&id_representante=' + <?= $id_representante ?> + '&id_consulta=' + item.sa_conp_id + '">' + '<i class="bx bx-mail-send"></i>' + '</a></td>' +
             '</tr>';
 
           cont++;
         });
 
-        $('#tbl_datos').html(ficha_estudiante);
+        $('#tbl_datos').html(consulta);
       }
     });
   }
 
   function buscar(buscar) {
-    var ficha_estudiante = '';
+    var consulta = '';
     var cont = 1;
     $.ajax({
       data: {
@@ -110,18 +111,20 @@ if (isset($_GET['id_ficha'])) {
         $.each(response, function(i, item) {
           //console.log(item);
 
-          ficha_estudiante +=
+          consulta +=
             '<tr>' +
             '<td>' + cont + '</td>' +
-            '<td>' + item.sa_fice_fecha_creacion.date + '</td>' +
-
-            '<td><a href="<?= $url_general ?>/vista/inicio.php?mod=7&acc=registrar_consulta_estudiante&id_ficha=' + item.sa_fice_id + '&id_estudiante=' + item.sa_fice_est_id + '&id_representante=' + item.sa_fice_rep_1_id + '"><u>' + item.sa_fice_est_primer_apellido + ' ' + item.sa_fice_est_segundo_apellido + ' ' + item.sa_fice_est_primer_nombre + ' ' + item.sa_fice_est_segundo_nombre + '</u></a></td>' +
-            '<td>' + 'N' + '</td>' +
+            '<td>' + fecha_formateada(item.sa_conp_fecha_ingreso.date) + '</td>' +
+            '<td>' + obtener_hora_formateada(item.sa_conp_desde_hora.date) + ' / ' + obtener_hora_formateada(item.sa_conp_hasta_hora.date) + '</td>' +
+            '<td><a href="<?= $url_general ?>/vista/inicio.php?mod=7&acc=registrar_consulta_estudiante&id_ficha=' + item.sa_fice_id + '&id_estudiante=' + <?= $id_estudiante ?> + '&id_representante=' + <?= $id_representante ?> + '&id_consulta=' + item.sa_conp_id + '"><u>' + item.sa_conp_nombres + '</u></a></td>' +
+            '<td>' + item.sa_conp_tipo_consulta + '</td>' +
+            '<td><a class="btn btn-primary btn-sm"  title="Enviar Mensaje" href="<?= $url_general ?>/vista/inicio.php?mod=7&acc=mensaje_atencion&id_ficha=' + item.sa_fice_id + '&id_estudiante=' + <?= $id_estudiante ?> + '&id_representante=' + <?= $id_representante ?> + '&id_consulta=' + item.sa_conp_id + '">' + '<i class="bx bx-mail-send"></i>' + '</a></td>' +
             '</tr>';
+
           cont++;
         });
 
-        $('#tbl_datos').html(estudiantes);
+        $('#tbl_datos').html(consulta);
       }
 
     });
@@ -140,7 +143,7 @@ if (isset($_GET['id_ficha'])) {
   <div class="page-content">
 
     <!--breadcrumb-->
-    <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3"> 
+    <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
       <div class="breadcrumb-title pe-3">Enfermería </div>
       <?php
       // print_r($_SESSION['INICIO']);die();
@@ -205,6 +208,7 @@ if (isset($_GET['id_ficha'])) {
                           <th>Hora Desde/Hasta</th>
                           <th>Estudiante</th>
                           <th>Tipo de Atención</th>
+                          <th>Acción</th>
                         </tr>
                       </thead>
                       <tbody id="tbl_datos">

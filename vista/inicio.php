@@ -168,6 +168,10 @@ if ($_GET['acc'] == 'registrar_consulta_estudiante') {
 	include('ENFERMERIA/Estudiantes/Consultas/registrar_consulta_estudiante.php');
 }
 
+if ($_GET['acc'] == 'mensaje_atencion') {
+	include('ENFERMERIA/Estudiantes/Consultas/mensaje_atencion.php');
+}
+
 //Cursos
 if ($_GET['acc'] == 'registrar_seccion') {
 	include('ENFERMERIA/cursos/seccion/registrar_seccion.php');

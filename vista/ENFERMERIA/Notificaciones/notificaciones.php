@@ -1,19 +1,22 @@
+<script>
+
+    
+
+</script>
+
 <div class="page-wrapper">
     <div class="page-content">
 
         <!--breadcrumb-->
         <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
             <div class="breadcrumb-title pe-3">Enfermería </div>
-            <?php
-            // print_r($_SESSION['INICIO']);die();
 
-            ?>
             <div class="ps-3">
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb mb-0 p-0">
                         <li class="breadcrumb-item"><a href="javascript:;"><i class="bx bx-home-alt"></i></a>
                         </li>
-                        <li class="breadcrumb-item active" aria-current="page">Notificación Consultas del Estudiante</li>
+                        <li class="breadcrumb-item active" aria-current="page">Notificación Consultas del Estudiante por </li>
                     </ol>
                 </nav>
             </div>
@@ -44,7 +47,7 @@
                             <section class="content">
                                 <div class="container-fluid">
 
-                                
+
 
                                     <h3>Notificacion de Atención al Estudiante</h3>
                                     <div class="row m-1">
@@ -53,22 +56,39 @@
                                             <div class="card">
                                                 <div class="card-header bg-dark text-white py-2 cursor-pointer">
                                                     <div class="d-flex align-items-center">
-                                                        <div class="compose-mail-title">Nuevo mensaje</div>
-                                                        <div class="compose-mail-close ms-auto">x</div>
+                                                        <div class="compose-mail-title">Notificación</div>
+                                                        
                                                     </div>
                                                 </div>
                                                 <div class="card-body">
 
                                                     <div class="email-form">
                                                         <div class="mb-1">
-                                                            <input type="text" class="form-control form-control-sm" placeholder="To" id="txt_to">
+                                                            <input type="text" class="form-control form-control-sm" placeholder="Para:" id="txt_to">
                                                         </div>
                                                         <div class="mb-1">
-                                                            <input type="text" class="form-control form-control-sm" value="Notificacion para Consultas en Salud" placeholder="Subject" id="txt_subjet">
+                                                            <input type="text" class="form-control form-control-sm" value="Notificacion para Consultas en Salud" placeholder="Ausnto:" id="txt_subjet">
                                                         </div>
                                                         <div class="mb-1">
-                                                            <textarea class="form-control" placeholder="Message" rows="5" cols="10" id="mensaje">Estimado Francisco: 
-                                                                Buenas dias, Modificar
+                                                            <textarea class="form-control" placeholder="Mensaje" rows="5" cols="10" id="mensaje">
+                                                                PARA ATENCION NORMAL
+                                                                FECHA: 
+                                                                CERTIFICO QUE EL(LA) ESTUDIANTE: ****************
+                                                                DEL GRADO "A", SE ENCOENTRÓ EN LE 
+                                                                DEPAPARTAMENTO MÉDICO DESDE 08:30 HASTA 09:30 
+
+
+                                                                PARA CERTIFICADO
+                                                                HOY, *******************
+                                                                CERTIFICO QUE REPRESENTANTE DE ANGELA DEL GRADO X PARALELO A ENTREGA
+                                                                CERTIFICADO MÉDICO DE REPRESENTADO CON DIAGNÓSTICO
+                                                                A001 - COLERA 
+
+                                                                PARA SALIDA
+                                                                HOY, *******************
+                                                                CERTIFICO QUE EL/LA ESTUDIANTE  **************** DEL GRADO X PARALELO *
+                                                                REQUIERE SALIR DEL PLANTEL PARA RECIBIR ATENCIÓN MÉDICA EXTERNA
+
 															</textarea>
                                                             <div class="col-sm-12 text-center" id="div_mensaje">
                                                                 <style>
