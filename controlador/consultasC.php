@@ -1,6 +1,10 @@
 <?php
+
+use function Complex\ln;
+
 include('../modelo/consultasM.php');
 include('../lib/phpmailer/enviar_emails.php');
+include('../lib/pdf/fpdf.php');
 
 
 $controlador = new consultasC();
@@ -27,6 +31,10 @@ if (isset($_GET['listar_solo_consulta'])) {
 
 if (isset($_GET['enviar_correo'])) {
     echo json_encode($controlador->enviar_correo($_POST['parametros']));
+}
+
+if (isset($_GET['notificaciones'])) {
+    echo json_encode($controlador->pdf_notificaciones());
 }
 
 //print_r($controlador->lista_consultas(''));
@@ -171,5 +179,100 @@ class consultasC
         //return $this->email->enviar_email($to_correo, $cuerpo_correo, $titulo_correo, $correo_respaldo = 'soporte@corsinf.com', $archivos = false, $titulo_correo, true);
 
         return true;
+    }
+
+    function pdf_notificaciones()
+    {
+        $pdf = new FPDF('P', 'mm', 'A4');
+        $pdf->AddPage();
+        $pdf->SetFont('Arial', 'B', 12);
+
+        $pdf->Cell(40, 10, utf8_decode(''), 'L T', 0);
+        $pdf->SetFont('Arial', 'B', 12);
+        $pdf->Cell(90, 10, utf8_decode('UNIDAD EDUCATIVA SAINT DOMINIC'), 1, 0, 'C');
+        $pdf->Cell(20, 10, utf8_decode('Código:'), 1, 0, 'R');
+        $pdf->SetFont('Arial', '', 12);
+        $pdf->Cell(40, 10, utf8_decode('GA-MD-RG-001'), 1, 1, 'C');
+
+
+        $pdf->Cell(40, 10, utf8_decode(''), 'L', 0);
+        $pdf->SetFont('Arial', 'B', 12);
+        $pdf->Cell(90, 10, utf8_decode('DEPARTAMENTO MÉDICO'), 1, 0, 'C');
+        $pdf->Cell(20, 10, utf8_decode('Versión:'), 1, 0, 'R');
+        $pdf->SetFont('Arial', '', 12);
+        $pdf->Cell(40, 10, utf8_decode('1.0'), 1, 1, 'C');
+
+
+        $pdf->Cell(40, 10, utf8_decode(''), 'L B', 0, 'C');
+        $pdf->SetFont('Arial', 'B', 12);
+        $pdf->Cell(90, 10, utf8_decode('PERMISO DE SALIDA'), 1, 0, 'C');
+        $pdf->Cell(20, 10, utf8_decode('Página:'), 1, 0, 'R');
+        $pdf->SetFont('Arial', '', 12);
+        $pdf->Cell(40, 10, utf8_decode('1 de 1'), 1, 1, 'C');
+
+        $pdf->ln('8');
+
+        //ENVIAR DATOS 
+        $mensaje = $this->mensajes_notificacion();
+        $pdf->MultiCell(0, 5, utf8_decode($mensaje), 0, 'J');
+
+        $pdf->ln('25');
+
+
+        $nombre_medico = ' Md. Camila López';
+
+        $pdf->SetFont('Arial', 'B', 12);
+        $pdf->Cell(60, 10, utf8_decode($nombre_medico), '0', 0, 'C');
+        $pdf->SetFont('Arial', '', 12);
+        $pdf->Cell(60, 10, utf8_decode('Representante'), '0', 1, 'R');
+
+        $pdf->Cell(60, 10, utf8_decode('Médico Institucional'), '0', 0, 'C');
+
+        $pdf->Output();
+    }
+
+    function mensajes_notificacion()
+    {
+        $fecha_creado = '2023/02/12';
+        $nombre_estudiante = 'Andrea Andrea Lopez Lopez';
+        $grado = 'Bachillerato 3';
+        $paralelo = 'A';
+        //CONSULTA
+        $hora_desde = '08:00';
+        $hora_hasta = '08:30';
+        //cERTIFICADO
+        $diagnostico_certificado = 'Consulta Medica';
+
+        //Mensaje Consulta/////////////////////////////////////////////////////////////////////////////////////
+        $mensaje_consulta = '';
+        $mensaje_consulta .=
+            'FECHA: ' . $fecha_creado . '
+        
+';
+        $mensaje_consulta .=
+            'CERTIFICO QUE EL/LA ESTUDIANTE' . $nombre_estudiante . ' DEL GRADO ' . $grado . ' PARALELO ' . $paralelo . ' SE ENCONTRO EN EL DEPARTAMENTO MÉDICO DESDE ' . $hora_desde . ' HASTA ' . $hora_hasta;
+        ///////////////////////////////////////////////////////////////////////////////////////////////////
+
+        //Mensaje Certificado/////////////////////////////////////////////////////////////////////////////////////
+        $mensaje_certificado = '';
+        $mensaje_certificado .=
+            'HOY, ' . $fecha_creado . '
+        
+';
+        $mensaje_certificado .=
+            'CERTIFICO QUE EL/LA REPRESENTANTE DE ' . $nombre_estudiante . ' DEL GRADO ' . $grado . ' PARALELO ' . $paralelo . ' ENTREGA CERTIFICADO MÉDICO DE REPRESENTADO CON DIAGNÓSTICO ' . $diagnostico_certificado;
+        ///////////////////////////////////////////////////////////////////////////////////////////////////
+
+        //Mensaje Salida/////////////////////////////////////////////////////////////////////////////////////
+        $mensaje_salida = '';
+        $mensaje_salida .=
+            'HOY, ' . $fecha_creado . '
+
+';
+        $mensaje_salida .=
+            'CERTIFICO QUE EL/LA ESTUDIANTE  ' . $nombre_estudiante . ' DEL GRADO ' . $grado . ' PARALELO ' . $paralelo . ' REQUIERE SALIR DEL PLANTEL PARA RECIBIR ATENCIÓN MÉDICA EXTERNA';
+        ///////////////////////////////////////////////////////////////////////////////////////////////////
+
+        return $mensaje_consulta;
     }
 }

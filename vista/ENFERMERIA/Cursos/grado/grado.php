@@ -1,5 +1,4 @@
 <script type="text/javascript">
-    
     $(document).ready(function() {
         consultar_datos();
     });
@@ -23,7 +22,7 @@
                         '<tr>' +
                         '<td>' + 'COD - ' + item.sa_gra_id + '</td>' +
                         '<td>' + item.sa_sec_nombre + '</td>' +
-                        '<td><a href="<?= $url_general ?>/vista/inicio.php?mod=7&acc=registrar_grado&id=' + item.sa_gra_id + '&id_seccion=' + item.sa_sec_id +'"><u>' + item.sa_gra_nombre + '</u></a></td>' +
+                        '<td><a href="<?= $url_general ?>/vista/inicio.php?mod=7&acc=registrar_grado&id=' + item.sa_gra_id + '&id_seccion=' + item.sa_sec_id + '"><u>' + item.sa_gra_nombre + '</u></a></td>' +
                         '<td></td>' +
                         '</tr>';
                 });
@@ -52,7 +51,7 @@
                         '<tr>' +
                         '<td>' + 'COD - ' + item.sa_gra_id + '</td>' +
                         '<td>' + item.sa_sec_nombre + '</td>' +
-                        '<td><a href="<?= $url_general ?>/vista/inicio.php?mod=7&acc=registrar_grado&id=' + item.sa_gra_id + '&id_seccion=' + item.sa_sec_id +'"><u>' + item.sa_gra_nombre + '</u></a></td>' +
+                        '<td><a href="<?= $url_general ?>/vista/inicio.php?mod=7&acc=registrar_grado&id=' + item.sa_gra_id + '&id_seccion=' + item.sa_sec_id + '"><u>' + item.sa_gra_nombre + '</u></a></td>' +
                         '<td> </td>' +
                         '</tr>';
                 });
@@ -68,15 +67,15 @@
         $('#titulo').text('Nueva Sección');
         $('#op').text('Guardar');
     }
-    
 </script>
+
 
 <div class="page-wrapper">
     <div class="page-content">
 
         <!--breadcrumb-->
         <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
-            <div class="breadcrumb-title pe-3">Enfermería  </div>
+            <div class="breadcrumb-title pe-3">Enfermería</div>
             <?php
             // print_r($_SESSION['INICIO']);die();
 
@@ -86,7 +85,9 @@
                     <ol class="breadcrumb mb-0 p-0">
                         <li class="breadcrumb-item"><a href="javascript:;"><i class="bx bx-home-alt"></i></a>
                         </li>
-                        <li class="breadcrumb-item active" aria-current="page">Grado</li>
+                        <li class="breadcrumb-item active" aria-current="page">
+                            Parametrización - Grado
+                        </li>
                     </ol>
                 </nav>
             </div>
@@ -94,9 +95,33 @@
         <!--end breadcrumb-->
 
         <div class="row">
-            <div class="col-xl-12 mx-auto">
+            <div class="col-12 col-lg-3">
+
                 <div class="card border-top border-0 border-4 border-primary">
                     <div class="card-body p-5">
+                        <div class="card-title d-flex align-items-center">
+                            <div><i class="bx bxs-user me-1 font-22 text-primary"></i>
+                            </div>
+                            <h5 class="mb-0 text-primary">
+                                Parametrización
+                            </h5>
+                        </div>
+
+                        <label class="menu-label">Cursos</label>
+                        <div class="fm-menu">
+                            <div class="list-group list-group-flush">
+                            <a href="<?= $url_general ?>/vista/inicio.php?mod=7&acc=seccion" class="list-group-item py-1"><i class='bx bx-file me-2'></i><span>Sección</span></a>
+                                <a href="<?= $url_general ?>/vista/inicio.php?mod=7&acc=grado" class="list-group-item py-1"><i class='bx bx-file me-2'></i><span>Grado</span></a>
+                                <a href="<?= $url_general ?>/vista/inicio.php?mod=7&acc=paralelo" class="list-group-item py-1"><i class='bx bx-file me-2'></i><span>Paralelo</span></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12 col-lg-9">
+                <div class="card card border-top border-0 border-4 border-primary">
+                    <div class="card-body">
                         <div class="card-title d-flex align-items-center">
                             <div><i class="bx bxs-user me-1 font-22 text-primary"></i>
                             </div>
@@ -110,7 +135,7 @@
 
                             <section class="content">
                                 <div class="container-fluid">
-                             
+
                                     <div class="row">
                                         <div class="col-sm-12" id="btn_nuevo">
                                             <a href="<?= $url_general ?>/vista/inicio.php?mod=7&acc=registrar_grado" class="btn btn-success btn-sm"><i class="bx bx-plus"></i> Nuevo</a>
@@ -150,8 +175,6 @@
                 </div>
             </div>
         </div>
+        <!--end row-->
     </div>
 </div>
-
-
-

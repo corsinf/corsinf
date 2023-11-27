@@ -84,10 +84,7 @@
                                                                 CERTIFICADO MÉDICO DE REPRESENTADO CON DIAGNÓSTICO
                                                                 A001 - COLERA 
 
-                                                                PARA SALIDA
-                                                                HOY, *******************
-                                                                CERTIFICO QUE EL/LA ESTUDIANTE  **************** DEL GRADO X PARALELO *
-                                                                REQUIERE SALIR DEL PLANTEL PARA RECIBIR ATENCIÓN MÉDICA EXTERNA
+                                                                
 
 															</textarea>
                                                             <div class="col-sm-12 text-center" id="div_mensaje">

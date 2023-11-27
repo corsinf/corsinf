@@ -139,8 +139,8 @@ if ($_GET['acc'] == 'detalle_libro') {
 //Salud
 
 //Admision
-if ($_GET['acc'] == 'admision') {
-	include('ENFERMERIA/Admision/admision.php');
+if ($_GET['acc'] == 'comunidad') {
+	include('ENFERMERIA/comunidad.php');
 }
 
 //Estudiantes
@@ -152,27 +152,41 @@ if ($_GET['acc'] == 'registrar_estudiantes') {
 	include('ENFERMERIA/Estudiantes/registrar_estudiantes.php');
 }
 
-if ($_GET['acc'] == 'ficha_estudiante') {
-	include('ENFERMERIA/Estudiantes/Ficha/ficha_estudiante.php');
+//Atenciones
+
+
+if ($_GET['acc'] == 'atencion_estudiante') {
+	include('ENFERMERIA/Atenciones/atencion_estudiante.php');
 }
 
-if ($_GET['acc'] == 'registrar_ficha_estudiante') {
-	include('ENFERMERIA/Estudiantes/Ficha/registrar_ficha_estudiante.php');
-}
+//Consultas
 
 if ($_GET['acc'] == 'consulta_estudiante') {
-	include('ENFERMERIA/Estudiantes/Consultas/consulta_estudiante.php');
+	include('ENFERMERIA/Consultas/Estudiantes/consulta_estudiante.php');
 }
 
 if ($_GET['acc'] == 'registrar_consulta_estudiante') {
-	include('ENFERMERIA/Estudiantes/Consultas/registrar_consulta_estudiante.php');
+	include('ENFERMERIA/Consultas/Estudiantes/registrar_consulta_estudiante.php');
 }
 
 if ($_GET['acc'] == 'mensaje_atencion') {
-	include('ENFERMERIA/Estudiantes/Consultas/mensaje_atencion.php');
+	include('ENFERMERIA/Consultas/Estudiantes/mensaje_atencion.php');
+}
+
+//Ficha Medica
+if ($_GET['acc'] == 'ficha_estudiante') {
+	include('ENFERMERIA/Fichas_Medicas/Estudiantes/ficha_estudiante.php');
+}
+
+if ($_GET['acc'] == 'registrar_ficha_estudiante') {
+	include('ENFERMERIA/Fichas_Medicas/Estudiantes/registrar_ficha_estudiante.php');
 }
 
 //Cursos
+if ($_GET['acc'] == 'parametrizacion') {
+	include('ENFERMERIA/cursos/parametrizacion.php');
+}
+
 if ($_GET['acc'] == 'registrar_seccion') {
 	include('ENFERMERIA/cursos/seccion/registrar_seccion.php');
 }

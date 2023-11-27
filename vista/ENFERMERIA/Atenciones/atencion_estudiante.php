@@ -21,9 +21,11 @@
                     estudiantes +=
                         '<tr>' +
                         '<td>' + item.sa_est_cedula + '</td>' +
-                        '<td><a href="<?= $url_general ?>/vista/inicio.php?mod=7&acc=registrar_estudiantes&id=' + item.sa_est_id + '&id_seccion=' + item.sa_id_seccion + '&id_grado=' + item.sa_id_grado + '&id_paralelo=' + item.sa_id_paralelo + '&id_representante=' + item.sa_id_representante + '"><u>' + item.sa_est_primer_apellido + ' ' + item.sa_est_segundo_apellido + ' ' + item.sa_est_primer_nombre + ' ' + item.sa_est_segundo_nombre + '</u></a></td>' +
+                        '<td style="width: 20%;"> <img id="image" name="image" style="border: 2px solid ; width: 100px;" alt="" src="<?= $url_general ?>/img/computadora.jpg"> </td>' +
+                        '<td>' + item.sa_est_primer_apellido + ' ' + item.sa_est_segundo_apellido + ' ' + item.sa_est_primer_nombre + ' ' + item.sa_est_segundo_nombre + '</td>' +
                         '<td>' + item.sa_sec_nombre + ' / ' + item.sa_gra_nombre + ' / ' + item.sa_par_nombre + '</td>' +
                         '<td>' + edad_fecha_nacimiento(item.sa_est_fecha_nacimiento.date) + '</td>' +
+                        '<td><a  class="btn btn-dark btn-sm" title="Ficha de Estudiante" href="<?= $url_general ?>/vista/inicio.php?mod=7&acc=ficha_estudiante&id_estudiante=' + item.sa_est_id + '&id_representante=' + item.sa_id_representante + '">' + '<i class="bx bx-file-blank me-0" ></i>' + '</a></td>' +
                         '</tr>';
                 });
 
@@ -73,11 +75,14 @@
                     console.log(item);
 
                     estudiantes +=
+                        estudiantes +=
                         '<tr>' +
                         '<td>' + item.sa_est_cedula + '</td>' +
-                        '<td><a href="<?= $url_general ?>/vista/inicio.php?mod=7&acc=registrar_estudiantes&id=' + item.sa_est_id + '&id_seccion=' + item.sa_id_seccion + '&id_grado=' + item.sa_id_grado + '&id_paralelo=' + item.sa_id_paralelo + '"><u>' + item.sa_est_primer_apellido + ' ' + item.sa_est_segundo_apellido + ' ' + item.sa_est_primer_nombre + ' ' + item.sa_est_segundo_nombre + '</u></a></td>' +
+                        '<td style="width: 20%;"> <img id="image" name="image" style="border: 2px solid ; width: 100px;" alt="" src="<?= $url_general ?>/img/computadora.jpg"> </td>' +
+                        '<td>' + item.sa_est_primer_apellido + ' ' + item.sa_est_segundo_apellido + ' ' + item.sa_est_primer_nombre + ' ' + item.sa_est_segundo_nombre + '</td>' +
                         '<td>' + item.sa_sec_nombre + ' / ' + item.sa_gra_nombre + ' / ' + item.sa_par_nombre + '</td>' +
                         '<td>' + edad_fecha_nacimiento(item.sa_est_fecha_nacimiento.date) + '</td>' +
+                        '<td><a  class="btn btn-dark btn-sm" title="Ficha de Estudiante" href="<?= $url_general ?>/vista/inicio.php?mod=7&acc=ficha_estudiante&id_estudiante=' + item.sa_est_id + '&id_representante=' + item.sa_id_representante + '">' + '<i class="bx bx-file-blank me-0" ></i>' + '</a></td>' +
                         '</tr>';
                 });
 
@@ -112,7 +117,7 @@
                         <li class="breadcrumb-item"><a href="javascript:;"><i class="bx bx-home-alt"></i></a>
                         </li>
                         <li class="breadcrumb-item active" aria-current="page">
-                            Comunidad Educativa - Estudiantes
+                            Atenciones Estudiantes
                         </li>
                     </ol>
                 </nav>
@@ -129,14 +134,14 @@
                             <div><i class="bx bxs-user me-1 font-22 text-primary"></i>
                             </div>
                             <h5 class="mb-0 text-primary">
-                                Comunidad Educativa
+                                Atenciones
                             </h5>
                         </div>
 
                         <div class="fm-menu">
                             <div class="list-group list-group-flush">
-                                <a href="<?= $url_general ?>/vista/inicio.php?mod=7&acc=estudiantes" class="list-group-item py-1"><i class='bx bx-group'></i><span>&nbsp;Estudiantes</span></a>
-                                <a href="<?= $url_general ?>/vista/inicio.php?mod=7&acc=representantes" class="list-group-item py-1"><i class='bx bx-group'></i><span>&nbsp;Representantes</span></a>
+                                <a href="<?= $url_general ?>/vista/inicio.php?mod=7&acc=atencion_estudiante" class="list-group-item py-1"><i class='bx bx-group'></i><span>&nbsp;Estudiantes</span></a>
+                                <a href="<?= $url_general ?>/vista/inicio.php?mod=7&acc=atencion_representante" class="list-group-item py-1"><i class='bx bx-group'></i><span>&nbsp;Representantes</span></a>
                                 <a href="<?= $url_general ?>/vista/inicio.php?mod=7&acc=" class="list-group-item py-1"><i class='bx bx-group'></i><span>&nbsp;Docente</span></a>
                                 <a href="<?= $url_general ?>/vista/inicio.php?mod=7&acc=" class="list-group-item py-1"><i class='bx bx-group'></i><span>&nbsp;Administrativo</span></a>
                             </div>
@@ -148,7 +153,7 @@
             <div class="col-12 col-lg-9">
                 <div class="card border-top border-0 border-4 border-primary">
                     <div class="card-body">
-                    <div class="card-title d-flex align-items-center">
+                        <div class="card-title d-flex align-items-center">
                             <div><i class="bx bxs-user me-1 font-22 text-primary"></i>
                             </div>
                             <h5 class="mb-0 text-primary">Estudiantes</h5>
@@ -157,18 +162,9 @@
 
                         <div class="content">
                             <!-- Content Header (Page header) -->
-                            <br>
 
                             <section class="content">
                                 <div class="container-fluid">
-
-                                    <div class="row">
-                                        <div class="col-sm-12" id="btn_nuevo">
-                                            <a href="<?= $url_general ?>/vista/inicio.php?mod=7&acc=registrar_estudiantes" class="btn btn-success btn-sm"><i class="bx bx-plus"></i> Nuevo</a>
-                                            <a href="#" class="btn btn-outline-secondary btn-sm" id="excel_estudiantes" title="Informe en excel del total de Estudiantes"><i class="bx bx-file"></i> Total Estudiantes</a>
-                                        </div>
-
-                                    </div>
 
                                     <div>
                                         <div class="col-sm-8 pt-3">
@@ -182,9 +178,11 @@
                                             <thead>
                                                 <tr>
                                                     <th>Cédula</th>
+                                                    <th>Foto</th>
                                                     <th>Nombre</th>
                                                     <th>Sección/Grado/Paralelo</th>
                                                     <th>Edad</th>
+                                                    <th>Acciones</th>
                                                 </tr>
                                             </thead>
                                             <tbody id="tbl_datos">
