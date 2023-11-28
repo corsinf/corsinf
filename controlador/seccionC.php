@@ -43,8 +43,11 @@ class seccionC
 
     function lista_seccion($id)
     {
-        $datos = $this->modelo->lista_seccion($id);
-        return $datos;
+        $id_rol = 1;
+        if ($id_rol == 1) {
+            $datos = $this->modelo->lista_seccion($id);
+            return $datos;
+        }
     }
 
     function buscar_seccion($buscar)
@@ -55,6 +58,7 @@ class seccionC
 
     function insertar_editar($parametros)
     {
+
         $datos1[0]['campo'] = 'sa_sec_id';
         $datos1[0]['dato'] = strval($parametros['sa_sec_id']);
         $datos[1]['campo'] = 'sa_sec_nombre';

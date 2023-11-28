@@ -16,7 +16,7 @@
             success: function(response) {
                 // console.log(response);   
                 $.each(response, function(i, item) {
-                    console.log(item);
+                    //console.log(item);
 
                     estudiantes +=
                         '<tr>' +
@@ -72,10 +72,9 @@
             success: function(response) {
                 // console.log(response);   
                 $.each(response, function(i, item) {
-                    console.log(item);
+                    //console.log(item);
 
                     estudiantes +=
-                        estudiantes +=
                         '<tr>' +
                         '<td>' + item.sa_est_cedula + '</td>' +
                         '<td style="width: 20%;"> <img id="image" name="image" style="border: 2px solid ; width: 100px;" alt="" src="<?= $url_general ?>/img/computadora.jpg"> </td>' +

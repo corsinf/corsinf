@@ -16,7 +16,7 @@
             success: function(response) {
                 // console.log(response);   
                 $.each(response, function(i, item) {
-                    console.log(item);
+                    //console.log(item);
 
                     representantes +=
                         '<tr>' +
@@ -72,15 +72,15 @@
             success: function(response) {
                 // console.log(response);   
                 $.each(response, function(i, item) {
-                    console.log(item);
+                    //console.log(item);
 
                     representantes +=
                         '<tr>' +
                         '<td>' + item.sa_rep_cedula + '</td>' +
                         '<td><a href="<?= $url_general ?>/vista/inicio.php?mod=7&acc=registrar_representantes&id=' + item.sa_rep_id + '&id_seccion=' + item.sa_id_seccion + '&id_grado=' + item.sa_id_grado + '&id_paralelo=' + item.sa_id_paralelo + '"><u>' + item.sa_rep_primer_apellido + ' ' + item.sa_rep_segundo_apellido + ' ' + item.sa_rep_primer_nombre + ' ' + item.sa_rep_segundo_nombre + '</u></a></td>' +
                         '<td>' + item.sa_sec_nombre + ' / ' + item.sa_gra_nombre + ' / ' + item.sa_par_nombre + '</td>' +
-                        '<td>' + item.sa_sec_correo + '</td>' +
-                        '<td>' + item.sa_sec_telefono_1 + '</td>' +
+                        '<td>' + item.sa_rep_correo + '</td>' +
+                        '<td>' + item.sa_rep_telefono_1 + '</td>' +
                         '<td>' + edad_fecha_nacimiento(item.sa_rep_fecha_nacimiento.date) + '</td>' +
                         '</tr>';
                 });

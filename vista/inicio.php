@@ -154,10 +154,17 @@ if ($_GET['acc'] == 'registrar_estudiantes') {
 
 //Atenciones
 
-
 if ($_GET['acc'] == 'atencion_estudiante') {
 	include('ENFERMERIA/Atenciones/atencion_estudiante.php');
 }
+
+//Inicio 
+if ($_GET['acc'] == 'inicio_representante') {
+	include('ENFERMERIA/Inicio/inicio_representante.php');
+}
+
+
+
 
 //Consultas
 
