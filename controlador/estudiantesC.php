@@ -23,6 +23,10 @@ if (isset($_GET['listar_paralelo_representante'])) {
     echo json_encode($controlador->listar_paralelo_representante($_POST['id_paralelo']));
 }
 
+if (isset($_GET['listar_estudiante_representante'])) {
+    echo json_encode($controlador->lista_estudiantes_representante($_POST['id_representante']));
+}
+
 //echo json_encode($controlador->listar_paralelo_representante(17));
 
 class estudiantesC
@@ -131,4 +135,12 @@ class estudiantesC
         $datos = $this->modelo->buscar_paralelo_representante($buscar);
         return $datos;
     }
+
+    function lista_estudiantes_representante($id)
+    {
+        $datos = $this->modelo->buscar_estudiantes_representante($id);
+        return $datos;
+    }
+
+
 }

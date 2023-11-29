@@ -1,12 +1,25 @@
+<?php
+
+$id_estudiante = '';
+if (isset($_GET['id_estudiante'])) {
+    $id_estudiante = $_GET['id_estudiante'];
+}
+
+?>
+
 <script type="text/javascript">
     $(document).ready(function() {
         var id = '<?php echo $_SESSION['INICIO']['ID_USUARIO']; ?>';
         //console.log(id);
-        if (id != '') {
-            cargarDatos(id)
+        var id_estudiante = '<?php echo $id_estudiante; ?>';
+
+        alert(id_estudiante);
+
+        if (id_estudiante != '') {
+            //cargarDatos(id)
         }
 
-        //Esta consultando unos datos por defecto
+
         consultar_datos_estudiante_representante(1004);
     });
 
@@ -42,6 +55,7 @@
                 $('#txt_telefono').html(response[0].tel + " <i class='bx bxs-phone'></i>");
             }
         });
+
     }
 
     function consultar_datos_estudiante_representante(id_representante = '') {
@@ -57,7 +71,7 @@
             success: function(response) {
                 console.log(response);
                 $.each(response, function(i, item) {
-                    //console.log(item);
+
 
                     /*estudiantes +=
                         '<tr>' +
@@ -101,7 +115,8 @@
                         '<td>' + item.sa_id_grado + ' </td>' +
                         '</tr><tr><td></td><td></td></tr>';*/
 
-                    sexo_estudiante = '';
+
+                    sexo = '';
                     if (item.sa_est_sexo == 'M') {
                         sexo = 'Masculino';
                     } else if (item.sa_est_sexo == 'F') {
@@ -109,6 +124,7 @@
                     }
 
                     estudiantes +=
+
                         '<div class="col">' +
                         '<div class="card radius-15">' +
                         '<div class="card-body text-center">' +
@@ -116,14 +132,13 @@
                         '<img src="<?= $url_general ?>/img/computadora.jpg" width="110" height="110" class="rounded-circle shadow" alt="">' +
                         '<h5 class="mb-0 mt-5">' + item.sa_est_primer_apellido + ' ' + item.sa_est_segundo_apellido + ' ' + item.sa_est_primer_nombre + ' ' + item.sa_est_segundo_nombre + '</h5>' +
                         '<p class="mb-0">' + item.sa_est_cedula + '</p>' +
-                        '<p class="mb-0">' + sexo_estudiante + '</p>' +
+                        '<p class="mb-0">' + sexo + '</p>' +
                         '<p class="mb-0">' + fecha_nacimiento_formateada(item.sa_est_fecha_nacimiento.date) + ' (' + edad_fecha_nacimiento(item.sa_est_fecha_nacimiento.date) + ' años)' + '</p>' +
                         '<p class="mb-0">' + item.sa_est_correo + '</p>' +
                         '<p class="mb-3">' + 'seccion/grado/paralelo' + '</p>' +
 
                         '<div class="d-grid mt-3">' +
-                        '<a href="<?= $url_general ?>/vista/inicio.php?mod=7&acc=ficha_medica_representado&id_estudiante=' + item.sa_est_id + '"' + 'class="btn btn-outline-primary radius-15">Detalles</a>' +
-
+                        '<a href="#" class="btn btn-outline-primary radius-15">Detalles</a>' +
                         '</div>' +
                         '</div>' +
                         '</div>' +
@@ -210,7 +225,7 @@
                                     <div class="d-flex align-items-center">
                                         <div class="tab-icon"><i class='bx bx-home font-18 me-1'></i>
                                         </div>
-                                        <div class="tab-title">Inicio</div>
+                                        <div class="tab-title">Detalles</div>
                                     </div>
                                 </a>
                             </li>
@@ -219,7 +234,7 @@
                                     <div class="d-flex align-items-center">
                                         <div class="tab-icon"><i class='bx bx-user-pin font-18 me-1'></i>
                                         </div>
-                                        <div class="tab-title">Estudiantes</div>
+                                        <div class="tab-title">Ficha Médica</div>
                                     </div>
                                 </a>
                             </li>
