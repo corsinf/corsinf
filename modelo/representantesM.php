@@ -131,4 +131,6 @@ class representantesM
         $datos = $this->db_salud->sql_string($sql);
         return $datos;
     }
+
+    
 }

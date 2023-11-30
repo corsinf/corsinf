@@ -8,6 +8,8 @@
 
         //Esta consultando unos datos por defecto
         consultar_datos_estudiante_representante(1004);
+
+        //consultar_datos(6);
     });
 
     function cargarDatos(id) {
@@ -103,10 +105,12 @@
 
                     sexo_estudiante = '';
                     if (item.sa_est_sexo == 'M') {
-                        sexo = 'Masculino';
+                        sexo_estudiante = 'Masculino';
                     } else if (item.sa_est_sexo == 'F') {
-                        sexo = 'Famenino';
+                        sexo_estudiante = 'Famenino';
                     }
+
+                    curso = item.sa_sec_nombre + '/' + item.sa_gra_nombre + '/' + item.sa_par_nombre;
 
                     estudiantes +=
                         '<div class="col">' +
@@ -117,9 +121,9 @@
                         '<h5 class="mb-0 mt-5">' + item.sa_est_primer_apellido + ' ' + item.sa_est_segundo_apellido + ' ' + item.sa_est_primer_nombre + ' ' + item.sa_est_segundo_nombre + '</h5>' +
                         '<p class="mb-0">' + item.sa_est_cedula + '</p>' +
                         '<p class="mb-0">' + sexo_estudiante + '</p>' +
-                        '<p class="mb-0">' + fecha_nacimiento_formateada(item.sa_est_fecha_nacimiento.date) + ' (' + edad_fecha_nacimiento(item.sa_est_fecha_nacimiento.date) + ' años)' + '</p>' +
-                        '<p class="mb-0">' + item.sa_est_correo + '</p>' +
-                        '<p class="mb-3">' + 'seccion/grado/paralelo' + '</p>' +
+                        //'<p class="mb-0">' + fecha_nacimiento_formateada(item.sa_est_fecha_nacimiento.date) + ' (' + edad_fecha_nacimiento(item.sa_est_fecha_nacimiento.date) + ' años)' + '</p>' +
+                        //'<p class="mb-0">' + item.sa_est_correo + '</p>' +
+                        '<p class="mb-3">' + curso + '</p>' +
 
                         '<div class="d-grid mt-3">' +
                         '<a href="<?= $url_general ?>/vista/inicio.php?mod=7&acc=ficha_medica_representado&id_estudiante=' + item.sa_est_id + '"' + 'class="btn btn-outline-primary radius-15">Detalles</a>' +
@@ -137,6 +141,8 @@
             }
         });
     }
+
+
 
     function edad_fecha_nacimiento(fecha_nacimiento) {
         const fechaNacimientoJson = fecha_nacimiento;
@@ -202,7 +208,7 @@
         <!--end breadcrumb-->
         <div class="row">
             <div class="col">
-                <div class="card">
+                <div class="card border-top border-0 border-4 border-primary">
                     <div class="card-body">
                         <ul class="nav nav-tabs nav-success" role="tablist">
                             <li class="nav-item" role="presentation">
@@ -232,35 +238,35 @@
                                             <table class="table mb-0" style="width:100%">
                                                 <tbody>
                                                     <tr>
-                                                        <th style="width:40%" class="table-success text-end">Cédula:</th>
+                                                        <th style="width:40%" class="table-primary text-end">Cédula:</th>
                                                         <td id="txt_ci">0000000000</td>
                                                     </tr>
                                                     <tr>
-                                                        <th style="width:40%" class="table-success text-end">Nombres:</th>
+                                                        <th style="width:40%" class="table-primary text-end">Nombres:</th>
                                                         <td id="txt_nombre">Mark Ryden</td>
                                                     </tr>
                                                     <tr>
-                                                        <th style="width:40%" class="table-success text-end">Apellidos:</th>
+                                                        <th style="width:40%" class="table-primary text-end">Apellidos:</th>
                                                         <td id="txt_apellido">Tipan Páez</td>
                                                     </tr>
                                                     <tr>
-                                                        <th style="width:40%" class="table-success text-end">Sexo:</th>
+                                                        <th style="width:40%" class="table-primary text-end">Sexo:</th>
                                                         <td id="txt_sexo">Masculino</td>
                                                     </tr>
                                                     <tr>
-                                                        <th style="width:40%" class="table-success text-end">Fecha de Nacimiento:</th>
+                                                        <th style="width:40%" class="table-primary text-end">Fecha de Nacimiento:</th>
                                                         <td id="txt_fecha_nacimiento">25 de mayo 2006</td>
                                                     </tr>
                                                     <tr>
-                                                        <th style="width:40%" class="table-success text-end">Edad Actual:</th>
+                                                        <th style="width:40%" class="table-primary text-end">Edad Actual:</th>
                                                         <td id="txt_edad">17 años</td>
                                                     </tr>
                                                     <tr>
-                                                        <th style="width:40%" class="table-success text-end">Correo Electrónico:</th>
+                                                        <th style="width:40%" class="table-primary text-end">Correo Electrónico:</th>
                                                         <td id="txt_email">mark@mail.com </td>
                                                     </tr>
                                                     <tr>
-                                                        <th style="width:40%" class="table-success text-end">Teléfono:</th>
+                                                        <th style="width:40%" class="table-primary text-end">Teléfono:</th>
                                                         <td id="txt_telefono">0999865412 </td>
                                                     </tr>
                                                 </tbody>

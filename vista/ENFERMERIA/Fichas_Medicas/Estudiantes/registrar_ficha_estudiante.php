@@ -885,7 +885,7 @@ if (isset($_GET['id_ficha'])) {
 
                             <div class="modal-footer pt-4">
 
-                                <?php if ($id_estudiante == '') { ?>
+                                <?php if ($id_ficha == '') { ?>
                                     <button class="btn btn-primary btn-sm px-4 m-1" onclick="editar_insertar()" type="button"><i class="bx bx-save"></i> Guardar</button>
                                 <?php } else { ?>
                                     <button class="btn btn-primary btn-sm px-4 m-1" onclick="editar_insertar()" type="button"><i class="bx bx-save"></i> Guardar</button>

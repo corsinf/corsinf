@@ -159,17 +159,17 @@ class estudiantesM
             $sql .= ' and est.sa_id_representante = ' . $id;
             $sql .= " ORDER BY sa_est_id;";
             $datos = $this->db_salud->datos($sql);
-        }else{
+        } else {
             $datos = 'Falta ID Respresentante';
         }
 
-       
+
         return $datos;
     }
 
     /*/////////////////////////////////////////////////////////////////////
 
-    Para consultar representante en paralelo
+    Para consultar representante en paralelo para el estudiante
 
     /////////////////////////////////////////////////////////////////////*/
 
@@ -191,6 +191,23 @@ class estudiantesM
                 FROM representantes rep
                 WHERE rep.sa_rep_estado = 1
                 AND rep.sa_id_paralelo = " . $buscar;
+
+        $datos = $this->db_salud->datos($sql);
+        return $datos;
+    }
+
+    /*/////////////////////////////////////////////////////////////////////
+
+    Para consultar si se tiene registros de ficha medica
+
+    /////////////////////////////////////////////////////////////////////*/
+    function buscar_estudiante_ficha_medica($id_estudiante)
+    {
+        $sql = "SELECT s.sa_fice_id
+                       
+                FROM estudiantes e
+                JOIN ficha_medica s ON e.sa_est_id = s.sa_fice_est_id
+                WHERE e.sa_est_id =" .  $id_estudiante;
 
         $datos = $this->db_salud->datos($sql);
         return $datos;

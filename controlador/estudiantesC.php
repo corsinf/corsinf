@@ -27,7 +27,12 @@ if (isset($_GET['listar_estudiante_representante'])) {
     echo json_encode($controlador->lista_estudiantes_representante($_POST['id_representante']));
 }
 
-//echo json_encode($controlador->listar_paralelo_representante(17));
+
+if (isset($_GET['buscar_estudiante_ficha_medica'])) {
+    echo json_encode($controlador->buscar_estudiante_ficha_medica($_POST['id_estudiante']));
+}
+
+//echo json_encode($controlador->buscar_estudiante_ficha_medica(5));
 
 class estudiantesC
 {
@@ -142,5 +147,14 @@ class estudiantesC
         return $datos;
     }
 
-
+    function buscar_estudiante_ficha_medica($id_estudiante)
+    {
+        if (count($this->modelo->buscar_estudiante_ficha_medica($id_estudiante)) == 1) {
+            return $this->modelo->buscar_estudiante_ficha_medica($id_estudiante);
+        } else if (count($this->modelo->buscar_estudiante_ficha_medica($id_estudiante)) == 0) {
+            return -1;
+        } else if (count($this->modelo->buscar_estudiante_ficha_medica($id_estudiante)) > 0) {
+            return -2;
+        }
+    }
 }

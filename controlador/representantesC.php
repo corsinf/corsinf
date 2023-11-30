@@ -19,6 +19,8 @@ if (isset($_GET['eliminar'])) {
     echo json_encode($controlador->eliminar($_POST['id']));
 }
 
+
+
 //echo json_encode($controlador->insertar_editar('Ejemplo1'));
 
 class representantesC
