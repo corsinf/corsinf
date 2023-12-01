@@ -131,6 +131,10 @@ if($_GET['acc']=='pagina_error')
 	{
 		include('EMPRESA/usuarios.php');
 	}
+	if($_GET['acc']=='usuarios_perfil')
+	{
+		include('EMPRESA/usuarios_perfil.php');
+	}
 	if($_GET['acc']=='tipo_usuario')
 	{
 		include('EMPRESA/tipo_usuario.php');
@@ -139,9 +143,9 @@ if($_GET['acc']=='pagina_error')
 	{
 		include('EMPRESA/modulos_paginas.php');
 	}
-	if($_GET['acc']=='vinculacion')
+	if($_GET['acc']=='licencia')
 	{
-		include('EMPRESA/vinculacion.php');
+		include('EMPRESA/licencias.php');
 	}
 	if($_GET['acc']=='detalle_usuario')
 	{

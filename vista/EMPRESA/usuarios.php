@@ -3,7 +3,7 @@
 <script type="text/javascript">
 	$( document ).ready(function() {
     lista_usuario();
-    lista_usuario_ina();
+    //lista_usuario_ina();
     autocoplet_tipo();
   });
 
@@ -130,7 +130,7 @@
            {
             $('#nuevo_tipo_usuario').modal('hide');
             lista_usuario();
-            lista_usuario_ina();
+            //lista_usuario_ina();
 
             if(id!='')
             {
@@ -241,7 +241,7 @@
            {
             Swal.fire('','Registro eliminado.','success');
             lista_usuario();
-            lista_usuario_ina();
+            //lista_usuario_ina();
            } else if(response == -2)
            {
            	Swal.fire({
@@ -298,7 +298,7 @@
            	if (response==1) 
            	{
             lista_usuario();
-            lista_usuario_ina();
+            //lista_usuario_ina();
            		Swal.fire('El usuario  se a inhabilitado!', 'El usuario no podra ingresar al sistema', 'success');
 
            	}else
@@ -327,7 +327,7 @@
            	{
             Swal.fire('','Registro habilitado.','success');
             lista_usuario();
-            lista_usuario_ina();
+            //lista_usuario_ina();
            	}else
            	{
            		Swal.fire('', 'UPs aparecio un problema', 'success');

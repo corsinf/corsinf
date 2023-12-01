@@ -75,3 +75,61 @@ function restriccion()
       console.log(Fecha);
       return Fecha;
     }
+
+function num_caracteres(campo,num)
+{
+    var val = $('#'+campo).val();
+    var cant = val.length;
+    console.log(cant+'-'+num);
+
+    if(cant>=num)
+    {
+        $('#'+campo).val(val.substr(0,num));
+        return false;
+    }
+
+}
+function solo_numeros(input)
+{
+   var valor = input.value;
+
+    // Reemplazar cualquier caracter que no sea un número con una cadena vacía
+    var soloNumeros = valor.replace(/\D/g, '');
+
+    // Actualizar el valor del input con solo números
+    input.value = soloNumeros;
+}
+function validar_cedula(campo) {
+    var cad = document.getElementById(campo).value.trim();
+    var total = 0;
+    var longitud = cad.length;
+    var longcheck = longitud - 1;
+
+    if(longitud==10 || longitud==13)
+    {
+            if (cad !== "" && longitud === 10){
+              for(i = 0; i < longcheck; i++){
+                if (i%2 === 0) {
+                  var aux = cad.charAt(i) * 2;
+                  if (aux > 9) aux -= 9;
+                  total += aux;
+                } else {
+                  total += parseInt(cad.charAt(i)); // parseInt o concatenará en lugar de sumar
+                }
+              }
+
+              total = total % 10 ? 10 - total % 10 : 0;
+
+              if (cad.charAt(longitud-1) == total) {
+              }else{
+                Swal.fire('Cedula invalida','revise su numero '+cad,'info');
+                $('#'+campo).val('');
+              }
+            }
+    }else
+    {
+        Swal.fire('Error en numero de cedula','Tiene que tener 10 ó 13 caracteres','info').then(function(){
+            $('#'+campo).val('');
+        })
+    }
+  }

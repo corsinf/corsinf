@@ -19,7 +19,7 @@ class modulos_paginasM
 	
 	function guardar($datos,$tabla)
 	{
-		$datos = $this->db->inserts($tabla,$datos);
+		$datos = $this->db->inserts($tabla,$datos,1);
 		if($datos==1)
 		{
 			return 1;
@@ -31,7 +31,7 @@ class modulos_paginasM
 	}
 	function update($tabla,$datos,$where)
 	{
-		$datos = $this->db->update($tabla,$datos,$where);
+		$datos = $this->db->update($tabla,$datos,$where,1);
 		if($datos==1)
 		{
 			return 1;
@@ -98,13 +98,13 @@ class modulos_paginasM
 	function eliminar($id)
 	{
 		$sql = "DELETE FROM MODULOS WHERE id_modulo = '".$id."'";
-		return $this->db->sql_string($sql);
+		return $this->db->sql_string_cod_error($sql,1);
 
 	}
 	function eliminar_pagina($id)
 	{
 		$sql = "DELETE FROM ACCESOS WHERE id_paginas = '".$id."';DELETE FROM PAGINAS WHERE id_paginas = '".$id."'";
-		return $this->db->sql_string($sql);
+		return $this->db->sql_string($sql,1);
 
 	}
 
@@ -130,7 +130,7 @@ class modulos_paginasM
 	function modulos_sis()
 	{
 		$sql = "SELECT  * FROM MODULOS_SISTEMA WHERE 1=1";
-		$datos = $this->db->datos($sql);
+		$datos = $this->db->datos($sql,1);
 		return $datos;
 	}
 }

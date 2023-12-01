@@ -1,4 +1,3 @@
-
 <!doctype html>
 <html lang="en">
 
@@ -44,19 +43,16 @@
               var spiner = '<div class="text-center"><img src="../../img/gif/proce.gif" width="100" height="100"></div>'     
             $('#tabla_').html(spiner);
          },*/
-           success:  function (response) {    
-           if (response==-2) 
-           {
-              Swal.fire( '','Email no registrado.','error');
+           success:  function (response) {  
 
-           }else if(response == -1)
-           {
-              Swal.fire( '','No tiene accesos.','info');
-
-           }else if(response == 1)
-           {
-             window.location.href = "vista/modulos_sistema.php";
-           }        
+           	if(response!='')
+           	{
+           		$('#lista_empresas').html(response);
+  						$('#myModal_empresas').modal('show');
+  					}else
+  					{
+  						Swal.fire( '','Usuario No registrado.','error');
+  					}           
          }
        });
 
@@ -65,14 +61,140 @@
        Swal.fire( '','LLene todo los campos.','error');
     }
   }
+
+  function iniciar_sesion(id)
+  {
+  	 var email=$('#email').val();
+    var pass =$('#pass').val();
+       var parametros = 
+       {
+         	'id':id,
+					'email':email,
+         	'pass':pass,
+       } 
+       $.ajax({
+         data:  {parametros:parametros},
+         url:   'controlador/loginC.php?iniciar_empresa=true',
+         type:  'post',
+         dataType: 'json',
+         /*beforeSend: function () {   
+              var spiner = '<div class="text-center"><img src="../../img/gif/proce.gif" width="100" height="100"></div>'     
+            $('#tabla_').html(spiner);
+         },*/
+           success:  function (response) {  
+
+           console.log(response);  
+           if (response==-2) 
+           {
+              Swal.fire( '','Email no registrado.','error');
+
+           }else if(response == -1)
+           {
+              Swal.fire( '','Empresa Inexistente','info');
+
+           }else if(response == 1)
+           {
+             window.location.href = "vista/modulos_sistema.php";
+           }        
+         }
+       });
+
+    
+  }
+
+
+
+  function empresa_selecconada(empresa)
+  {
+  		var parametros = 
+       {
+         'empresa':empresa,
+       } 
+       $.ajax({
+         data:  {parametros:parametros},
+         url:   'controlador/loginC.php?empresa_seleccionada=true',
+         type:  'post',
+         dataType: 'json',        
+           success:  function (response) {  
+           	if(response.respuesta==2)
+           	{
+           		$('#lista_modulos_empresas').html(response.modulos);
+           		$('#txt_id').val(empresa);
+           		$('#myModal_modulos').modal('show');
+           	}else if(response.respuesta==1)
+           	{
+           		iniciar_sesion(empresa);
+           	}      
+         }
+       });
+
+  }
+
+  function registrar_licencia(empresa,modulo)
+  {
+
+  	licencia = $('#licencia_'+modulo).val();
+  		var parametros = 
+       {
+         'empresa':empresa,
+         'modulo':modulo,
+         'licencia':licencia,
+       } 
+       $.ajax({
+         data:  {parametros:parametros},
+         url:   'controlador/loginC.php?registrar_licencia=true',
+         type:  'post',
+         dataType: 'json',        
+           success:  function (response) {  
+           	if(response==-1)
+           	{
+           		Swal.fire('La licencian es erronea','','error');
+           	}else if(response==1)
+           	{
+           		Swal.fire('La licencian registrada','','success');
+           	}
+         }
+       });
+
+  }
   function enter_press(event) {
 
     var codigo = event.which || event.keyCode;
-    if(codigo === 13){
+    if(codigo === 13){qw
+    	
       consultar_datos()
       // console.log("Tecla ENTER");
-    }     
-}
+   	 }     
+	}
+
+	function primer_inicio()
+	{
+  		var parametros = 
+       {
+         'empresa':$('#txt_id').val(),
+       } 
+       $.ajax({
+         data:  {parametros:parametros},
+         url:   'controlador/loginC.php?primer_inicio=true',
+         type:  'post',
+         dataType: 'json',        
+           success:  function (response) {  
+           	if(response==-1)
+           	{
+           		Swal.fire('La licencian es erronea','','error');
+           	}else if(response==1)
+           	{
+           		Swal.fire('Se a enviado a su correo registrado las credenciales de ingreso','','success').then(function(){
+           			$('#myModal_empresas').modal('hide');
+           			$('#myModal_modulos').modal('hide');
+           		});
+           	}
+         }
+       });
+	}
+
+
+
 	</script>
 </head>
 
@@ -123,7 +245,11 @@
 													<label class="form-check-label" for="flexSwitchCheckChecked">Remember Me</label>
 												</div>
 											</div> -->
-											<div class="col-md-12 text-end">	<a href="reset.php">Olvido su password ?</a>
+											<div class="col-md-12 text-end">
+												<a href="reset.php">Olvido su contraseña ?</a>
+												<br>
+												<a href="Nueva_empresa.php">Nueva empresa</a>
+											</div>
 											<!-- <div class="col-md-12 text-end">	<a href="vista/SEGUROS/formulario_prestamos.php">Solicitar Salida de bienes</a>
 											</div> -->
 											<div class="col-12">
@@ -177,6 +303,84 @@
 	
 	<!--app JS-->
 	<script src="assets/js/app.js"></script>
+
+<div class="modal fade" id="myModal_empresas" tabindex="-1" role="dialog" data-bs-backdrop="static" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title" id="titulo">Empresas</h3>
+      </div>
+      <div class="modal-body">
+        <ul class="list-group list-group-flush radius-10" id="lista_empresas">
+									
+									<li class="list-group-item d-flex align-items-center radius-10 mb-2 shadow-sm">
+										<div class="d-flex align-items-center">
+											<div class="font-20"><i class="flag-icon flag-icon-us"></i>
+											</div>
+											<div class="flex-grow-1 ms-2">
+												<h6 class="mb-0">United States</h6>
+											</div>
+										</div>
+										<div class="ms-auto">435</div>
+									</li>
+									<li class="list-group-item d-flex align-items-center radius-10 mb-2 shadow-sm">
+										<div class="d-flex align-items-center">
+											<div class="font-20"><i class="flag-icon flag-icon-vn"></i>
+											</div>
+											<div class="flex-grow-1 ms-2">
+												<h6 class="mb-0">Vietnam</h6>
+											</div>
+										</div>
+										<div class="ms-auto">287</div>
+									</li>
+									<li class="list-group-item d-flex align-items-center radius-10 mb-2 shadow-sm">
+										<div class="d-flex align-items-center">
+											<div class="font-20"><i class="flag-icon flag-icon-au"></i>
+											</div>
+											<div class="flex-grow-1 ms-2">
+												<h6 class="mb-0">Australia</h6>
+											</div>
+										</div>
+										<div class="ms-auto">432</div>
+									</li>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="myModal_modulos" tabindex="-1" role="dialog" data-bs-backdrop="static" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title" id="titulo">Modulos</h3>
+      </div>
+      <div class="modal-body">
+      	<input type="hidden" name="txt_id" id="txt_id">
+        <ul class="list-group list-group-flush radius-10" id="lista_modulos_empresas">
+					
+					<li class="list-group-item d-flex align-items-center radius-10 mb-2 shadow-sm">
+						<div class="d-flex align-items-center">
+							<div class="font-20"><i class="flag-icon flag-icon-us"></i>
+							</div>
+							<div class="flex-grow-1 ms-2">
+								<h6 class="mb-0">United States</h6>
+							</div>
+						</div>
+						<div class="ms-auto">435</div>
+					</li>
+									
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" onclick="primer_inicio()">Iniciar</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 </body>
 
 </html>

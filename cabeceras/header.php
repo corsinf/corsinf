@@ -1,6 +1,17 @@
 <?php @session_start(); 
 // print_r($_SESSION['INICIO']);
-if(!isset($_SESSION['INICIO'])){header('Location: ../login.php');}?> 
+$tiempo_inactividad = 2 * 60;
+if(!isset($_SESSION['INICIO'])){header('Location: ../login.php');}
+// if (isset($_SESSION['INICIO']['ULTIMO_ACCESO']) && (time() - $_SESSION['INICIO']['ULTIMO_ACCESO'] > $tiempo_inactividad)) {
+//     // Cerrar la sesión
+//     session_unset();
+//     session_destroy();
+//     header('Location: ../login.php');
+//     exit();
+// }
+
+
+?> 
 <!doctype html>
 <html lang="en">
 
@@ -35,17 +46,21 @@ if(!isset($_SESSION['INICIO'])){header('Location: ../login.php');}?>
 	<link href="../assets/css/icons.css" rel="stylesheet">
 	<!-- Theme Style CSS -->
 
+
+	<link rel="stylesheet" href="../css/jquery-ui.css">
 	<link rel="stylesheet" href="../assets/plugins/summernote/summernote-lite.css">
 	<!-- <link rel="stylesheet" href="../assets/plugins/summernote/css/styles_summernote.css"> -->
   <link rel="stylesheet" href="../assets/plugins/summernote/summernote-bs5.min.css">
   <!-- <link rel="stylesheet" href="../assets/plugins/summernote/css/font-awesome.min.css"> -->
 
-  <script src="../js/informes_globales.js"></script>
+  <script src="../js/informes_globales.js"></script>  
+  <script src="../js/jquery-3.6.0.js"></script>
+  <script src="../js/jquery-ui.js"></script>
   <script src="../js/codigos_globales.js"></script>
   <script src="../js/sweetalert2.all.min.js"></script>
   <script src="../js/notificaciones_seguros.js"></script>
 
-  <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+  <!-- <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script> -->
 
   <style>
     .input-group > .select2-container--bootstrap {
@@ -68,8 +83,8 @@ if(!isset($_SESSION['INICIO'])){header('Location: ../login.php');}?>
     	menu_lateral();
     $( document ).ready(function() {
       restriccion();   
-      notificaciones();
-  	  solicitudes();  
+      // notificaciones();
+  	  // solicitudes();  
     });
 
     function formatoDate(date)

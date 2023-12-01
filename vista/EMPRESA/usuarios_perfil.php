@@ -2,10 +2,7 @@
 //include('../cabeceras/header.php');?>
 <script type="text/javascript">
   $( document ).ready(function() {
-    usuarios();
-    lista_paginas();
-    lista_tipo_usuario_drop_pagina();
-    lista_modulos();  
+    lista_tipo_usuario();
     // modulos_acceso('1');
 
     $('#txt_tipo_usuario_new').autocomplete({
@@ -36,44 +33,13 @@
             },
     });
 
-
-    // $( "#txt_tipo_usuario_new" ).autocomplete({
-    //   source: [
-    //       "ActionScript",
-    //       "AppleScript",
-    //       "Asp",
-    //       "BASIC",
-    //       "C",
-    //       "C++",
-    //       "Clojure",
-    //       "COBOL",
-    //       "ColdFusion",
-    //       "Erlang",
-    //       "Fortran",
-    //       "Groovy",
-    //       "Haskell",
-    //       "Java",
-    //       "JavaScript",
-    //       "Lisp",
-    //       "Perl",
-    //       "PHP",
-    //       "Python",
-    //       "Ruby",
-    //       "Scala",
-    //       "Scheme"
-    //     ],
-    // });
-
-
   });
 
-
-
-   function lista_tipo_usuario_drop_pagina()
+  function lista_tipo_usuario()
   {
     $.ajax({
          // data:  {parametros:parametros},
-         url:   '../controlador/tipo_usuarioC.php?lista_usuarios_drop=true',
+         url:   '../controlador/tipo_usuarioC.php?lista_usuarios=true',
          type:  'post',
          dataType: 'json',
          /*beforeSend: function () {   
@@ -83,14 +49,14 @@
            success:  function (response) {  
            if (response) 
            {
-
-            response = '<option value="">Seleccione perfil</option>'+response;
-            $('#ddl_perfil').html(response);
+            $('#tipo_usuario').html(response);
            } 
           } 
           
        });
   }
+ 
+
 
 
   function eliminar_usuario_tipo(id)
@@ -119,7 +85,6 @@
            if(response==1)
            {
             Swal.fire('','Registro eliminado.','success');
-            lista_usuarios_asignados();
            } else if(response == -2)
            {
              Swal.fire('','El tipo de usuario esta ligado a uno o varios usuario o paginas y no se podra eliminar.','error')
@@ -134,123 +99,6 @@
 
    }
 
-  function usuarios(){
-    $('#ddl_usuario').select2({
-      width:'100%',
-      placeholder: 'Seleccione una usuario',
-      ajax: {
-        url: '../controlador/usuariosC.php?lista_usuarios_ddl2=true',
-        dataType: 'json',
-        delay: 250,
-        processResults: function (data) {
-          return {
-            results: data
-          };
-        },
-        cache: true
-      }
-    });
-  }
-
-  function lista_modulos()
-  {
-    //  var parametros = 
-    // {
-    //   'perfil':$('#ddl_perfil').val(),
-    //   'query':$('#txt_pagina').val(),
-    // }
-
-    $.ajax({
-         // data:  {parametros:parametros},
-         url:   '../controlador/tipo_usuarioC.php?modulo_sistema=true',
-         type:  'post',
-         dataType: 'json',
-           success:  function (response) {  
-            // console.log(response);
-           
-            $('#ddl_modulos').html(response);
-            // accesos_asignados();
-           
-          } 
-          
-       });
-  }
-
-  function lista_paginas()
-  {
-    var parametros = 
-    {
-      'perfil':$('#ddl_perfil').val(),
-      'modulo_sis':$('#ddl_modulos').val(),
-      'modulo':$('#ddl_menu').val(),
-      'query':$('#txt_pagina').val(),
-    }
-
-    $.ajax({
-         data:  {parametros:parametros},
-         url:   '../controlador/tipo_usuarioC.php?lista_paginas=true',
-         type:  'post',
-         dataType: 'json',
-           success:  function (response) {  
-            // console.log(response);
-           
-            $('#tbl_paginas').html(response);
-            accesos_asignados();
-           
-          } 
-          
-       });
-  }
-
-  function  buscar_usuario_perfil()
-  {    
-   var tipo = $('#ddl_perfil').val();
-
-    $.ajax({
-         data:  {tipo:tipo},
-         url:   '../controlador/tipo_usuarioC.php?lista_usuarios_perfil_accesos=true',
-         type:  'post',
-         dataType: 'json',
-           success:  function (response) {  
-            console.log(response);
-            var  op = "<option value = ''>Asignar a todos</option>";
-            response.forEach(function(item,i){
-              op+="<option value = '"+item.ID+"'>"+item.nombre+"</option>";
-           });           
-            $('#ddl_usuario_perfil').html(op);
-            // accesos_asignados();
-           
-          } 
-          
-       });
-
-  }
-
-  function cargar_menu()
-  {   
-    parametros = 
-    {
-      'modulo_sis':$('#ddl_modulos').val(),
-    }
-    $.ajax({
-         data:  {parametros:parametros},
-         url:   '../controlador/tipo_usuarioC.php?modulos=true',
-         type:  'post',
-         dataType: 'json',
-         /*beforeSend: function () {   
-              var spiner = '<div class="text-center"><img src="../img/gif/proce.gif" width="100" height="100"></div>'     
-            $('#tabla_').html(spiner);
-         },*/
-           success:  function (response) {  
-            // console.log(response);
-           if (response) 
-           {
-            $('#ddl_menu').html(response);
-           } 
-          } 
-          
-       });
-  }
 
   function accesos_asignados()
   {
@@ -338,6 +186,125 @@
   }
 
 
+   function eliminar_tipo(id)
+  {
+     Swal.fire({
+      title: 'Quiere eliminar este registro?',
+      text: "Esta seguro de eliminar este registro!",
+      type: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Si'
+    }).then((result) => {
+        if (result.value) {
+
+    $.ajax({
+         data:  {id:id},
+         url:   '../controlador/tipo_usuarioC.php?eliminar_tipo=true',
+         type:  'post',
+         dataType: 'json',
+         /*beforeSend: function () {   
+              var spiner = '<div class="text-center"><img src="../img/gif/proce.gif" width="100" height="100"></div>'     
+            $('#tabla_').html(spiner);
+         },*/
+           success:  function (response) { 
+           if(response==1)
+           {
+            Swal.fire('','Registro eliminado.','success');
+            lista_tipo_usuario();
+           } else if(response == -2)
+           {
+             Swal.fire('','El tipo de usuario esta ligado a uno o varios usuario o paginas y no se podra eliminar.','error')
+           }else
+           {
+            Swal.fire('','No se pudo elimnar.','info')
+           }
+          } 
+          
+       });}
+      });
+
+   }
+
+  function add_tipo(i='')
+  {
+    console.log(i);
+    if(i)
+    {
+      console.log('enn');
+      var ti = $('#txt_tipo_usuario_'+i).val();
+      var id = i;
+      var tipo_usu_empresa  = '';
+    }else
+    {
+      console.log('dasd');
+      var ti = $('#txt_tipo_usuario_new').val();
+      var id = $('#txt_tipo_usuario_update').val();
+      var tipo_usu_empresa = $('#txt_id_tipo_usu_empresa').val();
+    }
+    if(ti=='')
+    {
+      Swal.fire('','Asegurese de llenar todo los campos.','info')
+      return false;
+    }
+    var parametros = 
+    {
+      'tipo':ti,
+      'id':id,
+      'tipo_usu_empresa':tipo_usu_empresa,
+    };
+    $.ajax({
+         data:  {parametros,parametros},
+         url:   '../controlador/tipo_usuarioC.php?guardar_tipo=true',
+         type:  'post',
+         dataType: 'json',
+         /*beforeSend: function () {   
+              var spiner = '<div class="text-center"><img src="../img/gif/proce.gif" width="100" height="100"></div>'     
+            $('#tabla_').html(spiner);
+         },*/
+           success:  function (response) {  
+           if (response==1) 
+           {
+            $('#nuevo_tipo_usuario').modal('hide');
+            lista_tipo_usuario();
+
+            if(id!='')
+            {
+              Swal.fire(
+                  '',
+                  'Registro Editado.',
+                  'success');
+
+            }else{
+            Swal.fire(
+                  '',
+                  'Registro agregado.',
+                  'success');
+          }
+            $('#txt_tipo_usuario_new').val('');
+            $('#tipo_usu_empresa').val('');
+            $('#txt_tipo_usuario_update').val('');
+            $('#btn_opcion').text('Guardar');
+            $('#exampleModalLongTitle').text('Nuevo tipo de usuario');
+           }else
+           {
+
+            $('#nuevo_tipo_usuario').modal('hide');
+            Swal.fire(
+                  '',
+                  'No se pudo guardar intente mas tarde.',
+                  'info');
+
+            $('#txt_tipo_usuario_new').val('');
+            $('#txt_tipo_usuario_update').val('');
+            $('#btn_opcion').text('Guardar');
+           } 
+          } 
+          
+       });
+
+  }
   function update(id,nombre)
   {
      $('#nuevo_tipo_usuario').modal('show');
@@ -371,59 +338,17 @@
        });
    }
 
-  function guardar_en_perfil()
-   {     
-     var tipo = $('#ddl_tipo_usuario').val();
-     var tipo_nom = $('#ddl_tipo_usuario option:selected').text();
-      var usuario = $('#ddl_usuario').val();
-     var parametros = 
-     {
-       'usuario':usuario,
-       'tipo': tipo,
-     }
-      $.ajax({
-         data:  {parametros:parametros},
-         url:   '../controlador/tipo_usuarioC.php?guardar_en_perfil=true',
-         type:  'post',
-         dataType: 'json',
-           success:  function (response) { 
-            if(response==1)
-            {
-             Swal.fire('','Usuario Asignado a perfil','success');
-             lista_usuarios_asignados();
-            }else if(response==2)
-            {
-             Swal.fire('','Este usuario ya esta registrado en '+tipo_nom,'error');              
-            }
-          } 
-          
-       });
-   }
+  
 
    function marcar_todo_edit()
    {
      var perfil = $('#ddl_perfil').val();
      if(perfil=='')
      {
-       Swal.fire('Seleccione un Usuario','','info');
-       $('#rbl_todo_edit').prop('checked',false);
+       Swal.fire('Seleccione un pefil de usuario','','info');
        return false;
      }
-       
-     $('.rbl_pag_edi').each(function() {
-        const checkbox = $(this);
-        const isChecked = checkbox.prop('checked'); 
-        if (!isChecked) {
-          $(this).click();
-          // console.log(this.id);
-        }
-        // console.log(checkbox);
-    });
 
-     Swal.fire('Todos seleccionados','','info').then(function(){
-       $('#rbl_todo_edit').prop('checked',false);
-     })
-  
    }
    function marcar_todo_delet()
    {
@@ -431,22 +356,8 @@
      if(perfil=='')
      {
        Swal.fire('Seleccione un pefil de usuario','','info');
-       $('#rbl_todo_eli').prop('checked',false);
        return false;
      }
-
-      $('.rbl_pag_eli').each(function() {
-        const checkbox = $(this);
-        const isChecked = checkbox.prop('checked'); 
-        if (!isChecked) {
-          $(this).click();
-          // console.log(this.id);
-        }
-        // console.log(checkbox);
-    });
-       Swal.fire('Todos seleccionados','','info').then(function(){
-       $('#rbl_todo_eli').prop('checked',false);
-     })
 
    }
 </script>
@@ -462,7 +373,7 @@
               <ol class="breadcrumb mb-0 p-0">
                 <li class="breadcrumb-item"><a href="javascript:;"><i class="bx bx-home-alt"></i></a>
                 </li>
-                <li class="breadcrumb-item active" aria-current="page">Perfiles y accesos</li>
+                <li class="breadcrumb-item active" aria-current="page">Roles de usuario</li>
               </ol>
             </nav>
           </div>         
@@ -473,65 +384,43 @@
             <hr>
             <div class="card">
               <div class="card-body">
-                <div class="row"><br>                                     
-                    <div class="col-sm-3">                    
-                      <b>Perfil usuario</b>
-                      <select class="form-select form-select-sm" id="ddl_perfil" name="ddl_perfil" onchange="buscar_usuario_perfil();">
-                        <option value="">Seleccione perfil de usuario</option>
-                      </select>                    
+                <ul class="nav nav-tabs nav-danger" role="tablist">
+                  <li class="nav-item" role="presentation">
+                    <a class="nav-link active" data-bs-toggle="tab" href="#dangerhome" role="tab" aria-selected="true">
+                      <div class="d-flex align-items-center">
+                        <div class="tab-icon"><i class="bx bx-user-circle font-18 me-1"></i>
+                        </div>
+                        <div class="tab-title">Perfiles</div>
+                      </div>
+                    </a>
+                  </li>                  
+                </ul>
+                <div class="tab-content py-3">
+                  <div class="tab-pane fade active show" id="dangerhome" role="tabpanel">
+                    <div class="row">
+                      <div class="col-sm-6">
+                        <input type="text"  class="form-control form-control-sm" name="txt_tipo_usuario_new" id="txt_tipo_usuario_new" placeholder="Nombre">
+                        <input type="hidden"  class="form-control form-control-sm" name="txt_id_tipo_usu_empresa" id="txt_id_tipo_usu_empresa" placeholder="Nombre">
+                      </div>
+                      <div class="col-sm-6">
+                        <button class="btn btn-sm btn-primary btn-sm" onclick="add_tipo();"><i class="bx bx-plus font-18 me-1"></i></i> Agregar</button>                         
+                      </div>
                     </div>
-                    <div class="col-sm-5">
-                      <b>Usuarios</b>
-                      <select class="form-select form-select-sm" id="ddl_usuario_perfil" name="ddl_usuario_perfil" onchange="lista_paginas()">
-                        <option value="T">Aplicar a todos</option>
-                      </select>                      
-                    </div>
-                    <div class="col-sm-2">
-                      <b>Modulo </b>
-                      <select class="form-select form-select-sm" id="ddl_modulos" name="ddl_modulos" onchange="cargar_menu();lista_paginas()">
-                        <option value="">Modulos</option>
-                      </select>                    
-                    </div>
-
-                    <div class="col-sm-2">
-                      <b>Menu</b>
-                      <select class="form-select form-select-sm" id="ddl_menu" name="ddl_menu" onchange="lista_paginas()">
-                        <option value="">Modulos</option>
-                      </select>                    
-                    </div>
-                    <div class="col-sm-4">
-                      <b>Buscar pagina</b>
-                        <input type="text" name="txt_pagina" id="txt_pagina" placeholder="Buscar pagina" class="form-control form-control-sm" onkeyup="lista_paginas()">             
-                    </div>  
+                     <div class="row">                        
+                        <table class="table">                    
+                          <thead>
+                            <th scope="col">Tipo de usuario</th>
+                            <th scope="col"></th>
+                          </thead>
+                          <tbody id="tipo_usuario">
+                            <tr>
+                              <td colspan="2">No se encontraron tipos de usuario</td>
+                            </tr>
+                          </tbody>
+                        </table>                  
+                      </div>                    
+                  </div>
                 </div>
-                <hr>
-                <table class="table">
-                  <thead>
-                      <th colspan="6" class="text-end">Marcar todos</th>                            
-                      <th class="text-center"><input type="checkbox" name="rbl_todo_edit" id="rbl_todo_edit" onclick="marcar_todo_edit()"></th>
-                      <th class="text-center"><input type="checkbox" name="rbl_todo_eli" id="rbl_todo_eli" onclick="marcar_todo_delet()"></th>
-                    </thead>
-                    <thead>
-                      <th>Pagina</th>
-                      <th>Detalle</th>
-                      <th>Estado</th>
-                      <th>Menu</th>
-                      <th>Default</th>
-                      <th>Leer</th>
-                      <th class="text-center">Editar</th>
-                      <th class="text-center">Eliminar</th>
-                    </thead>
-                    <tbody id="tbl_paginas">
-                      <tr>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td width="15px" class="text-center"><input type="checkbox" name="" id="" checked disabled></td>
-                        <td width="15px" class="text-center"><input type="checkbox" name="" id=""></td>
-                        <td width="15px" class="text-center"><input type="checkbox" name="" id=""></td>
-                      </tr>
-                    </tbody>
-                </table>
               </div>
             </div>
           </div>

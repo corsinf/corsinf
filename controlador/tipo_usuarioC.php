@@ -18,6 +18,11 @@ if(isset($_GET['lista_usuarios']))
 {
 	echo json_encode($controlador->lista_tipo_usuarios());
 }
+if(isset($_GET['lista_usuarios_all']))
+{
+	$query = $_POST['search'];
+	echo json_encode($controlador->lista_tipo_usuarios_all($query));
+}
 if(isset($_GET['lista_usuarios_drop']))
 {
 	echo json_encode($controlador->lista_tipo_usuarios_drop());
@@ -123,6 +128,7 @@ class tipo_usuarioC
 		$this->modelo = new tipo_usuarioM();
 		$this->pagina = new codigos_globales();
 		$this->usuario = new usuariosM();
+
 		// $this->header = new headerM();
 		// $this->pagina->registrar_pagina_creada('../vista/tipo_usuario.php','Tipo usuario y accesos','3','estado');
 	}
@@ -159,6 +165,16 @@ class tipo_usuarioC
 			}
 		}
 		return $html;
+	}
+
+	function lista_tipo_usuarios_all($query)
+	{
+		$datos = $this->modelo->lista_tipo_usuario_all($query);
+		$tipo = array();
+		foreach ($datos as $key => $value) {
+			$tipo[] = array("value"=>$value['id'],"label"=>$value['nombre']);
+		}
+		return $tipo;
 	}
 
 
@@ -307,74 +323,7 @@ class tipo_usuarioC
 		$datos= $this->modelo->lista_modulos();
 		$tr ='';
 		foreach ($datos as $key => $value) {
-			$s1='';$s2='';$s3='';$s4='';$s5='';$s6='';$s7='';$s8='';$s9='';$s10='';$s11='';$s12='';$s13='';$s14='';$s15='';$s16='';$s17='';$s18='';$s19='';
-
-			$icon = str_replace('&#x','', $value['icono']);
-			// print_r($icon);die();
-			if(isset($icon))
-			{
-				// print_r($value['modulo'].'-');
-			switch ($icon) {
-					case  'ea75;':
-					  $s1 = 'selected';
-					break;
-					case  'e95f;':
-					  $s2 = 'selected';
-					break;
-					case  'e9be;':
-					  $s3 = 'selected';
-					break;
-					case  'eb2b;':
-					  $s4 = 'selected';
-					break;
-					case  'ea5c;':
-					  $s5 = 'selected';
-					break;
-					case  'eaab;':
-					  $s6 = 'selected';
-					break;
-					case 'e9e6;':
-					  $s7 = 'selected';
-					break;
-					case  'ea1a;':
-					  $s8 = 'selected';
-					break;
-					case  'ea37;':
-					  $s9 = 'selected';
-					break;
-					case  'ebbf;':
-					  $s10 = 'selected';
-					break;
-					case  'ea6f;':
-					  $s11 = 'selected';
-					break;
-					case  'ea21;':
-					  $s12 = 'selected';
-					break;
-					case  'e9d0;':
-					  $s13 = 'selected';
-					break;
-					case  'e9ba;':
-						$s14 = 'selected';
-					break;
-					case  'e91a;':
-						$s15 = 'selected';
-					break;
-					case  'e919;':
-						$s16 = 'selected';
-					break;
-					case  'e982;':
-						$s17 = 'selected';
-					break;
-					case  'eb43;':
-						$s18 = 'selected';
-					break;
-					case  'e9f7;':
-						$s19 = 'selected';
-					break;
-			}
-		}
-
+		
 		$modulos_sis = $this->modelo->modulos_sis();
 		$op = '';
 		foreach ($modulos_sis as $key2 => $value2) {
@@ -396,28 +345,11 @@ class tipo_usuarioC
 			<td><input name="txt_modulo'.$value['id'].'" id="txt_modulo'.$value['id'].'" value="'.$value['modulo'].'" class="form-control form-control-sm"></td>
 			<td><input name="txt_detalle'.$value['id'].'" id="txt_detalle'.$value['id'].'" value="'.$value['detalle'].'" class="form-control form-control-sm"></td>
 			<td>
-			 <select class="bx" id="ddl_icono'.$value['id'].'" name="ddl_icono'.$value['id'].'"> 
-         <option class="bx"> ICONO</option>
-            <option '.$s1.' class="bx" value="ea75" > &#xea75;</option>
-            <option '.$s2.' class="bx" value="e95f" > &#xe95f;</option>
-            <option '.$s3.' class="bx" value="e9be" > &#xe9be;</option>
-            <option '.$s4.' class="bx" value="eb2b" > &#xeb2b;</option>
-            <option '.$s5.' class="bx" value="ea5c" > &#xea5c; </option>
-            <option '.$s6.' class="bx" value="eaab" > &#xeaab;</option>
-            <option '.$s7.' class="bx" value="e9e6" > &#xe9e6;</option>
-            <option '.$s8.' class="bx" value="ea1a" > &#xea1a;</option>
-            <option '.$s9.' class="bx" value="ea37" > &#xea37;</option>
-            <option '.$s10.' class="bx" value="ebbf" > &#xebbf;</option>
-            <option '.$s11.' class="bx" value="ea6f" > &#xea6f;</option>
-            <option '.$s12.' class="bx" value="ea21" > &#xea21;</option>
-            <option '.$s13.' class="bx" value="e9d0" > &#xe9d0;</option>
-            <option '.$s14.' class="bx" value="e9ba" > &#xe9ba;</option>
-            <option '.$s15.' class="bx" value="e91a" > &#xe91a;</option>
-            <option '.$s16.' class="bx" value="e919" > &#xe919;</option>
-            <option '.$s17.' class="bx" value="e982" > &#xe982;</option>
-            <option '.$s18.' class="bx" value="eb43" > &#xeb43;</option>
-            <option '.$s19.' class="bx" value="e9f7" > &#xe9f7;</option>
-      </select> 
+				<div class="input-group input-group-sm mb-3"> 
+							<span class="input-group-text" id="inputGroup-sizing-sm">'.$value['icono'].'</span>
+							<input class = "form-control form-control-sm" id="ddl_icono'.$value['id'].'" name="ddl_icono'.$value['id'].'" value="'.str_replace('"',"'",$value['icono']).'" >
+				</div>
+
 			</td>
 			<td><button class="btn btn-primary btn-sm" onclick="guardar_modulos(\''.$value['id'].'\')"><i class="bx bx-save"></i></button>
 					<button class="btn btn-danger btn-sm" onclick="eliminar_modulos(\''.$value['id'].'\')"><i class="bx bx-trash"></i></button>
@@ -484,7 +416,7 @@ class tipo_usuarioC
 			$datos[1]['dato'] = $edi;
 			$datos[2]['campo'] = 'eliminar';
 			$datos[2]['dato'] = $eli;
-			return $this->modelo->update('ACCESOS',$datos,$where);
+			$this->modelo->update('ACCESOS',$datos,$where);
 		}else
 		{
 			$datos[0]['campo'] = 'Ver';
@@ -498,27 +430,76 @@ class tipo_usuarioC
 			$datos[4]['campo'] = 'id_tipo_usu';
 			$datos[4]['dato'] = $parametros['perfil'];
 
-			return $this->modelo->guardar($datos,'ACCESOS')	;		
+			$this->modelo->guardar($datos,'ACCESOS');	
 		}
+
+		return  $this->pagina->generar_primera_vez($_SESSION['INICIO']['BASEDATO'],$_SESSION['INICIO']['ID_EMPRESA']);	
 		// print_r($parametros);die();
 	}
 
 	function add_tipo($parametros)
 	{
+
+		// print_r($parametros);die();
 		if($parametros['id']=='')
 		{
-		   $acceso[0]['campo'] = 'DESCRIPCION';
-		   $acceso[0]['dato'] =strtoupper($parametros['tipo']);
-		   return $this->modelo->guardar($acceso,'TIPO_USUARIO');		
-	    }else
-	    {
-	    	 $acceso[0]['campo'] = 'DESCRIPCION';
-		     $acceso[0]['dato'] =strtoupper($parametros['tipo']);
-		     $where [0]['campo']='ID_TIPO';
-		     $where [0]['dato']= $parametros['id'];
-		    return $this->modelo->update('tipo_usuario',$acceso,$where);	
+				if($parametros['tipo_usu_empresa']!='')
+				{
 
-	    }
+				 //ingresamos en tipo usuario empresa
+					$tipo[0]['campo'] = 'id_empresa';
+					$tipo[0]['dato'] = $_SESSION['INICIO']['ID_EMPRESA'];
+					$tipo[1]['campo'] = 'id_tipo_usuario';
+					$tipo[1]['dato'] = $parametros['tipo_usu_empresa'];
+			   	$this->modelo->guardar($tipo,'TIPO_USUARIO_EMPRESA',1);		
+
+			 	}else
+			 	{
+			 		//buscar el tipo de usuario que se esta creando
+			 		$datos = $this->modelo->lista_tipo_usuario_all($parametros['tipo'],1);
+			 		// print_r($datos);die();
+			 		if(count($datos)>0)
+			 		{
+			 			$tipo[0]['campo'] = 'id_empresa';
+						$tipo[0]['dato'] = $_SESSION['INICIO']['ID_EMPRESA'];
+						$tipo[1]['campo'] = 'id_tipo_usuario';
+						$tipo[1]['dato'] = $datos[0]['id'];
+				   	$this->modelo->guardar($tipo,'TIPO_USUARIO_EMPRESA',1);		
+
+			 		}else
+			 		{
+			 			// guarda en tipo de usuario
+			 			$tipo[0]['campo'] = 'DESCRIPCION';
+						$tipo[0]['dato'] = strtoupper($parametros['tipo']);
+						$tipo[1]['campo'] = 'ESTADO';
+						$tipo[1]['dato'] = 'A';
+				   	$this->modelo->guardar($tipo,'TIPO_USUARIO',1);	
+
+			 			$datos = $this->modelo->lista_tipo_usuario_all($tipo[0]['dato'],1);
+			 			$tipo[0]['campo'] = 'id_empresa';
+						$tipo[0]['dato'] = $_SESSION['INICIO']['ID_EMPRESA'];
+						$tipo[1]['campo'] = 'id_tipo_usuario';
+						$tipo[1]['dato'] = $datos[0]['id'];
+				   	$this->modelo->guardar($tipo,'TIPO_USUARIO_EMPRESA',1);		
+
+
+
+			 		}
+			 	}
+
+			return $this->pagina->generar_primera_vez($_SESSION['INICIO']['BASEDATO'],$_SESSION['INICIO']['ID_EMPRESA']);
+
+    }else
+    {
+    	 $acceso[0]['campo'] = 'DESCRIPCION';
+	     $acceso[0]['dato'] =strtoupper($parametros['tipo']);
+	     $where [0]['campo']='ID_TIPO';
+	     $where [0]['dato']= $parametros['id'];
+	     $this->modelo->update('tipo_usuario',$acceso,$where);	
+
+			return $this->pagina->generar_primera_vez($_SESSION['INICIO']['BASEDATO'],$_SESSION['INICIO']['ID_EMPRESA']);
+
+    }
 		
 	}
 	function usuarios_en_tipo($id)
@@ -542,6 +523,8 @@ class tipo_usuarioC
 	function eliminar_tipo($id)
 	{
 		$resp = $this->modelo->eliminar_tipo($id);
+
+		$this->pagina->generar_primera_vez($_SESSION['INICIO']['BASEDATO'],$_SESSION['INICIO']['ID_EMPRESA']);
 		return $resp;
 
 	}
@@ -605,9 +588,9 @@ class tipo_usuarioC
 		 	<td>'.$value['estado_pagina'].'</td>
 		 	<td>'.$value['nombre_modulo'].'</td>
 		 	<td>'.$value['default_pag'].'</td>
-		 	<td width="15px" class="text-center"><input type="checkbox" name="ver_'.$value['id_paginas'].'" id="ver_'.$value['id_paginas'].'" checked onclick="guardar_accesos_edi(\''.$value['id_paginas'].'\')"></td>
-      <td width="15px" class="text-center"><input type="checkbox" onclick="guardar_accesos_edi(\''.$value['id_paginas'].'\')" name="edi_'.$value['id_paginas'].'" id="edi_'.$value['id_paginas'].'"></td>
-      <td width="15px" class="text-center"><input type="checkbox" onclick="guardar_accesos_edi(\''.$value['id_paginas'].'\')" name="eli_'.$value['id_paginas'].'" id="eli_'.$value['id_paginas'].'"></td>
+		 	<td width="15px" class="text-center"><input type="checkbox" name="ver_'.$value['id_paginas'].'" id="ver_'.$value['id_paginas'].'" onclick="guardar_accesos_edi(\''.$value['id_paginas'].'\')"></td>
+      <td width="15px" class="text-center"><input type="checkbox" class="rbl_pag_edi" onclick="guardar_accesos_edi(\''.$value['id_paginas'].'\')" name="edi_'.$value['id_paginas'].'" id="edi_'.$value['id_paginas'].'"></td>
+      <td width="15px" class="text-center"><input type="checkbox" class="rbl_pag_eli" onclick="guardar_accesos_edi(\''.$value['id_paginas'].'\')" name="eli_'.$value['id_paginas'].'" id="eli_'.$value['id_paginas'].'"></td>
 		 	</tr>';
 		 }
 		 return $tr;

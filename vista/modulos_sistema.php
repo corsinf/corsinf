@@ -12,7 +12,8 @@ function consultar_datos()
      url:   '../controlador/loginC.php?modulos_sistema=true',
      type:  'post',
      dataType: 'json',
-       success:  function (response) {    
+       success:  function (response) {
+       console.log(response);    
        if (response.num==0) 
        {
           Swal.fire( '','Su perfil no esta asignado a ningun modulo.','error').then(function(){

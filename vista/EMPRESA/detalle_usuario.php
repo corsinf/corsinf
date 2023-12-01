@@ -1,10 +1,17 @@
-<?php //include('../cabeceras/header.php'); $id=''; ?>
+<?php //include('../cabeceras/header.php'); $id=''; 
+$id = '';
+if(isset($_GET["usuario"]))
+{ 
+  $id = $_GET["usuario"];
+} 
+
+?>
 <script type="text/javascript">
    $( document ).ready(function() {
      autocoplet_tipo();
      autocoplet_arti();
-    var id = '<?php if(isset($_GET["usuario"])){ $id = $_GET["usuario"]; echo $_GET["usuario"];} ?>';
-   	console.log(id);
+    var id = '<?php echo $id;?>';
+   	// console.log(id);
    	if(id!='')
    	{
    		Editar(id)
@@ -62,6 +69,55 @@
         });
     });
     // --------------------------
+
+
+     $('#txt_nombre').autocomplete({
+       source: function( request, response ) {
+                
+                $.ajax({
+                    url:  '../controlador/usuariosC.php?usuarios_all_autocompletado=true',
+                    type: 'post',
+                    dataType: "json",
+                    data: {
+                        search: request.term
+                    },
+                    success: function( data ) {
+                      // console.log(data);
+                        response( data );
+                    }
+                });
+            },
+            select: function (event, ui) {
+                $('#txt_id_tipo_usu_empresa').val(ui.item.value); // display the selected text
+                $('#txt_nombre').val(ui.item.label); // display the selected text
+
+                 $('#txt_nombre').val(ui.item.data.nombres);
+                 $('#txt_ci').val(ui.item.data.ci);
+                 $('#txt_telefono').val(ui.item.data.tel);
+                 $('#txt_emial').val(ui.item.data.email);
+                 $('#txt_apellido').val(ui.item.data.ape);
+                 $('#txt_pass').val(ui.item.data.pass);
+                 $('#txt_dir').val(ui.item.data.dir);
+                 $('#txt_usuario_update').val(ui.item.data.id);
+                 $('#img_foto').attr('src',ui.item.data.foto+'?'+Math.random());
+                 // link
+
+                 $('#txt_link_web').val(ui.item.data.link_web);
+                 $('#txt_link_tw').val(ui.item.data.link_tw);
+                 $('#txt_link_in').val(ui.item.data.link_ins);           
+                 $('#txt_link_fb').val(ui.item.data.link_fb);
+
+
+                return false;
+            },
+            focus: function(event, ui){
+                 $('#txt_nombre').val(ui.item.label); // display the selected text
+                
+                return false;
+            },
+    });
+
+
 
     });
 
@@ -129,11 +185,78 @@
            $('#img_foto').attr('src',response[0].foto+'?'+Math.random());
            // link
 
-           $('#txt_link_web').val(response[0].web);
-           $('#txt_link_tw').val(response[0].tw);
-           $('#txt_link_in').val(response[0].ins);           
-           $('#txt_link_fb').val(response[0].fb);
+           $('#txt_link_web').val(response[0].link_web);
+           $('#txt_link_tw').val(response[0].link_tw);
+           $('#txt_link_in').val(response[0].link_ins);           
+           $('#txt_link_fb').val(response[0].link_fb);
            
+          } 
+          
+       });
+
+   }
+
+
+  function validar_registro(input)
+  {
+    var cedula = $('#'+input).val();
+     var parametros = 
+    {
+      'cedula':cedula,
+    }
+    $.ajax({
+         data:  {parametros:parametros},
+         url:   '../controlador/usuariosC.php?validar_registro=true',
+         type:  'post',
+         dataType: 'json',
+         success:  function (response) {
+
+            if(response.length>0)
+            {
+               Swal.fire({
+                  title: 'Numero Encontrado',
+                  text: "Se ha encontrado este numero de cedula en nuestras bases desea cargar sus datos?",
+                  icon: 'warning',
+                  showCancelButton: true,
+                  confirmButtonColor: '#3085d6',
+                  cancelButtonColor: '#d33',
+                  confirmButtonText: 'Si'
+                }).then((result) => {
+                  if (result.value) {
+
+
+                   $('#txt_nombre').val(response[0].nombres);
+                   $('#txt_ci').val(response[0].ci_ruc);
+                   $('#txt_telefono').val(response[0].telefono);
+                   $('#txt_emial').val(response[0].email);
+                   $('#ddl_tipo_usuario').append($('<option>',{value: response[0].idt, text:response[0].tipo,selected: true }));;
+                   $('#txt_apellido').val(response[0].apellidos);
+                   $('#txt_pass').val(response[0].password);
+                   $('#txt_dir').val(response[0].direccion);
+                   $('#txt_usuario_update').val(response[0].id_usuarios);
+                   $('#img_foto').attr('src',response[0].foto+'?'+Math.random());
+                   // link
+
+                   $('#txt_link_web').val(response[0].link_web);
+                   $('#txt_link_tw').val(response[0].link_tw);
+                   $('#txt_link_in').val(response[0].link_ins);           
+                   $('#txt_link_fb').val(response[0].link_fb);
+
+
+
+
+
+
+
+
+
+
+                  }else{
+                    $('#txt_ci').val('');
+                  }
+                })
+            } 
+           console.log(response);  
           } 
           
        });
@@ -168,7 +291,7 @@
            {
             Swal.fire('','Registro eliminado.','success').then(function(){
 
-              window.location.href = 'usuarios.php';
+              window.location.href = './inicio.php?mod=1&acc=usuarios';
             });
            } else if(response == -2)
            {
@@ -186,7 +309,7 @@
              // Swal.fire('','El Usuario esta ligado a uno o varios registros y no se podra eliminar.','error')
            }else
            {
-            Swal.fire('','No se pudo elimnar.','info')
+            Swal.fire('','No se pudo eliminar.','info')
            }
           } 
           
@@ -219,6 +342,8 @@
   	var pas = $('#txt_pass').val();
   	var dir = $('#txt_dir').val();
 
+    var rol = $('#ddl_tipo_usuario').val();
+
      // link
     var web = $('#txt_link_web').val();
     var tw = $('#txt_link_tw').val();
@@ -227,11 +352,8 @@
 
 
 
-
-
-
     var id = $('#txt_usuario_update').val();
-    if(tip=='' || nom=='' || ci=='' || tel=='' || ema==''  || pas=='' || nic=='')
+    if(rol=='' || nom=='' || ci=='' || tel=='' || ema==''  || pas=='' || nic=='')
     {
       Swal.fire('','Asegurese de llenar todo los campos.','info')
       return false;
@@ -267,7 +389,7 @@
                   '',
                   'Registro agregado.',
                   'success').then(function(){
-                    location.href='detalle_usuario.php?usuario='+response;
+                    location.href='./inicio.php?acc=detalle_usuario&usuario='+response;
                   });
           }
             // limpiar();
@@ -424,7 +546,7 @@ function checkKey(e) {
                         <h6 class="mb-0">CI / RUC</h6>
                       </div>
                       <div class="col-sm-9 text-secondary">
-                         <input type="text"  class="form-control form-control-sm" name="txt_ci" id="txt_ci" required="" onblur="validar_cedula('txt_ci','U')" onkeyup=" solo_numeros('txt_ci');num_caracteres('txt_ci',10)">
+                         <input type="text"  class="form-control form-control-sm" name="txt_ci" id="txt_ci" required="" onblur="validar_cedula('txt_ci');validar_registro('txt_ci')" onkeyup="num_caracteres('txt_ci',13);solo_numeros(this)">
                       </div>
                     </div>
                     <div class="row mb-3">
@@ -439,30 +561,35 @@ function checkKey(e) {
                       <div class="col-sm-3">
                         <h6 class="mb-0">Password</h6>
                       </div>
-                      <div class="col-sm-4 text-secondary">
+                      <div class="col-sm-9 text-secondary">
                         <div class="input-group mb-3">
                            <input type="password" class="form-control form-control-sm" name="txt_pass" id="txt_pass" required="">
-                            <button type="button" class="btn btn-info btn-flat btn-sm" onclick="pass()"><i class="lni lni-eye" id="eye"></i></button>                          
+                           <?php if($_SESSION['INICIO']['TIPO']=='DBA') { ?>
+                               <button type="button" class="btn btn-info btn-flat btn-sm" onclick="pass()"><i class="lni lni-eye" id="eye"></i></button>                          
+                          <?php } ?>
                         </div>
                       </div>
-                      <div class="col-sm-2">
-                        <h6 class="mb-0">Perfil</h6>
+                     
+                    </div>
+                    <div class="row mb-3">
+                      <div class="col-sm-3">
+                        <h6 class="mb-0">Rol de usuario</h6>
                       </div>
-                      <div class="col-sm-3 text-secondary">
-                        <div class="input-group mb-4">
-                          <select class="form-control form-control-sm" name="ddl_tipo_usuario" id="ddl_tipo_usuario" required="">
-                            <option value="">Seleccione tipo de usuario</option>
-                          </select>                                    
+                      <div class="col-sm-9 text-secondary">
+                        <div class="input-group mb-3">
+                           <select class="form-select form-select-sm" id="ddl_tipo_usuario" name="ddl_tipo_usuario">
+                             <option value="">Seleccione rol de usuario</option>
+                           </select>
                         </div>
                       </div>
-
+                     
                     </div>
                     <div class="row mb-3">
                       <div class="col-sm-3">
                         <h6 class="mb-0">Teléfono</h6>
                       </div>
                       <div class="col-sm-9 text-secondary">
-                        <input type="text"  class="form-control form-control-sm" name="txt_telefono" id="txt_telefono" required="" onkeyup=" solo_numeros('txt_telefono');num_caracteres('txt_telefono',10)">
+                        <input type="text"  class="form-control form-control-sm" name="txt_telefono" id="txt_telefono" required="" onkeyup=" solo_numeros(this);num_caracteres('txt_telefono',10)">
                       </div>
                     </div>                    
                     <div class="row mb-3">
