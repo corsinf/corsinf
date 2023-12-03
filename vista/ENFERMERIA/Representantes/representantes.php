@@ -125,7 +125,7 @@
         <!--end breadcrumb-->
 
         <div class="row">
-            <div class="col-12 col-lg-3">
+            <!-- <div class="col-12 col-lg-3">
 
                 <div class="card border-top border-0 border-4 border-primary">
                     <div class="card-body p-5">
@@ -148,8 +148,8 @@
                     </div>
                 </div>
             </div>
-
-            <div class="col-12 col-lg-9">
+ -->
+            <div class="col-12 col-lg-12">
                 <div class="card border-top border-0 border-4 border-primary">
                     <div class="card-body">
                         <div class="card-title d-flex align-items-center">

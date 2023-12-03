@@ -126,6 +126,9 @@ class consultasC
         );
 
 
+// print_r($parametros);die();
+
+
 
         if ($parametros['sa_conp_id'] == '') {
             if (count($this->modelo->buscar_consultas_CODIGO($datos1[0]['dato'])) == 0) {
@@ -136,6 +139,7 @@ class consultasC
         } else {
             $where[0]['campo'] = 'sa_conp_id';
             $where[0]['dato'] = $parametros['sa_conp_id'];
+            $datos[] = array('campo' => 'sa_conp_estado', 'dato' => 1);
             $datos = $this->modelo->editar($datos, $where);
         }
 
@@ -273,6 +277,6 @@ class consultasC
             'CERTIFICO QUE EL/LA ESTUDIANTE  ' . $nombre_estudiante . ' DEL GRADO ' . $grado . ' PARALELO ' . $paralelo . ' REQUIERE SALIR DEL PLANTEL PARA RECIBIR ATENCIÓN MÉDICA EXTERNA';
         ///////////////////////////////////////////////////////////////////////////////////////////////////
 
-        return $mensaje_consulta;
+        return $mensaje_certificado;
     }
 }

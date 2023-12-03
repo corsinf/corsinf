@@ -6,8 +6,11 @@ if (!isset($_SESSION['INICIO'])) {
 
 //Pendiente para revisar, tener en cuenta 
 $dominio = $_SERVER['SERVER_NAME'];
-//$url_general = 'http://'. $dominio . '/corsinf';
-$url_general = 'http://' . $dominio . ':8087/corsinf';
+$url_general = 'http://'. $dominio . '/corsinf';
+if($dominio!='localhost')
+{
+	$url_general = 'http://' . $dominio . ':8087/corsinf';
+}
 
 ?>
 <!doctype html>

@@ -34,7 +34,7 @@ if (isset($_GET['id_consulta'])) {
         //alert(id_estudiante + ' + ' + id_representante);
 
         //Para cargar el id de la ficha del estudiante al momento de insertar
-        $('#sa_fice_id').val(id_ficha);
+        $('#sa_conp_id').val(id_ficha);
 
         if (id_estudiante != '') {
             datos_col_estudiante(id_estudiante);
@@ -169,6 +169,8 @@ if (isset($_GET['id_consulta'])) {
             var diferenciaEnMinutos = Math.floor(diferenciaEnMs / (1000 * 60));
             $('#sa_conp_tiempo_aten').val(diferenciaEnMinutos);
         } else {
+            Swal.fire('','La hora Hasta de la consulta no puede ser menor','info');
+            $('#sa_conp_hasta_hora').val('');
             $('#sa_conp_tiempo_aten').val('NaN');
         }
     }
@@ -365,7 +367,7 @@ if (isset($_GET['id_consulta'])) {
             dataType: 'json',
             success: function(response) {
                 // Asignar valores del estudiante
-                $('#sa_conp_id').val(response[0].sa_conp_id);
+                // $('#sa_conp_id').val(response[0].sa_conp_id);
                 $('#sa_fice_id').val(response[0].sa_fice_id);
 
                 /*$('#sa_conp_nombres').val(response[0].sa_conp_nombres);
@@ -447,6 +449,8 @@ if (isset($_GET['id_consulta'])) {
         var sa_conp_id = $('#sa_conp_id').val();
         var sa_fice_id = $('#sa_fice_id').val();
 
+
+
         // Datos del estudiante
         var sa_conp_nombres = $('#sa_conp_nombres').val();
         var sa_conp_nivel = $('#sa_conp_nivel').val();
@@ -460,6 +464,8 @@ if (isset($_GET['id_consulta'])) {
         var sa_conp_desde_hora = ($('#sa_conp_desde_hora').val());
         var sa_conp_hasta_hora = ($('#sa_conp_hasta_hora').val());
         var sa_conp_tiempo_aten = $('#sa_conp_tiempo_aten').val();
+
+        if(sa_conp_tiempo_aten=='NaN'){ Swal.fire('','Ingrese una hora valida','info'); return false;}
 
         // Diagnósticos y medicamentos
         var sa_conp_CIE_10_1 = $('#sa_conp_CIE_10_1').val();
@@ -605,7 +611,7 @@ if (isset($_GET['id_consulta'])) {
             success: function(response) {
                 if (response == 1) {
                     Swal.fire('', 'Operacion realizada con exito.', 'success').then(function() {
-                        location.href = '<?= $url_general ?>/vista/inicio.php?mod=7&acc=consulta_estudiante&id_estudiante=' + id_estudiante + '&id_representante=' + id_representante + '&id_ficha=' + id_ficha;
+                        location.href = '<?= $url_general ?>/vista/inicio.php?mod=7&acc=atencion_estudiante';
                     });
                 } else if (response == -2) {
                     Swal.fire('', 'codigo ya registrado', 'success');
@@ -708,9 +714,12 @@ if (isset($_GET['id_consulta'])) {
                                 ?>
                             </h5>
                             <div class="row m-2">
+
+                                 <?php if(isset($_GET['ver']) && $_GET['ver']!=1){ ?>
                                 <div class="col-sm-12">
                                     <a href="<?= $url_general ?>/vista/inicio.php?mod=7&acc=consulta_estudiante&id_estudiante=<?= $id_estudiante ?>&id_representante=<?= $id_representante ?>&id_ficha=<?= $id_ficha ?>" class="btn btn-outline-dark btn-sm"><i class="bx bx-arrow-back"></i> Regresar</a>
                                 </div>
+                                <?php } ?>
                             </div>
                         </div>
 
@@ -958,6 +967,9 @@ if (isset($_GET['id_consulta'])) {
                                                 </div>
                                             </div>
 
+
+                                              <?php if(isset($_GET['ver']) && $_GET['ver']!=1){?>
+
                                             <div class="modal-footer pt-4" id="seccion_boton_consulta">
                                                 <?php if ($id_estudiante == '') { ?>
                                                     <button class="btn btn-primary btn-sm px-4 m-1" onclick="editar_insertar('Consulta', 1, 1, 1, 0)" type="button"><i class="bx bx-save"></i> Guardar</button>
@@ -966,6 +978,7 @@ if (isset($_GET['id_consulta'])) {
                                                     <button class="btn btn-danger btn-sm px-4 m-1" onclick="delete_datos()" type="button"><i class="bx bx-trash"></i> Eliminar</button>
                                                 <?php } ?>
                                             </div>
+                                            <?php } ?>
                                         </div>
 
                                     </div>
@@ -1019,6 +1032,8 @@ if (isset($_GET['id_consulta'])) {
                                                 </div>
                                             </div>
 
+                                              <?php if(isset($_GET['ver']) && $_GET['ver']!=1){?>
+
                                             <div class="modal-footer pt-4" id="seccion_boton_certificado">
                                                 <?php if ($id_estudiante == '') { ?>
                                                     <button class="btn btn-primary btn-sm px-4 m-1" onclick="editar_insertar('Certificado', 0, 1, 1, 0)" type="button"><i class="bx bx-save"></i> Guardar</button>
@@ -1027,6 +1042,7 @@ if (isset($_GET['id_consulta'])) {
                                                     <button class="btn btn-danger btn-sm px-4 m-1" onclick="delete_datos()" type="button"><i class="bx bx-trash"></i> Eliminar</button>
                                                 <?php } ?>
                                             </div>
+                                              <?php } ?>
 
                                         </div>
 
@@ -1059,6 +1075,9 @@ if (isset($_GET['id_consulta'])) {
                                                 </div>
                                             </div>
 
+
+                                            <?php if(isset($_GET['ver']) && $_GET['ver']!=1){?>
+
                                             <div class="modal-footer pt-4" id="seccion_boton_salida">
                                                 <?php if ($id_estudiante == '') { ?>
                                                     <button class="btn btn-primary btn-sm px-4 m-1" onclick="editar_insertar('Salida', 1, 1, 1, 1)" type="button"><i class="bx bx-save"></i> Guardar</button>
@@ -1067,6 +1086,7 @@ if (isset($_GET['id_consulta'])) {
                                                     <button class="btn btn-danger btn-sm px-4 m-1" onclick="delete_datos()" type="button"><i class="bx bx-trash"></i> Eliminar</button>
                                                 <?php } ?>
                                             </div>
+                                        <?php } ?>
                                         </div>
                                     </div>
                                 </div>
