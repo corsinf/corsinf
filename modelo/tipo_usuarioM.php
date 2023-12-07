@@ -114,8 +114,27 @@ class tipo_usuarioM
 
 	function modulos_sis()
 	{
-		$sql = "SELECT  * FROM MODULOS_SISTEMA";
-		$datos = $this->db->datos($sql,1);
+		switch ($_SESSION['INICIO']['TIPO']) {
+			case 'DBA':
+				$sql = "SELECT  * FROM MODULOS_SISTEMA";
+				$datos = $this->db->datos($sql,1);
+				break;
+			case 'ADMINISTRADOR':
+			case 'ADMIN':
+			   $sql ="SELECT MS.*
+						FROM LICENCIAS L
+						INNER JOIN MODULOS_SISTEMA MS ON L.Id_Modulo = MS.id_modulos
+						WHERE Id_empresa = '".$_SESSION['INICIO']['ID_EMPRESA']."' AND L.registrado = 1";
+				$datos = $this->db->datos($sql,1);
+				break;			
+
+			default:
+				$sql = "SELECT  * FROM MODULOS_SISTEMA";
+				$datos = $this->db->datos($sql);
+
+				break;
+		}
+		
 		return $datos;
 	}
 
@@ -246,7 +265,7 @@ class tipo_usuarioM
 		return $datos;
 	}
 
-	function paginas($query=false,$modulo=false,$menu=false)
+	function paginas($query=false,$modulo=false,$menu=false,$para_dba=false)
 	{
 		$sql = "SELECT id_paginas,nombre_pagina,detalle_pagina,estado_pagina,M.nombre_modulo,P.default_pag 
 		FROM PAGINAS P
@@ -264,6 +283,15 @@ class tipo_usuarioM
 		{
 			$sql.=" AND M.id_modulo = '".$menu."'";
 		}
+		switch ($para_dba) {
+			case '1':
+					$sql.=" AND P.para_dba = ".$para_dba." ";
+				break;
+			case '2':
+					$sql.=" AND P.para_dba = 0 ";
+				break;			
+		}
+	
 
 		// print_r($sql);die();
 		$datos = $this->db->datos($sql,1);

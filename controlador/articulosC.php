@@ -173,10 +173,9 @@ class articulosC
 		if($parametros['hasta']!=''){ $hasta = $parametros['hasta'];}else{$hasta = false;}
 
 		$_SESSION['INICIO']['LISTA_ART'] = $parametros['lista'];
-		
-
 
 		$datos = $this->modelo->cantidad_registros_new($query,$loc,$cus,false,$desde,$hasta,$coincidencia,$multiple,$buscar_por);
+
 		$total_reg = $datos[0]['numreg'];
 		if($total_reg >25)
 		{

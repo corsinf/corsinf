@@ -1,15 +1,36 @@
 <script type="text/javascript">
  $( document ).ready(function() {
+  autocompletar_empresa();
  	cargar_licencias();
+  modulos_sistemas_all()
   
  })
+
+
+function autocompletar_empresa(){
+      $('#ddl_empresa').select2({
+        placeholder: 'Seleccione Empresa',
+        ajax: {
+          url: '../controlador/licenciasC.php?lista_empresas=true',
+          dataType: 'json',
+          delay: 250,
+          processResults: function (data) {
+            return {
+              results: data
+            };
+          },
+          cache: true
+        }
+      });
+}
+
   
 function cargar_licencias()
 {
   	 
    $.ajax({
      // data:  {parametros:parametros},
-     url:   '../controlador/licenciasC.php?lista_licencias=true',
+     url:   '../controlador/licenciasC.php?lista_licencias_all=true',
      type:  'post',
      dataType: 'json',
      /*beforeSend: function () {   
@@ -22,6 +43,26 @@ function cargar_licencias()
      }
    });
 }
+
+function modulos_sistemas_all()
+{
+     
+   $.ajax({
+     // data:  {parametros:parametros},
+     url:   '../controlador/licenciasC.php?modulos_sistemas_all=true',
+     type:  'post',
+     dataType: 'json',
+     success:  function (response) {  
+      var op = '<option value = "">Seleccione Modulo</option>';
+      response.forEach(function(item,i){
+          // console.log(item);
+         op+= '<option value ="'+item.id_modulos+'">'+item.nombre_modulo+'</option>';
+      })
+        $('#ddl_modulos_sistema').html(op);
+     }
+   });
+}
+
 
 function registrar_licencia(modulo)
 {
@@ -83,7 +124,7 @@ function eliminar(id)
 	}
 	 $.ajax({
      data:  {parametros:parametros},
-     url:   '../controlador/licenciasC.php?eliminar_licencia=true',
+     url:   '../controlador/licenciasC.php?eliminar_licencia_definitivo=true',
      type:  'post',
      dataType: 'json',
      /*beforeSend: function () {   
@@ -102,6 +143,64 @@ function eliminar(id)
       // $('#tbl_licencias').html(response);
      }
    });
+}
+
+function validar_year()
+{
+  let desde = $('#txt_desde').val();
+  let hasta = $('#txt_hasta').val();
+  if(desde=='')
+  {
+    return false; 
+  }
+  var fechaEspecifica = new Date(desde);
+  fechaEspecifica.setFullYear(fechaEspecifica.getFullYear() + 1);
+  // console.log(fechaEspecifica);
+  fechaEspecifica =  formatoDate(fechaEspecifica);
+  $('#txt_hasta').val(fechaEspecifica);
+
+}
+function add_licencia()
+{
+
+  var emp = $('#ddl_empresa').val();
+  var cla = $('#txt_clave').val();
+  var mod = $('#ddl_modulos_sistema').val();
+  var des= $('#txt_desde').val();
+  var has = $('#txt_hasta').val();
+  var maq = $('#txt_maquinas').val();
+  if(emp == '' || cla == '' || mod == '' || des == '' || has == '' || maq == '')
+  {
+    Swal.fire('','Ingrese todo los datos','info');
+    return false;
+  }
+
+
+  var parametros = {
+    'empresa': emp,
+    'clave': cla,
+    'modulo': mod,
+    'desde': des,
+    'hasta': has,
+    'maquinas':maq,
+  }
+   $.ajax({
+     data:  {parametros:parametros},
+     url:   '../controlador/licenciasC.php?add_licencias=true',
+     type:  'post',
+     dataType: 'json',
+       success:  function (response) {          
+        if(response==1)
+        {
+            Swal.fire('','Licencia Ingresada','success').then(function(){
+            cargar_licencias();
+          });
+        }
+
+      // $('#tbl_licencias').html(response);
+     }
+   });
+
 }
 
 </script>
@@ -123,16 +222,61 @@ function eliminar(id)
         <!--end breadcrumb-->
         <div class="row">
           <div class="col-xl-12 mx-auto">
-            <h6 class="mb-0 text-uppercase">Form Wizard</h6>
+            <!-- <h6 class="mb-0 text-uppercase">Form Wizard</h6> -->
             <hr>
             <div class="card">
               <div class="card-body">
                 <div class="row">
+                    <div class="col-sm-4">
+                      <b>Empresa</b>
+                      <select class="form-select form-select-sm" id="ddl_empresa" name="ddl_empresa">
+                        <option>Seleccine empresa</option>
+                      </select>
+                    </div>       
+                     <div class="col-sm-4">
+                      <b>Clave</b>
+                      <div class="input-group">
+                          <input type="" class="form-control form-control-sm" name="txt_clave" id="txt_clave">
+                          <span title="Generar Licencia">
+                            <button class="btn btn-sm btn-primary"><i class="bx bx-refresh"></i></button>
+                          </span>
+                      </div>
+                    </div> 
+                    <div class="col-sm-4">
+                      <b>Modulo</b>
+                      <select class="form-select form-select-sm" id="ddl_modulos_sistema" name="ddl_modulos_sistema">
+                        <option>Seleccine empresa</option>
+                      </select>        
+                    </div>    
+                    <div class="col-sm-2">
+                      <b>Desde</b>
+                          <input type="date" class="form-control form-control-sm" name="txt_desde" id="txt_desde" onblur="validar_year()" value="<?php echo date('Y-m-d'); ?>">
+                    </div>     
+                    <div class="col-sm-2">
+                      <b>Hasta</b>
+                      <input type="date" class="form-control form-control-sm" name="txt_hasta" id="txt_hasta">                          
+                    </div>                   
+                   <div class="col-sm-2">
+                    <b>N° Maquinas</b>
+                    <input type="" class="form-control form-control-sm" name="txt_maquinas" id="txt_maquinas">
+                  </div>    
+                  <div class="col-sm-6 text-end">
+                    <br>
+                    <button class="btn btn-sm btn-primary" onclick="add_licencia()">Agregar</button>
+                  </div>                             
+                </div>
+                <hr>
+                <div class="row">
                 	<div class="table-responsive">
                 		<table class="table table-hover">
 	                		<thead>
+                        <th>Empresa</th>
+                        <th>Licencia</th>
 	                			<th>Modulo</th>
-		                		<th>Clave</th>
+		                		<th>Desde</th>
+                        <th>Hasta</th>
+                        <th>Maquinas</th>
+                        <th>Estado</th>
 		                		<th></th>                			
 	                		</thead>
 	                		<tbody id="tbl_licencias">

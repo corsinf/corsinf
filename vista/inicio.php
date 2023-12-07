@@ -143,9 +143,13 @@ if($_GET['acc']=='pagina_error')
 	{
 		include('EMPRESA/modulos_paginas.php');
 	}
-	if($_GET['acc']=='licencia')
+	if($_GET['acc']=='licencias')
 	{
 		include('EMPRESA/licencias.php');
+	}
+	if($_GET['acc']=='mis_licencias')
+	{
+		include('EMPRESA/mis_licencias.php');
 	}
 	if($_GET['acc']=='detalle_usuario')
 	{

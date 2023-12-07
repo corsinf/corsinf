@@ -579,7 +579,17 @@ class tipo_usuarioC
 		 $query = $parametros['query'];
 		 $modulo = $parametros['modulo_sis'];
 		 $menu = $parametros['modulo'];
-		 $datos = $this->modelo->paginas($query,$modulo,$menu);
+		 // print_r($_SESSION['INICIO']);die();
+		 if($_SESSION['INICIO']['TIPO']=='DBA')
+		 {		 	
+		 	//no se coloca nada para qu aparezcan todas las paginas sin excepcion
+			 $datos = $this->modelo->paginas($query,$modulo,$menu);
+		 }else{
+		 	//se agrega el nuemero 2 para qu aparescan todas las pagina que no sean para dba
+		  $datos = $this->modelo->paginas($query,$modulo,$menu,2);
+		 }
+		 // print_r('aqui');die();
+
 		 $tr = '';
 		 foreach ($datos as $key => $value) {
 		 	$tr.='<tr>
@@ -588,7 +598,7 @@ class tipo_usuarioC
 		 	<td>'.$value['estado_pagina'].'</td>
 		 	<td>'.$value['nombre_modulo'].'</td>
 		 	<td>'.$value['default_pag'].'</td>
-		 	<td width="15px" class="text-center"><input type="checkbox" name="ver_'.$value['id_paginas'].'" id="ver_'.$value['id_paginas'].'" onclick="guardar_accesos_edi(\''.$value['id_paginas'].'\')"></td>
+		 	<td width="15px" class="text-center"><input type="checkbox" class="rbl_pag_ver" onclick="guardar_accesos_edi(\''.$value['id_paginas'].'\') " name="ver_'.$value['id_paginas'].'" id="ver_'.$value['id_paginas'].'"></td>
       <td width="15px" class="text-center"><input type="checkbox" class="rbl_pag_edi" onclick="guardar_accesos_edi(\''.$value['id_paginas'].'\')" name="edi_'.$value['id_paginas'].'" id="edi_'.$value['id_paginas'].'"></td>
       <td width="15px" class="text-center"><input type="checkbox" class="rbl_pag_eli" onclick="guardar_accesos_edi(\''.$value['id_paginas'].'\')" name="eli_'.$value['id_paginas'].'" id="eli_'.$value['id_paginas'].'"></td>
 		 	</tr>';

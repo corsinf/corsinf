@@ -18,13 +18,13 @@ class nueva_empresaM
 
 	function add($tabla,$datos)
 	{
-		return $this->db->inserts($tabla,$datos);
+		return $this->db->inserts($tabla,$datos,1);
 	}
 
 	function buscar_empresa($ruc)
 	{
 		$sql = "SELECT * FROM EMPRESAS WHERE Ruc = '".$ruc."'";
-		return $this->db->datos($sql);
+		return $this->db->datos($sql,1);
 	} 
 
 

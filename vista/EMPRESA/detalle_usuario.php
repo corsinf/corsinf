@@ -210,6 +210,13 @@ if(isset($_GET["usuario"]))
          type:  'post',
          dataType: 'json',
          success:  function (response) {
+            if(response==-3)
+            {
+              Swal.fire("Cedula ya Registrado en empresa actual",'Este usuario ya esta registrado','error').then(function(){
+                $('#txt_ci').val('');
+              });
+              return false;
+            }
 
             if(response.length>0)
             {
@@ -224,16 +231,17 @@ if(isset($_GET["usuario"]))
                 }).then((result) => {
                   if (result.value) {
 
+                    console.log(response);
 
                    $('#txt_nombre').val(response[0].nombres);
-                   $('#txt_ci').val(response[0].ci_ruc);
-                   $('#txt_telefono').val(response[0].telefono);
+                   $('#txt_ci').val(response[0].ci);
+                   $('#txt_telefono').val(response[0].tel);
                    $('#txt_emial').val(response[0].email);
                    $('#ddl_tipo_usuario').append($('<option>',{value: response[0].idt, text:response[0].tipo,selected: true }));;
-                   $('#txt_apellido').val(response[0].apellidos);
-                   $('#txt_pass').val(response[0].password);
-                   $('#txt_dir').val(response[0].direccion);
-                   $('#txt_usuario_update').val(response[0].id_usuarios);
+                   $('#txt_apellido').val(response[0].ape);
+                   $('#txt_pass').val(response[0].pass);
+                   $('#txt_dir').val(response[0].dir);
+                   $('#txt_usuario_update').val(response[0].id);
                    $('#img_foto').attr('src',response[0].foto+'?'+Math.random());
                    // link
 
@@ -455,6 +463,17 @@ function checkKey(e) {
     window.location.href = 'detalle_usuario.php?usuario='+id;
   }
 
+  function valida_cecula_registro(campo)
+  {
+    if($('#'+campo).val()!='')
+    {
+      if(validar_cedula(campo))
+        {
+          validar_registro(campo);
+        }
+    }
+  }
+
 </script>
 
 <div class="page-wrapper">
@@ -546,7 +565,7 @@ function checkKey(e) {
                         <h6 class="mb-0">CI / RUC</h6>
                       </div>
                       <div class="col-sm-9 text-secondary">
-                         <input type="text"  class="form-control form-control-sm" name="txt_ci" id="txt_ci" required="" onblur="validar_cedula('txt_ci');validar_registro('txt_ci')" onkeyup="num_caracteres('txt_ci',13);solo_numeros(this)">
+                         <input type="text"  class="form-control form-control-sm" name="txt_ci" id="txt_ci" required="" onblur="valida_cecula_registro('txt_ci')" onkeyup="num_caracteres('txt_ci',13);solo_numeros(this)">
                       </div>
                     </div>
                     <div class="row mb-3">

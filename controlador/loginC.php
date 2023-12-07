@@ -377,6 +377,7 @@ class loginC
 		$id = '';
 		$link = '';
 		$pagina = '';
+		// print_r($datos);die();
 		foreach ($datos as $key => $value) {
 			$num = rand(1, 5);
 			$pagina = str_replace('.php','', $value['link']);

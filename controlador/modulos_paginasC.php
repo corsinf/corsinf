@@ -31,6 +31,11 @@ if(isset($_GET['activo_paginas']))
 	$parametros = $_POST['parametros'];
 	echo json_encode($controlador->activo_pagina($parametros));
 }
+if(isset($_GET['activo_paginas_dba']))
+{
+	$parametros = $_POST['parametros'];
+	echo json_encode($controlador->activo_pagina_dba($parametros));
+}
 if(isset($_GET['defaul_paginas']))
 {
 	$parametros = $_POST['parametros'];
@@ -91,25 +96,33 @@ class modulos_paginasC
 		 	<td><select class="form-select form-select-sm" id="ddl_modulos_pag_ing'.$value['id_paginas'].'" name="ddl_modulos_pag_ing'.$value['id_paginas'].'">'.$this->opciones_tipo($value['id_modulo'],$mod_sis['modulo_sis']).'</select></td>';
 		 	if($value['default_pag']==1)
 		 	{
-		 		$tr.='<td width="15px" class="text-center"><input type="checkbox" tittle = "Default" onclick="default_pag(\''.$value['id_paginas'].'\')" name="rbl_defaul'.$value['id_paginas'].'" id="rbl_defaul'.$value['id_paginas'].'" checked></td>';
+		 		$tr.='<td width="15px" class="text-center"><input type="checkbox" title = "Default" onclick="default_pag(\''.$value['id_paginas'].'\')" name="rbl_defaul'.$value['id_paginas'].'" id="rbl_defaul'.$value['id_paginas'].'" checked></td>';
 		 	}else
 		 	{
-		 		$tr.='<td width="15px" class="text-center"><input type="checkbox"  tittle = "Default" onclick="default_pag(\''.$value['id_paginas'].'\')" name="rbl_defaul'.$value['id_paginas'].'" id="rbl_defaul'.$value['id_paginas'].'"></td>';
+		 		$tr.='<td width="15px" class="text-center"><input type="checkbox"  title = "Default" onclick="default_pag(\''.$value['id_paginas'].'\')" name="rbl_defaul'.$value['id_paginas'].'" id="rbl_defaul'.$value['id_paginas'].'"></td>';
 		 	}
 		 	if($value['subpagina']==1)
 		 	{
-		 		$tr.='<td width="15px" class="text-center"><input type="checkbox"  tittle = "Sub pagina" onclick="subpag(\''.$value['id_paginas'].'\')" name="rbl_subpag'.$value['id_paginas'].'" id="rbl_subpag'.$value['id_paginas'].'" checked></td>';
+		 		$tr.='<td width="15px" class="text-center"><input type="checkbox"  title = "Sub pagina" onclick="subpag(\''.$value['id_paginas'].'\')" name="rbl_subpag'.$value['id_paginas'].'" id="rbl_subpag'.$value['id_paginas'].'" checked></td>';
 		 	}else
 		 	{
-		 		$tr.='<td width="15px" class="text-center"><input type="checkbox"  tittle = "Sub pagina" onclick="subpag(\''.$value['id_paginas'].'\')" name="rbl_subpag'.$value['id_paginas'].'" id="rbl_subpag'.$value['id_paginas'].'"></td>';
+		 		$tr.='<td width="15px" class="text-center"><input type="checkbox"  title = "Sub pagina" onclick="subpag(\''.$value['id_paginas'].'\')" name="rbl_subpag'.$value['id_paginas'].'" id="rbl_subpag'.$value['id_paginas'].'"></td>';
 		 	}
 
 		 	if($value['estado_pagina']=='A')
 		 	{
-		 		$tr.='<td width="15px" class="text-center"><input type="checkbox"  tittle = "Activo" name="rbl_activo'.$value['id_paginas'].'" id="rbl_activo'.$value['id_paginas'].'" onclick="activo_pag(\''.$value['id_paginas'].'\')"  checked></td>';
+		 		$tr.='<td width="15px" class="text-center"><input type="checkbox"  title = "Activo" name="rbl_activo'.$value['id_paginas'].'" id="rbl_activo'.$value['id_paginas'].'" onclick="activo_pag(\''.$value['id_paginas'].'\')"  checked></td>';
 		 	}else
 		 	{
-		 		$tr.='<td width="15px" class="text-center"><input type="checkbox"  tittle = "Activo" name="rbl_activo'.$value['id_paginas'].'" id="rbl_activo'.$value['id_paginas'].'" onclick="activo_pag(\''.$value['id_paginas'].'\')" ></td>';
+		 		$tr.='<td width="15px" class="text-center"><input type="checkbox"  title = "Activo" name="rbl_activo'.$value['id_paginas'].'" id="rbl_activo'.$value['id_paginas'].'" onclick="activo_pag(\''.$value['id_paginas'].'\')" ></td>';
+		 	}
+
+		 	if($value['para_dba']==1)
+		 	{
+		 		$tr.='<td width="15px" class="text-center"><input type="checkbox"  title = "Para dba" name="rbl_para_dba'.$value['id_paginas'].'" id="rbl_para_dba'.$value['id_paginas'].'" onclick="activo_dba(\''.$value['id_paginas'].'\')"  checked></td>';
+		 	}else
+		 	{
+		 		$tr.='<td width="15px" class="text-center"><input type="checkbox"  title = "Para dba" name="rbl_para_dba'.$value['id_paginas'].'" id="rbl_para_dba'.$value['id_paginas'].'" onclick="activo_dba(\''.$value['id_paginas'].'\')" ></td>';
 		 	}
 
 		 	$tr.='<td width="15px" class="text-center">
@@ -216,6 +229,18 @@ class modulos_paginasC
 		if($parametros['op']=='true'){$activo = 'A';	}	
 		$datos[6]['campo']='estado_pagina';
 		$datos[6]['dato']=$activo;
+
+		$where[0]['campo']='id_paginas';
+		$where[0]['dato'] = $parametros['id'];
+
+		return $this->modelo->update('PAGINAS',$datos,$where);
+	}
+	function activo_pagina_dba($parametros)
+	{   
+		$activo = 0;	
+		if($parametros['op']=='true'){$activo = 1;	}	
+		$datos[1]['campo']='para_dba';
+		$datos[1]['dato']=$activo;
 
 		$where[0]['campo']='id_paginas';
 		$where[0]['dato'] = $parametros['id'];

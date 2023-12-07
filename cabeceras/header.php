@@ -658,7 +658,7 @@ function cambiar_configuraciones()
 						<ul class="dropdown-menu dropdown-menu-end">
 							<li><a class="dropdown-item" href="inicio.php?acc=perfil"><i class="bx bx-user"></i><span>Perfil</span></a>
 							</li>
-							<?php if($_SESSION['INICIO']['TIPO']=='DBA'){ ?>
+							<?php if($_SESSION['INICIO']['TIPO']=='DBA' || $_SESSION['INICIO']['TIPO']=='ADMINISTRADOR' || $_SESSION['INICIO']['TIPO']=='ADMIN'  ){ ?>
 							<li><a class="dropdown-item" href="javascript:;" onclick="cambiar_configuraciones()"><i class="bx bx-cog"></i><span>Configuraciones</span></a>
 							</li>
 							<?php } ?>

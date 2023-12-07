@@ -43,22 +43,26 @@ class nueva_empresaC
 	}
 	function insertar_editar($parametros,$file)
 	{
-
+// print_r($file);die();
 		$empresa = $this->modelo->buscar_empresa($parametros['txt_ci']);
 		if(count($empresa)==0)
 		{
-			$ruta='../img/empresa/';
-		    if (!file_exists($ruta)) {
-		       mkdir($ruta, 0777, true);
-		    }
-			$uploadfile_temporal=$file['txt_logo']['tmp_name'];
-		    $tipo = explode('/', $file['txt_logo']['type']);
-		    $nombre = $parametros['txt_ci'].'.'.$tipo[1];	   
-		    $nuevo_nom=$ruta.$nombre;
-	         if (is_uploaded_file($uploadfile_temporal))
-	         {
-	           move_uploaded_file($uploadfile_temporal,$nuevo_nom);
-	         }
+			$nuevo_nom = '../img/de_sistema/sin-logo.png';
+			if($file['txt_logo']['full_path']!='')
+			{
+				$ruta='../img/empresa/';
+			    if (!file_exists($ruta)) {
+			       mkdir($ruta, 0777, true);
+			    }
+				$uploadfile_temporal=$file['txt_logo']['tmp_name'];
+			    $tipo = explode('/', $file['txt_logo']['type']);
+			    $nombre = $parametros['txt_ci'].'.'.$tipo[1];	   
+			    $nuevo_nom=$ruta.$nombre;
+		         if (is_uploaded_file($uploadfile_temporal))
+		         {
+		           move_uploaded_file($uploadfile_temporal,$nuevo_nom);
+		         }
+		     }
 			$datos[0]['campo'] ='Razon_Social';
 			$datos[0]['dato']= $parametros['txt_empresa'];
 			$datos[1]['campo'] = 'Nombre_Comercial';
@@ -69,6 +73,7 @@ class nueva_empresaC
 			$datos[3]['dato']= $parametros['txt_direccion'];
 			$datos[4]['campo'] ='Telefono';
 			$datos[4]['dato']= $parametros['txt_telefono'];
+			$datos[4]['tipo'] ='STRING';
 			$datos[5]['campo'] = 'Email';
 			$datos[5]['dato']= $parametros['txt_email'];
 			$datos[6]['campo'] ='Logo';

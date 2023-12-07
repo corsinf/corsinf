@@ -75,9 +75,9 @@ class modulos_paginasM
 
 	}
 
-	function paginas_all($query=false,$modulo=false)
+	function paginas_all($query=false,$modulo=false,$para_dba=false)
 	{
-		$sql = "SELECT id_paginas,nombre_pagina,detalle_pagina,estado_pagina,link_pagina,icono_paginas,P.id_modulo,M.nombre_modulo,P.default_pag,subpagina 
+		$sql = "SELECT id_paginas,nombre_pagina,detalle_pagina,estado_pagina,link_pagina,icono_paginas,P.id_modulo,M.nombre_modulo,P.default_pag,subpagina,para_dba 
 		FROM PAGINAS P
 		LEFT JOIN MODULOS M ON P.id_modulo = M.id_modulo WHERE 1 = 1 ";
 		if($query)
@@ -87,6 +87,10 @@ class modulos_paginasM
 		if($modulo)
 		{
 			$sql.=" AND M.id_modulo = '".$modulo."'";
+		}
+		if($para_dba)
+		{
+			$sql.=" AND P.para_dba = 1";
 		}
 
 		// print_r($sql);die();

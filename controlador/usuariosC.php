@@ -169,11 +169,18 @@ class usuariosC
 
 	function usuarios_all_autocompletado($parametros)
 	{
-		$datos = $this->modelo->usuarios_all($id=false,$parametros['query'],$tipo=false,$ci=false,$email=false);
+		$datos = $this->modelo->usuarios_all_sin_tipo_usuario($id=false,$parametros['query'],$tipo=false,$ci=false,$email=false);
 		// print_r($datos);die();
 		$lista = array();
-		foreach ($datos as $key => $value) {
-			$lista[] = array('value'=>$value['id'],'label'=>$value['nom'],'data'=>$value);
+		if($_SESSION['INICIO']['TIPO']=='DBA')
+		{
+			foreach ($datos as $key => $value) {
+				$usuario_existente = $this->modelo->usuarios_all_empresa_actual($id=false,$parametros['query'],$tipo=false,$ci=false,$email=false);
+				// print_r($usuario_existente);die();
+				if(empty($usuario_existente)){
+					$lista[] = array('value'=>$value['id'],'label'=>$value['nom'],'data'=>$value);
+				}
+			}
 		}
 		return $lista;
 	}
@@ -485,8 +492,17 @@ class usuariosC
 	function validar_registro($parametros)
 	{		
 		// print_r($parametros);die();
-		$datos  = $this->modelo->usuarios_all($parametros['cedula']);
-		return $datos;
+
+		$datos  = $this->modelo->usuarios_all_empresa_actual(false,false,false,$parametros['cedula']);
+		if(count($datos)==0)
+		{
+
+			$datos  = $this->modelo->usuarios_all(false,false,false,$parametros['cedula']);
+			return $datos;
+		}else
+		{
+			return -3;
+		}
 	}
 
 

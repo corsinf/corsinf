@@ -56,21 +56,31 @@ class db
 			    // print_r($_SESSION['INICIO']);die();
 			}else
 			{
-				$this->usuario = "";
-			    $this->password = "";  // en mi caso tengo contraseña pero en casa caso introducidla aquí.
-			    $this->servidor = "DESKTOP-RSN9E39\SQLEXPRESS";
+				// $this->usuario = "";
+			    // $this->password = "";  // en mi caso tengo contraseña pero en casa caso introducidla aquí.
+			    // $this->servidor = "DESKTOP-RSN9E39\SQLEXPRESS";
+			    // $this->database = "LISTA_EMPRESAS";
+			    // $this->tipo_base = '';
+			    // $this->puerto = '';
+
+			    $this->usuario = "sa";
+			    $this->password = "Tango456";  // en mi caso tengo contraseña pero en casa caso introducidla aquí.
+			    $this->servidor = "186.4.219.172, 1487";
 			    $this->database = "LISTA_EMPRESAS";
-			    $this->tipo_base = '';
-			    $this->puerto = '';
 			}
 		}else
 		{
-				$this->usuario = "";
-			    $this->password = "";  // en mi caso tengo contraseña pero en casa caso introducidla aquí.
-			    $this->servidor = "DESKTOP-RSN9E39\SQLEXPRESS";
+				// $this->usuario = "";
+			    // $this->password = "";  // en mi caso tengo contraseña pero en casa caso introducidla aquí.
+			    // $this->servidor = "DESKTOP-RSN9E39\SQLEXPRESS";
+			    // $this->database = "LISTA_EMPRESAS";
+			    // $this->tipo_base = '';
+			    // $this->puerto = '';
+
+			    $this->usuario = "sa";
+			    $this->password = "Tango456";  // en mi caso tengo contraseña pero en casa caso introducidla aquí.
+			    $this->servidor = "186.4.219.172, 1487";
 			    $this->database = "LISTA_EMPRESAS";
-			    $this->tipo_base = '';
-			    $this->puerto = '';
 		}
 
 	}
@@ -80,7 +90,12 @@ class db
 		$connectionInfo = array("Database"=>$this->database, "UID" => $this->usuario,"PWD" => $this->password,"CharacterSet" => "UTF-8");
 		// print_r($this->servidor);
 		// print_r($connectionInfo);die();
-		$cid = sqlsrv_connect($this->servidor, $connectionInfo); //returns false
+		$server = $this->servidor;
+		if($this->puerto!='')
+		{
+			$server = $this->servidor.', '.$this->puerto;
+		}
+		$cid = sqlsrv_connect($server, $connectionInfo); //returns false
 		if( $cid === false )
 			{
 				echo 'no se pudo conectar a la base de datos';

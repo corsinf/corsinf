@@ -122,6 +122,73 @@ class usuariosM
 		return $datos;
 	}
 
+
+	function usuarios_all_sin_tipo_usuario($id=false,$query=false,$tipo=false,$ci=false,$email=false)
+	{
+		$sql="SELECT DISTINCT  id_usuarios as 'id',ci_ruc as 'ci',nombres,apellidos as 'ape',nombres +' '+apellidos as 'nom', direccion as 'dir',telefono as 'tel',password as 'pass',email as 'email',foto,link_fb,link_gmail,link_ins,link_tw,link_web FROM USUARIOS
+		WHERE 1=1 ";
+		if($id)
+		{
+			$sql.=" AND id_usuarios = '".$id."'";
+		}
+		if($query)
+		{
+			$sql.=" AND  nombres +' '+apellidos+' '+ci_ruc LIKE '%".$query."%'";
+		}
+		if($ci)
+		{
+			$sql.=" AND ci_ruc = '".$ci."'";
+		}
+		if($email)
+		{
+			$sql.=" AND email = '".$email."'";
+		}
+		if($tipo)
+		{
+			$sql.=" AND U.id_tipo='".$tipo."'";
+		}
+
+		// print_r($sql);die();
+
+		// la lista de usuarios la busca en la base de datos especifica
+		$datos = $this->db->datos($sql,1);
+		return $datos;
+	}
+
+	function usuarios_all_empresa_actual($id=false,$query=false,$tipo=false,$ci=false,$email=false)
+	{
+		$sql="SELECT id_usuarios as 'id',ci_ruc as 'ci',nombres,apellidos as 'ape',nombres +' '+apellidos as 'nom', direccion as 'dir',telefono as 'tel',password as 'pass',email as 'email', T.ID_TIPO as 'idt',DESCRIPCION as 'tipo',foto,link_fb,link_gmail,link_ins,link_tw,link_web FROM USUARIO_TIPO_USUARIO UT
+			RIGHT JOIN USUARIOS U ON UT.ID_USUARIO = U.id_usuarios 
+			LEFT JOIN TIPO_USUARIO T ON UT.ID_TIPO_USUARIO = T.ID_TIPO
+			WHERE UT.ID_EMPRESA = '".$_SESSION['INICIO']['ID_EMPRESA']."' ";
+		if($id)
+		{
+			$sql.=" AND id_usuarios = '".$id."'";
+		}
+		if($query)
+		{
+			$sql.=" AND  nombres +' '+apellidos+' '+ci_ruc LIKE '%".$query."%'";
+		}
+		if($ci)
+		{
+			$sql.=" AND ci_ruc = '".$ci."'";
+		}
+		if($email)
+		{
+			$sql.=" AND email = '".$email."'";
+		}
+		if($tipo)
+		{
+			$sql.=" AND U.id_tipo='".$tipo."'";
+		}
+
+		// print_r($sql);die();
+
+		// la lista de usuarios la busca en la base de datos especifica
+		$datos = $this->db->datos($sql,1);
+		return $datos;
+	}
+
 	function no_concurente_custodios($codigo)
 	{
 		$sql = "SELECT ID_PERSON as 'id',PERSON_CI as 'ci',PERSON_NOM as 'nombres',DIRECCION as 'dir',TELEFONO as 'tel',PASS as 'pass',PERSON_CORREO as 'email',FOTO as 'foto'

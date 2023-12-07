@@ -443,6 +443,30 @@ function guardar_pagina(id='')
           
        });
   }
+  function activo_dba(id)
+  {
+    var op = $('#rbl_para_dba'+id).prop('checked');
+    var parametros = 
+    {
+      'op':op,
+      'id':id,
+    }
+     $.ajax({
+         data:  {parametros:parametros},
+         url:   '../controlador/modulos_paginasC.php?activo_paginas_dba=true',
+         type:  'post',
+         dataType: 'json',
+         /*beforeSend: function () {   
+              var spiner = '<div class="text-center"><img src="../img/gif/proce.gif" width="100" height="100"></div>'     
+            $('#tabla_').html(spiner);
+         },*/
+           success:  function (response) {  
+            console.log(response);
+                       
+          } 
+          
+       });
+  }
 
   function limpiar_pag()
   {
@@ -692,6 +716,7 @@ function guardar_pagina(id='')
                               <th>Default</th>
                               <th>sub pagina</th>
                               <th>Activo</th>
+                              <th>Para dba</th>
                               <th width="280px">Icono</th>
                                <th></th>
                             </thead>
@@ -762,18 +787,23 @@ function guardar_pagina(id='')
                       <textarea class="form-control form-control-sm" rows="1" id="txt_detalle_pag" name="txt_detalle_pag" ></textarea> 
                   </div>
                   
-                  <div class="col-sm-4"><br>
+                  <div class="col-sm-3"><br>
                     <label> Por default
                     <input type="checkbox" name="rbl_defaul" id="rbl_defaul"></label>
                   </div>
-                  <div class="col-sm-4"><br>
+                  <div class="col-sm-3"><br>
                     <label> Sub pagina
                     <input type="checkbox" name="rbl_subpag" id="rbl_subpag"></label>
                   </div>
-                  <div class="col-sm-4"><br>
-                    <label> Estado Activo
+                  <div class="col-sm-3"><br>
+                    <label> Activo
                     <input type="checkbox" name="rbl_estado" id="rbl_estado" checked></label>
-                  </div>                                    
+                  </div> 
+                   <div class="col-sm-3"><br>
+                    <label> Para DBA
+                    <input type="checkbox" name="rbl_para_dba" id="rbl_para_dba"></label>
+                  </div>       
+
                 </div>
 
               

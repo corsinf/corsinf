@@ -121,15 +121,18 @@ function validar_cedula(campo) {
               total = total % 10 ? 10 - total % 10 : 0;
 
               if (cad.charAt(longitud-1) == total) {
+                return true
               }else{
                 Swal.fire('Cedula invalida','revise su numero '+cad,'info');
                 $('#'+campo).val('');
+                return false;
               }
             }
     }else
     {
         Swal.fire('Error en numero de cedula','Tiene que tener 10 ó 13 caracteres','info').then(function(){
             $('#'+campo).val('');
+            return false;
         })
     }
   }

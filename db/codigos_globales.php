@@ -751,16 +751,22 @@ function para_ftp($nombre,$texto)
 	}
 
 
-	function actualizar_acceso_paginas($db_destino,$id_empresa)
-	{		
-		
-		 $db_origen = EMPRESA_MASTER;
+	function Copiar_estructura($modulo)
+	{				
+		$db_destino = $_SESSION['INICIO']['BASEDATO'];
+		switch ($modulo) {
+			case '7':
+				$db_origen = BASE_SALUD;
+				break;
+			case '2':
+				$db_origen = BASE_ACTIVOS;
+				break;
+		}
 		 $parametros = array(
 		    array(&$db_origen, SQLSRV_PARAM_IN),
 		    array(&$db_destino, SQLSRV_PARAM_IN),
-		    array(&$id_empresa, SQLSRV_PARAM_IN),
 		  );
-		  $sql = "EXEC CopiarEstructuraPaginas @origen_bd = ?,@destino_bd = ?,@id_empresa = ?";
+		  $sql = "EXEC EstructuraBase @origen_bd = ?,@destino_bd = ?";
 		  return $this->db->ejecutar_procesos_almacenados($sql,$parametros,false,1);
 	}
 

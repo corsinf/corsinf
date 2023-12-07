@@ -91,7 +91,12 @@ class loginM
 			INNER JOIN PAGINAS P ON A.id_paginas = P.id_paginas
 			INNER JOIN MODULOS M ON P.id_modulo = M.id_modulo
 			INNER JOIN MODULOS_SISTEMA MS ON M.modulos_sistema = MS.id_modulos
-			WHERE id_tipo_usu ='".$_SESSION['INICIO']['PERFIL']."' AND subpagina<> 1 AND Ver <> 0 AND editar <> 0 AND eliminar <> 0 ";
+			WHERE id_tipo_usu ='".$_SESSION['INICIO']['PERFIL']."' 
+			AND subpagina<> 1 
+			AND Ver <> 0 
+			AND editar <> 0 
+			AND eliminar <> 0
+			AND MS.estado = 'A' ";
 		}
 		// print_r($sql);die();
 		$datos = $this->db->datos($sql);

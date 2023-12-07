@@ -425,6 +425,32 @@
      })
   
    }
+
+  function marcar_todo_ver()
+   {
+     var perfil = $('#ddl_perfil').val();
+     if(perfil=='')
+     {
+       Swal.fire('Seleccione un Usuario','','info');
+       $('#rbl_todo_ver').prop('checked',false);
+       return false;
+     }
+       
+     $('.rbl_pag_ver').each(function() {
+        const checkbox = $(this);
+        const isChecked = checkbox.prop('checked'); 
+        if (!isChecked) {
+          $(this).click();
+          // console.log(this.id);
+        }
+        // console.log(checkbox);
+    });
+
+     Swal.fire('Todos seleccionados','','info').then(function(){
+       $('#rbl_todo_ver').prop('checked',false);
+     })
+  
+   }
    function marcar_todo_delet()
    {
      var perfil = $('#ddl_perfil').val();
@@ -507,7 +533,8 @@
                 <hr>
                 <table class="table">
                   <thead>
-                      <th colspan="6" class="text-end">Marcar todos</th>                            
+                      <th colspan="5" class="text-end">Marcar todos<i class="bx bx-down-arrow-alt"></i></th>                            
+                      <th class="text-center"><input type="checkbox" name="rbl_todo_ver" id="rbl_todo_ver" onclick="marcar_todo_ver()"></th>
                       <th class="text-center"><input type="checkbox" name="rbl_todo_edit" id="rbl_todo_edit" onclick="marcar_todo_edit()"></th>
                       <th class="text-center"><input type="checkbox" name="rbl_todo_eli" id="rbl_todo_eli" onclick="marcar_todo_delet()"></th>
                     </thead>

@@ -365,14 +365,14 @@
                 <div class="row">
                   <div class="col-sm-12 col-md-6">
                     <div class="dt-buttons btn-group"> 
-                      <a class="btn btn-outline-secondary buttons-copy buttons-html5 " href="inicio.php?acc=detalle_usuario">Nuevo</a>     
+                      <a class="btn btn-outline-primary buttons-copy btn-sm" href="inicio.php?acc=detalle_usuario">Nuevo</a>     
                       <!-- <button class="btn btn-outline-secondary buttons-copy buttons-html5" tabindex="0" aria-controls="example2" type="button"><span>Copy</span></button>  -->
                       
                     </div>
                   </div>
                   <div class="col-sm-12 col-md-6">
-                    <div class="row mb-3 dataTables_filter">
-                      <div class="col-sm-3">
+                    <div class="row mb-3">
+                      <div class="col-sm-3 text-end">
                         <h6 class="mb-0">Buscar</h6>
                       </div>
                       <div class="col-sm-9 text-secondary">
