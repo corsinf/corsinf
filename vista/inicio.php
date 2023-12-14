@@ -155,6 +155,11 @@ if($_GET['acc']=='pagina_error')
 	{
 		include('EMPRESA/detalle_usuario.php');
 	}
+	if($_GET['acc']=='no_concurente')
+	{
+		include('EMPRESA/no_concurente.php');
+	}
+
 
 
 //SEGUROS

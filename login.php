@@ -39,15 +39,13 @@
          url:   'controlador/loginC.php?iniciar=true',
          type:  'post',
          dataType: 'json',
-         /*beforeSend: function () {   
-              var spiner = '<div class="text-center"><img src="../../img/gif/proce.gif" width="100" height="100"></div>'     
-            $('#tabla_').html(spiner);
-         },*/
            success:  function (response) {  
+           	console.log(response);
 
-           	if(response!='')
+           	if(response.lista!='')
            	{
-           		$('#lista_empresas').html(response);
+           		$('#lista_empresas').html(response.lista);
+           		$('#txt_no_concurente').val(response.no_concurente);
   						$('#myModal_empresas').modal('show');
   					}else
   					{
@@ -66,11 +64,13 @@
   {
   	 var email=$('#email').val();
     var pass =$('#pass').val();
+    var no_concurente = $('#txt_no_concurente').val();
        var parametros = 
        {
          	'id':id,
 					'email':email,
          	'pass':pass,
+         	'no_concurente':no_concurente,
        } 
        $.ajax({
          data:  {parametros:parametros},
@@ -228,6 +228,8 @@
 									<div class="form-body">
 										<form class="row g-3">
 											<div class="col-12">
+
+												<input type="hidden" class="form-control" id="txt_no_concurente" name="txt_no_concurente" value="0">
 												<label for="inputEmailAddress" class="form-label">Email</label>
 												<!-- <input type="email" class="form-control" id="inputEmailAddress" placeholder="Email Address"> -->
 												<input type="email" class="form-control" id="email" placeholder="Email">

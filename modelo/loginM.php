@@ -33,6 +33,43 @@ class loginM
 		$datos = $this->db->datos($sql,1);
 		return $datos;
 	}
+
+	function empresa_tabla_noconcurente($id_empresa=false)
+	{
+		$sql = "SELECT Tabla,Id_Empresa,Campo_usuario,campo_pass FROM TABLAS_NOCONCURENTE
+				WHERE 1=1 ";
+				if($id_empresa)
+				{
+					$sql.=" AND Id_Empresa='".$id_empresa."'";
+				}
+				$sql.="GROUP BY Tabla,Id_Empresa,Campo_usuario,campo_pass";
+		$datos = $this->db->datos($sql,1);
+		return $datos;
+	}
+
+	function buscar_db_terceros($database,$usuario,$password,$servidor,$puerto,$parametros)
+	{
+		$sql = "SELECT * FROM ".$parametros['tabla']." WHERE ".$parametros['Campo_Usuario']." = '".$parametros['email']."' AND ".$parametros['Campo_Pass']."='".$parametros['pass']."'";
+		 $item = $this->db->datos_db_terceros($database,$usuario,$password,$servidor,$puerto,$sql);
+		 return $item;
+	}
+
+	function buscar_empresas_no_concurentes($email,$pass,$id=false)
+	{
+		$sql = "SELECT * 
+				FROM ACCESOS_EMPRESA AC
+				INNER JOIN USUARIOS US ON AC.Id_usuario = US.id_usuarios
+				INNER JOIN EMPRESAS EM ON AC.Id_Empresa = EM.Id_empresa
+				WHERE US.email = '".$email."' AND US.password = '".$pass."'";
+				if($id)
+				{
+					$sql.=" AND id_empresa='".$id."'";
+				}
+				// print_r($sql);die();
+		$datos = $this->db->datos($sql,1);
+		return $datos;
+	}
+
 	function datos_login($email,$pass)
 	{
 		$sql = "SELECT nombres,apellidos,email,DESCRIPCION,Ver,editar,eliminar,dba,T.DESCRIPCION as 'tipo',U.id_usuarios as 'id',ID as 'perfil',U.foto FROM USUARIO_TIPO_USUARIO A 
@@ -147,7 +184,7 @@ class loginM
 
 	function lista_empresa($id)
 	{
-		$sql = "SELECT * FROM EMPRESAS WHERE Id_empresa = '".$id."'";
+		$sql = "SELECT E.*,Id_empresa as 'Id_Empresa' FROM EMPRESAS E WHERE Id_empresa = '".$id."'";
 		return $this->db->datos($sql);
 	}
 

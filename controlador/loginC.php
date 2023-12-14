@@ -99,22 +99,46 @@ class loginC
 			{
 				 session_destroy();
 			}
-		 $datos = $this->login->buscar_empresas($parametros['email'],$parametros['pass']);
-		 $empresas = '';
-		 foreach ($datos as $key => $value) {
-		 	$empresas.= '<li class="list-group-item d-flex align-items-center radius-10 mb-2 shadow-sm" onclick="empresa_selecconada('.$value['Id_Empresa'].')">
-										<div class="d-flex align-items-center">
-											<div class="font-20"><img style="width:50px; height:50px" src="'.str_replace('../','',$value['Logo']).'" />
+
+			$no_concurente = 0;
+			 $datos = $this->login->buscar_empresas($parametros['email'],$parametros['pass']);
+			 $empresas = '';
+
+			 // si no ecuentra en usuarios va a la tabla de no concurentes 
+			 if(count($datos)==0)
+			 {
+			 	 $no_concurentes = $this->login->empresa_tabla_noconcurente();
+			 	 $datos = array();
+			 	 foreach ($no_concurentes as $key => $value) {
+			 	 	 	$empresa = $this->login->lista_empresa($value['Id_Empresa']);
+			 	 	 	$parametros['Campo_Usuario'] = $value['Campo_usuario'];
+			 	 	 	$parametros['Campo_Pass'] = $value['campo_pass'];
+			 	 	 	$parametros['tabla'] = $value['Tabla'];
+			 	 	 	$busqueda_tercero = $this->login->buscar_db_terceros($empresa[0]['Base_datos'],$empresa[0]['Usuario_db'],$empresa[0]['Password_db'],$empresa[0]['Ip_host'],$empresa[0]['Puerto_db'],$parametros);
+			 	 	 	if(count($busqueda_tercero)>0)
+			 	 	 	{
+			 	 	 		$datos[] = $empresa[0];
+			 	 	 		$no_concurentes = 1;
+			 	 	 	}
+			 	 }
+
+			 	 // print_r($datos);die();
+			 	 // $datos = $this->login->buscar_empresas_no_concurentes($parametros['email'],$parametros['pass']);
+			 }
+			 foreach ($datos as $key => $value) {
+			 	$empresas.= '<li class="list-group-item d-flex align-items-center radius-10 mb-2 shadow-sm" onclick="empresa_selecconada('.$value['Id_Empresa'].')">
+											<div class="d-flex align-items-center">
+												<div class="font-20"><img style="width:50px; height:50px" src="'.str_replace('../','',$value['Logo']).'" />
+												</div>
+												<div class="flex-grow-1 ms-2">
+													<h6 class="mb-0">'.$value['Nombre_Comercial'].'</h6>
+												</div>
 											</div>
-											<div class="flex-grow-1 ms-2">
-												<h6 class="mb-0">'.$value['Nombre_Comercial'].'</h6>
+											<div class="ms-auto">
 											</div>
-										</div>
-										<div class="ms-auto">
-										</div>
-									</li>';
-		 }
-		 return $empresas;
+										</li>';
+			 }
+			 return array('lista'=>$empresas,'no_concurente'=>$no_concurentes);
 	}
 
 
@@ -177,11 +201,23 @@ class loginC
 	function iniciar_sesion($parametros)
 	{		
 
-			$datos = $this->login->datos_login($parametros['email'],$parametros['pass']);
 			$empresa = $this->login->lista_empresa($parametros['id']);
-			if(count($datos)>0)
+			if(count($empresa)>0)
+			{
+					$_SESSION["INICIO"]['ID_EMPRESA'] = $empresa[0]['Id_empresa'];
+					$_SESSION["INICIO"]['RAZON_SOCIAL'] = $empresa[0]['Razon_Social'];
+					$_SESSION["INICIO"]['IP_HOST'] = $empresa[0]['Ip_host'];
+					$_SESSION["INICIO"]['BASEDATO'] = $empresa[0]['Base_datos'];
+					$_SESSION["INICIO"]['USUARIO_DB'] = $empresa[0]['Usuario_db'];
+					$_SESSION["INICIO"]['PASSWORD_DB'] = $empresa[0]['Password_db'];
+					$_SESSION["INICIO"]['PUERTO_DB'] = $empresa[0]['Puerto_db'];
+					$_SESSION["INICIO"]['TIPO_BASE'] = $empresa[0]['Tipo_base'];
+			}
+
+			if($parametros['no_concurente']==0)
 			{
 
+				$datos = $this->login->datos_login($parametros['email'],$parametros['pass']);
 				// print_r($datos);die();
 				// session_start();
 				$_SESSION['INICIO']['ULTIMO_ACCESO'] = time();
@@ -200,20 +236,46 @@ class loginC
 				$_SESSION["INICIO"]['MODULO_SISTEMA_ANT'] ='';
 				$_SESSION["INICIO"]['LISTA_ART'] =1;
 
-
-				$_SESSION["INICIO"]['ID_EMPRESA'] = $empresa[0]['Id_empresa'];
-				$_SESSION["INICIO"]['RAZON_SOCIAL'] = $empresa[0]['Razon_Social'];
-				$_SESSION["INICIO"]['IP_HOST'] = $empresa[0]['Ip_host'];
-				$_SESSION["INICIO"]['BASEDATO'] = $empresa[0]['Base_datos'];
-				$_SESSION["INICIO"]['USUARIO_DB'] = $empresa[0]['Usuario_db'];
-				$_SESSION["INICIO"]['PASSWORD_DB'] = $empresa[0]['Password_db'];
-				$_SESSION["INICIO"]['PUERTO_DB'] = $empresa[0]['Puerto_db'];
-				$_SESSION["INICIO"]['TIPO_BASE'] = $empresa[0]['Tipo_base'];
-
 				return 1;			
 
 			}else
 			{
+
+				$datos = $this->login->datos_login('noconcurente@noconcurente.com','12345');
+				// busca en tabla no concurrentes 
+				 $no_concurentes = $this->login->empresa_tabla_noconcurente($parametros['id']);
+			 	 $empresa = $this->login->lista_empresa($parametros['id']);
+			 	 $datos = array();
+			 	 $busqueda_tercero = array();
+			 	 foreach ($no_concurentes as $key => $value) {
+			 	 	 	$parametros['Campo_Usuario'] = $value['Campo_usuario'];
+			 	 	 	$parametros['Campo_Pass'] = $value['campo_pass'];
+			 	 	 	$parametros['tabla'] = $value['Tabla'];
+			 	 	 	$busqueda_tercero = $this->login->buscar_db_terceros($empresa[0]['Base_datos'],$empresa[0]['Usuario_db'],$empresa[0]['Password_db'],$empresa[0]['Ip_host'],$empresa[0]['Puerto_db'],$parametros);
+			 	 	 	break;
+			 	 }
+
+			 	$_SESSION['INICIO']['ULTIMO_ACCESO'] = time();
+				$_SESSION["INICIO"]['VER'] = $datos[0]['Ver'];
+				$_SESSION["INICIO"]['EDITAR'] = $datos[0]['editar'];
+				$_SESSION["INICIO"]['ELIMINAR'] = $datos[0]['eliminar'];
+				$_SESSION["INICIO"]['DBA'] = $datos[0]['dba'];
+				$_SESSION["INICIO"]['USUARIO'] = $datos[0]['nombres'].' '.$datos[0]['apellidos'];
+				$_SESSION["INICIO"]['ID_USUARIO'] = $datos[0]['id'];
+				$_SESSION["INICIO"]['EMAIL'] = $datos[0]['email'];
+				$_SESSION["INICIO"]['TIPO'] = $datos[0]['tipo'];
+				$_SESSION["INICIO"]['PERFIL'] = $datos[0]['perfil'];				
+				$_SESSION["INICIO"]['FOTO'] = $datos[0]['foto'];
+				$_SESSION["INICIO"]['NO_CONCURENTE'] = $busqueda_tercero[0][''] ;
+				$_SESSION["INICIO"]['NO_CONCURENTE_NOM'] ='';
+				$_SESSION["INICIO"]['MODULO_SISTEMA_ANT'] ='';
+				$_SESSION["INICIO"]['LISTA_ART'] =1;
+
+
+
+
+				print_r($busqueda_tercero);die();
+
 				return -1;
 			}
 

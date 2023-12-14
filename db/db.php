@@ -56,31 +56,31 @@ class db
 			    // print_r($_SESSION['INICIO']);die();
 			}else
 			{
-				// $this->usuario = "";
-			    // $this->password = "";  // en mi caso tengo contraseña pero en casa caso introducidla aquí.
-			    // $this->servidor = "DESKTOP-RSN9E39\SQLEXPRESS";
-			    // $this->database = "LISTA_EMPRESAS";
-			    // $this->tipo_base = '';
-			    // $this->puerto = '';
-
-			    $this->usuario = "sa";
-			    $this->password = "Tango456";  // en mi caso tengo contraseña pero en casa caso introducidla aquí.
-			    $this->servidor = "186.4.219.172, 1487";
+				$this->usuario = "";
+			    $this->password = "";  // en mi caso tengo contraseña pero en casa caso introducidla aquí.
+			    $this->servidor = "DESKTOP-RSN9E39\SQLEXPRESS";
 			    $this->database = "LISTA_EMPRESAS";
+			    $this->tipo_base = '';
+			    $this->puerto = '';
+
+			    // $this->usuario = "sa";
+			    // $this->password = "Tango456";  // en mi caso tengo contraseña pero en casa caso introducidla aquí.
+			    // $this->servidor = "186.4.219.172, 1487";
+			    // $this->database = "LISTA_EMPRESAS";
 			}
 		}else
 		{
-				// $this->usuario = "";
-			    // $this->password = "";  // en mi caso tengo contraseña pero en casa caso introducidla aquí.
-			    // $this->servidor = "DESKTOP-RSN9E39\SQLEXPRESS";
-			    // $this->database = "LISTA_EMPRESAS";
-			    // $this->tipo_base = '';
-			    // $this->puerto = '';
-
-			    $this->usuario = "sa";
-			    $this->password = "Tango456";  // en mi caso tengo contraseña pero en casa caso introducidla aquí.
-			    $this->servidor = "186.4.219.172, 1487";
+				$this->usuario = "";
+			    $this->password = "";  // en mi caso tengo contraseña pero en casa caso introducidla aquí.
+			    $this->servidor = "DESKTOP-RSN9E39\SQLEXPRESS";
 			    $this->database = "LISTA_EMPRESAS";
+			    $this->tipo_base = '';
+			    $this->puerto = '';
+
+			    // $this->usuario = "sa";
+			    // $this->password = "Tango456";  // en mi caso tengo contraseña pero en casa caso introducidla aquí.
+			    // $this->servidor = "186.4.219.172, 1487";
+			    // $this->database = "LISTA_EMPRESAS";
 		}
 
 	}
@@ -351,7 +351,68 @@ class db
 			   sqlsrv_close($conn);
 			   return 1;
 			}
+	}
+
+
+	function conexion_db_terceros($database,$usuario,$password,$servidor,$puerto)
+	{
+		if($usuario==''){$usuario = ''; }
+		if($password==''){$password = ''; }
+		$connectionInfo = array("Database"=>$database, "UID" => $usuario,"PWD" => $password,"CharacterSet" => "UTF-8");
+		// print_r($this->servidor);
+		// print_r($connectionInfo);die();
+		$server = $servidor;
+		if($puerto!='')
+		{
+			$server = $servidor.', '.$puerto;
 		}
+		$cid = sqlsrv_connect($server, $connectionInfo); //returns false
+		if( $cid === false )
+			{
+				echo 'no se pudo conectar a la base de datos';
+				die( print_r( sqlsrv_errors(), true));
+			}
+		return $cid;
+	}
+
+
+
+	function sql_string_db_terceros($database,$usuario,$password,$servidor,$puerto,$sql)
+	{
+		
+		$conn = $this->conexion_db_terceros($database,$usuario,$password,$servidor,$puerto);
+		$stmt = sqlsrv_query($conn, $sql);
+		if(!$stmt)
+		{
+        // print_r($sql);die();
+			echo "Error: " . $sql . "<br>" . sqlsrv_errors($conn);
+			sqlsrv_close($conn);
+			return -1;
+		}
+
+		sqlsrv_close($conn);
+		return 1;
+
+	}
+
+	function datos_db_terceros($database,$usuario,$password,$servidor,$puerto,$sql)
+	{
+		$conn = $this->conexion_db_terceros($database,$usuario,$password,$servidor,$puerto);
+		$stmt = sqlsrv_query($conn,$sql);
+		 // print_r($sql);die();
+	    $result = array();	  
+	    if( $stmt === false) {
+			die( print_r( sqlsrv_errors(), true) );
+		}
+	     while($row = sqlsrv_fetch_array($stmt,SQLSRV_FETCH_ASSOC)) 
+	     	{
+	     		$result[] = $row;
+	     	}
+	     
+		sqlsrv_close($conn);
+	     return $result;
+
+	}
 
 // ------------------------------------------------------------------------------------------------------
 	function conexion_pdo()
