@@ -202,6 +202,36 @@
        });
   }
 
+  function validar_licencia()
+  {
+    var parametros = 
+    {
+      'modulo_sis':$('#ddl_modulos').val(),
+    }
+    $.ajax({
+         data:  {parametros:parametros},
+         url:   '../controlador/tipo_usuarioC.php?valida_licencia=true',
+         type:  'post',
+         dataType: 'json',
+           success:  function (response) {  
+
+            if(response==0)
+            {
+              Swal.fire({
+                title: "Advertencia",
+                text: "Usted no tiene una licencia para este modulo, aun que Asigne accesos no se podra ver el modulo ",
+                icon: 'info',
+                confirmButtonText: 'OK',
+                allowOutsideClick: false, // Permite cerrar haciendo clic fuera del cuadro de diálogo
+              })
+
+            }
+           
+          } 
+          
+       });
+  }
+
   function  buscar_usuario_perfil()
   {    
    var tipo = $('#ddl_perfil').val();
@@ -514,7 +544,7 @@
                     </div>
                     <div class="col-sm-2">
                       <b>Modulo </b>
-                      <select class="form-select form-select-sm" id="ddl_modulos" name="ddl_modulos" onchange="cargar_menu();lista_paginas()">
+                      <select class="form-select form-select-sm" id="ddl_modulos" name="ddl_modulos" onchange="cargar_menu();lista_paginas();validar_licencia()">
                         <option value="">Modulos</option>
                       </select>                    
                     </div>

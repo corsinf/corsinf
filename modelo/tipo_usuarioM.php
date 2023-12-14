@@ -138,6 +138,12 @@ class tipo_usuarioM
 		return $datos;
 	}
 
+	function modulos_sistema_actual($id)
+	{
+		$sql = "SELECT  * FROM MODULOS_SISTEMA WHERE id_modulos = '".$id."'";
+		return $this->db->datos($sql);
+	}
+
 	function lista_paginas($query =false,$modulo=false,$idpag=false)
 	{
 		$sql = "SELECT id_paginas as 'id',nombre_pagina as 'pagina',detalle_pagina as 'detalle',icono_paginas as 'icono' FROM paginas WHERE estado_pagina = 'A' ";

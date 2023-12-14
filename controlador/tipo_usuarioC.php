@@ -106,6 +106,11 @@ if(isset($_GET['lista_paginas']))
 	$parametros = $_POST['parametros'];
 	echo json_encode($controlador->lista_paginas($parametros));
 }
+if(isset($_GET['valida_licencia']))
+{
+	$parametros = $_POST['parametros'];
+	echo json_encode($controlador->valida_licencia($parametros));
+}
 if(isset($_GET['lista_usuarios_perfil_accesos']))
 {
 	$tipo = $_POST['tipo'];
@@ -604,6 +609,21 @@ class tipo_usuarioC
 		 	</tr>';
 		 }
 		 return $tr;
+	}
+
+
+	function valida_licencia($parametros)
+	{
+			$id = $parametros['modulo_sis'];
+			$mod = $this->modelo->modulos_sistema_actual($id);
+			if(count($mod)>0)
+			{
+				return 1;
+			}else
+			{
+				return 0;
+			}
+
 	}
 
 	function eliminar_usuario_tipo($id)
