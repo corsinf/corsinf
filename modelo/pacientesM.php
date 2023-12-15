@@ -1,17 +1,17 @@
 <?php
-if (!class_exists('db_salud')) {
-    include('../db/db_salud.php');
+if (!class_exists('db')) {
+    include('../db/db.php');
 }
 /**
  * 
  */
 class pacientesM
 {
-    private $db_salud;
+    private $db;
 
     function __construct()
     {
-        $this->db_salud = new db_salud();
+        $this->db = new db();
     }
 
     function buscar_paciente($sa_pac_id_comunidad, $sa_pac_tabla)
@@ -79,7 +79,7 @@ class pacientesM
                 INNER JOIN cat_paralelo pr ON est.sa_id_paralelo = pr.sa_par_id
                 WHERE pac.sa_pac_id = $sa_pac_id_comunidad;";
 
-        $datos = $this->db_salud->datos($sql);
+        $datos = $this->db->datos($sql);
         return $datos;
     }
 
@@ -92,7 +92,7 @@ class pacientesM
 
         $sql = "EXEC SP_OBTENER_INFORMACION_PACIENTE_6 @sa_pac_id = ?";
 
-        return $this->db_salud->ejecutar_procedimiento_con_retorno_1($sql, $parametros);
+        return $this->db->ejecutar_procedimiento_con_retorno_1($sql, $parametros);
     }
 
     function lista_pacientes_todo($id = '')
@@ -111,7 +111,7 @@ class pacientesM
                 WHERE 1 = 1";
 
         $sql .= " ORDER BY sa_pac_id;";
-        $datos = $this->db_salud->datos($sql);
+        $datos = $this->db->datos($sql);
         return $datos;
     }
 }

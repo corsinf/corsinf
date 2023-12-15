@@ -1,17 +1,17 @@
 <?php
-if (!class_exists('db_salud')) {
-    include('../db/db_salud.php');
+if (!class_exists('db')) {
+    include('../db/db.php');
 }
 /**
  * 
  */
 class agendamientoM
 {
-    private $db_salud;
+    private $db;
 
     function __construct()
     {
-        $this->db_salud = new db_salud();
+        $this->db = new db();
     }
 
     function lista_consultas($fecha=false)
@@ -25,18 +25,18 @@ class agendamientoM
         }
 
         // print_r($sql);die();
-    	return $this->db_salud->datos($sql);
+    	return $this->db->datos($sql);
     }
 
     function insertar($tabla,$datos)
     {
-        $rest = $this->db_salud->inserts($tabla, $datos);
+        $rest = $this->db->inserts($tabla, $datos);
         return $rest;
     }
 
     function editar($datos, $where)
     {
-        $rest = $this->db_salud->update('estudiantes', $datos, $where);
+        $rest = $this->db->update('estudiantes', $datos, $where);
         return $rest;
     }
 
