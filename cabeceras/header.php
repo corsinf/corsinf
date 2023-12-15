@@ -54,7 +54,6 @@ if(!isset($_SESSION['INICIO'])){header('Location: ../login.php');}
 	<link rel="stylesheet" href="../assets/plugins/summernote/summernote-bs5.min.css">
 	<!-- <link rel="stylesheet" href="../assets/plugins/summernote/css/font-awesome.min.css"> -->
 
-<<<<<<< HEAD
   <script src="../js/informes_globales.js"></script>  
   <script src="../js/jquery-3.6.0.js"></script>
   <script src="../js/jquery-ui.js"></script>
@@ -63,14 +62,6 @@ if(!isset($_SESSION['INICIO'])){header('Location: ../login.php');}
   <script src="../js/notificaciones_seguros.js"></script>
 
   <!-- <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script> -->
-=======
-	<script src="../js/informes_globales.js"></script>
-	<script src="../js/codigos_globales.js"></script>
-	<script src="../js/sweetalert2.all.min.js"></script>
-	<script src="../js/notificaciones_seguros.js"></script>
-
-	<script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
->>>>>>> DEVELOPER01
 
 	<style>
 		.input-group>.select2-container--bootstrap {
@@ -153,17 +144,8 @@ if(!isset($_SESSION['INICIO'])){header('Location: ../login.php');}
 					location.href = 'inicio.php?mod=' + response + '&acc=index';
 				}
 
-<<<<<<< HEAD
-    	menu_lateral();
-    $( document ).ready(function() {
-      restriccion();   
-      // notificaciones();
-  	  // solicitudes();  
-    });
-=======
 			});
 		}
->>>>>>> DEVELOPER01
 
 		function menu_lateral() {
 			$.ajax({

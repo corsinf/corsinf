@@ -56,31 +56,31 @@ class db
 			    // print_r($_SESSION['INICIO']);die();
 			}else
 			{
-				$this->usuario = "";
-			    $this->password = "";  // en mi caso tengo contraseña pero en casa caso introducidla aquí.
-			    $this->servidor = "DESKTOP-RSN9E39\SQLEXPRESS";
-			    $this->database = "LISTA_EMPRESAS";
-			    $this->tipo_base = '';
-			    $this->puerto = '';
-
-			    // $this->usuario = "sa";
-			    // $this->password = "Tango456";  // en mi caso tengo contraseña pero en casa caso introducidla aquí.
-			    // $this->servidor = "186.4.219.172, 1487";
+				// $this->usuario = "";
+			    // $this->password = "";  // en mi caso tengo contraseña pero en casa caso introducidla aquí.
+			    // $this->servidor = "DESKTOP-RSN9E39\SQLEXPRESS";
 			    // $this->database = "LISTA_EMPRESAS";
+			    // $this->tipo_base = '';
+			    // $this->puerto = '';
+
+			    $this->usuario = "sa";
+			    $this->password = "Tango456";  // en mi caso tengo contraseña pero en casa caso introducidla aquí.
+			    $this->servidor = "186.4.219.172, 1487";
+			    $this->database = "LISTA_EMPRESAS";
 			}
 		}else
 		{
-				$this->usuario = "";
-			    $this->password = "";  // en mi caso tengo contraseña pero en casa caso introducidla aquí.
-			    $this->servidor = "DESKTOP-RSN9E39\SQLEXPRESS";
-			    $this->database = "LISTA_EMPRESAS";
-			    $this->tipo_base = '';
-			    $this->puerto = '';
-
-			    // $this->usuario = "sa";
-			    // $this->password = "Tango456";  // en mi caso tengo contraseña pero en casa caso introducidla aquí.
-			    // $this->servidor = "186.4.219.172, 1487";
+				// $this->usuario = "";
+			    // $this->password = "";  // en mi caso tengo contraseña pero en casa caso introducidla aquí.
+			    // $this->servidor = "DESKTOP-RSN9E39\SQLEXPRESS";
 			    // $this->database = "LISTA_EMPRESAS";
+			    // $this->tipo_base = '';
+			    // $this->puerto = '';
+
+			    $this->usuario = "sa";
+			    $this->password = "Tango456";  // en mi caso tengo contraseña pero en casa caso introducidla aquí.
+			    $this->servidor = "186.4.219.172, 1487";
+			    $this->database = "LISTA_EMPRESAS";
 		}
 
 	}
