@@ -1,17 +1,17 @@
 <?php
-if (!class_exists('db_salud')) {
-    include('../db/db_salud.php');
+if (!class_exists('db')) {
+    include('../db/db.php');
 }
 /**
  * 
  */
 class ficha_MedicaM
 {
-    private $db_salud;
+    private $db;
 
     function __construct()
     {
-        $this->db_salud = new db_salud();
+        $this->db = new db();
     }
 
     function lista_ficha_medica($id = '')
@@ -47,7 +47,7 @@ class ficha_MedicaM
         fm.sa_fice_rep_1_id,
         fm.sa_fice_fecha_creacion";
 
-        $datos = $this->db_salud->datos($sql);
+        $datos = $this->db->datos($sql);
         return $datos;
     }
 
@@ -108,7 +108,7 @@ class ficha_MedicaM
         }
 
 
-        $datos = $this->db_salud->datos($sql);
+        $datos = $this->db->datos($sql);
         return $datos;
     }
 
@@ -169,14 +169,14 @@ class ficha_MedicaM
         }
 
         $sql .= " ORDER BY sa_fice_est_id";
-        $datos = $this->db_salud->datos($sql);
+        $datos = $this->db->datos($sql);
         return $datos;
     }
 
     function buscar_ficha_medica($buscar)
     {
         $sql = "SELECT sa_sec_id, sa_sec_nombre, sa_sec_estado FROM ficha_medica WHERE sa_sec_estado = 1 and sa_sec_nombre + ' ' + sa_sec_id LIKE '%" . $buscar . "%'";
-        $datos = $this->db_salud->datos($sql);
+        $datos = $this->db->datos($sql);
         return $datos;
     }
 
@@ -232,26 +232,26 @@ class ficha_MedicaM
         FROM ficha_medica
         WHERE sa_fice_id = '" . $buscar . "'";
 
-        $datos = $this->db_salud->datos($sql);
+        $datos = $this->db->datos($sql);
         return $datos;
     }
 
     function insertar($datos)
     {
-        $rest = $this->db_salud->inserts('ficha_medica', $datos);
+        $rest = $this->db->inserts('ficha_medica', $datos);
         return $rest;
     }
 
     function editar($datos, $where)
     {
-        $rest = $this->db_salud->update('ficha_medica', $datos, $where);
+        $rest = $this->db->update('ficha_medica', $datos, $where);
         return $rest;
     }
 
     function eliminar($datos)
     {
         $sql = "UPDATE ficha_medica SET sa_fice_estado = 0 WHERE " . $datos[0]['campo'] . "='" . $datos[0]['dato'] . "';";
-        $datos = $this->db_salud->sql_string($sql);
+        $datos = $this->db->sql_string($sql);
         return $datos;
     }
 
@@ -263,7 +263,7 @@ class ficha_MedicaM
         FROM pacientes
         WHERE sa_pac_id_comunidad = $sa_pac_id_comunidad AND sa_pac_tabla = '$sa_pac_tabla';";
 
-        $datos = $this->db_salud->datos($sql);
+        $datos = $this->db->datos($sql);
 
         if (!empty($datos) && $datos[0]['existe_paciente_comunidad'] == 1) {
             return true;
@@ -281,7 +281,7 @@ class ficha_MedicaM
             FROM pacientes
             WHERE sa_pac_id_comunidad = $sa_pac_id_comunidad AND sa_pac_tabla = '$sa_pac_tabla';";
 
-        $datos = $this->db_salud->datos($sql);
+        $datos = $this->db->datos($sql);
 
         if (!empty($datos) && isset($datos[0]['sa_pac_id'])) {
             $datos = ['sa_pac_id' => $datos[0]['sa_pac_id'], 'sa_pac_tabla' => $datos[0]['sa_pac_tabla']];
@@ -305,7 +305,7 @@ class ficha_MedicaM
         //sin validar para que no se repitan los campos de cedula
         $sql = "EXEC SP_CREAR_PACIENTE_FICHA_MEDICA_ESTUDIANTE_14 @sa_pac_id_comunidad = ?, @sa_pac_tabla = ?";
 
-        $this->db_salud->ejecutar_procesos_almacenados($sql, $parametros);
+        $this->db->ejecutar_procesos_almacenados($sql, $parametros);
 
         $obtener_id_tabla = $this->obtener_id_tabla_paciente($sa_pac_id_comunidad, $sa_pac_tabla);
 

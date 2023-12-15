@@ -1,17 +1,17 @@
 <?php
-if (!class_exists('db_salud')) {
-    include('../db/db_salud.php');
+if (!class_exists('db')) {
+    include('../db/db.php');
 }
 /**
  * 
  */
 class paraleloM
 {
-    private $db_salud;
+    private $db;
 
     function __construct()
     {
-        $this->db_salud = new db_salud();
+        $this->db = new db();
     }
 
     function lista_paralelo($id = '')
@@ -27,7 +27,7 @@ class paraleloM
         }
 
         $sql .= " ORDER BY sa_par_id";
-        $datos = $this->db_salud->datos($sql);
+        $datos = $this->db->datos($sql);
         return $datos;
     }
 
@@ -40,7 +40,7 @@ class paraleloM
         }
 
         $sql .= " ORDER BY sa_par_id ";
-        $datos = $this->db_salud->datos($sql);
+        $datos = $this->db->datos($sql);
         return $datos;
     }
 
@@ -53,33 +53,33 @@ class paraleloM
         WHERE cp.sa_par_estado = 1 
         and CONCAT(cp.sa_par_nombre, ' ', cp.sa_par_id, ' ', cs.sa_sec_nombre, ' ', cg.sa_gra_nombre) LIKE '%" . $buscar . "%'";
 
-        $datos = $this->db_salud->datos($sql);
+        $datos = $this->db->datos($sql);
         return $datos;
     }
 
     function buscar_paralelo_CODIGO($buscar)
     {
         $sql = "SELECT sa_par_id, sa_par_nombre, sa_par_estado FROM cat_paralelo WHERE sa_par_id = '" . $buscar . "'";
-        $datos = $this->db_salud->datos($sql);
+        $datos = $this->db->datos($sql);
         return $datos;
     }
 
     function insertar($datos)
     {
-        $rest = $this->db_salud->inserts('cat_paralelo', $datos);
+        $rest = $this->db->inserts('cat_paralelo', $datos);
         return $rest;
     }
 
     function editar($datos, $where)
     {
-        $rest = $this->db_salud->update('cat_paralelo', $datos, $where);
+        $rest = $this->db->update('cat_paralelo', $datos, $where);
         return $rest;
     }
 
     function eliminar($datos)
     {
         $sql = "UPDATE cat_paralelo SET sa_par_estado = 0 WHERE " . $datos[0]['campo'] . "='" . $datos[0]['dato'] . "';";
-        $datos = $this->db_salud->sql_string($sql);
+        $datos = $this->db->sql_string($sql);
         return $datos;
     }
 
@@ -98,7 +98,7 @@ class paraleloM
                 WHERE cg.sa_gra_estado = 1
                 AND cs.sa_sec_id = " . $buscar;
 
-        $datos = $this->db_salud->datos($sql);
+        $datos = $this->db->datos($sql);
         return $datos;
     }
 
@@ -111,7 +111,7 @@ class paraleloM
                 WHERE cp.sa_par_estado = 1
                 AND cg.sa_gra_id = " . $buscar;
 
-        $datos = $this->db_salud->datos($sql);
+        $datos = $this->db->datos($sql);
         return $datos;
     }
 }

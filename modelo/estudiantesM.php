@@ -1,17 +1,17 @@
 <?php
-if (!class_exists('db_salud')) {
-    include('../db/db_salud.php');
+if (!class_exists('db')) {
+    include('../db/db.php');
 }
 /**
  * 
  */
 class estudiantesM
 {
-    private $db_salud;
+    private $db;
 
     function __construct()
     {
-        $this->db_salud = new db_salud();
+        $this->db = new db();
     }
     
     //Para mostrar todos los registros con campos especificos para la vista principal
@@ -47,7 +47,7 @@ class estudiantesM
                     WHERE est.sa_est_estado = 1";
 
         $sql .= " ORDER BY sa_est_id;";
-        $datos = $this->db_salud->datos($sql);
+        $datos = $this->db->datos($sql);
         return $datos;
     }
 
@@ -92,7 +92,7 @@ class estudiantesM
         }
 
         $sql .= " ORDER BY sa_est_id;";
-        $datos = $this->db_salud->datos($sql);
+        $datos = $this->db->datos($sql);
         return $datos;
     }
 
@@ -137,33 +137,33 @@ class estudiantesM
                        cg.sa_gra_nombre, ' ', 
                        pr.sa_par_nombre) LIKE '%" . $buscar . "%'";
 
-        $datos = $this->db_salud->datos($sql);
+        $datos = $this->db->datos($sql);
         return $datos;
     }
 
     function buscar_estudiantes_CEDULA($buscar)
     {
         $sql = "SELECT sa_est_id, sa_est_cedula, sa_est_primer_apellido, sa_est_primer_nombre FROM estudiantes WHERE sa_est_cedula = '" . $buscar . "'";
-        $datos = $this->db_salud->datos($sql);
+        $datos = $this->db->datos($sql);
         return $datos;
     }
 
     function insertar($datos)
     {
-        $rest = $this->db_salud->inserts('estudiantes', $datos);
+        $rest = $this->db->inserts('estudiantes', $datos);
         return $rest;
     }
 
     function editar($datos, $where)
     {
-        $rest = $this->db_salud->update('estudiantes', $datos, $where);
+        $rest = $this->db->update('estudiantes', $datos, $where);
         return $rest;
     }
 
     function eliminar($datos)
     {
         $sql = "UPDATE estudiantes SET sa_est_estado = 0 WHERE " . $datos[0]['campo'] . "='" . $datos[0]['dato'] . "';";
-        $datos = $this->db_salud->sql_string($sql);
+        $datos = $this->db->sql_string($sql);
         return $datos;
     }
 
@@ -204,7 +204,7 @@ class estudiantesM
                     WHERE est.sa_est_estado = 1";
             $sql .= ' and est.sa_id_representante = ' . $id;
             $sql .= " ORDER BY sa_est_id;";
-            $datos = $this->db_salud->datos($sql);
+            $datos = $this->db->datos($sql);
         } else {
             $datos = 'Falta ID Respresentante';
         }
