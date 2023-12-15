@@ -1,4 +1,3 @@
-<?php include('./header.php'); ?>
 <script type="text/javascript">
  $( document ).ready(function() {
   
@@ -40,6 +39,7 @@
             <div class="card">
               <div class="card-body">
                 <br>
+                <h1>Hola mundo</h1>
                
               </div>
             </div>
@@ -49,4 +49,3 @@
       </div>
     </div>
 
-<?php include('./footer.php'); ?>

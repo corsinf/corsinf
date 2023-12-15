@@ -7,6 +7,7 @@ date_default_timezone_set('America/Guayaquil');
 /**
  * 
  */
+
 $controlador = new cargar_datosC();
 if(isset($_GET['subir_archivo_server']))
 {
