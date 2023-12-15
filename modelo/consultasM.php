@@ -99,8 +99,11 @@ class consultasM
         }
 
         $sql .= " ORDER BY sa_conp_id";
+<<<<<<< HEAD
 
         // print_r($sql);die();
+=======
+>>>>>>> f975ff57302e9fcddee9c8879ae90e7325aab8d1
         $datos = $this->db_salud->datos($sql);
         return $datos;
     }

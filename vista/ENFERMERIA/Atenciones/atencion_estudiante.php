@@ -41,7 +41,11 @@
                                 '<h5 class="mb-0 mt-5">'+item.sa_conp_nombres+'</h5>'+
                                 '<p class="mb-3">'+item.sa_conp_tipo_consulta+'</p>'+                                
                                 '<div class="d-grid"> '+
+<<<<<<< HEAD
                                     '<a class="btn btn-outline-success radius-15" href="<?= $url_general ?>/vista/inicio.php?mod=7&acc=registrar_consulta_estudiante&id_ficha=' + item.sa_conp_id + '&id_estudiante=' +item.sa_fice_id + '&id_representante=' +item.sa_id_representante+ '&ver=0">Comenzar consulta</a>'+
+=======
+                                    '<a class="btn btn-outline-success radius-15" href="<?= $url_general ?>/vista/inicio.php?mod=7&acc=registrar_consulta_estudiante&id_ficha=' + item.sa_conp_id + '&id_estudiante=' +item.sa_fice_id + '&id_representante=' +item.sa_id_representante+ '&id_consulta=2&ver=0">Comenzar consulta</a>'+
+>>>>>>> f975ff57302e9fcddee9c8879ae90e7325aab8d1
                                     '<button class="btn btn-outline-primary radius-15" onclick="consultar_datos_h('+item.sa_fice_id+')">Historial</button>'+
                                 '</div>'+
                             '</div>'+
@@ -84,7 +88,11 @@
             '<td>' + obtener_hora_formateada(item.sa_conp_desde_hora.date) + ' / ' + obtener_hora_formateada(item.sa_conp_hasta_hora.date) + '</td>' +
             '<td><u>' + item.sa_conp_nombres + '</u></td>' +
             '<td>' + item.sa_conp_tipo_consulta + '</td>' +
+<<<<<<< HEAD
              '<td><a class="btn btn-primary btn-sm" target="_blank"  title="Enviar Mensaje" href="<?= $url_general ?>/vista/inicio.php?mod=7&acc=registrar_consulta_estudiante&id_ficha=' + item.sa_conp_id + '&id_estudiante=' +item.sa_fice_id + '&id_representante=' +item.sa_id_representante+ '&id_consulta=' + item.sa_conp_id + '&ver=1">' + '<i class="bx bx-show-alt"></i>' + '</a></td>' +
+=======
+             '<td><a class="btn btn-primary btn-sm" target="_blank"  title="Enviar Mensaje" href="<?= $url_general ?>/vista/inicio.php?mod=7&acc=registrar_consulta_estudiante&id_ficha=' + item.sa_conp_id + '&id_estudiante=' +item.sa_fice_id + '&id_representante=' +item.sa_id_representante+ '&id_consulta=2&ver=1">' + '<i class="bx bx-show-alt"></i>' + '</a></td>' +
+>>>>>>> f975ff57302e9fcddee9c8879ae90e7325aab8d1
             '</tr>';
 
           cont++;

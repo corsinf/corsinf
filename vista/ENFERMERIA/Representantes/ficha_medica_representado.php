@@ -9,12 +9,24 @@ if (isset($_GET['id_estudiante'])) {
 
 ?>
 
+<<<<<<< HEAD
+=======
+
+<script src="<?= $url_general ?>/js/ENFERMERIA/ficha_medica.js"></script>
+<script src="<?= $url_general ?>/js/ENFERMERIA/operaciones_generales.js"></script>
+
+
+>>>>>>> f975ff57302e9fcddee9c8879ae90e7325aab8d1
 <script type="text/javascript">
     $(document).ready(function() {
         var id = '<?php echo $_SESSION['INICIO']['ID_USUARIO']; ?>';
         //console.log(id);
         var id_estudiante = '<?php echo $id_estudiante; ?>';
+<<<<<<< HEAD
         
+=======
+
+>>>>>>> f975ff57302e9fcddee9c8879ae90e7325aab8d1
         //alert(id_representante);
 
         if (id_estudiante != '') {
@@ -26,6 +38,7 @@ if (isset($_GET['id_estudiante'])) {
 
         }
 
+<<<<<<< HEAD
 
         //Opciones para las preguntas de la ficha tecnica////////////////////////////////////////////////
 
@@ -75,6 +88,10 @@ if (isset($_GET['id_estudiante'])) {
         });
 
         //////////////////////////////////////////////////
+=======
+        preguntas_ficha_medica();
+
+>>>>>>> f975ff57302e9fcddee9c8879ae90e7325aab8d1
     });
 
     //Para el detalle principal
@@ -104,7 +121,11 @@ if (isset($_GET['id_estudiante'])) {
 
                 $('#txt_sexo').html(sexo_estudiante);
                 $('#txt_fecha_nacimiento').html(fecha_nacimiento_formateada(response[0].sa_est_fecha_nacimiento.date));
+<<<<<<< HEAD
                 $('#txt_edad').html(edad_fecha_nacimiento(response[0].sa_est_fecha_nacimiento.date) + ' años');
+=======
+                $('#txt_edad').html(calcular_edad_fecha_nacimiento(response[0].sa_est_fecha_nacimiento.date) + ' años');
+>>>>>>> f975ff57302e9fcddee9c8879ae90e7325aab8d1
                 $('#txt_email').html(response[0].sa_est_correo + " <i class='bx bx-envelope'></i>");
 
                 curso = response[0].sa_sec_nombre + '/' + response[0].sa_gra_nombre + '/' + response[0].sa_par_nombre;
@@ -117,6 +138,7 @@ if (isset($_GET['id_estudiante'])) {
             }
         });
     }
+<<<<<<< HEAD
 
     function edad_fecha_nacimiento(fecha_nacimiento) {
         const fechaNacimientoJson = fecha_nacimiento;
@@ -156,6 +178,9 @@ if (isset($_GET['id_estudiante'])) {
         return salida;
     }
 
+=======
+    
+>>>>>>> f975ff57302e9fcddee9c8879ae90e7325aab8d1
     // Ficha Tecnica  ---------------------------------------------------------------- 
 
     function datos_col_estudiante(id_estudiante) {
@@ -178,7 +203,11 @@ if (isset($_GET['id_estudiante'])) {
                 //Fecha de nacimiento
 
                 $('#sa_fice_est_fecha_nacimiento').val(fecha_nacimiento_formateada(response[0].sa_est_fecha_nacimiento.date));
+<<<<<<< HEAD
                 $('#sa_fice_est_edad').val(edad_fecha_nacimiento(response[0].sa_est_fecha_nacimiento.date));
+=======
+                $('#sa_fice_est_edad').val(calcular_edad_fecha_nacimiento(response[0].sa_est_fecha_nacimiento.date));
+>>>>>>> f975ff57302e9fcddee9c8879ae90e7325aab8d1
                 ///////////////////////////////////////////////////////////////////////////////////////////
 
                 datos_col_representante(response[0].sa_id_representante);

@@ -97,22 +97,38 @@ if ($_GET['acc'] == 'reporte_detalle') {
 }
 
 //EMPRESA
-if ($_GET['acc'] == 'usuarios') {
-	include('EMPRESA/usuarios.php');
-}
-if ($_GET['acc'] == 'tipo_usuario') {
-	include('EMPRESA/tipo_usuario.php');
-}
-if ($_GET['acc'] == 'modulos_paginas') {
-	include('EMPRESA/modulos_paginas.php');
-}
-if ($_GET['acc'] == 'vinculacion') {
-	include('EMPRESA/vinculacion.php');
-}
-if ($_GET['acc'] == 'detalle_usuario') {
-	include('EMPRESA/detalle_usuario.php');
-}
-
+	if($_GET['acc']=='usuarios')
+	{
+		include('EMPRESA/usuarios.php');
+	}
+	if($_GET['acc']=='usuarios_perfil')
+	{
+		include('EMPRESA/usuarios_perfil.php');
+	}
+	if($_GET['acc']=='tipo_usuario')
+	{
+		include('EMPRESA/tipo_usuario.php');
+	}
+	if($_GET['acc']=='modulos_paginas')
+	{
+		include('EMPRESA/modulos_paginas.php');
+	}
+	if($_GET['acc']=='licencias')
+	{
+		include('EMPRESA/licencias.php');
+	}
+	if($_GET['acc']=='mis_licencias')
+	{
+		include('EMPRESA/mis_licencias.php');
+	}
+	if($_GET['acc']=='detalle_usuario')
+	{
+		include('EMPRESA/detalle_usuario.php');
+	}
+	if($_GET['acc']=='no_concurente')
+	{
+		include('EMPRESA/no_concurente.php');
+	}
 
 //SEGUROS
 if ($_GET['acc'] == 'lista_solicitudes') {
@@ -195,6 +211,14 @@ if ($_GET['acc'] == 'registrar_ficha_estudiante') {
 	include('ENFERMERIA/Fichas_Medicas/Estudiantes/registrar_ficha_estudiante.php');
 }
 
+<<<<<<< HEAD
+=======
+//Posiblemente las de arriba se eliminan
+if ($_GET['acc'] == 'ficha_medica_pacientes') {
+	include('ENFERMERIA/Fichas_Medicas/ficha_medica_pacientes.php');
+}
+
+>>>>>>> f975ff57302e9fcddee9c8879ae90e7325aab8d1
 //Cursos
 if ($_GET['acc'] == 'parametrizacion') {
 	include('ENFERMERIA/cursos/parametrizacion.php');
@@ -246,6 +270,14 @@ if ($_GET['acc'] == 'medicamentos') {
 	include('ENFERMERIA/Medicamentos/medicamentos.php');
 }
 
+<<<<<<< HEAD
+=======
+//Pacientes
+if ($_GET['acc'] == 'pacientes') {
+	include('ENFERMERIA/Pacientes/pacientes.php');
+}
+
+>>>>>>> f975ff57302e9fcddee9c8879ae90e7325aab8d1
 //Notificaciones
 
 if ($_GET['acc'] == 'notificaciones') {

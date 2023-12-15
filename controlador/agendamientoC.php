@@ -1,5 +1,8 @@
 <?php
+<<<<<<< HEAD
 date_default_timezone_set('America/Guayaquil'); 
+=======
+>>>>>>> f975ff57302e9fcddee9c8879ae90e7325aab8d1
 include('../modelo/agendamientoM.php');
 include('../modelo/estudiantesM.php');
 
@@ -85,9 +88,12 @@ class agendamientoC
         );
         return  $datos = $this->modelo->insertar('consultas',$datos);
 
+<<<<<<< HEAD
 
 
 
+=======
+>>>>>>> f975ff57302e9fcddee9c8879ae90e7325aab8d1
     	print_r($datos);die();
 
     }

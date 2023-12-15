@@ -4,10 +4,10 @@ if(!class_exists('db'))
 {
  include('../db/db.php');
 }
-   if(!class_exists('codigos_globales'))
-   {
-   	include('../db/codigos_globales.php');
-   }
+if(!class_exists('codigos_globales'))
+{
+	include('../db/codigos_globales.php');
+}
 /**
  * 
  */
@@ -693,6 +693,82 @@ function para_ftp($nombre,$texto)
 
     	}
     }
+
+    //--------------------------------funcion para crear por primera vez los accesos a una empresa nueva ----------------------
+   function generar_primera_vez($db_destino,$id_empresa)
+	{		
+		for ($i=1; $i < 4; $i++) {
+
+			//valida si los usuarios por default estan creados si no estan los crea
+				$sql = "SELECT * FROM ACCESOS_EMPRESA WHERE Id_Empresa = '".$id_empresa."' AND Id_Usuario = ".$i;
+				$usu = $this->db->datos($sql,1);	
+
+				if(count($usu)==0)
+				{
+					 $datos[0]['campo'] = 'Id_usuario';
+					 $datos[0]['dato']  = $i;
+					 $datos[1]['campo'] = 'Id_Empresa';
+					 $datos[1]['dato']  = $id_empresa;
+					 $this->db->inserts('ACCESOS_EMPRESA',$datos,1);		
+				}
+
+			//validar los tipos de usuario con la empresa
+				$sql = "SELECT * FROM TIPO_USUARIO_EMPRESA WHERE id_tipo_usuario = '".$i."' AND id_empresa = '".$id_empresa."'"; 
+				$tipo = $this->db->datos($sql,1);	
+
+				if(count($tipo)==0)
+				{
+					 $datos[0]['campo'] = 'id_empresa';
+					 $datos[0]['dato']  = $id_empresa;
+					 $datos[1]['campo'] = 'id_tipo_usuario';
+					 $datos[1]['dato']  = $i;
+					 $this->db->inserts('TIPO_USUARIO_EMPRESA',$datos,1);		
+				} 		
+			
+			//valida si los perfiles de los usuarios por default estan sino los crea 
+				$sql = "SELECT * FROM USUARIO_TIPO_USUARIO WHERE ID_USUARIO = ".$i." AND ID_TIPO_USUARIO = ".$i." AND ID_EMPRESA = '".$id_empresa."'"; 
+				$usu = $this->db->datos($sql,1);	
+
+				if(count($usu)==0)
+				{
+					 $datos[0]['campo'] = 'ID_USUARIO';
+					 $datos[0]['dato']  = $i;
+					 $datos[1]['campo'] = 'ID_TIPO_USUARIO';
+					 $datos[1]['dato']  = $i;					 
+					 $datos[2]['campo'] = 'ID_EMPRESA';
+					 $datos[2]['dato']  = $id_empresa;
+					 $this->db->inserts('USUARIO_TIPO_USUARIO',$datos,1);		
+				} 	
+		 }
+		 $db_origen = EMPRESA_MASTER;
+		 $parametros = array(
+		    array(&$db_origen, SQLSRV_PARAM_IN),
+		    array(&$db_destino, SQLSRV_PARAM_IN),
+		    array(&$id_empresa, SQLSRV_PARAM_IN),
+		  );
+		  $sql = "EXEC CopiarEstructuraAccesos @origen_bd = ?,@destino_bd = ?,@id_empresa = ?";
+		  return $this->db->ejecutar_procesos_almacenados($sql,$parametros,false,1);
+	}
+
+
+	function Copiar_estructura($modulo)
+	{				
+		$db_destino = $_SESSION['INICIO']['BASEDATO'];
+		switch ($modulo) {
+			case '7':
+				$db_origen = BASE_SALUD;
+				break;
+			case '2':
+				$db_origen = BASE_ACTIVOS;
+				break;
+		}
+		 $parametros = array(
+		    array(&$db_origen, SQLSRV_PARAM_IN),
+		    array(&$db_destino, SQLSRV_PARAM_IN),
+		  );
+		  $sql = "EXEC EstructuraBase @origen_bd = ?,@destino_bd = ?";
+		  return $this->db->ejecutar_procesos_almacenados($sql,$parametros,false,1);
+	}
 
 }
 ?>

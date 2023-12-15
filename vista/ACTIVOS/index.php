@@ -14,8 +14,8 @@
     datos_seguros();
 
 
-    custodio_des();
-    localizacion_des();
+    // custodio_des();
+    // localizacion_des();
 
   });
 
@@ -110,42 +110,42 @@
 
 
 
-    function custodio_des()
-    {
+    // function custodio_des()
+    // {
 
-       $.ajax({
-         // data:  {parametros:parametros},
-         url:   '../controlador/vinculacionC.php?numero_custodios=true',
-         type:  'post',
-         dataType: 'json',
-           success:  function (response) {  
-            console.log(response);
-            if(response.length>0)
-            {
-              $('#lbl_custodios').text(response[0]['cant']);
-            }
-          }
-       });
-    }
+    //    $.ajax({
+    //      // data:  {parametros:parametros},
+    //      url:   '../controlador/vinculacionC.php?numero_custodios=true',
+    //      type:  'post',
+    //      dataType: 'json',
+    //        success:  function (response) {  
+    //         console.log(response);
+    //         if(response.length>0)
+    //         {
+    //           $('#lbl_custodios').text(response[0]['cant']);
+    //         }
+    //       }
+    //    });
+    // }
 
-    function localizacion_des()
-    {
+    // function localizacion_des()
+    // {
 
-       $.ajax({
-         // data:  {parametros:parametros},
-         url:   '../controlador/vinculacionC.php?numero_localizaciones=true',
-         type:  'post',
-         dataType: 'json',
-           success:  function (response) {  
-            console.log(response);
-            if(response.length>0)
-            {
-              $('#lbl_localizaciones').text(response[0]['cant']);
-            }
+    //    $.ajax({
+    //      // data:  {parametros:parametros},
+    //      url:   '../controlador/vinculacionC.php?numero_localizaciones=true',
+    //      type:  'post',
+    //      dataType: 'json',
+    //        success:  function (response) {  
+    //         console.log(response);
+    //         if(response.length>0)
+    //         {
+    //           $('#lbl_localizaciones').text(response[0]['cant']);
+    //         }
           
-          }
-       });
-    }
+    //       }
+    //    });
+    // }
 
     // function patrimoniales()
     // { 

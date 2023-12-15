@@ -3,7 +3,7 @@
 <script type="text/javascript">
 	$( document ).ready(function() {
     lista_usuario();
-    lista_usuario_ina();
+    //lista_usuario_ina();
     autocoplet_tipo();
   });
 
@@ -130,7 +130,7 @@
            {
             $('#nuevo_tipo_usuario').modal('hide');
             lista_usuario();
-            lista_usuario_ina();
+            //lista_usuario_ina();
 
             if(id!='')
             {
@@ -241,7 +241,7 @@
            {
             Swal.fire('','Registro eliminado.','success');
             lista_usuario();
-            lista_usuario_ina();
+            //lista_usuario_ina();
            } else if(response == -2)
            {
            	Swal.fire({
@@ -298,7 +298,7 @@
            	if (response==1) 
            	{
             lista_usuario();
-            lista_usuario_ina();
+            //lista_usuario_ina();
            		Swal.fire('El usuario  se a inhabilitado!', 'El usuario no podra ingresar al sistema', 'success');
 
            	}else
@@ -327,7 +327,7 @@
            	{
             Swal.fire('','Registro habilitado.','success');
             lista_usuario();
-            lista_usuario_ina();
+            //lista_usuario_ina();
            	}else
            	{
            		Swal.fire('', 'UPs aparecio un problema', 'success');
@@ -365,14 +365,14 @@
                 <div class="row">
                   <div class="col-sm-12 col-md-6">
                     <div class="dt-buttons btn-group"> 
-                      <a class="btn btn-outline-secondary buttons-copy buttons-html5 " href="inicio.php?acc=detalle_usuario">Nuevo</a>     
+                      <a class="btn btn-outline-primary buttons-copy btn-sm" href="inicio.php?acc=detalle_usuario">Nuevo</a>     
                       <!-- <button class="btn btn-outline-secondary buttons-copy buttons-html5" tabindex="0" aria-controls="example2" type="button"><span>Copy</span></button>  -->
                       
                     </div>
                   </div>
                   <div class="col-sm-12 col-md-6">
-                    <div class="row mb-3 dataTables_filter">
-                      <div class="col-sm-3">
+                    <div class="row mb-3">
+                      <div class="col-sm-3 text-end">
                         <h6 class="mb-0">Buscar</h6>
                       </div>
                       <div class="col-sm-9 text-secondary">

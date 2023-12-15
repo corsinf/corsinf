@@ -35,7 +35,10 @@ if (isset($_GET['id_consulta'])) {
 
         //Para cargar el id de la ficha del estudiante al momento de insertar
         $('#sa_conp_id').val(id_ficha);
+<<<<<<< HEAD
         $('#sa_fice_id').val(id_estudiante);
+=======
+>>>>>>> f975ff57302e9fcddee9c8879ae90e7325aab8d1
 
         if (id_estudiante != '') {
             datos_col_estudiante(id_estudiante);
@@ -77,8 +80,11 @@ if (isset($_GET['id_consulta'])) {
                 opcion_Salida();
             }
         });
+<<<<<<< HEAD
 
         opcion_Consulta();
+=======
+>>>>>>> f975ff57302e9fcddee9c8879ae90e7325aab8d1
     });
 
     //Funciones para la calga del formulario para mostrar pestañas con el radio buton

@@ -24,7 +24,7 @@ class tipo_usuarioM
 	
 	function guardar($datos,$tabla)
 	{
-		$datos = $this->db->inserts($tabla,$datos);
+		$datos = $this->db->inserts($tabla,$datos,1);
 		if($datos==1)
 		{
 			return 1;
@@ -36,7 +36,7 @@ class tipo_usuarioM
 	}
 	function update($tabla,$datos,$where)
 	{
-		$datos = $this->db->update($tabla,$datos,$where);
+		$datos = $this->db->update($tabla,$datos,$where,1);
 		if($datos==1)
 		{
 			return 1;
@@ -57,7 +57,37 @@ class tipo_usuarioM
 		// print_r($sql);die();
 		$datos = $this->db->datos($sql);
 		return $datos;
+	}
 
+	function lista_tipo_usuario_all($query=false,$exacto=false)
+	{
+		$sql = "SELECT ID_TIPO as 'id', DESCRIPCION as 'nombre' FROM TIPO_USUARIO WHERE 1=1 ";
+		if($query)
+		{
+			if($exacto)
+			{
+				$sql.=" AND DESCRIPCION = '".$query."'";
+
+			}else{
+				$sql.=" AND DESCRIPCION LIKE '%".$query."%'";
+			}
+		}
+		// print_r($sql);die();
+		$datos = $this->db->datos($sql,1);
+		return $datos;
+	}
+
+
+	function lista_tipo_usuario_all_empresa($query=false)
+	{
+		$sql = "SELECT ID_TIPO,TU.DESCRIPCION 
+					FROM TIPO_USUARIO_EMPRESA TUE
+					INNER JOIN TIPO_USUARIO TU ON TUE.id_tipo_usuario = TU.ID_TIPO
+					WHERE TU.DESCRIPCION  = '".$query."'";
+		
+		// print_r($sql);die();
+		$datos = $this->db->datos($sql,1);
+		return $datos;
 	}
 
 
@@ -78,15 +108,40 @@ class tipo_usuarioM
 		}
 		$sql.=" ORDER BY nombre_modulo ASC";
 		// print_r($sql);die();
-		$datos = $this->db->datos($sql);
+		$datos = $this->db->datos($sql,1);
 		return $datos ;
 	}
 
 	function modulos_sis()
 	{
-		$sql = "SELECT  * FROM MODULOS_SISTEMA WHERE estado = 'A'";
-		$datos = $this->db->datos($sql);
+		switch ($_SESSION['INICIO']['TIPO']) {
+			case 'DBA':
+				$sql = "SELECT  * FROM MODULOS_SISTEMA";
+				$datos = $this->db->datos($sql,1);
+				break;
+			case 'ADMINISTRADOR':
+			case 'ADMIN':
+			   $sql ="SELECT MS.*
+						FROM LICENCIAS L
+						INNER JOIN MODULOS_SISTEMA MS ON L.Id_Modulo = MS.id_modulos
+						WHERE Id_empresa = '".$_SESSION['INICIO']['ID_EMPRESA']."' AND L.registrado = 1";
+				$datos = $this->db->datos($sql,1);
+				break;			
+
+			default:
+				$sql = "SELECT  * FROM MODULOS_SISTEMA";
+				$datos = $this->db->datos($sql);
+
+				break;
+		}
+		
 		return $datos;
+	}
+
+	function modulos_sistema_actual($id)
+	{
+		$sql = "SELECT  * FROM MODULOS_SISTEMA WHERE id_modulos = '".$id."'";
+		return $this->db->datos($sql);
 	}
 
 	function lista_paginas($query =false,$modulo=false,$idpag=false)
@@ -104,7 +159,7 @@ class tipo_usuarioM
 		{
 			$sql.=" AND id_paginas ='".$idpag."'";
 		}
-		print_r($sql);die();
+		// print_r($sql);die();
 		$datos = $this->db->datos($sql);
 		return $datos;
 	}
@@ -187,7 +242,7 @@ class tipo_usuarioM
 	{
 		$sql = "DELETE FROM TIPO_USUARIO WHERE ID_TIPO='".$id."'";
 		// print_r($sql);die();
-		$datos = $this->db->sql_string_cod_error($sql);
+		$datos = $this->db->sql_string_cod_error($sql,1);
 		if($datos==1)
 		{
 			return 1;
@@ -216,7 +271,7 @@ class tipo_usuarioM
 		return $datos;
 	}
 
-	function paginas($query=false,$modulo=false,$menu=false)
+	function paginas($query=false,$modulo=false,$menu=false,$para_dba=false)
 	{
 		$sql = "SELECT id_paginas,nombre_pagina,detalle_pagina,estado_pagina,M.nombre_modulo,P.default_pag 
 		FROM PAGINAS P
@@ -234,9 +289,18 @@ class tipo_usuarioM
 		{
 			$sql.=" AND M.id_modulo = '".$menu."'";
 		}
+		switch ($para_dba) {
+			case '1':
+					$sql.=" AND P.para_dba = ".$para_dba." ";
+				break;
+			case '2':
+					$sql.=" AND P.para_dba = 0 ";
+				break;			
+		}
+	
 
 		// print_r($sql);die();
-		$datos = $this->db->datos($sql);
+		$datos = $this->db->datos($sql,1);
 		return $datos;
 
 	}
@@ -249,7 +313,7 @@ class tipo_usuarioM
 		AND id_tipo_usu = '".$per."'"; 
 
 		// print_r($sql);die();
-		$datos = $this->db->datos($sql);
+		$datos = $this->db->datos($sql,1);
 		return $datos;
 	}
 

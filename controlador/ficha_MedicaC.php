@@ -19,8 +19,31 @@ if (isset($_GET['eliminar'])) {
     echo json_encode($controlador->eliminar($_POST['id']));
 }
 
+<<<<<<< HEAD
 if (isset($_GET['listar_solo_ficha'])) {
     echo json_encode($controlador->lista_solo_ficha_medica($_POST['id']));
+=======
+//posiblemnte ya no sirve
+if (isset($_GET['listar_paciente_ficha'])) {
+    echo json_encode($controlador->lista_solo_ficha_medica($_POST['sa_pac_id']));
+}
+
+//Para crear automaticamente paciente y ficha medica
+if (isset($_GET['administrar_comunidad_ficha_medica'])) {
+
+    $sa_pac_id_comunidad = '';
+    $sa_pac_tabla = '';
+
+    if (isset($_POST['sa_pac_id_comunidad'])) {
+        $sa_pac_id_comunidad = $_POST['sa_pac_id_comunidad'];
+    }
+
+    if (isset($_POST['sa_pac_tabla'])) {
+        $sa_pac_tabla = $_POST['sa_pac_tabla'];
+    }
+
+    echo json_encode($controlador->crear_paciente_ficha_medica($sa_pac_id_comunidad, $sa_pac_tabla));
+>>>>>>> f975ff57302e9fcddee9c8879ae90e7325aab8d1
 }
 
 //print_r($controlador->lista_ficha_medica(''));
@@ -53,7 +76,11 @@ class ficha_MedicaC
 
     function lista_solo_ficha_medica($id)
     {
+<<<<<<< HEAD
         $datos = $this->modelo->lista_solo_ficha_medica($id);
+=======
+        $datos = $this->modelo->lista_paciente_ficha_medica($id);
+>>>>>>> f975ff57302e9fcddee9c8879ae90e7325aab8d1
         return $datos;
     }
 
@@ -65,6 +92,7 @@ class ficha_MedicaC
 
     function insertar_editar($parametros)
     {
+<<<<<<< HEAD
         $datos1[0]['campo'] = 'sa_fice_id';
         $datos1[0]['dato'] = ($parametros['sa_fice_id']);
 
@@ -80,6 +108,14 @@ class ficha_MedicaC
             array('campo' => 'sa_fice_est_seguro_medico', 'dato' => $parametros['sa_fice_est_seguro_medico']),
             array('campo' => 'sa_fice_est_nombre_seguro', 'dato' => $parametros['sa_fice_est_nombre_seguro']),
             array('campo' => 'sa_fice_rep_1_id', 'dato' => strval($parametros['sa_fice_rep_1_id'])),
+=======
+
+        $datos = array(
+            array('campo' => 'sa_fice_pac_id', 'dato' => $parametros['sa_fice_pac_id']),
+            array('campo' => 'sa_fice_pac_grupo_sangre', 'dato' => $parametros['sa_fice_pac_grupo_sangre']),
+            array('campo' => 'sa_fice_pac_direccion_domicilio', 'dato' => $parametros['sa_fice_pac_direccion_domicilio']),
+            array('campo' => 'sa_fice_pac_seguro_medico', 'dato' => $parametros['sa_fice_pac_seguro_medico']),
+>>>>>>> f975ff57302e9fcddee9c8879ae90e7325aab8d1
             array('campo' => 'sa_fice_rep_1_primer_apellido', 'dato' => $parametros['sa_fice_rep_1_primer_apellido']),
             array('campo' => 'sa_fice_rep_1_segundo_apellido', 'dato' => $parametros['sa_fice_rep_1_segundo_apellido']),
             array('campo' => 'sa_fice_rep_1_primer_nombre', 'dato' => $parametros['sa_fice_rep_1_primer_nombre']),
@@ -103,6 +139,7 @@ class ficha_MedicaC
             array('campo' => 'sa_fice_pregunta_4', 'dato' => $parametros['sa_fice_pregunta_4']),
             array('campo' => 'sa_fice_pregunta_4_obs', 'dato' => $parametros['sa_fice_pregunta_4_obs']),
             array('campo' => 'sa_fice_pregunta_5_obs', 'dato' => $parametros['sa_fice_pregunta_5_obs']),
+<<<<<<< HEAD
         );
 
         if ($parametros['sa_fice_id'] == '') {
@@ -111,6 +148,14 @@ class ficha_MedicaC
             } else {
                 return -2;
             }
+=======
+            //Este campo es para que valide que ya esta hecha la ficha medica
+            array('campo' => 'sa_fice_estado_realizado', 'dato' => 1),
+        );
+
+        if ($parametros['sa_fice_id'] == '') {
+            return -2;
+>>>>>>> f975ff57302e9fcddee9c8879ae90e7325aab8d1
         } else {
             $where[0]['campo'] = 'sa_fice_id';
             $where[0]['dato'] = $parametros['sa_fice_id'];
@@ -142,4 +187,31 @@ class ficha_MedicaC
         $datos = $this->modelo->eliminar($datos);
         return $datos;
     }
+<<<<<<< HEAD
+=======
+
+    //Para crear la ficha medica
+    function crear_paciente_ficha_medica($sa_pac_id_comunidad, $sa_pac_tabla)
+    {
+        /*$existe_paciente_comunidad = $this->modelo->existe_paciente_comunidad($sa_pac_id_comunidad, $sa_pac_tabla);
+        $existe_paciente_comunidad = $existe_paciente_comunidad[0]['existe_paciente_comunidad'];
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        //Variable para retornar el id del paciente
+        $variable_paciente = 1;
+
+        $salida = '';
+        if ($existe_paciente_comunidad == 1) {
+            $salida = 'valor del paciente';
+        } else if ($existe_paciente_comunidad == 0) {
+            $salida = $this->modelo->crear_paciente_ficha_medica($sa_pac_id_comunidad, $sa_pac_tabla);
+        }
+
+        return $salida;*/
+
+        //echo $sa_pac_id_comunidad . ' ' . $sa_pac_tabla;
+
+        return $this->modelo->gestion_comunidad_ficha_medica($sa_pac_id_comunidad, $sa_pac_tabla);
+    }
+>>>>>>> f975ff57302e9fcddee9c8879ae90e7325aab8d1
 }

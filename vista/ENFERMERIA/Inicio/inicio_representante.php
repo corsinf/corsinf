@@ -1,3 +1,8 @@
+<<<<<<< HEAD
+=======
+<script src="<?= $url_general ?>/js/ENFERMERIA/pacientes.js"></script>
+
+>>>>>>> f975ff57302e9fcddee9c8879ae90e7325aab8d1
 <script type="text/javascript">
     $(document).ready(function() {
         var id = '<?php echo $_SESSION['INICIO']['ID_USUARIO']; ?>';
@@ -7,15 +12,23 @@
         }
 
         //Esta consultando unos datos por defecto
+<<<<<<< HEAD
         consultar_datos_estudiante_representante(1004);
+=======
+        consultar_datos_estudiante_representante(3);
+>>>>>>> f975ff57302e9fcddee9c8879ae90e7325aab8d1
 
         //consultar_datos(6);
     });
 
     function cargarDatos(id) {
+<<<<<<< HEAD
         // $('#nuevo_tipo_usuario').modal('show');
         // $('#btn_opcion').text('Editar');
         // $('#exampleModalLongTitle').text('Editar tipo de usuario');
+=======
+
+>>>>>>> f975ff57302e9fcddee9c8879ae90e7325aab8d1
         var noconcurente = '<?php echo $_SESSION['INICIO']['NO_CONCURENTE']; ?>';
         var parametros = {
             'id': id,
@@ -28,10 +41,14 @@
             url: '../controlador/usuariosC.php?datos_usuarios=true',
             type: 'post',
             dataType: 'json',
+<<<<<<< HEAD
             /*beforeSend: function () {   
                  var spiner = '<div class="text-center"><img src="../../img/gif/proce.gif" width="100" height="100"></div>'     
                $('#tabla_').html(spiner);
             },*/
+=======
+
+>>>>>>> f975ff57302e9fcddee9c8879ae90e7325aab8d1
             success: function(response) {
                 //console.log(response);
                 $('#txt_ci').html(response[0].ci + " <i class='bx bxs-id-card'></i>");
@@ -59,6 +76,7 @@
             success: function(response) {
                 console.log(response);
                 $.each(response, function(i, item) {
+<<<<<<< HEAD
                     //console.log(item);
 
                     /*estudiantes +=
@@ -107,11 +125,19 @@
                     if (item.sa_est_sexo == 'M') {
                         sexo_estudiante = 'Masculino';
                     } else if (item.sa_est_sexo == 'F') {
+=======
+
+                    sexo_estudiante = '';
+                    if (item.sa_est_sexo == 'Masculino') {
+                        sexo_estudiante = 'Masculino';
+                    } else if (item.sa_est_sexo == 'Famenino') {
+>>>>>>> f975ff57302e9fcddee9c8879ae90e7325aab8d1
                         sexo_estudiante = 'Famenino';
                     }
 
                     curso = item.sa_sec_nombre + '/' + item.sa_gra_nombre + '/' + item.sa_par_nombre;
 
+<<<<<<< HEAD
                     estudiantes +=
                         '<div class="col">' +
                         '<div class="card radius-15">' +
@@ -127,6 +153,38 @@
 
                         '<div class="d-grid mt-3">' +
                         '<a href="<?= $url_general ?>/vista/inicio.php?mod=7&acc=ficha_medica_representado&id_estudiante=' + item.sa_est_id + '"' + 'class="btn btn-outline-primary radius-15">Detalles</a>' +
+=======
+                    alert = '<div class="alert border-0 border-start border-5 border-danger alert-dismissible fade show py-2">'+
+									'<div class="d-flex align-items-center">'+
+										'<div class="font-35 text-danger"><i class="bx bxs-message-square-x"></i>'+
+										'</div>'+
+										'<div class="ms-3">'+
+											'<h6 class="mb-0 text-danger text-start">¡Atención!</h6>'+
+											'<div class="mb-0 text-start">La ficha médica aún no esta realizada</div>'+
+										'</div>'+
+									'</div>'+
+								'</div>';
+
+
+                        
+
+                    estudiantes +=
+                        '<div class="col-12">' +
+                        '<div class="card radius-15">' +
+                        '<div class="card-body text-center">' +
+                        '<div class="p-4 border radius-15">' +
+
+                        alert +
+
+                        '<img src="<?= $url_general ?>/img/computadora.jpg" width="110" height="110" class="rounded-circle shadow" alt="">' +
+                        '<h5 class="mb-0 mt-5">' + item.sa_est_primer_apellido + ' ' + item.sa_est_segundo_apellido + ' ' + item.sa_est_primer_nombre + ' ' + item.sa_est_segundo_nombre + '</h5>' +
+                        '<p class="mb-0">' + item.sa_est_cedula + '</p>' +
+                        '<p class="mb-0">' + item.sa_est_sexo + '</p>' +
+                        '<p class="mb-3">' + curso + '</p>' +
+
+                        '<div class="d-grid mt-3">' +
+                        '<a href="#" onclick="gestion_paciente_comunidad(' + item.sa_est_id + ', \'' + item.sa_est_tabla + '\');" class="btn btn-outline-primary radius-15">Detalles</a>' +
+>>>>>>> f975ff57302e9fcddee9c8879ae90e7325aab8d1
 
                         '</div>' +
                         '</div>' +
@@ -135,12 +193,16 @@
                         '</div>';
                 });
 
+<<<<<<< HEAD
                 //$('#tbl_datos').html(estudiantes);
+=======
+>>>>>>> f975ff57302e9fcddee9c8879ae90e7325aab8d1
                 $('#card_estudiantes').html(estudiantes);
 
             }
         });
     }
+<<<<<<< HEAD
 
 
 
@@ -182,6 +244,8 @@
         return salida;
 
     }
+=======
+>>>>>>> f975ff57302e9fcddee9c8879ae90e7325aab8d1
 </script>
 
 <div class="page-wrapper">
@@ -273,6 +337,26 @@
                                             </table>
                                         </div>
                                     </div>
+<<<<<<< HEAD
+=======
+
+                                    <hr>
+                                    <form action="<?php echo $url_general ?>/controlador/ficha_MedicaC.php?administrar_comunidad_ficha_medica=true" method="post">
+                                        <input type="text" name="sa_pac_id_comunidad" id="">
+                                        <select name="sa_pac_tabla" id="">
+                                            <option value="estudiantes">estudiantes</option>
+                                            <option value="docentes">docentes</option>
+                                            <option value="representantes">representantes</option>
+                                            <option value="administrativos">administrativos</option>
+                                            <option value="comunidad">comunidad</option>
+                                        </select>
+                                        <input type="submit" value="Enviar">
+                                    </form>
+
+
+
+
+>>>>>>> f975ff57302e9fcddee9c8879ae90e7325aab8d1
                                 </div>
                             </div>
                             <div class="tab-pane fade" id="estudiantes" role="tabpanel">
@@ -288,7 +372,11 @@
                                     </div>
                                 </div>
 
+<<<<<<< HEAD
                                 <div class="row row-cols-1 row-cols-lg-2 row-cols-xl-4" id="card_estudiantes">
+=======
+                                <div class="row row-cols-1 row-cols-lg-2 row-cols-xl-3" id="card_estudiantes">
+>>>>>>> f975ff57302e9fcddee9c8879ae90e7325aab8d1
 
                                 </div>
                             </div>
@@ -297,7 +385,10 @@
                 </div>
             </div>
         </div>
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> f975ff57302e9fcddee9c8879ae90e7325aab8d1
     </div>
 </div>

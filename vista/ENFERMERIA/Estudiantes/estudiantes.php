@@ -1,8 +1,45 @@
+<<<<<<< HEAD
+=======
+<script src="<?= $url_general ?>/js/ENFERMERIA/operaciones_generales.js"></script>
+
+>>>>>>> f975ff57302e9fcddee9c8879ae90e7325aab8d1
 <script type="text/javascript">
     $(document).ready(function() {
-        consultar_datos();
+        $('#tabla_estudiante').DataTable({
+            language: {
+                url: 'https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
+            },
+            responsive: true,
+            ajax: {
+                url: '<?php echo $url_general ?>/controlador/estudiantesC.php?listar_todo=true',
+                dataSrc: ''
+            },
+            columns: [{
+                    data: 'sa_est_cedula'
+                },
+                {
+                    data: null,
+                    render: function(data, type, item) {
+                        return '<a href="#" onclick="enviar_ID_estudiante(' + item.sa_est_id + ', ' + item.sa_id_seccion + ', ' + item.sa_id_grado + ', ' + item.sa_id_paralelo + ', ' + item.sa_id_representante +')"><u>' + item.sa_est_primer_apellido + ' ' + item.sa_est_segundo_apellido + ' ' + item.sa_est_primer_nombre + ' ' + item.sa_est_segundo_nombre + '</u></a>';
+                    }
+                },
+                {
+                    data: null,
+                    render: function(data, type, item) {
+                        return item.sa_sec_nombre + ' / ' + item.sa_gra_nombre + ' / ' + item.sa_par_nombre;
+                    }
+                },
+                {
+                    data: null,
+                    render: function(data, type, item) {
+                        return calcular_edad_fecha_nacimiento(item.sa_est_fecha_nacimiento.date);
+                    }
+                },
+            ]
+        });
     });
 
+<<<<<<< HEAD
     function consultar_datos(id = '') {
         var estudiantes = '';
         $.ajax({
@@ -94,7 +131,28 @@
         $('#titulo').text('Nueva Sección');
         $('#op').text('Guardar');
     }
+=======
+    function enviar_ID_estudiante(id, sa_id_seccion, sa_id_grado, sa_id_paralelo, id_representante) {
+        // Actualiza el valor del campo de entrada con el ID
+        $('#sa_est_id').val(id);
+        $('#sa_sec_id').val(sa_id_seccion);
+        $('#sa_gra_id').val(sa_id_grado);
+        $('#sa_par_id').val(sa_id_paralelo);
+        $('#id_representante').val(id_representante);
+
+        // Envía el formulario por POST
+        $('#form_enviar').submit();
+    }
+>>>>>>> f975ff57302e9fcddee9c8879ae90e7325aab8d1
 </script>
+
+<form id="form_enviar" action="<?= $url_general ?>/vista/inicio.php?mod=7&acc=registrar_estudiantes" method="post" style="display: none;">
+    <input type="hidden" id="sa_est_id" name="sa_est_id">
+    <input type="hidden" id="sa_sec_id" name="sa_sec_id">
+    <input type="hidden" id="sa_gra_id" name="sa_gra_id">
+    <input type="hidden" id="sa_par_id" name="sa_par_id">
+    <input type="hidden" id="id_representante" name="id_representante">
+</form>
 
 <div class="page-wrapper">
     <div class="page-content">
@@ -121,8 +179,13 @@
         <!--end breadcrumb-->
 
         <div class="row">
+<<<<<<< HEAD
             <!-- <div class="col-12 col-lg-3">
 
+=======
+
+            <div class="col-xl-12 mx-auto">
+>>>>>>> f975ff57302e9fcddee9c8879ae90e7325aab8d1
                 <div class="card border-top border-0 border-4 border-primary">
                     <div class="card-body p-5">
                         <div class="card-title d-flex align-items-center">
@@ -152,16 +215,32 @@
                             <div><i class="bx bxs-user me-1 font-22 text-primary"></i>
                             </div>
                             <h5 class="mb-0 text-primary">Estudiantes</h5>
+
+                            <div class="row mx-1">
+                                <div class="col-sm-12" id="btn_nuevo">
+                                    <a href="<?= $url_general ?>/vista/inicio.php?mod=7&acc=registrar_estudiantes" class="btn btn-success btn-sm"><i class="bx bx-plus"></i> Nuevo</a>
+                                </div>
+                            </div>
                         </div>
+
                         <hr>
 
-                        <div class="content">
-                            <!-- Content Header (Page header) -->
-                            <br>
+                        <section class="content pt-4">
+                            <div class="container-fluid">
 
-                            <section class="content">
-                                <div class="container-fluid">
+                                <div class="table-responsive">
+                                    <table class="table table-striped responsive" id="tabla_estudiante" style="width:100%">
+                                        <thead>
+                                            <tr>
+                                                <th>Cédula</th>
+                                                <th>Nombre</th>
+                                                <th>Sección/Grado/Paralelo</th>
+                                                <th>Edad</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
 
+<<<<<<< HEAD
                                     <div class="row">
                                         <div class="col-sm-12" id="btn_nuevo">
                                             <a href="<?= $url_general ?>/vista/inicio.php?mod=7&acc=registrar_estudiantes" class="btn btn-success btn-sm"><i class="bx bx-plus"></i> Nuevo</a>
@@ -196,6 +275,13 @@
                             </section>
                             <!-- /.content -->
                         </div>
+=======
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div><!-- /.container-fluid -->
+                        </section>
+>>>>>>> f975ff57302e9fcddee9c8879ae90e7325aab8d1
                     </div>
                 </div>
             </div>

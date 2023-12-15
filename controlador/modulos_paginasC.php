@@ -31,6 +31,11 @@ if(isset($_GET['activo_paginas']))
 	$parametros = $_POST['parametros'];
 	echo json_encode($controlador->activo_pagina($parametros));
 }
+if(isset($_GET['activo_paginas_dba']))
+{
+	$parametros = $_POST['parametros'];
+	echo json_encode($controlador->activo_pagina_dba($parametros));
+}
 if(isset($_GET['defaul_paginas']))
 {
 	$parametros = $_POST['parametros'];
@@ -91,58 +96,46 @@ class modulos_paginasC
 		 	<td><select class="form-select form-select-sm" id="ddl_modulos_pag_ing'.$value['id_paginas'].'" name="ddl_modulos_pag_ing'.$value['id_paginas'].'">'.$this->opciones_tipo($value['id_modulo'],$mod_sis['modulo_sis']).'</select></td>';
 		 	if($value['default_pag']==1)
 		 	{
-		 		$tr.='<td width="15px" class="text-center"><input type="checkbox" onclick="default_pag(\''.$value['id_paginas'].'\')" name="rbl_defaul'.$value['id_paginas'].'" id="rbl_defaul'.$value['id_paginas'].'" checked></td>';
+		 		$tr.='<td width="15px" class="text-center"><input type="checkbox" title = "Default" onclick="default_pag(\''.$value['id_paginas'].'\')" name="rbl_defaul'.$value['id_paginas'].'" id="rbl_defaul'.$value['id_paginas'].'" checked></td>';
 		 	}else
 		 	{
-		 		$tr.='<td width="15px" class="text-center"><input type="checkbox" onclick="default_pag(\''.$value['id_paginas'].'\')" name="rbl_defaul'.$value['id_paginas'].'" id="rbl_defaul'.$value['id_paginas'].'"></td>';
+		 		$tr.='<td width="15px" class="text-center"><input type="checkbox"  title = "Default" onclick="default_pag(\''.$value['id_paginas'].'\')" name="rbl_defaul'.$value['id_paginas'].'" id="rbl_defaul'.$value['id_paginas'].'"></td>';
 		 	}
 		 	if($value['subpagina']==1)
 		 	{
-		 		$tr.='<td width="15px" class="text-center"><input type="checkbox" onclick="subpag(\''.$value['id_paginas'].'\')" name="rbl_subpag'.$value['id_paginas'].'" id="rbl_subpag'.$value['id_paginas'].'" checked></td>';
+		 		$tr.='<td width="15px" class="text-center"><input type="checkbox"  title = "Sub pagina" onclick="subpag(\''.$value['id_paginas'].'\')" name="rbl_subpag'.$value['id_paginas'].'" id="rbl_subpag'.$value['id_paginas'].'" checked></td>';
 		 	}else
 		 	{
-		 		$tr.='<td width="15px" class="text-center"><input type="checkbox" onclick="subpag(\''.$value['id_paginas'].'\')" name="rbl_subpag'.$value['id_paginas'].'" id="rbl_subpag'.$value['id_paginas'].'"></td>';
+		 		$tr.='<td width="15px" class="text-center"><input type="checkbox"  title = "Sub pagina" onclick="subpag(\''.$value['id_paginas'].'\')" name="rbl_subpag'.$value['id_paginas'].'" id="rbl_subpag'.$value['id_paginas'].'"></td>';
 		 	}
 
 		 	if($value['estado_pagina']=='A')
 		 	{
-		 		$tr.='<td width="15px" class="text-center"><input type="checkbox" name="rbl_activo'.$value['id_paginas'].'" id="rbl_activo'.$value['id_paginas'].'" onclick="activo_pag(\''.$value['id_paginas'].'\')"  checked></td>';
+		 		$tr.='<td width="15px" class="text-center"><input type="checkbox"  title = "Activo" name="rbl_activo'.$value['id_paginas'].'" id="rbl_activo'.$value['id_paginas'].'" onclick="activo_pag(\''.$value['id_paginas'].'\')"  checked></td>';
 		 	}else
 		 	{
-		 		$tr.='<td width="15px" class="text-center"><input type="checkbox" name="rbl_activo'.$value['id_paginas'].'" id="rbl_activo'.$value['id_paginas'].'" onclick="activo_pag(\''.$value['id_paginas'].'\')" ></td>';
+		 		$tr.='<td width="15px" class="text-center"><input type="checkbox"  title = "Activo" name="rbl_activo'.$value['id_paginas'].'" id="rbl_activo'.$value['id_paginas'].'" onclick="activo_pag(\''.$value['id_paginas'].'\')" ></td>';
+		 	}
+
+		 	if($value['para_dba']==1)
+		 	{
+		 		$tr.='<td width="15px" class="text-center"><input type="checkbox"  title = "Para dba" name="rbl_para_dba'.$value['id_paginas'].'" id="rbl_para_dba'.$value['id_paginas'].'" onclick="activo_dba(\''.$value['id_paginas'].'\')"  checked></td>';
+		 	}else
+		 	{
+		 		$tr.='<td width="15px" class="text-center"><input type="checkbox"  title = "Para dba" name="rbl_para_dba'.$value['id_paginas'].'" id="rbl_para_dba'.$value['id_paginas'].'" onclick="activo_dba(\''.$value['id_paginas'].'\')" ></td>';
 		 	}
 
 		 	$tr.='<td width="15px" class="text-center">
-		 	<i class="bx">'.$value['icono_paginas'].'</i>
-		 	 <select class="bx" id="ddl_icono_pag'.$value['id_paginas'].'" name="ddl_icono_pag'.$value['id_paginas'].'"> 
-                 	  <option class="bx"> ICONO</option>
-                      <option class="bx" value="ea75" > &#xea75;</option>
-                      <option class="bx" value="e95f" > &#xe95f;</option>
-                      <option class="bx" value="e9be" > &#xe9be;</option>
-                      <option class="bx" value="eb2b" > &#xeb2b;</option>
-                      <option class="bx" value="ea5c" > &#xea5c; </option>
-                      <option class="bx" value="eaab" > &#xeaab;</option>
-                      <option class="bx" value="e9e6" > &#xe9e6;</option>
-                      <option class="bx" value="ea1a" > &#xea1a;</option>
-                      <option class="bx" value="ea37" > &#xea37;</option>
-                      <option class="bx" value="ebbf" > &#xebbf;</option>
-                      <option class="bx" value="ea6f" > &#xea6f;</option>
-                      <option class="bx" value="ea21" > &#xea21;</option>
-                      <option class="bx" value="e9d0" > &#xe9d0;</option>
-                      <option class="bx" value="e9ba" > &#xe9ba;</option>
-                      <option class="bx" value="e91a" > &#xe91a;</option>
-                      <option class="bx" value="e919" > &#xe919;</option>
-                      <option class="bx" value="e982" > &#xe982;</option>
-                      <option class="bx" value="eb43" > &#xeb43;</option>
-                      <option class="bx" value="e9f7" > &#xe9f7;</option>
-
-              </select> 
-		 	</td>
-		      <td width="15px" class="text-center">
-		      <button class="btn btn-primary btn-sm" onclick="guardar_pagina(\''.$value['id_paginas'].'\')"><i class="bx bx-save"></i></button>
-		      	<button class="btn btn-danger btn-sm" onclick="eliminar_pagina(\''.$value['id_paginas'].'\')"><i class="bx bx-trash"></i></button>
-		      </td>
-		 	</tr>';
+			 			<div class="input-group input-group-sm mb-3"> 
+							<span class="input-group-text" id="inputGroup-sizing-sm">'.$value['icono_paginas'].'</span>
+							<input class = "form-control form-control-sm" id="ddl_icono_pag'.$value['id_paginas'].'" name="ddl_icono_pag'.$value['id_paginas'].'" value="'.str_replace('"',"'", $value['icono_paginas']).'" >
+						</div>		
+			 	</td>
+			      <td width="15px" class="text-center">
+			      <button class="btn btn-primary btn-sm" onclick="guardar_pagina(\''.$value['id_paginas'].'\')"><i class="bx bx-save"></i></button>
+			      	<button class="btn btn-danger btn-sm" onclick="eliminar_pagina(\''.$value['id_paginas'].'\')"><i class="bx bx-trash"></i></button>
+			      </td>
+			 	</tr>';
 		 }
 		 return $tr;
 	}
@@ -156,7 +149,7 @@ class modulos_paginasC
 		$datos[1]['campo']='descripcion_modulo';
 		$datos[1]['dato']=$parametros['detalle'];
 		$datos[2]['campo']='icono_modulo';
-		$datos[2]['dato']= '&#x'.$parametros['icono'].';';
+		$datos[2]['dato']= str_replace("'",'"',$parametros['icono']);
 		$datos[3]['campo']='modulos_sistema';
 		$datos[3]['dato']= $parametros['modulo_sis'];
 
@@ -164,11 +157,12 @@ class modulos_paginasC
 		$where[0]['dato'] = $parametros['id'];
 		if($parametros['id']!='')
 		{
-			return $this->modelo->update('MODULOS',$datos,$where);
+			$this->modelo->update('MODULOS',$datos,$where);
 		}else
 		{
-			return $this->modelo->guardar($datos,'MODULOS');
+			$this->modelo->guardar($datos,'MODULOS');
 		}
+		return $this->cod_global->generar_primera_vez($_SESSION['INICIO']['BASEDATO'],$_SESSION['INICIO']['ID_EMPRESA']);
 		// print_r($parametros);die();
 	}
 
@@ -187,7 +181,7 @@ class modulos_paginasC
 		$datos[1]['campo']='link_pagina';
 		$datos[1]['dato']=$parametros['url'];
 		$datos[2]['campo']='icono_paginas';
-		$datos[2]['dato']= '&#x'.$parametros['icono'].';';
+		$datos[2]['dato']= str_replace("'",'"', $parametros['icono']);
 		$datos[3]['campo']='id_modulo';
 		$datos[3]['dato']=$parametros['modulo'];
 		$datos[4]['campo']='estado_pagina';
@@ -204,22 +198,29 @@ class modulos_paginasC
 		if($parametros['id']!='')
 		{
 			// print_r($datos);die();
-			return $this->modelo->update('PAGINAS',$datos,$where);
+			$this->modelo->update('PAGINAS',$datos,$where);
 		}else
 		{
-			return $this->modelo->guardar($datos,'PAGINAS');
+			$this->modelo->guardar($datos,'PAGINAS');
 		}
+		return $this->cod_global->generar_primera_vez($_SESSION['INICIO']['BASEDATO'],$_SESSION['INICIO']['ID_EMPRESA']);
 		// print_r($parametros);die();
 	}
 
 	function eliminar_modulos($id)
 	{
-		return $this->modelo->eliminar($id);
+		$res = $this->modelo->eliminar($id);
+		if($res=='1')
+		{
+			$res =  $this->cod_global->generar_primera_vez($_SESSION['INICIO']['BASEDATO'],$_SESSION['INICIO']['ID_EMPRESA']);
+		}
+		return $res;
 	}
 
 	function eliminar_pagina($id)
 	{
-		return $this->modelo->eliminar_pagina($id);
+		$this->modelo->eliminar_pagina($id);		
+		return $this->cod_global->generar_primera_vez($_SESSION['INICIO']['BASEDATO'],$_SESSION['INICIO']['ID_EMPRESA']);
 	}
 
 	function activo_pagina($parametros)
@@ -228,6 +229,18 @@ class modulos_paginasC
 		if($parametros['op']=='true'){$activo = 'A';	}	
 		$datos[6]['campo']='estado_pagina';
 		$datos[6]['dato']=$activo;
+
+		$where[0]['campo']='id_paginas';
+		$where[0]['dato'] = $parametros['id'];
+
+		return $this->modelo->update('PAGINAS',$datos,$where);
+	}
+	function activo_pagina_dba($parametros)
+	{   
+		$activo = 0;	
+		if($parametros['op']=='true'){$activo = 1;	}	
+		$datos[1]['campo']='para_dba';
+		$datos[1]['dato']=$activo;
 
 		$where[0]['campo']='id_paginas';
 		$where[0]['dato'] = $parametros['id'];
@@ -322,7 +335,7 @@ class modulos_paginasC
 				<td>
 					<div class='input-group input-group-sm mb-3'> 
 						<span class='input-group-text' id='inputGroup-sizing-sm'>".$value['icono']."</span>
-						<input class = 'form-control form-control-sm' id='txt_icono_sis".$value['id_modulos']."' name='txt_icono_sis".$value['id_modulos']."' value='".$value['icono']."'
+						<input class = 'form-control form-control-sm' id='txt_icono_sis".$value['id_modulos']."' name='txt_icono_sis".$value['id_modulos']."' value='".$value['icono']."' >
 					</div>
 				</td>
 				<td class='text-center'>";
@@ -368,12 +381,15 @@ class modulos_paginasC
 
 			$where[0]['campo'] = 'id_modulos';
 			$where[0]['dato'] = $parametros['id'];
-			return $this->modelo->update('MODULOS_SISTEMA',$datos,$where);
+			$this->modelo->update('MODULOS_SISTEMA',$datos,$where);
+
 
 		}else
 		{
-			return $this->modelo->guardar($datos,'MODULOS_SISTEMA');
+			$this->modelo->guardar($datos,'MODULOS_SISTEMA');			
 		}
+
+		return $this->cod_global->generar_primera_vez($_SESSION['INICIO']['BASEDATO'],$_SESSION['INICIO']['ID_EMPRESA']);
 	}
 
 	function modulos_sis_ddl()

@@ -638,6 +638,8 @@ class articulosM
 				}
 
 			}
+
+			// print_r($sql);die();
 		$datos = $this->db->datos($sql);
 		return $datos;
 	}

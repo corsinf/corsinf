@@ -1,5 +1,6 @@
 <?php @session_start();
 // print_r($_SESSION['INICIO']);
+<<<<<<< HEAD
 if (!isset($_SESSION['INICIO'])) {
 	header('Location: ../login.php');
 }
@@ -13,6 +14,21 @@ if($dominio!='localhost')
 }
 
 ?>
+=======
+$tiempo_inactividad = 2 * 60;
+if(!isset($_SESSION['INICIO'])){header('Location: ../login.php');}
+// if (isset($_SESSION['INICIO']['ULTIMO_ACCESO']) && (time() - $_SESSION['INICIO']['ULTIMO_ACCESO'] > $tiempo_inactividad)) {
+//     // Cerrar la sesión
+//     session_unset();
+//     session_destroy();
+//     header('Location: ../login.php');
+//     exit();
+// }
+
+
+?> 
+
+>>>>>>> f975ff57302e9fcddee9c8879ae90e7325aab8d1
 <!doctype html>
 <html lang="en">
 
@@ -47,17 +63,30 @@ if($dominio!='localhost')
 	<link href="../assets/css/icons.css" rel="stylesheet">
 	<!-- Theme Style CSS -->
 
+
+	<link rel="stylesheet" href="../css/jquery-ui.css">
 	<link rel="stylesheet" href="../assets/plugins/summernote/summernote-lite.css">
 	<!-- <link rel="stylesheet" href="../assets/plugins/summernote/css/styles_summernote.css"> -->
 	<link rel="stylesheet" href="../assets/plugins/summernote/summernote-bs5.min.css">
 	<!-- <link rel="stylesheet" href="../assets/plugins/summernote/css/font-awesome.min.css"> -->
 
+<<<<<<< HEAD
 	<script src="../js/informes_globales.js"></script>
 	<script src="../js/codigos_globales.js"></script>
 	<script src="../js/sweetalert2.all.min.js"></script>
 	<script src="../js/notificaciones_seguros.js"></script>
 
 	<script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+=======
+  <script src="../js/informes_globales.js"></script>  
+  <script src="../js/jquery-3.6.0.js"></script>
+  <script src="../js/jquery-ui.js"></script>
+  <script src="../js/codigos_globales.js"></script>
+  <script src="../js/sweetalert2.all.min.js"></script>
+  <script src="../js/notificaciones_seguros.js"></script>
+
+  <!-- <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script> -->
+>>>>>>> f975ff57302e9fcddee9c8879ae90e7325aab8d1
 
 	<style>
 		.input-group>.select2-container--bootstrap {
@@ -646,9 +675,16 @@ if($dominio!='localhost')
 						<ul class="dropdown-menu dropdown-menu-end">
 							<li><a class="dropdown-item" href="inicio.php?acc=perfil"><i class="bx bx-user"></i><span>Perfil</span></a>
 							</li>
+<<<<<<< HEAD
 							<?php if ($_SESSION['INICIO']['TIPO'] == 'DBA') { ?>
 								<li><a class="dropdown-item" href="javascript:;" onclick="cambiar_configuraciones()"><i class="bx bx-cog"></i><span>Configuraciones</span></a>
 								</li>
+=======
+							<?php if($_SESSION['INICIO']['TIPO']=='DBA' || $_SESSION['INICIO']['TIPO']=='ADMINISTRADOR' || $_SESSION['INICIO']['TIPO']=='ADMIN'  ){ ?>
+							<li><a class="dropdown-item" href="javascript:;" onclick="cambiar_configuraciones()"><i class="bx bx-cog"></i><span>Configuraciones</span></a>
+							</li>
+
+>>>>>>> f975ff57302e9fcddee9c8879ae90e7325aab8d1
 							<?php } ?>
 							<li><a class="dropdown-item" href="javascript:;"><i class='bx bx-home-circle'></i><span>Dashboard</span></a>
 							</li>

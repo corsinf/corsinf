@@ -33,6 +33,11 @@ if(isset($_GET['lista_usuarios_ddl']))
 	$parametros = array('id'=>'','query'=>isset($_GET['q']));
 	echo json_encode($controlador->ddl_usuarios($parametros));
 }
+if(isset($_GET['usuarios_all_autocompletado']))
+{
+	$parametros = array('query'=>$_POST['search']);
+	echo json_encode($controlador->usuarios_all_autocompletado($parametros));
+}
 if(isset($_GET['lista_usuarios_ina']))
 {
 	$parametros = $_POST['parametros'];
@@ -43,6 +48,11 @@ if(isset($_GET['datos_usuarios']))
 {
 	$parametros = $_POST['parametros'];
 	echo json_encode($controlador->usuario_datos($parametros));
+}
+if(isset($_GET['validar_registro']))
+{
+	$parametros = $_POST['parametros'];
+	echo json_encode($controlador->validar_registro($parametros));
 }
 
 if(isset($_GET['guardar_usuario']))
@@ -151,34 +161,28 @@ class usuariosC
 
 
 	
-	// function cargar_articulos_lista($parametros)
-	// {
-	// 	   $producto = explode('-', $parametros['ddl_producto_modal_ing']);
-	// 	    $datos[0]['campo']='id_producto';
-	// 	    $datos[0]['dato']=$producto[0];
-	// 	    $datos[1]['campo']='cantidad';
-	// 	    $datos[1]['dato']=$parametros['txt_canti_modal_ing'];
-	// 	    $datos[2]['campo']='precio';
-	// 	    $datos[2]['dato']=$parametros['txt_precio_modal_ing'];
-	// 	    $datos[3]['campo']='iva';
-	// 	    $datos[3]['dato']=$parametros['txt_iva_modal_ing'];
-	// 	    $datos[4]['campo']='total';
-	// 	    $datos[4]['dato']=$parametros['txt_total_modal_ing'];
-	// 	    $datos[5]['campo']='num_orden';
-	// 	    $datos[5]['dato']=$parametros['txt_orden_modal_ing'];
-	// 	    $datos[6]['campo']='id_usuario';
-	// 	    $datos[6]['dato']=$_SESSION['INICIO']['ID'];
-	// 	    $datos[7]['campo']='id_bodegas';
-	// 	    $datos[7]['dato']=$parametros['ddl_bodega'];
-	// 	    $rep =  $this->modelo->guardar($datos,'ASIENTO_K');
-	// 	   return $rep;
-
-	// }
-
 	function usuarios_all()
 	{
 		$datos = $this->modelo->lista_usuarios();
 		return $datos;
+	}
+
+	function usuarios_all_autocompletado($parametros)
+	{
+		$datos = $this->modelo->usuarios_all_sin_tipo_usuario($id=false,$parametros['query'],$tipo=false,$ci=false,$email=false);
+		// print_r($datos);die();
+		$lista = array();
+		if($_SESSION['INICIO']['TIPO']=='DBA')
+		{
+			foreach ($datos as $key => $value) {
+				$usuario_existente = $this->modelo->usuarios_all_empresa_actual($id=false,$parametros['query'],$tipo=false,$ci=false,$email=false);
+				// print_r($usuario_existente);die();
+				if(empty($usuario_existente)){
+					$lista[] = array('value'=>$value['id'],'label'=>$value['nom'],'data'=>$value);
+				}
+			}
+		}
+		return $lista;
 	}
 
 
@@ -352,14 +356,30 @@ class usuariosC
 		    $datos[10]['campo']='link_fb';
 		    $datos[10]['dato']=$parametros['fb'];			     
 
+		    // Guarda los datos del usuario en master
 		    $this->modelo->guardar($datos,'USUARIOS'); 
+		    // buscamos al usuario creado en master
 		    $usuario =  $this->modelo->lista_usuarios_simple($id=false,$query=false,$ci=$parametros['txt_ci'],$email=$parametros['txt_emial']);
 
+		    // guardar el usuario en accesos de empresa actual en master(acceso empresa)
+		    $datosAE[0]['campo']='Id_usuario';
+		    $datosAE[0]['dato']=$usuario[0]['id'];
+		    $datosAE[1]['campo']='Id_Empresa';
+		    $datosAE[1]['dato']=$_SESSION['INICIO']['ID_EMPRESA'];	
+		    $this->modelo->guardar($datosAE,'ACCESOS_EMPRESA'); 
+
+		    
 		     $datosT[0]['campo']='ID_USUARIO';
 		     $datosT[0]['dato']=$usuario[0]['id'];
 		     $datosT[1]['campo']='ID_TIPO_USUARIO';
-		     $datosT[1]['dato']=$parametros['ddl_tipo_usuario'];	
+		     $datosT[1]['dato']=$parametros['ddl_tipo_usuario'];		     
+		     $datosT[2]['campo']='ID_EMPRESA';
+		     $datosT[2]['dato']=$_SESSION['INICIO']['ID_EMPRESA'];		
 		     $this->modelo->guardar($datosT,'USUARIO_TIPO_USUARIO'); 
+
+
+		    // actualiza en empresa logueada
+		    $resp = $this->modelo->generar_primera_vez($_SESSION['INICIO']['BASEDATO'],$_SESSION['INICIO']['ID_EMPRESA']);
 
 
 		     return $usuario[0]['id'];
@@ -401,15 +421,47 @@ class usuariosC
 
 		    $where[0]['campo']='id_usuarios';
 		    $where[0]['dato'] = $parametros['txt_usuario_update'];
+		    $this->modelo->update('USUARIOS',$datos,$where);
 
-		    $datosT[0]['campo']='ID_TIPO_USUARIO';
-		    $datosT[0]['dato']=$parametros['ddl_tipo_usuario'];
-		    $whereT[0]['campo']='ID';
-		    $whereT[0]['dato'] = $perfil[0]['ID'];
 
-		    // print_r($datos);die();
-		    $this->modelo->update('USUARIO_TIPO_USUARIO',$datosT,$whereT);
-		    return $this->modelo->update('USUARIOS',$datos,$where);
+		    //ingresa el acceso al usuario en la empresa 
+
+		    $acceso = $this->modelo->existe_acceso_usuario_empresa($parametros['txt_usuario_update']);
+		    if(count($acceso)==0)
+		    {
+			    $datosA[0]['campo']='Id_usuario';
+			    $datosA[0]['dato']=$parametros['txt_usuario_update'];	
+			    $datosA[1]['campo']='Id_Empresa';
+			    $datosA[1]['dato']=$_SESSION['INICIO']['ID_EMPRESA'];	
+			    $this->modelo->guardar($datosA,'ACCESOS_EMPRESA');
+			  }
+
+			  $perfil = $this->modelo->existe_usuario_perfil(false,$parametros['txt_usuario_update']);
+			  if($perfil==-1)
+			  {
+			  	$datosA[0]['campo']='ID_USUARIO';
+			    $datosA[0]['dato']=$parametros['txt_usuario_update'];	
+			    $datosA[1]['campo']='ID_EMPRESA';
+			    $datosA[1]['dato']=$_SESSION['INICIO']['ID_EMPRESA'];				    
+			    $datosA[2]['campo']='ID_TIPO_USUARIO';
+			    $datosA[2]['dato']=$parametros['ddl_tipo_usuario'];	
+			    $this->modelo->guardar($datosA,'USUARIO_TIPO_USUARIO');
+			  }else
+			  {				    
+			    $datosA[1]['campo']='ID_TIPO_USUARIO';
+			    $datosA[1]['dato']=$parametros['ddl_tipo_usuario'];	
+
+			    $where[0]['campo']='ID_USUARIO';
+			    $where[0]['dato'] = $parametros['txt_usuario_update'];			    
+			    $where[1]['campo']='ID_EMPRESA';
+			    $where[1]['dato'] = $_SESSION['INICIO']['ID_EMPRESA'];				   
+			    $this->modelo->update('USUARIO_TIPO_USUARIO',$datosA,$where);
+
+			  }
+
+
+		    return  $this->modelo->generar_primera_vez($_SESSION['INICIO']['BASEDATO'],$_SESSION['INICIO']['ID_EMPRESA']);
+
 		}
 	}
 
@@ -437,23 +489,42 @@ class usuariosC
 
 	}
 
+	function validar_registro($parametros)
+	{		
+		// print_r($parametros);die();
+
+		$datos  = $this->modelo->usuarios_all_empresa_actual(false,false,false,$parametros['cedula']);
+		if(count($datos)==0)
+		{
+
+			$datos  = $this->modelo->usuarios_all(false,false,false,$parametros['cedula']);
+			return $datos;
+		}else
+		{
+			return -3;
+		}
+	}
+
 
 	function eliminar_tipo($id)
 	{
 		$resp = $this->modelo->eliminar_tipo($id);
+		$this->modelo->generar_primera_vez($_SESSION['INICIO']['BASEDATO'],$_SESSION['INICIO']['ID_EMPRESA']);
 		return $resp;
 
 	}
 
 	function usuario_estado($id)
 	{
-		 $datos[0]['campo']='estado_usuario';
+		 $datos[0]['campo']='estado';
 		 $datos[0]['dato']='I';
 
 
 		 $where[0]['campo']='id_usuarios';
 		 $where[0]['dato'] = $id;
-		 return $this->modelo->update('usuarios',$datos,$where);
+		 $this->modelo->update('USUARIOS',$datos,$where);
+	   return  $this->modelo->generar_primera_vez($_SESSION['INICIO']['BASEDATO'],$_SESSION['INICIO']['ID_EMPRESA']);
+
 
 	}
 	function usuario_estado_($id)

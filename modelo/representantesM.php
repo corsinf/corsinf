@@ -14,10 +14,42 @@ class representantesM
         $this->db_salud = new db_salud();
     }
 
+<<<<<<< HEAD
     function lista_representantes($id = '')
     {
         $sql =
             "SELECT rep.sa_rep_id, 
+=======
+    //Para mostrar todos los registros con campos especificos para la vista principal
+    function lista_representantes_todo()
+    {
+        $sql =
+            "SELECT 
+                    rep.sa_rep_id,
+                    rep.sa_rep_primer_apellido,
+                    rep.sa_rep_segundo_apellido,
+                    rep.sa_rep_primer_nombre,
+                    rep.sa_rep_segundo_nombre,
+                    rep.sa_rep_cedula,
+                    rep.sa_rep_fecha_nacimiento,
+                    rep.sa_rep_telefono_1,
+                    rep.sa_rep_telefono_2,
+                    rep.sa_rep_correo
+
+                    FROM representantes rep
+                    WHERE rep.sa_rep_estado = 1";
+
+        $sql .= " ORDER BY sa_rep_id;";
+        $datos = $this->db_salud->datos($sql);
+        return $datos;
+    }
+
+    function lista_representantes($id = '')
+    {
+        $sql =
+            "SELECT 
+                    rep.sa_rep_id,
+>>>>>>> f975ff57302e9fcddee9c8879ae90e7325aab8d1
                     rep.sa_rep_primer_apellido,
                     rep.sa_rep_segundo_apellido,
                     rep.sa_rep_primer_nombre,
@@ -25,6 +57,7 @@ class representantesM
                     rep.sa_rep_cedula,
                     rep.sa_rep_sexo,
                     rep.sa_rep_fecha_nacimiento,
+<<<<<<< HEAD
                     rep.sa_id_seccion,
                     rep.sa_id_grado,
                     rep.sa_id_paralelo,
@@ -42,6 +75,17 @@ class representantesM
                     INNER JOIN cat_seccion cs ON rep.sa_id_seccion = cs.sa_sec_id
                     INNER JOIN cat_grado cg ON rep.sa_id_grado = cg.sa_gra_id
                     INNER JOIN cat_paralelo pr ON rep.sa_id_paralelo = pr.sa_par_id
+=======
+                    rep.sa_rep_telefono_1,
+                    rep.sa_rep_telefono_2,
+                    rep.sa_rep_correo,
+                    rep.sa_rep_tabla,
+                    rep.sa_rep_estado,
+                    rep.sa_rep_fecha_creacion,
+                    rep.sa_rep_fecha_modificacion
+
+                    FROM representantes rep
+>>>>>>> f975ff57302e9fcddee9c8879ae90e7325aab8d1
                     WHERE rep.sa_rep_estado = 1";
 
         if ($id) {
@@ -53,6 +97,7 @@ class representantesM
         return $datos;
     }
 
+<<<<<<< HEAD
     function lista_representantes_todo($id = '')
     {
         $sql = "SELECT  sa_rep_id, sa_par_nombre, sa_par_estado FROM representantes WHERE 1 = 1 ";
@@ -69,6 +114,12 @@ class representantesM
     function buscar_representantes($buscar)
     {
         $sql = "SELECT rep.sa_rep_id, 
+=======
+    function buscar_representantes($buscar)
+    {
+        $sql = "SELECT 
+                    rep.sa_rep_id,
+>>>>>>> f975ff57302e9fcddee9c8879ae90e7325aab8d1
                     rep.sa_rep_primer_apellido,
                     rep.sa_rep_segundo_apellido,
                     rep.sa_rep_primer_nombre,
@@ -76,6 +127,7 @@ class representantesM
                     rep.sa_rep_cedula,
                     rep.sa_rep_sexo,
                     rep.sa_rep_fecha_nacimiento,
+<<<<<<< HEAD
                     rep.sa_id_seccion,
                     rep.sa_id_grado,
                     rep.sa_id_paralelo,
@@ -101,14 +153,37 @@ class representantesM
                        cs.sa_sec_nombre, ' ', 
                        cg.sa_gra_nombre, ' ', 
                        pr.sa_par_nombre) LIKE '%" . $buscar . "%'";
+=======
+                    rep.sa_rep_telefono_1,
+                    rep.sa_rep_telefono_2,
+                    rep.sa_rep_correo,
+                    rep.sa_rep_tabla,
+                    rep.sa_rep_estado,
+                    rep.sa_rep_fecha_creacion,
+                    rep.sa_rep_fecha_modificacion
+
+                    FROM representantes rep
+                    WHERE rep.sa_rep_estado = 1
+
+                    AND CONCAT(rep.sa_rep_primer_apellido, ' ', rep.sa_rep_segundo_apellido, ' ', 
+                       rep.sa_rep_primer_nombre, ' ', rep.sa_rep_segundo_nombre, ' ',
+                       rep.sa_rep_cedula, ' ',          
+                       rep.sa_rep_correo) LIKE '%" . $buscar . "%'";
+>>>>>>> f975ff57302e9fcddee9c8879ae90e7325aab8d1
 
         $datos = $this->db_salud->datos($sql);
         return $datos;
     }
 
+<<<<<<< HEAD
     function buscar_representantes_CODIGO($buscar)
     {
         $sql = "SELECT sa_rep_id, sa_rep_cedula, sa_rep_primer_apellido, sa_rep_primer_nombre FROM representantes WHERE sa_rep_id = '" . $buscar . "'";
+=======
+    function buscar_representantes_CEDULA($buscar)
+    {
+        $sql = "SELECT sa_rep_id, sa_rep_cedula, sa_rep_primer_apellido, sa_rep_primer_nombre FROM representantes WHERE sa_rep_cedula = '" . $buscar . "'";
+>>>>>>> f975ff57302e9fcddee9c8879ae90e7325aab8d1
         $datos = $this->db_salud->datos($sql);
         return $datos;
     }
@@ -132,5 +207,9 @@ class representantesM
         return $datos;
     }
 
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> f975ff57302e9fcddee9c8879ae90e7325aab8d1
 }

@@ -3,6 +3,10 @@ include('../modelo/estudiantesM.php');
 
 $controlador = new estudiantesC();
 
+if (isset($_GET['listar_todo'])) {
+    echo json_encode($controlador->lista_estudiantes_todo());
+}
+
 if (isset($_GET['listar'])) {
     echo json_encode($controlador->lista_estudiantes($_POST['id']));
 }
@@ -19,6 +23,7 @@ if (isset($_GET['eliminar'])) {
     echo json_encode($controlador->eliminar($_POST['id']));
 }
 
+<<<<<<< HEAD
 if (isset($_GET['listar_paralelo_representante'])) {
     echo json_encode($controlador->listar_paralelo_representante($_POST['id_paralelo']));
 }
@@ -33,6 +38,13 @@ if (isset($_GET['buscar_estudiante_ficha_medica'])) {
 }
 
 //echo json_encode($controlador->buscar_estudiante_ficha_medica(5));
+=======
+if (isset($_GET['listar_estudiante_representante'])) {
+    echo json_encode($controlador->lista_estudiante_representante($_POST['id_representante']));
+}
+
+//echo json_encode($controlador->buscar_estudiantes_ficha_medica(5));
+>>>>>>> f975ff57302e9fcddee9c8879ae90e7325aab8d1
 
 class estudiantesC
 {
@@ -41,6 +53,12 @@ class estudiantesC
     function __construct()
     {
         $this->modelo = new estudiantesM();
+    }
+
+    function lista_estudiantes_todo()
+    {
+        $datos = $this->modelo->lista_estudiantes_todo();
+        return $datos;
     }
 
     function lista_estudiantes($id)
@@ -57,47 +75,27 @@ class estudiantesC
 
     function insertar_editar($parametros)
     {
-        $datos1[0]['campo'] = 'sa_est_id';
-        $datos1[0]['dato'] = strval($parametros['sa_est_id']);
+        $datos1[0]['campo'] = 'sa_est_cedula';
+        $datos1[0]['dato'] = strval($parametros['sa_est_cedula']);
 
-        $datos[1]['campo'] = 'sa_est_primer_apellido';
-        $datos[1]['dato'] = $parametros['sa_est_primer_apellido'];
-
-        $datos[2]['campo'] = 'sa_est_segundo_apellido';
-        $datos[2]['dato'] = $parametros['sa_est_segundo_apellido'];
-
-        $datos[3]['campo'] = 'sa_est_primer_nombre';
-        $datos[3]['dato'] = $parametros['sa_est_primer_nombre'];
-
-        $datos[4]['campo'] = 'sa_est_segundo_nombre';
-        $datos[4]['dato'] = $parametros['sa_est_segundo_nombre'];
-
-        $datos[5]['campo'] = 'sa_est_cedula';
-        $datos[5]['dato'] = $parametros['sa_est_cedula'];
-
-        $datos[6]['campo'] = 'sa_est_sexo';
-        $datos[6]['dato'] = $parametros['sa_est_sexo'];
-
-        $datos[7]['campo'] = 'sa_est_fecha_nacimiento';
-        $datos[7]['dato'] = $parametros['sa_est_fecha_nacimiento'];
-
-        $datos[8]['campo'] = 'sa_id_seccion';
-        $datos[8]['dato'] = $parametros['sa_id_seccion'];
-
-        $datos[9]['campo'] = 'sa_id_grado';
-        $datos[9]['dato'] = $parametros['sa_id_grado'];
-
-        $datos[10]['campo'] = 'sa_id_paralelo';
-        $datos[10]['dato'] = $parametros['sa_id_paralelo'];
-
-        $datos[11]['campo'] = 'sa_est_correo';
-        $datos[11]['dato'] = $parametros['sa_est_correo'];
-
-        $datos[12]['campo'] = 'sa_id_representante';
-        $datos[12]['dato'] = $parametros['sa_id_representante'];
+        $datos = array(
+            array('campo' => 'sa_est_primer_apellido', 'dato' => $parametros['sa_est_primer_apellido']),
+            array('campo' => 'sa_est_segundo_apellido', 'dato' => $parametros['sa_est_segundo_apellido']),
+            array('campo' => 'sa_est_primer_nombre', 'dato' => $parametros['sa_est_primer_nombre']),
+            array('campo' => 'sa_est_segundo_nombre', 'dato' => $parametros['sa_est_segundo_nombre']),
+            array('campo' => 'sa_est_cedula', 'dato' => $parametros['sa_est_cedula']),
+            array('campo' => 'sa_est_sexo', 'dato' => $parametros['sa_est_sexo']),
+            array('campo' => 'sa_est_fecha_nacimiento', 'dato' => $parametros['sa_est_fecha_nacimiento']),
+            array('campo' => 'sa_id_seccion', 'dato' => $parametros['sa_id_seccion']),
+            array('campo' => 'sa_id_grado', 'dato' => $parametros['sa_id_grado']),
+            array('campo' => 'sa_id_paralelo', 'dato' => $parametros['sa_id_paralelo']),
+            array('campo' => 'sa_id_representante', 'dato' => $parametros['sa_id_representante']),
+            array('campo' => 'sa_est_rep_parentesco', 'dato' => $parametros['sa_est_rep_parentesco']),
+            array('campo' => 'sa_est_correo', 'dato' => $parametros['sa_est_correo']),
+        );
 
         if ($parametros['sa_est_id'] == '') {
-            if (count($this->modelo->buscar_estudiantes_CODIGO($datos1[0]['dato'])) == 0) {
+            if (count($this->modelo->buscar_estudiantes_CEDULA($datos1[0]['dato'])) == 0) {
                 $datos = $this->modelo->insertar($datos);
             } else {
                 return -2;
@@ -119,22 +117,13 @@ class estudiantesC
         return $datos;
     }
 
-    function compara_datos($parametros)
+    function lista_estudiante_representante($id)
     {
-        $text = '';
-        $marca = $this->modelo->lista_estudiantes($parametros['id']);
-
-        if ($marca[0]['CODIGO'] != $parametros['cod']) {
-            $text .= ' Se modifico CODIGO en SECCION de ' . $marca[0]['CODIGO'] . ' a ' . $parametros['cod'];
-        }
-
-        if ($marca[0]['DESCRIPCION'] != $parametros['des']) {
-            $text .= ' Se modifico DESCRIPCION en SECCION DE ' . $marca[0]['DESCRIPCION'] . ' a ' . $parametros['des'];
-        }
-
-        return $text;
+        $datos = $this->modelo->buscar_estudiantes_representante($id);
+        return $datos;
     }
 
+<<<<<<< HEAD
     function listar_paralelo_representante($buscar)
     {
         $datos = $this->modelo->buscar_paralelo_representante($buscar);
@@ -157,4 +146,7 @@ class estudiantesC
             return -2;
         }
     }
+=======
+    //Validacion para determinar si tiene una ficha medica
+>>>>>>> f975ff57302e9fcddee9c8879ae90e7325aab8d1
 }

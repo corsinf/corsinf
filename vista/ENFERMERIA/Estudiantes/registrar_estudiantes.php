@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 <?php //include('../../../../cabeceras/header.php');
+=======
+<?php
+>>>>>>> f975ff57302e9fcddee9c8879ae90e7325aab8d1
 
 $id = '';
 $id_seccion = '';
@@ -6,20 +10,25 @@ $id_grado = '';
 $id_paralelo = '';
 $id_representante = '';
 
-if (isset($_GET['id'])) {
-  $id = $_GET['id'];
+if (isset($_POST['sa_est_id'])) {
+  $id = $_POST['sa_est_id'];
 }
 
-if (isset($_GET['id_seccion'])) {
-  $id_seccion = $_GET['id_seccion'];
+
+if (isset($_POST['sa_sec_id'])) {
+  $id_seccion = $_POST['sa_sec_id'];
 }
 
-if (isset($_GET['id_grado'])) {
-  $id_grado = $_GET['id_grado'];
+if (isset($_POST['sa_gra_id'])) {
+  $id_grado = $_POST['sa_gra_id'];
 }
 
-if (isset($_GET['id_paralelo'])) {
-  $id_paralelo = $_GET['id_paralelo'];
+if (isset($_POST['sa_par_id'])) {
+  $id_paralelo = $_POST['sa_par_id'];
+}
+
+if (isset($_POST['id_representante'])) {
+  $id_representante = $_POST['id_representante'];
 }
 
 if (isset($_GET['id_representante'])) {
@@ -28,6 +37,9 @@ if (isset($_GET['id_representante'])) {
 
 ?>
 
+<script src="<?= $url_general ?>/js/ENFERMERIA/operaciones_generales.js"></script>
+<script src="<?= $url_general ?>/js/ENFERMERIA/estudiantes.js"></script>
+
 <script type="text/javascript">
   $(document).ready(function() {
     var id = '<?php echo $id; ?>';
@@ -35,15 +47,25 @@ if (isset($_GET['id_representante'])) {
     var id_grado = '<?php echo $id_grado; ?>';
     var id_paralelo = '<?php echo $id_paralelo; ?>';
     var id_representante = '<?php echo $id_representante; ?>';
+<<<<<<< HEAD
+=======
+
+    //alert(id)
+>>>>>>> f975ff57302e9fcddee9c8879ae90e7325aab8d1
 
     if (id != '') {
       datos_col(id);
     }
 
+    //Carga los datos para la edicion
     consultar_datos_seccion(id = '', id_seccion);
     consultar_datos_seccion_grado(id_grado, id_seccion);
     consultar_datos_grado_paralelo(id_grado, id_paralelo);
+<<<<<<< HEAD
     consultar_datos_paralelo_representante(id_paralelo, id_representante);
+=======
+    consultar_representante(id_representante);
+>>>>>>> f975ff57302e9fcddee9c8879ae90e7325aab8d1
 
   });
 
@@ -179,6 +201,7 @@ if (isset($_GET['id_representante'])) {
     });
   }
 
+<<<<<<< HEAD
   function consultar_datos_paralelo_representante(id_paralelo = '', id_representante = '') {
     /*///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -221,6 +244,68 @@ if (isset($_GET['id_representante'])) {
 
         $('#sa_id_representante').html(representante);
 
+=======
+  function consultar_representante(id = '') {
+
+    if (id != '') {
+      //alert(id)
+      $.ajax({
+        data: {
+          "id": id
+        },
+
+        url: '<?php echo $url_general ?>/controlador/representantesC.php?listar=true',
+
+        type: 'post', //método de envio
+        dataType: 'json',
+        success: function(dato) { //una vez que el archivo recibe el request lo procesa y lo devuelve         
+          console.log(dato);
+          let etiquetas = "";
+          dato.forEach(function(item, itema, items) {
+            etiquetas += '<option value="' + item.sa_rep_id + '">' + item.sa_rep_primer_apellido + ' ' + item.sa_rep_segundo_apellido + ' ' + item.sa_rep_primer_nombre + ' ' + item.sa_rep_segundo_nombre + '</option>';
+          })
+
+          $("#sa_id_representante").html(etiquetas);
+        }
+      });
+    }
+
+    $('#sa_id_representante').select2({
+      placeholder: 'Selecciona una opción',
+      language: 'es',
+      minimumInputLength: 3,
+      ajax: {
+        url: '<?php echo $url_general ?>/controlador/representantesC.php?listar_todo=true',
+        dataType: 'json',
+        delay: 250,
+        data: function(params) {
+          return {
+            searchTerm: params.term // Envía el término de búsqueda al servidor
+          };
+        },
+        processResults: function(data, params) { // Agrega 'params' como parámetro
+          var searchTerm = params.term.toLowerCase();
+
+          var options = data.reduce(function(filtered, item) {
+
+            var fullName = item['sa_rep_cedula'] + " - " + item['sa_rep_primer_apellido'] + " " + item['sa_rep_segundo_apellido'] + " " + item['sa_rep_primer_nombre'] + " " + item['sa_rep_segundo_nombre'];
+
+            if (fullName.toLowerCase().includes(searchTerm)) {
+              filtered.push({
+                id: item['sa_rep_id'],
+                text: fullName
+              });
+            }
+
+            return filtered;
+          }, []);
+
+          return {
+            results: options
+          };
+        },
+        cache: true
+>>>>>>> f975ff57302e9fcddee9c8879ae90e7325aab8d1
       }
     });
   }
@@ -230,7 +315,7 @@ if (isset($_GET['id_representante'])) {
       data: {
         id: id
       },
-      url: '<?= $url_general ?>/controlador/estudiantesC.php?listar=true',
+      url: '<?php echo $url_general ?>/controlador/estudiantesC.php?listar=true',
       type: 'post',
       dataType: 'json',
       success: function(response) {
@@ -243,31 +328,17 @@ if (isset($_GET['id_representante'])) {
 
         $('#sa_est_cedula').val(response[0].sa_est_cedula);
 
-        ///////////////////////////////////////////////////////////////////////////////////////////
-        //Select sexo
-        if (response[0].sa_est_sexo === 'F') {
-          selectElement = $('#sa_est_sexo');
-          optionElement = selectElement.find('option[value="F"]');
-          if (optionElement.length > 0) {
-            optionElement.prop('selected', true); // Selecciona la opción 'Femenino'
-          }
-        } else if (response[0].sa_est_sexo === 'M') {
-          selectElement = $('#sa_est_sexo');
-          optionElement = selectElement.find('option[value="M"]');
-          if (optionElement.length > 0) {
-            optionElement.prop('selected', true); // Selecciona la opción 'Masculino'
-          }
-        }
-
-        ///////////////////////////////////////////////////////////////////////////////////////////
-        //Fecha de nacimiento
+        select_genero(response[0].sa_est_sexo, '#sa_est_sexo');
 
         $('#sa_est_fecha_nacimiento').val(fecha_nacimiento_formateada(response[0].sa_est_fecha_nacimiento.date));
-        $('#sa_est_edad').val(edad_fecha_nacimiento(response[0].sa_est_fecha_nacimiento.date));
+        $('#sa_est_edad').val(calcular_edad_fecha_nacimiento(response[0].sa_est_fecha_nacimiento.date));
         ///////////////////////////////////////////////////////////////////////////////////////////
 
         $('#sa_est_correo').val(response[0].sa_est_correo);
         $('#sa_id_representante').val(response[0].sa_id_representante);
+
+        select_parentesco(response[0].sa_est_rep_parentesco, '#sa_est_rep_parentesco');
+
 
         //$('#sa_id_seccion').val(response[0].sa_id_seccion);
         //$('#sa_id_grado').val(response[0].sa_id_grado);
@@ -281,6 +352,7 @@ if (isset($_GET['id_representante'])) {
     });
   }
 
+<<<<<<< HEAD
   function edad_normal(fecha_nacimiento) {
     $('#sa_est_edad').val(edad_fecha_nacimiento(fecha_nacimiento));
   }
@@ -340,6 +412,8 @@ if (isset($_GET['id_representante'])) {
     }
   }
 
+=======
+>>>>>>> f975ff57302e9fcddee9c8879ae90e7325aab8d1
   function editar_insertar() {
 
     var sa_est_id = $('#sa_est_id').val();
@@ -353,10 +427,12 @@ if (isset($_GET['id_representante'])) {
     var sa_id_seccion = $('#sa_id_seccion').val();
     var sa_id_grado = $('#sa_id_grado').val();
     var sa_id_paralelo = $('#sa_id_paralelo').val();
-    var sa_est_correo = $('#sa_est_correo').val();
     var sa_id_representante = $('#sa_id_representante').val();
+    var sa_est_rep_parentesco = $('#sa_est_rep_parentesco').val();
+    var sa_est_correo = $('#sa_est_correo').val();
 
     var parametros = {
+
       'sa_est_id': sa_est_id,
       'sa_est_primer_apellido': sa_est_primer_apellido,
       'sa_est_segundo_apellido': sa_est_segundo_apellido,
@@ -368,8 +444,10 @@ if (isset($_GET['id_representante'])) {
       'sa_id_seccion': sa_id_seccion,
       'sa_id_grado': sa_id_grado,
       'sa_id_paralelo': sa_id_paralelo,
-      'sa_est_correo': sa_est_correo,
       'sa_id_representante': sa_id_representante,
+      'sa_est_rep_parentesco': sa_est_rep_parentesco,
+      'sa_est_correo': sa_est_correo,
+
     };
 
     //alert(validar_email(sa_est_correo));
@@ -387,15 +465,26 @@ if (isset($_GET['id_representante'])) {
         sa_id_grado == null ||
         sa_id_paralelo == null ||
         validar_email(sa_est_correo) == false ||
+<<<<<<< HEAD
         sa_id_representante == null
+=======
+        sa_id_representante == null ||
+        sa_est_rep_parentesco == null
+
+>>>>>>> f975ff57302e9fcddee9c8879ae90e7325aab8d1
       ) {
         Swal.fire({
           icon: 'error',
           title: 'Oops...',
+<<<<<<< HEAD
           text: 'Asegurese de llenar todo los campos',
         })
         //alert('error');
         //console.log(parametros);
+=======
+          text: 'Asegurese de llenar todos los campos',
+        })
+>>>>>>> f975ff57302e9fcddee9c8879ae90e7325aab8d1
 
       } else {
         console.log(parametros);
@@ -414,23 +503,29 @@ if (isset($_GET['id_representante'])) {
         sa_id_grado == null ||
         sa_id_paralelo == null ||
         validar_email(sa_est_correo) == false ||
+<<<<<<< HEAD
         sa_id_representante == null
+=======
+        sa_id_representante == null ||
+        sa_est_rep_parentesco == null
+>>>>>>> f975ff57302e9fcddee9c8879ae90e7325aab8d1
       ) {
         Swal.fire({
           icon: 'error',
           title: 'Oops...',
+<<<<<<< HEAD
           text: 'Asegurese de llenar todo los campos',
         })
         //alert('error');
+=======
+          text: 'Asegurese de llenar todos los campos',
+        })
+>>>>>>> f975ff57302e9fcddee9c8879ae90e7325aab8d1
       } else {
         console.log(parametros);
         insertar(parametros);
       }
     }
-
-    /*console.log(parametros);
-    insertar(parametros);*/
-
   }
 
   function insertar(parametros) {
@@ -438,18 +533,16 @@ if (isset($_GET['id_representante'])) {
       data: {
         parametros: parametros
       },
-      url: '<?= $url_general ?>/controlador/estudiantesC.php?insertar=true',
+      url: '<?php echo $url_general ?>/controlador/estudiantesC.php?insertar=true',
       type: 'post',
       dataType: 'json',
-      /*beforeSend: function () {   
-           var spiner = '<div class="text-center"><img src="../../img/gif/proce.gif" width="100" height="100"></div>'     
-         $('#tabla_').html(spiner);
-      },*/
+
       success: function(response) {
         if (response == 1) {
           Swal.fire('', 'Operacion realizada con exito.', 'success').then(function() {
             location.href = '<?= $url_general ?>/vista/inicio.php?mod=7&acc=estudiantes';
           });
+<<<<<<< HEAD
           //location.href = '<?= $url_general ?>/vista/inicio.php?mod=7&acc=estudiantes';
         } else if (response == -2) {
           Swal.fire('', 'codigo ya regitrado', 'success');
@@ -457,6 +550,11 @@ if (isset($_GET['id_representante'])) {
         }
 
         //console.log(response);
+=======
+        } else if (response == -2) {
+          Swal.fire('', 'Cédula ya registrada.', 'warning');
+        }
+>>>>>>> f975ff57302e9fcddee9c8879ae90e7325aab8d1
       }
     });
   }
@@ -476,9 +574,12 @@ if (isset($_GET['id_representante'])) {
         eliminar(id);
       }
     })
+<<<<<<< HEAD
 
     //eliminar(id);
 
+=======
+>>>>>>> f975ff57302e9fcddee9c8879ae90e7325aab8d1
   }
 
   function eliminar(id) {
@@ -486,23 +587,35 @@ if (isset($_GET['id_representante'])) {
       data: {
         id: id
       },
-      url: '<?= $url_general ?>/controlador/estudiantesC.php?eliminar=true',
+      url: '<?php echo $url_general ?>/controlador/estudiantesC.php?eliminar=true',
       type: 'post',
       dataType: 'json',
+<<<<<<< HEAD
       /*beforeSend: function() {
         var spiner = '<div class="text-center"><img src="../../img/gif/proce.gif" width="100" height="100"></div>'
         $('#tabla_').html(spiner);
       },*/
+=======
+
+>>>>>>> f975ff57302e9fcddee9c8879ae90e7325aab8d1
       success: function(response) {
         if (response == 1) {
           Swal.fire('Eliminado!', 'Registro Eliminado.', 'success').then(function() {
             location.href = '<?= $url_general ?>/vista/inicio.php?mod=7&acc=estudiantes';
           });
+<<<<<<< HEAD
           //location.href = '<?= $url_general ?>/vista/inicio.php?mod=7&acc=estudiantes';
+=======
+>>>>>>> f975ff57302e9fcddee9c8879ae90e7325aab8d1
         }
-
       }
     });
+  }
+
+  /////////////////////////////////////////////////////////////////////////////////////////////////////
+
+  function edad_normal(fecha_nacimiento) {
+    $('#sa_est_edad').val(calcular_edad_fecha_nacimiento(fecha_nacimiento));
   }
 </script>
 
@@ -559,6 +672,7 @@ if (isset($_GET['id_representante'])) {
                 </div>
               </div>
             </div>
+            
             <hr>
 
             <form action="" method="post">
@@ -571,45 +685,56 @@ if (isset($_GET['id_representante'])) {
               <div class="row pt-3">
                 <div class="col-md-3">
                   <label for="" class="form-label">Primer Apellido: <label style="color: red;">*</label> </label>
-                  <input type="text" class="form-control" id="sa_est_primer_apellido" name="sa_est_primer_apellido">
+                  <input type="text" class="form-control form-control-sm" id="sa_est_primer_apellido" name="sa_est_primer_apellido">
                 </div>
+
                 <div class="col-md-3">
                   <label for="" class="form-label">Segundo Apellido: <label style="color: red;">*</label> </label>
-                  <input type="text" class="form-control" id="sa_est_segundo_apellido" name="sa_est_segundo_apellido">
+                  <input type="text" class="form-control form-control-sm" id="sa_est_segundo_apellido" name="sa_est_segundo_apellido">
                 </div>
+
                 <div class="col-md-3">
                   <label for="" class="form-label">Primer Nombre: <label style="color: red;">*</label> </label>
-                  <input type="text" class="form-control" id="sa_est_primer_nombre" name="sa_est_primer_nombre">
+                  <input type="text" class="form-control form-control-sm" id="sa_est_primer_nombre" name="sa_est_primer_nombre">
                 </div>
+
                 <div class="col-md-3">
                   <label for="" class="form-label">Segundo Nombre: <label style="color: red;">*</label> </label>
-                  <input type="text" class="form-control" id="sa_est_segundo_nombre" name="sa_est_segundo_nombre">
+                  <input type="text" class="form-control form-control-sm" id="sa_est_segundo_nombre" name="sa_est_segundo_nombre">
                 </div>
               </div>
 
               <div class="row pt-3">
                 <div class="col-md-3">
                   <label for="" class="form-label">Cédula de Identidad <label style="color: red;">*</label> </label>
+<<<<<<< HEAD
                   <input type="text" class="form-control" id="sa_est_cedula" name="sa_est_cedula" maxlength="10" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+=======
+                  <input type="text" class="form-control form-control-sm" id="sa_est_cedula" name="sa_est_cedula" maxlength="10" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+>>>>>>> f975ff57302e9fcddee9c8879ae90e7325aab8d1
                 </div>
 
                 <div class="col-md-3">
                   <label for="" class="form-label">Sexo: <label style="color: red;">*</label> </label>
-                  <select class="form-select" id="sa_est_sexo" name="sa_est_sexo">
+                  <select class="form-select form-select-sm" id="sa_est_sexo" name="sa_est_sexo">
                     <option selected disabled>-- Seleccione --</option>
-                    <option value="F">Femenino</option>
-                    <option value="M">Masculino</option>
+                    <option value="Femenino">Femenino</option>
+                    <option value="Masculino">Masculino</option>
                   </select>
                 </div>
 
                 <div class="col-md-3">
                   <label for="" class="form-label">Fecha de Nacimiento: <label style="color: red;">*</label> </label>
+<<<<<<< HEAD
                   <input type="date" class="form-control" id="sa_est_fecha_nacimiento" name="sa_est_fecha_nacimiento" onchange="edad_normal(this.value);">
+=======
+                  <input type="date" class="form-control form-control-sm" id="sa_est_fecha_nacimiento" name="sa_est_fecha_nacimiento" onchange="edad_normal(this.value);">
+>>>>>>> f975ff57302e9fcddee9c8879ae90e7325aab8d1
                 </div>
 
                 <div class="col-md-3">
                   <label for="" class="form-label">Edad: <label style="color: red;">*</label> </label>
-                  <input type="text" class="form-control" id="sa_est_edad" name="sa_est_edad" readonly>
+                  <input type="text" class="form-control form-control-sm" id="sa_est_edad" name="sa_est_edad" readonly>
                 </div>
 
               </div>
@@ -617,7 +742,11 @@ if (isset($_GET['id_representante'])) {
               <div class="row pt-3">
                 <div class="col-md-12">
                   <label for="" class="form-label">Correo <label style="color: red;">*</label> </label>
+<<<<<<< HEAD
                   <input type="email" class="form-control" id="sa_est_correo" name="sa_est_correo">
+=======
+                  <input type="email" class="form-control form-control-sm" id="sa_est_correo" name="sa_est_correo">
+>>>>>>> f975ff57302e9fcddee9c8879ae90e7325aab8d1
                 </div>
               </div>
 
@@ -625,7 +754,7 @@ if (isset($_GET['id_representante'])) {
 
                 <div class="col-md-6">
                   <label for="" class="form-label">Sección: <label style="color: red;">*</label> </label>
-                  <select class="form-select" id="sa_id_seccion" name="sa_id_seccion" onclick="consultar_datos_seccion_grado()">
+                  <select class="form-select form-select-sm" id="sa_id_seccion" name="sa_id_seccion" onclick="consultar_datos_seccion_grado()">
 
                   </select>
                 </div>
@@ -634,7 +763,7 @@ if (isset($_GET['id_representante'])) {
               <div class="row pt-3">
                 <div class="col-md-6">
                   <label for="" class="form-label">Grado: <label style="color: red;">*</label> </label>
-                  <select class="form-select" id="sa_id_grado" name="sa_id_grado" onclick="consultar_datos_grado_paralelo();">
+                  <select class="form-select form-select-sm" id="sa_id_grado" name="sa_id_grado" onclick="consultar_datos_grado_paralelo();">
                     <option selected disabled>-- Seleccione --</option>
                   </select>
                 </div>
@@ -643,7 +772,11 @@ if (isset($_GET['id_representante'])) {
               <div class="row pt-3">
                 <div class="col-md-6">
                   <label for="" class="form-label">Paralelo: <label style="color: red;">*</label> </label>
+<<<<<<< HEAD
                   <select class="form-select" id="sa_id_paralelo" name="sa_id_paralelo" onclick="consultar_datos_paralelo_representante();">
+=======
+                  <select class="form-select form-select-sm" id="sa_id_paralelo" name="sa_id_paralelo">
+>>>>>>> f975ff57302e9fcddee9c8879ae90e7325aab8d1
                     <option selected disabled>-- Seleccione --</option>
                   </select>
                 </div>
@@ -652,21 +785,36 @@ if (isset($_GET['id_representante'])) {
               <div class="row pt-3">
                 <div class="col-md-6">
                   <label for="" class="form-label">Representante: <label style="color: red;">*</label> </label>
-                  <select class="form-select" id="sa_id_representante" name="sa_id_representante">
+                  <select class="form-select form-select-sm" id="sa_id_representante" name="sa_id_representante">
                     <option selected disabled>-- Seleccione --</option>
+<<<<<<< HEAD
+=======
+                  </select>
+                </div>
+
+                <div class="col-md-4">
+                  <label for="" class="form-label">Parentesco: <label style="color: red;">*</label> </label>
+                  <select class="form-select form-select-sm" id="sa_est_rep_parentesco" name="sa_est_rep_parentesco">
+                    <option selected disabled>-- Seleccione --</option>
+                    <option value="Padre">Padre</option>
+                    <option value="Madre">Madre</option>
+                    <option value="Hermano">Hermano/a</option>
+                    <option value="Tio">Tío/a</option>
+                    <option value="Primo">Primo/a</option>
+                    <option value="Abuelo">Abuelo/a</option>
+                    <option value="Otro">Otro/a</option>
+>>>>>>> f975ff57302e9fcddee9c8879ae90e7325aab8d1
                   </select>
                 </div>
               </div>
 
               <div class="modal-footer pt-4">
-
                 <?php if ($id == '') { ?>
                   <button class="btn btn-primary btn-sm px-4 m-1" onclick="editar_insertar()" type="button"><i class="bx bx-save"></i> Guardar</button>
                 <?php } else { ?>
                   <button class="btn btn-primary btn-sm px-4 m-1" onclick="editar_insertar()" type="button"><i class="bx bx-save"></i> Guardar</button>
                   <button class="btn btn-danger btn-sm px-4 m-1" onclick="delete_datos()" type="button"><i class="bx bx-trash"></i> Eliminar</button>
                 <?php } ?>
-
               </div>
 
             </form>
@@ -676,10 +824,3 @@ if (isset($_GET['id_representante'])) {
     </div>
   </div>
 </div>
-<!--plugins-->
-
-<!--app JS-->
-<!-- <script src="assets/js/app.js"></script> -->
-
-<?php //include('../../../../cabeceras/footer.php'); 
-?>

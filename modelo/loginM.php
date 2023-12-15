@@ -17,14 +17,78 @@ class loginM
 		$datos = $this->db->existente($sql);
 		return $datos;
 	}
-	function datos_login($email,$pass)
+
+	function buscar_empresas($email,$pass,$id=false)
+	{
+		$sql = "SELECT * 
+				FROM ACCESOS_EMPRESA AC
+				INNER JOIN USUARIOS US ON AC.Id_usuario = US.id_usuarios
+				INNER JOIN EMPRESAS EM ON AC.Id_Empresa = EM.Id_empresa
+				WHERE US.email = '".$email."' AND US.password = '".$pass."'";
+				if($id)
+				{
+					$sql.=" AND id_empresa='".$id."'";
+				}
+				// print_r($sql);die();
+		$datos = $this->db->datos($sql,1);
+		return $datos;
+	}
+
+	function empresa_tabla_noconcurente($id_empresa=false)
+	{
+		$sql = "SELECT Tabla,Id_Empresa,Campo_usuario,campo_pass FROM TABLAS_NOCONCURENTE
+				WHERE 1=1 ";
+				if($id_empresa)
+				{
+					$sql.=" AND Id_Empresa='".$id_empresa."'";
+				}
+				$sql.="GROUP BY Tabla,Id_Empresa,Campo_usuario,campo_pass";
+		$datos = $this->db->datos($sql,1);
+		return $datos;
+	}
+
+	function buscar_db_terceros($database,$usuario,$password,$servidor,$puerto,$parametros)
+	{
+		$sql = "SELECT * FROM ".$parametros['tabla']." WHERE ".$parametros['Campo_Usuario']." = '".$parametros['email']."' AND ".$parametros['Campo_Pass']."='".$parametros['pass']."'";
+		 $item = $this->db->datos_db_terceros($database,$usuario,$password,$servidor,$puerto,$sql);
+		 return $item;
+	}
+
+	function buscar_empresas_no_concurentes($email,$pass,$id=false)
+	{
+		$sql = "SELECT * 
+				FROM ACCESOS_EMPRESA AC
+				INNER JOIN USUARIOS US ON AC.Id_usuario = US.id_usuarios
+				INNER JOIN EMPRESAS EM ON AC.Id_Empresa = EM.Id_empresa
+				WHERE US.email = '".$email."' AND US.password = '".$pass."'";
+				if($id)
+				{
+					$sql.=" AND id_empresa='".$id."'";
+				}
+				// print_r($sql);die();
+		$datos = $this->db->datos($sql,1);
+		return $datos;
+	}
+
+	function datos_login($email=false,$pass=false,$id=false)
 	{
 		$sql = "SELECT nombres,apellidos,email,DESCRIPCION,Ver,editar,eliminar,dba,T.DESCRIPCION as 'tipo',U.id_usuarios as 'id',ID as 'perfil',U.foto FROM USUARIO_TIPO_USUARIO A 
 		INNER JOIN USUARIOS U ON A.ID_USUARIO = U.id_usuarios
 		INNER JOIN TIPO_USUARIO T ON A.ID_TIPO_USUARIO  = T.ID_TIPO
 		LEFT JOIN ACCESOS AC ON A.ID = AC.id_tipo_usu 
-		WHERE email = '".$email."' AND password = '".$pass."'
-		GROUP BY  nombres,apellidos,email,DESCRIPCION,Ver,editar,eliminar,dba,id_usuarios,ID,foto";
+		WHERE 1=1";
+		if($email){
+			$sql.=" AND email = '".$email."' ";
+		}
+		if($pass)
+		{
+			$sql.=" AND password = '".$pass."' ";
+		}
+		if($id)
+		{
+			$sql.=" AND U.id_usuarios = ".$id;
+		}
+		$sql.=" GROUP BY  nombres,apellidos,email,DESCRIPCION,Ver,editar,eliminar,dba,id_usuarios,ID,foto";
 		// print_r($sql);die();
 		$datos = $this->db->datos($sql);
 		return $datos;
@@ -75,16 +139,34 @@ class loginM
 			INNER JOIN PAGINAS P ON A.id_paginas = P.id_paginas
 			INNER JOIN MODULOS M ON P.id_modulo = M.id_modulo
 			INNER JOIN MODULOS_SISTEMA MS ON M.modulos_sistema = MS.id_modulos
-			WHERE id_tipo_usu ='".$_SESSION['INICIO']['PERFIL']."' AND subpagina<> 1 AND Ver <> 0 AND editar <> 0 AND eliminar <> 0 ";
+			WHERE id_tipo_usu ='".$_SESSION['INICIO']['PERFIL']."' 
+			AND subpagina<> 1 
+			AND Ver <> 0 
+			AND editar <> 0 
+			AND eliminar <> 0
+			AND MS.estado = 'A' ";
 		}
 		// print_r($sql);die();
 		$datos = $this->db->datos($sql);
 		return $datos;
 	}
 
-	function add($tabla,$datos)
+	function modulos_empresa()
 	{
-		return $this->db->inserts($tabla,$datos);
+		$sql = "SELECT * FROM MODULOS_SISTEMA WHERE estado = 'A'";
+		$datos = $this->db->datos($sql,1);
+		return $datos;
+
+	}
+
+	function add($tabla,$datos,$master=false)
+	{
+		return $this->db->inserts($tabla,$datos,$master);
+	}
+
+	function update($tabla,$datos,$where)
+	{
+		return $this->db->update($tabla,$datos,$where);
 	}
 	function paginas($pagina)
 	{
@@ -92,6 +174,32 @@ class loginM
 		// print_r($sql);die();
 		return $this->db->datos($sql);
 	}
+
+	function empresa_licencias($id)
+	{
+		$sql = "SELECT * FROM LICENCIAS WHERE Id_empresa = '".$id."' AND registrado = 1";
+		return $this->db->datos($sql,1);
+	}
+
+	function empresa_licencias_regitrado($id,$licencia,$modulo)
+	{
+		$sql = "SELECT * 
+		FROM LICENCIAS 
+		WHERE Id_empresa = '".$id."' 
+		AND registrado = 0
+		AND Codigo_licencia = '".$licencia."'
+		AND Id_Modulo = '".$modulo."'";
+		// print_r($sql);die();
+		return $this->db->datos($sql);
+	}
+
+	function lista_empresa($id)
+	{
+		$sql = "SELECT E.*,Id_empresa as 'Id_Empresa' FROM EMPRESAS E WHERE Id_empresa = '".$id."'";
+		return $this->db->datos($sql);
+	}
+
+	
 
 }
 ?>
