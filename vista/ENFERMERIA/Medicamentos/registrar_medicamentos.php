@@ -24,28 +24,28 @@ if (isset($_GET['id'])) {
       data: {
         id: id
       },
-      url: '<?= $url_general ?>/controlador/seccionC.php?listar=true',
+      url: '<?= $url_general ?>/controlador/medicamentosC.php?listar=true',
       type: 'post',
       dataType: 'json',
       success: function(response) {
-        $('#sa_sec_id').val(response[0].sa_sec_id);
-        $('#sa_sec_nombre').val(response[0].sa_sec_nombre);
-        //$('#sa_sec_estado').val(response[0].sa_sec_estado);
+        $('#sa_med_id').val(response[0].sa_med_id);
+        $('#sa_med_nombre').val(response[0].sa_med_nombre);
+        //$('#sa_med_estado').val(response[0].sa_med_estado);
       }
     });
   }
 
   function editar_insertar() {
-    var sa_sec_id = $('#sa_sec_id').val();
-    var sa_sec_nombre = $('#sa_sec_nombre').val();
+    var sa_med_id = $('#sa_med_id').val();
+    var sa_med_nombre = $('#sa_med_nombre').val();
 
     var parametros = {
-      'sa_sec_id': sa_sec_id,
-      'sa_sec_nombre': sa_sec_nombre,
+      'sa_med_id': sa_med_id,
+      'sa_med_nombre': sa_med_nombre,
     }
 
-    if (sa_sec_id == '') {
-      if (sa_sec_nombre == '') {
+    if (sa_med_id == '') {
+      if (sa_med_nombre == '') {
         Swal.fire({
           icon: 'error',
           title: 'Oops...',
@@ -56,7 +56,7 @@ if (isset($_GET['id'])) {
         insertar(parametros)
       }
     } else {
-      if (sa_sec_nombre == '') {
+      if (sa_med_nombre == '') {
         Swal.fire({
           icon: 'error',
           title: 'Oops...',
@@ -78,7 +78,7 @@ if (isset($_GET['id'])) {
       data: {
         parametros: parametros
       },
-      url: '<?= $url_general ?>/controlador/seccionC.php?insertar=true',
+      url: '<?= $url_general ?>/controlador/medicamentosC.php?insertar=true',
       type: 'post',
       dataType: 'json',
       /*beforeSend: function () {   
@@ -88,9 +88,9 @@ if (isset($_GET['id'])) {
       success: function(response) {
         if (response == 1) {
           Swal.fire('', 'Operacion realizada con exito.', 'success').then(function() {
-              location.href = '<?= $url_general ?>/vista/inicio.php?mod=7&acc=seccion';
+              location.href = '<?= $url_general ?>/vista/inicio.php?mod=7&acc=medicamentos';
           });
-          //location.href = '<?= $url_general ?>/vista/inicio.php?mod=7&acc=seccion';
+          //location.href = '<?= $url_general ?>/vista/inicio.php?mod=7&acc=medicamentos';
         } else if (response == -2) {
           //Swal.fire('', 'codigo ya regitrado', 'success');
         }
@@ -123,7 +123,7 @@ if (isset($_GET['id'])) {
       data: {
         id: id
       },
-      url: '<?= $url_general ?>/controlador/seccionC.php?eliminar=true',
+      url: '<?= $url_general ?>/controlador/medicamentosC.php?eliminar=true',
       type: 'post',
       dataType: 'json',
       beforeSend: function () {   
@@ -133,9 +133,9 @@ if (isset($_GET['id'])) {
       success: function(response) {
         if (response == 1) {
           Swal.fire('Eliminado!', 'Registro Eliminado.', 'success').then(function() {
-            location.href = '<?= $url_general ?>/vista/inicio.php?mod=7&acc=seccion';
+            location.href = '<?= $url_general ?>/vista/inicio.php?mod=7&acc=medicamentos';
           });
-          //location.href = '<?= $url_general ?>/vista/inicio.php?mod=7&acc=seccion';
+          //location.href = '<?= $url_general ?>/vista/inicio.php?mod=7&acc=medicamentos';
         }
 
       }
@@ -162,9 +162,9 @@ if (isset($_GET['id'])) {
             <li class="breadcrumb-item active" aria-current="page">
               <?php
               if ($id == '') {
-                echo 'Registrar Sección';
+                echo 'Registrar Medicamento';
               } else {
-                echo 'Modificar Sección';
+                echo 'Modificar Medicamento';
               }
               ?>
             </li>
@@ -184,27 +184,27 @@ if (isset($_GET['id'])) {
               <h5 class="mb-0 text-primary">
                 <?php
                 if ($id == '') {
-                  echo 'Registrar Sección';
+                  echo 'Registrar Medicamento';
                 } else {
-                  echo 'Modificar Sección';
+                  echo 'Modificar Medicamento';
                 }
                 ?>
               </h5>
               <div class="row m-2">
                 <div class="col-sm-12">
-                  <a href="<?= $url_general ?>/vista/inicio.php?mod=7&acc=seccion" class="btn btn-outline-dark btn-sm"><i class="bx bx-arrow-back"></i> Regresar</a>
+                  <a href="<?= $url_general ?>/vista/inicio.php?mod=7&acc=medicamentos" class="btn btn-outline-dark btn-sm"><i class="bx bx-arrow-back"></i> Regresar</a>
                 </div>
               </div>
             </div>
             <hr>
 
             <form action="" method="post">
-              <input type="hidden" id="sa_sec_id" name="sa_sec_id">
+              <input type="hidden" id="sa_med_id" name="sa_med_id">
 
               <div class="row pt-3">
                 <div class="col-md-12">
-                  <label for="" class="form-label">Sección: <label style="color: red;">*</label> </label>
-                  <input type="text" class="form-control form-control-sm" id="sa_sec_nombre" name="sa_sec_nombre">
+                  <label for="" class="form-label">Medicamento: <label style="color: red;">*</label> </label>
+                  <input type="text" class="form-control form-control-sm" id="sa_med_nombre" name="sa_med_nombre">
                 </div>
               </div>
 

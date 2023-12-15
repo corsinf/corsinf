@@ -19,7 +19,20 @@ if (isset($_GET['eliminar'])) {
     echo json_encode($controlador->eliminar($_POST['id']));
 }
 
-//echo json_encode($controlador->insertar_editar('Ejemplo1'));
+if (isset($_GET['listar_paralelo_representante'])) {
+    echo json_encode($controlador->listar_paralelo_representante($_POST['id_paralelo']));
+}
+
+if (isset($_GET['listar_estudiante_representante'])) {
+    echo json_encode($controlador->lista_estudiantes_representante($_POST['id_representante']));
+}
+
+
+if (isset($_GET['buscar_estudiante_ficha_medica'])) {
+    echo json_encode($controlador->buscar_estudiante_ficha_medica($_POST['id_estudiante']));
+}
+
+//echo json_encode($controlador->buscar_estudiante_ficha_medica(5));
 
 class estudiantesC
 {
@@ -100,7 +113,7 @@ class estudiantesC
 
     function eliminar($id)
     {
-        $datos[0]['campo'] = 'sa_par_id';
+        $datos[0]['campo'] = 'sa_est_id';
         $datos[0]['dato'] = $id;
         $datos = $this->modelo->eliminar($datos);
         return $datos;
@@ -120,5 +133,28 @@ class estudiantesC
         }
 
         return $text;
+    }
+
+    function listar_paralelo_representante($buscar)
+    {
+        $datos = $this->modelo->buscar_paralelo_representante($buscar);
+        return $datos;
+    }
+
+    function lista_estudiantes_representante($id)
+    {
+        $datos = $this->modelo->buscar_estudiantes_representante($id);
+        return $datos;
+    }
+
+    function buscar_estudiante_ficha_medica($id_estudiante)
+    {
+        if (count($this->modelo->buscar_estudiante_ficha_medica($id_estudiante)) == 1) {
+            return $this->modelo->buscar_estudiante_ficha_medica($id_estudiante);
+        } else if (count($this->modelo->buscar_estudiante_ficha_medica($id_estudiante)) == 0) {
+            return -1;
+        } else if (count($this->modelo->buscar_estudiante_ficha_medica($id_estudiante)) > 0) {
+            return -2;
+        }
     }
 }

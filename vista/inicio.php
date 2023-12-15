@@ -139,8 +139,8 @@ if ($_GET['acc'] == 'detalle_libro') {
 //Salud
 
 //Admision
-if ($_GET['acc'] == 'admision') {
-	include('ENFERMERIA/Admision/admision.php');
+if ($_GET['acc'] == 'comunidad') {
+	include('ENFERMERIA/comunidad.php');
 }
 
 //Estudiantes
@@ -152,7 +152,54 @@ if ($_GET['acc'] == 'registrar_estudiantes') {
 	include('ENFERMERIA/Estudiantes/registrar_estudiantes.php');
 }
 
+//Atenciones
+
+if ($_GET['acc'] == 'atencion_estudiante') {
+	include('ENFERMERIA/Atenciones/atencion_estudiante.php');
+}
+if ($_GET['acc'] == 'atencion') {
+	include('ENFERMERIA/Atenciones/historial.php');
+}
+if ($_GET['acc'] == 'agendamiento') {
+	include('ENFERMERIA/Atenciones/agendamiento.php');
+}
+
+//Inicio 
+if ($_GET['acc'] == 'inicio_representante') {
+	include('ENFERMERIA/Inicio/inicio_representante.php');
+}
+
+
+
+
+//Consultas
+
+if ($_GET['acc'] == 'consulta_estudiante') {
+	include('ENFERMERIA/Consultas/Estudiantes/consulta_estudiante.php');
+}
+
+if ($_GET['acc'] == 'registrar_consulta_estudiante') {
+	include('ENFERMERIA/Consultas/Estudiantes/registrar_consulta_estudiante.php');
+}
+
+if ($_GET['acc'] == 'mensaje_atencion') {
+	include('ENFERMERIA/Consultas/Estudiantes/mensaje_atencion.php');
+}
+
+//Ficha Medica
+if ($_GET['acc'] == 'ficha_estudiante') {
+	include('ENFERMERIA/Fichas_Medicas/Estudiantes/ficha_estudiante.php');
+}
+
+if ($_GET['acc'] == 'registrar_ficha_estudiante') {
+	include('ENFERMERIA/Fichas_Medicas/Estudiantes/registrar_ficha_estudiante.php');
+}
+
 //Cursos
+if ($_GET['acc'] == 'parametrizacion') {
+	include('ENFERMERIA/cursos/parametrizacion.php');
+}
+
 if ($_GET['acc'] == 'registrar_seccion') {
 	include('ENFERMERIA/cursos/seccion/registrar_seccion.php');
 }
@@ -176,6 +223,35 @@ if ($_GET['acc'] == 'registrar_paralelo') {
 if ($_GET['acc'] == 'paralelo') {
 	include('ENFERMERIA/cursos/paralelo/paralelo.php');
 }
+
+//Representantes
+if ($_GET['acc'] == 'registrar_representantes') {
+	include('ENFERMERIA/representantes/registrar_representantes.php');
+}
+
+if ($_GET['acc'] == 'representantes') {
+	include('ENFERMERIA/representantes/representantes.php');
+}
+
+if ($_GET['acc'] == 'ficha_medica_representado') {
+	include('ENFERMERIA/representantes/ficha_medica_representado.php');
+}
+
+//Medicinas
+if ($_GET['acc'] == 'registrar_medicamentos') {
+	include('ENFERMERIA/Medicamentos/registrar_medicamentos.php');
+}
+
+if ($_GET['acc'] == 'medicamentos') {
+	include('ENFERMERIA/Medicamentos/medicamentos.php');
+}
+
+//Notificaciones
+
+if ($_GET['acc'] == 'notificaciones') {
+	include('ENFERMERIA/Notificaciones/notificaciones.php');
+}
+
 
 
 if ($_GET['acc'] == 'index') {

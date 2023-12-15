@@ -52,7 +52,7 @@ function consultar_datos()
 		<nav class="navbar navbar-expand-lg navbar-light bg-white rounded fixed-top rounded-0 shadow-sm">
 			<div class="container-fluid">
 				<a class="navbar-brand" href="#">
-					<img src="../img/de_sistema/logo_puce.png" width="140" alt="" />
+					<img src="../img/de_sistema/logo_puce2.jpeg" width="40" alt="" />
 				</a>
 				<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent1" aria-controls="navbarSupportedContent1" aria-expanded="false" aria-label="Toggle navigation"> <span class="navbar-toggler-icon"></span>
 				</button>
