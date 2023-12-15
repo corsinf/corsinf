@@ -1,6 +1,5 @@
 <?php @session_start();
 // print_r($_SESSION['INICIO']);
-<<<<<<< HEAD
 $tiempo_inactividad = 2 * 60;
 if(!isset($_SESSION['INICIO'])){header('Location: ../login.php');}
 // if (isset($_SESSION['INICIO']['ULTIMO_ACCESO']) && (time() - $_SESSION['INICIO']['ULTIMO_ACCESO'] > $tiempo_inactividad)) {
@@ -13,21 +12,7 @@ if(!isset($_SESSION['INICIO'])){header('Location: ../login.php');}
 
 
 ?> 
-=======
-if (!isset($_SESSION['INICIO'])) {
-	header('Location: ../login.php');
-}
 
-//Pendiente para revisar, tener en cuenta 
-$dominio = $_SERVER['SERVER_NAME'];
-$url_general = 'http://' . $dominio . '/corsinf';
-
-if ($dominio != 'localhost') {
-	$url_general = 'http://' . $dominio . ':8087/corsinf';
-}
-
-?>
->>>>>>> DEVELOPER01
 <!doctype html>
 <html lang="en">
 
@@ -683,15 +668,10 @@ if ($dominio != 'localhost') {
 						<ul class="dropdown-menu dropdown-menu-end">
 							<li><a class="dropdown-item" href="inicio.php?acc=perfil"><i class="bx bx-user"></i><span>Perfil</span></a>
 							</li>
-<<<<<<< HEAD
 							<?php if($_SESSION['INICIO']['TIPO']=='DBA' || $_SESSION['INICIO']['TIPO']=='ADMINISTRADOR' || $_SESSION['INICIO']['TIPO']=='ADMIN'  ){ ?>
 							<li><a class="dropdown-item" href="javascript:;" onclick="cambiar_configuraciones()"><i class="bx bx-cog"></i><span>Configuraciones</span></a>
 							</li>
-=======
-							<?php if ($_SESSION['INICIO']['TIPO'] == 'DBA') { ?>
-								<li><a class="dropdown-item" href="javascript:;" onclick="cambiar_configuraciones()"><i class="bx bx-cog"></i><span>Configuraciones</span></a>
-								</li>
->>>>>>> DEVELOPER01
+
 							<?php } ?>
 							<li><a class="dropdown-item" href="javascript:;"><i class='bx bx-home-circle'></i><span>Dashboard</span></a>
 							</li>

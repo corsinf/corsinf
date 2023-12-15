@@ -97,7 +97,6 @@ if ($_GET['acc'] == 'reporte_detalle') {
 }
 
 //EMPRESA
-<<<<<<< HEAD
 	if($_GET['acc']=='usuarios')
 	{
 		include('EMPRESA/usuarios.php');
@@ -130,25 +129,6 @@ if ($_GET['acc'] == 'reporte_detalle') {
 	{
 		include('EMPRESA/no_concurente.php');
 	}
-
-=======
-if ($_GET['acc'] == 'usuarios') {
-	include('EMPRESA/usuarios.php');
-}
-if ($_GET['acc'] == 'tipo_usuario') {
-	include('EMPRESA/tipo_usuario.php');
-}
-if ($_GET['acc'] == 'modulos_paginas') {
-	include('EMPRESA/modulos_paginas.php');
-}
-if ($_GET['acc'] == 'vinculacion') {
-	include('EMPRESA/vinculacion.php');
-}
-if ($_GET['acc'] == 'detalle_usuario') {
-	include('EMPRESA/detalle_usuario.php');
-}
->>>>>>> DEVELOPER01
-
 
 //SEGUROS
 if ($_GET['acc'] == 'lista_solicitudes') {
