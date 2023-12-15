@@ -9,12 +9,17 @@ if (isset($_GET['id_estudiante'])) {
 
 ?>
 
+
+<script src="<?= $url_general ?>/js/ENFERMERIA/ficha_medica.js"></script>
+<script src="<?= $url_general ?>/js/ENFERMERIA/operaciones_generales.js"></script>
+
+
 <script type="text/javascript">
     $(document).ready(function() {
         var id = '<?php echo $_SESSION['INICIO']['ID_USUARIO']; ?>';
         //console.log(id);
         var id_estudiante = '<?php echo $id_estudiante; ?>';
-        
+
         //alert(id_representante);
 
         if (id_estudiante != '') {
@@ -26,55 +31,8 @@ if (isset($_GET['id_estudiante'])) {
 
         }
 
+        preguntas_ficha_medica();
 
-        //Opciones para las preguntas de la ficha tecnica////////////////////////////////////////////////
-
-        $('input[name=sa_fice_pregunta_1]').change(function() {
-            if ($(this).val() === 'Si') {
-                $('#sa_fice_pregunta_1_obs').show();
-            } else if ($(this).val() === 'No') {
-                $('#sa_fice_pregunta_1_obs').hide();
-                $('#sa_fice_pregunta_1_obs').val('');
-            }
-        });
-
-        $('input[name=sa_fice_pregunta_2]').change(function() {
-            if ($(this).val() === 'Si') {
-                $('#sa_fice_pregunta_2_obs').show();
-            } else if ($(this).val() === 'No') {
-                $('#sa_fice_pregunta_2_obs').hide();
-                $('#sa_fice_pregunta_2_obs').val('');
-            }
-        });
-
-        $('input[name=sa_fice_pregunta_3]').change(function() {
-            if ($(this).val() === 'Si') {
-                $('#sa_fice_pregunta_3_obs').show();
-            } else if ($(this).val() === 'No') {
-                $('#sa_fice_pregunta_3_obs').hide();
-                $('#sa_fice_pregunta_3_obs').val('');
-            }
-        });
-
-        $('input[name=sa_fice_pregunta_4]').change(function() {
-            if ($(this).val() === 'Si') {
-                $('#sa_fice_pregunta_4_obs').show();
-            } else if ($(this).val() === 'No') {
-                $('#sa_fice_pregunta_4_obs').hide();
-                $('#sa_fice_pregunta_4_obs').val('');
-            }
-        });
-
-        $('#sa_fice_est_seguro_medico').change(function() {
-            if ($(this).val() === 'Si') {
-                $('#sa_fice_est_nombre_seguro_div').show();
-            } else if ($(this).val() === 'No') {
-                $('#sa_fice_est_nombre_seguro_div').hide();
-                $('#sa_fice_est_nombre_seguro').val('');
-            }
-        });
-
-        //////////////////////////////////////////////////
     });
 
     //Para el detalle principal
@@ -104,7 +62,7 @@ if (isset($_GET['id_estudiante'])) {
 
                 $('#txt_sexo').html(sexo_estudiante);
                 $('#txt_fecha_nacimiento').html(fecha_nacimiento_formateada(response[0].sa_est_fecha_nacimiento.date));
-                $('#txt_edad').html(edad_fecha_nacimiento(response[0].sa_est_fecha_nacimiento.date) + ' años');
+                $('#txt_edad').html(calcular_edad_fecha_nacimiento(response[0].sa_est_fecha_nacimiento.date) + ' años');
                 $('#txt_email').html(response[0].sa_est_correo + " <i class='bx bx-envelope'></i>");
 
                 curso = response[0].sa_sec_nombre + '/' + response[0].sa_gra_nombre + '/' + response[0].sa_par_nombre;
@@ -117,45 +75,7 @@ if (isset($_GET['id_estudiante'])) {
             }
         });
     }
-
-    function edad_fecha_nacimiento(fecha_nacimiento) {
-        const fechaNacimientoJson = fecha_nacimiento;
-
-        // Crear un objeto Date a partir del string de fecha
-        const fechaNacimiento = new Date(fechaNacimientoJson);
-
-        // Obtener la fecha actual
-        const fechaActual = new Date();
-
-        // Calcular la diferencia en milisegundos entre la fecha actual y la fecha de nacimiento
-        const diferenciaEnMilisegundos = fechaActual - fechaNacimiento;
-
-        // Calcular la edad en años a partir de la diferencia en milisegundos
-        const edadEnMilisegundos = new Date(diferenciaEnMilisegundos);
-        const edadEnAnios = Math.abs(edadEnMilisegundos.getUTCFullYear() - 1970);
-
-        var salida = 'jp';
-        // Mostrar la edad en años
-
-        salida = edadEnAnios;
-
-        return salida;
-    }
-
-    function fecha_nacimiento_formateada(fecha) {
-        fechaYHora = fecha;
-        fecha = new Date(fechaYHora);
-        año = fecha.getFullYear();
-        mes = (fecha.getMonth() + 1).toString().padStart(2, '0'); // Añade un 0 si es necesario
-        dia = fecha.getDate().toString().padStart(2, '0'); // Añade un 0 si es necesario
-        fechaFormateada = `${año}-${mes}-${dia}`;
-
-        var salida = '';
-        salida = fechaFormateada;
-
-        return salida;
-    }
-
+    
     // Ficha Tecnica  ---------------------------------------------------------------- 
 
     function datos_col_estudiante(id_estudiante) {
@@ -178,7 +98,7 @@ if (isset($_GET['id_estudiante'])) {
                 //Fecha de nacimiento
 
                 $('#sa_fice_est_fecha_nacimiento').val(fecha_nacimiento_formateada(response[0].sa_est_fecha_nacimiento.date));
-                $('#sa_fice_est_edad').val(edad_fecha_nacimiento(response[0].sa_est_fecha_nacimiento.date));
+                $('#sa_fice_est_edad').val(calcular_edad_fecha_nacimiento(response[0].sa_est_fecha_nacimiento.date));
                 ///////////////////////////////////////////////////////////////////////////////////////////
 
                 datos_col_representante(response[0].sa_id_representante);

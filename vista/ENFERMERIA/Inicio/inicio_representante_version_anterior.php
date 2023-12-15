@@ -1,5 +1,3 @@
-<script src="<?= $url_general ?>/js/ENFERMERIA/pacientes.js"></script>
-
 <script type="text/javascript">
     $(document).ready(function() {
         var id = '<?php echo $_SESSION['INICIO']['ID_USUARIO']; ?>';
@@ -15,7 +13,9 @@
     });
 
     function cargarDatos(id) {
-
+        // $('#nuevo_tipo_usuario').modal('show');
+        // $('#btn_opcion').text('Editar');
+        // $('#exampleModalLongTitle').text('Editar tipo de usuario');
         var noconcurente = '<?php echo $_SESSION['INICIO']['NO_CONCURENTE']; ?>';
         var parametros = {
             'id': id,
@@ -28,7 +28,10 @@
             url: '../controlador/usuariosC.php?datos_usuarios=true',
             type: 'post',
             dataType: 'json',
-
+            /*beforeSend: function () {   
+                 var spiner = '<div class="text-center"><img src="../../img/gif/proce.gif" width="100" height="100"></div>'     
+               $('#tabla_').html(spiner);
+            },*/
             success: function(response) {
                 //console.log(response);
                 $('#txt_ci').html(response[0].ci + " <i class='bx bxs-id-card'></i>");
@@ -56,46 +59,74 @@
             success: function(response) {
                 console.log(response);
                 $.each(response, function(i, item) {
+                    //console.log(item);
+
+                    /*estudiantes +=
+                        '<tr>' +
+                        '<td>' + item.sa_est_cedula + '</td>' +
+                        '<td><a href="<?= $url_general ?>/vista/inicio.php?mod=7&acc=registrar_estudiantes&id=' + item.sa_est_id + '&id_seccion=' + item.sa_id_seccion + '&id_grado=' + item.sa_id_grado + '&id_paralelo=' + item.sa_id_paralelo + '&id_representante=' + item.sa_id_representante + '"><u>' + item.sa_est_primer_apellido + ' ' + item.sa_est_segundo_apellido + ' ' + item.sa_est_primer_nombre + ' ' + item.sa_est_segundo_nombre + '</u></a></td>' +
+                        '<td>' + item.sa_sec_nombre + ' / ' + item.sa_gra_nombre + ' / ' + item.sa_par_nombre + '</td>' +
+                        '<td>' + edad_fecha_nacimiento(item.sa_est_fecha_nacimiento.date) + '</td>' +
+                        '</tr>';*/
+
+                    /*estudiantes +=
+                        '<tr>' +
+                        '<th style="width:40%" class="table-success text-end">Cédula:</th>' +
+                        '<td>' + item.sa_est_cedula + '</td>' +
+                        '</tr>' +
+                        '<tr>' +
+                        '<th style="width:40%" class="table-success text-end">Nombres:</th>' +
+                        '<td>' + item.sa_est_primer_nombre + ' ' + item.sa_est_segundo_nombre + '</td>' +
+                        '</tr>' +
+                        '<tr>' +
+                        '<th style="width:40%" class="table-success text-end">Apellidos:</th>' +
+                        '<td>' + item.sa_est_primer_apellido + ' ' + item.sa_est_segundo_apellido + '</td>' +
+                        '</tr>' +
+                        '<tr>' +
+                        '<th style="width:40%" class="table-success text-end">Sexo:</th>' +
+                        '<td>' + item.sa_est_cedula + '</td>' +
+                        '</tr>' +
+                        '<tr>' +
+                        '<th style="width:40%" class="table-success text-end">Fecha de Nacimiento:</th>' +
+                        '<td>' + fecha_nacimiento_formateada(item.sa_est_fecha_nacimiento.date) + '</td>' +
+                        '</tr>' +
+                        '<tr>' +
+                        '<th style="width:40%" class="table-success text-end">Edad Actual:</th>' +
+                        '<td>' + edad_fecha_nacimiento(item.sa_est_fecha_nacimiento.date) + ' años</td>' +
+                        '</tr>' +
+                        '<tr>' +
+                        '<th style="width:40%" class="table-success text-end">Correo Electrónico:</th>' +
+                        '<td>' + item.sa_est_correo + '</td>' +
+                        '</tr>' +
+                        '<tr>' +
+                        '<th style="width:40%" class="table-success text-end">Sección/Grado/Curso:</th>' +
+                        '<td>' + item.sa_id_grado + ' </td>' +
+                        '</tr><tr><td></td><td></td></tr>';*/
 
                     sexo_estudiante = '';
-                    if (item.sa_est_sexo == 'Masculino') {
+                    if (item.sa_est_sexo == 'M') {
                         sexo_estudiante = 'Masculino';
-                    } else if (item.sa_est_sexo == 'Famenino') {
+                    } else if (item.sa_est_sexo == 'F') {
                         sexo_estudiante = 'Famenino';
                     }
 
                     curso = item.sa_sec_nombre + '/' + item.sa_gra_nombre + '/' + item.sa_par_nombre;
 
-                    alert = '<div class="alert border-0 border-start border-5 border-danger alert-dismissible fade show py-2">'+
-									'<div class="d-flex align-items-center">'+
-										'<div class="font-35 text-danger"><i class="bx bxs-message-square-x"></i>'+
-										'</div>'+
-										'<div class="ms-3">'+
-											'<h6 class="mb-0 text-danger text-start">¡Atención!</h6>'+
-											'<div class="mb-0 text-start">La ficha médica aún no esta realizada</div>'+
-										'</div>'+
-									'</div>'+
-								'</div>';
-
-
-                        
-
                     estudiantes +=
-                        '<div class="col-12">' +
+                        '<div class="col">' +
                         '<div class="card radius-15">' +
                         '<div class="card-body text-center">' +
                         '<div class="p-4 border radius-15">' +
-
-                        alert +
-
                         '<img src="<?= $url_general ?>/img/computadora.jpg" width="110" height="110" class="rounded-circle shadow" alt="">' +
                         '<h5 class="mb-0 mt-5">' + item.sa_est_primer_apellido + ' ' + item.sa_est_segundo_apellido + ' ' + item.sa_est_primer_nombre + ' ' + item.sa_est_segundo_nombre + '</h5>' +
                         '<p class="mb-0">' + item.sa_est_cedula + '</p>' +
-                        '<p class="mb-0">' + item.sa_est_sexo + '</p>' +
+                        '<p class="mb-0">' + sexo_estudiante + '</p>' +
+                        //'<p class="mb-0">' + fecha_nacimiento_formateada(item.sa_est_fecha_nacimiento.date) + ' (' + edad_fecha_nacimiento(item.sa_est_fecha_nacimiento.date) + ' años)' + '</p>' +
+                        //'<p class="mb-0">' + item.sa_est_correo + '</p>' +
                         '<p class="mb-3">' + curso + '</p>' +
 
                         '<div class="d-grid mt-3">' +
-                        '<a href="#" onclick="gestion_paciente_comunidad(' + item.sa_est_id + ', \'' + item.sa_est_tabla + '\');" class="btn btn-outline-primary radius-15">Detalles</a>' +
+                        '<a href="<?= $url_general ?>/vista/inicio.php?mod=7&acc=ficha_medica_representado&id_estudiante=' + item.sa_est_id + '"' + 'class="btn btn-outline-primary radius-15">Detalles</a>' +
 
                         '</div>' +
                         '</div>' +
@@ -104,11 +135,13 @@
                         '</div>';
                 });
 
+                //$('#tbl_datos').html(estudiantes);
                 $('#card_estudiantes').html(estudiantes);
 
             }
         });
     }
+
 </script>
 
 <div class="page-wrapper">
@@ -200,23 +233,6 @@
                                             </table>
                                         </div>
                                     </div>
-
-                                    <hr>
-                                    <form action="<?php echo $url_general ?>/controlador/ficha_MedicaC.php?administrar_comunidad_ficha_medica=true" method="post">
-                                        <input type="text" name="sa_pac_id_comunidad" id="">
-                                        <select name="sa_pac_tabla" id="">
-                                            <option value="estudiantes">estudiantes</option>
-                                            <option value="docentes">docentes</option>
-                                            <option value="representantes">representantes</option>
-                                            <option value="administrativos">administrativos</option>
-                                            <option value="comunidad">comunidad</option>
-                                        </select>
-                                        <input type="submit" value="Enviar">
-                                    </form>
-
-
-
-
                                 </div>
                             </div>
                             <div class="tab-pane fade" id="estudiantes" role="tabpanel">
@@ -232,7 +248,7 @@
                                     </div>
                                 </div>
 
-                                <div class="row row-cols-1 row-cols-lg-2 row-cols-xl-3" id="card_estudiantes">
+                                <div class="row row-cols-1 row-cols-lg-2 row-cols-xl-4" id="card_estudiantes">
 
                                 </div>
                             </div>
@@ -241,5 +257,7 @@
                 </div>
             </div>
         </div>
+
+
     </div>
 </div>

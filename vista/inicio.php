@@ -195,6 +195,11 @@ if ($_GET['acc'] == 'registrar_ficha_estudiante') {
 	include('ENFERMERIA/Fichas_Medicas/Estudiantes/registrar_ficha_estudiante.php');
 }
 
+//Posiblemente las de arriba se eliminan
+if ($_GET['acc'] == 'ficha_medica_pacientes') {
+	include('ENFERMERIA/Fichas_Medicas/ficha_medica_pacientes.php');
+}
+
 //Cursos
 if ($_GET['acc'] == 'parametrizacion') {
 	include('ENFERMERIA/cursos/parametrizacion.php');
@@ -244,6 +249,11 @@ if ($_GET['acc'] == 'registrar_medicamentos') {
 
 if ($_GET['acc'] == 'medicamentos') {
 	include('ENFERMERIA/Medicamentos/medicamentos.php');
+}
+
+//Pacientes
+if ($_GET['acc'] == 'pacientes') {
+	include('ENFERMERIA/Pacientes/pacientes.php');
 }
 
 //Notificaciones

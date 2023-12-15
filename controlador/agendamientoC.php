@@ -84,9 +84,6 @@ class agendamientoC
         );
         return  $datos = $this->modelo->insertar('consultas',$datos);
 
-
-
-
     	print_r($datos);die();
 
     }
