@@ -740,6 +740,17 @@ function para_ftp($nombre,$texto)
 					 $this->db->inserts('USUARIO_TIPO_USUARIO',$datos,1);		
 				} 	
 		 }
+
+
+		 //genera tablas que comprate los diferentes modulos
+		 $parametros1 = array(
+		    array(&$id_empresa, SQLSRV_PARAM_IN),
+		    array(&$db_destino, SQLSRV_PARAM_IN),
+		  );
+		  $sql = "EXEC GenerarTablasCompartidas  @id_empresa = ?,@db_destino = ?";
+		  $this->db->ejecutar_procesos_almacenados($sql,$parametros1,false,1);
+
+
 		 $db_origen = EMPRESA_MASTER;
 		 $parametros = array(
 		    array(&$db_origen, SQLSRV_PARAM_IN),

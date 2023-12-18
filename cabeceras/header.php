@@ -672,10 +672,15 @@ if ($dominio != 'localhost') {
 							<li>
 								<div class="dropdown-divider mb-0"></div>
 							</li>
-							<li><a class="dropdown-item" href="javascript:;" onclick="cerrar_session();"><i class='bx bx-log-out-circle'></i><span>Salir de sistema</span></a>
-								<?php if ($_SESSION['INICIO']['MODULO_SISTEMA'] == 1) { ?>
-							<li><a class="dropdown-item" href="javascript:;" onclick="regresar_modulo();"><i class='bx bx-log-out-circle'></i><span>Salir de configuraciones</span></a>
+							<?php if ($_SESSION['INICIO']['MODULO_SISTEMA'] == 1) { ?>
+							<li><a class="dropdown-item" href="javascript:;" onclick="regresar_modulo();"><i class='bx bx-cog'></i><span>Salir de configuraciones</span></a>
 							<?php } ?>
+							<li>
+
+								<a class="dropdown-item" href="javascript:;" onclick="cerrar_session();">
+									<i class='bx bx-log-out-circle'></i><span>Salir de sistema</span>
+								</a>
+								
 							</li>
 						</ul>
 					</div>
