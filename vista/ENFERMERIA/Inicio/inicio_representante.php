@@ -9,7 +9,7 @@
         }
 
         //Esta consultando unos datos por defecto
-        consultar_datos_estudiante_representante(3);
+        consultar_datos_estudiante_representante(1);
 
         //consultar_datos(6);
     });
