@@ -5,6 +5,7 @@ include('../modelo/modulos_paginasM.php');
 include('../modelo/tipo_usuarioM.php');
 include('../modelo/no_concurenteM.php');
 include('../lib/phpmailer/enviar_emails.php');
+
 if(isset($_SESSION['INICIO']))
 {	
   @session_start();
@@ -106,23 +107,30 @@ class loginC
 			$no_concurente = 0;
 			 $datos = $this->login->buscar_empresas($parametros['email'],$parametros['pass']);
 			 $empresas = '';
+			 // print_r(count($datos));die();
 
 			 // si no ecuentra en usuarios va a la tabla de no concurentes 
 			 if(count($datos)==0)
 			 {
 			 	 $no_concurentes = $this->login->empresa_tabla_noconcurente();
+
+			 	 // print_r($no_concurentes);die();
 			 	 $datos = array();
 			 	 foreach ($no_concurentes as $key => $value) {
 			 	 	 	$empresa = $this->login->lista_empresa($value['Id_Empresa']);
 			 	 	 	$parametros['Campo_Usuario'] = $value['Campo_usuario'];
-			 	 	 	$parametros['Campo_Pass'] = $value['campo_pass'];
+			 	 	 	$parametros['Campo_Pass'] = $value['Campo_pass'];
 			 	 	 	$parametros['tabla'] = $value['Tabla'];
-			 	 	 	$busqueda_tercero = $this->login->buscar_db_terceros($empresa[0]['Base_datos'],$empresa[0]['Usuario_db'],$empresa[0]['Password_db'],$empresa[0]['Ip_host'],$empresa[0]['Puerto_db'],$parametros);
-			 	 	 	if(count($busqueda_tercero)>0)
+			 	 	 	// print_r($empresa);die();
+			 	 	 	if(count($empresa)>0)
 			 	 	 	{
-			 	 	 		$datos[] = $empresa[0];
-			 	 	 		$no_concurente = 1;
-			 	 	 	}
+					 	 	 	$busqueda_tercero = $this->login->buscar_db_terceros($empresa[0]['Base_datos'],$empresa[0]['Usuario_db'],$empresa[0]['Password_db'],$empresa[0]['Ip_host'],$empresa[0]['Puerto_db'],$parametros);
+					 	 	 	if(count($busqueda_tercero)>0)
+					 	 	 	{
+					 	 	 		$datos[] = $empresa[0];
+					 	 	 		$no_concurente = 1;
+					 	 	 	}
+				 	 	 }
 			 	 }
 
 			 	 // print_r($datos);die();
@@ -131,7 +139,7 @@ class loginC
 			 foreach ($datos as $key => $value) {
 			 	$empresas.= '<li class="list-group-item d-flex align-items-center radius-10 mb-2 shadow-sm" onclick="empresa_selecconada('.$value['Id_Empresa'].')">
 											<div class="d-flex align-items-center">
-												<div class="font-20"><img style="width:50px; height:50px" src="'.str_replace('../','',$value['Logo']).'" />
+												<div class="font-20"><img style="width:70px; height:50px" src="'.str_replace('../','',$value['Logo']).'" />
 												</div>
 												<div class="flex-grow-1 ms-2">
 													<h6 class="mb-0">'.$value['Nombre_Comercial'].'</h6>
@@ -253,7 +261,7 @@ class loginC
 			 	 $busqueda_tercero = array();
 			 	 foreach ($no_concurentes as $key => $value) {
 			 	 	 	$parametros['Campo_Usuario'] = $value['Campo_usuario'];
-			 	 	 	$parametros['Campo_Pass'] = $value['campo_pass'];
+			 	 	 	$parametros['Campo_Pass'] = $value['Campo_pass'];
 			 	 	 	$parametros['tabla'] = $value['Tabla'];
 			 	 	 	$tabla = $value['Tabla'];
 			 	 	 	$busqueda_tercero = $this->login->buscar_db_terceros($empresa[0]['Base_datos'],$empresa[0]['Usuario_db'],$empresa[0]['Password_db'],$empresa[0]['Ip_host'],$empresa[0]['Puerto_db'],$parametros);

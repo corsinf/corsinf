@@ -160,7 +160,7 @@
               if(response!=-1)
               {
                 Swal.fire('Contrato guardada','','success').then(function(){
-                  location.href = 'contratos.php?id='+response;
+                  location.href = 'inicio.php?acc=contratos&id='+response;
                 })
               }
           }
@@ -196,6 +196,35 @@
         });
   }
 
+  function tipo_pago_save()
+  {
+    nom =  $('#txt_tipo_pago').val();
+
+    var parametros = 
+    {
+      'nombre':nom,
+    }
+        $.ajax({
+          data:  {parametros:parametros},
+          url:   '../controlador/contratoC.php?tipo_pago_save=true',
+          type:  'post',
+          dataType: 'json',
+          /*beforeSend: function () {   
+               var spiner = '<div class="text-center"><img src="../img/gif/proce.gif" width="100" height="100"></div>'     
+             $('#tabla_').html(spiner);
+          },*/
+            success:  function (response) {
+              if(response==1)
+              {
+                $('#txt_tipo_pago').val('');
+                $('#myModal_tipo_pago').modal('hide');
+                Swal.fire('Tipo pago guardado','','success');
+                forma_pago();
+              }
+          }
+        });
+  }
+
 
   function forma_pago()
   {
@@ -206,7 +235,7 @@
           type:  'post',
           dataType: 'json',
             success:  function (response) {
-              var  op = '';
+              var  op = '<option value="">Seleccione tipo de pago</option>';
              response.forEach(function(item,i)
              {
                op+='<option value="'+item.id+'">'+item.nombre+'</option>';
@@ -303,11 +332,11 @@
 
   function editar_insertar()
   {
-    var nom = $('#txt_proveedor').val();
-    var ci = $('#txt_ci').val();
-    var tel = $('#txt_telefono').val();
-    var ema = $('#txt_email').val();
-    var dir = $('#txt_direccion').val();
+    var nom = $('#txt_proveedorNew').val();
+    var ci = $('#txt_ciNew').val();
+    var tel = $('#txt_telefonoNew').val();
+    var ema = $('#txt_emailNew').val();
+    var dir = $('#txt_direccionNew').val();
     
     if(nom=='' || ci =='' || tel =='' || ema =='' || dir =='')
     {
@@ -517,7 +546,7 @@
                     <input type="" name="txt_prima" id="txt_prima" class="form-control form-control-sm" value="0">
                   </div>
                   <div class="col-sm-6">
-                    <b>Plan</b>            
+                    <b>Nombre Plan</b>            
                     <input type="" name="txt_plan" id="txt_plan" class="form-control form-control-sm">
                   </div>
                   <div class="col-sm-6">
@@ -525,10 +554,13 @@
                     <input type="" name="txt_valor_seguro" id="txt_valor_seguro"  class="form-control form-control-sm">
                   </div>          
                   <div class="col-sm-6">
-                    <b>Forma de pago</b>            
-                    <select class="form-select form-select-sm" name="ddl_forma_pago" id="ddl_forma_pago">
-                      <option value="">Seleccione</option>
-                    </select>
+                    <b>Forma de pago</b>    
+                    <div class="input-group input-group-sm">        
+                      <select class="form-select form-select-sm" name="ddl_forma_pago" id="ddl_forma_pago">
+                        <option value="">Seleccione</option>
+                      </select>
+                       <button type="button" class="btn btn-outline-secondary btn-sm" title="Nuevo tipo de pago" onclick="nuevo_tipo_pago()"><i class="bx bx-plus"></i></button>
+                     </div>
                   </div>
                   <div class="col-sm-6">
                     <b>Cobertura %</b>            
@@ -580,7 +612,7 @@
                       </div>
                       <div class="col-sm-2 text-end">
                         <br>
-                          <button type="button" class="btn btn-primary btn-sm" title="Nuevo Siniestro" onclick="agregar_a_contrato()"><i class="bx bx-down-arrow-circle"></i> Agregar</button>                  
+                          <button type="button" class="btn btn-primary btn-sm" title="Nuevo Siniestro" onclick="agregar_a_contrato()"> Agregar <i class="bx bx-down-arrow-circle me-0"></i></button>                  
                       </div>
                     </div>
                     <div class="row table-responsive">
@@ -632,6 +664,10 @@
     {
       $('#myModal_proveedor').modal('show');
     }
+    function nuevo_tipo_pago()
+    {
+      $('#myModal_tipo_pago').modal('show');
+    }
   </script>
 
 <div class="modal fade" id="myModal_siniestro">
@@ -672,6 +708,24 @@
   </div>
 </div>
 
+<div class="modal fade" id="myModal_tipo_pago">
+  <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title" id="titulo">Nuevo tipo de pago</h3>
+      </div>
+      <div class="modal-body">       
+        Nombre de Tipo de pago <br>
+        <input type="input" name="txt_tipo_pago" id="txt_tipo_pago" class="form-control form-control-sm">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" id="op" onclick="tipo_pago_save()">Guardar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class="modal fade" id="myModal_proveedor">
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
@@ -682,23 +736,23 @@
         <div class="row">
           <div class="col-sm-12">
              Nombre <br>
-             <input type="input" name="txt_proveedor" id="txt_proveedor" class="form-control form-control-sm">           
+             <input type="input" name="txt_proveedorNew" id="txt_proveedorNew" class="form-control form-control-sm">           
           </div>
           <div class="col-sm-12">
             CI /RUC <br>
-            <input type="input" name="txt_ci" id="txt_ci" class="form-control form-control-sm">            
+            <input type="input" name="txt_ciNew" id="txt_ciNew" class="form-control form-control-sm">            
           </div>
            <div class="col-sm-6">
             Email <br>
-            <input type="input" name="txt_email" id="txt_email" class="form-control form-control-sm">            
+            <input type="input" name="txt_emailNew" id="txt_emailNew" class="form-control form-control-sm">            
           </div>
            <div class="col-sm-6">
             Telefono <br>
-            <input type="input" name="txt_telefono" id="txt_telefono" class="form-control form-control-sm">            
+            <input type="input" name="txt_telefonoNew" id="txt_telefonoNew" class="form-control form-control-sm">            
           </div>
            <div class="col-sm-12">
             Direccion <br>
-            <textarea class="form-control form-control-sm " id="txt_direccion" name="txt_direccion" style="resize:none" rows="2"></textarea>          
+            <textarea class="form-control form-control-sm " id="txt_direccionNew" name="txt_direccionNew" style="resize:none" rows="2"></textarea>          
           </div>
         </div>
       </div>

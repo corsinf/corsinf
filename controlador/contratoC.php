@@ -16,6 +16,11 @@ if(isset($_GET['coberturaSave']))
 	$parametros = $_POST['parametros'];
 	echo json_encode($controlador->guardar_cobertura($parametros));
 }
+if(isset($_GET['tipo_pago_save']))
+{
+	$parametros = $_POST['parametros'];
+	echo json_encode($controlador->tipo_pago_save($parametros));
+}
 if(isset($_GET['proveSave']))
 {
 	$parametros = $_POST['parametros'];
@@ -132,6 +137,13 @@ class contratoC
 		$datos[0]['campo'] = 'nombre_riesgo';
 		$datos[0]['dato'] = utf8_decode($parametros['nombre']);
 		return $this->modelo->guardar($tabla='RIESGOS',$datos);
+	}
+
+	function tipo_pago_save($parametros)
+	{
+		$datos[0]['campo'] = 'nombre_tipo';
+		$datos[0]['dato'] = utf8_decode($parametros['nombre']);
+		return $this->modelo->guardar('TIPO_PAGO',$datos);
 	}
 	function guardar_prove($parametros)
 	{

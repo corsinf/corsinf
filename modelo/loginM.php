@@ -36,22 +36,28 @@ class loginM
 
 	function empresa_tabla_noconcurente($id_empresa=false)
 	{
-		$sql = "SELECT Tabla,Id_Empresa,Campo_usuario,campo_pass FROM TABLAS_NOCONCURENTE
+		$sql = "SELECT Tabla,Id_Empresa,Campo_usuario,Campo_pass FROM TABLAS_NOCONCURENTE
 				WHERE 1=1 ";
 				if($id_empresa)
 				{
 					$sql.=" AND Id_Empresa='".$id_empresa."'";
 				}
-				$sql.="GROUP BY Tabla,Id_Empresa,Campo_usuario,campo_pass";
+				$sql.="GROUP BY Tabla,Id_Empresa,Campo_usuario,Campo_pass";
+
+				// print_r($sql);die();
 		$datos = $this->db->datos($sql,1);
 		return $datos;
 	}
 
 	function buscar_db_terceros($database,$usuario,$password,$servidor,$puerto,$parametros)
 	{
+		$item = array();
 		$sql = "SELECT * FROM ".$parametros['tabla']." WHERE ".$parametros['Campo_Usuario']." = '".$parametros['email']."' AND ".$parametros['Campo_Pass']."='".$parametros['pass']."'";
+		if($this->db->conexion_db_terceros($database,$usuario,$password,$servidor,$puerto)!='-1')
+		{
 		 $item = $this->db->datos_db_terceros($database,$usuario,$password,$servidor,$puerto,$sql);
-		 return $item;
+		}
+		return $item;
 	}
 
 	function buscar_empresas_no_concurentes($email,$pass,$id=false)
