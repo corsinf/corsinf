@@ -49,6 +49,8 @@ class loginM
 
 	function buscar_db_terceros($database,$usuario,$password,$servidor,$puerto,$parametros)
 	{
+		$this->parametros_conexion($master);
+
 		$sql = "SELECT * FROM ".$parametros['tabla']." WHERE ".$parametros['Campo_Usuario']." = '".$parametros['email']."' AND ".$parametros['Campo_Pass']."='".$parametros['pass']."'";
 		 $item = $this->db->datos_db_terceros($database,$usuario,$password,$servidor,$puerto,$sql);
 		 return $item;
