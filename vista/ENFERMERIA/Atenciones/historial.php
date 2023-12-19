@@ -3,7 +3,7 @@
         consultar_datos();
     });
 
-   
+
 
     function consultar_datos(id = '') {
         var estudiantes = '';
@@ -126,22 +126,10 @@
         </div>
         <!--end breadcrumb-->
 
-           
-           <div class="row" id="citas_actuales">
-                
-                    
-                    
-                    
 
+        <div class="row" id="citas_actuales">
 
-
-
-
-
-
-
-
-       <div class="col-12 col-lg-3">
+            <div class="col-12 col-lg-3">
 
                 <div class="card border-top border-0 border-4 border-primary">
                     <div class="card-body p-5">
@@ -164,8 +152,8 @@
                     </div>
                 </div>
             </div>
- 
-    <div class="col-12 col-lg-9">
+
+            <div class="col-12 col-lg-9">
                 <div class="card border-top border-0 border-4 border-primary">
                     <div class="card-body">
                         <div class="card-title d-flex align-items-center">
@@ -209,9 +197,8 @@
                         </div>
                     </div>
                 </div>
-            </div> 
+            </div>
         </div>
         <!--end row-->
     </div>
 </div>
-
