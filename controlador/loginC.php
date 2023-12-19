@@ -258,6 +258,8 @@ class loginC
 				// busca en tabla no concurrentes 
 				 $no_concurentes = $this->login->empresa_tabla_noconcurente($parametros['id']);
 			 	 $empresa = $this->login->lista_empresa($parametros['id']);
+
+			 	 // print_r($no_concurentes);die();
 			 	 $tabla = '';
 			 	 $busqueda_tercero = array();
 			 	 foreach ($no_concurentes as $key => $value) {
@@ -266,12 +268,17 @@ class loginC
 			 	 	 	$parametros['tabla'] = $value['Tabla'];
 			 	 	 	$tabla = $value['Tabla'];
 			 	 	 	$busqueda_tercero = $this->login->buscar_db_terceros($empresa[0]['Base_datos'],$empresa[0]['Usuario_db'],$empresa[0]['Password_db'],$empresa[0]['Ip_host'],$empresa[0]['Puerto_db'],$parametros);
-			 	 	 	break;
+			 	 	 	if(count($busqueda_tercero)>0)
+			 	 	 	{
+			 	 	 		break;
+			 	 	 	}
 			 	 }
 
 			 	 // print_r($datos);die();
 
 				 	$id = $this->noconcurente->id_tabla_no_concurentes($tabla);
+
+			 	 // print_r($busqueda_tercero);print_r($id);die();
 				 	$_SESSION['INICIO']['ULTIMO_ACCESO'] = time();
 					$_SESSION["INICIO"]['VER'] = $datos[0]['Ver'];
 					$_SESSION["INICIO"]['EDITAR'] = $datos[0]['editar'];
