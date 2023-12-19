@@ -5,6 +5,7 @@ include('../modelo/modulos_paginasM.php');
 include('../modelo/tipo_usuarioM.php');
 include('../modelo/no_concurenteM.php');
 include('../lib/phpmailer/enviar_emails.php');
+
 if(isset($_SESSION['INICIO']))
 {	
   @session_start();
@@ -131,7 +132,7 @@ class loginC
 			 foreach ($datos as $key => $value) {
 			 	$empresas.= '<li class="list-group-item d-flex align-items-center radius-10 mb-2 shadow-sm" onclick="empresa_selecconada('.$value['Id_Empresa'].')">
 											<div class="d-flex align-items-center">
-												<div class="font-20"><img style="width:50px; height:50px" src="'.str_replace('../','',$value['Logo']).'" />
+												<div class="font-20"><img style="width:70px; height:50px" src="'.str_replace('../','',$value['Logo']).'" />
 												</div>
 												<div class="flex-grow-1 ms-2">
 													<h6 class="mb-0">'.$value['Nombre_Comercial'].'</h6>
