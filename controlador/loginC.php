@@ -244,6 +244,7 @@ class loginC
 				$_SESSION["INICIO"]['FOTO'] = $datos[0]['foto'];
 				$_SESSION["INICIO"]['NO_CONCURENTE'] = '';
 				$_SESSION["INICIO"]['NO_CONCURENTE_NOM'] ='';
+				$_SESSION["INICIO"]['NO_CONCURENTE_TABLA_ID'] ='';
 				$_SESSION["INICIO"]['NO_CONCURENTE_TABLA'] ='';
 				$_SESSION["INICIO"]['MODULO_SISTEMA_ANT'] ='';
 				$_SESSION["INICIO"]['LISTA_ART'] =1;
@@ -284,6 +285,7 @@ class loginC
 					$_SESSION["INICIO"]['FOTO'] = $datos[0]['foto'];
 					$_SESSION["INICIO"]['NO_CONCURENTE'] = $busqueda_tercero[0][$id[0]['ID']] ;
 					$_SESSION["INICIO"]['NO_CONCURENTE_NOM'] ='';
+					$_SESSION["INICIO"]['NO_CONCURENTE_TABLA_ID'] =$id[0]['ID'];
 					$_SESSION["INICIO"]['NO_CONCURENTE_TABLA'] =$tabla;
 					$_SESSION["INICIO"]['MODULO_SISTEMA_ANT'] ='';
 					$_SESSION["INICIO"]['LISTA_ART'] =1;
