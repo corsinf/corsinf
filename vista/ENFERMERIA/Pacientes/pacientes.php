@@ -3,7 +3,7 @@
 
 <script type="text/javascript">
     $(document).ready(function() {
-        $('#tabla_representante').DataTable({
+        $('#tabla_pacientes').DataTable({
             language: {
                 url: 'https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
             },
@@ -87,7 +87,7 @@
                         <section class="content pt-4">
                             <div class="container-fluid">
                                 <div class="table-responsive">
-                                    <table class="table table-striped responsive" id="tabla_representante" style="width:100%">
+                                    <table class="table table-striped responsive" id="tabla_pacientes" style="width:100%">
                                         <thead>
                                             <tr>
                                                 <th>Cédula</th>

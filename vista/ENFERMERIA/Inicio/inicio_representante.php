@@ -3,20 +3,26 @@
 <script type="text/javascript">
     $(document).ready(function() {
         var id = '<?php echo $_SESSION['INICIO']['ID_USUARIO']; ?>';
+
+        var noconcurente_id = '<?php echo $_SESSION['INICIO']['NO_CONCURENTE']; ?>';
+
+        var noconcurente_tabla = '<?php echo $_SESSION['INICIO']['NO_CONCURENTE_TABLA']; ?>';
         //console.log(id);
+
+        //alert(noconcurente_tabla)
+
         if (id != '') {
-            cargarDatos(id)
+            cargarDatos(noconcurente_id)
         }
 
         //Esta consultando unos datos por defecto
-        consultar_datos_estudiante_representante(3);
+        consultar_datos_estudiante_representante(noconcurente_id);
 
         //consultar_datos(6);
     });
 
     function cargarDatos(id) {
 
-        var noconcurente = '<?php echo $_SESSION['INICIO']['NO_CONCURENTE']; ?>';
         var parametros = {
             'id': id,
             'query': '',
@@ -66,19 +72,19 @@
 
                     curso = item.sa_sec_nombre + '/' + item.sa_gra_nombre + '/' + item.sa_par_nombre;
 
-                    alert = '<div class="alert border-0 border-start border-5 border-danger alert-dismissible fade show py-2">'+
-									'<div class="d-flex align-items-center">'+
-										'<div class="font-35 text-danger"><i class="bx bxs-message-square-x"></i>'+
-										'</div>'+
-										'<div class="ms-3">'+
-											'<h6 class="mb-0 text-danger text-start">¡Atención!</h6>'+
-											'<div class="mb-0 text-start">La ficha médica aún no esta realizada</div>'+
-										'</div>'+
-									'</div>'+
-								'</div>';
+                    alert = '<div class="alert border-0 border-start border-5 border-danger alert-dismissible fade show py-2">' +
+                        '<div class="d-flex align-items-center">' +
+                        '<div class="font-35 text-danger"><i class="bx bxs-message-square-x"></i>' +
+                        '</div>' +
+                        '<div class="ms-3">' +
+                        '<h6 class="mb-0 text-danger text-start">¡Atención!</h6>' +
+                        '<div class="mb-0 text-start">La ficha médica aún no esta realizada</div>' +
+                        '</div>' +
+                        '</div>' +
+                        '</div>';
 
 
-                        
+
 
                     estudiantes +=
                         '<div class="col-12">' +
@@ -117,7 +123,8 @@
         <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
             <div class="breadcrumb-title pe-3">Enfermería</div>
             <?php
-            // print_r($_SESSION['INICIO']);die();
+            //print_r($_SESSION['INICIO']);
+            //die();
 
             ?>
             <div class="ps-3">
