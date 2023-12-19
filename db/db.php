@@ -308,8 +308,9 @@ class db
 	}
 
 	//Para retonar valores de la procedures de todo un select
-	function ejecutar_procedimiento_con_retorno_1($sql, $parametros = false)
+	function ejecutar_procedimiento_con_retorno_1($sql, $parametros = false, $master = false)
 	{
+		$this->parametros_conexion($master);
 		$conn = $this->conexion();
 
 		if ($parametros) {
