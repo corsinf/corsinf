@@ -9,8 +9,15 @@ include('../lib/pdf/fpdf.php');
 
 $controlador = new consultasC();
 
-if (isset($_GET['listar'])) {
-    echo json_encode($controlador->lista_consultas($_POST['id']));
+if (isset($_GET['listar_consulta_ficha'])) {
+
+    $id_ficha = '';
+
+    if (isset($_POST['id_ficha'])) {
+        $id_ficha = $_POST['id_ficha'];
+    }
+
+    echo json_encode($controlador->lista_consultas_ficha($id_ficha));
 }
 
 if (isset($_GET['buscar'])) {
@@ -60,9 +67,9 @@ class consultasC
         $this->email = new enviar_emails();
     }
 
-    function lista_consultas($id)
+    function lista_consultas_ficha($id_ficha)
     {
-        $datos = $this->modelo->lista_consultas($id);
+        $datos = $this->modelo->lista_consultas_ficha($id_ficha);
         return $datos;
     }
 
@@ -126,7 +133,7 @@ class consultasC
         );
 
 
-// print_r($parametros);die();
+        // print_r($parametros);die();
 
 
 
@@ -147,22 +154,6 @@ class consultasC
         $where[0]['dato'] = $parametros['sa_conp_id'];
         $datos = $this->modelo->editar($datos, $where);*/
         return $datos;
-    }
-
-    function compara_datos($parametros)
-    {
-        $text = '';
-        $marca = $this->modelo->lista_consultas($parametros['id']);
-
-        if ($marca[0]['CODIGO'] != $parametros['cod']) {
-            $text .= ' Se modifico CODIGO en SECCION de ' . $marca[0]['CODIGO'] . ' a ' . $parametros['cod'];
-        }
-
-        if ($marca[0]['DESCRIPCION'] != $parametros['des']) {
-            $text .= ' Se modifico DESCRIPCION en SECCION DE ' . $marca[0]['DESCRIPCION'] . ' a ' . $parametros['des'];
-        }
-
-        return $text;
     }
 
     function eliminar($id)

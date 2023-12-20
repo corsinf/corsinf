@@ -83,6 +83,10 @@ class pacientesM
         return $datos;
     }
 
+    // --------------------------------------------------------------------
+    // Funciones validas
+    // --------------------------------------------------------------------
+
     function obtener_informacion_pacienteM($sa_pac_id)
     {
 
@@ -95,7 +99,7 @@ class pacientesM
         return $this->db->ejecutar_procedimiento_con_retorno_1($sql, $parametros);
     }
 
-    function lista_pacientes_todo($id = '')
+    function lista_pacientes_todo()
     {
         $sql = "SELECT
                     sa_pac_id,
@@ -114,5 +118,26 @@ class pacientesM
         $datos = $this->db->datos($sql);
         return $datos;
     }
-}
 
+    function obtener_idFicha_paciente($id_paciente = '')
+    {
+        $sql = "SELECT 
+                    --p.sa_pac_id,
+                    --f.sa_fice_pac_id,
+                    f.sa_fice_id
+                    
+                FROM pacientes p
+                LEFT JOIN ficha_medica f ON p.sa_pac_id = f.sa_fice_pac_id
+                WHERE p.sa_pac_id = $id_paciente";
+
+        $datos = $this->db->datos($sql);
+
+        $data = [
+            'sa_fice_id' => $datos[0]['sa_fice_id'],
+            //'sa_pac_id' => $datos[0]['sa_pac_id'],
+            //'sa_fice_pac_id' => $datos[0]['sa_fice_pac_id'],
+        ];
+
+        return $data;
+    }
+}
