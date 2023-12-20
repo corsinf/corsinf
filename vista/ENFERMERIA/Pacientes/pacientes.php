@@ -3,7 +3,7 @@
 
 <script type="text/javascript">
     $(document).ready(function() {
-        $('#tabla_pacientes').DataTable({
+        $('#tbl_pacientes').DataTable({
             language: {
                 url: 'https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
             },
@@ -13,6 +13,11 @@
                 dataSrc: ''
             },
             columns: [{
+                    data: null,
+                    render: function(data, type, item) {
+                        return '<div class="text-center"><a href="<?= $url_general ?>/vista/inicio.php?mod=7&acc=consultas_pacientes&pac_id=' + item.sa_pac_id + '" class="btn btn-primary btn-sm "><i class="bx bxs-dock-left me-0"></i></a></div>';
+                    }
+                }, {
                     data: 'sa_pac_cedula'
                 },
                 {
@@ -36,7 +41,6 @@
             ]
         });
     });
-
 </script>
 
 <form id="form_enviar" action="<?= $url_general ?>/vista/inicio.php?mod=7&acc=ficha_medica_pacientes" method="post" style="display: none;">
@@ -87,9 +91,10 @@
                         <section class="content pt-4">
                             <div class="container-fluid">
                                 <div class="table-responsive">
-                                    <table class="table table-striped responsive" id="tabla_pacientes" style="width:100%">
+                                    <table class="table table-striped responsive " id="tbl_pacientes" style="width:100%">
                                         <thead>
                                             <tr>
+                                                <th width="10px">Consultas</th>
                                                 <th>Cédula</th>
                                                 <th>Nombres</th>
                                                 <th>Correo</th>

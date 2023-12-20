@@ -14,36 +14,38 @@ class consultasM
         $this->db = new db();
     }
 
-    function lista_consultas($id = '')
+    //Para buscar las consultas en base a la ficha medica
+    function lista_consultas_ficha($id_ficha = '')
     {
-        $sql = "SELECT 
-        sa_conp_id,
-        sa_fice_id,
-        sa_conp_nombres,
-        
-        sa_conp_fecha_ingreso,
-        sa_conp_desde_hora,
-        sa_conp_hasta_hora,
-        
-        sa_conp_notificacion_envio_representante,
-        sa_conp_notificacion_envio_inspector,
-        sa_conp_notificacion_envio_guardia,
+        if ($id_ficha) {
 
-        sa_conp_tipo_consulta,
-        sa_conp_estado,
-        sa_conp_fecha_creacion
+            $sql = "SELECT 
+                        sa_conp_id,
+                        sa_fice_id,
+                        sa_conp_nivel,
+                        
+                        sa_conp_fecha_ingreso,
+                        sa_conp_desde_hora,
+                        sa_conp_hasta_hora,
+                        
+                        sa_conp_notificacion_envio_representante,
+                        sa_conp_notificacion_envio_inspector,
+                        sa_conp_notificacion_envio_guardia,
 
-        
-        FROM consultas
-        WHERE sa_conp_estado = 1";
+                        sa_conp_tipo_consulta,
+                        sa_conp_estado,
+                        sa_conp_fecha_creacion
 
-        if ($id) {
-            $sql .= ' and sa_fice_id = ' . $id;
+                        FROM consultas_medicas
+                        WHERE sa_conp_estado = 1";
+
+
+            $sql .= ' and sa_fice_id = ' . $id_ficha;
+
+            $sql .= " ORDER BY sa_conp_id";
+            $datos = $this->db->datos($sql);
+            return $datos;
         }
-
-        $sql .= " ORDER BY sa_conp_id";
-        $datos = $this->db->datos($sql);
-        return $datos;
     }
 
     function lista_solo_consultas($id = '')
@@ -103,7 +105,7 @@ class consultasM
         return $datos;
     }
 
-    function lista_consultas_todo($id = '')
+    function lista_consultas_todo1($id = '')
     {
         $sql = "SELECT 
         sa_conp_id,
