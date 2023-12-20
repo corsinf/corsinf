@@ -10,10 +10,8 @@
         //console.log(id);
 
         //alert(noconcurente_tabla)
-
-        if (id != '') {
-            cargarDatos(noconcurente_id)
-        }
+            cargarDatos(id)
+    
 
         //Esta consultando unos datos por defecto
         consultar_datos_estudiante_representante(noconcurente_id);
@@ -38,13 +36,17 @@
             success: function(response) {
                 //console.log(response);
                 $('#txt_ci').html(response[0].ci + " <i class='bx bxs-id-card'></i>");
-                $('#txt_nombre').html(response[0].nombres);
+                $('#txt_nombre').html(response[0].nombre);
                 $('#txt_apellido').html(response[0].ape);
-                $('#txt_sexo').html('Falta dato en usuario' + " <i class='bx bx-female'></i> <i class='bx bx-male'></i>");
+                 $('#txt_sexo').html('Falta dato en usuario' + " <i class='bx bx-female'></i> <i class='bx bx-male'></i>");
+                if(response[0].sexo != '')
+                {
+                     $('#txt_sexo').html( response[0].sexo);
+                }
                 $('#txt_fecha_nacimiento').html('Falta dato en usuario');
                 $('#txt_edad').html('Falta dato en usuario');
                 $('#txt_email').html(response[0].email + " <i class='bx bx-envelope'></i>");
-                $('#txt_telefono').html(response[0].tel + " <i class='bx bxs-phone'></i>");
+                $('#txt_telefono').html(response[0].telefono + " <i class='bx bxs-phone'></i>");
             }
         });
     }
@@ -123,8 +125,8 @@
         <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
             <div class="breadcrumb-title pe-3">Enfermería</div>
             <?php
-            //print_r($_SESSION['INICIO']);
-            //die();
+            // print_r($_SESSION['INICIO']);
+            // die();
 
             ?>
             <div class="ps-3">

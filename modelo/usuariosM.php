@@ -189,17 +189,23 @@ class usuariosM
 		return $datos;
 	}
 
-	function no_concurente_custodios($codigo)
+	function no_concurente_data()
 	{
-		$sql = "SELECT ID_PERSON as 'id',PERSON_CI as 'ci',PERSON_NOM as 'nombres',DIRECCION as 'dir',TELEFONO as 'tel',PASS as 'pass',PERSON_CORREO as 'email',FOTO as 'foto'
-			 FROM PERSON_NO
-			 WHERE ESTADO = 'A' ";
-			 if($codigo)
-			 {
-			 	$sql.=" AND PERSON_NO = '".$codigo."'";
-			 }
-		$datos = $this->db->datos($sql,1);
-		return $datos;
+		$usuario= $_SESSION['INICIO']['NO_CONCURENTE'];
+		$tabla= $_SESSION['INICIO']['NO_CONCURENTE_TABLA'];
+		$campo= $_SESSION['INICIO']['NO_CONCURENTE_TABLA_ID'];
+
+		 $parametros = array(
+		    array(&$usuario, SQLSRV_PARAM_IN),
+		    array(&$tabla, SQLSRV_PARAM_IN),
+		    array(&$campo, SQLSRV_PARAM_IN),
+		  );
+		 
+		  $sql = "EXEC BuscarDatosNoconcurente @id_usuario = ?, @tabla = ?, @campowhere = ?";
+
+		  $datos = $this->db->ejecutar_procedimiento_con_retorno_1($sql, $parametros, $master = false);
+
+		  return $datos;
 	}
 
 
