@@ -16,7 +16,8 @@ if (isset($_GET['pac_id'])) {
     //obtener el id de la ficha por el paciente
 
     var sa_pac_id = '<?php echo $sa_pac_id; ?>';
-    $('#id_paciente').val(sa_pac_id);
+
+    $('input[name="id_paciente"]').val(sa_pac_id);
 
 
     cargar_datos_paciente(sa_pac_id);
@@ -81,7 +82,7 @@ if (isset($_GET['pac_id'])) {
         //Primer ajax
         console.log(response.sa_fice_id);
 
-        $('#id_ficha').val(response.sa_fice_id);
+        $('input[name="id_ficha"]').val(response.sa_fice_id);
 
         $.ajax({
           data: {
@@ -111,7 +112,7 @@ if (isset($_GET['pac_id'])) {
                 {
                   data: null,
                   render: function(data, type, item) {
-                    return fecha_nacimiento_formateada(item.sa_conp_fecha_ingreso.date);
+                    return fecha_nacimiento_formateada(item.sa_conp_fecha_ingreso.date) + ' / ' + obtener_hora_formateada(item.sa_conp_desde_hora.date);
                   }
                 },
                 {
@@ -121,7 +122,29 @@ if (isset($_GET['pac_id'])) {
                   }
                 },
                 {
-                  data: 'sa_conp_tipo_consulta'
+                  data: 'sa_conp_permiso_salida',
+                },
+                {
+                  data: null,
+                  render: function(data, type, item) {
+                    if (item.sa_conp_tipo_consulta == 'consulta') {
+                      return '<div class="badge rounded-pill text-success bg-light-success p-2 text-uppercase px-3">' + item.sa_conp_tipo_consulta + '</div>';
+                    } else {
+                      return '<div class="badge rounded-pill text-info bg-light-info p-2 text-uppercase px-3">' + item.sa_conp_tipo_consulta + '</div>';
+                    }
+                  }
+                },
+                {
+                  data: null,
+                  render: function(data, type, item) {
+                    if (item.sa_conp_estado_revision == 0) {
+                      return '<div class="badge rounded-pill text-info bg-light-info p-2 text-uppercase px-3">' + 'Creado' + '</div>';
+                    } else if (item.sa_conp_estado_revision == 1) {
+                      return '<div class="badge rounded-pill text-success bg-light-success p-2 text-uppercase px-3">' + 'Finalizado' + '</div>';
+                    } else if (item.sa_conp_estado_revision == 2) {
+                      return '<div class="badge rounded-pill text-danger bg-light-danger p-2 text-uppercase px-3">' + 'En Proceso' + '</div>';
+                    }
+                  }
                 },
               ],
             });
@@ -162,7 +185,7 @@ if (isset($_GET['pac_id'])) {
             <div class="card-title d-flex align-items-center">
               <div><i class="bx bxs-user me-1 font-22 text-primary"></i>
               </div>
-              <h5 class="mb-0 text-primary">Historial de Consultas del Paciente - <b id="title_paciente" class="text-success"></b></h5>
+              <h5 class="mb-0 text-primary">Historial de Consultas del Paciente: <b id="title_paciente" class="text-success"></b></h5>
 
               <div class="row m-2">
                 <div class="col-sm-12">
@@ -228,7 +251,9 @@ if (isset($_GET['pac_id'])) {
                             <th width="10px">Revisar</th>
                             <th>Fecha de creación</th>
                             <th>Hora Desde/Hasta</th>
+                            <th>Permiso de Salida</th>
                             <th>Tipo de Atención</th>
+                            <th width="10px">Estado</th>
                           </tr>
                         </thead>
                         <tbody>

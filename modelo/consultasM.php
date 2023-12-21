@@ -27,6 +27,8 @@ class consultasM
                         sa_conp_fecha_ingreso,
                         sa_conp_desde_hora,
                         sa_conp_hasta_hora,
+                        sa_conp_permiso_salida,
+                        sa_conp_estado_revision,
                         
                         sa_conp_notificacion_envio_representante,
                         sa_conp_notificacion_envio_inspector,
