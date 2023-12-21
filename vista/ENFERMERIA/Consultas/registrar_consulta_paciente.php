@@ -1,14 +1,21 @@
-<?php //include('../../../../cabeceras/header.php');
+<?php
 
 $id_ficha = '';
-$id_estudiante = '1';
-$id_representante = '1';
+$id_paciente = '';
+$tipo_consulta = '';
+
 $id_consulta = '';
 
+if (isset($_POST['id_ficha'])) {
+    $id_ficha = $_POST['id_ficha'];
+}
 
+if (isset($_POST['id_paciente'])) {
+    $id_paciente = $_POST['id_paciente'];
+}
 
-if (isset($_GET['id_ficha'])) {
-    $id_ficha = $_GET['id_ficha'];
+if (isset($_POST['tipo_consulta'])) {
+    $tipo_consulta = $_POST['tipo_consulta'];
 }
 
 if (isset($_GET['id_consulta'])) {
@@ -17,36 +24,19 @@ if (isset($_GET['id_consulta'])) {
 
 ?>
 
+<script src="<?= $url_general ?>/js/ENFERMERIA/operaciones_generales.js"></script>
+
 <script type="text/javascript">
     $(document).ready(function() {
-        var id_estudiante = '<?php echo $id_estudiante; ?>';
-        var id_representante = '<?php echo $id_representante; ?>';
+
         var id_ficha = '<?php echo $id_ficha; ?>';
         var id_consulta = '<?php echo $id_consulta; ?>';
-
-
-        //alert(id_estudiante + ' + ' + id_representante);
-
-        //Para cargar el id de la ficha del estudiante al momento de insertar
-        $('#sa_conp_id').val(id_ficha);
-
-        if (id_estudiante != '') {
-            datos_col_estudiante(id_estudiante);
-            datos_col_representante(id_representante);
-        }
-        //alert(id_consulta)
-        if (id_consulta != '') {
-            datos_col_consulta_estudiante(id_consulta)
-        } else {
-            datos_col_medicamentos_1();
-            datos_col_medicamentos_2();
-            datos_col_medicamentos_3();
-            $('#radio_tipo_atencion').show();
-        }
+        var id_paciente = '<?php echo $id_paciente; ?>';
+        var tipo_consulta = '<?php echo $tipo_consulta; ?>';
 
         //////////////////////////////////
-        //Para la consulta llenado de datos
-        cosnulta_hora_desde();
+        //Para la consulta - llenado de datos
+        consulta_hora_desde();
 
         $('#sa_conp_desde_hora, #sa_conp_hasta_hora').change(function() {
             calcular_diferencia_hora();
@@ -56,68 +46,10 @@ if (isset($_GET['id_consulta'])) {
             calcular_diferencia_fecha();
         });
 
-        //Preguntas para tipo de atencion que se escoja una opcion, para habilitar funcion comentar las dos lineas de abajo y descomentar lo que esta con /* */ 
-        //$('#main_consulta').show();
-        //$('#radio_tipo_atencion').hide();
-
-
-        $('input[name=tipo_atencion_1]').change(function() {
-            if ($(this).val() === 'Consulta') {
-                opcion_Consulta();
-            } else if ($(this).val() === 'Certificado') {
-                opcion_Certificado();
-            } else if ($(this).val() === 'Salida') {
-                opcion_Salida();
-            }
-        });
     });
 
-    //Funciones para la calga del formulario para mostrar pestañas con el radio buton
-
-    function opcion_Consulta() {
-        $('#main_consulta').show();
-
-        $('#seccion_navtab_consulta').show();
-        $('#seccion_navtab_certificado').hide();
-        $('#seccion_navtab_salida').hide();
-
-        $('#seccion_boton_consulta').show();
-        $('#seccion_boton_certificado').hide();
-        $('#seccion_boton_salida').hide();
-
-        $('#radio_tipo_atencion').hide();
-    }
-
-    function opcion_Certificado() {
-        $('#main_consulta').show();
-
-        $('#seccion_navtab_consulta').show();
-        $('#seccion_navtab_certificado').show();
-        $('#seccion_navtab_salida').hide();
-
-        $('#seccion_boton_consulta').hide();
-        $('#seccion_boton_certificado').show();
-        $('#seccion_boton_salida').hide();
-
-        $('#radio_tipo_atencion').hide();
-    }
-
-    function opcion_Salida() {
-        $('#main_consulta').show();
-
-        $('#seccion_navtab_consulta').show();
-        $('#seccion_navtab_certificado').hide();
-        $('#seccion_navtab_salida').show();
-
-        $('#seccion_boton_consulta').hide();
-        $('#seccion_boton_certificado').hide();
-        $('#seccion_boton_salida').show();
-
-        $('#radio_tipo_atencion').hide();
-    }
-
     //Funciones para la consulta
-    function cosnulta_hora_desde() {
+    function consulta_hora_desde() {
         // Obtener la hora actual
         var ahora = new Date();
 
@@ -169,189 +101,8 @@ if (isset($_GET['id_consulta'])) {
         }
     }
 
-    function edad_fecha_nacimiento(fecha_nacimiento) {
-        fechaNacimientoJson = fecha_nacimiento;
-
-        // Crear un objeto Date a partir del string de fecha
-        fechaNacimiento = new Date(fechaNacimientoJson);
-
-        // Obtener la fecha actual
-        fechaActual = new Date();
-
-        // Calcular la diferencia en milisegundos entre la fecha actual y la fecha de nacimiento
-        diferenciaEnMilisegundos = fechaActual - fechaNacimiento;
-
-        // Calcular la edad en años a partir de la diferencia en milisegundos
-        edadEnMilisegundos = new Date(diferenciaEnMilisegundos);
-        edadEnAnios = Math.abs(edadEnMilisegundos.getUTCFullYear() - 1970);
-
-        var salida = '';
-        // Mostrar la edad en años
-        salida = edadEnAnios;
-
-        return salida;
-    }
-
-    function fecha_formateada(fecha) {
-        fechaYHora = fecha;
-        fecha = new Date(fechaYHora);
-        año = fecha.getFullYear();
-        mes = (fecha.getMonth() + 1).toString().padStart(2, '0'); // Añade un 0 si es necesario
-        dia = fecha.getDate().toString().padStart(2, '0'); // Añade un 0 si es necesario
-        fechaFormateada = `${año}-${mes}-${dia}`;
-
-        var salida = '';
-        salida = fechaFormateada;
-
-        return salida;
-
-    }
-
-    function obtener_hora_formateada(hora) {
-        var fechaActual = new Date(hora);
-        var hora = fechaActual.getHours();
-        var minutos = fechaActual.getMinutes();
-
-        // Formatear la hora como una cadena
-        var horaFormateada = (hora < 10 ? '0' : '') + hora + ':' +
-            (minutos < 10 ? '0' : '') + minutos;
-
-        return horaFormateada;
-    }
-
-    //Estudiante 
-    function datos_col_estudiante(id_estudiante) {
-        $.ajax({
-            data: {
-                id: id_estudiante
-            },
-            url: '<?= $url_general ?>/controlador/estudiantesC.php?listar=true',
-            type: 'post',
-            dataType: 'json',
-            success: function(response) {
-                nombres = response[0].sa_est_primer_apellido + ' ' + response[0].sa_est_segundo_apellido + ' ' + response[0].sa_est_primer_nombre + ' ' + response[0].sa_est_segundo_apellido;
-
-                $('#sa_conp_nombres').val(nombres);
-                $('#sa_conp_fecha_nacimiento').val(fecha_formateada(response[0].sa_est_fecha_nacimiento.date));
-                $('#sa_conp_edad').val(edad_fecha_nacimiento(response[0].sa_est_fecha_nacimiento.date));
-                $('#sa_conp_nivel').val(response[0].sa_gra_nombre);
-                $('#sa_conp_paralelo').val(response[0].sa_par_nombre);
-            }
-        });
-    }
-
-    //Representante
-    function datos_col_representante(id_representante) {
-        $.ajax({
-            data: {
-                id: id_representante
-            },
-            url: '<?= $url_general ?>/controlador/representantesC.php?listar=true',
-            type: 'post',
-            dataType: 'json',
-            success: function(response) {
-                nombres = response[0].sa_rep_primer_apellido + ' ' + response[0].sa_rep_segundo_apellido + ' ' + response[0].sa_rep_primer_nombre + ' ' + response[0].sa_rep_segundo_apellido;
-
-                $('#sa_conp_rep_nombres').val(nombres);
-                $('#sa_conp_correo').val(response[0].sa_rep_correo);
-                $('#sa_conp_telefono').val(response[0].sa_rep_telefono_1);
-
-            }
-        });
-    }
-
-    //Medicamentos 1
-    function datos_col_medicamentos_1(id_medicamento = '', nombre_medicamento_consulta = '') {
-        var medicamentos = '';
-        medicamentos = '<option selected disabled>-- Seleccione --</option>'
-        $.ajax({
-            data: {
-                id: id_medicamento
-            },
-            url: '<?php echo $url_general ?>/controlador/medicamentosC.php?listar=true',
-            type: 'post',
-            dataType: 'json',
-
-            success: function(response) {
-                // console.log(response);   
-                $.each(response, function(i, item) {
-                    //console.log(item);
-
-                    if (nombre_medicamento_consulta == item.sa_med_nombre) {
-                        // Marca la opción correspondiente con el atributo 'selected'
-                        medicamentos += '<option value="' + item.sa_med_nombre + '" selected>' + item.sa_med_nombre + '</option>';
-                    } else {
-                        medicamentos += '<option value="' + item.sa_med_nombre + '">' + item.sa_med_nombre + '</option>';
-                    }
-                });
-
-                $('#sa_conp_medicina_1').html(medicamentos);
-            }
-        });
-    }
-
-    //Medicamentos 2
-    function datos_col_medicamentos_2(id_medicamento = '', id_medicamento_consulta = '') {
-        var medicamentos = '';
-        medicamentos = '<option selected disabled>-- Seleccione --</option>'
-        $.ajax({
-            data: {
-                id: id_medicamento
-            },
-            url: '<?php echo $url_general ?>/controlador/medicamentosC.php?listar=true',
-            type: 'post',
-            dataType: 'json',
-
-            success: function(response) {
-                // console.log(response);   
-                $.each(response, function(i, item) {
-                    //console.log(item);
-
-                    if (id_medicamento_consulta == item.sa_med_nombre) {
-                        // Marca la opción correspondiente con el atributo 'selected'
-                        medicamentos += '<option value="' + item.sa_med_nombre + '" selected>' + item.sa_med_nombre + '</option>';
-                    } else {
-                        medicamentos += '<option value="' + item.sa_med_nombre + '">' + item.sa_med_nombre + '</option>';
-                    }
-                });
-
-                $('#sa_conp_medicina_2').html(medicamentos);
-            }
-        });
-    }
-
-    //Medicamentos 3
-    function datos_col_medicamentos_3(id_medicamento = '', id_medicamento_consulta = '') {
-        var medicamentos = '';
-        medicamentos = '<option selected disabled>-- Seleccione --</option>'
-        $.ajax({
-            data: {
-                id: id_medicamento
-            },
-            url: '<?php echo $url_general ?>/controlador/medicamentosC.php?listar=true',
-            type: 'post',
-            dataType: 'json',
-
-            success: function(response) {
-                // console.log(response);   
-                $.each(response, function(i, item) {
-                    //console.log(item);
-
-                    if (id_medicamento_consulta == item.sa_med_nombre) {
-                        // Marca la opción correspondiente con el atributo 'selected'
-                        medicamentos += '<option value="' + item.sa_med_nombre + '" selected>' + item.sa_med_nombre + '</option>';
-                    } else {
-                        medicamentos += '<option value="' + item.sa_med_nombre + '">' + item.sa_med_nombre + '</option>';
-                    }
-                });
-
-                $('#sa_conp_medicina_3').html(medicamentos);
-            }
-        });
-    }
-
     //Consultas del Estudiante datos
-    function datos_col_consulta_estudiante(id_consulta) {
+    function datos_col_consulta_paciente(id_consulta) {
         $.ajax({
             data: {
                 id: id_consulta
@@ -372,7 +123,7 @@ if (isset($_GET['id_consulta'])) {
                 $('#sa_conp_telefono').val(response[0].sa_conp_telefono);*/
 
                 // Asignar valores de fechas y horas
-                $('#sa_conp_fecha_ingreso').val(fecha_formateada(response[0].sa_conp_fecha_ingreso.date));
+                $('#sa_conp_fecha_ingreso').val(obtener_hora_formateada(response[0].sa_conp_fecha_ingreso.date));
 
                 // alert(obtener_hora_formateada(response[0].sa_conp_desde_hora.date));
 
@@ -399,17 +150,17 @@ if (isset($_GET['id_consulta'])) {
                 $('#sa_conp_dosis_3').val(response[0].sa_conp_dosis_3);
 
                 // Asignar valores de certificados y permisos
-                $('#sa_conp_certificado_salud').val(response[0].sa_conp_certificado_salud);
+                $('#sa_conp_salud_certificado').val(response[0].sa_conp_salud_certificado);
                 $('#sa_conp_motivo_certificado').val(response[0].sa_conp_motivo_certificado);
                 $('#sa_conp_CIE_10_certificado').val(response[0].sa_conp_CIE_10_certificado);
                 $('#sa_conp_diagnostico_certificado').val(response[0].sa_conp_diagnostico_certificado);
-                $('#sa_conp_fecha_entrega_certificado').val(fecha_formateada(response[0].sa_conp_fecha_entrega_certificado.date));
-                $('#sa_conp_fecha_inicio_falta_certificado').val(fecha_formateada(response[0].sa_conp_fecha_inicio_falta_certificado.date));
-                $('#sa_conp_fecha_fin_alta_certificado').val(fecha_formateada(response[0].sa_conp_fecha_fin_alta_certificado.date));
+                $('#sa_conp_fecha_entrega_certificado').val(obtener_hora_formateada(response[0].sa_conp_fecha_entrega_certificado.date));
+                $('#sa_conp_fecha_inicio_falta_certificado').val(obtener_hora_formateada(response[0].sa_conp_fecha_inicio_falta_certificado.date));
+                $('#sa_conp_fecha_fin_alta_certificado').val(obtener_hora_formateada(response[0].sa_conp_fecha_fin_alta_certificado.date));
                 $('#sa_conp_dias_permiso_certificado').val(response[0].sa_conp_dias_permiso_certificado);
 
                 $('#sa_conp_permiso_salida').val(response[0].sa_conp_permiso_salida);
-                $('#sa_conp_fecha_permiso_salud_salida').val(fecha_formateada(response[0].sa_conp_fecha_permiso_salud_salida.date));
+                $('#sa_conp_fecha_permiso_salud_salida').val(obtener_hora_formateada(response[0].sa_conp_fecha_permiso_salud_salida.date));
                 $('#sa_conp_hora_permiso_salida').val(obtener_hora_formateada(response[0].sa_conp_hora_permiso_salida.date));
 
                 // Asignar valores de notificaciones y observaciones
@@ -439,19 +190,16 @@ if (isset($_GET['id_consulta'])) {
     }
 
     //falta estado para profesor
-    function editar_insertar(tipo_atencion = '', n_representante = '', n_docente = '', n_inspector = '', n_guardia = '') {
+    function editar_insertar(n_representante = '', n_docente = '', n_inspector = '', n_guardia = '') {
+
         var sa_conp_id = $('#sa_conp_id').val();
+
         var sa_fice_id = $('#sa_fice_id').val();
-
-
-
-        // Datos del estudiante
-        var sa_conp_nombres = $('#sa_conp_nombres').val();
         var sa_conp_nivel = $('#sa_conp_nivel').val();
         var sa_conp_paralelo = $('#sa_conp_paralelo').val();
         var sa_conp_edad = $('#sa_conp_edad').val();
-        var sa_conp_correo = $('#sa_conp_correo').val();
-        var sa_conp_telefono = $('#sa_conp_telefono').val();
+        var sa_conp_peso = $('#sa_conp_peso').val();
+        var sa_conp_altura = $('#sa_conp_altura').val();
 
         // Fechas y horas
         var sa_conp_fecha_ingreso = ($('#sa_conp_fecha_ingreso').val());
@@ -469,15 +217,9 @@ if (isset($_GET['id_consulta'])) {
         var sa_conp_diagnostico_1 = $('#sa_conp_diagnostico_1').val();
         var sa_conp_CIE_10_2 = $('#sa_conp_CIE_10_2').val();
         var sa_conp_diagnostico_2 = $('#sa_conp_diagnostico_2').val();
-        var sa_conp_medicina_1 = $('#sa_conp_medicina_1').val();
-        var sa_conp_dosis_1 = $('#sa_conp_dosis_1').val();
-        var sa_conp_medicina_2 = $('#sa_conp_medicina_2').val();
-        var sa_conp_dosis_2 = $('#sa_conp_dosis_2').val();
-        var sa_conp_medicina_3 = $('#sa_conp_medicina_3').val();
-        var sa_conp_dosis_3 = $('#sa_conp_dosis_3').val();
 
         // Certificados y permisos
-        var sa_conp_certificado_salud = $('#sa_conp_certificado_salud').val();
+        var sa_conp_salud_certificado = $('#sa_conp_salud_certificado').val();
         var sa_conp_motivo_certificado = $('#sa_conp_motivo_certificado').val();
         var sa_conp_CIE_10_certificado = $('#sa_conp_CIE_10_certificado').val();
         var sa_conp_diagnostico_certificado = $('#sa_conp_diagnostico_certificado').val();
@@ -487,35 +229,35 @@ if (isset($_GET['id_consulta'])) {
         var sa_conp_dias_permiso_certificado = $('#sa_conp_dias_permiso_certificado').val();
 
         // Permisos de salida
-        var sa_conp_permiso_salida = $('#sa_conp_permiso_salida').val();
+        var sa_conp_permiso_salida = $('input[name=sa_conp_permiso_salida]:checked').val();
         var sa_conp_fecha_permiso_salud_salida = ($('#sa_conp_fecha_permiso_salud_salida').val());
         var sa_conp_hora_permiso_salida = ($('#sa_conp_hora_permiso_salida').val());
 
         // Notificaciones y observaciones
         var sa_conp_notificacion_envio_representante = n_representante;
+        var sa_id_representante = $('#sa_id_representante').val();
+
         var sa_conp_notificacion_envio_docente = n_docente;
         var sa_id_docente = $('#sa_id_docente').val();
+
         var sa_conp_notificacion_envio_inspector = n_inspector;
+        var sa_id_inspector = $('#sa_id_inspector').val();
+
         var sa_conp_notificacion_envio_guardia = n_guardia;
+        var sa_id_guardia = $('#sa_id_guardia').val();
 
         var sa_conp_observaciones = $('#sa_conp_observaciones').val();
-        var sa_conp_tipo_consulta = tipo_atencion;
-
-        // Estado y fechas de creación/modificación
-        //var sa_conp_estado = $('#sa_conp_estado').val();
-        //var sa_conp_fecha_creacion = $('#sa_conp_fecha_creacion').val();
-        //var sa_conp_fecha_modificar = $('#sa_conp_fecha_modificar').val()
+        var sa_conp_tipo_consulta = '<?= $tipo_consulta; ?>';
 
         // Crear objeto de parámetros
         var parametros = {
             'sa_conp_id': sa_conp_id,
             'sa_fice_id': sa_fice_id,
-            'sa_conp_nombres': sa_conp_nombres,
             'sa_conp_nivel': sa_conp_nivel,
             'sa_conp_paralelo': sa_conp_paralelo,
             'sa_conp_edad': sa_conp_edad,
-            'sa_conp_correo': sa_conp_correo,
-            'sa_conp_telefono': sa_conp_telefono,
+            'sa_conp_peso': sa_conp_peso,
+            'sa_conp_altura': sa_conp_altura,
             'sa_conp_fecha_ingreso': sa_conp_fecha_ingreso,
             'sa_conp_desde_hora': sa_conp_desde_hora,
             'sa_conp_hasta_hora': sa_conp_hasta_hora,
@@ -524,13 +266,7 @@ if (isset($_GET['id_consulta'])) {
             'sa_conp_diagnostico_1': sa_conp_diagnostico_1,
             'sa_conp_CIE_10_2': sa_conp_CIE_10_2,
             'sa_conp_diagnostico_2': sa_conp_diagnostico_2,
-            'sa_conp_medicina_1': sa_conp_medicina_1,
-            'sa_conp_dosis_1': sa_conp_dosis_1,
-            'sa_conp_medicina_2': sa_conp_medicina_2,
-            'sa_conp_dosis_2': sa_conp_dosis_2,
-            'sa_conp_medicina_3': sa_conp_medicina_3,
-            'sa_conp_dosis_3': sa_conp_dosis_3,
-            'sa_conp_certificado_salud': sa_conp_certificado_salud,
+            'sa_conp_salud_certificado': sa_conp_salud_certificado,
             'sa_conp_motivo_certificado': sa_conp_motivo_certificado,
             'sa_conp_CIE_10_certificado': sa_conp_CIE_10_certificado,
             'sa_conp_diagnostico_certificado': sa_conp_diagnostico_certificado,
@@ -542,58 +278,59 @@ if (isset($_GET['id_consulta'])) {
             'sa_conp_fecha_permiso_salud_salida': sa_conp_fecha_permiso_salud_salida,
             'sa_conp_hora_permiso_salida': sa_conp_hora_permiso_salida,
             'sa_conp_notificacion_envio_representante': sa_conp_notificacion_envio_representante,
+            'sa_id_representante': sa_id_representante,
             'sa_conp_notificacion_envio_docente': sa_conp_notificacion_envio_docente,
             'sa_id_docente': sa_id_docente,
             'sa_conp_notificacion_envio_inspector': sa_conp_notificacion_envio_inspector,
+            'sa_id_inspector': sa_id_inspector,
             'sa_conp_notificacion_envio_guardia': sa_conp_notificacion_envio_guardia,
+            'sa_id_guardia': sa_id_guardia,
             'sa_conp_observaciones': sa_conp_observaciones,
-            'sa_conp_tipo_consulta': sa_conp_tipo_consulta
+            'sa_conp_tipo_consulta': sa_conp_tipo_consulta,
         };
 
         //alert(sa_conp_tipo_consulta)
 
         if (sa_conp_id == '') {
             if (
-                sa_conp_nombres == null
+                sa_conp_peso == '' ||
+                sa_conp_altura == ''
+
             ) {
                 Swal.fire({
                     icon: 'error',
                     title: 'Oops...',
                     text: 'Asegurese de llenar todo los campos',
                 })
-                //alert('error');
             } else {
                 insertar(parametros)
-                //alert('entra');
                 //console.log(parametros);
+                //alert('entra2');
             }
         } else {
             if (
-                sa_conp_nombres == null
+                sa_conp_peso == '' ||
+                sa_conp_altura == ''
             ) {
                 Swal.fire({
                     icon: 'error',
                     title: 'Oops...',
                     text: 'Asegurese de llenar todo los campos',
                 })
-                //alert('error');
             } else {
-                insertar(parametros);
-                //alert('entra');
+                //insertar(parametros);
                 //console.log(parametros);
+                //alert('entra2');
             }
         }
+
         //console.log(parametros);
         //insertar(parametros);
     }
 
     function insertar(parametros) {
-        var id_estudiante = '<?php echo $id_estudiante; ?>';
-        var id_representante = '<?php echo $id_representante; ?>';
-        var id_ficha = '<?php echo $id_ficha; ?>';
 
-        console.log(parametros);
-
+        //console.log(parametros);
         $.ajax({
             data: {
                 parametros: parametros
@@ -601,17 +338,17 @@ if (isset($_GET['id_consulta'])) {
             url: '<?= $url_general ?>/controlador/consultasC.php?insertar=true',
             type: 'post',
             dataType: 'json',
-            /*beforeSend: function () {   
-                 var spiner = '<div class="text-center"><img src="../../img/gif/proce.gif" width="100" height="100"></div>'     
-               $('#tabla_').html(spiner);
-            },*/
+
             success: function(response) {
+                console.log(response);
+
                 if (response == 1) {
                     Swal.fire('', 'Operacion realizada con exito.', 'success').then(function() {
-                        location.href = '<?= $url_general ?>/vista/inicio.php?mod=7&acc=atencion_estudiante';
+                        //location.href = '<?= $url_general ?>/vista/inicio.php?mod=7&acc=atencion_estudiante';
+                        location.href = '<?= $url_general ?>/vista/inicio.php?mod=7&acc=pacientes';
                     });
                 } else if (response == -2) {
-                    Swal.fire('', 'codigo ya registrado', 'success');
+                    Swal.fire('', 'Código ya registrado', 'success');
                 }
 
                 //console.log(response);
@@ -637,8 +374,6 @@ if (isset($_GET['id_consulta'])) {
     }
 
     function eliminar(id) {
-        var id_estudiante = '<?php echo $id_estudiante; ?>';
-        var id_representante = '<?php echo $id_representante; ?>';
         var id_ficha = '<?php echo $id_ficha; ?>';
 
         $.ajax({
@@ -655,13 +390,14 @@ if (isset($_GET['id_consulta'])) {
             success: function(response) {
                 if (response == 1) {
                     Swal.fire('Eliminado!', 'Registro Eliminado.', 'success').then(function() {
-                        location.href = '<?= $url_general ?>/vista/inicio.php?mod=7&acc=consulta_estudiante&id_estudiante=' + id_estudiante + '&id_representante=' + id_representante + '&id_ficha=' + id_ficha;
+                        location.href = '<?= $url_general ?>/vista/inicio.php?mod=7&acc=consulta_estudiante&id_ficha=';
                     });
                 }
             }
         });
     }
 </script>
+
 
 
 <div class="page-wrapper">
@@ -682,9 +418,9 @@ if (isset($_GET['id_consulta'])) {
                         <li class="breadcrumb-item active" aria-current="page">
                             <?php
                             if ($id_ficha == '') {
-                                echo 'Registrar Consultas del Estudiante';
+                                echo 'Registrar Consulta del Paciente';
                             } else {
-                                echo 'Modificar Consultas del Estudiante';
+                                echo 'Modificar Consulta del Paciente';
                             }
                             ?>
                         </li>
@@ -703,54 +439,48 @@ if (isset($_GET['id_consulta'])) {
                             </div>
                             <h5 class="mb-0 text-primary">
                                 <?php
-                                if ($id_ficha == '') {
-                                    echo 'Registrar Consultas del Estudiante';
+                                if ($id_consulta == '') {
+                                    echo 'Registrar Consulta del Paciente';
                                 } else {
-                                    echo 'Modificar Consultas del Estudiante';
+                                    echo 'Modificar Consulta del Paciente';
                                 }
                                 ?>
                             </h5>
+
                             <div class="row m-2">
 
-                                <?php if (isset($_GET['ver']) && $_GET['ver'] != 1) { ?>
-                                    <div class="col-sm-12">
-                                        <a href="<?= $url_general ?>/vista/inicio.php?mod=7&acc=consulta_estudiante&id_estudiante=<?= $id_estudiante ?>&id_representante=<?= $id_representante ?>&id_ficha=<?= $id_ficha ?>" class="btn btn-outline-dark btn-sm"><i class="bx bx-arrow-back"></i> Regresar</a>
-                                    </div>
-                                <?php } ?>
+                                <div class="col-sm-12">
+                                    <a href="<?= $url_general ?>/vista/inicio.php?mod=7&acc=consultas_pacientes&pac_id=<?= $id_paciente ?>" class="btn btn-outline-dark btn-sm"><i class="bx bx-arrow-back"></i> Regresar</a>
+                                </div>
+
                             </div>
                         </div>
 
-
-                        <div class="col-md-12 pt-4" id="radio_tipo_atencion" style="display: none;">
-                            <label for="" class="form-label">Tipo de Atención: <label style="color: red;">* </label> </label>
-                            <div>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="tipo_atencion_1" id="tipo_atencion_1_1" value="Consulta">
-                                    <label class="form-check-label" for="flexRadioDefault1">Consulta</label>
-                                </div>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="tipo_atencion_1" id="tipo_atencion_1_2" value="Certificado">
-                                    <label class="form-check-label" for="flexRadioDefault2">Certficado</label>
-                                </div>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="tipo_atencion_1" id="tipo_atencion_1_3" value="Salida">
-                                    <label class="form-check-label" for="flexRadioDefault2">Salida</label>
-                                </div>
-                            </div>
-                        </div>
                         <hr>
 
-                        <form action="" method="post">
+                        <form action="">
 
                             <input type="hidden" id="sa_conp_id" name="sa_conp_id">
-                            <input type="hidden" id="sa_fice_id" name="sa_fice_id">
-                            <input type="hidden" id="sa_conp_notificacion_envio_guardia" name="sa_conp_notificacion_envio_guardia">
-                            <input type="hidden" id="sa_conp_notificacion_envio_inspector" name="sa_conp_notificacion_envio_inspector">
+                            <input type="hidden" id="sa_fice_id" name="sa_fice_id" value="<?= $id_ficha; ?>">
+                            <input type="hidden" id="sa_conp_nivel" name="sa_conp_nivel">
+                            <input type="hidden" id="sa_conp_paralelo" name="sa_conp_paralelo">
+                            <input type="hidden" id="sa_conp_edad" name="sa_conp_edad">
+
+
+                            <input type="hidden" id="sa_conp_notificacion_envio_representante" name="sa_conp_notificacion_envio_representante">
+                            <input type="hidden" id="sa_id_representante" name="sa_id_representante">
+
                             <input type="hidden" id="sa_conp_notificacion_envio_docente" name="sa_conp_notificacion_envio_docente">
                             <input type="hidden" id="sa_id_docente" name="sa_id_docente">
-                            <input type="hidden" id="sa_conp_notificacion_envio_representante" name="sa_conp_notificacion_envio_representante">
 
-                            <div id="main_consulta" style="display: none;">
+                            <input type="hidden" id="sa_conp_notificacion_envio_inspector" name="sa_conp_notificacion_envio_inspector">
+                            <input type="hidden" id="sa_id_inspector" name="sa_id_inspector">
+
+                            <input type="hidden" id="sa_conp_notificacion_envio_guardia" name="sa_conp_notificacion_envio_guardia">
+                            <input type="hidden" id="sa_id_guardia" name="sa_id_guardia">
+
+
+                            <div id="main_consulta" style="display: block;">
 
                                 <ul class="nav nav-tabs nav-success" role="tablist">
 
@@ -773,27 +503,19 @@ if (isset($_GET['id_consulta'])) {
                                             </div>
                                         </a>
                                     </li>
-                                    <li class="nav-item" role="presentation" id="seccion_navtab_salida">
-                                        <a class="nav-link" data-bs-toggle="tab" href="#permiso_tab" role="tab" aria-selected="false">
-                                            <div class="d-flex align-items-center">
-                                                <div class="tab-icon"><i class='bx bx-user-pin font-18 me-1'></i>
-                                                </div>
-                                                <div class="tab-title">PERMISO DE SALIDA</div>
-                                            </div>
-                                        </a>
-                                    </li>
                                 </ul>
                                 <div class="tab-content py-3">
                                     <div class="tab-pane fade show active" id="consulta_tab" role="tabpanel">
 
-                                        <div class="accordion accordion-flush" id="consulta_acordeon">
+                                        <div class="accordion" id="consulta_acordeon">
+
                                             <div class="accordion-item">
                                                 <h2 class="accordion-header" id="flush-headingOne">
-                                                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#flush-estudiante" aria-expanded="true" aria-controls="flush-estudiante">
-                                                        <h6 class="text-success"><b>I. DATOS GENERALES DEL ESTUDIANTE</b></h6>
+                                                    <button class="accordion-button collapsed bg-success" type="button" data-bs-toggle="collapse" data-bs-target="#flush-estudiante" aria-expanded="false" aria-controls="flush-estudiante">
+                                                        <h6 class="text-white"><b>Ficha Médica</b></h6>
                                                     </button>
                                                 </h2>
-                                                <div id="flush-estudiante" class="accordion-collapse collapse show" aria-labelledby="flush-headingOne" data-bs-parent="#consulta_acordeon">
+                                                <div id="flush-estudiante" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#consulta_acordeon">
                                                     <div class="accordion-body">
                                                         <div>
                                                             <div class="row pt-2">
@@ -828,45 +550,26 @@ if (isset($_GET['id_consulta'])) {
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="accordion-item">
-                                                <h2 class="accordion-header" id="flush-headingTwo">
-                                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-representante" aria-expanded="false" aria-controls="flush-representante">
-                                                        <h6 class="text-success"><b>I.I Representante</b></h6>
-                                                    </button>
-                                                </h2>
-                                                <div id="flush-representante" class="accordion-collapse collapse" aria-labelledby="flush-headingTwo" data-bs-parent="#consulta_acordeon">
-                                                    <div class="accordion-body">
-                                                        <div>
-                                                            <div class="row pt-2">
-                                                                <div class="col-md-12">
-                                                                    <label for="" class="form-label">Nombres: <label style="color: red;">*</label> </label>
-                                                                    <input type="text" class="form-control form-control-sm" id="sa_conp_rep_nombres" name="sa_conp_rep_nombres" readonly>
-                                                                </div>
-                                                            </div>
 
-                                                            <div class="row pt-3">
-                                                                <div class="col-md-8">
-                                                                    <label for="" class="form-label">Correo: <label style="color: red;">*</label> </label>
-                                                                    <input type="text" class="form-control form-control-sm" id="sa_conp_correo" name="sa_conp_rep_correo" readonly>
-                                                                </div>
-
-                                                                <div class="col-md-4">
-                                                                    <label for="" class="form-label">Teléfono Celular: <label style="color: red;">*</label> </label>
-                                                                    <input type="text" class="form-control form-control-sm" id="sa_conp_telefono" name="sa_conp_rep_telefono" readonly>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
                                         </div>
 
                                         <hr>
 
-                                        <h6 class="text-success"><b>II. CONSULTA</b></h6>
+                                        <h6 class="text-success"><b>CONSULTA GENERAL</b></h6>
                                         <div>
                                             <div class="row pt-2">
                                                 <div class="row pt-1">
+                                                    <div class="col-md-3">
+                                                        <label for="" class="form-label">Peso: <label style="color: red;">*</label> </label>
+                                                        <input type="number" class="form-control form-control-sm" id="sa_conp_peso" name="sa_conp_peso">
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <label for="" class="form-label">Altura: <label style="color: red;">*</label> </label>
+                                                        <input type="number" class="form-control form-control-sm" id="sa_conp_altura" name="sa_conp_altura">
+                                                    </div>
+                                                </div>
+
+                                                <div class="row pt-3">
                                                     <div class="col-md-3">
                                                         <label for="" class="form-label">Fecha: <label style="color: red;">*</label> </label>
                                                         <input type="date" class="form-control form-control-sm" id="sa_conp_fecha_ingreso" name="sa_conp_fecha_ingreso" value="<?= date('Y-m-d'); ?>">
@@ -912,81 +615,80 @@ if (isset($_GET['id_consulta'])) {
                                                 </div>
 
                                                 <div class="row pt-3">
-                                                    <div class="col-md-8">
-                                                        <label for="" class="form-label">Medicina 1: <label style="color: red;">*</label> </label>
-                                                        <select class="form-select form-select-sm" id="sa_conp_medicina_1" name="sa_conp_medicina_1">
-                                                            <option selected disabled>-- Seleccione --</option>
-
-                                                        </select>
-                                                    </div>
-
-                                                    <div class="col-md-4">
-                                                        <label for="" class="form-label">Dosis: <label style="color: red;">*</label> </label>
-                                                        <input type="text" class="form-control form-control-sm" id="sa_conp_dosis_1" name="sa_conp_dosis_1">
-                                                    </div>
-                                                </div>
-
-                                                <div class="row pt-3">
-                                                    <div class="col-md-8">
-                                                        <label for="" class="form-label">Medicina 2: <label style="color: red;">*</label> </label>
-                                                        <select class="form-select form-select-sm" id="sa_conp_medicina_2" name="sa_conp_medicina_2">
-                                                            <option selected disabled>-- Seleccione --</option>
-
-                                                        </select>
-                                                    </div>
-
-                                                    <div class="col-md-4">
-                                                        <label for="" class="form-label">Dosis: <label style="color: red;">*</label> </label>
-                                                        <input type="text" class="form-control form-control-sm" id="sa_conp_dosis_2" name="sa_conp_dosis_2">
-                                                    </div>
-                                                </div>
-
-                                                <div class="row pt-3">
-                                                    <div class="col-md-8">
-                                                        <label for="" class="form-label">Medicina 3: <label style="color: red;">*</label> </label>
-                                                        <select class="form-select form-select-sm" id="sa_conp_medicina_3" name="sa_conp_medicina_3">
-                                                            <option selected disabled>-- Seleccione --</option>
-
-                                                        </select>
-                                                    </div>
-
-                                                    <div class="col-md-4">
-                                                        <label for="" class="form-label">Dosis: <label style="color: red;">*</label> </label>
-                                                        <input type="text" class="form-control form-control-sm" id="sa_conp_dosis_3" name="sa_conp_dosis_3">
-                                                    </div>
-                                                </div>
-
-                                                <div class="row pt-3">
                                                     <div class="col-md-12">
                                                         <label for="" class="form-label">Observaciones: <label style="color: red;">*</label> </label>
                                                         <textarea name="sa_conp_observaciones" id="sa_conp_observaciones" cols="30" rows="1" class="form-control" placeholder="Observaciones"></textarea>
                                                     </div>
                                                 </div>
+
+                                                <div class="row pt-3">
+                                                    <div class="col-md-12">
+                                                        <label for="" class="form-label"> <b>¿Necesita permiso de salida?: <label class="text-danger">*</label></b></label>
+
+                                                        <div>
+                                                            <div class="form-check">
+                                                                <input class="form-check-input" type="radio" name="sa_conp_permiso_salida" id="sa_conp_permiso_salida_1" value="SI">
+                                                                <label class="form-check-label" for="flexRadioDefault1">SI</label>
+                                                            </div>
+
+                                                            <div class="form-check">
+                                                                <input class="form-check-input" type="radio" name="sa_conp_permiso_salida" id="sa_conp_permiso_salida_2" value="NO" checked>
+                                                                <label class="form-check-label" for="flexRadioDefault2">NO</label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div id="permiso_salida" style="display: none;">
+
+                                                    <div class="row pt-2">
+                                                        <div class="col-md-4">
+                                                            <label for="" class="form-label">Fecha Permiso de Salida: <label style="color: red;">*</label> </label>
+                                                            <input type="date" class="form-control form-control-sm" id="sa_conp_fecha_permiso_salud_salida" name="sa_conp_fecha_permiso_salud_salida">
+                                                        </div>
+
+                                                        <div class="col-md-4">
+                                                            <label for="" class="form-label">Hora Permiso de Salida: <label style="color: red;">*</label> </label>
+                                                            <input type="time" class="form-control form-control-sm" id="sa_conp_hora_permiso_salida" name="sa_conp_hora_permiso_salida">
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+
                                             </div>
 
+                                            <script>
+                                                $('input[name=sa_conp_permiso_salida]').change(function() {
+                                                    if ($(this).val() === 'SI') {
+                                                        $('#permiso_salida').show();
+                                                    } else if ($(this).val() === 'NO') {
+                                                        $('#permiso_salida').hide();
+                                                    }
+                                                });
+                                            </script>
 
-                                            <?php if (isset($_GET['ver']) && $_GET['ver'] != 1) { ?>
 
-                                                <div class="modal-footer pt-4" id="seccion_boton_consulta">
-                                                    <?php if ($id_estudiante == '') { ?>
-                                                        <button class="btn btn-primary btn-sm px-4 m-1" onclick="editar_insertar('Consulta', 1, 1, 1, 0)" type="button"><i class="bx bx-save"></i> Guardar</button>
-                                                    <?php } else { ?>
-                                                        <button class="btn btn-primary btn-sm px-4 m-1" onclick="editar_insertar('Consulta', 1, 1, 1, 0)" type="button"><i class="bx bx-save"></i> Guardar</button>
-                                                        <button class="btn btn-danger btn-sm px-4 m-1" onclick="delete_datos()" type="button"><i class="bx bx-trash"></i> Eliminar</button>
-                                                    <?php } ?>
-                                                </div>
-                                            <?php } ?>
+
+                                            <div class="modal-footer pt-4" id="seccion_boton_consulta">
+                                                <?php if ($id_consulta == '') { ?>
+                                                    <button class="btn btn-primary btn-sm px-4 m-1" onclick="editar_insertar(1, 1, 1, 0)" type="button"><i class="bx bx-save"></i> Guardar</button>
+                                                <?php } else { ?>
+                                                    <button class="btn btn-primary btn-sm px-4 m-1" onclick="editar_insertar(1, 1, 1, 0)" type="button"><i class="bx bx-save"></i> Guardar</button>
+                                                    <button class="btn btn-danger btn-sm px-4 m-1" onclick="delete_datos()" type="button"><i class="bx bx-trash"></i> Eliminar</button>
+                                                <?php } ?>
+                                            </div>
+
                                         </div>
 
                                     </div>
+
                                     <div class="tab-pane fade" id="certificado_tab" role="tabpanel">
-                                        <h6 class="text-success"><b>III. CERTIFICADO</b></h6>
                                         <div>
                                             <div class="row pt-2">
                                                 <div class="row pt-2">
                                                     <div class="col-md-2">
                                                         <label for="" class="form-label">Certificado por Salud: <label style="color: red;">*</label> </label>
-                                                        <input type="text" class="form-control form-control-sm" id="sa_conp_certificado_salud" name="sa_conp_certificado_salud">
+                                                        <input type="text" class="form-control form-control-sm" id="sa_conp_salud_certificado" name="sa_conp_salud_certificado">
                                                     </div>
 
                                                     <div class="col-md-10">
@@ -1028,70 +730,10 @@ if (isset($_GET['id_consulta'])) {
                                                     </div>
                                                 </div>
                                             </div>
-
-                                            <?php if (isset($_GET['ver']) && $_GET['ver'] != 1) { ?>
-
-                                                <div class="modal-footer pt-4" id="seccion_boton_certificado">
-                                                    <?php if ($id_estudiante == '') { ?>
-                                                        <button class="btn btn-primary btn-sm px-4 m-1" onclick="editar_insertar('Certificado', 0, 1, 1, 0)" type="button"><i class="bx bx-save"></i> Guardar</button>
-                                                    <?php } else { ?>
-                                                        <button class="btn btn-primary btn-sm px-4 m-1" onclick="editar_insertar('Certificado', 0, 1, 1, 0)" type="button"><i class="bx bx-save"></i> Guardar</button>
-                                                        <button class="btn btn-danger btn-sm px-4 m-1" onclick="delete_datos()" type="button"><i class="bx bx-trash"></i> Eliminar</button>
-                                                    <?php } ?>
-                                                </div>
-                                            <?php } ?>
-
-                                        </div>
-
-
-
-                                    </div>
-                                    <div class="tab-pane fade" id="permiso_tab" role="tabpanel">
-                                        <h6 class="text-success"><b>IV. PERMISO DE SALIDA</b></h6>
-                                        <div>
-                                            <div class="row pt-2">
-                                                <div class="row pt-2">
-                                                    <div class="col-md-2">
-                                                        <label for="" class="form-label">Permiso de Salida: <label style="color: red;">*</label> </label>
-                                                        <select class="form-select form-select-sm" id="sa_conp_permiso_salida" name="sa_conp_permiso_salida">
-                                                            <option selected disabled>-- Seleccione --</option>
-                                                            <option value="Si">Si</option>
-                                                            <option value="No">No</option>
-                                                        </select>
-                                                    </div>
-
-                                                    <div class="col-md-4">
-                                                        <label for="" class="form-label">Fecha Permiso de Salud: <label style="color: red;">*</label> </label>
-                                                        <input type="date" class="form-control form-control-sm" id="sa_conp_fecha_permiso_salud_salida" name="sa_conp_fecha_permiso_salud_salida">
-                                                    </div>
-
-                                                    <div class="col-md-4">
-                                                        <label for="" class="form-label">Hora Permiso de Salida: <label style="color: red;">*</label> </label>
-                                                        <input type="time" class="form-control form-control-sm" id="sa_conp_hora_permiso_salida" name="sa_conp_hora_permiso_salida">
-                                                    </div>
-                                                </div>
-                                            </div>
-
-
-                                            <?php if (isset($_GET['ver']) && $_GET['ver'] != 1) { ?>
-
-                                                <div class="modal-footer pt-4" id="seccion_boton_salida">
-                                                    <?php if ($id_estudiante == '') { ?>
-                                                        <button class="btn btn-primary btn-sm px-4 m-1" onclick="editar_insertar('Salida', 1, 1, 1, 1)" type="button"><i class="bx bx-save"></i> Guardar</button>
-                                                    <?php } else { ?>
-                                                        <button class="btn btn-primary btn-sm px-4 m-1" onclick="editar_insertar('Salida', 1, 1, 1, 1)" type="button"><i class="bx bx-save"></i> Guardar</button>
-                                                        <button class="btn btn-danger btn-sm px-4 m-1" onclick="delete_datos()" type="button"><i class="bx bx-trash"></i> Eliminar</button>
-                                                    <?php } ?>
-                                                </div>
-                                            <?php } ?>
                                         </div>
                                     </div>
                                 </div>
-
                             </div>
-
-
-
                         </form>
                     </div>
                 </div>
@@ -1099,10 +741,3 @@ if (isset($_GET['id_consulta'])) {
         </div>
     </div>
 </div>
-<!--plugins-->
-
-<!--app JS-->
-<!-- <script src="assets/js/app.js"></script> -->
-
-<?php //include('../../../../cabeceras/footer.php'); 
-?>

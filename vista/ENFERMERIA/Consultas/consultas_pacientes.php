@@ -16,6 +16,8 @@ if (isset($_GET['pac_id'])) {
     //obtener el id de la ficha por el paciente
 
     var sa_pac_id = '<?php echo $sa_pac_id; ?>';
+    $('#id_paciente').val(sa_pac_id);
+
 
     cargar_datos_paciente(sa_pac_id);
 
@@ -103,7 +105,7 @@ if (isset($_GET['pac_id'])) {
                 {
                   data: null,
                   render: function(data, type, item) {
-                    return '<div class="text-center"><a href="<?= $url_general ?>/vista/inicio.php?mod=7&acc=consultas_pacientes&pac_id=' + item.sa_pac_id + '" class="btn btn-warning btn-sm "><i class="bx bxs-dock-left me-0"></i></a></div>';
+                    return '<div class="text-center"><a href="<?= $url_general ?>/vista/inicio.php?mod=7&acc=consultas_pacientes&pac_id=' + item.sa_pac_id + '" class="btn btn-primary btn-sm " title="Detalles de la Consulta"><i class="bx bx-spreadsheet me-0"></i></a></div>';
                   }
                 },
                 {
@@ -146,7 +148,7 @@ if (isset($_GET['pac_id'])) {
           <ol class="breadcrumb mb-0 p-0">
             <li class="breadcrumb-item"><a href="javascript:;"><i class="bx bx-home-alt"></i></a>
             </li>
-            <li class="breadcrumb-item active" aria-current="page">Consultas del Paciente</li>
+            <li class="breadcrumb-item active" aria-current="page">Historial de Consultas del Paciente</li>
           </ol>
         </nav>
       </div>
@@ -160,7 +162,7 @@ if (isset($_GET['pac_id'])) {
             <div class="card-title d-flex align-items-center">
               <div><i class="bx bxs-user me-1 font-22 text-primary"></i>
               </div>
-              <h5 class="mb-0 text-primary">Consultas del Paciente - <b id="title_paciente"></b></h5>
+              <h5 class="mb-0 text-primary">Historial de Consultas del Paciente - <b id="title_paciente" class="text-success"></b></h5>
 
               <div class="row m-2">
                 <div class="col-sm-12">
@@ -177,35 +179,65 @@ if (isset($_GET['pac_id'])) {
               <section class="content">
                 <div class="container-fluid">
 
-                  <div class="row">
-                    <div class="col-sm-12" id="btn_nuevo">
-                      <form action="<?= $url_general ?>/vista/inicio.php?mod=7&acc=registrar_consulta_paciente" method="post">
+                  <div class="row" id="btn_nuevo">
 
-                        <input type="hidden" name="id_ficha" id="id_ficha">
+                    <div class="col-2"></div>
 
-                        <button type="submit" class="btn btn-success btn-sm"><i class="bx bx-plus"></i> Nuevo</button>
-                      </form>
+                    <div class="col-auto">
+
+                      <div class="card">
+                        <div class="card-body bg-dark">
+                          <form action="<?= $url_general ?>/vista/inicio.php?mod=7&acc=registrar_consulta_paciente" method="post">
+
+                            <input type="hidden" name="id_ficha" id="id_ficha">
+                            <input type="hidden" name="id_paciente" id="id_paciente">
+                            <input type="hidden" name="tipo_consulta" id="tipo_consulta" value="consulta">
+
+                            <button type="submit" class="btn btn-primary btn-lg m-4"><i class='bx bx-file-blank'></i> Consulta</button>
+                          </form>
+                        </div>
+                      </div>
+
+                    </div>
+
+                    <div class="col-auto">
+
+                      <div class="card">
+                        <div class="card-body bg-dark">
+                          <form action="<?= $url_general ?>/vista/inicio.php?mod=7&acc=registrar_consulta_paciente" method="post">
+
+                            <input type="hidden" name="id_ficha" id="id_ficha">
+                            <input type="hidden" name="id_paciente" id="id_paciente">
+                            <input type="hidden" name="tipo_consulta" id="tipo_consulta" value="certificado">
+
+                            <button type="submit" class="btn btn-primary btn-lg m-4"><i class='bx bx-file-blank'></i> Certificado</button>
+                          </form>
+                        </div>
+                      </div>
+
                     </div>
                   </div>
 
                   <br>
 
+                  <div class="row">
+                    <div class="table-responsive">
+                      <table class="table table-striped responsive" id="tbl_consultas" style="width:100%">
+                        <thead>
+                          <tr>
+                            <th width="10px">Revisar</th>
+                            <th>Fecha de creación</th>
+                            <th>Hora Desde/Hasta</th>
+                            <th>Tipo de Atención</th>
+                          </tr>
+                        </thead>
+                        <tbody>
 
-                  <div class="table-responsive">
-                    <table class="table table-striped responsive" id="tbl_consultas" style="width:100%">
-                      <thead>
-                        <tr>
-                          <th width="10px">Revisar</th>
-                          <th>Fecha de creación</th>
-                          <th>Hora Desde/Hasta</th>
-                          <th>Tipo de Atención</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-
-                      </tbody>
-                    </table>
+                        </tbody>
+                      </table>
+                    </div>
                   </div>
+
                 </div><!-- /.container-fluid -->
               </section>
               <!-- /.content -->

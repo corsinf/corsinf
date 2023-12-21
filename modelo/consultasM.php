@@ -14,7 +14,7 @@ class consultasM
         $this->db = new db();
     }
 
-    //Para buscar las consultas en base a la ficha medica
+    //Para buscar las consultas_medicas en base a la ficha medica
     function lista_consultas_ficha($id_ficha = '')
     {
         if ($id_ficha) {
@@ -93,7 +93,7 @@ class consultasM
         sa_conp_fecha_creacion,
         sa_conp_fecha_modificar
         
-        FROM consultas
+        FROM consultas_medicas
         WHERE sa_conp_estado = 1";
 
         if ($id) {
@@ -150,7 +150,7 @@ class consultasM
         sa_conp_fecha_creacion,
         sa_conp_fecha_modificar
         
-        FROM consultas
+        FROM consultas_medicas
         WHERE sa_conp_estado = 1";
 
         if ($id) {
@@ -164,7 +164,7 @@ class consultasM
 
     function buscar_consultas($buscar)
     {
-        $sql = "SELECT sa_sec_id, sa_sec_nombre, sa_sec_estado FROM consultas WHERE sa_sec_estado = 1 and sa_sec_nombre + ' ' + sa_sec_id LIKE '%" . $buscar . "%'";
+        $sql = "SELECT sa_sec_id, sa_sec_nombre, sa_sec_estado FROM consultas_medicas WHERE sa_sec_estado = 1 and sa_sec_nombre + ' ' + sa_sec_id LIKE '%" . $buscar . "%'";
         $datos = $this->db->datos($sql);
         return $datos;
     }
@@ -174,7 +174,7 @@ class consultasM
         $sql = "SELECT 
         sa_conp_id
         
-        FROM consultas
+        FROM consultas_medicas
         WHERE sa_conp_estado = 1 and sa_conp_id = ' " . $buscar . "'";
 
         $datos = $this->db->datos($sql);
@@ -183,19 +183,19 @@ class consultasM
 
     function insertar($datos)
     {
-        $rest = $this->db->inserts('consultas', $datos);
+        $rest = $this->db->inserts('consultas_medicas', $datos);
         return $rest;
     }
 
     function editar($datos, $where)
     {
-        $rest = $this->db->update('consultas', $datos, $where);
+        $rest = $this->db->update('consultas_medicas', $datos, $where);
         return $rest;
     }
 
     function eliminar($datos)
     {
-        $sql = "UPDATE consultas SET sa_conp_estado = 0 WHERE " . $datos[0]['campo'] . "='" . $datos[0]['dato'] . "';";
+        $sql = "UPDATE consultas_medicas SET sa_conp_estado = 0 WHERE " . $datos[0]['campo'] . "='" . $datos[0]['dato'] . "';";
         $datos = $this->db->sql_string($sql);
         return $datos;
     }
