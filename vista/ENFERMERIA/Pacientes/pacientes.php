@@ -15,7 +15,7 @@
             columns: [{
                     data: null,
                     render: function(data, type, item) {
-                        return '<div class="text-center"><a href="<?= $url_general ?>/vista/inicio.php?mod=7&acc=consultas_pacientes&pac_id=' + item.sa_pac_id + '" class="btn btn-primary btn-sm "><i class="bx bxs-dock-left me-0"></i></a></div>';
+                        return '<div class="text-center"><a href="<?= $url_general ?>/vista/inicio.php?mod=7&acc=consultas_pacientes&pac_id=' + item.sa_pac_id + '" class="btn btn-warning btn-sm " title="Historial de Consultas"><i class="bx bxs-folder me-0"></i></i></a></div>';
                     }
                 }, {
                     data: 'sa_pac_cedula'

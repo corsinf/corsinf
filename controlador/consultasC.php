@@ -87,17 +87,18 @@ class consultasC
 
     function insertar_editar($parametros)
     {
+
+
         $datos1[0]['campo'] = 'sa_conp_id';
         $datos1[0]['dato'] = strval($parametros['sa_conp_id']);
 
         $datos = array(
-            array('campo' => 'sa_fice_id', 'dato' => strval($parametros['sa_fice_id'])),
-            array('campo' => 'sa_conp_nombres', 'dato' => $parametros['sa_conp_nombres']),
+            array('campo' => 'sa_fice_id', 'dato' => $parametros['sa_fice_id']),
             array('campo' => 'sa_conp_nivel', 'dato' => $parametros['sa_conp_nivel']),
             array('campo' => 'sa_conp_paralelo', 'dato' => $parametros['sa_conp_paralelo']),
             array('campo' => 'sa_conp_edad', 'dato' => $parametros['sa_conp_edad']),
-            array('campo' => 'sa_conp_correo', 'dato' => $parametros['sa_conp_correo']),
-            array('campo' => 'sa_conp_telefono', 'dato' => $parametros['sa_conp_telefono']),
+            array('campo' => 'sa_conp_peso', 'dato' => empty($parametros['sa_conp_peso']) ? 0 : $parametros['sa_conp_peso']),
+            array('campo' => 'sa_conp_altura', 'dato' => empty($parametros['sa_conp_altura']) ? 0 : $parametros['sa_conp_altura']),
             array('campo' => 'sa_conp_fecha_ingreso', 'dato' => $parametros['sa_conp_fecha_ingreso']),
             array('campo' => 'sa_conp_desde_hora', 'dato' => $parametros['sa_conp_desde_hora']),
             array('campo' => 'sa_conp_hasta_hora', 'dato' => $parametros['sa_conp_hasta_hora']),
@@ -106,13 +107,7 @@ class consultasC
             array('campo' => 'sa_conp_diagnostico_1', 'dato' => $parametros['sa_conp_diagnostico_1']),
             array('campo' => 'sa_conp_CIE_10_2', 'dato' => $parametros['sa_conp_CIE_10_2']),
             array('campo' => 'sa_conp_diagnostico_2', 'dato' => $parametros['sa_conp_diagnostico_2']),
-            array('campo' => 'sa_conp_medicina_1', 'dato' => $parametros['sa_conp_medicina_1']),
-            array('campo' => 'sa_conp_dosis_1', 'dato' => $parametros['sa_conp_dosis_1']),
-            array('campo' => 'sa_conp_medicina_2', 'dato' => $parametros['sa_conp_medicina_2']),
-            array('campo' => 'sa_conp_dosis_2', 'dato' => $parametros['sa_conp_dosis_2']),
-            array('campo' => 'sa_conp_medicina_3', 'dato' => $parametros['sa_conp_medicina_3']),
-            array('campo' => 'sa_conp_dosis_3', 'dato' => $parametros['sa_conp_dosis_3']),
-            array('campo' => 'sa_conp_certificado_salud', 'dato' => $parametros['sa_conp_certificado_salud']),
+            array('campo' => 'sa_conp_salud_certificado', 'dato' => $parametros['sa_conp_salud_certificado']),
             array('campo' => 'sa_conp_motivo_certificado', 'dato' => $parametros['sa_conp_motivo_certificado']),
             array('campo' => 'sa_conp_CIE_10_certificado', 'dato' => $parametros['sa_conp_CIE_10_certificado']),
             array('campo' => 'sa_conp_diagnostico_certificado', 'dato' => $parametros['sa_conp_diagnostico_certificado']),
@@ -124,16 +119,19 @@ class consultasC
             array('campo' => 'sa_conp_fecha_permiso_salud_salida', 'dato' => $parametros['sa_conp_fecha_permiso_salud_salida']),
             array('campo' => 'sa_conp_hora_permiso_salida', 'dato' => $parametros['sa_conp_hora_permiso_salida']),
             array('campo' => 'sa_conp_notificacion_envio_representante', 'dato' => $parametros['sa_conp_notificacion_envio_representante']),
+            array('campo' => 'sa_id_representante', 'dato' => $parametros['sa_id_representante']),
             array('campo' => 'sa_conp_notificacion_envio_docente', 'dato' => $parametros['sa_conp_notificacion_envio_docente']),
             array('campo' => 'sa_id_docente', 'dato' => $parametros['sa_id_docente']),
             array('campo' => 'sa_conp_notificacion_envio_inspector', 'dato' => $parametros['sa_conp_notificacion_envio_inspector']),
+            array('campo' => 'sa_id_inspector', 'dato' => $parametros['sa_id_inspector']),
             array('campo' => 'sa_conp_notificacion_envio_guardia', 'dato' => $parametros['sa_conp_notificacion_envio_guardia']),
+            array('campo' => 'sa_id_guardia', 'dato' => $parametros['sa_id_guardia']),
             array('campo' => 'sa_conp_observaciones', 'dato' => $parametros['sa_conp_observaciones']),
-            array('campo' => 'sa_conp_tipo_consulta', 'dato' => $parametros['sa_conp_tipo_consulta'])
+            array('campo' => 'sa_conp_tipo_consulta', 'dato' => $parametros['sa_conp_tipo_consulta']),
         );
 
 
-        // print_r($parametros);die();
+        //print_r($parametros);die();
 
 
 
@@ -153,6 +151,10 @@ class consultasC
         /*$where[0]['campo'] = 'sa_conp_id';
         $where[0]['dato'] = $parametros['sa_conp_id'];
         $datos = $this->modelo->editar($datos, $where);*/
+
+        //$datos = $this->modelo->insertar($datos);
+
+
         return $datos;
     }
 

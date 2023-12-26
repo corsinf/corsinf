@@ -2,12 +2,7 @@
 <script type="text/javascript">
 $( document ).ready(function() {
     var id = '<?php echo $_SESSION['INICIO']['ID_USUARIO'];?>';
-   	console.log(id);
-   	if(id!='')
-   	{
-   		Editar(id)
-   	}
-
+   	Editar(id);
 });
 
  function Editar(id)
@@ -33,10 +28,10 @@ $( document ).ready(function() {
            success:  function (response) {            
 
             console.log(response);
-           $('#txt_nombre').val(response[0].nombres);
-           $('#txt_apellido').val(response[0].ape);
+           $('#txt_nombre').val(response[0].nombre);
+           $('#txt_apellido').val(response[0].apellido);
            $('#txt_ci').val(response[0].ci);
-           $('#txt_telefono').val(response[0].tel);
+           $('#txt_telefono').val(response[0].telefono);
   	       $('#txt_emial').val(response[0].email);
   	       $('#txt_emial_2').val(response[0].email);
   	       // $('#ddl_tipo_usuario').append($('<option>',{value: response[0].idt, text:response[0].tipo,selected: true }));;
@@ -45,7 +40,7 @@ $( document ).ready(function() {
   	       var passlen = response[0].pass.length;
   	       $('#pass').text('*'.repeat(passlen));
 
-  	       $('#txt_dir').val(response[0].dir);
+  	       $('#txt_dir').val(response[0].direccion);
            $('#txt_id').val(response[0].id);           
            if(response[0].foto!='' && response[0].foto!=null )
            {
@@ -222,6 +217,8 @@ $( document ).ready(function() {
             </nav>
           </div>          
         </div>
+
+        <?php //print_r($_SESSION['INICIO']); ?>
         <!--end breadcrumb-->
         <div class="container">
           <div class="main-body">
@@ -297,15 +294,17 @@ $( document ).ready(function() {
                       </div>
                     </div>
                     <div class="row mb-3">
-                      <div class="col-sm-3">
-                        <h6 class="mb-0" _msthash="3834935" _msttexthash="75179">Password</h6>
-                      </div>
+                      <?php if($_SESSION['INICIO']['NO_CONCURENTE']==""){ ?>
+                        <div class="col-sm-3">
+                          <h6 class="mb-0" _msthash="3834935" _msttexthash="75179">Password</h6>
+                        </div>
                       <div class="col-sm-9 text-secondary">
                         <div class="input-group mb-3">
                            <input type="password" class="form-control form-control-sm" name="txt_pass" id="txt_pass" required="" readonly>
                             <button type="button" class="btn btn-info btn-flat" onclick="pass()"><i class="lni lni-eye" id="eye"></i></button>                          
                         </div>
                       </div>
+                      <?php } ?>
                     </div>
                     <div class="row mb-3">
                       <div class="col-sm-3">
@@ -323,15 +322,19 @@ $( document ).ready(function() {
                         <textarea rows="3" class="form-control" style="resize:none;" id="txt_dir"></textarea>
                       </div>
                     </div>
+
+                      <?php if($_SESSION['INICIO']['NO_CONCURENTE']==""){ ?>
                     <div class="row">
                       <div class="col-sm-3"></div>
                       <div class="col-sm-9 text-secondary">
                         <input type="button" class="btn btn-primary px-4" onclick="guardar_datos_personales()" value="Guardar cambios" _mstvalue="256646">
                       </div>
                     </div>
+                  <?php } ?>
                   </div>
                 </div>
 
+                <?php if($_SESSION['INICIO']['NO_CONCURENTE']==""){ ?>
                 <div class="card">
                   <div class="card-body">
                     <div class="row mb-3">
@@ -363,6 +366,7 @@ $( document ).ready(function() {
                     </div>                   
                   </div>
                 </div>
+              <?php } ?>
 
               </div>
             </div>

@@ -203,7 +203,7 @@ if (isset($_POST['id_representante'])) {
           console.log(dato);
           let etiquetas = "";
           dato.forEach(function(item, itema, items) {
-            etiquetas += '<option value="' + item.sa_rep_id + '">' + item.sa_rep_primer_apellido + ' ' + item.sa_rep_segundo_apellido + ' ' + item.sa_rep_primer_nombre + ' ' + item.sa_rep_segundo_nombre + '</option>';
+            etiquetas += '<option value="' + item.sa_rep_id + '">' + item.sa_rep_cedula + ' - ' + item.sa_rep_primer_apellido + ' ' + item.sa_rep_segundo_apellido + ' ' + item.sa_rep_primer_nombre + ' ' + item.sa_rep_segundo_nombre + '</option>';
           })
 
           $("#sa_id_representante").html(etiquetas);
@@ -502,7 +502,7 @@ if (isset($_POST['id_representante'])) {
                 </div>
               </div>
             </div>
-            
+
             <hr>
 
             <form action="" method="post">

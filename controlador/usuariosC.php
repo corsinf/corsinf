@@ -479,13 +479,13 @@ class usuariosC
 		if($_SESSION['INICIO']['NO_CONCURENTE']=='')
 		{
 			$datos  = $this->modelo->lista_usuarios($parametros['id'],$parametros['query']);
-			return $datos;
 		}else
 		{
-			$datos  = $this->modelo->no_concurente_custodios($_SESSION['INICIO']['NO_CONCURENTE']);
-			// print_r($datos);die();
-			return $datos;
+			$datos  = $this->modelo->no_concurente_data();
 		}
+
+		// print_r($datos);die();
+		return $datos;
 
 	}
 
