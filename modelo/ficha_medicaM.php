@@ -314,5 +314,15 @@ class ficha_MedicaM
         return $data;
     }
 
+    function lista_seguros($query=false)
+    {
+        $sql = "SELECT * FROM SEGUROS WHERE 1=1";
+        if($query)
+        {
+            $sql.=" AND Plan_seguro like '%".$query."%'";
+        }
+        return $this->db->datos($sql);
+    }
+
     
 }
