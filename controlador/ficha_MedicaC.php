@@ -83,6 +83,7 @@ class ficha_MedicaC
     {
         $datos = $this->modelo->lista_seguros();
         return $datos;
+        
     }
 
     function buscar_ficha_medica($buscar)
