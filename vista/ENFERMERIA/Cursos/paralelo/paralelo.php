@@ -97,31 +97,8 @@
         <!--end breadcrumb-->
 
         <div class="row">
-            <div class="col-12 col-lg-3">
 
-                <div class="card border-top border-0 border-4 border-primary">
-                    <div class="card-body p-5">
-                        <div class="card-title d-flex align-items-center">
-                            <div><i class="bx bxs-user me-1 font-22 text-primary"></i>
-                            </div>
-                            <h5 class="mb-0 text-primary">
-                                Parametrización
-                            </h5>
-                        </div>
-
-                        <label class="menu-label">Cursos</label>
-                        <div class="fm-menu">
-                            <div class="list-group list-group-flush">
-                                <a href="<?= $url_general ?>/vista/inicio.php?mod=7&acc=seccion" class="list-group-item py-1"><i class='bx bx-file me-2'></i><span>Sección</span></a>
-                                <a href="<?= $url_general ?>/vista/inicio.php?mod=7&acc=grado" class="list-group-item py-1"><i class='bx bx-file me-2'></i><span>Grado</span></a>
-                                <a href="<?= $url_general ?>/vista/inicio.php?mod=7&acc=paralelo" class="list-group-item py-1"><i class='bx bx-file me-2'></i><span>Paralelo</span></a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-12 col-lg-9">
+            <div class="col-12">
                 <div class="card border-top border-0 border-4 border-primary">
                     <div class="card-body">
                         <div class="card-title d-flex align-items-center">

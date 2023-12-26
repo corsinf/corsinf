@@ -865,12 +865,12 @@ if (isset($_GET['id_consulta'])) {
                                                     } ?>>
                                                 <div class="row pt-0">
                                                     <div class="row pt-1">
-                                                        <div class="col-md-2">
+                                                        <div class="col-md-3">
                                                             <label for="" class="form-label">Certificado por Salud: <label style="color: red;">*</label> </label>
                                                             <input type="text" class="form-control form-control-sm" id="sa_conp_salud_certificado" name="sa_conp_salud_certificado">
                                                         </div>
 
-                                                        <div class="col-md-10">
+                                                        <div class="col-md-9">
                                                             <label for="" class="form-label">Motivo Certificado: <label style="color: red;">*</label> </label>
                                                             <input type="text" class="form-control form-control-sm" id="sa_conp_motivo_certificado" name="sa_conp_motivo_certificado">
                                                         </div>
