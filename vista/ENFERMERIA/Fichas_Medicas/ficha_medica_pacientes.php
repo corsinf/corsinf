@@ -1,13 +1,13 @@
 <?php
 //Datos que llegan de la funcion gestion_paciente_comunidad // por el momento esta el sa_pac_tabla demas
 
-$sa_pac_id = '';
+$sa_pac_id = '1';
 
 if (isset($_POST['sa_pac_id'])) {
     $sa_pac_id = $_POST['sa_pac_id'];
 }
 
-$sa_pac_tabla = '';
+$sa_pac_tabla = 'estudiantes';
 
 if (isset($_POST['sa_pac_tabla'])) {
     $sa_pac_tabla = $_POST['sa_pac_tabla'];
@@ -335,8 +335,7 @@ if (isset($_POST['sa_pac_tabla'])) {
             });
         }
 
-        function lista_seguros()
-        {
+        function lista_seguros() {
             $.ajax({
                 // data: {
                 //     parametros: parametros
@@ -350,10 +349,10 @@ if (isset($_POST['sa_pac_tabla'])) {
                 },*/
                 success: function(response) {
                     var option = '<option selected disabled value="">-- Seleccione --</option>';
-                    response.forEach(function(item,i){
-                        option+='<option value ="'+item.id_contratos+'">'+item.plan_seguro+'</option>'
+                    response.forEach(function(item, i) {
+                        option += '<option value ="' + item.id_contratos + '">' + item.plan_seguro + '</option>'
                     })
-                   $('#sa_fice_pac_nombre_seguro').html(option);
+                    $('#sa_fice_pac_nombre_seguro').html(option);
                 }
             });
         }
@@ -394,18 +393,24 @@ if (isset($_POST['sa_pac_tabla'])) {
                     <div class="card-body">
 
                         <div class="card-title d-flex align-items-center">
-                            <div><i class="bx bxs-user me-1 font-22 text-primary"></i>
+
+                            <div class="col-sm-3">
+                                <a href="<?= $url_general ?>/vista/inicio.php?mod=7&acc=inicio_representante" class="btn btn-outline-dark btn-sm"><i class="bx bx-arrow-back"></i> Regresar</a>
                             </div>
-                            <h6 class="mb-0 text-primary">
-                                Ficha Médica del Paciente: <b class="text-success" id="title_paciente"></b>
-                                <!--  <p id="tipo_paciente"></p> -->
-                            </h6>
-                            <div class="row m-2">
-                                <div class="col-sm-12">
-                                    <a href="<?= $url_general ?>/vista/inicio.php?mod=7&acc=inicio_representante" class="btn btn-outline-dark btn-sm"><i class="bx bx-arrow-back"></i> Regresar</a>
-                                </div>
+
+
+                            <div class="col-sm-9 text-end">
+                                <h6 class="mb-0 text-primary">
+                                    
+
+                                    Paciente: <b class="text-success" id="title_paciente"></b>
+                                    <!--  <p id="tipo_paciente"></p> -->
+                                </h6>
                             </div>
+
                         </div>
+
+
                         <hr>
 
                         <?php if ($sa_pac_id != '' && $sa_pac_tabla != '') { ?>
@@ -443,100 +448,112 @@ if (isset($_POST['sa_pac_tabla'])) {
 
                                         <form class="needs-validation" novalidate>
 
+                                            <input type="hidden" name="sa_fice_id" id="sa_fice_id">
+                                            <input type="hidden" name="sa_fice_pac_id" id="sa_fice_pac_id">
+
                                             <h3 class="pt-3">Paso 1</h3>
                                             <p>Por favor, proporcione la siguiente información para completar el registro del paciente. Todos los campos son obligatorios, asegúrese de proporcionar datos precisos y completos.</p>
 
                                             <div class="row pt-3">
-                                                <div class="col-6 mx-5">
+                                                <div class="col-6">
                                                     <div class="table-responsive">
-                                                        <table class="table mb-0" style="width:100%">
+                                                        <table class="table mb-0  table-bordered" style="width:100%">
                                                             <tbody>
                                                                 <tr>
-                                                                    <th style="width:40%" class="table-primary text-end">Cédula:</th>
+                                                                    <th style="width:40%" class="bg-light-primary text-end">Cédula:</th>
                                                                     <td id="txt_ci"></td>
                                                                 </tr>
                                                                 <tr>
-                                                                    <th style="width:40%" class="table-primary text-end">Nombres:</th>
+                                                                    <th style="width:40%" class="bg-light-primary text-end">Nombres:</th>
                                                                     <td id="txt_nombre"></td>
                                                                 </tr>
                                                                 <tr>
-                                                                    <th style="width:40%" class="table-primary text-end">Apellidos:</th>
+                                                                    <th style="width:40%" class="bg-light-primary text-end">Apellidos:</th>
                                                                     <td id="txt_apellido"></td>
                                                                 </tr>
                                                                 <tr>
-                                                                    <th style="width:40%" class="table-primary text-end">Sexo:</th>
+                                                                    <th style="width:40%" class="bg-light-primary text-end">Sexo:</th>
                                                                     <td id="txt_sexo"></td>
                                                                 </tr>
                                                                 <tr>
-                                                                    <th style="width:40%" class="table-primary text-end">Fecha de Nacimiento:</th>
+                                                                    <th style="width:40%" class="bg-light-primary text-end">Fecha de Nacimiento:</th>
                                                                     <td id="txt_fecha_nacimiento"></td>
                                                                 </tr>
                                                                 <tr>
-                                                                    <th style="width:40%" class="table-primary text-end">Edad Actual:</th>
+                                                                    <th style="width:40%" class="bg-light-primary text-end">Edad Actual:</th>
                                                                     <td id="txt_edad"></td>
                                                                 </tr>
                                                                 <tr>
-                                                                    <th style="width:40%" class="table-primary text-end">Correo Electrónico:</th>
+                                                                    <th style="width:40%" class="bg-light-primary text-end">Correo Electrónico:</th>
                                                                     <td id="txt_email"></td>
                                                                 </tr>
                                                                 <tr>
-                                                                    <th style="width:40%" class="table-primary text-end" id="variable_paciente">Curso:</th>
+                                                                    <th style="width:40%" class="bg-light-primary text-end" id="variable_paciente">Curso:</th>
                                                                     <td id="txt_curso"></td>
                                                                 </tr>
                                                             </tbody>
                                                         </table>
                                                     </div>
                                                 </div>
+
+                                                <div class="col-6">
+                                                    <div class="row">
+                                                        <div class="col-md-11">
+                                                            <label for="" class="form-label"> Grupo Sanguíneo y Factor Rh: <label style="color: red;">*</label> </label>
+                                                            <select class="form-select form-select-sm" id="sa_fice_pac_grupo_sangre" name="sa_fice_pac_grupo_sangre">
+                                                                <option selected disabled>-- Seleccione --</option>
+                                                                <option value="A+">A+</option>
+                                                                <option value="A-">A-</option>
+                                                                <option value="B+">B+</option>
+                                                                <option value="B-">B-</option>
+                                                                <option value="AB+">AB+</option>
+                                                                <option value="AB-">AB-</option>
+                                                                <option value="O+">O+</option>
+                                                                <option value="O-">O-</option>
+                                                            </select>
+                                                        </div>
+
+
+                                                    </div>
+
+                                                    <div class="row pt-3">
+                                                        <div class="col-md-11">
+                                                            <label for="" class="form-label">Dirección del Domicilio: <label style="color: red;">*</label> </label>
+                                                            <input type="text" class="form-control form-control-sm" id="sa_fice_pac_direccion_domicilio" name="sa_fice_pac_direccion_domicilio">
+                                                        </div>
+                                                    </div>
+
+
+                                                    <div class="row pt-3">
+                                                        <div class="col-md-11">
+                                                            <label for="" class="form-label">¿El estudiante posee seguro médico?: <label style="color: red;">*</label> </label>
+                                                            <select class="form-select form-select-sm" id="sa_fice_pac_seguro_medico" name="sa_fice_pac_seguro_medico">
+                                                                <option selected disabled>-- Seleccione --</option>
+                                                                <option value="Si">Si</option>
+                                                                <option value="No">No</option>
+                                                            </select>
+                                                        </div>
+
+
+                                                    </div>
+
+                                                    <div class="row pt-3">
+                                                        <div class="col-md-11" id="sa_fice_pac_nombre_seguro_div">
+                                                            <label for="" class="form-label">Nombre del seguro: <label style="color: red;">*</label> </label>
+                                                            <select class="form-select form-select-sm" id="sa_fice_pac_nombre_seguro" name="sa_fice_pac_nombre_seguro">
+                                                                <option selected disabled value="">-- Seleccione --</option>
+                                                                <option value="IESS">IESS</option>
+                                                                <option value="ISSFA">ISSFA</option>
+                                                                <option value="ISSPOL">ISSPOL</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
 
 
-                                            <input type="hidden" name="sa_fice_id" id="sa_fice_id">
-                                            <input type="hidden" name="sa_fice_pac_id" id="sa_fice_pac_id">
 
-                                            <div class="pt-3">
-                                                <div class="row pt-3">
-                                                    <div class="col-md-4">
-                                                        <label for="" class="form-label"> Grupo Sanguíneo y Factor Rh: <label style="color: red;">*</label> </label>
-                                                        <select class="form-select form-select-sm" id="sa_fice_pac_grupo_sangre" name="sa_fice_pac_grupo_sangre">
-                                                            <option selected disabled>-- Seleccione --</option>
-                                                            <option value="A+">A+</option>
-                                                            <option value="A-">A-</option>
-                                                            <option value="B+">B+</option>
-                                                            <option value="B-">B-</option>
-                                                            <option value="AB+">AB+</option>
-                                                            <option value="AB-">AB-</option>
-                                                            <option value="O+">O+</option>
-                                                            <option value="O-">O-</option>
-                                                        </select>
-                                                    </div>
 
-                                                    <div class="col-md-8">
-                                                        <label for="" class="form-label">Dirección del Domicilio: <label style="color: red;">*</label> </label>
-                                                        <input type="text" class="form-control form-control-sm" id="sa_fice_pac_direccion_domicilio" name="sa_fice_pac_direccion_domicilio">
-                                                    </div>
-                                                </div>
-
-                                                <div class="row pt-3">
-                                                    <div class="col-md-4">
-                                                        <label for="" class="form-label">¿El estudiante posee seguro médico?: <label style="color: red;">*</label> </label>
-                                                        <select class="form-select form-select-sm" id="sa_fice_pac_seguro_medico" name="sa_fice_pac_seguro_medico">
-                                                            <option selected disabled>-- Seleccione --</option>
-                                                            <option value="Si">Si</option>
-                                                            <option value="No">No</option>
-                                                        </select>
-                                                    </div>
-
-                                                    <div class="col-md-8" id="sa_fice_pac_nombre_seguro_div">
-                                                        <label for="" class="form-label">Nombre del seguro: <label style="color: red;">*</label> </label>
-                                                        <select class="form-select form-select-sm" id="sa_fice_pac_nombre_seguro" name="sa_fice_pac_nombre_seguro">
-                                                            <option selected disabled value="">-- Seleccione --</option>
-                                                            <option value="IESS">IESS</option>
-                                                            <option value="ISSFA">ISSFA</option>
-                                                            <option value="ISSPOL">ISSPOL</option>
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                            </div>
                                         </form>
 
                                     </div>

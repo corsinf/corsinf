@@ -14,21 +14,21 @@ class agendamientoM
         $this->db = new db();
     }
 
-    function lista_consultas($fecha=false)
+    function lista_consultas($fecha = false)
     {
-    	$sql = "SELECT * from consultas c
-        INNER JOIN estudiantes e on c.sa_fice_id = e.sa_est_id
-        WHERE sa_conp_estado = 0";
-        if($fecha)
-        {
-            $sql.= " AND CONVERT(VARCHAR(10), sa_conp_fecha_creacion, 120) ='".$fecha."'";
+        $sql = "SELECT * from consultas_medicas c
+
+        WHERE sa_conp_estado_revision = 0";
+
+        if ($fecha) {
+            $sql .= " AND CONVERT(VARCHAR(10), sa_conp_fecha_creacion, 120) ='" . $fecha . "'";
         }
 
-        // print_r($sql);die();
-    	return $this->db->datos($sql);
+        //print_r($sql);die();
+        return $this->db->datos($sql);
     }
 
-    function insertar($tabla,$datos)
+    function insertar($tabla, $datos)
     {
         $rest = $this->db->inserts($tabla, $datos);
         return $rest;
@@ -39,5 +39,4 @@ class agendamientoM
         $rest = $this->db->update('estudiantes', $datos, $where);
         return $rest;
     }
-
 }
