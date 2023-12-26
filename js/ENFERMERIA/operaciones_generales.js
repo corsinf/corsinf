@@ -73,6 +73,18 @@ function select_genero(sexo = '', campo = '') {
     }
 }
 
+function obtener_hora_formateada(hora) {
+    var fechaActual = new Date(hora);
+    var hora = fechaActual.getHours();
+    var minutos = fechaActual.getMinutes();
+
+    // Formatear la hora como una cadena
+    var horaFormateada = (hora < 10 ? '0' : '') + hora + ':' +
+        (minutos < 10 ? '0' : '') + minutos;
+
+    return horaFormateada;
+}
+
 function base_url() {
     return (window.document.location.origin + "/" + window.location.pathname.split('/')[1]);
 }

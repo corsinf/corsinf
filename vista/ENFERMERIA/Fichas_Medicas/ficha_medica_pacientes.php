@@ -104,19 +104,6 @@ if (isset($_POST['sa_pac_tabla'])) {
 
                     <?php } ?>
 
-
-                    //$('#sa_est_id').val(response.sa_est_id);
-                    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                    //  Para el llenado de datos en la ficha /////////////////////////////////////////////////////////////////////////////////////////////
-
-                    //$('#sa_fice_pac_id').val(response.sa_pac_id);
-                    /*$('#sa_fice_pac_primer_apellido').val(response.sa_pac_primer_nombre);
-                    $('#sa_fice_pac_segundo_apellido').val(response.sa_pac_segundo_nombre);
-                    $('#sa_fice_pac_primer_nombre').val(response.sa_pac_primer_apellido);
-                    $('#sa_fice_pac_segundo_nombre').val(response.sa_pac_segundo_apellido);
-                    $('#sa_fice_pac_fecha_nacimiento').val(fecha_nacimiento_formateada(response.sa_pac_fecha_nacimiento.date));
-                    $('#sa_fice_pac_edad').val(calcular_edad_fecha_nacimiento(response.sa_pac_fecha_nacimiento.date));*/
-
                 }
             });
         }
