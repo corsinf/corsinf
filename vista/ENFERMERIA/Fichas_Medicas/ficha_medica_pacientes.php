@@ -13,6 +13,7 @@ if (isset($_POST['sa_pac_tabla'])) {
     $sa_pac_tabla = $_POST['sa_pac_tabla'];
 }
 
+
 ?>
 
 <script src="<?= $url_general ?>/js/ENFERMERIA/ficha_medica.js"></script>

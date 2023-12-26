@@ -320,6 +320,7 @@ class ficha_MedicaM
         if($query)
         {
             $sql.=" AND Plan_seguro like '%".$query."%'";
+            
         }
         return $this->db->datos($sql);
     }
