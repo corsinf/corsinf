@@ -155,6 +155,8 @@ if (isset($_POST['sa_pac_tabla'])) {
                         $('#sa_fice_pregunta_1_obs').val(response[0].sa_fice_pregunta_1_obs);
                     } else if (response[0].sa_fice_pregunta_1 === "No") {
                         $("#sa_fice_pregunta_1_obs").hide();
+                    } else {
+                        $("#sa_fice_pregunta_1_obs").hide();
                     }
 
                     $('input[name=sa_fice_pregunta_2][value=' + response[0].sa_fice_pregunta_2 + ']').prop('checked', true);
@@ -162,6 +164,8 @@ if (isset($_POST['sa_pac_tabla'])) {
                         $("#sa_fice_pregunta_2_obs").show();
                         $('#sa_fice_pregunta_2_obs').val(response[0].sa_fice_pregunta_2_obs);
                     } else if (response[0].sa_fice_pregunta_2 === "No") {
+                        $("#sa_fice_pregunta_2_obs").hide();
+                    } else {
                         $("#sa_fice_pregunta_2_obs").hide();
                     }
 
@@ -171,6 +175,8 @@ if (isset($_POST['sa_pac_tabla'])) {
                         $('#sa_fice_pregunta_3_obs').val(response[0].sa_fice_pregunta_3_obs);
                     } else if (response[0].sa_fice_pregunta_3 === "No") {
                         $("#sa_fice_pregunta_3_obs").hide();
+                    } else {
+                        $("#sa_fice_pregunta_3_obs").hide();
                     }
 
                     $('input[name=sa_fice_pregunta_4][value=' + response[0].sa_fice_pregunta_4 + ']').prop('checked', true);
@@ -178,6 +184,8 @@ if (isset($_POST['sa_pac_tabla'])) {
                         $("#sa_fice_pregunta_4_obs").show();
                         $('#sa_fice_pregunta_4_obs').val(response[0].sa_fice_pregunta_4_obs);
                     } else if (response[0].sa_fice_pregunta_4 === "No") {
+                        $("#sa_fice_pregunta_4_obs").hide();
+                    } else {
                         $("#sa_fice_pregunta_4_obs").hide();
                     }
 
@@ -363,10 +371,10 @@ if (isset($_POST['sa_pac_tabla'])) {
                         <div class="card-title d-flex align-items-center">
                             <div><i class="bx bxs-user me-1 font-22 text-primary"></i>
                             </div>
-                            <h5 class="mb-0 text-primary">
+                            <h6 class="mb-0 text-primary">
                                 Ficha Médica del Paciente: <b class="text-success" id="title_paciente"></b>
-                                <p id="tipo_paciente"></p>
-                            </h5>
+                                <!--  <p id="tipo_paciente"></p> -->
+                            </h6>
                             <div class="row m-2">
                                 <div class="col-sm-12">
                                     <a href="<?= $url_general ?>/vista/inicio.php?mod=7&acc=inicio_representante" class="btn btn-outline-dark btn-sm"><i class="bx bx-arrow-back"></i> Regresar</a>
@@ -382,25 +390,25 @@ if (isset($_POST['sa_pac_tabla'])) {
                                 <ul class="nav">
                                     <li class="nav-item">
                                         <a class="nav-link" href="#step-1"> <strong>Paso 1</strong>
-                                            <br>DATOS GENERALES DEL PACIENTE</a>
+                                            <br>Datos Generales</a>
                                     </li>
                                     <li class="nav-item">
                                         <a class="nav-link" href="#step-2"> <strong>Paso 2</strong>
 
                                             <?php if ($sa_pac_tabla == 'estudiantes') { ?>
-                                                <br>DATOS GENERALES DEL REPRESENTANTE</a>
+                                                <br>Datos del Representante</a>
                                     <?php } else { ?>
-                                        <br>CONTACTO DE EMERGENCIA</a>
+                                        <br>Contacto de Emergencia</a>
                                     <?php } ?>
 
                                     </li>
                                     <li class="nav-item">
                                         <a class="nav-link" href="#step-3"> <strong>Paso 3</strong>
-                                            <br>INFORMACIÓN IMPORTANTE</a>
+                                            <br>Información Importante</a>
                                     </li>
                                     <li class="nav-item">
                                         <a class="nav-link" href="#step-4"> <strong>Paso 4</strong>
-                                            <br>CONSENTIMIENTO</a>
+                                            <br>Consentimiento</a>
                                     </li>
                                 </ul>
                                 <div class="tab-content">
@@ -647,69 +655,80 @@ if (isset($_POST['sa_pac_tabla'])) {
 
                                                 <div class="col-md-12">
                                                     <label for="" class="form-label">1.- ¿Ha sido diagnosticado con alguna enfermedad?: <label style="color: red;">* OBLIGATORIO</label> </label>
-                                                    <div>
-                                                        <div class="form-check">
-                                                            <input class="form-check-input" type="radio" name="sa_fice_pregunta_1" id="sa_fice_pregunta_1_1" value="Si">
-                                                            <label class="form-check-label" for="flexRadioDefault1">SI</label>
-                                                        </div>
-                                                        <div class="form-check">
-                                                            <input class="form-check-input" type="radio" name="sa_fice_pregunta_1" id="sa_fice_pregunta_1_2" value="No">
-                                                            <label class="form-check-label" for="flexRadioDefault2">NO</label>
-                                                        </div>
+                                                    <div class="row">
+                                                        <div class="col-auto">
+                                                            <div class="form-check">
+                                                                <input class="form-check-input" type="radio" name="sa_fice_pregunta_1" id="sa_fice_pregunta_1_1" value="Si">
+                                                                <label class="form-check-label" for="flexRadioDefault1">SI</label>
+                                                            </div>
 
-                                                        <textarea name="sa_fice_pregunta_1_obs" id="sa_fice_pregunta_1_obs" cols="30" rows="1" class="form-control form-control-sm" placeholder="¿Cúal?"></textarea>
-
+                                                            <div class="form-check">
+                                                                <input class="form-check-input" type="radio" name="sa_fice_pregunta_1" id="sa_fice_pregunta_1_2" value="No">
+                                                                <label class="form-check-label" for="flexRadioDefault2">NO</label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-11">
+                                                            <textarea name="sa_fice_pregunta_1_obs" id="sa_fice_pregunta_1_obs" cols="30" rows="2" class="form-control form-control-sm" placeholder="¿Cúal?"></textarea>
+                                                        </div>
                                                     </div>
                                                 </div>
 
                                                 <div class="col-md-12 pt-4">
                                                     <label for="" class="form-label">2.- ¿Tiene algún antecedente familiar de importancia?: <label style="color: red;">* PADRES – HERMANOS – ABUELOS - TIOS </label> </label>
-                                                    <div>
-                                                        <div class="form-check">
-                                                            <input class="form-check-input" type="radio" name="sa_fice_pregunta_2" id="sa_fice_pregunta_2_1" value="Si">
-                                                            <label class="form-check-label" for="flexRadioDefault1">SI</label>
+                                                    <div class="row">
+                                                        <div class="col-auto">
+                                                            <div class="form-check">
+                                                                <input class="form-check-input" type="radio" name="sa_fice_pregunta_2" id="sa_fice_pregunta_2_1" value="Si">
+                                                                <label class="form-check-label" for="flexRadioDefault1">SI</label>
+                                                            </div>
+                                                            <div class="form-check">
+                                                                <input class="form-check-input" type="radio" name="sa_fice_pregunta_2" id="sa_fice_pregunta_2_2" value="No">
+                                                                <label class="form-check-label" for="flexRadioDefault2">NO</label>
+                                                            </div>
                                                         </div>
-                                                        <div class="form-check">
-                                                            <input class="form-check-input" type="radio" name="sa_fice_pregunta_2" id="sa_fice_pregunta_2_2" value="No">
-                                                            <label class="form-check-label" for="flexRadioDefault2">NO</label>
+                                                        <div class="col-11">
+                                                            <textarea name="sa_fice_pregunta_2_obs" id="sa_fice_pregunta_2_obs" cols="30" rows="2" class="form-control form-control-sm " placeholder="¿Cúal?"></textarea>
                                                         </div>
-
-                                                        <textarea name="sa_fice_pregunta_2_obs" id="sa_fice_pregunta_2_obs" cols="30" rows="1" class="form-control form-control-sm" placeholder="¿Cúal?"></textarea>
-
                                                     </div>
+
                                                 </div>
 
                                                 <div class="col-md-12 pt-4">
                                                     <label for="" class="form-label">3.- ¿Ha sido sometido a cirugías previas?: <label style="color: red;">* OBLIGATORIO </label> </label>
-                                                    <div>
-                                                        <div class="form-check">
-                                                            <input class="form-check-input" type="radio" name="sa_fice_pregunta_3" id="sa_fice_pregunta_3_1" value="Si">
-                                                            <label class="form-check-label" for="flexRadioDefault1">SI</label>
-                                                        </div>
-                                                        <div class="form-check">
-                                                            <input class="form-check-input" type="radio" name="sa_fice_pregunta_3" id="sa_fice_pregunta_3_2" value="No">
-                                                            <label class="form-check-label" for="flexRadioDefault2">NO</label>
+                                                    <div class="row">
+                                                        <div class="col-auto">
+                                                            <div class="form-check">
+                                                                <input class="form-check-input" type="radio" name="sa_fice_pregunta_3" id="sa_fice_pregunta_3_1" value="Si">
+                                                                <label class="form-check-label" for="sa_fice_pregunta_3_1">SI</label>
+                                                            </div>
+                                                            <div class="form-check">
+                                                                <input class="form-check-input" type="radio" name="sa_fice_pregunta_3" id="sa_fice_pregunta_3_2" value="No">
+                                                                <label class="form-check-label" for="sa_fice_pregunta_3_2">NO</label>
+                                                            </div>
                                                         </div>
 
-                                                        <textarea name="sa_fice_pregunta_3_obs" id="sa_fice_pregunta_3_obs" cols="30" rows="1" class="form-control form-control-sm" placeholder="¿Cúal?"></textarea>
-
+                                                        <div class="col-11">
+                                                            <textarea name="sa_fice_pregunta_3_obs" id="sa_fice_pregunta_3_obs" cols="30" rows="2" class="form-control form-control-sm" placeholder="¿Cuál?"></textarea>
+                                                        </div>
                                                     </div>
                                                 </div>
 
                                                 <div class="col-md-12 pt-4">
                                                     <label for="" class="form-label">4.- ¿Tiene alergias?: <label style="color: red;">* OBLIGATORIO </label> </label>
-                                                    <div>
-                                                        <div class="form-check">
-                                                            <input class="form-check-input" type="radio" name="sa_fice_pregunta_4" id="sa_fice_pregunta_4_1" value="Si">
-                                                            <label class="form-check-label" for="flexRadioDefault1">SI</label>
+                                                    <div class="row">
+                                                        <div class="col-auto">
+                                                            <div class="form-check">
+                                                                <input class="form-check-input" type="radio" name="sa_fice_pregunta_4" id="sa_fice_pregunta_4_1" value="Si">
+                                                                <label class="form-check-label" for="flexRadioDefault1">SI</label>
+                                                            </div>
+                                                            <div class="form-check">
+                                                                <input class="form-check-input" type="radio" name="sa_fice_pregunta_4" id="sa_fice_pregunta_4_2" value="No">
+                                                                <label class="form-check-label" for="flexRadioDefault2">NO</label>
+                                                            </div>
                                                         </div>
-                                                        <div class="form-check">
-                                                            <input class="form-check-input" type="radio" name="sa_fice_pregunta_4" id="sa_fice_pregunta_4_2" value="No">
-                                                            <label class="form-check-label" for="flexRadioDefault2">NO</label>
+                                                        <div class="col-11">
+                                                            <textarea name="sa_fice_pregunta_4_obs" id="sa_fice_pregunta_4_obs" cols="30" rows="2" class="form-control form-control-sm" placeholder="¿Cúal?"></textarea>
                                                         </div>
-
-                                                        <textarea name="sa_fice_pregunta_4_obs" id="sa_fice_pregunta_4_obs" cols="30" rows="1" class="form-control form-control-sm" placeholder="¿Cúal?"></textarea>
-
                                                     </div>
                                                 </div>
 
