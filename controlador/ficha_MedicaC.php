@@ -41,6 +41,10 @@ if (isset($_GET['administrar_comunidad_ficha_medica'])) {
     echo json_encode($controlador->crear_paciente_ficha_medica($sa_pac_id_comunidad, $sa_pac_tabla));
 }
 
+if (isset($_GET['lista_seguros'])) {
+    echo json_encode($controlador->lista_seguros());
+}
+
 //print_r($controlador->lista_ficha_medica(''));
 
 /*$parametros = array(
@@ -72,6 +76,12 @@ class ficha_MedicaC
     function lista_solo_ficha_medica($id)
     {
         $datos = $this->modelo->lista_paciente_ficha_medica($id);
+        return $datos;
+    }
+
+    function lista_seguros()
+    {
+        $datos = $this->modelo->lista_seguros();
         return $datos;
     }
 

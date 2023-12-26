@@ -29,6 +29,7 @@ if (isset($_POST['sa_pac_tabla'])) {
             (event || window.event).returnValue = confirmationMessage; // Para navegadores más antiguos
             return confirmationMessage; // Para navegadores modernos
         });
+        lista_seguros();
 
 
         var id = '<?php echo $_SESSION['INICIO']['ID_USUARIO']; ?>';
@@ -321,6 +322,29 @@ if (isset($_POST['sa_pac_tabla'])) {
                         Swal.fire('', 'Algo salió mal, repite el proceso.', 'success');
                     }
                     console.log(response);
+                }
+            });
+        }
+
+        function lista_seguros()
+        {
+            $.ajax({
+                // data: {
+                //     parametros: parametros
+                // },
+                url: '<?= $url_general ?>/controlador/ficha_medicaC.php?lista_seguros=true',
+                type: 'post',
+                dataType: 'json',
+                /*beforeSend: function () {   
+                     var spiner = '<div class="text-center"><img src="../../img/gif/proce.gif" width="100" height="100"></div>'     
+                   $('#tabla_').html(spiner);
+                },*/
+                success: function(response) {
+                    var option = '<option selected disabled value="">-- Seleccione --</option>';
+                    response.forEach(function(item,i){
+                        option+='<option value ="'+item.id_contratos+'">'+item.plan_seguro+'</option>'
+                    })
+                   $('#sa_fice_pac_nombre_seguro').html(option);
                 }
             });
         }
