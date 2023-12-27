@@ -26,6 +26,47 @@ if (isset($_GET['id_consulta'])) {
 
 <script src="<?= $url_general ?>/js/ENFERMERIA/operaciones_generales.js"></script>
 
+<!-- //link de api icd -->
+<link rel="stylesheet" href="https://icdcdn.who.int/embeddedct/icd11ect-1.6.1.css">
+<script src="https://icdcdn.who.int/embeddedct/icd11ect-1.6.1.js"></script>
+
+<script type="text/javascript">
+    const mySettings = {
+  // The API located at the URL below should be used only     
+  // for software development and testing. 
+  // ICD content at this location might not
+  // be up to date or complete. 
+  // For production, use the API located at
+  // id.who.int with proper OAUTH authentication
+  apiServerUrl: "https://icd11restapi-developer-test.azurewebsites.net",
+  language: "es", // set the language to Spanish
+  enableKeyboard:false,
+};
+
+const myCallbacks = {
+
+  selectedEntityFunction: (selectedEntity) => { 
+    // paste the code into the <input>
+    console.log(selectedEntity);
+    // document.getElementById('paste-selectedEntity').value = selectedEntity.code;        
+    // clear the searchbox and delete the search results
+    // ECT.Handler.clear("1")    
+  }
+};
+
+
+
+// configure the ECT Handler
+ECT.Handler.configure(mySettings,myCallbacks);
+
+ECT.Handler.overwriteConfiguration("1", {
+  chaptersFilter: "01;02",
+  wordsAvailable: false,
+  enableKeyboard:false,
+});
+
+</script>
+
 <script type="text/javascript">
     $(document).ready(function() {
 
@@ -766,6 +807,16 @@ if (isset($_GET['id_consulta'])) {
                                                     <div class="row pt-3">
                                                         <div class="col-md-12">
                                                             <label for="" class="form-label">CIE 10 - Diagnóstico 1: <label style="color: red;">*</label> </label>
+
+                                                            <input type="text" class="ctw-input" autocomplete="off" data-ctw-ino="1">
+                                                            <div class="ctw-window" data-ctw-ino="1"></div>
+                                                            <!-- example of an extra input element for testing the Embedded Coding Tool select entity function -->
+                                                            <!-- The selected code: <input type="text" id="paste-selectedEntity" value="">  -->
+
+
+
+
+<!-- <div class="ctw-eb-window" data-ctw-ino="1"></div> -->
 
                                                             <select class="form-select form-select-sm" id="sa_conp_CIE_10_1" name="sa_conp_CIE_10_1">
                                                                 <option selected disabled>-- Seleccione --</option>
