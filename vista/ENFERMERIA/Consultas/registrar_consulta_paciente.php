@@ -256,6 +256,47 @@ ECT.Handler.configure(mySettings,myCallbacks);
                     $('#sa_conp_nivel').val(response[0].sa_pac_temp_gra_nombre);
                     $('#sa_conp_paralelo').val(response[0].sa_pac_temp_par_nombre);
 
+                       //////////Para poner el numero de telefono del representante
+                       $.ajax({
+                        data: {
+                            id: id
+                        },
+                        url: '<?php echo $url_general ?>/controlador/estudiantesC.php?listar=true',
+                        type: 'post',
+                        dataType: 'json',
+                        success: function(response) {
+
+                            $('#sa_est_id').val(response[0].sa_est_id);
+                            $('#sa_est_primer_apellido').val(response[0].sa_est_primer_apellido);
+                            $('#sa_est_segundo_apellido').val(response[0].sa_est_segundo_apellido);
+                            $('#sa_est_primer_nombre').val(response[0].sa_est_primer_nombre);
+                            $('#sa_est_segundo_nombre').val(response[0].sa_est_segundo_nombre);
+
+                            $('#sa_est_cedula').val(response[0].sa_est_cedula);
+
+                            select_genero(response[0].sa_est_sexo, '#sa_est_sexo');
+
+                            $('#sa_est_fecha_nacimiento').val(fecha_nacimiento_formateada(response[0].sa_est_fecha_nacimiento.date));
+                            $('#sa_est_edad').val(calcular_edad_fecha_nacimiento(response[0].sa_est_fecha_nacimiento.date));
+                            ///////////////////////////////////////////////////////////////////////////////////////////
+
+                            $('#sa_est_correo').val(response[0].sa_est_correo);
+                            $('#sa_id_representante').val(response[0].sa_id_representante);
+
+                            select_parentesco(response[0].sa_est_rep_parentesco, '#sa_est_rep_parentesco');
+
+
+                            //$('#sa_id_seccion').val(response[0].sa_id_seccion);
+                            //$('#sa_id_grado').val(response[0].sa_id_grado);
+                            //$('#sa_id_paralelo').val(response[0].sa_id_paralelo);
+
+                            $('#sa_sec_id').val(response[0].sa_sec_id);
+                            $('#sa_gra_id').val(response[0].sa_gra_id);
+                            $('#sa_par_id').val(response[0].sa_par_id);
+
+                        }
+                    });
+
                 } else {
                     $('#variable_paciente').html('Teléfono:');
                     $('#txt_curso').html(response[0].sa_pac_temp_telefono_1);
