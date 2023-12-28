@@ -1172,18 +1172,5 @@ ECT.Handler.configure(mySettings,myCallbacks);
             $('#permiso_salida').hide();
         }
     });
-<<<<<<< HEAD
+
 </script>
-
-
-=======
-
-    $('input[name=sa_conp_permiso_tipo]').change(function() {
-        if ($(this).val() === 'emergencia') {
-            $('#permiso_salida_tipo').show();
-        } else if ($(this).val() === 'normal') {
-            $('#permiso_salida_tipo').hide();
-        }
-    });
-</script>
->>>>>>> DEVELOPER01
