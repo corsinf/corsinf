@@ -42,9 +42,9 @@
         calendar.removeAllEvents();
         // Recorrer la respuesta y agregar eventos al arreglo events
         response.forEach(function(evento) {
-          console.log(evento);
+          //console.log(evento);
           calendar.addEvent({
-            title: evento.sa_conp_tipo_consulta + ' - ' + evento.sa_fice_id,
+            title: evento.sa_conp_tipo_consulta + ' - ' + evento.nombres,
             start: formatoDate(evento.sa_conp_fecha_ingreso.date),
             end: formatoDate(evento.sa_conp_fecha_ingreso.date),
           });
@@ -76,27 +76,39 @@
   }
 
   function agendar() {
-    var parametros = {
-      'paciente': $('#ddl_pacientes').val(), //Se envia el id_ficha
-      'tipo': $('#txt_tipo_consulta').val(),
-      'fecha': $('#txt_fecha_consulta').val(),
+    var paciente = $('#ddl_pacientes').val();
+    var tipoConsulta = $('#txt_tipo_consulta').val();
+    var fechaConsulta = $('#txt_fecha_consulta').val();
+
+    if (paciente && tipoConsulta && fechaConsulta) {
+      // Todos los campos están llenos, puedes continuar con el envío de datos
+      var parametros = {
+        'paciente': paciente,
+        'tipo': tipoConsulta,
+        'fecha': fechaConsulta
+      };
+
+      $.ajax({
+        url: '<?php echo $url_general ?>/controlador/agendamientoC.php?add_agenda=true',
+        data: {
+          parametros: parametros
+        },
+        type: 'post',
+        dataType: 'json',
+        success: function(response) {
+          console.log(response)
+          Swal.fire('', 'Cita Agendada', 'success').then(function() {
+            $('#myModal').modal('hide');
+            cargar_citas();
+          })
+        }
+      });
+
+    } else {
+      Swal.fire('Oops...', 'Todos los campos son obligatorios. Por favor, completa la información.', 'error').then(function() {})
     }
 
-    $.ajax({
-      url: '<?php echo $url_general ?>/controlador/agendamientoC.php?add_agenda=true',
-      data: {
-        parametros: parametros
-      },
-      type: 'post',
-      dataType: 'json',
-      success: function(response) {
-        console.log(response)
-        Swal.fire('', 'Cita Agendada', 'success').then(function() {
-          $('#myModal').modal('hide');
-          cargar_citas();
-        })
-      }
-    });
+
   }
 </script>
 
@@ -170,7 +182,7 @@
       <!-- Modal footer -->
       <div class="modal-footer">
         <button type="button" class="btn btn-sm btn-primary" onclick="agendar()">Agendar</button>
-        <button type="button" class="btn btn-sm btn-danger" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-sm btn-danger" data-bs-dismiss="modal">Cerrar</button>
       </div>
 
     </div>

@@ -6,20 +6,38 @@ $tipo_consulta = '';
 
 $id_consulta = '';
 
-if (isset($_POST['id_ficha'])) {
-    $id_ficha = $_POST['id_ficha'];
-}
-
-if (isset($_POST['id_paciente'])) {
-    $id_paciente = $_POST['id_paciente'];
-}
-
-if (isset($_POST['tipo_consulta'])) {
-    $tipo_consulta = $_POST['tipo_consulta'];
-}
-
 if (isset($_GET['id_consulta'])) {
     $id_consulta = $_GET['id_consulta'];
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // La solicitud es un POST
+    if (isset($_POST['id_ficha'])) {
+        $id_ficha = $_POST['id_ficha'];
+    }
+
+    if (isset($_POST['id_paciente'])) {
+        $id_paciente = $_POST['id_paciente'];
+    }
+
+    if (isset($_POST['tipo_consulta'])) {
+        $tipo_consulta = $_POST['tipo_consulta'];
+    }
+} elseif ($_SERVER['REQUEST_METHOD'] === 'GET') {
+    // La solicitud es un GET
+    if (isset($_GET['id_ficha'])) {
+        $id_ficha = $_GET['id_ficha'];
+    }
+
+    if (isset($_GET['id_paciente'])) {
+        $id_paciente = $_GET['id_paciente'];
+    }
+
+    if (isset($_GET['tipo_consulta'])) {
+        $tipo_consulta = $_GET['tipo_consulta'];
+    }
 }
 
 ?>
@@ -29,19 +47,25 @@ if (isset($_GET['id_consulta'])) {
 <script type="text/javascript">
     $(document).ready(function() {
 
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        //Logica para registrar o modificar la consulta
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         var id_ficha = '<?php echo $id_ficha; ?>';
         var id_consulta = '<?php echo $id_consulta; ?>';
         var id_paciente = '<?php echo $id_paciente; ?>';
         var tipo_consulta = '<?php echo $tipo_consulta; ?>';
 
-        //alert(id_ficha)
-
         cargar_datos_paciente(id_paciente);
         datos_col_ficha_medica(id_paciente);
 
+        if (id_consulta !== '') {
+            datos_col_consulta(id_consulta);
+
+        }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         //Para la consulta - llenado de datos
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         consulta_hora_desde();
 
         $('#sa_conp_desde_hora, #sa_conp_hasta_hora').change(function() {
@@ -52,9 +76,29 @@ if (isset($_GET['id_consulta'])) {
             calcular_diferencia_fecha();
         });
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
     });
 
+    //Para traer los datos necesarios para cargar el formulario
+    function carga_datos_consulta(id_consulta = '') {
+        alert(id_consulta)
+        $.ajax({
+            data: {
+                id_consulta: id_consulta
+            },
+            url: '<?php echo $url_general ?>/controlador/consultasC.php?datos_consulta=true',
+            type: 'post',
+            dataType: 'json',
+            //Para el id representante tomar los datos con los de session
+            success: function(response) {
+                console.log(response);
+
+            }
+        });
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //Para la tabla medicamentos e insumos
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     var count_medicamento = 0;
 
     function insertarMedicamentos() {
@@ -198,7 +242,7 @@ if (isset($_GET['id_consulta'])) {
 
 
     //Datos de la consulta aun no se utiliza
-    function datos_col_consulta_paciente(id_consulta) {
+    function datos_col_consulta(id_consulta) {
         $.ajax({
             data: {
                 id: id_consulta
@@ -207,80 +251,90 @@ if (isset($_GET['id_consulta'])) {
             type: 'post',
             dataType: 'json',
             success: function(response) {
-                // Asignar valores del estudiante
-                // $('#sa_conp_id').val(response[0].sa_conp_id);
-                $('#sa_fice_id').val(response[0].sa_fice_id);
 
-                /*$('#sa_conp_nombres').val(response[0].sa_conp_nombres);
+                console.log(response);
+                // Asignar los valores a los campos del formulario
+                $('#sa_conp_id').val(response[0].sa_conp_id);
+                $('#sa_fice_id').val(response[0].sa_fice_id);
                 $('#sa_conp_nivel').val(response[0].sa_conp_nivel);
                 $('#sa_conp_paralelo').val(response[0].sa_conp_paralelo);
+
                 $('#sa_conp_edad').val(response[0].sa_conp_edad);
-                $('#sa_conp_correo').val(response[0].sa_conp_correo);
-                $('#sa_conp_telefono').val(response[0].sa_conp_telefono);*/
+                $('#sa_conp_peso').val(response[0].sa_conp_peso);
+                $('#sa_conp_altura').val(response[0].sa_conp_altura);
 
-                // Asignar valores de fechas y horas
-                $('#sa_conp_fecha_ingreso').val(obtener_hora_formateada(response[0].sa_conp_fecha_ingreso.date));
+                $('#sa_conp_temperatura').val(response[0].sa_conp_temperatura);
+                $('#sa_conp_presion_ar').val(response[0].sa_conp_presion_ar);
+                $('#sa_conp_frec_cardiaca').val(response[0].sa_conp_frec_cardiaca);
+                $('#sa_conp_frec_respiratoria').val(response[0].sa_conp_frec_respiratoria);
 
-                // alert(obtener_hora_formateada(response[0].sa_conp_desde_hora.date));
-
+                $('#sa_conp_fecha_ingreso').val(fecha_nacimiento_formateada(response[0].sa_conp_fecha_ingreso.date));
                 $('#sa_conp_desde_hora').val(obtener_hora_formateada(response[0].sa_conp_desde_hora.date));
                 $('#sa_conp_hasta_hora').val(obtener_hora_formateada(response[0].sa_conp_hasta_hora.date));
                 $('#sa_conp_tiempo_aten').val(response[0].sa_conp_tiempo_aten);
-
-                // Asignar valores de diagnósticos y medicamentos
                 $('#sa_conp_CIE_10_1').val(response[0].sa_conp_CIE_10_1);
                 $('#sa_conp_diagnostico_1').val(response[0].sa_conp_diagnostico_1);
                 $('#sa_conp_CIE_10_2').val(response[0].sa_conp_CIE_10_2);
                 $('#sa_conp_diagnostico_2').val(response[0].sa_conp_diagnostico_2);
 
-                //$('#sa_conp_medicina_1').val(response[0].sa_conp_medicina_1);
-                datos_col_medicamentos_1('', response[0].sa_conp_medicina_1);
-                $('#sa_conp_dosis_1').val(response[0].sa_conp_dosis_1);
-
-                //$('#sa_conp_medicina_2').val(response[0].sa_conp_medicina_2);
-                datos_col_medicamentos_2('', response[0].sa_conp_medicina_2);
-                $('#sa_conp_dosis_2').val(response[0].sa_conp_dosis_2);
-
-                //$('#sa_conp_medicina_3').val(response[0].sa_conp_medicina_3);
-                datos_col_medicamentos_3('', response[0].sa_conp_medicina_3);
-                $('#sa_conp_dosis_3').val(response[0].sa_conp_dosis_3);
-
-                // Asignar valores de certificados y permisos
                 $('#sa_conp_salud_certificado').val(response[0].sa_conp_salud_certificado);
                 $('#sa_conp_motivo_certificado').val(response[0].sa_conp_motivo_certificado);
                 $('#sa_conp_CIE_10_certificado').val(response[0].sa_conp_CIE_10_certificado);
                 $('#sa_conp_diagnostico_certificado').val(response[0].sa_conp_diagnostico_certificado);
-                $('#sa_conp_fecha_entrega_certificado').val(obtener_hora_formateada(response[0].sa_conp_fecha_entrega_certificado.date));
-                $('#sa_conp_fecha_inicio_falta_certificado').val(obtener_hora_formateada(response[0].sa_conp_fecha_inicio_falta_certificado.date));
-                $('#sa_conp_fecha_fin_alta_certificado').val(obtener_hora_formateada(response[0].sa_conp_fecha_fin_alta_certificado.date));
+                $('#sa_conp_fecha_entrega_certificado').val(fecha_nacimiento_formateada(response[0].sa_conp_fecha_entrega_certificado.date));
+                $('#sa_conp_fecha_inicio_falta_certificado').val(fecha_nacimiento_formateada(response[0].sa_conp_fecha_inicio_falta_certificado.date));
+                $('#sa_conp_fecha_fin_alta_certificado').val(fecha_nacimiento_formateada(response[0].sa_conp_fecha_fin_alta_certificado.date));
                 $('#sa_conp_dias_permiso_certificado').val(response[0].sa_conp_dias_permiso_certificado);
 
-                $('#sa_conp_permiso_salida').val(response[0].sa_conp_permiso_salida);
-                $('#sa_conp_fecha_permiso_salud_salida').val(obtener_hora_formateada(response[0].sa_conp_fecha_permiso_salud_salida.date));
-                $('#sa_conp_hora_permiso_salida').val(obtener_hora_formateada(response[0].sa_conp_hora_permiso_salida.date));
+                /////////////////////////////
+                //$('#sa_conp_permiso_salida').val(response[0].sa_conp_permiso_salida);
 
-                // Asignar valores de notificaciones y observaciones
-                $('#sa_conp_notificacion_envio_representante').val(response[0].sa_conp_notificacion_envio_representante);
-                $('#sa_conp_notificacion_envio_inspector').val(response[0].sa_conp_notificacion_envio_inspector);
-                $('#sa_conp_notificacion_envio_guardia').val(response[0].sa_conp_notificacion_envio_guardia);
-
-                $('#sa_conp_observaciones').val(response[0].sa_conp_observaciones);
-                $('#sa_conp_tipo_consulta').val(response[0].sa_conp_tipo_consulta);
-
-                if (response[0].sa_conp_tipo_consulta === 'Consulta') {
-                    opcion_Consulta();
-                } else if (response[0].sa_conp_tipo_consulta === 'Certificado') {
-                    opcion_Certificado();
-                } else if (response[0].sa_conp_tipo_consulta === 'Salida') {
-                    opcion_Salida();
+                $('input[name=sa_conp_permiso_salida][value=' + response[0].sa_conp_permiso_salida + ']').prop('checked', true);
+                if (response[0].sa_conp_permiso_salida === "SI") {
+                    $('#permiso_salida').show();
+                } else if (response[0].sa_conp_permiso_salida === "NO") {
+                    $('#permiso_salida').hide();
                 }
 
-                // Asignar valores de estado y fechas de creación/modificación
-                $('#sa_conp_estado').val(response[0].sa_conp_estado);
-                //$('#sa_conp_fecha_creacion').val(response[0].sa_conp_fecha_creacion);
-                //$('#sa_conp_fecha_modificar').val(response[0].sa_conp_fecha_modificar);
 
-                console.log(response);
+
+                $('#sa_conp_fecha_permiso_salud_salida').val(fecha_nacimiento_formateada(response[0].sa_conp_fecha_permiso_salud_salida.date));
+                $('#sa_conp_hora_permiso_salida').val(obtener_hora_formateada(response[0].sa_conp_hora_permiso_salida.date));
+
+                //////////////////////////////
+                //$('#sa_conp_permiso_tipo').val(response[0].sa_conp_permiso_tipo);
+
+                $('input[name=sa_conp_permiso_tipo][value=' + response[0].sa_conp_permiso_tipo + ']').prop('checked', true);
+                if (response[0].sa_conp_permiso_tipo === "emergencia") {
+                    $('#permiso_salida_tipo').show();
+                } else if (response[0].sa_conp_permiso_tipo === "normal") {
+                    $('#permiso_salida_tipo').hide();
+                }
+
+
+                $('#sa_conp_permiso_seguro_traslado').val(response[0].sa_conp_permiso_seguro_traslado);
+                $('#sa_conp_permiso_telefono_padre').val(response[0].sa_conp_permiso_telefono_padre);
+                $('#sa_conp_permiso_telefono_seguro').val(response[0].sa_conp_permiso_telefono_seguro);
+
+                $('#sa_conp_notificacion_envio_representante').val(response[0].sa_conp_notificacion_envio_representante);
+                $('#sa_id_representante').val(response[0].sa_id_representante);
+                $('#sa_conp_notificacion_envio_docente').val(response[0].sa_conp_notificacion_envio_docente);
+                $('#sa_id_docente').val(response[0].sa_id_docente);
+                $('#sa_conp_notificacion_envio_inspector').val(response[0].sa_conp_notificacion_envio_inspector);
+                $('#sa_id_inspector').val(response[0].sa_id_inspector);
+                $('#sa_conp_notificacion_envio_guardia').val(response[0].sa_conp_notificacion_envio_guardia);
+                $('#sa_id_guardia').val(response[0].sa_id_guardia);
+
+                $('#sa_conp_observaciones').val(response[0].sa_conp_observaciones);
+                $('#sa_conp_motivo_consulta').val(response[0].sa_conp_motivo_consulta);
+                $('#sa_conp_tratamiento').val(response[0].sa_conp_tratamiento);
+
+                /*$('#sa_conp_tipo_consulta').val(response[0].sa_conp_tipo_consulta);
+                $('#sa_conp_estado_revision').val(response[0].sa_conp_estado_revision);
+                $('#sa_conp_fecha_creacion').val(response[0].sa_conp_fecha_creacion);
+                $('#sa_conp_fecha_modificacion').val(response[0].sa_conp_fecha_modificacion);
+                $('#sa_conp_estado').val(response[0].sa_conp_estado);*/
+
             }
         });
     }
@@ -296,6 +350,11 @@ if (isset($_GET['id_consulta'])) {
         var sa_conp_edad = $('#sa_conp_edad').val();
         var sa_conp_peso = $('#sa_conp_peso').val();
         var sa_conp_altura = $('#sa_conp_altura').val();
+
+        var sa_conp_temperatura = $('#sa_conp_temperatura').val();
+        var sa_conp_presion_ar = $('#sa_conp_presion_ar').val();
+        var sa_conp_frec_cardiaca = $('#sa_conp_frec_cardiaca').val();
+        var sa_conp_frec_respiratoria = $('#sa_conp_frec_respiratoria').val();
 
         // Fechas y horas
         var sa_conp_fecha_ingreso = ($('#sa_conp_fecha_ingreso').val());
@@ -329,6 +388,11 @@ if (isset($_GET['id_consulta'])) {
         var sa_conp_fecha_permiso_salud_salida = ($('#sa_conp_fecha_permiso_salud_salida').val());
         var sa_conp_hora_permiso_salida = ($('#sa_conp_hora_permiso_salida').val());
 
+        var sa_conp_permiso_tipo = $('input[name=sa_conp_permiso_tipo]:checked').val();
+        var sa_conp_permiso_seguro_traslado = ($('#sa_conp_permiso_seguro_traslado').val());
+        var sa_conp_permiso_telefono_padre = ($('#sa_conp_permiso_telefono_padre').val());
+        var sa_conp_permiso_telefono_seguro = ($('#sa_conp_permiso_telefono_seguro').val());
+
         // Notificaciones y observaciones
         var sa_conp_notificacion_envio_representante = n_representante;
         var sa_id_representante = $('#sa_id_representante').val();
@@ -343,6 +407,10 @@ if (isset($_GET['id_consulta'])) {
         var sa_id_guardia = $('#sa_id_guardia').val();
 
         var sa_conp_observaciones = $('#sa_conp_observaciones').val();
+
+        var sa_conp_motivo_consulta = $('#sa_conp_motivo_consulta').val();
+        var sa_conp_tratamiento = $('#sa_conp_tratamiento').val();
+
         var sa_conp_tipo_consulta = '<?= $tipo_consulta; ?>';
 
         // Crear objeto de parámetros
@@ -354,6 +422,12 @@ if (isset($_GET['id_consulta'])) {
             'sa_conp_edad': sa_conp_edad,
             'sa_conp_peso': sa_conp_peso,
             'sa_conp_altura': sa_conp_altura,
+
+            'sa_conp_temperatura': sa_conp_temperatura,
+            'sa_conp_presion_ar': sa_conp_presion_ar,
+            'sa_conp_frec_cardiaca': sa_conp_frec_cardiaca,
+            'sa_conp_frec_respiratoria': sa_conp_frec_respiratoria,
+
             'sa_conp_fecha_ingreso': sa_conp_fecha_ingreso,
             'sa_conp_desde_hora': sa_conp_desde_hora,
             'sa_conp_hasta_hora': sa_conp_hasta_hora,
@@ -362,6 +436,7 @@ if (isset($_GET['id_consulta'])) {
             'sa_conp_diagnostico_1': sa_conp_diagnostico_1,
             'sa_conp_CIE_10_2': sa_conp_CIE_10_2,
             'sa_conp_diagnostico_2': sa_conp_diagnostico_2,
+
             'sa_conp_salud_certificado': sa_conp_salud_certificado,
             'sa_conp_motivo_certificado': sa_conp_motivo_certificado,
             'sa_conp_CIE_10_certificado': sa_conp_CIE_10_certificado,
@@ -370,9 +445,16 @@ if (isset($_GET['id_consulta'])) {
             'sa_conp_fecha_inicio_falta_certificado': sa_conp_fecha_inicio_falta_certificado,
             'sa_conp_fecha_fin_alta_certificado': sa_conp_fecha_fin_alta_certificado,
             'sa_conp_dias_permiso_certificado': sa_conp_dias_permiso_certificado,
+
             'sa_conp_permiso_salida': sa_conp_permiso_salida,
             'sa_conp_fecha_permiso_salud_salida': sa_conp_fecha_permiso_salud_salida,
             'sa_conp_hora_permiso_salida': sa_conp_hora_permiso_salida,
+
+            'sa_conp_permiso_tipo': sa_conp_permiso_tipo,
+            'sa_conp_permiso_seguro_traslado': sa_conp_permiso_seguro_traslado,
+            'sa_conp_permiso_telefono_padre': sa_conp_permiso_telefono_padre,
+            'sa_conp_permiso_telefono_seguro': sa_conp_permiso_telefono_seguro,
+
             'sa_conp_notificacion_envio_representante': sa_conp_notificacion_envio_representante,
             'sa_id_representante': sa_id_representante,
             'sa_conp_notificacion_envio_docente': sa_conp_notificacion_envio_docente,
@@ -381,12 +463,19 @@ if (isset($_GET['id_consulta'])) {
             'sa_id_inspector': sa_id_inspector,
             'sa_conp_notificacion_envio_guardia': sa_conp_notificacion_envio_guardia,
             'sa_id_guardia': sa_id_guardia,
+
             'sa_conp_observaciones': sa_conp_observaciones,
+
+            'sa_conp_motivo_consulta': sa_conp_motivo_consulta,
+            'sa_conp_tratamiento': sa_conp_tratamiento,
+
             'sa_conp_tipo_consulta': sa_conp_tipo_consulta,
         };
 
         //alert(sa_conp_tipo_consulta)
 
+        //console.log(parametros);
+        //insertar(parametros)
 
         if (sa_conp_tipo_consulta == 'consulta') {
             if (sa_conp_id == '') {
@@ -401,15 +490,17 @@ if (isset($_GET['id_consulta'])) {
                         text: 'Asegurese de llenar todo los campos',
                     })
                 } else {
-                    insertar(parametros);
                     //console.log(parametros);
+                    insertar(parametros);
                     //alert('entra2');
                 }
+            } else {
+                insertar(parametros);
             }
+
         } else if (sa_conp_tipo_consulta == 'certificado') {
             insertar(parametros)
         }
-
 
     }
 
@@ -425,7 +516,7 @@ if (isset($_GET['id_consulta'])) {
             dataType: 'json',
 
             success: function(response) {
-                console.log(response);
+                //console.log(response);
 
                 if (response == 1) {
                     Swal.fire('', 'Operacion realizada con exito.', 'success').then(function() {
@@ -599,8 +690,6 @@ if (isset($_GET['id_consulta'])) {
                             <input type="hidden" id="sa_conp_id" name="sa_conp_id">
                             <input type="hidden" id="sa_fice_id" name="sa_fice_id" value="<?= $id_ficha; ?>">
 
-
-
                             <input type="hidden" id="sa_conp_notificacion_envio_representante" name="sa_conp_notificacion_envio_representante">
                             <input type="hidden" id="sa_id_representante" name="sa_id_representante">
 
@@ -752,6 +841,7 @@ if (isset($_GET['id_consulta'])) {
                                                     } ?>>
 
                                                 <div class="row pt-0">
+
                                                     <div class="row pt-1">
                                                         <div class="col-md-3">
                                                             <label for="" class="form-label">Peso: <label style="color: red;">*</label> </label>
@@ -760,6 +850,32 @@ if (isset($_GET['id_consulta'])) {
                                                         <div class="col-md-3">
                                                             <label for="" class="form-label">Altura: <label style="color: red;">*</label> </label>
                                                             <input type="number" class="form-control form-control-sm" id="sa_conp_altura" name="sa_conp_altura">
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="row pt-3">
+                                                        <div class="col-md-3">
+                                                            <label for="" class="form-label">Temperatura: <label style="color: red;">*</label> </label>
+                                                            <input type="number" class="form-control form-control-sm" id="sa_conp_temperatura" name="sa_conp_temperatura">
+                                                        </div>
+                                                        <div class="col-md-3">
+                                                            <label for="" class="form-label">Presión Arterial: <label style="color: red;">*</label> </label>
+                                                            <input type="number" class="form-control form-control-sm" id="sa_conp_presion_ar" name="sa_conp_presion_ar">
+                                                        </div>
+                                                        <div class="col-md-3">
+                                                            <label for="" class="form-label">Frecuencia Cardiáca: <label style="color: red;">*</label> </label>
+                                                            <input type="number" class="form-control form-control-sm" id="sa_conp_frec_cardiaca" name="sa_conp_frec_cardiaca">
+                                                        </div>
+                                                        <div class="col-md-3">
+                                                            <label for="" class="form-label">Frecuencia Respiratoria: <label style="color: red;">*</label> </label>
+                                                            <input type="number" class="form-control form-control-sm" id="sa_conp_frec_respiratoria" name="sa_conp_frec_respiratoria">
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="row pt-3">
+                                                        <div class="col-md-12">
+                                                            <label for="" class="form-label">Motivo de la consulta: <label style="color: red;">*</label> </label>
+                                                            <textarea name="sa_conp_motivo_consulta" id="sa_conp_motivo_consulta" cols="30" rows="2" class="form-control" placeholder="Motivo de la consulta"></textarea>
                                                         </div>
                                                     </div>
 
@@ -821,6 +937,13 @@ if (isset($_GET['id_consulta'])) {
                                                         </div>
                                                     </div>
 
+                                                    <div class="row pt-2">
+                                                        <div class="col-md-12">
+                                                            <label for="" class="form-label">Tratamiento: <label style="color: red;">*</label> </label>
+                                                            <textarea name="sa_conp_tratamiento" id="sa_conp_tratamiento" cols="30" rows="2" class="form-control" placeholder="Tratamiento"></textarea>
+                                                        </div>
+                                                    </div>
+
                                                     <div class="row pt-3">
                                                         <div class="col-md-12">
                                                             <label for="" class="form-label"> <b>¿Necesita permiso de salida?: <label class="text-danger">*</label></b></label>
@@ -850,6 +973,51 @@ if (isset($_GET['id_consulta'])) {
                                                             <div class="col-md-4">
                                                                 <label for="" class="form-label">Hora Permiso de Salida: <label style="color: red;">*</label> </label>
                                                                 <input type="time" class="form-control form-control-sm" id="sa_conp_hora_permiso_salida" name="sa_conp_hora_permiso_salida">
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="row pt-3">
+                                                            <div class="col-md-12">
+                                                                <label for="" class="form-label"> <b>¿Tipo de Salida?: <label class="text-danger">*</label></b></label>
+
+                                                                <div>
+                                                                    <div class="form-check">
+                                                                        <input class="form-check-input" type="radio" name="sa_conp_permiso_tipo" id="sa_conp_permiso_tipo_1" value="emergencia">
+                                                                        <label class="form-check-label" for="1">Emergencia</label>
+                                                                    </div>
+
+                                                                    <div class="form-check">
+                                                                        <input class="form-check-input" type="radio" name="sa_conp_permiso_tipo" id="sa_conp_permiso_tipo_2" value="normal" checked>
+                                                                        <label class="form-check-label" for="2">Normal</label>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+
+                                                    <div id="permiso_salida_tipo" style="display: none;">
+
+                                                        <div class="row pt-2">
+                                                            <div class="col-md-12">
+                                                                <label for="" class="form-label">Paciente Referido a: <label style="color: red;">*</label> </label>
+                                                                <select class="form-select form-select-sm" id="sa_conp_permiso_seguro_traslado" name="sa_conp_permiso_seguro_traslado">
+                                                                    <option selected disabled>-- Seleccione --</option>
+                                                                    <option value="IESS">IESS</option>
+                                                                    <option value="SPPAT">SPPAT</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="row pt-3">
+                                                            <div class="col-md-4">
+                                                                <label for="" class="form-label">Teléfono Seguro<label style="color: red;">*</label> </label>
+                                                                <input type="text" class="form-control form-control-sm" id="sa_conp_permiso_telefono_seguro" name="sa_conp_permiso_telefono_seguro">
+                                                            </div>
+
+                                                            <div class="col-md-4">
+                                                                <label for="" class="form-label">Teléfono Representante<label style="color: red;">*</label> </label>
+                                                                <input type="text" class="form-control form-control-sm" id="sa_conp_permiso_telefono_padre" name="sa_conp_permiso_telefono_padre">
                                                             </div>
                                                         </div>
 
@@ -942,6 +1110,14 @@ if (isset($_GET['id_consulta'])) {
             $('#permiso_salida').show();
         } else if ($(this).val() === 'NO') {
             $('#permiso_salida').hide();
+        }
+    });
+
+    $('input[name=sa_conp_permiso_tipo]').change(function() {
+        if ($(this).val() === 'emergencia') {
+            $('#permiso_salida_tipo').show();
+        } else if ($(this).val() === 'normal') {
+            $('#permiso_salida_tipo').hide();
         }
     });
 </script>

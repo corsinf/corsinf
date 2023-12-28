@@ -46,6 +46,7 @@ class agendamientoC
     function cita_actual()
     {
         $fecha = date('Y-m-d');
+        //$fecha = '';
         $datos = $this->modelo->lista_consultas($fecha);
         return $datos;
     }
@@ -66,9 +67,11 @@ class agendamientoC
             array('campo' => 'sa_fice_id', 'dato' => $parametros['paciente']),
             array('campo' => 'sa_conp_fecha_ingreso', 'dato' => $parametros['fecha']),
             array('campo' => 'sa_conp_tipo_consulta', 'dato' => $parametros['tipo']),
-            array('campo' => 'sa_conp_estado_revision', 'dato' => 0)
-
+            array('campo' => 'sa_conp_estado_revision', 'dato' => 0),
+            array('campo' => 'sa_conp_desde_hora', 'dato' => '00:00:00.0000000'),
+            array('campo' => 'sa_conp_hasta_hora', 'dato' => '00:00:00.0000000'), 
         );
+
         return  $datos = $this->modelo->insertar('consultas_medicas', $datos);
 
         //print_r($datos);
