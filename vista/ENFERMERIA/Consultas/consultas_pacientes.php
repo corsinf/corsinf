@@ -14,7 +14,6 @@ if (isset($_GET['pac_id'])) {
   $(document).ready(function() {
 
     //obtener el id de la ficha por el paciente
-
     var sa_pac_id = '<?php echo $sa_pac_id; ?>';
 
     $('input[name="id_paciente"]').val(sa_pac_id);
@@ -23,7 +22,6 @@ if (isset($_GET['pac_id'])) {
     cargar_datos_paciente(sa_pac_id);
 
     //Proceso primero busca el id de la ficha en relacion al paciente
-
     cargar_datos_consultas(sa_pac_id);
 
   });
@@ -106,19 +104,27 @@ if (isset($_GET['pac_id'])) {
                 {
                   data: null,
                   render: function(data, type, item) {
-                    return '<div class="text-center"><a href="<?= $url_general ?>/vista/inicio.php?mod=7&acc=consultas_pacientes&pac_id=' + item.sa_pac_id + '" class="btn btn-primary btn-sm " title="Detalles de la Consulta"><i class="bx bx-spreadsheet me-0"></i></a></div>';
+                    return '<div class="text-center"><a href="<?= $url_general ?>/vista/inicio.php?mod=7&acc=registrar_consulta_paciente&id_consulta=' + item.sa_conp_id + '&tipo_consulta=' + item.sa_conp_tipo_consulta + '&id_ficha=' + item.sa_fice_id + '&id_paciente=' + item.sa_pac_id + '" class="btn btn-primary btn-sm " title="Detalles de la Consulta"><i class="bx bx-spreadsheet me-0"></i></a></div>';
                   }
                 },
                 {
                   data: null,
                   render: function(data, type, item) {
-                    return fecha_nacimiento_formateada(item.sa_conp_fecha_ingreso.date) + ' / ' + obtener_hora_formateada(item.sa_conp_desde_hora.date);
+                    if (item.sa_conp_desde_hora.date == null || item.sa_conp_fecha_ingreso.date == null) {
+                      return '';
+                    } else {
+                      return fecha_nacimiento_formateada(item.sa_conp_fecha_ingreso.date) + ' / ' + obtener_hora_formateada(item.sa_conp_desde_hora.date);
+                    }
                   }
                 },
                 {
                   data: null,
                   render: function(data, type, item) {
-                    return obtener_hora_formateada(item.sa_conp_desde_hora.date) + ' / ' + obtener_hora_formateada(item.sa_conp_hasta_hora.date);
+                    if (item.sa_conp_desde_hora.date == null || item.sa_conp_hasta_hora.date == null) {
+                      return '';
+                    } else {
+                      return obtener_hora_formateada(item.sa_conp_desde_hora.date) + ' / ' + obtener_hora_formateada(item.sa_conp_hasta_hora.date);
+                    }
                   }
                 },
                 {
@@ -147,6 +153,9 @@ if (isset($_GET['pac_id'])) {
                   }
                 },
               ],
+              order: [
+                [1, 'desc'] // Ordenar por la segunda columna (índice 1) en orden ascendente
+              ]
             });
 
           }

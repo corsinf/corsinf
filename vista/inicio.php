@@ -216,8 +216,8 @@ if ($_GET['acc'] == 'registrar_representantes') {
 
 //Atenciones
 
-if ($_GET['acc'] == 'atencion_estudiante') {
-	include('ENFERMERIA/Atenciones/atencion_estudiante.php');
+if ($_GET['acc'] == 'atencion_pacientes') {
+	include('ENFERMERIA/Atenciones/atencion_pacientes.php');
 }
 
 if ($_GET['acc'] == 'atencion') {

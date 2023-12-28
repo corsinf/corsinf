@@ -20,10 +20,6 @@ if (isset($_GET['listar_consulta_ficha'])) {
     echo json_encode($controlador->lista_consultas_ficha($id_ficha));
 }
 
-if (isset($_GET['buscar'])) {
-    echo json_encode($controlador->buscar_consultas($_POST['buscar']));
-}
-
 if (isset($_GET['insertar'])) {
     echo json_encode($controlador->insertar_editar($_POST['parametros']));
 }
@@ -42,6 +38,17 @@ if (isset($_GET['enviar_correo'])) {
 
 if (isset($_GET['notificaciones'])) {
     echo json_encode($controlador->pdf_notificaciones());
+}
+
+if (isset($_GET['datos_consulta'])) {
+
+    $id_consulta = '';
+
+    if (isset($_POST['id_consulta'])) {
+        $id_consulta = $_POST['id_consulta'];
+    }
+
+    echo json_encode($controlador->carga_datos_consultas($id_consulta));
 }
 
 //print_r($controlador->lista_consultas(''));
@@ -79,16 +86,18 @@ class consultasC
         return $datos;
     }
 
-    function buscar_consultas($buscar)
+    //Retorna los valores (id) para cargar la ficha medica y el paciente
+    function carga_datos_consultas($id_consulta)
     {
-        $datos = $this->modelo->buscar_consultas($buscar);
+        $datos = $this->modelo->carga_datos_consultas($id_consulta);
+
+
         return $datos;
     }
 
+
     function insertar_editar($parametros)
     {
-
-
         $datos1[0]['campo'] = 'sa_conp_id';
         $datos1[0]['dato'] = strval($parametros['sa_conp_id']);
 
@@ -99,6 +108,11 @@ class consultasC
             array('campo' => 'sa_conp_edad', 'dato' => $parametros['sa_conp_edad']),
             array('campo' => 'sa_conp_peso', 'dato' => empty($parametros['sa_conp_peso']) ? 0 : $parametros['sa_conp_peso']),
             array('campo' => 'sa_conp_altura', 'dato' => empty($parametros['sa_conp_altura']) ? 0 : $parametros['sa_conp_altura']),
+            array('campo' => 'sa_conp_temperatura', 'dato' => empty($parametros['sa_conp_temperatura']) ? 0 : $parametros['sa_conp_temperatura']),
+            array('campo' => 'sa_conp_presion_ar', 'dato' => empty($parametros['sa_conp_presion_ar']) ? 0 : $parametros['sa_conp_presion_ar']),
+            array('campo' => 'sa_conp_frec_cardiaca', 'dato' => empty($parametros['sa_conp_frec_cardiaca']) ? 0 : $parametros['sa_conp_frec_cardiaca']),
+            array('campo' => 'sa_conp_frec_respiratoria', 'dato' => empty($parametros['sa_conp_frec_respiratoria']) ? 0 : $parametros['sa_conp_frec_respiratoria']),
+
             array('campo' => 'sa_conp_fecha_ingreso', 'dato' => $parametros['sa_conp_fecha_ingreso']),
             array('campo' => 'sa_conp_desde_hora', 'dato' => $parametros['sa_conp_desde_hora']),
             array('campo' => 'sa_conp_hasta_hora', 'dato' => $parametros['sa_conp_hasta_hora']),
@@ -107,6 +121,7 @@ class consultasC
             array('campo' => 'sa_conp_diagnostico_1', 'dato' => $parametros['sa_conp_diagnostico_1']),
             array('campo' => 'sa_conp_CIE_10_2', 'dato' => $parametros['sa_conp_CIE_10_2']),
             array('campo' => 'sa_conp_diagnostico_2', 'dato' => $parametros['sa_conp_diagnostico_2']),
+
             array('campo' => 'sa_conp_salud_certificado', 'dato' => $parametros['sa_conp_salud_certificado']),
             array('campo' => 'sa_conp_motivo_certificado', 'dato' => $parametros['sa_conp_motivo_certificado']),
             array('campo' => 'sa_conp_CIE_10_certificado', 'dato' => $parametros['sa_conp_CIE_10_certificado']),
@@ -115,9 +130,15 @@ class consultasC
             array('campo' => 'sa_conp_fecha_inicio_falta_certificado', 'dato' => $parametros['sa_conp_fecha_inicio_falta_certificado']),
             array('campo' => 'sa_conp_fecha_fin_alta_certificado', 'dato' => $parametros['sa_conp_fecha_fin_alta_certificado']),
             array('campo' => 'sa_conp_dias_permiso_certificado', 'dato' => $parametros['sa_conp_dias_permiso_certificado']),
+
             array('campo' => 'sa_conp_permiso_salida', 'dato' => $parametros['sa_conp_permiso_salida']),
             array('campo' => 'sa_conp_fecha_permiso_salud_salida', 'dato' => $parametros['sa_conp_fecha_permiso_salud_salida']),
             array('campo' => 'sa_conp_hora_permiso_salida', 'dato' => $parametros['sa_conp_hora_permiso_salida']),
+            array('campo' => 'sa_conp_permiso_tipo', 'dato' => $parametros['sa_conp_permiso_tipo']),
+            array('campo' => 'sa_conp_permiso_seguro_traslado', 'dato' => $parametros['sa_conp_permiso_seguro_traslado']),
+            array('campo' => 'sa_conp_permiso_telefono_padre', 'dato' => $parametros['sa_conp_permiso_telefono_padre']),
+            array('campo' => 'sa_conp_permiso_telefono_seguro', 'dato' => $parametros['sa_conp_permiso_telefono_seguro']),
+
             array('campo' => 'sa_conp_notificacion_envio_representante', 'dato' => $parametros['sa_conp_notificacion_envio_representante']),
             array('campo' => 'sa_id_representante', 'dato' => $parametros['sa_id_representante']),
             array('campo' => 'sa_conp_notificacion_envio_docente', 'dato' => $parametros['sa_conp_notificacion_envio_docente']),
@@ -126,14 +147,13 @@ class consultasC
             array('campo' => 'sa_id_inspector', 'dato' => $parametros['sa_id_inspector']),
             array('campo' => 'sa_conp_notificacion_envio_guardia', 'dato' => $parametros['sa_conp_notificacion_envio_guardia']),
             array('campo' => 'sa_id_guardia', 'dato' => $parametros['sa_id_guardia']),
-            array('campo' => 'sa_conp_observaciones', 'dato' => $parametros['sa_conp_observaciones']),
             array('campo' => 'sa_conp_tipo_consulta', 'dato' => $parametros['sa_conp_tipo_consulta']),
+            array('campo' => 'sa_conp_observaciones', 'dato' => $parametros['sa_conp_observaciones']),
+            array('campo' => 'sa_conp_motivo_consulta', 'dato' => $parametros['sa_conp_motivo_consulta']),
+            array('campo' => 'sa_conp_tratamiento', 'dato' => $parametros['sa_conp_tratamiento']),
         );
 
-
         //print_r($parametros);die();
-
-
 
         if ($parametros['sa_conp_id'] == '') {
             if (count($this->modelo->buscar_consultas_CODIGO($datos1[0]['dato'])) == 0) {
@@ -144,7 +164,7 @@ class consultasC
         } else {
             $where[0]['campo'] = 'sa_conp_id';
             $where[0]['dato'] = $parametros['sa_conp_id'];
-            $datos[] = array('campo' => 'sa_conp_estado', 'dato' => 1);
+            //$datos[] = array('campo' => 'sa_conp_estado', 'dato' => 1);
             $datos = $this->modelo->editar($datos, $where);
         }
 
@@ -153,7 +173,6 @@ class consultasC
         $datos = $this->modelo->editar($datos, $where);*/
 
         //$datos = $this->modelo->insertar($datos);
-
 
         return $datos;
     }
