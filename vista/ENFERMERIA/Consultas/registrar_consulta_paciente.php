@@ -28,8 +28,14 @@ if (isset($_GET['id_consulta'])) {
 
 <!-- //link de api icd -->
 <link rel="stylesheet" href="https://icdcdn.who.int/embeddedct/icd11ect-1.6.1.css">
+
 <script src="https://icdcdn.who.int/embeddedct/icd11ect-1.6.1.js"></script>
 
+<style type="text/css">
+    .embeddedBrowser {
+      display: none; 
+    }
+</style>
 <script type="text/javascript">
     const mySettings = {
   // The API located at the URL below should be used only     
@@ -41,29 +47,36 @@ if (isset($_GET['id_consulta'])) {
   apiServerUrl: "https://icd11restapi-developer-test.azurewebsites.net",
   language: "es", // set the language to Spanish
   enableKeyboard:false,
+  searchByCodeOrURI:true,
+  popupMode:true,
+  simplifiedMode:true,
 };
+
+
 
 const myCallbacks = {
 
   selectedEntityFunction: (selectedEntity) => { 
-    // paste the code into the <input>
-    console.log(selectedEntity);
-    // document.getElementById('paste-selectedEntity').value = selectedEntity.code;        
-    // clear the searchbox and delete the search results
-    // ECT.Handler.clear("1")    
+     ECT.Handler.clear("1")    
+     $('#txt_diagnostico1').val(selectedEntity.code +'-'+selectedEntity.title);
+     $('#sa_conp_CIE_10_1').val(selectedEntity.code);
+     console.log(selectedEntity)
   }
 };
 
 
 
-// configure the ECT Handler
+// // configure the ECT Handler
 ECT.Handler.configure(mySettings,myCallbacks);
 
-ECT.Handler.overwriteConfiguration("1", {
-  chaptersFilter: "01;02",
-  wordsAvailable: false,
-  enableKeyboard:false,
-});
+// console.log('hola')
+
+
+// ECT.Handler.overwriteConfiguration("1", {
+//   chaptersFilter: "01;02",
+//   wordsAvailable: false,
+//   enableKeyboard:false,
+// });
 
 </script>
 
@@ -77,7 +90,7 @@ ECT.Handler.overwriteConfiguration("1", {
 
         //alert(id_ficha)
 
-        cargar_datos_paciente(id_paciente);
+        // cargar_datos_paciente(id_paciente);
         datos_col_ficha_medica(id_paciente);
 
 
@@ -807,22 +820,17 @@ ECT.Handler.overwriteConfiguration("1", {
                                                     <div class="row pt-3">
                                                         <div class="col-md-12">
                                                             <label for="" class="form-label">CIE 10 - Diagnóstico 1: <label style="color: red;">*</label> </label>
+                                                            <input type="text" class="ctw-input form-control" autocomplete="off" data-ctw-ino="1" id="txt_diagnostico1">
 
-                                                            <input type="text" class="ctw-input" autocomplete="off" data-ctw-ino="1">
+                                                            <input type="hidden" id="sa_conp_CIE_10_1">
                                                             <div class="ctw-window" data-ctw-ino="1"></div>
-                                                            <!-- example of an extra input element for testing the Embedded Coding Tool select entity function -->
-                                                            <!-- The selected code: <input type="text" id="paste-selectedEntity" value="">  -->
 
-
-
-
-<!-- <div class="ctw-eb-window" data-ctw-ino="1"></div> -->
-
+                                                      <!--    
                                                             <select class="form-select form-select-sm" id="sa_conp_CIE_10_1" name="sa_conp_CIE_10_1">
                                                                 <option selected disabled>-- Seleccione --</option>
                                                                 <option value="A001">A001</option>
                                                                 <option value="B001">B001</option>
-                                                            </select>
+                                                            </select> -->
 
                                                             <input type="hidden" id="sa_conp_diagnostico_1" name="sa_conp_diagnostico_1">
                                                         </div>
@@ -996,3 +1004,5 @@ ECT.Handler.overwriteConfiguration("1", {
         }
     });
 </script>
+
+
