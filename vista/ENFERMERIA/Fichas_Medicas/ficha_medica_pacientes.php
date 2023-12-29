@@ -1,7 +1,7 @@
 <?php
 //Datos que llegan de la funcion gestion_paciente_comunidad // por el momento esta el sa_pac_tabla demas
 
-$sa_pac_id = '1';
+$sa_pac_id = '';
 
 if (isset($_POST['sa_pac_id'])) {
     $sa_pac_id = $_POST['sa_pac_id'];

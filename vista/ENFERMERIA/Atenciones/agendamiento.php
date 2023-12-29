@@ -123,6 +123,12 @@
           </div>
         </div>
 
+        <div class="row pt-3">
+          <div class="col-sm-3">
+            <a class="btn btn-sm btn-primary" href="<?= $url_general ?>/vista/inicio.php?mod=7&acc=agendamiento_asistente"><i class="bx bx-plus"></i> Agenda Médica</a>
+          </div>
+        </div>
+
       </div>
     </div>
 

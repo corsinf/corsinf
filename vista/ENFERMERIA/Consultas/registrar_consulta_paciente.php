@@ -51,17 +51,32 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <style type="text/css">
     .embeddedBrowser {
-      display: none; 
+        display: none;
     }
 </style>
 <script type="text/javascript">
     const mySettings = {
+<<<<<<< HEAD
       apiServerUrl: "https://icd11restapi-developer-test.azurewebsites.net",
       language: "es", // set the language to Spanish
       enableKeyboard:false,
       searchByCodeOrURI:true,
       popupMode:true,
       simplifiedMode:true,
+=======
+        // The API located at the URL below should be used only     
+        // for software development and testing. 
+        // ICD content at this location might not
+        // be up to date or complete. 
+        // For production, use the API located at
+        // id.who.int with proper OAUTH authentication
+        apiServerUrl: "https://icd11restapi-developer-test.azurewebsites.net",
+        language: "es", // set the language to Spanish
+        enableKeyboard: false,
+        searchByCodeOrURI: true,
+        popupMode: true,
+        simplifiedMode: true,
+>>>>>>> DEVELOPER01
     };
 
     const myCallbacks = {
@@ -70,6 +85,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         switch(selectedEntity.iNo) {
           case '1':
 
+<<<<<<< HEAD
 console.log('ingresa 1')
              ECT.Handler.clear("1")    
              $('#sa_conp_diagnostico_1').val(selectedEntity.code +'-'+selectedEntity.title);
@@ -85,6 +101,16 @@ console.log('ingresa 2')
         }
          console.log(selectedEntity)        
       }
+=======
+    const myCallbacks = {
+
+        selectedEntityFunction: (selectedEntity) => {
+            ECT.Handler.clear("1")
+            $('#txt_diagnostico1').val(selectedEntity.code + '-' + selectedEntity.title);
+            $('#sa_conp_CIE_10_1').val(selectedEntity.code);
+            console.log(selectedEntity)
+        }
+>>>>>>> DEVELOPER01
     };
 
    
@@ -92,12 +118,26 @@ console.log('ingresa 2')
 
     // ECT.Handler.overwriteConfiguration("1", mySettings,myCallbacks);
 
+<<<<<<< HEAD
     // ECT.Handler.configure(mySettings,myCallbacks);
     // ECT.Handler.bind("1");
     // ECT.Handler.configure(mySettings,myCallbacks2);
     // ECT.Handler.bind("2");
 
 
+=======
+    // // configure the ECT Handler
+    ECT.Handler.configure(mySettings, myCallbacks);
+
+    // console.log('hola')
+
+
+    // ECT.Handler.overwriteConfiguration("1", {
+    //   chaptersFilter: "01;02",
+    //   wordsAvailable: false,
+    //   enableKeyboard:false,
+    // });
+>>>>>>> DEVELOPER01
 </script>
 
 <script type="text/javascript">
@@ -257,6 +297,47 @@ console.log('ingresa 2')
 
                     $('#sa_conp_nivel').val(response[0].sa_pac_temp_gra_nombre);
                     $('#sa_conp_paralelo').val(response[0].sa_pac_temp_par_nombre);
+
+                    //////////Para poner el numero de telefono del representante
+                    $.ajax({
+                        data: {
+                            id: id
+                        },
+                        url: '<?php echo $url_general ?>/controlador/estudiantesC.php?listar=true',
+                        type: 'post',
+                        dataType: 'json',
+                        success: function(response) {
+
+                            $('#sa_est_id').val(response[0].sa_est_id);
+                            $('#sa_est_primer_apellido').val(response[0].sa_est_primer_apellido);
+                            $('#sa_est_segundo_apellido').val(response[0].sa_est_segundo_apellido);
+                            $('#sa_est_primer_nombre').val(response[0].sa_est_primer_nombre);
+                            $('#sa_est_segundo_nombre').val(response[0].sa_est_segundo_nombre);
+
+                            $('#sa_est_cedula').val(response[0].sa_est_cedula);
+
+                            select_genero(response[0].sa_est_sexo, '#sa_est_sexo');
+
+                            $('#sa_est_fecha_nacimiento').val(fecha_nacimiento_formateada(response[0].sa_est_fecha_nacimiento.date));
+                            $('#sa_est_edad').val(calcular_edad_fecha_nacimiento(response[0].sa_est_fecha_nacimiento.date));
+                            ///////////////////////////////////////////////////////////////////////////////////////////
+
+                            $('#sa_est_correo').val(response[0].sa_est_correo);
+                            $('#sa_id_representante').val(response[0].sa_id_representante);
+
+                            select_parentesco(response[0].sa_est_rep_parentesco, '#sa_est_rep_parentesco');
+
+
+                            //$('#sa_id_seccion').val(response[0].sa_id_seccion);
+                            //$('#sa_id_grado').val(response[0].sa_id_grado);
+                            //$('#sa_id_paralelo').val(response[0].sa_id_paralelo);
+
+                            $('#sa_sec_id').val(response[0].sa_sec_id);
+                            $('#sa_gra_id').val(response[0].sa_gra_id);
+                            $('#sa_par_id').val(response[0].sa_par_id);
+
+                        }
+                    });
 
                 } else {
                     $('#variable_paciente').html('Teléfono:');
@@ -942,8 +1023,21 @@ console.log('ingresa 2')
                                                             <input type="text" class="ctw-input form-control form-control-sm" autocomplete="off" data-ctw-ino="1" id="sa_conp_diagnostico_1" placeholder="Diagnostico 1">
 
                                                             <input type="hidden" id="sa_conp_CIE_10_1">
+<<<<<<< HEAD
                                                             <div class="ctw-window" data-ctw-ino="1"></div>    
                                                            
+=======
+                                                            <div class="ctw-window" data-ctw-ino="1"></div>
+
+                                                            <!--    
+                                                            <select class="form-select form-select-sm" id="sa_conp_CIE_10_1" name="sa_conp_CIE_10_1">
+                                                                <option selected disabled>-- Seleccione --</option>
+                                                                <option value="A001">A001</option>
+                                                                <option value="B001">B001</option>
+                                                            </select> -->
+
+                                                            <input type="hidden" id="sa_conp_diagnostico_1" name="sa_conp_diagnostico_1">
+>>>>>>> DEVELOPER01
                                                         </div>
                                                     </div>
 
@@ -1163,7 +1257,16 @@ console.log('ingresa 2')
             $('#permiso_salida').show();
         } else if ($(this).val() === 'NO') {
             $('#permiso_salida').hide();
+            $('#permiso_salida_tipo').hide();
+            //validar que los inputs queden vacios
         }
     });
 
+    $('input[name=sa_conp_permiso_tipo]').change(function() {
+        if ($(this).val() === 'emergencia') {
+            $('#permiso_salida_tipo').show();
+        } else if ($(this).val() === 'normal') {
+            $('#permiso_salida_tipo').hide();
+        }
+    });
 </script>

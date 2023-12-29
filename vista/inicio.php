@@ -187,6 +187,10 @@ if ($_GET['acc'] == 'parametrizacion') {
 	include('ENFERMERIA/cursos/parametrizacion.php');
 }
 
+if ($_GET['acc'] == 'atencion') {
+	include('ENFERMERIA/Atenciones/historial.php');
+}
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -220,12 +224,12 @@ if ($_GET['acc'] == 'atencion_pacientes') {
 	include('ENFERMERIA/Atenciones/atencion_pacientes.php');
 }
 
-if ($_GET['acc'] == 'atencion') {
-	include('ENFERMERIA/Atenciones/historial.php');
-}
-
 if ($_GET['acc'] == 'agendamiento') {
 	include('ENFERMERIA/Atenciones/agendamiento.php');
+}
+
+if ($_GET['acc'] == 'agendamiento_asistente') {
+	include('ENFERMERIA/Atenciones/agendamiento_asistente.php');
 }
 
 //Pacientes
