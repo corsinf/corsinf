@@ -51,51 +51,50 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <style type="text/css">
     .embeddedBrowser {
-      display: none; 
+        display: none;
     }
 </style>
 <script type="text/javascript">
     const mySettings = {
-  // The API located at the URL below should be used only     
-  // for software development and testing. 
-  // ICD content at this location might not
-  // be up to date or complete. 
-  // For production, use the API located at
-  // id.who.int with proper OAUTH authentication
-  apiServerUrl: "https://icd11restapi-developer-test.azurewebsites.net",
-  language: "es", // set the language to Spanish
-  enableKeyboard:false,
-  searchByCodeOrURI:true,
-  popupMode:true,
-  simplifiedMode:true,
-};
+        // The API located at the URL below should be used only     
+        // for software development and testing. 
+        // ICD content at this location might not
+        // be up to date or complete. 
+        // For production, use the API located at
+        // id.who.int with proper OAUTH authentication
+        apiServerUrl: "https://icd11restapi-developer-test.azurewebsites.net",
+        language: "es", // set the language to Spanish
+        enableKeyboard: false,
+        searchByCodeOrURI: true,
+        popupMode: true,
+        simplifiedMode: true,
+    };
 
 
 
-const myCallbacks = {
+    const myCallbacks = {
 
-  selectedEntityFunction: (selectedEntity) => { 
-     ECT.Handler.clear("1")    
-     $('#txt_diagnostico1').val(selectedEntity.code +'-'+selectedEntity.title);
-     $('#sa_conp_CIE_10_1').val(selectedEntity.code);
-     console.log(selectedEntity)
-  }
-};
-
-
-
-// // configure the ECT Handler
-ECT.Handler.configure(mySettings,myCallbacks);
-
-// console.log('hola')
+        selectedEntityFunction: (selectedEntity) => {
+            ECT.Handler.clear("1")
+            $('#txt_diagnostico1').val(selectedEntity.code + '-' + selectedEntity.title);
+            $('#sa_conp_CIE_10_1').val(selectedEntity.code);
+            console.log(selectedEntity)
+        }
+    };
 
 
-// ECT.Handler.overwriteConfiguration("1", {
-//   chaptersFilter: "01;02",
-//   wordsAvailable: false,
-//   enableKeyboard:false,
-// });
 
+    // // configure the ECT Handler
+    ECT.Handler.configure(mySettings, myCallbacks);
+
+    // console.log('hola')
+
+
+    // ECT.Handler.overwriteConfiguration("1", {
+    //   chaptersFilter: "01;02",
+    //   wordsAvailable: false,
+    //   enableKeyboard:false,
+    // });
 </script>
 
 <script type="text/javascript">
@@ -256,8 +255,8 @@ ECT.Handler.configure(mySettings,myCallbacks);
                     $('#sa_conp_nivel').val(response[0].sa_pac_temp_gra_nombre);
                     $('#sa_conp_paralelo').val(response[0].sa_pac_temp_par_nombre);
 
-                       //////////Para poner el numero de telefono del representante
-                       $.ajax({
+                    //////////Para poner el numero de telefono del representante
+                    $.ajax({
                         data: {
                             id: id
                         },
@@ -983,7 +982,7 @@ ECT.Handler.configure(mySettings,myCallbacks);
                                                             <input type="hidden" id="sa_conp_CIE_10_1">
                                                             <div class="ctw-window" data-ctw-ino="1"></div>
 
-                                                      <!--    
+                                                            <!--    
                                                             <select class="form-select form-select-sm" id="sa_conp_CIE_10_1" name="sa_conp_CIE_10_1">
                                                                 <option selected disabled>-- Seleccione --</option>
                                                                 <option value="A001">A001</option>
@@ -1211,7 +1210,16 @@ ECT.Handler.configure(mySettings,myCallbacks);
             $('#permiso_salida').show();
         } else if ($(this).val() === 'NO') {
             $('#permiso_salida').hide();
+            $('#permiso_salida_tipo').hide();
+            //validar que los inputs queden vacios
         }
     });
 
+    $('input[name=sa_conp_permiso_tipo]').change(function() {
+        if ($(this).val() === 'emergencia') {
+            $('#permiso_salida_tipo').show();
+        } else if ($(this).val() === 'normal') {
+            $('#permiso_salida_tipo').hide();
+        }
+    });
 </script>

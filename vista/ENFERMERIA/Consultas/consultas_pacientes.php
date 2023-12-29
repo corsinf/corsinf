@@ -211,9 +211,7 @@ if (isset($_GET['pac_id'])) {
               <section class="content">
                 <div class="container-fluid">
 
-                  <div class="row" id="btn_nuevo">
-
-                    <div class="col-2"></div>
+                  <div class="row justify-content-center" id="btn_nuevo">
 
                     <div class="col-auto">
 
