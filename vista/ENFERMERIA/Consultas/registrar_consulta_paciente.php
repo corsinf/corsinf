@@ -46,37 +46,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <!-- //link de api icd -->
 <link rel="stylesheet" href="https://icdcdn.who.int/embeddedct/icd11ect-1.6.1.css">
-
 <script src="https://icdcdn.who.int/embeddedct/icd11ect-1.6.1.js"></script>
 
-<style type="text/css">
-    .embeddedBrowser {
-        display: none;
-    }
-</style>
+
 <script type="text/javascript">
     const mySettings = {
-<<<<<<< HEAD
       apiServerUrl: "https://icd11restapi-developer-test.azurewebsites.net",
       language: "es", // set the language to Spanish
       enableKeyboard:false,
       searchByCodeOrURI:true,
       popupMode:true,
       simplifiedMode:true,
-=======
-        // The API located at the URL below should be used only     
-        // for software development and testing. 
-        // ICD content at this location might not
-        // be up to date or complete. 
-        // For production, use the API located at
-        // id.who.int with proper OAUTH authentication
-        apiServerUrl: "https://icd11restapi-developer-test.azurewebsites.net",
-        language: "es", // set the language to Spanish
-        enableKeyboard: false,
-        searchByCodeOrURI: true,
-        popupMode: true,
-        simplifiedMode: true,
->>>>>>> DEVELOPER01
     };
 
     const myCallbacks = {
@@ -84,16 +64,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       selectedEntityFunction: (selectedEntity) => { 
         switch(selectedEntity.iNo) {
           case '1':
-
-<<<<<<< HEAD
-console.log('ingresa 1')
              ECT.Handler.clear("1")    
              $('#sa_conp_diagnostico_1').val(selectedEntity.code +'-'+selectedEntity.title);
              $('#sa_conp_CIE_10_1').val(selectedEntity.code);
             break;
           case '2':
-
-console.log('ingresa 2')
              ECT.Handler.clear("2")    
              $('#sa_conp_diagnostico_2').val(selectedEntity.code +'-'+selectedEntity.title);
              $('#sa_conp_CIE_10_2').val(selectedEntity.code);
@@ -101,43 +76,11 @@ console.log('ingresa 2')
         }
          console.log(selectedEntity)        
       }
-=======
-    const myCallbacks = {
-
-        selectedEntityFunction: (selectedEntity) => {
-            ECT.Handler.clear("1")
-            $('#txt_diagnostico1').val(selectedEntity.code + '-' + selectedEntity.title);
-            $('#sa_conp_CIE_10_1').val(selectedEntity.code);
-            console.log(selectedEntity)
-        }
->>>>>>> DEVELOPER01
     };
 
    
     ECT.Handler.configure(mySettings, myCallbacks);
 
-    // ECT.Handler.overwriteConfiguration("1", mySettings,myCallbacks);
-
-<<<<<<< HEAD
-    // ECT.Handler.configure(mySettings,myCallbacks);
-    // ECT.Handler.bind("1");
-    // ECT.Handler.configure(mySettings,myCallbacks2);
-    // ECT.Handler.bind("2");
-
-
-=======
-    // // configure the ECT Handler
-    ECT.Handler.configure(mySettings, myCallbacks);
-
-    // console.log('hola')
-
-
-    // ECT.Handler.overwriteConfiguration("1", {
-    //   chaptersFilter: "01;02",
-    //   wordsAvailable: false,
-    //   enableKeyboard:false,
-    // });
->>>>>>> DEVELOPER01
 </script>
 
 <script type="text/javascript">
@@ -1021,23 +964,10 @@ console.log('ingresa 2')
                                                         <div class="col-md-12">
                                                             <label for="" class="form-label">CIE 10 - Diagnóstico 1: <label style="color: red;">*</label> </label>
                                                             <input type="text" class="ctw-input form-control form-control-sm" autocomplete="off" data-ctw-ino="1" id="sa_conp_diagnostico_1" placeholder="Diagnostico 1">
-
                                                             <input type="hidden" id="sa_conp_CIE_10_1">
-<<<<<<< HEAD
                                                             <div class="ctw-window" data-ctw-ino="1"></div>    
                                                            
-=======
-                                                            <div class="ctw-window" data-ctw-ino="1"></div>
 
-                                                            <!--    
-                                                            <select class="form-select form-select-sm" id="sa_conp_CIE_10_1" name="sa_conp_CIE_10_1">
-                                                                <option selected disabled>-- Seleccione --</option>
-                                                                <option value="A001">A001</option>
-                                                                <option value="B001">B001</option>
-                                                            </select> -->
-
-                                                            <input type="hidden" id="sa_conp_diagnostico_1" name="sa_conp_diagnostico_1">
->>>>>>> DEVELOPER01
                                                         </div>
                                                     </div>
 
