@@ -47,41 +47,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <!-- //link de api icd -->
 <link rel="stylesheet" href="https://icdcdn.who.int/embeddedct/icd11ect-1.6.1.css">
 <script src="https://icdcdn.who.int/embeddedct/icd11ect-1.6.1.js"></script>
-
-
-<script type="text/javascript">
-    const mySettings = {
-      apiServerUrl: "https://icd11restapi-developer-test.azurewebsites.net",
-      language: "es", // set the language to Spanish
-      enableKeyboard:false,
-      searchByCodeOrURI:true,
-      popupMode:true,
-      simplifiedMode:true,
-    };
-
-    const myCallbacks = {
-
-      selectedEntityFunction: (selectedEntity) => { 
-        switch(selectedEntity.iNo) {
-          case '1':
-             ECT.Handler.clear("1")    
-             $('#sa_conp_diagnostico_1').val(selectedEntity.code +'-'+selectedEntity.title);
-             $('#sa_conp_CIE_10_1').val(selectedEntity.code);
-            break;
-          case '2':
-             ECT.Handler.clear("2")    
-             $('#sa_conp_diagnostico_2').val(selectedEntity.code +'-'+selectedEntity.title);
-             $('#sa_conp_CIE_10_2').val(selectedEntity.code);
-            break;
-        }
-         console.log(selectedEntity)        
-      }
-    };
-
-   
-    ECT.Handler.configure(mySettings, myCallbacks);
-
-</script>
+<script src="../js/ENFERMERIA/icd11_config.js"></script>
 
 <script type="text/javascript">
     $(document).ready(function() {
