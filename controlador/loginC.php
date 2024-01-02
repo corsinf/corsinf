@@ -216,6 +216,7 @@ class loginC
 			if(count($empresa)>0)
 			{
 					$_SESSION["INICIO"]['ID_EMPRESA'] = $empresa[0]['Id_empresa'];
+					$_SESSION["INICIO"]['ASIGNAR_SEGUROS'] = $empresa[0]['Tabla_seguros'];
 					$_SESSION["INICIO"]['RAZON_SOCIAL'] = $empresa[0]['Razon_Social'];
 					$_SESSION["INICIO"]['IP_HOST'] = $empresa[0]['Ip_host'];
 					$_SESSION["INICIO"]['BASEDATO'] = $empresa[0]['Base_datos'];

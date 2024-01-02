@@ -29,6 +29,11 @@
              $('#sa_conp_diagnostico_2').val(selectedEntity.code +'-'+selectedEntity.title);
              $('#sa_conp_CIE_10_2').val(selectedEntity.code);
             break;
+         case '3':
+             ECT.Handler.clear("3")    
+             $('#sa_conp_diagnostico_certificado').val(selectedEntity.code +'-'+selectedEntity.title);
+             $('#sa_conp_CIE_10_certificado').val(selectedEntity.code);
+            break;
         }
          console.log(selectedEntity)        
       },

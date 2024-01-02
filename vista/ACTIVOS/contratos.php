@@ -2,6 +2,8 @@
 <script type="text/javascript">
   $(document).ready(function() {
 
+    inputs_asignacion_seguros();
+
     var id ='<?php echo $id;?>';
     if(id)
     {
@@ -17,6 +19,33 @@
 });
 </script>
 <script type="text/javascript">
+
+
+   function inputs_asignacion_seguros()
+   {
+       var inputs = '';
+       var tablas = '<?php echo $_SESSION['INICIO']['ASIGNAR_SEGUROS'];?>';
+       if(tablas!='')
+       {
+        // console.log(tablas)
+         var obj = JSON.parse(tablas);
+         // console.log(obj);
+          obj.forEach(function(item,i){
+            if(i==0)
+            {
+              inputs+='<label><input type="radio" name="rbl_seguro_busqueda" checked >'+item.tabla+'</label>  ';
+            }else
+            {
+              inputs+='<label><input type="radio" name="rbl_seguro_busqueda">'+item.tabla+'</label>  ';              
+            }
+          })
+       }else
+       {
+         inputs+='<input type="radio" name="" checked style="display:none">';
+       }
+
+       $('#pnl_asociacion_seguros').html(inputs);
+   }
 
    function lista_cobertura()
    {
@@ -602,17 +631,20 @@
               </div>
               </div>
                <div class="col-lg-7">
-                  <div class="border border-3 p-4 rounded">
+                  <div class="border border-3 p-4 rounded">                    
                     <div class="row">
+                      <div class="col-sm-12" id="pnl_asociacion_seguros">
+                      <?php //print_r($_SESSION['INICIO']);?>
+                      </div>
                       <div class="col-sm-10">
-                        <b>Articulo o activos que aplican en el seguro</b>
+                        <b>Aplicar seguro a:</b>
                               <select class="form-select form-select-sm" name="ddl_articulos" id="ddl_articulos" >
                                 <option value="">Seleccione Articulo</option>                    
                               </select>
                       </div>
                       <div class="col-sm-2 text-end">
                         <br>
-                          <button type="button" class="btn btn-primary btn-sm" title="Nuevo Siniestro" onclick="agregar_a_contrato()"> Agregar <i class="bx bx-down-arrow-circle me-0"></i></button>                  
+                          <button type="button" class="btn btn-primary btn-sm" title="Nuevo Siniestro" onclick="agregar_a_contrato()"> Agregar<i class="bx bx-down-arrow-circle me-0"></i></button>                  
                       </div>
                     </div>
                     <div class="row table-responsive">

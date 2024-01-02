@@ -1090,12 +1090,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                     <div class="row pt-3">
                                                         <div class="col-md-12">
                                                             <label for="" class="form-label">CIE 10 - Diagnóstico de Certificado: <label style="color: red;">*</label> </label>
-                                                            <select class="form-select form-select-sm" id="sa_conp_CIE_10_certificado" name="sa_conp_CIE_10_certificado">
-                                                                <option selected disabled>-- Seleccione --</option>
-                                                                <option value="A001">A001</option>
-                                                                <option value="B001">B001</option>
-                                                            </select>
-                                                            <input type="hidden" id="sa_conp_diagnostico_certificado" name="sa_conp_diagnostico_certificado">
+                                                             <input type="text" class="ctw-input form-control form-control-sm" autocomplete="off" data-ctw-ino="3" id="sa_conp_diagnostico_certificado" placeholder="Diagnostico">
+
+                                                            <input type="hidden" id="sa_conp_CIE_10_certificado">
+                                                            <div class="ctw-window" data-ctw-ino="3"></div>
 
                                                         </div>
                                                     </div>
