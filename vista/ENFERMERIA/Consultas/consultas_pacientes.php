@@ -91,6 +91,9 @@ if (isset($_GET['pac_id'])) {
           dataType: 'json',
           success: function(responseConsultas) {
             console.log(responseConsultas);
+            console.log(responseConsultas[0]['sa_conp_fecha_ingreso']);
+
+
             //Segundo ajax
             $('#tbl_consultas').DataTable({
               destroy: true, // Destruir la tabla existente antes de recrearla
@@ -113,7 +116,8 @@ if (isset($_GET['pac_id'])) {
                     if (item.sa_conp_desde_hora.date == null || item.sa_conp_fecha_ingreso.date == null) {
                       return '';
                     } else {
-                      return fecha_nacimiento_formateada(item.sa_conp_fecha_ingreso.date) + ' / ' + obtener_hora_formateada(item.sa_conp_desde_hora.date);
+                      //Fecha de creacion para saber el dia en el que se creo
+                      return fecha_nacimiento_formateada(item.sa_conp_fecha_creacion.date) + ' / ' + obtener_hora_formateada(item.sa_conp_fecha_creacion.date);
                     }
                   }
                 },
@@ -123,7 +127,7 @@ if (isset($_GET['pac_id'])) {
                     if (item.sa_conp_desde_hora.date == null || item.sa_conp_hasta_hora.date == null) {
                       return '';
                     } else {
-                      return obtener_hora_formateada(item.sa_conp_desde_hora.date) + ' / ' + obtener_hora_formateada(item.sa_conp_hasta_hora.date);
+                      return fecha_nacimiento_formateada(item.sa_conp_fecha_ingreso.date) + ' / [' + obtener_hora_formateada(item.sa_conp_desde_hora.date) + ' / ' + obtener_hora_formateada(item.sa_conp_hasta_hora.date)+ ']';
                     }
                   }
                 },
@@ -223,7 +227,7 @@ if (isset($_GET['pac_id'])) {
                             <input type="hidden" name="id_paciente" id="id_paciente">
                             <input type="hidden" name="tipo_consulta" id="tipo_consulta" value="consulta">
 
-                            <button type="submit" class="btn btn-primary btn-lg m-4"><i class='bx bx-file-blank'></i> Consulta</button>
+                            <button type="submit" class="btn btn-primary btn-lg m-4"><i class='bx bx-file-blank'></i> Consulta&nbsp;&nbsp;&nbsp;</button>
                           </form>
                         </div>
                       </div>
@@ -257,7 +261,7 @@ if (isset($_GET['pac_id'])) {
                           <tr>
                             <th width="10px">Revisar</th>
                             <th>Fecha de creación</th>
-                            <th>Hora Desde/Hasta</th>
+                            <th>Fecha Agenda / Hora Desde/Hasta</th>
                             <th>Permiso de Salida</th>
                             <th>Tipo de Atención</th>
                             <th width="10px">Estado</th>

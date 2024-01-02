@@ -63,14 +63,36 @@ class agendamientoC
 
     function add_agenda($parametros)
     {
-        $datos = array(
-            array('campo' => 'sa_fice_id', 'dato' => $parametros['paciente']),
-            array('campo' => 'sa_conp_fecha_ingreso', 'dato' => $parametros['fecha']),
-            array('campo' => 'sa_conp_tipo_consulta', 'dato' => $parametros['tipo']),
-            array('campo' => 'sa_conp_estado_revision', 'dato' => 0),
-            array('campo' => 'sa_conp_desde_hora', 'dato' => '00:00:00.0000000'),
-            array('campo' => 'sa_conp_hasta_hora', 'dato' => '00:00:00.0000000'), 
-        );
+        $datos = null;
+
+        if ($parametros['tipo'] == 'consulta') {
+            $datos = array(
+                array('campo' => 'sa_fice_id', 'dato' => $parametros['paciente']),
+                array('campo' => 'sa_conp_fecha_ingreso', 'dato' => $parametros['fecha']),
+                array('campo' => 'sa_conp_tipo_consulta', 'dato' => $parametros['tipo']),
+                array('campo' => 'sa_conp_estado_revision', 'dato' => 0),
+                array('campo' => 'sa_conp_desde_hora', 'dato' => '00:00:00.0000000'),
+                array('campo' => 'sa_conp_hasta_hora', 'dato' => '00:00:00.0000000'),
+
+                array('campo' => 'sa_conp_peso', 'dato' => $parametros['sa_conp_peso']),
+                array('campo' => 'sa_conp_altura', 'dato' => $parametros['sa_conp_altura']),
+                array('campo' => 'sa_conp_temperatura', 'dato' => $parametros['sa_conp_temperatura']),
+                array('campo' => 'sa_conp_presion_ar', 'dato' => $parametros['sa_conp_presion_ar']),
+                array('campo' => 'sa_conp_frec_cardiaca', 'dato' => $parametros['sa_conp_frec_cardiaca']),
+                array('campo' => 'sa_conp_frec_respiratoria', 'dato' => $parametros['sa_conp_frec_respiratoria']),
+                array('campo' => 'sa_conp_motivo_consulta', 'dato' => $parametros['sa_conp_motivo_consulta']),
+
+            );
+        } else if ($parametros['tipo'] == 'certificado') {
+            $datos = array(
+                array('campo' => 'sa_fice_id', 'dato' => $parametros['paciente']),
+                array('campo' => 'sa_conp_fecha_ingreso', 'dato' => $parametros['fecha']),
+                array('campo' => 'sa_conp_tipo_consulta', 'dato' => $parametros['tipo']),
+                array('campo' => 'sa_conp_estado_revision', 'dato' => 0),
+                array('campo' => 'sa_conp_desde_hora', 'dato' => '00:00:00.0000000'),
+                array('campo' => 'sa_conp_hasta_hora', 'dato' => '00:00:00.0000000'),
+            );
+        }
 
         return  $datos = $this->modelo->insertar('consultas_medicas', $datos);
 

@@ -1,9 +1,9 @@
-<link href="../assets/plugins/fullcalendar/css/main.min.css" rel="stylesheet" />autocoplete_paciente
+<link href="../assets/plugins/fullcalendar/css/main.min.css" rel="stylesheet" />
 
 <script type="text/javascript">
   let calendar;
   $(document).ready(function() {
-    autocoplete_paciente()
+
   });
 
   document.addEventListener('DOMContentLoaded', function() {
@@ -28,6 +28,10 @@
       events: []
     });
 
+    calendar.setOption('dateClick', function(info) {
+      abrirModal(info.date);
+    });
+
     // Función para cargar eventos desde AJAX
     cargar_citas();
 
@@ -44,7 +48,7 @@
         response.forEach(function(evento) {
           //console.log(evento);
           calendar.addEvent({
-            title: evento.sa_conp_tipo_consulta + ' - ' + evento.nombres,
+            title: evento.sa_conp_tipo_consulta.toUpperCase() + ' - ' + evento.nombres,
             start: formatoDate(evento.sa_conp_fecha_ingreso.date),
             end: formatoDate(evento.sa_conp_fecha_ingreso.date),
           });
@@ -56,81 +60,30 @@
     });
   }
 
-  function autocoplete_paciente() {
-    $('#ddl_pacientes').select2({
-      placeholder: '-- Seleccione Paciente --',
-      dropdownParent: $('#myModal'),
-      ajax: {
-        url: '<?php echo $url_general ?>/controlador/agendamientoC.php?buscar=true',
-        dataType: 'json',
-        delay: 250,
-        processResults: function(data) {
-          // console.log(data);
-          return {
-            results: data
-          };
-        },
-        cache: true
-      }
-    });
-  }
+  function abrirModal(fecha) {
+    // Abre el modal (Bootstrap Modal en este ejemplo)
+    $('#myModal').modal('show');
 
-  function agendar() {
-    var paciente = $('#ddl_pacientes').val();
-    var tipoConsulta = $('#txt_tipo_consulta').val();
-    var fechaConsulta = $('#txt_fecha_consulta').val();
+    // Actualiza el contenido del modal con la fecha seleccionada
+    var fechaString = fecha;
+    var fechaObjeto = new Date(fechaString);
 
-    if (paciente && tipoConsulta && fechaConsulta) {
-      // Todos los campos están llenos, puedes continuar con el envío de datos
-      var parametros = {
-        'paciente': paciente,
-        'tipo': tipoConsulta,
-        'fecha': fechaConsulta
-      };
+    var year = fechaObjeto.getFullYear(); // Obtener el año (por ejemplo, 2023)
+    var month = fechaObjeto.getMonth() + 1; // Obtener el mes (0-11, sumar 1 para obtener el formato 1-12)
+    var day = fechaObjeto.getDate(); // Obtener el día del mes
 
-      $.ajax({
-        url: '<?php echo $url_general ?>/controlador/agendamientoC.php?add_agenda=true',
-        data: {
-          parametros: parametros
-        },
-        type: 'post',
-        dataType: 'json',
-        success: function(response) {
-          console.log(response)
-          Swal.fire('', 'Cita Agendada', 'success').then(function() {
-            $('#myModal').modal('hide');
-            cargar_citas();
-          })
-        }
-      });
+    // También puedes formatear la fecha como una cadena YYYY-MM-DD
+    var fechaFormateada = year + "-" + (month < 10 ? "0" : "") + month + "-" + (day < 10 ? "0" : "") + day;
 
-    } else {
-      Swal.fire('Oops...', 'Todos los campos son obligatorios. Por favor, completa la información.', 'error').then(function() {})
-    }
-
+    $('input[name="txt_fecha_consulta"]').val(fechaFormateada);
 
   }
+
 </script>
 
 <div class="page-wrapper">
   <div class="page-content">
     <!--breadcrumb-->
-    <div class="card">
-      <div class="card-body">
-        <div class="row">
-          <div class="col-sm-3">
-            <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#myModal"><i class="bx bx-plus"></i> Nueva consulta</button>
-          </div>
-        </div>
-
-        <div class="row pt-3">
-          <div class="col-sm-3">
-            <a class="btn btn-sm btn-primary" href="<?= $url_general ?>/vista/inicio.php?mod=7&acc=agendamiento_asistente"><i class="bx bx-plus"></i> Agenda Médica</a>
-          </div>
-        </div>
-
-      </div>
-    </div>
 
     <!--end breadcrumb-->
     <div class="card">
@@ -146,51 +99,47 @@
 <script src="../assets/plugins/fullcalendar/js/main.min.js"></script>
 <script src="../assets/js/app-fullcalendar.js"></script>
 
-
 <div class="modal" id="myModal" abindex="-1" aria-modal="true" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
   <div class="modal-dialog">
     <div class="modal-content">
 
       <!-- Modal Header -->
       <div class="modal-header">
-        <h4 class="modal-title text-success">Nueva Consulta</h4>
         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       </div>
 
       <!-- Modal body -->
       <div class="modal-body">
-        <div class="row">
-          <div class="col-sm-12">
-            <b>Pacientes: <label class="text-danger">*</label></b>
-            <select class="form-select form-select-sm" id="ddl_pacientes" name="ddl_pacientes">
-              <option value="">-- Seleccione Paciente --</option>
-            </select>
+        <div class="row justify-content-center" id="btn_nuevo">
+
+          <div class="col-4">
+
+            <!-- Unifica ambos formularios dentro de uno -->
+            <form action="<?= $url_general ?>/vista/inicio.php?mod=7&acc=agendamiento_asistente" method="post">
+
+              <input type="hidden" name="tipo_consulta" id="tipo_consulta" value="consulta">
+              <input type="hidden" name="txt_fecha_consulta" id="txt_fecha_consulta" class="form-control form-control-sm" value="<?php echo date('Y-m-d'); ?>" readonly>
+
+              <button type="submit" class="btn btn-primary btn-lg m-4"><i class='bx bx-file-find'></i> Consulta&nbsp;&nbsp;&nbsp;</button>
+
+            </form>
+
           </div>
 
-          <div class="row pt-3">
-            <div class="col-sm-5">
-              <b>Fecha de Atención: <label class="text-danger">*</label></b>
-              <input type="date" name="txt_fecha_consulta" id="txt_fecha_consulta" class="form-control form-control-sm" value="<?php echo date('Y-m-d'); ?>">
-            </div>
+          <div class="col-4">
 
-            <div class="col-sm-7">
-              <b>Tipo de Consulta: <label class="text-danger">*</label></b>
-              <select class="form-select form-select-sm" id="txt_tipo_consulta" name="txt_tipo_consulta">
-                <option value="">-- Seleccione Tipo de Consulta --</option>
-                <option value="consulta">Consulta General</option>
-                <option value="certificado">Validar Certificado</option>
-              </select>
-            </div>
+            <form action="<?= $url_general ?>/vista/inicio.php?mod=7&acc=agendamiento_asistente" method="post">
+
+              <input type="hidden" name="tipo_consulta" id="tipo_consulta" value="certificado">
+              <input type="hidden" name="txt_fecha_consulta" id="txt_fecha_consulta" class="form-control form-control-sm" value="<?php echo date('Y-m-d'); ?>" readonly>
+
+              <button type="submit" class="btn btn-primary btn-lg m-4"><i class='bx bx-file-blank'></i> Certificado</button>
+
+            </form>
+            
           </div>
         </div>
       </div>
-
-      <!-- Modal footer -->
-      <div class="modal-footer">
-        <button type="button" class="btn btn-sm btn-primary" onclick="agendar()">Agendar</button>
-        <button type="button" class="btn btn-sm btn-danger" data-bs-dismiss="modal">Cerrar</button>
-      </div>
-
     </div>
   </div>
 </div>

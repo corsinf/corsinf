@@ -87,7 +87,7 @@
                                 if (item.sa_conp_desde_hora.date == null || item.sa_conp_fecha_ingreso.date == null) {
                                     return '';
                                 } else {
-                                    return fecha_nacimiento_formateada(item.sa_conp_fecha_ingreso.date) + ' / ' + obtener_hora_formateada(item.sa_conp_desde_hora.date);
+                                    return fecha_nacimiento_formateada(item.sa_conp_fecha_creacion.date) + ' / ' + obtener_hora_formateada(item.sa_conp_fecha_creacion.date);
                                 }
                             }
                         },
@@ -97,7 +97,7 @@
                                 if (item.sa_conp_desde_hora.date == null || item.sa_conp_hasta_hora.date == null) {
                                     return '';
                                 } else {
-                                    return obtener_hora_formateada(item.sa_conp_desde_hora.date) + ' / ' + obtener_hora_formateada(item.sa_conp_hasta_hora.date);
+                                    return fecha_nacimiento_formateada(item.sa_conp_fecha_ingreso.date) + ' / [' + obtener_hora_formateada(item.sa_conp_desde_hora.date) + ' / ' + obtener_hora_formateada(item.sa_conp_hasta_hora.date) + ']';
                                 }
                             }
                         },

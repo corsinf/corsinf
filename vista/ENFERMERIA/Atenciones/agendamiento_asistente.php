@@ -1,5 +1,29 @@
 <?php
 
+$tipo_consulta = '';
+$txt_fecha_consulta = '';
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // La solicitud es un POST
+    if (isset($_POST['tipo_consulta'])) {
+        $tipo_consulta = $_POST['tipo_consulta'];
+    }
+
+    if (isset($_POST['txt_fecha_consulta'])) {
+        $txt_fecha_consulta = $_POST['txt_fecha_consulta'];
+    }
+} elseif ($_SERVER['REQUEST_METHOD'] === 'GET') {
+    // La solicitud es un GET
+    if (isset($_GET['tipo_consulta'])) {
+        $tipo_consulta = $_GET['tipo_consulta'];
+    }
+
+    if (isset($_GET['txt_fecha_consulta'])) {
+        $txt_fecha_consulta = $_GET['txt_fecha_consulta'];
+    }
+}
 
 ?>
 
@@ -7,6 +31,23 @@
 
 <script type="text/javascript">
     $(document).ready(function() {
+
+        window.addEventListener('beforeunload', function(event) {
+            // Mostrar un mensaje de alerta personalizado
+            var confirmationMessage = '¿Estás seguro de que quieres abandonar la página?';
+
+            (event || window.event).returnValue = confirmationMessage; // Para navegadores más antiguos
+            return confirmationMessage; // Para navegadores modernos
+        });
+
+        var tipo_consulta = '<?php echo $tipo_consulta; ?>';
+        var txt_fecha_consulta = '<?php echo $txt_fecha_consulta; ?>';
+
+        $('#txt_fecha_consulta').val(txt_fecha_consulta);
+
+
+
+
         smartwizard();
         autocoplete_paciente();
     });
@@ -36,7 +77,7 @@
             },
             lang: {
                 next: 'Siguiente',
-                id:'btn_sigiente',
+                id: 'btn_sigiente',
                 previous: 'Anterior'
             }
         });
@@ -59,6 +100,99 @@
                 cache: true
             }
         });
+    }
+
+    function agendar() {
+        var paciente = $('#ddl_pacientes').val();
+        //var tipoConsulta = $('#txt_tipo_consulta').val();
+        var tipoConsulta = '<?php echo $tipo_consulta; ?>';
+        var fechaConsulta = $('#txt_fecha_consulta').val();
+
+        var sa_conp_peso = $('#sa_conp_peso').val();
+        var sa_conp_altura = $('#sa_conp_altura').val();
+        var sa_conp_temperatura = $('#sa_conp_temperatura').val();
+        var sa_conp_presion_ar = $('#sa_conp_presion_ar').val();
+        var sa_conp_frec_cardiaca = $('#sa_conp_frec_cardiaca').val();
+        var sa_conp_frec_respiratoria = $('#sa_conp_frec_respiratoria').val();
+        var sa_conp_motivo_consulta = $('#sa_conp_motivo_consulta').val();
+
+
+
+        if (tipoConsulta === 'consulta') {
+            if (
+                paciente &&
+                tipoConsulta &&
+                fechaConsulta &&
+                sa_conp_peso &&
+                sa_conp_altura &&
+                sa_conp_temperatura &&
+                sa_conp_presion_ar &&
+                sa_conp_frec_cardiaca &&
+                sa_conp_frec_respiratoria &&
+                sa_conp_motivo_consulta) {
+                // Todos los campos están llenos, puedes continuar con el envío de datos
+                var parametros = {
+                    'paciente': paciente,
+                    'tipo': tipoConsulta,
+                    'fecha': fechaConsulta,
+                    'sa_conp_peso': sa_conp_peso,
+                    'sa_conp_altura': sa_conp_altura,
+                    'sa_conp_temperatura': sa_conp_temperatura,
+                    'sa_conp_presion_ar': sa_conp_presion_ar,
+                    'sa_conp_frec_cardiaca': sa_conp_frec_cardiaca,
+                    'sa_conp_frec_respiratoria': sa_conp_frec_respiratoria,
+                    'sa_conp_motivo_consulta': sa_conp_motivo_consulta,
+                };
+
+                $.ajax({
+                    url: '<?php echo $url_general ?>/controlador/agendamientoC.php?add_agenda=true',
+                    data: {
+                        parametros: parametros
+                    },
+                    type: 'post',
+                    dataType: 'json',
+                    success: function(response) {
+                        console.log(response)
+                        Swal.fire('', 'Cita Agendada', 'success').then(function() {
+                            location.href = '<?= $url_general ?>/vista/inicio.php?mod=7&acc=agendamiento';
+                        })
+                    }
+                });
+
+            } else {
+                Swal.fire('Oops...', 'Todos los campos son obligatorios. Por favor, completa la información.', 'error').then(function() {})
+            }
+
+        } else if (tipoConsulta === 'certificado') {
+            if (paciente && tipoConsulta && fechaConsulta) {
+                // Todos los campos están llenos, puedes continuar con el envío de datos
+                var parametros = {
+                    'paciente': paciente,
+                    'tipo': tipoConsulta,
+                    'fecha': fechaConsulta
+                };
+
+                $.ajax({
+                    url: '<?php echo $url_general ?>/controlador/agendamientoC.php?add_agenda=true',
+                    data: {
+                        parametros: parametros
+                    },
+                    type: 'post',
+                    dataType: 'json',
+                    success: function(response) {
+                        console.log(response)
+                        Swal.fire('', 'Cita Agendada', 'success').then(function() {
+                            location.href = '<?= $url_general ?>/vista/inicio.php?mod=7&acc=agendamiento';
+                        })
+                    }
+                });
+
+            } else {
+                Swal.fire('Oops...', 'Todos los campos son obligatorios. Por favor, completa la información.', 'error').then(function() {})
+            }
+        }
+
+
     }
 </script>
 
@@ -85,118 +219,60 @@
         </div>
         <!--end breadcrumb-->
 
-
-        <!--En algun punto de aqui esta psando algo para que no deje reenviar el post-->
-
         <div class="row">
             <div class="col-xl-12 mx-auto">
 
                 <div class="card border-top border-0 border-4 border-primary">
                     <div class="card-body">
 
-                        <div class="card-title d-flex align-items-center">
-
-                            <div class="col-sm-3">
-                                <a href="<?= $url_general ?>/vista/inicio.php?mod=7&acc=agendamiento" class="btn btn-outline-dark btn-sm"><i class="bx bx-arrow-back"></i> Regresar</a>
-                            </div>
 
 
-                            <div class="col-sm-9 text-end m-2">
-                                <h6 class="mb-0 text-primary">
+                        <?php if ($tipo_consulta !== "") { ?>
 
+                            <div class="card-title d-flex align-items-center">
 
-                                    Agendamiento
+                                <div class="col-sm-3">
+                                    <a href="<?= $url_general ?>/vista/inicio.php?mod=7&acc=agendamiento" class="btn btn-outline-dark btn-sm"><i class="bx bx-arrow-back"></i> Regresar</a>
+                                </div>
 
-                                </h6>
-                            </div>
-
-                        </div>
-
-
-                        <div class="row justify-content-center" id="btn_nuevo">
-                            <div class="col-auto" id="btn_consulta">
-                                <div class="card">
-                                    <div class="card-body bg-dark">
-                                        <!-- Agrega un identificador al botón y al div que deseas mostrar/ocultar -->
-                                        <button type="button" class="btn btn-primary btn-lg m-4" onclick="tipoConsulta('registro_sw', 1)"><i class='bx bx-file-blank'></i> Consulta</button>
-                                    </div>
+                                <div class="col-sm-9 text-end m-2">
+                                    <h6 class="mb-0 text-primary">
+                                        <?= strtoupper($tipo_consulta) ?>
+                                    </h6>
                                 </div>
                             </div>
 
-                            <div class="col-auto" id="btn_certificado">
-                                <div class="card">
-                                    <div class="card-body bg-dark">
-                                        <!-- Agrega un identificador al botón y al div que deseas mostrar/ocultar -->
-                                        <button type="button" class="btn btn-primary btn-lg m-4" onclick="tipoConsulta('triage_sw', 2)"><i class='bx bx-file-blank'></i> Certificado</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                            <br>
 
+                            <div id="pnl_main">
+                                <!-- SmartWizard html -->
+                                <div id="smartwizard_fm" class="sw sw-theme-arrows sw-justified">
+                                    <ul class="nav">
+                                        <li class="nav-item" id="registro_sw">
+                                            <a class="nav-link" href="#step-1"> <strong>Paso 1</strong>
+                                                <br>Agendamiento</a>
+                                        </li>
 
-                        <script>
-                            // Función para mostrar u ocultar un div específico
-                            var id_consulta_g = 0;
+                                        <?php if ($tipo_consulta == "consulta") { ?>
+                                            <li class="nav-item" id="triage_sw">
+                                                <a class="nav-link" href="#step-2"> <strong>Paso 2</strong>
+                                                    <br>Triage</a>
+                                            </li>
+                                        <?php } ?>
+                                    </ul>
 
-                            function tipoConsulta(divId, id_consulta) {
-                                //1 Consulta
-                                //2 Certificado
-                                id_consulta_g = id_consulta;
-
-                                $("#btn_consulta").css('display', 'none');
-                                $("#btn_certificado").css('display', 'none');
-
-                                if (id_consulta == 1) {
-                                    
-                                    $('#pnl_main').css('display', 'initial');
-                                    $('#step-1').css('width','auto');
-                                    $('#pnl_contenido').css('height','auto');
-                                    $("#triage_sw").show();
-                                    //$("#pnl_triage").show();
-
-
-
-                                } else if (id_consulta == 2) {
-                                    $('#triage_sw').css('display', 'none');
-                                    $('#pnl_main').css('display', 'initial');
-                                    $('#step-1').css('width','auto');
-                                    $('#pnl_contenido').css('height','auto');
-                                }
-
-                            }
-                        </script>
-
-
-
-                        <div id="pnl_main" style="display: none;">
-                            <!-- SmartWizard html -->
-                            <div id="smartwizard_fm" class="sw sw-theme-arrows sw-justified">
-                                <ul class="nav">
-                                    <li class="nav-item" id="registro_sw">
-                                        <a class="nav-link" href="#step-1"> <strong>Paso 1</strong>
-                                            <br>Agendamiento</a>
-                                    </li>
-
-                                    <li class="nav-item" id="triage_sw" style="display: none;">
-                                        <a class="nav-link" href="#step-2"> <strong>Paso 2</strong>
-                                            <br>Triage</a>
-                                    </li>
-                                </ul>
-
-                                <div class="tab-content" id="pnl_contenido">
+                                    <div class="tab-content" id="pnl_contenido">
 
                                         <div id="step-1" class="tab-pane" role="tabpanel" aria-labelledby="step-1">
 
                                             <form class="needs-validation" novalidate>
-
-
                                                 <div class="row pt-0 mx-1">
                                                     <b>
-                                                        <h3 class="pt-0 text-primary">Agendar Consulta</h3>
+                                                        <h3 class="pt-0 text-primary">Agendar</h3>
                                                     </b>
 
                                                     <div class="row pt-2">
-                                                        <div class="col-sm-12">
+                                                        <div class="col-sm-8">
                                                             <b>Pacientes: <label class="text-danger">*</label></b>
                                                             <select class="form-select form-select-sm" id="ddl_pacientes" name="ddl_pacientes">
                                                                 <option value="">-- Seleccione Paciente --</option>
@@ -205,89 +281,157 @@
                                                     </div>
 
                                                     <div class="row pt-3">
-                                                        <div class="col-sm-5">
+                                                        <div class="col-sm-8">
                                                             <b>Fecha de Atención: <label class="text-danger">*</label></b>
-                                                            <input type="date" name="txt_fecha_consulta" id="txt_fecha_consulta" class="form-control form-control-sm" value="<?php echo date('Y-m-d'); ?>">
-                                                        </div>
-
-                                                        <div class="col-sm-7">
-                                                            <b>Tipo de Consulta: <label class="text-danger">*</label></b>
-                                                            <select class="form-select form-select-sm" id="txt_tipo_consulta" name="txt_tipo_consulta">
-                                                                <option value="">-- Seleccione Tipo de Consulta --</option>
-                                                                <option value="consulta">Consulta General</option>
-                                                                <option value="certificado">Validar Certificado</option>
-                                                            </select>
+                                                            <input type="date" name="txt_fecha_consulta" id="txt_fecha_consulta" class="form-control form-control-sm" value="<?php echo date('Y-m-d'); ?>" readonly>
                                                         </div>
                                                     </div>
+
+                                                    <?php if ($tipo_consulta == "certificado") { ?>
+                                                        <div class="row pt-3 text-end">
+                                                            <div class="col-sm-8">
+
+                                                                <button class="btn btn-success px-4 m-1" onclick="agendar()" type="button"><i class="bx bx-save"></i> Agendar</button>
+
+                                                            </div>
+                                                        </div>
+                                                    <?php } ?>
+
+
+
                                                 </div>
-
                                             </form>
-
                                         </div>
 
-                                        <div id="step-2" class="tab-pane" role="tabpanel" aria-labelledby="step-2">
+                                        <?php if ($tipo_consulta == "consulta") { ?>
+                                            <div id="step-2" class="tab-pane" role="tabpanel" aria-labelledby="step-2">
 
-                                            <form class="needs-validation" novalidate>
+                                                <form class="needs-validation" novalidate>
 
-                                                <input type="hidden" name="sa_fice_id" id="sa_fice_id">
-                                                <input type="hidden" name="sa_fice_pac_id" id="sa_fice_pac_id">
+                                                    <div class="row pt-0 mx-1">
+                                                        <b>
+                                                            <h3 class="pt-0 text-primary">Triage</h3>
+                                                        </b>
 
-
-
-                                                <div class="row pt-0 mx-1">
-                                                    <b>
-                                                        <h3 class="pt-0 text-primary">Triage</h3>
-                                                    </b>
-
-                                                    <div class="row pt-2">
-                                                        <div class="col-md-3">
-                                                            <b><label for="" class="form-label">Peso: <label style="color: red;">*</label></b>
-                                                            <input type="number" class="form-control form-control-sm" id="sa_conp_peso" name="sa_conp_peso">
+                                                        <div class="row pt-2">
+                                                            <div class="col-md-3">
+                                                                <b><label for="" class="form-label">Peso: <label style="color: red;">*</label></b>
+                                                                <input type="number" class="form-control form-control-sm" id="sa_conp_peso" name="sa_conp_peso" placeholder="Ejemplo: 68.45 (Kilogramos)">
+                                                            </div>
+                                                            <div class="col-md-3">
+                                                                <b><label for="" class="form-label">Altura: <label style="color: red;">*</label> </label></b>
+                                                                <input type="number" class="form-control form-control-sm" id="sa_conp_altura" name="sa_conp_altura" placeholder="Ejemplo: 1.45 (Metros)">
+                                                            </div>
+                                                            <div class="col-md-3">
+                                                                <b><label for="" class="form-label">IMC: <label style="color: red;">*</label> </label></b>
+                                                                <input type="number" class="form-control form-control-sm" id="txt_imc" name="txt_imc" readonly disabled>
+                                                            </div>
+                                                            <div class="col-md-3">
+                                                                <b><label for="" class="form-label">Nivel del Peso: <label style="color: red;">*</label> </label></b>
+                                                                <input type="text" class="form-control form-control-sm" id="txt_np" name="txt_np" readonly disabled>
+                                                            </div>
                                                         </div>
-                                                        <div class="col-md-3">
-                                                            <b><label for="" class="form-label">Altura: <label style="color: red;">*</label> </label></b>
-                                                            <input type="number" class="form-control form-control-sm" id="sa_conp_altura" name="sa_conp_altura">
+
+                                                        <script>
+                                                            function calcularIMC() {
+                                                                var peso = $('#sa_conp_peso').val();
+                                                                var altura = $('#sa_conp_altura').val();
+
+                                                                if (peso && altura) {
+                                                                    var imc = peso / (altura * altura);
+                                                                    $('#txt_imc').val(imc.toFixed(2));
+
+                                                                    var nivelPeso = obtenerNivelPeso(imc);
+                                                                    $('#txt_np').val(nivelPeso);
+                                                                } else {
+                                                                    $('#txt_imc, #txt_np').val('');
+                                                                }
+                                                            }
+
+                                                            function obtenerNivelPeso(imc) {
+                                                                if (imc < 18.5) {
+                                                                    return 'Bajo Peso';
+                                                                } else if (imc >= 18.5 && imc < 24.9) {
+                                                                    return 'Peso Saludable';
+                                                                } else if (imc >= 25 && imc < 29.9) {
+                                                                    return 'Sobrepeso';
+                                                                } else if (imc >= 30 && imc < 34.9) {
+                                                                    return 'Obesidad Grado I';
+                                                                } else if (imc >= 35 && imc < 39.9) {
+                                                                    return 'Obesidad Grado II';
+                                                                } else {
+                                                                    return 'Obesidad Grado III';
+                                                                }
+                                                            }
+
+                                                            $('#sa_conp_peso, #sa_conp_altura').on('input', calcularIMC);
+                                                        </script>
+
+                                                        <div class="row pt-3">
+                                                            <div class="col-md-3">
+                                                                <b><label for="" class="form-label">Temperatura: <label style="color: red;">*</label> </label></b>
+                                                                <input type="number" class="form-control form-control-sm" id="sa_conp_temperatura" name="sa_conp_temperatura" placeholder="Ejemplo: 37.5 (°C)">
+                                                                <p></p>
+                                                            </div>
+                                                            <div class="col-md-3">
+                                                                <b><label for="" class="form-label">Presión Arterial: <label style="color: red;">*</label> </label></b>
+                                                                <input type="number" class="form-control form-control-sm" id="sa_conp_presion_ar" name="sa_conp_presion_ar">
+                                                            </div>
+                                                            <div class="col-md-3">
+                                                                <b><label for="" class="form-label">Frecuencia Cardiáca: <label style="color: red;">*</label> </label></b>
+                                                                <input type="number" class="form-control form-control-sm" id="sa_conp_frec_cardiaca" name="sa_conp_frec_cardiaca">
+                                                            </div>
+                                                            <div class="col-md-3">
+                                                                <b><label for="" class="form-label">Frecuencia Respiratoria: <label style="color: red;">*</label> </label></b>
+                                                                <input type="number" class="form-control form-control-sm" id="sa_conp_frec_respiratoria" name="sa_conp_frec_respiratoria">
+                                                            </div>
                                                         </div>
+
+                                                        <div class="row pt-3">
+                                                            <div class="col-md-12">
+                                                                <b><label for="" class="form-label">Motivo de la consulta: <label style="color: red;">*</label> </label></b>
+                                                                <textarea name="sa_conp_motivo_consulta" id="sa_conp_motivo_consulta" cols="30" rows="4" class="form-control" placeholder="Motivo de la consulta"></textarea>
+                                                            </div>
+                                                        </div>
+
+                                                        <?php if ($tipo_consulta == "consulta") { ?>
+                                                            <div class="row pt-3 text-end">
+                                                                <div class="col-sm-12">
+
+                                                                    <button class="btn btn-success px-4 m-1" onclick="agendar()" type="button"><i class="bx bx-save"></i> Agendar</button>
+
+                                                                </div>
+                                                            </div>
+                                                        <?php } ?>
                                                     </div>
-
-                                                    <div class="row pt-3">
-                                                        <div class="col-md-3">
-                                                            <b><label for="" class="form-label">Temperatura: <label style="color: red;">*</label> </label></b>
-                                                            <input type="number" class="form-control form-control-sm" id="sa_conp_temperatura" name="sa_conp_temperatura">
-                                                        </div>
-                                                        <div class="col-md-3">
-                                                            <b><label for="" class="form-label">Presión Arterial: <label style="color: red;">*</label> </label></b>
-                                                            <input type="number" class="form-control form-control-sm" id="sa_conp_presion_ar" name="sa_conp_presion_ar">
-                                                        </div>
-                                                        <div class="col-md-3">
-                                                            <b><label for="" class="form-label">Frecuencia Cardiáca: <label style="color: red;">*</label> </label></b>
-                                                            <input type="number" class="form-control form-control-sm" id="sa_conp_frec_cardiaca" name="sa_conp_frec_cardiaca">
-                                                        </div>
-                                                        <div class="col-md-3">
-                                                            <b><label for="" class="form-label">Frecuencia Respiratoria: <label style="color: red;">*</label> </label></b>
-                                                            <input type="number" class="form-control form-control-sm" id="sa_conp_frec_respiratoria" name="sa_conp_frec_respiratoria">
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="row pt-3">
-                                                        <div class="col-md-12">
-                                                            <b><label for="" class="form-label">Motivo de la consulta: <label style="color: red;">*</label> </label></b>
-                                                            <textarea name="sa_conp_motivo_consulta" id="sa_conp_motivo_consulta" cols="30" rows="4" class="form-control" placeholder="Motivo de la consulta"></textarea>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-
-
-                                            </form>
-
-                                        </div>
-
+                                                </form>
+                                            </div>
+                                        <?php } ?>
+                                    </div>
                                 </div>
                             </div>
 
-                       </div> 
+                        <?php } else {  ?>
 
+                            <div class="card-title d-flex align-items-center">
+
+                                <div class="col-sm-3">
+                                    <a href="<?= $url_general ?>/vista/inicio.php?mod=7&acc=agendamiento" class="btn btn-outline-dark btn-sm"><i class="bx bx-arrow-back"></i> Regresar</a>
+                                </div>
+
+                            </div>
+
+                            <div class="alert alert-danger border-0 bg-danger alert-dismissible fade show py-2">
+                                <div class="d-flex align-items-center">
+                                    <div class="font-35 text-white"><i class='bx bxs-message-square-x'></i>
+                                    </div>
+                                    <div class="ms-3">
+                                        <div class="text-white">¡Atención! Por favor, evita recargar la página. Si lo haces, perderás los datos que has ingresado en el formulario y tendrás que volver a llenarlos. Si encuentras algún problema o necesitas asistencia, no dudes en contactarnos. ¡Gracias por tu comprensión!</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        <?php } ?>
                     </div>
                 </div>
             </div>
