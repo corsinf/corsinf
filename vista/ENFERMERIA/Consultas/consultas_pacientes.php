@@ -37,7 +37,7 @@ if (isset($_GET['pac_id'])) {
       type: 'post',
       dataType: 'json',
       success: function(response) {
-        console.log(response);
+        //console.log(response);
         ///  Para la tabla de inicio /////////////////////////////////////////////////////////////////////////////////////////////////////////
         $('#txt_ci').html(response[0].sa_pac_temp_cedula + " <i class='bx bxs-id-card'></i>");
         nombres = response[0].sa_pac_temp_primer_nombre + ' ' + response[0].sa_pac_temp_segundo_nombre;
@@ -78,7 +78,7 @@ if (isset($_GET['pac_id'])) {
       dataType: 'json',
       success: function(response) {
         //Primer ajax
-        console.log(response.sa_fice_id);
+        //console.log(response.sa_fice_id);
 
         $('input[name="id_ficha"]').val(response.sa_fice_id);
 
@@ -90,8 +90,8 @@ if (isset($_GET['pac_id'])) {
           type: 'post',
           dataType: 'json',
           success: function(responseConsultas) {
-            console.log(responseConsultas);
-            console.log(responseConsultas[0]['sa_conp_fecha_ingreso']);
+            //console.log(responseConsultas);
+            //console.log(responseConsultas[0]['sa_conp_fecha_ingreso']);
 
 
             //Segundo ajax
@@ -127,7 +127,7 @@ if (isset($_GET['pac_id'])) {
                     if (item.sa_conp_desde_hora.date == null || item.sa_conp_hasta_hora.date == null) {
                       return '';
                     } else {
-                      return fecha_nacimiento_formateada(item.sa_conp_fecha_ingreso.date) + ' / [' + obtener_hora_formateada(item.sa_conp_desde_hora.date) + ' / ' + obtener_hora_formateada(item.sa_conp_hasta_hora.date)+ ']';
+                      return fecha_nacimiento_formateada(item.sa_conp_fecha_ingreso.date) + ' / ' + obtener_hora_formateada(item.sa_conp_desde_hora.date) + ' / ' + obtener_hora_formateada(item.sa_conp_hasta_hora.date);
                     }
                   }
                 },
@@ -227,7 +227,7 @@ if (isset($_GET['pac_id'])) {
                             <input type="hidden" name="id_paciente" id="id_paciente">
                             <input type="hidden" name="tipo_consulta" id="tipo_consulta" value="consulta">
 
-                            <button type="submit" class="btn btn-primary btn-lg m-4"><i class='bx bx-file-blank'></i> Consulta&nbsp;&nbsp;&nbsp;</button>
+                            <button type="submit" class="btn btn-primary btn-lg m-4"><i class='bx bx-file-blank'></i> Consulta</button>
                           </form>
                         </div>
                       </div>
