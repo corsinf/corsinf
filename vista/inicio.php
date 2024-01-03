@@ -244,6 +244,10 @@ if ($_GET['acc'] == 'ficha_medica_pacientes') {
 
 //Consultas
 
+if ($_GET['acc'] == 'consultas') {
+	include('ENFERMERIA/Consultas/consultas.php');
+}
+
 if ($_GET['acc'] == 'consultas_pacientes') {
 	include('ENFERMERIA/Consultas/consultas_pacientes.php');
 }
@@ -306,7 +310,7 @@ if ($_GET['acc'] == 'medicamentos') {
 	include('ENFERMERIA/Farmacia/Medicamentos/medicamentos.php');
 }
 
-//Medicinas
+//Insumos
 if ($_GET['acc'] == 'registrar_insumos') {
 	include('ENFERMERIA/Farmacia/Insumos/registrar_insumos.php');
 }

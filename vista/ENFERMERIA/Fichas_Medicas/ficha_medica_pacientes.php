@@ -701,12 +701,12 @@ if (isset($_POST['sa_pac_tabla'])) {
                                                         <div class="col-auto">
                                                             <div class="form-check">
                                                                 <input class="form-check-input" type="radio" name="sa_fice_pregunta_1" id="sa_fice_pregunta_1_1" value="Si">
-                                                                <label class="form-check-label" for="flexRadioDefault1">SI</label>
+                                                                <label class="form-check-label" for="sa_fice_pregunta_1_1">SI</label>
                                                             </div>
 
                                                             <div class="form-check">
                                                                 <input class="form-check-input" type="radio" name="sa_fice_pregunta_1" id="sa_fice_pregunta_1_2" value="No">
-                                                                <label class="form-check-label" for="flexRadioDefault2">NO</label>
+                                                                <label class="form-check-label" for="sa_fice_pregunta_1_2">NO</label>
                                                             </div>
                                                         </div>
                                                         <div class="col-11">
@@ -721,11 +721,11 @@ if (isset($_POST['sa_pac_tabla'])) {
                                                         <div class="col-auto">
                                                             <div class="form-check">
                                                                 <input class="form-check-input" type="radio" name="sa_fice_pregunta_2" id="sa_fice_pregunta_2_1" value="Si">
-                                                                <label class="form-check-label" for="flexRadioDefault1">SI</label>
+                                                                <label class="form-check-label" for="sa_fice_pregunta_2_1">SI</label>
                                                             </div>
                                                             <div class="form-check">
                                                                 <input class="form-check-input" type="radio" name="sa_fice_pregunta_2" id="sa_fice_pregunta_2_2" value="No">
-                                                                <label class="form-check-label" for="flexRadioDefault2">NO</label>
+                                                                <label class="form-check-label" for="sa_fice_pregunta_2_2">NO</label>
                                                             </div>
                                                         </div>
                                                         <div class="col-11">
@@ -761,11 +761,11 @@ if (isset($_POST['sa_pac_tabla'])) {
                                                         <div class="col-auto">
                                                             <div class="form-check">
                                                                 <input class="form-check-input" type="radio" name="sa_fice_pregunta_4" id="sa_fice_pregunta_4_1" value="Si">
-                                                                <label class="form-check-label" for="flexRadioDefault1">SI</label>
+                                                                <label class="form-check-label" for="sa_fice_pregunta_4_1">SI</label>
                                                             </div>
                                                             <div class="form-check">
                                                                 <input class="form-check-input" type="radio" name="sa_fice_pregunta_4" id="sa_fice_pregunta_4_2" value="No">
-                                                                <label class="form-check-label" for="flexRadioDefault2">NO</label>
+                                                                <label class="form-check-label" for="sa_fice_pregunta_4_2">NO</label>
                                                             </div>
                                                         </div>
                                                         <div class="col-11">

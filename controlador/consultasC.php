@@ -151,6 +151,7 @@ class consultasC
             array('campo' => 'sa_conp_observaciones', 'dato' => $parametros['sa_conp_observaciones']),
             array('campo' => 'sa_conp_motivo_consulta', 'dato' => $parametros['sa_conp_motivo_consulta']),
             array('campo' => 'sa_conp_tratamiento', 'dato' => $parametros['sa_conp_tratamiento']),
+            array('campo' => 'sa_conp_estado_revision', 'dato' => $parametros['sa_conp_estado_revision']),
         );
 
 

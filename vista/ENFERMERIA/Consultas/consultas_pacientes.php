@@ -107,7 +107,18 @@ if (isset($_GET['pac_id'])) {
                 {
                   data: null,
                   render: function(data, type, item) {
-                    return '<div class="text-center"><a href="<?= $url_general ?>/vista/inicio.php?mod=7&acc=registrar_consulta_paciente&id_consulta=' + item.sa_conp_id + '&tipo_consulta=' + item.sa_conp_tipo_consulta + '&id_ficha=' + item.sa_fice_id + '&id_paciente=' + item.sa_pac_id + '" class="btn btn-primary btn-sm " title="Detalles de la Consulta"><i class="bx bx-spreadsheet me-0"></i></a></div>';
+
+                    botones = '';
+                    botones += '<div class="text-center">';
+                    botones += '<a href="<?= $url_general ?>/vista/inicio.php?mod=7&acc=registrar_consulta_paciente&id_consulta=' + item.sa_conp_id + '&tipo_consulta=' + item.sa_conp_tipo_consulta + '&id_ficha=' + item.sa_fice_id + '&id_paciente=' + item.sa_pac_id + '" class="btn btn-primary btn-sm m-1" title="Detalles de la Consulta"><i class="bx bx-spreadsheet me-0"></i></a>';
+                    
+                    if (item.sa_conp_estado_revision == 0 || item.sa_conp_estado_revision == 2) {
+                      botones += '<a href="<?= $url_general ?>/vista/inicio.php?mod=7&acc=registrar_consulta_paciente&id_consulta=' + item.sa_conp_id + '&tipo_consulta=' + item.sa_conp_tipo_consulta + '&id_ficha=' + item.sa_fice_id + '&id_paciente=' + item.sa_pac_id + '" class="btn btn-warning btn-sm m-0" title="Detalles de la Consulta"><i class="bx bx-edit me-0" ></i></a>';
+                    }
+
+                    botones += '</div>';
+
+                    return botones;
                   }
                 },
                 {
@@ -259,7 +270,7 @@ if (isset($_GET['pac_id'])) {
                       <table class="table table-striped responsive" id="tbl_consultas" style="width:100%">
                         <thead>
                           <tr>
-                            <th width="10px">Revisar</th>
+                            <th width="5%">Revisar</th>
                             <th>Fecha de creación</th>
                             <th>Fecha Agenda / Hora Desde/Hasta</th>
                             <th>Permiso de Salida</th>
