@@ -248,6 +248,10 @@ if ($_GET['acc'] == 'consultas') {
 	include('ENFERMERIA/Consultas/consultas.php');
 }
 
+if ($_GET['acc'] == 'detalle_consulta') {
+	include('ENFERMERIA/Consultas/detalle_consulta.php');
+}
+
 if ($_GET['acc'] == 'consultas_pacientes') {
 	include('ENFERMERIA/Consultas/consultas_pacientes.php');
 }

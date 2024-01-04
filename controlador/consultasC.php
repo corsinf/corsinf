@@ -61,7 +61,7 @@ if (isset($_GET['pdf_consulta'])) {
         $id_consulta = $_POST['id_consulta'];
     }
 
-    echo json_encode($controlador->pdf_consulta_paciente($id_consulta));
+    echo ($controlador->pdf_consulta_paciente($id_consulta));
 }
 
 
@@ -237,7 +237,7 @@ class consultasC
 
     function pdf_consulta_paciente($id_consulta)
     {
-        $datos = $this->modelo->lista_solo_consultas(6);
+        $datos = $this->modelo->lista_solo_consultas($id_consulta);
         $ficha_medica = $this->ficha_medicaM->lista_ficha_medica_id($datos[0]['sa_fice_id']);
         $paciente = $this->pacientesM->obtener_informacion_pacienteM($ficha_medica[0]['sa_fice_pac_id']);
 
@@ -281,10 +281,14 @@ class consultasC
         $sa_conp_permiso_salida = $datos[0]['sa_conp_permiso_salida'];
 
         $sa_conp_fecha_permiso_salud_salida = $datos[0]['sa_conp_fecha_permiso_salud_salida'];
-        $sa_conp_fecha_permiso_salud_salida = $sa_conp_fecha_permiso_salud_salida->format('Y-m-d');
+        if ($sa_conp_fecha_permiso_salud_salida !== null) {
+            $sa_conp_fecha_permiso_salud_salida = $sa_conp_fecha_permiso_salud_salida->format('Y-m-d');
+        }
 
         $sa_conp_hora_permiso_salida = $datos[0]['sa_conp_hora_permiso_salida'];
-        $sa_conp_hora_permiso_salida = $sa_conp_hora_permiso_salida->format('H:i:s');
+        if ($sa_conp_hora_permiso_salida !== null) {
+            $sa_conp_hora_permiso_salida = $sa_conp_hora_permiso_salida->format('H:i:s');
+        }
 
         $sa_conp_permiso_tipo = $datos[0]['sa_conp_permiso_tipo'];
         $sa_conp_permiso_seguro_traslado = $datos[0]['sa_conp_permiso_seguro_traslado'];
