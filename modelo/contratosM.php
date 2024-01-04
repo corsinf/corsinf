@@ -116,6 +116,19 @@ class contratosM
 		return $datos;
 	}
 
+	function asignar_a_seguro($tabla,$campo,$query=false)
+	{
+		$sql = "SELECT * FROM ".$tabla." where  1=1 ";
+		if($query)
+		{
+			$sql.=" AND ".$campo." like '%".$query."%'";
+		}
+
+		// print_r($sql);die();
+		$datos = $this->db->datos($sql);
+		return $datos;
+	}
+
 	function lista_articulos_seguro($contrato=false,$query=false,$id_art=false)
 	{
 		$sql = "SELECT id_arti_asegurado as 'id',id_plantilla,COMPANYCODE,A.TAG_SERIE,P.DESCRIPT,DESCRIPT2,MODELO,SERIE,EMPLAZAMIENTO,L.DENOMINACION,PE.PERSON_NO,PE.PERSON_NOM,M.DESCRIPCION as 'marca',E.DESCRIPCION as 'estado',G.DESCRIPCION as 'genero',C.DESCRIPCION as 'color',FECHA_INV_DATE,ASSETSUPNO,ASSETSUPNO,TAG_ANT,QUANTITY,BASE_UOM,ORIG_ASSET,ORIG_ACQ_YR,ORIG_VALUE,CARACTERISTICA,PROYECTO.programa_financiacion as 'criterio',TAG_UNIQUE,SUBNUMBER,OBSERVACION,IMAGEN  
@@ -143,6 +156,21 @@ class contratosM
 				$sql.= ' AND id_articulo = '.$id_art;
 			}
 		$sql.=" ORDER BY id_plantilla DESC";
+		$datos = $this->db->datos($sql);
+		return $datos;
+	}
+
+	function lista_articulos_seguro2($tabla,$id,$modulo,$seguro=false)
+	{
+		$sql = "SELECT * 
+		FROM ARTICULOS_ASEGURADOS 
+		WHERE id_articulos = '".$id."' 
+		AND tabla = '".$tabla."' 
+		AND modulo='".$modulo."'";
+		if($seguro)
+		{
+			$sql.=" AND id_seguro='".$seguro."'";
+		}
 		$datos = $this->db->datos($sql);
 		return $datos;
 	}
@@ -227,6 +255,28 @@ class contratosM
 				$sql.=" AND id_deterioro = '".$id."' ";
 			}
 			$sql.=" ORDER BY id_deterioro DESC";
+		$datos = $this->db->datos($sql);
+		return $datos;
+	}
+
+	function tablas_aseguradas()
+	{
+		$sql= "SELECT DISTINCT tabla FROM ARTICULOS_ASEGURADOS ";
+		$datos = $this->db->datos($sql);
+		return $datos;
+	}
+	function lista_id_tabla($tabla,$contrato)
+	{
+		$sql= "SELECT id_articulos FROM ARTICULOS_ASEGURADOS 
+		WHERE tabla = '".$tabla."'
+		AND id_seguro = '".$contrato."'";
+		$datos = $this->db->datos($sql);
+		return $datos;
+	}
+	function itemAsegurado($tabla,$idtbl,$ids)
+	{
+		$sql="SELECT * FROM ".$tabla." WHERE ".$idtbl." in (".$ids.")";
+		// print_r($sql);
 		$datos = $this->db->datos($sql);
 		return $datos;
 	}

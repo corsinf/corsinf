@@ -781,5 +781,15 @@ function para_ftp($nombre,$texto)
 		  return $this->db->ejecutar_procesos_almacenados($sql,$parametros,false,1);
 	}
 
+	function id_tabla($tabla)
+	{
+		$sql2="SELECT COLUMN_NAME as 'ID'
+				FROM INFORMATION_SCHEMA.KEY_COLUMN_USAGE
+				WHERE OBJECTPROPERTY(OBJECT_ID(CONSTRAINT_NAME), 'IsPrimaryKey') = 1
+				AND TABLE_NAME = '".$tabla."'";
+		$datos2 = $this->db->datos($sql2);
+		return $datos2;
+	}
+
 }
 ?>

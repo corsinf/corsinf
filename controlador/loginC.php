@@ -54,6 +54,7 @@ if(isset($_GET['modulos_sistema']))
 if(isset($_GET['modulos_sistema_selected']))
 {
 	$_SESSION['INICIO']['MODULO_SISTEMA'] = $_POST['modulo_sistema'];
+	$_SESSION['INICIO']['MODULO_SISTEMA_NOMBRE'] = $controlador->nombre_modulo();
 	 echo json_encode(1);
 }
 if(isset($_GET['reseteo']))
@@ -224,6 +225,7 @@ class loginC
 					$_SESSION["INICIO"]['PASSWORD_DB'] = $empresa[0]['Password_db'];
 					$_SESSION["INICIO"]['PUERTO_DB'] = $empresa[0]['Puerto_db'];
 					$_SESSION["INICIO"]['TIPO_BASE'] = $empresa[0]['Tipo_base'];
+					$_SESSION["INICIO"]['LOGO'] = $empresa[0]['Logo'];
 			}
 
 			if($parametros['no_concurente']==0)
@@ -573,6 +575,12 @@ class loginC
 		 $db_destino = $datos[0]['Base_datos'];
 		 return $this->cod_global->generar_primera_vez($db_destino,$parametros['empresa']);
 		 
+	}
+
+	function nombre_modulo()
+	{
+		$datos = $this->login-> modulos_empresa_search($_SESSION['INICIO']['MODULO_SISTEMA']);
+		return $datos[0]['nombre_modulo'];
 	}
 
 }

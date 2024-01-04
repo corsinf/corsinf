@@ -235,10 +235,10 @@ if ($dominio != 'localhost') {
 		<div class="sidebar-wrapper" data-simplebar="true">
 			<div class="sidebar-header">
 				<div>
-					<img src="../img/de_sistema/puce_logo.png" class="logo-icon" alt="logo icon">
+					<img src="<?php echo $_SESSION['INICIO']['LOGO']; ?>" class="logo-icon" alt="logo icon">
 				</div>
 				<div>
-					<h4 class="logo-text">Activos fijos</h4>
+					<h4 class="logo-text"><?php echo $_SESSION['INICIO']['MODULO_SISTEMA_NOMBRE']; ?></h4>
 				</div>
 				<div class="toggle-icon ms-auto"><i class='bx bx-arrow-to-left'></i>
 				</div>

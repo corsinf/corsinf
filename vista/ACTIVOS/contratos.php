@@ -33,15 +33,15 @@
           obj.forEach(function(item,i){
             if(i==0)
             {
-              inputs+='<label><input type="radio" name="rbl_seguro_busqueda" checked >'+item.tabla+'</label>  ';
+              inputs+='<label><input type="radio" name="rbl_seguro_busqueda" value="'+item.tabla+'" checked ><b>'+item.tabla+'</b></label>  ';
             }else
             {
-              inputs+='<label><input type="radio" name="rbl_seguro_busqueda">'+item.tabla+'</label>  ';              
+              inputs+='<label><input type="radio" name="rbl_seguro_busqueda" value="'+item.tabla+'" ><b>'+item.tabla+'</b></label>  ';              
             }
           })
        }else
        {
-         inputs+='<input type="radio" name="" checked style="display:none">';
+         inputs+='<input type="radio" name="rbl_seguro_busqueda" value="ACTIVO" checked style="display:none">';
        }
 
        $('#pnl_asociacion_seguros').html(inputs);
@@ -110,11 +110,12 @@
 
    function lista_articulos()
    {
+      var tabla = $('input[name="rbl_seguro_busqueda"]:checked').val();
       $('#ddl_articulos').select2({
         placeholder: 'Seleccione Proveedor',
         width:'100%',
         ajax: {
-          url:   '../controlador/contratoC.php?lista_articulos=true',
+          url:   '../controlador/contratoC.php?lista_articulos=true&tabla='+tabla,
           dataType: 'json',
           delay: 250,
           processResults: function (data) {
@@ -406,6 +407,8 @@
   {
     var id = '<?php echo $id; ?>';
     var art = $('#ddl_articulos').val();
+    var mod = '<?php echo $_SESSION['INICIO']['MODULO_SISTEMA']; ?>';
+    var tabla = $('input[name="rbl_seguro_busqueda"]').val();
     if(id==''){
       Swal.fire('No se pudo agregar','Guarde primero los datos del contrato','info');
       return false;
@@ -420,6 +423,8 @@
       {
         'contrato':id,
         'articulo':art,
+        'modulo':mod,
+        'tabla':tabla,
       }
         $.ajax({
           data:  {parametros:parametros},
