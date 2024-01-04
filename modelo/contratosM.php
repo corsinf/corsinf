@@ -177,7 +177,8 @@ class contratosM
 
 	function Articulo_contrato_delete($id)
 	{
-		$sql = "DELETE FROM ARTICULOS_ASEGURADOS WHERE id_arti_asegurado='".$id."'";
+		$sql = "DELETE FROM ARTICULOS_ASEGURADOS WHERE id_arti_asegurados='".$id."'";
+		// print_r($sql);die();
 		return $this->db->sql_string($sql);
 	}
 
@@ -259,9 +260,24 @@ class contratosM
 		return $datos;
 	}
 
-	function tablas_aseguradas()
+	function tablas_aseguradas($tabla=false,$contrato=false,$idArticulo=false)
 	{
-		$sql= "SELECT DISTINCT tabla FROM ARTICULOS_ASEGURADOS ";
+		$sql= "SELECT * FROM ARTICULOS_ASEGURADOS 
+		WHERE  modulo = '".$_SESSION['INICIO']['MODULO_SISTEMA']."'";
+		if($tabla)
+		{
+			$sql.=" AND	tabla = '".$tabla."'";
+		}
+		if($contrato)
+		{
+			$sql.=" AND id_seguro = '".$contrato."'";
+		}
+		if($idArticulo)
+		{
+			$sql.=" AND id_articulos='".$idArticulo."'";
+		}
+
+		// print_r($sql);die();
 		$datos = $this->db->datos($sql);
 		return $datos;
 	}

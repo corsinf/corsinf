@@ -353,6 +353,7 @@ class contratoC
 			}
 		}else
 		{			
+			// print_r($parametros);die();
 			$exis = $this->modelo->lista_articulos_seguro2($parametros['tabla'],$parametros['articulo'],$parametros['modulo'],$parametros['contrato']);
 			if(count($exis)==0)
 			{							
@@ -398,9 +399,11 @@ class contratoC
 
     function lista_articulo_contrato($parametros)
     {
-    	$tablas_aseguradas = $this->modelo->tablas_aseguradas();
+      	$seguros_tabla = $_SESSION['INICIO']['ASIGNAR_SEGUROS'];
+		$tablas_aseguradas = json_decode($seguros_tabla, true);
+
     	$listado = array();
-    	$list_id='';
+    	$list_id='';    	
     	foreach ($tablas_aseguradas as $key => $value) {
     		$list_id = '';
     		$lista_ids = $this->modelo->lista_id_tabla($value['tabla'],$parametros['contrato']);
@@ -412,31 +415,24 @@ class contratoC
     		$datos = $this->modelo->itemAsegurado($value['tabla'],$id_tbl[0]['ID'],$list_id);
     		if(count($datos)>0)
     		{
-    			foreach ($datos as $key => $value) {
-    				array_push($listado, $value);
+    			$camp = $value['campo'];
+    			foreach ($datos as $key => $value3) {
+    				$asegu = $this->modelo->tablas_aseguradas($value['tabla'],$parametros['contrato'],$value3[$id_tbl[0]['ID']]);
+    				// print_r($asegu);die();
+    				$listado[] = array('id'=>$asegu[0]['id_arti_asegurados'],'campo'=>$id_tbl[0]['ID'],'nombre'=>$value3[$camp],'contrato'=>$parametros['contrato'],'tabla'=>$value['tabla'],'modulo'=>$_SESSION['INICIO']['MODULO_SISTEMA']);
     			}
     		}
     	}
-
     	//listar todos los demas 
-
     	// print_r($listado);die();
-
-    	$datos = $this->modelo->lista_articulos_seguro($parametros['contrato'],$query=false);
+    	// $datos = $this->modelo->lista_articulos_seguro($parametros['contrato'],$query=false);
     	$tr='';
-    	foreach ($datos as $key => $value) {
+    	foreach ($listado as $key => $value) {
     		$tr.='<tr>';
     			if($_SESSION['INICIO']['ELIMINAR']==1){
-	    		 $tr.='<td><button class="btn btn-sm btn-danger" onclick="eliminar_art(\''.$value['id'].'\')"><i class=" bx bx-trash"></i></button></td>';
+	    		 $tr.='<td><button class="btn btn-sm btn-danger me-0" onclick="eliminar_art(\''.$value['id'].'\')"><i class=" bx bx-trash me-0"></i></button></td>';
 	    		}
-	    		$tr.='<td>'.$value['DESCRIPT'].'</td>
-	    		<td>'.$value['TAG_SERIE'].'</td>
-	    		<td>'.$value['MODELO'].'</td>
-	    		<td>'.$value['SERIE'].'</td>
-	    		<td>'.$value['marca'].'</td>
-	    		<td>'.$value['estado'].'</td>
-	    		<td>'.$value['genero'].'</td>
-	    		<td>'.$value['color'].'</td>
+	    		$tr.='<td>'.$value['nombre'].'</td>
 	    		</tr>';
     	}
     	return $tr;

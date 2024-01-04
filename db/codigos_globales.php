@@ -787,6 +787,7 @@ function para_ftp($nombre,$texto)
 				FROM INFORMATION_SCHEMA.KEY_COLUMN_USAGE
 				WHERE OBJECTPROPERTY(OBJECT_ID(CONSTRAINT_NAME), 'IsPrimaryKey') = 1
 				AND TABLE_NAME = '".$tabla."'";
+				// print_r($sql2);die();
 		$datos2 = $this->db->datos($sql2);
 		return $datos2;
 	}

@@ -33,10 +33,10 @@
           obj.forEach(function(item,i){
             if(i==0)
             {
-              inputs+='<label><input type="radio" name="rbl_seguro_busqueda" value="'+item.tabla+'" checked ><b>'+item.tabla+'</b></label>  ';
+              inputs+='<label><input type="radio" name="rbl_seguro_busqueda" onclick="lista_articulos()" value="'+item.tabla+'" checked ><b>'+item.tabla+'</b></label>  ';
             }else
             {
-              inputs+='<label><input type="radio" name="rbl_seguro_busqueda" value="'+item.tabla+'" ><b>'+item.tabla+'</b></label>  ';              
+              inputs+='<label><input type="radio" name="rbl_seguro_busqueda" onclick="lista_articulos()" value="'+item.tabla+'" ><b>'+item.tabla+'</b></label>  ';              
             }
           })
        }else
@@ -187,11 +187,14 @@
              $('#tabla_').html(spiner);
           },*/
             success:  function (response) {
-              if(response!=-1)
+              if(response==1)
               {
                 Swal.fire('Contrato guardada','','success').then(function(){
                   location.href = 'inicio.php?acc=contratos&id='+response;
                 })
+              }else
+              {
+                Swal.fire('Algo sucedio','','error')
               }
           }
         });
@@ -408,7 +411,7 @@
     var id = '<?php echo $id; ?>';
     var art = $('#ddl_articulos').val();
     var mod = '<?php echo $_SESSION['INICIO']['MODULO_SISTEMA']; ?>';
-    var tabla = $('input[name="rbl_seguro_busqueda"]').val();
+    var tabla = $('input[name="rbl_seguro_busqueda"]:checked').val();
     if(id==''){
       Swal.fire('No se pudo agregar','Guarde primero los datos del contrato','info');
       return false;
@@ -657,14 +660,7 @@
                         <table class="table table-striped table-bordered dataTable">
                           <thead>
                             <th></th>
-                            <th>Producto</th>
-                            <th>Asset</th>
-                            <th>Modelo</th>
-                            <th>Serie</th>
-                            <th>Marca</th>
-                            <th>Estado</th>
-                            <th>Genero</th>
-                            <th>Color</th>
+                            <th>Item asegurado</th>
                           </thead>
                           <tbody id="tbl_art">
                             <tr>
