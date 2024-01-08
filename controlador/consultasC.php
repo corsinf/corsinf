@@ -55,7 +55,11 @@ if (isset($_GET['datos_consulta'])) {
 
 if (isset($_GET['pdf_consulta'])) {
 
+    //print_r($_POST);die();
     $id_consulta = '';
+    if (isset($_GET['id_consulta'])) {
+        $id_consulta = $_GET['id_consulta'];
+    }
 
     if (isset($_POST['id_consulta'])) {
         $id_consulta = $_POST['id_consulta'];

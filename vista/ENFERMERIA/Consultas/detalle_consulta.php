@@ -11,10 +11,18 @@ if (isset($_GET['id_consulta'])) {
 <script type="text/javascript">
     $(document).ready(function() {
         var id_consulta = '<?php echo $id_consulta; ?>';
+        ver_pdf();
         //alert(id_consulta);
 
-        pdf_consulta(id_consulta);
+        // pdf_consulta(id_consulta);
     });
+
+
+    function ver_pdf()
+    {
+        var id_consulta = '<?php echo $id_consulta; ?>';
+        $('#ifr_pdf_consulta').prop('src','../controlador/consultasC.php?pdf_consulta=true&id_consulta='+id_consulta);
+    }
 
     function pdf_consulta(id_consulta = '') {
 
@@ -139,7 +147,7 @@ if (isset($_GET['id_consulta'])) {
                                     <div class="col-xs-12 col-sm-12 col-md-12">
                                         <div class="panel">
                                             <div class="embed-responsive embed-responsive-4by3" style="margin-top: 30px">
-                                                <iframe class="embed-responsive-item" id="ifr_pdf_consulta" width="90%" height="1000" src="<?php echo $url_general ?>/controlador/consultasC.php?pdf_consulta=true">
+                                                <iframe class="embed-responsive-item" id="ifr_pdf_consulta" width="90%" height="1000" src="">
 
 
 

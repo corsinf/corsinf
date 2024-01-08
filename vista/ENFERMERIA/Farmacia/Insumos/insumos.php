@@ -1,12 +1,12 @@
 <script type="text/javascript">
     $(document).ready(function() {
-        $('#tabla_medicamentos').DataTable({
+        $('#tabla_insumos').DataTable({
             language: {
                 url: 'https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
             },
             responsive: true,
             ajax: {
-                url: '<?php echo $url_general ?>/controlador/medicamentosC.php?listar_todo=true',
+                url: '<?php echo $url_general ?>/controlador/insumosC.php?listar_todo=true',
                 dataSrc: ''
             },
             columns: [{
@@ -18,23 +18,20 @@
                 {
                     data: null,
                     render: function(data, type, item) {
-                        return '<a href="<?= $url_general ?>/vista/inicio.php?mod=7&acc=registrar_medicamentos&id=' + item.sa_cmed_id + '"><u>' + item.sa_cmed_presentacion + '</u></a>';
+                        return '<a href="<?= $url_general ?>/vista/inicio.php?mod=7&acc=registrar_insumos&id=' + item.sa_cins_id + '"><u>' + item.sa_cins_presentacion + '</u></a>';
                     }
                 },
                 {
-                    data: 'sa_cmed_concentracion'
+                    data: 'sa_cins_lote'
                 },
                 {
-                    data: 'sa_cmed_serie'
+                    data: 'sa_cins_minimos'
                 },
                 {
-                    data: 'sa_cmed_minimos'
+                    data: 'sa_cins_stock'
                 },
                 {
-                    data: 'sa_cmed_stock'
-                },
-                {
-                    data: 'sa_cmed_movimiento'
+                    data: 'sa_cins_movimiento'
                 },
             ]
         });
@@ -56,7 +53,7 @@
                     <ol class="breadcrumb mb-0 p-0">
                         <li class="breadcrumb-item"><a href="javascript:;"><i class="bx bx-home-alt"></i></a>
                         </li>
-                        <li class="breadcrumb-item active" aria-current="page">Medicamentos</li>
+                        <li class="breadcrumb-item active" aria-current="page">Insumos</li>
                     </ol>
                 </nav>
             </div>
@@ -70,7 +67,7 @@
                         <div class="card-title d-flex align-items-center">
                             <div><i class="bx bxs-user me-1 font-22 text-primary"></i>
                             </div>
-                            <h5 class="mb-0 text-primary">Medicamentos</h5>
+                            <h5 class="mb-0 text-primary">Insumos</h5>
                         </div>
                         <hr>
 
@@ -83,7 +80,7 @@
 
                                     <div class="row">
                                         <div class="col-sm-12" id="btn_nuevo">
-                                            <a href="<?= $url_general ?>/vista/inicio.php?mod=7&acc=registrar_medicamentos" class="btn btn-success btn-sm"><i class="bx bx-plus"></i> Nuevo</a>
+                                            <a href="<?= $url_general ?>/vista/inicio.php?mod=7&acc=registrar_insumos" class="btn btn-success btn-sm"><i class="bx bx-plus"></i> Nuevo</a>
                                         </div>
 
                                     </div>
@@ -91,13 +88,12 @@
                                     <br>
 
                                     <div class="table-responsive">
-                                        <table class="table table-striped responsive " id="tabla_medicamentos" style="width:100%">
+                                        <table class="table table-striped responsive " id="tabla_insumos" style="width:100%">
                                             <thead>
                                                 <tr>
                                                     <th>#</th>
-                                                    <th>Presentación</th>
                                                     <th>Concentración</th>
-                                                    <th>Serie</th>
+                                                    <th>Lote</th>
                                                     <th>Mínimos</th>
                                                     <th>Stock</th>
                                                     <th>Movimiento</th>
