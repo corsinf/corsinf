@@ -2,6 +2,7 @@
 
 <script type="text/javascript">
     $(document).ready(function() {
+
         var id = '<?php echo $_SESSION['INICIO']['ID_USUARIO']; ?>';
 
         var noconcurente_id = '<?php echo $_SESSION['INICIO']['NO_CONCURENTE']; ?>';
@@ -15,9 +16,9 @@
 
         //Esta consultando unos datos por defecto
         consultar_datos_estudiante_representante(noconcurente_id);
-
         //consultar_datos(6);
     });
+    var lista_estudiantes
 
     function cargarDatos(id) {
 
@@ -53,6 +54,8 @@
 
     function consultar_datos_estudiante_representante(id_representante = '') {
         var estudiantes = '';
+        var estudiantes2 = '  <option value="">-- Seleccione --</option>';
+        var ids = '';
         $.ajax({
             data: {
                 id_representante: id_representante,
@@ -110,12 +113,117 @@
                         '</div>' +
                         '</div>' +
                         '</div>';
+                    estudiantes2 += 
+                        '<option value="'+item.sa_est_id+'">' + item.sa_est_primer_apellido + ' ' + item.sa_est_segundo_apellido + ' ' + item.sa_est_primer_nombre + ' ' + item.sa_est_segundo_nombre + '</option>';
+
+                    ids+=item.sa_est_id+',';
                 });
 
                 $('#card_estudiantes').html(estudiantes);
 
+                $('#lista_estudiantes').html(estudiantes2);
+                $('#ids_est').val(ids);
+                lista_seguros();
+
             }
         });
+    }
+
+    function SaveNewSeguro()
+    {
+        var prov =  $('#txtSeguroProveedorNew').val();
+        var seguro = $('#txtSeguroNombreNew').val();
+        var estudiantes = $('#lista_estudiantes').val();
+
+        console.log(estudiantes);
+        console.log($('#rbl_todos').prop('checked'));
+        if(($('#rbl_todos').prop('checked')==false && estudiantes=='') || prov=='' || seguro =='')
+        {
+            Swal.fire('','Llene todo los campos','info')
+            return false;
+        }
+         var parametros = {
+            'Proveedor':prov,
+            'seguro': seguro,
+            'todos':$('#rbl_todos').prop('checked'),
+            'estudiantes':estudiantes,
+            'ids':$('#ids_est').val(),
+        }
+        $.ajax({
+            data: {
+                parametros: parametros
+            },
+            url: '../controlador/estudiantesC.php?SaveSeguros=true',
+            type: 'post',
+            dataType: 'json',
+
+            success: function(response) {
+
+                if(response==1)
+                {
+                    Swal.fire('','Agregado','success');
+                    lista_seguros();
+                }else if(response==-2)
+                {
+                    Swal.fire("","Estudiante ya esta registrado con este seguro","info")
+                }               
+            }
+        });
+    }
+
+
+    function lista_seguros()
+    {
+        
+         var parametros = {
+            'estudiantes':$('#ids_est').val(),
+        }
+        $.ajax({
+            data: {
+                parametros: parametros
+            },
+            url: '../controlador/estudiantesC.php?ListaSeguros=true',
+            type: 'post',
+            dataType: 'json',
+
+            success: function(response) {
+                $('#tbl_body').html(response)
+
+               console.log(response)   
+            }
+        });
+    }
+
+    function eliminar_seguro(id)
+    {
+        Swal.fire({
+          title: 'Eliminar Registro?',
+          text: "Esta seguro de eliminar este registro?",
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Si'
+        }).then((result) => {
+          if (result.value) {
+
+             $.ajax({
+                data: {
+                    id: id
+                },
+                url: '../controlador/estudiantesC.php?EliminarSeguros=true',
+                type: 'post',
+                dataType: 'json',
+
+                success: function(response) {
+                    if(response==1)
+                    {
+                        lista_seguros();
+                    }
+                }
+            });  
+          }
+        })
     }
 </script>
 
@@ -165,6 +273,15 @@
                                     </div>
                                 </a>
                             </li>
+                            <li class="nav-item" role="presentation">
+                                <a class="nav-link" data-bs-toggle="tab" href="#seguros" role="tab" aria-selected="false">
+                                    <div class="d-flex align-items-center">
+                                        <div class="tab-icon"><i class='bx bx-user-pin font-18 me-1'></i>
+                                        </div>
+                                        <div class="tab-title">Seguros</div>
+                                    </div>
+                                </a>
+                            </li>
                         </ul>
                         <div class="tab-content py-3">
                             <div class="tab-pane fade show active" id="inicio" role="tabpanel">
@@ -211,21 +328,7 @@
                                     </div>
 
                                     <hr>
-                                    <form action="<?php echo $url_general ?>/controlador/ficha_MedicaC.php?administrar_comunidad_ficha_medica=true" method="post">
-                                        <input type="text" name="sa_pac_id_comunidad" id="">
-                                        <select name="sa_pac_tabla" id="">
-                                            <option value="estudiantes">estudiantes</option>
-                                            <option value="docentes">docentes</option>
-                                            <option value="representantes">representantes</option>
-                                            <option value="administrativos">administrativos</option>
-                                            <option value="comunidad">comunidad</option>
-                                        </select>
-                                        <input type="submit" value="Enviar">
-                                    </form>
-
-
-
-
+                                   
                                 </div>
                             </div>
                             <div class="tab-pane fade" id="estudiantes" role="tabpanel">
@@ -244,6 +347,66 @@
                                 <div class="row row-cols-1 row-cols-lg-2 row-cols-xl-3" id="card_estudiantes">
 
                                 </div>
+                            </div>
+
+                            <div class="tab-pane fade" id="seguros" role="tabpanel">
+                                <div class="row">
+                                    
+                                    <div class="col-sm-8">
+                                         <div class="row">
+                                            <div class="col-sm-12">
+                                                <b>Nombre de Proveedor</b>
+                                                <input type="text" name="" id="txtSeguroProveedorNew" class="form-control form-control-sm">
+                                            </div>
+                                            <div class="col-sm-12">
+                                                <b>Nombre de seguro</b>
+                                                <input type="text" name="" id="txtSeguroNombreNew" class="form-control form-control-sm">
+                                            </div>
+                                            <div class="col-sm-12">
+                                                <b>Aplicar a:</b>
+                                                <div class="input-group text-center">
+                                                    <div class="input-group-text">
+                                                         <label>        
+                                                        <input class="form-check-input" type="checkbox" id="rbl_todos"> Todos</label>    
+                                                        <input class="" type="hidden" id="ids_est">
+                                                    </div>
+                                                     
+                                                    <select class="form-select form-select-sm" id="lista_estudiantes" name="lista_estudiantes">
+                                                        <option value="">-- Seleccione --</option>
+                                                    </select>
+                                                    <span>
+                                                       
+                                                    </span>   
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <br>
+                                        <button type="button" class="btn btn-primary btn-sm" onclick="SaveNewSeguro()"><i class="bx bx-save me-0"></i> Guardar</button>
+                                    </div>
+                                    <div class="col-sm-12">
+                                        <div class="table-responsive">
+                                            <table class="table">
+                                                <thead>
+                                                    <th></th>
+                                                    <th>Proveedor</th>
+                                                    <th>Nombre del seguro</th>
+                                                    <th>Estudiante</th>
+                                                </thead>
+                                                <tbody id="tbl_body">
+                                                    <tr>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>                                        
+                                    </div>
+                                </div>
+
                             </div>
                         </div>
                     </div>

@@ -1,5 +1,6 @@
 <?php
 include('../modelo/ficha_MedicaM.php');
+include('../modelo/contratosM.php');
 
 $controlador = new ficha_MedicaC();
 
@@ -42,7 +43,8 @@ if (isset($_GET['administrar_comunidad_ficha_medica'])) {
 }
 
 if (isset($_GET['lista_seguros'])) {
-    echo json_encode($controlador->lista_seguros());
+    $parametros = $_POST['parametros'];
+    echo json_encode($controlador->lista_seguros($parametros));
 }
 
 //print_r($controlador->lista_ficha_medica(''));
@@ -61,10 +63,12 @@ print_r($modelo->buscar_ficha_medica_CODIGO(1));*/
 class ficha_MedicaC
 {
     private $modelo;
+    private $seguros;
 
     function __construct()
     {
         $this->modelo = new ficha_MedicaM();
+        $this->seguros = new contratosM();
     }
 
     function lista_ficha_medica($id)
@@ -79,9 +83,12 @@ class ficha_MedicaC
         return $datos;
     }
 
-    function lista_seguros()
+    function lista_seguros($parametros)
     {
-        $datos = $this->modelo->lista_seguros();
+        // print_r($parametros);die();
+        $datos = $this->seguros->lista_articulos_seguro_detalle($parametros['tabla'],$parametros['id'],$_SESSION['INICIO']['MODULO_SISTEMA'],false);
+
+        // print_r($datos);die();
         return $datos;
         
     }

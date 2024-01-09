@@ -404,23 +404,30 @@ class contratoC
 
     	$listado = array();
     	$list_id='';    	
+
+    	// print_r($tablas_aseguradas);die();
     	foreach ($tablas_aseguradas as $key => $value) {
     		$list_id = '';
     		$lista_ids = $this->modelo->lista_id_tabla($value['tabla'],$parametros['contrato']);
-    		foreach ($lista_ids as $key => $value2) {
-    			$list_id.="'".$value2['id_articulos']."',";
-    		}
-    		$list_id = substr($list_id, 0,-1);
-    		$id_tbl = $this->cod_global->id_tabla($value['tabla']);
-    		$datos = $this->modelo->itemAsegurado($value['tabla'],$id_tbl[0]['ID'],$list_id);
-    		if(count($datos)>0)
+    		if(count($lista_ids)>0)
     		{
-    			$camp = $value['campo'];
-    			foreach ($datos as $key => $value3) {
-    				$asegu = $this->modelo->tablas_aseguradas($value['tabla'],$parametros['contrato'],$value3[$id_tbl[0]['ID']]);
-    				// print_r($asegu);die();
-    				$listado[] = array('id'=>$asegu[0]['id_arti_asegurados'],'campo'=>$id_tbl[0]['ID'],'nombre'=>$value3[$camp],'contrato'=>$parametros['contrato'],'tabla'=>$value['tabla'],'modulo'=>$_SESSION['INICIO']['MODULO_SISTEMA']);
-    			}
+	    		// print_r($lista_ids);
+	    		foreach ($lista_ids as $key => $value2) {
+	    			$list_id.="'".$value2['id_articulos']."',";
+	    		}
+	    		$list_id = substr($list_id, 0,-1);
+	    		$id_tbl = $this->cod_global->id_tabla($value['tabla']);   
+	    		$datos = $this->modelo->itemAsegurado($value['tabla'],$id_tbl[0]['ID'],$list_id);
+
+	    		if(count($datos)>0)
+	    		{
+	    			$camp = $value['campo'];
+	    			foreach ($datos as $key => $value3) {
+	    				$asegu = $this->modelo->tablas_aseguradas($value['tabla'],$parametros['contrato'],$value3[$id_tbl[0]['ID']]);
+	    				// print_r($asegu);die();
+	    				$listado[] = array('id'=>$asegu[0]['id_arti_asegurados'],'campo'=>$id_tbl[0]['ID'],'nombre'=>$value3[$camp],'contrato'=>$parametros['contrato'],'tabla'=>$value['tabla'],'modulo'=>$_SESSION['INICIO']['MODULO_SISTEMA']);
+	    			}
+	    		}
     		}
     	}
     	//listar todos los demas 

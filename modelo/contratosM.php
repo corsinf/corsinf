@@ -1,5 +1,8 @@
 <?php
-include('../db/db.php');
+if(!class_exists('db'))
+{
+	include('../db/db.php');
+}
 
 /**
  * 
@@ -67,9 +70,9 @@ class contratosM
 		$datos = $this->db->datos($sql);
 		return $datos;
 	}
-	function buscar_seguro($id=false,$prove=false,$desde=false,$hasta=false,$prima=false,$suma_asegurada=False)
+	function buscar_seguro($id=false,$prove=false,$desde=false,$hasta=false,$prima=false,$suma_asegurada=False,$plan=false,$terceros=null)
 	{
-		$sql="SELECT * FROM seguros WHERE 1=1";
+		$sql="SELECT * FROM seguros WHERE 1=1 AND terceros = ".$terceros;
 		if($id)
 		{
 			$sql.=" AND id_contratos =".$id;
@@ -89,6 +92,10 @@ class contratosM
 		if($suma_asegurada)
 		{
 			$sql.=" AND  suma_asegurada = '".$suma_asegurada."'";
+		}
+		if($plan)
+		{
+			$sql.=" AND Plan_seguro='".$plan."' ";
 		}
 		// print_r($sql);die();
 		$datos = $this->db->datos($sql);
@@ -171,6 +178,27 @@ class contratosM
 		{
 			$sql.=" AND id_seguro='".$seguro."'";
 		}
+		$datos = $this->db->datos($sql);
+		return $datos;
+	}
+
+	function lista_articulos_seguro_detalle($tabla,$id,$modulo,$seguro=false)
+	{
+		$sql = "SELECT * 
+		FROM ARTICULOS_ASEGURADOS ARS
+		INNER JOIN SEGUROS S ON ARS.id_seguro = S.id_contratos 
+		INNER JOIN PROVEEDOR P ON P.id_proveedor = S.proveedor 
+		INNER JOIN estudiantes E ON ARS.id_articulos = E.sa_est_id 
+		WHERE id_articulos = '".$id."' 
+		AND tabla = '".$tabla."' 
+		AND modulo='".$modulo."'";
+		if($seguro)
+		{
+			$sql.=" AND id_seguro='".$seguro."'";
+		}
+
+		$sql.=" ORDER BY terceros ASC";
+		// print_r($sql);die();
 		$datos = $this->db->datos($sql);
 		return $datos;
 	}
@@ -287,6 +315,8 @@ class contratosM
 		WHERE tabla = '".$tabla."'
 		AND id_seguro = '".$contrato."'";
 		$datos = $this->db->datos($sql);
+
+		// print_r($sql);
 		return $datos;
 	}
 	function itemAsegurado($tabla,$idtbl,$ids)
