@@ -111,6 +111,9 @@ class consultasM
                             sa_conp_tratamiento,
 
                             sa_conp_tipo_consulta,
+                            sa_conp_enfermedad_actual,
+                            sa_conp_saturacion,
+
                             sa_conp_estado,
                             sa_conp_estado_revision,
                             sa_conp_fecha_creacion,

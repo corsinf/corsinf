@@ -480,6 +480,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         var sa_conp_tipo_consulta = '<?= $tipo_consulta; ?>';
 
+        var sa_conp_enfermedad_actual = $('#sa_conp_enfermedad_actual').val();
+        var sa_conp_saturacion = $('#sa_conp_saturacion').val();
+        
         var sa_conp_estado_revision = revision;
 
 
@@ -540,7 +543,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'sa_conp_tratamiento': sa_conp_tratamiento,
 
             'sa_conp_tipo_consulta': sa_conp_tipo_consulta,
-
+            'sa_conp_enfermedad_actual': sa_conp_enfermedad_actual,
+            'sa_conp_saturacion': sa_conp_saturacion,
+            
             'sa_conp_estado_revision': sa_conp_estado_revision,
         };
 
@@ -939,15 +944,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                         </div>
                                                     </div>
 
-
-                                                    <div class="row pt-3">
-                                                        <div class="col-md-3">
+                                                    <div class="row pt-4">
+                                                        <div class="col-md-2">
                                                             <label for="" class="form-label">Temperatura: <label style="color: red;">*</label> </label>
                                                             <input type="number" class="form-control form-control-sm" id="sa_conp_temperatura" name="sa_conp_temperatura">
                                                         </div>
-                                                        <div class="col-md-3">
+                                                        <div class="col-md-2">
                                                             <label for="" class="form-label">Presión Arterial: <label style="color: red;">*</label> </label>
                                                             <input type="number" class="form-control form-control-sm" id="sa_conp_presion_ar" name="sa_conp_presion_ar">
+                                                        </div>
+                                                        <div class="col-md-2">
+                                                            <label for="" class="form-label">Saturación: <label style="color: red;">*</label> </label>
+                                                            <input type="number" class="form-control form-control-sm" id="sa_conp_saturacion" name="sa_conp_saturacion">
                                                         </div>
                                                         <div class="col-md-3">
                                                             <label for="" class="form-label">Frecuencia Cardiáca: <label style="color: red;">*</label> </label>
@@ -963,6 +971,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                         <div class="col-md-12">
                                                             <label for="" class="form-label">Motivo de la consulta: <label style="color: red;">*</label> </label>
                                                             <textarea name="sa_conp_motivo_consulta" id="sa_conp_motivo_consulta" cols="30" rows="2" class="form-control" placeholder="Motivo de la consulta"></textarea>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="row pt-3">
+                                                        <div class="col-md-12">
+                                                            <label for="" class="form-label">Enfermedad Actual: <label style="color: red;">*</label> </label>
+                                                            <textarea name="sa_conp_enfermedad_actual" id="sa_conp_enfermedad_actual" cols="30" rows="2" class="form-control" placeholder="Enfermedad Actual"></textarea>
                                                         </div>
                                                     </div>
 

@@ -170,6 +170,9 @@ class consultasC
             array('campo' => 'sa_conp_notificacion_envio_guardia', 'dato' => $parametros['sa_conp_notificacion_envio_guardia']),
             array('campo' => 'sa_id_guardia', 'dato' => $parametros['sa_id_guardia']),
             array('campo' => 'sa_conp_tipo_consulta', 'dato' => $parametros['sa_conp_tipo_consulta']),
+            array('campo' => 'sa_conp_enfermedad_actual', 'dato' => $parametros['sa_conp_enfermedad_actual']),
+            array('campo' => 'sa_conp_saturacion', 'dato' => $parametros['sa_conp_saturacion']), 
+
             array('campo' => 'sa_conp_observaciones', 'dato' => $parametros['sa_conp_observaciones']),
             array('campo' => 'sa_conp_motivo_consulta', 'dato' => $parametros['sa_conp_motivo_consulta']),
             array('campo' => 'sa_conp_tratamiento', 'dato' => $parametros['sa_conp_tratamiento']),
