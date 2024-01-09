@@ -388,6 +388,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $('#sa_conp_motivo_consulta').val(response[0].sa_conp_motivo_consulta);
                 $('#sa_conp_tratamiento').val(response[0].sa_conp_tratamiento);
 
+                $('#sa_conp_enfermedad_actual').val(response[0].sa_conp_enfermedad_actual);
+                $('#sa_conp_saturacion').val(response[0].sa_conp_saturacion);
+
+
                 /*$('#sa_conp_tipo_consulta').val(response[0].sa_conp_tipo_consulta);
                 $('#sa_conp_estado_revision').val(response[0].sa_conp_estado_revision);
                 $('#sa_conp_fecha_creacion').val(response[0].sa_conp_fecha_creacion);

@@ -26,6 +26,10 @@ if (isset($_GET['insertar'])) {
     echo json_encode($controlador->insertar_editar($_POST['parametros']));
 }
 
+if (isset($_GET['observacion'])) {
+    echo json_encode($controlador->observaciones_consulta($_POST['parametros']));
+}
+
 if (isset($_GET['eliminar'])) {
     echo json_encode($controlador->eliminar($_POST['id']));
 }
@@ -171,7 +175,7 @@ class consultasC
             array('campo' => 'sa_id_guardia', 'dato' => $parametros['sa_id_guardia']),
             array('campo' => 'sa_conp_tipo_consulta', 'dato' => $parametros['sa_conp_tipo_consulta']),
             array('campo' => 'sa_conp_enfermedad_actual', 'dato' => $parametros['sa_conp_enfermedad_actual']),
-            array('campo' => 'sa_conp_saturacion', 'dato' => $parametros['sa_conp_saturacion']), 
+            array('campo' => 'sa_conp_saturacion', 'dato' => $parametros['sa_conp_saturacion']),
 
             array('campo' => 'sa_conp_observaciones', 'dato' => $parametros['sa_conp_observaciones']),
             array('campo' => 'sa_conp_motivo_consulta', 'dato' => $parametros['sa_conp_motivo_consulta']),
@@ -218,6 +222,22 @@ class consultasC
         $datos = $this->modelo->editar($datos, $where);*/
 
         //$datos = $this->modelo->insertar($datos);
+
+        return $datos;
+    }
+
+    function observaciones_consulta($parametros)
+    {
+
+        $datos = array(
+            array('campo' => 'sa_conp_observaciones', 'dato' => $parametros['sa_conp_observaciones']),
+        );
+
+        $where[0]['campo'] = 'sa_conp_id';
+        $where[0]['dato'] = $parametros['sa_conp_id'];
+        //$datos[] = array('campo' => 'sa_conp_estado', 'dato' => 1);
+        $datos = $this->modelo->editar($datos, $where);
+
 
         return $datos;
     }
