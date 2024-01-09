@@ -40,7 +40,78 @@
                 },
             ]
         });
+
+        consultar_datos_comunidad_tabla();
+        consultar_tablas_datos('');
     });
+
+    function consultar_tablas_datos(valor_seleccionar) {
+
+        var valor_seleccionar = valor_seleccionar.split('-');
+        var sa_tbl_pac_tabla = valor_seleccionar[0];
+        var sa_tbl_pac_prefijo = valor_seleccionar[1];
+
+        //alert(sa_tbl_pac_prefijo);
+
+        $('#sa_pac_id_comunidad').select2({
+            placeholder: 'Selecciona una opción',
+            dropdownParent: $('#modal_pacientes'),
+            language: 'es',
+            minimumInputLength: 3,
+            ajax: {
+                url: '<?php echo $url_general ?>/controlador/' + sa_tbl_pac_tabla + 'C.php?listar_todo=true',
+                dataType: 'json',
+                delay: 250,
+                data: function(params) {
+                    return {
+                        searchTerm: params.term // Envía el término de búsqueda al servidor
+                    };
+                },
+                processResults: function(data, params) { // Agrega 'params' como parámetro
+                    var searchTerm = params.term.toLowerCase();
+
+                    var options = data.reduce(function(filtered, item) {
+
+                        var fullName = item['' + sa_tbl_pac_prefijo + '_cedula'] + " - " + item['' + sa_tbl_pac_prefijo + '_primer_apellido'] + " " + item['' + sa_tbl_pac_prefijo + '_segundo_apellido'] + " " + item['' + sa_tbl_pac_prefijo + '_primer_nombre'] + " " + item['' + sa_tbl_pac_prefijo + '_segundo_nombre'];
+
+                        if (fullName.toLowerCase().includes(searchTerm)) {
+                            filtered.push({
+                                id: item['' + sa_tbl_pac_prefijo + '_id'],
+                                text: fullName
+                            });
+                        }
+
+                        return filtered;
+                    }, []);
+
+                    return {
+                        results: options
+                    };
+                },
+                cache: true
+            }
+        });
+    }
+
+
+
+    function consultar_datos_comunidad_tabla() {
+        var salida = '<option value="">Seleccione el Tipo de Paciente</option>';
+
+        $.ajax({
+            url: '<?php echo $url_general ?>/controlador/Comunidad_TablasC.php?listar=true',
+            type: 'post',
+            dataType: 'json',
+            success: function(response) {
+                $.each(response, function(i, item) {
+                    // Concatenar dos variables en el valor del atributo "value"
+                    salida += '<option value="' + item.sa_tbl_pac_nombre + '-' + item.sa_tbl_pac_prefijo + '">' + item.sa_tbl_pac_nombre.toUpperCase() + '</option>';
+                });
+
+                $('#sa_pac_tabla').html(salida);
+            }
+        });
+    }
 </script>
 
 <form id="form_enviar" action="<?= $url_general ?>/vista/inicio.php?mod=7&acc=ficha_medica_pacientes" method="post" style="display: none;">
@@ -81,7 +152,9 @@
 
                             <div class="row mx-1">
                                 <div class="col-sm-12" id="btn_nuevo">
-                                    <a href="<?= $url_general ?>/vista/inicio.php?mod=7&acc=registrar_pacientes" class="btn btn-success btn-sm"><i class="bx bx-plus"></i> Nuevo</a>
+
+                                    <button type="button" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#modal_pacientes"><i class="bx bx-plus"></i> Nuevo</button>
+
                                 </div>
                             </div>
                         </div>
@@ -114,5 +187,54 @@
             </div>
         </div>
         <!--end row-->
+    </div>
+</div>
+
+
+
+<div class="modal" id="modal_pacientes" abindex="-1" aria-modal="true" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <!-- Modal body -->
+            <div class="modal-body">
+
+                <form action="<?php echo $url_general ?>/controlador/ficha_MedicaC.php?administrar_comunidad_ficha_medica=true" method="post">
+                    <div class="row">
+                        <div class="col-12">
+                            <label for="sa_pac_tabla">Tipo de Paciente: <label class="text-danger">*</label></label>
+                            <select name="sa_pac_tabla" id="sa_pac_tabla" class="form-select" onclick="consultar_tablas_datos(this.value)">
+                                <option value="">Seleccione el Tipo de Paciente</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="row pt-3">
+                        <div class="col-12">
+                            <label for="sa_pac_id_comunidad">Paciente: <label class="text-danger">*</label></label>
+                            <select name="sa_pac_id_comunidad" id="sa_pac_id_comunidad" class="form-select">
+                                <option value="">Seleccione el Paciente</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="row pt-3">
+                        <div class="col-12 text-end">
+                            <button type="submit" class="btn btn-success btn-sm"><i class="bx bx-save"></i> Agregar</button>
+
+                        </div>
+                    </div>
+
+                </form>
+
+
+
+            </div>
+        </div>
     </div>
 </div>

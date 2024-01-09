@@ -51,7 +51,7 @@ class ficha_MedicaM
         return $datos;
     }
 
-    //Solo para el id
+    //Solo para el id del paciente
     function lista_paciente_ficha_medica($id_paciente = '')
     {
         if ($id_paciente) {
@@ -112,63 +112,62 @@ class ficha_MedicaM
         return $datos;
     }
 
-    function lista_ficha_medica_todo($id = '')
+    //Solo para el id
+    function lista_ficha_medica_id($id_ficha = '')
     {
-        $sql = "SELECT
-        sa_fice_id,
-        sa_fice_est_id,
-        sa_fice_est_primer_apellido,
-        sa_fice_est_segundo_apellido,
-        sa_fice_est_primer_nombre,
-        sa_fice_est_segundo_nombre,
-        sa_fice_est_fecha_nacimiento,
-        sa_fice_est_grupo_sangre,
-        sa_fice_est_direccion_domicilio,
-        sa_fice_est_seguro_medico,
-        sa_fice_est_nombre_seguro,
+        if ($id_ficha) {
+            $sql = "SELECT
+                        sa_fice_id,
+                        sa_fice_pac_id,
+                        sa_fice_pac_fecha_nacimiento,
+                        sa_fice_pac_grupo_sangre,
+                        sa_fice_pac_direccion_domicilio,
+                        sa_fice_pac_seguro_medico,
+                        sa_fice_pac_seguro_medico,
+                    
+                        sa_fice_rep_1_primer_apellido,
+                        sa_fice_rep_1_segundo_apellido,
+                        sa_fice_rep_1_primer_nombre,
+                        sa_fice_rep_1_segundo_nombre,
+                        sa_fice_rep_1_parentesco,
+                        sa_fice_rep_1_telefono_1,
+                        sa_fice_rep_1_telefono_2,
+                    
+                        sa_fice_rep_2_primer_apellido,
+                        sa_fice_rep_2_segundo_apellido,
+                        sa_fice_rep_2_primer_nombre,
+                        sa_fice_rep_2_segundo_nombre,
+                        sa_fice_rep_2_parentesco,
+                        sa_fice_rep_2_telefono_1,
+                        sa_fice_rep_2_telefono_2,
+                    
+                        sa_fice_pregunta_1,
+                        sa_fice_pregunta_1_obs,
+                    
+                        sa_fice_pregunta_2,
+                        sa_fice_pregunta_2_obs,
+                    
+                        sa_fice_pregunta_3,
+                        sa_fice_pregunta_3_obs,
+                    
+                        sa_fice_pregunta_4,
+                        sa_fice_pregunta_4_obs,
+                        
+                        sa_fice_pregunta_5_obs,
+                        
+                        sa_fice_estado,
+                        sa_fice_fecha_creacion,
+                        sa_fice_fecha_modificacion,
+                        sa_fice_estado_realizado
     
-        sa_fice_rep_1_id,
-        sa_fice_rep_1_primer_apellido,
-        sa_fice_rep_1_segundo_apellido,
-        sa_fice_rep_1_primer_nombre,
-        sa_fice_rep_1_segundo_nombre,
-        sa_fice_rep_1_parentesco,
-        sa_fice_rep_1_telefono_1,
-        sa_fice_rep_1_telefono_2,
-    
-        sa_fice_rep_2_primer_apellido,
-        sa_fice_rep_2_segundo_apellido,
-        sa_fice_rep_2_primer_nombre,
-        sa_fice_rep_2_segundo_nombre,
-        sa_fice_rep_2_parentesco,
-        sa_fice_rep_2_telefono_1,
-        sa_fice_rep_2_telefono_2,
-    
-        sa_fice_pregunta_1,
-        sa_fice_pregunta_1_obs,
-    
-        sa_fice_pregunta_2,
-        sa_fice_pregunta_2_obs,
-    
-        sa_fice_pregunta_3,
-        sa_fice_pregunta_3_obs,
-    
-        sa_fice_pregunta_4,
-        sa_fice_pregunta_4_obs,
-        
-        sa_fice_pregunta_5_obs,
-        
-        sa_fice_fecha_creacion,
-        sa_fice_fecha_modificar
-        
-        FROM ficha_medica
-        WHERE sa_fice_estado = 1";
+                        FROM ficha_medica
+                        WHERE sa_fice_estado = 1";
 
-        if ($id) {
-            $sql .= ' and sa_fice_est_id = ' . $id;
+            $sql .= ' AND sa_fice_id = ' . $id_ficha;
+            $sql .= " ORDER BY sa_fice_id";
         }
 
-        $sql .= " ORDER BY sa_fice_est_id";
+
         $datos = $this->db->datos($sql);
         return $datos;
     }
@@ -314,16 +313,12 @@ class ficha_MedicaM
         return $data;
     }
 
-    function lista_seguros($query=false)
+    function lista_seguros($query = false)
     {
         $sql = "SELECT * FROM SEGUROS WHERE 1=1";
-        if($query)
-        {
-            $sql.=" AND Plan_seguro like '%".$query."%'";
-            
+        if ($query) {
+            $sql .= " AND Plan_seguro like '%" . $query . "%'";
         }
         return $this->db->datos($sql);
     }
-
-    
 }

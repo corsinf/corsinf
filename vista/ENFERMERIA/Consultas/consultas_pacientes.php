@@ -37,7 +37,7 @@ if (isset($_GET['pac_id'])) {
       type: 'post',
       dataType: 'json',
       success: function(response) {
-        console.log(response);
+        //console.log(response);
         ///  Para la tabla de inicio /////////////////////////////////////////////////////////////////////////////////////////////////////////
         $('#txt_ci').html(response[0].sa_pac_temp_cedula + " <i class='bx bxs-id-card'></i>");
         nombres = response[0].sa_pac_temp_primer_nombre + ' ' + response[0].sa_pac_temp_segundo_nombre;
@@ -78,7 +78,7 @@ if (isset($_GET['pac_id'])) {
       dataType: 'json',
       success: function(response) {
         //Primer ajax
-        console.log(response.sa_fice_id);
+        //console.log(response.sa_fice_id);
 
         $('input[name="id_ficha"]').val(response.sa_fice_id);
 
@@ -90,9 +90,8 @@ if (isset($_GET['pac_id'])) {
           type: 'post',
           dataType: 'json',
           success: function(responseConsultas) {
-            console.log(responseConsultas);
-            console.log(responseConsultas[0]['sa_conp_fecha_ingreso']);
-
+            //console.log(responseConsultas);
+            //console.log(responseConsultas[0]['sa_conp_fecha_ingreso']);
 
             //Segundo ajax
             $('#tbl_consultas').DataTable({
@@ -107,7 +106,21 @@ if (isset($_GET['pac_id'])) {
                 {
                   data: null,
                   render: function(data, type, item) {
-                    return '<div class="text-center"><a href="<?= $url_general ?>/vista/inicio.php?mod=7&acc=registrar_consulta_paciente&id_consulta=' + item.sa_conp_id + '&tipo_consulta=' + item.sa_conp_tipo_consulta + '&id_ficha=' + item.sa_fice_id + '&id_paciente=' + item.sa_pac_id + '" class="btn btn-primary btn-sm " title="Detalles de la Consulta"><i class="bx bx-spreadsheet me-0"></i></a></div>';
+
+                    botones = '';
+                    botones += '<div class="d-inline">';
+
+                      botones += '<button type="button" class="btn btn-primary btn-sm m-1" title="Detalles de la Consulta" onclick="ver_pdf('+ item.sa_conp_id+')"> <i class="bx bx-spreadsheet me-0"></i></button>';
+
+                    if (item.sa_conp_estado_revision == 0 || item.sa_conp_estado_revision == 2) {
+                      botones += '<a href="<?= $url_general ?>/vista/inicio.php?mod=7&acc=registrar_consulta_paciente&id_consulta=' + item.sa_conp_id + '&tipo_consulta=' + item.sa_conp_tipo_consulta + '&id_ficha=' + item.sa_fice_id + '&id_paciente=' + item.sa_pac_id + '" class="btn btn-warning btn-sm m-0" title="Detalles de la Consulta"><i class="bx bx-edit me-0" ></i></a>';
+                    }
+
+                    botones += '</div>';
+
+                    return botones;
+
+
                   }
                 },
                 {
@@ -127,7 +140,7 @@ if (isset($_GET['pac_id'])) {
                     if (item.sa_conp_desde_hora.date == null || item.sa_conp_hasta_hora.date == null) {
                       return '';
                     } else {
-                      return fecha_nacimiento_formateada(item.sa_conp_fecha_ingreso.date) + ' / [' + obtener_hora_formateada(item.sa_conp_desde_hora.date) + ' / ' + obtener_hora_formateada(item.sa_conp_hasta_hora.date)+ ']';
+                      return fecha_nacimiento_formateada(item.sa_conp_fecha_ingreso.date) + ' / ' + obtener_hora_formateada(item.sa_conp_desde_hora.date) + ' / ' + obtener_hora_formateada(item.sa_conp_hasta_hora.date);
                     }
                   }
                 },
@@ -166,6 +179,13 @@ if (isset($_GET['pac_id'])) {
         });
       }
     });
+  }
+
+
+  function ver_pdf(id)
+  {
+    console.log(id);
+    window.open('../vista/inicio.php?mod=7&acc=detalle_consulta&pdf_consulta=true&id_consulta='+id, '_blank');
   }
 </script>
 
@@ -227,7 +247,7 @@ if (isset($_GET['pac_id'])) {
                             <input type="hidden" name="id_paciente" id="id_paciente">
                             <input type="hidden" name="tipo_consulta" id="tipo_consulta" value="consulta">
 
-                            <button type="submit" class="btn btn-primary btn-lg m-4"><i class='bx bx-file-blank'></i> Consulta&nbsp;&nbsp;&nbsp;</button>
+                            <button type="submit" class="btn btn-primary btn-lg m-4"><i class='bx bx-file-blank'></i> Consulta</button>
                           </form>
                         </div>
                       </div>
@@ -259,7 +279,7 @@ if (isset($_GET['pac_id'])) {
                       <table class="table table-striped responsive" id="tbl_consultas" style="width:100%">
                         <thead>
                           <tr>
-                            <th width="10px">Revisar</th>
+                            <th width="5%">Revisar</th>
                             <th>Fecha de creación</th>
                             <th>Fecha Agenda / Hora Desde/Hasta</th>
                             <th>Permiso de Salida</th>

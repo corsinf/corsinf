@@ -69,6 +69,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         }
 
+
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         //Para la consulta - llenado de datos
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -96,7 +97,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             dataType: 'json',
             //Para el id representante tomar los datos con los de session
             success: function(response) {
-                console.log(response);
+                //console.log(response);
 
             }
         });
@@ -166,6 +167,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         });
     });
 
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
     //Datos del paciente
     function cargar_datos_paciente(sa_pac_id) {
         $.ajax({
@@ -189,6 +194,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 $('#tipo_paciente').html(response[0].sa_pac_tabla);
 
+                $('#sa_permiso_pac_id').val(response[0].sa_pac_id);
+                $('#sa_permiso_pac_tabla').val(response[0].sa_pac_tabla);
+
 
                 sexo_paciente = '';
                 if (response[0].sa_pac_temp_sexo === 'Masculino') {
@@ -203,55 +211,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 if (response[0].sa_pac_tabla == 'estudiantes') {
                     curso = response[0].sa_pac_temp_sec_nombre + '/' + response[0].sa_pac_temp_gra_nombre + '/' + response[0].sa_pac_temp_par_nombre;
                     $('#txt_curso').html(curso);
-
                     $('#sa_conp_nivel').val(response[0].sa_pac_temp_gra_nombre);
                     $('#sa_conp_paralelo').val(response[0].sa_pac_temp_par_nombre);
 
-                    //////////Para poner el numero de telefono del representante
-                    $.ajax({
-                        data: {
-                            id: id
-                        },
-                        url: '<?php echo $url_general ?>/controlador/estudiantesC.php?listar=true',
-                        type: 'post',
-                        dataType: 'json',
-                        success: function(response) {
-
-                            $('#sa_est_id').val(response[0].sa_est_id);
-                            $('#sa_est_primer_apellido').val(response[0].sa_est_primer_apellido);
-                            $('#sa_est_segundo_apellido').val(response[0].sa_est_segundo_apellido);
-                            $('#sa_est_primer_nombre').val(response[0].sa_est_primer_nombre);
-                            $('#sa_est_segundo_nombre').val(response[0].sa_est_segundo_nombre);
-
-                            $('#sa_est_cedula').val(response[0].sa_est_cedula);
-
-                            select_genero(response[0].sa_est_sexo, '#sa_est_sexo');
-
-                            $('#sa_est_fecha_nacimiento').val(fecha_nacimiento_formateada(response[0].sa_est_fecha_nacimiento.date));
-                            $('#sa_est_edad').val(calcular_edad_fecha_nacimiento(response[0].sa_est_fecha_nacimiento.date));
-                            ///////////////////////////////////////////////////////////////////////////////////////////
-
-                            $('#sa_est_correo').val(response[0].sa_est_correo);
-                            $('#sa_id_representante').val(response[0].sa_id_representante);
-
-                            select_parentesco(response[0].sa_est_rep_parentesco, '#sa_est_rep_parentesco');
-
-
-                            //$('#sa_id_seccion').val(response[0].sa_id_seccion);
-                            //$('#sa_id_grado').val(response[0].sa_id_grado);
-                            //$('#sa_id_paralelo').val(response[0].sa_id_paralelo);
-
-                            $('#sa_sec_id').val(response[0].sa_sec_id);
-                            $('#sa_gra_id').val(response[0].sa_gra_id);
-                            $('#sa_par_id').val(response[0].sa_par_id);
-
-                        }
-                    });
+                    $('#lbl_telefono_emergencia').html('Teléfono Representante: ' + '<label style="color: red;">*</label>');
+                    $('#btn_telefono').val('estudiantes');
 
                 } else {
                     $('#variable_paciente').html('Teléfono:');
                     $('#txt_curso').html(response[0].sa_pac_temp_telefono_1);
 
+                    $('#lbl_telefono_emergencia').html('Teléfono de Emergencia: ' + '<label style="color: red;">*</label>');
                 }
 
                 /////////////Para el formulario
@@ -281,12 +251,48 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $('#txt_sa_fice_pregunta_3_obs').html(response[0].sa_fice_pregunta_3_obs);
                 $('#txt_sa_fice_pregunta_4_obs').html(response[0].sa_fice_pregunta_4_obs);
                 $('#txt_sa_fice_pregunta_5_obs').html(response[0].sa_fice_pregunta_5_obs);
-
             }
         });
     }
 
+    //Telefonos en caso de salida
+    function llenar_telefonos_salida() {
 
+        sa_pac_id = $('#sa_permiso_pac_id').val();
+        sa_pac_tabla = $('#sa_permiso_pac_tabla').val();
+
+        //alert(sa_pac_id);
+
+        $.ajax({
+            data: {
+                sa_pac_id: sa_pac_id
+            },
+            url: '<?php echo $url_general ?>/controlador/ficha_MedicaC.php?listar_paciente_ficha=true',
+            type: 'post',
+            dataType: 'json',
+            success: function(response) {
+                //console.log(response);
+
+                nombre_completo_1 = '';
+                telefono_1_1 = '';
+                telefono_1_2 = '';
+
+                if (sa_pac_tabla === 'estudiantes') {
+                    nombre_completo_1 = response[0].sa_fice_rep_1_primer_apellido + ' ' + response[0].sa_fice_rep_1_segundo_apellido + ' ' + response[0].sa_fice_rep_1_primer_nombre + ' ' + response[0].sa_fice_rep_1_segundo_nombre;
+                    telefono_1_1 = response[0].sa_fice_rep_1_telefono_1;
+                    telefono_1_2 = response[0].sa_fice_rep_1_telefono_2;
+                } else {
+                    nombre_completo_1 = response[0].sa_fice_rep_2_primer_apellido + ' ' + response[0].sa_fice_rep_2_segundo_apellido + ' ' + response[0].sa_fice_rep_2_primer_nombre + ' ' + response[0].sa_fice_rep_2_segundo_nombre;
+                    telefono_1_1 = response[0].sa_fice_rep_2_telefono_1;
+                    telefono_1_2 = response[0].sa_fice_rep_2_telefono_2;
+                }
+
+                $('#txt_nombre_contacto').html(nombre_completo_1 + '<br> <label style="color: black;">Teléfono 2:&nbsp;</label>' + telefono_1_2);
+                $('#sa_conp_permiso_telefono_padre').val(telefono_1_1);
+
+            }
+        });
+    }
 
     //Datos de la consulta aun no se utiliza
     function datos_col_consulta(id_consulta) {
@@ -303,12 +309,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 // Asignar los valores a los campos del formulario
                 $('#sa_conp_id').val(response[0].sa_conp_id);
                 $('#sa_fice_id').val(response[0].sa_fice_id);
-                $('#sa_conp_nivel').val(response[0].sa_conp_nivel);
-                $('#sa_conp_paralelo').val(response[0].sa_conp_paralelo);
+                //$('#sa_conp_nivel').val(response[0].sa_conp_nivel);
+                //$('#sa_conp_paralelo').val(response[0].sa_conp_paralelo);
 
-                $('#sa_conp_edad').val(response[0].sa_conp_edad);
+                //$('#sa_conp_edad').val(response[0].sa_conp_edad);
                 $('#sa_conp_peso').val(response[0].sa_conp_peso);
                 $('#sa_conp_altura').val(response[0].sa_conp_altura);
+
+                calcularIMC();
 
                 $('#sa_conp_temperatura').val(response[0].sa_conp_temperatura);
                 $('#sa_conp_presion_ar').val(response[0].sa_conp_presion_ar);
@@ -328,9 +336,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $('#sa_conp_motivo_certificado').val(response[0].sa_conp_motivo_certificado);
                 $('#sa_conp_CIE_10_certificado').val(response[0].sa_conp_CIE_10_certificado);
                 $('#sa_conp_diagnostico_certificado').val(response[0].sa_conp_diagnostico_certificado);
-                $('#sa_conp_fecha_entrega_certificado').val(fecha_nacimiento_formateada(response[0].sa_conp_fecha_entrega_certificado.date));
-                $('#sa_conp_fecha_inicio_falta_certificado').val(fecha_nacimiento_formateada(response[0].sa_conp_fecha_inicio_falta_certificado.date));
-                $('#sa_conp_fecha_fin_alta_certificado').val(fecha_nacimiento_formateada(response[0].sa_conp_fecha_fin_alta_certificado.date));
+                //$('#sa_conp_fecha_entrega_certificado').val(fecha_nacimiento_formateada(response[0].sa_conp_fecha_entrega_certificado.date));
+                //$('#sa_conp_fecha_inicio_falta_certificado').val(fecha_nacimiento_formateada(response[0].sa_conp_fecha_inicio_falta_certificado.date));
+                //$('#sa_conp_fecha_fin_alta_certificado').val(fecha_nacimiento_formateada(response[0].sa_conp_fecha_fin_alta_certificado.date));
+
+                validar_fecha_formulario(response[0].sa_conp_fecha_entrega_certificado, 'sa_conp_fecha_entrega_certificado')
+                validar_fecha_formulario(response[0].sa_conp_fecha_inicio_falta_certificado, 'sa_conp_fecha_inicio_falta_certificado')
+                validar_fecha_formulario(response[0].sa_conp_fecha_fin_alta_certificado, 'sa_conp_fecha_fin_alta_certificado')
+
                 $('#sa_conp_dias_permiso_certificado').val(response[0].sa_conp_dias_permiso_certificado);
 
                 /////////////////////////////
@@ -343,9 +356,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $('#permiso_salida').hide();
                 }
 
+                validar_fecha_formulario(response[0].sa_conp_fecha_permiso_salud_salida, 'sa_conp_fecha_permiso_salud_salida')
 
-
-                $('#sa_conp_fecha_permiso_salud_salida').val(fecha_nacimiento_formateada(response[0].sa_conp_fecha_permiso_salud_salida.date));
                 $('#sa_conp_hora_permiso_salida').val(obtener_hora_formateada(response[0].sa_conp_hora_permiso_salida.date));
 
                 //////////////////////////////
@@ -386,8 +398,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         });
     }
 
+    function validar_fecha_formulario(campo, nombre_input) {
+        if (campo && campo.date !== null) {
+            $('#' + nombre_input).val(fecha_nacimiento_formateada(campo.date));
+        } else {
+            $('#' + nombre_input).val(''); // Establecer el valor como vacío
+        }
+    }
+
     //falta estado para profesor
-    function editar_insertar(n_representante = '', n_docente = '', n_inspector = '', n_guardia = '') {
+    function editar_insertar(n_representante = '', n_docente = '', n_inspector = '', n_guardia = '', revision = '') {
 
         var sa_conp_id = $('#sa_conp_id').val();
 
@@ -460,6 +480,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         var sa_conp_tipo_consulta = '<?= $tipo_consulta; ?>';
 
+        var sa_conp_enfermedad_actual = $('#sa_conp_enfermedad_actual').val();
+        var sa_conp_saturacion = $('#sa_conp_saturacion').val();
+        
+        var sa_conp_estado_revision = revision;
+
+
         // Crear objeto de parámetros
         var parametros = {
             'sa_conp_id': sa_conp_id,
@@ -517,6 +543,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'sa_conp_tratamiento': sa_conp_tratamiento,
 
             'sa_conp_tipo_consulta': sa_conp_tipo_consulta,
+            'sa_conp_enfermedad_actual': sa_conp_enfermedad_actual,
+            'sa_conp_saturacion': sa_conp_saturacion,
+            
+            'sa_conp_estado_revision': sa_conp_estado_revision,
         };
 
         //alert(sa_conp_tipo_consulta)
@@ -723,7 +753,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                             <div class="row m-2">
 
-                                <div class="col-sm-12">
+                                <div class="col-sm-12" hidden>
                                     <a href="<?= $url_general ?>/vista/inicio.php?mod=7&acc=consultas_pacientes&pac_id=<?= $id_paciente ?>" class="btn btn-outline-dark btn-sm"><i class="bx bx-arrow-back"></i> Regresar</a>
                                 </div>
 
@@ -791,64 +821,70 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                                                         <div class="row pt-3">
                                                             <div class="col-12">
-                                                                <div class="table-responsive">
+                                                                <div class="">
                                                                     <table class="table mb-0" style="width:100%">
+                                                                        <thead>
+                                                                            <tr>
+                                                                                <th style="width: 30%;"></th>
+                                                                                <th style="width: 25%;"></th>
+                                                                                <th style="width: 25%;"></th>
+                                                                                <th style="width: 25%;"></th>
+                                                                            </tr>
+
+                                                                        </thead>
                                                                         <tbody>
                                                                             <tr>
-                                                                                <th style="width:0%" class="table-primary text-end">Cédula:</th>
+                                                                                <th class="table-primary text-end">Cédula:</th>
                                                                                 <td id="txt_ci"></td>
-                                                                            </tr>
-                                                                            <tr>
-                                                                                <th style="width:0%" class="table-primary text-end">Nombres:</th>
-                                                                                <td id="txt_nombres"></td>
-                                                                            </tr>
-                                                                            <tr>
-                                                                                <th style="width:0%" class="table-primary text-end">Sexo:</th>
+
+                                                                                <th class="table-primary text-end">Sexo:</th>
                                                                                 <td id="txt_sexo"></td>
                                                                             </tr>
                                                                             <tr>
-                                                                                <th style="width:0%" class="table-primary text-end">Fecha de Nacimiento:</th>
+                                                                                <th class="table-primary text-end">Nombres:</th>
+                                                                                <td id="txt_nombres" colspan="3"></td>
+                                                                            </tr>
+
+                                                                            <tr>
+                                                                                <th class="table-primary text-end">Fecha de Nacimiento:</th>
                                                                                 <td id="txt_fecha_nacimiento"></td>
-                                                                            </tr>
-                                                                            <tr>
-                                                                                <th style="width:0%" class="table-primary text-end" id="variable_paciente">Curso:</th>
-                                                                                <td id="txt_curso"></td>
-                                                                            </tr>
 
-
-
-                                                                            <tr>
-                                                                                <th style="width:0%" class="table-primary text-end" id="variable_paciente">Grupo Sanguíneo y Factor Rh:</th>
+                                                                                <th class="table-primary text-end" id="variable_paciente">Grupo Sanguíneo:</th>
                                                                                 <td id="txt_sa_fice_pac_grupo_sangre"></td>
                                                                             </tr>
-
                                                                             <tr>
-                                                                                <th style="width:0%" class="table-primary text-end" id="variable_paciente">1.- ¿Ha sido diagnosticado con alguna enfermedad?:</th>
-                                                                                <td id="txt_sa_fice_pregunta_1_obs"></td>
+                                                                                <th class="table-primary text-end" id="variable_paciente">Curso:</th>
+                                                                                <td id="txt_curso" colspan="3"></td>
                                                                             </tr>
 
                                                                             <tr>
-                                                                                <th style="width:0%" class="table-primary text-end" id="variable_paciente">2.- ¿Tiene algún antecedente familiar de importancia?:</th>
-                                                                                <td id="txt_sa_fice_pregunta_2_obs"></td>
+                                                                                <th class="table-primary text-end" id="variable_paciente">1.- ¿Ha sido diagnosticado con alguna enfermedad?:</th>
+                                                                                <td id="txt_sa_fice_pregunta_1_obs" colspan="3"></td>
                                                                             </tr>
 
                                                                             <tr>
-                                                                                <th style="width:0%" class="table-primary text-end" id="variable_paciente">3.- ¿Ha sido sometido a cirugías previas?:</th>
-                                                                                <td id="txt_sa_fice_pregunta_3_obs"></td>
+                                                                                <th class="table-primary text-end" id="variable_paciente">2.- ¿Tiene algún antecedente familiar de importancia?:</th>
+                                                                                <td id="txt_sa_fice_pregunta_2_obs" colspan="3"></td>
                                                                             </tr>
 
                                                                             <tr>
-                                                                                <th style="width:0%" class="table-primary text-end" id="variable_paciente">4.- ¿Tiene alergias?:</th>
-                                                                                <td id="txt_sa_fice_pregunta_4_obs"></td>
+                                                                                <th class="table-primary text-end" id="variable_paciente">3.- ¿Ha sido sometido a cirugías previas?:</th>
+                                                                                <td id="txt_sa_fice_pregunta_3_obs" colspan="3"></td>
                                                                             </tr>
 
                                                                             <tr>
-                                                                                <th style="width:0%" class="table-primary text-end" id="variable_paciente">5.- ¿Qué medicamentos usa?:</th>
-                                                                                <td id="txt_sa_fice_pregunta_5_obs"></td>
+                                                                                <th class="table-primary text-end" id="variable_paciente">4.- ¿Tiene alergias?:</th>
+                                                                                <td id="txt_sa_fice_pregunta_4_obs" colspan="3"></td>
+                                                                            </tr>
+
+                                                                            <tr>
+                                                                                <th class="table-primary text-end" id="variable_paciente">5.- ¿Qué medicamentos usa?:</th>
+                                                                                <td id="txt_sa_fice_pregunta_5_obs" colspan="3"></td>
                                                                             </tr>
 
                                                                         </tbody>
                                                                     </table>
+
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -898,16 +934,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                             <label for="" class="form-label">Altura: <label style="color: red;">*</label> </label>
                                                             <input type="number" class="form-control form-control-sm" id="sa_conp_altura" name="sa_conp_altura">
                                                         </div>
+                                                        <div class="col-md-3">
+                                                            <b><label for="" class="form-label">IMC: <label style="color: red;">*</label> </label></b>
+                                                            <input type="number" class="form-control form-control-sm" id="txt_imc" name="txt_imc" readonly disabled>
+                                                        </div>
+                                                        <div class="col-md-3">
+                                                            <b><label for="" class="form-label">Nivel del Peso: <label style="color: red;">*</label> </label></b>
+                                                            <input type="text" class="form-control form-control-sm" id="txt_np" name="txt_np" readonly disabled>
+                                                        </div>
                                                     </div>
 
-                                                    <div class="row pt-3">
-                                                        <div class="col-md-3">
+                                                    <div class="row pt-4">
+                                                        <div class="col-md-2">
                                                             <label for="" class="form-label">Temperatura: <label style="color: red;">*</label> </label>
                                                             <input type="number" class="form-control form-control-sm" id="sa_conp_temperatura" name="sa_conp_temperatura">
                                                         </div>
-                                                        <div class="col-md-3">
+                                                        <div class="col-md-2">
                                                             <label for="" class="form-label">Presión Arterial: <label style="color: red;">*</label> </label>
                                                             <input type="number" class="form-control form-control-sm" id="sa_conp_presion_ar" name="sa_conp_presion_ar">
+                                                        </div>
+                                                        <div class="col-md-2">
+                                                            <label for="" class="form-label">Saturación: <label style="color: red;">*</label> </label>
+                                                            <input type="number" class="form-control form-control-sm" id="sa_conp_saturacion" name="sa_conp_saturacion">
                                                         </div>
                                                         <div class="col-md-3">
                                                             <label for="" class="form-label">Frecuencia Cardiáca: <label style="color: red;">*</label> </label>
@@ -928,11 +976,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                                                     <div class="row pt-3">
                                                         <div class="col-md-12">
+                                                            <label for="" class="form-label">Enfermedad Actual: <label style="color: red;">*</label> </label>
+                                                            <textarea name="sa_conp_enfermedad_actual" id="sa_conp_enfermedad_actual" cols="30" rows="2" class="form-control" placeholder="Enfermedad Actual"></textarea>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="row pt-3">
+                                                        <div class="col-md-12">
                                                             <label for="" class="form-label">CIE 10 - Diagnóstico 1: <label style="color: red;">*</label> </label>
                                                             <input type="text" class="ctw-input form-control form-control-sm" autocomplete="off" data-ctw-ino="1" id="sa_conp_diagnostico_1" placeholder="Diagnostico 1">
                                                             <input type="hidden" id="sa_conp_CIE_10_1">
-                                                            <div class="ctw-window" data-ctw-ino="1"></div>    
-                                                           
+                                                            <div class="ctw-window" data-ctw-ino="1"></div>
+
 
                                                         </div>
                                                     </div>
@@ -994,12 +1049,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                             <div>
                                                                 <div class="form-check">
                                                                     <input class="form-check-input" type="radio" name="sa_conp_permiso_salida" id="sa_conp_permiso_salida_1" value="SI">
-                                                                    <label class="form-check-label" for="flexRadioDefault1">SI</label>
+                                                                    <label class="form-check-label" for="sa_conp_permiso_salida_1">SI</label>
                                                                 </div>
 
                                                                 <div class="form-check">
                                                                     <input class="form-check-input" type="radio" name="sa_conp_permiso_salida" id="sa_conp_permiso_salida_2" value="NO" checked>
-                                                                    <label class="form-check-label" for="flexRadioDefault2">NO</label>
+                                                                    <label class="form-check-label" for="sa_conp_permiso_salida_2">NO</label>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -1026,12 +1081,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                                 <div>
                                                                     <div class="form-check">
                                                                         <input class="form-check-input" type="radio" name="sa_conp_permiso_tipo" id="sa_conp_permiso_tipo_1" value="emergencia">
-                                                                        <label class="form-check-label" for="1">Emergencia</label>
+                                                                        <label class="form-check-label" for="sa_conp_permiso_tipo_1">Emergencia</label>
                                                                     </div>
 
                                                                     <div class="form-check">
                                                                         <input class="form-check-input" type="radio" name="sa_conp_permiso_tipo" id="sa_conp_permiso_tipo_2" value="normal" checked>
-                                                                        <label class="form-check-label" for="2">Normal</label>
+                                                                        <label class="form-check-label" for="sa_conp_permiso_tipo_2">Normal</label>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -1054,14 +1109,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                                                         <div class="row pt-3">
                                                             <div class="col-md-4">
-                                                                <label for="" class="form-label">Teléfono Seguro<label style="color: red;">*</label> </label>
+                                                                <label for="" class="form-label">Teléfono Seguro: <label style="color: red;">*</label> </label>
                                                                 <input type="text" class="form-control form-control-sm" id="sa_conp_permiso_telefono_seguro" name="sa_conp_permiso_telefono_seguro">
                                                             </div>
 
                                                             <div class="col-md-4">
-                                                                <label for="" class="form-label">Teléfono Representante<label style="color: red;">*</label> </label>
-                                                                <input type="text" class="form-control form-control-sm" id="sa_conp_permiso_telefono_padre" name="sa_conp_permiso_telefono_padre">
+                                                                <label for="" class="form-label" id="lbl_telefono_emergencia">Teléfono Representante: <label style="color: red;">*</label> </label>
+                                                                <input type="text" class="form-control form-control-sm" aria-describedby="btn_telefono" id="sa_conp_permiso_telefono_padre" name="sa_conp_permiso_telefono_padre">
+
+                                                                <p id="txt_nombre_contacto" class="me-0 text-success"></p>
+
+                                                                <input type="hidden" name="sa_permiso_pac_id" id="sa_permiso_pac_id">
+                                                                <input type="hidden" name="sa_permiso_pac_tabla" id="sa_permiso_pac_tabla">
+
                                                             </div>
+
+
                                                         </div>
 
                                                     </div>
@@ -1090,7 +1153,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                     <div class="row pt-3">
                                                         <div class="col-md-12">
                                                             <label for="" class="form-label">CIE 10 - Diagnóstico de Certificado: <label style="color: red;">*</label> </label>
-                                                             <input type="text" class="ctw-input form-control form-control-sm" autocomplete="off" data-ctw-ino="3" id="sa_conp_diagnostico_certificado" placeholder="Diagnostico">
+                                                            <input type="text" class="ctw-input form-control form-control-sm" autocomplete="off" data-ctw-ino="3" id="sa_conp_diagnostico_certificado" placeholder="Diagnostico">
 
                                                             <input type="hidden" id="sa_conp_CIE_10_certificado">
                                                             <div class="ctw-window" data-ctw-ino="3"></div>
@@ -1120,16 +1183,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                 </div>
                                             </div>
 
-
-
-
                                             <div class="modal-footer pt-4" id="seccion_boton_consulta">
-                                                <?php if ($id_consulta == '') { ?>
-                                                    <button class="btn btn-primary btn-sm px-4 m-1" onclick="editar_insertar(1, 1, 1, 0)" type="button"><i class="bx bx-save"></i> Guardar</button>
-                                                <?php } else { ?>
-                                                    <button class="btn btn-primary btn-sm px-4 m-1" onclick="editar_insertar(1, 1, 1, 0)" type="button"><i class="bx bx-save"></i> Guardar</button>
-                                                    <button class="btn btn-danger btn-sm px-4 m-1" onclick="delete_datos()" type="button"><i class="bx bx-trash"></i> Eliminar</button>
-                                                <?php } ?>
+
+                                                <button class="btn btn-danger btn-sm px-2 m-1" onclick="editar_insertar(1, 1, 1, 0, 2)" type="button"><i class='bx bx-pause-circle'></i> En Proceso</button>
+
+                                                <button class="btn btn-success btn-sm px-2 m-1" onclick="editar_insertar(1, 1, 1, 0, 1)" type="button"><i class="bx bx-save"></i> Finalizar</button>
+
                                             </div>
 
                                         </div>
@@ -1145,6 +1204,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </div>
 </div>
 
+<script src="<?= $url_general ?>/js/ENFERMERIA/consulta_medica.js"></script>
+
 <script>
     $('input[name=sa_conp_permiso_salida]').change(function() {
         if ($(this).val() === 'SI') {
@@ -1152,15 +1213,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } else if ($(this).val() === 'NO') {
             $('#permiso_salida').hide();
             $('#permiso_salida_tipo').hide();
-            //validar que los inputs queden vacios
         }
     });
 
     $('input[name=sa_conp_permiso_tipo]').change(function() {
         if ($(this).val() === 'emergencia') {
             $('#permiso_salida_tipo').show();
+            llenar_telefonos_salida();
         } else if ($(this).val() === 'normal') {
             $('#permiso_salida_tipo').hide();
+            $('#sa_conp_permiso_telefono_padre').val('');
         }
     });
 </script>

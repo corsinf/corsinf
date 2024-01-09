@@ -30,9 +30,11 @@
                         '<h5 class="mb-0 mt-5">' + item.nombres + '</h5>' +
                         '<p class="mb-3">' + item.sa_conp_tipo_consulta.toUpperCase() + '</p>' +
                         '<div class="d-grid"> ' +
-                        '<a class="btn btn-outline-success radius-15 mb-1" href="<?= $url_general ?>/vista/inicio.php?mod=7&acc=registrar_consulta_estudiante&id_ficha=' + item.sa_conp_id + '&id_estudiante=' + item.sa_fice_id + '&id_representante=' + item.sa_id_representante + '&id_consulta=2&ver=0">Comenzar consulta</a>' +
 
-                        '<button class="btn btn-outline-primary radius-15 mt-2" onclick="consultar_datos_h(' + item.sa_fice_id + ', \'' + item.nombres + '\')">Historial</button>' +
+                        '<a class="btn btn-outline-success radius-15 mb-1" href="<?= $url_general ?>/vista/inicio.php?mod=7&acc=registrar_consulta_paciente&id_consulta=' + item.sa_conp_id + '&tipo_consulta=' + item.sa_conp_tipo_consulta + '&id_ficha=' + item.sa_fice_id + '&id_paciente=' + item.sa_pac_id + '"Comenzar title=" Consulta">Comenzar Consulta</a>' +
+
+
+                    '<button class="btn btn-outline-primary radius-15 mt-2" onclick="consultar_datos_h(' + item.sa_fice_id + ', \'' + item.nombres + '\')">Historial</button>' +
                         '</div>' +
                         '</div>' +
                         ' </div>' +

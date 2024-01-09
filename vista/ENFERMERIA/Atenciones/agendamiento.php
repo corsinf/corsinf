@@ -100,7 +100,7 @@
 <script src="../assets/js/app-fullcalendar.js"></script>
 
 <div class="modal" id="myModal" abindex="-1" aria-modal="true" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
-  <div class="modal-dialog">
+  <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
 
       <!-- Modal Header -->
@@ -112,7 +112,7 @@
       <div class="modal-body">
         <div class="row justify-content-center" id="btn_nuevo">
 
-          <div class="col-4">
+          <div class="col-auto">
 
             <!-- Unifica ambos formularios dentro de uno -->
             <form action="<?= $url_general ?>/vista/inicio.php?mod=7&acc=agendamiento_asistente" method="post">
@@ -126,7 +126,7 @@
 
           </div>
 
-          <div class="col-4">
+          <div class="col-auto">
 
             <form action="<?= $url_general ?>/vista/inicio.php?mod=7&acc=agendamiento_asistente" method="post">
 
@@ -143,3 +143,5 @@
     </div>
   </div>
 </div>
+
+

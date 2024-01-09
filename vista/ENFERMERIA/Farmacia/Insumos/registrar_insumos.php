@@ -28,63 +28,54 @@ if (isset($_GET['id'])) {
       data: {
         id: id
       },
-      url: '<?= $url_general ?>/controlador/medicamentosC.php?listar=true',
+      url: '<?= $url_general ?>/controlador/insumosC.php?listar=true',
       type: 'post',
       dataType: 'json',
       success: function(response) {
-        $('#sa_cmed_id').val(response[0].sa_cmed_id);
-        $('#sa_cmed_concentracion').val(response[0].sa_cmed_concentracion);
-        $('#sa_cmed_presentacion').val(response[0].sa_cmed_presentacion);
-        $('#sa_cmed_serie').val(response[0].sa_cmed_serie);
-        $('#sa_cmed_lote').val(response[0].sa_cmed_lote);
-        $('#sa_cmed_caducidad').val(fecha_nacimiento_formateada(response[0].sa_cmed_caducidad.date));
-        $('#sa_cmed_minimos').val(response[0].sa_cmed_minimos);
-        $('#sa_cmed_stock').val(response[0].sa_cmed_stock);
-        $('#sa_cmed_movimiento').val(response[0].sa_cmed_movimiento);
-        $('#sa_cmed_contraindicacion').val(response[0].sa_cmed_contraindicacion);
-        $('#sa_cmed_dosis').val(response[0].sa_cmed_dosis);
-        $('#sa_cmed_tratamientos').val(response[0].sa_cmed_tratamientos);
-        $('#sa_cmed_uso').val(response[0].sa_cmed_uso);
-        $('#sa_cmed_observaciones').val(response[0].sa_cmed_observaciones);
+        $('#sa_cins_id').val(response[0].sa_cins_id);
+        $('#sa_cins_codigo').val(response[0].sa_cins_codigo);
+        $('#sa_cins_presentacion').val(response[0].sa_cins_presentacion);
+        $('#sa_cins_lote').val(response[0].sa_cins_lote);
+        $('#sa_cins_caducidad').val(fecha_nacimiento_formateada(response[0].sa_cins_caducidad.date));
+        $('#sa_cins_minimos').val(response[0].sa_cins_minimos);
+        $('#sa_cins_stock').val(response[0].sa_cins_stock);
+        $('#sa_cins_movimiento').val(response[0].sa_cins_movimiento);
+        $('#sa_cins_localizacion').val(response[0].sa_cins_localizacion);
+        $('#sa_cins_uso').val(response[0].sa_cins_uso);
+        $('#sa_cins_observaciones').val(response[0].sa_cins_observaciones);
       }
     });
   }
 
   function editar_insertar() {
-    var sa_cmed_id = $('#sa_cmed_id').val();
-    var sa_cmed_concentracion = $('#sa_cmed_concentracion').val();
-    var sa_cmed_presentacion = $('#sa_cmed_presentacion').val();
-    var sa_cmed_serie = $('#sa_cmed_serie').val();
-    var sa_cmed_lote = $('#sa_cmed_lote').val();
-    var sa_cmed_caducidad = $('#sa_cmed_caducidad').val();
-    var sa_cmed_minimos = $('#sa_cmed_minimos').val();
-    var sa_cmed_stock = $('#sa_cmed_stock').val();
-    var sa_cmed_movimiento = $('#sa_cmed_movimiento').val();
-    var sa_cmed_contraindicacion = $('#sa_cmed_contraindicacion').val();
-    var sa_cmed_dosis = $('#sa_cmed_dosis').val();
-    var sa_cmed_tratamientos = $('#sa_cmed_tratamientos').val();
-    var sa_cmed_uso = $('#sa_cmed_uso').val();
-    var sa_cmed_observaciones = $('#sa_cmed_observaciones').val();
+    var sa_cins_id = $('#sa_cins_id').val();
+    var sa_cins_codigo = $('#sa_cins_codigo').val();
+    var sa_cins_presentacion = $('#sa_cins_presentacion').val();
+    var sa_cins_lote = $('#sa_cins_lote').val();
+    var sa_cins_caducidad = $('#sa_cins_caducidad').val();
+    var sa_cins_minimos = $('#sa_cins_minimos').val();
+    var sa_cins_stock = $('#sa_cins_stock').val();
+    var sa_cins_movimiento = $('#sa_cins_movimiento').val();
+    var sa_cins_localizacion = $('#sa_cins_localizacion').val();
+    var sa_cins_uso = $('#sa_cins_uso').val();
+    var sa_cins_observaciones = $('#sa_cins_observaciones').val();
 
     var parametros = {
-      'sa_cmed_id': sa_cmed_id,
-      'sa_cmed_concentracion': sa_cmed_concentracion,
-      'sa_cmed_presentacion': sa_cmed_presentacion,
-      'sa_cmed_serie': sa_cmed_serie,
-      'sa_cmed_lote': sa_cmed_lote,
-      'sa_cmed_caducidad': sa_cmed_caducidad,
-      'sa_cmed_minimos': sa_cmed_minimos,
-      'sa_cmed_stock': sa_cmed_stock,
-      'sa_cmed_movimiento': sa_cmed_movimiento,
-      'sa_cmed_contraindicacion': sa_cmed_contraindicacion,
-      'sa_cmed_dosis': sa_cmed_dosis,
-      'sa_cmed_tratamientos': sa_cmed_tratamientos,
-      'sa_cmed_uso': sa_cmed_uso,
-      'sa_cmed_observaciones': sa_cmed_observaciones,
+      'sa_cins_id': sa_cins_id,
+      'sa_cins_codigo': sa_cins_codigo,
+      'sa_cins_presentacion': sa_cins_presentacion,
+      'sa_cins_lote': sa_cins_lote,
+      'sa_cins_caducidad': sa_cins_caducidad,
+      'sa_cins_minimos': sa_cins_minimos,
+      'sa_cins_stock': sa_cins_stock,
+      'sa_cins_movimiento': sa_cins_movimiento,
+      'sa_cins_localizacion': sa_cins_localizacion,
+      'sa_cins_uso': sa_cins_uso,
+      'sa_cins_observaciones': sa_cins_observaciones,
     }
 
-    if (sa_cmed_id == '') {
-      if (sa_cmed_concentracion == '') {
+    if (sa_cins_id == '') {
+      if (sa_cins_presentacion == '') {
         Swal.fire({
           icon: 'error',
           title: 'Oops...',
@@ -95,7 +86,7 @@ if (isset($_GET['id'])) {
         insertar(parametros)
       }
     } else {
-      if (sa_cmed_concentracion == '') {
+      if (sa_cins_presentacion == '') {
         Swal.fire({
           icon: 'error',
           title: 'Oops...',
@@ -117,14 +108,14 @@ if (isset($_GET['id'])) {
       data: {
         parametros: parametros
       },
-      url: '<?= $url_general ?>/controlador/medicamentosC.php?insertar=true',
+      url: '<?= $url_general ?>/controlador/insumosC.php?insertar=true',
       type: 'post',
       dataType: 'json',
 
       success: function(response) {
         if (response == 1) {
           Swal.fire('', 'Operacion realizada con exito.', 'success').then(function() {
-            location.href = '<?= $url_general ?>/vista/inicio.php?mod=7&acc=medicamentos';
+            location.href = '<?= $url_general ?>/vista/inicio.php?mod=7&acc=insumos';
           });
         } else if (response == -2) {
           Swal.fire('', 'Código ya regitrado', 'success');
@@ -158,7 +149,7 @@ if (isset($_GET['id'])) {
       data: {
         id: id
       },
-      url: '<?= $url_general ?>/controlador/medicamentosC.php?eliminar=true',
+      url: '<?= $url_general ?>/controlador/insumosC.php?eliminar=true',
       type: 'post',
       dataType: 'json',
       beforeSend: function() {
@@ -168,7 +159,7 @@ if (isset($_GET['id'])) {
       success: function(response) {
         if (response == 1) {
           Swal.fire('Eliminado!', 'Registro Eliminado.', 'success').then(function() {
-            location.href = '<?= $url_general ?>/vista/inicio.php?mod=7&acc=medicamentos';
+            location.href = '<?= $url_general ?>/vista/inicio.php?mod=7&acc=insumos';
           });
         }
       }
@@ -195,9 +186,9 @@ if (isset($_GET['id'])) {
             <li class="breadcrumb-item active" aria-current="page">
               <?php
               if ($id == '') {
-                echo 'Registrar Medicamento';
+                echo 'Registrar Insumo';
               } else {
-                echo 'Modificar Medicamento';
+                echo 'Modificar Insumo';
               }
               ?>
             </li>
@@ -217,15 +208,15 @@ if (isset($_GET['id'])) {
               <h5 class="mb-0 text-primary">
                 <?php
                 if ($id == '') {
-                  echo 'Registrar Medicamento';
+                  echo 'Registrar Insumo';
                 } else {
-                  echo 'Modificar Medicamento';
+                  echo 'Modificar Insumo';
                 }
                 ?>
               </h5>
               <div class="row m-2">
                 <div class="col-sm-12">
-                  <a href="<?= $url_general ?>/vista/inicio.php?mod=7&acc=medicamentos" class="btn btn-outline-dark btn-sm"><i class="bx bx-arrow-back"></i> Regresar</a>
+                  <a href="<?= $url_general ?>/vista/inicio.php?mod=7&acc=insumos" class="btn btn-outline-dark btn-sm"><i class="bx bx-arrow-back"></i> Regresar</a>
                 </div>
               </div>
             </div>
@@ -233,66 +224,50 @@ if (isset($_GET['id'])) {
 
             <form action="" method="post">
 
-              <input type="hidden" name="sa_cmed_id" id="sa_cmed_id">
+              <input type="hidden" name="sa_cins_id" id="sa_cins_id">
 
               <div class="row pt-3">
-                <div class="col-6">
-                  <label for="" class="form-label">Concentración: <label style="color: red;">*</label> </label>
-                  <input type="text" class="form-control form-control-sm" name="sa_cmed_concentracion" id="sa_cmed_concentracion">
+                <div class="col-4">
+                  <label for="" class="form-label">Código: <label style="color: red;">*</label> </label>
+                  <input type="text" class="form-control form-control-sm" name="sa_cins_codigo" id="sa_cins_codigo">
                 </div>
 
-                <div class="col-6">
+                <div class="col-8">
                   <label for="" class="form-label">Presentación: <label style="color: red;">*</label> </label>
-                  <input type="text" class="form-control form-control-sm" name="sa_cmed_presentacion" id="sa_cmed_presentacion">
+                  <input type="text" class="form-control form-control-sm" name="sa_cins_presentacion" id="sa_cins_presentacion">
                 </div>
               </div>
 
               <div class="row pt-3">
                 <div class="col-3">
-                  <label for="" class="form-label">Dosis: <label style="color: red;">*</label> </label>
-                  <input type="text" class="form-control form-control-sm" name="sa_cmed_dosis" id="sa_cmed_dosis">
-                </div>
-                <div class="col-3">
-                  <label for="" class="form-label">Serie: <label style="color: red;">*</label> </label>
-                  <input type="text" class="form-control form-control-sm" name="sa_cmed_serie" id="sa_cmed_serie">
-                </div>
-                <div class="col-3">
                   <label for="" class="form-label">Lote: <label style="color: red;">*</label> </label>
-                  <input type="text" class="form-control form-control-sm" name="sa_cmed_lote" id="sa_cmed_lote">
+                  <input type="text" class="form-control form-control-sm" name="sa_cins_lote" id="sa_cins_lote">
                 </div>
                 <div class="col-3">
                   <label for="" class="form-label">Caducidad: <label style="color: red;">*</label> </label>
-                  <input type="date" class="form-control form-control-sm" name="sa_cmed_caducidad" id="sa_cmed_caducidad">
+                  <input type="date" class="form-control form-control-sm" name="sa_cins_caducidad" id="sa_cins_caducidad">
                 </div>
               </div>
 
               <div class="row pt-3">
                 <div class="col-4">
                   <label for="" class="form-label">Mínimos: <label style="color: red;">*</label> </label>
-                  <input type="number" class="form-control form-control-sm" name="sa_cmed_minimos" id="sa_cmed_minimos">
+                  <input type="number" class="form-control form-control-sm" name="sa_cins_minimos" id="sa_cins_minimos">
                 </div>
                 <div class="col-4">
                   <label for="" class="form-label">Stock: <label style="color: red;">*</label> </label>
-                  <input type="number" class="form-control form-control-sm" name="sa_cmed_stock" id="sa_cmed_stock">
+                  <input type="number" class="form-control form-control-sm" name="sa_cins_stock" id="sa_cins_stock">
                 </div>
                 <div class="col-4">
                   <label for="" class="form-label">Movimiento: <label style="color: red;">*</label> </label>
-                  <input type="number" class="form-control form-control-sm" name="sa_cmed_movimiento" id="sa_cmed_movimiento">
+                  <input type="number" class="form-control form-control-sm" name="sa_cins_movimiento" id="sa_cins_movimiento">
                 </div>
               </div>
 
               <div class="row pt-3">
                 <div class="col-12">
-                  <label for="" class="form-label">Contraindicación: <label style="color: red;">*</label> </label>
-                  <input type="text" class="form-control form-control-sm" name="sa_cmed_contraindicacion" id="sa_cmed_contraindicacion">
-
-                </div>
-              </div>
-
-              <div class="row pt-3">
-                <div class="col-12">
-                  <label for="" class="form-label">Tratamiento: <label style="color: red;">*</label> </label>
-                  <input type="text" class="form-control form-control-sm" name="sa_cmed_tratamientos" id="sa_cmed_tratamientos">
+                  <label for="" class="form-label">Localización: <label style="color: red;">*</label> </label>
+                  <input type="text" class="form-control form-control-sm" name="sa_cins_localizacion" id="sa_cins_localizacion">
 
 
                 </div>
@@ -301,14 +276,14 @@ if (isset($_GET['id'])) {
               <div class="row pt-3">
                 <div class="col-12">
                   <label for="" class="form-label">Uso: <label style="color: red;">*</label> </label>
-                  <input type="text" class="form-control form-control-sm" name="sa_cmed_uso" id="sa_cmed_uso">
+                  <input type="text" class="form-control form-control-sm" name="sa_cins_uso" id="sa_cins_uso">
                 </div>
               </div>
 
               <div class="row pt-3">
                 <div class="col-12">
                   <label for="" class="form-label">Observaciones: <label style="color: red;">*</label> </label>
-                  <input type="text" class="form-control form-control-sm" name="sa_cmed_observaciones" id="sa_cmed_observaciones">
+                  <input type="text" class="form-control form-control-sm" name="sa_cins_observaciones" id="sa_cins_observaciones">
                 </div>
               </div>
 

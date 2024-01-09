@@ -112,7 +112,7 @@ class pacientesM
                     sa_pac_tabla
                 FROM
                     pacientes
-                WHERE 1 = 1";
+                WHERE 1 = 1 AND sa_pac_estado = 1";
 
         $sql .= " ORDER BY sa_pac_id;";
         $datos = $this->db->datos($sql);

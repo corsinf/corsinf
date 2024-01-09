@@ -40,8 +40,9 @@ class representantesM
 
     function lista_representantes($id = '')
     {
-        $sql =
-            "SELECT 
+        if ($id) {
+            $sql =
+                "SELECT 
                     rep.sa_rep_id,
                     rep.sa_rep_primer_apellido,
                     rep.sa_rep_segundo_apellido,
@@ -61,13 +62,13 @@ class representantesM
                     FROM representantes rep
                     WHERE rep.sa_rep_estado = 1";
 
-        if ($id) {
-            $sql .= ' and sa_rep_id = ' . $id;
-        }
 
-        $sql .= " ORDER BY sa_rep_id;";
-        $datos = $this->db->datos($sql);
-        return $datos;
+            $sql .= ' and sa_rep_id = ' . $id;
+
+            $sql .= " ORDER BY sa_rep_id;";
+            $datos = $this->db->datos($sql);
+            return $datos;
+        }
     }
 
     function buscar_representantes($buscar)
@@ -126,6 +127,4 @@ class representantesM
         $datos = $this->db->sql_string($sql);
         return $datos;
     }
-
-
 }

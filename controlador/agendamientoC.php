@@ -71,8 +71,6 @@ class agendamientoC
                 array('campo' => 'sa_conp_fecha_ingreso', 'dato' => $parametros['fecha']),
                 array('campo' => 'sa_conp_tipo_consulta', 'dato' => $parametros['tipo']),
                 array('campo' => 'sa_conp_estado_revision', 'dato' => 0),
-                array('campo' => 'sa_conp_desde_hora', 'dato' => '00:00:00.0000000'),
-                array('campo' => 'sa_conp_hasta_hora', 'dato' => '00:00:00.0000000'),
 
                 array('campo' => 'sa_conp_peso', 'dato' => $parametros['sa_conp_peso']),
                 array('campo' => 'sa_conp_altura', 'dato' => $parametros['sa_conp_altura']),
@@ -89,8 +87,7 @@ class agendamientoC
                 array('campo' => 'sa_conp_fecha_ingreso', 'dato' => $parametros['fecha']),
                 array('campo' => 'sa_conp_tipo_consulta', 'dato' => $parametros['tipo']),
                 array('campo' => 'sa_conp_estado_revision', 'dato' => 0),
-                array('campo' => 'sa_conp_desde_hora', 'dato' => '00:00:00.0000000'),
-                array('campo' => 'sa_conp_hasta_hora', 'dato' => '00:00:00.0000000'),
+
             );
         }
 
