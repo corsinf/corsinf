@@ -55,10 +55,10 @@ if (isset($_GET['administrar_comunidad_ficha_medica'])) {
 
     echo json_encode($controlador->crear_paciente_ficha_medica($sa_pac_id_comunidad, $sa_pac_tabla));
 
-    header("Location: http://localhost/corsinf/vista/inicio.php?mod=7&acc=pacientes");
+    //header("Location: http://localhost/corsinf/vista/inicio.php?mod=7&acc=pacientes");
 
     // Asegúrate de que no haya más salida después de la redirección
-    exit();
+    //exit();
 }
 
 if (isset($_GET['lista_seguros'])) {
