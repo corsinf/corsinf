@@ -154,6 +154,12 @@ class estudiantesM
         return $rest;
     }
 
+    function add($tabla,$datos)
+    {
+        $rest = $this->db->inserts($tabla, $datos);
+        return $rest;
+    }
+
     function editar($datos, $where)
     {
         $rest = $this->db->update('estudiantes', $datos, $where);

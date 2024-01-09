@@ -165,6 +165,19 @@ class loginM
 
 	}
 
+
+	function modulos_empresa_search($id)
+	{
+		$sql = "SELECT * FROM MODULOS_SISTEMA WHERE 1=1";
+		if($id)
+		{
+			$sql.=" AND id_modulos = '".$id."'";
+		}
+		$datos = $this->db->datos($sql,1);
+		return $datos;
+
+	}
+
 	function add($tabla,$datos,$master=false)
 	{
 		return $this->db->inserts($tabla,$datos,$master);

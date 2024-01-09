@@ -7,7 +7,7 @@ if (isset($_POST['sa_pac_id'])) {
     $sa_pac_id = $_POST['sa_pac_id'];
 }
 
-$sa_pac_tabla = 'estudiantes';
+$sa_pac_tabla = '';
 
 if (isset($_POST['sa_pac_tabla'])) {
     $sa_pac_tabla = $_POST['sa_pac_tabla'];
@@ -23,14 +23,13 @@ if (isset($_POST['sa_pac_tabla'])) {
     $(document).ready(function() {
 
 
-        window.addEventListener('beforeunload', function(event) {
-            // Mostrar un mensaje de alerta personalizado
-            var confirmationMessage = '¿Estás seguro de que quieres abandonar la página?';
+        // window.addEventListener('beforeunload', function(event) {
+        //     // Mostrar un mensaje de alerta personalizado
+        //     var confirmationMessage = '¿Estás seguro de que quieres abandonar la página?';
 
-            (event || window.event).returnValue = confirmationMessage; // Para navegadores más antiguos
-            return confirmationMessage; // Para navegadores modernos
-        });
-        lista_seguros();
+        //     (event || window.event).returnValue = confirmationMessage; // Para navegadores más antiguos
+        //     return confirmationMessage; // Para navegadores modernos
+        // });
 
 
         var id = '<?php echo $_SESSION['INICIO']['ID_USUARIO']; ?>';
@@ -105,6 +104,8 @@ if (isset($_POST['sa_pac_tabla'])) {
                         $('#txt_curso').html(response[0].sa_pac_temp_telefono_1);
 
                     <?php } ?>
+
+                    lista_seguros(response[0].sa_pac_id_comunidad,response[0].sa_pac_tabla);
 
                 }
             });
@@ -335,11 +336,16 @@ if (isset($_POST['sa_pac_tabla'])) {
             });
         }
 
-        function lista_seguros() {
+        function lista_seguros(id,tabla) {
+
+            var parametros = {
+                'id':id,
+                'tabla':tabla,
+            }
             $.ajax({
-                // data: {
-                //     parametros: parametros
-                // },
+                data: {
+                    parametros: parametros
+                },
                 url: '<?= $url_general ?>/controlador/ficha_medicaC.php?lista_seguros=true',
                 type: 'post',
                 dataType: 'json',
@@ -350,7 +356,7 @@ if (isset($_POST['sa_pac_tabla'])) {
                 success: function(response) {
                     var option = '<option selected disabled value="">-- Seleccione --</option>';
                     response.forEach(function(item, i) {
-                        option += '<option value ="' + item.id_contratos + '">' + item.plan_seguro + '</option>'
+                        option += '<option value ="' + item.id_arti_asegurados + '">' + item.nombre + '</option>'
                     })
                     $('#sa_fice_pac_nombre_seguro').html(option);
                 }
@@ -358,6 +364,7 @@ if (isset($_POST['sa_pac_tabla'])) {
         }
 
     <?php } ?>
+
 </script>
 
 <div class="page-wrapper">
@@ -539,13 +546,14 @@ if (isset($_POST['sa_pac_tabla'])) {
 
                                                     <div class="row pt-3">
                                                         <div class="col-md-11" id="sa_fice_pac_nombre_seguro_div">
-                                                            <label for="" class="form-label">Nombre del seguro: <label style="color: red;">*</label> </label>
-                                                            <select class="form-select form-select-sm" id="sa_fice_pac_nombre_seguro" name="sa_fice_pac_nombre_seguro">
-                                                                <option selected disabled value="">-- Seleccione --</option>
-                                                                <option value="IESS">IESS</option>
-                                                                <option value="ISSFA">ISSFA</option>
-                                                                <option value="ISSPOL">ISSPOL</option>
-                                                            </select>
+                                                            <label for="" class="form-label">Seguro predeterminado: <label style="color: red;">*</label> </label>
+                                                            <div class="input-group">
+                                                                <select class="form-select form-select-sm" id="sa_fice_pac_nombre_seguro" name="sa_fice_pac_nombre_seguro">
+                                                                    <option selected disabled value="">-- Seleccione --</option>
+                                                                </select>
+                                                                <!-- <span><button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modal_seguros"><i class="bx bx-plus me-0"></i></button></span>                                                                 -->
+                                                            </div>
+                                                           
                                                         </div>
                                                     </div>
                                                 </div>
@@ -876,11 +884,6 @@ if (isset($_POST['sa_pac_tabla'])) {
                 </div>
             </div>
         </div>
-
-
-
-
-
 
     </div>
 </div>
