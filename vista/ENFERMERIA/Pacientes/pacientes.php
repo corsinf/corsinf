@@ -1,5 +1,5 @@
-<script src="<?= $url_general ?>/js/ENFERMERIA/operaciones_generales.js"></script>
-<script src="<?= $url_general ?>/js/ENFERMERIA/pacientes.js"></script>
+<script src="../js/ENFERMERIA/operaciones_generales.js"></script>
+<script src="../js/ENFERMERIA/pacientes.js"></script>
 
 <script type="text/javascript">
     $(document).ready(function() {
@@ -21,7 +21,7 @@
             columns: [{
                     data: null,
                     render: function(data, type, item) {
-                        return '<div class="text-center"><a href="<?= $url_general ?>/vista/inicio.php?mod=7&acc=consultas_pacientes&pac_id=' + item.sa_pac_id + '" class="btn btn-warning btn-sm " title="Historial de Consultas"><i class="bx bx-spreadsheet me-0"></i></a></div>';
+                        return '<div class="text-center"><a href="../vista/inicio.php?mod=7&acc=consultas_pacientes&pac_id=' + item.sa_pac_id + '" class="btn btn-warning btn-sm " title="Historial de Consultas"><i class="bx bx-spreadsheet me-0"></i></a></div>';
                     }
                 }, {
                     data: 'sa_pac_cedula'
@@ -129,7 +129,7 @@
     }
 </script>
 
-<form id="form_enviar" action="<?= $url_general ?>/vista/inicio.php?mod=7&acc=ficha_medica_pacientes" method="post" style="display: none;">
+<form id="form_enviar" action="../vista/inicio.php?mod=7&acc=ficha_medica_pacientes" method="post" style="display: none;">
     <input type="hidden" id="sa_pac_id" name="sa_pac_id" value="">
 </form>
 
