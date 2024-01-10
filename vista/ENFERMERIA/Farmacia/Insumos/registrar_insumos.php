@@ -8,7 +8,7 @@ if (isset($_GET['id'])) {
 
 ?>
 
-<script src="<?= $url_general ?>/js/ENFERMERIA/operaciones_generales.js"></script>
+<script src="../js/ENFERMERIA/operaciones_generales.js"></script>
 
 <script type="text/javascript">
   $(document).ready(function() {
@@ -28,7 +28,7 @@ if (isset($_GET['id'])) {
       data: {
         id: id
       },
-      url: '<?= $url_general ?>/controlador/insumosC.php?listar=true',
+      url: '../controlador/insumosC.php?listar=true',
       type: 'post',
       dataType: 'json',
       success: function(response) {
@@ -108,14 +108,14 @@ if (isset($_GET['id'])) {
       data: {
         parametros: parametros
       },
-      url: '<?= $url_general ?>/controlador/insumosC.php?insertar=true',
+      url: '../controlador/insumosC.php?insertar=true',
       type: 'post',
       dataType: 'json',
 
       success: function(response) {
         if (response == 1) {
           Swal.fire('', 'Operacion realizada con exito.', 'success').then(function() {
-            location.href = '<?= $url_general ?>/vista/inicio.php?mod=7&acc=insumos';
+            location.href = '../vista/inicio.php?mod=7&acc=insumos';
           });
         } else if (response == -2) {
           Swal.fire('', 'Código ya regitrado', 'success');
@@ -149,7 +149,7 @@ if (isset($_GET['id'])) {
       data: {
         id: id
       },
-      url: '<?= $url_general ?>/controlador/insumosC.php?eliminar=true',
+      url: '../controlador/insumosC.php?eliminar=true',
       type: 'post',
       dataType: 'json',
       beforeSend: function() {
@@ -159,7 +159,7 @@ if (isset($_GET['id'])) {
       success: function(response) {
         if (response == 1) {
           Swal.fire('Eliminado!', 'Registro Eliminado.', 'success').then(function() {
-            location.href = '<?= $url_general ?>/vista/inicio.php?mod=7&acc=insumos';
+            location.href = '../vista/inicio.php?mod=7&acc=insumos';
           });
         }
       }
@@ -216,7 +216,7 @@ if (isset($_GET['id'])) {
               </h5>
               <div class="row m-2">
                 <div class="col-sm-12">
-                  <a href="<?= $url_general ?>/vista/inicio.php?mod=7&acc=insumos" class="btn btn-outline-dark btn-sm"><i class="bx bx-arrow-back"></i> Regresar</a>
+                  <a href="../vista/inicio.php?mod=7&acc=insumos" class="btn btn-outline-dark btn-sm"><i class="bx bx-arrow-back"></i> Regresar</a>
                 </div>
               </div>
             </div>

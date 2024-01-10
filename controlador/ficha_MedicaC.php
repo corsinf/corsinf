@@ -36,29 +36,10 @@ if (isset($_GET['administrar_comunidad_ficha_medica'])) {
     }
 
     if (isset($_POST['sa_pac_tabla'])) {
-        $valor_seleccionado = $_POST['sa_pac_tabla'];
-
-        // Verificar si el valor seleccionado contiene "-"
-        if (strpos($valor_seleccionado, '-') !== false) {
-            // Si contiene "-", separar las dos variables usando el carácter "-"
-            list($sa_tbl_pac_nombre, $sa_tbl_pac_prefijo) = explode('-', $valor_seleccionado);
-            $sa_pac_tabla = $sa_tbl_pac_nombre;
-        } else {
-            // Si no contiene "-", asignar el valor completo a $sa_pac_tabla
-            $sa_pac_tabla = $valor_seleccionado;
-        }
+        $sa_pac_tabla = $_POST['sa_pac_tabla'];
     }
 
-    //echo $sa_pac_id_comunidad . '<br>';
-    //echo $sa_pac_tabla;
-
-
     echo json_encode($controlador->crear_paciente_ficha_medica($sa_pac_id_comunidad, $sa_pac_tabla));
-
-    //header("Location: http://localhost/corsinf/vista/inicio.php?mod=7&acc=pacientes");
-
-    // Asegúrate de que no haya más salida después de la redirección
-    //exit();
 }
 
 if (isset($_GET['lista_seguros'])) {
@@ -105,7 +86,7 @@ class ficha_MedicaC
     function lista_seguros($parametros)
     {
         // print_r($parametros);die();
-        $datos = $this->seguros->lista_articulos_seguro_detalle($parametros['tabla'],$parametros['id'],$_SESSION['INICIO']['MODULO_SISTEMA'],false);
+        $datos = $this->seguros->lista_articulos_seguro_detalle($parametros['tabla'], $parametros['id'], $_SESSION['INICIO']['MODULO_SISTEMA'], false);
 
         // print_r($datos);die();
         return $datos;
@@ -206,6 +187,7 @@ class ficha_MedicaC
         return $salida;*/
 
         //echo $sa_pac_id_comunidad . ' ' . $sa_pac_tabla;
+
 
         return $this->modelo->gestion_comunidad_ficha_medica($sa_pac_id_comunidad, $sa_pac_tabla);
     }

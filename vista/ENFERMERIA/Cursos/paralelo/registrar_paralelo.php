@@ -42,7 +42,7 @@ if (isset($_GET['id_grado'])) {
       data: {
         id: id
       },
-      url: '<?php echo $url_general ?>/controlador/seccionC.php?listar=true',
+      url: '../controlador/seccionC.php?listar=true',
       type: 'post',
       dataType: 'json',
 
@@ -89,7 +89,7 @@ if (isset($_GET['id_grado'])) {
       data: {
         "id_seccion": id_seccion
       },
-      url: '<?php echo $url_general ?>/controlador/paraleloC.php?listar_seccion_grado=true',
+      url: '../controlador/paraleloC.php?listar_seccion_grado=true',
       type: 'post',
       dataType: 'json',
 
@@ -119,7 +119,7 @@ if (isset($_GET['id_grado'])) {
       data: {
         id: id
       },
-      url: '<?= $url_general ?>/controlador/paraleloC.php?listar=true',
+      url: '../controlador/paraleloC.php?listar=true',
       type: 'post',
       dataType: 'json',
       success: function(response) {
@@ -179,7 +179,7 @@ if (isset($_GET['id_grado'])) {
       data: {
         parametros: parametros
       },
-      url: '<?= $url_general ?>/controlador/paraleloC.php?insertar=true',
+      url: '../controlador/paraleloC.php?insertar=true',
       type: 'post',
       dataType: 'json',
       /*beforeSend: function () {   
@@ -189,9 +189,9 @@ if (isset($_GET['id_grado'])) {
       success: function(response) {
         if (response == 1) {
           Swal.fire('', 'Operacion realizada con exito.', 'success').then(function() {
-            location.href = '<?= $url_general ?>/vista/inicio.php?mod=7&acc=paralelo';
+            location.href = '../vista/inicio.php?mod=7&acc=paralelo';
           });
-          //location.href = '<?= $url_general ?>/vista/inicio.php?mod=7&acc=paralelo';
+          //location.href = '../vista/inicio.php?mod=7&acc=paralelo';
         } else if (response == -2) {
           //Swal.fire('', 'codigo ya regitrado', 'success');
         }
@@ -224,7 +224,7 @@ if (isset($_GET['id_grado'])) {
       data: {
         id: id
       },
-      url: '<?= $url_general ?>/controlador/paraleloC.php?eliminar=true',
+      url: '../controlador/paraleloC.php?eliminar=true',
       type: 'post',
       dataType: 'json',
       beforeSend: function() {
@@ -234,9 +234,9 @@ if (isset($_GET['id_grado'])) {
       success: function(response) {
         if (response == 1) {
           Swal.fire('Eliminado!', 'Registro Eliminado.', 'success').then(function() {
-            location.href = '<?= $url_general ?>/vista/inicio.php?mod=7&acc=paralelo';
+            location.href = '../vista/inicio.php?mod=7&acc=paralelo';
           });
-          //location.href = '<?= $url_general ?>/vista/inicio.php?mod=7&acc=paralelo';
+          //location.href = '../vista/inicio.php?mod=7&acc=paralelo';
         }
 
       }
@@ -293,7 +293,7 @@ if (isset($_GET['id_grado'])) {
               </h5>
               <div class="row m-2">
                 <div class="col-sm-12">
-                  <a href="<?= $url_general ?>/vista/inicio.php?mod=7&acc=paralelo" class="btn btn-outline-dark btn-sm"><i class="bx bx-arrow-back"></i> Regresar</a>
+                  <a href="../vista/inicio.php?mod=7&acc=paralelo" class="btn btn-outline-dark btn-sm"><i class="bx bx-arrow-back"></i> Regresar</a>
                 </div>
               </div>
             </div>

@@ -1,4 +1,4 @@
-<script src="<?= $url_general ?>/js/ENFERMERIA/pacientes.js"></script>
+<script src="../js/ENFERMERIA/pacientes.js"></script>
 
 <script type="text/javascript">
     $(document).ready(function() {
@@ -60,7 +60,7 @@
             data: {
                 id_representante: id_representante,
             },
-            url: '<?php echo $url_general ?>/controlador/estudiantesC.php?listar_estudiante_representante=true',
+            url: '../controlador/estudiantesC.php?listar_estudiante_representante=true',
             type: 'post',
             dataType: 'json',
             //Para el id representante tomar los datos con los de session
@@ -99,7 +99,7 @@
 
                         alert +
 
-                        '<img src="<?= $url_general ?>/img/computadora.jpg" width="110" height="110" class="rounded-circle shadow" alt="">' +
+                        '<img src="../img/computadora.jpg" width="110" height="110" class="rounded-circle shadow" alt="">' +
                         '<h5 class="mb-0 mt-5">' + item.sa_est_primer_apellido + ' ' + item.sa_est_segundo_apellido + ' ' + item.sa_est_primer_nombre + ' ' + item.sa_est_segundo_nombre + '</h5>' +
                         '<p class="mb-0">' + item.sa_est_cedula + '</p>' +
                         '<p class="mb-0">' + item.sa_est_sexo + '</p>' +

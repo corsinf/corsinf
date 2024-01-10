@@ -41,3 +41,22 @@ function gestion_paciente_comunidad(sa_pac_id_comunidad, sa_pac_tabla) {
         }
     });
 }
+
+function gestion_paciente_comunidad_pacientes(sa_pac_id_comunidad, sa_pac_tabla) {
+    //alert(sa_pac_id_comunidad)
+    $.ajax({
+        data: {
+            sa_pac_id_comunidad: sa_pac_id_comunidad,
+            sa_pac_tabla: sa_pac_tabla
+        },
+        url: '../controlador/ficha_MedicaC.php?administrar_comunidad_ficha_medica=true',
+        type: 'post',
+        dataType: 'json',
+
+        success: function(response) {
+            //location.href = '../vista/inicio.php?mod=7&acc=pacientes';
+        }
+    });
+}
+
+

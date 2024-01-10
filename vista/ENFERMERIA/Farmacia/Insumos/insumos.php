@@ -6,7 +6,7 @@
             },
             responsive: true,
             ajax: {
-                url: '<?php echo $url_general ?>/controlador/insumosC.php?listar_todo=true',
+                url: '../controlador/insumosC.php?listar_todo=true',
                 dataSrc: ''
             },
             columns: [{
@@ -18,7 +18,7 @@
                 {
                     data: null,
                     render: function(data, type, item) {
-                        return '<a href="<?= $url_general ?>/vista/inicio.php?mod=7&acc=registrar_insumos&id=' + item.sa_cins_id + '"><u>' + item.sa_cins_presentacion + '</u></a>';
+                        return '<a href="../vista/inicio.php?mod=7&acc=registrar_insumos&id=' + item.sa_cins_id + '"><u>' + item.sa_cins_presentacion + '</u></a>';
                     }
                 },
                 {
@@ -80,7 +80,7 @@
 
                                     <div class="row">
                                         <div class="col-sm-12" id="btn_nuevo">
-                                            <a href="<?= $url_general ?>/vista/inicio.php?mod=7&acc=registrar_insumos" class="btn btn-success btn-sm"><i class="bx bx-plus"></i> Nuevo</a>
+                                            <a href="../vista/inicio.php?mod=7&acc=registrar_insumos" class="btn btn-success btn-sm"><i class="bx bx-plus"></i> Nuevo</a>
                                         </div>
 
                                     </div>

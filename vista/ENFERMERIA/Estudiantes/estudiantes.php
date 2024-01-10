@@ -1,4 +1,4 @@
-<script src="<?= $url_general ?>/js/ENFERMERIA/operaciones_generales.js"></script>
+<script src="../js/ENFERMERIA/operaciones_generales.js"></script>
 
 <script type="text/javascript">
     $(document).ready(function() {
@@ -8,7 +8,7 @@
             },
             responsive: true,
             ajax: {
-                url: '<?php echo $url_general ?>/controlador/estudiantesC.php?listar_todo=true',
+                url: '../controlador/estudiantesC.php?listar_todo=true',
                 dataSrc: ''
             },
             columns: [{
@@ -49,7 +49,7 @@
     }
 </script>
 
-<form id="form_enviar" action="<?= $url_general ?>/vista/inicio.php?mod=7&acc=registrar_estudiantes" method="post" style="display: none;">
+<form id="form_enviar" action="../vista/inicio.php?mod=7&acc=registrar_estudiantes" method="post" style="display: none;">
     <input type="hidden" id="sa_est_id" name="sa_est_id">
     <input type="hidden" id="sa_sec_id" name="sa_sec_id">
     <input type="hidden" id="sa_gra_id" name="sa_gra_id">
@@ -93,7 +93,7 @@
 
                             <div class="row mx-1">
                                 <div class="col-sm-12" id="btn_nuevo">
-                                    <a href="<?= $url_general ?>/vista/inicio.php?mod=7&acc=registrar_estudiantes" class="btn btn-success btn-sm"><i class="bx bx-plus"></i> Nuevo</a>
+                                    <a href="../vista/inicio.php?mod=7&acc=registrar_estudiantes" class="btn btn-success btn-sm"><i class="bx bx-plus"></i> Nuevo</a>
                                 </div>
                             </div>
                         </div>

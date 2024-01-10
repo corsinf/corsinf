@@ -16,8 +16,8 @@ if (isset($_POST['sa_pac_tabla'])) {
 
 ?>
 
-<script src="<?= $url_general ?>/js/ENFERMERIA/ficha_medica.js"></script>
-<script src="<?= $url_general ?>/js/ENFERMERIA/operaciones_generales.js"></script>
+<script src="../js/ENFERMERIA/ficha_medica.js"></script>
+<script src="../js/ENFERMERIA/operaciones_generales.js"></script>
 
 <script type="text/javascript">
 <?php if ($sa_pac_id == '' && $sa_pac_tabla == '') { ?>
@@ -61,7 +61,7 @@ $(document).ready(function() {
                     sa_pac_id: sa_pac_id
 
                 },
-                url: '<?= $url_general ?>/controlador/pacientesC.php?obtener_info_paciente=true',
+                url: '../controlador/pacientesC.php?obtener_info_paciente=true',
                 type: 'post',
                 dataType: 'json',
                 success: function(response) {
@@ -111,7 +111,7 @@ $(document).ready(function() {
                 data: {
                     sa_pac_id: sa_pac_id
                 },
-                url: '<?php echo $url_general ?>/controlador/ficha_MedicaC.php?listar_paciente_ficha=true',
+                url: '../controlador/ficha_MedicaC.php?listar_paciente_ficha=true',
                 type: 'post',
                 dataType: 'json',
                 success: function(response) {
@@ -310,7 +310,7 @@ $(document).ready(function() {
                 data: {
                     parametros: parametros
                 },
-                url: '<?= $url_general ?>/controlador/ficha_medicaC.php?insertar=true',
+                url: '../controlador/ficha_medicaC.php?insertar=true',
                 type: 'post',
                 dataType: 'json',
                 /*beforeSend: function () {   
@@ -320,7 +320,7 @@ $(document).ready(function() {
                 success: function(response) {
                     if (response == 1) {
                         Swal.fire('', 'Operacion realizada con exito.', 'success').then(function() {
-                            location.href = '<?= $url_general ?>/vista/inicio.php?mod=7&acc=inicio_representante';
+                            location.href = '../vista/inicio.php?mod=7&acc=inicio_representante';
                         });
                     } else if (response == -2) {
                         Swal.fire('', 'Algo salió mal, repite el proceso.', 'success');
@@ -340,7 +340,7 @@ $(document).ready(function() {
                 data: {
                     parametros: parametros
                 },
-                url: '<?= $url_general ?>/controlador/ficha_medicaC.php?lista_seguros=true',
+                url: '../controlador/ficha_medicaC.php?lista_seguros=true',
                 type: 'post',
                 dataType: 'json',
                 /*beforeSend: function () {   
@@ -396,7 +396,7 @@ $(document).ready(function() {
                         <div class="card-title d-flex align-items-center">
 
                             <div class="col-sm-3">
-                                <a href="<?= $url_general ?>/vista/inicio.php?mod=7&acc=inicio_representante" class="btn btn-outline-dark btn-sm"><i class="bx bx-arrow-back"></i> Regresar</a>
+                                <a href="../vista/inicio.php?mod=7&acc=inicio_representante" class="btn btn-outline-dark btn-sm"><i class="bx bx-arrow-back"></i> Regresar</a>
                             </div>
 
 

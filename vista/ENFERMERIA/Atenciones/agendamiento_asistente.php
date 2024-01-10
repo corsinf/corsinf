@@ -27,7 +27,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 ?>
 
-<script src="<?= $url_general ?>/js/ENFERMERIA/operaciones_generales.js"></script>
+<script src="../js/ENFERMERIA/operaciones_generales.js"></script>
 
 <script type="text/javascript">
     $(document).ready(function() {
@@ -49,7 +49,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 
         smartwizard();
-        autocoplete_paciente();
+        //autocoplete_paciente();
+
+        consultar_datos_comunidad_tabla();
+        consultar_tablas_datos('');
     });
 
     function smartwizard() {
@@ -83,28 +86,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         });
     }
 
-    function autocoplete_paciente() {
-        $('#ddl_pacientes').select2({
-            placeholder: '-- Seleccione Paciente --',
-            //dropdownParent: $('#myModal'),
-            ajax: {
-                url: '<?php echo $url_general ?>/controlador/agendamientoC.php?buscar=true',
-                dataType: 'json',
-                delay: 250,
-                processResults: function(data) {
-                    // console.log(data);
-                    return {
-                        results: data
-                    };
-                },
-                cache: true
-            }
-        });
-    }
-
     function agendar() {
-        var paciente = $('#ddl_pacientes').val();
-        //var tipoConsulta = $('#txt_tipo_consulta').val();
+        //tomar los valores de la tabla y el id enviar al controlador y de ahi coger los valores que regresa la procedure 
+        var sa_pac_tabla = $('#sa_pac_tabla').val();
+        var sa_pac_id_comunidad = $('#sa_pac_id_comunidad').val();
+
         var tipoConsulta = '<?php echo $tipo_consulta; ?>';
         var fechaConsulta = $('#txt_fecha_consulta').val();
 
@@ -116,11 +102,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         var sa_conp_frec_respiratoria = $('#sa_conp_frec_respiratoria').val();
         var sa_conp_motivo_consulta = $('#sa_conp_motivo_consulta').val();
 
-
-
         if (tipoConsulta === 'consulta') {
             if (
-                paciente &&
+                sa_pac_tabla &&
                 tipoConsulta &&
                 fechaConsulta &&
                 sa_conp_peso &&
@@ -132,7 +116,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 sa_conp_motivo_consulta) {
                 // Todos los campos están llenos, puedes continuar con el envío de datos
                 var parametros = {
-                    'paciente': paciente,
+                    'sa_pac_tabla': sa_pac_tabla,
+                    'sa_pac_id_comunidad': sa_pac_id_comunidad,
                     'tipo': tipoConsulta,
                     'fecha': fechaConsulta,
                     'sa_conp_peso': sa_conp_peso,
@@ -145,7 +130,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 };
 
                 $.ajax({
-                    url: '<?php echo $url_general ?>/controlador/agendamientoC.php?add_agenda=true',
+                    url: '../controlador/agendamientoC.php?add_agenda=true',
                     data: {
                         parametros: parametros
                     },
@@ -154,7 +139,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     success: function(response) {
                         console.log(response)
                         Swal.fire('', 'Cita Agendada', 'success').then(function() {
-                            location.href = '<?= $url_general ?>/vista/inicio.php?mod=7&acc=agendamiento';
+                            location.href = '../vista/inicio.php?mod=7&acc=agendamiento';
                         })
                     }
                 });
@@ -164,16 +149,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
 
         } else if (tipoConsulta === 'certificado') {
-            if (paciente && tipoConsulta && fechaConsulta) {
+            if (sa_pac_tabla && tipoConsulta && fechaConsulta) {
                 // Todos los campos están llenos, puedes continuar con el envío de datos
                 var parametros = {
-                    'paciente': paciente,
+                    'sa_pac_tabla': sa_pac_tabla,
+                    'sa_pac_id_comunidad': sa_pac_id_comunidad,
                     'tipo': tipoConsulta,
                     'fecha': fechaConsulta
                 };
 
                 $.ajax({
-                    url: '<?php echo $url_general ?>/controlador/agendamientoC.php?add_agenda=true',
+                    url: '../controlador/agendamientoC.php?add_agenda=true',
                     data: {
                         parametros: parametros
                     },
@@ -182,7 +168,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     success: function(response) {
                         console.log(response)
                         Swal.fire('', 'Cita Agendada', 'success').then(function() {
-                            location.href = '<?= $url_general ?>/vista/inicio.php?mod=7&acc=agendamiento';
+                            location.href = '../vista/inicio.php?mod=7&acc=agendamiento';
                         })
                     }
                 });
@@ -191,9 +177,76 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 Swal.fire('Oops...', 'Todos los campos son obligatorios. Por favor, completa la información.', 'error').then(function() {})
             }
         }
-
-
     }
+
+    function consultar_tablas_datos(valor_seleccionar) {
+
+        var valor_seleccionar = valor_seleccionar.split('-');
+        var sa_tbl_pac_tabla = valor_seleccionar[0];
+        var sa_tbl_pac_prefijo = valor_seleccionar[1];
+
+        //alert(sa_tbl_pac_prefijo);
+
+        $('#sa_pac_id_comunidad').select2({
+            placeholder: 'Selecciona una opción',
+            //dropdownParent: $('#modal_pacientes'),
+            language: 'es',
+            minimumInputLength: 3,
+            ajax: {
+                url: '../controlador/' + sa_tbl_pac_tabla + 'C.php?listar_todo=true',
+                dataType: 'json',
+                delay: 250,
+                data: function(params) {
+                    return {
+                        searchTerm: params.term // Envía el término de búsqueda al servidor
+                    };
+                },
+                processResults: function(data, params) { // Agrega 'params' como parámetro
+                    var searchTerm = params.term.toLowerCase();
+
+                    var options = data.reduce(function(filtered, item) {
+
+                        var fullName = item['' + sa_tbl_pac_prefijo + '_cedula'] + " - " + item['' + sa_tbl_pac_prefijo + '_primer_apellido'] + " " + item['' + sa_tbl_pac_prefijo + '_segundo_apellido'] + " " + item['' + sa_tbl_pac_prefijo + '_primer_nombre'] + " " + item['' + sa_tbl_pac_prefijo + '_segundo_nombre'];
+
+                        if (fullName.toLowerCase().includes(searchTerm)) {
+                            filtered.push({
+                                id: item['' + sa_tbl_pac_prefijo + '_id'],
+                                text: fullName
+                            });
+                        }
+
+                        return filtered;
+                    }, []);
+
+                    return {
+                        results: options
+                    };
+                },
+                cache: true
+            }
+        });
+    }
+
+    function consultar_datos_comunidad_tabla() {
+
+        var salida = '<option value="">Seleccione el Tipo de Paciente</option>';
+
+        $.ajax({
+            url: '../controlador/Comunidad_TablasC.php?listar=true',
+            type: 'post',
+            dataType: 'json',
+            success: function(response) {
+                $.each(response, function(i, item) {
+                    // Concatenar dos variables en el valor del atributo "value"
+                    salida += '<option value="' + item.sa_tbl_pac_nombre + '-' + item.sa_tbl_pac_prefijo + '">' + item.sa_tbl_pac_nombre.toUpperCase() + '</option>';
+                });
+
+                $('#sa_pac_tabla').empty().html(salida);
+
+            }
+        });
+    }
+
 </script>
 
 <div class="page-wrapper">
@@ -232,7 +285,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <div class="card-title d-flex align-items-center">
 
                                 <div class="col-sm-3">
-                                    <a href="<?= $url_general ?>/vista/inicio.php?mod=7&acc=agendamiento" class="btn btn-outline-dark btn-sm"><i class="bx bx-arrow-back"></i> Regresar</a>
+                                    <a href="../vista/inicio.php?mod=7&acc=agendamiento" class="btn btn-outline-dark btn-sm"><i class="bx bx-arrow-back"></i> Regresar</a>
                                 </div>
 
                                 <div class="col-sm-9 text-end m-2">
@@ -271,11 +324,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                         <h3 class="pt-0 text-primary">Agendar</h3>
                                                     </b>
 
-                                                    <div class="row pt-2">
-                                                        <div class="col-sm-8">
-                                                            <b>Pacientes: <label class="text-danger">*</label></b>
-                                                            <select class="form-select form-select-sm" id="ddl_pacientes" name="ddl_pacientes">
-                                                                <option value="">-- Seleccione Paciente --</option>
+
+
+                                                    <div class="row">
+                                                        <div class="col-8">
+                                                            <label for="sa_pac_tabla">Tipo de Paciente: <label class="text-danger">*</label></label>
+                                                            <select name="sa_pac_tabla" id="sa_pac_tabla" class="form-select" onclick="consultar_tablas_datos(this.value)">
+                                                                <option value="">Seleccione el Tipo de Paciente</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="row pt-3">
+                                                        <div class="col-8">
+                                                            <label for="sa_pac_id_comunidad">Paciente: <label class="text-danger">*</label></label>
+                                                            <select name="sa_pac_id_comunidad" id="sa_pac_id_comunidad" class="form-select">
+                                                                <option value="">Seleccione el Paciente</option>
                                                             </select>
                                                         </div>
                                                     </div>
@@ -381,7 +445,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <div class="card-title d-flex align-items-center">
 
                                 <div class="col-sm-3">
-                                    <a href="<?= $url_general ?>/vista/inicio.php?mod=7&acc=agendamiento" class="btn btn-outline-dark btn-sm"><i class="bx bx-arrow-back"></i> Regresar</a>
+                                    <a href="../vista/inicio.php?mod=7&acc=agendamiento" class="btn btn-outline-dark btn-sm"><i class="bx bx-arrow-back"></i> Regresar</a>
                                 </div>
 
                             </div>
@@ -404,4 +468,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </div>
 </div>
 
-<script src="<?= $url_general ?>/js/ENFERMERIA/consulta_medica.js"></script>
+<script src="../js/ENFERMERIA/consulta_medica.js"></script>

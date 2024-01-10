@@ -1,4 +1,4 @@
-<script src="<?= $url_general ?>/js/ENFERMERIA/operaciones_generales.js"></script>
+<script src="../js/ENFERMERIA/operaciones_generales.js"></script>
 
 <script type="text/javascript">
     $(document).ready(function() {
@@ -8,7 +8,7 @@
             },
             responsive: true,
             ajax: {
-                url: '<?php echo $url_general ?>/controlador/representantesC.php?listar_todo=true',
+                url: '../controlador/representantesC.php?listar_todo=true',
                 dataSrc: ''
             },
             columns: [{
@@ -45,7 +45,7 @@
     }
 </script>
 
-<form id="form_enviar" action="<?= $url_general ?>/vista/inicio.php?mod=7&acc=registrar_representantes" method="post" style="display: none;">
+<form id="form_enviar" action="../vista/inicio.php?mod=7&acc=registrar_representantes" method="post" style="display: none;">
     <input type="hidden" id="sa_rep_id" name="sa_rep_id" value="">
 </form>
 
@@ -83,7 +83,7 @@
 
                             <div class="row mx-1">
                                 <div class="col-sm-12" id="btn_nuevo">
-                                    <a href="<?= $url_general ?>/vista/inicio.php?mod=7&acc=registrar_representantes" class="btn btn-success btn-sm"><i class="bx bx-plus"></i> Nuevo</a>
+                                    <a href="../vista/inicio.php?mod=7&acc=registrar_representantes" class="btn btn-success btn-sm"><i class="bx bx-plus"></i> Nuevo</a>
                                 </div>
                             </div>
                         </div>
