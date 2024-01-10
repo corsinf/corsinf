@@ -10,7 +10,7 @@
             data: {
                 id: id
             },
-            url: '<?php echo $url_general ?>/controlador/gradoC.php?listar=true',
+            url: '../controlador/gradoC.php?listar=true',
             type: 'post',
             dataType: 'json',
 
@@ -22,7 +22,7 @@
                         '<tr>' +
                         '<td>' + 'COD - ' + item.sa_gra_id + '</td>' +
                         '<td>' + item.sa_sec_nombre + '</td>' +
-                        '<td><a href="<?= $url_general ?>/vista/inicio.php?mod=7&acc=registrar_grado&id=' + item.sa_gra_id + '&id_seccion=' + item.sa_sec_id + '"><u>' + item.sa_gra_nombre + '</u></a></td>' +
+                        '<td><a href="../vista/inicio.php?mod=7&acc=registrar_grado&id=' + item.sa_gra_id + '&id_seccion=' + item.sa_sec_id + '"><u>' + item.sa_gra_nombre + '</u></a></td>' +
                         '<td></td>' +
                         '</tr>';
                 });
@@ -39,7 +39,7 @@
             data: {
                 buscar: buscar
             },
-            url: '<?= $url_general ?>/controlador/gradoC.php?buscar=true',
+            url: '../controlador/gradoC.php?buscar=true',
             type: 'post',
             dataType: 'json',
 
@@ -51,7 +51,7 @@
                         '<tr>' +
                         '<td>' + 'COD - ' + item.sa_gra_id + '</td>' +
                         '<td>' + item.sa_sec_nombre + '</td>' +
-                        '<td><a href="<?= $url_general ?>/vista/inicio.php?mod=7&acc=registrar_grado&id=' + item.sa_gra_id + '&id_seccion=' + item.sa_sec_id + '"><u>' + item.sa_gra_nombre + '</u></a></td>' +
+                        '<td><a href="../vista/inicio.php?mod=7&acc=registrar_grado&id=' + item.sa_gra_id + '&id_seccion=' + item.sa_sec_id + '"><u>' + item.sa_gra_nombre + '</u></a></td>' +
                         '<td> </td>' +
                         '</tr>';
                 });
@@ -115,7 +115,7 @@
 
                                     <div class="row">
                                         <div class="col-sm-12" id="btn_nuevo">
-                                            <a href="<?= $url_general ?>/vista/inicio.php?mod=7&acc=registrar_grado" class="btn btn-success btn-sm"><i class="bx bx-plus"></i> Nuevo</a>
+                                            <a href="../vista/inicio.php?mod=7&acc=registrar_grado" class="btn btn-success btn-sm"><i class="bx bx-plus"></i> Nuevo</a>
                                             <a href="#" class="btn btn-outline-secondary btn-sm" id="excel_grado" title="Informe en excel del total de Grados"><i class="bx bx-file"></i> Total Grados</a>
                                         </div>
 

@@ -11,7 +11,7 @@
             // data: {
             //     id: id
             // },
-            url: '<?php echo $url_general ?>/controlador/agendamientoC.php?cita_actual=true',
+            url: '../controlador/agendamientoC.php?cita_actual=true',
             type: 'post',
             dataType: 'json',
             //Para el id representante tomar los datos con los de session
@@ -31,7 +31,7 @@
                         '<p class="mb-3">' + item.sa_conp_tipo_consulta.toUpperCase() + '</p>' +
                         '<div class="d-grid"> ' +
 
-                        '<a class="btn btn-outline-success radius-15 mb-1" href="<?= $url_general ?>/vista/inicio.php?mod=7&acc=registrar_consulta_paciente&id_consulta=' + item.sa_conp_id + '&tipo_consulta=' + item.sa_conp_tipo_consulta + '&id_ficha=' + item.sa_fice_id + '&id_paciente=' + item.sa_pac_id + '"Comenzar title=" Consulta">Comenzar Consulta</a>' +
+                        '<a class="btn btn-outline-success radius-15 mb-1" href="../vista/inicio.php?mod=7&acc=registrar_consulta_paciente&id_consulta=' + item.sa_conp_id + '&tipo_consulta=' + item.sa_conp_tipo_consulta + '&id_ficha=' + item.sa_fice_id + '&id_paciente=' + item.sa_pac_id + '"Comenzar title=" Consulta">Comenzar Consulta</a>' +
 
 
                     '<button class="btn btn-outline-primary radius-15 mt-2" onclick="consultar_datos_h(' + item.sa_fice_id + ', \'' + item.nombres + '\')">Historial</button>' +
@@ -60,7 +60,7 @@
             data: {
                 id_ficha: id_paciente
             },
-            url: '<?php echo $url_general ?>/controlador/consultasC.php?listar_consulta_ficha=true',
+            url: '../controlador/consultasC.php?listar_consulta_ficha=true',
             type: 'post',
             dataType: 'json',
             //Para el id representante tomar los datos con los de session
@@ -116,7 +116,7 @@
                         {
                             data: null,
                             render: function(data, type, item) {
-                                return '<a class="btn btn-primary btn-sm" target="_blank"  title="Enviar Mensaje" href="<?= $url_general ?>/vista/inicio.php?mod=7&acc=registrar_consulta_estudiante&id_ficha=' + item.sa_conp_id + '&id_estudiante=' + item.sa_fice_id + '&id_consulta=2&ver=1">' + '<i class="bx bx-show-alt me-0"></i>' + '</a>';
+                                return '<a class="btn btn-primary btn-sm" target="_blank"  title="Enviar Mensaje" href="../vista/inicio.php?mod=7&acc=registrar_consulta_estudiante&id_ficha=' + item.sa_conp_id + '&id_estudiante=' + item.sa_fice_id + '&id_consulta=2&ver=1">' + '<i class="bx bx-show-alt me-0"></i>' + '</a>';
                             }
                         },
 

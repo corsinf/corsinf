@@ -33,7 +33,7 @@ if (isset($_GET['id_paciente'])) {
             data: {
                 id: id_consulta
             },
-            url: '<?php echo $url_general ?>/controlador/consultasC.php?listar_solo_consulta=true',
+            url: '../controlador/consultasC.php?listar_solo_consulta=true',
             type: 'post',
             dataType: 'json',
             success: function(response) {
@@ -61,7 +61,7 @@ if (isset($_GET['id_paciente'])) {
             data: {
                 parametros: parametros
             },
-            url: '<?= $url_general ?>/controlador/consultasC.php?observacion=true',
+            url: '../controlador/consultasC.php?observacion=true',
             type: 'post',
             dataType: 'json',
 
@@ -70,8 +70,7 @@ if (isset($_GET['id_paciente'])) {
 
                 if (response == 1) {
                     Swal.fire('', 'Operacion realizada con exito.', 'success').then(function() {
-                        //location.href = '<?= $url_general ?>/vista/inicio.php?mod=7&acc=atencion_estudiante';
-                        location.href = '<?= $url_general ?>/vista/inicio.php?mod=7&acc=consultas_pacientes&pac_id=<?= $id_paciente; ?>';
+                        location.href = '../vista/inicio.php?mod=7&acc=consultas_pacientes&pac_id=<?= $id_paciente; ?>';
                     });
                 } else if (response == -2) {
                     Swal.fire('', 'Código ya registrado', 'success');
@@ -119,7 +118,7 @@ if (isset($_GET['id_paciente'])) {
 
                             <div class="row m-2">
                                 <div class="col-sm-12">
-                                    <a href="<?= $url_general ?>/vista/inicio.php?mod=7&acc=consultas_pacientes&pac_id=<?= $id_paciente; ?>" class="btn btn-outline-dark btn-sm"><i class="bx bx-arrow-back"></i> Regresar</a>
+                                    <a href="../vista/inicio.php?mod=7&acc=consultas_pacientes&pac_id=<?= $id_paciente; ?>" class="btn btn-outline-dark btn-sm"><i class="bx bx-arrow-back"></i> Regresar</a>
                                 </div>
                             </div>
                         </div>
@@ -146,7 +145,7 @@ if (isset($_GET['id_paciente'])) {
                             <section class="content">
                                 <div class="container-fluid">
 
-                                    <p>Abrir solo <a href="<?= $url_general; ?>/controlador/consultasC.php?pdf_consulta=true&id_consulta=<?= $id_consulta; ?>" TARGET="_BLANK">PDF</a></p>
+                                    <p>Abrir solo <a href="../controlador/consultasC.php?pdf_consulta=true&id_consulta=<?= $id_consulta; ?>" TARGET="_BLANK">PDF</a></p>
                                     <div class="col-xs-12 col-sm-12 col-md-12">
                                         <div class="panel">
                                             <div class="embed-responsive embed-responsive-4by3" style="margin-top: 30px">

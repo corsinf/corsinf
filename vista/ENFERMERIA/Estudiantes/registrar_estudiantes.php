@@ -29,8 +29,8 @@ if (isset($_POST['id_representante'])) {
 
 ?>
 
-<script src="<?= $url_general ?>/js/ENFERMERIA/operaciones_generales.js"></script>
-<script src="<?= $url_general ?>/js/ENFERMERIA/estudiantes.js"></script>
+<script src="../js/ENFERMERIA/operaciones_generales.js"></script>
+<script src="../js/ENFERMERIA/estudiantes.js"></script>
 
 <script type="text/javascript">
   $(document).ready(function() {
@@ -64,7 +64,7 @@ if (isset($_POST['id_representante'])) {
       data: {
         id: id
       },
-      url: '<?php echo $url_general ?>/controlador/seccionC.php?listar=true',
+      url: '../controlador/seccionC.php?listar=true',
       type: 'post',
       dataType: 'json',
 
@@ -113,7 +113,7 @@ if (isset($_POST['id_representante'])) {
       data: {
         "id_seccion": id_seccion
       },
-      url: '<?php echo $url_general ?>/controlador/paraleloC.php?listar_seccion_grado=true',
+      url: '../controlador/paraleloC.php?listar_seccion_grado=true',
       type: 'post',
       dataType: 'json',
 
@@ -162,7 +162,7 @@ if (isset($_POST['id_representante'])) {
       data: {
         "id_grado": id_grado
       },
-      url: '<?php echo $url_general ?>/controlador/paraleloC.php?listar_grado_paralelo=true',
+      url: '../controlador/paraleloC.php?listar_grado_paralelo=true',
       type: 'post',
       dataType: 'json',
 
@@ -195,7 +195,7 @@ if (isset($_POST['id_representante'])) {
           "id": id
         },
 
-        url: '<?php echo $url_general ?>/controlador/representantesC.php?listar=true',
+        url: '../controlador/representantesC.php?listar=true',
 
         type: 'post', //método de envio
         dataType: 'json',
@@ -216,7 +216,7 @@ if (isset($_POST['id_representante'])) {
       language: 'es',
       minimumInputLength: 3,
       ajax: {
-        url: '<?php echo $url_general ?>/controlador/representantesC.php?listar_todo=true',
+        url: '../controlador/representantesC.php?listar_todo=true',
         dataType: 'json',
         delay: 250,
         data: function(params) {
@@ -255,7 +255,7 @@ if (isset($_POST['id_representante'])) {
       data: {
         id: id
       },
-      url: '<?php echo $url_general ?>/controlador/estudiantesC.php?listar=true',
+      url: '../controlador/estudiantesC.php?listar=true',
       type: 'post',
       dataType: 'json',
       success: function(response) {
@@ -390,14 +390,14 @@ if (isset($_POST['id_representante'])) {
       data: {
         parametros: parametros
       },
-      url: '<?php echo $url_general ?>/controlador/estudiantesC.php?insertar=true',
+      url: '../controlador/estudiantesC.php?insertar=true',
       type: 'post',
       dataType: 'json',
 
       success: function(response) {
         if (response == 1) {
           Swal.fire('', 'Operacion realizada con exito.', 'success').then(function() {
-            location.href = '<?= $url_general ?>/vista/inicio.php?mod=7&acc=estudiantes';
+            location.href = '../vista/inicio.php?mod=7&acc=estudiantes';
           });
         } else if (response == -2) {
           Swal.fire('', 'Cédula ya registrada.', 'warning');
@@ -428,14 +428,14 @@ if (isset($_POST['id_representante'])) {
       data: {
         id: id
       },
-      url: '<?php echo $url_general ?>/controlador/estudiantesC.php?eliminar=true',
+      url: '../controlador/estudiantesC.php?eliminar=true',
       type: 'post',
       dataType: 'json',
 
       success: function(response) {
         if (response == 1) {
           Swal.fire('Eliminado!', 'Registro Eliminado.', 'success').then(function() {
-            location.href = '<?= $url_general ?>/vista/inicio.php?mod=7&acc=estudiantes';
+            location.href = '../vista/inicio.php?mod=7&acc=estudiantes';
           });
         }
       }
@@ -498,7 +498,7 @@ if (isset($_POST['id_representante'])) {
               </h5>
               <div class="row m-2">
                 <div class="col-sm-12">
-                  <a href="<?= $url_general ?>/vista/inicio.php?mod=7&acc=estudiantes" class="btn btn-outline-dark btn-sm"><i class="bx bx-arrow-back"></i> Regresar</a>
+                  <a href="../vista/inicio.php?mod=7&acc=estudiantes" class="btn btn-outline-dark btn-sm"><i class="bx bx-arrow-back"></i> Regresar</a>
                 </div>
               </div>
             </div>

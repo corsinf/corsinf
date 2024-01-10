@@ -3,19 +3,25 @@
 
 <script type="text/javascript">
     $(document).ready(function() {
-        $('#tbl_pacientes').DataTable({
+        carga_tabla();
+        consultar_datos_comunidad_tabla();
+        consultar_tablas_datos('');
+    });
+
+    function carga_tabla() {
+        tabla_pacientes = $('#tbl_pacientes').DataTable({
             language: {
                 url: 'https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
             },
             responsive: true,
             ajax: {
-                url: '<?php echo $url_general ?>/controlador/pacientesC.php?listar_todo=true',
+                url: '../controlador/pacientesC.php?listar_todo=true',
                 dataSrc: ''
             },
             columns: [{
                     data: null,
                     render: function(data, type, item) {
-                        return '<div class="text-center"><a href="<?= $url_general ?>/vista/inicio.php?mod=7&acc=consultas_pacientes&pac_id=' + item.sa_pac_id + '" class="btn btn-warning btn-sm " title="Historial de Consultas"><i class="bx bxs-folder me-0"></i></i></a></div>';
+                        return '<div class="text-center"><a href="<?= $url_general ?>/vista/inicio.php?mod=7&acc=consultas_pacientes&pac_id=' + item.sa_pac_id + '" class="btn btn-warning btn-sm " title="Historial de Consultas"><i class="bx bx-spreadsheet me-0"></i></a></div>';
                     }
                 }, {
                     data: 'sa_pac_cedula'
@@ -40,10 +46,7 @@
                 },
             ]
         });
-
-        consultar_datos_comunidad_tabla();
-        consultar_tablas_datos('');
-    });
+    }
 
     function consultar_tablas_datos(valor_seleccionar) {
 
@@ -59,7 +62,7 @@
             language: 'es',
             minimumInputLength: 3,
             ajax: {
-                url: '<?php echo $url_general ?>/controlador/' + sa_tbl_pac_tabla + 'C.php?listar_todo=true',
+                url: '../controlador/' + sa_tbl_pac_tabla + 'C.php?listar_todo=true',
                 dataType: 'json',
                 delay: 250,
                 data: function(params) {
@@ -93,13 +96,11 @@
         });
     }
 
-
-
     function consultar_datos_comunidad_tabla() {
         var salida = '<option value="">Seleccione el Tipo de Paciente</option>';
 
         $.ajax({
-            url: '<?php echo $url_general ?>/controlador/Comunidad_TablasC.php?listar=true',
+            url: '../controlador/Comunidad_TablasC.php?listar=true',
             type: 'post',
             dataType: 'json',
             success: function(response) {
@@ -111,6 +112,20 @@
                 $('#sa_pac_tabla').html(salida);
             }
         });
+    }
+
+    function gestion_pacientes() {
+        var sa_pac_tabla = $('#sa_pac_tabla').val();
+        var sa_pac_id_comunidad = $('#sa_pac_id_comunidad').val();
+
+        gestion_paciente_comunidad_pacientes(sa_pac_id_comunidad, sa_pac_tabla);
+
+        if (tabla_pacientes) {
+            tabla_pacientes.destroy(); // Destruir la instancia existente del DataTable
+        }
+
+        $('#modal_pacientes').modal('hide');
+        carga_tabla(); // Volver a cargar la tabla
     }
 </script>
 
@@ -191,7 +206,6 @@
 </div>
 
 
-
 <div class="modal" id="modal_pacientes" abindex="-1" aria-modal="true" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
@@ -204,35 +218,30 @@
             <!-- Modal body -->
             <div class="modal-body">
 
-                <form action="<?php echo $url_general ?>/controlador/ficha_MedicaC.php?administrar_comunidad_ficha_medica=true" method="post">
-                    <div class="row">
-                        <div class="col-12">
-                            <label for="sa_pac_tabla">Tipo de Paciente: <label class="text-danger">*</label></label>
-                            <select name="sa_pac_tabla" id="sa_pac_tabla" class="form-select" onclick="consultar_tablas_datos(this.value)">
-                                <option value="">Seleccione el Tipo de Paciente</option>
-                            </select>
-                        </div>
+                <div class="row">
+                    <div class="col-12">
+                        <label for="sa_pac_tabla">Tipo de Paciente: <label class="text-danger">*</label></label>
+                        <select name="sa_pac_tabla" id="sa_pac_tabla" class="form-select" onclick="consultar_tablas_datos(this.value)">
+                            <option value="">Seleccione el Tipo de Paciente</option>
+                        </select>
                     </div>
+                </div>
 
-                    <div class="row pt-3">
-                        <div class="col-12">
-                            <label for="sa_pac_id_comunidad">Paciente: <label class="text-danger">*</label></label>
-                            <select name="sa_pac_id_comunidad" id="sa_pac_id_comunidad" class="form-select">
-                                <option value="">Seleccione el Paciente</option>
-                            </select>
-                        </div>
+                <div class="row pt-3">
+                    <div class="col-12">
+                        <label for="sa_pac_id_comunidad">Paciente: <label class="text-danger">*</label></label>
+                        <select name="sa_pac_id_comunidad" id="sa_pac_id_comunidad" class="form-select">
+                            <option value="">Seleccione el Paciente</option>
+                        </select>
                     </div>
+                </div>
 
-                    <div class="row pt-3">
-                        <div class="col-12 text-end">
-                            <button type="submit" class="btn btn-success btn-sm"><i class="bx bx-save"></i> Agregar</button>
+                <div class="row pt-3">
+                    <div class="col-12 text-end">
+                        <button type="submit" class="btn btn-success btn-sm" onclick="gestion_pacientes()"><i class="bx bx-save"></i> Agregar</button>
 
-                        </div>
                     </div>
-
-                </form>
-
-
+                </div>
 
             </div>
         </div>

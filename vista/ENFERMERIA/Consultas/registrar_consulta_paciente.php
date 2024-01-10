@@ -42,7 +42,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 ?>
 
-<script src="<?= $url_general ?>/js/ENFERMERIA/operaciones_generales.js"></script>
+<script src="../js/ENFERMERIA/operaciones_generales.js"></script>
 
 <!-- //link de api icd -->
 <link rel="stylesheet" href="https://icdcdn.who.int/embeddedct/icd11ect-1.6.1.css">
@@ -92,7 +92,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             data: {
                 id_consulta: id_consulta
             },
-            url: '<?php echo $url_general ?>/controlador/consultasC.php?datos_consulta=true',
+            url: '../controlador/consultasC.php?datos_consulta=true',
             type: 'post',
             dataType: 'json',
             //Para el id representante tomar los datos con los de session
@@ -178,7 +178,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 sa_pac_id: sa_pac_id
 
             },
-            url: '<?= $url_general ?>/controlador/pacientesC.php?obtener_info_paciente=true',
+            url: '../controlador/pacientesC.php?obtener_info_paciente=true',
             type: 'post',
             dataType: 'json',
             success: function(response) {
@@ -239,7 +239,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             data: {
                 sa_pac_id: sa_pac_id
             },
-            url: '<?php echo $url_general ?>/controlador/ficha_MedicaC.php?listar_paciente_ficha=true',
+            url: '../controlador/ficha_MedicaC.php?listar_paciente_ficha=true',
             type: 'post',
             dataType: 'json',
             success: function(response) {
@@ -267,7 +267,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             data: {
                 sa_pac_id: sa_pac_id
             },
-            url: '<?php echo $url_general ?>/controlador/ficha_MedicaC.php?listar_paciente_ficha=true',
+            url: '../controlador/ficha_MedicaC.php?listar_paciente_ficha=true',
             type: 'post',
             dataType: 'json',
             success: function(response) {
@@ -300,7 +300,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             data: {
                 id: id_consulta
             },
-            url: '<?php echo $url_general ?>/controlador/consultasC.php?listar_solo_consulta=true',
+            url: '../controlador/consultasC.php?listar_solo_consulta=true',
             type: 'post',
             dataType: 'json',
             success: function(response) {
@@ -592,7 +592,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             data: {
                 parametros: parametros
             },
-            url: '<?= $url_general ?>/controlador/consultasC.php?insertar=true',
+            url: '../controlador/consultasC.php?insertar=true',
             type: 'post',
             dataType: 'json',
 
@@ -601,8 +601,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 if (response == 1) {
                     Swal.fire('', 'Operacion realizada con exito.', 'success').then(function() {
-                        //location.href = '<?= $url_general ?>/vista/inicio.php?mod=7&acc=atencion_estudiante';
-                        location.href = '<?= $url_general ?>/vista/inicio.php?mod=7&acc=pacientes';
+                        location.href = '../vista/inicio.php?mod=7&acc=pacientes';
                     });
                 } else if (response == -2) {
                     Swal.fire('', 'Código ya registrado', 'success');
@@ -637,7 +636,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             data: {
                 id: id
             },
-            url: '<?= $url_general ?>/controlador/consultasC.php?eliminar=true',
+            url: '../controlador/consultasC.php?eliminar=true',
             type: 'post',
             dataType: 'json',
             /*beforeSend: function () {   
@@ -647,7 +646,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             success: function(response) {
                 if (response == 1) {
                     Swal.fire('Eliminado!', 'Registro Eliminado.', 'success').then(function() {
-                        location.href = '<?= $url_general ?>/vista/inicio.php?mod=7&acc=consulta_estudiante&id_ficha=';
+                        location.href = '../vista/inicio.php?mod=7&acc=consulta_estudiante&id_ficha=';
                     });
                 }
             }
@@ -758,7 +757,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <div class="row m-2">
 
                                 <div class="col-sm-12" hidden>
-                                    <a href="<?= $url_general ?>/vista/inicio.php?mod=7&acc=consultas_pacientes&pac_id=<?= $id_paciente ?>" class="btn btn-outline-dark btn-sm"><i class="bx bx-arrow-back"></i> Regresar</a>
+                                    <a href="../vista/inicio.php?mod=7&acc=consultas_pacientes&pac_id=<?= $id_paciente ?>" class="btn btn-outline-dark btn-sm"><i class="bx bx-arrow-back"></i> Regresar</a>
                                 </div>
 
                             </div>
@@ -1208,7 +1207,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </div>
 </div>
 
-<script src="<?= $url_general ?>/js/ENFERMERIA/consulta_medica.js"></script>
+<script src="../js/ENFERMERIA/consulta_medica.js"></script>
 
 <script>
     $('input[name=sa_conp_permiso_salida]').change(function() {

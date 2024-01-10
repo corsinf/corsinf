@@ -8,7 +8,7 @@ if (isset($_GET['pac_id'])) {
 
 ?>
 
-<script src="<?= $url_general ?>/js/ENFERMERIA/operaciones_generales.js"></script>
+<script src="../js/ENFERMERIA/operaciones_generales.js"></script>
 
 <script type="text/javascript">
   $(document).ready(function() {
@@ -33,7 +33,7 @@ if (isset($_GET['pac_id'])) {
         sa_pac_id: sa_pac_id
 
       },
-      url: '<?= $url_general ?>/controlador/pacientesC.php?obtener_info_paciente=true',
+      url: '../controlador/pacientesC.php?obtener_info_paciente=true',
       type: 'post',
       dataType: 'json',
       success: function(response) {
@@ -73,7 +73,7 @@ if (isset($_GET['pac_id'])) {
       data: {
         id_paciente: id_paciente
       },
-      url: '<?php echo $url_general ?>/controlador/pacientesC.php?obtener_idFicha_paciente=true',
+      url: '../controlador/pacientesC.php?obtener_idFicha_paciente=true',
       type: 'post',
       dataType: 'json',
       success: function(response) {
@@ -86,7 +86,7 @@ if (isset($_GET['pac_id'])) {
           data: {
             id_ficha: response.sa_fice_id
           },
-          url: '<?php echo $url_general ?>/controlador/consultasC.php?listar_consulta_ficha=true',
+          url: '../controlador/consultasC.php?listar_consulta_ficha=true',
           type: 'post',
           dataType: 'json',
           success: function(responseConsultas) {
@@ -110,10 +110,10 @@ if (isset($_GET['pac_id'])) {
                     botones = '';
                     botones += '<div class="d-inline">';
 
-                    botones += '<button type="button" class="btn btn-primary btn-sm m-1" title="Detalles de la Consulta" onclick="ver_pdf(' + item.sa_conp_id + ')"> <i class="bx bx-spreadsheet me-0"></i></button>';
+                    botones += '<button type="button" class="btn btn-primary btn-sm m-1" title="Detalles de la Consulta" onclick="ver_pdf(' + item.sa_conp_id + ')"> <i class="bx bx-file me-0"></i></button>';
 
                     if (item.sa_conp_estado_revision == 0 || item.sa_conp_estado_revision == 2) {
-                      botones += '<a href="<?= $url_general ?>/vista/inicio.php?mod=7&acc=registrar_consulta_paciente&id_consulta=' + item.sa_conp_id + '&tipo_consulta=' + item.sa_conp_tipo_consulta + '&id_ficha=' + item.sa_fice_id + '&id_paciente=' + item.sa_pac_id + '" class="btn btn-warning btn-sm m-0" title="Detalles de la Consulta"><i class="bx bx-edit me-0" ></i></a>';
+                      botones += '<a href="../vista/inicio.php?mod=7&acc=registrar_consulta_paciente&id_consulta=' + item.sa_conp_id + '&tipo_consulta=' + item.sa_conp_tipo_consulta + '&id_ficha=' + item.sa_fice_id + '&id_paciente=' + item.sa_pac_id + '" class="btn btn-warning btn-sm m-0" title="Detalles de la Consulta"><i class="bx bx-edit me-0" ></i></a>';
                     }
 
                     botones += '</div>';
@@ -221,7 +221,7 @@ if (isset($_GET['pac_id'])) {
 
               <div class="row m-2">
                 <div class="col-sm-12">
-                  <a href="<?= $url_general ?>/vista/inicio.php?mod=7&acc=pacientes" class="btn btn-outline-dark btn-sm"><i class="bx bx-arrow-back"></i> Regresar</a>
+                  <a href="../vista/inicio.php?mod=7&acc=pacientes" class="btn btn-outline-dark btn-sm"><i class="bx bx-arrow-back"></i> Regresar</a>
                 </div>
               </div>
             </div>
@@ -240,7 +240,7 @@ if (isset($_GET['pac_id'])) {
 
                       <div class="card">
                         <div class="card-body bg-dark">
-                          <form action="<?= $url_general ?>/vista/inicio.php?mod=7&acc=registrar_consulta_paciente" method="post">
+                          <form action="../vista/inicio.php?mod=7&acc=registrar_consulta_paciente" method="post">
 
                             <input type="hidden" name="id_ficha" id="id_ficha">
                             <input type="hidden" name="id_paciente" id="id_paciente">
@@ -257,7 +257,7 @@ if (isset($_GET['pac_id'])) {
 
                       <div class="card">
                         <div class="card-body bg-dark">
-                          <form action="<?= $url_general ?>/vista/inicio.php?mod=7&acc=registrar_consulta_paciente" method="post">
+                          <form action="../vista/inicio.php?mod=7&acc=registrar_consulta_paciente" method="post">
 
                             <input type="hidden" name="id_ficha" id="id_ficha">
                             <input type="hidden" name="id_paciente" id="id_paciente">

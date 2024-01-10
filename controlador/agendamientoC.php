@@ -1,6 +1,7 @@
 <?php
 include('../modelo/agendamientoM.php');
 include('../modelo/pacientesM.php');
+include('../modelo/ficha_MedicaM.php');
 
 $controlador = new agendamientoC();
 
@@ -29,11 +30,13 @@ class agendamientoC
 {
     private $modelo;
     private $pacientes;
+    private $ficha_medica;
 
     function __construct()
     {
         $this->modelo = new agendamientoM();
         $this->pacientes = new pacientesM();
+        $this->ficha_medica = new ficha_MedicaM();
     }
 
     function lista_consultas()
@@ -65,9 +68,19 @@ class agendamientoC
     {
         $datos = null;
 
+        $sa_pac_tabla = $parametros['sa_pac_tabla'];
+        $sa_pac_id_comunidad = $parametros['sa_pac_id_comunidad'];
+
+        $buscar_paciente = $this->ficha_medica->gestion_comunidad_ficha_medica($sa_pac_id_comunidad, $sa_pac_tabla);
+        $id_paciente = $buscar_paciente['sa_pac_id'];
+
+        $buscar_paciente_fm = $this->pacientes->buscar_pacientes_ficha_medica($id_paciente);
+        $id_paciente_fm = $buscar_paciente_fm[0]['sa_fice_id'];
+
         if ($parametros['tipo'] == 'consulta') {
+
             $datos = array(
-                array('campo' => 'sa_fice_id', 'dato' => $parametros['paciente']),
+                array('campo' => 'sa_fice_id', 'dato' => $id_paciente_fm),
                 array('campo' => 'sa_conp_fecha_ingreso', 'dato' => $parametros['fecha']),
                 array('campo' => 'sa_conp_tipo_consulta', 'dato' => $parametros['tipo']),
                 array('campo' => 'sa_conp_estado_revision', 'dato' => 0),
@@ -82,8 +95,9 @@ class agendamientoC
 
             );
         } else if ($parametros['tipo'] == 'certificado') {
+
             $datos = array(
-                array('campo' => 'sa_fice_id', 'dato' => $parametros['paciente']),
+                array('campo' => 'sa_fice_id', 'dato' => $id_paciente_fm),
                 array('campo' => 'sa_conp_fecha_ingreso', 'dato' => $parametros['fecha']),
                 array('campo' => 'sa_conp_tipo_consulta', 'dato' => $parametros['tipo']),
                 array('campo' => 'sa_conp_estado_revision', 'dato' => 0),

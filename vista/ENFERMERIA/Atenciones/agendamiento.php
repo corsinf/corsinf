@@ -39,7 +39,7 @@
 
   function cargar_citas() {
     $.ajax({
-      url: '<?php echo $url_general ?>/controlador/agendamientoC.php?listar=true',
+      url: '../controlador/agendamientoC.php?listar=true',
       type: 'post',
       dataType: 'json',
       success: function(response) {
@@ -115,7 +115,7 @@
           <div class="col-auto">
 
             <!-- Unifica ambos formularios dentro de uno -->
-            <form action="<?= $url_general ?>/vista/inicio.php?mod=7&acc=agendamiento_asistente" method="post">
+            <form action="../vista/inicio.php?mod=7&acc=agendamiento_asistente" method="post">
 
               <input type="hidden" name="tipo_consulta" id="tipo_consulta" value="consulta">
               <input type="hidden" name="txt_fecha_consulta" id="txt_fecha_consulta" class="form-control form-control-sm" value="<?php echo date('Y-m-d'); ?>" readonly>
@@ -128,7 +128,7 @@
 
           <div class="col-auto">
 
-            <form action="<?= $url_general ?>/vista/inicio.php?mod=7&acc=agendamiento_asistente" method="post">
+            <form action="../vista/inicio.php?mod=7&acc=agendamiento_asistente" method="post">
 
               <input type="hidden" name="tipo_consulta" id="tipo_consulta" value="certificado">
               <input type="hidden" name="txt_fecha_consulta" id="txt_fecha_consulta" class="form-control form-control-sm" value="<?php echo date('Y-m-d'); ?>" readonly>

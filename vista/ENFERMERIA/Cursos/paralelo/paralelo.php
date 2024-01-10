@@ -10,7 +10,7 @@
             data: {
                 id: id
             },
-            url: '<?php echo $url_general ?>/controlador/paraleloC.php?listar=true',
+            url: '../controlador/paraleloC.php?listar=true',
             type: 'post',
             dataType: 'json',
 
@@ -23,7 +23,7 @@
                         '<td>' + 'COD - ' + item.sa_par_id + '</td>' +
                         '<td>' + item.sa_sec_nombre + '</td>' +
                         '<td>' + item.sa_gra_nombre + '</td>' +
-                        '<td><a href="<?= $url_general ?>/vista/inicio.php?mod=7&acc=registrar_paralelo&id=' + item.sa_par_id + '&id_seccion=' + item.sa_sec_id + '&id_grado=' + item.sa_gra_id + '"><u>' + item.sa_par_nombre + '</u></a></td>' +
+                        '<td><a href="../vista/inicio.php?mod=7&acc=registrar_paralelo&id=' + item.sa_par_id + '&id_seccion=' + item.sa_sec_id + '&id_grado=' + item.sa_gra_id + '"><u>' + item.sa_par_nombre + '</u></a></td>' +
                         '<td></td>' +
                         '</tr>';
                 });
@@ -40,7 +40,7 @@
             data: {
                 buscar: buscar
             },
-            url: '<?= $url_general ?>/controlador/paraleloC.php?buscar=true',
+            url: '../controlador/paraleloC.php?buscar=true',
             type: 'post',
             dataType: 'json',
 
@@ -53,7 +53,7 @@
                         '<td>' + 'COD - ' + item.sa_par_id + '</td>' +
                         '<td>' + item.sa_sec_nombre + '</td>' +
                         '<td>' + item.sa_gra_nombre + '</td>' +
-                        '<td><a href="<?= $url_general ?>/vista/inicio.php?mod=7&acc=registrar_paralelo&id=' + item.sa_par_id + '&id_seccion=' + item.sa_sec_id + '&id_grado=' + item.sa_gra_id + '"><u>' + item.sa_par_nombre + '</u></a></td>' +
+                        '<td><a href="../vista/inicio.php?mod=7&acc=registrar_paralelo&id=' + item.sa_par_id + '&id_seccion=' + item.sa_sec_id + '&id_grado=' + item.sa_gra_id + '"><u>' + item.sa_par_nombre + '</u></a></td>' +
                         '<td></td>' +
                         '</tr>';
                 });
@@ -117,7 +117,7 @@
 
                                     <div class="row">
                                         <div class="col-sm-12" id="btn_nuevo">
-                                            <a href="<?= $url_general ?>/vista/inicio.php?mod=7&acc=registrar_paralelo" class="btn btn-success btn-sm"><i class="bx bx-plus"></i> Nuevo</a>
+                                            <a href="../vista/inicio.php?mod=7&acc=registrar_paralelo" class="btn btn-success btn-sm"><i class="bx bx-plus"></i> Nuevo</a>
                                             <a href="#" class="btn btn-outline-secondary btn-sm" id="excel_paralelo" title="Informe en excel del total de Paralelos"><i class="bx bx-file"></i> Total Paralelos</a>
                                         </div>
 

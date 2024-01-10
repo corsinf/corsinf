@@ -114,7 +114,7 @@ class pacientesM
                     pacientes
                 WHERE 1 = 1 AND sa_pac_estado = 1";
 
-        $sql .= " ORDER BY sa_pac_id;";
+        $sql .= " ORDER BY sa_pac_id DESC;";
         $datos = $this->db->datos($sql);
         return $datos;
     }
@@ -158,6 +158,27 @@ class pacientesM
                 WHERE pac.sa_pac_estado = 1 
                 AND CONCAT(pac.sa_pac_apellidos, ' ', pac.sa_pac_nombres, ' ', 
                         pac.sa_pac_cedula, ' ', pac.sa_pac_correo) LIKE '%" . $buscar . "%'";
+
+        $datos = $this->db->datos($sql);
+        return $datos;
+    }
+
+    function buscar_pacientes_ficha_medica($id_paciente)
+    {
+        $sql = "SELECT 
+                    pac.sa_pac_id,
+                    pac.sa_pac_cedula,
+                    pac.sa_pac_nombres,
+                    pac.sa_pac_apellidos,
+                    pac.sa_pac_fecha_nacimiento,
+                    pac.sa_pac_correo,
+                    pac.sa_pac_id_comunidad,
+                    pac.sa_pac_tabla,
+                    f.sa_fice_id
+                FROM pacientes pac
+                LEFT JOIN ficha_medica f ON pac.sa_pac_id = f.sa_fice_pac_id
+                WHERE pac.sa_pac_estado = 1 
+                AND pac.sa_pac_id = $id_paciente";
 
         $datos = $this->db->datos($sql);
         return $datos;

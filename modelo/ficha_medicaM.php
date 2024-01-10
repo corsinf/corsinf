@@ -293,6 +293,19 @@ class ficha_MedicaM
     //Para crear la ficha medica y el paciente
     function gestion_comunidad_ficha_medica($sa_pac_id_comunidad, $sa_pac_tabla)
     {
+
+        $valor_seleccionado = $sa_pac_tabla;
+
+        // Verificar si el valor seleccionado contiene "-"
+        if (strpos($valor_seleccionado, '-') !== false) {
+            // Si contiene "-", separar las dos variables usando el carácter "-"
+            list($sa_tbl_pac_nombre, $sa_tbl_pac_prefijo) = explode('-', $valor_seleccionado);
+            $sa_pac_tabla = $sa_tbl_pac_nombre;
+        } else {
+            // Si no contiene "-", asignar el valor completo a $sa_pac_tabla
+            $sa_pac_tabla = $valor_seleccionado;
+        }
+        
         $parametros = array(
             array(&$sa_pac_id_comunidad, SQLSRV_PARAM_IN),
             array(&$sa_pac_tabla, SQLSRV_PARAM_IN)
