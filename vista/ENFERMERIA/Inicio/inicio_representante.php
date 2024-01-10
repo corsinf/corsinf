@@ -265,15 +265,6 @@
                                 </a>
                             </li>
                             <li class="nav-item" role="presentation">
-                                <a class="nav-link" data-bs-toggle="tab" href="#estudiantes" role="tab" aria-selected="false">
-                                    <div class="d-flex align-items-center">
-                                        <div class="tab-icon"><i class='bx bx-user-pin font-18 me-1'></i>
-                                        </div>
-                                        <div class="tab-title">Estudiantes</div>
-                                    </div>
-                                </a>
-                            </li>
-                            <li class="nav-item" role="presentation">
                                 <a class="nav-link" data-bs-toggle="tab" href="#seguros" role="tab" aria-selected="false">
                                     <div class="d-flex align-items-center">
                                         <div class="tab-icon"><i class='bx bx-user-pin font-18 me-1'></i>
@@ -282,6 +273,16 @@
                                     </div>
                                 </a>
                             </li>
+                            <li class="nav-item" role="presentation">
+                                <a class="nav-link" data-bs-toggle="tab" href="#estudiantes" role="tab" aria-selected="false">
+                                    <div class="d-flex align-items-center">
+                                        <div class="tab-icon"><i class='bx bx-user-pin font-18 me-1'></i>
+                                        </div>
+                                        <div class="tab-title">Estudiantes</div>
+                                    </div>
+                                </a>
+                            </li>
+                            
                         </ul>
                         <div class="tab-content py-3">
                             <div class="tab-pane fade show active" id="inicio" role="tabpanel">

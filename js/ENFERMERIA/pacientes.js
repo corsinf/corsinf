@@ -1,5 +1,7 @@
 //Aqui llega para que alguno de las tablas vea si existe o no el paciente 
 function gestion_paciente_comunidad(sa_pac_id_comunidad, sa_pac_tabla) {
+    localStorage.setItem("sa_pac_id",sa_pac_id_comunidad);
+    localStorage.setItem("sa_pac_tabla",sa_pac_tabla);
     $.ajax({
         data: {
             sa_pac_id_comunidad: sa_pac_id_comunidad,

@@ -20,42 +20,36 @@ if (isset($_POST['sa_pac_tabla'])) {
 <script src="../js/ENFERMERIA/operaciones_generales.js"></script>
 
 <script type="text/javascript">
-    $(document).ready(function() {
+<?php if ($sa_pac_id == '' && $sa_pac_tabla == '') { ?>
+    recargar_pag();
+<?php } ?>
+$(document).ready(function() {
+
+    var id = '<?php echo $_SESSION['INICIO']['ID_USUARIO']; ?>';
+    //console.log(id);
+
+    <?php if ($sa_pac_id != '' && $sa_pac_tabla != '') { ?>
 
 
-        // window.addEventListener('beforeunload', function(event) {
-        //     // Mostrar un mensaje de alerta personalizado
-        //     var confirmationMessage = '¿Estás seguro de que quieres abandonar la página?';
 
-        //     (event || window.event).returnValue = confirmationMessage; // Para navegadores más antiguos
-        //     return confirmationMessage; // Para navegadores modernos
-        // });
+        var sa_pac_id = '<?php echo $sa_pac_id; ?>';
+        var sa_pac_tabla = '<?php echo $sa_pac_tabla; ?>';
 
+        // alert(sa_pac_id)
 
-        var id = '<?php echo $_SESSION['INICIO']['ID_USUARIO']; ?>';
-        //console.log(id);
+        datos_col_ficha_medica(sa_pac_id);
+        cargar_datos_paciente(sa_pac_id);
 
-        <?php if ($sa_pac_id != '' && $sa_pac_tabla != '') { ?>
+        //Para que cargue la funcionalidad de los input de las preguntas
+        preguntas_ficha_medica();
 
-            var sa_pac_id = '<?php echo $sa_pac_id; ?>';
-            var sa_pac_tabla = '<?php echo $sa_pac_tabla; ?>';
+        //inicializa smartwizart
+        setTimeout(function() {
+            smartwizard_ficha_medica();
+        }, 10);
 
-            //alert(sa_pac_id)
-
-
-            datos_col_ficha_medica(sa_pac_id);
-            cargar_datos_paciente(sa_pac_id);
-
-            //Para que cargue la funcionalidad de los input de las preguntas
-            preguntas_ficha_medica();
-
-            //inicializa smartwizart
-            setTimeout(function() {
-                smartwizard_ficha_medica();
-            }, 10);
-
-        <?php } ?>
-    });
+    <?php } ?>
+});
 
     <?php if ($sa_pac_id != '' && $sa_pac_tabla != '') { ?>
 
@@ -450,10 +444,10 @@ if (isset($_POST['sa_pac_tabla'])) {
                                 </ul>
                                 <div class="tab-content">
 
+                                    <div id="step-1" class="tab-pane" role="tabpanel" aria-labelledby="step-1" data-step="0">
+    
 
-                                    <div id="step-1" class="tab-pane" role="tabpanel" aria-labelledby="step-1">
-
-                                        <form class="needs-validation" novalidate>
+                                        <form class="needs-validation" id="form-step-1">
 
                                             <input type="hidden" name="sa_fice_id" id="sa_fice_id">
                                             <input type="hidden" name="sa_fice_pac_id" id="sa_fice_pac_id">
@@ -507,7 +501,7 @@ if (isset($_POST['sa_pac_tabla'])) {
                                                     <div class="row">
                                                         <div class="col-md-11">
                                                             <label for="" class="form-label"> Grupo Sanguíneo y Factor Rh: <label style="color: red;">*</label> </label>
-                                                            <select class="form-select form-select-sm" id="sa_fice_pac_grupo_sangre" name="sa_fice_pac_grupo_sangre">
+                                                            <select class="form-select form-select-sm" id="sa_fice_pac_grupo_sangre" name="sa_fice_pac_grupo_sangre" required>
                                                                 <option selected disabled>-- Seleccione --</option>
                                                                 <option value="A+">A+</option>
                                                                 <option value="A-">A-</option>
@@ -526,7 +520,7 @@ if (isset($_POST['sa_pac_tabla'])) {
                                                     <div class="row pt-3">
                                                         <div class="col-md-11">
                                                             <label for="" class="form-label">Dirección del Domicilio: <label style="color: red;">*</label> </label>
-                                                            <input type="text" class="form-control form-control-sm" id="sa_fice_pac_direccion_domicilio" name="sa_fice_pac_direccion_domicilio">
+                                                            <input type="text" class="form-control form-control-sm" id="sa_fice_pac_direccion_domicilio" name="sa_fice_pac_direccion_domicilio" required>
                                                         </div>
                                                     </div>
 
@@ -534,7 +528,7 @@ if (isset($_POST['sa_pac_tabla'])) {
                                                     <div class="row pt-3">
                                                         <div class="col-md-11">
                                                             <label for="" class="form-label">¿El estudiante posee seguro médico?: <label style="color: red;">*</label> </label>
-                                                            <select class="form-select form-select-sm" id="sa_fice_pac_seguro_medico" name="sa_fice_pac_seguro_medico">
+                                                            <select class="form-select form-select-sm" id="sa_fice_pac_seguro_medico" name="sa_fice_pac_seguro_medico" required>
                                                                 <option selected disabled>-- Seleccione --</option>
                                                                 <option value="Si">Si</option>
                                                                 <option value="No">No</option>
@@ -548,7 +542,7 @@ if (isset($_POST['sa_pac_tabla'])) {
                                                         <div class="col-md-11" id="sa_fice_pac_nombre_seguro_div">
                                                             <label for="" class="form-label">Seguro predeterminado: <label style="color: red;">*</label> </label>
                                                             <div class="input-group">
-                                                                <select class="form-select form-select-sm" id="sa_fice_pac_nombre_seguro" name="sa_fice_pac_nombre_seguro">
+                                                                <select class="form-select form-select-sm" id="sa_fice_pac_nombre_seguro" name="sa_fice_pac_nombre_seguro"  required>
                                                                     <option selected disabled value="">-- Seleccione --</option>
                                                                 </select>
                                                                 <!-- <span><button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modal_seguros"><i class="bx bx-plus me-0"></i></button></span>                                                                 -->
@@ -566,9 +560,9 @@ if (isset($_POST['sa_pac_tabla'])) {
 
                                     </div>
 
-                                    <div id="step-2" class="tab-pane" role="tabpanel" aria-labelledby="step-2">
+                                    <div id="step-2" class="tab-pane" role="tabpanel" aria-labelledby="step-2" data-step="1">
 
-                                        <form class="needs-validation" novalidate>
+                                        <form class="needs-validation" id="form-step-2">
 
                                             <h3 class="pt-3">Paso 2</h3>
 
@@ -691,9 +685,9 @@ if (isset($_POST['sa_pac_tabla'])) {
 
                                     </div>
 
-                                    <div id="step-3" class="tab-pane" role="tabpanel" aria-labelledby="step-3">
+                                    <div id="step-3" class="tab-pane" role="tabpanel" aria-labelledby="step-3" data-step="2">
 
-                                        <form class="needs-validation" novalidate>
+                                        <form class="needs-validation" id="form-step-3">
 
                                             <h3 class="pt-3">Paso 3</h3>
 
@@ -798,7 +792,7 @@ if (isset($_POST['sa_pac_tabla'])) {
 
                                     </div>
 
-                                    <div id="step-4" class="tab-pane" role="tabpanel" aria-labelledby="step-4">
+                                    <div id="step-4" class="tab-pane" role="tabpanel" aria-labelledby="step-4" data-step="3">
                                         <h3 class="pt-3">Paso 4</h3>
 
                                         <div class="card bg-transparent shadow-none">
@@ -864,22 +858,7 @@ if (isset($_POST['sa_pac_tabla'])) {
 
 
 
-                        <?php } else {  ?>
-
-                            <div class="alert alert-danger border-0 bg-danger alert-dismissible fade show py-2">
-                                <div class="d-flex align-items-center">
-                                    <div class="font-35 text-white"><i class='bx bxs-message-square-x'></i>
-                                    </div>
-                                    <div class="ms-3">
-                                        <div class="text-white">¡Atención! Por favor, evita recargar la página. Si lo haces, perderás los datos que has ingresado en el formulario y tendrás que volver a llenarlos. Si encuentras algún problema o necesitas asistencia, no dudes en contactarnos. ¡Gracias por tu comprensión!</div>
-                                    </div>
-                                </div>
-                            </div>
-
-                        <?php } ?>
-
-
-
+                        <?php }  ?>
                     </div>
                 </div>
             </div>
