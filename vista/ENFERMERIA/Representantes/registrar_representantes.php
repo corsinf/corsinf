@@ -303,10 +303,8 @@ if (isset($_POST['sa_rep_id'])) {
                                     <label for="" class="form-label">Teléfono 2: <label style="color: red;">*</label> </label>
                                     <input type="text" class="form-control form-control-sm" id="sa_rep_telefono_2" name="sa_rep_telefono_2">
                                 </div>
-                            </div>
 
-                            <div class="row pt-3">
-                                <div class="col-md-12">
+                                <div class="col-md-4">
                                     <label for="" class="form-label">Correo: <label style="color: red;">*</label> </label>
                                     <input type="email" class="form-control form-control-sm" id="sa_rep_correo" name="sa_rep_correo">
                                 </div>

@@ -30,3 +30,15 @@ function obtenerNivelPeso(imc) {
 }
 
 $('#sa_conp_peso, #sa_conp_altura').on('input', calcularIMC);
+
+function abrir_ventana_emergente(sa_conp_id) {
+    // URL de la página que quieres cargar en la ventana emergente
+    var url = '../controlador/consultasC.php?pdf_consulta=true&id_consulta=' + sa_conp_id;
+
+    // Configuración de la ventana emergente
+    var ventana_emergente = window.open(url, '_blank', 'width=1000,height=1000');
+
+    // Se puede personalizar la configuración según tus necesidades
+    // window.open(url, nombreVentana, opciones);
+    // Ejemplo de opciones: 'width=500,height=400,toolbar=no,location=no,menubar=no,scrollbars=yes,resizable=yes'
+}

@@ -108,14 +108,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     var count_medicamento = 0;
 
-    function insertarMedicamentos() {
-        //alert(count_medicamento);
+    function insertarMedicamentos(valor) {
+        var etiquetas = "";
 
-        var etiquetas = "<option value='1'>" + 'medicamento 1' + "</option>";
-        etiquetas += "<option value='2'>" + 'medicamento 2' + "</option>";
-
-        // Obtener el último select agregado y agregar opciones
-        $('#lista_medicamentos').find('select:last').append(etiquetas);
+        //var valor_selecct = $("#tipo_farmacologia").val();
+        alert(valor)
+        if (valor === '1') {
+            etiquetas = "medicamentos";
+            $('#lista_medicamentos tr:last-child input[id^="sa_det_dosificacion_"]').val(etiquetas);
+            $('#lista_medicamentos tr:last-child label[id^="sa_det_conp_nombre_temp_"]').text(etiquetas);
+        } else if (valor === '2') {
+            etiquetas = "insumo";
+            $('#lista_medicamentos tr:last-child input[id^="sa_det_dosificacion_"]').val(etiquetas);
+            $('#lista_medicamentos tr:last-child label[id^="sa_det_conp_nombre_temp_"]').text(etiquetas);
+        }
     }
 
     $(document).ready(function() {
@@ -125,15 +131,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             var htmlFila = '<tr>';
             htmlFila += '<td><input class="itemFila_Medicamento" type="checkbox"></td>';
-            htmlFila += '<td><select class="form-select form-select-sm" name="medicamentos[]" id="medicamentos_' + count_medicamento + '"  autocomplete="off" required>';
-            htmlFila += '<option disabled selected value="">-- Seleccione --</option>';
-            htmlFila += '</select></td>';
+            htmlFila += '<td><label id="sa_det_conp_nombre_temp_' + count_medicamento + '"></label></td>';
+            htmlFila += '<td><input type="text" class="form-control form-control-sm" id="sa_det_dosificacion_' + count_medicamento + '" name="sa_det_dosificacion[]"></td>';
+            htmlFila += '<td><input type="number" class="form-control form-control-sm" id="sa_det_conp_cantidad_' + count_medicamento + '" name="sa_det_conp_cantidad[]"></td>';
+
+            htmlFila += '<input type="hidden" id="sa_det_conp_nombre_' + count_medicamento + '" name="sa_det_conp_nombre[]">';
+            htmlFila += '<input type="hidden" id="sa_det_conp_id_cmed_cins_' + count_medicamento + '" name="sa_det_conp_id_cmed_cins[]">';
+            htmlFila += '<input type="hidden" id="sa_det_conp_tipo_' + count_medicamento + '" name="sa_det_conp_tipo[]">';
+
+            htmlFila += '<input type="hidden" name="medicamentos[]" id="medicamentos_' + count_medicamento + '">';
             htmlFila += '</tr>';
 
             $('#lista_medicamentos').append(htmlFila);
 
+            var valor = $("#tipo_farmacologia_presentacion").val();
+            insertarMedicamentos(valor);
+
             // Llamar a la función para insertar opciones
-            insertarMedicamentos();
+            //insertarMedicamentos();
         });
 
 
@@ -167,9 +182,100 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         });
     });
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    function consultar_medicinas_insumos(entrada) {
 
+        var selectElement = $('#tipo_farmacologia_presentacion');
+
+        // Intenta destruir la instancia de Select2 si ya existe
+        if (selectElement.hasClass('select2-hidden-accessible')) {
+            selectElement.select2('destroy');
+        }
+
+        if (entrada === 'medicamentos') {
+            $('#tipo_farmacologia_presentacion').select2({
+                placeholder: '-- Selecciona una opción --',
+                language: 'es',
+                minimumInputLength: 3,
+                ajax: {
+                    url: '../controlador/medicamentosC.php?listar_todo=true',
+                    dataType: 'json',
+                    delay: 250,
+                    data: function(params) {
+                        return {
+                            searchTerm: params.term // Envía el término de búsqueda al servidor
+                        };
+                    },
+                    processResults: function(data, params) { // Agrega 'params' como parámetro
+                        var searchTerm = params.term.toLowerCase();
+
+                        var options = data.reduce(function(filtered, item) {
+
+                            var fullName = item['sa_cmed_presentacion'] + " - " + item['sa_cmed_concentracion'] + " - " + item['sa_cmed_dosis'];
+
+                            if (fullName.toLowerCase().includes(searchTerm)) {
+                                filtered.push({
+                                    id: item['sa_cmed_id'],
+                                    text: fullName
+                                });
+                            }
+
+                            return filtered;
+                        }, []);
+
+                        return {
+                            results: options
+                        };
+                    },
+                    cache: true
+                }
+            });
+
+        } else if (entrada === 'insumos') {
+            $('#tipo_farmacologia_presentacion').select2({
+                placeholder: '-- Selecciona una opción --',
+                language: 'es',
+                minimumInputLength: 3,
+                ajax: {
+                    url: '../controlador/insumosC.php?listar_todo=true',
+                    dataType: 'json',
+                    delay: 250,
+                    data: function(params) {
+                        return {
+                            searchTerm: params.term // Envía el término de búsqueda al servidor
+                        };
+                    },
+                    processResults: function(data, params) { // Agrega 'params' como parámetro
+                        var searchTerm = params.term.toLowerCase();
+
+                        var options = data.reduce(function(filtered, item) {
+
+                            var fullName = item['sa_cins_presentacion'] + " - " + item['sa_cins_codigo'] + " - " + item['sa_cins_localizacion'];
+
+                            if (fullName.toLowerCase().includes(searchTerm)) {
+                                filtered.push({
+                                    id: item['sa_cins_id'],
+                                    text: fullName
+                                });
+                            }
+
+                            return filtered;
+                        }, []);
+
+                        return {
+                            results: options
+                        };
+                    },
+                    cache: true
+                }
+            });
+        }
+
+        $('#tipo_farmacologia_presentacion').val(null).trigger('change');
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //Fin medicamentos
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     //Datos del paciente
     function cargar_datos_paciente(sa_pac_id) {
@@ -486,7 +592,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         var sa_conp_enfermedad_actual = $('#sa_conp_enfermedad_actual').val();
         var sa_conp_saturacion = $('#sa_conp_saturacion').val();
-        
+
         var sa_conp_estado_revision = revision;
 
 
@@ -549,7 +655,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'sa_conp_tipo_consulta': sa_conp_tipo_consulta,
             'sa_conp_enfermedad_actual': sa_conp_enfermedad_actual,
             'sa_conp_saturacion': sa_conp_saturacion,
-            
+
             'sa_conp_estado_revision': sa_conp_estado_revision,
         };
 
@@ -705,6 +811,90 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $('#sa_conp_tiempo_aten').val('NaN');
         }
     }
+
+    function show_historial() {
+        $('#myModal_historial').modal('show');
+    }
+
+    function consultar_datos_h(id_paciente = '', nombres = '') {
+        $('#title_nombre').html(nombres);
+        var consulta = '';
+        var cont = 1;
+        $.ajax({
+            data: {
+                id_ficha: id_paciente
+            },
+            url: '../controlador/consultasC.php?listar_consulta_ficha=true',
+            type: 'post',
+            dataType: 'json',
+            //Para el id representante tomar los datos con los de session
+            success: function(response) {
+                console.log(response);
+
+                $('#tbl_consultas_pac').DataTable({
+                    destroy: true, // Destruir la tabla existente antes de recrearla
+                    data: response,
+                    language: {
+                        url: 'https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
+                    },
+                    responsive: true, // Datos de las consultas médicas
+                    columns: [
+                        // Definir las columnas
+                        {
+                            data: null,
+                            render: function(data, type, row, meta) {
+                                // Usar el contador autoincremental proporcionado por DataTables
+                                return meta.row + 1;
+                            }
+                        },
+                        {
+                            data: null,
+                            render: function(data, type, item) {
+                                if (item.sa_conp_desde_hora.date == null || item.sa_conp_fecha_ingreso.date == null) {
+                                    return '';
+                                } else {
+                                    return fecha_nacimiento_formateada(item.sa_conp_fecha_creacion.date) + ' / ' + obtener_hora_formateada(item.sa_conp_fecha_creacion.date);
+                                }
+                            }
+                        },
+                        {
+                            data: null,
+                            render: function(data, type, item) {
+                                if (item.sa_conp_desde_hora.date == null || item.sa_conp_hasta_hora.date == null) {
+                                    return '';
+                                } else {
+                                    return fecha_nacimiento_formateada(item.sa_conp_fecha_ingreso.date) + ' / [' + obtener_hora_formateada(item.sa_conp_desde_hora.date) + ' / ' + obtener_hora_formateada(item.sa_conp_hasta_hora.date) + ']';
+                                }
+                            }
+                        },
+                        {
+                            data: null,
+                            render: function(data, type, item) {
+                                if (item.sa_conp_tipo_consulta == 'consulta') {
+                                    return '<div class="badge rounded-pill text-success bg-light-success p-2 text-uppercase px-3">' + item.sa_conp_tipo_consulta + '</div>';
+                                } else {
+                                    return '<div class="badge rounded-pill text-info bg-light-info p-2 text-uppercase px-3">' + item.sa_conp_tipo_consulta + '</div>';
+                                }
+                            }
+                        },
+                        {
+                            data: null,
+                            render: function(data, type, item) {
+                                //return '<a class="btn btn-primary btn-sm" target="_blank"  title="Enviar Mensaje" href="../controlador/consultasC.php?pdf_consulta=true&id_consulta=' + item.sa_conp_id + '">' + '<i class="bx bx-show-alt me-0"></i>' + '</a>';
+                                return '<a class="btn btn-primary btn-sm" target="_blank"  title="Enviar Mensaje" href="#" onclick="abrir_ventana_emergente(' + item.sa_conp_id + ');">' + '<i class="bx bx-show-alt me-0"></i>' + '</a>';
+                            }
+                        },
+
+                    ],
+                    order: [
+                        [1, 'desc'] // Ordenar por la segunda columna (índice 1) en orden ascendente
+                    ]
+                });
+
+                show_historial();
+            }
+        });
+    }
 </script>
 
 
@@ -756,8 +946,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                             <div class="row m-2">
 
-                                <div class="col-sm-12" hidden>
-                                    <a href="../vista/inicio.php?mod=7&acc=consultas_pacientes&pac_id=<?= $id_paciente ?>" class="btn btn-outline-dark btn-sm"><i class="bx bx-arrow-back"></i> Regresar</a>
+                                <div class="col-sm-12">
+                                    <a hidden href="../vista/inicio.php?mod=7&acc=consultas_pacientes&pac_id=<?= $id_paciente ?>" class="btn btn-outline-dark btn-sm"><i class="bx bx-arrow-back"></i> Regresar</a>
+
+                                    <button class="btn btn-outline-primary" onclick="consultar_datos_h(<?php echo $id_ficha; ?>)"><i class='bx bx-list-ol'></i> Historial</button>
                                 </div>
 
                             </div>
@@ -1013,30 +1205,60 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                         </div>
                                                     </div>
 
+                                                    <div class="row pt-4">
+                                                        <hr>
+
+                                                        <div class="col-md-3">
+                                                            <label for="tipo_farmacologia" class="form-label">Farmacología: <label style="color: red;">*</label> </label>
+                                                            <select class="form-select form-select-sm" id="tipo_farmacologia" name="tipo_farmacologia" onclick="consultar_medicinas_insumos(this.value);">
+                                                                <option selected disabled>-- Seleccione --</option>
+                                                                <option value="medicamentos">Medicamentos</option>
+                                                                <option value="insumos">Insumos</option>
+                                                            </select>
+                                                        </div>
+
+                                                        <div class="col-md-7">
+                                                            <label for="tipo_farmacologia_presentacion" class="form-label">Presentación: <label style="color: red;">*</label> </label>
+                                                            <select class="form-select form-select-sm" id="tipo_farmacologia_presentacion" name="tipo_farmacologia_presentacion">
+                                                                <option selected disabled>-- Seleccione --</option>
+                                                            </select>
+                                                        </div>
+
+                                                        <div class="col-md-2 mt-3">
+                                                            <label for="agregarFila_medicamentos" class="form-label"></label>
+                                                            <button class="btn btn-primary" title="Agregar Medicamentos" id="agregarFila_medicamentos" type="button"><i class='bx bx-plus me-0'></i>Agregar</button>
+                                                        </div>
+                                                    </div>
+
+
+
                                                     <div class="row pt-3">
-                                                        <div class="col-sm-4">
+
+
+                                                        <div class="col-sm-12">
                                                             <div class="mb-2">
-                                                                <label>
-                                                                    Medicamentos:
-
-                                                                    <button class="btn btn-success btn-sm mb-2" title="Agregar Medicamentos" id="agregarFila_medicamentos" type="button"><i class='bx bx-plus me-0'></i></button>
-
-                                                                    <button class="btn btn-danger btn-sm mb-2" title="Seleccione el Medicamento para Eliminar" id="eliminarFila_medicamentos" type="button"><i class='bx bx-minus me-0'></i></button>
-                                                                </label>
 
                                                                 <table class="table table-bordered table-hover" id="lista_medicamentos">
 
                                                                     <tr>
-                                                                        <th width="2%"><input id="checkAll_Medicamentos" class="form-check" type="checkbox">
-                                                                        </th>
+                                                                        <th width="2%"><input id="checkAll_Medicamentos" class="form-check" type="checkbox"></th>
 
-                                                                        <th><label>Medicamentos: <span style="color: crimson;">*</span></label></th>
+                                                                        <th width="40%">Farmacología</th>
+                                                                        <th width="50%">Dosificación</th>
+                                                                        <th width="8%">Cantidad</th>
 
                                                                     </tr>
+
+
                                                                 </table>
+
+                                                                <button class="btn btn-danger btn-sm mb-2" title="Seleccione el Medicamento para Eliminar" id="eliminarFila_medicamentos" type="button"><i class='bx bx-minus me-0'></i>Eliminar</button>
+
                                                             </div>
                                                         </div>
                                                     </div>
+
+                                                    <hr>
 
                                                     <div class="row pt-2">
                                                         <div class="col-md-12">
@@ -1229,3 +1451,47 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     });
 </script>
+
+<div class="modal" id="myModal_historial" abindex="-1" aria-modal="true" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog  modal-lg">
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title">Historial de consultas - <b id="title_nombre" class="text-primary"></b></h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <!-- Modal body -->
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="table-responsive">
+                            <table class="table table-striped responsive text-center" id="tbl_consultas_pac" style="width:100%">
+
+                                <thead class="">
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Fecha</th>
+                                        <th>Hora</th>
+                                        <th>Tipo de Atención</th>
+                                        <th>Acción</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal footer -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-sm btn-danger" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+
+        </div>
+    </div>
+</div>

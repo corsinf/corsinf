@@ -540,7 +540,7 @@ if (isset($_POST['id_representante'])) {
                   <input type="text" class="form-control form-control-sm" id="sa_est_cedula" name="sa_est_cedula" maxlength="10" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
                 </div>
 
-                <div class="col-md-3">
+                <div class="col-md-2">
                   <label for="" class="form-label">Sexo: <label style="color: red;">*</label> </label>
                   <select class="form-select form-select-sm" id="sa_est_sexo" name="sa_est_sexo">
                     <option selected disabled>-- Seleccione --</option>
@@ -554,50 +554,46 @@ if (isset($_POST['id_representante'])) {
                   <input type="date" class="form-control form-control-sm" id="sa_est_fecha_nacimiento" name="sa_est_fecha_nacimiento" onchange="edad_normal(this.value);">
                 </div>
 
-                <div class="col-md-3">
+                <div class="col-md-1">
                   <label for="" class="form-label">Edad: <label style="color: red;">*</label> </label>
                   <input type="text" class="form-control form-control-sm" id="sa_est_edad" name="sa_est_edad" readonly>
                 </div>
 
-              </div>
-
-              <div class="row pt-3">
-                <div class="col-md-12">
+                <div class="col-md-3">
                   <label for="" class="form-label">Correo <label style="color: red;">*</label> </label>
                   <input type="email" class="form-control form-control-sm" id="sa_est_correo" name="sa_est_correo">
                 </div>
+
               </div>
 
-              <div class="row pt-3">
+              <div class="row pt-4">
 
-                <div class="col-md-6">
+                <div class="col-md-4">
                   <label for="" class="form-label">Sección: <label style="color: red;">*</label> </label>
                   <select class="form-select form-select-sm" id="sa_id_seccion" name="sa_id_seccion" onclick="consultar_datos_seccion_grado()">
 
                   </select>
                 </div>
-              </div>
 
-              <div class="row pt-3">
-                <div class="col-md-6">
+                <div class="col-md-4">
                   <label for="" class="form-label">Grado: <label style="color: red;">*</label> </label>
                   <select class="form-select form-select-sm" id="sa_id_grado" name="sa_id_grado" onclick="consultar_datos_grado_paralelo();">
                     <option selected disabled>-- Seleccione --</option>
                   </select>
                 </div>
-              </div>
 
-              <div class="row pt-3">
-                <div class="col-md-6">
+                <div class="col-md-4">
                   <label for="" class="form-label">Paralelo: <label style="color: red;">*</label> </label>
                   <select class="form-select form-select-sm" id="sa_id_paralelo" name="sa_id_paralelo">
                     <option selected disabled>-- Seleccione --</option>
                   </select>
                 </div>
+
               </div>
 
-              <div class="row pt-3">
-                <div class="col-md-6">
+
+              <div class="row pt-4">
+                <div class="col-md-8">
                   <label for="" class="form-label">Representante: <label style="color: red;">*</label> </label>
                   <select class="form-select form-select-sm" id="sa_id_representante" name="sa_id_representante">
                     <option selected disabled>-- Seleccione --</option>

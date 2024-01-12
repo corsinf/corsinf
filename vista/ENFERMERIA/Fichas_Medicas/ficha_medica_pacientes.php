@@ -20,36 +20,35 @@ if (isset($_POST['sa_pac_tabla'])) {
 <script src="../js/ENFERMERIA/operaciones_generales.js"></script>
 
 <script type="text/javascript">
-<?php if ($sa_pac_id == '' && $sa_pac_tabla == '') { ?>
-    recargar_pag();
-<?php } ?>
-$(document).ready(function() {
-
-    var id = '<?php echo $_SESSION['INICIO']['ID_USUARIO']; ?>';
-    //console.log(id);
-
-    <?php if ($sa_pac_id != '' && $sa_pac_tabla != '') { ?>
-
-
-
-        var sa_pac_id = '<?php echo $sa_pac_id; ?>';
-        var sa_pac_tabla = '<?php echo $sa_pac_tabla; ?>';
-
-        // alert(sa_pac_id)
-
-        datos_col_ficha_medica(sa_pac_id);
-        cargar_datos_paciente(sa_pac_id);
-
-        //Para que cargue la funcionalidad de los input de las preguntas
-        preguntas_ficha_medica();
-
-        //inicializa smartwizart
-        setTimeout(function() {
-            smartwizard_ficha_medica();
-        }, 10);
-
+    <?php if ($sa_pac_id == '' && $sa_pac_tabla == '') { ?>
+        recargar_pag();
     <?php } ?>
-});
+
+    $(document).ready(function() {
+
+        var id = '<?php echo $_SESSION['INICIO']['ID_USUARIO']; ?>';
+        //console.log(id);
+
+        <?php if ($sa_pac_id != '' && $sa_pac_tabla != '') { ?>
+
+            var sa_pac_id = '<?php echo $sa_pac_id; ?>';
+            var sa_pac_tabla = '<?php echo $sa_pac_tabla; ?>';
+
+            // alert(sa_pac_id)
+
+            datos_col_ficha_medica(sa_pac_id);
+            cargar_datos_paciente(sa_pac_id);
+
+            //Para que cargue la funcionalidad de los input de las preguntas
+            preguntas_ficha_medica();
+
+            //inicializa smartwizart
+            setTimeout(function() {
+                smartwizard_ficha_medica();
+            }, 10);
+
+        <?php } ?>
+    });
 
     <?php if ($sa_pac_id != '' && $sa_pac_tabla != '') { ?>
 
@@ -99,7 +98,7 @@ $(document).ready(function() {
 
                     <?php } ?>
 
-                    lista_seguros(response[0].sa_pac_id_comunidad,response[0].sa_pac_tabla);
+                    lista_seguros(response[0].sa_pac_id_comunidad, response[0].sa_pac_tabla);
 
                 }
             });
@@ -330,11 +329,11 @@ $(document).ready(function() {
             });
         }
 
-        function lista_seguros(id,tabla) {
+        function lista_seguros(id, tabla) {
 
             var parametros = {
-                'id':id,
-                'tabla':tabla,
+                'id': id,
+                'tabla': tabla,
             }
             $.ajax({
                 data: {
@@ -358,7 +357,6 @@ $(document).ready(function() {
         }
 
     <?php } ?>
-
 </script>
 
 <div class="page-wrapper">
@@ -402,7 +400,7 @@ $(document).ready(function() {
 
                             <div class="col-sm-9 text-end">
                                 <h6 class="mb-0 text-primary">
-                                    
+
 
                                     Paciente: <b class="text-success" id="title_paciente"></b>
                                     <!--  <p id="tipo_paciente"></p> -->
@@ -445,7 +443,7 @@ $(document).ready(function() {
                                 <div class="tab-content">
 
                                     <div id="step-1" class="tab-pane" role="tabpanel" aria-labelledby="step-1" data-step="0">
-    
+
 
                                         <form class="needs-validation" id="form-step-1">
 
@@ -542,12 +540,12 @@ $(document).ready(function() {
                                                         <div class="col-md-11" id="sa_fice_pac_nombre_seguro_div">
                                                             <label for="" class="form-label">Seguro predeterminado: <label style="color: red;">*</label> </label>
                                                             <div class="input-group">
-                                                                <select class="form-select form-select-sm" id="sa_fice_pac_nombre_seguro" name="sa_fice_pac_nombre_seguro"  required>
+                                                                <select class="form-select form-select-sm" id="sa_fice_pac_nombre_seguro" name="sa_fice_pac_nombre_seguro">
                                                                     <option selected disabled value="">-- Seleccione --</option>
                                                                 </select>
                                                                 <!-- <span><button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modal_seguros"><i class="bx bx-plus me-0"></i></button></span>                                                                 -->
                                                             </div>
-                                                           
+
                                                         </div>
                                                     </div>
                                                 </div>
