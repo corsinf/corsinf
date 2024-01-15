@@ -27,7 +27,7 @@
        var tablas = '<?php echo $_SESSION['INICIO']['ASIGNAR_SEGUROS'];?>';
        if(tablas!='')
        {
-        // console.log(tablas)
+        console.log(tablas)
          var obj = JSON.parse(tablas);
          // console.log(obj);
           obj.forEach(function(item,i){

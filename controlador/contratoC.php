@@ -316,8 +316,15 @@ class contratoC
 			foreach ($tablas as $key => $value) {
 				if($value['tabla']==$parametros['tabla'])
 				{
+					foreach ($value as $key2 => $value2) {
+						// print_r($key2);die();
+						if($key2!='tabla')
+						{
+							$campo.=$value2."+' '+";
+						}
+					}
 					$tbl = $value['tabla'];
-					$campo = $value['campo'];
+					$campo = substr($campo,0,-5);
 					break;
 				}
 			}
@@ -325,7 +332,7 @@ class contratoC
 			$datos = $this->modelo->asignar_a_seguro($tbl,$campo,$parametros['query']);
 			$op = array();
 		    foreach ($datos as $key => $value) {
-		    	$op[] = array('id'=>$value[$id[0]['ID']],'text'=>$value[$campo],'data'=>$value);
+		    	$op[] = array('id'=>$value[$id[0]['ID']],'text'=>$value['texto'],'data'=>$value);
 		    }
 		}
 	    return $op;

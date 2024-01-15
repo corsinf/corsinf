@@ -125,7 +125,8 @@ class contratosM
 
 	function asignar_a_seguro($tabla,$campo,$query=false)
 	{
-		$sql = "SELECT * FROM ".$tabla." where  1=1 ";
+		$sql = "SELECT *,".$campo." as texto FROM ".$tabla." where  1=1 ";
+
 		if($query)
 		{
 			$sql.=" AND ".$campo." like '%".$query."%'";
@@ -182,13 +183,13 @@ class contratosM
 		return $datos;
 	}
 
-	function lista_articulos_seguro_detalle($tabla,$id,$modulo,$seguro=false)
+	function lista_articulos_seguro_detalle($tabla,$id,$modulo,$id_tabla,$seguro=false)
 	{
 		$sql = "SELECT * 
 		FROM ARTICULOS_ASEGURADOS ARS
 		INNER JOIN SEGUROS S ON ARS.id_seguro = S.id_contratos 
 		INNER JOIN PROVEEDOR P ON P.id_proveedor = S.proveedor 
-		INNER JOIN estudiantes E ON ARS.id_articulos = E.sa_est_id 
+		INNER JOIN ".$tabla." E ON ARS.id_articulos = E.".$id_tabla."
 		WHERE id_articulos = '".$id."' 
 		AND tabla = '".$tabla."' 
 		AND modulo='".$modulo."'";

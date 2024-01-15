@@ -1,6 +1,7 @@
 <?php
 include('../modelo/ficha_MedicaM.php');
 include('../modelo/contratosM.php');
+include('../db/codigos_globales.php');
 
 $controlador = new ficha_MedicaC();
 
@@ -64,11 +65,13 @@ class ficha_MedicaC
 {
     private $modelo;
     private $seguros;
+    private $cod_global;
 
     function __construct()
     {
         $this->modelo = new ficha_MedicaM();
         $this->seguros = new contratosM();
+        $this->cod_global = new codigos_globales();
     }
 
     function lista_ficha_medica($id)
@@ -86,7 +89,8 @@ class ficha_MedicaC
     function lista_seguros($parametros)
     {
         // print_r($parametros);die();
-        $datos = $this->seguros->lista_articulos_seguro_detalle($parametros['tabla'], $parametros['id'], $_SESSION['INICIO']['MODULO_SISTEMA'], false);
+        $id = $this->cod_global->id_tabla($parametros['tabla']);
+        $datos = $this->seguros->lista_articulos_seguro_detalle($parametros['tabla'], $parametros['id'], $_SESSION['INICIO']['MODULO_SISTEMA'],$id[0]['ID'], false);
 
         // print_r($datos);die();
         return $datos;

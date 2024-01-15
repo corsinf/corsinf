@@ -121,7 +121,9 @@ if ($_GET['acc'] == 'detalle_usuario') {
 if ($_GET['acc'] == 'no_concurente') {
 	include('EMPRESA/no_concurente.php');
 }
-
+if ($_GET['acc'] == 'ligar_seguros') {
+	include('EMPRESA/ligar_seguros.php');
+}
 //SEGUROS
 if ($_GET['acc'] == 'lista_solicitudes') {
 	include('SEGUROS/lista_solicitudes.php');
