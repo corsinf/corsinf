@@ -2,10 +2,10 @@
 
 function smartwizard_ficha_medica() {
     var btnSiguiente = $('<button></button>').text('Siguiente').addClass('btn btn-info').on('click', function () {
-        if ( valida_formulario()) {
+        if (valida_formulario()) {
             $('#smartwizard_fm').smartWizard("next");
         } else {
-            Swal.fire('','Llene todo los campos','info')
+            Swal.fire('', 'Llene todo los campos', 'info')
         }
     });
     var btnAtras = $('<button></button>').text('Atras').addClass('btn btn-info').on('click', function () {
@@ -34,8 +34,8 @@ function smartwizard_ficha_medica() {
             animation: 'slide-horizontal', // Effect on navigation, none/fade/slide-horizontal/slide-vertical/slide-swing
         },
         toolbarSettings: {
-            toolbarPosition: '', 
-            toolbarExtraButtons: [btnAtras,btnSiguiente],
+            toolbarPosition: '',
+            toolbarExtraButtons: [btnAtras, btnSiguiente],
             showNextButton: false,  // Oculta el botón predeterminado "Next"
             showPreviousButton: false,
         },
@@ -95,24 +95,20 @@ function preguntas_ficha_medica() {
 }
 
 
-function recargar_pag()
-{
+function recargar_pag() {
 
-     var sa_pac_id = '';
+    var sa_pac_id = '';
     var sa_pac_tabla = '';
-    if(sa_pac_id == '' && sa_pac_tabla == '')
-    {
-        if(localStorage.getItem("sa_pac_id")!==null)
-        {
+    
+    if (sa_pac_id == '' && sa_pac_tabla == '') {
+        if (localStorage.getItem("sa_pac_id") !== null) {
             sa_pac_id = localStorage.getItem("sa_pac_id");
         }
-        if(localStorage.getItem("sa_pac_tabla")!==null)
-        {
-         sa_pac_tabla = localStorage.getItem("sa_pac_tabla");
+        if (localStorage.getItem("sa_pac_tabla") !== null) {
+            sa_pac_tabla = localStorage.getItem("sa_pac_tabla");
         }
 
-        if(sa_pac_id != '' && sa_pac_tabla != '')
-        {
+        if (sa_pac_id != '' && sa_pac_tabla != '') {
             var form = document.createElement('form');
             form.method = 'post';
             form.action = '../vista/inicio.php?mod=7&acc=ficha_medica_pacientes';
@@ -126,30 +122,28 @@ function recargar_pag()
             }
 
             // Agregar campos al formulario
-            agregarCampo('sa_pac_id',sa_pac_id);
-            agregarCampo('sa_pac_tabla',sa_pac_tabla);
+            agregarCampo('sa_pac_id', sa_pac_id);
+            agregarCampo('sa_pac_tabla', sa_pac_tabla);
             document.body.appendChild(form);
             form.submit();
 
-        }else
-        {
-            Swal.fire('','Pagina no encontrada','error')
-        }           
-    } 
+        } else {
+            Swal.fire('', 'Pagina no encontrada', 'error')
+        }
+    }
 }
 
-function valida_formulario()
-{
+function valida_formulario() {
     var pasoActual = $('#smartwizard_fm').smartWizard('getStepIndex');
     var pasoValido = true;
     // Verificar campos requeridos en el paso actual
 
-    $('#smartwizard_fm [data-step="' + pasoActual + '"] [required]').each(function() {
+    $('#smartwizard_fm [data-step="' + pasoActual + '"] [required]').each(function () {
         console.log(this)
         if (!this.checkValidity()) {
             pasoValido = false;
-            num_form = pasoActual+1;
-            $('#form-step-'+num_form).addClass('was-validated');
+            num_form = pasoActual + 1;
+            $('#form-step-' + num_form).addClass('was-validated');
             console.log()
             return false; // Salir del bucle si se encuentra un campo no válido
         }

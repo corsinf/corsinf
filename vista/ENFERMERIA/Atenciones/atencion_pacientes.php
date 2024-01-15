@@ -1,4 +1,4 @@
-<script src="<?= $url_general ?>/js/ENFERMERIA/operaciones_generales.js"></script>
+<script src="../js/ENFERMERIA/operaciones_generales.js"></script>
 
 <script type="text/javascript">
     $(document).ready(function() {
@@ -33,8 +33,7 @@
 
                         '<a class="btn btn-outline-success radius-15 mb-1" href="../vista/inicio.php?mod=7&acc=registrar_consulta_paciente&id_consulta=' + item.sa_conp_id + '&tipo_consulta=' + item.sa_conp_tipo_consulta + '&id_ficha=' + item.sa_fice_id + '&id_paciente=' + item.sa_pac_id + '"Comenzar title=" Consulta">Comenzar Consulta</a>' +
 
-
-                    '<button class="btn btn-outline-primary radius-15 mt-2" onclick="consultar_datos_h(' + item.sa_fice_id + ', \'' + item.nombres + '\')">Historial</button>' +
+                        '<button class="btn btn-outline-primary radius-15 mt-2" onclick="consultar_datos_h(' + item.sa_fice_id + ', \'' + item.nombres + '\')">Historial</button>' +
                         '</div>' +
                         '</div>' +
                         ' </div>' +
@@ -116,7 +115,9 @@
                         {
                             data: null,
                             render: function(data, type, item) {
-                                return '<a class="btn btn-primary btn-sm" target="_blank"  title="Enviar Mensaje" href="../vista/inicio.php?mod=7&acc=registrar_consulta_estudiante&id_ficha=' + item.sa_conp_id + '&id_estudiante=' + item.sa_fice_id + '&id_consulta=2&ver=1">' + '<i class="bx bx-show-alt me-0"></i>' + '</a>';
+                                //return '<a class="btn btn-primary btn-sm" target="_blank"  title="Enviar Mensaje" href="../vista/inicio.php?mod=7&acc=registrar_consulta_estudiante&id_ficha=' + item.sa_conp_id + '&id_estudiante=' + item.sa_fice_id + '&id_consulta=2&ver=1">' + '<i class="bx bx-show-alt me-0"></i>' + '</a>';
+                                return '<a class="btn btn-primary btn-sm" target="_blank"  title="Enviar Mensaje" href="#" onclick="abrir_ventana_emergente(' + item.sa_conp_id + ');">' + '<i class="bx bx-show-alt me-0"></i>' + '</a>';
+                            
                             }
                         },
 
@@ -210,3 +211,5 @@
         </div>
     </div>
 </div>
+
+<script src="../js/ENFERMERIA/consulta_medica.js"></script>
