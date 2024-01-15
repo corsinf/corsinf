@@ -11,8 +11,8 @@
         //console.log(id);
 
         //alert(noconcurente_tabla)
-            cargarDatos(id)
-    
+        cargarDatos(id)
+
 
         //Esta consultando unos datos por defecto
         consultar_datos_estudiante_representante(noconcurente_id);
@@ -39,10 +39,9 @@
                 $('#txt_ci').html(response[0].ci + " <i class='bx bxs-id-card'></i>");
                 $('#txt_nombre').html(response[0].nombre);
                 $('#txt_apellido').html(response[0].ape);
-                 $('#txt_sexo').html('Falta dato en usuario' + " <i class='bx bx-female'></i> <i class='bx bx-male'></i>");
-                if(response[0].sexo != '')
-                {
-                     $('#txt_sexo').html( response[0].sexo);
+                $('#txt_sexo').html('Falta dato en usuario' + " <i class='bx bx-female'></i> <i class='bx bx-male'></i>");
+                if (response[0].sexo != '') {
+                    $('#txt_sexo').html(response[0].sexo);
                 }
                 $('#txt_fecha_nacimiento').html('Falta dato en usuario');
                 $('#txt_edad').html('Falta dato en usuario');
@@ -113,10 +112,10 @@
                         '</div>' +
                         '</div>' +
                         '</div>';
-                    estudiantes2 += 
-                        '<option value="'+item.sa_est_id+'">' + item.sa_est_primer_apellido + ' ' + item.sa_est_segundo_apellido + ' ' + item.sa_est_primer_nombre + ' ' + item.sa_est_segundo_nombre + '</option>';
+                    estudiantes2 +=
+                        '<option value="' + item.sa_est_id + '">' + item.sa_est_primer_apellido + ' ' + item.sa_est_segundo_apellido + ' ' + item.sa_est_primer_nombre + ' ' + item.sa_est_segundo_nombre + '</option>';
 
-                    ids+=item.sa_est_id+',';
+                    ids += item.sa_est_id + ',';
                 });
 
                 $('#card_estudiantes').html(estudiantes);
@@ -129,25 +128,23 @@
         });
     }
 
-    function SaveNewSeguro()
-    {
-        var prov =  $('#txtSeguroProveedorNew').val();
+    function SaveNewSeguro() {
+        var prov = $('#txtSeguroProveedorNew').val();
         var seguro = $('#txtSeguroNombreNew').val();
         var estudiantes = $('#lista_estudiantes').val();
 
         console.log(estudiantes);
         console.log($('#rbl_todos').prop('checked'));
-        if(($('#rbl_todos').prop('checked')==false && estudiantes=='') || prov=='' || seguro =='')
-        {
-            Swal.fire('','Llene todo los campos','info')
+        if (($('#rbl_todos').prop('checked') == false && estudiantes == '') || prov == '' || seguro == '') {
+            Swal.fire('', 'Llene todo los campos', 'info')
             return false;
         }
-         var parametros = {
-            'Proveedor':prov,
+        var parametros = {
+            'Proveedor': prov,
             'seguro': seguro,
-            'todos':$('#rbl_todos').prop('checked'),
-            'estudiantes':estudiantes,
-            'ids':$('#ids_est').val(),
+            'todos': $('#rbl_todos').prop('checked'),
+            'estudiantes': estudiantes,
+            'ids': $('#ids_est').val(),
         }
         $.ajax({
             data: {
@@ -159,24 +156,21 @@
 
             success: function(response) {
 
-                if(response==1)
-                {
-                    Swal.fire('','Agregado','success');
+                if (response == 1) {
+                    Swal.fire('', 'Agregado', 'success');
                     lista_seguros();
-                }else if(response==-2)
-                {
-                    Swal.fire("","Estudiante ya esta registrado con este seguro","info")
-                }               
+                } else if (response == -2) {
+                    Swal.fire("", "Estudiante ya esta registrado con este seguro", "info")
+                }
             }
         });
     }
 
 
-    function lista_seguros()
-    {
-        
-         var parametros = {
-            'estudiantes':$('#ids_est').val(),
+    function lista_seguros() {
+
+        var parametros = {
+            'estudiantes': $('#ids_est').val(),
         }
         $.ajax({
             data: {
@@ -189,40 +183,38 @@
             success: function(response) {
                 $('#tbl_body').html(response)
 
-               console.log(response)   
+                console.log(response)
             }
         });
     }
 
-    function eliminar_seguro(id)
-    {
+    function eliminar_seguro(id) {
         Swal.fire({
-          title: 'Eliminar Registro?',
-          text: "Esta seguro de eliminar este registro?",
-          icon: 'warning',
-          showCancelButton: true,
-          confirmButtonColor: '#3085d6',
-          cancelButtonColor: '#d33',
-          confirmButtonText: 'Si'
+            title: 'Eliminar Registro?',
+            text: "Esta seguro de eliminar este registro?",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Si'
         }).then((result) => {
-          if (result.value) {
+            if (result.value) {
 
-             $.ajax({
-                data: {
-                    id: id
-                },
-                url: '../controlador/estudiantesC.php?EliminarSeguros=true',
-                type: 'post',
-                dataType: 'json',
+                $.ajax({
+                    data: {
+                        id: id
+                    },
+                    url: '../controlador/estudiantesC.php?EliminarSeguros=true',
+                    type: 'post',
+                    dataType: 'json',
 
-                success: function(response) {
-                    if(response==1)
-                    {
-                        lista_seguros();
+                    success: function(response) {
+                        if (response == 1) {
+                            lista_seguros();
+                        }
                     }
-                }
-            });  
-          }
+                });
+            }
         })
     }
 </script>
@@ -282,13 +274,13 @@
                                     </div>
                                 </a>
                             </li>
-                            
+
                         </ul>
                         <div class="tab-content py-3">
                             <div class="tab-pane fade show active" id="inicio" role="tabpanel">
                                 <div class="row">
-                                    <div class="col-6 mx-5">
-                                        <div class="table-responsive">
+                                    <div class="col-lg-6 mx-1 col-sm-12">
+                                        <div class="">
                                             <table class="table mb-0" style="width:100%">
                                                 <tbody>
                                                     <tr>
@@ -327,9 +319,8 @@
                                             </table>
                                         </div>
                                     </div>
-
-                                    <hr>
                                    
+
                                 </div>
                             </div>
                             <div class="tab-pane fade" id="estudiantes" role="tabpanel">
@@ -352,9 +343,9 @@
 
                             <div class="tab-pane fade" id="seguros" role="tabpanel">
                                 <div class="row">
-                                    
+
                                     <div class="col-sm-8">
-                                         <div class="row">
+                                        <div class="row">
                                             <div class="col-sm-12">
                                                 <b>Nombre de Proveedor</b>
                                                 <input type="text" name="" id="txtSeguroProveedorNew" class="form-control form-control-sm">
@@ -367,17 +358,17 @@
                                                 <b>Aplicar a:</b>
                                                 <div class="input-group text-center">
                                                     <div class="input-group-text">
-                                                         <label>        
-                                                        <input class="form-check-input" type="checkbox" id="rbl_todos"> Todos</label>    
+                                                        <label>
+                                                            <input class="form-check-input" type="checkbox" id="rbl_todos"> Todos</label>
                                                         <input class="" type="hidden" id="ids_est">
                                                     </div>
-                                                     
+
                                                     <select class="form-select form-select-sm" id="lista_estudiantes" name="lista_estudiantes">
                                                         <option value="">-- Seleccione --</option>
                                                     </select>
                                                     <span>
-                                                       
-                                                    </span>   
+
+                                                    </span>
 
                                                 </div>
                                             </div>
@@ -404,7 +395,7 @@
                                                     </tr>
                                                 </tbody>
                                             </table>
-                                        </div>                                        
+                                        </div>
                                     </div>
                                 </div>
 

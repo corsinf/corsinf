@@ -109,19 +109,38 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     var count_medicamento = 0;
 
     function insertarMedicamentos(valor) {
-        var etiquetas = "";
 
-        //var valor_selecct = $("#tipo_farmacologia").val();
-        alert(valor)
-        if (valor === '1') {
-            etiquetas = "medicamentos";
-            $('#lista_medicamentos tr:last-child input[id^="sa_det_dosificacion_"]').val(etiquetas);
-            $('#lista_medicamentos tr:last-child label[id^="sa_det_conp_nombre_temp_"]').text(etiquetas);
-        } else if (valor === '2') {
-            etiquetas = "insumo";
-            $('#lista_medicamentos tr:last-child input[id^="sa_det_dosificacion_"]').val(etiquetas);
-            $('#lista_medicamentos tr:last-child label[id^="sa_det_conp_nombre_temp_"]').text(etiquetas);
+        var valor_selecct = $("#tipo_farmacologia").val();
+        var tabla = '';
+        var prefijo = '';
+
+        if (valor_selecct === 'medicamentos') {
+            tabla = 'medicamentos';
+            prefijo = 'sa_cmed';
+        } else if (valor_selecct === 'insumos') {
+            tabla = 'insumos';
+            prefijo = 'sa_cins';
         }
+
+        $.ajax({
+            data: {
+                id: valor
+            },
+            url: '../controlador/' + tabla + 'C.php?listar=true',
+            type: 'post',
+            dataType: 'json',
+            //Para el id representante tomar los datos con los de session
+            success: function(response) {
+                //console.log(response);
+
+                $('#lista_medicamentos tr:last-child label[id^="sa_det_conp_nombre_temp_"]').text(response[0][prefijo + '_presentacion']);
+
+                $('#lista_medicamentos tr:last-child input[id^="sa_det_conp_id_cmed_cins_"]').val(response[0][prefijo + '_id']);
+                $('#lista_medicamentos tr:last-child input[id^="sa_det_conp_tipo_"]').val(response[0][prefijo + '_tipo']);
+                $('#lista_medicamentos tr:last-child input[id^="sa_det_conp_nombre_"]').val(response[0][prefijo + '_presentacion']);
+
+            }
+        });
     }
 
     $(document).ready(function() {
@@ -133,7 +152,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             htmlFila += '<td><input class="itemFila_Medicamento" type="checkbox"></td>';
             htmlFila += '<td><label id="sa_det_conp_nombre_temp_' + count_medicamento + '"></label></td>';
             htmlFila += '<td><input type="text" class="form-control form-control-sm" id="sa_det_dosificacion_' + count_medicamento + '" name="sa_det_dosificacion[]"></td>';
-            htmlFila += '<td><input type="number" class="form-control form-control-sm" id="sa_det_conp_cantidad_' + count_medicamento + '" name="sa_det_conp_cantidad[]"></td>';
+            htmlFila += '<td><input type="number" class="form-control form-control-sm" id="sa_det_conp_cantidad_' + count_medicamento + '" name="sa_det_conp_cantidad[]" value="1"></td>';
 
             htmlFila += '<input type="hidden" id="sa_det_conp_nombre_' + count_medicamento + '" name="sa_det_conp_nombre[]">';
             htmlFila += '<input type="hidden" id="sa_det_conp_id_cmed_cins_' + count_medicamento + '" name="sa_det_conp_id_cmed_cins[]">';
@@ -147,8 +166,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             var valor = $("#tipo_farmacologia_presentacion").val();
             insertarMedicamentos(valor);
 
-            // Llamar a la función para insertar opciones
-            //insertarMedicamentos();
         });
 
 
@@ -664,6 +681,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         //console.log(parametros);
         //insertar(parametros)
 
+
+        var filas_tabla_farmacologia = [];
+
+        // Supongamos que estás agregando filas a una tabla con id "miTabla"
+        $('#lista_medicamentos tr:gt(0)').each(function(index, fila) {
+            var valores = {
+                sa_det_conp_nombre: $(fila).find('input[id^="sa_det_conp_nombre_"]').val(),
+                sa_det_conp_id_cmed_cins: $(fila).find('input[id^="sa_det_conp_id_cmed_cins_"]').val(),
+                sa_det_conp_tipo: $(fila).find('input[id^="sa_det_conp_tipo_"]').val(),
+                sa_det_dosificacion: $(fila).find('input[id^="sa_det_dosificacion_"]').val(),
+                sa_det_conp_cantidad: $(fila).find('input[id^="sa_det_conp_cantidad_"]').val(),
+                sa_det_conp_nombre_temp: $(fila).find('label[id^="sa_det_conp_nombre_temp_"]').text(),
+                medicamentos: $(fila).find('input[id^="medicamentos_"]').val()
+            };
+
+            filas_tabla_farmacologia.push(valores);
+        });
+
+        //console.log(filas_tabla_farmacologia);
+
         if (sa_conp_tipo_consulta == 'consulta') {
             if (sa_conp_id == '') {
                 if (
@@ -678,10 +715,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     })
                 } else {
                     //console.log(parametros);
+                    parametros.filas_tabla_farmacologia = filas_tabla_farmacologia;
                     insertar(parametros);
                     //alert('entra2');
                 }
             } else {
+                parametros.filas_tabla_farmacologia = filas_tabla_farmacologia;
                 insertar(parametros);
             }
 
@@ -712,7 +751,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 } else if (response == -2) {
                     Swal.fire('', 'Código ya registrado', 'success');
                 }
-
                 //console.log(response);
             }
         });
