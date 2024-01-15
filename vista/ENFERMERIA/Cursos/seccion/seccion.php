@@ -10,7 +10,7 @@
             data: {
                 id: id
             },
-            url: '<?php echo $url_general ?>/controlador/seccionC.php?listar=true',
+            url: '../controlador/seccionC.php?listar=true',
             type: 'post',
             dataType: 'json',
 
@@ -21,7 +21,7 @@
                     seccion +=
                         '<tr>' +
                         '<td>' + 'COD - ' + item.sa_sec_id + '</td>' +
-                        '<td><a href="<?= $url_general ?>/vista/inicio.php?mod=7&acc=registrar_seccion&id=' + item.sa_sec_id + '"><u>' + item.sa_sec_nombre + '</u></a></td>' +
+                        '<td><a href="../vista/inicio.php?mod=7&acc=registrar_seccion&id=' + item.sa_sec_id + '"><u>' + item.sa_sec_nombre + '</u></a></td>' +
                         '<td></td>' +
                         '</tr>';
                 });
@@ -38,7 +38,7 @@
             data: {
                 buscar: buscar
             },
-            url: '<?= $url_general ?>/controlador/seccionC.php?buscar=true',
+            url: '../controlador/seccionC.php?buscar=true',
             type: 'post',
             dataType: 'json',
 
@@ -49,7 +49,7 @@
                     seccion +=
                         '<tr>' +
                         '<td>' + 'COD - ' + item.sa_sec_id + '</td>' +
-                        '<td><a href="<?= $url_general ?>/vista/inicio.php?mod=7&acc=registrar_seccion&id=' + item.sa_sec_id + '"><u>' + item.sa_sec_nombre + '</u></a></td>' +
+                        '<td><a href="../vista/inicio.php?mod=7&acc=registrar_seccion&id=' + item.sa_sec_id + '"><u>' + item.sa_sec_nombre + '</u></a></td>' +
                         '<td> </td>' +
                         '</tr>';
                 });
@@ -112,7 +112,7 @@
 
                                     <div class="row">
                                         <div class="col-sm-12" id="btn_nuevo">
-                                            <a href="<?= $url_general ?>/vista/inicio.php?mod=7&acc=registrar_seccion" class="btn btn-success btn-sm"><i class="bx bx-plus"></i> Nuevo</a>
+                                            <a href="../vista/inicio.php?mod=7&acc=registrar_seccion" class="btn btn-success btn-sm"><i class="bx bx-plus"></i> Nuevo</a>
                                             <a href="#" class="btn btn-outline-secondary btn-sm" id="excel_seccion" title="Informe en excel del total de Secciones"><i class="bx bx-file"></i> Total Secciones</a>
                                         </div>
 

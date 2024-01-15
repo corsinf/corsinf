@@ -161,22 +161,20 @@
                 <div class="card border-top border-0 border-4 border-primary">
                     <div class="card-body p-5">
                         <div class="card-title d-flex align-items-center">
-                            <div><i class="bx bxs-user me-1 font-22 text-primary"></i>
-                            </div>
-                            <h5 class="mb-0 text-primary">Pacientes</h5>
+                          
+                            <h5 class="mb-0 text-primary"></h5>
 
-                            <div class="row mx-1">
+                            <div class="row mx-0">
                                 <div class="col-sm-12" id="btn_nuevo">
 
-                                    <button type="button" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#modal_pacientes"><i class="bx bx-plus"></i> Nuevo</button>
+                                    <button type="button" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#modal_pacientes"><i class="bx bx-plus"></i> Nuevo Paciente</button>
 
                                 </div>
                             </div>
                         </div>
 
-                        <hr>
 
-                        <section class="content pt-4">
+                        <section class="content pt-2">
                             <div class="container-fluid">
                                 <div class="table-responsive">
                                     <table class="table table-striped responsive " id="tbl_pacientes" style="width:100%">

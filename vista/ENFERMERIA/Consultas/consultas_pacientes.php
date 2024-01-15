@@ -239,14 +239,14 @@ if (isset($_GET['pac_id'])) {
                     <div class="col-auto">
 
                       <div class="card">
-                        <div class="card-body bg-dark">
+                        <div class="card-body bg-primary">
                           <form action="../vista/inicio.php?mod=7&acc=registrar_consulta_paciente" method="post">
 
                             <input type="hidden" name="id_ficha" id="id_ficha">
                             <input type="hidden" name="id_paciente" id="id_paciente">
                             <input type="hidden" name="tipo_consulta" id="tipo_consulta" value="consulta">
 
-                            <button type="submit" class="btn btn-primary btn-lg m-4"><i class='bx bx-file-blank'></i> Consulta</button>
+                            <button type="submit" class="btn btn-primary btn-lg m-4"> &nbsp; Consulta&nbsp;</button>
                           </form>
                         </div>
                       </div>
@@ -256,14 +256,14 @@ if (isset($_GET['pac_id'])) {
                     <div class="col-auto">
 
                       <div class="card">
-                        <div class="card-body bg-dark">
+                        <div class="card-body bg-primary">
                           <form action="../vista/inicio.php?mod=7&acc=registrar_consulta_paciente" method="post">
 
                             <input type="hidden" name="id_ficha" id="id_ficha">
                             <input type="hidden" name="id_paciente" id="id_paciente">
                             <input type="hidden" name="tipo_consulta" id="tipo_consulta" value="certificado">
 
-                            <button type="submit" class="btn btn-primary btn-lg m-4"><i class='bx bx-file-blank'></i> Certificado</button>
+                            <button type="submit" class="btn btn-primary btn-lg m-4"> Certificado</button>
                           </form>
                         </div>
                       </div>

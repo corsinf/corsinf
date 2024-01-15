@@ -7,6 +7,8 @@ include('../modelo/ficha_MedicaM.php');
 include('../modelo/pacientesM.php');
 include('../lib/phpmailer/enviar_emails.php');
 include('../lib/pdf/fpdf.php');
+include('../modelo/det_consultaM.php');
+
 
 
 $controlador = new consultasC();
@@ -92,12 +94,14 @@ class consultasC
     private $ficha_medicaM;
     private $pacientesM;
     private $email;
+    private $det_consultaM;
     function __construct()
     {
         $this->modelo = new consultasM();
         $this->ficha_medicaM = new ficha_MedicaM();
         $this->pacientesM = new pacientesM();
         $this->email = new enviar_emails();
+        $this->det_consultaM = new det_consultaM();
     }
 
     function lista_consultas_ficha($id_ficha)
@@ -206,7 +210,36 @@ class consultasC
 
         if ($parametros['sa_conp_id'] == '') {
             if (count($this->modelo->buscar_consultas_CODIGO($datos1[0]['dato'])) == 0) {
-                $datos = $this->modelo->insertar($datos);
+
+                //$datos = $this->modelo->insertar($datos);
+
+               $idConsultaPrincipal = $this->modelo->insertar_id($datos);
+                
+               // $idConsultaPrincipal = $this->modelo->ver_id($datos);
+
+          
+
+                var_dump($idConsultaPrincipal);
+                die();
+
+
+                $parametros['filas_tabla_farmacologia']; // Tu vector original
+
+                foreach ($parametros['filas_tabla_farmacologia'] as $fila) {
+                    $datos_farmacologia = array();
+
+                    $datos_farmacologia = array(
+                        array('campo' => 'sa_id_conp', 'dato' => $idConsultaPrincipal),
+                        array('campo' => 'sa_det_conp_id_cmed_cins', 'dato' => $fila['sa_det_conp_id_cmed_cins']),
+                        array('campo' => 'sa_det_conp_tipo', 'dato' => $fila['sa_det_conp_tipo']),
+                        array('campo' => 'sa_det_conp_nombre', 'dato' => $fila['sa_det_conp_nombre']),
+                        array('campo' => 'sa_det_conp_cantidad', 'dato' => $fila['sa_det_conp_cantidad']),
+                        array('campo' => 'sa_det_dosificacion', 'dato' => $fila['sa_det_dosificacion']),
+
+                    );
+
+                    $datos_farmacologia = $this->det_consultaM->insertar($datos_farmacologia);
+                }
             } else {
                 return -2 . ' . ' . $datos1[0]['dato'];
             }

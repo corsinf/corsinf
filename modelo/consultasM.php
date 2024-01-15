@@ -202,7 +202,23 @@ class consultasM
     function insertar($datos)
     {
         $rest = $this->db->inserts('consultas_medicas', $datos);
+
+
         return $rest;
+    }
+
+    function insertar_id($datos)
+    {
+        $rest = $this->db->inserts_id('consultas_medicas', $datos);
+        return $rest;
+    }
+
+    function ver_id()
+    {
+        $sql = "SELECT SCOPE_IDENTITY() AS id_ultimo;";
+
+        $datos = $this->db->datos($sql);
+        return $datos;
     }
 
     function editar($datos, $where)

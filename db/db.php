@@ -169,6 +169,49 @@ class db
 		return 1;
 	}
 
+	function inserts_id($tabla, $datos, $master = false)
+	{
+		$this->parametros_conexion($master);
+		$conn = $this->conexion();
+	
+		$valores = '';
+		$campos = '';
+		$sql = 'INSERT INTO ' . $tabla;
+	
+		foreach ($datos as $key => $value) {
+			$campos .= $value['campo'] . ',';
+			if (is_numeric($value['dato'])) {
+				if (isset($value['tipo']) && strtoupper($value['tipo']) == 'STRING') {
+					$valores .= "'" . $value['dato'] . "',";
+				} else {
+					$valores .= $value['dato'] . ',';
+				}
+			} else {
+				$valores .= "'" . $value['dato'] . "',";
+			}
+		}
+	
+		$campos = rtrim($campos, ',');
+		$valores = rtrim($valores, ',');
+		$sql .= '(' . $campos . ') VALUES (' . $valores . '); SELECT SCOPE_IDENTITY() AS id_ultimo;';
+	
+		$stmt = sqlsrv_query($conn, $sql);
+	
+		if ($stmt === false) {
+			die(print_r(sqlsrv_errors(), true)); // Manejar errores de SQL Server
+		}
+	
+		$resultado = null;
+		while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
+			$resultado = $row['id_ultimo'];
+		}
+	
+		sqlsrv_free_stmt($stmt);
+		sqlsrv_close($conn);
+	
+		return $resultado;
+	}
+
 	function update($tabla, $datos, $where, $master = false)
 	{
 		$this->parametros_conexion($master);
