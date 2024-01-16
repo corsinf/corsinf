@@ -33,10 +33,10 @@
           obj.forEach(function(item,i){
             if(i==0)
             {
-              inputs+='<label><input type="radio" name="rbl_seguro_busqueda" onclick="lista_articulos()" value="'+item.tabla+'" checked ><b>'+item.tabla+'</b></label>  ';
+              inputs+='<label class="me-2"><input type="radio" name="rbl_seguro_busqueda" onclick="lista_articulos()" value="'+item.tabla+'" checked ><b>'+item.tabla+'</b></label>  ';
             }else
             {
-              inputs+='<label><input type="radio" name="rbl_seguro_busqueda" onclick="lista_articulos()" value="'+item.tabla+'" ><b>'+item.tabla+'</b></label>  ';              
+              inputs+='<label class="me-2"><input type="radio" name="rbl_seguro_busqueda" onclick="lista_articulos()" value="'+item.tabla+'" ><b>'+item.tabla+'</b></label>  ';              
             }
           })
        }else
@@ -468,6 +468,9 @@
             if(response!='')
             {
              $('#tbl_art').html(response);             
+            }else
+            {
+              $('#tbl_art').html('<tr><td colspan="6">No Existen datos</td></tr>');      
             }
           }
         });
@@ -645,6 +648,7 @@
                       <?php //print_r($_SESSION['INICIO']);?>
                       </div>
                       <div class="col-sm-10">
+                        <br>
                         <b>Aplicar seguro a:</b>
                               <select class="form-select form-select-sm" name="ddl_articulos" id="ddl_articulos" >
                                 <option value="">Seleccione Articulo</option>                    
@@ -660,7 +664,8 @@
                         <table class="table table-striped table-bordered dataTable">
                           <thead>
                             <th></th>
-                            <th>Item asegurado</th>
+                            <th>Tabla</th>
+                            <th></th>
                           </thead>
                           <tbody id="tbl_art">
                             <tr>

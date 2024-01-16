@@ -72,7 +72,13 @@ class contratosM
 	}
 	function buscar_seguro($id=false,$prove=false,$desde=false,$hasta=false,$prima=false,$suma_asegurada=False,$plan=false,$terceros=null)
 	{
-		$sql="SELECT * FROM seguros WHERE 1=1 AND terceros = ".$terceros;
+		$sql="SELECT * FROM seguros WHERE 1=1 ";
+		if($terceros){
+			$sql.=" AND terceros = ".$terceros;
+		}else
+		{
+			$sql.=" AND terceros is NULL";
+		}
 		if($id)
 		{
 			$sql.=" AND id_contratos =".$id;
@@ -257,6 +263,8 @@ class contratosM
 			{
 				$sql.=" AND id_articulo = '".$id."'";
 			}
+
+			// print_r($sql);die();
 		$datos = $this->db->datos($sql);
 		return $datos;
 	}
@@ -289,10 +297,14 @@ class contratosM
 		return $datos;
 	}
 
-	function tablas_aseguradas($tabla=false,$contrato=false,$idArticulo=false)
+	function tablas_aseguradas($tabla=false,$contrato=false,$idArticulo=false,$ligar=false,$id_tabla=false)
 	{
-		$sql= "SELECT * FROM ARTICULOS_ASEGURADOS 
-		WHERE  modulo = '".$_SESSION['INICIO']['MODULO_SISTEMA']."'";
+		$sql= "SELECT * FROM ARTICULOS_ASEGURADOS AR";
+		if($ligar)
+		{
+			$sql.=" INNER JOIN ".$tabla." T ON AR.id_articulos = T.".$id_tabla;
+		} 
+		$sql.=" WHERE  modulo = '".$_SESSION['INICIO']['MODULO_SISTEMA']."'";
 		if($tabla)
 		{
 			$sql.=" AND	tabla = '".$tabla."'";
@@ -323,7 +335,7 @@ class contratosM
 	function itemAsegurado($tabla,$idtbl,$ids)
 	{
 		$sql="SELECT * FROM ".$tabla." WHERE ".$idtbl." in (".$ids.")";
-		// print_r($sql);
+		// print_r($sql);die();
 		$datos = $this->db->datos($sql);
 		return $datos;
 	}

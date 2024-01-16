@@ -124,6 +124,9 @@ if ($_GET['acc'] == 'no_concurente') {
 if ($_GET['acc'] == 'ligar_seguros') {
 	include('EMPRESA/ligar_seguros.php');
 }
+if ($_GET['acc'] == 'empresa') {
+	include('EMPRESA/empresa.php');
+}
 //SEGUROS
 if ($_GET['acc'] == 'lista_solicitudes') {
 	include('SEGUROS/lista_solicitudes.php');

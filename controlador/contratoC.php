@@ -269,7 +269,9 @@ class contratoC
 	function cargar_datos_seguro($parametros)
 	{
 		// print_r($parametros);die();
-		$seguro =  $this->modelo->buscar_seguro($parametros['id'],false,false,false,false,false);
+		$seguro =  $this->modelo->buscar_seguro($parametros['id'],false,false,false,false,false,false,false);
+
+		// print_r($seguro);die();
 		$prove = $this->modelo->lista_proveedores(false,$seguro[0]['proveedor']);
 		if(count($prove)>0)
 		{
@@ -428,11 +430,24 @@ class contratoC
 
 	    		if(count($datos)>0)
 	    		{
-	    			$camp = $value['campo'];
-	    			foreach ($datos as $key => $value3) {
-	    				$asegu = $this->modelo->tablas_aseguradas($value['tabla'],$parametros['contrato'],$value3[$id_tbl[0]['ID']]);
-	    				// print_r($asegu);die();
-	    				$listado[] = array('id'=>$asegu[0]['id_arti_asegurados'],'campo'=>$id_tbl[0]['ID'],'nombre'=>$value3[$camp],'contrato'=>$parametros['contrato'],'tabla'=>$value['tabla'],'modulo'=>$_SESSION['INICIO']['MODULO_SISTEMA']);
+	    			$campos = '';
+	    			foreach ($value as $key => $value3) {
+	    				if($value3!=$value['tabla'])
+	    				{
+	    					$campos.= $value3.',';
+	    				}
+	    			}
+	    			$camp = substr($campos,0,-1);
+	    			foreach ($datos as $key => $value4) {
+	    				$asegu = $this->modelo->tablas_aseguradas($value['tabla'],$parametros['contrato'],$value4[$id_tbl[0]['ID']],1,$id_tbl[0]['ID']);
+
+	    				$camposbuscar = explode(',',$camp);
+	    				$camposlista = array();
+	    				foreach ($camposbuscar as $key => $value5) {
+	    					$camposlista[] = $asegu[0][$value5];
+	    				}
+
+	    				$listado[] = array('id'=>$asegu[0]['id_arti_asegurados'],'campo_id'=>$id_tbl[0]['ID'],'campos'=>$camposlista,'contrato'=>$parametros['contrato'],'tabla'=>$value['tabla'],'modulo'=>$_SESSION['INICIO']['MODULO_SISTEMA']);
 	    			}
 	    		}
     		}
@@ -446,11 +461,13 @@ class contratoC
     			if($_SESSION['INICIO']['ELIMINAR']==1){
 	    		 $tr.='<td><button class="btn btn-sm btn-danger me-0" onclick="eliminar_art(\''.$value['id'].'\')"><i class=" bx bx-trash me-0"></i></button></td>';
 	    		}
-	    		$tr.='<td>'.$value['nombre'].'</td>
-	    		</tr>';
+	    		$tr.='<td>'.$value['tabla'].'</td>';
+	    		foreach ($value['campos'] as $key2 => $value2) {
+	    			$tr.='<td>'.$value2.'</td>';
+	    		}
+	    		$tr.='</tr>';
     	}
     	return $tr;
-    	print_r($parametros);die();
     }
 
     function Articulo_contrato_delete($id)

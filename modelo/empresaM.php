@@ -42,5 +42,23 @@ class empresaM
 		return $this->db->datos($sql,1);
 	}
 
+	function datos_empresa($id_empresa)
+	{
+		$sql="SELECT * FROM EMPRESAS WHERE Id_empresa = '".$id_empresa."'";
+		return $this->db->datos($sql,$id_empresa);
+	}
+	function editar($tabla,$datos,$where)
+	{
+		 $rest = $this->db->update($tabla,$datos,$where,$_SESSION['INICIO']['ID_EMPRESA'],1);
+		return $rest;
+		
+	}
+
+	function tipo_usuario()
+	{
+		$sql="SELECT id_tipo_usuario as 'id',tipo_usuario as 'detalle' FROM tipo_usuario WHERE empresa = '".$_SESSION['INICIO']['ID_EMPRESA']."'";
+		return $this->db->datos($sql,$_SESSION['INICIO']['ID_EMPRESA']);
+	}
+
 }
 ?>
