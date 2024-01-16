@@ -211,25 +211,16 @@ class consultasC
         if ($parametros['sa_conp_id'] == '') {
             if (count($this->modelo->buscar_consultas_CODIGO($datos1[0]['dato'])) == 0) {
 
-                //$datos = $this->modelo->insertar($datos);
 
-               $idConsultaPrincipal = $this->modelo->insertar_id($datos);
-                
-               // $idConsultaPrincipal = $this->modelo->ver_id($datos);
+                $id_insert = $this->modelo->insertar_id($datos);
 
-          
-
-                var_dump($idConsultaPrincipal);
-                die();
-
-
-                $parametros['filas_tabla_farmacologia']; // Tu vector original
+                //echo($idConsultaPrincipal);die();
 
                 foreach ($parametros['filas_tabla_farmacologia'] as $fila) {
                     $datos_farmacologia = array();
 
                     $datos_farmacologia = array(
-                        array('campo' => 'sa_id_conp', 'dato' => $idConsultaPrincipal),
+                        array('campo' => 'sa_id_conp', 'dato' => $id_insert),
                         array('campo' => 'sa_det_conp_id_cmed_cins', 'dato' => $fila['sa_det_conp_id_cmed_cins']),
                         array('campo' => 'sa_det_conp_tipo', 'dato' => $fila['sa_det_conp_tipo']),
                         array('campo' => 'sa_det_conp_nombre', 'dato' => $fila['sa_det_conp_nombre']),
@@ -240,6 +231,8 @@ class consultasC
 
                     $datos_farmacologia = $this->det_consultaM->insertar($datos_farmacologia);
                 }
+
+                $datos = 1;
             } else {
                 return -2 . ' . ' . $datos1[0]['dato'];
             }
@@ -248,6 +241,39 @@ class consultasC
             $where[0]['dato'] = $parametros['sa_conp_id'];
             //$datos[] = array('campo' => 'sa_conp_estado', 'dato' => 1);
             $datos = $this->modelo->editar($datos, $where);
+
+            foreach ($parametros['filas_tabla_farmacologia'] as $fila) {
+                $datos_farmacologia = array();
+
+                if ($fila['sa_det_conp_id'] == '') {
+                    // Insertar solo si sa_comp_det_id es null
+                    $datos_farmacologia = array(
+                        array('campo' => 'sa_id_conp', 'dato' => $parametros['sa_conp_id']),
+                        array('campo' => 'sa_det_conp_id_cmed_cins', 'dato' => $fila['sa_det_conp_id_cmed_cins']),
+                        array('campo' => 'sa_det_conp_tipo', 'dato' => $fila['sa_det_conp_tipo']),
+                        array('campo' => 'sa_det_conp_nombre', 'dato' => $fila['sa_det_conp_nombre']),
+                        array('campo' => 'sa_det_conp_cantidad', 'dato' => $fila['sa_det_conp_cantidad']),
+                        array('campo' => 'sa_det_dosificacion', 'dato' => $fila['sa_det_dosificacion']),
+                    );
+
+                    $datos_farmacologia = $this->det_consultaM->insertar($datos_farmacologia);
+                    
+                } else {
+
+                    $datos_farmacologia = array(
+                        array('campo' => 'sa_det_conp_id_cmed_cins', 'dato' => $fila['sa_det_conp_id_cmed_cins']),
+                        array('campo' => 'sa_det_conp_tipo', 'dato' => $fila['sa_det_conp_tipo']),
+                        array('campo' => 'sa_det_conp_nombre', 'dato' => $fila['sa_det_conp_nombre']),
+                        array('campo' => 'sa_det_conp_cantidad', 'dato' => $fila['sa_det_conp_cantidad']),
+                        array('campo' => 'sa_det_dosificacion', 'dato' => $fila['sa_det_dosificacion']),
+                    );
+
+                    $where[0]['campo'] = 'sa_det_conp_id';
+                    $where[0]['dato'] = $fila['sa_det_conp_id'];
+
+                    $datos_farmacologia = $this->det_consultaM->editar($datos_farmacologia, $where);
+                }
+            }
         }
 
         /*$where[0]['campo'] = 'sa_conp_id';

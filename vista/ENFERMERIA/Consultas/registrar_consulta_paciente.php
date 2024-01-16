@@ -66,8 +66,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         if (id_consulta !== '') {
             datos_col_consulta(id_consulta);
+            cargar_farmacologia(id_consulta);
 
         }
+
+
 
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -87,7 +90,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     //Para traer los datos necesarios para cargar el formulario
     function carga_datos_consulta(id_consulta = '') {
-        alert(id_consulta)
+        //alert(id_consulta)
         $.ajax({
             data: {
                 id_consulta: id_consulta
@@ -149,6 +152,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             count_medicamento++;
 
             var htmlFila = '<tr>';
+            htmlFila += '<input type="hidden" name="sa_det_conp_id[]" id="sa_det_conp_id_' + count_medicamento + '">';  
+
             htmlFila += '<td><input class="itemFila_Medicamento" type="checkbox"></td>';
             htmlFila += '<td><label id="sa_det_conp_nombre_temp_' + count_medicamento + '"></label></td>';
             htmlFila += '<td><input type="text" class="form-control form-control-sm" id="sa_det_dosificacion_' + count_medicamento + '" name="sa_det_dosificacion[]"></td>';
@@ -159,6 +164,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             htmlFila += '<input type="hidden" id="sa_det_conp_tipo_' + count_medicamento + '" name="sa_det_conp_tipo[]">';
 
             htmlFila += '<input type="hidden" name="medicamentos[]" id="medicamentos_' + count_medicamento + '">';
+
+
             htmlFila += '</tr>';
 
             $('#lista_medicamentos').append(htmlFila);
@@ -288,6 +295,51 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         $('#tipo_farmacologia_presentacion').val(null).trigger('change');
+    }
+
+    function cargar_farmacologia(id_consulta) {
+        $.ajax({
+            data: {
+                id_consulta: id_consulta
+            },
+            url: '../controlador/det_consultaC.php?listar_consulta=true',
+            type: 'post',
+            dataType: 'json',
+            // Para el id representante tomar los datos con los de session
+            success: function(response) {
+                //console.log(response);
+
+                // Verificar si la respuesta contiene datos
+                if (response && response.length > 0) {
+                    // Iterar sobre los datos usando forEach
+                    response.forEach(function(medicamento) {
+
+                        console.log(medicamento);
+                        count_medicamento++;
+
+                        var htmlFila = '<tr>';
+                        htmlFila += '<input type="hidden" value="' + medicamento.sa_det_conp_id + '" name="sa_det_conp_id[]" id="sa_det_conp_id_' + count_medicamento + '">';
+
+                        htmlFila += '<td><input class="itemFila_Medicamento" type="checkbox"></td>';
+                        htmlFila += '<td><label id="sa_det_conp_nombre_temp_' + count_medicamento + '">' + medicamento.sa_det_conp_nombre + '</label></td>';
+                        htmlFila += '<td><input type="text" class="form-control form-control-sm" id="sa_det_dosificacion_' + count_medicamento + '" name="sa_det_dosificacion[]" value="' + medicamento.sa_det_dosificacion + '"></td>';
+                        htmlFila += '<td><input type="number" class="form-control form-control-sm" id="sa_det_conp_cantidad_' + count_medicamento + '" name="sa_det_conp_cantidad[]" value="' + medicamento.sa_det_conp_cantidad + '"></td>';
+
+                        htmlFila += '<input type="hidden" value="' + medicamento.sa_det_conp_nombre + '" name="sa_det_conp_nombre[]" id="sa_det_conp_nombre_' + count_medicamento + '">';
+                        htmlFila += '<input type="hidden" value="' + medicamento.sa_det_conp_id_cmed_cins + '" name="sa_det_conp_id_cmed_cins[]" id="sa_det_conp_id_cmed_cins_' + count_medicamento + '">';
+                        htmlFila += '<input type="hidden" value="' + medicamento.sa_det_conp_tipo + '" name="sa_det_conp_tipo[]" id="sa_det_conp_tipo_' + count_medicamento + '">';
+                        
+
+                        htmlFila += '<input type="hidden" name="medicamentos[]" id="medicamentos_' + count_medicamento + '">';
+
+                        htmlFila += '</tr>';
+
+                        $('#lista_medicamentos').append(htmlFila);
+                    });
+                }
+
+            }
+        });
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -687,13 +739,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Supongamos que estás agregando filas a una tabla con id "miTabla"
         $('#lista_medicamentos tr:gt(0)').each(function(index, fila) {
             var valores = {
+                sa_det_conp_id: $(fila).find('input[id^="sa_det_conp_id_"]').val(),
+
                 sa_det_conp_nombre: $(fila).find('input[id^="sa_det_conp_nombre_"]').val(),
                 sa_det_conp_id_cmed_cins: $(fila).find('input[id^="sa_det_conp_id_cmed_cins_"]').val(),
                 sa_det_conp_tipo: $(fila).find('input[id^="sa_det_conp_tipo_"]').val(),
                 sa_det_dosificacion: $(fila).find('input[id^="sa_det_dosificacion_"]').val(),
                 sa_det_conp_cantidad: $(fila).find('input[id^="sa_det_conp_cantidad_"]').val(),
                 sa_det_conp_nombre_temp: $(fila).find('label[id^="sa_det_conp_nombre_temp_"]').text(),
-                medicamentos: $(fila).find('input[id^="medicamentos_"]').val()
+                medicamentos: $(fila).find('input[id^="medicamentos_"]').val(),
             };
 
             filas_tabla_farmacologia.push(valores);
