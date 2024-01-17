@@ -193,7 +193,7 @@ class db
 	
 		$campos = rtrim($campos, ',');
 		$valores = rtrim($valores, ',');
-		$sql .= '(' . $campos . ') VALUES (' . $valores . '); SELECT SCOPE_IDENTITY() AS id_ultimo;';
+		$sql .= '(' . $campos . ') VALUES (' . $valores . ');';
 	
 		$stmt = sqlsrv_query($conn, $sql);
 	
@@ -201,12 +201,21 @@ class db
 			die(print_r(sqlsrv_errors(), true)); // Manejar errores de SQL Server
 		}
 	
+		// Obtener el último ID
+		$sql2 = 'SELECT SCOPE_IDENTITY() AS id_ultimo;';
+		$stmt2 = sqlsrv_query($conn, $sql2);
+	
+		if ($stmt2 === false) {
+			die(print_r(sqlsrv_errors(), true)); // Manejar errores de SQL Server
+		}
+	
 		$resultado = null;
-		while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
+		while ($row = sqlsrv_fetch_array($stmt2, SQLSRV_FETCH_ASSOC)) {
 			$resultado = $row['id_ultimo'];
 		}
 	
 		sqlsrv_free_stmt($stmt);
+		sqlsrv_free_stmt($stmt2);
 		sqlsrv_close($conn);
 	
 		return $resultado;
