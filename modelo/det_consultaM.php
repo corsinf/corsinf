@@ -23,7 +23,8 @@ class det_consultaM
 					sa_det_conp_tipo,
 					sa_det_conp_nombre,
 					sa_det_conp_cantidad,
-					sa_det_dosificacion
+					sa_det_conp_dosificacion,
+					sa_det_conp_estado_entrega
 
 				FROM det_consulta WHERE 1 = 1";
 
@@ -41,8 +42,9 @@ class det_consultaM
 					sa_det_conp_tipo,
 					sa_det_conp_nombre,
 					sa_det_conp_cantidad,
-					sa_det_dosificacion
-				FROM det_consulta 
+					sa_det_conp_dosificacion,
+					sa_det_conp_estado_entrega
+				FROM det_consulta
 				WHERE 1 = 1 ";
 
 		if ($id) {
@@ -64,7 +66,8 @@ class det_consultaM
 					sa_det_conp_tipo,
 					sa_det_conp_nombre,
 					sa_det_conp_cantidad,
-					sa_det_dosificacion
+					sa_det_conp_dosificacion,
+					sa_det_conp_estado_entrega
 				FROM det_consulta 
 				WHERE 1 = 1 ";
 
@@ -91,9 +94,9 @@ class det_consultaM
 		return $rest;
 	}
 
-	function eliminar($datos)
+	function eliminar($id)
 	{
-		$sql = "UPDATE det_consulta SET sa_det_conp_estado = 0 WHERE " . $datos[0]['campo'] . "='" . $datos[0]['dato'] . "';";
+		$sql = "DELETE FROM det_consulta WHERE sa_det_conp_id = $id";
 		$datos = $this->db->sql_string($sql);
 		return $datos;
 	}

@@ -49,9 +49,7 @@ class det_consultaC
 
     function eliminar($id)
     {
-        $datos[0]['campo'] = 'sa_det_conp_id';
-        $datos[0]['dato'] = $id;
-        $datos = $this->modelo->eliminar($datos);
+        $datos = $this->modelo->eliminar($id);
         return $datos;
     }
 
