@@ -187,7 +187,7 @@
              $('#tabla_').html(spiner);
           },*/
             success:  function (response) {
-              if(response==1)
+              if(response!=-1)
               {
                 Swal.fire('Contrato guardada','','success').then(function(){
                   location.href = 'inicio.php?acc=contratos&id='+response;

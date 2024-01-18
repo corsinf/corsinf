@@ -85,7 +85,7 @@ class contratosM
 		}
 		if($prove)
 		{
-			$sql.="AND proveedor =".$prove;
+			$sql.=" AND proveedor =".$prove;
 		}
 		if($desde!=false && $hasta!=false)
 		{
