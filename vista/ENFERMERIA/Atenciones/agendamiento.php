@@ -29,7 +29,19 @@
     });
 
     calendar.setOption('dateClick', function(info) {
-      abrirModal(info.date);
+      //abrirModal(info.date);
+
+      var fecha_actual = new Date(); // Obtiene la fecha y hora actuales
+      var fecha_ayer = new Date(fecha_actual); // Crea una copia de la fecha actual
+      fecha_ayer.setDate(fecha_actual.getDate() - 1);
+
+      // Validar si la fecha seleccionada es anterior a la fecha actual
+      if (info.date < fecha_ayer) {
+        Swal.fire('', 'No puedes seleccionar una fecha anterior al día actual.', 'error');
+
+      } else {
+        abrirModal(info.date);
+      }
     });
 
     // Función para cargar eventos desde AJAX
@@ -78,7 +90,6 @@
     $('input[name="txt_fecha_consulta"]').val(fechaFormateada);
 
   }
-
 </script>
 
 <div class="page-wrapper">
@@ -136,12 +147,10 @@
               <button type="submit" class="btn btn-primary btn-lg m-4"><i class='bx bx-file-blank'></i> Certificado</button>
 
             </form>
-            
+
           </div>
         </div>
       </div>
     </div>
   </div>
 </div>
-
-

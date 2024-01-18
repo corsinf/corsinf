@@ -646,146 +646,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <input type="hidden" id="sa_id_guardia" name="sa_id_guardia">
 
 
-                            <div class="row">
-                                <div class="col-md-3">
-                                    <label for="" class="form-label">Fecha: <label style="color: red;">*</label> </label>
-                                    <input type="date" class="form-control form-control-sm" id="sa_conp_fecha_ingreso" name="sa_conp_fecha_ingreso" value="<?= date('Y-m-d'); ?>">
-                                </div>
-                                <div class="col-md-3">
-                                    <label for="" class="form-label">Desde: <label style="color: red;">*</label> </label>
-                                    <input type="time" class="form-control form-control-sm" id="sa_conp_desde_hora" name="sa_conp_desde_hora">
-                                </div>
-                                <div class="col-md-3">
-                                    <label for="" class="form-label">Hasta: <label style="color: red;">*</label> </label>
-                                    <input type="time" class="form-control form-control-sm" id="sa_conp_hasta_hora" name="sa_conp_hasta_hora">
-                                </div>
-                                <div class="col-md-3">
-                                    <label for="" class="form-label">Tiempo (Minutos): <label style="color: red;">*</label> </label>
-                                    <input type="text" class="form-control form-control-sm" id="sa_conp_tiempo_aten" name="sa_conp_tiempo_aten" readonly>
-                                </div>
-                            </div>
-                            <br>
-                            <hr>
-
-                            <div id="main_consulta" style="display: block;" class="pt-4">
+                            <div id="main_consulta" style="display: block;">
                                 <ul class="nav nav-tabs nav-success" role="tablist">
 
                                     <li class="nav-item" role="presentation" id="seccion_navtab_consulta">
-                                        <a class="nav-link active" data-bs-toggle="tab" href="#triage_tab" role="tab" aria-selected="true">
+                                        <a class="nav-link active" data-bs-toggle="tab" href="#consulta_tab" role="tab" aria-selected="true">
                                             <div class="d-flex align-items-center">
                                                 <div class="tab-icon"><i class='bx bx-receipt font-20 me-1'></i>
                                                 </div>
-                                                <div class="tab-title">TRIAGE</div>
 
-                                            </div>
-                                        </a>
-                                    </li>
-
-                                    <li class="nav-item" role="presentation">
-                                        <a class="nav-link" data-bs-toggle="tab" href="#consulta_tab" role="tab" aria-selected="false">
-                                            <div class="d-flex align-items-center">
-                                                <div class="tab-icon"><i class='bx bx-user-pin font-18 me-1'></i>
-                                                </div>
                                                 <?php if ($tipo_consulta == 'consulta') { ?>
                                                     <div class="tab-title">CONSULTA</div>
                                                 <?php } else if ($tipo_consulta == 'certificado') { ?>
                                                     <div class="tab-title">CERTIFICADO</div>
                                                 <?php } ?>
+
                                             </div>
                                         </a>
                                     </li>
 
-                                    <li class="nav-item" role="presentation" id="">
-                                        <a class="nav-link" data-bs-toggle="tab" href="#recetario_tab" role="tab" aria-selected="false">
-                                            <div class="d-flex align-items-center">
-                                                <div class="tab-icon"><i class='bx bx-receipt font-20 me-1'></i>
-                                                </div>
-                                                <div class="tab-title">RECETARIO</div>
-                                            </div>
-                                        </a>
-                                    </li>
 
                                 </ul>
                                 <div class="tab-content py-3">
-                                    <div class="tab-pane fade show active" id="triage_tab" role="tabpanel">
-
-                                        <div>
-                                            <!-- Consulta -->
-                                            <div <?php if ($tipo_consulta != 'consulta') {
-                                                        echo 'hidden';
-                                                    } ?>>
-
-                                                <div class="row pt-0">
-
-                                                    <?php include('../vista/ENFERMERIA/Consultas/triage.php'); ?>
-
-                                                </div>
-                                            </div>
-
-
-                                            <!-- Certificado -->
-                                            <div <?php if ($tipo_consulta != 'certificado') {
-                                                        echo 'hidden';
-                                                    } ?>>
-                                                <div class="row pt-0">
-                                                    <div class="row pt-1">
-                                                        <div class="col-md-3">
-                                                            <label for="" class="form-label">Certificado por Salud: <label style="color: red;">*</label> </label>
-                                                            <input type="text" class="form-control form-control-sm" id="sa_conp_salud_certificado" name="sa_conp_salud_certificado">
-                                                        </div>
-
-                                                        <div class="col-md-9">
-                                                            <label for="" class="form-label">Motivo Certificado: <label style="color: red;">*</label> </label>
-                                                            <input type="text" class="form-control form-control-sm" id="sa_conp_motivo_certificado" name="sa_conp_motivo_certificado">
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="row pt-3">
-                                                        <div class="col-md-12">
-                                                            <label for="" class="form-label">CIE 10 - Diagnóstico de Certificado: <label style="color: red;">*</label> </label>
-                                                            <input type="text" class="ctw-input form-control form-control-sm" autocomplete="off" data-ctw-ino="3" id="sa_conp_diagnostico_certificado" placeholder="Diagnostico">
-
-                                                            <input type="hidden" id="sa_conp_CIE_10_certificado">
-                                                            <div class="ctw-window" data-ctw-ino="3"></div>
-
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="row pt-3">
-                                                        <div class="col-md-3">
-                                                            <label for="" class="form-label">Fecha de Entrega del Certificado: <label style="color: red;">*</label> </label>
-                                                            <input type="date" class="form-control form-control-sm" id="sa_conp_fecha_entrega_certificado" name="sa_conp_fecha_entrega_certificado">
-                                                        </div>
-
-                                                        <div class="col-md-3">
-                                                            <label for="" class="form-label">Fecha Inicio Falta: <label style="color: red;">*</label> </label>
-                                                            <input type="date" class="form-control form-control-sm" id="sa_conp_fecha_inicio_falta_certificado" name="sa_conp_fecha_inicio_falta_certificado">
-                                                        </div>
-                                                        <div class="col-md-3">
-                                                            <label for="" class="form-label">Fecha Fin Alta: <label style="color: red;">*</label> </label>
-                                                            <input type="date" class="form-control form-control-sm" id="sa_conp_fecha_fin_alta_certificado" name="sa_conp_fecha_fin_alta_certificado">
-                                                        </div>
-                                                        <div class="col-md-3">
-                                                            <label for="" class="form-label"># Días de Permiso: <label style="color: red;">*</label> </label>
-                                                            <input type="text" class="form-control form-control-sm" id="sa_conp_dias_permiso_certificado" name="sa_conp_dias_permiso_certificado">
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div class="modal-footer pt-4" id="seccion_boton_consulta">
-
-                                                <button class="btn btn-danger btn-sm px-2 m-1" onclick="editar_insertar(1, 1, 1, 0, 2)" type="button"><i class='bx bx-pause-circle'></i> En Proceso</button>
-
-                                                <button class="btn btn-success btn-sm px-2 m-1" onclick="editar_insertar(1, 1, 1, 0, 1)" type="button"><i class="bx bx-save"></i> Finalizar</button>
-
-                                            </div>
-
-                                        </div>
-
-                                    </div>
-
-                                    <div class="tab-pane fade show" id="consulta_tab" role="tabpanel">
+                                    <div class="tab-pane fade show active" id="consulta_tab" role="tabpanel">
 
                                         <div class="accordion" id="consulta_acordeon">
 
@@ -880,12 +763,86 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                         <hr>
 
                                         <div>
+                                            <div class="row">
+                                                <div class="col-md-3">
+                                                    <label for="" class="form-label">Fecha: <label style="color: red;">*</label> </label>
+                                                    <input type="date" class="form-control form-control-sm" id="sa_conp_fecha_ingreso" name="sa_conp_fecha_ingreso" value="<?= date('Y-m-d'); ?>">
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <label for="" class="form-label">Desde: <label style="color: red;">*</label> </label>
+                                                    <input type="time" class="form-control form-control-sm" id="sa_conp_desde_hora" name="sa_conp_desde_hora">
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <label for="" class="form-label">Hasta: <label style="color: red;">*</label> </label>
+                                                    <input type="time" class="form-control form-control-sm" id="sa_conp_hasta_hora" name="sa_conp_hasta_hora">
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <label for="" class="form-label">Tiempo (Minutos): <label style="color: red;">*</label> </label>
+                                                    <input type="text" class="form-control form-control-sm" id="sa_conp_tiempo_aten" name="sa_conp_tiempo_aten" readonly>
+                                                </div>
+                                            </div>
+                                            <br>
+                                            <hr>
+
                                             <!-- Consulta -->
                                             <div <?php if ($tipo_consulta != 'consulta') {
                                                         echo 'hidden';
                                                     } ?>>
 
                                                 <div class="row pt-0">
+
+                                                    <div>
+                                                        <div class="row pt-1">
+                                                            <div class="col-md-3">
+                                                                <label for="" class="form-label">Peso: <label style="color: red;">*</label> </label>
+                                                                <input type="number" class="form-control form-control-sm" id="sa_conp_peso" name="sa_conp_peso">
+                                                            </div>
+                                                            <div class="col-md-3">
+                                                                <label for="" class="form-label">Altura: <label style="color: red;">*</label> </label>
+                                                                <input type="number" class="form-control form-control-sm" id="sa_conp_altura" name="sa_conp_altura">
+                                                            </div>
+                                                            <div class="col-md-3">
+                                                                <b><label for="" class="form-label">IMC: <label style="color: red;">*</label> </label></b>
+                                                                <input type="number" class="form-control form-control-sm" id="txt_imc" name="txt_imc" readonly disabled>
+                                                            </div>
+                                                            <div class="col-md-3">
+                                                                <b><label for="" class="form-label">Nivel del Peso: <label style="color: red;">*</label> </label></b>
+                                                                <input type="text" class="form-control form-control-sm" id="txt_np" name="txt_np" readonly disabled>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="row pt-4">
+                                                            <div class="col-md-2">
+                                                                <label for="" class="form-label">Temperatura: <label style="color: red;">*</label> </label>
+                                                                <input type="number" class="form-control form-control-sm" id="sa_conp_temperatura" name="sa_conp_temperatura">
+                                                            </div>
+                                                            <div class="col-md-2">
+                                                                <label for="" class="form-label">Presión Arterial: <label style="color: red;">*</label> </label>
+                                                                <input type="number" class="form-control form-control-sm" id="sa_conp_presion_ar" name="sa_conp_presion_ar">
+                                                            </div>
+                                                            <div class="col-md-2">
+                                                                <label for="" class="form-label">Saturación: <label style="color: red;">*</label> </label>
+                                                                <input type="number" class="form-control form-control-sm" id="sa_conp_saturacion" name="sa_conp_saturacion">
+                                                            </div>
+                                                            <div class="col-md-3">
+                                                                <label for="" class="form-label">Frecuencia Cardiáca: <label style="color: red;">*</label> </label>
+                                                                <input type="number" class="form-control form-control-sm" id="sa_conp_frec_cardiaca" name="sa_conp_frec_cardiaca">
+                                                            </div>
+                                                            <div class="col-md-3">
+                                                                <label for="" class="form-label">Frecuencia Respiratoria: <label style="color: red;">*</label> </label>
+                                                                <input type="number" class="form-control form-control-sm" id="sa_conp_frec_respiratoria" name="sa_conp_frec_respiratoria">
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="row pt-3">
+                                                            <div class="col-md-12">
+                                                                <label for="" class="form-label">Motivo de la consulta: <label style="color: red;">*</label> </label>
+                                                                <textarea name="sa_conp_motivo_consulta" id="sa_conp_motivo_consulta" cols="30" rows="2" class="form-control" placeholder="Motivo de la consulta"></textarea>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+
 
                                                     <div class="row pt-3">
                                                         <div class="col-md-12">
@@ -900,13 +857,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                             <input type="text" class="ctw-input form-control form-control-sm" autocomplete="off" data-ctw-ino="1" id="sa_conp_diagnostico_1" placeholder="Diagnostico 1">
                                                             <input type="hidden" id="sa_conp_CIE_10_1">
                                                             <div class="ctw-window" data-ctw-ino="1"></div>
+
+
                                                         </div>
                                                     </div>
 
                                                     <div class="row pt-3">
                                                         <div class="col-md-12">
                                                             <label for="" class="form-label">CIE 10 - Diagnóstico 2: <label style="color: red;">*</label> </label>
+
                                                             <input type="text" class="ctw-input form-control form-control-sm" autocomplete="off" data-ctw-ino="2" id="sa_conp_diagnostico_2" placeholder="Diagnostico 2">
+
                                                             <input type="hidden" id="sa_conp_CIE_10_2">
                                                             <div class="ctw-window" data-ctw-ino="2"></div>
                                                         </div>
@@ -916,6 +877,69 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                         <div class="col-md-12">
                                                             <label for="" class="form-label">Observaciones: <label style="color: red;">*</label> </label>
                                                             <textarea name="sa_conp_observaciones" id="sa_conp_observaciones" cols="30" rows="1" class="form-control" placeholder="Observaciones"></textarea>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="row pt-4">
+                                                        <hr>
+
+                                                        <div class="col-md-3">
+                                                            <label for="tipo_farmacologia" class="form-label">Farmacología: <label style="color: red;">*</label> </label>
+                                                            <select class="form-select form-select-sm" id="tipo_farmacologia" name="tipo_farmacologia" onclick="consultar_medicinas_insumos(this.value);">
+                                                                <option selected disabled>-- Seleccione --</option>
+                                                                <option value="medicamentos">Medicamentos</option>
+                                                                <option value="insumos">Insumos</option>
+                                                            </select>
+                                                        </div>
+
+                                                        <div class="col-md-7">
+                                                            <label for="tipo_farmacologia_presentacion" class="form-label">Presentación: <label style="color: red;">*</label> </label>
+                                                            <select class="form-select form-select-sm" id="tipo_farmacologia_presentacion" name="tipo_farmacologia_presentacion">
+                                                                <option selected disabled>-- Seleccione --</option>
+                                                            </select>
+                                                        </div>
+
+                                                        <div class="col-md-2 mt-3">
+                                                            <label for="agregarFila_medicamentos" class="form-label"></label>
+                                                            <button class="btn btn-primary" title="Agregar Medicamentos" id="agregarFila_medicamentos" type="button"><i class='bx bx-plus me-0'></i>Agregar</button>
+                                                        </div>
+                                                    </div>
+
+
+
+                                                    <div class="row pt-3">
+
+
+                                                        <div class="col-sm-12">
+                                                            <div class="mb-2">
+
+                                                                <table class="table table-bordered table-hover" id="lista_medicamentos">
+
+                                                                    <tr>
+                                                                        <th width="2%"><input id="checkAll_Medicamentos" class="form-check" type="checkbox"></th>
+
+                                                                        <th width="40%">Farmacología</th>
+                                                                        <th width="48%">Dosificación</th>
+                                                                        <th width="8%">Cantidad</th>
+                                                                        <th width="2%%">Entregado?</th>
+
+                                                                    </tr>
+
+
+                                                                </table>
+
+                                                                <button class="btn btn-danger btn-sm mb-2" title="Seleccione el Medicamento para Eliminar" id="eliminarFila_medicamentos" type="button"><i class='bx bx-minus me-0'></i>Eliminar</button>
+
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <hr>
+
+                                                    <div class="row pt-2">
+                                                        <div class="col-md-12">
+                                                            <label for="" class="form-label">Tratamiento: <label style="color: red;">*</label> </label>
+                                                            <textarea name="sa_conp_tratamiento" id="sa_conp_tratamiento" cols="30" rows="2" class="form-control" placeholder="Tratamiento"></textarea>
                                                         </div>
                                                     </div>
 
@@ -1070,89 +1094,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                                         </div>
 
-                                    </div>
-
-                                    <div class="tab-pane fade show" id="recetario_tab" role="tabpanel">
-                                        <div>
-
-
-                                            <!-- Consulta -->
-                                            <div>
-
-                                                <div class="row pt-0">
-
-                                                    <!-- Farmacologia -->
-                                                    <div>
-                                                        <div class="row pt-4">
-                                                            <hr>
-
-                                                            <div class="col-md-3">
-                                                                <label for="tipo_farmacologia" class="form-label">Farmacología: <label style="color: red;">*</label> </label>
-                                                                <select class="form-select form-select-sm" id="tipo_farmacologia" name="tipo_farmacologia" onclick="consultar_medicinas_insumos(this.value);">
-                                                                    <option selected disabled>-- Seleccione --</option>
-                                                                    <option value="medicamentos">Medicamentos</option>
-                                                                    <option value="insumos">Insumos</option>
-                                                                </select>
-                                                            </div>
-
-                                                            <div class="col-md-7">
-                                                                <label for="tipo_farmacologia_presentacion" class="form-label">Presentación: <label style="color: red;">*</label> </label>
-                                                                <select class="form-select form-select-sm" id="tipo_farmacologia_presentacion" name="tipo_farmacologia_presentacion">
-                                                                    <option selected disabled>-- Seleccione --</option>
-                                                                </select>
-                                                            </div>
-
-                                                            <div class="col-md-2 mt-3">
-                                                                <label for="agregarFila_medicamentos" class="form-label"></label>
-                                                                <button class="btn btn-primary" title="Agregar Medicamentos" id="agregarFila_medicamentos" type="button"><i class='bx bx-plus me-0'></i>Agregar</button>
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="row pt-3">
-
-
-                                                            <div class="col-sm-12">
-                                                                <div class="mb-2">
-
-                                                                    <table class="table table-bordered table-hover" id="lista_medicamentos">
-
-                                                                        <tr>
-                                                                            <th width="2%"><input id="checkAll_Medicamentos" class="form-check" type="checkbox"></th>
-
-                                                                            <th width="40%">Farmacología</th>
-                                                                            <th width="48%">Dosificación</th>
-                                                                            <th width="8%">Cantidad</th>
-                                                                            <th width="2%%">Entregado?</th>
-
-                                                                        </tr>
-
-
-                                                                    </table>
-
-                                                                    <button class="btn btn-danger btn-sm mb-2" title="Seleccione el Medicamento para Eliminar" id="eliminarFila_medicamentos" type="button"><i class='bx bx-minus me-0'></i>Eliminar</button>
-
-                                                                </div>
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="row pt-2">
-                                                            <div class="col-md-12">
-                                                                <label for="" class="form-label">Tratamiento: <label style="color: red;">*</label> </label>
-                                                                <textarea name="sa_conp_tratamiento" id="sa_conp_tratamiento" cols="30" rows="2" class="form-control" placeholder="Tratamiento"></textarea>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div class="modal-footer pt-4" id="seccion_boton_consulta">
-
-                                                <button class="btn btn-danger btn-sm px-2 m-1" onclick="editar_insertar(1, 1, 1, 0, 2)" type="button"><i class='bx bx-pause-circle'></i> En Proceso</button>
-
-                                                <button class="btn btn-success btn-sm px-2 m-1" onclick="editar_insertar(1, 1, 1, 0, 1)" type="button"><i class="bx bx-save"></i> Finalizar</button>
-
-                                            </div>
-                                        </div>
                                     </div>
                                 </div>
                             </div>

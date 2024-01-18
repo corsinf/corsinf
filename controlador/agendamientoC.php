@@ -85,12 +85,14 @@ class agendamientoC
                 array('campo' => 'sa_conp_tipo_consulta', 'dato' => $parametros['tipo']),
                 array('campo' => 'sa_conp_estado_revision', 'dato' => 0),
 
-                array('campo' => 'sa_conp_peso', 'dato' => $parametros['sa_conp_peso']),
-                array('campo' => 'sa_conp_altura', 'dato' => $parametros['sa_conp_altura']),
-                array('campo' => 'sa_conp_temperatura', 'dato' => $parametros['sa_conp_temperatura']),
-                array('campo' => 'sa_conp_presion_ar', 'dato' => $parametros['sa_conp_presion_ar']),
-                array('campo' => 'sa_conp_frec_cardiaca', 'dato' => $parametros['sa_conp_frec_cardiaca']),
-                array('campo' => 'sa_conp_frec_respiratoria', 'dato' => $parametros['sa_conp_frec_respiratoria']),
+                array('campo' => 'sa_conp_peso', 'dato' => empty($parametros['sa_conp_peso']) ? 0 : $parametros['sa_conp_peso']),
+                array('campo' => 'sa_conp_altura', 'dato' => empty($parametros['sa_conp_altura']) ? 0 : $parametros['sa_conp_altura']),
+                array('campo' => 'sa_conp_temperatura', 'dato' => empty($parametros['sa_conp_temperatura']) ? 0 : $parametros['sa_conp_temperatura']),
+                array('campo' => 'sa_conp_presion_ar', 'dato' => empty($parametros['sa_conp_presion_ar']) ? 0 : $parametros['sa_conp_presion_ar']),
+                array('campo' => 'sa_conp_frec_cardiaca', 'dato' => empty($parametros['sa_conp_frec_cardiaca']) ? 0 : $parametros['sa_conp_frec_cardiaca']),
+                array('campo' => 'sa_conp_frec_respiratoria', 'dato' => empty($parametros['sa_conp_frec_respiratoria']) ? 0 : $parametros['sa_conp_frec_respiratoria']),
+                array('campo' => 'sa_conp_saturacion', 'dato' => empty($parametros['sa_conp_saturacion']) ? 0 : $parametros['sa_conp_saturacion']),
+
                 array('campo' => 'sa_conp_motivo_consulta', 'dato' => $parametros['sa_conp_motivo_consulta']),
 
             );

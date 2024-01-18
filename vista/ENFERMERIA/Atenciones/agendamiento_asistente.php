@@ -101,6 +101,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         var sa_conp_frec_cardiaca = $('#sa_conp_frec_cardiaca').val();
         var sa_conp_frec_respiratoria = $('#sa_conp_frec_respiratoria').val();
         var sa_conp_motivo_consulta = $('#sa_conp_motivo_consulta').val();
+        var sa_conp_saturacion = $('#sa_conp_saturacion').val();
 
         if (tipoConsulta === 'consulta') {
             if (
@@ -126,6 +127,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     'sa_conp_presion_ar': sa_conp_presion_ar,
                     'sa_conp_frec_cardiaca': sa_conp_frec_cardiaca,
                     'sa_conp_frec_respiratoria': sa_conp_frec_respiratoria,
+                    'sa_conp_saturacion': sa_conp_saturacion,
                     'sa_conp_motivo_consulta': sa_conp_motivo_consulta,
                 };
 
@@ -246,7 +248,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         });
     }
-
 </script>
 
 <div class="page-wrapper">
@@ -277,8 +278,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 <div class="card border-top border-0 border-4 border-primary">
                     <div class="card-body">
-
-
 
                         <?php if ($tipo_consulta !== "") { ?>
 
@@ -323,8 +322,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                     <b>
                                                         <h3 class="pt-0 text-primary">Agendar</h3>
                                                     </b>
-
-
 
                                                     <div class="row">
                                                         <div class="col-8">
@@ -377,51 +374,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                             <h3 class="pt-0 text-primary">Triage</h3>
                                                         </b>
 
-                                                        <div class="row pt-2">
-                                                            <div class="col-md-3">
-                                                                <b><label for="" class="form-label">Peso: <label style="color: red;">*</label></b>
-                                                                <input type="number" class="form-control form-control-sm" id="sa_conp_peso" name="sa_conp_peso" placeholder="Ejemplo: 68.45 (Kilogramos)">
-                                                            </div>
-                                                            <div class="col-md-3">
-                                                                <b><label for="" class="form-label">Altura: <label style="color: red;">*</label> </label></b>
-                                                                <input type="number" class="form-control form-control-sm" id="sa_conp_altura" name="sa_conp_altura" placeholder="Ejemplo: 1.45 (Metros)">
-                                                            </div>
-                                                            <div class="col-md-3">
-                                                                <b><label for="" class="form-label">IMC: <label style="color: red;">*</label> </label></b>
-                                                                <input type="number" class="form-control form-control-sm" id="txt_imc" name="txt_imc" readonly disabled>
-                                                            </div>
-                                                            <div class="col-md-3">
-                                                                <b><label for="" class="form-label">Nivel del Peso: <label style="color: red;">*</label> </label></b>
-                                                                <input type="text" class="form-control form-control-sm" id="txt_np" name="txt_np" readonly disabled>
-                                                            </div>
-                                                        </div>
 
-                                                        <div class="row pt-3">
-                                                            <div class="col-md-3">
-                                                                <b><label for="" class="form-label">Temperatura: <label style="color: red;">*</label> </label></b>
-                                                                <input type="number" class="form-control form-control-sm" id="sa_conp_temperatura" name="sa_conp_temperatura" placeholder="Ejemplo: 37.5 (°C)">
-                                                                <p></p>
-                                                            </div>
-                                                            <div class="col-md-3">
-                                                                <b><label for="" class="form-label">Presión Arterial: <label style="color: red;">*</label> </label></b>
-                                                                <input type="number" class="form-control form-control-sm" id="sa_conp_presion_ar" name="sa_conp_presion_ar">
-                                                            </div>
-                                                            <div class="col-md-3">
-                                                                <b><label for="" class="form-label">Frecuencia Cardiáca: <label style="color: red;">*</label> </label></b>
-                                                                <input type="number" class="form-control form-control-sm" id="sa_conp_frec_cardiaca" name="sa_conp_frec_cardiaca">
-                                                            </div>
-                                                            <div class="col-md-3">
-                                                                <b><label for="" class="form-label">Frecuencia Respiratoria: <label style="color: red;">*</label> </label></b>
-                                                                <input type="number" class="form-control form-control-sm" id="sa_conp_frec_respiratoria" name="sa_conp_frec_respiratoria">
-                                                            </div>
-                                                        </div>
+                                                        <?php include('../vista/ENFERMERIA/Consultas/triage.php'); ?>
 
-                                                        <div class="row pt-3">
-                                                            <div class="col-md-12">
-                                                                <b><label for="" class="form-label">Motivo de la consulta: <label style="color: red;">*</label> </label></b>
-                                                                <textarea name="sa_conp_motivo_consulta" id="sa_conp_motivo_consulta" cols="30" rows="4" class="form-control" placeholder="Motivo de la consulta"></textarea>
-                                                            </div>
-                                                        </div>
 
                                                         <?php if ($tipo_consulta == "consulta") { ?>
                                                             <div class="row pt-3 text-end">
