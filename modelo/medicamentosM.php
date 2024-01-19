@@ -70,7 +70,7 @@ class medicamentosM
 
 	function buscar_medicamentos($buscar)
 	{
-		$sql = "SELECT sa_cmed_id, sa_cmed_concentracion, sa_cmed_estado FROM cat_medicamentos WHERE sa_cmed_estado = 1 and CONCAT(sa_cmed_concentracion, ' ', sa_cmed_id) LIKE '%" . $buscar . "%'";
+		$sql = "SELECT * FROM cat_medicamentos WHERE sa_cmed_estado = 1 and CONCAT(sa_cmed_presentacion, ' ', sa_cmed_id) LIKE '%" . $buscar . "%'";
 
 		$datos = $this->db->datos($sql);
 		return $datos;

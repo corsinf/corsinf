@@ -142,6 +142,7 @@ class consultasC
             array('campo' => 'sa_conp_presion_ar', 'dato' => empty($parametros['sa_conp_presion_ar']) ? 0 : $parametros['sa_conp_presion_ar']),
             array('campo' => 'sa_conp_frec_cardiaca', 'dato' => empty($parametros['sa_conp_frec_cardiaca']) ? 0 : $parametros['sa_conp_frec_cardiaca']),
             array('campo' => 'sa_conp_frec_respiratoria', 'dato' => empty($parametros['sa_conp_frec_respiratoria']) ? 0 : $parametros['sa_conp_frec_respiratoria']),
+            array('campo' => 'sa_conp_saturacion', 'dato' => empty($parametros['sa_conp_saturacion']) ? 0 : $parametros['sa_conp_saturacion']),
 
             array('campo' => 'sa_conp_fecha_ingreso', 'dato' => $parametros['sa_conp_fecha_ingreso']),
             array('campo' => 'sa_conp_desde_hora', 'dato' => $parametros['sa_conp_desde_hora']),
@@ -179,7 +180,6 @@ class consultasC
             array('campo' => 'sa_id_guardia', 'dato' => $parametros['sa_id_guardia']),
             array('campo' => 'sa_conp_tipo_consulta', 'dato' => $parametros['sa_conp_tipo_consulta']),
             array('campo' => 'sa_conp_enfermedad_actual', 'dato' => $parametros['sa_conp_enfermedad_actual']),
-            array('campo' => 'sa_conp_saturacion', 'dato' => $parametros['sa_conp_saturacion']),
 
             array('campo' => 'sa_conp_observaciones', 'dato' => $parametros['sa_conp_observaciones']),
             array('campo' => 'sa_conp_motivo_consulta', 'dato' => $parametros['sa_conp_motivo_consulta']),
