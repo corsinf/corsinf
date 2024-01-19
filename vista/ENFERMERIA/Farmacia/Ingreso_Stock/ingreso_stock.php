@@ -1,5 +1,7 @@
+
 <script type="text/javascript">
     $(document).ready(function() {
+    	lista_proveedor();
         $('#tabla_insumos').DataTable({
             language: {
                 url: 'https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
@@ -35,7 +37,97 @@
                 },
             ]
         });
+
+         $('#tabla_medicamentos').DataTable({
+            language: {
+                url: 'https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
+            },
+            responsive: true,
+            ajax: {
+                url: '../controlador/medicamentosC.php?listar_todo=true',
+                dataSrc: ''
+            },
+            columns: [{
+                    data: null,
+                    render: function(data, type, item, meta) {
+                        return meta.row + 1;
+                    }
+                },
+                {
+                    data: null,
+                    render: function(data, type, item) {
+                        return '<a href="../vista/inicio.php?mod=7&acc=registrar_medicamentos&id=' + item.sa_cmed_id + '"><u>' + item.sa_cmed_presentacion + '</u></a>';
+                    }
+                },
+                {
+                    data: 'sa_cmed_concentracion'
+                },
+                {
+                    data: 'sa_cmed_serie'
+                },
+                {
+                    data: 'sa_cmed_minimos'
+                },
+                {
+                    data: 'sa_cmed_stock'
+                },
+                {
+                    data: 'sa_cmed_movimiento'
+                },
+            ]
+        });
     });
+
+function modal_ingreso(tipo)
+{
+	$('#ddl_tipo').val(tipo)
+	$('#myTabs a[href="#'+tipo+'"]').tab('show');
+	$('#exampleVerticallycenteredModal').modal('hide');
+	$('#exampleModal').modal('show');
+	lista_medicamentos(tipo);
+}
+
+ function lista_proveedor()
+  {
+      $('#ddl_proveedor').select2({
+        placeholder: 'Seleccione Proveedor',
+        dropdownParent: $('#exampleModal'),
+        width:'87%',
+        ajax: {
+          url:   '../controlador/contratoC.php?lista_proveedores=true',
+          dataType: 'json',
+          delay: 250,
+          processResults: function (data) {
+            // console.log(data);
+            return {
+              results: data
+            };
+          },
+          cache: true
+        }
+      });
+  }
+
+  function lista_medicamentos(tipo)
+  {
+      $('#ddl_lista_productos').select2({
+        placeholder: 'Seleccione Proveedor',
+        dropdownParent: $('#exampleModal'),
+        width:'87%',
+        ajax: {
+          url:   '../controlador/ingreso_stockC.php?lista_articulos=true&tipo='+tipo,
+          dataType: 'json',
+          delay: 250,
+          processResults: function (data) {
+            // console.log(data);
+            return {
+              results: data
+            };
+          },
+          cache: true
+        }
+      });
+  }
 </script>
 
 <div class="page-wrapper">
@@ -69,16 +161,16 @@
 
                                     <div class="row">
                                         <div class="col-sm-12" id="btn_nuevo">
-                                        	<button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#exampleModal"><i class="bx bx-plus me-0"></i> Nuevo Ingreso</button>
+                                        	<button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#exampleVerticallycenteredModal"><i class="bx bx-plus me-0"></i> Nuevo Ingreso</button>
                                         </div>
 
                                     </div>
                                     <br>
                                     <div class="row">
                                     	<div class="col-sm-12">
-											<ul class="nav nav-tabs nav-success" role="tablist">
+											<ul class="nav nav-tabs nav-success" role="tablist" id="myTabs">
 												<li class="nav-item" role="presentation">
-													<a class="nav-link active" data-bs-toggle="tab" href="#successhome" role="tab" aria-selected="true">
+													<a class="nav-link active" data-bs-toggle="tab" href="#Medicamento" role="tab" aria-selected="true">
 														<div class="d-flex align-items-center">
 															<div class="tab-icon">
 																<i class='bx bxs-capsule font-18 me-1' ></i>
@@ -88,7 +180,7 @@
 													</a>
 												</li>
 												<li class="nav-item" role="presentation">
-													<a class="nav-link" data-bs-toggle="tab" href="#successprofile" role="tab" aria-selected="false" tabindex="-1">
+													<a class="nav-link" data-bs-toggle="tab" href="#Insumos" role="tab" aria-selected="false" tabindex="-1">
 														<div class="d-flex align-items-center">
 															<div class="tab-icon">
 																<i class="bx bx-test-tube font-18 me-1"></i>
@@ -99,14 +191,15 @@
 												</li>												
 											</ul>
 											<div class="tab-content py-3">
-												<div class="tab-pane fade show active" id="successhome" role="tabpanel">
+												<div class="tab-pane fade show active" id="Medicamento" role="tabpanel">
 													<div class="table-responsive">
-				                                        <table class="table table-striped responsive " id="tabla_insumos" style="width:100%">
+				                                        <table class="table table-striped responsive " id="tabla_medicamentos" style="width:100%">
 				                                            <thead>
 				                                                <tr>
 				                                                    <th>#</th>
+				                                                    <th>Presentación</th>
 				                                                    <th>Concentración</th>
-				                                                    <th>Lote</th>
+				                                                    <th>Serie</th>
 				                                                    <th>Mínimos</th>
 				                                                    <th>Stock</th>
 				                                                    <th>Movimiento</th>
@@ -118,7 +211,7 @@
 				                                        </table>
 				                                    </div>
 												</div>
-												<div class="tab-pane fade" id="successprofile" role="tabpanel">
+												<div class="tab-pane fade" id="Insumos" role="tabpanel">
 													<div class="table-responsive">
 				                                        <table class="table table-striped responsive " id="tabla_insumos" style="width:100%">
 				                                            <thead>
@@ -165,7 +258,7 @@
 				<div class="row">
 					<div class="col-sm-4">
 						<b>Proveedor</b>
-						<select class="form-select form-select-sm mb-3">
+						<select class="form-select form-select-sm mb-3" id="ddl_proveedor" name="ddl_proveedor">
 							<option>Seleccione proveedor</option>
 						</select>
 					</div>
@@ -192,14 +285,14 @@
 		           </div>
 		           <div class="col-sm-5">
 		              <b>Producto:</b>
-		              <select class="form-select form-select-sm" id="ddl_producto" name="ddl_producto" onchange="cargar_detalles()">
+		              <select class="form-select form-select-sm" id="ddl_lista_productos" name="ddl_lista_productos" onchange="cargar_detalles()">
 		                <option value="">Seleccione una producto</option>
 		              </select>
 		           </div>
 		          
 		           <div class=" col-sm-3">
 		              <b>Tipo:</b>
-		                <select class="form-control form-control-sm" id="ddl_familia" name="ddl_familia" disabled>
+		                <select class="form-control form-control-sm" id="ddl_tipo" name="ddl_tipo" disabled>
 		                  <option value=""> -- Selecione -- </option>
 		                  <option value="Insumos">Insumos</option>
 		                  <option value="Medicamento">Medicamento</option>
@@ -279,3 +372,57 @@
 		</div>
 	</div>
 </div>
+
+<div class="col">
+<!-- Button trigger modal -->
+
+<!-- Modal -->
+<div class="modal fade" id="exampleVerticallycenteredModal" tabindex="-1" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered">
+		<div class="modal-content">
+			<div class="modal-header">
+				<!-- <h5 class="modal-title">Modal title</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> -->
+			</div>
+			<div class="modal-body">
+				<div class="row">
+					
+					<div class="col-sm-12" onclick="modal_ingreso('Medicamento')">
+						<div class="card radius-10">
+							<div class="card-body">
+								<div class="d-flex align-items-center">
+									<div>
+										<p class="mb-0 text-secondary">Ingreso</p>
+										<h4 class="my-1">Medicamentos</h4>
+									</div>
+									<div class="text-primary ms-auto font-35"><i class="bx bxs-capsule"></i>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-sm-12" onclick="modal_ingreso('Insumos')">
+						<div class="card radius-10">
+							<div class="card-body">
+								<div class="d-flex align-items-center">
+									<div>
+										<p class="mb-0 text-secondary">Ingreso</p>
+										<h4 class="my-1">Insumos</h4>
+									</div>
+									<div class="text-danger ms-auto font-35"><i class="bx bx-test-tube"></i>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- <div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+				<button type="button" class="btn btn-primary">Save changes</button>
+			</div> -->
+		</div>
+	</div>
+</div>
+</div>
+
