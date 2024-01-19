@@ -103,16 +103,21 @@ class ligar_segurosC
 
 		//busca en base de datos
 		$lista_tabla = $this->modelo->existe();
-		$tablas = $lista_tabla[0]['Tabla_seguros'];
-		$arrayDatos = json_decode($tablas, true);
-		$existe = 0;
-		foreach ($arrayDatos as $key => $value) {
-			if($value['tabla']==$tbl)
+		
+			$tablas = $lista_tabla[0]['Tabla_seguros'];
+			$existe = 0;
+			$arrayDatos = array();
+			if($tablas!='')
 			{
-				$existe = 1;
-				break;
+				$arrayDatos = json_decode($tablas, true);
+				foreach ($arrayDatos as $key => $value) {
+					if($value['tabla']==$tbl)
+					{
+						$existe = 1;
+						break;
+					}
+				}
 			}
-		}
 
 		if($existe==0)
 		{
