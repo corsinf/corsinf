@@ -71,6 +71,17 @@ if ($dominio != 'localhost') {
 
   <!-- <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script> -->
 
+  <style type="text/css">
+		input[readonly] {
+	    /* Estilos para inputs en modo de solo lectura */
+	    background-color: #e8e8e8; /* Color de fondo */
+	    border: 1px solid #ccc; /* Borde */
+	    color: #555; /* Color del texto */
+	    cursor: not-allowed; /* Cambia el cursor */
+	    /* Otros estilos según sea necesario */
+	}
+	</style>
+
 	<style>
 		.input-group>.select2-container--bootstrap {
 			width: auto;

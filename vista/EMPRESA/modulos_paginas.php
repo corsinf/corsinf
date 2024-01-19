@@ -336,11 +336,13 @@ function guardar_pagina(id='')
       d = $('#rbl_defaul'+id).prop('checked')
       a = $('#rbl_activo'+id).prop('checked')
       s = $('#rbl_subpag'+id).prop('checked')
+      dba = $('#rbl_para_dba'+id).prop('checked')
     }else
     {
       d = $('#rbl_defaul').prop('checked')
       a = $('#rbl_estado').prop('checked')
       s = $('#rbl_subpag').prop('checked')
+      dba = $('#rbl_para_dba').prop('checked')
     }
     var parametros = 
     {
@@ -354,6 +356,7 @@ function guardar_pagina(id='')
       'defaul':d,
       'activo':a,
       'subpag':s,
+      'paradb':dba,
     }
      $.ajax({
          data:  {parametros:parametros},
