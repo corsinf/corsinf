@@ -232,6 +232,9 @@ class loginC
 			{
 
 				$datos = $this->login->datos_login($parametros['email'],$parametros['pass']);
+				if(count($datos)>0)
+				{
+					
 				// print_r($datos);die();
 				// session_start();
 				$_SESSION['INICIO']['ULTIMO_ACCESO'] = time();
@@ -253,6 +256,10 @@ class loginC
 				$_SESSION["INICIO"]['LISTA_ART'] =1;
 
 				return 1;			
+			}else
+			{
+				 return -3;
+			}
 
 			}else
 			{

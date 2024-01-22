@@ -78,10 +78,9 @@ class loginM
 
 	function datos_login($email=false,$pass=false,$id=false)
 	{
-		$sql = "SELECT nombres,apellidos,email,DESCRIPCION,Ver,editar,eliminar,dba,T.DESCRIPCION as 'tipo',U.id_usuarios as 'id',ID as 'perfil',U.foto FROM USUARIO_TIPO_USUARIO A 
-		INNER JOIN USUARIOS U ON A.ID_USUARIO = U.id_usuarios
-		INNER JOIN TIPO_USUARIO T ON A.ID_TIPO_USUARIO  = T.ID_TIPO
-		LEFT JOIN ACCESOS AC ON A.ID = AC.id_tipo_usu 
+		$sql = "SELECT id_usuarios as 'id',U.*,TU.DESCRIPCION as tipo,A.*  FROM ACCESOS A
+		 INNER JOIN TIPO_USUARIO TU ON A.id_tipo_usu = TU.ID_TIPO
+		 INNER JOIN USUARIOS U ON TU.ID_TIPO = U.perfil
 		WHERE 1=1";
 		if($email){
 			$sql.=" AND email = '".$email."' ";
@@ -94,10 +93,20 @@ class loginM
 		{
 			$sql.=" AND U.id_usuarios = ".$id;
 		}
-		$sql.=" GROUP BY  nombres,apellidos,email,DESCRIPCION,Ver,editar,eliminar,dba,id_usuarios,ID,foto";
+
 		// print_r($sql);die();
 		$datos = $this->db->datos($sql);
 		return $datos;
+	}
+
+	function accesos_dba($email,$pass)
+	{
+
+		$sql = "SELECT id_usuarios as 'id',perfil as tipo,U.*,TU.DESCRIPCION  FROM  USUARIOS U
+		INNER JOIN TIPO_USUARIO TU ON U.perfil = TU.ID_TIPO 
+		WHERE email = '".$email."'  AND password = '".$pass."'";
+		$datos = $this->db->datos($sql);
+		return $datos;  
 	}
 
 	function datos_login_no_concurentes($email,$pass)

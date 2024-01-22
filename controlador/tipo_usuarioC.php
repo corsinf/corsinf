@@ -537,12 +537,15 @@ class tipo_usuarioC
 	{
 		// $perfil = $this->modelo->lista_usuarios_en_tipo(false,$parametros['usuario']);
 		// 	print_r($perfil);die();
-		if($parametros['usuario']!='T')
+		// print_r($parametros);die();
+		if($parametros['usuario']=='T')
 		{
+			// print_r('e');die();
 			return $this->modelo->lista_accesos_asignados($parametros['usuario']);
 		}else
 		{
-			return array();
+			// validar que solo se cargue cuando sea perfil (porm desarrollar)
+			return $this->modelo->lista_accesos_por_perfil($parametros['perfil']);
 		}
 	}
 	function guardar_modulos($parametros)

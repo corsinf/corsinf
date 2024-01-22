@@ -723,22 +723,29 @@ function para_ftp($nombre,$texto)
 					 $datos[1]['campo'] = 'id_tipo_usuario';
 					 $datos[1]['dato']  = $i;
 					 $this->db->inserts('TIPO_USUARIO_EMPRESA',$datos,1);		
-				} 		
-			
-			//valida si los perfiles de los usuarios por default estan sino los crea 
-				$sql = "SELECT * FROM USUARIO_TIPO_USUARIO WHERE ID_USUARIO = ".$i." AND ID_TIPO_USUARIO = ".$i." AND ID_EMPRESA = '".$id_empresa."'"; 
-				$usu = $this->db->datos($sql,1);	
-
-				if(count($usu)==0)
-				{
-					 $datos[0]['campo'] = 'ID_USUARIO';
-					 $datos[0]['dato']  = $i;
-					 $datos[1]['campo'] = 'ID_TIPO_USUARIO';
-					 $datos[1]['dato']  = $i;					 
-					 $datos[2]['campo'] = 'ID_EMPRESA';
-					 $datos[2]['dato']  = $id_empresa;
-					 $this->db->inserts('USUARIO_TIPO_USUARIO',$datos,1);		
 				} 	
+
+				//insertar en acceso un registro de dba
+				$sql = "SELECT * FROM ACCESOS WHERE id_tipo_usu = '1' and id_paginas='93' "; 
+				$tipo = $this->db->datos($sql,1);	
+				if(count($tipo)==0)
+				{
+					 $datos[0]['campo'] = 'Ver';
+					 $datos[0]['dato']  = 1;
+					 $datos[1]['campo'] = 'editar';
+					 $datos[1]['dato']  = 1;
+					 $datos[2]['campo'] = 'eliminar';
+					 $datos[2]['dato']  = 1;
+					 $datos[3]['campo'] = 'dba';
+					 $datos[3]['dato']  = 1;
+					 $datos[4]['campo'] = 'id_paginas';
+					 $datos[4]['dato']  = 93;
+					 $datos[5]['campo'] = 'id_tipo_usu';
+					 $datos[5]['dato']  = 1;
+					 $this->db->inserts('ACCESOS',$datos,1);		
+				} 		
+				
+			
 		 }
 
 

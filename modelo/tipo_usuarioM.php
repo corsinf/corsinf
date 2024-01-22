@@ -320,9 +320,26 @@ class tipo_usuarioM
 	function lista_accesos_asignados($perfil)
 	{
 		$sql = "SELECT Ver,editar,eliminar,id_paginas as 'pag' FROM ACCESOS WHERE id_tipo_usu = '".$perfil."'";
+		print_r($sql);die();
+		$datos = $this->db->datos($sql);
+		return $datos;
+
+
+	}
+
+
+	function lista_accesos_por_perfil($perfil)
+	{
+		$sql = "SELECT Ver,editar,eliminar,id_paginas as 'pag' FROM ACCESOS A
+					INNER JOIN USUARIO_TIPO_USUARIO UT ON A.id_tipo_usu = UT.ID
+					WHERE ID_TIPO_USUARIO = '".$perfil."' AND ID_EMPRESA = '".$_SESSION['INICIO']['ID_EMPRESA']."'";
 		// print_r($sql);die();
 		$datos = $this->db->datos($sql);
 		return $datos;
+
+
+
+
 	}
 
 	function eliminar_usuario_tipo($id)

@@ -76,6 +76,13 @@
                 },
             ]
         });
+
+
+	  	 $('#ddl_lista_productos').on('select2:select', function (e) {
+	  	 	  var data = e.params.data.data;
+	  	 	  console.log(data);
+	  	 })
+
     });
 
 function modal_ingreso(tipo)
@@ -111,7 +118,7 @@ function modal_ingreso(tipo)
   function lista_medicamentos(tipo)
   {
       $('#ddl_lista_productos').select2({
-        placeholder: 'Seleccione Proveedor',
+        placeholder: 'Seleccione producto',
         dropdownParent: $('#exampleModal'),
         width:'87%',
         ajax: {
@@ -128,6 +135,71 @@ function modal_ingreso(tipo)
         }
       });
   }
+
+  function calculos()
+   {
+     let cant = parseFloat($('#txt_canti').val());
+     let pre = parseFloat($('#txt_precio').val());
+     let des = parseFloat($('#txt_descto').val());
+     if($('#rbl_si').prop('checked'))
+     {
+       let subtotal = pre*cant;
+       let dscto = (subtotal*des)/100;
+       let total = (subtotal-dscto)*1.12;
+
+       let iva = parseFloat($('#txt_iva').val()); 
+       let sub_val = subtotal-dscto;
+       $('#txt_subtotal').val(sub_val.toFixed(2));
+       $('#txt_total').val(total.toFixed(2));
+       let iva_val = total-(subtotal-dscto)
+       $('#txt_iva').val(iva_val.toFixed(2));
+
+     }else
+     {
+      $('#txt_iva').val(0);
+       let iva = parseFloat($('#txt_iva').val());       
+       let sub = (pre*cant);
+       let dscto = (sub*des)/100;
+
+       let total = (sub-dscto);
+       let sub_val = sub-dscto;
+       $('#txt_subtotal').val(sub_val.toFixed(2));
+       $('#txt_total').val(total.toFixed(2));
+     }
+   }
+
+   function guardar_producto()
+   {
+     var datos =  $("#form_nuevo_producto").serialize();
+
+     var ddl = $('#ddl_tipo option:selected').text();
+     var datos = datos+'&ddl_tipo='+ddl;
+     
+     if($('#ddl_familia_modal').val()=='' || $('#txt_ref').val()=='' || $('#txt_nombre').val()=='' || $('#txt_reg_sanitario').val()=='')
+     {
+       Swal.fire('','Llene todo lso campos.','info');   
+      return false;
+     }
+
+     $.ajax({
+      data:  datos,
+      url:   '../controlador/ingreso_stockC.php?producto_nuevo=true',
+      type:  'post',
+      dataType: 'json',
+      success:  function (response) { 
+        // console.log(response);
+        
+          $('#Nuevo_producto').modal('hide');
+        if(response==1)
+        {
+          Swal.fire('Nuevo producto registrado.','','success'); 
+          limpiar_nuevo_producto();         
+        }
+      }
+    });
+     // console.log(datos);
+   }
+
 </script>
 
 <div class="page-wrapper">
@@ -255,6 +327,8 @@ function modal_ingreso(tipo)
 				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 			</div>
 			<div class="modal-body">
+				<form id="form_nuevo_producto">
+					
 				<div class="row">
 					<div class="col-sm-4">
 						<b>Proveedor</b>
@@ -267,15 +341,15 @@ function modal_ingreso(tipo)
 					</div>
 					<div class="col-sm-1">
 						<b>Serie</b>
-						<input type="" class="form-control form-control-sm" name="" id="">						
+						<input type="" class="form-control form-control-sm" name="txt_serie" id="txt_serie">						
 					</div>
 					<div class="col-sm-2">
 						<b>Factura</b>
-						<input type="" class="form-control form-control-sm" name="" id="">						
+						<input type="" class="form-control form-control-sm" name="txt_factura" id="txt_factura">						
 					</div>
 					<div class="col-sm-2">
 						<b>Fecha Ingreso</b>
-						<input type="date" readonly class="form-control form-control-sm" name="" id="" value="<?php echo date('Y-m-d'); ?>">						
+						<input type="date" readonly class="form-control form-control-sm" name="txt_fecha" id="txt_fecha" value="<?php echo date('Y-m-d'); ?>">						
 					</div>
 				</div>
 				<div class="row">
@@ -285,7 +359,7 @@ function modal_ingreso(tipo)
 		           </div>
 		           <div class="col-sm-5">
 		              <b>Producto:</b>
-		              <select class="form-select form-select-sm" id="ddl_lista_productos" name="ddl_lista_productos" onchange="cargar_detalles()">
+		              <select class="form-select form-select-sm" id="ddl_lista_productos" name="ddl_lista_productos">
 		                <option value="">Seleccione una producto</option>
 		              </select>
 		           </div>
@@ -363,11 +437,12 @@ function modal_ingreso(tipo)
 		               <b>Total</b>
 		                  <input type="text" name="txt_total" id="txt_total" class="form-control form-control-sm" readonly="" value="0">
 		            </div>          
-		        </div>
+		        </div>		        
+				</form>
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-				<button type="button" class="btn btn-primary">Save changes</button>
+				<button type="button" class="btn btn-primary" onclick="guardar_producto()">Guardar</button>
 			</div>
 		</div>
 	</div>

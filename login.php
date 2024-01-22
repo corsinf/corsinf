@@ -92,6 +92,10 @@
            {
               Swal.fire( '','Empresa Inexistente','info');
 
+           }else if(response == -3)
+           {
+              Swal.fire( '','Usuario sin acceso','error');
+
            }else if(response == 1)
            {
              window.location.href = "vista/modulos_sistema.php";
