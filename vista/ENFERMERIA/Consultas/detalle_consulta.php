@@ -25,7 +25,7 @@ if (isset($_GET['id_paciente'])) {
     });
 
     function ver_pdf_controlador(id_consulta) {
-        $('#ifr_pdf_consulta').prop('src', '../controlador/consultasC.php?pdf_consulta=true&id_consulta=' + id_consulta);
+        $('#ifr_pdf_consulta').prop('src', '../controlador/consultasC.php?pdf_recetario=true&id_consulta=' + id_consulta);
     }
 
     function datos_col_consulta(id_consulta) {

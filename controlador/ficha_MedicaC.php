@@ -90,7 +90,7 @@ class ficha_MedicaC
     {
         // print_r($parametros);die();
         $id = $this->cod_global->id_tabla($parametros['tabla']);
-        $datos = $this->seguros->lista_articulos_seguro_detalle($parametros['tabla'], $parametros['id'], $_SESSION['INICIO']['MODULO_SISTEMA'],$id[0]['ID'], false);
+        $datos = $this->seguros->lista_articulos_seguro_detalle($parametros['tabla'], $parametros['id'], $_SESSION['INICIO']['MODULO_SISTEMA'], $id[0]['ID'], false);
 
         // print_r($datos);die();
         return $datos;
@@ -110,6 +110,7 @@ class ficha_MedicaC
             array('campo' => 'sa_fice_pac_grupo_sangre', 'dato' => $parametros['sa_fice_pac_grupo_sangre']),
             array('campo' => 'sa_fice_pac_direccion_domicilio', 'dato' => $parametros['sa_fice_pac_direccion_domicilio']),
             array('campo' => 'sa_fice_pac_seguro_medico', 'dato' => $parametros['sa_fice_pac_seguro_medico']),
+            array('campo' => 'sa_fice_pac_seguro_predeterminado', 'dato' => $parametros['sa_fice_pac_seguro_predeterminado']),
             array('campo' => 'sa_fice_rep_1_primer_apellido', 'dato' => $parametros['sa_fice_rep_1_primer_apellido']),
             array('campo' => 'sa_fice_rep_1_segundo_apellido', 'dato' => $parametros['sa_fice_rep_1_segundo_apellido']),
             array('campo' => 'sa_fice_rep_1_primer_nombre', 'dato' => $parametros['sa_fice_rep_1_primer_nombre']),

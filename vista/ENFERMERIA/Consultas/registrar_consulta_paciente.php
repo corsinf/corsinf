@@ -593,9 +593,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <li class="breadcrumb-item active" aria-current="page">
                             <?php
                             if ($id_consulta == '') {
-                                echo 'Registrar Consulta del Paciente';
+                                echo 'REGISTRAR ' . strtoupper($tipo_consulta) . '';
                             } else {
-                                echo 'Modificar Consulta del Paciente';
+                                echo 'MODIFICAR ' . strtoupper($tipo_consulta) . '';
                             }
                             ?>
                         </li>
@@ -609,26 +609,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <div class="col-xl-12 mx-auto">
                 <div class="card border-top border-0 border-4 border-primary">
                     <div class="card-body p-5">
-                        <div class="card-title d-flex align-items-center">
-                            <div><i class="bx bxs-user me-1 font-22 text-primary"></i>
-                            </div>
-                            <h5 class="mb-0 text-primary">
-                                <?php if ($id_consulta == '') { ?>
-                                    Registrar Consulta del Paciente: <b class="text-success" id="title_paciente"></b>
-                                <?php } else { ?>
-                                    Modificar Consulta del Paciente: <b class="text-success" id="title_paciente"></b>
-                                <?php } ?>
-                            </h5>
+                        <div class="row">
 
-                            <div class="row m-2">
-
-                                <div class="col-sm-12">
-                                    <a hidden href="../vista/inicio.php?mod=7&acc=consultas_pacientes&pac_id=<?= $id_paciente ?>" class="btn btn-outline-dark btn-sm"><i class="bx bx-arrow-back"></i> Regresar</a>
-
-                                    <button class="btn btn-outline-primary" onclick="consultar_datos_h(<?php echo $id_ficha; ?>)"><i class='bx bx-list-ol'></i> Historial</button>
+                            <div class="col-6">
+                                <div class="card-title d-flex align-items-center">
+                                    <div><i class="bx bxs-user me-1 font-22 text-primary"></i>
+                                    </div>
+                                    <h5 class="mb-0 text-primary">
+                                        <?php if ($id_consulta == '') { ?>
+                                            Paciente: <b class="text-success" id="title_paciente"></b>
+                                        <?php } else { ?>
+                                            Paciente: <b class="text-success" id="title_paciente"></b>
+                                        <?php } ?>
+                                    </h5>
                                 </div>
-
                             </div>
+
+                            <div class="col-6 text-end">
+                                <a hidden href="../vista/inicio.php?mod=7&acc=consultas_pacientes&pac_id=<?= $id_paciente ?>" class="btn btn-outline-dark btn-sm"><i class="bx bx-arrow-back"></i> Regresar</a>
+
+                                <button class="btn btn-outline-primary" onclick="consultar_datos_h(<?php echo $id_ficha; ?>)"><i class='bx bx-list-ol'></i> Historial</button>
+                            </div>
+
+
                         </div>
 
                         <hr>
@@ -785,7 +788,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                                                 <div class="modal-footer pt-4" id="seccion_boton_consulta">
 
-                                                    <button class="btn btn-danger btn-sm px-2 m-1" onclick="editar_insertar(1, 1, 1, 0, 2)" type="button"><i class='bx bx-pause-circle'></i> En Proceso</button>
+                                                    <button hidden class="btn btn-danger btn-sm px-2 m-1" onclick="editar_insertar(1, 1, 1, 0, 2)" type="button"><i class='bx bx-pause-circle'></i> En Proceso</button>
 
                                                     <button class="btn btn-success btn-sm px-2 m-1" onclick="editar_insertar(1, 1, 1, 0, 1)" type="button"><i class="bx bx-save"></i> Finalizar</button>
 
@@ -1021,7 +1024,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                                                 <div class="modal-footer pt-4" id="seccion_boton_consulta">
 
-                                                    <button class="btn btn-danger btn-sm px-2 m-1" onclick="editar_insertar(1, 1, 1, 0, 2)" type="button"><i class='bx bx-pause-circle'></i> En Proceso</button>
+                                                    <button hidden class="btn btn-danger btn-sm px-2 m-1" onclick="editar_insertar(1, 1, 1, 0, 2)" type="button"><i class='bx bx-pause-circle'></i> En Proceso</button>
 
                                                     <button class="btn btn-success btn-sm px-2 m-1" onclick="editar_insertar(1, 1, 1, 0, 1)" type="button"><i class="bx bx-save"></i> Finalizar</button>
 
@@ -1101,7 +1104,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                                                 <div class="modal-footer pt-4" id="seccion_boton_consulta">
 
-                                                    <button class="btn btn-danger btn-sm px-2 m-1" onclick="editar_insertar(1, 1, 1, 0, 2)" type="button"><i class='bx bx-pause-circle'></i> En Proceso</button>
+                                                    <button hidden class="btn btn-danger btn-sm px-2 m-1" onclick="editar_insertar(1, 1, 1, 0, 2)" type="button"><i class='bx bx-pause-circle'></i> En Proceso</button>
 
                                                     <button class="btn btn-success btn-sm px-2 m-1" onclick="editar_insertar(1, 1, 1, 0, 1)" type="button"><i class="bx bx-save"></i> Finalizar</button>
 

@@ -36,8 +36,8 @@ if (isset($_POST['sa_pac_tabla'])) {
 
             // alert(sa_pac_id)
 
+            //cargar_datos_paciente(sa_pac_id);
             datos_col_ficha_medica(sa_pac_id);
-            cargar_datos_paciente(sa_pac_id);
 
             //Para que cargue la funcionalidad de los input de las preguntas
             preguntas_ficha_medica();
@@ -53,7 +53,7 @@ if (isset($_POST['sa_pac_tabla'])) {
     <?php if ($sa_pac_id != '' && $sa_pac_tabla != '') { ?>
 
         //Para el detalle principal
-        function cargar_datos_paciente(sa_pac_id) {
+        function cargar_datos_paciente(sa_pac_id, id_seguro_predeterminado) {
             //alert('Estudiante')
             $.ajax({
                 data: {
@@ -98,7 +98,7 @@ if (isset($_POST['sa_pac_tabla'])) {
 
                     <?php } ?>
 
-                    lista_seguros(response[0].sa_pac_id_comunidad, response[0].sa_pac_tabla);
+                    lista_seguros(response[0].sa_pac_id_comunidad, response[0].sa_pac_tabla, id_seguro_predeterminado);
 
                 }
             });
@@ -192,7 +192,7 @@ if (isset($_POST['sa_pac_tabla'])) {
 
 
                     //cargar datos del paciente
-                    //cargar_datos_paciente(response[0].sa_fice_pac_id, sa_pac_tabla);
+                    cargar_datos_paciente(sa_pac_id, response[0].sa_fice_pac_seguro_predeterminado);
 
                 }
             });
@@ -208,6 +208,9 @@ if (isset($_POST['sa_pac_tabla'])) {
             var sa_fice_pac_grupo_sangre = $('#sa_fice_pac_grupo_sangre').val();
             var sa_fice_pac_direccion_domicilio = $('#sa_fice_pac_direccion_domicilio').val();
             var sa_fice_pac_seguro_medico = $('#sa_fice_pac_seguro_medico').val();
+            var sa_fice_pac_nombre_seguro = $('#sa_fice_pac_nombre_seguro').val();
+
+
 
             // Datos del representante 1
             var sa_fice_rep_1_primer_apellido = $('#sa_fice_rep_1_primer_apellido').val();
@@ -253,6 +256,7 @@ if (isset($_POST['sa_pac_tabla'])) {
                 'sa_fice_pac_grupo_sangre': sa_fice_pac_grupo_sangre,
                 'sa_fice_pac_direccion_domicilio': sa_fice_pac_direccion_domicilio,
                 'sa_fice_pac_seguro_medico': sa_fice_pac_seguro_medico,
+                'sa_fice_pac_seguro_predeterminado': sa_fice_pac_nombre_seguro,
                 'sa_fice_rep_1_primer_apellido': sa_fice_rep_1_primer_apellido,
                 'sa_fice_rep_1_segundo_apellido': sa_fice_rep_1_segundo_apellido,
                 'sa_fice_rep_1_primer_nombre': sa_fice_rep_1_primer_nombre,
@@ -329,12 +333,15 @@ if (isset($_POST['sa_pac_tabla'])) {
             });
         }
 
-        function lista_seguros(id, tabla) {
+        function lista_seguros(id, tabla, id_seleccionado) {
 
             var parametros = {
                 'id': id,
                 'tabla': tabla,
             }
+
+            var option = '<option selected disabled value="">-- Seleccione Seguro --</option>';
+
             $.ajax({
                 data: {
                     parametros: parametros
@@ -342,16 +349,19 @@ if (isset($_POST['sa_pac_tabla'])) {
                 url: '../controlador/ficha_medicaC.php?lista_seguros=true',
                 type: 'post',
                 dataType: 'json',
-                /*beforeSend: function () {   
-                     var spiner = '<div class="text-center"><img src="../../img/gif/proce.gif" width="100" height="100"></div>'     
-                   $('#tabla_').html(spiner);
-                },*/
+
                 success: function(response) {
-                    var option = '<option selected disabled value="">-- Seleccione --</option>';
-                    response.forEach(function(item, i) {
-                        option += '<option value ="' + item.id_arti_asegurados + '">' + item.nombre + '</option>'
-                    })
+                    //console.log(response);
+                    $.each(response, function(i, item) {
+                        if (id_seleccionado == item.id_arti_asegurados) {
+                            option += '<option value ="' + item.id_arti_asegurados + '" selected>' + item.nombre + '</option>'
+                        } else {
+                            option += '<option value ="' + item.id_arti_asegurados + '">' + item.nombre + '</option>'
+                        }
+                    });
+
                     $('#sa_fice_pac_nombre_seguro').html(option);
+
                 }
             });
         }
@@ -533,6 +543,7 @@ if (isset($_POST['sa_pac_tabla'])) {
                                                             </select>
                                                         </div>
 
+                                                        <input type="hidden" name="sa_fice_pac_seguro_medico_temp" id="sa_fice_pac_seguro_medico_temp">
 
                                                     </div>
 

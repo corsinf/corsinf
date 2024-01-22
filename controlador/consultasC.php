@@ -74,6 +74,21 @@ if (isset($_GET['pdf_consulta'])) {
     echo ($controlador->pdf_consulta_paciente($id_consulta));
 }
 
+if (isset($_GET['pdf_recetario'])) {
+
+    //print_r($_POST);die();
+    $id_consulta = '';
+    if (isset($_GET['id_consulta'])) {
+        $id_consulta = $_GET['id_consulta'];
+    }
+
+    if (isset($_POST['id_consulta'])) {
+        $id_consulta = $_POST['id_consulta'];
+    }
+
+    echo ($controlador->pdf_recetario_consulta_paciente($id_consulta));
+}
+
 
 //print_r($controlador->lista_consultas(''));
 
@@ -700,6 +715,194 @@ class consultasC
         $pdf->Cell(60, 10, utf8_decode('Médico Institucional'), '0', 0, 'C');
 
         $pdf->Output();
+    }
+
+    function pdf_recetario_consulta_paciente($id_consulta)
+    {
+
+        $pdf = new FPDF('L', 'mm', 'A4');
+        $pdf->AddPage();
+        $pdf->SetLeftMargin(10);
+        $pdf->SetRightMargin(10);
+        $pdf->SetTopMargin(10);
+        $pdf->SetAutoPageBreak(true, 1);
+
+        //Footer
+        $pdf->setY(201);
+        $pdf->setX(1);
+        $pdf->SetFont('Arial', 'I', 8);
+        $pdf->Cell(148.5, 5, 'Desarrollado por Corsinf', 0, 0, 'C');
+
+        $pdf->SetFont('Arial', 'B', 14);
+
+        $pdf->setY(201);
+        $pdf->setX(148.5);
+        $pdf->SetFont('Arial', 'I', 8);
+        $pdf->Cell(148.5, 5, 'Desarrollado por Corsinf', 0, 0, 'C');
+
+        $pdf->SetFont('Arial', 'B', 14);
+
+
+
+        //210 x 297
+
+
+        //x1 y1 x2 y2
+        //105 148.5
+
+        $imagePath = '../img/empresa/9999999999999.jpeg';
+
+        // Coordenadas y dimensiones de la imagen
+
+        $pdf->Image($imagePath, 10, 10, 20, 20);
+        $pdf->Image($imagePath, 158.5, 10, 20, 20);
+
+        $pdf->Line(148.5, 0, 148.5, 210);
+
+        $pdf->SetTextColor(57, 80, 122);
+        $pdf->SetFont('Arial', 'B', 12);
+
+        $pdf->setY(10);
+        $pdf->setX(40);
+        $pdf->Cell(90, 5, utf8_decode('UNIDAD EDUCATIVA SAINT DOMINIC'), 0, 1, 'C');
+
+        $pdf->setY(15);
+        $pdf->setX(40);
+        $pdf->Cell(90, 5, utf8_decode('DEPARTAMENTO MÉDICO'), 0, 1, 'C');
+
+        $pdf->setY(20);
+        $pdf->setX(40);
+        $pdf->Cell(90, 5, utf8_decode('RECETARIO'), 0, 1, 'C');
+
+        $pdf->SetTextColor(0, 0, 0);
+        $pdf->SetFont('Arial', 'B', 10);
+        $pdf->setY(40);
+        $pdf->setX(10);
+        $pdf->Cell(18, 7, utf8_decode('Nombre: '), 0, 0, '');
+        $pdf->SetFont('Arial', '', 10);
+        $pdf->Cell(90, 7, utf8_decode('Ruben Andres Pilca Ortiz'), 0, 1, 'L');
+        $pdf->SetFont('Arial', 'B', 10);
+        $pdf->SetTextColor(57, 80, 122);
+        $pdf->Cell(90, 5, utf8_decode('Rp. '), 0, 1, 'L');
+
+        $pdf->Ln(2);
+
+        $medicamentos = array(
+            array("1", "Medicamento 1", "1", "1 mes", "Tomar tres veces en el día"),
+            array("2", "Medicamento 2", "2", "2 meses", "Tomar tres veces en el día"),
+            array("3", "Medicamento 3", "2", "1 mes", "Tomar tres veces en el día"),
+            array("4", "Medicamento 4", "2", "1 mes", "Tomar tres veces en el día"),
+            array("5", "Medicamento 5", "3", "1 mes", "Tomar tres veces en el día"),
+            array("6", "Medicamento 6", "1", "12 meses", "Tomar tres veces en el día"),
+            array("7", "Medicamento 6", "1", "12 meses", "Tomar tres veces en el día"),
+            array("8", "Medicamento 6", "1", "12 meses", "Tomar tres veces en el día"),
+            array("9", "Medicamento 6", "1", "12 meses", "Tomar tres veces en el día"),
+            array("10", "Medicamento 6", "1", "12 meses", "Tomar tres veces en el díaomar tres veces en el díaomar tres veces en el díaomar tres veces en el díaomar tres veces en el día"),
+
+        );
+
+        $pdf->SetTextColor(0, 0, 0);
+
+        $pdf->Cell('8.5', 5, '#', 0, 0, 'C');
+        $pdf->Cell('100', 5, utf8_decode('Famacología'), 0, 0, 'L');
+        $pdf->Cell('20', 5, 'Cantidad', 0, 1, 'C');
+
+        $pdf->SetFont('Arial', '', 9);
+        foreach ($medicamentos as $row) {
+            $pdf->Cell('8.5', 5, utf8_decode($row[0]), 0, 0, 'C');
+            $pdf->Cell('100', 5, utf8_decode($row[1]), 0, 0, 'L');
+            $pdf->Cell('20', 5, utf8_decode($row[2]), 0, 1, 'C');
+        }
+
+
+        /*$pdf->Ln(25);
+
+        //$pdf->setX(10);
+
+        $pdf->SetFont('Arial', 'B', 10);
+        $pdf->Cell(128.5, 7, "FIRMA Y SELLO", 0, 1, 'C');
+        $pdf->SetFont('Arial', '', 10);
+        $pdf->Ln(25);
+        $pdf->Cell(128.5, 7, "_________________________________________", 0, 1, 'C');
+        $pdf->Cell(128.5, 7, "Nombre del Medico/Doctor", 0, 1, 'C');
+
+        $pdf->Cell(128.5, 7, "Powered by Evilnapsis", 0, 1, 'C');*/
+
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        //Inficaciones
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        $pdf->SetTextColor(57, 80, 122);
+        $pdf->SetFont('Arial', 'B', 12);
+        $pdf->setY(10);
+        $pdf->setX(190);
+        $pdf->Cell(90, 5, utf8_decode('UNIDAD EDUCATIVA SAINT DOMINIC'), 0, 1, 'C');
+
+        $pdf->setY(15);
+        $pdf->setX(190);
+        $pdf->Cell(90, 5, utf8_decode('DEPARTAMENTO MÉDICO'), 0, 1, 'C');
+
+        $pdf->setY(20);
+        $pdf->setX(190);
+        $pdf->Cell(90, 5, utf8_decode('RECETARIO'), 0, 1, 'C');
+
+        $pdf->SetTextColor(0, 0, 0);
+        $pdf->SetFont('Arial', 'B', 10);
+        $pdf->setY(40);
+        $pdf->setX(158.5);
+        $pdf->Cell(18, 7, utf8_decode('Nombre: '), 0, 0, '');
+        $pdf->SetFont('Arial', '', 10);
+        $pdf->Cell(158.5, 7, utf8_decode('Ruben Andres Pilca Ortiz'), 0, 1, 'L');
+        $pdf->SetFont('Arial', 'B', 10);
+        $pdf->SetTextColor(57, 80, 122);
+        $pdf->setY(47);
+        $pdf->setX(158.5);
+        $pdf->Cell(90, 5, utf8_decode('Indicaciones. '), 0, 1, 'L');
+
+        $pdf->Ln(2);
+
+       
+
+        $pdf->SetTextColor(0, 0, 0);
+        $pdf->setX(158.5);
+        $pdf->Cell('8.5', 5, '#', 0, 0, 'C');
+        $pdf->setX(167);
+        $pdf->Cell('100', 5, utf8_decode('Famacología'), 0, 0, 'L');
+        $pdf->setX(267);
+        $pdf->Cell('20', 5, 'Cantidad', 0, 1, 'C');
+
+       
+        foreach ($medicamentos as $row) {
+            $pdf->SetFont('Arial', '', 9);
+            $pdf->SetTextColor(0, 0, 0);
+
+            $pdf->setX(158.5);
+            $pdf->Cell('8.5', 3, utf8_decode($row[0]), 0, 0, 'C');
+
+            $pdf->setX(167);
+            $pdf->Cell('100', 3, utf8_decode($row[1]), 0, 0, 'L');
+
+            $pdf->setX(267);
+            $pdf->Cell('20', 3, utf8_decode($row[2]), 0, 1, 'C');
+            $pdf->setX(167);
+
+            $pdf->SetFont('Arial', '', 8);
+            $pdf->SetTextColor(57, 80, 122);
+            $pdf->MultiCell(120, 5, "Indicaciones: " . utf8_decode($row[4]), 0, 'L');
+        }
+
+
+        //$pdf->Cell(90, 7, utf8_decode('UNIDAD EDUCATIVA SAINT DOMINIC'), 1, 1, 'C');
+
+
+
+
+
+
+
+
+        $pdf->output();
     }
 
     function pdf_notificaciones()
