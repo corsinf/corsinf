@@ -325,8 +325,32 @@ function calcular_diferencia_hora() {
         var diferenciaEnMinutos = Math.floor(diferenciaEnMs / (1000 * 60));
         $('#sa_conp_tiempo_aten').val(diferenciaEnMinutos);
     } else {
-        Swal.fire('', 'La hora Hasta de la consulta no puede ser menor', 'info');
+        //Swal.fire('', 'La hora Hasta de la consulta no puede ser menor', 'info');
         $('#sa_conp_hasta_hora').val('');
         $('#sa_conp_tiempo_aten').val('NaN');
     }
+}
+
+function calcular_diferencia_hora_retorno() {
+    var horaDesde = $('#sa_conp_desde_hora').val();
+    var horaHasta = $('#sa_conp_hasta_hora').val();
+
+    var fechaBase = new Date('2000-01-01');
+    var fechaDesde = new Date(fechaBase.toDateString() + ' ' + horaDesde);
+    var fechaHasta = new Date(fechaBase.toDateString() + ' ' + horaHasta);
+
+    var diferenciaEnMs = fechaHasta - fechaDesde;
+
+    if (diferenciaEnMs >= 0) {
+        var diferenciaEnMinutos = Math.floor(diferenciaEnMs / (1000 * 60));
+        $('#sa_conp_tiempo_aten').val(diferenciaEnMinutos);
+        return diferenciaEnMinutos;
+    }
+}
+
+function obtener_hora_hasta() {
+    ahora = new Date();
+    horas = ahora.getHours().toString().padStart(2, '0');
+    minutos = ahora.getMinutes().toString().padStart(2, '0');
+    return `${horas}:${minutos}`;
 }

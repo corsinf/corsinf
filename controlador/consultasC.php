@@ -44,10 +44,6 @@ if (isset($_GET['enviar_correo'])) {
     echo json_encode($controlador->enviar_correo($_POST['parametros']));
 }
 
-if (isset($_GET['notificaciones'])) {
-    echo json_encode($controlador->pdf_notificaciones());
-}
-
 if (isset($_GET['datos_consulta'])) {
 
     $id_consulta = '';
@@ -87,6 +83,20 @@ if (isset($_GET['pdf_recetario'])) {
     }
 
     echo ($controlador->pdf_recetario_consulta_paciente($id_consulta));
+}
+
+if (isset($_GET['pdf_notificacion'])) {
+
+    $id_consulta = '';
+    if (isset($_GET['id_consulta'])) {
+        $id_consulta = $_GET['id_consulta'];
+    }
+
+    if (isset($_POST['id_consulta'])) {
+        $id_consulta = $_POST['id_consulta'];
+    }
+
+    echo json_encode($controlador->pdf_notificacion($id_consulta));
 }
 
 
@@ -719,6 +729,20 @@ class consultasC
 
     function pdf_recetario_consulta_paciente($id_consulta)
     {
+        $datos = $this->modelo->lista_solo_consultas($id_consulta);
+        $ficha_medica = $this->ficha_medicaM->lista_ficha_medica_id($datos[0]['sa_fice_id']);
+        $paciente = $this->pacientesM->obtener_informacion_pacienteM($ficha_medica[0]['sa_fice_pac_id']);
+        $detalle_consulta = $this->det_consultaM->lista_det_consulta_consulta($id_consulta);
+
+        //Pacientes
+        $sa_pac_temp_cedula = $paciente[0]['sa_pac_temp_cedula'];
+        $sa_pac_temp_primer_nombre = $paciente[0]['sa_pac_temp_primer_nombre'];
+        $sa_pac_temp_segundo_nombre = $paciente[0]['sa_pac_temp_segundo_nombre'];
+        $sa_pac_temp_primer_apellido = $paciente[0]['sa_pac_temp_primer_apellido'];
+        $sa_pac_temp_segundo_apellido = $paciente[0]['sa_pac_temp_segundo_apellido'];
+
+        $nombre_completo = $sa_pac_temp_primer_apellido . ' ' .  $sa_pac_temp_segundo_apellido . ' ' .  $sa_pac_temp_primer_nombre . ' ' . $sa_pac_temp_segundo_nombre;
+
 
         $pdf = new FPDF('L', 'mm', 'A4');
         $pdf->AddPage();
@@ -780,7 +804,7 @@ class consultasC
         $pdf->setX(10);
         $pdf->Cell(18, 7, utf8_decode('Nombre: '), 0, 0, '');
         $pdf->SetFont('Arial', '', 10);
-        $pdf->Cell(90, 7, utf8_decode('Ruben Andres Pilca Ortiz'), 0, 1, 'L');
+        $pdf->Cell(90, 7, utf8_decode($nombre_completo), 0, 1, 'L');
         $pdf->SetFont('Arial', 'B', 10);
         $pdf->SetTextColor(57, 80, 122);
         $pdf->Cell(90, 5, utf8_decode('Rp. '), 0, 1, 'L');
@@ -808,10 +832,12 @@ class consultasC
         $pdf->Cell('20', 5, 'Cantidad', 0, 1, 'C');
 
         $pdf->SetFont('Arial', '', 9);
-        foreach ($medicamentos as $row) {
-            $pdf->Cell('8.5', 5, utf8_decode($row[0]), 0, 0, 'C');
-            $pdf->Cell('100', 5, utf8_decode($row[1]), 0, 0, 'L');
-            $pdf->Cell('20', 5, utf8_decode($row[2]), 0, 1, 'C');
+        $contador = 1;
+        foreach ($detalle_consulta as $row) {
+            $pdf->Cell('8.5', 5, utf8_decode($contador), 0, 0, 'C');
+            $pdf->Cell('100', 5, utf8_decode($row['sa_det_conp_nombre']), 0, 0, 'L');
+            $pdf->Cell('20', 5, utf8_decode($row['sa_det_conp_cantidad']), 0, 1, 'C');
+            $contador++;
         }
 
 
@@ -853,7 +879,7 @@ class consultasC
         $pdf->setX(158.5);
         $pdf->Cell(18, 7, utf8_decode('Nombre: '), 0, 0, '');
         $pdf->SetFont('Arial', '', 10);
-        $pdf->Cell(158.5, 7, utf8_decode('Ruben Andres Pilca Ortiz'), 0, 1, 'L');
+        $pdf->Cell(158.5, 7, utf8_decode($nombre_completo), 0, 1, 'L');
         $pdf->SetFont('Arial', 'B', 10);
         $pdf->SetTextColor(57, 80, 122);
         $pdf->setY(47);
@@ -862,7 +888,7 @@ class consultasC
 
         $pdf->Ln(2);
 
-       
+
 
         $pdf->SetTextColor(0, 0, 0);
         $pdf->setX(158.5);
@@ -872,41 +898,80 @@ class consultasC
         $pdf->setX(267);
         $pdf->Cell('20', 5, 'Cantidad', 0, 1, 'C');
 
-       
-        foreach ($medicamentos as $row) {
+        $contador_rec = 1;
+        foreach ($detalle_consulta as $row) {
             $pdf->SetFont('Arial', '', 9);
             $pdf->SetTextColor(0, 0, 0);
 
             $pdf->setX(158.5);
-            $pdf->Cell('8.5', 3, utf8_decode($row[0]), 0, 0, 'C');
+            $pdf->Cell('8.5', 3, utf8_decode($contador_rec), 0, 0, 'C');
 
             $pdf->setX(167);
-            $pdf->Cell('100', 3, utf8_decode($row[1]), 0, 0, 'L');
+            $pdf->Cell('100', 3, utf8_decode($row['sa_det_conp_nombre']), 0, 0, 'L');
 
             $pdf->setX(267);
-            $pdf->Cell('20', 3, utf8_decode($row[2]), 0, 1, 'C');
+            $pdf->Cell('20', 3, utf8_decode($row['sa_det_conp_cantidad']), 0, 1, 'C');
             $pdf->setX(167);
 
             $pdf->SetFont('Arial', '', 8);
             $pdf->SetTextColor(57, 80, 122);
-            $pdf->MultiCell(120, 5, "Indicaciones: " . utf8_decode($row[4]), 0, 'L');
+            $pdf->MultiCell(120, 5, "Indicaciones: " . utf8_decode($row['sa_det_conp_dosificacion']), 0, 'L');
+
+            $contador_rec++;
         }
-
-
-        //$pdf->Cell(90, 7, utf8_decode('UNIDAD EDUCATIVA SAINT DOMINIC'), 1, 1, 'C');
-
-
-
-
-
-
-
 
         $pdf->output();
     }
 
-    function pdf_notificaciones()
+    function pdf_notificacion($id_consulta)
     {
+        $datos = $this->modelo->lista_solo_consultas($id_consulta);
+        $ficha_medica = $this->ficha_medicaM->lista_ficha_medica_id($datos[0]['sa_fice_id']);
+        $paciente = $this->pacientesM->obtener_informacion_pacienteM($ficha_medica[0]['sa_fice_pac_id']);
+
+        //Consulta 
+        $sa_conp_nivel = $datos[0]['sa_conp_nivel'];
+        $sa_conp_paralelo = $datos[0]['sa_conp_paralelo'];
+
+        $sa_conp_fecha_ingreso = $datos[0]['sa_conp_fecha_ingreso'];
+        $sa_conp_fecha_ingreso = $sa_conp_fecha_ingreso->format('Y-m-d');
+
+        $sa_conp_desde_hora = $datos[0]['sa_conp_desde_hora'];
+        $sa_conp_desde_hora = $sa_conp_desde_hora->format('H:i:s');
+
+        $sa_conp_hasta_hora = $datos[0]['sa_conp_hasta_hora'];
+        $sa_conp_hasta_hora = $sa_conp_hasta_hora->format('H:i:s');
+
+
+        $sa_conp_diagnostico_certificado = $datos[0]['sa_conp_diagnostico_certificado'];
+
+        $sa_conp_permiso_salida = $datos[0]['sa_conp_permiso_salida'];
+
+        $sa_conp_tipo_consulta = $datos[0]['sa_conp_tipo_consulta'];
+
+        //Pacientes
+        $sa_pac_temp_cedula = $paciente[0]['sa_pac_temp_cedula'];
+        $sa_pac_temp_primer_nombre = $paciente[0]['sa_pac_temp_primer_nombre'];
+        $sa_pac_temp_segundo_nombre = $paciente[0]['sa_pac_temp_segundo_nombre'];
+        $sa_pac_temp_primer_apellido = $paciente[0]['sa_pac_temp_primer_apellido'];
+        $sa_pac_temp_segundo_apellido = $paciente[0]['sa_pac_temp_segundo_apellido'];
+
+        $nombre_completo = $sa_pac_temp_primer_apellido . ' ' .  $sa_pac_temp_segundo_apellido . ' ' .  $sa_pac_temp_primer_nombre . ' ' . $sa_pac_temp_segundo_nombre;
+
+
+        //Valores para notificacion ///////////////////////////////////////////////////////////////////////////////////
+        $fecha_creado = $sa_conp_fecha_ingreso;
+        $nombre_estudiante = $nombre_completo;
+        $grado = $sa_conp_nivel;
+        $paralelo = $sa_conp_paralelo;
+        //CONSULTA
+        $hora_desde = $sa_conp_desde_hora;
+        $hora_hasta = $sa_conp_hasta_hora;
+        //cERTIFICADO
+        $diagnostico_certificado = $sa_conp_diagnostico_certificado;
+
+        $nombre_medico = ' Md. Camila López';
+
         $pdf = new FPDF('P', 'mm', 'A4');
         $pdf->AddPage();
         $pdf->SetFont('Arial', 'B', 12);
@@ -929,21 +994,34 @@ class consultasC
 
         $pdf->Cell(40, 10, utf8_decode(''), 'L B', 0, 'C');
         $pdf->SetFont('Arial', 'B', 12);
-        $pdf->Cell(90, 10, utf8_decode('PERMISO DE SALIDA'), 1, 0, 'C');
+
+        if ($sa_conp_permiso_salida == 'SI') {
+            $pdf->Cell(90, 10, utf8_decode('PERMISO DE SALIDA'), 1, 0, 'C');
+        } else {
+            $pdf->Cell(90, 10, utf8_decode(strtoupper($sa_conp_tipo_consulta)), 1, 0, 'C');
+        }
+
         $pdf->Cell(20, 10, utf8_decode('Página:'), 1, 0, 'R');
         $pdf->SetFont('Arial', '', 12);
         $pdf->Cell(40, 10, utf8_decode('1 de 1'), 1, 1, 'C');
 
         $pdf->ln('8');
 
-        //ENVIAR DATOS 
-        $mensaje = $this->mensajes_notificacion();
-        $pdf->MultiCell(0, 5, utf8_decode($mensaje), 0, 'J');
+        $pdf->Cell(0, 10, utf8_decode('Fecha: ' . $fecha_creado), 0, 1, 'L');
+        $pdf->ln('3');
+
+        if ($sa_conp_permiso_salida == 'SI') {
+            $mensaje_salida = 'Certifico que él/la estudiante  ' . $nombre_estudiante . ' del grado ' . $grado . ' paralelo ' . $paralelo . ' requiere salir del plantel para recibir atención médica externa';
+            $pdf->MultiCell(0, 6, utf8_decode($mensaje_salida), 0, 'J');
+        } else if ($sa_conp_tipo_consulta == 'consulta') {
+            $mensaje_consulta = 'Certifico que él/la estudiante ' . $nombre_estudiante . ' del grado ' . $grado . ' paralelo ' . $paralelo . ' se encontró en el departamento médico desde ' . $hora_desde . ' hasta ' . $hora_hasta . '.';
+            $pdf->MultiCell(0, 6, utf8_decode($mensaje_consulta), 0, 'J');
+        } else if ($sa_conp_tipo_consulta == 'certificado') {
+            $mensaje_certificado = 'Certifico que él/la representante de ' . $nombre_estudiante . ' del grado ' . $grado . ' paralelo ' . $paralelo . ' entrega certificado médico de representado con diagnóstico ' . $diagnostico_certificado;
+            $pdf->MultiCell(0, 6, utf8_decode($mensaje_certificado), 0, 'J');
+        }
 
         $pdf->ln('25');
-
-
-        $nombre_medico = ' Md. Camila López';
 
         $pdf->SetFont('Arial', 'B', 12);
         $pdf->Cell(60, 10, utf8_decode($nombre_medico), '0', 0, 'C');
@@ -953,50 +1031,5 @@ class consultasC
         $pdf->Cell(60, 10, utf8_decode('Médico Institucional'), '0', 0, 'C');
 
         $pdf->Output();
-    }
-
-    function mensajes_notificacion()
-    {
-        $fecha_creado = '2023/02/12';
-        $nombre_estudiante = 'Andrea Andrea Lopez Lopez';
-        $grado = 'Bachillerato 3';
-        $paralelo = 'A';
-        //CONSULTA
-        $hora_desde = '08:00';
-        $hora_hasta = '08:30';
-        //cERTIFICADO
-        $diagnostico_certificado = 'Consulta Medica';
-
-        //Mensaje Consulta/////////////////////////////////////////////////////////////////////////////////////
-        $mensaje_consulta = '';
-        $mensaje_consulta .=
-            'FECHA: ' . $fecha_creado . '
-        
-';
-        $mensaje_consulta .=
-            'CERTIFICO QUE EL/LA ESTUDIANTE' . $nombre_estudiante . ' DEL GRADO ' . $grado . ' PARALELO ' . $paralelo . ' SE ENCONTRO EN EL DEPARTAMENTO MÉDICO DESDE ' . $hora_desde . ' HASTA ' . $hora_hasta;
-        ///////////////////////////////////////////////////////////////////////////////////////////////////
-
-        //Mensaje Certificado/////////////////////////////////////////////////////////////////////////////////////
-        $mensaje_certificado = '';
-        $mensaje_certificado .=
-            'HOY, ' . $fecha_creado . '
-        
-';
-        $mensaje_certificado .=
-            'CERTIFICO QUE EL/LA REPRESENTANTE DE ' . $nombre_estudiante . ' DEL GRADO ' . $grado . ' PARALELO ' . $paralelo . ' ENTREGA CERTIFICADO MÉDICO DE REPRESENTADO CON DIAGNÓSTICO ' . $diagnostico_certificado;
-        ///////////////////////////////////////////////////////////////////////////////////////////////////
-
-        //Mensaje Salida/////////////////////////////////////////////////////////////////////////////////////
-        $mensaje_salida = '';
-        $mensaje_salida .=
-            'HOY, ' . $fecha_creado . '
-
-';
-        $mensaje_salida .=
-            'CERTIFICO QUE EL/LA ESTUDIANTE  ' . $nombre_estudiante . ' DEL GRADO ' . $grado . ' PARALELO ' . $paralelo . ' REQUIERE SALIR DEL PLANTEL PARA RECIBIR ATENCIÓN MÉDICA EXTERNA';
-        ///////////////////////////////////////////////////////////////////////////////////////////////////
-
-        return $mensaje_certificado;
     }
 }
