@@ -192,12 +192,17 @@ function modal_ingreso(tipo)
           $('#Nuevo_producto').modal('hide');
         if(response==1)
         {
-          Swal.fire('Nuevo producto registrado.','','success'); 
+          Swal.fire('Ingresado a stock.','','success'); 
           limpiar_nuevo_producto();         
         }
       }
     });
      // console.log(datos);
+   }
+
+    function limpiar_nuevo_producto()
+   {
+     $('#ddl_lista_productos').empty();
    }
 
 </script>

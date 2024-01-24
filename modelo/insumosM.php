@@ -51,7 +51,12 @@ class insumosM
 					sa_cins_estado,
 					sa_cins_fecha_creacion,
 					sa_cins_fecha_modificacion,
-					sa_cins_tipo
+					sa_cins_tipo,
+					sa_cins_unidad,
+					sa_cins_reg_sanitario,
+					sa_cins_fecha_exp,
+					sa_cins_fecha_elab,
+					sa_cins_referencia
 				FROM cat_insumos 
 				WHERE sa_cins_estado = 1 ";
 

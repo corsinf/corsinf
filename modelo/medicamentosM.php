@@ -55,7 +55,12 @@ class medicamentosM
 					sa_cmed_estado,
 					sa_cmed_fecha_creacion,
 					sa_cmed_fecha_modificacion,
-					sa_cmed_tipo
+					sa_cmed_tipo,
+					sa_cmed_unidad,
+					sa_cmed_reg_sanitario,
+					sa_cmed_fecha_exp,
+					sa_cmed_fecha_elab,
+					sa_cmed_referencia
 				FROM cat_medicamentos 
 				WHERE sa_cmed_estado = 1 ";
 
