@@ -535,7 +535,7 @@ if (isset($_POST['sa_pac_tabla'])) {
 
                                                     <div class="row pt-3">
                                                         <div class="col-md-11">
-                                                            <label for="" class="form-label">¿El estudiante posee seguro médico?: <label style="color: red;">*</label> </label>
+                                                            <label for="" class="form-label">¿Posee seguro médico?: <label style="color: red;">*</label> </label>
                                                             <select class="form-select form-select-sm" id="sa_fice_pac_seguro_medico" name="sa_fice_pac_seguro_medico" required>
                                                                 <option selected disabled>-- Seleccione --</option>
                                                                 <option value="Si">Si</option>

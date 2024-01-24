@@ -390,6 +390,8 @@ class consultasC
         $sa_conp_presion_ar = $datos[0]['sa_conp_presion_ar'];
         $sa_conp_frec_cardiaca = $datos[0]['sa_conp_frec_cardiaca'];
         $sa_conp_frec_respiratoria = $datos[0]['sa_conp_frec_respiratoria'];
+        $sa_conp_saturacion = $datos[0]['sa_conp_saturacion'];
+
 
         $sa_conp_fecha_ingreso = $datos[0]['sa_conp_fecha_ingreso'];
         $sa_conp_fecha_ingreso = $sa_conp_fecha_ingreso->format('Y-m-d');
@@ -411,9 +413,22 @@ class consultasC
         $sa_conp_motivo_certificado = $datos[0]['sa_conp_motivo_certificado'];
         $sa_conp_CIE_10_certificado = $datos[0]['sa_conp_CIE_10_certificado'];
         $sa_conp_diagnostico_certificado = $datos[0]['sa_conp_diagnostico_certificado'];
+
         $sa_conp_fecha_entrega_certificado = $datos[0]['sa_conp_fecha_entrega_certificado'];
+        if ($sa_conp_fecha_entrega_certificado !== null) {
+            $sa_conp_fecha_entrega_certificado = $sa_conp_fecha_entrega_certificado->format('Y-m-d');
+        }
+
         $sa_conp_fecha_inicio_falta_certificado = $datos[0]['sa_conp_fecha_inicio_falta_certificado'];
+        if ($sa_conp_fecha_inicio_falta_certificado !== null) {
+            $sa_conp_fecha_inicio_falta_certificado = $sa_conp_fecha_inicio_falta_certificado->format('Y-m-d');
+        }
+
         $sa_conp_fecha_fin_alta_certificado = $datos[0]['sa_conp_fecha_fin_alta_certificado'];
+        if ($sa_conp_fecha_fin_alta_certificado !== null) {
+            $sa_conp_fecha_fin_alta_certificado = $sa_conp_fecha_fin_alta_certificado->format('Y-m-d');
+        }
+
         $sa_conp_dias_permiso_certificado = $datos[0]['sa_conp_dias_permiso_certificado'];
 
         $sa_conp_permiso_salida = $datos[0]['sa_conp_permiso_salida'];
@@ -473,6 +488,8 @@ class consultasC
         $sa_pac_temp_segundo_nombre = $paciente[0]['sa_pac_temp_segundo_nombre'];
         $sa_pac_temp_primer_apellido = $paciente[0]['sa_pac_temp_primer_apellido'];
         $sa_pac_temp_segundo_apellido = $paciente[0]['sa_pac_temp_segundo_apellido'];
+        $sa_pac_tabla = $paciente[0]['sa_pac_tabla'];
+
         //$sa_pac_temp_fecha_nacimiento = $paciente[0]['sa_pac_temp_fecha_nacimiento'];
 
         $fechaNacimiento = $paciente[0]['sa_pac_temp_fecha_nacimiento'];
@@ -576,17 +593,19 @@ class consultasC
         $pdf->SetFont('Arial', 'B', 12);
         $pdf->Cell(190, 10, utf8_decode('  DATOS DE CONTACTO'), 1, 1, 'L');
 
-        $pdf->SetFont('Arial', 'B', 10);
-        $pdf->Cell(70, 7, utf8_decode('EN CASO NECESARIO LLAMAR A:'), 1, 0, 'C');
-        $pdf->Cell(40, 7, utf8_decode('PARENTESCO'), 1, 0, 'C');
-        $pdf->Cell(40, 7, utf8_decode('TELÉFONO 1'), 1, 0, 'C');
-        $pdf->Cell(40, 7, utf8_decode('TELÉFONO 2'), 1, 1, 'C');
+        if ($sa_pac_tabla == 'estudiantes') {
+            $pdf->SetFont('Arial', 'B', 10);
+            $pdf->Cell(70, 7, utf8_decode('EN CASO NECESARIO LLAMAR A:'), 1, 0, 'C');
+            $pdf->Cell(40, 7, utf8_decode('PARENTESCO'), 1, 0, 'C');
+            $pdf->Cell(40, 7, utf8_decode('TELÉFONO 1'), 1, 0, 'C');
+            $pdf->Cell(40, 7, utf8_decode('TELÉFONO 2'), 1, 1, 'C');
 
-        $pdf->SetFont('Arial', '', 9);
-        $pdf->Cell(70, 8, utf8_decode($sa_fice_rep_1_completo), 1, 0, 'C');
-        $pdf->Cell(40, 8, utf8_decode($sa_fice_rep_1_parentesco), 1, 0, 'C');
-        $pdf->Cell(40, 8, utf8_decode($sa_fice_rep_1_telefono_1), 1, 0, 'C');
-        $pdf->Cell(40, 8, utf8_decode($sa_fice_rep_1_telefono_2), 1, 1, 'C');
+            $pdf->SetFont('Arial', '', 9);
+            $pdf->Cell(70, 8, utf8_decode($sa_fice_rep_1_completo), 1, 0, 'C');
+            $pdf->Cell(40, 8, utf8_decode($sa_fice_rep_1_parentesco), 1, 0, 'C');
+            $pdf->Cell(40, 8, utf8_decode($sa_fice_rep_1_telefono_1), 1, 0, 'C');
+            $pdf->Cell(40, 8, utf8_decode($sa_fice_rep_1_telefono_2), 1, 1, 'C');
+        }
 
         $pdf->SetFont('Arial', 'B', 10);
         $pdf->Cell(70, 7, utf8_decode('EN CASO NECESARIO LLAMAR A:'), 1, 0, 'C');
@@ -610,76 +629,156 @@ class consultasC
         $pdf->SetFont('Arial', 'B', 12);
         $pdf->Cell(190, 10, utf8_decode('  DIAGNÓSTICOS'), 1, 1, 'L');
 
-        $pdf->SetFont('Arial', 'B', 10);
-        $pdf->Cell(32, 7, utf8_decode('DIAGNÓSTICO 1: '), 1, 0, 'C');
-        $pdf->SetFont('Arial', '', 9);
-        $pdf->Cell(158, 7, utf8_decode($sa_conp_diagnostico_1), 1, 1, 'C');
+        if ($sa_conp_tipo_consulta == 'consulta') {
+            $pdf->SetFont('Arial', 'B', 10);
+            $pdf->Cell(32, 7, utf8_decode('DIAGNÓSTICO 1: '), 1, 0, 'C');
+            $pdf->SetFont('Arial', '', 9);
+            $pdf->Cell(158, 7, utf8_decode($sa_conp_diagnostico_1), 1, 1, 'C');
 
-        $pdf->SetFont('Arial', 'B', 10);
-        $pdf->Cell(32, 7, utf8_decode('DIAGNÓSTICO 2: '), 1, 0, 'C');
-        $pdf->SetFont('Arial', '', 9);
-        $pdf->Cell(158, 7, utf8_decode($sa_conp_diagnostico_2), 1, 1, 'C');
+            $pdf->SetFont('Arial', 'B', 10);
+            $pdf->Cell(32, 7, utf8_decode('DIAGNÓSTICO 2: '), 1, 0, 'C');
+            $pdf->SetFont('Arial', '', 9);
+            $pdf->Cell(158, 7, utf8_decode($sa_conp_diagnostico_2), 1, 1, 'C');
+        } else {
+            $pdf->SetFont('Arial', 'B', 10);
+            $pdf->Cell(32, 7, utf8_decode('DIAGNÓSTICO: '), 1, 0, 'C');
+            $pdf->SetFont('Arial', '', 9);
+            $pdf->Cell(158, 7, utf8_decode($sa_conp_diagnostico_certificado), 1, 1, 'C');
+
+            //DATOS DEL CERTIFICADO
+
+            //$sa_conp_salud_certificado
+            //$sa_conp_motivo_certificado
+
+            $pdf->ln('4');
+
+            $pdf->SetFont('Arial', 'B', 10);
+            $pdf->Cell(47.5, 7, utf8_decode('FECHA DE ENTREGA'), 1, 0, 'C');
+            $pdf->Cell(47.5, 7, utf8_decode('FECHA INICIO'), 1, 0, 'C');
+            $pdf->Cell(47.5, 7, utf8_decode('FECHA FIN'), 1, 0, 'C');
+            $pdf->Cell(47.5, 7, utf8_decode('DÍAS DE PERMISO'), 1, 1, 'C');
+
+            $pdf->SetFont('Arial', '', 9);
+            $pdf->Cell(47.5, 8, ($sa_conp_fecha_entrega_certificado), 1, 0, 'C');
+            $pdf->Cell(47.5, 8, ($sa_conp_fecha_inicio_falta_certificado), 1, 0, 'C');
+            $pdf->Cell(47.5, 8, ($sa_conp_fecha_fin_alta_certificado), 1, 0, 'C');
+            $pdf->Cell(47.5, 8, ($sa_conp_dias_permiso_certificado), 1, 1, 'C');
+
+            $pdf->ln('4');
+
+            $pdf->SetFont('Arial', 'B', 10);
+            $pdf->Cell(0, 7, utf8_decode('SALUD CERTIFICADO'), 1, 1, 'L');
+            $pdf->SetFont('Arial', '', 9);
+            $pdf->MultiCell(0, 5, utf8_decode($sa_conp_salud_certificado), 1, 'L');
+
+            $pdf->ln('4');
+            $pdf->SetFont('Arial', 'B', 10);
+            $pdf->Cell(0, 7, utf8_decode('MOTIVO DEL CERTIFICADO'), 1, 1, 'l');
+            $pdf->SetFont('Arial', '', 9);
+            $pdf->MultiCell(0, 5, utf8_decode($sa_conp_motivo_certificado), 1, 'L');
+        }
+
 
 
         /////////////////////////////////////////////////////////////////////////////////////////////
         $pdf->ln('4');
 
-        $pdf->SetFont('Arial', 'B', 12);
-        $pdf->Cell(190, 10, utf8_decode('  CONSTANTES VITALES'), 1, 1, 'L');
+        if ($sa_conp_tipo_consulta == 'consulta') {
+            $pdf->SetFont('Arial', 'B', 12);
+            $pdf->Cell(190, 10, utf8_decode('  CONSTANTES VITALES'), 1, 1, 'L');
 
-        $pdf->SetFont('Arial', 'B', 8);
-        $pdf->Cell(29.6, 7, utf8_decode('TEMPERATURA'), 1, 0, 'C');
-        $pdf->Cell(31.6, 7, utf8_decode('PRESIÓN ARTERIAL'), 1, 0, 'C');
-        $pdf->Cell(29.6, 7, utf8_decode('PULOS / min'), 1, 0, 'C');
-        $pdf->Cell(41.2, 7, utf8_decode('FRECIENCIA RESPITARORIA'), 1, 0, 'C');
-        $pdf->Cell(29, 7, utf8_decode('PESO (kg)'), 1, 0, 'C');
-        $pdf->Cell(29, 7, utf8_decode('TALLA (m)'), 1, 1, 'C');
+            $pdf->SetFont('Arial', 'B', 8);
+            $pdf->Cell(28.2, 7, utf8_decode('TEMPERATURA'), 1, 0, 'C');
+            $pdf->Cell(31, 7, utf8_decode('PRESIÓN ARTERIAL'), 1, 0, 'C');
+            $pdf->Cell(20, 7, utf8_decode('PULOS / min'), 1, 0, 'C');
+            $pdf->Cell(41.2, 7, utf8_decode('FRECIENCIA RESPITARORIA'), 1, 0, 'C');
+            $pdf->Cell(20, 7, utf8_decode('PESO (kg)'), 1, 0, 'C');
+            $pdf->Cell(20, 7, utf8_decode('TALLA (m)'), 1, 0, 'C');
+            $pdf->Cell(29.6, 7, utf8_decode('SARURACIÓN'), 1, 1, 'C');
 
-        $pdf->SetFont('Arial', '', 9);
-        $pdf->Cell(29.6, 8, utf8_decode($sa_conp_temperatura), 1, 0, 'C');
-        $pdf->Cell(31.6, 8, utf8_decode($sa_conp_presion_ar), 1, 0, 'C');
-        $pdf->Cell(29.6, 8, utf8_decode($sa_conp_frec_cardiaca), 1, 0, 'C');
-        $pdf->Cell(41.2, 8, utf8_decode($sa_conp_frec_respiratoria), 1, 0, 'C');
-        $pdf->Cell(29, 8, utf8_decode($sa_conp_peso), 1, 0, 'C');
-        $pdf->Cell(29, 8, utf8_decode($sa_conp_altura), 1, 1, 'C');
-
+            $pdf->SetFont('Arial', '', 9);
+            $pdf->Cell(28.2, 8, utf8_decode($sa_conp_temperatura), 1, 0, 'C');
+            $pdf->Cell(31, 8, utf8_decode($sa_conp_presion_ar), 1, 0, 'C');
+            $pdf->Cell(20, 8, utf8_decode($sa_conp_frec_cardiaca), 1, 0, 'C');
+            $pdf->Cell(41.2, 8, utf8_decode($sa_conp_frec_respiratoria), 1, 0, 'C');
+            $pdf->Cell(20, 8, utf8_decode($sa_conp_peso), 1, 0, 'C');
+            $pdf->Cell(20, 8, utf8_decode($sa_conp_altura), 1, 0, 'C');
+            $pdf->Cell(29.6, 8, utf8_decode($sa_conp_saturacion), 1, 1, 'C');
+        }
         /////////////////////////////////////////////////////////////////////////////////////////////
         $pdf->ln('4');
 
-        $pdf->SetFont('Arial', 'B', 12);
-        $pdf->Cell(190, 10, utf8_decode('  REFERENCIA'), 1, 1, 'L');
+        if ($sa_conp_permiso_salida == 'SI' && $sa_conp_permiso_tipo == 'emergencia') {
+            $pdf->SetFont('Arial', 'B', 12);
+            $pdf->Cell(190, 10, utf8_decode('  REFERENCIA'), 1, 1, 'L');
 
-        $pdf->SetFont('Arial', 'B', 8);
-        $pdf->Cell(160, 7, utf8_decode('PACIENTE REFERIDO A:'), 1, 0, 'C');
-        $pdf->Cell(30, 7, utf8_decode('TELÉFONO'), 1, 1, 'C');
+            $pdf->SetFont('Arial', 'B', 8);
+            $pdf->Cell(160, 7, utf8_decode('PACIENTE REFERIDO A:'), 1, 0, 'C');
+            $pdf->Cell(30, 7, utf8_decode('TELÉFONO'), 1, 1, 'C');
 
-        $pdf->SetFont('Arial', '', 9);
-        $pdf->Cell(160, 8, utf8_decode($sa_conp_permiso_seguro_traslado), 1, 0, 'C');
-        $pdf->Cell(30, 8, utf8_decode($sa_conp_permiso_telefono_seguro), 1, 1, 'C');
+            $pdf->SetFont('Arial', '', 9);
+            $pdf->Cell(160, 8, utf8_decode($sa_conp_permiso_seguro_traslado), 1, 0, 'C');
+            $pdf->Cell(30, 8, utf8_decode($sa_conp_permiso_telefono_seguro), 1, 1, 'C');
 
-        $pdf->SetFont('Arial', 'B', 8);
-        $pdf->Cell(47.5, 7, utf8_decode('TELÉFONO RESPONSABLE:'), 1, 0, 'C');
-        $pdf->Cell(47.5, 7, utf8_decode('FECHA DE SALIDA:'), 1, 0, 'C');
-        $pdf->Cell(47.5, 7, utf8_decode('HORA DE SALIDA'), 1, 0, 'C');
-        $pdf->Cell(47.5, 7, utf8_decode('TIPO DE SALIDA'), 1, 1, 'C');
+            $pdf->SetFont('Arial', 'B', 8);
+            $pdf->Cell(47.5, 7, utf8_decode('TELÉFONO RESPONSABLE:'), 1, 0, 'C');
+            $pdf->Cell(47.5, 7, utf8_decode('FECHA DE SALIDA:'), 1, 0, 'C');
+            $pdf->Cell(47.5, 7, utf8_decode('HORA DE SALIDA'), 1, 0, 'C');
+            $pdf->Cell(47.5, 7, utf8_decode('TIPO DE SALIDA'), 1, 1, 'C');
 
-        $pdf->SetFont('Arial', '', 9);
-        $pdf->Cell(47.5, 8, utf8_decode($sa_conp_permiso_telefono_padre), 1, 0, 'C');
-        $pdf->Cell(47.5, 8, ($sa_conp_hora_permiso_salida), 1, 0, 'C');
-        $pdf->Cell(47.5, 8, ($sa_conp_fecha_permiso_salud_salida), 1, 0, 'C');
-        $pdf->Cell(47.5, 8, utf8_decode(strtoupper($sa_conp_permiso_tipo)), 1, 1, 'C');
+            $pdf->SetFont('Arial', '', 9);
+            $pdf->Cell(47.5, 8, utf8_decode($sa_conp_permiso_telefono_padre), 1, 0, 'C');
+            $pdf->Cell(47.5, 8, ($sa_conp_hora_permiso_salida), 1, 0, 'C');
+            $pdf->Cell(47.5, 8, ($sa_conp_fecha_permiso_salud_salida), 1, 0, 'C');
+            $pdf->Cell(47.5, 8, utf8_decode(strtoupper($sa_conp_permiso_tipo)), 1, 1, 'C');
+        } else if ($sa_conp_permiso_salida == 'SI' && $sa_conp_permiso_tipo == 'normal') {
+            $pdf->SetFont('Arial', 'B', 12);
+            $pdf->Cell(190, 10, utf8_decode('  DATOS DE SALIDA'), 1, 1, 'L');
 
+            $pdf->SetFont('Arial', 'B', 8);
+            $pdf->Cell(63.33, 7, utf8_decode('FECHA DE SALIDA:'), 1, 0, 'C');
+            $pdf->Cell(63.33, 7, utf8_decode('HORA DE SALIDA'), 1, 0, 'C');
+            $pdf->Cell(63.33, 7, utf8_decode('TIPO DE SALIDA'), 1, 1, 'C');
 
-        $pdf->AddPage();
+            $pdf->SetFont('Arial', '', 9);
+            $pdf->Cell(63.33, 8, ($sa_conp_hora_permiso_salida), 1, 0, 'C');
+            $pdf->Cell(63.33, 8, ($sa_conp_fecha_permiso_salud_salida), 1, 0, 'C');
+            $pdf->Cell(63.33, 8, utf8_decode(strtoupper($sa_conp_permiso_tipo)), 1, 1, 'C');
+        }
 
         /////////////////////////////////////////////////////////////////////////////////////////////
         //Ficha medica
         /////////////////////////////////////////////////////////////////////////////////////////////
+        $pdf->AddPage();
+
         $pdf->ln('10');
 
         $pdf->SetFont('Arial', 'B', 12);
         $pdf->Cell(190, 10, utf8_decode('  INFORMACIÓN ADICIONAL'), 1, 1, 'L');
 
+
+        $pdf->SetFont('Arial', 'B', 10);
+        $pdf->Cell(0, 7, utf8_decode('OBSERVACIONES'), 1, 1, 'l');
+        $pdf->SetFont('Arial', '', 9);
+        $pdf->MultiCell(0, 6, utf8_decode($sa_conp_observaciones), 1, 'L');
+
+        if ($sa_conp_tipo_consulta == 'consulta') {
+            $pdf->SetFont('Arial', 'B', 10);
+            $pdf->Cell(0, 7, utf8_decode('MOTIVO DE LA CONSULTA'), 1, 1, 'l');
+            $pdf->SetFont('Arial', '', 9);
+            $pdf->MultiCell(0, 6, utf8_decode($sa_conp_motivo_consulta), 1, 'L');
+
+            $pdf->SetFont('Arial', 'B', 10);
+            $pdf->Cell(0, 7, utf8_decode('TRATAMIENTO'), 1, 1, 'l');
+            $pdf->SetFont('Arial', '', 9);
+            $pdf->MultiCell(0, 6, utf8_decode($sa_conp_tratamiento), 1, 'L');
+        }
+
+        $pdf->ln('10');
+
+
+        $pdf->SetFont('Arial', 'B', 12);
+        $pdf->Cell(190, 10, utf8_decode('  FICHA MÉDICA'), 1, 1, 'L');
         $pdf->SetFont('Arial', 'B', 10);
         $pdf->Cell(190, 7, utf8_decode('   1.- ¿Ha sido diagnosticado con alguna enfermedad?:'), 1, 1, 'L');
         $pdf->SetFont('Arial', '', 9);
@@ -942,6 +1041,7 @@ class consultasC
         $sa_conp_hasta_hora = $datos[0]['sa_conp_hasta_hora'];
         $sa_conp_hasta_hora = $sa_conp_hasta_hora->format('H:i:s');
 
+        $sa_conp_diagnostico_1 = $datos[0]['sa_conp_diagnostico_1'];
 
         $sa_conp_diagnostico_certificado = $datos[0]['sa_conp_diagnostico_certificado'];
 
@@ -955,18 +1055,20 @@ class consultasC
         $sa_pac_temp_segundo_nombre = $paciente[0]['sa_pac_temp_segundo_nombre'];
         $sa_pac_temp_primer_apellido = $paciente[0]['sa_pac_temp_primer_apellido'];
         $sa_pac_temp_segundo_apellido = $paciente[0]['sa_pac_temp_segundo_apellido'];
+        $sa_pac_tabla = $paciente[0]['sa_pac_tabla'];
 
         $nombre_completo = $sa_pac_temp_primer_apellido . ' ' .  $sa_pac_temp_segundo_apellido . ' ' .  $sa_pac_temp_primer_nombre . ' ' . $sa_pac_temp_segundo_nombre;
 
 
         //Valores para notificacion ///////////////////////////////////////////////////////////////////////////////////
         $fecha_creado = $sa_conp_fecha_ingreso;
-        $nombre_estudiante = $nombre_completo;
+
         $grado = $sa_conp_nivel;
         $paralelo = $sa_conp_paralelo;
         //CONSULTA
         $hora_desde = $sa_conp_desde_hora;
         $hora_hasta = $sa_conp_hasta_hora;
+        $diagnostico_consulta = $sa_conp_diagnostico_1;
         //cERTIFICADO
         $diagnostico_certificado = $sa_conp_diagnostico_certificado;
 
@@ -1010,15 +1112,20 @@ class consultasC
         $pdf->Cell(0, 10, utf8_decode('Fecha: ' . $fecha_creado), 0, 1, 'L');
         $pdf->ln('3');
 
-        if ($sa_conp_permiso_salida == 'SI') {
-            $mensaje_salida = 'Certifico que él/la estudiante  ' . $nombre_estudiante . ' del grado ' . $grado . ' paralelo ' . $paralelo . ' requiere salir del plantel para recibir atención médica externa';
-            $pdf->MultiCell(0, 6, utf8_decode($mensaje_salida), 0, 'J');
-        } else if ($sa_conp_tipo_consulta == 'consulta') {
-            $mensaje_consulta = 'Certifico que él/la estudiante ' . $nombre_estudiante . ' del grado ' . $grado . ' paralelo ' . $paralelo . ' se encontró en el departamento médico desde ' . $hora_desde . ' hasta ' . $hora_hasta . '.';
-            $pdf->MultiCell(0, 6, utf8_decode($mensaje_consulta), 0, 'J');
-        } else if ($sa_conp_tipo_consulta == 'certificado') {
-            $mensaje_certificado = 'Certifico que él/la representante de ' . $nombre_estudiante . ' del grado ' . $grado . ' paralelo ' . $paralelo . ' entrega certificado médico de representado con diagnóstico ' . $diagnostico_certificado;
-            $pdf->MultiCell(0, 6, utf8_decode($mensaje_certificado), 0, 'J');
+        if ($sa_pac_tabla == 'estudiantes') {
+            if ($sa_conp_permiso_salida == 'SI') {
+                $mensaje_salida = 'Certifico que él/la estudiante  ' . $nombre_completo . ' del grado ' . $grado . ' paralelo ' . $paralelo . ' requiere salir del plantel para recibir atención médica externa';
+                $pdf->MultiCell(0, 6, utf8_decode($mensaje_salida), 0, 'J');
+            } else if ($sa_conp_tipo_consulta == 'consulta') {
+                $mensaje_consulta = 'Certifico que él/la estudiante ' . $nombre_completo . ' del grado ' . $grado . ' paralelo ' . $paralelo . ' se encontró en el departamento médico desde ' . $hora_desde . ' hasta ' . $hora_hasta . '.';
+                $pdf->MultiCell(0, 6, utf8_decode($mensaje_consulta), 0, 'J');
+            } else if ($sa_conp_tipo_consulta == 'certificado') {
+                $mensaje_certificado = 'Certifico que él/la representante de ' . $nombre_completo . ' del grado ' . $grado . ' paralelo ' . $paralelo . ' entrega certificado médico de representado con diagnóstico ' . $diagnostico_certificado;
+                $pdf->MultiCell(0, 6, utf8_decode($mensaje_certificado), 0, 'J');
+            }
+        } else {
+            $mensaje = 'Certifico que  ' . $nombre_completo . ' estaba en el cosultoria con diagnóstico ' . $diagnostico_consulta . ' desde ' . $hora_desde . ' hasta ' . $hora_hasta . '.';
+            $pdf->MultiCell(0, 6, utf8_decode($mensaje), 0, 'J');
         }
 
         $pdf->ln('25');

@@ -383,10 +383,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         // Diagnósticos y medicamentos
-        var sa_conp_CIE_10_1 = $('#sa_conp_CIE_10_1').val();
-        var sa_conp_diagnostico_1 = $('#sa_conp_diagnostico_1').val();
-        var sa_conp_CIE_10_2 = $('#sa_conp_CIE_10_2').val();
-        var sa_conp_diagnostico_2 = $('#sa_conp_diagnostico_2').val();
+        var sa_conp_CIE_10_1 = $('#sa_conp_CIE_10_1').val() ?? '';
+        var sa_conp_diagnostico_1 = $('#sa_conp_diagnostico_1').val() ?? '';
+        var sa_conp_CIE_10_2 = $('#sa_conp_CIE_10_2').val() ?? '';
+        var sa_conp_diagnostico_2 = $('#sa_conp_diagnostico_2').val() ?? '';
 
         // Certificados y permisos
         var sa_conp_salud_certificado = $('#sa_conp_salud_certificado').val();
@@ -399,14 +399,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         var sa_conp_dias_permiso_certificado = $('#sa_conp_dias_permiso_certificado').val();
 
         // Permisos de salida
-        var sa_conp_permiso_salida = $('input[name=sa_conp_permiso_salida]:checked').val();
-        var sa_conp_fecha_permiso_salud_salida = ($('#sa_conp_fecha_permiso_salud_salida').val());
-        var sa_conp_hora_permiso_salida = ($('#sa_conp_hora_permiso_salida').val());
+        var sa_conp_permiso_salida = $('input[name=sa_conp_permiso_salida]:checked').val() ?? '';
+        var sa_conp_fecha_permiso_salud_salida = ($('#sa_conp_fecha_permiso_salud_salida').val()) ?? '';
+        var sa_conp_hora_permiso_salida = ($('#sa_conp_hora_permiso_salida').val()) ?? '';
 
-        var sa_conp_permiso_tipo = $('input[name=sa_conp_permiso_tipo]:checked').val();
-        var sa_conp_permiso_seguro_traslado = ($('#sa_conp_permiso_seguro_traslado').val());
-        var sa_conp_permiso_telefono_padre = ($('#sa_conp_permiso_telefono_padre').val());
-        var sa_conp_permiso_telefono_seguro = ($('#sa_conp_permiso_telefono_seguro').val());
+        var sa_conp_permiso_tipo = $('input[name=sa_conp_permiso_tipo]:checked').val() ?? '';
+        var sa_conp_permiso_seguro_traslado = ($('#sa_conp_permiso_seguro_traslado').val()) ?? '';
+        var sa_conp_permiso_telefono_padre = ($('#sa_conp_permiso_telefono_padre').val()) ?? '';
+        var sa_conp_permiso_telefono_seguro = ($('#sa_conp_permiso_telefono_seguro').val()) ?? '';
 
         // Notificaciones y observaciones
         var sa_conp_notificacion_envio_representante = n_representante;
@@ -424,11 +424,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         var sa_conp_observaciones = $('#sa_conp_observaciones').val();
 
         var sa_conp_motivo_consulta = $('#sa_conp_motivo_consulta').val();
-        var sa_conp_tratamiento = $('#sa_conp_tratamiento').val();
+        var sa_conp_tratamiento = $('#sa_conp_tratamiento').val() ?? '';
 
         var sa_conp_tipo_consulta = '<?= $tipo_consulta; ?>';
 
-        var sa_conp_enfermedad_actual = $('#sa_conp_enfermedad_actual').val();
+        var sa_conp_enfermedad_actual = $('#sa_conp_enfermedad_actual').val() ?? '';
         var sa_conp_saturacion = $('#sa_conp_saturacion').val();
 
         var sa_conp_estado_revision = revision;
@@ -558,7 +558,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     function insertar(parametros) {
         tardo = calcular_diferencia_hora_retorno();
 
-        //console.log(parametros);
+        console.log(parametros);
         $.ajax({
             data: {
                 parametros: parametros
@@ -649,6 +649,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <input type="hidden" id="sa_conp_id" name="sa_conp_id">
                             <input type="hidden" id="sa_fice_id" name="sa_fice_id" value="<?= $id_ficha; ?>">
 
+                            <input type="hidden" id="sa_conp_nivel" name="sa_conp_nivel">
+                            <input type="hidden" id="sa_conp_paralelo" name="sa_conp_paralelo">
+                            <input type="hidden" id="sa_conp_edad" name="sa_conp_edad">
+
                             <input type="hidden" id="sa_conp_notificacion_envio_representante" name="sa_conp_notificacion_envio_representante">
                             <input type="hidden" id="sa_id_representante" name="sa_id_representante">
 
@@ -660,7 +664,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                             <input type="hidden" id="sa_conp_notificacion_envio_guardia" name="sa_conp_notificacion_envio_guardia">
                             <input type="hidden" id="sa_id_guardia" name="sa_id_guardia">
-
 
                             <div class="row" hidden>
                                 <div class="col-md-3">
@@ -793,12 +796,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                         </div>
                                                     </div>
 
-                                                    <div class="row pt-3">
-                                                        <div class="col-md-12">
-                                                            <label for="" class="form-label">Observaciones: <label style="color: red;">*</label> </label>
-                                                            <textarea name="sa_conp_observaciones" id="sa_conp_observaciones" cols="30" rows="1" class="form-control" placeholder="Observaciones"></textarea>
+                                                    <?php if ($tipo_consulta == 'certificado') { ?>
+                                                        <div class="row pt-3">
+                                                            <div class="col-md-12">
+                                                                <label for="" class="form-label">Observaciones: <label style="color: red;">*</label> </label>
+                                                                <textarea name="sa_conp_observaciones" id="sa_conp_observaciones" cols="30" rows="1" class="form-control" placeholder="Observaciones"></textarea>
+                                                            </div>
                                                         </div>
-                                                    </div>
+                                                    <?php } ?>
                                                 </div>
 
                                                 <div class="modal-footer pt-4" id="seccion_boton_consulta">
@@ -813,321 +818,323 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                                     </div>
 
-                                    <div class="tab-pane fade show" id="consulta_tab" role="tabpanel" <?php if ($tipo_consulta != 'consulta') {
-                                                                                                            echo 'hidden';
-                                                                                                        } ?>>
+                                    <?php if ($tipo_consulta == 'consulta') { ?>
+                                        <div class="tab-pane fade show" id="consulta_tab" role="tabpanel">
 
-                                        <div class="accordion" id="consulta_acordeon">
+                                            <div class="accordion" id="consulta_acordeon">
 
-                                            <div class="accordion-item">
-                                                <h2 class="accordion-header" id="flush-headingOne">
-                                                    <button class="accordion-button collapsed bg-success" type="button" data-bs-toggle="collapse" data-bs-target="#flush-estudiante" aria-expanded="false" aria-controls="flush-estudiante">
-                                                        <h6 class="text-white"><b>Ficha Médica</b></h6>
-                                                    </button>
-                                                </h2>
-                                                <div id="flush-estudiante" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#consulta_acordeon">
-                                                    <div class="accordion-body">
+                                                <div class="accordion-item">
+                                                    <h2 class="accordion-header" id="flush-headingOne">
+                                                        <button class="accordion-button collapsed bg-success" type="button" data-bs-toggle="collapse" data-bs-target="#flush-estudiante" aria-expanded="false" aria-controls="flush-estudiante">
+                                                            <h6 class="text-white"><b>Ficha Médica</b></h6>
+                                                        </button>
+                                                    </h2>
+                                                    <div id="flush-estudiante" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#consulta_acordeon">
+                                                        <div class="accordion-body">
 
-                                                        <input type="hidden" id="sa_conp_nivel" name="sa_conp_nivel">
-                                                        <input type="hidden" id="sa_conp_paralelo" name="sa_conp_paralelo">
-                                                        <input type="hidden" id="sa_conp_edad" name="sa_conp_edad">
 
-                                                        <div class="row pt-3">
-                                                            <div class="col-12">
-                                                                <div class="">
-                                                                    <table class="table mb-0" style="width:100%">
-                                                                        <thead>
-                                                                            <tr>
-                                                                                <th style="width: 30%;"></th>
-                                                                                <th style="width: 25%;"></th>
-                                                                                <th style="width: 25%;"></th>
-                                                                                <th style="width: 25%;"></th>
-                                                                            </tr>
 
-                                                                        </thead>
-                                                                        <tbody>
-                                                                            <tr>
-                                                                                <th class="table-primary text-end">Cédula:</th>
-                                                                                <td id="txt_ci"></td>
+                                                            <div class="row pt-3">
+                                                                <div class="col-12">
+                                                                    <div class="">
+                                                                        <table class="table mb-0" style="width:100%">
+                                                                            <thead>
+                                                                                <tr>
+                                                                                    <th style="width: 30%;"></th>
+                                                                                    <th style="width: 25%;"></th>
+                                                                                    <th style="width: 25%;"></th>
+                                                                                    <th style="width: 25%;"></th>
+                                                                                </tr>
 
-                                                                                <th class="table-primary text-end">Sexo:</th>
-                                                                                <td id="txt_sexo"></td>
-                                                                            </tr>
-                                                                            <tr>
-                                                                                <th class="table-primary text-end">Nombres:</th>
-                                                                                <td id="txt_nombres" colspan="3"></td>
-                                                                            </tr>
+                                                                            </thead>
+                                                                            <tbody>
+                                                                                <tr>
+                                                                                    <th class="table-primary text-end">Cédula:</th>
+                                                                                    <td id="txt_ci"></td>
 
-                                                                            <tr>
-                                                                                <th class="table-primary text-end">Fecha de Nacimiento:</th>
-                                                                                <td id="txt_fecha_nacimiento"></td>
+                                                                                    <th class="table-primary text-end">Sexo:</th>
+                                                                                    <td id="txt_sexo"></td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <th class="table-primary text-end">Nombres:</th>
+                                                                                    <td id="txt_nombres" colspan="3"></td>
+                                                                                </tr>
 
-                                                                                <th class="table-primary text-end" id="variable_paciente">Grupo Sanguíneo:</th>
-                                                                                <td id="txt_sa_fice_pac_grupo_sangre"></td>
-                                                                            </tr>
-                                                                            <tr>
-                                                                                <th class="table-primary text-end" id="variable_paciente">Curso:</th>
-                                                                                <td id="txt_curso" colspan="3"></td>
-                                                                            </tr>
+                                                                                <tr>
+                                                                                    <th class="table-primary text-end">Fecha de Nacimiento:</th>
+                                                                                    <td id="txt_fecha_nacimiento"></td>
 
-                                                                            <tr>
-                                                                                <th class="table-primary text-end" id="variable_paciente">1.- ¿Ha sido diagnosticado con alguna enfermedad?:</th>
-                                                                                <td id="txt_sa_fice_pregunta_1_obs" colspan="3"></td>
-                                                                            </tr>
+                                                                                    <th class="table-primary text-end" id="variable_paciente">Grupo Sanguíneo:</th>
+                                                                                    <td id="txt_sa_fice_pac_grupo_sangre"></td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <th class="table-primary text-end" id="variable_paciente">Curso:</th>
+                                                                                    <td id="txt_curso" colspan="3"></td>
+                                                                                </tr>
 
-                                                                            <tr>
-                                                                                <th class="table-primary text-end" id="variable_paciente">2.- ¿Tiene algún antecedente familiar de importancia?:</th>
-                                                                                <td id="txt_sa_fice_pregunta_2_obs" colspan="3"></td>
-                                                                            </tr>
+                                                                                <tr>
+                                                                                    <th class="table-primary text-end" id="variable_paciente">1.- ¿Ha sido diagnosticado con alguna enfermedad?:</th>
+                                                                                    <td id="txt_sa_fice_pregunta_1_obs" colspan="3"></td>
+                                                                                </tr>
 
-                                                                            <tr>
-                                                                                <th class="table-primary text-end" id="variable_paciente">3.- ¿Ha sido sometido a cirugías previas?:</th>
-                                                                                <td id="txt_sa_fice_pregunta_3_obs" colspan="3"></td>
-                                                                            </tr>
+                                                                                <tr>
+                                                                                    <th class="table-primary text-end" id="variable_paciente">2.- ¿Tiene algún antecedente familiar de importancia?:</th>
+                                                                                    <td id="txt_sa_fice_pregunta_2_obs" colspan="3"></td>
+                                                                                </tr>
 
-                                                                            <tr>
-                                                                                <th class="table-primary text-end" id="variable_paciente">4.- ¿Tiene alergias?:</th>
-                                                                                <td id="txt_sa_fice_pregunta_4_obs" colspan="3"></td>
-                                                                            </tr>
+                                                                                <tr>
+                                                                                    <th class="table-primary text-end" id="variable_paciente">3.- ¿Ha sido sometido a cirugías previas?:</th>
+                                                                                    <td id="txt_sa_fice_pregunta_3_obs" colspan="3"></td>
+                                                                                </tr>
 
-                                                                            <tr>
-                                                                                <th class="table-primary text-end" id="variable_paciente">5.- ¿Qué medicamentos usa?:</th>
-                                                                                <td id="txt_sa_fice_pregunta_5_obs" colspan="3"></td>
-                                                                            </tr>
+                                                                                <tr>
+                                                                                    <th class="table-primary text-end" id="variable_paciente">4.- ¿Tiene alergias?:</th>
+                                                                                    <td id="txt_sa_fice_pregunta_4_obs" colspan="3"></td>
+                                                                                </tr>
 
-                                                                        </tbody>
-                                                                    </table>
+                                                                                <tr>
+                                                                                    <th class="table-primary text-end" id="variable_paciente">5.- ¿Qué medicamentos usa?:</th>
+                                                                                    <td id="txt_sa_fice_pregunta_5_obs" colspan="3"></td>
+                                                                                </tr>
 
+                                                                            </tbody>
+                                                                        </table>
+
+                                                                    </div>
                                                                 </div>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
+
                                             </div>
 
-                                        </div>
+                                            <hr>
 
-                                        <hr>
-
-                                        <div>
-                                            <!-- Consulta -->
                                             <div>
+                                                <!-- Consulta -->
+                                                <div>
 
-                                                <div class="row pt-0">
+                                                    <div class="row pt-0">
 
-                                                    <div class="row pt-3">
-                                                        <div class="col-md-12">
-                                                            <label for="" class="form-label">Enfermedad Actual: <label style="color: red;">*</label> </label>
-                                                            <textarea name="sa_conp_enfermedad_actual" id="sa_conp_enfermedad_actual" cols="30" rows="2" class="form-control" placeholder="Enfermedad Actual"></textarea>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="row pt-3">
-                                                        <div class="col-md-12">
-                                                            <label for="" class="form-label">CIE 10 - Diagnóstico 1: <label style="color: red;">*</label> </label>
-                                                            <input type="text" class="ctw-input form-control form-control-sm" autocomplete="off" data-ctw-ino="1" id="sa_conp_diagnostico_1" placeholder="Diagnostico 1">
-                                                            <input type="hidden" id="sa_conp_CIE_10_1">
-                                                            <div class="ctw-window" data-ctw-ino="1"></div>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="row pt-3">
-                                                        <div class="col-md-12">
-                                                            <label for="" class="form-label">CIE 10 - Diagnóstico 2: <label style="color: red;">*</label> </label>
-                                                            <input type="text" class="ctw-input form-control form-control-sm" autocomplete="off" data-ctw-ino="2" id="sa_conp_diagnostico_2" placeholder="Diagnostico 2">
-                                                            <input type="hidden" id="sa_conp_CIE_10_2">
-                                                            <div class="ctw-window" data-ctw-ino="2"></div>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="row pt-3">
-                                                        <div class="col-md-12">
-                                                            <label for="" class="form-label">Observaciones: <label style="color: red;">*</label> </label>
-                                                            <textarea name="sa_conp_observaciones" id="sa_conp_observaciones" cols="30" rows="1" class="form-control" placeholder="Observaciones"></textarea>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="row pt-3">
-                                                        <div class="col-md-12">
-                                                            <label for="" class="form-label"> <b>¿Necesita permiso de salida?: <label class="text-danger">*</label></b></label>
-
-                                                            <div>
-                                                                <div class="form-check">
-                                                                    <input class="form-check-input" type="radio" name="sa_conp_permiso_salida" id="sa_conp_permiso_salida_1" value="SI">
-                                                                    <label class="form-check-label" for="sa_conp_permiso_salida_1">SI</label>
-                                                                </div>
-
-                                                                <div class="form-check">
-                                                                    <input class="form-check-input" type="radio" name="sa_conp_permiso_salida" id="sa_conp_permiso_salida_2" value="NO" checked>
-                                                                    <label class="form-check-label" for="sa_conp_permiso_salida_2">NO</label>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-
-                                                    <div id="permiso_salida" style="display: none;">
-
-                                                        <div class="row pt-2">
-                                                            <div class="col-md-4">
-                                                                <label for="" class="form-label">Fecha Permiso de Salida: <label style="color: red;">*</label> </label>
-                                                                <input type="date" class="form-control form-control-sm" id="sa_conp_fecha_permiso_salud_salida" name="sa_conp_fecha_permiso_salud_salida" value="<?= date('Y-m-d'); ?>">
-                                                            </div>
-
-                                                            <div class="col-md-4">
-                                                                <label for="" class="form-label">Hora Permiso de Salida: <label style="color: red;">*</label> </label>
-                                                                <input type="time" class="form-control form-control-sm" id="sa_conp_hora_permiso_salida" name="sa_conp_hora_permiso_salida">
+                                                        <div class="row pt-3">
+                                                            <div class="col-md-12">
+                                                                <label for="" class="form-label">Enfermedad Actual: <label style="color: red;">*</label> </label>
+                                                                <textarea name="sa_conp_enfermedad_actual" id="sa_conp_enfermedad_actual" cols="30" rows="2" class="form-control" placeholder="Enfermedad Actual"></textarea>
                                                             </div>
                                                         </div>
 
                                                         <div class="row pt-3">
                                                             <div class="col-md-12">
-                                                                <label for="" class="form-label"> <b>¿Tipo de Salida?: <label class="text-danger">*</label></b></label>
+                                                                <label for="" class="form-label">CIE 10 - Diagnóstico 1: <label style="color: red;">*</label> </label>
+                                                                <input type="text" class="ctw-input form-control form-control-sm" autocomplete="off" data-ctw-ino="1" id="sa_conp_diagnostico_1" placeholder="Diagnostico 1">
+                                                                <input type="hidden" id="sa_conp_CIE_10_1">
+                                                                <div class="ctw-window" data-ctw-ino="1"></div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="row pt-3">
+                                                            <div class="col-md-12">
+                                                                <label for="" class="form-label">CIE 10 - Diagnóstico 2: <label style="color: red;">*</label> </label>
+                                                                <input type="text" class="ctw-input form-control form-control-sm" autocomplete="off" data-ctw-ino="2" id="sa_conp_diagnostico_2" placeholder="Diagnostico 2">
+                                                                <input type="hidden" id="sa_conp_CIE_10_2">
+                                                                <div class="ctw-window" data-ctw-ino="2"></div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="row pt-3">
+                                                            <div class="col-md-12">
+                                                                <label for="" class="form-label">Observaciones: <label style="color: red;">*</label> </label>
+                                                                <textarea name="sa_conp_observaciones" id="sa_conp_observaciones" cols="30" rows="1" class="form-control" placeholder="Observaciones"></textarea>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="row pt-3">
+                                                            <div class="col-md-12">
+                                                                <label for="" class="form-label"> <b>¿Necesita permiso de salida?: <label class="text-danger">*</label></b></label>
 
                                                                 <div>
                                                                     <div class="form-check">
-                                                                        <input class="form-check-input" type="radio" name="sa_conp_permiso_tipo" id="sa_conp_permiso_tipo_1" value="emergencia">
-                                                                        <label class="form-check-label" for="sa_conp_permiso_tipo_1">Emergencia</label>
+                                                                        <input class="form-check-input" type="radio" name="sa_conp_permiso_salida" id="sa_conp_permiso_salida_1" value="SI">
+                                                                        <label class="form-check-label" for="sa_conp_permiso_salida_1">SI</label>
                                                                     </div>
 
                                                                     <div class="form-check">
-                                                                        <input class="form-check-input" type="radio" name="sa_conp_permiso_tipo" id="sa_conp_permiso_tipo_2" value="normal" checked>
-                                                                        <label class="form-check-label" for="sa_conp_permiso_tipo_2">Normal</label>
+                                                                        <input class="form-check-input" type="radio" name="sa_conp_permiso_salida" id="sa_conp_permiso_salida_2" value="NO" checked>
+                                                                        <label class="form-check-label" for="sa_conp_permiso_salida_2">NO</label>
                                                                     </div>
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                    </div>
 
+                                                        <div id="permiso_salida" style="display: none;">
 
-                                                    <div id="permiso_salida_tipo" style="display: none;">
+                                                            <div class="row pt-2">
+                                                                <div class="col-md-4">
+                                                                    <label for="" class="form-label">Fecha Permiso de Salida: <label style="color: red;">*</label> </label>
+                                                                    <input type="date" class="form-control form-control-sm" id="sa_conp_fecha_permiso_salud_salida" name="sa_conp_fecha_permiso_salud_salida" value="<?= date('Y-m-d'); ?>">
+                                                                </div>
 
-                                                        <div class="row pt-2">
-                                                            <div class="col-md-12">
-                                                                <label for="" class="form-label">Paciente Referido a: <label style="color: red;">*</label> </label>
-                                                                <select class="form-select form-select-sm" id="sa_conp_permiso_seguro_traslado" name="sa_conp_permiso_seguro_traslado">
-                                                                    <option selected disabled>-- Seleccione --</option>
-                                                                    <option value="IESS">IESS</option>
-                                                                    <option value="SPPAT">SPPAT</option>
-                                                                </select>
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="row pt-3">
-                                                            <div class="col-md-4">
-                                                                <label for="" class="form-label">Teléfono Seguro: <label style="color: red;">*</label> </label>
-                                                                <input type="text" class="form-control form-control-sm" id="sa_conp_permiso_telefono_seguro" name="sa_conp_permiso_telefono_seguro">
+                                                                <div class="col-md-4">
+                                                                    <label for="" class="form-label">Hora Permiso de Salida: <label style="color: red;">*</label> </label>
+                                                                    <input type="time" class="form-control form-control-sm" id="sa_conp_hora_permiso_salida" name="sa_conp_hora_permiso_salida">
+                                                                </div>
                                                             </div>
 
-                                                            <div class="col-md-4">
-                                                                <label for="" class="form-label" id="lbl_telefono_emergencia">Teléfono Representante: <label style="color: red;">*</label> </label>
-                                                                <input type="text" class="form-control form-control-sm" aria-describedby="btn_telefono" id="sa_conp_permiso_telefono_padre" name="sa_conp_permiso_telefono_padre">
+                                                            <div class="row pt-3">
+                                                                <div class="col-md-12">
+                                                                    <label for="" class="form-label"> <b>¿Tipo de Salida?: <label class="text-danger">*</label></b></label>
 
-                                                                <p id="txt_nombre_contacto" class="me-0 text-success"></p>
+                                                                    <div>
+                                                                        <div class="form-check">
+                                                                            <input class="form-check-input" type="radio" name="sa_conp_permiso_tipo" id="sa_conp_permiso_tipo_1" value="emergencia">
+                                                                            <label class="form-check-label" for="sa_conp_permiso_tipo_1">Emergencia</label>
+                                                                        </div>
 
-                                                                <input type="hidden" name="sa_permiso_pac_id" id="sa_permiso_pac_id">
-                                                                <input type="hidden" name="sa_permiso_pac_tabla" id="sa_permiso_pac_tabla">
-
-                                                            </div>
-
-
-                                                        </div>
-
-                                                    </div>
-
-                                                </div>
-                                            </div>
-
-                                            <div class="modal-footer pt-4" id="seccion_boton_consulta">
-
-                                                <button hidden class="btn btn-danger btn-sm px-2 m-1" onclick="editar_insertar(1, 1, 1, 0, 2)" type="button"><i class='bx bx-pause-circle'></i> En Proceso</button>
-
-                                                <button class="btn btn-success btn-sm px-2 m-1" onclick="editar_insertar(1, 1, 1, 0, 1)" type="button"><i class="bx bx-save"></i> Finalizar</button>
-
-                                            </div>
-
-                                        </div>
-
-                                    </div>
-
-
-                                    <div class="tab-pane fade show" id="recetario_tab" role="tabpanel" <?php if ($tipo_consulta != 'consulta') {
-                                                                                                            echo 'hidden';
-                                                                                                        } ?>>
-                                        <div>
-
-                                            <!-- Consulta -->
-                                            <div>
-                                                <div class="row pt-0">
-                                                    <!-- Farmacologia -->
-                                                    <div>
-                                                        <div class="row pt-4">
-                                                            <hr>
-
-                                                            <div class="col-md-3">
-                                                                <label for="tipo_farmacologia" class="form-label">Farmacología: <label style="color: red;">*</label> </label>
-                                                                <select class="form-select form-select-sm" id="tipo_farmacologia" name="tipo_farmacologia" onclick="consultar_medicinas_insumos(this.value);">
-                                                                    <option selected disabled>-- Seleccione --</option>
-                                                                    <option value="medicamentos">Medicamentos</option>
-                                                                    <option value="insumos">Insumos</option>
-                                                                </select>
-                                                            </div>
-
-                                                            <div class="col-md-7">
-                                                                <label for="tipo_farmacologia_presentacion" class="form-label">Presentación: <label style="color: red;">*</label> </label>
-                                                                <select class="form-select form-select-sm" id="tipo_farmacologia_presentacion" name="tipo_farmacologia_presentacion">
-                                                                    <option selected disabled>-- Seleccione --</option>
-                                                                </select>
-                                                            </div>
-
-                                                            <div class="col-md-2 mt-3">
-                                                                <label for="agregarFila_medicamentos" class="form-label"></label>
-                                                                <button class="btn btn-primary" title="Agregar Medicamentos" id="agregarFila_medicamentos" type="button"><i class='bx bx-plus me-0'></i>Agregar</button>
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="row pt-3">
-                                                            <div class="col-sm-12">
-                                                                <div class="mb-2">
-
-                                                                    <table class="table table-bordered table-hover" id="lista_medicamentos">
-
-                                                                        <tr>
-                                                                            <th width="2%"><input id="checkAll_Medicamentos" class="form-check" type="checkbox"></th>
-
-                                                                            <th width="40%">Farmacología</th>
-                                                                            <th width="48%">Dosificación</th>
-                                                                            <th width="8%">Cantidad</th>
-                                                                            <th width="2%%">Entregado?</th>
-
-                                                                        </tr>
-
-                                                                    </table>
-
-                                                                    <button class="btn btn-danger btn-sm mb-2" title="Seleccione el Medicamento para Eliminar" id="eliminarFila_medicamentos" type="button"><i class='bx bx-minus me-0'></i>Eliminar</button>
-
+                                                                        <div class="form-check">
+                                                                            <input class="form-check-input" type="radio" name="sa_conp_permiso_tipo" id="sa_conp_permiso_tipo_2" value="normal" checked>
+                                                                            <label class="form-check-label" for="sa_conp_permiso_tipo_2">Normal</label>
+                                                                        </div>
+                                                                    </div>
                                                                 </div>
                                                             </div>
                                                         </div>
 
-                                                        <div class="row pt-2">
-                                                            <div class="col-md-12">
-                                                                <label for="" class="form-label">Tratamiento: <label style="color: red;">*</label> </label>
-                                                                <textarea name="sa_conp_tratamiento" id="sa_conp_tratamiento" cols="30" rows="2" class="form-control" placeholder="Tratamiento"></textarea>
+
+                                                        <div id="permiso_salida_tipo" style="display: none;">
+
+                                                            <div class="row pt-2">
+                                                                <div class="col-md-12">
+                                                                    <label for="" class="form-label">Paciente Referido a: <label style="color: red;">*</label> </label>
+                                                                    <select class="form-select form-select-sm" id="sa_conp_permiso_seguro_traslado" name="sa_conp_permiso_seguro_traslado">
+                                                                        <option selected disabled>-- Seleccione --</option>
+                                                                        <option value="IESS">IESS</option>
+                                                                        <option value="SPPAT">SPPAT</option>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="row pt-3">
+                                                                <div class="col-md-4">
+                                                                    <label for="" class="form-label">Teléfono Seguro: <label style="color: red;">*</label> </label>
+                                                                    <input type="text" class="form-control form-control-sm" id="sa_conp_permiso_telefono_seguro" name="sa_conp_permiso_telefono_seguro">
+                                                                </div>
+
+                                                                <div class="col-md-4">
+                                                                    <label for="" class="form-label" id="lbl_telefono_emergencia">Teléfono Representante: <label style="color: red;">*</label> </label>
+                                                                    <input type="text" class="form-control form-control-sm" aria-describedby="btn_telefono" id="sa_conp_permiso_telefono_padre" name="sa_conp_permiso_telefono_padre">
+
+                                                                    <p id="txt_nombre_contacto" class="me-0 text-success"></p>
+
+                                                                    <input type="hidden" name="sa_permiso_pac_id" id="sa_permiso_pac_id">
+                                                                    <input type="hidden" name="sa_permiso_pac_tabla" id="sa_permiso_pac_tabla">
+
+                                                                </div>
+
+
+                                                            </div>
+
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+
+                                                <div class="modal-footer pt-4" id="seccion_boton_consulta">
+
+                                                    <button hidden class="btn btn-danger btn-sm px-2 m-1" onclick="editar_insertar(1, 1, 1, 0, 2)" type="button"><i class='bx bx-pause-circle'></i> En Proceso</button>
+
+                                                    <button class="btn btn-success btn-sm px-2 m-1" onclick="editar_insertar(1, 1, 1, 0, 1)" type="button"><i class="bx bx-save"></i> Finalizar</button>
+
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+                                    <?php } ?>
+
+
+                                    <?php if ($tipo_consulta == 'consulta') { ?>
+                                        <div class="tab-pane fade show" id="recetario_tab" role="tabpanel" <?php if ($tipo_consulta != 'consulta') {
+                                                                                                                echo 'hidden';
+                                                                                                            } ?>>
+                                            <div>
+
+                                                <!-- Consulta -->
+                                                <div>
+                                                    <div class="row pt-0">
+                                                        <!-- Farmacologia -->
+                                                        <div>
+                                                            <div class="row pt-4">
+                                                                <hr>
+
+                                                                <div class="col-md-3">
+                                                                    <label for="tipo_farmacologia" class="form-label">Farmacología: <label style="color: red;">*</label> </label>
+                                                                    <select class="form-select form-select-sm" id="tipo_farmacologia" name="tipo_farmacologia" onclick="consultar_medicinas_insumos(this.value);">
+                                                                        <option selected disabled>-- Seleccione --</option>
+                                                                        <option value="medicamentos">Medicamentos</option>
+                                                                        <option value="insumos">Insumos</option>
+                                                                    </select>
+                                                                </div>
+
+                                                                <div class="col-md-7">
+                                                                    <label for="tipo_farmacologia_presentacion" class="form-label">Presentación: <label style="color: red;">*</label> </label>
+                                                                    <select class="form-select form-select-sm" id="tipo_farmacologia_presentacion" name="tipo_farmacologia_presentacion">
+                                                                        <option selected disabled>-- Seleccione --</option>
+                                                                    </select>
+                                                                </div>
+
+                                                                <div class="col-md-2 mt-3">
+                                                                    <label for="agregarFila_medicamentos" class="form-label"></label>
+                                                                    <button class="btn btn-primary" title="Agregar Medicamentos" id="agregarFila_medicamentos" type="button"><i class='bx bx-plus me-0'></i>Agregar</button>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="row pt-3">
+                                                                <div class="col-sm-12">
+                                                                    <div class="mb-2">
+
+                                                                        <table class="table table-bordered table-hover" id="lista_medicamentos">
+
+                                                                            <tr>
+                                                                                <th width="2%"><input id="checkAll_Medicamentos" class="form-check" type="checkbox"></th>
+
+                                                                                <th width="40%">Farmacología</th>
+                                                                                <th width="48%">Dosificación</th>
+                                                                                <th width="8%">Cantidad</th>
+                                                                                <th width="2%%">Entregado?</th>
+
+                                                                            </tr>
+
+                                                                        </table>
+
+                                                                        <button class="btn btn-danger btn-sm mb-2" title="Seleccione el Medicamento para Eliminar" id="eliminarFila_medicamentos" type="button"><i class='bx bx-minus me-0'></i>Eliminar</button>
+
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="row pt-2">
+                                                                <div class="col-md-12">
+                                                                    <label for="" class="form-label">Tratamiento: <label style="color: red;">*</label> </label>
+                                                                    <textarea name="sa_conp_tratamiento" id="sa_conp_tratamiento" cols="30" rows="2" class="form-control" placeholder="Tratamiento"></textarea>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
 
-                                            <div class="modal-footer pt-4" id="seccion_boton_consulta">
+                                                <div class="modal-footer pt-4" id="seccion_boton_consulta">
 
-                                                <button hidden class="btn btn-danger btn-sm px-2 m-1" onclick="editar_insertar(1, 1, 1, 0, 2)" type="button"><i class='bx bx-pause-circle'></i> En Proceso</button>
+                                                    <button hidden class="btn btn-danger btn-sm px-2 m-1" onclick="editar_insertar(1, 1, 1, 0, 2)" type="button"><i class='bx bx-pause-circle'></i> En Proceso</button>
 
-                                                <button class="btn btn-success btn-sm px-2 m-1" onclick="editar_insertar(1, 1, 1, 0, 1)" type="button"><i class="bx bx-save"></i> Finalizar</button>
+                                                    <button class="btn btn-success btn-sm px-2 m-1" onclick="editar_insertar(1, 1, 1, 0, 1)" type="button"><i class="bx bx-save"></i> Finalizar</button>
 
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
+                                    <?php } ?>
+
+
 
                                 </div>
                             </div>
