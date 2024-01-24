@@ -351,6 +351,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     //falta estado para profesor
     function editar_insertar(n_representante = '', n_docente = '', n_inspector = '', n_guardia = '', revision = '') {
 
+        hora_hasta = obtener_hora_hasta();
+        $('#sa_conp_hasta_hora').val(hora_hasta);
+
+        tardo = calcular_diferencia_hora_retorno();
+
+
         var sa_conp_id = $('#sa_conp_id').val();
 
         var sa_fice_id = $('#sa_fice_id').val();
@@ -377,10 +383,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         // Diagnósticos y medicamentos
-        var sa_conp_CIE_10_1 = $('#sa_conp_CIE_10_1').val();
-        var sa_conp_diagnostico_1 = $('#sa_conp_diagnostico_1').val();
-        var sa_conp_CIE_10_2 = $('#sa_conp_CIE_10_2').val();
-        var sa_conp_diagnostico_2 = $('#sa_conp_diagnostico_2').val();
+        var sa_conp_CIE_10_1 = $('#sa_conp_CIE_10_1').val() ?? '';
+        var sa_conp_diagnostico_1 = $('#sa_conp_diagnostico_1').val() ?? '';
+        var sa_conp_CIE_10_2 = $('#sa_conp_CIE_10_2').val() ?? '';
+        var sa_conp_diagnostico_2 = $('#sa_conp_diagnostico_2').val() ?? '';
 
         // Certificados y permisos
         var sa_conp_salud_certificado = $('#sa_conp_salud_certificado').val();
@@ -393,14 +399,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         var sa_conp_dias_permiso_certificado = $('#sa_conp_dias_permiso_certificado').val();
 
         // Permisos de salida
-        var sa_conp_permiso_salida = $('input[name=sa_conp_permiso_salida]:checked').val();
-        var sa_conp_fecha_permiso_salud_salida = ($('#sa_conp_fecha_permiso_salud_salida').val());
-        var sa_conp_hora_permiso_salida = ($('#sa_conp_hora_permiso_salida').val());
+        var sa_conp_permiso_salida = $('input[name=sa_conp_permiso_salida]:checked').val() ?? '';
+        var sa_conp_fecha_permiso_salud_salida = ($('#sa_conp_fecha_permiso_salud_salida').val()) ?? '';
+        var sa_conp_hora_permiso_salida = ($('#sa_conp_hora_permiso_salida').val()) ?? '';
 
-        var sa_conp_permiso_tipo = $('input[name=sa_conp_permiso_tipo]:checked').val();
-        var sa_conp_permiso_seguro_traslado = ($('#sa_conp_permiso_seguro_traslado').val());
-        var sa_conp_permiso_telefono_padre = ($('#sa_conp_permiso_telefono_padre').val());
-        var sa_conp_permiso_telefono_seguro = ($('#sa_conp_permiso_telefono_seguro').val());
+        var sa_conp_permiso_tipo = $('input[name=sa_conp_permiso_tipo]:checked').val() ?? '';
+        var sa_conp_permiso_seguro_traslado = ($('#sa_conp_permiso_seguro_traslado').val()) ?? '';
+        var sa_conp_permiso_telefono_padre = ($('#sa_conp_permiso_telefono_padre').val()) ?? '';
+        var sa_conp_permiso_telefono_seguro = ($('#sa_conp_permiso_telefono_seguro').val()) ?? '';
 
         // Notificaciones y observaciones
         var sa_conp_notificacion_envio_representante = n_representante;
@@ -418,14 +424,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         var sa_conp_observaciones = $('#sa_conp_observaciones').val();
 
         var sa_conp_motivo_consulta = $('#sa_conp_motivo_consulta').val();
-        var sa_conp_tratamiento = $('#sa_conp_tratamiento').val();
+        var sa_conp_tratamiento = $('#sa_conp_tratamiento').val() ?? '';
 
         var sa_conp_tipo_consulta = '<?= $tipo_consulta; ?>';
 
-        var sa_conp_enfermedad_actual = $('#sa_conp_enfermedad_actual').val();
+        var sa_conp_enfermedad_actual = $('#sa_conp_enfermedad_actual').val() ?? '';
         var sa_conp_saturacion = $('#sa_conp_saturacion').val();
 
         var sa_conp_estado_revision = revision;
+
 
 
         // Crear objeto de parámetros
@@ -549,8 +556,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     function insertar(parametros) {
+        tardo = calcular_diferencia_hora_retorno();
 
-        //console.log(parametros);
+        console.log(parametros);
         $.ajax({
             data: {
                 parametros: parametros
@@ -563,7 +571,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 //console.log(response);
 
                 if (response == 1) {
-                    Swal.fire('', 'Operacion realizada con exito.', 'success').then(function() {
+                    Swal.fire('', 'Operacion realizada con exito. La atención tardó: ' + tardo + ' minutos.', 'success').then(function() {
                         location.href = '../vista/inicio.php?mod=7&acc=pacientes';
                     });
                 } else if (response == -2) {
@@ -593,9 +601,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <li class="breadcrumb-item active" aria-current="page">
                             <?php
                             if ($id_consulta == '') {
-                                echo 'Registrar Consulta del Paciente';
+                                echo 'REGISTRAR ' . strtoupper($tipo_consulta) . '';
                             } else {
-                                echo 'Modificar Consulta del Paciente';
+                                echo 'MODIFICAR ' . strtoupper($tipo_consulta) . '';
                             }
                             ?>
                         </li>
@@ -609,26 +617,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <div class="col-xl-12 mx-auto">
                 <div class="card border-top border-0 border-4 border-primary">
                     <div class="card-body p-5">
-                        <div class="card-title d-flex align-items-center">
-                            <div><i class="bx bxs-user me-1 font-22 text-primary"></i>
-                            </div>
-                            <h5 class="mb-0 text-primary">
-                                <?php if ($id_consulta == '') { ?>
-                                    Registrar Consulta del Paciente: <b class="text-success" id="title_paciente"></b>
-                                <?php } else { ?>
-                                    Modificar Consulta del Paciente: <b class="text-success" id="title_paciente"></b>
-                                <?php } ?>
-                            </h5>
+                        <div class="row">
 
-                            <div class="row m-2">
-
-                                <div class="col-sm-12">
-                                    <a hidden href="../vista/inicio.php?mod=7&acc=consultas_pacientes&pac_id=<?= $id_paciente ?>" class="btn btn-outline-dark btn-sm"><i class="bx bx-arrow-back"></i> Regresar</a>
-
-                                    <button class="btn btn-outline-primary" onclick="consultar_datos_h(<?php echo $id_ficha; ?>)"><i class='bx bx-list-ol'></i> Historial</button>
+                            <div class="col-6">
+                                <div class="card-title d-flex align-items-center">
+                                    <div><i class="bx bxs-user me-1 font-22 text-primary"></i>
+                                    </div>
+                                    <h5 class="mb-0 text-primary">
+                                        <?php if ($id_consulta == '') { ?>
+                                            Paciente: <b class="text-success" id="title_paciente"></b>
+                                        <?php } else { ?>
+                                            Paciente: <b class="text-success" id="title_paciente"></b>
+                                        <?php } ?>
+                                    </h5>
                                 </div>
-
                             </div>
+
+                            <div class="col-6 text-end">
+                                <a hidden href="../vista/inicio.php?mod=7&acc=consultas_pacientes&pac_id=<?= $id_paciente ?>" class="btn btn-outline-dark btn-sm"><i class="bx bx-arrow-back"></i> Regresar</a>
+
+                                <button class="btn btn-outline-primary" onclick="consultar_datos_h(<?php echo $id_ficha; ?>)"><i class='bx bx-list-ol'></i> Historial</button>
+                            </div>
+
+
                         </div>
 
                         <hr>
@@ -637,6 +648,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                             <input type="hidden" id="sa_conp_id" name="sa_conp_id">
                             <input type="hidden" id="sa_fice_id" name="sa_fice_id" value="<?= $id_ficha; ?>">
+
+                            <input type="hidden" id="sa_conp_nivel" name="sa_conp_nivel">
+                            <input type="hidden" id="sa_conp_paralelo" name="sa_conp_paralelo">
+                            <input type="hidden" id="sa_conp_edad" name="sa_conp_edad">
 
                             <input type="hidden" id="sa_conp_notificacion_envio_representante" name="sa_conp_notificacion_envio_representante">
                             <input type="hidden" id="sa_id_representante" name="sa_id_representante">
@@ -650,8 +665,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <input type="hidden" id="sa_conp_notificacion_envio_guardia" name="sa_conp_notificacion_envio_guardia">
                             <input type="hidden" id="sa_id_guardia" name="sa_id_guardia">
 
-
-                            <div class="row">
+                            <div class="row" hidden>
                                 <div class="col-md-3">
                                     <label for="" class="form-label">Fecha: <label style="color: red;">*</label> </label>
                                     <input type="date" class="form-control form-control-sm" id="sa_conp_fecha_ingreso" name="sa_conp_fecha_ingreso" value="<?= date('Y-m-d'); ?>">
@@ -669,8 +683,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                     <input type="text" class="form-control form-control-sm" id="sa_conp_tiempo_aten" name="sa_conp_tiempo_aten" readonly>
                                 </div>
                             </div>
-                            <br>
-                            <hr>
+
+
 
                             <div id="main_consulta" style="display: block;" class="pt-4">
                                 <ul class="nav nav-tabs nav-success" role="tablist">
@@ -765,7 +779,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                     <div class="row pt-3">
                                                         <div class="col-md-3">
                                                             <label for="" class="form-label">Fecha de Entrega del Certificado: <label style="color: red;">*</label> </label>
-                                                            <input type="date" class="form-control form-control-sm" id="sa_conp_fecha_entrega_certificado" name="sa_conp_fecha_entrega_certificado">
+                                                            <input type="date" class="form-control form-control-sm" id="sa_conp_fecha_entrega_certificado" name="sa_conp_fecha_entrega_certificado" value="<?= date('Y-m-d'); ?>">
                                                         </div>
 
                                                         <div class="col-md-3">
@@ -781,11 +795,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                             <input type="text" class="form-control form-control-sm" id="sa_conp_dias_permiso_certificado" name="sa_conp_dias_permiso_certificado">
                                                         </div>
                                                     </div>
+
+                                                    <?php if ($tipo_consulta == 'certificado') { ?>
+                                                        <div class="row pt-3">
+                                                            <div class="col-md-12">
+                                                                <label for="" class="form-label">Observaciones: <label style="color: red;">*</label> </label>
+                                                                <textarea name="sa_conp_observaciones" id="sa_conp_observaciones" cols="30" rows="1" class="form-control" placeholder="Observaciones"></textarea>
+                                                            </div>
+                                                        </div>
+                                                    <?php } ?>
                                                 </div>
 
                                                 <div class="modal-footer pt-4" id="seccion_boton_consulta">
 
-                                                    <button class="btn btn-danger btn-sm px-2 m-1" onclick="editar_insertar(1, 1, 1, 0, 2)" type="button"><i class='bx bx-pause-circle'></i> En Proceso</button>
+                                                    <button hidden class="btn btn-danger btn-sm px-2 m-1" onclick="editar_insertar(1, 1, 1, 0, 2)" type="button"><i class='bx bx-pause-circle'></i> En Proceso</button>
 
                                                     <button class="btn btn-success btn-sm px-2 m-1" onclick="editar_insertar(1, 1, 1, 0, 1)" type="button"><i class="bx bx-save"></i> Finalizar</button>
 
@@ -794,6 +817,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                         </div>
 
                                     </div>
+
                                     <?php if ($tipo_consulta == 'consulta') { ?>
                                         <div class="tab-pane fade show" id="consulta_tab" role="tabpanel">
 
@@ -808,9 +832,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                     <div id="flush-estudiante" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#consulta_acordeon">
                                                         <div class="accordion-body">
 
-                                                            <input type="hidden" id="sa_conp_nivel" name="sa_conp_nivel">
-                                                            <input type="hidden" id="sa_conp_paralelo" name="sa_conp_paralelo">
-                                                            <input type="hidden" id="sa_conp_edad" name="sa_conp_edad">
+
 
                                                             <div class="row pt-3">
                                                                 <div class="col-12">
@@ -891,9 +913,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                                             <div>
                                                 <!-- Consulta -->
-                                                <div <?php if ($tipo_consulta != 'consulta') {
-                                                            echo 'hidden';
-                                                        } ?>>
+                                                <div>
 
                                                     <div class="row pt-0">
 
@@ -952,7 +972,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                             <div class="row pt-2">
                                                                 <div class="col-md-4">
                                                                     <label for="" class="form-label">Fecha Permiso de Salida: <label style="color: red;">*</label> </label>
-                                                                    <input type="date" class="form-control form-control-sm" id="sa_conp_fecha_permiso_salud_salida" name="sa_conp_fecha_permiso_salud_salida">
+                                                                    <input type="date" class="form-control form-control-sm" id="sa_conp_fecha_permiso_salud_salida" name="sa_conp_fecha_permiso_salud_salida" value="<?= date('Y-m-d'); ?>">
                                                                 </div>
 
                                                                 <div class="col-md-4">
@@ -1021,7 +1041,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                                                 <div class="modal-footer pt-4" id="seccion_boton_consulta">
 
-                                                    <button class="btn btn-danger btn-sm px-2 m-1" onclick="editar_insertar(1, 1, 1, 0, 2)" type="button"><i class='bx bx-pause-circle'></i> En Proceso</button>
+                                                    <button hidden class="btn btn-danger btn-sm px-2 m-1" onclick="editar_insertar(1, 1, 1, 0, 2)" type="button"><i class='bx bx-pause-circle'></i> En Proceso</button>
 
                                                     <button class="btn btn-success btn-sm px-2 m-1" onclick="editar_insertar(1, 1, 1, 0, 1)" type="button"><i class="bx bx-save"></i> Finalizar</button>
 
@@ -1030,9 +1050,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                             </div>
 
                                         </div>
-                                    <?php   } ?>
+                                    <?php } ?>
+
+
                                     <?php if ($tipo_consulta == 'consulta') { ?>
-                                        <div class="tab-pane fade show" id="recetario_tab" role="tabpanel">
+                                        <div class="tab-pane fade show" id="recetario_tab" role="tabpanel" <?php if ($tipo_consulta != 'consulta') {
+                                                                                                                echo 'hidden';
+                                                                                                            } ?>>
                                             <div>
 
                                                 <!-- Consulta -->
@@ -1101,14 +1125,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                                                 <div class="modal-footer pt-4" id="seccion_boton_consulta">
 
-                                                    <button class="btn btn-danger btn-sm px-2 m-1" onclick="editar_insertar(1, 1, 1, 0, 2)" type="button"><i class='bx bx-pause-circle'></i> En Proceso</button>
+                                                    <button hidden class="btn btn-danger btn-sm px-2 m-1" onclick="editar_insertar(1, 1, 1, 0, 2)" type="button"><i class='bx bx-pause-circle'></i> En Proceso</button>
 
                                                     <button class="btn btn-success btn-sm px-2 m-1" onclick="editar_insertar(1, 1, 1, 0, 1)" type="button"><i class="bx bx-save"></i> Finalizar</button>
 
                                                 </div>
                                             </div>
                                         </div>
-                                    <?php   } ?>
+                                    <?php } ?>
+
+
+
                                 </div>
                             </div>
                         </form>
@@ -1125,6 +1152,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $('input[name=sa_conp_permiso_salida]').change(function() {
         if ($(this).val() === 'SI') {
             $('#permiso_salida').show();
+
+            hora_hasta = obtener_hora_hasta();
+            $('#sa_conp_hora_permiso_salida').val(hora_hasta);
+
         } else if ($(this).val() === 'NO') {
             $('#permiso_salida').hide();
             $('#permiso_salida_tipo').hide();

@@ -62,7 +62,7 @@ class ficha_MedicaM
                     sa_fice_pac_grupo_sangre,
                     sa_fice_pac_direccion_domicilio,
                     sa_fice_pac_seguro_medico,
-                    sa_fice_pac_seguro_medico,
+                    sa_fice_pac_seguro_predeterminado,
                 
                     sa_fice_rep_1_primer_apellido,
                     sa_fice_rep_1_segundo_apellido,
@@ -123,7 +123,7 @@ class ficha_MedicaM
                         sa_fice_pac_grupo_sangre,
                         sa_fice_pac_direccion_domicilio,
                         sa_fice_pac_seguro_medico,
-                        sa_fice_pac_seguro_medico,
+                        sa_fice_pac_seguro_predeterminado,
                     
                         sa_fice_rep_1_primer_apellido,
                         sa_fice_rep_1_segundo_apellido,

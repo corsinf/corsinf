@@ -6,6 +6,12 @@ if (isset($_GET['id_consulta'])) {
     $id_consulta = $_GET['id_consulta'];
 }
 
+$tipo_consulta = '';
+
+if (isset($_GET['tipo_consulta'])) {
+    $tipo_consulta = $_GET['tipo_consulta'];
+}
+
 $id_paciente = '';
 
 if (isset($_GET['id_paciente'])) {
@@ -17,15 +23,19 @@ if (isset($_GET['id_paciente'])) {
 <script type="text/javascript">
     $(document).ready(function() {
         var id_consulta = '<?php echo $id_consulta; ?>';
-        ver_pdf_controlador(id_consulta);
+        ver_pdf_consulta(id_consulta);
         datos_col_consulta(id_consulta);
 
         //var id_paciente = '<?php echo $id_paciente; ?>';
 
     });
 
-    function ver_pdf_controlador(id_consulta) {
+    function ver_pdf_consulta(id_consulta) {
         $('#ifr_pdf_consulta').prop('src', '../controlador/consultasC.php?pdf_consulta=true&id_consulta=' + id_consulta);
+        $('#ifr_pdf_receta').prop('src', '../controlador/consultasC.php?pdf_recetario=true&id_consulta=' + id_consulta);
+        $('#ifr_pdf_notificacion').prop('src', '../controlador/consultasC.php?pdf_notificacion=true&id_consulta=' + id_consulta);
+
+
     }
 
     function datos_col_consulta(id_consulta) {
@@ -139,28 +149,117 @@ if (isset($_GET['id_paciente'])) {
                                 <button class="btn btn-success btn-sm px-2 m-1" onclick="editar_insertar()" type="button"><i class="bx bx-save"></i> Guardar</button>
                             </div>
 
-                            <br>
-                            <hr>
 
-                            <section class="content">
-                                <div class="container-fluid">
-
-                                    <p>Abrir solo <a href="../controlador/consultasC.php?pdf_consulta=true&id_consulta=<?= $id_consulta; ?>" TARGET="_BLANK">PDF</a></p>
-                                    <div class="col-xs-12 col-sm-12 col-md-12">
-                                        <div class="panel">
-                                            <div class="embed-responsive embed-responsive-4by3" style="margin-top: 30px">
-                                                <iframe class="embed-responsive-item" id="ifr_pdf_consulta" width="90%" height="1000" src="">
+                            <div class="col">
+                                <h6 class="mb-0 text-uppercase">Documentos</h6>
+                                <hr />
 
 
-
-                                                </iframe>
-
+                                <ul class="nav nav-tabs nav-success" role="tablist">
+                                    <li class="nav-item" role="presentation">
+                                        <a class="nav-link active" data-bs-toggle="tab" href="#tab_hoja" role="tab" aria-selected="true">
+                                            <div class="d-flex align-items-center">
+                                                <div class="tab-icon"><i class='bx bx-receipt font-18 me-1'></i></i>
+                                                </div>
+                                                <div class="tab-title">Notificación</div>
                                             </div>
-                                        </div>
-                                    </div>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item" role="presentation">
+                                        <a class="nav-link" data-bs-toggle="tab" href="#tab_formulario" role="tab" aria-selected="false">
+                                            <div class="d-flex align-items-center">
+                                                <div class="tab-icon"><i class='bx bx-file font-18 me-1'></i>
+                                                </div>
+                                                <div class="tab-title">Formulario</div>
+                                            </div>
+                                        </a>
+                                    </li>
+                                    <?php if ($tipo_consulta == 'consulta') { ?>
+                                        <li class="nav-item" role="presentation">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#tab_recetario" role="tab" aria-selected="false">
+                                                <div class="d-flex align-items-center">
+                                                    <div class="tab-icon"><i class='bx bxs-capsule font-18 me-1'></i>
+                                                    </div>
+                                                    <div class="tab-title">Recetario</div>
+                                                </div>
+                                            </a>
+                                        </li>
+                                    <?php } ?>
 
-                                </div><!-- /.container-fluid -->
-                            </section>
+                                </ul>
+                                <div class="tab-content py-3">
+                                    <div class="tab-pane fade show active" id="tab_hoja" role="tabpanel">
+
+                                        <section class="content">
+                                            <div class="container-fluid">
+
+                                                <p>Abrir solo <a href="../controlador/consultasC.php?pdf_notificacion=true&id_consulta=<?= $id_consulta; ?>" TARGET="_BLANK">PDF</a></p>
+
+                                                <div class="col-xs-12 col-sm-12 col-md-12">
+                                                    <div class="panel">
+                                                        <div class="embed-responsive embed-responsive-4by3" style="margin-top: 30px">
+                                                            <iframe class="embed-responsive-item" id="ifr_pdf_notificacion" width="90%" height="1000" src="">
+
+
+
+                                                            </iframe>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div><!-- /.container-fluid -->
+                                        </section>
+                                    </div>
+                                    <div class="tab-pane fade" id="tab_formulario" role="tabpanel">
+
+                                        <section class="content">
+                                            <div class="container-fluid">
+
+                                                <p>Abrir solo <a href="../controlador/consultasC.php?pdf_consulta=true&id_consulta=<?= $id_consulta; ?>" TARGET="_BLANK">PDF</a></p>
+
+                                                <div class="col-xs-12 col-sm-12 col-md-12">
+                                                    <div class="panel">
+                                                        <div class="embed-responsive embed-responsive-4by3" style="margin-top: 30px">
+                                                            <iframe class="embed-responsive-item" id="ifr_pdf_consulta" width="90%" height="1000" src="">
+
+
+
+                                                            </iframe>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div><!-- /.container-fluid -->
+                                        </section>
+                                    </div>
+                                    <?php if ($tipo_consulta == 'consulta') { ?>
+                                        <div class="tab-pane fade" id="tab_recetario" role="tabpanel">
+
+                                            <section class="content">
+                                                <div class="container-fluid">
+
+                                                    <p>Abrir solo <a href="../controlador/consultasC.php?pdf_recetario=true&id_consulta=<?= $id_consulta; ?>" TARGET="_BLANK">PDF</a></p>
+
+                                                    <div class="col-xs-12 col-sm-12 col-md-12">
+                                                        <div class="panel">
+                                                            <div class="embed-responsive embed-responsive-4by3" style="margin-top: 30px">
+                                                                <iframe class="embed-responsive-item" id="ifr_pdf_receta" width="90%" height="1000" src="">
+
+
+
+                                                                </iframe>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div><!-- /.container-fluid -->
+                                            </section>
+                                        </div>
+                                    <?php } ?>
+
+                                </div>
+
+
+                            </div>
+
+
                             <!-- /.content -->
                         </div>
                     </div>

@@ -110,7 +110,11 @@ if (isset($_GET['pac_id'])) {
                     botones = '';
                     botones += '<div class="d-inline">';
 
-                    botones += '<button type="button" class="btn btn-primary btn-sm m-1" title="Detalles de la Consulta" onclick="ver_pdf(' + item.sa_conp_id + ')"> <i class="bx bx-file me-0"></i></button>';
+                    //botones += '<button type="button" class="btn btn-primary btn-sm m-1" title="Detalles de la Consulta" onclick="ver_pdf(' + item.sa_conp_id + ')"> <i class="bx bx-file me-0"></i></button>';
+
+                    botones += '<button type="button" class="btn btn-primary btn-sm m-1" title="Detalles de la Consulta" onclick="ver_pdf(' + item.sa_conp_id + ', \'' + item.sa_conp_tipo_consulta + '\')"> <i class="bx bx-file me-0"></i></button>';
+
+                    
 
                     if (item.sa_conp_estado_revision == 0 || item.sa_conp_estado_revision == 2) {
                       botones += '<a href="../vista/inicio.php?mod=7&acc=registrar_consulta_paciente&id_consulta=' + item.sa_conp_id + '&tipo_consulta=' + item.sa_conp_tipo_consulta + '&id_ficha=' + item.sa_fice_id + '&id_paciente=' + item.sa_pac_id + '" class="btn btn-warning btn-sm m-0" title="Detalles de la Consulta"><i class="bx bx-edit me-0" ></i></a>';
@@ -182,9 +186,9 @@ if (isset($_GET['pac_id'])) {
   }
 
 
-  function ver_pdf(id_consulta) {
+  function ver_pdf(id_consulta, tipo_consulta) {
     console.log(id_consulta);
-    window.open('../vista/inicio.php?mod=7&acc=detalle_consulta&pdf_consulta=true&id_consulta=' + id_consulta + '&id_paciente=' + <?= $sa_pac_id; ?>, '_blank');
+    window.open('../vista/inicio.php?mod=7&acc=detalle_consulta&pdf_consulta=true&id_consulta=' + id_consulta + '&id_paciente=' + <?= $sa_pac_id; ?> + '&tipo_consulta=' + tipo_consulta, '_blank');
   }
 </script>
 
