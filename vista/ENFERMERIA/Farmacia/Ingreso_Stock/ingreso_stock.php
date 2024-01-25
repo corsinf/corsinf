@@ -1,8 +1,66 @@
 
 <script type="text/javascript">
+	var tablaAll;
+	var tablaMedi;
+	var tablaInsu;
     $(document).ready(function() {
     	lista_proveedor();
-        $('#tabla_insumos').DataTable({
+    	tablaAll = $('#tabla_todos').DataTable({
+            language: {
+                url: 'https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
+            },
+            responsive: true,
+            ajax: {
+                url: '../controlador/ingreso_stockC.php?lista_kardex=true',
+                dataSrc: ''
+            },
+            columns: [{
+                    data: null,
+                    render: function(data, type, item, meta) {
+                        return meta.row + 1;
+                    }
+                },
+                {
+                    data: null,
+                    render: function(data, type, item) {
+                        return formatoDate(item.Fecha.date);
+                    }
+                },
+                {
+                    data: null,
+                    render: function(data, type, item) {
+                        return '<a href="../vista/inicio.php?mod=7&acc=registrar_insumos&id=' + item.id_ar + '"><u>' + item.Productos + '</u></a>';
+                    }
+                },
+                {
+                    data: 'Tipo'
+                },
+                {
+                    data: 'Entrada'
+                },
+                {
+                    data: 'Salida'
+                },
+                {
+                    data: 'Precio'
+                },
+                {
+                    data: 'Stock'
+                },
+                {
+                    data: 'Serie'
+                },
+                {
+                    data: 'Factura'
+                },
+            ],
+            dom: "<'row'<'col-sm-6'B><'col-sm-6'f>><'row'<'col-sm-12'tr>><'row'<'col-sm-5'i><'col-sm-7'p>>", // Agrega los botones al contenedor DOM
+		    buttons: [
+		        'excel', 'pdf' // Configura los botones que deseas
+		    ]
+        });
+
+tablaInsu = $('#tabla_insumos').DataTable({
             language: {
                 url: 'https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
             },
@@ -32,13 +90,12 @@
                 {
                     data: 'sa_cins_stock'
                 },
-                {
-                    data: 'sa_cins_movimiento'
-                },
+                
             ]
         });
 
-         $('#tabla_medicamentos').DataTable({
+       
+       tablaMedi =  $('#tabla_medicamentos').DataTable({
             language: {
                 url: 'https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
             },
@@ -70,10 +127,7 @@
                 },
                 {
                     data: 'sa_cmed_stock'
-                },
-                {
-                    data: 'sa_cmed_movimiento'
-                },
+                }
             ]
         });
 
@@ -175,9 +229,9 @@ function modal_ingreso(tipo)
      var ddl = $('#ddl_tipo option:selected').text();
      var datos = datos+'&ddl_tipo='+ddl;
      
-     if($('#ddl_familia_modal').val()=='' || $('#txt_ref').val()=='' || $('#txt_nombre').val()=='' || $('#txt_reg_sanitario').val()=='')
+     if($('#ddl_proveedor').val()=='' || $('#ddl_lista_productos').val()=='' || $('#txt_precio').val()=='0' || $('#txt_precio').val()=='' || $('#txt_serie').val()=='' || $('#txt_factura').val()=='' || $('#txt_fecha_ela').val()=='' || $('#txt_fecha_exp').val()=='')
      {
-       Swal.fire('','Llene todo lso campos.','info');   
+       Swal.fire('','Llene todo los campos.','info');   
       return false;
      }
 
@@ -192,7 +246,15 @@ function modal_ingreso(tipo)
           $('#Nuevo_producto').modal('hide');
         if(response==1)
         {
-          Swal.fire('Ingresado a stock.','','success'); 
+         
+          Swal.fire('Ingresado a stock.','','success').then(function()
+          	{
+          		if (tablaAll) {
+			        tablaAll.ajax.reload();
+			        tablaInsu.ajax.reload();
+					tablaMedi.ajax.reload();
+			    }
+          	}); 
           limpiar_nuevo_producto();         
         }
       }
@@ -247,7 +309,17 @@ function modal_ingreso(tipo)
                                     	<div class="col-sm-12">
 											<ul class="nav nav-tabs nav-success" role="tablist" id="myTabs">
 												<li class="nav-item" role="presentation">
-													<a class="nav-link active" data-bs-toggle="tab" href="#Medicamento" role="tab" aria-selected="true">
+													<a class="nav-link active" data-bs-toggle="tab" href="#all" role="tab" aria-selected="true">
+														<div class="d-flex align-items-center">
+															<div class="tab-icon">
+																<i class='bx bxs-capsule font-18 me-1' ></i>
+															</div>
+															<div class="tab-title">Todos</div>
+														</div>
+													</a>
+												</li>
+												<li class="nav-item" role="presentation">
+													<a class="nav-link" data-bs-toggle="tab" href="#Medicamento" role="tab" aria-selected="true">
 														<div class="d-flex align-items-center">
 															<div class="tab-icon">
 																<i class='bx bxs-capsule font-18 me-1' ></i>
@@ -268,7 +340,30 @@ function modal_ingreso(tipo)
 												</li>												
 											</ul>
 											<div class="tab-content py-3">
-												<div class="tab-pane fade show active" id="Medicamento" role="tabpanel">
+												<div class="tab-pane fade show active" id="all" role="tabpanel">
+													<div class="table-responsive">
+				                                        <table class="table table-striped responsive " id="tabla_todos" style="width:100%">
+				                                            <thead>
+				                                                <tr>
+				                                                    <th>#</th>
+				                                                    <th>Fecha Ingreso</th>
+				                                                    <th>Productos</th>
+				                                                    <th>Tipo</th>
+				                                                    <th>Entrada</th>
+				                                                    <th>Salida</th>
+				                                                    <th>Precio</th>
+				                                                    <th>Stock</th>
+				                                                    <th>Serie</th>
+				                                                    <th>Factura</th>
+				                                                </tr>
+				                                            </thead>
+				                                            <tbody>
+
+				                                            </tbody>
+				                                        </table>
+				                                    </div>
+												</div>
+												<div class="tab-pane fade show" id="Medicamento" role="tabpanel">
 													<div class="table-responsive">
 				                                        <table class="table table-striped responsive " id="tabla_medicamentos" style="width:100%">
 				                                            <thead>
@@ -279,7 +374,6 @@ function modal_ingreso(tipo)
 				                                                    <th>Serie</th>
 				                                                    <th>Mínimos</th>
 				                                                    <th>Stock</th>
-				                                                    <th>Movimiento</th>
 				                                                </tr>
 				                                            </thead>
 				                                            <tbody>
@@ -298,7 +392,6 @@ function modal_ingreso(tipo)
 				                                                    <th>Lote</th>
 				                                                    <th>Mínimos</th>
 				                                                    <th>Stock</th>
-				                                                    <th>Movimiento</th>
 				                                                </tr>
 				                                            </thead>
 				                                            <tbody>
@@ -338,7 +431,7 @@ function modal_ingreso(tipo)
 					<div class="col-sm-4">
 						<b>Proveedor</b>
 						<select class="form-select form-select-sm mb-3" id="ddl_proveedor" name="ddl_proveedor">
-							<option>Seleccione proveedor</option>
+							<option value="">Seleccione proveedor</option>
 						</select>
 					</div>
 					<div class="col-sm-3">
@@ -379,7 +472,7 @@ function modal_ingreso(tipo)
 		           </div>
 		           <div class="col-sm-1">
 		            <b>Unidad</b>
-		            <input type="" name="txt_unidad" id="txt_unidad" class="form-control form-control-sm">             
+		            <input type="" name="txt_unidad" id="txt_unidad" class="form-control form-control-sm" value="">             
 		           </div>
 		           <div class="col-sm-1" style="padding: 0px;">
 		              <b>Lleva iva</b><br>
@@ -406,11 +499,11 @@ function modal_ingreso(tipo)
 		            </div>
 		            <div class="col-sm-2">
 		               <b>Procedencia</b>
-		                  <input type="text" name="txt_procedencia" id="txt_procedencia" class="form-control form-control-sm">
+		                  <input type="text" name="txt_procedencia" id="txt_procedencia" class="form-control form-control-sm" value=".">
 		            </div>
 		            <div class="col-sm-2">
 		               <b>Lote</b>
-		                  <input type="text" name="txt_lote" id="txt_lote" class="form-control form-control-sm">
+		                  <input type="text" name="txt_lote" id="txt_lote" class="form-control form-control-sm" value=".">
 		            </div>              
 		        </div>
 		        <div class="row">                

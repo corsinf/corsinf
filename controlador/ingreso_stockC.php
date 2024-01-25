@@ -27,6 +27,10 @@ if(isset($_GET['producto_nuevo']))
 	$parametros = $_POST;
 	echo json_encode($controlador->producto_nuevo_entrada($parametros));
 }
+if(isset($_GET['lista_kardex']))
+{
+	echo json_encode($controlador->lista_kardex());
+}
 
 class ingreso_stockC 
 {
@@ -232,6 +236,13 @@ class ingreso_stockC
 		}
 
 
+	}
+
+	function lista_kardex()
+	{
+		$datos = $this->modelo->lista_kardex();
+		// print_r($datos);die();
+		return $datos;
 	}
 
 
