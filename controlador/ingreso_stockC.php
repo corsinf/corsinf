@@ -163,7 +163,7 @@ class ingreso_stockC
 				break;
 			case 'Insumos':
 				$productos = $this->insumos->lista_insumos($parametros['ddl_lista_productos']);
-				$referencia = $productos[0]["sa_cmed_referencia"];
+				$referencia = $productos[0]["sa_cins_referencia"];
 				$id_articulo  = $productos[0]["sa_cins_id"];
 				$lotes = $productos[0]["sa_cins_lote"];
 				$unidad = $productos[0]["sa_cins_unidad"];
@@ -181,6 +181,7 @@ class ingreso_stockC
 
 		//actualizar producto y kardex
 		$pro = $this->modelo->stock($parametros['ddl_lista_productos'],$parametros['ddl_tipo']);
+		$subtotal = floatval($pro[0]['sa_kar_valor_unitario'])*floatval($parametros['txt_canti']);
 
 		$exist = floatval($stock)-floatval($parametros['txt_canti']);
 		$datos = array(
@@ -195,8 +196,8 @@ class ingreso_stockC
 		   	array('campo'=>'sa_kar_salida','dato'=>$parametros['txt_canti']),	
 		   	array('campo'=>'sa_kar_valor_unitario','dato'=>$pro[0]['sa_kar_valor_unitario']),	
 		   	array('campo'=>'sa_kar_existencias','dato'=> $exist),	
-		   	array('campo'=>'sa_kar_subtotal','dato'=>$parametros['txt_subtotal']),
-		   	array('campo'=>'sa_kar_valor_total','dato'=>$parametros['txt_total']),
+		   	array('campo'=>'sa_kar_subtotal','dato'=>$subtotal),
+		   	array('campo'=>'sa_kar_valor_total','dato'=>$subtotal),
 		   	array('campo'=>'sa_kar_tipo','dato'=>$parametros['ddl_tipo']),
 		   	array('campo'=>'sa_kar_orden_no','dato'=>$orden)					   
 		);			
