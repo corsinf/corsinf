@@ -43,12 +43,28 @@ if (isset($_GET['administrar_comunidad_ficha_medica'])) {
     echo json_encode($controlador->crear_paciente_ficha_medica($sa_pac_id_comunidad, $sa_pac_tabla));
 }
 
+if (isset($_GET['id_paciente_id_comunidad_tabla'])) {
+
+    $sa_pac_id_comunidad = '';
+    $sa_pac_tabla = '';
+
+    if (isset($_POST['sa_pac_id_comunidad'])) {
+        $sa_pac_id_comunidad = $_POST['sa_pac_id_comunidad'];
+    }
+
+    if (isset($_POST['sa_pac_tabla'])) {
+        $sa_pac_tabla = $_POST['sa_pac_tabla'];
+    }
+
+    echo json_encode($controlador->id_paciente_id_comunidad_tabla($sa_pac_id_comunidad, $sa_pac_tabla));
+}
+
 if (isset($_GET['lista_seguros'])) {
     $parametros = $_POST['parametros'];
     echo json_encode($controlador->lista_seguros($parametros));
 }
 
-//print_r($controlador->lista_ficha_medica(''));
+//print_r($controlador->id_paciente_id_comunidad_tabla('3','estudiantes'));
 
 /*$parametros = array(
     'sa_sec_id' => 1,
@@ -195,5 +211,10 @@ class ficha_MedicaC
 
 
         return $this->modelo->gestion_comunidad_ficha_medica($sa_pac_id_comunidad, $sa_pac_tabla);
+    }
+
+    function id_paciente_id_comunidad_tabla($sa_pac_id_comunidad, $sa_pac_tabla)
+    {
+        return $this->modelo->obtener_id_tabla_paciente($sa_pac_id_comunidad, $sa_pac_tabla);
     }
 }

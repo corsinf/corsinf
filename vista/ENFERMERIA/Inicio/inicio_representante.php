@@ -53,8 +53,11 @@
 
     function consultar_datos_estudiante_representante(id_representante = '') {
         var estudiantes = '';
-        var estudiantes2 = '  <option value="">-- Seleccione --</option>';
+        var estudiantes2 = '<option value="">-- Seleccione --</option>';
         var ids = '';
+        var contador_alertas = 0;
+        var contador_alertas_div = 1;
+
         $.ajax({
             data: {
                 id_representante: id_representante,
@@ -62,33 +65,88 @@
             url: '../controlador/estudiantesC.php?listar_estudiante_representante=true',
             type: 'post',
             dataType: 'json',
-            //Para el id representante tomar los datos con los de session
             success: function(response) {
                 console.log(response);
                 $.each(response, function(i, item) {
-
                     sexo_estudiante = '';
                     if (item.sa_est_sexo == 'Masculino') {
                         sexo_estudiante = 'Masculino';
-                    } else if (item.sa_est_sexo == 'Famenino') {
-                        sexo_estudiante = 'Famenino';
+                    } else if (item.sa_est_sexo == 'Femenino') {
+                        sexo_estudiante = 'Femenino';
                     }
 
                     curso = item.sa_sec_nombre + '/' + item.sa_gra_nombre + '/' + item.sa_par_nombre;
 
-                    alert = '<div class="alert border-0 border-start border-5 border-danger alert-dismissible fade show py-2">' +
+                    alert_finalizado =
+                        '<div class="alert border-0 border-start border-5 border-success alert-dismissible fade show py-2">' +
                         '<div class="d-flex align-items-center">' +
-                        '<div class="font-35 text-danger"><i class="bx bxs-message-square-x"></i>' +
+                        '<div class="font-35 text-success"><i class="bx bxs-check-circle"></i>' +
                         '</div>' +
                         '<div class="ms-3">' +
-                        '<h6 class="mb-0 text-danger text-start">¡Atención!</h6>' +
-                        '<div class="mb-0 text-start">La ficha médica aún no esta realizada</div>' +
+                        '<h6 class="mb-0 text-success">La ficha médica se ha guardado correctamente.</h6>' +
                         '</div>' +
                         '</div>' +
                         '</div>';
 
+                    alert_proceso =
+                        '<div class="alert border-0 border-start border-5 border-warning alert-dismissible fade show py-2">' +
+                        '<div class="d-flex align-items-center">' +
+                        '<div class="font-35 text-warning"><i class="bx bx-info-circle"></i>' +
+                        '</div>' +
+                        '<div class="ms-3">' +
+                        '<h6 class="mb-0 text-warning">Falta completar datos en la ficha médica.</h6>' +
+                        '</div>' +
+                        '</div>' +
+                        '</div>';
 
+                    $.ajax({
+                        data: {
+                            sa_pac_id_comunidad: item.sa_est_id,
+                            sa_pac_tabla: item.sa_est_tabla,
+                        },
+                        url: '../controlador/ficha_MedicaC.php?id_paciente_id_comunidad_tabla=true',
+                        type: 'post',
+                        dataType: 'json',
+                        success: function(response) {
+                            alert_salida = '';
+                            console.log(response);
 
+                            if (response === null) {
+                                // Si la respuesta es nula o no es un objeto JSON válido
+                                alert_salida =
+                                    '<div class="alert border-0 border-start border-5 border-danger alert-dismissible fade show py-2">' +
+                                    '<div class="d-flex align-items-center">' +
+                                    '<div class="font-35 text-danger"><i class="bx bxs-message-square-x"></i>' +
+                                    '</div>' +
+                                    '<div class="ms-3">' +
+                                    '<h6 class="mb-0 text-danger text-start">¡Atención!</h6>' +
+                                    '<div class="mb-0 text-start">La ficha médica aún no está realizada</div>' +
+                                    '</div>' +
+                                    '</div>' +
+                                    '</div>';
+                            } else {
+                                // Si la respuesta es válida (no nula y es un objeto JSON)
+                                alert_salida =
+                                    '<div class="alert border-0 border-start border-5 border-warning alert-dismissible fade show py-2">' +
+                                    '<div class="d-flex align-items-center">' +
+                                    '<div class="font-35 text-warning"><i class="bx bx-info-circle"></i>' +
+                                    '</div>' +
+                                    '<div class="ms-3">' +
+                                    '<h6 class="mb-0 text-warning">Falta completar datos en la ficha médica.</h6>' +
+                                    '</div>' +
+                                    '</div>' +
+                                    '</div>';
+                            }
+
+                            // Incrementa el contador aquí
+                            contador_alertas++;
+
+                            // Actualiza el contenido del elemento con el ID "alert_notificacion"
+                            $('#alert_notificacion_' + contador_alertas).html(alert_salida);
+
+                            console.log(contador_alertas);
+                        }
+                    });
 
                     estudiantes +=
                         '<div class="col-12">' +
@@ -96,7 +154,7 @@
                         '<div class="card-body text-center">' +
                         '<div class="p-4 border radius-15">' +
 
-                        alert +
+                        '<div id="alert_notificacion_' + (contador_alertas_div) + '"></div>' +
 
                         '<img src="../img/computadora.jpg" width="110" height="110" class="rounded-circle shadow" alt="">' +
                         '<h5 class="mb-0 mt-5">' + item.sa_est_primer_apellido + ' ' + item.sa_est_segundo_apellido + ' ' + item.sa_est_primer_nombre + ' ' + item.sa_est_segundo_nombre + '</h5>' +
@@ -116,14 +174,16 @@
                         '<option value="' + item.sa_est_id + '">' + item.sa_est_primer_apellido + ' ' + item.sa_est_segundo_apellido + ' ' + item.sa_est_primer_nombre + ' ' + item.sa_est_segundo_nombre + '</option>';
 
                     ids += item.sa_est_id + ',';
+
+                    contador_alertas_div++;
                 });
 
                 $('#card_estudiantes').html(estudiantes);
-
                 $('#lista_estudiantes').html(estudiantes2);
                 $('#ids_est').val(ids);
                 lista_seguros();
 
+                
             }
         });
     }
@@ -319,7 +379,7 @@
                                             </table>
                                         </div>
                                     </div>
-                                   
+
 
                                 </div>
                             </div>

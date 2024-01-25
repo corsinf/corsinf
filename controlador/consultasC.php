@@ -9,6 +9,7 @@ include('../lib/phpmailer/enviar_emails.php');
 include('../lib/pdf/fpdf.php');
 include('../modelo/det_consultaM.php');
 
+include('ingreso_stockC.php');
 
 
 $controlador = new consultasC();
@@ -100,7 +101,7 @@ if (isset($_GET['pdf_notificacion'])) {
 }
 
 
-//print_r($controlador->lista_consultas(''));
+//print_r($controlador->ret(''));
 
 /*$parametros = array(
     'sa_sec_id' => 1,
@@ -120,6 +121,7 @@ class consultasC
     private $pacientesM;
     private $email;
     private $det_consultaM;
+    private $ingreso_stock;
     function __construct()
     {
         $this->modelo = new consultasM();
@@ -127,6 +129,7 @@ class consultasC
         $this->pacientesM = new pacientesM();
         $this->email = new enviar_emails();
         $this->det_consultaM = new det_consultaM();
+        $this->ingreso_stock = new ingreso_stockC();
     }
 
     function lista_consultas_ficha($id_ficha)
@@ -246,9 +249,9 @@ class consultasC
                         $datos_farmacologia = array();
 
                         $estado_entrega = -1;
-                        if ($fila['sa_det_conp_estado_entrega'] == true) {
+                        if ($fila['sa_det_conp_estado_entrega'] == 'true') {
                             $estado_entrega = 1;
-                        } elseif ($fila['sa_det_conp_estado_entrega'] == false) {
+                        } elseif ($fila['sa_det_conp_estado_entrega'] == 'false') {
                             $estado_entrega = 0;
                         }
 
@@ -259,10 +262,36 @@ class consultasC
                             array('campo' => 'sa_det_conp_nombre', 'dato' => $fila['sa_det_conp_nombre']),
                             array('campo' => 'sa_det_conp_cantidad', 'dato' => $fila['sa_det_conp_cantidad']),
                             array('campo' => 'sa_det_conp_dosificacion', 'dato' => $fila['sa_det_conp_dosificacion']),
-                            array('campo' => 'sa_det_conp_estado_entrega', 'dato' => $estado_entrega),
+                            array('campo' => 'sa_det_conp_estado_entrega', 'dato' =>  $estado_entrega),
                         );
 
                         $datos_farmacologia = $this->det_consultaM->insertar($datos_farmacologia);
+
+                        //Insertar 
+                        ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                        //Para reducir el stock
+                        if ($estado_entrega == 1) {
+                            $tipo_tabla = '';
+                            if ($fila['sa_det_conp_tipo'] == 'medicamentos') {
+                                $tipo_tabla = ucfirst($fila['sa_det_conp_tipo']);
+                                $tipo_tabla = substr($tipo_tabla, 0, -1);
+                            } else if ($fila['sa_det_conp_tipo'] == 'insumos') {
+                                $tipo_tabla = ucfirst($fila['sa_det_conp_tipo']);
+                            }
+
+                            $datos_stock = array(
+                                'orden' => 'Consulta - '.$id_insert,
+                                'ddl_tipo' => $tipo_tabla,
+                                'ddl_lista_productos' => $fila['sa_det_conp_id_cmed_cins'],
+                                'txt_canti' => $fila['sa_det_conp_cantidad'],
+                                'txt_subtotal' => 0,
+                                'txt_total' => 0,
+                            );
+
+                            //print_r($tipo_tabla);die();
+                            $this->ingreso_stock->producto_nuevo_salida($datos_stock);
+                        }
+                        ////////////////////////////////////////////////////////////////////////////////////////////////////////////
                     }
                 }
 
@@ -284,9 +313,9 @@ class consultasC
                     if ($fila['sa_det_conp_id'] == '') {
 
                         $estado_entrega = -1;
-                        if ($fila['sa_det_conp_estado_entrega'] == true) {
+                        if ($fila['sa_det_conp_estado_entrega'] == 'true') {
                             $estado_entrega = 1;
-                        } elseif ($fila['sa_det_conp_estado_entrega'] == false) {
+                        } elseif ($fila['sa_det_conp_estado_entrega'] == 'false') {
                             $estado_entrega = 0;
                         }
 
@@ -301,6 +330,32 @@ class consultasC
                         );
 
                         $datos_farmacologia = $this->det_consultaM->insertar($datos_farmacologia);
+
+                        //Modificar
+                        ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                        //Para reducir el stock
+                        if ($estado_entrega == 1) {
+                            $tipo_tabla = '';
+                            if ($fila['sa_det_conp_tipo'] == 'medicamentos') {
+                                $tipo_tabla = ucfirst($fila['sa_det_conp_tipo']);
+                                $tipo_tabla = substr($tipo_tabla, 0, -1);
+                            } else if ($fila['sa_det_conp_tipo'] == 'insumos') {
+                                $tipo_tabla = ucfirst($fila['sa_det_conp_tipo']);
+                            }
+
+                            $datos_stock = array(
+                                'orden' => 'Consulta - '.$parametros['sa_conp_id'],
+                                'ddl_tipo' => $tipo_tabla,
+                                'ddl_lista_productos' => $fila['sa_det_conp_id_cmed_cins'],
+                                'txt_canti' => $fila['sa_det_conp_cantidad'],
+                                'txt_subtotal' => 0,
+                                'txt_total' => 0,
+                            );
+
+                            //print_r($tipo_tabla);die();
+                            $this->ingreso_stock->producto_nuevo_salida($datos_stock);
+                        }
+                        ////////////////////////////////////////////////////////////////////////////////////////////////////////////
                     } else {
 
                         $estado_entrega = -1;
@@ -323,6 +378,32 @@ class consultasC
                         $where[0]['dato'] = $fila['sa_det_conp_id'];
 
                         $datos_farmacologia = $this->det_consultaM->editar($datos_farmacologia, $where);
+
+                        //Modificar
+                        ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                        //Para reducir el stock
+                        if ($estado_entrega == 1) {
+                            $tipo_tabla = '';
+                            if ($fila['sa_det_conp_tipo'] == 'medicamentos') {
+                                $tipo_tabla = ucfirst($fila['sa_det_conp_tipo']);
+                                $tipo_tabla = substr($tipo_tabla, 0, -1);
+                            } else if ($fila['sa_det_conp_tipo'] == 'insumos') {
+                                $tipo_tabla = ucfirst($fila['sa_det_conp_tipo']);
+                            }
+
+                            $datos_stock = array(
+                                'orden' => 'Consulta - '.$parametros['sa_conp_id'],
+                                'ddl_tipo' => $tipo_tabla,
+                                'ddl_lista_productos' => $fila['sa_det_conp_id_cmed_cins'],
+                                'txt_canti' => $fila['sa_det_conp_cantidad'],
+                                'txt_subtotal' => 0,
+                                'txt_total' => 0,
+                            );
+
+                            //print_r($tipo_tabla);die();
+                            $this->ingreso_stock->producto_nuevo_salida($datos_stock);
+                        }
+                        ////////////////////////////////////////////////////////////////////////////////////////////////////////////
                     }
                 }
             }

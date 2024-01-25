@@ -808,7 +808,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                                                 <div class="modal-footer pt-4" id="seccion_boton_consulta">
 
-                                                    <button hidden class="btn btn-danger btn-sm px-2 m-1" onclick="editar_insertar(1, 1, 1, 0, 2)" type="button"><i class='bx bx-pause-circle'></i> En Proceso</button>
+                                                    <button  class="btn btn-danger btn-sm px-2 m-1" onclick="editar_insertar(1, 1, 1, 0, 2)" type="button"><i class='bx bx-pause-circle'></i> En Proceso</button>
 
                                                     <button class="btn btn-success btn-sm px-2 m-1" onclick="editar_insertar(1, 1, 1, 0, 1)" type="button"><i class="bx bx-save"></i> Finalizar</button>
 
@@ -1041,7 +1041,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                                                 <div class="modal-footer pt-4" id="seccion_boton_consulta">
 
-                                                    <button hidden class="btn btn-danger btn-sm px-2 m-1" onclick="editar_insertar(1, 1, 1, 0, 2)" type="button"><i class='bx bx-pause-circle'></i> En Proceso</button>
+                                                    <button  class="btn btn-danger btn-sm px-2 m-1" onclick="editar_insertar(1, 1, 1, 0, 2)" type="button"><i class='bx bx-pause-circle'></i> En Proceso</button>
 
                                                     <button class="btn btn-success btn-sm px-2 m-1" onclick="editar_insertar(1, 1, 1, 0, 1)" type="button"><i class="bx bx-save"></i> Finalizar</button>
 
@@ -1125,7 +1125,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                                                 <div class="modal-footer pt-4" id="seccion_boton_consulta">
 
-                                                    <button hidden class="btn btn-danger btn-sm px-2 m-1" onclick="editar_insertar(1, 1, 1, 0, 2)" type="button"><i class='bx bx-pause-circle'></i> En Proceso</button>
+                                                    <button  class="btn btn-danger btn-sm px-2 m-1" onclick="editar_insertar(1, 1, 1, 0, 2)" type="button"><i class='bx bx-pause-circle'></i> En Proceso</button>
 
                                                     <button class="btn btn-success btn-sm px-2 m-1" onclick="editar_insertar(1, 1, 1, 0, 1)" type="button"><i class="bx bx-save"></i> Finalizar</button>
 

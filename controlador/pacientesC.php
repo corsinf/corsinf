@@ -49,7 +49,7 @@ if (isset($_GET['obtener_idFicha_paciente'])) {
     echo json_encode($controlador->buscar_idFicha_paciente($sa_pac_id));
 }
 
-
+//print_r ($controlador->obtener_informacion_pacienteC(20));
 
 class pacientesC
 {
