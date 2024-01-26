@@ -56,7 +56,7 @@
         var estudiantes2 = '<option value="">-- Seleccione --</option>';
         var ids = '';
         var contador_alertas = 0;
-        var contador_alertas_div = 1;
+        var contador_alertas_div = 0;
 
         $.ajax({
             data: {
@@ -66,7 +66,7 @@
             type: 'post',
             dataType: 'json',
             success: function(response) {
-                console.log(response);
+                //console.log(response);
                 $.each(response, function(i, item) {
                     sexo_estudiante = '';
                     if (item.sa_est_sexo == 'Masculino') {
@@ -76,28 +76,6 @@
                     }
 
                     curso = item.sa_sec_nombre + '/' + item.sa_gra_nombre + '/' + item.sa_par_nombre;
-
-                    alert_finalizado =
-                        '<div class="alert border-0 border-start border-5 border-success alert-dismissible fade show py-2">' +
-                        '<div class="d-flex align-items-center">' +
-                        '<div class="font-35 text-success"><i class="bx bxs-check-circle"></i>' +
-                        '</div>' +
-                        '<div class="ms-3">' +
-                        '<h6 class="mb-0 text-success">La ficha médica se ha guardado correctamente.</h6>' +
-                        '</div>' +
-                        '</div>' +
-                        '</div>';
-
-                    alert_proceso =
-                        '<div class="alert border-0 border-start border-5 border-warning alert-dismissible fade show py-2">' +
-                        '<div class="d-flex align-items-center">' +
-                        '<div class="font-35 text-warning"><i class="bx bx-info-circle"></i>' +
-                        '</div>' +
-                        '<div class="ms-3">' +
-                        '<h6 class="mb-0 text-warning">Falta completar datos en la ficha médica.</h6>' +
-                        '</div>' +
-                        '</div>' +
-                        '</div>';
 
                     $.ajax({
                         data: {
@@ -109,6 +87,7 @@
                         dataType: 'json',
                         success: function(response) {
                             alert_salida = '';
+
                             console.log(response);
 
                             if (response === null) {
@@ -126,25 +105,22 @@
                                     '</div>';
                             } else {
                                 // Si la respuesta es válida (no nula y es un objeto JSON)
-                                alert_salida =
-                                    '<div class="alert border-0 border-start border-5 border-warning alert-dismissible fade show py-2">' +
-                                    '<div class="d-flex align-items-center">' +
-                                    '<div class="font-35 text-warning"><i class="bx bx-info-circle"></i>' +
-                                    '</div>' +
-                                    '<div class="ms-3">' +
-                                    '<h6 class="mb-0 text-warning">Falta completar datos en la ficha médica.</h6>' +
-                                    '</div>' +
-                                    '</div>' +
-                                    '</div>';
-                            }
 
-                            // Incrementa el contador aquí
-                            contador_alertas++;
+                                ////////////////////////////////////////
+                                //Ficha medica 
+                                ////////////////////////////////////////
+
+                                ficha_medica_validacion(response.sa_pac_id, contador_alertas);
+
+                            }
 
                             // Actualiza el contenido del elemento con el ID "alert_notificacion"
                             $('#alert_notificacion_' + contador_alertas).html(alert_salida);
+                            // Incrementa el contador aquí
+                            contador_alertas++;
 
                             console.log(contador_alertas);
+
                         }
                     });
 
@@ -183,9 +159,52 @@
                 $('#ids_est').val(ids);
                 lista_seguros();
 
-                
+
             }
         });
+    }
+
+    function ficha_medica_validacion(sa_pac_id, id_notificacion) {
+        $.ajax({
+            data: {
+                sa_pac_id: sa_pac_id
+            },
+            url: '../controlador/ficha_MedicaC.php?listar_paciente_ficha=true',
+            type: 'post',
+            dataType: 'json',
+            success: function(response_2) {
+                //console.log(response_2[0].sa_fice_estado_realizado + ' conta ' + contador_alertas);
+
+                if (response_2[0].sa_fice_estado_realizado == 1) {
+                    alert_salida =
+                        '<div class="alert border-0 border-start border-5 border-success alert-dismissible fade show py-2">' +
+                        '<div class="d-flex align-items-center">' +
+                        '<div class="font-35 text-success"><i class="bx bxs-check-circle"></i>' +
+                        '</div>' +
+                        '<div class="ms-3">' +
+                        '<h6 class="mb-0 text-success">La ficha médica se ha guardado correctamente.</h6>' +
+                        '</div>' +
+                        '</div>' +
+                        '</div>';
+                } else {
+                    alert_salida =
+                        '<div class="alert border-0 border-start border-5 border-warning alert-dismissible fade show py-2">' +
+                        '<div class="d-flex align-items-center">' +
+                        '<div class="font-35 text-warning"><i class="bx bx-info-circle"></i>' +
+                        '</div>' +
+                        '<div class="ms-3">' +
+                        '<h6 class="mb-0 text-warning">Falta completar datos en la ficha médica.</h6>' +
+                        '</div>' +
+                        '</div>' +
+                        '</div>';
+                }
+
+                $('#alert_notificacion_' + id_notificacion).html(alert_salida);
+                //contador_alertas++;
+            }
+        });
+
+        console.log(id_notificacion + sa_pac_id)
     }
 
     function SaveNewSeguro() {

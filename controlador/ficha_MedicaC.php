@@ -21,7 +21,7 @@ if (isset($_GET['eliminar'])) {
     echo json_encode($controlador->eliminar($_POST['id']));
 }
 
-//posiblemnte ya no sirve
+
 if (isset($_GET['listar_paciente_ficha'])) {
     echo json_encode($controlador->lista_solo_ficha_medica($_POST['sa_pac_id']));
 }

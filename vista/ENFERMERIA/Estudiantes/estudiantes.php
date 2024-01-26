@@ -11,13 +11,27 @@
                 url: '../controlador/estudiantesC.php?listar_todo=true',
                 dataSrc: ''
             },
+            dom: '<"top"Bfr>t<"bottom"lip>',
+            buttons: [{
+                    extend: 'excel',
+                    text: '<i class="bx bxs-file-pdf me-0"></i> Exportar a Excel',
+                    title: 'Título del archivo Excel',
+                    filename: 'nombre_archivo_excel'
+                },
+                {
+                    extend: 'pdf',
+                    text: '<i class="bx bxs-spreadsheet me-0"></i> Exportar a PDF',
+                    title: 'Título del archivo PDF',
+                    filename: 'nombre_archivo_PDF'
+                }
+            ],
             columns: [{
                     data: 'sa_est_cedula'
                 },
                 {
                     data: null,
                     render: function(data, type, item) {
-                        return '<a href="#" onclick="enviar_ID_estudiante(' + item.sa_est_id + ', ' + item.sa_id_seccion + ', ' + item.sa_id_grado + ', ' + item.sa_id_paralelo + ', ' + item.sa_id_representante +')"><u>' + item.sa_est_primer_apellido + ' ' + item.sa_est_segundo_apellido + ' ' + item.sa_est_primer_nombre + ' ' + item.sa_est_segundo_nombre + '</u></a>';
+                        return '<a href="#" onclick="enviar_ID_estudiante(' + item.sa_est_id + ', ' + item.sa_id_seccion + ', ' + item.sa_id_grado + ', ' + item.sa_id_paralelo + ', ' + item.sa_id_representante + ')"><u>' + item.sa_est_primer_apellido + ' ' + item.sa_est_segundo_apellido + ' ' + item.sa_est_primer_nombre + ' ' + item.sa_est_segundo_nombre + '</u></a>';
                     }
                 },
                 {
@@ -32,7 +46,11 @@
                         return calcular_edad_fecha_nacimiento(item.sa_est_fecha_nacimiento.date);
                     }
                 },
-            ]
+            ],
+            initComplete: function() {
+                // Mover los botones al contenedor personalizado
+                $('#contenedor_botones').append($('.dt-buttons'));
+            }
         });
     });
 
@@ -86,17 +104,31 @@
             <div class="col-xl-12 mx-auto">
                 <div class="card border-top border-0 border-4 border-primary">
                     <div class="card-body p-5">
-                        <div class="card-title d-flex align-items-center">
-                            <div><i class="bx bxs-user me-1 font-22 text-primary"></i>
-                            </div>
-                            <h5 class="mb-0 text-primary">Estudiantes</h5>
 
-                            <div class="row mx-1">
-                                <div class="col-sm-12" id="btn_nuevo">
-                                    <a href="../vista/inicio.php?mod=7&acc=registrar_estudiantes" class="btn btn-success btn-sm"><i class="bx bx-plus"></i> Nuevo</a>
+                        <div class="row">
+
+                            <div class="col-6">
+                                <div class="card-title d-flex align-items-center">
+                                    <div><i class="bx bxs-user me-1 font-22 text-primary"></i>
+                                    </div>
+                                    <h5 class="mb-0 text-primary">Estudiantes</h5>
+
+                                    <div class="row mx-1">
+                                        <div class="col-sm-12" id="btn_nuevo">
+                                            <a href="../vista/inicio.php?mod=7&acc=registrar_estudiantes" class="btn btn-success btn-sm"><i class="bx bx-plus"></i> Nuevo</a>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
+
+                            <div class="col-6 text-end">
+                                <div id="contenedor_botones"></div>
+                            </div>
+
+
                         </div>
+
+
 
                         <hr>
 
