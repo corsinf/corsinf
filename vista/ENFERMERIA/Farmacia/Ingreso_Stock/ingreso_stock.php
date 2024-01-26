@@ -14,6 +14,13 @@
                 url: '../controlador/ingreso_stockC.php?lista_kardex=true',
                 dataSrc: ''
             },
+              columns: [
+                { data: null, searchable: false }, // #
+                { data: null, searchable: true },  // Fecha 
+                { data: null, searchable: true }, // Producto
+                { data: null, searchable: true }, // Tipo
+                // ... el resto de columnas
+              ],
             columns: [{
                     data: null,
                     render: function(data, type, item, meta) {
@@ -54,11 +61,25 @@
                     data: 'Factura'
                 },
             ],
-            dom: "<'row'<'col-sm-6'B><'col-sm-6'f>><'row'<'col-sm-12'tr>><'row'<'col-sm-5'i><'col-sm-7'p>>", // Agrega los botones al contenedor DOM
+            dom: '<"top"Bfr>t<"bottom"lip>',
 		    buttons: [
 		        'excel', 'pdf' // Configura los botones que deseas
-		    ]
+		    ],
+            initComplete: function() {
+                // Mover los botones al contenedor personalizado
+                $('#pnl_exportar').append($('.dt-buttons'));
+                $('#tabla_todos_filter input').unbind().bind('input', function() {
+                    buscarExacto($(this).val());
+                });
+            }
         });
+
+
+        function buscarExacto(valorABuscar) {
+            tablaAll.search("^" + $.fn.dataTable.util.escapeRegex(valorABuscar) + "$|\\b" + $.fn.dataTable.util.escapeRegex(valorABuscar) + "\\b", true, false).draw();
+
+        }
+
 
 tablaInsu = $('#tabla_insumos').DataTable({
             language: {
@@ -299,10 +320,12 @@ function modal_ingreso(tipo)
                                 <div class="container-fluid">
 
                                     <div class="row">
-                                        <div class="col-sm-12" id="btn_nuevo">
+                                        <div class="col-sm-8" id="btn_nuevo">
                                         	<button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#exampleVerticallycenteredModal"><i class="bx bx-plus me-0"></i> Nuevo Ingreso</button>
                                         </div>
-
+                                        <div class="col-sm-4 text-end" id="pnl_exportar">
+                                            
+                                        </div>                                        
                                     </div>
                                     <br>
                                     <div class="row">

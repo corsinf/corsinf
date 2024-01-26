@@ -182,7 +182,7 @@ class usuariosM
 			$sql.=" AND U.id_tipo='".$tipo."'";
 		}
 
-		// print_r($sql);die();
+		print_r($sql);die();
 
 		// la lista de usuarios la busca en la base de datos especifica
 		$datos = $this->db->datos($sql,1);

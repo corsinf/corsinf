@@ -2,6 +2,7 @@
  $( document ).ready(function() {
       cargar_tablas();
       lista_no_concurente();
+      lista_tipo_usuario_drop_pagina();
   
  })
   
@@ -72,7 +73,7 @@ function lista_no_concurente()
         console.log(response);
         var op='';
         response.forEach(function(item,i){
-          op+='<tr><td>'+item.Total+'</td><td>'+item.Tabla+'</td><td>'+item.Campo_usuario+'</td><td>'+item.Campo_pass+'</td>'+
+          op+='<tr><td>'+item.Total+'</td><td>'+item.Tabla+'</td><td>'+item.Campo_usuario+'</td><td>'+item.Campo_pass+'</td><td>'+item.perfil+'</td>'+
           '<td>'+
           '<button type="button" class="btn btn-danger btn-sm" onclick="eliminar_no_concurente(\''+item.Tabla+'\')"><i class="bx bx-trash me-0"></i></button>'+
           '</td>'+
@@ -87,9 +88,9 @@ function lista_no_concurente()
 function add_no_concurente()
 {
   
-  if($('#ddl_tablas').val()=='')
+  if($('#ddl_tablas').val()=='' || $("#ddl_perfil").val()=='' || $('#ddl_usuario').val() == '' || $('#ddl_pass').val()=='')
   {
-    Swal.fire('','Seleccione una tabla','info');
+    Swal.fire('','Seleccione todos los campos','info');
      return false;
   }
   if($('#ddl_usuario').val() == $('#ddl_pass').val())
@@ -100,7 +101,8 @@ function add_no_concurente()
   var parametros = {
     'tabla':$('#ddl_tablas').val(),
     'usuario':$('#ddl_usuario').val(),
-    'pass':$('#ddl_pass').val()
+    'pass':$('#ddl_pass').val(),
+    'perfil_usu':$("#ddl_perfil").val(),
   }
   $.ajax({
      data:  {parametros:parametros},
@@ -161,6 +163,31 @@ function eliminar(tabla)
 }
 
 
+  function lista_tipo_usuario_drop_pagina()
+  {
+    $.ajax({
+         // data:  {parametros:parametros},
+         url:   '../controlador/tipo_usuarioC.php?lista_usuarios_drop=true',
+         type:  'post',
+         dataType: 'json',
+         /*beforeSend: function () {   
+              var spiner = '<div class="text-center"><img src="../img/gif/proce.gif" width="100" height="100"></div>'     
+            $('#tabla_').html(spiner);
+         },*/
+           success:  function (response) {  
+           if (response) 
+           {
+
+            response = '<option value="">Seleccione perfil</option>'+response;
+            $('#ddl_perfil').html(response);
+           } 
+          } 
+          
+       });
+  }
+
+
+
 </script>
 <div class="page-wrapper">
       <div class="page-content">
@@ -202,11 +229,17 @@ function eliminar(tabla)
                       <select class="form-select form-select-sm" id="ddl_pass" name="ddl_pass">
                         <option value="">Seleccione password</option>
                       </select>
-                    </div> 
+                    </div>
+                    <div class="col-sm-3">                    
+                      <b>Perfil Asignado</b>
+                      <select class="form-select form-select-sm" id="ddl_perfil" name="ddl_perfil" onchange="buscar_usuario_perfil();">
+                        <option value="">Seleccione perfil de usuario</option>
+                      </select>                    
+                    </div>
 
                     <div class="col-sm-2">
                       <br>
-                      <button type="button" class="btn btn-primary btn-sm" onclick="add_no_concurente()">Agregas</button>
+                      <button type="button" class="btn btn-primary btn-sm" onclick="add_no_concurente()">Agregar</button>
                     </div>        
                                                
                 </div>
@@ -219,6 +252,7 @@ function eliminar(tabla)
                         <th>Tabla</th>
                         <th>Campo Usuario</th>
                         <th>Campo Password</th>
+                        <th>Perfil Asignado</th>
 	                			<th></th>               			
 	                		</thead>
 	                		<tbody id="tbl_lista_no_concurentes">

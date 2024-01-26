@@ -36,13 +36,15 @@ class loginM
 
 	function empresa_tabla_noconcurente($id_empresa=false)
 	{
-		$sql = "SELECT Tabla,Id_Empresa,Campo_usuario,Campo_pass FROM TABLAS_NOCONCURENTE
+		$sql = "SELECT Tabla,Id_Empresa,Campo_usuario,Campo_pass,tipo_perfil,TU.DESCRIPCION as 'tipo'
+			FROM TABLAS_NOCONCURENTE T
+			INNER JOIN TIPO_USUARIO TU ON T.tipo_perfil = TU.ID_TIPO 
 				WHERE 1=1 ";
 				if($id_empresa)
 				{
 					$sql.=" AND Id_Empresa='".$id_empresa."'";
 				}
-				$sql.="GROUP BY Tabla,Id_Empresa,Campo_usuario,Campo_pass";
+				$sql.="GROUP BY Tabla,Id_Empresa,Campo_usuario,Campo_pass,tipo_perfil,TU.DESCRIPCION";
 
 				// print_r($sql);die();
 		$datos = $this->db->datos($sql,1);
