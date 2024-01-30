@@ -349,6 +349,9 @@ if ($_GET['acc'] == 'index') {
 		case '6':
 			include('SEGUROS/index.php');
 			break;
+		case '7':
+			include('ENFERMERIA/index.php');
+			break;
 		case 'variable':
 
 			break;
