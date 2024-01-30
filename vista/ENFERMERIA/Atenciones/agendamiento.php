@@ -25,7 +25,27 @@
       selectable: true,
       businessHours: true,
       dayMaxEvents: true,
-      events: []
+      events: [],
+      eventClick: function(info) {
+        // Obtener información del evento
+        var tipo_consulta = info.event.id;
+        var url = info.event.url;
+
+        //alert(info.event.tabla)
+        //console.log(info.event)
+
+        //Redirigir a la página deseada al hacer clic en el evento
+        if (tipo_consulta === 'certificado') {
+          window.location.href = url;
+        } else {
+          Swal.fire('', 'No puede realizar consultas.', 'error');
+        }
+
+        info.jsEvent.preventDefault();
+
+      }
+
+
     });
 
     calendar.setOption('dateClick', function(info) {
@@ -60,9 +80,11 @@
         response.forEach(function(evento) {
           //console.log(evento);
           calendar.addEvent({
+            id: evento.sa_conp_tipo_consulta,
             title: evento.sa_conp_tipo_consulta.toUpperCase() + ' - ' + evento.nombres,
             start: formatoDate(evento.sa_conp_fecha_ingreso.date),
             end: formatoDate(evento.sa_conp_fecha_ingreso.date),
+            url: '../vista/inicio.php?mod=7&acc=registrar_consulta_paciente&id_consulta=' + evento.sa_conp_id + '&tipo_consulta=' + evento.sa_conp_tipo_consulta + '&id_ficha=' + evento.sa_fice_id + '&id_paciente=' + evento.sa_pac_id,
           });
         });
 

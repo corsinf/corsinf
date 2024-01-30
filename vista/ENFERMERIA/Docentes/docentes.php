@@ -2,34 +2,34 @@
 
 <script type="text/javascript">
     $(document).ready(function() {
-        $('#tabla_representante').DataTable({
+        $('#tabla_administrativo').DataTable({
             language: {
                 url: 'https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
             },
             responsive: true,
             ajax: {
-                url: '../controlador/representantesC.php?listar_todo=true',
+                url: '../controlador/docentesC.php?listar_todo=true',
                 dataSrc: ''
             },
             columns: [{
-                    data: 'sa_rep_cedula'
+                    data: 'sa_doc_cedula'
                 },
                 {
                     data: null,
                     render: function(data, type, item) {
-                        return '<a href="#" onclick="enviar_ID_representante(' + item.sa_rep_id + ')"><u>' + item.sa_rep_primer_apellido + ' ' + item.sa_rep_segundo_apellido + ' ' + item.sa_rep_primer_nombre + ' ' + item.sa_rep_segundo_nombre + '</u></a>';
+                        return '<a href="#" onclick="enviar_ID(' + item.sa_doc_id + ')"><u>' + item.sa_doc_primer_apellido + ' ' + item.sa_doc_segundo_apellido + ' ' + item.sa_doc_primer_nombre + ' ' + item.sa_doc_segundo_nombre + '</u></a>';
                     }
                 },
                 {
-                    data: 'sa_rep_correo'
+                    data: 'sa_doc_correo'
                 },
                 {
-                    data: 'sa_rep_telefono_1'
+                    data: 'sa_doc_telefono_1'
                 },
                 {
                     data: null,
                     render: function(data, type, item) {
-                        return calcular_edad_fecha_nacimiento(item.sa_rep_fecha_nacimiento.date);
+                        return calcular_edad_fecha_nacimiento(item.sa_doc_fecha_nacimiento.date);
                     }
                 },
             ],
@@ -39,17 +39,17 @@
         });
     });
 
-    function enviar_ID_representante(id) {
+    function enviar_ID(id) {
         // Actualiza el valor del campo de entrada con el ID
-        $('#sa_rep_id').val(id);
+        $('#sa_doc_id').val(id);
 
         // Envía el formulario por POST
         $('#form_enviar').submit();
     }
 </script>
 
-<form id="form_enviar" action="../vista/inicio.php?mod=7&acc=registrar_representantes" method="post" style="display: none;">
-    <input type="hidden" id="sa_rep_id" name="sa_rep_id" value="">
+<form id="form_enviar" action="../vista/inicio.php?mod=7&acc=registrar_docentes" method="post" style="display: none;">
+    <input type="hidden" id="sa_doc_id" name="sa_doc_id" value="">
 </form>
 
 <div class="page-wrapper">
@@ -67,7 +67,7 @@
                         <li class="breadcrumb-item"><a href="javascript:;"><i class="bx bx-home-alt"></i></a>
                         </li>
                         <li class="breadcrumb-item active" aria-current="page">
-                            Comunidad Educativa
+                            Docentes Educativa
                         </li>
                     </ol>
                 </nav>
@@ -82,11 +82,11 @@
                         <div class="card-title d-flex align-items-center">
                             <div><i class="bx bxs-user me-1 font-22 text-primary"></i>
                             </div>
-                            <h5 class="mb-0 text-primary">Representantes</h5>
+                            <h5 class="mb-0 text-primary">Docentes</h5>
 
                             <div class="row mx-1">
                                 <div class="col-sm-12" id="btn_nuevo">
-                                    <a href="../vista/inicio.php?mod=7&acc=registrar_representantes" class="btn btn-success btn-sm"><i class="bx bx-plus"></i> Nuevo</a>
+                                    <a href="../vista/inicio.php?mod=7&acc=registrar_docentes" class="btn btn-success btn-sm"><i class="bx bx-plus"></i> Nuevo</a>
                                 </div>
                             </div>
                         </div>
@@ -96,7 +96,7 @@
                         <section class="content pt-4">
                             <div class="container-fluid">
                                 <div class="table-responsive">
-                                    <table class="table table-striped responsive" id="tabla_representante" style="width:100%">
+                                    <table class="table table-striped responsive" id="tabla_administrativo" style="width:100%">
                                         <thead>
                                             <tr>
                                                 <th>Cédula</th>

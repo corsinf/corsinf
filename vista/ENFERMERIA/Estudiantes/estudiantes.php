@@ -47,6 +47,9 @@
                     }
                 },
             ],
+            order: [
+                [1, 'asc']
+            ],
             initComplete: function() {
                 // Mover los botones al contenedor personalizado
                 $('#contenedor_botones').append($('.dt-buttons'));

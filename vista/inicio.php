@@ -167,11 +167,38 @@ if ($_GET['acc'] == 'registrar_estudiantes') {
 
 //Representantes
 if ($_GET['acc'] == 'representantes') {
-	include('ENFERMERIA/representantes/representantes.php');
+	include('ENFERMERIA/Representantes/representantes.php');
 }
 
 if ($_GET['acc'] == 'registrar_representantes') {
-	include('ENFERMERIA/representantes/registrar_representantes.php');
+	include('ENFERMERIA/Representantes/registrar_representantes.php');
+}
+
+//Administrativos
+if ($_GET['acc'] == 'administrativos') {
+	include('ENFERMERIA/Administrativos/administrativos.php');
+}
+
+if ($_GET['acc'] == 'registrar_administrativos') {
+	include('ENFERMERIA/Administrativos/registrar_administrativos.php');
+}
+
+//Comunidad
+if ($_GET['acc'] == 'comunidad') {
+	include('ENFERMERIA/Comunidad/comunidad.php');
+}
+
+if ($_GET['acc'] == 'registrar_comunidad') {
+	include('ENFERMERIA/Comunidad/registrar_comunidad.php');
+}
+
+//Docentes
+if ($_GET['acc'] == 'docentes') {
+	include('ENFERMERIA/Docentes/docentes.php');
+}
+
+if ($_GET['acc'] == 'registrar_docentes') {
+	include('ENFERMERIA/Docentes/registrar_docentes.php');
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

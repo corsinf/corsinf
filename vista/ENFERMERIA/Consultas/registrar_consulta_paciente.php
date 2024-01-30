@@ -272,9 +272,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 //$('#sa_conp_fecha_inicio_falta_certificado').val(fecha_nacimiento_formateada(response[0].sa_conp_fecha_inicio_falta_certificado.date));
                 //$('#sa_conp_fecha_fin_alta_certificado').val(fecha_nacimiento_formateada(response[0].sa_conp_fecha_fin_alta_certificado.date));
 
-                validar_fecha_formulario(response[0].sa_conp_fecha_entrega_certificado, 'sa_conp_fecha_entrega_certificado')
-                validar_fecha_formulario(response[0].sa_conp_fecha_inicio_falta_certificado, 'sa_conp_fecha_inicio_falta_certificado')
-                validar_fecha_formulario(response[0].sa_conp_fecha_fin_alta_certificado, 'sa_conp_fecha_fin_alta_certificado')
+                
+                validar_fecha_formulario(response[0].sa_conp_fecha_inicio_falta_certificado, 'sa_conp_fecha_inicio_falta_certificado');
+                validar_fecha_formulario(response[0].sa_conp_fecha_fin_alta_certificado, 'sa_conp_fecha_fin_alta_certificado');
 
                 $('#sa_conp_dias_permiso_certificado').val(response[0].sa_conp_dias_permiso_certificado);
 
@@ -328,6 +328,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 if ((estado != 0)) {
                     $('#sa_conp_desde_hora').val(obtener_hora_formateada(response[0].sa_conp_desde_hora.date));
                     $('#sa_conp_hasta_hora').val(obtener_hora_formateada(response[0].sa_conp_hasta_hora.date));
+
+                    //Para certficado
+                    validar_fecha_formulario(response[0].sa_conp_fecha_entrega_certificado, 'sa_conp_fecha_entrega_certificado');
                 }
 
                 /*$('#sa_conp_tipo_consulta').val(response[0].sa_conp_tipo_consulta);
@@ -808,7 +811,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                                                 <div class="modal-footer pt-4" id="seccion_boton_consulta">
 
-                                                    <button  class="btn btn-danger btn-sm px-2 m-1" onclick="editar_insertar(1, 1, 1, 0, 2)" type="button"><i class='bx bx-pause-circle'></i> En Proceso</button>
+                                                    <button  hidden class="btn btn-danger btn-sm px-2 m-1" onclick="editar_insertar(1, 1, 1, 0, 2)" type="button"><i class='bx bx-pause-circle'></i> En Proceso</button>
 
                                                     <button class="btn btn-success btn-sm px-2 m-1" onclick="editar_insertar(1, 1, 1, 0, 1)" type="button"><i class="bx bx-save"></i> Finalizar</button>
 
@@ -1041,7 +1044,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                                                 <div class="modal-footer pt-4" id="seccion_boton_consulta">
 
-                                                    <button  class="btn btn-danger btn-sm px-2 m-1" onclick="editar_insertar(1, 1, 1, 0, 2)" type="button"><i class='bx bx-pause-circle'></i> En Proceso</button>
+                                                    <button hidden class="btn btn-danger btn-sm px-2 m-1" onclick="editar_insertar(1, 1, 1, 0, 2)" type="button"><i class='bx bx-pause-circle'></i> En Proceso</button>
 
                                                     <button class="btn btn-success btn-sm px-2 m-1" onclick="editar_insertar(1, 1, 1, 0, 1)" type="button"><i class="bx bx-save"></i> Finalizar</button>
 
@@ -1125,7 +1128,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                                                 <div class="modal-footer pt-4" id="seccion_boton_consulta">
 
-                                                    <button  class="btn btn-danger btn-sm px-2 m-1" onclick="editar_insertar(1, 1, 1, 0, 2)" type="button"><i class='bx bx-pause-circle'></i> En Proceso</button>
+                                                    <button hidden class="btn btn-danger btn-sm px-2 m-1" onclick="editar_insertar(1, 1, 1, 0, 2)" type="button"><i class='bx bx-pause-circle'></i> En Proceso</button>
 
                                                     <button class="btn btn-success btn-sm px-2 m-1" onclick="editar_insertar(1, 1, 1, 0, 1)" type="button"><i class="bx bx-save"></i> Finalizar</button>
 
