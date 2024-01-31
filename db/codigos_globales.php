@@ -697,6 +697,7 @@ function para_ftp($nombre,$texto)
     //--------------------------------funcion para crear por primera vez los accesos a una empresa nueva ----------------------
    function generar_primera_vez($db_destino,$id_empresa)
 	{		
+		$usu = array();
 		for ($i=1; $i < 4; $i++) {
 
 			//valida si los usuarios por default estan creados si no estan los crea
@@ -709,6 +710,8 @@ function para_ftp($nombre,$texto)
 					 $datos[0]['dato']  = $i;
 					 $datos[1]['campo'] = 'Id_Empresa';
 					 $datos[1]['dato']  = $id_empresa;
+					 $datos[2]['campo'] = 'Id_Tipo_usuario';
+					 $datos[2]['dato']  = $i;
 					 $this->db->inserts('ACCESOS_EMPRESA',$datos,1);		
 				}
 
@@ -765,7 +768,23 @@ function para_ftp($nombre,$texto)
 		    array(&$id_empresa, SQLSRV_PARAM_IN),
 		  );
 		  $sql = "EXEC CopiarEstructuraAccesos @origen_bd = ?,@destino_bd = ?,@id_empresa = ?";
-		  return $this->db->ejecutar_procesos_almacenados($sql,$parametros,false,1);
+		  $res = $this->db->ejecutar_procesos_almacenados($sql,$parametros,false,1);
+
+		  $sql = "SELECT * FROM ACCESOS_EMPRESA WHERE Id_Empresa = '".$id_empresa."'";
+		  $usuarios = $this->db->datos($sql,1);
+		  foreach ($usuarios as $key => $value) {
+		  // print_r($value);die();
+		  	$datos[0]['campo'] = 'perfil';
+		  	$datos[0]['dato'] = $value['Id_Tipo_usuario'];
+
+		  	$where[0]['campo'] = 'id_usuarios';
+		  	$where[0]['dato'] = $value['Id_usuario'];
+		  	$this->db->update('USUARIOS',$datos, $where);
+		  }
+
+		  return $res;
+
+
 	}
 
 

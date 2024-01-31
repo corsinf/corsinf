@@ -168,7 +168,7 @@ class modulos_paginasC
 
 	function guardar_paginas($parametros)
 	{
-		print_r($parametros);die();
+		// print_r($parametros);die();
 		$defa = 0;
 		$activo = 'I';
 		$subpag = 0;
