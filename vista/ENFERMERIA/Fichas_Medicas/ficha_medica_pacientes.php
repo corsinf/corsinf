@@ -13,6 +13,17 @@ if (isset($_POST['sa_pac_tabla'])) {
     $sa_pac_tabla = $_POST['sa_pac_tabla'];
 }
 
+$btn_regresar = '';
+
+if (isset($_POST['btn_regresar'])) {
+    $btn_regresar = $_POST['btn_regresar'];
+}
+
+if ($btn_regresar == '') {
+    $btn_regresar = '../vista/inicio.php?mod=7&acc=inicio_representante';
+}
+
+
 
 ?>
 
@@ -33,8 +44,9 @@ if (isset($_POST['sa_pac_tabla'])) {
 
             var sa_pac_id = '<?php echo $sa_pac_id; ?>';
             var sa_pac_tabla = '<?php echo $sa_pac_tabla; ?>';
+            var btn_regresar = '<?php echo $btn_regresar; ?>';
 
-            // alert(sa_pac_id)
+            //alert(btn_regresar)
 
             //cargar_datos_paciente(sa_pac_id);
             datos_col_ficha_medica(sa_pac_id);
@@ -404,7 +416,7 @@ if (isset($_POST['sa_pac_tabla'])) {
                         <div class="card-title d-flex align-items-center">
 
                             <div class="col-sm-3">
-                                <a href="../vista/inicio.php?mod=7&acc=inicio_representante" class="btn btn-outline-dark btn-sm"><i class="bx bx-arrow-back"></i> Regresar</a>
+                                <a href="<?= $btn_regresar ?>" class="btn btn-outline-dark btn-sm"><i class="bx bx-arrow-back"></i> Regresar</a>
                             </div>
 
 
@@ -535,7 +547,7 @@ if (isset($_POST['sa_pac_tabla'])) {
 
                                                     <div class="row pt-3">
                                                         <div class="col-md-11">
-                                                            <label for="" class="form-label">¿Posee seguro médico?: <label style="color: red;">*</label> </label>
+                                                            <label for="" class="form-label">¿Posee Seguro Médico Adicional?: <label style="color: red;">*</label> </label>
                                                             <select class="form-select form-select-sm" id="sa_fice_pac_seguro_medico" name="sa_fice_pac_seguro_medico" required>
                                                                 <option selected disabled>-- Seleccione --</option>
                                                                 <option value="Si">Si</option>
@@ -549,7 +561,7 @@ if (isset($_POST['sa_pac_tabla'])) {
 
                                                     <div class="row pt-3">
                                                         <div class="col-md-11" id="sa_fice_pac_nombre_seguro_div">
-                                                            <label for="" class="form-label">Seguro predeterminado: <label style="color: red;">*</label> </label>
+                                                            <label for="" class="form-label">Seguro Predeterminado: <label style="color: red;">*</label> </label>
                                                             <div class="input-group">
                                                                 <select class="form-select form-select-sm" id="sa_fice_pac_nombre_seguro" name="sa_fice_pac_nombre_seguro">
                                                                     <option selected disabled value="">-- Seleccione --</option>

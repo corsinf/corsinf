@@ -19,17 +19,12 @@
                 dataSrc: ''
             },
             columns: [{
-                    data: null,
-                    render: function(data, type, item) {
-                        return '<div class="text-center"><a href="../vista/inicio.php?mod=7&acc=consultas_pacientes&pac_id=' + item.sa_pac_id + '" class="btn btn-warning btn-sm " title="Historial de Consultas"><i class="bx bx-spreadsheet me-0"></i></a></div>';
-                    }
-                }, {
                     data: 'sa_pac_cedula'
                 },
                 {
                     data: null,
                     render: function(data, type, item) {
-                        return '<a href="#" onclick="gestion_paciente_comunidad(' + item.sa_pac_id_comunidad + ', \'' + item.sa_pac_tabla + '\');"><u>' + item.sa_pac_apellidos + ' ' + item.sa_pac_nombres + '</u></a>';
+                        return '<div"><a href="../vista/inicio.php?mod=7&acc=consultas_pacientes&pac_id=' + item.sa_pac_id + '" " title="Historial de Consultas"><u>' + item.sa_pac_apellidos + ' ' + item.sa_pac_nombres + '</u></a></div>';
                     }
                 },
                 {
@@ -42,8 +37,18 @@
                     }
                 },
                 {
-                    data: 'sa_pac_tabla'
+                    data: null,
+                    render: function(data, type, item) {
+                        return (item.sa_pac_tabla).toUpperCase();
+                    }
                 },
+                {
+                    data: null,
+                    render: function(data, type, item) {
+                        url = '../vista/inicio.php?mod=7&acc=pacientes';
+                        return '<a title="Editar Ficha Médica" class="text-center btn btn-warning btn-sm" href="#" onclick="gestion_paciente_comunidad(' + item.sa_pac_id_comunidad + ', \'' + item.sa_pac_tabla + '\', url);"><u>' + '<i class="bx bxs-edit-alt me-0"></i>' + '</u></a>';
+                    }
+                }
             ]
         });
     }
@@ -161,7 +166,7 @@
                 <div class="card border-top border-0 border-4 border-primary">
                     <div class="card-body p-5">
                         <div class="card-title d-flex align-items-center">
-                          
+
                             <h5 class="mb-0 text-primary"></h5>
 
                             <div class="row mx-0">
@@ -180,12 +185,12 @@
                                     <table class="table table-striped responsive " id="tbl_pacientes" style="width:100%">
                                         <thead>
                                             <tr>
-                                                <th width="10px">Consultas</th>
                                                 <th>Cédula</th>
                                                 <th>Nombres</th>
                                                 <th>Correo</th>
                                                 <th>Edad</th>
                                                 <th>Tipo Paciente</th>
+                                                <th width="10px">Acción</th>
                                             </tr>
                                         </thead>
                                         <tbody>

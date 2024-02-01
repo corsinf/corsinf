@@ -245,8 +245,6 @@ class ingreso_stockC
 				break;
 		}
 	}
-<<<<<<< HEAD
-=======
 
 	function lista_kardex()
 	{
@@ -254,7 +252,4 @@ class ingreso_stockC
 		// print_r($datos);die();
 		return $datos;
 	}
-
-
->>>>>>> 431ac0d8c272a0e4946d01f20a05b68ec034f107
 }

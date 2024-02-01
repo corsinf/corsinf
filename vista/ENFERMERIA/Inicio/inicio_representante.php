@@ -139,7 +139,7 @@
                         '<p class="mb-3">' + curso + '</p>' +
 
                         '<div class="d-grid mt-3">' +
-                        '<a href="#" onclick="gestion_paciente_comunidad(' + item.sa_est_id + ', \'' + item.sa_est_tabla + '\');" class="btn btn-outline-primary radius-15">Detalles</a>' +
+                        '<a href="#" onclick="gestion_paciente_comunidad(' + item.sa_est_id + ', \'' + item.sa_est_tabla + '\', \'./inicio.php?mod=7&acc=inicio_representante\');" class="btn btn-outline-primary radius-15">Detalles</a>' +
 
                         '</div>' +
                         '</div>' +
