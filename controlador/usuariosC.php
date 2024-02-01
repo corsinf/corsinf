@@ -366,16 +366,18 @@ class usuariosC
 		    $datosAE[0]['dato']=$usuario[0]['id'];
 		    $datosAE[1]['campo']='Id_Empresa';
 		    $datosAE[1]['dato']=$_SESSION['INICIO']['ID_EMPRESA'];	
+		    $datosAE[2]['campo']='Id_Tipo_usuario';
+		    $datosAE[2]['dato']=$parametros['ddl_tipo_usuario'];	
 		    $this->modelo->guardar($datosAE,'ACCESOS_EMPRESA'); 
 
 		    
-		     $datosT[0]['campo']='ID_USUARIO';
-		     $datosT[0]['dato']=$usuario[0]['id'];
-		     $datosT[1]['campo']='ID_TIPO_USUARIO';
-		     $datosT[1]['dato']=$parametros['ddl_tipo_usuario'];		     
-		     $datosT[2]['campo']='ID_EMPRESA';
-		     $datosT[2]['dato']=$_SESSION['INICIO']['ID_EMPRESA'];		
-		     $this->modelo->guardar($datosT,'USUARIO_TIPO_USUARIO'); 
+		     // $datosT[0]['campo']='ID_USUARIO';
+		     // $datosT[0]['dato']=$usuario[0]['id'];
+		     // $datosT[1]['campo']='ID_TIPO_USUARIO';
+		     // $datosT[1]['dato']=$parametros['ddl_tipo_usuario'];		     
+		     // $datosT[2]['campo']='ID_EMPRESA';
+		     // $datosT[2]['dato']=$_SESSION['INICIO']['ID_EMPRESA'];		
+		     // $this->modelo->guardar($datosT,'USUARIO_TIPO_USUARIO'); 
 
 
 		    // actualiza en empresa logueada
@@ -388,8 +390,7 @@ class usuariosC
 		    
 		}else
 		{
-			  $perfil = $this->modelo->existe_usuario_perfil_datos($tipo=false,$parametros['txt_usuario_update']);
-
+			 
 			  // print_r($perfil);die();
 		    // $datos[0]['campo']='nick_usuario';
 		    // $datos[0]['dato']=$parametros['txt_nick'];
@@ -427,37 +428,45 @@ class usuariosC
 		    //ingresa el acceso al usuario en la empresa 
 
 		    $acceso = $this->modelo->existe_acceso_usuario_empresa($parametros['txt_usuario_update']);
-		    if(count($acceso)==0)
-		    {
-			    $datosA[0]['campo']='Id_usuario';
+		    	$datosA[0]['campo']='Id_usuario';
 			    $datosA[0]['dato']=$parametros['txt_usuario_update'];	
 			    $datosA[1]['campo']='Id_Empresa';
-			    $datosA[1]['dato']=$_SESSION['INICIO']['ID_EMPRESA'];	
+			    $datosA[1]['dato']=$_SESSION['INICIO']['ID_EMPRESA'];
+			    $datosA[2]['campo']='Id_Tipo_usuario';
+		    	$datosA[2]['dato']=$parametros['ddl_tipo_usuario'];	
+		    if(count($acceso)==0)
+		    {			    
 			    $this->modelo->guardar($datosA,'ACCESOS_EMPRESA');
-			  }
-
-			  $perfil = $this->modelo->existe_usuario_perfil(false,$parametros['txt_usuario_update']);
-			  if($perfil==-1)
-			  {
-			  	$datosA[0]['campo']='ID_USUARIO';
-			    $datosA[0]['dato']=$parametros['txt_usuario_update'];	
-			    $datosA[1]['campo']='ID_EMPRESA';
-			    $datosA[1]['dato']=$_SESSION['INICIO']['ID_EMPRESA'];				    
-			    $datosA[2]['campo']='ID_TIPO_USUARIO';
-			    $datosA[2]['dato']=$parametros['ddl_tipo_usuario'];	
-			    $this->modelo->guardar($datosA,'USUARIO_TIPO_USUARIO');
 			  }else
-			  {				    
-			    $datosA[1]['campo']='ID_TIPO_USUARIO';
-			    $datosA[1]['dato']=$parametros['ddl_tipo_usuario'];	
-
-			    $where[0]['campo']='ID_USUARIO';
-			    $where[0]['dato'] = $parametros['txt_usuario_update'];			    
-			    $where[1]['campo']='ID_EMPRESA';
-			    $where[1]['dato'] = $_SESSION['INICIO']['ID_EMPRESA'];				   
-			    $this->modelo->update('USUARIO_TIPO_USUARIO',$datosA,$where);
-
+			  {
+			  	// print_r($acceso);die();
+			  	$whereA[0]['campo']='Id_accesos_empresa';
+			    $whereA[0]['dato']=$acceso[0]['Id_accesos_empresa'];	
+			  	$this->modelo->update('ACCESOS_EMPRESA',$datosA,$whereA);
 			  }
+
+			  // $perfil = $this->modelo->existe_usuario_perfil(false,$parametros['txt_usuario_update']);
+			  // if($perfil==-1)
+			  // {
+			  // 	$datosA[0]['campo']='ID_USUARIO';
+			  //   $datosA[0]['dato']=$parametros['txt_usuario_update'];	
+			  //   $datosA[1]['campo']='ID_EMPRESA';
+			  //   $datosA[1]['dato']=$_SESSION['INICIO']['ID_EMPRESA'];				    
+			  //   $datosA[2]['campo']='ID_TIPO_USUARIO';
+			  //   $datosA[2]['dato']=$parametros['ddl_tipo_usuario'];	
+			  //   $this->modelo->guardar($datosA,'USUARIO_TIPO_USUARIO');
+			  // }else
+			  // {				    
+			  //   $datosA[1]['campo']='ID_TIPO_USUARIO';
+			  //   $datosA[1]['dato']=$parametros['ddl_tipo_usuario'];	
+
+			  //   $where[0]['campo']='ID_USUARIO';
+			  //   $where[0]['dato'] = $parametros['txt_usuario_update'];			    
+			  //   $where[1]['campo']='ID_EMPRESA';
+			  //   $where[1]['dato'] = $_SESSION['INICIO']['ID_EMPRESA'];				   
+			  //   $this->modelo->update('USUARIO_TIPO_USUARIO',$datosA,$where);
+
+			  // }
 
 
 		    return  $this->modelo->generar_primera_vez($_SESSION['INICIO']['BASEDATO'],$_SESSION['INICIO']['ID_EMPRESA']);

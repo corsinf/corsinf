@@ -532,7 +532,7 @@
                 <div class="row"><br>                                     
                     <div class="col-sm-3">                    
                       <b>Perfil usuario</b>
-                      <select class="form-select form-select-sm" id="ddl_perfil" name="ddl_perfil" onchange="buscar_usuario_perfil();">
+                      <select class="form-select form-select-sm" id="ddl_perfil" name="ddl_perfil" onchange="accesos_asignados()">
                         <option value="">Seleccione perfil de usuario</option>
                       </select>                    
                     </div>

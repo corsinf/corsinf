@@ -234,7 +234,7 @@ class tipo_usuarioM
 			$sql.=" AND ID_USUARIO = '".$usuario."'";
 		}
 
-		// print_r($sql);die();
+		print_r($sql);die();
 		$datos = $this->db->datos($sql);
 		return $datos;
 	}
@@ -320,7 +320,7 @@ class tipo_usuarioM
 	function lista_accesos_asignados($perfil)
 	{
 		$sql = "SELECT Ver,editar,eliminar,id_paginas as 'pag' FROM ACCESOS WHERE id_tipo_usu = '".$perfil."'";
-		print_r($sql);die();
+		// print_r($sql);die();
 		$datos = $this->db->datos($sql);
 		return $datos;
 

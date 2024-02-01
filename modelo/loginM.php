@@ -79,11 +79,11 @@ class loginM
 	}
 
 	function datos_login($email=false,$pass=false,$id=false)
-	{
-		$sql = "SELECT id_usuarios as 'id',U.*,TU.DESCRIPCION as tipo,A.*  FROM ACCESOS A
+	{		
+		$sql ="SELECT id_usuarios as 'id',U.*,TU.DESCRIPCION as tipo,A.*  FROM ACCESOS A
 		 INNER JOIN TIPO_USUARIO TU ON A.id_tipo_usu = TU.ID_TIPO
 		 INNER JOIN USUARIOS U ON TU.ID_TIPO = U.perfil
-		WHERE 1=1";
+		WHERE 1=1 ";		
 		if($email){
 			$sql.=" AND email = '".$email."' ";
 		}
