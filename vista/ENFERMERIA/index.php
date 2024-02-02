@@ -4,64 +4,27 @@
 
   <script type="text/javascript">
   $( document ).ready(function() {
-    usuarios();
-    // patrimoniales();
-    // bajas();
-    // terceros();
-    info_articulos();
-    custodio();
-    localizacion();
-    datos_seguros();
-
-
-    // custodio_des();
-    // localizacion_des();
-pie(20,40)
+    total_pacientes()
+    total_docentes()
+    total_estudiantes()
+    total_comunidad()
+    total_Agendas()
+    total_medicamentos()
+    total_insumos()
+    lista_medicamentos()
+    lista_insumos()
+    total_consultas()
+    pacientes_atendidos()
   });
 
 
-    function pie(sin,con) {
-       var donutData        = {
-      labels: [
-          'Asegurados', 
-          'Sin seguro',
-          
-      ],
-      datasets: [
-        {
-          data: [con,sin],
-          backgroundColor : ['#00a65a','#f56954'],
-        }
-      ]
-    }
    
-    //-------------
-    //- PIE CHART -
-    //-------------
-    // Get context with jQuery - using jQuery's .get() method.
-    var pieChartCanvas = $('#pieChart').get(0).getContext('2d')
-    var pieData        = donutData;
-    var pieOptions     = {
-      maintainAspectRatio : false,
-      responsive : true,
-    }
-    //Create pie or douhnut chart
-    // You can switch between pie and douhnut using the method below.
-    var pieChart = new Chart(pieChartCanvas, {
-      type: 'pie',
-      data: pieData,
-      options: pieOptions      
-    })
 
-  }
-
-
-    function usuarios()
+   function total_pacientes()
     {
-
-       $.ajax({
+      $.ajax({
          // data:  {parametros:parametros},
-         url:   '../controlador/usuariosC.php?usuarios=true',
+         url:   '../controlador/index_saludC.php?total_pacientes=true',
          type:  'post',
          dataType: 'json',
          /*beforeSend: function () {   
@@ -69,180 +32,18 @@ pie(20,40)
             $('#tabla_').html(spiner);
          },*/
            success:  function (response) {  
-            var res = response.length;
-            $('#lbl_usuarios').text(res);
-          
+            $('#lbl_pacientes').text(response);
+          },error: function (jqXHR, textStatus, errorThrown) {
+            $('#pnl_pacientes').css('display','none');             
           }
        });
+
     }
-
-    function custodio()
+    function total_docentes()
     {
-
-       $.ajax({
+      $.ajax({
          // data:  {parametros:parametros},
-         url:   '../controlador/custodioC.php?numero_custodios=true',
-         type:  'post',
-         dataType: 'json',
-           success:  function (response) {  
-            console.log(response);
-            $('#lbl_custodios').text(response[0]['cant']);
-          
-          }
-       });
-    }
-
-    function localizacion()
-    {
-
-       $.ajax({
-         // data:  {parametros:parametros},
-         url:   '../controlador/localizacionC.php?numero_localizaciones=true',
-         type:  'post',
-         dataType: 'json',
-           success:  function (response) {  
-            console.log(response);
-            $('#lbl_localizaciones').text(response[0]['cant']);
-          
-          }
-       });
-    }
-
-
-
-    // function custodio_des()
-    // {
-
-    //    $.ajax({
-    //      // data:  {parametros:parametros},
-    //      url:   '../controlador/vinculacionC.php?numero_custodios=true',
-    //      type:  'post',
-    //      dataType: 'json',
-    //        success:  function (response) {  
-    //         console.log(response);
-    //         if(response.length>0)
-    //         {
-    //           $('#lbl_custodios').text(response[0]['cant']);
-    //         }
-    //       }
-    //    });
-    // }
-
-    // function localizacion_des()
-    // {
-
-    //    $.ajax({
-    //      // data:  {parametros:parametros},
-    //      url:   '../controlador/vinculacionC.php?numero_localizaciones=true',
-    //      type:  'post',
-    //      dataType: 'json',
-    //        success:  function (response) {  
-    //         console.log(response);
-    //         if(response.length>0)
-    //         {
-    //           $('#lbl_localizaciones').text(response[0]['cant']);
-    //         }
-          
-    //       }
-    //    });
-    // }
-
-    // function patrimoniales()
-    // { 
-    //   var parametros = 
-    //   {
-    //     'bajas':0,
-    //     'terceros':0,
-    //     'patrimoniales':1,
-    //     'articulos':0,
-    //   }
-    //     $.ajax({
-    //      data:  {parametros:parametros},
-    //      url:   '../controlador/articulosC.php?articulos_especiales=true',
-    //      type:  'post',
-    //      dataType: 'json',
-    //      /*beforeSend: function () {   
-    //           var spiner = '<div class="text-center"><img src="../img/gif/proce.gif" width="100" height="100"></div>'     
-    //         $('#tabla_').html(spiner);
-    //      },*/
-    //        success:  function (response) {  
-    //         var res = response.length;
-    //         $('#lbl_patrimoniales').text(res);
-    //         // console.log(res)
-          
-    //       } 
-          
-    //    });
-
-    // }
-
-    // function bajas()
-    // { var parametros = 
-    //   {
-    //     'bajas':1,
-    //     'terceros':0,
-    //     'patrimoniales':0,
-    //     'articulos':0,
-    //   }
-    //     $.ajax({
-    //      data:  {parametros:parametros},
-    //      url:   '../controlador/articulosC.php?articulos_especiales=true',
-    //      type:  'post',
-    //      dataType: 'json',
-    //      /*beforeSend: function () {   
-    //           var spiner = '<div class="text-center"><img src="../img/gif/proce.gif" width="100" height="100"></div>'     
-    //         $('#tabla_').html(spiner);
-    //      },*/
-    //        success:  function (response) {  
-    //         var res = response.length;
-    //         $('#lbl_bajas').text(res);
-    //         // console.log(res)
-          
-    //       } 
-          
-    //    });
-
-    // }
-
-    // function terceros()
-    // { var parametros = 
-    //   {
-    //     'bajas':0,
-    //     'terceros':1,
-    //     'patrimoniales':0,
-    //     'articulos':0,
-    //   }
-    //     $.ajax({
-    //      data:  {parametros:parametros},
-    //      url:   '../controlador/articulosC.php?articulos_especiales=true',
-    //      type:  'post',
-    //      dataType: 'json',
-    //      /*beforeSend: function () {   
-    //           var spiner = '<div class="text-center"><img src="../img/gif/proce.gif" width="100" height="100"></div>'     
-    //         $('#tabla_').html(spiner);
-    //      },*/
-    //        success:  function (response) {  
-    //         var res = response.length;
-    //         $('#lbl_terceros').text(res);
-    //         // console.log(res)
-          
-    //       } 
-          
-    //    });      
-    // }
-
-    function info_articulos()
-    {
-      // var parametros = 
-      // {
-      //   'bajas':0,
-      //   'terceros':0,
-      //   'patrimoniales':0,
-      //   'articulos':1,
-      // }
-        $.ajax({
-         // data:  {parametros:parametros},
-         url:   '../controlador/articulosC.php?articulos_especiales=true',
+         url:   '../controlador/index_saludC.php?total_docentes=true',
          type:  'post',
          dataType: 'json',
          /*beforeSend: function () {   
@@ -250,65 +51,187 @@ pie(20,40)
             $('#tabla_').html(spiner);
          },*/
            success:  function (response) {  
+            $('#lbl_docentes').text(response);
+          },error: function (jqXHR, textStatus, errorThrown) {
+            $('#pnl_docentes').css('display','none');             
+          }
+       });
 
-
-            console.log(response);
-           
-
-
-            // var res = response[0]['numreg'];
-            // var res1 = response[1]['eti'];
-            // console.log(response);
-            $('#lbl_articulos').text(response.activos);
-            $('#lbl_articulos1').text(response.activos);
-            $('#lbl_etiqueta').text(response.etiquetados);
-
-            $('#lbl_terceros').text(response.terceros);
-            $('#lbl_patrimoniales').text(response.patrimoniales);
-            $('#lbl_bajas').text(response.bajas);
-
-            var b = parseInt(response.etiquetados*100/response.activos);
-            $('#lbl_porcen').html('<b>'+b+'</b>/100');
-            $('#progres').css('width',b+'%');
-            $('#lbl_porce').html('<i class="bx bxs-up-arrow align-middle"></i> '+b+'%');
-
-
-            // console.log(b)
-          
-          } 
-          
-       });  
-  }    
-
-
-    function datos_seguros()
+    }
+    function total_estudiantes()
     {
-     
-        $.ajax({
+      $.ajax({
          // data:  {parametros:parametros},
-         url:   '../controlador/contratoC.php?datos_seguros=true',
+         url:   '../controlador/index_saludC.php?total_estudiantes=true',
          type:  'post',
-         dataType: 'json',        
-           success:  function (response) {  
-            console.log(response);
-            pie(response.sinseguro,response.asegurados);   
+         dataType: 'json',
+         /*beforeSend: function () {   
+              var spiner = '<div class="text-center"><img src="../img/gif/proce.gif" width="100" height="100"></div>'     
+            $('#tabla_').html(spiner);
+         },*/
+           success:  function (response) {              
+            $('#lbl_estudiantes').text(response);          
+          },error: function (jqXHR, textStatus, errorThrown) {
+            $('#pnl_estudiantes').css('display','none');             
+          }
+       });
 
-            var sin = ((response.sinseguro*100)/response.total);
-            var con = ((response.asegurados*100)/response.total);
-            console.log(sin);console.log(con);
-            $('#lbl_porce_sin_seguro').html('<i class="fas fa-caret-up">'+sin.toFixed(3)+'%');
-            $('#lbl_porce_asegurados').html('<i class="fas fa-caret-up">'+con.toFixed(3)+'%');
+    }
+    function total_comunidad()
+    {
+      $.ajax({
+         // data:  {parametros:parametros},
+         url:   '../controlador/index_saludC.php?total_comunidad=true',
+         type:  'post',
+         dataType: 'json',
+         /*beforeSend: function () {   
+              var spiner = '<div class="text-center"><img src="../img/gif/proce.gif" width="100" height="100"></div>'     
+            $('#tabla_').html(spiner);
+         },*/
+           success:  function (response) {              
+            $('#lbl_comunidad').text(response);          
+          },error: function (jqXHR, textStatus, errorThrown) {
+            $('#pnl_comunidad').css('display','none');             
+          }
+       });
 
-            $('#lbl_sin_seguro').text(response.sinseguro);
-            $('#lbl_asgurados').text(response.asegurados);
-            $('#lbl_articulos2').text(response.total);   
-            $('#lbl_num_seguros').text(response.seguros);
-          
-          } 
-          
-       });      
+    }
+    function total_Agendas()
+    {
+      $.ajax({
+         // data:  {parametros:parametros},
+         url:   '../controlador/index_saludC.php?total_Agendas=true',
+         type:  'post',
+         dataType: 'json',
+         /*beforeSend: function () {   
+              var spiner = '<div class="text-center"><img src="../img/gif/proce.gif" width="100" height="100"></div>'     
+            $('#tabla_').html(spiner);
+         },*/
+           success:  function (response) { 
+            $('#lbl_agenda').text(response);
+          },error: function (jqXHR, textStatus, errorThrown) {
+            $('#pnl_agenda').css('display','none');             
+          }
+
+       });
+
+    }
+    function total_consultas()
+    {
+      $.ajax({
+         // data:  {parametros:parametros},
+         url:   '../controlador/index_saludC.php?total_consultas=true',
+         type:  'post',
+         dataType: 'json',
+         /*beforeSend: function () {   
+              var spiner = '<div class="text-center"><img src="../img/gif/proce.gif" width="100" height="100"></div>'     
+            $('#tabla_').html(spiner);
+         },*/
+           success:  function (response) { 
+            $('#lbl_consultas').text(response);
+          },error: function (jqXHR, textStatus, errorThrown) {
+            $('#pnl_consultas').css('display','none');             
+          }
+
+       });
+
+    }
+    function total_medicamentos()
+    {
+      $.ajax({
+         // data:  {parametros:parametros},
+         url:   '../controlador/index_saludC.php?total_medicamentos=true',
+         type:  'post',
+         dataType: 'json',
+         /*beforeSend: function () {   
+              var spiner = '<div class="text-center"><img src="../img/gif/proce.gif" width="100" height="100"></div>'     
+            $('#tabla_').html(spiner);
+         },*/
+           success:  function (response) {              
+            $('#lbl_medicamentos').text(response);          
+          }
+          ,error: function (jqXHR, textStatus, errorThrown) {
+            $('#pnl_medicamentos').css('display','none');             
+          }
+       });
+
+    }
+    function total_insumos()
+    {
+      $.ajax({
+         // data:  {parametros:parametros},
+         url:   '../controlador/index_saludC.php?total_insumos=true',
+         type:  'post',
+         dataType: 'json',
+         /*beforeSend: function () {   
+              var spiner = '<div class="text-center"><img src="../img/gif/proce.gif" width="100" height="100"></div>'     
+            $('#tabla_').html(spiner);
+         },*/
+           success:  function (response) {              
+            $('#lbl_insumos').text(response);          
+          },error: function (jqXHR, textStatus, errorThrown) {
+            $('#pnl_insumos').css('display','none');             
+          }
+       });
+        
     }
 
+    function lista_medicamentos()
+    {
+      $.ajax({
+         // data:  {parametros:parametros},
+         url:   '../controlador/index_saludC.php?lista_medicamentos=true',
+         type:  'post',
+         dataType: 'json',
+         /*beforeSend: function () {   
+              var spiner = '<div class="text-center"><img src="../img/gif/proce.gif" width="100" height="100"></div>'     
+            $('#tabla_').html(spiner);
+         },*/
+           success:  function (response) {  
+            $('#pnl_alertas_farmacia').append(response.alertas)            
+            lista_medicamentos_chart(response.data,response.cate)  
+          },error: function (jqXHR, textStatus, errorThrown) {
+            $('#pnl_insumos').css('display','none');             
+          }
+       });
+    }
+    function lista_insumos()
+    {
+      $.ajax({
+         // data:  {parametros:parametros},
+         url:   '../controlador/index_saludC.php?lista_insumos=true',
+         type:  'post',
+         dataType: 'json',
+         /*beforeSend: function () {   
+              var spiner = '<div class="text-center"><img src="../img/gif/proce.gif" width="100" height="100"></div>'     
+            $('#tabla_').html(spiner);
+         },*/
+           success:  function (response) { 
+            $('#pnl_alertas_farmacia').append(response.alertas)             
+            lista_insumos_chart(response.data,response.cate)  
+          },error: function (jqXHR, textStatus, errorThrown) {
+            $('#pnl_insumos').css('display','none');             
+          }
+       });
+    }
+    function pacientes_atendidos()
+    {
+      $.ajax({
+         // data:  {parametros:parametros},
+         url:   '../controlador/index_saludC.php?pacientes_atendidos=true',
+         type:  'post',
+         dataType: 'json',
+         /*beforeSend: function () {   
+              var spiner = '<div class="text-center"><img src="../img/gif/proce.gif" width="100" height="100"></div>'     
+            $('#tabla_').html(spiner);
+         },*/
+           success:  function (response) {          
+           pie(response.tipo,response.cant)
+          },error: function (jqXHR, textStatus, errorThrown) {
+            $('#pnl_').css('display','none');             
+          }
+       });
+    }
   </script>
 
 <div class="page-wrapper">
@@ -330,7 +253,8 @@ pie(20,40)
     <div class="row">
       <div class="col-xl-12 mx-auto">
 
-      	<?php if($_SESSION['INICIO']['TIPO']=='DBA' || $_SESSION['INICIO']['TIPO']=='DOCENTES') { ?>
+      	<?php if($_SESSION['INICIO']['TIPO']=='DBA' || strtoupper($_SESSION['INICIO']['TIPO'])=='DOCENTES'
+       || strtoupper($_SESSION['INICIO']['TIPO'])=='COMUNIDAD'  || strtoupper($_SESSION['INICIO']['TIPO'])=='ADMINISTRADOR') { ?>
         <h6 class="mb-0 text-uppercase">Gestion Educativa</h6>
         <hr>
             
@@ -347,13 +271,13 @@ pie(20,40)
             </div>
           </div> -->
 
-          <div class="col-3" onclick="location.h='articulos.php'">
+          <div class="col-4"  id="pnl_estudiantes">
             <div class="card radius-10">
               <div class="card-body">
                 <div class="d-flex align-items-center">
                   <div>
                     <p class="mb-0 text-secondary">Estudiantes</p>
-                    <h4 class="my-1" id="lbl_patrimoniales">0</h4>
+                    <h4 class="my-1" id="lbl_estudiantes">0</h4>
                     <!-- <p class="mb-0 font-13 text-success"><i class="bx bxs-up-arrow align-middle"></i>$34 from last week</p> -->
                   </div>
                   <div class="widgets-icons bg-light-success text-warning ms-auto"><i class="bx bx-package"></i>
@@ -363,13 +287,13 @@ pie(20,40)
             </div>
           </div>
 
-          <div class="col-3" onclick="location.href='articulos.php'">
+          <div class="col-4" id="pnl_docentes">
             <div class="card radius-10">
               <div class="card-body">
                 <div class="d-flex align-items-center">
                   <div>
                     <p class="mb-0 text-secondary">Docentes</p>
-                    <h4 class="my-1" id="lbl_articulos">0</h4>
+                    <h4 class="my-1" id="lbl_docentes">0</h4>
                     <!-- <p class="mb-0 font-13 text-success"><i class="bx bxs-up-arrow align-middle"></i>$34 from last week</p> -->
                   </div>
                   <div class="widgets-icons bg-light-success text-success ms-auto"><i class="bx bx-package"></i>
@@ -381,13 +305,13 @@ pie(20,40)
 
           
 
-          <div class="col-3" onclick="location.href='articulos.php'">
+          <div class="col-4" id="pnl_comunidad">
             <div class="card radius-10">
               <div class="card-body">
                 <div class="d-flex align-items-center">
                   <div>
                     <p class="mb-0 text-secondary">Comunidad</p>
-                    <h4 class="my-1" id="lbl_terceros">0</h4>
+                    <h4 class="my-1" id="lbl_comunidad">0</h4>
                     <!-- <p class="mb-0 font-13 text-success"><i class="bx bxs-up-arrow align-middle"></i>$34 from last week</p> -->
                   </div>
                   <div class="widgets-icons bg-light-success text-primary ms-auto"><i class="bx bx-package"></i>
@@ -399,17 +323,17 @@ pie(20,40)
       <?php } ?>
 
 
-      <?php if($_SESSION['INICIO']['TIPO']=='DBA' || $_SESSION['INICIO']['TIPO']=='DBA') { ?>
+      <?php if($_SESSION['INICIO']['TIPO']=='DBA'  || strtoupper($_SESSION['INICIO']['TIPO'])=='MEDICO'  || strtoupper($_SESSION['INICIO']['TIPO'])=='ENFERMERA'  || strtoupper($_SESSION['INICIO']['TIPO'])=='ADMINISTRADOR') { ?>
         <h6 class="mb-0 text-uppercase">Pacientes</h6>
         <hr>
         <div class="row">
-        	<div class="col-3" onclick="location.href='articulos.php'">
+        	<div class="col-4" id="pnl_pacientes">
 	            <div class="card radius-10">
 	              <div class="card-body">
 	                <div class="d-flex align-items-center">
 	                  <div>
 	                    <p class="mb-0 text-secondary">Pacientes</p>
-	                    <h4 class="my-1" id="lbl_terceros">0</h4>
+	                    <h4 class="my-1" id="lbl_pacientes">0</h4>
 	                    <!-- <p class="mb-0 font-13 text-success"><i class="bx bxs-up-arrow align-middle"></i>$34 from last week</p> -->
 	                  </div>
 	                  <div class="widgets-icons bg-light-success text-primary ms-auto"><i class="bx bx-package"></i>
@@ -418,13 +342,13 @@ pie(20,40)
 	              </div>
 	            </div>
 	          </div>       
-	          <div class="col-3" onclick="location.href='articulos.php'">
+	          <div class="col-4" id="pnl_consultas">
 	            <div class="card radius-10">
 	              <div class="card-body">
 	                <div class="d-flex align-items-center">
 	                  <div>
 	                    <p class="mb-0 text-secondary">Cosultas</p>
-	                    <h4 class="my-1" id="lbl_terceros">0</h4>
+	                    <h4 class="my-1" id="lbl_consultas">0</h4>
 	                    <!-- <p class="mb-0 font-13 text-success"><i class="bx bxs-up-arrow align-middle"></i>$34 from last week</p> -->
 	                  </div>
 	                  <div class="widgets-icons bg-light-success text-primary ms-auto"><i class="bx bx-package"></i>
@@ -433,13 +357,13 @@ pie(20,40)
 	              </div>
 	            </div>
 	          </div>         
-	          <div class="col-3" onclick="location.href='articulos.php'">
+	          <div class="col-4" id="pnl_agenda">
 	            <div class="card radius-10">
 	              <div class="card-body">
 	                <div class="d-flex align-items-center">
 	                  <div>
 	                    <p class="mb-0 text-secondary">Agenda</p>
-	                    <h4 class="my-1" id="lbl_terceros">0</h4>
+	                    <h4 class="my-1" id="lbl_agenda">0</h4>
 	                    <!-- <p class="mb-0 font-13 text-success"><i class="bx bxs-up-arrow align-middle"></i>$34 from last week</p> -->
 	                  </div>
 	                  <div class="widgets-icons bg-light-success text-primary ms-auto"><i class="bx bx-package"></i>
@@ -447,23 +371,33 @@ pie(20,40)
 	                </div>
 	              </div>
 	            </div>
-	          </div>         	
+	          </div>
+            <div class="col-6">
+              <div class="card">
+              <div class="card-body">
+                <div id="chart8"></div>
+              </div>
+            </div>
+            </div>         	
         </div>        
        <?php } ?>
 
 
-      <?php if($_SESSION['INICIO']['TIPO']=='DBA' || $_SESSION['INICIO']['TIPO']=='DBA') { ?>
+      <?php if($_SESSION['INICIO']['TIPO']=='DBA'  || strtoupper($_SESSION['INICIO']['TIPO'])=='COMUNIDAD'  || strtoupper($_SESSION['INICIO']['TIPO'])=='ENFERMERA'  || strtoupper($_SESSION['INICIO']['TIPO'])=='DOCTOR'  || strtoupper($_SESSION['INICIO']['TIPO'])=='ADMINISTRADOR') { ?>
 
         <h6 class="mb-0 text-uppercase">Farmacia</h6>
         <hr>
+        <div class="row" id="pnl_alertas_farmacia">
+          
+        </div>
         <div class="row">
-        	<div class="col-3" onclick="location.href='articulos.php'">
+        	<div class="col-6"  id="pnl_medicamentos">
 	            <div class="card radius-10">
 	              <div class="card-body">
 	                <div class="d-flex align-items-center">
 	                  <div>
 	                    <p class="mb-0 text-secondary">Medicamentos</p>
-	                    <h4 class="my-1" id="lbl_terceros">0</h4>
+	                    <h4 class="my-1" id="lbl_medicamentos">0</h4>
 	                    <!-- <p class="mb-0 font-13 text-success"><i class="bx bxs-up-arrow align-middle"></i>$34 from last week</p> -->
 	                  </div>
 	                  <div class="widgets-icons bg-light-success text-primary ms-auto"><i class="bx bx-package"></i>
@@ -472,13 +406,13 @@ pie(20,40)
 	              </div>
 	            </div>
 	          </div> 
-	         <div class="col-3" onclick="location.href='articulos.php'">
+	         <div class="col-6" id="pnl_insumos">
 	            <div class="card radius-10">
 	              <div class="card-body">
 	                <div class="d-flex align-items-center">
 	                  <div>
 	                    <p class="mb-0 text-secondary">Insumos</p>
-	                    <h4 class="my-1" id="lbl_terceros">0</h4>
+	                    <h4 class="my-1" id="lbl_insumos">0</h4>
 	                    <!-- <p class="mb-0 font-13 text-success"><i class="bx bxs-up-arrow align-middle"></i>$34 from last week</p> -->
 	                  </div>
 	                  <div class="widgets-icons bg-light-success text-primary ms-auto"><i class="bx bx-package"></i>
@@ -489,82 +423,23 @@ pie(20,40)
 	          </div>
 	          <div class="col-6">
 	          	<div class="card">
-					<div class="card-body">
-						<div id="chart5"></div>
-					</div>
-				</div>	          	
+      					<div class="card-body">
+      						<div id="chartMed"></div>
+      					</div>
+      				</div>	          	
 	          </div> 
+            <div class="col-6">
+              <div class="card">
+                <div class="card-body">
+                  <div id="chartIns"></div>
+                </div>
+              </div>              
+            </div> 
         	
         </div>
  <?php } ?>
 
 
-      <?php if($_SESSION['INICIO']['TIPO']=='DBA' || $_SESSION['INICIO']['TIPO']=='DBA') { ?>
-         <h6 class="mb-0 text-uppercase">Seguros</h6>
-        <hr>
-
-          <div class="row">
-          <div class="col-md-12">         
-              <div class="card-body">
-                <div class="row">
-
-                  <div class="col-md-5">
-                     <p class="text-center">
-                      <strong>Porcentaje de articulos asegurados</strong>
-                    </p>
-                     <div class="card card-danger">              
-                      <div class="card-body">
-                        <canvas id="pieChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
-                      </div>
-                    </div>                  
-                   
-                  </div>
-
-                  <div class="col-md-7">
-                    <div class="row">
-
-                      <div class="col-6">
-                        <div class="card radius-10">
-                          <div class="card-body">
-                            <div class="d-flex align-items-center">
-                              <div>
-                                <p class="mb-0 text-secondary">Seguros registrados</p>
-                                <h4 class="my-1" id="lbl_num_seguros">0</h4>
-                                <!-- <p class="mb-0 font-13 text-warning" id="lbl_porce"><i class="bx bxs-up-arrow align-middle"></i>0% </p> -->
-                              </div>
-                              <div class="widgets-icons bg-light-warning text-warning ms-auto"><i class="bx bx-lock"></i>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="col-6">
-                        <div class="card radius-10">
-                          <div class="card-body">
-                            <div class="d-flex align-items-center">
-                              <div>
-                                <p class="mb-0 text-secondary">Total de Activos</p>
-                                <h4 class="my-1" id="lbl_articulos2">0</h4>
-                                <!-- <p class="mb-0 font-13 text-primary" id="lbl_porce_asegurados"><i class="bx bx-circle align-middle"></i>100% </p> -->
-                              </div>
-                              <div class="widgets-icons bg-light-primary text-primary ms-auto"><i class="bx bx-package"></i>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>        
-                    </div>
-
-
-                  </div>
-
-
-                </div>
-            </div>
-          </div>
-        </div>
-
- <?php } ?>
 
 
 
@@ -612,33 +487,103 @@ pie(20,40)
 
 	<script src="../assets/plugins/apexcharts-bundle/js/apexcharts.min.js"></script>
 <script type="text/javascript">
-		// chart 5
-	var options = {
-		series: [{
-			data: [400, 430, 448, 470, 540, 580, 690, 610, 800, 980]
-		}],
-		chart: {
-			foreColor: '#9ba7b2',
-			type: 'bar',
-			height: 350
-		},
-		colors: ["#0d6efd"],
-		plotOptions: {
-			bar: {
-				horizontal: true,
-				columnWidth: '35%',
-				endingShape: 'rounded'
-			}
-		},
-		dataLabels: {
-			enabled: false
-		},
-		xaxis: {
-			categories: ['South Korea', 'Canada', 'United Kingdom', 'Netherlands', 'Italy', 'France', 'Japan', 'United States', 'China', 'Germany'],
-		}
-	};
-	var chart = new ApexCharts(document.querySelector("#chart5"), options);
-	chart.render();
+   function lista_medicamentos_chart(data,cate)
+    {
+      var options = {
+        series: [{
+          data: data
+        }],
+        chart: {
+          foreColor: '#9ba7b2',
+          type: 'bar',
+          height: 350
+        },
+        colors: ["#0dfd64"],
+        plotOptions: {
+          bar: {
+            horizontal: true,
+            columnWidth: '35%',
+            endingShape: 'rounded'
+          }
+        },
+        dataLabels: {
+          enabled: false
+        },
+        xaxis: {
+          categories: cate,
+        },
+        title: {
+            text: 'Stock de Medicamentos',
+            align: 'center',            
+        }
+      };
+      var chart = new ApexCharts(document.querySelector("#chartMed"), options);
+      chart.render();
+
+    }
+  function lista_insumos_chart(data,cate)
+    {
+      var options = {
+        series: [{
+          data: data
+        }],
+        chart: {
+          foreColor: '#9ba7b2',
+          type: 'bar',
+          height: 350
+        },
+        colors: ["#0d6efd"],
+        plotOptions: {
+          bar: {
+            horizontal: true,
+            columnWidth: '35%',
+            endingShape: 'rounded'
+          }
+        },
+        dataLabels: {
+          enabled: false
+        },
+        xaxis: {
+          categories: cate,
+        },title: {
+            text: 'Stock de Insumos',
+            align: 'center',            
+        }
+      };
+      var chart = new ApexCharts(document.querySelector("#chartIns"), options);
+      chart.render();
+    }
+
+    function pie(tipo,cant) {
+      var options = {
+        series: cant,
+        chart: {
+          foreColor: '#9ba7b2',
+          height: 330,
+          type: 'pie',
+        },title: {
+            text: 'Pacientes Atendidos',
+            align: 'center',            
+        },
+        colors: ["#0d6efd", "#6c757d", "#17a00e", "#f41127", "#ffc107","#0d5efd", "#6c767d", "#17a10e", "#f41327", "#ffc207"],
+        labels: tipo,
+        responsive: [{
+          breakpoint: 480,
+          options: {
+            chart: {
+              height: 360
+            },
+            legend: {
+              position: 'bottom'
+            }
+          }
+        }]
+      };
+      var chart = new ApexCharts(document.querySelector("#chart8"), options);
+      chart.render();
+
+  }
+	
 </script>
  
 <?php //include('../cabeceras/footer.php'); ?>

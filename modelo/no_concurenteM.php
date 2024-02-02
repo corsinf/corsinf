@@ -57,6 +57,7 @@ class no_concurenteM
 				WHERE OBJECTPROPERTY(OBJECT_ID(CONSTRAINT_NAME), 'IsPrimaryKey') = 1
 				AND TABLE_NAME = '".$tabla."'";
 		$datos2 = $this->db->datos($sql2);
+		// print_r($sql2);die();
 		return $datos2;
 	}
 

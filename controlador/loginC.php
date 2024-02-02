@@ -184,8 +184,8 @@ class loginC
 		{
 			//actualizamos
 			$empresa = $this->login->lista_empresa($parametros['empresa']);
-		 	$this->cod_global->generar_primera_vez($empresa[0]['Base_datos'],$parametros['empresa']);
-			return array('respuesta'=>1);
+		 	$res = $this->cod_global->generar_primera_vez($empresa[0]['Base_datos'],$parametros['empresa']);
+			return array('respuesta'=>$res);
 		}
 	}
 

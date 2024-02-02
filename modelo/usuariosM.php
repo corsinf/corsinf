@@ -346,7 +346,8 @@ class usuariosM
 
 		  	$where[0]['campo'] = 'id_usuarios';
 		  	$where[0]['dato'] = $value['Id_usuario'];
-		  	$this->db->update('USUARIOS',$datos, $where);
+		  	$p =  $this->db->update('USUARIOS',$datos, $where);
+		  	// print_r($p);
 		  }
 
 		  return $resp;
