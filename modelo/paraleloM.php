@@ -31,15 +31,15 @@ class paraleloM
         return $datos;
     }
 
-    function lista_paralelo_todo($id = '')
+    function lista_paralelo_todo()
     {
-        $sql = "SELECT  sa_par_id, sa_par_nombre, sa_par_estado FROM cat_paralelo WHERE 1 = 1 ";
+        $sql = "SELECT cp.sa_par_id, cp.sa_par_nombre, cp.sa_par_estado, cs.sa_sec_id, cs.sa_sec_nombre, cg.sa_gra_id, cg.sa_gra_nombre
+        FROM cat_paralelo cp
+        INNER JOIN cat_seccion cs ON cp.sa_id_seccion = cs.sa_sec_id
+        INNER JOIN cat_grado cg ON cp.sa_id_grado = cg.sa_gra_id
+        WHERE cp.sa_par_estado = 1";
 
-        if ($id) {
-            $sql .= ' and sa_par_id= ' . $id;
-        }
-
-        $sql .= " ORDER BY sa_par_id ";
+        $sql .= " ORDER BY sa_par_id";
         $datos = $this->db->datos($sql);
         return $datos;
     }

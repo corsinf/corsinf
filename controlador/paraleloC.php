@@ -7,6 +7,10 @@ if (isset($_GET['listar'])) {
     echo json_encode($controlador->lista_paralelo($_POST['id']));
 }
 
+if (isset($_GET['listar_todo'])) {
+    echo json_encode($controlador->lista_paralelo_todo());
+}
+
 if (isset($_GET['buscar'])) {
     echo json_encode($controlador->buscar_paralelo($_POST['buscar']));
 }
@@ -36,6 +40,12 @@ class paraleloC
     function __construct()
     {
         $this->modelo = new paraleloM();
+    }
+
+    function lista_paralelo_todo()
+    {
+        $datos = $this->modelo->lista_paralelo_todo();
+        return $datos;
     }
 
     function lista_paralelo($id)
