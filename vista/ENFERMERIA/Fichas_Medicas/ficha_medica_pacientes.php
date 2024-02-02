@@ -105,7 +105,7 @@ if (isset($_POST['sa_pac_tabla'])) {
         }
 
         function datos_col_ficha_medica(sa_pac_id) {
-            //alert(id_ficha)
+            // alert(sa_pac_id)
             $.ajax({
                 data: {
                     sa_pac_id: sa_pac_id
@@ -549,7 +549,7 @@ if (isset($_POST['sa_pac_tabla'])) {
 
                                                     <div class="row pt-3">
                                                         <div class="col-md-11" id="sa_fice_pac_nombre_seguro_div">
-                                                            <label for="" class="form-label">Seguro predeterminado: <label style="color: red;">*</label> </label>
+                                                            <label for="" class="form-label">Seleccione Seguro medico predeterminado: <label style="color: red;">*</label> </label>
                                                             <div class="input-group">
                                                                 <select class="form-select form-select-sm" id="sa_fice_pac_nombre_seguro" name="sa_fice_pac_nombre_seguro">
                                                                     <option selected disabled value="">-- Seleccione --</option>

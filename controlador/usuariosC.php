@@ -112,6 +112,12 @@ if(isset($_GET['usuarios']))
    echo json_encode($controlador->usuarios_all());
 }
 
+if(isset($_GET['cargar_imagen_no_concurente']))
+{
+   echo json_encode($controlador->guardar_foto_perfil($_FILES,$_POST));
+}
+
+
 
 class usuariosC
 {
@@ -570,7 +576,63 @@ class usuariosC
 		 $where[0]['dato'] = $parametros['id'];
 		 return $this->modelo->update('USUARIOS',$datos,$where);
 
-	}	
+	}
+
+	function guardar_foto_perfil($file,$post)
+	 {
+	 		$ruta='../img/usuarios/';//ruta carpeta donde queremos copiar las imágenes
+	 		if($_SESSION['INICIO']['NO_CONCURENTE']!=''){
+	    	$ruta='../img/no_concurentes/';//ruta carpeta donde queremos copiar las imágenes
+	  	}
+	    if (!file_exists($ruta)) {
+	       mkdir($ruta, 0777, true);
+	    }
+	    if($this->validar_formato_img($file)==1)
+	    {
+	         $uploadfile_temporal=$file['file_img']['tmp_name'];
+	         $tipo = explode('/', $file['file_img']['type']);
+	         $nombre = $post['name_img'].'.'.$tipo[1];	        
+	         $nuevo_nom=$ruta.$nombre;
+	         if (is_uploaded_file($uploadfile_temporal))
+	         {
+	           move_uploaded_file($uploadfile_temporal,$nuevo_nom);
+	            if($_SESSION['INICIO']['NO_CONCURENTE']!=''){
+	              $datosI[0]['campo']=$_SESSION['INICIO']['NO_CONCURENTE_CAMPO_IMG'];
+	              $datosI[0]['dato'] = $nuevo_nom;
+	              $where[0]['campo'] = $_SESSION['INICIO']['NO_CONCURENTE_TABLA_ID'];
+	              $where[0]['dato'] =  $_SESSION['INICIO']['NO_CONCURENTE'];
+	              $base = $this->modelo->updateEmpresa($_SESSION['INICIO']['NO_CONCURENTE_TABLA'],$datosI,$where);
+	            }else
+	            {
+	            	$datosI[0]['campo']='foto';
+	              $datosI[0]['dato'] = $nuevo_nom;
+	              $where[0]['campo'] = 'id_usuarios';
+	              $where[0]['dato'] =  $_SESSION['INICIO']['ID_USUARIO'];
+	              $base = $this->modelo->update('USUARIOS',$datosI,$where);
+	            }
+	             $resp = $this->modelo->generar_primera_vez($_SESSION['INICIO']['BASEDATO'],$_SESSION['INICIO']['ID_EMPRESA']);
+
+
+	              $_SESSION['INICIO']['FOTO'] = $nuevo_nom;
+	           if($base==1)
+	           {
+	            return 1;
+	           }else
+	           {
+	            return -1;
+	           }
+
+	         }
+	         else
+	         {
+	           return -1;
+	         } 
+	     }else
+	     {
+	      return -2;
+	     }
+
+	  }	
 
 	function guardar_foto($file,$post)
 	 {

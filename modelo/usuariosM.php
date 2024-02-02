@@ -45,6 +45,19 @@ class usuariosM
 
 	}
 
+	function updateEmpresa($tabla,$datos,$where)
+	{
+		$datos = $this->db->update($tabla,$datos,$where);
+		if($datos==1)
+		{
+			return 1;
+		}else
+		{
+			return -1;
+		}
+
+	}
+
 	
 	function eliminar_permisos($id)
 	{
@@ -56,7 +69,7 @@ class usuariosM
 
 	function lista_usuarios($id=false,$query=false,$tipo=false,$ci=false,$email=false)
 	{
-		$sql="SELECT id_usuarios as 'id',ci_ruc as 'ci',nombres,apellidos as 'ape',nombres +' '+apellidos as 'nom', direccion as 'dir',telefono as 'tel',password as 'pass',email as 'email', T.ID_TIPO as 'idt',DESCRIPCION as 'tipo',foto,link_fb,link_gmail,link_ins,link_tw,link_web 
+		$sql="SELECT id_usuarios as 'id',ci_ruc as 'ci',nombres as 'nombre',apellidos as 'apellido',nombres +' '+apellidos as 'nom', direccion as 'direccion',telefono as 'telefono',password as 'pass',email as 'email', T.ID_TIPO as 'idt',DESCRIPCION as 'tipo',foto,link_fb,link_gmail,link_ins,link_tw,link_web 
 			FROM ACCESOS_EMPRESA UT
 			RIGHT JOIN USUARIOS U ON UT.ID_USUARIO = U.id_usuarios 
 			LEFT JOIN TIPO_USUARIO T ON UT.ID_TIPO_USUARIO = T.ID_TIPO

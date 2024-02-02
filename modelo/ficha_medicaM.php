@@ -108,6 +108,7 @@ class ficha_MedicaM
         }
 
 
+        // print_r($sql);die();
         $datos = $this->db->datos($sql);
         return $datos;
     }

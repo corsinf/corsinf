@@ -660,7 +660,11 @@ if ($dominio != 'localhost') {
 					</div>
 					<div class="user-box dropdown">
 						<a class="d-flex align-items-center nav-link dropdown-toggle dropdown-toggle-nocaret" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-							<img src="<?php echo $_SESSION['INICIO']['FOTO']; ?>" class="user-img" alt="user avatar">
+							<?php if($_SESSION['INICIO']['NO_CONCURENTE_NOM']=='') { ?>
+								<img src="<?php if($_SESSION['INICIO']['FOTO']!=''){echo $_SESSION['INICIO']['FOTO'];}else{echo "../img/sin_imagen.jpg"; } ?>" class="user-img" alt="user avatar">
+							<?php }else{ ?>
+							<img src="<?php if($_SESSION['INICIO']['FOTO']!=''){ echo $_SESSION['INICIO']['FOTO'];}else{echo "../img/sin_imagen.jpg"; } ?>" class="user-img" alt="user avatar">
+							<?php } ?>
 							<div class="user-info ps-3">
 								<p class="user-name mb-0"><?php if($_SESSION['INICIO']['NO_CONCURENTE_NOM']==''){ echo $_SESSION['INICIO']['USUARIO'];}else{echo $_SESSION['INICIO']['NO_CONCURENTE_NOM'];} ?></p>
 								<p class="designattion mb-0"><?php echo $_SESSION['INICIO']['TIPO']; ?></p>

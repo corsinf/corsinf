@@ -35,7 +35,7 @@
             dataType: 'json',
 
             success: function(response) {
-                //console.log(response);
+                console.log(response);
                 $('#txt_ci').html(response[0].ci + " <i class='bx bxs-id-card'></i>");
                 $('#txt_nombre').html(response[0].nombre);
                 $('#txt_apellido').html(response[0].ape);
@@ -43,8 +43,17 @@
                 if (response[0].sexo != '') {
                     $('#txt_sexo').html(response[0].sexo);
                 }
-                $('#txt_fecha_nacimiento').html('Falta dato en usuario');
-                $('#txt_edad').html('Falta dato en usuario');
+                $('#txt_fecha_nacimiento').html(formatoDate(response[0].fechaN.date));
+
+                var fecha1 = new Date(formatoDate(response[0].fechaN.date));
+                var fecha2 = new Date();
+
+                var diferenciaEnMilisegundos = fecha2 - fecha1;
+
+                var milisegundosEnUnAnio = 1000 * 60 * 60 * 24 * 365.25; // Aproximadamente 365.25 días en un año
+                var diferenciaEnAnios = Math.round(diferenciaEnMilisegundos / milisegundosEnUnAnio);
+
+                $('#txt_edad').html(diferenciaEnAnios);
                 $('#txt_email').html(response[0].email + " <i class='bx bx-envelope'></i>");
                 $('#txt_telefono').html(response[0].telefono + " <i class='bx bxs-phone'></i>");
             }
@@ -422,8 +431,10 @@
 
                             <div class="tab-pane fade" id="seguros" role="tabpanel">
                                 <div class="row">
+                                    <span class="badge rounded-pill bg-warning"><i class="bx bx-info-circle"></i>Seccion exclusiva para agregar seguros medicos adicionales a los que existen en la institucion </span>
 
                                     <div class="col-sm-8">
+                                    <br>
                                         <div class="row">
                                             <div class="col-sm-12">
                                                 <b>Nombre de Proveedor</b>
@@ -454,7 +465,7 @@
                                         </div>
                                     </div>
                                     <div class="col-sm-4">
-                                        <br>
+                                        <br><br>
                                         <button type="button" class="btn btn-primary btn-sm" onclick="SaveNewSeguro()"><i class="bx bx-save me-0"></i> Guardar</button>
                                     </div>
                                     <div class="col-sm-12">

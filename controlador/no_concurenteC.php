@@ -68,6 +68,7 @@ class no_concurenteC
 					array('campo'=>'Campo_usuario','dato'=>$parametros['usuario']),
 					array('campo'=>'Campo_pass','dato'=>$parametros['pass']),
 					array('campo'=>'tipo_perfil','dato'=>$parametros['perfil_usu']),
+					array('campo'=>'campo_img','dato'=>$parametros['foto']),
 				);
 				$this->modelo->insertar('TABLAS_NOCONCURENTE',$datosADD,1);
 			}

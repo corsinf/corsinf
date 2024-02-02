@@ -36,7 +36,7 @@ class loginM
 
 	function empresa_tabla_noconcurente($id_empresa=false)
 	{
-		$sql = "SELECT Tabla,Id_Empresa,Campo_usuario,Campo_pass,tipo_perfil,TU.DESCRIPCION as 'tipo'
+		$sql = "SELECT Tabla,Id_Empresa,Campo_usuario,Campo_pass,tipo_perfil,TU.DESCRIPCION as 'tipo',campo_img
 			FROM TABLAS_NOCONCURENTE T
 			INNER JOIN TIPO_USUARIO TU ON T.tipo_perfil = TU.ID_TIPO 
 				WHERE 1=1 ";
@@ -44,7 +44,7 @@ class loginM
 				{
 					$sql.=" AND Id_Empresa='".$id_empresa."'";
 				}
-				$sql.="GROUP BY Tabla,Id_Empresa,Campo_usuario,Campo_pass,tipo_perfil,TU.DESCRIPCION";
+				$sql.="GROUP BY Tabla,Id_Empresa,Campo_usuario,Campo_pass,tipo_perfil,TU.DESCRIPCION,campo_img";
 
 				// print_r($sql);die();
 		$datos = $this->db->datos($sql,1);
@@ -227,6 +227,13 @@ class loginM
 	{
 		$sql = "SELECT E.*,Id_empresa as 'Id_Empresa' FROM EMPRESAS E WHERE Id_empresa = '".$id."'";
 		return $this->db->datos($sql);
+	}
+	function datos_no_concurente($tabla,$campoid,$id)
+	{
+		$sql= "SELECT * FROM ".$tabla." WHERE ".$campoid.' = '.$id;
+		$datos = $this->db->datos($sql);
+		return $datos;
+		// print_r($sql);die();
 	}
 
 	
