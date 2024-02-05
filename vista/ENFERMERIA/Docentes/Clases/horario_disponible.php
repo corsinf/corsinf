@@ -19,8 +19,6 @@ if (isset($_POST['id_docente'])) {
     $(document).ready(function() {
         var id_docente = '<?php echo $id_docente; ?>';
 
-        cargar_clases();
-
     });
 
     document.addEventListener('DOMContentLoaded', function() {
@@ -70,7 +68,7 @@ if (isset($_POST['id_docente'])) {
             },
 
             allDaySlot: false,
-
+            
             eventClick: function(info) {
                 // Obtener información del evento
                 var id_horario_clases = info.event.id;
@@ -91,7 +89,7 @@ if (isset($_POST['id_docente'])) {
                     if (result.isConfirmed) {
                         // Ejecuta la solicitud AJAX
                         $.ajax({
-                            url: '../controlador/horario_clasesC.php?eliminar=true',
+                            url: '../controlador/horario_disponibleC.php?eliminar=true',
                             type: 'POST',
                             data: {
                                 id: id_horario_clases
@@ -99,7 +97,7 @@ if (isset($_POST['id_docente'])) {
                             success: function(response) {
                                 // Maneja la respuesta exitosa
                                 Swal.fire('Éxito', 'La operación se realizó con éxito', 'success');
-                                cargar_horario_clases();
+                                cargar_horario_disponible();
                             },
                             error: function() {
                                 // Maneja el error
@@ -111,40 +109,23 @@ if (isset($_POST['id_docente'])) {
 
                 info.jsEvent.preventDefault();
 
-            },
-
-            eventMouseEnter: function(info) {
-                // Al pasar el ratón, muestra la información completa del evento
-                var tooltip = document.createElement('div');
-                tooltip.className = 'custom-tooltip';
-                tooltip.innerHTML = '<strong>' + info.event.title + info.event.extendedProps.descripcion + '</strong><br>'
-
-                document.body.appendChild(tooltip);
-                $(tooltip).css({
-                    top: info.el.getBoundingClientRect().top + window.scrollY - tooltip.offsetHeight - 10 + 'px',
-                    left: info.el.getBoundingClientRect().left + window.scrollX + 'px',
-                });
-            },
-            eventMouseLeave: function() {
-                // Al salir del ratón, oculta la información completa del evento
-                $('.custom-tooltip').remove();
-            },
+            }
         });
 
 
 
         // Función para cargar eventos desde AJAX
-        cargar_horario_clases();
+        cargar_horario_disponible();
 
     });
 
     //Fecha que empieza el horario de clases es el 2024-02-12 como lunes
-    function cargar_horario_clases() {
+    function cargar_horario_disponible() {
         id_docente = <?= $id_docente ?>;
         fecha_dia_estatico = '';
 
         $.ajax({
-            url: '../controlador/horario_clasesC.php?listar=true',
+            url: '../controlador/horario_disponibleC.php?listar=true',
             type: 'get',
             data: {
                 id_docente: id_docente
@@ -155,32 +136,29 @@ if (isset($_POST['id_docente'])) {
                 // Recorrer la respuesta y agregar eventos al arreglo events
                 response.forEach(function(evento) {
                     //console.log(evento);
-                    if (evento.ac_horarioC_dia == 'lunes') {
+                    if (evento.ac_horarioD_dia == 'lunes') {
                         fecha_dia_estatico = '2024-02-12';
-                    } else if (evento.ac_horarioC_dia == 'martes') {
+                    } else if (evento.ac_horarioD_dia == 'martes') {
                         fecha_dia_estatico = '2024-02-13';
-                    } else if (evento.ac_horarioC_dia == 'miercoles') {
+                    } else if (evento.ac_horarioD_dia == 'miercoles') {
                         fecha_dia_estatico = '2024-02-14';
-                    } else if (evento.ac_horarioC_dia == 'jueves') {
+                    } else if (evento.ac_horarioD_dia == 'jueves') {
                         fecha_dia_estatico = '2024-02-15';
-                    } else if (evento.ac_horarioC_dia == 'viernes') {
+                    } else if (evento.ac_horarioD_dia == 'viernes') {
                         fecha_dia_estatico = '2024-02-16';
-                    } else if (evento.ac_horarioC_dia == 'sabado') {
+                    } else if (evento.ac_horarioD_dia == 'sabado') {
                         fecha_dia_estatico = '2024-02-17';
                     }
 
                     calendar.addEvent({
-                        id: evento.ac_horarioC_id,
-                        title: (evento.ac_horarioC_materia).toUpperCase(),
-                        start: fecha_dia_estatico + 'T' + obtener_hora_formateada(evento.ac_horarioC_inicio.date),
-                        end: fecha_dia_estatico + 'T' + obtener_hora_formateada(evento.ac_horarioC_fin.date),
-                        extendedProps: {
-                            descripcion: ' (' + evento.sa_sec_nombre + ' / ' + evento.sa_gra_nombre + ' / ' + evento.sa_par_nombre + ')',
-                        },
+                        id: evento.ac_horarioD_id,
+                        title: (evento.ac_horarioD_materia).toUpperCase(),
+                        start: fecha_dia_estatico + 'T' + obtener_hora_formateada(evento.ac_horarioD_inicio.date),
+                        end: fecha_dia_estatico + 'T' + obtener_hora_formateada(evento.ac_horarioD_fin.date),
 
                     });
 
-                    console.log(fecha_nacimiento_formateada(evento.ac_horarioC_fecha_creacion.date) + '-- ' + obtener_hora_formateada(evento.ac_horarioC_inicio.date));
+                    console.log(fecha_nacimiento_formateada(evento.ac_horarioD_fecha_creacion.date) + '-- ' + obtener_hora_formateada(evento.ac_horarioD_inicio.date));
                 });
                 // Renderizar el calendario después de agregar los eventos
                 calendar.render();
@@ -192,9 +170,9 @@ if (isset($_POST['id_docente'])) {
 
         eventos.forEach(function(evento) {
             calendar.addEvent({
-                title: evento.ac_horarioC_materia.toUpperCase(),
-                start: formatoDate(evento.ac_horarioC_inicio.date) + 'T' + evento.ac_horarioC_inicio.time,
-                end: formatoDate(evento.ac_horarioC_fin.date) + 'T' + evento.ac_horarioC_fin.time,
+                title: evento.ac_horarioD_materia.toUpperCase(),
+                start: formatoDate(evento.ac_horarioD_inicio.date) + 'T' + evento.ac_horarioD_inicio.time,
+                end: formatoDate(evento.ac_horarioD_fin.date) + 'T' + evento.ac_horarioD_fin.time,
             });
         });
 
@@ -204,30 +182,27 @@ if (isset($_POST['id_docente'])) {
     function agregar_clase() {
         var ac_docente_id = '<?php echo $id_docente; ?>';
 
-        var ac_paralelo_id = $('#ac_paralelo_id').val();
+        var ac_horarioD_inicio = $('#ac_horarioD_inicio').val();
+        var ac_horarioD_fin = $('#ac_horarioD_fin').val();
+        var ac_horarioD_dia = $('#ac_horarioD_dia').val();
+        var ac_horarioD_materia = $('#ac_horarioD_materia').val();
 
-        var ac_horarioC_inicio = $('#ac_horarioC_inicio').val();
-        var ac_horarioC_fin = $('#ac_horarioC_fin').val();
-        var ac_horarioC_dia = $('#ac_horarioC_dia').val();
-        var ac_horarioC_materia = $('#ac_horarioC_materia').val();
-
-        //alert(ac_horarioC_inicio + ' ' + ac_horarioC_fin);
+        //alert(ac_horarioD_inicio + ' ' + ac_horarioD_fin);
 
         var parametros = {
-            'ac_horarioC_id': '',
+            'ac_horarioD_id': '',
             'ac_docente_id': ac_docente_id,
-            'ac_paralelo_id': ac_paralelo_id,
-            'ac_horarioC_inicio': ac_horarioC_inicio,
-            'ac_horarioC_fin': ac_horarioC_fin,
-            'ac_horarioC_dia': ac_horarioC_dia,
-            'ac_horarioC_materia': ac_horarioC_materia,
+            'ac_horarioD_inicio': ac_horarioD_inicio,
+            'ac_horarioD_fin': ac_horarioD_fin,
+            'ac_horarioD_dia': ac_horarioD_dia,
+            'ac_horarioD_materia': ac_horarioD_materia,
         }
 
         //console.log(parametros)
 
-        if (ac_horarioC_inicio != '' && ac_horarioC_fin != '' && ac_horarioC_dia != null && ac_horarioC_materia != null && ac_paralelo_id != null) {
+        if (ac_horarioD_inicio != '' && ac_horarioD_fin != '' && ac_horarioD_dia != null && ac_horarioD_materia != null) {
             $.ajax({
-                url: '../controlador/horario_clasesC.php?insertar=true',
+                url: '../controlador/horario_disponibleC.php?insertar=true',
                 data: {
                     parametros: parametros
                 },
@@ -244,46 +219,13 @@ if (isset($_POST['id_docente'])) {
             Swal.fire('', 'Falta llenar los campos.', 'error');
         }
 
+
+
+
         $('#modal_horario_clases').modal('hide');
-        cargar_horario_clases(); // Volver a cargar la tabla
-    }
-
-    function cargar_clases() {
-        var ac_docente_id = '<?php echo $id_docente; ?>';
-        var select = '';
-
-        select = '<option selected disabled>-- Seleccione --</option>'
-        $.ajax({
-            data: {
-                id_docente: ac_docente_id
-            },
-            url: '../controlador/docente_paraleloC.php?listar=true',
-            type: 'get',
-            dataType: 'json',
-
-            success: function(response) {
-                //console.log(response);
-                $.each(response, function(i, item) {
-                    //console.log(item);
-                    select += '<option value="' + item.sa_par_id + '">' + item.sa_sec_nombre + ' / ' + item.sa_gra_nombre + ' / ' + item.sa_par_nombre + '</option>';
-                });
-
-                $('#ac_paralelo_id').html(select);
-            }
-        });
+        cargar_horario_disponible(); // Volver a cargar la tabla
     }
 </script>
-
-<style>
-    .custom-tooltip {
-        position: absolute;
-        background-color: white;
-        border: 1px solid #ccc;
-        padding: 5px;
-        z-index: 1000;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    }
-</style>
 
 <div class="page-wrapper">
     <div class="page-content">
@@ -300,7 +242,7 @@ if (isset($_POST['id_docente'])) {
                         <li class="breadcrumb-item"><a href="javascript:;"><i class="bx bx-home-alt"></i></a>
                         </li>
                         <li class="breadcrumb-item active" aria-current="page">
-                            Horario de Clases
+                            Horario Disponible
                         </li>
                     </ol>
                 </nav>
@@ -319,7 +261,7 @@ if (isset($_POST['id_docente'])) {
                             <div class="row mx-0">
                                 <div class="col-sm-12" id="btn_nuevo">
 
-                                    <button type="button" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#modal_horario_clases"><i class="bx bx-plus"></i> Agregar Asignatura</button>
+                                    <button type="button" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#modal_horario_clases"><i class="bx bx-plus"></i> Agregar Hora Disponible</button>
 
 
                                 </div>
@@ -329,7 +271,7 @@ if (isset($_POST['id_docente'])) {
 
                         <section class="content pt-2">
                             <div class="container-fluid">
-                                <p class="text-danger">*Para eliminar un registro, haga clic en el evento previamente asignado con una materia en el cuadro azul.</p>
+                                <p class="text-danger">*Para eliminar un registro, haga clic en el evento previamente asignado en el cuadro azul.</p>
 
                                 <div class="row">
                                     <div class="col-12">
@@ -356,7 +298,7 @@ if (isset($_POST['id_docente'])) {
 
             <!-- Modal Header -->
             <div class="modal-header">
-                <h5>Agregar Asignatura</h5>
+                <h5>Agregar Hora Disponible</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
 
@@ -365,26 +307,15 @@ if (isset($_POST['id_docente'])) {
 
                 <div class="row">
                     <div class="col-12">
-                        <label for="ac_horarioC_materia">Materia: <label class="text-danger">*</label></label>
-                        <select name="ac_horarioC_materia" id="ac_horarioC_materia" class="form-select form-select-sm">
-                            <option selected disabled>-- Seleccione una Materia --</option>
-                            <option value="matematicas">Matemáticas</option>
-                            <option value="lengua">Lengua y Literatura</option>
-                            <option value="ciencias">Ciencias Naturales</option>
-                            <option value="historia">Historia</option>
-                            <option value="geografia">Geografía</option>
-                            <option value="educacion-fisica">Educación Física</option>
-                            <option value="arte">Arte</option>
-                            <option value="musica">Música</option>
-                            <option value="tecnologia">Tecnología</option>
-                        </select>
+                        <label for="ac_horarioD_materia">Disponibilidad: <label class="text-danger">*</label></label>
+                        <input type="text" name="ac_horarioD_materia" id="ac_horarioD_materia" value="Disponible" class="form-control form-control-sm" readonly>
                     </div>
                 </div>
 
                 <div class="row pt-3">
                     <div class="col-12">
-                        <label for="ac_horarioC_dia">Día: <label class="text-danger">*</label></label>
-                        <select name="ac_horarioC_dia" id="ac_horarioC_dia" class="form-select form-select-sm">
+                        <label for="ac_horarioD_dia">Día: <label class="text-danger">*</label></label>
+                        <select name="ac_horarioD_dia" id="ac_horarioD_dia" class="form-select form-select-sm">
                             <option selected disabled>-- Seleccione un Día --</option>
                             <option value="lunes">Lunes</option>
                             <option value="martes">Martes</option>
@@ -395,26 +326,16 @@ if (isset($_POST['id_docente'])) {
                     </div>
                 </div>
 
-
-                <div class="row pt-3">
-                    <div class="col-12">
-                        <label for="ac_horarioC_dia">Clase: <label class="text-danger">*</label></label>
-                        <select name="ac_paralelo_id" id="ac_paralelo_id" class="form-select form-select-sm">
-                            <option selected disabled>-- Seleccione una Clase --</option>
-                        </select>
-                    </div>
-                </div>
-
                 <div class="row pt-3">
 
                     <div class="col-4">
-                        <label for="ac_horarioC_inicio">Inicio de la Clase: <label class="text-danger">*</label></label>
-                        <input type="time" name="ac_horarioC_inicio" id="ac_horarioC_inicio" class="form-control form-control-sm">
+                        <label for="ac_horarioD_inicio">Inicio de la Clase: <label class="text-danger">*</label></label>
+                        <input type="time" name="ac_horarioD_inicio" id="ac_horarioD_inicio" class="form-control form-control-sm">
                     </div>
 
                     <div class="col-4">
-                        <label for="ac_horarioC_fin">Fin de la Clase: <label class="text-danger">*</label></label>
-                        <input type="time" name="ac_horarioC_fin" id="ac_horarioC_fin" class="form-control form-control-sm">
+                        <label for="ac_horarioD_fin">Fin de la Clase: <label class="text-danger">*</label></label>
+                        <input type="time" name="ac_horarioD_fin" id="ac_horarioD_fin" class="form-control form-control-sm">
                     </div>
                 </div>
 

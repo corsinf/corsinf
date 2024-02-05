@@ -49,6 +49,7 @@ class horario_clasesC
 
         $datos = array(
             array('campo' => 'ac_docente_id', 'dato' => strval($parametros['ac_docente_id'])),
+            array('campo' => 'ac_paralelo_id', 'dato' => strval($parametros['ac_paralelo_id'])),
             array('campo' => 'ac_horarioC_inicio', 'dato' => ($parametros['ac_horarioC_inicio'])),
             array('campo' => 'ac_horarioC_fin', 'dato' => ($parametros['ac_horarioC_fin'])),
             array('campo' => 'ac_horarioC_dia', 'dato' => ($parametros['ac_horarioC_dia'])),
@@ -68,9 +69,7 @@ class horario_clasesC
 
     function eliminar($id)
     {
-        $datos[0]['campo'] = 'ac_horario_clases_id';
-        $datos[0]['dato'] = $id;
-        $datos = $this->modelo->eliminar($datos);
+        $datos = $this->modelo->eliminar($id);
         return $datos;
     }
 

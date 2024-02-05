@@ -1,6 +1,6 @@
 <?php
 
-$id_docente = '2';
+$id_docente = '1';
 
 if (isset($_POST['id_docente'])) {
     $id_docente = $_POST['id_docente'];
@@ -15,13 +15,15 @@ if (isset($_POST['id_docente'])) {
     $(document).ready(function() {
         var id_docente = '<?php echo $id_docente; ?>';
 
-        carga_tabla(id_docente);
+        carga_tabla();
 
         consultar_paralelos_datos();
     });
 
-    function carga_tabla(id_docente) {
-        tabla_pacientes = $('#tbl_doc_par').DataTable({
+    function carga_tabla() {
+        var id_docente = '<?php echo $id_docente; ?>';
+        
+        tbl_doc_par = $('#tbl_doc_par').DataTable({
             language: {
                 url: 'https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
             },
@@ -114,8 +116,8 @@ if (isset($_POST['id_docente'])) {
         });
 
 
-        if (tabla_pacientes) {
-            tabla_pacientes.destroy(); // Destruir la instancia existente del DataTable
+        if (tbl_doc_par) {
+            tbl_doc_par.destroy(); // Destruir la instancia existente del DataTable
         }
 
         $('#modal_paralelo').modal('hide');

@@ -53,6 +53,7 @@ function campos_tabla_noconcurente()
         })
         $('#ddl_usuario').html(op);
         $('#ddl_pass').html(op);
+        $('#ddl_campo_img').html(op);
      }
    });
 }
@@ -88,7 +89,7 @@ function lista_no_concurente()
 function add_no_concurente()
 {
   
-  if($('#ddl_tablas').val()=='' || $("#ddl_perfil").val()=='' || $('#ddl_usuario').val() == '' || $('#ddl_pass').val()=='')
+  if($('#ddl_tablas').val()=='' || $("#ddl_perfil").val()=='' || $('#ddl_usuario').val() == '' || $('#ddl_pass').val()=='' || $('#ddl_campo_img').val()=='')
   {
     Swal.fire('','Seleccione todos los campos','info');
      return false;
@@ -103,6 +104,7 @@ function add_no_concurente()
     'usuario':$('#ddl_usuario').val(),
     'pass':$('#ddl_pass').val(),
     'perfil_usu':$("#ddl_perfil").val(),
+    'foto':$('#ddl_campo_img').val(),
   }
   $.ajax({
      data:  {parametros:parametros},
@@ -235,6 +237,12 @@ function eliminar(tabla)
                       <select class="form-select form-select-sm" id="ddl_perfil" name="ddl_perfil" onchange="buscar_usuario_perfil();">
                         <option value="">Seleccione perfil de usuario</option>
                       </select>                    
+                    </div>
+                    <div class="col-sm-3">
+                      <b>Campo Foto perfil</b>
+                      <select class="form-select form-select-sm" id="ddl_campo_img" name="ddl_campo_img">
+                        <option value="">Seleccione password</option>
+                      </select>
                     </div>
 
                     <div class="col-sm-2">
