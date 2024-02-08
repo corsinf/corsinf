@@ -11,12 +11,14 @@
         //console.log(id);
 
         //alert(noconcurente_tabla)
-        cargarDatos(id)
+        //cargarDatos(id)
 
 
         //Esta consultando unos datos por defecto
-        consultar_datos_estudiante_representante(noconcurente_id);
-        //consultar_datos(6);
+        //consultar_datos_estudiante_representante(noconcurente_id);
+        cargarDatos(1);
+        consultar_datos_estudiante_representante(1);
+
     });
     var lista_estudiantes
 

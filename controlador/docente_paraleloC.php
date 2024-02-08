@@ -12,6 +12,10 @@ if (isset($_GET['listar'])) {
     echo json_encode($controlador->lista_docente_paralelo($_GET['id_docente']));
 }
 
+if (isset($_GET['listar_estudiante_docente_paralelo'])) {
+    echo json_encode($controlador->listar_estudiante_docente_paralelo($_POST['id_paralelo']));
+}
+
 if (isset($_GET['insertar'])) {
     echo json_encode($controlador->insertar_editar($_POST['parametros']));
 }
@@ -68,6 +72,12 @@ class docente_paraleloC
         $datos[0]['campo'] = 'ac_docente_paralelo_id';
         $datos[0]['dato'] = $id;
         $datos = $this->modelo->eliminar($datos);
+        return $datos;
+    }
+
+    function listar_estudiante_docente_paralelo($id_paralelo)
+    {
+        $datos = $this->modelo->lista_estudiante_docente_paralelo($id_paralelo);
         return $datos;
     }
 

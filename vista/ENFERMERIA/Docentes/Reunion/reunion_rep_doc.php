@@ -1,10 +1,13 @@
 <?php
 
+$id_representante = '1';
+
+if (isset($_POST['id_representante'])) {
+    $id_representante = $_POST['id_representante'];
+}
+
 $id_docente = '1';
 
-if (isset($_POST['id_docente'])) {
-    $id_docente = $_POST['id_docente'];
-}
 
 ?>
 
@@ -17,9 +20,9 @@ if (isset($_POST['id_docente'])) {
     let calendar;
 
     $(document).ready(function() {
-        var id_docente = '<?php echo $id_docente; ?>';
+        var id_representante = '<?php echo $id_representante; ?>';
 
-        cargar_clases();
+        consultar_datos_estudiante_representante(id_representante);
 
     });
 
@@ -28,28 +31,33 @@ if (isset($_POST['id_docente'])) {
 
         calendar = new FullCalendar.Calendar(calendarEl, {
             headerToolbar: {
-                start: '', // Oculta los botones de navegación
-                center: '', // Oculta el título
-                end: '' // Oculta el botón de cambio de vista
+                start: 'prev,next today', // Botones de navegación: anterior, siguiente y hoy
+                center: 'title', // Muestra el título del calendario en el centro
+                end: 'dayGridMonth,timeGridWeek', // Botones para cambiar de vista: mes y semana
+            },
+            buttonText: {
+                today: 'Hoy',
+                week: 'Semana',
+                month: 'Mes',
             },
             locale: 'es',
             initialView: 'timeGridWeek',
-            initialDate: '2024-02-15', // Fecha de inicio de la semana deseada
+            //initialDate: '2024-02-15',
             duration: {
                 weeks: 1
-            }, // Duración de una semana
-            navLinks: false, // Desactiva los enlaces de navegación
+            },
+            navLinks: false,
             selectable: true,
             editable: false,
             nowIndicator: true,
             dayMaxEvents: true,
             selectable: true,
             businessHours: {
-                daysOfWeek: [1, 2, 3, 4, 5, 6], // Lunes (1) a Sábado (6)
-                startTime: '06:00', // Hora de inicio
-                endTime: '18:00' // Hora de finalización
+                daysOfWeek: [1, 2, 3, 4, 5, 6],
+                startTime: '06:00',
+                endTime: '18:00'
             },
-            hiddenDays: [0, 7], // Domingo (0) y Domingo (7) estarán ocultos
+            hiddenDays: [0, 7],
             events: [],
             slotLabelFormat: {
                 hour: 'numeric',
@@ -57,233 +65,210 @@ if (isset($_POST['id_docente'])) {
                 omitZeroMinute: false,
                 hour12: false
             },
-            slotMinTime: '00:00:00', // Hora de inicio
-            slotMaxTime: '24:00:00', // Hora de finalización
-
-            dayHeaderFormat: {
-                weekday: 'long', // Muestra solo el nombre del día
-
-            },
-            viewDidMount: function(view) {
-                // Modifica los encabezados de día para que estén en mayúsculas
-                $('.fc-col-header-cell-cushion').css('text-transform', 'uppercase');
+            slotMinTime: '05:00:00',
+            slotMaxTime: '20:00:00',
+            slotDuration: '00:30:00',
+            slotLabelInterval: {
+                hours: 0.5
             },
 
-            allDaySlot: false,
+            eventDisplay: 'block',
+            displayEventTime: true,
+
+            eventContent: function(arg) {
+                const fecha = arg.event.start;
+                const startTime = arg.event.start.toLocaleTimeString([], {
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+                const endTime = arg.event.end.toLocaleTimeString([], {
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+
+                const buttonsHtml = `
+                    <div class="">
+                        <b>${startTime}</b> - <b>${endTime}</b> ${arg.event.title}
+                        
+                    </div>
+                `;
+
+                return {
+                    html: buttonsHtml,
+                };
+            },
 
             eventClick: function(info) {
-                // Obtener información del evento
-                var id_horario_clases = info.event.id;
-                var title = info.event.title;
+                var ac_horarioD_estado = info.event.extendedProps.ac_horarioD_estado;
+                var url = info.event.url;
 
-                //alert(id_horario_clases)
+                
 
-                Swal.fire({
-                    title: '¿Estás seguro de eliminar esta asignatura ' + title + '?',
-                    text: 'Esta acción no se puede deshacer.',
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'Sí, estoy seguro.'
-                }).then((result) => {
-                    // Si el usuario hace clic en "Sí"
-                    if (result.isConfirmed) {
-                        // Ejecuta la solicitud AJAX
-                        $.ajax({
-                            url: '../controlador/horario_clasesC.php?eliminar=true',
-                            type: 'POST',
-                            data: {
-                                id: id_horario_clases
-                            },
-                            success: function(response) {
-                                // Maneja la respuesta exitosa
-                                Swal.fire('Éxito', 'La operación se realizó con éxito', 'success');
-                                cargar_horario_clases();
-                            },
-                            error: function() {
-                                // Maneja el error
-                                Swal.fire('Error', 'Hubo un error en la operación', 'error');
-                            }
-                        });
-                    }
-                });
+                // Obtener el botón que abre el modal
+                var btnAbrirModal = document.getElementById('btn_modal_agendar_reunion');
+
+                // Si el botón existe, abrir el modal
+                if (btnAbrirModal) {
+                    var modal = new bootstrap.Modal(document.getElementById('modal_agendar_reunion'));
+                    modal.show();
+                }
 
                 info.jsEvent.preventDefault();
-
             },
+            allDaySlot: false,
 
-            eventMouseEnter: function(info) {
-                // Al pasar el ratón, muestra la información completa del evento
-                var tooltip = document.createElement('div');
-                tooltip.className = 'custom-tooltip';
-                tooltip.innerHTML = '<strong>' + info.event.title + info.event.extendedProps.descripcion + '</strong><br>'
-
-                document.body.appendChild(tooltip);
-                $(tooltip).css({
-                    top: info.el.getBoundingClientRect().top + window.scrollY - tooltip.offsetHeight - 10 + 'px',
-                    left: info.el.getBoundingClientRect().left + window.scrollX + 'px',
-                });
-            },
-            eventMouseLeave: function() {
-                // Al salir del ratón, oculta la información completa del evento
-                $('.custom-tooltip').remove();
-            },
         });
 
 
 
         // Función para cargar eventos desde AJAX
-        cargar_horario_clases();
+        cargar_horario_disponible_docente();
 
     });
 
     //Fecha que empieza el horario de clases es el 2024-02-12 como lunes
-    function cargar_horario_clases() {
-        id_docente = <?= $id_docente ?>;
-        fecha_dia_estatico = '';
+    function cargar_horario_disponible_docente() {
 
-        $.ajax({
-            url: '../controlador/horario_clasesC.php?listar=true',
-            type: 'get',
-            data: {
-                id_docente: id_docente
-            },
-            dataType: 'json',
-            success: function(response) {
-                calendar.removeAllEvents();
-                // Recorrer la respuesta y agregar eventos al arreglo events
-                response.forEach(function(evento) {
-                    //console.log(evento);
-                    if (evento.ac_horarioC_dia == 'lunes') {
-                        fecha_dia_estatico = '2024-02-12';
-                    } else if (evento.ac_horarioC_dia == 'martes') {
-                        fecha_dia_estatico = '2024-02-13';
-                    } else if (evento.ac_horarioC_dia == 'miercoles') {
-                        fecha_dia_estatico = '2024-02-14';
-                    } else if (evento.ac_horarioC_dia == 'jueves') {
-                        fecha_dia_estatico = '2024-02-15';
-                    } else if (evento.ac_horarioC_dia == 'viernes') {
-                        fecha_dia_estatico = '2024-02-16';
-                    } else if (evento.ac_horarioC_dia == 'sabado') {
-                        fecha_dia_estatico = '2024-02-17';
-                    }
+        id_docente = $('#ac_docente_id_hidden').val();
+        //alert(id_docente)
 
-                    calendar.addEvent({
-                        id: evento.ac_horarioC_id,
-                        title: (evento.ac_horarioC_materia).toUpperCase(),
-                        start: fecha_dia_estatico + 'T' + obtener_hora_formateada(evento.ac_horarioC_inicio.date),
-                        end: fecha_dia_estatico + 'T' + obtener_hora_formateada(evento.ac_horarioC_fin.date),
-                        extendedProps: {
-                            descripcion: ' (' + evento.sa_sec_nombre + ' / ' + evento.sa_gra_nombre + ' / ' + evento.sa_par_nombre + ')',
-                        },
+        if (id_docente != '') {
 
-                    });
-
-                    console.log(fecha_nacimiento_formateada(evento.ac_horarioC_fecha_creacion.date) + '-- ' + obtener_hora_formateada(evento.ac_horarioC_inicio.date));
-                });
-                // Renderizar el calendario después de agregar los eventos
-                calendar.render();
-            }
-        });
-
-
-        /*calendar.removeAllEvents();
-
-        eventos.forEach(function(evento) {
-            calendar.addEvent({
-                title: evento.ac_horarioC_materia.toUpperCase(),
-                start: formatoDate(evento.ac_horarioC_inicio.date) + 'T' + evento.ac_horarioC_inicio.time,
-                end: formatoDate(evento.ac_horarioC_fin.date) + 'T' + evento.ac_horarioC_fin.time,
-            });
-        });
-
-        calendar.render();*/
-    }
-
-    function agregar_clase() {
-        var ac_docente_id = '<?php echo $id_docente; ?>';
-
-        var ac_paralelo_id = $('#ac_paralelo_id').val();
-
-        var ac_horarioC_inicio = $('#ac_horarioC_inicio').val();
-        var ac_horarioC_fin = $('#ac_horarioC_fin').val();
-        var ac_horarioC_dia = $('#ac_horarioC_dia').val();
-        var ac_horarioC_materia = $('#ac_horarioC_materia').val();
-
-        //alert(ac_horarioC_inicio + ' ' + ac_horarioC_fin);
-
-        var parametros = {
-            'ac_horarioC_id': '',
-            'ac_docente_id': ac_docente_id,
-            'ac_paralelo_id': ac_paralelo_id,
-            'ac_horarioC_inicio': ac_horarioC_inicio,
-            'ac_horarioC_fin': ac_horarioC_fin,
-            'ac_horarioC_dia': ac_horarioC_dia,
-            'ac_horarioC_materia': ac_horarioC_materia,
-        }
-
-        //console.log(parametros)
-
-        if (ac_horarioC_inicio != '' && ac_horarioC_fin != '' && ac_horarioC_dia != null && ac_horarioC_materia != null && ac_paralelo_id != null) {
             $.ajax({
-                url: '../controlador/horario_clasesC.php?insertar=true',
+                url: '../controlador/horario_disponibleC.php?listar=true',
+                type: 'get',
                 data: {
-                    parametros: parametros
+                    id_docente: id_docente
                 },
-                type: 'post',
                 dataType: 'json',
                 success: function(response) {
-                    //console.log(response)
-                    Swal.fire('', 'Curso Asignado.', 'success').then(function() {
-                        //location.href = '../vista/inicio.php?mod=7&acc=agendamiento';
-                    })
+                    calendar.removeAllEvents();
+                    // Recorrer la respuesta y agregar eventos al arreglo events
+                    response.forEach(function(evento) {
+                        console.log(evento);
+
+                        calendar.addEvent({
+                            id: evento.ac_horarioD_id,
+                            //title: (evento.ac_horarioD_materia).toUpperCase(),
+                            start: fecha_nacimiento_formateada(evento.ac_horarioD_fecha_disponible.date) + 'T' + obtener_hora_formateada(evento.ac_horarioD_inicio.date),
+                            end: fecha_nacimiento_formateada(evento.ac_horarioD_fecha_disponible.date) + 'T' + obtener_hora_formateada(evento.ac_horarioD_fin.date),
+                            color: '#3D94C9',
+                            url: '../vista/inicio.php?mod=7&acc=pacientes',
+                            extendedProps: {
+                                ac_horarioD_estado: evento.ac_horarioD_estado,
+                            },
+
+                        });
+
+                        console.log(fecha_nacimiento_formateada(evento.ac_horarioD_fecha_creacion.date) + '-- ' + obtener_hora_formateada(evento.ac_horarioD_inicio.date));
+                    });
+                    // Renderizar el calendario después de agregar los eventos
+                    calendar.render();
                 }
             });
+        }
+    }
+
+    function buscar_agenda() {
+
+        var ac_docente_id = $('#ac_docente_id').val();
+        var sa_est_id = $('#sa_est_id').val();
+
+        $('#ac_docente_id_hidden').val(ac_docente_id);
+
+        cargar_datos_docente(ac_docente_id);
+
+        if (ac_docente_id != null && sa_est_id != null) {
+
         } else {
             Swal.fire('', 'Falta llenar los campos.', 'error');
         }
 
-        $('#modal_horario_clases').modal('hide');
-        cargar_horario_clases(); // Volver a cargar la tabla
+        $('#modal_buscar_horario_disponible').modal('hide');
+        cargar_horario_disponible_docente(); // Volver a cargar la tabla
     }
 
-    function cargar_clases() {
-        var ac_docente_id = '<?php echo $id_docente; ?>';
+    //Para buscar el docente en base al paralelo en el que este el estudiante 
+    function consultar_datos_docente_paralelo(id_paralelo = '') {
+        //alert(id_paralelo);
         var select = '';
+        select = '<option selected disabled>-- Seleccione un Docente --</option>'
 
-        select = '<option selected disabled>-- Seleccione --</option>'
         $.ajax({
             data: {
-                id_docente: ac_docente_id
+                id_paralelo: id_paralelo
             },
-            url: '../controlador/docente_paraleloC.php?listar=true',
-            type: 'get',
+            url: '../controlador/docente_paraleloC.php?listar_estudiante_docente_paralelo=true',
+            type: 'post',
             dataType: 'json',
 
             success: function(response) {
                 //console.log(response);
                 $.each(response, function(i, item) {
-                    //console.log(item);
-                    select += '<option value="' + item.sa_par_id + '">' + item.sa_sec_nombre + ' / ' + item.sa_gra_nombre + ' / ' + item.sa_par_nombre + '</option>';
+                    console.log(item);
+                    select += '<option value="' + item.ac_docente_id + '">' + item.docente_nombres + ' / ' + item.sec_gra_par + '</option>';
                 });
 
-                $('#ac_paralelo_id').html(select);
+                $('#ac_docente_id').html(select);
             }
         });
     }
+
+    function consultar_datos_estudiante_representante(id_representante = '') {
+        var estudiantes = '<option value="">-- Seleccione un Estudiante--</option>';
+
+        $.ajax({
+            data: {
+                id_representante: id_representante,
+            },
+            url: '../controlador/estudiantesC.php?listar_estudiante_representante=true',
+            type: 'post',
+            dataType: 'json',
+            success: function(response) {
+                console.log(response);
+                $.each(response, function(i, item) {
+
+                    nombres = item.sa_est_primer_apellido + ' ' + item.sa_est_segundo_apellido + ' ' + item.sa_est_primer_nombre + ' ' + item.sa_est_segundo_nombre;
+                    estudiantes += '<option value="' + item.sa_par_id + '">' + nombres + '</option>';
+
+                });
+
+                $('#sa_est_id').html(estudiantes);
+            }
+        });
+    }
+
+    function cargar_datos_docente(id_docente) {
+        alert(id_docente)
+        $.ajax({
+            data: {
+                id: id_docente,
+            },
+            url: '../controlador/docentesC.php?listar=true',
+            type: 'post',
+            dataType: 'json',
+            success: function(response) {
+                console.log(response);
+
+
+                nombres = response[0].sa_doc_primer_apellido + ' ' + response[0].sa_doc_segundo_apellido + ' ' + response[0].sa_doc_primer_nombre + ' ' + response[0].sa_doc_segundo_nombre;
+
+                salida = "<b><p class='text-success'>La agenda del docente " + nombres + " es la siugiente.</p></b>";
+
+                $('#lbl_docente').html(salida);
+
+
+
+            }
+        });
+    }
+
+    function agengar_reunion(){
+        alert('agendado xD')
+    }
 </script>
 
-<style>
-    .custom-tooltip {
-        position: absolute;
-        background-color: white;
-        border: 1px solid #ccc;
-        padding: 5px;
-        z-index: 1000;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    }
-</style>
+<input type="hidden" name="ac_docente_id_hidden" id="ac_docente_id_hidden">
 
 <div class="page-wrapper">
     <div class="page-content">
@@ -300,7 +285,7 @@ if (isset($_POST['id_docente'])) {
                         <li class="breadcrumb-item"><a href="javascript:;"><i class="bx bx-home-alt"></i></a>
                         </li>
                         <li class="breadcrumb-item active" aria-current="page">
-                            Horario de Clases
+                            Agendar Reunión con el Docente
                         </li>
                     </ol>
                 </nav>
@@ -319,8 +304,9 @@ if (isset($_POST['id_docente'])) {
                             <div class="row mx-0">
                                 <div class="col-sm-12" id="btn_nuevo">
 
-                                    <button type="button" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#modal_horario_clases"><i class="bx bx-plus"></i> Agregar Asignatura</button>
+                                    <button type="button" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#modal_buscar_horario_disponible"><i class='bx bx-search-alt'></i> Buscar Agenda del Docente</button>
 
+                                    <button hidden id="btn_modal_agendar_reunion" type="button" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#modal_agendar_reunion"><i class='bx bx-search-alt'></i> Modal</button>
 
                                 </div>
                             </div>
@@ -329,7 +315,9 @@ if (isset($_POST['id_docente'])) {
 
                         <section class="content pt-2">
                             <div class="container-fluid">
-                                <p class="text-danger">*Para eliminar un registro, haga clic en el evento previamente asignado con una materia en el cuadro azul.</p>
+                                <p class="text-primary">*Para buscar la agenda del docente debe dar click en el botón.</p>
+
+                                <p id="lbl_docente"></p>
 
                                 <div class="row">
                                     <div class="col-12">
@@ -350,13 +338,13 @@ if (isset($_POST['id_docente'])) {
 <script src="../assets/plugins/fullcalendar/js/main.min.js"></script>
 <script src="../assets/js/app-fullcalendar.js"></script>
 
-<div class="modal" id="modal_horario_clases" abindex="-1" aria-modal="true" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
+<div class="modal" id="modal_buscar_horario_disponible" abindex="-1" aria-modal="true" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
     <div class="modal-dialog ">
         <div class="modal-content">
 
             <!-- Modal Header -->
             <div class="modal-header">
-                <h5>Agregar Asignatura</h5>
+                <h5>Buscar Agenda del Docente</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
 
@@ -365,62 +353,73 @@ if (isset($_POST['id_docente'])) {
 
                 <div class="row">
                     <div class="col-12">
-                        <label for="ac_horarioC_materia">Materia: <label class="text-danger">*</label></label>
-                        <select name="ac_horarioC_materia" id="ac_horarioC_materia" class="form-select form-select-sm">
-                            <option selected disabled>-- Seleccione una Materia --</option>
-                            <option value="matematicas">Matemáticas</option>
-                            <option value="lengua">Lengua y Literatura</option>
-                            <option value="ciencias">Ciencias Naturales</option>
-                            <option value="historia">Historia</option>
-                            <option value="geografia">Geografía</option>
-                            <option value="educacion-fisica">Educación Física</option>
-                            <option value="arte">Arte</option>
-                            <option value="musica">Música</option>
-                            <option value="tecnologia">Tecnología</option>
+                        <label for="ac_horarioC_materia">Estudiante: <label class="text-danger">*</label></label>
+                        <select name="sa_est_id" id="sa_est_id" class="form-select form-select-sm" onclick="consultar_datos_docente_paralelo(this.value);">
+                            <option selected disabled>-- Seleccione un Estudiante --</option>
                         </select>
                     </div>
                 </div>
 
                 <div class="row pt-3">
                     <div class="col-12">
-                        <label for="ac_horarioC_dia">Día: <label class="text-danger">*</label></label>
-                        <select name="ac_horarioC_dia" id="ac_horarioC_dia" class="form-select form-select-sm">
-                            <option selected disabled>-- Seleccione un Día --</option>
-                            <option value="lunes">Lunes</option>
-                            <option value="martes">Martes</option>
-                            <option value="miercoles">Miércoles</option>
-                            <option value="jueves">Jueves</option>
-                            <option value="viernes">Viernes</option>
+                        <label for="ac_horarioC_dia">Profesor: <label class="text-danger">*</label></label>
+                        <select name="ac_docente_id" id="ac_docente_id" class="form-select form-select-sm">
+                            <option selected disabled>-- Seleccione un Docente --</option>
+
                         </select>
-                    </div>
-                </div>
-
-
-                <div class="row pt-3">
-                    <div class="col-12">
-                        <label for="ac_horarioC_dia">Clase: <label class="text-danger">*</label></label>
-                        <select name="ac_paralelo_id" id="ac_paralelo_id" class="form-select form-select-sm">
-                            <option selected disabled>-- Seleccione una Clase --</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="row pt-3">
-
-                    <div class="col-4">
-                        <label for="ac_horarioC_inicio">Inicio de la Clase: <label class="text-danger">*</label></label>
-                        <input type="time" name="ac_horarioC_inicio" id="ac_horarioC_inicio" class="form-control form-control-sm">
-                    </div>
-
-                    <div class="col-4">
-                        <label for="ac_horarioC_fin">Fin de la Clase: <label class="text-danger">*</label></label>
-                        <input type="time" name="ac_horarioC_fin" id="ac_horarioC_fin" class="form-control form-control-sm">
                     </div>
                 </div>
 
                 <div class="row pt-3">
                     <div class="col-12 text-end">
-                        <button type="submit" class="btn btn-success btn-sm" onclick="agregar_clase()"><i class="bx bx-save"></i> Agregar</button>
+                        <button type="submit" class="btn btn-success btn-sm" onclick="buscar_agenda()"><i class="bx bx-save"></i> Buscar</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="modal_agendar_reunion" abindex="-1" aria-modal="true" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog ">
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h5>Agendar Reunión con el Docente</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <!-- Modal body -->
+            <div class="modal-body">
+
+                <div class="row">
+                    <div class="col-12">
+                        <label for="ac_horarioC_materia">Motivo de la Reunión: <label class="text-danger">*</label></label>
+                        <select name="sa_est_id" id="sa_est_id" class="form-select form-select-sm" onclick="consultar_datos_docente_paralelo(this.value);">
+                            <option selected disabled>-- Seleccione un Estudiante --</option>
+                            <option value="lab1">Faltas</option>
+                            <option value="lab1">Notas</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="row pt-3">
+                    <div class="col-12">
+                        <label for="ac_horarioC_dia">Ubicación: <label class="text-danger">*</label></label>
+                        <select name="ac_docente_id" id="ac_docente_id" class="form-select form-select-sm">
+                            <option selected disabled>-- Seleccione un Docente --</option>
+                            <option value="lab1">lab1</option>
+                            <option value="lab1">lab2</option>
+
+                        </select>
+                    </div>
+                </div>
+
+                <div class="row pt-3">
+                    <div class="col-12 text-end">
+                        <button type="submit" class="btn btn-success btn-sm" onclick="agengar_reunion()"><i class="bx bx-save"></i> Buscar</button>
                     </div>
                 </div>
 

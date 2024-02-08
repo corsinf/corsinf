@@ -1,6 +1,6 @@
 <?php
 
-$id_docente = '1';
+$id_docente = '2';
 
 if (isset($_POST['id_docente'])) {
     $id_docente = $_POST['id_docente'];
@@ -18,6 +18,17 @@ if (isset($_POST['id_docente'])) {
 
     $(document).ready(function() {
         var id_docente = '<?php echo $id_docente; ?>';
+
+
+        $('#ac_horarioD_inicio').blur(function() {
+            horaDesde = $(this).val();
+            $('#ac_horarioD_fin').val('00:00')
+        });
+
+        $('#ac_horarioD_fin').blur(function() {
+            horaHasta = $(this).val();
+            calcular_diferencia_hora();
+        });
 
     });
 
@@ -85,8 +96,8 @@ if (isset($_POST['id_docente'])) {
                     <div class="d-flex justify-content-between align-items-center">
                         <b>${startTime}</b> - <b>${endTime}</b> ${arg.event.title}
                         <div class="btn-group">
-                            <button class="btn btn-outline-white btn-sm" style="font-size: 4px;"  onclick="eliminar_evento('${arg.event.id}', '${arg.event.title}', '${startTime}', '${endTime}')"><i class='bx bx-trash-alt me-0' style="font-size: 14px;"></i></button>
-                            <button class="btn btn-outline-white btn-sm" style="font-size: 4px;" onclick="crear_horarioD_igual('${arg.event.id}', '${arg.event.title}', '${startTime}', '${endTime}', '${fecha}')"><i class='bx bxs-arrow-to-right' style="font-size: 14px;"></i></button>
+                            <button title='Eliminar Turno' class="btn btn-danger btn-sm" style="font-size: 4px; background-color: #CA4646;"  onclick="eliminar_evento('${arg.event.id}', '${arg.event.title}', '${startTime}', '${endTime}')"><i class='bx bx-trash-alt me-0' style="font-size: 14px;"></i></button>
+                            <button title='Duplicar Turno' class="btn btn-primary btn-sm" style="font-size: 4px;" onclick="crear_horarioD_igual('${arg.event.id}', '${arg.event.title}', '${startTime}', '${endTime}', '${fecha}')"><i class='bx bxs-arrow-to-right me-0' style="font-size: 14px;"></i></button>
                         </div>
                     </div>
                 `;
@@ -236,7 +247,7 @@ if (isset($_POST['id_docente'])) {
                         //title: (evento.ac_horarioD_materia).toUpperCase(),
                         start: fecha_nacimiento_formateada(evento.ac_horarioD_fecha_disponible.date) + 'T' + obtener_hora_formateada(evento.ac_horarioD_inicio.date),
                         end: fecha_nacimiento_formateada(evento.ac_horarioD_fecha_disponible.date) + 'T' + obtener_hora_formateada(evento.ac_horarioD_fin.date),
-                        color: 'green'
+                        color: '#3D94C9'
 
                     });
 
@@ -367,7 +378,9 @@ if (isset($_POST['id_docente'])) {
 
                         <section class="content pt-2">
                             <div class="container-fluid">
-                                <p class="text-danger">*Para eliminar un registro, haga clic en el evento previamente asignado en el cuadro azul.</p>
+
+                                <p class="text-danger">*Para eliminar un registro, haga clic en el icono <label class="text-black"><a class="btn btn-danger btn-sm" style="font-size: 4px; background-color: #CA4646;"><i class='bx bx-trash-alt me-0' style="font-size: 14px;"></i></a></label> previamente asignado en el cuadro verde.</p>
+                                <p class="text-danger">*Para duplicar un turno, haga click en el icono <label class="text-black"><a class="btn btn-primary btn-sm" style="font-size: 4px;"><i class='bx bxs-arrow-to-right me-0' style="font-size: 14px;"></i></a></label> previamente asignado en el cuadro verde.</p>
 
                                 <div class="row">
                                     <div class="col-12">
@@ -444,3 +457,30 @@ if (isset($_POST['id_docente'])) {
         </div>
     </div>
 </div>
+
+<script>
+    function calcular_diferencia_hora() {
+        var horaDesde = $('#ac_horarioD_inicio').val();
+        var horaHasta = $('#ac_horarioD_fin').val();
+
+        var fechaBase = new Date('2000-01-01');
+        var fechaDesde = new Date(fechaBase.toDateString() + ' ' + horaDesde);
+        var fechaHasta = new Date(fechaBase.toDateString() + ' ' + horaHasta);
+
+        var diferenciaEnMs = fechaHasta - fechaDesde;
+
+        if (diferenciaEnMs >= 0) {
+            var diferenciaEnMinutos = Math.floor(diferenciaEnMs / (1000 * 60));
+
+            if (diferenciaEnMinutos >= 15) {
+                //alert(diferenciaEnMinutos);
+            } else {
+                Swal.fire('', 'La diferencia de tiempo debe ser mayor o igual a 15 minutos', 'info');
+                $('#ac_horarioD_fin').val('00:00');
+            }
+        } else {
+            Swal.fire('', 'La hora Hasta de la consulta no puede ser menor', 'info');
+            $('#ac_horarioD_fin').val('00:00');
+        }
+    }
+</script>
