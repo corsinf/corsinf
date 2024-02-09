@@ -49,6 +49,7 @@ class horario_disponibleC
 
         $datos = array(
             array('campo' => 'ac_docente_id', 'dato' => strval($parametros['ac_docente_id'])),
+            array('campo' => 'ac_horarioD_ubicacion', 'dato' => ($parametros['ac_horarioD_ubicacion'])),
             array('campo' => 'ac_horarioD_inicio', 'dato' => ($parametros['ac_horarioD_inicio'])),
             array('campo' => 'ac_horarioD_fin', 'dato' => ($parametros['ac_horarioD_fin'])),
             array('campo' => 'ac_horarioD_fecha_disponible', 'dato' => ($parametros['ac_horarioD_fecha_disponible'])),
