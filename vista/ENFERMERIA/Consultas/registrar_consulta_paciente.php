@@ -115,7 +115,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             type: 'post',
             dataType: 'json',
             success: function(response) {
-                //console.log(response);
+                // console.log(response);
                 ///  Para la tabla de inicio /////////////////////////////////////////////////////////////////////////////////////////////////////////
                 $('#txt_ci').html(response[0].sa_pac_temp_cedula + " <i class='bx bxs-id-card'></i>");
                 nombres = response[0].sa_pac_temp_primer_nombre + ' ' + response[0].sa_pac_temp_segundo_nombre;
@@ -160,10 +160,50 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 /////////////Para el formulario
                 $('#sa_conp_edad').val(calcular_edad_fecha_nacimiento(response[0].sa_pac_temp_fecha_nacimiento.date));
 
+                $('#txt_id_comunidad').val(response[0].sa_pac_id_comunidad);
+                $('#txt_tabla').val(response[0].sa_pac_tabla);
+
                 //alert(calcular_edad_fecha_nacimiento(response[0].sa_pac_temp_fecha_nacimiento.date))
             }
         });
     }
+
+      function lista_seguros(id_seleccionado) {
+
+            var parametros = {
+                'id': $('#txt_id_comunidad').val(),
+                'tabla':  $('#txt_tabla').val(),
+            }
+
+            console.log(parametros);
+            var option = '<option selected disabled value="">-- Seleccione Seguro --</option>';
+            $.ajax({
+                data: {
+                    parametros: parametros
+                },
+                url: '../controlador/ficha_medicaC.php?lista_seguros=true',
+                type: 'post',
+                dataType: 'json',
+
+                success: function(response) {
+                    //console.log(response);
+                    $.each(response, function(i, item) {
+                        if (id_seleccionado == item.id_arti_asegurados) {
+                            option += '<option value ="' + item.id_arti_asegurados + '" selected>' + item.nombre + '</option>'
+                            $('#sa_conp_permiso_telefono_seguro').val(item.telefono);
+                            $('#sa_conp_permiso_telefono_padre').val(item.telefono_asesor)
+                            console.log(item)
+                        } else {
+                            option += '<option value ="' + item.id_arti_asegurados + '">' + item.nombre + '</option>'
+                        }
+                    });
+
+                    $('#sa_conp_permiso_seguro_traslado').html(option);
+
+                }
+            });
+        }
+
 
     //Datos de la ficha medica
     function datos_col_ficha_medica(sa_pac_id) {
@@ -176,7 +216,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             type: 'post',
             dataType: 'json',
             success: function(response) {
-                //console.log(response);
+                // console.log(response);
                 // Preguntas
                 $('#txt_sa_fice_pac_grupo_sangre').html(response[0].sa_fice_pac_grupo_sangre);
                 $('#txt_sa_fice_pregunta_1_obs').html(response[0].sa_fice_pregunta_1_obs);
@@ -184,6 +224,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $('#txt_sa_fice_pregunta_3_obs').html(response[0].sa_fice_pregunta_3_obs);
                 $('#txt_sa_fice_pregunta_4_obs').html(response[0].sa_fice_pregunta_4_obs);
                 $('#txt_sa_fice_pregunta_5_obs').html(response[0].sa_fice_pregunta_5_obs);
+                 lista_seguros(response[0].sa_fice_pac_seguro_predeterminado);
+                // $('#sa_conp_permiso_seguro_traslado').val(response[0].sa_fice_pac_seguro_predeterminado);
             }
         });
     }
@@ -238,7 +280,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             dataType: 'json',
             success: function(response) {
 
-                console.log(response);
+                // console.log(response);
                 // Asignar los valores a los campos del formulario
                 $('#sa_conp_id').val(response[0].sa_conp_id);
                 $('#sa_fice_id').val(response[0].sa_fice_id);
@@ -987,6 +1029,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                             <div class="row pt-3">
                                                                 <div class="col-md-12">
                                                                     <label for="" class="form-label"> <b>¿Tipo de Salida?: <label class="text-danger">*</label></b></label>
+                                                                    <input type="hidden" name="txt_id_comunidad" id="txt_id_comunidad">
+                                                                    <input type="hidden" name="txt_tabla" id="txt_tabla">
 
                                                                     <div>
                                                                         <div class="form-check">

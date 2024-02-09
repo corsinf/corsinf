@@ -48,7 +48,7 @@ if ($btn_regresar == '') {
 
             //alert(btn_regresar)
 
-            //cargar_datos_paciente(sa_pac_id);
+            cargar_datos_paciente(sa_pac_id);
             datos_col_ficha_medica(sa_pac_id);
 
             //Para que cargue la funcionalidad de los input de las preguntas
@@ -110,7 +110,10 @@ if ($btn_regresar == '') {
 
                     <?php } ?>
 
-                    lista_seguros(response[0].sa_pac_id_comunidad, response[0].sa_pac_tabla, id_seguro_predeterminado);
+                    //ide de la tabla a la que pertenece estudiantes /doentes/
+                    $('#txt_id_comnunidad').val(response[0].sa_pac_id_comunidad);
+
+                    lista_seguros(response[0].sa_pac_id_comunidad, response[0].sa_pac_tabla);
 
                 }
             });
@@ -379,6 +382,41 @@ if ($btn_regresar == '') {
         }
 
     <?php } ?>
+
+    function SaveNewSeguro() {
+        var prov = $('#txtSeguroProveedorNew').val();
+        var seguro = $('#txtSeguroNombreNew').val();
+        var estudiantes = $('#txt_id_comnunidad').val();
+        var tabla ='<?php echo  $sa_pac_tabla ?>';
+        var parametros = {
+            'Proveedor': prov,
+            'seguro': seguro,
+            'todos': false,
+            'estudiantes': estudiantes,
+            'ids': '',
+            'tabla':tabla,
+        }
+        $.ajax({
+            data: {
+                parametros: parametros
+            },
+            url: '../controlador/estudiantesC.php?SaveSeguros=true',
+            type: 'post',
+            dataType: 'json',
+
+            success: function(response) {
+                $('#myModal_seguros').modal('hide');
+                if (response == 1) {
+                    Swal.fire('', 'Agregado', 'success');
+                    console.log(estudiantes);
+                    lista_seguros(estudiantes, tabla);
+                } else if (response == -2) {
+                    Swal.fire("", "Estudiante ya esta registrado con este seguro", "info")
+                }
+            }
+        });
+    }
+
 </script>
 
 <div class="page-wrapper">
@@ -570,7 +608,7 @@ if ($btn_regresar == '') {
                                                                 <select class="form-select form-select-sm" id="sa_fice_pac_nombre_seguro" name="sa_fice_pac_nombre_seguro">
                                                                     <option selected disabled value="">-- Seleccione --</option>
                                                                 </select>
-                                                                <!-- <span><button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modal_seguros"><i class="bx bx-plus me-0"></i></button></span>                                                                 -->
+                                                                 <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#myModal_seguros"><i class="bx bx-plus me-0"></i></button>       
                                                             </div>
 
                                                         </div>
@@ -889,5 +927,32 @@ if ($btn_regresar == '') {
             </div>
         </div>
 
+    </div>
+</div>
+
+<div class="modal fade" id="myModal_seguros" tabindex="-1" aria-modal="true" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog modal-sm modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5>Agregar Seguros</h5>
+            </div>
+            <div class="modal-body">
+            <div class="row">
+                <input type="hidden" name="txt_id_comnunidad" id="txt_id_comnunidad">
+                <div class="col-sm-12">
+                    <b>Nombre de Proveedor</b>
+                    <input type="text" name="" id="txtSeguroProveedorNew" class="form-control form-control-sm">
+                </div>
+                <div class="col-sm-12">
+                    <b>Nombre de seguro</b>
+                    <input type="text" name="" id="txtSeguroNombreNew" class="form-control form-control-sm">
+                </div>
+            </div>         
+            </div>
+            <div class="modal-footer">    
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-primary" onclick="SaveNewSeguro()">Agregar</button>    
+            </div>
+        </div>
     </div>
 </div>

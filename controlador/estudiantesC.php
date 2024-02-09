@@ -123,7 +123,7 @@ class estudiantesC
 
     function SaveSeguros($parametros)
     {
-
+        // print_r($parametros);die();
         //buscamos si el proveedor existe        
         $datos = $this->seguros->lista_proveedores($parametros['Proveedor'],$id=false);
         if(count($datos)==0)
@@ -158,7 +158,9 @@ class estudiantesC
                     $id = substr($parametros['ids'],0,-1);
                     $id = explode(',',$id);
                     foreach ($id as $key => $value) {
-                        $datosEstAse = $this->seguros->lista_articulos_seguro2('estudiantes',$value,$_SESSION['INICIO']['MODULO_SISTEMA'],$datosSR[0]['id_contratos']);
+                        $tabla = 'estudiantes';
+                        if(isset($parametros['tabla'])){$tabla = $parametros['tabla'];}
+                        $datosEstAse = $this->seguros->lista_articulos_seguro2($tabla,$value,$_SESSION['INICIO']['MODULO_SISTEMA'],$datosSR[0]['id_contratos']);
                         if(count($datosEstAse)==0)
                         {
                             $datosSE[0]['campo'] = 'id_seguro';        
@@ -166,7 +168,7 @@ class estudiantesC
                             $datosSE[1]['campo'] = 'id_articulos';        
                             $datosSE[1]['dato'] = $value;
                             $datosSE[2]['campo'] = 'tabla';        
-                            $datosSE[2]['dato'] = 'estudiantes';
+                            $datosSE[2]['dato'] = $tabla;
                             $datosSE[3]['campo'] = 'modulo';        
                             $datosSE[3]['dato'] = $_SESSION['INICIO']['MODULO_SISTEMA'];
                             $this->modelo->add('ARTICULOS_ASEGURADOS',$datosSE);
@@ -177,7 +179,10 @@ class estudiantesC
 
                 }else
                 {
-                    $datosEstAse = $this->seguros->lista_articulos_seguro2('estudiantes',$parametros['estudiantes'],$_SESSION['INICIO']['MODULO_SISTEMA'],$datosSR[0]['id_contratos']);
+                    $tabla = 'estudiantes';
+                    if(isset($parametros['tabla'])){$tabla = $parametros['tabla'];}
+                       
+                    $datosEstAse = $this->seguros->lista_articulos_seguro2($tabla,$parametros['estudiantes'],$_SESSION['INICIO']['MODULO_SISTEMA'],$datosSR[0]['id_contratos']);
                     if(count($datosEstAse)==0)
                     {
                         $datosSE[0]['campo'] = 'id_seguro';        
@@ -185,7 +190,7 @@ class estudiantesC
                         $datosSE[1]['campo'] = 'id_articulos';        
                         $datosSE[1]['dato'] = $parametros['estudiantes'];
                         $datosSE[2]['campo'] = 'tabla';        
-                        $datosSE[2]['dato'] = 'estudiantes';
+                        $datosSE[2]['dato'] = $tabla;
                         $datosSE[3]['campo'] = 'modulo';        
                         $datosSE[3]['dato'] = $_SESSION['INICIO']['MODULO_SISTEMA'];
                         return $this->modelo->add('ARTICULOS_ASEGURADOS',$datosSE);
@@ -205,7 +210,7 @@ class estudiantesC
         $id = substr($parametros['estudiantes'], 0,-1);
         $ids = explode(',', $id);
         foreach ($ids as $key => $value) {
-            $datos = $this->seguros->lista_articulos_seguro_detalle('estudiantes',$value,$_SESSION['INICIO']['MODULO_SISTEMA']);
+            $datos = $this->seguros->lista_articulos_seguro_detalle('estudiantes',$value,$_SESSION['INICIO']['MODULO_SISTEMA'],'sa_est_id');
             foreach ($datos as $key2 => $value2) {
                 $tr.='<tr>';
                  if($value2['terceros']==1)
