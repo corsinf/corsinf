@@ -94,17 +94,29 @@ if (isset($_POST['id_docente'])) {
 
                 const isLastEventOfDay = isLastEvent(arg);
 
+                const ac_horarioD_estado = arg.event.extendedProps.ac_horarioD_estado;
+
+                // Verificar si el estado es diferente de 0 antes de incluir el botón de eliminar
+                const eliminarButtonHtml = (ac_horarioD_estado !== 0) ? `
+                        <button title='Eliminar Turno' class="btn btn-danger btn-sm" style="font-size: 4px; background-color: #CA4646;"  onclick="eliminar_evento('${arg.event.id}', '${arg.event.title}', '${startTime}', '${endTime}')">
+                            <i class='bx bx-trash-alt me-0' style="font-size: 14px;"></i>
+                        </button>` : '';
+
                 const buttonsHtml = `
-                    <div class="d-flex justify-content-between align-items-center">
-                        <b>${startTime}</b> - <b>${endTime}</b> ${arg.event.title}
-                        <div class="btn-group">
-                            <button title='Eliminar Turno' class="btn btn-danger btn-sm" style="font-size: 4px; background-color: #CA4646;"  onclick="eliminar_evento('${arg.event.id}', '${arg.event.title}', '${startTime}', '${endTime}')"><i class='bx bx-trash-alt me-0' style="font-size: 14px;"></i></button>
-                            ${isLastEventOfDay ?
-                        `<button title='Duplicar Turno' class="btn btn-secondary btn-sm" style="font-size: 4px;" onclick="crear_horarioD_igual_abajo('${arg.event.id}', '${arg.event.title}', '${startTime}', '${endTime}', '${fecha}', '${arg.event.extendedProps.ac_horarioD_ubicacion}')"><i class='bx bx-arrow-to-bottom me-0' style="font-size: 14px;"></i></button>` : ''}
-                            <button title='Duplicar Turno' class="btn btn-primary btn-sm" style="font-size: 4px;" onclick="crear_horarioD_igual('${arg.event.id}', '${arg.event.title}', '${startTime}', '${endTime}', '${fecha}', '${arg.event.extendedProps.ac_horarioD_ubicacion}')"><i class='bx bxs-arrow-to-right me-0' style="font-size: 14px;"></i></button>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <b>${startTime}</b> - <b>${endTime}</b> ${arg.event.title}
+                            <div class="btn-group">
+                                ${eliminarButtonHtml}
+                                ${isLastEventOfDay ?
+                                `<button title='Duplicar Turno' class="btn btn-secondary btn-sm" style="font-size: 4px;" onclick="crear_horarioD_igual_abajo('${arg.event.id}', '${arg.event.title}', '${startTime}', '${endTime}', '${fecha}', '${arg.event.extendedProps.ac_horarioD_ubicacion}')">
+                                    <i class='bx bx-arrow-to-bottom me-0' style="font-size: 14px;"></i>
+                                </button>` : ''}
+                                <button title='Duplicar Turno' class="btn btn-primary btn-sm" style="font-size: 4px;" onclick="crear_horarioD_igual('${arg.event.id}', '${arg.event.title}', '${startTime}', '${endTime}', '${fecha}', '${arg.event.extendedProps.ac_horarioD_ubicacion}')">
+                                    <i class='bx bxs-arrow-to-right me-0' style="font-size: 14px;"></i>
+                                </button>
+                            </div>
                         </div>
-                    </div>
-                `;
+                    `;
 
                 return {
                     html: buttonsHtml,
@@ -186,15 +198,17 @@ if (isset($_POST['id_docente'])) {
                 response.forEach(function(evento) {
                     //console.log(evento);
 
+                    var color = (evento.ac_horarioD_estado == 0) ? '#B63232' : '#3D94C9';
 
                     calendar.addEvent({
                         id: evento.ac_horarioD_id,
                         //title: (evento.ac_horarioD_materia).toUpperCase(),
                         start: fecha_nacimiento_formateada(evento.ac_horarioD_fecha_disponible.date) + 'T' + obtener_hora_formateada(evento.ac_horarioD_inicio.date),
                         end: fecha_nacimiento_formateada(evento.ac_horarioD_fecha_disponible.date) + 'T' + obtener_hora_formateada(evento.ac_horarioD_fin.date),
-                        color: '#3D94C9',
+                        color: color,
                         extendedProps: {
                             ac_horarioD_ubicacion: evento.ac_horarioD_ubicacion,
+                            ac_horarioD_estado: evento.ac_horarioD_estado,
                         },
 
                     });

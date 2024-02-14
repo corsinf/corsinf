@@ -85,4 +85,13 @@ class horario_disponibleM
         $datos = $this->db->sql_string($sql);
         return $datos;
     }
+
+    function turno_representanteM($id)
+    {
+        $sql = "UPDATE horario_disponible SET ac_horarioD_estado = 0  WHERE ac_horarioD_id = $id;";
+        $datos = $this->db->sql_string($sql);
+        return $datos;
+    }
+
+    
 }

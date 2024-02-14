@@ -73,4 +73,10 @@ class horario_disponibleC
         return $datos;
     }
 
+    function turno_representante($id)
+    {
+        //$datos = $this->modelo->turno_representanteM($id);
+        return '$datos';
+    }
+
 }

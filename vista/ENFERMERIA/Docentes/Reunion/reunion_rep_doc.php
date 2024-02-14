@@ -6,7 +6,7 @@ if (isset($_POST['id_representante'])) {
     $id_representante = $_POST['id_representante'];
 }
 
-$id_docente = '1';
+
 
 
 ?>
@@ -99,19 +99,26 @@ $id_docente = '1';
             },
 
             eventClick: function(info) {
+                var ac_horarioD_id = info.event.id;
+
                 var ac_horarioD_estado = info.event.extendedProps.ac_horarioD_estado;
                 var url = info.event.url;
 
-                
+                if (ac_horarioD_estado == 1) {
+                    // Obtener el botón que abre el modal
+                    var btnAbrirModal = document.getElementById('btn_modal_agendar_reunion');
 
-                // Obtener el botón que abre el modal
-                var btnAbrirModal = document.getElementById('btn_modal_agendar_reunion');
-
-                // Si el botón existe, abrir el modal
-                if (btnAbrirModal) {
-                    var modal = new bootstrap.Modal(document.getElementById('modal_agendar_reunion'));
-                    modal.show();
+                    // Si el botón existe, abrir el modal
+                    if (btnAbrirModal) {
+                        var modal = new bootstrap.Modal(document.getElementById('modal_agendar_reunion'));
+                        $('#ac_horarioD_id').val(ac_horarioD_id);
+                        modal.show();
+                    }
+                } else {
+                    Swal.fire('', 'Turno ocupado.', 'error');
                 }
+
+
 
                 info.jsEvent.preventDefault();
             },
@@ -147,12 +154,14 @@ $id_docente = '1';
                     response.forEach(function(evento) {
                         console.log(evento);
 
+                        var color = (evento.ac_horarioD_estado == 0) ? '#B63232' : '#3D94C9';
+
                         calendar.addEvent({
                             id: evento.ac_horarioD_id,
                             //title: (evento.ac_horarioD_materia).toUpperCase(),
                             start: fecha_nacimiento_formateada(evento.ac_horarioD_fecha_disponible.date) + 'T' + obtener_hora_formateada(evento.ac_horarioD_inicio.date),
                             end: fecha_nacimiento_formateada(evento.ac_horarioD_fecha_disponible.date) + 'T' + obtener_hora_formateada(evento.ac_horarioD_fin.date),
-                            color: '#3D94C9',
+                            color: color,
                             url: '../vista/inicio.php?mod=7&acc=pacientes',
                             extendedProps: {
                                 ac_horarioD_estado: evento.ac_horarioD_estado,
@@ -239,7 +248,7 @@ $id_docente = '1';
     }
 
     function cargar_datos_docente(id_docente) {
-        alert(id_docente)
+        //alert(id_docente)
         $.ajax({
             data: {
                 id: id_docente,
@@ -253,7 +262,7 @@ $id_docente = '1';
 
                 nombres = response[0].sa_doc_primer_apellido + ' ' + response[0].sa_doc_segundo_apellido + ' ' + response[0].sa_doc_primer_nombre + ' ' + response[0].sa_doc_segundo_nombre;
 
-                salida = "<b><p class='text-success'>La agenda del docente " + nombres + " es la siugiente.</p></b>";
+                salida = "<b><p class='text-success'>La agenda del docente " + nombres + " es la siguiente.</p></b>";
 
                 $('#lbl_docente').html(salida);
 
@@ -263,8 +272,46 @@ $id_docente = '1';
         });
     }
 
-    function agengar_reunion(){
-        alert('agendado xD')
+    function agengar_reunion() {
+        var ac_horarioD_id = $('#ac_horarioD_id').val();
+        var ac_representante_id = '<?php echo $id_representante; ?>';
+        var ac_reunion_motivo = $('#ac_reunion_motivo').val();
+        var ac_reunion_observacion = $('#ac_reunion_observacion').val();
+
+        //alert(ac_horarioD_inicio + ' ' + ac_horarioD_fin);
+
+        var parametros = {
+            'ac_reunion_id': '',
+            'ac_horarioD_id': ac_horarioD_id,
+            'ac_representante_id': ac_representante_id,
+            'ac_reunion_motivo': ac_reunion_motivo,
+            'ac_reunion_observacion': ac_reunion_observacion,
+        }
+
+        console.log(parametros);
+
+        if (ac_horarioD_id != '' && ac_representante_id != '' && ac_reunion_motivo != '') {
+            $.ajax({
+                url: '../controlador/reunionesC.php?insertar=true',
+                data: {
+                    parametros: parametros
+                },
+                type: 'post',
+                dataType: 'json',
+                success: function(response) {
+                    //console.log(response)
+                    Swal.fire('', 'Turno Registrado.', 'success').then(function() {
+                        //location.href = '../vista/inicio.php?mod=7&acc=agendamiento';
+                    })
+                }
+            });
+
+        } else {
+            Swal.fire('', 'Falta llenar los campos.', 'error');
+        }
+
+        $('#modal_agendar_reunion').modal('hide');
+        cargar_horario_disponible_docente();
     }
 </script>
 
@@ -397,31 +444,31 @@ $id_docente = '1';
                 <div class="row">
                     <div class="col-12">
                         <label for="ac_horarioC_materia">Motivo de la Reunión: <label class="text-danger">*</label></label>
-                        <select name="sa_est_id" id="sa_est_id" class="form-select form-select-sm" onclick="consultar_datos_docente_paralelo(this.value);">
+                        <select name="ac_reunion_motivo" id="ac_reunion_motivo" class="form-select form-select-sm">
                             <option selected disabled>-- Seleccione un Estudiante --</option>
-                            <option value="lab1">Faltas</option>
-                            <option value="lab1">Notas</option>
+                            <option value="Faltas">Faltas</option>
+                            <option value="Notas">Notas</option>
                         </select>
                     </div>
                 </div>
 
-                <div class="row pt-3">
+                <div hidden class="row pt-3">
                     <div class="col-12">
-                        <label for="ac_horarioC_dia">Ubicación: <label class="text-danger">*</label></label>
-                        <select name="ac_docente_id" id="ac_docente_id" class="form-select form-select-sm">
-                            <option selected disabled>-- Seleccione un Docente --</option>
-                            <option value="lab1">lab1</option>
-                            <option value="lab1">lab2</option>
-
-                        </select>
+                        <label for="ac_horarioC_materia">Observación: <label class="text-danger">*</label></label>
+                        <input type="text" id="ac_reunion_observacion" name="ac_reunion_observacion" class="form-control form-control-sm" >
                     </div>
                 </div>
+
+
+                <input type="hidden" name="ac_horarioD_id" id="ac_horarioD_id">
 
                 <div class="row pt-3">
                     <div class="col-12 text-end">
                         <button type="submit" class="btn btn-success btn-sm" onclick="agengar_reunion()"><i class="bx bx-save"></i> Buscar</button>
                     </div>
                 </div>
+
+
 
             </div>
         </div>
