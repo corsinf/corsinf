@@ -47,6 +47,9 @@ if ($btn_regresar == '') {
             var btn_regresar = '<?php echo $btn_regresar; ?>';
 
             //alert(btn_regresar)
+            
+        console.log(sa_pac_id);
+        console.log(sa_pac_tabla);
 
             cargar_datos_paciente(sa_pac_id);
             datos_col_ficha_medica(sa_pac_id);

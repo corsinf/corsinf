@@ -108,6 +108,9 @@ function recargar_pag() {
             sa_pac_tabla = localStorage.getItem("sa_pac_tabla");
         }
 
+        console.log(sa_pac_id);
+        console.log(sa_pac_tabla);
+
         if (sa_pac_id != '' && sa_pac_tabla != '') {
             var form = document.createElement('form');
             form.method = 'post';

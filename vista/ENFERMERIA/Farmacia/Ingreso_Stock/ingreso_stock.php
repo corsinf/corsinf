@@ -256,6 +256,12 @@ function modal_ingreso(tipo)
       return false;
      }
 
+     if($('#txt_canti').val()<1)
+     {
+         Swal.fire('','Cantidad no valida.','info');   
+        return false;
+     }
+
      $.ajax({
       data:  datos,
       url:   '../controlador/ingreso_stockC.php?producto_nuevo=true',

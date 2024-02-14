@@ -1,7 +1,5 @@
 //Aqui llega para que alguno de las tablas vea si existe o no el paciente 
 function gestion_paciente_comunidad(sa_pac_id_comunidad, sa_pac_tabla, btn_regresar = '') {
-    localStorage.setItem("sa_pac_id", sa_pac_id_comunidad);
-    localStorage.setItem("sa_pac_tabla", sa_pac_tabla);
     $.ajax({
         data: {
             sa_pac_id_comunidad: sa_pac_id_comunidad,
@@ -30,6 +28,9 @@ function gestion_paciente_comunidad(sa_pac_id_comunidad, sa_pac_tabla, btn_regre
             // Agregar campos al formulario
             agregarCampo('sa_pac_id', response.sa_pac_id);
             agregarCampo('sa_pac_tabla', response.sa_pac_tabla);
+            localStorage.setItem("sa_pac_id", response.sa_pac_id);
+            localStorage.setItem("sa_pac_tabla", response.sa_pac_tabla);
+   
 
             if (btn_regresar != '') {
                 agregarCampo('btn_regresar', btn_regresar);
@@ -37,6 +38,8 @@ function gestion_paciente_comunidad(sa_pac_id_comunidad, sa_pac_tabla, btn_regre
 
             // Agregar el formulario al cuerpo del documento
             document.body.appendChild(form);
+
+            // cons
 
             // Enviar el formulario
             form.submit();
