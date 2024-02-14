@@ -218,6 +218,7 @@ class usuariosM
 		  $sql = "EXEC BuscarDatosNoconcurente @id_usuario = ?, @tabla = ?, @campowhere = ?";
 
 		  $datos = $this->db->ejecutar_procedimiento_con_retorno_1($sql, $parametros, $master = false);
+		  $datos[0]['tabla'] = $tabla;
 
 		  return $datos;
 	}

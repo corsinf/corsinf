@@ -107,9 +107,12 @@ function recargar_pag() {
         if (localStorage.getItem("sa_pac_tabla") !== null) {
             sa_pac_tabla = localStorage.getItem("sa_pac_tabla");
         }
+        if (localStorage.getItem("btn_regresar") !== null) {
+            btn_regresar = localStorage.getItem("btn_regresar");
+        }
 
-        console.log(sa_pac_id);
-        console.log(sa_pac_tabla);
+        //console.log(sa_pac_id);
+       // console.log(sa_pac_tabla);
 
         if (sa_pac_id != '' && sa_pac_tabla != '') {
             var form = document.createElement('form');
@@ -127,6 +130,7 @@ function recargar_pag() {
             // Agregar campos al formulario
             agregarCampo('sa_pac_id', sa_pac_id);
             agregarCampo('sa_pac_tabla', sa_pac_tabla);
+            agregarCampo('btn_regresar', btn_regresar);
             document.body.appendChild(form);
             form.submit();
 

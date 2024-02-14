@@ -46,7 +46,7 @@
                     data: null,
                     render: function(data, type, item) {
                         url = '../vista/inicio.php?mod=7&acc=pacientes';
-                        return '<a title="Editar Ficha Médica" class="text-center btn btn-warning btn-sm" href="#" onclick="gestion_paciente_comunidad(' + item.sa_pac_id_comunidad + ', \'' + item.sa_pac_tabla + '\', url);"><u>' + '<i class="bx bxs-edit-alt me-0"></i>' + '</u></a>';
+                        return '<a title="Editar Ficha Médica" class="text-center btn btn-warning btn-sm" href="#" onclick="gestion_paciente_comunidad(' + item.sa_pac_id_comunidad + ', \'' + item.sa_pac_tabla + '\', \'' + url + '\');"><u>' + '<i class="bx bxs-edit-alt me-0"></i>' + '</u></a>';
                     }
                 }
             ]

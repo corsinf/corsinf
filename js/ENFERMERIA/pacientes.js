@@ -28,9 +28,13 @@ function gestion_paciente_comunidad(sa_pac_id_comunidad, sa_pac_tabla, btn_regre
             // Agregar campos al formulario
             agregarCampo('sa_pac_id', response.sa_pac_id);
             agregarCampo('sa_pac_tabla', response.sa_pac_tabla);
+            agregarCampo('btn_regresar', btn_regresar);
             localStorage.setItem("sa_pac_id", response.sa_pac_id);
             localStorage.setItem("sa_pac_tabla", response.sa_pac_tabla);
-   
+            localStorage.setItem("btn_regresar", btn_regresar);
+  
+
+  // console.log(btn_regresar) 
 
             if (btn_regresar != '') {
                 agregarCampo('btn_regresar', btn_regresar);
