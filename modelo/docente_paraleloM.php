@@ -102,4 +102,40 @@ class docente_paraleloM
         $datos = $this->db->sql_string($sql);
         return $datos;
     }
+
+    function lista_estudiante_docente_paralelo($id_paralelo = '')
+    {
+        if ($id_paralelo != '') {
+            $sql =
+                "SELECT 
+                    docp.ac_docente_paralelo_id,
+                    docp.ac_docente_id,
+                    docp.ac_paralelo_id,
+                    docp.ac_docente_paralelo_fecha_creacion,
+                   
+                    cs.sa_sec_id, 
+                    cs.sa_sec_nombre, 
+                    cg.sa_gra_id, 
+                    cg.sa_gra_nombre,
+                    cp.sa_par_id, 
+                    cp.sa_par_nombre,
+
+                    CONCAT(doc.sa_doc_primer_apellido, ' ', doc.sa_doc_segundo_apellido, ' ', doc.sa_doc_primer_nombre, ' ', doc.sa_doc_segundo_nombre) AS docente_nombres,
+                    CONCAT(cs.sa_sec_nombre, ' / ', cg.sa_gra_nombre, ' / ', cp.sa_par_nombre) AS sec_gra_par
+
+                    FROM docente_paralelo docp
+
+                    INNER JOIN cat_paralelo cp ON docp.ac_paralelo_id = cp.sa_par_id
+                    INNER JOIN cat_seccion cs ON cp.sa_id_seccion = cs.sa_sec_id
+                    INNER JOIN cat_grado cg ON cp.sa_id_grado = cg.sa_gra_id
+
+                    INNER JOIN docentes doc ON docp.ac_docente_id = doc.sa_doc_id
+
+                    WHERE 1 = 1 AND cp.sa_par_id = $id_paralelo";
+
+            $sql .= " ORDER BY ac_docente_paralelo_id;";
+            $datos = $this->db->datos($sql);
+            return $datos;
+        }
+    }
 }

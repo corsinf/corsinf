@@ -46,6 +46,7 @@ class horario_disponibleM
                 "SELECT 
                     hdd.ac_horarioD_id,
                     hdd.ac_docente_id,
+                    hdd.ac_horarioD_ubicacion,
                     hdd.ac_horarioD_inicio,
                     hdd.ac_horarioD_fin,
                     hdd.ac_horarioD_fecha_disponible,
