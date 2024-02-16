@@ -51,7 +51,7 @@ class horario_clasesM
         return $datos;
     }
 
-    function lista_horario_clases($id_docente = '')
+    function lista_horario_clases($id_docente = '', $id_paralelo = '')
     {
         if ($id_docente != '') {
             $sql =
@@ -81,6 +81,10 @@ class horario_clasesM
                     INNER JOIN cat_grado cg ON cp.sa_id_grado = cg.sa_gra_id
 
                     WHERE 1 = 1 AND hcd.ac_docente_id = $id_docente";
+
+            if ($id_paralelo != '') {
+                $sql .= "AND hcd.ac_paralelo_id = $id_paralelo";
+            }
 
             $sql .= " ORDER BY hcd.ac_horarioC_id;";
             $datos = $this->db->datos($sql);

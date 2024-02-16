@@ -39,6 +39,7 @@ class horario_disponibleM
         return $datos;
     }
 
+    //Para que solo tome los turnos con fecha actual
     function lista_horario_disponible($id_docente = '')
     {
         if ($id_docente != '') {
@@ -56,7 +57,7 @@ class horario_disponibleM
                     hdd.ac_horarioD_estado
 
                     FROM horario_disponible hdd
-                    WHERE 1 = 1 AND hdd.ac_docente_id = $id_docente";
+                    WHERE 1 = 1 AND hdd.ac_docente_id = $id_docente AND CONVERT(DATE, hdd.ac_horarioD_fecha_disponible) >= CONVERT(DATE, GETDATE())";
 
             $sql .= " ORDER BY hdd.ac_horarioD_id;";
             $datos = $this->db->datos($sql);

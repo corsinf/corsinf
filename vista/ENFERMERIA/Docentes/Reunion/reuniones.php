@@ -1,6 +1,6 @@
 <?php
 
-$id_docente= '2';
+$id_docente = '2';
 
 if (isset($_POST['id_docente'])) {
     $id_docente = $_POST['id_docente'];
@@ -13,7 +13,12 @@ if (isset($_POST['id_docente'])) {
 <script type="text/javascript">
     $(document).ready(function() {
 
-        $('#tabla_representante').DataTable({
+        cargar_tabla();
+
+    });
+
+    function cargar_tabla() {
+        tabla_reunion = $('#tabla_reunion').DataTable({
             language: {
                 url: 'https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
             },
@@ -58,6 +63,26 @@ if (isset($_POST['id_docente'])) {
                 {
                     data: null,
                     render: function(data, type, item) {
+                        if (item.ac_reunion_estado == 0) {
+                            return '<div class="badge rounded-pill text-warning bg-light-warning p-2 text-uppercase px-3">Pendiente</div>';
+
+                        } else if (item.ac_reunion_estado == 1) {
+                            return '<div class="badge rounded-pill text-success bg-light-success p-2 text-uppercase px-3">Completa</div>';
+
+                        } else if (item.ac_reunion_estado == 2) {
+                            return '<div class="badge rounded-pill text-primary bg-light-primary p-2 text-uppercase px-3">Docente Anula</div>';
+
+                        } else if (item.ac_reunion_estado == 3) {
+                            return '<div class="badge rounded-pill text-danger bg-light-danger p-2 text-uppercase px-3">Representante Ausente</div>';
+
+                        }
+
+                        return '';
+                    }
+                },
+                {
+                    data: null,
+                    render: function(data, type, item) {
 
                         return `<button type="button" class="btn btn-primary btn-sm" onclick="abrir_modal('${item.ac_reunion_id}');"><i class="bx bx-plus me-0"></i></button>`
                     }
@@ -69,7 +94,7 @@ if (isset($_POST['id_docente'])) {
                 [1, 'asc']
             ],
         });
-    });
+    }
 
     // Función para abrir el modal
     function abrir_modal(ac_reunion_id) {
@@ -88,6 +113,7 @@ if (isset($_POST['id_docente'])) {
 
                     $('#ac_reunion_motivo').val(response[0].ac_reunion_motivo);
                     $('#ac_reunion_observacion').val(response[0].ac_reunion_observacion);
+                    $('#ac_reunion_estado').val(response[0].ac_reunion_estado);
 
                 }
             });
@@ -100,17 +126,19 @@ if (isset($_POST['id_docente'])) {
 
         var ac_reunion_id = $('#ac_reunion_id').val();
         var ac_reunion_observacion = $('#ac_reunion_observacion').val();
+        var ac_reunion_estado = $('#ac_reunion_estado').val();
 
         //alert(ac_horarioD_inicio + ' ' + ac_horarioD_fin);
 
         var parametros = {
             'ac_reunion_id': ac_reunion_id,
             'ac_reunion_observacion': ac_reunion_observacion,
+            'ac_reunion_estado': ac_reunion_estado,
         }
 
         console.log(parametros);
 
-        if (ac_reunion_id != '' && ac_reunion_observacion != '') {
+        if (ac_reunion_id != '' && ac_reunion_observacion != '' && ac_reunion_estado != '') {
             $.ajax({
                 url: '../controlador/reunionesC.php?insertar=true',
                 data: {
@@ -127,8 +155,14 @@ if (isset($_POST['id_docente'])) {
         } else {
             Swal.fire('', 'Falta llenar los campos.', 'error');
         }
+        
+        if (tabla_reunion) {
+            tabla_reunion.destroy(); // Destruir la instancia existente del DataTable
+        }
 
         $('#modal_agendar_reunion').modal('hide');
+        
+        cargar_tabla();
 
     }
 </script>
@@ -177,7 +211,7 @@ if (isset($_POST['id_docente'])) {
                         <section class="content pt-4">
                             <div class="container-fluid">
                                 <div class="table-responsive">
-                                    <table class="table table-striped responsive" id="tabla_representante" style="width:100%">
+                                    <table class="table table-striped responsive" id="tabla_reunion" style="width:100%">
                                         <thead>
                                             <tr>
                                                 <th>Ubicación</th>
@@ -186,6 +220,7 @@ if (isset($_POST['id_docente'])) {
                                                 <th>Fecha Turno</th>
                                                 <th>Hora de Inicio</th>
                                                 <th>Hora Fin</th>
+                                                <th>Estado</th>
                                                 <th>Acciones</th>
                                             </tr>
                                         </thead>
@@ -222,6 +257,20 @@ if (isset($_POST['id_docente'])) {
                         <label for="ac_horarioC_materia">Motivo de la Reunión: <label class="text-danger">*</label></label>
                         <input type="text" id="ac_reunion_motivo" name="ac_reunion_motivo" class="form-control form-control-sm" disabled>
 
+                    </div>
+                </div>
+
+                <div class="row pt-3">
+                    <div class="col-12">
+                        <label for="ac_horarioD_fecha_disponible">Estado de la Reunión: <label class="text-danger">*</label></label>
+                        <select name="ac_reunion_estado" id="ac_reunion_estado" class="form-select form-select-sm">
+                            <option value="0" selected disabled>-- Seleccione --</option>
+                            <option value="1">Completa</option>
+                            <option value="2">Docente Anula</option>
+                            <option value="3">Representante Ausente</option>
+
+
+                        </select>
                     </div>
                 </div>
 

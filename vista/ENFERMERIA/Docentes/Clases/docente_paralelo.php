@@ -1,6 +1,6 @@
 <?php
 
-$id_docente = '2';
+$id_docente = '1';
 
 if (isset($_POST['id_docente'])) {
     $id_docente = $_POST['id_docente'];

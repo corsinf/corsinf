@@ -196,7 +196,7 @@ if (isset($_POST['id_docente'])) {
                 calendar.removeAllEvents();
                 // Recorrer la respuesta y agregar eventos al arreglo events
                 response.forEach(function(evento) {
-                    //console.log(evento);
+                    console.log(evento);
 
                     var color = (evento.ac_horarioD_estado == 0) ? '#B63232' : '#3D94C9';
 
@@ -244,7 +244,7 @@ if (isset($_POST['id_docente'])) {
 
         console.log(parametros)
 
-        if (ac_horarioD_inicio != '' && ac_horarioD_fin != '' && ac_horarioD_fecha_disponible != '' && ac_horarioD_materia != null && ac_horarioD_ubicacion != '') {
+        if (ac_horarioD_inicio != '' && ac_horarioD_fin != '' && ac_horarioD_fecha_disponible != '' && ac_horarioD_materia != null && ac_horarioD_ubicacion != null) {
             $.ajax({
                 url: '../controlador/horario_disponibleC.php?insertar=true',
                 data: {
@@ -535,11 +535,11 @@ if (isset($_POST['id_docente'])) {
                         <label for="ac_horarioD_fecha_disponible">Cubículo: <label class="text-danger">*</label></label>
                         <select name="ac_horarioD_ubicacion" id="ac_horarioD_ubicacion" class="form-select form-select-sm">
                             <option selected disabled>-- Seleccione un Cubículo --</option>
-                            <option value="cubiculo_1">Cubículo 1</option>
-                            <option value="cubiculo_2">Cubículo 2</option>
-                            <option value="cubiculo_3">Cubículo 3</option>
-                            <option value="cubiculo_4">Cubículo 4</option>
-                            <option value="cubiculo_5">Cubículo 5</option>
+                            <option value="Cubículo 1">Cubículo 1</option>
+                            <option value="Cubículo 2">Cubículo 2</option>
+                            <option value="Cubículo 3">Cubículo 3</option>
+                            <option value="Cubículo 4">Cubículo 4</option>
+                            <option value="Cubículo 5">Cubículo 5</option>
                         </select>
                     </div>
                 </div>

@@ -20,6 +20,7 @@ if (isset($_POST['id_docente'])) {
         var id_docente = '<?php echo $id_docente; ?>';
 
         cargar_clases();
+        cargar_docente_paralelo();
 
     });
 
@@ -143,11 +144,14 @@ if (isset($_POST['id_docente'])) {
         id_docente = <?= $id_docente ?>;
         fecha_dia_estatico = '';
 
+        id_paralelo = $('#ac_paralelo_id_busqueda').val();
+
         $.ajax({
             url: '../controlador/horario_clasesC.php?listar=true',
             type: 'get',
             data: {
-                id_docente: id_docente
+                id_docente: id_docente,
+                id_paralelo: id_paralelo
             },
             dataType: 'json',
             success: function(response) {
@@ -187,18 +191,6 @@ if (isset($_POST['id_docente'])) {
             }
         });
 
-
-        /*calendar.removeAllEvents();
-
-        eventos.forEach(function(evento) {
-            calendar.addEvent({
-                title: evento.ac_horarioC_materia.toUpperCase(),
-                start: formatoDate(evento.ac_horarioC_inicio.date) + 'T' + evento.ac_horarioC_inicio.time,
-                end: formatoDate(evento.ac_horarioC_fin.date) + 'T' + evento.ac_horarioC_fin.time,
-            });
-        });
-
-        calendar.render();*/
     }
 
     function agregar_clase() {
@@ -272,6 +264,38 @@ if (isset($_POST['id_docente'])) {
             }
         });
     }
+
+    function cargar_docente_paralelo() {
+
+        var ac_docente_id = '<?php echo $id_docente; ?>';
+        var select = '<option value="">Todos</option>';
+
+        $.ajax({
+            url: '../controlador/docente_paraleloC.php?listar=true',
+            data: {
+                id_docente: ac_docente_id
+            },
+            type: 'get',
+            dataType: 'json',
+            success: function(response) {
+                console.log(response)
+
+                $.each(response, function(i, item) {
+                    //console.log(item);
+                    select += '<option value="' + item.sa_par_id + '">' + item.sa_sec_nombre + ' / ' + item.sa_gra_nombre + ' / ' + item.sa_par_nombre + '</option>';
+                });
+
+                $('#ac_paralelo_id_busqueda').html(select);
+
+            }
+        });
+    }
+
+    function cargar_solo_paralelos_seleccionados() {
+        id_paralelo = $('#ac_paralelo_id_busqueda').val();
+        //alert(id_paralelo)
+        cargar_horario_clases();
+    }
 </script>
 
 <style>
@@ -330,6 +354,14 @@ if (isset($_POST['id_docente'])) {
                         <section class="content pt-2">
                             <div class="container-fluid">
                                 <p class="text-danger">*Para eliminar un registro, haga clic en el evento previamente asignado con una materia en el cuadro azul.</p>
+
+                                <div class="row pt-3">
+                                    <div class="col-4">
+                                        <label for="ac_horarioD_fecha_disponible">Curso: <label class="text-danger">*</label></label>
+                                        <select name="ac_paralelo_id_busqueda" id="ac_paralelo_id_busqueda" class="form-select form-select-sm" onclick="cargar_solo_paralelos_seleccionados();">
+                                        </select>
+                                    </div>
+                                </div>
 
                                 <div class="row">
                                     <div class="col-12">

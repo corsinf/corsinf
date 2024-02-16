@@ -9,7 +9,7 @@ if (isset($_GET['listar_todo'])) {
 }
 
 if (isset($_GET['listar'])) {
-    echo json_encode($controlador->lista_horario_clases($_GET['id_docente']));
+    echo json_encode($controlador->lista_horario_clases($_GET['id_docente'], $_GET['id_paralelo']));
 }
 
 if (isset($_GET['insertar'])) {
@@ -38,9 +38,9 @@ class horario_clasesC
         return $datos;
     }
 
-    function lista_horario_clases($id)
+    function lista_horario_clases($id, $id_paralelo)
     {
-        $datos = $this->modelo->lista_horario_clases($id);
+        $datos = $this->modelo->lista_horario_clases($id, $id_paralelo);
         return $datos;
     }
 

@@ -74,6 +74,8 @@ class reunionesC
         } else {
             $datos = array(
                 array('campo' => 'ac_reunion_observacion', 'dato' => ($parametros['ac_reunion_observacion'])),
+                array('campo' => 'ac_reunion_estado', 'dato' => strval($parametros['ac_reunion_estado'])),
+
             );
 
             $where[0]['campo'] = 'ac_reunion_id';
