@@ -39,6 +39,10 @@ if (isset($_GET['ListaSeguros'])) {
 if (isset($_GET['EliminarSeguros'])) {
     echo json_encode($controlador->EliminarSeguros($_POST['id']));
 }
+if(isset($_GET['cargar_imagen_estudiantes']))
+{
+   echo json_encode($controlador->cargar_imagen_estudiantes($_FILES,$_POST));
+}
 //echo json_encode($controlador->buscar_estudiantes_ficha_medica(5));
 
 class estudiantesC
@@ -236,4 +240,67 @@ class estudiantesC
     {
         return $this->seguros->Articulo_contrato_delete($id);
     }
+
+    function cargar_imagen_estudiantes($file,$post)
+    {       
+        // print_r($file);print_r($post);die();
+        $id = $post['txt_idEst'];
+        $ruta='../img/estudiantes/';//ruta carpeta donde queremos copiar las imágenes
+        if (!file_exists($ruta)) {
+           mkdir($ruta, 0777, true);
+        }
+        if($this->validar_formato_img($file['file_estudiante_img_'.$id])==1)
+        {
+             $uploadfile_temporal=$file['file_estudiante_img_'.$id]['tmp_name'];
+             $tipo = explode('/', $file['file_estudiante_img_'.$id]['type']);
+             $nombre = $post['name_img'].'.'.$tipo[1];          
+             $nuevo_nom=$ruta.$nombre;
+             if (is_uploaded_file($uploadfile_temporal))
+             {
+               move_uploaded_file($uploadfile_temporal,$nuevo_nom);
+
+                  $datosI[0]['campo']='sa_est_foto_url';
+                  $datosI[0]['dato'] = $nuevo_nom;
+                  $where[0]['campo'] = 'sa_est_id';
+                  $where[0]['dato'] =  $id;
+
+                  $base = $this->modelo->editar($datosI,$where);
+
+                 //$resp = $this->modelo->generar_primera_vez($_SESSION['INICIO']['BASEDATO'],$_SESSION['INICIO']['ID_EMPRESA']);
+
+
+               if($base==1)
+               {
+                return 1;
+               }else
+               {
+                return -1;
+               }
+
+             }
+             else
+             {
+               return -1;
+             } 
+         }else
+         {
+          return -2;
+         }
+
+      } 
+    function validar_formato_img($file)
+      {
+        switch ($file['type']) {
+          case 'image/jpeg':
+          case 'image/pjpeg':
+          case 'image/gif':
+          case 'image/png':
+             return 1;
+            break;      
+          default:
+            return -1;
+            break;
+        }
+
+      }
 }

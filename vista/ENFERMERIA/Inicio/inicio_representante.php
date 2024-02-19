@@ -1,13 +1,121 @@
 <script src="../js/ENFERMERIA/pacientes.js"></script>
+<style>
+.upload-img {
+    border-radius: 100%;
+    display: inline-block;
+    width: 70px;
+    height: 70px;
+    object-fit: cover;
+    object-position: 50% 50%;
+    border: 3px solid #20e5bf;
+    margin-right: 15px;
+    vertical-align: middle;
+}
+.input-file-upload {
+    position: relative;
+    display: inline-block;
+    vertical-align: middle;
+}
+.input-file-upload input[type="file"] {
+  opacity: 0;
+  padding: 10px 0;
+  height:36px;
+  width: 150px;
+}
 
+.upload-label {
+  width: 150px;
+  height: 38px;
+  background: #3b70f1;
+  text-align: center;
+  color: #ffffff;
+  display: block;
+  padding: 8px 0;
+  position: absolute;
+    line-height: normal;
+    font-size: 14px;
+    font-weight: 700;
+    transition: all 0.3s ease-in-out;
+}
+.input-file-upload:hover .upload-label {
+    background: #eaf5fe;
+    color: #3b70f1;
+}
+</style>
 <script type="text/javascript">
+    function readURL(input,item) {
+        var id = input.id;
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                $('#file_upload_'+item).attr('src', e.target.result);
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+    function readURLRep(input) {
+        var id = input.id;
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                $('#img_rep').attr('src', e.target.result);
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+    function cargar_img_alumno(id)
+    {
+        
+       var fileInput = $('#file_estudiante_img_'+id).val();        
+        if(fileInput=='')
+        {
+            Swal.fire('','Seleccione una imagen','warning');
+            return false;
+        }
+
+        var formData = new FormData(document.getElementById("form_estudiantes_"+id));
+         $.ajax({
+            url: '../controlador/estudiantesC.php?cargar_imagen_estudiantes=true',
+            type: 'post',
+            data: formData,
+            contentType: false,
+            processData: false,
+            dataType:'json',
+         // beforeSend: function () {
+         //        $("#foto_alumno").attr('src',"../img/gif/proce.gif");
+         //     },
+            success: function(response) {
+               if(response==-1)
+               {
+                 Swal.fire(
+                  '',
+                  'Algo extraño a pasado intente mas tarde.',
+                  'error')
+
+               }else if(response ==-2)
+               {
+                  Swal.fire(
+                  '',
+                  'Asegurese que el archivo subido sea una imagen.',
+                  'error')
+               }else
+               {
+                 consultar_datos_estudiante_representante(noconcurente_id);
+               } 
+            }
+        });
+
+    }
+</script>
+
+<script type="text/javascript">    
+        var noconcurente_id = '<?php echo $_SESSION['INICIO']['NO_CONCURENTE']; ?>';
+        var noconcurente_tabla = '<?php echo $_SESSION['INICIO']['NO_CONCURENTE_TABLA']; ?>';
     $(document).ready(function() {
 
         var id = '<?php echo $_SESSION['INICIO']['ID_USUARIO']; ?>';
 
-        var noconcurente_id = '<?php echo $_SESSION['INICIO']['NO_CONCURENTE']; ?>';
-
-        var noconcurente_tabla = '<?php echo $_SESSION['INICIO']['NO_CONCURENTE_TABLA']; ?>';
         //console.log(id);
 
         //alert(noconcurente_tabla)
@@ -18,6 +126,50 @@
         //consultar_datos_estudiante_representante(noconcurente_id);
         cargarDatos(1);
         consultar_datos_estudiante_representante(1);
+
+        $("#btn_subir_img_rep").on('click', function() {
+
+            var fileInput = $('#file_img').val();        
+            if(fileInput=='')
+            {
+                Swal.fire('','Seleccione una imagen','warning');
+                return false;
+            }
+
+
+        var formData = new FormData(document.getElementById("form_img"));
+         $.ajax({
+            url: '../controlador/usuariosC.php?cargar_imagen_no_concurente=true',
+            type: 'post',
+            data: formData,
+            contentType: false,
+            processData: false,
+            dataType:'json',
+         // beforeSend: function () {
+         //        $("#foto_alumno").attr('src',"../img/gif/proce.gif");
+         //     },
+            success: function(response) {
+               if(response==-1)
+               {
+                 Swal.fire(
+                  '',
+                  'Algo extraño a pasado intente mas tarde.',
+                  'error')
+
+               }else if(response ==-2)
+               {
+                  Swal.fire(
+                  '',
+                  'Asegurese que el archivo subido sea una imagen.',
+                  'error')
+               }else
+               {
+                  location.reload();
+               } 
+            }
+        });
+    });
+
 
     });
     var lista_estudiantes
@@ -39,8 +191,9 @@
             success: function(response) {
                 console.log(response);
                 $('#txt_ci').html(response[0].ci + " <i class='bx bxs-id-card'></i>");
+                $('#name_img').val(response[0].ci)
                 $('#txt_nombre').html(response[0].nombre);
-                $('#txt_apellido').html(response[0].ape);
+                $('#txt_apellido').html(response[0].apellido);
                 $('#txt_sexo').html('Falta dato en usuario' + " <i class='bx bx-female'></i> <i class='bx bx-male'></i>");
                 if (response[0].sexo != '') {
                     $('#txt_sexo').html(response[0].sexo);
@@ -58,6 +211,7 @@
                 $('#txt_edad').html(diferenciaEnAnios);
                 $('#txt_email').html(response[0].email + " <i class='bx bx-envelope'></i>");
                 $('#txt_telefono').html(response[0].telefono + " <i class='bx bxs-phone'></i>");
+                $('#img_rep').attr("src",response[0].foto+'?'+Math.random())
             }
         });
     }
@@ -99,7 +253,7 @@
                         success: function(response) {
                             alert_salida = '';
 
-                            console.log(response);
+                             // console.log(response);
 
                             if (response === null) {
                                 // Si la respuesta es nula o no es un objeto JSON válido
@@ -143,8 +297,30 @@
 
                         '<div id="alert_notificacion_' + (contador_alertas_div) + '"></div>' +
 
-                        '<img src="../img/computadora.jpg" width="110" height="110" class="rounded-circle shadow" alt="">' +
-                        '<h5 class="mb-0 mt-5">' + item.sa_est_primer_apellido + ' ' + item.sa_est_segundo_apellido + ' ' + item.sa_est_primer_nombre + ' ' + item.sa_est_segundo_nombre + '</h5>' +
+                        '<form id="form_estudiantes_'+item.sa_est_id+'">'+
+                                '<div class="mt-1">'
+                                    if(item.sa_est_foto_url!='' && item.sa_est_foto_url!=null)
+                                    {
+                                    estudiantes+='<img src="'+item.sa_est_foto_url+'?'+Math.random()+'" id="file_upload_'+item.sa_est_id+'" width="110" height="110" class="rounded-circle shadow" alt="">' 
+                                    }else{
+                                        estudiantes+='<img src="../img/sin_imagen.jpg" id="file_upload_'+item.sa_est_id+'" width="110" height="110" class="rounded-circle shadow" alt="">' 
+                                    }
+                                    <?php if($_SESSION['INICIO']['TIPO']!='DBA'){ ?>
+                                    estudiantes+='<div class="input-file-upload mt-1">'+
+                                       '<div class="btn-group" role="group" aria-label="Button group with nested dropdown">'+
+                                            '<span class="upload-label">Seleccionar Imagen</span>'+
+                                             '<input type="file" id="file_estudiante_img_'+item.sa_est_id+'" name="file_estudiante_img_'+item.sa_est_id+'" onchange="readURL(this,'+item.sa_est_id+');" />'+
+                                             '<input type="hidden" id="name_img" name="name_img" value="'+item.sa_est_cedula+'" />'+
+                                             '<input type="hidden" id="txt_idEst" name="txt_idEst" value="'+item.sa_est_id+'" />'+
+                                            '<div class="btn-group" role="group">'+
+                                                '<button type="button" class="btn btn-outline-primary" title="subir imagen" onclick="cargar_img_alumno('+item.sa_est_id+')" ><i class="bx bx-upload me-0"></i></button>'+
+                                           '</div>'+
+                                       '</div>'+
+                                    '</div>'+
+                                    <?php } ?>
+                                '</div>'+
+                        '</form>'+
+                        '<h5 class="mb-0 mt-3">' + item.sa_est_primer_apellido + ' ' + item.sa_est_segundo_apellido + ' ' + item.sa_est_primer_nombre + ' ' + item.sa_est_segundo_nombre + '</h5>' +
                         '<p class="mb-0">' + item.sa_est_cedula + '</p>' +
                         '<p class="mb-0">' + item.sa_est_sexo + '</p>' +
                         '<p class="mb-3">' + curso + '</p>' +
@@ -369,7 +545,7 @@
                         <div class="tab-content py-3">
                             <div class="tab-pane fade show active" id="inicio" role="tabpanel">
                                 <div class="row">
-                                    <div class="col-lg-6 mx-1 col-sm-12">
+                                    <div class="col-sm-6">
                                         <div class="">
                                             <table class="table mb-0" style="width:100%">
                                                 <tbody>
@@ -407,6 +583,31 @@
                                                     </tr>
                                                 </tbody>
                                             </table>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="d-flex flex-column align-items-center text-center">
+                                            <form id="form_img">
+                                            <?php if($_SESSION['INICIO']['TIPO']=='DBA' && $_SESSION["INICIO"]['LOGO']!=''){ ?>
+                                                <img id="img_rep" src="<?php echo $_SESSION["INICIO"]['FOTO']; ?>" alt="Admin" class="rounded-circle p-1 bg-primary" style="width: 250px;height: 250px;">
+                                            <?php }else{ ?>
+                                                <img id="img_rep" src="../img/sin_imagen.jpg" alt="Admin" class="rounded-circle p-1 bg-primary" style="width: 250px;height: 250px;">
+                                            <?php } ?>
+                                                <div class="mt-3">
+                                                    <?php if($_SESSION['INICIO']['TIPO']!='DBA'){ ?>
+                                                    <div class="row">
+                                                        <div class="col-sm-8">
+                                                            <input type="file" id="file_img"  name="file_img" class="form-control form-control-sm" onchange="readURLRep(this)"> 
+                                                            <input type="hidden" name="name_img" id="name_img">
+                                                        </div>
+                                                        <div class="col-sm-4">
+                                                            <button type="button" class="btn btn-outline-primary btn-block btn-sm" style="width:100%" id="btn_subir_img_rep">Subir</button>
+                                                        </div>                                                    
+                                                    </div>
+                                                <?php } ?>
+                                                     
+                                                </div>
+                                            </form>
                                         </div>
                                     </div>
 

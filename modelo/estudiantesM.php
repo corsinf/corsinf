@@ -117,6 +117,7 @@ class estudiantesM
                     est.sa_est_estado,
                     est.sa_est_fecha_creacion,
                     est.sa_est_fecha_modificacion,
+                    est.sa_est_foto,
 
                     cs.sa_sec_id, 
                     cs.sa_sec_nombre, 
@@ -196,6 +197,7 @@ class estudiantesM
                     est.sa_est_estado,
                     est.sa_est_fecha_creacion,
                     est.sa_est_fecha_modificacion,
+                    est.sa_est_foto_url,
                     
                     cs.sa_sec_id, 
                     cs.sa_sec_nombre, 
