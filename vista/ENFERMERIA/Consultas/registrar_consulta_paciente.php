@@ -168,41 +168,41 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         });
     }
 
-      function lista_seguros(id_seleccionado) {
+    function lista_seguros(id_seleccionado) {
 
-            var parametros = {
-                'id': $('#txt_id_comunidad').val(),
-                'tabla':  $('#txt_tabla').val(),
-            }
-
-            console.log(parametros);
-            var option = '<option selected disabled value="">-- Seleccione Seguro --</option>';
-            $.ajax({
-                data: {
-                    parametros: parametros
-                },
-                url: '../controlador/ficha_medicaC.php?lista_seguros=true',
-                type: 'post',
-                dataType: 'json',
-
-                success: function(response) {
-                    //console.log(response);
-                    $.each(response, function(i, item) {
-                        if (id_seleccionado == item.id_arti_asegurados) {
-                            option += '<option value ="' + item.id_arti_asegurados + '" selected>' + item.nombre + '</option>'
-                            $('#sa_conp_permiso_telefono_seguro').val(item.telefono);
-                            $('#sa_conp_permiso_telefono_padre').val(item.telefono_asesor)
-                            console.log(item)
-                        } else {
-                            option += '<option value ="' + item.id_arti_asegurados + '">' + item.nombre + '</option>'
-                        }
-                    });
-
-                    $('#sa_conp_permiso_seguro_traslado').html(option);
-
-                }
-            });
+        var parametros = {
+            'id': $('#txt_id_comunidad').val(),
+            'tabla': $('#txt_tabla').val(),
         }
+
+        console.log(parametros);
+        var option = '<option selected disabled value="">-- Seleccione Seguro --</option>';
+        $.ajax({
+            data: {
+                parametros: parametros
+            },
+            url: '../controlador/ficha_medicaC.php?lista_seguros=true',
+            type: 'post',
+            dataType: 'json',
+
+            success: function(response) {
+                //console.log(response);
+                $.each(response, function(i, item) {
+                    if (id_seleccionado == item.id_arti_asegurados) {
+                        option += '<option value ="' + item.id_arti_asegurados + '" selected>' + item.nombre + '</option>'
+                        $('#sa_conp_permiso_telefono_seguro').val(item.telefono);
+                        $('#sa_conp_permiso_telefono_padre').val(item.telefono_asesor)
+                        console.log(item)
+                    } else {
+                        option += '<option value ="' + item.id_arti_asegurados + '">' + item.nombre + '</option>'
+                    }
+                });
+
+                $('#sa_conp_permiso_seguro_traslado').html(option);
+
+            }
+        });
+    }
 
 
     //Datos de la ficha medica
@@ -224,7 +224,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $('#txt_sa_fice_pregunta_3_obs').html(response[0].sa_fice_pregunta_3_obs);
                 $('#txt_sa_fice_pregunta_4_obs').html(response[0].sa_fice_pregunta_4_obs);
                 $('#txt_sa_fice_pregunta_5_obs').html(response[0].sa_fice_pregunta_5_obs);
-                 lista_seguros(response[0].sa_fice_pac_seguro_predeterminado);
+                lista_seguros(response[0].sa_fice_pac_seguro_predeterminado);
                 // $('#sa_conp_permiso_seguro_traslado').val(response[0].sa_fice_pac_seguro_predeterminado);
             }
         });
@@ -314,7 +314,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 //$('#sa_conp_fecha_inicio_falta_certificado').val(fecha_nacimiento_formateada(response[0].sa_conp_fecha_inicio_falta_certificado.date));
                 //$('#sa_conp_fecha_fin_alta_certificado').val(fecha_nacimiento_formateada(response[0].sa_conp_fecha_fin_alta_certificado.date));
 
-                
+
                 validar_fecha_formulario(response[0].sa_conp_fecha_inicio_falta_certificado, 'sa_conp_fecha_inicio_falta_certificado');
                 validar_fecha_formulario(response[0].sa_conp_fecha_fin_alta_certificado, 'sa_conp_fecha_fin_alta_certificado');
 
@@ -574,8 +574,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (sa_conp_tipo_consulta == 'consulta') {
             if (sa_conp_id == '') {
                 if (
-                    sa_conp_peso == '' ||
-                    sa_conp_altura == ''
+                    sa_conp_peso &&
+                    sa_conp_altura &&
+                    sa_conp_temperatura &&
+                    sa_conp_presion_ar &&
+                    sa_conp_frec_cardiaca &&
+                    sa_conp_frec_respiratoria &&
+                    sa_conp_saturacion
 
                 ) {
                     Swal.fire({
@@ -853,7 +858,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                                                 <div class="modal-footer pt-4" id="seccion_boton_consulta">
 
-                                                    <button  hidden class="btn btn-danger btn-sm px-2 m-1" onclick="editar_insertar(1, 1, 1, 0, 2)" type="button"><i class='bx bx-pause-circle'></i> En Proceso</button>
+                                                    <button hidden class="btn btn-danger btn-sm px-2 m-1" onclick="editar_insertar(1, 1, 1, 0, 2)" type="button"><i class='bx bx-pause-circle'></i> En Proceso</button>
 
                                                     <button class="btn btn-success btn-sm px-2 m-1" onclick="editar_insertar(1, 1, 1, 0, 1)" type="button"><i class="bx bx-save"></i> Finalizar</button>
 

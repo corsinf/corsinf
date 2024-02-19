@@ -114,6 +114,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 sa_conp_presion_ar &&
                 sa_conp_frec_cardiaca &&
                 sa_conp_frec_respiratoria &&
+                sa_conp_saturacion &&
                 sa_conp_motivo_consulta) {
                 // Todos los campos están llenos, puedes continuar con el envío de datos
                 var parametros = {
