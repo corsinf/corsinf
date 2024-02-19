@@ -580,7 +580,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     sa_conp_presion_ar == '' ||
                     sa_conp_frec_cardiaca == '' ||
                     sa_conp_frec_respiratoria == '' ||
-                    sa_conp_saturacion == '' 
+                    sa_conp_saturacion == ''
 
                 ) {
                     Swal.fire({
@@ -966,6 +966,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                 <div>
 
                                                     <div class="row pt-0">
+
+                                                        <div class="row pt-3">
+                                                            <div class="col-md-12">
+                                                                <label for="" class="form-label">aqui viene la tabla: <label style="color: red;">*</label> </label>
+                                                                <textarea name="sa_conp_enfermedad_actual" id="sa_conp_enfermedad_actual" cols="30" rows="2" class="form-control" placeholder="Enfermedad Actual"></textarea>
+                                                            </div>
+                                                        </div>
+                                                        
+                                                        <div class="row pt-4">
+                                                            <hr>
+                                                        </div>
 
                                                         <div class="row pt-3">
                                                             <div class="col-md-12">

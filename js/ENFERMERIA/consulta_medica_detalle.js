@@ -144,8 +144,21 @@ function consultar_medicinas_insumos(entrada) {
     if (entrada === 'medicamentos') {
         $('#tipo_farmacologia_presentacion').select2({
             placeholder: '-- Selecciona una opción --',
-            language: 'es',
-            minimumInputLength: 3,
+            language: {
+                inputTooShort: function() {
+                    return "Por favor ingresa 1 o más caracteres";
+                },
+                noResults: function() {
+                    return "No se encontraron resultados";
+                },
+                searching: function() {
+                    return "Buscando...";
+                },
+                errorLoading: function() {
+                    return "No se encontraron resultados";
+                }
+            },
+            minimumInputLength: 1,
             ajax: {
                 url: '../controlador/medicamentosC.php?listar_todo=true',
                 dataType: 'json',
@@ -183,8 +196,21 @@ function consultar_medicinas_insumos(entrada) {
     } else if (entrada === 'insumos') {
         $('#tipo_farmacologia_presentacion').select2({
             placeholder: '-- Selecciona una opción --',
-            language: 'es',
-            minimumInputLength: 3,
+            language: {
+                inputTooShort: function() {
+                    return "Por favor ingresa 1 o más caracteres";
+                },
+                noResults: function() {
+                    return "No se encontraron resultados";
+                },
+                searching: function() {
+                    return "Buscando...";
+                },
+                errorLoading: function() {
+                    return "No se encontraron resultados";
+                }
+            },
+            minimumInputLength: 1,
             ajax: {
                 url: '../controlador/insumosC.php?listar_todo=true',
                 dataType: 'json',

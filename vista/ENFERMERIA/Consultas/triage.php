@@ -6,7 +6,7 @@
         </div>
         <div class="col-md-3">
             <b><label for="" class="form-label">Altura m (1.65): <label style="color: red;">*</label> </label></b>
-            <input type="number" class="form-control form-control-sm" id="sa_conp_altura" name="sa_conp_altura" placeholder="Ejemplo: 1.45 (Metros)">
+            <input type="text" class="form-control form-control-sm" id="sa_conp_altura" name="sa_conp_altura" placeholder="Ejemplo: 1.45 (Metros)">
         </div>
         <div class="col-md-3">
             <b><label for="" class="form-label">IMC: <label style="color: red;">*</label> </label></b>

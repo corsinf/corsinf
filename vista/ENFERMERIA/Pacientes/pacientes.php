@@ -64,8 +64,21 @@
         $('#sa_pac_id_comunidad').select2({
             placeholder: 'Selecciona una opción',
             dropdownParent: $('#modal_pacientes'),
-            language: 'es',
-            minimumInputLength: 3,
+            language: {
+                inputTooShort: function() {
+                    return "Por favor ingresa 1 o más caracteres";
+                },
+                noResults: function() {
+                    return "No se encontraron resultados";
+                },
+                searching: function() {
+                    return "Buscando...";
+                },
+                errorLoading: function() {
+                    return "No se encontraron resultados";
+                }
+            },
+            minimumInputLength: 1,
             ajax: {
                 url: '../controlador/' + sa_tbl_pac_tabla + 'C.php?listar_todo=true',
                 dataType: 'json',

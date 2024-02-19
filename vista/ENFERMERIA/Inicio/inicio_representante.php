@@ -119,13 +119,14 @@
         //console.log(id);
 
         //alert(noconcurente_tabla)
-        //cargarDatos(id)
 
 
         //Esta consultando unos datos por defecto
-        //consultar_datos_estudiante_representante(noconcurente_id);
-        cargarDatos(1);
-        consultar_datos_estudiante_representante(1);
+        consultar_datos_estudiante_representante(noconcurente_id);
+        cargarDatos(id)
+
+        //cargarDatos(1);
+        //consultar_datos_estudiante_representante(1);
 
         $("#btn_subir_img_rep").on('click', function() {
 

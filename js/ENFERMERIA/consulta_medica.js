@@ -1,3 +1,26 @@
+$(document).ready(function () {
+    var inputAltura = $('#sa_conp_altura');
+
+    inputAltura.on('input', function () {
+        // Obtén el valor actual del campo y elimina caracteres no numéricos
+        var valor = inputAltura.val().replace(/[^\d]/g, '');
+
+        // Agrega un punto decimal después del primer dígito si no hay punto ya presente
+        if (valor.length > 0 && valor.indexOf('.') === -1) {
+            inputAltura.val(valor.charAt(0) + (valor.length > 1 ? '.' + valor.substring(1) : ''));
+        }
+    });
+
+    // Asegura que solo se permitan números y el punto decimal
+    inputAltura.on('keypress', function (event) {
+        var charCode = (event.which) ? event.which : event.keyCode;
+        // Permitir números (48-57) y el punto (46)
+        if (charCode !== 46 && (charCode < 48 || charCode > 57)) {
+            event.preventDefault();
+        }
+    });
+});
+
 function calcularIMC() {
     var peso = $('#sa_conp_peso').val();
     var altura = $('#sa_conp_altura').val();

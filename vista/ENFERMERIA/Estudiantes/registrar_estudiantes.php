@@ -213,8 +213,21 @@ if (isset($_POST['id_representante'])) {
 
     $('#sa_id_representante').select2({
       placeholder: 'Selecciona una opción',
-      language: 'es',
-      minimumInputLength: 3,
+      language: {
+        inputTooShort: function() {
+          return "Por favor ingresa 1 o más caracteres";
+        },
+        noResults: function() {
+          return "No se encontraron resultados";
+        },
+        searching: function() {
+          return "Buscando...";
+        },
+        errorLoading: function() {
+          return "No se encontraron resultados";
+        }
+      },
+      minimumInputLength: 1,
       ajax: {
         url: '../controlador/representantesC.php?listar_todo=true',
         dataType: 'json',
