@@ -574,13 +574,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (sa_conp_tipo_consulta == 'consulta') {
             if (sa_conp_id == '') {
                 if (
-                    sa_conp_peso &&
-                    sa_conp_altura &&
-                    sa_conp_temperatura &&
-                    sa_conp_presion_ar &&
-                    sa_conp_frec_cardiaca &&
-                    sa_conp_frec_respiratoria &&
-                    sa_conp_saturacion
+                    sa_conp_peso == '' ||
+                    sa_conp_altura == '' ||
+                    sa_conp_temperatura == '' ||
+                    sa_conp_presion_ar == '' ||
+                    sa_conp_frec_cardiaca == '' ||
+                    sa_conp_frec_respiratoria == '' ||
+                    sa_conp_saturacion == '' 
 
                 ) {
                     Swal.fire({
