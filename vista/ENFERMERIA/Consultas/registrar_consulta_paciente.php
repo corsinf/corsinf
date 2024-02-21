@@ -84,7 +84,40 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             calcular_diferencia_fecha();
         });
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        $('#tipo_farmacologia_presentacion').on('select2:select', function (e) {
+          var data = e.params.data.data;
+          if($('#tipo_farmacologia').val()=='medicamentos')
+          {
+            $('#stock_farmacologia').val(data['sa_cmed_stock']);      
+          }else{    
+            $('#stock_farmacologia').val(data['sa_cins_stock']);
+           }
+          console.log(data);
+        });
+
     });
+
+
+
+    function limitarMaximo(id) {
+      var max = parseInt($('#sa_det_conp_cantidad_'+id).attr('max'));
+      if (parseInt($('#sa_det_conp_cantidad_'+id).val()) > max) {
+        Swal.fire('Cantidad supera el stock','','info').then(function(){
+            $('#sa_det_conp_cantidad_'+id).val(max);
+        })
+      }
+    }
+
+    function limpiar()
+    {
+        $('#stock_farmacologia').val('');
+        $('#cantidad_farmacologia').val('');
+        $('#tipo_farmacologia').val('');
+        $('#tipo_farmacologia_presentacion').empty();
+        
+    }
+
 
     //Para traer los datos necesarios para cargar el formulario
     function carga_datos_consulta(id_consulta = '') {
@@ -1132,18 +1165,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                                                                 <div class="col-md-3">
                                                                     <label for="tipo_farmacologia" class="form-label">Farmacología: <label style="color: red;">*</label> </label>
-                                                                    <select class="form-select form-select-sm" id="tipo_farmacologia" name="tipo_farmacologia" onclick="consultar_medicinas_insumos(this.value);">
+                                                                    <select class="form-select form-select-sm" id="tipo_farmacologia" name="tipo_farmacologia" onchange="consultar_medicinas_insumos(this.value);">
                                                                         <option selected disabled>-- Seleccione --</option>
                                                                         <option value="medicamentos">Medicamentos</option>
                                                                         <option value="insumos">Insumos</option>
                                                                     </select>
                                                                 </div>
 
-                                                                <div class="col-md-7">
+                                                                <div class="col-md-5">
                                                                     <label for="tipo_farmacologia_presentacion" class="form-label">Presentación: <label style="color: red;">*</label> </label>
                                                                     <select class="form-select form-select-sm" id="tipo_farmacologia_presentacion" name="tipo_farmacologia_presentacion">
                                                                         <option selected disabled>-- Seleccione --</option>
                                                                     </select>
+                                                                </div>
+                                                                <div class="col-md-1">
+                                                                    <label for="Stock_farmacologia" class="form-label">Stock: </label>
+                                                                    <input type="text" name="stock_farmacologia" id="stock_farmacologia" readonly class="form-control form-control-sm">
+                                                                </div>
+                                                                 <div class="col-md-1">
+                                                                    <label for="cantidad_farmacologia" class="form-label">Cant: <label style="color: red;">*</label> </label>
+                                                                    <input type="text" name="cantidad_farmacologia" id="cantidad_farmacologia" class="form-control form-control-sm">
                                                                 </div>
 
                                                                 <div class="col-md-2 mt-3">

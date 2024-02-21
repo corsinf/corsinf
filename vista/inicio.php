@@ -317,6 +317,9 @@ if ($_GET['acc'] == 'insumos') {
 if ($_GET['acc'] == 'ingreso_stock') {
 	include('ENFERMERIA/Farmacia/Ingreso_Stock/ingreso_stock.php');
 }
+if ($_GET['acc'] == 'salida_stock') {
+	include('ENFERMERIA/Farmacia/Ingreso_Stock/salida_stock.php');
+}
 
 //Notificaciones
 

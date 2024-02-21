@@ -34,6 +34,13 @@ if(isset($_GET['lista_kardex']))
 	echo json_encode($controlador->lista_kardex());
 }
 
+if(isset($_GET['producto_nuevo_salida']))
+{
+	$parametros = $_POST;
+	echo json_encode($controlador->producto_nuevo_salida($parametros));
+}
+
+
 class ingreso_stockC
 {
 	private $modelo;
@@ -152,6 +159,7 @@ class ingreso_stockC
 	function producto_nuevo_salida($parametros)
 	{
 
+		// print_r($parametros);die();
 		//orden -> crear un codigo para la orden en la consulta debido a que pueden hacer salidas no solo desde la consulta 
 		//ddl_tipo -> insumos o medicamento -> se ingresa solo uno 
 		//ddl_lista_productos -> este es el id de medicamento o de insumo 

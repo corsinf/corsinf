@@ -41,6 +41,25 @@ $(document).ready(function () {
 
     $(document).on('click', '#agregarFila_medicamentos', function () {
 
+        var stock = $('#stock_farmacologia').val();
+        var cant = $('#cantidad_farmacologia').val();
+        
+        if(cant=='' || cant=='0') {  Swal.fire('','Ingrese un valor valido','info'); return false;  }
+        if(parseFloat(cant)> parseFloat(stock)){  Swal.fire('','Valor supera al stock','info'); return false;  }
+
+        var farmaco = $("#tipo_farmacologia_presentacion option:selected").text();
+        var farmaco = farmaco.split('-');
+        // console.log(farmaco[0].trim())
+        var existe = buscar_medicamento_existente(farmaco[0].trim())
+        if(existe)
+        {
+            Swal.fire('Este farmaco ya esta registrado','Modifique el ya existente','error');
+            return false;
+        }
+
+        // console.log(existe);
+
+
         if ($("#tipo_farmacologia_presentacion").val()) {
             count_medicamento++;
 
@@ -50,7 +69,7 @@ $(document).ready(function () {
             htmlFila += '<td><input class="itemFila_Medicamento" type="checkbox"></td>';
             htmlFila += '<td><label id="sa_det_conp_nombre_temp_' + count_medicamento + '"></label></td>';
             htmlFila += '<td><input type="text" class="form-control form-control-sm" id="sa_det_conp_dosificacion_' + count_medicamento + '" name="sa_det_conp_dosificacion[]"></td>';
-            htmlFila += '<td><input type="number" class="form-control form-control-sm" id="sa_det_conp_cantidad_' + count_medicamento + '" name="sa_det_conp_cantidad[]" value="1"></td>';
+            htmlFila += '<td><input type="number" class="form-control form-control-sm" id="sa_det_conp_cantidad_' + count_medicamento + '" name="sa_det_conp_cantidad[]" onblur="limitarMaximo('+count_medicamento+')" max="'+stock+'" value="'+cant+'"></td>';
 
             htmlFila += '<td><div class="form-check d-flex justify-content-center">';
             htmlFila += '<input class="form-check-input" type="checkbox" value="" id="sa_det_conp_estado_entrega_' + count_medicamento + '" name="sa_det_conp_estado_entrega_' + count_medicamento + '" checked>';
@@ -69,10 +88,31 @@ $(document).ready(function () {
 
             var valor = $("#tipo_farmacologia_presentacion").val();
             insertarMedicamentos(valor);
+            limpiar();
         } else {
             Swal.fire('', 'Campos vacíos', 'error');
         }
     });
+
+   function buscar_medicamento_existente(texto) {
+  var searchText = texto.toLowerCase();
+  var encontrado = false;
+  $('#lista_medicamentos tbody tr').each(function() {
+    $(this).find('td label').each(function() {
+      var cellText = $(this).text().toLowerCase();
+      if (cellText.indexOf(searchText) !== -1) {
+        encontrado = true;
+        return false; // Sale del bucle each interno
+      }
+    });
+    
+    if (encontrado) {
+      return false; // Sale del bucle each externo
+    }
+  });
+  
+  return encontrado;
+}
 
 
     $(document).on('click', '#checkAll_Medicamentos', function () {
@@ -133,6 +173,7 @@ function eliminar_det_consulta_item(id_item) {
 }
 
 function consultar_medicinas_insumos(entrada) {
+    console.log(entrada);
 
     var selectElement = $('#tipo_farmacologia_presentacion');
 
@@ -178,7 +219,8 @@ function consultar_medicinas_insumos(entrada) {
                         if (fullName.toLowerCase().includes(searchTerm)) {
                             filtered.push({
                                 id: item['sa_cmed_id'],
-                                text: fullName
+                                text: fullName,
+                                data:item,
                             });
                         }
 
@@ -230,7 +272,8 @@ function consultar_medicinas_insumos(entrada) {
                         if (fullName.toLowerCase().includes(searchTerm)) {
                             filtered.push({
                                 id: item['sa_cins_id'],
-                                text: fullName
+                                text: fullName,
+                                data:item,
                             });
                         }
 
