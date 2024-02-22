@@ -509,7 +509,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         var sa_conp_estado_revision = revision;
 
-
+        var sa_examen_fisico_regional = generarJSON();
 
         // Crear objeto de parámetros
         var parametros = {
@@ -572,6 +572,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'sa_conp_saturacion': sa_conp_saturacion,
 
             'sa_conp_estado_revision': sa_conp_estado_revision,
+
+            'sa_examen_fisico_regional': sa_examen_fisico_regional,
+
         };
 
         //alert(sa_conp_tipo_consulta)
@@ -620,18 +623,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         text: 'Asegurese de llenar todo los campos',
                     })
                 } else {
-                    //console.log(parametros);
                     parametros.filas_tabla_farmacologia = filas_tabla_farmacologia;
                     insertar(parametros);
-                    //alert('entra2');
+                    //console.log(parametros);
+
                 }
             } else {
                 parametros.filas_tabla_farmacologia = filas_tabla_farmacologia;
                 insertar(parametros);
+                //console.log(parametros);
             }
 
         } else if (sa_conp_tipo_consulta == 'certificado') {
             insertar(parametros)
+            //console.log(parametros);
         }
 
     }
@@ -1172,7 +1177,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                                                     <input type="checkbox" class="custom-control-input" id="chx_Tabique">
                                                                                 </td>
 
-                                                                                <th class="table-primary text-end">c. Pared Abdominal</th>
+                                                                                <th class="table-primary text-end">b. Pared Abdominal</th>
                                                                                 <td>
                                                                                     <input type="checkbox" class="custom-control-input" id="chx_Pared_Abdominal">
                                                                                 </td>
@@ -1301,305 +1306,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                                                 <th colspan="9" class="small text-danger">*SI EXISTE EVIDENCIA DE PATOLOGÍA MARCAR Y DESCRIBIR EN LA SIGUIENTE SECCIÓN COLOCANDO EL NUMERAL</th>
                                                                             </tr>
 
-                                                                            <button type="button" onclick="generarJSON();">tomar datos</button>
-
                                                                         </tbody>
                                                                     </table>
 
                                                                 </div>
                                                             </div>
+
                                                         </div>
 
-                                                        <script>
-                                                            function agregarCampo(objeto, clave, idCheckbox, dato) {
-                                                                var valor = $('#' + idCheckbox).prop('checked');
-                                                                if (valor) {
-                                                                    objeto[clave] = dato;
-                                                                }
-                                                            }
-
-                                                            function generarJSON() {
-                                                                var datos = {};
-
-                                                                //1 Piel
-                                                                agregarCampo(datos.Piel = {}, 'a', 'chx_Cicatrices', 'Cicatrices');
-                                                                agregarCampo(datos.Piel, 'b', 'chx_Tatuajes', 'Tatuajes');
-                                                                agregarCampo(datos.Piel, 'c', 'chx_Piel_Faneras', 'Piel y Faneras');
-
-                                                                //2 Ojos
-                                                                agregarCampo(datos.Ojos = {}, 'a', 'chx_Parpados', 'Párpados');
-                                                                agregarCampo(datos.Ojos, 'b', 'chx_Conjuntivas', 'Conjuntivas');
-                                                                agregarCampo(datos.Ojos, 'c', 'chx_Pupilas', 'Pupilas');
-                                                                agregarCampo(datos.Ojos, 'd', 'chx_Cornea', 'Córnea');
-                                                                agregarCampo(datos.Ojos, 'e', 'chx_Motilidad', 'Motilidad');
-
-                                                                //3 Oído
-                                                                agregarCampo(datos.Oído = {}, 'a', 'chx_C_auditivo_externo', 'C.auditivo externo');
-                                                                agregarCampo(datos.Oído, 'b', 'chx_Pabellon', 'Pabellón');
-                                                                agregarCampo(datos.Oído, 'c', 'chx_Timpanos', 'Timpanos');
-
-                                                                //4 Oro_faringe
-                                                                agregarCampo(datos.Oro_faringe = {}, 'a', 'chx_Labios', 'Labios');
-                                                                agregarCampo(datos.Oro_faringe, 'b', 'chx_Lengua', 'Lengua');
-                                                                agregarCampo(datos.Oro_faringe, 'c', 'chx_Faringe', 'Faringe');
-                                                                agregarCampo(datos.Oro_faringe, 'd', 'chx_Amigdalas', 'Amígdalas');
-                                                                agregarCampo(datos.Oro_faringe, 'e', 'chx_Dentadura', 'Dentadura');
-
-                                                                //5 Nariz
-                                                                agregarCampo(datos.Nariz = {}, 'a', 'chx_Tabique', 'Tabique');
-                                                                agregarCampo(datos.Nariz, 'b', 'chx_Cornetes', 'Cornetes');
-                                                                agregarCampo(datos.Nariz, 'c', 'chx_Mucosas', 'Mucosas');
-                                                                agregarCampo(datos.Nariz, 'd', 'chx_Senos_paranasales', 'Senos paranasales');
-
-                                                                //6 Cuello
-                                                                agregarCampo(datos.Cuello = {}, 'a', 'chx_Tiroides', 'Tiroides');
-                                                                agregarCampo(datos.Cuello, 'b', 'chx_Movilidad', 'Movilidad');
-
-                                                                //7 Tórax
-                                                                agregarCampo(datos.Torax_1 = {}, 'a', 'chx_Mamas', 'Mamas');
-                                                                agregarCampo(datos.Torax_1, 'b', 'chx_Corazon', 'Corazón');
-
-                                                                //8 Tórax
-                                                                agregarCampo(datos.Torax_2 = {}, 'a', 'chx_Pulmones', 'Pulmones');
-                                                                agregarCampo(datos.Torax_2, 'b', 'chx_Parrilla_Costal', 'Parrilla Costal');
-
-                                                                //9 Abdomen
-                                                                agregarCampo(datos.Abdomen = {}, 'a', 'chx_Visceras', 'Vísceras');
-                                                                agregarCampo(datos.Abdomen, 'b', 'chx_Pared_Abdominal', 'Pared abdominal');
-
-                                                                //10 Columna
-                                                                agregarCampo(datos.Columna = {}, 'a', 'chx_Flexibilidad', 'Flexibilidad');
-                                                                agregarCampo(datos.Columna, 'b', 'chx_Desviacion', 'Desviación');
-                                                                agregarCampo(datos.Columna, 'c', 'chx_Dolor', 'Dolor');
-
-                                                                //11 Pelvis
-                                                                agregarCampo(datos.Pelvis = {}, 'a', 'chx_Pelvis', 'Pelvis');
-                                                                agregarCampo(datos.Pelvis, 'b', 'chx_Genitales', 'Genitales');
-
-                                                                //12 Extremidades
-                                                                agregarCampo(datos.Extremidades, 'a', 'chx_Vascular', 'Vascular');
-                                                                agregarCampo(datos.Extremidades, 'b', 'chx_Miembros_superiores', 'Miembros superiores');
-                                                                agregarCampo(datos.Extremidades, 'c', 'chx_Miembros_inferiores', 'Miembros inferiores');
-
-                                                                //13 Neurológico
-                                                                agregarCampo(datos.Neurológico = {}, 'a', 'chx_Fuerza', 'Fuerza');
-                                                                agregarCampo(datos.Neurológico, 'b', 'chx_Sencibilidad', 'Sencibilidad');
-                                                                agregarCampo(datos.Neurológico, 'c', 'chx_Marcha', 'Marcha');
-                                                                agregarCampo(datos.Neurológico, 'd', 'chx_Reflejos', 'Reflejos');
-
-                                                                var jsonString = JSON.stringify(datos);
-                                                                console.log(jsonString);
-                                                                
+                                                        <div class="row pt-3">
+                                                            <div class="col-md-12">
+                                                                <label for="" class="form-label">Observaciones : <label style="color: red;">*</label> </label>
+                                                                <textarea name="sa_examen_fisico_regional_obs" id="sa_examen_fisico_regional_obs" cols="30" rows="2" class="form-control" placeholder="OBSERVACIONES  EXAMEN FÍSICO REGIONAL"></textarea>
+                                                            </div>
+                                                        </div>
 
 
-                                                            }
-
-                                                            function datos_k() {
-                                                                //1 Piel
-                                                                var chx_Cicatrices = $('#chx_Cicatrices').prop('checked');
-                                                                var chx_Cicatrices = (chx_Cicatrices ? 'Cicatrices' : '');
-
-                                                                var chx_Tatuajes = $('#chx_Tatuajes').prop('checked');
-                                                                var chx_Tatuajes = (chx_Tatuajes ? 'Tatuajes' : '');
-
-                                                                var chx_Piel_Faneras = $('#chx_Piel_Faneras').prop('checked');
-                                                                var chx_Piel_Faneras = (chx_Piel_Faneras ? 'Piel y Faneras' : '');
-
-                                                                //2 Ojos
-                                                                var chx_Parpados = $('#chx_Parpados').prop('checked');
-                                                                var chx_Parpados = (chx_Parpados ? 'Párpados' : '');
-
-                                                                var chx_Conjuntivas = $('#chx_Conjuntivas').prop('checked');
-                                                                var chx_Conjuntivas = (chx_Conjuntivas ? 'Conjuntivas' : '');
-
-                                                                var chx_Pupilas = $('#chx_Pupilas').prop('checked');
-                                                                var chx_Pupilas = (chx_Pupilas ? 'Pupilas' : '');
-
-                                                                var chx_Cornea = $('#chx_Cornea').prop('checked');
-                                                                var chx_Cornea = (chx_Cornea ? 'Córnea' : '');
-
-                                                                var chx_Motilidad = $('#chx_Motilidad').prop('checked');
-                                                                var chx_Motilidad = (chx_Motilidad ? 'Motilidad' : '');
-
-                                                                //3 Oído
-                                                                var chx_C_auditivo_externo = $('#chx_C_auditivo_externo').prop('checked');
-                                                                var chx_C_auditivo_externo = (chx_C_auditivo_externo ? 'C. auditivo externo' : '');
-
-                                                                var chx_Pabellon = $('#chx_Pabellon').prop('checked');
-                                                                var chx_Pabellon = (chx_Pabellon ? 'Pabellón' : '');
-
-                                                                var chx_Timpanos = $('#chx_Timpanos').prop('checked');
-                                                                var chx_Timpanos = (chx_Timpanos ? 'Timpanos' : '');
-
-                                                                //4 Oro faringe
-                                                                var chx_Labios = $('#chx_Labios').prop('checked');
-                                                                var chx_Labios = (chx_Labios ? 'Labios' : '');
-
-                                                                var chx_Lengua = $('#chx_Lengua').prop('checked');
-                                                                var chx_Lengua = (chx_Lengua ? 'Lengua' : '');
-
-                                                                var chx_Faringe = $('#chx_Faringe').prop('checked');
-                                                                var chx_Faringe = (chx_Faringe ? 'Faringe' : '');
-
-                                                                var chx_Amigdalas = $('#chx_Amigdalas').prop('checked');
-                                                                var chx_Amigdalas = (chx_Amigdalas ? 'Amígdalas' : '');
-
-                                                                var chx_Dentadura = $('#chx_Dentadura').prop('checked');
-                                                                var chx_Dentadura = (chx_Dentadura ? 'Dentadura' : '');
-
-                                                                //5 Nariz
-                                                                var chx_Tabique = $('#chx_Tabique').prop('checked');
-                                                                var chx_Tabique = (chx_Tabique ? 'Tabique' : '');
-
-                                                                var chx_Cornetes = $('#chx_Cornetes').prop('checked');
-                                                                var chx_Cornetes = (chx_Cornetes ? 'Cornetes' : '');
-
-                                                                var chx_Mucosas = $('#chx_Mucosas').prop('checked');
-                                                                var chx_Mucosas = (chx_Mucosas ? 'Mucosas' : '');
-
-                                                                var chx_Senos_paranasales = $('#chx_Senos_paranasales').prop('checked');
-                                                                var chx_Senos_paranasales = (chx_Senos_paranasales ? 'Senos paranasales' : '');
-
-                                                                //6 Cuello
-                                                                var chx_Tiroides = $('#chx_Tiroides').prop('checked');
-                                                                var chx_Tiroides = (chx_Tiroides ? 'Tiroides/masas' : '');
-
-                                                                var chx_Movilidad = $('#chx_Movilidad').prop('checked');
-                                                                var chx_Movilidad = (chx_Movilidad ? 'Movilidad' : '');
-
-                                                                //7 Tórax
-                                                                var chx_Mamas = $('#chx_Mamas').prop('checked');
-                                                                var chx_Mamas = (chx_Mamas ? 'Mamas' : '');
-
-                                                                var chx_Corazon = $('#chx_Corazon').prop('checked');
-                                                                var chx_Corazon = (chx_Corazon ? 'Corazón' : '');
-
-                                                                //8 Tórax
-                                                                var chx_Pulmones = $('#chx_Pulmones').prop('checked');
-                                                                var chx_Pulmones = (chx_Pulmones ? 'Pulmones' : '');
-
-                                                                var chx_Parrilla_Costal = $('#chx_Parrilla_Costal').prop('checked');
-                                                                var chx_Parrilla_Costal = (chx_Parrilla_Costal ? 'Parrilla Costal' : '');
-
-                                                                //9 Adomen
-                                                                var chx_Visceras = $('#chx_Visceras').prop('checked');
-                                                                var chx_Visceras = (chx_Visceras ? 'Vísceras' : '');
-
-                                                                var chx_Pared_Abdominal = $('#chx_Pared_Abdominal').prop('checked');
-                                                                var chx_Pared_Abdominal = (chx_Pared_Abdominal ? 'Pared abdominal' : '');
-
-                                                                //10 Columna
-                                                                var chx_Flexibilidad = $('#chx_Flexibilidad').prop('checked');
-                                                                var chx_Flexibilidad = (chx_Flexibilidad ? 'Flexibilidad' : '');
-
-                                                                var chx_Desviacion = $('#chx_Desviacion').prop('checked');
-                                                                var chx_Desviacion = (chx_Desviacion ? 'Desviación' : '');
-
-                                                                var chx_Dolor = $('#chx_Dolor').prop('checked');
-                                                                var chx_Dolor = (chx_Dolor ? 'Dolor' : '');
-
-                                                                //11 Pelvis
-                                                                var chx_Pelvis = $('#chx_Pelvis').prop('checked');
-                                                                var chx_Pelvis = (chx_Pelvis ? 'Pelvis' : '');
-
-                                                                var chx_Genitales = $('#chx_Genitales').prop('checked');
-                                                                var chx_Genitales = (chx_Genitales ? 'Genitales' : '');
-
-                                                                //12 Extremidades
-                                                                var chx_Vascular = $('#chx_Vascular').prop('checked');
-                                                                var chx_Vascular = (chx_Vascular ? 'Vascular' : '');
-
-                                                                var chx_Miembros_superiores = $('#chx_Miembros_superiores').prop('checked');
-                                                                var chx_Miembros_superiores = (chx_Miembros_superiores ? 'Miembros superiores' : '');
-
-                                                                var chx_Miembros_inferiores = $('#chx_Miembros_inferiores').prop('checked');
-                                                                var chx_Miembros_inferiores = (chx_Miembros_inferiores ? 'Miembros inferiores' : '');
-
-                                                                //13 Neurológico
-                                                                var chx_Fuerza = $('#chx_Fuerza').prop('checked');
-                                                                var chx_Fuerza = (chx_Fuerza ? 'Fuerza' : '');
-
-                                                                var chx_Sencibilidad = $('#chx_Sencibilidad').prop('checked');
-                                                                var chx_Sencibilidad = (chx_Sencibilidad ? 'Sencibilidad' : '');
-
-                                                                var chx_Marcha = $('#chx_Marcha').prop('checked');
-                                                                var chx_Marcha = (chx_Marcha ? 'Marcha' : '');
-
-                                                                var chx_Reflejos = $('#chx_Reflejos').prop('checked');
-                                                                var chx_Reflejos = (chx_Reflejos ? 'Reflejos' : '');
-
-
-                                                                var datos = {
-                                                                    "Piel": {
-                                                                        "a": chx_Cicatrices,
-                                                                        "b": chx_Tatuajes,
-                                                                        "c": chx_Piel_Faneras
-                                                                    },
-                                                                    "Ojos": {
-                                                                        "a": chx_Parpados,
-                                                                        "b": chx_Conjuntivas,
-                                                                        "c": chx_Pupilas,
-                                                                        "d": chx_Cornea,
-                                                                        "e": chx_Motilidad
-                                                                    },
-                                                                    "Oído": {
-                                                                        "a": chx_C_auditivo_externo,
-                                                                        "b": chx_Pabellon,
-                                                                        "c": chx_Timpanos
-                                                                    },
-                                                                    "Oro_faringe": {
-                                                                        "a": chx_Labios,
-                                                                        "b": chx_Lengua,
-                                                                        "c": chx_Faringe,
-                                                                        "d": chx_Amigdalas,
-                                                                        "e": chx_Dentadura
-                                                                    },
-                                                                    "Nariz": {
-                                                                        "a": chx_Tabique,
-                                                                        "b": chx_Cornetes,
-                                                                        "c": chx_Mucosas,
-                                                                        "d": chx_Senos_paranasales
-                                                                    },
-                                                                    "Cuello": {
-                                                                        "a": chx_Tiroides,
-                                                                        "b": chx_Movilidad
-                                                                    },
-                                                                    "Tórax": {
-                                                                        "a": chx_Mamas,
-                                                                        "b": chx_Corazon
-                                                                    },
-                                                                    "Abdomen": {
-                                                                        "a": chx_Visceras,
-                                                                        "b": chx_Pared_Abdominal
-                                                                    },
-                                                                    "Columna": {
-                                                                        "a": chx_Flexibilidad,
-                                                                        "b": chx_Desviacion,
-                                                                        "c": chx_Dolor
-                                                                    },
-                                                                    "Pelvis": {
-                                                                        "a": chx_Pelvis,
-                                                                        "b": chx_Genitales
-                                                                    },
-                                                                    "Extremidades": {
-                                                                        "a": chx_Vascular,
-                                                                        "b": chx_Miembros_superiores,
-                                                                        "c": chx_Miembros_inferiores
-                                                                    },
-                                                                    "Neurológico": {
-                                                                        "a": chx_Fuerza,
-                                                                        "b": chx_Sencibilidad,
-                                                                        "c": chx_Marcha,
-                                                                        "d": chx_Reflejos
-                                                                    }
-                                                                };
-
-                                                                var jsonString = JSON.stringify(datos);
-                                                                console.log(jsonString);
-
-
-                                                            }
-                                                        </script>
 
                                                         <div class="row pt-4">
                                                             <hr>

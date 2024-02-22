@@ -213,6 +213,8 @@ class consultasC
             array('campo' => 'sa_conp_motivo_consulta', 'dato' => $parametros['sa_conp_motivo_consulta']),
             array('campo' => 'sa_conp_tratamiento', 'dato' => $parametros['sa_conp_tratamiento']),
             array('campo' => 'sa_conp_estado_revision', 'dato' => $parametros['sa_conp_estado_revision']),
+
+            array('campo' => 'sa_examen_fisico_regional', 'dato' => $parametros['sa_examen_fisico_regional']),
         );
 
 
@@ -280,7 +282,7 @@ class consultasC
                             }
 
                             $datos_stock = array(
-                                'orden' => 'Consulta - '.$id_insert,
+                                'orden' => 'Consulta - ' . $id_insert,
                                 'ddl_tipo' => $tipo_tabla,
                                 'ddl_lista_productos' => $fila['sa_det_conp_id_cmed_cins'],
                                 'txt_canti' => $fila['sa_det_conp_cantidad'],
@@ -344,7 +346,7 @@ class consultasC
                             }
 
                             $datos_stock = array(
-                                'orden' => 'Consulta - '.$parametros['sa_conp_id'],
+                                'orden' => 'Consulta - ' . $parametros['sa_conp_id'],
                                 'ddl_tipo' => $tipo_tabla,
                                 'ddl_lista_productos' => $fila['sa_det_conp_id_cmed_cins'],
                                 'txt_canti' => $fila['sa_det_conp_cantidad'],
@@ -392,7 +394,7 @@ class consultasC
                             }
 
                             $datos_stock = array(
-                                'orden' => 'Consulta - '.$parametros['sa_conp_id'],
+                                'orden' => 'Consulta - ' . $parametros['sa_conp_id'],
                                 'ddl_tipo' => $tipo_tabla,
                                 'ddl_lista_productos' => $fila['sa_det_conp_id_cmed_cins'],
                                 'txt_canti' => $fila['sa_det_conp_cantidad'],
@@ -533,6 +535,9 @@ class consultasC
         $sa_conp_observaciones = $datos[0]['sa_conp_observaciones'];
         $sa_conp_tratamiento = $datos[0]['sa_conp_tratamiento'];
         $sa_conp_tipo_consulta = $datos[0]['sa_conp_tipo_consulta'];
+
+        $sa_examen_fisico_regional = $datos[0]['sa_examen_fisico_regional'];
+
 
         //Ficha medica
         $sa_fice_pac_grupo_sangre = $ficha_medica[0]['sa_fice_pac_grupo_sangre'];
@@ -835,6 +840,245 @@ class consultasC
         $pdf->ln('10');
 
         $pdf->SetFont('Arial', 'B', 12);
+        $pdf->Cell(190, 10, utf8_decode('  EXAMEN FÍSICO REGIONAL'), 1, 1, 'L');
+
+        $pdf->SetFont('Arial', '', 10);
+        $jsonArray = json_decode($sa_examen_fisico_regional, true);
+
+        //190 63.33
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+        $pdf->SetFont('Arial', 'B', 12);
+
+        $piel_a = isset($jsonArray['Piel']['z']) ? $jsonArray['Piel']['z'] : '';
+
+
+        $pdf->SetFont('Arial', 'B', 8);
+        // Primera fila de celdas
+
+        $pdf->SetFillColor(211, 228, 251);
+        $pdf->Cell(6, 7, utf8_decode(''), 'LT', 0, 'L', true);
+        $pdf->SetFillColor(211, 228, 251);
+        $pdf->Cell(35.5, 7, utf8_decode('a. Cicatrices'), 1, 0, 'L', true);
+        $pdf->Cell(6, 7, utf8_decode('X'), 1, 0, 'L');
+
+        $pdf->SetFillColor(211, 228, 251);
+        $pdf->Cell(6, 7, utf8_decode(''), 'LT', 0, 'L', true);
+        $pdf->SetFillColor(211, 228, 251);
+        $pdf->Cell(35.5, 7, utf8_decode('a. Labios'), 1, 0, 'L', true);
+        $pdf->Cell(6, 7, utf8_decode('X'), 1, 0, 'L');
+
+        $pdf->Cell(6, 7, utf8_decode(''), 'LT', 0, 'L', true);
+        $pdf->Cell(35.5, 7, utf8_decode('a. Mamas'), 1, 0, 'L', true);
+        $pdf->Cell(6, 7, utf8_decode('X'), 1, 0, 'L');
+
+        $pdf->Cell(6, 7, utf8_decode(''), 'LT', 0, 'L', true);
+        $pdf->Cell(35.5, 7, utf8_decode('a. Vascular'), 1, 0, 'L', true);
+        $pdf->Cell(6, 7, utf8_decode('X'), 1, 1, 'L');
+
+
+        // Segunda fila de celdas
+        $pdf->SetFillColor(211, 228, 251);
+        $pdf->Cell(6, 7, utf8_decode(''), 'L', 0, 'L', true);
+        $pdf->SetFillColor(211, 228, 251);
+        $pdf->Cell(35.5, 7, utf8_decode('b. Tatuajes'), 1, 0, 'L', true);
+        $pdf->Cell(6, 7, utf8_decode('X'), 1, 0, 'L');
+
+        $pdf->Cell(6, 7, utf8_decode(''), 'L', 0, 'L', true);
+        $pdf->Cell(35.5, 7, utf8_decode('b. Lengua'), 1, 0, 'L', true);
+        $pdf->Cell(6, 7, utf8_decode('X'), 1, 0, 'L');
+
+        $pdf->Cell(6, 7, utf8_decode(''), 'L', 0, 'L', true);
+        $pdf->Cell(35.5, 7, utf8_decode('b. Corazón'), 1, 0, 'L', true);
+        $pdf->Cell(6, 7, utf8_decode('X'), 1, 0, 'L');
+
+        $pdf->Cell(6, 7, utf8_decode(''), 'L', 0, 'L', true);
+        $pdf->Cell(35.5, 7, utf8_decode('b. Miembros superiores'), 1, 0, 'L', true);
+        $pdf->Cell(6, 7, utf8_decode('X'), 1, 1, 'L');
+
+
+        // Tercera fila de celdas
+        $pdf->SetFillColor(211, 228, 251);
+        $pdf->Cell(6, 7, utf8_decode(''), 'L', 0, 'L', true);
+        $pdf->SetFillColor(211, 228, 251);
+        $pdf->Cell(35.5, 7, utf8_decode('c. Piel y Faneras'), 1, 0, 'L', true);
+        $pdf->Cell(6, 7, utf8_decode('X'), 1, 0, 'L');
+
+        $pdf->Cell(6, 7, utf8_decode(''), 'L', 0, 'L', true);
+        $pdf->Cell(35.5, 7, utf8_decode('c. Faringe'), 1, 0, 'L', true);
+        $pdf->Cell(6, 7, utf8_decode('X'), 1, 0, 'L');
+
+        $pdf->Cell(6, 7, utf8_decode(''), 'LT', 0, 'L', true);
+        $pdf->Cell(35.5, 7, utf8_decode('a. Pulmones'), 1, 0, 'L', true);
+        $pdf->Cell(6, 7, utf8_decode('X'), 1, 0, 'L');
+
+        $pdf->Cell(6, 7, utf8_decode(''), 'L', 0, 'L', true);
+        $pdf->Cell(35.5, 7, utf8_decode('c. Miembros inferiores'), 1, 0, 'L', true);
+        $pdf->Cell(6, 7, utf8_decode('X'), 1, 1, 'L');
+
+
+        // Cuarta fila de celdas
+        $pdf->Cell(6, 7, utf8_decode(''), 'LT', 0, 'L', true);
+        $pdf->Cell(35.5, 7, utf8_decode('a. Párpados'), 1, 0, 'L', true);
+        $pdf->Cell(6, 7, utf8_decode('X'), 1, 0, 'L');
+
+        $pdf->Cell(6, 7, utf8_decode(''), 'L', 0, 'L', true);
+        $pdf->Cell(35.5, 7, utf8_decode('d. Amígdalas'), 1, 0, 'L', true);
+        $pdf->Cell(6, 7, utf8_decode('X'), 1, 0, 'L');
+
+        $pdf->Cell(6, 7, utf8_decode(''), 'L', 0, 'L', true);
+        $pdf->Cell(35.5, 7, utf8_decode('b. Parrilla Costal'), 1, 0, 'L', true);
+        $pdf->Cell(6, 7, utf8_decode('X'), 1, 0, 'L');
+
+        $pdf->Cell(6, 7, utf8_decode(''), 'LT', 0, 'L', true);
+        $pdf->Cell(35.5, 7, utf8_decode('a. Fuerza'), 1, 0, 'L', true);
+        $pdf->Cell(6, 7, utf8_decode('X'), 1, 1, 'L');
+
+
+        // Quinta fila de celdas
+        $pdf->Cell(6, 7, utf8_decode(''), 'L', 0, 'L', true);
+        $pdf->Cell(35.5, 7, utf8_decode('b. Conjuntivas'), 1, 0, 'L', true);
+        $pdf->Cell(6, 7, utf8_decode('X'), 1, 0, 'L');
+
+        $pdf->Cell(6, 7, utf8_decode(''), 'L', 0, 'L', true);
+        $pdf->Cell(35.5, 7, utf8_decode('e. Dentadura'), 1, 0, 'L', true);
+        $pdf->Cell(6, 7, utf8_decode('X'), 1, 0, 'L');
+
+        $pdf->Cell(6, 7, utf8_decode(''), 'LT', 0, 'L', true);
+        $pdf->Cell(35.5, 7, utf8_decode('a. Vísceras'), 1, 0, 'L', true);
+        $pdf->Cell(6, 7, utf8_decode('X'), 1, 0, 'L');
+
+        $pdf->Cell(6, 7, utf8_decode(''), 'L', 0, 'L', true);
+        $pdf->Cell(35.5, 7, utf8_decode('b. Sencibilidad'), 1, 0, 'L', true);
+        $pdf->Cell(6, 7, utf8_decode('X'), 1, 1, 'L');
+
+
+        // Sexta fila de celdas
+        $pdf->Cell(6, 7, utf8_decode(''), 'L', 0, 'L', true);
+        $pdf->Cell(35.5, 7, utf8_decode('c. Pupilas'), 1, 0, 'L', true);
+        $pdf->Cell(6, 7, utf8_decode('X'), 1, 0, 'L');
+
+        $pdf->Cell(6, 7, utf8_decode(''), 'LT', 0, 'L', true);
+        $pdf->Cell(35.5, 7, utf8_decode('a. Tabique'), 1, 0, 'L', true);
+        $pdf->Cell(6, 7, utf8_decode('X'), 1, 0, 'L');
+
+        $pdf->Cell(6, 7, utf8_decode(''), 'L', 0, 'L', true);
+        $pdf->Cell(35.5, 7, utf8_decode('b. Pared Abdominal'), 1, 0, 'L', true);
+        $pdf->Cell(6, 7, utf8_decode('X'), 1, 0, 'L');
+
+        $pdf->Cell(6, 7, utf8_decode(''), 'L', 0, 'L', true);
+        $pdf->Cell(35.5, 7, utf8_decode('c. Marcha'), 1, 0, 'L', true);
+        $pdf->Cell(6, 7, utf8_decode('X'), 1, 1, 'L');
+
+
+        // Septima fila de celdas
+        $pdf->Cell(6, 7, utf8_decode(''), 'L', 0, 'L', true);
+        $pdf->Cell(35.5, 7, utf8_decode('d. Córnea'), 1, 0, 'L', true);
+        $pdf->Cell(6, 7, utf8_decode('X'), 1, 0, 'L');
+
+        $pdf->Cell(6, 7, utf8_decode(''), 'L', 0, 'L', true);
+        $pdf->Cell(35.5, 7, utf8_decode('b. Cornetes'), 1, 0, 'L', true);
+        $pdf->Cell(6, 7, utf8_decode('X'), 1, 0, 'L');
+
+        $pdf->Cell(6, 7, utf8_decode(''), 'LT', 0, 'L', true);
+        $pdf->Cell(35.5, 7, utf8_decode('a. Flexibilidad'), 1, 0, 'L', true);
+        $pdf->Cell(6, 7, utf8_decode('X'), 1, 0, 'L');
+
+        $pdf->Cell(6, 7, utf8_decode(''), 'LB', 0, 'L', true);
+        $pdf->Cell(35.5, 7, utf8_decode('d. Reflejos'), 1, 0, 'L', true);
+        $pdf->Cell(6, 7, utf8_decode('X'), 1, 1, 'L');
+
+
+        // Octava fila de celdas
+        $pdf->Cell(6, 7, utf8_decode(''), 'L', 0, 'L', true);
+        $pdf->Cell(35.5, 7, utf8_decode('e. Motilidad'), 1, 0, 'L', true);
+        $pdf->Cell(6, 7, utf8_decode('X'), 1, 0, 'L');
+
+        $pdf->Cell(6, 7, utf8_decode(''), 'L', 0, 'L', true);
+        $pdf->Cell(35.5, 7, utf8_decode('c. Mucosas'), 1, 0, 'L', true);
+        $pdf->Cell(6, 7, utf8_decode('X'), 1, 0, 'L');
+
+        $pdf->Cell(6, 7, utf8_decode(''), 'L', 0, 'L', true);
+        $pdf->Cell(35.5, 7, utf8_decode('b. Desviación'), 1, 0, 'L', true);
+        $pdf->Cell(6, 7, utf8_decode('X'), 1, 1, 'L');
+
+        // Novena fila de celdas
+        $pdf->Cell(6, 7, utf8_decode(''), 'LT', 0, 'L', true);
+        $pdf->Cell(35.5, 7, utf8_decode('a. C. auditivo externo'), 1, 0, 'L', true);
+        $pdf->Cell(6, 7, utf8_decode('X'), 1, 0, 'L');
+
+        $pdf->Cell(6, 7, utf8_decode(''), 'L', 0, 'L', true);
+        $pdf->Cell(35.5, 7, utf8_decode('d. Senos paranasales'), 1, 0, 'L', true);
+        $pdf->Cell(6, 7, utf8_decode('X'), 1, 0, 'L');
+
+        $pdf->Cell(6, 7, utf8_decode(''), 'L', 0, 'L', true);
+        $pdf->Cell(35.5, 7, utf8_decode('c. Dolor'), 1, 0, 'L', true);
+        $pdf->Cell(6, 7, utf8_decode('X'), 1, 1, 'L');
+
+
+        // Decima fila de celdas
+        $pdf->Cell(6, 7, utf8_decode(''), 'L', 0, 'L', true);
+        $pdf->Cell(35.5, 7, utf8_decode('b. Pabellón'), 1, 0, 'L', true);
+        $pdf->Cell(6, 7, utf8_decode('X'), 1, 0, 'L');
+
+        $pdf->Cell(6, 7, utf8_decode(''), 'LT', 0, 'L', true);
+        $pdf->Cell(35.5, 7, utf8_decode('a. Tiroides/masas'), 1, 0, 'L', true);
+        $pdf->Cell(6, 7, utf8_decode('X'), 1, 0, 'L');
+
+        $pdf->Cell(6, 7, utf8_decode(''), 'LT', 0, 'L', true);
+        $pdf->Cell(35.5, 7, utf8_decode('a. Pelvis'), 1, 0, 'L', true);
+        $pdf->Cell(6, 7, utf8_decode('X'), 1, 1, 'L');
+
+
+        // Decimo primero fila de celdas
+        $pdf->Cell(6, 7, utf8_decode(''), 'LB', 0, 'L', true);
+        $pdf->Cell(35.5, 7, utf8_decode('c. Timpanos'), 1, 0, 'L', true);
+        $pdf->Cell(6, 7, utf8_decode('X'), 1, 0, 'L');
+
+        $pdf->Cell(6, 7, utf8_decode(''), 'LB', 0, 'L', true);
+        $pdf->Cell(35.5, 7, utf8_decode('b. Movilidad'), 1, 0, 'L', true);
+        $pdf->Cell(6, 7, utf8_decode('X'), 1, 0, 'L');
+
+        $pdf->Cell(6, 7, utf8_decode(''), 'LB', 0, 'L', true);
+        $pdf->Cell(35.5, 7, utf8_decode('b. Genitales'), 1, 0, 'L', true);
+        $pdf->Cell(6, 7, utf8_decode('X'), 1, 1, 'L');
+
+        //Para poner los textos en la tabla
+        $pdf->RotatedText(14, 44, utf8_decode('1. Piel'), 90);
+        $pdf->RotatedText(14, 68, utf8_decode('2. Ojos'), 90);
+        $pdf->RotatedText(14, 99, utf8_decode('3. Oído'), 90);
+
+        $pdf->RotatedText(61.5, 54, utf8_decode('4. Oro faringe'), 90);
+        $pdf->RotatedText(61.5, 77, utf8_decode('5. Naríz'), 90);
+        $pdf->RotatedText(61.5, 105, utf8_decode('6.Cuello'), 90);
+
+        $pdf->RotatedText(109, 44, utf8_decode('7. Tórax'), 90);
+        $pdf->RotatedText(109, 57, utf8_decode('8. Tórax'), 90);
+        $pdf->SetFont('Arial', 'B', 7);
+
+        $pdf->RotatedText(109, 71.7, utf8_decode('9.Abdomen'), 90);
+        $pdf->SetFont('Arial', 'B', 8);
+
+        $pdf->RotatedText(109, 91, utf8_decode('10. Columna'), 90);
+        $pdf->RotatedText(109, 106.5, utf8_decode('11. Pelvis'), 90);
+
+        $pdf->SetFont('Arial', 'B', 7);
+        $pdf->RotatedText(156.5, 50.5, utf8_decode('12. Extremidades'), 90);
+
+        $pdf->SetFont('Arial', 'B', 8);
+        $pdf->RotatedText(156.5, 76, utf8_decode('13. Neurológico'), 90);
+
+        //11. Pelvis
+        //12. Extremidades
+        //13. Neurológico
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        $pdf->ln('10');
+
+        $pdf->SetFont('Arial', 'B', 12);
         $pdf->Cell(190, 10, utf8_decode('  INFORMACIÓN ADICIONAL'), 1, 1, 'L');
 
 
@@ -903,6 +1147,17 @@ class consultasC
         $pdf->SetFont('Arial', '', 12);
 
         $pdf->Cell(60, 10, utf8_decode('Médico Institucional'), '0', 0, 'C');
+
+
+
+
+        $pdf->AddPage();
+
+        // Rotar texto a 45 grados
+        $pdf->RotatedText(10, 50, 'Texto Rotado 45 grados', 90);
+
+        // Rotar texto a -30 grados
+        $pdf->RotatedText(100, 100, 'Texto Rotado -30 grados', -30);
 
         $pdf->Output();
     }
