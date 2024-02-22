@@ -583,11 +583,12 @@ if ($dominio != 'localhost') {
 								<div class="dropdown-menu dropdown-menu-end">
 									<div class="row row-cols-3 g-3 p-3">
 										<div class="col text-center">
-											<div class="app-box mx-auto bg-gradient-cosmic text-white"><i class='bx bx-group'></i>
+											<a href="inicio.php?mod=<?php echo $_SESSION['INICIO']['MODULO_SISTEMA']; ?>&acc=ats" target="_blank"><div class="app-box mx-auto bg-gradient-burning text-white"><i class='bx bx-clipboard'></i>
 											</div>
-											<div class="app-title">Teams</div>
+											</a>
+											<div class="app-title">Generar ATS</div>
 										</div>
-										<div class="col text-center">
+										<!-- <div class="col text-center">
 											<div class="app-box mx-auto bg-gradient-burning text-white"><i class='bx bx-atom'></i>
 											</div>
 											<div class="app-title">Projects</div>
@@ -611,7 +612,7 @@ if ($dominio != 'localhost') {
 											<div class="app-box mx-auto bg-gradient-moonlit text-white"><i class='bx bx-filter-alt'></i>
 											</div>
 											<div class="app-title">Alerts</div>
-										</div>
+										</div> -->
 									</div>
 								</div>
 							</li>

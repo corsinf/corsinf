@@ -134,7 +134,7 @@ function recuperar_xml_a_factura($documento)
 {
 	$respuesta = 1;
 	//busco el archivo xml
-	$ruta_G = dirname(__DIR__,2).'/TEMP/XMLS';
+	$ruta_G = dirname(__DIR__,2).'/XMLS';
 	// print_r($ruta_G);die();
 	
 	$texto = file_get_contents($ruta_G.'/'.$documento);
