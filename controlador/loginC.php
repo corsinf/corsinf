@@ -273,6 +273,7 @@ class loginC
 			 	 $tabla = '';
 			 	 $busqueda_tercero = array();
 			 	 foreach ($no_concurentes as $key => $value) {
+			 	 	// print_r($value);die();
 			 	 	 	$parametros['Campo_Usuario'] = $value['Campo_usuario'];
 			 	 	 	$parametros['Campo_Pass'] = $value['Campo_pass'];
 			 	 	 	$parametros['tabla'] = $value['Tabla'];
@@ -293,6 +294,7 @@ class loginC
 				 	$datos_usu = $this->login->datos_no_concurente($tabla,$id[0]['ID'],$busqueda_tercero[0][$id[0]['ID']]);
 
 			 	 // print_r($busqueda_tercero);
+				 	// print_r($datos_usu[0][$parametros['foto']]);die();
 				 	// print_r($datos_usu);die();
 				 	$_SESSION['INICIO']['ULTIMO_ACCESO'] = time();
 					$_SESSION["INICIO"]['VER'] = $datos[0]['Ver'];
@@ -303,8 +305,12 @@ class loginC
 					$_SESSION["INICIO"]['ID_USUARIO'] = $datos[0]['id'];
 					$_SESSION["INICIO"]['EMAIL'] = $datos[0]['email'];
 					$_SESSION["INICIO"]['TIPO'] = $parametros['tipo'];
-					$_SESSION["INICIO"]['PERFIL'] = $parametros['perfil'];		
-					$_SESSION["INICIO"]['FOTO'] = $datos_usu[0][$parametros['foto']];
+					$_SESSION["INICIO"]['PERFIL'] = $parametros['perfil'];
+					$_SESSION["INICIO"]['FOTO'] = '';
+					if($parametros['foto']!='' && $parametros['foto']!=null)
+					{		
+						$_SESSION["INICIO"]['FOTO'] = $datos_usu[0][$parametros['foto']];
+					}
 					$_SESSION["INICIO"]['NO_CONCURENTE'] = $busqueda_tercero[0][$id[0]['ID']] ;
 					$_SESSION["INICIO"]['NO_CONCURENTE_NOM'] =$parametros['email'];
 					$_SESSION["INICIO"]['NO_CONCURENTE_TABLA_ID'] =$id[0]['ID'];
