@@ -406,6 +406,10 @@ class loginC
 				$datos = array('ver'=>0,'editar'=>0,'eliminar'=>0,'dba'=>0,'modulo'=>0,'pag'=>$pagina);
 			}
 		}
+		if($_SESSION['INICIO']['TIPO']=='DBA'){
+			
+					$datos = array('ver'=>1,'editar'=>1,'eliminar'=>1,'dba'=>1,'modulo'=>1,'pag'=>$pagina);
+		}
 		// print_r($accesos);die();
 		return $datos;
 
