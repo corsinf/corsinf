@@ -1004,6 +1004,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                     <div class="row pt-0">
 
                                                         <div class="row pt-3">
+                                                            <div class="col-md-12">
+                                                                <label for="" class="form-label"> <b>Agregar exámen físico regional: <label class="text-danger">*</label></b></label>
+
+                                                                <div>
+                                                                    <div class="form-check">
+                                                                        <input class="form-check-input" type="radio" name="rb_examen_fisico" id="rb_examen_fisico_1" value="SI">
+                                                                        <label class="form-check-label" for="rb_examen_fisico_1">SI</label>
+                                                                    </div>
+
+                                                                    <div class="form-check">
+                                                                        <input class="form-check-input" type="radio" name="rb_examen_fisico" id="rb_examen_fisico_2" value="NO" checked>
+                                                                        <label class="form-check-label" for="rb_examen_fisico_2">NO</label>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+
+
+                                                        <div class="row pt-3" id="pnl_examen_fisico" style="display: none;">
                                                             <div class="col-12">
                                                                 <label for="" class="form-label"><b>EXAMEN FÍSICO REGIONAL</b> <label style="color: red;">*</label> </label>
 
@@ -1028,8 +1048,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                                                                     <table class="table table-bordered mb-0" style="width:100%">
                                                                         <thead>
-
-
                                                                         </thead>
                                                                         <tbody class="small">
                                                                             <tr>
@@ -1496,11 +1514,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                                 </div>
                                                                 <div class="col-md-1">
                                                                     <label for="Stock_farmacologia" class="form-label">Stock: </label>
-                                                                    <input type="text" name="stock_farmacologia" id="stock_farmacologia" readonly class="form-control form-control-sm">
+                                                                    <input type="text" name="stock_farmacologia" id="stock_farmacologia" readonly class="form-control form-control-sm solo_numeros">
                                                                 </div>
                                                                 <div class="col-md-1">
                                                                     <label for="cantidad_farmacologia" class="form-label">Cant: <label style="color: red;">*</label> </label>
-                                                                    <input type="number" name="cantidad_farmacologia" id="cantidad_farmacologia" class="form-control form-control-sm" min="1">
+                                                                    <input type="number" name="cantidad_farmacologia" id="cantidad_farmacologia" class="form-control form-control-sm solo_numeros" min="1">
                                                                 </div>
 
                                                                 <div class="col-md-2 mt-3">
@@ -1589,6 +1607,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } else if ($(this).val() === 'normal') {
             $('#permiso_salida_tipo').hide();
             $('#sa_conp_permiso_telefono_padre').val('');
+        }
+    });
+
+    $("input[name='rb_examen_fisico']").change(function() {
+        if ($(this).val() === "SI") {
+            $("#pnl_examen_fisico").show();
+        } else if ($(this).val() === "NO") {
+            $("#pnl_examen_fisico").hide();
         }
     });
 </script>
