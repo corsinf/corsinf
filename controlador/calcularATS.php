@@ -366,7 +366,7 @@ class calcular
 
 	function leer_xml_carpeta()
 	{
-		$ruta_carpeta = dirname(__DIR__,1).'TEMP/XMLS/';
+		$ruta_carpeta = dirname(__DIR__,1).'/TEMP/XMLS/';
 		if(!file_exists($ruta_carpeta))
 		{
 			 mkdir($ruta_carpeta, 0777, true);
