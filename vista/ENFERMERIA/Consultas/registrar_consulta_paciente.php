@@ -1500,7 +1500,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                                 </div>
                                                                 <div class="col-md-1">
                                                                     <label for="cantidad_farmacologia" class="form-label">Cant: <label style="color: red;">*</label> </label>
-                                                                    <input type="text" name="cantidad_farmacologia" id="cantidad_farmacologia" class="form-control form-control-sm">
+                                                                    <input type="number" name="cantidad_farmacologia" id="cantidad_farmacologia" class="form-control form-control-sm" min="1">
                                                                 </div>
 
                                                                 <div class="col-md-2 mt-3">
