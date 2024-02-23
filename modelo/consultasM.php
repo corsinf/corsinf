@@ -113,6 +113,7 @@ class consultasM
                             sa_conp_tipo_consulta,
                             sa_conp_enfermedad_actual,
                             sa_conp_saturacion,
+                            sa_examen_fisico_regional,
 
                             sa_conp_estado,
                             sa_conp_estado_revision,
@@ -173,7 +174,8 @@ class consultasM
         sa_conp_tipo_consulta,
         sa_conp_estado,
         sa_conp_fecha_creacion,
-        sa_conp_fecha_modificar
+        sa_conp_fecha_modificar,
+        sa_examen_fisico_regional
         
         FROM consultas_medicas
         WHERE sa_conp_estado = 1";

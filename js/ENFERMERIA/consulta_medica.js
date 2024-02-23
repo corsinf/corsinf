@@ -148,3 +148,96 @@ function consultar_datos_h(id_paciente = '', nombres = '') {
         }
     });
 }
+
+
+function agregarCampo(objeto, clave, idCheckbox, dato) {
+    var valor = $('#' + idCheckbox).prop('checked');
+    if (valor) {
+        objeto[clave] = dato;
+    }
+}
+
+function generarJSON() {
+    var datos = {};
+
+    var sa_examen_fisico_regional_obs = $('#sa_examen_fisico_regional_obs').val();
+
+    
+
+    //1 Piel
+    agregarCampo(datos.Piel = {}, 'a', 'chx_Cicatrices', 'Cicatrices');
+    agregarCampo(datos.Piel, 'b', 'chx_Tatuajes', 'Tatuajes');
+    agregarCampo(datos.Piel, 'c', 'chx_Piel_Faneras', 'Piel y Faneras');
+
+    //2 Ojos
+    agregarCampo(datos.Ojos = {}, 'a', 'chx_Parpados', 'Párpados');
+    agregarCampo(datos.Ojos, 'b', 'chx_Conjuntivas', 'Conjuntivas');
+    agregarCampo(datos.Ojos, 'c', 'chx_Pupilas', 'Pupilas');
+    agregarCampo(datos.Ojos, 'd', 'chx_Cornea', 'Córnea');
+    agregarCampo(datos.Ojos, 'e', 'chx_Motilidad', 'Motilidad');
+
+    //3 Oído
+    agregarCampo(datos.Oído = {}, 'a', 'chx_C_auditivo_externo', 'C.auditivo externo');
+    agregarCampo(datos.Oído, 'b', 'chx_Pabellon', 'Pabellón');
+    agregarCampo(datos.Oído, 'c', 'chx_Timpanos', 'Timpanos');
+
+    //4 Oro_faringe
+    agregarCampo(datos.Oro_faringe = {}, 'a', 'chx_Labios', 'Labios');
+    agregarCampo(datos.Oro_faringe, 'b', 'chx_Lengua', 'Lengua');
+    agregarCampo(datos.Oro_faringe, 'c', 'chx_Faringe', 'Faringe');
+    agregarCampo(datos.Oro_faringe, 'd', 'chx_Amigdalas', 'Amígdalas');
+    agregarCampo(datos.Oro_faringe, 'e', 'chx_Dentadura', 'Dentadura');
+
+    //5 Nariz
+    agregarCampo(datos.Nariz = {}, 'a', 'chx_Tabique', 'Tabique');
+    agregarCampo(datos.Nariz, 'b', 'chx_Cornetes', 'Cornetes');
+    agregarCampo(datos.Nariz, 'c', 'chx_Mucosas', 'Mucosas');
+    agregarCampo(datos.Nariz, 'd', 'chx_Senos_paranasales', 'Senos paranasales');
+
+    //6 Cuello
+    agregarCampo(datos.Cuello = {}, 'a', 'chx_Tiroides', 'Tiroides');
+    agregarCampo(datos.Cuello, 'b', 'chx_Movilidad', 'Movilidad');
+
+    //7 Tórax
+    agregarCampo(datos.Torax_1 = {}, 'a', 'chx_Mamas', 'Mamas');
+    agregarCampo(datos.Torax_1, 'b', 'chx_Corazon', 'Corazón');
+
+    //8 Tórax
+    agregarCampo(datos.Torax_2 = {}, 'a', 'chx_Pulmones', 'Pulmones');
+    agregarCampo(datos.Torax_2, 'b', 'chx_Parrilla_Costal', 'Parrilla Costal');
+
+    //9 Abdomen
+    agregarCampo(datos.Abdomen = {}, 'a', 'chx_Visceras', 'Vísceras');
+    agregarCampo(datos.Abdomen, 'b', 'chx_Pared_Abdominal', 'Pared abdominal');
+
+    //10 Columna
+    agregarCampo(datos.Columna = {}, 'a', 'chx_Flexibilidad', 'Flexibilidad');
+    agregarCampo(datos.Columna, 'b', 'chx_Desviacion', 'Desviación');
+    agregarCampo(datos.Columna, 'c', 'chx_Dolor', 'Dolor');
+
+    //11 Pelvis
+    agregarCampo(datos.Pelvis = {}, 'a', 'chx_Pelvis', 'Pelvis');
+    agregarCampo(datos.Pelvis, 'b', 'chx_Genitales', 'Genitales');
+
+    //12 Extremidades
+    agregarCampo(datos.Extremidades = {}, 'a', 'chx_Vascular', 'Vascular');
+    agregarCampo(datos.Extremidades, 'b', 'chx_Miembros_superiores', 'Miembros superiores');
+    agregarCampo(datos.Extremidades, 'c', 'chx_Miembros_inferiores', 'Miembros inferiores');
+
+    //13 Neurológico
+    agregarCampo(datos.Neurológico = {}, 'a', 'chx_Fuerza', 'Fuerza');
+    agregarCampo(datos.Neurológico, 'b', 'chx_Sencibilidad', 'Sencibilidad');
+    agregarCampo(datos.Neurológico, 'c', 'chx_Marcha', 'Marcha');
+    agregarCampo(datos.Neurológico, 'd', 'chx_Reflejos', 'Reflejos');
+
+    datos.Observaciones =
+    {
+        'sa_examen_fisico_regional_obs': sa_examen_fisico_regional_obs,
+    };
+
+    var jsonString = JSON.stringify(datos);
+
+    return jsonString;
+
+}
+

@@ -85,15 +85,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         });
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        $('#tipo_farmacologia_presentacion').on('select2:select', function (e) {
-          var data = e.params.data.data;
-          if($('#tipo_farmacologia').val()=='medicamentos')
-          {
-            $('#stock_farmacologia').val(data['sa_cmed_stock']);      
-          }else{    
-            $('#stock_farmacologia').val(data['sa_cins_stock']);
-           }
-          console.log(data);
+        $('#tipo_farmacologia_presentacion').on('select2:select', function(e) {
+            var data = e.params.data.data;
+            if ($('#tipo_farmacologia').val() == 'medicamentos') {
+                $('#stock_farmacologia').val(data['sa_cmed_stock']);
+            } else {
+                $('#stock_farmacologia').val(data['sa_cins_stock']);
+            }
+            console.log(data);
         });
 
     });
@@ -101,21 +100,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 
     function limitarMaximo(id) {
-      var max = parseInt($('#sa_det_conp_cantidad_'+id).attr('max'));
-      if (parseInt($('#sa_det_conp_cantidad_'+id).val()) > max) {
-        Swal.fire('Cantidad supera el stock','','info').then(function(){
-            $('#sa_det_conp_cantidad_'+id).val(max);
-        })
-      }
+        var max = parseInt($('#sa_det_conp_cantidad_' + id).attr('max'));
+        if (parseInt($('#sa_det_conp_cantidad_' + id).val()) > max) {
+            Swal.fire('Cantidad supera el stock', '', 'info').then(function() {
+                $('#sa_det_conp_cantidad_' + id).val(max);
+            })
+        }
     }
 
-    function limpiar()
-    {
+    function limpiar() {
         $('#stock_farmacologia').val('');
         $('#cantidad_farmacologia').val('');
         $('#tipo_farmacologia').val('');
         $('#tipo_farmacologia_presentacion').empty();
-        
+
     }
 
 
@@ -511,7 +509,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         var sa_conp_estado_revision = revision;
 
-
+        var sa_examen_fisico_regional = generarJSON();
 
         // Crear objeto de parámetros
         var parametros = {
@@ -574,6 +572,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'sa_conp_saturacion': sa_conp_saturacion,
 
             'sa_conp_estado_revision': sa_conp_estado_revision,
+
+            'sa_examen_fisico_regional': sa_examen_fisico_regional,
+
         };
 
         //alert(sa_conp_tipo_consulta)
@@ -622,18 +623,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         text: 'Asegurese de llenar todo los campos',
                     })
                 } else {
-                    //console.log(parametros);
                     parametros.filas_tabla_farmacologia = filas_tabla_farmacologia;
                     insertar(parametros);
-                    //alert('entra2');
+                    //console.log(parametros);
+
                 }
             } else {
                 parametros.filas_tabla_farmacologia = filas_tabla_farmacologia;
                 insertar(parametros);
+                //console.log(parametros);
             }
 
         } else if (sa_conp_tipo_consulta == 'certificado') {
             insertar(parametros)
+            //console.log(parametros);
         }
 
     }
@@ -1001,12 +1004,325 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                     <div class="row pt-0">
 
                                                         <div class="row pt-3">
+                                                            <div class="col-12">
+                                                                <label for="" class="form-label"><b>EXAMEN FÍSICO REGIONAL</b> <label style="color: red;">*</label> </label>
+
+                                                                <div class="">
+                                                                    <style>
+                                                                        .vertical-text {
+                                                                            writing-mode: vertical-lr;
+                                                                            transform: rotate(180deg);
+                                                                            white-space: nowrap;
+                                                                            text-align: center;
+                                                                            /* Centra el texto horizontalmente */
+                                                                            vertical-align: middle;
+                                                                            /* Centra el texto verticalmente */
+                                                                        }
+
+                                                                        .table-bordered th,
+                                                                        .table-bordered td {
+                                                                            border: 2px solid black;
+                                                                            /* Ajusta el grosor de las líneas a tu preferencia */
+                                                                        }
+                                                                    </style>
+
+                                                                    <table class="table table-bordered mb-0" style="width:100%">
+                                                                        <thead>
+
+
+                                                                        </thead>
+                                                                        <tbody class="small">
+                                                                            <tr>
+                                                                                <th rowspan="3" class="vertical-text table-primary">1. Piel</th>
+
+                                                                                <th class="table-primary text-end">a. Cicatrices</th>
+                                                                                <td>
+                                                                                    <input type="checkbox" class="custom-control-input" id="chx_Cicatrices">
+                                                                                </td>
+
+                                                                                <th rowspan="5" class="vertical-text table-primary">4. Oro faringe</th>
+
+                                                                                <th class="table-primary text-end">a. Labios</th>
+                                                                                <td>
+                                                                                    <input type="checkbox" class="custom-control-input" id="chx_Labios">
+                                                                                </td>
+
+                                                                                <th rowspan="2" class="vertical-text table-primary">7. Tórax</th>
+
+                                                                                <th class="table-primary text-end">a. Mamas</th>
+                                                                                <td>
+                                                                                    <input type="checkbox" class="custom-control-input" id="chx_Mamas">
+                                                                                </td>
+
+                                                                                <th rowspan="3" class="vertical-text table-primary">12. Extremidades</th>
+
+                                                                                <th class="table-primary text-end">a. Vascular</th>
+                                                                                <td>
+                                                                                    <input type="checkbox" class="custom-control-input" id="chx_Vascular">
+                                                                                </td>
+                                                                            </tr>
+
+                                                                            <tr>
+                                                                                <th class="table-primary text-end">b. Tatuajes</th>
+                                                                                <td>
+                                                                                    <input type="checkbox" class="custom-control-input" id="chx_Tatuajes">
+                                                                                </td>
+
+                                                                                <th class="table-primary text-end">b. Lengua</th>
+                                                                                <td>
+                                                                                    <input type="checkbox" class="custom-control-input" id="chx_Lengua">
+                                                                                </td>
+
+                                                                                <th class="table-primary text-end">b. Corazón</th>
+                                                                                <td>
+                                                                                    <input type="checkbox" class="custom-control-input" id="chx_Corazon">
+                                                                                </td>
+
+                                                                                <th class="table-primary text-end">b. Miembros superiores</th>
+                                                                                <td>
+                                                                                    <input type="checkbox" class="custom-control-input" id="chx_Miembros_superiores">
+                                                                                </td>
+                                                                            </tr>
+
+                                                                            <tr>
+                                                                                <th class="table-primary text-end">c. Piel y Faneras</th>
+                                                                                <td>
+                                                                                    <input type="checkbox" class="custom-control-input" id="chx_Piel_Faneras">
+                                                                                </td>
+
+                                                                                <th class="table-primary text-end">c. Faringe</th>
+                                                                                <td>
+                                                                                    <input type="checkbox" class="custom-control-input" id="chx_Faringe">
+                                                                                </td>
+
+                                                                                <th rowspan="2" class="vertical-text table-primary">8. Tórax</th>
+
+                                                                                <th class="table-primary text-end">a. Pulmones</th>
+                                                                                <td>
+                                                                                    <input type="checkbox" class="custom-control-input" id="chx_Pulmones">
+                                                                                </td>
+
+                                                                                <th class="table-primary text-end">c. Miembros inferiores</th>
+                                                                                <td>
+                                                                                    <input type="checkbox" class="custom-control-input" id="chx_Miembros_inferiores">
+                                                                                </td>
+
+
+                                                                            </tr>
+
+                                                                            <tr>
+                                                                                <th rowspan="5" class="vertical-text table-primary">2. Ojos</th>
+
+                                                                                <th class="table-primary text-end">a. Párpados</th>
+                                                                                <td>
+                                                                                    <input type="checkbox" class="custom-control-input" id="chx_Parpados">
+                                                                                </td>
+
+                                                                                <th class="table-primary text-end">d. Amígdalas</th>
+                                                                                <td>
+                                                                                    <input type="checkbox" class="custom-control-input" id="chx_Amigdalas">
+                                                                                </td>
+
+
+                                                                                <th class="table-primary text-end">b. Parrilla Costal</th>
+                                                                                <td>
+                                                                                    <input type="checkbox" class="custom-control-input" id="chx_Parrilla_Costal">
+                                                                                </td>
+
+                                                                                <th rowspan="4" class="vertical-text table-primary">13. Neurológico</th>
+
+
+                                                                                <th class="table-primary text-end">a. Fuerza</th>
+                                                                                <td>
+                                                                                    <input type="checkbox" class="custom-control-input" id="chx_Fuerza">
+                                                                                </td>
+                                                                            </tr>
+
+                                                                            <tr>
+                                                                                <th class="table-primary text-end">b. Conjuntivas</th>
+                                                                                <td>
+                                                                                    <input type="checkbox" class="custom-control-input" id="chx_Conjuntivas">
+                                                                                </td>
+
+                                                                                <th class="table-primary text-end">e. Dentadura</th>
+                                                                                <td>
+                                                                                    <input type="checkbox" class="custom-control-input" id="chx_Dentadura">
+                                                                                </td>
+
+                                                                                <th rowspan="2" class="vertical-text table-primary">9. Abdomen</th>
+
+
+                                                                                <th class="table-primary text-end">a. Vísceras</th>
+                                                                                <td>
+                                                                                    <input type="checkbox" class="custom-control-input" id="chx_Visceras">
+                                                                                </td>
+
+                                                                                <th class="table-primary text-end">b. Sencibilidad</th>
+                                                                                <td>
+                                                                                    <input type="checkbox" class="custom-control-input" id="chx_Sencibilidad">
+                                                                                </td>
+
+                                                                            </tr>
+
+                                                                            <tr>
+                                                                                <th class="table-primary text-end">c. Pupilas</th>
+                                                                                <td>
+                                                                                    <input type="checkbox" class="custom-control-input" id="chx_Pupilas">
+                                                                                </td>
+
+                                                                                <th rowspan="4" class="vertical-text table-primary">5. Naríz</th>
+
+                                                                                <th class="table-primary text-end">a. Tabique</th>
+                                                                                <td>
+                                                                                    <input type="checkbox" class="custom-control-input" id="chx_Tabique">
+                                                                                </td>
+
+                                                                                <th class="table-primary text-end">b. Pared Abdominal</th>
+                                                                                <td>
+                                                                                    <input type="checkbox" class="custom-control-input" id="chx_Pared_Abdominal">
+                                                                                </td>
+
+                                                                                <th class="table-primary text-end">c. Marcha</th>
+                                                                                <td>
+                                                                                    <input type="checkbox" class="custom-control-input" id="chx_Marcha">
+                                                                                </td>
+
+
+                                                                            </tr>
+
+                                                                            <tr>
+                                                                                <th class="table-primary text-end">d. Córnea</th>
+                                                                                <td>
+                                                                                    <input type="checkbox" class="custom-control-input" id="chx_Cornea">
+                                                                                </td>
+
+                                                                                <th class="table-primary text-end">b. Cornetes</th>
+                                                                                <td>
+                                                                                    <input type="checkbox" class="custom-control-input" id="chx_Cornetes">
+                                                                                </td>
+
+                                                                                <th rowspan="3" class="vertical-text table-primary">10. Columna</th>
+
+
+                                                                                <th class="table-primary text-end">a. Flexibilidad</th>
+                                                                                <td>
+                                                                                    <input type="checkbox" class="custom-control-input" id="chx_Flexibilidad">
+                                                                                </td>
+
+                                                                                <th class="table-primary text-end">d. Reflejos</th>
+                                                                                <td>
+                                                                                    <input type="checkbox" class="custom-control-input" id="chx_Reflejos">
+                                                                                </td>
+                                                                            </tr>
+
+                                                                            <tr>
+                                                                                <th class="table-primary text-end">e. Motilidad</th>
+                                                                                <td>
+                                                                                    <input type="checkbox" class="custom-control-input" id="chx_Motilidad">
+                                                                                </td>
+
+                                                                                <th class="table-primary text-end">c. Mucosas</th>
+                                                                                <td>
+                                                                                    <input type="checkbox" class="custom-control-input" id="chx_Mucosas">
+                                                                                </td>
+
+                                                                                <th class="table-primary text-end">b. Desviación</th>
+                                                                                <td>
+                                                                                    <input type="checkbox" class="custom-control-input" id="chx_Desviacion">
+                                                                                </td>
+
+
+                                                                            </tr>
+
+                                                                            <tr>
+                                                                                <th rowspan="3" class="vertical-text table-primary">3. Oído</th>
+
+                                                                                <th class="table-primary text-end">a. C. auditivo externo</th>
+                                                                                <td>
+                                                                                    <input type="checkbox" class="custom-control-input" id="chx_C_auditivo_externo">
+                                                                                </td>
+
+
+                                                                                <th class="table-primary text-end">d. Senos paranasales</th>
+                                                                                <td>
+                                                                                    <input type="checkbox" class="custom-control-input" id="chx_Senos_paranasales">
+                                                                                </td>
+
+
+                                                                                <th class="table-primary text-end">c. Dolor</th>
+                                                                                <td>
+                                                                                    <input type="checkbox" class="custom-control-input" id="chx_Dolor">
+                                                                                </td>
+
+
+                                                                            </tr>
+
+
+
+                                                                            <tr>
+                                                                                <th class="table-primary text-end">b. Pabellón</th>
+                                                                                <td>
+                                                                                    <input type="checkbox" class="custom-control-input" id="chx_Pabellon">
+                                                                                </td>
+
+                                                                                <th rowspan="2" class="vertical-text table-primary">6. Cuello</th>
+
+
+                                                                                <th class="table-primary text-end">a. Tiroides/masas</th>
+                                                                                <td>
+                                                                                    <input type="checkbox" class="custom-control-input" id="chx_Tiroides">
+                                                                                </td>
+
+                                                                                <th rowspan="2" class="vertical-text table-primary">11. Pelvis</th>
+
+                                                                                <th class="table-primary text-end">a. Pelvis</th>
+                                                                                <td>
+                                                                                    <input type="checkbox" class="custom-control-input" id="chx_Pelvis">
+                                                                                </td>
+
+
+                                                                            </tr>
+
+                                                                            <tr>
+                                                                                <th class="table-primary text-end">c. Timpanos</th>
+                                                                                <td>
+                                                                                    <input type="checkbox" class="custom-control-input" id="chx_Timpanos">
+                                                                                </td>
+
+                                                                                <th class="table-primary text-end">b. Movilidad</th>
+                                                                                <td>
+                                                                                    <input type="checkbox" class="custom-control-input" id="chx_Movilidad">
+                                                                                </td>
+
+                                                                                <th class="table-primary text-end">b. Genitales</th>
+                                                                                <td>
+                                                                                    <input type="checkbox" class="custom-control-input" id="chx_Genitales">
+                                                                                </td>
+
+
+                                                                            </tr>
+
+                                                                            <tr class="small">
+                                                                                <th colspan="9" class="small text-danger">*SI EXISTE EVIDENCIA DE PATOLOGÍA MARCAR Y DESCRIBIR EN LA SIGUIENTE SECCIÓN COLOCANDO EL NUMERAL</th>
+                                                                            </tr>
+
+                                                                        </tbody>
+                                                                    </table>
+
+                                                                </div>
+                                                            </div>
+
+                                                        </div>
+
+                                                        <div class="row pt-3">
                                                             <div class="col-md-12">
-                                                                <label for="" class="form-label">aqui viene la tabla: <label style="color: red;">*</label> </label>
-                                                                <textarea name="sa_conp_enfermedad_actual" id="sa_conp_enfermedad_actual" cols="30" rows="2" class="form-control" placeholder="Enfermedad Actual"></textarea>
+                                                                <label for="" class="form-label">Observaciones : <label style="color: red;">*</label> </label>
+                                                                <textarea name="sa_examen_fisico_regional_obs" id="sa_examen_fisico_regional_obs" cols="30" rows="2" class="form-control" placeholder="OBSERVACIONES  EXAMEN FÍSICO REGIONAL"></textarea>
                                                             </div>
                                                         </div>
-                                                        
+
+
+
                                                         <div class="row pt-4">
                                                             <hr>
                                                         </div>
@@ -1182,7 +1498,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                                     <label for="Stock_farmacologia" class="form-label">Stock: </label>
                                                                     <input type="text" name="stock_farmacologia" id="stock_farmacologia" readonly class="form-control form-control-sm">
                                                                 </div>
-                                                                 <div class="col-md-1">
+                                                                <div class="col-md-1">
                                                                     <label for="cantidad_farmacologia" class="form-label">Cant: <label style="color: red;">*</label> </label>
                                                                     <input type="text" name="cantidad_farmacologia" id="cantidad_farmacologia" class="form-control form-control-sm">
                                                                 </div>
