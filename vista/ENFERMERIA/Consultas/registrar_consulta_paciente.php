@@ -6,6 +6,8 @@ $tipo_consulta = '';
 
 $id_consulta = '';
 
+$regresar = '';
+
 if (isset($_GET['id_consulta'])) {
     $id_consulta = $_GET['id_consulta'];
 }
@@ -37,6 +39,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if (isset($_GET['tipo_consulta'])) {
         $tipo_consulta = $_GET['tipo_consulta'];
+    }
+
+    if (isset($_GET['regresar'])) {
+        $regresar = $_GET['regresar'];
     }
 }
 
@@ -658,7 +664,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 if (response == 1) {
                     Swal.fire('', 'Operacion realizada con exito. La atención tardó: ' + tardo + ' minutos.', 'success').then(function() {
-                        location.href = '../vista/inicio.php?mod=7&acc=pacientes';
+                        <?php if ($regresar == 'agendamiento') { ?>
+                            location.href = '../vista/inicio.php?mod=7&acc=agendamiento';
+                        <?php } else { ?>
+                            location.href = '../vista/inicio.php?mod=7&acc=pacientes';
+                        <?php } ?>
+
+
+                        
                     });
                 } else if (response == -2) {
                     Swal.fire('', 'Código ya registrado', 'success');
