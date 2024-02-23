@@ -407,8 +407,8 @@ class loginC
 			}
 		}
 		if($_SESSION['INICIO']['TIPO']=='DBA'){
-			
-					$datos = array('ver'=>1,'editar'=>1,'eliminar'=>1,'dba'=>1,'modulo'=>1,'pag'=>$pagina);
+
+					$datos = array('ver'=>1,'editar'=>1,'eliminar'=>1,'dba'=>1,'modulo'=>1,'sistema'=>$_SESSION['INICIO']['MODULO_SISTEMA'],'pag'=>$pagina);
 		}
 		// print_r($accesos);die();
 		return $datos;
