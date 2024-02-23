@@ -50,7 +50,7 @@ function restriccion()
             {
                 if(response.pag!='pagina_error.php')
                 {
-                    // location.href = 'inicio.php?acc=pagina_error';
+                     location.href = 'inicio.php?acc=pagina_error';
                 }
             }
 
