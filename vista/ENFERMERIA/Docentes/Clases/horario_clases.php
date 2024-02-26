@@ -1,9 +1,9 @@
 <?php
 
-$id_docente = '1';
+$id = $_SESSION['INICIO']['NO_CONCURENTE'];
 
-if (isset($_POST['id_docente'])) {
-    $id_docente = $_POST['id_docente'];
+if ($id != null && $id != '') {
+    $id_docente = $id;
 }
 
 ?>

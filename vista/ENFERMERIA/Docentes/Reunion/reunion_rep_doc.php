@@ -1,12 +1,10 @@
 <?php
 
-$id_representante = '1';
+$id = $_SESSION['INICIO']['NO_CONCURENTE'];
 
-if (isset($_POST['id_representante'])) {
-    $id_representante = $_POST['id_representante'];
+if ($id != null && $id != '') {
+    $id_representante = $id;
 }
-
-
 
 
 ?>
@@ -455,7 +453,7 @@ if (isset($_POST['id_representante'])) {
                 <div hidden class="row pt-3">
                     <div class="col-12">
                         <label for="ac_horarioC_materia">Observación: <label class="text-danger">*</label></label>
-                        <input type="text" id="ac_reunion_observacion" name="ac_reunion_observacion" class="form-control form-control-sm" >
+                        <input type="text" id="ac_reunion_observacion" name="ac_reunion_observacion" class="form-control form-control-sm">
                     </div>
                 </div>
 

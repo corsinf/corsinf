@@ -29,6 +29,9 @@
       eventClick: function(info) {
         // Obtener información del evento
         var tipo_consulta = info.event.id;
+        var sa_conp_estado_revision = info.event.extendedProps.sa_conp_estado_revision;
+
+
         var url = info.event.url;
 
         //alert(info.event.tabla)
@@ -36,10 +39,16 @@
 
         //Redirigir a la página deseada al hacer clic en el evento
         if (tipo_consulta === 'certificado') {
-          window.location.href = url;
+          if (sa_conp_estado_revision == 0) {
+            window.location.href = url;
+          } else {
+            Swal.fire('', 'El certificado ya esta realizado.', 'error');
+          }
         } else {
           Swal.fire('', 'No puede realizar consultas.', 'error');
         }
+
+
 
         info.jsEvent.preventDefault();
 
@@ -79,12 +88,19 @@
         // Recorrer la respuesta y agregar eventos al arreglo events
         response.forEach(function(evento) {
           //console.log(evento);
+
+          var color = (evento.sa_conp_estado_revision == 0) ? '#B63232' : '#3D94C9';
+
           calendar.addEvent({
             id: evento.sa_conp_tipo_consulta,
             title: evento.sa_conp_tipo_consulta.toUpperCase() + ' - ' + evento.nombres,
             start: formatoDate(evento.sa_conp_fecha_ingreso.date),
             end: formatoDate(evento.sa_conp_fecha_ingreso.date),
-            url: '../vista/inicio.php?mod=7&acc=registrar_consulta_paciente&id_consulta=' + evento.sa_conp_id + '&tipo_consulta=' + evento.sa_conp_tipo_consulta + '&id_ficha=' + evento.sa_fice_id + '&id_paciente=' + evento.sa_pac_id,
+            color: color,
+            extendedProps: {
+              sa_conp_estado_revision: evento.sa_conp_estado_revision,
+            },
+            url: '../vista/inicio.php?mod=7&acc=registrar_consulta_paciente&id_consulta=' + evento.sa_conp_id + '&tipo_consulta=' + evento.sa_conp_tipo_consulta + '&id_ficha=' + evento.sa_fice_id + '&id_paciente=' + evento.sa_pac_id + '&regresar=agendamiento',
           });
         });
 
