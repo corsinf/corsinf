@@ -50,7 +50,7 @@ class agendamientoC
     {
         $fecha = date('Y-m-d');
         //$fecha = '';
-        $datos = $this->modelo->lista_consultas($fecha);
+        $datos = $this->modelo->lista_consultas($fecha, 0);
         return $datos;
     }
 

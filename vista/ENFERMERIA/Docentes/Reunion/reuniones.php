@@ -148,7 +148,7 @@ if ($id != null && $id != '') {
                 dataType: 'json',
                 success: function(response) {
                     //console.log(response)
-                    Swal.fire('', 'Observación Registrado.', 'success');
+                    Swal.fire('', 'Observación Registrada.', 'success');
                 }
             });
 

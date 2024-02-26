@@ -15,6 +15,30 @@
         right: 'dayGridMonth,timeGridDay'
       },
       locale: 'es',
+      buttonText: {
+        today: 'Hoy',
+        week: 'Semana',
+        month: 'Mes',
+      },
+      businessHours: {
+        daysOfWeek: [1, 2, 3, 4, 5, 6],
+        startTime: '06:00',
+        endTime: '18:00'
+      },
+      hiddenDays: [0, 7],
+      events: [],
+      slotLabelFormat: {
+        hour: 'numeric',
+        minute: '2-digit',
+        omitZeroMinute: false,
+        hour12: false
+      },
+      slotMinTime: '05:00:00',
+      slotMaxTime: '20:00:00',
+      slotDuration: '00:30:00',
+      slotLabelInterval: {
+        hours: 0.5
+      },
       initialView: 'dayGridMonth',
       initialDate: new Date(),
       navLinks: true,
