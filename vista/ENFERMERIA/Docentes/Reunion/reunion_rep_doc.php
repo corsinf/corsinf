@@ -446,6 +446,7 @@ if ($id != null && $id != '') {
                             <option selected disabled>-- Seleccione un Estudiante --</option>
                             <option value="Faltas">Faltas</option>
                             <option value="Notas">Notas</option>
+                            <option value="Otros">Otros</option>
                         </select>
                     </div>
                 </div>
@@ -462,7 +463,7 @@ if ($id != null && $id != '') {
 
                 <div class="row pt-3">
                     <div class="col-12 text-end">
-                        <button type="submit" class="btn btn-success btn-sm" onclick="agengar_reunion()"><i class="bx bx-save"></i> Buscar</button>
+                        <button type="submit" class="btn btn-success btn-sm" onclick="agengar_reunion()"><i class="bx bx-save"></i> Agendar</button>
                     </div>
                 </div>
 
