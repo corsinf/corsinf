@@ -307,7 +307,7 @@ class loginC
 					$_SESSION["INICIO"]['TIPO'] = $parametros['tipo'];
 					$_SESSION["INICIO"]['PERFIL'] = $parametros['perfil'];
 					$_SESSION["INICIO"]['FOTO'] = '';
-					if($parametros['foto']!='' && $parametros['foto']!=null)
+					if($parametros['foto']!='' && $parametros['foto']!=null && file_exists($parametros['foto']))
 					{		
 						$_SESSION["INICIO"]['FOTO'] = $datos_usu[0][$parametros['foto']];
 					}
@@ -382,7 +382,7 @@ class loginC
 			$_SESSION['INICIO']['VER'] = $accesos[0]['Ver'];
 		}else
 		{
-			if(strpos($pagina, 'index')!==false)
+			if(strpos($pagina, 'index')!==false || strpos($pagina, 'perfil')!==false)
 			{
 				/*$pag = $this->login->paginas($pagina);
 				print_r($pag);die();
@@ -400,7 +400,7 @@ class loginC
 					$datos[4]['campo'] = 'id_paginas';
 					$datos[4]['dato'] = $pag[0]['id_paginas'];
 					$this->login->add($tabla,$datos);*/
-					$datos = array('ver'=>1,'editar'=>1,'eliminar'=>1,'dba'=>1,'modulo'=>1,'pag'=>$pagina);
+					$datos = array('ver'=>1,'editar'=>1,'eliminar'=>1,'dba'=>1,'sistema'=>$_SESSION['INICIO']['MODULO_SISTEMA'],'modulo'=>1,'pag'=>$pagina);
 				// }
 			}else{
 				$datos = array('ver'=>0,'editar'=>0,'eliminar'=>0,'dba'=>0,'modulo'=>0,'pag'=>$pagina);

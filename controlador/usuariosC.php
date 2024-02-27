@@ -116,6 +116,17 @@ if(isset($_GET['cargar_imagen_no_concurente']))
 {
    echo json_encode($controlador->guardar_foto_perfil($_FILES,$_POST));
 }
+if(isset($_GET['editar_datos']))
+{
+	$parametros = $_POST['parametros'];
+	echo json_encode($controlador->editar_datos($parametros));
+}
+if(isset($_GET['guardar_credencial']))
+{
+	$parametros = $_POST['parametros'];
+	echo json_encode($controlador->guardar_credencial($parametros));
+}
+
 
 
 
@@ -493,10 +504,24 @@ class usuariosC
 	{
 		if($_SESSION['INICIO']['NO_CONCURENTE']=='')
 		{
-			$datos  = $this->modelo->lista_usuarios($parametros['id'],$parametros['query']);
+			$datos  = $this->modelo->lista_usuarios($parametros['id'],$parametros['query']);	
 		}else
 		{
 			$datos  = $this->modelo->no_concurente_data();
+			$datosNOCon = $this->modelo->credenciales_no_concurentes_campos();
+			if(count($datosNOCon)>0)
+			{
+				$datosNo = $this->modelo->credenciales_no_concurentes_datos($datosNOCon[0]['usu'],$datosNOCon[0]['pass']);
+				if(count($datosNo)>0)
+				{
+					$datos[0]['pass'] = $datosNo[0]['pass'];
+					$datos[0]['usu'] = $datosNo[0]['usuario']; 
+				}
+			}
+			if(!file_exists($datos[0]['foto']))
+			{
+				 $datos[0]['foto'] ='';
+			}
 		}
 
 		// print_r($datos);die();
@@ -690,6 +715,99 @@ class usuariosC
         break;
     }
 
+  }
+
+  function editar_datos($parametros)
+  {
+  	switch ($parametros['tabla']) {
+  		case 'representantes':
+	  		$datos[0]['campo'] ='sa_rep_primer_nombre' ;
+	  		$datos[0]['dato'] =$parametros['nombre1'];
+	  		$datos[1]['campo'] ='sa_rep_segundo_nombre' ;
+	  		$datos[1]['dato'] =$parametros['nombre2'];
+	  		$datos[2]['campo'] ='sa_rep_primer_apellido' ;
+	  		$datos[2]['dato'] =$parametros['apellidos1'];
+	  		$datos[3]['campo'] ='sa_rep_segundo_apellido' ;
+	  		$datos[3]['dato'] =$parametros['apellidos2'];
+	  		$datos[4]['campo'] ='sa_rep_fecha_nacimiento' ;
+	  		$datos[4]['dato'] =$parametros['fecha_n'];
+	  		$datos[5]['campo'] ='sa_rep_correo' ;
+	  		$datos[5]['dato'] =$parametros['correo'];
+	  		$datos[6]['campo'] ='sa_rep_telefono_1' ;
+	  		$datos[6]['dato'] =$parametros['telefono'];
+	  		$datos[7]['campo'] ='sa_rep_cedula' ;
+	  		$datos[7]['dato'] =$parametros['cedula'];
+  			break;
+  	case 'docentes':
+	  		$datos[0]['campo'] ='sa_doc_primer_nombre' ;
+	  		$datos[0]['dato'] =$parametros['nombre1'];
+	  		$datos[1]['campo'] ='sa_doc_segundo_nombre' ;
+	  		$datos[1]['dato'] =$parametros['nombre2'];
+	  		$datos[2]['campo'] ='sa_doc_primer_apellido' ;
+	  		$datos[2]['dato'] =$parametros['apellidos1'];
+	  		$datos[3]['campo'] ='sa_doc_segundo_apellido' ;
+	  		$datos[3]['dato'] =$parametros['apellidos2'];
+	  		$datos[4]['campo'] ='sa_doc_fecha_nacimiento' ;
+	  		$datos[4]['dato'] =$parametros['fecha_n'];
+	  		$datos[5]['campo'] ='sa_doc_correo' ;
+	  		$datos[5]['dato'] =$parametros['correo'];
+	  		$datos[6]['campo'] ='sa_doc_telefono_1' ;
+	  		$datos[6]['dato'] =$parametros['telefono'];
+	  		$datos[7]['campo'] ='sa_doc_cedula' ;
+	  		$datos[7]['dato'] =$parametros['cedula'];
+  			break;
+  	case 'comunidad':
+	  		$datos[0]['campo'] ='sa_com_primer_nombre' ;
+	  		$datos[0]['dato'] =$parametros['nombre1'];
+	  		$datos[1]['campo'] ='sa_com_segundo_nombre' ;
+	  		$datos[1]['dato'] =$parametros['nombre2'];
+	  		$datos[2]['campo'] ='sa_com_primer_apellido' ;
+	  		$datos[2]['dato'] =$parametros['apellidos1'];
+	  		$datos[3]['campo'] ='sa_com_segundo_apellido' ;
+	  		$datos[3]['dato'] =$parametros['apellidos2'];
+	  		$datos[4]['campo'] ='sa_com_fecha_nacimiento' ;
+	  		$datos[4]['dato'] =$parametros['fecha_n'];
+	  		$datos[5]['campo'] ='sa_com_correo' ;
+	  		$datos[5]['dato'] =$parametros['correo'];
+	  		$datos[6]['campo'] ='sa_com_telefono_1' ;
+	  		$datos[6]['dato'] =$parametros['telefono'];
+	  		$datos[7]['campo'] ='sa_com_cedula' ;
+	  		$datos[7]['dato'] =$parametros['cedula'];
+  			break;
+  	}
+
+  	$where[0]['campo'] = $_SESSION['INICIO']['NO_CONCURENTE_TABLA_ID'];
+  	$where[0]['dato'] = $_SESSION['INICIO']['NO_CONCURENTE'];
+  	if(count($datos)>0)
+  	{
+  		return  $this->modelo->updateEmpresa($parametros['tabla'],$datos,$where);
+  	}else{
+  		return -2;
+  	}
+  }
+
+  function guardar_credencial($parametros)
+  {
+
+  	$usuario= $_SESSION['INICIO']['NO_CONCURENTE'];
+		$tabla= $_SESSION['INICIO']['NO_CONCURENTE_TABLA'];
+		$campo= $_SESSION['INICIO']['NO_CONCURENTE_TABLA_ID'];
+
+  	$campos = $this->modelo->credenciales_no_concurentes_campos();
+  	if(count($campos)>0)
+  	{
+  		$datos[0]['campo'] = $campos[0]['pass'];
+  		$datos[0]['dato'] = $parametros['pass'];
+  	}
+
+		$where[0]['campo'] = $campo;
+		$where[0]['dato'] = $usuario;
+		if(count( $datos))
+		{
+  		return  $this->modelo->updateEmpresa($tabla,$datos,$where);
+  	}else{
+  		return -2;
+  	}
   }
 
 

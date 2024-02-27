@@ -3,7 +3,12 @@
 include('../cabeceras/header.php');
 
 if ($_GET['acc'] == 'perfil') {
-	include('perfil.php');
+	if($_SESSION['INICIO']['NO_CONCURENTE']=='')
+	{
+		include('perfil.php');
+	}else{		
+		include('perfil_no_concurente.php');
+	}
 }
 if ($_GET['acc'] == 'descargas') {
 	include('ACTIVOS/descargas.php');

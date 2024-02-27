@@ -215,6 +215,8 @@ class consultasC
             array('campo' => 'sa_conp_estado_revision', 'dato' => $parametros['sa_conp_estado_revision']),
 
             array('campo' => 'sa_examen_fisico_regional', 'dato' => $parametros['sa_examen_fisico_regional']),
+
+            array('campo' => 'sa_conp_usu_id', 'dato' => $_SESSION['INICIO']['NO_CONCURENTE']),
         );
 
 
