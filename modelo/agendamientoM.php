@@ -14,7 +14,7 @@ class agendamientoM
         $this->db = new db();
     }
 
-    function lista_consultas($fecha = false)
+    function lista_consultas($fecha = false, $estado = -1)
     {
         $sql = "SELECT 
                     cm.sa_conp_id,
@@ -29,8 +29,12 @@ class agendamientoM
                 FROM consultas_medicas cm
                 INNER JOIN ficha_medica fm ON cm.sa_fice_id = fm.sa_fice_id
                 INNER JOIN pacientes pac ON fm.sa_fice_pac_id = pac.sa_pac_id
-                --WHERE cm.sa_conp_estado_revision = 0
+                WHERE 1 = 1 
                 ";
+
+        if ($estado == 0) {
+            $sql .= " AND cm.sa_conp_estado_revision = $estado";
+        }
 
         if ($fecha) {
             $sql .= " AND CONVERT(VARCHAR(10), sa_conp_fecha_creacion, 120) ='" . $fecha . "'";
