@@ -1142,7 +1142,7 @@ class consultasC
         $pdf->RotatedText(156.5, 76, utf8_decode('13. Neurológico'), 90);
 
       
-        $pdf->ln('2');
+        //$pdf->ln('1');
         $pdf->SetFont('Arial', 'B', 12);
         $pdf->Cell(190, 10, utf8_decode('  OBSERVACIONES'), 1, 1, 'L');
 
@@ -1218,24 +1218,13 @@ class consultasC
 
 
 
-        $nombre_medico = ' Md. Camila López';
+        /*$nombre_medico = ' Md. Camila López';
 
         $pdf->SetFont('Arial', 'B', 12);
         $pdf->Cell(60, 10, utf8_decode($nombre_medico), '0', 1, 'C');
         $pdf->SetFont('Arial', '', 12);
 
-        $pdf->Cell(60, 10, utf8_decode('Médico Institucional'), '0', 0, 'C');
-
-
-
-
-        $pdf->AddPage();
-
-        // Rotar texto a 45 grados
-        $pdf->RotatedText(10, 50, 'Texto Rotado 45 grados', 90);
-
-        // Rotar texto a -30 grados
-        $pdf->RotatedText(100, 100, 'Texto Rotado -30 grados', -30);
+        $pdf->Cell(60, 10, utf8_decode('Médico Institucional'), '0', 0, 'C');*/
 
         $pdf->Output();
     }

@@ -155,7 +155,12 @@ tablaInsu = $('#tabla_insumos').DataTable({
 
 	  	 $('#ddl_lista_productos').on('select2:select', function (e) {
 	  	 	  var data = e.params.data.data;
+              if($('#ddl_tipo').val()!='Insumos'){
+              $("#txt_existencias").val(data.sa_cmed_stock)
+          }else{
+              $("#txt_existencias").val(data.sa_cins_stock)
 	  	 	  console.log(data);
+            }
 	  	 })
 
     });
@@ -250,7 +255,7 @@ function modal_ingreso(tipo)
      var ddl = $('#ddl_tipo option:selected').text();
      var datos = datos+'&ddl_tipo='+ddl;
      
-     if($('#ddl_proveedor').val()=='' || $('#ddl_lista_productos').val()=='' || $('#txt_precio').val()=='0' || $('#txt_precio').val()=='' || $('#txt_serie').val()=='' || $('#txt_factura').val()=='' || $('#txt_fecha_ela').val()=='' || $('#txt_fecha_exp').val()=='')
+     if($('#ddl_proveedor').val()=='' || $('#ddl_lista_productos').val()==''  || $('#ddl_lista_productos').val()==null || $('#txt_precio').val()=='0' || $('#txt_precio').val()=='' || $('#txt_serie').val()=='' || $('#txt_factura').val()=='' || $('#txt_fecha_ela').val()=='' || $('#txt_fecha_exp').val()=='')
      {
        Swal.fire('','Llene todo los campos.','info');   
       return false;

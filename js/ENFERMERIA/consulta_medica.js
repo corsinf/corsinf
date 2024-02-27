@@ -19,6 +19,16 @@ $(document).ready(function () {
             event.preventDefault();
         }
     });
+
+    var validacion_numeros = $('.solo_numeros');
+
+    validacion_numeros.on('keypress', function (event) {
+        var charCode = (event.which) ? event.which : event.keyCode;
+        // Permitir números (48-57) y el punto (46)
+        if (charCode !== 46 && (charCode < 48 || charCode > 57)) {
+            event.preventDefault();
+        }
+    });
 });
 
 function calcularIMC() {
