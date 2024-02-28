@@ -47,11 +47,11 @@ if ($btn_regresar == '') {
             var btn_regresar = '<?php echo $btn_regresar; ?>';
 
             //alert(btn_regresar)
-            
-        console.log(sa_pac_id);
-        console.log(sa_pac_tabla);
 
-            cargar_datos_paciente(sa_pac_id);
+            console.log(sa_pac_id);
+            console.log(sa_pac_tabla);
+
+            //cargar_datos_paciente(sa_pac_id);
             datos_col_ficha_medica(sa_pac_id);
 
             //Para que cargue la funcionalidad de los input de las preguntas
@@ -116,7 +116,7 @@ if ($btn_regresar == '') {
                     //ide de la tabla a la que pertenece estudiantes /doentes/
                     $('#txt_id_comnunidad').val(response[0].sa_pac_id_comunidad);
 
-                    lista_seguros(response[0].sa_pac_id_comunidad, response[0].sa_pac_tabla);
+                    lista_seguros(response[0].sa_pac_id_comunidad, response[0].sa_pac_tabla, id_seguro_predeterminado);
 
                 }
             });
@@ -327,6 +327,8 @@ if ($btn_regresar == '') {
         }
 
         function insertar(parametros) {
+            url_post = '<?php echo $btn_regresar ?>';
+
             $.ajax({
                 data: {
                     parametros: parametros
@@ -341,7 +343,7 @@ if ($btn_regresar == '') {
                 success: function(response) {
                     if (response == 1) {
                         Swal.fire('', 'Operacion realizada con exito.', 'success').then(function() {
-                            location.href = '../vista/inicio.php?mod=7&acc=inicio_representante';
+                            location.href = url_post;
                         });
                     } else if (response == -2) {
                         Swal.fire('', 'Algo salió mal, repite el proceso.', 'success');
@@ -390,14 +392,14 @@ if ($btn_regresar == '') {
         var prov = $('#txtSeguroProveedorNew').val();
         var seguro = $('#txtSeguroNombreNew').val();
         var estudiantes = $('#txt_id_comnunidad').val();
-        var tabla ='<?php echo  $sa_pac_tabla ?>';
+        var tabla = '<?php echo  $sa_pac_tabla ?>';
         var parametros = {
             'Proveedor': prov,
             'seguro': seguro,
             'todos': false,
             'estudiantes': estudiantes,
             'ids': '',
-            'tabla':tabla,
+            'tabla': tabla,
         }
         $.ajax({
             data: {
@@ -419,7 +421,6 @@ if ($btn_regresar == '') {
             }
         });
     }
-
 </script>
 
 <div class="page-wrapper">
@@ -561,7 +562,7 @@ if ($btn_regresar == '') {
                                                 <div class="col-6">
                                                     <div class="row">
                                                         <div class="col-md-11">
-                                                            <label for="" class="form-label"> Grupo Sanguíneo y Factor Rh: <label style="color: red;">*</label> </label>
+                                                            <label for="" class="form-label"> Grupo Sanguíneo y Factor Rh <label style="color: red;">*</label> </label>
                                                             <select class="form-select form-select-sm" id="sa_fice_pac_grupo_sangre" name="sa_fice_pac_grupo_sangre" required>
                                                                 <option selected disabled>-- Seleccione --</option>
                                                                 <option value="A+">A+</option>
@@ -580,7 +581,7 @@ if ($btn_regresar == '') {
 
                                                     <div class="row pt-3">
                                                         <div class="col-md-11">
-                                                            <label for="" class="form-label">Dirección del Domicilio: <label style="color: red;">*</label> </label>
+                                                            <label for="" class="form-label">Dirección del Domicilio <label style="color: red;">*</label> </label>
                                                             <input type="text" class="form-control form-control-sm" id="sa_fice_pac_direccion_domicilio" name="sa_fice_pac_direccion_domicilio" required>
                                                         </div>
                                                     </div>
@@ -588,9 +589,9 @@ if ($btn_regresar == '') {
 
                                                     <div class="row pt-3">
                                                         <div class="col-md-11">
-                                                            <label for="" class="form-label">¿Posee Seguro Médico Adicional?: <label style="color: red;">*</label> </label>
+                                                            <label for="" class="form-label">¿Posee Seguro Médico Adicional? <label style="color: red;">*</label> </label>
                                                             <select class="form-select form-select-sm" id="sa_fice_pac_seguro_medico" name="sa_fice_pac_seguro_medico" required>
-                                                                <option selected disabled>-- Seleccione --</option>
+                                                                <option selected disabled value="">-- Seleccione --</option>
                                                                 <option value="Si">Si</option>
                                                                 <option value="No">No</option>
                                                             </select>
@@ -605,13 +606,13 @@ if ($btn_regresar == '') {
 
                                                             <!-- <label for="" class="form-label">Seguro Predeterminado: <label style="color: red;">*</label> </label> -->
 
-                                                            <label for="" class="form-label">Seleccione Seguro medico predeterminado: <label style="color: red;">*</label> </label>
+                                                            <label for="" class="form-label">Seleccione Seguro medico predeterminado <label style="color: red;">*</label> </label>
 
                                                             <div class="input-group">
-                                                                <select class="form-select form-select-sm" id="sa_fice_pac_nombre_seguro" name="sa_fice_pac_nombre_seguro">
+                                                                <select class="form-select form-select-sm" id="sa_fice_pac_nombre_seguro" name="sa_fice_pac_nombre_seguro" required>
                                                                     <option selected disabled value="">-- Seleccione --</option>
                                                                 </select>
-                                                                 <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#myModal_seguros"><i class="bx bx-plus me-0"></i></button>       
+                                                                <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#myModal_seguros"><i class="bx bx-plus me-0"></i></button>
                                                             </div>
 
                                                         </div>
@@ -646,26 +647,26 @@ if ($btn_regresar == '') {
 
                                                 <div class="row pt-2">
                                                     <div class="col-md-3">
-                                                        <label for="" class="form-label">Primer Apellido: <label style="color: red;">*</label> </label>
+                                                        <label for="" class="form-label">Primer Apellido <label style="color: red;">*</label> </label>
                                                         <input type="text" class="form-control form-control-sm" id="sa_fice_rep_1_primer_apellido" name="sa_fice_rep_1_primer_apellido" readonly>
                                                     </div>
                                                     <div class="col-md-3">
-                                                        <label for="" class="form-label">Segundo Apellido: <label style="color: red;">*</label> </label>
+                                                        <label for="" class="form-label">Segundo Apellido <label style="color: red;">*</label> </label>
                                                         <input type="text" class="form-control form-control-sm" id="sa_fice_rep_1_segundo_apellido" name="sa_fice_rep_1_segundo_apellido" readonly>
                                                     </div>
                                                     <div class="col-md-3">
-                                                        <label for="" class="form-label">Primer Nombre: <label style="color: red;">*</label> </label>
+                                                        <label for="" class="form-label">Primer Nombre <label style="color: red;">*</label> </label>
                                                         <input type="text" class="form-control form-control-sm" id="sa_fice_rep_1_primer_nombre" name="sa_fice_rep_1_primer_nombre" readonly>
                                                     </div>
                                                     <div class="col-md-3">
-                                                        <label for="" class="form-label">Segundo Nombre: <label style="color: red;">*</label> </label>
+                                                        <label for="" class="form-label">Segundo Nombre <label style="color: red;">*</label> </label>
                                                         <input type="text" class="form-control form-control-sm" id="sa_fice_rep_1_segundo_nombre" name="sa_fice_rep_1_segundo_nombre" readonly>
                                                     </div>
                                                 </div>
 
                                                 <div class="row pt-3">
                                                     <div class="col-md-4">
-                                                        <label for="" class="form-label">Parentesco: <label style="color: red;">*</label> </label>
+                                                        <label for="" class="form-label">Parentesco <label style="color: red;">*</label> </label>
 
                                                         <select class="form-select form-select-sm" id="sa_fice_rep_1_parentesco" name="sa_fice_rep_1_parentesco" disabled>
                                                             <option selected disabled value="">-- Seleccione --</option>
@@ -682,12 +683,12 @@ if ($btn_regresar == '') {
                                                     </div>
 
                                                     <div class="col-md-4">
-                                                        <label for="" class="form-label">Teléfono Fijo: <label style="color: red;">*</label> </label>
+                                                        <label for="" class="form-label">Teléfono Fijo <label style="color: red;">*</label> </label>
                                                         <input type="text" class="form-control form-control-sm" id="sa_fice_rep_1_telefono_1" name="sa_fice_rep_1_telefono_1" readonly>
                                                     </div>
 
                                                     <div class="col-md-4">
-                                                        <label for="" class="form-label">Teléfono Celular: <label style="color: red;">*</label> </label>
+                                                        <label for="" class="form-label">Teléfono Celular </label>
                                                         <input type="text" class="form-control form-control-sm" id="sa_fice_rep_1_telefono_2" name="sa_fice_rep_1_telefono_2" readonly>
                                                     </div>
                                                 </div>
@@ -703,26 +704,26 @@ if ($btn_regresar == '') {
 
                                                 <div class="row pt-2">
                                                     <div class="col-md-3">
-                                                        <label for="" class="form-label">Primer Apellido: <label style="color: red;">*</label> </label>
+                                                        <label for="" class="form-label">Primer Apellido <label style="color: red;"></label> </label>
                                                         <input type="text" class="form-control form-control-sm" id="sa_fice_rep_2_primer_apellido" name="sa_fice_rep_2_primer_apellido">
                                                     </div>
                                                     <div class="col-md-3">
-                                                        <label for="" class="form-label">Segundo Apellido: <label style="color: red;">*</label> </label>
+                                                        <label for="" class="form-label">Segundo Apellido <label style="color: red;"></label> </label>
                                                         <input type="text" class="form-control form-control-sm" id="sa_fice_rep_2_segundo_apellido" name="sa_fice_rep_2_segundo_apellido">
                                                     </div>
                                                     <div class="col-md-3">
-                                                        <label for="" class="form-label">Primer Nombre: <label style="color: red;">*</label> </label>
+                                                        <label for="" class="form-label">Primer Nombre <label style="color: red;"></label> </label>
                                                         <input type="text" class="form-control form-control-sm" id="sa_fice_rep_2_primer_nombre" name="sa_fice_rep_2_primer_nombre">
                                                     </div>
                                                     <div class="col-md-3">
-                                                        <label for="" class="form-label">Segundo Nombre: <label style="color: red;">*</label> </label>
+                                                        <label for="" class="form-label">Segundo Nombre <label style="color: red;"></label> </label>
                                                         <input type="text" class="form-control form-control-sm" id="sa_fice_rep_2_segundo_nombre" name="sa_fice_rep_2_segundo_nombre">
                                                     </div>
                                                 </div>
 
                                                 <div class="row pt-3">
                                                     <div class="col-md-4">
-                                                        <label for="" class="form-label">Parentesco: <label style="color: red;">*</label> </label>
+                                                        <label for="" class="form-label">Parentesco <label style="color: red;"></label> </label>
 
                                                         <select class="form-select form-select-sm" id="sa_fice_rep_2_parentesco" name="sa_fice_rep_2_parentesco">
                                                             <option selected disabled value="">-- Seleccione --</option>
@@ -737,12 +738,12 @@ if ($btn_regresar == '') {
                                                     </div>
 
                                                     <div class="col-md-4">
-                                                        <label for="" class="form-label">Teléfono Fijo: <label style="color: red;">*</label> </label>
+                                                        <label for="" class="form-label">Teléfono Fijo <label style="color: red;"></label> </label>
                                                         <input type="text" class="form-control form-control-sm" id="sa_fice_rep_2_telefono_1" name="sa_fice_rep_2_telefono_1">
                                                     </div>
 
                                                     <div class="col-md-4">
-                                                        <label for="" class="form-label">Teléfono Celular: <label style="color: red;">*</label> </label>
+                                                        <label for="" class="form-label">Teléfono Celular <label style="color: red;"></label> </label>
                                                         <input type="text" class="form-control form-control-sm" id="sa_fice_rep_2_telefono_2" name="sa_fice_rep_2_telefono_2">
                                                     </div>
                                                 </div>
@@ -764,16 +765,16 @@ if ($btn_regresar == '') {
                                             <div class="row pt-2">
 
                                                 <div class="col-md-12">
-                                                    <label for="" class="form-label">1.- ¿Ha sido diagnosticado con alguna enfermedad?: <label style="color: red;">* OBLIGATORIO</label> </label>
+                                                    <label for="" class="form-label">1.- ¿Ha sido diagnosticado con alguna enfermedad? <label style="color: red;">* OBLIGATORIO</label> </label>
                                                     <div class="row">
                                                         <div class="col-auto">
                                                             <div class="form-check">
-                                                                <input class="form-check-input" type="radio" name="sa_fice_pregunta_1" id="sa_fice_pregunta_1_1" value="Si">
+                                                                <input class="form-check-input" type="radio" name="sa_fice_pregunta_1" id="sa_fice_pregunta_1_1" value="Si" required>
                                                                 <label class="form-check-label" for="sa_fice_pregunta_1_1">SI</label>
                                                             </div>
 
                                                             <div class="form-check">
-                                                                <input class="form-check-input" type="radio" name="sa_fice_pregunta_1" id="sa_fice_pregunta_1_2" value="No">
+                                                                <input class="form-check-input" type="radio" name="sa_fice_pregunta_1" id="sa_fice_pregunta_1_2" value="No" required>
                                                                 <label class="form-check-label" for="sa_fice_pregunta_1_2">NO</label>
                                                             </div>
                                                         </div>
@@ -784,15 +785,15 @@ if ($btn_regresar == '') {
                                                 </div>
 
                                                 <div class="col-md-12 pt-4">
-                                                    <label for="" class="form-label">2.- ¿Tiene algún antecedente familiar de importancia?: <label style="color: red;">* PADRES – HERMANOS – ABUELOS - TIOS </label> </label>
+                                                    <label for="" class="form-label">2.- ¿Tiene algún antecedente familiar de importancia? <label style="color: red;">* PADRES – HERMANOS – ABUELOS - TIOS </label> </label>
                                                     <div class="row">
                                                         <div class="col-auto">
                                                             <div class="form-check">
-                                                                <input class="form-check-input" type="radio" name="sa_fice_pregunta_2" id="sa_fice_pregunta_2_1" value="Si">
+                                                                <input class="form-check-input" type="radio" name="sa_fice_pregunta_2" id="sa_fice_pregunta_2_1" value="Si" required>
                                                                 <label class="form-check-label" for="sa_fice_pregunta_2_1">SI</label>
                                                             </div>
                                                             <div class="form-check">
-                                                                <input class="form-check-input" type="radio" name="sa_fice_pregunta_2" id="sa_fice_pregunta_2_2" value="No">
+                                                                <input class="form-check-input" type="radio" name="sa_fice_pregunta_2" id="sa_fice_pregunta_2_2" value="No" required>
                                                                 <label class="form-check-label" for="sa_fice_pregunta_2_2">NO</label>
                                                             </div>
                                                         </div>
@@ -804,15 +805,15 @@ if ($btn_regresar == '') {
                                                 </div>
 
                                                 <div class="col-md-12 pt-4">
-                                                    <label for="" class="form-label">3.- ¿Ha sido sometido a cirugías previas?: <label style="color: red;">* OBLIGATORIO </label> </label>
+                                                    <label for="" class="form-label">3.- ¿Ha sido sometido a cirugías previas? <label style="color: red;">* OBLIGATORIO </label> </label>
                                                     <div class="row">
                                                         <div class="col-auto">
                                                             <div class="form-check">
-                                                                <input class="form-check-input" type="radio" name="sa_fice_pregunta_3" id="sa_fice_pregunta_3_1" value="Si">
+                                                                <input class="form-check-input" type="radio" name="sa_fice_pregunta_3" id="sa_fice_pregunta_3_1" value="Si" required>
                                                                 <label class="form-check-label" for="sa_fice_pregunta_3_1">SI</label>
                                                             </div>
                                                             <div class="form-check">
-                                                                <input class="form-check-input" type="radio" name="sa_fice_pregunta_3" id="sa_fice_pregunta_3_2" value="No">
+                                                                <input class="form-check-input" type="radio" name="sa_fice_pregunta_3" id="sa_fice_pregunta_3_2" value="No" required>
                                                                 <label class="form-check-label" for="sa_fice_pregunta_3_2">NO</label>
                                                             </div>
                                                         </div>
@@ -824,15 +825,15 @@ if ($btn_regresar == '') {
                                                 </div>
 
                                                 <div class="col-md-12 pt-4">
-                                                    <label for="" class="form-label">4.- ¿Tiene alergias?: <label style="color: red;">* OBLIGATORIO </label> </label>
+                                                    <label for="" class="form-label">4.- ¿Tiene alergias? <label style="color: red;">* OBLIGATORIO </label> </label>
                                                     <div class="row">
                                                         <div class="col-auto">
                                                             <div class="form-check">
-                                                                <input class="form-check-input" type="radio" name="sa_fice_pregunta_4" id="sa_fice_pregunta_4_1" value="Si">
+                                                                <input class="form-check-input" type="radio" name="sa_fice_pregunta_4" id="sa_fice_pregunta_4_1" value="Si" required>
                                                                 <label class="form-check-label" for="sa_fice_pregunta_4_1">SI</label>
                                                             </div>
                                                             <div class="form-check">
-                                                                <input class="form-check-input" type="radio" name="sa_fice_pregunta_4" id="sa_fice_pregunta_4_2" value="No">
+                                                                <input class="form-check-input" type="radio" name="sa_fice_pregunta_4" id="sa_fice_pregunta_4_2" value="No" required>
                                                                 <label class="form-check-label" for="sa_fice_pregunta_4_2">NO</label>
                                                             </div>
                                                         </div>
@@ -844,11 +845,11 @@ if ($btn_regresar == '') {
 
                                                 <div class="col-md-12 pt-4">
 
-                                                    <label for="" class="form-label">5.- ¿Qué medicamentos usa?: <label style="color: red;">*</label> </label>
+                                                    <label for="" class="form-label">5.- ¿Qué medicamentos usa? <label style="color: red;">*</label> </label>
                                                     <p style="color: red;">*Si el estudiante requiere algún tratamiento específico durante el horario escolar, el representante deberá enviar el medicamento con la indicación médica correspondiente por agenda a través del docente tutor</p>
 
                                                     <div>
-                                                        <textarea name="sa_fice_pregunta_5_obs" id="sa_fice_pregunta_5_obs" cols="30" rows="10" class="form-control form-control-sm"></textarea>
+                                                        <textarea name="sa_fice_pregunta_5_obs" id="sa_fice_pregunta_5_obs" cols="30" rows="10" class="form-control form-control-sm" required></textarea>
                                                     </div>
                                                 </div>
 
@@ -896,8 +897,6 @@ if ($btn_regresar == '') {
 
                                                     </div>
 
-
-
                                                     <script>
                                                         // Agrega un evento de escucha al cambio en la casilla de verificación usando jQuery
                                                         $('#chk_terminos').change(function() {
@@ -912,18 +911,12 @@ if ($btn_regresar == '') {
                                                         });
                                                     </script>
 
-
                                                 </div>
                                             </div>
                                         </div>
-
-
                                     </div>
                                 </div>
                             </div>
-
-
-
                         <?php }  ?>
                     </div>
                 </div>
@@ -937,24 +930,25 @@ if ($btn_regresar == '') {
     <div class="modal-dialog modal-sm modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h5>Agregar Seguros</h5>
+                <h5>Agrega Seguro</h5>
             </div>
             <div class="modal-body">
-            <div class="row">
-                <input type="hidden" name="txt_id_comnunidad" id="txt_id_comnunidad">
-                <div class="col-sm-12">
-                    <b>Nombre de Proveedor</b>
-                    <input type="text" name="" id="txtSeguroProveedorNew" class="form-control form-control-sm">
+                <div class="row">
+                    <input type="hidden" name="txt_id_comnunidad" id="txt_id_comnunidad">
+                    <div class="col-sm-12">
+                        <label for="" class="form-label fw-bold">Nombre del Proveedor <label style="color: red;">*</label> </label>
+                        <input type="text" name="" id="txtSeguroProveedorNew" class="form-control form-control-sm">
+                    </div>
+
+                    <div class="col-sm-12 pt-3">
+                        <label for="" class="form-label fw-bold">Nombre del Seguro <label style="color: red;">*</label> </label>
+                        <input type="text" name="" id="txtSeguroNombreNew" class="form-control form-control-sm">
+                    </div>
                 </div>
-                <div class="col-sm-12">
-                    <b>Nombre de seguro</b>
-                    <input type="text" name="" id="txtSeguroNombreNew" class="form-control form-control-sm">
-                </div>
-            </div>         
             </div>
-            <div class="modal-footer">    
+            <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                <button type="button" class="btn btn-primary" onclick="SaveNewSeguro()">Agregar</button>    
+                <button type="button" class="btn btn-primary" onclick="SaveNewSeguro()">Agregar</button>
             </div>
         </div>
     </div>

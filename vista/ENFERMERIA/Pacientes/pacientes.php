@@ -236,8 +236,8 @@
 
                 <div class="row">
                     <div class="col-12">
-                        <label for="sa_pac_tabla">Tipo de Paciente: <label class="text-danger">*</label></label>
-                        <select name="sa_pac_tabla" id="sa_pac_tabla" class="form-select" onclick="consultar_tablas_datos(this.value)">
+                        <label for="sa_pac_tabla">Tipo de Paciente <label class="text-danger">*</label></label>
+                        <select name="sa_pac_tabla" id="sa_pac_tabla" class="form-select form-select-sm" onchange="consultar_tablas_datos(this.value)">
                             <option value="">Seleccione el Tipo de Paciente</option>
                         </select>
                     </div>
@@ -245,8 +245,8 @@
 
                 <div class="row pt-3">
                     <div class="col-12">
-                        <label for="sa_pac_id_comunidad">Paciente: <label class="text-danger">*</label></label>
-                        <select name="sa_pac_id_comunidad" id="sa_pac_id_comunidad" class="form-select">
+                        <label for="sa_pac_id_comunidad">Paciente <label class="text-danger">*</label></label>
+                        <select name="sa_pac_id_comunidad" id="sa_pac_id_comunidad" class="form-select form-select-sm">
                             <option value="">Seleccione el Paciente</option>
                         </select>
                     </div>

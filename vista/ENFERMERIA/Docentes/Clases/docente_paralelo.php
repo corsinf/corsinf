@@ -39,7 +39,7 @@ if ($id != null && $id != '') {
             columns: [{
                 data: null,
                 render: function(data, type, item) {
-                    return item.sa_sec_nombre + ' - ' + item.sa_gra_nombre + ' - ' + item.sa_par_nombre + ' - ' + item.docente_nombres;
+                    return item.sa_sec_nombre + ' - ' + item.sa_gra_nombre + ' - ' + item.sa_par_nombre; // + ' - ' + item.docente_nombres;
                 }
             }]
         });
@@ -209,7 +209,7 @@ if ($id != null && $id != '') {
 
                 <div class="row">
                     <div class="col-12">
-                        <label for="sa_par_id">Curso: <label class="text-danger">*</label></label>
+                        <label for="sa_par_id">Curso <label class="text-danger">*</label></label>
                         <select name="sa_par_id" id="sa_par_id" class="form-select">
                             <option value="">Seleccione un Curso</option>
                         </select>
