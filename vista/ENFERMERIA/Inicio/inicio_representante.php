@@ -1,117 +1,116 @@
 <script src="../js/ENFERMERIA/pacientes.js"></script>
 <style>
-.upload-img {
-    border-radius: 100%;
-    display: inline-block;
-    width: 70px;
-    height: 70px;
-    object-fit: cover;
-    object-position: 50% 50%;
-    border: 3px solid #20e5bf;
-    margin-right: 15px;
-    vertical-align: middle;
-}
-.input-file-upload {
-    position: relative;
-    display: inline-block;
-    vertical-align: middle;
-}
-.input-file-upload input[type="file"] {
-  opacity: 0;
-  padding: 10px 0;
-  height:36px;
-  width: 150px;
-}
+    .upload-img {
+        border-radius: 100%;
+        display: inline-block;
+        width: 70px;
+        height: 70px;
+        object-fit: cover;
+        object-position: 50% 50%;
+        border: 3px solid #20e5bf;
+        margin-right: 15px;
+        vertical-align: middle;
+    }
 
-.upload-label {
-  width: 150px;
-  height: 38px;
-  background: #3b70f1;
-  text-align: center;
-  color: #ffffff;
-  display: block;
-  padding: 8px 0;
-  position: absolute;
-    line-height: normal;
-    font-size: 14px;
-    font-weight: 700;
-    transition: all 0.3s ease-in-out;
-}
-.input-file-upload:hover .upload-label {
-    background: #eaf5fe;
-    color: #3b70f1;
-}
+    .input-file-upload {
+        position: relative;
+        display: inline-block;
+        vertical-align: middle;
+    }
+
+    .input-file-upload input[type="file"] {
+        opacity: 0;
+        padding: 10px 0;
+        height: 36px;
+        width: 150px;
+    }
+
+    .upload-label {
+        width: 150px;
+        height: 38px;
+        background: #3b70f1;
+        text-align: center;
+        color: #ffffff;
+        display: block;
+        padding: 8px 0;
+        position: absolute;
+        line-height: normal;
+        font-size: 14px;
+        font-weight: 700;
+        transition: all 0.3s ease-in-out;
+    }
+
+    .input-file-upload:hover .upload-label {
+        background: #eaf5fe;
+        color: #3b70f1;
+    }
 </style>
 <script type="text/javascript">
-    function readURL(input,item) {
+    function readURL(input, item) {
         var id = input.id;
         if (input.files && input.files[0]) {
             var reader = new FileReader();
-            reader.onload = function (e) {
-                $('#file_upload_'+item).attr('src', e.target.result);
+            reader.onload = function(e) {
+                $('#file_upload_' + item).attr('src', e.target.result);
             };
             reader.readAsDataURL(input.files[0]);
         }
     }
+
     function readURLRep(input) {
         var id = input.id;
         if (input.files && input.files[0]) {
             var reader = new FileReader();
-            reader.onload = function (e) {
+            reader.onload = function(e) {
                 $('#img_rep').attr('src', e.target.result);
             };
             reader.readAsDataURL(input.files[0]);
         }
     }
 
-    function cargar_img_alumno(id)
-    {
-        
-       var fileInput = $('#file_estudiante_img_'+id).val();        
-        if(fileInput=='')
-        {
-            Swal.fire('','Seleccione una imagen','warning');
+    function cargar_img_alumno(id) {
+
+        var fileInput = $('#file_estudiante_img_' + id).val();
+        if (fileInput == '') {
+            Swal.fire('', 'Seleccione una imagen', 'warning');
             return false;
         }
 
-        var formData = new FormData(document.getElementById("form_estudiantes_"+id));
-         $.ajax({
+        var formData = new FormData(document.getElementById("form_estudiantes_" + id));
+        $.ajax({
             url: '../controlador/estudiantesC.php?cargar_imagen_estudiantes=true',
             type: 'post',
             data: formData,
             contentType: false,
             processData: false,
-            dataType:'json',
-         // beforeSend: function () {
-         //        $("#foto_alumno").attr('src',"../img/gif/proce.gif");
-         //     },
+            dataType: 'json',
+            // beforeSend: function () {
+            //        $("#foto_alumno").attr('src',"../img/gif/proce.gif");
+            //     },
             success: function(response) {
-               if(response==-1)
-               {
-                 Swal.fire(
-                  '',
-                  'Algo extraño a pasado intente mas tarde.',
-                  'error')
+                if (response == -1) {
+                    Swal.fire(
+                        '',
+                        'Algo extraño a pasado intente mas tarde.',
+                        'error')
 
-               }else if(response ==-2)
-               {
-                  Swal.fire(
-                  '',
-                  'Asegurese que el archivo subido sea una imagen.',
-                  'error')
-               }else
-               {
-                 consultar_datos_estudiante_representante(noconcurente_id);
-               } 
+                } else if (response == -2) {
+                    Swal.fire(
+                        '',
+                        'Asegurese que el archivo subido sea una imagen.',
+                        'error')
+                } else {
+                    consultar_datos_estudiante_representante(noconcurente_id);
+                }
             }
         });
 
     }
 </script>
 
-<script type="text/javascript">    
-        var noconcurente_id = '<?php echo $_SESSION['INICIO']['NO_CONCURENTE']; ?>';
-        var noconcurente_tabla = '<?php echo $_SESSION['INICIO']['NO_CONCURENTE_TABLA']; ?>';
+<script type="text/javascript">
+    var noconcurente_id = '<?php echo $_SESSION['INICIO']['NO_CONCURENTE']; ?>';
+    var noconcurente_tabla = '<?php echo $_SESSION['INICIO']['NO_CONCURENTE_TABLA']; ?>';
     $(document).ready(function() {
 
         var id = '<?php echo $_SESSION['INICIO']['ID_USUARIO']; ?>';
@@ -130,46 +129,42 @@
 
         $("#btn_subir_img_rep").on('click', function() {
 
-            var fileInput = $('#file_img').val();        
-            if(fileInput=='')
-            {
-                Swal.fire('','Seleccione una imagen','warning');
+            var fileInput = $('#file_img').val();
+            if (fileInput == '') {
+                Swal.fire('', 'Seleccione una imagen', 'warning');
                 return false;
             }
 
 
-        var formData = new FormData(document.getElementById("form_img"));
-         $.ajax({
-            url: '../controlador/usuariosC.php?cargar_imagen_no_concurente=true',
-            type: 'post',
-            data: formData,
-            contentType: false,
-            processData: false,
-            dataType:'json',
-         // beforeSend: function () {
-         //        $("#foto_alumno").attr('src',"../img/gif/proce.gif");
-         //     },
-            success: function(response) {
-               if(response==-1)
-               {
-                 Swal.fire(
-                  '',
-                  'Algo extraño a pasado intente mas tarde.',
-                  'error')
+            var formData = new FormData(document.getElementById("form_img"));
+            $.ajax({
+                url: '../controlador/usuariosC.php?cargar_imagen_no_concurente=true',
+                type: 'post',
+                data: formData,
+                contentType: false,
+                processData: false,
+                dataType: 'json',
+                // beforeSend: function () {
+                //        $("#foto_alumno").attr('src',"../img/gif/proce.gif");
+                //     },
+                success: function(response) {
+                    if (response == -1) {
+                        Swal.fire(
+                            '',
+                            'Algo extraño a pasado intente mas tarde.',
+                            'error')
 
-               }else if(response ==-2)
-               {
-                  Swal.fire(
-                  '',
-                  'Asegurese que el archivo subido sea una imagen.',
-                  'error')
-               }else
-               {
-                  location.reload();
-               } 
-            }
+                    } else if (response == -2) {
+                        Swal.fire(
+                            '',
+                            'Asegurese que el archivo subido sea una imagen.',
+                            'error')
+                    } else {
+                        location.reload();
+                    }
+                }
+            });
         });
-    });
 
 
     });
@@ -201,14 +196,13 @@
                 $('#txt_apellido2').val(response[0].apellido2);
                 $('#txt_sexo').html('Falta dato en usuario' + " ");
                 if (response[0].sexo != "Masculino") {
-                    $('#cbx_fe').prop('checked',true);
-                }else{
-                    $('#cbx_ma').prop('checked',true);
+                    $('#cbx_fe').prop('checked', true);
+                } else {
+                    $('#cbx_ma').prop('checked', true);
                 }
-                 if(response[0].fechaN!='' && response[0].fechaN!=null)
-                {
+                if (response[0].fechaN != '' && response[0].fechaN != null) {
                     $('#txt_fecha_nacimiento').val(formatoDate(response[0].fechaN.date));
-               
+
                     var fecha1 = new Date(formatoDate(response[0].fechaN.date));
                     var fecha2 = new Date();
 
@@ -218,12 +212,11 @@
                     var diferenciaEnAnios = Math.round(diferenciaEnMilisegundos / milisegundosEnUnAnio);
 
                     $('#txt_edad').html(diferenciaEnAnios);
-                 }
+                }
                 $('#txt_email').val(response[0].email);
                 $('#txt_telefono').val(response[0].telefono);
-                if(response[0].foto!='')
-                {
-                    $('#img_rep').attr("src",response[0].foto+'?'+Math.random())
+                if (response[0].foto != '') {
+                    $('#img_rep').attr("src", response[0].foto + '?' + Math.random())
                 }
                 $('#txt_usuario').val(response[0].usu);
                 $('#txt_pass').val(response[0].pass);
@@ -268,7 +261,7 @@
                         success: function(response) {
                             alert_salida = '';
 
-                             // console.log(response);
+                            // console.log(response);
 
                             if (response === null) {
                                 // Si la respuesta es nula o no es un objeto JSON válido
@@ -312,29 +305,27 @@
 
                         '<div id="alert_notificacion_' + (contador_alertas_div) + '"></div>' +
 
-                        '<form id="form_estudiantes_'+item.sa_est_id+'">'+
-                                '<div class="mt-1">'
-                                    if(item.sa_est_foto_url!='' && item.sa_est_foto_url!=null)
-                                    {
-                                    estudiantes+='<img src="'+item.sa_est_foto_url+'?'+Math.random()+'" id="file_upload_'+item.sa_est_id+'" width="110" height="110" class="rounded-circle shadow" alt="">' 
-                                    }else{
-                                        estudiantes+='<img src="../img/sin_imagen.jpg" id="file_upload_'+item.sa_est_id+'" width="110" height="110" class="rounded-circle shadow" alt="">' 
-                                    }
-                                    <?php if($_SESSION['INICIO']['TIPO']!='DBA'){ ?>
-                                    estudiantes+='<br><div class="input-file-upload mt-1">'+
-                                       '<div class="btn-group" role="group" aria-label="Button group with nested dropdown">'+
-                                            '<span class="upload-label">Seleccionar Imagen</span>'+
-                                             '<input type="file" id="file_estudiante_img_'+item.sa_est_id+'" name="file_estudiante_img_'+item.sa_est_id+'" onchange="readURL(this,'+item.sa_est_id+');" />'+
-                                             '<input type="hidden" id="name_img" name="name_img" value="'+item.sa_est_cedula+'" />'+
-                                             '<input type="hidden" id="txt_idEst" name="txt_idEst" value="'+item.sa_est_id+'" />'+
-                                            '<div class="btn-group" role="group">'+
-                                                '<button type="button" class="btn btn-outline-primary" title="subir imagen" onclick="cargar_img_alumno('+item.sa_est_id+')" ><i class="bx bx-upload me-0"></i></button>'+
-                                           '</div>'+
-                                       '</div>'+
-                                    '</div>'+
-                                    <?php } ?>
-                                '</div>'+
-                        '</form>'+
+                        '<form id="form_estudiantes_' + item.sa_est_id + '">' +
+                        '<div class="mt-1">'
+                    if (item.sa_est_foto_url != '' && item.sa_est_foto_url != null) {
+                        estudiantes += '<img src="' + item.sa_est_foto_url + '?' + Math.random() + '" id="file_upload_' + item.sa_est_id + '" width="110" height="110" class="rounded-circle shadow" alt="">'
+                    } else {
+                        estudiantes += '<img src="../img/sin_imagen.jpg" id="file_upload_' + item.sa_est_id + '" width="110" height="110" class="rounded-circle shadow" alt="">'
+                    }
+                    <?php if ($_SESSION['INICIO']['TIPO'] != 'DBA') { ?>
+                        estudiantes += '<br><div class="input-file-upload mt-1">' +
+                            '<div class="btn-group" role="group" aria-label="Button group with nested dropdown">' +
+                            '<span class="upload-label">Seleccionar Imagen</span>' +
+                            '<input type="file" id="file_estudiante_img_' + item.sa_est_id + '" name="file_estudiante_img_' + item.sa_est_id + '" onchange="readURL(this,' + item.sa_est_id + ');" />' +
+                            '<input type="hidden" id="name_img" name="name_img" value="' + item.sa_est_cedula + '" />' +
+                            '<input type="hidden" id="txt_idEst" name="txt_idEst" value="' + item.sa_est_id + '" />' +
+                            '<div class="btn-group" role="group">' +
+                            '<button type="button" class="btn btn-outline-primary" title="subir imagen" onclick="cargar_img_alumno(' + item.sa_est_id + ')" ><i class="bx bx-upload me-0"></i></button>' +
+                            '</div>' +
+                            '</div>' +
+                            '</div>' +
+                        <?php } ?> '</div>' +
+                        '</form>' +
                         '<h5 class="mb-0 mt-3">' + item.sa_est_primer_apellido + ' ' + item.sa_est_segundo_apellido + ' ' + item.sa_est_primer_nombre + ' ' + item.sa_est_segundo_nombre + '</h5>' +
                         '<p class="mb-0">' + item.sa_est_cedula + '</p>' +
                         '<p class="mb-0">' + item.sa_est_sexo + '</p>' +
@@ -348,12 +339,12 @@
                         '</div>' +
                         '</div>' +
                         '</div>';
-                    estudiantes2 +=
-                        '<option value="' + item.sa_est_id + '">' + item.sa_est_primer_apellido + ' ' + item.sa_est_segundo_apellido + ' ' + item.sa_est_primer_nombre + ' ' + item.sa_est_segundo_nombre + '</option>';
+                        estudiantes2 +=
+                            '<option value="' + item.sa_est_id + '">' + item.sa_est_primer_apellido + ' ' + item.sa_est_segundo_apellido + ' ' + item.sa_est_primer_nombre + ' ' + item.sa_est_segundo_nombre + '</option>';
 
-                    ids += item.sa_est_id + ',';
+                        ids += item.sa_est_id + ',';
 
-                    contador_alertas_div++;
+                        contador_alertas_div++;
                 });
 
                 $('#card_estudiantes').html(estudiantes);
@@ -499,82 +490,79 @@
         })
     }
 
-    function editar_datos()
-    {
-        parametros = {            
-            'id':$('#txt_id').val(),
-            'tabla':$('#txt_tabla').val(),
-            'nombre1':$('#txt_nombre').val(),
-            'nombre2':$('#txt_nombre2').val(),
-            'apellidos1':$('#txt_apellido').val(),
-            'apellidos2':$('#txt_apellido2').val(),
-            'sexo':$('input [name="cbx_sexo"]:checked').val(),
-            'fecha_n':$('#txt_fecha_nacimiento').val(),
-            'correo':$('#txt_email').val(),
-            'telefono':$('#txt_telefono').val(),
-            'cedula':$('#txt_ci').val(),
+    function editar_datos() {
+        parametros = {
+            'id': $('#txt_id').val(),
+            'tabla': $('#txt_tabla').val(),
+            'nombre1': $('#txt_nombre').val(),
+            'nombre2': $('#txt_nombre2').val(),
+            'apellidos1': $('#txt_apellido').val(),
+            'apellidos2': $('#txt_apellido2').val(),
+            'sexo': $('input [name="cbx_sexo"]:checked').val(),
+            'fecha_n': $('#txt_fecha_nacimiento').val(),
+            'correo': $('#txt_email').val(),
+            'telefono': $('#txt_telefono').val(),
+            'cedula': $('#txt_ci').val(),
         }
-         $.ajax({
-            data: {parametros:parametros},
+        $.ajax({
+            data: {
+                parametros: parametros
+            },
             url: '../controlador/usuariosC.php?editar_datos=true',
             type: 'post',
             dataType: 'json',
             success: function(response) {
-                if(response==1)
-                {
-                    Swal.fire("Datos guardados","","success");
+                if (response == 1) {
+                    Swal.fire("Datos guardados", "", "success");
                     cargarDatos($('#txt_id').val())
-                }else if(response == '-2')
-                {                    
-                    Swal.fire("Usuario no concurrente no asignado","Consulte con su administrador","error");
-                }else{                    
-                    Swal.fire("No se pudo guardar los datos","Consulte con su administrador","error");
+                } else if (response == '-2') {
+                    Swal.fire("Usuario no concurrente no asignado", "Consulte con su administrador", "error");
+                } else {
+                    Swal.fire("No se pudo guardar los datos", "Consulte con su administrador", "error");
                 }
-                
+
             }
         });
 
     }
-    function guardar_credencial()
-    {
-        parametros = {            
-            'id':$('#txt_id').val(),
-            'tabla':$('#txt_tabla').val(),
-            'usuario':$('#txt_usuario').val(),
-            'pass':$('#txt_pass').val(),
+
+    function guardar_credencial() {
+        parametros = {
+            'id': $('#txt_id').val(),
+            'tabla': $('#txt_tabla').val(),
+            'usuario': $('#txt_usuario').val(),
+            'pass': $('#txt_pass').val(),
         }
-         $.ajax({
-            data: {parametros:parametros},
+        $.ajax({
+            data: {
+                parametros: parametros
+            },
             url: '../controlador/usuariosC.php?guardar_credencial=true',
             type: 'post',
             dataType: 'json',
             success: function(response) {
-                if(response==1)
-                {
-                    Swal.fire("Datos guardados","","success");
+                if (response == 1) {
+                    Swal.fire("Datos guardados", "", "success");
                     cargarDatos($('#txt_id').val())
-                }else if(response == '-2')
-                {                    
-                    Swal.fire("Usuario no concurrente no asignado","Consulte con su administrador","error");
-                }else{                    
-                    Swal.fire("No se pudo guardar los datos","Consulte con su administrador","error");
+                } else if (response == '-2') {
+                    Swal.fire("Usuario no concurrente no asignado", "Consulte con su administrador", "error");
+                } else {
+                    Swal.fire("No se pudo guardar los datos", "Consulte con su administrador", "error");
                 }
-                
+
             }
         });
 
     }
-    function pass()
-   {
-     var pa =document.getElementById("txt_pass");
-     if(pa.type == 'password')
-     {
-        pa.type = 'text';
-     }else
-     {
-        pa.type = 'password';
-     }
-   }
+
+    function pass() {
+        var pa = document.getElementById("txt_pass");
+        if (pa.type == 'password') {
+            pa.type = 'text';
+        } else {
+            pa.type = 'password';
+        }
+    }
 </script>
 
 <div class="page-wrapper">
@@ -646,34 +634,34 @@
                                                         <td>
                                                             <div class="input-group">
                                                                 <!-- <i class='bx bxs-id-card'></i> -->
-                                                                 <input type="hidden" name="" id="txt_id" class="form-control form-control-sm" value="0000000000">
-                                                                  <input type="hidden" name="" id="txt_tabla" class="form-control form-control-sm" value="0000000000">
+                                                                <input type="hidden" name="" id="txt_id" class="form-control form-control-sm" value="0000000000">
+                                                                <input type="hidden" name="" id="txt_tabla" class="form-control form-control-sm" value="0000000000">
 
                                                                 <input type="" name="" id="txt_ci" class="form-control form-control-sm" value="0000000000">
                                                             </div>
                                                         </td>
                                                     </tr>
                                                     <tr>
-                                                        <th style="width:40%" class="table-primary text-end">Nombres:</th>
+                                                        <th style="width:40%" class="table-primary text-end">Nombre 1:</th>
                                                         <td>
                                                             <input type="" name="" id="txt_nombre" class="form-control form-control-sm" value="">
                                                         </td>
                                                     </tr>
                                                     <tr>
-                                                        <th style="width:40%" class="table-primary text-end">Nombres 2:</th>
+                                                        <th style="width:40%" class="table-primary text-end">Nombre 2:</th>
                                                         <td>
                                                             <input type="" name="" id="txt_nombre2" class="form-control form-control-sm" value="">
                                                         </td>
                                                     </tr>
                                                     <tr>
-                                                        <th style="width:40%" class="table-primary text-end">Apellido paterno:</th>
-                                                        <td >
+                                                        <th style="width:40%" class="table-primary text-end">Apellido Paterno:</th>
+                                                        <td>
                                                             <input type="" name="" id="txt_apellido" class="form-control form-control-sm" value="">
                                                         </td>
                                                     </tr>
                                                     <tr>
-                                                        <th style="width:40%" class="table-primary text-end">Apellido materno:</th>
-                                                        <td >
+                                                        <th style="width:40%" class="table-primary text-end">Apellido Materno:</th>
+                                                        <td>
                                                             <input type="" name="" id="txt_apellido2" class="form-control form-control-sm" value="">
                                                         </td>
                                                     </tr>
@@ -681,7 +669,9 @@
                                                         <th style="width:40%" class="table-primary text-end">Sexo:</th>
                                                         <td>
 
-                                                            <label><i class='bx bx-female'><input type="radio" id="cbx_fe" name="cbx_sexo" value="Femenino">Femenino</i></label><label><i class='bx bx-male'></i><input type="radio" name="cbx_sexo" id="cbx_ma" value="Masculino">Masculino</label>
+                                                            <label><i class='bx bx-female'><input type="radio" id="cbx_fe" name="cbx_sexo" value="Femenino"> Femenino</i></label>
+                                                            &nbsp;&nbsp;&nbsp;
+                                                            <label><i class='bx bx-male'><input type="radio" name="cbx_sexo" id="cbx_ma" value="Masculino"> Masculino </i></label>
                                                         </td>
                                                     </tr>
                                                     <tr>
@@ -697,18 +687,18 @@
                                                     <tr>
                                                         <th style="width:40%" class="table-primary text-end">Correo Electrónico:</th>
                                                         <td>
-                                                             <input type="" name="" id="txt_email" class="form-control form-control-sm" value="">
+                                                            <input type="" name="" id="txt_email" class="form-control form-control-sm" value="">
                                                         </td>
                                                     </tr>
                                                     <tr>
                                                         <th style="width:40%" class="table-primary text-end">Teléfono:</th>
                                                         <td>
                                                             <input type="" name="" id="txt_telefono" class="form-control form-control-sm" value="">
-                                                    </td>
+                                                        </td>
                                                     </tr>
                                                     <tr>
                                                         <td colspan="2" class="text-end">
-                                                           <button class="btn btn-sm btn-primary" onclick="editar_datos()">Guardar</button>
+                                                            <button class="btn btn-sm btn-primary" onclick="editar_datos()">Guardar</button>
                                                         </td>
                                                     </tr>
                                                 </tbody>
@@ -718,41 +708,42 @@
                                     <div class="col-sm-6">
                                         <div class="d-flex flex-column align-items-center text-center">
                                             <form id="form_img">
-                                            <?php if($_SESSION['INICIO']['TIPO']=='DBA' && $_SESSION["INICIO"]['LOGO']!=''){ ?>
-                                                <img id="img_rep" src="<?php echo $_SESSION["INICIO"]['FOTO']; ?>" alt="Admin" class="rounded-circle p-1 bg-primary" style="width: 250px;height: 250px;">
-                                            <?php }else{ ?>
-                                                <img id="img_rep" src="../img/sin_imagen.jpg" alt="Admin" class="rounded-circle p-1 bg-primary" style="width: 250px;height: 250px;">
-                                            <?php } ?>
+                                                <?php if ($_SESSION['INICIO']['TIPO'] == 'DBA' && $_SESSION["INICIO"]['LOGO'] != '') { ?>
+                                                    <img id="img_rep" src="<?php echo $_SESSION["INICIO"]['FOTO']; ?>" alt="Admin" class="rounded-circle p-1 bg-primary" style="width: 250px;height: 250px;">
+                                                <?php } else { ?>
+                                                    <img id="img_rep" src="../img/sin_imagen.jpg" alt="Admin" class="rounded-circle p-1 bg-primary" style="width: 250px;height: 250px;">
+                                                <?php } ?>
                                                 <div class="mt-3">
-                                                    <?php if($_SESSION['INICIO']['TIPO']!='DBA'){ ?>
-                                                    <div class="row">
-                                                        <div class="col-sm-8">
-                                                            <input type="file" id="file_img"  name="file_img" class="form-control form-control-sm" onchange="readURLRep(this)"> 
-                                                            <input type="hidden" name="name_img" id="name_img">
-                                                        </div>
-                                                        <div class="col-sm-4">
-                                                            <button type="button" class="btn btn-outline-primary btn-block btn-sm" style="width:100%" id="btn_subir_img_rep">Subir</button>
-                                                        </div>                                                    
-                                                    </div>
-                                                    <div class="row text-start">
-                                                        <div class="col-sm-12">
-                                                            <b>Usuarios</b>
-                                                            <input type="" name="txt_usuario" id="txt_usuario" readonly class="form-control form-control-sm">
-                                                        </div>
-                                                        <div class="col-sm-12">
-                                                            <b>Contraseña</b>
-                                                            <div class="input-group mb-3">
-                                                               <input type="password" class="form-control form-control-sm" name="txt_pass" id="txt_pass" required="">
-                                                                   <button type="button" class="btn btn-info btn-flat btn-sm" onclick="pass()"><i class="lni lni-eye" id="eye"></i></button>  
+                                                    <?php if ($_SESSION['INICIO']['TIPO'] != 'DBA') { ?>
+                                                        <div class="row">
+                                                            <div class="col-sm-8">
+                                                                <input type="file" id="file_img" name="file_img" class="form-control form-control-sm" onchange="readURLRep(this)">
+                                                                <input type="hidden" name="name_img" id="name_img">
+                                                            </div>
+                                                            <div class="col-sm-4">
+                                                                <button type="button" class="btn btn-outline-primary btn-block btn-sm" style="width:100%" id="btn_subir_img_rep">Subir</button>
                                                             </div>
                                                         </div>
-                                                        <div class="col-sm-12 text-end">
-                                                            <button type="button" class="btn-sm btn-primary btn" onclick="guardar_credencial()">Guardar Credenciales</button>
-                                                            <?php //print_r($_SESSION['INICIO']); ?>
+                                                        <div class="row text-start pt-3">
+                                                            <div class="col-sm-12 mb-3">
+                                                                <label for="" class="form-label fw-bold"> Usuario <label style="color: red;">*</label> </label>
+                                                                <input type="" name="txt_usuario" id="txt_usuario" readonly class="form-control form-control-sm">
+                                                            </div>
+                                                            <div class="col-sm-12 mb-3">
+                                                                <label for="" class="form-label fw-bold"> Contraseña <label style="color: red;">*</label> </label>
+                                                                <div class="input-group mb-3">
+                                                                    <input type="password" class="form-control form-control-sm" name="txt_pass" id="txt_pass" required="">
+                                                                    <button type="button" class="btn btn-info btn-flat btn-sm" onclick="pass()"><i class="lni lni-eye" id="eye"></i></button>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-12 text-end">
+                                                                <button type="button" class="btn-sm btn-primary btn" onclick="guardar_credencial()">Guardar Credenciales</button>
+                                                                <?php //print_r($_SESSION['INICIO']); 
+                                                                ?>
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                <?php } ?>
-                                                     
+                                                    <?php } ?>
+
                                                 </div>
                                             </form>
                                         </div>
@@ -784,14 +775,14 @@
                                     <span class="badge rounded-pill bg-warning"><i class="bx bx-info-circle"></i>Seccion exclusiva para agregar seguros medicos adicionales a los que existen en la institucion </span>
 
                                     <div class="col-sm-8">
-                                    <br>
+                                        <br>
                                         <div class="row">
-                                            <div class="col-sm-12">
-                                                <b>Nombre de Proveedor</b>
+                                            <div class="col-sm-12 mb-2">
+                                                <label for="" class=" fw-bold"> Nombre del Proveedor </label>
                                                 <input type="text" name="" id="txtSeguroProveedorNew" class="form-control form-control-sm">
                                             </div>
-                                            <div class="col-sm-12">
-                                                <b>Nombre de seguro</b>
+                                            <div class="col-sm-12 mb-2">
+                                                <label for="" class=" fw-bold"> Nombre del Seguro </label>
                                                 <input type="text" name="" id="txtSeguroNombreNew" class="form-control form-control-sm">
                                             </div>
                                             <div class="col-sm-12">
@@ -818,13 +809,13 @@
                                         <br><br>
                                         <button type="button" class="btn btn-primary btn-sm" onclick="SaveNewSeguro()"><i class="bx bx-save me-0"></i> Guardar</button>
                                     </div>
-                                    <div class="col-sm-12">
-                                        <div class="table-responsive">
+                                    <div class="col-sm-12 pt-3">
+                                        <div class="table-responsive table">
                                             <table class="table">
                                                 <thead>
                                                     <th></th>
                                                     <th>Proveedor</th>
-                                                    <th>Nombre del seguro</th>
+                                                    <th>Nombre del Seguro</th>
                                                     <th>Estudiante</th>
                                                 </thead>
                                                 <tbody id="tbl_body">

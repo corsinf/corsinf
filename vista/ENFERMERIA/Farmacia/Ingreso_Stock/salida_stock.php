@@ -47,12 +47,10 @@
                 {
                     data: null,
                     render: function(data, type, item) {
-                        if(item.Tipo=='Insumos')
-                        {
-                        return '<a href="../vista/inicio.php?mod=7&acc=registrar_insumos&id=' + item.id_ar + '" target="_blank"><u>' + item.Productos + '</u></a>';
-                        }else
-                        {
-                             return '<a href="../vista/inicio.php?mod=7&acc=registrar_medicamentos&id=' + item.id_ar + '" target="_blank"><u>' + item.Productos + '</u></a>';
+                        if (item.Tipo == 'Insumos') {
+                            return '<a href="../vista/inicio.php?mod=7&acc=registrar_insumos&id=' + item.id_ar + '" target="_blank"><u>' + item.Productos + '</u></a>';
+                        } else {
+                            return '<a href="../vista/inicio.php?mod=7&acc=registrar_medicamentos&id=' + item.id_ar + '" target="_blank"><u>' + item.Productos + '</u></a>';
                         }
                     }
                 },
@@ -74,7 +72,7 @@
                 {
                     data: 'Orden'
                 },
-                
+
             ],
             dom: '<"top"Bfr>t<"bottom"lip>',
             buttons: [
@@ -481,7 +479,6 @@
 
                                                 <div class="row">
 
-<<<<<<< HEAD
                                                     <div class="col-sm-5">
 
                                                         <div class="col-12 mb-3">
@@ -544,115 +541,75 @@
                                                             </div>
                                                         </div>
 
-
-
                                                     </div>
                                                 </div>
 
-                                            </div>
 
+                                                <div class="row mt-2">
+                                                    <div class="col-sm-12">
+                                                        <div class="table-responsive">
+                                                            <table class="table table-bordered table-hover" id="lista_medicamentos">
+                                                                <thead>
+                                                                    <th width="10%"></th>
+                                                                    <th width="20%">Tipo</th>
+                                                                    <th width="25%">Entregado a</th>
+                                                                    <th width="25%">Tipo farmaco</th>
+                                                                    <th width="15%">Farmacología</th>
+                                                                    <th width="8%">Cantidad</th>
+                                                                </thead>
+                                                                <tbody id="tbl_body">
+                                                                </tbody>
 
-                                            <div class="row mt-2 pt-3">
-                                                <div class="col-sm-12">
-                                                    <div class="table-responsive">
-                                                        <table class="table table-bordered table-hover" id="lista_medicamentos">
-                                                            <thead>
-                                                                <th width="10%"></th>
-                                                                <th width="20%">Tipo</th>
-                                                                <th width="25%">Entregado a</th>
-                                                                <th width="25%">Tipo farmaco</th>
-                                                                <th width="15%">Farmacología</th>
-                                                                <th width="8%">Cantidad</th>
-                                                            </thead>
-                                                            <tbody id="tbl_body">
-                                                            </tbody>
-
-                                                        </table>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-12 text-end mt-1">
+                                                        <button type="button" class="btn btn-primary btn-sm" onclick="ingresar_salida()">Generar salida</button>
                                                     </div>
                                                 </div>
-                                                <div class="col-sm-12 text-end mt-1">
-                                                    <button type="button" class="btn btn-primary btn-sm" onclick="ingresar_salida()">Generar salida</button>
+                                            </div>
+                                            <div class="tab-pane fade" id="kardex" role="tabpanel">
+                                                <div class="row">
+                                                    <div class="col-sm-8" id="btn_nuevo">
+
+                                                    </div>
+                                                    <div class="col-sm-4 text-end" id="pnl_exportar">
+
+                                                    </div>
+                                                </div>
+                                                <div class="table-responsive">
+                                                    <table class="table table-striped responsive " id="tabla_todos" style="width:100%">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>#</th>
+                                                                <th>Fecha Ingreso</th>
+                                                                <th>Productos</th>
+                                                                <th>Tipo</th>
+                                                                <th>Entrada</th>
+                                                                <th>Salida</th>
+                                                                <th>Precio</th>
+                                                                <th>Stock</th>
+                                                                <th>Orden</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+
+                                                        </tbody>
+                                                    </table>
                                                 </div>
                                             </div>
+
                                         </div>
-                                        <div class="tab-pane fade" id="kardex" role="tabpanel">
-                                            <div class="row">
-                                                <div class="col-sm-8" id="btn_nuevo">
-
-                                                </div>
-                                                <div class="col-sm-4 text-end" id="pnl_exportar">
-
-                                                </div>
-                                            </div>
-                                            <div class="table-responsive">
-                                                <table class="table table-striped responsive " id="tabla_todos" style="width:100%">
-                                                    <thead>
-                                                        <tr>
-                                                            <th>#</th>
-                                                            <th>Fecha Ingreso</th>
-                                                            <th>Productos</th>
-                                                            <th>Tipo</th>
-                                                            <th>Entrada</th>
-                                                            <th>Salida</th>
-                                                            <th>Precio</th>
-                                                            <th>Stock</th>
-                                                            <th>Serie</th>
-                                                            <th>Factura</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        </div>
-=======
-						                                            </table>
-						                                    	</div>	                                    	
-					                                    	</div>
-					                                    	<div class="col-sm-12 text-end mt-1">
-					                                    		<button type="button" class="btn btn-primary btn-sm" onclick="ingresar_salida()" >Generar salida</button>
-					                                    	</div>
-					                                    </div>
-												</div>
-												<div class="tab-pane fade" id="kardex" role="tabpanel">
-													<div class="row">
-				                                        <div class="col-sm-8" id="btn_nuevo">
-				                                        	
-				                                        </div>
-				                                        <div class="col-sm-4 text-end" id="pnl_exportar">
-				                                            
-				                                        </div>                                        
-				                                    </div>
-													<div class="table-responsive">
-				                                        <table class="table table-striped responsive " id="tabla_todos" style="width:100%">
-				                                            <thead>
-				                                                <tr>
-				                                                    <th>#</th>
-				                                                    <th>Fecha Ingreso</th>
-				                                                    <th>Productos</th>
-				                                                    <th>Tipo</th>
-				                                                    <th>Entrada</th>
-				                                                    <th>Salida</th>
-				                                                    <th>Precio</th>
-				                                                    <th>Stock</th>
-				                                                    <th>Orden</th>
-				                                                </tr>
-				                                            </thead>
-				                                            <tbody>
->>>>>>> 4f31380b28051e3bb3c24f8c85f8193ecdd58cef
-
                                     </div>
                                 </div>
-                            </div>
 
-                            <br>
-                        </div><!-- /.container-fluid -->
-                        <!-- /.content -->
+                                <br>
+                            </div><!-- /.container-fluid -->
+                            <!-- /.content -->
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 </div>
