@@ -36,7 +36,13 @@
                 {
                     data: null,
                     render: function(data, type, item) {
-                        return '<a href="../vista/inicio.php?mod=7&acc=registrar_insumos&id=' + item.id_ar + '"><u>' + item.Productos + '</u></a>';
+                        if(item.Tipo=='Insumos')
+                        {
+                        return '<a href="../vista/inicio.php?mod=7&acc=registrar_insumos&id=' + item.id_ar + '" target="_blank"><u>' + item.Productos + '</u></a>';
+                        }else
+                        {
+                             return '<a href="../vista/inicio.php?mod=7&acc=registrar_medicamentos&id=' + item.id_ar + '" target="_blank"><u>' + item.Productos + '</u></a>';
+                        }
                     }
                 },
                 {

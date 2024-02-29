@@ -325,6 +325,9 @@ if ($_GET['acc'] == 'ingreso_stock') {
 if ($_GET['acc'] == 'salida_stock') {
 	include('ENFERMERIA/Farmacia/Ingreso_Stock/salida_stock.php');
 }
+if ($_GET['acc'] == 'movimiento_stock') {
+	include('ENFERMERIA/Farmacia/Ingreso_Stock/movimiento_stock.php');
+}
 
 //Notificaciones
 

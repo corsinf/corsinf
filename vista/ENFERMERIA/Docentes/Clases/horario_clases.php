@@ -357,8 +357,8 @@ if ($id != null && $id != '') {
 
                                 <div class="row pt-3">
                                     <div class="col-4">
-                                        <label for="ac_horarioD_fecha_disponible">Curso: <label class="text-danger">*</label></label>
-                                        <select name="ac_paralelo_id_busqueda" id="ac_paralelo_id_busqueda" class="form-select form-select-sm" onclick="cargar_solo_paralelos_seleccionados();">
+                                        <label for="ac_horarioD_fecha_disponible">Curso <label class="text-danger">*</label></label>
+                                        <select name="ac_paralelo_id_busqueda" id="ac_paralelo_id_busqueda" class="form-select form-select-sm" onchange="cargar_solo_paralelos_seleccionados();">
                                         </select>
                                     </div>
                                 </div>
@@ -397,7 +397,7 @@ if ($id != null && $id != '') {
 
                 <div class="row">
                     <div class="col-12">
-                        <label for="ac_horarioC_materia">Materia: <label class="text-danger">*</label></label>
+                        <label for="ac_horarioC_materia">Materia <label class="text-danger">*</label></label>
                         <select name="ac_horarioC_materia" id="ac_horarioC_materia" class="form-select form-select-sm">
                             <option selected disabled>-- Seleccione una Materia --</option>
                             <option value="matematicas">Matemáticas</option>
@@ -415,7 +415,7 @@ if ($id != null && $id != '') {
 
                 <div class="row pt-3">
                     <div class="col-12">
-                        <label for="ac_horarioC_dia">Día: <label class="text-danger">*</label></label>
+                        <label for="ac_horarioC_dia">Día <label class="text-danger">*</label></label>
                         <select name="ac_horarioC_dia" id="ac_horarioC_dia" class="form-select form-select-sm">
                             <option selected disabled>-- Seleccione un Día --</option>
                             <option value="lunes">Lunes</option>
@@ -430,7 +430,7 @@ if ($id != null && $id != '') {
 
                 <div class="row pt-3">
                     <div class="col-12">
-                        <label for="ac_horarioC_dia">Clase: <label class="text-danger">*</label></label>
+                        <label for="ac_horarioC_dia">Clase <label class="text-danger">*</label></label>
                         <select name="ac_paralelo_id" id="ac_paralelo_id" class="form-select form-select-sm">
                             <option selected disabled>-- Seleccione una Clase --</option>
                         </select>
@@ -440,19 +440,19 @@ if ($id != null && $id != '') {
                 <div class="row pt-3">
 
                     <div class="col-4">
-                        <label for="ac_horarioC_inicio">Inicio de la Clase: <label class="text-danger">*</label></label>
+                        <label for="ac_horarioC_inicio">Inicio de la Clase <label class="text-danger">*</label></label>
                         <input type="time" name="ac_horarioC_inicio" id="ac_horarioC_inicio" class="form-control form-control-sm">
                     </div>
 
                     <div class="col-4">
-                        <label for="ac_horarioC_fin">Fin de la Clase: <label class="text-danger">*</label></label>
+                        <label for="ac_horarioC_fin">Fin de la Clase <label class="text-danger">*</label></label>
                         <input type="time" name="ac_horarioC_fin" id="ac_horarioC_fin" class="form-control form-control-sm">
                     </div>
                 </div>
 
                 <div class="row pt-3">
                     <div class="col-12 text-end">
-                        <button type="submit" class="btn btn-success btn-sm" onclick="agregar_clase()"><i class="bx bx-save"></i> Agregar</button>
+                        <button type="submit" class="btn btn-success btn-sm" onclick="agregar_clase();"><i class="bx bx-save"></i> Agregar</button>
                     </div>
                 </div>
 

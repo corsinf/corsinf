@@ -512,16 +512,16 @@ if ($id != null && $id != '') {
             <!-- Modal body -->
             <div class="modal-body">
 
-                <div class="row">
+                <div class="row" hidden>
                     <div class="col-12">
-                        <label for="ac_horarioD_materia">Disponibilidad: <label class="text-danger">*</label></label>
+                        <label for="ac_horarioD_materia">Disponibilidad <label class="text-danger">*</label></label>
                         <input type="text" name="ac_horarioD_materia" id="ac_horarioD_materia" value="Disponible" class="form-control form-control-sm" readonly>
                     </div>
                 </div>
 
-                <div class="row pt-3">
+                <div class="row">
                     <div class="col-12">
-                        <label for="ac_horarioD_fecha_disponible">Día: <label class="text-danger">*</label></label>
+                        <label for="ac_horarioD_fecha_disponible">Día <label class="text-danger">*</label></label>
                         <input type="date" name="ac_horarioD_fecha_disponible" id="ac_horarioD_fecha_disponible" class="form-control form-control-sm" min="" required>
                         <script>
                             var fechaActual = new Date().toISOString().split('T')[0];
@@ -532,7 +532,7 @@ if ($id != null && $id != '') {
 
                 <div class="row pt-3">
                     <div class="col-12">
-                        <label for="ac_horarioD_fecha_disponible">Cubículo: <label class="text-danger">*</label></label>
+                        <label for="ac_horarioD_fecha_disponible">Cubículo <label class="text-danger">*</label></label>
                         <select name="ac_horarioD_ubicacion" id="ac_horarioD_ubicacion" class="form-select form-select-sm">
                             <option selected disabled>-- Seleccione un Cubículo --</option>
                             <option value="Cubículo 1">Cubículo 1</option>
@@ -546,13 +546,13 @@ if ($id != null && $id != '') {
 
                 <div class="row pt-3">
 
-                    <div class="col-4">
-                        <label for="ac_horarioD_inicio">Inicio de la Hora Turno: <label class="text-danger">*</label></label>
+                    <div class="col-6">
+                        <label for="ac_horarioD_inicio">Inicio de la Hora Turno <label class="text-danger">*</label></label>
                         <input type="time" name="ac_horarioD_inicio" id="ac_horarioD_inicio" class="form-control form-control-sm">
                     </div>
 
-                    <div class="col-4">
-                        <label for="ac_horarioD_fin">Fin de la Hora de Turno: <label class="text-danger">*</label></label>
+                    <div class="col-6">
+                        <label for="ac_horarioD_fin">Fin de la Hora de Turno <label class="text-danger">*</label></label>
                         <input type="time" name="ac_horarioD_fin" id="ac_horarioD_fin" class="form-control form-control-sm">
                     </div>
                 </div>

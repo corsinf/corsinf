@@ -1,7 +1,7 @@
 <?php @session_start();
-// print_r($_SESSION['INICIO']);
+// print_r($_SESSION['INICIO']);die();
 $tiempo_inactividad = 2 * 60;
-if(!isset($_SESSION['INICIO'])){header('Location: ../login.php');}
+if(!isset($_SESSION['INICIO']) || !isset($_SESSION['INICIO']['NO_CONCURENTE'])){header('Location: ../login.php');}
 // if (isset($_SESSION['INICIO']['ULTIMO_ACCESO']) && (time() - $_SESSION['INICIO']['ULTIMO_ACCESO'] > $tiempo_inactividad)) {
 //     // Cerrar la sesión
 //     session_unset();

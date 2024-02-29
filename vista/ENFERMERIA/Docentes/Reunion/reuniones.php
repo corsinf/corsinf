@@ -254,7 +254,7 @@ if ($id != null && $id != '') {
 
                 <div class="row">
                     <div class="col-12">
-                        <label for="ac_horarioC_materia">Motivo de la Reunión: <label class="text-danger">*</label></label>
+                        <label for="ac_horarioC_materia">Motivo de la Reunión <label class="text-danger">*</label></label>
                         <input type="text" id="ac_reunion_motivo" name="ac_reunion_motivo" class="form-control form-control-sm" disabled>
 
                     </div>
@@ -262,22 +262,20 @@ if ($id != null && $id != '') {
 
                 <div class="row pt-3">
                     <div class="col-12">
-                        <label for="ac_horarioD_fecha_disponible">Estado de la Reunión: <label class="text-danger">*</label></label>
+                        <label for="ac_horarioD_fecha_disponible">Estado de la Reunión <label class="text-danger">*</label></label>
                         <select name="ac_reunion_estado" id="ac_reunion_estado" class="form-select form-select-sm">
                             <option value="0" selected disabled>-- Seleccione --</option>
                             <option value="1">Completa</option>
                             <option value="2">Docente Anula</option>
                             <option value="3">Representante Ausente</option>
-
-
                         </select>
                     </div>
                 </div>
 
                 <div class="row pt-3">
                     <div class="col-12">
-                        <label for="ac_horarioC_materia">Observación: <label class="text-danger">*</label></label>
-                        <input type="text" id="ac_reunion_observacion" name="ac_reunion_observacion" class="form-control form-control-sm">
+                        <label for="ac_horarioC_materia">Observaciones <label class="text-danger">*</label></label>
+                        <textarea name="ac_reunion_observacion" id="ac_reunion_observacion" cols="30" rows="2" class="form-control form-control-sm"></textarea>
                     </div>
                 </div>
 
@@ -288,9 +286,6 @@ if ($id != null && $id != '') {
                         <button type="submit" class="btn btn-success btn-sm" onclick="guardar_obs()"><i class="bx bx-save"></i> Guardar</button>
                     </div>
                 </div>
-
-
-
             </div>
         </div>
     </div>

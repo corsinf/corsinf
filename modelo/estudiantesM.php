@@ -214,7 +214,7 @@ class estudiantesM
             $sql .= " ORDER BY sa_est_id;";
             $datos = $this->db->datos($sql);
         } else {
-            $datos = 'Falta ID Respresentante';
+            $datos = 'Falta ID Representante';
         }
 
 
