@@ -11,7 +11,7 @@
             },
             responsive: true,
             ajax: {
-                url: '../controlador/ingreso_stockC.php?lista_kardex=true',
+                url: '../controlador/salida_stockC.php?lista_kardex=true',
                 dataSrc: ''
             },
             columns: [{
@@ -47,7 +47,13 @@
                 {
                     data: null,
                     render: function(data, type, item) {
-                        return '<a href="../vista/inicio.php?mod=7&acc=registrar_insumos&id=' + item.id_ar + '"><u>' + item.Productos + '</u></a>';
+                        if(item.Tipo=='Insumos')
+                        {
+                        return '<a href="../vista/inicio.php?mod=7&acc=registrar_insumos&id=' + item.id_ar + '" target="_blank"><u>' + item.Productos + '</u></a>';
+                        }else
+                        {
+                             return '<a href="../vista/inicio.php?mod=7&acc=registrar_medicamentos&id=' + item.id_ar + '" target="_blank"><u>' + item.Productos + '</u></a>';
+                        }
                     }
                 },
                 {
@@ -66,11 +72,9 @@
                     data: 'Stock'
                 },
                 {
-                    data: 'Serie'
+                    data: 'Orden'
                 },
-                {
-                    data: 'Factura'
-                },
+                
             ],
             dom: '<"top"Bfr>t<"bottom"lip>',
             buttons: [
@@ -477,6 +481,7 @@
 
                                                 <div class="row">
 
+<<<<<<< HEAD
                                                     <div class="col-sm-5">
 
                                                         <div class="col-12 mb-3">
@@ -601,6 +606,41 @@
                                                 </table>
                                             </div>
                                         </div>
+=======
+						                                            </table>
+						                                    	</div>	                                    	
+					                                    	</div>
+					                                    	<div class="col-sm-12 text-end mt-1">
+					                                    		<button type="button" class="btn btn-primary btn-sm" onclick="ingresar_salida()" >Generar salida</button>
+					                                    	</div>
+					                                    </div>
+												</div>
+												<div class="tab-pane fade" id="kardex" role="tabpanel">
+													<div class="row">
+				                                        <div class="col-sm-8" id="btn_nuevo">
+				                                        	
+				                                        </div>
+				                                        <div class="col-sm-4 text-end" id="pnl_exportar">
+				                                            
+				                                        </div>                                        
+				                                    </div>
+													<div class="table-responsive">
+				                                        <table class="table table-striped responsive " id="tabla_todos" style="width:100%">
+				                                            <thead>
+				                                                <tr>
+				                                                    <th>#</th>
+				                                                    <th>Fecha Ingreso</th>
+				                                                    <th>Productos</th>
+				                                                    <th>Tipo</th>
+				                                                    <th>Entrada</th>
+				                                                    <th>Salida</th>
+				                                                    <th>Precio</th>
+				                                                    <th>Stock</th>
+				                                                    <th>Orden</th>
+				                                                </tr>
+				                                            </thead>
+				                                            <tbody>
+>>>>>>> 4f31380b28051e3bb3c24f8c85f8193ecdd58cef
 
                                     </div>
                                 </div>

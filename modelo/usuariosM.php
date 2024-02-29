@@ -69,7 +69,7 @@ class usuariosM
 
 	function lista_usuarios($id=false,$query=false,$tipo=false,$ci=false,$email=false)
 	{
-		$sql="SELECT id_usuarios as 'id',ci_ruc as 'ci',nombres as 'nombre',apellidos as 'apellido',nombres +' '+apellidos as 'nom', direccion as 'direccion',telefono as 'telefono',password as 'pass',email as 'email', T.ID_TIPO as 'idt',DESCRIPCION as 'tipo',foto,link_fb,link_gmail,link_ins,link_tw,link_web 
+		$sql="SELECT id_usuarios as 'id',ci_ruc as 'ci',nombres as 'nombre',apellidos as 'apellido',nombres +' '+apellidos as 'nom', direccion as 'direccion',telefono as 'telefono',password as 'pass',email as 'email', T.ID_TIPO as 'idt',DESCRIPCION as 'tipo',foto,link_fb,link_gmail,link_ins,link_tw,link_web,usu=null 
 			FROM ACCESOS_EMPRESA UT
 			RIGHT JOIN USUARIOS U ON UT.ID_USUARIO = U.id_usuarios 
 			LEFT JOIN TIPO_USUARIO T ON UT.ID_TIPO_USUARIO = T.ID_TIPO
@@ -200,6 +200,35 @@ class usuariosM
 
 		// la lista de usuarios la busca en la base de datos especifica
 		$datos = $this->db->datos($sql,1);
+		return $datos;
+	}
+
+	function credenciales_no_concurentes_campos()
+	{
+		$usuario= $_SESSION['INICIO']['NO_CONCURENTE'];
+		$tabla= $_SESSION['INICIO']['NO_CONCURENTE_TABLA'];
+		$campo= $_SESSION['INICIO']['NO_CONCURENTE_TABLA_ID'];
+		$empresa = $_SESSION['INICIO']['ID_EMPRESA'];
+
+		$sql = "SELECT Campo_Usuario as 'usu',Campo_pass as 'pass'
+		FROM TABLAS_NOCONCURENTE
+		WHERE Tabla = '".$tabla."'
+		AND Id_Empresa = '".$empresa."'
+		AND Id_Usuario = '".$usuario."'";
+		$datos = $this->db->datos($sql,1);
+		return $datos;
+	}
+	function credenciales_no_concurentes_datos($campo_usu,$campo_pass)
+	{
+		$usuario= $_SESSION['INICIO']['NO_CONCURENTE'];
+		$tabla= $_SESSION['INICIO']['NO_CONCURENTE_TABLA'];
+		$campo= $_SESSION['INICIO']['NO_CONCURENTE_TABLA_ID'];
+		$empresa = $_SESSION['INICIO']['ID_EMPRESA'];
+
+		$sql = "SELECT ".$campo_usu." as usuario ,".$campo_pass." as 'pass'
+		FROM ".$tabla."
+		WHERE ".$_SESSION['INICIO']['NO_CONCURENTE_TABLA_ID']." = '".$usuario."'";
+		$datos = $this->db->datos($sql);
 		return $datos;
 	}
 

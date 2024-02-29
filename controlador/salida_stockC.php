@@ -33,6 +33,14 @@ if(isset($_GET['lista_kardex']))
 {
 	echo json_encode($controlador->lista_kardex());
 }
+if(isset($_GET['lista_kardex_entrada']))
+{
+	echo json_encode($controlador->lista_kardex_entrada());
+}
+if(isset($_GET['lista_kardex_all']))
+{
+	echo json_encode($controlador->lista_kardex_all());
+}
 
 class salida_stockC
 {
@@ -67,5 +75,23 @@ class salida_stockC
 				break;
 		}
 		return $lista;
+	}
+	function lista_kardex()
+	{
+		$datos = $this->modelo->lista_kardex(false,1);
+		// print_r($datos);die();
+		return $datos;
+	}
+	function lista_kardex_entrada()
+	{
+		$datos = $this->modelo->lista_kardex(1,false);
+		// print_r($datos);die();
+		return $datos;
+	}
+	function lista_kardex_all()
+	{
+		$datos = $this->modelo->lista_kardex();
+		// print_r($datos);die();
+		return $datos;
 	}
 }

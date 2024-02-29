@@ -3,7 +3,12 @@
 include('../cabeceras/header.php');
 
 if ($_GET['acc'] == 'perfil') {
-	include('perfil.php');
+	if($_SESSION['INICIO']['NO_CONCURENTE']=='')
+	{
+		include('perfil.php');
+	}else{		
+		include('perfil_no_concurente.php');
+	}
 }
 if ($_GET['acc'] == 'descargas') {
 	include('ACTIVOS/descargas.php');
@@ -319,6 +324,9 @@ if ($_GET['acc'] == 'ingreso_stock') {
 }
 if ($_GET['acc'] == 'salida_stock') {
 	include('ENFERMERIA/Farmacia/Ingreso_Stock/salida_stock.php');
+}
+if ($_GET['acc'] == 'movimiento_stock') {
+	include('ENFERMERIA/Farmacia/Ingreso_Stock/movimiento_stock.php');
 }
 
 //Notificaciones

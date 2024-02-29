@@ -2,6 +2,7 @@
 	var tablaAll;
 	var tablaMedi;
 	var tablaInsu;
+<<<<<<< HEAD
 	$(document).ready(function() {
 		lista_proveedor();
 		tablaAll = $('#tabla_todos').DataTable({
@@ -83,6 +84,84 @@
 				});
 			}
 		});
+=======
+    $(document).ready(function() {
+    	lista_proveedor();
+    	tablaAll = $('#tabla_todos').DataTable({
+            language: {
+                url: 'https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
+            },
+            responsive: true,
+            ajax: {
+                url: '../controlador/ingreso_stockC.php?lista_kardex=true',
+                dataSrc: ''
+            },
+              columns: [
+                { data: null, searchable: false }, // #
+                { data: null, searchable: true },  // Fecha 
+                { data: null, searchable: true }, // Producto
+                { data: null, searchable: true }, // Tipo
+                // ... el resto de columnas
+              ],
+            columns: [{
+                    data: null,
+                    render: function(data, type, item, meta) {
+                        return meta.row + 1;
+                    }
+                },
+                {
+                    data: null,
+                    render: function(data, type, item) {
+                        return formatoDate(item.Fecha.date);
+                    }
+                },
+                {
+                    data: null,
+                    render: function(data, type, item) {
+                        if(item.Tipo=='Insumos')
+                        {
+                        return '<a href="../vista/inicio.php?mod=7&acc=registrar_insumos&id=' + item.id_ar + '" target="_blank"><u>' + item.Productos + '</u></a>';
+                        }else
+                        {
+                             return '<a href="../vista/inicio.php?mod=7&acc=registrar_medicamentos&id=' + item.id_ar + '" target="_blank"><u>' + item.Productos + '</u></a>';
+                        }
+                    }
+                },
+                {
+                    data: 'Tipo'
+                },
+                {
+                    data: 'Entrada'
+                },
+                {
+                    data: 'Salida'
+                },
+                {
+                    data: 'Precio'
+                },
+                {
+                    data: 'Stock'
+                },
+                {
+                    data: 'Serie'
+                },
+                {
+                    data: 'Factura'
+                },
+            ],
+            dom: '<"top"Bfr>t<"bottom"lip>',
+		    buttons: [
+		        'excel', 'pdf' // Configura los botones que deseas
+		    ],
+            initComplete: function() {
+                // Mover los botones al contenedor personalizado
+                $('#pnl_exportar').append($('.dt-buttons'));
+                $('#tabla_todos_filter input').unbind().bind('input', function() {
+                    buscarExacto($(this).val());
+                });
+            }
+        });
+>>>>>>> 4f31380b28051e3bb3c24f8c85f8193ecdd58cef
 
 
 		function buscarExacto(valorABuscar) {
@@ -126,6 +205,7 @@
 		});
 
 
+<<<<<<< HEAD
 		tablaMedi = $('#tabla_medicamentos').DataTable({
 			language: {
 				url: 'https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
@@ -161,6 +241,17 @@
 				}
 			]
 		});
+=======
+	  	 $('#ddl_lista_productos').on('select2:select', function (e) {
+	  	 	  var data = e.params.data.data;
+              if($('#ddl_tipo').val()!='Insumos'){
+              $("#txt_existencias").val(data.sa_cmed_stock)
+          }else{
+              $("#txt_existencias").val(data.sa_cins_stock)
+	  	 	  console.log(data);
+            }
+	  	 })
+>>>>>>> 4f31380b28051e3bb3c24f8c85f8193ecdd58cef
 
 
 		$('#ddl_lista_productos').on('select2:select', function(e) {
@@ -240,12 +331,23 @@
 			let sub = (pre * cant);
 			let dscto = (sub * des) / 100;
 
+<<<<<<< HEAD
 			let total = (sub - dscto);
 			let sub_val = sub - dscto;
 			$('#txt_subtotal').val(sub_val.toFixed(2));
 			$('#txt_total').val(total.toFixed(2));
 		}
 	}
+=======
+     var ddl = $('#ddl_tipo option:selected').text();
+     var datos = datos+'&ddl_tipo='+ddl;
+     
+     if($('#ddl_proveedor').val()=='' || $('#ddl_lista_productos').val()==''  || $('#ddl_lista_productos').val()==null || $('#txt_precio').val()=='0' || $('#txt_precio').val()=='' || $('#txt_serie').val()=='' || $('#txt_factura').val()=='' || $('#txt_fecha_ela').val()=='' || $('#txt_fecha_exp').val()=='')
+     {
+       Swal.fire('','Llene todo los campos.','info');   
+      return false;
+     }
+>>>>>>> 4f31380b28051e3bb3c24f8c85f8193ecdd58cef
 
 	function guardar_producto() {
 		var datos = $("#form_nuevo_producto").serialize();

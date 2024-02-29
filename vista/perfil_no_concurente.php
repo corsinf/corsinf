@@ -64,49 +64,7 @@
         }
     }
 
-    function cargar_img_alumno(id)
-    {
-        
-       var fileInput = $('#file_estudiante_img_'+id).val();        
-        if(fileInput=='')
-        {
-            Swal.fire('','Seleccione una imagen','warning');
-            return false;
-        }
-
-        var formData = new FormData(document.getElementById("form_estudiantes_"+id));
-         $.ajax({
-            url: '../controlador/estudiantesC.php?cargar_imagen_estudiantes=true',
-            type: 'post',
-            data: formData,
-            contentType: false,
-            processData: false,
-            dataType:'json',
-         // beforeSend: function () {
-         //        $("#foto_alumno").attr('src',"../img/gif/proce.gif");
-         //     },
-            success: function(response) {
-               if(response==-1)
-               {
-                 Swal.fire(
-                  '',
-                  'Algo extraño a pasado intente mas tarde.',
-                  'error')
-
-               }else if(response ==-2)
-               {
-                  Swal.fire(
-                  '',
-                  'Asegurese que el archivo subido sea una imagen.',
-                  'error')
-               }else
-               {
-                 consultar_datos_estudiante_representante(noconcurente_id);
-               } 
-            }
-        });
-
-    }
+   
 </script>
 
 <script type="text/javascript">    
@@ -122,11 +80,9 @@
 
 
         //Esta consultando unos datos por defecto
-        consultar_datos_estudiante_representante(noconcurente_id);
         cargarDatos(id)
 
         //cargarDatos(1);
-        //consultar_datos_estudiante_representante(1);
 
         $("#btn_subir_img_rep").on('click', function() {
 
@@ -205,20 +161,21 @@
                 }else{
                     $('#cbx_ma').prop('checked',true);
                 }
-                 if(response[0].fechaN!='' && response[0].fechaN!=null)
+                if(response[0].fechaN!='' && response[0].fechaN!=null)
                 {
-                    $('#txt_fecha_nacimiento').val(formatoDate(response[0].fechaN.date));
+                	$('#txt_fecha_nacimiento').val(formatoDate(response[0].fechaN.date));
                
-                    var fecha1 = new Date(formatoDate(response[0].fechaN.date));
-                    var fecha2 = new Date();
+	                var fecha1 = new Date(formatoDate(response[0].fechaN.date));
+	                var fecha2 = new Date();
 
-                    var diferenciaEnMilisegundos = fecha2 - fecha1;
+	                var diferenciaEnMilisegundos = fecha2 - fecha1;
 
-                    var milisegundosEnUnAnio = 1000 * 60 * 60 * 24 * 365.25; // Aproximadamente 365.25 días en un año
-                    var diferenciaEnAnios = Math.round(diferenciaEnMilisegundos / milisegundosEnUnAnio);
+	                var milisegundosEnUnAnio = 1000 * 60 * 60 * 24 * 365.25; // Aproximadamente 365.25 días en un año
+	                var diferenciaEnAnios = Math.round(diferenciaEnMilisegundos / milisegundosEnUnAnio);
 
-                    $('#txt_edad').html(diferenciaEnAnios);
+	                $('#txt_edad').html(diferenciaEnAnios);
                  }
+
                 $('#txt_email').val(response[0].email);
                 $('#txt_telefono').val(response[0].telefono);
                 if(response[0].foto!='')
@@ -231,140 +188,6 @@
         });
     }
 
-    function consultar_datos_estudiante_representante(id_representante = '') {
-        var estudiantes = '';
-        var estudiantes2 = '<option value="">-- Seleccione --</option>';
-        var ids = '';
-        var contador_alertas = 0;
-        var contador_alertas_div = 0;
-
-        $.ajax({
-            data: {
-                id_representante: id_representante,
-            },
-            url: '../controlador/estudiantesC.php?listar_estudiante_representante=true',
-            type: 'post',
-            dataType: 'json',
-            success: function(response) {
-                //console.log(response);
-                $.each(response, function(i, item) {
-                    sexo_estudiante = '';
-                    if (item.sa_est_sexo == 'Masculino') {
-                        sexo_estudiante = 'Masculino';
-                    } else if (item.sa_est_sexo == 'Femenino') {
-                        sexo_estudiante = 'Femenino';
-                    }
-
-                    curso = item.sa_sec_nombre + '/' + item.sa_gra_nombre + '/' + item.sa_par_nombre;
-
-                    $.ajax({
-                        data: {
-                            sa_pac_id_comunidad: item.sa_est_id,
-                            sa_pac_tabla: item.sa_est_tabla,
-                        },
-                        url: '../controlador/ficha_MedicaC.php?id_paciente_id_comunidad_tabla=true',
-                        type: 'post',
-                        dataType: 'json',
-                        success: function(response) {
-                            alert_salida = '';
-
-                             // console.log(response);
-
-                            if (response === null) {
-                                // Si la respuesta es nula o no es un objeto JSON válido
-                                alert_salida =
-                                    '<div class="alert border-0 border-start border-5 border-danger alert-dismissible fade show py-2">' +
-                                    '<div class="d-flex align-items-center">' +
-                                    '<div class="font-35 text-danger"><i class="bx bxs-message-square-x"></i>' +
-                                    '</div>' +
-                                    '<div class="ms-3">' +
-                                    '<h6 class="mb-0 text-danger text-start">¡Atención!</h6>' +
-                                    '<div class="mb-0 text-start">La ficha médica aún no está realizada</div>' +
-                                    '</div>' +
-                                    '</div>' +
-                                    '</div>';
-                            } else {
-                                // Si la respuesta es válida (no nula y es un objeto JSON)
-
-                                ////////////////////////////////////////
-                                //Ficha medica 
-                                ////////////////////////////////////////
-
-                                ficha_medica_validacion(response.sa_pac_id, contador_alertas);
-
-                            }
-
-                            // Actualiza el contenido del elemento con el ID "alert_notificacion"
-                            $('#alert_notificacion_' + contador_alertas).html(alert_salida);
-                            // Incrementa el contador aquí
-                            contador_alertas++;
-
-                            console.log(contador_alertas);
-
-                        }
-                    });
-
-                    estudiantes +=
-                        '<div class="col-12">' +
-                        '<div class="card radius-15">' +
-                        '<div class="card-body text-center">' +
-                        '<div class="p-4 border radius-15">' +
-
-                        '<div id="alert_notificacion_' + (contador_alertas_div) + '"></div>' +
-
-                        '<form id="form_estudiantes_'+item.sa_est_id+'">'+
-                                '<div class="mt-1">'
-                                    if(item.sa_est_foto_url!='' && item.sa_est_foto_url!=null)
-                                    {
-                                    estudiantes+='<img src="'+item.sa_est_foto_url+'?'+Math.random()+'" id="file_upload_'+item.sa_est_id+'" width="110" height="110" class="rounded-circle shadow" alt="">' 
-                                    }else{
-                                        estudiantes+='<img src="../img/sin_imagen.jpg" id="file_upload_'+item.sa_est_id+'" width="110" height="110" class="rounded-circle shadow" alt="">' 
-                                    }
-                                    <?php if($_SESSION['INICIO']['TIPO']!='DBA'){ ?>
-                                    estudiantes+='<br><div class="input-file-upload mt-1">'+
-                                       '<div class="btn-group" role="group" aria-label="Button group with nested dropdown">'+
-                                            '<span class="upload-label">Seleccionar Imagen</span>'+
-                                             '<input type="file" id="file_estudiante_img_'+item.sa_est_id+'" name="file_estudiante_img_'+item.sa_est_id+'" onchange="readURL(this,'+item.sa_est_id+');" />'+
-                                             '<input type="hidden" id="name_img" name="name_img" value="'+item.sa_est_cedula+'" />'+
-                                             '<input type="hidden" id="txt_idEst" name="txt_idEst" value="'+item.sa_est_id+'" />'+
-                                            '<div class="btn-group" role="group">'+
-                                                '<button type="button" class="btn btn-outline-primary" title="subir imagen" onclick="cargar_img_alumno('+item.sa_est_id+')" ><i class="bx bx-upload me-0"></i></button>'+
-                                           '</div>'+
-                                       '</div>'+
-                                    '</div>'+
-                                    <?php } ?>
-                                '</div>'+
-                        '</form>'+
-                        '<h5 class="mb-0 mt-3">' + item.sa_est_primer_apellido + ' ' + item.sa_est_segundo_apellido + ' ' + item.sa_est_primer_nombre + ' ' + item.sa_est_segundo_nombre + '</h5>' +
-                        '<p class="mb-0">' + item.sa_est_cedula + '</p>' +
-                        '<p class="mb-0">' + item.sa_est_sexo + '</p>' +
-                        '<p class="mb-3">' + curso + '</p>' +
-
-                        '<div class="d-grid mt-3">' +
-                        '<a href="#" onclick="gestion_paciente_comunidad(' + item.sa_est_id + ', \'' + item.sa_est_tabla + '\', \'./inicio.php?mod=7&acc=inicio_representante\');" class="btn btn-outline-primary radius-15">Detalles</a>' +
-
-                        '</div>' +
-                        '</div>' +
-                        '</div>' +
-                        '</div>' +
-                        '</div>';
-                    estudiantes2 +=
-                        '<option value="' + item.sa_est_id + '">' + item.sa_est_primer_apellido + ' ' + item.sa_est_segundo_apellido + ' ' + item.sa_est_primer_nombre + ' ' + item.sa_est_segundo_nombre + '</option>';
-
-                    ids += item.sa_est_id + ',';
-
-                    contador_alertas_div++;
-                });
-
-                $('#card_estudiantes').html(estudiantes);
-                $('#lista_estudiantes').html(estudiantes2);
-                $('#ids_est').val(ids);
-                lista_seguros();
-
-
-            }
-        });
-    }
 
     function ficha_medica_validacion(sa_pac_id, id_notificacion) {
         $.ajax({
@@ -406,7 +229,7 @@
             }
         });
 
-        //console.log(id_notificacion + sa_pac_id)
+        console.log(id_notificacion + sa_pac_id)
     }
 
     function SaveNewSeguro() {
@@ -604,36 +427,7 @@
             <div class="col">
                 <div class="card border-top border-0 border-4 border-primary">
                     <div class="card-body">
-                        <ul class="nav nav-tabs nav-success" role="tablist">
-                            <li class="nav-item" role="presentation">
-                                <a class="nav-link active" data-bs-toggle="tab" href="#inicio" role="tab" aria-selected="true">
-                                    <div class="d-flex align-items-center">
-                                        <div class="tab-icon"><i class='bx bx-home font-18 me-1'></i>
-                                        </div>
-                                        <div class="tab-title">Inicio</div>
-                                    </div>
-                                </a>
-                            </li>
-                            <li class="nav-item" role="presentation">
-                                <a class="nav-link" data-bs-toggle="tab" href="#seguros" role="tab" aria-selected="false">
-                                    <div class="d-flex align-items-center">
-                                        <div class="tab-icon"><i class='bx bx-user-pin font-18 me-1'></i>
-                                        </div>
-                                        <div class="tab-title">Seguros</div>
-                                    </div>
-                                </a>
-                            </li>
-                            <li class="nav-item" role="presentation">
-                                <a class="nav-link" data-bs-toggle="tab" href="#estudiantes" role="tab" aria-selected="false">
-                                    <div class="d-flex align-items-center">
-                                        <div class="tab-icon"><i class='bx bx-user-pin font-18 me-1'></i>
-                                        </div>
-                                        <div class="tab-title">Estudiantes</div>
-                                    </div>
-                                </a>
-                            </li>
-
-                        </ul>
+                        
                         <div class="tab-content py-3">
                             <div class="tab-pane fade show active" id="inicio" role="tabpanel">
                                 <div class="row">
