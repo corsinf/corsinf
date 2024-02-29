@@ -406,7 +406,7 @@
             }
         });
 
-        console.log(id_notificacion + sa_pac_id)
+        //console.log(id_notificacion + sa_pac_id)
     }
 
     function SaveNewSeguro() {
