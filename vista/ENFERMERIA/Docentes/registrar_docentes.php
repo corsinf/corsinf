@@ -247,22 +247,22 @@ if (isset($_POST['sa_doc_id'])) {
 
                             <div class="row pt-3">
                                 <div class="col-md-3">
-                                    <label for="" class="form-label">Primer Apellido: <label style="color: red;">*</label> </label>
+                                    <label for="" class="form-label">Primer Apellido <label style="color: red;">*</label> </label>
                                     <input type="text" class="form-control form-control-sm" id="sa_doc_primer_apellido" name="sa_doc_primer_apellido">
                                 </div>
 
                                 <div class="col-md-3">
-                                    <label for="" class="form-label">Segundo Apellido: <label style="color: red;">*</label> </label>
+                                    <label for="" class="form-label">Segundo Apellido <label style="color: red;">*</label> </label>
                                     <input type="text" class="form-control form-control-sm" id="sa_doc_segundo_apellido" name="sa_doc_segundo_apellido">
                                 </div>
 
                                 <div class="col-md-3">
-                                    <label for="" class="form-label">Primer Nombre: <label style="color: red;">*</label> </label>
+                                    <label for="" class="form-label">Primer Nombre <label style="color: red;">*</label> </label>
                                     <input type="text" class="form-control form-control-sm" id="sa_doc_primer_nombre" name="sa_doc_primer_nombre">
                                 </div>
 
                                 <div class="col-md-3">
-                                    <label for="" class="form-label">Segundo Nombre: <label style="color: red;">*</label> </label>
+                                    <label for="" class="form-label">Segundo Nombre <label style="color: red;">*</label> </label>
                                     <input type="text" class="form-control form-control-sm" id="sa_doc_segundo_nombre" name="sa_doc_segundo_nombre">
                                 </div>
                             </div>
@@ -274,7 +274,7 @@ if (isset($_POST['sa_doc_id'])) {
                                 </div>
 
                                 <div class="col-md-3">
-                                    <label for="" class="form-label">Sexo: <label style="color: red;">*</label> </label>
+                                    <label for="" class="form-label">Sexo <label style="color: red;">*</label> </label>
                                     <select class="form-select form-select-sm" id="sa_doc_sexo" name="sa_doc_sexo">
                                         <option selected disabled>-- Seleccione --</option>
                                         <option value="Femenino">Femenino</option>
@@ -283,29 +283,29 @@ if (isset($_POST['sa_doc_id'])) {
                                 </div>
 
                                 <div class="col-md-3">
-                                    <label for="" class="form-label">Fecha de Nacimiento: <label style="color: red;">*</label> </label>
+                                    <label for="" class="form-label">Fecha de Nacimiento <label style="color: red;">*</label> </label>
                                     <input type="date" class="form-control form-control-sm" id="sa_doc_fecha_nacimiento" name="sa_doc_fecha_nacimiento" onchange="edad_normal(this.value);">
                                 </div>
 
                                 <div class="col-md-3">
-                                    <label for="" class="form-label">Edad: <label style="color: red;">*</label> </label>
+                                    <label for="" class="form-label">Edad <label style="color: red;">*</label> </label>
                                     <input type="text" class="form-control form-control-sm" id="sa_doc_edad" name="sa_doc_edad" readonly>
                                 </div>
                             </div>
 
                             <div class="row pt-3">
                                 <div class="col-md-4">
-                                    <label for="" class="form-label">Teléfono 1: <label style="color: red;">*</label> </label>
+                                    <label for="" class="form-label">Teléfono 1 <label style="color: red;">*</label> </label>
                                     <input type="text" class="form-control form-control-sm" id="sa_doc_telefono_1" name="sa_doc_telefono_1">
                                 </div>
 
                                 <div class="col-md-4">
-                                    <label for="" class="form-label">Teléfono 2: <label style="color: red;">*</label> </label>
+                                    <label for="" class="form-label">Teléfono 2 <label style="color: red;">*</label> </label>
                                     <input type="text" class="form-control form-control-sm" id="sa_doc_telefono_2" name="sa_doc_telefono_2">
                                 </div>
 
                                 <div class="col-md-4">
-                                    <label for="" class="form-label">Correo: <label style="color: red;">*</label> </label>
+                                    <label for="" class="form-label">Correo <label style="color: red;">*</label> </label>
                                     <input type="email" class="form-control form-control-sm" id="sa_doc_correo" name="sa_doc_correo">
                                 </div>
                             </div>

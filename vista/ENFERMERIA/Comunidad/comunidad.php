@@ -29,7 +29,13 @@
                 {
                     data: null,
                     render: function(data, type, item) {
-                        return calcular_edad_fecha_nacimiento(item.sa_com_fecha_nacimiento.date);
+
+                        fecha_nacimiento = item.sa_com_fecha_nacimiento;
+                        //fecha_nacimiento_calc = ;
+                        
+                        salida = fecha_nacimiento ? calcular_edad_fecha_nacimiento(item.sa_com_fecha_nacimiento.date) : '';
+
+                        return salida;
                     }
                 },
             ],

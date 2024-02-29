@@ -27,14 +27,16 @@ if (isset($_GET['id_seccion'])) {
   });
 
   //Para cargar los datos en el select
+
   function consultar_datos_seccion(id = '', id_seccion = '') {
     var seccion = '';
+    //console.log(id_seccion);
     seccion = '<option selected disabled>-- Seleccione --</option>'
     $.ajax({
       data: {
         id: id
       },
-      url: '<?php echo $url_general ?>/controlador/seccionC.php?listar=true',
+      url: '../controlador/seccionC.php?listar=true',
       type: 'post',
       dataType: 'json',
 
@@ -251,7 +253,7 @@ if (isset($_GET['id_seccion'])) {
               <div class="row pt-3">
 
                 <div class="col-md-6">
-                  <label for="" class="form-label">Sección: <label style="color: red;">*</label> </label>
+                  <label for="" class="form-label">Sección <label style="color: red;">*</label> </label>
                   <select class="form-select" id="sa_id_seccion" name="sa_id_seccion">
 
                   </select>
@@ -260,7 +262,7 @@ if (isset($_GET['id_seccion'])) {
 
               <div class="row pt-3">
                 <div class="col-md-6">
-                  <label for="" class="form-label">Grado: <label style="color: red;">*</label> </label>
+                  <label for="" class="form-label">Grado <label style="color: red;">*</label> </label>
                   <input type="text" class="form-control" id="sa_gra_nombre" name="sa_gra_nombre">
                 </div>
               </div>

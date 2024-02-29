@@ -228,45 +228,45 @@ if (isset($_GET['id'])) {
 
               <div class="row pt-3">
                 <div class="col-4">
-                  <label for="" class="form-label">Código: <label style="color: red;">*</label> </label>
+                  <label for="" class="form-label">Código <label style="color: red;">*</label> </label>
                   <input type="text" class="form-control form-control-sm" name="sa_cins_codigo" id="sa_cins_codigo">
                 </div>
 
                 <div class="col-8">
-                  <label for="" class="form-label">Presentación: <label style="color: red;">*</label> </label>
+                  <label for="" class="form-label">Presentación <label style="color: red;">*</label> </label>
                   <input type="text" class="form-control form-control-sm" name="sa_cins_presentacion" id="sa_cins_presentacion">
                 </div>
               </div>
 
               <div class="row pt-3">
                 <div class="col-3">
-                  <label for="" class="form-label">Lote: <label style="color: red;">*</label> </label>
+                  <label for="" class="form-label">Lote <label style="color: red;">*</label> </label>
                   <input type="text" class="form-control form-control-sm" name="sa_cins_lote" id="sa_cins_lote">
                 </div>
                 <div class="col-3">
-                  <label for="" class="form-label">Caducidad: <label style="color: red;">*</label> </label>
+                  <label for="" class="form-label">Caducidad <label style="color: red;">*</label> </label>
                   <input type="date" class="form-control form-control-sm" name="sa_cins_caducidad" id="sa_cins_caducidad">
                 </div>
               </div>
 
               <div class="row pt-3">
                 <div class="col-4">
-                  <label for="" class="form-label">Mínimos: <label style="color: red;">*</label> </label>
+                  <label for="" class="form-label">Mínimos <label style="color: red;">*</label> </label>
                   <input type="number" class="form-control form-control-sm" name="sa_cins_minimos" id="sa_cins_minimos">
                 </div>
                 <div class="col-4">
-                  <label for="" class="form-label">Stock: <label style="color: red;">*</label> </label>
+                  <label for="" class="form-label">Stock <label style="color: red;">*</label> </label>
                   <input type="number" class="form-control form-control-sm" name="sa_cins_stock" id="sa_cins_stock">
                 </div>
                 <div class="col-4">
-                  <label for="" class="form-label">Movimiento: <label style="color: red;">*</label> </label>
+                  <label for="" class="form-label">Movimiento <label style="color: red;">*</label> </label>
                   <input type="number" class="form-control form-control-sm" name="sa_cins_movimiento" id="sa_cins_movimiento">
                 </div>
               </div>
 
               <div class="row pt-3">
                 <div class="col-12">
-                  <label for="" class="form-label">Localización: <label style="color: red;">*</label> </label>
+                  <label for="" class="form-label">Localización <label style="color: red;">*</label> </label>
                   <input type="text" class="form-control form-control-sm" name="sa_cins_localizacion" id="sa_cins_localizacion">
 
 
@@ -275,14 +275,14 @@ if (isset($_GET['id'])) {
 
               <div class="row pt-3">
                 <div class="col-12">
-                  <label for="" class="form-label">Uso: <label style="color: red;">*</label> </label>
+                  <label for="" class="form-label">Uso <label style="color: red;">*</label> </label>
                   <input type="text" class="form-control form-control-sm" name="sa_cins_uso" id="sa_cins_uso">
                 </div>
               </div>
 
               <div class="row pt-3">
                 <div class="col-12">
-                  <label for="" class="form-label">Observaciones: <label style="color: red;">*</label> </label>
+                  <label for="" class="form-label">Observaciones <label style="color: red;">*</label> </label>
                   <input type="text" class="form-control form-control-sm" name="sa_cins_observaciones" id="sa_cins_observaciones">
                 </div>
               </div>

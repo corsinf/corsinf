@@ -114,7 +114,7 @@ if (isset($_GET['pac_id'])) {
 
                     botones += '<button type="button" class="btn btn-primary btn-sm m-1" title="Detalles de la Consulta" onclick="ver_pdf(' + item.sa_conp_id + ', \'' + item.sa_conp_tipo_consulta + '\')"> <i class="bx bx-file me-0"></i></button>';
 
-                    
+
 
                     if (item.sa_conp_estado_revision == 0 || item.sa_conp_estado_revision == 2) {
                       //botones += '<a href="../vista/inicio.php?mod=7&acc=registrar_consulta_paciente&id_consulta=' + item.sa_conp_id + '&tipo_consulta=' + item.sa_conp_tipo_consulta + '&id_ficha=' + item.sa_fice_id + '&id_paciente=' + item.sa_pac_id + '" class="btn btn-warning btn-sm m-0" title="Detalles de la Consulta"><i class="bx bx-edit me-0" ></i></a>';
@@ -218,17 +218,23 @@ if (isset($_GET['pac_id'])) {
       <div class="col-xl-12 mx-auto">
         <div class="card border-top border-0 border-4 border-primary">
           <div class="card-body p-5">
-            <div class="card-title d-flex align-items-center">
-              <div><i class="bx bxs-user me-1 font-22 text-primary"></i>
-              </div>
-              <h5 class="mb-0 text-primary">Historial de Consultas del Paciente: <b id="title_paciente" class="text-success"></b></h5>
 
-              <div class="row m-2">
-                <div class="col-sm-12">
-                  <a href="../vista/inicio.php?mod=7&acc=pacientes" class="btn btn-outline-dark btn-sm"><i class="bx bx-arrow-back"></i> Regresar</a>
+            <div class="row">
+              <div class="col-9">
+                <div class="card-title d-flex align-items-center">
+                  <div><i class="bx bxs-user me-1 font-22 text-primary"></i>
+                  </div>
+
+                  <h5 class="mb-0 text-primary">Historial de Consultas del Paciente: <b id="title_paciente" class="text-success"></b></h5>
+
                 </div>
               </div>
+              <div class="col-3 text-end">
+                <a href="../vista/inicio.php?mod=7&acc=pacientes" class="btn btn-outline-dark btn-sm"><i class="bx bx-arrow-back"></i> Regresar</a>
+              </div>
             </div>
+
+
             <hr>
 
             <div class="content">

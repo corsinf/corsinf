@@ -69,7 +69,7 @@ $(document).ready(function () {
             htmlFila += '<td><input class="itemFila_Medicamento" type="checkbox"></td>';
             htmlFila += '<td><label id="sa_det_conp_nombre_temp_' + count_medicamento + '"></label></td>';
             htmlFila += '<td><input type="text" class="form-control form-control-sm" id="sa_det_conp_dosificacion_' + count_medicamento + '" name="sa_det_conp_dosificacion[]"></td>';
-            htmlFila += '<td><input type="number" class="form-control form-control-sm" id="sa_det_conp_cantidad_' + count_medicamento + '" name="sa_det_conp_cantidad[]" onblur="limitarMaximo('+count_medicamento+')" max="'+stock+'" value="'+cant+'"></td>';
+            htmlFila += '<td><input type="number" class="form-control form-control-sm solo_numeros" min="1" id="sa_det_conp_cantidad_' + count_medicamento + '" name="sa_det_conp_cantidad[]" onblur="limitarMaximo('+count_medicamento+')" max="'+stock+'" value="'+cant+'"></td>';
 
             htmlFila += '<td><div class="form-check d-flex justify-content-center">';
             htmlFila += '<input class="form-check-input" type="checkbox" value="" id="sa_det_conp_estado_entrega_' + count_medicamento + '" name="sa_det_conp_estado_entrega_' + count_medicamento + '" checked>';
@@ -316,7 +316,7 @@ function cargar_farmacologia(id_consulta) {
                     htmlFila += '<td><input class="itemFila_Medicamento" type="checkbox"></td>';
                     htmlFila += '<td><label id="sa_det_conp_nombre_temp_' + count_medicamento + '">' + medicamento.sa_det_conp_nombre + '</label></td>';
                     htmlFila += '<td><input type="text" class="form-control form-control-sm" id="sa_det_conp_dosificacion_' + count_medicamento + '" name="sa_det_conp_dosificacion[]" value="' + medicamento.sa_det_conp_dosificacion + '"></td>';
-                    htmlFila += '<td><input type="number" class="form-control form-control-sm" id="sa_det_conp_cantidad_' + count_medicamento + '" name="sa_det_conp_cantidad[]" value="' + medicamento.sa_det_conp_cantidad + '"></td>';
+                    htmlFila += '<td><input type="number" class="form-control form-control-sm solo_numeros" min="1" id="sa_det_conp_cantidad_' + count_medicamento + '" name="sa_det_conp_cantidad[]" value="' + medicamento.sa_det_conp_cantidad + '"></td>';
 
                     var checked = medicamento.sa_det_conp_estado_entrega === 1 ? 'checked' : '';
                     htmlFila += '<td>';

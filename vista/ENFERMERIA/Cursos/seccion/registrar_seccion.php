@@ -203,7 +203,7 @@ if (isset($_GET['id'])) {
 
               <div class="row pt-3">
                 <div class="col-md-12">
-                  <label for="" class="form-label">Sección: <label style="color: red;">*</label> </label>
+                  <label for="" class="form-label">Sección <label style="color: red;">*</label> </label>
                   <input type="text" class="form-control form-control-sm" id="sa_sec_nombre" name="sa_sec_nombre">
                 </div>
               </div>

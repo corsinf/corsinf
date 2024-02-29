@@ -604,7 +604,7 @@ if ($btn_regresar == '') {
                                                     <div class="row pt-3">
                                                         <div class="col-md-11" id="sa_fice_pac_nombre_seguro_div">
 
-                                                            <!-- <label for="" class="form-label">Seguro Predeterminado: <label style="color: red;">*</label> </label> -->
+                                                            <!-- <label for="" class="form-label">Seguro Predeterminado <label style="color: red;">*</label> </label> -->
 
                                                             <label for="" class="form-label">Seleccione Seguro medico predeterminado <label style="color: red;">*</label> </label>
 

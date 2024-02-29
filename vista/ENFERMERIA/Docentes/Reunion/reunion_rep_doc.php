@@ -398,7 +398,7 @@ if ($id != null && $id != '') {
 
                 <div class="row">
                     <div class="col-12">
-                        <label for="ac_horarioC_materia">Estudiante: <label class="text-danger">*</label></label>
+                        <label for="ac_horarioC_materia">Estudiante <label class="text-danger">*</label></label>
                         <select name="sa_est_id" id="sa_est_id" class="form-select form-select-sm" onclick="consultar_datos_docente_paralelo(this.value);">
                             <option selected disabled>-- Seleccione un Estudiante --</option>
                         </select>
@@ -407,7 +407,7 @@ if ($id != null && $id != '') {
 
                 <div class="row pt-3">
                     <div class="col-12">
-                        <label for="ac_horarioC_dia">Profesor: <label class="text-danger">*</label></label>
+                        <label for="ac_horarioC_dia">Profesor <label class="text-danger">*</label></label>
                         <select name="ac_docente_id" id="ac_docente_id" class="form-select form-select-sm">
                             <option selected disabled>-- Seleccione un Docente --</option>
 
@@ -441,7 +441,7 @@ if ($id != null && $id != '') {
 
                 <div class="row">
                     <div class="col-12">
-                        <label for="ac_horarioC_materia">Motivo de la Reunión: <label class="text-danger">*</label></label>
+                        <label for="ac_horarioC_materia">Motivo de la Reunión <label class="text-danger">*</label></label>
                         <select name="ac_reunion_motivo" id="ac_reunion_motivo" class="form-select form-select-sm">
                             <option selected disabled>-- Seleccione un Estudiante --</option>
                             <option value="Faltas">Faltas</option>
@@ -453,7 +453,7 @@ if ($id != null && $id != '') {
 
                 <div hidden class="row pt-3">
                     <div class="col-12">
-                        <label for="ac_horarioC_materia">Observación: <label class="text-danger">*</label></label>
+                        <label for="ac_horarioC_materia">Observación <label class="text-danger">*</label></label>
                         <input type="text" id="ac_reunion_observacion" name="ac_reunion_observacion" class="form-control form-control-sm">
                     </div>
                 </div>

@@ -337,9 +337,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                         <h3 class="pt-0 text-primary">Agendar</h3>
                                                     </b>
 
-                                                    <div class="row">
+                                                    <div class="row pt-3">
                                                         <div class="col-8">
-                                                            <label for="sa_pac_tabla">Tipo de Paciente: <label class="text-danger">*</label></label>
+                                                            <label for="sa_pac_tabla">Tipo de Paciente <label class="text-danger">*</label></label>
                                                             <select name="sa_pac_tabla" id="sa_pac_tabla" class="form-select" onclick="consultar_tablas_datos(this.value)">
                                                                 <option value="">Seleccione el Tipo de Paciente</option>
                                                             </select>
@@ -348,7 +348,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                                                     <div class="row pt-3">
                                                         <div class="col-8">
-                                                            <label for="sa_pac_id_comunidad">Paciente: <label class="text-danger">*</label></label>
+                                                            <label for="sa_pac_id_comunidad">Paciente <label class="text-danger">*</label></label>
                                                             <select name="sa_pac_id_comunidad" id="sa_pac_id_comunidad" class="form-select">
                                                                 <option value="">Seleccione el Paciente</option>
                                                             </select>
@@ -357,7 +357,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                                                     <div class="row pt-3">
                                                         <div class="col-sm-8">
-                                                            <b>Fecha de Atención: <label class="text-danger">*</label></b>
+
+                                                            <label for="txt_fecha_consulta">Fecha de Atención <label class="text-danger">*</label></label>
                                                             <input type="date" name="txt_fecha_consulta" id="txt_fecha_consulta" class="form-control form-control-sm" value="<?php echo date('Y-m-d'); ?>" readonly>
                                                         </div>
                                                     </div>

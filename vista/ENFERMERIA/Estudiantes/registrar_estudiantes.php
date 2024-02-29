@@ -527,22 +527,22 @@ if (isset($_POST['id_representante'])) {
 
               <div class="row pt-3">
                 <div class="col-md-3">
-                  <label for="" class="form-label">Primer Apellido: <label style="color: red;">*</label> </label>
+                  <label for="" class="form-label">Primer Apellido <label style="color: red;">*</label> </label>
                   <input type="text" class="form-control form-control-sm" id="sa_est_primer_apellido" name="sa_est_primer_apellido">
                 </div>
 
                 <div class="col-md-3">
-                  <label for="" class="form-label">Segundo Apellido: <label style="color: red;">*</label> </label>
+                  <label for="" class="form-label">Segundo Apellido <label style="color: red;">*</label> </label>
                   <input type="text" class="form-control form-control-sm" id="sa_est_segundo_apellido" name="sa_est_segundo_apellido">
                 </div>
 
                 <div class="col-md-3">
-                  <label for="" class="form-label">Primer Nombre: <label style="color: red;">*</label> </label>
+                  <label for="" class="form-label">Primer Nombre <label style="color: red;">*</label> </label>
                   <input type="text" class="form-control form-control-sm" id="sa_est_primer_nombre" name="sa_est_primer_nombre">
                 </div>
 
                 <div class="col-md-3">
-                  <label for="" class="form-label">Segundo Nombre: <label style="color: red;">*</label> </label>
+                  <label for="" class="form-label">Segundo Nombre <label style="color: red;">*</label> </label>
                   <input type="text" class="form-control form-control-sm" id="sa_est_segundo_nombre" name="sa_est_segundo_nombre">
                 </div>
               </div>
@@ -554,7 +554,7 @@ if (isset($_POST['id_representante'])) {
                 </div>
 
                 <div class="col-md-2">
-                  <label for="" class="form-label">Sexo: <label style="color: red;">*</label> </label>
+                  <label for="" class="form-label">Sexo <label style="color: red;">*</label> </label>
                   <select class="form-select form-select-sm" id="sa_est_sexo" name="sa_est_sexo">
                     <option selected disabled>-- Seleccione --</option>
                     <option value="Femenino">Femenino</option>
@@ -563,12 +563,12 @@ if (isset($_POST['id_representante'])) {
                 </div>
 
                 <div class="col-md-3">
-                  <label for="" class="form-label">Fecha de Nacimiento: <label style="color: red;">*</label> </label>
+                  <label for="" class="form-label">Fecha de Nacimiento <label style="color: red;">*</label> </label>
                   <input type="date" class="form-control form-control-sm" id="sa_est_fecha_nacimiento" name="sa_est_fecha_nacimiento" onchange="edad_normal(this.value);">
                 </div>
 
                 <div class="col-md-1">
-                  <label for="" class="form-label">Edad: <label style="color: red;">*</label> </label>
+                  <label for="" class="form-label">Edad <label style="color: red;">*</label> </label>
                   <input type="text" class="form-control form-control-sm" id="sa_est_edad" name="sa_est_edad" readonly>
                 </div>
 
@@ -582,21 +582,21 @@ if (isset($_POST['id_representante'])) {
               <div class="row pt-4">
 
                 <div class="col-md-4">
-                  <label for="" class="form-label">Sección: <label style="color: red;">*</label> </label>
-                  <select class="form-select form-select-sm" id="sa_id_seccion" name="sa_id_seccion" onclick="consultar_datos_seccion_grado()">
+                  <label for="" class="form-label">Sección <label style="color: red;">*</label> </label>
+                  <select class="form-select form-select-sm" id="sa_id_seccion" name="sa_id_seccion" onchange="consultar_datos_seccion_grado()">
 
                   </select>
                 </div>
 
                 <div class="col-md-4">
-                  <label for="" class="form-label">Grado: <label style="color: red;">*</label> </label>
-                  <select class="form-select form-select-sm" id="sa_id_grado" name="sa_id_grado" onclick="consultar_datos_grado_paralelo();">
+                  <label for="" class="form-label">Grado <label style="color: red;">*</label> </label>
+                  <select class="form-select form-select-sm" id="sa_id_grado" name="sa_id_grado" onchange="consultar_datos_grado_paralelo();">
                     <option selected disabled>-- Seleccione --</option>
                   </select>
                 </div>
 
                 <div class="col-md-4">
-                  <label for="" class="form-label">Paralelo: <label style="color: red;">*</label> </label>
+                  <label for="" class="form-label">Paralelo <label style="color: red;">*</label> </label>
                   <select class="form-select form-select-sm" id="sa_id_paralelo" name="sa_id_paralelo">
                     <option selected disabled>-- Seleccione --</option>
                   </select>
@@ -607,14 +607,14 @@ if (isset($_POST['id_representante'])) {
 
               <div class="row pt-4">
                 <div class="col-md-8">
-                  <label for="" class="form-label">Representante: <label style="color: red;">*</label> </label>
+                  <label for="" class="form-label">Representante <label style="color: red;">*</label> </label>
                   <select class="form-select form-select-sm" id="sa_id_representante" name="sa_id_representante">
                     <option selected disabled>-- Seleccione --</option>
                   </select>
                 </div>
 
                 <div class="col-md-4">
-                  <label for="" class="form-label">Parentesco: <label style="color: red;">*</label> </label>
+                  <label for="" class="form-label">Parentesco <label style="color: red;">*</label> </label>
                   <select class="form-select form-select-sm" id="sa_est_rep_parentesco" name="sa_est_rep_parentesco">
                     <option selected disabled>-- Seleccione --</option>
                     <option value="Padre">Padre</option>

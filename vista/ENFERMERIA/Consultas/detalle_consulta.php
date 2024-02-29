@@ -140,7 +140,7 @@ if (isset($_GET['id_paciente'])) {
 
                             <div class="row pt-2">
                                 <div class="col-md-12">
-                                    <label for="" class="form-label">Observaciones: <label style="color: red;">*</label> </label>
+                                    <label for="" class="form-label">Observaciones <label style="color: red;">*</label> </label>
                                     <textarea name="sa_conp_observaciones" id="sa_conp_observaciones" cols="30" rows="2" class="form-control" placeholder="Motivo de la consulta"></textarea>
                                 </div>
                             </div>

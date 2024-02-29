@@ -237,53 +237,53 @@ if (isset($_GET['id'])) {
 
               <div class="row pt-3">
                 <div class="col-6">
-                  <label for="" class="form-label">Concentración: <label style="color: red;">*</label> </label>
+                  <label for="" class="form-label">Concentración <label style="color: red;">*</label> </label>
                   <input type="text" class="form-control form-control-sm" name="sa_cmed_concentracion" id="sa_cmed_concentracion">
                 </div>
 
                 <div class="col-6">
-                  <label for="" class="form-label">Presentación: <label style="color: red;">*</label> </label>
+                  <label for="" class="form-label">Presentación <label style="color: red;">*</label> </label>
                   <input type="text" class="form-control form-control-sm" name="sa_cmed_presentacion" id="sa_cmed_presentacion">
                 </div>
               </div>
 
               <div class="row pt-3">
                 <div class="col-3">
-                  <label for="" class="form-label">Dosis: <label style="color: red;">*</label> </label>
+                  <label for="" class="form-label">Dosis <label style="color: red;">*</label> </label>
                   <input type="text" class="form-control form-control-sm" name="sa_cmed_dosis" id="sa_cmed_dosis">
                 </div>
                 <div class="col-3">
-                  <label for="" class="form-label">Serie: <label style="color: red;">*</label> </label>
+                  <label for="" class="form-label">Serie <label style="color: red;">*</label> </label>
                   <input type="text" class="form-control form-control-sm" name="sa_cmed_serie" id="sa_cmed_serie">
                 </div>
                 <div class="col-3">
-                  <label for="" class="form-label">Lote: <label style="color: red;">*</label> </label>
+                  <label for="" class="form-label">Lote <label style="color: red;">*</label> </label>
                   <input type="text" class="form-control form-control-sm" name="sa_cmed_lote" id="sa_cmed_lote">
                 </div>
                 <div class="col-3">
-                  <label for="" class="form-label">Caducidad: <label style="color: red;">*</label> </label>
+                  <label for="" class="form-label">Caducidad <label style="color: red;">*</label> </label>
                   <input type="date" class="form-control form-control-sm" name="sa_cmed_caducidad" id="sa_cmed_caducidad">
                 </div>
               </div>
 
               <div class="row pt-3">
                 <div class="col-4">
-                  <label for="" class="form-label">Mínimos: <label style="color: red;">*</label> </label>
+                  <label for="" class="form-label">Mínimos <label style="color: red;">*</label> </label>
                   <input type="number" class="form-control form-control-sm" name="sa_cmed_minimos" id="sa_cmed_minimos">
                 </div>
                 <div class="col-4">
-                  <label for="" class="form-label">Stock: <label style="color: red;">*</label> </label>
+                  <label for="" class="form-label">Stock <label style="color: red;">*</label> </label>
                   <input type="number" class="form-control form-control-sm" name="sa_cmed_stock" id="sa_cmed_stock">
                 </div>
                 <div class="col-4">
-                  <label for="" class="form-label">Movimiento: <label style="color: red;">*</label> </label>
+                  <label for="" class="form-label">Movimiento <label style="color: red;">*</label> </label>
                   <input type="number" class="form-control form-control-sm" name="sa_cmed_movimiento" id="sa_cmed_movimiento">
                 </div>
               </div>
 
               <div class="row pt-3">
                 <div class="col-12">
-                  <label for="" class="form-label">Contraindicación: <label style="color: red;">*</label> </label>
+                  <label for="" class="form-label">Contraindicación <label style="color: red;">*</label> </label>
                   <input type="text" class="form-control form-control-sm" name="sa_cmed_contraindicacion" id="sa_cmed_contraindicacion">
 
                 </div>
@@ -291,7 +291,7 @@ if (isset($_GET['id'])) {
 
               <div class="row pt-3">
                 <div class="col-12">
-                  <label for="" class="form-label">Tratamiento: <label style="color: red;">*</label> </label>
+                  <label for="" class="form-label">Tratamiento <label style="color: red;">*</label> </label>
                   <input type="text" class="form-control form-control-sm" name="sa_cmed_tratamientos" id="sa_cmed_tratamientos">
 
 
@@ -300,14 +300,14 @@ if (isset($_GET['id'])) {
 
               <div class="row pt-3">
                 <div class="col-12">
-                  <label for="" class="form-label">Uso: <label style="color: red;">*</label> </label>
+                  <label for="" class="form-label">Uso <label style="color: red;">*</label> </label>
                   <input type="text" class="form-control form-control-sm" name="sa_cmed_uso" id="sa_cmed_uso">
                 </div>
               </div>
 
               <div class="row pt-3">
                 <div class="col-12">
-                  <label for="" class="form-label">Observaciones: <label style="color: red;">*</label> </label>
+                  <label for="" class="form-label">Observaciones <label style="color: red;">*</label> </label>
                   <input type="text" class="form-control form-control-sm" name="sa_cmed_observaciones" id="sa_cmed_observaciones">
                 </div>
               </div>

@@ -306,8 +306,8 @@ if (isset($_GET['id_grado'])) {
               <div class="row pt-3">
 
                 <div class="col-md-6">
-                  <label for="" class="form-label">Sección: <label style="color: red;">*</label> </label>
-                  <select class="form-select" id="sa_id_seccion" name="sa_id_seccion" onclick="consultar_datos_seccion_grado()">
+                  <label for="" class="form-label">Sección <label style="color: red;">*</label> </label>
+                  <select class="form-select" id="sa_id_seccion" name="sa_id_seccion" onchange="consultar_datos_seccion_grado()">
 
                   </select>
                 </div>
@@ -315,7 +315,7 @@ if (isset($_GET['id_grado'])) {
 
               <div class="row pt-3">
                 <div class="col-md-6">
-                  <label for="" class="form-label">Grado: <label style="color: red;">*</label> </label>
+                  <label for="" class="form-label">Grado <label style="color: red;">*</label> </label>
                   <select class="form-select" id="sa_id_grado" name="sa_id_grado">
                     <option selected disabled>-- Seleccione --</option>
                   </select>
@@ -324,7 +324,7 @@ if (isset($_GET['id_grado'])) {
 
               <div class="row pt-3">
                 <div class="col-md-6">
-                  <label for="" class="form-label">Paralelo: <label style="color: red;">*</label> </label>
+                  <label for="" class="form-label">Paralelo <label style="color: red;">*</label> </label>
                   <input type="text" class="form-control" id="sa_par_nombre" name="sa_par_nombre">
                 </div>
               </div>

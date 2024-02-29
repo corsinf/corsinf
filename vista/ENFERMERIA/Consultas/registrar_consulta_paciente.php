@@ -162,6 +162,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 $('#title_paciente').html(apellidos + " " + nombres);
 
+                $('#nombre_modal').val(apellidos + " " + nombres);
+
                 $('#tipo_paciente').html(response[0].sa_pac_tabla);
 
                 $('#sa_permiso_pac_id').val(response[0].sa_pac_id);
@@ -735,7 +737,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <div class="col-6 text-end">
                                 <a hidden href="../vista/inicio.php?mod=7&acc=consultas_pacientes&pac_id=<?= $id_paciente ?>" class="btn btn-outline-dark btn-sm"><i class="bx bx-arrow-back"></i> Regresar</a>
 
-                                <button class="btn btn-outline-primary" onclick="consultar_datos_h(<?php echo $id_ficha; ?>)"><i class='bx bx-list-ol'></i> Historial</button>
+                                <input type="hidden" name="nombre_modal" id="nombre_modal">
+
+                                <button class="btn btn-outline-primary" onclick="consultar_datos_h(<?php echo $id_ficha; ?>, $('#nombre_modal').val())"><i class='bx bx-list-ol'></i> Historial</button>
                             </div>
 
 
@@ -766,19 +770,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                             <div class="row" hidden>
                                 <div class="col-md-3">
-                                    <label for="" class="form-label">Fecha: <label style="color: red;">*</label> </label>
+                                    <label for="" class="form-label fw-bold">Fecha <label style="color: red;">*</label> </label>
                                     <input type="date" class="form-control form-control-sm" id="sa_conp_fecha_ingreso" name="sa_conp_fecha_ingreso" value="<?= date('Y-m-d'); ?>">
                                 </div>
                                 <div class="col-md-3">
-                                    <label for="" class="form-label">Desde: <label style="color: red;">*</label> </label>
+                                    <label for="" class="form-label fw-bold">Desde <label style="color: red;">*</label> </label>
                                     <input type="time" class="form-control form-control-sm" id="sa_conp_desde_hora" name="sa_conp_desde_hora">
                                 </div>
                                 <div class="col-md-3">
-                                    <label for="" class="form-label">Hasta: <label style="color: red;">*</label> </label>
+                                    <label for="" class="form-label fw-bold">Hasta <label style="color: red;">*</label> </label>
                                     <input type="time" class="form-control form-control-sm" id="sa_conp_hasta_hora" name="sa_conp_hasta_hora">
                                 </div>
                                 <div class="col-md-3">
-                                    <label for="" class="form-label">Tiempo (Minutos): <label style="color: red;">*</label> </label>
+                                    <label for="" class="form-label fw-bold">Tiempo (Minutos) <label style="color: red;">*</label> </label>
                                     <input type="text" class="form-control form-control-sm" id="sa_conp_tiempo_aten" name="sa_conp_tiempo_aten" readonly>
                                 </div>
                             </div>
@@ -854,19 +858,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                 <div class="row pt-0">
                                                     <div class="row pt-1">
                                                         <div class="col-md-3">
-                                                            <label for="" class="form-label">Certificado por Salud: <label style="color: red;">*</label> </label>
+                                                            <label for="" class="form-label fw-bold">Certificado por Salud <label style="color: red;">*</label> </label>
                                                             <input type="text" class="form-control form-control-sm" id="sa_conp_salud_certificado" name="sa_conp_salud_certificado">
                                                         </div>
 
                                                         <div class="col-md-9">
-                                                            <label for="" class="form-label">Motivo Certificado: <label style="color: red;">*</label> </label>
+                                                            <label for="" class="form-label fw-bold">Motivo Certificado <label style="color: red;">*</label> </label>
                                                             <input type="text" class="form-control form-control-sm" id="sa_conp_motivo_certificado" name="sa_conp_motivo_certificado">
                                                         </div>
                                                     </div>
 
                                                     <div class="row pt-3">
                                                         <div class="col-md-12">
-                                                            <label for="" class="form-label">CIE 10 - Diagnóstico de Certificado: <label style="color: red;">*</label> </label>
+                                                            <label for="" class="form-label fw-bold">CIE 10 - Diagnóstico de Certificado <label style="color: red;">*</label> </label>
                                                             <input type="text" class="ctw-input form-control form-control-sm" autocomplete="off" data-ctw-ino="3" id="sa_conp_diagnostico_certificado" placeholder="Diagnostico">
 
                                                             <input type="hidden" id="sa_conp_CIE_10_certificado">
@@ -877,20 +881,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                                                     <div class="row pt-3">
                                                         <div class="col-md-3">
-                                                            <label for="" class="form-label">Fecha de Entrega del Certificado: <label style="color: red;">*</label> </label>
+                                                            <label for="" class="form-label fw-bold">Fecha de Entrega del Certificado <label style="color: red;">*</label> </label>
                                                             <input type="date" class="form-control form-control-sm" id="sa_conp_fecha_entrega_certificado" name="sa_conp_fecha_entrega_certificado" value="<?= date('Y-m-d'); ?>">
                                                         </div>
 
                                                         <div class="col-md-3">
-                                                            <label for="" class="form-label">Fecha Inicio Falta: <label style="color: red;">*</label> </label>
+                                                            <label for="" class="form-label fw-bold">Fecha Inicio Falta <label style="color: red;">*</label> </label>
                                                             <input type="date" class="form-control form-control-sm" id="sa_conp_fecha_inicio_falta_certificado" name="sa_conp_fecha_inicio_falta_certificado">
                                                         </div>
                                                         <div class="col-md-3">
-                                                            <label for="" class="form-label">Fecha Fin Alta: <label style="color: red;">*</label> </label>
+                                                            <label for="" class="form-label fw-bold">Fecha Fin Alta <label style="color: red;">*</label> </label>
                                                             <input type="date" class="form-control form-control-sm" id="sa_conp_fecha_fin_alta_certificado" name="sa_conp_fecha_fin_alta_certificado">
                                                         </div>
                                                         <div class="col-md-3">
-                                                            <label for="" class="form-label"># Días de Permiso: <label style="color: red;">*</label> </label>
+                                                            <label for="" class="form-label fw-bold"># Días de Permiso <label style="color: red;">*</label> </label>
                                                             <input type="text" class="form-control form-control-sm" id="sa_conp_dias_permiso_certificado" name="sa_conp_dias_permiso_certificado">
                                                         </div>
                                                     </div>
@@ -898,7 +902,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                     <?php if ($tipo_consulta == 'certificado') { ?>
                                                         <div class="row pt-3">
                                                             <div class="col-md-12">
-                                                                <label for="" class="form-label">Observaciones: <label style="color: red;">*</label> </label>
+                                                                <label for="" class="form-label fw-bold">Observaciones <label style="color: red;">*</label> </label>
                                                                 <textarea name="sa_conp_observaciones" id="sa_conp_observaciones" cols="30" rows="1" class="form-control" placeholder="Observaciones"></textarea>
                                                             </div>
                                                         </div>
@@ -1018,7 +1022,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                                                         <div class="row pt-3">
                                                             <div class="col-md-12">
-                                                                <label for="" class="form-label"> <b>Agregar exámen físico regional: <label class="text-danger">*</label></b></label>
+                                                                <label for="" class="form-label fw-bold"> <b>Agregar exámen físico regional <label class="text-danger">*</label></b></label>
 
                                                                 <div>
                                                                     <div class="form-check">
@@ -1038,7 +1042,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                                                         <div class="row pt-3" id="pnl_examen_fisico" style="display: none;">
                                                             <div class="col-12">
-                                                                <label for="" class="form-label"><b>EXAMEN FÍSICO REGIONAL</b> <label style="color: red;">*</label> </label>
+                                                                <label for="" class="form-label fw-bold"><b>EXAMEN FÍSICO REGIONAL</b> <label style="color: red;">*</label> </label>
 
                                                                 <div class="">
                                                                     <style>
@@ -1347,7 +1351,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                                                         <div class="row pt-3">
                                                             <div class="col-md-12">
-                                                                <label for="" class="form-label">Observaciones : <label style="color: red;">*</label> </label>
+                                                                <label for="" class="form-label fw-bold">Observaciones  <label style="color: red;">*</label> </label>
                                                                 <textarea name="sa_examen_fisico_regional_obs" id="sa_examen_fisico_regional_obs" cols="30" rows="2" class="form-control" placeholder="OBSERVACIONES  EXAMEN FÍSICO REGIONAL"></textarea>
                                                             </div>
                                                         </div>
@@ -1360,14 +1364,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                                                         <div class="row pt-3">
                                                             <div class="col-md-12">
-                                                                <label for="" class="form-label">Enfermedad Actual: <label style="color: red;">*</label> </label>
+                                                                <label for="" class="form-label fw-bold">Enfermedad Actual <label style="color: red;">*</label> </label>
                                                                 <textarea name="sa_conp_enfermedad_actual" id="sa_conp_enfermedad_actual" cols="30" rows="2" class="form-control" placeholder="Enfermedad Actual"></textarea>
                                                             </div>
                                                         </div>
 
                                                         <div class="row pt-3">
                                                             <div class="col-md-12">
-                                                                <label for="" class="form-label">CIE 10 - Diagnóstico 1: <label style="color: red;">*</label> </label>
+                                                                <label for="" class="form-label fw-bold">CIE 10 - Diagnóstico 1 <label style="color: red;">*</label> </label>
                                                                 <input type="text" class="ctw-input form-control form-control-sm" autocomplete="off" data-ctw-ino="1" id="sa_conp_diagnostico_1" placeholder="Diagnostico 1">
                                                                 <input type="hidden" id="sa_conp_CIE_10_1">
                                                                 <div class="ctw-window" data-ctw-ino="1"></div>
@@ -1376,7 +1380,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                                                         <div class="row pt-3">
                                                             <div class="col-md-12">
-                                                                <label for="" class="form-label">CIE 10 - Diagnóstico 2: <label style="color: red;">*</label> </label>
+                                                                <label for="" class="form-label fw-bold">CIE 10 - Diagnóstico 2 <label style="color: red;">*</label> </label>
                                                                 <input type="text" class="ctw-input form-control form-control-sm" autocomplete="off" data-ctw-ino="2" id="sa_conp_diagnostico_2" placeholder="Diagnostico 2">
                                                                 <input type="hidden" id="sa_conp_CIE_10_2">
                                                                 <div class="ctw-window" data-ctw-ino="2"></div>
@@ -1385,14 +1389,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                                                         <div class="row pt-3">
                                                             <div class="col-md-12">
-                                                                <label for="" class="form-label">Observaciones: <label style="color: red;">*</label> </label>
+                                                                <label for="" class="form-label fw-bold">Observaciones <label style="color: red;">*</label> </label>
                                                                 <textarea name="sa_conp_observaciones" id="sa_conp_observaciones" cols="30" rows="1" class="form-control" placeholder="Observaciones"></textarea>
                                                             </div>
                                                         </div>
 
                                                         <div class="row pt-3">
                                                             <div class="col-md-12">
-                                                                <label for="" class="form-label"> <b>¿Necesita permiso de salida?: <label class="text-danger">*</label></b></label>
+                                                                <label for="" class="form-label fw-bold"> <b>¿Necesita permiso de salida? <label class="text-danger">*</label></b></label>
 
                                                                 <div>
                                                                     <div class="form-check">
@@ -1412,19 +1416,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                                                             <div class="row pt-2">
                                                                 <div class="col-md-4">
-                                                                    <label for="" class="form-label">Fecha Permiso de Salida: <label style="color: red;">*</label> </label>
+                                                                    <label for="" class="form-label fw-bold">Fecha Permiso de Salida <label style="color: red;">*</label> </label>
                                                                     <input type="date" class="form-control form-control-sm" id="sa_conp_fecha_permiso_salud_salida" name="sa_conp_fecha_permiso_salud_salida" value="<?= date('Y-m-d'); ?>">
                                                                 </div>
 
                                                                 <div class="col-md-4">
-                                                                    <label for="" class="form-label">Hora Permiso de Salida: <label style="color: red;">*</label> </label>
+                                                                    <label for="" class="form-label fw-bold">Hora Permiso de Salida <label style="color: red;">*</label> </label>
                                                                     <input type="time" class="form-control form-control-sm" id="sa_conp_hora_permiso_salida" name="sa_conp_hora_permiso_salida">
                                                                 </div>
                                                             </div>
 
                                                             <div class="row pt-3">
                                                                 <div class="col-md-12">
-                                                                    <label for="" class="form-label"> <b>¿Tipo de Salida?: <label class="text-danger">*</label></b></label>
+                                                                    <label for="" class="form-label fw-bold"> <b>¿Tipo de Salida? <label class="text-danger">*</label></b></label>
                                                                     <input type="hidden" name="txt_id_comunidad" id="txt_id_comunidad">
                                                                     <input type="hidden" name="txt_tabla" id="txt_tabla">
 
@@ -1448,7 +1452,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                                                             <div class="row pt-2">
                                                                 <div class="col-md-12">
-                                                                    <label for="" class="form-label">Paciente Referido a: <label style="color: red;">*</label> </label>
+                                                                    <label for="" class="form-label fw-bold">Paciente Referido a <label style="color: red;">*</label> </label>
                                                                     <select class="form-select form-select-sm" id="sa_conp_permiso_seguro_traslado" name="sa_conp_permiso_seguro_traslado">
                                                                         <option selected disabled>-- Seleccione --</option>
                                                                         <option value="IESS">IESS</option>
@@ -1459,12 +1463,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                                                             <div class="row pt-3">
                                                                 <div class="col-md-4">
-                                                                    <label for="" class="form-label">Teléfono Seguro: <label style="color: red;">*</label> </label>
+                                                                    <label for="" class="form-label fw-bold">Teléfono Seguro <label style="color: red;">*</label> </label>
                                                                     <input type="text" class="form-control form-control-sm" id="sa_conp_permiso_telefono_seguro" name="sa_conp_permiso_telefono_seguro">
                                                                 </div>
 
                                                                 <div class="col-md-4">
-                                                                    <label for="" class="form-label" id="lbl_telefono_emergencia">Teléfono Representante: <label style="color: red;">*</label> </label>
+                                                                    <label for="" class="form-label fw-bold" id="lbl_telefono_emergencia">Teléfono Representante <label style="color: red;">*</label> </label>
                                                                     <input type="text" class="form-control form-control-sm" aria-describedby="btn_telefono" id="sa_conp_permiso_telefono_padre" name="sa_conp_permiso_telefono_padre">
 
                                                                     <p id="txt_nombre_contacto" class="me-0 text-success"></p>
@@ -1511,7 +1515,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                                 <hr>
 
                                                                 <div class="col-md-3">
-                                                                    <label for="tipo_farmacologia" class="form-label">Farmacología: <label style="color: red;">*</label> </label>
+                                                                    <label for="tipo_farmacologia" class="form-label fw-bold">Farmacología <label style="color: red;">*</label> </label>
                                                                     <select class="form-select form-select-sm" id="tipo_farmacologia" name="tipo_farmacologia" onchange="consultar_medicinas_insumos(this.value);">
                                                                         <option selected disabled>-- Seleccione --</option>
                                                                         <option value="medicamentos">Medicamentos</option>
@@ -1520,23 +1524,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                                 </div>
 
                                                                 <div class="col-md-5">
-                                                                    <label for="tipo_farmacologia_presentacion" class="form-label">Presentación: <label style="color: red;">*</label> </label>
+                                                                    <label for="tipo_farmacologia_presentacion" class="form-label fw-bold">Presentación <label style="color: red;">*</label> </label>
                                                                     <select class="form-select form-select-sm" id="tipo_farmacologia_presentacion" name="tipo_farmacologia_presentacion">
                                                                         <option selected disabled>-- Seleccione --</option>
                                                                     </select>
                                                                 </div>
                                                                 <div class="col-md-1">
-                                                                    <label for="Stock_farmacologia" class="form-label">Stock: </label>
+                                                                    <label for="Stock_farmacologia" class="form-label fw-bold">Stock </label>
                                                                     <input type="text" name="stock_farmacologia" id="stock_farmacologia" readonly class="form-control form-control-sm solo_numeros">
                                                                 </div>
                                                                 <div class="col-md-1">
-                                                                    <label for="cantidad_farmacologia" class="form-label">Cant: <label style="color: red;">*</label> </label>
+                                                                    <label for="cantidad_farmacologia" class="form-label fw-bold">Cant <label style="color: red;">*</label> </label>
                                                                     <input type="number" name="cantidad_farmacologia" id="cantidad_farmacologia" class="form-control form-control-sm solo_numeros" min="1">
                                                                 </div>
 
-                                                                <div class="col-md-2 mt-3">
-                                                                    <label for="agregarFila_medicamentos" class="form-label"></label>
-                                                                    <button class="btn btn-primary" title="Agregar Medicamentos" id="agregarFila_medicamentos" type="button"><i class='bx bx-plus me-0'></i>Agregar</button>
+                                                                <div class="col-md-2 mt-4 ">
+                                                                    <label for="agregarFila_medicamentos" class="form-label fw-bold"></label>
+                                                                    <button class="btn btn-primary" title="Agregar Medicamentos" id="agregarFila_medicamentos" type="button"><i class='bx bx-plus me-0'></i> Agregar</button>
                                                                 </div>
                                                             </div>
 
@@ -1566,7 +1570,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                                                             <div class="row pt-2">
                                                                 <div class="col-md-12">
-                                                                    <label for="" class="form-label">Tratamiento: <label style="color: red;">*</label> </label>
+                                                                    <label for="" class="form-label fw-bold">Tratamiento <label style="color: red;">*</label> </label>
                                                                     <textarea name="sa_conp_tratamiento" id="sa_conp_tratamiento" cols="30" rows="2" class="form-control" placeholder="Tratamiento"></textarea>
                                                                 </div>
                                                             </div>
@@ -1638,7 +1642,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             <!-- Modal Header -->
             <div class="modal-header">
-                <h4 class="modal-title">Historial de consultas - <b id="title_nombre" class="text-primary"></b></h4>
+                <h4 class="modal-title">Historial de consultas - <b id="title_nombre" class="text-primary"> as</b></h4>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
 
