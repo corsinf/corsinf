@@ -55,6 +55,7 @@ class ingreso_stockM
 		FROM kardex K
 		LEFT JOIN cat_insumos I ON K.sa_kar_tipo = 'Insumos' AND K.sa_kar_id_articulo = I.sa_cins_id
 		LEFT JOIN cat_medicamentos M ON K.sa_kar_tipo = 'Medicamento' AND K.sa_kar_id_articulo = M.sa_cmed_id
+		WHERE K.sa_kar_entrada>0
 		ORDER BY K.sa_kar_id DESC";
 
 		return  $this->db->datos($sql);
