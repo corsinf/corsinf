@@ -1,241 +1,198 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <autorizacion>
 <estado>AUTORIZADO</estado>
-<numeroAutorizacion>1201202301179130986300120072430000749660007496613</numeroAutorizacion>
-<fechaAutorizacion>2023-01-12T21:11:59-05:00</fechaAutorizacion>
+<numeroAutorizacion>0504202301179131006300120010020036328572320381216</numeroAutorizacion>
+<fechaAutorizacion>2023-04-06T08:05:10-05:00</fechaAutorizacion>
 <ambiente>PRODUCCIÓN</ambiente>
-<comprobante><![CDATA[<?xml version="1.0" encoding="UTF-8" standalone="no"?><factura id="comprobante" version="2.1.0">
-  <infoTributaria>
-    <ambiente>2</ambiente>
-    <tipoEmision>1</tipoEmision>
-    <razonSocial>MULTICINES S.A.</razonSocial>
-    <nombreComercial>1058426</nombreComercial>
-    <ruc>1791309863001</ruc>
-    <claveAcceso>1201202301179130986300120072430000749660007496613</claveAcceso>
-    <codDoc>01</codDoc>
-    <estab>007</estab>
-    <ptoEmi>243</ptoEmi>
-    <secuencial>000074966</secuencial>
-    <dirMatriz>MULTICINES S.A.Av. González Suárez N27317N26C y San Ignacio Ed. Delta Piso7</dirMatriz>
-  </infoTributaria>
-  <infoFactura>
-    <fechaEmision>12/01/2023</fechaEmision>
-    <dirEstablecimiento>MULTICINES - SCALAAv. Interoceanica S/NCumbaya.  Quito Ecuador</dirEstablecimiento>
-    <contribuyenteEspecial>0590</contribuyenteEspecial>
-    <obligadoContabilidad>SI</obligadoContabilidad>
-    <tipoIdentificacionComprador>05</tipoIdentificacionComprador>
-    <razonSocialComprador>Milton Rubio</razonSocialComprador>
-    <identificacionComprador>1712605284</identificacionComprador>
-    <totalSinImpuestos>34.78</totalSinImpuestos>
-    <totalDescuento>0.00</totalDescuento>
-    <totalConImpuestos>
-      <totalImpuesto>
-        <codigo>2</codigo>
-        <codigoPorcentaje>2</codigoPorcentaje>
-        <baseImponible>20.17</baseImponible>
-        <valor>2.42</valor>
-      </totalImpuesto>
-      <totalImpuesto>
-        <codigo>2</codigo>
-        <codigoPorcentaje>0</codigoPorcentaje>
-        <baseImponible>12.92</baseImponible>
-        <valor>0.00</valor>
-      </totalImpuesto>
-      <totalImpuesto>
-        <codigo>2</codigo>
-        <codigoPorcentaje>6</codigoPorcentaje>
-        <baseImponible>1.68</baseImponible>
-        <valor>0.00</valor>
-      </totalImpuesto>
-    </totalConImpuestos>
-    <propina>0.00</propina>
-    <importeTotal>37.20</importeTotal>
-    <moneda>DOLAR</moneda>
-    <pagos>
-      <pago>
-        <formaPago>19</formaPago>
-        <total>37.20</total>
-        <plazo>0</plazo>
-      </pago>
-    </pagos>
-  </infoFactura>
-  <detalles>
-    <detalle>
-      <codigoPrincipal>2166</codigoPrincipal>
-      <codigoAuxiliar>2166</codigoAuxiliar>
-      <descripcion>COMBO 3 NOR MODIFICADOR</descripcion>
-      <cantidad>2.00</cantidad>
-      <precioUnitario>10.09</precioUnitario>
-      <descuento>0.00</descuento>
-      <precioTotalSinImpuesto>20.17</precioTotalSinImpuesto>
-      <detallesAdicionales>
-        <detAdicional nombre="Pelicula" valor="N/A"/>
-        <detAdicional nombre="Fecha" valor="N/A"/>
-        <detAdicional nombre="Horario" valor="N/A"/>
-      </detallesAdicionales>
-      <impuestos>
-        <impuesto>
-          <codigo>2</codigo>
-          <codigoPorcentaje>2</codigoPorcentaje>
-          <tarifa>12</tarifa>
-          <baseImponible>20.17</baseImponible>
-          <valor>2.42</valor>
-        </impuesto>
-      </impuestos>
-    </detalle>
-    <detalle>
-      <codigoPrincipal>0017</codigoPrincipal>
-      <codigoAuxiliar>0017</codigoAuxiliar>
-      <descripcion>3D ADULTO</descripcion>
-      <cantidad>2.00</cantidad>
-      <precioUnitario>6.46</precioUnitario>
-      <descuento>0.00</descuento>
-      <precioTotalSinImpuesto>12.92</precioTotalSinImpuesto>
-      <detallesAdicionales>
-        <detAdicional nombre="Pelicula" valor="Pel: AVATAR EL CAMINO DEL AGUA"/>
-        <detAdicional nombre="Fecha" valor="F.Func:13/01/2023"/>
-        <detAdicional nombre="Horario" valor="Hora:17:00"/>
-      </detallesAdicionales>
-      <impuestos>
-        <impuesto>
-          <codigo>2</codigo>
-          <codigoPorcentaje>0</codigoPorcentaje>
-          <tarifa>0</tarifa>
-          <baseImponible>12.92</baseImponible>
-          <valor>0.00</valor>
-        </impuesto>
-      </impuestos>
-    </detalle>
-    <detalle>
-      <codigoPrincipal>00</codigoPrincipal>
-      <codigoAuxiliar>00</codigoAuxiliar>
-      <descripcion>MUNICIPAL QUITO</descripcion>
-      <cantidad>1.00</cantidad>
-      <precioUnitario>1.68</precioUnitario>
-      <descuento>0.00</descuento>
-      <precioTotalSinImpuesto>1.68</precioTotalSinImpuesto>
-      <detallesAdicionales>
-        <detAdicional nombre="Pelicula" valor="N/A"/>
-        <detAdicional nombre="Fecha" valor="N/A"/>
-        <detAdicional nombre="Horario" valor="N/A"/>
-      </detallesAdicionales>
-      <impuestos>
-        <impuesto>
-          <codigo>2</codigo>
-          <codigoPorcentaje>6</codigoPorcentaje>
-          <tarifa>0</tarifa>
-          <baseImponible>1.68</baseImponible>
-          <valor>0.00</valor>
-        </impuesto>
-      </impuestos>
-    </detalle>
-  </detalles>
-  <infoAdicional>
-    <campoAdicional nombre="Direccion Principal">.</campoAdicional>
-    <campoAdicional nombre="Telefono">0999219738</campoAdicional>
-    <campoAdicional nombre="emailCliente">miltonrubio@hotmail.com</campoAdicional>
-    <campoAdicional nombre="Codigo Segmento">25</campoAdicional>
-  </infoAdicional>
-<ds:Signature xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xmlns:etsi="http://uri.etsi.org/01903/v1.3.2#" Id="Signature731693">
-<ds:SignedInfo Id="Signature-SignedInfo634864">
-<ds:CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/>
-<ds:SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/>
-<ds:Reference Id="SignedPropertiesID608248" Type="http://uri.etsi.org/01903#SignedProperties" URI="#Signature731693-SignedProperties370742">
-<ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/>
-<ds:DigestValue>wpnDvvJ3IjYS8MZC6caaKDPZAOY=</ds:DigestValue>
+<comprobante><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+<factura id="comprobante" version="1.0.0">                                                                                                                                                                                                                                                                                                                                                                      
+<infoTributaria>                                                                                                                                                                                                                                                                                                                                                                                                
+<ambiente>2</ambiente>                                                                                                                                                                                                                                                                                                                                                                                          
+<tipoEmision>1</tipoEmision>                                                                                                                                                                                                                                                                                                                                                                                    
+<razonSocial>DATAFAST S.A.</razonSocial>                                                                                                                                                                                                                                                                                                                                                                        
+<nombreComercial>DATAFAST S.A.</nombreComercial>                                                                                                                                                                                                                                                                                                                                                                
+<ruc>1791310063001</ruc>                                                                                                                                                                                                                                                                                                                                                                                        
+<claveAcceso>0504202301179131006300120010020036328572320381216</claveAcceso>                                                                                                                                                                                                                                                                                                                                    
+<codDoc>01</codDoc>                                                                                                                                                                                                                                                                                                                                                                                             
+<estab>001</estab>                                                                                                                                                                                                                                                                                                                                                                                              
+<ptoEmi>002</ptoEmi>                                                                                                                                                                                                                                                                                                                                                                                            
+<secuencial>003632857</secuencial>                                                                                                                                                                                                                                                                                                                                                                              
+<dirMatriz>AV. DE LAS AMERICAS S/N Y AV. ISIDRO AYORA AEROPUERTO J.J. OLMEDO EDIFICIOCORPORATIVO PISO 1 OFIC. MZ01</dirMatriz>                                                                                                                                                                                                                                                                                  
+</infoTributaria>                                                                                                                                                                                                                                                                                                                                                                                               
+<infoFactura>                                                                                                                                                                                                                                                                                                                                                                                                   
+<fechaEmision>05/04/2023</fechaEmision>                                                                                                                                                                                                                                                                                                                                                                         
+<contribuyenteEspecial>1305</contribuyenteEspecial>                                                                                                                                                                                                                                                                                                                                                             
+<obligadoContabilidad>SI</obligadoContabilidad>                                                                                                                                                                                                                                                                                                                                                                 
+<tipoIdentificacionComprador>04</tipoIdentificacionComprador>                                                                                                                                                                                                                                                                                                                                                   
+<razonSocialComprador>RUBIO PUETATE MILTON ANDRES</razonSocialComprador>                                                                                                                                                                                                                                                                                                                                        
+<identificacionComprador>1712605284001</identificacionComprador>                                                                                                                                                                                                                                                                                                                                                
+<totalSinImpuestos>13.20</totalSinImpuestos>                                                                                                                                                                                                                                                                                                                                                                    
+<totalDescuento>0.00</totalDescuento>                                                                                                                                                                                                                                                                                                                                                                           
+<totalConImpuestos>                                                                                                                                                                                                                                                                                                                                                                                             
+<totalImpuesto>                                                                                                                                                                                                                                                                                                                                                                                                 
+<codigo>2</codigo>                                                                                                                                                                                                                                                                                                                                                                                              
+<codigoPorcentaje>2</codigoPorcentaje>                                                                                                                                                                                                                                                                                                                                                                          
+<baseImponible>13.20</baseImponible>                                                                                                                                                                                                                                                                                                                                                                            
+<valor>1.58</valor>                                                                                                                                                                                                                                                                                                                                                                                             
+</totalImpuesto>                                                                                                                                                                                                                                                                                                                                                                                                
+</totalConImpuestos>                                                                                                                                                                                                                                                                                                                                                                                            
+<propina>0.00</propina>                                                                                                                                                                                                                                                                                                                                                                                         
+<importeTotal>14.78</importeTotal>                                                                                                                                                                                                                                                                                                                                                                              
+<moneda>DOLAR</moneda>                                                                                                                                                                                                                                                                                                                                                                                          
+<pagos>                                                                                                                                                                                                                                                                                                                                                                                                         
+<pago>                                                                                                                                                                                                                                                                                                                                                                                                          
+<formaPago>20</formaPago>                                                                                                                                                                                                                                                                                                                                                                                       
+<total>14.78</total>                                                                                                                                                                                                                                                                                                                                                                                            
+<plazo>00</plazo>                                                                                                                                                                                                                                                                                                                                                                                               
+<unidadTiempo>dias</unidadTiempo>                                                                                                                                                                                                                                                                                                                                                                               
+</pago>                                                                                                                                                                                                                                                                                                                                                                                                         
+</pagos>                                                                                                                                                                                                                                                                                                                                                                                                        
+</infoFactura>                                                                                                                                                                                                                                                                                                                                                                                                  
+<detalles>                                                                                                                                                                                                                                                                                                                                                                                                      
+<detalle>                                                                                                                                                                                                                                                                                                                                                                                                       
+<codigoPrincipal>CNXX01</codigoPrincipal>                                                                                                                                                                                                                                                                                                                                                                       
+<descripcion>Servicio Conexion</descripcion>                                                                                                                                                                                                                                                                                                                                                                    
+<cantidad>1.00</cantidad>                                                                                                                                                                                                                                                                                                                                                                                       
+<precioUnitario>12.00</precioUnitario>                                                                                                                                                                                                                                                                                                                                                                          
+<descuento>0.00</descuento>                                                                                                                                                                                                                                                                                                                                                                                     
+<precioTotalSinImpuesto>12.00</precioTotalSinImpuesto>                                                                                                                                                                                                                                                                                                                                                          
+<impuestos>                                                                                                                                                                                                                                                                                                                                                                                                     
+<impuesto>                                                                                                                                                                                                                                                                                                                                                                                                      
+<codigo>2</codigo>                                                                                                                                                                                                                                                                                                                                                                                              
+<codigoPorcentaje>2</codigoPorcentaje>                                                                                                                                                                                                                                                                                                                                                                          
+<tarifa>12</tarifa>                                                                                                                                                                                                                                                                                                                                                                                             
+<baseImponible>12.00</baseImponible>                                                                                                                                                                                                                                                                                                                                                                            
+<valor>1.44</valor>                                                                                                                                                                                                                                                                                                                                                                                             
+</impuesto>                                                                                                                                                                                                                                                                                                                                                                                                     
+</impuestos>                                                                                                                                                                                                                                                                                                                                                                                                    
+</detalle>                                                                                                                                                                                                                                                                                                                                                                                                      
+<detalle>                                                                                                                                                                                                                                                                                                                                                                                                       
+<codigoPrincipal>PMABPC</codigoPrincipal>                                                                                                                                                                                                                                                                                                                                                                       
+<descripcion>COSTO POR TRANSACCION BOTON PAGOS SIS-2023-6463</descripcion>                                                                                                                                                                                                                                                                                                                                      
+<cantidad>6.00</cantidad>                                                                                                                                                                                                                                                                                                                                                                                       
+<precioUnitario>0.20</precioUnitario>                                                                                                                                                                                                                                                                                                                                                                           
+<descuento>0.00</descuento>                                                                                                                                                                                                                                                                                                                                                                                     
+<precioTotalSinImpuesto>1.20</precioTotalSinImpuesto>                                                                                                                                                                                                                                                                                                                                                           
+<impuestos>                                                                                                                                                                                                                                                                                                                                                                                                     
+<impuesto>                                                                                                                                                                                                                                                                                                                                                                                                      
+<codigo>2</codigo>                                                                                                                                                                                                                                                                                                                                                                                              
+<codigoPorcentaje>2</codigoPorcentaje>                                                                                                                                                                                                                                                                                                                                                                          
+<tarifa>12</tarifa>                                                                                                                                                                                                                                                                                                                                                                                             
+<baseImponible>1.20</baseImponible>                                                                                                                                                                                                                                                                                                                                                                             
+<valor>0.14</valor>                                                                                                                                                                                                                                                                                                                                                                                             
+</impuesto>                                                                                                                                                                                                                                                                                                                                                                                                     
+</impuestos>                                                                                                                                                                                                                                                                                                                                                                                                    
+</detalle>                                                                                                                                                                                                                                                                                                                                                                                                      
+</detalles>                                                                                                                                                                                                                                                                                                                                                                                                     
+<infoAdicional>                                                                                                                                                                                                                                                                                                                                                                                                 
+<campoAdicional nombre="Direccion">CRISTOBAL ACUNA E1 18 Y AV 10 DE AGOSTO</campoAdicional>                                                                                                                                                                                                                                                                                                                     
+<campoAdicional nombre="Telefono">3920507</campoAdicional>                                                                                                                                                                                                                                                                                                                                                      
+<campoAdicional nombre="Email">mrubio@corsinf.com</campoAdicional>                                                                                                                                                                                                                                                                                                                                              
+<campoAdicional nombre="Forma de pago">OTROS CON UTILIZACION DEL SISTEMA FINANCIERO</campoAdicional>                                                                                                                                                                                                                                                                                                            
+<campoAdicional nombre="Detalle 1">MID: 4200000953</campoAdicional>                                                                                                                                                                                                                                                                                                                                             
+<campoAdicional nombre="Detalle 2">ON2: 009244</campoAdicional>                                                                                                                                                                                                                                                                                                                                                 
+<campoAdicional nombre="Detalle 3">TID: DL334156</campoAdicional>                                                                                                                                                                                                                                                                                                                                               
+<campoAdicional nombre="Detalle 4">Periodo Facturado Servicios: 05-ABR a 04-MAY</campoAdicional>                                                                                                                                                                                                                                                                                                                
+<campoAdicional nombre="Detalle 5">Periodo Facturado Transaccion: 01-MAR a 31-MAR</campoAdicional>                                                                                                                                                                                                                                                                                                              
+</infoAdicional>                                                                                                                                                                                                                                                                                                                                                                                                
+<ds:Signature xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xmlns:etsi="http://uri.etsi.org/01903/v1.3.2#" Id="Signature26268">
+<ds:SignedInfo Id="Signature-SignedInfo391287">
+<ds:CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"></ds:CanonicalizationMethod>
+<ds:SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"></ds:SignatureMethod>
+<ds:Reference Id="SignedPropertiesID764468" Type="http://uri.etsi.org/01903#SignedProperties" URI="#Signature26268-SignedProperties932766">
+<ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"></ds:DigestMethod>
+<ds:DigestValue>gHNL1Y2+OFZR4+Wz5i5dR29GQr8=</ds:DigestValue>
 </ds:Reference>
-<ds:Reference URI="#Certificate1306052">
-<ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/>
-<ds:DigestValue>XKXOS1x4uwwo5Q2WEKe1F7iyB8M=</ds:DigestValue>
+<ds:Reference URI="#Certificate1804775">
+<ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"></ds:DigestMethod>
+<ds:DigestValue>W8S7dEVlNXJbUi4mKyzbkrnvyTs=</ds:DigestValue>
 </ds:Reference>
-<ds:Reference Id="Reference-ID-210569" URI="#comprobante">
+<ds:Reference Id="Reference-ID-808641" URI="#comprobante">
 <ds:Transforms>
-<ds:Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/>
+<ds:Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"></ds:Transform>
 </ds:Transforms>
-<ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/>
-<ds:DigestValue>VvSIWRr5VZqoE47V7OhtWfBXODI=</ds:DigestValue>
+<ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"></ds:DigestMethod>
+<ds:DigestValue>LlT2eNPgQI3hJl4qpNR6cmdbhIE=</ds:DigestValue>
 </ds:Reference>
 </ds:SignedInfo>
-<ds:SignatureValue Id="SignatureValue992929">
-dJ+fCkTOLife7hPqEGuCGzu0YnqHn5+XvkvIQLp2hrAIObnyUit1QbkJQEnFn7rr0sMLyrXwLXVI
-bsrv6vZEFDwssrArseg+kFlAhXE5uZmDhrl3HlIwTHnJ1sC8McVImiEeP1QhOSsOHsqxnuLPSEMJ
-lGEoHJ2qh48OgOmVOJ7eF10eQbH3xgH0ls2Uon8JF+Q/pNs22CZSNpAxas0RrXIiJm4rOPwk3zoW
-+/HULMMfYMG46LI4wB5O31+RLJ+t2m9di8sJvE10IeRby4zN5QR4RDGzsS42+0mc82qt4CN5pQtX
-XcRdy+NmH900qBnKVrlaGERuvLUJBpeepP33tA==
+<ds:SignatureValue Id="SignatureValue567191">
+mVgDzztkEET5y3ECrivDk0lkKvASMrfN0tG5lIU7e0hgci/vCG/+JQjY8O5ZrmrmVV3NXFhke+Lt
+dMqvcCvCpGrtTM2OGzf7MGaB1NrI3AIpHG/fq98ojM+x52Gkib3b45r1bNvPmMH2FbtLdtPrqoFE
+xuOBFuefvoCefqv5ATApKqKEQ/DEcfUOY9Q4F0uM3wcKmp+kQE6fw0s+Nx8zz/14o+kHF6s7Fr6V
+W1dthJFmRJDGL3wdzWRApzCxcbgXazXkof6lQm9p/+bLKA031mGmph6/+4VMBY+vcjhTZebFn3Ih
+MrCSsOMPElC6p948yYbYyOFGJN+XBAQTELx6VA==
 </ds:SignatureValue>
-<ds:KeyInfo Id="Certificate1306052">
+<ds:KeyInfo Id="Certificate1804775">
 <ds:X509Data>
 <ds:X509Certificate>
-MIIMAjCCCeqgAwIBAgIEUy/oijANBgkqhkiG9w0BAQsFADCBmTELMAkGA1UEBhMCRUMxHTAbBgNV
-BAoMFFNFQ1VSSVRZIERBVEEgUy5BLiAyMTAwLgYDVQQLDCdFTlRJREFEIERFIENFUlRJRklDQUNJ
+MIILWTCCCUGgAwIBAgIED7OEsjANBgkqhkiG9w0BAQsFADCBmTELMAkGA1UEBhMCRUMxHTAbBgNV
+BAoMFFNFQ1VSSVRZIERBVEEgUy5BLiAxMTAwLgYDVQQLDCdFTlRJREFEIERFIENFUlRJRklDQUNJ
 T04gREUgSU5GT1JNQUNJT04xOTA3BgNVBAMMMEFVVE9SSURBRCBERSBDRVJUSUZJQ0FDSU9OIFNV
-QkNBLTIgU0VDVVJJVFkgREFUQTAeFw0yMjA4MDgwMTQ1MzNaFw0yNjA4MDgwMTQ1MzNaMIGbMSQw
-IgYDVQQDDBtFRERZIEdPTlpBTE8gTE9QRVogQ0lTTkVST1MxFTATBgNVBAUTDDA3MDgyMjIwNTUy
-MDEwMC4GA1UECwwnRU5USURBRCBERSBDRVJUSUZJQ0FDSU9OIERFIElORk9STUFDSU9OMR0wGwYD
-VQQKDBRTRUNVUklUWSBEQVRBIFMuQS4gMjELMAkGA1UEBhMCRUMwggEiMA0GCSqGSIb3DQEBAQUA
-A4IBDwAwggEKAoIBAQDIlTNjfs+q+xI/PEqG5V0PNJAN/779/BwUNvXSgWMDcJKKn6KU3HrqX1cJ
-EDo1ci4tTo9O6R5prPJ+igW39ww+NKIN/7e2ZDpXV4o70qCZDwv+hBozovfNxY0Fk8TKWm8WUFt2
-xeDa2i5MplaPBzvQAMhyANBVKIjPUSOVoMtcKpEYr9q4t4vYJ5ILkH9TEf3+vy3eX7dI3OhLFhG5
-xr0elaGiBC8LP4ui0sZXAJxA8BaAkLuUyXkORKmjF6rZMs7oiw3X43J6xWTjNdsu288gn1ksyM1P
-RQaIUqPAywx78PPGskDDJmOub8Lp/IF3haHBBbzAtq6p5wg+lvkYMwxnAgMBAAGjggdMMIIHSDAM
-BgNVHRMBAf8EAjAAMB8GA1UdIwQYMBaAFIy6yhFXeCWAHWsKS1W/ja5i3b2PMFkGCCsGAQUFBwEB
-BE0wSzBJBggrBgEFBQcwAYY9aHR0cDovL29jc3Bndy5zZWN1cml0eWRhdGEubmV0LmVjL2VqYmNh
-L3B1YmxpY3dlYi9zdGF0dXMvb2NzcDCBzwYDVR0uBIHHMIHEMIHBoIG+oIG7hoG4bGRhcDovL2xk
-YXBzZGNhMi5zZWN1cml0eWRhdGEubmV0LmVjL0NOPUFVVE9SSURBRCBERSBDRVJUSUZJQ0FDSU9O
-IFNVQkNBLTIgU0VDVVJJVFkgREFUQSxPVT1FTlRJREFEIERFIENFUlRJRklDQUNJT04gREUgSU5G
-T1JNQUNJT04sTz1TRUNVUklUWSBEQVRBIFMuQS4gMixDPUVDP2RlbHRhUmV2b2NhdGlvbkxpc3Q/
-YmFzZTAjBgNVHREEHDAagRhnbG9wZXpAbXVsdGljaW5lcy5jb20uZWMwggEVBgNVHSAEggEMMIIB
-CDBiBgorBgEEAYKmcgIJMFQwUgYIKwYBBQUHAgIwRh5EAEMAZQByAHQAaQBmAGkAYwBhAGQAbwAg
-AGQAZQAgAFIAZQBwAHIAZQBzAGUAbgB0AGEAbgB0AGUAIABMAGUAZwBhAGwwgaEGCisGAQQBgqZy
-AgMwgZIwgY8GCCsGAQUFBwIBFoGCaHR0cHM6Ly93d3cuc2VjdXJpdHlkYXRhLm5ldC5lYy93cC1j
-b250ZW50L2Rvd25sb2Fkcy9Ob3JtYXRpdmFzL1BfZGVfQ2VydGlmaWNhZG9zL1BvbGl0aWNhcyBk
-ZSBDZXJ0aWZpY2FkbyBSZXByZXNlbnRhbnRlIExlZ2FsLnBkZjCCAqIGA1UdHwSCApkwggKVMIHl
-oEGgP4Y9aHR0cDovL29jc3Bndy5zZWN1cml0eWRhdGEubmV0LmVjL2VqYmNhL3B1YmxpY3dlYi9z
-dGF0dXMvb2NzcKKBn6SBnDCBmTE5MDcGA1UEAwwwQVVUT1JJREFEIERFIENFUlRJRklDQUNJT04g
-U1VCQ0EtMiBTRUNVUklUWSBEQVRBMTAwLgYDVQQLDCdFTlRJREFEIERFIENFUlRJRklDQUNJT04g
-REUgSU5GT1JNQUNJT04xHTAbBgNVBAoMFFNFQ1VSSVRZIERBVEEgUy5BLiAyMQswCQYDVQQGEwJF
-QzCBx6CBxKCBwYaBvmxkYXA6Ly9sZGFwc2RjYTIuc2VjdXJpdHlkYXRhLm5ldC5lYy9DTj1BVVRP
-UklEQUQgREUgQ0VSVElGSUNBQ0lPTiBTVUJDQS0yIFNFQ1VSSVRZIERBVEEsT1U9RU5USURBRCBE
-RSBDRVJUSUZJQ0FDSU9OIERFIElORk9STUFDSU9OLE89U0VDVVJJVFkgREFUQSBTLkEuIDIsQz1F
-Qz9jZXJ0aWZpY2F0ZVJldm9jYXRpb25MaXN0P2Jhc2UwgeCggd2ggdqGgddodHRwczovL3BvcnRh
-bC1vcGVyYWRvcjIuc2VjdXJpdHlkYXRhLm5ldC5lYy9lamJjYS9wdWJsaWN3ZWIvd2ViZGlzdC9j
-ZXJ0ZGlzdD9jbWQ9Y3JsJmlzc3Vlcj1DTj1BVVRPUklEQUQgREUgQ0VSVElGSUNBQ0lPTiBTVUJD
-QS0yIFNFQ1VSSVRZIERBVEEsT1U9RU5USURBRCBERSBDRVJUSUZJQ0FDSU9OIERFIElORk9STUFD
-SU9OLE89U0VDVVJJVFkgREFUQSBTLkEuIDIsQz1FQzAdBgNVHQ4EFgQUa3Q4j9znyJQ7EPS8gGGP
-750+sFcwKwYDVR0QBCQwIoAPMjAyMjA4MDgwMTQ1MzNagQ8yMDI2MDgwODAxNDUzM1owCwYDVR0P
-BAQDAgXgMB8GCisGAQQBgqZyAwUEEQwPR0VSRU5URSBHRU5FUkFMMBoGCisGAQQBgqZyAwEEDAwK
-MTcwNzMyNzcxMjAVBgorBgEEAYKmcgMJBAcMBVFVSVRPMBEGCisGAQQBgqZyAyIEAwwBLjA4Bgor
-BgEEAYKmcgMHBCoMKEdPTlpBTEVaIFNVQVJFWiBOMjczMTdOMjZDIFkgU0FOIElHTkFDSU8wHAYK
-KwYBBAGCpnIDAgQODAxFRERZIEdPTlpBTE8wHwYKKwYBBAGCpnIDIAQRDA8wMDIwMDEwMDAzOTc4
-NDcwEwYKKwYBBAGCpnIDIQQFDANQRlgwFwYKKwYBBAGCpnIDDAQJDAdFQ1VBRE9SMBUGCisGAQQB
-gqZyAwMEBwwFTE9QRVowHwYKKwYBBAGCpnIDCgQRDA9NVUxUSUNJTkVTIFMuQS4wHQYKKwYBBAGC
-pnIDCwQPDA0xNzkxMzA5ODYzMDAxMBIGCisGAQQBgqZyAx0EBAwCTm8wGAYKKwYBBAGCpnIDBAQK
-DAhDSVNORVJPUzAaBgorBgEEAYKmcgMIBAwMCjA5OTk3Mzk3MDEwDQYJKoZIhvcNAQELBQADggIB
-AJmqQO+OIIJog7PSJjgN/HF1A4SvXLhhM4KP5auPSRBlHP85Y+xy+1Bteg6YwZ0lfvQVDVlJaJzQ
-jTtUguolXRgI/9fagndJSbGoq2kbhuBH9P6J2Vi8FOf6fb/ukvd69+AHuCzUINMWrtU7m+riBf8T
-ECXTd5/GxPPJVulA2JTLZSw/V4m20ZyZP6UGLvKjAU62EPcmjVOLhZK+sH4CfV6ivsPmTCxpR9wg
-ajoBtFTlKHNeclwVJ4ZqZK9Dme69P4DEX4k90FZLfnJ7hmZN8rti0+5d2J5IX10s3/FHMinMV7zP
-gnGaIx1vCBh/E3Hng9o4c+/lgkjdtnU47zICBchXT9mar2aZ4Tok596wrTbzt9a7dyqE/6Ts9PsR
-+4fHQoiBAW1ozljRZIIqHuuXYX2yjK57rwk71s1ZCC9NbJCDkYk0/zATtljOnEVNB1XFMCXGM88V
-LskILFgkoLvzK9rg76JSjFlpcEfPUU8VOBhAdVt4N5Nhf2iyBIxZEvIJs0nIxxkuGfxiKdxOIuBR
-JYZkpHHa5V4BaxwUy0og3WH3ARoVMXw6ngOkLZpNdlK3QBdZNJnp3KqOiYDdEhG42QygA6mpnFSs
-RAKMh36tj/8TO1Jjytj69NV9CWj9e7AkqkO/Zy+7g1WPT1L9DwXsw8L2y01vyw+ATBlS+586N2SG
+QkNBLTEgU0VDVVJJVFkgREFUQTAeFw0yMTAyMDIxNjAwMDRaFw0yNDAyMDIxNjAwMDRaMIGfMQsw
+CQYDVQQGEwJFQzEdMBsGA1UECgwUU0VDVVJJVFkgREFUQSBTLkEuIDExMDAuBgNVBAsMJ0VOVElE
+QUQgREUgQ0VSVElGSUNBQ0lPTiBERSBJTkZPUk1BQ0lPTjEVMBMGA1UEBRMMMDIwMjIxMTExMDA3
+MSgwJgYDVQQDDB9DQVJMT1MgRkFCUklDSU8gRlJBTkNPIFNBTVBFRFJPMIIBIjANBgkqhkiG9w0B
+AQEFAAOCAQ8AMIIBCgKCAQEAy4sKFNahDQiRyukt21vSgbDAL7P7O69BHK2v/vrPaHg2Xp6bupWx
++z0HX2IP9QT6g+SQRFjEzGzz7xz35h+lhI/kbM0LPfJ7axk/xKk+QHGROddc4AqykT0btEBprtFZ
+ZbX8QKWFIADGZCzDZnbmmGspoV0+Froc4DT8YOZGxlZGEpWUDwrd093e9EvRfhrAEiF+o005t7E1
+D4+q+zEjK4Z7fU0AFqBq66Xz+0Zw7Hn8n48kMMaLFVXJSqIPY24I+JH0tWO2fxmQ18Ucf7g8JTLE
+84O+ic59xdtKSVPIjSN8h718X+RKo10sK7FPPcD0QfI4/z3Q1tZcJdICfs7fnwIDAQABo4IGnzCC
+BpswWQYIKwYBBQUHAQEETTBLMEkGCCsGAQUFBzABhj1odHRwOi8vb2NzcGd3LnNlY3VyaXR5ZGF0
+YS5uZXQuZWMvZWpiY2EvcHVibGljd2ViL3N0YXR1cy9vY3NwMB0GA1UdDgQWBBSabSOorZcvL8IU
+q4hBIPDeyNChHjAMBgNVHRMBAf8EAjAAMB8GA1UdIwQYMBaAFFwPhaR0EPytASwaAD2TFwn6OQHW
+MCsGA1UdEAQkMCKADzIwMjEwMjAyMTYwMDA0WoEPMjAyNDAyMDIxNjAwMDRaMIHMBgNVHS4EgcQw
+gcEwgb6ggbuggbiGgbVsZGFwOi8vbGRhcHNkLnNlY3VyaXR5ZGF0YS5uZXQuZWMvQ049QVVUT1JJ
+REFEIERFIENFUlRJRklDQUNJT04gU1VCQ0EtMSBTRUNVUklUWSBEQVRBLE9VPUVOVElEQUQgREUg
+Q0VSVElGSUNBQ0lPTiBERSBJTkZPUk1BQ0lPTixPPVNFQ1VSSVRZIERBVEEgUy5BLiAxLEM9RUM/
+ZGVsdGFSZXZvY2F0aW9uTGlzdD9iYXNlMG0GA1UdIARmMGQwYgYKKwYBBAGCpnICCTBUMFIGCCsG
+AQUFBwICMEYeRABDAGUAcgB0AGkAZgBpAGMAYQBkAG8AIABkAGUAIABSAGUAcAByAGUAcwBlAG4A
+dABhAG4AdABlACAATABlAGcAYQBsMIICngYDVR0fBIIClTCCApEwgeWgQaA/hj1odHRwOi8vb2Nz
+cGd3LnNlY3VyaXR5ZGF0YS5uZXQuZWMvZWpiY2EvcHVibGljd2ViL3N0YXR1cy9vY3NwooGfpIGc
+MIGZMTkwNwYDVQQDDDBBVVRPUklEQUQgREUgQ0VSVElGSUNBQ0lPTiBTVUJDQS0xIFNFQ1VSSVRZ
+IERBVEExMDAuBgNVBAsMJ0VOVElEQUQgREUgQ0VSVElGSUNBQ0lPTiBERSBJTkZPUk1BQ0lPTjEd
+MBsGA1UECgwUU0VDVVJJVFkgREFUQSBTLkEuIDExCzAJBgNVBAYTAkVDMIHEoIHBoIG+hoG7bGRh
+cDovL2xkYXBzZC5zZWN1cml0eWRhdGEubmV0LmVjL0NOPUFVVE9SSURBRCBERSBDRVJUSUZJQ0FD
+SU9OIFNVQkNBLTEgU0VDVVJJVFkgREFUQSxPVT1FTlRJREFEIERFIENFUlRJRklDQUNJT04gREUg
+SU5GT1JNQUNJT04sTz1TRUNVUklUWSBEQVRBIFMuQS4gMSxDPUVDP2NlcnRpZmljYXRlUmV2b2Nh
+dGlvbkxpc3Q/YmFzZTCB36CB3KCB2YaB1mh0dHBzOi8vcG9ydGFsLW9wZXJhZG9yLnNlY3VyaXR5
+ZGF0YS5uZXQuZWMvZWpiY2EvcHVibGljd2ViL3dlYmRpc3QvY2VydGRpc3Q/Y21kPWNybCZpc3N1
+ZXI9Q049QVVUT1JJREFEIERFIENFUlRJRklDQUNJT04gU1VCQ0EtMSBTRUNVUklUWSBEQVRBLE9V
+PUVOVElEQUQgREUgQ0VSVElGSUNBQ0lPTiBERSBJTkZPUk1BQ0lPTixPPVNFQ1VSSVRZIERBVEEg
+Uy5BLiAxLEM9RUMwCwYDVR0PBAQDAgXgMCIGA1UdEQQbMBmBF2ZmcmFuY29AZGF0YWZhc3QuY29t
+LmVjMBoGCisGAQQBgqZyAwEEDAwKMDkwNTAxOTYwMDAfBgorBgEEAYKmcgMCBBEMD0NBUkxPUyBG
+QUJSSUNJTzAWBgorBgEEAYKmcgMDBAgMBkZSQU5DTzAYBgorBgEEAYKmcgMEBAoMCFNBTVBFRFJP
+MB8GCisGAQQBgqZyAwUEEQwPR0VSRU5URSBHRU5FUkFMMDUGCisGAQQBgqZyAwcEJwwlQVYgTEFT
+IEFNRVJJQ0FTIFMgTiBZIEFWIElTSURSTyBBWU9SQTAcBgorBgEEAYKmcgMIBA4MDDU5Mzk5NzY0
+NDYwMTAZBgorBgEEAYKmcgMJBAsMCUdVQVlBUVVJTDAdBgorBgEEAYKmcgMKBA8MDURBVEFGQVNU
+IFMuQS4wHQYKKwYBBAGCpnIDCwQPDA0xNzkxMzEwMDYzMDAxMBcGCisGAQQBgqZyAwwECQwHRUNV
+QURPUjASBgorBgEEAYKmcgMdBAQMAk5vMB8GCisGAQQBgqZyAyAEEQwPMDAxMDAyMDAwMDk1NTk1
+MBMGCisGAQQBgqZyAyEEBQwDUEZYMBEGCisGAQQBgqZyAyIEAwwBLjANBgkqhkiG9w0BAQsFAAOC
+AgEAehtLTQN4PfFzRl7aq3+ZCF1UKyvf2FmPLEA9U5zLPNi80Z8TthT8xCM9yvrr4sUdBRb5LfvQ
+O0IGEuKEG9U6i42ePonyEVoB8MDUfU3d0pcFY/K8qaDQrZaHhl6PMI1OvRfx8H3J7wvTviBc0tLy
+vfcnlg7EXOs2kbyhfDn0EsHXCqlrve3AKrcZ6jXiy8qey5bS3eOAJYcsvyzlfpvAfo0xEg1PsMHt
+DheU1/DJVjIGRtaoyWcYOuIk+Cfo7UJc5fZWr+vj+NgPY2X3iBIALNjmOKmugCJlM1fkMEHHL9FI
+mJIjWhimI7wwPFln/lXULUXUrDHAqYSgMYQc2sn3H+R6IpRvkpfuio4dGQKyf41Gqrq5HwrmV1JY
+U/PdbrluGI7ufag8hj+UnvYGEeGNxmsN+okOYQzVNaKfAsdkRuU7iBf16GQFq9DJ1kYHhjPvNIrW
+vYVeWsjiMqaZTKHs4zRI39I5i6RVaFeXeYOX+Uc4T1ieEFnTE30ES+MjVJra1OGbFQJg/kTfV8u2
+LramSJa7fXSxfzkfvBqfce+NBsFPoE1MF6lOHcVIgJmdqX1uaPNAUclicTePFaJIyMQAH64g2pSe
+ivXBQ6EH61+WKfEwQ8cVF9cVIdzKbXar8AGvLavZEJZCUNT9tEtH8G2i/K1jMrzG9diKcvlQC5aJ
+aGc=
 </ds:X509Certificate>
 </ds:X509Data>
 <ds:KeyValue>
 <ds:RSAKeyValue>
 <ds:Modulus>
-yJUzY37PqvsSPzxKhuVdDzSQDf++/fwcFDb10oFjA3CSip+ilNx66l9XCRA6NXIuLU6PTukeaazy
-fooFt/cMPjSiDf+3tmQ6V1eKO9KgmQ8L/oQaM6L3zcWNBZPEylpvFlBbdsXg2touTKZWjwc70ADI
-cgDQVSiIz1EjlaDLXCqRGK/auLeL2CeSC5B/UxH9/r8t3l+3SNzoSxYRuca9HpWhogQvCz+LotLG
-VwCcQPAWgJC7lMl5DkSpoxeq2TLO6IsN1+NyesVk4zXbLtvPIJ9ZLMjNT0UGiFKjwMsMe/DzxrJA
-wyZjrm/C6fyBd4WhwQW8wLauqecIPpb5GDMMZw==
+y4sKFNahDQiRyukt21vSgbDAL7P7O69BHK2v/vrPaHg2Xp6bupWx+z0HX2IP9QT6g+SQRFjEzGzz
+7xz35h+lhI/kbM0LPfJ7axk/xKk+QHGROddc4AqykT0btEBprtFZZbX8QKWFIADGZCzDZnbmmGsp
+oV0+Froc4DT8YOZGxlZGEpWUDwrd093e9EvRfhrAEiF+o005t7E1D4+q+zEjK4Z7fU0AFqBq66Xz
++0Zw7Hn8n48kMMaLFVXJSqIPY24I+JH0tWO2fxmQ18Ucf7g8JTLE84O+ic59xdtKSVPIjSN8h718
+X+RKo10sK7FPPcD0QfI4/z3Q1tZcJdICfs7fnw==
 </ds:Modulus>
 <ds:Exponent>AQAB</ds:Exponent>
 </ds:RSAKeyValue>
 </ds:KeyValue>
 </ds:KeyInfo>
-<ds:Object Id="Signature731693-Object366180"><etsi:QualifyingProperties Target="#Signature731693"><etsi:SignedProperties Id="Signature731693-SignedProperties370742"><etsi:SignedSignatureProperties><etsi:SigningTime>2023-01-12T21:11:58-05:00</etsi:SigningTime><etsi:SigningCertificate><etsi:Cert><etsi:CertDigest><ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/><ds:DigestValue>/6F9aXb8rb9xq03ZjkXq8CmoeKk=</ds:DigestValue></etsi:CertDigest><etsi:IssuerSerial><ds:X509IssuerName>CN=AUTORIDAD DE CERTIFICACION SUBCA-2 SECURITY DATA,OU=ENTIDAD DE CERTIFICACION DE INFORMACION,O=SECURITY DATA S.A. 2,C=EC</ds:X509IssuerName><ds:X509SerialNumber>1395648650</ds:X509SerialNumber></etsi:IssuerSerial></etsi:Cert></etsi:SigningCertificate></etsi:SignedSignatureProperties><etsi:SignedDataObjectProperties><etsi:DataObjectFormat ObjectReference="#Reference-ID-210569"><etsi:Description>comprobante</etsi:Description><etsi:MimeType>text/xml</etsi:MimeType></etsi:DataObjectFormat></etsi:SignedDataObjectProperties></etsi:SignedProperties></etsi:QualifyingProperties></ds:Object></ds:Signature></factura>]]></comprobante>
+<ds:Object Id="Signature26268-Object772415"><etsi:QualifyingProperties Target="#Signature26268"><etsi:SignedProperties Id="Signature26268-SignedProperties932766"><etsi:SignedSignatureProperties><etsi:SigningTime>2023-04-06T08:03:31-05:00</etsi:SigningTime><etsi:SigningCertificate><etsi:Cert><etsi:CertDigest><ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"></ds:DigestMethod><ds:DigestValue>PXnYkRwqp/hj0hrqKvlPI5mqrNQ=</ds:DigestValue></etsi:CertDigest><etsi:IssuerSerial><ds:X509IssuerName>CN=AUTORIDAD DE CERTIFICACION SUBCA-1 SECURITY DATA,OU=ENTIDAD DE CERTIFICACION DE INFORMACION,O=SECURITY DATA S.A. 1,C=EC</ds:X509IssuerName><ds:X509SerialNumber>263423154</ds:X509SerialNumber></etsi:IssuerSerial></etsi:Cert></etsi:SigningCertificate></etsi:SignedSignatureProperties><etsi:SignedDataObjectProperties><etsi:DataObjectFormat ObjectReference="#Reference-ID-808641"><etsi:Description>Documento de ejemplo</etsi:Description><etsi:MimeType>text/xml</etsi:MimeType></etsi:DataObjectFormat></etsi:SignedDataObjectProperties></etsi:SignedProperties></etsi:QualifyingProperties></ds:Object></ds:Signature></factura>]]></comprobante>
 <mensajes/>
 </autorizacion>
 

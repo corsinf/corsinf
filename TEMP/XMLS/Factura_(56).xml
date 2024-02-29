@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <autorizacion>
 <estado>AUTORIZADO</estado>
-<numeroAutorizacion>0904202301179130986300120012930001400570014005715</numeroAutorizacion>
-<fechaAutorizacion>2023-04-09T11:20:14-05:00</fechaAutorizacion>
+<numeroAutorizacion>2904202301179130986300120012320002081730020817313</numeroAutorizacion>
+<fechaAutorizacion>2023-04-29T13:50:23-05:00</fechaAutorizacion>
 <ambiente>PRODUCCIÓN</ambiente>
 <comprobante><![CDATA[<?xml version="1.0" encoding="UTF-8" standalone="no"?><factura id="comprobante" version="2.1.0">
   <infoTributaria>
@@ -11,68 +11,68 @@
     <razonSocial>MULTICINES S.A.</razonSocial>
     <nombreComercial>1058380</nombreComercial>
     <ruc>1791309863001</ruc>
-    <claveAcceso>0904202301179130986300120012930001400570014005715</claveAcceso>
+    <claveAcceso>2904202301179130986300120012320002081730020817313</claveAcceso>
     <codDoc>01</codDoc>
     <estab>001</estab>
-    <ptoEmi>293</ptoEmi>
-    <secuencial>000140057</secuencial>
+    <ptoEmi>232</ptoEmi>
+    <secuencial>000208173</secuencial>
     <dirMatriz>MULTICINES S.A.Av. González Suárez N27317N26C y San Ignacio Ed. Delta Piso7</dirMatriz>
   </infoTributaria>
   <infoFactura>
-    <fechaEmision>09/04/2023</fechaEmision>
+    <fechaEmision>29/04/2023</fechaEmision>
     <dirEstablecimiento>MULTICINES - CCIAv. Amazonas 3918Iñaquito. Quito Ecuador</dirEstablecimiento>
     <contribuyenteEspecial>0590</contribuyenteEspecial>
     <obligadoContabilidad>SI</obligadoContabilidad>
     <tipoIdentificacionComprador>05</tipoIdentificacionComprador>
     <razonSocialComprador>Milton Rubio</razonSocialComprador>
     <identificacionComprador>1712605284</identificacionComprador>
-    <totalSinImpuestos>7.50</totalSinImpuestos>
+    <totalSinImpuestos>12.00</totalSinImpuestos>
     <totalDescuento>0.00</totalDescuento>
     <totalConImpuestos>
       <totalImpuesto>
         <codigo>2</codigo>
         <codigoPorcentaje>0</codigoPorcentaje>
-        <baseImponible>6.63</baseImponible>
+        <baseImponible>10.62</baseImponible>
         <valor>0.00</valor>
       </totalImpuesto>
       <totalImpuesto>
         <codigo>2</codigo>
         <codigoPorcentaje>6</codigoPorcentaje>
-        <baseImponible>0.87</baseImponible>
+        <baseImponible>1.38</baseImponible>
         <valor>0.00</valor>
       </totalImpuesto>
     </totalConImpuestos>
     <propina>0.00</propina>
-    <importeTotal>7.50</importeTotal>
+    <importeTotal>12.00</importeTotal>
     <moneda>DOLAR</moneda>
     <pagos>
       <pago>
-        <formaPago>19</formaPago>
-        <total>7.50</total>
+        <formaPago>01</formaPago>
+        <total>12.00</total>
         <plazo>0</plazo>
       </pago>
     </pagos>
   </infoFactura>
   <detalles>
     <detalle>
-      <codigoPrincipal>0827</codigoPrincipal>
-      <codigoAuxiliar>0827</codigoAuxiliar>
-      <descripcion>2D VERMOUTH BCO PICHINCHA</descripcion>
-      <cantidad>3.00</cantidad>
-      <precioUnitario>2.21</precioUnitario>
+      <codigoPrincipal>0069</codigoPrincipal>
+      <codigoAuxiliar>0069</codigoAuxiliar>
+      <descripcion>2D ADULTO</descripcion>
+      <cantidad>2.00</cantidad>
+      <precioUnitario>5.31</precioUnitario>
       <descuento>0.00</descuento>
-      <precioTotalSinImpuesto>6.63</precioTotalSinImpuesto>
+      <precioTotalSinImpuesto>10.62</precioTotalSinImpuesto>
       <detallesAdicionales>
-        <detAdicional nombre="Pelicula" valor="Pel: CALABOZOS Y DRAGONES"/>
-        <detAdicional nombre="Fecha" valor="F.Func:09/04/2023"/>
-        <detAdicional nombre="Horario" valor="Hora:11:45"/>
+        <detAdicional nombre="Pelicula" valor="Pel: POSESION INFERNAL"/>
+        <detAdicional nombre="Fecha" valor="F.Func:29/04/2023"/>
+        <detAdicional nombre="Horario" valor="Hora:14:40"/>
       </detallesAdicionales>
       <impuestos>
         <impuesto>
           <codigo>2</codigo>
           <codigoPorcentaje>0</codigoPorcentaje>
           <tarifa>0</tarifa>
-          <baseImponible>6.63</baseImponible>
+          <baseImponible>10.62</baseImponible>
           <valor>0.00</valor>
         </impuesto>
       </impuestos>
@@ -82,9 +82,9 @@
       <codigoAuxiliar>00</codigoAuxiliar>
       <descripcion>MUNICIPAL QUITO</descripcion>
       <cantidad>1.00</cantidad>
-      <precioUnitario>0.87</precioUnitario>
+      <precioUnitario>1.38</precioUnitario>
       <descuento>0.00</descuento>
-      <precioTotalSinImpuesto>0.87</precioTotalSinImpuesto>
+      <precioTotalSinImpuesto>1.38</precioTotalSinImpuesto>
       <detallesAdicionales>
         <detAdicional nombre="Pelicula" valor="N/A"/>
         <detAdicional nombre="Fecha" valor="N/A"/>
@@ -95,46 +95,46 @@
           <codigo>2</codigo>
           <codigoPorcentaje>6</codigoPorcentaje>
           <tarifa>0</tarifa>
-          <baseImponible>0.87</baseImponible>
+          <baseImponible>1.38</baseImponible>
           <valor>0.00</valor>
         </impuesto>
       </impuestos>
     </detalle>
   </detalles>
   <infoAdicional>
-    <campoAdicional nombre="Direccion Principal">.</campoAdicional>
+    <campoAdicional nombre="Direccion Principal">DOMICILIO CONOCIDO</campoAdicional>
     <campoAdicional nombre="Telefono">0999219738</campoAdicional>
     <campoAdicional nombre="emailCliente">miltonrubio@hotmail.com</campoAdicional>
     <campoAdicional nombre="Codigo Segmento">21</campoAdicional>
   </infoAdicional>
-<ds:Signature xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xmlns:etsi="http://uri.etsi.org/01903/v1.3.2#" Id="Signature633552">
-<ds:SignedInfo Id="Signature-SignedInfo707347">
+<ds:Signature xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xmlns:etsi="http://uri.etsi.org/01903/v1.3.2#" Id="Signature303977">
+<ds:SignedInfo Id="Signature-SignedInfo616099">
 <ds:CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/>
 <ds:SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/>
-<ds:Reference Id="SignedPropertiesID741641" Type="http://uri.etsi.org/01903#SignedProperties" URI="#Signature633552-SignedProperties382424">
+<ds:Reference Id="SignedPropertiesID693519" Type="http://uri.etsi.org/01903#SignedProperties" URI="#Signature303977-SignedProperties110035">
 <ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/>
-<ds:DigestValue>0iziSgPdwHozFGpXhsoSIk+ssOc=</ds:DigestValue>
+<ds:DigestValue>gVvKN9At9+IZJ3yAlWLUTYcFkP8=</ds:DigestValue>
 </ds:Reference>
-<ds:Reference URI="#Certificate188048">
+<ds:Reference URI="#Certificate1260241">
 <ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/>
-<ds:DigestValue>5onhcUf0TweiWKNg633JpZqu88c=</ds:DigestValue>
+<ds:DigestValue>Hz7z0n3ChxMvkZdF97fIEFfJQSw=</ds:DigestValue>
 </ds:Reference>
-<ds:Reference Id="Reference-ID-636509" URI="#comprobante">
+<ds:Reference Id="Reference-ID-1028350" URI="#comprobante">
 <ds:Transforms>
 <ds:Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/>
 </ds:Transforms>
 <ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/>
-<ds:DigestValue>pEflDse3ewW3b+7NV4G7/ScU234=</ds:DigestValue>
+<ds:DigestValue>FviOBZ58hI77I3xlmXWKcv+MC2k=</ds:DigestValue>
 </ds:Reference>
 </ds:SignedInfo>
-<ds:SignatureValue Id="SignatureValue928363">
-QSV9BhenB71jFwiM+YcxyzbF1QHGEfW03AE0kBuijm+iqNRAL33I3r0MCrErEDoJ7IqEeKMPg2Cg
-ii3htsP3b5j7cOzFz4lrtfabsi++Dfzrucx/kf23XYd/o6rUSj+qUwsagSe7GtlCBonjLeRGi6Lf
-1ZA1HQgDv4p8cBdl79wqdoA+0B+TSvWuWx22bcCUiorvskpe4UaRkwjNz8z5QuW34wkuivpoeATa
-GkunlvDs5uzamRoTvfvB9gX4VEMBKxbwn9rSI9R2+KayiqjDKZdvfKQTfJuDpSThrjxXH47bJb8p
-kluJOjwJ+CSTfafSROeosDUztQcgWSj28KZayA==
+<ds:SignatureValue Id="SignatureValue119850">
+XErsZsQB++ZxkmJXzJiamMq/SbzTP1XQA9XzMxdbzep6j3YNkLhhi/MEMuDYCvCLy+mGX/z40Lrp
+B24P63tSPC/Q1ZWIDYW+Fp9zInSlTRA7VxcYHOFDOM0Hsik71DXnW+itjz7Yg4MYzhTU79LtSTBg
+DIzjgrkWXLQysIJ8tj3WJE/uhZxf+fwEa6Dyu+hjQ+iShLzvtOejvrL6u0ura5BZnM6weR7ofLMd
+SJfpgZKn6Lx9XSn0oenvcsrt4q7Bcy0oVePdmDGgzpW6gwRIEArwnTwjq8//LuputXX7oRNRGCQ4
+HdeNSj7K6U31Vsy9/VdKFLRgTW3GlFHxRc5ojQ==
 </ds:SignatureValue>
-<ds:KeyInfo Id="Certificate188048">
+<ds:KeyInfo Id="Certificate1260241">
 <ds:X509Data>
 <ds:X509Certificate>
 MIIMAjCCCeqgAwIBAgIEUy/oijANBgkqhkiG9w0BAQsFADCBmTELMAkGA1UEBhMCRUMxHTAbBgNV
@@ -206,7 +206,7 @@ wyZjrm/C6fyBd4WhwQW8wLauqecIPpb5GDMMZw==
 </ds:RSAKeyValue>
 </ds:KeyValue>
 </ds:KeyInfo>
-<ds:Object Id="Signature633552-Object954729"><etsi:QualifyingProperties Target="#Signature633552"><etsi:SignedProperties Id="Signature633552-SignedProperties382424"><etsi:SignedSignatureProperties><etsi:SigningTime>2023-04-09T11:20:12-05:00</etsi:SigningTime><etsi:SigningCertificate><etsi:Cert><etsi:CertDigest><ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/><ds:DigestValue>/6F9aXb8rb9xq03ZjkXq8CmoeKk=</ds:DigestValue></etsi:CertDigest><etsi:IssuerSerial><ds:X509IssuerName>CN=AUTORIDAD DE CERTIFICACION SUBCA-2 SECURITY DATA,OU=ENTIDAD DE CERTIFICACION DE INFORMACION,O=SECURITY DATA S.A. 2,C=EC</ds:X509IssuerName><ds:X509SerialNumber>1395648650</ds:X509SerialNumber></etsi:IssuerSerial></etsi:Cert></etsi:SigningCertificate></etsi:SignedSignatureProperties><etsi:SignedDataObjectProperties><etsi:DataObjectFormat ObjectReference="#Reference-ID-636509"><etsi:Description>comprobante</etsi:Description><etsi:MimeType>text/xml</etsi:MimeType></etsi:DataObjectFormat></etsi:SignedDataObjectProperties></etsi:SignedProperties></etsi:QualifyingProperties></ds:Object></ds:Signature></factura>]]></comprobante>
+<ds:Object Id="Signature303977-Object704520"><etsi:QualifyingProperties Target="#Signature303977"><etsi:SignedProperties Id="Signature303977-SignedProperties110035"><etsi:SignedSignatureProperties><etsi:SigningTime>2023-04-29T13:50:21-05:00</etsi:SigningTime><etsi:SigningCertificate><etsi:Cert><etsi:CertDigest><ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/><ds:DigestValue>/6F9aXb8rb9xq03ZjkXq8CmoeKk=</ds:DigestValue></etsi:CertDigest><etsi:IssuerSerial><ds:X509IssuerName>CN=AUTORIDAD DE CERTIFICACION SUBCA-2 SECURITY DATA,OU=ENTIDAD DE CERTIFICACION DE INFORMACION,O=SECURITY DATA S.A. 2,C=EC</ds:X509IssuerName><ds:X509SerialNumber>1395648650</ds:X509SerialNumber></etsi:IssuerSerial></etsi:Cert></etsi:SigningCertificate></etsi:SignedSignatureProperties><etsi:SignedDataObjectProperties><etsi:DataObjectFormat ObjectReference="#Reference-ID-1028350"><etsi:Description>comprobante</etsi:Description><etsi:MimeType>text/xml</etsi:MimeType></etsi:DataObjectFormat></etsi:SignedDataObjectProperties></etsi:SignedProperties></etsi:QualifyingProperties></ds:Object></ds:Signature></factura>]]></comprobante>
 <mensajes/>
 </autorizacion>
 

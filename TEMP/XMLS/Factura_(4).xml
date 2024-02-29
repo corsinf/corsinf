@@ -1,37 +1,37 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <autorizacion>
 <estado>AUTORIZADO</estado>
-<numeroAutorizacion>0301202301179190681000120010020000859130008591311</numeroAutorizacion>
-<fechaAutorizacion>2023-01-03T07:12:20-05:00</fechaAutorizacion>
+<numeroAutorizacion>0102202301179190681000120010020000883210008832118</numeroAutorizacion>
+<fechaAutorizacion>2023-02-01T07:59:50-05:00</fechaAutorizacion>
 <ambiente>PRODUCCIÓN</ambiente>
-<comprobante><![CDATA[<?xml version="1.0" encoding="utf-8" standalone="no"?><factura id="comprobante" version="1.1.0"><infoTributaria><ambiente>2</ambiente><tipoEmision>1</tipoEmision><razonSocial>Congregacion Hermanas Dominicas de la Inmaculada Concepcion</razonSocial><nombreComercial>SAINT DOMINIC SCHOOL</nombreComercial><ruc>1791906810001</ruc><claveAcceso>0301202301179190681000120010020000859130008591311</claveAcceso><codDoc>01</codDoc><estab>001</estab><ptoEmi>002</ptoEmi><secuencial>000085913</secuencial><dirMatriz>CESAR DAVILA N10-222 Y CHARLES DARWIN</dirMatriz><agenteRetencion>1</agenteRetencion></infoTributaria><infoFactura><fechaEmision>03/01/2023</fechaEmision><dirEstablecimiento>César Dávila N10-222 y Charles Darwin</dirEstablecimiento><contribuyenteEspecial>1451E</contribuyenteEspecial><obligadoContabilidad>SI</obligadoContabilidad><tipoIdentificacionComprador>05</tipoIdentificacionComprador><razonSocialComprador>RUBIO PUETATE MILTON ANDRES</razonSocialComprador><identificacionComprador>1712605284</identificacionComprador><direccionComprador>AJAVI, LOS ENCUENTROS , S15-53 y AJAVI</direccionComprador><totalSinImpuestos>297.70</totalSinImpuestos><totalDescuento>0.00</totalDescuento><totalConImpuestos><totalImpuesto><codigo>2</codigo><codigoPorcentaje>0</codigoPorcentaje><baseImponible>297.70</baseImponible><tarifa>0</tarifa><valor>0.00</valor></totalImpuesto></totalConImpuestos><importeTotal>297.70</importeTotal><moneda>USD</moneda><pagos><pago><formaPago>20</formaPago><total>297.70</total><plazo>7.00</plazo><unidadTiempo>días</unidadTiempo></pago></pagos></infoFactura><detalles><detalle><codigoPrincipal>PENSBGU2223</codigoPrincipal><codigoAuxiliar>PENSBGU2223</codigoAuxiliar><descripcion>PENSION BGU 2022-2023 Enero 5 10</descripcion><cantidad>1.00</cantidad><precioUnitario>297.7000</precioUnitario><descuento>0.00</descuento><precioTotalSinImpuesto>297.70</precioTotalSinImpuesto><impuestos><impuesto><codigo>2</codigo><codigoPorcentaje>0</codigoPorcentaje><tarifa>0</tarifa><baseImponible>297.70</baseImponible><valor>0.00</valor></impuesto></impuestos></detalle></detalles><infoAdicional><campoAdicional nombre="DIR:">BATAN</campoAdicional><campoAdicional nombre="TLF:">3920507</campoAdicional><campoAdicional nombre="Email:">mrubio@corsinf.com</campoAdicional><campoAdicional nombre="ESTUDIANTE:">ANNY MAITE  RUBIO CHILLAGANA</campoAdicional><campoAdicional nombre="GRUPO:">SEGUNDO BACHILLERATO 2022-2023 B</campoAdicional><campoAdicional nombre="REGIMEN">AGENTE DE RETENCION RESOLUCIÓN Nro. NAC-DNCRASC20-00000001</campoAdicional></infoAdicional><ds:Signature xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xmlns:etsi="http://uri.etsi.org/01903/v1.3.2#" Id="Signature99009">
-<ds:SignedInfo Id="Signature-SignedInfo314659">
+<comprobante><![CDATA[<?xml version="1.0" encoding="utf-8" standalone="no"?><factura id="comprobante" version="1.1.0"><infoTributaria><ambiente>2</ambiente><tipoEmision>1</tipoEmision><razonSocial>Congregación Hermanas Dominicas de la Inmaculada Concepción</razonSocial><nombreComercial>SAINT DOMINIC SCHOOL</nombreComercial><ruc>1791906810001</ruc><claveAcceso>0102202301179190681000120010020000883210008832118</claveAcceso><codDoc>01</codDoc><estab>001</estab><ptoEmi>002</ptoEmi><secuencial>000088321</secuencial><dirMatriz>CÉSAR DÁVILA N10-222 Y CHARLES DARWIN</dirMatriz><agenteRetencion>1</agenteRetencion></infoTributaria><infoFactura><fechaEmision>01/02/2023</fechaEmision><dirEstablecimiento>César Dávila N10-222 y Charles Darwin</dirEstablecimiento><contribuyenteEspecial>1451E</contribuyenteEspecial><obligadoContabilidad>SI</obligadoContabilidad><tipoIdentificacionComprador>05</tipoIdentificacionComprador><razonSocialComprador>RUBIO PUETATE MILTON ANDRES</razonSocialComprador><identificacionComprador>1712605284</identificacionComprador><direccionComprador>AJAVI, LOS ENCUENTROS , S15-53 y AJAVI</direccionComprador><totalSinImpuestos>297.70</totalSinImpuestos><totalDescuento>0.00</totalDescuento><totalConImpuestos><totalImpuesto><codigo>2</codigo><codigoPorcentaje>0</codigoPorcentaje><baseImponible>297.70</baseImponible><tarifa>0</tarifa><valor>0.00</valor></totalImpuesto></totalConImpuestos><importeTotal>297.70</importeTotal><moneda>USD</moneda><pagos><pago><formaPago>20</formaPago><total>297.70</total><plazo>11.00</plazo><unidadTiempo>días</unidadTiempo></pago></pagos></infoFactura><detalles><detalle><codigoPrincipal>PENSBGU2223</codigoPrincipal><codigoAuxiliar>PENSBGU2223</codigoAuxiliar><descripcion>PENSION BGU 2022-2023 Febrero 6 10</descripcion><cantidad>1.00</cantidad><precioUnitario>297.7000</precioUnitario><descuento>0.00</descuento><precioTotalSinImpuesto>297.70</precioTotalSinImpuesto><impuestos><impuesto><codigo>2</codigo><codigoPorcentaje>0</codigoPorcentaje><tarifa>0</tarifa><baseImponible>297.70</baseImponible><valor>0.00</valor></impuesto></impuestos></detalle></detalles><infoAdicional><campoAdicional nombre="DIR:">BATAN</campoAdicional><campoAdicional nombre="TLF:">3920507</campoAdicional><campoAdicional nombre="Email:">mrubio@corsinf.com</campoAdicional><campoAdicional nombre="ESTUDIANTE:">ANNY MAITE  RUBIO CHILLAGANA</campoAdicional><campoAdicional nombre="GRUPO:">SEGUNDO BACHILLERATO 2022-2023 B</campoAdicional><campoAdicional nombre="REGIMEN">AGENTE DE RETENCION RESOLUCIÓN Nro. NAC-DNCRASC20-00000001</campoAdicional></infoAdicional><ds:Signature xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xmlns:etsi="http://uri.etsi.org/01903/v1.3.2#" Id="Signature441712">
+<ds:SignedInfo Id="Signature-SignedInfo427679">
 <ds:CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/>
 <ds:SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/>
-<ds:Reference Id="SignedPropertiesID74579" Type="http://uri.etsi.org/01903#SignedProperties" URI="#Signature99009-SignedProperties160443">
+<ds:Reference Id="SignedPropertiesID73472" Type="http://uri.etsi.org/01903#SignedProperties" URI="#Signature441712-SignedProperties6643">
 <ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/>
-<ds:DigestValue>m32x54iRZlsnBZTYuUd3vhLyngI=</ds:DigestValue>
+<ds:DigestValue>V2rsu6i9SflVyCxltQrauKcKFkI=</ds:DigestValue>
 </ds:Reference>
-<ds:Reference URI="#Certificate1980017">
+<ds:Reference URI="#Certificate1372882">
 <ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/>
-<ds:DigestValue>DjlaKHqna1M6jNb/Y1ndo45GvGk=</ds:DigestValue>
+<ds:DigestValue>pkdXV3x9PdslfGZTbscXrk0PN1Y=</ds:DigestValue>
 </ds:Reference>
-<ds:Reference Id="Reference-ID-965749" URI="#comprobante">
+<ds:Reference Id="Reference-ID-659818" URI="#comprobante">
 <ds:Transforms>
 <ds:Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/>
 </ds:Transforms>
 <ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/>
-<ds:DigestValue>l+y5HUV6Bdr0Y/tf96wz1bQ85po=</ds:DigestValue>
+<ds:DigestValue>wHHbsGtvMTGpi15HroW06/2QnTA=</ds:DigestValue>
 </ds:Reference>
 </ds:SignedInfo>
-<ds:SignatureValue Id="SignatureValue735357">
-TQBc3qqsYPUipY3FYZY+4HFjAXo6qrb9CEWE40bxIp88SM79hnh5fg3ibtEbIvatAWaorHlSx872
-aB2LDhfrg0MAMhy2XwB89KbZzSPzp6WL1g25Tch75uycEa/CGEf1JEJd/th2lqu8P6hGfZ1bOdBu
-ABry6byCLNOuLz6jLQGIbpPBsR4p46lYRAq3SmPMHXXhlUFO87HUPmmEIj5cyB6MyNcc6ni4LYeU
-XiaGwaIyQqftWBN9qrAhaSv86/m8ONfwmNNWFkUrXwSF4PtoY6obRQt2yK3fhuZUA++0Pfq1M1fg
-tGCfWj3DCxb13MSkgkuUSmEtb2zna6fl1ESR4w==
+<ds:SignatureValue Id="SignatureValue882766">
+uwBzTmeX0rEUvSW2+fF3NGvqtU4S+nzWbdI3MRjkJ/aSveqLx3dzMW1oNsidXbasHiTZBvFDRVfx
+Rygqy+xCJWrYgGwprgAzGu6uLeno3c4BYjxqO+qCyS4efK2RfaZE+MPq3rt6GEO/Dvgsws3NncQd
+ryBOGI3qUql6f0yReKUg+z0lDSCPfl3b/9+qcnDKg8BosKHjO+uKQNDXxeD5ZVA61MLDF6SE2VaL
+70NWxGZG2KvcpbBseL0qa5uGSuXcqo9+eFPx8CB1KqQhk/nWe4DL0pO7VpCOtwh5aVFD55ugXTad
+YWM4sfTLG/6ErEmuvTkV55an84Rm2MBKDHuOGA==
 </ds:SignatureValue>
-<ds:KeyInfo Id="Certificate1980017">
+<ds:KeyInfo Id="Certificate1372882">
 <ds:X509Data>
 <ds:X509Certificate>
 MIIKGjCCCAKgAwIBAgIEW2t1xTANBgkqhkiG9w0BAQsFADCBoTELMAkGA1UEBhMCRUMxIjAgBgNV
@@ -95,7 +95,7 @@ UocL3s0R+lKwvQ+8NZuNSh01VHj/TagQ2XCwEQ==
 </ds:RSAKeyValue>
 </ds:KeyValue>
 </ds:KeyInfo>
-<ds:Object Id="Signature99009-Object653603"><etsi:QualifyingProperties Target="#Signature99009"><etsi:SignedProperties Id="Signature99009-SignedProperties160443"><etsi:SignedSignatureProperties><etsi:SigningTime>2023-01-03T12:12:19+00:00</etsi:SigningTime><etsi:SigningCertificate><etsi:Cert><etsi:CertDigest><ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/><ds:DigestValue>9PEZGI/FDOHELClo9+mzEux36as=</ds:DigestValue></etsi:CertDigest><etsi:IssuerSerial><ds:X509IssuerName>CN=AC BANCO CENTRAL DEL ECUADOR,L=QUITO,OU=ENTIDAD DE CERTIFICACION DE INFORMACION-ECIBCE,O=BANCO CENTRAL DEL ECUADOR,C=EC</ds:X509IssuerName><ds:X509SerialNumber>1533769157</ds:X509SerialNumber></etsi:IssuerSerial></etsi:Cert></etsi:SigningCertificate></etsi:SignedSignatureProperties><etsi:SignedDataObjectProperties><etsi:DataObjectFormat ObjectReference="#Reference-ID-965749"><etsi:Description>contenido comprobante</etsi:Description><etsi:MimeType>text/xml</etsi:MimeType></etsi:DataObjectFormat></etsi:SignedDataObjectProperties></etsi:SignedProperties></etsi:QualifyingProperties></ds:Object></ds:Signature></factura>
+<ds:Object Id="Signature441712-Object40630"><etsi:QualifyingProperties Target="#Signature441712"><etsi:SignedProperties Id="Signature441712-SignedProperties6643"><etsi:SignedSignatureProperties><etsi:SigningTime>2023-02-01T12:59:49+00:00</etsi:SigningTime><etsi:SigningCertificate><etsi:Cert><etsi:CertDigest><ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/><ds:DigestValue>9PEZGI/FDOHELClo9+mzEux36as=</ds:DigestValue></etsi:CertDigest><etsi:IssuerSerial><ds:X509IssuerName>CN=AC BANCO CENTRAL DEL ECUADOR,L=QUITO,OU=ENTIDAD DE CERTIFICACION DE INFORMACION-ECIBCE,O=BANCO CENTRAL DEL ECUADOR,C=EC</ds:X509IssuerName><ds:X509SerialNumber>1533769157</ds:X509SerialNumber></etsi:IssuerSerial></etsi:Cert></etsi:SigningCertificate></etsi:SignedSignatureProperties><etsi:SignedDataObjectProperties><etsi:DataObjectFormat ObjectReference="#Reference-ID-659818"><etsi:Description>contenido comprobante</etsi:Description><etsi:MimeType>text/xml</etsi:MimeType></etsi:DataObjectFormat></etsi:SignedDataObjectProperties></etsi:SignedProperties></etsi:QualifyingProperties></ds:Object></ds:Signature></factura>
 ]]></comprobante>
 <mensajes/>
 </autorizacion>

@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<autorizacion>
+<estado>AUTORIZADO</estado>
+<numeroAutorizacion>3004202301099000573700120270030309317245592120017</numeroAutorizacion>
+<fechaAutorizacion>2023-05-07T01:33:27-05:00</fechaAutorizacion>
+<ambiente>PRODUCCIÓN</ambiente>
+<comprobante><![CDATA[<?xml version="1.0" encoding="UTF-8" standalone="no"?><factura id="comprobante" version="1.0.0"><infoTributaria><ambiente>2</ambiente><tipoEmision>1</tipoEmision><razonSocial>BANCO DEL PACIFICO S.A.</razonSocial><nombreComercial>BANCO DEL PACIFICO S.A.</nombreComercial><ruc>0990005737001</ruc><claveAcceso>3004202301099000573700120270030309317245592120017</claveAcceso><codDoc>01</codDoc><estab>027</estab><ptoEmi>003</ptoEmi><secuencial>030931724</secuencial><dirMatriz>FRANCISCO DE PAULA ICAZA #200 Y PICHINCHA</dirMatriz></infoTributaria><infoFactura><fechaEmision>30/04/2023</fechaEmision><dirEstablecimiento>FCO DE PAULA ICAZA 200 Y PEDRO CARBO</dirEstablecimiento><contribuyenteEspecial>06925</contribuyenteEspecial><obligadoContabilidad>SI</obligadoContabilidad><tipoIdentificacionComprador>05</tipoIdentificacionComprador><razonSocialComprador>MILTON RUBIO PUETATE</razonSocialComprador><identificacionComprador>1712605284</identificacionComprador><totalSinImpuestos>8.72</totalSinImpuestos><totalDescuento>0.00</totalDescuento><totalConImpuestos><totalImpuesto><codigo>2</codigo><codigoPorcentaje>2</codigoPorcentaje><baseImponible>8.72</baseImponible><valor>1.06</valor></totalImpuesto><totalImpuesto><codigo>2</codigo><codigoPorcentaje>6</codigoPorcentaje><baseImponible>0.00</baseImponible><valor>0.00</valor></totalImpuesto></totalConImpuestos><propina>0.00</propina><importeTotal>9.78</importeTotal><moneda>DOLAR</moneda><pagos><pago><formaPago>20</formaPago><total>9.78</total><plazo>15</plazo><unidadTiempo>DIAS</unidadTiempo></pago></pagos></infoFactura><detalles><detalle><codigoPrincipal>32</codigoPrincipal><descripcion>SERV.EMISION TARJ/CHIP</descripcion><cantidad>1</cantidad><precioUnitario>4.36</precioUnitario><descuento>0.00</descuento><precioTotalSinImpuesto>4.36</precioTotalSinImpuesto><detallesAdicionales><detAdicional nombre="CIUDAD" valor="NO APLICA"/></detallesAdicionales><impuestos><impuesto><codigo>2</codigo><codigoPorcentaje>2</codigoPorcentaje><tarifa>12</tarifa><baseImponible>4.36</baseImponible><valor>0.53</valor></impuesto></impuestos></detalle><detalle><codigoPrincipal>32</codigoPrincipal><descripcion>SERV.EMISION TARJ.ADIC/CHI</descripcion><cantidad>1</cantidad><precioUnitario>4.36</precioUnitario><descuento>0.00</descuento><precioTotalSinImpuesto>4.36</precioTotalSinImpuesto><detallesAdicionales><detAdicional nombre="CIUDAD" valor="P"/></detallesAdicionales><impuestos><impuesto><codigo>2</codigo><codigoPorcentaje>2</codigoPorcentaje><tarifa>12</tarifa><baseImponible>4.36</baseImponible><valor>0.53</valor></impuesto></impuestos></detalle></detalles><infoAdicional><campoAdicional nombre="Ciudad">QUITO</campoAdicional><campoAdicional nombre="Cifcod">M59212</campoAdicional><campoAdicional nombre="Direccion">CLL DE LOS MOTILONES N40 345 Y CAMILO GA LLEGO CASA 3 PISOS LADRILLO</campoAdicional><campoAdicional nombre="Telefono1">3920507</campoAdicional><campoAdicional nombre="Telefono2">3920507</campoAdicional><campoAdicional nombre="Email">miltonrubio@hotmail.com</campoAdicional></infoAdicional><ds:Signature xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xmlns:etsi="http://uri.etsi.org/01903/v1.3.2#" Id="Signature135219">
+<ds:SignedInfo Id="Signature-SignedInfo115637">
+<ds:CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/>
+<ds:SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/>
+<ds:Reference Id="SignedPropertiesID749398" Type="http://uri.etsi.org/01903#SignedProperties" URI="#Signature135219-SignedProperties661862">
+<ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/>
+<ds:DigestValue>/T3GUfn8FeKUv47u1xZyZWUALYk=</ds:DigestValue>
+</ds:Reference>
+<ds:Reference URI="#Certificate17948">
+<ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/>
+<ds:DigestValue>aNhcwg5zuT6hxzhzRy83wn2qI68=</ds:DigestValue>
+</ds:Reference>
+<ds:Reference Id="Reference-ID-825559" URI="#comprobante">
+<ds:Transforms>
+<ds:Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/>
+</ds:Transforms>
+<ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/>
+<ds:DigestValue>tIVaOY4bkUVw1CCyZHCQjT+3NGk=</ds:DigestValue>
+</ds:Reference>
+</ds:SignedInfo>
+<ds:SignatureValue Id="SignatureValue569404">
+Xcx2jNhOL+f1mtSa0swzyLRIgYk10nu4LA8XlZPA+/vnyL34jRLeufOPzol4m7qCzzoopdP+klnX
+H6EwpWOHWfAhTT11535t2hGxk0VWBm+4pcULeqMTX7rdwfi0NsXah66KpDKe2ppcMgLsp8kPSMf0
+h7aOmcU3PEsjQ/QKqx4Erd97u6y9TF5+ibRoE++OMV87FlQbS9SgRM/Vwl4dHnFfEB+Zukbo9JJP
+iUB+AwAESsmIAfznDRxTSv/yLm3C02+8QOsqj5iZEkzlraxSWy02t1EBMbnEA+98e8kP6y75Xlby
+G7yiYufBtL2DQCiqO7CfNHTKhK6NpaA8KEUvQg==
+</ds:SignatureValue>
+<ds:KeyInfo Id="Certificate17948">
+<ds:X509Data>
+<ds:X509Certificate>
+MIIJ6jCCB9KgAwIBAgIEW2wUqjANBgkqhkiG9w0BAQsFADCBoTELMAkGA1UEBhMCRUMxIjAgBgNV
+BAoTGUJBTkNPIENFTlRSQUwgREVMIEVDVUFET1IxNzA1BgNVBAsTLkVOVElEQUQgREUgQ0VSVElG
+SUNBQ0lPTiBERSBJTkZPUk1BQ0lPTi1FQ0lCQ0UxDjAMBgNVBAcTBVFVSVRPMSUwIwYDVQQDExxB
+QyBCQU5DTyBDRU5UUkFMIERFTCBFQ1VBRE9SMB4XDTIyMDIxODE1MjcxNVoXDTI0MDIxODE1NTcx
+NVowgbUxCzAJBgNVBAYTAkVDMSIwIAYDVQQKExlCQU5DTyBDRU5UUkFMIERFTCBFQ1VBRE9SMTcw
+NQYDVQQLEy5FTlRJREFEIERFIENFUlRJRklDQUNJT04gREUgSU5GT1JNQUNJT04tRUNJQkNFMQ4w
+DAYDVQQHEwVRVUlUTzE5MBEGA1UEBRMKMDAwMDI2NTIyMjAkBgNVBAMTHVdBTFRFUiBGRVJOQU5E
+TyBCQU5DSE9OIE1VTk9aMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAyqqlNDs5GDYr
+aDlMdGj9kO4XWlU5mXlKbEs5SCJryra7JpKeNeDg8Np6FRivSLvXeMtlccp/h5hIf1FXMJ9i3Ftk
+shIjbY4Jr6cnfgFhVRbv7Ln6I/8DC6Ze3HW6s6WlCka158UCEPlaG03qR20bJLHKBCDT/wwRsxxU
+RsFt04NEk2r2U+sViIEx/m17hhyQFf5pJPclX0ELjYWYY9V0lhCSaeE7lyXOdjIj8LrcKNMAk6vv
+hOKMwLgVDFVgAJDoyTBVVIuW+gfxZV1HmFe5IkjPOhvUNOdZFHN8mbcNs+NicnZ0kmpO7ghp91jq
+cntRA5oHSZah2fr+HjHzzcU3/wIDAQABo4IFEjCCBQ4wCwYDVR0PBAQDAgeAMGcGA1UdIARgMF4w
+XAYLKwYBBAGCqDsCAgEwTTBLBggrBgEFBQcCARY/aHR0cDovL3d3dy5lY2kuYmNlLmVjL3BvbGl0
+aWNhLWNlcnRpZmljYWRvL3BlcnNvbmEtanVyaWRpY2EucGRmMIGRBggrBgEFBQcBAQSBhDCBgTA+
+BggrBgEFBQcwAYYyaHR0cDovL29jc3AuZWNpLmJjZS5lYy9lamJjYS9wdWJsaWN3ZWIvc3RhdHVz
+L29jc3AwPwYIKwYBBQUHMAGGM2h0dHA6Ly9vY3NwMS5lY2kuYmNlLmVjL2VqYmNhL3B1YmxpY3dl
+Yi9zdGF0dXMvb2NzcDAlBgorBgEEAYKoOwMKBBcTFUJBTkNPIERFTCBQQUNJRklDTyBTQTAdBgor
+BgEEAYKoOwMLBA8TDTA5OTAwMDU3MzcwMDEwGgYKKwYBBAGCqDsDAQQMEwowOTA3ODg3NTc0MB8G
+CisGAQQBgqg7AwIEERMPV0FMVEVSIEZFUk5BTkRPMBcGCisGAQQBgqg7AwMECRMHQkFOQ0hPTjAV
+BgorBgEEAYKoOwMEBAcTBU1VTk9aMBgGCisGAQQBgqg7AwUEChMIQ09OVEFET1IwJwYKKwYBBAGC
+qDsDBwQZExdQIElDQVpBIDIwMCBZIFBJQ0hJTkNIQTAZBgorBgEEAYKoOwMIBAsTCTA0MzczMTUw
+MDAZBgorBgEEAYKoOwMJBAsTCUd1YXlhcXVpbDAXBgorBgEEAYKoOwMMBAkTB0VDVUFET1IwIAYK
+KwYBBAGCqDsDMwQSExBTT0ZUV0FSRS1BUkNISVZPMCMGA1UdEQQcMBqBGHdiYW5jaG9uQHBhY2lm
+aWNvLmZpbi5lYzCCAeEGA1UdHwSCAdgwggHUMIIB0KCCAcygggHIhoHWbGRhcDovL2JjZXFsZGFw
+c3VicDEuYmNlLmVjL2NuPUNSTDE0MzEsY249QUMlMjBCQU5DTyUyMENFTlRSQUwlMjBERUwlMjBF
+Q1VBRE9SLGw9UVVJVE8sb3U9RU5USURBRCUyMERFJTIwQ0VSVElGSUNBQ0lPTiUyMERFJTIwSU5G
+T1JNQUNJT04tRUNJQkNFLG89QkFOQ08lMjBDRU5UUkFMJTIwREVMJTIwRUNVQURPUixjPUVDP2Nl
+cnRpZmljYXRlUmV2b2NhdGlvbkxpc3Q/YmFzZYY0aHR0cDovL3d3dy5lY2kuYmNlLmVjL0NSTC9l
+Y2lfYmNlX2VjX2NybGZpbGVjb21iLmNybKSBtjCBszELMAkGA1UEBhMCRUMxIjAgBgNVBAoTGUJB
+TkNPIENFTlRSQUwgREVMIEVDVUFET1IxNzA1BgNVBAsTLkVOVElEQUQgREUgQ0VSVElGSUNBQ0lP
+TiBERSBJTkZPUk1BQ0lPTi1FQ0lCQ0UxDjAMBgNVBAcTBVFVSVRPMSUwIwYDVQQDExxBQyBCQU5D
+TyBDRU5UUkFMIERFTCBFQ1VBRE9SMRAwDgYDVQQDEwdDUkwxNDMxMCsGA1UdEAQkMCKADzIwMjIw
+MjE4MTUyNzE1WoEPMjAyNDAyMTgxNTU3MTVaMB8GA1UdIwQYMBaAFEii3yMfHfgsUXqMA81JMqUJ
+wZSrMB0GA1UdDgQWBBRxizVn7WNy7MbNqOQvt8MV8DR7mjAJBgNVHRMEAjAAMBkGCSqGSIb2fQdB
+AAQMMAobBFY4LjEDAgSwMA0GCSqGSIb3DQEBCwUAA4ICAQCILYQ7Yf4vV1CT1eChUsD56dehcB5h
+YrzQBA8zzbo+JqGcvhJ0HdkYwJS4cAYdeb3FR289qegDvEJ296yrNGr/+S9D3HbiIJCIjnfFS+co
+WxoZShjej1Z+p1dTZwc4cbweRcLvoR1lhInPaN1IG99go9kIsVaBZEfsDfvq9uW05AoYrFm7CHuP
+TnCJ6RljBJGHoRXjfnACOAJu+Pwa/rFd6TBA5HEVIXo5x7yRZzN6P5sIUrrHDPU43RvHfJAY1+07
+k9DtZ3scPQV50bCHlZvDmbW+K8W9/kLS0m4jFmzdSOaaTuk11OmVeTWN0HoSfKxmqfnSkLwaMb00
+C1OQoDKsctA2v850eaLbU7qdmIJmSJeAncHgEEf1QhoVwwbVkggL9GfEELniI+9CwYRnhNnNgk8n
+58ZGb9iQ64af/JrtX0jQOqQrjZG28Q078iSZn2eIA+2efTnPxoE6zZiAC8IvCm38N01YndIxEokp
+8IR+IC/1tGg8Hu3T5DKsOCDoqHRORLjcYiB+/eZfhSZejQVWsdUU/MlG5w2+tVPcg7/56sYfleAP
+8ax7y2oc1J+D0u19RMfeuVcGOpUido7/TXbKBmsDELqaE+7vgQB/5MUjIg+JrusjgNo1T6yssBVS
+lWe0lBBc3h6A+CypcT/RODrolzGJJy2EGdM/VB+p+GMjvQ==
+</ds:X509Certificate>
+</ds:X509Data>
+<ds:KeyValue>
+<ds:RSAKeyValue>
+<ds:Modulus>
+yqqlNDs5GDYraDlMdGj9kO4XWlU5mXlKbEs5SCJryra7JpKeNeDg8Np6FRivSLvXeMtlccp/h5hI
+f1FXMJ9i3FtkshIjbY4Jr6cnfgFhVRbv7Ln6I/8DC6Ze3HW6s6WlCka158UCEPlaG03qR20bJLHK
+BCDT/wwRsxxURsFt04NEk2r2U+sViIEx/m17hhyQFf5pJPclX0ELjYWYY9V0lhCSaeE7lyXOdjIj
+8LrcKNMAk6vvhOKMwLgVDFVgAJDoyTBVVIuW+gfxZV1HmFe5IkjPOhvUNOdZFHN8mbcNs+NicnZ0
+kmpO7ghp91jqcntRA5oHSZah2fr+HjHzzcU3/w==
+</ds:Modulus>
+<ds:Exponent>AQAB</ds:Exponent>
+</ds:RSAKeyValue>
+</ds:KeyValue>
+</ds:KeyInfo>
+<ds:Object Id="Signature135219-Object26904"><etsi:QualifyingProperties Target="#Signature135219"><etsi:SignedProperties Id="Signature135219-SignedProperties661862"><etsi:SignedSignatureProperties><etsi:SigningTime>2023-05-04T22:54:56-05:00</etsi:SigningTime><etsi:SigningCertificate><etsi:Cert><etsi:CertDigest><ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/><ds:DigestValue>ONaDoh2xEdpsjZIir1AkZcfQ3N8=</ds:DigestValue></etsi:CertDigest><etsi:IssuerSerial><ds:X509IssuerName>CN=AC BANCO CENTRAL DEL ECUADOR,L=QUITO,OU=ENTIDAD DE CERTIFICACION DE INFORMACION-ECIBCE,O=BANCO CENTRAL DEL ECUADOR,C=EC</ds:X509IssuerName><ds:X509SerialNumber>1533809834</ds:X509SerialNumber></etsi:IssuerSerial></etsi:Cert></etsi:SigningCertificate></etsi:SignedSignatureProperties><etsi:SignedDataObjectProperties><etsi:DataObjectFormat ObjectReference="#Reference-ID-825559"><etsi:Description>Descripcion del documento</etsi:Description><etsi:MimeType>text/xml</etsi:MimeType></etsi:DataObjectFormat></etsi:SignedDataObjectProperties></etsi:SignedProperties></etsi:QualifyingProperties></ds:Object></ds:Signature></factura>]]></comprobante>
+<mensajes/>
+</autorizacion>
+
