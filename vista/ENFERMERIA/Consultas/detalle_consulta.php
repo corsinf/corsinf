@@ -18,6 +18,11 @@ if (isset($_GET['id_paciente'])) {
     $id_paciente = $_GET['id_paciente'];
 }
 
+$btn_regresar = '';
+if (isset($_GET['btn_regresar'])) {
+    $btn_regresar = $_GET['btn_regresar'];
+}
+
 ?>
 
 <script type="text/javascript">
@@ -126,11 +131,14 @@ if (isset($_GET['id_paciente'])) {
                             </div>
                             <h5 class="mb-0 text-primary">Formulario de Consulta</h5>
 
-                            <div class="row m-2">
-                                <div class="col-sm-12">
-                                    <a href="../vista/inicio.php?mod=7&acc=consultas_pacientes&pac_id=<?= $id_paciente; ?>" class="btn btn-outline-dark btn-sm"><i class="bx bx-arrow-back"></i> Regresar</a>
+                            <?php if ($btn_regresar == '') { ?>
+                                <div class="row m-2">
+                                    <div class="col-sm-12">
+                                        <a href="../vista/inicio.php?mod=7&acc=consultas_pacientes&pac_id=<?= $id_paciente; ?>" class="btn btn-outline-dark btn-sm"><i class="bx bx-arrow-back"></i> Regresar</a>
+                                    </div>
                                 </div>
-                            </div>
+                            <?php } ?>
+
                         </div>
                         <hr>
 

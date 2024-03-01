@@ -100,6 +100,10 @@ if (isset($_GET['pdf_notificacion'])) {
     echo json_encode($controlador->pdf_notificacion($id_consulta));
 }
 
+if (isset($_GET['listar_todo'])) {
+    echo json_encode($controlador->listar_todo());
+}
+
 
 //print_r($controlador->ret(''));
 
@@ -130,6 +134,12 @@ class consultasC
         $this->email = new enviar_emails();
         $this->det_consultaM = new det_consultaM();
         $this->ingreso_stock = new ingreso_stockC();
+    }
+
+    function listar_todo()
+    {
+        $datos = $this->modelo->lista_consultas_todo();
+        return $datos;
     }
 
     function lista_consultas_ficha($id_ficha)

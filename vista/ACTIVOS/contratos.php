@@ -307,7 +307,7 @@
               $('#txt_plan').val(response.datos[0].plan_seguro);
               $('#txt_vigencia').val(response.datos[0].vigencia);
               $('#ddl_forma_pago').val(response.datos[0].forma_pago);
-              console.log(response.datos[0].forma_pago)
+              //console.log(response.datos[0].forma_pago)
               $('#txt_cobertura_por').val(response.datos[0].cobertura_porce);
               $('#txt_deducible').val(response.datos[0].Dedusible);
               $('#rbl_renovacion_'+response.datos[0].renovacion).prop('checked',true);
