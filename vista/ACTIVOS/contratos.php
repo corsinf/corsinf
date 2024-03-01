@@ -33,10 +33,10 @@
           obj.forEach(function(item,i){
             if(i==0)
             {
-              inputs+='<label class="me-2"><input type="radio" name="rbl_seguro_busqueda" onclick="lista_articulos()" value="'+item.tabla+'" checked ><b>'+item.tabla+'</b></label>  ';
+              inputs+='<label class="me-2"><input type="radio" name="rbl_seguro_busqueda" onclick="lista_articulos()" value="'+item.tabla+'" checked ><b> '+capitalize(item.tabla)+'</b></label>  ';
             }else
             {
-              inputs+='<label class="me-2"><input type="radio" name="rbl_seguro_busqueda" onclick="lista_articulos()" value="'+item.tabla+'" ><b>'+item.tabla+'</b></label>  ';              
+              inputs+='<label class="me-2"><input type="radio" name="rbl_seguro_busqueda" onclick="lista_articulos()" value="'+item.tabla+'" ><b> '+capitalize(item.tabla)+'</b></label>  ';              
             }
           })
        }else
@@ -268,7 +268,7 @@
           type:  'post',
           dataType: 'json',
             success:  function (response) {
-              var  op = '<option value="">Seleccione tipo de pago</option>';
+              var  op = '<option value="">-- Seleccione --</option>';
              response.forEach(function(item,i)
              {
                op+='<option value="'+item.id+'">'+item.nombre+'</option>';
@@ -509,6 +509,12 @@
       }
     });
   }
+
+  function capitalize(str) 
+  {
+    return str.charAt(0).toUpperCase() + str.slice(1);
+  }
+
 </script>
 
 <div class="page-wrapper">
@@ -553,78 +559,79 @@
                         <select class="form-control form-control-sm" id="ddl_proveedor" name="ddl_proveedor">
                           <option value="">Proveedor 1</option>
                         </select>
-                          <button type="button" class="btn btn-outline-secondary btn-sm" title="Nuevo proveedor" onclick="nuevo_proveedor()"><i class="bx bx-user-plus"></i></button>
+                          <button type="button" class="btn btn-outline-secondary btn-sm" title="Nuevo proveedor" onclick="nuevo_proveedor()"><i class="bx bx-user-plus me-2 ms-2"></i></button>
                     </div>
                   </div>
-                  <div class="col-sm-12">
+                  <div class="col-sm-12 mb-1">
                     <b>Asesor</b>            
                     <input type="" name="txt_asesor" id="txt_asesor" class="form-control form-control-sm">
                   </div>
-                  <div class="col-sm-6">
+                  <div class="col-sm-6 mb-1">
                     <b>Telefono</b>            
                     <input type="" name="txt_telefono" id="txt_telefono" class="form-control form-control-sm">
                   </div>                
-                  <div class="col-sm-6">
+                  <div class="col-sm-6 mb-1">
                     <b>Email</b>            
                     <input type="" name="txt_email" id="txt_email" class="form-control form-control-sm">
                   </div>
                   <hr>
-                  <div class="col-sm-6">
+                  <div class="col-sm-6 mb-1">
                     <b>Fecha de contrato</b>
                     <input type="date" name="txt_desde" id="txt_desde" class="form-control form-control-sm">
                   </div>
-                  <div class="col-sm-6">
+                  <div class="col-sm-6 mb-1">
                     <b>Fin de contrato</b>
                     <input type="date" name="txt_hasta" id="txt_hasta" class="form-control form-control-sm">
                   </div>
-                  <div class="col-sm-6">
+                  <div class="col-sm-6 mb-1">
                     <b>Vigencia</b>            
                     <input type="" name="txt_vigencia" id="txt_vigencia" class="form-control form-control-sm">
                   </div>
-                  <div class="col-sm-6" style="display: none;">
+                  <div class="col-sm-6 mb-1" style="display: none;">
                     <b>Precio prima</b>
                     <input type="" name="txt_prima" id="txt_prima" class="form-control form-control-sm" value="0">
                   </div>
-                  <div class="col-sm-6">
+                  <div class="col-sm-6 mb-1">
                     <b>Nombre Plan</b>            
                     <input type="" name="txt_plan" id="txt_plan" class="form-control form-control-sm">
                   </div>
-                  <div class="col-sm-6">
+                  <div class="col-sm-6 mb-1">
                     <b>Suma asegurada</b>
                     <input type="" name="txt_valor_seguro" id="txt_valor_seguro"  class="form-control form-control-sm">
                   </div>          
-                  <div class="col-sm-6">
+                  <div class="col-sm-6 mb-1">
                     <b>Forma de pago</b>    
                     <div class="input-group input-group-sm">        
                       <select class="form-select form-select-sm" name="ddl_forma_pago" id="ddl_forma_pago">
                         <option value="">Seleccione</option>
                       </select>
-                       <button type="button" class="btn btn-outline-secondary btn-sm" title="Nuevo tipo de pago" onclick="nuevo_tipo_pago()"><i class="bx bx-plus"></i></button>
+                       <button type="button" class="btn btn-outline-secondary btn-sm" title="Nuevo tipo de pago" onclick="nuevo_tipo_pago()"><i class="bx bx-plus me-2 ms-2"></i></button>
                      </div>
                   </div>
-                  <div class="col-sm-6">
+                  <div class="col-sm-6 mb-1">
                     <b>Cobertura %</b>            
                     <input type="" placeholder="10%" name="txt_cobertura_por" id="txt_cobertura_por" class="form-control form-control-sm">
                   </div>
-                  <div class="col-sm-6">
+                  <div class="col-sm-6 mb-1">
                     <b>Dedusible</b>            
                     <input type="" name="txt_deducible" id="txt_deducible" class="form-control form-control-sm" readonly value="0">
                   </div>
-                  <div class="col-sm-6">
-                    <b>Tipo de renovacion</b>            
-                    <label><input type="radio" name="rbl_renovacion" id="rbl_renovacion_A" value="A" checked>Automatica</label>
-                    <label><input type="radio" name="rbl_renovacion" id="rbl_renovacion_M" value="M">Manual</label>
+                  <div class="col-sm-6 mb-1">
+                    <b>Tipo de renovacion</b>      
+                    <br>      
+                    <label class="online-radio "><input type="radio" name="rbl_renovacion" id="rbl_renovacion_A" value="A" checked>Automatica</label>
+                    <label class="online-radio "><input type="radio" name="rbl_renovacion" id="rbl_renovacion_M" value="M">Manual</label>
                   </div>
-                  <div class="col-sm-12">
+                  <div class="col-sm-12 mb-1">
                     <b>Cobertuta</b>
                     <div class="input-group input-group-sm">
                         <select class="form-control form-control-sm" id="ddl_cobertura" name="ddl_cobertura" onchange="lista_siniestros()"> 
                           <option value="">Seleccione cobertura</option>                    
                         </select>
-                        <button type="button" class="btn btn-outline-secondary btn-sm" title="Nueva Cobertuta" onclick="nueva_cobertura()"><i class="bx bx-clinic"></i></button>                  
+                        <button type="button" class="btn btn-outline-secondary btn-sm" title="Nueva Cobertuta" onclick="nueva_cobertura()"><i class="bx bx-clinic me-2 ms-2"></i></button>                  
                     </div>            
                   </div>
-                   <div class="col-sm-12">
+                   <div class="col-sm-12 mb-1">
                     <b>Siniestro</b>
                      <div class="input-group">
                           <select class="multiple-select" name="ddl_siniestros[]" multiple="multiple" id="ddl_siniestros" style="width:80%" data-placeholder="Choose anything">
@@ -641,13 +648,13 @@
                 </div> 
               </div>
               </div>
-               <div class="col-lg-7">
+               <div class="col-lg-7 mb-1">
                   <div class="border border-3 p-4 rounded">                    
                     <div class="row">
                       <div class="col-sm-12" id="pnl_asociacion_seguros">
                       <?php //print_r($_SESSION['INICIO']);?>
                       </div>
-                      <div class="col-sm-10">
+                      <div class="col-sm-10 mb-1">
                         <br>
                         <b>Aplicar seguro a:</b>
                               <select class="form-select form-select-sm" name="ddl_articulos" id="ddl_articulos" >
@@ -660,7 +667,7 @@
                       </div>
                     </div>
                     <div class="row table-responsive">
-                      <div class="col-sm-12">
+                      <div class="col-sm-12 mb-1">
                         <table class="table table-striped table-bordered dataTable">
                           <thead>
                             <th></th>
@@ -712,16 +719,16 @@
   <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h3 class="modal-title" id="titulo">Nuevo siniestro</h3>
+        <h3 class="modal-title" id="titulo">Nuevo Siniestro</h3>
       </div>
-      <div class="modal-body">       
-        Nombre de siniestro <br>
+      <div class="modal-body">     
+				<label for="" class="fw-bold">Nombre de Siniestro <label style="color: red;">*</label> </label>
         <input type="input" name="txt_nombre" id="txt_nombre" class="form-control form-control-sm">
-        Detalle de siniestro <br>
+				<label for="" class="fw-bold">Detalle de Siniestro <label style="color: red;">*</label> </label>
         <textarea class="form-control form-control-sm" style="resize:none"  rows="2" id="txt_detalle_siniestro" name="txt_detalle_siniestro"></textarea>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
         <button type="button" class="btn btn-primary" id="op" onclick="siniestros()">Guardar</button>
       </div>
     </div>
@@ -734,12 +741,12 @@
       <div class="modal-header">
         <h3 class="modal-title" id="titulo">Nueva Cobertura</h3>
       </div>
-      <div class="modal-body">       
-        Nombre de cobertura <br>
+      <div class="modal-body">    
+				<label for="" class="fw-bold">Nombre de Cobertura <label style="color: red;">*</label> </label>
         <input type="input" name="txt_cobertura" id="txt_cobertura" class="form-control form-control-sm">
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
         <button type="button" class="btn btn-primary" id="op" onclick="cobertura()">Guardar</button>
       </div>
     </div>
@@ -750,14 +757,14 @@
   <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h3 class="modal-title" id="titulo">Nuevo tipo de pago</h3>
+        <h3 class="modal-title" id="titulo">Nuevo Tipo de Pago</h3>
       </div>
-      <div class="modal-body">       
-        Nombre de Tipo de pago <br>
-        <input type="input" name="txt_tipo_pago" id="txt_tipo_pago" class="form-control form-control-sm">
+      <div class="modal-body">   
+				  <label for="" class="fw-bold">Nombre de Tipo de Pago <label style="color: red;">*</label> </label>
+          <input type="input" name="txt_tipo_pago" id="txt_tipo_pago" class="form-control form-control-sm">
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
         <button type="button" class="btn btn-primary" id="op" onclick="tipo_pago_save()">Guardar</button>
       </div>
     </div>
@@ -772,30 +779,30 @@
       </div>
       <div class="modal-body">
         <div class="row">
-          <div class="col-sm-12">
-             Nombre <br>
-             <input type="input" name="txt_proveedorNew" id="txt_proveedorNew" class="form-control form-control-sm">           
+          <div class="col-sm-12 mb-2">
+						<label for="" class="fw-bold">Nombre <label style="color: red;">*</label> </label>
+            <input type="input" name="txt_proveedorNew" id="txt_proveedorNew" class="form-control form-control-sm">           
           </div>
-          <div class="col-sm-12">
-            CI /RUC <br>
+          <div class="col-sm-12 mb-2">
+						<label for="" class="fw-bold"> CI /RUC  <label style="color: red;">*</label> </label>
             <input type="input" name="txt_ciNew" id="txt_ciNew" class="form-control form-control-sm">            
           </div>
-           <div class="col-sm-6">
-            Email <br>
+           <div class="col-sm-6 mb-2">
+						<label for="" class="fw-bold"> Correo  <label style="color: red;">*</label> </label>
             <input type="input" name="txt_emailNew" id="txt_emailNew" class="form-control form-control-sm">            
           </div>
-           <div class="col-sm-6">
-            Telefono <br>
+           <div class="col-sm-6 mb-2">
+						<label for="" class="fw-bold"> Teléfono  <label style="color: red;">*</label> </label>
             <input type="input" name="txt_telefonoNew" id="txt_telefonoNew" class="form-control form-control-sm">            
           </div>
-           <div class="col-sm-12">
-            Direccion <br>
+           <div class="col-sm-12 mb-2">
+						<label for="" class="fw-bold"> Dirección  <label style="color: red;">*</label> </label>
             <textarea class="form-control form-control-sm " id="txt_direccionNew" name="txt_direccionNew" style="resize:none" rows="2"></textarea>          
           </div>
         </div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
         <button type="button" class="btn btn-primary" id="op" onclick="editar_insertar()">Guardar</button>
       </div>
     </div>
