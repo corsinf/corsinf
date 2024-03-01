@@ -2,23 +2,44 @@
 <script type="text/javascript">
   $(document).ready(function() {
 
-    inputs_asignacion_seguros();
+      var id ='<?php echo $id;?>';
+      inputs_asignacion_seguros();
 
-    var id ='<?php echo $id;?>';
-    if(id)
-    {
-      cargar_datos_seguro(id);
-      $('#txt_id').val(id);
-      Articulo_contrato_lista();
-    }
-    $('#ddl_siniestros').select2();
-    lista_cobertura();
-    lista_proveedor();
-    lista_articulos();
-    forma_pago();
-});
-</script>
-<script type="text/javascript">
+      $('#ddl_siniestros').select2();
+      lista_cobertura();
+      lista_proveedor();
+      lista_articulos();
+
+
+      if(id!='')
+      {
+        $('#txt_id').val(id);
+        Articulo_contrato_lista();
+        cargar_datos_seguro(id);
+      }
+  });
+
+  forma_pago();
+
+  function forma_pago()
+  {
+        $.ajax({
+          // data:  {parametros:parametros},
+          url:   '../controlador/contratoC.php?forma_pago=true',
+          type:  'post',
+          dataType: 'json',
+            success:  function (response) {
+              var  op = '<option value="">Seleccione</option>';
+             response.forEach(function(item,i)
+             {
+                op+='<option value="'+item.id+'">'+item.nombre+'</option>';
+             })
+             console.log(op)
+
+             $('#ddl_forma_pago').html(op);
+          }
+        });
+  }
 
 
    function inputs_asignacion_seguros()
@@ -259,25 +280,6 @@
   }
 
 
-  function forma_pago()
-  {
-
-        $.ajax({
-          // data:  {parametros:parametros},
-          url:   '../controlador/contratoC.php?forma_pago=true',
-          type:  'post',
-          dataType: 'json',
-            success:  function (response) {
-              var  op = '<option value="">-- Seleccione --</option>';
-             response.forEach(function(item,i)
-             {
-               op+='<option value="'+item.id+'">'+item.nombre+'</option>';
-             })
-
-             $('#ddl_forma_pago').html(op);
-          }
-        });
-  }
 
   function cargar_datos_seguro(id)
   {
@@ -290,22 +292,13 @@
           url:   '../controlador/contratoC.php?cargar_datos_seguro=true',
           type:  'post',
           dataType: 'json',
-          /*beforeSend: function () {   
-               var spiner = '<div class="text-center"><img src="../img/gif/proce.gif" width="100" height="100"></div>'     
-             $('#tabla_').html(spiner);
-          },*/
-            success:  function (response) {
-              console.log(response)
-
+            success: function (response) {
+              // console.log(response)
               $('#ddl_proveedor').html(response.proveedor);
               $('#ddl_cobertura').html(response.cobertura); 
               lista_siniestros();
               $('#ddl_siniestros').html(response.siniestro).trigger('change');
 
-              
-             // $('#ddl_localizacion').append($('<option>',{value: response[0].id_loc, text: response[0].DENOMINACION,selected: true }));
-
-              // $('#ddl_siniestros').html(response.siniestros);
               $('#txt_desde').val(formatoDate(response.datos[0].hasta.date));
               $('#txt_hasta').val(formatoDate(response.datos[0].desde.date));
               $('#txt_prima').val(response.datos[0].prima);
@@ -314,6 +307,7 @@
               $('#txt_plan').val(response.datos[0].plan_seguro);
               $('#txt_vigencia').val(response.datos[0].vigencia);
               $('#ddl_forma_pago').val(response.datos[0].forma_pago);
+              console.log(response.datos[0].forma_pago)
               $('#txt_cobertura_por').val(response.datos[0].cobertura_porce);
               $('#txt_deducible').val(response.datos[0].Dedusible);
               $('#rbl_renovacion_'+response.datos[0].renovacion).prop('checked',true);
@@ -515,6 +509,23 @@
     return str.charAt(0).toUpperCase() + str.slice(1);
   }
 
+  function nuevo_siniestro()
+    {
+      $('#myModal_siniestro').modal('show');
+    }
+     function nueva_cobertura()
+    {
+      $('#myModal_cobertura').modal('show');
+    }
+     function nuevo_proveedor()
+    {
+      $('#myModal_proveedor').modal('show');
+    }
+    function nuevo_tipo_pago()
+    {
+      $('#myModal_tipo_pago').modal('show');
+    }
+
 </script>
 
 <div class="page-wrapper">
@@ -697,22 +708,7 @@
     </div>
 
   <script type="text/javascript">
-    function nuevo_siniestro()
-    {
-      $('#myModal_siniestro').modal('show');
-    }
-     function nueva_cobertura()
-    {
-      $('#myModal_cobertura').modal('show');
-    }
-     function nuevo_proveedor()
-    {
-      $('#myModal_proveedor').modal('show');
-    }
-    function nuevo_tipo_pago()
-    {
-      $('#myModal_tipo_pago').modal('show');
-    }
+    
   </script>
 
 <div class="modal fade" id="myModal_siniestro">
