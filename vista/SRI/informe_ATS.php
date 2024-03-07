@@ -69,9 +69,9 @@
                     <b>Facturas</b>
                       <table class="table table-hover">
                           <tr>
-                              <th>Total Impuestos</th>
-                              <th>Total Sin Impuestos</th>
-                              <th>Total Con Impuestos</th>
+                              <th>Total iva</th>
+                              <th>Total Sin iva</th>
+                              <th>Total Con iva</th>
                           </tr>
                           <tr>
                               <td id="lbl_imp">0</td>
@@ -117,7 +117,24 @@
 
   function  subir_archivo()
   {
-    $('#tbl_datos').html('<tr><td><img src="img/ZZ5H.gif"></td></tr>')
+    $('#tbl_datos').html('<tr><td colspan="7"><div class="card-body">'+
+                '<div class="spinner-grow text-primary" role="status"> <span class="visually-hidden">Loading...</span>'+
+                '</div>'+
+                '<div class="spinner-grow text-secondary" role="status"> <span class="visually-hidden">Loading...</span>'+
+                '</div>'+
+                '<div class="spinner-grow text-success" role="status"> <span class="visually-hidden">Loading...</span>'+
+                '</div>'+
+                '<div class="spinner-grow text-danger" role="status"> <span class="visually-hidden">Loading...</span>'+
+                '</div>'+
+                '<div class="spinner-grow text-warning" role="status"> <span class="visually-hidden">Loading...</span>'+
+                '</div>'+
+                '<div class="spinner-grow text-info" role="status"> <span class="visually-hidden">Loading...</span>'+
+                '</div>'+                
+                '<div class="spinner-grow text-dark" role="status"> <span class="visually-hidden">Loading...</span>'+
+                '</div>'+
+              '</div>'+
+            '</td>'+
+            '</tr>')
     var fi = $('#file').val();
       if(fi != '')
       {
@@ -227,8 +244,8 @@
             
             $('#tbl_datos').html(response.tr);
             $('#lbl_imp').text(parseFloat(response.total_impuestos).toFixed(2));
-            $('#lbl_sin').text(parseFloat(response.sin_impuestos).toFixed(2));
-            $('#lbl_con').text(parseFloat(response.con_impuestos).toFixed(2));
+            $('#lbl_sin').text(parseFloat(response.sin_iva).toFixed(2));
+            $('#lbl_con').text(parseFloat(response.con_iva).toFixed(2));
 
             // response.Retencion_val
              $('#retenciones_val').html('')
