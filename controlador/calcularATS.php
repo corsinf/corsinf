@@ -190,8 +190,11 @@ class calcular
 
 		$tr = '';
 		$ingresa = 0;
-		$total_sin_inpuestos = 0;
-		$total_con_impuestos = 0;
+		$total_sin_iva = 0;
+		$total_con_iva = 0;
+		$sin_iva = 0; //para uso por factura analizada
+		$con_iva = 0; //para uso por factura analizada
+		$valor_iva = 0;
 		$total_impuestos = 0;
 		// ---------------listado del porcentajes de retencion --------------
 		$porcentaje_ret = array();
@@ -212,11 +215,39 @@ class calcular
 		// print_r($porcentaje_ret);die();
 		//-------------------todso los comprobantes listado------------------
 		foreach ($facturas_doc as $key => $value) {
+			// print_r($facturas_doc);die();
 			if(is_numeric($value[9]))
 			{
 				$tot = '';
 				if(isset($value[11])){ $tot = $value[11]; }
-				$tr.='<tr><td style="width: 122px;">'.$value[0].'</td><td style="width: 150px;">'.$value[1].'</td><td style="width: 130px;">'.$value[2].'</td><td style="width: 300px;">'.$value[3].'</td><td style="width: 100px;">'.$value[4].'</td><td style="width: 100px;">'.$tot.'</td></tr>';
+				$tr.='<div class="card">
+                     	<div class="card-body">
+                     		<div class="row">
+                     			<div class="col-sm-6">
+	                     			<b>RAZON SOCIAL EMISOR</b></br>
+	                     			'.$value[3].'
+                     			</div>
+                     			<div class="col-sm-3">
+	                     			<b>TIPO DE COMPROBANTE</b>
+	                     			'.$value[0].'
+                     			</div>
+                     			<div class="col-sm-3">
+	                     			<b>SERIE COMPROBANTE</b><br>
+	                     			'.$value[1].'
+                     			</div>
+                     			<div class="col-sm-6">
+	                     			<b>RUC: </b>
+	                     			'.$value[2].'
+                     			</div>
+                     			<div class="col-sm-3">
+	                     			<b>FECHA: </b>
+	                     			'.$value[4].'
+                     			</div>
+                     			<div class="col-sm-3">
+	                     			<b>TOTAL IMPORTE: </b>
+	                     			'.$tot.'
+                     			</div>
+                     		</div>';
 				// print_r($value);die();
 				//----------------------------todas ala lineas de los xml leidos-----------------------
 				foreach ($lineas_xml as $key2 => $value2) {
@@ -226,7 +257,7 @@ class calcular
 					if(isset($value2[0]['Autorizacion']) && $value2[0]['Autorizacion']==$value[9])
 					{
 						$ingresa = 1;
-						$tr.='<tr><td colspan="9"><table style="border: 1px solid;width:100%">';
+						$tr.='<tr><td colspan="9"><table class="table" style="border: 1px solid;width:100%">';
 						foreach ($value2 as $key3 => $value3) {
 
 							if($value3['Tipo']=='F')
@@ -248,13 +279,21 @@ class calcular
 
 								 $tr.='<tr><td>'.$value3['detalle'].'</td><td>'.number_format($value3['cantidad'],2,'.','').'</td><td>'.number_format($value3['pvp'],2,'.','').'</td><td>'.number_format($value3['descuento'],2,'.','').'</td><td>'.number_format($value3['subtotal'],2,'.','').'</td><td>'.number_format($value3['iva_v'],2,'.','').'</td><td>'.number_format($value3['Total'],2,'.','').'</td></tr>';
 
-								$total_sin_inpuestos = $total_sin_inpuestos+$value3['subtotal'];
-								$total_con_impuestos = $total_con_impuestos+$value3['Total'];
-								$total_impuestos = $total_impuestos+$value3['iva_v'];
+								 if(floatval($value3['iva'])==0)
+								 {
+								 	$total_sin_iva = number_format($total_sin_iva+$value3['Total'],2,'.','');
+								 	$sin_iva = number_format($sin_iva+$value3['Total'],2,'.','');
+								 }else
+								 {
+								 	$total_con_iva = number_format($total_con_iva+$value3['Total'],2,'.','');
+								 	$con_iva = number_format($con_iva+$value3['Total'],2,'.','');
+								 }
 
-								// print_r('Fac');
-								// print_r($value2);die();
-								 // print_r($tr);die();
+								$total_impuestos = number_format($total_impuestos+$value3['iva_v'],2,'.','');
+								$valor_iva = number_format($valor_iva+$value3['iva_v'],2,'.','');
+								// 	print_r('Fac');
+								// 	print_r($value2);die();
+								// print_r($tr);die();
 							}
 
 							if($value3['Tipo']=='R')
@@ -295,22 +334,65 @@ class calcular
 					}
 					if($ingresa==1)
 					{
-						$tr.='</table></td></tr>';
-						$ingresa=0;						
+						if($value3['Tipo']=='F')
+						{
+							$tr.='</table><table class="table" style="border: 1px solid;width:100%"><tr><td colspan="5">----------------------------------------------------</td><td>Total sin iva: '.$sin_iva.'</td><td>Total con iva: '.$con_iva.'</td><td>Total iva: '.$valor_iva.'</td></tr></table></td></tr>';
+						}else
+						{
+							$tr.='</table></div></div>';
+						}
+						$ingresa=0;
+						$sin_iva = 0;
+						$con_iva = 0;	
+						$valor_iva = 0;					
 					}
 					// print_r($value2);die();
 				}
 				// print_r($value);die();
-			}else
-			{
-				//titulos de tabla
-				// print_r($value);die();
-				$tr.='<tr><td>'.$value[0].'</td><td>'.$value[1].'</td><td>'.$value[2].'</td><td>'.$value[3].'</td><td>'.$value[4].'</td><td>'.$value[11].'</td></tr>';
-			
+				  
+				$tr.='</table>
+				<div class="card">
+					<div class="card-body">
+						<div class="accordion" id="accor-'.$value[1].'">
+							<div class="accordion-item">
+								<h2 class="accordion-header" id="heading'.$value[1].'">
+						  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse'.$value['1'].'" aria-expanded="false" aria-controls="collapse'.$value['1'].'">
+							Detalle de factura
+						  </button>
+						</h2>
+								<div id="collapse'.$value['1'].'" class="accordion-collapse collapse" aria-labelledby="heading'.$value[1].'" data-bs-parent="#accor-'.$value[1].'" style="">
+									<div class="accordion-body">
+
+									</div>
+								</div>
+							</div>							
+						</div>
+					</div>
+				</div>
+
+						</div>
+							</div>';
 			}
+			// else
+			// {
+			// 	//titulos de tabla
+			// 	// print_r($value);die();
+			// 	$tr.='<div class="card">
+            //         	<div class="card-body">
+            //         		<table class="table table-striped">
+            //         			<tr>
+	        //             			<th>'.$value[0].'</th>
+	        //             			<th>'.$value[1].'</th>
+	        //             			<th>'.$value[2].'</th>
+	        //             			<th>'.$value[3].'</th>
+	        //             			<th>'.$value[4].'</th>
+	        //             			<th>'.$value[11].'</th>
+            //         			</tr>';
+			
+			// }
 		}
 
-		return array('tr'=>$tr,'tipo'=>$tipo_doc,'sin_impuestos'=>$total_sin_inpuestos,'con_impuestos'=>$total_con_impuestos,'total_impuestos'=>$total_impuestos,'Retencion_val'=>$porcentaje_ret);
+		return array('tr'=>$tr,'tipo'=>$tipo_doc,'sin_iva'=>$total_sin_iva,'con_iva'=>$total_con_iva,'total_impuestos'=>$total_impuestos,'Retencion_val'=>$porcentaje_ret);
 
 	}
 

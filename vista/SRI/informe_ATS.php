@@ -7,7 +7,7 @@
 <div class="page-wrapper">
       <div class="page-content">
         <!--breadcrumb-->
-        <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
+        <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-2">
           <div class="breadcrumb-title pe-3">Herramienta</div>
           <div class="ps-3">
             <nav aria-label="breadcrumb">
@@ -22,7 +22,7 @@
         <!--end breadcrumb-->
         <div class="row">
           <div class="col-xl-12 mx-auto">
-            <hr>
+            <hr class="m-1">
             <div class="card">
               <div class="card-body">
                 <div class="row">
@@ -50,45 +50,33 @@
                       <button type="button" class="btn btn-sm btn-primary" onclick="filtrar_documentos()">filtrar</button>    
                     </div>                     
                   </div>
+                  <div class="col-sm-2">
+                    <button class="btn btn-sm btn-primary" onclick="$('#myModal_resumen').modal('show')" >Ver resumen</button>
+                  </div>
                 </div>
                               
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-sm-12" id="tbl_datos">
+                <div class="card">
+                    <div class="card-body">
+                      
+                    </div>
+                </div>
+                
               </div>
             </div>
             <div class="card">
               <div class="card-body">
                 <div class="row">
-                  <div class="col-sm-8">
+                  <div class="col-sm-12">
                     <table class="table table-hover" style="font-size: 10px;font-family: sans-serif; border-spacing: 1.5px;">
-                        <tbody id="tbl_datos">          
+                        <tbody id="tbl_datoss">          
                             
                         </tbody>
                     </table>        
                     
-                  </div>
-                  <div class="col-sm-4">
-                    <b>Facturas</b>
-                      <table class="table table-hover">
-                          <tr>
-                              <th>Total iva</th>
-                              <th>Total Sin iva</th>
-                              <th>Total Con iva</th>
-                          </tr>
-                          <tr>
-                              <td id="lbl_imp">0</td>
-                              <td id="lbl_sin">0</td>
-                              <td id="lbl_con">0</td>
-                          </tr>
-                      </table>
-                      <b>Retenciones</b>
-                      <table class="table table-hover">
-                          <tr>
-                              <th>% Retencion</th>
-                              <th> Valor</th>
-                          </tr>
-                          <tbody  id="retenciones_val">
-                            
-                          </tbody>                          
-                      </table>                    
                   </div>
                 </div>
               </div>
@@ -99,6 +87,64 @@
       </div>
     </div>
 
+<div class="modal fade" id="myModal_resumen" tabindex="-1" aria-modal="true" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+        </div>
+        <div class="modal-body">
+            <div class="row">
+              <div class="col-sm-12">
+                <table class="table table-hover">
+                    <tr>
+                        <th>%</th>
+                        <th>SubTotal</th>
+                        <th>iva</th>
+                        <th>Total</th>
+                    </tr>                    
+                    <tr>
+                        <td>12%</td><td id="lbl_imp">0</td><td>Subtotal 12%</td><td id="lbl_imp">0</td>
+                    </tr>
+                    <tr>                      
+                        <td>0%</td><td id="lbl_sin">0</td><td>Subtotal 12%</td><td id="lbl_imp">0</td>
+                    </tr>
+                </table>
+
+                  <b>Facturas</b>
+                    <table class="table table-hover">
+                        <tr>
+                            <th>Total iva</th>
+                            <th>Total Sin iva</th>
+                            <th>Total Con iva</th>
+                        </tr>
+                        <tr>
+                            <td id="lbl_imp">0</td>
+                            <td id="lbl_sin">0</td>
+                            <td id="lbl_con">0</td>
+                        </tr>
+                    </table>
+                    <b>Retenciones</b>
+                    <table class="table table-hover">
+                        <tr>
+                            <th>% Retencion</th>
+                            <th> Valor</th>
+                        </tr>
+                        <tbody  id="retenciones_val">
+                          
+                        </tbody>                          
+                    </table>                    
+                </div>        
+              
+            </div> 
+        </div>
+        <div class="modal-footer">
+                  <!-- <a type="button" class="btn btn-primary" href="#" id="doc_xml">Descargar xml</button>         -->
+                  <!-- <button type="button" class="btn btn-default" onclick="location.reload();">Cerrar</button> -->
+                   <button type="button" class="btn btn-default" data-bs-dismiss="modal">Cerrar</button>
+              </div>
+      </div>
+    </div>
+</div>
 
 <script type="text/javascript">
     const folderInput = document.getElementById('file_xml');
