@@ -10,6 +10,7 @@ include('../lib/pdf/fpdf.php');
 include('../modelo/det_consultaM.php');
 
 include('ingreso_stockC.php');
+include('../modelo/notificacionesM.php');
 
 
 $controlador = new consultasC();
@@ -101,7 +102,19 @@ if (isset($_GET['pdf_notificacion'])) {
 }
 
 if (isset($_GET['listar_todo'])) {
-    echo json_encode($controlador->listar_todo());
+    echo json_encode($controlador->listar_todo($_GET['tabla'], $_GET['fecha_inicio'], $_GET['fecha_fin']));
+}
+
+if (isset($_GET['lista_con_est'])) {
+    echo json_encode($controlador->lista_consultas_estudiantes($_GET['id_paralelo']));
+}
+
+if (isset($_GET['lista_con_est_doc'])) {
+    echo json_encode($controlador->lista_consultas_estudiantes_docente($_GET['id_docente'], $_GET['fecha_actual_estado']));
+}
+
+if (isset($_GET['contar_consultas_docente'])) {
+    echo json_encode($controlador->contar_consultas_estudiantes_docente($_POST['id_docente']));
 }
 
 
@@ -126,6 +139,7 @@ class consultasC
     private $email;
     private $det_consultaM;
     private $ingreso_stock;
+    private $notificaciones;
     function __construct()
     {
         $this->modelo = new consultasM();
@@ -134,11 +148,12 @@ class consultasC
         $this->email = new enviar_emails();
         $this->det_consultaM = new det_consultaM();
         $this->ingreso_stock = new ingreso_stockC();
+        $this->notificaciones = new notificacionesM();
     }
 
-    function listar_todo()
+    function listar_todo($tabla, $fecha_inicio, $fecha_fin)
     {
-        $datos = $this->modelo->lista_consultas_todo();
+        $datos = $this->modelo->lista_consultas_todo($tabla, $fecha_inicio, $fecha_fin);
         return $datos;
     }
 
@@ -151,6 +166,25 @@ class consultasC
     function lista_solo_consultas($id)
     {
         $datos = $this->modelo->lista_solo_consultas($id);
+        return $datos;
+    }
+
+    function lista_consultas_estudiantes($id_paralelo)
+    {
+        $datos = $this->modelo->lista_consultas_estudiantes($id_paralelo);
+        return $datos;
+    }
+
+    function lista_consultas_estudiantes_docente($id_docente, $fecha_actual_estado)
+    {
+        $datos = $this->modelo->lista_consultas_estudiantes_docente($id_docente, $fecha_actual_estado);
+        // print_r($datos);die();
+        return $datos;
+    }
+
+    function contar_consultas_estudiantes_docente($id_docente)
+    {
+        $datos = $this->modelo->contar_consultas_estudiantes_docente($id_docente);
         return $datos;
     }
 
@@ -253,8 +287,53 @@ class consultasC
         if ($parametros['sa_conp_id'] == '') {
             if (count($this->modelo->buscar_consultas_CODIGO($datos1[0]['dato'])) == 0) {
 
-
+                //Se inserta los datos de la consulta
                 $id_insert = $this->modelo->insertar_id($datos);
+
+                /* ----------------------*/
+                //    Notificaciones
+                /* ----------------------*/
+
+                $icono = "bx bxs-file-plus";
+
+                if ($parametros['txt_paciente_tabla'] == 'estudiantes') {
+                    //Notificacion para el docente
+                    $datos_notificaciones = array(
+                        array('campo' => 'GLO_modulo', 'dato' => '7'),
+                        array('campo' => 'GLO_titulo', 'dato' => $parametros['sa_conp_tipo_consulta']),
+                        array('campo' => 'GLO_cuerpo', 'dato' => $parametros['nombre_paciente']),
+                        array('campo' => 'GLO_icono', 'dato' => $icono),
+                        array('campo' => 'GLO_tabla', 'dato' => 'docentes'),
+                        array('campo' => 'GLO_id_tabla', 'dato' => ''),
+                        array('campo' => 'GLO_busqueda_especifica', 'dato' => $parametros['sa_id_paralelo']),
+                        array('campo' => 'GLO_desc_busqueda', 'dato' => 'Para listar los estudiantes con el docente respectivo'),
+                        array('campo' => 'GLO_link_redirigir', 'dato' => '../vista/inicio.php?acc=historial_salud_estudiantil'),
+                        array('campo' => 'GLO_rol', 'dato' => 'docentes'),
+                        array('campo' => 'GLO_observacion', 'dato' => ''),
+                    );
+
+                    $this->notificaciones->insertar($datos_notificaciones);
+
+                    //Notificacion para el inspector
+                    $datos_notificaciones = array(
+                        array('campo' => 'GLO_modulo', 'dato' => '7'),
+                        array('campo' => 'GLO_titulo', 'dato' => $parametros['sa_conp_tipo_consulta']),
+                        array('campo' => 'GLO_cuerpo', 'dato' => $parametros['nombre_paciente']),
+                        array('campo' => 'GLO_icono', 'dato' => $icono),
+                        array('campo' => 'GLO_tabla', 'dato' => ''),
+                        array('campo' => 'GLO_id_tabla', 'dato' => ''),
+                        array('campo' => 'GLO_busqueda_especifica', 'dato' => ''),
+                        array('campo' => 'GLO_desc_busqueda', 'dato' => 'Para listar todas las consultas de estudiantes'),
+                        array('campo' => 'GLO_link_redirigir', 'dato' => '../vista/inicio.php?acc=consultas'),
+                        array('campo' => 'GLO_rol', 'dato' => 'INSPECTOR'),
+                        array('campo' => 'GLO_observacion', 'dato' => ''),
+                    );
+
+                    $this->notificaciones->insertar($datos_notificaciones);
+                }
+
+
+                /////////////////////////////////////////////////////////////////////////////////
 
                 //echo($idConsultaPrincipal);die();
                 if (!empty($parametros['filas_tabla_farmacologia'])) {
@@ -319,6 +398,15 @@ class consultasC
             $where[0]['dato'] = $parametros['sa_conp_id'];
             //$datos[] = array('campo' => 'sa_conp_estado', 'dato' => 1);
             $datos = $this->modelo->editar($datos, $where);
+
+            /* ----------------------*/
+            //    Notificaciones
+            /* ----------------------*/
+
+
+
+
+            /////////////////////////////////////////////////////////////////////////////////
 
             if (!empty($parametros['filas_tabla_farmacologia'])) {
                 foreach ($parametros['filas_tabla_farmacologia'] as $fila) {
@@ -590,12 +678,10 @@ class consultasC
 
         //$sa_pac_temp_fecha_nacimiento = $paciente[0]['sa_pac_temp_fecha_nacimiento'];
 
-        $fechaNacimiento = $paciente[0]['sa_pac_temp_fecha_nacimiento'];
-        $sa_pac_temp_fecha_nacimiento = $fechaNacimiento->format('Y-m-d');
-
-        /*$fechaActual = new DateTime(); 
-        $diferencia = $fechaActual->diff($fechaNacimiento);
-        $edad = $diferencia->y;*/
+        $sa_pac_temp_fecha_nacimiento = $paciente[0]['sa_pac_temp_fecha_nacimiento'];
+        if ($sa_pac_temp_fecha_nacimiento !== null) {
+            $sa_pac_temp_fecha_nacimiento = $sa_pac_temp_fecha_nacimiento->format('Y-m-d');
+        }
 
 
 

@@ -361,6 +361,12 @@ if ($_GET['acc'] == 'reuniones') {
 	include('ENFERMERIA/Docentes/Reunion/reuniones.php');
 }
 
+//Historial de salud Estudiantes por Paralelo
+if ($_GET['acc'] == 'historial_salud_estudiantil') {
+	include('ENFERMERIA/Docentes/historial_salud_estudiantil.php');
+}
+
+
 // tools
 
 if ($_GET['acc'] == 'ats') {

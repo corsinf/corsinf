@@ -160,6 +160,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 $('#txt_nombres').html(apellidos + " " + nombres);
 
+                $('#txt_nombre_paciente').val(apellidos + " " + nombres);
+                $('#txt_paciente_tabla').val(response[0].sa_pac_tabla);
+
+
                 $('#title_paciente').html(apellidos + " " + nombres);
 
                 $('#nombre_modal').val(apellidos + " " + nombres);
@@ -185,6 +189,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $('#txt_curso').html(curso);
                     $('#sa_conp_nivel').val(response[0].sa_pac_temp_gra_nombre);
                     $('#sa_conp_paralelo').val(response[0].sa_pac_temp_par_nombre);
+                    $('#sa_id_paralelo').val(response[0].sa_pac_temp_paralelo);
 
                     $('#lbl_telefono_emergencia').html('Teléfono Representante: ' + '<label style="color: red;">*</label>');
                     $('#btn_telefono').val('estudiantes');
@@ -519,6 +524,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         var sa_examen_fisico_regional = generarJSON();
 
+        var nombre_paciente = $('#txt_nombre_paciente').val();
+        var sa_id_paralelo = $('#sa_id_paralelo').val();
+        var txt_paciente_tabla = $('#txt_paciente_tabla').val();
+
+        //alert(nombre_paciente)
+
         // Crear objeto de parámetros
         var parametros = {
             'sa_conp_id': sa_conp_id,
@@ -582,6 +593,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'sa_conp_estado_revision': sa_conp_estado_revision,
 
             'sa_examen_fisico_regional': sa_examen_fisico_regional,
+
+            'nombre_paciente': nombre_paciente,
+            'sa_id_paralelo': sa_id_paralelo,
+            'txt_paciente_tabla': txt_paciente_tabla,
 
         };
 
@@ -754,6 +769,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                             <input type="hidden" id="sa_conp_nivel" name="sa_conp_nivel">
                             <input type="hidden" id="sa_conp_paralelo" name="sa_conp_paralelo">
+                            <input type="hidden" id="sa_id_paralelo" name="sa_id_paralelo">
                             <input type="hidden" id="sa_conp_edad" name="sa_conp_edad">
 
                             <input type="hidden" id="sa_conp_notificacion_envio_representante" name="sa_conp_notificacion_envio_representante">
@@ -767,6 +783,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                             <input type="hidden" id="sa_conp_notificacion_envio_guardia" name="sa_conp_notificacion_envio_guardia">
                             <input type="hidden" id="sa_id_guardia" name="sa_id_guardia">
+
+                            <input type="hidden" id="txt_nombre_paciente" name="txt_nombre_paciente">
+                            <input type="hidden" id="txt_paciente_tabla" name="txt_paciente_tabla">
+                            
+
 
                             <div class="row" hidden>
                                 <div class="col-md-3">
@@ -1351,7 +1372,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                                                         <div class="row pt-3">
                                                             <div class="col-md-12">
-                                                                <label for="" class="form-label fw-bold">Observaciones  <label style="color: red;">*</label> </label>
+                                                                <label for="" class="form-label fw-bold">Observaciones <label style="color: red;">*</label> </label>
                                                                 <textarea name="sa_examen_fisico_regional_obs" id="sa_examen_fisico_regional_obs" cols="30" rows="2" class="form-control" placeholder="OBSERVACIONES  EXAMEN FÍSICO REGIONAL"></textarea>
                                                             </div>
                                                         </div>

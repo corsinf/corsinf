@@ -1,7 +1,9 @@
 <?php @session_start();
 // print_r($_SESSION['INICIO']);die();
 $tiempo_inactividad = 2 * 60;
-if(!isset($_SESSION['INICIO']) || !isset($_SESSION['INICIO']['NO_CONCURENTE'])){header('Location: ../login.php');}
+if (!isset($_SESSION['INICIO']) || !isset($_SESSION['INICIO']['NO_CONCURENTE'])) {
+	header('Location: ../login.php');
+}
 // if (isset($_SESSION['INICIO']['ULTIMO_ACCESO']) && (time() - $_SESSION['INICIO']['ULTIMO_ACCESO'] > $tiempo_inactividad)) {
 //     // Cerrar la sesión
 //     session_unset();
@@ -19,7 +21,7 @@ if ($dominio != 'localhost') {
 }
 
 
-?> 
+?>
 
 <!doctype html>
 <html lang="en">
@@ -62,24 +64,28 @@ if ($dominio != 'localhost') {
 	<link rel="stylesheet" href="../assets/plugins/summernote/summernote-bs5.min.css">
 	<!-- <link rel="stylesheet" href="../assets/plugins/summernote/css/font-awesome.min.css"> -->
 
-  <script src="../js/informes_globales.js"></script>  
-  <script src="../js/jquery-3.6.0.js"></script>
-  <script src="../js/jquery-ui.js"></script>
-  <script src="../js/codigos_globales.js"></script>
-  <script src="../js/sweetalert2.all.min.js"></script>
-  <script src="../js/notificaciones_seguros.js"></script>
+	<script src="../js/informes_globales.js"></script>
+	<script src="../js/jquery-3.6.0.js"></script>
+	<script src="../js/jquery-ui.js"></script>
+	<script src="../js/codigos_globales.js"></script>
+	<script src="../js/sweetalert2.all.min.js"></script>
+	<script src="../js/notificaciones_seguros.js"></script>
 
-  <!-- <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script> -->
+	<!-- <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script> -->
 
-  <style type="text/css">
+	<style type="text/css">
 		input[readonly] {
-	    /* Estilos para inputs en modo de solo lectura */
-	    background-color: #e8e8e8; /* Color de fondo */
-	    border: 1px solid #ccc; /* Borde */
-	    color: #555; /* Color del texto */
-	    cursor: not-allowed; /* Cambia el cursor */
-	    /* Otros estilos según sea necesario */
-	}
+			/* Estilos para inputs en modo de solo lectura */
+			background-color: #e8e8e8;
+			/* Color de fondo */
+			border: 1px solid #ccc;
+			/* Borde */
+			color: #555;
+			/* Color del texto */
+			cursor: not-allowed;
+			/* Cambia el cursor */
+			/* Otros estilos según sea necesario */
+		}
 	</style>
 
 	<style>
@@ -101,11 +107,26 @@ if ($dominio != 'localhost') {
 
 		var mod = '<?php echo $_SESSION['INICIO']['MODULO_SISTEMA']; ?>';
 
+		var rol = '<?php echo $_SESSION['INICIO']['TIPO']; ?>';
+		var tabla = '<?php echo $_SESSION['INICIO']['NO_CONCURENTE_TABLA']; ?>';
+		var id_tabla = '<?php echo $_SESSION['INICIO']['NO_CONCURENTE']; ?>';
+
+		var parametros_noti = {
+			'rol': rol,
+			'tabla': tabla,
+			'id_tabla': id_tabla,
+		}
+
 		menu_lateral();
 		$(document).ready(function() {
 			restriccion();
-			notificaciones();
+			//notificaciones();
+			notificaciones_1(parametros_noti);
 			solicitudes();
+
+			setInterval(function() {
+				notificaciones_1(parametros_noti);
+			}, 10000);
 		});
 
 		function formatoDate(date) {
@@ -583,8 +604,9 @@ if ($dominio != 'localhost') {
 								<div class="dropdown-menu dropdown-menu-end">
 									<div class="row row-cols-3 g-3 p-3">
 										<div class="col text-center">
-											<a href="inicio.php?mod=<?php echo $_SESSION['INICIO']['MODULO_SISTEMA']; ?>&acc=ats" target="_blank"><div class="app-box mx-auto bg-gradient-burning text-white"><i class='bx bx-clipboard'></i>
-											</div>
+											<a href="inicio.php?mod=<?php echo $_SESSION['INICIO']['MODULO_SISTEMA']; ?>&acc=ats" target="_blank">
+												<div class="app-box mx-auto bg-gradient-burning text-white"><i class='bx bx-clipboard'></i>
+												</div>
 											</a>
 											<div class="app-title">Generar ATS</div>
 										</div>
@@ -628,8 +650,17 @@ if ($dominio != 'localhost') {
 										</div>
 									</a>
 									<div class="header-notifications-list" id="pnl_notificaciones">
-
-
+										<a class="dropdown-item" href="javascript:;">
+											<div class="d-flex align-items-center">
+												<div class="notify bg-light-primary text-primary"><i class="bx bx-group"></i>
+												</div>
+												<div class="flex-grow-1">
+													<h6 class="msg-name">CONSULTA<span class="msg-time float-end">14 segundos
+														</span></h6>
+													<p class="msg-info">Prueba Header</p>
+												</div>
+											</div>
+										</a>
 									</div>
 									<!-- <a href="javascript:;">
 										<div class="text-center msg-footer">View All Notifications</div>
@@ -661,22 +692,34 @@ if ($dominio != 'localhost') {
 					</div>
 					<div class="user-box dropdown">
 						<a class="d-flex align-items-center nav-link dropdown-toggle dropdown-toggle-nocaret" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-							<?php if($_SESSION['INICIO']['NO_CONCURENTE_NOM']=='') { ?>
-								<img src="<?php if($_SESSION['INICIO']['FOTO']!=''){echo $_SESSION['INICIO']['FOTO'];}else{echo "../img/sin_imagen.jpg"; } ?>" class="user-img" alt="user avatar">
-							<?php }else{ ?>
-							<img src="<?php if($_SESSION['INICIO']['FOTO']!=''){ echo $_SESSION['INICIO']['FOTO'];}else{echo "../img/sin_imagen.jpg"; } ?>" class="user-img" alt="user avatar">
+							<?php if ($_SESSION['INICIO']['NO_CONCURENTE_NOM'] == '') { ?>
+								<img src="<?php if ($_SESSION['INICIO']['FOTO'] != '') {
+												echo $_SESSION['INICIO']['FOTO'];
+											} else {
+												echo "../img/sin_imagen.jpg";
+											} ?>" class="user-img" alt="user avatar">
+							<?php } else { ?>
+								<img src="<?php if ($_SESSION['INICIO']['FOTO'] != '') {
+												echo $_SESSION['INICIO']['FOTO'];
+											} else {
+												echo "../img/sin_imagen.jpg";
+											} ?>" class="user-img" alt="user avatar">
 							<?php } ?>
 							<div class="user-info ps-3">
-								<p class="user-name mb-0"><?php if($_SESSION['INICIO']['NO_CONCURENTE_NOM']==''){ echo $_SESSION['INICIO']['USUARIO'];}else{echo $_SESSION['INICIO']['NO_CONCURENTE_NOM'];} ?></p>
+								<p class="user-name mb-0"><?php if ($_SESSION['INICIO']['NO_CONCURENTE_NOM'] == '') {
+																echo $_SESSION['INICIO']['USUARIO'];
+															} else {
+																echo $_SESSION['INICIO']['NO_CONCURENTE_NOM'];
+															} ?></p>
 								<p class="designattion mb-0"><?php echo $_SESSION['INICIO']['TIPO']; ?></p>
 							</div>
 						</a>
 						<ul class="dropdown-menu dropdown-menu-end">
 							<li><a class="dropdown-item" href="inicio.php?acc=perfil"><i class="bx bx-user"></i><span>Perfil</span></a>
 							</li>
-							<?php if($_SESSION['INICIO']['TIPO']=='DBA' || $_SESSION['INICIO']['TIPO']=='ADMINISTRADOR' || $_SESSION['INICIO']['TIPO']=='ADMIN'  ){ ?>
-							<li><a class="dropdown-item" href="javascript:;" onclick="cambiar_configuraciones()"><i class="bx bx-cog"></i><span>Configuraciones</span></a>
-							</li>
+							<?php if ($_SESSION['INICIO']['TIPO'] == 'DBA' || $_SESSION['INICIO']['TIPO'] == 'ADMINISTRADOR' || $_SESSION['INICIO']['TIPO'] == 'ADMIN') { ?>
+								<li><a class="dropdown-item" href="javascript:;" onclick="cambiar_configuraciones()"><i class="bx bx-cog"></i><span>Configuraciones</span></a>
+								</li>
 
 							<?php } ?>
 							<li><a class="dropdown-item" href="javascript:;"><i class='bx bx-home-circle'></i><span>Dashboard</span></a>
@@ -689,15 +732,15 @@ if ($dominio != 'localhost') {
 								<div class="dropdown-divider mb-0"></div>
 							</li>
 							<?php if ($_SESSION['INICIO']['MODULO_SISTEMA'] == 1) { ?>
-							<li><a class="dropdown-item" href="javascript:;" onclick="regresar_modulo();"><i class='bx bx-cog'></i><span>Salir de configuraciones</span></a>
-							<?php } ?>
-							<li>
+								<li><a class="dropdown-item" href="javascript:;" onclick="regresar_modulo();"><i class='bx bx-cog'></i><span>Salir de configuraciones</span></a>
+								<?php } ?>
+								<li>
 
-								<a class="dropdown-item" href="javascript:;" onclick="cerrar_session();">
-									<i class='bx bx-log-out-circle'></i><span>Salir de sistema</span>
-								</a>
-								
-							</li>
+									<a class="dropdown-item" href="javascript:;" onclick="cerrar_session();">
+										<i class='bx bx-log-out-circle'></i><span>Salir de sistema</span>
+									</a>
+
+								</li>
 						</ul>
 					</div>
 				</nav>

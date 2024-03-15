@@ -36,7 +36,7 @@
 
                         fecha_nacimiento = item.sa_pac_fecha_nacimiento;
                         //fecha_nacimiento_calc = ;
-                        
+
                         salida = fecha_nacimiento ? calcular_edad_fecha_nacimiento(item.sa_pac_fecha_nacimiento.date) : '';
 
                         return salida;
@@ -55,7 +55,9 @@
                         return '<a title="Editar Ficha Médica" class="text-center btn btn-warning btn-sm" href="#" onclick="gestion_paciente_comunidad(' + item.sa_pac_id_comunidad + ', \'' + item.sa_pac_tabla + '\', \'' + url + '\');"><u>' + '<i class="bx bxs-edit-alt me-0"></i>' + '</u></a>';
                     }
                 }
-            ]
+            ],
+            
+            order: []
         });
     }
 
