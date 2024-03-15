@@ -37,10 +37,15 @@
                      <div class="input-group">
                          <form id="form_file">
                           <input type="file" class="form-control form-control-sm" name="file" id="file">
-                        </form>      
-                        <button type="button" class="btn btn-sm btn-primary" onclick="subir_archivo()">Leer archivo</button>    
+                        </form>       
                       </div>                                          
                   </div>
+                  <div class="col-sm-4 text-end">
+                    <br>
+                        <button type="button" class="btn btn-sm btn-primary" onclick="subir_archivo()">Leer archivo</button>                       
+                  </div>
+
+
                   <div class="col-sm-4">
                       <b>tipo de documento</b>
                     <div class="input-group">
@@ -50,7 +55,8 @@
                       <button type="button" class="btn btn-sm btn-primary" onclick="filtrar_documentos()">filtrar</button>    
                     </div>                     
                   </div>
-                  <div class="col-sm-2">
+                  <div class="col-sm-8 text-end">
+                    <br>
                     <button class="btn btn-sm btn-primary" onclick="$('#myModal_resumen').modal('show')" >Ver resumen</button>
                   </div>
                 </div>
@@ -67,7 +73,7 @@
                 
               </div>
             </div>
-            <div class="card">
+            <!-- <div class="card">
               <div class="card-body">
                 <div class="row">
                   <div class="col-sm-12">
@@ -80,7 +86,7 @@
                   </div>
                 </div>
               </div>
-            </div>
+            </div> -->
           </div>
         </div>
         <!--end row-->
@@ -94,6 +100,7 @@
         </div>
         <div class="modal-body">
             <div class="row">
+              <b>Total Facturas</b>
               <div class="col-sm-12">
                 <table class="table table-hover">
                     <tr>
@@ -103,14 +110,17 @@
                         <th>Total</th>
                     </tr>                    
                     <tr>
-                        <td>12%</td><td id="lbl_imp">0</td><td>Subtotal 12%</td><td id="lbl_imp">0</td>
+                        <td>12%</td><td id="lbl_com">0</td><td id="lbl_iva">0.00</td><td id="lbl_total_con_iva">0</td>
                     </tr>
                     <tr>                      
-                        <td>0%</td><td id="lbl_sin">0</td><td>Subtotal 12%</td><td id="lbl_imp">0</td>
+                        <td>0%</td><td id="lbl_sin">0</td><td id="">0.00</td><td id="lbl_total_sin_iva">0</td>
+                    </tr>
+                    <tr>                      
+                        <td></td><td></td><td><b>Total</b></td><td id="lbl_total_todo">0</td>
                     </tr>
                 </table>
 
-                  <b>Facturas</b>
+                <!--   <b>Facturas</b>
                     <table class="table table-hover">
                         <tr>
                             <th>Total iva</th>
@@ -122,7 +132,7 @@
                             <td id="lbl_sin">0</td>
                             <td id="lbl_con">0</td>
                         </tr>
-                    </table>
+                    </table> -->
                     <b>Retenciones</b>
                     <table class="table table-hover">
                         <tr>
@@ -287,11 +297,14 @@
          dataType: 'json',         
            success:  function (response) { 
             // console.log(response);
-            
+            $("#lbl_com").text(parseFloat(response.sub_con_iva).toFixed(2));
+            $("#lbl_sin").text(parseFloat(response.sub_sin_iva).toFixed(2));
+            $("#lbl_iva").text(parseFloat(response.iva_total).toFixed(2));
+            $("#lbl_total_con_iva").text(parseFloat(response.total_con_iva).toFixed(2));
+            $("#lbl_total_sin_iva").text(parseFloat(response.sub_sin_iva).toFixed(2));
+            $('#lbl_total_todo').text(parseFloat(response.total).toFixed(2))
             $('#tbl_datos').html(response.tr);
-            $('#lbl_imp').text(parseFloat(response.total_impuestos).toFixed(2));
-            $('#lbl_sin').text(parseFloat(response.sin_iva).toFixed(2));
-            $('#lbl_con').text(parseFloat(response.con_iva).toFixed(2));
+           
 
             // response.Retencion_val
              $('#retenciones_val').html('')
