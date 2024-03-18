@@ -283,8 +283,8 @@ if (isset($_POST['id_representante'])) {
 
         select_genero(response[0].sa_est_sexo, '#sa_est_sexo');
 
-        $('#sa_est_fecha_nacimiento').val(fecha_nacimiento_formateada(response[0].sa_est_fecha_nacimiento.date));
-        $('#sa_est_edad').val(calcular_edad_fecha_nacimiento(response[0].sa_est_fecha_nacimiento.date));
+        $('#sa_est_fecha_nacimiento').val(fecha_nacimiento_formateada(response[0].sa_est_fecha_nacimiento));
+        $('#sa_est_edad').val(calcular_edad_fecha_nacimiento(response[0].sa_est_fecha_nacimiento));
         ///////////////////////////////////////////////////////////////////////////////////////////
 
         $('#sa_est_correo').val(response[0].sa_est_correo);

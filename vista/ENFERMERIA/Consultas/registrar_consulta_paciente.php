@@ -208,7 +208,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $('#txt_id_comunidad').val(response[0].sa_pac_id_comunidad);
                 $('#txt_tabla').val(response[0].sa_pac_tabla);
 
-                //alert(calcular_edad_fecha_nacimiento(response[0].sa_pac_temp_fecha_nacimiento.date))
+                //alert(calcular_edad_fecha_nacimiento(response[0].sa_pac_temp_fecha_nacimiento))
             }
         });
     }
@@ -343,7 +343,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $('#sa_conp_frec_cardiaca').val(response[0].sa_conp_frec_cardiaca);
                 $('#sa_conp_frec_respiratoria').val(response[0].sa_conp_frec_respiratoria);
 
-                $('#sa_conp_fecha_ingreso').val(fecha_nacimiento_formateada(response[0].sa_conp_fecha_ingreso.date));
+                $('#sa_conp_fecha_ingreso').val(fecha_nacimiento_formateada(response[0].sa_conp_fecha_ingreso));
 
                 $('#sa_conp_tiempo_aten').val(response[0].sa_conp_tiempo_aten);
                 $('#sa_conp_CIE_10_1').val(response[0].sa_conp_CIE_10_1);
@@ -355,9 +355,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $('#sa_conp_motivo_certificado').val(response[0].sa_conp_motivo_certificado);
                 $('#sa_conp_CIE_10_certificado').val(response[0].sa_conp_CIE_10_certificado);
                 $('#sa_conp_diagnostico_certificado').val(response[0].sa_conp_diagnostico_certificado);
-                //$('#sa_conp_fecha_entrega_certificado').val(fecha_nacimiento_formateada(response[0].sa_conp_fecha_entrega_certificado.date));
-                //$('#sa_conp_fecha_inicio_falta_certificado').val(fecha_nacimiento_formateada(response[0].sa_conp_fecha_inicio_falta_certificado.date));
-                //$('#sa_conp_fecha_fin_alta_certificado').val(fecha_nacimiento_formateada(response[0].sa_conp_fecha_fin_alta_certificado.date));
+                //$('#sa_conp_fecha_entrega_certificado').val(fecha_nacimiento_formateada(response[0].sa_conp_fecha_entrega_certificado));
+                //$('#sa_conp_fecha_inicio_falta_certificado').val(fecha_nacimiento_formateada(response[0].sa_conp_fecha_inicio_falta_certificado));
+                //$('#sa_conp_fecha_fin_alta_certificado').val(fecha_nacimiento_formateada(response[0].sa_conp_fecha_fin_alta_certificado));
 
 
                 validar_fecha_formulario(response[0].sa_conp_fecha_inicio_falta_certificado, 'sa_conp_fecha_inicio_falta_certificado');
@@ -377,7 +377,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 validar_fecha_formulario(response[0].sa_conp_fecha_permiso_salud_salida, 'sa_conp_fecha_permiso_salud_salida')
 
-                $('#sa_conp_hora_permiso_salida').val(obtener_hora_formateada(response[0].sa_conp_hora_permiso_salida.date));
+                $('#sa_conp_hora_permiso_salida').val(obtener_hora_formateada(response[0].sa_conp_hora_permiso_salida));
 
                 //////////////////////////////
                 //$('#sa_conp_permiso_tipo').val(response[0].sa_conp_permiso_tipo);
@@ -413,8 +413,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 estado = response[0].sa_conp_estado_revision;
                 //alert(estado)
                 if ((estado != 0)) {
-                    $('#sa_conp_desde_hora').val(obtener_hora_formateada(response[0].sa_conp_desde_hora.date));
-                    $('#sa_conp_hasta_hora').val(obtener_hora_formateada(response[0].sa_conp_hasta_hora.date));
+                    $('#sa_conp_desde_hora').val(obtener_hora_formateada(response[0].sa_conp_desde_hora));
+                    $('#sa_conp_hasta_hora').val(obtener_hora_formateada(response[0].sa_conp_hasta_hora));
 
                     //Para certficado
                     validar_fecha_formulario(response[0].sa_conp_fecha_entrega_certificado, 'sa_conp_fecha_entrega_certificado');
@@ -431,8 +431,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     function validar_fecha_formulario(campo, nombre_input) {
-        if (campo && campo.date !== null) {
-            $('#' + nombre_input).val(fecha_nacimiento_formateada(campo.date));
+        if (campo && campo !== null) {
+            $('#' + nombre_input).val(fecha_nacimiento_formateada(campo));
         } else {
             $('#' + nombre_input).val(''); // Establecer el valor como vacío
         }

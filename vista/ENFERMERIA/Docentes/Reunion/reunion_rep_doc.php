@@ -157,8 +157,8 @@ if ($id != null && $id != '') {
                         calendar.addEvent({
                             id: evento.ac_horarioD_id,
                             //title: (evento.ac_horarioD_materia).toUpperCase(),
-                            start: fecha_nacimiento_formateada(evento.ac_horarioD_fecha_disponible.date) + 'T' + obtener_hora_formateada(evento.ac_horarioD_inicio.date),
-                            end: fecha_nacimiento_formateada(evento.ac_horarioD_fecha_disponible.date) + 'T' + obtener_hora_formateada(evento.ac_horarioD_fin.date),
+                            start: (evento.ac_horarioD_fecha_disponible) + 'T' + obtener_hora_formateada(evento.ac_horarioD_inicio),
+                            end: (evento.ac_horarioD_fecha_disponible) + 'T' + obtener_hora_formateada(evento.ac_horarioD_fin),
                             color: color,
                             url: '../vista/inicio.php?mod=7&acc=pacientes',
                             extendedProps: {
@@ -167,7 +167,7 @@ if ($id != null && $id != '') {
 
                         });
 
-                        console.log(fecha_nacimiento_formateada(evento.ac_horarioD_fecha_creacion.date) + '-- ' + obtener_hora_formateada(evento.ac_horarioD_inicio.date));
+                        console.log(fecha_nacimiento_formateada(evento.ac_horarioD_fecha_creacion) + '-- ' + obtener_hora_formateada(evento.ac_horarioD_inicio));
                     });
                     // Renderizar el calendario después de agregar los eventos
                     calendar.render();

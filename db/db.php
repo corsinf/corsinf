@@ -217,6 +217,8 @@ class db
 		$campos = rtrim($campos, ',');
 		$valores = rtrim($valores, ',');
 		$sql .= '(' . $campos . ') VALUES (' . $valores . ');';
+
+		//print_r($sql); exit();die();
 	
 		$stmt = sqlsrv_query($conn, $sql);
 	

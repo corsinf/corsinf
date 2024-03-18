@@ -118,11 +118,11 @@ if ($id != null && $id != '') {
                     {
                         data: null,
                         render: function(data, type, item) {
-                            if (item.sa_conp_desde_hora.date == null || item.sa_conp_fecha_ingreso.date == null) {
+                            if (item.sa_conp_desde_hora == null || item.sa_conp_fecha_ingreso == null) {
                                 return '';
                             } else {
                                 //Fecha de creacion para saber el dia en el que se creo
-                                return fecha_nacimiento_formateada(item.sa_conp_fecha_creacion.date) + ' / ' + obtener_hora_formateada(item.sa_conp_fecha_creacion.date);
+                                return fecha_nacimiento_formateada(item.sa_conp_fecha_creacion) + ' / ' + obtener_hora_formateada(item.sa_conp_fecha_creacion);
                             }
                         }
                     },

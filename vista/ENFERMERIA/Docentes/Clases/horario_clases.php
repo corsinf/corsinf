@@ -176,15 +176,15 @@ if ($id != null && $id != '') {
                     calendar.addEvent({
                         id: evento.ac_horarioC_id,
                         title: (evento.ac_horarioC_materia).toUpperCase(),
-                        start: fecha_dia_estatico + 'T' + obtener_hora_formateada(evento.ac_horarioC_inicio.date),
-                        end: fecha_dia_estatico + 'T' + obtener_hora_formateada(evento.ac_horarioC_fin.date),
+                        start: fecha_dia_estatico + 'T' + obtener_hora_formateada(evento.ac_horarioC_inicio),
+                        end: fecha_dia_estatico + 'T' + obtener_hora_formateada(evento.ac_horarioC_fin),
                         extendedProps: {
                             descripcion: ' (' + evento.sa_sec_nombre + ' / ' + evento.sa_gra_nombre + ' / ' + evento.sa_par_nombre + ')',
                         },
 
                     });
 
-                    console.log(fecha_nacimiento_formateada(evento.ac_horarioC_fecha_creacion.date) + '-- ' + obtener_hora_formateada(evento.ac_horarioC_inicio.date));
+                    console.log(fecha_nacimiento_formateada(evento.ac_horarioC_fecha_creacion) + '-- ' + obtener_hora_formateada(evento.ac_horarioC_inicio));
                 });
                 // Renderizar el calendario después de agregar los eventos
                 calendar.render();

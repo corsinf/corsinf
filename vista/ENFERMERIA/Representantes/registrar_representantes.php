@@ -39,8 +39,8 @@ if (isset($_POST['sa_rep_id'])) {
                 $('#sa_rep_cedula').val(response[0].sa_rep_cedula);
                 select_genero(response[0].sa_rep_sexo, '#sa_rep_sexo');
 
-                $('#sa_rep_fecha_nacimiento').val(fecha_nacimiento_formateada(response[0].sa_rep_fecha_nacimiento.date));
-                $('#sa_rep_edad').val(calcular_edad_fecha_nacimiento(response[0].sa_rep_fecha_nacimiento.date));
+                $('#sa_rep_fecha_nacimiento').val(fecha_nacimiento_formateada(response[0].sa_rep_fecha_nacimiento));
+                $('#sa_rep_edad').val(calcular_edad_fecha_nacimiento(response[0].sa_rep_fecha_nacimiento));
 
                 $('#sa_rep_correo').val(response[0].sa_rep_correo);
                 $('#sa_rep_telefono_1').val(response[0].sa_rep_telefono_1);

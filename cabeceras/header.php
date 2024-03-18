@@ -121,7 +121,12 @@ if ($dominio != 'localhost') {
 		$(document).ready(function() {
 			restriccion();
 			//notificaciones();
-			notificaciones_1(parametros_noti);
+
+			//Descomentar el settime 
+			/*setInterval(function() {
+				notificaciones_1(parametros_noti);
+			}, 6000);*/
+
 			solicitudes();
 		});
 
@@ -241,139 +246,127 @@ if ($dominio != 'localhost') {
 			// })
 		}
 
-  function consultar_modulos()
-  {           
-   $.ajax({
-     // data:  {parametros:parametros},
-     url:   '../controlador/loginC.php?modulos_sistema_acceso_rapido=true',
-     type:  'post',
-     dataType: 'json',
-       success:  function (response) {
-       console.log(response);    
-       if (response.num==0) 
-       {
-          Swal.fire( '','Su perfil no esta asignado a ningun modulo.','error').then(function(){
-          	window.location.href = "../login.php";
-          });
-       }else
-       {
+		function consultar_modulos() {
+			$.ajax({
+				// data:  {parametros:parametros},
+				url: '../controlador/loginC.php?modulos_sistema_acceso_rapido=true',
+				type: 'post',
+				dataType: 'json',
+				success: function(response) {
+					console.log(response);
+					if (response.num == 0) {
+						Swal.fire('', 'Su perfil no esta asignado a ningun modulo.', 'error').then(function() {
+							window.location.href = "../login.php";
+						});
+					} else {
 
-       		$('#pnl_acceso_rapido_modulo').html(response.html);
-       		
-       } 
-     }
-   });
-  }
-  function modulo_seleccionado(modulo,link)
-  {
-	  	$.ajax({
-	     data:  {modulo_sistema:modulo},
-	     url:   '../controlador/loginC.php?modulos_sistema_selected=true',
-	     type:  'post',
-	     dataType: 'json',
-	       success:  function (response) { 
-	       	   
-	      	location.href = 'inicio.php?mod='+modulo+'&acc='+link;         
-	     }
-	   });
-  }
+						$('#pnl_acceso_rapido_modulo').html(response.html);
 
-  function cargar_empresas()
-  {
-  	$('#myModal_empresas').modal('show');
-  	consultar_empresas();
-  }
+					}
+				}
+			});
+		}
 
-  function consultar_empresas()
-  {   
-       $.ajax({
-         // data:  {parametros:parametros},
-         url:   '../controlador/loginC.php?mis_empresas=true',
-         type:  'post',
-         dataType: 'json',
-           success:  function (response) {  
-           	console.log(response);
+		function modulo_seleccionado(modulo, link) {
+			$.ajax({
+				data: {
+					modulo_sistema: modulo
+				},
+				url: '../controlador/loginC.php?modulos_sistema_selected=true',
+				type: 'post',
+				dataType: 'json',
+				success: function(response) {
 
-           	if(response.lista!='')
-           	{
-           		$('#lista_empresas').html(response.lista);
-  						$('#myModal_empresas').modal('show');
-			}else
-			{
-				Swal.fire( '','Usuario No registrado.','error');
-			}           
-         }
-       });
-  }
+					location.href = 'inicio.php?mod=' + modulo + '&acc=' + link;
+				}
+			});
+		}
 
-  function empresa_selecconada(empresa)
-  {
+		function cargar_empresas() {
+			$('#myModal_empresas').modal('show');
+			consultar_empresas();
+		}
 
-  		var parametros = 
-       {
-         'empresa':empresa,
-       } 
-       $.ajax({
-         data:  {parametros:parametros},
-         url:   '../controlador/loginC.php?empresa_seleccionada_head=true',
-         type:  'post',
-         dataType: 'json',        
-           success:  function (response) {  
-           	if(response.respuesta==2)
-           	{
-           		$('#lista_modulos_empresas').html(response.modulos);
-           		$('#txt_id').val(empresa);
-           		$('#myModal_modulos').modal('show');
-           	}else if(response.respuesta==1)
-           	{
+		function consultar_empresas() {
+			$.ajax({
+				// data:  {parametros:parametros},
+				url: '../controlador/loginC.php?mis_empresas=true',
+				type: 'post',
+				dataType: 'json',
+				success: function(response) {
+					console.log(response);
 
-           		iniciar_sesion(empresa);
-           	}      
-         }
-       });
+					if (response.lista != '') {
+						$('#lista_empresas').html(response.lista);
+						$('#myModal_empresas').modal('show');
+					} else {
+						Swal.fire('', 'Usuario No registrado.', 'error');
+					}
+				}
+			});
+		}
 
-  }
+		function empresa_selecconada(empresa) {
 
-  function iniciar_sesion(id)
-  {
-  	   var parametros = 
-       {
-         	'id':id,
-       } 
-       $.ajax({
-         data:  {parametros:parametros},
-         url:   '../controlador/loginC.php?cambiar_empresa=true',
-         type:  'post',
-         dataType: 'json',
-         /*beforeSend: function () {   
-              var spiner = '<div class="text-center"><img src="../../img/gif/proce.gif" width="100" height="100"></div>'     
-            $('#tabla_').html(spiner);
-         },*/
-           success:  function (response) {  
+			var parametros = {
+				'empresa': empresa,
+			}
+			$.ajax({
+				data: {
+					parametros: parametros
+				},
+				url: '../controlador/loginC.php?empresa_seleccionada_head=true',
+				type: 'post',
+				dataType: 'json',
+				success: function(response) {
+					if (response.respuesta == 2) {
+						$('#lista_modulos_empresas').html(response.modulos);
+						$('#txt_id').val(empresa);
+						$('#myModal_modulos').modal('show');
+					} else if (response.respuesta == 1) {
 
-           console.log(response);  
-           if (response==-2) 
-           {
-              Swal.fire( '','Email no registrado.','error');
+						iniciar_sesion(empresa);
+					}
+				}
+			});
 
-           }else if(response == -1)
-           {
-              Swal.fire( '','Empresa Inexistente','info');
+		}
 
-           }else if(response == -3)
-           {
-              Swal.fire( '','Usuario sin acceso','error');
+		function iniciar_sesion(id) {
+			var parametros = {
+				'id': id,
+			}
+			$.ajax({
+				data: {
+					parametros: parametros
+				},
+				url: '../controlador/loginC.php?cambiar_empresa=true',
+				type: 'post',
+				dataType: 'json',
+				/*beforeSend: function () {   
+				     var spiner = '<div class="text-center"><img src="../../img/gif/proce.gif" width="100" height="100"></div>'     
+				   $('#tabla_').html(spiner);
+				},*/
+				success: function(response) {
 
-           }else if(response == 1)
-           {
-             window.location.href = "modulos_sistema.php";
-           }        
-         }
-       });
+					console.log(response);
+					if (response == -2) {
+						Swal.fire('', 'Email no registrado.', 'error');
 
-    
-  }
+					} else if (response == -1) {
+						Swal.fire('', 'Empresa Inexistente', 'info');
 
+					} else if (response == -3) {
+						Swal.fire('', 'Usuario sin acceso', 'error');
+
+					} else if (response == 1) {
+						window.location.href = "modulos_sistema.php";
+					}
+				}
+			});
+
+
+		}
 	</script>
 </head>
 
@@ -388,11 +381,11 @@ if ($dominio != 'localhost') {
 		<!--sidebar wrapper -->
 		<div class="sidebar-wrapper" data-simplebar="true">
 			<div class="sidebar-header">
-				<?php if(file_exists($_SESSION['INICIO']['LOGO'])){ ?>
-				<div>
-					<img src="<?php echo $_SESSION['INICIO']['LOGO']; ?>" class="logo-icon" alt="logo icon">
-				</div>
-			<?php } ?>
+				<?php if (file_exists($_SESSION['INICIO']['LOGO'])) { ?>
+					<div>
+						<img src="<?php echo $_SESSION['INICIO']['LOGO']; ?>" class="logo-icon" alt="logo icon">
+					</div>
+				<?php } ?>
 				<div>
 					<h4 class="logo-text"><?php echo $_SESSION['INICIO']['MODULO_SISTEMA_NOMBRE']; ?></h4>
 				</div>
@@ -726,10 +719,11 @@ if ($dominio != 'localhost') {
 								<a class="nav-link dropdown-toggle dropdown-toggle-nocaret" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"> <i class='bx bx-category'></i>
 								</a>
 								<div class="dropdown-menu dropdown-menu-end">
-									<div class="row row-cols-3 g-3 p-3" id="pnl_acceso_rapido_modulo">										
+									<div class="row row-cols-3 g-3 p-3" id="pnl_acceso_rapido_modulo">
 										<div class="col text-center">
-											<a href="inicio.php?mod=<?php echo $_SESSION['INICIO']['MODULO_SISTEMA']; ?>&acc=ats" target="_blank"><div class="app-box mx-auto bg-gradient-burning text-white"><i class='bx bx-clipboard'></i>
-											</div>
+											<a href="inicio.php?mod=<?php echo $_SESSION['INICIO']['MODULO_SISTEMA']; ?>&acc=ats" target="_blank">
+												<div class="app-box mx-auto bg-gradient-burning text-white"><i class='bx bx-clipboard'></i>
+												</div>
 											</a>
 											<div class="app-title">Generar ATS</div>
 										</div>
@@ -807,13 +801,13 @@ if ($dominio != 'localhost') {
 									<i class='bx bx-log-out'></i>
 								</a>
 							</li>
-							<?php if($_SESSION['INICIO']['NO_CONCURENTE']==''){?>
-							<li>
-								<a class="nav-link dropdown-toggle dropdown-toggle-nocaret position-relative" onclick="cargar_empresas()" role="button" aria-expanded="false" title="Cambiar empresa">
-									<i class='bx bx-building-house'></i>
-								</a>
-							</li>
-						<?php } ?>
+							<?php if ($_SESSION['INICIO']['NO_CONCURENTE'] == '') { ?>
+								<li>
+									<a class="nav-link dropdown-toggle dropdown-toggle-nocaret position-relative" onclick="cargar_empresas()" role="button" aria-expanded="false" title="Cambiar empresa">
+										<i class='bx bx-building-house'></i>
+									</a>
+								</li>
+							<?php } ?>
 						</ul>
 					</div>
 					<div class="user-box dropdown">
@@ -874,48 +868,48 @@ if ($dominio != 'localhost') {
 		</header>
 
 		<div class="modal fade" id="myModal_empresas" tabindex="-1" role="dialog" data-bs-backdrop="static" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-		  <div class="modal-dialog modal-dialog-centered" role="document">
-		    <div class="modal-content">
-		      <div class="modal-header">
-		        <h3 class="modal-title" id="titulo">Empresas</h3>
-		      </div>
-		      <div class="modal-body">
-		        <ul class="list-group list-group-flush radius-10" id="lista_empresas">
-											
-					<li class="list-group-item d-flex align-items-center radius-10 mb-2 shadow-sm">
-						<div class="d-flex align-items-center">
-							<div class="font-20"><i class="flag-icon flag-icon-us"></i>
-							</div>
-							<div class="flex-grow-1 ms-2">
-								<h6 class="mb-0">United States</h6>
-							</div>
-						</div>
-						<div class="ms-auto">435</div>
-					</li>
-					<li class="list-group-item d-flex align-items-center radius-10 mb-2 shadow-sm">
-						<div class="d-flex align-items-center">
-							<div class="font-20"><i class="flag-icon flag-icon-vn"></i>
-							</div>
-							<div class="flex-grow-1 ms-2">
-								<h6 class="mb-0">Vietnam</h6>
-							</div>
-						</div>
-						<div class="ms-auto">287</div>
-					</li>
-					<li class="list-group-item d-flex align-items-center radius-10 mb-2 shadow-sm">
-						<div class="d-flex align-items-center">
-							<div class="font-20"><i class="flag-icon flag-icon-au"></i>
-							</div>
-							<div class="flex-grow-1 ms-2">
-								<h6 class="mb-0">Australia</h6>
-							</div>
-						</div>
-						<div class="ms-auto">432</div>
-					</li>
-		      </div>
-		      <div class="modal-footer">
-		        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-		      </div>
-		    </div>
-		  </div>
+			<div class="modal-dialog modal-dialog-centered" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h3 class="modal-title" id="titulo">Empresas</h3>
+					</div>
+					<div class="modal-body">
+						<ul class="list-group list-group-flush radius-10" id="lista_empresas">
+
+							<li class="list-group-item d-flex align-items-center radius-10 mb-2 shadow-sm">
+								<div class="d-flex align-items-center">
+									<div class="font-20"><i class="flag-icon flag-icon-us"></i>
+									</div>
+									<div class="flex-grow-1 ms-2">
+										<h6 class="mb-0">United States</h6>
+									</div>
+								</div>
+								<div class="ms-auto">435</div>
+							</li>
+							<li class="list-group-item d-flex align-items-center radius-10 mb-2 shadow-sm">
+								<div class="d-flex align-items-center">
+									<div class="font-20"><i class="flag-icon flag-icon-vn"></i>
+									</div>
+									<div class="flex-grow-1 ms-2">
+										<h6 class="mb-0">Vietnam</h6>
+									</div>
+								</div>
+								<div class="ms-auto">287</div>
+							</li>
+							<li class="list-group-item d-flex align-items-center radius-10 mb-2 shadow-sm">
+								<div class="d-flex align-items-center">
+									<div class="font-20"><i class="flag-icon flag-icon-au"></i>
+									</div>
+									<div class="flex-grow-1 ms-2">
+										<h6 class="mb-0">Australia</h6>
+									</div>
+								</div>
+								<div class="ms-auto">432</div>
+							</li>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+					</div>
+				</div>
+			</div>
 		</div>

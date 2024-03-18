@@ -37,31 +37,11 @@ if (isset($_GET['pac_id'])) {
       type: 'post',
       dataType: 'json',
       success: function(response) {
-        //console.log(response);
-        ///  Para la tabla de inicio /////////////////////////////////////////////////////////////////////////////////////////////////////////
-        $('#txt_ci').html(response[0].sa_pac_temp_cedula + " <i class='bx bxs-id-card'></i>");
+        //Para el encabezado
         nombres = response[0].sa_pac_temp_primer_nombre + ' ' + response[0].sa_pac_temp_segundo_nombre;
-        $('#txt_nombre').html(nombres);
         apellidos = response[0].sa_pac_temp_primer_apellido + ' ' + response[0].sa_pac_temp_segundo_apellido;
-        $('#txt_apellido').html(apellidos);
 
         $('#title_paciente').html(apellidos + " " + nombres);
-
-        $('#tipo_paciente').html(response[0].sa_pac_tabla);
-
-
-        sexo_paciente = '';
-        if (response[0].sa_pac_temp_sexo === 'Masculino') {
-          sexo_paciente = "Masculino <i class='bx bx-male'></i>";
-        } else if (response[0].sa_pac_temp_sexo === 'Femenino') {
-          sexo_paciente = "Famenino <i class='bx bx-female'></i>";
-        }
-        $('#txt_sexo').html(sexo_paciente);
-        $('#txt_fecha_nacimiento').html(fecha_nacimiento_formateada(response[0].sa_pac_temp_fecha_nacimiento.date));
-        $('#txt_edad').html(calcular_edad_fecha_nacimiento(response[0].sa_pac_temp_fecha_nacimiento.date) + ' años');
-        $('#txt_email').html(response[0].sa_pac_temp_correo + " <i class='bx bx-envelope'></i>");
-
-
       }
     });
   }
@@ -130,21 +110,21 @@ if (isset($_GET['pac_id'])) {
                 {
                   data: null,
                   render: function(data, type, item) {
-                    if (item.sa_conp_desde_hora.date == null || item.sa_conp_fecha_ingreso.date == null) {
+                    if (item.sa_conp_desde_hora == null || item.sa_conp_fecha_ingreso == null) {
                       return '';
                     } else {
                       //Fecha de creacion para saber el dia en el que se creo
-                      return fecha_nacimiento_formateada(item.sa_conp_fecha_creacion.date) + ' / ' + obtener_hora_formateada(item.sa_conp_fecha_creacion.date);
+                      return fecha_nacimiento_formateada(item.sa_conp_fecha_creacion) + ' / ' + obtener_hora_formateada(item.sa_conp_fecha_creacion);
                     }
                   }
                 },
                 {
                   data: null,
                   render: function(data, type, item) {
-                    if (item.sa_conp_desde_hora.date == null || item.sa_conp_hasta_hora.date == null) {
+                    if (item.sa_conp_desde_hora == null || item.sa_conp_hasta_hora == null) {
                       return '';
                     } else {
-                      return fecha_nacimiento_formateada(item.sa_conp_fecha_ingreso.date) + ' / ' + obtener_hora_formateada(item.sa_conp_desde_hora.date) + ' / ' + obtener_hora_formateada(item.sa_conp_hasta_hora.date);
+                      return fecha_nacimiento_formateada(item.sa_conp_fecha_ingreso) + ' / ' + obtener_hora_formateada(item.sa_conp_desde_hora) + ' / ' + obtener_hora_formateada(item.sa_conp_hasta_hora);
                     }
                   }
                 },

@@ -89,7 +89,7 @@ if (isset($_GET['id_consulta'])) {
 
                 mensaje += 'Me comunico con usted en calidad para informarle sobre el diagnóstico médico reciente de ' + response[0].sa_conp_nombres + '\n\n';
                 mensaje += 'Diagnóstico: ' + response[0].sa_conp_diagnostico_1 + '\n';
-                mensaje += 'Hora de atención: ' + obtener_hora_formateada(response[0].sa_conp_desde_hora.date) + '\n';
+                mensaje += 'Hora de atención: ' + obtener_hora_formateada(response[0].sa_conp_desde_hora) + '\n';
                 mensaje += 'Motivo: ' + response[0].sa_conp_tipo_consulta + '\n\n';
 
                 $('#mensaje').val(mensaje);

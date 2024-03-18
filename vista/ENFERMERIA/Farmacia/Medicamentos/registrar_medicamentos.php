@@ -37,7 +37,7 @@ if (isset($_GET['id'])) {
         $('#sa_cmed_presentacion').val(response[0].sa_cmed_presentacion);
         $('#sa_cmed_serie').val(response[0].sa_cmed_serie);
         $('#sa_cmed_lote').val(response[0].sa_cmed_lote);
-        $('#sa_cmed_caducidad').val(fecha_nacimiento_formateada(response[0].sa_cmed_caducidad.date));
+        $('#sa_cmed_caducidad').val(fecha_nacimiento_formateada(response[0].sa_cmed_caducidad));
         $('#sa_cmed_minimos').val(response[0].sa_cmed_minimos);
         $('#sa_cmed_stock').val(response[0].sa_cmed_stock);
         $('#sa_cmed_movimiento').val(response[0].sa_cmed_movimiento);

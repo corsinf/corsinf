@@ -47,7 +47,7 @@
                         fecha_nacimiento = item.sa_est_fecha_nacimiento;
                         //fecha_nacimiento_calc = ;
                         
-                        salida = fecha_nacimiento ? calcular_edad_fecha_nacimiento(item.sa_est_fecha_nacimiento.date) : '';
+                        salida = fecha_nacimiento ? calcular_edad_fecha_nacimiento(item.sa_est_fecha_nacimiento) : '';
 
                         return salida;
                     }

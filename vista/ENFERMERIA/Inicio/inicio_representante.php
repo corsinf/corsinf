@@ -201,9 +201,9 @@
                     $('#cbx_ma').prop('checked', true);
                 }
                 if (response[0].fechaN != '' && response[0].fechaN != null) {
-                    $('#txt_fecha_nacimiento').val(formatoDate(response[0].fechaN.date));
+                    $('#txt_fecha_nacimiento').val((response[0].fechaN));
 
-                    var fecha1 = new Date(formatoDate(response[0].fechaN.date));
+                    var fecha1 = new Date((response[0].fechaN));
                     var fecha2 = new Date();
 
                     var diferenciaEnMilisegundos = fecha2 - fecha1;

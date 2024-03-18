@@ -45,19 +45,19 @@ if ($id != null && $id != '') {
                 {
                     data: null,
                     render: function(data, type, item) {
-                        return fecha_nacimiento_formateada(item.ac_horarioD_fecha_disponible.date);
+                        return fecha_nacimiento_formateada(item.ac_horarioD_fecha_disponible);
                     }
                 },
                 {
                     data: null,
                     render: function(data, type, item) {
-                        return obtener_hora_formateada(item.ac_horarioD_inicio.date);
+                        return obtener_hora_formateada(item.ac_horarioD_inicio);
                     }
                 },
                 {
                     data: null,
                     render: function(data, type, item) {
-                        return obtener_hora_formateada(item.ac_horarioD_fin.date);
+                        return obtener_hora_formateada(item.ac_horarioD_fin);
                     }
                 },
                 {

@@ -111,15 +111,15 @@
         calendar.removeAllEvents();
         // Recorrer la respuesta y agregar eventos al arreglo events
         response.forEach(function(evento) {
-          //console.log(evento);
+          console.log(evento);
 
           var color = (evento.sa_conp_estado_revision == 0) ? '#B63232' : '#3D94C9';
 
           calendar.addEvent({
             id: evento.sa_conp_tipo_consulta,
             title: evento.sa_conp_tipo_consulta.toUpperCase() + ' - ' + evento.nombres,
-            start: formatoDate(evento.sa_conp_fecha_ingreso.date),
-            end: formatoDate(evento.sa_conp_fecha_ingreso.date),
+            start: (evento.sa_conp_fecha_ingreso),
+            end: (evento.sa_conp_fecha_ingreso),
             color: color,
             extendedProps: {
               sa_conp_estado_revision: evento.sa_conp_estado_revision,

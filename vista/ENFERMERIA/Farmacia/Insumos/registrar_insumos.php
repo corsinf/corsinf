@@ -36,7 +36,7 @@ if (isset($_GET['id'])) {
         $('#sa_cins_codigo').val(response[0].sa_cins_codigo);
         $('#sa_cins_presentacion').val(response[0].sa_cins_presentacion);
         $('#sa_cins_lote').val(response[0].sa_cins_lote);
-        $('#sa_cins_caducidad').val(fecha_nacimiento_formateada(response[0].sa_cins_caducidad.date));
+        $('#sa_cins_caducidad').val(fecha_nacimiento_formateada(response[0].sa_cins_caducidad));
         $('#sa_cins_minimos').val(response[0].sa_cins_minimos);
         $('#sa_cins_stock').val(response[0].sa_cins_stock);
         $('#sa_cins_movimiento').val(response[0].sa_cins_movimiento);

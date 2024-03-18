@@ -113,20 +113,20 @@ function consultar_datos_h(id_paciente = '', nombres = '') {
                     {
                         data: null,
                         render: function (data, type, item) {
-                            if (item.sa_conp_desde_hora.date == null || item.sa_conp_fecha_ingreso.date == null) {
+                            if (item.sa_conp_desde_hora == null || item.sa_conp_fecha_ingreso == null) {
                                 return '';
                             } else {
-                                return fecha_nacimiento_formateada(item.sa_conp_fecha_creacion.date) + ' / ' + obtener_hora_formateada(item.sa_conp_fecha_creacion.date);
+                                return fecha_nacimiento_formateada(item.sa_conp_fecha_creacion) + ' / ' + obtener_hora_formateada(item.sa_conp_fecha_creacion);
                             }
                         }
                     },
                     {
                         data: null,
                         render: function (data, type, item) {
-                            if (item.sa_conp_desde_hora.date == null || item.sa_conp_hasta_hora.date == null) {
+                            if (item.sa_conp_desde_hora == null || item.sa_conp_hasta_hora == null) {
                                 return '';
                             } else {
-                                return fecha_nacimiento_formateada(item.sa_conp_fecha_ingreso.date) + ' / [' + obtener_hora_formateada(item.sa_conp_desde_hora.date) + ' / ' + obtener_hora_formateada(item.sa_conp_hasta_hora.date) + ']';
+                                return fecha_nacimiento_formateada(item.sa_conp_fecha_ingreso) + ' / [' + obtener_hora_formateada(item.sa_conp_desde_hora) + ' / ' + obtener_hora_formateada(item.sa_conp_hasta_hora) + ']';
                             }
                         }
                     },
