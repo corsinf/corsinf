@@ -81,7 +81,6 @@ function obtener_hora_formateada(hora) {
     // Formatear la hora como una cadena
     var horaFormateada = (hora < 10 ? '0' : '') + hora + ':' +
         (minutos < 10 ? '0' : '') + minutos;
-
     return horaFormateada;
 }
 
