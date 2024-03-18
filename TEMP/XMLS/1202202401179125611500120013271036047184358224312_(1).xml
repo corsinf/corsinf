@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<autorizacion>
+<estado>AUTORIZADO</estado>
+<numeroAutorizacion>1202202401179125611500120013271036047184358224312</numeroAutorizacion>
+<fechaAutorizacion>2024-02-12T07:39:31-05:00</fechaAutorizacion>
+<ambiente>PRODUCCIÓN</ambiente>
+<comprobante><![CDATA[<factura id="comprobante" version="1.1.0"><infoTributaria><ambiente>2</ambiente><tipoEmision>1</tipoEmision><razonSocial>OTECEL S.A.</razonSocial><nombreComercial>MOVISTAR</nombreComercial><ruc>1791256115001</ruc><claveAcceso>1202202401179125611500120013271036047184358224312</claveAcceso><codDoc>01</codDoc><estab>001</estab><ptoEmi>327</ptoEmi><secuencial>103604718</secuencial><dirMatriz>CENTRO CORPORATIVO EKOPARK, TORRE 3 AV. SIMÓN BOLÍVAR Y VÍA A NAYÓN QUITO-ECUADOR</dirMatriz></infoTributaria><infoFactura><fechaEmision>12/02/2024</fechaEmision><dirEstablecimiento>CENTRO CORPORATIVO EKOPARK, TORRE 3 AV. SIMÓN BOLÍVAR Y VÍA A NAYÓN QUITO-ECUADOR</dirEstablecimiento><contribuyenteEspecial>5368</contribuyenteEspecial><obligadoContabilidad>SI</obligadoContabilidad><tipoIdentificacionComprador>05</tipoIdentificacionComprador><razonSocialComprador>EDISON JAVIER FARINANGO CABEZAS</razonSocialComprador><identificacionComprador>1722214507</identificacionComprador><direccionComprador>FRANCISCO DE LA PITA E12-85   Y TERCERA TRANSVERSAL  QUITO-ECUADOR</direccionComprador><totalSinImpuestos>11.81</totalSinImpuestos><totalDescuento>0.00</totalDescuento><totalConImpuestos><totalImpuesto><codigo>2</codigo><codigoPorcentaje>2</codigoPorcentaje><baseImponible>11.81</baseImponible><tarifa>12.00</tarifa><valor>1.42</valor></totalImpuesto></totalConImpuestos><importeTotal>13.22</importeTotal><moneda>DOLAR</moneda><pagos><pago><formaPago>20</formaPago><total>13.22</total></pago></pagos></infoFactura><detalles><detalle><codigoPrincipal>20840</codigoPrincipal><codigoAuxiliar>0</codigoAuxiliar><descripcion>PREVIOPAGO PLAN MOVISTAR STARTER PLUS</descripcion><cantidad>1</cantidad><precioUnitario>11.420000</precioUnitario><descuento>0.00</descuento><precioTotalSinImpuesto>11.42</precioTotalSinImpuesto><impuestos><impuesto><codigo>2</codigo><codigoPorcentaje>2</codigoPorcentaje><tarifa>12.00</tarifa><baseImponible>11.42</baseImponible><valor>1.37</valor></impuesto></impuestos></detalle><detalle><codigoPrincipal>11510</codigoPrincipal><codigoAuxiliar>0</codigoAuxiliar><descripcion>CONSUMO MEGAS ADICIONALES</descripcion><cantidad>119.88</cantidad><precioUnitario>0.003234</precioUnitario><descuento>0.00</descuento><precioTotalSinImpuesto>0.39</precioTotalSinImpuesto><impuestos><impuesto><codigo>2</codigo><codigoPorcentaje>2</codigoPorcentaje><tarifa>12.00</tarifa><baseImponible>0.39</baseImponible><valor>0.05</valor></impuesto></impuestos></detalle></detalles><infoAdicional><campoAdicional nombre="Teléfono">022227700</campoAdicional><campoAdicional nombre="Página web">www.movistar.com.ec</campoAdicional><campoAdicional nombre="rucFirmante">1791256115001</campoAdicional><campoAdicional nombre="Factura">001-327-103604718</campoAdicional><campoAdicional nombre="email">EJFC_OMOSHIROI@HOTMAIL.COM</campoAdicional><campoAdicional nombre="account">43582243</campoAdicional><campoAdicional nombre="MSISDN">987242579</campoAdicional><campoAdicional nombre="DireccionComprador">FRANCISCO DE LA PITA E12-85   Y TERCERA TRANSVERSAL  QUITO-ECUADOR</campoAdicional><campoAdicional nombre="NoOrdenFactura">186086288</campoAdicional><campoAdicional nombre="FormaPago">20</campoAdicional><campoAdicional nombre="Valor">13.22</campoAdicional><campoAdicional nombre="Gran Contribuyente Nro">NAC-GCFOIOC21-00000869-E</campoAdicional></infoAdicional><ds:Signature xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xmlns:etsi="http://uri.etsi.org/01903/v1.3.2#" Id="Signature708173">
+<ds:SignedInfo Id="Signature-SignedInfo664736">
+<ds:CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/>
+<ds:SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/>
+<ds:Reference Id="SignedPropertiesID300911" Type="http://uri.etsi.org/01903#SignedProperties" URI="#Signature708173-SignedProperties159309">
+<ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/>
+<ds:DigestValue>0oseaHVvK3LqZxghVAnQelJsR2Y=</ds:DigestValue>
+</ds:Reference>
+<ds:Reference URI="#Certificate183612">
+<ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/>
+<ds:DigestValue>Tn+vHGYjIpkMuw1dByD8kBtASaY=</ds:DigestValue>
+</ds:Reference>
+<ds:Reference Id="Reference-ID-221856" URI="#comprobante">
+<ds:Transforms>
+<ds:Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/>
+</ds:Transforms>
+<ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/>
+<ds:DigestValue>ZkZBbvlIVvUdhnHwA4X5XV+e6Bs=</ds:DigestValue>
+</ds:Reference>
+</ds:SignedInfo>
+<ds:SignatureValue Id="SignatureValue636440">
+Q9ZIxDe1ig0OY5AM5xsyGMM6i56msfLg8w4W3L9tqtK4Tb7SnwsXOSr4xk9J+8xMgeOw2kWE892b
+B3l4+Vr0emFp4xFfcVZ4UY+XFJ69ZFJMtAbzo1HY56C1Ok036jRL1kvS6r0gOoPrMk3Zw6gGGS4B
+J3s8wW/X5xDrLFhcTzn4PuPe8Z+6FNIiOoRoLnV+q9HaeyLgs0f1mCo3qec9njCTUr5vpfilzAXr
+AG4RpN4mDNxpYUX5Nk5s//cpCi0/9kSPMtklkGQdDbTYMOZi7Zq4Vnzo0TRr0qrPuGtYUMfpsCTY
+vX19LD/wxQMM294Rf9tqKFyrN5gVN+4XLefVUw==
+</ds:SignatureValue>
+<ds:KeyInfo Id="Certificate183612">
+<ds:X509Data>
+<ds:X509Certificate>
+MIIMCDCCCfCgAwIBAgIEChUy1zANBgkqhkiG9w0BAQsFADCBmTELMAkGA1UEBhMCRUMxHTAbBgNV
+BAoMFFNFQ1VSSVRZIERBVEEgUy5BLiAyMTAwLgYDVQQLDCdFTlRJREFEIERFIENFUlRJRklDQUNJ
+T04gREUgSU5GT1JNQUNJT04xOTA3BgNVBAMMMEFVVE9SSURBRCBERSBDRVJUSUZJQ0FDSU9OIFNV
+QkNBLTIgU0VDVVJJVFkgREFUQTAeFw0yMjA2MTAwNDMzNTBaFw0yNDA2MDkwNDMzNTBaMIGaMSMw
+IQYDVQQDDBpNQVRJTERFIFBBTUVMQSBMQVJBIFRPUlJFUzEVMBMGA1UEBRMMMDkwNjIyMjM0MzQx
+MTAwLgYDVQQLDCdFTlRJREFEIERFIENFUlRJRklDQUNJT04gREUgSU5GT1JNQUNJT04xHTAbBgNV
+BAoMFFNFQ1VSSVRZIERBVEEgUy5BLiAyMQswCQYDVQQGEwJFQzCCASIwDQYJKoZIhvcNAQEBBQAD
+ggEPADCCAQoCggEBALd1dkQ/tzHKdoLmV4CrN/wyyeAeYLzq9evy0eXL+nSfNd0BEJDsyN1yVriG
++60ct4wf9i5CHXKKU/gfM52lMRdlfgPFi6RmkLLRDNVwICnp6fXBYn/iL9PAq4HYlQDN4PteD+oS
+0mxOZjzGa/a8/YEgD39T3UqW/JPLHrcfAEYS63wNgNXswtAIf7yn7J0V10bPZF2+JwsADC57l6SS
+fw2RsD8EmvkMr821XcK3M8F02+fH2tuAM8txDGmcRCWIEA/IIt+yG2M8td2sOjqLpbbrQZmFXF/T
+mOvZPpejI6+OM9BcCFrEHV0sN1J2A7bTDJ3pZke7aN2q+gswwMCT1CcCAwEAAaOCB1MwggdPMAwG
+A1UdEwEB/wQCMAAwHwYDVR0jBBgwFoAUjLrKEVd4JYAdawpLVb+NrmLdvY8wWQYIKwYBBQUHAQEE
+TTBLMEkGCCsGAQUFBzABhj1odHRwOi8vb2NzcGd3LnNlY3VyaXR5ZGF0YS5uZXQuZWMvZWpiY2Ev
+cHVibGljd2ViL3N0YXR1cy9vY3NwMIHPBgNVHS4EgccwgcQwgcGggb6ggbuGgbhsZGFwOi8vbGRh
+cHNkY2EyLnNlY3VyaXR5ZGF0YS5uZXQuZWMvQ049QVVUT1JJREFEIERFIENFUlRJRklDQUNJT04g
+U1VCQ0EtMiBTRUNVUklUWSBEQVRBLE9VPUVOVElEQUQgREUgQ0VSVElGSUNBQ0lPTiBERSBJTkZP
+Uk1BQ0lPTixPPVNFQ1VSSVRZIERBVEEgUy5BLiAyLEM9RUM/ZGVsdGFSZXZvY2F0aW9uTGlzdD9i
+YXNlMCYGA1UdEQQfMB2BG21hdGlsZGUubGFyYUB0ZWxlZm9uaWNhLmNvbTCCARIGA1UdIASCAQkw
+ggEFMGAGCisGAQQBgqZyAgowUjBQBggrBgEFBQcCAjBEHkIAQwBlAHIAdABpAGYAaQBjAGEAZABv
+ACAAZABlACAATQBpAGUAbQBiAHIAbwAgAGQAZQAgAEUAbQBwAHIAZQBzAGEwgaAGCisGAQQBgqZy
+AgQwgZEwgY4GCCsGAQUFBwIBFoGBaHR0cHM6Ly93d3cuc2VjdXJpdHlkYXRhLm5ldC5lYy93cC1j
+b250ZW50L2Rvd25sb2Fkcy9Ob3JtYXRpdmFzL1BfZGVfQ2VydGlmaWNhZG9zL1BvbGl0aWNhcyBk
+ZSBDZXJ0aWZpY2FkbyBNaWVtYnJvIGRlIEVtcHJlc2EucGRmMIICogYDVR0fBIICmTCCApUwgeWg
+QaA/hj1odHRwOi8vb2NzcGd3LnNlY3VyaXR5ZGF0YS5uZXQuZWMvZWpiY2EvcHVibGljd2ViL3N0
+YXR1cy9vY3NwooGfpIGcMIGZMTkwNwYDVQQDDDBBVVRPUklEQUQgREUgQ0VSVElGSUNBQ0lPTiBT
+VUJDQS0yIFNFQ1VSSVRZIERBVEExMDAuBgNVBAsMJ0VOVElEQUQgREUgQ0VSVElGSUNBQ0lPTiBE
+RSBJTkZPUk1BQ0lPTjEdMBsGA1UECgwUU0VDVVJJVFkgREFUQSBTLkEuIDIxCzAJBgNVBAYTAkVD
+MIHHoIHEoIHBhoG+bGRhcDovL2xkYXBzZGNhMi5zZWN1cml0eWRhdGEubmV0LmVjL0NOPUFVVE9S
+SURBRCBERSBDRVJUSUZJQ0FDSU9OIFNVQkNBLTIgU0VDVVJJVFkgREFUQSxPVT1FTlRJREFEIERF
+IENFUlRJRklDQUNJT04gREUgSU5GT1JNQUNJT04sTz1TRUNVUklUWSBEQVRBIFMuQS4gMixDPUVD
+P2NlcnRpZmljYXRlUmV2b2NhdGlvbkxpc3Q/YmFzZTCB4KCB3aCB2oaB12h0dHBzOi8vcG9ydGFs
+LW9wZXJhZG9yMi5zZWN1cml0eWRhdGEubmV0LmVjL2VqYmNhL3B1YmxpY3dlYi93ZWJkaXN0L2Nl
+cnRkaXN0P2NtZD1jcmwmaXNzdWVyPUNOPUFVVE9SSURBRCBERSBDRVJUSUZJQ0FDSU9OIFNVQkNB
+LTIgU0VDVVJJVFkgREFUQSxPVT1FTlRJREFEIERFIENFUlRJRklDQUNJT04gREUgSU5GT1JNQUNJ
+T04sTz1TRUNVUklUWSBEQVRBIFMuQS4gMixDPUVDMB0GA1UdDgQWBBRF02wYuqBRLIMT/WYQbxBc
+V9OiizArBgNVHRAEJDAigA8yMDIyMDYxMDA0MzM1MFqBDzIwMjQwNjA5MDQzMzUwWjALBgNVHQ8E
+BAMCBeAwNgYKKwYBBAGCpnIDBQQoDCZHRVJFTlRFIEZJTkFOWkFTIENPTlRBQklMSURBRCBZIEZJ
+U0NBTDAaBgorBgEEAYKmcgMBBAwMCjE3MTc3Mzc2MjkwFQYKKwYBBAGCpnIDCQQHDAVRVUlUTzAR
+BgorBgEEAYKmcgMiBAMMAS4wLQYKKwYBBAGCpnIDBwQfDB1BVi4gU0lNT04gQk9MSVZBUiBTIE4g
+WSBOQVlPTjAeBgorBgEEAYKmcgMCBBAMDk1BVElMREUgUEFNRUxBMB8GCisGAQQBgqZyAyAEEQwP
+MDA1MDAxMDAwMDE5ODU2MBMGCisGAQQBgqZyAyEEBQwDUEZYMBcGCisGAQQBgqZyAwwECQwHRUNV
+QURPUjAUBgorBgEEAYKmcgMDBAYMBExBUkEwGwYKKwYBBAGCpnIDCgQNDAtPVEVDRUwgUy5BLjAd
+BgorBgEEAYKmcgMLBA8MDTE3OTEyNTYxMTUwMDEwEgYKKwYBBAGCpnIDHQQEDAJObzAWBgorBgEE
+AYKmcgMEBAgMBlRPUlJFUzAaBgorBgEEAYKmcgMIBAwMCjA5ODQxNjg2NTUwDQYJKoZIhvcNAQEL
+BQADggIBAKvpcARN3xtFHEjnTKngWKCw56HFmlEaDHgvmGdzdSUPy+eoqh2OzT16NIVyRVEliYo4
+5fOkKZB3w80IJrzTviGW6mYfDHt0InGbS0E6K/NMSRtrtZBwDctHWMImns1E2tVqFXXyqYaWuFCO
++czFLivOIYT9GoyNy2vatrM4Ioo1d5NiG6NA0dFP6yWcR77tgZjyW7kvcaDCK9Rtkf6pJQc0nIQX
+d3zlz2mFRMsejsm4NUc3ZyBx6iix4/RPHP8XP6+pM2CUtnrFAuX9dlXDn0x269a/H/0SPTqSprB8
+r/LaHq2gmWB1dfqZdIhXdcu30NYBZdH8A8NswzRoUfsaHX2NKkpwrcIX6KsuHPM+/85VSdg1I2R+
+B5GoV1rzhM53Foeksoi8p53DRoOPQBTGxoxUlPZoPz51nRLu8l4kHttXDrQIxexSauFGx4jg0e8V
+OrSXXDJU2PzTTnQBfFmjUKU26N4jjzWptDDmn9PRxMP1aeAMMjHNhudcwo4jSEpU3Ge/SvhKnH+S
+2Dl+Mfa6VI05pQ36WDn6zS1nFnp3r8HMskhLsDbYc+vPwuPFPL4n/lUwAjJZicdwoWNcrWxPhMPR
+tA0JqICOuZ5vjfwBGBQLqYmaigXAAGRcq+R8OLGtXKvC2IaJ1ZSERF5Ox/yaLxMpALskJGOaonDE
+Bf4I0UUp
+</ds:X509Certificate>
+</ds:X509Data>
+<ds:KeyValue>
+<ds:RSAKeyValue>
+<ds:Modulus>
+t3V2RD+3Mcp2guZXgKs3/DLJ4B5gvOr16/LR5cv6dJ813QEQkOzI3XJWuIb7rRy3jB/2LkIdcopT
++B8znaUxF2V+A8WLpGaQstEM1XAgKenp9cFif+Iv08CrgdiVAM3g+14P6hLSbE5mPMZr9rz9gSAP
+f1PdSpb8k8setx8ARhLrfA2A1ezC0Ah/vKfsnRXXRs9kXb4nCwAMLnuXpJJ/DZGwPwSa+QyvzbVd
+wrczwXTb58fa24Azy3EMaZxEJYgQD8gi37IbYzy13aw6OoultutBmYVcX9OY69k+l6Mjr44z0FwI
+WsQdXSw3UnYDttMMnelmR7to3ar6CzDAwJPUJw==
+</ds:Modulus>
+<ds:Exponent>AQAB</ds:Exponent>
+</ds:RSAKeyValue>
+</ds:KeyValue>
+</ds:KeyInfo>
+<ds:Object Id="Signature708173-Object744931"><etsi:QualifyingProperties Target="#Signature708173"><etsi:SignedProperties Id="Signature708173-SignedProperties159309"><etsi:SignedSignatureProperties><etsi:SigningTime>2024-02-12T07:39:29-05:00</etsi:SigningTime><etsi:SigningCertificate><etsi:Cert><etsi:CertDigest><ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/><ds:DigestValue>8VzdkaxGTiDz7suLi9cAqNvXi/0=</ds:DigestValue></etsi:CertDigest><etsi:IssuerSerial><ds:X509IssuerName>CN=AUTORIDAD DE CERTIFICACION SUBCA-2 SECURITY DATA,OU=ENTIDAD DE CERTIFICACION DE INFORMACION,O=SECURITY DATA S.A. 2,C=EC</ds:X509IssuerName><ds:X509SerialNumber>169161431</ds:X509SerialNumber></etsi:IssuerSerial></etsi:Cert></etsi:SigningCertificate></etsi:SignedSignatureProperties><etsi:SignedDataObjectProperties><etsi:DataObjectFormat ObjectReference="#Reference-ID-221856"><etsi:Description>contenido comprobante</etsi:Description><etsi:MimeType>text/xml</etsi:MimeType></etsi:DataObjectFormat></etsi:SignedDataObjectProperties></etsi:SignedProperties></etsi:QualifyingProperties></ds:Object></ds:Signature></factura>]]></comprobante>
+<mensajes/>
+</autorizacion>
+
