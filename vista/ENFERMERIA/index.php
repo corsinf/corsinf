@@ -22,7 +22,27 @@
 
 
 
-  function total_pacientes() {
+  function tcp() {
+    $.ajax({
+      // data:  {parametros:parametros},
+      url: '../controlador/index_saludC.php?tcp=true',
+      type: 'post',
+      dataType: 'json',
+      /*beforeSend: function () {   
+           var spiner = '<div class="text-center"><img src="../img/gif/proce.gif" width="100" height="100"></div>'     
+         $('#tabla_').html(spiner);
+      },*/
+      success: function(response) {
+        console.log(response)
+      },
+      error: function(jqXHR, textStatus, errorThrown) {
+        console.log(textStatus)
+      }
+    });
+
+  }
+
+    function total_pacientes() {
     $.ajax({
       // data:  {parametros:parametros},
       url: '../controlador/index_saludC.php?total_pacientes=true',
@@ -261,6 +281,7 @@
     </div>
     <!--end breadcrumb-->
     <div class="row">
+      <!-- <button class="btn btn btn-primary" onclick="tcp() ">Envio tcp</button> -->
       <div class="col-xl-12 mx-auto">
 
         <?php if (
