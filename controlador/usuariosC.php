@@ -219,7 +219,7 @@ class usuariosC
               <div class="card-body text-center">
                 <div class="p-4 border radius-15">
                   <img src="../'.$value['foto'].'" width="110" height="110" class="rounded-circle shadow" alt="">
-                  <h5 class="mb-0 mt-5">'.$value['nombres'].' '.$value['ape'].'</h5>
+                  <h5 class="mb-0 mt-5">'.$value['nombre'].' '.$value['apellido'].'</h5>
                   <p class="mb-3">'.$value['tipo'].'</p>
                   <div class="list-inline contacts-social mt-3 mb-3"> <a href="javascript:;" class="list-inline-item bg-facebook text-white border-0"><i class="bx bxl-facebook"></i></a>
                     <a href="javascript:;" class="list-inline-item bg-twitter text-white border-0"><i class="bx bxl-twitter"></i></a>
@@ -238,7 +238,7 @@ class usuariosC
 					}
 				}else
 				{
-
+// print_r($value);die();
 
 						$tabla.='
 						<div class="col">
@@ -246,7 +246,7 @@ class usuariosC
               <div class="card-body text-center">
                 <div class="p-4 border radius-15">
                   <img src="'.$value['foto'].'" width="110" height="110" class="rounded-circle shadow" alt="">
-                  <h5 class="mb-0 mt-5">'.$value['nombres'].' '.$value['ape'].'</h5>
+                  <h5 class="mb-0 mt-5">'.$value['nombre'].' '.$value['apellido'].'</h5>
                   <p class="mb-3">'.$value['tipo'].'</p>
                   <div class="list-inline contacts-social mt-3 mb-3"> <a href="javascript:;" class="list-inline-item bg-facebook text-white border-0"><i class="bx bxl-facebook"></i></a>
                     <a href="javascript:;" class="list-inline-item bg-twitter text-white border-0"><i class="bx bxl-twitter"></i></a>
@@ -349,7 +349,7 @@ class usuariosC
 
 		// print_r($parametros);die();
 				$datos[0]['campo']='password';
-		    $datos[0]['dato']=$parametros['txt_pass'];
+		    $datos[0]['dato']= $this->pagina->enciptar_clave($parametros['txt_pass']);
 		    $datos[1]['campo']='nombres';
 		    $datos[1]['dato']=$parametros['txt_nombre'];
 		    $datos[2]['campo']='direccion';
@@ -412,7 +412,7 @@ class usuariosC
 		    // $datos[0]['campo']='nick_usuario';
 		    // $datos[0]['dato']=$parametros['txt_nick'];
 		    $datos[0]['campo']='password';
-		    $datos[0]['dato']=$parametros['txt_pass'];
+		    $datos[0]['dato']= $this->pagina->enciptar_clave($parametros['txt_pass']);
 		    $datos[1]['campo']='nombres';
 		    $datos[1]['dato']=$parametros['txt_nombre'];
 		    $datos[2]['campo']='direccion';
@@ -521,7 +521,11 @@ class usuariosC
 			if(!file_exists($datos[0]['foto']))
 			{
 				 $datos[0]['foto'] ='';
-			}
+			}			
+		}
+		if($datos[0]['pass']!='')
+		{
+			$datos[0]['pass'] = $this->pagina->desenciptar_clave($datos[0]['pass']);
 		}
 
 		// print_r($datos);die();
@@ -582,7 +586,7 @@ class usuariosC
 	function guardar_pass($parametros)
 	{
 		 $datos[0]['campo']='password';
-		 $datos[0]['dato']= $parametros['pass'];
+		 $datos[0]['dato']= $this->pagina->enciptar_clave($parametros['pass']);
 
 
 		 $where[0]['campo']='id_usuarios';
@@ -797,7 +801,7 @@ class usuariosC
   	if(count($campos)>0)
   	{
   		$datos[0]['campo'] = $campos[0]['pass'];
-  		$datos[0]['dato'] = $parametros['pass'];
+  		$datos[0]['dato'] = $this->pagina->enciptar_clave($parametros['pass']);
   	}
 
 		$where[0]['campo'] = $campo;

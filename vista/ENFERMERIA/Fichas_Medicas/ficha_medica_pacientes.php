@@ -99,8 +99,8 @@ if ($btn_regresar == '') {
                         sexo_paciente = "Famenino <i class='bx bx-female'></i>";
                     }
                     $('#txt_sexo').html(sexo_paciente);
-                    $('#txt_fecha_nacimiento').html(fecha_nacimiento_formateada(response[0].sa_pac_temp_fecha_nacimiento.date));
-                    $('#txt_edad').html(calcular_edad_fecha_nacimiento(response[0].sa_pac_temp_fecha_nacimiento.date) + ' años');
+                    $('#txt_fecha_nacimiento').html(fecha_nacimiento_formateada(response[0].sa_pac_temp_fecha_nacimiento));
+                    $('#txt_edad').html(calcular_edad_fecha_nacimiento(response[0].sa_pac_temp_fecha_nacimiento) + ' años');
                     $('#txt_email').html(response[0].sa_pac_temp_correo + " <i class='bx bx-envelope'></i>");
 
 

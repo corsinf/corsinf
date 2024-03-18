@@ -80,19 +80,17 @@ class db
 
 	function conexion()
 	{
-		$connectionInfo = array("Database" => $this->database, "UID" => $this->usuario, "PWD" => $this->password, "CharacterSet" => "UTF-8");
-		// print_r($this->servidor);
-		// print_r($connectionInfo);die();
-		$server = $this->servidor;
-		if ($this->puerto != '') {
-			$server = $this->servidor . ', ' . $this->puerto;
-		}
-		$cid = sqlsrv_connect($server, $connectionInfo); //returns false
-		if ($cid === false) {
-			echo 'no se pudo conectar a la base de datos';
-			die(print_r(sqlsrv_errors(), true));
-		}
-		return $cid;
+		try{
+		     $conn = new PDO("sqlsrv:Server=".$this->servidor . ', ' . $this->puerto.";Database=".$this->database, $this->usuario, $this->password);
+		     $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+		      return $conn;
+		    }	 
+		  catch(PDOException $e)
+		    {
+		      echo "La conexión ha fallado: " . $e->getMessage();
+		    }
+		 
+		  $conn = null;
 	}
 
 
@@ -117,18 +115,22 @@ class db
 	{
 		$this->parametros_conexion($master);
 		$conn = $this->conexion();
-		$stmt = sqlsrv_query($conn, $sql);
-		// print_r($sql);die();
 		$result = array();
-		if ($stmt === false) {
+
+		// print_r($sql);die();
+		try {
+			$stmt = $conn->prepare($sql);
+    		$stmt->execute();
+    		while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+		        $result[] = $row;
+		    }
+		    $conn=null;
+			return $result;
+			
+		} catch (Exception $e) {
 			die(print_r(sqlsrv_errors(), true));
 		}
-		while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
-			$result[] = $row;
-		}
-
-		sqlsrv_close($conn);
-		return $result;
+		
 	}
 	function inserts($tabla, $datos, $master = false)
 	{
@@ -148,25 +150,46 @@ class db
 				} else {
 					$valores .= $value['dato'] . ',';
 				}
-			} else {
-				$valores .= "'" . $value['dato'] . "',";
+			} else {			
+				// $valores .= "'" . $value['dato'] . "',";
+				$valores .= $value['dato'] . ',';
 			}
 		}
 		$campos = substr($campos, 0, -1);
 		$valores = substr($valores, 0, -1);
-		$sql .= '(' . $campos . ')values(' . $valores . ');';
+		$valores = explode(',',$valores);
+		$incognitas = '';
+		// print_r($valores);die();
+		foreach ($valores as $value) {
+			// print_r($value.'-');
+			if (strlen($value)==12 && strtotime($value) !== false) 
+				{
+					// print_r($value);die();
+    			    $incognitas.='CAST(? AS DATE),';
+				}else
+				{
+					$incognitas.='?,';
+				}
+		}
+		$incognitas = substr($incognitas, 0, -1);
+		
+		$sql .= '(' . $campos . ')values(' . $incognitas . ');';
 
 		// print_r($sql);die();
-		$stmt = sqlsrv_query($conn, $sql);
-		if (!$stmt) {
-			echo "Error: " . $sql . "<br>" . sqlsrv_errors($conn);
-
-			sqlsrv_close($conn);
-			return -1;
+		// print_r($valores);die();
+		// $stmt = sqlsrv_query($conn, $sql);
+		$stmt = $conn->prepare($sql);
+		try {
+			$stmt->execute($valores);
+			$conn = null;
+			return 1;
+			
+		} catch (Exception $e) {
+			echo "Error: " . $sql . "<br>" . $e;			
+			$conn = null;
+			return -1;			
 		}
-
-		sqlsrv_close($conn);
-		return 1;
+		
 	}
 
 	function inserts_id($tabla, $datos, $master = false)
@@ -230,43 +253,40 @@ class db
 		$campos = '';
 		$sql = 'UPDATE ' . $tabla . ' SET ';
 
+		$datos_update = array();
 		foreach ($datos as $key => $value) {
-			// if(is_numeric($value['dato']))
-			// {
-			// $sql.=$value['campo'].'='.$value['dato'];
-			// }else
-			// {
-			$sql .= $value['campo'] . "='" . $value['dato'] . "'";
-			// }
+			
+			$sql .= $value['campo'] . "= ?";		
 			$sql .= ',';
+			array_push($datos_update, $value['dato']);
 		}
 
 		$sql = substr($sql, 0, -1);
 
 		$sql .= " WHERE ";
 
-
 		foreach ($where as $key => $value) {
-			if (is_numeric($value['dato'])) {
-				$sql .= $value['campo'] . '=' . $value['dato'];
-			} else {
-				$sql .= $value['campo'] . '="' . $value['dato'] . '"';
-				//	$valores.='"'.$value['dato'].'",';
-			}
+			array_push($datos_update, $value['dato']);
+			// if (is_numeric($value['dato'])) {
+				$sql .= $value['campo'] . '= ? '; // . $value['dato'];
+			// } else {
+			// 	$sql .= $value['campo'] . '="' . $value['dato'] . '"';
+			// 	//	$valores.='"'.$value['dato'].'",';
+			// }
 			$sql .= " AND ";
 		}
-		$sql = substr($sql, 0, -5);
-		// print_r($sql);
-		// die();		
-		$stmt = sqlsrv_query($conn, $sql);
-		if (!$stmt) {
-			echo "Error: " . $sql . "<br>" . sqlsrv_errors($conn);
-			sqlsrv_close($conn);
-			return -1;
-		}
+		$sql = substr($sql, 0, -5);		
 
-		sqlsrv_close($conn);
-		return 1;
+		try {
+			$stmt = $conn->prepare($sql);
+    		$stmt->execute($datos_update);
+    		$conn=null;
+    		return 1;
+			
+		} catch (Exception $e) {
+			echo "Error: " . $sql . "<br>".$e;
+			return -1;
+		}		
 	}
 
 
@@ -312,16 +332,17 @@ class db
 		$this->parametros_conexion($master);
 		$conn = $this->conexion();
 		// print_r($sql);
-		$stmt = sqlsrv_query($conn, $sql);
-		if (!$stmt) {
-			// print_r($sql);die();
-			echo "Error: " . $sql . "<br>" . sqlsrv_errors($conn);
-			sqlsrv_close($conn);
-			return -1;
-		}
 
-		sqlsrv_close($conn);
-		return 1;
+		try {
+			$stmt = $conn->prepare($sql);
+    		$stmt->execute();    		
+		    $conn=null;
+			return 1;
+			
+		} catch (Exception $e) {
+			return -1;
+			die(print_r(sqlsrv_errors(), true));
+		}
 	}
 
 	function sql_string_cod_error($sql, $master = false)
@@ -343,20 +364,25 @@ class db
 	function ejecutar_procesos_almacenados($sql, $parametros = false, $retorna = false, $master = false)
 	{
 		$this->parametros_conexion($master);
+		
 		$conn = $this->conexion();
-		if ($parametros) {
-			$stmt = sqlsrv_prepare($conn, $sql, $parametros);
-		} else {
-			$stmt = sqlsrv_prepare($conn, $sql);
-		}
-		$res = sqlsrv_execute($stmt);
-		if ($res === false) {
-			// return "Error en consulta PA. -1 ";  
-			die(print_r(sqlsrv_errors(), true));
-		} else {
-			sqlsrv_close($conn);
+		$stmt = $conn->prepare($sql);
+		
+		try {
+			if ($parametros) {
+				$stmt->execute($parametros);
+			} else {
+				$stmt->execute();
+			}
+
+			$conn=null;
 			return 1;
+		} catch (Exception $e) {
+			$conn=null;
+			return -1;			
 		}
+		
+
 	}
 
 	//Para retonar valores de la procedures de todo un select
@@ -364,33 +390,25 @@ class db
 	{
 		$this->parametros_conexion($master);
 		$conn = $this->conexion();
+		$stmt = $conn->prepare($sql);
 
 		if ($parametros) {
-			$stmt = sqlsrv_prepare($conn, $sql, $parametros);
+			$stmt->execute($parametros);
 		} else {
-			$stmt = sqlsrv_prepare($conn, $sql);
+			$stmt->execute();
 		}
-
-		if ($stmt === false) {
-			throw new Exception("Error al preparar la consulta PA. -1");
-		}
-
-		$res = sqlsrv_execute($stmt);
-
-		if ($res === false) {
-			throw new Exception("Error al ejecutar la consulta PA. -1");
-		}
-
-		// Obtener el valor de retorno directamente del conjunto de resultados
-		// Obtener los resultados
 		$resultados = array();
-		while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
-			$resultados[] = $row;
-		}
+		do {
+		    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+		        $resultados[] = $row;
+		    }
+		} while ($stmt->nextRowset());
 
-		sqlsrv_free_stmt($stmt);
-		sqlsrv_close($conn);
+		// Cerrar la conexión
+		$stmt = null;
+		$conn = null;
 
+		// Retornar los resultados
 		return $resultados;
 	}
 
@@ -403,27 +421,41 @@ class db
 		if ($password == '') {
 			$password = '';
 		}
-		$connectionInfo = array("Database" => $database, "UID" => $usuario, "PWD" => $password, "CharacterSet" => "UTF-8");
-		// print_r($this->servidor);
-		// print_r($connectionInfo);die();
-		$server = $servidor;
-		if ($puerto != '') {
-			$server = $servidor . ', ' . $puerto;
-		}
-		$cid = sqlsrv_connect($server, $connectionInfo); //returns false
 
-		if ($cid === false) {
-			echo 'no se pudo conectar a la base de datos';
-			die(print_r(sqlsrv_errors(), true));
-		}
+		try{
+		     $conn = new PDO("sqlsrv:Server=".$servidor . ', ' . $puerto.";Database=".$database, $usuario, $password);
+		     $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+		      return $conn;
+		    }	 
+		  catch(PDOException $e)
+		    {
+		      echo "La conexión ha fallado: " . $e->getMessage();
+		    }
+		 
+		  $conn = null;
 
-		if ($cid === false) {
-			return -1;
-			// echo 'no se pudo conectar a la base de datos';
-			// die( print_r( sqlsrv_errors(), true));
-		}
 
-		return $cid;
+		// $connectionInfo = array("Database" => $database, "UID" => $usuario, "PWD" => $password, "CharacterSet" => "UTF-8");
+		// // print_r($this->servidor);
+		// // print_r($connectionInfo);die();
+		// $server = $servidor;
+		// if ($puerto != '') {
+		// 	$server = $servidor . ', ' . $puerto;
+		// }
+		// $cid = sqlsrv_connect($server, $connectionInfo); //returns false
+
+		// if ($cid === false) {
+		// 	echo 'no se pudo conectar a la base de datos';
+		// 	die(print_r(sqlsrv_errors(), true));
+		// }
+
+		// if ($cid === false) {
+		// 	return -1;
+		// 	// echo 'no se pudo conectar a la base de datos';
+		// 	// die( print_r( sqlsrv_errors(), true));
+		// }
+
+		// return $cid;
 	}
 
 
@@ -446,19 +478,32 @@ class db
 
 	function datos_db_terceros($database, $usuario, $password, $servidor, $puerto, $sql)
 	{
+
+
 		$conn = $this->conexion_db_terceros($database, $usuario, $password, $servidor, $puerto);
-		$stmt = sqlsrv_query($conn, $sql);
-		// print_r($sql);die();
 		$result = array();
-		if ($stmt === false) {
+
+		// print_r($database);
+		// print_r($usuario);
+		// print_r($password);
+		// print_r($servidor);
+		// print_r($puerto);
+		// print_r($sql);
+		// die();
+
+		try {
+			$stmt = $conn->prepare($sql);
+    		$stmt->execute();
+    		while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+		        $result[] = $row;
+		    }
+		    $conn=null;
+			return $result;
+			
+		} catch (Exception $e) {
 			die(print_r(sqlsrv_errors(), true));
 		}
-		while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
-			$result[] = $row;
-		}
 
-		sqlsrv_close($conn);
-		return $result;
 	}
 
 	// ------------------------------------------------------------------------------------------------------

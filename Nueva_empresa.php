@@ -107,7 +107,7 @@
         contentType: false,
         processData: false,
         success: function(response) {
-           if(response==2)
+           if(response==-2)
            {
            	 Swal.fire("La empresa ya esta registrada","","Error");
            }else if(response==1)

@@ -39,10 +39,7 @@
                     }
                 },
                 {
-                    data: null,
-                    render: function(data, type, item) {
-                        return formatoDate(item.Fecha.date);
-                    }
+                    data: 'Fecha'
                 },
                 {
                     data: null,

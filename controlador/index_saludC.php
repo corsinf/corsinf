@@ -50,6 +50,10 @@ if (isset($_GET['estudiantes_atendidos'])) {
     echo json_encode($controlador->estudiantes_atendidos($_POST['id_representante']));
 }
 
+if (isset($_GET['tcp'])) {
+    echo json_encode($controlador->tcp());
+}
+
 
 //echo json_encode($controlador->insertar_editar('Ejemplo1'));
 
@@ -174,6 +178,31 @@ class index_saludC
         }
 
         return array('estudiante' => $estudiante, 'atenciones' => $atenciones);
+    }
+
+    function tcp()
+    {
+        // print_r('hola');die();
+            $ip = '192.168.1.6'; // Dirección IP del servidor 
+            // $ip = '186.4.219.172'; // Dirección IP del servidor
+            $puerto = 15300; // Puerto en el que el servidor está escuchando
+            $mensaje = '1'; // Mensaje a enviar
+
+            // Abre una conexión TCP/IP
+            $socket = fsockopen($ip, $puerto, $errno, $errstr, 30);
+            if (!$socket) {
+                return "Error al abrir el socket: $errstr ($errno)\n";
+            } else {
+                // Escribe el mensaje en el socket
+                fwrite($socket, $mensaje);
+                
+                // Lee la respuesta del servidor (opcional)
+                $respuesta = fread($socket, 1024);
+                return "Respuesta del servidor: $respuesta\n";
+                
+                // Cierra la conexión
+                fclose($socket);
+            }
     }
 
 

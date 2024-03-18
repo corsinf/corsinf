@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<autorizacion>
+<estado>AUTORIZADO</estado>
+<numeroAutorizacion>3001202307170477950100120010010000060191234567810</numeroAutorizacion>
+<fechaAutorizacion>2023-02-10T15:10:37-05:00</fechaAutorizacion>
+<ambiente>PRODUCCIÓN</ambiente>
+<comprobante><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+<comprobanteRetencion id="comprobante" version="1.0.0">
+    <infoTributaria>
+        <ambiente>2</ambiente>
+        <tipoEmision>1</tipoEmision>
+        <razonSocial>DIAZ AYALA ANDREA</razonSocial>
+        <nombreComercial>DIAZ AYALA ANDREA</nombreComercial>
+        <ruc>1704779501001</ruc>
+        <claveAcceso>3001202307170477950100120010010000060191234567810</claveAcceso>
+        <codDoc>07</codDoc>
+        <estab>001</estab>
+        <ptoEmi>001</ptoEmi>
+        <secuencial>000006019</secuencial>
+        <dirMatriz>Calle:LEONIDAS PLAZA Numero:N24-7351 Interseccion:MARISCAL FOCH</dirMatriz>
+        <agenteRetencion>1</agenteRetencion>
+    </infoTributaria>
+    <infoCompRetencion>
+        <fechaEmision>30/01/2023</fechaEmision>
+        <dirEstablecimiento>N/A</dirEstablecimiento>
+        <obligadoContabilidad>SI</obligadoContabilidad>
+        <tipoIdentificacionSujetoRetenido>04</tipoIdentificacionSujetoRetenido>
+        <razonSocialSujetoRetenido>RUBIO PUETATE MILTON ANDRES .</razonSocialSujetoRetenido>
+        <identificacionSujetoRetenido>1712605284001</identificacionSujetoRetenido>
+        <periodoFiscal>01/2023</periodoFiscal>
+    </infoCompRetencion>
+    <impuestos>
+        <impuesto>
+            <codigo>2</codigo>
+            <codigoRetencion>1</codigoRetencion>
+            <baseImponible>60.0</baseImponible>
+            <porcentajeRetener>30</porcentajeRetener>
+            <valorRetenido>18.0</valorRetenido>
+            <codDocSustento>01</codDocSustento>
+            <numDocSustento>001001000000700</numDocSustento>
+            <fechaEmisionDocSustento>30/01/2023</fechaEmisionDocSustento>
+        </impuesto>
+        <impuesto>
+            <codigo>1</codigo>
+            <codigoRetencion>343</codigoRetencion>
+            <baseImponible>500.0</baseImponible>
+            <porcentajeRetener>1.0</porcentajeRetener>
+            <valorRetenido>5.0</valorRetenido>
+            <codDocSustento>01</codDocSustento>
+            <numDocSustento>001001000000700</numDocSustento>
+            <fechaEmisionDocSustento>30/01/2023</fechaEmisionDocSustento>
+        </impuesto>
+    </impuestos>
+    <infoAdicional>
+        <campoAdicional nombre="Dirección">RIO COCA E24-126 Y AV AMAZONAS</campoAdicional>
+        <campoAdicional nombre="Teléfono">0999219738</campoAdicional>
+        <campoAdicional nombre="AGENTE DE RETENCION">SEGUN RESOLUCION NAC-DNCRASC20-00000001</campoAdicional>
+    </infoAdicional>
+<ds:Signature xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xmlns:etsi="http://uri.etsi.org/01903/v1.3.2#" Id="Signature478464">
+<ds:SignedInfo Id="Signature-SignedInfo937592">
+<ds:CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"></ds:CanonicalizationMethod>
+<ds:SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"></ds:SignatureMethod>
+<ds:Reference Id="SignedPropertiesID510464" Type="http://uri.etsi.org/01903#SignedProperties" URI="#Signature478464-SignedProperties605148">
+<ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"></ds:DigestMethod>
+<ds:DigestValue>iXfsyzNBBWMQZzi5eTL6w0FL03o=</ds:DigestValue>
+</ds:Reference>
+<ds:Reference URI="#Certificate1242716">
+<ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"></ds:DigestMethod>
+<ds:DigestValue>QJiooz4KnAKCxgjOh02LWn2WL8s=</ds:DigestValue>
+</ds:Reference>
+<ds:Reference Id="Reference-ID-530745" URI="#comprobante">
+<ds:Transforms>
+<ds:Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"></ds:Transform>
+</ds:Transforms>
+<ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"></ds:DigestMethod>
+<ds:DigestValue>cp6pxjwSkpitT3q9hpIJJ2pLBs0=</ds:DigestValue>
+</ds:Reference>
+</ds:SignedInfo>
+<ds:SignatureValue Id="SignatureValue469544">
+GjBsxUuL6T3mM7OXbh8xJz8s27v3nWNM0P3xjo4k0IS1VrPotGzAialntTsifAmXgQ4zNv0PFePu
+H+LeN6N622QaHsmE2D0XwiYmxqgtYCDT3e3TAsDXFhvjjGX1oQtemmtzHravTse43wHxR2qFReYy
+KmCv9OQQYaHk7rOh5EubgRNfzkFeRrBOBRi4KKN2vWWIJqDv1UqZ2D3zKwPWDRR4VEVPVDtReLvM
+kJIr6B8B6WXbcvf+1WF2LDcubeYk/OSR8FA28a7+5EnmEtUS04egLde4Py5jOTMzlIJo7pidv/kW
+jMnHlaKXch0UZ+/vd5lLGLAnwpnsKzj9MX7tNA==
+</ds:SignatureValue>
+<ds:KeyInfo Id="Certificate1242716">
+<ds:X509Data>
+<ds:X509Certificate>
+MIII+DCCBuCgAwIBAgIEW2twUTANBgkqhkiG9w0BAQsFADCBoTELMAkGA1UEBhMCRUMxIjAgBgNV
+BAoTGUJBTkNPIENFTlRSQUwgREVMIEVDVUFET1IxNzA1BgNVBAsTLkVOVElEQUQgREUgQ0VSVElG
+SUNBQ0lPTiBERSBJTkZPUk1BQ0lPTi1FQ0lCQ0UxDjAMBgNVBAcTBVFVSVRPMSUwIwYDVQQDExxB
+QyBCQU5DTyBDRU5UUkFMIERFTCBFQ1VBRE9SMB4XDTIxMTIxNDE3MzEyOFoXDTIzMTIxNDE4MDEy
+OFowgakxCzAJBgNVBAYTAkVDMSIwIAYDVQQKExlCQU5DTyBDRU5UUkFMIERFTCBFQ1VBRE9SMTcw
+NQYDVQQLEy5FTlRJREFEIERFIENFUlRJRklDQUNJT04gREUgSU5GT1JNQUNJT04tRUNJQkNFMQ4w
+DAYDVQQHEwVRVUlUTzEtMBEGA1UEBRMKMDAwMDI0MzU1MzAYBgNVBAMTEUFORFJFQSBESUFaIEFZ
+QUxBMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAyTTTd0nKGk4V2wKcq68tpYcVPvCo
+GgYHtOTuxfVCtggTLQ2xUSgyS7Eza0eL27ceNGweTabdQhJiO7AM0Vn4M+rCWVz1Jp0iYQhgQTBd
+eDUPZMyEoCD8MWfTsy72LEdIGpEJ7zEjVbIkBxHvvkncvEQyOHQA9BxK7OAna5D4TQvGbZNf4B2j
+jciKamQT4ZQuUtfXB/+BStrYVlltmaFtE3En+Uot4yKsqtKqNv+WAV+qkGtT1gSI1JGTmCtxu5ki
+SOLXN6AiAw5jqzhs/Tz/hcx+mBwa/3ayZepmf8zTJE2EwQm3t5FUzAUle1VBvzT4agBR2F3xlB/e
+YT2hNVGbAwIDAQABo4IELDCCBCgwgZEGCCsGAQUFBwEBBIGEMIGBMD4GCCsGAQUFBzABhjJodHRw
+Oi8vb2NzcC5lY2kuYmNlLmVjL2VqYmNhL3B1YmxpY3dlYi9zdGF0dXMvb2NzcDA/BggrBgEFBQcw
+AYYzaHR0cDovL29jc3AxLmVjaS5iY2UuZWMvZWpiY2EvcHVibGljd2ViL3N0YXR1cy9vY3NwMBoG
+CisGAQQBgqg7AwEEDBMKMTcwNDc3OTUwMTAWBgorBgEEAYKoOwMCBAgTBkFORFJFQTAUBgorBgEE
+AYKoOwMDBAYTBERJQVowFQYKKwYBBAGCqDsDBAQHEwVBWUFMQTAuBgorBgEEAYKoOwMHBCATHlZJ
+QSBJTlRFUlZBTExFUyBVUkIgQ1VDVUNCQU1CQTAZBgorBgEEAYKoOwMIBAsTCTAyNDUwMjcyNjAV
+BgorBgEEAYKoOwMJBAcTBVF1aXRvMBcGCisGAQQBgqg7AwwECRMHRUNVQURPUjAdBgorBgEEAYKo
+OwMLBA8TDTE3MDQ3Nzk1MDEwMDEwIAYKKwYBBAGCqDsDMwQSExBTT0ZUV0FSRS1BUkNISVZPMB0G
+A1UdEQQWMBSBEmFkYV9jb3JwQHlhaG9vLmNvbTCCAeEGA1UdHwSCAdgwggHUMIIB0KCCAcygggHI
+hoHWbGRhcDovL2JjZXFsZGFwc3VicDEuYmNlLmVjL2NuPUNSTDEzOTYsY249QUMlMjBCQU5DTyUy
+MENFTlRSQUwlMjBERUwlMjBFQ1VBRE9SLGw9UVVJVE8sb3U9RU5USURBRCUyMERFJTIwQ0VSVElG
+SUNBQ0lPTiUyMERFJTIwSU5GT1JNQUNJT04tRUNJQkNFLG89QkFOQ08lMjBDRU5UUkFMJTIwREVM
+JTIwRUNVQURPUixjPUVDP2NlcnRpZmljYXRlUmV2b2NhdGlvbkxpc3Q/YmFzZYY0aHR0cDovL3d3
+dy5lY2kuYmNlLmVjL0NSTC9lY2lfYmNlX2VjX2NybGZpbGVjb21iLmNybKSBtjCBszELMAkGA1UE
+BhMCRUMxIjAgBgNVBAoTGUJBTkNPIENFTlRSQUwgREVMIEVDVUFET1IxNzA1BgNVBAsTLkVOVElE
+QUQgREUgQ0VSVElGSUNBQ0lPTiBERSBJTkZPUk1BQ0lPTi1FQ0lCQ0UxDjAMBgNVBAcTBVFVSVRP
+MSUwIwYDVQQDExxBQyBCQU5DTyBDRU5UUkFMIERFTCBFQ1VBRE9SMRAwDgYDVQQDEwdDUkwxMzk2
+MAsGA1UdDwQEAwIFIDAfBgNVHSMEGDAWgBRIot8jHx34LFF6jAPNSTKlCcGUqzAdBgNVHQ4EFgQU
+Br6aTMyCYIETCDOzGZw4JA15j2wwCQYDVR0TBAIwADAZBgkqhkiG9n0HQQAEDDAKGwRWOC4xAwIE
+kDANBgkqhkiG9w0BAQsFAAOCAgEAIbQXfQl/lNjipFEpMnoudMf/xjib9PTbfPKCUP3ZoDhDa0on
+Vrsir5eK/bLSc78s0dMvCkkAmcfktpl9CUcydWU5w/r+p1JzUC/Nqp9TKs6gVJslQHODQmlbZeo8
+65i2yMeCi/1YUgkgTwtgSk5xsgXZ3njF+sMQMg6dMK5d54q7WFpxAp+2hGCXxCxXXfKRWALwrtGy
+g6I22ffgE0rR/lZUBg5DGxsXce1SRTnWhP7FwhURSQYaGAFXFP3g0MltM7nIo6WJQoM0BocZfcwo
+yXFmUV9Psm3Qm3ZkVVL/a+BEF68BO25DPbf3oBpDthI9hbjBv+yDp9R/HynTudQeXUhI4l7Qk9uT
+KbqUEy5aJfYcvHF4oolMsisoZNWWUzSjobvlGKpphqxw1sIuYzgr4vXAyfCUgINDWqMjJeDNx/qO
+DJ5QnEdoDod2c/yLKbNOjJW6W8TjdH9QsF8QBHINSFHsqOeszJtP5eCClpCJ1dJzKe6EYd4HUx5I
+1EOZeICyW1ScCccb1Odv3o+ZkwBtSTMgyUZ+4nSWtvj1dKXCE7WR4yJpWcG2xxW81+A8o7olNevW
++3ncjl/q+VmyzPrHm5+FdwnPRggM9cixbTgalIV3Rh3ZWGdfQMdEq5ANwbUjkf7XPl5bB+QFGNYn
+RX/wZbq4Qpg9fS8oYyTP6GQZOMg=
+</ds:X509Certificate>
+</ds:X509Data>
+<ds:KeyValue>
+<ds:RSAKeyValue>
+<ds:Modulus>
+yTTTd0nKGk4V2wKcq68tpYcVPvCoGgYHtOTuxfVCtggTLQ2xUSgyS7Eza0eL27ceNGweTabdQhJi
+O7AM0Vn4M+rCWVz1Jp0iYQhgQTBdeDUPZMyEoCD8MWfTsy72LEdIGpEJ7zEjVbIkBxHvvkncvEQy
+OHQA9BxK7OAna5D4TQvGbZNf4B2jjciKamQT4ZQuUtfXB/+BStrYVlltmaFtE3En+Uot4yKsqtKq
+Nv+WAV+qkGtT1gSI1JGTmCtxu5kiSOLXN6AiAw5jqzhs/Tz/hcx+mBwa/3ayZepmf8zTJE2EwQm3
+t5FUzAUle1VBvzT4agBR2F3xlB/eYT2hNVGbAw==
+</ds:Modulus>
+<ds:Exponent>AQAB</ds:Exponent>
+</ds:RSAKeyValue>
+</ds:KeyValue>
+</ds:KeyInfo>
+<ds:Object Id="Signature478464-Object298107"><etsi:QualifyingProperties Target="#Signature478464"><etsi:SignedProperties Id="Signature478464-SignedProperties605148"><etsi:SignedSignatureProperties><etsi:SigningTime>2023-02-10T15:00:24-05:00</etsi:SigningTime><etsi:SigningCertificate><etsi:Cert><etsi:CertDigest><ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"></ds:DigestMethod><ds:DigestValue>gY8QeAviYWkPoxtpXA1b4otIrfQ=</ds:DigestValue></etsi:CertDigest><etsi:IssuerSerial><ds:X509IssuerName>CN=AC BANCO CENTRAL DEL ECUADOR,L=QUITO,OU=ENTIDAD DE CERTIFICACION DE INFORMACION-ECIBCE,O=BANCO CENTRAL DEL ECUADOR,C=EC</ds:X509IssuerName><ds:X509SerialNumber>1533767761</ds:X509SerialNumber></etsi:IssuerSerial></etsi:Cert></etsi:SigningCertificate></etsi:SignedSignatureProperties><etsi:SignedDataObjectProperties><etsi:DataObjectFormat ObjectReference="#Reference-ID-530745"><etsi:Description>contenido comprobante</etsi:Description><etsi:MimeType>text/xml</etsi:MimeType></etsi:DataObjectFormat></etsi:SignedDataObjectProperties></etsi:SignedProperties></etsi:QualifyingProperties></ds:Object></ds:Signature></comprobanteRetencion>]]></comprobante>
+<mensajes/>
+</autorizacion>
+

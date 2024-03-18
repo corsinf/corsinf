@@ -182,7 +182,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     sexo_paciente = "Famenino <i class='bx bx-female'></i>";
                 }
                 $('#txt_sexo').html(sexo_paciente);
-                $('#txt_fecha_nacimiento').html(fecha_nacimiento_formateada(response[0].sa_pac_temp_fecha_nacimiento.date) + ' (' + calcular_edad_fecha_nacimiento(response[0].sa_pac_temp_fecha_nacimiento.date) + ' años)');
+                $('#txt_fecha_nacimiento').html(fecha_nacimiento_formateada(response[0].sa_pac_temp_fecha_nacimiento) + ' (' + calcular_edad_fecha_nacimiento(response[0].sa_pac_temp_fecha_nacimiento) + ' años)');
 
 
                 if (response[0].sa_pac_tabla == 'estudiantes') {
@@ -203,7 +203,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 }
 
                 /////////////Para el formulario
-                $('#sa_conp_edad').val(calcular_edad_fecha_nacimiento(response[0].sa_pac_temp_fecha_nacimiento.date));
+                $('#sa_conp_edad').val(calcular_edad_fecha_nacimiento(response[0].sa_pac_temp_fecha_nacimiento));
 
                 $('#txt_id_comunidad').val(response[0].sa_pac_id_comunidad);
                 $('#txt_tabla').val(response[0].sa_pac_tabla);

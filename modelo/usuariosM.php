@@ -239,9 +239,9 @@ class usuariosM
 		$campo= $_SESSION['INICIO']['NO_CONCURENTE_TABLA_ID'];
 
 		 $parametros = array(
-		    array(&$usuario, SQLSRV_PARAM_IN),
-		    array(&$tabla, SQLSRV_PARAM_IN),
-		    array(&$campo, SQLSRV_PARAM_IN),
+		    $usuario,
+		    $tabla,
+		    $campo,
 		  );
 		 
 		  $sql = "EXEC BuscarDatosNoconcurente @id_usuario = ?, @tabla = ?, @campowhere = ?";
@@ -373,11 +373,9 @@ class usuariosM
 	function generar_primera_vez($db_destino,$id_empresa)
 	{		
 		 $db_origen = EMPRESA_MASTER;
-		 $parametros = array(
-		    array(&$db_origen, SQLSRV_PARAM_IN),
-		    array(&$db_destino, SQLSRV_PARAM_IN),
-		    array(&$id_empresa, SQLSRV_PARAM_IN),
-		  );
+		 $parametros = array($db_origen,
+		    				$db_destino,
+		    				$id_empresa);
 		  $sql = "EXEC CopiarEstructuraAccesos @origen_bd = ?,@destino_bd = ?,@id_empresa = ?";
 		  $resp =  $this->db->ejecutar_procesos_almacenados($sql,$parametros,false,$basemaster=1);
 
