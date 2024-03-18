@@ -173,14 +173,14 @@ if(isset($_GET["usuario"]))
            //   $('#rbl_no').prop('checked',true);
            //   $('#rbl_si').prop('checked',false);
            // }
-           $('#txt_nombre').val(response[0].nombres);
+           $('#txt_nombre').val(response[0].nombre);
            $('#txt_ci').val(response[0].ci);
-           $('#txt_telefono').val(response[0].tel);
+           $('#txt_telefono').val(response[0].telefono);
   	       $('#txt_emial').val(response[0].email);
   	       $('#ddl_tipo_usuario').append($('<option>',{value: response[0].idt, text:response[0].tipo,selected: true }));;
-  	       $('#txt_apellido').val(response[0].ape);
+  	       $('#txt_apellido').val(response[0].apellido);
   	       $('#txt_pass').val(response[0].pass);
-  	       $('#txt_dir').val(response[0].dir);
+  	       $('#txt_dir').val(response[0].direccion);
            $('#txt_usuario_update').val(response[0].id);
            $('#img_foto').attr('src',response[0].foto+'?'+Math.random());
            // link

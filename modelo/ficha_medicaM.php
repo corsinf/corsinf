@@ -307,9 +307,8 @@ class ficha_MedicaM
             $sa_pac_tabla = $valor_seleccionado;
         }
         
-        $parametros = array(
-            array(&$sa_pac_id_comunidad, SQLSRV_PARAM_IN),
-            array(&$sa_pac_tabla, SQLSRV_PARAM_IN)
+        $parametros = array($sa_pac_id_comunidad,
+            $sa_pac_tabla,
         );
 
         //cambiar a la procedure que es

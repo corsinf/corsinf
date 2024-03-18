@@ -14,10 +14,15 @@ if(!class_exists('codigos_globales'))
 class codigos_globales
 {
 	private $db;
+	private $CodAES;
+	private $iv;
 	function __construct()
 	{
 		$this->db = new db();
-		
+
+		//AES-128
+		$this->CodAES = 'corsinf-encrypted-Data/*';
+		$this->iv = 'Data/*cors¡nf47';
 	}
 
 
@@ -753,23 +758,25 @@ function para_ftp($nombre,$texto)
 
 
 		 //genera tablas que comprate los diferentes modulos
-		 $parametros1 = array(
-		    array(&$id_empresa, SQLSRV_PARAM_IN),
-		    array(&$db_destino, SQLSRV_PARAM_IN),
-		  );
+		 $parametros1 = array($id_empresa
+		 							 ,$db_destino);
 		  $sql = "EXEC GenerarTablasCompartidas  @id_empresa = ?,@db_destino = ?";
 		  $this->db->ejecutar_procesos_almacenados($sql,$parametros1,false,1);
 
 
 		 $db_origen = EMPRESA_MASTER;
-		 $parametros = array(
-		    array(&$db_origen, SQLSRV_PARAM_IN),
-		    array(&$db_destino, SQLSRV_PARAM_IN),
-		    array(&$id_empresa, SQLSRV_PARAM_IN),
-		  );
+		 $parametros = array($db_origen,
+		    						$db_destino,
+		    						$id_empresa);
+
+		 // print_r($parametros);die();
+
+			
+			
 		  $sql = "EXEC CopiarEstructuraAccesos @origen_bd = ?,@destino_bd = ?,@id_empresa = ?";
 		  $res = $this->db->ejecutar_procesos_almacenados($sql,$parametros,false,1);
 
+			// print_r("holii");die();
 		  $sql = "SELECT * FROM ACCESOS_EMPRESA WHERE Id_Empresa = '".$id_empresa."'";
 		  $usuarios = $this->db->datos($sql,1);
 		  foreach ($usuarios as $key => $value) {
@@ -788,9 +795,10 @@ function para_ftp($nombre,$texto)
 	}
 
 
-	function Copiar_estructura($modulo)
+	function Copiar_estructura($modulo,$base)
 	{				
-		$db_destino = $_SESSION['INICIO']['BASEDATO'];
+		$db_destino = $base;
+		$db_origen = '';
 		switch ($modulo) {
 			case '7':
 				$db_origen = BASE_SALUD;
@@ -800,11 +808,14 @@ function para_ftp($nombre,$texto)
 				break;
 		}
 		 $parametros = array(
-		    array(&$db_origen, SQLSRV_PARAM_IN),
-		    array(&$db_destino, SQLSRV_PARAM_IN),
+		    $db_origen,
+		    $db_destino,
 		  );
-		  $sql = "EXEC EstructuraBase @origen_bd = ?,@destino_bd = ?";
-		  return $this->db->ejecutar_procesos_almacenados($sql,$parametros,false,1);
+		 if($db_origen!='')
+		 {
+		  	$sql = "EXEC EstructuraBase @origen_bd = ?, @destino_bd = ?";
+		  	return $this->db->ejecutar_procesos_almacenados($sql,$parametros,false,1);
+		 }else{ return -2;}
 	}
 
 	function id_tabla($tabla)
@@ -816,6 +827,42 @@ function para_ftp($nombre,$texto)
 				// print_r($sql2);die();
 		$datos2 = $this->db->datos($sql2);
 		return $datos2;
+	}
+
+	function sql_string_db_terceros($database, $usuario, $password, $servidor, $puerto, $sql)
+	{
+		return $this->db->sql_string_db_terceros($database, $usuario, $password, $servidor, $puerto, $sql);
+	}
+
+	function datos_db_terceros($database, $usuario, $password, $servidor, $puerto, $sql)
+	{
+		return $this->db->datos_db_terceros($database, $usuario, $password, $servidor, $puerto, $sql);
+	}
+
+	function enciptar_clave($data)
+	{
+		// Clave de encriptación (debe tener 16, 24 o 32 bytes para AES-128, AES-192 o AES-256 respectivamente)
+		$key = $this->CodAES; 
+
+		// Vector de inicialización (IV) para AES-256-CBC, debe ser de 16 bytes
+		$iv = $this->iv;
+
+		// Encriptar los datos usando AES-256-CBC
+		$encrypted = openssl_encrypt($data, 'aes-256-cbc', $key, 0, $iv);
+
+		return $encrypted;
+	}
+
+	function desenciptar_clave($data)
+	{
+		$key = $this->CodAES;
+		// Vector de inicialización (IV) para AES-256-CBC, debe ser de 16 bytes
+		$iv = $this->iv; //openssl_random_pseudo_bytes(16);
+		
+		$decrypted = openssl_decrypt($data, 'aes-256-cbc', $key, 0, $iv);
+
+		// Mostrar el texto desencriptado
+		return $decrypted;
 	}
 
 }
