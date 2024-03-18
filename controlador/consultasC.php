@@ -12,6 +12,11 @@ include('../modelo/det_consultaM.php');
 include('ingreso_stockC.php');
 include('../modelo/notificacionesM.php');
 
+//HIKVISION
+include('../lib/HIKVISION/Notificaciones.php');
+include('../lib/HIKVISION/HIK_TCP.php');
+
+
 
 $controlador = new consultasC();
 
@@ -140,6 +145,8 @@ class consultasC
     private $det_consultaM;
     private $ingreso_stock;
     private $notificaciones;
+    private $notificaciones_HV;
+    private $TCP_HV;
     function __construct()
     {
         $this->modelo = new consultasM();
@@ -149,6 +156,8 @@ class consultasC
         $this->det_consultaM = new det_consultaM();
         $this->ingreso_stock = new ingreso_stockC();
         $this->notificaciones = new notificacionesM();
+        $this->notificaciones_HV = new NotificaionesHV('28519009', 'kTnwcJUu7OQEGHCVGSJQ');
+        $this->TCP_HV = new HIK_TCP();
     }
 
     function listar_todo($tabla, $fecha_inicio, $fecha_fin)
@@ -330,6 +339,20 @@ class consultasC
                     );
 
                     $this->notificaciones->insertar($datos_notificaciones);
+
+                    /*HIKVISION*/
+
+                    if ($parametros['sa_conp_permiso_tipo'] == 'normal') {
+                        $mensaje_TCP = 'consulta_' . $id_insert;
+                        $this->notificaciones_HV->crear_Evento_usuario('SALUD ' . $parametros['nombre_apellido_paciente'] . $id_insert, $mensaje_TCP, 3);
+                        sleep(4);
+                        $this->TCP_HV->TCP_enviar($mensaje_TCP);
+                    } else if ($parametros['sa_conp_permiso_tipo'] == 'emergencia') {
+                        $mensaje_TCP = 'conulta_' . $id_insert;
+                        $this->notificaciones_HV->crear_Evento_usuario('SALUD ' . $parametros['nombre_apellido_paciente'] . $id_insert, $mensaje_TCP, 2);
+                        sleep(4);
+                        $this->TCP_HV->TCP_enviar($mensaje_TCP);
+                    }
                 }
 
 

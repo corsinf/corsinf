@@ -161,6 +161,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $('#txt_nombres').html(apellidos + " " + nombres);
 
                 $('#txt_nombre_paciente').val(apellidos + " " + nombres);
+                $('#txt_nombre_apellido_paciente').val(response[0].sa_pac_temp_primer_apellido  + " " + response[0].sa_pac_temp_primer_nombre );
                 $('#txt_paciente_tabla').val(response[0].sa_pac_tabla);
 
 
@@ -525,6 +526,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         var sa_examen_fisico_regional = generarJSON();
 
         var nombre_paciente = $('#txt_nombre_paciente').val();
+        var nombre_apellido_paciente = $('#txt_nombre_apellido_paciente').val();
+        
         var sa_id_paralelo = $('#sa_id_paralelo').val();
         var txt_paciente_tabla = $('#txt_paciente_tabla').val();
 
@@ -595,6 +598,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'sa_examen_fisico_regional': sa_examen_fisico_regional,
 
             'nombre_paciente': nombre_paciente,
+            'nombre_apellido_paciente': nombre_apellido_paciente,
             'sa_id_paralelo': sa_id_paralelo,
             'txt_paciente_tabla': txt_paciente_tabla,
 
@@ -785,6 +789,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <input type="hidden" id="sa_id_guardia" name="sa_id_guardia">
 
                             <input type="hidden" id="txt_nombre_paciente" name="txt_nombre_paciente">
+                            <input type="hidden" id="txt_nombre_apellido_paciente" name="txt_nombre_apellido_paciente">
                             <input type="hidden" id="txt_paciente_tabla" name="txt_paciente_tabla">
                             
 

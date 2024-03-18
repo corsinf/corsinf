@@ -112,17 +112,3 @@ class Artemis
     }
 
 }
-
-/*
-//Funcionamiento
-$clave_partner = '28519009';
-$clave_secreta = 'kTnwcJUu7OQEGHCVGSJQ';
-
-$prueba = new Artemis($clave_partner, $clave_secreta);
-
-$url_API = '/artemis/api/eventService/v1/generalEventRule/generalEventRuleList';
-$body = array("pageNo" => 1, "pageSize" => 10);
-
-
-echo $prueba->respuesta_Json($url_API, $body);
-*/
