@@ -91,7 +91,7 @@ class pacientesM
     {
 
         $parametros = array(
-            array(&$sa_pac_id, SQLSRV_PARAM_IN)
+            $sa_pac_id,
         );
 
         $sql = "EXEC SP_OBTENER_INFORMACION_PACIENTE_6 @sa_pac_id = ?";

@@ -1,4 +1,4 @@
-<?php include('../../cabeceras/header.php'); ?> 
+
   <script type="text/javascript">
   $( document ).ready(function() {
   	})
@@ -26,5 +26,3 @@
 </div>
 </div>
   <!-- Content Wrapper. Contains page content -->
-  
-<?php include('../../cabeceras/footer.php'); ?>

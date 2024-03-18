@@ -24,7 +24,7 @@ class loginM
 				FROM ACCESOS_EMPRESA AC
 				INNER JOIN USUARIOS US ON AC.Id_usuario = US.id_usuarios
 				INNER JOIN EMPRESAS EM ON AC.Id_Empresa = EM.Id_empresa
-				WHERE US.email = '".$email."' AND US.password = '".$pass."'";
+				WHERE US.email = '".$email."' AND US.password = '".$pass."' AND EM.Estado = 'A'";
 				if($id)
 				{
 					$sql.=" AND id_empresa='".$id."'";
@@ -223,10 +223,16 @@ class loginM
 		return $this->db->datos($sql);
 	}
 
-	function lista_empresa($id)
+	function lista_empresa($id,$master=false)
 	{
 		$sql = "SELECT E.*,Id_empresa as 'Id_Empresa' FROM EMPRESAS E WHERE Id_empresa = '".$id."'";
-		return $this->db->datos($sql);
+		if($master)
+		{
+			return $this->db->datos($sql);
+		}else
+		{
+			return $this->db->datos($sql,1);
+		}
 	}
 	function datos_no_concurente($tabla,$campoid,$id)
 	{
@@ -234,6 +240,18 @@ class loginM
 		$datos = $this->db->datos($sql);
 		return $datos;
 		// print_r($sql);die();
+	}
+	function permisos_db_terceros($database, $usuario, $password, $servidor, $puerto)	{
+		// print_r($database);die();
+		
+		$sql ="SELECT id_usuarios as 'id',U.*,TU.DESCRIPCION as tipo,A.*  FROM ACCESOS A
+		INNER JOIN TIPO_USUARIO TU ON A.id_tipo_usu = TU.ID_TIPO
+		INNER JOIN USUARIOS U ON TU.ID_TIPO = U.perfil
+		WHERE 1=1   AND U.id_usuarios = '".$_SESSION['INICIO']['ID_USUARIO']."'";
+
+		// print_r($sql);die();
+		return $this->db->datos_db_terceros($database, $usuario, $password, $servidor,$puerto,$sql);
+
 	}
 
 	
