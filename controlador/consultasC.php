@@ -1476,13 +1476,13 @@ class consultasC
         $sa_conp_paralelo = $datos[0]['sa_conp_paralelo'];
 
         $sa_conp_fecha_ingreso = $datos[0]['sa_conp_fecha_ingreso'];
-        $sa_conp_fecha_ingreso = $sa_conp_fecha_ingreso->format('Y-m-d');
+        $sa_conp_fecha_ingreso = $sa_conp_fecha_ingreso;
 
         $sa_conp_desde_hora = $datos[0]['sa_conp_desde_hora'];
-        $sa_conp_desde_hora = $sa_conp_desde_hora->format('H:i:s');
+        $sa_conp_desde_hora = $sa_conp_desde_hora;
 
         $sa_conp_hasta_hora = $datos[0]['sa_conp_hasta_hora'];
-        $sa_conp_hasta_hora = $sa_conp_hasta_hora->format('H:i:s');
+        $sa_conp_hasta_hora = $sa_conp_hasta_hora;
 
         $sa_conp_diagnostico_1 = $datos[0]['sa_conp_diagnostico_1'];
 

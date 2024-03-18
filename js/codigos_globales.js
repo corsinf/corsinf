@@ -136,3 +136,15 @@ function validar_cedula(campo) {
         })
     }
   }
+
+  function pass(input)
+    {
+     var pa =document.getElementById(input);
+     if(pa.type == 'password')
+     {
+        pa.type = 'text';
+     }else
+     {
+        pa.type = 'password';
+     }
+    }

@@ -113,7 +113,13 @@
 										       	   		<b>Usuario</b>
 										       	   		<input type="text" name="txt_db_usuario" id="txt_db_usuario" class="form-control form-control-sm">
 										       	   		<b>Password</b>
-										       	   		<input type="text" name="txt_db_pass" id="txt_db_pass" class="form-control form-control-sm">
+										       	   		<div class="input-group mb-3">
+								                           <input type="password" name="txt_db_pass" id="txt_db_pass" class="form-control form-control-sm">										       	   		
+								                           <?php if($_SESSION['INICIO']['TIPO']=='DBA') { ?>
+								                               <button type="button" class="btn btn-info btn-flat btn-sm" onclick="pass('txt_db_pass')"><i class="lni lni-eye" id="eye"></i></button>                          
+								                          <?php } ?>
+								                        </div>
+
 										       	   		<b>Puerto</b>
 										       	   		<input type="text" name="txt_db_puerto" id="txt_db_puerto" class="form-control form-control-sm">
 										       	   	</div>       	   
@@ -129,7 +135,12 @@
 										       	   		<b>SMTP Usuario</b>
 										       	   		<input type="text" name="txt_usuario" id="txt_usuario" class="form-control form-control-sm">
 										       	   		<b>SMTP Pass</b>
-										       	   		<input type="text" name="txt_pass" id="txt_pass" class="form-control form-control-sm">
+										       	   		<div class="input-group mb-3">								                           
+										       	   		<input type="password" name="txt_pass" id="txt_pass" class="form-control form-control-sm">								       	   		
+								                           <?php if($_SESSION['INICIO']['TIPO']=='DBA') { ?>
+								                               <button type="button" class="btn btn-info btn-flat btn-sm" onclick="pass('txt_pass')"><i class="lni lni-eye" id="eye"></i></button>                          
+								                          <?php } ?>
+								                        </div>
 										       	   		<b>SMTP Puerto</b>
 										       	   		<input type="text" name="txt_puerto" id="txt_puerto" class="form-control form-control-sm">
 										       	   		<b>SMTP Secure</b>
