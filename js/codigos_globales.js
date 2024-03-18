@@ -110,18 +110,15 @@ function validar_cedula(campo) {
       if (cad.charAt(longitud - 1) == total) {
         return true
       } else {
-        Swal.fire('Cedula invalida', 'revise su numero ' + cad, 'info');
-        $('#' + campo).val('');
-        return false;
+        Swal.fire('Error en numero de cedula', 'Tiene que tener 10 ó 13 caracteres', 'info').then(function () {
+          $('#' + campo).val('');
+          return false;
+        })
       }
     }
-  } else {
-    Swal.fire('Error en numero de cedula', 'Tiene que tener 10 ó 13 caracteres', 'info').then(function () {
-      $('#' + campo).val('');
-      return false;
-    })
   }
 }
+
 
 function notificaciones_1(parametros) {
   salida = '';
@@ -142,7 +139,7 @@ function notificaciones_1(parametros) {
         tiempo_trans = calcularTiempoTranscurrido(item.GLO_fecha_creacion.date)
 
         salida +=
-                `<a class="dropdown-item" href="${item.GLO_link_redirigir}">
+          `<a class="dropdown-item" href="${item.GLO_link_redirigir}">
                       <div class="d-flex align-items-center">
                           <div class="notify bg-light-danger text-danger"><i class='${item.GLO_icono}' ></i> 
                           </div>
@@ -194,3 +191,14 @@ function calcularTiempoTranscurrido(fecha_consulta) {
     return `${diferencia_horas} hora${diferencia_horas !== 1 ? 's' : ''}`;
   }
 }
+
+
+function pass(input) {
+  var pa = document.getElementById(input);
+  if (pa.type == 'password') {
+    pa.type = 'text';
+  } else {
+    pa.type = 'password';
+  }
+}
+
