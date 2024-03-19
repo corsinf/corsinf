@@ -191,7 +191,7 @@ function informes()
           if(item.PATRIMONIALES==1){baja = 'background-color: #ffc108a6; /*bg-warning*/';}
           if(item.TERCEROS==1){baja ='background-color: #007bffa8;; /*bg-blue*/'}
           if(item.RFID==null){item.RFID='';}
-          lineas+= '<tr style="'+baja+'"><td style="color: #1467e2; cursor: pointer;"  onclick="redireccionar(\''+item.id+'\')"><u>'+item.tag+'</u></td><td>'+item.nom+'</td><td>'+item.modelo+'</td><td>'+item.serie+'</td><td>'+item.RFID+'</td><td>'+item.localizacion+'</td><td>'+item.custodio+'</td><td>'+item.marca+'</td><td>'+item.estado+'</td><td>'+item.genero+'</td><td>'+item.color+'</td><td>'+formato_fecha(item.fecha_in.date)+'</td><td>'+item.OBSERVACION+'</td></tr>';
+          lineas+= '<tr style="'+baja+'"><td style="color: #1467e2; cursor: pointer;"  onclick="redireccionar(\''+item.id+'\')"><u>'+item.tag+'</u></td><td>'+item.nom+'</td><td>'+item.modelo+'</td><td>'+item.serie+'</td><td>'+item.RFID+'</td><td>'+item.localizacion+'</td><td>'+item.custodio+'</td><td>'+item.marca+'</td><td>'+item.estado+'</td><td>'+item.genero+'</td><td>'+item.color+'</td><td>'+formato_fecha(item.fecha_in)+'</td><td>'+item.OBSERVACION+'</td></tr>';
           // console.log(item);
        
         });       
@@ -357,7 +357,7 @@ function informes()
                   '<div class="cursor-pointer">Estado<br>'+
                   estado+
                   '</div>'+  
-                  '<p class="mb-0 ms-auto font-13"><b>Fecha Inv.</b><br>'+formatoDate(item.fecha_in.date)+'</p>'+
+                  '<p class="mb-0 ms-auto font-13"><b>Fecha Inv.</b><br>'+item.fecha_in+'</p>'+
                 '</div>'+
               '</div>'+
             '</div>'+

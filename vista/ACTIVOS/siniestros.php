@@ -68,11 +68,11 @@
       dataType: 'json',
         success:  function (response) {    
             $('#txt_encargado').val(response[0].encargado);
-            $('#txt_fecha_reg').val(formatoDate(response[0].fecha.date));
-            $('#txt_fecha_sini').val(formatoDate(response[0].fecha_siniestro.date));
+            $('#txt_fecha_reg').val(response[0].fecha);
+            $('#txt_fecha_sini').val(response[0].fecha_siniestro);
             $('#ddl_estado').append($('<option>',{value: response[0].estado, text: response[0].DESCRIPCION,selected: true }));;
             $('#txt_detalle_siniestro').val(response[0].detalle);
-            $('#txt_alertado').val(formatoDate(response[0].fecha_alertado.date));
+            $('#txt_alertado').val(response[0].fecha_alertado);
             $('#txt_respuesta').val(response[0].respuesta);
             $('#txt_evaluacion').val(response[0].evaluacion);
             $('#rbl_estado_proceso_'+response[0].estado_proceso).prop('checked',true);
@@ -127,8 +127,8 @@
                 $('#div_datos').css('display','block');
                 data = response[0];
                 $("#lbl_proveedor").text(data.nombre);           
-                $("#lbl_seguro").text( 'FECHA INICIO:'+ formatoDate(data.desde.date));        
-                $("#lbl_fin_seguro").text('FECHA FIN:'+ formatoDate(data.desde.date));            
+                $("#lbl_seguro").text( 'FECHA INICIO:'+data.desde);        
+                $("#lbl_fin_seguro").text('FECHA FIN:'+data.desde);            
                 $("#lbl_cobertura").text(data.nombre_riesgo);           
                 $("#lbl_email").text(data.email_asesor);                 
                 $("#lbl_telefono").text(data.telefono_asesor);          

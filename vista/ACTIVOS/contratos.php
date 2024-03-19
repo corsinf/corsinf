@@ -299,8 +299,8 @@
               lista_siniestros();
               $('#ddl_siniestros').html(response.siniestro).trigger('change');
 
-              $('#txt_desde').val(formatoDate(response.datos[0].hasta.date));
-              $('#txt_hasta').val(formatoDate(response.datos[0].desde.date));
+              $('#txt_desde').val(response.datos[0].hasta);
+              $('#txt_hasta').val(response.datos[0].desde);
               $('#txt_prima').val(response.datos[0].prima);
               $('#txt_valor_seguro').val(response.datos[0].suma_asegurada);
 

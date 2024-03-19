@@ -352,7 +352,7 @@ function informes()
                   '<div class="cursor-pointer">Estado<br>'+
                   estado+
                   '</div>'+  
-                  '<p class="mb-0 ms-auto font-13"><b>Fecha Inv.</b><br>'+formatoDate(item.fecha_in.date)+'</p>'+
+                  '<p class="mb-0 ms-auto font-13"><b>Fecha Inv.</b><br>'+item.fecha_in+'</p>'+
                 '</div>'+
               '</div>'+
             '</div>'+
