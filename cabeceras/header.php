@@ -131,18 +131,22 @@ if ($dominio != 'localhost') {
 		});
 
 		function formatoDate(date) {
-			var formattedDate = new Date(date);
-			var d = formattedDate.getDate();
-			var m = formattedDate.getMonth();
-			m += 1; // javascript months are 0-11
-			if (m < 10) {
-				m = '0' + m;
+			if(date.length>10)
+			{
+				Fecha = date.substr(0,10);
 			}
-			if (d < 10) {
-				d = '0' + d;
-			}
-			var y = formattedDate.getFullYear();
-			var Fecha = y + "-" + m + "-" + d;
+			// var formattedDate = new Date(date);
+			// var d = formattedDate.getDate();
+			// var m = formattedDate.getMonth();
+			// m += 1; // javascript months are 0-11
+			// if (m < 10) {
+			// 	m = '0' + m;
+			// }
+			// if (d < 10) {
+			// 	d = '0' + d;
+			// }
+			// var y = formattedDate.getFullYear();
+			// var Fecha = y + "-" + m + "-" + d;
 			//console.log(Fecha);
 			return Fecha;
 		}

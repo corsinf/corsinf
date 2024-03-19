@@ -284,7 +284,7 @@
         $('#txt_rfid').val(response[0].rfid);
         $('#txt_tag_anti').val(response[0].ant);
         $('#txt_serie').val(response[0].SERIE);
-        $('#txt_fecha').val( formatoDate(response[0].fecha.date));
+        $('#txt_fecha').val(response[0].fecha);
         $('#txt_modelo').val(response[0].MODELO);
         $('#txt_id').val(response[0].id_A);        
         $('#txt_idA_img').val(response[0].id_A);
@@ -294,7 +294,7 @@
         $('#txt_nom_img').val(response[0].tag_s);
         $('#txt_cant').val(response[0].QUANTY);
         $('#txt_unidad').val(response[0].BASE_UOM);
-        $('#txt_compra').val(formatoDate(response[0].ORIG_ACQ_YR.date));
+        $('#txt_compra').val(response[0].ORIG_ACQ_YR);
         $('#txt_carac').val(response[0].CARACTERISTICA);
         $('#txt_valor').val(response[0].ORIG_VALUE);
         $('#txt_acti').val(response[0].ORIG_ASSET);
