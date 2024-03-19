@@ -267,7 +267,7 @@ class consultasC
             array('campo' => 'sa_conp_tratamiento', 'dato' => $parametros['sa_conp_tratamiento']),
             array('campo' => 'sa_conp_estado_revision', 'dato' => $parametros['sa_conp_estado_revision']),
 
-            array('campo' => 'sa_examen_fisico_regional', 'dato' => $parametros['sa_examen_fisico_regional']),
+            array('campo' => 'sa_examen_fisico_regional', 'dato' => $parametros['sa_examen_fisico_regional'],'tipo'=>'STRING'),
 
             array('campo' => 'sa_conp_usu_id', 'dato' => $_SESSION['INICIO']['NO_CONCURENTE']),
         );
@@ -291,13 +291,15 @@ class consultasC
             $datos = array_merge($datos, $fechas_salida);
         }
 
-        //print_r($parametros);die();
+        // print_r($parametros);die();
 
         if ($parametros['sa_conp_id'] == '') {
             if (count($this->modelo->buscar_consultas_CODIGO($datos1[0]['dato'])) == 0) {
-
+// print_r('expression');die();
                 //Se inserta los datos de la consulta
                 $id_insert = $this->modelo->insertar_id($datos);
+
+                // print_r($id_insert);die();
 
                 /* ----------------------*/
                 //    Notificaciones

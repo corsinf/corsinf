@@ -196,52 +196,76 @@ class db
 	{
 		$this->parametros_conexion($master);
 		$conn = $this->conexion();
-	
+
 		$valores = '';
 		$campos = '';
 		$sql = 'INSERT INTO ' . $tabla;
-	
+
 		foreach ($datos as $key => $value) {
 			$campos .= $value['campo'] . ',';
 			if (is_numeric($value['dato'])) {
 				if (isset($value['tipo']) && strtoupper($value['tipo']) == 'STRING') {
-					$valores .= "'" . $value['dato'] . "',";
+					$valores .= "'" . $value['dato'] . "', ";
 				} else {
-					$valores .= $value['dato'] . ',';
+					$valores .= $value['dato'] . ', ';
 				}
-			} else {
-				$valores .= "'" . $value['dato'] . "',";
+			} else {			
+				if (isset($value['tipo']) && strtoupper($value['tipo']) == 'STRING') {
+					$valores .= "'" . $value['dato'] . "', ";
+				} else {
+					$valores .= $value['dato'] . ', ';
+				}
 			}
 		}
-	
-		$campos = rtrim($campos, ',');
-		$valores = rtrim($valores, ',');
-		$sql .= '(' . $campos . ') VALUES (' . $valores . ');';
 
-		//print_r($sql); exit();die();
-	
-		$stmt = sqlsrv_query($conn, $sql);
-	
-		if ($stmt === false) {
-			die(print_r(sqlsrv_errors(), true)); // Manejar errores de SQL Server
+		//print_r($valores);
+		// die();
+		$campos = substr($campos, 0, -1);
+		$valores = substr($valores, 0, -2);
+		$valores = explode(', ',$valores);
+		$incognitas = '';
+		//print_r($valores);die();
+		foreach ($valores as $value) {
+			// print_r($value.'-');
+			if (strlen($value)==12 && strtotime($value) !== false) 
+				{
+					// print_r($value);die();
+    			    $incognitas.='CAST(? AS DATE),';
+				}else
+				{
+					$incognitas.='?,';
+				}
 		}
-	
-		// Obtener el último ID
-		$sql2 = 'SELECT SCOPE_IDENTITY() AS id_ultimo;';
-		$stmt2 = sqlsrv_query($conn, $sql2);
-	
-		if ($stmt2 === false) {
-			die(print_r(sqlsrv_errors(), true)); // Manejar errores de SQL Server
+		$incognitas = substr($incognitas, 0, -1);
+		
+		$sql .= '(' . $campos . ')values(' . $incognitas . ');';
+
+		// print_r($sql);
+		// print_r($incognitas);
+		// print_r($valores);die();
+		// $stmt = sqlsrv_query($conn, $sql);
+		$stmt = $conn->prepare($sql);
+		try {
+			$stmt->execute($valores);
+			
+			// Obtener el último ID
+			$sql2 = 'SELECT SCOPE_IDENTITY() AS id_ultimo;';
+			$resultado = null;
+			$stmt = $conn->prepare($sql2);
+    		$stmt->execute();
+    		while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+		       $resultado = $row['id_ultimo'];
+		    }
+			
+			$conn = null;		
+
+			
+		} catch (Exception $e) {
+			echo "Error: " . $sql . "<br>" . $e;			
+			$conn = null;
+			return -1;			
 		}
-	
-		$resultado = null;
-		while ($row = sqlsrv_fetch_array($stmt2, SQLSRV_FETCH_ASSOC)) {
-			$resultado = $row['id_ultimo'];
-		}
-	
-		sqlsrv_free_stmt($stmt);
-		sqlsrv_free_stmt($stmt2);
-		sqlsrv_close($conn);
+		
 	
 		return $resultado;
 	}

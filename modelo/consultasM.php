@@ -193,6 +193,7 @@ class consultasM
 
     function insertar($datos)
     {
+        // print_r($datos);die();
         $rest = $this->db->inserts('consultas_medicas', $datos);
 
 
@@ -201,6 +202,7 @@ class consultasM
 
     function insertar_id($datos)
     {
+        // print_r($datos);die();
         $rest = $this->db->inserts_id('consultas_medicas', $datos);
         return $rest;
     }
