@@ -490,16 +490,18 @@ class db
 	{
 
 		$conn = $this->conexion_db_terceros($database, $usuario, $password, $servidor, $puerto);
-		$stmt = sqlsrv_query($conn, $sql);
-		if (!$stmt) {
-			// print_r($sql);die();
-			echo "Error: " . $sql . "<br>" . sqlsrv_errors($conn);
-			sqlsrv_close($conn);
-			return -1;
-		}
+		// print_r($sql);
 
-		sqlsrv_close($conn);
-		return 1;
+		try {
+			$stmt = $conn->prepare($sql);
+    		$stmt->execute();    		
+		    $conn=null;
+			return 1;
+			
+		} catch (Exception $e) {
+			return -1;
+			die(print_r(sqlsrv_errors(), true));
+		}
 	}
 
 	function datos_db_terceros($database, $usuario, $password, $servidor, $puerto, $sql)

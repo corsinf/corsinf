@@ -321,7 +321,7 @@ class loginC
 			if(count($usuario)>0)
 			{
 		 		$parametros['email'] =  $usuario[0]['email'];
-		 		$parametros['pass'] =  $this->cod_global->enciptar_clave($usuario[0]['password']);
+		 		$parametros['pass'] =  $usuario[0]['password'];
 		 		$parametros['no_concurente'] = 0;
 		 		$validar_permisos = $this->acceso_en_terceros($parametros);
 		 		if(count($validar_permisos)==0)
@@ -348,8 +348,10 @@ class loginC
 
 			if($parametros['no_concurente']==0)
 			{
-
 				$datos = $this->login->datos_login($parametros['email'],$this->cod_global->enciptar_clave($parametros['pass']));
+				if($cambiar){
+					$datos = $this->login->datos_login($parametros['email'],$parametros['pass']);
+				}
 				if(count($datos)>0)
 				{
 					
@@ -774,7 +776,8 @@ class loginC
 			$password = $empresa[0]['Password_db'];
 			$servidor = $empresa[0]['Ip_host'];
 			$puerto = $empresa[0]['Puerto_db'];
-// print_r($empresa);die();
+			// print_r($parametros);die();
+			// $this->cod_global->generar_primera_vez($database,$parametros['id']);
 			$datos = $this->login->permisos_db_terceros($database, $usuario, $password, $servidor, $puerto);
 
 			// print_r($datos);die();

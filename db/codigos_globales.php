@@ -702,6 +702,9 @@ function para_ftp($nombre,$texto)
     //--------------------------------funcion para crear por primera vez los accesos a una empresa nueva ----------------------
    function generar_primera_vez($db_destino,$id_empresa)
 	{		
+		// print_r($db_destino);
+		// print_r($id_empresa);
+		// die();
 		$usu = array();
 		for ($i=1; $i < 4; $i++) {
 
@@ -778,15 +781,31 @@ function para_ftp($nombre,$texto)
 
 			// print_r("holii");die();
 		  $sql = "SELECT * FROM ACCESOS_EMPRESA WHERE Id_Empresa = '".$id_empresa."'";
+
+		  $empresa = $this->lista_empresa($id_empresa);
 		  $usuarios = $this->db->datos($sql,1);
 		  foreach ($usuarios as $key => $value) {
 		  // print_r($value);die();
-		  	$datos[0]['campo'] = 'perfil';
-		  	$datos[0]['dato'] = $value['Id_Tipo_usuario'];
 
-		  	$where[0]['campo'] = 'id_usuarios';
-		  	$where[0]['dato'] = $value['Id_usuario'];
-		  	$this->db->update('USUARIOS',$datos, $where);
+		  	$sql = "UPDATE USUARIOS SET perfil = '".$value['Id_Tipo_usuario']."' WHERE id_usuarios = '".$value['Id_usuario']."'";
+		  	// $datos[0]['campo'] = 'perfil';
+		  	// $datos[0]['dato'] = $value['Id_Tipo_usuario'];
+
+		  	// $where[0]['campo'] = 'id_usuarios';
+		  	// $where[0]['dato'] = $value['Id_usuario'];
+
+			$database = $empresa[0]['Base_datos'];
+			$usuario = $empresa[0]['Usuario_db'];
+			$password = $empresa[0]['Password_db'];
+			$servidor = $empresa[0]['Ip_host'];
+			$puerto = $empresa[0]['Puerto_db'];
+
+			// print_r($sql);
+			// print_r($database);
+			$datos = $this->db->sql_string_db_terceros($database, $usuario, $password, $servidor, $puerto,$sql);
+
+
+		  	// $this->db->update('USUARIOS',$datos, $where);
 		  }
 
 		  return $res;
@@ -863,6 +882,17 @@ function para_ftp($nombre,$texto)
 
 		// Mostrar el texto desencriptado
 		return $decrypted;
+	}
+	function lista_empresa($id,$master=false)
+	{
+		$sql = "SELECT E.*,Id_empresa as 'Id_Empresa' FROM EMPRESAS E WHERE Id_empresa = '".$id."'";
+		if($master)
+		{
+			return $this->db->datos($sql);
+		}else
+		{
+			return $this->db->datos($sql,1);
+		}
 	}
 
 }

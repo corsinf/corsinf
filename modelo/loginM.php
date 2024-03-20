@@ -96,6 +96,7 @@ class loginM
 			$sql.=" AND U.id_usuarios = ".$id;
 		}
 
+		// print_r($_SESSION);
 		// print_r($sql);die();
 		$datos = $this->db->datos($sql);
 		return $datos;
@@ -249,7 +250,8 @@ class loginM
 		INNER JOIN USUARIOS U ON TU.ID_TIPO = U.perfil
 		WHERE 1=1   AND U.id_usuarios = '".$_SESSION['INICIO']['ID_USUARIO']."'";
 
-		// print_r($sql);die();
+		// print_r($sql);
+		// print_r($database);die();
 		return $this->db->datos_db_terceros($database, $usuario, $password, $servidor,$puerto,$sql);
 
 	}
