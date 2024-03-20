@@ -203,71 +203,34 @@ class db
 
 		foreach ($datos as $key => $value) {
 			$campos .= $value['campo'] . ',';
-			if (is_numeric($value['dato'])) {
-				if (isset($value['tipo']) && strtoupper($value['tipo']) == 'STRING') {
-					$valores .= "'" . $value['dato'] . "', ";
-				} else {
-					$valores .= $value['dato'] . ', ';
-				}
-			} else {			
-				if (isset($value['tipo']) && strtoupper($value['tipo']) == 'STRING') {
-					$valores .= "'" . $value['dato'] . "', ";
-				} else {
-					$valores .= $value['dato'] . ', ';
-				}
-			}
+			$valores .= '?,';
 		}
 
-		//print_r($valores);
-		// die();
-		$campos = substr($campos, 0, -1);
-		$valores = substr($valores, 0, -2);
-		$valores = explode(', ',$valores);
-		$incognitas = '';
-		//print_r($valores);die();
-		foreach ($valores as $value) {
-			// print_r($value.'-');
-			if (strlen($value)==12 && strtotime($value) !== false) 
-				{
-					// print_r($value);die();
-    			    $incognitas.='CAST(? AS DATE),';
-				}else
-				{
-					$incognitas.='?,';
-				}
-		}
-		$incognitas = substr($incognitas, 0, -1);
-		
-		$sql .= '(' . $campos . ')values(' . $incognitas . ');';
+		$campos = rtrim($campos, ',');
+		$valores = rtrim($valores, ',');
 
-		// print_r($sql);
-		// print_r($incognitas);
-		// print_r($valores);die();
-		// $stmt = sqlsrv_query($conn, $sql);
+		$sql .= '(' . $campos . ') VALUES (' . $valores . ')';
+
 		$stmt = $conn->prepare($sql);
-		try {
-			$stmt->execute($valores);
-			
-			// Obtener el último ID
-			$sql2 = 'SELECT SCOPE_IDENTITY() AS id_ultimo;';
-			$resultado = null;
-			$stmt = $conn->prepare($sql2);
-    		$stmt->execute();
-    		while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-		       $resultado = $row['id_ultimo'];
-		    }
-			
-			$conn = null;		
 
-			
-		} catch (Exception $e) {
-			echo "Error: " . $sql . "<br>" . $e;			
+		try {
+			foreach ($datos as $key => $value) {
+				$tipo = is_numeric($value['dato']) ? PDO::PARAM_INT : PDO::PARAM_STR;
+				$stmt->bindValue(($key + 1), $value['dato'], $tipo);
+			}
+
+			$stmt->execute();
+
+			// Obtener el último ID
+			$ultimoID = $conn->lastInsertId();
+
 			$conn = null;
-			return -1;			
+
+			return $ultimoID;
+		} catch (PDOException $e) {
+			echo "Error: " . $e->getMessage();
+			return -1;
 		}
-		
-	
-		return $resultado;
 	}
 
 	function update($tabla, $datos, $where, $master = false)
