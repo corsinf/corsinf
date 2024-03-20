@@ -141,7 +141,7 @@ class cargar_datosM
 		set_time_limit(0);
 		$USUARIO = $_SESSION['INICIO']['USUARIO'];
 		$parametros = array(
-	     array(&$USUARIO, SQLSRV_PARAM_IN)
+	     $USUARIO
 	    );
 	    $sql = "EXEC SP_CARGA_MASIVA_NEW @USUARIO=?";
 		$re = $this->db->ejecutar_procesos_almacenados($sql,$parametros);
