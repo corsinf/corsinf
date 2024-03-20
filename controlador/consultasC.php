@@ -245,11 +245,11 @@ class consultasC
 
             array('campo' => 'sa_conp_permiso_salida', 'dato' => $parametros['sa_conp_permiso_salida']),
             //array('campo' => 'sa_conp_fecha_permiso_salud_salida', 'dato' => $parametros['sa_conp_fecha_permiso_salud_salida']),
-            array('campo' => 'sa_conp_hora_permiso_salida', 'dato' => $parametros['sa_conp_hora_permiso_salida']),
-            array('campo' => 'sa_conp_permiso_tipo', 'dato' => $parametros['sa_conp_permiso_tipo']),
-            array('campo' => 'sa_conp_permiso_seguro_traslado', 'dato' => $parametros['sa_conp_permiso_seguro_traslado']),
-            array('campo' => 'sa_conp_permiso_telefono_padre', 'dato' => $parametros['sa_conp_permiso_telefono_padre']),
-            array('campo' => 'sa_conp_permiso_telefono_seguro', 'dato' => $parametros['sa_conp_permiso_telefono_seguro']),
+            //array('campo' => 'sa_conp_hora_permiso_salida', 'dato' => $parametros['sa_conp_hora_permiso_salida']),
+            //array('campo' => 'sa_conp_permiso_tipo', 'dato' => $parametros['sa_conp_permiso_tipo']),
+            //array('campo' => 'sa_conp_permiso_seguro_traslado', 'dato' => $parametros['sa_conp_permiso_seguro_traslado']),
+            //array('campo' => 'sa_conp_permiso_telefono_padre', 'dato' => $parametros['sa_conp_permiso_telefono_padre']),
+            //array('campo' => 'sa_conp_permiso_telefono_seguro', 'dato' => $parametros['sa_conp_permiso_telefono_seguro']),
 
             array('campo' => 'sa_conp_notificacion_envio_representante', 'dato' => $parametros['sa_conp_notificacion_envio_representante']),
             array('campo' => 'sa_id_representante', 'dato' => $parametros['sa_id_representante']),
@@ -267,7 +267,7 @@ class consultasC
             array('campo' => 'sa_conp_tratamiento', 'dato' => $parametros['sa_conp_tratamiento']),
             array('campo' => 'sa_conp_estado_revision', 'dato' => $parametros['sa_conp_estado_revision']),
 
-            array('campo' => 'sa_examen_fisico_regional', 'dato' => $parametros['sa_examen_fisico_regional'],'tipo'=>'STRING'),
+            array('campo' => 'sa_examen_fisico_regional', 'dato' => $parametros['sa_examen_fisico_regional'], 'tipo' => 'STRING'),
 
             array('campo' => 'sa_conp_usu_id', 'dato' => $_SESSION['INICIO']['NO_CONCURENTE']),
         );
@@ -283,19 +283,32 @@ class consultasC
             $datos = array_merge($datos, $fechas_certificado);
         }
 
+        //Para la salida 
         $fechas_salida = null;
         if ($parametros['sa_conp_permiso_salida'] === 'SI') {
             $fechas_salida = array(
                 array('campo' => 'sa_conp_fecha_permiso_salud_salida', 'dato' => $parametros['sa_conp_fecha_permiso_salud_salida']),
+                
+                array('campo' => 'sa_conp_hora_permiso_salida', 'dato' => $parametros['sa_conp_hora_permiso_salida']),
+                array('campo' => 'sa_conp_permiso_tipo', 'dato' => $parametros['sa_conp_permiso_tipo']),
             );
             $datos = array_merge($datos, $fechas_salida);
+        }
+
+        if ($parametros['sa_conp_permiso_tipo'] === 'emergencia') {
+            $salida_tipo = array(
+                array('campo' => 'sa_conp_permiso_seguro_traslado', 'dato' => $parametros['sa_conp_permiso_seguro_traslado']),
+                array('campo' => 'sa_conp_permiso_telefono_padre', 'dato' => $parametros['sa_conp_permiso_telefono_padre']),
+                array('campo' => 'sa_conp_permiso_telefono_seguro', 'dato' => $parametros['sa_conp_permiso_telefono_seguro']),
+            );
+            $datos = array_merge($datos, $salida_tipo);
         }
 
         // print_r($parametros);die();
 
         if ($parametros['sa_conp_id'] == '') {
             if (count($this->modelo->buscar_consultas_CODIGO($datos1[0]['dato'])) == 0) {
-// print_r('expression');die();
+                // print_r('expression');die();
                 //Se inserta los datos de la consulta
                 $id_insert = $this->modelo->insertar_id($datos);
 
@@ -344,7 +357,7 @@ class consultasC
 
                     /*HIKVISION*/
 
-                    if ($parametros['sa_conp_permiso_tipo'] == 'normal') {
+                    /*if ($parametros['sa_conp_permiso_tipo'] == 'normal') {
                         $mensaje_TCP = 'consulta_' . $id_insert;
                         $this->notificaciones_HV->crear_Evento_usuario('SALUD ' . $parametros['nombre_apellido_paciente'] . $id_insert, $mensaje_TCP, 3);
                         sleep(4);
@@ -354,7 +367,7 @@ class consultasC
                         $this->notificaciones_HV->crear_Evento_usuario('SALUD ' . $parametros['nombre_apellido_paciente'] . $id_insert, $mensaje_TCP, 2);
                         sleep(4);
                         $this->TCP_HV->TCP_enviar($mensaje_TCP);
-                    }
+                    }*/
                 }
 
 
