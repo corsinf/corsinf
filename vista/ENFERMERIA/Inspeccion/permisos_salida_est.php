@@ -44,7 +44,11 @@
                     }
                 },
                 {
-                    data: 'ac_ps_nombre'
+                    data: null,
+                    render: function(data, type, item) {
+
+                        return `<div"><a href="#" onclick="informacion('${item.ac_ps_id_tabla}', '${item.ac_ps_observacion}');" title="Información"><u>${item.ac_ps_nombre}</u></a></div>`;
+                    }
                 },
                 {
                     data: null,
@@ -81,7 +85,7 @@
                         if (item.ac_ps_prioridad == '1') {
                             return '<div class="badge rounded-pill text-danger bg-light-danger p-2 text-uppercase px-3">' + 'Alta' + '</div>';
                         } else if (item.ac_ps_prioridad == '2') {
-                            return '<div class="badge rounded-pill text-warning bg-light-warning p-2 text-uppercase px-3">' + 'Mediana' + '</div>';
+                            return '<div class="badge rounded-pill text-warning bg-light-warning p-2 text-uppercase px-3">' + 'Media' + '</div>';
                         } else if (item.ac_ps_prioridad == '3') {
                             return '<div class="badge rounded-pill text-success bg-light-success p-2 text-uppercase px-3">' + 'Baja' + '</div>';
                         }
@@ -146,7 +150,12 @@
 
             success: function(response) {
                 if (response == 1) {
+                    $("#modal_permisos").modal('hide');
                     Swal.fire('', 'Operacion realizada con exito.', 'success').then(function() {});
+                    $('#ac_ps_estado_salida').val('');
+                    $('#ac_ps_prioridad').val('');
+                    $('#ac_ps_observacion').val('');
+                    $('#ac_ps_id_tabla').val([]).trigger('change');
                 }
             }
         });
@@ -257,6 +266,49 @@
                 });
             }
         });
+    }
+
+    //Por el momento solo de estudiantes
+    function informacion(id, observacion) {
+
+        $('#ac_ps_observacion_Inf').val(observacion);
+
+        //Datos del estudiante
+        $.ajax({
+            data: {
+                id: id
+
+            },
+            url: '../controlador/estudiantesC.php?listar=true',
+            type: 'post',
+            dataType: 'json',
+            success: function(response) {
+                // console.log(response);
+                ///  Para la tabla de inicio /////////////////////////////////////////////////////////////////////////////////////////////////////////
+                $('#txt_ci').html(response[0].sa_est_cedula + " <i class='bx bxs-id-card'></i>");
+
+                nombres = response[0].sa_est_primer_nombre + ' ' + response[0].sa_est_segundo_nombre;
+                apellidos = response[0].sa_est_primer_apellido + ' ' + response[0].sa_est_segundo_apellido;
+
+                $('#txt_nombres').html(apellidos + " " + nombres);
+
+                sexo_paciente = '';
+                if (response[0].sa_est_sexo === 'Masculino') {
+                    sexo_paciente = "Masculino <i class='bx bx-male'></i>";
+                } else if (response[0].sa_est_sexo === 'Femenino') {
+                    sexo_paciente = "Famenino <i class='bx bx-female'></i>";
+                }
+                $('#txt_sexo').html(sexo_paciente);
+                $('#txt_fecha_nacimiento').html(fecha_nacimiento_formateada(response[0].sa_est_fecha_nacimiento) + ' (' + calcular_edad_fecha_nacimiento(response[0].sa_est_fecha_nacimiento) + ' años)');
+
+                curso = response[0].sa_sec_nombre + ' / ' + response[0].sa_gra_nombre + ' / ' + response[0].sa_par_nombre;
+                $('#txt_curso').html(curso);
+
+            }
+        });
+
+        $("#modal_informacion").modal('show');
+
     }
 </script>
 
@@ -390,6 +442,71 @@
                 <div class="row pt-3">
                     <div class="col-12 text-end">
                         <button type="submit" class="btn btn-success btn-sm" onclick="insertar_datos()"><i class="bx bx-save"></i> Guardar</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal" id="modal_informacion" abindex="-1" aria-modal="true" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h5>Información</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <!-- Modal body -->
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="">
+                            <table class="table mb-0" style="width:100%">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 30%;"></th>
+                                        <th style="width: 25%;"></th>
+                                        <th style="width: 25%;"></th>
+                                        <th style="width: 25%;"></th>
+                                    </tr>
+
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <th class="table-secondary text-end">Cédula:</th>
+                                        <td id="txt_ci"></td>
+
+                                        <th class="table-secondary text-end">Sexo:</th>
+                                        <td id="txt_sexo"></td>
+                                    </tr>
+                                    <tr>
+                                        <th class="table-secondary text-end">Nombres:</th>
+                                        <td id="txt_nombres" colspan="3"></td>
+                                    </tr>
+                                    <tr>
+                                        <th class="table-secondary text-end">Fecha de Nacimiento:</th>
+                                        <td id="txt_fecha_nacimiento" colspan="3"></td>
+                                    </tr>
+                                    <tr>
+                                        <th class="table-secondary text-end" id="variable_paciente">Curso:</th>
+                                        <td id="txt_curso" colspan="3"></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row pt-3">
+                    <div class="col-12">
+                        <label for="ac_horarioC_materia">Observación <label class="text-danger"></label></label>
+                        <textarea readonly name="ac_ps_observacion_Inf" id="ac_ps_observacion_Inf" cols="30" rows="10" class="form-control form-control-sm" placeholder="Observaciones"></textarea>
                     </div>
                 </div>
 

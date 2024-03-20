@@ -1,6 +1,10 @@
 <?php
 include('../modelo/permisos_salidaM.php');
 
+include('../lib/HIKVISION/Notificaciones.php');
+include('../lib/HIKVISION/HIK_TCP.php');
+
+
 $controlador = new permisos_salidaC();
 
 //Para mostrar todos los registros con campos especificos para la vista principal
@@ -24,10 +28,14 @@ if (isset($_GET['llegada'])) {
 class permisos_salidaC
 {
     private $modelo;
+    private $notificaciones_HV;
+    private $TCP_HV;
 
     function __construct()
     {
         $this->modelo = new permisos_salidaM();
+        $this->notificaciones_HV = new NotificaionesHV('28519009', 'kTnwcJUu7OQEGHCVGSJQ');
+        $this->TCP_HV = new HIK_TCP();
     }
 
     function lista_todo_permisos_salida()
@@ -68,6 +76,44 @@ class permisos_salidaC
         $where[0]['campo'] = 'ac_ps_id';
         $where[0]['dato'] = $id;
         $datos = $this->modelo->editar($datos_edit, $where);
+
+        /*HIKVISION*/
+        /*$mensaje_alerta = '';
+        if ($parametros['ac_ps_estado_salida'] == '1') {
+            $mensaje_alerta = 'PSR_' . $parametros['ac_ps_nombre'] . '_' . $id;
+            $API_response = $this->notificaciones_HV->crear_Evento_usuario($mensaje_alerta, $mensaje_HV, $parametros['ac_ps_prioridad']);
+
+            ///////////////////////////////////////////////////////////////////////////////////////
+            $max_intentos = 10;
+            $intentos = 0;
+            while (($API_response != '0') && $intentos < $max_intentos) {
+                usleep(500000);
+                $intentos++;
+            }
+            if ($API_response == '0') {
+                $this->TCP_HV->TCP_enviar($mensaje_HV);
+            } else {
+                echo "La tarea no se completó después del tiempo máximo.";
+            }
+            ///////////////////////////////////////////////////////////////////////////////////////
+        } else if ($parametros['ac_ps_estado_salida'] == '0') {
+            $mensaje_alerta = 'PSL_' . $parametros['ac_ps_nombre'] . '_' . $id;
+            $API_response = $this->notificaciones_HV->crear_Evento_usuario($mensaje_alerta, $mensaje_HV, $parametros['ac_ps_prioridad']);
+
+            ///////////////////////////////////////////////////////////////////////////////////////
+            $max_intentos = 10;
+            $intentos = 0;
+            while (($API_response != '0') && $intentos < $max_intentos) {
+                usleep(500000);
+                $intentos++;
+            }
+            if ($API_response == '0') {
+                $this->TCP_HV->TCP_enviar($mensaje_HV);
+            } else {
+                echo "La tarea no se completó después del tiempo máximo.";
+            }
+            ///////////////////////////////////////////////////////////////////////////////////////
+        }*/
 
 
         return $datos;

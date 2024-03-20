@@ -615,13 +615,13 @@ class consultasC
 
 
         $sa_conp_fecha_ingreso = $datos[0]['sa_conp_fecha_ingreso'];
-        $sa_conp_fecha_ingreso = $sa_conp_fecha_ingreso->format('Y-m-d');
+        $sa_conp_fecha_ingreso = $sa_conp_fecha_ingreso;
 
         $sa_conp_desde_hora = $datos[0]['sa_conp_desde_hora'];
-        $sa_conp_desde_hora = $sa_conp_desde_hora->format('H:i:s');
+        $sa_conp_desde_hora = $sa_conp_desde_hora;
 
         $sa_conp_hasta_hora = $datos[0]['sa_conp_hasta_hora'];
-        $sa_conp_hasta_hora = $sa_conp_hasta_hora->format('H:i:s');
+        $sa_conp_hasta_hora = $sa_conp_hasta_hora;
 
         $sa_conp_tiempo_aten = $datos[0]['sa_conp_tiempo_aten'];
 
@@ -637,17 +637,17 @@ class consultasC
 
         $sa_conp_fecha_entrega_certificado = $datos[0]['sa_conp_fecha_entrega_certificado'];
         if ($sa_conp_fecha_entrega_certificado !== null) {
-            $sa_conp_fecha_entrega_certificado = $sa_conp_fecha_entrega_certificado->format('Y-m-d');
+            $sa_conp_fecha_entrega_certificado = $sa_conp_fecha_entrega_certificado;
         }
 
         $sa_conp_fecha_inicio_falta_certificado = $datos[0]['sa_conp_fecha_inicio_falta_certificado'];
         if ($sa_conp_fecha_inicio_falta_certificado !== null) {
-            $sa_conp_fecha_inicio_falta_certificado = $sa_conp_fecha_inicio_falta_certificado->format('Y-m-d');
+            $sa_conp_fecha_inicio_falta_certificado = $sa_conp_fecha_inicio_falta_certificado;
         }
 
         $sa_conp_fecha_fin_alta_certificado = $datos[0]['sa_conp_fecha_fin_alta_certificado'];
         if ($sa_conp_fecha_fin_alta_certificado !== null) {
-            $sa_conp_fecha_fin_alta_certificado = $sa_conp_fecha_fin_alta_certificado->format('Y-m-d');
+            $sa_conp_fecha_fin_alta_certificado = $sa_conp_fecha_fin_alta_certificado;
         }
 
         $sa_conp_dias_permiso_certificado = $datos[0]['sa_conp_dias_permiso_certificado'];
@@ -656,12 +656,12 @@ class consultasC
 
         $sa_conp_fecha_permiso_salud_salida = $datos[0]['sa_conp_fecha_permiso_salud_salida'];
         if ($sa_conp_fecha_permiso_salud_salida !== null) {
-            $sa_conp_fecha_permiso_salud_salida = $sa_conp_fecha_permiso_salud_salida->format('Y-m-d');
+            $sa_conp_fecha_permiso_salud_salida = $sa_conp_fecha_permiso_salud_salida;
         }
 
         $sa_conp_hora_permiso_salida = $datos[0]['sa_conp_hora_permiso_salida'];
         if ($sa_conp_hora_permiso_salida !== null) {
-            $sa_conp_hora_permiso_salida = $sa_conp_hora_permiso_salida->format('H:i:s');
+            $sa_conp_hora_permiso_salida = $sa_conp_hora_permiso_salida;
         }
 
         $sa_conp_permiso_tipo = $datos[0]['sa_conp_permiso_tipo'];
@@ -718,7 +718,7 @@ class consultasC
 
         $sa_pac_temp_fecha_nacimiento = $paciente[0]['sa_pac_temp_fecha_nacimiento'];
         if ($sa_pac_temp_fecha_nacimiento !== null) {
-            $sa_pac_temp_fecha_nacimiento = $sa_pac_temp_fecha_nacimiento->format('Y-m-d');
+            $sa_pac_temp_fecha_nacimiento = $sa_pac_temp_fecha_nacimiento;
         }
 
 

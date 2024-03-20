@@ -114,7 +114,7 @@ if (isset($_GET['pac_id'])) {
                       return '';
                     } else {
                       //Fecha de creacion para saber el dia en el que se creo
-                      return fecha_nacimiento_formateada(item.sa_conp_fecha_creacion) + ' / ' + obtener_hora_formateada(item.sa_conp_fecha_creacion);
+                      return fecha_nacimiento_formateada(item.sa_conp_fecha_creacion) + ' / ' + obtener_hora_formateada_arr(item.sa_conp_fecha_creacion);
                     }
                   }
                 },

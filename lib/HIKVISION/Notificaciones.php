@@ -113,7 +113,13 @@ class NotificaionesHV
         $generalEventRuleIndexCodes = $valor;
         $description = 'default';
 
-        $this->combinar_Eveto_General_Normal($generalEventRuleIndexCodes, $description, $prioridad);
+        //$this->combinar_Eveto_General_Normal($generalEventRuleIndexCodes, $description, $prioridad);
+
+        $code = json_decode($this->combinar_Eveto_General_Normal($generalEventRuleIndexCodes, $description, $prioridad));
+
+        $code = $code->code;
+
+        return $code;
     }
 
     function llamadaTCP($mensaje_TCP)
