@@ -1,7 +1,7 @@
 <?php //include('../cabeceras/header.php'); ?>
 <script type="text/javascript">
     $( document ).ready(function() {  
-      log_activos();
+      //log_activos();
 
      $("#btn_carga").on('click', function() {
       var id = $('#ddl_opcion').val();

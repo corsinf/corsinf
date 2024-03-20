@@ -848,9 +848,10 @@ if ($dominio != 'localhost') {
 							<?php } ?>
 							<li><a class="dropdown-item" href="javascript:;"><i class='bx bx-home-circle'></i><span>Dashboard</span></a>
 							</li>
-							<li><a class="dropdown-item" href="javascript:;"><i class='bx bx-dollar-circle'></i><span>Earnings</span></a>
-							</li>
+							
 							<li><a class="dropdown-item" href="inicio.php?mod=<?php echo $_SESSION['INICIO']['MODULO_SISTEMA']; ?>&acc=descargas"><i class='bx bx-download'></i><span>Descargas</span></a>
+							</li>
+							<li onclick="$('#myModal_acerca_de').modal('show')"><a class="dropdown-item" href="#"><i class='bx bx-info-circle'></i><span>Acerca de</span></a>
 							</li>
 							<li>
 								<div class="dropdown-divider mb-0"></div>
