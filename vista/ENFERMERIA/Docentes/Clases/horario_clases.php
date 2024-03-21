@@ -184,7 +184,7 @@ if ($id != null && $id != '') {
 
                     });
 
-                    console.log(fecha_nacimiento_formateada(evento.ac_horarioC_fecha_creacion) + '-- ' + obtener_hora_formateada(evento.ac_horarioC_inicio));
+                    //console.log(fecha_nacimiento_formateada(evento.ac_horarioC_fecha_creacion) + '-- ' + obtener_hora_formateada(evento.ac_horarioC_inicio));
                 });
                 // Renderizar el calendario después de agregar los eventos
                 calendar.render();
@@ -278,7 +278,7 @@ if ($id != null && $id != '') {
             type: 'get',
             dataType: 'json',
             success: function(response) {
-                console.log(response)
+                //console.log(response)
 
                 $.each(response, function(i, item) {
                     //console.log(item);
@@ -345,11 +345,9 @@ if ($id != null && $id != '') {
 
                                     <button type="button" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#modal_horario_clases"><i class="bx bx-plus"></i> Agregar Asignatura</button>
 
-
                                 </div>
                             </div>
                         </div>
-
 
                         <section class="content pt-2">
                             <div class="container-fluid">
@@ -426,7 +424,6 @@ if ($id != null && $id != '') {
                         </select>
                     </div>
                 </div>
-
 
                 <div class="row pt-3">
                     <div class="col-12">

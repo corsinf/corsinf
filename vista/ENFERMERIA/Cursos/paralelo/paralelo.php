@@ -17,7 +17,7 @@
             success: function(response) {
                 // console.log(response);   
                 $.each(response, function(i, item) {
-                    console.log(item);
+                    //console.log(item);
                     grado +=
                         '<tr>' +
                         '<td>' + 'COD - ' + item.sa_par_id + '</td>' +
@@ -47,7 +47,7 @@
             success: function(response) {
                 // console.log(response);   
                 $.each(response, function(i, item) {
-                    console.log(item);
+                    //console.log(item);
                     grado +=
                         '<tr>' +
                         '<td>' + 'COD - ' + item.sa_par_id + '</td>' +

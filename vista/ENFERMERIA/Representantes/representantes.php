@@ -31,7 +31,6 @@
                     render: function(data, type, item) {
 
                         fecha_nacimiento = item.sa_rep_fecha_nacimiento;
-                        //fecha_nacimiento_calc = ;
                         
                         salida = fecha_nacimiento ? calcular_edad_fecha_nacimiento(item.sa_rep_fecha_nacimiento) : '';
 

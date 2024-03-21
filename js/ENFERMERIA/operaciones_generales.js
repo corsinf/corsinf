@@ -27,10 +27,10 @@ function calcular_edad_fecha_nacimiento(fecha_nacimiento) {
 function fecha_nacimiento_formateada(fecha) {
     fechaYHora = fecha;
     fecha = new Date(fechaYHora);
-    año = fecha.getFullYear();
+    anio = fecha.getFullYear();
     mes = (fecha.getMonth() + 1).toString().padStart(2, '0'); // Añade un 0 si es necesario
     dia = fecha.getDate().toString().padStart(2, '0'); // Añade un 0 si es necesario
-    fechaFormateada = `${año}-${mes}-${dia}`;
+    fechaFormateada = `${anio}-${mes}-${dia}`;
 
     var salida = '';
     salida = fechaFormateada;

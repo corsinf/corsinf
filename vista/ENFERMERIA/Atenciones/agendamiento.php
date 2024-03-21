@@ -72,13 +72,9 @@
           Swal.fire('', 'No puede realizar consultas.', 'error');
         }
 
-
-
         info.jsEvent.preventDefault();
 
       }
-
-
     });
 
     calendar.setOption('dateClick', function(info) {

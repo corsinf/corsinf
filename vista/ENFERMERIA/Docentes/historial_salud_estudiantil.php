@@ -19,6 +19,7 @@ if ($id != null && $id != '') {
 
 
 
+        //Queda por verificar si se usa de esta forma
         setInterval(function() {
             // Mostrar el indicador de carga antes de la actualización
         
@@ -28,7 +29,6 @@ if ($id != null && $id != '') {
             }
 
             cargar_tabla();*/
-
 
             /*var tabla_consultas = $('#tabla_consultas').DataTable();
 
@@ -53,7 +53,6 @@ if ($id != null && $id != '') {
 
             // Agregar la nueva fila
             tabla_consultas.row.add(nuevaFila).draw();*/
-
 
         }, 3000);
     });
@@ -122,7 +121,7 @@ if ($id != null && $id != '') {
                                 return '';
                             } else {
                                 //Fecha de creacion para saber el dia en el que se creo
-                                return fecha_nacimiento_formateada(item.sa_conp_fecha_creacion) + ' / ' + obtener_hora_formateada(item.sa_conp_fecha_creacion);
+                                return fecha_nacimiento_formateada(item.sa_conp_fecha_creacion) + ' / ' + obtener_hora_formateada_arr(item.sa_conp_fecha_creacion);
                             }
                         }
                     },
@@ -195,7 +194,6 @@ if ($id != null && $id != '') {
                 });
 
                 $('#ac_paralelo_id_busqueda').append(select);
-
             }
         });
     }
@@ -207,17 +205,11 @@ if ($id != null && $id != '') {
         }
 
         cargar_tabla();
-
     }
 
     function ver_pdf(id_consulta, tipo_consulta, sa_pac_id, btn_regresar) {
-
         window.open('../vista/inicio.php?mod=7&acc=detalle_consulta&pdf_consulta=true&id_consulta=' + id_consulta + '&id_paciente=' + sa_pac_id + '&tipo_consulta=' + tipo_consulta + '&btn_regresar=' + btn_regresar, '_blank');
     }
-
-
-
-    
 </script>
 
 
@@ -320,7 +312,7 @@ if ($id != null && $id != '') {
                                                 <th>Cédula</th>
                                                 <th>Nombres</th>
                                                 <th>Tipo de Atención</th>
-                                                <th>Fecha Atendido</th>
+                                                <th>Fecha Agendado</th>
                                                 <th>Estado</th>
                                             </tr>
                                         </thead>

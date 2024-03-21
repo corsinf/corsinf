@@ -45,7 +45,7 @@ if ($id != null && $id != '') {
                 {
                     data: null,
                     render: function(data, type, item) {
-                        return fecha_nacimiento_formateada(item.ac_horarioD_fecha_disponible);
+                        return (item.ac_horarioD_fecha_disponible);
                     }
                 },
                 {
@@ -109,7 +109,7 @@ if ($id != null && $id != '') {
                 type: 'post',
                 dataType: 'json',
                 success: function(response) {
-                    console.log(response)
+                    //console.log(response)
 
                     $('#ac_reunion_motivo').val(response[0].ac_reunion_motivo);
                     $('#ac_reunion_observacion').val(response[0].ac_reunion_observacion);
@@ -136,7 +136,7 @@ if ($id != null && $id != '') {
             'ac_reunion_estado': ac_reunion_estado,
         }
 
-        console.log(parametros);
+        //console.log(parametros);
 
         if (ac_reunion_id != '' && ac_reunion_observacion != '' && ac_reunion_estado != '') {
             $.ajax({
@@ -202,7 +202,6 @@ if ($id != null && $id != '') {
                             <div><i class="bx bxs-user me-1 font-22 text-primary"></i>
                             </div>
                             <h5 class="mb-0 text-primary">Reuniones</h5>
-
 
                         </div>
 

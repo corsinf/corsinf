@@ -108,7 +108,7 @@ if ($id != null && $id != '') {
             type: 'post',
             dataType: 'json',
             success: function(response) {
-                console.log(response)
+                //console.log(response)
                 Swal.fire('', 'Curso Asignado.', 'success').then(function() {
                     //location.href = '../vista/inicio.php?mod=7&acc=agendamiento';
                 })

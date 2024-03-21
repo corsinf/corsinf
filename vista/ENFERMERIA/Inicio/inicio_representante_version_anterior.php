@@ -88,7 +88,7 @@
                         '</tr>' +
                         '<tr>' +
                         '<th style="width:40%" class="table-success text-end">Fecha de Nacimiento:</th>' +
-                        '<td>' + fecha_nacimiento_formateada(item.sa_est_fecha_nacimiento.date) + '</td>' +
+                        '<td>' + (item.sa_est_fecha_nacimiento.date) + '</td>' +
                         '</tr>' +
                         '<tr>' +
                         '<th style="width:40%" class="table-success text-end">Edad Actual:</th>' +
@@ -121,7 +121,7 @@
                         '<h5 class="mb-0 mt-5">' + item.sa_est_primer_apellido + ' ' + item.sa_est_segundo_apellido + ' ' + item.sa_est_primer_nombre + ' ' + item.sa_est_segundo_nombre + '</h5>' +
                         '<p class="mb-0">' + item.sa_est_cedula + '</p>' +
                         '<p class="mb-0">' + sexo_estudiante + '</p>' +
-                        //'<p class="mb-0">' + fecha_nacimiento_formateada(item.sa_est_fecha_nacimiento.date) + ' (' + edad_fecha_nacimiento(item.sa_est_fecha_nacimiento.date) + ' años)' + '</p>' +
+                        //'<p class="mb-0">' + (item.sa_est_fecha_nacimiento.date) + ' (' + edad_fecha_nacimiento(item.sa_est_fecha_nacimiento.date) + ' años)' + '</p>' +
                         //'<p class="mb-0">' + item.sa_est_correo + '</p>' +
                         '<p class="mb-3">' + curso + '</p>' +
 

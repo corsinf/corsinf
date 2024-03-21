@@ -124,7 +124,7 @@ if (isset($_GET['pac_id'])) {
                     if (item.sa_conp_desde_hora == null || item.sa_conp_hasta_hora == null) {
                       return '';
                     } else {
-                      return fecha_nacimiento_formateada(item.sa_conp_fecha_ingreso) + ' / ' + obtener_hora_formateada(item.sa_conp_desde_hora) + ' / ' + obtener_hora_formateada(item.sa_conp_hasta_hora);
+                      return (item.sa_conp_fecha_ingreso) + ' / ' + obtener_hora_formateada(item.sa_conp_desde_hora) + ' / ' + obtener_hora_formateada(item.sa_conp_hasta_hora);
                     }
                   }
                 },
@@ -165,9 +165,8 @@ if (isset($_GET['pac_id'])) {
     });
   }
 
-
   function ver_pdf(id_consulta, tipo_consulta) {
-    console.log(id_consulta);
+    //console.log(id_consulta);
     window.open('../vista/inicio.php?mod=7&acc=detalle_consulta&pdf_consulta=true&id_consulta=' + id_consulta + '&id_paciente=' + <?= $sa_pac_id; ?> + '&tipo_consulta=' + tipo_consulta, '_blank');
   }
 </script>
@@ -213,7 +212,6 @@ if (isset($_GET['pac_id'])) {
                 <a href="../vista/inicio.php?mod=7&acc=pacientes" class="btn btn-outline-dark btn-sm"><i class="bx bx-arrow-back"></i> Regresar</a>
               </div>
             </div>
-
 
             <hr>
 

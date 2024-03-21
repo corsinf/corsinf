@@ -5,6 +5,45 @@
 
 <script type="text/javascript">
   $(document).ready(function() {
+
+    <?php if (
+      $_SESSION['INICIO']['TIPO'] == 'DBA' ||
+      strtoupper($_SESSION['INICIO']['TIPO']) == 'DOCENTES' ||
+      strtoupper($_SESSION['INICIO']['TIPO']) == 'COMUNIDAD'  ||
+      strtoupper($_SESSION['INICIO']['TIPO']) == 'ADMINISTRADOR'
+    ) { ?>
+
+
+    <?php } ?>
+
+
+
+    <?php if (
+      $_SESSION['INICIO']['TIPO'] == 'DBA'  ||
+      strtoupper($_SESSION['INICIO']['TIPO']) == 'MEDICO'  ||
+      strtoupper($_SESSION['INICIO']['TIPO']) == 'ENFERMERA'  ||
+      strtoupper($_SESSION['INICIO']['TIPO']) == 'ADMINISTRADOR'
+    ) { ?>
+
+      pacientes_atendidos();
+
+    <?php } ?>
+
+
+
+    <?php if (
+      $_SESSION['INICIO']['TIPO'] == 'DBA'  ||
+      strtoupper($_SESSION['INICIO']['TIPO']) == 'COMUNIDAD'  ||
+      strtoupper($_SESSION['INICIO']['TIPO']) == 'ENFERMERA'  ||
+      strtoupper($_SESSION['INICIO']['TIPO']) == 'DOCTOR'  ||
+      strtoupper($_SESSION['INICIO']['TIPO']) == 'ADMINISTRADOR'
+    ) { ?>
+
+      lista_medicamentos();
+      lista_insumos();
+
+    <?php } ?>
+
     total_pacientes();
     total_docentes();
     total_estudiantes();
@@ -12,15 +51,9 @@
     total_Agendas();
     total_medicamentos();
     total_insumos();
-    lista_medicamentos();
-    lista_insumos();
     total_consultas();
-    pacientes_atendidos();
 
   });
-
-
-
 
   function tcp() {
     $.ajax({
@@ -42,7 +75,7 @@
 
   }
 
-    function total_pacientes() {
+  function total_pacientes() {
     $.ajax({
       // data:  {parametros:parametros},
       url: '../controlador/index_saludC.php?total_pacientes=true',
@@ -304,7 +337,7 @@
                       <h4 class="my-1" id="lbl_estudiantes">0</h4>
                       <!-- <p class="mb-0 font-13 text-success"><i class="bx bxs-up-arrow align-middle"></i>$34 from last week</p> -->
                     </div>
-                    <div class="widgets-icons bg-light-success text-warning ms-auto"><i class="bx bx-package"></i>
+                    <div class="widgets-icons bg-light-success text-warning ms-auto"><i class='bx bxs-group'></i>
                     </div>
                   </div>
                 </div>
@@ -320,7 +353,7 @@
                       <h4 class="my-1" id="lbl_docentes">0</h4>
                       <!-- <p class="mb-0 font-13 text-success"><i class="bx bxs-up-arrow align-middle"></i>$34 from last week</p> -->
                     </div>
-                    <div class="widgets-icons bg-light-success text-success ms-auto"><i class="bx bx-package"></i>
+                    <div class="widgets-icons bg-light-success text-success ms-auto"><i class='bx bxs-group'></i>
                     </div>
                   </div>
                 </div>
@@ -336,7 +369,7 @@
                       <h4 class="my-1" id="lbl_comunidad">0</h4>
                       <!-- <p class="mb-0 font-13 text-success"><i class="bx bxs-up-arrow align-middle"></i>$34 from last week</p> -->
                     </div>
-                    <div class="widgets-icons bg-light-success text-primary ms-auto"><i class="bx bx-package"></i>
+                    <div class="widgets-icons bg-light-  text-primary ms-auto"><i class='bx bxs-group'></i>
                     </div>
                   </div>
                 </div>
@@ -498,8 +531,6 @@
               lista_estudiantes_atenciones();
             });
 
-
-
             function consultar_datos_estudiante_representante(id_representante = '') {
               var estudiantes = '';
 
@@ -568,12 +599,9 @@
           <h6 class="mb-0 text-uppercase">ESTUDIANTES MATRICULADOS</h6>
           <hr>
 
-
-
           <div class="row row-cols-1 row-cols-lg-2 row-cols-xl-3" id="card_estudiantes">
 
           </div>
-
 
           <div class="row">
 
@@ -603,37 +631,6 @@
 <!--end row-->
 </div>
 </div>
-
-
-<div class="content-wrapper">
-  <!-- Content Header (Page header) -->
-  <div class="content-header">
-    <div class="container-fluid">
-      <div class="row mb-2">
-        <div class="col-sm-6">
-          <h1 class="m-0 text-dark">HOME</h1>
-        </div><!-- /.col -->
-
-      </div><!-- /.row -->
-    </div><!-- /.container-fluid -->
-  </div>
-  <!-- /.content-header -->
-
-  <!-- Main content -->
-  <section class="content">
-    <div class="container-fluid">
-
-
-
-      <div class="row">
-        <!-- <img src="../img/de_sistema/modulo_inventario1.gif" style="width: 100%"> -->
-      </div>
-      <!-- /.row (main row) -->
-    </div><!-- /.container-fluid -->
-  </section>
-  <!-- /.content -->
-</div>
-
 
 <script src="../assets/plugins/apexcharts-bundle/js/apexcharts.min.js"></script>
 <script type="text/javascript">
@@ -704,7 +701,8 @@
     chart.render();
   }
 
-  function pie(tipo, cant) {
+  //Revisar no carga cuando es pie
+  function pie2(tipo, cant) {
     var options = {
       series: cant,
       chart: {
@@ -733,6 +731,47 @@
     var chart = new ApexCharts(document.querySelector("#chart8"), options);
     chart.render();
 
+  }
+
+  function pie(tipo, cant) {
+
+    var categorias_Mayusculas = tipo.map(function(elemento) {
+      return elemento.toUpperCase();
+    });
+
+    var options = {
+      series: [{
+        name: 'Pacientes Atendidos',
+        data: (cant),
+      }],
+      chart: {
+        foreColor: '#9ba7b2',
+        type: 'bar',
+        height: 350
+      },
+      colors: ["#0d6efd", "#34c38f", "#f1b44c", "#e83e8c", "#fd7e14", "#20c997"],
+      plotOptions: {
+        bar: {
+          horizontal: false,
+          columnWidth: '90%',
+          endingShape: 'flat',
+          barHeight: '35%',
+          distributed: true,
+        }
+      },
+      dataLabels: {
+        enabled: false
+      },
+      xaxis: {
+        categories: categorias_Mayusculas,
+      },
+      title: {
+        text: 'Pacientes Atendidos',
+        align: 'center',
+      }
+    };
+    var chart = new ApexCharts(document.querySelector("#chart8"), options);
+    chart.render();
   }
 
   function lista_estudiantes_atenciones_chart(data, cate) {
@@ -771,6 +810,3 @@
     chart.render();
   }
 </script>
-
-<?php //include('../cabeceras/footer.php'); 
-?>

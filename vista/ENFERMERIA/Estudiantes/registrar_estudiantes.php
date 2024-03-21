@@ -58,7 +58,7 @@ if (isset($_POST['id_representante'])) {
   function consultar_datos_seccion(id = '', id_seccion) {
     var seccion = '';
 
-    console.log(id_seccion);
+    //console.log(id_seccion);
     seccion = '<option selected disabled>-- Seleccione --</option>'
     $.ajax({
       data: {
@@ -69,7 +69,7 @@ if (isset($_POST['id_representante'])) {
       dataType: 'json',
 
       success: function(response) {
-        console.log(response);
+        //console.log(response);
 
         $.each(response, function(i, item) {
           //console.log(item);
@@ -200,7 +200,7 @@ if (isset($_POST['id_representante'])) {
         type: 'post', //método de envio
         dataType: 'json',
         success: function(dato) { //una vez que el archivo recibe el request lo procesa y lo devuelve         
-          console.log(dato);
+          //console.log(dato);
           let etiquetas = "";
           dato.forEach(function(item, itema, items) {
             etiquetas += '<option value="' + item.sa_rep_id + '">' + item.sa_rep_cedula + ' - ' + item.sa_rep_primer_apellido + ' ' + item.sa_rep_segundo_apellido + ' ' + item.sa_rep_primer_nombre + ' ' + item.sa_rep_segundo_nombre + '</option>';
@@ -283,7 +283,7 @@ if (isset($_POST['id_representante'])) {
 
         select_genero(response[0].sa_est_sexo, '#sa_est_sexo');
 
-        $('#sa_est_fecha_nacimiento').val(fecha_nacimiento_formateada(response[0].sa_est_fecha_nacimiento));
+        $('#sa_est_fecha_nacimiento').val((response[0].sa_est_fecha_nacimiento));
         $('#sa_est_edad').val(calcular_edad_fecha_nacimiento(response[0].sa_est_fecha_nacimiento));
         ///////////////////////////////////////////////////////////////////////////////////////////
 
@@ -367,7 +367,7 @@ if (isset($_POST['id_representante'])) {
         })
 
       } else {
-        console.log(parametros);
+        //console.log(parametros);
         insertar(parametros)
       }
     } else {
@@ -392,7 +392,7 @@ if (isset($_POST['id_representante'])) {
           text: 'Asegurese de llenar todos los campos',
         })
       } else {
-        console.log(parametros);
+        //console.log(parametros);
         insertar(parametros);
       }
     }

@@ -39,8 +39,6 @@ if (isset($_GET['btn_regresar'])) {
         $('#ifr_pdf_consulta').prop('src', '../controlador/consultasC.php?pdf_consulta=true&id_consulta=' + id_consulta);
         $('#ifr_pdf_receta').prop('src', '../controlador/consultasC.php?pdf_recetario=true&id_consulta=' + id_consulta);
         $('#ifr_pdf_notificacion').prop('src', '../controlador/consultasC.php?pdf_notificacion=true&id_consulta=' + id_consulta);
-
-
     }
 
     function datos_col_consulta(id_consulta) {
@@ -90,7 +88,6 @@ if (isset($_GET['btn_regresar'])) {
                 } else if (response == -2) {
                     Swal.fire('', 'Código ya registrado', 'success');
                 }
-
                 //console.log(response);
             }
         });
@@ -140,6 +137,7 @@ if (isset($_GET['btn_regresar'])) {
                             <?php } ?>
 
                         </div>
+                        
                         <hr>
 
                         <div class="content">

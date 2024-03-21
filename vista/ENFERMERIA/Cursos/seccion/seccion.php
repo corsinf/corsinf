@@ -17,7 +17,7 @@
             success: function(response) {
                 // console.log(response);   
                 $.each(response, function(i, item) {
-                    console.log(item);
+                    //console.log(item);
                     seccion +=
                         '<tr>' +
                         '<td>' + 'COD - ' + item.sa_sec_id + '</td>' +
@@ -45,7 +45,7 @@
             success: function(response) {
                 // console.log(response);   
                 $.each(response, function(i, item) {
-                    console.log(item);
+                    //console.log(item);
                     seccion +=
                         '<tr>' +
                         '<td>' + 'COD - ' + item.sa_sec_id + '</td>' +

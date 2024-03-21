@@ -32,24 +32,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <script type="text/javascript">
     $(document).ready(function() {
 
-        /* window.addEventListener('beforeunload', function(event) {
-             // Mostrar un mensaje de alerta personalizado
-             var confirmationMessage = '¿Estás seguro de que quieres abandonar la página?';
-
-             (event || window.event).returnValue = confirmationMessage; // Para navegadores más antiguos
-             return confirmationMessage; // Para navegadores modernos
-         });*/
-
         var tipo_consulta = '<?php echo $tipo_consulta; ?>';
         var txt_fecha_consulta = '<?php echo $txt_fecha_consulta; ?>';
 
         $('#txt_fecha_consulta').val(txt_fecha_consulta);
 
-
-
-
         smartwizard();
-        //autocoplete_paciente();
 
         consultar_datos_comunidad_tabla();
         consultar_tablas_datos('');
@@ -140,7 +128,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     type: 'post',
                     dataType: 'json',
                     success: function(response) {
-                        console.log(response)
+                        //console.log(response)
                         Swal.fire('', 'Cita Agendada', 'success').then(function() {
                             location.href = '../vista/inicio.php?mod=7&acc=agendamiento';
                         })
@@ -169,7 +157,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     type: 'post',
                     dataType: 'json',
                     success: function(response) {
-                        console.log(response)
+                        //console.log(response)
                         Swal.fire('', 'Cita Agendada', 'success').then(function() {
                             location.href = '../vista/inicio.php?mod=7&acc=agendamiento';
                         })
@@ -372,8 +360,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                             </div>
                                                         </div>
                                                     <?php } ?>
-
-
 
                                                 </div>
                                             </form>

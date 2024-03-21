@@ -59,6 +59,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <script type="text/javascript">
     $(document).ready(function() {
 
+       
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         //Logica para registrar o modificar la consulta
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -98,7 +99,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             } else {
                 $('#stock_farmacologia').val(data['sa_cins_stock']);
             }
-            console.log(data);
+            //console.log(data);
         });
 
     });
@@ -182,7 +183,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     sexo_paciente = "Famenino <i class='bx bx-female'></i>";
                 }
                 $('#txt_sexo').html(sexo_paciente);
-                $('#txt_fecha_nacimiento').html(fecha_nacimiento_formateada(response[0].sa_pac_temp_fecha_nacimiento) + ' (' + calcular_edad_fecha_nacimiento(response[0].sa_pac_temp_fecha_nacimiento) + ' años)');
+                $('#txt_fecha_nacimiento').html((response[0].sa_pac_temp_fecha_nacimiento) + ' (' + calcular_edad_fecha_nacimiento(response[0].sa_pac_temp_fecha_nacimiento) + ' años)');
 
 
                 if (response[0].sa_pac_tabla == 'estudiantes') {
@@ -220,7 +221,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'tabla': $('#txt_tabla').val(),
         }
 
-        console.log(parametros);
+        //console.log(parametros);
         var option = '<option selected disabled value="">-- Seleccione Seguro --</option>';
         $.ajax({
             data: {
@@ -237,7 +238,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         option += '<option value ="' + item.id_arti_asegurados + '" selected>' + item.nombre + '</option>'
                         $('#sa_conp_permiso_telefono_seguro').val(item.telefono);
                         $('#sa_conp_permiso_telefono_padre').val(item.telefono_asesor)
-                        console.log(item)
+                        //console.log(item)
                     } else {
                         option += '<option value ="' + item.id_arti_asegurados + '">' + item.nombre + '</option>'
                     }
@@ -343,7 +344,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $('#sa_conp_frec_cardiaca').val(response[0].sa_conp_frec_cardiaca);
                 $('#sa_conp_frec_respiratoria').val(response[0].sa_conp_frec_respiratoria);
 
-                $('#sa_conp_fecha_ingreso').val(fecha_nacimiento_formateada(response[0].sa_conp_fecha_ingreso));
+                $('#sa_conp_fecha_ingreso').val((response[0].sa_conp_fecha_ingreso));
 
                 $('#sa_conp_tiempo_aten').val(response[0].sa_conp_tiempo_aten);
                 $('#sa_conp_CIE_10_1').val(response[0].sa_conp_CIE_10_1);
@@ -355,9 +356,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $('#sa_conp_motivo_certificado').val(response[0].sa_conp_motivo_certificado);
                 $('#sa_conp_CIE_10_certificado').val(response[0].sa_conp_CIE_10_certificado);
                 $('#sa_conp_diagnostico_certificado').val(response[0].sa_conp_diagnostico_certificado);
-                //$('#sa_conp_fecha_entrega_certificado').val(fecha_nacimiento_formateada(response[0].sa_conp_fecha_entrega_certificado));
-                //$('#sa_conp_fecha_inicio_falta_certificado').val(fecha_nacimiento_formateada(response[0].sa_conp_fecha_inicio_falta_certificado));
-                //$('#sa_conp_fecha_fin_alta_certificado').val(fecha_nacimiento_formateada(response[0].sa_conp_fecha_fin_alta_certificado));
+                //$('#sa_conp_fecha_entrega_certificado').val((response[0].sa_conp_fecha_entrega_certificado));
+                //$('#sa_conp_fecha_inicio_falta_certificado').val((response[0].sa_conp_fecha_inicio_falta_certificado));
+                //$('#sa_conp_fecha_fin_alta_certificado').val((response[0].sa_conp_fecha_fin_alta_certificado));
 
 
                 validar_fecha_formulario(response[0].sa_conp_fecha_inicio_falta_certificado, 'sa_conp_fecha_inicio_falta_certificado');
@@ -432,7 +433,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     function validar_fecha_formulario(campo, nombre_input) {
         if (campo && campo !== null) {
-            $('#' + nombre_input).val(fecha_nacimiento_formateada(campo));
+            $('#' + nombre_input).val((campo));
         } else {
             $('#' + nombre_input).val(''); // Establecer el valor como vacío
         }
@@ -671,7 +672,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     function insertar(parametros) {
         tardo = calcular_diferencia_hora_retorno();
 
-        console.log(parametros);
+        //console.log(parametros);
         $.ajax({
             data: {
                 parametros: parametros
@@ -812,7 +813,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                     <input type="text" class="form-control form-control-sm" id="sa_conp_tiempo_aten" name="sa_conp_tiempo_aten" readonly>
                                 </div>
                             </div>
-
 
 
                             <div id="main_consulta" style="display: block;" class="pt-4">
@@ -1028,7 +1028,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                                                                             </tbody>
                                                                         </table>
-
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -1291,8 +1290,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                                                 <td>
                                                                                     <input type="checkbox" class="custom-control-input" id="chx_Desviacion">
                                                                                 </td>
-
-
                                                                             </tr>
 
                                                                             <tr>
@@ -1314,8 +1311,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                                                 <td>
                                                                                     <input type="checkbox" class="custom-control-input" id="chx_Dolor">
                                                                                 </td>
-
-
                                                                             </tr>
 
 
@@ -1340,8 +1335,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                                                 <td>
                                                                                     <input type="checkbox" class="custom-control-input" id="chx_Pelvis">
                                                                                 </td>
-
-
                                                                             </tr>
 
                                                                             <tr>
@@ -1359,8 +1352,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                                                 <td>
                                                                                     <input type="checkbox" class="custom-control-input" id="chx_Genitales">
                                                                                 </td>
-
-
                                                                             </tr>
 
                                                                             <tr class="small">
@@ -1369,10 +1360,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                                                                         </tbody>
                                                                     </table>
-
                                                                 </div>
                                                             </div>
-
                                                         </div>
 
                                                         <div class="row pt-3">
@@ -1381,8 +1370,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                                 <textarea name="sa_examen_fisico_regional_obs" id="sa_examen_fisico_regional_obs" cols="30" rows="2" class="form-control" placeholder="OBSERVACIONES  EXAMEN FÍSICO REGIONAL"></textarea>
                                                             </div>
                                                         </div>
-
-
 
                                                         <div class="row pt-4">
                                                             <hr>
@@ -1501,12 +1488,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                                                                     <input type="hidden" name="sa_permiso_pac_id" id="sa_permiso_pac_id">
                                                                     <input type="hidden" name="sa_permiso_pac_tabla" id="sa_permiso_pac_tabla">
-
                                                                 </div>
-
-
                                                             </div>
-
                                                         </div>
 
                                                     </div>
@@ -1521,7 +1504,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                 </div>
 
                                             </div>
-
                                         </div>
                                     <?php } ?>
 
@@ -1531,7 +1513,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                                                                                 echo 'hidden';
                                                                                                             } ?>>
                                             <div>
-
                                                 <!-- Consulta -->
                                                 <div>
                                                     <div class="row pt-0">
@@ -1614,9 +1595,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                             </div>
                                         </div>
                                     <?php } ?>
-
-
-
                                 </div>
                             </div>
                         </form>

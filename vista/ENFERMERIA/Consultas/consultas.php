@@ -2,11 +2,7 @@
 
 <script type="text/javascript">
     $(document).ready(function() {
-
-
         cargar_tabla();
-
-
     });
 
     function cargar_tabla() {
@@ -210,7 +206,6 @@
                                 </div>
                             </div>
                         </div>
-
 
                         <section class="content pt-4">
                             <div class="container-fluid">

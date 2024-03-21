@@ -48,8 +48,8 @@ if ($btn_regresar == '') {
 
             //alert(btn_regresar)
 
-            console.log(sa_pac_id);
-            console.log(sa_pac_tabla);
+            //console.log(sa_pac_id);
+            //console.log(sa_pac_tabla);
 
             //cargar_datos_paciente(sa_pac_id);
             datos_col_ficha_medica(sa_pac_id);
@@ -79,7 +79,7 @@ if ($btn_regresar == '') {
                 type: 'post',
                 dataType: 'json',
                 success: function(response) {
-                    console.log(response);
+                    //console.log(response);
                     ///  Para la tabla de inicio /////////////////////////////////////////////////////////////////////////////////////////////////////////
                     $('#txt_ci').html(response[0].sa_pac_temp_cedula + " <i class='bx bxs-id-card'></i>");
                     nombres = response[0].sa_pac_temp_primer_nombre + ' ' + response[0].sa_pac_temp_segundo_nombre;
@@ -99,7 +99,7 @@ if ($btn_regresar == '') {
                         sexo_paciente = "Famenino <i class='bx bx-female'></i>";
                     }
                     $('#txt_sexo').html(sexo_paciente);
-                    $('#txt_fecha_nacimiento').html(fecha_nacimiento_formateada(response[0].sa_pac_temp_fecha_nacimiento));
+                    $('#txt_fecha_nacimiento').html((response[0].sa_pac_temp_fecha_nacimiento));
                     $('#txt_edad').html(calcular_edad_fecha_nacimiento(response[0].sa_pac_temp_fecha_nacimiento) + ' años');
                     $('#txt_email').html(response[0].sa_pac_temp_correo + " <i class='bx bx-envelope'></i>");
 
@@ -132,7 +132,7 @@ if ($btn_regresar == '') {
                 type: 'post',
                 dataType: 'json',
                 success: function(response) {
-                    console.log(response);
+                    //console.log(response);
 
                     // Id de la ficha
                     $('#sa_fice_id').val(response[0].sa_fice_id);
@@ -321,7 +321,7 @@ if ($btn_regresar == '') {
                     //alert('entra');
                 }
 
-                console.log(parametros);
+                //console.log(parametros);
                 //insertar(parametros);
             }
         }
@@ -348,7 +348,7 @@ if ($btn_regresar == '') {
                     } else if (response == -2) {
                         Swal.fire('', 'Algo salió mal, repite el proceso.', 'success');
                     }
-                    console.log(response);
+                    //console.log(response);
                 }
             });
         }
@@ -413,7 +413,7 @@ if ($btn_regresar == '') {
                 $('#myModal_seguros').modal('hide');
                 if (response == 1) {
                     Swal.fire('', 'Agregado', 'success');
-                    console.log(estudiantes);
+                    //console.log(estudiantes);
                     lista_seguros(estudiantes, tabla);
                 } else if (response == -2) {
                     Swal.fire("", "Estudiante ya esta registrado con este seguro", "info")

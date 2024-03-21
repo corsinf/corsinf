@@ -13,7 +13,6 @@ if ($id != null && $id != '') {
 
 <script src="../js/ENFERMERIA/operaciones_generales.js"></script>
 
-
 <script type="text/javascript">
     let calendar;
 
@@ -124,11 +123,8 @@ if ($id != null && $id != '') {
 
         });
 
-
-
         // Función para cargar eventos desde AJAX
         cargar_horario_disponible_docente();
-
     });
 
     //Fecha que empieza el horario de clases es el 2024-02-12 como lunes
@@ -150,7 +146,7 @@ if ($id != null && $id != '') {
                     calendar.removeAllEvents();
                     // Recorrer la respuesta y agregar eventos al arreglo events
                     response.forEach(function(evento) {
-                        console.log(evento);
+                        //console.log(evento);
 
                         var color = (evento.ac_horarioD_estado == 0) ? '#B63232' : '#3D94C9';
 
@@ -167,7 +163,7 @@ if ($id != null && $id != '') {
 
                         });
 
-                        console.log(fecha_nacimiento_formateada(evento.ac_horarioD_fecha_creacion) + '-- ' + obtener_hora_formateada(evento.ac_horarioD_inicio));
+                        //console.log(fecha_nacimiento_formateada(evento.ac_horarioD_fecha_creacion) + '-- ' + obtener_hora_formateada(evento.ac_horarioD_inicio));
                     });
                     // Renderizar el calendario después de agregar los eventos
                     calendar.render();
@@ -212,7 +208,7 @@ if ($id != null && $id != '') {
             success: function(response) {
                 //console.log(response);
                 $.each(response, function(i, item) {
-                    console.log(item);
+                    //console.log(item);
                     select += '<option value="' + item.ac_docente_id + '">' + item.docente_nombres + ' / ' + item.sec_gra_par + '</option>';
                 });
 
@@ -232,7 +228,7 @@ if ($id != null && $id != '') {
             type: 'post',
             dataType: 'json',
             success: function(response) {
-                console.log(response);
+                //console.log(response);
                 $.each(response, function(i, item) {
 
                     nombres = item.sa_est_primer_apellido + ' ' + item.sa_est_segundo_apellido + ' ' + item.sa_est_primer_nombre + ' ' + item.sa_est_segundo_nombre;
@@ -255,17 +251,13 @@ if ($id != null && $id != '') {
             type: 'post',
             dataType: 'json',
             success: function(response) {
-                console.log(response);
-
+                //console.log(response);
 
                 nombres = response[0].sa_doc_primer_apellido + ' ' + response[0].sa_doc_segundo_apellido + ' ' + response[0].sa_doc_primer_nombre + ' ' + response[0].sa_doc_segundo_nombre;
 
                 salida = "<b><p class='text-success'>La agenda del docente " + nombres + " es la siguiente.</p></b>";
 
                 $('#lbl_docente').html(salida);
-
-
-
             }
         });
     }
@@ -286,7 +278,7 @@ if ($id != null && $id != '') {
             'ac_reunion_observacion': ac_reunion_observacion,
         }
 
-        console.log(parametros);
+        //console.log(parametros);
 
         if (ac_horarioD_id != '' && ac_representante_id != '' && ac_reunion_motivo != '') {
             $.ajax({
@@ -312,6 +304,19 @@ if ($id != null && $id != '') {
         cargar_horario_disponible_docente();
     }
 </script>
+
+<style>
+    /* Ajusta el tamaño de las ranuras de tiempo */
+    .fc-timegrid-slot,
+    .fc-timegrid-slot-lane,
+    .fc-timegrid-slot.fc-timegrid-slot-label,
+    .fc-scrollgrid-shrink {
+        height: 40px;
+        /* Ajusta este valor según tus preferencias */
+        line-height: 40px;
+        /* Ajusta este valor según tus preferencias */
+    }
+</style>
 
 <input type="hidden" name="ac_docente_id_hidden" id="ac_docente_id_hidden">
 
@@ -357,7 +362,6 @@ if ($id != null && $id != '') {
                             </div>
                         </div>
 
-
                         <section class="content pt-2">
                             <div class="container-fluid">
                                 <p class="text-primary">*Para buscar la agenda del docente debe dar click en el botón.</p>
@@ -384,7 +388,7 @@ if ($id != null && $id != '') {
 <script src="../assets/js/app-fullcalendar.js"></script>
 
 <div class="modal" id="modal_buscar_horario_disponible" abindex="-1" aria-modal="true" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
-    <div class="modal-dialog ">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
 
             <!-- Modal Header -->
@@ -458,7 +462,6 @@ if ($id != null && $id != '') {
                     </div>
                 </div>
 
-
                 <input type="hidden" name="ac_horarioD_id" id="ac_horarioD_id">
 
                 <div class="row pt-3">
@@ -466,9 +469,6 @@ if ($id != null && $id != '') {
                         <button type="submit" class="btn btn-success btn-sm" onclick="agengar_reunion()"><i class="bx bx-save"></i> Agendar</button>
                     </div>
                 </div>
-
-
-
             </div>
         </div>
     </div>

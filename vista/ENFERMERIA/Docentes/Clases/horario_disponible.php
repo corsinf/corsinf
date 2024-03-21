@@ -97,14 +97,14 @@ if ($id != null && $id != '') {
                 const ac_horarioD_estado = arg.event.extendedProps.ac_horarioD_estado;
 
                 // Verificar si el estado es diferente de 0 antes de incluir el botón de eliminar
-                const eliminarButtonHtml = (ac_horarioD_estado !== 0) ? `
+                const eliminarButtonHtml = (ac_horarioD_estado != 0) ? `
                         <button title='Eliminar Turno' class="btn btn-danger btn-sm" style="font-size: 4px; background-color: #CA4646;"  onclick="eliminar_evento('${arg.event.id}', '${arg.event.title}', '${startTime}', '${endTime}')">
                             <i class='bx bx-trash-alt me-0' style="font-size: 14px;"></i>
                         </button>` : '';
 
                 const buttonsHtml = `
                         <div class="d-flex justify-content-between align-items-center">
-                            <b>${startTime}</b> - <b>${endTime}</b> ${arg.event.title}
+                            <b>${startTime}</b> - <b>${endTime}</b>
                             <div class="btn-group">
                                 ${eliminarButtonHtml}
                                 ${isLastEventOfDay ?
@@ -196,7 +196,7 @@ if ($id != null && $id != '') {
                 calendar.removeAllEvents();
                 // Recorrer la respuesta y agregar eventos al arreglo events
                 response.forEach(function(evento) {
-                    console.log(evento);
+                    //console.log(evento);
 
                     var color = (evento.ac_horarioD_estado == 0) ? '#B63232' : '#3D94C9';
 
@@ -242,7 +242,7 @@ if ($id != null && $id != '') {
             'ac_horarioD_ubicacion': ac_horarioD_ubicacion,
         }
 
-        console.log(parametros)
+        //console.log(parametros)
 
         if (ac_horarioD_inicio != '' && ac_horarioD_fin != '' && ac_horarioD_fecha_disponible != '' && ac_horarioD_materia != null && ac_horarioD_ubicacion != null) {
             $.ajax({
@@ -326,7 +326,7 @@ if ($id != null && $id != '') {
             'ac_horarioD_ubicacion': ac_horarioD_ubicacion,
         }
 
-        console.log(parametros);
+        //console.log(parametros);
 
         $.ajax({
             url: '../controlador/horario_disponibleC.php?insertar=true',
@@ -381,7 +381,7 @@ if ($id != null && $id != '') {
             'ac_horarioD_ubicacion': ac_horarioD_ubicacion,
         }
 
-        console.log(parametros);
+        //console.log(parametros);
 
         $.ajax({
             url: '../controlador/horario_disponibleC.php?insertar=true',
@@ -468,11 +468,9 @@ if ($id != null && $id != '') {
 
                                     <button type="button" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#modal_horario_clases"><i class="bx bx-plus"></i> Agregar Hora Disponible</button>
 
-
                                 </div>
                             </div>
                         </div>
-
 
                         <section class="content pt-2">
                             <div class="container-fluid">
@@ -562,9 +560,6 @@ if ($id != null && $id != '') {
                         <button type="submit" class="btn btn-success btn-sm" onclick="agregar_clase()"><i class="bx bx-save"></i> Agregar</button>
                     </div>
                 </div>
-
-
-
             </div>
         </div>
     </div>

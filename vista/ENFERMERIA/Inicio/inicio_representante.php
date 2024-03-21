@@ -185,7 +185,7 @@
             dataType: 'json',
 
             success: function(response) {
-                console.log(response);
+                //console.log(response);
                 $('#txt_id').val(response[0].id);
                 $('#txt_tabla').val(response[0].tabla);
                 $('#txt_ci').val(response[0].ci);
@@ -292,7 +292,7 @@
                             // Incrementa el contador aquí
                             contador_alertas++;
 
-                            console.log(contador_alertas);
+                            //console.log(contador_alertas);
 
                         }
                     });
@@ -405,8 +405,8 @@
         var seguro = $('#txtSeguroNombreNew').val();
         var estudiantes = $('#lista_estudiantes').val();
 
-        console.log(estudiantes);
-        console.log($('#rbl_todos').prop('checked'));
+        //console.log(estudiantes);
+        //console.log($('#rbl_todos').prop('checked'));
         if (($('#rbl_todos').prop('checked') == false && estudiantes == '') || prov == '' || seguro == '') {
             Swal.fire('', 'Llene todo los campos', 'info')
             return false;
@@ -455,7 +455,7 @@
             success: function(response) {
                 $('#tbl_body').html(response)
 
-                console.log(response)
+                //console.log(response)
             }
         });
     }

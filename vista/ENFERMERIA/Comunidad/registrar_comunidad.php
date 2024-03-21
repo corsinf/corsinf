@@ -39,7 +39,7 @@ if (isset($_POST['sa_com_id'])) {
                 $('#sa_com_cedula').val(response[0].sa_com_cedula);
                 select_genero(response[0].sa_com_sexo, '#sa_com_sexo');
 
-                $('#sa_com_fecha_nacimiento').val(fecha_nacimiento_formateada(response[0].sa_com_fecha_nacimiento));
+                $('#sa_com_fecha_nacimiento').val((response[0].sa_com_fecha_nacimiento));
                 $('#sa_com_edad').val(calcular_edad_fecha_nacimiento(response[0].sa_com_fecha_nacimiento));
 
                 $('#sa_com_correo').val(response[0].sa_com_correo);
@@ -96,7 +96,7 @@ if (isset($_POST['sa_com_id'])) {
                     text: 'Asegurese de llenar todos los campos',
                 })
             } else {
-                console.log(parametros);
+                //console.log(parametros);
                 insertar(parametros)
             }
         } else {
@@ -118,7 +118,7 @@ if (isset($_POST['sa_com_id'])) {
                     text: 'Asegurese de llenar todos los campos',
                 })
             } else {
-                console.log(parametros);
+                //console.log(parametros);
                 insertar(parametros);
             }
         }

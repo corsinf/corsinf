@@ -136,6 +136,7 @@ class index_saludM
                     
                     WHERE pac.sa_pac_estado = 1 
                     AND est.sa_id_representante = $id_representante
+                    AND sa_pac_tabla = 'estudiantes'
                     
                     GROUP BY 
                         pac.sa_pac_id,

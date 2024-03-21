@@ -173,7 +173,7 @@
 				$("#txt_existencias").val(data.sa_cmed_stock)
 			} else {
 				$("#txt_existencias").val(data.sa_cins_stock)
-				console.log(data);
+				//console.log(data);
 			}
 		})
 
@@ -487,7 +487,6 @@
 						</div>
 					</div>
 
-
 					<hr>
 
 					<div class="row pt-1">
@@ -634,7 +633,7 @@
 								</div>
 							</div>
 						</div>
-						
+
 						<div class="col-sm-12" onclick="modal_ingreso('Insumos')">
 							<div class="card radius-10 shadow-card">
 								<div class="card-body">

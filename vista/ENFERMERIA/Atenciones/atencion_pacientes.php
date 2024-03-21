@@ -20,7 +20,7 @@
                 var lista = '';
                 $.each(response, function(i, item) {
 
-                    console.log(item);
+                    //console.log(item);
 
                     lista += '<div class="col">' +
                         '<div class="card radius-15">' +
@@ -73,15 +73,12 @@
         </div>
         <!--end breadcrumb-->
 
-
         <div class="row row-cols-1 row-cols-lg-2 row-cols-xl-4" id="citas_actuales">
-
 
         </div>
         <!--end row-->
     </div>
 </div>
-
 
 <div class="modal" id="myModal_historial" abindex="-1" aria-modal="true" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
     <div class="modal-dialog  modal-lg">

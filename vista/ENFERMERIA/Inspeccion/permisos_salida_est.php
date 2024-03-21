@@ -134,7 +134,7 @@
                 text: 'Asegurese de llenar todos los campos',
             })
         } else {
-            console.log(parametros);
+            //console.log(parametros);
             insertar(parametros)
         }
     }
@@ -299,7 +299,7 @@
                     sexo_paciente = "Famenino <i class='bx bx-female'></i>";
                 }
                 $('#txt_sexo').html(sexo_paciente);
-                $('#txt_fecha_nacimiento').html(fecha_nacimiento_formateada(response[0].sa_est_fecha_nacimiento) + ' (' + calcular_edad_fecha_nacimiento(response[0].sa_est_fecha_nacimiento) + ' años)');
+                $('#txt_fecha_nacimiento').html((response[0].sa_est_fecha_nacimiento) + ' (' + calcular_edad_fecha_nacimiento(response[0].sa_est_fecha_nacimiento) + ' años)');
 
                 curso = response[0].sa_sec_nombre + ' / ' + response[0].sa_gra_nombre + ' / ' + response[0].sa_par_nombre;
                 $('#txt_curso').html(curso);
