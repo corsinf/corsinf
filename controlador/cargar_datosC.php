@@ -162,7 +162,7 @@ class cargar_datosC
 		foreach ($datos as $key => $value) {
 			$informe .='<tr>
 				<td>'.$value['detalle'].'</td>
-				<td>'.$value['fecha']->format('Y-m-d').'</td>
+				<td>'.$value['fecha'].'</td>
 				<td>'.$value['intento'].'</td>
 				<td>'.$value['accion'].'</td>
 				<td>'.$value['estado'].'</td>
