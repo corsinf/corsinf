@@ -28,6 +28,10 @@ if (isset($_GET['listar_estudiante_representante'])) {
     echo json_encode($controlador->lista_estudiante_representante($_POST['id_representante']));
 }
 
+if (isset($_GET['listar_estudiante_representante_get'])) {
+    echo json_encode($controlador->lista_estudiante_representante($_GET['id_representante']));
+}
+
 if (isset($_GET['SaveSeguros'])) {
     echo json_encode($controlador->SaveSeguros($_POST['parametros']));
 }

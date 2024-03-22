@@ -17,12 +17,12 @@ if ($id != null && $id != '') {
 
         carga_tabla();
 
-        consultar_paralelos_datos();
+        //consultar_paralelos_datos();
     });
 
     function carga_tabla() {
         var id_docente = '<?php echo $id_docente; ?>';
-        
+
         tbl_doc_par = $('#tbl_doc_par').DataTable({
             language: {
                 url: 'https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
@@ -37,17 +37,27 @@ if ($id != null && $id != '') {
                 dataSrc: ''
             },
             columns: [{
-                data: null,
-                render: function(data, type, item) {
-                    return item.sa_sec_nombre + ' - ' + item.sa_gra_nombre + ' - ' + item.sa_par_nombre; // + ' - ' + item.docente_nombres;
+                    data: null,
+                    render: function(data, type, item) {
+                        return item.sa_sec_nombre + ' - ' + item.sa_gra_nombre + ' - ' + item.sa_par_nombre;
+                    }
+                },
+                {
+                    data: 'sa_par_id',
+                    visible: false,
                 }
-            }]
+            ],
+            initComplete: function() {
+                // Obtener los IDs de los cursos ya agregados en la tabla
+                var cursosAgregados = tbl_doc_par.rows().data().pluck('sa_par_id').toArray();
+
+                // Llamar a la función para cargar el select2
+                consultar_paralelos_datos(cursosAgregados);
+            }
         });
     }
 
-    function consultar_paralelos_datos() {
-
-
+    function consultar_paralelos_datos(cursosAgregados) {
         $('#sa_par_id').select2({
             placeholder: 'Seleccione un Curso',
             dropdownParent: $('#modal_paralelo'),
@@ -59,17 +69,17 @@ if ($id != null && $id != '') {
                 delay: 250,
                 data: function(params) {
                     return {
-                        searchTerm: params.term // Envía el término de búsqueda al servidor
+                        searchTerm: params.term,
+                        cursosAgregados: cursosAgregados // Envía los cursos ya agregados
                     };
                 },
-                processResults: function(data, params) { // Agrega 'params' como parámetro
+                processResults: function(data, params) {
                     var searchTerm = params.term.toLowerCase();
 
                     var options = data.reduce(function(filtered, item) {
-
                         var fullName = item['sa_sec_nombre'] + " - " + item['sa_gra_nombre'] + " - " + item['sa_par_nombre'];
 
-                        if (fullName.toLowerCase().includes(searchTerm)) {
+                        if (fullName.toLowerCase().includes(searchTerm) && !cursosAgregados.includes(item['sa_par_id'])) {
                             filtered.push({
                                 id: item['sa_par_id'],
                                 text: fullName
@@ -227,5 +237,3 @@ if ($id != null && $id != '') {
         </div>
     </div>
 </div>
-
-

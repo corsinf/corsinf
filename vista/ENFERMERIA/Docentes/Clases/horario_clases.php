@@ -22,6 +22,16 @@ if ($id != null && $id != '') {
         cargar_clases();
         cargar_docente_paralelo();
 
+        $('#ac_horarioC_inicio').blur(function() {
+            horaDesde = $(this).val();
+            $('#ac_horarioC_fin').val('00:00')
+        });
+
+        $('#ac_horarioC_fin').blur(function() {
+            horaHasta = $(this).val();
+            calcular_diferencia_hora();
+        });
+
     });
 
     document.addEventListener('DOMContentLoaded', function() {
@@ -457,3 +467,30 @@ if ($id != null && $id != '') {
         </div>
     </div>
 </div>
+
+<script>
+    function calcular_diferencia_hora() {
+        var horaDesde = $('#ac_horarioC_inicio').val();
+        var horaHasta = $('#ac_horarioC_fin').val();
+
+        var fechaBase = new Date('2000-01-01');
+        var fechaDesde = new Date(fechaBase.toDateString() + ' ' + horaDesde);
+        var fechaHasta = new Date(fechaBase.toDateString() + ' ' + horaHasta);
+
+        var diferenciaEnMs = fechaHasta - fechaDesde;
+
+        if (diferenciaEnMs >= 0) {
+            var diferenciaEnMinutos = Math.floor(diferenciaEnMs / (1000 * 60));
+
+            if (diferenciaEnMinutos >= 15) {
+                //alert(diferenciaEnMinutos);
+            } else {
+                Swal.fire('', 'La diferencia de tiempo debe ser mayor o igual a 15 minutos', 'info');
+                $('#ac_horarioC_fin').val('00:00');
+            }
+        } else {
+            Swal.fire('', 'La hora final de la clase no puede ser menor', 'info');
+            $('#ac_horarioC_fin').val('00:00');
+        }
+    }
+</script>

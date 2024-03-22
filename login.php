@@ -238,13 +238,13 @@
 												<input type="hidden" class="form-control" id="txt_no_concurente" name="txt_no_concurente" value="0">
 												<label for="inputEmailAddress" class="form-label">Email</label>
 												<!-- <input type="email" class="form-control" id="inputEmailAddress" placeholder="Email Address"> -->
-												<input type="email" class="form-control" id="email" placeholder="Email">
+												<input type="email" autocomplete="username" class="form-control" id="email" placeholder="Email">
 											</div>
 											<div class="col-12">
 												<label for="inputChoosePassword" class="form-label">Password</label>
 												<div class="input-group" id="show_hide_password">
 													<!-- <input type="password" class="form-control border-end-0" id="inputChoosePassword" value="12345678" placeholder="Enter Password"> -->
-													 <input type="password" class="form-control" id="pass" name="pass" placeholder="Password"> <a href="javascript:;" class="input-group-text bg-transparent"><i class='bx bx-hide'></i></a>
+													 <input type="password" autocomplete="current-password" class="form-control" id="pass" name="pass" placeholder="Password"> <a href="javascript:;" class="input-group-text bg-transparent"><i class='bx bx-hide'></i></a>
 												</div>
 											</div>
 											<!-- <div class="col-md-6">
@@ -310,7 +310,7 @@
 	</script>
 	
 	<!--app JS-->
-	<script src="assets/js/app.js"></script>
+	
 
 <div class="modal fade" id="myModal_empresas" tabindex="-1" role="dialog" data-bs-backdrop="static" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" role="document">
@@ -392,3 +392,19 @@
 </body>
 
 </html>
+
+<script>
+	var advertencia =                       
+`░██████╗████████╗░█████╗░██████╗░██╗      ¡Atención! Este mensaje está destinado a los usuarios. 
+██╔════╝╚══██╔══╝██╔══██╗██╔══██╗██║      Si alguien te ha instruido a copiar y pegar código aquí para activar
+╚█████╗░░░░██║░░░██║░░██║██████╔╝██║      una función de APUDATA con el objetivo de acceder ilegalmente a una cuenta,  
+░╚═══██╗░░░██║░░░██║░░██║██╔═══╝░╚═╝      ten en cuenta que se trata de una actividad fraudulenta.
+██████╔╝░░░██║░░░╚█████╔╝██║░░░░░██╗      Si sigues estas instrucciones, podrías poner en riesgo la seguridad de tu cuenta. 
+╚═════╝░░░░╚═╝░░░░╚════╝░╚═╝░░░░░╚═╝      Por favor, ten precaución y no compartas información personal o confidencial. 
+
+Si tienes alguna pregunta o inquietud, por favor contáctanos en el equipo de soporte de APUDATA.
+Para obtener más información, visita nuestro sitio web: https://www.corsinf.com.    
+`   ;
+
+console.log(advertencia);
+</script>

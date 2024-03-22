@@ -110,11 +110,17 @@ if ($id != null && $id != '') {
                 dataType: 'json',
                 success: function(response) {
                     //console.log(response)
+                    $('#lbl_nombre_est').html('Estudiante: ' + response[0].ac_nombre_est);
 
-                    $('#ac_reunion_motivo').val(response[0].ac_reunion_motivo);
-                    $('#ac_reunion_observacion').val(response[0].ac_reunion_observacion);
-                    $('#ac_reunion_estado').val(response[0].ac_reunion_estado);
-
+                    if (response[0].ac_reunion_estado != 0) {
+                        $('#ac_reunion_motivo').val(response[0].ac_reunion_motivo).prop('disabled', true);
+                        $('#ac_reunion_observacion').val(response[0].ac_reunion_observacion).prop('disabled', true);
+                        $('#ac_reunion_estado').val(response[0].ac_reunion_estado).prop('disabled', true);
+                    } else {
+                        $('#ac_reunion_motivo').val(response[0].ac_reunion_motivo).prop('disabled', true);
+                        $('#ac_reunion_observacion').val(response[0].ac_reunion_observacion).prop('disabled', false);
+                        $('#ac_reunion_estado').val(response[0].ac_reunion_estado).prop('disabled', false);
+                    }
                 }
             });
         }
@@ -155,13 +161,13 @@ if ($id != null && $id != '') {
         } else {
             Swal.fire('', 'Falta llenar los campos.', 'error');
         }
-        
+
         if (tabla_reunion) {
             tabla_reunion.destroy(); // Destruir la instancia existente del DataTable
         }
 
         $('#modal_agendar_reunion').modal('hide');
-        
+
         cargar_tabla();
 
     }
@@ -244,13 +250,14 @@ if ($id != null && $id != '') {
 
             <!-- Modal Header -->
             <div class="modal-header">
-                <h5>Obervaciones del Turno</h5>
+                <h5>Obervaciones de la Reunión</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
 
             <!-- Modal body -->
             <div class="modal-body">
-
+                <h6 class="text-primary" id="lbl_nombre_est"></h6>
+             
                 <div class="row">
                     <div class="col-12">
                         <label for="ac_horarioC_materia">Motivo de la Reunión <label class="text-danger">*</label></label>

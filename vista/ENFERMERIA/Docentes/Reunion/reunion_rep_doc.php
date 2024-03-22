@@ -217,7 +217,7 @@ if ($id != null && $id != '') {
         });
     }
 
-    function consultar_datos_estudiante_representante(id_representante = '') {
+    function consultar_datos_estudiante_representante1(id_representante = '') {
         var estudiantes = '<option value="">-- Seleccione un Estudiante--</option>';
 
         $.ajax({
@@ -232,12 +232,71 @@ if ($id != null && $id != '') {
                 $.each(response, function(i, item) {
 
                     nombres = item.sa_est_primer_apellido + ' ' + item.sa_est_segundo_apellido + ' ' + item.sa_est_primer_nombre + ' ' + item.sa_est_segundo_nombre;
-                    estudiantes += '<option value="' + item.sa_par_id + '">' + nombres + '</option>';
 
+                    nombre_corto = response[0].sa_est_primer_apellido + ' ' + response[0].sa_est_primer_nombre;
+
+                    estudiantes += '<option value="' + item.sa_par_id + '">' + nombres + '</option>';
                 });
 
                 $('#sa_est_id').html(estudiantes);
             }
+        });
+    }
+
+
+    function consultar_datos_estudiante_representante(id_representante = '') {
+        $('#sa_est_id').select2({
+            placeholder: 'Selecciona una opción',
+            dropdownParent: $('#modal_buscar_horario_disponible'),
+            language: {
+                inputTooShort: function() {
+                    return "Por favor ingresa 1 o más caracteres";
+                },
+                noResults: function() {
+                    return "No se encontraron resultados";
+                },
+                searching: function() {
+                    return "Buscando...";
+                },
+                errorLoading: function() {
+                    return "No se encontraron resultados";
+                }
+            },
+            ajax: {
+                url: '../controlador/estudiantesC.php?listar_estudiante_representante_get=true',
+                dataType: 'json',
+                delay: 250,
+                data: function(params) {
+                    return {
+                        id_representante: id_representante,
+                    };
+                },
+                processResults: function(data, params) {
+                    var options = data.map(function(item) {
+                        var fullName = item['sa_est_primer_apellido'] + ' ' + item['sa_est_segundo_apellido'] + ' ' + item['sa_est_primer_nombre'] + ' ' + item['sa_est_segundo_nombre'];
+                        var nombre_corto = item['sa_est_primer_apellido'] + ' ' + item['sa_est_primer_nombre'];
+                        var sa_est_id = item['sa_est_id'];
+
+                        return {
+                            id: item['sa_par_id'],
+                            text: fullName,
+                            nombre_corto: nombre_corto,
+                            sa_est_id: sa_est_id,
+                        };
+                    });
+
+                    return {
+                        results: options
+                    };
+                },
+                cache: true
+            }
+        }).on('select2:select', function(e) {
+            var nombre_corto = e.params.data.nombre_corto;
+            var sa_est_id = e.params.data.sa_est_id;
+
+            $('#ac_estudiante_id').val(sa_est_id);
+            $('#ac_nombre_est').val(nombre_corto);
         });
     }
 
@@ -268,6 +327,9 @@ if ($id != null && $id != '') {
         var ac_reunion_motivo = $('#ac_reunion_motivo').val();
         var ac_reunion_observacion = $('#ac_reunion_observacion').val();
 
+        var ac_estudiante_id = $('#ac_estudiante_id').val();
+        var ac_nombre_est = $('#ac_nombre_est').val();
+
         //alert(ac_horarioD_inicio + ' ' + ac_horarioD_fin);
 
         var parametros = {
@@ -276,6 +338,8 @@ if ($id != null && $id != '') {
             'ac_representante_id': ac_representante_id,
             'ac_reunion_motivo': ac_reunion_motivo,
             'ac_reunion_observacion': ac_reunion_observacion,
+            'ac_estudiante_id': ac_estudiante_id,
+            'ac_nombre_est': ac_nombre_est,
         }
 
         //console.log(parametros);
@@ -319,6 +383,8 @@ if ($id != null && $id != '') {
 </style>
 
 <input type="hidden" name="ac_docente_id_hidden" id="ac_docente_id_hidden">
+<input type="hidden" name="ac_estudiante_id" id="ac_estudiante_id">
+<input type="hidden" name="ac_nombre_est" id="ac_nombre_est">
 
 <div class="page-wrapper">
     <div class="page-content">
@@ -403,7 +469,7 @@ if ($id != null && $id != '') {
                 <div class="row">
                     <div class="col-12">
                         <label for="ac_horarioC_materia">Estudiante <label class="text-danger">*</label></label>
-                        <select name="sa_est_id" id="sa_est_id" class="form-select form-select-sm" onclick="consultar_datos_docente_paralelo(this.value);">
+                        <select name="sa_est_id" id="sa_est_id" class="form-select form-select-sm" onchange="consultar_datos_docente_paralelo(this.value);">
                             <option selected disabled>-- Seleccione un Estudiante --</option>
                         </select>
                     </div>

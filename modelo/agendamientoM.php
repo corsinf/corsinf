@@ -37,7 +37,7 @@ class agendamientoM
         }
 
         if ($fecha) {
-            $sql .= " AND CONVERT(VARCHAR(10), sa_conp_fecha_creacion, 120) ='" . $fecha . "'";
+            $sql .= " AND CONVERT(VARCHAR(10), sa_conp_fecha_ingreso, 120) ='" . $fecha . "'";
         }
 
         //print_r($sql);die();
