@@ -98,7 +98,7 @@ if ($id != null && $id != '') {
                     {
                         data: null,
                         render: function(data, type, item) {
-                            return '<a href="#" onclick="ver_pdf(' + item.sa_conp_id + ', \'' + item.sa_conp_tipo_consulta + '\',' + item.sa_pac_id + ', 1)"><u>' + item.sa_pac_apellidos + ' ' + item.sa_pac_nombres + '</u></a>';
+                            return '<a href="#" onclick="ver_pdf(' + item.sa_conp_id + ', \'' + item.sa_conp_tipo_consulta + '\',' + item.sa_pac_id + ')"><u>' + item.sa_pac_apellidos + ' ' + item.sa_pac_nombres + '</u></a>';
 
                         }
                     },
@@ -207,8 +207,8 @@ if ($id != null && $id != '') {
         cargar_tabla();
     }
 
-    function ver_pdf(id_consulta, tipo_consulta, sa_pac_id, btn_regresar) {
-        window.open('../vista/inicio.php?mod=7&acc=detalle_consulta&pdf_consulta=true&id_consulta=' + id_consulta + '&id_paciente=' + sa_pac_id + '&tipo_consulta=' + tipo_consulta + '&btn_regresar=' + btn_regresar, '_blank');
+    function ver_pdf(id_consulta, tipo_consulta, sa_pac_id) {
+        window.open('../vista/inicio.php?mod=7&acc=detalle_consulta&pdf_consulta=true&id_consulta=' + id_consulta + '&id_paciente=' + sa_pac_id + '&tipo_consulta=' + tipo_consulta + '&btn_regresar=docentes', '_blank');
     }
 </script>
 

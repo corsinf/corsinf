@@ -16,6 +16,7 @@ include('../modelo/notificacionesM.php');
 include('../lib/HIKVISION/Notificaciones.php');
 include('../lib/HIKVISION/HIK_TCP.php');
 
+include('../modelo/representantesM.php');
 
 
 $controlador = new consultasC();
@@ -49,6 +50,10 @@ if (isset($_GET['listar_solo_consulta'])) {
 
 if (isset($_GET['enviar_correo'])) {
     echo json_encode($controlador->enviar_correo($_POST['parametros']));
+}
+
+if (isset($_GET['enviar_correo_con'])) {
+    //echo json_encode($controlador->enviar_correo_con($_POST['id']));
 }
 
 if (isset($_GET['datos_consulta'])) {
@@ -147,6 +152,7 @@ class consultasC
     private $notificaciones;
     private $notificaciones_HV;
     private $TCP_HV;
+    private $representantesM;
     function __construct()
     {
         $this->modelo = new consultasM();
@@ -158,6 +164,8 @@ class consultasC
         $this->notificaciones = new notificacionesM();
         $this->notificaciones_HV = new NotificaionesHV('28519009', 'kTnwcJUu7OQEGHCVGSJQ');
         $this->TCP_HV = new HIK_TCP();
+
+        $this->representantesM = new representantesM();
     }
 
     function listar_todo($tabla, $fecha_inicio, $fecha_fin)
@@ -288,7 +296,7 @@ class consultasC
         if ($parametros['sa_conp_permiso_salida'] === 'SI') {
             $fechas_salida = array(
                 array('campo' => 'sa_conp_fecha_permiso_salud_salida', 'dato' => $parametros['sa_conp_fecha_permiso_salud_salida']),
-                
+
                 array('campo' => 'sa_conp_hora_permiso_salida', 'dato' => $parametros['sa_conp_hora_permiso_salida']),
                 array('campo' => 'sa_conp_permiso_tipo', 'dato' => $parametros['sa_conp_permiso_tipo']),
             );
@@ -356,6 +364,7 @@ class consultasC
                     $this->notificaciones->insertar($datos_notificaciones);
 
                     /*HIKVISION*/
+                    //Descomentar las lineas para activar el funcionamiento con HV
 
                     /*if ($parametros['sa_conp_permiso_tipo'] == 'normal') {
                         $mensaje_TCP = 'consulta_' . $id_insert;
@@ -368,6 +377,45 @@ class consultasC
                         sleep(4);
                         $this->TCP_HV->TCP_enviar($mensaje_TCP);
                     }*/
+
+                    /* Enviar mensaje a padre de familia */
+                    //Descomentar las lineas de la funcion enviar_correo_con para enviar el mensaje al correo
+                    $tipo_consulta = $parametros['sa_conp_tipo_consulta'];
+                    $id_representante = $parametros['sa_pac_temp_rep_id'];
+                    $nombre_est = $parametros['nombre_paciente'];
+                    $diagnostico = '';
+                    $permiso_salida = '';
+                    if ($parametros['sa_conp_permiso_salida'] == 'SI') {
+                        $permiso_salida = $parametros['sa_conp_permiso_tipo'];
+                    } else {
+                        $permiso_salida = 'NO';
+                    }
+
+                    if ($tipo_consulta == 'consulta') {
+                        $diagnostico = $parametros['sa_conp_diagnostico_1'];
+                        $this->enviar_correo_con($id_representante, $nombre_est, $diagnostico, $tipo_consulta, $permiso_salida);
+                    } else {
+                        $diagnostico = $parametros['sa_conp_diagnostico_certificado'];
+                        $this->enviar_correo_con($id_representante, $nombre_est, $diagnostico, $tipo_consulta, $permiso_salida);
+                    }
+
+                    $url_rep_noti = '../vista/inicio.php?mod=7&acc=detalle_consulta&pdf_consulta=true&id_consulta=' . $id_insert . '&tipo_consulta=' . $parametros['sa_conp_tipo_consulta']. '&btn_regresar=represententes';
+
+                    $datos_notificaciones = array(
+                        array('campo' => 'GLO_modulo', 'dato' => '7'),
+                        array('campo' => 'GLO_titulo', 'dato' => $parametros['sa_conp_tipo_consulta']),
+                        array('campo' => 'GLO_cuerpo', 'dato' => $parametros['nombre_paciente']),
+                        array('campo' => 'GLO_icono', 'dato' => $icono),
+                        array('campo' => 'GLO_tabla', 'dato' => 'representantes'),
+                        array('campo' => 'GLO_id_tabla', 'dato' => $id_representante),
+                        array('campo' => 'GLO_busqueda_especifica', 'dato' => $id_insert),
+                        array('campo' => 'GLO_desc_busqueda', 'dato' => 'Para mostrar consulta al representante'),
+                        array('campo' => 'GLO_link_redirigir', 'dato' => $url_rep_noti),
+                        array('campo' => 'GLO_rol', 'dato' => 'REPRESENTANTE'),
+                        array('campo' => 'GLO_observacion', 'dato' => ''),
+                    );
+
+                    $this->notificaciones->insertar($datos_notificaciones);
                 }
 
 
@@ -441,7 +489,97 @@ class consultasC
             //    Notificaciones
             /* ----------------------*/
 
+            $icono = "bx bxs-file-plus";
 
+            if ($parametros['txt_paciente_tabla'] == 'estudiantes') {
+                //Notificacion para el docente
+                $datos_notificaciones = array(
+                    array('campo' => 'GLO_modulo', 'dato' => '7'),
+                    array('campo' => 'GLO_titulo', 'dato' => $parametros['sa_conp_tipo_consulta']),
+                    array('campo' => 'GLO_cuerpo', 'dato' => $parametros['nombre_paciente']),
+                    array('campo' => 'GLO_icono', 'dato' => $icono),
+                    array('campo' => 'GLO_tabla', 'dato' => 'docentes'),
+                    array('campo' => 'GLO_id_tabla', 'dato' => ''),
+                    array('campo' => 'GLO_busqueda_especifica', 'dato' => $parametros['sa_id_paralelo']),
+                    array('campo' => 'GLO_desc_busqueda', 'dato' => 'Para listar los estudiantes con el docente respectivo'),
+                    array('campo' => 'GLO_link_redirigir', 'dato' => '../vista/inicio.php?acc=historial_salud_estudiantil'),
+                    array('campo' => 'GLO_rol', 'dato' => 'docentes'),
+                    array('campo' => 'GLO_observacion', 'dato' => ''),
+                );
+
+                $this->notificaciones->insertar($datos_notificaciones);
+
+                //Notificacion para el inspector
+                $datos_notificaciones = array(
+                    array('campo' => 'GLO_modulo', 'dato' => '7'),
+                    array('campo' => 'GLO_titulo', 'dato' => $parametros['sa_conp_tipo_consulta']),
+                    array('campo' => 'GLO_cuerpo', 'dato' => $parametros['nombre_paciente']),
+                    array('campo' => 'GLO_icono', 'dato' => $icono),
+                    array('campo' => 'GLO_tabla', 'dato' => ''),
+                    array('campo' => 'GLO_id_tabla', 'dato' => ''),
+                    array('campo' => 'GLO_busqueda_especifica', 'dato' => ''),
+                    array('campo' => 'GLO_desc_busqueda', 'dato' => 'Para listar todas las consultas de estudiantes'),
+                    array('campo' => 'GLO_link_redirigir', 'dato' => '../vista/inicio.php?acc=consultas'),
+                    array('campo' => 'GLO_rol', 'dato' => 'INSPECTOR'),
+                    array('campo' => 'GLO_observacion', 'dato' => ''),
+                );
+
+                $this->notificaciones->insertar($datos_notificaciones);
+
+                /*HIKVISION*/
+                //Descomentar las lineas para activar el funcionamiento con HV
+
+                /*if ($parametros['sa_conp_permiso_tipo'] == 'normal') {
+                    $mensaje_TCP = 'consulta_' . $id_insert;
+                    $this->notificaciones_HV->crear_Evento_usuario('SALUD ' . $parametros['nombre_apellido_paciente'] . $id_insert, $mensaje_TCP, 3);
+                    sleep(4);
+                    $this->TCP_HV->TCP_enviar($mensaje_TCP);
+                } else if ($parametros['sa_conp_permiso_tipo'] == 'emergencia') {
+                    $mensaje_TCP = 'conulta_' . $id_insert;
+                    $this->notificaciones_HV->crear_Evento_usuario('SALUD ' . $parametros['nombre_apellido_paciente'] . $id_insert, $mensaje_TCP, 2);
+                    sleep(4);
+                    $this->TCP_HV->TCP_enviar($mensaje_TCP);
+                }*/
+
+                /* Enviar mensaje a padre de familia */
+                //Descomentar las lineas de la funcion enviar_correo_con para enviar el mensaje al correo
+                $tipo_consulta = $parametros['sa_conp_tipo_consulta'];
+                $id_representante = $parametros['sa_pac_temp_rep_id'];
+                $nombre_est = $parametros['nombre_paciente'];
+                $diagnostico = '';
+                $permiso_salida = '';
+                if ($parametros['sa_conp_permiso_salida'] == 'SI') {
+                    $permiso_salida = $parametros['sa_conp_permiso_tipo'];
+                } else {
+                    $permiso_salida = 'NO';
+                }
+
+                if ($tipo_consulta == 'consulta') {
+                    $diagnostico = $parametros['sa_conp_diagnostico_1'];
+                    $this->enviar_correo_con($id_representante, $nombre_est, $diagnostico, $tipo_consulta, $permiso_salida);
+                } else {
+                    $diagnostico = $parametros['sa_conp_diagnostico_certificado'];
+                    $this->enviar_correo_con($id_representante, $nombre_est, $diagnostico, $tipo_consulta, $permiso_salida);
+                }
+
+                $url_rep_noti = '../vista/inicio.php?mod=7&acc=detalle_consulta&pdf_consulta=true&id_consulta=' . $parametros['sa_conp_id'] . '&tipo_consulta=' . $parametros['sa_conp_tipo_consulta']. '&btn_regresar=represententes';
+
+                $datos_notificaciones = array(
+                    array('campo' => 'GLO_modulo', 'dato' => '7'),
+                    array('campo' => 'GLO_titulo', 'dato' => $parametros['sa_conp_tipo_consulta']),
+                    array('campo' => 'GLO_cuerpo', 'dato' => $parametros['nombre_paciente']),
+                    array('campo' => 'GLO_icono', 'dato' => $icono),
+                    array('campo' => 'GLO_tabla', 'dato' => 'representantes'),
+                    array('campo' => 'GLO_id_tabla', 'dato' => $id_representante),
+                    array('campo' => 'GLO_busqueda_especifica', 'dato' => $parametros['sa_conp_id']),
+                    array('campo' => 'GLO_desc_busqueda', 'dato' => 'Para mostrar consulta al representante'),
+                    array('campo' => 'GLO_link_redirigir', 'dato' => $url_rep_noti),
+                    array('campo' => 'GLO_rol', 'dato' => 'REPRESENTANTE'),
+                    array('campo' => 'GLO_observacion', 'dato' => ''),
+                );
+
+                $this->notificaciones->insertar($datos_notificaciones);
+            }
 
 
             /////////////////////////////////////////////////////////////////////////////////
@@ -580,6 +718,39 @@ class consultasC
         $datos[0]['dato'] = $id;
         $datos = $this->modelo->eliminar($datos);
         return $datos;
+    }
+
+    function enviar_correo_con($id_representante, $nombres_est = '', $diagnostico = '', $tipo_consulta = '', $permiso_salida = '')
+    {
+        date_default_timezone_set('America/Guayaquil');
+        $fecha_actual = date('Y-m-d H:i:s');
+        $mensaje = '';
+
+        $correo_rep = $this->representantesM->lista_representantes($id_representante);
+        $correo_rep = $correo_rep[0]['sa_rep_correo'];
+
+        if ($tipo_consulta == 'consulta') {
+            $mensaje .= 'Me comunico con usted en calidad para informarle sobre el diagnóstico médico reciente de ' . $nombres_est . ".<br><br>";
+            $mensaje .= '<b>Diagnóstico: </b>' . $diagnostico . "<br><br>";
+            $mensaje .= '<b>Hora de atención: </b>' . $fecha_actual . "<br><br>";
+            $mensaje .= '<b>Motivo: </b>' . strtoupper($tipo_consulta) . "<br><br>";
+            $mensaje .= '<b>Permiso de salida: </b>' . strtoupper($permiso_salida) . "<br>";
+        } else {
+            $mensaje .= 'Me comunico con usted en calidad para informarle sobre la entrega del certficado médico reciente de ' . $nombres_est . ".<br><br>";
+            $mensaje .= '<b>Diagnóstico: </b>' . $diagnostico . "<br><br>";
+            $mensaje .= '<b>Hora de atención: </b>' . $fecha_actual . "<br><br>";
+            $mensaje .= '<b>Motivo: </b>' . strtoupper($tipo_consulta) . "<br><br>";
+        }
+
+        // print_r($parametros);die();
+        $to_correo = $correo_rep;
+        $titulo_correo = 'ATENCION - DEPARTAMENTO MEDICO';
+        $cuerpo_correo = $mensaje;
+
+        //Descomentar para enviar al correo la notficacion
+        //return $this->email->enviar_email($to_correo, $cuerpo_correo, $titulo_correo, $correo_respaldo = 'soporte@corsinf.com', $archivos = false, $titulo_correo, true);
+
+        return true;
     }
 
     function enviar_correo($parametros)

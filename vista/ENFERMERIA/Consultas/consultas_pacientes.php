@@ -167,7 +167,7 @@ if (isset($_GET['pac_id'])) {
 
   function ver_pdf(id_consulta, tipo_consulta) {
     //console.log(id_consulta);
-    window.open('../vista/inicio.php?mod=7&acc=detalle_consulta&pdf_consulta=true&id_consulta=' + id_consulta + '&id_paciente=' + <?= $sa_pac_id; ?> + '&tipo_consulta=' + tipo_consulta, '_blank');
+    window.open('../vista/inicio.php?mod=7&acc=detalle_consulta&pdf_consulta=true&id_consulta=' + id_consulta + '&id_paciente=' + <?= $sa_pac_id; ?> + '&btn_regresar=admin' + '&tipo_consulta=' + tipo_consulta, '_blank');
   }
 </script>
 

@@ -136,7 +136,7 @@ function notificaciones_1(parametros) {
 
       $.each(response, function (i, item) {
 
-        tiempo_trans = calcularTiempoTranscurrido(item.GLO_fecha_creacion.date)
+        tiempo_trans = calcularTiempoTranscurrido(item.GLO_fecha_creacion)
 
         salida +=
           `<a class="dropdown-item" href="${item.GLO_link_redirigir}">
@@ -170,12 +170,14 @@ function notificaciones_1(parametros) {
 function calcularTiempoTranscurrido(fecha_consulta) {
   // Convierte la fecha de consulta a un objeto Date
   fecha_consulta_format = new Date(fecha_consulta);
+  // Obtiene la hora actual ajustada a la zona horaria de Quito o Guayaquil
+  fechaActual = new Date().toLocaleString('en-US', { timeZone: 'America/Guayaquil' });
 
-  // Obtiene la fecha y hora actual
-  fechaActual = new Date();
+  // Convierte la hora actual a un objeto Date
+  fechaActual_format = new Date(fechaActual);
 
   // Calcula la diferencia en milisegundos
-  diferencia_milisegundos = fechaActual - fecha_consulta_format;
+  diferencia_milisegundos = fechaActual_format - fecha_consulta_format;
 
   // Convierte la diferencia a segundos, minutos y horas
   diferencia_segundos = Math.floor(diferencia_milisegundos / 1000);

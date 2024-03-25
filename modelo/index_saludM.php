@@ -44,7 +44,8 @@ class index_saludM
 
     function total_Agendas()
     {
-        $sql = " SELECT count(*) as total from consultas_medicas where sa_conp_estado_revision = 0 and sa_conp_fecha_creacion > '" . date('Ymd') . "'";
+        //sa_conp_fecha_creacion
+        $sql = " SELECT count(*) as total from consultas_medicas where sa_conp_estado_revision = 0 and sa_conp_fecha_ingreso = '" . date('Ymd') . "'";
         // print_r($sql);die();
         $datos = $this->db->datos($sql);
         return $datos[0]['total'];

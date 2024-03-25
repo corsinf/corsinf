@@ -107,12 +107,12 @@ if ($dominio != 'localhost') {
 
 		var mod = '<?php echo $_SESSION['INICIO']['MODULO_SISTEMA']; ?>';
 
-		var rol = '<?php echo $_SESSION['INICIO']['TIPO']; ?>';
+		var TIPO = '<?php echo $_SESSION['INICIO']['TIPO']; ?>';
 		var tabla = '<?php echo $_SESSION['INICIO']['NO_CONCURENTE_TABLA']; ?>';
 		var id_tabla = '<?php echo $_SESSION['INICIO']['NO_CONCURENTE']; ?>';
 
 		var parametros_noti = {
-			'rol': rol,
+			'rol': TIPO,
 			'tabla': tabla,
 			'id_tabla': id_tabla,
 		}
@@ -121,11 +121,12 @@ if ($dominio != 'localhost') {
 		$(document).ready(function() {
 			restriccion();
 			//notificaciones();
+			notificaciones_1(parametros_noti);
 
 			//Descomentar el settime 
-			/*setInterval(function() {
+			setInterval(function() {
 				notificaciones_1(parametros_noti);
-			}, 6000);*/
+			}, 6000);
 
 			solicitudes();
 		});
@@ -762,7 +763,7 @@ if ($dominio != 'localhost') {
 								<div class="dropdown-menu dropdown-menu-end">
 									<a href="javascript:;">
 										<div class="msg-header">
-											<p class="msg-header-title">Notificationes</p>
+											<p class="msg-header-title">Notificaciones</p>
 											<!-- <p class="msg-header-clear ms-auto">Marks all as read</p> -->
 										</div>
 									</a>

@@ -21,7 +21,7 @@ class notificacionesM
         $tabla = $parametros['tabla'];
         $id_tabla = $parametros['id_tabla'];
 
-        if ($rol == 'DOCENTES' || $rol == 'INSPECTOR') {
+        if ($rol == 'DOCENTES' || $rol == 'INSPECTOR' || $rol == 'REPRESENTANTE') {
             $sql =
                 "SELECT 
                 ntc.GLO_id,
@@ -51,6 +51,10 @@ class notificacionesM
 
             if ($tabla == 'docentes') {
                 $sql .= " AND doc.sa_doc_id = $id_tabla";
+            }
+
+            if ($tabla == 'representantes') {
+                $sql .= " AND GLO_id_tabla = $id_tabla";
             }
 
             if ($rol == 'INSPECTOR') {

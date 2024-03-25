@@ -20,7 +20,22 @@ if (isset($_GET['id_paciente'])) {
 
 $btn_regresar = '';
 if (isset($_GET['btn_regresar'])) {
+
+    $btn_regresar_temp = $_GET['btn_regresar'];
+
     $btn_regresar = $_GET['btn_regresar'];
+
+    if ($btn_regresar == 'admin') {
+        $btn_regresar = '../vista/inicio.php?mod=7&acc=consultas_pacientes&pac_id=' . $id_paciente;
+    } else if ($btn_regresar == 'represententes') {
+        $btn_regresar = '../vista/inicio.php?mod=7&acc=index';
+    } else if ($btn_regresar == 'docentes') {
+        $btn_regresar = '../vista/inicio.php?acc=historial_salud_estudiantil';
+    } else if ($btn_regresar == 'consultas_m') {
+        $btn_regresar = '../vista/inicio.php?acc=consultas';
+    } else {
+        $btn_regresar = '../vista/inicio.php?mod=7&acc=index';
+    }
 }
 
 ?>
@@ -83,7 +98,15 @@ if (isset($_GET['btn_regresar'])) {
 
                 if (response == 1) {
                     Swal.fire('', 'Operacion realizada con exito.', 'success').then(function() {
-                        location.href = '../vista/inicio.php?mod=7&acc=consultas_pacientes&pac_id=<?= $id_paciente; ?>';
+
+
+                        <?php if ($btn_regresar_temp == 'consultas_m') { ?>
+                            location.href = '../vista/inicio.php?mod=7&acc=consultas';
+                        <?php } else if ($btn_regresar_temp == 'admin') { ?>
+                            location.href = '../vista/inicio.php?mod=7&acc=consultas_pacientes&pac_id=<?= $id_paciente; ?>';
+                        <?php  } else { ?>
+                            location.href = '../vista/inicio.php?mod=7&acc=index';
+                        <?php } ?>
                     });
                 } else if (response == -2) {
                     Swal.fire('', 'Código ya registrado', 'success');
@@ -128,33 +151,33 @@ if (isset($_GET['btn_regresar'])) {
                             </div>
                             <h5 class="mb-0 text-primary">Formulario de Consulta</h5>
 
-                            <?php if ($btn_regresar == '') { ?>
+                            <?php if ($btn_regresar != '') { ?>
                                 <div class="row m-2">
                                     <div class="col-sm-12">
-                                        <a href="../vista/inicio.php?mod=7&acc=consultas_pacientes&pac_id=<?= $id_paciente; ?>" class="btn btn-outline-dark btn-sm"><i class="bx bx-arrow-back"></i> Regresar</a>
+                                        <a href="<?= $btn_regresar ?>" class="btn btn-outline-dark btn-sm"><i class="bx bx-arrow-back"></i> Regresar</a>
                                     </div>
                                 </div>
                             <?php } ?>
 
                         </div>
-                        
+
                         <hr>
 
                         <div class="content">
                             <!-- Content Header (Page header) -->
-                            <input type="hidden" id="sa_conp_id" name="sa_conp_id" value="<?= $id_consulta; ?>">
-
-                            <div class="row pt-2">
-                                <div class="col-md-12">
-                                    <label for="" class="form-label">Observaciones <label style="color: red;">*</label> </label>
-                                    <textarea name="sa_conp_observaciones" id="sa_conp_observaciones" cols="30" rows="2" class="form-control" placeholder="Motivo de la consulta"></textarea>
+                            <?php if ($btn_regresar_temp == 'admin' || $btn_regresar_temp == 'consultas_m') { ?>
+                                <input type="hidden" id="sa_conp_id" name="sa_conp_id" value="<?= $id_consulta; ?>">
+                                <div class="row pt-2">
+                                    <div class="col-md-12">
+                                        <label for="" class="form-label">Observaciones <label style="color: red;">*</label> </label>
+                                        <textarea name="sa_conp_observaciones" id="sa_conp_observaciones" cols="30" rows="2" class="form-control" placeholder="Motivo de la consulta"></textarea>
+                                    </div>
                                 </div>
-                            </div>
 
-                            <div class="modal-footer pt-2" id="seccion_boton_consulta">
-                                <button class="btn btn-success btn-sm px-2 m-1" onclick="editar_insertar()" type="button"><i class="bx bx-save"></i> Guardar</button>
-                            </div>
-
+                                <div class="modal-footer pt-2" id="seccion_boton_consulta">
+                                    <button class="btn btn-success btn-sm px-2 m-1" onclick="editar_insertar()" type="button"><i class="bx bx-save"></i> Guardar</button>
+                                </div>
+                            <?php } ?>
 
                             <div class="col">
                                 <h6 class="mb-0 text-uppercase">Documentos</h6>
