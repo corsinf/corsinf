@@ -20,7 +20,7 @@ class localizacionM
 	{
 		// $sql = "SELECT ID_MARCA,CODIGO,DESCRIPCION FROM localizacion ";
 		$sql = "SELECT ID_LOCATION,CENTRO,EMPLAZAMIENTO,DENOMINACION FROM LOCATION WHERE ESTADO='A' and DENOMINACION+''+EMPLAZAMIENTO LIKE '%".$query."%' ORDER BY ID_LOCATION DESC OFFSET ".$ini." ROWS FETCH NEXT ".$fin." ROWS ONLY;";
-		 //print_r($sql);die();
+		 // print_r($sql);die();
 		$datos = $this->db->datos($sql);
 		return $datos;
 	}

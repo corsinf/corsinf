@@ -200,7 +200,8 @@ class ligar_segurosC
 	{
 		$tabla = $parametros['tbl'];
 		$lista = array();
-		$datos = $this->modelo->campos_tabla($tabla);
+		$query = $parametros['q'];
+		$datos = $this->modelo->campos_tabla($tabla,$query);
 		foreach ($datos as $key => $value) {
 			
 			$lista[] = array('id'=>$value['COLUMN_NAME'],'text'=>$value['COLUMN_NAME']); 

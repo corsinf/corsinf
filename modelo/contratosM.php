@@ -110,7 +110,7 @@ class contratosM
 
 	function lista_articulos($query=false)
 	{
-		$sql = "SELECT id_plantilla,COMPANYCODE,A.TAG_SERIE,P.DESCRIPT,DESCRIPT2,MODELO,SERIE,EMPLAZAMIENTO,L.DENOMINACION,PE.PERSON_NO,PE.PERSON_NOM,M.DESCRIPCION as 'marca',E.DESCRIPCION as 'estado',G.DESCRIPCION as 'genero',C.DESCRIPCION as 'color',FECHA_INV_DATE,ASSETSUPNO,ASSETSUPNO,TAG_ANT,QUANTITY,BASE_UOM,ORIG_ASSET,ORIG_ACQ_YR,ORIG_VALUE,CARACTERISTICA,PROYECTO.programa_financiacion as 'criterio',TAG_UNIQUE,SUBNUMBER,OBSERVACION,IMAGEN  FROM PLANTILLA_MASIVA P
+		$sql = "SELECT top(100) id_plantilla,COMPANYCODE,A.TAG_SERIE,P.DESCRIPT,DESCRIPT2,MODELO,SERIE,EMPLAZAMIENTO,L.DENOMINACION,PE.PERSON_NO,PE.PERSON_NOM,M.DESCRIPCION as 'marca',E.DESCRIPCION as 'estado',G.DESCRIPCION as 'genero',C.DESCRIPCION as 'color',FECHA_INV_DATE,ASSETSUPNO,ASSETSUPNO,TAG_ANT,QUANTITY,BASE_UOM,ORIG_ASSET,ORIG_ACQ_YR,ORIG_VALUE,CARACTERISTICA,PROYECTO.programa_financiacion as 'criterio',TAG_UNIQUE,SUBNUMBER,OBSERVACION,IMAGEN  FROM PLANTILLA_MASIVA P
 			LEFT JOIN ASSET A ON P.ID_ASSET = A.ID_ASSET
 			LEFT JOIN LOCATION L ON P.LOCATION = L.ID_LOCATION
 			LEFT JOIN PERSON_NO PE ON P.PERSON_NO = PE.ID_PERSON
@@ -124,14 +124,16 @@ class contratosM
 			{
 				$sql.="  AND A.TAG_SERIE +' '+DESCRIPT LIKE '%".$query."%'";
 			}
-		$sql.=" ORDER BY id_plantilla	OFFSET 0 ROWS FETCH NEXT 25 ROWS ONLY;";
+		//$sql.=" ORDER BY id_plantilla	OFFSET 0 ROWS FETCH NEXT 25 ROWS ONLY;";
+
+		// print_r($sql);die();
 		$datos = $this->db->datos($sql);
 		return $datos;
 	}
 
 	function asignar_a_seguro($tabla,$campo,$query=false)
 	{
-		$sql = "SELECT *,".$campo." as texto FROM ".$tabla." where  1=1 ";
+		$sql = "SELECT Top(100) *,".$campo." as texto FROM ".$tabla." where  1=1 ";
 
 		if($query)
 		{
@@ -261,7 +263,7 @@ class contratosM
 			WHERE 1=1 ";
 			if($id)
 			{
-				$sql.=" AND id_articulo = '".$id."'";
+				$sql.=" AND id_articulos = '".$id."'";
 			}
 
 			// print_r($sql);die();

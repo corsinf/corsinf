@@ -90,7 +90,7 @@
         placeholder: 'Seleccione articulo / activo para ver detalle de seguro',
         width:'100%',
         ajax: {
-          url:   '../controlador/contratoC.php?lista_articulos=true',
+          url:   '../controlador/contratoC.php?lista_articulos=true&tabla=ACTIVO',
           dataType: 'json',
           delay: 250,
           processResults: function (data) {
@@ -124,6 +124,8 @@
               console.log(response)
               if (response.length>0)
                {                
+                console.log('entra');
+                $('#lbl_alerta').css('display','none');
                 $('#div_datos').css('display','block');
                 data = response[0];
                 $("#lbl_proveedor").text(data.nombre);           
@@ -139,6 +141,8 @@
                }else
                {
                 $('#div_datos').css('display','none');
+                $('#lbl_alerta').css('display','block');
+
                }
           }
         });
@@ -180,6 +184,17 @@
                 </div>  
               </div>
             </div>
+            <div class="alert alert-warning border-0 bg-warning alert-dismissible fade show py-2" id="lbl_alerta" style="display: none;">
+                  <div class="d-flex align-items-center">
+                    <div class="font-35 text-dark"><i class="bx bx-info-circle"></i>
+                    </div>
+                    <div class="ms-3">
+                      <h6 class="mb-0 text-dark">Sin seguro registrado</h6>
+                      <div class="text-dark">El activo seleccionado no tiene un seguro registrado!</div>
+                    </div>
+                  </div>
+                  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
 
             <div class="card" id="div_datos" style="display: none;">
               <div class="card-body">

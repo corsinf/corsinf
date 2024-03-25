@@ -162,17 +162,30 @@ class articulosC
 	function lista_articulos($parametros)
 	{
 		// print_r($parametros);die();
+		$coincidencia=false;$multiple=false;$buscar_por=false;
 		$query = $parametros['query'];
 		$loc = $parametros['localizacion'];
 		$cus = $parametros['custodio'];
 		$pag = $parametros['pag'];
-		$coincidencia = $parametros['exacto'];
-		$multiple = $parametros['multiple'];
-		$buscar_por = $parametros['buscar_por']; 
-		if($parametros['desde']!=''){ $desde = $parametros['desde'];}else{$desde = false;}
-		if($parametros['hasta']!=''){ $hasta = $parametros['hasta'];}else{$hasta = false;}
+		if(isset($parametros['exacto']))
+		{
+			$coincidencia = $parametros['exacto'];
+		}
+		if(isset($parametros['multiple']))
+		{
+			$multiple = $parametros['multiple'];
+		}
+		if(isset($parametros['buscar_por']))
+		{
+			$buscar_por = $parametros['buscar_por']; 
+		}
+		if(isset($parametros['desde']) && $parametros['desde']!=''){ $desde = $parametros['desde'];}else{$desde = false;}
+		if(isset($parametros['hasta']) && $parametros['hasta']!=''){ $hasta = $parametros['hasta'];}else{$hasta = false;}
 
-		$_SESSION['INICIO']['LISTA_ART'] = $parametros['lista'];
+		if(isset($parametros['lista']))
+		{
+			$_SESSION['INICIO']['LISTA_ART'] = $parametros['lista'];
+		}
 
 		$datos = $this->modelo->cantidad_registros_new($query,$loc,$cus,false,$desde,$hasta,$coincidencia,$multiple,$buscar_por);
 
@@ -185,6 +198,8 @@ class articulosC
 			$pag = false;
 			$datos= $this->modelo->lista_articulos_new($query,$loc,$cus,$pag,$desde,$hasta,$coincidencia,$multiple,$buscar_por);
 		}
+
+		// print_r($datos);die();
 		
 		//$datos = array_map(array($this->cod_global, 'transformar_array_encode'), $datos);
 		$datos2 = array('datos'=>$datos,'cant'=>$total_reg);
@@ -598,7 +613,7 @@ class articulosC
 
 		$datos = $this->modelo->ejecutar_sql($reporte['sql']);
 
-		// print_r($datos);die();
+		print_r($datos);die();
 
 		$header = array();
 		$cant_header = 0;

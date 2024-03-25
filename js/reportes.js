@@ -279,6 +279,48 @@ function paginacion(num)
   detalle_reporte(id);  
 }
 
+function eliminar_reporte(id)
+{
+	 Swal.fire({
+      title: 'Quiere eliminar este registro?',
+      text: "Esta seguro de eliminar este registro!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Si'
+    }).then((result) => {
+        if (result.value) {
+        	eliminar_repo(id)
+        }
+    })
+
+}
+
+function eliminar_repo(id)
+{
+		$.ajax({
+		  data:  {id,id},
+		  url:  '../controlador/reportesC.php?eliminar_reporte=true',
+		  type:  'post',
+		  dataType: 'json',
+		  /*beforeSend: function () {   
+		       var spiner = '<div class="text-center"><img src="../img/gif/proce.gif" width="100" height="100"></div>'     
+		     $('#tabla_').html(spiner);
+		  },*/
+		    success:  function (response) {
+		    	if(response==1)
+		    	{
+		    		lista_reportes();
+		    	}
+		  },
+		  error: function(xhr, status, error) {
+		    // Manejo de errores
+		    console.log(error);
+		  }
+		});
+}
+
 
 
 

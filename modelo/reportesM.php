@@ -96,6 +96,12 @@ class reportesM
 		return $this->db->datos($sql);
 	}
 
+	function eliminar_reportes($id)
+	{
+		$sql = "DELETE FROM REPORTE WHERE ID_REPORTE = '".$id."'";
+		return $this->db->sql_string($sql);
+	}
+
 }
 
 ?>

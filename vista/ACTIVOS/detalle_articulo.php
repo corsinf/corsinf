@@ -581,7 +581,7 @@ function guardar_kit()
         $('#lbl_rfid').html(response[0].rfid);
         $('#lbl_tag_ant').html('<b>Tag Antiguo:</b>'+response[0].ant);
         $('#lbl_serie').text(response[0].SERIE);
-        $('#lbl_fecha_inve').text(response[0].fecha.date);
+        $('#lbl_fecha_inve').text(formatoDate(response[0].fecha));
         $('#lbl_modelo').text(response[0].MODELO);
         // $('#txt_id').val(response[0].id_A);        
         // $('#txt_idA_img').val(response[0].id_A);
@@ -597,7 +597,7 @@ function guardar_kit()
         }
         // $('#txt_nom_img').val(response[0].tag_s);
         $('#lbl_unidad').text('/'+response[0].BASE_UOM);
-        $('#lbl_fecha_compra').text(response[0].ORIG_ACQ_YR.date);
+        $('#lbl_fecha_compra').text(formatoDate(response[0].ORIG_ACQ_YR));
 
         if(response[0].CARACTERISTICA!='')
         {
@@ -614,7 +614,7 @@ function guardar_kit()
         bajas = false;terceros = false; patri = false;
         if(response[0].PATRIMONIALES=='1')
         {
-          $('#lbl_tipo').html('<div class="text-warning">ACTIVO PATRIONIAL</div>');
+          $('#lbl_tipo').html('<div class="text-warning">ACTIVO PATRIMONIAL</div>');
         }
         if(response[0].TERCEROS=='1')
         {          
@@ -676,7 +676,7 @@ function guardar_kit()
         success:  function (response) {   
         $.each(response,function(i,item){
         	console.log(item);
-        	table+="<tr><td>"+item.ob+"</td><td style='white-space: nowrap;'>"+item.fe+"</td><td>"+item.codigo_ant+"</td><td>"+item.dante+"</td><td>"+item.codigo_nue+"</td><td>"+item.dnuevo+"</td><td>"+item.responsable+"</td></tr>"
+        	table+="<tr><td>"+item.ob+"</td><td style='white-space: nowrap;'>"+formatoDate(item.fe)+"</td><td>"+item.codigo_ant+"</td><td>"+item.dante+"</td><td>"+item.codigo_nue+"</td><td>"+item.dnuevo+"</td><td>"+item.responsable+"</td></tr>"
         });
         $('#table_contenido').html(table); 
 

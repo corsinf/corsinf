@@ -28,15 +28,17 @@ function cargar_lineas_solicitud(id)
           }
           trs+='</td></tr>';
 
-          tre+='<tr><td>'+item.codigo+'</td><td>'+item.item+'</td><td>'+item.salida+'</td><td><textarea class="form-control" id="txt_l_entrada_'+item.idls+'">'+item.entrada+'</textarea></td><td>';
+          tre+='<tr><td>'+item.codigo+'</td><td>'+item.item+'</td><td>'+item.salida+'</td><td><textarea class="form-control" rows="1" id="txt_l_entrada_'+item.idls+'">'+item.entrada+'</textarea></td><td>';
           if(estado==0)
           {
             tre+='<button class="btn btn-primary btn-sm" onclick="detalle_entrada('+item.idls+')" ><i class="bx bx-save"></i></button>';
           }
           tre+='</td></tr>';
       	})
+        console.log(ids);
 
-        ids = ids.substring(1,-1);
+        ids = ids.slice(0,-1);
+        // console.log(ids);
         $('#txt_lineas').val(ids);
       	$('#tbl_lineas').html(tr);
         $('#tbl_lineas_salida').html(trs);
@@ -46,6 +48,9 @@ function cargar_lineas_solicitud(id)
         {
           var url = '../lib/Reporte_pdf.php?reporte_cedula_lista=true&id='+ids
           $('#iframe').attr('src',url);
+        }else
+        {
+          $('#lbl_no_activo').css('display','block')
         }
       }
     });
@@ -112,8 +117,8 @@ function cargar_solicitud(id)
         response = response[0];
         $('#lbl_responsable').text(response.PERSON_NOM);
         $('#lbl_destino').text(response.destino);
-        $('#lbl_fechas').text(response.fecha_salida.date.substr(0,10));
-        $('#lbl_fechae').text(response.fecha_regreso.date.substr(0,10));
+        $('#lbl_fechas').text(response.fecha_salida.substr(0,10));
+        $('#lbl_fechae').text(response.fecha_regreso.substr(0,10));
         $('#lbl_motivo').text(response.observacion);
         $('#lbl_duracion').text(response.duracion);
         var broker = response.fecha_notificacion_broker;

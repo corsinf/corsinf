@@ -298,7 +298,7 @@ class generar_word
             $compra = '';
             if($value["FECHA_COMPRA"]!='')
             {
-                $compra = $value["FECHA_COMPRA"]->format('Y-m-d');
+                $compra = $value["FECHA_COMPRA"];
             }
             // print_r($value);die();
             $table->addRow();
@@ -1825,11 +1825,11 @@ class generar_word
 
         $table->addRow();
         $table->addCell(3000, $alineacionLEFT)->addText('Fecha de Salida', $fuente,$alineacionLEFT);
-        $table->addCell(2000, $alineacionCenter)->addText($datos_soli[0]['fecha_salida']->format('Y-m-d'), $fuente,$alineacionLEFT);
+        $table->addCell(2000, $alineacionCenter)->addText($datos_soli[0]['fecha_salida'], $fuente,$alineacionLEFT);
 
         $table->addRow();
         $table->addCell(3000, $alineacionLEFT)->addText('Fecha de entrada', $fuente,$alineacionLEFT);
-        $table->addCell(7000, $alineacionCenter)->addText($datos_soli[0]['fecha_regreso']->format('Y-m-d'), $fuente,$alineacionLEFT);
+        $table->addCell(7000, $alineacionCenter)->addText($datos_soli[0]['fecha_regreso'], $fuente,$alineacionLEFT);
 
         $table->addRow();
         $table->addCell(3000, $alineacionLEFT)->addText('duracion / tiempo Estimado', $fuente,$alineacionLEFT);

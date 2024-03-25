@@ -99,17 +99,25 @@ class db
 		// print_r($sql);die();
 		$this->parametros_conexion($master);
 		$conn = $this->conexion();
-		$stmt = sqlsrv_query($conn, $sql);
 		$result = array();
-		while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
-			$result[] = $row;
+
+		try {
+			$stmt = $conn->prepare($sql);
+    		$stmt->execute();
+    		while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+		        $result[] = $row;
+		    }
+
+		    $conn=null;
+		    if (count($result) == 0) {
+				return -1;
+				} else {
+					return 1;
+				}
+			
+		} catch (Exception $e) {
+			die(print_r(sqlsrv_errors(), true));
 		}
-		if (count($result) == 0) {
-			return -1;
-		} else {
-			return 1;
-		}
-		sqlsrv_close($conn);
 	}
 	function datos($sql, $master = false)
 	{
@@ -305,14 +313,7 @@ class db
 			$sql = substr($sql, 0, -5);
 		}
 		// print_r($sql);	die();			
-		$stmt = sqlsrv_query($conn, $sql);
-		if (!$stmt) {
-			echo "Error: " . $sql . "<br>" . sqlsrv_errors($conn);
-			sqlsrv_close($conn);
-			return -1;
-		}
-		sqlsrv_close($conn);
-		return 1;
+		return $this->sql_string($sql);
 	}
 
 	function sql_string($sql, $master = false)

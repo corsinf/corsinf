@@ -76,13 +76,15 @@ class excel_spout
 
 	function generar_excel($parametros)
 	{
+
+		set_time_limit(0);
 		unset($parametros['reporte_dinamico']);
 		// print_r($parametros);die();
 
 		$datos2 = $this->reportes->datos_reporte($parametros['id']);
 		$sql = $datos2[0]['SQL'];
 		$campos = $datos2[0]['CAMPOS'];
-		// print_r($sql);die();
+		// print_r($datos2);die();
 		$sql_new = $this->funciones->generar_sql($parametros,$sql,$para_vista=false);
 
 		// print_r($sql_new);die();
@@ -100,10 +102,12 @@ class excel_spout
 		$total = $this->reportes->total_consulta($sql2);
 		$total_act = ($total[0]['total']/$bloque);
 
+		// print_r($total);die();
+
 		ini_set('memory_limit', '512M');
 		$writer = WriterEntityFactory::createXLSXWriter();
-		$filePath = 'TOTAL_ACTIVOS.xlsx';
-		$writer->openToBrowser($fileName);
+		$filePath =  $datos2[0]['NOMBRE_REPORTE'].'.xlsx';
+		$writer->openToBrowser($filePath);
 
 		$CABECERA1 = array();
 		$campos = explode(',',$campos);

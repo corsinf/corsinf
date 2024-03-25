@@ -301,6 +301,7 @@ class contratoC
 
 	function lista_articulos($parametros)
 	{
+		// print_r($parametros);die();
 		if($parametros['tabla']=='ACTIVO')
 		{
 			$datos = $this->modelo->lista_articulos($parametros['query']);
@@ -332,6 +333,8 @@ class contratoC
 			}
 			$id = $this->cod_global->id_tabla($tbl);
 			$datos = $this->modelo->asignar_a_seguro($tbl,$campo,$parametros['query']);
+			// print_r($datos);
+			// print_r($id);die();
 			$op = array();
 		    foreach ($datos as $key => $value) {
 		    	$op[] = array('id'=>$value[$id[0]['ID']],'text'=>$value['texto'],'data'=>$value);
@@ -414,44 +417,46 @@ class contratoC
     	$listado = array();
     	$list_id='';    	
 
-    	// print_r($tablas_aseguradas);die();
-    	foreach ($tablas_aseguradas as $key => $value) {
-    		$list_id = '';
-    		$lista_ids = $this->modelo->lista_id_tabla($value['tabla'],$parametros['contrato']);
-    		if(count($lista_ids)>0)
-    		{
-	    		// print_r($lista_ids);
-	    		foreach ($lista_ids as $key => $value2) {
-	    			$list_id.="'".$value2['id_articulos']."',";
-	    		}
-	    		$list_id = substr($list_id, 0,-1);
-	    		$id_tbl = $this->cod_global->id_tabla($value['tabla']);   
-	    		$datos = $this->modelo->itemAsegurado($value['tabla'],$id_tbl[0]['ID'],$list_id);
-
-	    		if(count($datos)>0)
+    	// print_r($tablas_aseguradas.'-');die();
+    	if($tablas_aseguradas!=''){
+	    	foreach ($tablas_aseguradas as $key => $value) {
+	    		$list_id = '';
+	    		$lista_ids = $this->modelo->lista_id_tabla($value['tabla'],$parametros['contrato']);
+	    		if(count($lista_ids)>0)
 	    		{
-	    			$campos = '';
-	    			foreach ($value as $key => $value3) {
-	    				if($value3!=$value['tabla'])
-	    				{
-	    					$campos.= $value3.',';
-	    				}
-	    			}
-	    			$camp = substr($campos,0,-1);
-	    			foreach ($datos as $key => $value4) {
-	    				$asegu = $this->modelo->tablas_aseguradas($value['tabla'],$parametros['contrato'],$value4[$id_tbl[0]['ID']],1,$id_tbl[0]['ID']);
+		    		// print_r($lista_ids);
+		    		foreach ($lista_ids as $key => $value2) {
+		    			$list_id.="'".$value2['id_articulos']."',";
+		    		}
+		    		$list_id = substr($list_id, 0,-1);
+		    		$id_tbl = $this->cod_global->id_tabla($value['tabla']);   
+		    		$datos = $this->modelo->itemAsegurado($value['tabla'],$id_tbl[0]['ID'],$list_id);
 
-	    				$camposbuscar = explode(',',$camp);
-	    				$camposlista = array();
-	    				foreach ($camposbuscar as $key => $value5) {
-	    					$camposlista[] = $asegu[0][$value5];
-	    				}
+		    		if(count($datos)>0)
+		    		{
+		    			$campos = '';
+		    			foreach ($value as $key => $value3) {
+		    				if($value3!=$value['tabla'])
+		    				{
+		    					$campos.= $value3.',';
+		    				}
+		    			}
+		    			$camp = substr($campos,0,-1);
+		    			foreach ($datos as $key => $value4) {
+		    				$asegu = $this->modelo->tablas_aseguradas($value['tabla'],$parametros['contrato'],$value4[$id_tbl[0]['ID']],1,$id_tbl[0]['ID']);
 
-	    				$listado[] = array('id'=>$asegu[0]['id_arti_asegurados'],'campo_id'=>$id_tbl[0]['ID'],'campos'=>$camposlista,'contrato'=>$parametros['contrato'],'tabla'=>$value['tabla'],'modulo'=>$_SESSION['INICIO']['MODULO_SISTEMA']);
-	    			}
+		    				$camposbuscar = explode(',',$camp);
+		    				$camposlista = array();
+		    				foreach ($camposbuscar as $key => $value5) {
+		    					$camposlista[] = $asegu[0][$value5];
+		    				}
+
+		    				$listado[] = array('id'=>$asegu[0]['id_arti_asegurados'],'campo_id'=>$id_tbl[0]['ID'],'campos'=>$camposlista,'contrato'=>$parametros['contrato'],'tabla'=>$value['tabla'],'modulo'=>$_SESSION['INICIO']['MODULO_SISTEMA']);
+		    			}
+		    		}
 	    		}
-    		}
-    	}
+	    	}
+	    }
     	//listar todos los demas 
     	// print_r($listado);die();
     	// $datos = $this->modelo->lista_articulos_seguro($parametros['contrato'],$query=false);
@@ -488,8 +493,8 @@ class contratoC
 			$tr.='<tr>
 			<td><a href="inicio.php?acc=contratos&id='.$value['id'].'">'.$value['nombre'].'</a></td>
 			<td>'.$value['prima'].'</td>
-			<td>'.$value['desde']->format('Y-m-d').'</td>
-			<td>'.$value['hasta']->format('Y-m-d').'</td>
+			<td>'.$value['desde'].'</td>
+			<td>'.$value['hasta'].'</td>
 			<td>'.$value['suma_asegurada'].'</td>
 			</tr>';
 		}
@@ -585,13 +590,13 @@ class contratoC
 			}
 			$tr.='<tr>
 			<td>'.$es.'</td>
-			<td>'.$value['fecha_siniestro']->format('Y-m-d').'</td>
+			<td>'.$value['fecha_siniestro'].'</td>
 			<td class="text-left">
 	            <h3><a href="javascript:;">Encargado: '.$value['encargado'].'</a></h3>
 	            '.$value['detalle'].'
 	        </td>
 			<td>'.$value['DESCRIPCION'].'</td>
-			<td>'.$value['fecha_alertado']->format('Y-m-d').'</td>
+			<td>'.$value['fecha_alertado'].'</td>
 			<td class="unit">'.$value['evaluacion'].'</td>
 			</tr>';
 		}

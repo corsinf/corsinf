@@ -45,6 +45,8 @@ class ingresar_procesoM
 		INNER JOIN ASSET A ON P.ID_ASSET = A.ID_ASSET 
 		INNER JOIN MARCAS M ON P.EVALGROUP1 = M.ID_MARCA
 		WHERE id_solicitud = '".$id."'";
+
+		// print_r($sql);die();
 		return $this->db->datos($sql);
 	}
 	function solicitud_pdf($id)

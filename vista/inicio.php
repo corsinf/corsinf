@@ -96,9 +96,6 @@ if ($_GET['acc'] == 'terceros') {
 if ($_GET['acc'] == 'patrimoniales') {
 	include('ACTIVOS/patrimoniales.php');
 }
-if ($_GET['acc'] == 'reporte_detalle') {
-	include('ACTIVOS/reporte_detalle.php');
-}
 
 //EMPRESA
 if ($_GET['acc'] == 'usuarios') {

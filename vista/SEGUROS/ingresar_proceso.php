@@ -218,8 +218,9 @@
 												</div>
 												<div class="col-sm-6">
 														<b>Cedula de bienes</b>
+														<h2 id="lbl_no_activo" style="display:none">NO SE HA SELECCIONADO NINGUN ACTIVO</h2>			
 														<input type="hidden" name="" id="txt_lineas">
-														<iframe src="" id="iframe" style="width:100%; height:50vw;" frameborder="0" allowfullscreen></iframe>			
+														<iframe src="" id="iframe" style="width:100%; height:50vw;" frameborder="0" allowfullscreen></iframe>
 												</div>												
 											</div>										
 										</div>
@@ -260,23 +261,24 @@
 												</div>
 												<div class="col-sm-12">
 													<table class="table table-hover">
-														<header>
-															<td>Codigo Puce</td>
-															<td>Item</td>
-															<td>Observacion salida</td>
-															<td>Observacion Entrada</td>
-															<td></td>
-														</header>
+														<thead>
+															<th>Codigo Puce</th>
+															<th>Item</th>
+															<th>Observacion salida</th>
+															<th>Observacion Entrada</th>
+															<th></th>
+														</thead>
 														<tbody id="tbl_lineas_entrada">
 															
 														</tbody>															
 													</table>								
 													
+															<br>
+															<br>
 												</div>
 											
 										</div>
 											
-															
 										</div>
 									</div>
 									<div class="toolbar toolbar-bottom" role="toolbar" style="text-align: right;">

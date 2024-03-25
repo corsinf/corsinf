@@ -163,8 +163,11 @@ class funciones
 						}
 						$sql = explode('ORDER', $sql);
 						$sql = $sql[0].' '.$where.' ORDER '.$sql[1];
-						$pag = explode('-',$parametros['pag']);
-						$sql.= " OFFSET ".$pag[0]." ROWS FETCH NEXT ".$pag[1]." ROWS ONLY;";
+						if(isset($parametros['pag']))
+						{
+							$pag = explode('-',$parametros['pag']);
+							$sql.= " OFFSET ".$pag[0]." ROWS FETCH NEXT ".$pag[1]." ROWS ONLY;";
+						}
 					}else
 					{
 						if($para_vista)

@@ -58,11 +58,15 @@ class ligar_segurosM
 		return $datos2;
 	}
 
-	function campos_tabla($tabla)
+	function campos_tabla($tabla,$query=false)
 	{
 		$sql2="SELECT COLUMN_NAME, DATA_TYPE
 			FROM INFORMATION_SCHEMA.COLUMNS
 			WHERE TABLE_NAME = '".$tabla."'";
+			if($query)
+			{
+				$sql2.=" AND COLUMN_NAME like '%".$query."%'";
+			}
 			// print_r($sql2);die();
 		$datos2 = $this->db->datos($sql2);
 		return $datos2;

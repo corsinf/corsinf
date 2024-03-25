@@ -21,7 +21,7 @@
         // console.log(response);   
         $.each(response, function(i, item){
           console.log(item);
-        proyectos+='<tr><td>'+item.id+'</td><td><a href="inicio.php?acc=detalle_proyectos&id='+item.id+'">'+item.pro+'</a></td><td>'+item.enti+'</td><td>'+item.deno+'</td><td>'+item.desc+'</td><td>'+item.valde.date.substr(0,10)+'</td><td>'+item.vala.date.substr(0,10)+'</td><td>'+item.exp.date.substr(0,10)+'</td><td>';
+        proyectos+='<tr><td>'+item.id+'</td><td><a href="inicio.php?acc=detalle_proyectos&id='+item.id+'">'+item.pro+'</a></td><td>'+item.enti+'</td><td>'+item.deno+'</td><td>'+item.desc+'</td><td>'+item.valde.substr(0,10)+'</td><td>'+item.vala.substr(0,10)+'</td><td>'+item.exp.substr(0,10)+'</td><td>';
         });      
         $('#tbl_datos').html(proyectos);            
       }
@@ -49,9 +49,9 @@
            $('#txt_enti').val(response[0].enti);
            $('#txt_deno').val(response[0].deno);
            $('#txt_descri').val(response[0].desc);
-           $('#txt_valde').val(response[0].valde.date.substr(0,10));
-           $('#txt_vala').val(response[0].vala.date.substr(0,10));
-           $('#txt_expi').val(response[0].exp.date.substr(0,10));
+           $('#txt_valde').val(response[0].valde.substr(0,10));
+           $('#txt_vala').val(response[0].vala.substr(0,10));
+           $('#txt_expi').val(response[0].exp.substr(0,10));
       }
     });
   }
@@ -91,7 +91,7 @@
         // console.log(response);   
         $.each(response, function(i, item){
           console.log(item);
-         proyectos+='<tr><td>'+item.id+'</td><td><a href="inicio.php?acc=detalle_proyectos.php&id='+item.id+'">'+item.pro+'</a></td><td>'+item.enti+'</td><td>'+item.deno+'</td><td>'+item.desc+'</td><td>'+item.valde.date.substr(0,10)+'</td><td>'+item.vala.date.substr(0,10)+'</td><td>'+item.exp.date.substr(0,10)+'</td><td>';
+         proyectos+='<tr><td>'+item.id+'</td><td><a href="inicio.php?acc=detalle_proyectos.php&id='+item.id+'">'+item.pro+'</a></td><td>'+item.enti+'</td><td>'+item.deno+'</td><td>'+item.desc+'</td><td>'+item.valde.substr(0,10)+'</td><td>'+item.vala.substr(0,10)+'</td><td>'+item.exp.substr(0,10)+'</td><td>';
         });      
         $('#tbl_datos').html(proyectos);                    
       }
