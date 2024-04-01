@@ -112,6 +112,23 @@ if(isset($_GET['usuarios']))
    echo json_encode($controlador->usuarios_all());
 }
 
+if(isset($_GET['cargar_imagen_no_concurente']))
+{
+   echo json_encode($controlador->guardar_foto_perfil($_FILES,$_POST));
+}
+if(isset($_GET['editar_datos']))
+{
+	$parametros = $_POST['parametros'];
+	echo json_encode($controlador->editar_datos($parametros));
+}
+if(isset($_GET['guardar_credencial']))
+{
+	$parametros = $_POST['parametros'];
+	echo json_encode($controlador->guardar_credencial($parametros));
+}
+
+
+
 
 class usuariosC
 {
@@ -202,7 +219,7 @@ class usuariosC
               <div class="card-body text-center">
                 <div class="p-4 border radius-15">
                   <img src="../'.$value['foto'].'" width="110" height="110" class="rounded-circle shadow" alt="">
-                  <h5 class="mb-0 mt-5">'.$value['nombres'].' '.$value['ape'].'</h5>
+                  <h5 class="mb-0 mt-5">'.$value['nombre'].' '.$value['apellido'].'</h5>
                   <p class="mb-3">'.$value['tipo'].'</p>
                   <div class="list-inline contacts-social mt-3 mb-3"> <a href="javascript:;" class="list-inline-item bg-facebook text-white border-0"><i class="bx bxl-facebook"></i></a>
                     <a href="javascript:;" class="list-inline-item bg-twitter text-white border-0"><i class="bx bxl-twitter"></i></a>
@@ -221,7 +238,7 @@ class usuariosC
 					}
 				}else
 				{
-
+// print_r($value);die();
 
 						$tabla.='
 						<div class="col">
@@ -229,7 +246,7 @@ class usuariosC
               <div class="card-body text-center">
                 <div class="p-4 border radius-15">
                   <img src="'.$value['foto'].'" width="110" height="110" class="rounded-circle shadow" alt="">
-                  <h5 class="mb-0 mt-5">'.$value['nombres'].' '.$value['ape'].'</h5>
+                  <h5 class="mb-0 mt-5">'.$value['nombre'].' '.$value['apellido'].'</h5>
                   <p class="mb-3">'.$value['tipo'].'</p>
                   <div class="list-inline contacts-social mt-3 mb-3"> <a href="javascript:;" class="list-inline-item bg-facebook text-white border-0"><i class="bx bxl-facebook"></i></a>
                     <a href="javascript:;" class="list-inline-item bg-twitter text-white border-0"><i class="bx bxl-twitter"></i></a>
@@ -332,7 +349,7 @@ class usuariosC
 
 		// print_r($parametros);die();
 				$datos[0]['campo']='password';
-		    $datos[0]['dato']=$parametros['txt_pass'];
+		    $datos[0]['dato']= $this->pagina->enciptar_clave($parametros['txt_pass']);
 		    $datos[1]['campo']='nombres';
 		    $datos[1]['dato']=$parametros['txt_nombre'];
 		    $datos[2]['campo']='direccion';
@@ -366,16 +383,18 @@ class usuariosC
 		    $datosAE[0]['dato']=$usuario[0]['id'];
 		    $datosAE[1]['campo']='Id_Empresa';
 		    $datosAE[1]['dato']=$_SESSION['INICIO']['ID_EMPRESA'];	
+		    $datosAE[2]['campo']='Id_Tipo_usuario';
+		    $datosAE[2]['dato']=$parametros['ddl_tipo_usuario'];	
 		    $this->modelo->guardar($datosAE,'ACCESOS_EMPRESA'); 
 
 		    
-		     $datosT[0]['campo']='ID_USUARIO';
-		     $datosT[0]['dato']=$usuario[0]['id'];
-		     $datosT[1]['campo']='ID_TIPO_USUARIO';
-		     $datosT[1]['dato']=$parametros['ddl_tipo_usuario'];		     
-		     $datosT[2]['campo']='ID_EMPRESA';
-		     $datosT[2]['dato']=$_SESSION['INICIO']['ID_EMPRESA'];		
-		     $this->modelo->guardar($datosT,'USUARIO_TIPO_USUARIO'); 
+		     // $datosT[0]['campo']='ID_USUARIO';
+		     // $datosT[0]['dato']=$usuario[0]['id'];
+		     // $datosT[1]['campo']='ID_TIPO_USUARIO';
+		     // $datosT[1]['dato']=$parametros['ddl_tipo_usuario'];		     
+		     // $datosT[2]['campo']='ID_EMPRESA';
+		     // $datosT[2]['dato']=$_SESSION['INICIO']['ID_EMPRESA'];		
+		     // $this->modelo->guardar($datosT,'USUARIO_TIPO_USUARIO'); 
 
 
 		    // actualiza en empresa logueada
@@ -388,13 +407,12 @@ class usuariosC
 		    
 		}else
 		{
-			  $perfil = $this->modelo->existe_usuario_perfil_datos($tipo=false,$parametros['txt_usuario_update']);
-
+			 
 			  // print_r($perfil);die();
 		    // $datos[0]['campo']='nick_usuario';
 		    // $datos[0]['dato']=$parametros['txt_nick'];
 		    $datos[0]['campo']='password';
-		    $datos[0]['dato']=$parametros['txt_pass'];
+		    $datos[0]['dato']= $this->pagina->enciptar_clave($parametros['txt_pass']);
 		    $datos[1]['campo']='nombres';
 		    $datos[1]['dato']=$parametros['txt_nombre'];
 		    $datos[2]['campo']='direccion';
@@ -427,37 +445,45 @@ class usuariosC
 		    //ingresa el acceso al usuario en la empresa 
 
 		    $acceso = $this->modelo->existe_acceso_usuario_empresa($parametros['txt_usuario_update']);
-		    if(count($acceso)==0)
-		    {
-			    $datosA[0]['campo']='Id_usuario';
+		    	$datosA[0]['campo']='Id_usuario';
 			    $datosA[0]['dato']=$parametros['txt_usuario_update'];	
 			    $datosA[1]['campo']='Id_Empresa';
-			    $datosA[1]['dato']=$_SESSION['INICIO']['ID_EMPRESA'];	
+			    $datosA[1]['dato']=$_SESSION['INICIO']['ID_EMPRESA'];
+			    $datosA[2]['campo']='Id_Tipo_usuario';
+		    	$datosA[2]['dato']=$parametros['ddl_tipo_usuario'];	
+		    if(count($acceso)==0)
+		    {			    
 			    $this->modelo->guardar($datosA,'ACCESOS_EMPRESA');
-			  }
-
-			  $perfil = $this->modelo->existe_usuario_perfil(false,$parametros['txt_usuario_update']);
-			  if($perfil==-1)
-			  {
-			  	$datosA[0]['campo']='ID_USUARIO';
-			    $datosA[0]['dato']=$parametros['txt_usuario_update'];	
-			    $datosA[1]['campo']='ID_EMPRESA';
-			    $datosA[1]['dato']=$_SESSION['INICIO']['ID_EMPRESA'];				    
-			    $datosA[2]['campo']='ID_TIPO_USUARIO';
-			    $datosA[2]['dato']=$parametros['ddl_tipo_usuario'];	
-			    $this->modelo->guardar($datosA,'USUARIO_TIPO_USUARIO');
 			  }else
-			  {				    
-			    $datosA[1]['campo']='ID_TIPO_USUARIO';
-			    $datosA[1]['dato']=$parametros['ddl_tipo_usuario'];	
-
-			    $where[0]['campo']='ID_USUARIO';
-			    $where[0]['dato'] = $parametros['txt_usuario_update'];			    
-			    $where[1]['campo']='ID_EMPRESA';
-			    $where[1]['dato'] = $_SESSION['INICIO']['ID_EMPRESA'];				   
-			    $this->modelo->update('USUARIO_TIPO_USUARIO',$datosA,$where);
-
+			  {
+			  	// print_r($acceso);die();
+			  	$whereA[0]['campo']='Id_accesos_empresa';
+			    $whereA[0]['dato']=$acceso[0]['Id_accesos_empresa'];	
+			  	$this->modelo->update('ACCESOS_EMPRESA',$datosA,$whereA);
 			  }
+
+			  // $perfil = $this->modelo->existe_usuario_perfil(false,$parametros['txt_usuario_update']);
+			  // if($perfil==-1)
+			  // {
+			  // 	$datosA[0]['campo']='ID_USUARIO';
+			  //   $datosA[0]['dato']=$parametros['txt_usuario_update'];	
+			  //   $datosA[1]['campo']='ID_EMPRESA';
+			  //   $datosA[1]['dato']=$_SESSION['INICIO']['ID_EMPRESA'];				    
+			  //   $datosA[2]['campo']='ID_TIPO_USUARIO';
+			  //   $datosA[2]['dato']=$parametros['ddl_tipo_usuario'];	
+			  //   $this->modelo->guardar($datosA,'USUARIO_TIPO_USUARIO');
+			  // }else
+			  // {				    
+			  //   $datosA[1]['campo']='ID_TIPO_USUARIO';
+			  //   $datosA[1]['dato']=$parametros['ddl_tipo_usuario'];	
+
+			  //   $where[0]['campo']='ID_USUARIO';
+			  //   $where[0]['dato'] = $parametros['txt_usuario_update'];			    
+			  //   $where[1]['campo']='ID_EMPRESA';
+			  //   $where[1]['dato'] = $_SESSION['INICIO']['ID_EMPRESA'];				   
+			  //   $this->modelo->update('USUARIO_TIPO_USUARIO',$datosA,$where);
+
+			  // }
 
 
 		    return  $this->modelo->generar_primera_vez($_SESSION['INICIO']['BASEDATO'],$_SESSION['INICIO']['ID_EMPRESA']);
@@ -478,14 +504,32 @@ class usuariosC
 	{
 		if($_SESSION['INICIO']['NO_CONCURENTE']=='')
 		{
-			$datos  = $this->modelo->lista_usuarios($parametros['id'],$parametros['query']);
-			return $datos;
+			$datos  = $this->modelo->lista_usuarios($parametros['id'],$parametros['query']);	
 		}else
 		{
-			$datos  = $this->modelo->no_concurente_custodios($_SESSION['INICIO']['NO_CONCURENTE']);
-			// print_r($datos);die();
-			return $datos;
+			$datos  = $this->modelo->no_concurente_data();
+			$datosNOCon = $this->modelo->credenciales_no_concurentes_campos();
+			if(count($datosNOCon)>0)
+			{
+				$datosNo = $this->modelo->credenciales_no_concurentes_datos($datosNOCon[0]['usu'],$datosNOCon[0]['pass']);
+				if(count($datosNo)>0)
+				{
+					$datos[0]['pass'] = $datosNo[0]['pass'];
+					$datos[0]['usu'] = $datosNo[0]['usuario']; 
+				}
+			}
+			if(!file_exists($datos[0]['foto']))
+			{
+				 $datos[0]['foto'] ='';
+			}			
 		}
+		if($datos[0]['pass']!='')
+		{
+			$datos[0]['pass'] = $this->pagina->desenciptar_clave($datos[0]['pass']);
+		}
+
+		// print_r($datos);die();
+		return $datos;
 
 	}
 
@@ -542,7 +586,7 @@ class usuariosC
 	function guardar_pass($parametros)
 	{
 		 $datos[0]['campo']='password';
-		 $datos[0]['dato']= $parametros['pass'];
+		 $datos[0]['dato']= $this->pagina->enciptar_clave($parametros['pass']);
 
 
 		 $where[0]['campo']='id_usuarios';
@@ -561,7 +605,63 @@ class usuariosC
 		 $where[0]['dato'] = $parametros['id'];
 		 return $this->modelo->update('USUARIOS',$datos,$where);
 
-	}	
+	}
+
+	function guardar_foto_perfil($file,$post)
+	 {
+	 		$ruta='../img/usuarios/';//ruta carpeta donde queremos copiar las imágenes
+	 		if($_SESSION['INICIO']['NO_CONCURENTE']!=''){
+	    	$ruta='../img/no_concurentes/';//ruta carpeta donde queremos copiar las imágenes
+	  	}
+	    if (!file_exists($ruta)) {
+	       mkdir($ruta, 0777, true);
+	    }
+	    if($this->validar_formato_img($file)==1)
+	    {
+	         $uploadfile_temporal=$file['file_img']['tmp_name'];
+	         $tipo = explode('/', $file['file_img']['type']);
+	         $nombre = $post['name_img'].'.'.$tipo[1];	        
+	         $nuevo_nom=$ruta.$nombre;
+	         if (is_uploaded_file($uploadfile_temporal))
+	         {
+	           move_uploaded_file($uploadfile_temporal,$nuevo_nom);
+	            if($_SESSION['INICIO']['NO_CONCURENTE']!=''){
+	              $datosI[0]['campo']=$_SESSION['INICIO']['NO_CONCURENTE_CAMPO_IMG'];
+	              $datosI[0]['dato'] = $nuevo_nom;
+	              $where[0]['campo'] = $_SESSION['INICIO']['NO_CONCURENTE_TABLA_ID'];
+	              $where[0]['dato'] =  $_SESSION['INICIO']['NO_CONCURENTE'];
+	              $base = $this->modelo->updateEmpresa($_SESSION['INICIO']['NO_CONCURENTE_TABLA'],$datosI,$where);
+	            }else
+	            {
+	            	$datosI[0]['campo']='foto';
+	              $datosI[0]['dato'] = $nuevo_nom;
+	              $where[0]['campo'] = 'id_usuarios';
+	              $where[0]['dato'] =  $_SESSION['INICIO']['ID_USUARIO'];
+	              $base = $this->modelo->update('USUARIOS',$datosI,$where);
+	            }
+	             $resp = $this->modelo->generar_primera_vez($_SESSION['INICIO']['BASEDATO'],$_SESSION['INICIO']['ID_EMPRESA']);
+
+
+	              $_SESSION['INICIO']['FOTO'] = $nuevo_nom;
+	           if($base==1)
+	           {
+	            return 1;
+	           }else
+	           {
+	            return -1;
+	           }
+
+	         }
+	         else
+	         {
+	           return -1;
+	         } 
+	     }else
+	     {
+	      return -2;
+	     }
+
+	  }	
 
 	function guardar_foto($file,$post)
 	 {
@@ -619,6 +719,99 @@ class usuariosC
         break;
     }
 
+  }
+
+  function editar_datos($parametros)
+  {
+  	switch ($parametros['tabla']) {
+  		case 'representantes':
+	  		$datos[0]['campo'] ='sa_rep_primer_nombre' ;
+	  		$datos[0]['dato'] =$parametros['nombre1'];
+	  		$datos[1]['campo'] ='sa_rep_segundo_nombre' ;
+	  		$datos[1]['dato'] =$parametros['nombre2'];
+	  		$datos[2]['campo'] ='sa_rep_primer_apellido' ;
+	  		$datos[2]['dato'] =$parametros['apellidos1'];
+	  		$datos[3]['campo'] ='sa_rep_segundo_apellido' ;
+	  		$datos[3]['dato'] =$parametros['apellidos2'];
+	  		$datos[4]['campo'] ='sa_rep_fecha_nacimiento' ;
+	  		$datos[4]['dato'] =$parametros['fecha_n'];
+	  		$datos[5]['campo'] ='sa_rep_correo' ;
+	  		$datos[5]['dato'] =$parametros['correo'];
+	  		$datos[6]['campo'] ='sa_rep_telefono_1' ;
+	  		$datos[6]['dato'] =$parametros['telefono'];
+	  		$datos[7]['campo'] ='sa_rep_cedula' ;
+	  		$datos[7]['dato'] =$parametros['cedula'];
+  			break;
+  	case 'docentes':
+	  		$datos[0]['campo'] ='sa_doc_primer_nombre' ;
+	  		$datos[0]['dato'] =$parametros['nombre1'];
+	  		$datos[1]['campo'] ='sa_doc_segundo_nombre' ;
+	  		$datos[1]['dato'] =$parametros['nombre2'];
+	  		$datos[2]['campo'] ='sa_doc_primer_apellido' ;
+	  		$datos[2]['dato'] =$parametros['apellidos1'];
+	  		$datos[3]['campo'] ='sa_doc_segundo_apellido' ;
+	  		$datos[3]['dato'] =$parametros['apellidos2'];
+	  		$datos[4]['campo'] ='sa_doc_fecha_nacimiento' ;
+	  		$datos[4]['dato'] =$parametros['fecha_n'];
+	  		$datos[5]['campo'] ='sa_doc_correo' ;
+	  		$datos[5]['dato'] =$parametros['correo'];
+	  		$datos[6]['campo'] ='sa_doc_telefono_1' ;
+	  		$datos[6]['dato'] =$parametros['telefono'];
+	  		$datos[7]['campo'] ='sa_doc_cedula' ;
+	  		$datos[7]['dato'] =$parametros['cedula'];
+  			break;
+  	case 'comunidad':
+	  		$datos[0]['campo'] ='sa_com_primer_nombre' ;
+	  		$datos[0]['dato'] =$parametros['nombre1'];
+	  		$datos[1]['campo'] ='sa_com_segundo_nombre' ;
+	  		$datos[1]['dato'] =$parametros['nombre2'];
+	  		$datos[2]['campo'] ='sa_com_primer_apellido' ;
+	  		$datos[2]['dato'] =$parametros['apellidos1'];
+	  		$datos[3]['campo'] ='sa_com_segundo_apellido' ;
+	  		$datos[3]['dato'] =$parametros['apellidos2'];
+	  		$datos[4]['campo'] ='sa_com_fecha_nacimiento' ;
+	  		$datos[4]['dato'] =$parametros['fecha_n'];
+	  		$datos[5]['campo'] ='sa_com_correo' ;
+	  		$datos[5]['dato'] =$parametros['correo'];
+	  		$datos[6]['campo'] ='sa_com_telefono_1' ;
+	  		$datos[6]['dato'] =$parametros['telefono'];
+	  		$datos[7]['campo'] ='sa_com_cedula' ;
+	  		$datos[7]['dato'] =$parametros['cedula'];
+  			break;
+  	}
+
+  	$where[0]['campo'] = $_SESSION['INICIO']['NO_CONCURENTE_TABLA_ID'];
+  	$where[0]['dato'] = $_SESSION['INICIO']['NO_CONCURENTE'];
+  	if(count($datos)>0)
+  	{
+  		return  $this->modelo->updateEmpresa($parametros['tabla'],$datos,$where);
+  	}else{
+  		return -2;
+  	}
+  }
+
+  function guardar_credencial($parametros)
+  {
+
+  	$usuario= $_SESSION['INICIO']['NO_CONCURENTE'];
+		$tabla= $_SESSION['INICIO']['NO_CONCURENTE_TABLA'];
+		$campo= $_SESSION['INICIO']['NO_CONCURENTE_TABLA_ID'];
+
+  	$campos = $this->modelo->credenciales_no_concurentes_campos();
+  	if(count($campos)>0)
+  	{
+  		$datos[0]['campo'] = $campos[0]['pass'];
+  		$datos[0]['dato'] = $this->pagina->enciptar_clave($parametros['pass']);
+  	}
+
+		$where[0]['campo'] = $campo;
+		$where[0]['dato'] = $usuario;
+		if(count( $datos))
+		{
+  		return  $this->modelo->updateEmpresa($tabla,$datos,$where);
+  	}else{
+  		return -2;
+  	}
   }
 
 

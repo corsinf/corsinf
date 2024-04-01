@@ -1,17 +1,17 @@
 <?php
-if (!class_exists('db_salud')) {
-    include('../db/db_salud.php');
+if (!class_exists('db')) {
+    include('../db/db.php');
 }
 /**
  * 
  */
 class ficha_MedicaM
 {
-    private $db_salud;
+    private $db;
 
     function __construct()
     {
-        $this->db_salud = new db_salud();
+        $this->db = new db();
     }
 
 <<<<<<< HEAD
@@ -56,6 +56,7 @@ class ficha_MedicaM
         
 =======
 
+<<<<<<< HEAD
 >>>>>>> f975ff57302e9fcddee9c8879ae90e7325aab8d1
         $datos = $this->db_salud->datos($sql);
         return $datos;
@@ -121,6 +122,13 @@ class ficha_MedicaM
         $sql .= " ORDER BY sa_fice_id";
 =======
     //Solo para el id
+=======
+        $datos = $this->db->datos($sql);
+        return $datos;
+    }
+
+    //Solo para el id del paciente
+>>>>>>> c9a234889f7443a040d28d13f82e35ef88467ae7
     function lista_paciente_ficha_medica($id_paciente = '')
     {
         if ($id_paciente) {
@@ -131,7 +139,7 @@ class ficha_MedicaM
                     sa_fice_pac_grupo_sangre,
                     sa_fice_pac_direccion_domicilio,
                     sa_fice_pac_seguro_medico,
-                    sa_fice_pac_seguro_medico,
+                    sa_fice_pac_seguro_predeterminado,
                 
                     sa_fice_rep_1_primer_apellido,
                     sa_fice_rep_1_segundo_apellido,
@@ -177,76 +185,80 @@ class ficha_MedicaM
         }
 
 
+<<<<<<< HEAD
 >>>>>>> f975ff57302e9fcddee9c8879ae90e7325aab8d1
         $datos = $this->db_salud->datos($sql);
+=======
+        // print_r($sql);die();
+        $datos = $this->db->datos($sql);
+>>>>>>> c9a234889f7443a040d28d13f82e35ef88467ae7
         return $datos;
     }
 
-    function lista_ficha_medica_todo($id = '')
+    //Solo para el id
+    function lista_ficha_medica_id($id_ficha = '')
     {
-        $sql = "SELECT
-        sa_fice_id,
-        sa_fice_est_id,
-        sa_fice_est_primer_apellido,
-        sa_fice_est_segundo_apellido,
-        sa_fice_est_primer_nombre,
-        sa_fice_est_segundo_nombre,
-        sa_fice_est_fecha_nacimiento,
-        sa_fice_est_grupo_sangre,
-        sa_fice_est_direccion_domicilio,
-        sa_fice_est_seguro_medico,
-        sa_fice_est_nombre_seguro,
+        if ($id_ficha) {
+            $sql = "SELECT
+                        sa_fice_id,
+                        sa_fice_pac_id,
+                        sa_fice_pac_fecha_nacimiento,
+                        sa_fice_pac_grupo_sangre,
+                        sa_fice_pac_direccion_domicilio,
+                        sa_fice_pac_seguro_medico,
+                        sa_fice_pac_seguro_predeterminado,
+                    
+                        sa_fice_rep_1_primer_apellido,
+                        sa_fice_rep_1_segundo_apellido,
+                        sa_fice_rep_1_primer_nombre,
+                        sa_fice_rep_1_segundo_nombre,
+                        sa_fice_rep_1_parentesco,
+                        sa_fice_rep_1_telefono_1,
+                        sa_fice_rep_1_telefono_2,
+                    
+                        sa_fice_rep_2_primer_apellido,
+                        sa_fice_rep_2_segundo_apellido,
+                        sa_fice_rep_2_primer_nombre,
+                        sa_fice_rep_2_segundo_nombre,
+                        sa_fice_rep_2_parentesco,
+                        sa_fice_rep_2_telefono_1,
+                        sa_fice_rep_2_telefono_2,
+                    
+                        sa_fice_pregunta_1,
+                        sa_fice_pregunta_1_obs,
+                    
+                        sa_fice_pregunta_2,
+                        sa_fice_pregunta_2_obs,
+                    
+                        sa_fice_pregunta_3,
+                        sa_fice_pregunta_3_obs,
+                    
+                        sa_fice_pregunta_4,
+                        sa_fice_pregunta_4_obs,
+                        
+                        sa_fice_pregunta_5_obs,
+                        
+                        sa_fice_estado,
+                        sa_fice_fecha_creacion,
+                        sa_fice_fecha_modificacion,
+                        sa_fice_estado_realizado
     
-        sa_fice_rep_1_id,
-        sa_fice_rep_1_primer_apellido,
-        sa_fice_rep_1_segundo_apellido,
-        sa_fice_rep_1_primer_nombre,
-        sa_fice_rep_1_segundo_nombre,
-        sa_fice_rep_1_parentesco,
-        sa_fice_rep_1_telefono_1,
-        sa_fice_rep_1_telefono_2,
-    
-        sa_fice_rep_2_primer_apellido,
-        sa_fice_rep_2_segundo_apellido,
-        sa_fice_rep_2_primer_nombre,
-        sa_fice_rep_2_segundo_nombre,
-        sa_fice_rep_2_parentesco,
-        sa_fice_rep_2_telefono_1,
-        sa_fice_rep_2_telefono_2,
-    
-        sa_fice_pregunta_1,
-        sa_fice_pregunta_1_obs,
-    
-        sa_fice_pregunta_2,
-        sa_fice_pregunta_2_obs,
-    
-        sa_fice_pregunta_3,
-        sa_fice_pregunta_3_obs,
-    
-        sa_fice_pregunta_4,
-        sa_fice_pregunta_4_obs,
-        
-        sa_fice_pregunta_5_obs,
-        
-        sa_fice_fecha_creacion,
-        sa_fice_fecha_modificar
-        
-        FROM ficha_medica
-        WHERE sa_fice_estado = 1";
+                        FROM ficha_medica
+                        WHERE sa_fice_estado = 1";
 
-        if ($id) {
-            $sql .= ' and sa_fice_est_id = ' . $id;
+            $sql .= ' AND sa_fice_id = ' . $id_ficha;
+            $sql .= " ORDER BY sa_fice_id";
         }
 
-        $sql .= " ORDER BY sa_fice_est_id";
-        $datos = $this->db_salud->datos($sql);
+
+        $datos = $this->db->datos($sql);
         return $datos;
     }
 
     function buscar_ficha_medica($buscar)
     {
         $sql = "SELECT sa_sec_id, sa_sec_nombre, sa_sec_estado FROM ficha_medica WHERE sa_sec_estado = 1 and sa_sec_nombre + ' ' + sa_sec_id LIKE '%" . $buscar . "%'";
-        $datos = $this->db_salud->datos($sql);
+        $datos = $this->db->datos($sql);
         return $datos;
     }
 
@@ -302,26 +314,26 @@ class ficha_MedicaM
         FROM ficha_medica
         WHERE sa_fice_id = '" . $buscar . "'";
 
-        $datos = $this->db_salud->datos($sql);
+        $datos = $this->db->datos($sql);
         return $datos;
     }
 
     function insertar($datos)
     {
-        $rest = $this->db_salud->inserts('ficha_medica', $datos);
+        $rest = $this->db->inserts('ficha_medica', $datos);
         return $rest;
     }
 
     function editar($datos, $where)
     {
-        $rest = $this->db_salud->update('ficha_medica', $datos, $where);
+        $rest = $this->db->update('ficha_medica', $datos, $where);
         return $rest;
     }
 
     function eliminar($datos)
     {
         $sql = "UPDATE ficha_medica SET sa_fice_estado = 0 WHERE " . $datos[0]['campo'] . "='" . $datos[0]['dato'] . "';";
-        $datos = $this->db_salud->sql_string($sql);
+        $datos = $this->db->sql_string($sql);
         return $datos;
     }
 <<<<<<< HEAD
@@ -335,7 +347,7 @@ class ficha_MedicaM
         FROM pacientes
         WHERE sa_pac_id_comunidad = $sa_pac_id_comunidad AND sa_pac_tabla = '$sa_pac_tabla';";
 
-        $datos = $this->db_salud->datos($sql);
+        $datos = $this->db->datos($sql);
 
         if (!empty($datos) && $datos[0]['existe_paciente_comunidad'] == 1) {
             return true;
@@ -353,7 +365,7 @@ class ficha_MedicaM
             FROM pacientes
             WHERE sa_pac_id_comunidad = $sa_pac_id_comunidad AND sa_pac_tabla = '$sa_pac_tabla';";
 
-        $datos = $this->db_salud->datos($sql);
+        $datos = $this->db->datos($sql);
 
         if (!empty($datos) && isset($datos[0]['sa_pac_id'])) {
             $datos = ['sa_pac_id' => $datos[0]['sa_pac_id'], 'sa_pac_tabla' => $datos[0]['sa_pac_tabla']];
@@ -366,9 +378,21 @@ class ficha_MedicaM
     //Para crear la ficha medica y el paciente
     function gestion_comunidad_ficha_medica($sa_pac_id_comunidad, $sa_pac_tabla)
     {
-        $parametros = array(
-            array(&$sa_pac_id_comunidad, SQLSRV_PARAM_IN),
-            array(&$sa_pac_tabla, SQLSRV_PARAM_IN)
+
+        $valor_seleccionado = $sa_pac_tabla;
+
+        // Verificar si el valor seleccionado contiene "-"
+        if (strpos($valor_seleccionado, '-') !== false) {
+            // Si contiene "-", separar las dos variables usando el carácter "-"
+            list($sa_tbl_pac_nombre, $sa_tbl_pac_prefijo) = explode('-', $valor_seleccionado);
+            $sa_pac_tabla = $sa_tbl_pac_nombre;
+        } else {
+            // Si no contiene "-", asignar el valor completo a $sa_pac_tabla
+            $sa_pac_tabla = $valor_seleccionado;
+        }
+        
+        $parametros = array($sa_pac_id_comunidad,
+            $sa_pac_tabla,
         );
 
         //cambiar a la procedure que es
@@ -377,7 +401,7 @@ class ficha_MedicaM
         //sin validar para que no se repitan los campos de cedula
         $sql = "EXEC SP_CREAR_PACIENTE_FICHA_MEDICA_ESTUDIANTE_14 @sa_pac_id_comunidad = ?, @sa_pac_tabla = ?";
 
-        $this->db_salud->ejecutar_procesos_almacenados($sql, $parametros);
+        $this->db->ejecutar_procesos_almacenados($sql, $parametros);
 
         $obtener_id_tabla = $this->obtener_id_tabla_paciente($sa_pac_id_comunidad, $sa_pac_tabla);
 
@@ -386,6 +410,17 @@ class ficha_MedicaM
         return $data;
     }
 
+<<<<<<< HEAD
     
 >>>>>>> f975ff57302e9fcddee9c8879ae90e7325aab8d1
+=======
+    function lista_seguros($query = false)
+    {
+        $sql = "SELECT * FROM SEGUROS WHERE 1=1";
+        if ($query) {
+            $sql .= " AND Plan_seguro like '%" . $query . "%'";
+        }
+        return $this->db->datos($sql);
+    }
+>>>>>>> c9a234889f7443a040d28d13f82e35ef88467ae7
 }

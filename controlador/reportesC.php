@@ -61,6 +61,11 @@ if(isset($_GET['informes_activos']))
 	// print_r($parametros);die();
 	echo json_encode($controlador->informes_activos());
 }
+if(isset($_GET['eliminar_reporte']))
+{
+
+	echo json_encode($controlador->eliminar_reporte($_POST));
+}
 
 
 
@@ -87,11 +92,12 @@ class reportes
 			$datos[0]['dato'] = $parametros['nombre'];
 			$datos[1]['campo'] = 'TIPO_REPORTE';
 			$datos[1]['dato'] = $parametros['tipo']; 
-			$datos[1]['tipo'] = 'string'; 
+			// $datos[1]['tipo'] = 'string'; 
 			$datos[2]['campo'] = 'DETALLE';
 			$datos[2]['dato'] = $parametros['detalle']; 
 
 			$ing = $this->modelo->add('REPORTE',$datos);		
+			// print_r($ing);die();
 			$reg = $this->modelo->buscar_reporte($parametros['tipo'],$parametros['nombre']);
 			return array('respuesta'=>$ing,'id'=>$reg[0]['ID_REPORTE']);
 		}else
@@ -496,7 +502,7 @@ class reportes
 										<div class="btn-group" role="group" aria-label="Basic example">
 											<a href="inicio.php?acc=reporte_detalle&id='.$value['ID_REPORTE'].'" id="" class="btn btn-outline-dark btn-sm"><i class="bx bx-show-alt"></i></a>
 										<a href="inicio.php?acc=nuevo_reporte&id='.$value['ID_REPORTE'].'" id="" class="btn btn-primary btn-sm" id=""><i class="bx bx-pencil"></i></a>
-											<a href="inicio.php?acc=nuevo_reporte&id='.$value['ID_REPORTE'].'" id="btn_eliminar" class="btn btn-danger btn-sm" id=""><i class="bx bx-trash"></i></a>
+											<button type="button" id="btn_eliminar" class="btn btn-danger btn-sm" onclick="eliminar_reporte('.$value['ID_REPORTE'].')"><i class="bx bx-trash"></i></button>
 										</div>
 							</div>
 						</div>
@@ -632,6 +638,12 @@ function informes_activos()
               </li>';
 		}
 		return $OP;
+	}
+
+	function eliminar_reporte($parametros)
+	{
+		// print_r($id);die();
+		return $this->modelo->eliminar_reportes($parametros['id']);
 	}
 }
 

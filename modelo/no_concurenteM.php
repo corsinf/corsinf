@@ -30,10 +30,12 @@ class no_concurenteM
 
 	function lista_no_concurente($query=false)
 	{
-		$sql = "SELECT count(*) as 'Total',Tabla
-				FROM TABLAS_NOCONCURENTE 
+		$sql = "SELECT count(*) as 'Total',Tabla,Campo_usuario,Campo_pass,TU.DESCRIPCION as 'perfil' 
+			FROM TABLAS_NOCONCURENTE T
+			INNER JOIN TIPO_USUARIO TU ON T.tipo_perfil = TU.ID_TIPO
 				WHERE Id_Empresa = '".$_SESSION['INICIO']['ID_EMPRESA']."'
-				GROUP BY Tabla";
+				GROUP BY Tabla,Campo_usuario,Campo_pass,TU.DESCRIPCION";
+				// print_r($sql);die();
 		$datos = $this->db->datos($sql,1);
 		return $datos;
 	}
@@ -55,9 +57,22 @@ class no_concurenteM
 				WHERE OBJECTPROPERTY(OBJECT_ID(CONSTRAINT_NAME), 'IsPrimaryKey') = 1
 				AND TABLE_NAME = '".$tabla."'";
 		$datos2 = $this->db->datos($sql2);
+		// print_r($sql2);die();
 		return $datos2;
 	}
-	 function existe_no_concurente($tabla)
+
+	function campos_tabla_no_concurentes($tabla)
+	{
+		$sql2="SELECT COLUMN_NAME, DATA_TYPE
+			FROM INFORMATION_SCHEMA.COLUMNS
+			WHERE TABLE_NAME = '".$tabla."'";
+		$datos2 = $this->db->datos($sql2);
+		return $datos2;
+	}
+
+
+
+	function existe_no_concurente($tabla)
 	 {
 	 	$sql = "SELECT * FROM TABLAS_NOCONCURENTE WHERE Id_Empresa = '".$_SESSION['INICIO']['ID_EMPRESA']."' AND Tabla = '".$tabla."'";
 		return $this->db->datos($sql,1);

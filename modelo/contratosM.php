@@ -1,5 +1,8 @@
 <?php
-include('../db/db.php');
+if(!class_exists('db'))
+{
+	include('../db/db.php');
+}
 
 /**
  * 
@@ -67,16 +70,22 @@ class contratosM
 		$datos = $this->db->datos($sql);
 		return $datos;
 	}
-	function buscar_seguro($id=false,$prove=false,$desde=false,$hasta=false,$prima=false,$suma_asegurada=False)
+	function buscar_seguro($id=false,$prove=false,$desde=false,$hasta=false,$prima=false,$suma_asegurada=False,$plan=false,$terceros=null)
 	{
-		$sql="SELECT * FROM seguros WHERE 1=1";
+		$sql="SELECT * FROM seguros WHERE 1=1 ";
+		if($terceros){
+			$sql.=" AND terceros = ".$terceros;
+		}else
+		{
+			$sql.=" AND terceros is NULL";
+		}
 		if($id)
 		{
 			$sql.=" AND id_contratos =".$id;
 		}
 		if($prove)
 		{
-			$sql.="AND proveedor =".$prove;
+			$sql.=" AND proveedor =".$prove;
 		}
 		if($desde!=false && $hasta!=false)
 		{
@@ -90,6 +99,10 @@ class contratosM
 		{
 			$sql.=" AND  suma_asegurada = '".$suma_asegurada."'";
 		}
+		if($plan)
+		{
+			$sql.=" AND Plan_seguro='".$plan."' ";
+		}
 		// print_r($sql);die();
 		$datos = $this->db->datos($sql);
 		return $datos;
@@ -97,7 +110,7 @@ class contratosM
 
 	function lista_articulos($query=false)
 	{
-		$sql = "SELECT id_plantilla,COMPANYCODE,A.TAG_SERIE,P.DESCRIPT,DESCRIPT2,MODELO,SERIE,EMPLAZAMIENTO,L.DENOMINACION,PE.PERSON_NO,PE.PERSON_NOM,M.DESCRIPCION as 'marca',E.DESCRIPCION as 'estado',G.DESCRIPCION as 'genero',C.DESCRIPCION as 'color',FECHA_INV_DATE,ASSETSUPNO,ASSETSUPNO,TAG_ANT,QUANTITY,BASE_UOM,ORIG_ASSET,ORIG_ACQ_YR,ORIG_VALUE,CARACTERISTICA,PROYECTO.programa_financiacion as 'criterio',TAG_UNIQUE,SUBNUMBER,OBSERVACION,IMAGEN  FROM PLANTILLA_MASIVA P
+		$sql = "SELECT top(100) id_plantilla,COMPANYCODE,A.TAG_SERIE,P.DESCRIPT,DESCRIPT2,MODELO,SERIE,EMPLAZAMIENTO,L.DENOMINACION,PE.PERSON_NO,PE.PERSON_NOM,M.DESCRIPCION as 'marca',E.DESCRIPCION as 'estado',G.DESCRIPCION as 'genero',C.DESCRIPCION as 'color',FECHA_INV_DATE,ASSETSUPNO,ASSETSUPNO,TAG_ANT,QUANTITY,BASE_UOM,ORIG_ASSET,ORIG_ACQ_YR,ORIG_VALUE,CARACTERISTICA,PROYECTO.programa_financiacion as 'criterio',TAG_UNIQUE,SUBNUMBER,OBSERVACION,IMAGEN  FROM PLANTILLA_MASIVA P
 			LEFT JOIN ASSET A ON P.ID_ASSET = A.ID_ASSET
 			LEFT JOIN LOCATION L ON P.LOCATION = L.ID_LOCATION
 			LEFT JOIN PERSON_NO PE ON P.PERSON_NO = PE.ID_PERSON
@@ -111,7 +124,23 @@ class contratosM
 			{
 				$sql.="  AND A.TAG_SERIE +' '+DESCRIPT LIKE '%".$query."%'";
 			}
-		$sql.=" ORDER BY id_plantilla	OFFSET 0 ROWS FETCH NEXT 25 ROWS ONLY;";
+		//$sql.=" ORDER BY id_plantilla	OFFSET 0 ROWS FETCH NEXT 25 ROWS ONLY;";
+
+		// print_r($sql);die();
+		$datos = $this->db->datos($sql);
+		return $datos;
+	}
+
+	function asignar_a_seguro($tabla,$campo,$query=false)
+	{
+		$sql = "SELECT Top(100) *,".$campo." as texto FROM ".$tabla." where  1=1 ";
+
+		if($query)
+		{
+			$sql.=" AND ".$campo." like '%".$query."%'";
+		}
+
+		// print_r($sql);die();
 		$datos = $this->db->datos($sql);
 		return $datos;
 	}
@@ -147,9 +176,46 @@ class contratosM
 		return $datos;
 	}
 
+	function lista_articulos_seguro2($tabla,$id,$modulo,$seguro=false)
+	{
+		$sql = "SELECT * 
+		FROM ARTICULOS_ASEGURADOS 
+		WHERE id_articulos = '".$id."' 
+		AND tabla = '".$tabla."' 
+		AND modulo='".$modulo."'";
+		if($seguro)
+		{
+			$sql.=" AND id_seguro='".$seguro."'";
+		}
+		$datos = $this->db->datos($sql);
+		return $datos;
+	}
+
+	function lista_articulos_seguro_detalle($tabla,$id,$modulo,$id_tabla,$seguro=false)
+	{
+		$sql = "SELECT * 
+		FROM ARTICULOS_ASEGURADOS ARS
+		INNER JOIN SEGUROS S ON ARS.id_seguro = S.id_contratos 
+		INNER JOIN PROVEEDOR P ON P.id_proveedor = S.proveedor 
+		INNER JOIN ".$tabla." E ON ARS.id_articulos = E.".$id_tabla."
+		WHERE id_articulos = '".$id."' 
+		AND tabla = '".$tabla."' 
+		AND modulo='".$modulo."'";
+		if($seguro)
+		{
+			$sql.=" AND id_seguro='".$seguro."'";
+		}
+
+		$sql.=" ORDER BY terceros ASC";
+		// print_r($sql);die();
+		$datos = $this->db->datos($sql);
+		return $datos;
+	}
+
 	function Articulo_contrato_delete($id)
 	{
-		$sql = "DELETE FROM ARTICULOS_ASEGURADOS WHERE id_arti_asegurado='".$id."'";
+		$sql = "DELETE FROM ARTICULOS_ASEGURADOS WHERE id_arti_asegurados='".$id."'";
+		// print_r($sql);die();
 		return $this->db->sql_string($sql);
 	}
 
@@ -197,8 +263,10 @@ class contratosM
 			WHERE 1=1 ";
 			if($id)
 			{
-				$sql.=" AND id_articulo = '".$id."'";
+				$sql.=" AND id_articulos = '".$id."'";
 			}
+
+			// print_r($sql);die();
 		$datos = $this->db->datos($sql);
 		return $datos;
 	}
@@ -227,6 +295,49 @@ class contratosM
 				$sql.=" AND id_deterioro = '".$id."' ";
 			}
 			$sql.=" ORDER BY id_deterioro DESC";
+		$datos = $this->db->datos($sql);
+		return $datos;
+	}
+
+	function tablas_aseguradas($tabla=false,$contrato=false,$idArticulo=false,$ligar=false,$id_tabla=false)
+	{
+		$sql= "SELECT * FROM ARTICULOS_ASEGURADOS AR";
+		if($ligar)
+		{
+			$sql.=" INNER JOIN ".$tabla." T ON AR.id_articulos = T.".$id_tabla;
+		} 
+		$sql.=" WHERE  modulo = '".$_SESSION['INICIO']['MODULO_SISTEMA']."'";
+		if($tabla)
+		{
+			$sql.=" AND	tabla = '".$tabla."'";
+		}
+		if($contrato)
+		{
+			$sql.=" AND id_seguro = '".$contrato."'";
+		}
+		if($idArticulo)
+		{
+			$sql.=" AND id_articulos='".$idArticulo."'";
+		}
+
+		// print_r($sql);die();
+		$datos = $this->db->datos($sql);
+		return $datos;
+	}
+	function lista_id_tabla($tabla,$contrato)
+	{
+		$sql= "SELECT id_articulos FROM ARTICULOS_ASEGURADOS 
+		WHERE tabla = '".$tabla."'
+		AND id_seguro = '".$contrato."'";
+		$datos = $this->db->datos($sql);
+
+		// print_r($sql);
+		return $datos;
+	}
+	function itemAsegurado($tabla,$idtbl,$ids)
+	{
+		$sql="SELECT * FROM ".$tabla." WHERE ".$idtbl." in (".$ids.")";
+		// print_r($sql);die();
 		$datos = $this->db->datos($sql);
 		return $datos;
 	}

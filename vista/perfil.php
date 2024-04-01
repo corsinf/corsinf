@@ -2,12 +2,59 @@
 <script type="text/javascript">
 $( document ).ready(function() {
     var id = '<?php echo $_SESSION['INICIO']['ID_USUARIO'];?>';
-   	console.log(id);
-   	if(id!='')
-   	{
-   		Editar(id)
-   	}
+   	Editar(id);
 
+    $("#subir_imagen").on('click', function() {
+
+       var fileInput = $('#file_img').val();  
+       var id = $('#txt_id').val();
+      if(id=='')
+      {
+        Swal.fire('','Asegurese de llenar los datos primero','warning');
+        return false;
+      }
+      if(fileInput=='')
+      {
+        Swal.fire('','Seleccione una imagen','warning');
+        return false;
+      }
+
+
+        var formData = new FormData(document.getElementById("form_img"));
+         $.ajax({
+            url: '../controlador/usuariosC.php?cargar_imagen_no_concurente=true',
+            type: 'post',
+            data: formData,
+            contentType: false,
+            processData: false,
+            dataType:'json',
+         // beforeSend: function () {
+         //        $("#foto_alumno").attr('src',"../img/gif/proce.gif");
+         //     },
+            success: function(response) {
+               if(response==-1)
+               {
+                 Swal.fire(
+                  '',
+                  'Algo extraño a pasado intente mas tarde.',
+                  'error')
+
+               }else if(response ==-2)
+               {
+                  Swal.fire(
+                  '',
+                  'Asegurese que el archivo subido sea una imagen.',
+                  'error')
+               }else
+               {
+                  location.reload();
+               } 
+            }
+        });
+    });
+    // --------------------------
+
+    
 });
 
  function Editar(id)
@@ -32,11 +79,13 @@ $( document ).ready(function() {
          },*/
            success:  function (response) {            
 
-            console.log(response);
-           $('#txt_nombre').val(response[0].nombres);
-           $('#txt_apellido').val(response[0].ape);
+            // console.log(response);
+           $('#lbl_nombre_usuario').text(response[0].nombre+' '+response[0].apellido)
+           $('#txt_nombre').val(response[0].nombre);
+           $('#txt_apellido').val(response[0].apellido);
            $('#txt_ci').val(response[0].ci);
-           $('#txt_telefono').val(response[0].tel);
+           $('#name_img').val(response[0].ci);
+           $('#txt_telefono').val(response[0].telefono);
   	       $('#txt_emial').val(response[0].email);
   	       $('#txt_emial_2').val(response[0].email);
   	       // $('#ddl_tipo_usuario').append($('<option>',{value: response[0].idt, text:response[0].tipo,selected: true }));;
@@ -45,7 +94,7 @@ $( document ).ready(function() {
   	       var passlen = response[0].pass.length;
   	       $('#pass').text('*'.repeat(passlen));
 
-  	       $('#txt_dir').val(response[0].dir);
+  	       $('#txt_dir').val(response[0].direccion);
            $('#txt_id').val(response[0].id);           
            if(response[0].foto!='' && response[0].foto!=null )
            {
@@ -222,6 +271,8 @@ $( document ).ready(function() {
             </nav>
           </div>          
         </div>
+
+        <?php //print_r($_SESSION['INICIO']); ?>
         <!--end breadcrumb-->
         <div class="container">
           <div class="main-body">
@@ -230,16 +281,20 @@ $( document ).ready(function() {
                 <div class="card">
                   <div class="card-body">
                     <div class="d-flex flex-column align-items-center text-center">
-                      <img src="../assets/images/avatars/avatar-2.png" alt="Admin" class="rounded-circle p-1 bg-primary" width="110" height="110" id="img_foto">
+                      <img src="<?php if($_SESSION['INICIO']['FOTO']!=''){ echo $_SESSION['INICIO']['FOTO'];}else{echo "../img/sin_imagen.jpg"; }  ?>" alt="Admin" class="rounded-circle p-1 bg-primary" width="110" height="110" id="img_foto">
                       <div class="mt-3">
-                        <h4><?php echo $_SESSION['INICIO']['USUARIO']; ?></h4>
+                        <h4 id="lbl_nombre_usuario"><?php if($_SESSION['INICIO']['NO_CONCURENTE']==''){echo $_SESSION['INICIO']['USUARIO'];} ?></h4>
                         <p class="text-secondary mb-1"><?php echo $_SESSION['INICIO']['TIPO']; ?></p>
                         <!-- <p class="text-muted font-size-sm">Área de la Bahía, San Francisco, CA</p> -->
-                        <button class="btn btn-primary" _msthash="4232514" _msttexthash="78117">Seguir</button>
-                        <button class="btn btn-outline-primary" _msthash="4232696" _msttexthash="92807">Mensaje</button>
+                        <form id="form_img">
+                        <input type="file" name="file_img" _msthash="4232514" _msttexthash="78117" id="file_img">
+                        <input type="hidden" name="name_img" _msthash="4232514" _msttexthash="78117" id="name_img">
+                        <button type="button" class="btn btn-outline-primary" id="subir_imagen" _msthash="4232696" _msttexthash="92807">Subir</button>
+                        </form>
+
                       </div>
                     </div>
-                    <hr class="my-4">
+                   <!-- <hr class="my-4">
                     <ul class="list-group list-group-flush">
                       <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
                         <h6 class="mb-0"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-globe me-2 icon-inline"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg><font _mstmutation="1">Website</font></h6><br>
@@ -257,7 +312,7 @@ $( document ).ready(function() {
                         <h6 class="mb-0"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-facebook me-2 icon-inline text-primary"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg><font _mstmutation="1">Facebook</font></h6>
                         <span class="text-secondary" id="txt_link_fb"></span>
                       </li>
-                    </ul>
+                    </ul> -->
                   </div>
                 </div>
               </div>
@@ -297,15 +352,17 @@ $( document ).ready(function() {
                       </div>
                     </div>
                     <div class="row mb-3">
-                      <div class="col-sm-3">
-                        <h6 class="mb-0" _msthash="3834935" _msttexthash="75179">Password</h6>
-                      </div>
+                      <?php if($_SESSION['INICIO']['NO_CONCURENTE']==""){ ?>
+                        <div class="col-sm-3">
+                          <h6 class="mb-0" _msthash="3834935" _msttexthash="75179">Password</h6>
+                        </div>
                       <div class="col-sm-9 text-secondary">
                         <div class="input-group mb-3">
                            <input type="password" class="form-control form-control-sm" name="txt_pass" id="txt_pass" required="" readonly>
                             <button type="button" class="btn btn-info btn-flat" onclick="pass()"><i class="lni lni-eye" id="eye"></i></button>                          
                         </div>
                       </div>
+                      <?php } ?>
                     </div>
                     <div class="row mb-3">
                       <div class="col-sm-3">
@@ -323,15 +380,19 @@ $( document ).ready(function() {
                         <textarea rows="3" class="form-control" style="resize:none;" id="txt_dir"></textarea>
                       </div>
                     </div>
+
+                      <?php if($_SESSION['INICIO']['NO_CONCURENTE']==""){ ?>
                     <div class="row">
                       <div class="col-sm-3"></div>
                       <div class="col-sm-9 text-secondary">
                         <input type="button" class="btn btn-primary px-4" onclick="guardar_datos_personales()" value="Guardar cambios" _mstvalue="256646">
                       </div>
                     </div>
+                  <?php } ?>
                   </div>
                 </div>
 
+                <?php if($_SESSION['INICIO']['NO_CONCURENTE']==""){ ?>
                 <div class="card">
                   <div class="card-body">
                     <div class="row mb-3">
@@ -363,6 +424,7 @@ $( document ).ready(function() {
                     </div>                   
                   </div>
                 </div>
+              <?php } ?>
 
               </div>
             </div>

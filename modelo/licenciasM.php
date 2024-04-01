@@ -1,5 +1,8 @@
-<?php 
-include('../db/db.php');
+<?php
+if(!class_exists('db'))
+{ 
+	include('../db/db.php');
+}
 /**
  * 
  */

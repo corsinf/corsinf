@@ -172,9 +172,11 @@ class modulos_paginasC
 		$defa = 0;
 		$activo = 'I';
 		$subpag = 0;
+		$paradb = 0;
 		if($parametros['defaul']=='true'){$defa = 1;	}		// print_r($parametros);die();
 		if($parametros['activo']=='true'){$activo = 'A';	}
 		if($parametros['subpag']=='true'){$subpag = 1;	}	
+		if($parametros['paradb']=='true'){$paradb = 1;	}	
 
 		$datos[0]['campo']='nombre_pagina';
 		$datos[0]['dato']=$parametros['pagina'];
@@ -191,7 +193,9 @@ class modulos_paginasC
 		$datos[6]['campo']='detalle_pagina';
 		$datos[6]['dato']=$parametros['detalle'];
 		$datos[7]['campo']='subpagina';
-		$datos[7]['dato']=$subpag;
+		$datos[7]['dato']=$subpag;		
+		$datos[8]['campo']='para_dba';
+		$datos[8]['dato']=$paradb;
 
 		$where[0]['campo']='id_paginas';
 		$where[0]['dato'] = $parametros['id'];

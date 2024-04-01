@@ -76,7 +76,7 @@ class Reporte_pdf
 		$sizetable = 8;
 		$titulo="Reporte inventario";
 
-		$activos = $this->articulo->lista_articulos($query=false,$loc=false,$cus=false,$pag=false,$parametros['id'],$exacto=false,$asset=false,$bajas=false,$terceros=false,$patrimoniales=false,$desde=false,$hasta=false,$multiple=false);
+		$activos = $this->articulo->lista_articulos_new_new($query=false,$loc=false,$cus=false,$pag=false,$parametros['id'],$exacto=false,$asset=false,$bajas=false,$terceros=false,$patrimoniales=false,$desde=false,$hasta=false,$multiple=false);
 
 		// print_r($activos);die();
 
@@ -135,7 +135,7 @@ class Reporte_pdf
 
 		$tablaHTML[$pos]['medidas']=array(30,15,90,30,25);
 		$tablaHTML[$pos]['alineado']=array('L','L','L','L','L');
-		$tablaHTML[$pos]['datos']=array('<b>Categoria:','','','<b>Fecha Compra:',$activos[0]['ORIG_ACQ_YR']->format('Y-m-d'));
+		$tablaHTML[$pos]['datos']=array('<b>Categoria:','','','<b>Fecha Compra:',substr($activos[0]['ORIG_ACQ_YR'],0,10));
 		$tablaHTML[$pos]['estilo']='';		
 		// $tablaHTML[$pos]['borde']='1';
 		$pos+=1;
@@ -255,7 +255,7 @@ class Reporte_pdf
 		$pos+=1;
 
 		$contabilidad = '';
-		if($activos[0]['FECHA_CONTA']!='' && $activos[0]['FECHA_CONTA']!=null){$contabilidad = $activos[0]['FECHA_CONTA']->format('Y-m-d');}
+		if($activos[0]['FECHA_CONTA']!='' && $activos[0]['FECHA_CONTA']!=null){$contabilidad = $activos[0]['FECHA_CONTA'];}
 		$tablaHTML[$pos]['medidas']=array(40,40,35,40,35);
 		$tablaHTML[$pos]['alineado']=array('C','C','C','C','C');
 		$tablaHTML[$pos]['datos']=array($contabilidad,'$'.$activos[0]['ORIG_VALUE'],'','','');
@@ -269,13 +269,13 @@ class Reporte_pdf
 
 
 		
-		// $datos = $this->articulo->lista_articulos($query,$loc,$cus,$pag=false,$whereid=false,$exacto=false,$asset=false,$bajas=false,$terceros=false,$patrimoniales=false,$desde,$hasta);
+		// $datos = $this->articulo->lista_articulos_new($query,$loc,$cus,$pag=false,$whereid=false,$exacto=false,$asset=false,$bajas=false,$terceros=false,$patrimoniales=false,$desde,$hasta);
 
 		// foreach ($datos as $key => $value) {
 		// 	$fecha='';
 		// 	if($value['fecha_in'] !='')
 		// 	{
-		// 		$fecha =$value['fecha_in']->format('Y-m-d'); 
+		// 		$fecha =$value['fecha_in']; 
 		// 	}
 		// 	$tablaHTML[$pos]['medidas']=$tablaHTML[0]['medidas'];
 		//     $tablaHTML[$pos]['alineado']=$tablaHTML[0]['alineado'];
@@ -299,13 +299,14 @@ class Reporte_pdf
 		$list = array();
 
 		foreach ($ids as $key => $value) {
-			$activos = $this->articulo->lista_articulos($query=false,$loc=false,$cus=false,$pag=false,$value,$exacto=false,$asset=false,$bajas=false,$terceros=false,$patrimoniales=false,$desde=false,$hasta=false,$multiple=false);	
+			$activos = $this->articulo->lista_articulos_new($query=false,$loc=false,$cus=false,$pag=false,$value,$exacto=false,$asset=false,$bajas=false,$terceros=false,$patrimoniales=false,$desde=false,$hasta=false,$multiple=false);	
 			array_push($list,$activos[0]);
 		}
-		// print_r($list);die();	
+		// print_r($parametros['id']);die();
+
+			// print_r('expression');die()	
 		$tablaHTML = array();
-		$pos = 0;
-				
+		$pos = 0;				
 
 		foreach ($list as $key => $activos) {
 				$image[0]['url'] = '../img/de_sistema/puce_logo.png';
@@ -361,7 +362,7 @@ class Reporte_pdf
 
 				$tablaHTML[$pos]['medidas']=array(30,15,90,30,25);
 				$tablaHTML[$pos]['alineado']=array('L','L','L','L','L');
-				$tablaHTML[$pos]['datos']=array('<b>Categoria:','','','<b>Fecha Compra:',$activos['ORIG_ACQ_YR']->format('Y-m-d'));
+				$tablaHTML[$pos]['datos']=array('<b>Categoria:','','','<b>Fecha Compra:', substr($activos['ORIG_ACQ_YR'],0,10));
 				$tablaHTML[$pos]['estilo']='';		
 				// $tablaHTML[$pos]['borde']='1';
 				$pos+=1;
@@ -481,7 +482,7 @@ class Reporte_pdf
 				$pos+=1;
 
 				$contabilidad = '';
-				if($activos['FECHA_CONTA']!='' && $activos['FECHA_CONTA']!=null){$contabilidad = $activos['FECHA_CONTA']->format('Y-m-d');}
+				if($activos['FECHA_CONTA']!='' && $activos['FECHA_CONTA']!=null){$contabilidad = $activos['FECHA_CONTA'];}
 				$tablaHTML[$pos]['medidas']=array(40,40,35,40,35);
 				$tablaHTML[$pos]['alineado']=array('C','C','C','C','C');
 				$tablaHTML[$pos]['datos']=array($contabilidad,'$'.$activos['ORIG_VALUE'],'','','');
@@ -507,7 +508,7 @@ class Reporte_pdf
 		$list = array();
 
 		foreach ($ids as $key => $value) {
-			$activos = $this->articulo->lista_articulos($query=false,$loc=false,$cus=false,$pag=false,$value,$exacto=false,$asset=false,$bajas=false,$terceros=false,$patrimoniales=false,$desde=false,$hasta=false,$multiple=false);	
+			$activos = $this->articulo->lista_articulos_new($query=false,$loc=false,$cus=false,$pag=false,$value,$exacto=false,$asset=false,$bajas=false,$terceros=false,$patrimoniales=false,$desde=false,$hasta=false,$multiple=false);	
 			array_push($list,$activos[0]);
 		}
 		// print_r($list);die();	
@@ -586,7 +587,7 @@ class Reporte_pdf
 
 				$tablaHTML[$pos]['medidas']=array(30,15,90,30,25);
 				$tablaHTML[$pos]['alineado']=array('L','L','L','L','L');
-				$tablaHTML[$pos]['datos']=array('<b>Categoria:','','','<b>Fecha Compra:',$activos['ORIG_ACQ_YR']->format('Y-m-d'));
+				$tablaHTML[$pos]['datos']=array('<b>Categoria:','','','<b>Fecha Compra:',substr($activos['ORIG_ACQ_YR'],0,10));
 				$tablaHTML[$pos]['estilo']='';
 
 				$tablaHTML[$pos]['size'] = 8;		
@@ -733,7 +734,7 @@ class Reporte_pdf
 				$pos+=1;
 
 				$contabilidad = '';
-				if($activos['FECHA_CONTA']!='' && $activos['FECHA_CONTA']!=null){$contabilidad = $activos['FECHA_CONTA']->format('Y-m-d');}
+				if($activos['FECHA_CONTA']!='' && $activos['FECHA_CONTA']!=null){$contabilidad = $activos['FECHA_CONTA'];}
 				$tablaHTML[$pos]['medidas']=array(40,40,35,40,35);
 				$tablaHTML[$pos]['alineado']=array('C','C','C','C','C');
 				$tablaHTML[$pos]['datos']=array($contabilidad,'$'.$activos['ORIG_VALUE'],'','','');
@@ -779,13 +780,13 @@ class Reporte_pdf
 		$tablaHTML[0]['datos']=array('Tag','Decripcion','Modelo','Serie','Localizacion','Custodio','Marca','Estado','Genero','Color','Observacion','Fecha inventario');
 		$tablaHTML[0]['estilo']='BI';
 		$tablaHTML[0]['borde'] = '1';
-		$datos = $this->articulo->lista_articulos($query,$loc,$cus,$pag=false,$whereid=false,$exacto=false,$asset=false,$bajas=false,$terceros=false,$patrimoniales=false,$desde,$hasta);
+		$datos = $this->articulo->lista_articulos_new($query,$loc,$cus,$pag=false,$whereid=false,$exacto=false,$asset=false,$bajas=false,$terceros=false,$patrimoniales=false,$desde,$hasta);
 
 		foreach ($datos as $key => $value) {
 			$fecha='';
 			if($value['fecha_in'] !='')
 			{
-				$fecha =$value['fecha_in']->format('Y-m-d'); 
+				$fecha =$value['fecha_in']; 
 			}
 			$tablaHTML[$pos]['medidas']=$tablaHTML[0]['medidas'];
 		    $tablaHTML[$pos]['alineado']=$tablaHTML[0]['alineado'];
@@ -821,12 +822,12 @@ class Reporte_pdf
 		while ($total_act>0) {
 			$limite = $inicio.'-'.$bloque;
 
-			$datos = $this->articulo->lista_articulos_sap_codigos($query=false,$loc=false,$cus=false,$limite);
+			$datos = $this->articulo->lista_articulos_new_sap_codigos($query=false,$loc=false,$cus=false,$limite);
 			foreach ($datos as $key => $value) {
 				$fecha='';
 				if($value['FECHA_INV_DATE'] !='')
 				{
-					$fecha =$value['FECHA_INV_DATE']->format('Y-m-d'); 
+					$fecha =$value['FECHA_INV_DATE']; 
 				}
 				$tablaHTML[$pos]['medidas']=$tablaHTML[0]['medidas'];
 			    $tablaHTML[$pos]['alineado']=$tablaHTML[0]['alineado'];
@@ -876,7 +877,7 @@ class Reporte_pdf
 		$tablaHTML[2]['datos']=array('COMPA','ASSET','SUBNU','DESCRIPCION','DESCRIPCION 2','MODELO','SERIE','RFID','ULTI. INVE.','CANT','UNI.MED','COD EMPL.','EMPLAZAMIEN.','ID CUS','CUSTODIO','MARCA','ESTAD','GENER','COLOR','PROYECTO',	'SUPRA','TAG ANTI','FEC COMP','VALOR','OBSER.','BAJA','ACTUALIZADO POR','FEC BAJA','FEC. CON','FEC. REF','PERIO','CLAS MOV','MOVIMIENTO');
 		$tablaHTML[2]['estilo']='B';
 		$tablaHTML[2]['borde'] = '1';
-		$datos = $this->articulo->lista_articulos_sap_codigos($query=false,$loc=false,$cus=false,$pag=false,$whereid=false,$mes=false,$desde,$hasta,$bajas=1,$terceros=false,$patrimoniales=false);
+		$datos = $this->articulo->lista_articulos_new_sap_codigos($query=false,$loc=false,$cus=false,$pag=false,$whereid=false,$mes=false,$desde,$hasta,$bajas=1,$terceros=false,$patrimoniales=false);
 
 		foreach ($datos as $key => $value) {
 
@@ -888,23 +889,23 @@ class Reporte_pdf
 			$fecha_ref = '';
 			if($value['FECHA_INV_DATE'] !='')
 			{
-				$fecha =$value['FECHA_INV_DATE']->format('Y-m-d'); 
+				$fecha =$value['FECHA_INV_DATE']; 
 			}
 			if($value['FECHA_INV_DATE'] !='')
 			{
-				$fecha_compra =$value['ORIG_ACQ_YR']->format('Y-m-d'); 
+				$fecha_compra =$value['ORIG_ACQ_YR']; 
 			}
 			if($value['FECHA_BAJA'] !='')
 			{
-				$fecha_baja =$value['FECHA_BAJA']->format('Y-m-d'); 
+				$fecha_baja =$value['FECHA_BAJA']; 
 			}
 			if($value['FECHA_CONTA'] !='')
 			{
-				$fecha_conta =$value['FECHA_CONTA']->format('Y-m-d'); 
+				$fecha_conta =$value['FECHA_CONTA']; 
 			}
 			if($value['FECHA_REFERENCIA'] !='')
 			{
-				$fecha_ref =$value['FECHA_REFERENCIA']->format('Y-m-d'); 
+				$fecha_ref =$value['FECHA_REFERENCIA']; 
 			}
 
 			$tablaHTML[$pos]['medidas']=$tablaHTML[1]['medidas'];
@@ -931,13 +932,13 @@ class Reporte_pdf
 		$tablaHTML[0]['datos']=array('Tag','Decripcion','Modelo','Serie','Localizacion','Custodio','Marca','Estado','Genero','Color','Observacion','Fecha inventario');
 		$tablaHTML[0]['estilo']='BI';
 		$tablaHTML[0]['borde'] = '1';
-		$datos = $this->articulo->lista_articulos($query=false,$loc=false,$cus=false,$pag=false,$whereid=false,$exacto=false,$asset=false,$bajas=false,$terceros=1,$patrimoniales=false);
+		$datos = $this->articulo->lista_articulos_new($query=false,$loc=false,$cus=false,$pag=false,$whereid=false,$exacto=false,$asset=false,$bajas=false,$terceros=1,$patrimoniales=false);
 
 		foreach ($datos as $key => $value) {
 			$fecha='';
 			if($value['fecha_in'] !='')
 			{
-				$fecha =$value['fecha_in']->format('Y-m-d'); 
+				$fecha =$value['fecha_in']; 
 			}
 			$tablaHTML[$pos]['medidas']=$tablaHTML[0]['medidas'];
 		    $tablaHTML[$pos]['alineado']=$tablaHTML[0]['alineado'];
@@ -963,13 +964,13 @@ class Reporte_pdf
 		$tablaHTML[0]['datos']=array('Tag','Decripcion','Modelo','Serie','Localizacion','Custodio','Marca','Estado','Genero','Color','Observacion','Fecha inventario');
 		$tablaHTML[0]['estilo']='BI';
 		$tablaHTML[0]['borde'] = '1';
-		$datos = $this->articulo->lista_articulos($query=false,$loc=false,$cus=false,$pag=false,$whereid=false,$exacto=false,$asset=false,$bajas=false,$terceros=false,$patrimoniales=1);
+		$datos = $this->articulo->lista_articulos_new($query=false,$loc=false,$cus=false,$pag=false,$whereid=false,$exacto=false,$asset=false,$bajas=false,$terceros=false,$patrimoniales=1);
 
 		foreach ($datos as $key => $value) {
 			$fecha='';
 			if($value['fecha_in'] !='')
 			{
-				$fecha =$value['fecha_in']->format('Y-m-d'); 
+				$fecha =$value['fecha_in']; 
 			}
 			$tablaHTML[$pos]['medidas']=$tablaHTML[0]['medidas'];
 		    $tablaHTML[$pos]['alineado']=$tablaHTML[0]['alineado'];
@@ -1008,13 +1009,13 @@ class Reporte_pdf
 		$tablaHTML[0]['datos']=array('COMPANYCODE','NUM. INVENTARIO','ASSET','SUBNUMBER','DESCRIPT','DESCRIPT2','MODELO','SERIE','date','location','FILE1','PERSON_NO','FILE2','EVALGROUP1','EVALGROUP2','EVALGROUP3','EVALGROUP4','ASSETSUPNO','FILE3');
 		$tablaHTML[0]['estilo']='BI';
 		$tablaHTML[0]['borde'] = '1';
-		$datos = $this->articulo->lista_articulos_sap($query,$loc,$cus);
+		$datos = $this->articulo->lista_articulos_new_sap($query,$loc,$cus);
 
 		foreach ($datos as $key => $value) {
 		$fecha='';
 			if($value['FECHA_INV_DATE'] !='')
 			{
-				$fecha =$value['FECHA_INV_DATE']->format('Y-m-d'); 
+				$fecha =$value['FECHA_INV_DATE']; 
 			}
 			$tablaHTML[$pos]['medidas']=$tablaHTML[0]['medidas'];
 		    $tablaHTML[$pos]['alineado']=$tablaHTML[0]['alineado'];
@@ -1044,13 +1045,13 @@ class Reporte_pdf
 		,'STORT','KTEXT','PERNR','PERNP_TXT','ORD41','ORD42','ORD43','ORD44','GDLGRP','ANLUE','AIBN1','AKTIV','URWRT','','NOTE1','IMAGEN','ACTUALIZADO POR');
 		$tablaHTML[0]['estilo']='BI';
 		$tablaHTML[0]['borde'] = '1';
-		// $datos = $this->articulo->lista_articulos_sap($query,$loc,$cus);
+		// $datos = $this->articulo->lista_articulos_new_sap($query,$loc,$cus);
 
 		// foreach ($datos as $key => $value) {
 		// $fecha='';
 		// 	if($value['FECHA_INV_DATE'] !='')
 		// 	{
-		// 		$fecha =$value['FECHA_INV_DATE']->format('Y-m-d'); 
+		// 		$fecha =$value['FECHA_INV_DATE']; 
 		// 	}
 		// 	$tablaHTML[$pos]['medidas']=$tablaHTML[0]['medidas'];
 		//     $tablaHTML[$pos]['alineado']=$tablaHTML[0]['alineado'];

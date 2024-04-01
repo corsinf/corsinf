@@ -2,6 +2,7 @@
 @session_start();
 include('../modelo/contratosM.php');
 include('../modelo/articulosM.php');
+include('../db/codigos_globales.php');
 /**
  * 
  */
@@ -15,6 +16,11 @@ if(isset($_GET['coberturaSave']))
 {
 	$parametros = $_POST['parametros'];
 	echo json_encode($controlador->guardar_cobertura($parametros));
+}
+if(isset($_GET['tipo_pago_save']))
+{
+	$parametros = $_POST['parametros'];
+	echo json_encode($controlador->tipo_pago_save($parametros));
 }
 if(isset($_GET['proveSave']))
 {
@@ -45,8 +51,14 @@ if(isset($_GET['lista_cobertura']))
 if(isset($_GET['lista_articulos']))
 {
 	$query = '';
+	$tabla = '';
 	if(isset($_GET['q'])){$query=$_GET['q'];}
-	echo json_encode($controlador->lista_articulos($query));
+	if(isset($_GET['tabla'])){$tabla=$_GET['tabla'];}
+	$parametros = array(
+		'query'=>$query,
+		'tabla'=>$tabla,
+	);
+	echo json_encode($controlador->lista_articulos($parametros));
 }
 if(isset($_GET['lista_proveedores']))
 {
@@ -109,10 +121,12 @@ class contratoC
 {
 	private $modelo;
 	private $arti;
+	private $cod_global;
 	function __construct()
 	{
 		$this->modelo = new contratosM();	
-		$this->arti = new articulosM();	
+		$this->arti = new articulosM();			
+		$this->cod_global = new codigos_globales();
 	}
 
 	function guardar_siniestros($parametros)
@@ -132,6 +146,13 @@ class contratoC
 		$datos[0]['campo'] = 'nombre_riesgo';
 		$datos[0]['dato'] = utf8_decode($parametros['nombre']);
 		return $this->modelo->guardar($tabla='RIESGOS',$datos);
+	}
+
+	function tipo_pago_save($parametros)
+	{
+		$datos[0]['campo'] = 'nombre_tipo';
+		$datos[0]['dato'] = utf8_decode($parametros['nombre']);
+		return $this->modelo->guardar('TIPO_PAGO',$datos);
 	}
 	function guardar_prove($parametros)
 	{
@@ -248,7 +269,9 @@ class contratoC
 	function cargar_datos_seguro($parametros)
 	{
 		// print_r($parametros);die();
-		$seguro =  $this->modelo->buscar_seguro($parametros['id'],false,false,false,false,false);
+		$seguro =  $this->modelo->buscar_seguro($parametros['id'],false,false,false,false,false,false,false);
+
+		// print_r($seguro);die();
 		$prove = $this->modelo->lista_proveedores(false,$seguro[0]['proveedor']);
 		if(count($prove)>0)
 		{
@@ -276,58 +299,182 @@ class contratoC
 		// print_r($seguro);die();
 	}
 
-	function lista_articulos($query)
+	function lista_articulos($parametros)
 	{
-		$datos = $this->modelo->lista_articulos($query);
-		$op = array();
-	    foreach ($datos as $key => $value) {
-	    	$op[] = array('id'=>$value['id_plantilla'],'text'=>$value['TAG_SERIE'].' - '.$value['DESCRIPT'] .' - '.$value['CARACTERISTICA']);
-	    }
+		// print_r($parametros);die();
+		if($parametros['tabla']=='ACTIVO')
+		{
+			$datos = $this->modelo->lista_articulos($parametros['query']);
+			$op = array();
+		    foreach ($datos as $key => $value) {
+		    	$op[] = array('id'=>$value['id_plantilla'],'text'=>$value['TAG_SERIE'].' - '.$value['DESCRIPT'] .' - '.$value['CARACTERISTICA']);
+		    }
+		}else
+		{
+
+			$tbl = '';
+			$campo = '';
+			$seguros_tabla = $_SESSION['INICIO']['ASIGNAR_SEGUROS'];
+			$tablas = json_decode($seguros_tabla, true);
+			foreach ($tablas as $key => $value) {
+				if($value['tabla']==$parametros['tabla'])
+				{
+					foreach ($value as $key2 => $value2) {
+						// print_r($key2);die();
+						if($key2!='tabla')
+						{
+							$campo.=$value2."+' '+";
+						}
+					}
+					$tbl = $value['tabla'];
+					$campo = substr($campo,0,-5);
+					break;
+				}
+			}
+			$id = $this->cod_global->id_tabla($tbl);
+			$datos = $this->modelo->asignar_a_seguro($tbl,$campo,$parametros['query']);
+			// print_r($datos);
+			// print_r($id);die();
+			$op = array();
+		    foreach ($datos as $key => $value) {
+		    	$op[] = array('id'=>$value[$id[0]['ID']],'text'=>$value['texto'],'data'=>$value);
+		    }
+		}
 	    return $op;
 	}
 	function guardar_articulo_contrato($parametros)
-	{
-		$exis = $this->modelo->lista_articulos_seguro($parametros['contrato'],$query=false,$parametros['articulo']);
-		if(count($exis)==0)
-		{
-			$exis1 = $this->modelo->lista_articulos_seguro(false,$query=false,$parametros['articulo']);
-			if(count($exis1)>0)
+	{	
+		if($parametros['tabla']=='ACTIVOS'){
+			$exis = $this->modelo->lista_articulos_seguro($parametros['contrato'],$query=false,$parametros['articulo']);
+			if(count($exis)==0)
 			{
-				return -3;
-			}else{
-				$datos[0]['campo']='id_seguro';
-				$datos[0]['dato']= $parametros['contrato'];
-				$datos[1]['campo']='id_articulo';
-				$datos[1]['dato']= $parametros['articulo'];
-				return $this->modelo->guardar('ARTICULOS_ASEGURADOS',$datos);
+				$exis1 = $this->modelo->lista_articulos_seguro(false,$query=false,$parametros['articulo']);
+				if(count($exis1)>0)
+				{
+					return -3;
+				}else{
+					$datos[0]['campo']='id_seguro';
+					$datos[0]['dato']= $parametros['contrato'];
+					$datos[1]['campo']='id_articulos';
+					$datos[1]['dato']= $parametros['articulo'];
+					return $this->modelo->guardar('ARTICULOS_ASEGURADOS',$datos);
+				}
+			}else
+			{
+				return -2;
 			}
 		}else
-		{
-			return -2;
+		{			
+			// print_r($parametros);die();
+			$exis = $this->modelo->lista_articulos_seguro2($parametros['tabla'],$parametros['articulo'],$parametros['modulo'],$parametros['contrato']);
+			if(count($exis)==0)
+			{							
+				$datos[0]['campo']='id_seguro';
+				$datos[0]['dato']= $parametros['contrato'];
+				$datos[1]['campo']='id_articulos';
+				$datos[1]['dato']= $parametros['articulo'];
+				$datos[2]['campo']='tabla';
+				$datos[2]['dato']= $parametros['tabla'];				
+				$datos[3]['campo']='modulo';
+				$datos[3]['dato']= $parametros['modulo'];
+				// print_r($datos);die();
+				return $this->modelo->guardar('ARTICULOS_ASEGURADOS',$datos);				
+			}else
+			{
+				return -2;
+			}
 		}
+		
 	}
+    // function lista_articulo_contrato($parametros)
+    // {
+    // 	$datos = $this->modelo->lista_articulos_seguro($parametros['contrato'],$query=false);
+    // 	$tr='';
+    // 	foreach ($datos as $key => $value) {
+    // 		$tr.='<tr>';
+    // 			if($_SESSION['INICIO']['ELIMINAR']==1){
+	//     		 $tr.='<td><button class="btn btn-sm btn-danger" onclick="eliminar_art(\''.$value['id'].'\')"><i class=" bx bx-trash"></i></button></td>';
+	//     		}
+	//     		$tr.='<td>'.$value['DESCRIPT'].'</td>
+	//     		<td>'.$value['TAG_SERIE'].'</td>
+	//     		<td>'.$value['MODELO'].'</td>
+	//     		<td>'.$value['SERIE'].'</td>
+	//     		<td>'.$value['marca'].'</td>
+	//     		<td>'.$value['estado'].'</td>
+	//     		<td>'.$value['genero'].'</td>
+	//     		<td>'.$value['color'].'</td>
+	//     		</tr>';
+    // 	}
+    // 	return $tr;
+    // 	print_r($parametros);die();
+    // }
+
     function lista_articulo_contrato($parametros)
     {
-    	$datos = $this->modelo->lista_articulos_seguro($parametros['contrato'],$query=false);
+      	$seguros_tabla = $_SESSION['INICIO']['ASIGNAR_SEGUROS'];
+		$tablas_aseguradas = json_decode($seguros_tabla, true);
+
+    	$listado = array();
+    	$list_id='';    	
+
+    	// print_r($tablas_aseguradas.'-');die();
+    	if($tablas_aseguradas!=''){
+	    	foreach ($tablas_aseguradas as $key => $value) {
+	    		$list_id = '';
+	    		$lista_ids = $this->modelo->lista_id_tabla($value['tabla'],$parametros['contrato']);
+	    		if(count($lista_ids)>0)
+	    		{
+		    		// print_r($lista_ids);
+		    		foreach ($lista_ids as $key => $value2) {
+		    			$list_id.="'".$value2['id_articulos']."',";
+		    		}
+		    		$list_id = substr($list_id, 0,-1);
+		    		$id_tbl = $this->cod_global->id_tabla($value['tabla']);   
+		    		$datos = $this->modelo->itemAsegurado($value['tabla'],$id_tbl[0]['ID'],$list_id);
+
+		    		if(count($datos)>0)
+		    		{
+		    			$campos = '';
+		    			foreach ($value as $key => $value3) {
+		    				if($value3!=$value['tabla'])
+		    				{
+		    					$campos.= $value3.',';
+		    				}
+		    			}
+		    			$camp = substr($campos,0,-1);
+		    			foreach ($datos as $key => $value4) {
+		    				$asegu = $this->modelo->tablas_aseguradas($value['tabla'],$parametros['contrato'],$value4[$id_tbl[0]['ID']],1,$id_tbl[0]['ID']);
+
+		    				$camposbuscar = explode(',',$camp);
+		    				$camposlista = array();
+		    				foreach ($camposbuscar as $key => $value5) {
+		    					$camposlista[] = $asegu[0][$value5];
+		    				}
+
+		    				$listado[] = array('id'=>$asegu[0]['id_arti_asegurados'],'campo_id'=>$id_tbl[0]['ID'],'campos'=>$camposlista,'contrato'=>$parametros['contrato'],'tabla'=>$value['tabla'],'modulo'=>$_SESSION['INICIO']['MODULO_SISTEMA']);
+		    			}
+		    		}
+	    		}
+	    	}
+	    }
+    	//listar todos los demas 
+    	// print_r($listado);die();
+    	// $datos = $this->modelo->lista_articulos_seguro($parametros['contrato'],$query=false);
     	$tr='';
-    	foreach ($datos as $key => $value) {
+    	foreach ($listado as $key => $value) {
     		$tr.='<tr>';
     			if($_SESSION['INICIO']['ELIMINAR']==1){
-	    		 $tr.='<td><button class="btn btn-sm btn-danger" onclick="eliminar_art(\''.$value['id'].'\')"><i class=" bx bx-trash"></i></button></td>';
+	    		 $tr.='<td><button class="btn btn-sm btn-danger me-0" onclick="eliminar_art(\''.$value['id'].'\')"><i class=" bx bx-trash me-0"></i></button></td>';
 	    		}
-	    		$tr.='<td>'.$value['DESCRIPT'].'</td>
-	    		<td>'.$value['TAG_SERIE'].'</td>
-	    		<td>'.$value['MODELO'].'</td>
-	    		<td>'.$value['SERIE'].'</td>
-	    		<td>'.$value['marca'].'</td>
-	    		<td>'.$value['estado'].'</td>
-	    		<td>'.$value['genero'].'</td>
-	    		<td>'.$value['color'].'</td>
-	    		</tr>';
+	    		$tr.='<td>'.$value['tabla'].'</td>';
+	    		foreach ($value['campos'] as $key2 => $value2) {
+	    			$tr.='<td>'.$value2.'</td>';
+	    		}
+	    		$tr.='</tr>';
     	}
     	return $tr;
-    	print_r($parametros);die();
     }
+
     function Articulo_contrato_delete($id)
     {
     	return $this->modelo->Articulo_contrato_delete($id);
@@ -346,8 +493,8 @@ class contratoC
 			$tr.='<tr>
 			<td><a href="inicio.php?acc=contratos&id='.$value['id'].'">'.$value['nombre'].'</a></td>
 			<td>'.$value['prima'].'</td>
-			<td>'.$value['desde']->format('Y-m-d').'</td>
-			<td>'.$value['hasta']->format('Y-m-d').'</td>
+			<td>'.$value['desde'].'</td>
+			<td>'.$value['hasta'].'</td>
 			<td>'.$value['suma_asegurada'].'</td>
 			</tr>';
 		}
@@ -443,13 +590,13 @@ class contratoC
 			}
 			$tr.='<tr>
 			<td>'.$es.'</td>
-			<td>'.$value['fecha_siniestro']->format('Y-m-d').'</td>
+			<td>'.$value['fecha_siniestro'].'</td>
 			<td class="text-left">
 	            <h3><a href="javascript:;">Encargado: '.$value['encargado'].'</a></h3>
 	            '.$value['detalle'].'
 	        </td>
 			<td>'.$value['DESCRIPCION'].'</td>
-			<td>'.$value['fecha_alertado']->format('Y-m-d').'</td>
+			<td>'.$value['fecha_alertado'].'</td>
 			<td class="unit">'.$value['evaluacion'].'</td>
 			</tr>';
 		}

@@ -134,7 +134,7 @@ function recuperar_xml_a_factura($documento)
 {
 	$respuesta = 1;
 	//busco el archivo xml
-	$ruta_G = dirname(__DIR__,2).'/XMLS';
+	$ruta_G = dirname(__DIR__,2).'/TEMP/XMLS';
 	// print_r($ruta_G);die();
 	
 	$texto = file_get_contents($ruta_G.'/'.$documento);
@@ -163,15 +163,24 @@ function recuperar_xml_a_factura($documento)
 		$encontrado = 0;
 		$tributaria = $documentos['infoTributaria'];
 		$cabecera = $documentos['infoCompRetencion'];
-		$detalle = $documentos['impuestos']['impuesto'];
-// print_r($tributaria);die();
+		if(isset($documentos['impuestos']['impuesto']))
+		{
+			$detalle = $documentos['impuestos']['impuesto'];
+		}
+		if(isset($documentos['docsSustento']['docSustento']['retenciones']['retencion']))
+		{
+			$detalle = $documentos['docsSustento']['docSustento']['retenciones']['retencion'];
+		}
+// print_r($detalle);die();
+// print_r($documentos);die();
 		foreach ($detalle as $key => $value) {
-			//print_r($value);
-			//die();
+			// print_r($value);
+			// die();
 			foreach ($this->tipo_retencion as $key2 => $value2) {
+				// print_r($value['codigoRetencion']);
 				if(isset($value2[2]))
 				{
-					if($value['codigoRetencion']==$value2[2] && intval($value['porcentajeRetener'])==$value2[1])
+					if(isset($value['codigoRetencion']) && isset($value['porcentajeRetener']) && $value['codigoRetencion']==$value2[2] && intval($value['porcentajeRetener'])==$value2[1])
 					{
 						$lineas[] = array('Tipo'=>'R','Autorizacion'=>$tributaria['claveAcceso'],'detalle'=>$value2[0],'baseImponible'=>$value['baseImponible'],'Porcentaje'=>$value['porcentajeRetener'],'valor'=>$value['valorRetenido']);
 						$encontrado = 1;
@@ -183,10 +192,10 @@ function recuperar_xml_a_factura($documento)
 			if($encontrado==0)
 			{
 				// print_r('expression');die();
-				if($value['codigoRetencion']==1)
+				if(isset($value['codigoRetencion']) && $value['codigoRetencion']==1)
 				{
 					$lineas[] = array('Tipo'=>'R','Autorizacion'=>$tributaria['claveAcceso'],'detalle'=>'IVA bienes','baseImponible'=>$value['baseImponible'],'Porcentaje'=>$value['porcentajeRetener'],'valor'=>$value['valorRetenido']);
-				}else if($value['codigoRetencion']==2)
+				}else if(isset($value['codigoRetencion']) && $value['codigoRetencion']==2)
 				{
 					$lineas[] = array('Tipo'=>'R','Autorizacion'=>$tributaria['claveAcceso'],'detalle'=>'IVA Servicios','baseImponible'=>$value['baseImponible'],'Porcentaje'=>$value['porcentajeRetener'],'valor'=>$value['valorRetenido']);
 				}
@@ -207,7 +216,7 @@ function recuperar_xml_a_factura($documento)
 		{
 			$detalle = $documentos['detalles'];
 		}
-		// print_r($detalle);die();
+		
 		$lineas = array();
 		foreach ($detalle as $key => $value) {
 			// print_r($value);die();

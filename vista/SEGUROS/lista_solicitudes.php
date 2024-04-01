@@ -25,12 +25,12 @@
        		fecha = '';
        		if(item.fecha!=null)
        		{
-       			fecha = item.fecha.date.substr(0,10);
+       			fecha = item.fecha.substr(0,10);
        		}
        		fecha_up = '';
        		if(item.fecha_update!=null)
        		{
-       			fecha_up = item.fecha_update.date.substr(0,10);
+       			fecha_up = item.fecha_update.substr(0,10);
        		}
        		if(item.paso!=null)
        		{
@@ -38,13 +38,13 @@
        		}
        		switch(item.paso)
 					{
-						case 4:
+						case '4':
 							estado ='<div class="badge rounded-pill bg-success w-100">Completo</div>';
 							color = 'success';
 						break;
-						case 3:
-						case 2:							
-						case 1:
+						case '3':
+						case '2':							
+						case '1':
 							estado ='<div class="badge rounded-pill bg-primary w-100">En proceso</div>';
 							color = 'primary';
 						break;
@@ -79,12 +79,12 @@
 
 				switch(item.paso)
 					{
-						case 4:
+						case '4':
 							htmlC+=html;
 						break;
-						case 3:
-						case 2:							
-						case 1:
+						case '3':
+						case '2':							
+						case '1':
 							htmlP+=html;
 						break;
 						default:

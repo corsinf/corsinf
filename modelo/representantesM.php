@@ -1,17 +1,17 @@
 <?php
-if (!class_exists('db_salud')) {
-    include('../db/db_salud.php');
+if (!class_exists('db')) {
+    include('../db/db.php');
 }
 /**
  * 
  */
 class representantesM
 {
-    private $db_salud;
+    private $db;
 
     function __construct()
     {
-        $this->db_salud = new db_salud();
+        $this->db = new db();
     }
 
 <<<<<<< HEAD
@@ -40,14 +40,15 @@ class representantesM
                     WHERE rep.sa_rep_estado = 1";
 
         $sql .= " ORDER BY sa_rep_id;";
-        $datos = $this->db_salud->datos($sql);
+        $datos = $this->db->datos($sql);
         return $datos;
     }
 
     function lista_representantes($id = '')
     {
-        $sql =
-            "SELECT 
+        if ($id) {
+            $sql =
+                "SELECT 
                     rep.sa_rep_id,
 >>>>>>> f975ff57302e9fcddee9c8879ae90e7325aab8d1
                     rep.sa_rep_primer_apellido,
@@ -88,13 +89,13 @@ class representantesM
 >>>>>>> f975ff57302e9fcddee9c8879ae90e7325aab8d1
                     WHERE rep.sa_rep_estado = 1";
 
-        if ($id) {
-            $sql .= ' and sa_rep_id = ' . $id;
-        }
 
-        $sql .= " ORDER BY sa_rep_id;";
-        $datos = $this->db_salud->datos($sql);
-        return $datos;
+            $sql .= ' and sa_rep_id = ' . $id;
+
+            $sql .= " ORDER BY sa_rep_id;";
+            $datos = $this->db->datos($sql);
+            return $datos;
+        }
     }
 
 <<<<<<< HEAD
@@ -171,7 +172,7 @@ class representantesM
                        rep.sa_rep_correo) LIKE '%" . $buscar . "%'";
 >>>>>>> f975ff57302e9fcddee9c8879ae90e7325aab8d1
 
-        $datos = $this->db_salud->datos($sql);
+        $datos = $this->db->datos($sql);
         return $datos;
     }
 
@@ -183,33 +184,40 @@ class representantesM
     function buscar_representantes_CEDULA($buscar)
     {
         $sql = "SELECT sa_rep_id, sa_rep_cedula, sa_rep_primer_apellido, sa_rep_primer_nombre FROM representantes WHERE sa_rep_cedula = '" . $buscar . "'";
+<<<<<<< HEAD
 >>>>>>> f975ff57302e9fcddee9c8879ae90e7325aab8d1
         $datos = $this->db_salud->datos($sql);
+=======
+        $datos = $this->db->datos($sql);
+>>>>>>> c9a234889f7443a040d28d13f82e35ef88467ae7
         return $datos;
     }
 
     function insertar($datos)
     {
-        $rest = $this->db_salud->inserts('representantes', $datos);
+        $rest = $this->db->inserts('representantes', $datos);
         return $rest;
     }
 
     function editar($datos, $where)
     {
-        $rest = $this->db_salud->update('representantes', $datos, $where);
+        $rest = $this->db->update('representantes', $datos, $where);
         return $rest;
     }
 
     function eliminar($datos)
     {
         $sql = "UPDATE representantes SET sa_rep_estado = 0 WHERE " . $datos[0]['campo'] . "='" . $datos[0]['dato'] . "';";
-        $datos = $this->db_salud->sql_string($sql);
+        $datos = $this->db->sql_string($sql);
         return $datos;
     }
+<<<<<<< HEAD
 
 <<<<<<< HEAD
     
 =======
 
 >>>>>>> f975ff57302e9fcddee9c8879ae90e7325aab8d1
+=======
+>>>>>>> c9a234889f7443a040d28d13f82e35ef88467ae7
 }

@@ -27,12 +27,12 @@ var url = '../../lib/Reporte_excel.php?reporte_estado';
 });
 
 $('#excel_generos').click(function(){
-var url = '../lib/Reporte_excel.php?reporte_genero';                 
+var url = '../../lib/Reporte_excel.php?reporte_genero';                 
    window.open(url, '_blank');
 });
 
 $('#excel_colores').click(function(){
-var url = '../lib/Reporte_excel.php?reporte_colores';                 
+var url = '../../lib/Reporte_excel.php?reporte_colores';                 
    window.open(url, '_blank');
 });
 

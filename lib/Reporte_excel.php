@@ -257,18 +257,18 @@ class Reporte_excel
 
 		foreach ($datos as $key => $value) {
 			//print_r($value);die();
-		// $fecha = $value['FECHA_INV_DATE']->format('Y-m-d');
+		// $fecha = $value['FECHA_INV_DATE'];
 		    $fecha='';
 			if($value['FECHA_INV_DATE'] !='')
 			{
-				$fecha =$value['FECHA_INV_DATE']->format('Y-m-d');
+				$fecha =$value['FECHA_INV_DATE'];
 				$fecha = new DateTime($fecha);
 				$fecha = \PhpOffice\PhpSpreadsheet\Shared\Date::PHPToExcel($fecha);
 			}
 			$fechaC='';
 			if($value['ORIG_ACQ_YR'] !='')
 			{
-				$fechaC =$value['ORIG_ACQ_YR']->format('Y-m-d'); 
+				$fechaC =$value['ORIG_ACQ_YR']; 
 				$fechaC = new DateTime($fechaC);
 				$fechaC = \PhpOffice\PhpSpreadsheet\Shared\Date::PHPToExcel($fechaC);
 
@@ -277,17 +277,17 @@ class Reporte_excel
 			$fechaB='';
 			if($value['FECHA_BAJA'] !='')
 			{
-				$fechaB =$value['FECHA_BAJA']->format('Y-m-d'); 
+				$fechaB =$value['FECHA_BAJA']; 
 			}
 			$fechaCON='';
 			if($value['FECHA_CONTA'] !='')
 			{
-				$fechaCON =$value['FECHA_CONTA']->format('Y-m-d'); 
+				$fechaCON =$value['FECHA_CONTA']; 
 			}
 			$fechaREF='';
 			if($value['FECHA_REFERENCIA'] !='')
 			{
-				$fechaREF =$value['FECHA_REFERENCIA']->format('Y-m-d'); 
+				$fechaREF =$value['FECHA_REFERENCIA']; 
 			}
 
 
@@ -464,31 +464,31 @@ class Reporte_excel
 	  </tr>';
 // print_r($datos);die();
 		  foreach ($datos as $key => $value) {
-		// $fecha = $value['FECHA_INV_DATE']->format('Y-m-d');
+		// $fecha = $value['FECHA_INV_DATE'];
 		  $fecha='';
 			if($value['FECHA_INV_DATE'] !='')
 			{
-				$fecha =$value['FECHA_INV_DATE']->format('Y-m-d');
+				$fecha =$value['FECHA_INV_DATE'];
 			}
 			$fechaC='';
 			if($value['ORIG_ACQ_YR'] !='')
 			{
-				$fechaC =$value['ORIG_ACQ_YR']->format('Y-m-d'); 
+				$fechaC =$value['ORIG_ACQ_YR']; 
 			}
 			$fechaB='';
 			if($value['FECHA_BAJA'] !='')
 			{
-				$fechaB =$value['FECHA_BAJA']->format('Y-m-d'); 
+				$fechaB =$value['FECHA_BAJA']; 
 			}
 			$fechaCON='';
 			if($value['FECHA_CONTA'] !='')
 			{
-				$fechaCON =$value['FECHA_CONTA']->format('Y-m-d'); 
+				$fechaCON =$value['FECHA_CONTA']; 
 			}
 			$fechaREF='';
 			if($value['FECHA_REFERENCIA'] !='')
 			{
-				$fechaREF =$value['FECHA_REFERENCIA']->format('Y-m-d'); 
+				$fechaREF =$value['FECHA_REFERENCIA']; 
 			}
 
 		 $salida.='<tr>
@@ -625,31 +625,31 @@ set_time_limit(0);
 	  $datos = $this->articulos->lista_articulos_sap_codigos($query,$loc,$cus,false,false,false,false,false);
 	  // print_r($datos);die();
 	  foreach ($datos as $key => $value) {
-		// $fecha = $value['FECHA_INV_DATE']->format('Y-m-d');
+		// $fecha = $value['FECHA_INV_DATE'];
 			  $fecha='';
 				if($value['FECHA_INV_DATE'] !='')
 				{
-					$fecha =$value['FECHA_INV_DATE']->format('Y-m-d');
+					$fecha =$value['FECHA_INV_DATE'];
 				}
 				$fechaC='';
 				if($value['ORIG_ACQ_YR'] !='')
 				{
-					$fechaC =$value['ORIG_ACQ_YR']->format('Y-m-d'); 
+					$fechaC =$value['ORIG_ACQ_YR']; 
 				}
 				$fechaB='';
 				if($value['FECHA_BAJA'] !='')
 				{
-					$fechaB =$value['FECHA_BAJA']->format('Y-m-d'); 
+					$fechaB =$value['FECHA_BAJA']; 
 				}
 				$fechaCON='';
 				if($value['FECHA_CONTA'] !='')
 				{
-					$fechaCON =$value['FECHA_CONTA']->format('Y-m-d'); 
+					$fechaCON =$value['FECHA_CONTA']; 
 				}
 				$fechaREF='';
 				if($value['FECHA_REFERENCIA'] !='')
 				{
-					$fechaREF =$value['FECHA_REFERENCIA']->format('Y-m-d'); 
+					$fechaREF =$value['FECHA_REFERENCIA']; 
 				}
 
 			 $salida.='<tr>
@@ -813,31 +813,31 @@ set_time_limit(0);
 	  $datos = $this->articulos->lista_articulos_sap_multiples($query,$loc,$cus,$pag,false,$exacto,$asset,false,false,false,false,false,$multiple);
 	  // print_r($datos);die();
 	  foreach ($datos as $key => $value) {
-		// $fecha = $value['FECHA_INV_DATE']->format('Y-m-d');
+		// $fecha = $value['FECHA_INV_DATE'];
 			  $fecha='';
 				if($value['FECHA_INV_DATE'] !='')
 				{
-					$fecha =$value['FECHA_INV_DATE']->format('Y-m-d');
+					$fecha =$value['FECHA_INV_DATE'];
 				}
 				$fechaC='';
 				if($value['ORIG_ACQ_YR'] !='')
 				{
-					$fechaC =$value['ORIG_ACQ_YR']->format('Y-m-d'); 
+					$fechaC =$value['ORIG_ACQ_YR']; 
 				}
 				$fechaB='';
 				if($value['FECHA_BAJA'] !='')
 				{
-					$fechaB =$value['FECHA_BAJA']->format('Y-m-d'); 
+					$fechaB =$value['FECHA_BAJA']; 
 				}
 				$fechaCON='';
 				if($value['FECHA_CONTA'] !='')
 				{
-					$fechaCON =$value['FECHA_CONTA']->format('Y-m-d'); 
+					$fechaCON =$value['FECHA_CONTA']; 
 				}
 				$fechaREF='';
 				if($value['FECHA_REFERENCIA'] !='')
 				{
-					$fechaREF =$value['FECHA_REFERENCIA']->format('Y-m-d'); 
+					$fechaREF =$value['FECHA_REFERENCIA']; 
 				}
 
 			 $salida.='<tr>
@@ -975,31 +975,31 @@ set_time_limit(0);
 	  $datos = $this->articulos->lista_articulos_sap_codigos($query,$loc,$cus,false,false,false,false,false,1,false,false);
 	  // print_r($datos);die();
 	  foreach ($datos as $key => $value) {
-		// $fecha = $value['FECHA_INV_DATE']->format('Y-m-d');
+		// $fecha = $value['FECHA_INV_DATE'];
 		  $fecha='';
 			if($value['FECHA_INV_DATE'] !='')
 			{
-				$fecha =$value['FECHA_INV_DATE']->format('Y-m-d');
+				$fecha =$value['FECHA_INV_DATE'];
 			}
 			$fechaC='';
 			if($value['ORIG_ACQ_YR'] !='')
 			{
-				$fechaC =$value['ORIG_ACQ_YR']->format('Y-m-d'); 
+				$fechaC =$value['ORIG_ACQ_YR']; 
 			}
 			$fechaB='';
 			if($value['FECHA_BAJA'] !='')
 			{
-				$fechaB =$value['FECHA_BAJA']->format('Y-m-d'); 
+				$fechaB =$value['FECHA_BAJA']; 
 			}
 			$fechaCON='';
 			if($value['FECHA_CONTA'] !='')
 			{
-				$fechaCON =$value['FECHA_CONTA']->format('Y-m-d'); 
+				$fechaCON =$value['FECHA_CONTA']; 
 			}
 			$fechaREF='';
 			if($value['FECHA_REFERENCIA'] !='')
 			{
-				$fechaREF =$value['FECHA_REFERENCIA']->format('Y-m-d'); 
+				$fechaREF =$value['FECHA_REFERENCIA']; 
 			}
 
 		 $salida.='<tr>
@@ -1094,16 +1094,16 @@ set_time_limit(0);
 	  $datos = $this->articulos->lista_articulos_sap_codigos($query,$loc,$cus,false,false,false,false,false,false,1,false);
 	  // print_r($datos);die();
 	  foreach ($datos as $key => $value) {
-		// $fecha = $value['FECHA_INV_DATE']->format('Y-m-d');
+		// $fecha = $value['FECHA_INV_DATE'];
 		  $fecha='';
 			if($value['FECHA_INV_DATE'] !='')
 			{
-				$fecha =$value['FECHA_INV_DATE']->format('Y-m-d');
+				$fecha =$value['FECHA_INV_DATE'];
 			}
 			$fechaC='';
 			if($value['ORIG_ACQ_YR'] !='')
 			{
-				$fechaC =$value['ORIG_ACQ_YR']->format('Y-m-d'); 
+				$fechaC =$value['ORIG_ACQ_YR']; 
 			}
 
 		 $salida.='<tr>
@@ -1190,16 +1190,16 @@ set_time_limit(0);
 	  $datos = $this->articulos->lista_articulos_sap_codigos($query,$loc,$cus,false,false,false,false,false,false,false,1);
 	  // print_r($datos);die();
 	  foreach ($datos as $key => $value) {
-		// $fecha = $value['FECHA_INV_DATE']->format('Y-m-d');
+		// $fecha = $value['FECHA_INV_DATE'];
 		  $fecha='';
 			if($value['FECHA_INV_DATE'] !='')
 			{
-				$fecha =$value['FECHA_INV_DATE']->format('Y-m-d');
+				$fecha =$value['FECHA_INV_DATE'];
 			}
 			$fechaC='';
 			if($value['ORIG_ACQ_YR'] !='')
 			{
-				$fechaC =$value['ORIG_ACQ_YR']->format('Y-m-d'); 
+				$fechaC =$value['ORIG_ACQ_YR']; 
 			}
 
 		 $salida.='<tr>
@@ -1292,18 +1292,18 @@ set_time_limit(0);
 
 		foreach ($datos as $key => $value) {
 			//print_r($value);die();
-		// $fecha = $value['FECHA_INV_DATE']->format('Y-m-d');
+		// $fecha = $value['FECHA_INV_DATE'];
 		    $fecha='';
 			if($value['FECHA_INV_DATE'] !='')
 			{
-				$fecha =$value['FECHA_INV_DATE']->format('Y-m-d');
+				$fecha =$value['FECHA_INV_DATE'];
 				$fecha = new DateTime($fecha);
 				$fecha = \PhpOffice\PhpSpreadsheet\Shared\Date::PHPToExcel($fecha);
 			}
 			$fechaC='';
 			if($value['ORIG_ACQ_YR'] !='')
 			{
-				$fechaC =$value['ORIG_ACQ_YR']->format('Y-m-d'); 
+				$fechaC =$value['ORIG_ACQ_YR']; 
 				$fechaC = new DateTime($fechaC);
 				$fechaC = \PhpOffice\PhpSpreadsheet\Shared\Date::PHPToExcel($fechaC);
 
@@ -1403,11 +1403,11 @@ set_time_limit(0);
 	  $datos =  $this->articulos->lista_articulos($query,$loc,$cus);
 	  // print_r($datos);die();
 	  foreach ($datos as $key => $value) {
-		// $fecha = $value['FECHA_INV_DATE']->format('Y-m-d');
+		// $fecha = $value['FECHA_INV_DATE'];
 		$fecha='';
 			if($value['fecha_in'] !='')
 			{
-				$fecha =$value['fecha_in']->format('Y-m-d'); 
+				$fecha =$value['fecha_in']; 
 			}
 
 	  $salida.='<tr><td>'.$value['tag'].'</td>'.
@@ -1632,11 +1632,11 @@ set_time_limit(0);
 	  $datos =  $this->articulos->cambios($desde,$hasta);
 	  // print_r($datos);die();
 	  foreach ($datos as $key => $value) {
-		// $fecha = $value['FECHA_INV_DATE']->format('Y-m-d');
+		// $fecha = $value['FECHA_INV_DATE'];
 		$fecha='';
 			if($value['fecha_movimiento'] !='')
 			{
-				$fecha =$value['fecha_movimiento']->format('Y-m-d'); 
+				$fecha =$value['fecha_movimiento']; 
 			}
 
 	  $salida.='<tr>
@@ -1673,7 +1673,7 @@ set_time_limit(0);
 		$count = 2;
 		foreach ($datos as $key => $value) {
 			$sheet->setCellValue('A'.$count,$value['ob']);
-		  $sheet->setCellValue('B'.$count,$value['fe']->format('Y-m-d'));
+		  $sheet->setCellValue('B'.$count,$value['fe']);
 		  $sheet->setCellValue('C'.$count,$value['codigo_ant']);
 		  $sheet->setCellValue('D'.$count,$value['dante']);
 		  $sheet->setCellValue('E'.$count,$value['codigo_nue']);
@@ -1826,31 +1826,31 @@ set_time_limit(0);
 	  $datos = $this->articulos->lista_articulos_sap_codigos($query,$loc,$cus,false,false,false,false,false,1,false,false);
 	  // print_r($datos);die();
 	  foreach ($datos as $key => $value) {
-		// $fecha = $value['FECHA_INV_DATE']->format('Y-m-d');
+		// $fecha = $value['FECHA_INV_DATE'];
 		  $fecha='';
 			if($value['FECHA_INV_DATE'] !='')
 			{
-				$fecha =$value['FECHA_INV_DATE']->format('Y-m-d');
+				$fecha =$value['FECHA_INV_DATE'];
 			}
 			$fechaC='';
 			if($value['ORIG_ACQ_YR'] !='')
 			{
-				$fechaC =$value['ORIG_ACQ_YR']->format('Y-m-d'); 
+				$fechaC =$value['ORIG_ACQ_YR']; 
 			}
 			$fechaB='';
 			if($value['FECHA_BAJA'] !='')
 			{
-				$fechaB =$value['FECHA_BAJA']->format('Y-m-d'); 
+				$fechaB =$value['FECHA_BAJA']; 
 			}
 			$fechaCON='';
 			if($value['FECHA_CONTA'] !='')
 			{
-				$fechaCON =$value['FECHA_CONTA']->format('Y-m-d'); 
+				$fechaCON =$value['FECHA_CONTA']; 
 			}
 			$fechaREF='';
 			if($value['FECHA_REFERENCIA'] !='')
 			{
-				$fechaREF =$value['FECHA_REFERENCIA']->format('Y-m-d'); 
+				$fechaREF =$value['FECHA_REFERENCIA']; 
 			}
 
 		 $salida.='<tr>
@@ -1921,11 +1921,11 @@ set_time_limit(0);
 	  $datos = $this->carga_datos->log_activo($parametros['txt_fecha'],$parametros['txt_intento'],$parametros['txt_accion'],$parametros['rbl_estado']);
 	  // print_r($datos);die();
 	  foreach ($datos as $key => $value) {
-		// $fecha = $value['FECHA_INV_DATE']->format('Y-m-d');
+		// $fecha = $value['FECHA_INV_DATE'];
 		  $fecha='';
 			if($value['fecha'] !='')
 			{
-				$fecha =$value['fecha']->format('Y-m-d');
+				$fecha =$value['fecha'];
 			}		
 
 		 $salida.='<tr>

@@ -1,4 +1,5 @@
 <?php @session_start();
+<<<<<<< HEAD
 // print_r($_SESSION['INICIO']);
 <<<<<<< HEAD
 if (!isset($_SESSION['INICIO'])) {
@@ -15,8 +16,13 @@ if($dominio!='localhost')
 
 ?>
 =======
+=======
+// print_r($_SESSION['INICIO']);die();
+>>>>>>> c9a234889f7443a040d28d13f82e35ef88467ae7
 $tiempo_inactividad = 2 * 60;
-if(!isset($_SESSION['INICIO'])){header('Location: ../login.php');}
+if (!isset($_SESSION['INICIO']) || !isset($_SESSION['INICIO']['NO_CONCURENTE'])) {
+	header('Location: ../login.php');
+}
 // if (isset($_SESSION['INICIO']['ULTIMO_ACCESO']) && (time() - $_SESSION['INICIO']['ULTIMO_ACCESO'] > $tiempo_inactividad)) {
 //     // Cerrar la sesión
 //     session_unset();
@@ -25,8 +31,16 @@ if(!isset($_SESSION['INICIO'])){header('Location: ../login.php');}
 //     exit();
 // }
 
+//Pendiente para revisar, tener en cuenta 
+$dominio = $_SERVER['SERVER_NAME'];
+$url_general = 'http://' . $dominio . '/corsinf';
 
-?> 
+if ($dominio != 'localhost') {
+	$url_general = 'http://' . $dominio . ':8087/corsinf';
+}
+
+
+?>
 
 >>>>>>> f975ff57302e9fcddee9c8879ae90e7325aab8d1
 <!doctype html>
@@ -71,6 +85,7 @@ if(!isset($_SESSION['INICIO'])){header('Location: ../login.php');}
 	<!-- <link rel="stylesheet" href="../assets/plugins/summernote/css/font-awesome.min.css"> -->
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 	<script src="../js/informes_globales.js"></script>
 	<script src="../js/codigos_globales.js"></script>
 	<script src="../js/sweetalert2.all.min.js"></script>
@@ -87,6 +102,31 @@ if(!isset($_SESSION['INICIO'])){header('Location: ../login.php');}
 
   <!-- <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script> -->
 >>>>>>> f975ff57302e9fcddee9c8879ae90e7325aab8d1
+=======
+	<script src="../js/informes_globales.js"></script>
+	<script src="../js/jquery-3.6.0.js"></script>
+	<script src="../js/jquery-ui.js"></script>
+	<script src="../js/codigos_globales.js"></script>
+	<script src="../js/sweetalert2.all.min.js"></script>
+	<script src="../js/notificaciones_seguros.js"></script>
+
+	<!-- <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script> -->
+
+	<style type="text/css">
+		input[readonly] {
+			/* Estilos para inputs en modo de solo lectura */
+			background-color: #e8e8e8;
+			/* Color de fondo */
+			border: 1px solid #ccc;
+			/* Borde */
+			color: #555;
+			/* Color del texto */
+			cursor: not-allowed;
+			/* Cambia el cursor */
+			/* Otros estilos según sea necesario */
+		}
+	</style>
+>>>>>>> c9a234889f7443a040d28d13f82e35ef88467ae7
 
 	<style>
 		.input-group>.select2-container--bootstrap {
@@ -107,27 +147,48 @@ if(!isset($_SESSION['INICIO'])){header('Location: ../login.php');}
 
 		var mod = '<?php echo $_SESSION['INICIO']['MODULO_SISTEMA']; ?>';
 
+		var TIPO = '<?php echo $_SESSION['INICIO']['TIPO']; ?>';
+		var tabla = '<?php echo $_SESSION['INICIO']['NO_CONCURENTE_TABLA']; ?>';
+		var id_tabla = '<?php echo $_SESSION['INICIO']['NO_CONCURENTE']; ?>';
+
+		var parametros_noti = {
+			'rol': TIPO,
+			'tabla': tabla,
+			'id_tabla': id_tabla,
+		}
+
 		menu_lateral();
 		$(document).ready(function() {
 			restriccion();
-			notificaciones();
+			//notificaciones();
+			notificaciones_1(parametros_noti);
+
+			//Descomentar el settime 
+			setInterval(function() {
+				notificaciones_1(parametros_noti);
+			}, 6000);
+
 			solicitudes();
 		});
 
 		function formatoDate(date) {
-			var formattedDate = new Date(date);
-			var d = formattedDate.getDate();
-			var m = formattedDate.getMonth();
-			m += 1; // javascript months are 0-11
-			if (m < 10) {
-				m = '0' + m;
+			if(date.length>10)
+			{
+				Fecha = date.substr(0,10);
 			}
-			if (d < 10) {
-				d = '0' + d;
-			}
-			var y = formattedDate.getFullYear();
-			var Fecha = y + "-" + m + "-" + d;
-			console.log(Fecha);
+			// var formattedDate = new Date(date);
+			// var d = formattedDate.getDate();
+			// var m = formattedDate.getMonth();
+			// m += 1; // javascript months are 0-11
+			// if (m < 10) {
+			// 	m = '0' + m;
+			// }
+			// if (d < 10) {
+			// 	d = '0' + d;
+			// }
+			// var y = formattedDate.getFullYear();
+			// var Fecha = y + "-" + m + "-" + d;
+			//console.log(Fecha);
 			return Fecha;
 		}
 
@@ -230,13 +291,127 @@ if(!isset($_SESSION['INICIO'])){header('Location: ../login.php');}
 			// })
 		}
 
-		// function navegacion(link)
-		// {
-		// 	var URLactual = window.location.pathname;
-		// 	// console.log(URLactual);
-		// 	pag = link.replace('.php','');
-		// 	location.href = URLactual+'?pag='+pag
-		// }
+		function consultar_modulos() {
+			$.ajax({
+				// data:  {parametros:parametros},
+				url: '../controlador/loginC.php?modulos_sistema_acceso_rapido=true',
+				type: 'post',
+				dataType: 'json',
+				success: function(response) {
+					console.log(response);
+					if (response.num == 0) {
+						Swal.fire('', 'Su perfil no esta asignado a ningun modulo.', 'error').then(function() {
+							window.location.href = "../login.php";
+						});
+					} else {
+
+						$('#pnl_acceso_rapido_modulo').html(response.html);
+
+					}
+				}
+			});
+		}
+
+		function modulo_seleccionado(modulo, link) {
+			$.ajax({
+				data: {
+					modulo_sistema: modulo
+				},
+				url: '../controlador/loginC.php?modulos_sistema_selected=true',
+				type: 'post',
+				dataType: 'json',
+				success: function(response) {
+
+					location.href = 'inicio.php?mod=' + modulo + '&acc=' + link;
+				}
+			});
+		}
+
+		function cargar_empresas() {
+			$('#myModal_empresas').modal('show');
+			consultar_empresas();
+		}
+
+		function consultar_empresas() {
+			$.ajax({
+				// data:  {parametros:parametros},
+				url: '../controlador/loginC.php?mis_empresas=true',
+				type: 'post',
+				dataType: 'json',
+				success: function(response) {
+					console.log(response);
+
+					if (response.lista != '') {
+						$('#lista_empresas').html(response.lista);
+						$('#myModal_empresas').modal('show');
+					} else {
+						Swal.fire('', 'Usuario No registrado.', 'error');
+					}
+				}
+			});
+		}
+
+		function empresa_selecconada(empresa) {
+
+			var parametros = {
+				'empresa': empresa,
+			}
+			$.ajax({
+				data: {
+					parametros: parametros
+				},
+				url: '../controlador/loginC.php?empresa_seleccionada_head=true',
+				type: 'post',
+				dataType: 'json',
+				success: function(response) {
+					if (response.respuesta == 2) {
+						$('#lista_modulos_empresas').html(response.modulos);
+						$('#txt_id').val(empresa);
+						$('#myModal_modulos').modal('show');
+					} else if (response.respuesta == 1) {
+
+						iniciar_sesion(empresa);
+					}
+				}
+			});
+
+		}
+
+		function iniciar_sesion(id) {
+			var parametros = {
+				'id': id,
+			}
+			$.ajax({
+				data: {
+					parametros: parametros
+				},
+				url: '../controlador/loginC.php?cambiar_empresa=true',
+				type: 'post',
+				dataType: 'json',
+				/*beforeSend: function () {   
+				     var spiner = '<div class="text-center"><img src="../../img/gif/proce.gif" width="100" height="100"></div>'     
+				   $('#tabla_').html(spiner);
+				},*/
+				success: function(response) {
+
+					console.log(response);
+					if (response == -2) {
+						Swal.fire('', 'Email no registrado.', 'error');
+
+					} else if (response == -1) {
+						Swal.fire('', 'Empresa Inexistente', 'info');
+
+					} else if (response == -3) {
+						Swal.fire('', 'Usuario sin acceso', 'error');
+
+					} else if (response == 1) {
+						window.location.href = "modulos_sistema.php";
+					}
+				}
+			});
+
+
+		}
 	</script>
 </head>
 
@@ -251,11 +426,20 @@ if(!isset($_SESSION['INICIO'])){header('Location: ../login.php');}
 		<!--sidebar wrapper -->
 		<div class="sidebar-wrapper" data-simplebar="true">
 			<div class="sidebar-header">
+				<?php if (file_exists($_SESSION['INICIO']['LOGO'])) { ?>
+					<div>
+						<img src="<?php echo $_SESSION['INICIO']['LOGO']; ?>" class="logo-icon" alt="logo icon">
+					</div>
+				<?php } ?>
 				<div>
+<<<<<<< HEAD
 					<img src="../img/de_sistema/logo_puce2.jpeg" class="logo-icon" alt="logo icon">
 				</div>
 				<div>
 					<h4 class="logo-text">Activos fijos</h4>
+=======
+					<h4 class="logo-text"><?php echo $_SESSION['INICIO']['MODULO_SISTEMA_NOMBRE']; ?></h4>
+>>>>>>> c9a234889f7443a040d28d13f82e35ef88467ae7
 				</div>
 				<div class="toggle-icon ms-auto"><i class='bx bx-arrow-to-left'></i>
 				</div>
@@ -587,16 +771,19 @@ if(!isset($_SESSION['INICIO'])){header('Location: ../login.php');}
 								<a class="nav-link dropdown-toggle dropdown-toggle-nocaret" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"> <i class='bx bx-category'></i>
 								</a>
 								<div class="dropdown-menu dropdown-menu-end">
-									<div class="row row-cols-3 g-3 p-3">
+									<div class="row row-cols-3 g-3 p-3" id="pnl_acceso_rapido_modulo">
 										<div class="col text-center">
-											<div class="app-box mx-auto bg-gradient-cosmic text-white"><i class='bx bx-group'></i>
-											</div>
-											<div class="app-title">Teams</div>
+											<a href="inicio.php?mod=<?php echo $_SESSION['INICIO']['MODULO_SISTEMA']; ?>&acc=ats" target="_blank">
+												<div class="app-box mx-auto bg-gradient-burning text-white"><i class='bx bx-clipboard'></i>
+												</div>
+											</a>
+											<div class="app-title">Generar ATS</div>
 										</div>
-										<div class="col text-center">
+										<!-- <div class="col text-center">
 											<div class="app-box mx-auto bg-gradient-burning text-white"><i class='bx bx-atom'></i>
 											</div>
 											<div class="app-title">Projects</div>
+										</a>
 										</div>
 										<div class="col text-center">
 											<div class="app-box mx-auto bg-gradient-lush text-white"><i class='bx bx-shield'></i>
@@ -612,12 +799,7 @@ if(!isset($_SESSION['INICIO'])){header('Location: ../login.php');}
 											<div class="app-box mx-auto bg-gradient-blues text-dark"><i class='bx bx-file'></i>
 											</div>
 											<div class="app-title">Files</div>
-										</div>
-										<div class="col text-center">
-											<div class="app-box mx-auto bg-gradient-moonlit text-white"><i class='bx bx-filter-alt'></i>
-											</div>
-											<div class="app-title">Alerts</div>
-										</div>
+										</div> -->
 									</div>
 								</div>
 							</li>
@@ -628,13 +810,22 @@ if(!isset($_SESSION['INICIO'])){header('Location: ../login.php');}
 								<div class="dropdown-menu dropdown-menu-end">
 									<a href="javascript:;">
 										<div class="msg-header">
-											<p class="msg-header-title">Notificationes</p>
+											<p class="msg-header-title">Notificaciones</p>
 											<!-- <p class="msg-header-clear ms-auto">Marks all as read</p> -->
 										</div>
 									</a>
 									<div class="header-notifications-list" id="pnl_notificaciones">
-
-
+										<a class="dropdown-item" href="javascript:;">
+											<div class="d-flex align-items-center">
+												<div class="notify bg-light-primary text-primary"><i class="bx bx-group"></i>
+												</div>
+												<div class="flex-grow-1">
+													<h6 class="msg-name">CONSULTA<span class="msg-time float-end">14 segundos
+														</span></h6>
+													<p class="msg-info">Prueba Header</p>
+												</div>
+											</div>
+										</a>
 									</div>
 									<!-- <a href="javascript:;">
 										<div class="text-center msg-footer">View All Notifications</div>
@@ -662,19 +853,43 @@ if(!isset($_SESSION['INICIO'])){header('Location: ../login.php');}
 									<i class='bx bx-log-out'></i>
 								</a>
 							</li>
+							<?php if ($_SESSION['INICIO']['NO_CONCURENTE'] == '') { ?>
+								<li>
+									<a class="nav-link dropdown-toggle dropdown-toggle-nocaret position-relative" onclick="cargar_empresas()" role="button" aria-expanded="false" title="Cambiar empresa">
+										<i class='bx bx-building-house'></i>
+									</a>
+								</li>
+							<?php } ?>
 						</ul>
 					</div>
 					<div class="user-box dropdown">
 						<a class="d-flex align-items-center nav-link dropdown-toggle dropdown-toggle-nocaret" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-							<img src="<?php echo $_SESSION['INICIO']['FOTO']; ?>" class="user-img" alt="user avatar">
+							<?php if ($_SESSION['INICIO']['NO_CONCURENTE_NOM'] == '') { ?>
+								<img src="<?php if ($_SESSION['INICIO']['FOTO'] != '') {
+												echo $_SESSION['INICIO']['FOTO'];
+											} else {
+												echo "../img/sin_imagen.jpg";
+											} ?>" class="user-img" alt="user avatar">
+							<?php } else { ?>
+								<img src="<?php if ($_SESSION['INICIO']['FOTO'] != '') {
+												echo $_SESSION['INICIO']['FOTO'];
+											} else {
+												echo "../img/sin_imagen.jpg";
+											} ?>" class="user-img" alt="user avatar">
+							<?php } ?>
 							<div class="user-info ps-3">
-								<p class="user-name mb-0"><?php echo $_SESSION['INICIO']['USUARIO']; ?></p>
+								<p class="user-name mb-0"><?php if ($_SESSION['INICIO']['NO_CONCURENTE_NOM'] == '') {
+																echo $_SESSION['INICIO']['USUARIO'];
+															} else {
+																echo $_SESSION['INICIO']['NO_CONCURENTE_NOM'];
+															} ?></p>
 								<p class="designattion mb-0"><?php echo $_SESSION['INICIO']['TIPO']; ?></p>
 							</div>
 						</a>
 						<ul class="dropdown-menu dropdown-menu-end">
 							<li><a class="dropdown-item" href="inicio.php?acc=perfil"><i class="bx bx-user"></i><span>Perfil</span></a>
 							</li>
+<<<<<<< HEAD
 <<<<<<< HEAD
 							<?php if ($_SESSION['INICIO']['TIPO'] == 'DBA') { ?>
 								<li><a class="dropdown-item" href="javascript:;" onclick="cambiar_configuraciones()"><i class="bx bx-cog"></i><span>Configuraciones</span></a>
@@ -683,25 +898,83 @@ if(!isset($_SESSION['INICIO'])){header('Location: ../login.php');}
 							<?php if($_SESSION['INICIO']['TIPO']=='DBA' || $_SESSION['INICIO']['TIPO']=='ADMINISTRADOR' || $_SESSION['INICIO']['TIPO']=='ADMIN'  ){ ?>
 							<li><a class="dropdown-item" href="javascript:;" onclick="cambiar_configuraciones()"><i class="bx bx-cog"></i><span>Configuraciones</span></a>
 							</li>
+=======
+							<?php if ($_SESSION['INICIO']['TIPO'] == 'DBA' || $_SESSION['INICIO']['TIPO'] == 'ADMINISTRADOR' || $_SESSION['INICIO']['TIPO'] == 'ADMIN') { ?>
+								<li><a class="dropdown-item" href="javascript:;" onclick="cambiar_configuraciones()"><i class="bx bx-cog"></i><span>Configuraciones</span></a>
+								</li>
+>>>>>>> c9a234889f7443a040d28d13f82e35ef88467ae7
 
 >>>>>>> f975ff57302e9fcddee9c8879ae90e7325aab8d1
 							<?php } ?>
 							<li><a class="dropdown-item" href="javascript:;"><i class='bx bx-home-circle'></i><span>Dashboard</span></a>
 							</li>
-							<li><a class="dropdown-item" href="javascript:;"><i class='bx bx-dollar-circle'></i><span>Earnings</span></a>
-							</li>
+							
 							<li><a class="dropdown-item" href="inicio.php?mod=<?php echo $_SESSION['INICIO']['MODULO_SISTEMA']; ?>&acc=descargas"><i class='bx bx-download'></i><span>Descargas</span></a>
+							</li>
+							<li onclick="$('#myModal_acerca_de').modal('show')"><a class="dropdown-item" href="#"><i class='bx bx-info-circle'></i><span>Acerca de</span></a>
 							</li>
 							<li>
 								<div class="dropdown-divider mb-0"></div>
 							</li>
-							<li><a class="dropdown-item" href="javascript:;" onclick="cerrar_session();"><i class='bx bx-log-out-circle'></i><span>Salir de sistema</span></a>
-								<?php if ($_SESSION['INICIO']['MODULO_SISTEMA'] == 1) { ?>
-							<li><a class="dropdown-item" href="javascript:;" onclick="regresar_modulo();"><i class='bx bx-log-out-circle'></i><span>Salir de configuraciones</span></a>
-							<?php } ?>
-							</li>
+							<?php if ($_SESSION['INICIO']['MODULO_SISTEMA'] == 1) { ?>
+								<li><a class="dropdown-item" href="javascript:;" onclick="regresar_modulo();"><i class='bx bx-cog'></i><span>Salir de configuraciones</span></a>
+								<?php } ?>
+								<li>
+
+									<a class="dropdown-item" href="javascript:;" onclick="cerrar_session();">
+										<i class='bx bx-log-out-circle'></i><span>Salir de sistema</span>
+									</a>
+
+								</li>
 						</ul>
 					</div>
 				</nav>
 			</div>
 		</header>
+
+		<div class="modal fade" id="myModal_empresas" tabindex="-1" role="dialog" data-bs-backdrop="static" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+			<div class="modal-dialog modal-dialog-centered" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h3 class="modal-title" id="titulo">Empresas</h3>
+					</div>
+					<div class="modal-body">
+						<ul class="list-group list-group-flush radius-10" id="lista_empresas">
+
+							<li class="list-group-item d-flex align-items-center radius-10 mb-2 shadow-sm">
+								<div class="d-flex align-items-center">
+									<div class="font-20"><i class="flag-icon flag-icon-us"></i>
+									</div>
+									<div class="flex-grow-1 ms-2">
+										<h6 class="mb-0">United States</h6>
+									</div>
+								</div>
+								<div class="ms-auto">435</div>
+							</li>
+							<li class="list-group-item d-flex align-items-center radius-10 mb-2 shadow-sm">
+								<div class="d-flex align-items-center">
+									<div class="font-20"><i class="flag-icon flag-icon-vn"></i>
+									</div>
+									<div class="flex-grow-1 ms-2">
+										<h6 class="mb-0">Vietnam</h6>
+									</div>
+								</div>
+								<div class="ms-auto">287</div>
+							</li>
+							<li class="list-group-item d-flex align-items-center radius-10 mb-2 shadow-sm">
+								<div class="d-flex align-items-center">
+									<div class="font-20"><i class="flag-icon flag-icon-au"></i>
+									</div>
+									<div class="flex-grow-1 ms-2">
+										<h6 class="mb-0">Australia</h6>
+									</div>
+								</div>
+								<div class="ms-auto">432</div>
+							</li>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+					</div>
+				</div>
+			</div>
+		</div>

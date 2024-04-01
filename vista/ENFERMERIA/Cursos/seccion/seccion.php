@@ -1,28 +1,27 @@
 <script type="text/javascript">
-    
     $(document).ready(function() {
         consultar_datos();
     });
 
     function consultar_datos(id = '') {
         var seccion = '';
-  
+
         $.ajax({
             data: {
                 id: id
             },
-            url: '<?php echo $url_general ?>/controlador/seccionC.php?listar=true',
+            url: '../controlador/seccionC.php?listar=true',
             type: 'post',
             dataType: 'json',
 
             success: function(response) {
                 // console.log(response);   
                 $.each(response, function(i, item) {
-                    console.log(item);
+                    //console.log(item);
                     seccion +=
                         '<tr>' +
                         '<td>' + 'COD - ' + item.sa_sec_id + '</td>' +
-                        '<td><a href="<?= $url_general ?>/vista/inicio.php?mod=7&acc=registrar_seccion&id=' + item.sa_sec_id + '"><u>' + item.sa_sec_nombre + '</u></a></td>' +
+                        '<td><a href="../vista/inicio.php?mod=7&acc=registrar_seccion&id=' + item.sa_sec_id + '"><u>' + item.sa_sec_nombre + '</u></a></td>' +
                         '<td></td>' +
                         '</tr>';
                 });
@@ -39,18 +38,18 @@
             data: {
                 buscar: buscar
             },
-            url: '<?= $url_general ?>/controlador/seccionC.php?buscar=true',
+            url: '../controlador/seccionC.php?buscar=true',
             type: 'post',
             dataType: 'json',
 
             success: function(response) {
                 // console.log(response);   
                 $.each(response, function(i, item) {
-                    console.log(item);
+                    //console.log(item);
                     seccion +=
                         '<tr>' +
                         '<td>' + 'COD - ' + item.sa_sec_id + '</td>' +
-                        '<td><a href="<?= $url_general ?>/vista/inicio.php?mod=7&acc=registrar_seccion&id=' + item.sa_sec_id + '"><u>' + item.sa_sec_nombre + '</u></a></td>' +
+                        '<td><a href="../vista/inicio.php?mod=7&acc=registrar_seccion&id=' + item.sa_sec_id + '"><u>' + item.sa_sec_nombre + '</u></a></td>' +
                         '<td> </td>' +
                         '</tr>';
                 });
@@ -66,7 +65,6 @@
         $('#titulo').text('Nueva Sección');
         $('#op').text('Guardar');
     }
-    
 </script>
 
 <div class="page-wrapper">
@@ -94,34 +92,11 @@
         <!--end breadcrumb-->
 
         <div class="row">
-            <div class="col-12 col-lg-3">
 
-                <div class="card border-top border-0 border-4 border-primary">
-                    <div class="card-body p-5">
-                        <div class="card-title d-flex align-items-center">
-                            <div><i class="bx bxs-user me-1 font-22 text-primary"></i>
-                            </div>
-                            <h5 class="mb-0 text-primary">
-                                Parametrización 
-                            </h5>
-                        </div>
-
-                        <label class="menu-label">Cursos</label>
-                        <div class="fm-menu">
-                            <div class="list-group list-group-flush">
-                                <a href="<?= $url_general ?>/vista/inicio.php?mod=7&acc=seccion" class="list-group-item py-1"><i class='bx bx-file me-2'></i><span>Sección</span></a>
-                                <a href="<?= $url_general ?>/vista/inicio.php?mod=7&acc=grado" class="list-group-item py-1"><i class='bx bx-file me-2'></i><span>Grado</span></a>
-                                <a href="<?= $url_general ?>/vista/inicio.php?mod=7&acc=paralelo" class="list-group-item py-1"><i class='bx bx-file me-2'></i><span>Paralelo</span></a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-12 col-lg-9">
+            <div class="col-12">
                 <div class="card border-top border-0 border-4 border-primary">
                     <div class="card-body">
-                    <div class="card-title d-flex align-items-center">
+                        <div class="card-title d-flex align-items-center">
                             <div><i class="bx bxs-user me-1 font-22 text-primary"></i>
                             </div>
                             <h5 class="mb-0 text-primary">Sección</h5>
@@ -134,10 +109,10 @@
 
                             <section class="content">
                                 <div class="container-fluid">
-                             
+
                                     <div class="row">
                                         <div class="col-sm-12" id="btn_nuevo">
-                                            <a href="<?= $url_general ?>/vista/inicio.php?mod=7&acc=registrar_seccion" class="btn btn-success btn-sm"><i class="bx bx-plus"></i> Nuevo</a>
+                                            <a href="../vista/inicio.php?mod=7&acc=registrar_seccion" class="btn btn-success btn-sm"><i class="bx bx-plus"></i> Nuevo</a>
                                             <a href="#" class="btn btn-outline-secondary btn-sm" id="excel_seccion" title="Informe en excel del total de Secciones"><i class="bx bx-file"></i> Total Secciones</a>
                                         </div>
 
@@ -176,8 +151,3 @@
         <!--end row-->
     </div>
 </div>
-
-
-
-
-

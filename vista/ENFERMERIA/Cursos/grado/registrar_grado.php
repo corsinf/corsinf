@@ -27,14 +27,16 @@ if (isset($_GET['id_seccion'])) {
   });
 
   //Para cargar los datos en el select
+
   function consultar_datos_seccion(id = '', id_seccion = '') {
     var seccion = '';
+    //console.log(id_seccion);
     seccion = '<option selected disabled>-- Seleccione --</option>'
     $.ajax({
       data: {
         id: id
       },
-      url: '<?php echo $url_general ?>/controlador/seccionC.php?listar=true',
+      url: '../controlador/seccionC.php?listar=true',
       type: 'post',
       dataType: 'json',
 
@@ -68,7 +70,7 @@ if (isset($_GET['id_seccion'])) {
       data: {
         id: id
       },
-      url: '<?= $url_general ?>/controlador/gradoC.php?listar=true',
+      url: '../controlador/gradoC.php?listar=true',
       type: 'post',
       dataType: 'json',
       success: function(response) {
@@ -124,7 +126,7 @@ if (isset($_GET['id_seccion'])) {
       data: {
         parametros: parametros
       },
-      url: '<?= $url_general ?>/controlador/gradoC.php?insertar=true',
+      url: '../controlador/gradoC.php?insertar=true',
       type: 'post',
       dataType: 'json',
       /*beforeSend: function () {   
@@ -134,9 +136,9 @@ if (isset($_GET['id_seccion'])) {
       success: function(response) {
         if (response == 1) {
           Swal.fire('', 'Operacion realizada con exito.', 'success').then(function() {
-            location.href = '<?= $url_general ?>/vista/inicio.php?mod=7&acc=grado';
+            location.href = '../vista/inicio.php?mod=7&acc=grado';
           });
-          //location.href = '<?= $url_general ?>/vista/inicio.php?mod=7&acc=grado';
+          //location.href = '../vista/inicio.php?mod=7&acc=grado';
         } else if (response == -2) {
           //Swal.fire('', 'codigo ya regitrado', 'success');
         }
@@ -169,7 +171,7 @@ if (isset($_GET['id_seccion'])) {
       data: {
         id: id
       },
-      url: '<?= $url_general ?>/controlador/gradoC.php?eliminar=true',
+      url: '../controlador/gradoC.php?eliminar=true',
       type: 'post',
       dataType: 'json',
       beforeSend: function() {
@@ -179,9 +181,9 @@ if (isset($_GET['id_seccion'])) {
       success: function(response) {
         if (response == 1) {
           Swal.fire('Eliminado!', 'Registro Eliminado.', 'success').then(function() {
-            location.href = '<?= $url_general ?>/vista/inicio.php?mod=7&acc=grado';
+            location.href = '../vista/inicio.php?mod=7&acc=grado';
           });
-          //location.href = '<?= $url_general ?>/vista/inicio.php?mod=7&acc=grado';
+          //location.href = '../vista/inicio.php?mod=7&acc=grado';
         }
 
       }
@@ -238,7 +240,7 @@ if (isset($_GET['id_seccion'])) {
               </h5>
               <div class="row m-2">
                 <div class="col-sm-12">
-                  <a href="<?= $url_general ?>/vista/inicio.php?mod=7&acc=grado" class="btn btn-outline-dark btn-sm"><i class="bx bx-arrow-back"></i> Regresar</a>
+                  <a href="../vista/inicio.php?mod=7&acc=grado" class="btn btn-outline-dark btn-sm"><i class="bx bx-arrow-back"></i> Regresar</a>
                 </div>
               </div>
             </div>
@@ -251,7 +253,7 @@ if (isset($_GET['id_seccion'])) {
               <div class="row pt-3">
 
                 <div class="col-md-6">
-                  <label for="" class="form-label">Sección: <label style="color: red;">*</label> </label>
+                  <label for="" class="form-label">Sección <label style="color: red;">*</label> </label>
                   <select class="form-select" id="sa_id_seccion" name="sa_id_seccion">
 
                   </select>
@@ -260,7 +262,7 @@ if (isset($_GET['id_seccion'])) {
 
               <div class="row pt-3">
                 <div class="col-md-6">
-                  <label for="" class="form-label">Grado: <label style="color: red;">*</label> </label>
+                  <label for="" class="form-label">Grado <label style="color: red;">*</label> </label>
                   <input type="text" class="form-control" id="sa_gra_nombre" name="sa_gra_nombre">
                 </div>
               </div>

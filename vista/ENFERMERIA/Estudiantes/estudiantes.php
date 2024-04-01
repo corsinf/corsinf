@@ -1,6 +1,10 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <script src="<?= $url_general ?>/js/ENFERMERIA/operaciones_generales.js"></script>
+=======
+<script src="../js/ENFERMERIA/operaciones_generales.js"></script>
+>>>>>>> c9a234889f7443a040d28d13f82e35ef88467ae7
 
 >>>>>>> f975ff57302e9fcddee9c8879ae90e7325aab8d1
 <script type="text/javascript">
@@ -11,16 +15,30 @@
             },
             responsive: true,
             ajax: {
-                url: '<?php echo $url_general ?>/controlador/estudiantesC.php?listar_todo=true',
+                url: '../controlador/estudiantesC.php?listar_todo=true',
                 dataSrc: ''
             },
+            dom: '<"top"Bfr>t<"bottom"lip>',
+            buttons: [{
+                    extend: 'excel',
+                    text: '<i class="bx bxs-file-pdf me-0"></i> Exportar a Excel',
+                    title: 'Título del archivo Excel',
+                    filename: 'nombre_archivo_excel'
+                },
+                {
+                    extend: 'pdf',
+                    text: '<i class="bx bxs-spreadsheet me-0"></i> Exportar a PDF',
+                    title: 'Título del archivo PDF',
+                    filename: 'nombre_archivo_PDF'
+                }
+            ],
             columns: [{
                     data: 'sa_est_cedula'
                 },
                 {
                     data: null,
                     render: function(data, type, item) {
-                        return '<a href="#" onclick="enviar_ID_estudiante(' + item.sa_est_id + ', ' + item.sa_id_seccion + ', ' + item.sa_id_grado + ', ' + item.sa_id_paralelo + ', ' + item.sa_id_representante +')"><u>' + item.sa_est_primer_apellido + ' ' + item.sa_est_segundo_apellido + ' ' + item.sa_est_primer_nombre + ' ' + item.sa_est_segundo_nombre + '</u></a>';
+                        return '<a href="#" onclick="enviar_ID_estudiante(' + item.sa_est_id + ', ' + item.sa_id_seccion + ', ' + item.sa_id_grado + ', ' + item.sa_id_paralelo + ', ' + item.sa_id_representante + ')"><u>' + item.sa_est_primer_apellido + ' ' + item.sa_est_segundo_apellido + ' ' + item.sa_est_primer_nombre + ' ' + item.sa_est_segundo_nombre + '</u></a>';
                     }
                 },
                 {
@@ -32,10 +50,23 @@
                 {
                     data: null,
                     render: function(data, type, item) {
-                        return calcular_edad_fecha_nacimiento(item.sa_est_fecha_nacimiento.date);
+
+                        fecha_nacimiento = item.sa_est_fecha_nacimiento;
+                        //fecha_nacimiento_calc = ;
+                        
+                        salida = fecha_nacimiento ? calcular_edad_fecha_nacimiento(item.sa_est_fecha_nacimiento) : '';
+
+                        return salida;
                     }
                 },
-            ]
+            ],
+            order: [
+                [1, 'asc']
+            ],
+            initComplete: function() {
+                // Mover los botones al contenedor personalizado
+                $('#contenedor_botones').append($('.dt-buttons'));
+            }
         });
     });
 
@@ -146,7 +177,7 @@
 >>>>>>> f975ff57302e9fcddee9c8879ae90e7325aab8d1
 </script>
 
-<form id="form_enviar" action="<?= $url_general ?>/vista/inicio.php?mod=7&acc=registrar_estudiantes" method="post" style="display: none;">
+<form id="form_enviar" action="../vista/inicio.php?mod=7&acc=registrar_estudiantes" method="post" style="display: none;">
     <input type="hidden" id="sa_est_id" name="sa_est_id">
     <input type="hidden" id="sa_sec_id" name="sa_sec_id">
     <input type="hidden" id="sa_gra_id" name="sa_gra_id">
@@ -188,6 +219,7 @@
 >>>>>>> f975ff57302e9fcddee9c8879ae90e7325aab8d1
                 <div class="card border-top border-0 border-4 border-primary">
                     <div class="card-body p-5">
+<<<<<<< HEAD
                         <div class="card-title d-flex align-items-center">
                             <div><i class="bx bxs-user me-1 font-22 text-primary"></i>
                             </div>
@@ -215,13 +247,33 @@
                             <div><i class="bx bxs-user me-1 font-22 text-primary"></i>
                             </div>
                             <h5 class="mb-0 text-primary">Estudiantes</h5>
+=======
+>>>>>>> c9a234889f7443a040d28d13f82e35ef88467ae7
 
-                            <div class="row mx-1">
-                                <div class="col-sm-12" id="btn_nuevo">
-                                    <a href="<?= $url_general ?>/vista/inicio.php?mod=7&acc=registrar_estudiantes" class="btn btn-success btn-sm"><i class="bx bx-plus"></i> Nuevo</a>
+                        <div class="row">
+
+                            <div class="col-6">
+                                <div class="card-title d-flex align-items-center">
+                                    <div><i class="bx bxs-user me-1 font-22 text-primary"></i>
+                                    </div>
+                                    <h5 class="mb-0 text-primary">Estudiantes</h5>
+
+                                    <div class="row mx-1">
+                                        <div class="col-sm-12" id="btn_nuevo">
+                                            <a href="../vista/inicio.php?mod=7&acc=registrar_estudiantes" class="btn btn-success btn-sm"><i class="bx bx-plus"></i> Nuevo</a>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
+
+                            <div class="col-6 text-end">
+                                <div id="contenedor_botones"></div>
+                            </div>
+
+
                         </div>
+
+
 
                         <hr>
 

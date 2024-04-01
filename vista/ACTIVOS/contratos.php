@@ -2,21 +2,71 @@
 <script type="text/javascript">
   $(document).ready(function() {
 
-    var id ='<?php echo $id;?>';
-    if(id)
-    {
-      cargar_datos_seguro(id);
-      $('#txt_id').val(id);
-      Articulo_contrato_lista();
-    }
-    $('#ddl_siniestros').select2();
-    lista_cobertura();
-    lista_proveedor();
-    lista_articulos();
-    forma_pago();
-});
-</script>
-<script type="text/javascript">
+      var id ='<?php echo $id;?>';
+      inputs_asignacion_seguros();
+
+      $('#ddl_siniestros').select2();
+      lista_cobertura();
+      lista_proveedor();
+      lista_articulos();
+
+
+      if(id!='')
+      {
+        $('#txt_id').val(id);
+        Articulo_contrato_lista();
+        cargar_datos_seguro(id);
+      }
+  });
+
+  forma_pago();
+
+  function forma_pago()
+  {
+        $.ajax({
+          // data:  {parametros:parametros},
+          url:   '../controlador/contratoC.php?forma_pago=true',
+          type:  'post',
+          dataType: 'json',
+            success:  function (response) {
+              var  op = '<option value="">Seleccione</option>';
+             response.forEach(function(item,i)
+             {
+                op+='<option value="'+item.id+'">'+item.nombre+'</option>';
+             })
+             console.log(op)
+
+             $('#ddl_forma_pago').html(op);
+          }
+        });
+  }
+
+
+   function inputs_asignacion_seguros()
+   {
+       var inputs = '';
+       var tablas = '<?php echo $_SESSION['INICIO']['ASIGNAR_SEGUROS'];?>';
+       if(tablas!='')
+       {
+        console.log(tablas)
+         var obj = JSON.parse(tablas);
+         // console.log(obj);
+          obj.forEach(function(item,i){
+            if(i==0)
+            {
+              inputs+='<label class="me-2"><input type="radio" name="rbl_seguro_busqueda" onclick="lista_articulos()" value="'+item.tabla+'" checked ><b> '+capitalize(item.tabla)+'</b></label>  ';
+            }else
+            {
+              inputs+='<label class="me-2"><input type="radio" name="rbl_seguro_busqueda" onclick="lista_articulos()" value="'+item.tabla+'" ><b> '+capitalize(item.tabla)+'</b></label>  ';              
+            }
+          })
+       }else
+       {
+         inputs+='<input type="radio" name="rbl_seguro_busqueda" value="ACTIVO" checked style="display:none">';
+       }
+
+       $('#pnl_asociacion_seguros').html(inputs);
+   }
 
    function lista_cobertura()
    {
@@ -81,11 +131,12 @@
 
    function lista_articulos()
    {
+      var tabla = $('input[name="rbl_seguro_busqueda"]:checked').val();
       $('#ddl_articulos').select2({
         placeholder: 'Seleccione Proveedor',
         width:'100%',
         ajax: {
-          url:   '../controlador/contratoC.php?lista_articulos=true',
+          url:   '../controlador/contratoC.php?lista_articulos=true&tabla='+tabla,
           dataType: 'json',
           delay: 250,
           processResults: function (data) {
@@ -160,8 +211,11 @@
               if(response!=-1)
               {
                 Swal.fire('Contrato guardada','','success').then(function(){
-                  location.href = 'contratos.php?id='+response;
+                  location.href = 'inicio.php?acc=contratos&id='+response;
                 })
+              }else
+              {
+                Swal.fire('Algo sucedio','','error')
               }
           }
         });
@@ -196,26 +250,36 @@
         });
   }
 
-
-  function forma_pago()
+  function tipo_pago_save()
   {
+    nom =  $('#txt_tipo_pago').val();
 
+    var parametros = 
+    {
+      'nombre':nom,
+    }
         $.ajax({
-          // data:  {parametros:parametros},
-          url:   '../controlador/contratoC.php?forma_pago=true',
+          data:  {parametros:parametros},
+          url:   '../controlador/contratoC.php?tipo_pago_save=true',
           type:  'post',
           dataType: 'json',
+          /*beforeSend: function () {   
+               var spiner = '<div class="text-center"><img src="../img/gif/proce.gif" width="100" height="100"></div>'     
+             $('#tabla_').html(spiner);
+          },*/
             success:  function (response) {
-              var  op = '';
-             response.forEach(function(item,i)
-             {
-               op+='<option value="'+item.id+'">'+item.nombre+'</option>';
-             })
-
-             $('#ddl_forma_pago').html(op);
+              if(response==1)
+              {
+                $('#txt_tipo_pago').val('');
+                $('#myModal_tipo_pago').modal('hide');
+                Swal.fire('Tipo pago guardado','','success');
+                forma_pago();
+              }
           }
         });
   }
+
+
 
   function cargar_datos_seguro(id)
   {
@@ -228,30 +292,22 @@
           url:   '../controlador/contratoC.php?cargar_datos_seguro=true',
           type:  'post',
           dataType: 'json',
-          /*beforeSend: function () {   
-               var spiner = '<div class="text-center"><img src="../img/gif/proce.gif" width="100" height="100"></div>'     
-             $('#tabla_').html(spiner);
-          },*/
-            success:  function (response) {
-              console.log(response)
-
+            success: function (response) {
+              // console.log(response)
               $('#ddl_proveedor').html(response.proveedor);
               $('#ddl_cobertura').html(response.cobertura); 
               lista_siniestros();
               $('#ddl_siniestros').html(response.siniestro).trigger('change');
 
-              
-             // $('#ddl_localizacion').append($('<option>',{value: response[0].id_loc, text: response[0].DENOMINACION,selected: true }));
-
-              // $('#ddl_siniestros').html(response.siniestros);
-              $('#txt_desde').val(formatoDate(response.datos[0].hasta.date));
-              $('#txt_hasta').val(formatoDate(response.datos[0].desde.date));
+              $('#txt_desde').val(response.datos[0].hasta);
+              $('#txt_hasta').val(response.datos[0].desde);
               $('#txt_prima').val(response.datos[0].prima);
               $('#txt_valor_seguro').val(response.datos[0].suma_asegurada);
 
               $('#txt_plan').val(response.datos[0].plan_seguro);
               $('#txt_vigencia').val(response.datos[0].vigencia);
               $('#ddl_forma_pago').val(response.datos[0].forma_pago);
+              //console.log(response.datos[0].forma_pago)
               $('#txt_cobertura_por').val(response.datos[0].cobertura_porce);
               $('#txt_deducible').val(response.datos[0].Dedusible);
               $('#rbl_renovacion_'+response.datos[0].renovacion).prop('checked',true);
@@ -303,11 +359,11 @@
 
   function editar_insertar()
   {
-    var nom = $('#txt_proveedor').val();
-    var ci = $('#txt_ci').val();
-    var tel = $('#txt_telefono').val();
-    var ema = $('#txt_email').val();
-    var dir = $('#txt_direccion').val();
+    var nom = $('#txt_proveedorNew').val();
+    var ci = $('#txt_ciNew').val();
+    var tel = $('#txt_telefonoNew').val();
+    var ema = $('#txt_emailNew').val();
+    var dir = $('#txt_direccionNew').val();
     
     if(nom=='' || ci =='' || tel =='' || ema =='' || dir =='')
     {
@@ -348,6 +404,8 @@
   {
     var id = '<?php echo $id; ?>';
     var art = $('#ddl_articulos').val();
+    var mod = '<?php echo $_SESSION['INICIO']['MODULO_SISTEMA']; ?>';
+    var tabla = $('input[name="rbl_seguro_busqueda"]:checked').val();
     if(id==''){
       Swal.fire('No se pudo agregar','Guarde primero los datos del contrato','info');
       return false;
@@ -362,6 +420,8 @@
       {
         'contrato':id,
         'articulo':art,
+        'modulo':mod,
+        'tabla':tabla,
       }
         $.ajax({
           data:  {parametros:parametros},
@@ -402,6 +462,9 @@
             if(response!='')
             {
              $('#tbl_art').html(response);             
+            }else
+            {
+              $('#tbl_art').html('<tr><td colspan="6">No Existen datos</td></tr>');      
             }
           }
         });
@@ -440,6 +503,29 @@
       }
     });
   }
+
+  function capitalize(str) 
+  {
+    return str.charAt(0).toUpperCase() + str.slice(1);
+  }
+
+  function nuevo_siniestro()
+    {
+      $('#myModal_siniestro').modal('show');
+    }
+     function nueva_cobertura()
+    {
+      $('#myModal_cobertura').modal('show');
+    }
+     function nuevo_proveedor()
+    {
+      $('#myModal_proveedor').modal('show');
+    }
+    function nuevo_tipo_pago()
+    {
+      $('#myModal_tipo_pago').modal('show');
+    }
+
 </script>
 
 <div class="page-wrapper">
@@ -484,75 +570,79 @@
                         <select class="form-control form-control-sm" id="ddl_proveedor" name="ddl_proveedor">
                           <option value="">Proveedor 1</option>
                         </select>
-                          <button type="button" class="btn btn-outline-secondary btn-sm" title="Nuevo proveedor" onclick="nuevo_proveedor()"><i class="bx bx-user-plus"></i></button>
+                          <button type="button" class="btn btn-outline-secondary btn-sm" title="Nuevo proveedor" onclick="nuevo_proveedor()"><i class="bx bx-user-plus me-2 ms-2"></i></button>
                     </div>
                   </div>
-                  <div class="col-sm-12">
+                  <div class="col-sm-12 mb-1">
                     <b>Asesor</b>            
                     <input type="" name="txt_asesor" id="txt_asesor" class="form-control form-control-sm">
                   </div>
-                  <div class="col-sm-6">
+                  <div class="col-sm-6 mb-1">
                     <b>Telefono</b>            
                     <input type="" name="txt_telefono" id="txt_telefono" class="form-control form-control-sm">
                   </div>                
-                  <div class="col-sm-6">
+                  <div class="col-sm-6 mb-1">
                     <b>Email</b>            
                     <input type="" name="txt_email" id="txt_email" class="form-control form-control-sm">
                   </div>
                   <hr>
-                  <div class="col-sm-6">
+                  <div class="col-sm-6 mb-1">
                     <b>Fecha de contrato</b>
                     <input type="date" name="txt_desde" id="txt_desde" class="form-control form-control-sm">
                   </div>
-                  <div class="col-sm-6">
+                  <div class="col-sm-6 mb-1">
                     <b>Fin de contrato</b>
                     <input type="date" name="txt_hasta" id="txt_hasta" class="form-control form-control-sm">
                   </div>
-                  <div class="col-sm-6">
+                  <div class="col-sm-6 mb-1">
                     <b>Vigencia</b>            
                     <input type="" name="txt_vigencia" id="txt_vigencia" class="form-control form-control-sm">
                   </div>
-                  <div class="col-sm-6" style="display: none;">
+                  <div class="col-sm-6 mb-1" style="display: none;">
                     <b>Precio prima</b>
                     <input type="" name="txt_prima" id="txt_prima" class="form-control form-control-sm" value="0">
                   </div>
-                  <div class="col-sm-6">
-                    <b>Plan</b>            
+                  <div class="col-sm-6 mb-1">
+                    <b>Nombre Plan</b>            
                     <input type="" name="txt_plan" id="txt_plan" class="form-control form-control-sm">
                   </div>
-                  <div class="col-sm-6">
+                  <div class="col-sm-6 mb-1">
                     <b>Suma asegurada</b>
                     <input type="" name="txt_valor_seguro" id="txt_valor_seguro"  class="form-control form-control-sm">
                   </div>          
-                  <div class="col-sm-6">
-                    <b>Forma de pago</b>            
-                    <select class="form-select form-select-sm" name="ddl_forma_pago" id="ddl_forma_pago">
-                      <option value="">Seleccione</option>
-                    </select>
+                  <div class="col-sm-6 mb-1">
+                    <b>Forma de pago</b>    
+                    <div class="input-group input-group-sm">        
+                      <select class="form-select form-select-sm" name="ddl_forma_pago" id="ddl_forma_pago">
+                        <option value="">Seleccione</option>
+                      </select>
+                       <button type="button" class="btn btn-outline-secondary btn-sm" title="Nuevo tipo de pago" onclick="nuevo_tipo_pago()"><i class="bx bx-plus me-2 ms-2"></i></button>
+                     </div>
                   </div>
-                  <div class="col-sm-6">
+                  <div class="col-sm-6 mb-1">
                     <b>Cobertura %</b>            
                     <input type="" placeholder="10%" name="txt_cobertura_por" id="txt_cobertura_por" class="form-control form-control-sm">
                   </div>
-                  <div class="col-sm-6">
+                  <div class="col-sm-6 mb-1">
                     <b>Dedusible</b>            
                     <input type="" name="txt_deducible" id="txt_deducible" class="form-control form-control-sm" readonly value="0">
                   </div>
-                  <div class="col-sm-6">
-                    <b>Tipo de renovacion</b>            
-                    <label><input type="radio" name="rbl_renovacion" id="rbl_renovacion_A" value="A" checked>Automatica</label>
-                    <label><input type="radio" name="rbl_renovacion" id="rbl_renovacion_M" value="M">Manual</label>
+                  <div class="col-sm-6 mb-1">
+                    <b>Tipo de renovacion</b>      
+                    <br>      
+                    <label class="online-radio "><input type="radio" name="rbl_renovacion" id="rbl_renovacion_A" value="A" checked>Automatica</label>
+                    <label class="online-radio "><input type="radio" name="rbl_renovacion" id="rbl_renovacion_M" value="M">Manual</label>
                   </div>
-                  <div class="col-sm-12">
+                  <div class="col-sm-12 mb-1">
                     <b>Cobertuta</b>
                     <div class="input-group input-group-sm">
                         <select class="form-control form-control-sm" id="ddl_cobertura" name="ddl_cobertura" onchange="lista_siniestros()"> 
                           <option value="">Seleccione cobertura</option>                    
                         </select>
-                        <button type="button" class="btn btn-outline-secondary btn-sm" title="Nueva Cobertuta" onclick="nueva_cobertura()"><i class="bx bx-clinic"></i></button>                  
+                        <button type="button" class="btn btn-outline-secondary btn-sm" title="Nueva Cobertuta" onclick="nueva_cobertura()"><i class="bx bx-clinic me-2 ms-2"></i></button>                  
                     </div>            
                   </div>
-                   <div class="col-sm-12">
+                   <div class="col-sm-12 mb-1">
                     <b>Siniestro</b>
                      <div class="input-group">
                           <select class="multiple-select" name="ddl_siniestros[]" multiple="multiple" id="ddl_siniestros" style="width:80%" data-placeholder="Choose anything">
@@ -569,33 +659,31 @@
                 </div> 
               </div>
               </div>
-               <div class="col-lg-7">
-                  <div class="border border-3 p-4 rounded">
+               <div class="col-lg-7 mb-1">
+                  <div class="border border-3 p-4 rounded">                    
                     <div class="row">
-                      <div class="col-sm-10">
-                        <b>Articulo o activos que aplican en el seguro</b>
+                      <div class="col-sm-12" id="pnl_asociacion_seguros">
+                      <?php //print_r($_SESSION['INICIO']);?>
+                      </div>
+                      <div class="col-sm-10 mb-1">
+                        <br>
+                        <b>Aplicar seguro a:</b>
                               <select class="form-select form-select-sm" name="ddl_articulos" id="ddl_articulos" >
                                 <option value="">Seleccione Articulo</option>                    
                               </select>
                       </div>
                       <div class="col-sm-2 text-end">
                         <br>
-                          <button type="button" class="btn btn-primary btn-sm" title="Nuevo Siniestro" onclick="agregar_a_contrato()"><i class="bx bx-down-arrow-circle"></i> Agregar</button>                  
+                          <button type="button" class="btn btn-primary btn-sm" title="Nuevo Siniestro" onclick="agregar_a_contrato()"> Agregar<i class="bx bx-down-arrow-circle me-0"></i></button>                  
                       </div>
                     </div>
                     <div class="row table-responsive">
-                      <div class="col-sm-12">
+                      <div class="col-sm-12 mb-1">
                         <table class="table table-striped table-bordered dataTable">
                           <thead>
                             <th></th>
-                            <th>Producto</th>
-                            <th>Asset</th>
-                            <th>Modelo</th>
-                            <th>Serie</th>
-                            <th>Marca</th>
-                            <th>Estado</th>
-                            <th>Genero</th>
-                            <th>Color</th>
+                            <th>Tabla</th>
+                            <th></th>
                           </thead>
                           <tbody id="tbl_art">
                             <tr>
@@ -620,34 +708,23 @@
     </div>
 
   <script type="text/javascript">
-    function nuevo_siniestro()
-    {
-      $('#myModal_siniestro').modal('show');
-    }
-     function nueva_cobertura()
-    {
-      $('#myModal_cobertura').modal('show');
-    }
-     function nuevo_proveedor()
-    {
-      $('#myModal_proveedor').modal('show');
-    }
+    
   </script>
 
 <div class="modal fade" id="myModal_siniestro">
   <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h3 class="modal-title" id="titulo">Nuevo siniestro</h3>
+        <h3 class="modal-title" id="titulo">Nuevo Siniestro</h3>
       </div>
-      <div class="modal-body">       
-        Nombre de siniestro <br>
+      <div class="modal-body">     
+				<label for="" class="fw-bold">Nombre de Siniestro <label style="color: red;">*</label> </label>
         <input type="input" name="txt_nombre" id="txt_nombre" class="form-control form-control-sm">
-        Detalle de siniestro <br>
+				<label for="" class="fw-bold">Detalle de Siniestro <label style="color: red;">*</label> </label>
         <textarea class="form-control form-control-sm" style="resize:none"  rows="2" id="txt_detalle_siniestro" name="txt_detalle_siniestro"></textarea>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
         <button type="button" class="btn btn-primary" id="op" onclick="siniestros()">Guardar</button>
       </div>
     </div>
@@ -660,13 +737,31 @@
       <div class="modal-header">
         <h3 class="modal-title" id="titulo">Nueva Cobertura</h3>
       </div>
-      <div class="modal-body">       
-        Nombre de cobertura <br>
+      <div class="modal-body">    
+				<label for="" class="fw-bold">Nombre de Cobertura <label style="color: red;">*</label> </label>
         <input type="input" name="txt_cobertura" id="txt_cobertura" class="form-control form-control-sm">
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
         <button type="button" class="btn btn-primary" id="op" onclick="cobertura()">Guardar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="myModal_tipo_pago">
+  <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title" id="titulo">Nuevo Tipo de Pago</h3>
+      </div>
+      <div class="modal-body">   
+				  <label for="" class="fw-bold">Nombre de Tipo de Pago <label style="color: red;">*</label> </label>
+          <input type="input" name="txt_tipo_pago" id="txt_tipo_pago" class="form-control form-control-sm">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+        <button type="button" class="btn btn-primary" id="op" onclick="tipo_pago_save()">Guardar</button>
       </div>
     </div>
   </div>
@@ -680,30 +775,30 @@
       </div>
       <div class="modal-body">
         <div class="row">
-          <div class="col-sm-12">
-             Nombre <br>
-             <input type="input" name="txt_proveedor" id="txt_proveedor" class="form-control form-control-sm">           
+          <div class="col-sm-12 mb-2">
+						<label for="" class="fw-bold">Nombre <label style="color: red;">*</label> </label>
+            <input type="input" name="txt_proveedorNew" id="txt_proveedorNew" class="form-control form-control-sm">           
           </div>
-          <div class="col-sm-12">
-            CI /RUC <br>
-            <input type="input" name="txt_ci" id="txt_ci" class="form-control form-control-sm">            
+          <div class="col-sm-12 mb-2">
+						<label for="" class="fw-bold"> CI /RUC  <label style="color: red;">*</label> </label>
+            <input type="input" name="txt_ciNew" id="txt_ciNew" class="form-control form-control-sm">            
           </div>
-           <div class="col-sm-6">
-            Email <br>
-            <input type="input" name="txt_email" id="txt_email" class="form-control form-control-sm">            
+           <div class="col-sm-6 mb-2">
+						<label for="" class="fw-bold"> Correo  <label style="color: red;">*</label> </label>
+            <input type="input" name="txt_emailNew" id="txt_emailNew" class="form-control form-control-sm">            
           </div>
-           <div class="col-sm-6">
-            Telefono <br>
-            <input type="input" name="txt_telefono" id="txt_telefono" class="form-control form-control-sm">            
+           <div class="col-sm-6 mb-2">
+						<label for="" class="fw-bold"> Teléfono  <label style="color: red;">*</label> </label>
+            <input type="input" name="txt_telefonoNew" id="txt_telefonoNew" class="form-control form-control-sm">            
           </div>
-           <div class="col-sm-12">
-            Direccion <br>
-            <textarea class="form-control form-control-sm " id="txt_direccion" name="txt_direccion" style="resize:none" rows="2"></textarea>          
+           <div class="col-sm-12 mb-2">
+						<label for="" class="fw-bold"> Dirección  <label style="color: red;">*</label> </label>
+            <textarea class="form-control form-control-sm " id="txt_direccionNew" name="txt_direccionNew" style="resize:none" rows="2"></textarea>          
           </div>
         </div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
         <button type="button" class="btn btn-primary" id="op" onclick="editar_insertar()">Guardar</button>
       </div>
     </div>

@@ -45,6 +45,19 @@ class usuariosM
 
 	}
 
+	function updateEmpresa($tabla,$datos,$where)
+	{
+		$datos = $this->db->update($tabla,$datos,$where);
+		if($datos==1)
+		{
+			return 1;
+		}else
+		{
+			return -1;
+		}
+
+	}
+
 	
 	function eliminar_permisos($id)
 	{
@@ -56,7 +69,8 @@ class usuariosM
 
 	function lista_usuarios($id=false,$query=false,$tipo=false,$ci=false,$email=false)
 	{
-		$sql="SELECT id_usuarios as 'id',ci_ruc as 'ci',nombres,apellidos as 'ape',nombres +' '+apellidos as 'nom', direccion as 'dir',telefono as 'tel',password as 'pass',email as 'email', T.ID_TIPO as 'idt',DESCRIPCION as 'tipo',foto,link_fb,link_gmail,link_ins,link_tw,link_web FROM USUARIO_TIPO_USUARIO UT
+		$sql="SELECT id_usuarios as 'id',ci_ruc as 'ci',nombres as 'nombre',apellidos as 'apellido',nombres +' '+apellidos as 'nom', direccion as 'direccion',telefono as 'telefono',password as 'pass',email as 'email', T.ID_TIPO as 'idt',DESCRIPCION as 'tipo',foto,link_fb,link_gmail,link_ins,link_tw,link_web,usu=null 
+			FROM ACCESOS_EMPRESA UT
 			RIGHT JOIN USUARIOS U ON UT.ID_USUARIO = U.id_usuarios 
 			LEFT JOIN TIPO_USUARIO T ON UT.ID_TIPO_USUARIO = T.ID_TIPO
 			WHERE ID_EMPRESA = '".$_SESSION['INICIO']['ID_EMPRESA']."' ";
@@ -157,10 +171,10 @@ class usuariosM
 
 	function usuarios_all_empresa_actual($id=false,$query=false,$tipo=false,$ci=false,$email=false)
 	{
-		$sql="SELECT id_usuarios as 'id',ci_ruc as 'ci',nombres,apellidos as 'ape',nombres +' '+apellidos as 'nom', direccion as 'dir',telefono as 'tel',password as 'pass',email as 'email', T.ID_TIPO as 'idt',DESCRIPCION as 'tipo',foto,link_fb,link_gmail,link_ins,link_tw,link_web FROM USUARIO_TIPO_USUARIO UT
-			RIGHT JOIN USUARIOS U ON UT.ID_USUARIO = U.id_usuarios 
-			LEFT JOIN TIPO_USUARIO T ON UT.ID_TIPO_USUARIO = T.ID_TIPO
-			WHERE UT.ID_EMPRESA = '".$_SESSION['INICIO']['ID_EMPRESA']."' ";
+		$sql="SELECT * FROM USUARIOS
+			 WHERE id_usuarios in (SELECT Id_usuario 
+			 						    FROM ACCESOS_EMPRESA 
+			 						    WHERE Id_Empresa = '".$_SESSION['INICIO']['ID_EMPRESA']."')";
 		if($id)
 		{
 			$sql.=" AND id_usuarios = '".$id."'";
@@ -189,17 +203,53 @@ class usuariosM
 		return $datos;
 	}
 
-	function no_concurente_custodios($codigo)
+	function credenciales_no_concurentes_campos()
 	{
-		$sql = "SELECT ID_PERSON as 'id',PERSON_CI as 'ci',PERSON_NOM as 'nombres',DIRECCION as 'dir',TELEFONO as 'tel',PASS as 'pass',PERSON_CORREO as 'email',FOTO as 'foto'
-			 FROM PERSON_NO
-			 WHERE ESTADO = 'A' ";
-			 if($codigo)
-			 {
-			 	$sql.=" AND PERSON_NO = '".$codigo."'";
-			 }
+		$usuario= $_SESSION['INICIO']['NO_CONCURENTE'];
+		$tabla= $_SESSION['INICIO']['NO_CONCURENTE_TABLA'];
+		$campo= $_SESSION['INICIO']['NO_CONCURENTE_TABLA_ID'];
+		$empresa = $_SESSION['INICIO']['ID_EMPRESA'];
+
+		$sql = "SELECT Campo_Usuario as 'usu',Campo_pass as 'pass'
+		FROM TABLAS_NOCONCURENTE
+		WHERE Tabla = '".$tabla."'
+		AND Id_Empresa = '".$empresa."'
+		AND Id_Usuario = '".$usuario."'";
 		$datos = $this->db->datos($sql,1);
 		return $datos;
+	}
+	function credenciales_no_concurentes_datos($campo_usu,$campo_pass)
+	{
+		$usuario= $_SESSION['INICIO']['NO_CONCURENTE'];
+		$tabla= $_SESSION['INICIO']['NO_CONCURENTE_TABLA'];
+		$campo= $_SESSION['INICIO']['NO_CONCURENTE_TABLA_ID'];
+		$empresa = $_SESSION['INICIO']['ID_EMPRESA'];
+
+		$sql = "SELECT ".$campo_usu." as usuario ,".$campo_pass." as 'pass'
+		FROM ".$tabla."
+		WHERE ".$_SESSION['INICIO']['NO_CONCURENTE_TABLA_ID']." = '".$usuario."'";
+		$datos = $this->db->datos($sql);
+		return $datos;
+	}
+
+	function no_concurente_data()
+	{
+		$usuario= $_SESSION['INICIO']['NO_CONCURENTE'];
+		$tabla= $_SESSION['INICIO']['NO_CONCURENTE_TABLA'];
+		$campo= $_SESSION['INICIO']['NO_CONCURENTE_TABLA_ID'];
+
+		 $parametros = array(
+		    $usuario,
+		    $tabla,
+		    $campo,
+		  );
+		 
+		  $sql = "EXEC BuscarDatosNoconcurente @id_usuario = ?, @tabla = ?, @campowhere = ?";
+
+		  $datos = $this->db->ejecutar_procedimiento_con_retorno_1($sql, $parametros, $master = false);
+		  $datos[0]['tabla'] = $tabla;
+
+		  return $datos;
 	}
 
 
@@ -308,9 +358,13 @@ class usuariosM
 		return $this->db->datos($sql,1);
 	}
 
-	function existe_acceso_usuario_empresa($usuario)
+	function existe_acceso_usuario_empresa($usuario=false)
 	{
-		$sql = "SELECT * FROM ACCESOS_EMPRESA WHERE Id_Empresa = '".$_SESSION['INICIO']['ID_EMPRESA']."' AND Id_usuario = '".$usuario."'"; 		
+		$sql = "SELECT * FROM ACCESOS_EMPRESA WHERE Id_Empresa = '".$_SESSION['INICIO']['ID_EMPRESA']."' ";
+		if($usuario)
+		{
+			$sql.=" AND Id_usuario = '".$usuario."'"; 
+		}		
 		// print_r($sql);die();
 		return $this->db->datos($sql,1);
 	}
@@ -319,13 +373,26 @@ class usuariosM
 	function generar_primera_vez($db_destino,$id_empresa)
 	{		
 		 $db_origen = EMPRESA_MASTER;
-		 $parametros = array(
-		    array(&$db_origen, SQLSRV_PARAM_IN),
-		    array(&$db_destino, SQLSRV_PARAM_IN),
-		    array(&$id_empresa, SQLSRV_PARAM_IN),
-		  );
+		 $parametros = array($db_origen,
+		    				$db_destino,
+		    				$id_empresa);
 		  $sql = "EXEC CopiarEstructuraAccesos @origen_bd = ?,@destino_bd = ?,@id_empresa = ?";
-		  return $this->db->ejecutar_procesos_almacenados($sql,$parametros,false,$basemaster=1);
+		  $resp =  $this->db->ejecutar_procesos_almacenados($sql,$parametros,false,$basemaster=1);
+
+		  $usuarios = $this->existe_acceso_usuario_empresa();
+		   foreach ($usuarios as $key => $value) {
+		  	// print_r($value);die();
+		  	$datos[0]['campo'] = 'perfil';
+		  	$datos[0]['dato'] = $value['Id_Tipo_usuario'];
+
+		  	$where[0]['campo'] = 'id_usuarios';
+		  	$where[0]['dato'] = $value['Id_usuario'];
+		  	$p =  $this->db->update('USUARIOS',$datos, $where);
+		  	// print_r($p);
+		  }
+
+		  return $resp;
+
 	}
 
 }

@@ -94,7 +94,12 @@ class modulos_paginasM
 		}
 
 		// print_r($sql);die();
-		$datos = $this->db->datos($sql);
+		if($_SESSION['INICIO']['TIPO']!='DBA')
+		{
+			$datos = $this->db->datos($sql);
+		}else{			
+			$datos = $this->db->datos($sql,1);
+		}
 		return $datos;
 
 	}
@@ -107,8 +112,10 @@ class modulos_paginasM
 	}
 	function eliminar_pagina($id)
 	{
-		$sql = "DELETE FROM ACCESOS WHERE id_paginas = '".$id."';DELETE FROM PAGINAS WHERE id_paginas = '".$id."'";
-		return $this->db->sql_string($sql,1);
+		$sql = "DELETE FROM ACCESOS WHERE id_paginas = '".$id."' ";
+		$this->db->sql_string($sql,1);
+		$sql2= "DELETE FROM PAGINAS WHERE id_paginas = '".$id."'";
+		return $this->db->sql_string($sql2,1);
 
 	}
 

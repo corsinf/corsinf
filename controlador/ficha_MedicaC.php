@@ -1,5 +1,7 @@
 <?php
 include('../modelo/ficha_MedicaM.php');
+include('../modelo/contratosM.php');
+include('../db/codigos_globales.php');
 
 $controlador = new ficha_MedicaC();
 
@@ -20,10 +22,14 @@ if (isset($_GET['eliminar'])) {
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 if (isset($_GET['listar_solo_ficha'])) {
     echo json_encode($controlador->lista_solo_ficha_medica($_POST['id']));
 =======
 //posiblemnte ya no sirve
+=======
+
+>>>>>>> c9a234889f7443a040d28d13f82e35ef88467ae7
 if (isset($_GET['listar_paciente_ficha'])) {
     echo json_encode($controlador->lista_solo_ficha_medica($_POST['sa_pac_id']));
 }
@@ -46,7 +52,28 @@ if (isset($_GET['administrar_comunidad_ficha_medica'])) {
 >>>>>>> f975ff57302e9fcddee9c8879ae90e7325aab8d1
 }
 
-//print_r($controlador->lista_ficha_medica(''));
+if (isset($_GET['id_paciente_id_comunidad_tabla'])) {
+
+    $sa_pac_id_comunidad = '';
+    $sa_pac_tabla = '';
+
+    if (isset($_POST['sa_pac_id_comunidad'])) {
+        $sa_pac_id_comunidad = $_POST['sa_pac_id_comunidad'];
+    }
+
+    if (isset($_POST['sa_pac_tabla'])) {
+        $sa_pac_tabla = $_POST['sa_pac_tabla'];
+    }
+
+    echo json_encode($controlador->id_paciente_id_comunidad_tabla($sa_pac_id_comunidad, $sa_pac_tabla));
+}
+
+if (isset($_GET['lista_seguros'])) {
+    $parametros = $_POST['parametros'];
+    echo json_encode($controlador->lista_seguros($parametros));
+}
+
+//print_r($controlador->id_paciente_id_comunidad_tabla('3','estudiantes'));
 
 /*$parametros = array(
     'sa_sec_id' => 1,
@@ -62,10 +89,14 @@ print_r($modelo->buscar_ficha_medica_CODIGO(1));*/
 class ficha_MedicaC
 {
     private $modelo;
+    private $seguros;
+    private $cod_global;
 
     function __construct()
     {
         $this->modelo = new ficha_MedicaM();
+        $this->seguros = new contratosM();
+        $this->cod_global = new codigos_globales();
     }
 
     function lista_ficha_medica($id)
@@ -81,6 +112,16 @@ class ficha_MedicaC
 =======
         $datos = $this->modelo->lista_paciente_ficha_medica($id);
 >>>>>>> f975ff57302e9fcddee9c8879ae90e7325aab8d1
+        return $datos;
+    }
+
+    function lista_seguros($parametros)
+    {
+        // print_r($parametros);die();
+        $id = $this->cod_global->id_tabla($parametros['tabla']);
+        $datos = $this->seguros->lista_articulos_seguro_detalle($parametros['tabla'], $parametros['id'], $_SESSION['INICIO']['MODULO_SISTEMA'], $id[0]['ID'], false);
+
+        // print_r($datos);die();
         return $datos;
     }
 
@@ -115,7 +156,11 @@ class ficha_MedicaC
             array('campo' => 'sa_fice_pac_grupo_sangre', 'dato' => $parametros['sa_fice_pac_grupo_sangre']),
             array('campo' => 'sa_fice_pac_direccion_domicilio', 'dato' => $parametros['sa_fice_pac_direccion_domicilio']),
             array('campo' => 'sa_fice_pac_seguro_medico', 'dato' => $parametros['sa_fice_pac_seguro_medico']),
+<<<<<<< HEAD
 >>>>>>> f975ff57302e9fcddee9c8879ae90e7325aab8d1
+=======
+            array('campo' => 'sa_fice_pac_seguro_predeterminado', 'dato' => $parametros['sa_fice_pac_seguro_predeterminado']),
+>>>>>>> c9a234889f7443a040d28d13f82e35ef88467ae7
             array('campo' => 'sa_fice_rep_1_primer_apellido', 'dato' => $parametros['sa_fice_rep_1_primer_apellido']),
             array('campo' => 'sa_fice_rep_1_segundo_apellido', 'dato' => $parametros['sa_fice_rep_1_segundo_apellido']),
             array('campo' => 'sa_fice_rep_1_primer_nombre', 'dato' => $parametros['sa_fice_rep_1_primer_nombre']),
@@ -211,7 +256,16 @@ class ficha_MedicaC
 
         //echo $sa_pac_id_comunidad . ' ' . $sa_pac_tabla;
 
+
         return $this->modelo->gestion_comunidad_ficha_medica($sa_pac_id_comunidad, $sa_pac_tabla);
     }
+<<<<<<< HEAD
 >>>>>>> f975ff57302e9fcddee9c8879ae90e7325aab8d1
+=======
+
+    function id_paciente_id_comunidad_tabla($sa_pac_id_comunidad, $sa_pac_tabla)
+    {
+        return $this->modelo->obtener_id_tabla_paciente($sa_pac_id_comunidad, $sa_pac_tabla);
+    }
+>>>>>>> c9a234889f7443a040d28d13f82e35ef88467ae7
 }

@@ -564,7 +564,7 @@ class detalle_articuloC
 		{
 			// print_r($datos[0]['fecha']);die();
 			if(is_object($datos[0]['fecha'])){  $datos[0]['fecha'] = $datos[0]['fecha']->format('Y-m-d');}
-			if($parametros['fech']!=$datos[0]['fecha'])
+			if($parametros['fech']!= substr($datos[0]['fecha'],0,10))
 			{
 				$movimiento =' Se cambio FECHA INGRESO de '.$datos[0]['fecha'].' a '.$parametros['fech'];
 				$this->cod_globales->ingresar_movimientos($id,$movimiento,$seccion='ARTICULOS',$datos[0]['fecha'],$parametros['fech'],'','');
@@ -600,7 +600,7 @@ class detalle_articuloC
 			if(is_object($datos[0]['ORIG_ACQ_YR'])){ $datos[0]['ORIG_ACQ_YR'] = $datos[0]['ORIG_ACQ_YR']->format('Y-m-d'); }
 			if($parametros['compra']!=$datos[0]['ORIG_ACQ_YR'])
 			{
-				$movimiento=' Se cambio FECHA DE INVENTARIO de '.$datos[0]['ORIG_ACQ_YR'].' a '.$parametros['uni'];
+				$movimiento=' Se cambio FECHA DE INVENTARIO de '.$datos[0]['ORIG_ACQ_YR'].' a '.$parametros['compra'];
 					$this->cod_globales->ingresar_movimientos($id,$movimiento,$seccion='ARTICULOS',$datos[0]['ORIG_ACQ_YR'],$parametros['uni'],'','');
 		
 			}

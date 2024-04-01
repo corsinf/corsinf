@@ -1,8 +1,8 @@
 <?php //include('../cabeceras/header.php'); ?>
 
-    <link rel="stylesheet" type="text/css" href="../css/estilos.css">
-    <script src="../js/filesaver.js" type="text/javascript"></script>
-    <script src="../js/html2canvas.js" type="text/javascript"></script> 
+    <!-- <link rel="stylesheet" type="text/css" href="../css/estilos.css"> -->
+    <!-- <script src="../js/filesaver.js" type="text/javascript"></script> -->
+    <!-- <script src="../js/html2canvas.js" type="text/javascript"></script>  -->
     <script type="text/javascript">
       $(function() { 
           $("#crearimagen").click(function() { 
@@ -116,6 +116,7 @@ var parametros = {
       'localizacion':'', //  $('#ddl_localizacion').val(),
       'custodio':'', // $('#ddl_custodio').val(),
       'pag':'0-25', //$('#txt_pag').val(),
+      // 'exacto':0,
      }
      var lineas = '';
      console.log(parametros);
@@ -129,9 +130,9 @@ var parametros = {
          $('#tabla_').html(spiner);
       },*/
         success:  function (response) {    
-        console.log(response);   
+        console.log(response.datos);   
         $.each(response.datos, function(i, item){
-          lineas+= '<tr><td>'+item.id+'</td><td><a href="detalle_articulo.php?id='+item.id+'">'+item.tag+'</a></td><td>'+item.nom+'</td><td>'+item.modelo+'</td><td>'+item.serie+'</td><td>'+item.localizacion+'</td><td>'+item.custodio+'</td><td>'+item.fecha_in.date+'</td><td><button class="btn-outline-secondary" onclick="tag_im(\''+item.tag+'\')"><li class="bx bx-purchase-tag"></li></button></td></tr>';
+          lineas+= '<tr><td>'+item.id+'</td><td><a href="detalle_articulo.php?id='+item.id+'">'+item.tag+'</a></td><td>'+item.nom+'</td><td>'+item.modelo+'</td><td>'+item.serie+'</td><td>'+item.localizacion+'</td><td>'+item.custodio+'</td><td>'+item.fecha_in+'</td><td><button class="btn-outline-secondary" onclick="tag_im(\''+item.tag+'\')"><li class="bx bx-purchase-tag"></li></button></td></tr>';
           // console.log(item);
        
         });       
@@ -391,7 +392,7 @@ function generar_vista()
                     <button class="btn btn-outline-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#myModal_tag"><li class="bx bx-purchase-tag"></li> Imprimir (N) Etiquetas</button>
                   </div>
                 </div>
-                <!--
+             
                 <br>
                 <b>Filtros de busqueda</b>
                 <div class="row">
@@ -413,8 +414,7 @@ function generar_vista()
                     </div>                          
                   </div>              
                 </div>
-                -->
-                <!--
+
                 <div class="row text-right">
                   <nav aria-label="Page navigation example">
                     <ul class="pagination" id="pag">
@@ -442,7 +442,7 @@ function generar_vista()
                   </table>
                 </div>
 
-               -->
+               
               </div>
             </div>
           </div>

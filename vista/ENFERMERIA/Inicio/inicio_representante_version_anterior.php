@@ -52,7 +52,7 @@
             data: {
                 id_representante: id_representante,
             },
-            url: '<?php echo $url_general ?>/controlador/estudiantesC.php?listar_estudiante_representante=true',
+            url: '../controlador/estudiantesC.php?listar_estudiante_representante=true',
             type: 'post',
             dataType: 'json',
             //Para el id representante tomar los datos con los de session
@@ -64,7 +64,7 @@
                     /*estudiantes +=
                         '<tr>' +
                         '<td>' + item.sa_est_cedula + '</td>' +
-                        '<td><a href="<?= $url_general ?>/vista/inicio.php?mod=7&acc=registrar_estudiantes&id=' + item.sa_est_id + '&id_seccion=' + item.sa_id_seccion + '&id_grado=' + item.sa_id_grado + '&id_paralelo=' + item.sa_id_paralelo + '&id_representante=' + item.sa_id_representante + '"><u>' + item.sa_est_primer_apellido + ' ' + item.sa_est_segundo_apellido + ' ' + item.sa_est_primer_nombre + ' ' + item.sa_est_segundo_nombre + '</u></a></td>' +
+                        '<td><a href="../vista/inicio.php?mod=7&acc=registrar_estudiantes&id=' + item.sa_est_id + '&id_seccion=' + item.sa_id_seccion + '&id_grado=' + item.sa_id_grado + '&id_paralelo=' + item.sa_id_paralelo + '&id_representante=' + item.sa_id_representante + '"><u>' + item.sa_est_primer_apellido + ' ' + item.sa_est_segundo_apellido + ' ' + item.sa_est_primer_nombre + ' ' + item.sa_est_segundo_nombre + '</u></a></td>' +
                         '<td>' + item.sa_sec_nombre + ' / ' + item.sa_gra_nombre + ' / ' + item.sa_par_nombre + '</td>' +
                         '<td>' + edad_fecha_nacimiento(item.sa_est_fecha_nacimiento.date) + '</td>' +
                         '</tr>';*/
@@ -88,7 +88,7 @@
                         '</tr>' +
                         '<tr>' +
                         '<th style="width:40%" class="table-success text-end">Fecha de Nacimiento:</th>' +
-                        '<td>' + fecha_nacimiento_formateada(item.sa_est_fecha_nacimiento.date) + '</td>' +
+                        '<td>' + (item.sa_est_fecha_nacimiento.date) + '</td>' +
                         '</tr>' +
                         '<tr>' +
                         '<th style="width:40%" class="table-success text-end">Edad Actual:</th>' +
@@ -117,16 +117,16 @@
                         '<div class="card radius-15">' +
                         '<div class="card-body text-center">' +
                         '<div class="p-4 border radius-15">' +
-                        '<img src="<?= $url_general ?>/img/computadora.jpg" width="110" height="110" class="rounded-circle shadow" alt="">' +
+                        '<img src="../img/computadora.jpg" width="110" height="110" class="rounded-circle shadow" alt="">' +
                         '<h5 class="mb-0 mt-5">' + item.sa_est_primer_apellido + ' ' + item.sa_est_segundo_apellido + ' ' + item.sa_est_primer_nombre + ' ' + item.sa_est_segundo_nombre + '</h5>' +
                         '<p class="mb-0">' + item.sa_est_cedula + '</p>' +
                         '<p class="mb-0">' + sexo_estudiante + '</p>' +
-                        //'<p class="mb-0">' + fecha_nacimiento_formateada(item.sa_est_fecha_nacimiento.date) + ' (' + edad_fecha_nacimiento(item.sa_est_fecha_nacimiento.date) + ' años)' + '</p>' +
+                        //'<p class="mb-0">' + (item.sa_est_fecha_nacimiento.date) + ' (' + edad_fecha_nacimiento(item.sa_est_fecha_nacimiento.date) + ' años)' + '</p>' +
                         //'<p class="mb-0">' + item.sa_est_correo + '</p>' +
                         '<p class="mb-3">' + curso + '</p>' +
 
                         '<div class="d-grid mt-3">' +
-                        '<a href="<?= $url_general ?>/vista/inicio.php?mod=7&acc=ficha_medica_representado&id_estudiante=' + item.sa_est_id + '"' + 'class="btn btn-outline-primary radius-15">Detalles</a>' +
+                        '<a href="../vista/inicio.php?mod=7&acc=ficha_medica_representado&id_estudiante=' + item.sa_est_id + '"' + 'class="btn btn-outline-primary radius-15">Detalles</a>' +
 
                         '</div>' +
                         '</div>' +

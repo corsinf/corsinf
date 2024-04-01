@@ -13,6 +13,11 @@ if(isset($_GET['tabla_no_concurente']))
 {
 	echo json_encode($controlador->tabla_no_concurente());
 }
+if(isset($_GET['campos_tabla_noconcurente']))
+{
+	$parametros = $_POST['parametros'];
+	echo json_encode($controlador->campos_tabla_no_concurentes($parametros));
+}
 if(isset($_GET['add_no_concurente']))
 {
 	echo json_encode($controlador->add_no_concurente($_POST['parametros']));
@@ -60,6 +65,10 @@ class no_concurenteC
 					array('campo'=>'Tabla','dato'=>$parametros['tabla']),
 					array('campo'=>'Id_Empresa','dato'=>$_SESSION['INICIO']['ID_EMPRESA']),
 					array('campo'=>'Id_Usuario','dato'=>$value[$id]),
+					array('campo'=>'Campo_usuario','dato'=>$parametros['usuario']),
+					array('campo'=>'Campo_pass','dato'=>$parametros['pass']),
+					array('campo'=>'tipo_perfil','dato'=>$parametros['perfil_usu']),
+					array('campo'=>'campo_img','dato'=>$parametros['foto']),
 				);
 				$this->modelo->insertar('TABLAS_NOCONCURENTE',$datosADD,1);
 			}
@@ -87,6 +96,20 @@ class no_concurenteC
 				array('campo'=>'1','dato'=>1)			
 		);		
 		return $this->modelo->editar($parametros['tabla'],$datosUPD ,$where,$master=false);
+	}
+
+	function campos_tabla_no_concurentes($parametros)
+	{
+		$tabla = $parametros['tabla'];
+		$lista = array();
+		$datos = $this->modelo->campos_tabla_no_concurentes($tabla);
+		foreach ($datos as $key => $value) {
+			if($value['COLUMN_NAME']!='PERFIL')
+			{
+				$lista[] = array('campo'=>$value['COLUMN_NAME']); 
+			}
+		}
+		return $lista;
 	}
 	
 }

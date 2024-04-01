@@ -27,10 +27,10 @@ function calcular_edad_fecha_nacimiento(fecha_nacimiento) {
 function fecha_nacimiento_formateada(fecha) {
     fechaYHora = fecha;
     fecha = new Date(fechaYHora);
-    año = fecha.getFullYear();
+    anio = fecha.getFullYear();
     mes = (fecha.getMonth() + 1).toString().padStart(2, '0'); // Añade un 0 si es necesario
     dia = fecha.getDate().toString().padStart(2, '0'); // Añade un 0 si es necesario
-    fechaFormateada = `${año}-${mes}-${dia}`;
+    fechaFormateada = `${anio}-${mes}-${dia}`;
 
     var salida = '';
     salida = fechaFormateada;
@@ -71,6 +71,32 @@ function select_genero(sexo = '', campo = '') {
             optionElement.prop('selected', true); // Selecciona la opción 'Masculino'
         }
     }
+}
+
+//Cuando se envia por array y en formato de fecha
+function obtener_hora_formateada_arr(hora) {
+    var fechaActual = new Date(hora);
+    var hora = fechaActual.getHours();
+    var minutos = fechaActual.getMinutes();
+
+    // Formatear la hora como una cadena
+    var horaFormateada = (hora < 10 ? '0' : '') + hora + ':' +
+        (minutos < 10 ? '0' : '') + minutos;
+    return horaFormateada;
+}
+
+//cuando se resive solo la hora 
+function obtener_hora_formateada(hora) {
+    // Dividir la cadena de hora en horas, minutos y segundos
+    var partesHora = hora.split(":");
+    var horas = parseInt(partesHora[0], 10);
+    var minutos = parseInt(partesHora[1], 10);
+    // No necesitamos los segundos, ya que no se están utilizando en la función original
+
+    // Formatear la hora como una cadena
+    var horaFormateada = (horas < 10 ? '0' : '') + horas + ':' +
+        (minutos < 10 ? '0' : '') + minutos;
+    return horaFormateada;
 }
 
 function base_url() {

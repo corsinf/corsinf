@@ -112,6 +112,8 @@ class nueva_empresaC
 				$datos2[0]['dato']= $i;
 				$datos2[1]['campo'] = 'Id_Empresa';
 				$datos2[1]['dato']= $empresa[0]['Id_empresa'];	
+				$datos2[2]['campo'] = 'Id_Tipo_usuario';
+				$datos2[2]['dato']  = $i;
 				$this->modelo->add('ACCESOS_EMPRESA',$datos2);
 			 }
 			

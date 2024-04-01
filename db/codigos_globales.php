@@ -14,10 +14,15 @@ if(!class_exists('codigos_globales'))
 class codigos_globales
 {
 	private $db;
+	private $CodAES;
+	private $iv;
 	function __construct()
 	{
 		$this->db = new db();
-		
+
+		//AES-128
+		$this->CodAES = 'corsinf-encrypted-Data/*';
+		$this->iv = 'Data/*cors¡nf47';
 	}
 
 
@@ -697,6 +702,10 @@ function para_ftp($nombre,$texto)
     //--------------------------------funcion para crear por primera vez los accesos a una empresa nueva ----------------------
    function generar_primera_vez($db_destino,$id_empresa)
 	{		
+		// print_r($db_destino);
+		// print_r($id_empresa);
+		// die();
+		$usu = array();
 		for ($i=1; $i < 4; $i++) {
 
 			//valida si los usuarios por default estan creados si no estan los crea
@@ -709,6 +718,8 @@ function para_ftp($nombre,$texto)
 					 $datos[0]['dato']  = $i;
 					 $datos[1]['campo'] = 'Id_Empresa';
 					 $datos[1]['dato']  = $id_empresa;
+					 $datos[2]['campo'] = 'Id_Tipo_usuario';
+					 $datos[2]['dato']  = $i;
 					 $this->db->inserts('ACCESOS_EMPRESA',$datos,1);		
 				}
 
@@ -723,37 +734,90 @@ function para_ftp($nombre,$texto)
 					 $datos[1]['campo'] = 'id_tipo_usuario';
 					 $datos[1]['dato']  = $i;
 					 $this->db->inserts('TIPO_USUARIO_EMPRESA',$datos,1);		
-				} 		
-			
-			//valida si los perfiles de los usuarios por default estan sino los crea 
-				$sql = "SELECT * FROM USUARIO_TIPO_USUARIO WHERE ID_USUARIO = ".$i." AND ID_TIPO_USUARIO = ".$i." AND ID_EMPRESA = '".$id_empresa."'"; 
-				$usu = $this->db->datos($sql,1);	
-
-				if(count($usu)==0)
-				{
-					 $datos[0]['campo'] = 'ID_USUARIO';
-					 $datos[0]['dato']  = $i;
-					 $datos[1]['campo'] = 'ID_TIPO_USUARIO';
-					 $datos[1]['dato']  = $i;					 
-					 $datos[2]['campo'] = 'ID_EMPRESA';
-					 $datos[2]['dato']  = $id_empresa;
-					 $this->db->inserts('USUARIO_TIPO_USUARIO',$datos,1);		
 				} 	
+
+				//insertar en acceso un registro de dba
+				$sql = "SELECT * FROM ACCESOS WHERE id_tipo_usu = '1' and id_paginas='93' "; 
+				$tipo = $this->db->datos($sql,1);	
+				if(count($tipo)==0)
+				{
+					 $datos[0]['campo'] = 'Ver';
+					 $datos[0]['dato']  = 1;
+					 $datos[1]['campo'] = 'editar';
+					 $datos[1]['dato']  = 1;
+					 $datos[2]['campo'] = 'eliminar';
+					 $datos[2]['dato']  = 1;
+					 $datos[3]['campo'] = 'dba';
+					 $datos[3]['dato']  = 1;
+					 $datos[4]['campo'] = 'id_paginas';
+					 $datos[4]['dato']  = 93;
+					 $datos[5]['campo'] = 'id_tipo_usu';
+					 $datos[5]['dato']  = 1;
+					 $this->db->inserts('ACCESOS',$datos,1);		
+				} 		
+				
+			
 		 }
+
+
+		 //genera tablas que comprate los diferentes modulos
+		 $parametros1 = array($id_empresa
+		 							 ,$db_destino);
+		  $sql = "EXEC GenerarTablasCompartidas  @id_empresa = ?,@db_destino = ?";
+		  $this->db->ejecutar_procesos_almacenados($sql,$parametros1,false,1);
+
+
 		 $db_origen = EMPRESA_MASTER;
-		 $parametros = array(
-		    array(&$db_origen, SQLSRV_PARAM_IN),
-		    array(&$db_destino, SQLSRV_PARAM_IN),
-		    array(&$id_empresa, SQLSRV_PARAM_IN),
-		  );
+		 $parametros = array($db_origen,
+		    						$db_destino,
+		    						$id_empresa);
+
+		 // print_r($parametros);die();
+
+			
+			
 		  $sql = "EXEC CopiarEstructuraAccesos @origen_bd = ?,@destino_bd = ?,@id_empresa = ?";
-		  return $this->db->ejecutar_procesos_almacenados($sql,$parametros,false,1);
+		  $res = $this->db->ejecutar_procesos_almacenados($sql,$parametros,false,1);
+
+			// print_r("holii");die();
+		  $sql = "SELECT * FROM ACCESOS_EMPRESA WHERE Id_Empresa = '".$id_empresa."'";
+
+		  $empresa = $this->lista_empresa($id_empresa);
+		  $usuarios = $this->db->datos($sql,1);
+		  foreach ($usuarios as $key => $value) {
+		  // print_r($value);die();
+
+		  	$sql = "UPDATE USUARIOS SET perfil = '".$value['Id_Tipo_usuario']."' WHERE id_usuarios = '".$value['Id_usuario']."'";
+		  	// $datos[0]['campo'] = 'perfil';
+		  	// $datos[0]['dato'] = $value['Id_Tipo_usuario'];
+
+		  	// $where[0]['campo'] = 'id_usuarios';
+		  	// $where[0]['dato'] = $value['Id_usuario'];
+
+			$database = $empresa[0]['Base_datos'];
+			$usuario = $empresa[0]['Usuario_db'];
+			$password = $empresa[0]['Password_db'];
+			$servidor = $empresa[0]['Ip_host'];
+			$puerto = $empresa[0]['Puerto_db'];
+
+			// print_r($sql);
+			// print_r($database);
+			$datos = $this->db->sql_string_db_terceros($database, $usuario, $password, $servidor, $puerto,$sql);
+
+
+		  	// $this->db->update('USUARIOS',$datos, $where);
+		  }
+
+		  return $res;
+
+
 	}
 
 
-	function Copiar_estructura($modulo)
+	function Copiar_estructura($modulo,$base)
 	{				
-		$db_destino = $_SESSION['INICIO']['BASEDATO'];
+		$db_destino = $base;
+		$db_origen = '';
 		switch ($modulo) {
 			case '7':
 				$db_origen = BASE_SALUD;
@@ -763,11 +827,72 @@ function para_ftp($nombre,$texto)
 				break;
 		}
 		 $parametros = array(
-		    array(&$db_origen, SQLSRV_PARAM_IN),
-		    array(&$db_destino, SQLSRV_PARAM_IN),
+		    $db_origen,
+		    $db_destino,
 		  );
-		  $sql = "EXEC EstructuraBase @origen_bd = ?,@destino_bd = ?";
-		  return $this->db->ejecutar_procesos_almacenados($sql,$parametros,false,1);
+		 if($db_origen!='')
+		 {
+		  	$sql = "EXEC EstructuraBase @origen_bd = ?, @destino_bd = ?";
+		  	return $this->db->ejecutar_procesos_almacenados($sql,$parametros,false,1);
+		 }else{ return -2;}
+	}
+
+	function id_tabla($tabla)
+	{
+		$sql2="SELECT COLUMN_NAME as 'ID'
+				FROM INFORMATION_SCHEMA.KEY_COLUMN_USAGE
+				WHERE OBJECTPROPERTY(OBJECT_ID(CONSTRAINT_NAME), 'IsPrimaryKey') = 1
+				AND TABLE_NAME = '".$tabla."'";
+				// print_r($sql2);die();
+		$datos2 = $this->db->datos($sql2);
+		return $datos2;
+	}
+
+	function sql_string_db_terceros($database, $usuario, $password, $servidor, $puerto, $sql)
+	{
+		return $this->db->sql_string_db_terceros($database, $usuario, $password, $servidor, $puerto, $sql);
+	}
+
+	function datos_db_terceros($database, $usuario, $password, $servidor, $puerto, $sql)
+	{
+		return $this->db->datos_db_terceros($database, $usuario, $password, $servidor, $puerto, $sql);
+	}
+
+	function enciptar_clave($data)
+	{
+		// Clave de encriptación (debe tener 16, 24 o 32 bytes para AES-128, AES-192 o AES-256 respectivamente)
+		$key = $this->CodAES; 
+
+		// Vector de inicialización (IV) para AES-256-CBC, debe ser de 16 bytes
+		$iv = $this->iv;
+
+		// Encriptar los datos usando AES-256-CBC
+		$encrypted = openssl_encrypt($data, 'aes-256-cbc', $key, 0, $iv);
+
+		return $encrypted;
+	}
+
+	function desenciptar_clave($data)
+	{
+		$key = $this->CodAES;
+		// Vector de inicialización (IV) para AES-256-CBC, debe ser de 16 bytes
+		$iv = $this->iv; //openssl_random_pseudo_bytes(16);
+		
+		$decrypted = openssl_decrypt($data, 'aes-256-cbc', $key, 0, $iv);
+
+		// Mostrar el texto desencriptado
+		return $decrypted;
+	}
+	function lista_empresa($id,$master=false)
+	{
+		$sql = "SELECT E.*,Id_empresa as 'Id_Empresa' FROM EMPRESAS E WHERE Id_empresa = '".$id."'";
+		if($master)
+		{
+			return $this->db->datos($sql);
+		}else
+		{
+			return $this->db->datos($sql,1);
+		}
 	}
 
 }

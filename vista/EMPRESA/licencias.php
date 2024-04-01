@@ -156,7 +156,7 @@ function validar_year()
   var fechaEspecifica = new Date(desde);
   fechaEspecifica.setFullYear(fechaEspecifica.getFullYear() + 1);
   // console.log(fechaEspecifica);
-  fechaEspecifica =  formatoDate(fechaEspecifica);
+  fechaEspecifica =  fechaEspecifica;
   $('#txt_hasta').val(fechaEspecifica);
 
 }

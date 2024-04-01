@@ -4,7 +4,8 @@ date_default_timezone_set('America/Guayaquil');
 =======
 >>>>>>> f975ff57302e9fcddee9c8879ae90e7325aab8d1
 include('../modelo/agendamientoM.php');
-include('../modelo/estudiantesM.php');
+include('../modelo/pacientesM.php');
+include('../modelo/ficha_MedicaM.php');
 
 $controlador = new agendamientoC();
 
@@ -16,78 +17,73 @@ if (isset($_GET['cita_actual'])) {
 }
 
 if (isset($_GET['buscar'])) {
-	$query = '' ;
-	if(isset($_GET['q']))
-	{
-		$query = $_GET['q'];
-	}
-    echo json_encode($controlador->lista_estudiantes($query));
+    $query = '';
+    if (isset($_GET['q'])) {
+        $query = $_GET['q'];
+    }
+    echo json_encode($controlador->lista_pacientes($query));
 }
 
 if (isset($_GET['add_agenda'])) {
 
-	$parametros = $_POST['parametros'];
+    $parametros = $_POST['parametros'];
     echo json_encode($controlador->add_agenda($parametros));
 }
-
-//echo json_encode($controlador->buscar_estudiante_ficha_medica(5));
 
 class agendamientoC
 {
     private $modelo;
-    private $estudiantes;
+    private $pacientes;
+    private $ficha_medica;
 
     function __construct()
     {
         $this->modelo = new agendamientoM();
-        $this->estudiantes = new estudiantesM();
+        $this->pacientes = new pacientesM();
+        $this->ficha_medica = new ficha_MedicaM();
     }
 
     function lista_consultas()
     {
-    	$datos = $this->modelo->lista_consultas();
-    	return $datos;
-    	// print_r($datos);die();
+        $datos = $this->modelo->lista_consultas();
+        return $datos;
+        // print_r($datos);die();
     }
 
-    function cita_actual(){
+    function cita_actual()
+    {
         $fecha = date('Y-m-d');
-        $datos = $this->modelo->lista_consultas($fecha);
+        //$fecha = '';
+        $datos = $this->modelo->lista_consultas($fecha, 0);
         return $datos;
     }
 
-    function lista_estudiantes($buscar)
+    function lista_pacientes($buscar)
     {
-    	$datos = $this->estudiantes->buscar_estudiantes($buscar);
-    	$lista = array();
-    	foreach ($datos as $key => $value) {
-    		$lista[] = array('id'=>$value['sa_est_id'],'text'=>$value['sa_est_primer_apellido'].' '.$value['sa_est_primer_nombre'],'data'=>$value);
-    	}
+        $datos = $this->pacientes->buscar_pacientes($buscar);
+        $lista = array();
+        foreach ($datos as $key => $value) {
+            $lista[] = array('id' => $value['sa_fice_id'], 'text' => ($value['sa_pac_cedula'] . ' - ' . $value['sa_pac_apellidos'] . ' ' . $value['sa_pac_nombres']), 'data' => $value);
+        }
         return $lista;
     }
+
     function add_agenda($parametros)
     {
-    	$estudiante = $this->estudiantes->lista_estudiantes($parametros['estudiante']);
+        $datos = null;
 
-    	$fechaObj1 = new DateTime( $estudiante[0]['sa_est_fecha_nacimiento']->format('Y-m-d'));
-		$fechaObj2 = new DateTime();
+        $sa_pac_tabla = $parametros['sa_pac_tabla'];
+        $sa_pac_id_comunidad = $parametros['sa_pac_id_comunidad'];
 
-		$diferencia = $fechaObj1->diff($fechaObj2);
-		$diferenciaEnAnios = $diferencia->y;
+        $buscar_paciente = $this->ficha_medica->gestion_comunidad_ficha_medica($sa_pac_id_comunidad, $sa_pac_tabla);
+        $id_paciente = $buscar_paciente['sa_pac_id'];
 
-        $datos = array(
-            array('campo' => 'sa_fice_id', 'dato' => $estudiante[0]['sa_est_id']),
-            array('campo' => 'sa_conp_nombres', 'dato' => $estudiante[0]['sa_est_primer_apellido'].' '.$estudiante[0]['sa_est_primer_nombre']),
-            array('campo' => 'sa_conp_nivel', 'dato' => $estudiante[0]['sa_id_grado']),
-            array('campo' => 'sa_conp_paralelo', 'dato' => $estudiante[0]['sa_id_paralelo']),
-            array('campo' => 'sa_conp_edad', 'dato' => $diferenciaEnAnios),
-            array('campo' => 'sa_conp_fecha_ingreso', 'dato' => $parametros['fecha']),
-            array('campo' => 'sa_conp_tipo_consulta', 'dato' => $parametros['tipo']),
-            array('campo' => 'sa_conp_estado', 'dato' => 0)
+        $buscar_paciente_fm = $this->pacientes->buscar_pacientes_ficha_medica($id_paciente);
+        $id_paciente_fm = $buscar_paciente_fm[0]['sa_fice_id'];
 
-        );
-        return  $datos = $this->modelo->insertar('consultas',$datos);
+        if ($parametros['tipo'] == 'consulta') {
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 
 
@@ -95,9 +91,39 @@ class agendamientoC
 =======
 >>>>>>> f975ff57302e9fcddee9c8879ae90e7325aab8d1
     	print_r($datos);die();
+=======
+            $datos = array(
+                array('campo' => 'sa_fice_id', 'dato' => $id_paciente_fm),
+                array('campo' => 'sa_conp_fecha_ingreso', 'dato' => $parametros['fecha']),
+                array('campo' => 'sa_conp_tipo_consulta', 'dato' => $parametros['tipo']),
+                array('campo' => 'sa_conp_estado_revision', 'dato' => 0),
+>>>>>>> c9a234889f7443a040d28d13f82e35ef88467ae7
 
+                array('campo' => 'sa_conp_peso', 'dato' => empty($parametros['sa_conp_peso']) ? 0 : $parametros['sa_conp_peso']),
+                array('campo' => 'sa_conp_altura', 'dato' => empty($parametros['sa_conp_altura']) ? 0 : $parametros['sa_conp_altura']),
+                array('campo' => 'sa_conp_temperatura', 'dato' => empty($parametros['sa_conp_temperatura']) ? 0 : $parametros['sa_conp_temperatura']),
+                array('campo' => 'sa_conp_presion_ar', 'dato' => empty($parametros['sa_conp_presion_ar']) ? 0 : $parametros['sa_conp_presion_ar']),
+                array('campo' => 'sa_conp_frec_cardiaca', 'dato' => empty($parametros['sa_conp_frec_cardiaca']) ? 0 : $parametros['sa_conp_frec_cardiaca']),
+                array('campo' => 'sa_conp_frec_respiratoria', 'dato' => empty($parametros['sa_conp_frec_respiratoria']) ? 0 : $parametros['sa_conp_frec_respiratoria']),
+                array('campo' => 'sa_conp_saturacion', 'dato' => empty($parametros['sa_conp_saturacion']) ? 0 : $parametros['sa_conp_saturacion']),
+
+                array('campo' => 'sa_conp_motivo_consulta', 'dato' => $parametros['sa_conp_motivo_consulta']),
+
+            );
+        } else if ($parametros['tipo'] == 'certificado') {
+
+            $datos = array(
+                array('campo' => 'sa_fice_id', 'dato' => $id_paciente_fm),
+                array('campo' => 'sa_conp_fecha_ingreso', 'dato' => $parametros['fecha']),
+                array('campo' => 'sa_conp_tipo_consulta', 'dato' => $parametros['tipo']),
+                array('campo' => 'sa_conp_estado_revision', 'dato' => 0),
+
+            );
+        }
+
+        return  $datos = $this->modelo->insertar('consultas_medicas', $datos);
+
+        //print_r($datos);
+        //die();
     }
-
-
 }
-

@@ -37,8 +37,8 @@ if (isset($_GET['id_representante'])) {
 
 ?>
 
-<script src="<?= $url_general ?>/js/ENFERMERIA/operaciones_generales.js"></script>
-<script src="<?= $url_general ?>/js/ENFERMERIA/estudiantes.js"></script>
+<script src="../js/ENFERMERIA/operaciones_generales.js"></script>
+<script src="../js/ENFERMERIA/estudiantes.js"></script>
 
 <script type="text/javascript">
   $(document).ready(function() {
@@ -73,18 +73,18 @@ if (isset($_GET['id_representante'])) {
   function consultar_datos_seccion(id = '', id_seccion) {
     var seccion = '';
 
-    console.log(id_seccion);
+    //console.log(id_seccion);
     seccion = '<option selected disabled>-- Seleccione --</option>'
     $.ajax({
       data: {
         id: id
       },
-      url: '<?php echo $url_general ?>/controlador/seccionC.php?listar=true',
+      url: '../controlador/seccionC.php?listar=true',
       type: 'post',
       dataType: 'json',
 
       success: function(response) {
-        console.log(response);
+        //console.log(response);
 
         $.each(response, function(i, item) {
           //console.log(item);
@@ -128,7 +128,7 @@ if (isset($_GET['id_representante'])) {
       data: {
         "id_seccion": id_seccion
       },
-      url: '<?php echo $url_general ?>/controlador/paraleloC.php?listar_seccion_grado=true',
+      url: '../controlador/paraleloC.php?listar_seccion_grado=true',
       type: 'post',
       dataType: 'json',
 
@@ -177,7 +177,7 @@ if (isset($_GET['id_representante'])) {
       data: {
         "id_grado": id_grado
       },
-      url: '<?php echo $url_general ?>/controlador/paraleloC.php?listar_grado_paralelo=true',
+      url: '../controlador/paraleloC.php?listar_grado_paralelo=true',
       type: 'post',
       dataType: 'json',
 
@@ -254,15 +254,15 @@ if (isset($_GET['id_representante'])) {
           "id": id
         },
 
-        url: '<?php echo $url_general ?>/controlador/representantesC.php?listar=true',
+        url: '../controlador/representantesC.php?listar=true',
 
         type: 'post', //método de envio
         dataType: 'json',
         success: function(dato) { //una vez que el archivo recibe el request lo procesa y lo devuelve         
-          console.log(dato);
+          //console.log(dato);
           let etiquetas = "";
           dato.forEach(function(item, itema, items) {
-            etiquetas += '<option value="' + item.sa_rep_id + '">' + item.sa_rep_primer_apellido + ' ' + item.sa_rep_segundo_apellido + ' ' + item.sa_rep_primer_nombre + ' ' + item.sa_rep_segundo_nombre + '</option>';
+            etiquetas += '<option value="' + item.sa_rep_id + '">' + item.sa_rep_cedula + ' - ' + item.sa_rep_primer_apellido + ' ' + item.sa_rep_segundo_apellido + ' ' + item.sa_rep_primer_nombre + ' ' + item.sa_rep_segundo_nombre + '</option>';
           })
 
           $("#sa_id_representante").html(etiquetas);
@@ -272,10 +272,23 @@ if (isset($_GET['id_representante'])) {
 
     $('#sa_id_representante').select2({
       placeholder: 'Selecciona una opción',
-      language: 'es',
-      minimumInputLength: 3,
+      language: {
+        inputTooShort: function() {
+          return "Por favor ingresa 1 o más caracteres";
+        },
+        noResults: function() {
+          return "No se encontraron resultados";
+        },
+        searching: function() {
+          return "Buscando...";
+        },
+        errorLoading: function() {
+          return "No se encontraron resultados";
+        }
+      },
+      minimumInputLength: 1,
       ajax: {
-        url: '<?php echo $url_general ?>/controlador/representantesC.php?listar_todo=true',
+        url: '../controlador/representantesC.php?listar_todo=true',
         dataType: 'json',
         delay: 250,
         data: function(params) {
@@ -315,7 +328,7 @@ if (isset($_GET['id_representante'])) {
       data: {
         id: id
       },
-      url: '<?php echo $url_general ?>/controlador/estudiantesC.php?listar=true',
+      url: '../controlador/estudiantesC.php?listar=true',
       type: 'post',
       dataType: 'json',
       success: function(response) {
@@ -330,8 +343,8 @@ if (isset($_GET['id_representante'])) {
 
         select_genero(response[0].sa_est_sexo, '#sa_est_sexo');
 
-        $('#sa_est_fecha_nacimiento').val(fecha_nacimiento_formateada(response[0].sa_est_fecha_nacimiento.date));
-        $('#sa_est_edad').val(calcular_edad_fecha_nacimiento(response[0].sa_est_fecha_nacimiento.date));
+        $('#sa_est_fecha_nacimiento').val((response[0].sa_est_fecha_nacimiento));
+        $('#sa_est_edad').val(calcular_edad_fecha_nacimiento(response[0].sa_est_fecha_nacimiento));
         ///////////////////////////////////////////////////////////////////////////////////////////
 
         $('#sa_est_correo').val(response[0].sa_est_correo);
@@ -487,7 +500,7 @@ if (isset($_GET['id_representante'])) {
 >>>>>>> f975ff57302e9fcddee9c8879ae90e7325aab8d1
 
       } else {
-        console.log(parametros);
+        //console.log(parametros);
         insertar(parametros)
       }
     } else {
@@ -522,7 +535,7 @@ if (isset($_GET['id_representante'])) {
         })
 >>>>>>> f975ff57302e9fcddee9c8879ae90e7325aab8d1
       } else {
-        console.log(parametros);
+        //console.log(parametros);
         insertar(parametros);
       }
     }
@@ -533,14 +546,14 @@ if (isset($_GET['id_representante'])) {
       data: {
         parametros: parametros
       },
-      url: '<?php echo $url_general ?>/controlador/estudiantesC.php?insertar=true',
+      url: '../controlador/estudiantesC.php?insertar=true',
       type: 'post',
       dataType: 'json',
 
       success: function(response) {
         if (response == 1) {
           Swal.fire('', 'Operacion realizada con exito.', 'success').then(function() {
-            location.href = '<?= $url_general ?>/vista/inicio.php?mod=7&acc=estudiantes';
+            location.href = '../vista/inicio.php?mod=7&acc=estudiantes';
           });
 <<<<<<< HEAD
           //location.href = '<?= $url_general ?>/vista/inicio.php?mod=7&acc=estudiantes';
@@ -587,7 +600,7 @@ if (isset($_GET['id_representante'])) {
       data: {
         id: id
       },
-      url: '<?php echo $url_general ?>/controlador/estudiantesC.php?eliminar=true',
+      url: '../controlador/estudiantesC.php?eliminar=true',
       type: 'post',
       dataType: 'json',
 <<<<<<< HEAD
@@ -601,7 +614,7 @@ if (isset($_GET['id_representante'])) {
       success: function(response) {
         if (response == 1) {
           Swal.fire('Eliminado!', 'Registro Eliminado.', 'success').then(function() {
-            location.href = '<?= $url_general ?>/vista/inicio.php?mod=7&acc=estudiantes';
+            location.href = '../vista/inicio.php?mod=7&acc=estudiantes';
           });
 <<<<<<< HEAD
           //location.href = '<?= $url_general ?>/vista/inicio.php?mod=7&acc=estudiantes';
@@ -668,11 +681,11 @@ if (isset($_GET['id_representante'])) {
               </h5>
               <div class="row m-2">
                 <div class="col-sm-12">
-                  <a href="<?= $url_general ?>/vista/inicio.php?mod=7&acc=estudiantes" class="btn btn-outline-dark btn-sm"><i class="bx bx-arrow-back"></i> Regresar</a>
+                  <a href="../vista/inicio.php?mod=7&acc=estudiantes" class="btn btn-outline-dark btn-sm"><i class="bx bx-arrow-back"></i> Regresar</a>
                 </div>
               </div>
             </div>
-            
+
             <hr>
 
             <form action="" method="post">
@@ -684,22 +697,22 @@ if (isset($_GET['id_representante'])) {
 
               <div class="row pt-3">
                 <div class="col-md-3">
-                  <label for="" class="form-label">Primer Apellido: <label style="color: red;">*</label> </label>
+                  <label for="" class="form-label">Primer Apellido <label style="color: red;">*</label> </label>
                   <input type="text" class="form-control form-control-sm" id="sa_est_primer_apellido" name="sa_est_primer_apellido">
                 </div>
 
                 <div class="col-md-3">
-                  <label for="" class="form-label">Segundo Apellido: <label style="color: red;">*</label> </label>
+                  <label for="" class="form-label">Segundo Apellido <label style="color: red;">*</label> </label>
                   <input type="text" class="form-control form-control-sm" id="sa_est_segundo_apellido" name="sa_est_segundo_apellido">
                 </div>
 
                 <div class="col-md-3">
-                  <label for="" class="form-label">Primer Nombre: <label style="color: red;">*</label> </label>
+                  <label for="" class="form-label">Primer Nombre <label style="color: red;">*</label> </label>
                   <input type="text" class="form-control form-control-sm" id="sa_est_primer_nombre" name="sa_est_primer_nombre">
                 </div>
 
                 <div class="col-md-3">
-                  <label for="" class="form-label">Segundo Nombre: <label style="color: red;">*</label> </label>
+                  <label for="" class="form-label">Segundo Nombre <label style="color: red;">*</label> </label>
                   <input type="text" class="form-control form-control-sm" id="sa_est_segundo_nombre" name="sa_est_segundo_nombre">
                 </div>
               </div>
@@ -714,8 +727,8 @@ if (isset($_GET['id_representante'])) {
 >>>>>>> f975ff57302e9fcddee9c8879ae90e7325aab8d1
                 </div>
 
-                <div class="col-md-3">
-                  <label for="" class="form-label">Sexo: <label style="color: red;">*</label> </label>
+                <div class="col-md-2">
+                  <label for="" class="form-label">Sexo <label style="color: red;">*</label> </label>
                   <select class="form-select form-select-sm" id="sa_est_sexo" name="sa_est_sexo">
                     <option selected disabled>-- Seleccione --</option>
                     <option value="Femenino">Femenino</option>
@@ -724,23 +737,24 @@ if (isset($_GET['id_representante'])) {
                 </div>
 
                 <div class="col-md-3">
+<<<<<<< HEAD
                   <label for="" class="form-label">Fecha de Nacimiento: <label style="color: red;">*</label> </label>
 <<<<<<< HEAD
                   <input type="date" class="form-control" id="sa_est_fecha_nacimiento" name="sa_est_fecha_nacimiento" onchange="edad_normal(this.value);">
 =======
+=======
+                  <label for="" class="form-label">Fecha de Nacimiento <label style="color: red;">*</label> </label>
+>>>>>>> c9a234889f7443a040d28d13f82e35ef88467ae7
                   <input type="date" class="form-control form-control-sm" id="sa_est_fecha_nacimiento" name="sa_est_fecha_nacimiento" onchange="edad_normal(this.value);">
 >>>>>>> f975ff57302e9fcddee9c8879ae90e7325aab8d1
                 </div>
 
-                <div class="col-md-3">
-                  <label for="" class="form-label">Edad: <label style="color: red;">*</label> </label>
+                <div class="col-md-1">
+                  <label for="" class="form-label">Edad <label style="color: red;">*</label> </label>
                   <input type="text" class="form-control form-control-sm" id="sa_est_edad" name="sa_est_edad" readonly>
                 </div>
 
-              </div>
-
-              <div class="row pt-3">
-                <div class="col-md-12">
+                <div class="col-md-3">
                   <label for="" class="form-label">Correo <label style="color: red;">*</label> </label>
 <<<<<<< HEAD
                   <input type="email" class="form-control" id="sa_est_correo" name="sa_est_correo">
@@ -748,43 +762,48 @@ if (isset($_GET['id_representante'])) {
                   <input type="email" class="form-control form-control-sm" id="sa_est_correo" name="sa_est_correo">
 >>>>>>> f975ff57302e9fcddee9c8879ae90e7325aab8d1
                 </div>
+
               </div>
 
-              <div class="row pt-3">
+              <div class="row pt-4">
 
-                <div class="col-md-6">
-                  <label for="" class="form-label">Sección: <label style="color: red;">*</label> </label>
-                  <select class="form-select form-select-sm" id="sa_id_seccion" name="sa_id_seccion" onclick="consultar_datos_seccion_grado()">
+                <div class="col-md-4">
+                  <label for="" class="form-label">Sección <label style="color: red;">*</label> </label>
+                  <select class="form-select form-select-sm" id="sa_id_seccion" name="sa_id_seccion" onchange="consultar_datos_seccion_grado()">
 
                   </select>
                 </div>
-              </div>
 
-              <div class="row pt-3">
-                <div class="col-md-6">
-                  <label for="" class="form-label">Grado: <label style="color: red;">*</label> </label>
-                  <select class="form-select form-select-sm" id="sa_id_grado" name="sa_id_grado" onclick="consultar_datos_grado_paralelo();">
+                <div class="col-md-4">
+                  <label for="" class="form-label">Grado <label style="color: red;">*</label> </label>
+                  <select class="form-select form-select-sm" id="sa_id_grado" name="sa_id_grado" onchange="consultar_datos_grado_paralelo();">
                     <option selected disabled>-- Seleccione --</option>
                   </select>
                 </div>
-              </div>
 
+<<<<<<< HEAD
               <div class="row pt-3">
                 <div class="col-md-6">
                   <label for="" class="form-label">Paralelo: <label style="color: red;">*</label> </label>
 <<<<<<< HEAD
                   <select class="form-select" id="sa_id_paralelo" name="sa_id_paralelo" onclick="consultar_datos_paralelo_representante();">
 =======
+=======
+                <div class="col-md-4">
+                  <label for="" class="form-label">Paralelo <label style="color: red;">*</label> </label>
+>>>>>>> c9a234889f7443a040d28d13f82e35ef88467ae7
                   <select class="form-select form-select-sm" id="sa_id_paralelo" name="sa_id_paralelo">
 >>>>>>> f975ff57302e9fcddee9c8879ae90e7325aab8d1
                     <option selected disabled>-- Seleccione --</option>
                   </select>
                 </div>
+
               </div>
 
-              <div class="row pt-3">
-                <div class="col-md-6">
-                  <label for="" class="form-label">Representante: <label style="color: red;">*</label> </label>
+
+              <div class="row pt-4">
+                <div class="col-md-8">
+                  <label for="" class="form-label">Representante <label style="color: red;">*</label> </label>
                   <select class="form-select form-select-sm" id="sa_id_representante" name="sa_id_representante">
                     <option selected disabled>-- Seleccione --</option>
 <<<<<<< HEAD
@@ -793,7 +812,7 @@ if (isset($_GET['id_representante'])) {
                 </div>
 
                 <div class="col-md-4">
-                  <label for="" class="form-label">Parentesco: <label style="color: red;">*</label> </label>
+                  <label for="" class="form-label">Parentesco <label style="color: red;">*</label> </label>
                   <select class="form-select form-select-sm" id="sa_est_rep_parentesco" name="sa_est_rep_parentesco">
                     <option selected disabled>-- Seleccione --</option>
                     <option value="Padre">Padre</option>

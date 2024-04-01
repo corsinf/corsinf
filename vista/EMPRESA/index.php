@@ -333,55 +333,6 @@
                       
                     </div>
                   </div>
-                  <!-- /.col -->
-                  <div class="col-md-5">
-                    <p class="text-center">
-                      <strong>Porcentaje de articulos etiquetados</strong>
-                    </p>
-
-                    <div class="progress-group">
-                      % de articulos etiquetados
-                      <span class="float-right" id="lbl_porcen"><b>0</b>/0</span>
-                      <div class="progress progress-sm">
-                        <div class="progress-bar bg-primary" style="width: 0%" id="progres"></div>
-                      </div>
-                    </div>
-
-                     <div class="row">
-                      <div class="col">
-                        <div class="card radius-10">
-                          <div class="card-body">
-                            <div class="d-flex align-items-center">
-                              <div>
-                                <p class="mb-0 text-secondary">Total Activos</p>
-                                <h4 class="my-1" id="lbl_articulos1">0</h4>
-                                <p class="mb-0 font-13 text-success"><i class="bx bx-circle align-middle"></i>100% </p>
-                              </div>
-                              <div class="widgets-icons bg-light-success text-success ms-auto"><i class="bx bx-package"></i>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-
-                       <div class="col">
-                        <div class="card radius-10">
-                          <div class="card-body">
-                            <div class="d-flex align-items-center">
-                              <div>
-                                <p class="mb-0 text-secondary">Activos Etiquetados</p>
-                                <h4 class="my-1" id="lbl_etiqueta">0</h4>
-                                <p class="mb-0 font-13 text-warning" id="lbl_porce"><i class="bx bxs-up-arrow align-middle"></i>0% </p>
-                              </div>
-                              <div class="widgets-icons bg-light-warning text-success ms-auto"><i class="bx bx-tag"></i>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-
-                    </div>
-                  </div>
                 </div>
               </div>
           </div>

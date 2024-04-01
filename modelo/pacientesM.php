@@ -1,17 +1,17 @@
 <?php
-if (!class_exists('db_salud')) {
-    include('../db/db_salud.php');
+if (!class_exists('db')) {
+    include('../db/db.php');
 }
 /**
  * 
  */
 class pacientesM
 {
-    private $db_salud;
+    private $db;
 
     function __construct()
     {
-        $this->db_salud = new db_salud();
+        $this->db = new db();
     }
 
     function buscar_paciente($sa_pac_id_comunidad, $sa_pac_tabla)
@@ -79,23 +79,27 @@ class pacientesM
                 INNER JOIN cat_paralelo pr ON est.sa_id_paralelo = pr.sa_par_id
                 WHERE pac.sa_pac_id = $sa_pac_id_comunidad;";
 
-        $datos = $this->db_salud->datos($sql);
+        $datos = $this->db->datos($sql);
         return $datos;
     }
+
+    // --------------------------------------------------------------------
+    // Funciones validas
+    // --------------------------------------------------------------------
 
     function obtener_informacion_pacienteM($sa_pac_id)
     {
 
         $parametros = array(
-            array(&$sa_pac_id, SQLSRV_PARAM_IN)
+            $sa_pac_id,
         );
 
         $sql = "EXEC SP_OBTENER_INFORMACION_PACIENTE_6 @sa_pac_id = ?";
 
-        return $this->db_salud->ejecutar_procedimiento_con_retorno_1($sql, $parametros);
+        return $this->db->ejecutar_procedimiento_con_retorno_1($sql, $parametros);
     }
 
-    function lista_pacientes_todo($id = '')
+    function lista_pacientes_todo()
     {
         $sql = "SELECT
                     sa_pac_id,
@@ -108,11 +112,75 @@ class pacientesM
                     sa_pac_tabla
                 FROM
                     pacientes
-                WHERE 1 = 1";
+                WHERE 1 = 1 AND sa_pac_estado = 1";
 
-        $sql .= " ORDER BY sa_pac_id;";
-        $datos = $this->db_salud->datos($sql);
+        $sql .= " ORDER BY sa_pac_id DESC;";
+        $datos = $this->db->datos($sql);
+        return $datos;
+    }
+
+    function obtener_idFicha_paciente($id_paciente = '')
+    {
+        $sql = "SELECT 
+                    --p.sa_pac_id,
+                    --f.sa_fice_pac_id,
+                    f.sa_fice_id
+                    
+                FROM pacientes p
+                LEFT JOIN ficha_medica f ON p.sa_pac_id = f.sa_fice_pac_id
+                WHERE p.sa_pac_id = $id_paciente";
+
+        $datos = $this->db->datos($sql);
+
+        $data = [
+            'sa_fice_id' => $datos[0]['sa_fice_id'],
+            //'sa_pac_id' => $datos[0]['sa_pac_id'],
+            //'sa_fice_pac_id' => $datos[0]['sa_fice_pac_id'],
+        ];
+
+        return $data;
+    }
+
+    function buscar_pacientes($buscar)
+    {
+        $sql = "SELECT 
+                    pac.sa_pac_id,
+                    pac.sa_pac_cedula,
+                    pac.sa_pac_nombres,
+                    pac.sa_pac_apellidos,
+                    pac.sa_pac_fecha_nacimiento,
+                    pac.sa_pac_correo,
+                    pac.sa_pac_id_comunidad,
+                    pac.sa_pac_tabla,
+                    f.sa_fice_id
+                FROM pacientes pac
+                LEFT JOIN ficha_medica f ON pac.sa_pac_id = f.sa_fice_pac_id
+                WHERE pac.sa_pac_estado = 1 
+                AND CONCAT(pac.sa_pac_apellidos, ' ', pac.sa_pac_nombres, ' ', 
+                        pac.sa_pac_cedula, ' ', pac.sa_pac_correo) LIKE '%" . $buscar . "%'";
+
+        $datos = $this->db->datos($sql);
+        return $datos;
+    }
+
+    function buscar_pacientes_ficha_medica($id_paciente)
+    {
+        $sql = "SELECT 
+                    pac.sa_pac_id,
+                    pac.sa_pac_cedula,
+                    pac.sa_pac_nombres,
+                    pac.sa_pac_apellidos,
+                    pac.sa_pac_fecha_nacimiento,
+                    pac.sa_pac_correo,
+                    pac.sa_pac_id_comunidad,
+                    pac.sa_pac_tabla,
+                    f.sa_fice_id
+                FROM pacientes pac
+                LEFT JOIN ficha_medica f ON pac.sa_pac_id = f.sa_fice_pac_id
+                WHERE pac.sa_pac_estado = 1 
+                AND pac.sa_pac_id = $id_paciente";
+
+        $datos = $this->db->datos($sql);
         return $datos;
     }
 }
-

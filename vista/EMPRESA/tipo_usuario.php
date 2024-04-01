@@ -284,11 +284,11 @@
 
   function accesos_asignados()
   {
-    // var perfil = $('#ddl_perfil').val();
+    var perfil = $('#ddl_perfil').val();
     var usuario_perfil = $('#ddl_usuario_perfil').val();
     parametros = 
     {
-      // 'perfil':perfil,
+      'perfil':perfil,
       'usuario':usuario_perfil,
     }   
     $.ajax({
@@ -324,7 +324,7 @@
     parametros= 
     {
       'pag':id,
-      'perfil':$('#ddl_usuario_perfil').val(),
+      'perfil':$('#ddl_perfil').val(),
       'ver':$('#ver_'+id).prop('checked'),
       'edi':$('#edi_'+id).prop('checked'),
       'eli':$('#eli_'+id).prop('checked'),
@@ -532,11 +532,11 @@
                 <div class="row"><br>                                     
                     <div class="col-sm-3">                    
                       <b>Perfil usuario</b>
-                      <select class="form-select form-select-sm" id="ddl_perfil" name="ddl_perfil" onchange="buscar_usuario_perfil();">
+                      <select class="form-select form-select-sm" id="ddl_perfil" name="ddl_perfil" onchange="accesos_asignados()">
                         <option value="">Seleccione perfil de usuario</option>
                       </select>                    
                     </div>
-                    <div class="col-sm-5">
+                    <div class="col-sm-5" style="display:none;">
                       <b>Usuarios</b>
                       <select class="form-select form-select-sm" id="ddl_usuario_perfil" name="ddl_usuario_perfil" onchange="lista_paginas()">
                         <option value="T">Aplicar a todos</option>

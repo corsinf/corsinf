@@ -33,6 +33,7 @@ if (isset($_POST['sa_rep_id'])) {
 ?>
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 <script type="text/javascript">
     $(document).ready(function() {
         var id = '<?php echo $id; ?>';
@@ -41,6 +42,9 @@ if (isset($_POST['sa_rep_id'])) {
         var id_paralelo = '<?php echo $id_paralelo; ?>';
 =======
 <script src="<?= $url_general ?>/js/ENFERMERIA/operaciones_generales.js"></script>
+=======
+<script src="../js/ENFERMERIA/operaciones_generales.js"></script>
+>>>>>>> c9a234889f7443a040d28d13f82e35ef88467ae7
 
 <script type="text/javascript">
     $(document).ready(function() {
@@ -204,7 +208,7 @@ if (isset($_POST['sa_rep_id'])) {
             data: {
                 id: id
             },
-            url: '<?= $url_general ?>/controlador/representantesC.php?listar=true',
+            url: '../controlador/representantesC.php?listar=true',
             type: 'post',
             dataType: 'json',
             success: function(response) {
@@ -291,9 +295,14 @@ if (isset($_POST['sa_rep_id'])) {
 =======
                 select_genero(response[0].sa_rep_sexo, '#sa_rep_sexo');
 
+<<<<<<< HEAD
                 $('#sa_rep_fecha_nacimiento').val(fecha_nacimiento_formateada(response[0].sa_rep_fecha_nacimiento.date));
                 $('#sa_rep_edad').val(calcular_edad_fecha_nacimiento(response[0].sa_rep_fecha_nacimiento.date));
 >>>>>>> f975ff57302e9fcddee9c8879ae90e7325aab8d1
+=======
+                $('#sa_rep_fecha_nacimiento').val((response[0].sa_rep_fecha_nacimiento));
+                $('#sa_rep_edad').val(calcular_edad_fecha_nacimiento(response[0].sa_rep_fecha_nacimiento));
+>>>>>>> c9a234889f7443a040d28d13f82e35ef88467ae7
 
                 $('#sa_rep_correo').val(response[0].sa_rep_correo);
                 $('#sa_rep_telefono_1').val(response[0].sa_rep_telefono_1);
@@ -452,7 +461,7 @@ if (isset($_POST['sa_rep_id'])) {
 >>>>>>> f975ff57302e9fcddee9c8879ae90e7325aab8d1
                 })
             } else {
-                console.log(parametros);
+                //console.log(parametros);
                 insertar(parametros)
             }
         } else {
@@ -486,7 +495,7 @@ if (isset($_POST['sa_rep_id'])) {
 >>>>>>> f975ff57302e9fcddee9c8879ae90e7325aab8d1
                 })
             } else {
-                console.log(parametros);
+                //console.log(parametros);
                 insertar(parametros);
             }
         }
@@ -497,7 +506,7 @@ if (isset($_POST['sa_rep_id'])) {
             data: {
                 parametros: parametros
             },
-            url: '<?= $url_general ?>/controlador/representantesC.php?insertar=true',
+            url: '../controlador/representantesC.php?insertar=true',
             type: 'post',
             dataType: 'json',
 <<<<<<< HEAD
@@ -511,7 +520,7 @@ if (isset($_POST['sa_rep_id'])) {
             success: function(response) {
                 if (response == 1) {
                     Swal.fire('', 'Operacion realizada con exito.', 'success').then(function() {
-                        location.href = '<?= $url_general ?>/vista/inicio.php?mod=7&acc=representantes';
+                        location.href = '../vista/inicio.php?mod=7&acc=representantes';
                     });
                 } else if (response == -2) {
 <<<<<<< HEAD
@@ -552,7 +561,7 @@ if (isset($_POST['sa_rep_id'])) {
             data: {
                 id: id
             },
-            url: '<?= $url_general ?>/controlador/representantesC.php?eliminar=true',
+            url: '../controlador/representantesC.php?eliminar=true',
             type: 'post',
             dataType: 'json',
 <<<<<<< HEAD
@@ -565,9 +574,9 @@ if (isset($_POST['sa_rep_id'])) {
             success: function(response) {
                 if (response == 1) {
                     Swal.fire('Eliminado!', 'Registro Eliminado.', 'success').then(function() {
-                        location.href = '<?= $url_general ?>/vista/inicio.php?mod=7&acc=representantes';
+                        location.href = '../vista/inicio.php?mod=7&acc=representantes';
                     });
-                    //location.href = '<?= $url_general ?>/vista/inicio.php?mod=7&acc=representantes';
+                    //location.href = '../vista/inicio.php?mod=7&acc=representantes';
                 }
 <<<<<<< HEAD
 
@@ -636,7 +645,7 @@ if (isset($_POST['sa_rep_id'])) {
                             </h5>
                             <div class="row m-2">
                                 <div class="col-sm-12">
-                                    <a href="<?= $url_general ?>/vista/inicio.php?mod=7&acc=representantes" class="btn btn-outline-dark btn-sm"><i class="bx bx-arrow-back"></i> Regresar</a>
+                                    <a href="../vista/inicio.php?mod=7&acc=representantes" class="btn btn-outline-dark btn-sm"><i class="bx bx-arrow-back"></i> Regresar</a>
                                 </div>
                             </div>
                         </div>
@@ -654,6 +663,7 @@ if (isset($_POST['sa_rep_id'])) {
 
                             <div class="row pt-3">
                                 <div class="col-md-3">
+<<<<<<< HEAD
                                     <label for="" class="form-label">Primer Apellido: <label style="color: red;">*</label> </label>
 <<<<<<< HEAD
                                     <input type="text" class="form-control" id="sa_rep_primer_apellido" name="sa_rep_primer_apellido">
@@ -670,21 +680,24 @@ if (isset($_POST['sa_rep_id'])) {
                                     <label for="" class="form-label">Segundo Nombre: <label style="color: red;">*</label> </label>
                                     <input type="text" class="form-control" id="sa_rep_segundo_nombre" name="sa_rep_segundo_nombre">
 =======
+=======
+                                    <label for="" class="form-label">Primer Apellido <label style="color: red;">*</label> </label>
+>>>>>>> c9a234889f7443a040d28d13f82e35ef88467ae7
                                     <input type="text" class="form-control form-control-sm" id="sa_rep_primer_apellido" name="sa_rep_primer_apellido">
                                 </div>
 
                                 <div class="col-md-3">
-                                    <label for="" class="form-label">Segundo Apellido: <label style="color: red;">*</label> </label>
+                                    <label for="" class="form-label">Segundo Apellido <label style="color: red;">*</label> </label>
                                     <input type="text" class="form-control form-control-sm" id="sa_rep_segundo_apellido" name="sa_rep_segundo_apellido">
                                 </div>
 
                                 <div class="col-md-3">
-                                    <label for="" class="form-label">Primer Nombre: <label style="color: red;">*</label> </label>
+                                    <label for="" class="form-label">Primer Nombre <label style="color: red;">*</label> </label>
                                     <input type="text" class="form-control form-control-sm" id="sa_rep_primer_nombre" name="sa_rep_primer_nombre">
                                 </div>
 
                                 <div class="col-md-3">
-                                    <label for="" class="form-label">Segundo Nombre: <label style="color: red;">*</label> </label>
+                                    <label for="" class="form-label">Segundo Nombre <label style="color: red;">*</label> </label>
                                     <input type="text" class="form-control form-control-sm" id="sa_rep_segundo_nombre" name="sa_rep_segundo_nombre">
 >>>>>>> f975ff57302e9fcddee9c8879ae90e7325aab8d1
                                 </div>
@@ -701,6 +714,7 @@ if (isset($_POST['sa_rep_id'])) {
                                 </div>
 
                                 <div class="col-md-3">
+<<<<<<< HEAD
                                     <label for="" class="form-label">Sexo: <label style="color: red;">*</label> </label>
 <<<<<<< HEAD
                                     <select class="form-select" id="sa_rep_sexo" name="sa_rep_sexo">
@@ -708,6 +722,9 @@ if (isset($_POST['sa_rep_id'])) {
                                         <option value="F">Femenino</option>
                                         <option value="M">Masculino</option>
 =======
+=======
+                                    <label for="" class="form-label">Sexo <label style="color: red;">*</label> </label>
+>>>>>>> c9a234889f7443a040d28d13f82e35ef88467ae7
                                     <select class="form-select form-select-sm" id="sa_rep_sexo" name="sa_rep_sexo">
                                         <option selected disabled>-- Seleccione --</option>
                                         <option value="Femenino">Femenino</option>
@@ -717,21 +734,29 @@ if (isset($_POST['sa_rep_id'])) {
                                 </div>
 
                                 <div class="col-md-3">
+<<<<<<< HEAD
                                     <label for="" class="form-label">Fecha de Nacimiento: <label style="color: red;">*</label> </label>
 <<<<<<< HEAD
                                     <input type="date" class="form-control" id="sa_rep_fecha_nacimiento" name="sa_rep_fecha_nacimiento" onchange="edad_normal(this.value);">
 =======
+=======
+                                    <label for="" class="form-label">Fecha de Nacimiento <label style="color: red;">*</label> </label>
+>>>>>>> c9a234889f7443a040d28d13f82e35ef88467ae7
                                     <input type="date" class="form-control form-control-sm" id="sa_rep_fecha_nacimiento" name="sa_rep_fecha_nacimiento" onchange="edad_normal(this.value);">
 >>>>>>> f975ff57302e9fcddee9c8879ae90e7325aab8d1
                                 </div>
 
                                 <div class="col-md-3">
+<<<<<<< HEAD
                                     <label for="" class="form-label">Edad: <label style="color: red;">*</label> </label>
 <<<<<<< HEAD
                                     <input type="text" class="form-control" id="sa_rep_edad" name="sa_rep_edad" readonly>
                                 </div>
 
 =======
+=======
+                                    <label for="" class="form-label">Edad <label style="color: red;">*</label> </label>
+>>>>>>> c9a234889f7443a040d28d13f82e35ef88467ae7
                                     <input type="text" class="form-control form-control-sm" id="sa_rep_edad" name="sa_rep_edad" readonly>
                                 </div>
 >>>>>>> f975ff57302e9fcddee9c8879ae90e7325aab8d1
@@ -739,6 +764,7 @@ if (isset($_POST['sa_rep_id'])) {
 
                             <div class="row pt-3">
                                 <div class="col-md-4">
+<<<<<<< HEAD
 <<<<<<< HEAD
                                     <label for="" class="form-label">Parentesco: <label style="color: red;">*</label> </label>
 
@@ -761,20 +787,27 @@ if (isset($_POST['sa_rep_id'])) {
                                     <input type="text" class="form-control" id="sa_rep_telefono_1" name="sa_rep_telefono_1">
 =======
                                     <label for="" class="form-label">Teléfono 1: <label style="color: red;">*</label> </label>
+=======
+                                    <label for="" class="form-label">Teléfono 1 <label style="color: red;">*</label> </label>
+>>>>>>> c9a234889f7443a040d28d13f82e35ef88467ae7
                                     <input type="text" class="form-control form-control-sm" id="sa_rep_telefono_1" name="sa_rep_telefono_1">
 >>>>>>> f975ff57302e9fcddee9c8879ae90e7325aab8d1
                                 </div>
 
                                 <div class="col-md-4">
+<<<<<<< HEAD
                                     <label for="" class="form-label">Teléfono 2: <label style="color: red;">*</label> </label>
 <<<<<<< HEAD
                                     <input type="text" class="form-control" id="sa_rep_telefono_2" name="sa_rep_telefono_2">
 =======
+=======
+                                    <label for="" class="form-label">Teléfono 2 <label style="color: red;">*</label> </label>
+>>>>>>> c9a234889f7443a040d28d13f82e35ef88467ae7
                                     <input type="text" class="form-control form-control-sm" id="sa_rep_telefono_2" name="sa_rep_telefono_2">
 >>>>>>> f975ff57302e9fcddee9c8879ae90e7325aab8d1
                                 </div>
-                            </div>
 
+<<<<<<< HEAD
                             <div class="row pt-3">
                                 <div class="col-md-12">
                                     <label for="" class="form-label">Correo: <label style="color: red;">*</label> </label>
@@ -809,6 +842,10 @@ if (isset($_POST['sa_rep_id'])) {
                                         <option selected disabled>-- Seleccione --</option>
                                     </select>
 =======
+=======
+                                <div class="col-md-4">
+                                    <label for="" class="form-label">Correo <label style="color: red;">*</label> </label>
+>>>>>>> c9a234889f7443a040d28d13f82e35ef88467ae7
                                     <input type="email" class="form-control form-control-sm" id="sa_rep_correo" name="sa_rep_correo">
 >>>>>>> f975ff57302e9fcddee9c8879ae90e7325aab8d1
                                 </div>
