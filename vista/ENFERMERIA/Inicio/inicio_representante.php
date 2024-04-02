@@ -1,10 +1,3 @@
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-<script src="<?= $url_general ?>/js/ENFERMERIA/pacientes.js"></script>
-
->>>>>>> f975ff57302e9fcddee9c8879ae90e7325aab8d1
-=======
 <script src="../js/ENFERMERIA/pacientes.js"></script>
 <style>
     .upload-img {
@@ -52,7 +45,6 @@
         color: #3b70f1;
     }
 </style>
->>>>>>> c9a234889f7443a040d28d13f82e35ef88467ae7
 <script type="text/javascript">
     function readURL(input, item) {
         var id = input.id;
@@ -84,14 +76,6 @@
             return false;
         }
 
-<<<<<<< HEAD
-        //Esta consultando unos datos por defecto
-<<<<<<< HEAD
-        consultar_datos_estudiante_representante(1004);
-=======
-        consultar_datos_estudiante_representante(3);
->>>>>>> f975ff57302e9fcddee9c8879ae90e7325aab8d1
-=======
         var formData = new FormData(document.getElementById("form_estudiantes_" + id));
         $.ajax({
             url: '../controlador/estudiantesC.php?cargar_imagen_estudiantes=true',
@@ -182,23 +166,12 @@
             });
         });
 
->>>>>>> c9a234889f7443a040d28d13f82e35ef88467ae7
 
     });
     var lista_estudiantes
 
     function cargarDatos(id) {
-<<<<<<< HEAD
-        // $('#nuevo_tipo_usuario').modal('show');
-        // $('#btn_opcion').text('Editar');
-        // $('#exampleModalLongTitle').text('Editar tipo de usuario');
-=======
 
-<<<<<<< HEAD
->>>>>>> f975ff57302e9fcddee9c8879ae90e7325aab8d1
-        var noconcurente = '<?php echo $_SESSION['INICIO']['NO_CONCURENTE']; ?>';
-=======
->>>>>>> c9a234889f7443a040d28d13f82e35ef88467ae7
         var parametros = {
             'id': id,
             'query': '',
@@ -210,14 +183,7 @@
             url: '../controlador/usuariosC.php?datos_usuarios=true',
             type: 'post',
             dataType: 'json',
-<<<<<<< HEAD
-            /*beforeSend: function () {   
-                 var spiner = '<div class="text-center"><img src="../../img/gif/proce.gif" width="100" height="100"></div>'     
-               $('#tabla_').html(spiner);
-            },*/
-=======
 
->>>>>>> f975ff57302e9fcddee9c8879ae90e7325aab8d1
             success: function(response) {
                 //console.log(response);
                 $('#txt_id').val(response[0].id);
@@ -275,104 +241,15 @@
             success: function(response) {
                 //console.log(response);
                 $.each(response, function(i, item) {
-<<<<<<< HEAD
-<<<<<<< HEAD
-                    //console.log(item);
-
-                    /*estudiantes +=
-                        '<tr>' +
-                        '<td>' + item.sa_est_cedula + '</td>' +
-                        '<td><a href="<?= $url_general ?>/vista/inicio.php?mod=7&acc=registrar_estudiantes&id=' + item.sa_est_id + '&id_seccion=' + item.sa_id_seccion + '&id_grado=' + item.sa_id_grado + '&id_paralelo=' + item.sa_id_paralelo + '&id_representante=' + item.sa_id_representante + '"><u>' + item.sa_est_primer_apellido + ' ' + item.sa_est_segundo_apellido + ' ' + item.sa_est_primer_nombre + ' ' + item.sa_est_segundo_nombre + '</u></a></td>' +
-                        '<td>' + item.sa_sec_nombre + ' / ' + item.sa_gra_nombre + ' / ' + item.sa_par_nombre + '</td>' +
-                        '<td>' + edad_fecha_nacimiento(item.sa_est_fecha_nacimiento.date) + '</td>' +
-                        '</tr>';*/
-
-                    /*estudiantes +=
-                        '<tr>' +
-                        '<th style="width:40%" class="table-success text-end">Cédula:</th>' +
-                        '<td>' + item.sa_est_cedula + '</td>' +
-                        '</tr>' +
-                        '<tr>' +
-                        '<th style="width:40%" class="table-success text-end">Nombres:</th>' +
-                        '<td>' + item.sa_est_primer_nombre + ' ' + item.sa_est_segundo_nombre + '</td>' +
-                        '</tr>' +
-                        '<tr>' +
-                        '<th style="width:40%" class="table-success text-end">Apellidos:</th>' +
-                        '<td>' + item.sa_est_primer_apellido + ' ' + item.sa_est_segundo_apellido + '</td>' +
-                        '</tr>' +
-                        '<tr>' +
-                        '<th style="width:40%" class="table-success text-end">Sexo:</th>' +
-                        '<td>' + item.sa_est_cedula + '</td>' +
-                        '</tr>' +
-                        '<tr>' +
-                        '<th style="width:40%" class="table-success text-end">Fecha de Nacimiento:</th>' +
-                        '<td>' + fecha_nacimiento_formateada(item.sa_est_fecha_nacimiento.date) + '</td>' +
-                        '</tr>' +
-                        '<tr>' +
-                        '<th style="width:40%" class="table-success text-end">Edad Actual:</th>' +
-                        '<td>' + edad_fecha_nacimiento(item.sa_est_fecha_nacimiento.date) + ' años</td>' +
-                        '</tr>' +
-                        '<tr>' +
-                        '<th style="width:40%" class="table-success text-end">Correo Electrónico:</th>' +
-                        '<td>' + item.sa_est_correo + '</td>' +
-                        '</tr>' +
-                        '<tr>' +
-                        '<th style="width:40%" class="table-success text-end">Sección/Grado/Curso:</th>' +
-                        '<td>' + item.sa_id_grado + ' </td>' +
-                        '</tr><tr><td></td><td></td></tr>';*/
-
-                    sexo_estudiante = '';
-                    if (item.sa_est_sexo == 'M') {
-                        sexo_estudiante = 'Masculino';
-                    } else if (item.sa_est_sexo == 'F') {
-=======
-
-                    sexo_estudiante = '';
-                    if (item.sa_est_sexo == 'Masculino') {
-                        sexo_estudiante = 'Masculino';
-                    } else if (item.sa_est_sexo == 'Famenino') {
->>>>>>> f975ff57302e9fcddee9c8879ae90e7325aab8d1
-                        sexo_estudiante = 'Famenino';
-=======
                     sexo_estudiante = '';
                     if (item.sa_est_sexo == 'Masculino') {
                         sexo_estudiante = 'Masculino';
                     } else if (item.sa_est_sexo == 'Femenino') {
                         sexo_estudiante = 'Femenino';
->>>>>>> c9a234889f7443a040d28d13f82e35ef88467ae7
                     }
 
                     curso = item.sa_sec_nombre + '/' + item.sa_gra_nombre + '/' + item.sa_par_nombre;
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-                    estudiantes +=
-                        '<div class="col">' +
-                        '<div class="card radius-15">' +
-                        '<div class="card-body text-center">' +
-                        '<div class="p-4 border radius-15">' +
-                        '<img src="<?= $url_general ?>/img/computadora.jpg" width="110" height="110" class="rounded-circle shadow" alt="">' +
-                        '<h5 class="mb-0 mt-5">' + item.sa_est_primer_apellido + ' ' + item.sa_est_segundo_apellido + ' ' + item.sa_est_primer_nombre + ' ' + item.sa_est_segundo_nombre + '</h5>' +
-                        '<p class="mb-0">' + item.sa_est_cedula + '</p>' +
-                        '<p class="mb-0">' + sexo_estudiante + '</p>' +
-                        //'<p class="mb-0">' + fecha_nacimiento_formateada(item.sa_est_fecha_nacimiento.date) + ' (' + edad_fecha_nacimiento(item.sa_est_fecha_nacimiento.date) + ' años)' + '</p>' +
-                        //'<p class="mb-0">' + item.sa_est_correo + '</p>' +
-                        '<p class="mb-3">' + curso + '</p>' +
-
-                        '<div class="d-grid mt-3">' +
-                        '<a href="<?= $url_general ?>/vista/inicio.php?mod=7&acc=ficha_medica_representado&id_estudiante=' + item.sa_est_id + '"' + 'class="btn btn-outline-primary radius-15">Detalles</a>' +
-=======
-                    alert = '<div class="alert border-0 border-start border-5 border-danger alert-dismissible fade show py-2">'+
-									'<div class="d-flex align-items-center">'+
-										'<div class="font-35 text-danger"><i class="bx bxs-message-square-x"></i>'+
-										'</div>'+
-										'<div class="ms-3">'+
-											'<h6 class="mb-0 text-danger text-start">¡Atención!</h6>'+
-											'<div class="mb-0 text-start">La ficha médica aún no esta realizada</div>'+
-										'</div>'+
-									'</div>'+
-								'</div>';
-=======
                     $.ajax({
                         data: {
                             sa_pac_id_comunidad: item.sa_est_id,
@@ -383,7 +260,6 @@
                         dataType: 'json',
                         success: function(response) {
                             alert_salida = '';
->>>>>>> c9a234889f7443a040d28d13f82e35ef88467ae7
 
                             // console.log(response);
 
@@ -456,12 +332,7 @@
                         '<p class="mb-3">' + curso + '</p>' +
 
                         '<div class="d-grid mt-3">' +
-<<<<<<< HEAD
-                        '<a href="#" onclick="gestion_paciente_comunidad(' + item.sa_est_id + ', \'' + item.sa_est_tabla + '\');" class="btn btn-outline-primary radius-15">Detalles</a>' +
->>>>>>> f975ff57302e9fcddee9c8879ae90e7325aab8d1
-=======
                         '<a href="#" onclick="gestion_paciente_comunidad(' + item.sa_est_id + ', \'' + item.sa_est_tabla + '\', \'./inicio.php?mod=7&acc=inicio_representante\');" class="btn btn-outline-primary radius-15">Detalles</a>' +
->>>>>>> c9a234889f7443a040d28d13f82e35ef88467ae7
 
                         '</div>' +
                         '</div>' +
@@ -476,10 +347,6 @@
                         contador_alertas_div++;
                 });
 
-<<<<<<< HEAD
-                //$('#tbl_datos').html(estudiantes);
-=======
->>>>>>> f975ff57302e9fcddee9c8879ae90e7325aab8d1
                 $('#card_estudiantes').html(estudiantes);
                 $('#lista_estudiantes').html(estudiantes2);
                 $('#ids_est').val(ids);
@@ -489,52 +356,6 @@
             }
         });
     }
-<<<<<<< HEAD
-<<<<<<< HEAD
-
-
-
-    function edad_fecha_nacimiento(fecha_nacimiento) {
-        const fechaNacimientoJson = fecha_nacimiento;
-
-        // Crear un objeto Date a partir del string de fecha
-        const fechaNacimiento = new Date(fechaNacimientoJson);
-
-        // Obtener la fecha actual
-        const fechaActual = new Date();
-
-        // Calcular la diferencia en milisegundos entre la fecha actual y la fecha de nacimiento
-        const diferenciaEnMilisegundos = fechaActual - fechaNacimiento;
-
-        // Calcular la edad en años a partir de la diferencia en milisegundos
-        const edadEnMilisegundos = new Date(diferenciaEnMilisegundos);
-        const edadEnAnios = Math.abs(edadEnMilisegundos.getUTCFullYear() - 1970);
-
-        var salida = 'jp';
-        // Mostrar la edad en años
-
-        salida = edadEnAnios;
-
-        return salida;
-    }
-
-    function fecha_nacimiento_formateada(fecha) {
-        fechaYHora = fecha;
-        fecha = new Date(fechaYHora);
-        año = fecha.getFullYear();
-        mes = (fecha.getMonth() + 1).toString().padStart(2, '0'); // Añade un 0 si es necesario
-        dia = fecha.getDate().toString().padStart(2, '0'); // Añade un 0 si es necesario
-        fechaFormateada = `${año}/${mes}/${dia}`;
-
-        var salida = '';
-        salida = fechaFormateada;
-
-        return salida;
-
-    }
-=======
->>>>>>> f975ff57302e9fcddee9c8879ae90e7325aab8d1
-=======
 
     function ficha_medica_validacion(sa_pac_id, id_notificacion) {
         $.ajax({
@@ -742,7 +563,6 @@
             pa.type = 'password';
         }
     }
->>>>>>> c9a234889f7443a040d28d13f82e35ef88467ae7
 </script>
 
 <div class="page-wrapper">
@@ -885,10 +705,6 @@
                                             </table>
                                         </div>
                                     </div>
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-=======
                                     <div class="col-sm-6">
                                         <div class="d-flex flex-column align-items-center text-center">
                                             <form id="form_img">
@@ -927,7 +743,6 @@
                                                             </div>
                                                         </div>
                                                     <?php } ?>
->>>>>>> c9a234889f7443a040d28d13f82e35ef88467ae7
 
                                                 </div>
                                             </form>
@@ -935,7 +750,6 @@
                                     </div>
 
 
->>>>>>> f975ff57302e9fcddee9c8879ae90e7325aab8d1
                                 </div>
                             </div>
                             <div class="tab-pane fade" id="estudiantes" role="tabpanel">
@@ -951,11 +765,7 @@
                                     </div>
                                 </div>
 
-<<<<<<< HEAD
-                                <div class="row row-cols-1 row-cols-lg-2 row-cols-xl-4" id="card_estudiantes">
-=======
                                 <div class="row row-cols-1 row-cols-lg-2 row-cols-xl-3" id="card_estudiantes">
->>>>>>> f975ff57302e9fcddee9c8879ae90e7325aab8d1
 
                                 </div>
                             </div>
@@ -1026,10 +836,5 @@
                 </div>
             </div>
         </div>
-<<<<<<< HEAD
-
-
-=======
->>>>>>> f975ff57302e9fcddee9c8879ae90e7325aab8d1
     </div>
 </div>

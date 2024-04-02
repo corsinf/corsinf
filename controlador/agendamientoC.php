@@ -1,8 +1,4 @@
 <?php
-<<<<<<< HEAD
-date_default_timezone_set('America/Guayaquil'); 
-=======
->>>>>>> f975ff57302e9fcddee9c8879ae90e7325aab8d1
 include('../modelo/agendamientoM.php');
 include('../modelo/pacientesM.php');
 include('../modelo/ficha_MedicaM.php');
@@ -83,21 +79,11 @@ class agendamientoC
 
         if ($parametros['tipo'] == 'consulta') {
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-
-
-
-=======
->>>>>>> f975ff57302e9fcddee9c8879ae90e7325aab8d1
-    	print_r($datos);die();
-=======
             $datos = array(
                 array('campo' => 'sa_fice_id', 'dato' => $id_paciente_fm),
                 array('campo' => 'sa_conp_fecha_ingreso', 'dato' => $parametros['fecha']),
                 array('campo' => 'sa_conp_tipo_consulta', 'dato' => $parametros['tipo']),
                 array('campo' => 'sa_conp_estado_revision', 'dato' => 0),
->>>>>>> c9a234889f7443a040d28d13f82e35ef88467ae7
 
                 array('campo' => 'sa_conp_peso', 'dato' => empty($parametros['sa_conp_peso']) ? 0 : $parametros['sa_conp_peso']),
                 array('campo' => 'sa_conp_altura', 'dato' => empty($parametros['sa_conp_altura']) ? 0 : $parametros['sa_conp_altura']),

@@ -127,20 +127,9 @@ class consultasM
             $sql .= ' and sa_conp_id = ' . $id;
             $sql .= " ORDER BY sa_conp_id;";
 
-<<<<<<< HEAD
-        $sql .= " ORDER BY sa_conp_id";
-<<<<<<< HEAD
-
-        // print_r($sql);die();
-=======
->>>>>>> f975ff57302e9fcddee9c8879ae90e7325aab8d1
-        $datos = $this->db_salud->datos($sql);
-        return $datos;
-=======
             $datos = $this->db->datos($sql);
             return $datos;
         }
->>>>>>> c9a234889f7443a040d28d13f82e35ef88467ae7
     }
 
     function lista_consultas_todo($tabla, $fecha_inicio, $fecha_fin)

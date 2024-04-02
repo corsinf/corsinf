@@ -1,24 +1,5 @@
 <?php @session_start();
-<<<<<<< HEAD
-// print_r($_SESSION['INICIO']);
-<<<<<<< HEAD
-if (!isset($_SESSION['INICIO'])) {
-	header('Location: ../login.php');
-}
-
-//Pendiente para revisar, tener en cuenta 
-$dominio = $_SERVER['SERVER_NAME'];
-$url_general = 'http://'. $dominio . '/corsinf';
-if($dominio!='localhost')
-{
-	$url_general = 'http://' . $dominio . ':8087/corsinf';
-}
-
-?>
-=======
-=======
 // print_r($_SESSION['INICIO']);die();
->>>>>>> c9a234889f7443a040d28d13f82e35ef88467ae7
 $tiempo_inactividad = 2 * 60;
 if (!isset($_SESSION['INICIO']) || !isset($_SESSION['INICIO']['NO_CONCURENTE'])) {
 	header('Location: ../login.php');
@@ -42,7 +23,6 @@ if ($dominio != 'localhost') {
 
 ?>
 
->>>>>>> f975ff57302e9fcddee9c8879ae90e7325aab8d1
 <!doctype html>
 <html lang="en">
 
@@ -84,25 +64,6 @@ if ($dominio != 'localhost') {
 	<link rel="stylesheet" href="../assets/plugins/summernote/summernote-bs5.min.css">
 	<!-- <link rel="stylesheet" href="../assets/plugins/summernote/css/font-awesome.min.css"> -->
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-	<script src="../js/informes_globales.js"></script>
-	<script src="../js/codigos_globales.js"></script>
-	<script src="../js/sweetalert2.all.min.js"></script>
-	<script src="../js/notificaciones_seguros.js"></script>
-
-	<script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
-=======
-  <script src="../js/informes_globales.js"></script>  
-  <script src="../js/jquery-3.6.0.js"></script>
-  <script src="../js/jquery-ui.js"></script>
-  <script src="../js/codigos_globales.js"></script>
-  <script src="../js/sweetalert2.all.min.js"></script>
-  <script src="../js/notificaciones_seguros.js"></script>
-
-  <!-- <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script> -->
->>>>>>> f975ff57302e9fcddee9c8879ae90e7325aab8d1
-=======
 	<script src="../js/informes_globales.js"></script>
 	<script src="../js/jquery-3.6.0.js"></script>
 	<script src="../js/jquery-ui.js"></script>
@@ -126,7 +87,6 @@ if ($dominio != 'localhost') {
 			/* Otros estilos según sea necesario */
 		}
 	</style>
->>>>>>> c9a234889f7443a040d28d13f82e35ef88467ae7
 
 	<style>
 		.input-group>.select2-container--bootstrap {
@@ -432,14 +392,7 @@ if ($dominio != 'localhost') {
 					</div>
 				<?php } ?>
 				<div>
-<<<<<<< HEAD
-					<img src="../img/de_sistema/logo_puce2.jpeg" class="logo-icon" alt="logo icon">
-				</div>
-				<div>
-					<h4 class="logo-text">Activos fijos</h4>
-=======
 					<h4 class="logo-text"><?php echo $_SESSION['INICIO']['MODULO_SISTEMA_NOMBRE']; ?></h4>
->>>>>>> c9a234889f7443a040d28d13f82e35ef88467ae7
 				</div>
 				<div class="toggle-icon ms-auto"><i class='bx bx-arrow-to-left'></i>
 				</div>
@@ -889,22 +842,10 @@ if ($dominio != 'localhost') {
 						<ul class="dropdown-menu dropdown-menu-end">
 							<li><a class="dropdown-item" href="inicio.php?acc=perfil"><i class="bx bx-user"></i><span>Perfil</span></a>
 							</li>
-<<<<<<< HEAD
-<<<<<<< HEAD
-							<?php if ($_SESSION['INICIO']['TIPO'] == 'DBA') { ?>
-								<li><a class="dropdown-item" href="javascript:;" onclick="cambiar_configuraciones()"><i class="bx bx-cog"></i><span>Configuraciones</span></a>
-								</li>
-=======
-							<?php if($_SESSION['INICIO']['TIPO']=='DBA' || $_SESSION['INICIO']['TIPO']=='ADMINISTRADOR' || $_SESSION['INICIO']['TIPO']=='ADMIN'  ){ ?>
-							<li><a class="dropdown-item" href="javascript:;" onclick="cambiar_configuraciones()"><i class="bx bx-cog"></i><span>Configuraciones</span></a>
-							</li>
-=======
 							<?php if ($_SESSION['INICIO']['TIPO'] == 'DBA' || $_SESSION['INICIO']['TIPO'] == 'ADMINISTRADOR' || $_SESSION['INICIO']['TIPO'] == 'ADMIN') { ?>
 								<li><a class="dropdown-item" href="javascript:;" onclick="cambiar_configuraciones()"><i class="bx bx-cog"></i><span>Configuraciones</span></a>
 								</li>
->>>>>>> c9a234889f7443a040d28d13f82e35ef88467ae7
 
->>>>>>> f975ff57302e9fcddee9c8879ae90e7325aab8d1
 							<?php } ?>
 							<li><a class="dropdown-item" href="javascript:;"><i class='bx bx-home-circle'></i><span>Dashboard</span></a>
 							</li>

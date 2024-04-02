@@ -1,208 +1,25 @@
-<<<<<<< HEAD
-<?php //include('../../../../cabeceras/header.php');
-
-$id = '';
-$id_seccion = '';
-$id_grado = '';
-$id_paralelo = '';
-
-if (isset($_GET['id'])) {
-    $id = $_GET['id'];
-}
-
-if (isset($_GET['id_seccion'])) {
-    $id_seccion = $_GET['id_seccion'];
-}
-
-if (isset($_GET['id_grado'])) {
-    $id_grado = $_GET['id_grado'];
-}
-
-if (isset($_GET['id_paralelo'])) {
-    $id_paralelo = $_GET['id_paralelo'];
-=======
 <?php
 
 $id = '';
 
 if (isset($_POST['sa_rep_id'])) {
     $id = $_POST['sa_rep_id'];
->>>>>>> f975ff57302e9fcddee9c8879ae90e7325aab8d1
 }
 
 ?>
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-<script type="text/javascript">
-    $(document).ready(function() {
-        var id = '<?php echo $id; ?>';
-        var id_seccion = '<?php echo $id_seccion; ?>';
-        var id_grado = '<?php echo $id_grado; ?>';
-        var id_paralelo = '<?php echo $id_paralelo; ?>';
-=======
-<script src="<?= $url_general ?>/js/ENFERMERIA/operaciones_generales.js"></script>
-=======
 <script src="../js/ENFERMERIA/operaciones_generales.js"></script>
->>>>>>> c9a234889f7443a040d28d13f82e35ef88467ae7
 
 <script type="text/javascript">
     $(document).ready(function() {
         var id = '<?php echo $id; ?>';
         //alert(id)
->>>>>>> f975ff57302e9fcddee9c8879ae90e7325aab8d1
 
         if (id != '') {
             datos_col(id);
         }
-<<<<<<< HEAD
-
-        consultar_datos_seccion(id = '', id_seccion);
-        consultar_datos_seccion_grado(id_grado, id_seccion);
-        consultar_datos_grado_paralelo(id_grado, id_paralelo);
-
     });
 
-    //Para cargar los datos en el select
-    function consultar_datos_seccion(id = '', id_seccion) {
-        var seccion = '';
-
-        console.log(id_seccion);
-        seccion = '<option selected disabled>-- Seleccione --</option>'
-        $.ajax({
-            data: {
-                id: id
-            },
-            url: '<?php echo $url_general ?>/controlador/seccionC.php?listar=true',
-            type: 'post',
-            dataType: 'json',
-
-            success: function(response) {
-                console.log(response);
-
-                $.each(response, function(i, item) {
-                    //console.log(item);
-                    if (id_seccion == item.sa_sec_id) {
-                        // Marca la opción correspondiente con el atributo 'selected'
-                        seccion += '<option value="' + item.sa_sec_id + '" selected>' + item.sa_sec_nombre + '</option>';
-                    } else {
-                        seccion += '<option value="' + item.sa_sec_id + '">' + item.sa_sec_nombre + '</option>';
-                    }
-
-                });
-
-                $('#sa_id_seccion').html(seccion);
-
-                // Marca la opción correspondiente si el ID coincide
-            }
-        });
-
-
-
-
-    }
-
-    function consultar_datos_seccion_grado(id_grado = '', id_seccion = '') {
-        /*///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-            Para Buscar el Grado con la Seccion
-
-        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////*/
-        id_sec_varia = ''
-
-        if (id_seccion == '') {
-            id_seccion = $("#sa_id_seccion").val();
-
-            id_sec_varia = id_seccion;
-        }
-
-        if (id_grado == '') {
-            id_grado = $("#sa_id_grado").val();
-        }
-
-        var grado = '';
-        grado = '<option selected disabled>-- Seleccione --</option>'
-        $.ajax({
-            data: {
-                "id_seccion": id_seccion
-            },
-            url: '<?php echo $url_general ?>/controlador/paraleloC.php?listar_seccion_grado=true',
-            type: 'post',
-            dataType: 'json',
-
-            success: function(response) {
-                // console.log(response);   
-                $.each(response, function(i, item) {
-                    //console.log(item);
-
-                    if (id_grado == item.sa_gra_id) {
-                        // Marca la opción correspondiente con el atributo 'selected'
-                        grado += '<option value="' + item.sa_gra_id + '" selected>' + item.sa_gra_nombre + '</option>';
-                    } else {
-                        grado += '<option value="' + item.sa_gra_id + '">' + item.sa_gra_nombre + '</option>';
-                    }
-
-                });
-
-                //$('#sa_id_paralelo').html('<option selected disabled>-- Seleccione --</option>');
-
-                $('#sa_id_grado').html(grado);
-
-            }
-        });
-
-
-
-    }
-
-    function consultar_datos_grado_paralelo(id_grado = '', id_paralelo = '') {
-        /*///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-            Para Buscar el Paralelo con la Grado
-
-        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////*/
-        if (id_paralelo == '') {
-            id_paralelo = $("#sa_id_paralelo").val();
-        }
-
-        if (id_grado == '') {
-            id_grado = $("#sa_id_grado").val();
-        }
-
-        var grado = '';
-        paralelo = '<option selected disabled>-- Seleccione --</option>'
-        $.ajax({
-            data: {
-                "id_grado": id_grado
-            },
-            url: '<?php echo $url_general ?>/controlador/paraleloC.php?listar_grado_paralelo=true',
-            type: 'post',
-            dataType: 'json',
-
-            success: function(response) {
-                // console.log(response);   
-                $.each(response, function(i, item) {
-                    //console.log(item);
-
-                    if (id_paralelo == item.sa_par_id) {
-                        // Marca la opción correspondiente con el atributo 'selected'
-                        paralelo += '<option value="' + item.sa_par_id + '" selected>' + item.sa_par_nombre + '</option>';
-                    } else {
-                        paralelo += '<option value="' + item.sa_par_id + '">' + item.sa_par_nombre + '</option>';
-                    }
-
-                });
-
-                $('#sa_id_paralelo').html(paralelo);
-
-            }
-        });
-    }
-
-=======
-    });
-
->>>>>>> f975ff57302e9fcddee9c8879ae90e7325aab8d1
     function datos_col(id) {
         $.ajax({
             data: {
@@ -220,171 +37,19 @@ if (isset($_POST['sa_rep_id'])) {
                 $('#sa_rep_segundo_nombre').val(response[0].sa_rep_segundo_nombre);
 
                 $('#sa_rep_cedula').val(response[0].sa_rep_cedula);
-<<<<<<< HEAD
-
-                ///////////////////////////////////////////////////////////////////////////////////////////
-                //Select sexo
-                if (response[0].sa_rep_sexo === 'F') {
-                    selectElement = $('#sa_rep_sexo');
-                    optionElement = selectElement.find('option[value="F"]');
-                    if (optionElement.length > 0) {
-                        optionElement.prop('selected', true); // Selecciona la opción 'Femenino'
-                    }
-                } else if (response[0].sa_rep_sexo === 'M') {
-                    selectElement = $('#sa_rep_sexo');
-                    optionElement = selectElement.find('option[value="M"]');
-                    if (optionElement.length > 0) {
-                        optionElement.prop('selected', true); // Selecciona la opción 'Masculino'
-                    }
-                }
-
-                ///////////////////////////////////////////////////////////////////////////////////////////
-                //Fecha de nacimiento
-
-                $('#sa_rep_fecha_nacimiento').val(fecha_nacimiento_formateada(response[0].sa_rep_fecha_nacimiento.date));
-                $('#sa_rep_edad').val(edad_fecha_nacimiento(response[0].sa_rep_fecha_nacimiento.date));
-                ///////////////////////////////////////////////////////////////////////////////////////////
-
-                //$('#sa_rep_parentesco').val(response[0].sa_rep_parentesco);Padre
-
-                if (response[0].sa_rep_parentesco === 'Padre') {
-                    selectElement = $('#sa_rep_parentesco');
-                    optionElement = selectElement.find('option[value="Padre"]');
-                    if (optionElement.length > 0) {
-                        optionElement.prop('selected', true); // Selecciona la opción 'Femenino'
-                    }
-                } else if (response[0].sa_rep_parentesco === 'Madre') {
-                    selectElement = $('#sa_rep_parentesco');
-                    optionElement = selectElement.find('option[value="Madre"]');
-                    if (optionElement.length > 0) {
-                        optionElement.prop('selected', true); // Selecciona la opción 'Masculino'
-                    }
-                } else if (response[0].sa_rep_parentesco === 'Hermano') {
-                    selectElement = $('#sa_rep_parentesco');
-                    optionElement = selectElement.find('option[value="Hermano"]');
-                    if (optionElement.length > 0) {
-                        optionElement.prop('selected', true); // Selecciona la opción 'Masculino'
-                    }
-                } else if (response[0].sa_rep_parentesco === 'Tio') {
-                    selectElement = $('#sa_rep_parentesco');
-                    optionElement = selectElement.find('option[value="Tio"]');
-                    if (optionElement.length > 0) {
-                        optionElement.prop('selected', true); // Selecciona la opción 'Masculino'
-                    }
-                } else if (response[0].sa_rep_parentesco === 'Primo') {
-                    selectElement = $('#sa_rep_parentesco');
-                    optionElement = selectElement.find('option[value="Primo"]');
-                    if (optionElement.length > 0) {
-                        optionElement.prop('selected', true); // Selecciona la opción 'Masculino'
-                    }
-                } else if (response[0].sa_rep_parentesco === 'Abuelo') {
-                    selectElement = $('#sa_rep_parentesco');
-                    optionElement = selectElement.find('option[value="Abuelo"]');
-                    if (optionElement.length > 0) {
-                        optionElement.prop('selected', true); // Selecciona la opción 'Masculino'
-                    }
-                } else if (response[0].sa_rep_parentesco === 'Otro') {
-                    selectElement = $('#sa_rep_parentesco');
-                    optionElement = selectElement.find('option[value="Abuelo"]');
-                    if (optionElement.length > 0) {
-                        optionElement.prop('selected', true); // Selecciona la opción 'Masculino'
-                    }
-                }
-
-                ///////////////////////////////////////////////////////////////////////////////////////////
-=======
                 select_genero(response[0].sa_rep_sexo, '#sa_rep_sexo');
 
-<<<<<<< HEAD
-                $('#sa_rep_fecha_nacimiento').val(fecha_nacimiento_formateada(response[0].sa_rep_fecha_nacimiento.date));
-                $('#sa_rep_edad').val(calcular_edad_fecha_nacimiento(response[0].sa_rep_fecha_nacimiento.date));
->>>>>>> f975ff57302e9fcddee9c8879ae90e7325aab8d1
-=======
                 $('#sa_rep_fecha_nacimiento').val((response[0].sa_rep_fecha_nacimiento));
                 $('#sa_rep_edad').val(calcular_edad_fecha_nacimiento(response[0].sa_rep_fecha_nacimiento));
->>>>>>> c9a234889f7443a040d28d13f82e35ef88467ae7
 
                 $('#sa_rep_correo').val(response[0].sa_rep_correo);
                 $('#sa_rep_telefono_1').val(response[0].sa_rep_telefono_1);
                 $('#sa_rep_telefono_2').val(response[0].sa_rep_telefono_2);
 
-<<<<<<< HEAD
-                //$('#sa_id_seccion').val(response[0].sa_id_seccion);
-                //$('#sa_id_grado').val(response[0].sa_id_grado);
-                //$('#sa_id_paralelo').val(response[0].sa_id_paralelo);
-
-                $('#sa_sec_id').val(response[0].sa_sec_id);
-                $('#sa_gra_id').val(response[0].sa_gra_id);
-                $('#sa_par_id').val(response[0].sa_par_id);
-
-=======
->>>>>>> f975ff57302e9fcddee9c8879ae90e7325aab8d1
             }
         });
     }
 
-<<<<<<< HEAD
-    function edad_normal(fecha_nacimiento) {
-        $('#sa_rep_edad').val(edad_fecha_nacimiento(fecha_nacimiento));
-    }
-
-    function edad_fecha_nacimiento(fecha_nacimiento) {
-        fechaNacimientoJson = fecha_nacimiento;
-
-        // Crear un objeto Date a partir del string de fecha
-        fechaNacimiento = new Date(fechaNacimientoJson);
-
-        // Obtener la fecha actual
-        fechaActual = new Date();
-
-        // Calcular la diferencia en milisegundos entre la fecha actual y la fecha de nacimiento
-        diferenciaEnMilisegundos = fechaActual - fechaNacimiento;
-
-        // Calcular la edad en años a partir de la diferencia en milisegundos
-        edadEnMilisegundos = new Date(diferenciaEnMilisegundos);
-        edadEnAnios = Math.abs(edadEnMilisegundos.getUTCFullYear() - 1970);
-
-        var salida = '';
-        // Mostrar la edad en años
-
-        salida = edadEnAnios;
-
-        return salida;
-    }
-
-    function fecha_nacimiento_formateada(fecha) {
-        fechaYHora = fecha;
-        fecha = new Date(fechaYHora);
-        año = fecha.getFullYear();
-        mes = (fecha.getMonth() + 1).toString().padStart(2, '0'); // Añade un 0 si es necesario
-        dia = fecha.getDate().toString().padStart(2, '0'); // Añade un 0 si es necesario
-        fechaFormateada = `${año}-${mes}-${dia}`;
-
-        var salida = '';
-        salida = fechaFormateada;
-
-        return salida;
-
-    }
-
-    function validar_email(sa_rep_correo) {
-
-        var email = sa_rep_correo;
-
-        // Define expresion regular
-        var validad_email = /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
-
-        if (validad_email.test(email)) {
-            //alert('Email valido');
-            return true;
-        } else {
-            //alert('Email no valido');
-            return false;
-        }
-    }
-
-=======
->>>>>>> f975ff57302e9fcddee9c8879ae90e7325aab8d1
     function editar_insertar() {
         var sa_rep_id = $('#sa_rep_id').val();
         var sa_rep_primer_apellido = $('#sa_rep_primer_apellido').val();
@@ -394,19 +59,9 @@ if (isset($_POST['sa_rep_id'])) {
         var sa_rep_cedula = $('#sa_rep_cedula').val();
         var sa_rep_sexo = $('#sa_rep_sexo').val();
         var sa_rep_fecha_nacimiento = $('#sa_rep_fecha_nacimiento').val();
-<<<<<<< HEAD
-        var sa_id_seccion = $('#sa_id_seccion').val();
-        var sa_id_grado = $('#sa_id_grado').val();
-        var sa_id_paralelo = $('#sa_id_paralelo').val();
-        var sa_rep_correo = $('#sa_rep_correo').val();
-        var sa_rep_parentesco = $('#sa_rep_parentesco').val();
-        var sa_rep_telefono_1 = $('#sa_rep_telefono_1').val();
-        var sa_rep_telefono_2 = $('#sa_rep_telefono_2').val();
-=======
         var sa_rep_telefono_1 = $('#sa_rep_telefono_1').val();
         var sa_rep_telefono_2 = $('#sa_rep_telefono_2').val();
         var sa_rep_correo = $('#sa_rep_correo').val();
->>>>>>> f975ff57302e9fcddee9c8879ae90e7325aab8d1
 
         var parametros = {
             'sa_rep_id': sa_rep_id,
@@ -417,15 +72,7 @@ if (isset($_POST['sa_rep_id'])) {
             'sa_rep_cedula': sa_rep_cedula,
             'sa_rep_sexo': sa_rep_sexo,
             'sa_rep_fecha_nacimiento': sa_rep_fecha_nacimiento,
-<<<<<<< HEAD
-            'sa_id_seccion': sa_id_seccion,
-            'sa_id_grado': sa_id_grado,
-            'sa_id_paralelo': sa_id_paralelo,
             'sa_rep_correo': sa_rep_correo,
-            'sa_rep_parentesco': sa_rep_parentesco,
-=======
-            'sa_rep_correo': sa_rep_correo,
->>>>>>> f975ff57302e9fcddee9c8879ae90e7325aab8d1
             'sa_rep_telefono_1': sa_rep_telefono_1,
             'sa_rep_telefono_2': sa_rep_telefono_2,
         };
@@ -439,26 +86,14 @@ if (isset($_POST['sa_rep_id'])) {
                 sa_rep_cedula === '' ||
                 sa_rep_sexo == null ||
                 sa_rep_fecha_nacimiento === '' ||
-<<<<<<< HEAD
-                sa_id_seccion == null ||
-                sa_id_grado == null ||
-                sa_id_paralelo == null ||
                 validar_email(sa_rep_correo) == false ||
-                sa_rep_parentesco == null ||
-=======
-                validar_email(sa_rep_correo) == false ||
->>>>>>> f975ff57302e9fcddee9c8879ae90e7325aab8d1
                 sa_rep_telefono_1 === '' ||
                 sa_rep_telefono_2 === ''
             ) {
                 Swal.fire({
                     icon: 'error',
                     title: 'Oops...',
-<<<<<<< HEAD
-                    text: 'Asegurese de llenar todo los campos',
-=======
                     text: 'Asegurese de llenar todos los campos',
->>>>>>> f975ff57302e9fcddee9c8879ae90e7325aab8d1
                 })
             } else {
                 //console.log(parametros);
@@ -473,26 +108,14 @@ if (isset($_POST['sa_rep_id'])) {
                 sa_rep_cedula === '' ||
                 sa_rep_sexo == null ||
                 sa_rep_fecha_nacimiento === '' ||
-<<<<<<< HEAD
-                sa_id_seccion == null ||
-                sa_id_grado == null ||
-                sa_id_paralelo == null ||
                 validar_email(sa_rep_correo) == false ||
-                sa_rep_parentesco == null ||
-=======
-                validar_email(sa_rep_correo) == false ||
->>>>>>> f975ff57302e9fcddee9c8879ae90e7325aab8d1
                 sa_rep_telefono_1 === '' ||
                 sa_rep_telefono_2 === ''
             ) {
                 Swal.fire({
                     icon: 'error',
                     title: 'Oops...',
-<<<<<<< HEAD
-                    text: 'Asegurese de llenar todo los campos',
-=======
                     text: 'Asegurese de llenar todos los campos',
->>>>>>> f975ff57302e9fcddee9c8879ae90e7325aab8d1
                 })
             } else {
                 //console.log(parametros);
@@ -509,25 +132,14 @@ if (isset($_POST['sa_rep_id'])) {
             url: '../controlador/representantesC.php?insertar=true',
             type: 'post',
             dataType: 'json',
-<<<<<<< HEAD
-            /*beforeSend: function () {   
-                 var spiner = '<div class="text-center"><img src="../../img/gif/proce.gif" width="100" height="100"></div>'     
-               $('#tabla_').html(spiner);
-            },*/
-=======
 
->>>>>>> f975ff57302e9fcddee9c8879ae90e7325aab8d1
             success: function(response) {
                 if (response == 1) {
                     Swal.fire('', 'Operacion realizada con exito.', 'success').then(function() {
                         location.href = '../vista/inicio.php?mod=7&acc=representantes';
                     });
                 } else if (response == -2) {
-<<<<<<< HEAD
-                    Swal.fire('', 'codigo ya regitrado', 'success');
-=======
                     Swal.fire('', 'Cédula ya registrada', 'warning');
->>>>>>> f975ff57302e9fcddee9c8879ae90e7325aab8d1
                 }
             }
         });
@@ -548,12 +160,6 @@ if (isset($_POST['sa_rep_id'])) {
                 eliminar(id);
             }
         })
-<<<<<<< HEAD
-
-        //eliminar(id);
-
-=======
->>>>>>> f975ff57302e9fcddee9c8879ae90e7325aab8d1
     }
 
     function eliminar(id) {
@@ -564,13 +170,6 @@ if (isset($_POST['sa_rep_id'])) {
             url: '../controlador/representantesC.php?eliminar=true',
             type: 'post',
             dataType: 'json',
-<<<<<<< HEAD
-            /*beforeSend: function() {
-              var spiner = '<div class="text-center"><img src="../../img/gif/proce.gif" width="100" height="100"></div>'
-              $('#tabla_').html(spiner);
-            },*/
-=======
->>>>>>> f975ff57302e9fcddee9c8879ae90e7325aab8d1
             success: function(response) {
                 if (response == 1) {
                     Swal.fire('Eliminado!', 'Registro Eliminado.', 'success').then(function() {
@@ -578,14 +177,6 @@ if (isset($_POST['sa_rep_id'])) {
                     });
                     //location.href = '../vista/inicio.php?mod=7&acc=representantes';
                 }
-<<<<<<< HEAD
-
-            }
-        });
-    }
-</script>
-
-=======
             }
         });
     }
@@ -595,7 +186,6 @@ if (isset($_POST['sa_rep_id'])) {
         $('#sa_rep_edad').val(calcular_edad_fecha_nacimiento(fecha_nacimiento));
     }
 </script>
->>>>>>> f975ff57302e9fcddee9c8879ae90e7325aab8d1
 
 <div class="page-wrapper">
     <div class="page-content">
@@ -654,35 +244,10 @@ if (isset($_POST['sa_rep_id'])) {
                         <form action="" method="post">
 
                             <input type="hidden" id="sa_rep_id" name="sa_rep_id">
-<<<<<<< HEAD
-                            <input type="hidden" id="sa_sec_id" name="sa_sec_id">
-                            <input type="hidden" id="sa_gra_id" name="sa_gra_id">
-                            <input type="hidden" id="sa_par_id" name="sa_psa_repar_id">
-=======
->>>>>>> f975ff57302e9fcddee9c8879ae90e7325aab8d1
 
                             <div class="row pt-3">
                                 <div class="col-md-3">
-<<<<<<< HEAD
-                                    <label for="" class="form-label">Primer Apellido: <label style="color: red;">*</label> </label>
-<<<<<<< HEAD
-                                    <input type="text" class="form-control" id="sa_rep_primer_apellido" name="sa_rep_primer_apellido">
-                                </div>
-                                <div class="col-md-3">
-                                    <label for="" class="form-label">Segundo Apellido: <label style="color: red;">*</label> </label>
-                                    <input type="text" class="form-control" id="sa_rep_segundo_apellido" name="sa_rep_segundo_apellido">
-                                </div>
-                                <div class="col-md-3">
-                                    <label for="" class="form-label">Primer Nombre: <label style="color: red;">*</label> </label>
-                                    <input type="text" class="form-control" id="sa_rep_primer_nombre" name="sa_rep_primer_nombre">
-                                </div>
-                                <div class="col-md-3">
-                                    <label for="" class="form-label">Segundo Nombre: <label style="color: red;">*</label> </label>
-                                    <input type="text" class="form-control" id="sa_rep_segundo_nombre" name="sa_rep_segundo_nombre">
-=======
-=======
                                     <label for="" class="form-label">Primer Apellido <label style="color: red;">*</label> </label>
->>>>>>> c9a234889f7443a040d28d13f82e35ef88467ae7
                                     <input type="text" class="form-control form-control-sm" id="sa_rep_primer_apellido" name="sa_rep_primer_apellido">
                                 </div>
 
@@ -699,191 +264,64 @@ if (isset($_POST['sa_rep_id'])) {
                                 <div class="col-md-3">
                                     <label for="" class="form-label">Segundo Nombre <label style="color: red;">*</label> </label>
                                     <input type="text" class="form-control form-control-sm" id="sa_rep_segundo_nombre" name="sa_rep_segundo_nombre">
->>>>>>> f975ff57302e9fcddee9c8879ae90e7325aab8d1
                                 </div>
                             </div>
 
                             <div class="row pt-3">
                                 <div class="col-md-3">
                                     <label for="" class="form-label">Cédula de Identidad <label style="color: red;">*</label> </label>
-<<<<<<< HEAD
-                                    <input type="text" class="form-control" id="sa_rep_cedula" name="sa_rep_cedula" maxlength="10" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
-=======
                                     <input type="text" class="form-control form-control-sm" id="sa_rep_cedula" name="sa_rep_cedula" maxlength="10" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
->>>>>>> f975ff57302e9fcddee9c8879ae90e7325aab8d1
                                 </div>
 
                                 <div class="col-md-3">
-<<<<<<< HEAD
-                                    <label for="" class="form-label">Sexo: <label style="color: red;">*</label> </label>
-<<<<<<< HEAD
-                                    <select class="form-select" id="sa_rep_sexo" name="sa_rep_sexo">
-                                        <option selected disabled>-- Seleccione --</option>
-                                        <option value="F">Femenino</option>
-                                        <option value="M">Masculino</option>
-=======
-=======
                                     <label for="" class="form-label">Sexo <label style="color: red;">*</label> </label>
->>>>>>> c9a234889f7443a040d28d13f82e35ef88467ae7
                                     <select class="form-select form-select-sm" id="sa_rep_sexo" name="sa_rep_sexo">
                                         <option selected disabled>-- Seleccione --</option>
                                         <option value="Femenino">Femenino</option>
                                         <option value="Masculino">Masculino</option>
->>>>>>> f975ff57302e9fcddee9c8879ae90e7325aab8d1
                                     </select>
                                 </div>
 
                                 <div class="col-md-3">
-<<<<<<< HEAD
-                                    <label for="" class="form-label">Fecha de Nacimiento: <label style="color: red;">*</label> </label>
-<<<<<<< HEAD
-                                    <input type="date" class="form-control" id="sa_rep_fecha_nacimiento" name="sa_rep_fecha_nacimiento" onchange="edad_normal(this.value);">
-=======
-=======
                                     <label for="" class="form-label">Fecha de Nacimiento <label style="color: red;">*</label> </label>
->>>>>>> c9a234889f7443a040d28d13f82e35ef88467ae7
                                     <input type="date" class="form-control form-control-sm" id="sa_rep_fecha_nacimiento" name="sa_rep_fecha_nacimiento" onchange="edad_normal(this.value);">
->>>>>>> f975ff57302e9fcddee9c8879ae90e7325aab8d1
                                 </div>
 
                                 <div class="col-md-3">
-<<<<<<< HEAD
-                                    <label for="" class="form-label">Edad: <label style="color: red;">*</label> </label>
-<<<<<<< HEAD
-                                    <input type="text" class="form-control" id="sa_rep_edad" name="sa_rep_edad" readonly>
-                                </div>
-
-=======
-=======
                                     <label for="" class="form-label">Edad <label style="color: red;">*</label> </label>
->>>>>>> c9a234889f7443a040d28d13f82e35ef88467ae7
                                     <input type="text" class="form-control form-control-sm" id="sa_rep_edad" name="sa_rep_edad" readonly>
                                 </div>
->>>>>>> f975ff57302e9fcddee9c8879ae90e7325aab8d1
                             </div>
 
                             <div class="row pt-3">
                                 <div class="col-md-4">
-<<<<<<< HEAD
-<<<<<<< HEAD
-                                    <label for="" class="form-label">Parentesco: <label style="color: red;">*</label> </label>
-
-                                    <select class="form-select" id="sa_rep_parentesco" name="sa_rep_parentesco">
-                                        <option selected disabled>-- Seleccione --</option>
-                                        <option value="Padre">Padre</option>
-                                        <option value="Madre">Madre</option>
-                                        <option value="Hermano">Hermano/a</option>
-                                        <option value="Tio">Tío/a</option>
-                                        <option value="Primo">Primo/a</option>
-                                        <option value="Abuelo">Abuelo/a</option>
-                                        <option value="Otro">Otro/a</option>
-
-                                    </select>
-
-                                </div>
-
-                                <div class="col-md-4">
-                                    <label for="" class="form-label">Teléfono 1: <label style="color: red;">*</label> </label>
-                                    <input type="text" class="form-control" id="sa_rep_telefono_1" name="sa_rep_telefono_1">
-=======
-                                    <label for="" class="form-label">Teléfono 1: <label style="color: red;">*</label> </label>
-=======
                                     <label for="" class="form-label">Teléfono 1 <label style="color: red;">*</label> </label>
->>>>>>> c9a234889f7443a040d28d13f82e35ef88467ae7
                                     <input type="text" class="form-control form-control-sm" id="sa_rep_telefono_1" name="sa_rep_telefono_1">
->>>>>>> f975ff57302e9fcddee9c8879ae90e7325aab8d1
                                 </div>
 
                                 <div class="col-md-4">
-<<<<<<< HEAD
-                                    <label for="" class="form-label">Teléfono 2: <label style="color: red;">*</label> </label>
-<<<<<<< HEAD
-                                    <input type="text" class="form-control" id="sa_rep_telefono_2" name="sa_rep_telefono_2">
-=======
-=======
                                     <label for="" class="form-label">Teléfono 2 <label style="color: red;">*</label> </label>
->>>>>>> c9a234889f7443a040d28d13f82e35ef88467ae7
                                     <input type="text" class="form-control form-control-sm" id="sa_rep_telefono_2" name="sa_rep_telefono_2">
->>>>>>> f975ff57302e9fcddee9c8879ae90e7325aab8d1
                                 </div>
 
-<<<<<<< HEAD
-                            <div class="row pt-3">
-                                <div class="col-md-12">
-                                    <label for="" class="form-label">Correo: <label style="color: red;">*</label> </label>
-<<<<<<< HEAD
-                                    <input type="email" class="form-control" id="sa_rep_correo" name="sa_rep_correo">
-                                </div>
-                            </div>
-
-                            <div class="row pt-3">
-
-                                <div class="col-md-6">
-                                    <label for="" class="form-label">Sección: <label style="color: red;">*</label> </label>
-                                    <select class="form-select" id="sa_id_seccion" name="sa_id_seccion" onclick="consultar_datos_seccion_grado()">
-
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div class="row pt-3">
-                                <div class="col-md-6">
-                                    <label for="" class="form-label">Grado: <label style="color: red;">*</label> </label>
-                                    <select class="form-select" id="sa_id_grado" name="sa_id_grado" onclick="consultar_datos_grado_paralelo();">
-                                        <option selected disabled>-- Seleccione --</option>
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div class="row pt-3">
-                                <div class="col-md-6">
-                                    <label for="" class="form-label">Paralelo: <label style="color: red;">*</label> </label>
-                                    <select class="form-select" id="sa_id_paralelo" name="sa_id_paralelo">
-                                        <option selected disabled>-- Seleccione --</option>
-                                    </select>
-=======
-=======
                                 <div class="col-md-4">
                                     <label for="" class="form-label">Correo <label style="color: red;">*</label> </label>
->>>>>>> c9a234889f7443a040d28d13f82e35ef88467ae7
                                     <input type="email" class="form-control form-control-sm" id="sa_rep_correo" name="sa_rep_correo">
->>>>>>> f975ff57302e9fcddee9c8879ae90e7325aab8d1
                                 </div>
                             </div>
 
                             <div class="modal-footer pt-4">
-<<<<<<< HEAD
-
-=======
->>>>>>> f975ff57302e9fcddee9c8879ae90e7325aab8d1
                                 <?php if ($id == '') { ?>
                                     <button class="btn btn-primary btn-sm px-4 m-1" onclick="editar_insertar()" type="button"><i class="bx bx-save"></i> Guardar</button>
                                 <?php } else { ?>
                                     <button class="btn btn-primary btn-sm px-4 m-1" onclick="editar_insertar()" type="button"><i class="bx bx-save"></i> Guardar</button>
                                     <button class="btn btn-danger btn-sm px-4 m-1" onclick="delete_datos()" type="button"><i class="bx bx-trash"></i> Eliminar</button>
                                 <?php } ?>
-<<<<<<< HEAD
-
                             </div>
-
-=======
-                            </div>
->>>>>>> f975ff57302e9fcddee9c8879ae90e7325aab8d1
                         </form>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-<<<<<<< HEAD
 </div>
-<!--plugins-->
-
-<!--app JS-->
-<!-- <script src="assets/js/app.js"></script> -->
-
-<?php //include('../../../../cabeceras/footer.php'); 
-?>
-=======
-</div>
->>>>>>> f975ff57302e9fcddee9c8879ae90e7325aab8d1

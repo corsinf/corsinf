@@ -14,12 +14,6 @@ class ficha_MedicaM
         $this->db = new db();
     }
 
-<<<<<<< HEAD
-    
-
-
-=======
->>>>>>> f975ff57302e9fcddee9c8879ae90e7325aab8d1
     function lista_ficha_medica($id = '')
     {
         $sql = "SELECT
@@ -52,83 +46,12 @@ class ficha_MedicaM
         fm.sa_fice_est_segundo_nombre,
         fm.sa_fice_rep_1_id,
         fm.sa_fice_fecha_creacion";
-<<<<<<< HEAD
-        
-=======
 
-<<<<<<< HEAD
->>>>>>> f975ff57302e9fcddee9c8879ae90e7325aab8d1
-        $datos = $this->db_salud->datos($sql);
-        return $datos;
-    }
-
-<<<<<<< HEAD
-    function lista_solo_ficha_medica($id = '')
-    {
-        $sql = "SELECT
-        sa_fice_id,
-        sa_fice_est_id,
-        sa_fice_est_primer_apellido,
-        sa_fice_est_segundo_apellido,
-        sa_fice_est_primer_nombre,
-        sa_fice_est_segundo_nombre,
-        sa_fice_est_fecha_nacimiento,
-        sa_fice_est_grupo_sangre,
-        sa_fice_est_direccion_domicilio,
-        sa_fice_est_seguro_medico,
-        sa_fice_est_nombre_seguro,
-    
-        sa_fice_rep_1_id,
-        sa_fice_rep_1_primer_apellido,
-        sa_fice_rep_1_segundo_apellido,
-        sa_fice_rep_1_primer_nombre,
-        sa_fice_rep_1_segundo_nombre,
-        sa_fice_rep_1_parentesco,
-        sa_fice_rep_1_telefono_1,
-        sa_fice_rep_1_telefono_2,
-    
-        sa_fice_rep_2_primer_apellido,
-        sa_fice_rep_2_segundo_apellido,
-        sa_fice_rep_2_primer_nombre,
-        sa_fice_rep_2_segundo_nombre,
-        sa_fice_rep_2_parentesco,
-        sa_fice_rep_2_telefono_1,
-        sa_fice_rep_2_telefono_2,
-    
-        sa_fice_pregunta_1,
-        sa_fice_pregunta_1_obs,
-    
-        sa_fice_pregunta_2,
-        sa_fice_pregunta_2_obs,
-    
-        sa_fice_pregunta_3,
-        sa_fice_pregunta_3_obs,
-    
-        sa_fice_pregunta_4,
-        sa_fice_pregunta_4_obs,
-        
-        sa_fice_pregunta_5_obs,
-        
-        sa_fice_fecha_creacion,
-        sa_fice_fecha_modificar
-        
-        FROM ficha_medica
-        WHERE sa_fice_estado = 1";
-
-        if ($id) {
-            $sql .= ' and sa_fice_id = ' . $id;
-        }
-
-        $sql .= " ORDER BY sa_fice_id";
-=======
-    //Solo para el id
-=======
         $datos = $this->db->datos($sql);
         return $datos;
     }
 
     //Solo para el id del paciente
->>>>>>> c9a234889f7443a040d28d13f82e35ef88467ae7
     function lista_paciente_ficha_medica($id_paciente = '')
     {
         if ($id_paciente) {
@@ -185,13 +108,8 @@ class ficha_MedicaM
         }
 
 
-<<<<<<< HEAD
->>>>>>> f975ff57302e9fcddee9c8879ae90e7325aab8d1
-        $datos = $this->db_salud->datos($sql);
-=======
         // print_r($sql);die();
         $datos = $this->db->datos($sql);
->>>>>>> c9a234889f7443a040d28d13f82e35ef88467ae7
         return $datos;
     }
 
@@ -336,8 +254,6 @@ class ficha_MedicaM
         $datos = $this->db->sql_string($sql);
         return $datos;
     }
-<<<<<<< HEAD
-=======
 
     //Para ver si existe alguien de la comunidad en la tabla
     function existe_paciente_comunidad($sa_pac_id_comunidad, $sa_pac_tabla)
@@ -410,10 +326,6 @@ class ficha_MedicaM
         return $data;
     }
 
-<<<<<<< HEAD
-    
->>>>>>> f975ff57302e9fcddee9c8879ae90e7325aab8d1
-=======
     function lista_seguros($query = false)
     {
         $sql = "SELECT * FROM SEGUROS WHERE 1=1";
@@ -422,5 +334,4 @@ class ficha_MedicaM
         }
         return $this->db->datos($sql);
     }
->>>>>>> c9a234889f7443a040d28d13f82e35ef88467ae7
 }

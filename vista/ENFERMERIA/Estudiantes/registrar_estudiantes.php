@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-<?php //include('../../../../cabeceras/header.php');
-=======
 <?php
->>>>>>> f975ff57302e9fcddee9c8879ae90e7325aab8d1
 
 $id = '';
 $id_seccion = '';
@@ -31,10 +27,6 @@ if (isset($_POST['id_representante'])) {
   $id_representante = $_POST['id_representante'];
 }
 
-if (isset($_GET['id_representante'])) {
-  $id_representante = $_GET['id_representante'];
-}
-
 ?>
 
 <script src="../js/ENFERMERIA/operaciones_generales.js"></script>
@@ -47,11 +39,8 @@ if (isset($_GET['id_representante'])) {
     var id_grado = '<?php echo $id_grado; ?>';
     var id_paralelo = '<?php echo $id_paralelo; ?>';
     var id_representante = '<?php echo $id_representante; ?>';
-<<<<<<< HEAD
-=======
 
     //alert(id)
->>>>>>> f975ff57302e9fcddee9c8879ae90e7325aab8d1
 
     if (id != '') {
       datos_col(id);
@@ -61,11 +50,7 @@ if (isset($_GET['id_representante'])) {
     consultar_datos_seccion(id = '', id_seccion);
     consultar_datos_seccion_grado(id_grado, id_seccion);
     consultar_datos_grado_paralelo(id_grado, id_paralelo);
-<<<<<<< HEAD
-    consultar_datos_paralelo_representante(id_paralelo, id_representante);
-=======
     consultar_representante(id_representante);
->>>>>>> f975ff57302e9fcddee9c8879ae90e7325aab8d1
 
   });
 
@@ -201,50 +186,6 @@ if (isset($_GET['id_representante'])) {
     });
   }
 
-<<<<<<< HEAD
-  function consultar_datos_paralelo_representante(id_paralelo = '', id_representante = '') {
-    /*///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-        Para Buscar el Paralelo con la Grado
-
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////*/
-    if (id_paralelo == '') {
-      id_paralelo = $("#sa_id_paralelo").val();
-    }
-
-    if (id_representante == '') {
-      id_representante = $("#id_representante").val();
-    }
-
-    var representante = '';
-
-    representante = '<option selected disabled>-- Seleccione --</option>'
-    $.ajax({
-      data: {
-        "id_paralelo": id_paralelo
-      },
-      url: '<?php echo $url_general ?>/controlador/estudiantesC.php?listar_paralelo_representante=true',
-      type: 'post',
-      dataType: 'json',
-
-      success: function(response) {
-        //console.log(response);
-
-        $.each(response, function(i, item) {
-          //console.log(item);
-
-          if (id_representante == item.sa_rep_id) {
-            // Marca la opción correspondiente con el atributo 'selected'
-            representante += '<option value="' + item.sa_rep_id + '" selected>' + item.sa_rep_primer_apellido + ' ' + item.sa_rep_segundo_apellido + ' ' + item.sa_rep_primer_nombre + ' ' + item.sa_rep_segundo_nombre + '</option>';
-          } else {
-            representante += '<option value="' + item.sa_rep_id + '">' + item.sa_rep_primer_apellido + ' ' + item.sa_rep_segundo_apellido + ' ' + item.sa_rep_primer_nombre + ' ' + item.sa_rep_segundo_nombre + '</option>';
-          }
-
-        });
-
-        $('#sa_id_representante').html(representante);
-
-=======
   function consultar_representante(id = '') {
 
     if (id != '') {
@@ -318,7 +259,6 @@ if (isset($_GET['id_representante'])) {
           };
         },
         cache: true
->>>>>>> f975ff57302e9fcddee9c8879ae90e7325aab8d1
       }
     });
   }
@@ -365,68 +305,6 @@ if (isset($_GET['id_representante'])) {
     });
   }
 
-<<<<<<< HEAD
-  function edad_normal(fecha_nacimiento) {
-    $('#sa_est_edad').val(edad_fecha_nacimiento(fecha_nacimiento));
-  }
-
-  function edad_fecha_nacimiento(fecha_nacimiento) {
-    fechaNacimientoJson = fecha_nacimiento;
-
-    // Crear un objeto Date a partir del string de fecha
-    fechaNacimiento = new Date(fechaNacimientoJson);
-
-    // Obtener la fecha actual
-    fechaActual = new Date();
-
-    // Calcular la diferencia en milisegundos entre la fecha actual y la fecha de nacimiento
-    diferenciaEnMilisegundos = fechaActual - fechaNacimiento;
-
-    // Calcular la edad en años a partir de la diferencia en milisegundos
-    edadEnMilisegundos = new Date(diferenciaEnMilisegundos);
-    edadEnAnios = Math.abs(edadEnMilisegundos.getUTCFullYear() - 1970);
-
-    var salida = '';
-    // Mostrar la edad en años
-
-    salida = edadEnAnios;
-
-    return salida;
-  }
-
-  function fecha_nacimiento_formateada(fecha) {
-    fechaYHora = fecha;
-    fecha = new Date(fechaYHora);
-    año = fecha.getFullYear();
-    mes = (fecha.getMonth() + 1).toString().padStart(2, '0'); // Añade un 0 si es necesario
-    dia = fecha.getDate().toString().padStart(2, '0'); // Añade un 0 si es necesario
-    fechaFormateada = `${año}-${mes}-${dia}`;
-
-    var salida = '';
-    salida = fechaFormateada;
-
-    return salida;
-
-  }
-
-  function validar_email(sa_est_correo) {
-
-    var email = sa_est_correo;
-
-    // Define expresion regular
-    var validad_email = /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
-
-    if (validad_email.test(email)) {
-      //alert('Email valido');
-      return true;
-    } else {
-      //alert('Email no valido');
-      return false;
-    }
-  }
-
-=======
->>>>>>> f975ff57302e9fcddee9c8879ae90e7325aab8d1
   function editar_insertar() {
 
     var sa_est_id = $('#sa_est_id').val();
@@ -478,26 +356,15 @@ if (isset($_GET['id_representante'])) {
         sa_id_grado == null ||
         sa_id_paralelo == null ||
         validar_email(sa_est_correo) == false ||
-<<<<<<< HEAD
-        sa_id_representante == null
-=======
         sa_id_representante == null ||
         sa_est_rep_parentesco == null
 
->>>>>>> f975ff57302e9fcddee9c8879ae90e7325aab8d1
       ) {
         Swal.fire({
           icon: 'error',
           title: 'Oops...',
-<<<<<<< HEAD
-          text: 'Asegurese de llenar todo los campos',
-        })
-        //alert('error');
-        //console.log(parametros);
-=======
           text: 'Asegurese de llenar todos los campos',
         })
->>>>>>> f975ff57302e9fcddee9c8879ae90e7325aab8d1
 
       } else {
         //console.log(parametros);
@@ -516,24 +383,14 @@ if (isset($_GET['id_representante'])) {
         sa_id_grado == null ||
         sa_id_paralelo == null ||
         validar_email(sa_est_correo) == false ||
-<<<<<<< HEAD
-        sa_id_representante == null
-=======
         sa_id_representante == null ||
         sa_est_rep_parentesco == null
->>>>>>> f975ff57302e9fcddee9c8879ae90e7325aab8d1
       ) {
         Swal.fire({
           icon: 'error',
           title: 'Oops...',
-<<<<<<< HEAD
-          text: 'Asegurese de llenar todo los campos',
-        })
-        //alert('error');
-=======
           text: 'Asegurese de llenar todos los campos',
         })
->>>>>>> f975ff57302e9fcddee9c8879ae90e7325aab8d1
       } else {
         //console.log(parametros);
         insertar(parametros);
@@ -555,19 +412,9 @@ if (isset($_GET['id_representante'])) {
           Swal.fire('', 'Operacion realizada con exito.', 'success').then(function() {
             location.href = '../vista/inicio.php?mod=7&acc=estudiantes';
           });
-<<<<<<< HEAD
-          //location.href = '<?= $url_general ?>/vista/inicio.php?mod=7&acc=estudiantes';
-        } else if (response == -2) {
-          Swal.fire('', 'codigo ya regitrado', 'success');
-          //alert('registrado')
-        }
-
-        //console.log(response);
-=======
         } else if (response == -2) {
           Swal.fire('', 'Cédula ya registrada.', 'warning');
         }
->>>>>>> f975ff57302e9fcddee9c8879ae90e7325aab8d1
       }
     });
   }
@@ -587,12 +434,6 @@ if (isset($_GET['id_representante'])) {
         eliminar(id);
       }
     })
-<<<<<<< HEAD
-
-    //eliminar(id);
-
-=======
->>>>>>> f975ff57302e9fcddee9c8879ae90e7325aab8d1
   }
 
   function eliminar(id) {
@@ -603,23 +444,12 @@ if (isset($_GET['id_representante'])) {
       url: '../controlador/estudiantesC.php?eliminar=true',
       type: 'post',
       dataType: 'json',
-<<<<<<< HEAD
-      /*beforeSend: function() {
-        var spiner = '<div class="text-center"><img src="../../img/gif/proce.gif" width="100" height="100"></div>'
-        $('#tabla_').html(spiner);
-      },*/
-=======
 
->>>>>>> f975ff57302e9fcddee9c8879ae90e7325aab8d1
       success: function(response) {
         if (response == 1) {
           Swal.fire('Eliminado!', 'Registro Eliminado.', 'success').then(function() {
             location.href = '../vista/inicio.php?mod=7&acc=estudiantes';
           });
-<<<<<<< HEAD
-          //location.href = '<?= $url_general ?>/vista/inicio.php?mod=7&acc=estudiantes';
-=======
->>>>>>> f975ff57302e9fcddee9c8879ae90e7325aab8d1
         }
       }
     });
@@ -720,11 +550,7 @@ if (isset($_GET['id_representante'])) {
               <div class="row pt-3">
                 <div class="col-md-3">
                   <label for="" class="form-label">Cédula de Identidad <label style="color: red;">*</label> </label>
-<<<<<<< HEAD
-                  <input type="text" class="form-control" id="sa_est_cedula" name="sa_est_cedula" maxlength="10" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
-=======
                   <input type="text" class="form-control form-control-sm" id="sa_est_cedula" name="sa_est_cedula" maxlength="10" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
->>>>>>> f975ff57302e9fcddee9c8879ae90e7325aab8d1
                 </div>
 
                 <div class="col-md-2">
@@ -737,16 +563,8 @@ if (isset($_GET['id_representante'])) {
                 </div>
 
                 <div class="col-md-3">
-<<<<<<< HEAD
-                  <label for="" class="form-label">Fecha de Nacimiento: <label style="color: red;">*</label> </label>
-<<<<<<< HEAD
-                  <input type="date" class="form-control" id="sa_est_fecha_nacimiento" name="sa_est_fecha_nacimiento" onchange="edad_normal(this.value);">
-=======
-=======
                   <label for="" class="form-label">Fecha de Nacimiento <label style="color: red;">*</label> </label>
->>>>>>> c9a234889f7443a040d28d13f82e35ef88467ae7
                   <input type="date" class="form-control form-control-sm" id="sa_est_fecha_nacimiento" name="sa_est_fecha_nacimiento" onchange="edad_normal(this.value);">
->>>>>>> f975ff57302e9fcddee9c8879ae90e7325aab8d1
                 </div>
 
                 <div class="col-md-1">
@@ -756,11 +574,7 @@ if (isset($_GET['id_representante'])) {
 
                 <div class="col-md-3">
                   <label for="" class="form-label">Correo <label style="color: red;">*</label> </label>
-<<<<<<< HEAD
-                  <input type="email" class="form-control" id="sa_est_correo" name="sa_est_correo">
-=======
                   <input type="email" class="form-control form-control-sm" id="sa_est_correo" name="sa_est_correo">
->>>>>>> f975ff57302e9fcddee9c8879ae90e7325aab8d1
                 </div>
 
               </div>
@@ -781,19 +595,9 @@ if (isset($_GET['id_representante'])) {
                   </select>
                 </div>
 
-<<<<<<< HEAD
-              <div class="row pt-3">
-                <div class="col-md-6">
-                  <label for="" class="form-label">Paralelo: <label style="color: red;">*</label> </label>
-<<<<<<< HEAD
-                  <select class="form-select" id="sa_id_paralelo" name="sa_id_paralelo" onclick="consultar_datos_paralelo_representante();">
-=======
-=======
                 <div class="col-md-4">
                   <label for="" class="form-label">Paralelo <label style="color: red;">*</label> </label>
->>>>>>> c9a234889f7443a040d28d13f82e35ef88467ae7
                   <select class="form-select form-select-sm" id="sa_id_paralelo" name="sa_id_paralelo">
->>>>>>> f975ff57302e9fcddee9c8879ae90e7325aab8d1
                     <option selected disabled>-- Seleccione --</option>
                   </select>
                 </div>
@@ -806,8 +610,6 @@ if (isset($_GET['id_representante'])) {
                   <label for="" class="form-label">Representante <label style="color: red;">*</label> </label>
                   <select class="form-select form-select-sm" id="sa_id_representante" name="sa_id_representante">
                     <option selected disabled>-- Seleccione --</option>
-<<<<<<< HEAD
-=======
                   </select>
                 </div>
 
@@ -822,7 +624,6 @@ if (isset($_GET['id_representante'])) {
                     <option value="Primo">Primo/a</option>
                     <option value="Abuelo">Abuelo/a</option>
                     <option value="Otro">Otro/a</option>
->>>>>>> f975ff57302e9fcddee9c8879ae90e7325aab8d1
                   </select>
                 </div>
               </div>

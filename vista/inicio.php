@@ -225,45 +225,15 @@ if ($_GET['acc'] == 'pacientes') {
 	include('ENFERMERIA/Pacientes/pacientes.php');
 }
 
-<<<<<<< HEAD
-if ($_GET['acc'] == 'registrar_consulta_estudiante') {
-	include('ENFERMERIA/Consultas/Estudiantes/registrar_consulta_estudiante.php');
-}
-
-if ($_GET['acc'] == 'mensaje_atencion') {
-	include('ENFERMERIA/Consultas/Estudiantes/mensaje_atencion.php');
-}
-
-//Ficha Medica
-if ($_GET['acc'] == 'ficha_estudiante') {
-	include('ENFERMERIA/Fichas_Medicas/Estudiantes/ficha_estudiante.php');
-}
-
-if ($_GET['acc'] == 'registrar_ficha_estudiante') {
-	include('ENFERMERIA/Fichas_Medicas/Estudiantes/registrar_ficha_estudiante.php');
-}
-
-<<<<<<< HEAD
-=======
-//Posiblemente las de arriba se eliminan
-=======
 //Ficha medica
->>>>>>> c9a234889f7443a040d28d13f82e35ef88467ae7
 if ($_GET['acc'] == 'ficha_medica_pacientes') {
 	include('ENFERMERIA/Fichas_Medicas/ficha_medica_pacientes.php');
 }
 
-<<<<<<< HEAD
->>>>>>> f975ff57302e9fcddee9c8879ae90e7325aab8d1
-//Cursos
-if ($_GET['acc'] == 'parametrizacion') {
-	include('ENFERMERIA/cursos/parametrizacion.php');
-=======
 //Consultas
 
 if ($_GET['acc'] == 'consultas') {
 	include('ENFERMERIA/Consultas/consultas.php');
->>>>>>> c9a234889f7443a040d28d13f82e35ef88467ae7
 }
 
 if ($_GET['acc'] == 'detalle_consulta') {
@@ -337,13 +307,6 @@ if ($_GET['acc'] == 'medicamentos') {
 	include('ENFERMERIA/Farmacia/Medicamentos/medicamentos.php');
 }
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-//Pacientes
-if ($_GET['acc'] == 'pacientes') {
-	include('ENFERMERIA/Pacientes/pacientes.php');
-=======
 //Insumos
 if ($_GET['acc'] == 'registrar_insumos') {
 	include('ENFERMERIA/Farmacia/Insumos/registrar_insumos.php');
@@ -360,10 +323,8 @@ if ($_GET['acc'] == 'salida_stock') {
 }
 if ($_GET['acc'] == 'movimiento_stock') {
 	include('ENFERMERIA/Farmacia/Ingreso_Stock/movimiento_stock.php');
->>>>>>> c9a234889f7443a040d28d13f82e35ef88467ae7
 }
 
->>>>>>> f975ff57302e9fcddee9c8879ae90e7325aab8d1
 //Notificaciones
 
 if ($_GET['acc'] == 'notificaciones') {
