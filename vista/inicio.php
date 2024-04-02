@@ -307,6 +307,10 @@ if ($_GET['acc'] == 'medicamentos') {
 	include('ENFERMERIA/Farmacia/Medicamentos/medicamentos.php');
 }
 
+if ($_GET['acc'] == 'cargar_farmacia') {
+	include('ENFERMERIA/Farmacia/cargar_farmacia.php');
+}
+
 //Insumos
 if ($_GET['acc'] == 'registrar_insumos') {
 	include('ENFERMERIA/Farmacia/Insumos/registrar_insumos.php');
