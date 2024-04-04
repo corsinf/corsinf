@@ -311,7 +311,7 @@
             for (var clave in response.Retencion_val) {
               if (response.Retencion_val.hasOwnProperty(clave)) {
                 var valor = response.Retencion_val[clave];
-                $('#retenciones_val').append('<tr><td>'+clave+'%</td><td>'+valor+'</td></tr>');
+                $('#retenciones_val').append('<tr><td>'+clave+'</td><td>'+valor+'</td></tr>');
                 // console.log("Clave: " + clave + ", Valor: " + valor);
               }
             }

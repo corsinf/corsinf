@@ -293,18 +293,35 @@ class calcular
 		$t_valor_iva = 0;
 		$t_total_todo = 0;
 		// ---------------listado del porcentajes de retencion --------------
-		$porcentaje_ret = array();
+		$porcentaje_ret = array('Ret_iva'=>0,'Ret_renta'=>0,'Ret_otras'=>0);
 		foreach ($lineas_xml as $key => $value) {
 			foreach ($value as $key2 => $value2) {
 				if($value2['Tipo']=='R')
 				{
 					$porc = intval($value2['Porcentaje']);
-					if(isset($porcentaje_ret[$porc]))
-					{
-						$porcentaje_ret[$porc] = $porcentaje_ret[$porc]+$value2['valor'];
-					}else{						
-						$porcentaje_ret[$porc] = $value2['valor'];
+
+					switch ($porc) {
+						case '10':
+						case '20':
+						case '30':
+						case '50':
+						case '70':
+						case '100':
+						$porcentaje_ret['Ret_iva'] = $porcentaje_ret['Ret_iva']+$value2['valor'];
+							break;
+						case '1':						
+						$porcentaje_ret['Ret_renta'] = $porcentaje_ret['Ret_renta']+$value2['valor'];	
+						break;					
+						default:
+						$porcentaje_ret['Ret_otras'] = $porcentaje_ret['Ret_otras']+$value2['valor'];
+							break;
 					}
+					// if(isset($porcentaje_ret[$porc]))
+					// {
+					// 	$porcentaje_ret[$porc] = $porcentaje_ret[$porc]+$value2['valor'];
+					// }else{						
+					// 	$porcentaje_ret[$porc] = $value2['valor'];
+					// }
 				}
 			}
 		}
