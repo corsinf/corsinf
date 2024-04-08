@@ -142,6 +142,12 @@ if(isset($_GET['ver_excel']))
 	echo json_encode($controlador->generar_excel($parametros));
 }
 
+if(isset($_GET['imprimir_tags_bloque']))
+{
+	$parametros = $_POST['parametros'];
+	echo json_encode($controlador->imprimir_tags_bloque($parametros));
+}
+
 
 
 
@@ -750,5 +756,86 @@ class articulosC
 
     	}
     }
+
+
+	function imprimir_tags_bloque($parametros)
+	{
+	   $tags = preg_replace("/^\h*\v+/m", "",$parametros['tags']);
+	   $tags_assets = explode("\n", $tags);
+	   $tags_assets = array_filter($tags_assets, 'strlen');
+
+		$v = $this->modelo->existe_datos();
+		// print_r($v);die();
+		$RFID_nuevos = array();	
+		$datoss2 = array();
+		if($v == -1)
+		{
+			// print_r($tags_assets);die();
+			foreach ($tags_assets as $key => $value) {
+				$generar = 1;
+				// $rand = "500200010007002800".$rand;
+				// print_r($value);die();
+					while ($generar==1) {
+						$rand = $this->generarCodigo(6);
+						// print_r($rand);die();
+						$rand = "500200010007002800".$rand;
+						$exis = $this->modelo->existe_RFID($rand); 
+						// print_r($exis);die();
+						if($exis==-1){
+							$exis = $this->modelo->existe_RFID_impreso($rand); 
+						}
+						if($exis==-1)
+						{
+							$generar = 0;
+							foreach ($RFID_nuevos as $key => $value2) {
+								if($value2==$rand)
+								{
+									$generar = 1;
+									break;
+								}
+							}
+							// if($generar==0)
+							// {
+							// 	$RFID_nuevos[] = array('RFID'=>$rand,'SERIE'=>$value);
+							// 	// array_push($RFID_nuevos,$rand);
+							// }
+						}
+					}
+					$RFID_nuevos[] = array('RFID'=>$rand,'SERIE'=>$value);
+		  	}
+
+	  		$link = str_replace('impresiones_tag.php','', $_SERVER['HTTP_REFERER']);
+
+	  		// print_r($RFID_nuevos);die();
+
+			foreach ($RFID_nuevos as $key => $value) {
+		  		$datoss2[0]['campo']='RFID';
+				$datoss2[0]['dato']=$value['RFID'];
+		  		$datoss2[1]['campo']='SERIE';
+				$datoss2[1]['dato']=$value['SERIE'];
+		  		$datoss2[2]['campo']='DATO_QR';
+				$datoss2[2]['dato']=$link."detalle_activo.php?id=".$value['SERIE'];
+				$this->modelo->insertar($datoss2,'IMPRIMIR_TAGS');
+
+		  		$datoss3[0]['campo']='Codigo';
+				$datoss3[0]['dato']=$value['RFID'];
+				$this->modelo->insertar($datoss3,'RFID_IMPRESOS');
+
+				$datoss4[0]['campo']='TAG_UNIQUE';
+				$datoss4[0]['dato']=$value['RFID'];
+		  		$datoss4[1]['campo']='TAG_SERIE';
+				$datoss4[1]['dato']=$value['SERIE'];
+				$this->modelo->insertar($datoss4,'ASSET');
+			 }
+			$d = 1;
+			return $d;
+	
+		}else{
+
+		$d=2;
+		return $d;
+		}
+	}
+
 }
 ?>

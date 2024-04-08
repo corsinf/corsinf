@@ -1178,6 +1178,21 @@ class articulosM
 		// print_r($sql);die();
 		return $this->db->datos($sql);
 	}
+	function existe_RFID_impreso($datos)
+	{
+		$sql ="SELECT Codigo from RFID_IMPRESOS WHERE Codigo ='".$datos."'";
+	    $rest = $this->db->existente($sql);
+		return $rest;
+	}
+	function existe_RFID($datos)
+	{
+		$sql ="SELECT TAG_UNIQUE from ASSET WHERE TAG_UNIQUE ='".$datos."' 
+		UNION SELECT Codigo FROM RFID_IMPRESOS  WHERE Codigo = '".$datos."'";
+		// print_r($sql);die();
+	    $rest = $this->db->existente($sql);
+	    // print_r($rest);die();
+		return $rest;
+	}
 }
 
 ?>

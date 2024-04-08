@@ -80,6 +80,7 @@ class db
 
 	function conexion()
 	{
+		// print_r($this->database);die();
 		try{
 		     $conn = new PDO("sqlsrv:Server=".$this->servidor . ', ' . $this->puerto.";Database=".$this->database, $this->usuario, $this->password);
 		     $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -96,29 +97,30 @@ class db
 
 	function existente($sql, $master = false)
 	{
-		// print_r($sql);die();
-		$this->parametros_conexion($master);
-		$conn = $this->conexion();
-		$result = array();
+	    $this->parametros_conexion($master);
+	    $conn = $this->conexion();
+	    $result = array();
+	    $rsp = '-1';
 
-		try {
-			$stmt = $conn->prepare($sql);
-    		$stmt->execute();
-    		while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-		        $result[] = $row;
-		    }
+	    // print_r($this->database);die();
+	    try {
+	        $stmt = $conn->prepare($sql);
+	        $stmt->execute();
+	        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+	        
+	        if (count($result) > 0) {
+	            $rsp = '1';
+	        }
 
-		    $conn=null;
-		    if (count($result) == 0) {
-				return -1;
-				} else {
-					return 1;
-				}
-			
-		} catch (Exception $e) {
-			die(print_r(sqlsrv_errors(), true));
-		}
+	        $conn = null;
+	    } catch (PDOException $e) {
+	        // Manejo de errores PDO
+	        die("Error: " . $e->getMessage());
+	    }
+
+	    return $rsp;
 	}
+
 	function datos($sql, $master = false)
 	{
 		$this->parametros_conexion($master);
@@ -136,7 +138,7 @@ class db
 			return $result;
 			
 		} catch (Exception $e) {
-			die(print_r(sqlsrv_errors(), true));
+			 die("Error: " . $e->getMessage());
 		}
 		
 	}
