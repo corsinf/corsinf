@@ -24,7 +24,7 @@ if ($id != null && $id != '') {
 
         $('#ac_horarioC_inicio').blur(function() {
             horaDesde = $(this).val();
-            $('#ac_horarioC_fin').val('00:00')
+            $('#ac_horarioC_fin').val('--:--')
         });
 
         $('#ac_horarioC_fin').blur(function() {
@@ -68,8 +68,12 @@ if ($id != null && $id != '') {
                 omitZeroMinute: false,
                 hour12: false
             },
-            slotMinTime: '00:00:00', // Hora de inicio
-            slotMaxTime: '24:00:00', // Hora de finalización
+            slotMinTime: '07:00:00', // Hora de inicio
+            slotMaxTime: '15:00:00', // Hora de finalización
+            slotDuration: '00:30:00',
+            slotLabelInterval: {
+                hours: 0.1
+            },
 
             dayHeaderFormat: {
                 weekday: 'long', // Muestra solo el nombre del día
@@ -204,6 +208,7 @@ if ($id != null && $id != '') {
     }
 
     function agregar_clase() {
+
         var ac_docente_id = '<?php echo $id_docente; ?>';
 
         var ac_paralelo_id = $('#ac_paralelo_id').val();
@@ -212,8 +217,6 @@ if ($id != null && $id != '') {
         var ac_horarioC_fin = $('#ac_horarioC_fin').val();
         var ac_horarioC_dia = $('#ac_horarioC_dia').val();
         var ac_horarioC_materia = $('#ac_horarioC_materia').val();
-
-        //alert(ac_horarioC_inicio + ' ' + ac_horarioC_fin);
 
         var parametros = {
             'ac_horarioC_id': '',
@@ -225,29 +228,122 @@ if ($id != null && $id != '') {
             'ac_horarioC_materia': ac_horarioC_materia,
         }
 
-        //console.log(parametros)
-
         if (ac_horarioC_inicio != '' && ac_horarioC_fin != '' && ac_horarioC_dia != null && ac_horarioC_materia != null && ac_paralelo_id != null) {
-            $.ajax({
-                url: '../controlador/horario_clasesC.php?insertar=true',
-                data: {
-                    parametros: parametros
-                },
-                type: 'post',
-                dataType: 'json',
-                success: function(response) {
-                    //console.log(response)
-                    Swal.fire('', 'Curso Asignado.', 'success').then(function() {
-                        //location.href = '../vista/inicio.php?mod=7&acc=agendamiento';
-                    })
-                }
-            });
-        } else {
-            Swal.fire('', 'Falta llenar los campos.', 'error');
-        }
 
-        $('#modal_horario_clases').modal('hide');
-        cargar_horario_clases(); // Volver a cargar la tabla
+            // Obtener las clases existentes del calendario
+            var eventos = calendar.getEvents();
+
+            // Convertir las horas de inicio y fin de la nueva clase a objetos Date
+            var nueva_inicio;
+            var nueva_fin;
+
+            //Día seleccionado a la fecha correspondiente
+            var fecha_dia;
+            switch (ac_horarioC_dia) {
+                case 'lunes':
+                    fecha_dia = '2024-02-12'; // Lunes
+                    break;
+                case 'martes':
+                    fecha_dia = '2024-02-13'; // Martes
+                    break;
+                case 'miercoles':
+                    fecha_dia = '2024-02-14'; // Miércoles
+                    break;
+                case 'jueves':
+                    fecha_dia = '2024-02-15'; // Jueves
+                    break;
+                case 'viernes':
+                    fecha_dia = '2024-02-16'; // Viernes
+                    break;
+                case 'sabado':
+                    fecha_dia = '2024-02-17'; // Sábado
+                    break;
+                default:
+                    //Swal.fire('', 'Día de la semana no válido.', 'error');
+                    return;
+            }
+
+            // Crear la fecha completa combinando la fecha del día seleccionado y la hora ingresada
+            nueva_inicio = new Date(fecha_dia + 'T' + ac_horarioC_inicio);
+            nueva_fin = new Date(fecha_dia + 'T' + ac_horarioC_fin);
+
+            // Validar que la hora de finalización sea mayor que la hora de inicio
+            if (nueva_inicio >= nueva_fin) {
+                Swal.fire('', 'La hora de finalización debe ser mayor que la hora de inicio.', 'error');
+            } else {
+
+                // Verificar si la nueva clase se superpone con alguna clase existente
+                var seSuperpone = eventos.some(function(evento) {
+                    var inicio_evento = new Date(evento.start);
+                    var fin_evento = new Date(evento.end);
+
+                    // Comprobar si la nueva clase comienza después de que el evento existente haya terminado
+                    var superpone_Inicio = nueva_inicio >= fin_evento;
+
+                    // Comprobar si la nueva clase termina antes de que el evento existente comience
+                    var superpone_fin = nueva_fin <= inicio_evento;
+
+                    // La nueva clase se superpone si ambas condiciones son falsas
+                    return !(superpone_Inicio || superpone_fin);
+                });
+
+                // Mostrar mensaje si la nueva clase se superpone
+                if (seSuperpone) {
+                    Swal.fire('', 'No se puede agregar la clase porque se superpone con otra clase existente.', 'error');
+                } else {
+
+                    $.ajax({
+                        url: '../controlador/horario_clasesC.php?insertar=true',
+                        data: {
+                            parametros: parametros
+                        },
+                        type: 'post',
+                        dataType: 'json',
+                        success: function(response) {
+                            //console.log(response)
+                            Swal.fire('', 'Curso Asignado.', 'success').then(function() {
+                                //location.href = '../vista/inicio.php?mod=7&acc=agendamiento';
+                            })
+                        }
+                    });
+
+
+                    $('#modal_horario_clases').modal('hide');
+                    cargar_horario_clases(); // Volver a cargar la tabla
+                }
+            }
+
+        } else {
+            var errores = [];
+
+            if (ac_horarioC_materia == null) {
+                errores.push('Falta seleccionar la materia.');
+            }
+            if (ac_horarioC_dia == null) {
+                errores.push('Falta seleccionar el día de la semana.');
+            }
+            if (ac_paralelo_id == null) {
+                errores.push('Falta seleccionar una clase.');
+            }
+            if (ac_horarioC_inicio == '') {
+                errores.push('Falta seleccionar la hora de inicio.');
+            }
+            if (ac_horarioC_fin == '') {
+                errores.push('Falta seleccionar la hora de finalización.');
+            }
+
+            // Verificar si hay errores y mostrarlos en una lista
+            if (errores.length > 0) {
+                var mensajeError = '';
+                errores.forEach(function(error) {
+                    mensajeError += '<br>' + error + '</br>';
+                });
+                mensajeError += '';
+
+                Swal.fire('', mensajeError, 'error');
+                return; // Detener la ejecución si hay errores
+            }
+        }
     }
 
     function cargar_clases() {
@@ -317,6 +413,17 @@ if ($id != null && $id != '') {
         z-index: 1000;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     }
+
+    /* Ajusta el tamaño de las ranuras de tiempo */
+    .fc-timegrid-slot,
+    .fc-timegrid-slot-lane,
+    .fc-timegrid-slot.fc-timegrid-slot-label,
+    .fc-scrollgrid-shrink {
+        height: 30px;
+        /* Ajusta este valor según tus preferencias */
+        line-height: 40px;
+        /* Ajusta este valor según tus preferencias */
+    }
 </style>
 
 <div class="page-wrapper">
@@ -364,7 +471,7 @@ if ($id != null && $id != '') {
                                 <p class="text-danger">*Para eliminar un registro, haga clic en el evento previamente asignado con una materia en el cuadro azul.</p>
 
                                 <div class="row pt-3">
-                                    <div class="col-4">
+                                    <div class="col-6">
                                         <label for="ac_horarioD_fecha_disponible">Curso <label class="text-danger">*</label></label>
                                         <select name="ac_paralelo_id_busqueda" id="ac_paralelo_id_busqueda" class="form-select form-select-sm" onchange="cargar_solo_paralelos_seleccionados();">
                                         </select>
@@ -448,12 +555,12 @@ if ($id != null && $id != '') {
 
                     <div class="col-4">
                         <label for="ac_horarioC_inicio">Inicio de la Clase <label class="text-danger">*</label></label>
-                        <input type="time" name="ac_horarioC_inicio" id="ac_horarioC_inicio" class="form-control form-control-sm">
+                        <input type="time" name="ac_horarioC_inicio" id="ac_horarioC_inicio" class="form-control form-control-sm" min="09:00" max="18:00">
                     </div>
 
                     <div class="col-4">
                         <label for="ac_horarioC_fin">Fin de la Clase <label class="text-danger">*</label></label>
-                        <input type="time" name="ac_horarioC_fin" id="ac_horarioC_fin" class="form-control form-control-sm">
+                        <input type="time" name="ac_horarioC_fin" id="ac_horarioC_fin" class="form-control form-control-sm" min="09:00" max="18:00">
                     </div>
                 </div>
 
@@ -486,11 +593,40 @@ if ($id != null && $id != '') {
                 //alert(diferenciaEnMinutos);
             } else {
                 Swal.fire('', 'La diferencia de tiempo debe ser mayor o igual a 15 minutos', 'info');
-                $('#ac_horarioC_fin').val('00:00');
+                $('#ac_horarioC_fin').val('--:--');
             }
         } else {
             Swal.fire('', 'La hora final de la clase no puede ser menor', 'info');
-            $('#ac_horarioC_fin').val('00:00');
+            $('#ac_horarioC_fin').val('--:--');
         }
+    }
+</script>
+
+<script>
+    $(document).ready(function() {
+        validarHoraInicioFin('ac_horarioC_inicio');
+        validarHoraInicioFin('ac_horarioC_fin');
+    });
+
+    function validarHoraInicioFin(datos) {
+        $('#' + datos).on("change", function() {
+            // Obtener la hora seleccionada
+            var horaSeleccionada = $(this).val();
+
+            // Extraer las horas de la fecha de inicio y fin
+            var horaInicio = 7; // 7:00 AM
+            var horaFin = 15; // 3:00 PM
+
+            // Obtener la hora seleccionada (convertirla a número)
+            var horaSeleccionadaNum = parseInt(horaSeleccionada.split(':')[0]);
+
+            // Verificar si la hora seleccionada está dentro del rango permitido
+            if (horaSeleccionadaNum < horaInicio || horaSeleccionadaNum > horaFin) {
+                // Restablecer la hora seleccionada a un valor vacío
+                $(this).val("");
+                // Mostrar un mensaje de error
+                Swal.fire('', 'Por favor, selecciona una hora entre las 07:00 y las 15:00.', 'info');
+            }
+        });
     }
 </script>

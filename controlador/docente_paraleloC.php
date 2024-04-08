@@ -16,6 +16,10 @@ if (isset($_GET['listar_estudiante_docente_paralelo'])) {
     echo json_encode($controlador->listar_estudiante_docente_paralelo($_POST['id_paralelo']));
 }
 
+if (isset($_GET['lista_est_rep_doc_par'])) {
+    echo json_encode($controlador->lista_estudiantes_representantes_docente_paralelo($_POST['id_docente']));
+}
+
 if (isset($_GET['insertar'])) {
     echo json_encode($controlador->insertar_editar($_POST['parametros']));
 }
@@ -45,6 +49,12 @@ class docente_paraleloC
     function lista_docente_paralelo($id)
     {
         $datos = $this->modelo->lista_docente_paralelo($id);
+        return $datos;
+    }
+
+    function lista_estudiantes_representantes_docente_paralelo($id_docente)
+    {
+        $datos = $this->modelo->lista_estudiantes_representantes_docente_paralelo($id_docente);
         return $datos;
     }
 

@@ -17,7 +17,7 @@ if ($id != null && $id != '') {
 
         carga_tabla();
 
-        //consultar_paralelos_datos();
+        consultar_datos_seccion();
     });
 
     function carga_tabla() {
@@ -41,24 +41,24 @@ if ($id != null && $id != '') {
                     render: function(data, type, item) {
                         return item.sa_sec_nombre + ' - ' + item.sa_gra_nombre + ' - ' + item.sa_par_nombre;
                     }
-                },
-                {
+                }, {
                     data: 'sa_par_id',
                     visible: false,
                 }
+
             ],
             initComplete: function() {
                 // Obtener los IDs de los cursos ya agregados en la tabla
                 var cursosAgregados = tbl_doc_par.rows().data().pluck('sa_par_id').toArray();
 
                 // Llamar a la función para cargar el select2
-                consultar_paralelos_datos(cursosAgregados);
+                //console.log(cursosAgregados);
             }
         });
     }
 
     function consultar_paralelos_datos(cursosAgregados) {
-        $('#sa_par_id').select2({
+        $('#sa_par_id_1').select2({
             placeholder: 'Seleccione un Curso',
             dropdownParent: $('#modal_paralelo'),
             language: 'es',
@@ -98,6 +98,160 @@ if ($id != null && $id != '') {
         });
     }
 
+    //Para cargar los datos en el select
+    function consultar_datos_seccion(id = '') {
+        var seccion = '';
+
+        //console.log(id_seccion);
+        seccion = '<option selected disabled>-- Seleccione --</option>'
+        $.ajax({
+            data: {
+                id: id
+            },
+            url: '../controlador/seccionC.php?listar=true',
+            type: 'post',
+            dataType: 'json',
+
+            success: function(response) {
+                //console.log(response);
+
+                $.each(response, function(i, item) {
+                    //console.log(item);
+                    seccion += '<option value="' + item.sa_sec_id + '">' + item.sa_sec_nombre + '</option>';
+                });
+
+                $('#sa_id_seccion').html(seccion);
+            }
+        });
+    }
+
+    function consultar_datos_seccion_grado(id_grado = '', id_seccion = '') {
+        /*///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+            Para Buscar el Grado con la Seccion
+
+        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////*/
+
+        if (id_seccion == '') {
+            id_seccion = $("#sa_id_seccion").val();
+        }
+
+        if (id_grado == '') {
+            id_grado = $("#sa_id_grado").val();
+        }
+
+        var grado = '';
+        grado = '<option selected disabled>-- Seleccione --</option>'
+        $.ajax({
+            data: {
+                "id_seccion": id_seccion
+            },
+            url: '../controlador/paraleloC.php?listar_seccion_grado=true',
+            type: 'post',
+            dataType: 'json',
+
+            success: function(response) {
+                // console.log(response);   
+                $.each(response, function(i, item) {
+                    //console.log(item);
+
+                    if (id_grado == item.sa_gra_id) {
+                        // Marca la opción correspondiente con el atributo 'selected'
+                        grado += '<option value="' + item.sa_gra_id + '" selected>' + item.sa_gra_nombre + '</option>';
+                    } else {
+                        grado += '<option value="' + item.sa_gra_id + '">' + item.sa_gra_nombre + '</option>';
+                    }
+
+                });
+
+                $('#sa_id_grado').html(grado);
+            }
+        });
+
+
+
+    }
+
+    function consultar_datos_grado_paralelo(id_grado = '', id_paralelo = '') {
+        var id_docente = '<?php echo $id_docente; ?>';
+
+        if (id_paralelo == '') {
+            id_paralelo = $("#sa_par_id").val();
+        }
+
+        if (id_grado == '') {
+            id_grado = $("#sa_id_grado").val();
+        }
+
+        var grado = '';
+        var paralelo = '<option selected disabled>-- Seleccione --</option>';
+
+        // Realiza la llamada AJAX para obtener los datos de paraleloC
+        $.ajax({
+            data: {
+                "id_grado": id_grado
+            },
+            url: '../controlador/paraleloC.php?listar_grado_paralelo=true',
+            type: 'post',
+            dataType: 'json',
+
+            success: function(paralelo_response) {
+                // Realiza la llamada AJAX para obtener los datos de docente_paraleloC
+                $.ajax({
+                    data: {
+                        "id_docente": id_docente
+                    },
+                    url: '../controlador/docente_paraleloC.php?listar=true',
+                    type: 'get',
+                    dataType: 'json',
+
+                    success: function(docente_paralelo_response) {
+                        // Filtra los datos de paraleloC que no están presentes en docente_paraleloC
+                        var paralelos_filtrados = paralelo_response.filter(function(item) {
+                            return !docente_paralelo_response.some(function(docenteItem) {
+                                return docenteItem.sa_par_id === item.sa_par_id;
+                            });
+                        });
+
+                        // Genera las opciones de selección para los paralelos filtrados
+                        $.each(paralelos_filtrados, function(i, item) {
+                            paralelo += '<option value="' + item.sa_par_id + '">' + item.sa_par_nombre + '</option>';
+                        });
+
+                        // Actualiza el contenido del elemento HTML con los paralelos filtrados
+                        $('#sa_par_id').html(paralelo);
+                    }
+                });
+            }
+        });
+    }
+
+    //No se ocupa
+    function consultar_paralelos_docente() {
+
+        var id_docente = '<?php echo $id_docente; ?>';
+
+        paralelo = '<option selected disabled>-- Seleccione --</option>'
+        $.ajax({
+            data: {
+                "id_docente": id_docente
+            },
+            url: '../controlador/docente_paraleloC.php?listar=true',
+            type: 'get',
+            dataType: 'json',
+
+            success: function(response) {
+                // Crear un nuevo array con solo los valores de sa_par_id
+                var sa_par_ids = response.map(function(item) {
+                    return item.sa_par_id * 1;
+                });
+
+                // Imprimir los valores de sa_par_id en la consola
+                //console.log(sa_par_ids);
+            }
+        });
+    }
+
     function insertar() {
         var ac_docente_id = '<?php echo $id_docente; ?>';
         var ac_paralelo_id = $('#sa_par_id').val();
@@ -125,13 +279,13 @@ if ($id != null && $id != '') {
             }
         });
 
-
-        if (tbl_doc_par) {
-            tbl_doc_par.destroy(); // Destruir la instancia existente del DataTable
-        }
+        tbl_doc_par.ajax.reload(); // Recargar el DataTable
 
         $('#modal_paralelo').modal('hide');
-        carga_tabla(); // Volver a cargar la tabla
+        //$('#sa_id_seccion').val('');
+        $('#sa_id_grado').val('');
+        $('#sa_par_id').val('');
+
     }
 </script>
 
@@ -217,11 +371,33 @@ if ($id != null && $id != '') {
             <!-- Modal body -->
             <div class="modal-body">
 
+
+
+
                 <div class="row">
-                    <div class="col-12">
-                        <label for="sa_par_id">Curso <label class="text-danger">*</label></label>
-                        <select name="sa_par_id" id="sa_par_id" class="form-select">
-                            <option value="">Seleccione un Curso</option>
+                    <div class="col-md-12">
+                        <label for="" class="form-label">Sección <label style="color: red;">*</label> </label>
+                        <select class="form-select form-select-sm" id="sa_id_seccion" name="sa_id_seccion" onchange="consultar_datos_seccion_grado()">
+
+                        </select>
+                    </div>
+                </div>
+
+                <div class="row pt-3">
+                    <div class="col-md-12">
+                        <label for="" class="form-label">Grado <label style="color: red;">*</label> </label>
+                        <select class="form-select form-select-sm" id="sa_id_grado" name="sa_id_grado" onchange="consultar_datos_grado_paralelo();">
+                            <option selected disabled>-- Seleccione --</option>
+                        </select>
+                    </div>
+
+                </div>
+
+                <div class="row pt-3">
+                    <div class="col-md-12">
+                        <label for="" class="form-label">Paralelo <label style="color: red;">*</label> </label>
+                        <select class="form-select form-select-sm" id="sa_par_id" name="sa_par_id">
+                            <option selected disabled>-- Seleccione --</option>
                         </select>
                     </div>
                 </div>

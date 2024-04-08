@@ -357,6 +357,10 @@ if ($_GET['acc'] == 'reunion_rep_doc') {
 	include('ENFERMERIA/Docentes/Reunion/reunion_rep_doc.php');
 }
 
+if ($_GET['acc'] == 'reuniones_representante') {
+	include('ENFERMERIA/Representantes/reuniones.php');
+}
+
 if ($_GET['acc'] == 'reuniones') {
 	include('ENFERMERIA/Docentes/Reunion/reuniones.php');
 }
