@@ -42,8 +42,8 @@
 </script>
 
 <script type="text/javascript">
-	function cargar_datos()
-	{
+  function cargar_datos()
+  {
      var id = $('#ddl_opcion').val();
       var parametros=
      {
@@ -51,31 +51,31 @@
       'tip':$('#rbl_primera').prop('checked'),
       };
      $('#myModal').modal('show');
-		 $.ajax({
+     $.ajax({
          data:  {parametros:parametros},
          url: '../controlador/cargar_datosC.php?ejecutar_sp=true',
          type:  'post',
          dataType: 'json',
           success:  function (response) {  
-          	console.log(response);
-          	if(response==1)
-          	{
-          		Swal.fire('carga completada','','success').then(function()
+            console.log(response);
+            if(response==1)
+            {
+              Swal.fire('carga completada','','success').then(function()
                 {                  
                   $('#myModal').modal('hide');
                   // console.log(id);                  
                     log_activos()
                 });
-          	}else
-          	{
-          		Swal.fire('No se pudo completar','Asegurese que los datos esten en los formatos correctos y sin (;) punto y comas ó revise la cantidad de items en el archivo','error').then(function(){
+            }else
+            {
+              Swal.fire('No se pudo completar','Asegurese que los datos esten en los formatos correctos y sin (;) punto y comas ó revise la cantidad de items en el archivo','error').then(function(){
 
-                  $('#myModal').modal('hide');});          		
-          	}
+                  $('#myModal').modal('hide');});             
+            }
         } 
           
        });
-	}
+  }
 
   function opcion_carga()
   {
@@ -87,6 +87,59 @@
      {
        $('#lbl_check').css('display','block');
      }
+
+    
+      $('#link_plantilla').css('display','none');
+      $('#link_ficha').css('display','none');
+       if(op!=''){$('#link_plantilla').css('display','initial');
+         $('#link_ficha').css('display','initial');}
+
+     switch(op)
+     {
+       case '1':
+        url = '../descargas/FORMATOS/ACTIVOS_PRUEBAS.csv';
+        url2 = '../descargas/FORMATOS/FICHA TECNICA/ACTIVOS.xlsx';
+          break;
+      case '2':
+        url = '../descargas/FORMATOS/CUSTODIO_PRUEBA.csv';
+        url2 = '../descargas/FORMATOS/FICHA TECNICA/CUSTODIOS.xlsx';
+          break;
+      case '3':
+        url = '../descargas/FORMATOS/EMPLAZAMIENTO_PRUEBA.csv';
+        url2 = '../descargas/FORMATOS/FICHA TECNICA/EMPLAZAMIENTOS.xlsx';
+          break;
+      case '4':
+        url = '../descargas/FORMATOS/MARCAS_PRUEBAS.csv';
+        url2 = '../descargas/FORMATOS/FICHA TECNICA/MARCA.xlsx';
+          break;
+      case '5':
+        url = '../descargas/FORMATOS/ESTADO_PRUEBA.csv';
+        url2 = '../descargas/FORMATOS/FICHA TECNICA/ESTADO.xlsx';
+          break;
+      case '6':
+        url = '../descargas/FORMATOS/GENEROS_PRUEBA.csv';
+        url2 = '../descargas/FORMATOS/FICHA TECNICA/GENERO.xlsx';
+          break;      
+      case '7':
+        url = '../descargas/FORMATOS/COLORES_PRUEBA.csv';
+        url2 = '../descargas/FORMATOS/FICHA TECNICA/COLORES.xlsx';
+          break;
+      case '8':
+        url = '../descargas/FORMATOS/PROYECTOS_PRUEBA.csv';
+        url2 = '../descargas/FORMATOS/FICHA TECNICA/PROYECTO.xlsx';
+          break;
+      case '9':
+        url = '../descargas/FORMATOS/CLASE_MOVIMIENTO.csv';
+      $('#link_ficha').css('display','none');
+          break;
+      default:
+         url = '#';
+         url2 = '#';
+        break;
+     }
+    
+    $('#link_plantilla').attr('href',url);
+    $('#link_ficha').attr('href',url2);
   }
 
   function log_activos()
@@ -160,6 +213,23 @@
             <div class="card">
               <div class="card-body">
                 <div class="row"> 
+                   <div class="col-sm-4">
+                      <select class="form-control form-select" id="ddl_opcion" onchange="opcion_carga()">
+                        <option value="">Seleccione destino de datos</option>
+                            <option value="1">Cargar Activos</option>
+                            <option value="2">Cargar Custodios</option>
+                            <option value="3">Cargar Emplazamientos</option>
+                            <option value="4">Cargar Marcas</option>
+                            <option value="5">Cargar Estado</option>
+                            <option value="6">Cargar Genero</option>
+                            <option value="7">Cargar Color</option>
+                            <option value="8">Cargar Proyectos</option>
+                            <option value="9">Clases de Movimiento</option>
+                            <option value="10">Actualizar Activos</option>
+                      </select>  
+                      <a href="#" style="display: none;" id="link_plantilla" class="font-13" download><i class="bx bx-file me-0"></i> Descargar plantilla</a><br>
+                      <a href="#" style="display: none;" id="link_ficha" class="font-13" download><i class="bx bx-file me-0"></i> Descargar ficha tecnica</a>            
+                    </div>
                   <div class="col-sm-6">
                     <form enctype="multipart/form-data" id="form_img" method="post"> 
                      <input type="hidden" id="txt_opcion" name="txt_opcion">     
@@ -167,25 +237,11 @@
                       <p><b>Nota:</b> El archivo debera tener un maximo de 10000 items</p>
                     </form>
                     </div>
-                    <div class="col-sm-3">
-                      <select class="form-control form-select" id="ddl_opcion" onchange="opcion_carga()">
-                    <option value="">Seleccione destino de datos</option>
-                        <option value="1">Cargar Activos</option>
-                        <option value="2">Cargar Custodios</option>
-                        <option value="3">Cargar Emplazamientos</option>
-                        <option value="4">Cargar Marcas</option>
-                        <option value="5">Cargar Estado</option>
-                        <option value="6">Cargar Genero</option>
-                        <option value="7">Cargar Color</option>
-                        <option value="8">Cargar Proyectos</option>
-                        <option value="9">Clases de Movimiento</option>
-                        <option value="10">Actualizar Activos</option>
-                      </select>              
-                      <label id="lbl_check"><input type="checkbox" name="rbl_primera" id="rbl_primera"> Como primera vez</label>
-                    </div>
-                     <div class="col-sm-3">
+                   
+                     <div class="col-sm-2">
                       <button class="btn btn-sm btn-primary" id="btn_carga">Actualizar archivos</button>
-                      <button class="btn btn-sm btn-primary" onclick="leer_datos()">Leer datos</button>
+                      <label id="lbl_check"><input type="checkbox" name="rbl_primera" id="rbl_primera"> Como primera vez</label>
+                      <!-- <button class="btn btn-sm btn-primary" onclick="leer_datos()">Leer datos</button> -->
                     </div>
                 </div>
               </div>

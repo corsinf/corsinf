@@ -361,6 +361,66 @@ function generar_vista()
 }
 
 
+
+   function imprimir_tags_bloque()
+  {
+     var parametros = 
+     {
+      'tags':$('#txt_tag_assets').val(),
+     }
+     var lineas = '';
+    $.ajax({
+      data:  {parametros:parametros},
+      url:   '../controlador/articulosC.php?imprimir_tags_bloque=true',
+      type:  'post',
+      dataType: 'json',
+        success:  function (response) {    
+        // console.log(response);  
+        if(response==1)
+        {
+          Swal.fire( '',
+                  'Etiquetas generadas Dirijase a Zebra designer.',
+                  'info');
+          $('#myModal_tag').modal('hide');
+        } else if(response==2)
+        {
+         Swal.fire({
+            title: 'Existen etiquetas generadas para impresion!',
+            text: "desea generar etiquetas!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Eliminar y continuar!'
+          }).then((result) => {
+            if (result.value) {
+             vaciar_tags2()
+            }
+          })
+
+        }
+      }
+       
+    });
+  }
+
+   function vaciar_tags2()
+  {
+     $.ajax({
+      // data:  {parametros:parametros},
+      url:   '../controlador/articulosC.php?vaciar=true',
+      type:  'post',
+      dataType: 'json',
+      success:  function (response) {
+         imprimir_tags_bloque();
+      }
+   
+      });
+
+  }
+
+
+
 </script>
 
 <div class="page-wrapper">
@@ -390,6 +450,7 @@ function generar_vista()
                     <!-- <a href="#" class="btn btn-success btn-md" data-toggle="modal" data-target="#myModal" onclick="limpiar()"><li class="fa fa-plus"></li> Nuevo</a> -->
                    <!-- <button class="btn btn-default btn-md" onclick="imprimir_tags_masivo()"><li class="fa fa-tags"></li> Imprimir para todos</button>-->
                     <button class="btn btn-outline-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#myModal_tag"><li class="bx bx-purchase-tag"></li> Imprimir (N) Etiquetas</button>
+                    <button class="btn btn-outline-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#myModal_block"><li class="bx bx-purchase-tag"></li> Imprimir etiquetas en bloque</button>
                   </div>
                 </div>
              
@@ -568,6 +629,32 @@ function generar_vista()
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
         <button type="button" class="btn btn-primary" id="crearimagen"  onclick="imprimir_tags_masivo_()">Guardar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="modal fade" id="myModal_block" tabindex="-1" aria-modal="true" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3 class="modal-title" id="titulo">Etiquetas</h3>
+        </div>
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-sm-6">
+              <b>Assets</b>
+              <textarea class="form-control" rows="7" id="txt_tag_assets" name="txt_tag_assets" placeholder="Pegue Assets
+0000001
+0000002
+0000003"></textarea>
+            </div>
+            <div class="col-sm-6 text-right">
+                <button type="button" class="btn btn-sm btn-primary" id="crearimagen"  onclick="imprimir_tags_bloque()">Generar</button>
+                <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Cerrar</button>                
+            </div>
+          </div>     
       </div>
     </div>
   </div>
