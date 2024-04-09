@@ -22,13 +22,20 @@ if ($id != null && $id != '') {
 
         $('#ac_horarioD_inicio').blur(function() {
             horaDesde = $(this).val();
-            $('#ac_horarioD_fin').val('00:00')
+            $('#ac_horarioD_fin').val('')
         });
+
+        /*$('#ac_horarioD_fin').change(function() {
+            // Vaciar el input
+            $(this).val('');
+        });*/
 
         $('#ac_horarioD_fin').blur(function() {
             horaHasta = $(this).val();
             calcular_diferencia_hora();
         });
+
+        cargar_est_rep_doc_par()
 
     });
 
@@ -71,8 +78,8 @@ if ($id != null && $id != '') {
                 omitZeroMinute: false,
                 hour12: false
             },
-            slotMinTime: '05:00:00',
-            slotMaxTime: '20:00:00',
+            slotMinTime: '07:00:00',
+            slotMaxTime: '15:00:00',
             slotDuration: '00:30:00',
             slotLabelInterval: {
                 hours: 0.5
@@ -81,79 +88,148 @@ if ($id != null && $id != '') {
             eventDisplay: 'block',
             displayEventTime: true,
 
-            eventContent: function(arg) {
-                const fecha = arg.event.start;
-                const startTime = arg.event.start.toLocaleTimeString([], {
-                    hour: '2-digit',
-                    minute: '2-digit'
-                });
-                const endTime = arg.event.end.toLocaleTimeString([], {
-                    hour: '2-digit',
-                    minute: '2-digit'
-                });
+            eventClick: function(info) {
+                // Obtener información del evento
+                var id_horario_clases = info.event.extendedProps.id;
 
-                const isLastEventOfDay = isLastEvent(arg);
+                var id_horario_clases = info.event.extendedProps.id_horario_clases ?? '';
+                var id_horario_disponible = info.event.extendedProps.id_horario_disponible ?? '';
 
-                const ac_horarioD_estado = arg.event.extendedProps.ac_horarioD_estado;
+                //${arg.event.id}', '${arg.event.title}', '${startTime}', '${endTime}
 
-                // Verificar si el estado es diferente de 0 antes de incluir el botón de eliminar
-                const eliminarButtonHtml = (ac_horarioD_estado != 0) ? `
-                        <button title='Eliminar Turno' class="btn btn-danger btn-sm" style="font-size: 4px; background-color: #CA4646;"  onclick="eliminar_evento('${arg.event.id}', '${arg.event.title}', '${startTime}', '${endTime}')">
-                            <i class='bx bx-trash-alt me-0' style="font-size: 14px;"></i>
-                        </button>` : '';
+                //console.log(info.event)
 
-                const buttonsHtml = `
-                        <div class="d-flex justify-content-between align-items-center">
-                            <b>${startTime}</b> - <b>${endTime}</b>
-                            <div class="btn-group">
-                                ${eliminarButtonHtml}
-                                ${isLastEventOfDay ?
-                                `<button title='Duplicar Turno' class="btn btn-secondary btn-sm" style="font-size: 4px;" onclick="crear_horarioD_igual_abajo('${arg.event.id}', '${arg.event.title}', '${startTime}', '${endTime}', '${fecha}', '${arg.event.extendedProps.ac_horarioD_ubicacion}')">
-                                    <i class='bx bx-arrow-to-bottom me-0' style="font-size: 14px;"></i>
-                                </button>` : ''}
-                                <button title='Duplicar Turno' class="btn btn-primary btn-sm" style="font-size: 4px;" onclick="crear_horarioD_igual('${arg.event.id}', '${arg.event.title}', '${startTime}', '${endTime}', '${fecha}', '${arg.event.extendedProps.ac_horarioD_ubicacion}')">
-                                    <i class='bx bxs-arrow-to-right me-0' style="font-size: 14px;"></i>
-                                </button>
-                            </div>
-                        </div>
-                    `;
+                if (id_horario_disponible != '') {
+                    eliminar_evento(id_horario_disponible)
+                }
 
-                return {
-                    html: buttonsHtml,
-                };
+                info.jsEvent.preventDefault();
+
             },
 
             viewDidMount: function(view) {
                 $('.fc-col-header-cell-cushion').css('text-transform', 'uppercase');
             },
+
             allDaySlot: false,
 
         });
 
+        calendar.setOption('dateClick', function(info) {
+
+            var fecha_actual = new Date(); // Obtiene la fecha y hora actuales
+            var fecha_ayer = new Date(fecha_actual); // Crea una copia de la fecha actual
+            fecha_ayer.setDate(fecha_actual.getDate() - 1);
+
+            // Validar si la fecha seleccionada es anterior a la fecha actual
+            if (info.date < fecha_ayer) {
+                Swal.fire('', 'No puedes seleccionar una fecha anterior al día actual.', 'error');
+
+            } else {
+                obtenerHoraInicio(info.date, info.jsEvent);
+            }
+
+        });
+
         // Función para cargar eventos desde AJAX
-        cargar_horario_disponible();
+        cargar_horarios();
 
-        function isLastEvent(arg) {
-            const currentEvent = arg.event;
-            const currentEventEnd = currentEvent.end;
 
-            // Filtrar eventos del mismo día que comienzan después del final del evento actual
-            const nextEvents = arg.view.calendar.getEvents().filter((e) => {
-                return e.start >= currentEventEnd && e.start.toDateString() === currentEvent.start.toDateString();
-            });
-
-            // Si no hay eventos después del actual del mismo día, es el último del día
-            return nextEvents.length === 0;
-        }
 
     });
 
-    function eliminar_evento(id_horarioD, titulo, hora_inicio, hora_fin) {
+    // Función para obtener la hora de inicio basada en los eventos existentes dentro del cuadro de hora específico
+    function obtenerHoraInicio(fecha, eventoJS) {
+        // Obtenemos la hora específica del cuadro de hora en el que se hizo clic
+        var hora_inicio_cuadro = fecha; // La fecha seleccionada en el calendario, que incluye la hora específica del cuadro de hora
+
+        // Filtramos los eventos dentro del intervalo de tiempo del cuadro de hora específico
+        var eventos_en_cuadro = calendar.getEvents().filter(function(evento) {
+            return evento.start <= hora_inicio_cuadro && evento.end > hora_inicio_cuadro;
+        });
+
+        // Si hay eventos dentro del cuadro de hora, encontramos la hora de finalización del último evento
+        if (eventos_en_cuadro.length > 0) {
+            eventos_en_cuadro.sort(function(a, b) {
+                return b.end - a.end; // Ordenamos los eventos por hora de finalización descendente para obtener el último evento
+            });
+            var hora_fin_ultimo_evento = eventos_en_cuadro[0].end;
+
+            // Llamar a la función abrirModal con la fecha y la hora de finalización del último evento
+            abrirModal(fecha, hora_fin_ultimo_evento);
+        } else {
+            // Si no hay eventos dentro del cuadro de hora, utilizamos la hora de inicio del cuadro de hora
+            abrirModal(fecha, hora_inicio_cuadro);
+        }
+    }
+
+    function abrirModal(fecha, hora_inicio) {
+        // Abre el modal (Bootstrap Modal en este ejemplo)
+        $('#modal_horario_clases').modal('show');
+
+        // Actualiza el contenido del modal con la fecha seleccionada
+        var year = fecha.getFullYear(); // Obtener el año (por ejemplo, 2023)
+        var month = fecha.getMonth() + 1; // Obtener el mes (0-11, sumar 1 para obtener el formato 1-12)
+        var day = fecha.getDate(); // Obtener el día del mes
+
+        // Formatear la fecha como una cadena YYYY-MM-DD
+        var fechaFormateada = year + "-" + (month < 10 ? "0" : "") + month + "-" + (day < 10 ? "0" : "") + day;
+
+        // Formatear la hora de inicio
+        var hora_inicio_formateada = (hora_inicio.getHours() < 10 ? '0' : '') + hora_inicio.getHours() + ':' + (hora_inicio.getMinutes() < 10 ? '0' : '') + hora_inicio.getMinutes();
+
+        // Obtener el siguiente evento si existe
+        var siguienteEvento = obtenerSiguienteEvento(fecha, hora_inicio)
+
+        // Si hay un siguiente evento, obtener su hora de inicio
+        // Obtener la hora de fin formateada
+        var hora_fin_formateada = '';
+        if (siguienteEvento) {
+            // Si el siguiente evento es 07:00, establecer la hora de fin en 15:00
+            if (siguienteEvento.getHours() === 7 && siguienteEvento.getMinutes() === 0) {
+                hora_fin_formateada = '15:00';
+            } else {
+                // Formatear la hora de fin normalmente
+                hora_fin_formateada = (siguienteEvento.getHours() < 10 ? '0' : '') + siguienteEvento.getHours() + ':' + (siguienteEvento.getMinutes() < 10 ? '0' : '') + siguienteEvento.getMinutes();
+            }
+        } else {
+            // Si no hay eventos, establecer la hora de fin en 15:00
+            hora_fin_formateada = '15:00';
+        }
+
+        // Actualizar los campos de entrada con la fecha y la hora de inicio y fin del nuevo evento
+        $('input[name="ac_horarioD_fecha_disponible"]').val(fechaFormateada);
+        $('input[name="ac_horarioD_inicio"]').val(hora_inicio_formateada);
+        $('input[name="ac_horarioD_fin"]').val(hora_fin_formateada);
+    }
+
+    // Función para obtener la hora de inicio del siguiente evento si existe
+    function obtenerSiguienteEvento(fecha, hora_actual) {
+        // Filtrar los eventos para encontrar el siguiente evento después de la hora actual
+        var siguienteEvento = null;
+        var eventos_en_fecha = calendar.getEvents().filter(function(evento) {
+            return evento.start.getDate() === fecha.getDate() && evento.start > hora_actual;
+        });
+
+        // Ordenar los eventos por hora de inicio
+        eventos_en_fecha.sort(function(a, b) {
+            return a.start - b.start;
+        });
+
+        // Si hay eventos después de la hora actual, obtener el primer evento
+        if (eventos_en_fecha.length > 0) {
+            siguienteEvento = eventos_en_fecha[0].start;
+        }
+
+        return siguienteEvento;
+    }
+
+    function eliminar_evento(id_horarioD) {
 
         //alert(id_horarioD + ' - ' + titulo);
 
         Swal.fire({
-            title: '¿Estás seguro de eliminar esta hora disponible ' + hora_inicio + ' -  ' + hora_fin + '?',
+            title: '¿Estás seguro de eliminar esta hora disponible?',
             text: 'Esta acción no se puede deshacer.',
             icon: 'warning',
             showCancelButton: true,
@@ -170,7 +246,7 @@ if ($id != null && $id != '') {
                     },
                     success: function(response) {
                         Swal.fire('Éxito', 'La operación se realizó con éxito', 'success');
-                        cargar_horario_disponible();
+                        cargar_horarios();
                     },
                     error: function() {
                         Swal.fire('Error', 'Hubo un error en la operación', 'error');
@@ -180,48 +256,130 @@ if ($id != null && $id != '') {
         });
     }
 
-    //Fecha que empieza el horario de clases es el 2024-02-12 como lunes
-    function cargar_horario_disponible() {
-        id_docente = <?= $id_docente ?>;
-        fecha_dia_estatico = '';
+    function cargar_horarios() {
+        var fechaInicioClases = new Date(); // Obtener la fecha actual
+        var id_docente = <?= $id_docente ?>;
 
-        $.ajax({
-            url: '../controlador/horario_disponibleC.php?listar=true',
-            type: 'get',
-            data: {
-                id_docente: id_docente
-            },
-            dataType: 'json',
-            success: function(response) {
-                calendar.removeAllEvents();
-                // Recorrer la respuesta y agregar eventos al arreglo events
-                response.forEach(function(evento) {
-                    //console.log(evento);
+        // Calcular la fecha de finalización para tres semanas más
+        var fechaFinClases = new Date(fechaInicioClases);
+        fechaFinClases.setDate(fechaFinClases.getDate() + 21);
 
-                    var color = (evento.ac_horarioD_estado == 0) ? '#B63232' : '#3D94C9';
+        // Promesa para la solicitud de horarios de clases
+        var promesaHorariosClases = new Promise(function(resolve, reject) {
+            $.ajax({
+                url: '../controlador/horario_clasesC.php?listar=true',
+                type: 'get',
+                data: {
+                    id_docente: id_docente,
+                    id_paralelo: '',
+                },
+                dataType: 'json',
+                success: function(response) {
+                    var eventos = [];
+                    // Recorrer cada semana del mes
+                    var fecha = new Date(fechaInicioClases);
+                    var fechaLimite = new Date(fechaInicioClases);
+                    fechaLimite.setDate(fechaLimite.getDate() + 21); // Establecer la fecha límite en tres semanas más
+                    //alert(fechaLimite)
+                    while (fecha <= fechaLimite) {
+                        // Iterar sobre cada día de la semana
+                        for (var i = 0; i < 7; i++) {
+                            var fechaDia = new Date(fecha);
+                            fechaDia.setDate(fechaDia.getDate() + i);
+                            // Verificar si el día coincide con alguno de los días de la semana de la base de datos
+                            response.forEach(function(evento) {
+                                var fechaEvento = obtenerFechaEvento(fechaDia, evento.ac_horarioC_dia);
+                                if (fechaEvento) {
+                                    eventos.push({
+                                        id: evento.ac_horarioC_id,
+                                        title: (evento.ac_horarioC_materia).toUpperCase(),
+                                        start: fechaEvento + 'T' + obtener_hora_formateada(evento.ac_horarioC_inicio),
+                                        end: fechaEvento + 'T' + obtener_hora_formateada(evento.ac_horarioC_fin),
+                                        extendedProps: {
+                                            descripcion: ' (' + evento.sa_sec_nombre + ' / ' + evento.sa_gra_nombre + ' / ' + evento.sa_par_nombre + ')',
+                                            id_horario_clases: evento.ac_horarioC_id,
+                                        },
+                                        color: '#ffc107'
+                                    });
+                                }
+                            });
+                        }
+                        // Pasar a la siguiente semana
+                        fecha.setDate(fecha.getDate() + 7);
+                    }
+                    resolve(eventos);
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    reject(errorThrown);
+                }
+            });
+        });
 
-                    calendar.addEvent({
-                        id: evento.ac_horarioD_id,
-                        //title: (evento.ac_horarioD_materia).toUpperCase(),
-                        start: (evento.ac_horarioD_fecha_disponible) + 'T' + obtener_hora_formateada(evento.ac_horarioD_inicio),
-                        end: (evento.ac_horarioD_fecha_disponible) + 'T' + obtener_hora_formateada(evento.ac_horarioD_fin),
-                        color: color,
-                        extendedProps: {
-                            ac_horarioD_ubicacion: evento.ac_horarioD_ubicacion,
-                            ac_horarioD_estado: evento.ac_horarioD_estado,
-                        },
-
+        // Promesa para la solicitud de horarios disponibles
+        var promesaHorariosDisponibles = new Promise(function(resolve, reject) {
+            $.ajax({
+                url: '../controlador/horario_disponibleC.php?listar=true',
+                type: 'get',
+                data: {
+                    id_docente: id_docente
+                },
+                dataType: 'json',
+                success: function(response) {
+                    var eventos = [];
+                    // Recorrer la respuesta y agregar eventos al arreglo events
+                    response.forEach(function(evento) {
+                        var color = (evento.ac_horarioD_estado == 0) ? '#B63232' : '#3D94C9';
+                        eventos.push({
+                            id: evento.ac_horarioD_id,
+                            title: evento.ac_cubiculo_nombre,
+                            start: (evento.ac_horarioD_fecha_disponible) + 'T' + obtener_hora_formateada(evento.ac_horarioD_inicio),
+                            end: (evento.ac_horarioD_fecha_disponible) + 'T' + obtener_hora_formateada(evento.ac_horarioD_fin),
+                            color: color,
+                            extendedProps: {
+                                ac_horarioD_ubicacion: evento.ac_horarioD_ubicacion,
+                                ac_horarioD_estado: evento.ac_horarioD_estado,
+                                id_horario_disponible: evento.ac_horarioD_id,
+                            }
+                        });
+                        //console.log((evento.ac_horarioD_fecha_creacion) + '-- ' + obtener_hora_formateada(evento.ac_horarioD_inicio));
                     });
+                    resolve(eventos);
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    reject(errorThrown);
+                }
+            });
+        });
 
-                    console.log((evento.ac_horarioD_fecha_creacion) + '-- ' + obtener_hora_formateada(evento.ac_horarioD_inicio));
-                });
-                // Renderizar el calendario después de agregar los eventos
-                calendar.render();
-            }
+        // Ejecutar ambas promesas y renderizar el calendario cuando ambas se completen
+        Promise.all([promesaHorariosClases, promesaHorariosDisponibles]).then(function(resultados) {
+            var eventos = resultados[0].concat(resultados[1]); // Concatenar los eventos de ambas solicitudes
+            calendar.removeAllEvents();
+            eventos.forEach(function(evento) {
+                calendar.addEvent(evento);
+                //console.log(evento)
+            });
+            calendar.render();
+        }).catch(function(error) {
+            console.error('Error al cargar los horarios:', error);
         });
     }
 
-    function agregar_clase() {
+    // Función para obtener la fecha del evento basada en el día de la semana
+    function obtenerFechaEvento(fecha, diaSemana) {
+        var diasSemana = ['domingo', 'lunes', 'martes', 'miercoles', 'jueves', 'viernes', 'sábado'];
+        var diaEvento = diasSemana.indexOf(diaSemana);
+        if (fecha.getDay() === diaEvento) {
+            return fecha.toISOString().slice(0, 10); // Formato YYYY-MM-DD
+        }
+        return null;
+    }
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    function agregar_turno() {
+
+        var errores = [];
+
         var ac_docente_id = '<?php echo $id_docente; ?>';
 
         var ac_horarioD_inicio = $('#ac_horarioD_inicio').val();
@@ -242,179 +400,293 @@ if ($id != null && $id != '') {
             'ac_horarioD_ubicacion': ac_horarioD_ubicacion,
         }
 
-        //console.log(parametros)
+        var eventos = calendar.getEvents();
+        // Crear la fecha completa combinando la fecha actual y la hora ingresada
+        //var hoy = new Date(ac_horarioD_fecha_disponible); // Obtener la fecha actual
+
+        // Obtener la fecha actual
+        var partesFecha = ac_horarioD_fecha_disponible.split('-'); // Dividir la fecha en partes
+        var hoy = new Date(partesFecha[0], partesFecha[1] - 1, partesFecha[2]); // Crear el objeto Date
+
+        var nueva_inicio = new Date(hoy.getFullYear(), hoy.getMonth(), hoy.getDate(), ac_horarioD_inicio.split(':')[0], ac_horarioD_inicio.split(':')[1]);
+        var nueva_fin = new Date(hoy.getFullYear(), hoy.getMonth(), hoy.getDate(), ac_horarioD_fin.split(':')[0], ac_horarioD_fin.split(':')[1]);
+
+        //console.log(ac_horarioD_fecha_disponible)
+        //console.log(hoy)
 
         if (ac_horarioD_inicio != '' && ac_horarioD_fin != '' && ac_horarioD_fecha_disponible != '' && ac_horarioD_materia != null && ac_horarioD_ubicacion != null) {
-            $.ajax({
-                url: '../controlador/horario_disponibleC.php?insertar=true',
-                data: {
-                    parametros: parametros
-                },
-                type: 'post',
-                dataType: 'json',
-                success: function(response) {
-                    //console.log(response)
-                    Swal.fire('', 'Curso Asignado.', 'success').then(function() {
-                        //location.href = '../vista/inicio.php?mod=7&acc=agendamiento';
-                    })
+            // Validar que la hora de finalización sea mayor que la hora de inicio
+            if (nueva_inicio >= nueva_fin) {
+                Swal.fire('', 'La hora de finalización debe ser mayor que la hora de inicio.', 'error');
+            } else {
+                // Verificar si la nueva clase se superpone con alguna clase existente
+                var seSuperpone = eventos.some(function(evento) {
+                    var inicio_evento = new Date(evento.start);
+                    var fin_evento = new Date(evento.end);
+
+                    // Comprobar si la nueva clase comienza después de que el evento existente haya terminado
+                    var superpone_Inicio = nueva_inicio >= fin_evento;
+
+                    // Comprobar si la nueva clase termina antes de que el evento existente comience
+                    var superpone_fin = nueva_fin <= inicio_evento;
+
+                    // La nueva clase se superpone si ambas condiciones son falsas
+                    return !(superpone_Inicio || superpone_fin);
+                });
+
+                // Mostrar mensaje si la nueva clase se superpone
+                if (seSuperpone) {
+                    Swal.fire('', 'No se puede agregar la clase porque se superpone con otra clase existente.', 'error');
+                } else {
+
+                    chx_turno_rep = $('#chx_turno_rep').prop('checked');
+                    console.log(chx_turno_rep);
+
+                    if (chx_turno_rep == true) {
+
+                        //var ac_horarioD_id = $('#ac_horarioD_id').val();
+                        var ac_representante_id = $('#sa_id_representante').val();
+                        var ac_reunion_motivo = $('#ac_reunion_motivo').val();
+                        //var ac_reunion_observacion = $('#ac_reunion_observacion').val();
+                        var ac_estudiante_id = $('#txt_estudiante').val();
+                        var ac_nombre_est = $('#ac_nombre_est').val();
+
+
+                        var parametros_turno_rep = {
+                            'ac_representante_id': ac_representante_id,
+                            'ac_reunion_motivo': ac_reunion_motivo,
+                            'ac_estudiante_id': ac_estudiante_id,
+                            'ac_nombre_est': ac_nombre_est,
+                            'chx_turno_rep': chx_turno_rep
+                        }
+
+                        if (ac_estudiante_id != null && ac_reunion_motivo != null) {
+
+                            parametros.parametros_turno_rep = parametros_turno_rep;
+
+                            $.ajax({
+                                url: '../controlador/horario_disponibleC.php?insertar=true',
+                                data: {
+                                    parametros: parametros
+                                },
+                                type: 'post',
+                                dataType: 'json',
+                                success: function(response) {
+                                    //console.log(response)
+                                    Swal.fire('', 'Turno Agregado Con Representante.', 'success').then(function() {
+                                        $('#modal_horario_clases').modal('hide');
+                                        restablecerModal()
+                                    })
+                                }
+                            });
+
+                        } else {
+
+                            if (ac_estudiante_id == null) {
+                                errores.push('Falta seleccionar un Estudiante.');
+                            }
+                            if (ac_reunion_motivo == null) {
+                                errores.push('Falta seleccionar un motivo para la reunión.');
+                            }
+                        }
+
+                    } else {
+                        $.ajax({
+                            url: '../controlador/horario_disponibleC.php?insertar=true',
+                            data: {
+                                parametros: parametros
+                            },
+                            type: 'post',
+                            dataType: 'json',
+                            success: function(response) {
+                                //console.log(response)
+                                Swal.fire('', 'Turno Agregado.', 'success').then(function() {
+                                    $('#modal_horario_clases').modal('hide');
+                                    restablecerModal()
+                                })
+                            }
+                        });
+                    }
+                    cargar_horarios(); // Volver a cargar la tabla
                 }
-            });
+            }
         } else {
-            Swal.fire('', 'Falta llenar los campos.', 'error');
+
+            if (ac_horarioD_inicio == '') {
+                errores.push('Falta seleccionar la hora de inicio.');
+            }
+            if (ac_horarioD_fin == '') {
+                errores.push('Falta seleccionar la hora de finalización.');
+            }
+            if (ac_horarioD_fecha_disponible == '') {
+                errores.push('Falta seleccionar una fecha disponible.');
+            }
+            if (ac_horarioD_materia == null) {
+                errores.push('Falta disponibilidad');
+            }
+            if (ac_horarioD_ubicacion == null) {
+                errores.push('Falta seleccionar un cubículo.');
+            }
         }
 
+        // Verificar si hay errores y mostrarlos en una lista
+        if (errores.length > 0) {
+            var mensajeError = '';
+            errores.forEach(function(error) {
+                mensajeError += '<br>' + error + '</br>';
+            });
+            mensajeError += '';
 
+            Swal.fire('', mensajeError, 'error');
+            return; // Detener la ejecución si hay errores
+        }
 
-
-        $('#modal_horario_clases').modal('hide');
-        cargar_horario_disponible(); // Volver a cargar la tabla
+        //////////////////////////////////
     }
 
-    //Para los botones de los eventos
-    function crear_horarioD_igual(id_horarioD, titulo, hora_inicio, hora_fin, fecha, ubicacion) {
-        //////////////////////////////////////////////////////////////////////////////////////////////////////////
-        // Para replicar las horas de las reuniones para cuando sea de lunes a sabado
-        // Obtener la fecha formateada
-        var fecha_formateada = fecha_nacimiento_formateada(fecha);
+    function cargar_cubiculos() {
 
-        // Dividir la cadena de fecha en año, mes y día
-        var [año, mes, dia] = fecha_formateada.split('-');
+        $('#btn_buscar_cubiculo').hide();
+        $('#btn_agregar_turno').show();
+        $('#pnl_select_cubiculo').show();
 
-        // Crear un objeto Date con la fecha formateada
-        var fecha_inicial = new Date(Number(año), Number(mes) - 1, Number(dia));
+        $('#ac_horarioD_inicio').prop('readonly', true);
+        $('#ac_horarioD_fin').prop('readonly', true);
 
-        // Obtener el día de la semana (0 para domingo, 1 para lunes, ..., 6 para sábado)
-        var diaSemana = fecha_inicial.getDay();
+        var ac_horarioD_inicio = $('#ac_horarioD_inicio').val();
+        var ac_horarioD_fin = $('#ac_horarioD_fin').val();
+        var ac_horarioD_fecha_disponible = $('#ac_horarioD_fecha_disponible').val();
 
-        // Determinar cuántos días sumar en función del día de la semana
-        var diasASumar = (diaSemana >= 1 && diaSemana <= 5) ? 1 : 2;
-
-        // Sumar los días
-        fecha_inicial.setDate(fecha_inicial.getDate() + diasASumar);
-
-        // Obtener la nueva fecha formateada
-        var nuevo_dia = fecha_inicial.getDate();
-        var nuevo_mes = fecha_inicial.getMonth() + 1;
-        var nuevo_año = fecha_inicial.getFullYear();
-
-        // Asegurarse de que el día y el mes tengan dos dígitos
-        nuevo_dia = (nuevo_dia < 10) ? '0' + nuevo_dia : nuevo_dia;
-        nuevo_mes = (nuevo_mes < 10) ? '0' + nuevo_mes : nuevo_mes;
-
-        // Nueva fecha formateada
-        var nueva_fecha = nuevo_año + '-' + nuevo_mes + '-' + nuevo_dia;
-
-        //////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-        var ac_docente_id = '<?php echo $id_docente; ?>';
-
-        var ac_horarioD_inicio = hora_inicio;
-        var ac_horarioD_fin = hora_fin;
-        var ac_horarioD_fecha_disponible = nueva_fecha;
-        var ac_horarioD_materia = 'Disponible';
-        var ac_horarioD_ubicacion = ubicacion;
-
-        //alert(ac_horarioD_inicio + ' ' + ac_horarioD_fin);
-
-        var parametros = {
-            'ac_horarioD_id': '',
-            'ac_docente_id': ac_docente_id,
-            'ac_horarioD_inicio': ac_horarioD_inicio,
-            'ac_horarioD_fin': ac_horarioD_fin,
-            'ac_horarioD_fecha_disponible': ac_horarioD_fecha_disponible,
-            'ac_horarioD_materia': ac_horarioD_materia,
-            'ac_horarioD_ubicacion': ac_horarioD_ubicacion,
-        }
-
-        //console.log(parametros);
-
+        select = '<option selected disabled>-- Seleccione un Cubículo --</option>';
         $.ajax({
-            url: '../controlador/horario_disponibleC.php?insertar=true',
+            url: '../controlador/cat_cubiculoC.php?listar=true',
+            type: 'POST',
             data: {
-                parametros: parametros
+                hora_inicio: ac_horarioD_inicio,
+                hora_fin: ac_horarioD_fin,
+                fecha_disponible: ac_horarioD_fecha_disponible,
             },
-            type: 'post',
-            dataType: 'json',
             success: function(response) {
-                //console.log(response)
+                //console.log(response);
+                try {
+                    var jsonResponse = JSON.parse(response);
 
+                    // Recorre cada elemento en el arreglo JSON
+                    jsonResponse.forEach(function(item) {
+                        // Realiza cualquier acción con cada elemento
+                        select += '<option value="' + item.ac_cubiculo_id + '">' + item.ac_cubiculo_nombre + '</option>';
+
+                    });
+
+                    $('#ac_horarioD_ubicacion').html(select);
+
+                } catch (error) {
+                    console.error('Error al analizar la respuesta JSON:', error);
+                }
+            },
+            error: function() {
+                Swal.fire('Error', 'Hubo un error en la operación', 'error');
             }
         });
-
-        cargar_horario_disponible();
-
     }
 
-    function crear_horarioD_igual_abajo(id_horarioD, titulo, hora_inicio, hora_fin, fecha, ubicacion) {
+    function cargar_est_rep_doc_par() {
+        var id_docente = '<?php echo $id_docente; ?>';
 
-        // Obtener la fecha formateada y la hora en formato HH:mm
-        var fecha_formateada = fecha_nacimiento_formateada(fecha);
-        var inicio = new Date(fecha_formateada + ' ' + hora_inicio);
-        var fin = new Date(fecha_formateada + ' ' + hora_fin);
-
-        // Calcular la diferencia en minutos
-        var diferencia_minutos = Math.floor((fin - inicio) / (1000 * 60));
-
-        // Crear nuevas variables sumando los minutos a la hora de inicio
-        var nueva_hora_inicio = sumar_minutos_ahora(hora_inicio, diferencia_minutos, fecha_formateada);
-        var nueva_hora_fin = sumar_minutos_ahora(hora_fin, diferencia_minutos, fecha_formateada);
-
-        //alert(nueva_hora_fin)
-
-        ///////////////////////////////////////////////////////////////////////////////////////////////////
-
-        var ac_docente_id = '<?php echo $id_docente; ?>';
-
-        var ac_horarioD_inicio = nueva_hora_inicio;
-        var ac_horarioD_fin = nueva_hora_fin;
-        var ac_horarioD_fecha_disponible = fecha_formateada;
-        var ac_horarioD_materia = 'Disponible';
-        var ac_horarioD_ubicacion = ubicacion;
-
-        var parametros = {
-            'ac_horarioD_id': '',
-            'ac_docente_id': ac_docente_id,
-            'ac_horarioD_inicio': ac_horarioD_inicio,
-            'ac_horarioD_fin': ac_horarioD_fin,
-            'ac_horarioD_fecha_disponible': ac_horarioD_fecha_disponible,
-            'ac_horarioD_materia': ac_horarioD_materia,
-            'ac_horarioD_ubicacion': ac_horarioD_ubicacion,
-        }
-
-        //console.log(parametros);
-
-        $.ajax({
-            url: '../controlador/horario_disponibleC.php?insertar=true',
-            data: {
-                parametros: parametros
+        $('#txt_estudiante').select2({
+            placeholder: '-- Seleccione un Estudiante --',
+            dropdownParent: $('#modal_horario_clases'),
+            language: {
+                inputTooShort: function() {
+                    return "Por favor ingresa 1 o más caracteres";
+                },
+                noResults: function() {
+                    return "No se encontraron resultados";
+                },
+                searching: function() {
+                    return "Buscando...";
+                },
+                errorLoading: function() {
+                    return "No se encontraron resultados";
+                }
             },
-            type: 'post',
-            dataType: 'json',
-            success: function(response) {
-                //console.log(response)
+            minimumInputLength: 1,
+            ajax: {
+                url: '../controlador/docente_paraleloC.php?lista_est_rep_doc_par=true',
+                dataType: 'json',
+                delay: 250,
+                type: 'POST',
+                data: function(params) {
+                    return {
+                        id_docente: id_docente,
+                        searchTerm: params.term // Envía el término de búsqueda al servidor
 
+                    };
+                },
+                processResults: function(data, params) { // Agrega 'params' como parámetro
+                    var searchTerm = params.term.toLowerCase();
+
+                    var options = data.reduce(function(filtered, item) {
+
+                        var fullName = item['sa_est_cedula'] + " - " + item['estudiante_nombres'];
+
+                        if (fullName.toLowerCase().includes(searchTerm)) {
+                            filtered.push({
+                                id: item['sa_est_id'],
+                                text: fullName,
+                                representante_nombres: item.representante_nombres + ' - ' + item.sa_est_rep_parentesco,
+                                sa_id_representante: item.sa_id_representante,
+                                ac_nombre_est: item.estudiante_nombres,
+                            });
+                        }
+
+                        return filtered;
+                    }, []);
+
+                    return {
+                        results: options
+                    };
+                },
+                cache: true
             }
-        });
+        }).on('select2:select', function(e) {
+            var representante_nombres = e.params.data.representante_nombres;
+            $('#lbl_representante_nombres').html(representante_nombres);
+            $('#lbl_title_rep_nom').html('Representante');
 
-        cargar_horario_disponible();
+            /////////////////////////////////////////////////////////////////
+
+            var sa_id_representante = e.params.data.sa_id_representante;
+            var ac_nombre_est = e.params.data.ac_nombre_est;
+
+            $('#sa_id_representante').val(sa_id_representante);
+            $('#ac_nombre_est').val(ac_nombre_est);
+
+        });
     }
 
-    // Función para sumar minutos a una hora en formato HH:mm
-    function sumar_minutos_ahora(hora, minutos, fecha) {
-        var partes_hora = hora.split(':');
-        var hora_date = new Date(fecha + ' ' + hora);
+    function restablecerModal() {
+        $('#btn_buscar_cubiculo').show();
+        $('#btn_agregar_turno').hide();
+        $('#pnl_select_cubiculo').hide();
 
-        // Sumar los minutos
-        hora_date.setMinutes(hora_date.getMinutes() + minutos);
+        $('#ac_horarioD_inicio').prop('readonly', false);
+        $('#ac_horarioD_fin').prop('readonly', false);
 
-        // Obtener la nueva hora y formatearla
-        var nueva_hora = hora_date.getHours();
-        var nuevo_minuto = hora_date.getMinutes();
+        restablecerDatosRepModal();
+    }
 
-        nueva_hora = (nueva_hora < 10) ? '0' + nueva_hora : nueva_hora;
-        nuevo_minuto = (nuevo_minuto < 10) ? '0' + nuevo_minuto : nuevo_minuto;
+    function restablecerDatosRepModal() {
+        $('#pnl_select_estudiante').hide();
 
-        return nueva_hora + ':' + nuevo_minuto;
+        $('#chx_turno_rep').prop('checked', false);
+
+        $('#ac_reunion_motivo').val('');
+
+        $('#txt_estudiante').val(null).trigger('change');
+
+        $('#lbl_title_rep_nom').html('');
+        $('#lbl_representante_nombres').html('');
     }
 </script>
 
@@ -431,6 +703,12 @@ if ($id != null && $id != '') {
     }
 </style>
 
+<!--Datos para asignar una reunion a un representante -->
+
+<input type="hidden" name="sa_id_representante" id="sa_id_representante">
+<input type="hidden" name="ac_nombre_est" id="ac_nombre_est">
+
+<!------------------------------------------------------>
 
 <div class="page-wrapper">
     <div class="page-content">
@@ -459,24 +737,11 @@ if ($id != null && $id != '') {
             <div class="col-xl-12 mx-auto">
                 <div class="card border-top border-0 border-4 border-primary">
                     <div class="card-body p-5">
-                        <div class="card-title d-flex align-items-center">
 
-                            <h5 class="mb-0 text-primary"></h5>
-
-                            <div class="row mx-0">
-                                <div class="col-sm-12" id="btn_nuevo">
-
-                                    <button type="button" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#modal_horario_clases"><i class="bx bx-plus"></i> Agregar Hora Disponible</button>
-
-                                </div>
-                            </div>
-                        </div>
 
                         <section class="content pt-2">
                             <div class="container-fluid">
 
-                                <p class="text-danger">*Para eliminar un registro, haga clic en el icono <label class="text-black"><a class="btn btn-danger btn-sm" style="font-size: 4px; background-color: #CA4646;"><i class='bx bx-trash-alt me-0' style="font-size: 14px;"></i></a></label> previamente asignado en el cuadro verde.</p>
-                                <p class="text-danger">*Para duplicar un turno, haga click en el icono <label class="text-black"><a class="btn btn-primary btn-sm" style="font-size: 4px;"><i class='bx bxs-arrow-to-right me-0' style="font-size: 14px;"></i></a></label> previamente asignado en el cuadro verde.</p>
 
                                 <div class="row">
                                     <div class="col-12">
@@ -503,8 +768,8 @@ if ($id != null && $id != '') {
 
             <!-- Modal Header -->
             <div class="modal-header">
-                <h5>Agregar Hora Disponible</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                <h5>Agregar Turno</h5>
+                <button type="button" class="btn-close" id="btn_cerrar_mhc" onclick="restablecerModal();" data-bs-dismiss="modal"></button>
             </div>
 
             <!-- Modal body -->
@@ -520,7 +785,7 @@ if ($id != null && $id != '') {
                 <div class="row">
                     <div class="col-12">
                         <label for="ac_horarioD_fecha_disponible">Día <label class="text-danger">*</label></label>
-                        <input type="date" name="ac_horarioD_fecha_disponible" id="ac_horarioD_fecha_disponible" class="form-control form-control-sm" min="" required>
+                        <input type="date" name="ac_horarioD_fecha_disponible" id="ac_horarioD_fecha_disponible" class="form-control form-control-sm" min="" required readonly>
                         <script>
                             var fechaActual = new Date().toISOString().split('T')[0];
                             document.getElementById('ac_horarioD_fecha_disponible').min = fechaActual;
@@ -529,23 +794,9 @@ if ($id != null && $id != '') {
                 </div>
 
                 <div class="row pt-3">
-                    <div class="col-12">
-                        <label for="ac_horarioD_fecha_disponible">Cubículo <label class="text-danger">*</label></label>
-                        <select name="ac_horarioD_ubicacion" id="ac_horarioD_ubicacion" class="form-select form-select-sm">
-                            <option selected disabled>-- Seleccione un Cubículo --</option>
-                            <option value="Cubículo 1">Cubículo 1</option>
-                            <option value="Cubículo 2">Cubículo 2</option>
-                            <option value="Cubículo 3">Cubículo 3</option>
-                            <option value="Cubículo 4">Cubículo 4</option>
-                            <option value="Cubículo 5">Cubículo 5</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="row pt-3">
 
                     <div class="col-6">
-                        <label for="ac_horarioD_inicio">Inicio de la Hora Turno <label class="text-danger">*</label></label>
+                        <label for="ac_horarioD_inicio">Inicio de la Hora de Turno <label class="text-danger">*</label></label>
                         <input type="time" name="ac_horarioD_inicio" id="ac_horarioD_inicio" class="form-control form-control-sm">
                     </div>
 
@@ -555,15 +806,115 @@ if ($id != null && $id != '') {
                     </div>
                 </div>
 
+                <div class="row pt-3" id="btn_buscar_cubiculo">
+                    <div class="col-12 text-end">
+                        <button type="button" class="btn btn-primary btn-sm" onclick="cargar_cubiculos()"><i class="bx bx-search"></i> Buscar Cubículo</button>
+                    </div>
+                </div>
+
+                <div class="row pt-3" id="pnl_select_cubiculo" style="display: none;">
+                    <div class="col-12">
+                        <label for="ac_horarioD_fecha_disponible">Cubículo <label class="text-danger">*</label></label>
+                        <select name="ac_horarioD_ubicacion" id="ac_horarioD_ubicacion" class="form-select form-select-sm">
+                            <option selected disabled>-- Seleccione un Cubículo --</option>
+                        </select>
+                    </div>
+
+                    <div class="col-12 pt-2">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="chx_turno_rep">
+                            <label class="form-check-label text-secondary" for="chx_turno_rep">Asignar Turno a Representante</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row pt-2" id="pnl_select_estudiante" style="display: none;">
+                    <div class="row m-0">
+                        <div class="col-12">
+                            <label for="ac_horarioC_materia">Motivo de la Reunión <label class="text-danger">*</label></label>
+                            <select name="ac_reunion_motivo" id="ac_reunion_motivo" class="form-select form-select-sm" disabled>
+                                <option  disabled value="">-- Seleccione un Motivo --</option>
+                                <option value="Faltas">Faltas</option>
+                                <option value="Notas">Notas</option>
+                                <option value="Otros">Otros</option>
+                                <option selected value="Solicitado">Solicitado al Representante</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="row m-0 pt-3">
+                        <div class="col-12">
+                            <label for="txt_estudiante">Estudiante <label class="text-danger">*</label></label>
+                            <select name="txt_estudiante" id="txt_estudiante" class="form-select form-select-sm">
+                                <option selected disabled>-- Seleccione un Estudiante --</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="row m-0">
+                        <div class="col-12 pt-2">
+                            <label id="lbl_title_rep_nom"></label>
+                            <br>
+                            <label class="text-primary fw-bold" id="lbl_representante_nombres"> </label>
+                        </div>
+                    </div>
+
+                </div>
+
+
+
                 <div class="row pt-3">
                     <div class="col-12 text-end">
-                        <button type="submit" class="btn btn-success btn-sm" onclick="agregar_clase()"><i class="bx bx-save"></i> Agregar</button>
+
+                        <button style="display: none;" type="button" id="btn_agregar_turno" class="btn btn-success btn-sm" onclick="agregar_turno()"><i class="bx bx-save"></i> Agregar</button>
+
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+<script>
+    $(document).ready(function() {
+        validarHoraInicioFin('ac_horarioD_inicio');
+        validarHoraInicioFin('ac_horarioD_fin');
+
+        $('#chx_turno_rep').click(function() {
+            // Verificar si el checkbox está marcado
+            if ($(this).is(':checked')) {
+                // Mostrar el div si el checkbox está marcado
+                $('#pnl_select_estudiante').show();
+            } else {
+                // Ocultar el div si el checkbox no está marcado
+                $('#pnl_select_estudiante').hide();
+                restablecerDatosRepModal()
+            }
+        });
+    });
+
+    function validarHoraInicioFin(datos) {
+        $('#' + datos).on("change", function() {
+            // Obtener la hora seleccionada
+            var horaSeleccionada = $(this).val();
+
+            // Extraer las horas de la fecha de inicio y fin
+            var horaInicio = 7; // 7:00 AM
+            var horaFin = 15; // 3:00 PM
+
+            // Obtener la hora seleccionada (convertirla a número)
+            var horaSeleccionadaNum = parseInt(horaSeleccionada.split(':')[0]);
+
+            // Verificar si la hora seleccionada está dentro del rango permitido
+            if (horaSeleccionadaNum < horaInicio || horaSeleccionadaNum > horaFin) {
+                // Restablecer la hora seleccionada a un valor vacío
+                $(this).val("");
+                // Mostrar un mensaje de error
+                Swal.fire('', 'Por favor, selecciona una hora entre las 07:00 y las 15:00.', 'info');
+            }
+        });
+    }
+</script>
 
 <script>
     function calcular_diferencia_hora() {
@@ -583,11 +934,11 @@ if ($id != null && $id != '') {
                 //alert(diferenciaEnMinutos);
             } else {
                 Swal.fire('', 'La diferencia de tiempo debe ser mayor o igual a 15 minutos', 'info');
-                $('#ac_horarioD_fin').val('00:00');
+                $('#ac_horarioD_fin').val('');
             }
         } else {
-            Swal.fire('', 'La hora Hasta de la consulta no puede ser menor', 'info');
-            $('#ac_horarioD_fin').val('00:00');
+            Swal.fire('', 'El fin de la hora de turno no puede ser menor a la del incio', 'info');
+            $('#ac_horarioD_fin').val('');
         }
     }
 </script>

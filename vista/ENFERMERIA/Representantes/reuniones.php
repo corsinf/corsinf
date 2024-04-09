@@ -3,7 +3,7 @@
 $id = $_SESSION['INICIO']['NO_CONCURENTE'];
 
 if ($id != null && $id != '') {
-    $id_docente = $id;
+    $id_representante = $id;
 }
 
 ?>
@@ -28,7 +28,7 @@ if ($id != null && $id != '') {
                 data: function(d) {
                     d.listar_todo_docentes = true; // Otros parámetros que puedas necesitar
                     // Agrega el parámetro ac_reunion_id
-                    d.id_docente = <?= $id_docente ?>; // Puedes obtener este valor dinámicamente según tus necesidades
+                    d.id_representante = <?= $id_representante ?>; // Puedes obtener este valor dinámicamente según tus necesidades
                 },
                 dataSrc: ''
             },
@@ -37,7 +37,7 @@ if ($id != null && $id != '') {
                     data: 'ac_cubiculo_nombre'
                 },
                 {
-                    data: 'nombre_representante'
+                    data: 'nombre_docente'
                 },
                 {
                     data: 'ac_reunion_motivo'
@@ -220,7 +220,7 @@ if ($id != null && $id != '') {
                                         <thead>
                                             <tr>
                                                 <th>Ubicación</th>
-                                                <th>Representante</th>
+                                                <th>Docente</th>
                                                 <th>Motivo</th>
                                                 <th>Fecha Turno</th>
                                                 <th>Hora de Inicio</th>

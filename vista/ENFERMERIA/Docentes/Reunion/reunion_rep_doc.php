@@ -62,8 +62,8 @@ if ($id != null && $id != '') {
                 omitZeroMinute: false,
                 hour12: false
             },
-            slotMinTime: '05:00:00',
-            slotMaxTime: '20:00:00',
+            slotMinTime: '07:00:00',
+            slotMaxTime: '15:00:00',
             slotDuration: '00:30:00',
             slotLabelInterval: {
                 hours: 0.5
@@ -280,7 +280,7 @@ if ($id != null && $id != '') {
                         return {
                             id: item['sa_par_id'],
                             text: fullName,
-                            nombre_corto: nombre_corto,
+                            nombre_corto: fullName,
                             sa_est_id: sa_est_id,
                         };
                     });
@@ -344,7 +344,7 @@ if ($id != null && $id != '') {
 
         //console.log(parametros);
 
-        if (ac_horarioD_id != '' && ac_representante_id != '' && ac_reunion_motivo != '') {
+        if (ac_horarioD_id != '' && ac_representante_id != '' && ac_reunion_motivo != null) {
             $.ajax({
                 url: '../controlador/reunionesC.php?insertar=true',
                 data: {
@@ -513,7 +513,7 @@ if ($id != null && $id != '') {
                     <div class="col-12">
                         <label for="ac_horarioC_materia">Motivo de la Reunión <label class="text-danger">*</label></label>
                         <select name="ac_reunion_motivo" id="ac_reunion_motivo" class="form-select form-select-sm">
-                            <option selected disabled>-- Seleccione un Estudiante --</option>
+                            <option selected disabled>-- Seleccione un Motivo --</option>
                             <option value="Faltas">Faltas</option>
                             <option value="Notas">Notas</option>
                             <option value="Otros">Otros</option>

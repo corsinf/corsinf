@@ -10,7 +10,11 @@ if (isset($_GET['listar_todo'])) {
 }
 
 if (isset($_GET['listar_todo_docentes'])) {
-    echo json_encode($controlador->lista_todo_reuniones_docentes($_GET['id_docente']));
+
+    $id_docente = $_GET['id_docente'] ?? "";
+    $id_representante = $_GET['id_representante'] ?? '';
+
+    echo json_encode($controlador->lista_todo_reuniones_docentes($id_docente, $id_representante));
 }
 
 if (isset($_GET['listar'])) {
@@ -43,9 +47,9 @@ class reunionesC
         return $datos;
     }
 
-    function lista_todo_reuniones_docentes($ac_docente_id)
+    function lista_todo_reuniones_docentes($ac_docente_id, $id_representante)
     {
-        $datos = $this->modelo->lista_reuniones_todo_docente($ac_docente_id);
+        $datos = $this->modelo->lista_reuniones_todo_docente($ac_docente_id, $id_representante);
         return $datos;
     }
 
@@ -66,7 +70,7 @@ class reunionesC
             array('campo' => 'ac_reunion_observacion', 'dato' => ($parametros['ac_reunion_observacion'])),
             array('campo' => 'ac_estudiante_id', 'dato' => strval($parametros['ac_estudiante_id'])),
             array('campo' => 'ac_nombre_est', 'dato' => ($parametros['ac_nombre_est'])),
-            
+
         );
 
         if ($parametros['ac_reunion_id'] == '') {
