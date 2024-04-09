@@ -158,8 +158,8 @@
 
 <script type="text/javascript">
     const folderInput = document.getElementById('file_xml');
-    folderInput.addEventListener('change', (event) => {
-        eliminar_xml();
+    folderInput.addEventListener('change', async (event) => {
+        await eliminar_xml();
       const selectedFiles = event.target.files;
       if (selectedFiles.length > 0) {
         subir_archivo_xml();
