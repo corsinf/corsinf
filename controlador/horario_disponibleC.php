@@ -1,5 +1,6 @@
 <?php
 include('../modelo/horario_disponibleM.php');
+include('../modelo/reunionesM.php');
 
 $controlador = new horario_disponibleC();
 
@@ -56,15 +57,48 @@ class horario_disponibleC
             array('campo' => 'ac_horarioD_materia', 'dato' => ($parametros['ac_horarioD_materia'])),
         );
 
-        if ($parametros['ac_horarioD_id'] == '') {
-            $datos = $this->modelo->insertar($datos);
-        } else {
-            $where[0]['campo'] = 'ac_horarioD_id';
-            $where[0]['dato'] = $parametros['ac_horarioD_id'];
-            $datos = $this->modelo->editar($datos, $where);
-        }
+        //Validacion para insertar un turno con un representante
 
-        return $datos;
+        $validacion_turno_rep = $parametros['parametros_turno_rep'] ?? false;
+        if ($validacion_turno_rep) {
+            $reunionesM = new reunionesM();
+
+            $datos_id = $this->modelo->insertar_id($datos);
+
+            $ac_representante_id = $parametros['parametros_turno_rep']['ac_representante_id'];
+            $ac_reunion_motivo = $parametros['parametros_turno_rep']['ac_reunion_motivo'];
+            $ac_estudiante_id = $parametros['parametros_turno_rep']['ac_estudiante_id'];
+            $ac_nombre_est = $parametros['parametros_turno_rep']['ac_nombre_est'];
+            $ac_reunion_descripcion = $parametros['parametros_turno_rep']['ac_reunion_descripcion'];
+
+            $datos = array(
+                array('campo' => 'ac_horarioD_id', 'dato' => strval($datos_id)),
+                array('campo' => 'ac_representante_id', 'dato' => strval($ac_representante_id)),
+                array('campo' => 'ac_reunion_motivo', 'dato' => ($ac_reunion_motivo)),
+                array('campo' => 'ac_reunion_observacion', 'dato' => ('')),
+                array('campo' => 'ac_estudiante_id', 'dato' => strval($ac_estudiante_id)),
+                array('campo' => 'ac_nombre_est', 'dato' => ($ac_nombre_est)),
+                array('campo' => 'ac_reunion_descripcion', 'dato' => ($ac_reunion_descripcion)),
+
+            );
+
+            $datos = $reunionesM->insertar($datos);
+            $this->modelo->turno_representanteM(strval($datos_id));
+
+            return $datos;
+
+        } else {
+
+            if ($parametros['ac_horarioD_id'] == '') {
+                $datos = $this->modelo->insertar($datos);
+            } else {
+                $where[0]['campo'] = 'ac_horarioD_id';
+                $where[0]['dato'] = $parametros['ac_horarioD_id'];
+                $datos = $this->modelo->editar($datos, $where);
+            }
+
+            return $datos;
+        }
     }
 
     function eliminar($id)
@@ -78,5 +112,4 @@ class horario_disponibleC
         //$datos = $this->modelo->turno_representanteM($id);
         return '$datos';
     }
-
 }

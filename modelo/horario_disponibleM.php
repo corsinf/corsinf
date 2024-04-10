@@ -54,9 +54,11 @@ class horario_disponibleM
                     hdd.ac_horarioD_materia,
                     hdd.ac_horarioD_fecha_creacion,
                     hdd.ac_horarioD_fecha_modificacion,
-                    hdd.ac_horarioD_estado
+                    hdd.ac_horarioD_estado,
+                    cc.ac_cubiculo_nombre
 
                     FROM horario_disponible hdd
+                    INNER JOIN cat_cubiculo cc ON hdd.ac_horarioD_ubicacion = cc.ac_cubiculo_id
                     WHERE 1 = 1 AND hdd.ac_docente_id = $id_docente AND CONVERT(DATE, hdd.ac_horarioD_fecha_disponible) >= CONVERT(DATE, GETDATE())";
 
             $sql .= " ORDER BY hdd.ac_horarioD_id;";
@@ -69,6 +71,12 @@ class horario_disponibleM
     function insertar($datos)
     {
         $rest = $this->db->inserts('horario_disponible', $datos);
+        return $rest;
+    }
+
+    function insertar_id($datos)
+    {
+        $rest = $this->db->inserts_id('horario_disponible', $datos);
         return $rest;
     }
 

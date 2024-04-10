@@ -54,6 +54,43 @@ if (isset($_GET['tcp'])) {
     echo json_encode($controlador->tcp());
 }
 
+if (isset($_GET['lista_reuniones'])) {
+    $tipo = $_POST['tipo'];
+    $id_busqueda = $_POST['id_busqueda'];
+    echo json_encode($controlador->lista_reuniones($tipo, $id_busqueda));
+}
+
+if (isset($_GET['lista_estado_reuniones'])) {
+    $tipo = $_POST['tipo'];
+    $id_busqueda = $_POST['id_busqueda'];
+    echo json_encode($controlador->lista_estado_reuniones($tipo, $id_busqueda));
+}
+
+if (isset($_GET['total_horario_disponible'])) {
+    $id_docente = $_POST['id_docente'];
+    $estado = $_POST['estado'];
+    echo json_encode($controlador->total_horario_disponible($id_docente, $estado));
+}
+
+if (isset($_GET['total_horario_clases'])) {
+    $id_docente = $_POST['id_docente'] ?? '';
+    echo json_encode($controlador->total_horario_clases($id_docente));
+}
+
+if (isset($_GET['total_clases'])) {
+    $id_docente = $_POST['id_docente'] ?? '';
+    echo json_encode($controlador->total_clases($id_docente));
+}
+
+if (isset($_GET['total_historial_estudiantil_docente'])) {
+    $id_docente = $_POST['id_docente'] ?? '';
+    echo json_encode($controlador->total_historial_estudiantil_docente($id_docente));
+}
+
+
+
+
+
 
 //echo json_encode($controlador->insertar_editar('Ejemplo1'));
 
@@ -205,5 +242,50 @@ class index_saludC
             }
     }
 
+    function lista_reuniones($tipo, $id_busqueda)
+    {
+        $motivo = array();
+        $total_motivos = array();
+        $datos = $this->modelo->reuniones_realizadas($tipo, $id_busqueda);
+        foreach ($datos as $key => $value) {
+            $motivo[] = $value['motivo'];
+            $total_motivos[] = $value['total_motivos'];
+        }
+
+        return array('motivo' => $motivo, 'total_motivos' => $total_motivos);
+    }
+
+    function lista_estado_reuniones($tipo, $id_busqueda)
+    {
+        $estado = array();
+        $total_estados = array();
+        $datos = $this->modelo->estado_reuniones($tipo, $id_busqueda);
+        foreach ($datos as $key => $value) {
+            $estado[] = $value['estado'];
+            $total_estados[] = $value['total_estados'];
+        }
+
+        return array('estado' => $estado, 'total_estados' => $total_estados);
+    }
+
+    function total_horario_disponible($id_docente, $estado)
+    {
+        return $this->modelo->total_horario_dispoible($id_docente, $estado);
+    }
+
+    function total_horario_clases($id_docente)
+    {
+        return $this->modelo->total_horario_clases($id_docente);
+    }
+
+    function total_clases($id_docente)
+    {
+        return $this->modelo->total_clases($id_docente);
+    }
+
+    function total_historial_estudiantil_docente($id_docente)
+    {
+        return $this->modelo->total_historial_estudiantil_docente($id_docente);
+    }
 
 }

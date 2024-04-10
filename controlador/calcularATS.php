@@ -170,6 +170,7 @@ class calcular
 
 								if($value3['Tipo']=='R')
 								{
+									// print_r($value3);die();
 									$titulo = 'Retencion';
 									if($key3==0)
 									{
@@ -269,9 +270,18 @@ class calcular
 		$lineas_xml = $this->leer_archivo_xmls();
 		$facturas_doc = $this->calcular_excel();
 
+
 		$tipo_doc = array();
+		$tipo = 1;
 		foreach ($facturas_doc as $key => $value) {
-			$tipo_doc[] = $value[0]; 
+			if($value[0]=='RUC_EMISOR' || $tipo==2)
+			{
+				$tipo_doc[] = $value[2]; 
+				$tipo = 2;
+			}else
+			{
+				$tipo_doc[] = $value[0]; 
+			}
 		}
 
 		$tipo_doc = array_unique($tipo_doc);
@@ -292,6 +302,7 @@ class calcular
 		$t_con_iva_total = 0;
 		$t_valor_iva = 0;
 		$t_total_todo = 0;
+
 		// ---------------listado del porcentajes de retencion --------------
 		$porcentaje_ret = array('Ret_iva'=>0,'Ret_renta'=>0,'Ret_otras'=>0);
 		foreach ($lineas_xml as $key => $value) {
@@ -326,11 +337,50 @@ class calcular
 			}
 		}
 		// print_r($porcentaje_ret);die();
+
 		//-------------------todso los comprobantes listado------------------
+		
 		foreach ($facturas_doc as $key => $value) {
-			// print_r($facturas_doc);die();
+			// print_r($value[0]);
+			if($value[0]=='RUC_EMISOR' || $tipo==2)
+			{
+				$tipo = 2;
+				$valueT[0] = $value[2];
+				$valueT[1] = $value[3];
+				$valueT[2] = $value[0];
+				$valueT[3] = $value[1];
+				$valueT[4] = $value[6];
+				$valueT[5] = $value[5];
+
+				$valueT[6] = 'NO hay';
+
+				$valueT[7] = $value[11];
+				$valueT[8] = $value[7];
+				$valueT[9] = $value[4];
+				$valueT[10] = $value[4];
+				$valueT[11] = $value[10];
+			}
+			if($tipo==2)
+			{
+				$value[0] = $valueT[0];
+				$value[1] = $valueT[1];
+				$value[2] = $valueT[2];
+				$value[3] = $valueT[3];
+				$value[4] = $valueT[4];
+				$value[5] = $valueT[5];
+				$value[6] = $valueT[6];
+				$value[7] = $valueT[7];
+				$value[8] = $valueT[8];
+				$value[9] = $valueT[9];
+				$value[10] = $valueT[10];
+				$value[11] = $valueT[11];
+			}
+
+			// print_r($value[9]);die();
 			if(is_numeric($value[9]))
 			{
+
+			// print_r($value[9]);die();
 				$tot = '';
 				if(isset($value[11])){ $tot = $value[11]; }
 				$tr.='<div class="card">
@@ -341,8 +391,8 @@ class calcular
 	                     			'.$value[3].'
                      			</div>
                      			<div class="col-sm-3">
-	                     			<b>TIPO DE COMPROBANTE</b>
-	                     			'.$value[0].'
+	                     			<b>TIPO DE COMPROBANTE</b></br>
+	                     			<b><u>'.$value[0].'</u></b>
                      			</div>
                      			<div class="col-sm-3">
 	                     			<b>SERIE COMPROBANTE</b><br>
@@ -361,18 +411,19 @@ class calcular
 	                     			'.$tot.'
                      			</div>
                      		</div>';
-				// print_r($value);die();
+				// print_r($value);
                  $tabla = '';
+                 $titulo = $value[0];
 				//----------------------------todas ala lineas de los xml leidos-----------------------
 				foreach ($lineas_xml as $key2 => $value2) {
-
+					// print_r($lineas_xml);die();
 					//------------------compara el numero de autorizacion de xmls leidos y listado de comprobantes--------
-					
 					if(isset($value2[0]['Autorizacion']) && $value2[0]['Autorizacion']==$value[9])
 					{
 						$ingresa = 1;
 						$tabla.='<tr><td colspan="9"><table class="table table-striped" style="border: 1px solid;width:100%">';
 						foreach ($value2 as $key3 => $value3) {
+							// print_r($value3);die();
 
 							if($value3['Tipo']=='F')
 							{
@@ -417,6 +468,7 @@ class calcular
 
 							if($value3['Tipo']=='R')
 							{
+								// print_r($value3);die();
 								$titulo = 'Retencion';
 								if($key3==0)
 								{
@@ -451,6 +503,9 @@ class calcular
 						}
 						// print_r($value2);die();
 
+					}else
+					{
+						// print_r($tr);die();
 					}
 					if($ingresa==1)
 					{
@@ -477,6 +532,7 @@ class calcular
 					// print_r($value2);die();
 				}
 				// print_r($value);die();
+				if($tabla==''){$tabla='<table class="table table-sm"><tr><td colspan="7">No existe xml de detalles</td></tr></table>';}
 				  
 				$tr.='</table>
 				<div class="card">
@@ -588,10 +644,14 @@ class calcular
 	function leer_archivo_xmls()
 	{
 		$detalle = array();
-		foreach ($this->documentos as $key => $value) {
-			$detalle[] = $this->sri->recuperar_xml_a_factura($value,$value);
-			// print_r($detalle);die();
-		}
+		// print_r($this->documentos);die();
+		// if($this->documentos!='')
+		// {
+			foreach ($this->documentos as $key => $value) {
+				$detalle[] = $this->sri->recuperar_xml_a_factura($value,$value);
+				// print_r($detalle);die();
+			}
+		// }
 
 		return $detalle;
 	}
@@ -623,6 +683,8 @@ class calcular
 
 	function eliminar_xml()
 	{
+		$ruta = dirname(__DIR__,1).'/TEMP/XMLS/';
+		$this->vaciarDirectorio($ruta);
 		array_map('unlink', glob("XMLS/*"));
     	array_filter(glob("XMLS/*"), 'is_dir', GLOB_ONLYDIR) ?: array_map('rmdir', glob("XMLS/*"));
     	return 1;
@@ -673,6 +735,26 @@ class calcular
 		}
 		return $link;
 
+	}
+
+	function vaciarDirectorio($directorio) 
+	{
+	    // Verificar que el directorio exista
+	    if (is_dir($directorio)) {
+	        // Obtener la lista de archivos y subdirectorios en el directorio
+	        $archivos = glob($directorio . '/*');
+	        
+	        // Eliminar cada archivo o subdirectorio
+	        foreach($archivos as $archivo) {
+	            // Si es un directorio, llamar recursivamente a la función
+	            if (is_dir($archivo)) {
+	                vaciarDirectorio($archivo);
+	            } else {
+	                // Si es un archivo, eliminarlo
+	                unlink($archivo);
+	            }
+	        }
+	    }
 	}
 
 }

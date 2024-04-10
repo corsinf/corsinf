@@ -171,6 +171,11 @@ function recuperar_xml_a_factura($documento)
 		{
 			$detalle = $documentos['docsSustento']['docSustento']['retenciones']['retencion'];
 		}
+
+		if(isset($detalle['codigo']))
+		{
+			$detalle = array($detalle);
+		}
 // print_r($detalle);die();
 // print_r($documentos);die();
 		foreach ($detalle as $key => $value) {

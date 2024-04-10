@@ -31,6 +31,7 @@ class reunionesM
                 reu.ac_reunion_fecha_creacion,
                 reu.ac_reunion_fecha_modificacion,
                 reu.ac_reunion_estado,
+                reu.ac_reunion_descripcion,
 
                 hdd.ac_docente_id,
                 hdd.ac_horarioD_ubicacion,
@@ -70,6 +71,7 @@ class reunionesM
                     reu.ac_reunion_fecha_creacion,
                     reu.ac_reunion_fecha_modificacion,
                     reu.ac_reunion_estado,
+                    reu.ac_reunion_descripcion,
 
                     hdd.ac_docente_id,
                     hdd.ac_horarioD_ubicacion,
@@ -93,9 +95,9 @@ class reunionesM
         }
     }
 
-    function lista_reuniones_todo_docente($ac_docente_id = '')
+    function lista_reuniones_todo_docente($ac_docente_id = '', $ac_representante_id = '')
     {
-        if ($ac_docente_id != '') {
+        if ($ac_docente_id != '' || $ac_representante_id != '') {
             $sql =
                 "SELECT 
                     reu.ac_reunion_id,
@@ -108,6 +110,7 @@ class reunionesM
                     reu.ac_reunion_fecha_creacion,
                     reu.ac_reunion_fecha_modificacion,
                     reu.ac_reunion_estado,
+                    reu.ac_reunion_descripcion,
 
                     hdd.ac_docente_id,
                     hdd.ac_horarioD_ubicacion,
@@ -117,15 +120,28 @@ class reunionesM
                     hdd.ac_horarioD_materia,
                     hdd.ac_horarioD_estado,
 
-                    CONCAT(rep.sa_rep_primer_apellido, ' ', rep.sa_rep_segundo_apellido, ' ', rep.sa_rep_primer_nombre, ' ', rep.sa_rep_segundo_nombre) AS nombre_representante
+                    CONCAT(rep.sa_rep_primer_apellido, ' ', rep.sa_rep_segundo_apellido, ' ', rep.sa_rep_primer_nombre, ' ', rep.sa_rep_segundo_nombre) AS nombre_representante,
+                    CONCAT(doc.sa_doc_primer_apellido, ' ', doc.sa_doc_segundo_apellido, ' ', doc.sa_doc_primer_nombre, ' ', doc.sa_doc_segundo_nombre) AS nombre_docente,
+
+                    cub.ac_cubiculo_nombre
 
 
                 FROM reuniones reu
                 INNER JOIN horario_disponible hdd ON reu.ac_horarioD_id = hdd.ac_horarioD_id
                 INNER JOIN representantes rep ON reu.ac_representante_id = rep.sa_rep_id
-                WHERE 1 = 1 AND hdd.ac_docente_id = $ac_docente_id";
+                INNER JOIN docentes doc ON hdd.ac_docente_id = doc.sa_doc_id
+                INNER JOIN cat_cubiculo cub ON hdd.ac_horarioD_ubicacion = cub.ac_cubiculo_id
+                WHERE 1 = 1 ";
 
-            $sql .= " ORDER BY reu.ac_horarioD_id;";
+            if ($ac_docente_id != '') {
+                $sql .= " AND hdd.ac_docente_id = $ac_docente_id";
+            }
+
+            if ($ac_representante_id != '') {
+                $sql .= " AND reu.ac_representante_id = $ac_representante_id";
+            }
+
+            $sql .= " ORDER BY reu.ac_horarioD_id DESC;";
             $datos = $this->db->datos($sql);
             return $datos;
         }

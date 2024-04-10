@@ -62,8 +62,8 @@ if ($id != null && $id != '') {
                 omitZeroMinute: false,
                 hour12: false
             },
-            slotMinTime: '05:00:00',
-            slotMaxTime: '20:00:00',
+            slotMinTime: '07:00:00',
+            slotMaxTime: '15:00:00',
             slotDuration: '00:30:00',
             slotLabelInterval: {
                 hours: 0.5
@@ -280,7 +280,7 @@ if ($id != null && $id != '') {
                         return {
                             id: item['sa_par_id'],
                             text: fullName,
-                            nombre_corto: nombre_corto,
+                            nombre_corto: fullName,
                             sa_est_id: sa_est_id,
                         };
                     });
@@ -329,6 +329,7 @@ if ($id != null && $id != '') {
 
         var ac_estudiante_id = $('#ac_estudiante_id').val();
         var ac_nombre_est = $('#ac_nombre_est').val();
+        var ac_reunion_descripcion = $('#ac_reunion_descripcion').val();
 
         //alert(ac_horarioD_inicio + ' ' + ac_horarioD_fin);
 
@@ -340,11 +341,12 @@ if ($id != null && $id != '') {
             'ac_reunion_observacion': ac_reunion_observacion,
             'ac_estudiante_id': ac_estudiante_id,
             'ac_nombre_est': ac_nombre_est,
+            'ac_reunion_descripcion': ac_reunion_descripcion,
         }
 
         //console.log(parametros);
 
-        if (ac_horarioD_id != '' && ac_representante_id != '' && ac_reunion_motivo != '') {
+        if (ac_horarioD_id != '' && ac_representante_id != '' && ac_reunion_motivo != null) {
             $.ajax({
                 url: '../controlador/reunionesC.php?insertar=true',
                 data: {
@@ -513,11 +515,18 @@ if ($id != null && $id != '') {
                     <div class="col-12">
                         <label for="ac_horarioC_materia">Motivo de la Reunión <label class="text-danger">*</label></label>
                         <select name="ac_reunion_motivo" id="ac_reunion_motivo" class="form-select form-select-sm">
-                            <option selected disabled>-- Seleccione un Estudiante --</option>
+                            <option selected disabled>-- Seleccione un Motivo --</option>
                             <option value="Faltas">Faltas</option>
                             <option value="Notas">Notas</option>
                             <option value="Otros">Otros</option>
                         </select>
+                    </div>
+                </div>
+
+                <div class="row pt-3">
+                    <div class="col-12">
+                        <label for="ac_horarioC_materia">Descripción del Motivo<label class="text-danger">*</label></label>
+                        <textarea name="ac_reunion_descripcion" id="ac_reunion_descripcion" cols="30" rows="2" class="form-control form-control-sm"></textarea>
                     </div>
                 </div>
 

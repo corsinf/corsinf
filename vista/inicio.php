@@ -307,6 +307,10 @@ if ($_GET['acc'] == 'medicamentos') {
 	include('ENFERMERIA/Farmacia/Medicamentos/medicamentos.php');
 }
 
+if ($_GET['acc'] == 'cargar_farmacia') {
+	include('ENFERMERIA/Farmacia/cargar_farmacia.php');
+}
+
 //Insumos
 if ($_GET['acc'] == 'registrar_insumos') {
 	include('ENFERMERIA/Farmacia/Insumos/registrar_insumos.php');
@@ -351,6 +355,10 @@ if ($_GET['acc'] == 'horario_disponible') {
 //Reunion
 if ($_GET['acc'] == 'reunion_rep_doc') {
 	include('ENFERMERIA/Docentes/Reunion/reunion_rep_doc.php');
+}
+
+if ($_GET['acc'] == 'reuniones_representante') {
+	include('ENFERMERIA/Representantes/reuniones.php');
 }
 
 if ($_GET['acc'] == 'reuniones') {
