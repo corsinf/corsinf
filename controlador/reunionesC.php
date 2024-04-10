@@ -63,17 +63,18 @@ class reunionesC
     {
         $horario_disponibleM = new horario_disponibleM();
 
-        $datos = array(
-            array('campo' => 'ac_horarioD_id', 'dato' => strval($parametros['ac_horarioD_id'])),
-            array('campo' => 'ac_representante_id', 'dato' => strval($parametros['ac_representante_id'])),
-            array('campo' => 'ac_reunion_motivo', 'dato' => ($parametros['ac_reunion_motivo'])),
-            array('campo' => 'ac_reunion_observacion', 'dato' => ($parametros['ac_reunion_observacion'])),
-            array('campo' => 'ac_estudiante_id', 'dato' => strval($parametros['ac_estudiante_id'])),
-            array('campo' => 'ac_nombre_est', 'dato' => ($parametros['ac_nombre_est'])),
-
-        );
-
         if ($parametros['ac_reunion_id'] == '') {
+            
+            $datos = array(
+                array('campo' => 'ac_horarioD_id', 'dato' => strval($parametros['ac_horarioD_id'])),
+                array('campo' => 'ac_representante_id', 'dato' => strval($parametros['ac_representante_id'])),
+                array('campo' => 'ac_reunion_motivo', 'dato' => ($parametros['ac_reunion_motivo'])),
+                array('campo' => 'ac_reunion_observacion', 'dato' => ($parametros['ac_reunion_observacion'])),
+                array('campo' => 'ac_estudiante_id', 'dato' => strval($parametros['ac_estudiante_id'])),
+                array('campo' => 'ac_nombre_est', 'dato' => ($parametros['ac_nombre_est'])),
+                array('campo' => 'ac_reunion_descripcion', 'dato' => ($parametros['ac_reunion_descripcion'])),
+    
+            );
             $datos = $this->modelo->insertar($datos);
             $horario_disponibleM->turno_representanteM(strval($parametros['ac_horarioD_id']));
         } else {

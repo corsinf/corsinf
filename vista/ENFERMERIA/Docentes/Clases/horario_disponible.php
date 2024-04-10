@@ -94,12 +94,14 @@ if ($id != null && $id != '') {
 
                 var id_horario_clases = info.event.extendedProps.id_horario_clases ?? '';
                 var id_horario_disponible = info.event.extendedProps.id_horario_disponible ?? '';
+                var ac_horarioD_estado = info.event.extendedProps.ac_horarioD_estado ?? '';
+                
 
                 //${arg.event.id}', '${arg.event.title}', '${startTime}', '${endTime}
 
-                //console.log(info.event)
+                //console.log(ac_horarioD_estado)
 
-                if (id_horario_disponible != '') {
+                if (id_horario_disponible != '' && ac_horarioD_estado == 1) {
                     eliminar_evento(id_horario_disponible)
                 }
 
@@ -298,6 +300,7 @@ if ($id != null && $id != '') {
                                         extendedProps: {
                                             descripcion: ' (' + evento.sa_sec_nombre + ' / ' + evento.sa_gra_nombre + ' / ' + evento.sa_par_nombre + ')',
                                             id_horario_clases: evento.ac_horarioC_id,
+                                            estado: evento.ac_horarioD_estado
                                         },
                                         color: '#ffc107'
                                     });
@@ -450,6 +453,7 @@ if ($id != null && $id != '') {
                         //var ac_reunion_observacion = $('#ac_reunion_observacion').val();
                         var ac_estudiante_id = $('#txt_estudiante').val();
                         var ac_nombre_est = $('#ac_nombre_est').val();
+                        var ac_reunion_descripcion = $('#ac_reunion_descripcion').val();
 
 
                         var parametros_turno_rep = {
@@ -457,10 +461,11 @@ if ($id != null && $id != '') {
                             'ac_reunion_motivo': ac_reunion_motivo,
                             'ac_estudiante_id': ac_estudiante_id,
                             'ac_nombre_est': ac_nombre_est,
-                            'chx_turno_rep': chx_turno_rep
+                            'chx_turno_rep': chx_turno_rep,
+                            'ac_reunion_descripcion': ac_reunion_descripcion
                         }
 
-                        if (ac_estudiante_id != null && ac_reunion_motivo != null) {
+                        if (ac_estudiante_id != null && ac_reunion_motivo != null && ac_reunion_descripcion != '') {
 
                             parametros.parametros_turno_rep = parametros_turno_rep;
 
@@ -484,6 +489,9 @@ if ($id != null && $id != '') {
 
                             if (ac_estudiante_id == null) {
                                 errores.push('Falta seleccionar un Estudiante.');
+                            }
+                            if (ac_reunion_descripcion == '') {
+                                errores.push('Falta Escribir una Descripción del Motivo.');
                             }
                             if (ac_reunion_motivo == null) {
                                 errores.push('Falta seleccionar un motivo para la reunión.');
@@ -681,7 +689,7 @@ if ($id != null && $id != '') {
 
         $('#chx_turno_rep').prop('checked', false);
 
-        $('#ac_reunion_motivo').val('');
+        $('#ac_reunion_descripcion').val('');
 
         $('#txt_estudiante').val(null).trigger('change');
 
@@ -833,12 +841,15 @@ if ($id != null && $id != '') {
                         <div class="col-12">
                             <label for="ac_horarioC_materia">Motivo de la Reunión <label class="text-danger">*</label></label>
                             <select name="ac_reunion_motivo" id="ac_reunion_motivo" class="form-select form-select-sm" disabled>
-                                <option  disabled value="">-- Seleccione un Motivo --</option>
-                                <option value="Faltas">Faltas</option>
-                                <option value="Notas">Notas</option>
-                                <option value="Otros">Otros</option>
                                 <option selected value="Solicitado">Solicitado al Representante</option>
                             </select>
+                        </div>
+                    </div>
+
+                    <div class="row m-0 pt-3">
+                        <div class="col-12">
+                            <label for="ac_horarioC_materia">Descripción del Motivo<label class="text-danger">*</label></label>
+                            <textarea name="ac_reunion_descripcion" id="ac_reunion_descripcion" cols="30" rows="2" class="form-control form-control-sm"></textarea>
                         </div>
                     </div>
 

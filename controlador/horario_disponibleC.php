@@ -69,6 +69,7 @@ class horario_disponibleC
             $ac_reunion_motivo = $parametros['parametros_turno_rep']['ac_reunion_motivo'];
             $ac_estudiante_id = $parametros['parametros_turno_rep']['ac_estudiante_id'];
             $ac_nombre_est = $parametros['parametros_turno_rep']['ac_nombre_est'];
+            $ac_reunion_descripcion = $parametros['parametros_turno_rep']['ac_reunion_descripcion'];
 
             $datos = array(
                 array('campo' => 'ac_horarioD_id', 'dato' => strval($datos_id)),
@@ -77,6 +78,7 @@ class horario_disponibleC
                 array('campo' => 'ac_reunion_observacion', 'dato' => ('')),
                 array('campo' => 'ac_estudiante_id', 'dato' => strval($ac_estudiante_id)),
                 array('campo' => 'ac_nombre_est', 'dato' => ($ac_nombre_est)),
+                array('campo' => 'ac_reunion_descripcion', 'dato' => ($ac_reunion_descripcion)),
 
             );
 
