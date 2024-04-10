@@ -1,107 +1,249 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <autorizacion>
 <estado>AUTORIZADO</estado>
-<numeroAutorizacion>0501202301179071031900122730010000090805658032314</numeroAutorizacion>
-<fechaAutorizacion>2023-01-05T15:00:13-05:00</fechaAutorizacion>
+<numeroAutorizacion>2511202201099078906100120020200007644720076447210</numeroAutorizacion>
+<fechaAutorizacion>2022-11-25T23:25:40-05:00</fechaAutorizacion>
 <ambiente>PRODUCCIÓN</ambiente>
 <comprobante><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
-<factura id="comprobante" version="1.1.0">
-    <infoTributaria>
-        <ambiente>2</ambiente>
-        <tipoEmision>1</tipoEmision>
-        <razonSocial>FARMACIAS Y COMISARIATOS DE MEDICINAS S.A. FARCOMED</razonSocial>
-        <nombreComercial>FYBECA MATOVELLE</nombreComercial>
-        <ruc>1790710319001</ruc>
-        <claveAcceso>0501202301179071031900122730010000090805658032314</claveAcceso>
-        <codDoc>01</codDoc>
-        <estab>273</estab>
-        <ptoEmi>001</ptoEmi>
-        <secuencial>000009080</secuencial>
-        <dirMatriz>KM CINCO Y MEDIO AV DE LOS SHYRIS N SN Y SECUNDARIA</dirMatriz>
-    </infoTributaria>
-    <infoFactura>
-        <fechaEmision>05/01/2023</fechaEmision>
-        <dirEstablecimiento>AV ELOY ALFARO Y LOS ALAMOS</dirEstablecimiento>
-        <contribuyenteEspecial>5368</contribuyenteEspecial>
-        <obligadoContabilidad>SI</obligadoContabilidad>
-        <tipoIdentificacionComprador>05</tipoIdentificacionComprador>
-        <razonSocialComprador>RUBIO PUETATE MILTON ANDRES</razonSocialComprador>
-        <identificacionComprador>1712605284</identificacionComprador>
-        <totalSinImpuestos>2.33</totalSinImpuestos>
-        <totalDescuento>0</totalDescuento>
-        <totalConImpuestos>
-            <totalImpuesto>
-                <codigo>2</codigo>
-                <codigoPorcentaje>0</codigoPorcentaje>
-                <baseImponible>1.80</baseImponible>
-                <tarifa>0</tarifa>
-                <valor>0.00</valor>
-            </totalImpuesto>
-            <totalImpuesto>
-                <codigo>2</codigo>
-                <codigoPorcentaje>2</codigoPorcentaje>
-                <baseImponible>0.53</baseImponible>
-                <tarifa>12</tarifa>
-                <valor>0.06</valor>
-            </totalImpuesto>
-        </totalConImpuestos>
-        <propina>0.00</propina>
-        <importeTotal>2.39</importeTotal>
-        <moneda>DOLAR</moneda>
-        <pagos>
-            <pago>
-                <formaPago>01</formaPago>
-                <total>2.39</total>
-            </pago>
-        </pagos>
-    </infoFactura>
-    <detalles>
-        <detalle>
-            <codigoPrincipal>100222136</codigoPrincipal>
-            <descripcion>MELOXICAM .(MINTLAB))MELOXICAM (MINTLAB) COMP. 15 MG C10 SUELTA</descripcion>
-            <cantidad>4</cantidad>
-            <precioUnitario>0.45</precioUnitario>
-            <descuento>0</descuento>
-            <precioTotalSinImpuesto>1.8</precioTotalSinImpuesto>
-            <impuestos>
-                <impuesto>
-                    <codigo>2</codigo>
-                    <codigoPorcentaje>0</codigoPorcentaje>
-                    <tarifa>0</tarifa>
-                    <baseImponible>1.80</baseImponible>
-                    <valor>0.00</valor>
-                </impuesto>
-            </impuestos>
-        </detalle>
-        <detalle>
-            <codigoPrincipal>295881</codigoPrincipal>
-            <descripcion>AGUAS CON GAS SAN FELIPE B&amp;C.AGUAS SAN FELIPE CON GAS  500 ML</descripcion>
-            <cantidad>1</cantidad>
-            <precioUnitario>0.53</precioUnitario>
-            <descuento>0</descuento>
-            <precioTotalSinImpuesto>0.53</precioTotalSinImpuesto>
-            <impuestos>
-                <impuesto>
-                    <codigo>2</codigo>
-                    <codigoPorcentaje>2</codigoPorcentaje>
-                    <tarifa>12</tarifa>
-                    <baseImponible>0.53</baseImponible>
-                    <valor>0.06</valor>
-                </impuesto>
-            </impuestos>
-        </detalle>
-    </detalles>
-    <infoAdicional>
-        <campoAdicional nombre="DIRECCION">MICHELENA 721 MARISCAL SUCRE</campoAdicional>
-        <campoAdicional nombre="DESCUENTO">0.28</campoAdicional>
-        <campoAdicional nombre="DEDUCIBLE ALIMENTOS">0.53</campoAdicional>
-        <campoAdicional nombre="DEDUCIBLE MEDICINAS">1.8</campoAdicional>
-        <campoAdicional nombre="DOCUMENTO INTERNO">9722</campoAdicional>
-        <campoAdicional nombre="EMAIL">mrubio@corsinf.com</campoAdicional>
-    </infoAdicional>
-<ds:Signature xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xmlns:etsi="http://uri.etsi.org/01903/v1.3.2#" Id="Signature852805"><ds:SignedInfo Id="Signature-SignedInfo879464"><ds:CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"></ds:CanonicalizationMethod><ds:SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"></ds:SignatureMethod><ds:Reference Id="SignedPropertiesID757436" Type="http://uri.etsi.org/01903#SignedProperties" URI="#Signature852805-SignedProperties896074"><ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"></ds:DigestMethod><ds:DigestValue>tij+VVn85jNnoeYs+qR4oFKWlho=</ds:DigestValue></ds:Reference><ds:Reference URI="#Certificate1967495"><ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"></ds:DigestMethod><ds:DigestValue>CvqkgXkTg9iXSdVYECUr5WXyV5Y=</ds:DigestValue></ds:Reference><ds:Reference Id="Reference-ID-335866" URI="#comprobante"><ds:Transforms><ds:Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"></ds:Transform></ds:Transforms><ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"></ds:DigestMethod><ds:DigestValue>uz6O/kONV9MZ7bnWnGXdLYFIlQc=</ds:DigestValue></ds:Reference></ds:SignedInfo><ds:SignatureValue Id="SignatureValue834693">BUD1rnqd5Lat4Tw4yY6Mfgo+AqpE1z7mTUnoNPskTo7ZfCqhzxOJfwwg3RrMAouO8BiEuJMQkbqIj2TBtPtWRxeBmTjgoKuo2sKIIna+eFmdOLo9HMYbDcWGbmyysrFCJlqDAPgvik2NUKsbnv2ZxRoOkRLYqOTuC4MDAUYgMMJRTli+fPLgZ8SUX1SJtkm+sWD1s4gix259fj4zI6rjTXUZ9d+PvBETdsHW12bs2HTiqFKjbHi4tgYzkjLj0pfHdG0itV8ZGqPxNRtcCrFPKLD4kZ7t49gh+aPQOVumxdPeK13GwdDVFCju1UwtjPHOI2OgaXysvESTMbQqn6ibYA==</ds:SignatureValue><ds:KeyInfo Id="Certificate1967495"><ds:X509Data><ds:X509Certificate>MIIKTzCCCDegAwIBAgIEW2mrATANBgkqhkiG9w0BAQsFADCBoTELMAkGA1UEBhMCRUMxIjAgBgNVBAoTGUJBTkNPIENFTlRSQUwgREVMIEVDVUFET1IxNzA1BgNVBAsTLkVOVElEQUQgREUgQ0VSVElGSUNBQ0lPTiBERSBJTkZPUk1BQ0lPTi1FQ0lCQ0UxDjAMBgNVBAcTBVFVSVRPMSUwIwYDVQQDExxBQyBCQU5DTyBDRU5UUkFMIERFTCBFQ1VBRE9SMB4XDTIxMDcwMTE5MzQwMFoXDTIzMDcwMTIwMDQwMFowgbUxCzAJBgNVBAYTAkVDMSIwIAYDVQQKExlCQU5DTyBDRU5UUkFMIERFTCBFQ1VBRE9SMTcwNQYDVQQLEy5FTlRJREFEIERFIENFUlRJRklDQUNJT04gREUgSU5GT1JNQUNJT04tRUNJQkNFMQ4wDAYDVQQHEwVRVUlUTzE5MBEGA1UEBRMKMDAwMDY1NjIyOTAkBgNVBAMTHU1JR1VFTCBBTkdFTCBDRUxFRE9OIEdPTlpBTEVaMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAuWpj5GLjEWBBSRilziAkh/tIrk5ej5EME3J1Lbz3KmCVoVAh6J8qvL4T992ijj1g8s+5DwST4Tk1Oqijt+gFC/TeCGbPsaosMlmf1XI6ZqI33tyuErCohHX6j5ROF5AmuFvMSL2y9YULqugp2U8tmyTxGI8SFkPRO71M2fLVD4+s8WtL8RIqT1IML/gEKejtV87gYkfW8bL306llMVekCE43Sm/+T8mNll/WwTh83H0M/1OwOtBXaCvU5BjgTqRD1raxL845dyaIR5HM+CPVSHlReRqJShlC2tZvlGeLU7KvIjmg7cv0QOXmnmkacIUUpmghUTGPeZEnkd/em7UVyQIDAQABo4IFdzCCBXMwCwYDVR0PBAQDAgeAMGcGA1UdIARgMF4wXAYLKwYBBAGCqDsCAgEwTTBLBggrBgEFBQcCARY/aHR0cDovL3d3dy5lY2kuYmNlLmVjL3BvbGl0aWNhLWNlcnRpZmljYWRvL3BlcnNvbmEtanVyaWRpY2EucGRmMIGRBggrBgEFBQcBAQSBhDCBgTA+BggrBgEFBQcwAYYyaHR0cDovL29jc3AuZWNpLmJjZS5lYy9lamJjYS9wdWJsaWN3ZWIvc3RhdHVzL29jc3AwPwYIKwYBBQUHMAGGM2h0dHA6Ly9vY3NwMS5lY2kuYmNlLmVjL2VqYmNhL3B1YmxpY3dlYi9zdGF0dXMvb2NzcDBBBgorBgEEAYKoOwMKBDMTMUZBUk1BQ0lBUyBZIENPTUlTQVJJQVRPUyBERSBNRURJQ0lOQVMgU0EgRkFSQ09NRUQwHQYKKwYBBAGCqDsDCwQPEw0xNzkwNzEwMzE5MDAxMBoGCisGAQQBgqg7AwEEDBMKMTc1OTcwOTgzMzAcBgorBgEEAYKoOwMCBA4TDE1JR1VFTCBBTkdFTDAXBgorBgEEAYKoOwMDBAkTB0NFTEVET04wGAYKKwYBBAGCqDsDBAQKEwhHT05aQUxFWjAkBgorBgEEAYKoOwMFBBYTFFBSRVNJREVOVEUgRUpFQ1VUSVZPMFUGCisGAQQBgqg7AwcERxNFQVYgREUgTE9TIFNIWVJJUyBTTiBLTSA1IFZJQSBBTUFHVUFOQSBGUkVOVEUgQSBMQSBIQUNJRU5EQSBFTCBDT1JUSUpPMBkGCisGAQQBgqg7AwgECxMJMDIzODI5ODAwMBkGCisGAQQBgqg7AwkECxMJUnVtaW5haHVpMBcGCisGAQQBgqg7AwwECRMHRUNVQURPUjAgBgorBgEEAYKoOwMzBBITEFNPRlRXQVJFLUFSQ0hJVk8wMgYDVR0RBCswKYEnZ19yZXByZXNlbnRhbnRlbGVnYWxAY29ycG9yYWNpb25ncGYuY29tMIIB4QYDVR0fBIIB2DCCAdQwggHQoIIBzKCCAciGgdZsZGFwOi8vYmNlcWxkYXBzdWJwMS5iY2UuZWMvY249Q1JMMTMwMSxjbj1BQyUyMEJBTkNPJTIwQ0VOVFJBTCUyMERFTCUyMEVDVUFET1IsbD1RVUlUTyxvdT1FTlRJREFEJTIwREUlMjBDRVJUSUZJQ0FDSU9OJTIwREUlMjBJTkZPUk1BQ0lPTi1FQ0lCQ0Usbz1CQU5DTyUyMENFTlRSQUwlMjBERUwlMjBFQ1VBRE9SLGM9RUM/Y2VydGlmaWNhdGVSZXZvY2F0aW9uTGlzdD9iYXNlhjRodHRwOi8vd3d3LmVjaS5iY2UuZWMvQ1JML2VjaV9iY2VfZWNfY3JsZmlsZWNvbWIuY3JspIG2MIGzMQswCQYDVQQGEwJFQzEiMCAGA1UEChMZQkFOQ08gQ0VOVFJBTCBERUwgRUNVQURPUjE3MDUGA1UECxMuRU5USURBRCBERSBDRVJUSUZJQ0FDSU9OIERFIElORk9STUFDSU9OLUVDSUJDRTEOMAwGA1UEBxMFUVVJVE8xJTAjBgNVBAMTHEFDIEJBTkNPIENFTlRSQUwgREVMIEVDVUFET1IxEDAOBgNVBAMTB0NSTDEzMDEwKwYDVR0QBCQwIoAPMjAyMTA3MDExOTM0MDBagQ8yMDIzMDcwMTIwMDQwMFowHwYDVR0jBBgwFoAUSKLfIx8d+CxReowDzUkypQnBlKswHQYDVR0OBBYEFB1UrW9KQEURvUW8j7zn8Y7ui1CyMAkGA1UdEwQCMAAwGQYJKoZIhvZ9B0EABAwwChsEVjguMQMCBLAwDQYJKoZIhvcNAQELBQADggIBAC56thZbToM51BkwwJRJjSqG0CpwanHxt8DA1UfX8zQTRC5GXt2FF9v4E/osMfXD3wiD++BC+550ASR3AklD5FvzmFjnkLDSKmbIbSH3wiNB24qPT9BDKbdqpj8wgzF0ldl8Q1U3pJng44oaQ0MXNO2twBFCXkjxzNuAXg4M1VJfAfrNc2F0e57BlH72p88pjbp2iggkLwdolVP0LkcmmEfnSrt/ZTZDCSoSN61zTYhQSfqjXg9+ORoLhMdFMc9C2LdvS/rQE2kvb5pKzPP2mhLf5KzYr96DJVx1jZ8Bw1oMKf8xd4dY+E54Alkf1Z1EmF6pzSU5uUXH5Ua4liY9L/CIa5bEdYhWlNmH7svrmxfD+9nDaEOHPuJt5Nfny24/qITuAsUE38Jwa7iy+hTAGe3BTktlKGZHpAjz3Uy4pkZpB94imuEuzFhTdAGpKDJKM9lgMAPenwL/9zL5wVQRlQnML6WPdTqpIKqi+eYC4LRNIcV25cB4ZSernfNVRuyfwJytd74sS//usAL6dzRoRI8lJkGBknHFYD71lF6vVuT8dvJ80KlRyrrwU0cif6kbqh2Pe6Dok4Nh25kJdkyDFevpqb50BAWI/4GuxI5d8Jx+gdLb2AN5NdDzdj3Btm0tMmOZFgVMpZPrkiVH2QJRhumc+nWbXPZ4vsD0mrG145CN</ds:X509Certificate></ds:X509Data><ds:KeyValue><ds:RSAKeyValue><ds:Modulus>
-uWpj5GLjEWBBSRilziAkh/tIrk5ej5EME3J1Lbz3KmCVoVAh6J8qvL4T992ijj1g8s+5DwST4Tk1Oqijt+gFC/TeCGbPsaosMlmf1XI6ZqI33tyuErCohHX6j5ROF5AmuFvMSL2y9YULqugp2U8tmyTxGI8SFkPRO71M2fLVD4+s8WtL8RIqT1IML/gEKejtV87gYkfW8bL306llMVekCE43Sm/+T8mNll/WwTh83H0M/1OwOtBXaCvU5BjgTqRD1raxL845dyaIR5HM+CPVSHlReRqJShlC2tZvlGeLU7KvIjmg7cv0QOXmnmkacIUUpmghUTGPeZEnkd/em7UVyQ==
-</ds:Modulus><ds:Exponent>AQAB</ds:Exponent></ds:RSAKeyValue></ds:KeyValue></ds:KeyInfo><ds:Object Id="Signature852805-Object333320"><etsi:QualifyingProperties Target="#Signature852805"><etsi:SignedProperties Id="Signature852805-SignedProperties896074"><etsi:SignedSignatureProperties><etsi:SigningTime>2023-01-05T15:00:12-05:00</etsi:SigningTime><etsi:SigningCertificate><etsi:Cert><etsi:CertDigest><ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"></ds:DigestMethod><ds:DigestValue>ONeK/eA6p2tgLpOxfD5mIka+hxw=</ds:DigestValue></etsi:CertDigest><etsi:IssuerSerial><ds:X509IssuerName>CN=AC BANCO CENTRAL DEL ECUADOR,L=QUITO,OU=ENTIDAD DE CERTIFICACION DE INFORMACION-ECIBCE,O=BANCO CENTRAL DEL ECUADOR,C=EC</ds:X509IssuerName><ds:X509SerialNumber>1533651713</ds:X509SerialNumber></etsi:IssuerSerial></etsi:Cert></etsi:SigningCertificate></etsi:SignedSignatureProperties><etsi:SignedDataObjectProperties><etsi:DataObjectFormat ObjectReference="#Reference-ID-335866"><etsi:Description>Contenido Comprobante</etsi:Description><etsi:MimeType>text/xml</etsi:MimeType></etsi:DataObjectFormat></etsi:SignedDataObjectProperties></etsi:SignedProperties></etsi:QualifyingProperties></ds:Object></ds:Signature></factura>]]></comprobante>
+<factura id="comprobante" version="2.1.0">
+  <infoTributaria>
+    <ambiente>2</ambiente>
+    <tipoEmision>1</tipoEmision>
+    <razonSocial>DISTRIBUIDORA IMPORTADORA DIPOR S.A.</razonSocial>
+    <nombreComercial>DIPOR</nombreComercial>
+    <ruc>0990789061001</ruc>
+    <claveAcceso>2511202201099078906100120020200007644720076447210</claveAcceso>
+    <codDoc>01</codDoc>
+    <estab>002</estab>
+    <ptoEmi>020</ptoEmi>
+    <secuencial>000764472</secuencial>
+    <dirMatriz>VIA DAULE KM 10.5</dirMatriz>
+  </infoTributaria>
+  <infoFactura>
+    <fechaEmision>25/11/2022</fechaEmision>
+    <dirEstablecimiento>TANICUCHI LOTE 7 Y PASAJE S/N VIA AMAGUA�A KM. 12.5</dirEstablecimiento>
+    <contribuyenteEspecial>02239</contribuyenteEspecial>
+    <obligadoContabilidad>SI</obligadoContabilidad>
+    <tipoIdentificacionComprador>04</tipoIdentificacionComprador>
+    <guiaRemision>002-020-000043548</guiaRemision>
+    <razonSocialComprador>MORALES NELLY</razonSocialComprador>
+    <identificacionComprador>1793196048001</identificacionComprador>
+    <direccionComprador>S-57-15                       ROCIO</direccionComprador>
+    <totalSinImpuestos>4.80</totalSinImpuestos>
+    <totalDescuento>0.00</totalDescuento>
+    <totalComprobantesReembolso>0</totalComprobantesReembolso>
+    <totalBaseImponibleReembolso>0</totalBaseImponibleReembolso>
+    <totalImpuestoReembolso>0</totalImpuestoReembolso>
+    <totalConImpuestos>
+      <totalImpuesto>
+        <codigo>2</codigo>
+        <codigoPorcentaje>0</codigoPorcentaje>
+        <descuentoAdicional>0</descuentoAdicional>
+        <baseImponible>4.80</baseImponible>
+        <tarifa>0.00</tarifa>
+        <valor>0.00</valor>
+      </totalImpuesto>
+    </totalConImpuestos>
+    <propina>0.00</propina>
+    <fleteInternacional>0</fleteInternacional>
+    <seguroInternacional>0</seguroInternacional>
+    <gastosAduaneros>0</gastosAduaneros>
+    <gastosTransporteOtros>0</gastosTransporteOtros>
+    <importeTotal>4.80</importeTotal>
+    <moneda>DOLAR</moneda>
+    <pagos>
+      <pago>
+        <formaPago>01</formaPago>
+        <total>4.80</total>
+        <plazo>0</plazo>
+        <unidadTiempo>dias</unidadTiempo>
+      </pago>
+    </pagos>
+    <valorRetIva>0</valorRetIva>
+    <valorRetRenta>0</valorRetRenta>
+  </infoFactura>
+  <detalles>
+    <detalle>
+      <codigoPrincipal>9544</codigoPrincipal>
+      <descripcion>LONCHYS HOT POLLO  63GRX100</descripcion>
+      <cantidad>2.000000</cantidad>
+      <precioUnitario>0.78000</precioUnitario>
+      <descuento>0.00</descuento>
+      <precioTotalSinImpuesto>1.56</precioTotalSinImpuesto>
+      <impuestos>
+        <impuesto>
+          <codigo>2</codigo>
+          <codigoPorcentaje>0</codigoPorcentaje>
+          <tarifa>0.00</tarifa>
+          <baseImponible>1.56</baseImponible>
+          <valor>0.00</valor>
+        </impuesto>
+      </impuestos>
+    </detalle>
+    <detalle>
+      <codigoPrincipal>9545</codigoPrincipal>
+      <descripcion>LONCHYS POLLO  63GRX100</descripcion>
+      <cantidad>2.000000</cantidad>
+      <precioUnitario>0.81000</precioUnitario>
+      <descuento>0.00</descuento>
+      <precioTotalSinImpuesto>1.62</precioTotalSinImpuesto>
+      <impuestos>
+        <impuesto>
+          <codigo>2</codigo>
+          <codigoPorcentaje>0</codigoPorcentaje>
+          <tarifa>0.00</tarifa>
+          <baseImponible>1.62</baseImponible>
+          <valor>0.00</valor>
+        </impuesto>
+      </impuestos>
+    </detalle>
+    <detalle>
+      <codigoPrincipal>9547</codigoPrincipal>
+      <descripcion>LONCHYS CAMARON 63GRX100</descripcion>
+      <cantidad>2.000000</cantidad>
+      <precioUnitario>0.81000</precioUnitario>
+      <descuento>0.00</descuento>
+      <precioTotalSinImpuesto>1.62</precioTotalSinImpuesto>
+      <impuestos>
+        <impuesto>
+          <codigo>2</codigo>
+          <codigoPorcentaje>0</codigoPorcentaje>
+          <tarifa>0.00</tarifa>
+          <baseImponible>1.62</baseImponible>
+          <valor>0.00</valor>
+        </impuesto>
+      </impuestos>
+    </detalle>
+  </detalles>
+  <infoSustitutivaGuiaRemision>
+    <dirPartida>TANICUCHI LOTE 7 Y PASAJE S/N VIA AMAGUA�A KM. 12.5</dirPartida>
+    <dirDestinatario>S-57-15                       ROCIO</dirDestinatario>
+    <fechaIniTransporte>26/11/2022</fechaIniTransporte>
+    <fechaFinTransporte>26/11/2022</fechaFinTransporte>
+    <razonSocialTransportista>VELEZ SEGOVIA OSCAR ANTONIO</razonSocialTransportista>
+    <tipoIdentificacionTransportista>05</tipoIdentificacionTransportista>
+    <rucTransportista>1312532565</rucTransportista>
+    <placa>PDR-4646</placa>
+    <destinos>
+      <destino>
+        <motivoTraslado>VENTA</motivoTraslado>
+        <codEstabDestino>002</codEstabDestino>
+        <ruta>QUITO - MEJIA - QUITO</ruta>
+      </destino>
+    </destinos>
+  </infoSustitutivaGuiaRemision>
+  <infoAdicional>
+    <campoAdicional nombre="emailCliente">notiene@notiene.com</campoAdicional>
+    <campoAdicional nombre="CodInternoSAP">9999999</campoAdicional>
+    <campoAdicional nombre="CodSociedad">6595</campoAdicional>
+    <campoAdicional nombre="direccion_cliente">S-57-15                       ROCIO</campoAdicional>
+    <campoAdicional nombre="Sucursal">QUITO VALLE</campoAdicional>
+    <campoAdicional nombre="Transaccion">111 CONTADO / EFECTIVO</campoAdicional>
+    <campoAdicional nombre="FecEntrega">26/11/2022</campoAdicional>
+    <campoAdicional nombre="FecPago">26/11/2022</campoAdicional>
+    <campoAdicional nombre="DocInterno">09F07644722</campoAdicional>
+    <campoAdicional nombre="CodCliente">437234</campoAdicional>
+  </infoAdicional>
+<ds:Signature xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xmlns:etsi="http://uri.etsi.org/01903/v1.3.2#" Id="Signature469323">
+<ds:SignedInfo Id="Signature-SignedInfo489846">
+<ds:CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"></ds:CanonicalizationMethod>
+<ds:SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"></ds:SignatureMethod>
+<ds:Reference Id="SignedPropertiesID553071" Type="http://uri.etsi.org/01903#SignedProperties" URI="#Signature469323-SignedProperties730196">
+<ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"></ds:DigestMethod>
+<ds:DigestValue>neXgEG+rFAyZdt/sre6eGDcSDFo=</ds:DigestValue>
+</ds:Reference>
+<ds:Reference URI="#Certificate1762234">
+<ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"></ds:DigestMethod>
+<ds:DigestValue>sU3RkgpVjO53jRdRVjqXBwWOWDQ=</ds:DigestValue>
+</ds:Reference>
+<ds:Reference Id="Reference-ID-407398" URI="#comprobante">
+<ds:Transforms>
+<ds:Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"></ds:Transform>
+</ds:Transforms>
+<ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"></ds:DigestMethod>
+<ds:DigestValue>TrE3N2d3MYPIFEdnCuxi/0pF0Do=</ds:DigestValue>
+</ds:Reference>
+</ds:SignedInfo>
+<ds:SignatureValue Id="SignatureValue354264">
+Jo58vtWB7d7Gt4wBCPdaaopaKyja51dfxZBy70BRcVKPs1ODlDFH2L/K3QIxlqs5pdc3VXM321Lx
+NjFnkWeg9HXzvgLZDwaLjDfgU5gqoBs8d6dC6ge4zsx26oigupOXbY0HYtzX0xqj8gwMNlSgtQd0
+49qSiXkdNtWoiBrSY24IXYTL6fz+bFd9Uyniv4yMthlRQqC9sR9FD99ltAcqB0Y9OYuf19pj+6PV
+IjnDPTkhTKDjr1k2MOIVc8gnfHVNOgCPp8VuhX69SsfTG/8i2NMYjSo3Wp1sSfxcdAEac07OzzEH
+OkCxwMi9Evq9LV58tMI2uDWfcXGIVBYDYpk01g==
+</ds:SignatureValue>
+<ds:KeyInfo Id="Certificate1762234">
+<ds:X509Data>
+<ds:X509Certificate>
+MIIL9TCCCd2gAwIBAgIEKLjxaDANBgkqhkiG9w0BAQsFADCBmTELMAkGA1UEBhMCRUMxHTAbBgNV
+BAoMFFNFQ1VSSVRZIERBVEEgUy5BLiAyMTAwLgYDVQQLDCdFTlRJREFEIERFIENFUlRJRklDQUNJ
+T04gREUgSU5GT1JNQUNJT04xOTA3BgNVBAMMMEFVVE9SSURBRCBERSBDRVJUSUZJQ0FDSU9OIFNV
+QkNBLTIgU0VDVVJJVFkgREFUQTAeFw0yMjEwMTgxNTQ4NDFaFw0yNDEwMTcxNTQ4NDFaMIGdMSYw
+JAYDVQQDDB1EQVlTSSBFRElUSCBDQVJERU5BUyBHVUVSUkVSTzEVMBMGA1UEBRMMMTgxMDIyMTA1
+ODI5MTAwLgYDVQQLDCdFTlRJREFEIERFIENFUlRJRklDQUNJT04gREUgSU5GT1JNQUNJT04xHTAb
+BgNVBAoMFFNFQ1VSSVRZIERBVEEgUy5BLiAyMQswCQYDVQQGEwJFQzCCASIwDQYJKoZIhvcNAQEB
+BQADggEPADCCAQoCggEBALAoyn0EEAUSmzDyWOTjSa7yOE42HtSJ18VrPSxw9GJtqGl7Kt0KJjTj
+klbqJ1T0nJ9tn2Pf694EwcxuI2LJCG5JpbMzMwXtOBNA6oiApQbCwr1SWbs9Nw9XW6dMeG2bqvnn
+AKGuBnR+Oo9vqbV927CBUHNXaoN0dVNVAgi+65K1Q7fPDnpM9qNpJoxjUo3PtNUVgb0/3TlsYXFQ
+InLDHUqWwZyVnL+ehektkvkUzZwVnZH/C9tINVkIzZQrsce2UhkdYXJGV8+iapqeegIH7a64d5Vx
+AzyVY501yn7k8rLHocWG8rt3IXol5haMhMDqS8FfNGh/uVpYWTCixDO6VVkCAwEAAaOCBz0wggc5
+MAwGA1UdEwEB/wQCMAAwHwYDVR0jBBgwFoAUjLrKEVd4JYAdawpLVb+NrmLdvY8wWQYIKwYBBQUH
+AQEETTBLMEkGCCsGAQUFBzABhj1odHRwOi8vb2NzcGd3LnNlY3VyaXR5ZGF0YS5uZXQuZWMvZWpi
+Y2EvcHVibGljd2ViL3N0YXR1cy9vY3NwMIHPBgNVHS4EgccwgcQwgcGggb6ggbuGgbhsZGFwOi8v
+bGRhcHNkY2EyLnNlY3VyaXR5ZGF0YS5uZXQuZWMvQ049QVVUT1JJREFEIERFIENFUlRJRklDQUNJ
+T04gU1VCQ0EtMiBTRUNVUklUWSBEQVRBLE9VPUVOVElEQUQgREUgQ0VSVElGSUNBQ0lPTiBERSBJ
+TkZPUk1BQ0lPTixPPVNFQ1VSSVRZIERBVEEgUy5BLiAyLEM9RUM/ZGVsdGFSZXZvY2F0aW9uTGlz
+dD9iYXNlMCYGA1UdEQQfMB2BG2RheXNpLmNhcmRlbmFzQHRvbmljb3JwLmNvbTCCARIGA1UdIASC
+AQkwggEFMGAGCisGAQQBgqZyAgowUjBQBggrBgEFBQcCAjBEHkIAQwBlAHIAdABpAGYAaQBjAGEA
+ZABvACAAZABlACAATQBpAGUAbQBiAHIAbwAgAGQAZQAgAEUAbQBwAHIAZQBzAGEwgaAGCisGAQQB
+gqZyAgQwgZEwgY4GCCsGAQUFBwIBFoGBaHR0cHM6Ly93d3cuc2VjdXJpdHlkYXRhLm5ldC5lYy93
+cC1jb250ZW50L2Rvd25sb2Fkcy9Ob3JtYXRpdmFzL1BfZGVfQ2VydGlmaWNhZG9zL1BvbGl0aWNh
+cyBkZSBDZXJ0aWZpY2FkbyBNaWVtYnJvIGRlIEVtcHJlc2EucGRmMIICogYDVR0fBIICmTCCApUw
+geWgQaA/hj1odHRwOi8vb2NzcGd3LnNlY3VyaXR5ZGF0YS5uZXQuZWMvZWpiY2EvcHVibGljd2Vi
+L3N0YXR1cy9vY3NwooGfpIGcMIGZMTkwNwYDVQQDDDBBVVRPUklEQUQgREUgQ0VSVElGSUNBQ0lP
+TiBTVUJDQS0yIFNFQ1VSSVRZIERBVEExMDAuBgNVBAsMJ0VOVElEQUQgREUgQ0VSVElGSUNBQ0lP
+TiBERSBJTkZPUk1BQ0lPTjEdMBsGA1UECgwUU0VDVVJJVFkgREFUQSBTLkEuIDIxCzAJBgNVBAYT
+AkVDMIHHoIHEoIHBhoG+bGRhcDovL2xkYXBzZGNhMi5zZWN1cml0eWRhdGEubmV0LmVjL0NOPUFV
+VE9SSURBRCBERSBDRVJUSUZJQ0FDSU9OIFNVQkNBLTIgU0VDVVJJVFkgREFUQSxPVT1FTlRJREFE
+IERFIENFUlRJRklDQUNJT04gREUgSU5GT1JNQUNJT04sTz1TRUNVUklUWSBEQVRBIFMuQS4gMixD
+PUVDP2NlcnRpZmljYXRlUmV2b2NhdGlvbkxpc3Q/YmFzZTCB4KCB3aCB2oaB12h0dHBzOi8vcG9y
+dGFsLW9wZXJhZG9yMi5zZWN1cml0eWRhdGEubmV0LmVjL2VqYmNhL3B1YmxpY3dlYi93ZWJkaXN0
+L2NlcnRkaXN0P2NtZD1jcmwmaXNzdWVyPUNOPUFVVE9SSURBRCBERSBDRVJUSUZJQ0FDSU9OIFNV
+QkNBLTIgU0VDVVJJVFkgREFUQSxPVT1FTlRJREFEIERFIENFUlRJRklDQUNJT04gREUgSU5GT1JN
+QUNJT04sTz1TRUNVUklUWSBEQVRBIFMuQS4gMixDPUVDMB0GA1UdDgQWBBSYxDK0JAc5TX2thDkM
+K+Lu6qwAsTArBgNVHRAEJDAigA8yMDIyMTAxODE1NDg0MVqBDzIwMjQxMDE3MTU0ODQxWjALBgNV
+HQ8EBAMCBeAwGQYKKwYBBAGCpnIDBQQLDAlDT05UQURPUkEwGgYKKwYBBAGCpnIDAQQMDAoxMjAy
+MDI1MDg0MBkGCisGAQQBgqZyAwkECwwJR1VBWUFRVUlMMBEGCisGAQQBgqZyAyIEAwwBLjASBgor
+BgEEAYKmcgMHBAQMAlNOMBsGCisGAQQBgqZyAwIEDQwLREFZU0kgRURJVEgwHwYKKwYBBAGCpnID
+IAQRDA8wMDEwMDIwMDAyNjc4NDEwEwYKKwYBBAGCpnIDIQQFDANQRlgwFwYKKwYBBAGCpnIDDAQJ
+DAdFQ1VBRE9SMBgGCisGAQQBgqZyAwMECgwIQ0FSREVOQVMwNAYKKwYBBAGCpnIDCgQmDCRESVNU
+UklCVUlET1JBIElNUE9SVEFET1JBIERJUE9SIFMuQS4wHQYKKwYBBAGCpnIDCwQPDA0wOTkwNzg5
+MDYxMDAxMBIGCisGAQQBgqZyAx0EBAwCTm8wGAYKKwYBBAGCpnIDBAQKDAhHVUVSUkVSTzAcBgor
+BgEEAYKmcgMIBA4MDDU5Mzk4NDUwMjQzNjANBgkqhkiG9w0BAQsFAAOCAgEAdX+mzoOgAfncCImK
+wUSZ6WnoxdDqNm8aLLt1VG3btUj4XIZptU0Iiqfoae8tK0j25lRyXZCTLMeUH9m8Hew09PeWZCNr
+ouQOl6s0J3IAqTqK7HypU2MiKNwCrz8AKQ2BxdqjlHhsmbg9f5iVFteyaFDstGGBfhMPL92rBjC+
+NQ7o2ZlZwUjGCKkJ47+r/L9MO7CuOCEi2jJvpjehwiI3R+Iblm+ZAJso7AobhnzVjdg0UuW4TtrS
+UNfwjxplp5tnFoAvKypjDiAFHqLPxkiiBFQ3czLu3masleSGIgghSzKwixc6HbX4UVWhUgPSMTLU
+uLDT8UghHFHw6kYHbfuBJavHZW0mhtBTLD8JJGn4Si28XHpqkLyt5scH+5QlOeBEsxWTEbEcJ0i+
+ncu5HotsGtzuD35YE/OECKf6TSMSQeSs/kDLSwTZzyL7Bhc43Ru+PB7seyWLS2dl/L/0drqPhWjx
+2aKrymO389aaQ961jonWyUKSHqY0pOrrQQVPDa4NwUamaGcz32I2drwP10cEa3So/FlSFlH8uVjF
+ylSPFXlAfsPyAq90cAJ07kh9pLiBgeCeVsWb3OixJNS/j4z5wxlLqua00k/GtWHUTPd2JCu7Lj1c
+kRd3JUv58Bew5900524/1Vcqebkpk29LJlU63iWe+D8ThK00erKbbDXoOyY=
+</ds:X509Certificate>
+</ds:X509Data>
+<ds:KeyValue>
+<ds:RSAKeyValue>
+<ds:Modulus>
+sCjKfQQQBRKbMPJY5ONJrvI4TjYe1InXxWs9LHD0Ym2oaXsq3QomNOOSVuonVPScn22fY9/r3gTB
+zG4jYskIbkmlszMzBe04E0DqiIClBsLCvVJZuz03D1dbp0x4bZuq+ecAoa4GdH46j2+ptX3bsIFQ
+c1dqg3R1U1UCCL7rkrVDt88Oekz2o2kmjGNSjc+01RWBvT/dOWxhcVAicsMdSpbBnJWcv56F6S2S
++RTNnBWdkf8L20g1WQjNlCuxx7ZSGR1hckZXz6Jqmp56Agftrrh3lXEDPJVjnTXKfuTyssehxYby
+u3cheiXmFoyEwOpLwV80aH+5WlhZMKLEM7pVWQ==
+</ds:Modulus>
+<ds:Exponent>AQAB</ds:Exponent>
+</ds:RSAKeyValue>
+</ds:KeyValue>
+</ds:KeyInfo>
+<ds:Object Id="Signature469323-Object277157"><etsi:QualifyingProperties Target="#Signature469323"><etsi:SignedProperties Id="Signature469323-SignedProperties730196"><etsi:SignedSignatureProperties><etsi:SigningTime>2022-11-25T22:58:18-05:00</etsi:SigningTime><etsi:SigningCertificate><etsi:Cert><etsi:CertDigest><ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"></ds:DigestMethod><ds:DigestValue>g133oOJGNkPFdcXGA83dp+JLDjA=</ds:DigestValue></etsi:CertDigest><etsi:IssuerSerial><ds:X509IssuerName>CN=AUTORIDAD DE CERTIFICACION SUBCA-2 SECURITY DATA,OU=ENTIDAD DE CERTIFICACION DE INFORMACION,O=SECURITY DATA S.A. 2,C=EC</ds:X509IssuerName><ds:X509SerialNumber>683209064</ds:X509SerialNumber></etsi:IssuerSerial></etsi:Cert></etsi:SigningCertificate></etsi:SignedSignatureProperties><etsi:SignedDataObjectProperties><etsi:DataObjectFormat ObjectReference="#Reference-ID-407398"><etsi:Description>contenido comprobante</etsi:Description><etsi:MimeType>text/xml</etsi:MimeType></etsi:DataObjectFormat></etsi:SignedDataObjectProperties></etsi:SignedProperties></etsi:QualifyingProperties></ds:Object></ds:Signature></factura>]]></comprobante>
 <mensajes/>
 </autorizacion>
 
