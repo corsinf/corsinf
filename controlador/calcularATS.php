@@ -270,9 +270,18 @@ class calcular
 		$lineas_xml = $this->leer_archivo_xmls();
 		$facturas_doc = $this->calcular_excel();
 
+
 		$tipo_doc = array();
+		$tipo = 1;
 		foreach ($facturas_doc as $key => $value) {
-			$tipo_doc[] = $value[0]; 
+			if($value[0]=='RUC_EMISOR' || $tipo==2)
+			{
+				$tipo_doc[] = $value[2]; 
+				$tipo = 2;
+			}else
+			{
+				$tipo_doc[] = $value[0]; 
+			}
 		}
 
 		$tipo_doc = array_unique($tipo_doc);
@@ -330,10 +339,48 @@ class calcular
 		// print_r($porcentaje_ret);die();
 
 		//-------------------todso los comprobantes listado------------------
+		
 		foreach ($facturas_doc as $key => $value) {
-			// print_r($facturas_doc);die();
+			// print_r($value[0]);
+			if($value[0]=='RUC_EMISOR' || $tipo==2)
+			{
+				$tipo = 2;
+				$valueT[0] = $value[2];
+				$valueT[1] = $value[3];
+				$valueT[2] = $value[0];
+				$valueT[3] = $value[1];
+				$valueT[4] = $value[6];
+				$valueT[5] = $value[5];
+
+				$valueT[6] = 'NO hay';
+
+				$valueT[7] = $value[11];
+				$valueT[8] = $value[7];
+				$valueT[9] = $value[4];
+				$valueT[10] = $value[4];
+				$valueT[11] = $value[10];
+			}
+			if($tipo==2)
+			{
+				$value[0] = $valueT[0];
+				$value[1] = $valueT[1];
+				$value[2] = $valueT[2];
+				$value[3] = $valueT[3];
+				$value[4] = $valueT[4];
+				$value[5] = $valueT[5];
+				$value[6] = $valueT[6];
+				$value[7] = $valueT[7];
+				$value[8] = $valueT[8];
+				$value[9] = $valueT[9];
+				$value[10] = $valueT[10];
+				$value[11] = $valueT[11];
+			}
+
+			// print_r($value[9]);die();
 			if(is_numeric($value[9]))
 			{
+
+			// print_r($value[9]);die();
 				$tot = '';
 				if(isset($value[11])){ $tot = $value[11]; }
 				$tr.='<div class="card">
@@ -598,10 +645,13 @@ class calcular
 	{
 		$detalle = array();
 		// print_r($this->documentos);die();
-		foreach ($this->documentos as $key => $value) {
-			$detalle[] = $this->sri->recuperar_xml_a_factura($value,$value);
-			// print_r($detalle);die();
-		}
+		// if($this->documentos!='')
+		// {
+			foreach ($this->documentos as $key => $value) {
+				$detalle[] = $this->sri->recuperar_xml_a_factura($value,$value);
+				// print_r($detalle);die();
+			}
+		// }
 
 		return $detalle;
 	}
