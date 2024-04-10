@@ -329,6 +329,7 @@ if ($id != null && $id != '') {
 
         var ac_estudiante_id = $('#ac_estudiante_id').val();
         var ac_nombre_est = $('#ac_nombre_est').val();
+        var ac_reunion_descripcion = $('#ac_reunion_descripcion').val();
 
         //alert(ac_horarioD_inicio + ' ' + ac_horarioD_fin);
 
@@ -340,6 +341,7 @@ if ($id != null && $id != '') {
             'ac_reunion_observacion': ac_reunion_observacion,
             'ac_estudiante_id': ac_estudiante_id,
             'ac_nombre_est': ac_nombre_est,
+            'ac_reunion_descripcion': ac_reunion_descripcion,
         }
 
         //console.log(parametros);
@@ -518,6 +520,13 @@ if ($id != null && $id != '') {
                             <option value="Notas">Notas</option>
                             <option value="Otros">Otros</option>
                         </select>
+                    </div>
+                </div>
+
+                <div class="row pt-3">
+                    <div class="col-12">
+                        <label for="ac_horarioC_materia">Descripción del Motivo<label class="text-danger">*</label></label>
+                        <textarea name="ac_reunion_descripcion" id="ac_reunion_descripcion" cols="30" rows="2" class="form-control form-control-sm"></textarea>
                     </div>
                 </div>
 

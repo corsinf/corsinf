@@ -319,7 +319,6 @@
 
         <?php if (
           $_SESSION['INICIO']['TIPO'] == 'DBA' ||
-          strtoupper($_SESSION['INICIO']['TIPO']) == 'DOCENTES' ||
           strtoupper($_SESSION['INICIO']['TIPO']) == 'COMUNIDAD'  ||
           strtoupper($_SESSION['INICIO']['TIPO']) == 'ADMINISTRADOR'
         ) { ?>
@@ -618,6 +617,388 @@
         <?php } ?>
 
 
+        <?php if (
+          //Horarios disponibles
+          $_SESSION['INICIO']['TIPO'] == 'DBA'  ||
+          strtoupper($_SESSION['INICIO']['TIPO']) == 'DOCENTES'
+        ) { ?>
+
+          <script>
+            $(document).ready(function() {
+              id_docente = <?= $_SESSION['INICIO']['NO_CONCURENTE']; ?>;
+              total_horario_disponible();
+              total_horario_disponible_ocupados();
+              total_horario_disponible_total();
+              total_horario_clases();
+              total_clases();
+              total_historial_estudiantil_docente();
+            });
+
+            function total_horario_disponible_total() {
+              id_docente = <?= $_SESSION['INICIO']['NO_CONCURENTE']; ?>;
+              $.ajax({
+                // data:  {parametros:parametros},
+                url: '../controlador/index_saludC.php?total_horario_disponible=true',
+                type: 'post',
+                dataType: 'json',
+                data: {
+                  id_docente: id_docente,
+                  estado: '',
+                },
+
+                success: function(response) {
+                  $('#lbl_turnosTot').text(response);
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                  $('#pnl_turnosTot').css('display', 'none');
+                }
+              });
+            }
+
+            function total_horario_disponible() {
+              id_docente = <?= $_SESSION['INICIO']['NO_CONCURENTE']; ?>;
+              $.ajax({
+                // data:  {parametros:parametros},
+                url: '../controlador/index_saludC.php?total_horario_disponible=true',
+                type: 'post',
+                dataType: 'json',
+                data: {
+                  id_docente: id_docente,
+                  estado: 1,
+                },
+
+                success: function(response) {
+                  $('#lbl_turnosG').text(response);
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                  $('#pnl_turnosG').css('display', 'none');
+                }
+              });
+            }
+
+            function total_horario_disponible_ocupados() {
+              id_docente = <?= $_SESSION['INICIO']['NO_CONCURENTE']; ?>;
+              $.ajax({
+                // data:  {parametros:parametros},
+                url: '../controlador/index_saludC.php?total_horario_disponible=true',
+                type: 'post',
+                dataType: 'json',
+                data: {
+                  id_docente: id_docente,
+                  estado: 0,
+                },
+
+                success: function(response) {
+                  $('#lbl_turnosGO').text(response);
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                  $('#pnl_turnosGO').css('display', 'none');
+                }
+              });
+            }
+
+            function total_horario_clases() {
+              id_docente = <?= $_SESSION['INICIO']['NO_CONCURENTE']; ?>;
+              $.ajax({
+                // data:  {parametros:parametros},
+                url: '../controlador/index_saludC.php?total_horario_clases=true',
+                type: 'post',
+                dataType: 'json',
+                data: {
+                  id_docente: id_docente,
+                },
+
+                success: function(response) {
+                  $('#lbl_horario_clases').text(response);
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                  $('#pnl_horario_clases').css('display', 'none');
+                }
+              });
+            }
+
+            function total_clases() {
+              id_docente = <?= $_SESSION['INICIO']['NO_CONCURENTE']; ?>;
+              $.ajax({
+                // data:  {parametros:parametros},
+                url: '../controlador/index_saludC.php?total_clases=true',
+                type: 'post',
+                dataType: 'json',
+                data: {
+                  id_docente: id_docente,
+                },
+
+                success: function(response) {
+                  $('#lbl_clases').text(response);
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                  $('#pnl_clases').css('display', 'none');
+                }
+              });
+            }
+
+            function total_historial_estudiantil_docente() {
+              id_docente = <?= $_SESSION['INICIO']['NO_CONCURENTE']; ?>;
+              $.ajax({
+                // data:  {parametros:parametros},
+                url: '../controlador/index_saludC.php?total_historial_estudiantil_docente=true',
+                type: 'post',
+                dataType: 'json',
+                data: {
+                  id_docente: id_docente,
+                },
+
+                success: function(response) {
+                  $('#lbl_salud_h_est').text(response);
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                  $('#pnl_salud_h_est').css('display', 'none');
+                }
+              });
+            }
+
+            function redireccionar(url_redireccion) {
+              url_click = "inicio.php?mod=7&acc=" + url_redireccion;
+              window.location.href = url_click;
+            }
+          </script>
+
+          <h6 class="mb-0 text-uppercase">DASHBOARD</h6>
+          <hr>
+
+          <div class="row">
+
+
+
+
+            <div class="col-6 col-sm-6 col-md-4" id="pnl_clases" onclick="redireccionar('docente_paralelo');">
+              <div class="card radius-10 shadow-card">
+                <div class="card-body">
+                  <div class="d-flex align-items-center">
+                    <div>
+                      <p class="mb-0 text-secondary">Clases</p>
+                      <h4 class="my-1" id="lbl_clases">0</h4>
+                      <!-- <p class="mb-0 font-13 text-success"><i class="bx bxs-up-arrow align-middle"></i>$34 from last week</p> -->
+                    </div>
+                    <div class="widgets-icons bg-light-success text-success ms-auto"><i class='bx bxs-book-content'></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-6 col-sm-6 col-md-4" id="pnl_horario_clases" onclick="redireccionar('horario_clases');">
+              <div class="card radius-10 shadow-card">
+                <div class="card-body">
+                  <div class="d-flex align-items-center">
+                    <div>
+                      <p class="mb-0 text-secondary">Horario de Clases</p>
+                      <h4 class="my-1" id="lbl_horario_clases">0</h4>
+                      <!-- <p class="mb-0 font-13 text-success"><i class="bx bxs-up-arrow align-middle"></i>$34 from last week</p> -->
+                    </div>
+                    <div class="widgets-icons bg-light-success text-success ms-auto"><i class='bx bx-calendar'></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-6 col-sm-6 col-md-4" id="pnl_horario_disponible" onclick="redireccionar('horario_disponible');">
+              <div class="card radius-10 shadow-card">
+                <div class="card-body">
+                  <div class="d-flex align-items-center">
+                    <div>
+                      <p class="mb-0 text-secondary fw-bold">Horario Disponible (Turnos)</p>
+                      <h4 class="my-1" id="lbl_horario_disponible">&nbsp;</h4>
+                      <!-- <p class="mb-0 font-13 text-success"><i class="bx bxs-up-arrow align-middle"></i>$34 from last week</p> -->
+                    </div>
+                    <div class="widgets-icons bg-light-success text-success ms-auto"><i class='bx bx-calendar'></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-6 col-sm-6 col-md-4" id="pnl_reuniones" onclick="redireccionar('reuniones');">
+              <div class="card radius-10 shadow-card">
+                <div class="card-body">
+                  <div class="d-flex align-items-center">
+                    <div>
+                      <p class="mb-0 text-secondary">Reuniones</p>
+                      <h4 class="my-1" id="lbl_reuniones">0</h4>
+                      <!-- <p class="mb-0 font-13 text-success"><i class="bx bxs-up-arrow align-middle"></i>$34 from last week</p> -->
+                    </div>
+                    <div class="widgets-icons bg-light-success text-success ms-auto"><i class='bx bxs-book-content'></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-6 col-sm-6 col-md-4" id="pnl_salud_h_est" onclick="redireccionar('historial_salud_estudiantil');">
+              <div class="card radius-10 shadow-card">
+                <div class="card-body">
+                  <div class="d-flex align-items-center">
+                    <div>
+                      <p class="mb-0 text-secondary">Historial Salud Estudiantil</p>
+                      <h4 class="my-1" id="lbl_salud_h_est">0</h4>
+                      <!-- <p class="mb-0 font-13 text-success"><i class="bx bxs-up-arrow align-middle"></i>$34 from last week</p> -->
+                    </div>
+                    <div class="widgets-icons bg-light-success text-success ms-auto"><i class='bx bxs-book-content'></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <h6 class="mb-0 text-uppercase">Turnos</h6>
+          <hr>
+
+          <div class="row">
+            <div class="col-6 col-sm-6 col-md-4" id="pnl_turnosTot">
+              <div class="card radius-10">
+                <div class="card-body">
+                  <div class="d-flex align-items-center">
+                    <div>
+                      <p class="mb-0 text-secondary">Total Turnos</p>
+                      <h4 class="my-1" id="lbl_turnosTot">0</h4>
+                      <!-- <p class="mb-0 font-13 text-success"><i class="bx bxs-up-arrow align-middle"></i>$34 from last week</p> -->
+                    </div>
+                    <div class="widgets-icons bg-light-primary text-primary ms-auto"><i class='bx bxs-bar-chart-alt-2'></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-6 col-sm-6 col-md-4" id="pnl_turnosGO">
+              <div class="card radius-10">
+                <div class="card-body">
+                  <div class="d-flex align-items-center">
+                    <div>
+                      <p class="mb-0 text-secondary">Turnos Concluidos</p>
+                      <h4 class="my-1" id="lbl_turnosGO">0</h4>
+                      <!-- <p class="mb-0 font-13 text-success"><i class="bx bxs-up-arrow align-middle"></i>$34 from last week</p> -->
+                    </div>
+                    <div class="widgets-icons bg-light-primary text-primary ms-auto"><i class='bx bxs-bar-chart-alt-2'></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-6 col-sm-6 col-md-4" id="pnl_turnosG">
+              <div class="card radius-10">
+                <div class="card-body">
+                  <div class="d-flex align-items-center">
+                    <div>
+                      <p class="mb-0 text-secondary">Turnos No Concluidos</p>
+                      <h4 class="my-1" id="lbl_turnosG">0</h4>
+                      <!-- <p class="mb-0 font-13 text-success"><i class="bx bxs-up-arrow align-middle"></i>$34 from last week</p> -->
+                    </div>
+                    <div class="widgets-icons bg-light-primary text-primary ms-auto"><i class='bx bxs-bar-chart-alt-2'></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+
+        <?php } ?>
+
+
+
+        <?php if (
+          //Reuniones
+          $_SESSION['INICIO']['TIPO'] == 'DBA'  ||
+          strtoupper($_SESSION['INICIO']['TIPO']) == 'REPRESENTANTE' ||
+          strtoupper($_SESSION['INICIO']['TIPO']) == 'DOCENTES'
+        ) { ?>
+
+          <script>
+            $(document).ready(function() {
+              id_rep_doc = <?= $_SESSION['INICIO']['NO_CONCURENTE']; ?>;
+              tipo = '<?= $_SESSION['INICIO']['TIPO'] ?>';
+
+              lista_reuniones();
+              lista_estado_reuniones();
+            });
+
+            function lista_reuniones() {
+
+              id_busqueda = <?= $_SESSION['INICIO']['NO_CONCURENTE']; ?>;
+              tipo = '<?= $_SESSION['INICIO']['TIPO'] ?>';
+
+              $.ajax({
+                data: {
+                  tipo: tipo,
+                  id_busqueda: id_busqueda,
+                },
+                url: '../controlador/index_saludC.php?lista_reuniones=true',
+                type: 'post',
+                dataType: 'json',
+                success: function(response) {
+                  console.log(response)
+                  lista_reuniones_chart(response.total_motivos, response.motivo)
+                }
+
+              });
+            }
+
+            function lista_estado_reuniones() {
+
+              id_busqueda = <?= $_SESSION['INICIO']['NO_CONCURENTE']; ?>;
+              tipo = '<?= $_SESSION['INICIO']['TIPO'] ?>';
+
+              $.ajax({
+                data: {
+                  tipo: tipo,
+                  id_busqueda: id_busqueda,
+                },
+                url: '../controlador/index_saludC.php?lista_estado_reuniones=true',
+                type: 'post',
+                dataType: 'json',
+                success: function(response) {
+                  console.log(response)
+                  lista_estado_reuniones_chart(response.total_estados, response.estado)
+                }
+
+              });
+            }
+          </script>
+
+          <h6 class="mb-0 text-uppercase">REUNIONES</h6>
+          <hr>
+
+          <div class="row">
+
+            <div class="col-6 col-sm-12 col-md-6">
+              <div class="card">
+                <div class="card-body">
+                  <div id="chartReu"></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-6 col-sm-12 col-md-6">
+              <div class="card">
+                <div class="card-body">
+                  <div id="chartReuEstado"></div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+        <?php } ?>
+
+
+
+
+
 
 
 
@@ -809,4 +1190,119 @@
     var chart = new ApexCharts(document.querySelector("#chartEst"), options);
     chart.render();
   }
+
+  function lista_reuniones_chart(data, cate) {
+    var total_reuniones = data.reduce((cont, dato) => cont + parseInt(dato), 0);
+    $('#lbl_reuniones').text(total_reuniones);
+    lbl_reuniones
+    var options = {
+      series: [{
+        name: 'Reuniones',
+        data: data
+      }],
+      chart: {
+        foreColor: '#9ba7b2',
+        type: 'bar',
+        height: 350
+      },
+      colors: ["#0d6efd", "#34c38f", "#f1b44c", "#e83e8c", "#fd7e14", "#20c997"],
+      plotOptions: {
+        bar: {
+          horizontal: true,
+          columnWidth: '25%',
+          endingShape: 'flat',
+          barHeight: '35%',
+          distributed: true,
+        }
+      },
+      dataLabels: {
+        enabled: false
+      },
+      xaxis: {
+        categories: cate,
+      },
+      title: {
+        text: 'Reuniones Agendadas - Total: ' + total_reuniones,
+        align: 'center',
+      }
+    };
+    var chart = new ApexCharts(document.querySelector("#chartReu"), options);
+    chart.render();
+  }
+
+  function lista_estado_reuniones_chart(data, cate) {
+    var total_reuniones = data.reduce((cont, dato) => cont + parseInt(dato), 0);
+
+    var options = {
+      series: [{
+        name: 'Reuniones',
+        data: data
+      }],
+      chart: {
+        foreColor: '#9ba7b2',
+        type: 'bar',
+        height: 350
+      },
+      colors: ["#0d6efd", "#34c38f", "#f1b44c", "#e83e8c", "#fd7e14", "#20c997"],
+      plotOptions: {
+        bar: {
+          horizontal: true,
+          columnWidth: '25%',
+          endingShape: 'flat',
+          barHeight: '35%',
+          distributed: true,
+        }
+      },
+      dataLabels: {
+        enabled: false
+      },
+      xaxis: {
+        categories: cate,
+      },
+      title: {
+        text: 'Estado de Reuniones - Total: ' + total_reuniones,
+        align: 'center',
+      }
+    };
+    var chart = new ApexCharts(document.querySelector("#chartReuEstado"), options);
+    chart.render();
+  }
 </script>
+
+<!-- Estilos para redireccionar -->
+<script>
+  $(document).ready(function() {
+    $('.shadow-card').on('mouseover', function() {
+      $(this).addClass('hoverEffect');
+    });
+
+    $('.shadow-card').on('mouseout', function() {
+      $(this).removeClass('hoverEffect');
+    });
+
+    $('.shadow-card').on('click', function() {
+      $(this).toggleClass('clickedEffect');
+    });
+
+    $(document).on('mouseout', '.shadow-card', function() {
+      $(this).removeClass('clickedEffect');
+    });
+
+  });
+</script>
+
+<style>
+  .card {
+    cursor: pointer;
+    transition: background-color 0.3s, box-shadow 0.3s;
+  }
+
+  .card.hoverEffect {
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+    background-color: rgba(45, 216, 34, 0.1);
+  }
+
+  .card.clickedEffect {
+    background-color: rgba(128, 224, 122, 0.5);
+  }
+</style>

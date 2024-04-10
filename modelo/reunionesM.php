@@ -31,6 +31,7 @@ class reunionesM
                 reu.ac_reunion_fecha_creacion,
                 reu.ac_reunion_fecha_modificacion,
                 reu.ac_reunion_estado,
+                reu.ac_reunion_descripcion,
 
                 hdd.ac_docente_id,
                 hdd.ac_horarioD_ubicacion,
@@ -70,6 +71,7 @@ class reunionesM
                     reu.ac_reunion_fecha_creacion,
                     reu.ac_reunion_fecha_modificacion,
                     reu.ac_reunion_estado,
+                    reu.ac_reunion_descripcion,
 
                     hdd.ac_docente_id,
                     hdd.ac_horarioD_ubicacion,
@@ -108,6 +110,7 @@ class reunionesM
                     reu.ac_reunion_fecha_creacion,
                     reu.ac_reunion_fecha_modificacion,
                     reu.ac_reunion_estado,
+                    reu.ac_reunion_descripcion,
 
                     hdd.ac_docente_id,
                     hdd.ac_horarioD_ubicacion,
@@ -138,7 +141,7 @@ class reunionesM
                 $sql .= " AND reu.ac_representante_id = $ac_representante_id";
             }
 
-            $sql .= " ORDER BY reu.ac_horarioD_id;";
+            $sql .= " ORDER BY reu.ac_horarioD_id DESC;";
             $datos = $this->db->datos($sql);
             return $datos;
         }

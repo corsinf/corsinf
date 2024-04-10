@@ -43,6 +43,9 @@ if ($id != null && $id != '') {
                     data: 'ac_reunion_motivo'
                 },
                 {
+                    data: 'ac_reunion_descripcion'
+                },
+                {
                     data: null,
                     render: function(data, type, item) {
                         return (item.ac_horarioD_fecha_disponible);
@@ -80,97 +83,14 @@ if ($id != null && $id != '') {
                         return '';
                     }
                 },
-                {
-                    data: null,
-                    render: function(data, type, item) {
-
-                        return `<button type="button" class="btn btn-primary btn-sm" onclick="abrir_modal('${item.ac_reunion_id}');"><i class="bx bx-plus me-0"></i></button>`
-                    }
-                },
-
 
             ],
             order: [
-                [1, 'asc']
+              
             ],
         });
     }
 
-    // Función para abrir el modal
-    function abrir_modal(ac_reunion_id) {
-        $('#ac_reunion_id').val(ac_reunion_id);
-
-        if (ac_reunion_id) {
-            $.ajax({
-                url: '../controlador/reunionesC.php?listar=true',
-                data: {
-                    id_reunion: ac_reunion_id
-                },
-                type: 'post',
-                dataType: 'json',
-                success: function(response) {
-                    //console.log(response)
-                    $('#lbl_nombre_est').html('Estudiante: ' + response[0].ac_nombre_est);
-
-                    if (response[0].ac_reunion_estado != 0) {
-                        $('#ac_reunion_motivo').val(response[0].ac_reunion_motivo).prop('disabled', true);
-                        $('#ac_reunion_observacion').val(response[0].ac_reunion_observacion).prop('disabled', true);
-                        $('#ac_reunion_estado').val(response[0].ac_reunion_estado).prop('disabled', true);
-                    } else {
-                        $('#ac_reunion_motivo').val(response[0].ac_reunion_motivo).prop('disabled', true);
-                        $('#ac_reunion_observacion').val(response[0].ac_reunion_observacion).prop('disabled', false);
-                        $('#ac_reunion_estado').val(response[0].ac_reunion_estado).prop('disabled', false);
-                    }
-                }
-            });
-        }
-
-        $('#modal_agendar_reunion').modal('show');
-    }
-
-    function guardar_obs() {
-
-        var ac_reunion_id = $('#ac_reunion_id').val();
-        var ac_reunion_observacion = $('#ac_reunion_observacion').val();
-        var ac_reunion_estado = $('#ac_reunion_estado').val();
-
-        //alert(ac_horarioD_inicio + ' ' + ac_horarioD_fin);
-
-        var parametros = {
-            'ac_reunion_id': ac_reunion_id,
-            'ac_reunion_observacion': ac_reunion_observacion,
-            'ac_reunion_estado': ac_reunion_estado,
-        }
-
-        //console.log(parametros);
-
-        if (ac_reunion_id != '' && ac_reunion_observacion != '' && ac_reunion_estado != '') {
-            $.ajax({
-                url: '../controlador/reunionesC.php?insertar=true',
-                data: {
-                    parametros: parametros
-                },
-                type: 'post',
-                dataType: 'json',
-                success: function(response) {
-                    //console.log(response)
-                    Swal.fire('', 'Observación Registrada.', 'success');
-                }
-            });
-
-        } else {
-            Swal.fire('', 'Falta llenar los campos.', 'error');
-        }
-
-        if (tabla_reunion) {
-            tabla_reunion.destroy(); // Destruir la instancia existente del DataTable
-        }
-
-        $('#modal_agendar_reunion').modal('hide');
-
-        cargar_tabla();
-
-    }
 </script>
 
 <form id="form_enviar" action="../vista/inicio.php?mod=7&acc=registrar_representantes" method="post" style="display: none;">
@@ -222,11 +142,11 @@ if ($id != null && $id != '') {
                                                 <th>Ubicación</th>
                                                 <th>Docente</th>
                                                 <th>Motivo</th>
+                                                <th>Descripción Motivo</th>
                                                 <th>Fecha Turno</th>
-                                                <th>Hora de Inicio</th>
+                                                <th>Hora Inicio</th>
                                                 <th>Hora Fin</th>
                                                 <th>Estado</th>
-                                                <th>Acciones</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -241,58 +161,5 @@ if ($id != null && $id != '') {
             </div>
         </div>
         <!--end row-->
-    </div>
-</div>
-
-<div class="modal" id="modal_agendar_reunion" abindex="-1" aria-modal="true" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
-    <div class="modal-dialog ">
-        <div class="modal-content">
-
-            <!-- Modal Header -->
-            <div class="modal-header">
-                <h5>Obervaciones de la Reunión</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-
-            <!-- Modal body -->
-            <div class="modal-body">
-                <h6 class="text-primary" id="lbl_nombre_est"></h6>
-             
-                <div class="row">
-                    <div class="col-12">
-                        <label for="ac_horarioC_materia">Motivo de la Reunión <label class="text-danger">*</label></label>
-                        <input type="text" id="ac_reunion_motivo" name="ac_reunion_motivo" class="form-control form-control-sm" disabled>
-
-                    </div>
-                </div>
-
-                <div class="row pt-3">
-                    <div class="col-12">
-                        <label for="ac_horarioD_fecha_disponible">Estado de la Reunión <label class="text-danger">*</label></label>
-                        <select name="ac_reunion_estado" id="ac_reunion_estado" class="form-select form-select-sm">
-                            <option value="0" selected disabled>-- Seleccione --</option>
-                            <option value="1">Completa</option>
-                            <option value="2">Docente Anula</option>
-                            <option value="3">Representante Ausente</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="row pt-3">
-                    <div class="col-12">
-                        <label for="ac_horarioC_materia">Observaciones <label class="text-danger">*</label></label>
-                        <textarea name="ac_reunion_observacion" id="ac_reunion_observacion" cols="30" rows="2" class="form-control form-control-sm"></textarea>
-                    </div>
-                </div>
-
-                <input type="hidden" name="ac_reunion_id" id="ac_reunion_id">
-
-                <div class="row pt-3">
-                    <div class="col-12 text-end">
-                        <button type="submit" class="btn btn-success btn-sm" onclick="guardar_obs()"><i class="bx bx-save"></i> Guardar</button>
-                    </div>
-                </div>
-            </div>
-        </div>
     </div>
 </div>

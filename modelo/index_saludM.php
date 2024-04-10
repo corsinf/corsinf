@@ -95,8 +95,8 @@ class index_saludM
 
     function estudiantes_atendidos($id_representante)
     {
-        
-            $sql = "SELECT 
+
+        $sql = "SELECT 
                         pac.sa_pac_id,
                         pac.sa_pac_cedula,
                         pac.sa_pac_nombres,
@@ -164,9 +164,147 @@ class index_saludM
                         est.sa_est_foto_url,
                         rep.sa_rep_primer_apellido,
                         rep.sa_rep_primer_nombre;";
-                
-            $datos = $this->db->datos($sql);
-            return $datos;
-        
+
+        $datos = $this->db->datos($sql);
+        return $datos;
+    }
+
+    //Para consultar las reuniones realizadas por parte del docente y del representante
+    function reuniones_realizadas($tipo, $id_busqueda)
+    {
+        if ($tipo == 'DOCENTES') {
+            $select_campos = "hd.ac_docente_id";
+            $join_condicion = "INNER JOIN horario_disponible hd ON r.ac_horarioD_id = hd.ac_horarioD_id";
+            $where = "hd.ac_docente_id = '$id_busqueda'";
+        } elseif ($tipo == 'REPRESENTANTE') {
+            $select_campos = "r.ac_representante_id";
+            $join_condicion = "";
+            $where = "r.ac_representante_id = '$id_busqueda'";
+        }
+
+        $sql = "SELECT 
+                    r.ac_reunion_motivo AS motivo, 
+                    COUNT(r.ac_reunion_motivo) AS total_motivos,  
+                    $select_campos
+                FROM 
+                    reuniones r 
+                $join_condicion 
+                WHERE $where 
+                GROUP BY 
+                    r.ac_reunion_motivo, $select_campos";
+
+        $datos = $this->db->datos($sql);
+        return $datos;
+    }
+
+    function estado_reuniones($tipo, $id_busqueda)
+    {
+
+        if ($tipo == 'DOCENTES') {
+            $select_campos = "hd.ac_docente_id";
+            $join_condicion = "INNER JOIN horario_disponible hd ON r.ac_horarioD_id = hd.ac_horarioD_id";
+            $where = "hd.ac_docente_id = '$id_busqueda'";
+        } elseif ($tipo == 'REPRESENTANTE') {
+            $select_campos = "r.ac_representante_id";
+            $join_condicion = "";
+            $where = "r.ac_representante_id = '$id_busqueda'";
+        }
+
+        $sql = "SELECT 
+                    CASE 
+                        WHEN r.ac_reunion_estado = 0 THEN 'Pendiente'
+                        WHEN r.ac_reunion_estado = 1 THEN 'Completa'
+                        WHEN r.ac_reunion_estado = 2 THEN 'Docente Anula'
+                        WHEN r.ac_reunion_estado = 3 THEN 'Representante Ausente'
+                        ELSE CAST(r.ac_reunion_estado AS VARCHAR)
+                    END AS estado,
+                    COUNT(r.ac_reunion_estado) AS total_estados,
+                    $select_campos
+                FROM 
+                    reuniones r 
+                $join_condicion 
+                WHERE $where 
+                GROUP BY 
+                    CASE 
+                        WHEN r.ac_reunion_estado = 0 THEN 'Pendiente'
+                        WHEN r.ac_reunion_estado = 1 THEN 'Completa'
+                        WHEN r.ac_reunion_estado = 2 THEN 'Docente Anula'
+                        WHEN r.ac_reunion_estado = 3 THEN 'Representante Ausente'
+                        ELSE CAST(r.ac_reunion_estado AS VARCHAR) 
+                    END, 
+                    $select_campos";
+
+        $datos = $this->db->datos($sql);
+        return $datos;
+    }
+
+    function total_horario_dispoible($id_docente, $estado)
+    {
+        if ($estado != '') {
+            $estado = "AND ac_horarioD_estado = '$estado'";
+        }
+
+        $sql =
+            "SELECT 
+                COUNT(*) AS total_estado,
+                ac_docente_id
+            FROM 
+                horario_disponible
+            WHERE 
+                ac_docente_id = '$id_docente'
+                $estado
+            GROUP BY 
+                ac_docente_id;";
+
+        $datos = $this->db->datos($sql);
+        return $datos[0]['total_estado'];
+    }
+
+    function total_horario_clases($id_docente)
+    {
+        $sql =
+            "SELECT COUNT(*) AS total 
+            FROM 
+                horario_clases 
+            WHERE 
+                ac_docente_id = '$id_docente';";
+
+        $datos = $this->db->datos($sql);
+        return $datos[0]['total'];
+    }
+
+    function total_clases($id_docente)
+    {
+        $sql =
+            "SELECT COUNT(*) AS total 
+            FROM 
+                docente_paralelo 
+            WHERE 
+                ac_docente_id = '$id_docente';";
+
+        $datos = $this->db->datos($sql);
+        return $datos[0]['total'];
+    }
+
+    function total_historial_estudiantil_docente($id_docente)
+    {
+        $sql =
+            "SELECT COUNT(*) AS total
+            FROM 
+                consultas_medicas cm
+                                
+            INNER JOIN ficha_medica fm ON cm.sa_fice_id = fm.sa_fice_id
+            INNER JOIN pacientes pac ON fm.sa_fice_pac_id = pac.sa_pac_id
+            INNER JOIN estudiantes est ON pac.sa_pac_id_comunidad = est.sa_est_id
+            INNER JOIN cat_paralelo par ON est.sa_id_paralelo = par.sa_par_id
+            INNER JOIN docente_paralelo dop ON est.sa_id_paralelo = dop.ac_paralelo_id 
+
+            WHERE 
+                sa_conp_estado = 1
+                AND pac.sa_pac_tabla = 'estudiantes'
+                AND dop.ac_docente_id = '$id_docente';";
+
+        $datos = $this->db->datos($sql);
+        return $datos[0]['total'];
     }
 }

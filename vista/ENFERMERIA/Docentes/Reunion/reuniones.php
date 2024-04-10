@@ -43,6 +43,9 @@ if ($id != null && $id != '') {
                     data: 'ac_reunion_motivo'
                 },
                 {
+                    data: 'ac_reunion_descripcion'
+                },
+                {
                     data: null,
                     render: function(data, type, item) {
                         return (item.ac_horarioD_fecha_disponible);
@@ -91,7 +94,7 @@ if ($id != null && $id != '') {
 
             ],
             order: [
-                [1, 'asc']
+               
             ],
         });
     }
@@ -112,12 +115,12 @@ if ($id != null && $id != '') {
                     //console.log(response)
                     $('#lbl_nombre_est').html('Estudiante: ' + response[0].ac_nombre_est);
 
+                    $('#ac_reunion_motivo').val(response[0].ac_reunion_motivo).prop('disabled', true);
+                    $('#ac_reunion_descripcion').val(response[0].ac_reunion_descripcion).prop('disabled', true);
                     if (response[0].ac_reunion_estado != 0) {
-                        $('#ac_reunion_motivo').val(response[0].ac_reunion_motivo).prop('disabled', true);
                         $('#ac_reunion_observacion').val(response[0].ac_reunion_observacion).prop('disabled', true);
                         $('#ac_reunion_estado').val(response[0].ac_reunion_estado).prop('disabled', true);
                     } else {
-                        $('#ac_reunion_motivo').val(response[0].ac_reunion_motivo).prop('disabled', true);
                         $('#ac_reunion_observacion').val(response[0].ac_reunion_observacion).prop('disabled', false);
                         $('#ac_reunion_estado').val(response[0].ac_reunion_estado).prop('disabled', false);
                     }
@@ -155,21 +158,15 @@ if ($id != null && $id != '') {
                 success: function(response) {
                     //console.log(response)
                     Swal.fire('', 'Observación Registrada.', 'success');
+                    $('#modal_agendar_reunion').modal('hide');
                 }
             });
+
+            tabla_reunion.ajax.reload();
 
         } else {
             Swal.fire('', 'Falta llenar los campos.', 'error');
         }
-
-        if (tabla_reunion) {
-            tabla_reunion.destroy(); // Destruir la instancia existente del DataTable
-        }
-
-        $('#modal_agendar_reunion').modal('hide');
-
-        cargar_tabla();
-
     }
 </script>
 
@@ -222,8 +219,9 @@ if ($id != null && $id != '') {
                                                 <th>Ubicación</th>
                                                 <th>Representante</th>
                                                 <th>Motivo</th>
+                                                <th>Descripción Motivo</th>
                                                 <th>Fecha Turno</th>
-                                                <th>Hora de Inicio</th>
+                                                <th>Hora Inicio</th>
                                                 <th>Hora Fin</th>
                                                 <th>Estado</th>
                                                 <th>Acciones</th>
@@ -257,12 +255,19 @@ if ($id != null && $id != '') {
             <!-- Modal body -->
             <div class="modal-body">
                 <h6 class="text-primary" id="lbl_nombre_est"></h6>
-             
+
                 <div class="row">
                     <div class="col-12">
                         <label for="ac_horarioC_materia">Motivo de la Reunión <label class="text-danger">*</label></label>
                         <input type="text" id="ac_reunion_motivo" name="ac_reunion_motivo" class="form-control form-control-sm" disabled>
 
+                    </div>
+                </div>
+
+                <div class="row pt-3">
+                    <div class="col-12">
+                        <label for="ac_horarioC_materia">Descripción del Motivo<label class="text-danger">*</label></label>
+                        <textarea name="ac_reunion_descripcion" id="ac_reunion_descripcion" cols="30" rows="2" class="form-control form-control-sm"></textarea>
                     </div>
                 </div>
 
