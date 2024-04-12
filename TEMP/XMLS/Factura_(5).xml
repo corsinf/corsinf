@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<autorizacion>
+<estado>AUTORIZADO</estado>
+<numeroAutorizacion>2111202201179190475300120010050000032940000000110</numeroAutorizacion>
+<fechaAutorizacion>2022-11-21T13:03:50-05:00</fechaAutorizacion>
+<ambiente>PRODUCCIÓN</ambiente>
+<comprobante><![CDATA[<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<factura id="comprobante" version="1.1.0">
+    <infoTributaria>
+        <ambiente>2</ambiente>
+        <tipoEmision>1</tipoEmision>
+        <razonSocial>CORA REFRIGERACION CIA LTDA</razonSocial>
+        <nombreComercial>CORA REFRIGERACION CIA LTDA</nombreComercial>
+        <ruc>1791904753001</ruc>
+        <claveAcceso>2111202201179190475300120010050000032940000000110</claveAcceso>
+        <codDoc>01</codDoc>
+        <estab>001</estab>
+        <ptoEmi>005</ptoEmi>
+        <secuencial>000003294</secuencial>
+        <dirMatriz>AV PANAMERICANA NORTE KM14 2 Y PASAJE CENEPA</dirMatriz>
+        <agenteRetencion>1</agenteRetencion>
+        </infoTributaria>
+        <infoFactura>
+        <fechaEmision>21/11/2022</fechaEmision>
+        <dirEstablecimiento>AV. PANAMERICANA NORTE KM14 2 Y PASAJE CENEPA</dirEstablecimiento>
+        <contribuyenteEspecial>057</contribuyenteEspecial>        <obligadoContabilidad>SI</obligadoContabilidad>
+        <tipoIdentificacionComprador>06</tipoIdentificacionComprador>
+        <razonSocialComprador>MERAKY ELABORACION Y COMERCIALIZACION DE PRODUCTOS ALIMENTICIOS SOCIEDAD CIVIL Y COMERCIAL</razonSocialComprador>
+        <identificacionComprador>1793196048001</identificacionComprador>
+        <direccionComprador>PICHINCHA   QUITO   GUAMANI   EL ROCIO S57-26</direccionComprador>
+        <totalSinImpuestos>14.34</totalSinImpuestos>
+        <totalDescuento>0.00</totalDescuento>
+        <totalConImpuestos> 
+                    <totalImpuesto>
+                <codigo>2</codigo>
+                <codigoPorcentaje>2</codigoPorcentaje>
+                <baseImponible>14.34</baseImponible>
+                <valor>1.72</valor>
+            </totalImpuesto>
+        </totalConImpuestos>
+        <propina>0.00</propina>
+        <importeTotal>16.06</importeTotal>
+        <moneda>DOLAR</moneda>
+        
+        <pagos>
+<pago>
+<formaPago>20</formaPago>
+<total>16.06</total>
+   </pago>         </pagos>
+         </infoFactura>
+         <detalles>
+        <detalle>
+            <codigoPrincipal>C-L100B020302009200A</codigoPrincipal>
+            <codigoAuxiliar>C-L100B020302009200A</codigoAuxiliar>
+            <descripcion>CORTINA PVC CLEARWAY ESTANDAR LISO 0 20MX90MX2MM DE ESPESOR</descripcion>
+            <cantidad>3.000000</cantidad>
+            <precioUnitario>4.780000</precioUnitario>
+            <descuento>0.00</descuento>
+            <precioTotalSinImpuesto>14.34</precioTotalSinImpuesto>
+             
+            <impuestos>
+                <impuesto>
+                    <codigo>2</codigo>
+                    <codigoPorcentaje>2</codigoPorcentaje>
+                    <tarifa>12.00</tarifa>
+                    <baseImponible>14.34</baseImponible>
+                    <valor>1.72</valor>
+                 </impuesto>
+          </impuestos>
+        </detalle> 
+    </detalles>    <infoAdicional>
+        <campoAdicional nombre="eMail">info@merakysc.com</campoAdicional>
+        <campoAdicional nombre="Sistema">FenixPRO</campoAdicional>
+        <campoAdicional nombre="Forma Pago">OTROS CON UTILIZACION DEL SISTEMA FINANCIERO USD-16.06</campoAdicional>
+        <campoAdicional nombre="Plazo">1 DIAS</campoAdicional>
+        <campoAdicional nombre="Email cliente">info@merakysc.com</campoAdicional>
+        <campoAdicional nombre="Resolucion No.">NAC-GTRRIOC21-00000544</campoAdicional>
+        <campoAdicional nombre="Contribuyente Especial">057</campoAdicional>
+    </infoAdicional>
+<ds:Signature xmlns:ds="http://www.w3.org/2000/09/xmldsig#" Id="Signature488628"><ds:SignedInfo><ds:CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315" /><ds:SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1" /><ds:Reference Id="Reference-ID-264789" URI="#comprobante"><ds:Transforms><ds:Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature" /></ds:Transforms><ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" /><ds:DigestValue>DgYGZd5Z4NL5LjOqKVQ8IFFyR58=</ds:DigestValue></ds:Reference><ds:Reference URI="#Certificate189147"><ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" /><ds:DigestValue>yvZYtpX8vHd6HkO6CqbOTyx+75o=</ds:DigestValue></ds:Reference><ds:Reference Id="SignedPropertiesID983120" Type="http://uri.etsi.org/01903#SignedProperties" URI="#Signature488628-SignedProperties713763"><ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" /><ds:DigestValue>Enx6W+M2tUJACFvxEXrl+vRO1+w=</ds:DigestValue></ds:Reference></ds:SignedInfo><ds:SignatureValue Id="SignatureValue338014">kRM3oMkj16V4aJ76RsZhnz/32YvOSDmlXHYOZ/VihI0uOdMOkl/VD/FcLKu7eG1wnAcpFQW5AmxFYb7LxaHodG5DqkKHkuWdVoN+FCGTSBYWa2+a2iek6TgUM3PfMvOKCiK4b+AErm7cF7EgBrQ0K31ut/v3mB1ERIn+R7M3KV3elWO6qAjYbUwQQwfNze+e/88nI6XOh7GAOwlpPoVoy1Z+eMBEhYzdvMiIhTYcQaZqXftP7GaRMhqNYO5Ye7899h9UbhvGE7GrWKTYQJRLwsh4pqZpoj3ZSnn+Eu7FU/g+wn9jOeUSEBms0d0AZbJz4XSpSG4zLuVwmRH/hcaMWQ==</ds:SignatureValue><ds:KeyInfo Id="Certificate189147"><ds:X509Data><ds:X509Certificate>MIIMODCCCiCgAwIBAgIEXpDwJzANBgkqhkiG9w0BAQsFADCBmTELMAkGA1UEBhMCRUMxHTAbBgNVBAoMFFNFQ1VSSVRZIERBVEEgUy5BLiAyMTAwLgYDVQQLDCdFTlRJREFEIERFIENFUlRJRklDQUNJT04gREUgSU5GT1JNQUNJT04xOTA3BgNVBAMMMEFVVE9SSURBRCBERSBDRVJUSUZJQ0FDSU9OIFNVQkNBLTIgU0VDVVJJVFkgREFUQTAeFw0yMjA1MTkxNzEyMTVaFw0yNzA1MTkxNzEyMTVaMIGpMTIwMAYDVQQDDClKT1NFIElHTkFDSU8gVklDVE9SIEhVR08gQ0FTVFJPIENISVJJQk9HQTEVMBMGA1UEBRMMMTkwNTIyMTIyMTU3MTAwLgYDVQQLDCdFTlRJREFEIERFIENFUlRJRklDQUNJT04gREUgSU5GT1JNQUNJT04xHTAbBgNVBAoMFFNFQ1VSSVRZIERBVEEgUy5BLiAyMQswCQYDVQQGEwJFQzCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBALANhqZq/pqfZ5cRw/ppNEGGrY3LxXHcLp4K6WVkvHUNC41tzlm5McPyT+K+q0m5XoHEOwf8rWdqZVUQ0LlWu0y7TGtGHFNgq3KscWn+ppgWvebafgpojtGvwpfCuoeKwq+SsXaWRq7XjS8zZMSlORHfirRAzLg+2Z1/FBzZtkyCW54kMIXJpYoi8mpVaHmCyafHx+lbX1f+GTwd0Hktk/wL/oRRKV3felxQSyb9JZSScS7fj/fvyQa8Go8TEkeXdJHt+RZWSfjIfqbrbOGYTyAVIxY7kfvLr7+D33elk8F5cHSo0sXsZ/7kzbW7tGqHyDgk0fUZHJ4mOeMdcZnGGAkCAwEAAaOCB3QwggdwMAwGA1UdEwEB/wQCMAAwHwYDVR0jBBgwFoAUjLrKEVd4JYAdawpLVb+NrmLdvY8wWQYIKwYBBQUHAQEETTBLMEkGCCsGAQUFBzABhj1odHRwOi8vb2NzcGd3LnNlY3VyaXR5ZGF0YS5uZXQuZWMvZWpiY2EvcHVibGljd2ViL3N0YXR1cy9vY3NwMIHPBgNVHS4EgccwgcQwgcGggb6ggbuGgbhsZGFwOi8vbGRhcHNkY2EyLnNlY3VyaXR5ZGF0YS5uZXQuZWMvQ049QVVUT1JJREFEIERFIENFUlRJRklDQUNJT04gU1VCQ0EtMiBTRUNVUklUWSBEQVRBLE9VPUVOVElEQUQgREUgQ0VSVElGSUNBQ0lPTiBERSBJTkZPUk1BQ0lPTixPPVNFQ1VSSVRZIERBVEEgUy5BLiAyLEM9RUM/ZGVsdGFSZXZvY2F0aW9uTGlzdD9iYXNlMCwGA1UdEQQlMCOBIWpvc2UuY2FzdHJvQGNvcmFyZWZyaWdlcmFjaW9uLmNvbTCCARUGA1UdIASCAQwwggEIMGIGCisGAQQBgqZyAgkwVDBSBggrBgEFBQcCAjBGHkQAQwBlAHIAdABpAGYAaQBjAGEAZABvACAAZABlACAAUgBlAHAAcgBlAHMAZQBuAHQAYQBuAHQAZQAgAEwAZQBnAGEAbDCBoQYKKwYBBAGCpnICAzCBkjCBjwYIKwYBBQUHAgEWgYJodHRwczovL3d3dy5zZWN1cml0eWRhdGEubmV0LmVjL3dwLWNvbnRlbnQvZG93bmxvYWRzL05vcm1hdGl2YXMvUF9kZV9DZXJ0aWZpY2Fkb3MvUG9saXRpY2FzIGRlIENlcnRpZmljYWRvIFJlcHJlc2VudGFudGUgTGVnYWwucGRmMIICogYDVR0fBIICmTCCApUwgeWgQaA/hj1odHRwOi8vb2NzcGd3LnNlY3VyaXR5ZGF0YS5uZXQuZWMvZWpiY2EvcHVibGljd2ViL3N0YXR1cy9vY3NwooGfpIGcMIGZMTkwNwYDVQQDDDBBVVRPUklEQUQgREUgQ0VSVElGSUNBQ0lPTiBTVUJDQS0yIFNFQ1VSSVRZIERBVEExMDAuBgNVBAsMJ0VOVElEQUQgREUgQ0VSVElGSUNBQ0lPTiBERSBJTkZPUk1BQ0lPTjEdMBsGA1UECgwUU0VDVVJJVFkgREFUQSBTLkEuIDIxCzAJBgNVBAYTAkVDMIHHoIHEoIHBhoG+bGRhcDovL2xkYXBzZGNhMi5zZWN1cml0eWRhdGEubmV0LmVjL0NOPUFVVE9SSURBRCBERSBDRVJUSUZJQ0FDSU9OIFNVQkNBLTIgU0VDVVJJVFkgREFUQSxPVT1FTlRJREFEIERFIENFUlRJRklDQUNJT04gREUgSU5GT1JNQUNJT04sTz1TRUNVUklUWSBEQVRBIFMuQS4gMixDPUVDP2NlcnRpZmljYXRlUmV2b2NhdGlvbkxpc3Q/YmFzZTCB4KCB3aCB2oaB12h0dHBzOi8vcG9ydGFsLW9wZXJhZG9yMi5zZWN1cml0eWRhdGEubmV0LmVjL2VqYmNhL3B1YmxpY3dlYi93ZWJkaXN0L2NlcnRkaXN0P2NtZD1jcmwmaXNzdWVyPUNOPUFVVE9SSURBRCBERSBDRVJUSUZJQ0FDSU9OIFNVQkNBLTIgU0VDVVJJVFkgREFUQSxPVT1FTlRJREFEIERFIENFUlRJRklDQUNJT04gREUgSU5GT1JNQUNJT04sTz1TRUNVUklUWSBEQVRBIFMuQS4gMixDPUVDMB0GA1UdDgQWBBRwPl0zHEfOVb2g++tAjJSqbEfaYzArBgNVHRAEJDAigA8yMDIyMDUxOTE3MTIxNVqBDzIwMjcwNTE5MTcxMjE1WjALBgNVHQ8EBAMCBeAwJAYKKwYBBAGCpnIDBQQWDBRQUkVTSURFTlRFIEVKRUNVVElWTzAaBgorBgEEAYKmcgMBBAwMCjA1MDEyMDYwNzIwFQYKKwYBBAGCpnIDCQQHDAVRVUlUTzARBgorBgEEAYKmcgMiBAMMAS4wNwYKKwYBBAGCpnIDBwQpDCdQQU5BTUVSSUNBTkEgTk9SVEUgMTU0NSBZIFBBU0FKRSBDRU5FUEEwKAYKKwYBBAGCpnIDAgQaDBhKT1NFIElHTkFDSU8gVklDVE9SIEhVR08wHwYKKwYBBAGCpnIDIAQRDA8wMDIwMDEwMDAwMDAwMDAwEwYKKwYBBAGCpnIDIQQFDANQRlgwFwYKKwYBBAGCpnIDDAQJDAdFQ1VBRE9SMBYGCisGAQQBgqZyAwMECAwGQ0FTVFJPMCwGCisGAQQBgqZyAwoEHgwcQ09SQSBSRUZSSUdFUkFDSU9OIENJQS4gTFREQTAdBgorBgEEAYKmcgMLBA8MDTE3OTE5MDQ3NTMwMDEwEgYKKwYBBAGCpnIDHQQEDAJObzAZBgorBgEEAYKmcgMEBAsMCUNISVJJQk9HQTAaBgorBgEEAYKmcgMIBAwMCjA5OTk3MjI0OTkwDQYJKoZIhvcNAQELBQADggIBAGB1k+VWu6qDrl1G3kvHvFRpH0Yqyv/kt4c0a2mS2QFD1d6odvfxgamOf0xv0+b0+wD2OlvKIVSTJZBp8ejRUOxmBQJvm+/jt0ObWszUCw2WQlsDARxknRozOLno72bis+S6/NenaO3thjI1HtVzLIJBEP1SvU1qix/TQBnXSfi86e0ciU66uT+1zTL2BhOEMXc849dN2nsAoOL4TpnRvndk7WvF2GUhEvUfGQ2UKu/xtzBmv1Mq1ttVpB5MaAOFe1NP64oqE+BATKdxTgQeONU4M3pcNtYORMu/5kYKbD2q3tnvMpq5y9hbROv2M8HPFtl7y1sWuClBvwaGOGicKJVBmxa8IGkxvAxhIIOTuvMwQTvHBidVx+hvc4XSmdgOXVIxjiapFqWGuNMswRF6C65Sq4V21VI/rk4+Nq7YLs9ujwaC/5t+WIN+An4WUR6trKLwJ0JDesY7nSg5YAel220dtxGVFPEeyuWve26FI3tccd6TqVTYAU9r2HLdCgWQTP+Jg4Vmc3DUHIGhlwv4A+teIBAs/2xWD618Mc829oKdPPgG0aVS8Umj30uVfbc2t0drvLVotfxk/MdllUCt9CFDvp6Z1jLM1clleD2OOKKQ9sLZdoslLicZhrJK1uYZAngkox3AWHF48tWETe9aVBhVgvsm/zFOAVfEIbJJ08bf</ds:X509Certificate></ds:X509Data><ds:KeyValue><ds:RSAKeyValue><ds:Modulus>sA2Gpmr+mp9nlxHD+mk0QYatjcvFcdwungrpZWS8dQ0LjW3OWbkxw/JP4r6rSblegcQ7B/ytZ2plVRDQuVa7TLtMa0YcU2Crcqxxaf6mmBa95tp+CmiO0a/Cl8K6h4rCr5KxdpZGrteNLzNkxKU5Ed+KtEDMuD7ZnX8UHNm2TIJbniQwhcmliiLyalVoeYLJp8fH6VtfV/4ZPB3QeS2T/Av+hFEpXd96XFBLJv0llJJxLt+P9+/JBrwajxMSR5d0ke35FlZJ+Mh+puts4ZhPIBUjFjuR+8uvv4Pfd6WTwXlwdKjSxexn/uTNtbu0aofIOCTR9RkcniY54x1xmcYYCQ==</ds:Modulus><ds:Exponent>AQAB</ds:Exponent></ds:RSAKeyValue></ds:KeyValue></ds:KeyInfo><ds:Object Id="Signature488628-Object149711"><etsi:QualifyingProperties xmlns:etsi="http://uri.etsi.org/01903/v1.3.2#" Target="#Signature488628"><etsi:SignedProperties Id="Signature488628-SignedProperties713763"><etsi:SignedSignatureProperties><etsi:SigningTime>2022-11-21T13:03:45-05:00</etsi:SigningTime><etsi:SigningCertificate><etsi:Cert><etsi:CertDigest><ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" /><ds:DigestValue>t5bbX0ZhWcl8FNawrimRv4D5Ni8=</ds:DigestValue></etsi:CertDigest><etsi:IssuerSerial><ds:X509IssuerName>CN=AUTORIDAD DE CERTIFICACION SUBCA-2 SECURITY DATA, OU=ENTIDAD DE CERTIFICACION DE INFORMACION, O=SECURITY DATA S.A. 2, C=EC</ds:X509IssuerName><ds:X509SerialNumber>1586556967</ds:X509SerialNumber></etsi:IssuerSerial></etsi:Cert></etsi:SigningCertificate></etsi:SignedSignatureProperties><etsi:SignedDataObjectProperties><etsi:DataObjectFormat ObjectReference="#Reference-ID-264789"><etsi:Description>contenido comprobante</etsi:Description><etsi:MimeType>text/xml</etsi:MimeType></etsi:DataObjectFormat></etsi:SignedDataObjectProperties></etsi:SignedProperties></etsi:QualifyingProperties></ds:Object></ds:Signature></factura>
+]]></comprobante>
+<mensajes/>
+</autorizacion>
+
