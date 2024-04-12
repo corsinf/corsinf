@@ -307,4 +307,45 @@ class index_saludM
         $datos = $this->db->datos($sql);
         return $datos[0]['total'];
     }
+
+    function lista_horario_clases_paralelo($id_paralelo = '')
+    {
+        if ($id_paralelo != '') {
+            $sql =
+                "SELECT 
+                    hcd.ac_horarioC_id,
+                    hcd.ac_docente_id,
+                    hcd.ac_paralelo_id,
+                    hcd.ac_horarioC_inicio,
+                    hcd.ac_horarioC_fin,
+                    hcd.ac_horarioC_dia,
+                    hcd.ac_horarioC_materia,
+                    hcd.ac_horarioC_fecha_creacion,
+                    hcd.ac_horarioC_fecha_modificacion,
+                    hcd.ac_horarioC_estado,
+
+                    cs.sa_sec_id, 
+                    cs.sa_sec_nombre, 
+                    cg.sa_gra_id, 
+                    cg.sa_gra_nombre,
+                    cp.sa_par_id, 
+                    cp.sa_par_nombre
+
+                    FROM horario_clases hcd
+
+                    INNER JOIN cat_paralelo cp ON hcd.ac_paralelo_id = cp.sa_par_id
+                    INNER JOIN cat_seccion cs ON cp.sa_id_seccion = cs.sa_sec_id
+                    INNER JOIN cat_grado cg ON cp.sa_id_grado = cg.sa_gra_id
+
+                    WHERE 1 = 1 ";
+
+            if ($id_paralelo != '') {
+                $sql .= "AND hcd.ac_paralelo_id = $id_paralelo";
+            }
+
+            $sql .= " ORDER BY hcd.ac_horarioC_id;";
+            $datos = $this->db->datos($sql);
+            return $datos;
+        }
+    }
 }

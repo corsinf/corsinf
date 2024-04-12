@@ -183,4 +183,28 @@ class pacientesM
         $datos = $this->db->datos($sql);
         return $datos;
     }
+
+    function existe_paciente($sa_pac_id_comunidad, $sa_pac_tabla)
+    {
+        $sql = "SELECT TOP 1 pac.sa_pac_id, pac.sa_pac_tabla, fm.sa_fice_id
+            FROM pacientes pac
+            INNER JOIN ficha_medica fm ON pac.sa_pac_id = fm.sa_fice_pac_id
+            WHERE sa_pac_id_comunidad = $sa_pac_id_comunidad AND sa_pac_tabla = '$sa_pac_tabla';";
+
+        $datos = $this->db->datos($sql);
+
+        if (!empty($datos) && isset($datos[0]['sa_pac_id'])) {
+            $datos = [
+                'sa_pac_id' => $datos[0]['sa_pac_id'], 
+                'sa_pac_tabla' => $datos[0]['sa_pac_tabla'],
+                'sa_fice_id' => $datos[0]['sa_fice_id'],
+            ];
+            
+            return $datos;
+        } else {
+            return null; // Otra lógica de retorno en caso de no encontrar un paciente
+        }
+    }
+
+
 }
