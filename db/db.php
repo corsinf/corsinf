@@ -158,15 +158,18 @@ class db
 				if (isset($value['tipo']) && strtoupper($value['tipo']) == 'STRING') {
 					$valores .= "'" . $value['dato'] . "',";
 				} else {
-					$valores .= $value['dato'] . ',';
+					$valores .= str_replace(',','',$value['dato']). ',';
 				}
 			} else {			
 				// $valores .= "'" . $value['dato'] . "',";
-				$valores .= $value['dato'] . ',';
+				$valores .= str_replace(',','',$value['dato']). ',';
 			}
 		}
 		$campos = substr($campos, 0, -1);
 		$valores = substr($valores, 0, -1);
+		// print_r($datos);
+		// print_r($valores);
+		// die();
 		$valores = explode(',',$valores);
 		$incognitas = '';
 		// print_r($valores);die();
