@@ -244,7 +244,11 @@ class loginC
 		{
 			//actualizamos
 			$empresa = $this->login->lista_empresa($parametros['empresa']);
-		 	$res = $this->cod_global->generar_primera_vez($empresa[0]['Base_datos'],$parametros['empresa']);
+			// print_r($empresa);die();
+			if($empresa[0]['Ip_host']=='186.4.219.172')
+			{
+		 		$res = $this->cod_global->generar_primera_vez($empresa[0]['Base_datos'],$parametros['empresa']);
+		 	}else{$res=1;}
 			return array('respuesta'=>$res);
 		}
 	}
