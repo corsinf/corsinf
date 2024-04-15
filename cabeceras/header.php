@@ -125,7 +125,7 @@ if ($dominio != 'localhost') {
 
 			//Descomentar el settime 
 			setInterval(function() {
-				notificaciones_1(parametros_noti);
+				//notificaciones_1(parametros_noti);
 			}, 6000);
 
 			solicitudes();

@@ -87,6 +87,10 @@ if (isset($_GET['total_historial_estudiantil_docente'])) {
     echo json_encode($controlador->total_historial_estudiantil_docente($id_docente));
 }
 
+if (isset($_GET['horario_clases'])) {
+    echo json_encode($controlador->lista_horario_clases_paralelo($_GET['id_paralelo']));
+}
+
 
 
 
@@ -286,6 +290,12 @@ class index_saludC
     function total_historial_estudiantil_docente($id_docente)
     {
         return $this->modelo->total_historial_estudiantil_docente($id_docente);
+    }
+
+    function lista_horario_clases_paralelo($id_paralelo)
+    {
+        $datos = $this->modelo->lista_horario_clases_paralelo($id_paralelo);
+        return $datos;
     }
 
 }

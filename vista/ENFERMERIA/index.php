@@ -35,7 +35,7 @@
       $_SESSION['INICIO']['TIPO'] == 'DBA'  ||
       strtoupper($_SESSION['INICIO']['TIPO']) == 'COMUNIDAD'  ||
       strtoupper($_SESSION['INICIO']['TIPO']) == 'ENFERMERA'  ||
-      strtoupper($_SESSION['INICIO']['TIPO']) == 'DOCTOR'  ||
+      strtoupper($_SESSION['INICIO']['TIPO']) == 'MEDICO'  ||
       strtoupper($_SESSION['INICIO']['TIPO']) == 'ADMINISTRADOR'
     ) { ?>
 
@@ -295,6 +295,11 @@
       }
     });
   }
+
+  function redireccionar(url_redireccion) {
+    url_click = "inicio.php?mod=7&acc=" + url_redireccion;
+    window.location.href = url_click;
+  }
 </script>
 
 <div class="page-wrapper">
@@ -336,7 +341,7 @@
                       <h4 class="my-1" id="lbl_estudiantes">0</h4>
                       <!-- <p class="mb-0 font-13 text-success"><i class="bx bxs-up-arrow align-middle"></i>$34 from last week</p> -->
                     </div>
-                    <div class="widgets-icons bg-light-success text-warning ms-auto"><i class='bx bxs-group'></i>
+                    <div class="widgets-icons bg-light-primary text-primary ms-auto"><i class='bx bxs-group'></i>
                     </div>
                   </div>
                 </div>
@@ -352,7 +357,7 @@
                       <h4 class="my-1" id="lbl_docentes">0</h4>
                       <!-- <p class="mb-0 font-13 text-success"><i class="bx bxs-up-arrow align-middle"></i>$34 from last week</p> -->
                     </div>
-                    <div class="widgets-icons bg-light-success text-success ms-auto"><i class='bx bxs-group'></i>
+                    <div class="widgets-icons bg-light-primary text-primary ms-auto"><i class='bx bxs-group'></i>
                     </div>
                   </div>
                 </div>
@@ -368,7 +373,7 @@
                       <h4 class="my-1" id="lbl_comunidad">0</h4>
                       <!-- <p class="mb-0 font-13 text-success"><i class="bx bxs-up-arrow align-middle"></i>$34 from last week</p> -->
                     </div>
-                    <div class="widgets-icons bg-light-  text-primary ms-auto"><i class='bx bxs-group'></i>
+                    <div class="widgets-icons bg-light-primary  text-primary ms-auto"><i class='bx bxs-group'></i>
                     </div>
                   </div>
                 </div>
@@ -379,16 +384,101 @@
 
         <?php } ?>
 
+        <?php if (
+          $_SESSION['INICIO']['TIPO'] == 'DBA'  ||
+          strtoupper($_SESSION['INICIO']['TIPO']) == 'MEDICO'
+        ) { ?>
+          <h6 class="mb-0 text-uppercase">Pacientes</h6>
+          <hr>
+          <div class="row">
+
+            <div class="col-6 col-sm-6 col-md-4" id="pnl_pacientes" onclick="redireccionar('pacientes');">
+              <div class="card radius-10 shadow-card">
+                <div class="card-body">
+                  <div class="d-flex align-items-center">
+                    <div>
+                      <p class="mb-0 text-secondary">Pacientes</p>
+                      <h4 class="my-1" id="lbl_pacientes">0</h4>
+                    </div>
+                    <div class="widgets-icons bg-light-success text-success ms-auto"><i class='bx bx-group'></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-6 col-sm-6 col-md-4" id="pnl_agenda" onclick="redireccionar('atencion_pacientes');">
+              <div class="card radius-10 shadow-card">
+                <div class="card-body">
+                  <div class="d-flex align-items-center">
+                    <div>
+                      <p class="mb-0 text-secondary">Agenda</p>
+                      <h4 class="my-1" id="lbl_agenda">0</h4>
+                    </div>
+                    <div class="widgets-icons bg-light-success text-success ms-auto"><i class='bx bx-notepad'></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-6 col-sm-6 col-md-4" id="pnl_consultas" onclick="redireccionar('consultas');">
+              <div class="card radius-10 shadow-card">
+                <div class="card-body">
+                  <div class="d-flex align-items-center">
+                    <div>
+                      <p class="mb-0 text-secondary">Consultas/Certificados</p>
+                      <h4 class="my-1" id="lbl_consultas">0</h4>
+                    </div>
+                    <div class="widgets-icons bg-light-success text-success ms-auto"><i class='bx bxs-user-check'></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="row">
+            <div class="col-12 col-sm-12 col-md-8">
+              <div class="card">
+                <div class="card-body">
+                  <div id="chart8"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        <?php } ?>
 
         <?php if (
           $_SESSION['INICIO']['TIPO'] == 'DBA'  ||
-          strtoupper($_SESSION['INICIO']['TIPO']) == 'MEDICO'  ||
           strtoupper($_SESSION['INICIO']['TIPO']) == 'ENFERMERA'  ||
           strtoupper($_SESSION['INICIO']['TIPO']) == 'ADMINISTRADOR'
         ) { ?>
           <h6 class="mb-0 text-uppercase">Pacientes</h6>
           <hr>
           <div class="row">
+
+            <?php if (
+              $_SESSION['INICIO']['TIPO'] == 'DBA'  ||
+              strtoupper($_SESSION['INICIO']['TIPO']) == 'ENFERMERA'
+            ) { ?>
+              <div class="col-6 col-sm-6 col-md-4" id="" onclick="redireccionar('agendamiento');">
+                <div class="card radius-10 shadow-card">
+                  <div class="card-body">
+                    <div class="d-flex align-items-center">
+                      <div>
+                        <p class="mb-0 text-secondary fw-bold">Agendamiento</p>
+                        <h4 class="my-1" id="">&nbsp;</h4>
+                        <!-- <p class="mb-0 font-13 text-success"><i class="bx bxs-up-arrow align-middle"></i>$34 from last week</p> -->
+                      </div>
+                      <div class="widgets-icons bg-light-success text-success ms-auto"><i class='bx bx-notepad'></i>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            <?php } ?>
 
             <div class="col-6 col-sm-6 col-md-4" id="pnl_pacientes">
               <div class="card radius-10">
@@ -399,7 +489,7 @@
                       <h4 class="my-1" id="lbl_pacientes">0</h4>
                       <!-- <p class="mb-0 font-13 text-success"><i class="bx bxs-up-arrow align-middle"></i>$34 from last week</p> -->
                     </div>
-                    <div class="widgets-icons bg-light-success text-primary ms-auto"><i class="bx bx-package"></i>
+                    <div class="widgets-icons bg-light-primary text-primary ms-auto"><i class='bx bx-group'></i>
                     </div>
                   </div>
                 </div>
@@ -411,27 +501,11 @@
                 <div class="card-body">
                   <div class="d-flex align-items-center">
                     <div>
-                      <p class="mb-0 text-secondary">Atenciones </p>
+                      <p class="mb-0 text-secondary">Consultas/Certificados</p>
                       <h4 class="my-1" id="lbl_consultas">0</h4>
                       <!-- <p class="mb-0 font-13 text-success"><i class="bx bxs-up-arrow align-middle"></i>$34 from last week</p> -->
                     </div>
-                    <div class="widgets-icons bg-light-success text-primary ms-auto"><i class="bx bx-package"></i>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div class="col-6 col-sm-6 col-md-4" id="pnl_agenda">
-              <div class="card radius-10">
-                <div class="card-body">
-                  <div class="d-flex align-items-center">
-                    <div>
-                      <p class="mb-0 text-secondary">Agenda</p>
-                      <h4 class="my-1" id="lbl_agenda">0</h4>
-                      <!-- <p class="mb-0 font-13 text-success"><i class="bx bxs-up-arrow align-middle"></i>$34 from last week</p> -->
-                    </div>
-                    <div class="widgets-icons bg-light-success text-primary ms-auto"><i class="bx bx-package"></i>
+                    <div class="widgets-icons bg-light-primary text-primary ms-auto"><i class='bx bxs-user-check'></i>
                     </div>
                   </div>
                 </div>
@@ -456,16 +530,33 @@
           $_SESSION['INICIO']['TIPO'] == 'DBA'  ||
           strtoupper($_SESSION['INICIO']['TIPO']) == 'COMUNIDAD'  ||
           strtoupper($_SESSION['INICIO']['TIPO']) == 'ENFERMERA'  ||
-          strtoupper($_SESSION['INICIO']['TIPO']) == 'DOCTOR'  ||
+          strtoupper($_SESSION['INICIO']['TIPO']) == 'MEDICO'  ||
           strtoupper($_SESSION['INICIO']['TIPO']) == 'ADMINISTRADOR'
         ) { ?>
 
           <h6 class="mb-0 text-uppercase">Farmacia</h6>
           <hr>
-          <div class="row" id="pnl_alertas_farmacia">
 
+          <div class="accordion" id="consulta_acordeon">
+            <div class="accordion-item">
+              <h2 class="accordion-header" id="flush-headingOne">
+                <button class="accordion-button collapsed bg-danger text-white" type="button" data-bs-toggle="collapse" data-bs-target="#flush-estudiante" aria-expanded="false" aria-controls="flush-estudiante">
+                  Medicamentos / Insumos - Agotados
+                </button>
+              </h2>
+              <div id="flush-estudiante" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#consulta_acordeon">
+                <div class="accordion-body">
+
+                  <div class="row" id="pnl_alertas_farmacia">
+                  </div>
+
+                </div>
+              </div>
+            </div>
           </div>
-          <div class="row">
+
+
+          <div class="row pt-3">
             <div class="col-6 col-sm-6 col-md-4" id="pnl_medicamentos">
               <div class="card radius-10">
                 <div class="card-body">
@@ -475,7 +566,7 @@
                       <h4 class="my-1" id="lbl_medicamentos">0</h4>
                       <!-- <p class="mb-0 font-13 text-success"><i class="bx bxs-up-arrow align-middle"></i>$34 from last week</p> -->
                     </div>
-                    <div class="widgets-icons bg-light-success text-primary ms-auto"><i class="bx bx-package"></i>
+                    <div class="widgets-icons bg-light-primary text-primary ms-auto"><i class='bx bxs-capsule'></i>
                     </div>
                   </div>
                 </div>
@@ -490,7 +581,7 @@
                       <h4 class="my-1" id="lbl_insumos">0</h4>
                       <!-- <p class="mb-0 font-13 text-success"><i class="bx bxs-up-arrow align-middle"></i>$34 from last week</p> -->
                     </div>
-                    <div class="widgets-icons bg-light-success text-primary ms-auto"><i class="bx bx-package"></i>
+                    <div class="widgets-icons bg-light-primary text-primary ms-auto"><i class="bx bx-test-tube"></i>
                     </div>
                   </div>
                 </div>
@@ -551,24 +642,22 @@
                     }
 
                     curso = item.sa_sec_nombre + '/' + item.sa_gra_nombre + '/' + item.sa_par_nombre;
-
-                    estudiantes +=
-
-                      '<div class="col">' +
-                      '<div class="card radius-15">' +
-                      '<div class="card-body text-center">' +
-                      '<div class="p-4 border radius-15">' +
-                      '<img src="' + item.sa_est_foto_url + '" width="110" height="110" class="rounded-circle shadow" alt="">' +
-
-                      '<h5 class="mb-0 mt-3">' + item.sa_est_primer_apellido + ' ' + item.sa_est_segundo_apellido + ' ' + item.sa_est_primer_nombre + ' ' + item.sa_est_segundo_nombre + '</h5>' +
-                      '<p class="mb-0">' + item.sa_est_cedula + '</p>' +
-                      '<p class="mb-0">' + item.sa_est_sexo + '</p>' +
-                      '<p class="mb-3">' + curso + '</p>' +
-                      '</div>' +
-                      '</div>' +
-                      '</div>' +
-                      '</div>' +
-                      '</div>';
+                    //pilas mañana
+                    estudiantes += `
+                                    <div class="col" onclick="redireccionar('perfil_estudiante_salud&id_estudiante=${item.sa_est_id}&paralelo=${item.sa_id_paralelo}');">
+                                      <div class="card radius-10 shadow-card">
+                                        <div class="card-body text-center">
+                                          <div class="p-4 border radius-10">
+                                            <img src="${item.sa_est_foto_url}" width="110" height="110" class="rounded-circle shadow" alt="">
+                                            <h5 class="mb-0 mt-3">${item.sa_est_primer_apellido} ${item.sa_est_segundo_apellido} ${item.sa_est_primer_nombre} ${item.sa_est_segundo_nombre}</h5>
+                                            <p class="mb-0">${item.sa_est_cedula}</p>
+                                            <p class="mb-0">${item.sa_est_sexo}</p>
+                                            <p class="mb-3">${curso}</p>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  `;
 
                   });
 
@@ -595,6 +684,57 @@
             }
           </script>
 
+          <h6 class="mb-0 text-uppercase">DASHBOARD</h6>
+          <hr>
+
+          <div class="row">
+
+            <div class="col-6 col-sm-6 col-md-4" id="" onclick="redireccionar('inicio_representante');">
+              <div class="card radius-10 shadow-card">
+                <div class="card-body">
+                  <div class="d-flex align-items-center">
+                    <div>
+                      <p class="mb-0 text-secondary fw-bold">Formularios</p>
+                      <h4 class="my-1" id="">&nbsp;</h4>
+                    </div>
+                    <div class="widgets-icons bg-light-success text-success ms-auto"><i class='bx bxs-book-content'></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-6 col-sm-6 col-md-4" id="" onclick="redireccionar('reunion_rep_doc');">
+              <div class="card radius-10 shadow-card">
+                <div class="card-body">
+                  <div class="d-flex align-items-center">
+                    <div>
+                      <p class="mb-0 text-secondary fw-bold">Agendar Reunión</p>
+                      <h4 class="my-1" id="">&nbsp;</h4>
+                    </div>
+                    <div class="widgets-icons bg-light-success text-success ms-auto"><i class='bx bx-calendar'></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-6 col-sm-6 col-md-4" id="" onclick="redireccionar('reuniones_representante');">
+              <div class="card radius-10 shadow-card">
+                <div class="card-body">
+                  <div class="d-flex align-items-center">
+                    <div>
+                      <p class="mb-0 text-secondary fw-bold">Reuniones</p>
+                      <h4 class="my-1" id="">&nbsp;</h4>
+                    </div>
+                    <div class="widgets-icons bg-light-success text-success ms-auto"><i class='bx bxs-book-content'></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
           <h6 class="mb-0 text-uppercase">ESTUDIANTES MATRICULADOS</h6>
           <hr>
 
@@ -602,9 +742,11 @@
 
           </div>
 
-          <div class="row">
+          <h6 class="mb-0 text-uppercase">atenciones realizadas y certificados validados</h6>
+          <hr>
 
-            <div class="col-12 col-sm-12 col-md-12">
+          <div class="row">
+            <div class="col-8 col-sm-12 col-md-8">
               <div class="card">
                 <div class="card-body">
                   <div id="chartEst"></div>
@@ -756,20 +898,12 @@
                 }
               });
             }
-
-            function redireccionar(url_redireccion) {
-              url_click = "inicio.php?mod=7&acc=" + url_redireccion;
-              window.location.href = url_click;
-            }
           </script>
 
           <h6 class="mb-0 text-uppercase">DASHBOARD</h6>
           <hr>
 
           <div class="row">
-
-
-
 
             <div class="col-6 col-sm-6 col-md-4" id="pnl_clases" onclick="redireccionar('docente_paralelo');">
               <div class="card radius-10 shadow-card">
@@ -941,7 +1075,7 @@
                 type: 'post',
                 dataType: 'json',
                 success: function(response) {
-                  console.log(response)
+                  //console.log(response)
                   lista_reuniones_chart(response.total_motivos, response.motivo)
                 }
 
@@ -962,7 +1096,7 @@
                 type: 'post',
                 dataType: 'json',
                 success: function(response) {
-                  console.log(response)
+                  //console.log(response)
                   lista_estado_reuniones_chart(response.total_estados, response.estado)
                 }
 
@@ -1194,7 +1328,6 @@
   function lista_reuniones_chart(data, cate) {
     var total_reuniones = data.reduce((cont, dato) => cont + parseInt(dato), 0);
     $('#lbl_reuniones').text(total_reuniones);
-    lbl_reuniones
     var options = {
       series: [{
         name: 'Reuniones',
