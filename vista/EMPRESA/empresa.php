@@ -47,6 +47,9 @@
 								   <li class="nav-item" style="display: none;">
 								    <a class="nav-link" data-bs-toggle="pill" href="#menu3">SMTP de correo</a>
 								  </li>
+								   <li class="nav-item">
+								    <a class="nav-link" data-bs-toggle="pill" href="#menu5">Active Directory</a>
+								  </li>
 								</ul>
 
 								<!-- Tab panes -->
@@ -267,6 +270,35 @@
 							       		</select>
 							       	</div>
 							       </div>
+								  </div>
+								  <div class="tab-pane container fade" id="menu5">
+								  	<div class="row">
+							       	   	<div class="col-sm-6">
+							       	   		<b>Host</b>
+							       	   		<input type="text" name="txt_Ip_dir" id="txt_Ip_dir" class="form-control form-control-sm" placeholder="127.0.0.1" value="">
+							       	   		<b>Puerto</b>
+							       	   		<input type="text" name="txt_puerto_dir" id="txt_puerto_dir" class="form-control form-control-sm" value="">
+							       	   		<b>basedn</b>
+							       	   		<input type="text" name="txt_base_dir" id="txt_base_dir" class="form-control form-control-sm" placeholder="DC=devcorsinf,DC=local" value="">
+							       	   		<b>Dominio</b>							       	   		
+							       	   		<input type="text" name="txt_dominio_dir" id="txt_dominio_dir" class="form-control form-control-sm" placeholder="devcorsinf.local" value="">
+							       	   		<b>Usuario</b>
+							       	   		<input type="text" name="txt_usuario_dir" id="txt_usuario_dir" class="form-control form-control-sm">
+							       	   		<b>Password</b>
+							       	   		<div class="input-group mb-3">
+								            <input type="password" name="txt_pass_dir" id="txt_pass_dir" class="form-control form-control-sm">	
+					                           <?php if($_SESSION['INICIO']['TIPO']=='DBA') { ?>
+					                               <button type="button" class="btn btn-info btn-flat btn-sm" onclick="pass('txt_pass_dir')"><i class="lni lni-eye" id="eye"></i></button>                          
+					                          <?php } ?>
+					                        </div> 
+					                        
+							       	   	<button class="btn btn-warning" onclick="probar_directory()">Probar conexion</button>     	
+							       	   	</div>
+							       	   	<div class="col-sm-6">
+							       	   		
+							       	   	</div>
+							       	    
+							       </div>							      
 								  </div>
 								</div>           
 

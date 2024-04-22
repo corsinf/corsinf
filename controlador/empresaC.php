@@ -42,6 +42,10 @@ if(isset($_GET['eli_certi']))
 {
 	echo json_encode($controlador->eliminar_certificados());
 }
+if(isset($_GET['probar_conexion_dir']))
+{
+	echo json_encode($controlador->probar_conexion_dir($_POST['parametros']));
+}
 
 
 class empresaC
@@ -229,6 +233,19 @@ class empresaC
 	// $datos[22]['dato']= $parametros['proce'];
 	// $datos[23]['campo'] = 'encargado_envios';
 	// $datos[23]['dato']= $parametros['responsable_envios'];
+
+	$datos[24]['campo'] = 'ip_directory';
+	$datos[24]['dato'] = $parametros['ip_dir'];
+	$datos[25]['campo'] = 'puerto_directory';
+	$datos[25]['dato'] = $parametros['puerto_dir'];
+	$datos[26]['campo'] = 'basedn_directory';
+	$datos[26]['dato'] = $parametros['base_dir'];
+	$datos[27]['campo'] = 'usuario_directory';
+	$datos[27]['dato'] = $parametros['usu_dir'];
+	$datos[28]['campo'] = 'password_directory';
+	$datos[28]['dato'] = $parametros['pass_dir'];
+	$datos[29]['campo'] = 'dominio_directory';
+	$datos[29]['dato'] = $parametros['dominio_dir'];
 	
 
 
@@ -257,6 +274,39 @@ class empresaC
 		$where[0]['campo'] = 'id_empresa';
 		$where[0]['dato']= $_SESSION['INICIO']['ID_EMPRESA'];
   	return  $this->modelo->editar('empresa',$datos,$where);
+  }
+
+  function probar_conexion_dir($parametros)
+  {
+			// Configuración de conexión
+			$ldapconfig['host'] = 'ldap://'.$parametros['ip_dir'];  // Servidor de Active Directory
+			$ldapconfig['port'] = $parametros['puerto_dir'];  // Puerto LDAP predeterminado
+			$ldapconfig['basedn'] = 'DC=devcorsinf,DC=local';  // Base DN de tu dominio
+
+			// Nombre de usuario y contraseña de prueba
+			$username = $parametros['usu_dir'];
+			$password = $parametros['pass_dir'];
+
+			// Intentar la conexión
+			$ldapconn = ldap_connect($ldapconfig['host'], $ldapconfig['port']);
+
+			if ($ldapconn) {
+			    // Configurar opciones de LDAP
+			    ldap_set_option($ldapconn, LDAP_OPT_PROTOCOL_VERSION, 3);
+			    ldap_set_option($ldapconn, LDAP_OPT_REFERRALS, 0);
+
+			    // Intentar la autenticación
+			    $ldapbind = @ldap_bind($ldapconn, "$username@".$parametros['dominio_dir'], $password);
+
+			    if ($ldapbind) {
+			    	return 1;
+			    } else {
+			    	return -1;
+			    }
+
+			    // Cerrar la conexión LDAP
+			    ldap_close($ldapconn);
+			}
   }
 
 }
