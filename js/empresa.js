@@ -163,6 +163,14 @@ function empresa()
                 $("#txt_mesas").val(response[0].N_MESAS)
                 $("#ddl_tipo_usuario").val(response[0].encargado_envios)
 
+
+                $('#txt_Ip_dir').val(response[0].ip_directory);
+                $('#txt_puerto_dir').val(response[0].puerto_directory);
+                $('#txt_base_dir').val(response[0].basedn_directory);
+                $('#txt_usuario_dir').val(response[0].usuario_directory);
+                $('#txt_pass_dir').val(response[0].password_directory);
+                $('#txt_dominio_dir').val(response[0].dominio_directory);
+
                 $('#txt_nom_img').val(response[0].Ruc);
                 if(response[0].Logo !=null)
                 {
@@ -267,6 +275,14 @@ Swal.fire({
         'iva':$("#txt_iva").val(),
         'mesa':$("#txt_mesas").val(),
         'responsable_envios':$("#ddl_tipo_usuario").val(),
+
+        //directory
+        'ip_dir': $('#txt_Ip_dir').val(),
+        'puerto_dir': $('#txt_puerto_dir').val(),
+        'base_dir': $('#txt_base_dir').val(),
+        'usu_dir': $('#txt_usuario_dir').val(),
+        'pass_dir': $('#txt_pass_dir').val(),
+        'dominio_dir': $('#txt_dominio_dir').val(),
     }
      $.ajax({
       data:  {parametros:parametros},
@@ -314,6 +330,34 @@ Swal.fire({
             $('#ddl_tipo_usuario').html(response);  
         }
       });
+  }
 
-
+  function probar_directory()
+  {
+    var parametros = 
+    {  
+        //directory
+        'ip_dir': $('#txt_Ip_dir').val(),
+        'puerto_dir': $('#txt_puerto_dir').val(),
+        'base_dir': $('#txt_base_dir').val(),
+        'usu_dir': $('#txt_usuario_dir').val(),
+        'pass_dir': $('#txt_pass_dir').val(),
+        'dominio_dir': $('#txt_dominio_dir').val(),
+    }
+      $.ajax({
+        data:  {parametros:parametros},
+        url:   '../controlador/empresaC.php?probar_conexion_dir=true',
+        type:  'post',
+        dataType: 'json',
+        success:  function (response) { 
+            if(response==1)
+            {
+                Swal.fire("Active Directory","conexion exitosa","success");
+            }else
+            {                
+                Swal.fire("Active Directory","No se pudo conectar","error");
+            }
+            console.log(response)
+        }
+      });
   }

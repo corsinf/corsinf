@@ -49,6 +49,12 @@ if (isset($_GET['obtener_idFicha_paciente'])) {
     echo json_encode($controlador->buscar_idFicha_paciente($sa_pac_id));
 }
 
+if (isset($_GET['existe_paciente'])) {
+    $sa_pac_id_comunidad = $_POST['sa_pac_id_comunidad'] ?? '';
+    $sa_pac_tabla = $_POST['sa_pac_tabla'] ?? '';
+    echo json_encode($controlador->existe_paciente($sa_pac_id_comunidad, $sa_pac_tabla));
+}
+
 //print_r ($controlador->obtener_informacion_pacienteC(20));
 
 class pacientesC
@@ -80,6 +86,12 @@ class pacientesC
     function buscar_idFicha_paciente($id_paciente)
     {
         $datos = $this->modelo->obtener_idFicha_paciente($id_paciente);
+        return $datos;
+    }
+
+    function existe_paciente($sa_pac_tabla, $sa_pac_id_comunidad)
+    {
+        $datos = $this->modelo->existe_paciente($sa_pac_tabla, $sa_pac_id_comunidad);
         return $datos;
     }
 }

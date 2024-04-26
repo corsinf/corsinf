@@ -20,10 +20,10 @@
 	<link href="assets/css/bootstrap-extended.css" rel="stylesheet">
 	<link href="assets/css/app.css" rel="stylesheet">
 	<link href="assets/css/icons.css" rel="stylesheet">
-	<title>Activos Fijos| PUCE</title>
+	<!-- <title>Activos Fijos| PUCE</title> -->
 	<script src="js/sweetalert2.all.min.js"></script>
 
-  <link rel="stylesheet" href="./css/multi_step.css">
+    <link rel="stylesheet" href="./css/multi_step.css">
   
 	<script type="text/javascript">	
 // function consultar_datos()
@@ -196,7 +196,7 @@
 									<label for="inputFirstName" class="form-label">Nombre Comercial</label>
 									<input type="text" class="form-control" name="txt_empresa" id="txt_empresa" placeholder="Jhon">
 									<label for="inputLastName" class="form-label">Ruc / CI </label>
-									<input type="text" class="form-control"  name="txt_ci" id="txt_ci" placeholder="Deo">
+									<input type="text" class="form-control"  name="txt_ci" id="txt_ci" placeholder="9999999999999" onkeyup="num_caracteres('txt_ci', 13)">
 								</div>
 
                         	</div>
@@ -207,7 +207,7 @@
 								</div>
 								<div class="col-5">
 									<label for="inputEmailAddress" class="form-label">Telefono</label>
-									<input type="text" class="form-control" name="txt_telefono" id="txt_telefono" placeholder="0999999999">
+									<input type="text" class="form-control" name="txt_telefono" id="txt_telefono" placeholder="0999999999" onkeyup="num_caracteres('txt_telefono', 10)">
 								</div>
 								<div class="col-12">
 									<label for="inputEmailAddress" class="form-label">Direccion</label>
@@ -296,6 +296,7 @@
 	<script src="assets/plugins/simplebar/js/simplebar.min.js"></script>
 	<script src="assets/plugins/metismenu/js/metisMenu.min.js"></script>
 	<script src="assets/plugins/perfect-scrollbar/js/perfect-scrollbar.js"></script>
+	<script src="js/codigos_globales.js"></script>
 	<!--Password show & hide js -->
 	<script>
 		$(document).ready(function () {

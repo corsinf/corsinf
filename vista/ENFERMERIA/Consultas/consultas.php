@@ -3,6 +3,7 @@
 <script type="text/javascript">
     $(document).ready(function() {
         cargar_tabla();
+        consultar_datos_comunidad_tabla();
     });
 
     function cargar_tabla() {
@@ -114,6 +115,24 @@
 
         window.open('../vista/inicio.php?mod=7&acc=detalle_consulta&pdf_consulta=true&id_consulta=' + id_consulta + '&id_paciente=' + sa_pac_id + '&tipo_consulta=' + tipo_consulta + '&btn_regresar=consultas_m', '_blank');
     }
+
+    function consultar_datos_comunidad_tabla() {
+        var salida = '<option value="">Todos</option>';
+
+        $.ajax({
+            url: '../controlador/Comunidad_TablasC.php?listar=true',
+            type: 'post',
+            dataType: 'json',
+            success: function(response) {
+                $.each(response, function(i, item) {
+                    // Concatenar dos variables en el valor del atributo "value"
+                    salida += '<option value="' + item.sa_tbl_pac_nombre + '">' + item.sa_tbl_pac_nombre.toUpperCase() + '</option>';
+                });
+
+                $('#txt_tabla').html(salida);
+            }
+        });
+    }
 </script>
 
 
@@ -186,9 +205,7 @@
                                             <div class="col-md-4">
                                                 <label for="txt_tabla" class="form-label fw-bold">Tipo de Paciente </label>
                                                 <select name="txt_tabla" id="txt_tabla" class="form-select form-select-sm" onchange="buscar_paciente();">
-                                                    <option value="">Todos</option>
-                                                    <option value="estudiantes">Estudiantes</option>
-                                                    <option value="docentes">Docentes</option>
+                                                    
                                                 </select>
                                             </div>
                                         </div>

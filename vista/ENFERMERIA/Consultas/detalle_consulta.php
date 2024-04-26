@@ -33,6 +33,9 @@ if (isset($_GET['btn_regresar'])) {
         $btn_regresar = '../vista/inicio.php?acc=historial_salud_estudiantil';
     } else if ($btn_regresar == 'consultas_m') {
         $btn_regresar = '../vista/inicio.php?acc=consultas';
+    } else if ($btn_regresar == 'represententes_consulta') {
+        $id_estudiante = $_GET['id_estudiante'] ?? '';
+        $btn_regresar = '../vista/inicio.php?mod=7&acc=perfil_estudiante_salud&id_estudiante='.$id_estudiante;
     } else {
         $btn_regresar = '../vista/inicio.php?mod=7&acc=index';
     }
@@ -56,65 +59,69 @@ if (isset($_GET['btn_regresar'])) {
         $('#ifr_pdf_notificacion').prop('src', '../controlador/consultasC.php?pdf_notificacion=true&id_consulta=' + id_consulta);
     }
 
-    function datos_col_consulta(id_consulta) {
-        $.ajax({
-            data: {
-                id: id_consulta
-            },
-            url: '../controlador/consultasC.php?listar_solo_consulta=true',
-            type: 'post',
-            dataType: 'json',
-            success: function(response) {
-                //console.log(response);
-                $('#sa_conp_observaciones').val(response[0].sa_conp_observaciones);
-            }
-        });
-    }
+    <?php if ($btn_regresar_temp == 'admin' || $btn_regresar_temp == 'consultas_m') { ?>
 
-    function editar_insertar() {
-        var sa_conp_observaciones = $('#sa_conp_observaciones').val();
-        var sa_conp_id = $('#sa_conp_id').val();
-        // Crear objeto de parámetros
-        var parametros = {
-            'sa_conp_id': sa_conp_id,
-            'sa_conp_observaciones': sa_conp_observaciones,
-        };
-
-        insertar(parametros);
-
-    }
-
-    function insertar(parametros) {
-        $.ajax({
-            data: {
-                parametros: parametros
-            },
-            url: '../controlador/consultasC.php?observacion=true',
-            type: 'post',
-            dataType: 'json',
-
-            success: function(response) {
-                //console.log(response);
-
-                if (response == 1) {
-                    Swal.fire('', 'Operacion realizada con exito.', 'success').then(function() {
-
-
-                        <?php if ($btn_regresar_temp == 'consultas_m') { ?>
-                            location.href = '../vista/inicio.php?mod=7&acc=consultas';
-                        <?php } else if ($btn_regresar_temp == 'admin') { ?>
-                            location.href = '../vista/inicio.php?mod=7&acc=consultas_pacientes&pac_id=<?= $id_paciente; ?>';
-                        <?php  } else { ?>
-                            location.href = '../vista/inicio.php?mod=7&acc=index';
-                        <?php } ?>
-                    });
-                } else if (response == -2) {
-                    Swal.fire('', 'Código ya registrado', 'success');
+        function datos_col_consulta(id_consulta) {
+            $.ajax({
+                data: {
+                    id: id_consulta
+                },
+                url: '../controlador/consultasC.php?listar_solo_consulta=true',
+                type: 'post',
+                dataType: 'json',
+                success: function(response) {
+                    //console.log(response);
+                    $('#sa_conp_observaciones').val(response[0].sa_conp_observaciones);
                 }
-                //console.log(response);
-            }
-        });
-    }
+            });
+        }
+
+        function editar_insertar() {
+            var sa_conp_observaciones = $('#sa_conp_observaciones').val();
+            var sa_conp_id = $('#sa_conp_id').val();
+            // Crear objeto de parámetros
+            var parametros = {
+                'sa_conp_id': sa_conp_id,
+                'sa_conp_observaciones': sa_conp_observaciones,
+            };
+
+            insertar(parametros);
+
+        }
+
+        function insertar(parametros) {
+            $.ajax({
+                data: {
+                    parametros: parametros
+                },
+                url: '../controlador/consultasC.php?observacion=true',
+                type: 'post',
+                dataType: 'json',
+
+                success: function(response) {
+                    //console.log(response);
+
+                    if (response == 1) {
+                        Swal.fire('', 'Operacion realizada con exito.', 'success').then(function() {
+
+
+                            <?php if ($btn_regresar_temp == 'consultas_m') { ?>
+                                location.href = '../vista/inicio.php?mod=7&acc=consultas';
+                            <?php } else if ($btn_regresar_temp == 'admin') { ?>
+                                location.href = '../vista/inicio.php?mod=7&acc=consultas_pacientes&pac_id=<?= $id_paciente; ?>';
+                            <?php  } else { ?>
+                                location.href = '../vista/inicio.php?mod=7&acc=index';
+                            <?php } ?>
+                        });
+                    } else if (response == -2) {
+                        Swal.fire('', 'Código ya registrado', 'success');
+                    }
+                    //console.log(response);
+                }
+            });
+        }
+
+    <?php } ?>
 </script>
 
 <div class="page-wrapper">

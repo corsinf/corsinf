@@ -73,7 +73,7 @@ class nueva_empresaC
 			$datos[3]['dato']= $parametros['txt_direccion'];
 			$datos[4]['campo'] ='Telefono';
 			$datos[4]['dato']= $parametros['txt_telefono'];
-			$datos[4]['tipo'] ='STRING';
+			// $datos[4]['tipo'] ='STRING';
 			$datos[5]['campo'] = 'Email';
 			$datos[5]['dato']= $parametros['txt_email'];
 			$datos[6]['campo'] ='Logo';
