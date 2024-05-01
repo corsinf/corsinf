@@ -302,18 +302,22 @@ class activeDirC
 			}
 			// print_r($value);die();
 
-			$datos[0]['campo']='nombres';
-		    $datos[0]['dato']=$nombres;
-		    $datos[1]['campo']='apellidos';
-		    $datos[1]['dato']=$apellidos;	
-		    $datos[2]['campo']='email';
-		    $datos[2]['dato']=$value['email'];	
-		    $datos[3]['campo']='perfil';
-		    $datos[3]['dato']=$tipo_usuario;
+
+		    $usu = $this->modelo->lista_usuarios_simple(false,false,false,$value['email']);
+		    if(count($usu)==0)
+		    {
+				$datos[0]['campo']='nombres';
+			    $datos[0]['dato']=$nombres;
+			    $datos[1]['campo']='apellidos';
+			    $datos[1]['dato']=$apellidos;	
+			    $datos[2]['campo']='email';
+			    $datos[2]['dato']=$value['email'];	
+			    $datos[3]['campo']='perfil';
+			    $datos[3]['dato']=$tipo_usuario;
+			}
 		    // Guarda los datos del usuario en master
 		    $this->modelo->guardar($datos,'USUARIOS'); 
 		    //agregar en acceso empresas de lista empresas.
-		    $usu = $this->modelo->lista_usuarios_simple(false,false,false,$value['email']);
 		    if(count($usu)>0)
 		    {
 			    $datosA[0]['campo']='Id_usuario';
