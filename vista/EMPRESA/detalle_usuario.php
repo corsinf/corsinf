@@ -136,10 +136,7 @@ if(isset($_GET["usuario"]))
           },
           cache: true
         }
-      });
-
-
-      document.onkeydown = checkKey;   
+      }); 
   }
 
   function Editar(id)

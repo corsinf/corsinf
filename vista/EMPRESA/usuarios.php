@@ -1,6 +1,10 @@
 <?php 
-//include('../cabeceras/header.php');?>
+$activeRep = 0;
+
+//include('../cabeceras/header.php');
+?>
 <script type="text/javascript">
+   activeDirectory();
 	$( document ).ready(function() {
     lista_usuario();
     //lista_usuario_ina();
@@ -10,7 +14,8 @@
 	function autocoplet_tipo(){
       $('#ddl_tipo_usuario').select2({
         placeholder: 'Seleccione una tipo de usuario',
-        width:'90%',
+        dropdownParent: $('#myModal_tipo_usuario'),
+        width:'100%',
         ajax: {
           url:   '../controlador/usuariosC.php?tipo=true',
           dataType: 'json',
@@ -336,7 +341,115 @@
           } 
           
        });
+   }
 
+   function abrir_modal()
+   {
+    activeDirectory();
+      $('#myModal_active').modal('show');
+   }
+
+   function activeDirectory()
+   {
+      $.ajax({
+      // data:  {id:id},
+      url:   '../controlador/ACTIVEDIR/activedirectoryC.php?usuarios_directory=true',
+      type:  'post',
+      dataType: 'json',
+      success:  function (response) { 
+        console.log(response);
+          $('#accordionExample').html(response);           
+        }             
+      });
+   }
+
+   function activeDirectory()
+   {
+      $.ajax({
+      // data:  {id:id},
+      url:   '../controlador/ACTIVEDIR/activedirectoryC.php?repositoy_active=true',
+      type:  'post',
+      dataType: 'json',
+      success:  function (response) { 
+        console.log(response);
+        if(response==1)
+          {
+            $('#btn_active').css('display','initial');
+          }        
+        }             
+      });
+   }
+
+   function calcular_usu(Fromgrupo)
+   {
+      grupo = Fromgrupo.replace('form_',"");
+      var checkboxes = document.querySelectorAll('#'+Fromgrupo+' input[type="checkbox"]');
+      var checkboxes_checkeados = [];
+      var contador = 0;
+      checkboxes.forEach(function(checkbox) {
+          if (checkbox.checked) {
+            contador+=1; 
+              checkboxes_checkeados.push(checkbox.value);
+          }
+      });
+      if(contador==0)
+      {
+        $('#lbl_cant_usu_'+grupo).text('Todos');
+      }else
+      {
+        $('#lbl_cant_usu_'+grupo).text(contador);        
+      }
+      console.log(checkboxes_checkeados);
+      console.log(contador);
+
+   }
+
+   function modal_tipo_usu(Fromgrupo)
+   {
+      $('#myModal_tipo_usuario').modal('show');
+      $('#id_form').val(Fromgrupo);
+   }
+
+   function Asignar_usuarios()
+   {
+      if($('#ddl_tipo_usuario').val()=='')
+      {
+        Swal.fire("","Seleccione un tipo de usuario","info");
+        return false;
+      }
+      Fromgrupo = $('#id_form').val();
+      grupo = Fromgrupo.replace('form_',"");
+      var checkboxes = document.querySelectorAll('#'+Fromgrupo+' input[type="checkbox"]');
+      var checkboxes_checkeados = [];
+      var contador = 0;
+      checkboxes.forEach(function(checkbox) {
+          if (checkbox.checked) {
+              checkboxes_checkeados.push(checkbox.value);
+              contador+1;
+          }
+      });
+
+     var parametros = {
+        'usuarios':checkboxes_checkeados,
+        'tipo':$('#ddl_tipo_usuario').val(),
+        'grupo':grupo,
+     }
+      $.ajax({
+      data:  {parametros:parametros},
+      url:   '../controlador/ACTIVEDIR/activedirectoryC.php?Asignar_usuarios=true',
+      type:  'post',
+      dataType: 'json',
+      success:  function (response) { 
+
+        Swal.fire("","Usuario Asignado","success").then(function(){
+
+           $('#myModal_tipo_usuario').modal('hide');   
+            activeDirectory();    
+        })
+       }       
+      });
+
+      // console.log(checkboxes_checkeados);
    }
 
 
@@ -366,8 +479,8 @@
                   <div class="col-sm-12 col-md-6">
                     <div class="dt-buttons btn-group"> 
                       <a class="btn btn-outline-primary buttons-copy btn-sm" href="inicio.php?acc=detalle_usuario">Nuevo</a>     
-                      <!-- <button class="btn btn-outline-secondary buttons-copy buttons-html5" tabindex="0" aria-controls="example2" type="button"><span>Copy</span></button>  -->
-                      
+                      <button class="btn btn-outline-primary buttons-copy btn-sm" style="display:none;"  id="btn_active" onclick="abrir_modal()" type="button">Nuevo desde Active Directory</button> 
+                      <?php //print_r($_SESSION['INICIO']); ?>
                     </div>
                   </div>
                   <div class="col-sm-12 col-md-6">
@@ -391,4 +504,45 @@
         <!--end row-->
       </div>
     </div>
+
+<div class="modal fade" id="myModal_active" tabindex="-1" aria-modal="true" role="dialog">
+    <div class="modal-dialog modal-dialog-centered  modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5>Active Diretory</h5>
+        </div>
+        <div class="modal-body">
+            <div class="accordion" id="accordionExample">
+             
+            </div>
+          </div> 
+        <div class="modal-footer">        
+        </div>
+      </div>
+    </div>
+</div>
+
+<div class="modal fade" id="myModal_tipo_usuario" tabindex="-1" aria-modal="true" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog modal-dialog-centered  modal-sm">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5>Tipo de usuario</h5>
+        </div>
+        <div class="modal-body">
+            <div class="">
+              <input type="hidden" id="id_form" name="id_fomr">
+              <select class="form-select" id="ddl_tipo_usuario" name="ddl_tipo_usuario">
+                <option value="">Seleccione el tipo de usuario</option>
+              </select>
+            </div>
+          </div> 
+        <div class="modal-footer">        
+          <button type="button" class="btn btn-primary btn-sm"  onclick="Asignar_usuarios()">Asignar</button>    
+          <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cerrar</button> 
+        </div>
+      </div>
+    </div>
+</div>
+
+
 <?php //include('../cabeceras/footer.php'); ?>

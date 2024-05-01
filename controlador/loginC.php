@@ -248,7 +248,9 @@ class loginC
 			if($empresa[0]['Ip_host']=='186.4.219.172')
 			{
 		 		$res = $this->cod_global->generar_primera_vez($empresa[0]['Base_datos'],$parametros['empresa']);
-		 	}else{$res=1;}
+		 	}else{
+		 		print_r($empresa);die();
+		 	}
 			return array('respuesta'=>$res);
 		}
 	}
@@ -304,12 +306,19 @@ class loginC
 			$where[0]['campo'] = 'Id_licencias';			
 			$where[0]['dato'] = $registrado[0]['Id_licencias'];
 
-			$this->login->update('LICENCIAS',$datos,$where);
+			// $this->login->update('LICENCIAS',$datos,$where);
 
 			$base_des = $empresa[0]['Base_datos'];
-			$this->cod_global->generar_primera_vez($base_des,$parametros['empresa']);
-			$this->cod_global->Copiar_estructura($parametros['modulo'],$base_des);
-			return 1;
+			if(IP_MASTER==$empresa[0]['Ip_host'])
+			{
+				$this->cod_global->generar_primera_vez($base_des,$parametros['empresa']);
+				$this->cod_global->Copiar_estructura($parametros['modulo'],$base_des);
+				return 1;
+			}else{
+				print_r($base_des.'-'.$parametros['empresa']);die();
+				$this->cod_global->generar_primera_vez_terceros($empresa,$parametros['empresa']);
+				print_r($empresa);die();
+			}
 		}else
 		{
 			 return -1;
@@ -334,6 +343,7 @@ class loginC
 		 		}
 		 	}
 	 	}
+	 	// print_r('sss');die();
 
 			$empresa = $this->login->lista_empresa($parametros['id']);
 			if(count($empresa)>0)
@@ -350,8 +360,12 @@ class loginC
 					$_SESSION["INICIO"]['LOGO'] = $empresa[0]['Logo'];
 			}
 
+	 	// print_r($parametros);die();
 			if($parametros['no_concurente']==0)
 			{
+
+				
+	 	// print_r($parametros);die();
 				$datos = $this->login->datos_login($parametros['email'],$this->cod_global->enciptar_clave($parametros['pass']));
 				if($cambiar){
 					$datos = $this->login->datos_login($parametros['email'],$parametros['pass']);
@@ -359,6 +373,7 @@ class loginC
 				if(count($datos)>0)
 				{
 					
+	 	// print_r($parametros);die();
 				// print_r($datos);die();
 				// session_start();
 				$_SESSION['INICIO']['ULTIMO_ACCESO'] = time();
@@ -387,6 +402,8 @@ class loginC
 
 			}else
 			{
+
+	 	// print_r('sss');die();
 				$parametros['pass'] = $this->cod_global->enciptar_clave($parametros['pass']);
 				$datos = $this->login->datos_login(false,false,2);
 				// busca en tabla no concurrentes 
