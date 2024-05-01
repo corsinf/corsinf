@@ -4,7 +4,7 @@ $activeRep = 0;
 //include('../cabeceras/header.php');
 ?>
 <script type="text/javascript">
-   activeDirectory();
+   activeDirectory_ac();
 	$( document ).ready(function() {
     lista_usuario();
     //lista_usuario_ina();
@@ -363,7 +363,7 @@ $activeRep = 0;
       });
    }
 
-   function activeDirectory()
+   function activeDirectory_ac()
    {
       $.ajax({
       // data:  {id:id},
