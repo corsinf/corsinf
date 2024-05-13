@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<autorizacion>
+<estado>AUTORIZADO</estado>
+<numeroAutorizacion>2301202301171206301300120010020000001121348468914</numeroAutorizacion>
+<fechaAutorizacion>2023-01-23T12:55:30-05:00</fechaAutorizacion>
+<ambiente>PRODUCCIÓN</ambiente>
+<comprobante><![CDATA[<?xml version="1.0" encoding="UTF-8"?><factura id="comprobante" version="2.1.0">
+	<infoTributaria>
+		<ambiente>2</ambiente>
+	    <tipoEmision>1</tipoEmision>
+	    <razonSocial>CARVAJAL CASTRO GABRIELA CRISTINA</razonSocial>
+	    <nombreComercial>CARVAJAL CASTRO GABRIELA CRISTINA</nombreComercial>
+	    <ruc>1712063013001</ruc>
+	    <claveAcceso>2301202301171206301300120010020000001121348468914</claveAcceso>
+	    <codDoc>01</codDoc>
+	    <estab>001</estab>
+	    <ptoEmi>002</ptoEmi>
+	    <secuencial>000000112</secuencial>
+	    <dirMatriz>PICHINCHA / QUITO / TUMBACO / GONZALO PIZARRO N2-36 Y ABDON CALDERON</dirMatriz>
+		
+		
+		
+			<contribuyenteRimpe>CONTRIBUYENTE RÉGIMEN RIMPE</contribuyenteRimpe>
+		
+  	</infoTributaria>
+	<infoFactura>
+	    <fechaEmision>23/01/2023</fechaEmision>
+		
+			<dirEstablecimiento>PICHINCHA / QUITO / TUMBACO / GONZALO PIZARRO N2-36 Y ABDON CALDERON</dirEstablecimiento>
+		
+	    
+	    
+			<obligadoContabilidad>NO</obligadoContabilidad>
+		
+		
+	    
+	    <tipoIdentificacionComprador>04</tipoIdentificacionComprador>
+		
+		<razonSocialComprador>MERAKY ELABORACION Y COMERCIALIZACION DE PRODUCTOS ALIMENTICIOS SOCIEDAD CIVIL Y COMERCIAL</razonSocialComprador>
+	    <identificacionComprador>1793196048001</identificacionComprador>
+		<direccionComprador>GUAMANÍ</direccionComprador>
+	    
+	    <totalSinImpuestos>34.00000</totalSinImpuestos>
+		
+	  	
+	    <totalDescuento>0.00</totalDescuento>
+	    
+	    <totalConImpuestos>
+	      <totalImpuesto>
+	        <codigo>2</codigo>
+	        <codigoPorcentaje>2</codigoPorcentaje>
+	        <descuentoAdicional>0</descuentoAdicional>
+	        <baseImponible>0.00</baseImponible>
+	        <valor>0.00000</valor>
+	      </totalImpuesto>
+	      
+	      
+	      <totalImpuesto>
+	        <codigo>2</codigo>
+	        <codigoPorcentaje>6</codigoPorcentaje>
+	        <descuentoAdicional>0</descuentoAdicional>
+	        <baseImponible>34.00000</baseImponible>
+	        <valor>0</valor>
+	      </totalImpuesto>
+	      
+		  
+		  
+	    </totalConImpuestos>
+	    <propina>0</propina>
+	    <importeTotal>34.00000</importeTotal>
+	    <moneda>DOLAR</moneda>
+		
+	    
+	    <pagos>
+	    	
+	    	<pago>
+	    		<formaPago>20</formaPago>
+	    		<total>34.00</total>
+	    		<plazo>0</plazo>
+	    		<unidadTiempo>días</unidadTiempo>
+	    	</pago>
+	    	
+	    </pagos>
+	    
+  	</infoFactura>
+  	<detalles>
+  	
+    <detalle>
+      
+      	<codigoPrincipal>001</codigoPrincipal>
+		<codigoAuxiliar>001</codigoAuxiliar>
+      	<descripcion>Huevos Grandes</descripcion>
+      
+      <cantidad>10.000000</cantidad>
+      <precioUnitario>3.400000</precioUnitario>
+	  
+      <descuento>0.00</descuento>
+      <precioTotalSinImpuesto>34.00</precioTotalSinImpuesto>
+	  
+	  
+            
+      
+      <impuestos>
+        <impuesto>
+          <codigo>2</codigo>
+          <codigoPorcentaje>6</codigoPorcentaje>
+          <tarifa>0</tarifa>
+          <baseImponible>34.00000</baseImponible>
+          <valor>0.00</valor>
+        </impuesto>
+        
+		
+		
+      </impuestos>
+	  
+	</detalle>
+    
+	
+    </detalles>
+    
+	
+    
+    <infoAdicional>
+    	
+    		
+    			<campoAdicional nombre="Descripción">Factura</campoAdicional>
+    		
+    	
+    </infoAdicional>
+	
+	
+<ds:Signature xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xmlns:etsi="http://uri.etsi.org/01903/v1.3.2#" Id="Signature14497">
+<ds:SignedInfo Id="Signature-SignedInfo55620">
+<ds:CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/>
+<ds:SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/>
+<ds:Reference Id="SignedPropertiesID973509" Type="http://uri.etsi.org/01903#SignedProperties" URI="#Signature14497-SignedProperties606278">
+<ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/>
+<ds:DigestValue>VmWHqZNTQN9bmjJezYWvBMFIxUk=</ds:DigestValue>
+</ds:Reference>
+<ds:Reference URI="#Certificate123567">
+<ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/>
+<ds:DigestValue>HVlZVRqF96M25PuWbK8cwNZgDCk=</ds:DigestValue>
+</ds:Reference>
+<ds:Reference Id="Reference-ID-322300" URI="#comprobante">
+<ds:Transforms>
+<ds:Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/>
+</ds:Transforms>
+<ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/>
+<ds:DigestValue>xN/5Bs3WTqVos7p2CNBqnRZqktg=</ds:DigestValue>
+</ds:Reference>
+</ds:SignedInfo>
+<ds:SignatureValue Id="SignatureValue922794">
+CWjz7uFYinCdRubyx9YRoVSw9vjAmnA5j0bNJf5B/Q0pKl2jbWTM9+y1Br25O08kzpPZ5rl0hCi9
+QFA8XHICmxACprNFxqPF7FXBxTPojDlffhH5XZwBsDrLrojS0O6+FiDlhFBN7NuHACsJMeSW8vMD
+u4uIcUatAEmoeU1KKe9UH59UP3hNfkJJ2wtlTUnqvdeIelmDmEDblM5Q89yUNUlhkQwtEu/Jvl1n
+Yhk0YmOEihyz3zG+vV2YZpanLuf8oyZBYhRPMw9oS1EmSkY4JzpJ5ZsxuULPZpA8ijZo+gk487R1
+lC6qsIhxno5HQPuu/feJ7Dfu1ebzf7jlfYqiWQ==
+</ds:SignatureValue>
+<ds:KeyInfo Id="Certificate123567">
+<ds:X509Data>
+<ds:X509Certificate>
+MIIJxzCCB6+gAwIBAgIEW27FSTANBgkqhkiG9w0BAQsFADCBoTELMAkGA1UEBhMCRUMxIjAgBgNV
+BAoTGUJBTkNPIENFTlRSQUwgREVMIEVDVUFET1IxNzA1BgNVBAsTLkVOVElEQUQgREUgQ0VSVElG
+SUNBQ0lPTiBERSBJTkZPUk1BQ0lPTi1FQ0lCQ0UxDjAMBgNVBAcTBVFVSVRPMSUwIwYDVQQDExxB
+QyBCQU5DTyBDRU5UUkFMIERFTCBFQ1VBRE9SMB4XDTIyMTAwNTE2NTcyNloXDTI0MTAwNTE3Mjcy
+NlowgbkxCzAJBgNVBAYTAkVDMSIwIAYDVQQKExlCQU5DTyBDRU5UUkFMIERFTCBFQ1VBRE9SMTcw
+NQYDVQQLEy5FTlRJREFEIERFIENFUlRJRklDQUNJT04gREUgSU5GT1JNQUNJT04tRUNJQkNFMQ4w
+DAYDVQQHEwVRVUlUTzE9MBEGA1UEBRMKMDAwMDc1NTExODAoBgNVBAMTIUdBQlJJRUxBIENSSVNU
+SU5BIENBUlZBSkFMIENBU1RSTzCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBANsYibJF
+8bTm8Y/VU5WsvMmB2fXx9QhRQCgS3dBD1pcQC622u7vVInhZUHlOjU09bBJaZkDqidxr1+BXmB4L
+ALZjVwPqefHdJOlRh45f2wsHmu7X20QJoNjE0PYAiSqmVfTEJc3wWrn3XanpCYX1Yq77AcSzdMJl
+eQPn4roYPUAW0pINKJLGZ4yV2dR1Q9htY/tm7E3zl3UmxQkAnzwvZU6BPm16mjOp7VA7srNbILUQ
+uTOfjBf14tuOv1uc5+Y7E/OleExz0p/ZjmTsDzyKqFhDVFF0uxLxX2wO23K15rkXJrhFOvzp1FfK
+YJu4UjrXOv3yt7oEdXsFzpfAShcG1hkCAwEAAaOCBOswggTnMAsGA1UdDwQEAwIHgDBmBgNVHSAE
+XzBdMFsGCysGAQQBgqg7AgEBMEwwSgYIKwYBBQUHAgEWPmh0dHA6Ly93d3cuZWNpLmJjZS5lYy9w
+b2xpdGljYS1jZXJ0aWZpY2Fkby9wZXJzb25hLW5hdHVyYWwucGRmMIGRBggrBgEFBQcBAQSBhDCB
+gTA+BggrBgEFBQcwAYYyaHR0cDovL29jc3AuZWNpLmJjZS5lYy9lamJjYS9wdWJsaWN3ZWIvc3Rh
+dHVzL29jc3AwPwYIKwYBBQUHMAGGM2h0dHA6Ly9vY3NwMS5lY2kuYmNlLmVjL2VqYmNhL3B1Ymxp
+Y3dlYi9zdGF0dXMvb2NzcDAaBgorBgEEAYKoOwMBBAwTCjE3MTIwNjMwMTMwIQYKKwYBBAGCqDsD
+AgQTExFHQUJSSUVMQSBDUklTVElOQTAYBgorBgEEAYKoOwMDBAoTCENBUlZBSkFMMBYGCisGAQQB
+gqg7AwQECBMGQ0FTVFJPMDcGCisGAQQBgqg7AwcEKRMnQU5UT05JTyBTT0xBTk8gREUgTEEgU0FM
+QSBZIEVMT1kgQUxGQVJPMBkGCisGAQQBgqg7AwgECxMJMDIyMzcyMzE3MBUGCisGAQQBgqg7AwkE
+BxMFUXVpdG8wFwYKKwYBBAGCqDsDDAQJEwdFQ1VBRE9SMB0GCisGAQQBgqg7AwsEDxMNMTcxMjA2
+MzAxMzAwMTAgBgorBgEEAYKoOwMzBBITEFNPRlRXQVJFLUFSQ0hJVk8wLgYDVR0RBCcwJYEjZ2Fi
+eS5jYXJ2YWphbEBncmFuamFpbnRlZ3JhbGcxNC5jb20wggHhBgNVHR8EggHYMIIB1DCCAdCgggHM
+oIIByIaB1mxkYXA6Ly9iY2VxbGRhcHN1YnAxLmJjZS5lYy9jbj1DUkwxNTczLGNuPUFDJTIwQkFO
+Q08lMjBDRU5UUkFMJTIwREVMJTIwRUNVQURPUixsPVFVSVRPLG91PUVOVElEQUQlMjBERSUyMENF
+UlRJRklDQUNJT04lMjBERSUyMElORk9STUFDSU9OLUVDSUJDRSxvPUJBTkNPJTIwQ0VOVFJBTCUy
+MERFTCUyMEVDVUFET1IsYz1FQz9jZXJ0aWZpY2F0ZVJldm9jYXRpb25MaXN0P2Jhc2WGNGh0dHA6
+Ly93d3cuZWNpLmJjZS5lYy9DUkwvZWNpX2JjZV9lY19jcmxmaWxlY29tYi5jcmykgbYwgbMxCzAJ
+BgNVBAYTAkVDMSIwIAYDVQQKExlCQU5DTyBDRU5UUkFMIERFTCBFQ1VBRE9SMTcwNQYDVQQLEy5F
+TlRJREFEIERFIENFUlRJRklDQUNJT04gREUgSU5GT1JNQUNJT04tRUNJQkNFMQ4wDAYDVQQHEwVR
+VUlUTzElMCMGA1UEAxMcQUMgQkFOQ08gQ0VOVFJBTCBERUwgRUNVQURPUjEQMA4GA1UEAxMHQ1JM
+MTU3MzArBgNVHRAEJDAigA8yMDIyMTAwNTE2NTcyNlqBDzIwMjQxMDA1MTcyNzI2WjAfBgNVHSME
+GDAWgBRIot8jHx34LFF6jAPNSTKlCcGUqzAdBgNVHQ4EFgQUmuw5elQtiWzZK1ZtDc9pWBvYn2Iw
+CQYDVR0TBAIwADAZBgkqhkiG9n0HQQAEDDAKGwRWOC4xAwIEsDANBgkqhkiG9w0BAQsFAAOCAgEA
+dxCExVcfT+1RU43uW0XXhB77Lklx1pUFv1+ERJ3qDiYTbgOSsqV/25eNWZmD1QoQsmEVFb/sI6Xl
+KEJwhpAoRTYZvWqLUFpc72d2C7rrgEletHuSkLRAsCg7BX1K6DQnnXFGNhlsi5OseA8rkdC2SjXc
+dpdmHWcOb3CxZ10R4OxHzCkQ86rY+MPJGJBZbOP27O/0FnR+9BpMaCsbsaB9yLyI9COx/ETPkEo+
+VcsTUoG/VqIHVQuVmfBmtxVeDymPoCre28qEAGZAslKLneZiUVIoqUODIDLOojYJ6zr01OiNFiH7
+PxDW1hgOfOaa9RyAP08ZczHvk/fPFQKH6YhzCl2E47HHVu5vf4Uhr7xENMg8ahUyvtA7Czb1fzEw
+9Wgbdx7Rj75UlWeZwqpLrWGkVYfpssu8bn3fSIX9E3QerR8u/wKyAmFIWgENDldhMv/UcljIewC0
+iBMNFdFf7JfIkUlPx9ILzDwHcUlit1Aqre5CC+SQfRDf78FiFySp350654FZpawvWTm1xbAYW3Vw
+6NUicPZ/QmwqsnbfrW4Rhg5h0HZ7FecRo3gUFOgquZt1WxODUxEeqaK9I+4oWgaj8bMzHKIaYcJJ
+StHIxZyEz2JLVpQTS9vVFFQTMgl4EtA9nwGIn/EGyU6FcJVkSwCuhth78bAnlNw2GwFudNulN6E=
+</ds:X509Certificate>
+</ds:X509Data>
+<ds:KeyValue>
+<ds:RSAKeyValue>
+<ds:Modulus>
+2xiJskXxtObxj9VTlay8yYHZ9fH1CFFAKBLd0EPWlxALrba7u9UieFlQeU6NTT1sElpmQOqJ3GvX
+4FeYHgsAtmNXA+p58d0k6VGHjl/bCwea7tfbRAmg2MTQ9gCJKqZV9MQlzfBaufddqekJhfVirvsB
+xLN0wmV5A+fiuhg9QBbSkg0oksZnjJXZ1HVD2G1j+2bsTfOXdSbFCQCfPC9lToE+bXqaM6ntUDuy
+s1sgtRC5M5+MF/Xi246/W5zn5jsT86V4THPSn9mOZOwPPIqoWENUUXS7EvFfbA7bcrXmuRcmuEU6
+/OnUV8pgm7hSOtc6/fK3ugR1ewXOl8BKFwbWGQ==
+</ds:Modulus>
+<ds:Exponent>AQAB</ds:Exponent>
+</ds:RSAKeyValue>
+</ds:KeyValue>
+</ds:KeyInfo>
+<ds:Object Id="Signature14497-Object198724"><etsi:QualifyingProperties Target="#Signature14497"><etsi:SignedProperties Id="Signature14497-SignedProperties606278"><etsi:SignedSignatureProperties><etsi:SigningTime>2023-01-23T12:47:54-05:00</etsi:SigningTime><etsi:SigningCertificate><etsi:Cert><etsi:CertDigest><ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/><ds:DigestValue>BYrAPzlCe+cNU6r/EWjXSqqaWuA=</ds:DigestValue></etsi:CertDigest><etsi:IssuerSerial><ds:X509IssuerName>CN=AC BANCO CENTRAL DEL ECUADOR,L=QUITO,OU=ENTIDAD DE CERTIFICACION DE INFORMACION-ECIBCE,O=BANCO CENTRAL DEL ECUADOR,C=EC</ds:X509IssuerName><ds:X509SerialNumber>1533986121</ds:X509SerialNumber></etsi:IssuerSerial></etsi:Cert></etsi:SigningCertificate></etsi:SignedSignatureProperties></etsi:SignedProperties></etsi:QualifyingProperties></ds:Object></ds:Signature></factura>]]></comprobante>
+<mensajes/>
+</autorizacion>
+
