@@ -9,6 +9,10 @@ include('../lib/phpmailer/enviar_emails.php');
 include('../lib/pdf/fpdf.php');
 include('../modelo/det_consultaM.php');
 
+//Seguros
+include('../modelo/contratosM.php');
+
+
 include('ingreso_stockC.php');
 include('../modelo/notificacionesM.php');
 
@@ -153,6 +157,8 @@ class consultasC
     private $notificaciones_HV;
     private $TCP_HV;
     private $representantesM;
+    private $seguros;
+    private $cod_global;
     function __construct()
     {
         $this->modelo = new consultasM();
@@ -166,6 +172,8 @@ class consultasC
         $this->TCP_HV = new HIK_TCP();
 
         $this->representantesM = new representantesM();
+        $this->seguros = new contratosM();
+        $this->cod_global = new codigos_globales();
     }
 
     function listar_todo($tabla, $fecha_inicio, $fecha_fin)
@@ -277,7 +285,7 @@ class consultasC
 
             array('campo' => 'sa_examen_fisico_regional', 'dato' => $parametros['sa_examen_fisico_regional'], 'tipo' => 'STRING'),
 
-            array('campo' => 'sa_conp_usu_id', 'dato' => $_SESSION['INICIO']['NO_CONCURENTE']),
+            array('campo' => 'sa_conp_usu_id', 'dato' => $_SESSION['INICIO']['ID_USUARIO']),
         );
 
 
@@ -378,6 +386,46 @@ class consultasC
                         $this->TCP_HV->TCP_enviar($mensaje_TCP);
                     }*/
 
+                    /*$mensaje_alerta = '';
+                    $id_consulta = $id_insert;
+                    if ($parametros['sa_conp_permiso_tipo'] == 'normal') {
+                        $mensaje_alerta = 'SALUD ' . $parametros['nombre_apellido_paciente'] . $id_consulta;
+                        $mensaje_TCP = 'consulta_' . $id_consulta;
+                        $API_response = $this->notificaciones_HV->crear_Evento_usuario($mensaje_alerta, $mensaje_TCP, 3);
+
+                        ///////////////////////////////////////////////////////////////////////////////////////
+                        $max_intentos = 10;
+                        $intentos = 0;
+                        while (($API_response != '0') && $intentos < $max_intentos) {
+                            usleep(500000);
+                            $intentos++;
+                        }
+                        if ($API_response == '0') {
+                            $this->TCP_HV->TCP_enviar($mensaje_TCP);
+                        } else {
+                            echo "La tarea no se completó después del tiempo máximo.";
+                        }
+                        ///////////////////////////////////////////////////////////////////////////////////////
+                    } else if ($parametros['sa_conp_permiso_tipo'] == 'emergencia') {
+                        $mensaje_alerta = 'SALUD ' . $parametros['nombre_apellido_paciente'] . $id_consulta;
+                        $mensaje_TCP = 'consulta_' . $id_consulta;
+                        $API_response = $this->notificaciones_HV->crear_Evento_usuario($mensaje_alerta, $mensaje_TCP, 2);
+
+                        ///////////////////////////////////////////////////////////////////////////////////////
+                        $max_intentos = 10;
+                        $intentos = 0;
+                        while (($API_response != '0') && $intentos < $max_intentos) {
+                            usleep(500000);
+                            $intentos++;
+                        }
+                        if ($API_response == '0') {
+                            $this->TCP_HV->TCP_enviar($mensaje_TCP);
+                        } else {
+                            echo "La tarea no se completó después del tiempo máximo.";
+                        }
+                        ///////////////////////////////////////////////////////////////////////////////////////
+                    }*/
+
                     /* Enviar mensaje a padre de familia */
                     //Descomentar las lineas de la funcion enviar_correo_con para enviar el mensaje al correo
                     $tipo_consulta = $parametros['sa_conp_tipo_consulta'];
@@ -399,7 +447,7 @@ class consultasC
                         $this->enviar_correo_con($id_representante, $nombre_est, $diagnostico, $tipo_consulta, $permiso_salida);
                     }
 
-                    $url_rep_noti = '../vista/inicio.php?mod=7&acc=detalle_consulta&pdf_consulta=true&id_consulta=' . $id_insert . '&tipo_consulta=' . $parametros['sa_conp_tipo_consulta']. '&btn_regresar=represententes';
+                    $url_rep_noti = '../vista/inicio.php?mod=7&acc=detalle_consulta&pdf_consulta=true&id_consulta=' . $id_insert . '&tipo_consulta=' . $parametros['sa_conp_tipo_consulta'] . '&btn_regresar=represententes';
 
                     $datos_notificaciones = array(
                         array('campo' => 'GLO_modulo', 'dato' => '7'),
@@ -527,18 +575,58 @@ class consultasC
                 $this->notificaciones->insertar($datos_notificaciones);
 
                 /*HIKVISION*/
-                //Descomentar las lineas para activar el funcionamiento con HV
+                //Descomentar las lineas para activar el funcionamiento con HV -- Nuevo
 
                 /*if ($parametros['sa_conp_permiso_tipo'] == 'normal') {
-                    $mensaje_TCP = 'consulta_' . $id_insert;
-                    $this->notificaciones_HV->crear_Evento_usuario('SALUD ' . $parametros['nombre_apellido_paciente'] . $id_insert, $mensaje_TCP, 3);
+                    $mensaje_TCP = 'consulta_' . $parametros['sa_conp_id'];
+                    $this->notificaciones_HV->crear_Evento_usuario('SALUD ' . $parametros['nombre_apellido_paciente'] . $parametros['sa_conp_id'], $mensaje_TCP, 3);
                     sleep(4);
                     $this->TCP_HV->TCP_enviar($mensaje_TCP);
                 } else if ($parametros['sa_conp_permiso_tipo'] == 'emergencia') {
-                    $mensaje_TCP = 'conulta_' . $id_insert;
-                    $this->notificaciones_HV->crear_Evento_usuario('SALUD ' . $parametros['nombre_apellido_paciente'] . $id_insert, $mensaje_TCP, 2);
+                    $mensaje_TCP = 'conulta_' . $parametros['sa_conp_id'];
+                    $this->notificaciones_HV->crear_Evento_usuario('SALUD ' . $parametros['nombre_apellido_paciente'] . $parametros['sa_conp_id'], $mensaje_TCP, 2);
                     sleep(4);
                     $this->TCP_HV->TCP_enviar($mensaje_TCP);
+                }*/
+
+                /*$mensaje_alerta = '';
+                $id_consulta = $parametros['sa_conp_id'];
+                if ($parametros['sa_conp_permiso_tipo'] == 'normal') {
+                    $mensaje_alerta = 'SALUD ' . $parametros['nombre_apellido_paciente'] . $id_consulta;
+                    $mensaje_TCP = 'consulta_' . $id_consulta;
+                    $API_response = $this->notificaciones_HV->crear_Evento_usuario($mensaje_alerta, $mensaje_TCP, 3);
+
+                    ///////////////////////////////////////////////////////////////////////////////////////
+                    $max_intentos = 10;
+                    $intentos = 0;
+                    while (($API_response != '0') && $intentos < $max_intentos) {
+                        usleep(500000);
+                        $intentos++;
+                    }
+                    if ($API_response == '0') {
+                        $this->TCP_HV->TCP_enviar($mensaje_TCP);
+                    } else {
+                        echo "La tarea no se completó después del tiempo máximo.";
+                    }
+                    ///////////////////////////////////////////////////////////////////////////////////////
+                } else if ($parametros['sa_conp_permiso_tipo'] == 'emergencia') {
+                    $mensaje_alerta = 'SALUD ' . $parametros['nombre_apellido_paciente'] . $id_consulta;
+                    $mensaje_TCP = 'consulta_' . $id_consulta;
+                    $API_response = $this->notificaciones_HV->crear_Evento_usuario($mensaje_alerta, $mensaje_TCP, 2);
+
+                    ///////////////////////////////////////////////////////////////////////////////////////
+                    $max_intentos = 10;
+                    $intentos = 0;
+                    while (($API_response != '0') && $intentos < $max_intentos) {
+                        usleep(500000);
+                        $intentos++;
+                    }
+                    if ($API_response == '0') {
+                        $this->TCP_HV->TCP_enviar($mensaje_TCP);
+                    } else {
+                        echo "La tarea no se completó después del tiempo máximo.";
+                    }
+                    ///////////////////////////////////////////////////////////////////////////////////////
                 }*/
 
                 /* Enviar mensaje a padre de familia */
@@ -562,7 +650,7 @@ class consultasC
                     $this->enviar_correo_con($id_representante, $nombre_est, $diagnostico, $tipo_consulta, $permiso_salida);
                 }
 
-                $url_rep_noti = '../vista/inicio.php?mod=7&acc=detalle_consulta&pdf_consulta=true&id_consulta=' . $parametros['sa_conp_id'] . '&tipo_consulta=' . $parametros['sa_conp_tipo_consulta']. '&btn_regresar=represententes';
+                $url_rep_noti = '../vista/inicio.php?mod=7&acc=detalle_consulta&pdf_consulta=true&id_consulta=' . $parametros['sa_conp_id'] . '&tipo_consulta=' . $parametros['sa_conp_tipo_consulta'] . '&btn_regresar=represententes';
 
                 $datos_notificaciones = array(
                     array('campo' => 'GLO_modulo', 'dato' => '7'),
@@ -789,10 +877,14 @@ class consultasC
         $sa_conp_fecha_ingreso = $sa_conp_fecha_ingreso;
 
         $sa_conp_desde_hora = $datos[0]['sa_conp_desde_hora'];
-        $sa_conp_desde_hora = $sa_conp_desde_hora;
+        if ($sa_conp_desde_hora !== null) {
+            $sa_conp_desde_hora = preg_replace('/\.?0+$/', '', $sa_conp_desde_hora);
+        }
 
         $sa_conp_hasta_hora = $datos[0]['sa_conp_hasta_hora'];
-        $sa_conp_hasta_hora = $sa_conp_hasta_hora;
+        if ($sa_conp_hasta_hora !== null) {
+            $sa_conp_hasta_hora = preg_replace('/\.?0+$/', '', $sa_conp_hasta_hora);
+        }
 
         $sa_conp_tiempo_aten = $datos[0]['sa_conp_tiempo_aten'];
 
@@ -832,7 +924,7 @@ class consultasC
 
         $sa_conp_hora_permiso_salida = $datos[0]['sa_conp_hora_permiso_salida'];
         if ($sa_conp_hora_permiso_salida !== null) {
-            $sa_conp_hora_permiso_salida = $sa_conp_hora_permiso_salida;
+            $sa_conp_hora_permiso_salida = preg_replace('/\.?0+$/', '', $sa_conp_hora_permiso_salida);
         }
 
         $sa_conp_permiso_tipo = $datos[0]['sa_conp_permiso_tipo'];
@@ -884,6 +976,7 @@ class consultasC
         $sa_pac_temp_primer_apellido = $paciente[0]['sa_pac_temp_primer_apellido'];
         $sa_pac_temp_segundo_apellido = $paciente[0]['sa_pac_temp_segundo_apellido'];
         $sa_pac_tabla = $paciente[0]['sa_pac_tabla'];
+        $sa_pac_id_comunidad = $paciente[0]['sa_pac_id_comunidad'];
 
         //$sa_pac_temp_fecha_nacimiento = $paciente[0]['sa_pac_temp_fecha_nacimiento'];
 
@@ -892,13 +985,17 @@ class consultasC
             $sa_pac_temp_fecha_nacimiento = $sa_pac_temp_fecha_nacimiento;
         }
 
+        $sa_pac_temp_correo = $paciente[0]['sa_pac_temp_correo'];
+
+        // print_r($parametros);die();
+        $id = $this->cod_global->id_tabla($sa_pac_tabla);
+        $datos_1 = $this->seguros->lista_articulos_seguro_detalle($sa_pac_tabla, $sa_pac_id_comunidad, $_SESSION['INICIO']['MODULO_SISTEMA'], $id[0]['ID'], false, $sa_conp_permiso_seguro_traslado);
 
 
-        //print_r($datos);
+        $nombre_seguro = ($datos_1[0]['plan_seguro']);
 
         //exit();
 
-        $sa_pac_temp_correo = $paciente[0]['sa_pac_temp_correo'];
 
 
 
@@ -1110,7 +1207,7 @@ class consultasC
             $pdf->Cell(30, 7, utf8_decode('TELÉFONO'), 1, 1, 'C');
 
             $pdf->SetFont('Arial', '', 9);
-            $pdf->Cell(160, 8, utf8_decode($sa_conp_permiso_seguro_traslado), 1, 0, 'C');
+            $pdf->Cell(160, 8, utf8_decode($nombre_seguro), 1, 0, 'C');
             $pdf->Cell(30, 8, utf8_decode($sa_conp_permiso_telefono_seguro), 1, 1, 'C');
 
             $pdf->SetFont('Arial', 'B', 8);
@@ -1121,9 +1218,10 @@ class consultasC
 
             $pdf->SetFont('Arial', '', 9);
             $pdf->Cell(47.5, 8, utf8_decode($sa_conp_permiso_telefono_padre), 1, 0, 'C');
-            $pdf->Cell(47.5, 8, ($sa_conp_hora_permiso_salida), 1, 0, 'C');
             $pdf->Cell(47.5, 8, ($sa_conp_fecha_permiso_salud_salida), 1, 0, 'C');
+            $pdf->Cell(47.5, 8, ($sa_conp_hora_permiso_salida), 1, 0, 'C');
             $pdf->Cell(47.5, 8, utf8_decode(strtoupper($sa_conp_permiso_tipo)), 1, 1, 'C');
+            
         } else if ($sa_conp_permiso_salida == 'SI' && $sa_conp_permiso_tipo == 'normal') {
             $pdf->SetFont('Arial', 'B', 12);
             $pdf->Cell(190, 10, utf8_decode('  DATOS DE SALIDA'), 1, 1, 'L');
@@ -1134,8 +1232,8 @@ class consultasC
             $pdf->Cell(63.33, 7, utf8_decode('TIPO DE SALIDA'), 1, 1, 'C');
 
             $pdf->SetFont('Arial', '', 9);
-            $pdf->Cell(63.33, 8, ($sa_conp_hora_permiso_salida), 1, 0, 'C');
             $pdf->Cell(63.33, 8, ($sa_conp_fecha_permiso_salud_salida), 1, 0, 'C');
+            $pdf->Cell(63.33, 8, ($sa_conp_hora_permiso_salida), 1, 0, 'C');
             $pdf->Cell(63.33, 8, utf8_decode(strtoupper($sa_conp_permiso_tipo)), 1, 1, 'C');
         }
 
