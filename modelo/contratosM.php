@@ -191,7 +191,7 @@ class contratosM
 		return $datos;
 	}
 
-	function lista_articulos_seguro_detalle($tabla,$id,$modulo,$id_tabla,$seguro=false)
+	function lista_articulos_seguro_detalle($tabla,$id,$modulo,$id_tabla,$seguro=false,$id_arti_seguro=false)
 	{
 		$sql = "SELECT * 
 		FROM ARTICULOS_ASEGURADOS ARS
@@ -204,6 +204,9 @@ class contratosM
 		if($seguro)
 		{
 			$sql.=" AND id_seguro='".$seguro."'";
+		}
+		if($id_arti_seguro){
+			$sql.=" AND id_arti_asegurados='".$id_arti_seguro."'";
 		}
 
 		$sql.=" ORDER BY terceros ASC";
