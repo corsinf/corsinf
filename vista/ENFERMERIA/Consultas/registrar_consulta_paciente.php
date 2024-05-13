@@ -194,7 +194,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $('#sa_id_paralelo').val(response[0].sa_pac_temp_paralelo);
 
                     $('#lbl_telefono_emergencia').html('Teléfono Representante: ' + '<label style="color: red;">*</label>');
-                    $('#btn_telefono').val('estudiantes');
 
                     $('#sa_pac_temp_rep_id').val(response[0].sa_pac_temp_rep_id);
                 } else {
@@ -902,7 +901,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                                                     <div class="row pt-3">
                                                         <div class="col-md-12">
-                                                            <label for="" class="form-label fw-bold">CIE 10 - Diagnóstico de Certificado <label style="color: red;">*</label> </label>
+                                                            <label for="" class="form-label fw-bold">CIE 11 - Diagnóstico de Certificado <label style="color: red;">*</label> </label>
                                                             <input type="text" class="ctw-input form-control form-control-sm" autocomplete="off" data-ctw-ino="3" id="sa_conp_diagnostico_certificado" placeholder="Diagnostico">
 
                                                             <input type="hidden" id="sa_conp_CIE_10_certificado">
@@ -1367,13 +1366,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                                         </tbody>
                                                                     </table>
                                                                 </div>
-                                                            </div>
-                                                        </div>
 
-                                                        <div class="row pt-3">
-                                                            <div class="col-md-12">
-                                                                <label for="" class="form-label fw-bold">Observaciones <label style="color: red;">*</label> </label>
-                                                                <textarea name="sa_examen_fisico_regional_obs" id="sa_examen_fisico_regional_obs" cols="30" rows="2" class="form-control" placeholder="OBSERVACIONES  EXAMEN FÍSICO REGIONAL"></textarea>
+                                                                <div class="row pt-3">
+                                                                    <div class="col-md-12">
+                                                                        <label for="" class="form-label fw-bold">Observaciones <label style="color: red;">*</label> </label>
+                                                                        <textarea name="sa_examen_fisico_regional_obs" id="sa_examen_fisico_regional_obs" cols="30" rows="2" class="form-control" placeholder="OBSERVACIONES  EXAMEN FÍSICO REGIONAL"></textarea>
+                                                                    </div>
+                                                                </div>
                                                             </div>
                                                         </div>
 
@@ -1390,7 +1389,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                                                         <div class="row pt-3">
                                                             <div class="col-md-12">
-                                                                <label for="" class="form-label fw-bold">CIE 10 - Diagnóstico 1 <label style="color: red;">*</label> </label>
+                                                                <label for="" class="form-label fw-bold">CIE 11 - Diagnóstico 1 <label style="color: red;">*</label> </label>
                                                                 <input type="text" class="ctw-input form-control form-control-sm" autocomplete="off" data-ctw-ino="1" id="sa_conp_diagnostico_1" placeholder="Diagnostico 1">
                                                                 <input type="hidden" id="sa_conp_CIE_10_1">
                                                                 <div class="ctw-window" data-ctw-ino="1"></div>
@@ -1399,7 +1398,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                                                         <div class="row pt-3">
                                                             <div class="col-md-12">
-                                                                <label for="" class="form-label fw-bold">CIE 10 - Diagnóstico 2 <label style="color: red;">*</label> </label>
+                                                                <label for="" class="form-label fw-bold">CIE 11 - Diagnóstico 2 <label style="color: red;">*</label> </label>
                                                                 <input type="text" class="ctw-input form-control form-control-sm" autocomplete="off" data-ctw-ino="2" id="sa_conp_diagnostico_2" placeholder="Diagnostico 2">
                                                                 <input type="hidden" id="sa_conp_CIE_10_2">
                                                                 <div class="ctw-window" data-ctw-ino="2"></div>
@@ -1464,6 +1463,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                                     </div>
                                                                 </div>
                                                             </div>
+
+                                                            <div class="row pt-3">
+                                                                <div class="col-md-4">
+                                                                    <label for="" class="form-label fw-bold" id="lbl_telefono_emergencia">Teléfono Representante <label style="color: red;">*</label> </label>
+                                                                    <input type="text" class="form-control form-control-sm" id="sa_conp_permiso_telefono_padre" name="sa_conp_permiso_telefono_padre">
+
+                                                                    <p id="txt_nombre_contacto" class="me-0 text-success"></p>
+
+                                                                    <input type="hidden" name="sa_permiso_pac_id" id="sa_permiso_pac_id">
+                                                                    <input type="hidden" name="sa_permiso_pac_tabla" id="sa_permiso_pac_tabla">
+                                                                </div>
+                                                            </div>
                                                         </div>
 
 
@@ -1486,15 +1497,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                                     <input type="text" class="form-control form-control-sm" id="sa_conp_permiso_telefono_seguro" name="sa_conp_permiso_telefono_seguro">
                                                                 </div>
 
-                                                                <div class="col-md-4">
-                                                                    <label for="" class="form-label fw-bold" id="lbl_telefono_emergencia">Teléfono Representante <label style="color: red;">*</label> </label>
-                                                                    <input type="text" class="form-control form-control-sm" aria-describedby="btn_telefono" id="sa_conp_permiso_telefono_padre" name="sa_conp_permiso_telefono_padre">
-
-                                                                    <p id="txt_nombre_contacto" class="me-0 text-success"></p>
-
-                                                                    <input type="hidden" name="sa_permiso_pac_id" id="sa_permiso_pac_id">
-                                                                    <input type="hidden" name="sa_permiso_pac_tabla" id="sa_permiso_pac_tabla">
-                                                                </div>
                                                             </div>
                                                         </div>
 
@@ -1617,6 +1619,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $('input[name=sa_conp_permiso_salida]').change(function() {
         if ($(this).val() === 'SI') {
             $('#permiso_salida').show();
+            llenar_telefonos_salida();
+
 
             hora_hasta = obtener_hora_hasta();
             $('#sa_conp_hora_permiso_salida').val(hora_hasta);
@@ -1633,7 +1637,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             llenar_telefonos_salida();
         } else if ($(this).val() === 'normal') {
             $('#permiso_salida_tipo').hide();
-            $('#sa_conp_permiso_telefono_padre').val('');
+            //$('#sa_conp_permiso_telefono_padre').val('');
+            llenar_telefonos_salida();
         }
     });
 
