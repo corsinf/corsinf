@@ -54,22 +54,30 @@
         // Obtener información del evento
         var tipo_consulta = info.event.id;
         var sa_conp_estado_revision = info.event.extendedProps.sa_conp_estado_revision;
-
-
         var url = info.event.url;
 
-        //alert(info.event.tabla)
-        //console.log(info.event)
+        // Obtener la fecha actual (solo la parte de la fecha, sin la hora)
+        var fecha_actual = new Date();
+        fecha_actual.setHours(0, 0, 0, 0);
 
-        //Redirigir a la página deseada al hacer clic en el evento
-        if (tipo_consulta === 'certificado') {
-          if (sa_conp_estado_revision == 0) {
-            window.location.href = url;
-          } else {
-            Swal.fire('', 'El certificado ya esta realizado.', 'error');
-          }
+        // Obtener la fecha del evento (solo la parte de la fecha, sin la hora)
+        var fecha_evento = new Date(info.event.start);
+        fecha_evento.setHours(0, 0, 0, 0);
+
+        // Validar si la fecha seleccionada es diferente a la fecha actual
+        if (fecha_evento.getTime() !== fecha_actual.getTime()) {
+          Swal.fire('', 'No puedes seleccionar una fecha diferente al día actual.', 'error');
         } else {
-          Swal.fire('', 'No puede realizar consultas.', 'error');
+          // Redirigir a la página deseada al hacer clic en el evento
+          if (tipo_consulta === 'certificado' || tipo_consulta === 'consulta') {
+            if (sa_conp_estado_revision == 0) {
+              window.location.href = url;
+            } else {
+              Swal.fire('', 'La atención médica ya está realizada.', 'error');
+            }
+          } else {
+            window.location.href = url;
+          }
         }
 
         info.jsEvent.preventDefault();
@@ -111,9 +119,16 @@
 
           var color = (evento.sa_conp_estado_revision == 0) ? '#B63232' : '#3D94C9';
 
+          var tipo_consulta = '';
+          if (evento.sa_conp_tipo_consulta == 'consulta') {
+            tipo_consulta = 'Atención Médica';
+          } else {
+            tipo_consulta = evento.sa_conp_tipo_consulta;
+          }
+
           calendar.addEvent({
             id: evento.sa_conp_tipo_consulta,
-            title: evento.sa_conp_tipo_consulta.toUpperCase() + ' - ' + evento.nombres,
+            title: tipo_consulta.toUpperCase() + ' - ' + evento.nombres,
             start: (evento.sa_conp_fecha_ingreso),
             end: (evento.sa_conp_fecha_ingreso),
             color: color,
@@ -179,34 +194,41 @@
 
       <!-- Modal body -->
       <div class="modal-body">
-        <div class="row justify-content-center" id="btn_nuevo">
+        <div class="row " id="btn_nuevo">
 
-          <div class="col-auto">
+          <div class="row justify-content-center">
+            <div class="col-auto">
 
-            <!-- Unifica ambos formularios dentro de uno -->
-            <form action="../vista/inicio.php?mod=7&acc=agendamiento_asistente" method="post">
+              <!-- Unifica ambos formularios dentro de uno -->
+              <form action="../vista/inicio.php?mod=7&acc=agendamiento_asistente" method="post">
 
-              <input type="hidden" name="tipo_consulta" id="tipo_consulta" value="consulta">
-              <input type="hidden" name="txt_fecha_consulta" id="txt_fecha_consulta" class="form-control form-control-sm" value="<?php echo date('Y-m-d'); ?>" readonly>
+                <input type="hidden" name="tipo_consulta" id="tipo_consulta" value="consulta">
+                <input type="hidden" name="txt_fecha_consulta" id="txt_fecha_consulta" class="form-control form-control-sm" value="<?php echo date('Y-m-d'); ?>" readonly>
 
-              <button type="submit" class="btn btn-primary btn-lg m-4"><i class='bx bx-file-find'></i> Consulta&nbsp;&nbsp;&nbsp;</button>
+                <button type="submit" class="btn btn-primary btn-lg m-4"><i class='bx bx-file-find'></i>Atención Médica</button>
 
-            </form>
+              </form>
 
+            </div>
           </div>
 
-          <div class="col-auto">
+          <div class="row justify-content-center">
+            <div class="col-auto">
 
-            <form action="../vista/inicio.php?mod=7&acc=agendamiento_asistente" method="post">
+              <form action="../vista/inicio.php?mod=7&acc=agendamiento_asistente" method="post">
 
-              <input type="hidden" name="tipo_consulta" id="tipo_consulta" value="certificado">
-              <input type="hidden" name="txt_fecha_consulta" id="txt_fecha_consulta" class="form-control form-control-sm" value="<?php echo date('Y-m-d'); ?>" readonly>
+                <input type="hidden" name="tipo_consulta" id="tipo_consulta" value="certificado">
+                <input type="hidden" name="txt_fecha_consulta" id="txt_fecha_consulta" class="form-control form-control-sm" value="<?php echo date('Y-m-d'); ?>" readonly>
 
-              <button type="submit" class="btn btn-primary btn-lg m-4"><i class='bx bx-file-blank'></i> Certificado</button>
+                <button type="submit" class="btn btn-primary btn-lg m-4"><i class='bx bx-file-blank'></i> Certificado</button>
 
-            </form>
+              </form>
 
+            </div>
           </div>
+
+
+
         </div>
       </div>
     </div>

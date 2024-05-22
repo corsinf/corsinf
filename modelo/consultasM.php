@@ -119,7 +119,8 @@ class consultasM
                             sa_conp_estado,
                             sa_conp_estado_revision,
                             sa_conp_fecha_creacion,
-                            sa_conp_fecha_modificacion
+                            sa_conp_fecha_modificacion,
+                            sa_conp_usu_id
 
                     FROM consultas_medicas
                     WHERE sa_conp_estado = 1";

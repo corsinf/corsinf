@@ -22,6 +22,9 @@ include('../lib/HIKVISION/HIK_TCP.php');
 
 include('../modelo/representantesM.php');
 
+//Usuarios
+include('../modelo/usuariosM.php');
+
 
 $controlador = new consultasC();
 
@@ -159,6 +162,7 @@ class consultasC
     private $representantesM;
     private $seguros;
     private $cod_global;
+    private $usuariosM;
     function __construct()
     {
         $this->modelo = new consultasM();
@@ -174,6 +178,8 @@ class consultasC
         $this->representantesM = new representantesM();
         $this->seguros = new contratosM();
         $this->cod_global = new codigos_globales();
+
+        $this->usuariosM = new usuariosM();
     }
 
     function listar_todo($tabla, $fecha_inicio, $fecha_fin)
@@ -817,17 +823,26 @@ class consultasC
         $correo_rep = $this->representantesM->lista_representantes($id_representante);
         $correo_rep = $correo_rep[0]['sa_rep_correo'];
 
+        $tipo_usuario = '';
+        if (strtoupper($_SESSION['INICIO']['TIPO']) == 'MEDICO') {
+            $tipo_usuario = 'Dra. ';
+        } else {
+            $tipo_usuario = '';
+        }
+
         if ($tipo_consulta == 'consulta') {
             $mensaje .= 'Me comunico con usted en calidad para informarle sobre el diagnóstico médico reciente de ' . $nombres_est . ".<br><br>";
             $mensaje .= '<b>Diagnóstico: </b>' . $diagnostico . "<br><br>";
             $mensaje .= '<b>Hora de atención: </b>' . $fecha_actual . "<br><br>";
             $mensaje .= '<b>Motivo: </b>' . strtoupper($tipo_consulta) . "<br><br>";
-            $mensaje .= '<b>Permiso de salida: </b>' . strtoupper($permiso_salida) . "<br>";
+            $mensaje .= '<b>Permiso de salida: </b>' . strtoupper($permiso_salida) . "<br><br>";
+            $mensaje .= '<b>Atendido por: </b>' . $tipo_usuario . strtoupper($_SESSION['INICIO']['USUARIO']) . "<br><br>";
         } else {
             $mensaje .= 'Me comunico con usted en calidad para informarle sobre la entrega del certficado médico reciente de ' . $nombres_est . ".<br><br>";
             $mensaje .= '<b>Diagnóstico: </b>' . $diagnostico . "<br><br>";
             $mensaje .= '<b>Hora de atención: </b>' . $fecha_actual . "<br><br>";
             $mensaje .= '<b>Motivo: </b>' . strtoupper($tipo_consulta) . "<br><br>";
+            $mensaje .= '<b>Atendido por: </b>' . $tipo_usuario . strtoupper($_SESSION['INICIO']['USUARIO']) . "<br><br>";
         }
 
         // print_r($parametros);die();
@@ -838,7 +853,7 @@ class consultasC
         //Descomentar para enviar al correo la notficacion
         //return $this->email->enviar_email($to_correo, $cuerpo_correo, $titulo_correo, $correo_respaldo = 'soporte@corsinf.com', $archivos = false, $titulo_correo, true);
 
-        return true;
+        ////return true;
     }
 
     function enviar_correo($parametros)
@@ -860,6 +875,7 @@ class consultasC
         $paciente = $this->pacientesM->obtener_informacion_pacienteM($ficha_medica[0]['sa_fice_pac_id']);
 
         //Consulta 
+        $sa_conp_id = $datos[0]['sa_conp_id'];
         $sa_fice_id = $datos[0]['sa_fice_id'];
         $sa_conp_nivel = $datos[0]['sa_conp_nivel'];
         $sa_conp_paralelo = $datos[0]['sa_conp_paralelo'];
@@ -994,21 +1010,27 @@ class consultasC
 
         $nombre_seguro = ($datos_1[0]['plan_seguro']);
 
+        //Usuario
+        $usuario = $this->usuariosM->lista_usuarios($datos[0]['sa_conp_usu_id']);
+        $nombre_medico = $usuario;
+
+
         //exit();
 
 
 
 
         $pdf = new FPDF('P', 'mm', 'A4');
+        
         $pdf->AddPage();
-        $pdf->SetFont('Arial', 'B', 12);
+        
 
         $pdf->Cell(40, 10, utf8_decode(''), 'L T', 0);
         $pdf->SetFont('Arial', 'B', 12);
         $pdf->Cell(90, 10, utf8_decode('UNIDAD EDUCATIVA SAINT DOMINIC'), 1, 0, 'C');
         $pdf->Cell(20, 10, utf8_decode('Código:'), 1, 0, 'R');
         $pdf->SetFont('Arial', '', 12);
-        $pdf->Cell(40, 10, utf8_decode('GA-MD-RG-001'), 1, 1, 'C');
+        $pdf->Cell(40, 10, utf8_decode('AM - ' . $sa_conp_id), 1, 1, 'C');
 
 
         $pdf->Cell(40, 10, utf8_decode(''), 'L', 0);
@@ -1221,7 +1243,6 @@ class consultasC
             $pdf->Cell(47.5, 8, ($sa_conp_fecha_permiso_salud_salida), 1, 0, 'C');
             $pdf->Cell(47.5, 8, ($sa_conp_hora_permiso_salida), 1, 0, 'C');
             $pdf->Cell(47.5, 8, utf8_decode(strtoupper($sa_conp_permiso_tipo)), 1, 1, 'C');
-            
         } else if ($sa_conp_permiso_salida == 'SI' && $sa_conp_permiso_tipo == 'normal') {
             $pdf->SetFont('Arial', 'B', 12);
             $pdf->Cell(190, 10, utf8_decode('  DATOS DE SALIDA'), 1, 1, 'L');
@@ -1460,7 +1481,7 @@ class consultasC
                 $pdf->Cell(6, 7, utf8_decode($Abdomen_a), 1, 0, 'L');
 
                 $pdf->Cell(6, 7, utf8_decode(''), 'L', 0, 'L', true);
-                $pdf->Cell(35.5, 7, utf8_decode('b. Sencibilidad'), 1, 0, 'L', true);
+                $pdf->Cell(35.5, 7, utf8_decode('b. Sensibilidad'), 1, 0, 'L', true);
                 $pdf->Cell(6, 7, utf8_decode($Neurologico_b), 1, 1, 'L');
 
 
@@ -1661,13 +1682,27 @@ class consultasC
 
 
 
-        /*$nombre_medico = ' Md. Camila López';
+        $tipo_usuario = '';
+        if (strtoupper($nombre_medico[0]['tipo']) == 'MEDICO') {
+            $tipo_usuario = 'Dra. ';
+        } else {
+            $tipo_usuario = '';
+        }
 
         $pdf->SetFont('Arial', 'B', 12);
-        $pdf->Cell(60, 10, utf8_decode($nombre_medico), '0', 1, 'C');
+        $pdf->Cell(60, 10, utf8_decode($tipo_usuario . $nombre_medico[0]['nom']), '0', 0, 'C');
         $pdf->SetFont('Arial', '', 12);
+        $pdf->Cell(60, 10, utf8_decode(''), '0', 1, 'R');
 
-        $pdf->Cell(60, 10, utf8_decode('Médico Institucional'), '0', 0, 'C');*/
+        $pdf->Cell(60, 3, utf8_decode('Médico Institucional'), '0', 0, 'C');
+
+        //Footer
+        $pdf->setY(271.9);
+        $pdf->setX(30);
+        $pdf->SetFont('Arial', 'I', 8);
+        $pdf->Cell(148.5, 5, 'Desarrollado por Corsinf', 0, 0, 'C');
+        $pdf->SetFont('Arial', 'B', 12);
+        
 
         $pdf->Output();
     }
@@ -1678,6 +1713,8 @@ class consultasC
         $ficha_medica = $this->ficha_medicaM->lista_ficha_medica_id($datos[0]['sa_fice_id']);
         $paciente = $this->pacientesM->obtener_informacion_pacienteM($ficha_medica[0]['sa_fice_pac_id']);
         $detalle_consulta = $this->det_consultaM->lista_det_consulta_consulta($id_consulta);
+        $usuario = $this->usuariosM->lista_usuarios($datos[0]['sa_conp_usu_id']);
+
 
         //Pacientes
         $sa_pac_temp_cedula = $paciente[0]['sa_pac_temp_cedula'];
@@ -1750,6 +1787,20 @@ class consultasC
         $pdf->Cell(18, 7, utf8_decode('Nombre: '), 0, 0, '');
         $pdf->SetFont('Arial', '', 10);
         $pdf->Cell(90, 7, utf8_decode($nombre_completo), 0, 1, 'L');
+
+
+        $tipo_usuario = '';
+        if (strtoupper($usuario[0]['tipo']) == 'MEDICO') {
+            $tipo_usuario = 'Dra. ';
+        } else {
+            $tipo_usuario = '';
+        }
+
+        $pdf->SetFont('Arial', 'B', 10);
+        $pdf->Cell(27, 7, utf8_decode('Recetado por: '), 0, 0, '');
+        $pdf->SetFont('Arial', '', 10);
+        $pdf->Cell(81, 7, utf8_decode($tipo_usuario . $usuario[0]['nom']), 0, 1, 'L');
+
         $pdf->SetFont('Arial', 'B', 10);
         $pdf->SetTextColor(57, 80, 122);
         $pdf->Cell(90, 5, utf8_decode('Rp. '), 0, 1, 'L');
@@ -1825,9 +1876,17 @@ class consultasC
         $pdf->Cell(18, 7, utf8_decode('Nombre: '), 0, 0, '');
         $pdf->SetFont('Arial', '', 10);
         $pdf->Cell(158.5, 7, utf8_decode($nombre_completo), 0, 1, 'L');
+
+        $pdf->setY(47);
+        $pdf->setX(158.5);
+        $pdf->SetFont('Arial', 'B', 10);
+        $pdf->Cell(27, 7, utf8_decode('Recetado por: '), 0, 0, '');
+        $pdf->SetFont('Arial', '', 10);
+        $pdf->Cell(81, 7, utf8_decode($tipo_usuario . $usuario[0]['nom']), 0, 1, 'L');
+
         $pdf->SetFont('Arial', 'B', 10);
         $pdf->SetTextColor(57, 80, 122);
-        $pdf->setY(47);
+        $pdf->setY(54);
         $pdf->setX(158.5);
         $pdf->Cell(90, 5, utf8_decode('Indicaciones. '), 0, 1, 'L');
 
@@ -1874,7 +1933,11 @@ class consultasC
         $ficha_medica = $this->ficha_medicaM->lista_ficha_medica_id($datos[0]['sa_fice_id']);
         $paciente = $this->pacientesM->obtener_informacion_pacienteM($ficha_medica[0]['sa_fice_pac_id']);
 
+        $usuario = $this->usuariosM->lista_usuarios($datos[0]['sa_conp_usu_id']);
+
         //Consulta 
+        $sa_conp_id = $datos[0]['sa_conp_id'];
+
         $sa_conp_nivel = $datos[0]['sa_conp_nivel'];
         $sa_conp_paralelo = $datos[0]['sa_conp_paralelo'];
 
@@ -1918,7 +1981,7 @@ class consultasC
         //cERTIFICADO
         $diagnostico_certificado = $sa_conp_diagnostico_certificado;
 
-        $nombre_medico = ' Md. Camila López';
+        $nombre_medico = $usuario;
 
         $pdf = new FPDF('P', 'mm', 'A4');
         $pdf->AddPage();
@@ -1929,7 +1992,7 @@ class consultasC
         $pdf->Cell(90, 10, utf8_decode('UNIDAD EDUCATIVA SAINT DOMINIC'), 1, 0, 'C');
         $pdf->Cell(20, 10, utf8_decode('Código:'), 1, 0, 'R');
         $pdf->SetFont('Arial', '', 12);
-        $pdf->Cell(40, 10, utf8_decode('GA-MD-RG-001'), 1, 1, 'C');
+        $pdf->Cell(40, 10, utf8_decode('AM - ' . $sa_conp_id), 1, 1, 'C');
 
 
         $pdf->Cell(40, 10, utf8_decode(''), 'L', 0);
@@ -1976,12 +2039,27 @@ class consultasC
 
         $pdf->ln('25');
 
-        $pdf->SetFont('Arial', 'B', 12);
-        $pdf->Cell(60, 10, utf8_decode($nombre_medico), '0', 0, 'C');
-        $pdf->SetFont('Arial', '', 12);
-        $pdf->Cell(60, 10, utf8_decode('Representante'), '0', 1, 'R');
+        $tipo_usuario = '';
+        if (strtoupper($nombre_medico[0]['tipo']) == 'MEDICO') {
+            $tipo_usuario = 'Dra. ';
+        } else {
+            $tipo_usuario = '';
+        }
 
-        $pdf->Cell(60, 10, utf8_decode('Médico Institucional'), '0', 0, 'C');
+        $pdf->SetFont('Arial', 'B', 12);
+        $pdf->Cell(60, 10, utf8_decode($tipo_usuario . $nombre_medico[0]['nom']), '0', 0, 'C');
+        $pdf->SetFont('Arial', '', 12);
+        $pdf->Cell(60, 10, utf8_decode(''), '0', 1, 'R');
+
+        $pdf->Cell(60, 3, utf8_decode('Médico Institucional'), '0', 0, 'C');
+
+        //print_r($nombre_medico); exit();
+
+        //Footer
+        $pdf->setY(0);
+        $pdf->setX(30);
+        $pdf->SetFont('Arial', 'I', 8);
+        $pdf->Cell(148.5, 5, 'Desarrollado por Corsinf', 0, 0, 'C');
 
         $pdf->Output();
     }

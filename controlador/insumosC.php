@@ -67,6 +67,7 @@ class insumosC
             array('campo' => 'sa_cins_localizacion', 'dato' => $parametros['sa_cins_localizacion']),
             array('campo' => 'sa_cins_uso', 'dato' => $parametros['sa_cins_uso']),
             array('campo' => 'sa_cins_observaciones', 'dato' => $parametros['sa_cins_observaciones']),
+            array('campo' => 'sa_cins_nombre_comercial', 'dato' => $parametros['sa_cins_nombre_comercial']),
         );
 
 

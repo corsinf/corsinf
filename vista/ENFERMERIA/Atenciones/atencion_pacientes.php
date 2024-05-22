@@ -22,16 +22,23 @@
 
                     //console.log(item);
 
+                    var tipo_consulta = '';
+                    if (item.sa_conp_tipo_consulta == 'consulta') {
+                        tipo_consulta = 'Atención Médica';
+                    } else {
+                        tipo_consulta = item.sa_conp_tipo_consulta;
+                    }
+
                     lista += '<div class="col">' +
                         '<div class="card radius-15">' +
                         '<div class="card-body text-center">' +
                         '<div class="p-4 border radius-15">' +
                         '<img src="../assets/images/avatars/avatar-1.png" width="110" height="110" class="rounded-circle shadow" alt="">' +
                         '<h5 class="mb-0 mt-5">' + item.nombres + '</h5>' +
-                        '<p class="mb-3">' + item.sa_conp_tipo_consulta.toUpperCase() + '</p>' +
+                        '<p class="mb-3">' + tipo_consulta.toUpperCase() + '</p>' +
                         '<div class="d-grid"> ' +
 
-                        '<a class="btn btn-outline-success radius-15 mb-1" href="../vista/inicio.php?mod=7&acc=registrar_consulta_paciente&id_consulta=' + item.sa_conp_id + '&tipo_consulta=' + item.sa_conp_tipo_consulta + '&id_ficha=' + item.sa_fice_id + '&id_paciente=' + item.sa_pac_id + '&regresar=atencion_pac' + '"Comenzar title=" Consulta">Comenzar Consulta</a>' +
+                        '<a class="btn btn-outline-success radius-15 mb-1" href="../vista/inicio.php?mod=7&acc=registrar_consulta_paciente&id_consulta=' + item.sa_conp_id + '&tipo_consulta=' + item.sa_conp_tipo_consulta + '&id_ficha=' + item.sa_fice_id + '&id_paciente=' + item.sa_pac_id + '&regresar=atencion_pac' + '"Comenzar title=" Consulta">Realizar Atención Médica</a>' +
 
                         '<button class="btn btn-outline-primary radius-15 mt-2" onclick="consultar_datos_h(' + item.sa_fice_id + ', \'' + item.nombres + '\')">Historial</button>' +
                         '</div>' +
@@ -64,7 +71,7 @@
                         <li class="breadcrumb-item"><a href="javascript:;"><i class="bx bx-home-alt"></i></a>
                         </li>
                         <li class="breadcrumb-item active" aria-current="page">
-                            Atenciones Estudiantes
+                            Atenciones Médicas Pendientes
                         </li>
                     </ol>
                 </nav>

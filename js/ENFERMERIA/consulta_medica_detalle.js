@@ -43,17 +43,16 @@ $(document).ready(function () {
 
         var stock = $('#stock_farmacologia').val();
         var cant = $('#cantidad_farmacologia').val();
-        
-        if(cant=='' || cant=='0') {  Swal.fire('','Ingrese un valor valido','info'); return false;  }
-        if(parseFloat(cant)> parseFloat(stock)){  Swal.fire('','Valor supera al stock','info'); return false;  }
+
+        if (cant == '' || cant == '0') { Swal.fire('', 'Ingrese un valor valido', 'info'); return false; }
+        if (parseFloat(cant) > parseFloat(stock)) { Swal.fire('', 'Valor supera al stock', 'info'); return false; }
 
         var farmaco = $("#tipo_farmacologia_presentacion option:selected").text();
         var farmaco = farmaco.split('-');
         // console.log(farmaco[0].trim())
         var existe = buscar_medicamento_existente(farmaco[0].trim())
-        if(existe)
-        {
-            Swal.fire('Este farmaco ya esta registrado','Modifique el ya existente','error');
+        if (existe) {
+            Swal.fire('Este farmaco ya esta registrado', 'Modifique el ya existente', 'error');
             return false;
         }
 
@@ -69,7 +68,7 @@ $(document).ready(function () {
             htmlFila += '<td><input class="itemFila_Medicamento" type="checkbox"></td>';
             htmlFila += '<td><label id="sa_det_conp_nombre_temp_' + count_medicamento + '"></label></td>';
             htmlFila += '<td><input type="text" class="form-control form-control-sm" id="sa_det_conp_dosificacion_' + count_medicamento + '" name="sa_det_conp_dosificacion[]"></td>';
-            htmlFila += '<td><input type="number" class="form-control form-control-sm solo_numeros" min="1" id="sa_det_conp_cantidad_' + count_medicamento + '" name="sa_det_conp_cantidad[]" onblur="limitarMaximo('+count_medicamento+')" max="'+stock+'" value="'+cant+'"></td>';
+            htmlFila += '<td><input type="number" class="form-control form-control-sm solo_numeros" min="1" id="sa_det_conp_cantidad_' + count_medicamento + '" name="sa_det_conp_cantidad[]" onblur="limitarMaximo(' + count_medicamento + ')" max="' + stock + '" value="' + cant + '"></td>';
 
             htmlFila += '<td><div class="form-check d-flex justify-content-center">';
             htmlFila += '<input class="form-check-input" type="checkbox" value="" id="sa_det_conp_estado_entrega_' + count_medicamento + '" name="sa_det_conp_estado_entrega_' + count_medicamento + '" checked>';
@@ -94,25 +93,25 @@ $(document).ready(function () {
         }
     });
 
-   function buscar_medicamento_existente(texto) {
-  var searchText = texto.toLowerCase();
-  var encontrado = false;
-  $('#lista_medicamentos tbody tr').each(function() {
-    $(this).find('td label').each(function() {
-      var cellText = $(this).text().toLowerCase();
-      if (cellText.indexOf(searchText) !== -1) {
-        encontrado = true;
-        return false; // Sale del bucle each interno
-      }
-    });
-    
-    if (encontrado) {
-      return false; // Sale del bucle each externo
+    function buscar_medicamento_existente(texto) {
+        var searchText = texto.toLowerCase();
+        var encontrado = false;
+        $('#lista_medicamentos tbody tr').each(function () {
+            $(this).find('td label').each(function () {
+                var cellText = $(this).text().toLowerCase();
+                if (cellText.indexOf(searchText) !== -1) {
+                    encontrado = true;
+                    return false; // Sale del bucle each interno
+                }
+            });
+
+            if (encontrado) {
+                return false; // Sale del bucle each externo
+            }
+        });
+
+        return encontrado;
     }
-  });
-  
-  return encontrado;
-}
 
 
     $(document).on('click', '#checkAll_Medicamentos', function () {
@@ -166,14 +165,14 @@ function eliminar_det_consulta_item(id_item) {
         type: 'post',
         dataType: 'json',
         success: function (response) {
-            console.log(response);
+            //console.log(response);
 
         }
     });
 }
 
 function consultar_medicinas_insumos(entrada) {
-    console.log(entrada);
+    //console.log(entrada);
 
     var selectElement = $('#tipo_farmacologia_presentacion');
 
@@ -186,16 +185,16 @@ function consultar_medicinas_insumos(entrada) {
         $('#tipo_farmacologia_presentacion').select2({
             placeholder: '-- Selecciona una opción --',
             language: {
-                inputTooShort: function() {
+                inputTooShort: function () {
                     return "Por favor ingresa 1 o más caracteres";
                 },
-                noResults: function() {
+                noResults: function () {
                     return "No se encontraron resultados";
                 },
-                searching: function() {
+                searching: function () {
                     return "Buscando...";
                 },
-                errorLoading: function() {
+                errorLoading: function () {
                     return "No se encontraron resultados";
                 }
             },
@@ -220,7 +219,7 @@ function consultar_medicinas_insumos(entrada) {
                             filtered.push({
                                 id: item['sa_cmed_id'],
                                 text: fullName,
-                                data:item,
+                                data: item,
                             });
                         }
 
@@ -233,22 +232,34 @@ function consultar_medicinas_insumos(entrada) {
                 },
                 cache: true
             }
-        });
+        })
+            .off('select2:select')
+            .on('select2:select', function (e) {
+                var data = e.params.data.data;
+
+                $('#sa_det_fice_id_cmed_cins').val(data.sa_cmed_id);
+                $('#sa_det_fice_tipo').val(data.sa_cmed_tipo);
+                $('#stock_farmacologia').val(data.sa_cmed_stock);
+
+                listar_farmacos_alergia()
+
+                //console.log(data);
+            });
 
     } else if (entrada === 'insumos') {
         $('#tipo_farmacologia_presentacion').select2({
             placeholder: '-- Selecciona una opción --',
             language: {
-                inputTooShort: function() {
+                inputTooShort: function () {
                     return "Por favor ingresa 1 o más caracteres";
                 },
-                noResults: function() {
+                noResults: function () {
                     return "No se encontraron resultados";
                 },
-                searching: function() {
+                searching: function () {
                     return "Buscando...";
                 },
-                errorLoading: function() {
+                errorLoading: function () {
                     return "No se encontraron resultados";
                 }
             },
@@ -273,7 +284,7 @@ function consultar_medicinas_insumos(entrada) {
                             filtered.push({
                                 id: item['sa_cins_id'],
                                 text: fullName,
-                                data:item,
+                                data: item,
                             });
                         }
 
@@ -286,7 +297,20 @@ function consultar_medicinas_insumos(entrada) {
                 },
                 cache: true
             }
-        });
+        })
+            .off('select2:select')
+            .on('select2:select', function (e) {
+                var data = e.params.data.data;
+
+                $('#sa_det_fice_id_cmed_cins').val(data.sa_cins_id);
+                $('#sa_det_fice_tipo').val(data.sa_cins_tipo);
+                $('#stock_farmacologia').val(data.sa_cins_stock);
+
+                listar_farmacos_alergia()
+
+
+                //console.log(data);
+            });
     }
 
     $('#tipo_farmacologia_presentacion').val(null).trigger('change');
@@ -307,7 +331,7 @@ function cargar_farmacologia(id_consulta) {
             if (response && response.length > 0) {
                 response.forEach(function (medicamento) {
 
-                    console.log(medicamento);
+                    //console.log(medicamento);
                     count_medicamento++;
 
                     var htmlFila = '<tr>';
@@ -423,3 +447,37 @@ function obtener_hora_hasta() {
     minutos = ahora.getMinutes().toString().padStart(2, '0');
     return `${horas}:${minutos}`;
 }
+
+//Consultar alergia farmacos
+function listar_farmacos_alergia() {
+
+    var sa_det_fice_id_cmed_cins = $('#sa_det_fice_id_cmed_cins').val();
+    var sa_det_fice_tipo = $('#sa_det_fice_tipo').val();
+
+    // Llamar a la función insertar_detalle_fm
+    var parametros = {
+        'sa_fice_id': $('#sa_fice_id').val(),
+        'sa_det_fice_id_cmed_cins': sa_det_fice_id_cmed_cins,
+        'sa_det_fice_tipo': sa_det_fice_tipo,
+    };
+
+    //console.log(parametros);
+
+
+    $.ajax({
+        data: {
+            parametros: parametros
+        },
+        url: '../controlador/detalle_fm_med_insC.php?fm_farmaco_a=true',
+        type: 'post',
+        dataType: 'json',
+        success: function (response) {
+
+            //console.log(response);
+            if (response && response.length > 0) {
+                Swal.fire('', 'Tiene alergia a este fármaco.', 'error');
+                limpiar();
+            }
+        }
+    });
+} 

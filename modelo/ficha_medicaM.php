@@ -25,7 +25,8 @@ class ficha_MedicaM
         fm.sa_fice_est_segundo_nombre,
         fm.sa_fice_rep_1_id,
         fm.sa_fice_fecha_creacion,
-        COUNT(c.sa_conp_id) AS cantidad_consultas
+        COUNT(c.sa_conp_id) AS cantidad_consultas,
+        fm.sa_fice_medicamentos_alergia
         FROM
             ficha_medica fm
         LEFT JOIN
@@ -97,7 +98,9 @@ class ficha_MedicaM
                     sa_fice_estado,
                     sa_fice_fecha_creacion,
                     sa_fice_fecha_modificacion,
-                    sa_fice_estado_realizado
+                    sa_fice_estado_realizado,
+
+                    sa_fice_medicamentos_alergia
 
                     FROM ficha_medica
                     WHERE sa_fice_estado = 1";
@@ -159,7 +162,9 @@ class ficha_MedicaM
                         sa_fice_estado,
                         sa_fice_fecha_creacion,
                         sa_fice_fecha_modificacion,
-                        sa_fice_estado_realizado
+                        sa_fice_estado_realizado,
+
+                        sa_fice_medicamentos_alergia
     
                         FROM ficha_medica
                         WHERE sa_fice_estado = 1";
@@ -227,7 +232,9 @@ class ficha_MedicaM
         sa_fice_pregunta_5_obs,
         
         sa_fice_fecha_creacion,
-        sa_fice_fecha_modificar
+        sa_fice_fecha_modificar,
+
+        sa_fice_medicamentos_alergia
         
         FROM ficha_medica
         WHERE sa_fice_id = '" . $buscar . "'";

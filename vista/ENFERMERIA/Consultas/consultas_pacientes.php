@@ -135,7 +135,7 @@ if (isset($_GET['pac_id'])) {
                   data: null,
                   render: function(data, type, item) {
                     if (item.sa_conp_tipo_consulta == 'consulta') {
-                      return '<div class="badge rounded-pill text-success bg-light-success p-2 text-uppercase px-3">' + item.sa_conp_tipo_consulta + '</div>';
+                      return '<div class="badge rounded-pill text-success bg-light-success p-2 text-uppercase px-3">' + 'Atención médica' + '</div>';
                     } else {
                       return '<div class="badge rounded-pill text-info bg-light-info p-2 text-uppercase px-3">' + item.sa_conp_tipo_consulta + '</div>';
                     }
@@ -186,7 +186,7 @@ if (isset($_GET['pac_id'])) {
           <ol class="breadcrumb mb-0 p-0">
             <li class="breadcrumb-item"><a href="javascript:;"><i class="bx bx-home-alt"></i></a>
             </li>
-            <li class="breadcrumb-item active" aria-current="page">Historial de Consultas del Paciente</li>
+            <li class="breadcrumb-item active" aria-current="page">Historial de Atenciones Médicas del Paciente</li>
           </ol>
         </nav>
       </div>
@@ -204,7 +204,9 @@ if (isset($_GET['pac_id'])) {
                   <div><i class="bx bxs-user me-1 font-22 text-primary"></i>
                   </div>
 
-                  <h5 class="mb-0 text-primary">Historial de Consultas del Paciente: <b id="title_paciente" class="text-success"></b></h5>
+                  <h5 class="mb-0 text-primary">Historial de Atenciones Médicas del Paciente: <b id="title_paciente" class="text-success"></b></h5>
+
+                  <?php //print_r($_SESSION)//['INICIO']['USUARIO'])  //TIPO ?>
 
                 </div>
               </div>
@@ -234,7 +236,7 @@ if (isset($_GET['pac_id'])) {
                             <input type="hidden" name="id_paciente" id="id_paciente">
                             <input type="hidden" name="tipo_consulta" id="tipo_consulta" value="consulta">
 
-                            <button type="submit" class="btn btn-primary btn-lg m-4"> &nbsp; Consulta&nbsp;</button>
+                            <button type="submit" class="btn btn-primary btn-lg m-4">Atención Médica</button>
                           </form>
                         </div>
                       </div>

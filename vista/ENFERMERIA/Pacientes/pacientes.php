@@ -24,7 +24,7 @@
                 {
                     data: null,
                     render: function(data, type, item) {
-                        return '<div"><a href="../vista/inicio.php?mod=7&acc=consultas_pacientes&pac_id=' + item.sa_pac_id + '" " title="Historial de Consultas"><u>' + item.sa_pac_apellidos + ' ' + item.sa_pac_nombres + '</u></a></div>';
+                        return '<div"><a href="../vista/inicio.php?mod=7&acc=consultas_pacientes&pac_id=' + item.sa_pac_id + '" " title="Historial de Atenciones médicas"><u>' + item.sa_pac_apellidos + ' ' + item.sa_pac_nombres + '</u></a></div>';
                     }
                 },
                 {

@@ -70,6 +70,7 @@ class medicamentosC
             array('campo' => 'sa_cmed_tratamientos', 'dato' => $parametros['sa_cmed_tratamientos']),
             array('campo' => 'sa_cmed_uso', 'dato' => $parametros['sa_cmed_uso']),
             array('campo' => 'sa_cmed_observaciones', 'dato' => $parametros['sa_cmed_observaciones']),
+            array('campo' => 'sa_cmed_nombre_comercial', 'dato' => $parametros['sa_cmed_nombre_comercial']),
         );
 
 

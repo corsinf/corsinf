@@ -1,4 +1,9 @@
 <script type="text/javascript">
+    var hoy = new Date();
+    var fecha = hoy.toISOString().split('T')[0];
+
+
+
     $(document).ready(function() {
         $('#tabla_medicamentos').DataTable({
             language: {
@@ -22,21 +27,31 @@
                     }
                 },
                 {
-                    data: 'sa_cmed_concentracion'
-                },
-                {
-                    data: 'sa_cmed_serie'
-                },
-                {
-                    data: 'sa_cmed_minimos'
+                    data: 'sa_cmed_nombre_comercial'
                 },
                 {
                     data: 'sa_cmed_stock'
                 },
-                {
-                    data: 'sa_cmed_movimiento'
+
+            ],
+            dom: '<"top"Bfr>t<"bottom"lip>',
+            buttons: [{
+                    extend: 'excel',
+                    text: '<i class="bx bxs-file-pdf me-0"></i> Exportar a Excel',
+                    title: 'MEDICAMENTOS',
+                    filename: 'medicamentos_' + fecha
                 },
-            ]
+                {
+                    extend: 'pdf',
+                    text: '<i class="bx bxs-spreadsheet me-0"></i> Exportar a PDF',
+                    title: 'MEDICAMENTOS',
+                    filename: 'medicamentos_' + fecha
+                }
+            ],
+            initComplete: function() {
+                // Mover los botones al contenedor personalizado
+                $('#contenedor_botones').append($('.dt-buttons'));
+            }
         });
     });
 </script>
@@ -67,11 +82,30 @@
             <div class="col-xl-12 mx-auto">
                 <div class="card border-top border-0 border-4 border-primary">
                     <div class="card-body p-5">
-                        <div class="card-title d-flex align-items-center">
-                            <div><i class="bx bxs-user me-1 font-22 text-primary"></i>
+
+                        <div class="row">
+
+                            <div class="col-6">
+                                <div class="card-title d-flex align-items-center">
+                                    <div><i class="bx bxs-user me-1 font-22 text-primary"></i>
+                                    </div>
+                                    <h5 class="mb-0 text-primary">Medicamentos</h5>
+
+                                    <div class="row mx-1">
+                                        <div class="col-sm-12" id="btn_nuevo">
+                                            <a href="../vista/inicio.php?mod=7&acc=registrar_medicamentos" class="btn btn-success btn-sm"><i class="bx bx-plus"></i> Nuevo</a>
+
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                            <h5 class="mb-0 text-primary">Medicamentos</h5>
+
+                            <div class="col-6 text-end">
+                                <div id="contenedor_botones"></div>
+                            </div>
+
                         </div>
+
                         <hr>
 
                         <div class="content">
@@ -81,12 +115,10 @@
                             <section class="content">
                                 <div class="container-fluid">
 
-                                    <div class="row">
-                                        <div class="col-sm-12" id="btn_nuevo">
-                                            <a href="../vista/inicio.php?mod=7&acc=registrar_medicamentos" class="btn btn-success btn-sm"><i class="bx bx-plus"></i> Nuevo</a>
-                                        </div>
 
-                                    </div>
+
+
+
 
                                     <br>
 
@@ -95,12 +127,9 @@
                                             <thead>
                                                 <tr>
                                                     <th>#</th>
-                                                    <th>Presentación</th>
-                                                    <th>Concentración</th>
-                                                    <th>Serie</th>
-                                                    <th>Mínimos</th>
+                                                    <th>NOMBRE DEL MEDICAMENTO</th>
+                                                    <th>NOMBRE COMERCIAL</th>
                                                     <th>Stock</th>
-                                                    <th>Movimiento</th>
                                                 </tr>
                                             </thead>
                                             <tbody>

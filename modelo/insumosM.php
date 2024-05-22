@@ -26,7 +26,8 @@ class insumosM
 					sa_cins_stock,
 					sa_cins_movimiento,
 					sa_cins_localizacion,
-					sa_cins_tipo
+					sa_cins_tipo,
+					sa_cins_nombre_comercial
 				FROM cat_insumos WHERE 1 = 1 and sa_cins_estado = 1 ";
 
 		$sql .= " ORDER BY sa_cins_id ";
@@ -56,7 +57,8 @@ class insumosM
 					sa_cins_reg_sanitario,
 					sa_cins_fecha_exp,
 					sa_cins_fecha_elab,
-					sa_cins_referencia
+					sa_cins_referencia,
+					sa_cins_nombre_comercial
 				FROM cat_insumos 
 				WHERE sa_cins_estado = 1 ";
 
@@ -81,7 +83,7 @@ class insumosM
 
 	function buscar_insumos_CODIGO($buscar)
 	{
-		$sql = "SELECT sa_cins_id, sa_cins_concentracion, sa_cins_estado FROM cat_insumos WHERE sa_cins_id = '" . $buscar . "'";
+		$sql = "SELECT sa_cins_id, sa_cins_presentacion, sa_cins_estado FROM cat_insumos WHERE sa_cins_id = '" . $buscar . "'";
 		$datos = $this->db->datos($sql);
 		return $datos;
 	}
