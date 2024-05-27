@@ -110,7 +110,6 @@ class administrativosM
 
     function insertar($datos)
     {
-        print_r($datos);die();
         $rest = $this->db->inserts('administrativos', $datos);
         return $rest;
     }

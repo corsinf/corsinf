@@ -173,17 +173,26 @@ if (isset($_GET['id'])) {
   }
 
   function inicializarInputs() {
-    $('#sa_cins_presentacion_inputs').show();
-    $('#sa_cins_nombre_comercial_inputs').show();
-    $('#sa_cins_codigo_inputs').hide();
-    $('#sa_cins_lote_inputs').hide();
-    $('#sa_cins_caducidad_inputs').show();
-    $('#sa_cins_minimos_inputs').show();
-    $('#sa_cins_stock_inputs').show();
-    $('#sa_cins_movimiento_inputs').hide();
-    $('#sa_cins_localizacion_inputs').hide();
-    $('#sa_cins_uso_inputs').hide();
-    $('#sa_cins_observaciones_inputs').hide();
+    $.ajax({
+      url: '../controlador/v_med_insC.php?listar_v_insumos=true',
+      type: 'post',
+      dataType: 'json',
+      success: function(response) {
+        console.log(response);
+
+        // Verificar si la respuesta contiene datos
+        if (response && response.length > 0) {
+          response.forEach(function(medicamento) {
+            if (medicamento.sa_vmi_estado == 1) {
+              $('#' + medicamento.sa_vmi_id_input).show();
+            } else {
+              $('#' + medicamento.sa_vmi_id_input).hide();
+            }
+          });
+
+        }
+      },
+    });
   }
 </script>
 
@@ -246,14 +255,14 @@ if (isset($_GET['id'])) {
 
               <input type="hidden" name="sa_cins_id" id="sa_cins_id">
 
-              <div class="row pt-3" id="sa_cins_presentacion_inputs">
+              <div class="row pt-3" id="sa_cins_presentacion_inputs" style="display: none;">
                 <div class="col-12">
-                  <label for="" class="form-label">Presentación (Nombre del Medicamentos) <label style="color: red;">*</label> </label>
+                  <label for="" class="form-label">Presentación (Nombre del Insumo) <label style="color: red;">*</label> </label>
                   <input type="text" class="form-control form-control-sm" name="sa_cins_presentacion" id="sa_cins_presentacion">
                 </div>
               </div>
 
-              <div class="row pt-3" id="sa_cins_nombre_comercial_inputs">
+              <div class="row pt-3" id="sa_cins_nombre_comercial_inputs" style="display: none;">
                 <div class="col-12">
                   <label for="" class="form-label">Nombre Comercial <label style="color: red;">*</label> </label>
                   <input type="text" class="form-control form-control-sm" name="sa_cins_nombre_comercial" id="sa_cins_nombre_comercial">
@@ -261,38 +270,38 @@ if (isset($_GET['id'])) {
               </div>
 
               <div class="row pt-3">
-                <div class="col-4" id="sa_cins_codigo_inputs">
+                <div class="col-4" id="sa_cins_codigo_inputs" style="display: none;">
                   <label for="" class="form-label">Código <label style="color: red;">*</label> </label>
                   <input type="text" class="form-control form-control-sm" name="sa_cins_codigo" id="sa_cins_codigo">
                 </div>
 
-                <div class="col-3" id="sa_cins_lote_inputs">
+                <div class="col-3" id="sa_cins_lote_inputs" style="display: none;">
                   <label for="" class="form-label">Lote <label style="color: red;">*</label> </label>
                   <input type="text" class="form-control form-control-sm" name="sa_cins_lote" id="sa_cins_lote">
                 </div>
 
-                <div class="col-3" id="sa_cins_caducidad_inputs">
+                <div class="col-3" id="sa_cins_caducidad_inputs" style="display: none;">
                   <label for="" class="form-label">Caducidad <label style="color: red;">*</label> </label>
                   <input type="date" class="form-control form-control-sm" name="sa_cins_caducidad" id="sa_cins_caducidad">
                 </div>
               </div>
 
               <div class="row pt-3">
-                <div class="col-4" id="sa_cins_minimos_inputs">
+                <div class="col-4" id="sa_cins_minimos_inputs" style="display: none;">
                   <label for="" class="form-label">Mínimos <label style="color: red;">*</label> </label>
                   <input type="number" class="form-control form-control-sm" name="sa_cins_minimos" id="sa_cins_minimos">
                 </div>
-                <div class="col-4" id="sa_cins_stock_inputs">
+                <div class="col-4" id="sa_cins_stock_inputs" style="display: none;">
                   <label for="" class="form-label">Stock <label style="color: red;">*</label> </label>
                   <input type="number" class="form-control form-control-sm" name="sa_cins_stock" id="sa_cins_stock">
                 </div>
-                <div class="col-4" id="sa_cins_movimiento_inputs">
+                <div class="col-4" id="sa_cins_movimiento_inputs" style="display: none;">
                   <label for="" class="form-label">Movimiento <label style="color: red;">*</label> </label>
                   <input type="number" class="form-control form-control-sm" name="sa_cins_movimiento" id="sa_cins_movimiento">
                 </div>
               </div>
 
-              <div class="row pt-3" id="sa_cins_localizacion_inputs">
+              <div class="row pt-3" id="sa_cins_localizacion_inputs" style="display: none;">
                 <div class="col-12">
                   <label for="" class="form-label">Localización <label style="color: red;">*</label> </label>
                   <input type="text" class="form-control form-control-sm" name="sa_cins_localizacion" id="sa_cins_localizacion">
@@ -301,14 +310,14 @@ if (isset($_GET['id'])) {
                 </div>
               </div>
 
-              <div class="row pt-3" id="sa_cins_uso_inputs">
+              <div class="row pt-3" id="sa_cins_uso_inputs" style="display: none;">
                 <div class="col-12">
                   <label for="" class="form-label">Uso <label style="color: red;">*</label> </label>
                   <input type="text" class="form-control form-control-sm" name="sa_cins_uso" id="sa_cins_uso">
                 </div>
               </div>
 
-              <div class="row pt-3" id="sa_cins_observaciones_inputs">
+              <div class="row pt-3" id="sa_cins_observaciones_inputs" style="display: none;">
                 <div class="col-12">
                   <label for="" class="form-label">Observaciones <label style="color: red;">*</label> </label>
                   <input type="text" class="form-control form-control-sm" name="sa_cins_observaciones" id="sa_cins_observaciones">

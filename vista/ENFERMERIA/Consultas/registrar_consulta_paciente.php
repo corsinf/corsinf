@@ -1111,74 +1111,74 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                                                                                 <th class="table-primary text-end">a. Cicatrices</th>
                                                                                 <td>
-                                                                                    <input type="checkbox" class="custom-control-input" id="chx_Cicatrices">
+                                                                                    <input type="checkbox" class="custom-control-input chx_ef" id="chx_Cicatrices" value="a. Cicatrices">
                                                                                 </td>
 
                                                                                 <th rowspan="5" class="vertical-text table-primary">4. Oro faringe</th>
 
                                                                                 <th class="table-primary text-end">a. Labios</th>
                                                                                 <td>
-                                                                                    <input type="checkbox" class="custom-control-input" id="chx_Labios">
+                                                                                    <input type="checkbox" class="custom-control-input chx_ef" id="chx_Labios" value="a. Labios">
                                                                                 </td>
 
                                                                                 <th rowspan="2" class="vertical-text table-primary">7. Tórax</th>
 
                                                                                 <th class="table-primary text-end">a. Mamas</th>
                                                                                 <td>
-                                                                                    <input type="checkbox" class="custom-control-input" id="chx_Mamas">
+                                                                                    <input type="checkbox" class="custom-control-input chx_ef" id="chx_Mamas" value="a. Mamas">
                                                                                 </td>
 
                                                                                 <th rowspan="3" class="vertical-text table-primary">12. Extremidades</th>
 
                                                                                 <th class="table-primary text-end">a. Vascular</th>
                                                                                 <td>
-                                                                                    <input type="checkbox" class="custom-control-input" id="chx_Vascular">
+                                                                                    <input type="checkbox" class="custom-control-input chx_ef" id="chx_Vascular" value="a. Vascular">
                                                                                 </td>
                                                                             </tr>
 
                                                                             <tr>
                                                                                 <th class="table-primary text-end">b. Tatuajes</th>
                                                                                 <td>
-                                                                                    <input type="checkbox" class="custom-control-input" id="chx_Tatuajes">
+                                                                                    <input type="checkbox" class="custom-control-input chx_ef" id="chx_Tatuajes" value="b. Tatuajes">
                                                                                 </td>
 
                                                                                 <th class="table-primary text-end">b. Lengua</th>
                                                                                 <td>
-                                                                                    <input type="checkbox" class="custom-control-input" id="chx_Lengua">
+                                                                                    <input type="checkbox" class="custom-control-input chx_ef" id="chx_Lengua" value="b. Lengua">
                                                                                 </td>
 
                                                                                 <th class="table-primary text-end">b. Corazón</th>
                                                                                 <td>
-                                                                                    <input type="checkbox" class="custom-control-input" id="chx_Corazon">
+                                                                                    <input type="checkbox" class="custom-control-input chx_ef" id="chx_Corazon" value="b. Corazón">
                                                                                 </td>
 
                                                                                 <th class="table-primary text-end">b. Miembros superiores</th>
                                                                                 <td>
-                                                                                    <input type="checkbox" class="custom-control-input" id="chx_Miembros_superiores">
+                                                                                    <input type="checkbox" class="custom-control-input chx_ef" id="chx_Miembros_superiores" value="b. Miembros superiores">
                                                                                 </td>
                                                                             </tr>
 
                                                                             <tr>
                                                                                 <th class="table-primary text-end">c. Piel y Faneras</th>
                                                                                 <td>
-                                                                                    <input type="checkbox" class="custom-control-input" id="chx_Piel_Faneras">
+                                                                                    <input type="checkbox" class="custom-control-input chx_ef" id="chx_Piel_Faneras" value="c. Piel y Faneras">
                                                                                 </td>
 
                                                                                 <th class="table-primary text-end">c. Faringe</th>
                                                                                 <td>
-                                                                                    <input type="checkbox" class="custom-control-input" id="chx_Faringe">
+                                                                                    <input type="checkbox" class="custom-control-input chx_ef" id="chx_Faringe" value="c. Faringe">
                                                                                 </td>
 
                                                                                 <th rowspan="2" class="vertical-text table-primary">8. Tórax</th>
 
                                                                                 <th class="table-primary text-end">a. Pulmones</th>
                                                                                 <td>
-                                                                                    <input type="checkbox" class="custom-control-input" id="chx_Pulmones">
+                                                                                    <input type="checkbox" class="custom-control-input chx_ef" id="chx_Pulmones" value="a. Pulmones">
                                                                                 </td>
 
                                                                                 <th class="table-primary text-end">c. Miembros inferiores</th>
                                                                                 <td>
-                                                                                    <input type="checkbox" class="custom-control-input" id="chx_Miembros_inferiores">
+                                                                                    <input type="checkbox" class="custom-control-input chx_ef" id="chx_Miembros_inferiores" value="c. Miembros inferiores">
                                                                                 </td>
 
 
@@ -1189,18 +1189,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                                                                                 <th class="table-primary text-end">a. Párpados</th>
                                                                                 <td>
-                                                                                    <input type="checkbox" class="custom-control-input" id="chx_Parpados">
+                                                                                    <input type="checkbox" class="custom-control-input chx_ef" id="chx_Parpados" value="a. Párpados">
                                                                                 </td>
 
                                                                                 <th class="table-primary text-end">d. Amígdalas</th>
                                                                                 <td>
-                                                                                    <input type="checkbox" class="custom-control-input" id="chx_Amigdalas">
+                                                                                    <input type="checkbox" class="custom-control-input chx_ef" id="chx_Amigdalas" value="d. Amígdalas">
                                                                                 </td>
 
 
                                                                                 <th class="table-primary text-end">b. Parrilla Costal</th>
                                                                                 <td>
-                                                                                    <input type="checkbox" class="custom-control-input" id="chx_Parrilla_Costal">
+                                                                                    <input type="checkbox" class="custom-control-input chx_ef" id="chx_Parrilla_Costal" value="b. Parrilla Costal">
                                                                                 </td>
 
                                                                                 <th rowspan="4" class="vertical-text table-primary">13. Neurológico</th>
@@ -1208,19 +1208,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                                                                                 <th class="table-primary text-end">a. Fuerza</th>
                                                                                 <td>
-                                                                                    <input type="checkbox" class="custom-control-input" id="chx_Fuerza">
+                                                                                    <input type="checkbox" class="custom-control-input chx_ef" id="chx_Fuerza" value="a. Fuerza">
                                                                                 </td>
                                                                             </tr>
 
                                                                             <tr>
                                                                                 <th class="table-primary text-end">b. Conjuntivas</th>
                                                                                 <td>
-                                                                                    <input type="checkbox" class="custom-control-input" id="chx_Conjuntivas">
+                                                                                    <input type="checkbox" class="custom-control-input chx_ef" id="chx_Conjuntivas" value="b. Conjuntivas">
                                                                                 </td>
 
                                                                                 <th class="table-primary text-end">e. Dentadura</th>
                                                                                 <td>
-                                                                                    <input type="checkbox" class="custom-control-input" id="chx_Dentadura">
+                                                                                    <input type="checkbox" class="custom-control-input chx_ef" id="chx_Dentadura" value="e. Dentadura">
                                                                                 </td>
 
                                                                                 <th rowspan="2" class="vertical-text table-primary">9. Abdomen</th>
@@ -1228,12 +1228,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                                                                                 <th class="table-primary text-end">a. Vísceras</th>
                                                                                 <td>
-                                                                                    <input type="checkbox" class="custom-control-input" id="chx_Visceras">
+                                                                                    <input type="checkbox" class="custom-control-input chx_ef" id="chx_Visceras" value="a. Vísceras">
                                                                                 </td>
 
                                                                                 <th class="table-primary text-end">b. Sensibilidad</th>
                                                                                 <td>
-                                                                                    <input type="checkbox" class="custom-control-input" id="chx_Sensibilidad">
+                                                                                    <input type="checkbox" class="custom-control-input chx_ef" id="chx_Sensibilidad" value="b. Sensibilidad">
                                                                                 </td>
 
                                                                             </tr>
@@ -1241,24 +1241,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                                             <tr>
                                                                                 <th class="table-primary text-end">c. Pupilas</th>
                                                                                 <td>
-                                                                                    <input type="checkbox" class="custom-control-input" id="chx_Pupilas">
+                                                                                    <input type="checkbox" class="custom-control-input chx_ef" id="chx_Pupilas" value="c. Pupilas">
                                                                                 </td>
 
                                                                                 <th rowspan="4" class="vertical-text table-primary">5. Naríz</th>
 
                                                                                 <th class="table-primary text-end">a. Tabique</th>
                                                                                 <td>
-                                                                                    <input type="checkbox" class="custom-control-input" id="chx_Tabique">
+                                                                                    <input type="checkbox" class="custom-control-input chx_ef" id="chx_Tabique" value="a. Tabique">
                                                                                 </td>
 
                                                                                 <th class="table-primary text-end">b. Pared Abdominal</th>
                                                                                 <td>
-                                                                                    <input type="checkbox" class="custom-control-input" id="chx_Pared_Abdominal">
+                                                                                    <input type="checkbox" class="custom-control-input chx_ef" id="chx_Pared_Abdominal" value="b. Pared Abdominal">
                                                                                 </td>
 
                                                                                 <th class="table-primary text-end">c. Marcha</th>
                                                                                 <td>
-                                                                                    <input type="checkbox" class="custom-control-input" id="chx_Marcha">
+                                                                                    <input type="checkbox" class="custom-control-input chx_ef" id="chx_Marcha" value="c. Marcha">
                                                                                 </td>
 
 
@@ -1267,12 +1267,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                                             <tr>
                                                                                 <th class="table-primary text-end">d. Córnea</th>
                                                                                 <td>
-                                                                                    <input type="checkbox" class="custom-control-input" id="chx_Cornea">
+                                                                                    <input type="checkbox" class="custom-control-input chx_ef" id="chx_Cornea" value="d. Córnea">
                                                                                 </td>
 
                                                                                 <th class="table-primary text-end">b. Cornetes</th>
                                                                                 <td>
-                                                                                    <input type="checkbox" class="custom-control-input" id="chx_Cornetes">
+                                                                                    <input type="checkbox" class="custom-control-input chx_ef" id="chx_Cornetes" value="b. Cornetes">
                                                                                 </td>
 
                                                                                 <th rowspan="3" class="vertical-text table-primary">10. Columna</th>
@@ -1280,29 +1280,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                                                                                 <th class="table-primary text-end">a. Flexibilidad</th>
                                                                                 <td>
-                                                                                    <input type="checkbox" class="custom-control-input" id="chx_Flexibilidad">
+                                                                                    <input type="checkbox" class="custom-control-input chx_ef" id="chx_Flexibilidad" value="a. Flexibilidad">
                                                                                 </td>
 
                                                                                 <th class="table-primary text-end">d. Reflejos</th>
                                                                                 <td>
-                                                                                    <input type="checkbox" class="custom-control-input" id="chx_Reflejos">
+                                                                                    <input type="checkbox" class="custom-control-input chx_ef" id="chx_Reflejos" value="d. Reflejos">
                                                                                 </td>
                                                                             </tr>
 
                                                                             <tr>
                                                                                 <th class="table-primary text-end">e. Motilidad</th>
                                                                                 <td>
-                                                                                    <input type="checkbox" class="custom-control-input" id="chx_Motilidad">
+                                                                                    <input type="checkbox" class="custom-control-input chx_ef" id="chx_Motilidad" value="e. Motilidad">
                                                                                 </td>
 
                                                                                 <th class="table-primary text-end">c. Mucosas</th>
                                                                                 <td>
-                                                                                    <input type="checkbox" class="custom-control-input" id="chx_Mucosas">
+                                                                                    <input type="checkbox" class="custom-control-input chx_ef" id="chx_Mucosas" value="c. Mucosas">
                                                                                 </td>
 
                                                                                 <th class="table-primary text-end">b. Desviación</th>
                                                                                 <td>
-                                                                                    <input type="checkbox" class="custom-control-input" id="chx_Desviacion">
+                                                                                    <input type="checkbox" class="custom-control-input chx_ef" id="chx_Desviacion" value="b. Desviación">
                                                                                 </td>
                                                                             </tr>
 
@@ -1311,19 +1311,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                                                                                 <th class="table-primary text-end">a. C. auditivo externo</th>
                                                                                 <td>
-                                                                                    <input type="checkbox" class="custom-control-input" id="chx_C_auditivo_externo">
+                                                                                    <input type="checkbox" class="custom-control-input chx_ef" id="chx_C_auditivo_externo" value="a. C. auditivo externo">
                                                                                 </td>
 
 
                                                                                 <th class="table-primary text-end">d. Senos paranasales</th>
                                                                                 <td>
-                                                                                    <input type="checkbox" class="custom-control-input" id="chx_Senos_paranasales">
+                                                                                    <input type="checkbox" class="custom-control-input chx_ef" id="chx_Senos_paranasales" value="d. Senos paranasales">
                                                                                 </td>
 
 
                                                                                 <th class="table-primary text-end">c. Dolor</th>
                                                                                 <td>
-                                                                                    <input type="checkbox" class="custom-control-input" id="chx_Dolor">
+                                                                                    <input type="checkbox" class="custom-control-input chx_ef" id="chx_Dolor" value="c. Dolor">
                                                                                 </td>
                                                                             </tr>
 
@@ -1332,7 +1332,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                                             <tr>
                                                                                 <th class="table-primary text-end">b. Pabellón</th>
                                                                                 <td>
-                                                                                    <input type="checkbox" class="custom-control-input" id="chx_Pabellon">
+                                                                                    <input type="checkbox" class="custom-control-input chx_ef" id="chx_Pabellon" value="b. Pabellón">
                                                                                 </td>
 
                                                                                 <th rowspan="2" class="vertical-text table-primary">6. Cuello</th>
@@ -1340,31 +1340,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                                                                                 <th class="table-primary text-end">a. Tiroides/masas</th>
                                                                                 <td>
-                                                                                    <input type="checkbox" class="custom-control-input" id="chx_Tiroides">
+                                                                                    <input type="checkbox" class="custom-control-input chx_ef" id="chx_Tiroides" value="a. Tiroides/masas">
                                                                                 </td>
 
                                                                                 <th rowspan="2" class="vertical-text table-primary">11. Pelvis</th>
 
                                                                                 <th class="table-primary text-end">a. Pelvis</th>
                                                                                 <td>
-                                                                                    <input type="checkbox" class="custom-control-input" id="chx_Pelvis">
+                                                                                    <input type="checkbox" class="custom-control-input chx_ef" id="chx_Pelvis" value="a. Pelvis">
                                                                                 </td>
                                                                             </tr>
 
                                                                             <tr>
                                                                                 <th class="table-primary text-end">c. Timpanos</th>
                                                                                 <td>
-                                                                                    <input type="checkbox" class="custom-control-input" id="chx_Timpanos">
+                                                                                    <input type="checkbox" class="custom-control-input chx_ef" id="chx_Timpanos" value="c. Timpanos">
                                                                                 </td>
 
                                                                                 <th class="table-primary text-end">b. Movilidad</th>
                                                                                 <td>
-                                                                                    <input type="checkbox" class="custom-control-input" id="chx_Movilidad">
+                                                                                    <input type="checkbox" class="custom-control-input chx_ef" id="chx_Movilidad" value="b. Movilidad">
                                                                                 </td>
 
                                                                                 <th class="table-primary text-end">b. Genitales</th>
                                                                                 <td>
-                                                                                    <input type="checkbox" class="custom-control-input" id="chx_Genitales">
+                                                                                    <input type="checkbox" class="custom-control-input chx_ef" id="chx_Genitales" value="b. Genitales">
                                                                                 </td>
                                                                             </tr>
 
@@ -1379,7 +1379,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                                 <div class="row pt-3">
                                                                     <div class="col-md-12">
                                                                         <label for="" class="form-label fw-bold">Observaciones <label style="color: red;">*</label> </label>
-                                                                        <textarea name="sa_examen_fisico_regional_obs" id="sa_examen_fisico_regional_obs" cols="30" rows="2" class="form-control" placeholder="OBSERVACIONES  EXAMEN FÍSICO REGIONAL"></textarea>
+                                                                        <textarea name="sa_examen_fisico_regional_obs" id="sa_examen_fisico_regional_obs" cols="30" rows="2" class="form-control" placeholder="OBSERVACIONES  EXAMEN FÍSICO REGIONAL" disabled></textarea>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -1703,6 +1703,49 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <!-- Modal footer -->
             <div class="modal-footer">
                 <button type="button" class="btn btn-sm btn-danger" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal para examen fisico -->
+<div class="modal" id="modal_ef" abindex="-1" aria-modal="true" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog  modal-lg modal-dialog-centered">
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title">Observación de: <label id="title_ef" class="text-primary"></label></h4>
+
+            </div>
+
+            <!-- Modal body -->
+            <div class="modal-body">
+
+                <input type="hidden" name="id_valor" id="id_valor">
+
+                <div class="row">
+
+                    <div class="col-12">
+                        <label for="ac_horarioC_inicio">Observaciones <label class="text-danger">*</label></label>
+                        <input type="text" name="observaciones_temp" id="observaciones_temp" class="form-control form-control-sm">
+                    </div>
+
+                </div>
+
+                <div class="row pt-3">
+                    <div class="col-12 text-end">
+                        <button type="submit" class="btn btn-success btn-sm" onclick="agregar_obs_ef();"><i class="bx bx-save"></i> Agregar</button>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Modal footer -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-sm btn-danger" id="btn_ef_modal" data-bs-dismiss="modal">Cerrar</button>
             </div>
 
         </div>

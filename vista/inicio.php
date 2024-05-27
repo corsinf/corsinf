@@ -248,6 +248,10 @@ if ($_GET['acc'] == 'registrar_consulta_paciente') {
 	include('ENFERMERIA/Consultas/registrar_consulta_paciente.php');
 }
 
+if ($_GET['acc'] == 'seguimientos_personal') {
+	include('ENFERMERIA/Consultas/seguimiento_personal.php');
+}
+
 //Pendiente para enviar Correo
 if ($_GET['acc'] == 'mensaje_atencion') {
 	include('ENFERMERIA/Consultas/Estudiantes/mensaje_atencion.php');
@@ -384,6 +388,12 @@ if ($_GET['acc'] == 'historial_salud_estudiantil') {
 if ($_GET['acc'] == 'permisos_salida_est') {
 	include('ENFERMERIA/Inspeccion/permisos_salida_est.php');
 }
+
+//Para DBA Salud integral 
+if ($_GET['acc'] == 'medicamentos_insumos_inputs') {
+	include('ENFERMERIA/DBA/medicamentos_insumos_inputs.php');
+}
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

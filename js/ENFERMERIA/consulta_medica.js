@@ -29,6 +29,10 @@ $(document).ready(function () {
             event.preventDefault();
         }
     });
+
+    //Para el modal de examen fisico regional 
+
+    modal_examen_fisico_regional();
 });
 
 function calcularIMC() {
@@ -250,4 +254,94 @@ function generarJSON() {
     return jsonString;
 
 }
+
+// Función para confirmar la desmarcación del checkbox usando SweetAlert
+function delete_datos(valor, checkbox) {
+    Swal.fire({
+        title: 'Desmarcar opción.',
+        text: "¿Está seguro/a que desea desmarcar el Check " + valor + "?",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Si'
+    }).then((result) => {
+        if (result.value) {
+            //alert('El checkbox se desmarca');
+            eliminar_ef_observaciones(valor, checkbox);
+        } else {
+            // Si el usuario cancela, vuelve a marcar el checkbox específico
+            $(checkbox).prop('checked', true);
+        }
+    })
+}
+
+function modal_examen_fisico_regional() {
+    $('.chx_ef').click(function () {
+        currentCheckbox = $(this); 
+        var isChecked = $(this).prop('checked');
+        var valor = $(this).val();
+        $('#id_valor').val(valor);
+
+        if (!isChecked) {
+            delete_datos(valor, this);
+        } else {
+            $('#title_ef').html(valor);
+            $('#modal_ef').modal('show');
+        }
+    });
+
+    $('#btn_ef_modal').click(function () {
+        if (currentCheckbox) {
+            currentCheckbox.prop('checked', false); // Solo desmarcar el checkbox actual
+            currentCheckbox = null; // Reinicia la referencia al checkbox actual
+        }
+    });
+}
+
+var ef_observaciones = [];
+
+function agregar_obs_ef() {
+    var id_valor = $('#id_valor').val();
+    var texto = $('#observaciones_temp').val();
+
+    if (id_valor && texto) {
+        ef_observaciones.push({ valor: id_valor, texto: texto });
+        console.log('Observaciones:', ef_observaciones);
+    } else {
+        Swal.fire('Error', 'Campo vacío Observación.', 'error');
+        return;
+    }
+
+    mostrar_ef_observaciones();
+
+    $('#observaciones_temp').val('');
+    $('#modal_ef').modal('hide');
+}
+
+function mostrar_ef_observaciones() {
+    var cadenaTexto = "";
+    ef_observaciones.forEach(function (observacion) {
+        cadenaTexto += observacion.valor + ": " + observacion.texto + "\n";
+    });
+
+    $('#sa_examen_fisico_regional_obs').val(cadenaTexto);
+}
+
+function eliminar_ef_observaciones(valor, checkbox) {
+    ef_observaciones = ef_observaciones.filter(function (observacion) {
+        return observacion.valor !== valor; // Retorna true si el valor no es igual al valor proporcionado
+    });
+
+    mostrar_ef_observaciones();
+
+    $(checkbox).prop('checked', false);
+}
+
+
+
+
+
+
+
 
