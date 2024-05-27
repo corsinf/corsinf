@@ -872,33 +872,42 @@ function para_ftp($nombre,$texto)
 			
 		 }
 
+		 //COPIAMOS EL PROCESO ALMACENADO QUE ES PARA COPIAR LAS TABLAS DE ACCESO
+		// $this->crear_sp_en_terceros($id_empresa,'CopiarEstructuraAccesosTerc');
 
-
+		 $empresaAC = $this->lista_empresa($id_empresa);
 		 
-		 //genera tablas que comprate los diferentes modulos
-		 $parametros1 = array($id_empresa
-		 							 ,$db_destino);
-		  $sql = "EXEC GenerarTablasCompartidas  @id_empresa = ?,@db_destino = ?";
-		  $this->db->ejecutar_procesos_almacenados($sql,$parametros1,false,1);
+		// print_r($empresaAC);die();
+		$database = $empresaAC[0]['Base_datos'];
+		$usuario = $empresaAC[0]['Usuario_db'];
+		$password = $empresaAC[0]['Password_db'];
+		$servidor = $empresaAC[0]['Ip_host'];
+		$puerto = $empresaAC[0]['Puerto_db'];
 
 
-		 $db_origen = EMPRESA_MASTER;
-		 $parametros = array($db_origen,
+		//ejecutamos el proceso almacenado
+		// print_r($res);die();
+		$db_origen = EMPRESA_MASTER;
+		$db_destino = $empresa[0]["Base_datos"];
+		$parametros = array($db_origen,
 		    						$db_destino,
 		    						$id_empresa);
+		$sql = "EXEC CopiarEstructuraAccesosTerc @origen_bd = ?,@destino_bd = ?,@id_empresa = ?";
+		$res = $this->db->ejecutar_sp_db_terceros($database, $usuario, $password, $servidor, $puerto,$sql, $parametros);
 
-		 // print_r($parametros);die();
+		 // print_r('expression');die();
 
-			
-			
-		  $sql = "EXEC CopiarEstructuraAccesos @origen_bd = ?,@destino_bd = ?,@id_empresa = ?";
-		  $res = $this->db->ejecutar_procesos_almacenados($sql,$parametros,false,1);
+		 //genera tablas que comprate los diferentes modulos
+		 // $parametros1 = array($id_empresa
+		 // 							 ,$db_destino);
+		 //  $sql = "EXEC GenerarTablasCompartidas  @id_empresa = ?,@db_destino = ?";
+		 //  $this->db->ejecutar_procesos_almacenados($sql,$parametros1,false,1);
 
-			// print_r("holii");die();
+
 		  $sql = "SELECT * FROM ACCESOS_EMPRESA WHERE Id_Empresa = '".$id_empresa."'";
-
-		  $empresa = $this->lista_empresa($id_empresa);
 		  $usuarios = $this->db->datos($sql,1);
+
+
 		  foreach ($usuarios as $key => $value) {
 		  // print_r($value);die();
 
@@ -909,11 +918,11 @@ function para_ftp($nombre,$texto)
 		  	// $where[0]['campo'] = 'id_usuarios';
 		  	// $where[0]['dato'] = $value['Id_usuario'];
 
-			$database = $empresa[0]['Base_datos'];
-			$usuario = $empresa[0]['Usuario_db'];
-			$password = $empresa[0]['Password_db'];
-			$servidor = $empresa[0]['Ip_host'];
-			$puerto = $empresa[0]['Puerto_db'];
+			// $database = $empresaAC[0]['Base_datos'];
+			// $usuario = $empresa[0]['Usuario_db'];
+			// $password = $empresa[0]['Password_db'];
+			// $servidor = $empresa[0]['Ip_host'];
+			// $puerto = $empresa[0]['Puerto_db'];
 
 			// print_r($sql);
 			// print_r($database);
@@ -927,7 +936,7 @@ function para_ftp($nombre,$texto)
 	}
 
 
-	function Copiar_estructura($modulo,$base)
+	function Copiar_estructura($modulo,$base,$tercero=false,$empresa=false)
 	{				
 		$db_destino = $base;
 		$db_origen = '';
@@ -945,8 +954,21 @@ function para_ftp($nombre,$texto)
 		  );
 		 if($db_origen!='')
 		 {
-		  	$sql = "EXEC EstructuraBase @origen_bd = ?, @destino_bd = ?";
-		  	return $this->db->ejecutar_procesos_almacenados($sql,$parametros,false,1);
+		 	if($tercero)
+		 	{		 		
+		 		$id_empresa = $empresa[0]['Id_empresa'];
+		 		$this->crear_sp_en_terceros($id_empresa,'EstructuraBaseTerc');
+		  		$sql = "EXEC EstructuraBaseTerc @origen_bd = ?, @destino_bd = ?";
+		  		$database = $empresa[0]['Base_datos'];
+				$usuario = $empresa[0]['Usuario_db'];
+				$password = $empresa[0]['Password_db'];
+				$servidor = $empresa[0]['Ip_host'];
+				$puerto = $empresa[0]['Puerto_db'];
+		  		return $this->db->ejecutar_sp_db_terceros($database, $usuario, $password, $servidor, $puerto,$sql, $parametros);
+		 	}else{
+		  		$sql = "EXEC EstructuraBase @origen_bd = ?, @destino_bd = ?";
+		  		return $this->db->ejecutar_procesos_almacenados($sql,$parametros,false,1);
+		  	}
 		 }else{ return -2;}
 	}
 
@@ -1006,6 +1028,34 @@ function para_ftp($nombre,$texto)
 		{
 			return $this->db->datos($sql,1);
 		}
+	}
+
+	function crear_sp_en_terceros($id_empresa,$proceso_alm)
+	{
+		 $sql = "SELECT definition
+		 			FROM sys.sql_modules
+		 			WHERE object_id = OBJECT_ID('dbo.".$proceso_alm."')";
+		 $datos = $this->db->datos($sql,1);
+
+		$empresaAC = $this->lista_empresa($id_empresa);
+		 
+		// print_r($empresaAC);die();
+		$database = $empresaAC[0]['Base_datos'];
+		$usuario = $empresaAC[0]['Usuario_db'];
+		$password = $empresaAC[0]['Password_db'];
+		$servidor = $empresaAC[0]['Ip_host'];
+		$puerto = $empresaAC[0]['Puerto_db'];
+
+
+		$sql = "DROP PROCEDURE IF EXISTS dbo.".$proceso_alm;
+		$res = $this->db->Generar_sp_db_terceros($database, $usuario, $password, $servidor, $puerto, $sql);
+
+		// print_r($datos[0]['definition']);die();
+		$sql = $datos[0]['definition'];
+		$res = $this->db->Generar_sp_db_terceros($database, $usuario, $password, $servidor, $puerto, $sql);
+
+		return $res;
+		
 	}
 
 }

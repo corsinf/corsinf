@@ -249,7 +249,9 @@ class loginC
 			{
 		 		$res = $this->cod_global->generar_primera_vez($empresa[0]['Base_datos'],$parametros['empresa']);
 		 	}else{
-		 		print_r($empresa);die();
+		 		// print_r("ss");die();
+		 		$res = $this->cod_global->generar_primera_vez_terceros($empresa,$parametros['empresa']);
+		 		// print_r($empresa);die();
 		 	}
 			return array('respuesta'=>$res);
 		}
@@ -297,7 +299,7 @@ class loginC
 		$registrado = $this->login->empresa_licencias_regitrado($parametros['empresa'],$parametros['licencia'],$parametros['modulo']);
 		$empresa = $this->login->lista_empresa($parametros['empresa'],1);
 
-		// print_r($empresa);die();
+		// print_r("ddd");die();
 		if(count($registrado)>0)
 		{
 			$datos[0]['campo'] = 'registrado';
@@ -306,7 +308,7 @@ class loginC
 			$where[0]['campo'] = 'Id_licencias';			
 			$where[0]['dato'] = $registrado[0]['Id_licencias'];
 
-			// $this->login->update('LICENCIAS',$datos,$where);
+			 // $this->login->update('LICENCIAS',$datos,$where);
 
 			$base_des = $empresa[0]['Base_datos'];
 			if(IP_MASTER==$empresa[0]['Ip_host'])
@@ -315,8 +317,9 @@ class loginC
 				$this->cod_global->Copiar_estructura($parametros['modulo'],$base_des);
 				return 1;
 			}else{
-				print_r($base_des.'-'.$parametros['empresa']);die();
 				$this->cod_global->generar_primera_vez_terceros($empresa,$parametros['empresa']);
+				$this->cod_global->Copiar_estructura($parametros['modulo'],$base_des,1,$empresa);
+				return 1;
 				print_r($empresa);die();
 			}
 		}else
@@ -346,6 +349,7 @@ class loginC
 	 	// print_r('sss');die();
 
 			$empresa = $this->login->lista_empresa($parametros['id']);
+			// print_r($empresa);die();
 			if(count($empresa)>0)
 			{
 					$_SESSION["INICIO"]['ID_EMPRESA'] = $empresa[0]['Id_empresa'];
@@ -367,6 +371,7 @@ class loginC
 				
 	 	// print_r($parametros);die();
 				$datos = $this->login->datos_login($parametros['email'],$this->cod_global->enciptar_clave($parametros['pass']));
+				// print_r($datos);die();
 				if($cambiar){
 					$datos = $this->login->datos_login($parametros['email'],$parametros['pass']);
 				}
