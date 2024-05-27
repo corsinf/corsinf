@@ -47,9 +47,9 @@
                     data: null,
                     render: function(data, type, item) {
                         if (item.sa_conp_tipo_consulta == 'consulta') {
-                            return '<div class="badge rounded-pill text-success bg-light-success p-2 text-uppercase px-3">' + (item.sa_conp_tipo_consulta).toUpperCase() + '</div>';
+                            return '<div class="badge rounded-pill text-success bg-light-success p-2 text-uppercase px-3">' + ('Atención médica') + '</div>';
                         } else {
-                            return '<div class="badge rounded-pill text-info bg-light-info p-2 text-uppercase px-3">' + (item.sa_conp_tipo_consulta).toUpperCase() + '</div>';
+                            return '<div class="badge rounded-pill text-info bg-light-info p-2 text-uppercase px-3">' + (item.sa_conp_tipo_consulta) + '</div>';
                         }
                     }
                 },
@@ -151,7 +151,7 @@
                         <li class="breadcrumb-item"><a href="javascript:;"><i class="bx bx-home-alt"></i></a>
                         </li>
                         <li class="breadcrumb-item active" aria-current="page">
-                            Consultas
+                            Atenciones Médicas Realizadas
                         </li>
                     </ol>
                 </nav>
@@ -205,7 +205,7 @@
                                             <div class="col-md-4">
                                                 <label for="txt_tabla" class="form-label fw-bold">Tipo de Paciente </label>
                                                 <select name="txt_tabla" id="txt_tabla" class="form-select form-select-sm" onchange="buscar_paciente();">
-                                                    
+
                                                 </select>
                                             </div>
                                         </div>

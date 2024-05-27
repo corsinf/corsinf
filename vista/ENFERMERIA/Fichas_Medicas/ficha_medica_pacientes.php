@@ -122,6 +122,7 @@ if ($btn_regresar == '') {
             });
         }
 
+        //Aumento de carga de medicamentos a los que es alergico el paciente
         function datos_col_ficha_medica(sa_pac_id) {
             // alert(sa_pac_id)
             $.ajax({
@@ -132,8 +133,7 @@ if ($btn_regresar == '') {
                 type: 'post',
                 dataType: 'json',
                 success: function(response) {
-                    //console.log(response);
-
+                    //console.log(response[0].sa_fice_id);
                     // Id de la ficha
                     $('#sa_fice_id').val(response[0].sa_fice_id);
 
@@ -212,6 +212,20 @@ if ($btn_regresar == '') {
                     //cargar datos del paciente
                     cargar_datos_paciente(sa_pac_id, response[0].sa_fice_pac_seguro_predeterminado);
 
+                    //Cargar datos de farmacos que tiene alergia
+                    cargar_farmacologia_fm(response[0].sa_fice_id);
+
+                    $('input[name=sa_fice_medicamentos_alergia][value=' + response[0].sa_fice_medicamentos_alergia + ']').prop('checked', true);
+                    if (response[0].sa_fice_medicamentos_alergia === "Si") {
+                        $("#pnl_farmacologia").show();
+                    } else if (response[0].sa_fice_medicamentos_alergia === "No") {
+                        $("#pnl_farmacologia").hide();
+                    } else {
+                        $("#pnl_farmacologia").hide();
+                    }
+
+
+
                 }
             });
         }
@@ -265,6 +279,7 @@ if ($btn_regresar == '') {
 
             var sa_fice_estado_realizado = 1;
 
+            var sa_fice_medicamentos_alergia = $('input[name=sa_fice_medicamentos_alergia]:checked').val();
 
             // Crear objeto de parámetros
 
@@ -298,6 +313,7 @@ if ($btn_regresar == '') {
                 'sa_fice_pregunta_4': sa_fice_pregunta_4,
                 'sa_fice_pregunta_4_obs': sa_fice_pregunta_4_obs,
                 'sa_fice_pregunta_5_obs': sa_fice_pregunta_5_obs,
+                'sa_fice_medicamentos_alergia': sa_fice_medicamentos_alergia,
             };
 
             if (sa_fice_id != '') {
@@ -504,7 +520,7 @@ if ($btn_regresar == '') {
                                             <br>Consentimiento</a>
                                     </li>
                                 </ul>
-                                <div class="tab-content">
+                                <div class="tab-content" id="tab_content_smart">
 
                                     <div id="step-1" class="tab-pane" role="tabpanel" aria-labelledby="step-1" data-step="0">
 
@@ -849,10 +865,82 @@ if ($btn_regresar == '') {
                                                     <p style="color: red;">*Si el estudiante requiere algún tratamiento específico durante el horario escolar, el representante deberá enviar el medicamento con la indicación médica correspondiente por agenda a través del docente tutor</p>
 
                                                     <div>
-                                                        <textarea name="sa_fice_pregunta_5_obs" id="sa_fice_pregunta_5_obs" cols="30" rows="10" class="form-control form-control-sm" required></textarea>
+                                                        <textarea name="sa_fice_pregunta_5_obs" id="sa_fice_pregunta_5_obs" cols="30" rows="2" class="form-control form-control-sm" required></textarea>
                                                     </div>
                                                 </div>
 
+                                                <div class="col-md-12 pt-4">
+
+                                                    <label for="" class="form-label">6.- ¿Tiene prohibido tomar algún medicamento? <label style="color: red;">*</label> </label>
+
+                                                    <div class="row">
+                                                        <div class="col-auto">
+                                                            <div class="form-check">
+                                                                <input class="form-check-input" type="radio" name="sa_fice_medicamentos_alergia" id="sa_fice_medicamentos_alergia_1" value="Si" required>
+                                                                <label class="form-check-label" for="sa_fice_medicamentos_alergia_1">SI</label>
+                                                            </div>
+                                                            <div class="form-check">
+                                                                <input class="form-check-input" type="radio" name="sa_fice_medicamentos_alergia" id="sa_fice_medicamentos_alergia_2" value="No" required>
+                                                                <label class="form-check-label" for="sa_fice_medicamentos_alergia_2">NO</label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div id="pnl_farmacologia" style="display: none;">
+                                                        <div class="row pt-3">
+
+                                                            <div class="col-md-3">
+                                                                <label for="tipo_farmacologia" class="form-label fw-bold">Farmacología <label style="color: red;">*</label> </label>
+                                                                <select class="form-select form-select-sm" id="tipo_farmacologia" name="tipo_farmacologia" onchange="consultar_medicinas_insumos(this.value);">
+                                                                    <option selected disabled>-- Seleccione --</option>
+                                                                    <option value="medicamentos">Medicamentos</option>
+                                                                    <option value="insumos">Insumos</option>
+                                                                </select>
+                                                            </div>
+
+                                                            <div class="col-md-5">
+                                                                <label for="tipo_farmacologia_presentacion" class="form-label fw-bold">Presentación <label style="color: red;">*</label> </label>
+                                                                <select class="form-select form-select-sm" id="tipo_farmacologia_presentacion" name="tipo_farmacologia_presentacion">
+                                                                    <option selected disabled>-- Seleccione --</option>
+                                                                </select>
+                                                            </div>
+
+                                                            <input type="hidden" name="sa_det_fice_id_cmed_cins" id="sa_det_fice_id_cmed_cins">
+                                                            <input type="hidden" name="sa_det_fice_nombre" id="sa_det_fice_nombre">
+                                                            <input type="hidden" name="sa_det_fice_tipo" id="sa_det_fice_tipo">
+
+
+                                                            <div class="col-md-2 mt-4 ">
+                                                                <label for="agregarFila_medicamentos" class="form-label fw-bold"></label>
+                                                                <button class="btn btn-primary" title="Agregar Medicamentos" id="agregarFila_medicamentos" type="button"><i class='bx bx-plus me-0'></i> Agregar</button>
+                                                            </div>
+                                                        </div>
+
+
+
+                                                        <div class="row pt-3">
+                                                            <div class="col-sm-6">
+                                                                <div class="mb-2">
+
+                                                                    <table class="table table-bordered table-hover" id="lista_medicamentos">
+
+                                                                        <tr>
+                                                                            <th width="2%"><input id="checkAll_Medicamentos" class="form-check" type="checkbox"></th>
+
+                                                                            <th width="98%">Farmacología</th>
+
+                                                                        </tr>
+
+                                                                    </table>
+
+                                                                    <button class="btn btn-danger btn-sm mb-2" title="Seleccione el Medicamento para Eliminar" id="eliminarFila_medicamentos" type="button"><i class='bx bx-minus me-0'></i>Eliminar</button>
+
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
                                             </div>
 
                                         </form>

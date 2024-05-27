@@ -134,7 +134,7 @@ function consultar_datos_h(id_paciente = '', nombres = '') {
                         data: null,
                         render: function (data, type, item) {
                             if (item.sa_conp_tipo_consulta == 'consulta') {
-                                return '<div class="badge rounded-pill text-success bg-light-success p-2 text-uppercase px-3">' + item.sa_conp_tipo_consulta + '</div>';
+                                return '<div class="badge rounded-pill text-success bg-light-success p-2 text-uppercase px-3">' + ('Atención médica') + '</div>';
                             } else {
                                 return '<div class="badge rounded-pill text-info bg-light-info p-2 text-uppercase px-3">' + item.sa_conp_tipo_consulta + '</div>';
                             }
@@ -172,7 +172,7 @@ function generarJSON() {
 
     var sa_examen_fisico_regional_obs = $('#sa_examen_fisico_regional_obs').val();
 
-    
+
 
     //1 Piel
     agregarCampo(datos.Piel = {}, 'a', 'chx_Cicatrices', 'Cicatrices');
@@ -236,7 +236,7 @@ function generarJSON() {
 
     //13 Neurológico
     agregarCampo(datos.Neurológico = {}, 'a', 'chx_Fuerza', 'Fuerza');
-    agregarCampo(datos.Neurológico, 'b', 'chx_Sencibilidad', 'Sencibilidad');
+    agregarCampo(datos.Neurológico, 'b', 'chx_Sensibilidad', 'Sensibilidad');
     agregarCampo(datos.Neurológico, 'c', 'chx_Marcha', 'Marcha');
     agregarCampo(datos.Neurológico, 'd', 'chx_Reflejos', 'Reflejos');
 

@@ -152,6 +152,7 @@ class ficha_MedicaC
             array('campo' => 'sa_fice_pregunta_5_obs', 'dato' => $parametros['sa_fice_pregunta_5_obs']),
             //Este campo es para que valide que ya esta hecha la ficha medica
             array('campo' => 'sa_fice_estado_realizado', 'dato' => 1),
+            array('campo' => 'sa_fice_medicamentos_alergia', 'dato' => $parametros['sa_fice_medicamentos_alergia']),
         );
 
         if ($parametros['sa_fice_id'] == '') {

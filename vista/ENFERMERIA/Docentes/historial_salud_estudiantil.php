@@ -22,7 +22,7 @@ if ($id != null && $id != '') {
         //Queda por verificar si se usa de esta forma
         setInterval(function() {
             // Mostrar el indicador de carga antes de la actualización
-        
+
 
             /*if (tabla_consultas) {
                 tabla_consultas.destroy(); // Destruir la instancia existente del DataTable
@@ -107,7 +107,7 @@ if ($id != null && $id != '') {
                         data: null,
                         render: function(data, type, item) {
                             if (item.sa_conp_tipo_consulta == 'consulta') {
-                                return '<div class="badge rounded-pill text-success bg-light-success p-2 text-uppercase px-3">' + (item.sa_conp_tipo_consulta).toUpperCase() + '</div>';
+                                return '<div class="badge rounded-pill text-success bg-light-success p-2 text-uppercase px-3">' + ('Atención médica').toUpperCase() + '</div>';
                             } else {
                                 return '<div class="badge rounded-pill text-info bg-light-info p-2 text-uppercase px-3">' + (item.sa_conp_tipo_consulta).toUpperCase() + '</div>';
                             }
@@ -257,7 +257,7 @@ if ($id != null && $id != '') {
 
                                                     <h5 class="card-title fw-bold">Filtros</h5>
                                                     <h6>
-                                                        <?php 
+                                                        <?php
                                                         /*echo('<pre>');
                                                         var_dump($_SESSION);
                                                         echo('</pre>');*/

@@ -10,6 +10,8 @@
         tablas();
 
         formula_estimar_peso_femenino(18, 40, 37, 'Masculino');
+
+        examen_buiquimimos();
     });
 
     function smartwizardFormularios(formulario) {
@@ -170,7 +172,7 @@
         var ddl_tipo_ejercicio = $('#ddl_tipo_ejercicio').val();
         var txt_tiempo_ejercicio = $('#txt_tiempo_ejercicio').val();
         var txt_dias_xsemana = $('#txt_dias_xsemana').val();
-        var txt_peso_actual = $('#txt_peso_actual').val();
+        var txt_peso = $('#txt_peso').val();
         var txt_talla = $('#txt_talla').val();
         var txt_edad = $('#txt_edad').val();
         var txt_peso_usual = $('#txt_peso_usual').val();
@@ -205,7 +207,7 @@
             'ddl_tipo_ejercicio': ddl_tipo_ejercicio,
             'txt_tiempo_ejercicio': txt_tiempo_ejercicio,
             'txt_dias_xsemana': txt_dias_xsemana,
-            'txt_peso_actual': txt_peso_actual,
+            'txt_peso': txt_peso,
             'txt_talla': txt_talla,
             'txt_edad': txt_edad,
             'txt_peso_usual': txt_peso_usual,
@@ -234,8 +236,85 @@
         console.log(parametros);
     }
 
-    function insertar() {
+    function examen_buiquimimos() {
+        $.ajax({
+            data: {
+               
+            },
+            url: '../controlador/RED_CONSULTORIOS/interm_t_examen_examenC.php?listar=true',
+            type: 'post',
+            dataType: 'json',
+            success: function(response) {
+                console.log(response);
 
+                // Limpiar el contenido existente en el div
+                $('#buiquimimos').empty();
+
+                // Iterar sobre los datos recibidos y crear elementos de formulario
+                $.each(response, function(index, item) {
+                    // Crear un nuevo elemento div con la clase "row mb-2"
+                    var divRow = $('<div>').addClass('row mb-2');
+
+                    // Crear un nuevo elemento label con la clase "col-sm-3 col-form-label text-end fw-bold"
+                    var label = $('<label>').addClass('col-sm-3 col-form-label text-end fw-bold').html(item.ex_descripcion + ' <span class="text-danger">*</span>');
+
+                    // Crear un nuevo elemento div con la clase "col-sm-2"
+                    var divCol1 = $('<div>').addClass('col-sm-2');
+
+                    // Crear un nuevo elemento input de tipo texto con la clase "form-control form-control-sm" y asignar el name y id
+                    var input1 = $('<input>').attr({
+                        type: 'text',
+                        class: 'form-control form-control-sm',
+                        name: item.t_ex_descripcion + '[]',
+                        id: item.itee_id
+                    });
+
+                    var inputHidden = $('<input>').attr({
+                        type: 'hidden',
+                        name: item.itee_id + '123' + item.ex_name_input,
+                        id: item.itee_id + '123' + item.ex_name_input
+                    });
+
+                    // Crear un segundo div y un segundo input similar al primero para el valor VR
+                    var divCol2 = $('<div>').addClass('col-sm-2');
+
+                    var input2 = $('<input>').attr({
+                        type: 'text',
+                        class: 'form-control form-control-sm',
+                        name: item.ex_name_input + '_vr',
+                        id: item.ex_name_input + '_vr'
+                    });
+
+                    // Agregar los elementos creados al divRow
+                    divRow.append(label, divCol1.append(input1), divCol1.append(inputHidden), divCol2.append(input2));
+
+                    //console.log(divRow);
+
+                    // Agregar divRow al div "buiquimimos"
+                    $('#buiquimimos').append(divRow);
+                });
+            }
+        });
+    }
+
+    function guardarDatos() {
+        // Crear un objeto para almacenar los datos a enviar al servidor
+        var datos = {};
+
+        // Iterar sobre los elementos de entrada del formulario
+        $('#buiquimimos input[name^="bioquimico"]').each(function(index, input) { 
+        // Obtener el ID del input
+        var id = $(input).attr('id');
+
+        // Obtener el valor del input
+        var valor = $(input).val();
+
+        // Agregar el par ID-Valor al objeto datos
+        datos[id] = valor;
+    });
+
+
+        console.log(datos);
     }
 
     /******************************************************************/
@@ -277,10 +356,6 @@
 
         return peso;
     }
-
-    
-
-
 </script>
 
 <div class="page-wrapper">
@@ -455,9 +530,9 @@
                                     <div>
 
                                         <div class="row mb-2">
-                                            <label for="txt_peso_actual" class="col-sm-3 col-form-label text-end fw-bold">Peso Actual <label class="text-danger">*</label></label>
+                                            <label for="txt_peso" class="col-sm-3 col-form-label text-end fw-bold">Peso Actual <label class="text-danger">*</label></label>
                                             <div class="col-sm-3">
-                                                <input type="text" class="form-control form-control-sm" name="txt_peso_actual" id="txt_peso_actual">
+                                                <input type="text" class="form-control form-control-sm" name="txt_peso" id="txt_peso">
                                             </div>
                                         </div>
 
@@ -517,88 +592,16 @@
                                     <h3>Bioquímicos</h3>
 
                                     <!-- Bioquímicos -->
-                                    <div>
+                                    <div id="buiquimimos"></div>
 
-                                        <div class="row mb-2">
-                                            <label for="txt_linfocitos" class="col-sm-3 col-form-label text-end fw-bold">Linfocitos <label class="text-danger">*</label></label>
-                                            <div class="col-sm-2">
-                                                <input type="text" class="form-control form-control-sm" name="txt_linfocitos" id="txt_linfocitos">
-                                            </div>
-                                            <div class="col-sm-2">
-                                                <input type="text" class="form-control form-control-sm" name="txt_linfocitos_vr" id="txt_linfocitos_vr">
-                                            </div>
-                                        </div>
+                                    <div class="modal-footer pt-4" id="prueba">
 
-                                        <div class="row mb-2">
-                                            <label for="txt_bun" class="col-sm-3 col-form-label text-end fw-bold">BUN <label class="text-danger">*</label></label>
-                                            <div class="col-sm-2">
-                                                <input type="text" class="form-control form-control-sm" name="txt_bun" id="txt_bun">
-                                            </div>
-                                            <div class="col-sm-2">
-                                                <input type="text" class="form-control form-control-sm" name="txt_bun_vr" id="txt_bun_vr">
-                                            </div>
-                                        </div>
-
-                                        <div class="row mb-2">
-                                            <label for="txt_glucosa" class="col-sm-3 col-form-label text-end fw-bold">Glucosa <label class="text-danger">*</label></label>
-                                            <div class="col-sm-2">
-                                                <input type="text" class="form-control form-control-sm" name="txt_glucosa" id="txt_glucosa">
-                                            </div>
-                                            <div class="col-sm-2">
-                                                <input type="text" class="form-control form-control-sm" name="txt_glucosa_vr" id="txt_glucosa_vr">
-                                            </div>
-                                        </div>
-
-                                        <div class="row mb-2">
-                                            <label for="txt_colesterol_tot" class="col-sm-3 col-form-label text-end fw-bold">Colesterol Total <label class="text-danger">*</label></label>
-                                            <div class="col-sm-2">
-                                                <input type="text" class="form-control form-control-sm" name="txt_colesterol_tot" id="txt_colesterol_tot">
-                                            </div>
-                                            <div class="col-sm-2">
-                                                <input type="text" class="form-control form-control-sm" name="txt_colesterol_tot_vr" id="txt_colesterol_tot_vr">
-                                            </div>
-                                        </div>
-
-                                        <div class="row mb-2">
-                                            <label for="txt_cLDL" class="col-sm-3 col-form-label text-end fw-bold">cLDL <label class="text-danger">*</label></label>
-                                            <div class="col-sm-2">
-                                                <input type="text" class="form-control form-control-sm" name="txt_cLDL" id="txt_cLDL">
-                                            </div>
-                                            <div class="col-sm-2">
-                                                <input type="text" class="form-control form-control-sm" name="txt_cLDL_vr" id="txt_cLDL_vr">
-                                            </div>
-                                        </div>
-                                        <div class="row mb-2">
-                                            <label for="txt_cHDL" class="col-sm-3 col-form-label text-end fw-bold">cHDL <label class="text-danger">*</label></label>
-                                            <div class="col-sm-2">
-                                                <input type="text" class="form-control form-control-sm" name="txt_cHDL" id="txt_cHDL">
-                                            </div>
-                                            <div class="col-sm-2">
-                                                <input type="text" class="form-control form-control-sm" name="txt_cHDL_vr" id="txt_cHDL_vr">
-                                            </div>
-                                        </div>
-
-                                        <div class="row mb-2">
-                                            <label for="txt_trigliceridos" class="col-sm-3 col-form-label text-end fw-bold">Triglicéridos <label class="text-danger">*</label></label>
-                                            <div class="col-sm-2">
-                                                <input type="text" class="form-control form-control-sm" name="txt_trigliceridos" id="txt_trigliceridos">
-                                            </div>
-                                            <div class="col-sm-2">
-                                                <input type="text" class="form-control form-control-sm" name="txt_trigliceridos_vr" id="txt_trigliceridos_vr">
-                                            </div>
-                                        </div>
-
-                                        <div class="row mb-2">
-                                            <label for="txt_acido_urico" class="col-sm-3 col-form-label text-end fw-bold">Acido Úrico <label class="text-danger">*</label></label>
-                                            <div class="col-sm-2">
-                                                <input type="text" class="form-control form-control-sm" name="txt_acido_urico" id="txt_acido_urico">
-                                            </div>
-                                            <div class="col-sm-2">
-                                                <input type="text" class="form-control form-control-sm" name="txt_acido_urico_vr" id="txt_acido_urico_vr">
-                                            </div>
-                                        </div>
+                                        <button class="btn btn-primary btn-sm px-2 m-1" onclick="guardarDatos()" type="button"><i class='bx bx-pause-circle'></i> Guardar</button>
 
                                     </div>
+
+
+
                                 </div>
 
                                 <div id="con-4-nut" class="tab-pane" role="tabpanel" aria-labelledby="con-4-nut">

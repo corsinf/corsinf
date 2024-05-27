@@ -92,7 +92,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         });
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        $('#tipo_farmacologia_presentacion').on('select2:select', function(e) {
+        //Se le integro en la parte del on del select
+        /*$('#tipo_farmacologia_presentacion').on('select2:select', function(e) {
             var data = e.params.data.data;
             if ($('#tipo_farmacologia').val() == 'medicamentos') {
                 $('#stock_farmacologia').val(data['sa_cmed_stock']);
@@ -100,7 +101,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $('#stock_farmacologia').val(data['sa_cins_stock']);
             }
             //console.log(data);
-        });
+        });*/
 
     });
 
@@ -119,8 +120,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $('#stock_farmacologia').val('');
         $('#cantidad_farmacologia').val('');
         $('#tipo_farmacologia').val('');
-        $('#tipo_farmacologia_presentacion').empty();
+        var select = $('#tipo_farmacologia_presentacion');
 
+        // Verificar si el select está usando Select2 antes de destruir
+        if (select.hasClass('select2-hidden-accessible')) {
+            // Destruir la instancia de Select2
+            select.select2('destroy');
+        }
+
+        // Agrega la opción predeterminada
+        select.html('<option selected disabled> -- Selecciona una opción -- </option>');
     }
 
 
@@ -1222,9 +1231,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                                                     <input type="checkbox" class="custom-control-input" id="chx_Visceras">
                                                                                 </td>
 
-                                                                                <th class="table-primary text-end">b. Sencibilidad</th>
+                                                                                <th class="table-primary text-end">b. Sensibilidad</th>
                                                                                 <td>
-                                                                                    <input type="checkbox" class="custom-control-input" id="chx_Sencibilidad">
+                                                                                    <input type="checkbox" class="custom-control-input" id="chx_Sensibilidad">
                                                                                 </td>
 
                                                                             </tr>
@@ -1544,10 +1553,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                                         <option selected disabled>-- Seleccione --</option>
                                                                     </select>
                                                                 </div>
+
+                                                                <input type="hidden" name="sa_det_fice_id_cmed_cins" id="sa_det_fice_id_cmed_cins">
+                                                                <input type="hidden" name="sa_det_fice_tipo" id="sa_det_fice_tipo">
+
                                                                 <div class="col-md-1">
                                                                     <label for="Stock_farmacologia" class="form-label fw-bold">Stock </label>
                                                                     <input type="text" name="stock_farmacologia" id="stock_farmacologia" readonly class="form-control form-control-sm solo_numeros">
                                                                 </div>
+
                                                                 <div class="col-md-1">
                                                                     <label for="cantidad_farmacologia" class="form-label fw-bold">Cant <label style="color: red;">*</label> </label>
                                                                     <input type="number" name="cantidad_farmacologia" id="cantidad_farmacologia" class="form-control form-control-sm solo_numeros" min="1">

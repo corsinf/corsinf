@@ -361,7 +361,7 @@ if (isset($_GET['paralelo'])) {
                                     data: null,
                                     render: function(data, type, item) {
                                         if (item.sa_conp_tipo_consulta == 'consulta') {
-                                            return '<div class="badge rounded-pill text-success bg-light-success p-2 text-uppercase px-3">' + item.sa_conp_tipo_consulta + '</div>';
+                                            return '<div class="badge rounded-pill text-success bg-light-success p-2 text-uppercase px-3">' + ('Atención médica') + '</div>';
                                         } else {
                                             return '<div class="badge rounded-pill text-info bg-light-info p-2 text-uppercase px-3">' + item.sa_conp_tipo_consulta + '</div>';
                                         }

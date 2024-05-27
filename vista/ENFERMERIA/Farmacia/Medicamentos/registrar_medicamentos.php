@@ -14,10 +14,13 @@ if (isset($_GET['id'])) {
   $(document).ready(function() {
     var id = '<?php echo $id; ?>';
 
+    inicializarInputs()
+
     //alert(id);
 
     if (id != '') {
       datos_col(id);
+      $('#sa_cmed_stock').prop('disabled', true);
     }
 
   });
@@ -46,6 +49,7 @@ if (isset($_GET['id'])) {
         $('#sa_cmed_tratamientos').val(response[0].sa_cmed_tratamientos);
         $('#sa_cmed_uso').val(response[0].sa_cmed_uso);
         $('#sa_cmed_observaciones').val(response[0].sa_cmed_observaciones);
+        $('#sa_cmed_nombre_comercial').val(response[0].sa_cmed_nombre_comercial);
       }
     });
   }
@@ -65,6 +69,8 @@ if (isset($_GET['id'])) {
     var sa_cmed_tratamientos = $('#sa_cmed_tratamientos').val();
     var sa_cmed_uso = $('#sa_cmed_uso').val();
     var sa_cmed_observaciones = $('#sa_cmed_observaciones').val();
+    var sa_cmed_nombre_comercial = $('#sa_cmed_nombre_comercial').val();
+
 
     var parametros = {
       'sa_cmed_id': sa_cmed_id,
@@ -81,10 +87,11 @@ if (isset($_GET['id'])) {
       'sa_cmed_tratamientos': sa_cmed_tratamientos,
       'sa_cmed_uso': sa_cmed_uso,
       'sa_cmed_observaciones': sa_cmed_observaciones,
+      'sa_cmed_nombre_comercial': sa_cmed_nombre_comercial,
     }
 
     if (sa_cmed_id == '') {
-      if (sa_cmed_concentracion == '') {
+      if (sa_cmed_presentacion == '') {
         Swal.fire({
           icon: 'error',
           title: 'Oops...',
@@ -95,7 +102,7 @@ if (isset($_GET['id'])) {
         insertar(parametros)
       }
     } else {
-      if (sa_cmed_concentracion == '') {
+      if (sa_cmed_presentacion == '') {
         Swal.fire({
           icon: 'error',
           title: 'Oops...',
@@ -174,6 +181,23 @@ if (isset($_GET['id'])) {
       }
     });
   }
+
+  function inicializarInputs() {
+    $('#sa_cmed_concentracion_inputs').hide();
+    $('#sa_cmed_presentacion_inputs').show();
+    $('#sa_cmed_nombre_comercial_inputs').show();
+    $('#sa_cmed_dosis_inputs').hide();
+    $('#sa_cmed_serie_inputs').hide();
+    $('#sa_cmed_lote_inputs').hide();
+    $('#sa_cmed_caducidad_inputs').show();
+    $('#sa_cmed_minimos_inputs').show();
+    $('#sa_cmed_stock_inputs').show();
+    $('#sa_cmed_movimiento_inputs').hide();
+    $('#sa_cmed_contraindicacion_inputs').hide();
+    $('#sa_cmed_tratamientos_inputs').hide();
+    $('#sa_cmed_uso_inputs').hide();
+    $('#sa_cmed_observaciones_inputs').hide();
+  }
 </script>
 
 
@@ -235,77 +259,84 @@ if (isset($_GET['id'])) {
 
               <input type="hidden" name="sa_cmed_id" id="sa_cmed_id">
 
-              <div class="row pt-3">
-                <div class="col-6">
+              <div class="row pt-3" id="sa_cmed_concentracion_inputs">
+                <div class="col-12">
                   <label for="" class="form-label">Concentración <label style="color: red;">*</label> </label>
                   <input type="text" class="form-control form-control-sm" name="sa_cmed_concentracion" id="sa_cmed_concentracion">
                 </div>
+              </div>
 
-                <div class="col-6">
-                  <label for="" class="form-label">Presentación <label style="color: red;">*</label> </label>
+              <div class="row pt-3" id="sa_cmed_presentacion_inputs">
+                <div class="col-12">
+                  <label for="" class="form-label">Presentación (Nombre del Medicamentos) <label style="color: red;">*</label> </label>
                   <input type="text" class="form-control form-control-sm" name="sa_cmed_presentacion" id="sa_cmed_presentacion">
                 </div>
               </div>
 
+
+              <div class="row pt-3" id="sa_cmed_nombre_comercial_inputs">
+                <div class="col-12">
+                  <label for="" class="form-label">Nombre Comercial <label style="color: red;">*</label> </label>
+                  <input type="text" class="form-control form-control-sm" name="sa_cmed_nombre_comercial" id="sa_cmed_nombre_comercial">
+                </div>
+              </div>
+
               <div class="row pt-3">
-                <div class="col-3">
+                <div class="col-3" id="sa_cmed_dosis_inputs">
                   <label for="" class="form-label">Dosis <label style="color: red;">*</label> </label>
                   <input type="text" class="form-control form-control-sm" name="sa_cmed_dosis" id="sa_cmed_dosis">
                 </div>
-                <div class="col-3">
+                <div class="col-3" id="sa_cmed_serie_inputs">
                   <label for="" class="form-label">Serie <label style="color: red;">*</label> </label>
                   <input type="text" class="form-control form-control-sm" name="sa_cmed_serie" id="sa_cmed_serie">
                 </div>
-                <div class="col-3">
+                <div class="col-3" id="sa_cmed_lote_inputs">
                   <label for="" class="form-label">Lote <label style="color: red;">*</label> </label>
                   <input type="text" class="form-control form-control-sm" name="sa_cmed_lote" id="sa_cmed_lote">
                 </div>
-                <div class="col-3">
+                <div class="col-3" id="sa_cmed_caducidad_inputs">
                   <label for="" class="form-label">Caducidad <label style="color: red;">*</label> </label>
                   <input type="date" class="form-control form-control-sm" name="sa_cmed_caducidad" id="sa_cmed_caducidad">
                 </div>
               </div>
 
               <div class="row pt-3">
-                <div class="col-4">
+                <div class="col-4" id="sa_cmed_minimos_inputs">
                   <label for="" class="form-label">Mínimos <label style="color: red;">*</label> </label>
                   <input type="number" class="form-control form-control-sm" name="sa_cmed_minimos" id="sa_cmed_minimos">
                 </div>
-                <div class="col-4">
+                <div class="col-4" id="sa_cmed_stock_inputs">
                   <label for="" class="form-label">Stock <label style="color: red;">*</label> </label>
                   <input type="number" class="form-control form-control-sm" name="sa_cmed_stock" id="sa_cmed_stock">
                 </div>
-                <div class="col-4">
+                <div class="col-4" id="sa_cmed_movimiento_inputs">
                   <label for="" class="form-label">Movimiento <label style="color: red;">*</label> </label>
                   <input type="number" class="form-control form-control-sm" name="sa_cmed_movimiento" id="sa_cmed_movimiento">
                 </div>
               </div>
 
-              <div class="row pt-3">
+              <div class="row pt-3" id="sa_cmed_contraindicacion_inputs">
                 <div class="col-12">
                   <label for="" class="form-label">Contraindicación <label style="color: red;">*</label> </label>
                   <input type="text" class="form-control form-control-sm" name="sa_cmed_contraindicacion" id="sa_cmed_contraindicacion">
-
                 </div>
               </div>
 
-              <div class="row pt-3">
+              <div class="row pt-3" id="sa_cmed_tratamientos_inputs">
                 <div class="col-12">
                   <label for="" class="form-label">Tratamiento <label style="color: red;">*</label> </label>
                   <input type="text" class="form-control form-control-sm" name="sa_cmed_tratamientos" id="sa_cmed_tratamientos">
-
-
                 </div>
               </div>
 
-              <div class="row pt-3">
+              <div class="row pt-3" id="sa_cmed_uso_inputs">
                 <div class="col-12">
                   <label for="" class="form-label">Uso <label style="color: red;">*</label> </label>
                   <input type="text" class="form-control form-control-sm" name="sa_cmed_uso" id="sa_cmed_uso">
                 </div>
               </div>
 
-              <div class="row pt-3">
+              <div class="row pt-3" id="sa_cmed_observaciones_inputs">
                 <div class="col-12">
                   <label for="" class="form-label">Observaciones <label style="color: red;">*</label> </label>
                   <input type="text" class="form-control form-control-sm" name="sa_cmed_observaciones" id="sa_cmed_observaciones">

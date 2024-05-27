@@ -412,7 +412,7 @@
                 <div class="card-body">
                   <div class="d-flex align-items-center">
                     <div>
-                      <p class="mb-0 text-secondary">Agenda</p>
+                      <p class="mb-0 text-secondary">Atenciones Médicas Pendientes</p>
                       <h4 class="my-1" id="lbl_agenda">0</h4>
                     </div>
                     <div class="widgets-icons bg-light-success text-success ms-auto"><i class='bx bx-notepad'></i>
@@ -427,7 +427,7 @@
                 <div class="card-body">
                   <div class="d-flex align-items-center">
                     <div>
-                      <p class="mb-0 text-secondary">Consultas/Certificados</p>
+                      <p class="mb-0 text-secondary">Atenciones Médicas Realizadas</p>
                       <h4 class="my-1" id="lbl_consultas">0</h4>
                     </div>
                     <div class="widgets-icons bg-light-success text-success ms-auto"><i class='bx bxs-user-check'></i>
@@ -468,7 +468,7 @@
                   <div class="card-body">
                     <div class="d-flex align-items-center">
                       <div>
-                        <p class="mb-0 text-secondary fw-bold">Agendamiento</p>
+                        <p class="mb-0 text-secondary fw-bold">Triage</p>
                         <h4 class="my-1" id="">&nbsp;</h4>
                         <!-- <p class="mb-0 font-13 text-success"><i class="bx bxs-up-arrow align-middle"></i>$34 from last week</p> -->
                       </div>
@@ -501,7 +501,7 @@
                 <div class="card-body">
                   <div class="d-flex align-items-center">
                     <div>
-                      <p class="mb-0 text-secondary">Consultas/Certificados</p>
+                      <p class="mb-0 text-secondary">Atenciones Médicas</p>
                       <h4 class="my-1" id="lbl_consultas">0</h4>
                       <!-- <p class="mb-0 font-13 text-success"><i class="bx bxs-up-arrow align-middle"></i>$34 from last week</p> -->
                     </div>

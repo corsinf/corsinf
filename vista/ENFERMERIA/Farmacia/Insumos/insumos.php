@@ -22,16 +22,11 @@
                     }
                 },
                 {
-                    data: 'sa_cins_lote'
+                    data: 'sa_cins_nombre_comercial'
                 },
-                {
-                    data: 'sa_cins_minimos'
-                },
+
                 {
                     data: 'sa_cins_stock'
-                },
-                {
-                    data: 'sa_cins_movimiento'
                 },
             ]
         });
@@ -92,11 +87,9 @@
                                             <thead>
                                                 <tr>
                                                     <th>#</th>
-                                                    <th>Concentración</th>
-                                                    <th>Lote</th>
-                                                    <th>Mínimos</th>
+                                                    <th>NOMBRE DEL MEDICAMENTO</th>
+                                                    <th>NOMBRE COMERCIAL</th>
                                                     <th>Stock</th>
-                                                    <th>Movimiento</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
