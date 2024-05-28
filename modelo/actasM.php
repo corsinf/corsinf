@@ -55,7 +55,7 @@ class actasM
 		$datos =  $this->db->datos($sql);
 		if(count($datos)==0)
 		{
-			$sql2 = "INSERT INTO SECUENCIALES (DETALLE,NUMERO)VALUES('".$query."',1)";
+			$sql2 = "INSERT INTO SECUENCIALES (DETALLE,NUMERO)VALUES('".$query."',1,1)";
 			$this->db->sql_string($sql2);
 			$datos =  $this->db->datos($sql);
 		}

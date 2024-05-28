@@ -16,38 +16,37 @@ class db
 	private $puerto;
 	function __construct()
 	{
-		// $this->usuario = "sa";
-		// $this->password = "Tango456";  // en mi caso tengo contraseña pero en casa caso introducidla aquí.
-		// $this->servidor = "186.4.219.172, 1487";
-		// $this->database = "PUCE_V3";
-		// $this->database = "PUCE 2.0";
-
-		// $this->usuario = "";
-		// $this->password = "";  // en mi caso tengo contraseña pero en casa caso introducidla aquí.
-		// $this->servidor = "DESKTOP-RSN9E39\SQLEXPRESS";
-		// $this->database = "LISTA_EMPRESAS";
-		// $this->tipo_base = '';
-		// $this->puerto = '';
-
+		
 		$this->usuario =  '';
 		$this->password = '';
+		$this->puerto = '';
 	}
 
 	function parametros_conexion($master = false)
 	{
+
+		$this->usuario =  '';
+		$this->password = '';
+		$this->puerto = '';
 		if (!$master) {
 			if (isset($_SESSION['INICIO']['ID_EMPRESA'])) {
+
 				$_SESSION['INICIO']['ULTIMO_ACCESO'] = time();
 				$this->servidor = $_SESSION['INICIO']['IP_HOST'];
 				$this->database = $_SESSION['INICIO']['BASEDATO'];
-				if ($_SESSION['INICIO']['USUARIO_DB'] != '') {
+				if ($_SESSION['INICIO']['USUARIO_DB'] != '' && $_SESSION['INICIO']['USUARIO_DB']!=null) {
+
+					// print_r($_SESSION['INICIO']['USUARIO_DB']);die();
 					$this->usuario =  $_SESSION['INICIO']['USUARIO_DB'];
 				}
-				if ($_SESSION['INICIO']['PASSWORD_DB'] != '') {
+				if ($_SESSION['INICIO']['PASSWORD_DB'] != '' && $_SESSION['INICIO']['PASSWORD_DB']!=null) {
 					$this->password = $_SESSION['INICIO']['PASSWORD_DB'];
 				}
 				$this->tipo_base = $_SESSION['INICIO']['TIPO_BASE'];
-				$this->puerto =   $_SESSION['INICIO']['PUERTO_DB'];
+				if($_SESSION['INICIO']['PUERTO_DB']!='' && $_SESSION['INICIO']['PUERTO_DB']!=null)
+				{
+					$this->puerto =   ', '.$_SESSION['INICIO']['PUERTO_DB'];
+				}
 
 				// print_r($_SESSION['INICIO']);die();
 			} else {
@@ -79,10 +78,9 @@ class db
 	}
 
 	function conexion()
-	{
-		// print_r($this->database);die();
+	{		
 		try{
-		     $conn = new PDO("sqlsrv:Server=".$this->servidor . ', ' . $this->puerto.";Database=".$this->database, $this->usuario, $this->password);
+		     $conn = new PDO("sqlsrv:Server=".$this->servidor .''. $this->puerto.";Database=".$this->database, $this->usuario, $this->password);
 		     $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 		      return $conn;
 		    }	 
@@ -123,11 +121,12 @@ class db
 
 	function datos($sql, $master = false)
 	{
+
 		$this->parametros_conexion($master);
 		$conn = $this->conexion();
-		$result = array();
+		$result = array();		
 
-		// print_r($sql);die();
+		// print_r($sql);
 		try {
 			$stmt = $conn->prepare($sql);
     		$stmt->execute();
@@ -359,7 +358,6 @@ class db
 	function ejecutar_procesos_almacenados($sql, $parametros = false, $retorna = false, $master = false)
 	{
 		$this->parametros_conexion($master);
-		
 		$conn = $this->conexion();
 		$stmt = $conn->prepare($sql);
 		
@@ -374,6 +372,7 @@ class db
 			return 1;
 		} catch (Exception $e) {
 			$conn=null;
+			print_r($e);die();
 			return -1;			
 		}
 		
@@ -416,10 +415,21 @@ class db
 		if ($password == '') {
 			$password = '';
 		}
+		if($puerto !='')
+		{
+			$puerto = ', '.$puerto;
+		}else
+		{
+			$puerto = '';
+		}
+
+		 // print_r("sqlsrv:Server=".$servidor .''. $puerto.";Database=".$database.','.$usuario.','.$password);die();
 
 		try{
-		     $conn = new PDO("sqlsrv:Server=".$servidor . ', ' . $puerto.";Database=".$database, $usuario, $password);
+		     $conn = new PDO("sqlsrv:Server=".$servidor .''. $puerto.";Database=".$database, $usuario, $password);
 		     $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+		     // $conn->setAttribute(PDO::SQLSRV_ATTR_ENCODING, PDO::SQLSRV_ENCODING_UTF8);
+		     // print_r("conectado");die();
 		      return $conn;
 		    }	 
 		  catch(PDOException $e)
@@ -473,20 +483,60 @@ class db
 		}
 	}
 
+	function Generar_sp_db_terceros($database, $usuario, $password, $servidor, $puerto, $sql)
+	{
+		
+		$conn = $this->conexion_db_terceros($database, $usuario, $password, $servidor, $puerto);
+		try{
+			$conn->exec($sql);
+		   return 1;
+		} catch(Exception $ex) {
+		    return -1;
+			die(print_r(sqlsrv_errors(), true));
+		}
+
+		$conn->close();
+	}
+
+	function ejecutar_sp_db_terceros($database, $usuario, $password, $servidor, $puerto,$sql, $parametros = false, $retorna = false)
+	{
+		$conn = $this->conexion_db_terceros($database, $usuario, $password, $servidor, $puerto);
+		$stmt = $conn->prepare($sql);
+		$resultados = array();
+		
+		try {
+			if ($parametros) {
+				$stmt->execute($parametros);
+			} else {
+				$stmt->execute();
+			}
+
+			if($retorna)
+			{
+				do {
+				    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+				        $resultados[] = $row;
+				    }
+				} while ($stmt->nextRowset());
+			}
+
+			$conn=null;
+			return 1;
+		} catch (Exception $e) {
+			$conn=null;
+			print_r($e);die();
+			return -1;			
+		}
+		
+
+	}
+
 	function datos_db_terceros($database, $usuario, $password, $servidor, $puerto, $sql)
 	{
 
 
 		$conn = $this->conexion_db_terceros($database, $usuario, $password, $servidor, $puerto);
 		$result = array();
-
-		// print_r($database);
-		// print_r($usuario);
-		// print_r($password);
-		// print_r($servidor);
-		// print_r($puerto);
-		// print_r($sql);
-		// die();
 
 		try {
 			$stmt = $conn->prepare($sql);

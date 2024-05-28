@@ -135,7 +135,7 @@ class licenciasC
 
 	function guardar_licencia($parametros)
 	{
-		// print_r($parametros['modulo']);die();
+		// print_r($parametros);die();
 		$datos = $this->modelo->lista_licencias($parametros['modulo'],0,$parametros['licencias']);
 		if(count($datos)==0)
 		{	// la licencia no se encontro
@@ -150,12 +150,21 @@ class licenciasC
 			$where[0]['dato'] = $datos[0]['Id_licencias'];
 
 			$this->modelo->update('LICENCIAS',$datosL,$where,1);
+			$empresa = $this->cod_global->lista_empresa($_SESSION['INICIO']['ID_EMPRESA']);
+			// print_r($empresa);die();
+			if($empresa[0]['Ip_host']==IP_MASTER)
+			{
+				 		// print_r($parametros['modulo']);die();
+					$destino =  $_SESSION['INICIO']['BASEDATO'];
+					$this->cod_global->Copiar_estructura($parametros['modulo'],$destino);
+					return $this->cod_global->generar_primera_vez($_SESSION['INICIO']['BASEDATO'],$_SESSION['INICIO']['ID_EMPRESA']);
 
-			// print_r($parametros['modulo']);die();
-			$destino =  $_SESSION['INICIO']['BASEDATO'];
-			$this->cod_global->Copiar_estructura($parametros['modulo'],$destino);
-
-			return $this->cod_global->generar_primera_vez($_SESSION['INICIO']['BASEDATO'],$_SESSION['INICIO']['ID_EMPRESA']);
+		 	}else{
+		 		$base_des = $_SESSION['INICIO']['BASEDATO'];
+		 		$this->cod_global->generar_primera_vez_terceros($empresa,$_SESSION['INICIO']['ID_EMPRESA']);
+				return	$this->cod_global->Copiar_estructura($parametros['modulo'],$base_des,1,$empresa);
+			
+		 	}
 
 
 		}

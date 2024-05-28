@@ -616,7 +616,7 @@
 
           <script>
             $(document).ready(function() {
-              id_representante = <?= $_SESSION['INICIO']['NO_CONCURENTE']; ?>;
+              id_representante = <?php echo $_SESSION['INICIO']['NO_CONCURENTE']; ?>;
               consultar_datos_estudiante_representante(id_representante)
               lista_estudiantes_atenciones();
             });

@@ -759,6 +759,8 @@ function para_ftp($nombre,$texto)
 			
 		 }
 
+		 // print_r('expression');die();
+
 
 		 //genera tablas que comprate los diferentes modulos
 		 $parametros1 = array($id_empresa
@@ -800,9 +802,11 @@ function para_ftp($nombre,$texto)
 			$servidor = $empresa[0]['Ip_host'];
 			$puerto = $empresa[0]['Puerto_db'];
 
-			// print_r($sql);
+			// print_r($sql);die();
 			// print_r($database);
 			$datos = $this->db->sql_string_db_terceros($database, $usuario, $password, $servidor, $puerto,$sql);
+
+			// print_r('expression');die();
 
 
 		  	// $this->db->update('USUARIOS',$datos, $where);
@@ -872,8 +876,11 @@ function para_ftp($nombre,$texto)
 			
 		 }
 
+		 
+		$this->crear_sp_en_terceros($id_empresa,'Tablas_compartidas');	
+		$this->crear_sp_en_terceros($id_empresa,'GenerarTablasCompartidas');		
 		 //COPIAMOS EL PROCESO ALMACENADO QUE ES PARA COPIAR LAS TABLAS DE ACCESO
-		// $this->crear_sp_en_terceros($id_empresa,'CopiarEstructuraAccesosTerc');
+		$this->crear_sp_en_terceros($id_empresa,'CopiarEstructuraAccesosTerc');
 
 		 $empresaAC = $this->lista_empresa($id_empresa);
 		 
@@ -885,25 +892,32 @@ function para_ftp($nombre,$texto)
 		$puerto = $empresaAC[0]['Puerto_db'];
 
 
-		//ejecutamos el proceso almacenado
-		// print_r($res);die();
 		$db_origen = EMPRESA_MASTER;
 		$db_destino = $empresa[0]["Base_datos"];
+
+
+		 // print_r('expression');die();
+		
+
+		//ejecutamos el proceso almacenado y copiamos estructura de accesos
+		// print_r($res);die();
 		$parametros = array($db_origen,
 		    						$db_destino,
 		    						$id_empresa);
 		$sql = "EXEC CopiarEstructuraAccesosTerc @origen_bd = ?,@destino_bd = ?,@id_empresa = ?";
 		$res = $this->db->ejecutar_sp_db_terceros($database, $usuario, $password, $servidor, $puerto,$sql, $parametros);
 
-		 // print_r('expression');die();
+		 // print_r($res);die();
 
-		 //genera tablas que comprate los diferentes modulos
-		 // $parametros1 = array($id_empresa
-		 // 							 ,$db_destino);
-		 //  $sql = "EXEC GenerarTablasCompartidas  @id_empresa = ?,@db_destino = ?";
-		 //  $this->db->ejecutar_procesos_almacenados($sql,$parametros1,false,1);
+	
+		 $parametros2 = array($id_empresa
+		 							 ,$db_destino
+		 							 ,'1');
+		$sql = "EXEC GenerarTablasCompartidas  @id_empresa = ?,@db_destino = ?,@db_tercero=?";
+		$res = $this->db->ejecutar_sp_db_terceros($database, $usuario, $password, $servidor, $puerto,$sql, $parametros2);
 
 
+// print_r($res);die();
 		  $sql = "SELECT * FROM ACCESOS_EMPRESA WHERE Id_Empresa = '".$id_empresa."'";
 		  $usuarios = $this->db->datos($sql,1);
 

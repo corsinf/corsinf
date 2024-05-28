@@ -114,12 +114,15 @@
        {
          'empresa':empresa,
        } 
+
+       $('#myModal_espera').modal('show');
        $.ajax({
          data:  {parametros:parametros},
          url:   'controlador/loginC.php?empresa_seleccionada=true',
          type:  'post',
          dataType: 'json',        
            success:  function (response) {  
+       			$('#myModal_espera').modal('hide');
            	if(response.respuesta==2)
            	{
            		$('#lista_modulos_empresas').html(response.modulos);
@@ -129,6 +132,10 @@
            	{
            		iniciar_sesion(empresa);
            	}      
+         },
+         error:function(xhr, status, error)
+         {
+         	 $('#myModal_espera').modal('hide');
          }
        });
 
@@ -144,12 +151,14 @@
          'modulo':modulo,
          'licencia':licencia,
        } 
+       $('#myModal_espera').modal('show');
        $.ajax({
          data:  {parametros:parametros},
          url:   'controlador/loginC.php?registrar_licencia=true',
          type:  'post',
          dataType: 'json',        
            success:  function (response) {  
+           	$('#myModal_espera').modal('show');
            	if(response==-1)
            	{
            		Swal.fire('La licencian es erronea','','error');
@@ -157,6 +166,10 @@
            	{
            		Swal.fire('La licencian registrada','','success');
            	}
+         },
+         error:function(xhr, status, error)
+         {
+         	 $('#myModal_espera').modal('hide');
          }
        });
 

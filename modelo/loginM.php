@@ -96,9 +96,11 @@ class loginM
 			$sql.=" AND U.id_usuarios = ".$id;
 		}
 
-		// print_r($_SESSION);
+		// print_r($_SESSION['INICIO']);
 		// print_r($sql);die();
+
 		$datos = $this->db->datos($sql);
+		// print_r($datos);die();
 		return $datos;
 	}
 
