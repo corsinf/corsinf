@@ -183,20 +183,28 @@ if (isset($_GET['id'])) {
   }
 
   function inicializarInputs() {
-    $('#sa_cmed_concentracion_inputs').hide();
-    $('#sa_cmed_presentacion_inputs').show();
-    $('#sa_cmed_nombre_comercial_inputs').show();
-    $('#sa_cmed_dosis_inputs').hide();
-    $('#sa_cmed_serie_inputs').hide();
-    $('#sa_cmed_lote_inputs').hide();
-    $('#sa_cmed_caducidad_inputs').show();
-    $('#sa_cmed_minimos_inputs').show();
-    $('#sa_cmed_stock_inputs').show();
-    $('#sa_cmed_movimiento_inputs').hide();
-    $('#sa_cmed_contraindicacion_inputs').hide();
-    $('#sa_cmed_tratamientos_inputs').hide();
-    $('#sa_cmed_uso_inputs').hide();
-    $('#sa_cmed_observaciones_inputs').hide();
+    $.ajax({
+      url: '../controlador/v_med_insC.php?listar_v_medicamentos=true',
+      type: 'post',
+      dataType: 'json',
+      success: function(response) {
+        console.log(response);
+
+        // Verificar si la respuesta contiene datos
+        if (response && response.length > 0) {
+          response.forEach(function(medicamento) {
+
+            if (medicamento.sa_vmi_estado == 1) {
+              $('#' + medicamento.sa_vmi_id_input).show();
+            } else {
+              $('#' + medicamento.sa_vmi_id_input).hide();
+            }
+
+          });
+
+        }
+      },
+    });
   }
 </script>
 
@@ -259,14 +267,14 @@ if (isset($_GET['id'])) {
 
               <input type="hidden" name="sa_cmed_id" id="sa_cmed_id">
 
-              <div class="row pt-3" id="sa_cmed_concentracion_inputs">
+              <div class="row pt-3" id="sa_cmed_concentracion_inputs" style="display: none;">
                 <div class="col-12">
                   <label for="" class="form-label">Concentración <label style="color: red;">*</label> </label>
                   <input type="text" class="form-control form-control-sm" name="sa_cmed_concentracion" id="sa_cmed_concentracion">
                 </div>
               </div>
 
-              <div class="row pt-3" id="sa_cmed_presentacion_inputs">
+              <div class="row pt-3" id="sa_cmed_presentacion_inputs" style="display: none;">
                 <div class="col-12">
                   <label for="" class="form-label">Presentación (Nombre del Medicamentos) <label style="color: red;">*</label> </label>
                   <input type="text" class="form-control form-control-sm" name="sa_cmed_presentacion" id="sa_cmed_presentacion">
@@ -274,7 +282,7 @@ if (isset($_GET['id'])) {
               </div>
 
 
-              <div class="row pt-3" id="sa_cmed_nombre_comercial_inputs">
+              <div class="row pt-3" id="sa_cmed_nombre_comercial_inputs" style="display: none;">
                 <div class="col-12">
                   <label for="" class="form-label">Nombre Comercial <label style="color: red;">*</label> </label>
                   <input type="text" class="form-control form-control-sm" name="sa_cmed_nombre_comercial" id="sa_cmed_nombre_comercial">
@@ -282,61 +290,61 @@ if (isset($_GET['id'])) {
               </div>
 
               <div class="row pt-3">
-                <div class="col-3" id="sa_cmed_dosis_inputs">
+                <div class="col-3" id="sa_cmed_dosis_inputs" style="display: none;">
                   <label for="" class="form-label">Dosis <label style="color: red;">*</label> </label>
                   <input type="text" class="form-control form-control-sm" name="sa_cmed_dosis" id="sa_cmed_dosis">
                 </div>
-                <div class="col-3" id="sa_cmed_serie_inputs">
+                <div class="col-3" id="sa_cmed_serie_inputs" style="display: none;">
                   <label for="" class="form-label">Serie <label style="color: red;">*</label> </label>
                   <input type="text" class="form-control form-control-sm" name="sa_cmed_serie" id="sa_cmed_serie">
                 </div>
-                <div class="col-3" id="sa_cmed_lote_inputs">
+                <div class="col-3" id="sa_cmed_lote_inputs" style="display: none;">
                   <label for="" class="form-label">Lote <label style="color: red;">*</label> </label>
                   <input type="text" class="form-control form-control-sm" name="sa_cmed_lote" id="sa_cmed_lote">
                 </div>
-                <div class="col-3" id="sa_cmed_caducidad_inputs">
+                <div class="col-3" id="sa_cmed_caducidad_inputs" style="display: none;">
                   <label for="" class="form-label">Caducidad <label style="color: red;">*</label> </label>
                   <input type="date" class="form-control form-control-sm" name="sa_cmed_caducidad" id="sa_cmed_caducidad">
                 </div>
               </div>
 
               <div class="row pt-3">
-                <div class="col-4" id="sa_cmed_minimos_inputs">
+                <div class="col-4" id="sa_cmed_minimos_inputs" style="display: none;">
                   <label for="" class="form-label">Mínimos <label style="color: red;">*</label> </label>
                   <input type="number" class="form-control form-control-sm" name="sa_cmed_minimos" id="sa_cmed_minimos">
                 </div>
-                <div class="col-4" id="sa_cmed_stock_inputs">
+                <div class="col-4" id="sa_cmed_stock_inputs" style="display: none;">
                   <label for="" class="form-label">Stock <label style="color: red;">*</label> </label>
                   <input type="number" class="form-control form-control-sm" name="sa_cmed_stock" id="sa_cmed_stock">
                 </div>
-                <div class="col-4" id="sa_cmed_movimiento_inputs">
+                <div class="col-4" id="sa_cmed_movimiento_inputs" style="display: none;">
                   <label for="" class="form-label">Movimiento <label style="color: red;">*</label> </label>
                   <input type="number" class="form-control form-control-sm" name="sa_cmed_movimiento" id="sa_cmed_movimiento">
                 </div>
               </div>
 
-              <div class="row pt-3" id="sa_cmed_contraindicacion_inputs">
+              <div class="row pt-3" id="sa_cmed_contraindicacion_inputs" style="display: none;">
                 <div class="col-12">
                   <label for="" class="form-label">Contraindicación <label style="color: red;">*</label> </label>
                   <input type="text" class="form-control form-control-sm" name="sa_cmed_contraindicacion" id="sa_cmed_contraindicacion">
                 </div>
               </div>
 
-              <div class="row pt-3" id="sa_cmed_tratamientos_inputs">
+              <div class="row pt-3" id="sa_cmed_tratamientos_inputs" style="display: none;">
                 <div class="col-12">
                   <label for="" class="form-label">Tratamiento <label style="color: red;">*</label> </label>
                   <input type="text" class="form-control form-control-sm" name="sa_cmed_tratamientos" id="sa_cmed_tratamientos">
                 </div>
               </div>
 
-              <div class="row pt-3" id="sa_cmed_uso_inputs">
+              <div class="row pt-3" id="sa_cmed_uso_inputs" style="display: none;">
                 <div class="col-12">
                   <label for="" class="form-label">Uso <label style="color: red;">*</label> </label>
                   <input type="text" class="form-control form-control-sm" name="sa_cmed_uso" id="sa_cmed_uso">
                 </div>
               </div>
 
-              <div class="row pt-3" id="sa_cmed_observaciones_inputs">
+              <div class="row pt-3" id="sa_cmed_observaciones_inputs" style="display: none;">
                 <div class="col-12">
                   <label for="" class="form-label">Observaciones <label style="color: red;">*</label> </label>
                   <input type="text" class="form-control form-control-sm" name="sa_cmed_observaciones" id="sa_cmed_observaciones">

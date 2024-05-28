@@ -115,11 +115,6 @@
                             <section class="content">
                                 <div class="container-fluid">
 
-
-
-
-
-
                                     <br>
 
                                     <div class="table-responsive">

@@ -24,6 +24,8 @@ if (isset($_GET['pac_id'])) {
     //Proceso primero busca el id de la ficha en relacion al paciente
     cargar_datos_consultas(sa_pac_id);
 
+    cargar_datos_seguimiento(sa_pac_id)
+
   });
 
   function cargar_datos_paciente(sa_pac_id) {
@@ -40,6 +42,16 @@ if (isset($_GET['pac_id'])) {
         //Para el encabezado
         nombres = response[0].sa_pac_temp_primer_nombre + ' ' + response[0].sa_pac_temp_segundo_nombre;
         apellidos = response[0].sa_pac_temp_primer_apellido + ' ' + response[0].sa_pac_temp_segundo_apellido;
+        tabla = response[0].sa_pac_tabla;
+
+        if (tabla == 'estudiantes') {
+          $('#pnl_segumiento_personal').hide();
+        } else {
+          $('#pnl_segumiento_personal').show();
+
+          $('#pnl_seguimiento_li').show();
+          $('#pnl_seguimiento').show();
+        }
 
         $('#title_paciente').html(apellidos + " " + nombres);
       }
@@ -169,6 +181,60 @@ if (isset($_GET['pac_id'])) {
     //console.log(id_consulta);
     window.open('../vista/inicio.php?mod=7&acc=detalle_consulta&pdf_consulta=true&id_consulta=' + id_consulta + '&id_paciente=' + <?= $sa_pac_id; ?> + '&btn_regresar=admin' + '&tipo_consulta=' + tipo_consulta, '_blank');
   }
+
+  function seguimiento() {
+    var sa_pac_id = <?= ($sa_pac_id); ?>;
+    var url = '../vista/inicio.php?mod=7&acc=seguimientos_personal&id_paciente=' + sa_pac_id + '&btn_regresar=admin';
+    window.location.href = url;
+  }
+
+  function cargar_datos_seguimiento(id_paciente) {
+    // Hacer una llamada AJAX para obtener los datos de seguimiento
+    $.ajax({
+      url: '../controlador/seguimiento_personalC.php?listar_seguimiento=true',
+      type: 'post',
+      data: {
+        id: id_paciente
+      },
+      dataType: 'json',
+      success: function(response) {
+        // Inicializar DataTable con los datos recibidos
+        //console.log(response)
+
+        $('#tbl_seguimiento').DataTable({
+          destroy: true, // Destruir la tabla existente antes de recrearla
+          data: response, // Usar la respuesta del AJAX como datos
+          language: {
+            url: 'https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
+          },
+          responsive: true, // Datos de las consultas médicas
+          columns: [
+            // Definir las columnas
+            {
+              data: null,
+              render: function(data, type, item) {
+                if (item.sa_sep_fecha_creacion == null) {
+                  return '';
+                } else {
+                  return fecha_nacimiento_formateada(item.sa_sep_fecha_creacion) + ' / ' + obtener_hora_formateada_arr(item.sa_sep_fecha_creacion);
+                }
+              }
+            },
+            {
+              data: 'sa_sep_observacion',
+            },
+          ],
+          order: [
+            [0, 'desc'] // Ordenar por la segunda columna (índice 1) en orden descendente
+          ]
+        });
+
+      },
+      error: function() {
+        Swal.fire('Error', 'No se pudieron cargar los datos de seguimiento', 'error');
+      }
+    });
+  }
 </script>
 
 <div class="page-wrapper">
@@ -206,7 +272,8 @@ if (isset($_GET['pac_id'])) {
 
                   <h5 class="mb-0 text-primary">Historial de Atenciones Médicas del Paciente: <b id="title_paciente" class="text-success"></b></h5>
 
-                  <?php //print_r($_SESSION)//['INICIO']['USUARIO'])  //TIPO ?>
+                  <?php //print_r($_SESSION)//['INICIO']['USUARIO'])  //TIPO 
+                  ?>
 
                 </div>
               </div>
@@ -259,29 +326,91 @@ if (isset($_GET['pac_id'])) {
                       </div>
 
                     </div>
+
+                    <div class="col-auto" id="pnl_segumiento_personal" style="display: none;">
+
+                      <div class="card">
+                        <div class="card-body bg-primary">
+                          <button type="button" class="btn btn-primary btn-lg m-4" onclick="seguimiento()"> Seguimiento</button>
+                        </div>
+                      </div>
+
+                    </div>
                   </div>
 
                   <br>
 
-                  <div class="row">
-                    <div class="table-responsive">
-                      <table class="table table-striped responsive" id="tbl_consultas" style="width:100%">
-                        <thead>
-                          <tr>
-                            <th width="5%">Revisar</th>
-                            <th>Fecha de creación</th>
-                            <th>Fecha Agenda / Hora Desde/Hasta</th>
-                            <th>Permiso de Salida</th>
-                            <th>Tipo de Atención</th>
-                            <th width="10px">Estado</th>
-                          </tr>
-                        </thead>
-                        <tbody>
 
-                        </tbody>
-                      </table>
+
+                  <ul class="nav nav-tabs nav-success" role="tablist">
+                    <li class="nav-item" role="presentation">
+                      <a class="nav-link active" data-bs-toggle="tab" href="#pnl_am" role="tab" aria-selected="true">
+                        <div class="d-flex align-items-center">
+                          <div class="tab-icon"><i class='bx bx-file-find font-18 me-1'></i>
+                          </div>
+                          <div class="tab-title">Atenciones Médicas</div>
+                        </div>
+                      </a>
+                    </li>
+                    <li class="nav-item" role="presentation" id="pnl_seguimiento_li" style="display: none;">
+                      <a class="nav-link" data-bs-toggle="tab" href="#pnl_seguimiento" role="tab" aria-selected="false">
+                        <div class="d-flex align-items-center">
+                          <div class="tab-icon"><i class='bx bx-file-find font-18 me-1'></i>
+                          </div>
+                          <div class="tab-title">Seguimiento</div>
+                        </div>
+                      </a>
+                    </li>
+                  </ul>
+
+                  <div class="tab-content py-3">
+                    <div class="tab-pane fade show active" id="pnl_am" role="tabpanel">
+
+                      <div class="row">
+                        <div class="table-responsive">
+                          <table class="table table-striped responsive" id="tbl_consultas" style="width:100%">
+                            <thead>
+                              <tr>
+                                <th width="5%">Revisar</th>
+                                <th>Fecha de creación</th>
+                                <th>Fecha Agenda / Hora Desde/Hasta</th>
+                                <th>Permiso de Salida</th>
+                                <th>Tipo de Atención</th>
+                                <th width="10px">Estado</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="tab-pane fade" id="pnl_seguimiento" role="tabpanel" style="display: none;">
+
+                      <div class="row">
+                        <div class="table-responsive">
+                          <table class="table table-striped responsive" id="tbl_seguimiento" style="width:100%">
+                            <thead>
+                              <tr>
+                                <th width="10%">Fecha de creación</th>
+                                <th>Observación</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+
                     </div>
                   </div>
+
+
+
+
 
                 </div><!-- /.container-fluid -->
               </section>
