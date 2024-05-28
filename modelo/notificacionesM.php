@@ -50,15 +50,15 @@ class notificacionesM
             $sql .= " WHERE ntc.GLO_estado = 1";
 
             if ($tabla == 'docentes') {
-                $sql .= " AND doc.sa_doc_id = $id_tabla";
+                $sql .= " AND doc.sa_doc_id = '$id_tabla'";
             }
 
             if ($tabla == 'representantes') {
-                $sql .= " AND GLO_id_tabla = $id_tabla";
+                $sql .= " AND GLO_id_tabla = '$id_tabla'";
             }
 
             if ($rol == 'INSPECTOR') {
-                $sql .= " AND ntc.GLO_rol = $rol";
+                $sql .= " AND ntc.GLO_rol = '$rol'";
             }
 
 

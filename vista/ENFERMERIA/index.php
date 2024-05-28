@@ -324,6 +324,49 @@
 
         <?php if (
           $_SESSION['INICIO']['TIPO'] == 'DBA' ||
+          strtoupper($_SESSION['INICIO']['TIPO']) == 'INSPECTOR'
+        ) { ?>
+          <h6 class="mb-0 text-uppercase">Gestión Educativa</h6>
+          <hr>
+
+          <div class="row">
+
+            <div class="col-6 col-sm-6 col-md-4" id="" onclick="redireccionar('permisos_salida_est');">
+              <div class="card radius-10 shadow-card">
+                <div class="card-body">
+                  <div class="d-flex align-items-center">
+                    <div>
+                      <p class="mb-0 text-secondary">Permisos Estudiantes</p>
+                      <h4 class="my-1" id="">&nbsp;</h4>
+                    </div>
+                    <div class="widgets-icons bg-light-success text-success ms-auto"><i class='bx bx-group'></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-6 col-sm-6 col-md-4" id="" onclick="redireccionar('consultas_estudiantes');">
+              <div class="card radius-10 shadow-card">
+                <div class="card-body">
+                  <div class="d-flex align-items-center">
+                    <div>
+                      <p class="mb-0 text-secondary">Historial Consultas</p>
+                      <h4 class="my-1" id="">&nbsp;</h4>
+                    </div>
+                    <div class="widgets-icons bg-light-success text-success ms-auto"><i class='bx bx-group'></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+        <?php } ?>
+
+        <?php if (
+          $_SESSION['INICIO']['TIPO'] == 'DBA' ||
           strtoupper($_SESSION['INICIO']['TIPO']) == 'COMUNIDAD'  ||
           strtoupper($_SESSION['INICIO']['TIPO']) == 'ADMINISTRADOR'
         ) { ?>

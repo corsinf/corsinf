@@ -370,7 +370,7 @@ class consultasC
                         array('campo' => 'GLO_id_tabla', 'dato' => ''),
                         array('campo' => 'GLO_busqueda_especifica', 'dato' => ''),
                         array('campo' => 'GLO_desc_busqueda', 'dato' => 'Para listar todas las consultas de estudiantes'),
-                        array('campo' => 'GLO_link_redirigir', 'dato' => '../vista/inicio.php?acc=consultas'),
+                        array('campo' => 'GLO_link_redirigir', 'dato' => '../vista/inicio.php?acc=consultas_estudiantes'),
                         array('campo' => 'GLO_rol', 'dato' => 'INSPECTOR'),
                         array('campo' => 'GLO_observacion', 'dato' => ''),
                     );
@@ -573,7 +573,7 @@ class consultasC
                     array('campo' => 'GLO_id_tabla', 'dato' => ''),
                     array('campo' => 'GLO_busqueda_especifica', 'dato' => ''),
                     array('campo' => 'GLO_desc_busqueda', 'dato' => 'Para listar todas las consultas de estudiantes'),
-                    array('campo' => 'GLO_link_redirigir', 'dato' => '../vista/inicio.php?acc=consultas'),
+                    array('campo' => 'GLO_link_redirigir', 'dato' => '../vista/inicio.php?acc=consultas_estudiantes'),
                     array('campo' => 'GLO_rol', 'dato' => 'INSPECTOR'),
                     array('campo' => 'GLO_observacion', 'dato' => ''),
                 );

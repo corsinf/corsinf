@@ -236,6 +236,10 @@ if ($_GET['acc'] == 'consultas') {
 	include('ENFERMERIA/Consultas/consultas.php');
 }
 
+if ($_GET['acc'] == 'consultas_estudiantes') {
+	include('ENFERMERIA/Inspeccion/consultas_estudiantes.php');
+}
+
 if ($_GET['acc'] == 'detalle_consulta') {
 	include('ENFERMERIA/Consultas/detalle_consulta.php');
 }

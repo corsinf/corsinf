@@ -3,11 +3,10 @@
 <script type="text/javascript">
     $(document).ready(function() {
         cargar_tabla();
-        consultar_datos_comunidad_tabla();
     });
 
     function cargar_tabla() {
-        tabla = $('#txt_tabla').val();
+        tabla = 'estudiantes';
 
         txt_fecha_inicio_temp = $('#txt_fecha_inicio').val();
         txt_fecha_fin_temp = $('#txt_fecha_fin').val();
@@ -104,15 +103,6 @@
         });
     }
 
-    function buscar_paciente() {
-
-        if (tabla_consultas) {
-            tabla_consultas.destroy(); // Destruir la instancia existente del DataTable
-        }
-
-        cargar_tabla();
-    }
-
     function buscar_fechas() {
 
         if (tabla_consultas) {
@@ -123,26 +113,9 @@
 
     function ver_pdf(id_consulta, tipo_consulta, sa_pac_id) {
 
-        window.open('../vista/inicio.php?mod=7&acc=detalle_consulta&pdf_consulta=true&id_consulta=' + id_consulta + '&id_paciente=' + sa_pac_id + '&tipo_consulta=' + tipo_consulta + '&btn_regresar=consultas_m', '_blank');
+        window.open('../vista/inicio.php?mod=7&acc=detalle_consulta&pdf_consulta=true&id_consulta=' + id_consulta + '&id_paciente=' + sa_pac_id + '&tipo_consulta=' + tipo_consulta + '&btn_regresar=INSPECTOR', '_blank');
     }
 
-    function consultar_datos_comunidad_tabla() {
-        var salida = '<option value="">Todos</option>';
-
-        $.ajax({
-            url: '../controlador/Comunidad_TablasC.php?listar=true',
-            type: 'post',
-            dataType: 'json',
-            success: function(response) {
-                $.each(response, function(i, item) {
-                    // Concatenar dos variables en el valor del atributo "value"
-                    salida += '<option value="' + item.sa_tbl_pac_nombre + '">' + item.sa_tbl_pac_nombre.toUpperCase() + '</option>';
-                });
-
-                $('#txt_tabla').html(salida);
-            }
-        });
-    }
 </script>
 
 
@@ -210,13 +183,6 @@
                                             <div class="col-md-3">
                                                 <label for="txt_fecha_fin" class="form-label fw-bold">Fecha Fin <label style="color: red;">*</label> </label>
                                                 <input type="date" class="form-control form-control-sm" id="txt_fecha_fin" name="txt_fecha_fin">
-                                            </div>
-
-                                            <div class="col-md-4">
-                                                <label for="txt_tabla" class="form-label fw-bold">Tipo de Paciente </label>
-                                                <select name="txt_tabla" id="txt_tabla" class="form-select form-select-sm" onchange="buscar_paciente();">
-
-                                                </select>
                                             </div>
                                         </div>
 
