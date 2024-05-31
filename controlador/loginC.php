@@ -368,6 +368,11 @@ class loginC
 					$_SESSION["INICIO"]['PUERTO_DB'] = $empresa[0]['Puerto_db'];
 					$_SESSION["INICIO"]['TIPO_BASE'] = $empresa[0]['Tipo_base'];
 					$_SESSION["INICIO"]['LOGO'] = $empresa[0]['Logo'];
+					$_SESSION["INICIO"]['IP_API_HIKVISION'] = $empresa[0]['ip_api_hikvision'];
+					$_SESSION["INICIO"]['KEY_API_HIKVISION'] = $empresa[0]['key_api_hikvision'];
+					$_SESSION["INICIO"]['USER_API_HIKVISION'] = $empresa[0]['user_api_hikvision'];
+					$_SESSION["INICIO"]['TCP_PUERTO_HIKVISION'] = $empresa[0]['tcp_puerto_hikvision'];
+					$_SESSION["INICIO"]['PUERTO_API_HIKVISION'] = $empresa[0]['puerto_api_hikvision'];
 			}
 
 	 	// print_r($parametros);die();
