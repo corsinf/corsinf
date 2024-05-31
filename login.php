@@ -114,7 +114,7 @@
        {
          'empresa':empresa,
        } 
-
+        titulos_cargados();
        $('#myModal_espera').modal('show');
        $.ajax({
          data:  {parametros:parametros},
@@ -320,6 +320,31 @@
 		    	$('#btn_inicio').click();
 		    }
 			});
+
+		const textos = [
+		    "Cargando Modulos...",
+		    "Cargando Usuarios...",
+		    "Cargando Permiso...",
+		    "Probando configuracion",
+		    "Dando ultimos toques"
+		];
+
+		// Índice inicial
+		let indice = 0;
+
+		// Función que muestra un texto diferente en un alert
+		function mostrarTexto() {
+			  $('#lbl_proceso').text(textos[indice]);
+		    indice = (indice + 1) % textos.length; // Incrementar el índice y reiniciarlo si alcanza el final de la lista
+		}
+
+		// Ejecutar la función cada 2 segundos (2000 milisegundos)
+
+
+		function titulos_cargados()
+		{
+				setInterval(mostrarTexto, 10000);
+		}
 	</script>
 	
 	<!--app JS-->
@@ -410,3 +435,34 @@
 
 // console.log(advertencia);
 </script>
+
+
+<div class="modal fade" id="myModal_espera" tabindex="-1" aria-modal="true" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
+	  <div class="modal-dialog modal-sm modal-dialog-centered">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	      </div>
+	      <div class="modal-body">
+	      			
+	         <div class="text-center">
+	         		<h5 id="lbl_proceso">Configurando entorno...</h5>
+		         	<div class="card-body">
+									<div class="spinner-grow text-primary" role="status"> <span class="visually-hidden">Loading...</span>
+									</div>
+									<div class="spinner-grow text-secondary" role="status"> <span class="visually-hidden">Loading...</span>
+									</div>
+									<div class="spinner-grow text-success" role="status"> <span class="visually-hidden">Loading...</span>
+									</div>
+									<div class="spinner-grow text-danger" role="status"> <span class="visually-hidden">Loading...</span>
+									</div>
+									<div class="spinner-grow text-warning" role="status"> <span class="visually-hidden">Loading...</span>
+									</div>																
+							</div>
+
+	         </div>         
+	      </div>
+	      <div class="modal-footer">        
+	      </div>
+	    </div>
+	  </div>
+	</div>
