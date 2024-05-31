@@ -3,15 +3,16 @@
 
 class Artemis
 {
-    private $ip_puerto_API = 'https://192.168.1.6:449';
-
+    private $ip_puerto_API; //= 'https://192.168.1.6:449';
     private $clave_partner;
     private $clave_secreta;
 
-    public function __construct($clave_partner, $clave_secreta)
+    public function __construct($clave_partner, $clave_secreta, $ip_puerto_API, $puerto_API)
     {
         $this->clave_partner = $clave_partner;
         $this->clave_secreta = $clave_secreta;
+
+        $this->ip_puerto_API = 'https://' . $ip_puerto_API . ':' .  $puerto_API;
     }
 
     public function consulta_API($parametros)
@@ -22,17 +23,17 @@ class Artemis
         $firma_Peticion = $parametros['firma_Peticion'];
         $body = $parametros['body'];
 
+        $headers = [
+            'x-ca-key: ' . $this->clave_partner,
+            'x-ca-signature-headers: x-ca-key',
+            'x-ca-signature: ' . $firma_Peticion,
+            'Content-Type: application/json',
+            'Accept: */*'
+        ];
 
         $options = array(
             'http' => array(
-                'header' => [
-                    'x-ca-key: ' .  $this->clave_partner,
-                    'x-ca-signature-headers: x-ca-key',
-                    'x-ca-signature: ' . $firma_Peticion,
-                    'Content-Type: application/json',
-                    'Accept: */*'
-                ],
-
+                'header' => $headers,
                 'method'  => 'POST',
                 'content' => $body,
             ),
@@ -43,19 +44,37 @@ class Artemis
         );
 
         $context = stream_context_create($options);
-        $response = file_get_contents($this->ip_puerto_API . $url_API, false, $context);
 
-        if ($response === FALSE) {
-            throw new Exception("Error en la solicitud HTTP.");
+        try {
+            $response = @file_get_contents($this->ip_puerto_API . $url_API, false, $context);
+
+            if ($response === FALSE) {
+                $http_response_header = isset($http_response_header) ? $http_response_header : [];
+                if (strpos($http_response_header[0], '503') !== false) {
+                    //throw new Exception("El servicio está suspendido (HTTP 503 Service Unavailable).");
+                    return -11;
+                } else {
+                    //throw new Exception("Error en la solicitud HTTP.");
+                    return -11;
+                }
+            }
+
+            $result = json_decode($response, true);
+
+            if ($result === null) {
+                //throw new Exception("Error al decodificar la respuesta JSON.");
+                return -11;
+            }
+
+            return $result;
+        } catch (Exception $e) {
+            // Aquí puedes manejar el error de una manera específica o registrar el error
+            //echo 'Excepción capturada: ',  $e->getMessage(), "\n";
+            // O lanzar nuevamente la excepción si prefieres
+            // throw $e;
+            return -11;
+
         }
-
-        $result = ($response);
-
-        if ($result === null) {
-            throw new Exception("Error al decodificar la respuesta JSON.");
-        }
-
-        return $result;
     }
 
     public function url_firma($parametros)
@@ -110,5 +129,4 @@ class Artemis
 
         return $this->consulta_API($datos_Pet);
     }
-
 }

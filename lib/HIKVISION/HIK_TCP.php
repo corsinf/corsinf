@@ -4,8 +4,14 @@
 class HIK_TCP
 {
     // Configuración de la conexión
-    private $ip = "192.168.1.6";
-    private $puerto = 15300;
+    private $ip; //= "192.168.1.6";
+    private $puerto; // = 15300;
+
+    public function __construct($ip, $puerto)
+    {
+        $this->ip = $ip;
+        $this->puerto = $puerto;
+    }
 
     function TCP_enviar($mensaje_usu)
     {
@@ -33,5 +39,3 @@ class HIK_TCP
         }
     }
 }
-
-

@@ -31,11 +31,35 @@ class permisos_salidaC
     private $notificaciones_HV;
     private $TCP_HV;
 
+    //Variables para HIKVISION
+
+    private $ip_api_hikvision;
+    private $key_api_hikvision;
+    private $user_api_hikvision;
+    private $tcp_puerto_hikvision;
+    private $puerto_api_hikvision;
+
     function __construct()
     {
         $this->modelo = new permisos_salidaM();
-        $this->notificaciones_HV = new NotificaionesHV('28519009', 'kTnwcJUu7OQEGHCVGSJQ');
-        $this->TCP_HV = new HIK_TCP();
+
+        //HIKVISION
+
+        // Asegúrate de que las variables de sesión estén definidas antes de usarlas
+        if (isset($_SESSION['INICIO'])) {
+            $this->ip_api_hikvision = $_SESSION['INICIO']['IP_API_HIKVISION'] ?? '.';
+            $this->key_api_hikvision = $_SESSION['INICIO']['KEY_API_HIKVISION'] ?? '.';
+            $this->user_api_hikvision = $_SESSION['INICIO']['USER_API_HIKVISION'] ?? '.';
+            $this->tcp_puerto_hikvision = $_SESSION['INICIO']['TCP_PUERTO_HIKVISION'] ?? '.';
+            $this->puerto_api_hikvision = $_SESSION['INICIO']['PUERTO_API_HIKVISION'] ?? '.';
+
+            // Inicializa los objetos relacionados con Hikvision
+            $this->notificaciones_HV = new NotificaionesHV($this->user_api_hikvision, $this->key_api_hikvision, $this->ip_api_hikvision, $this->puerto_api_hikvision, $this->tcp_puerto_hikvision);
+            $this->TCP_HV = new HIK_TCP($this->ip_api_hikvision, $this->tcp_puerto_hikvision);
+        } else {
+            // Manejo de errores si la sesión no está definida
+            throw new Exception("La sesión 'INICIO' no está definida.");
+        }
     }
 
     function lista_todo_permisos_salida()
@@ -65,58 +89,67 @@ class permisos_salidaC
         //Ingresa los datos
         $id = $this->modelo->insertar_id($datos);
 
-        //Permiso del inspector
-        $mensaje_HV = 'per_ins_' . $id;
+        $respuesta_servicio_API = '';
 
-        $datos_edit = array(
-            //array('campo' => 'ac_ps_hora_entrada', 'dato' => $parametros['ac_ps_hora_entrada']),
-            array('campo' => 'ac_ps_codigo_TCP_HIK', 'dato' => $mensaje_HV),
-        );
+        if ($this->user_api_hikvision != '.' && $this->key_api_hikvision != '.' && $this->ip_api_hikvision != '.' && $this->puerto_api_hikvision != '.') {
+            //Permiso del inspector
+            $mensaje_HV = 'per_ins_' . $id;
 
-        $where[0]['campo'] = 'ac_ps_id';
-        $where[0]['dato'] = $id;
-        $datos = $this->modelo->editar($datos_edit, $where);
+            $datos_edit = array(
+                //array('campo' => 'ac_ps_hora_entrada', 'dato' => $parametros['ac_ps_hora_entrada']),
+                array('campo' => 'ac_ps_codigo_TCP_HIK', 'dato' => $mensaje_HV),
+            );
 
-        /*HIKVISION*/
-        /*$mensaje_alerta = '';
-        if ($parametros['ac_ps_estado_salida'] == '1') {
-            $mensaje_alerta = 'PSR_' . $parametros['ac_ps_nombre'] . '_' . $id;
-            $API_response = $this->notificaciones_HV->crear_Evento_usuario($mensaje_alerta, $mensaje_HV, $parametros['ac_ps_prioridad']);
+            $where[0]['campo'] = 'ac_ps_id';
+            $where[0]['dato'] = $id;
+            $datos = $this->modelo->editar($datos_edit, $where);
 
-            ///////////////////////////////////////////////////////////////////////////////////////
-            $max_intentos = 10;
-            $intentos = 0;
-            while (($API_response != '0') && $intentos < $max_intentos) {
-                usleep(500000);
-                $intentos++;
+            /*HIKVISION*/
+            $mensaje_alerta = '';
+            if ($parametros['ac_ps_estado_salida'] == '1') {
+                $mensaje_alerta = 'PSR_' . $parametros['ac_ps_nombre'] . '_' . $id;
+                $API_response = $this->notificaciones_HV->crear_Evento_usuario($mensaje_alerta, $mensaje_HV, $parametros['ac_ps_prioridad']);
+                $respuesta_servicio_API = $API_response;
+                ///////////////////////////////////////////////////////////////////////////////////////
+                $max_intentos = 10;
+                $intentos = 0;
+                while (($API_response != '0') && $intentos < $max_intentos) {
+                    usleep(500000);
+                    $intentos++;
+                }
+                if ($API_response == '0') {
+                    $this->TCP_HV->TCP_enviar($mensaje_HV);
+                } else {
+                    //echo "La tarea no se completó después del tiempo máximo.";
+                }
+                ///////////////////////////////////////////////////////////////////////////////////////
+            } else if ($parametros['ac_ps_estado_salida'] == '0') {
+                $mensaje_alerta = 'PSL_' . $parametros['ac_ps_nombre'] . '_' . $id;
+                $API_response = $this->notificaciones_HV->crear_Evento_usuario($mensaje_alerta, $mensaje_HV, $parametros['ac_ps_prioridad']);
+                $respuesta_servicio_API = $API_response;
+
+                ///////////////////////////////////////////////////////////////////////////////////////
+                $max_intentos = 10;
+                $intentos = 0;
+                while (($API_response != '0') && $intentos < $max_intentos) {
+                    usleep(500000);
+                    $intentos++;
+                }
+                if ($API_response == '0') {
+                    $this->TCP_HV->TCP_enviar($mensaje_HV);
+                } else {
+                    //echo "La tarea no se completó después del tiempo máximo.";
+                }
+                ///////////////////////////////////////////////////////////////////////////////////////
             }
-            if ($API_response == '0') {
-                $this->TCP_HV->TCP_enviar($mensaje_HV);
-            } else {
-                echo "La tarea no se completó después del tiempo máximo.";
-            }
-            ///////////////////////////////////////////////////////////////////////////////////////
-        } else if ($parametros['ac_ps_estado_salida'] == '0') {
-            $mensaje_alerta = 'PSL_' . $parametros['ac_ps_nombre'] . '_' . $id;
-            $API_response = $this->notificaciones_HV->crear_Evento_usuario($mensaje_alerta, $mensaje_HV, $parametros['ac_ps_prioridad']);
-
-            ///////////////////////////////////////////////////////////////////////////////////////
-            $max_intentos = 10;
-            $intentos = 0;
-            while (($API_response != '0') && $intentos < $max_intentos) {
-                usleep(500000);
-                $intentos++;
-            }
-            if ($API_response == '0') {
-                $this->TCP_HV->TCP_enviar($mensaje_HV);
-            } else {
-                echo "La tarea no se completó después del tiempo máximo.";
-            }
-            ///////////////////////////////////////////////////////////////////////////////////////
-        }*/
+        }
 
 
-        return $datos;
+        if ($respuesta_servicio_API == -10) {
+            return -10;
+        } else {
+            return $datos;
+        }
     }
 
     function llegada($id)

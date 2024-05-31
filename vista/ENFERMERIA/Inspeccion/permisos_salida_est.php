@@ -156,6 +156,13 @@
                     $('#ac_ps_prioridad').val('');
                     $('#ac_ps_observacion').val('');
                     $('#ac_ps_id_tabla').val([]).trigger('change');
+                }else if (response == -10){
+                    $("#modal_permisos").modal('hide');
+                    Swal.fire('', 'Operacion realizada con exito. ' + 'HIKVISION NO ALERTÓ AL GUARDIA INFORMAR PERSONALMENTE', 'success').then(function() {});
+                    $('#ac_ps_estado_salida').val('');
+                    $('#ac_ps_prioridad').val('');
+                    $('#ac_ps_observacion').val('');
+                    $('#ac_ps_id_tabla').val([]).trigger('change');
                 }
             }
         });
