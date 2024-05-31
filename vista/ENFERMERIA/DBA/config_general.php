@@ -5,95 +5,54 @@
 
 <script type="text/javascript">
     $(document).ready(function() {
-        cargar_datos_v_medicamentos();
-        cargar_datos_v_insumos();
+        cargar_datos_v_config();
     });
 
-    function cargar_datos_v_medicamentos() {
+    function cargar_datos_v_config() {
         $.ajax({
-            url: '../controlador/v_med_insC.php?listar_v_medicamentos=true',
+            url: '../controlador/cat_configuracionGC.php?listar_config_general=true',
             type: 'post',
             dataType: 'json',
             success: function(response) {
                 console.log(response);
 
                 // Limpiar el contenido previo del div
-                $('#pnl_medicamentos').empty();
+                $('#pnl_config_general').empty();
 
                 // Verificar si la respuesta contiene datos
                 if (response && response.length > 0) {
-                    response.forEach(function(medicamento) {
-                        // Crear el HTML para cada medicamento
-                        var isChecked = medicamento.sa_vmi_estado == 1 ? 'checked' : '';
-                        var htmlMedicamento = '<div class="col-md-12">';
-                        htmlMedicamento += '<input type="checkbox" class="medicamento-checkbox" name="medicamento[]" id="' + medicamento.sa_vmi_id_input + '" value="' + medicamento.sa_vmi_id + '" ' + isChecked + '> ';
-                        htmlMedicamento += '<label>' + medicamento.sa_vmi_descripcion + '</label>';
-                        htmlMedicamento += '</div>';
+                    response.forEach(function(config) {
+                        // Crear el HTML para cada config
+                        var isChecked = config.sa_config_estado == 1 ? 'checked' : '';
+                        var htmlconfig = '<div class="col-md-12">';
+                        htmlconfig += '<input type="checkbox" class="config-checkbox" name="config[]" id="' + config.sa_config_validar + '" value="' + config.sa_config_id + '" ' + isChecked + '> ';
+                        htmlconfig += '<label>' + config.sa_config_descripcion + '</label>';
+                        htmlconfig += '</div>';
 
                         // Agregar el HTML generado al div
-                        $('#pnl_medicamentos').append(htmlMedicamento);
+                        $('#pnl_config_general').append(htmlconfig);
                     });
 
                     // Agregar evento change a los checkboxes generados
-                    $('.medicamento-checkbox').change(function() {
-                        var sa_vmi_id = $(this).val();
-                        var sa_vmi_estado = $(this).is(':checked') ? 1 : 0;
-                        insertar(sa_vmi_id, sa_vmi_estado);
+                    $('.config-checkbox').change(function() {
+                        var sa_config_id = $(this).val();
+                        var sa_config_estado = $(this).is(':checked') ? 1 : 0;
+                        insertar(sa_config_id, sa_config_estado);
                     });
                 }
             },
             error: function() {
                 // Manejo de errores
-                $('#pnl_medicamentos').append('<p>Error al cargar los medicamentos.</p>');
+                $('#pnl_config_general').append('<p>Error al cargar los configs.</p>');
             }
         });
     }
 
-    function cargar_datos_v_insumos() {
-        $.ajax({
-            url: '../controlador/v_med_insC.php?listar_v_insumos=true',
-            type: 'post',
-            dataType: 'json',
-            success: function(response) {
-                console.log(response);
-
-                // Limpiar el contenido previo del div
-                $('#pnl_insumos').empty();
-
-                // Verificar si la respuesta contiene datos
-                if (response && response.length > 0) {
-                    response.forEach(function(medicamento) {
-                        // Crear el HTML para cada medicamento
-                        var isChecked = medicamento.sa_vmi_estado == 1 ? 'checked' : '';
-                        var htmlMedicamento = '<div class="col-md-12">';
-                        htmlMedicamento += '<input type="checkbox" class="medicamento-checkbox" name="insumos[]" id="' + medicamento.sa_vmi_id_input + '" value="' + medicamento.sa_vmi_id + '" ' + isChecked + '> ';
-                        htmlMedicamento += '<label>' + medicamento.sa_vmi_descripcion + '</label>';
-                        htmlMedicamento += '</div>';
-
-                        // Agregar el HTML generado al div
-                        $('#pnl_insumos').append(htmlMedicamento);
-                    });
-
-                    // Agregar evento change a los checkboxes generados
-                    $('.medicamento-checkbox').change(function() {
-                        var sa_vmi_id = $(this).val();
-                        var sa_vmi_estado = $(this).is(':checked') ? 1 : 0;
-                        insertar(sa_vmi_id, sa_vmi_estado);
-                    });
-                }
-            },
-            error: function() {
-                // Manejo de errores
-                $('#pnl_insumos').append('<p>Error al cargar los insumos.</p>');
-            }
-        });
-    }
-
-    function insertar(sa_vmi_id, sa_vmi_estado) {
+    function insertar(sa_config_id, sa_config_estado) {
 
         var parametros = {
-            'sa_vmi_id': sa_vmi_id,
-            'sa_vmi_estado': sa_vmi_estado
+            'sa_config_id': sa_config_id,
+            'sa_config_estado': sa_config_estado
         };
 
         //console.log(parametros);
@@ -102,7 +61,7 @@
             data: {
                 parametros: parametros
             },
-            url: '../controlador/v_med_insC.php?vista_mod=true',
+            url: '../controlador/cat_configuracionGC.php?vista_mod=true',
             type: 'post',
             dataType: 'json',
             success: function(response) {
@@ -153,7 +112,7 @@
                         <div class="card-title d-flex align-items-center">
                             <div><i class="bx bxs-user me-1 font-22 text-primary"></i>
                             </div>
-                            <h5 class="mb-0 text-primary">Configuración - Vistas Medicamentos, Insumos</h5>
+                            <h5 class="mb-0 text-primary">Configuración - General</h5>
 
                         </div>
 
@@ -161,8 +120,8 @@
 
                         <div class="content">
                             <!-- Content Header (Page header) -->
-                            <h6>Configuración General </h6>
-                            <div class="row" id="pnl_medicamentos">
+                            <h6>Configuración General</h6>
+                            <div class="row" id="pnl_config_general">
 
                             </div>
 

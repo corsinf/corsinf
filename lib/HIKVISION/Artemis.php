@@ -50,12 +50,16 @@ class Artemis
 
             if ($response === FALSE) {
                 $http_response_header = isset($http_response_header) ? $http_response_header : [];
-                if (strpos($http_response_header[0], '503') !== false) {
-                    //throw new Exception("El servicio está suspendido (HTTP 503 Service Unavailable).");
+                if (empty($http_response_header)) {
                     return -11;
                 } else {
-                    //throw new Exception("Error en la solicitud HTTP.");
-                    return -11;
+                    if (strpos($http_response_header[0], '503') !== false) {
+                        //throw new Exception("El servicio está suspendido (HTTP 503 Service Unavailable).");
+                        return -11;
+                    } else {
+                        //throw new Exception("Error en la solicitud HTTP.");
+                        return -11;
+                    }
                 }
             }
 
@@ -73,7 +77,6 @@ class Artemis
             // O lanzar nuevamente la excepción si prefieres
             // throw $e;
             return -11;
-
         }
     }
 

@@ -684,7 +684,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     function insertar(parametros) {
         tardo = calcular_diferencia_hora_retorno();
 
-        //console.log(parametros);
+        // Mostrar el spinner usando SweetAlert2
+        Swal.fire({
+            title: 'Por favor, espere',
+            text: 'Procesando la solicitud...',
+            allowOutsideClick: false,
+            onOpen: () => {
+                Swal.showLoading();
+            }
+        });
+
         $.ajax({
             data: {
                 parametros: parametros
@@ -692,11 +701,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             url: '../controlador/consultasC.php?insertar=true',
             type: 'post',
             dataType: 'json',
-
             success: function(response) {
-                //console.log(response);
+                // Cerrar el spinner
+
 
                 if (response == 1) {
+                    Swal.close();
                     Swal.fire('', 'Operacion realizada con exito. La atención tardó: ' + tardo + ' minutos.', 'success').then(function() {
                         <?php if ($regresar == 'agendamiento') { ?>
                             location.href = '../vista/inicio.php?mod=7&acc=agendamiento';
@@ -705,14 +715,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <?php  } else { ?>
                             location.href = '../vista/inicio.php?mod=7&acc=pacientes';
                         <?php } ?>
-
-
-
                     });
                 } else if (response == -2) {
-                    Swal.fire('', 'Código ya registrado', 'success');
-                    
-                }else if (response == -10) {
+                    Swal.close();
+                    Swal.fire('', 'Código ya registrado', 'error');
+                } else if (response == -10) {
+                    Swal.close();
                     Swal.fire('', 'Operacion realizada con exito. La atención tardó: ' + tardo + ' minutos.' + 'HIKVISION NO ALERTÓ AL GUARDIA INFORMAR PERSONALMENTE', 'success').then(function() {
                         <?php if ($regresar == 'agendamiento') { ?>
                             location.href = '../vista/inicio.php?mod=7&acc=agendamiento';
@@ -721,12 +729,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <?php  } else { ?>
                             location.href = '../vista/inicio.php?mod=7&acc=pacientes';
                         <?php } ?>
-
-
-
                     });
                 }
-                //console.log(response);
+            },
+            error: function(xhr, status, error) {
+                // Cerrar el spinner en caso de error también
+                Swal.fire('Error', 'Ocurrió un error en la solicitud: ' + error, 'error');
             }
         });
     }

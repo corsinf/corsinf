@@ -25,6 +25,8 @@ include('../modelo/representantesM.php');
 //Usuarios
 include('../modelo/usuariosM.php');
 
+//Configuracion General
+include('../modelo/cat_configuracionGM.php');
 
 $controlador = new consultasC();
 
@@ -164,6 +166,8 @@ class consultasC
     private $cod_global;
     private $usuariosM;
 
+    private $configGM;
+
     //Variables para HIKVISION
 
     private $ip_api_hikvision;
@@ -181,6 +185,7 @@ class consultasC
         $this->det_consultaM = new det_consultaM();
         $this->ingreso_stock = new ingreso_stockC();
         $this->notificaciones = new notificacionesM();
+        $this->configGM = new cat_configuracionGM();
 
         //HIKVISION
 
@@ -470,63 +475,55 @@ class consultasC
                     $this->notificaciones->insertar($datos_notificaciones);
 
                     /*HIKVISION*/
-                    //Codigo antiguo
-
-                    /*if ($parametros['sa_conp_permiso_tipo'] == 'normal') {
-                        $mensaje_TCP = 'consulta_' . $id_insert;
-                        $this->notificaciones_HV->crear_Evento_usuario('SALUD ' . $parametros['nombre_apellido_paciente'] . $id_insert, $mensaje_TCP, 3);
-                        sleep(4);
-                        $this->TCP_HV->TCP_enviar($mensaje_TCP);
-                    } else if ($parametros['sa_conp_permiso_tipo'] == 'emergencia') {
-                        $mensaje_TCP = 'conulta_' . $id_insert;
-                        $this->notificaciones_HV->crear_Evento_usuario('SALUD ' . $parametros['nombre_apellido_paciente'] . $id_insert, $mensaje_TCP, 2);
-                        sleep(4);
-                        $this->TCP_HV->TCP_enviar($mensaje_TCP);
-                    }*/
-
-                    //Varaible para manejar estado de HIKVISION
+                    //Variable para manejar estado de HIKVISION
                     $respuesta_servicio_API = '';
-                    if ($this->user_api_hikvision != '.' && $this->key_api_hikvision != '.' && $this->ip_api_hikvision != '.' && $this->puerto_api_hikvision != '.') {
-                        $mensaje_alerta = '';
-                        $id_consulta = $id_insert;
-                        if ($parametros['sa_conp_permiso_tipo'] == 'normal') {
-                            $mensaje_alerta = 'SALUD ' . $parametros['nombre_apellido_paciente'] . $id_consulta;
-                            $mensaje_TCP = 'consulta_' . $id_consulta;
-                            $API_response = $this->notificaciones_HV->crear_Evento_usuario($mensaje_alerta, $mensaje_TCP, 3);
-                            $respuesta_servicio_API = $API_response;
-                            //print_r($respuesta_servicio_API);
-                            //exit;
-                            ///////////////////////////////////////////////////////////////////////////////////////
-                            $max_intentos = 10;
-                            $intentos = 0;
-                            while (($API_response != '0') && $intentos < $max_intentos) {
-                                usleep(500000);
-                                $intentos++;
+                    if ($parametros['sa_conp_permiso_salida'] === 'SI') {
+
+                        if ($this->user_api_hikvision != '.' && $this->key_api_hikvision != '.' && $this->ip_api_hikvision != '.' && $this->puerto_api_hikvision != '.') {
+                            $mensaje_alerta = '';
+                            $id_consulta = $id_insert;
+                            $parametros['sa_conp_permiso_tipo'];
+                            // print_r($parametros['sa_conp_permiso_tipo']);
+                            //exit();
+                            if ($parametros['sa_conp_permiso_tipo'] == 'normal') {
+                                $mensaje_alerta = 'SALUD ' . $parametros['nombre_apellido_paciente'] . $id_consulta;
+                                $mensaje_TCP = 'consulta_' . $id_consulta;
+                                $API_response = $this->notificaciones_HV->crear_Evento_usuario($mensaje_alerta, $mensaje_TCP, 3);
+                                $respuesta_servicio_API = $API_response;
+                                //print_r($respuesta_servicio_API);
+                                //exit;
+                                ///////////////////////////////////////////////////////////////////////////////////////
+                                $max_intentos = 10;
+                                $intentos = 0;
+                                while (($API_response != '0') && $intentos < $max_intentos) {
+                                    usleep(500000);
+                                    $intentos++;
+                                }
+                                if ($API_response == '0') {
+                                    $this->TCP_HV->TCP_enviar($mensaje_TCP);
+                                } else {
+                                    //echo "La tarea no se completó después del tiempo máximo.";
+                                }
+                                ///////////////////////////////////////////////////////////////////////////////////////
+                            } else if ($parametros['sa_conp_permiso_tipo'] == 'emergencia') {
+                                $mensaje_alerta = 'SALUD ' . $parametros['nombre_apellido_paciente'] . $id_consulta;
+                                $mensaje_TCP = 'consulta_' . $id_consulta;
+                                $API_response = $this->notificaciones_HV->crear_Evento_usuario($mensaje_alerta, $mensaje_TCP, 2);
+                                $respuesta_servicio_API = $API_response;
+                                ///////////////////////////////////////////////////////////////////////////////////////
+                                $max_intentos = 10;
+                                $intentos = 0;
+                                while (($API_response != '0') && $intentos < $max_intentos) {
+                                    usleep(500000);
+                                    $intentos++;
+                                }
+                                if ($API_response == '0') {
+                                    $this->TCP_HV->TCP_enviar($mensaje_TCP);
+                                } else {
+                                    //echo "La tarea no se completó después del tiempo máximo.";
+                                }
+                                ///////////////////////////////////////////////////////////////////////////////////////
                             }
-                            if ($API_response == '0') {
-                                $this->TCP_HV->TCP_enviar($mensaje_TCP);
-                            } else {
-                                //echo "La tarea no se completó después del tiempo máximo.";
-                            }
-                            ///////////////////////////////////////////////////////////////////////////////////////
-                        } else if ($parametros['sa_conp_permiso_tipo'] == 'emergencia') {
-                            $mensaje_alerta = 'SALUD ' . $parametros['nombre_apellido_paciente'] . $id_consulta;
-                            $mensaje_TCP = 'consulta_' . $id_consulta;
-                            $API_response = $this->notificaciones_HV->crear_Evento_usuario($mensaje_alerta, $mensaje_TCP, 2);
-                            $respuesta_servicio_API = $API_response;
-                            ///////////////////////////////////////////////////////////////////////////////////////
-                            $max_intentos = 10;
-                            $intentos = 0;
-                            while (($API_response != '0') && $intentos < $max_intentos) {
-                                usleep(500000);
-                                $intentos++;
-                            }
-                            if ($API_response == '0') {
-                                $this->TCP_HV->TCP_enviar($mensaje_TCP);
-                            } else {
-                                //echo "La tarea no se completó después del tiempo máximo.";
-                            }
-                            ///////////////////////////////////////////////////////////////////////////////////////
                         }
                     }
 
@@ -545,7 +542,8 @@ class consultasC
 
                     if ($tipo_consulta == 'consulta') {
                         $diagnostico = $parametros['sa_conp_diagnostico_1'];
-                        $this->enviar_correo_con($id_representante, $nombre_est, $diagnostico, $tipo_consulta, $permiso_salida);
+                        $variable = $this->enviar_correo_con($id_representante, $nombre_est, $diagnostico, $tipo_consulta, $permiso_salida);
+                        //print_r($variable);exit();die();
                     } else {
                         $diagnostico = $parametros['sa_conp_diagnostico_certificado'];
                         $this->enviar_correo_con($id_representante, $nombre_est, $diagnostico, $tipo_consulta, $permiso_salida);
@@ -682,60 +680,49 @@ class consultasC
                 $this->notificaciones->insertar($datos_notificaciones);
 
                 /*HIKVISION*/
-                //Codigo antiguo
-
-                /*if ($parametros['sa_conp_permiso_tipo'] == 'normal') {
-                    $mensaje_TCP = 'consulta_' . $parametros['sa_conp_id'];
-                    $this->notificaciones_HV->crear_Evento_usuario('SALUD ' . $parametros['nombre_apellido_paciente'] . $parametros['sa_conp_id'], $mensaje_TCP, 3);
-                    sleep(4);
-                    $this->TCP_HV->TCP_enviar($mensaje_TCP);
-                } else if ($parametros['sa_conp_permiso_tipo'] == 'emergencia') {
-                    $mensaje_TCP = 'conulta_' . $parametros['sa_conp_id'];
-                    $this->notificaciones_HV->crear_Evento_usuario('SALUD ' . $parametros['nombre_apellido_paciente'] . $parametros['sa_conp_id'], $mensaje_TCP, 2);
-                    sleep(4);
-                    $this->TCP_HV->TCP_enviar($mensaje_TCP);
-                }*/
-                
+                //Variable para manejar estado de HIKVISION
                 $respuesta_servicio_API = '';
-                if ($this->user_api_hikvision != '.' && $this->key_api_hikvision != '.' && $this->ip_api_hikvision != '.' && $this->puerto_api_hikvision != '.' && $this->tcp_puerto_hikvision != '.') {
-                    $mensaje_alerta = '';
-                    $id_consulta = $parametros['sa_conp_id'];
-                    if ($parametros['sa_conp_permiso_tipo'] == 'normal') {
-                        $mensaje_alerta = 'SALUD ' . $parametros['nombre_apellido_paciente'] . $id_consulta;
-                        $mensaje_TCP = 'consulta_' . $id_consulta;
-                        $API_response = $this->notificaciones_HV->crear_Evento_usuario($mensaje_alerta, $mensaje_TCP, 3);
-                        $respuesta_servicio_API = $API_response;
-                        ///////////////////////////////////////////////////////////////////////////////////////
-                        $max_intentos = 10;
-                        $intentos = 0;
-                        while (($API_response != '0') && $intentos < $max_intentos) {
-                            usleep(500000);
-                            $intentos++;
+                if ($parametros['sa_conp_permiso_salida'] === 'SI') {
+                    if ($this->user_api_hikvision != '.' && $this->key_api_hikvision != '.' && $this->ip_api_hikvision != '.' && $this->puerto_api_hikvision != '.' && $this->tcp_puerto_hikvision != '.') {
+                        $mensaje_alerta = '';
+                        $id_consulta = $parametros['sa_conp_id'];
+                        if ($parametros['sa_conp_permiso_tipo'] == 'normal') {
+                            $mensaje_alerta = 'SALUD ' . $parametros['nombre_apellido_paciente'] . $id_consulta;
+                            $mensaje_TCP = 'consulta_' . $id_consulta;
+                            $API_response = $this->notificaciones_HV->crear_Evento_usuario($mensaje_alerta, $mensaje_TCP, 3);
+                            $respuesta_servicio_API = $API_response;
+                            ///////////////////////////////////////////////////////////////////////////////////////
+                            $max_intentos = 10;
+                            $intentos = 0;
+                            while (($API_response != '0') && $intentos < $max_intentos) {
+                                usleep(500000);
+                                $intentos++;
+                            }
+                            if ($API_response == '0') {
+                                $this->TCP_HV->TCP_enviar($mensaje_TCP);
+                            } else {
+                                //echo "La tarea no se completó después del tiempo máximo.";
+                            }
+                            ///////////////////////////////////////////////////////////////////////////////////////
+                        } else if ($parametros['sa_conp_permiso_tipo'] == 'emergencia') {
+                            $mensaje_alerta = 'SALUD ' . $parametros['nombre_apellido_paciente'] . $id_consulta;
+                            $mensaje_TCP = 'consulta_' . $id_consulta;
+                            $API_response = $this->notificaciones_HV->crear_Evento_usuario($mensaje_alerta, $mensaje_TCP, 2);
+                            $respuesta_servicio_API = $API_response;
+                            ///////////////////////////////////////////////////////////////////////////////////////
+                            $max_intentos = 10;
+                            $intentos = 0;
+                            while (($API_response != '0') && $intentos < $max_intentos) {
+                                usleep(500000);
+                                $intentos++;
+                            }
+                            if ($API_response == '0') {
+                                $this->TCP_HV->TCP_enviar($mensaje_TCP);
+                            } else {
+                                //echo "La tarea no se completó después del tiempo máximo.";
+                            }
+                            ///////////////////////////////////////////////////////////////////////////////////////
                         }
-                        if ($API_response == '0') {
-                            $this->TCP_HV->TCP_enviar($mensaje_TCP);
-                        } else {
-                            //echo "La tarea no se completó después del tiempo máximo.";
-                        }
-                        ///////////////////////////////////////////////////////////////////////////////////////
-                    } else if ($parametros['sa_conp_permiso_tipo'] == 'emergencia') {
-                        $mensaje_alerta = 'SALUD ' . $parametros['nombre_apellido_paciente'] . $id_consulta;
-                        $mensaje_TCP = 'consulta_' . $id_consulta;
-                        $API_response = $this->notificaciones_HV->crear_Evento_usuario($mensaje_alerta, $mensaje_TCP, 2);
-                        $respuesta_servicio_API = $API_response;
-                        ///////////////////////////////////////////////////////////////////////////////////////
-                        $max_intentos = 10;
-                        $intentos = 0;
-                        while (($API_response != '0') && $intentos < $max_intentos) {
-                            usleep(500000);
-                            $intentos++;
-                        }
-                        if ($API_response == '0') {
-                            $this->TCP_HV->TCP_enviar($mensaje_TCP);
-                        } else {
-                            //echo "La tarea no se completó después del tiempo máximo.";
-                        }
-                        ///////////////////////////////////////////////////////////////////////////////////////
                     }
                 }
 
@@ -957,10 +944,13 @@ class consultasC
         $titulo_correo = 'ATENCION - DEPARTAMENTO MEDICO';
         $cuerpo_correo = $mensaje;
 
-        //Descomentar para enviar al correo la notficacion
-        //return $this->email->enviar_email($to_correo, $cuerpo_correo, $titulo_correo, $correo_respaldo = 'soporte@corsinf.com', $archivos = false, $titulo_correo, true);
+        $validacion_correo_representantes = $this->configGM->validacion('enviar_correos_consultas_reps');
 
-        ////return true;
+        if ($validacion_correo_representantes == 1) {
+            return $this->email->enviar_email($to_correo, $cuerpo_correo, $titulo_correo, $correo_respaldo = 'soporte@corsinf.com', $archivos = false, $titulo_correo, true);
+        } else {
+            return true;
+        }
     }
 
     function enviar_correo($parametros)
