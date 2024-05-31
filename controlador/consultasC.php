@@ -163,6 +163,15 @@ class consultasC
     private $seguros;
     private $cod_global;
     private $usuariosM;
+
+    //Variables para HIKVISION
+
+    private $ip_api_hikvision;
+    private $key_api_hikvision;
+    private $user_api_hikvision;
+    private $tcp_puerto_hikvision;
+    private $puerto_api_hikvision;
+
     function __construct()
     {
         $this->modelo = new consultasM();
@@ -172,8 +181,26 @@ class consultasC
         $this->det_consultaM = new det_consultaM();
         $this->ingreso_stock = new ingreso_stockC();
         $this->notificaciones = new notificacionesM();
-        $this->notificaciones_HV = new NotificaionesHV('28519009', 'kTnwcJUu7OQEGHCVGSJQ');
-        $this->TCP_HV = new HIK_TCP();
+
+        //HIKVISION
+
+        // Asegúrate de que las variables de sesión estén definidas antes de usarlas
+        if (isset($_SESSION['INICIO'])) {
+            $this->ip_api_hikvision = $_SESSION['INICIO']['IP_API_HIKVISION'] ?? '.';
+            $this->key_api_hikvision = $_SESSION['INICIO']['KEY_API_HIKVISION'] ?? '.';
+            $this->user_api_hikvision = $_SESSION['INICIO']['USER_API_HIKVISION'] ?? '.';
+            $this->tcp_puerto_hikvision = $_SESSION['INICIO']['TCP_PUERTO_HIKVISION'] ?? '.';
+            $this->puerto_api_hikvision = $_SESSION['INICIO']['PUERTO_API_HIKVISION'] ?? '.';
+
+            // Inicializa los objetos relacionados con Hikvision
+            $this->notificaciones_HV = new NotificaionesHV($this->user_api_hikvision, $this->key_api_hikvision, $this->ip_api_hikvision, $this->puerto_api_hikvision, $this->tcp_puerto_hikvision);
+            $this->TCP_HV = new HIK_TCP($this->ip_api_hikvision, $this->tcp_puerto_hikvision);
+        } else {
+            // Manejo de errores si la sesión no está definida
+            throw new Exception("La sesión 'INICIO' no está definida.");
+        }
+
+        /* ---------------------------------------- */
 
         $this->representantesM = new representantesM();
         $this->seguros = new contratosM();
@@ -228,6 +255,71 @@ class consultasC
         return $datos;
     }
 
+    function insertar_editar1($parametros)
+    {
+        $ip_api_hikvision = $_SESSION['INICIO']['IP_API_HIKVISION'];
+        $key_api_hikvision = $_SESSION['INICIO']['KEY_API_HIKVISION'];
+        $user_api_hikvision = $_SESSION['INICIO']['USER_API_HIKVISION'];
+        $tcp_puerto_hikvision = $_SESSION['INICIO']['TCP_PUERTO_HIKVISION'];
+        $puerto_api_hikvision = $_SESSION['INICIO']['PUERTO_API_HIKVISION'];
+
+
+        //&& $this->tcp_puerto_hikvision != '.'
+        if ($this->user_api_hikvision != '.' && $this->key_api_hikvision != '.' && $this->ip_api_hikvision != '.' && $this->puerto_api_hikvision != '.') {
+            $mensaje_alerta = '';
+            $id_consulta = 40;
+            if ($parametros['sa_conp_permiso_tipo'] == 'normal') {
+                $mensaje_alerta = 'SALUD ' . $parametros['nombre_apellido_paciente'] . $id_consulta;
+                $mensaje_TCP = 'consulta_' . $id_consulta;
+                $API_response = $this->notificaciones_HV->crear_Evento_usuario($mensaje_alerta, $mensaje_TCP, 3);
+                //print_r($API_response);
+
+                //exit();
+                ///////////////////////////////////////////////////////////////////////////////////////
+
+
+                $max_intentos = 10;
+                $intentos = 0;
+                while (($API_response != '0') && $intentos < $max_intentos) {
+                    usleep(500000);
+                    $intentos++;
+                }
+                if ($API_response == '0') {
+                    $this->TCP_HV->TCP_enviar($mensaje_TCP);
+                } else if ($API_response == '-1') {
+                    //echo "La tarea no se completo después del tiempo maximo.";
+
+                }
+                ///////////////////////////////////////////////////////////////////////////////////////
+            } else if ($parametros['sa_conp_permiso_tipo'] == 'emergencia') {
+                $mensaje_alerta = 'SALUD ' . $parametros['nombre_apellido_paciente'] . $id_consulta;
+                $mensaje_TCP = 'consulta_' . $id_consulta;
+                $API_response = $this->notificaciones_HV->crear_Evento_usuario($mensaje_alerta, $mensaje_TCP, 2);
+
+                //echo $API_response;
+
+                ///////////////////////////////////////////////////////////////////////////////////////
+                $max_intentos = 10;
+                $intentos = 0;
+                while (($API_response != '0') && $intentos < $max_intentos) {
+                    usleep(500000);
+                    $intentos++;
+                }
+                if ($API_response == '0') {
+                    $this->TCP_HV->TCP_enviar($mensaje_TCP);
+                } else {
+                }
+                ///////////////////////////////////////////////////////////////////////////////////////
+            }
+        } else {
+            echo $ip_api_hikvision;
+            return -1;
+        }
+
+        //print_r($key_api_hikvision);  
+
+
+    }
 
     function insertar_editar($parametros)
     {
@@ -378,7 +470,7 @@ class consultasC
                     $this->notificaciones->insertar($datos_notificaciones);
 
                     /*HIKVISION*/
-                    //Descomentar las lineas para activar el funcionamiento con HV
+                    //Codigo antiguo
 
                     /*if ($parametros['sa_conp_permiso_tipo'] == 'normal') {
                         $mensaje_TCP = 'consulta_' . $id_insert;
@@ -392,45 +484,51 @@ class consultasC
                         $this->TCP_HV->TCP_enviar($mensaje_TCP);
                     }*/
 
-                    /*$mensaje_alerta = '';
-                    $id_consulta = $id_insert;
-                    if ($parametros['sa_conp_permiso_tipo'] == 'normal') {
-                        $mensaje_alerta = 'SALUD ' . $parametros['nombre_apellido_paciente'] . $id_consulta;
-                        $mensaje_TCP = 'consulta_' . $id_consulta;
-                        $API_response = $this->notificaciones_HV->crear_Evento_usuario($mensaje_alerta, $mensaje_TCP, 3);
-
-                        ///////////////////////////////////////////////////////////////////////////////////////
-                        $max_intentos = 10;
-                        $intentos = 0;
-                        while (($API_response != '0') && $intentos < $max_intentos) {
-                            usleep(500000);
-                            $intentos++;
+                    //Varaible para manejar estado de HIKVISION
+                    $respuesta_servicio_API = '';
+                    if ($this->user_api_hikvision != '.' && $this->key_api_hikvision != '.' && $this->ip_api_hikvision != '.' && $this->puerto_api_hikvision != '.') {
+                        $mensaje_alerta = '';
+                        $id_consulta = $id_insert;
+                        if ($parametros['sa_conp_permiso_tipo'] == 'normal') {
+                            $mensaje_alerta = 'SALUD ' . $parametros['nombre_apellido_paciente'] . $id_consulta;
+                            $mensaje_TCP = 'consulta_' . $id_consulta;
+                            $API_response = $this->notificaciones_HV->crear_Evento_usuario($mensaje_alerta, $mensaje_TCP, 3);
+                            $respuesta_servicio_API = $API_response;
+                            //print_r($respuesta_servicio_API);
+                            //exit;
+                            ///////////////////////////////////////////////////////////////////////////////////////
+                            $max_intentos = 10;
+                            $intentos = 0;
+                            while (($API_response != '0') && $intentos < $max_intentos) {
+                                usleep(500000);
+                                $intentos++;
+                            }
+                            if ($API_response == '0') {
+                                $this->TCP_HV->TCP_enviar($mensaje_TCP);
+                            } else {
+                                //echo "La tarea no se completó después del tiempo máximo.";
+                            }
+                            ///////////////////////////////////////////////////////////////////////////////////////
+                        } else if ($parametros['sa_conp_permiso_tipo'] == 'emergencia') {
+                            $mensaje_alerta = 'SALUD ' . $parametros['nombre_apellido_paciente'] . $id_consulta;
+                            $mensaje_TCP = 'consulta_' . $id_consulta;
+                            $API_response = $this->notificaciones_HV->crear_Evento_usuario($mensaje_alerta, $mensaje_TCP, 2);
+                            $respuesta_servicio_API = $API_response;
+                            ///////////////////////////////////////////////////////////////////////////////////////
+                            $max_intentos = 10;
+                            $intentos = 0;
+                            while (($API_response != '0') && $intentos < $max_intentos) {
+                                usleep(500000);
+                                $intentos++;
+                            }
+                            if ($API_response == '0') {
+                                $this->TCP_HV->TCP_enviar($mensaje_TCP);
+                            } else {
+                                //echo "La tarea no se completó después del tiempo máximo.";
+                            }
+                            ///////////////////////////////////////////////////////////////////////////////////////
                         }
-                        if ($API_response == '0') {
-                            $this->TCP_HV->TCP_enviar($mensaje_TCP);
-                        } else {
-                            echo "La tarea no se completó después del tiempo máximo.";
-                        }
-                        ///////////////////////////////////////////////////////////////////////////////////////
-                    } else if ($parametros['sa_conp_permiso_tipo'] == 'emergencia') {
-                        $mensaje_alerta = 'SALUD ' . $parametros['nombre_apellido_paciente'] . $id_consulta;
-                        $mensaje_TCP = 'consulta_' . $id_consulta;
-                        $API_response = $this->notificaciones_HV->crear_Evento_usuario($mensaje_alerta, $mensaje_TCP, 2);
-
-                        ///////////////////////////////////////////////////////////////////////////////////////
-                        $max_intentos = 10;
-                        $intentos = 0;
-                        while (($API_response != '0') && $intentos < $max_intentos) {
-                            usleep(500000);
-                            $intentos++;
-                        }
-                        if ($API_response == '0') {
-                            $this->TCP_HV->TCP_enviar($mensaje_TCP);
-                        } else {
-                            echo "La tarea no se completó después del tiempo máximo.";
-                        }
-                        ///////////////////////////////////////////////////////////////////////////////////////
-                    }*/
+                    }
 
                     /* Enviar mensaje a padre de familia */
                     //Descomentar las lineas de la funcion enviar_correo_con para enviar el mensaje al correo
@@ -528,8 +626,11 @@ class consultasC
                     }
                 }
 
-
-                $datos = 1;
+                if ($respuesta_servicio_API == -10) {
+                    return -10;
+                } else {
+                    $datos = 1;
+                }
             } else {
                 return -2 . ' . ' . $datos1[0]['dato'];
             }
@@ -581,7 +682,7 @@ class consultasC
                 $this->notificaciones->insertar($datos_notificaciones);
 
                 /*HIKVISION*/
-                //Descomentar las lineas para activar el funcionamiento con HV -- Nuevo
+                //Codigo antiguo
 
                 /*if ($parametros['sa_conp_permiso_tipo'] == 'normal') {
                     $mensaje_TCP = 'consulta_' . $parametros['sa_conp_id'];
@@ -594,46 +695,49 @@ class consultasC
                     sleep(4);
                     $this->TCP_HV->TCP_enviar($mensaje_TCP);
                 }*/
-
-                /*$mensaje_alerta = '';
-                $id_consulta = $parametros['sa_conp_id'];
-                if ($parametros['sa_conp_permiso_tipo'] == 'normal') {
-                    $mensaje_alerta = 'SALUD ' . $parametros['nombre_apellido_paciente'] . $id_consulta;
-                    $mensaje_TCP = 'consulta_' . $id_consulta;
-                    $API_response = $this->notificaciones_HV->crear_Evento_usuario($mensaje_alerta, $mensaje_TCP, 3);
-
-                    ///////////////////////////////////////////////////////////////////////////////////////
-                    $max_intentos = 10;
-                    $intentos = 0;
-                    while (($API_response != '0') && $intentos < $max_intentos) {
-                        usleep(500000);
-                        $intentos++;
+                
+                $respuesta_servicio_API = '';
+                if ($this->user_api_hikvision != '.' && $this->key_api_hikvision != '.' && $this->ip_api_hikvision != '.' && $this->puerto_api_hikvision != '.' && $this->tcp_puerto_hikvision != '.') {
+                    $mensaje_alerta = '';
+                    $id_consulta = $parametros['sa_conp_id'];
+                    if ($parametros['sa_conp_permiso_tipo'] == 'normal') {
+                        $mensaje_alerta = 'SALUD ' . $parametros['nombre_apellido_paciente'] . $id_consulta;
+                        $mensaje_TCP = 'consulta_' . $id_consulta;
+                        $API_response = $this->notificaciones_HV->crear_Evento_usuario($mensaje_alerta, $mensaje_TCP, 3);
+                        $respuesta_servicio_API = $API_response;
+                        ///////////////////////////////////////////////////////////////////////////////////////
+                        $max_intentos = 10;
+                        $intentos = 0;
+                        while (($API_response != '0') && $intentos < $max_intentos) {
+                            usleep(500000);
+                            $intentos++;
+                        }
+                        if ($API_response == '0') {
+                            $this->TCP_HV->TCP_enviar($mensaje_TCP);
+                        } else {
+                            //echo "La tarea no se completó después del tiempo máximo.";
+                        }
+                        ///////////////////////////////////////////////////////////////////////////////////////
+                    } else if ($parametros['sa_conp_permiso_tipo'] == 'emergencia') {
+                        $mensaje_alerta = 'SALUD ' . $parametros['nombre_apellido_paciente'] . $id_consulta;
+                        $mensaje_TCP = 'consulta_' . $id_consulta;
+                        $API_response = $this->notificaciones_HV->crear_Evento_usuario($mensaje_alerta, $mensaje_TCP, 2);
+                        $respuesta_servicio_API = $API_response;
+                        ///////////////////////////////////////////////////////////////////////////////////////
+                        $max_intentos = 10;
+                        $intentos = 0;
+                        while (($API_response != '0') && $intentos < $max_intentos) {
+                            usleep(500000);
+                            $intentos++;
+                        }
+                        if ($API_response == '0') {
+                            $this->TCP_HV->TCP_enviar($mensaje_TCP);
+                        } else {
+                            //echo "La tarea no se completó después del tiempo máximo.";
+                        }
+                        ///////////////////////////////////////////////////////////////////////////////////////
                     }
-                    if ($API_response == '0') {
-                        $this->TCP_HV->TCP_enviar($mensaje_TCP);
-                    } else {
-                        echo "La tarea no se completó después del tiempo máximo.";
-                    }
-                    ///////////////////////////////////////////////////////////////////////////////////////
-                } else if ($parametros['sa_conp_permiso_tipo'] == 'emergencia') {
-                    $mensaje_alerta = 'SALUD ' . $parametros['nombre_apellido_paciente'] . $id_consulta;
-                    $mensaje_TCP = 'consulta_' . $id_consulta;
-                    $API_response = $this->notificaciones_HV->crear_Evento_usuario($mensaje_alerta, $mensaje_TCP, 2);
-
-                    ///////////////////////////////////////////////////////////////////////////////////////
-                    $max_intentos = 10;
-                    $intentos = 0;
-                    while (($API_response != '0') && $intentos < $max_intentos) {
-                        usleep(500000);
-                        $intentos++;
-                    }
-                    if ($API_response == '0') {
-                        $this->TCP_HV->TCP_enviar($mensaje_TCP);
-                    } else {
-                        echo "La tarea no se completó después del tiempo máximo.";
-                    }
-                    ///////////////////////////////////////////////////////////////////////////////////////
-                }*/
+                }
 
                 /* Enviar mensaje a padre de familia */
                 //Descomentar las lineas de la funcion enviar_correo_con para enviar el mensaje al correo
@@ -786,8 +890,11 @@ class consultasC
         $datos = $this->modelo->editar($datos, $where);*/
 
         //$datos = $this->modelo->insertar($datos);
-
-        return $datos;
+        if ($respuesta_servicio_API == -10) {
+            return -10;
+        } else {
+            return $datos;
+        }
     }
 
     function observaciones_consulta($parametros)
@@ -1007,7 +1114,7 @@ class consultasC
         $id = $this->cod_global->id_tabla($sa_pac_tabla);
         $datos_1 = $this->seguros->lista_articulos_seguro_detalle($sa_pac_tabla, $sa_pac_id_comunidad, $_SESSION['INICIO']['MODULO_SISTEMA'], $id[0]['ID'], false, $sa_conp_permiso_seguro_traslado);
 
-        if(!empty($datos_1)){
+        if (!empty($datos_1)) {
             $nombre_seguro = ($datos_1[0]['plan_seguro']);
         }
 
@@ -1022,9 +1129,9 @@ class consultasC
 
 
         $pdf = new FPDF('P', 'mm', 'A4');
-        
+
         $pdf->AddPage();
-        
+
 
         $pdf->Cell(40, 10, utf8_decode(''), 'L T', 0);
         $pdf->SetFont('Arial', 'B', 12);
@@ -1703,7 +1810,7 @@ class consultasC
         $pdf->SetFont('Arial', 'I', 8);
         $pdf->Cell(148.5, 5, 'Desarrollado por Corsinf', 0, 0, 'C');
         $pdf->SetFont('Arial', 'B', 12);
-        
+
 
         $pdf->Output();
     }

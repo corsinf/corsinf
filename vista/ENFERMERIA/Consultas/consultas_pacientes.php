@@ -24,7 +24,7 @@ if (isset($_GET['pac_id'])) {
     //Proceso primero busca el id de la ficha en relacion al paciente
     cargar_datos_consultas(sa_pac_id);
 
-    cargar_datos_seguimiento(sa_pac_id)
+    
 
   });
 
@@ -51,6 +51,8 @@ if (isset($_GET['pac_id'])) {
 
           $('#pnl_seguimiento_li').show();
           $('#pnl_seguimiento').show();
+
+          cargar_datos_seguimiento(sa_pac_id)
         }
 
         $('#title_paciente').html(apellidos + " " + nombres);

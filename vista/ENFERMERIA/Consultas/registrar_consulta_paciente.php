@@ -711,6 +711,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     });
                 } else if (response == -2) {
                     Swal.fire('', 'Código ya registrado', 'success');
+                    
+                }else if (response == -10) {
+                    Swal.fire('', 'Operacion realizada con exito. La atención tardó: ' + tardo + ' minutos.' + 'HIKVISION NO ALERTÓ AL GUARDIA INFORMAR PERSONALMENTE', 'success').then(function() {
+                        <?php if ($regresar == 'agendamiento') { ?>
+                            location.href = '../vista/inicio.php?mod=7&acc=agendamiento';
+                        <?php } else if ($regresar == 'atencion_pac') { ?>
+                            location.href = '../vista/inicio.php?mod=7&acc=atencion_pacientes';
+                        <?php  } else { ?>
+                            location.href = '../vista/inicio.php?mod=7&acc=pacientes';
+                        <?php } ?>
+
+
+
+                    });
                 }
                 //console.log(response);
             }
