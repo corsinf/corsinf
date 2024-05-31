@@ -407,17 +407,6 @@
 </html>
 
 <script>
-	var advertencia =                       
-`░██████╗████████╗░█████╗░██████╗░██╗      ¡Atención! Este mensaje está destinado a los usuarios. 
-██╔════╝╚══██╔══╝██╔══██╗██╔══██╗██║      Si alguien te ha instruido a copiar y pegar código aquí para activar
-╚█████╗░░░░██║░░░██║░░██║██████╔╝██║      una función de APUDATA con el objetivo de acceder ilegalmente a una cuenta,  
-░╚═══██╗░░░██║░░░██║░░██║██╔═══╝░╚═╝      ten en cuenta que se trata de una actividad fraudulenta.
-██████╔╝░░░██║░░░╚█████╔╝██║░░░░░██╗      Si sigues estas instrucciones, podrías poner en riesgo la seguridad de tu cuenta. 
-╚═════╝░░░░╚═╝░░░░╚════╝░╚═╝░░░░░╚═╝      Por favor, ten precaución y no compartas información personal o confidencial. 
 
-Si tienes alguna pregunta o inquietud, por favor contáctanos en el equipo de soporte de APUDATA.
-Para obtener más información, visita nuestro sitio web: https://www.corsinf.com.    
-`   ;
-
-console.log(advertencia);
+// console.log(advertencia);
 </script>

@@ -878,7 +878,8 @@ function para_ftp($nombre,$texto)
 
 		 
 		$this->crear_sp_en_terceros($id_empresa,'Tablas_compartidas');	
-		$this->crear_sp_en_terceros($id_empresa,'GenerarTablasCompartidas');		
+		$this->crear_sp_en_terceros($id_empresa,'GenerarTablasCompartidas');	
+		$this->crear_sp_en_terceros($id_empresa,'GenerarSPBase');		
 		 //COPIAMOS EL PROCESO ALMACENADO QUE ES PARA COPIAR LAS TABLAS DE ACCESO
 		$this->crear_sp_en_terceros($id_empresa,'CopiarEstructuraAccesosTerc');
 
@@ -901,6 +902,8 @@ function para_ftp($nombre,$texto)
 
 		//ejecutamos el proceso almacenado y copiamos estructura de accesos
 		// print_r($res);die();
+
+
 		$parametros = array($db_origen,
 		    						$db_destino,
 		    						$id_empresa);
@@ -954,12 +957,14 @@ function para_ftp($nombre,$texto)
 	{				
 		$db_destino = $base;
 		$db_origen = '';
+		$sp = array();
 		switch ($modulo) {
 			case '7':
 				$db_origen = BASE_SALUD;
 				break;
 			case '2':
 				$db_origen = BASE_ACTIVOS;
+
 				break;
 		}
 		 $parametros = array(
@@ -978,6 +983,12 @@ function para_ftp($nombre,$texto)
 				$password = $empresa[0]['Password_db'];
 				$servidor = $empresa[0]['Ip_host'];
 				$puerto = $empresa[0]['Puerto_db'];
+
+				$parametrosSp = array($db_origen,
+		    								$db_destino,
+		    								'1');
+				$sql2 = "EXEC GenerarSPBase @origen_bd = ?,@destino_bd = ?,@db_tercero = ?";
+				$res = $this->db->ejecutar_sp_db_terceros($database, $usuario, $password, $servidor, $puerto,$sql2, $parametrosSp);
 		  		return $this->db->ejecutar_sp_db_terceros($database, $usuario, $password, $servidor, $puerto,$sql, $parametros);
 		 	}else{
 		  		$sql = "EXEC EstructuraBase @origen_bd = ?, @destino_bd = ?";
