@@ -31,7 +31,7 @@
                 {
                     data: null,
                     render: function(data, type, item) {
-                        return '<a href="#" onclick="enviar_ID_estudiante(' + item.sa_est_id + ', ' + item.sa_id_seccion + ', ' + item.sa_id_grado + ', ' + item.sa_id_paralelo + ', ' + item.sa_id_representante + ')"><u>' + item.sa_est_primer_apellido + ' ' + item.sa_est_segundo_apellido + ' ' + item.sa_est_primer_nombre + ' ' + item.sa_est_segundo_nombre + '</u></a>';
+                        return '<a href="#" onclick="enviar_ID_estudiante(' + item.sa_est_id + ', ' + item.sa_id_seccion + ', ' + item.sa_id_grado + ', ' + item.sa_id_paralelo + ', ' + item.sa_id_representante + ', ' + item.sa_id_representante_2 + ')"><u>' + item.sa_est_primer_apellido + ' ' + item.sa_est_segundo_apellido + ' ' + item.sa_est_primer_nombre + ' ' + item.sa_est_segundo_nombre + '</u></a>';
                     }
                 },
                 {
@@ -46,7 +46,7 @@
 
                         fecha_nacimiento = item.sa_est_fecha_nacimiento;
                         //fecha_nacimiento_calc = ;
-                        
+
                         salida = fecha_nacimiento ? calcular_edad_fecha_nacimiento(item.sa_est_fecha_nacimiento) : '';
 
                         return salida;
@@ -63,13 +63,14 @@
         });
     });
 
-    function enviar_ID_estudiante(id, sa_id_seccion, sa_id_grado, sa_id_paralelo, id_representante) {
+    function enviar_ID_estudiante(id, sa_id_seccion, sa_id_grado, sa_id_paralelo, id_representante, id_representante_2) {
         // Actualiza el valor del campo de entrada con el ID
         $('#sa_est_id').val(id);
         $('#sa_sec_id').val(sa_id_seccion);
         $('#sa_gra_id').val(sa_id_grado);
         $('#sa_par_id').val(sa_id_paralelo);
         $('#id_representante').val(id_representante);
+        $('#id_representante_2').val(id_representante_2);
 
         // Envía el formulario por POST
         $('#form_enviar').submit();
@@ -82,6 +83,7 @@
     <input type="hidden" id="sa_gra_id" name="sa_gra_id">
     <input type="hidden" id="sa_par_id" name="sa_par_id">
     <input type="hidden" id="id_representante" name="id_representante">
+    <input type="hidden" id="id_representante_2" name="id_representante_2">
 </form>
 
 <div class="page-wrapper">

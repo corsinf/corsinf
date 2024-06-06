@@ -30,15 +30,15 @@ function select_parentesco(paretesco = '', campo = '') {
         if (optionElement.length > 0) {
             optionElement.prop('selected', true); // Selecciona la opción 'Masculino'
         }
-    } else if (paretesco === 'Abuelo') {
+    } else if (paretesco === 'Abuelo/a') {
         selectElement = $(campo);
-        optionElement = selectElement.find('option[value="Abuelo"]');
+        optionElement = selectElement.find('option[value="Abuelo/a"]');
         if (optionElement.length > 0) {
             optionElement.prop('selected', true); // Selecciona la opción 'Masculino'
         }
     } else if (paretesco === 'Otro') {
         selectElement = $(campo);
-        optionElement = selectElement.find('option[value="Abuelo"]');
+        optionElement = selectElement.find('option[value="Otro"]');
         if (optionElement.length > 0) {
             optionElement.prop('selected', true); // Selecciona la opción 'Masculino'
         }

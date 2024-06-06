@@ -27,6 +27,10 @@ if (isset($_POST['id_representante'])) {
   $id_representante = $_POST['id_representante'];
 }
 
+if (isset($_POST['id_representante_2'])) {
+  $id_representante_2 = $_POST['id_representante_2'];
+}
+
 ?>
 
 <script src="../js/ENFERMERIA/operaciones_generales.js"></script>
@@ -39,6 +43,7 @@ if (isset($_POST['id_representante'])) {
     var id_grado = '<?php echo $id_grado; ?>';
     var id_paralelo = '<?php echo $id_paralelo; ?>';
     var id_representante = '<?php echo $id_representante; ?>';
+    var id_representante_2 = '<?php echo $id_representante_2; ?>';
 
     //alert(id)
 
@@ -51,6 +56,7 @@ if (isset($_POST['id_representante'])) {
     consultar_datos_seccion_grado(id_grado, id_seccion);
     consultar_datos_grado_paralelo(id_grado, id_paralelo);
     consultar_representante(id_representante);
+    consultar_representante_2(id_representante_2)
 
   });
 
@@ -263,6 +269,83 @@ if (isset($_POST['id_representante'])) {
     });
   }
 
+  function consultar_representante_2(id = '') {
+
+    if (id != '') {
+      //alert(id)
+      $.ajax({
+        data: {
+          "id": id
+        },
+
+        url: '../controlador/representantesC.php?listar=true',
+
+        type: 'post', //método de envio
+        dataType: 'json',
+        success: function(dato) { //una vez que el archivo recibe el request lo procesa y lo devuelve         
+          //console.log(dato);
+          let etiquetas = "";
+          dato.forEach(function(item, itema, items) {
+            etiquetas += '<option value="' + item.sa_rep_id + '">' + item.sa_rep_cedula + ' - ' + item.sa_rep_primer_apellido + ' ' + item.sa_rep_segundo_apellido + ' ' + item.sa_rep_primer_nombre + ' ' + item.sa_rep_segundo_nombre + '</option>';
+          })
+
+          $("#sa_id_representante_2").html(etiquetas);
+        }
+      });
+    }
+
+    $('#sa_id_representante_2').select2({
+      placeholder: 'Selecciona una opción',
+      language: {
+        inputTooShort: function() {
+          return "Por favor ingresa 1 o más caracteres";
+        },
+        noResults: function() {
+          return "No se encontraron resultados";
+        },
+        searching: function() {
+          return "Buscando...";
+        },
+        errorLoading: function() {
+          return "No se encontraron resultados";
+        }
+      },
+      minimumInputLength: 1,
+      ajax: {
+        url: '../controlador/representantesC.php?listar_todo=true',
+        dataType: 'json',
+        delay: 250,
+        data: function(params) {
+          return {
+            searchTerm: params.term // Envía el término de búsqueda al servidor
+          };
+        },
+        processResults: function(data, params) { // Agrega 'params' como parámetro
+          var searchTerm = params.term.toLowerCase();
+
+          var options = data.reduce(function(filtered, item) {
+
+            var fullName = item['sa_rep_cedula'] + " - " + item['sa_rep_primer_apellido'] + " " + item['sa_rep_segundo_apellido'] + " " + item['sa_rep_primer_nombre'] + " " + item['sa_rep_segundo_nombre'];
+
+            if (fullName.toLowerCase().includes(searchTerm)) {
+              filtered.push({
+                id: item['sa_rep_id'],
+                text: fullName
+              });
+            }
+
+            return filtered;
+          }, []);
+
+          return {
+            results: options
+          };
+        },
+        cache: true
+      }
+    });
+  }
+
   function datos_col(id) {
     $.ajax({
       data: {
@@ -288,10 +371,15 @@ if (isset($_POST['id_representante'])) {
         ///////////////////////////////////////////////////////////////////////////////////////////
 
         $('#sa_est_correo').val(response[0].sa_est_correo);
-        $('#sa_id_representante').val(response[0].sa_id_representante);
+        //$('#sa_id_representante').val(response[0].sa_id_representante);
 
         select_parentesco(response[0].sa_est_rep_parentesco, '#sa_est_rep_parentesco');
 
+        //$('#sa_id_representante_2').val(response[0].sa_id_representante_2);
+
+        select_parentesco(response[0].sa_est_rep_parentesco_2, '#sa_est_rep_parentesco_2');
+
+        $('#sa_est_direccion').val(response[0].sa_est_direccion);
 
         //$('#sa_id_seccion').val(response[0].sa_id_seccion);
         //$('#sa_id_grado').val(response[0].sa_id_grado);
@@ -322,6 +410,10 @@ if (isset($_POST['id_representante'])) {
     var sa_est_rep_parentesco = $('#sa_est_rep_parentesco').val();
     var sa_est_correo = $('#sa_est_correo').val();
 
+    var sa_id_representante_2 = $('#sa_id_representante_2').val();
+    var sa_est_rep_parentesco_2 = $('#sa_est_rep_parentesco_2').val();
+    var sa_est_direccion = $('#sa_est_direccion').val();
+
     var parametros = {
 
       'sa_est_id': sa_est_id,
@@ -338,10 +430,13 @@ if (isset($_POST['id_representante'])) {
       'sa_id_representante': sa_id_representante,
       'sa_est_rep_parentesco': sa_est_rep_parentesco,
       'sa_est_correo': sa_est_correo,
-
+      'sa_id_representante_2': sa_id_representante_2,
+      'sa_est_rep_parentesco_2': sa_est_rep_parentesco_2,
+      'sa_est_direccion': sa_est_direccion,
     };
 
     //alert(validar_email(sa_est_correo));
+    console.log(parametros);
 
     if (sa_est_id == '') {
       if (
@@ -622,9 +717,40 @@ if (isset($_POST['id_representante'])) {
                     <option value="Hermano">Hermano/a</option>
                     <option value="Tio">Tío/a</option>
                     <option value="Primo">Primo/a</option>
-                    <option value="Abuelo">Abuelo/a</option>
+                    <option value="Abuelo/a">Abuelo/a</option>
                     <option value="Otro">Otro/a</option>
                   </select>
+                </div>
+              </div>
+
+              <div class="row pt-4">
+                <div class="col-md-8">
+                  <label for="" class="form-label">Representante 2<label style="color: red;">*</label> </label>
+                  <select class="form-select form-select-sm" id="sa_id_representante_2" name="sa_id_representante_2">
+                    <option selected disabled>-- Seleccione --</option>
+                  </select>
+                </div>
+
+                <div class="col-md-4">
+                  <label for="" class="form-label">Parentesco <label style="color: red;">*</label> </label>
+                  <select class="form-select form-select-sm" id="sa_est_rep_parentesco_2" name="sa_est_rep_parentesco_2">
+                    <option selected disabled>-- Seleccione --</option>
+                    <option value="Padre">Padre</option>
+                    <option value="Madre">Madre</option>
+                    <option value="Hermano">Hermano/a</option>
+                    <option value="Tio">Tío/a</option>
+                    <option value="Primo">Primo/a</option>
+                    <option value="Abuelo/a">Abuelo/a</option>
+                    <option value="Otro">Otro/a</option>
+                  </select>
+                </div>
+              </div>
+
+
+              <div class="row pt-4">
+                <div class="col-md-12">
+                  <label for="" class="form-label">Dirección <label style="color: red;">*</label> </label>
+                  <input type="text" class="form-control form-control-sm" id="sa_est_direccion" name="sa_est_direccion">
                 </div>
               </div>
 

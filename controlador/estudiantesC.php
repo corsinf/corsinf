@@ -97,6 +97,9 @@ class estudiantesC
             array('campo' => 'sa_id_representante', 'dato' => $parametros['sa_id_representante']),
             array('campo' => 'sa_est_rep_parentesco', 'dato' => $parametros['sa_est_rep_parentesco']),
             array('campo' => 'sa_est_correo', 'dato' => $parametros['sa_est_correo']),
+            array('campo' => 'sa_id_representante_2', 'dato' => $parametros['sa_id_representante_2']),
+            array('campo' => 'sa_est_rep_parentesco_2', 'dato' => $parametros['sa_est_rep_parentesco_2']),
+            array('campo' => 'sa_est_direccion', 'dato' => $parametros['sa_est_direccion']),
         );
 
         if ($parametros['sa_est_id'] == '') {
