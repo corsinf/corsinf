@@ -249,13 +249,13 @@ class loginC
 			{
 		 		$res = $this->cod_global->generar_primera_vez($empresa[0]['Base_datos'],$parametros['empresa']);
 		 		// foreach ($licencias as $key => $value) {
-		 		// 		$this->cod_global->Copiar_estructura($value['Id_Modulo'],$empresa[0]['Base_datos']);
+		 				// $this->cod_global->Copiar_estructura($value['Id_Modulo'],$empresa[0]['Base_datos']);
 		 		// }
 		 	}else{
 		 		// print_r("ss");die();
 		 		$res = $this->cod_global->generar_primera_vez_terceros($empresa,$parametros['empresa']);
 		 		// foreach ($licencias as $key => $value) {
-		 		// 		$this->cod_global->Copiar_estructura($value['Id_Modulo'],$empresa[0]['Base_datos'],1,$empresa);
+		 				// $this->cod_global->Copiar_estructura($value['Id_Modulo'],$empresa[0]['Base_datos'],1,$empresa);
 		 		// }
 		 		// print_r($empresa);die();
 		 	}
