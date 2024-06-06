@@ -13,7 +13,7 @@ class estudiantesM
     {
         $this->db = new db();
     }
-    
+
     //Para mostrar todos los registros con campos especificos para la vista principal
     function lista_estudiantes_todo()
     {
@@ -30,8 +30,14 @@ class estudiantesM
                     est.sa_id_grado,
                     est.sa_id_paralelo,
                     est.sa_id_representante,
+                    sa_est_rep_parentesco,
+
+
+                    sa_id_representante_2,
+                    sa_est_rep_parentesco_2,
                    
                     est.sa_est_tabla,
+                    sa_est_direccion,
 
                     cs.sa_sec_id, 
                     cs.sa_sec_nombre, 
@@ -68,11 +74,16 @@ class estudiantesM
                     est.sa_id_paralelo,
                     est.sa_id_representante,
                     est.sa_est_rep_parentesco,
+
+                    sa_id_representante_2,
+                    sa_est_rep_parentesco_2,
+
                     est.sa_est_tabla,
                     est.sa_est_correo,
                     est.sa_est_estado,
                     est.sa_est_fecha_creacion,
                     est.sa_est_fecha_modificacion,
+                    sa_est_direccion,
 
                     cs.sa_sec_id, 
                     cs.sa_sec_nombre, 
@@ -112,6 +123,11 @@ class estudiantesM
                     est.sa_id_paralelo,
                     est.sa_id_representante,
                     est.sa_est_rep_parentesco,
+
+                    sa_id_representante_2,
+                    sa_est_rep_parentesco_2,
+                    sa_est_direccion,
+
                     est.sa_est_tabla,
                     est.sa_est_correo,
                     est.sa_est_estado,
@@ -155,7 +171,7 @@ class estudiantesM
         return $rest;
     }
 
-    function add($tabla,$datos)
+    function add($tabla, $datos)
     {
         $rest = $this->db->inserts($tabla, $datos);
         return $rest;
@@ -192,12 +208,17 @@ class estudiantesM
                     est.sa_id_paralelo,
                     est.sa_id_representante,
                     est.sa_est_rep_parentesco,
+
+                    sa_id_representante_2,
+                    sa_est_rep_parentesco_2,
+
                     est.sa_est_tabla,
                     est.sa_est_correo,
                     est.sa_est_estado,
                     est.sa_est_fecha_creacion,
                     est.sa_est_fecha_modificacion,
                     est.sa_est_foto_url,
+                    sa_est_direccion,
                     
                     cs.sa_sec_id, 
                     cs.sa_sec_nombre, 
@@ -221,4 +242,39 @@ class estudiantesM
         return $datos;
     }
 
+    function cargaMasivaIdukay($sql)
+    {
+        //echo $sql;
+        $datos = $this->db->sql_string($sql);
+        return $datos;
+    }
+
+    function ponerRepresentantesEstudiantes()
+    {
+        $sql =
+            "UPDATE e
+
+            SET e.sa_id_representante = r.sa_rep_id
+
+            FROM estudiantes e
+
+            INNER JOIN representantes r
+
+            ON e.sa_id_rep_idukay = r.sa_id_rep_idukay;";
+
+
+        $sql .=
+            "UPDATE e
+
+            SET e.sa_id_representante_2 = r.sa_rep_id
+            
+            FROM estudiantes e
+            
+            INNER JOIN representantes r
+            
+            ON e.sa_id_rep_idukay_2 = r.sa_id_rep_idukay;";
+
+        $datos = $this->db->sql_string($sql);
+        return $datos;
+    }
 }

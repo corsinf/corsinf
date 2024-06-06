@@ -5,95 +5,55 @@
 
 <script type="text/javascript">
     $(document).ready(function() {
-        cargar_datos_v_medicamentos();
-        cargar_datos_v_insumos();
+        cargar_datos_v_config();
+        //cargar_estudiantes1();
     });
 
-    function cargar_datos_v_medicamentos() {
+    function cargar_datos_v_config() {
         $.ajax({
-            url: '../controlador/v_med_insC.php?listar_v_medicamentos=true',
+            url: '../controlador/cat_configuracionGC.php?listar_config_general=true',
             type: 'post',
             dataType: 'json',
             success: function(response) {
                 console.log(response);
 
                 // Limpiar el contenido previo del div
-                $('#pnl_medicamentos').empty();
+                $('#pnl_config_general').empty();
 
                 // Verificar si la respuesta contiene datos
                 if (response && response.length > 0) {
-                    response.forEach(function(medicamento) {
-                        // Crear el HTML para cada medicamento
-                        var isChecked = medicamento.sa_vmi_estado == 1 ? 'checked' : '';
-                        var htmlMedicamento = '<div class="col-md-12">';
-                        htmlMedicamento += '<input type="checkbox" class="medicamento-checkbox" name="medicamento[]" id="' + medicamento.sa_vmi_id_input + '" value="' + medicamento.sa_vmi_id + '" ' + isChecked + '> ';
-                        htmlMedicamento += '<label>' + medicamento.sa_vmi_descripcion + '</label>';
-                        htmlMedicamento += '</div>';
+                    response.forEach(function(config) {
+                        // Crear el HTML para cada config
+                        var isChecked = config.sa_config_estado == 1 ? 'checked' : '';
+                        var htmlconfig = '<div class="col-md-12">';
+                        htmlconfig += '<input type="checkbox" class="config-checkbox" name="config[]" id="' + config.sa_config_validar + '" value="' + config.sa_config_id + '" ' + isChecked + '> ';
+                        htmlconfig += '<label>' + config.sa_config_descripcion + '</label>';
+                        htmlconfig += '</div>';
 
                         // Agregar el HTML generado al div
-                        $('#pnl_medicamentos').append(htmlMedicamento);
+                        $('#pnl_config_general').append(htmlconfig);
                     });
 
                     // Agregar evento change a los checkboxes generados
-                    $('.medicamento-checkbox').change(function() {
-                        var sa_vmi_id = $(this).val();
-                        var sa_vmi_estado = $(this).is(':checked') ? 1 : 0;
-                        insertar(sa_vmi_id, sa_vmi_estado);
+                    $('.config-checkbox').change(function() {
+                        var sa_config_id = $(this).val();
+                        var sa_config_estado = $(this).is(':checked') ? 1 : 0;
+                        insertar(sa_config_id, sa_config_estado);
                     });
                 }
             },
             error: function() {
                 // Manejo de errores
-                $('#pnl_medicamentos').append('<p>Error al cargar los medicamentos.</p>');
+                $('#pnl_config_general').append('<p>Error al cargar los configs.</p>');
             }
         });
     }
 
-    function cargar_datos_v_insumos() {
-        $.ajax({
-            url: '../controlador/v_med_insC.php?listar_v_insumos=true',
-            type: 'post',
-            dataType: 'json',
-            success: function(response) {
-                console.log(response);
-
-                // Limpiar el contenido previo del div
-                $('#pnl_insumos').empty();
-
-                // Verificar si la respuesta contiene datos
-                if (response && response.length > 0) {
-                    response.forEach(function(medicamento) {
-                        // Crear el HTML para cada medicamento
-                        var isChecked = medicamento.sa_vmi_estado == 1 ? 'checked' : '';
-                        var htmlMedicamento = '<div class="col-md-12">';
-                        htmlMedicamento += '<input type="checkbox" class="medicamento-checkbox" name="insumos[]" id="' + medicamento.sa_vmi_id_input + '" value="' + medicamento.sa_vmi_id + '" ' + isChecked + '> ';
-                        htmlMedicamento += '<label>' + medicamento.sa_vmi_descripcion + '</label>';
-                        htmlMedicamento += '</div>';
-
-                        // Agregar el HTML generado al div
-                        $('#pnl_insumos').append(htmlMedicamento);
-                    });
-
-                    // Agregar evento change a los checkboxes generados
-                    $('.medicamento-checkbox').change(function() {
-                        var sa_vmi_id = $(this).val();
-                        var sa_vmi_estado = $(this).is(':checked') ? 1 : 0;
-                        insertar(sa_vmi_id, sa_vmi_estado);
-                    });
-                }
-            },
-            error: function() {
-                // Manejo de errores
-                $('#pnl_insumos').append('<p>Error al cargar los insumos.</p>');
-            }
-        });
-    }
-
-    function insertar(sa_vmi_id, sa_vmi_estado) {
+    function insertar(sa_config_id, sa_config_estado) {
 
         var parametros = {
-            'sa_vmi_id': sa_vmi_id,
-            'sa_vmi_estado': sa_vmi_estado
+            'sa_config_id': sa_config_id,
+            'sa_config_estado': sa_config_estado
         };
 
         //console.log(parametros);
@@ -102,7 +62,7 @@
             data: {
                 parametros: parametros
             },
-            url: '../controlador/v_med_insC.php?vista_mod=true',
+            url: '../controlador/cat_configuracionGC.php?vista_mod=true',
             type: 'post',
             dataType: 'json',
             success: function(response) {
@@ -116,6 +76,323 @@
             },
             error: function() {
                 Swal.fire('', 'Error en la conexión con el servidor.', 'error');
+            }
+        });
+    }
+
+    function cargar_estudiantes() {
+        // Mostrar el spinner usando SweetAlert2
+        Swal.fire({
+            title: 'Por favor, espere',
+            text: 'Procesando la solicitud...',
+            allowOutsideClick: false,
+            onOpen: () => {
+                Swal.showLoading();
+            }
+        });
+
+
+        $.ajax({
+            url: '../controlador/cat_configuracionGC.php?listar_idukay_estudiantes=true',
+            type: 'post',
+            dataType: 'json',
+            success: function(data) {
+                console.log(data);
+                Swal.close();
+                // Inicializar DataTable con la configuración requerida
+                $('#tabla_estudiantes').DataTable({
+                    language: {
+                        url: 'https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
+                    },
+                    responsive: true,
+                    data: data.response,
+                    columns: [{
+                            data: '_id'
+                        },
+                        {
+                            data: 'user.surname'
+                        },
+
+                        {
+                            data: null,
+                            render: function(data) {
+                                if (data.user.second_surname == null) {
+                                    return '';
+
+                                } else {
+                                    return data.user.second_surname;
+                                }
+
+                            }
+                        },
+                        {
+                            data: 'user.name'
+                        },
+                        {
+                            data: null,
+                            render: function(data) {
+                                if (data.user.second_name == null) {
+                                    return '';
+
+                                } else {
+                                    return data.user.second_name;
+                                }
+
+                            }
+                        },
+                        {
+                            data: 'user.id_card'
+                        },
+                        {
+                            data: 'user.gender',
+                            render: function(data) {
+                                return data === 'M' ? 'Masculino' : 'Femenino';
+                            }
+                        },
+                        {
+                            data: 'user.birthday',
+                            render: function(data) {
+                                return new Date(data * 1000).toLocaleDateString();
+                            }
+
+                        },
+                        {
+                            data: 'user.email',
+                            defaultContent: '' // Si el campo está vacío, mostrará una cadena vacía en lugar de 'null'
+                        },
+                        {
+                            data: null,
+                            render: function(data) {
+                                if (data.user.address == null) {
+                                    return '';
+                                } else {
+                                    return data.user.address;
+                                }
+
+                            }
+                        },
+                        {
+                            data: 'relatives',
+                            render: function(data) {
+                                var html = '';
+                                data.forEach(function(rel, index) {
+                                    html += '<p><strong>Pariente ' + (index + 1) + ':</strong></p>';
+                                    html += '<p><strong>Nombre:</strong> ' + rel.relationship + '</p>';
+                                    html += '<p><strong>ID:</strong> ' + rel.parent + '</p>';
+                                });
+                                return html;
+                            }
+                        }
+                    ]
+                });
+            },
+            error: function() {
+                // Manejo de errores
+                $('#pnl_idukay').append('<p>Error al cargar los estudiantes.</p>');
+            }
+        });
+    }
+
+    function cargar_estudiantes2() {
+        $.ajax({
+            url: '../controlador/cat_configuracionGC.php?idukay_estudiantes=true',
+            type: 'post',
+            dataType: 'json',
+            success: function(data) {
+                console.log(data);
+                var estudiantesHtml = '';
+
+                // Iterar sobre la respuesta JSON
+                data.response.forEach(function(estudiante) {
+                    // Aquí puedes acceder a los datos de cada estudiante
+                    var id = estudiante._id;
+                    var apellido = estudiante.user.surname;
+                    var segundoApellido = estudiante.user.second_surname;
+                    var primerNombre = estudiante.user.name;
+                    var segundoNombre = estudiante.user.second_name;
+                    var cedula = estudiante.user.id_card;
+                    var sexo = estudiante.user.gender;
+                    var fechaNacimiento = new Date(estudiante.user.birthday * 1000).toLocaleDateString();
+
+                    // Datos de los parientes
+                    var relativesHtml = '';
+                    estudiante.relatives.forEach(function(pariente, index) {
+                        relativesHtml += '<p><strong>Pariente ' + (index + 1) + ':</strong></p>';
+                        relativesHtml += '<p><strong>Nombre:</strong> ' + pariente.relationship + '</p>';
+                        relativesHtml += '<p><strong>ID:</strong> ' + pariente._id + '</p>';
+                        // Puedes incluir más datos del pariente si es necesario
+                    });
+
+                    var direccion = estudiante.user.address;
+                    var correo = estudiante.user.email;
+
+                    estudiantesHtml += '<div class="estudiante">';
+                    estudiantesHtml += '<p><strong>ID:</strong> ' + id + '</p>';
+                    estudiantesHtml += '<p><strong>Primer Apellido:</strong> ' + apellido + '</p>';
+                    estudiantesHtml += '<p><strong>Segundo Apellido:</strong> ' + segundoApellido + '</p>';
+                    estudiantesHtml += '<p><strong>Primer Nombre:</strong> ' + primerNombre + '</p>';
+                    estudiantesHtml += '<p><strong>Segundo Nombre:</strong> ' + segundoNombre + '</p>';
+                    estudiantesHtml += '<p><strong>Cédula:</strong> ' + cedula + '</p>';
+                    estudiantesHtml += '<p><strong>Género:</strong> ' + (sexo === 'M' ? 'Masculino' : 'Femenino') + '</p>';
+                    estudiantesHtml += '<p><strong>Fecha de nacimiento:</strong> ' + fechaNacimiento + '</p>';
+                    estudiantesHtml += relativesHtml;
+                    estudiantesHtml += '<p><strong>Correo:</strong> ' + correo + '</p>';
+                    estudiantesHtml += '<p><strong>Dirección:</strong> ' + direccion + '</p>';
+                    estudiantesHtml += '</div><br><hr>';
+                });
+
+                // Append the constructed HTML to the panel
+                $('#pnl_idukay').append(estudiantesHtml);
+            },
+            error: function() {
+                // Manejo de errores
+                $('#pnl_idukay').append('<p>Error al cargar los estudiantes.</p>');
+            }
+        });
+    }
+
+    function cargar_estudiantes1() {
+        $.ajax({
+            url: '../controlador/cat_configuracionGC.php?listar_idukay_estudiantes=true',
+            type: 'post',
+            dataType: 'json',
+            success: function(response) {
+                console.log(response);
+
+                // Contar el número de registros
+                var numRegistros = response.response.length;
+
+                // Mostrar el número de registros
+                var contadorElement = $('<p></p>').text('Número de registros: ' + numRegistros);
+                $('#pnl_idukay').append(contadorElement);
+
+                // Convertir el JSON a una cadena con formato
+                var formattedJson = JSON.stringify(response, null, 2);
+
+                // Crear un elemento <pre> para mostrar el JSON con formato
+                var preElement = $('<pre></pre>').text(formattedJson);
+
+                // Agregar el <pre> al panel
+                $('#pnl_idukay').append(preElement);
+            },
+            error: function() {
+                // Manejo de errores
+                $('#pnl_idukay').append('<p>Error al cargar los configs.</p>');
+            }
+        });
+    }
+
+
+    function sincronizar_estudiantes() {
+        Swal.fire({
+            title: 'Por favor, espere',
+            text: 'Procesando la solicitud...',
+            allowOutsideClick: false,
+            onOpen: () => {
+                Swal.showLoading();
+            }
+        });
+
+        $.ajax({
+            url: '../controlador/cat_configuracionGC.php?idukay_estudiantes=true',
+            type: 'post',
+            dataType: 'json',
+            success: function(response) {
+                console.log(response);
+                if (response == 1) {
+                    Swal.close();
+                    Swal.fire('', 'Copia masiva exitosa.', 'success');
+                    $('#pnl_idukay').html('<p>Copia masiva exitosa.</p>');
+                } else if (response == -10) {
+                    Swal.close();
+                    $('#pnl_idukay').html('<p>Error al subir datos a la Base de Datos.</p>');
+                    Swal.fire('', 'Error al subir datos a la Base de Datos.', 'error');
+                } else if (response == -11) {
+                    Swal.close();
+                    $('#pnl_idukay').html('<p>Error al conectarse con la API de Idukay.</p>');
+                    Swal.fire('', 'Error al conectarse con la API de Idukay.', 'error');
+                }
+
+            },
+            error: function() {
+                // Manejo de errores
+                $('#pnl_idukay').html('<p>Error al cargar los configs.</p>');
+            }
+        });
+    }
+
+    function sincronizar_representantes() {
+        Swal.fire({
+            title: 'Por favor, espere',
+            text: 'Procesando la solicitud...',
+            allowOutsideClick: false,
+            onOpen: () => {
+                Swal.showLoading();
+            }
+        });
+
+        $.ajax({
+            url: '../controlador/cat_configuracionGC.php?idukay_representantes=true',
+            type: 'post',
+            dataType: 'json',
+            success: function(response) {
+                console.log(response);
+                if (response == 1) {
+                    Swal.close();
+                    Swal.fire('', 'Copia masiva exitosa.', 'success');
+                    $('#pnl_idukay').html('<p>Copia masiva exitosa.</p>');
+                } else if (response == -10) {
+                    Swal.close();
+                    $('#pnl_idukay').html('<p>Error al subir datos a la Base de Datos.</p>');
+                    Swal.fire('', 'Error al subir datos a la Base de Datos.', 'error');
+                } else if (response == -11) {
+                    Swal.close();
+                    $('#pnl_idukay').html('<p>Error al conectarse con la API de Idukay.</p>');
+                    Swal.fire('', 'Error al conectarse con la API de Idukay.', 'error');
+                }
+
+            },
+            error: function() {
+                // Manejo de errores
+                $('#pnl_idukay').html('<p>Error al cargar los configs.</p>');
+            }
+        });
+    }
+
+    function sincronizar_idukay() {
+        Swal.fire({
+            title: 'Por favor, espere',
+            text: 'Procesando la solicitud...',
+            allowOutsideClick: false,
+            onOpen: () => {
+                Swal.showLoading();
+            }
+        });
+
+        $.ajax({
+            url: '../controlador/cat_configuracionGC.php?idukay_sincronizar=true',
+            type: 'post',
+            dataType: 'json',
+            success: function(response) {
+                console.log(response);
+                if (response == 1) {
+                    Swal.close();
+                    Swal.fire('', 'Copia masiva exitosa.', 'success');
+                    $('#pnl_idukay').html('<p>Copia masiva exitosa.</p>');
+                } else if (response == -1) {
+                    Swal.close();
+                    $('#pnl_idukay').html('<p>Error al subir Estudiantes a la Base de Datos.</p>');
+                    Swal.fire('', 'Error al subir datos a la Base de Datos.', 'error');
+                } else if (response == -2) {
+                    Swal.close();
+                    $('#pnl_idukay').html('<p>Error al subir Representantes a la Base de Datos.</p>');
+                    Swal.fire('', 'Error al subir datos a la Base de Datos.', 'error');
+                }
+
+            },
+            error: function() {
+                // Manejo de errores
+                $('#pnl_idukay').html('<p>Error al cargar los configs.</p>');
             }
         });
     }
@@ -153,7 +430,7 @@
                         <div class="card-title d-flex align-items-center">
                             <div><i class="bx bxs-user me-1 font-22 text-primary"></i>
                             </div>
-                            <h5 class="mb-0 text-primary">Configuración - Vistas Medicamentos, Insumos</h5>
+                            <h5 class="mb-0 text-primary">Configuración - General</h5>
 
                         </div>
 
@@ -161,11 +438,53 @@
 
                         <div class="content">
                             <!-- Content Header (Page header) -->
-                            <h6>Configuración General </h6>
-                            <div class="row" id="pnl_medicamentos">
+                            <h6>Configuración General</h6>
+                            <br>
+                            <div class="row" id="pnl_config_general">
 
                             </div>
 
+                            <br>
+                            <br>
+                            <hr>
+
+                            <h6>Configuración Idukay</h6>
+                            <button class="btn btn-primary btn-sm" onclick="sincronizar_estudiantes()" type="button"><i class='bx bx-sync'></i> Sincronizar Estudiantes Idukay</button>
+
+                            <button class="btn btn-primary btn-sm" onclick="sincronizar_representantes()" type="button"><i class='bx bx-sync'></i> Sincronizar Representantes Idukay</button>
+
+                            <button class="btn btn-primary btn-sm" onclick="sincronizar_idukay()" type="button"><i class='bx bx-sync'></i> Sincronizar con Idukay</button>
+
+
+                            <div class="row" id="pnl_idukay">
+
+                            </div>
+
+                            <br><br>
+
+                            <section class="content pt-4" hidden>
+                                <div class="container-fluid">
+                                    <div class="table-responsive">
+                                        <table class="table table-striped responsive" id="tabla_estudiantes" style="width:100%">
+                                            <thead>
+                                                <tr>
+                                                    <th>ID</th>
+                                                    <th>Primer Apellido</th>
+                                                    <th>Segundo Apellido</th>
+                                                    <th>Primer Nombre</th>
+                                                    <th>Segundo Nombre</th>
+                                                    <th>Cédula</th>
+                                                    <th>Género</th>
+                                                    <th>Fecha de Nacimiento</th>
+                                                    <th>Correo</th>
+                                                    <th>Dirección</th>
+                                                    <th>Parientes</th>
+                                                </tr>
+                                            </thead>
+                                        </table>
+                                    </div>
+                                </div><!-- /.container-fluid -->
+                            </section>
 
                             <!-- /.content -->
                         </div>

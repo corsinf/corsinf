@@ -1,237 +1,28 @@
-{
-  "response": {
-    "results": [
-      {
-        "_id": "53a1e04e51cfd2ec27000055",
-        "__v": 0,
-        "addresses": [
-          {
-            "_id": "53a1e04e51cfd2ec27000057",
-            "city_zone": "53a99a79774b6ad71d000047",
-            "bus_routes": [
-              "53a99a79774b6ad71d000045"
-            ],
-            "name": "Principal",
-            "main_street": "Miguel Castro",
-            "number": "E8545-45",
-            "secondary_street": "Manuel Cordova Galarza",
-            "zip_code": "897899",
-            "additional_info": "frente a la farmacia",
-            "sector": "Iñaquito",
-            "parish": "Iñaquito",
-            "district": "Iñaquito",
-            "province": "Pichincha",
-            "city": "Quito",
-            "main": true,
-            "trips": [
-              {
-                "_id": "53a1e04e51cfd2ec2700005e",
-                "from": true,
-                "to": true,
-                "week_day": 0
-              }
-            ]
-          }
-        ],
-        "citizenship": "EC",
-        "emergency": {
-          "contacts": [
-            {
-              "_id": "558b1c5b09409a8e5c00003a",
-              "phones": {
-                "mobile": "897655555"
-              }
-            }
-          ],
-          "preferred_hospital": {
-            "name": "Metropolitano",
-            "notes": "Seguros BMI"
-          }
-        },
-        "permissions": [
-          "53a0a866fc09c1392c4a020f"
-        ],
-        "relational_data": {
-          "gender": "M",
-          "name": {
-            "show": "Allerdyce Pyro, John",
-            "order": "allerdyce pyro, john"
-          },
-          "id_card": {
-            "show": "0301738852",
-            "order": "0301738852"
-          },
-          "email": "jonhdoe@mail.com",
-          "years": {
-            "53a0a8695dc899392c00004f": {
-              "grade": {
-                "show": "Primero de Básica, 2012-2013, Básica",
-                "order": "primero de basica, 2012-2013, basica"
-              },
-              "group": {
-                "show": "",
-                "order": ""
-              },
-              "all_data": "0301738852 allerdyce pyro, john  primero de basica, 2012-2013, basica"
-            },
-            "53a0be2c1a9d5fb532000051": {
-              "all_data": "0301738852 allerdyce pyro, john  segúndo de basica, basica elemental 2b-b",
-              "group": {
-                "order": "2b-b",
-                "show": "2B-B"
-              },
-              "grade": {
-                "order": "segúndo de basica, basica elemental",
-                "show": "segúndo de Básica, Básica Elemental"
-              }
-            }
-          }
-        },
-        "school": "53a0a8665dc899392c00004b",
-        "user": {
-          "_id": "53d27b4a2c6c197fa0000045",
-          "address": "las casas",
-          "birthday": 960940800,
-          "email": "banshee@xmen.com",
-          "fix_email_index_check": "",
-          "gender": "F",
-          "id_card": "0302084793",
-          "is_passport": true,
-          "name": "Sean",
-          "photo": "",
-          "place_of_birth": "Quito",
-          "preferences": {
-            "receive_mail_on_notification": true,
-            "working_school": "string"
-          },
-          "profiles": [
-            {
-              "_id": "53a1e0ba51cfd2ec2700005f",
-              "collection_name": "students"
-            }
-          ],
-          "school": "53a0a8665dc899392c00004b",
-          "second_surname": "banshee",
-          "surname": "Cassidy",
-          "system_access": false,
-          "schools_registered\"": [
-            "53a0a8665dc899392c00004b"
-          ],
-          "accept_disclaimer": true
-        },
-        "years": [
-          {
-            "_id": "53a1e0ba51cfd2ec27000060",
-            "enrolled": true,
-            "grade": "53a0a8695dc899392c000061",
-            "registered": false,
-            "registered_date": 1214691508,
-            "year": "53a0a8695dc899392c00004f",
-            "registration_type": "5671d70310bc97627548393b",
-            "withdrawn": false,
-            "withdrawn_after_period": "Periodo 5 basica",
-            "withdrawn_notes": "9",
-            "group": "53a1f82951cfd2ec2700017f",
-            "registration_sequence": 0,
-            "registration_type_notes": "",
-            "paid": true,
-            "late_paiment": false,
-            "subscription": "53a1f82951cfd2ec2700017f"
-          }
-        ],
-        "code": "x1",
-        "general_information": "general info",
-        "religion": "mormon",
-        "phone": "9098787654",
-        "home_ownership": "abuelo",
-        "unique_electric_code": "897080987-cc",
-        "system_access": true,
-        "blocked": false,
-        "transport": true,
-        "relatives": [
-          {
-            "parent": "558b1c5b09409a8e5c00003a",
-            "relationship": "abuelo",
-            "is_legal_guardian": false,
-            "official_legal_guardian": false,
-            "economic_representative": false,
-            "can_pick_up": true,
-            "lives_with": true
-          }
-        ],
-        "counseling": {
-          "siblings": {
-            "male": 1,
-            "female": 2,
-            "student_position": 3
-          },
-          "living_arrangement_description": "acogedor",
-          "academic_needs": {
-            "has_special_needs": false
-          },
-          "professional_help": {
-            "received": false,
-            "notes": "comportamiento regular"
-          },
-          "notes": "estuvo en terapia luego de la separación de sus padres"
-        },
-        "previous_school": {
-          "name": "Escuela Narnia",
-          "reasons": "Cambio de domicilio"
-        },
-        "medical_history": {
-          "notes": "El alumno tiene diavetes",
-          "height": 1.35,
-          "weight": 40,
-          "blood_type": "Orh +",
-          "has_health_insurance": true,
-          "health_insurance": "BMI",
-          "illnesses": [
-            {
-              "name": "diavetes",
-              "had": false,
-              "has": true,
-              "description": "constrola con insulina"
-            }
-          ],
-          "allergies": [
-            {
-              "type": "dermica",
-              "name": "Urticaria",
-              "reaction": "Ronchas"
-            }
-          ],
-          "vaccines": [
-            {
-              "name": "Tetanos",
-              "date": 1214691508,
-              "description": "se le hizo poner despues de una caida"
-            }
-          ]
-        },
-        "period_conduct": [
-          {
-            "_id": "53a1e04e51cfd2ec27000890",
-            "score": 9.7,
-            "score_letter": "53a1e04e51cfd2ec27007850",
-            "recommendation": "recomendacion de conducta",
-            "improvement": "oportunidad de mejora"
-          }
-        ],
-        "period_comments": [
-          {
-            "period": "53a1e04e51cfd2ec27000890",
-            "title": "Satisfactorio",
-            "text": "Alumno destacado en cuanto al orden"
-          }
-        ]
-      }
-    ],
-    "total": 22,
-    "active": 20,
-    "inactive": 2
-  },
-  "errors": [
-    ""
-  ]
-}
+<<<<<<< HEAD
+COMPROBANTE	SERIE_COMPROBANTE	RUC_EMISOR	RAZON_SOCIAL_EMISOR	FECHA_EMISION	FECHA_AUTORIZACION	TIPO_EMISION	NUMERO_DOCUMENTO_MODIFICADO	IDENTIFICACION_RECEPTOR	CLAVE_ACCESO	NUMERO_AUTORIZACION	IMPORTE_TOTAL
+Factura	001-001-000531205	0992560754001	ZUKALO S A	01/12/2023	02/12/2023 13:18:24	NORMAL		1793196048001	0112202301099256075400120010010005312052832727410	0112202301099256075400120010010005312052832727410	46.1
+Notas de Crédito	001-001-000040091	0992560754001	ZUKALO S A	21/12/2023	21/12/2023 09:51:22	NORMAL	001-001-000531205	1793196048001	2112202304099256075400120010010000400912898748317	2112202304099256075400120010010000400912898748317	
+=======
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 0161a81e77bb576f134ca280a802af4810c4b1a0
+RUC_EMISOR	RAZON_SOCIAL_EMISOR	TIPO_COMPROBANTE	SERIE_COMPROBANTE	CLAVE_ACCESO	FECHA_AUTORIZACION	FECHA_EMISION	IDENTIFICACION_RECEPTOR	VALOR_SIN_IMPUESTOS	IVA	IMPORTE_TOTAL	NUMERO_DOCUMENTO_MODIFICADO
+1791904753001	CORA REFRIGERACION CIA. LTDA	Factura	001-005-000003279	1511202201179190475300120010050000032790000000113	15/11/2022 10:38:04	15/11/2022	1793196048001	47.8	5.74	53.54	
+1790041220001	COMERCIAL KYWI S.A. 	Factura	038-903-000130795	1811202201179004122000120389030001307951790041211	18/11/2022 14:37:05	18/11/2022	1793196048001	28.86	3.46	32.32	
+0990789061001	DISTRIBUIDORA IMPORTADORA DIPOR S.A.	Factura	002-020-000748355	1911202201099078906100120020200007483550074835511	19/11/2022 01:39:28	19/11/2022	1793196048001	1.42	.17	1.59	
+1792144566001	INSUMOS PROFESIONALES INSUPROF CIA. LTDA.	Factura	001-301-000084785	2111202201179214456600120013010000847850008478515	21/11/2022 17:04:35	21/11/2022	1793196048001	1009.81	121.18	1130.99	
+1791904753001	CORA REFRIGERACION CIA. LTDA	Factura	001-005-000003294	2111202201179190475300120010050000032940000000110	21/11/2022 13:03:50	21/11/2022	1793196048001	14.34	1.72	16.06	
+1792144566001	INSUMOS PROFESIONALES INSUPROF CIA. LTDA.	Factura	001-301-000084764	2111202201179214456600120013010000847640008476410	21/11/2022 11:09:07	21/11/2022	1793196048001	6.49	.78	7.27	
+0600588594001	VACA SUAREZ ELIZABETH DEL ROSARIO	Factura	001-002-000003361	2411202201060058859400120010020000033616005885918	24/11/2022 17:09:37	24/11/2022	1793196048001	2669.64	320.36	2990	
+0990789061001	DISTRIBUIDORA IMPORTADORA DIPOR S.A.	Factura	002-020-000764472	2511202201099078906100120020200007644720076447210	25/11/2022 23:25:40	25/11/2022	1793196048001	4.8	0	4.8	
+1790041220001	COMERCIAL KYWI S.A. 	Factura	038-903-000133278	2911202201179004122000120389030001332781790041211	29/11/2022 13:00:07	29/11/2022	1793196048001	90.09	10.81	100.9	
+<<<<<<< HEAD
+=======
+=======
+COMPROBANTE	SERIE_COMPROBANTE	RUC_EMISOR	RAZON_SOCIAL_EMISOR	FECHA_EMISION	FECHA_AUTORIZACION	TIPO_EMISION	NUMERO_DOCUMENTO_MODIFICADO	IDENTIFICACION_RECEPTOR	CLAVE_ACCESO	NUMERO_AUTORIZACION	IMPORTE_TOTAL
+Factura	001-042-000177495	1768169530001	AGENCIA NACIONAL DE REGULACION, CONTROL Y VIGILANCIA SANITARIA - ARCSA, DOCTOR LEOPOLDO IZQUIETA PEREZ	03/08/2022	03/08/2022 10:52:10	NORMAL		1793196048001	0308202201176816953000120010420001774951234567814	0308202201176816953000120010420001774951234567814	104.53
+Factura	001-011-000006442	1791237056001	ASOCIACION ECUATORIANA DE CODIGO DE PRODUCTO ECOP	22/08/2022	22/08/2022 17:16:27	NORMAL		1793196048001	2208202201179123705600120010110000064420000644218	2208202201179123705600120010110000064420000644218	52.64
+>>>>>>> 76d9b57e4927a8287269486468eb5ae559172141
+>>>>>>> 0161a81e77bb576f134ca280a802af4810c4b1a0
+>>>>>>> cb443e43b692390b947e4fc999fd8a8a0f67593d
