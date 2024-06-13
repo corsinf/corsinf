@@ -18,23 +18,27 @@ class loginM
 		return $datos;
 	}
 
-	function buscar_empresas($email,$pass,$id=false)
+	function buscar_empresas($email,$pass=false,$id=false)
 	{
 		$sql = "SELECT * 
 				FROM ACCESOS_EMPRESA AC
 				INNER JOIN USUARIOS US ON AC.Id_usuario = US.id_usuarios
 				INNER JOIN EMPRESAS EM ON AC.Id_Empresa = EM.Id_empresa
-				WHERE US.email = '".$email."' AND US.password = '".$pass."' AND EM.Estado = 'A'";
+				WHERE  EM.Estado = 'A' AND US.email = '".$email."' ";
+				if($pass)
+				{
+					$sql.=" AND US.password = '".$pass."' ";
+				}
 				if($id)
 				{
-					$sql.=" AND id_empresa='".$id."'";
+					$sql.=" AND AC.Id_empresa='".$id."'";
 				}
 				// print_r($sql);die();
 		$datos = $this->db->datos($sql,1);
 		return $datos;
 	}
 
-	function empresa_tabla_noconcurente($id_empresa=false)
+	function empresa_tabla_noconcurente($id_empresa=false,$tabla=false)
 	{
 		$sql = "SELECT Tabla,Id_Empresa,Campo_usuario,Campo_pass,tipo_perfil,TU.DESCRIPCION as 'tipo',campo_img
 			FROM TABLAS_NOCONCURENTE T
@@ -43,6 +47,10 @@ class loginM
 				if($id_empresa)
 				{
 					$sql.=" AND Id_Empresa='".$id_empresa."'";
+				}
+				if($tabla)
+				{
+					$sql.= " AND Tabla = '".$tabla."' ";
 				}
 				$sql.="GROUP BY Tabla,Id_Empresa,Campo_usuario,Campo_pass,tipo_perfil,TU.DESCRIPCION,campo_img";
 
@@ -55,6 +63,7 @@ class loginM
 	{
 		$item = array();
 		$sql = "SELECT * FROM ".$parametros['tabla']." WHERE ".$parametros['Campo_Usuario']." = '".$parametros['email']."' AND ".$parametros['Campo_Pass']."='".$parametros['pass']."'";
+		// print_r($sql);die();
 		if($this->db->conexion_db_terceros($database,$usuario,$password,$servidor,$puerto)!='-1')
 		{
 		 $item = $this->db->datos_db_terceros($database,$usuario,$password,$servidor,$puerto,$sql);
@@ -258,7 +267,73 @@ class loginM
 
 	}
 
+	function tabla_noconcurente($idempresa=false,$tabla=false)
+	{
+		$sql= "SELECT DISTINCT Tabla,Id_Empresa,Campo_usuario,Campo_pass FROM  TABLAS_NOCONCURENTE
+		WHERE 1 = 1";
+		if($idempresa)
+		{
+			$sql.=" AND Id_Empresa='".$idempresa."'";
+		}
+		if($tabla)
+		{
+			$sql.=" AND Tabla = '".$tabla."'";
+		}
+
+		// print_r($sql);die();
+		$datos = $this->db->datos($sql,1);
+		return $datos;
+	}
+
+	function buscar_en_tablas_noconcurente_empresaTerceros($empresa,$tabla,$correo,$campoValidar,$validar =false,$campoPass=false)
+	{
+		$database = $empresa[0]['Base_datos'];
+		$usuario = $empresa[0]['Usuario_db'];
+		$password = $empresa[0]['Password_db'];
+		$servidor = $empresa[0]['Ip_host'];
+		$puerto = $empresa[0]['Puerto_db'];
+
+
+		$sql = "SELECT *  FROM ".$tabla." 
+				WHERE ".$campoValidar." = '".$correo."' ";
+				if($validar)
+				{
+					$sql.=" AND ".$campoPass." IS NOT NULL ";
+				}
+				// print_r($sql);
+		$datos = $this->db->datos_db_terceros($database, $usuario, $password, $servidor, $puerto, $sql);
+		return $datos;
+	}
+
 	
+	function id_tabla_terceros($tabla,$empresa)
+	{
+		// print_r($empresa);die();
+		$database = $empresa[0]['Base_datos'];
+		$usuario = $empresa[0]['Usuario_db'];
+		$password = $empresa[0]['Password_db'];
+		$servidor = $empresa[0]['Ip_host'];
+		$puerto = $empresa[0]['Puerto_db'];
+
+		$sql="SELECT COLUMN_NAME as 'ID'
+				FROM INFORMATION_SCHEMA.KEY_COLUMN_USAGE
+				WHERE OBJECTPROPERTY(OBJECT_ID(CONSTRAINT_NAME), 'IsPrimaryKey') = 1
+				AND TABLE_NAME = '".$tabla."'";
+		$datos2 = $this->db->datos_db_terceros($database, $usuario, $password, $servidor, $puerto, $sql);
+		return $datos2;
+	}
+
+	function update_no_concurente($empresa,$sql)
+	{
+		// print_r($empresa);die();
+		$database = $empresa[0]['Base_datos'];
+		$usuario = $empresa[0]['Usuario_db'];
+		$password = $empresa[0]['Password_db'];
+		$servidor = $empresa[0]['Ip_host'];
+		$puerto = $empresa[0]['Puerto_db'];
+		$datos2 = $this->db->sql_string_db_terceros($database, $usuario, $password, $servidor, $puerto, $sql);
+		return $datos2;
+	}		
 
 }
 ?>

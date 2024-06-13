@@ -119,6 +119,12 @@ function add_no_concurente()
         {
           Swal.fire('','Agregado a no concurrentes','success');   
           lista_no_concurente()
+        }else if(response==-3)
+        {
+          Swal.fire('','La tabla asociada no tiede datos','error'); 
+        }else
+        {
+          Swal.fire('No se puedo guardar','Comuniquese con el Administrador del sistema (key no encontrado)','error'); 
         }
         // console.log(response);
      }

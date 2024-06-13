@@ -2,11 +2,11 @@
 @session_start();
 if(!class_exists('db'))
 {
- include('../db/db.php');
+ 	require_once('../db/db.php');
 }
 if(!class_exists('codigos_globales'))
 {
-	include('../db/codigos_globales.php');
+	require_once('../db/codigos_globales.php');
 }
 /**
  * 

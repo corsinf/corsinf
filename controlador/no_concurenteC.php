@@ -57,20 +57,32 @@ class no_concurenteC
 		if(count($existe)==0)
 		{
 			$id_tabla = $this->modelo->id_tabla_no_concurentes($parametros['tabla']);
+			if(!isset($id_tabla[0]['ID']) || $id_tabla[0]['ID']=='')
+			{
+				return -4;
+			}
 			$id = $id_tabla[0]['ID'];
+
 			$datos = $this->modelo->datos_no_concurentes($parametros['tabla']);
 
-			foreach ($datos as $key => $value) {
-					$datosADD = array(
-					array('campo'=>'Tabla','dato'=>$parametros['tabla']),
-					array('campo'=>'Id_Empresa','dato'=>$_SESSION['INICIO']['ID_EMPRESA']),
-					array('campo'=>'Id_Usuario','dato'=>$value[$id]),
-					array('campo'=>'Campo_usuario','dato'=>$parametros['usuario']),
-					array('campo'=>'Campo_pass','dato'=>$parametros['pass']),
-					array('campo'=>'tipo_perfil','dato'=>$parametros['perfil_usu']),
-					array('campo'=>'campo_img','dato'=>$parametros['foto']),
-				);
-				$this->modelo->insertar('TABLAS_NOCONCURENTE',$datosADD,1);
+			if(count($datos)>0)
+			{
+
+				foreach ($datos as $key => $value) {
+						$datosADD = array(
+						array('campo'=>'Tabla','dato'=>$parametros['tabla']),
+						array('campo'=>'Id_Empresa','dato'=>$_SESSION['INICIO']['ID_EMPRESA']),
+						array('campo'=>'Id_Usuario','dato'=>$value[$id]),
+						array('campo'=>'Campo_usuario','dato'=>$parametros['usuario']),
+						array('campo'=>'Campo_pass','dato'=>$parametros['pass']),
+						array('campo'=>'tipo_perfil','dato'=>$parametros['perfil_usu']),
+						array('campo'=>'campo_img','dato'=>$parametros['foto']),
+					);
+					$this->modelo->insertar('TABLAS_NOCONCURENTE',$datosADD,1);
+				}
+			}else
+			{
+				return -3;
 			}
 
 			$datosUPD = array(

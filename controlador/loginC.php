@@ -3,6 +3,7 @@ include('../modelo/loginM.php');
 include('../db/codigos_globales.php');
 include('../modelo/modulos_paginasM.php');
 include('../modelo/tipo_usuarioM.php');
+require_once(dirname(__DIR__).'/controlador/ACTIVEDIR/activedirectoryC.php');
 include('../modelo/no_concurenteM.php');
 include('../lib/phpmailer/enviar_emails.php');
 
@@ -96,6 +97,18 @@ if(isset($_GET['primer_inicio']))
 	 $parametros = $_POST['parametros'];
   echo json_encode($controlador->primer_inicio($parametros));
 }
+
+if(isset($_GET['validar_directory']))
+{
+	$parametros = $_POST['parametros'];
+	echo json_encode($controlador->validar_directory($parametros));
+}
+
+if(isset($_GET['primerInicioActive']))
+{
+	$parametros = $_POST['parametros'];
+	echo json_encode($controlador->primerInicioActive($parametros));
+}
 class loginC
 {
 	private $login;
@@ -104,6 +117,7 @@ class loginC
 	private $email;
 	private $globales;
 	private $noconcurente;
+	private $active;
 	function __construct()
 	{
 		$this->login = new loginM();
@@ -112,6 +126,7 @@ class loginC
 		$this->email = new enviar_emails();
 		$this->cod_global = new codigos_globales();
 		$this->noconcurente = new no_concurenteM();
+		$this->active = new activeDirC();
 	}
 
 
@@ -337,6 +352,15 @@ class loginC
 	function iniciar_sesion($parametros,$cambiar=false)
 	 {		
 	 	// print_r($parametros);die();
+
+		$empresa = $this->login->lista_empresa($parametros['id']);
+		$active_Valido = 1;
+		if($empresa[0]['ip_directory']=='' || $empresa[0]['puerto_directory']=='' || $empresa[0]['basedn_directory']=='' || $empresa[0]['dominio_directory']=='' || $empresa[0]['usuario_directory']=='' || $empresa[0]['password_directory']==''){
+			$active_Valido = 0;
+		}
+
+		
+
 	 	if($cambiar)
 	 	{
 	 		$usuario = $this->login->datos_usuario($_SESSION['INICIO']['ID_USUARIO']);
@@ -354,7 +378,6 @@ class loginC
 	 	}
 	 	// print_r('sss');die();
 
-			$empresa = $this->login->lista_empresa($parametros['id']);
 			// print_r($empresa);die();
 			if(count($empresa)>0)
 			{
@@ -379,8 +402,18 @@ class loginC
 			if($parametros['no_concurente']==0)
 			{
 
-				
-	 	// print_r($parametros);die();
+				$datos = $this->login->datos_login($parametros['email']);
+				if($active_Valido && $parametros['no_concurente']==1 && $datos[0]['tipo']!='DBA')
+				{
+					$respuesta = $this->active->AutentificarUserActiveDir($parametros['email'], $parametros['pass'],$empresa);
+					if($respuesta!='1')
+					{
+						return -4;
+					}			
+				}
+
+
+	 			// print_r($parametros);die();
 				$datos = $this->login->datos_login($parametros['email'],$this->cod_global->enciptar_clave($parametros['pass']));
 				// print_r($datos);die();
 				if($cambiar){
@@ -447,6 +480,9 @@ class loginC
 			 	 // print_r($parametros);die();
 
 				 	$id = $this->noconcurente->id_tabla_no_concurentes($tabla);
+				 	// print_r($tabla);
+				 	// print_r($id);
+				 	// print_r($busqueda_tercero);die();
 
 				 	$datos_usu = $this->login->datos_no_concurente($tabla,$id[0]['ID'],$busqueda_tercero[0][$id[0]['ID']]);
 
@@ -819,6 +855,150 @@ class loginC
 
 			// print_r($datos);die();
 			return $datos;
+	}
+
+	function validar_directory($parametros)
+	{
+		$correo = $parametros['user'];
+		$lista_empresas = array();
+		if($correo!='')
+		{
+			$tabla_noconcurente = $this->login->tabla_noconcurente();
+
+			if(count($tabla_noconcurente)>0)
+			{
+					foreach ($tabla_noconcurente as $key => $value) {
+							$activeDir = 1;
+							$empresa = $this->login->lista_empresa($value['Id_Empresa'],1);
+							if(count($empresa)>0)
+							{
+								if($empresa[0]['ip_directory']=='' || $empresa[0]['puerto_directory']=='' || $empresa[0]['basedn_directory']=='' || $empresa[0]['dominio_directory']=='' || $empresa[0]['usuario_directory']=='' || $empresa[0]['password_directory']=='')
+								{
+									 $activeDir = 0; 
+								}
+								// print_r($value);die();
+								$datos = $this->login->buscar_en_tablas_noconcurente_empresaTerceros($empresa,$value['Tabla'],$correo,$value['Campo_usuario']);
+								// print_r($datos);
+								if(count($datos)>0)
+								{
+										$user = $this->login->buscar_en_tablas_noconcurente_empresaTerceros($empresa,$value['Tabla'],$correo,$value['Campo_usuario'],1,$value['Campo_pass']);
+										// print_r($user);die();
+
+									$empresa[0]['ActiveDirectory'] = $activeDir;
+									if(count($user)>0)
+									{
+										$primerIngreso = 0;
+									}else
+									{
+										$primerIngreso = 1;								
+									}
+									$lista_empresas[] = array('id'=>$empresa[0]['Id_empresa'],'Empresa'=>$empresa[0]['Razon_Social'],'ActiveDirectory'=>$activeDir,'PrimerIngresoActiveDir'=>$primerIngreso,'tabla'=>$value['Tabla']);
+								}
+							}
+					}
+			}
+
+			if(count($lista_empresas)==0)
+			{
+				$activeDir = 1;
+				$datos = $this->login->buscar_empresas($correo);
+				if($datos[0]['ip_directory']=='' || $datos[0]['puerto_directory']=='' || $datos[0]['basedn_directory']=='' || $datos[0]['dominio_directory']=='' || $datos[0]['usuario_directory']=='' || $datos[0]['password_directory']=='')
+					{
+						 $activeDir = 0; 
+					}
+
+					if($datos[0]['password']!='')
+					{
+						$primerIngreso = 0;
+					}else
+					{
+						$primerIngreso = 1;								
+					}
+					$lista_empresas[] = array('id'=>$datos[0]['Id_Empresa'],'Empresa'=>$datos[0]['Razon_Social'],'ActiveDirectory'=>$activeDir,'PrimerIngresoActiveDir'=>$primerIngreso,'tabla'=>'USUARIOS');
+
+				 // print_r($usuarios);die();
+
+			}
+				 
+
+		}
+
+		return $lista_empresas;
+	}
+
+	function primerInicioActive($parametros)
+	{
+			$empresa = $this->login->lista_empresa($parametros['empresa'],1);
+			$respuesta = $this->active->AutentificarUserActiveDir($parametros['user'], $parametros['pass'],$empresa);
+			$msj='';
+			switch ($respuesta) {
+				case '1':
+					if($parametros!='USUARIOS')
+					{
+						$respuesta = $this->save_update_passActive($parametros);
+					}
+					{						
+						$respuesta = $this->save_update_passActiveUsu($parametros);
+					}
+					$msj = 'Autenticación exitosa.';
+					break;
+				case '-1':
+				$msj = 'Error de autenticación. Credenciales incorrectas.';
+					// code...
+					break;
+				case '-2':
+				$msj = 'Usuario no encontrado.';
+					// code...
+					break;
+				case '-3':
+				$msj = 'Error en la búsqueda LDAP.';
+					// code...
+					break;
+				case '-4':
+				$msj = 'Error en la conexion LDAP.';
+					// code...
+					break;				
+			}
+
+			return array('resp'=>$respuesta,'msj'=>$msj);
+
+	}
+
+
+	function save_update_passActive($parametros)
+	{
+		 $empresa = $this->login->lista_empresa($parametros['empresa'],1);
+		 $no_concurente = $this->login->tabla_noconcurente($parametros['empresa'],$parametros['tabla']);
+		 $r = -1;
+		 if(count($no_concurente)>0)
+		 {
+		 	  $campoValidar = $no_concurente[0]['Campo_usuario'];
+		 		$user = $this->login->buscar_en_tablas_noconcurente_empresaTerceros($empresa,$parametros['tabla'],$parametros['user'],$campoValidar,false,false);
+		 		$ID = $this->login->id_tabla_terceros($parametros['tabla'],$empresa);
+		 		$sql = "UPDATE ".$parametros['tabla']." SET PASS = '".$this->cod_global->enciptar_clave($parametros['pass'])."' WHERE ".$ID[0]['ID']." = ".$user[0][$ID[0]['ID']];
+		 		$r =  $this->login->update_no_concurente($empresa,$sql);
+
+		 		// print_r($r);die();
+		 }
+
+		 // print_r('hola');die();
+
+		 return $r;
+	}
+
+	function save_update_passActiveUsu($parametros)
+	{
+		 $empresa = $this->login->lista_empresa($parametros['empresa'],1);
+		 $user = $this->login->buscar_empresas($parametros['user'],$pass=false,$parametros['empresa']);
+
+		 $datos[0]['campo']= 'password';
+		 $datos[0]['dato']= $this->cod_global->enciptar_clave( $parametros['pass']);
+
+
+		 $datosW[0]['campo']= 'id_usuarios';
+		 $datosW[0]['dato']= $user[0]['Id_usuario'];
+
+		 return $this->login->update('USUARIOS',$datos,$datosW);
 	}
 
 }

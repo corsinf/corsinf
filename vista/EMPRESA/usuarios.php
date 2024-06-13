@@ -441,11 +441,18 @@ $activeRep = 0;
       dataType: 'json',
       success:  function (response) { 
 
-        Swal.fire("","Usuario Asignado","success").then(function(){
-
-           $('#myModal_tipo_usuario').modal('hide');   
-            activeDirectory();    
-        })
+         if(response.resp==1)
+         {
+            Swal.fire("","Usuario Asignado","success").then(function(){
+             $('#myModal_tipo_usuario').modal('hide');   
+              activeDirectory();    
+          })
+         }else if(response.resp==2)
+         {
+           Swal.fire("",response.msg,"info").then(function(){
+             $('#myModal_tipo_usuario').modal('hide');   
+            })
+         }
        }       
       });
 

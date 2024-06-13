@@ -96,7 +96,11 @@
            {
               Swal.fire( '','Usuario sin acceso','error');
 
-           }else if(response == 1)
+           }else if(response == -4)
+           {
+              Swal.fire( '','Usuario de active directory no autentificado','error');
+           }
+           else if(response == 1)
            {
              window.location.href = "vista/modulos_sistema.php";
            }        
@@ -210,7 +214,75 @@
        });
 	}
 
+	function validar_directory()
+	{
+		 user = $('#email').val();
+		 if(user=='' || user==null)
+		 {
+		 		return false;
+		 }
+		 console.log(user);
+		 var parametros = 
+       {
+         'user':user,
+       } 
+       $.ajax({
+         data:  {parametros:parametros},
+         url:   'controlador/loginC.php?validar_directory=true',
+         type:  'post',
+         dataType: 'json',        
+           success:  function (response) { 
+           	if(response.length==1)
+           	{
+		           if(response[0].ActiveDirectory=='1' && response[0].PrimerIngresoActiveDir=='1')
+		           {
+		           		$('#myModal_Active').modal('show');
+		           		$('#txt_EmpresaIdActive').val(response[0]['id']);
+		           		$('#txt_tablaActive').val(response[0]['tabla']);
+		           	 //alert('ingres por primera vez debe validar en active directory y copiar la contraseña, muetra por primera vez una caja de tecto que va al ActiveDirectory');
+		           }
+		           //else
+		           // {
+		           // 	 alert('valida en active y actualiza pas en caso de que sea otra credencial, proceso de actualizacion interno');
+		           // } 
+		        }else if(response.length>1)
+		        {
+		        	 alert('debe salir la lista de empresas');
+		        }
+         }
+       });
 
+	}
+
+	function primerInicioActive()
+	{
+		 var parametros = 
+       {
+				'user' :$('#email').val(),
+				'pass' : $('#txt_passActive').val(),
+				'empresa' :  $('#txt_EmpresaIdActive').val(),
+				'tabla':$('#txt_tablaActive').val(),
+       } 
+       $.ajax({
+         data:  {parametros:parametros},
+         url:   'controlador/loginC.php?primerInicioActive=true',
+         type:  'post',
+         dataType: 'json',        
+           success:  function (response) { 
+           	console.log(response);
+           	if(response.resp==1)
+           	{
+           		 Swal.fire('ActiveDirectory',response.msj,'success').then(function(){
+           		 	 $('#pass').val($('#txt_passActive').val());
+		           	 $('#btn_inicio').click();
+           		 		$('#myModal_Active').modal('hide');
+           		 })
+		          
+		        }
+         }
+       });
+
+	}
 
 	</script>
 </head>
@@ -251,7 +323,7 @@
 												<input type="hidden" class="form-control" id="txt_no_concurente" name="txt_no_concurente" value="0">
 												<label for="inputEmailAddress" class="form-label">Email</label>
 												<!-- <input type="email" class="form-control" id="inputEmailAddress" placeholder="Email Address"> -->
-												<input type="email" autocomplete="username" class="form-control" id="email" placeholder="Email">
+												<input type="email" autocomplete="username" class="form-control" id="email" placeholder="Email" onblur="validar_directory()">
 											</div>
 											<div class="col-12">
 												<label for="inputChoosePassword" class="form-label">Password</label>
@@ -344,6 +416,13 @@
 		function titulos_cargados()
 		{
 				setInterval(mostrarTexto, 10000);
+		}
+
+		function limpiarInicio()
+		{
+			$('#myModal_Active').modal('hide');
+			$('#txt_passActive').val('');
+			$('#email').val('');
 		}
 	</script>
 	
@@ -462,6 +541,34 @@
 	         </div>         
 	      </div>
 	      <div class="modal-footer">        
+	      </div>
+	    </div>
+	  </div>
+	</div>
+
+<div class="modal fade" id="myModal_Active" tabindex="-1" aria-modal="true" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
+	  <div class="modal-dialog modal-sm modal-dialog-centered">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	      	<h5>Usuario de Active directory </h5>
+	      </div>
+	      <div class="modal-body">
+	      			
+	         <div class="text-center">
+		         	<div class="card-body">
+		         			<b>Ingrese contraseña de ActiveDirectory</b>
+									<input type="" class="form-control form-control-sm" name="txt_passActive" id="txt_passActive">			
+
+									<input type="hidden" class="form-control form-control-sm" name="txt_EmpresaIdActive" id="txt_EmpresaIdActive">
+									<input type="hidden" class="form-control form-control-sm" name="txt_tablaActive" id="txt_tablaActive">			
+									<!-- <input type="" class="form-control form-control-sm" name="txt_passActive" id="txt_passActive">										 -->
+							</div>
+
+	         </div>         
+	      </div>
+	      <div class="modal-footer">      
+        	<button type="button" class="btn btn-primary" onclick="primerInicioActive()">Iniciar</button>
+        	<button type="button" class="btn btn-secondary" onclick="limpiarInicio()">Cerrar</button>  
 	      </div>
 	    </div>
 	  </div>
