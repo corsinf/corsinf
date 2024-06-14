@@ -997,6 +997,98 @@ function para_ftp($nombre,$texto)
 		 }else{ return -2;}
 	}
 
+	function tablas_por_licencias($licencias,$empresa,$terceros=false)
+	{
+		$totalTablas = 0;
+		$db_origen  = '';
+		foreach ($licencias as $key => $value) {
+
+				switch ($value['Id_Modulo']) {
+						case '7':
+							$db_origen = BASE_SALUD;
+							break;
+						case '2':
+							$db_origen = BASE_ACTIVOS;
+
+							break;
+				}
+
+				$sql = "SELECT COUNT(*) AS CantidadDeTablas 
+							FROM ".$db_origen.".INFORMATION_SCHEMA.TABLES 
+							WHERE TABLE_TYPE = 'BASE TABLE' 
+							AND TABLE_CATALOG = '".$db_origen."';";
+
+			if($terceros)
+			{
+				$sql2 = "SELECT * FROM EMPRESAS WHERE Base_datos = '".$db_origen."' AND Estado = 'A'";
+				// print_r($sql2);
+				$empresaBuscada = $this->db->datos($sql2,1);
+				if(count($empresaBuscada)>0)
+				{
+					$database = $empresaBuscada[0]['Base_datos'];
+					$usuario = $empresaBuscada[0]['Usuario_db'];
+					$password = $empresaBuscada[0]['Password_db'];
+					$servidor = $empresaBuscada[0]['Ip_host'];
+					$puerto = $empresaBuscada[0]['Puerto_db'];
+
+					$cant =   $this->db->datos_db_terceros($database, $usuario, $password, $servidor, $puerto, $sql);
+					$totalTablas = $totalTablas+$cant[0]['CantidadDeTablas'];
+				}
+
+			}else
+			{
+				$cant =  $this->db->datos($sql);
+				$totalTablas = $totalTablas+$cant[0]['CantidadDeTablas'];
+			}
+
+		}
+
+
+		if(count($licencias)>1)
+		{
+			$totalTablas = $totalTablas - NUM_TABLA_ACCESOS;
+		}
+
+		// print_r($totalTablas);die();
+
+
+		$db = $empresa[0]['Base_datos'];
+
+		$sql = $sql = "SELECT COUNT(*) AS CantidadDeTablas 
+					FROM ".$db.".INFORMATION_SCHEMA.TABLES 
+					WHERE TABLE_TYPE = 'BASE TABLE' 
+					AND TABLE_CATALOG = '".$db."';";
+		if($terceros)
+		{
+			print_r($empresa);die();
+			$database = $empresa[0]['Base_datos'];
+			$usuario = $empresa[0]['Usuario_db'];
+			$password = $empresa[0]['Password_db'];
+			$servidor = $empresa[0]['Ip_host'];
+			$puerto = $empresa[0]['Puerto_db'];
+			$cant =  $this->db->datos_db_terceros($database, $usuario, $password, $servidor, $puerto, $sql);
+			$totalActual = $cant[0]['CantidadDeTablas'];
+
+			// print_r($totalActual);die();
+
+		}else
+		{
+			$cant =  $this->db->datos($sql);
+			$totalActual = $cant[0]['CantidadDeTablas'];
+		}
+
+		print_r($totalTablas.' = '.$totalActual);die();
+
+		if($totalTablas!=$totalActual &&  $totalActual < $totalTablas)
+		{
+			return -1;
+		}else
+		{
+			return 1;
+		}
+	}
+
+
 	function id_tabla($tabla)
 	{
 		$sql2="SELECT COLUMN_NAME as 'ID'

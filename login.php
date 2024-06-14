@@ -62,6 +62,7 @@
 
   function iniciar_sesion(id)
   {
+  	$('#myModal_espera').modal('show');
   	 var email=$('#email').val();
     var pass =$('#pass').val();
     var no_concurente = $('#txt_no_concurente').val();
@@ -82,6 +83,8 @@
             $('#tabla_').html(spiner);
          },*/
            success:  function (response) {  
+
+  					$('#myModal_espera').modal('hide');
 
            console.log(response);  
            if (response==-2) 
@@ -119,21 +122,23 @@
          'empresa':empresa,
        } 
         titulos_cargados();
-       $('#myModal_espera').modal('show');
        $.ajax({
          data:  {parametros:parametros},
          url:   'controlador/loginC.php?empresa_seleccionada=true',
          type:  'post',
          dataType: 'json',        
            success:  function (response) {  
-       			$('#myModal_espera').modal('hide');
+       			// $('#myModal_espera').modal('hide');
            	if(response.respuesta==2)
            	{
            		$('#lista_modulos_empresas').html(response.modulos);
            		$('#txt_id').val(empresa);
            		$('#myModal_modulos').modal('show');
+       			// $('#myModal_espera').modal('hide');
            	}else if(response.respuesta==1)
            	{
+
+      				$('#myModal_espera').modal('show');
            		iniciar_sesion(empresa);
            	}      
          },
@@ -162,7 +167,7 @@
          type:  'post',
          dataType: 'json',        
            success:  function (response) {  
-           	$('#myModal_espera').modal('show');
+           	// $('#myModal_espera').modal('show');
            	if(response==-1)
            	{
            		Swal.fire('La licencian es erronea','','error');
