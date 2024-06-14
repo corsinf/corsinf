@@ -1060,7 +1060,7 @@ function para_ftp($nombre,$texto)
 					AND TABLE_CATALOG = '".$db."';";
 		if($terceros)
 		{
-			print_r($empresa);die();
+			// print_r($empresa);die();
 			$database = $empresa[0]['Base_datos'];
 			$usuario = $empresa[0]['Usuario_db'];
 			$password = $empresa[0]['Password_db'];
@@ -1077,7 +1077,7 @@ function para_ftp($nombre,$texto)
 			$totalActual = $cant[0]['CantidadDeTablas'];
 		}
 
-		print_r($totalTablas.' = '.$totalActual);die();
+		// print_r($totalTablas.' = '.$totalActual);die();
 
 		if($totalTablas!=$totalActual &&  $totalActual < $totalTablas)
 		{
