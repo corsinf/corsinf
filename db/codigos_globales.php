@@ -1046,7 +1046,7 @@ function para_ftp($nombre,$texto)
 
 		if(count($licencias)>1)
 		{
-			$totalTablas = $totalTablas - NUM_TABLA_ACCESOS;
+			$totalTablas = $totalTablas - (NUM_TABLA_ACCESOS*count($licencias));
 		}
 
 		// print_r($totalTablas);die();
