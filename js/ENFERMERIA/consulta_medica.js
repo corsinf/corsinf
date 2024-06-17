@@ -30,6 +30,16 @@ $(document).ready(function () {
         }
     });
 
+    var validacion_numeros_slash = $('.solo_numeros_slash');
+
+    validacion_numeros_slash.on('keypress', function (event) {
+        var charCode = (event.which) ? event.which : event.keyCode;
+        // Permitir números (48-57), el punto (46) y la barra (/)
+        if (charCode !== 46 && charCode !== 47 && (charCode < 48 || charCode > 57)) {
+            event.preventDefault();
+        }
+    });
+
     //Para el modal de examen fisico regional 
 
     modal_examen_fisico_regional();
@@ -278,7 +288,7 @@ function delete_datos(valor, checkbox) {
 
 function modal_examen_fisico_regional() {
     $('.chx_ef').click(function () {
-        currentCheckbox = $(this); 
+        currentCheckbox = $(this);
         var isChecked = $(this).prop('checked');
         var valor = $(this).val();
         $('#id_valor').val(valor);

@@ -71,6 +71,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         var tipo_consulta = '<?php echo $tipo_consulta; ?>';
 
         cargar_datos_paciente(id_paciente);
+        llenar_telefonos_salida(id_paciente);
 
         datos_col_ficha_medica(id_paciente);
 
@@ -302,10 +303,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     //la solucion esta en modificar el procedure para enviar ahi los datos del padre 
     //Telefonos en caso de salida
-    function llenar_telefonos_salida() {
+    function llenar_telefonos_salida(sa_pac_id) {
 
-        sa_pac_id = $('#sa_permiso_pac_id').val();
-        sa_pac_tabla = $('#sa_permiso_pac_tabla').val();
+        // sa_pac_id = $('#sa_permiso_pac_id').val();
+        // sa_pac_tabla = $('#sa_permiso_pac_tabla').val();
 
         //alert(sa_pac_id);
 
@@ -323,7 +324,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 telefono_1_1 = '';
                 if (response[0].sa_pac_tabla == 'estudiantes') {
 
-                    $('#pnl_contactos_salida').show();
+                    //$('#pnl_contactos_salida').show();
 
                     nombre_completo_1 = response[0].sa_pac_temp_nombre_completo_rep;
                     telefono_1_1 = response[0].sa_pac_temp_telefono_1;
@@ -337,7 +338,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                     //Cuando exista el representate2 
                     if (response[0].sa_pac_temp_rep2_id != null && response[0].sa_pac_temp_rep2_id != '') {
-                        
+
                         $('#pnl_representante_2').show();
 
                         nombre_completo_2 = response[0].sa_pac_temp_nombre_completo_rep2;
@@ -355,7 +356,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                         sa_pac_temp_rep_id_correo = $('#sa_pac_temp_rep_id_correo').val();
                         sa_pac_temp_rep2_id_correo = $('#sa_pac_temp_rep2_id_correo').val();
-                    }else{
+                    } else {
                         $('#chx_representante').prop('disabled', true);
                         $('#chx_representante_2').prop('checked', false);
                     }
@@ -1212,6 +1213,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                                                         <div class="row pt-3">
                                                             <div class="col-md-12">
+                                                                <label for="" class="form-label fw-bold">Enfermedad Actual <label style="color: red;">*</label> </label>
+                                                                <textarea name="sa_conp_enfermedad_actual" id="sa_conp_enfermedad_actual" cols="30" rows="2" class="form-control" placeholder="Enfermedad Actual"></textarea>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="row pt-4">
+                                                            <hr>
+                                                        </div>
+
+                                                        <div class="row pt-3">
+                                                            <div class="col-md-12">
                                                                 <label for="" class="form-label fw-bold"> <b>Agregar exámen físico regional <label class="text-danger">*</label></b></label>
 
                                                                 <div>
@@ -1540,16 +1552,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                             <hr>
                                                         </div>
 
-                                                        <div class="row pt-3">
-                                                            <div class="col-md-12">
-                                                                <label for="" class="form-label fw-bold">Enfermedad Actual <label style="color: red;">*</label> </label>
-                                                                <textarea name="sa_conp_enfermedad_actual" id="sa_conp_enfermedad_actual" cols="30" rows="2" class="form-control" placeholder="Enfermedad Actual"></textarea>
-                                                            </div>
-                                                        </div>
+
 
                                                         <div class="row pt-3">
                                                             <div class="col-md-12">
-                                                                <label for="" class="form-label fw-bold">CIE 10 - Diagnóstico 1 <label style="color: red;">*</label> </label>
+                                                                <label for="" class="form-label fw-bold">CIE 10 - Diagnóstico Presuntivo 1 <label style="color: red;">*</label> </label>
                                                                 <!--<input type="text" class="ctw-input form-control form-control-sm" autocomplete="off" data-ctw-ino="1" id="sa_conp_diagnostico_1" placeholder="Diagnostico 1">
                                                                 <input type="hidden" id="sa_conp_CIE_10_1">
                                                                 <div class="ctw-window" data-ctw-ino="1"></div>-->
@@ -1564,7 +1571,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                                                         <div class="row pt-3">
                                                             <div class="col-md-12">
-                                                                <label for="" class="form-label fw-bold">CIE 10 - Diagnóstico 2 <label style="color: red;">*</label> </label>
+                                                                <label for="" class="form-label fw-bold">CIE 10 - Diagnóstico Presuntivo 2 <label style="color: red;">*</label> </label>
                                                                 <!--<input type="text" class="ctw-input form-control form-control-sm" autocomplete="off" data-ctw-ino="2" id="sa_conp_diagnostico_2" placeholder="Diagnostico 2">
                                                                 <input type="hidden" id="sa_conp_CIE_10_2">
                                                                 <div class="ctw-window" data-ctw-ino="2"></div>-->
@@ -1582,6 +1589,47 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                                 <textarea name="sa_conp_observaciones" id="sa_conp_observaciones" cols="30" rows="1" class="form-control" placeholder="Observaciones"></textarea>
                                                             </div>
                                                         </div>
+
+
+                                                        <div class="row pt-3" id="pnl_contactos_salida">
+                                                            <div class="col-md-4">
+                                                                <label for="" class="form-label fw-bold" id="lbl_telefono_emergencia">Vienede desde el Paciente </label>
+                                                                <input type="text" class="form-control form-control-sm" id="sa_conp_permiso_telefono_padre" name="sa_conp_permiso_telefono_padre">
+                                                                <div class="form-check">
+                                                                    <input class="form-check-input" type="checkbox" id="chx_representante" checked>
+                                                                    <label class="form-check-label" for="chx_representante">Enviar Correo</label>
+                                                                </div>
+
+                                                                <p id="txt_nombre_contacto" class="me-0 text-success"></p>
+
+                                                                <input type="hidden" name="sa_permiso_pac_id" id="sa_permiso_pac_id">
+                                                                <input type="hidden" name="sa_permiso_pac_tabla" id="sa_permiso_pac_tabla">
+                                                            </div>
+
+                                                            <div class="col-md-4" id="pnl_representante_2" style="display: none;">
+                                                                <label for="" class="form-label fw-bold" id="lbl_telefono_emergencia_2">Telefono Representante 2 <label style="color: red;">*</label> </label>
+                                                                <input type="text" class="form-control form-control-sm" id="sa_conp_permiso_telefono_padre_2" name="sa_conp_permiso_telefono_padre_2">
+                                                                <div class="form-check">
+                                                                    <input class="form-check-input" type="checkbox" id="chx_representante_2" checked>
+                                                                    <label class="form-check-label" for="chx_representante_2">Enviar Correo</label>
+                                                                </div>
+
+                                                                <p id="txt_nombre_contacto_2" class="me-0 text-success"></p>
+                                                            </div>
+
+                                                            <script>
+                                                                $(document).ready(function() {
+                                                                    $('#chx_representante, #chx_representante_2').on('change', function() {
+                                                                        if (!$('#chx_representante').prop('checked') && !$('#chx_representante_2').prop('checked')) {
+                                                                            Swal.fire('Error', 'Debe estar seleccionado al menos un Representante.', 'error');
+
+                                                                            $(this).prop('checked', true);
+                                                                        }
+                                                                    });
+                                                                });
+                                                            </script>
+                                                        </div>
+
 
                                                         <div class="row pt-3">
                                                             <div class="col-md-12">
@@ -1634,45 +1682,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                                     </div>
                                                                 </div>
                                                             </div>
-
-                                                            <div class="row pt-3" style="display: none;" id="pnl_contactos_salida">
-                                                                <div class="col-md-4">
-                                                                    <label for="" class="form-label fw-bold" id="lbl_telefono_emergencia">Vienede desde el Paciente </label>
-                                                                    <input type="text" class="form-control form-control-sm" id="sa_conp_permiso_telefono_padre" name="sa_conp_permiso_telefono_padre">
-                                                                    <div class="form-check">
-                                                                        <input class="form-check-input" type="checkbox" id="chx_representante" checked>
-                                                                        <label class="form-check-label" for="chx_representante">Enviar Correo</label>
-                                                                    </div>
-
-                                                                    <p id="txt_nombre_contacto" class="me-0 text-success"></p>
-
-                                                                    <input type="hidden" name="sa_permiso_pac_id" id="sa_permiso_pac_id">
-                                                                    <input type="hidden" name="sa_permiso_pac_tabla" id="sa_permiso_pac_tabla">
-                                                                </div>
-
-                                                                <div class="col-md-4" id="pnl_representante_2" style="display: none;">
-                                                                    <label for="" class="form-label fw-bold" id="lbl_telefono_emergencia_2">Telefono Representante 2 <label style="color: red;">*</label> </label>
-                                                                    <input type="text" class="form-control form-control-sm" id="sa_conp_permiso_telefono_padre_2" name="sa_conp_permiso_telefono_padre_2">
-                                                                    <div class="form-check">
-                                                                        <input class="form-check-input" type="checkbox" id="chx_representante_2" checked>
-                                                                        <label class="form-check-label" for="chx_representante_2">Enviar Correo</label>
-                                                                    </div>
-
-                                                                    <p id="txt_nombre_contacto_2" class="me-0 text-success"></p>
-                                                                </div>
-                                                            </div>
-
-                                                            <script>
-                                                                $(document).ready(function() {
-                                                                    $('#chx_representante, #chx_representante_2').on('change', function() {
-                                                                        if (!$('#chx_representante').prop('checked') && !$('#chx_representante_2').prop('checked')) {
-                                                                            Swal.fire('Error', 'Debe estar seleccionado al menos un Representante.', 'error');
-
-                                                                            $(this).prop('checked', true);
-                                                                        }
-                                                                    });
-                                                                });
-                                                            </script>
 
                                                         </div>
 
@@ -1773,7 +1782,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                                                 <th width="2%"><input id="checkAll_Medicamentos" class="form-check" type="checkbox"></th>
 
                                                                                 <th width="40%">Farmacología</th>
-                                                                                <th width="48%">Dosificación</th>
+                                                                                <th width="48%">Indicaciones</th>
                                                                                 <th width="8%">Cantidad</th>
                                                                                 <th width="2%%">Entregado?</th>
 
@@ -1789,8 +1798,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                                                             <div class="row pt-2">
                                                                 <div class="col-md-12">
-                                                                    <label for="" class="form-label fw-bold">Tratamiento <label style="color: red;">*</label> </label>
-                                                                    <textarea name="sa_conp_tratamiento" id="sa_conp_tratamiento" cols="30" rows="2" class="form-control" placeholder="Tratamiento"></textarea>
+                                                                    <label for="" class="form-label fw-bold">Observaciones Recetario <label style="color: red;">*</label> </label>
+                                                                    <textarea name="sa_conp_tratamiento" id="sa_conp_tratamiento" cols="30" rows="2" class="form-control" placeholder="Observaciones Recetario"></textarea>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -1823,7 +1832,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $('input[name=sa_conp_permiso_salida]').change(function() {
         if ($(this).val() === 'SI') {
             $('#permiso_salida').show();
-            llenar_telefonos_salida();
+            //llenar_telefonos_salida();
 
 
             hora_hasta = obtener_hora_hasta();
@@ -1838,11 +1847,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $('input[name=sa_conp_permiso_tipo]').change(function() {
         if ($(this).val() === 'emergencia') {
             $('#permiso_salida_tipo').show();
-            llenar_telefonos_salida();
+            //llenar_telefonos_salida();
         } else if ($(this).val() === 'normal') {
             $('#permiso_salida_tipo').hide();
             //$('#sa_conp_permiso_telefono_padre').val('');
-            llenar_telefonos_salida();
+            //llenar_telefonos_salida();
         }
     });
 

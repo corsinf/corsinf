@@ -213,7 +213,7 @@ function consultar_medicinas_insumos(entrada) {
 
                     var options = data.reduce(function (filtered, item) {
 
-                        var fullName = item['sa_cmed_presentacion'] + " - " + item['sa_cmed_concentracion'] + " - " + item['sa_cmed_dosis'];
+                        var fullName = item['sa_cmed_presentacion'] + " - " + item['sa_cmed_nombre_comercial'];
 
                         if (fullName.toLowerCase().includes(searchTerm)) {
                             filtered.push({
@@ -278,7 +278,7 @@ function consultar_medicinas_insumos(entrada) {
 
                     var options = data.reduce(function (filtered, item) {
 
-                        var fullName = item['sa_cins_presentacion'] + " - " + item['sa_cins_codigo'] + " - " + item['sa_cins_localizacion'];
+                        var fullName = item['sa_cins_presentacion'] + " - " + item['sa_cins_nombre_comercial'];
 
                         if (fullName.toLowerCase().includes(searchTerm)) {
                             filtered.push({

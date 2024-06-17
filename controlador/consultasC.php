@@ -535,35 +535,37 @@ class consultasC
                     $chx_representante = $parametros['chx_representante'];
                     $chx_representante_2 = $parametros['chx_representante_2'];
 
+                    
                     $nombre_est = $parametros['nombre_paciente'];
                     $diagnostico = '';
                     $permiso_salida = '';
-
+                    
                     if ($parametros['sa_conp_permiso_salida'] == 'SI') {
                         $permiso_salida = $parametros['sa_conp_permiso_tipo'];
                     } else {
                         $permiso_salida = 'NO';
                     }
-
+                    
                     if ($tipo_consulta == 'consulta') {
                         $diagnostico = $parametros['sa_conp_diagnostico_1'];
-
-                        if ($chx_representante == true) {
+                        
+                        if ($chx_representante === true) {
                             $this->enviar_correo_con($id_representante, $nombre_est, $diagnostico, $tipo_consulta, $permiso_salida);
                         }
-
-                        if ($chx_representante_2 == true) {
+                        
+                        if ($chx_representante_2 === true) {
                             $this->enviar_correo_con($sa_pac_temp_rep2_id, $nombre_est, $diagnostico, $tipo_consulta, $permiso_salida);
                         }
-
+                        
+                        //echo $chx_representante_2; exit; die();
                         //print_r($variable);exit();die();
                     } else {
                         $diagnostico = $parametros['sa_conp_diagnostico_certificado'];
-                        if ($chx_representante == true) {
+                        if ($chx_representante === true) {
                             $this->enviar_correo_con($id_representante, $nombre_est, $diagnostico, $tipo_consulta, $permiso_salida);
                         }
 
-                        if ($chx_representante_2 == true) {
+                        if ($chx_representante_2 === true) {
                             $this->enviar_correo_con($sa_pac_temp_rep2_id, $nombre_est, $diagnostico, $tipo_consulta, $permiso_salida);
                         }
                     }
@@ -764,20 +766,20 @@ class consultasC
                 if ($tipo_consulta == 'consulta') {
                     $diagnostico = $parametros['sa_conp_diagnostico_1'];
 
-                    if ($chx_representante == true) {
+                    if ($chx_representante === true) {
                         $this->enviar_correo_con($id_representante, $nombre_est, $diagnostico, $tipo_consulta, $permiso_salida);
                     }
 
-                    if ($chx_representante_2 == true) {
+                    if ($chx_representante_2 === true) {
                         $this->enviar_correo_con($id_representante, $nombre_est, $diagnostico, $tipo_consulta, $permiso_salida);
                     }
                 } else {
                     $diagnostico = $parametros['sa_conp_diagnostico_certificado'];
-                    if ($chx_representante == true) {
+                    if ($chx_representante === true) {
                         $this->enviar_correo_con($id_representante, $nombre_est, $diagnostico, $tipo_consulta, $permiso_salida);
                     }
 
-                    if ($chx_representante_2 == true) {
+                    if ($chx_representante_2 === true) {
                         $this->enviar_correo_con($id_representante, $nombre_est, $diagnostico, $tipo_consulta, $permiso_salida);
                     }
                 }
@@ -2056,6 +2058,19 @@ class consultasC
 
             $contador_rec++;
         }
+
+        $pdf->Ln(2);
+        
+
+        $pdf->SetFont('Arial', 'B', 10);
+        $pdf->SetTextColor(0, 0, 0);
+
+        $pdf->setX(158.5);
+        $pdf->Cell(90, 5, utf8_decode('Observaciones: '), 0, 1, 'L');
+        $pdf->setX(158.5);
+        $pdf->SetFont('Arial', '', 8);
+        $pdf->MultiCell(120, 5,  utf8_decode($datos[0]['sa_conp_tratamiento']), 0, 'L');
+
 
         $pdf->output();
     }
