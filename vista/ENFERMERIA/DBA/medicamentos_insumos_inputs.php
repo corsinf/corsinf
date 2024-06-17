@@ -7,6 +7,7 @@
     $(document).ready(function() {
         cargar_datos_v_medicamentos();
         cargar_datos_v_insumos();
+        cargar_datos_v_ingresoStock();
     });
 
     function cargar_datos_v_medicamentos() {
@@ -85,6 +86,46 @@
             error: function() {
                 // Manejo de errores
                 $('#pnl_insumos').append('<p>Error al cargar los insumos.</p>');
+            }
+        });
+    }
+
+    function cargar_datos_v_ingresoStock() {
+        $.ajax({
+            url: '../controlador/v_med_insC.php?listar_v_ingresoStock=true',
+            type: 'post',
+            dataType: 'json',
+            success: function(response) {
+                console.log(response);
+
+                // Limpiar el contenido previo del div
+                $('#pnl_ingresoStock').empty();
+
+                // Verificar si la respuesta contiene datos
+                if (response && response.length > 0) {
+                    response.forEach(function(valor) {
+                        // Crear el HTML para cada valor
+                        var isChecked = valor.sa_vmi_estado == 1 ? 'checked' : '';
+                        var htmlValor = '<div class="col-md-12">';
+                        htmlValor += '<input type="checkbox" class="valor-checkbox" name="insumos[]" id="' + valor.sa_vmi_id_input + '" value="' + valor.sa_vmi_id + '" ' + isChecked + '> ';
+                        htmlValor += '<label>' + valor.sa_vmi_descripcion + '</label>';
+                        htmlValor += '</div>';
+
+                        // Agregar el HTML generado al div
+                        $('#pnl_ingresoStock').append(htmlValor);
+                    });
+
+                    // Agregar evento change a los checkboxes generados
+                    $('.valor-checkbox').change(function() {
+                        var sa_vmi_id = $(this).val();
+                        var sa_vmi_estado = $(this).is(':checked') ? 1 : 0;
+                        insertar(sa_vmi_id, sa_vmi_estado);
+                    });
+                }
+            },
+            error: function() {
+                // Manejo de errores
+                $('#pnl_ingresoStock').append('<p>Error al cargar los valores.</p>');
             }
         });
     }
@@ -170,6 +211,13 @@
 
                             <h6>Vista de Insumos</h6>
                             <div class="row" id="pnl_insumos">
+
+                            </div>
+
+                            <br><hr>
+
+                            <h6>Vista de Ingresar Stock</h6>
+                            <div class="row" id="pnl_ingresoStock">
 
                             </div>
 

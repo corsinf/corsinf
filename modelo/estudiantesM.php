@@ -277,4 +277,87 @@ class estudiantesM
         $datos = $this->db->sql_string($sql);
         return $datos;
     }
+
+    function ponerIdCursos()
+    {
+        $sql =
+            "UPDATE e
+            SET e.sa_id_seccion = mappings.sa_sec_id,
+                e.sa_id_grado = mappings.sa_gra_id,
+                e.sa_id_paralelo = mappings.sa_par_id
+            FROM [SALUD_DESARROLLO].[dbo].[estudiantes] e
+            JOIN (
+                SELECT cs.sa_sec_nombre AS seccion_nombre, cg.sa_gra_nombre AS grado_nombre, cp.sa_par_nombre AS paralelo_nombre, sa_sec_id, sa_gra_id, sa_par_id
+                FROM cat_paralelo cp
+                INNER JOIN cat_seccion cs ON cp.sa_id_seccion = cs.sa_sec_id
+                INNER JOIN cat_grado cg ON cp.sa_id_grado = cg.sa_gra_id
+                WHERE cp.sa_par_estado = 1
+            ) AS mappings ON e.seccion_estudiante_idukay = mappings.seccion_nombre AND e.grado_estudiante_idukay = mappings.grado_nombre AND e.paralelo_estudiante_idukay = mappings.paralelo_nombre;";
+
+        $datos = $this->db->sql_string($sql);
+        return $datos;
+    }
+
+    function datosEstudianteRepresentante($id)
+    {
+        if ($id) {
+            $sql =
+                "SELECT 
+                est.sa_est_id,
+                est.sa_est_primer_apellido,
+                est.sa_est_segundo_apellido,
+                est.sa_est_primer_nombre,
+                est.sa_est_segundo_nombre,
+                est.sa_est_cedula,
+                est.sa_est_sexo,
+                est.sa_est_fecha_nacimiento,
+                est.sa_id_seccion,
+                est.sa_id_grado,
+                est.sa_id_paralelo,
+                est.sa_id_representante,
+                est.sa_est_rep_parentesco,
+
+                sa_id_representante_2,
+                sa_est_rep_parentesco_2,
+
+                est.sa_est_tabla,
+                est.sa_est_correo,
+                est.sa_est_estado,
+                est.sa_est_fecha_creacion,
+                est.sa_est_fecha_modificacion,
+                sa_est_direccion,
+
+                cs.sa_sec_id, 
+                cs.sa_sec_nombre, 
+                cg.sa_gra_id, 
+                cg.sa_gra_nombre,
+                pr.sa_par_id, 
+                pr.sa_par_nombre,
+
+                rep.sa_rep_id,
+                
+                CONCAT(
+                    est.sa_est_primer_apellido, ' ', 
+                    est.sa_est_segundo_apellido, ' ', 
+                    est.sa_est_primer_nombre, ' ', 
+                    est.sa_est_segundo_nombre) AS NombreCompleto
+
+
+                FROM estudiantes est
+                INNER JOIN cat_seccion cs ON est.sa_id_seccion = cs.sa_sec_id
+                INNER JOIN cat_grado cg ON est.sa_id_grado = cg.sa_gra_id
+                INNER JOIN cat_paralelo pr ON est.sa_id_paralelo = pr.sa_par_id
+                LEFT JOIN representantes rep ON est.sa_id_representante = rep.sa_rep_id
+
+                WHERE est.sa_est_estado = 1";
+
+
+            $sql .= ' and sa_est_id = ' . $id;
+            $sql .= " ORDER BY sa_est_id;";
+            $datos = $this->db->datos($sql);
+            return $datos;
+        }
+
+        return null;
+    }
 }

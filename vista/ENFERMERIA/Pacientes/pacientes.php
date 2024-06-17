@@ -9,6 +9,15 @@
     });
 
     function carga_tabla() {
+        Swal.fire({
+            title: 'Por favor, espere',
+            text: 'Procesando la solicitud...',
+            allowOutsideClick: false,
+            onOpen: () => {
+                Swal.showLoading();
+            }
+        });
+
         tabla_pacientes = $('#tbl_pacientes').DataTable({
             language: {
                 url: 'https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
@@ -16,7 +25,10 @@
             responsive: true,
             ajax: {
                 url: '../controlador/pacientesC.php?listar_todo=true',
-                dataSrc: ''
+                dataSrc: '',
+                complete: function() {
+                    Swal.close();
+                }
             },
             columns: [{
                     data: 'sa_pac_cedula'

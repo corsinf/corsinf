@@ -108,8 +108,10 @@ class cat_configuracionGC
     function cargarEstudiantesIdukay()
     {
         $data = $this->Idukay_API->lista_Estudiante();
+        $selecionar_anio_lectivo = '6308dedb64d9466850b563d9';
 
-        if ($data != -11) {
+
+        if ($data != -11) { //Validar si llega la data
             $parametros = [];
             foreach ($data['response'] as $item) {
 
@@ -121,6 +123,48 @@ class cat_configuracionGC
                     $sa_est_sexo = 'Femenino';
                 }
 
+                $sa_est_estado = '';
+
+                /*if ($item['years']['registered'] == true) {
+                    $sa_est_estado = '1';
+                } else {
+                    $sa_est_estado = '0';
+                }*/
+
+
+                /*----------------------------------------------------------------
+                Para guardar los curso en otro array y crear un sql 
+                /*----------------------------------------------------------------*/
+
+                // Recorrer los datos para la seccion, grado y paralelo
+                $grado_seccion = $item['relational_data']['years'][$selecionar_anio_lectivo]['grade']['show'] ?? '-1,-1';
+                $grado_seccion_min = $item['relational_data']['years'][$selecionar_anio_lectivo]['grade']['order'] ?? '';
+
+                $paralelo = $item['relational_data']['years'][$selecionar_anio_lectivo]['group']['show'] ?? '-1';
+                $paralelo_min = $item['relational_data']['years'][$selecionar_anio_lectivo]['group']['order'] ?? '';
+
+                //$curso_est = $grado_seccion . ', ' . $paralelo;
+
+                if (!empty($grado_seccion)) {
+                    $curso_array = array_map('trim', explode(',', $grado_seccion));
+
+                    if (count($curso_array) == 2) {
+                        list($grado, $seccion) = $curso_array;
+                    } else {
+                        // Manejo de error o asignación de valores predeterminados
+                        $grado = $seccion = '-1';
+                    }
+                } else {
+                    // Asignación de valores predeterminados si curso_texto está vacío
+                    $grado = $seccion = '-1';
+                }
+
+                $estado_est = 0;
+                if (isset($item['years'])) {
+                    $estado_est = '1';
+                }
+
+                //Alamacenar la data para poder armar el sql
                 $parametros[] = [
                     'sa_est_primer_apellido' => $item['user']['surname'] ?? '',
                     'sa_est_segundo_apellido' => $item['user']['second_surname'] ?? '',
@@ -132,9 +176,9 @@ class cat_configuracionGC
                     'sa_id_representante' => -1,
                     'sa_est_correo' => $item['user']['email'] ?? '',
                     'sa_est_direccion' => $item['user']['address'] ?? '',
-                    'sa_id_seccion' => 1,
-                    'sa_id_grado' => 1,
-                    'sa_id_paralelo' => 1,
+                    'sa_id_seccion' => -1,
+                    'sa_id_grado' => -1,
+                    'sa_id_paralelo' => -1,
 
                     'sa_id_est_idukay' => $item['_id'],
 
@@ -144,11 +188,20 @@ class cat_configuracionGC
                     'sa_id_rep_idukay_2' => $item['relatives'][1]['parent'] ?? '',
                     'sa_est_rep_parentesco_2' => $item['relatives'][1]['relationship'] ?? '',
 
+                    'sa_est_estado' => $estado_est,
+
+                    'seccion_estudiante_idukay' => $seccion,
+                    'grado_estudiante_idukay' => $grado,
+                    'paralelo_estudiante_idukay' => $paralelo,
+
                 ];
             }
 
-            //print_r($parametros); exit();die();
+            /*print_r($parametros);
+            exit();
+            die();*/
 
+            //Crear clave valor para generar el script para guardar a los estudiantes    
             $datos = array();
             foreach ($parametros as $parametro) {
                 $datos[] = array(
@@ -172,11 +225,23 @@ class cat_configuracionGC
 
                     array('campo' => 'sa_id_rep_idukay_2', 'dato' => $parametro['sa_id_rep_idukay_2']),
                     array('campo' => 'sa_est_rep_parentesco_2', 'dato' => $parametro['sa_est_rep_parentesco_2']),
+
+                    array('campo' => 'sa_est_estado', 'dato' => $parametro['sa_est_estado']),
+                    array('campo' => 'seccion_estudiante_idukay', 'dato' => $parametro['seccion_estudiante_idukay']),
+                    array('campo' => 'grado_estudiante_idukay', 'dato' => $parametro['grado_estudiante_idukay']),
+                    array('campo' => 'paralelo_estudiante_idukay', 'dato' => $parametro['paralelo_estudiante_idukay']),
+
                 );
                 //break;
+
+                /*print_r($datos);
+                exit();
+                die();*/
             }
 
-            //print_r($datos);
+            /*----------------------------------------------------------------
+                Para guardar en la bdd los insert de los estudiantes 
+            /*----------------------------------------------------------------*/
 
             // Dividir los datos en grupos de 300
             $grupos = array_chunk($datos, 300);
@@ -194,9 +259,14 @@ class cat_configuracionGC
                 $sentenciaSql = '';
                 foreach ($sql as $dato) {
                     foreach ($dato as $consulta) {
-                        $sentenciaSql .= $consulta . " ";
+                        $sentenciaSql .= $consulta . " "; //<br/>
                     }
                 }
+
+                /*echo ($sentenciaSql);
+                exit();
+                die();*/
+
 
                 // Ejecutar la inserción del grupo actual
                 $resultado = $this->estudiantes->cargaMasivaIdukay($sentenciaSql);
@@ -212,8 +282,8 @@ class cat_configuracionGC
                 }
             }
 
-
-            return 1;
+            $query = $this->estudiantes->ponerIdCursos();
+            return $query;
         } else {
             return -11;
         }
@@ -350,15 +420,15 @@ class cat_configuracionGC
 
         foreach ($datos as $key => $value) {
             $campos .= $value['campo'] . ',';
-            if (is_numeric($value['dato'])) {
-                if (isset($value['tipo']) && strtoupper($value['tipo']) == 'STRING') {
-                    $valores .= "'" . $value['dato'] . "',";
-                } else {
-                    $valores .= str_replace(',', '', $value['dato']) . ',';
-                }
+
+            if (is_string($value['dato'])) {
+                $dato = "'" . str_replace("'", "''", $value['dato']) . "'";
             } else {
-                $valores .= "'" . str_replace(',', '', $value['dato']) . "',";
+                $dato = str_replace(',', '', $value['dato']);
+                $dato = is_numeric($dato) ? $dato : "'" . $dato . "'";
             }
+
+            $valores .= $dato . ',';
         }
 
         $campos = rtrim($campos, ',');
@@ -366,6 +436,76 @@ class cat_configuracionGC
 
         $sql .= '(' . $campos . ') VALUES (' . $valores . ');';
         return $sql;
+    }
+
+
+    function generarUpdate($cursos_modificar)
+    {
+        $updates = [];
+        foreach ($cursos_modificar as $curso) {
+            $est_id = 0;
+            $curso_texto = '';
+
+            foreach ($curso as $item) {
+                if ($item['campo'] == 'sa_id_est_idukay') {
+                    $est_id = $item['dato'];
+                } elseif ($item['campo'] == 'curso_est') {
+                    $curso_texto = $item['dato'];
+                }
+            }
+
+            // Validar y descomponer la cadena del curso
+            if (!empty($curso_texto)) {
+                $curso_array = array_map('trim', explode(',', $curso_texto));
+
+                if (count($curso_array) == 3) {
+                    list($grado, $seccion, $paralelo) = $curso_array;
+                } else {
+                    // Manejo de error o asignación de valores predeterminados
+                    $grado = $seccion = $paralelo = '-1';
+                }
+            } else {
+                // Asignación de valores predeterminados si curso_texto está vacío
+                $grado = $seccion = $paralelo = '-1';
+            }
+
+            $update = "UPDATE estudiantes
+                       SET sa_id_paralelo = (
+                            SELECT cp.sa_par_id
+                            FROM cat_paralelo cp
+                            INNER JOIN cat_seccion cs ON cp.sa_id_seccion = cs.sa_sec_id
+                            INNER JOIN cat_grado cg ON cp.sa_id_grado = cg.sa_gra_id
+                            WHERE cp.sa_par_estado = 1
+                              AND cg.sa_gra_nombre = '$grado'
+                              AND cs.sa_sec_nombre = '$seccion'
+                              AND cp.sa_par_nombre = '$paralelo'
+                        ),
+                           sa_id_seccion = (
+                            SELECT cs.sa_sec_id
+                            FROM cat_paralelo cp
+                            INNER JOIN cat_seccion cs ON cp.sa_id_seccion = cs.sa_sec_id
+                            INNER JOIN cat_grado cg ON cp.sa_id_grado = cg.sa_gra_id
+                            WHERE cp.sa_par_estado = 1
+                              AND cg.sa_gra_nombre = '$grado'
+                              AND cs.sa_sec_nombre = '$seccion'
+                              AND cp.sa_par_nombre = '$paralelo'
+                        ),
+                           sa_id_grado = (
+                            SELECT cg.sa_gra_id
+                            FROM cat_paralelo cp
+                            INNER JOIN cat_seccion cs ON cp.sa_id_seccion = cs.sa_sec_id
+                            INNER JOIN cat_grado cg ON cp.sa_id_grado = cg.sa_gra_id
+                            WHERE cp.sa_par_estado = 1
+                              AND cg.sa_gra_nombre = '$grado'
+                              AND cs.sa_sec_nombre = '$seccion'
+                              AND cp.sa_par_nombre = '$paralelo'
+                        )
+                       WHERE sa_id_est_idukay = '$est_id';";
+
+            $updates[] = $update;
+        }
+
+        return $updates;
     }
 }
 

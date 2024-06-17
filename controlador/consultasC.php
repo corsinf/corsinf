@@ -439,6 +439,7 @@ class consultasC
 
                 $icono = "bx bxs-file-plus";
 
+                $respuesta_servicio_API = '';
                 if ($parametros['txt_paciente_tabla'] == 'estudiantes') {
                     //Notificacion para el docente
                     $datos_notificaciones = array(
@@ -474,11 +475,10 @@ class consultasC
 
                     $this->notificaciones->insertar($datos_notificaciones);
 
-                    /*HIKVISION*/
-                    //Variable para manejar estado de HIKVISION
-                    $respuesta_servicio_API = '';
                     if ($parametros['sa_conp_permiso_salida'] === 'SI') {
 
+                        /*HIKVISION*/
+                        //Variable para manejar estado de HIKVISION
                         if ($this->user_api_hikvision != '.' && $this->key_api_hikvision != '.' && $this->ip_api_hikvision != '.' && $this->puerto_api_hikvision != '.') {
                             $mensaje_alerta = '';
                             $id_consulta = $id_insert;
@@ -527,13 +527,18 @@ class consultasC
                         }
                     }
 
-                    /* Enviar mensaje a padre de familia */
+                    /* Enviar mensaje a padre de familia Insert*/
                     //Descomentar las lineas de la funcion enviar_correo_con para enviar el mensaje al correo
                     $tipo_consulta = $parametros['sa_conp_tipo_consulta'];
                     $id_representante = $parametros['sa_pac_temp_rep_id'];
+                    $sa_pac_temp_rep2_id = $parametros['sa_pac_temp_rep2_id'];
+                    $chx_representante = $parametros['chx_representante'];
+                    $chx_representante_2 = $parametros['chx_representante_2'];
+
                     $nombre_est = $parametros['nombre_paciente'];
                     $diagnostico = '';
                     $permiso_salida = '';
+
                     if ($parametros['sa_conp_permiso_salida'] == 'SI') {
                         $permiso_salida = $parametros['sa_conp_permiso_tipo'];
                     } else {
@@ -542,11 +547,25 @@ class consultasC
 
                     if ($tipo_consulta == 'consulta') {
                         $diagnostico = $parametros['sa_conp_diagnostico_1'];
-                        $variable = $this->enviar_correo_con($id_representante, $nombre_est, $diagnostico, $tipo_consulta, $permiso_salida);
+
+                        if ($chx_representante == true) {
+                            $this->enviar_correo_con($id_representante, $nombre_est, $diagnostico, $tipo_consulta, $permiso_salida);
+                        }
+
+                        if ($chx_representante_2 == true) {
+                            $this->enviar_correo_con($sa_pac_temp_rep2_id, $nombre_est, $diagnostico, $tipo_consulta, $permiso_salida);
+                        }
+
                         //print_r($variable);exit();die();
                     } else {
                         $diagnostico = $parametros['sa_conp_diagnostico_certificado'];
-                        $this->enviar_correo_con($id_representante, $nombre_est, $diagnostico, $tipo_consulta, $permiso_salida);
+                        if ($chx_representante == true) {
+                            $this->enviar_correo_con($id_representante, $nombre_est, $diagnostico, $tipo_consulta, $permiso_salida);
+                        }
+
+                        if ($chx_representante_2 == true) {
+                            $this->enviar_correo_con($sa_pac_temp_rep2_id, $nombre_est, $diagnostico, $tipo_consulta, $permiso_salida);
+                        }
                     }
 
                     $url_rep_noti = '../vista/inicio.php?mod=7&acc=detalle_consulta&pdf_consulta=true&id_consulta=' . $id_insert . '&tipo_consulta=' . $parametros['sa_conp_tipo_consulta'] . '&btn_regresar=represententes';
@@ -643,7 +662,7 @@ class consultasC
             /* ----------------------*/
 
             $icono = "bx bxs-file-plus";
-
+            $respuesta_servicio_API = '';
             if ($parametros['txt_paciente_tabla'] == 'estudiantes') {
                 //Notificacion para el docente
                 $datos_notificaciones = array(
@@ -679,10 +698,10 @@ class consultasC
 
                 $this->notificaciones->insertar($datos_notificaciones);
 
-                /*HIKVISION*/
-                //Variable para manejar estado de HIKVISION
-                $respuesta_servicio_API = '';
                 if ($parametros['sa_conp_permiso_salida'] === 'SI') {
+
+                    /*HIKVISION*/
+                    //Variable para manejar estado de HIKVISION
                     if ($this->user_api_hikvision != '.' && $this->key_api_hikvision != '.' && $this->ip_api_hikvision != '.' && $this->puerto_api_hikvision != '.' && $this->tcp_puerto_hikvision != '.') {
                         $mensaje_alerta = '';
                         $id_consulta = $parametros['sa_conp_id'];
@@ -726,10 +745,13 @@ class consultasC
                     }
                 }
 
-                /* Enviar mensaje a padre de familia */
+                /* Enviar mensaje a padre de familia 2*/
                 //Descomentar las lineas de la funcion enviar_correo_con para enviar el mensaje al correo
                 $tipo_consulta = $parametros['sa_conp_tipo_consulta'];
                 $id_representante = $parametros['sa_pac_temp_rep_id'];
+                $sa_pac_temp_rep2_id = $parametros['sa_pac_temp_rep2_id'];
+                $chx_representante = $parametros['chx_representante'];
+                $chx_representante_2 = $parametros['chx_representante_2'];
                 $nombre_est = $parametros['nombre_paciente'];
                 $diagnostico = '';
                 $permiso_salida = '';
@@ -741,10 +763,23 @@ class consultasC
 
                 if ($tipo_consulta == 'consulta') {
                     $diagnostico = $parametros['sa_conp_diagnostico_1'];
-                    $this->enviar_correo_con($id_representante, $nombre_est, $diagnostico, $tipo_consulta, $permiso_salida);
+
+                    if ($chx_representante == true) {
+                        $this->enviar_correo_con($id_representante, $nombre_est, $diagnostico, $tipo_consulta, $permiso_salida);
+                    }
+
+                    if ($chx_representante_2 == true) {
+                        $this->enviar_correo_con($id_representante, $nombre_est, $diagnostico, $tipo_consulta, $permiso_salida);
+                    }
                 } else {
                     $diagnostico = $parametros['sa_conp_diagnostico_certificado'];
-                    $this->enviar_correo_con($id_representante, $nombre_est, $diagnostico, $tipo_consulta, $permiso_salida);
+                    if ($chx_representante == true) {
+                        $this->enviar_correo_con($id_representante, $nombre_est, $diagnostico, $tipo_consulta, $permiso_salida);
+                    }
+
+                    if ($chx_representante_2 == true) {
+                        $this->enviar_correo_con($id_representante, $nombre_est, $diagnostico, $tipo_consulta, $permiso_salida);
+                    }
                 }
 
                 $url_rep_noti = '../vista/inicio.php?mod=7&acc=detalle_consulta&pdf_consulta=true&id_consulta=' . $parametros['sa_conp_id'] . '&tipo_consulta=' . $parametros['sa_conp_tipo_consulta'] . '&btn_regresar=represententes';

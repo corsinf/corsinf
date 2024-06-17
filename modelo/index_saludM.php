@@ -30,7 +30,7 @@ class index_saludM
 
     function total_estudiantes()
     {
-        $sql = " SELECT count(*) as total from estudiantes";
+        $sql = " SELECT count(*) as total from estudiantes where sa_est_estado = 1;";
         $datos = $this->db->datos($sql);
         return $datos[0]['total'];
     }

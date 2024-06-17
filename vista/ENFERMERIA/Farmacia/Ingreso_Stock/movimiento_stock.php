@@ -63,22 +63,13 @@
                 {
                     data: 'Salida'
                 },
-                {
-                    data: 'Precio'
-                },
+                
                 {
                     data: 'Stock'
                 },
                 {
                     data: 'Orden'
                 },
-                {
-                    data: 'Factura'
-                },
-                {
-                    data: 'Serie'
-                },
-
             ],
             dom: '<"top"Bfr>t<"bottom"lip>',
             buttons: [
@@ -248,12 +239,8 @@
                                             <th>Tipo</th>
                                             <th>Entrada</th>
                                             <th>Salida</th>
-                                            <th>Precio</th>
                                             <th>Stock</th>
                                             <th>Orden</th>
-                                            <th>Serie</th>
-                                            <th>Factura</th>
-
                                         </tr>
                                     </thead>
                                     <tbody>

@@ -3,6 +3,7 @@
 	var tablaMedi;
 	var tablaInsu;
 	$(document).ready(function() {
+		inicializarInputs();
 		lista_proveedor();
 		tablaAll = $('#tabla_todos').DataTable({
 			language: {
@@ -63,17 +64,9 @@
 					data: 'Salida'
 				},
 				{
-					data: 'Precio'
-				},
-				{
 					data: 'Stock'
 				},
-				{
-					data: 'Serie'
-				},
-				{
-					data: 'Factura'
-				},
+
 			],
 			dom: '<"top"Bfr>t<"bottom"lip>',
 			buttons: [
@@ -117,7 +110,7 @@
 					}
 				},
 				{
-					data: 'sa_cins_lote'
+					data: 'sa_cins_nombre_comercial'
 				},
 				{
 					data: 'sa_cins_minimos'
@@ -152,10 +145,7 @@
 					}
 				},
 				{
-					data: 'sa_cmed_concentracion'
-				},
-				{
-					data: 'sa_cmed_serie'
+					data: 'sa_cmed_nombre_comercial'
 				},
 				{
 					data: 'sa_cmed_minimos'
@@ -262,7 +252,17 @@
 		var ddl = $('#ddl_tipo option:selected').text();
 		var datos = datos + '&ddl_tipo=' + ddl;
 
-		if ($('#ddl_proveedor').val() == '' || $('#ddl_lista_productos').val() == '' || $('#ddl_lista_productos').val() == null || $('#txt_precio').val() == '0' || $('#txt_precio').val() == '' || $('#txt_serie').val() == '' || $('#txt_factura').val() == '' || $('#txt_fecha_ela').val() == '' || $('#txt_fecha_exp').val() == '') {
+		if (
+			//$('#ddl_proveedor').val() == '' ||
+			$('#ddl_lista_productos').val() == '' ||
+			$('#ddl_lista_productos').val() == null //||
+			//$('#txt_precio').val() == '0' ||
+			//$('#txt_precio').val() == '' ||
+			//$('#txt_serie').val() == '' ||
+			//$('#txt_factura').val() == '' ||
+			//$('#txt_fecha_ela').val() == '' ||
+			//$('#txt_fecha_exp').val() == ''
+		) {
 			Swal.fire('', 'Llene todo los campos.', 'info');
 			return false;
 		}
@@ -299,6 +299,39 @@
 
 	function limpiar_nuevo_producto() {
 		$('#ddl_lista_productos').empty();
+		$('#txt_existencias').val('');
+		$('#txt_fecha_ela').val('');
+		$('#txt_canti').val('');
+
+
+
+
+
+	}
+
+	function inicializarInputs() {
+		$.ajax({
+			url: '../controlador/v_med_insC.php?listar_v_ingresoStock=true',
+			type: 'post',
+			dataType: 'json',
+			success: function(response) {
+				console.log(response);
+
+				// Verificar si la respuesta contiene datos
+				if (response && response.length > 0) {
+					response.forEach(function(valor) {
+
+						if (valor.sa_vmi_estado == 1) {
+							$('#' + valor.sa_vmi_id_input).show();
+						} else {
+							$('#' + valor.sa_vmi_id_input).hide();
+						}
+
+					});
+
+				}
+			},
+		});
 	}
 </script>
 
@@ -380,16 +413,13 @@
 													<table class="table table-striped responsive " id="tabla_todos" style="width:100%">
 														<thead>
 															<tr>
-																<th>#</th>
-																<th>Fecha Ingreso</th>
+																<th width='5%'>#</th>
+																<th width='10%'>Fecha Ingreso</th>
 																<th>Productos</th>
 																<th>Tipo</th>
 																<th>Entrada</th>
 																<th>Salida</th>
-																<th>Precio</th>
 																<th>Stock</th>
-																<th>Serie</th>
-																<th>Factura</th>
 															</tr>
 														</thead>
 														<tbody>
@@ -404,9 +434,8 @@
 														<thead>
 															<tr>
 																<th>#</th>
-																<th>Presentación</th>
-																<th>Concentración</th>
-																<th>Serie</th>
+																<th>NOMBRE DEL MEDICAMENTO</th>
+																<th>NOMBRE COMERCIAL</th>
 																<th>Mínimos</th>
 																<th>Stock</th>
 															</tr>
@@ -423,8 +452,8 @@
 														<thead>
 															<tr>
 																<th>#</th>
-																<th>Concentración</th>
-																<th>Lote</th>
+																<th>NOMBRE DEL INSUMO</th>
+																<th>NOMBRE COMERCIAL</th>
 																<th>Mínimos</th>
 																<th>Stock</th>
 															</tr>
@@ -463,25 +492,25 @@
 				<form id="form_nuevo_producto">
 
 					<div class="row">
-						<div class="col-sm-4 mb-2">
+						<div class="col-sm-4 mb-2" id="ddl_proveedor_inputs" style="display: none;">
 							<label for="" class="fw-bold">Proveedor <label style="color: red;">*</label> </label>
 							<select class="form-select form-select-sm" id="ddl_proveedor" name="ddl_proveedor">
 								<option value="">Seleccione proveedor</option>
 							</select>
 						</div>
-						<div class="col-sm-3 mb-2"></div>
+						<div class="col-sm-3 mb-2" id="separador_inputs" style="display: none;"></div>
 
-						<div class="col-sm-1 mb-2">
+						<div class="col-sm-1 mb-2" id="txt_serie_inputs" style="display: none;">
 							<label for="" class="fw-bold">Serie <label style="color: red;">*</label> </label>
 							<input type="" class="form-control form-control-sm" name="txt_serie" id="txt_serie">
 						</div>
 
-						<div class="col-sm-2 mb-2">
+						<div class="col-sm-2 mb-2" id="txt_factura_inputs" style="display: none;">
 							<label for="" class="fw-bold">Factura <label style="color: red;">*</label> </label>
 							<input type="" class="form-control form-control-sm" name="txt_factura" id="txt_factura">
 						</div>
 
-						<div class="col-sm-2 mb-2">
+						<div class="col-sm-2 mb-2" id="txt_fecha_inputs" style="display: none;">
 							<label for="" class="fw-bold">Fecha Ingreso <label style="color: red;">*</label> </label>
 							<input type="date" readonly class="form-control form-control-sm" name="txt_fecha" id="txt_fecha" value="<?php echo date('Y-m-d'); ?>">
 						</div>
@@ -490,19 +519,19 @@
 					<hr>
 
 					<div class="row pt-1">
-						<div class="col-sm-2 mb-2">
+						<div class="col-sm-2 mb-2" id="txt_referencia_inputs" style="display: none;">
 							<label for="" class="fw-bold">Referencia <label style="color: red;">*</label> </label>
 							<input type="text" name="txt_referencia" id="txt_referencia" class="form-control form-control-sm" readonly="">
 						</div>
 
-						<div class="col-sm-4 mb-2">
+						<div class="col-sm-4 mb-2" id="ddl_lista_productos_inputs" style="display: none;">
 							<label for="" class="fw-bold">Producto <label style="color: red;">*</label> </label>
 							<select class="form-select form-select-sm" id="ddl_lista_productos" name="ddl_lista_productos">
 								<option value="">Seleccione una producto</option>
 							</select>
 						</div>
 
-						<div class="col-sm-3 mb-2">
+						<div class="col-sm-3 mb-2" id="ddl_tipo_inputs" style="display: none;">
 							<label for="ddl_tipo" class="fw-bold">Tipo <label style="color: red;">*</label> </label>
 							<select class="form-control form-control-sm" id="ddl_tipo" name="ddl_tipo" disabled>
 								<option value=""> -- Selecione -- </option>
@@ -511,12 +540,12 @@
 							</select>
 						</div>
 
-						<div class="col-sm-1 mb-2">
+						<div class="col-sm-1 mb-2" id="txt_unidad_inputs" style="display: none;">
 							<label for="" class="fw-bold">Unidad <label style="color: red;">*</label> </label>
 							<input type="" name="txt_unidad" id="txt_unidad" class="form-control form-control-sm" value="">
 						</div>
 
-						<div class="col-sm-2 mb-2">
+						<div class="col-sm-2 mb-2" id="rbl_radio_inputs" style="display: none;">
 							<label for="" class="fw-bold">Lleva IVA <label style="color: red;">*</label> </label>
 							<br>
 							<label class="online-radio "><input type="radio" name="rbl_radio" id="rbl_no" checked="" onchange="calculos()"> No</label>
@@ -525,32 +554,32 @@
 					</div>
 
 					<div class="row pt-2">
-						<div class="col-sm-2 mb-2">
+						<div class="col-sm-2 mb-2" id="txt_existencias_inputs" style="display: none;">
 							<label for="" class="fw-bold">Existente <label style="color: red;">*</label> </label>
 							<input type="text" name="txt_existencias" id="txt_existencias" class="form-control form-control-sm" readonly="">
 						</div>
 
-						<div class="col-sm-2 mb-2">
-							<label for="" class="fw-bold">Fecha Elab <label style="color: red;">*</label> </label>
+						<div class="col-sm-2 mb-2" id="txt_fecha_ela_inputs" style="display: none;">
+							<label for="" class="fw-bold">Fecha Elab <label style="color: red;"></label> </label>
 							<input type="date" name="txt_fecha_ela" id="txt_fecha_ela" class="form-control form-control-sm">
 						</div>
 
-						<div class="col-sm-2 mb-2">
-							<label for="" class="fw-bold">Fecha Exp <label style="color: red;">*</label> </label>
+						<div class="col-sm-2 mb-2" id="txt_fecha_exp_inputs" style="display: none;">
+							<label for="" class="fw-bold">Fecha Exp <label style="color: red;"></label> </label>
 							<input type="date" name="txt_fecha_exp" id="txt_fecha_exp" class="form-control form-control-sm">
 						</div>
 
-						<div class="col-sm-2 mb-2">
+						<div class="col-sm-2 mb-2" id="txt_reg_sani_inputs" style="display: none;">
 							<label for="" class="fw-bold">Reg. Sanitario <label style="color: red;">*</label> </label>
 							<input type="text" name="txt_reg_sani" id="txt_reg_sani" class="form-control form-control-sm" readonly="" value=".">
 						</div>
 
-						<div class="col-sm-2 mb-2">
+						<div class="col-sm-2 mb-2" id="txt_procedencia_inputs" style="display: none;">
 							<label for="" class="fw-bold">Procedencia <label style="color: red;">*</label> </label>
 							<input type="text" name="txt_procedencia" id="txt_procedencia" class="form-control form-control-sm" value=".">
 						</div>
 
-						<div class="col-sm-2 mb-2">
+						<div class="col-sm-2 mb-2" id="txt_lote_inputs" style="display: none;">
 							<label for="" class="fw-bold">Lote <label style="color: red;">*</label> </label>
 							<input type="text" name="txt_lote" id="txt_lote" class="form-control form-control-sm" value=".">
 						</div>
@@ -559,37 +588,37 @@
 					<hr>
 
 					<div class="row pt-2">
-						<div class="col-sm-2 mb-2">
+						<div class="col-sm-2 mb-2" id="txt_canti_inputs" style="display: none;">
 							<label for="" class="fw-bold">Cantidad <label style="color: red;">*</label> </label>
 							<input type="number" min="1" name="txt_canti" id="txt_canti" class="form-control form-control-sm solo_numeros" value="1" onblur="calculos()">
 						</div>
 
-						<div class="col-sm-2 mb-2">
+						<div class="col-sm-2 mb-2" id="txt_precio_inputs" style="display: none;">
 							<label for="" class="fw-bold">Precio <label style="color: red;">*</label> </label>
 							<input type="number" min="1" name="txt_precio" id="txt_precio" class="form-control form-control-sm solo_numeros" value="0" onblur="calculos()">
 						</div>
 
-						<div class="col-sm-2 mb-2">
+						<div class="col-sm-2 mb-2" id="txt_precio_ref_inputs" style="display: none;">
 							<label for="" class="fw-bold">PvP Ref. <label style="color: red;">*</label> </label>
 							<input type="text" name="txt_precio_ref" id="txt_precio_ref" class="form-control form-control-sm solo_numeros" value="0" readonly="">
 						</div>
 
-						<div class="col-sm-2 mb-2">
+						<div class="col-sm-2 mb-2" id="txt_descto_inputs" style="display: none;">
 							<label for="" class="fw-bold">% descto. <label style="color: red;">*</label> </label>
 							<input type="number" min="0" name="txt_descto" id="txt_descto" class="form-control form-control-sm solo_numeros" value="0" onblur="calculos()">
 						</div>
 
-						<div class="col-sm-2 mb-2">
+						<div class="col-sm-2 mb-2" id="txt_subtotal_inputs" style="display: none;">
 							<label for="" class="fw-bold">Subtotal <label style="color: red;">*</label> </label>
 							<input type="text" name="txt_subtotal" id="txt_subtotal" class="form-control form-control-sm" readonly="" value="0">
 						</div>
 
-						<div class="col-sm-1 mb-2">
+						<div class="col-sm-1 mb-2" id="txt_iva_inputs" style="display: none;">
 							<label for="" class="fw-bold">IVA <label style="color: red;">*</label> </label>
 							<input type="text" name="txt_iva" id="txt_iva" class="form-control form-control-sm" readonly="" value="0">
 						</div>
 
-						<div class="col-sm-1 mb-2">
+						<div class="col-sm-1 mb-2" id="txt_total_inputs" style="display: none;">
 							<label for="" class="fw-bold">Total <label style="color: red;">*</label> </label>
 							<input type="text" name="txt_total" id="txt_total" class="form-control form-control-sm" readonly="" value="0">
 						</div>

@@ -91,19 +91,19 @@ class permisos_salidaC
 
         $respuesta_servicio_API = '';
 
+        //Permiso del inspector
+        $mensaje_HV = 'per_ins_' . $id;
+        
+        $datos_edit = array(
+            //array('campo' => 'ac_ps_hora_entrada', 'dato' => $parametros['ac_ps_hora_entrada']),
+            array('campo' => 'ac_ps_codigo_TCP_HIK', 'dato' => $mensaje_HV),
+        );
+        
+        $where[0]['campo'] = 'ac_ps_id';
+        $where[0]['dato'] = $id;
+        $datos = $this->modelo->editar($datos_edit, $where);
+        
         if ($this->user_api_hikvision != '.' && $this->key_api_hikvision != '.' && $this->ip_api_hikvision != '.' && $this->puerto_api_hikvision != '.') {
-            //Permiso del inspector
-            $mensaje_HV = 'per_ins_' . $id;
-
-            $datos_edit = array(
-                //array('campo' => 'ac_ps_hora_entrada', 'dato' => $parametros['ac_ps_hora_entrada']),
-                array('campo' => 'ac_ps_codigo_TCP_HIK', 'dato' => $mensaje_HV),
-            );
-
-            $where[0]['campo'] = 'ac_ps_id';
-            $where[0]['dato'] = $id;
-            $datos = $this->modelo->editar($datos_edit, $where);
-
             /*HIKVISION*/
             $mensaje_alerta = '';
             if ($parametros['ac_ps_estado_salida'] == '1') {

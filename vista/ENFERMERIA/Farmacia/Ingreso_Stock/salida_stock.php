@@ -5,6 +5,7 @@
     $(document).ready(function() {
         consultar_datos_comunidad_tabla();
         lista_medicamentos();
+
         tablaAll = $('#tabla_todos').DataTable({
             language: {
                 url: 'https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
@@ -61,9 +62,6 @@
                     data: 'Salida'
                 },
                 {
-                    data: 'Precio'
-                },
-                {
                     data: 'Stock'
                 },
                 {
@@ -75,91 +73,6 @@
             buttons: [
                 'excel', 'pdf' // Configura los botones que deseas
             ],
-            // initComplete: function() {
-            //     // Mover los botones al contenedor personalizado
-            //     $('#pnl_exportar').append($('.dt-buttons'));
-            //     $('#tabla_todos_filter input').unbind().bind('input', function() {
-            //         buscarExacto($(this).val());
-            //     });
-            // }
-        });
-
-
-        function buscarExacto(valorABuscar) {
-            tablaAll.search("^" + $.fn.dataTable.util.escapeRegex(valorABuscar) + "$|\\b" + $.fn.dataTable.util.escapeRegex(valorABuscar) + "\\b", true, false).draw();
-
-        }
-
-
-        tablaInsu = $('#tabla_insumos').DataTable({
-            language: {
-                url: 'https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
-            },
-            responsive: true,
-            ajax: {
-                url: '../controlador/insumosC.php?listar_todo=true',
-                dataSrc: ''
-            },
-            columns: [{
-                    data: null,
-                    render: function(data, type, item, meta) {
-                        return meta.row + 1;
-                    }
-                },
-                {
-                    data: null,
-                    render: function(data, type, item) {
-                        return '<a href="../vista/inicio.php?mod=7&acc=registrar_insumos&id=' + item.sa_cins_id + '"><u>' + item.sa_cins_presentacion + '</u></a>';
-                    }
-                },
-                {
-                    data: 'sa_cins_lote'
-                },
-                {
-                    data: 'sa_cins_minimos'
-                },
-                {
-                    data: 'sa_cins_stock'
-                },
-
-            ]
-        });
-
-
-        tablaMedi = $('#tabla_medicamentos').DataTable({
-            language: {
-                url: 'https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
-            },
-            responsive: true,
-            ajax: {
-                url: '../controlador/medicamentosC.php?listar_todo=true',
-                dataSrc: ''
-            },
-            columns: [{
-                    data: null,
-                    render: function(data, type, item, meta) {
-                        return meta.row + 1;
-                    }
-                },
-                {
-                    data: null,
-                    render: function(data, type, item) {
-                        return '<a href="../vista/inicio.php?mod=7&acc=registrar_medicamentos&id=' + item.sa_cmed_id + '"><u>' + item.sa_cmed_presentacion + '</u></a>';
-                    }
-                },
-                {
-                    data: 'sa_cmed_concentracion'
-                },
-                {
-                    data: 'sa_cmed_serie'
-                },
-                {
-                    data: 'sa_cmed_minimos'
-                },
-                {
-                    data: 'sa_cmed_stock'
-                }
-            ]
         });
 
 
@@ -174,29 +87,49 @@
 
     });
 
-
     function lista_medicamentos() {
         $('#ddl_lista_productos').empty();
         var tipo = $('input[name=rbl_farmaco]:checked').val();
         $('#ddl_lista_productos').select2({
-            placeholder: 'Seleccione producto',
-            width: '87%',
-            ajax: {
-                url: '../controlador/salida_stockC.php?lista_articulos=true&tipo=' + tipo,
-                dataType: 'json',
-                delay: 250,
-                processResults: function(data) {
-                    // console.log(data);
-                    return {
-                        results: data
-                    };
-                },
-                cache: true
-            }
-        });
+                placeholder: 'Seleccione producto',
+                width: '87%',
+                ajax: {
+                    url: '../controlador/salida_stockC.php?lista_articulos=true&tipo=' + tipo,
+                    dataType: 'json',
+                    delay: 250,
+                    processResults: function(data) {
+                        return {
+                            results: data
+                        };
+                    },
+                    cache: true
+                }
+            })
+            .off('select2:select')
+            .on('select2:select', function(e) {
+                var data = e.params.data.data;
+
+                if (tipo == 'Medicamento') {
+                    $('#sa_det_fice_id_cmed_cins').val(data.sa_cmed_id);
+                    $('#sa_det_fice_tipo').val(data.sa_cmed_tipo);
+                    $('#stock_farmacologia').val(data.sa_cmed_stock);
+                    listar_farmacos_alergia();
+                    //console.log(data.sa_cmed_id);
+                } else if (tipo == 'Insumos') {
+                    //console.log(data.sa_cins_id);
+                    $('#sa_det_fice_id_cmed_cins').val(data.sa_cins_id);
+                    $('#sa_det_fice_tipo').val(data.sa_cins_tipo);
+                    $('#stock_farmacologia').val(data.sa_cins_stock);
+                    listar_farmacos_alergia();
+                }
+                // Para verificar los datos en la consola
+            });
     }
 
     function agregar_tabla() {
+        $('#sa_pac_tabla').prop('disabled', true);
+        $('#sa_pac_id_comunidad').prop('disabled', true);
+
         var farmaco = $('#ddl_lista_productos option:selected').text();
         var farmaco_id = $('#ddl_lista_productos').val();
         var tipo = $('#sa_pac_tabla option:selected').text();
@@ -222,7 +155,15 @@
 
         var rowCount = $('#lista_medicamentos tbody').find('tr').length;
         var fila = rowCount;
-        var tr = '<tr id="ln_' + rowCount + '"><td><button class="btn btn-danger btn-sm" onclick="remover_fila(' + fila + ')"><i class="bx bx-trash me-0"></i></button></td><td style="display:none">' + farmaco_id + '</td><td>' + tipo + '</td><td>' + paciente + '</td><td>' + tipo_farmaco + '</td><td>' + farmaco + '</td><td>' + cant + '</td></tr>';
+        var tr =
+            '<tr id="ln_' + rowCount + '">' +
+            '<td><button class="btn btn-danger btn-sm" onclick="remover_fila(' + fila + ')"><i class="bx bx-trash me-0"></i></button></td>' +
+            '<td style="display:none">' + farmaco_id + '</td>' +
+            '<td>' + tipo + '</td><td>' + paciente + '</td>' +
+            '<td>' + tipo_farmaco + '</td>' +
+            '<td>' + farmaco + '</td>' +
+            '<td>' + cant + '</td>' +
+            '</tr>';
         $("#tbl_body").append(tr);
     }
 
@@ -244,49 +185,6 @@
         });
 
         return encontrado;
-    }
-
-
-
-    function guardar_producto() {
-        var datos = $("#form_nuevo_producto").serialize();
-
-        var ddl = $('#ddl_tipo option:selected').text();
-        var datos = datos + '&ddl_tipo=' + ddl;
-
-        if ($('#ddl_proveedor').val() == '' || $('#ddl_lista_productos').val() == '' || $('#txt_precio').val() == '0' || $('#txt_precio').val() == '' || $('#txt_serie').val() == '' || $('#txt_factura').val() == '' || $('#txt_fecha_ela').val() == '' || $('#txt_fecha_exp').val() == '') {
-            Swal.fire('', 'Llene todo los campos.', 'info');
-            return false;
-        }
-
-        if ($('#txt_canti').val() < 1) {
-            Swal.fire('', 'Cantidad no valida.', 'info');
-            return false;
-        }
-
-        $.ajax({
-            data: datos,
-            url: '../controlador/ingreso_stockC.php?producto_nuevo=true',
-            type: 'post',
-            dataType: 'json',
-            success: function(response) {
-                // console.log(response);
-
-                $('#Nuevo_producto').modal('hide');
-                if (response == 1) {
-
-                    Swal.fire('Ingresado a stock.', '', 'success').then(function() {
-                        if (tablaAll) {
-                            tablaAll.ajax.reload();
-                            tablaInsu.ajax.reload();
-                            tablaMedi.ajax.reload();
-                        }
-                    });
-                    limpiar_nuevo_producto();
-                }
-            }
-        });
-        // console.log(datos);
     }
 
     function limpiar_nuevo_producto() {
@@ -355,7 +253,10 @@
                         if (fullName.toLowerCase().includes(searchTerm)) {
                             filtered.push({
                                 id: item['' + sa_tbl_pac_prefijo + '_id'],
-                                text: fullName
+                                text: fullName,
+                                sa_id: item['' + sa_tbl_pac_prefijo + '_id'],
+                                sa_tabla: sa_tbl_pac_tabla,
+
                             });
                         }
 
@@ -368,6 +269,14 @@
                 },
                 cache: true
             }
+        }).on('select2:select', function(e) {
+            var sa_id = e.params.data.sa_id;
+            var sa_tabla = e.params.data.sa_tabla;
+
+            $('#sa_id').val(sa_id);
+            $('#sa_tabla').val(sa_tabla);
+
+            existePaciente(sa_id, sa_tabla);
         });
     }
 
@@ -377,11 +286,14 @@
     }
 
     function ingresar_salida() {
+
+        parametros_mensaje = [];
         $('#lista_medicamentos tbody tr').each(function() {
             var id = $(this).find('td:eq(1)').text();
             var orden = $(this).find('td:eq(3)').text();
             var tipo = $(this).find('td:eq(4)').text();
             var cant = $(this).find('td:eq(6)').text();
+            var farmacologia = $(this).find('td:eq(5)').text();
             parametros = {
                 'ddl_lista_productos': id,
                 'orden': orden,
@@ -389,8 +301,32 @@
                 'txt_canti': cant,
                 'txt_subtotal': 0,
                 'txt_total': 0,
+                'farmacologia': farmacologia,
+                'sa_id': $('#sa_id').val(),
+                'sa_tabla': $('#sa_tabla').val(),
             }
             salida_registro(parametros);
+            parametros_mensaje.push(parametros);
+
+        });
+
+        mensajeCorreo(parametros_mensaje);
+    }
+
+    function mensajeCorreo(parametros) {
+        //console.log('mensaje: ');
+        //console.log(parametros);
+
+        $.ajax({
+            data: {
+                parametros: parametros
+            },
+            url: '../controlador/ingreso_stockC.php?enviar_correo=true',
+            type: 'post',
+            dataType: 'json',
+            success: function(response) {
+                //console.log(response);
+            }
         });
     }
 
@@ -417,7 +353,89 @@
             }
         });
     }
+
+    //Consultar alergia farmacos
+    function listar_farmacos_alergia() {
+
+        var sa_det_fice_id_cmed_cins = $('#sa_det_fice_id_cmed_cins').val();
+        var sa_det_fice_tipo = $('#sa_det_fice_tipo').val();
+
+        // alert(sa_det_fice_id_cmed_cins)
+        // alert(sa_det_fice_tipo)
+        //alert($('#sa_fice_id').val())
+
+
+        // Llamar a la función insertar_detalle_fm
+        var parametros = {
+            'sa_fice_id': $('#sa_fice_id').val(),
+            'sa_det_fice_id_cmed_cins': sa_det_fice_id_cmed_cins,
+            'sa_det_fice_tipo': sa_det_fice_tipo,
+        };
+
+        //console.log(parametros);
+
+        $.ajax({
+            data: {
+                parametros: parametros
+            },
+            url: '../controlador/detalle_fm_med_insC.php?fm_farmaco_a=true',
+            type: 'post',
+            dataType: 'json',
+            success: function(response) {
+
+                //console.log(response);
+                if (response && response.length > 0) {
+                    Swal.fire('', 'Tiene alergia a este fármaco.', 'error');
+                    limpiar_nuevo_producto();
+                } else {
+
+                }
+            }
+        });
+    }
+
+    //Consultar alergia farmacos
+    function existePaciente(id, tabla) {
+        $.ajax({
+            data: {
+                sa_pac_id_comunidad: id,
+                sa_pac_tabla: tabla
+            },
+            url: '../controlador/ficha_MedicaC.php?id_paciente_id_comunidad_tabla=true',
+            type: 'post',
+            dataType: 'json',
+            success: function(response) {
+                //console.log(response);
+
+                if (response != null) {
+                    $.ajax({
+                        data: {
+                            id_paciente: response.sa_pac_id
+                        },
+                        url: '../controlador/pacientesC.php?obtener_idFicha_paciente=true',
+                        type: 'post',
+                        dataType: 'json',
+                        success: function(response) {
+                            console.log(response);
+                            if (response != null) {
+                                $('#sa_fice_id').val(response.sa_fice_id);
+                            } else {
+                                $('#sa_fice_id').val('');
+                            }
+                        }
+                    });
+                } else {
+                    $('#sa_fice_id').val('');
+                }
+            }
+        });
+    }
 </script>
+
+<input type="hidden" name="sa_id" id="sa_id">
+<input type="hidden" name="sa_tabla" id="sa_tabla">
+<input type="hidden" name="sa_fice_id" id="sa_fice_id">
+
 
 <div class="page-wrapper">
     <div class="page-content">
@@ -498,7 +516,7 @@
 
                                                         <div class="card border-top border-0 border-4">
                                                             <div class="card-body">
-                                                                <label for="sa_pac_id_comunidad" class="fw-bold">Farmacos <label class="text-danger">*</label></label>
+                                                                <label for="" class="fw-bold">Farmacos <label class="text-danger">*</label></label>
 
                                                                 <div class="row">
                                                                     <div class="col-sm-6">
@@ -516,6 +534,9 @@
                                                                         </select>
                                                                     </div>
                                                                 </div>
+
+                                                                <input type="hidden" name="sa_det_fice_id_cmed_cins" id="sa_det_fice_id_cmed_cins">
+                                                                <input type="hidden" name="sa_det_fice_tipo" id="sa_det_fice_tipo">
 
                                                                 <div class="row pt-3">
                                                                     <div class="col-sm-2">
@@ -547,7 +568,7 @@
                                                         <div class="table-responsive">
                                                             <table class="table table-bordered table-hover" id="lista_medicamentos">
                                                                 <thead>
-                                                                    <th width="10%"></th>
+                                                                    <th width="5%"></th>
                                                                     <th width="20%">Tipo</th>
                                                                     <th width="25%">Entregado a</th>
                                                                     <th width="25%">Tipo farmaco</th>
@@ -584,7 +605,6 @@
                                                                 <th>Tipo</th>
                                                                 <th>Entrada</th>
                                                                 <th>Salida</th>
-                                                                <th>Precio</th>
                                                                 <th>Stock</th>
                                                                 <th>Orden</th>
                                                             </tr>

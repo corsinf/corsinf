@@ -87,8 +87,8 @@ if (isset($_POST['sa_rep_id'])) {
                 sa_rep_sexo == null ||
                 sa_rep_fecha_nacimiento === '' ||
                 validar_email(sa_rep_correo) == false ||
-                sa_rep_telefono_1 === '' ||
-                sa_rep_telefono_2 === ''
+                sa_rep_telefono_1 === '' //||
+                //sa_rep_telefono_2 === ''
             ) {
                 Swal.fire({
                     icon: 'error',
@@ -109,8 +109,8 @@ if (isset($_POST['sa_rep_id'])) {
                 sa_rep_sexo == null ||
                 sa_rep_fecha_nacimiento === '' ||
                 validar_email(sa_rep_correo) == false ||
-                sa_rep_telefono_1 === '' ||
-                sa_rep_telefono_2 === ''
+                sa_rep_telefono_1 === '' //||
+                //sa_rep_telefono_2 === ''
             ) {
                 Swal.fire({
                     icon: 'error',

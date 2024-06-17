@@ -4,6 +4,23 @@ include('../modelo/ingreso_stockM.php');
 include('../modelo/insumosM.php');
 include('../modelo/medicamentosM.php');
 include('../db/codigos_globales.php');
+
+include('../modelo/estudiantesM.php');
+//Email
+//include('../lib/phpmailer/enviar_emails.php');
+
+//Representante
+//include('../modelo/representantesM.php');
+
+//Estudiante
+
+
+//Usuarios
+//include('../modelo/usuariosM.php');
+
+//Configuracion General
+//include('../modelo/cat_configuracionGM.php');
+
 /**
  * 
  */
@@ -29,15 +46,18 @@ if (isset($_GET['producto_nuevo'])) {
 	$parametros = $_POST;
 	echo json_encode($controlador->producto_nuevo_entrada($parametros));
 }
-if(isset($_GET['lista_kardex']))
-{
+
+if (isset($_GET['lista_kardex'])) {
 	echo json_encode($controlador->lista_kardex());
 }
 
-if(isset($_GET['producto_nuevo_salida']))
-{
+if (isset($_GET['producto_nuevo_salida'])) {
 	$parametros = $_POST;
 	echo json_encode($controlador->producto_nuevo_salida($parametros));
+}
+
+if (isset($_GET['enviar_correo'])) {
+	echo json_encode($controlador->enviarCorreo($_POST['parametros']));
 }
 
 
@@ -47,12 +67,25 @@ class ingreso_stockC
 	private $insumos;
 	private $medicamentos;
 	private $cod_global;
+	private $estudiantesM;
+
+	/*private $email;
+	private $representantesM;
+
+	private $usuariosM;
+	private $configGM;*/
 	function __construct()
 	{
 		$this->modelo = new ingreso_stockM();
 		$this->insumos = new insumosM();
 		$this->medicamentos = new medicamentosM();
 		$this->cod_global = new codigos_globales();
+
+		$this->estudiantesM = new estudiantesM();
+		/*$this->email = new enviar_emails();
+		$this->representantesM = new representantesM();
+		$this->usuariosM = new usuariosM();
+		$this->configGM = new cat_configuracionGM();*/
 	}
 
 	function lista_articulos($parametros)
@@ -221,7 +254,9 @@ class ingreso_stockC
 			array('campo' => 'sa_kar_subtotal', 'dato' => $subtotal),
 			array('campo' => 'sa_kar_valor_total', 'dato' => $subtotal),
 			array('campo' => 'sa_kar_tipo', 'dato' => $parametros['ddl_tipo']),
-			array('campo' => 'sa_kar_orden_no', 'dato' => $orden)
+			array('campo' => 'sa_kar_orden_no', 'dato' => $orden),
+			array('campo' => 'id_usuarios', 'dato' => $_SESSION['INICIO']['ID_USUARIO']),
+
 		);
 		$this->modelo->guardar('kardex', $datos);
 
@@ -259,5 +294,73 @@ class ingreso_stockC
 		$datos = $this->modelo->lista_kardex();
 		// print_r($datos);die();
 		return $datos;
+	}
+
+	function enviarCorreo($parametros)
+	{
+		$sa_id = $parametros[0]['sa_id'];
+		$sa_tabla = $parametros[0]['sa_tabla'];
+
+		if ($sa_tabla == 'estudiantes') {
+			$estudiante = $this->estudiantesM->datosEstudianteRepresentante($sa_id);
+			$nombre_estudiante = $estudiante[0]['NombreCompleto'];
+			$id_representante = $estudiante[0]['sa_rep_id'];
+			$medicamentos = '';
+
+			foreach ($parametros as $medicamento) {
+				$medicamentos .= $medicamento['farmacologia'] . ', Cantidad: ' . $medicamento['txt_canti'] . '<br>';
+			}
+
+			//return $medicamentos;
+			return $this->enviar_correo($id_representante, $nombre_estudiante, $medicamentos);
+		}
+	}
+
+	function enviar_correo($id_representante, $nombres_est = '', $medicamentos = '')
+	{
+		date_default_timezone_set('America/Guayaquil');
+		$fecha_actual = date('Y-m-d H:i:s');
+		$mensaje = '';
+
+		//Declarado en el controlador de consulta
+		$correo_rep = $this->representantesM->lista_representantes($id_representante);
+		$correo_rep = $correo_rep[0]['sa_rep_correo'];
+
+		$tipo_usuario = '';
+		if (strtoupper($_SESSION['INICIO']['TIPO']) == 'MEDICO') {
+			$tipo_usuario = 'Dra. ';
+		} else {
+			$tipo_usuario = '';
+		}
+
+		$mensaje .= 'Me comunico con usted para informarle sobre la entrega de medicamentos para ' . $nombres_est . ".<br><br>";
+		$mensaje .= '<b>Hora de atención: </b>' . $fecha_actual . "<br><br>";
+		$mensaje .= '<b>Medicamento/s recetado/s: </b>' . "<br>";
+		$mensaje .= $medicamentos . "<br>";
+		$mensaje .= '<b>Atendido por: </b>' . $tipo_usuario . ' ' . strtoupper($_SESSION['INICIO']['USUARIO']) . "<br><br>";
+
+
+		// print_r($parametros);die();
+		$to_correo = $correo_rep;
+		$titulo_correo = 'ATENCION - DEPARTAMENTO MEDICO';
+		$cuerpo_correo = $mensaje;
+
+		//echo $to_correo . '<br>' . $titulo_correo . '<br>' . $cuerpo_correo;
+
+		//Declarado en el controlador de consulta
+		$validacion_correo_representantes = $this->configGM->validacion('enviar_correos_salida_stock_representante');
+
+		if ($validacion_correo_representantes == 1) {
+			//Declarado en el controlador de consulta
+			$mail = $this->email->enviar_email($to_correo, $cuerpo_correo, $titulo_correo, $correo_respaldo = 'soporte@corsinf.com', $archivos = false, $titulo_correo, true);
+
+			if ($mail == true) {
+				return true;
+			} else {
+				return false;
+			}
+		} else {
+			return true;
+		}
 	}
 }

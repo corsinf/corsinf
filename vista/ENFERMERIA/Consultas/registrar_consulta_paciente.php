@@ -52,14 +52,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <script src="../js/ENFERMERIA/consulta_medica_detalle.js"></script>
 
 <!-- //link de api icd -->
-<link rel="stylesheet" href="https://icdcdn.who.int/embeddedct/icd11ect-1.6.1.css">
-<script src="https://icdcdn.who.int/embeddedct/icd11ect-1.6.1.js"></script>
-<script src="../js/ENFERMERIA/icd11_config.js"></script>
+<!--<link rel="stylesheet" href="https://icdcdn.who.int/embeddedct/icd11ect-1.6.1.css">-->
+<!--<script src="https://icdcdn.who.int/embeddedct/icd11ect-1.6.1.js"></script>-->
+<!--<script src="../js/ENFERMERIA/icd11_config.js"></script>-->
 
 <script type="text/javascript">
     $(document).ready(function() {
 
-
+        cargarCIE10('sa_conp_diagnostico_1', 'sa_conp_CIE_10_1');
+        cargarCIE10('sa_conp_diagnostico_2', 'sa_conp_CIE_10_2');
+        cargarCIE10('sa_conp_diagnostico_certificado', 'sa_conp_CIE_10_certificado');
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         //Logica para registrar o modificar la consulta
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -153,6 +155,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     //Datos del paciente
     function cargar_datos_paciente(sa_pac_id) {
+
+        // Mostrar el spinner usando SweetAlert2
+        Swal.fire({
+            title: 'Por favor, espere',
+            text: 'Procesando la solicitud...',
+            allowOutsideClick: false,
+            onOpen: () => {
+                Swal.showLoading();
+            }
+        });
+
         $.ajax({
             data: {
                 sa_pac_id: sa_pac_id
@@ -162,6 +175,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             type: 'post',
             dataType: 'json',
             success: function(response) {
+                Swal.close();
                 // console.log(response);
                 ///  Para la tabla de inicio /////////////////////////////////////////////////////////////////////////////////////////////////////////
                 $('#txt_ci').html(response[0].sa_pac_temp_cedula + " <i class='bx bxs-id-card'></i>");
@@ -202,14 +216,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $('#sa_conp_paralelo').val(response[0].sa_pac_temp_par_nombre);
                     $('#sa_id_paralelo').val(response[0].sa_pac_temp_paralelo);
 
-                    $('#lbl_telefono_emergencia').html('Teléfono Representante: ' + '<label style="color: red;">*</label>');
+                    $('#lbl_telefono_emergencia').html('Teléfono Representante ' + '<label style="color: red;">*</label>');
 
                     $('#sa_pac_temp_rep_id').val(response[0].sa_pac_temp_rep_id);
+                    $('#sa_pac_temp_rep2_id').val(response[0].sa_pac_temp_rep2_id);
                 } else {
                     $('#variable_paciente').html('Teléfono:');
                     $('#txt_curso').html(response[0].sa_pac_temp_telefono_1);
 
-                    $('#lbl_telefono_emergencia').html('Teléfono de Emergencia: ' + '<label style="color: red;">*</label>');
+                    $('#lbl_telefono_emergencia').html('Teléfono de Emergencia ' + '<label style="color: red;">*</label>');
                 }
 
                 /////////////Para el formulario
@@ -246,7 +261,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     if (id_seleccionado == item.id_arti_asegurados) {
                         option += '<option value ="' + item.id_arti_asegurados + '" selected>' + item.nombre + '</option>'
                         $('#sa_conp_permiso_telefono_seguro').val(item.telefono);
-                        $('#sa_conp_permiso_telefono_padre').val(item.telefono_asesor)
+                        //$('#sa_conp_permiso_telefono_padre').val(item.telefono_asesor)
                         //console.log(item)
                     } else {
                         option += '<option value ="' + item.id_arti_asegurados + '">' + item.nombre + '</option>'
@@ -285,6 +300,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         });
     }
 
+    //la solucion esta en modificar el procedure para enviar ahi los datos del padre 
     //Telefonos en caso de salida
     function llenar_telefonos_salida() {
 
@@ -296,32 +312,72 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $.ajax({
             data: {
                 sa_pac_id: sa_pac_id
+
             },
-            url: '../controlador/ficha_MedicaC.php?listar_paciente_ficha=true',
+            url: '../controlador/pacientesC.php?obtener_info_paciente=true',
             type: 'post',
             dataType: 'json',
             success: function(response) {
-                //console.log(response);
-
-                nombre_completo_1 = '';
+                // console.log(response);
+                mensaje_span = '';
                 telefono_1_1 = '';
-                telefono_1_2 = '';
+                if (response[0].sa_pac_tabla == 'estudiantes') {
 
-                if (sa_pac_tabla === 'estudiantes') {
-                    nombre_completo_1 = response[0].sa_fice_rep_1_primer_apellido + ' ' + response[0].sa_fice_rep_1_segundo_apellido + ' ' + response[0].sa_fice_rep_1_primer_nombre + ' ' + response[0].sa_fice_rep_1_segundo_nombre;
-                    telefono_1_1 = response[0].sa_fice_rep_1_telefono_1;
-                    telefono_1_2 = response[0].sa_fice_rep_1_telefono_2;
+                    $('#pnl_contactos_salida').show();
+
+                    nombre_completo_1 = response[0].sa_pac_temp_nombre_completo_rep;
+                    telefono_1_1 = response[0].sa_pac_temp_telefono_1;
+                    telefono_1_2 = response[0].sa_pac_temp_telefono_2;
+                    correo = response[0].sa_pac_temp_correo_rep;
+
+                    mensaje_span =
+                        nombre_completo_1 +
+                        '<br><label style="color: black;">Teléfono 2:&nbsp;</label>' + telefono_1_2 +
+                        '<br><label style="color: black;">Correo:&nbsp;</label>' + correo;
+
+                    //Cuando exista el representate2 
+                    if (response[0].sa_pac_temp_rep2_id != null && response[0].sa_pac_temp_rep2_id != '') {
+                        
+                        $('#pnl_representante_2').show();
+
+                        nombre_completo_2 = response[0].sa_pac_temp_nombre_completo_rep2;
+                        telefono_2_1 = response[0].sa_pac_temp_telefono_2_1;
+                        telefono_2_2 = response[0].sa_pac_temp_telefono_2_2;
+                        correo2 = response[0].sa_pac_temp_correo_rep2;
+
+                        mensaje_span2 =
+                            nombre_completo_2 +
+                            '<br><label style="color: black;">Teléfono 2:&nbsp;</label>' + telefono_2_2 +
+                            '<br><label style="color: black;">Correo:&nbsp;</label>' + correo2;
+
+                        $('#sa_conp_permiso_telefono_padre_2').val(telefono_2_1);
+                        $('#txt_nombre_contacto_2').html(mensaje_span2);
+
+                        sa_pac_temp_rep_id_correo = $('#sa_pac_temp_rep_id_correo').val();
+                        sa_pac_temp_rep2_id_correo = $('#sa_pac_temp_rep2_id_correo').val();
+                    }else{
+                        $('#chx_representante').prop('disabled', true);
+                        $('#chx_representante_2').prop('checked', false);
+                    }
+
                 } else {
-                    nombre_completo_1 = response[0].sa_fice_rep_2_primer_apellido + ' ' + response[0].sa_fice_rep_2_segundo_apellido + ' ' + response[0].sa_fice_rep_2_primer_nombre + ' ' + response[0].sa_fice_rep_2_segundo_nombre;
-                    telefono_1_1 = response[0].sa_fice_rep_2_telefono_1;
-                    telefono_1_2 = response[0].sa_fice_rep_2_telefono_2;
+                    // nombres = response[0].sa_pac_temp_primer_nombre + ' ' + response[0].sa_pac_temp_segundo_nombre;
+                    // apellidos = response[0].sa_pac_temp_primer_apellido + ' ' + response[0].sa_pac_temp_segundo_apellido;
+
+                    // nombre_completo_1 = apellidos + ' ' + nombres;
+                    // telefono_1_1 = response[0].sa_pac_temp_telefono_1;
+                    // telefono_1_2 = response[0].sa_pac_temp_telefono_2;
+
                 }
 
-                $('#txt_nombre_contacto').html(nombre_completo_1 + '<br> <label style="color: black;">Teléfono 2:&nbsp;</label>' + telefono_1_2);
                 $('#sa_conp_permiso_telefono_padre').val(telefono_1_1);
+                $('#txt_nombre_contacto').html(mensaje_span);
+
+
 
             }
         });
+
     }
 
     //Datos de la consulta aun no se utiliza
@@ -541,7 +597,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         var sa_id_paralelo = $('#sa_id_paralelo').val();
         var txt_paciente_tabla = $('#txt_paciente_tabla').val();
 
+        //Para registrar la salida de los estudiantes con un correo y notificacion
         var sa_pac_temp_rep_id = $('#sa_pac_temp_rep_id').val();
+        var sa_pac_temp_rep2_id = $('#sa_pac_temp_rep2_id').val();
+
+        var chx_representante = $('#chx_representante').prop('checked');
+        var chx_representante_2 = $('#chx_representante_2').prop('checked');
         //alert(nombre_paciente)
 
         // Crear objeto de parámetros
@@ -613,7 +674,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'sa_id_paralelo': sa_id_paralelo,
             'txt_paciente_tabla': txt_paciente_tabla,
 
+            //Para enviar los correos
             'sa_pac_temp_rep_id': sa_pac_temp_rep_id,
+            'sa_pac_temp_rep2_id': sa_pac_temp_rep2_id,
+            'chx_representante': chx_representante,
+            'chx_representante_2': chx_representante_2,
         };
 
         //alert(sa_conp_tipo_consulta)
@@ -738,6 +803,63 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         });
     }
+
+    //CIE 10
+    function cargarCIE10(ddl_cie_codigo, input_descripcion) {
+        /*$.ajax({
+            data: {
+
+            },
+            url: '../controlador/cat_cie10C.php?listar_cie10=true',
+            type: 'post',
+            dataType: 'json',
+            success: function(response) {
+                 console.log(response);
+            }
+        });*/
+
+        $('#' + ddl_cie_codigo).select2({
+                language: {
+                    inputTooShort: function() {
+                        return "Por favor ingresa 3 o más caracteres";
+                    },
+                    noResults: function() {
+                        return "No se encontraron resultados";
+                    },
+                    searching: function() {
+                        return "Buscando...";
+                    },
+                    errorLoading: function() {
+                        return "No se encontraron resultados";
+                    }
+                },
+                minimumInputLength: 3,
+
+                placeholder: '-- Seleccione --',
+                width: '100%',
+                ajax: {
+                    url: '../controlador/cat_cie10C.php?buscar_cie10=true',
+                    dataType: 'json',
+                    delay: 250,
+                    processResults: function(data) {
+                        return {
+                            results: data
+                        };
+                    },
+                    cache: true
+                }
+            })
+            .off('select2:select')
+            .on('select2:select', function(e) {
+                var data = e.params.data.data;
+
+                $('#' + input_descripcion).val(data.sa_cie10_codigo);
+
+                //console.log(data);
+                // Para verificar los datos en la consola
+            });
+
+    }
 </script>
 
 <div class="page-wrapper">
@@ -829,6 +951,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <input type="hidden" id="txt_nombre_apellido_paciente" name="txt_nombre_apellido_paciente">
                             <input type="hidden" id="txt_paciente_tabla" name="txt_paciente_tabla">
                             <input type="hidden" id="sa_pac_temp_rep_id" name="sa_pac_temp_rep_id">
+                            <input type="hidden" id="sa_pac_temp_rep2_id" name="sa_pac_temp_rep2_id">
 
 
 
@@ -933,11 +1056,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                                                     <div class="row pt-3">
                                                         <div class="col-md-12">
-                                                            <label for="" class="form-label fw-bold">CIE 11 - Diagnóstico de Certificado <label style="color: red;">*</label> </label>
-                                                            <input type="text" class="ctw-input form-control form-control-sm" autocomplete="off" data-ctw-ino="3" id="sa_conp_diagnostico_certificado" placeholder="Diagnostico">
+                                                            <label for="" class="form-label fw-bold">CIE 10 - Diagnóstico de Certificado <label style="color: red;">*</label> </label>
+                                                            <!--<input type="text" class="ctw-input form-control form-control-sm" autocomplete="off" data-ctw-ino="3" id="sa_conp_diagnostico_certificado" placeholder="Diagnostico">
 
                                                             <input type="hidden" id="sa_conp_CIE_10_certificado">
-                                                            <div class="ctw-window" data-ctw-ino="3"></div>
+                                                            <div class="ctw-window" data-ctw-ino="3"></div>-->
+
+                                                            <select name="sa_conp_diagnostico_certificado" id="sa_conp_diagnostico_certificado" class="form-select form-select-sm">
+                                                                <option value="">Seleccione</option>
+                                                            </select>
+                                                            <input type="hidden" id="sa_conp_CIE_10_certificado">
 
                                                         </div>
                                                     </div>
@@ -1421,19 +1549,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                                                         <div class="row pt-3">
                                                             <div class="col-md-12">
-                                                                <label for="" class="form-label fw-bold">CIE 11 - Diagnóstico 1 <label style="color: red;">*</label> </label>
-                                                                <input type="text" class="ctw-input form-control form-control-sm" autocomplete="off" data-ctw-ino="1" id="sa_conp_diagnostico_1" placeholder="Diagnostico 1">
+                                                                <label for="" class="form-label fw-bold">CIE 10 - Diagnóstico 1 <label style="color: red;">*</label> </label>
+                                                                <!--<input type="text" class="ctw-input form-control form-control-sm" autocomplete="off" data-ctw-ino="1" id="sa_conp_diagnostico_1" placeholder="Diagnostico 1">
                                                                 <input type="hidden" id="sa_conp_CIE_10_1">
-                                                                <div class="ctw-window" data-ctw-ino="1"></div>
+                                                                <div class="ctw-window" data-ctw-ino="1"></div>-->
+
+                                                                <select name="sa_conp_diagnostico_1" id="sa_conp_diagnostico_1" class="form-select form-select-sm">
+                                                                    <option value="">Seleccione</option>
+                                                                </select>
+                                                                <input type="hidden" id="sa_conp_CIE_10_1">
+
                                                             </div>
                                                         </div>
 
                                                         <div class="row pt-3">
                                                             <div class="col-md-12">
-                                                                <label for="" class="form-label fw-bold">CIE 11 - Diagnóstico 2 <label style="color: red;">*</label> </label>
-                                                                <input type="text" class="ctw-input form-control form-control-sm" autocomplete="off" data-ctw-ino="2" id="sa_conp_diagnostico_2" placeholder="Diagnostico 2">
+                                                                <label for="" class="form-label fw-bold">CIE 10 - Diagnóstico 2 <label style="color: red;">*</label> </label>
+                                                                <!--<input type="text" class="ctw-input form-control form-control-sm" autocomplete="off" data-ctw-ino="2" id="sa_conp_diagnostico_2" placeholder="Diagnostico 2">
                                                                 <input type="hidden" id="sa_conp_CIE_10_2">
-                                                                <div class="ctw-window" data-ctw-ino="2"></div>
+                                                                <div class="ctw-window" data-ctw-ino="2"></div>-->
+
+                                                                <select name="sa_conp_diagnostico_2" id="sa_conp_diagnostico_2" class="form-select form-select-sm">
+                                                                    <option value="">Seleccione</option>
+                                                                </select>
+                                                                <input type="hidden" id="sa_conp_CIE_10_2">
                                                             </div>
                                                         </div>
 
@@ -1496,17 +1635,45 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                                 </div>
                                                             </div>
 
-                                                            <div class="row pt-3">
+                                                            <div class="row pt-3" style="display: none;" id="pnl_contactos_salida">
                                                                 <div class="col-md-4">
-                                                                    <label for="" class="form-label fw-bold" id="lbl_telefono_emergencia">Teléfono Representante <label style="color: red;">*</label> </label>
+                                                                    <label for="" class="form-label fw-bold" id="lbl_telefono_emergencia">Vienede desde el Paciente </label>
                                                                     <input type="text" class="form-control form-control-sm" id="sa_conp_permiso_telefono_padre" name="sa_conp_permiso_telefono_padre">
+                                                                    <div class="form-check">
+                                                                        <input class="form-check-input" type="checkbox" id="chx_representante" checked>
+                                                                        <label class="form-check-label" for="chx_representante">Enviar Correo</label>
+                                                                    </div>
 
                                                                     <p id="txt_nombre_contacto" class="me-0 text-success"></p>
 
                                                                     <input type="hidden" name="sa_permiso_pac_id" id="sa_permiso_pac_id">
                                                                     <input type="hidden" name="sa_permiso_pac_tabla" id="sa_permiso_pac_tabla">
                                                                 </div>
+
+                                                                <div class="col-md-4" id="pnl_representante_2" style="display: none;">
+                                                                    <label for="" class="form-label fw-bold" id="lbl_telefono_emergencia_2">Telefono Representante 2 <label style="color: red;">*</label> </label>
+                                                                    <input type="text" class="form-control form-control-sm" id="sa_conp_permiso_telefono_padre_2" name="sa_conp_permiso_telefono_padre_2">
+                                                                    <div class="form-check">
+                                                                        <input class="form-check-input" type="checkbox" id="chx_representante_2" checked>
+                                                                        <label class="form-check-label" for="chx_representante_2">Enviar Correo</label>
+                                                                    </div>
+
+                                                                    <p id="txt_nombre_contacto_2" class="me-0 text-success"></p>
+                                                                </div>
                                                             </div>
+
+                                                            <script>
+                                                                $(document).ready(function() {
+                                                                    $('#chx_representante, #chx_representante_2').on('change', function() {
+                                                                        if (!$('#chx_representante').prop('checked') && !$('#chx_representante_2').prop('checked')) {
+                                                                            Swal.fire('Error', 'Debe estar seleccionado al menos un Representante.', 'error');
+
+                                                                            $(this).prop('checked', true);
+                                                                        }
+                                                                    });
+                                                                });
+                                                            </script>
+
                                                         </div>
 
 

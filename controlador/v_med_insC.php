@@ -12,6 +12,10 @@ if (isset($_GET['listar_v_insumos'])) {
     echo json_encode($controlador->lista_vista_med_ins('insumos'));
 }
 
+if (isset($_GET['listar_v_ingresoStock'])) {
+    echo json_encode($controlador->lista_vista_med_ins('ingreso_stock'));
+}
+
 if (isset($_GET['vista_mod'])) {
     echo json_encode($controlador->editar($_POST['parametros']));
     //print_r($_POST['parametros']); exit;

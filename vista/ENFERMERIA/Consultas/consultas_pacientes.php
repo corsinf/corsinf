@@ -24,11 +24,21 @@ if (isset($_GET['pac_id'])) {
     //Proceso primero busca el id de la ficha en relacion al paciente
     cargar_datos_consultas(sa_pac_id);
 
-    
+
 
   });
 
   function cargar_datos_paciente(sa_pac_id) {
+    // Mostrar el spinner usando SweetAlert2
+    Swal.fire({
+      title: 'Por favor, espere',
+      text: 'Procesando la solicitud...',
+      allowOutsideClick: false,
+      onOpen: () => {
+        Swal.showLoading();
+      }
+    });
+
     //alert('Estudiante')
     $.ajax({
       data: {
@@ -39,6 +49,8 @@ if (isset($_GET['pac_id'])) {
       type: 'post',
       dataType: 'json',
       success: function(response) {
+        Swal.close();
+
         //Para el encabezado
         nombres = response[0].sa_pac_temp_primer_nombre + ' ' + response[0].sa_pac_temp_segundo_nombre;
         apellidos = response[0].sa_pac_temp_primer_apellido + ' ' + response[0].sa_pac_temp_segundo_apellido;

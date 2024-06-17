@@ -76,7 +76,7 @@ class insumosM
 	function buscar_insumos($buscar)
 	{
 
-		$sql = "SELECT * FROM cat_insumos WHERE sa_cins_estado = 1 and CONCAT(sa_cins_presentacion, ' ', sa_cins_id) LIKE '%" . $buscar . "%'";
+		$sql = "SELECT * FROM cat_insumos WHERE sa_cins_estado = 1 and CONCAT(sa_cins_presentacion, ' ', sa_cins_id, ' ','sa_cmed_nombre_comercial') LIKE '%" . $buscar . "%'";
 		$datos = $this->db->datos($sql);
 		return $datos;
 	}
