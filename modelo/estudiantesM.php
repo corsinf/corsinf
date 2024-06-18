@@ -285,7 +285,7 @@ class estudiantesM
             SET e.sa_id_seccion = mappings.sa_sec_id,
                 e.sa_id_grado = mappings.sa_gra_id,
                 e.sa_id_paralelo = mappings.sa_par_id
-            FROM [SALUD_DESARROLLO].[dbo].[estudiantes] e
+            FROM estudiantes e
             JOIN (
                 SELECT cs.sa_sec_nombre AS seccion_nombre, cg.sa_gra_nombre AS grado_nombre, cp.sa_par_nombre AS paralelo_nombre, sa_sec_id, sa_gra_id, sa_par_id
                 FROM cat_paralelo cp
