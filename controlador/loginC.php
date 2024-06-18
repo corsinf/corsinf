@@ -273,11 +273,12 @@ class loginC
 		 	}else{
 
 				$tablas_iguales = $this->cod_global->tablas_por_licencias($licencias,$empresa,1);
-		 		// print_r("ss");die();
 		 		$res = $this->cod_global->generar_primera_vez_terceros($empresa,$parametros['empresa']);
-		 		foreach ($licencias as $key => $value) {
-		 				$this->cod_global->Copiar_estructura($value['Id_Modulo'],$empresa[0]['Base_datos'],1,$empresa);
-		 		}
+		 		if($tablas_iguales==-1){
+			 		foreach ($licencias as $key => $value) {
+			 				$this->cod_global->Copiar_estructura($value['Id_Modulo'],$empresa[0]['Base_datos'],1,$empresa);
+			 		}
+			 	}
 		 		// print_r($empresa);die();
 		 	}
 			return array('respuesta'=>$res);
