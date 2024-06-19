@@ -166,12 +166,13 @@ class activeDirC
 
 											$val_select = substr($val_select, 0,-5);
 											$sql = "SELECT * FROM ".$value3['Tabla']." WHERE ".$val_select;
-											$tabla_enco.=$value3['Tabla'].'/';
 											// print_r($sql);
 											$res = $this->modelo->ejecutar_sql($sql,1);
 											if(count($res)>0)
 											{
 												$usu = array('id'=>'d');
+												$tabla_enco.=$value3['Tabla'].'/';
+											
 											}
 
 											// print_r($usu);
