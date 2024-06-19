@@ -140,7 +140,7 @@ class activeDirC
 		                    		</div>'; 
 		                    	}
 
-		                    	$usu = $this->modelo->lista_usuarios_simple(false,false,false,$value2['email']);
+		                    	$usu = $this->modelo->lista_usuarios_simple_empresa(false,false,false,$value2['email']);
 		                    	$tabla_NoConcu = $this->modelo->buscar_no_concurente_ligado();
 		                    	$tabla_enco = 'Usuarios';
 		                    	if(count($usu)==0)
