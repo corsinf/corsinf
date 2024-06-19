@@ -884,24 +884,33 @@ class loginC
 								{
 									 $activeDir = 0; 
 								}
-								// print_r($value);die();
-								$datos = $this->login->buscar_en_tablas_noconcurente_empresaTerceros($empresa,$value['Tabla'],$correo,$value['Campo_usuario']);
-								// print_r($datos);
-								if(count($datos)>0)
-								{
-										$user = $this->login->buscar_en_tablas_noconcurente_empresaTerceros($empresa,$value['Tabla'],$correo,$value['Campo_usuario'],1,$value['Campo_pass']);
-										// print_r($user);die();
 
-									$empresa[0]['ActiveDirectory'] = $activeDir;
-									if(count($user)>0)
-									{
-										$primerIngreso = 0;
-									}else
-									{
-										$primerIngreso = 1;								
+								  if($this->validar_dominio($empresa[0]['dominio_directory'],$correo)==1)
+								  {
+
+										// print_r($value);die();
+										$datos = $this->login->buscar_en_tablas_noconcurente_empresaTerceros($empresa,$value['Tabla'],$correo,$value['Campo_usuario']);
+										// print_r($datos);
+										// print_r($empresa);
+										
+										if(count($datos)>0)
+										{
+												$user = $this->login->buscar_en_tablas_noconcurente_empresaTerceros($empresa,$value['Tabla'],$correo,$value['Campo_usuario'],1,$value['Campo_pass']);
+												// print_r($user);die();
+
+											$empresa[0]['ActiveDirectory'] = $activeDir;
+											if(count($user)>0)
+											{
+												$primerIngreso = 0;
+											}else
+											{
+												$primerIngreso = 1;								
+											}
+											$lista_empresas[] = array('id'=>$empresa[0]['Id_empresa'],'Empresa'=>$empresa[0]['Razon_Social'],'ActiveDirectory'=>$activeDir,'PrimerIngresoActiveDir'=>$primerIngreso,'tabla'=>$value['Tabla']);
+										}
+										// print_r($empresa);
+										// break;
 									}
-									$lista_empresas[] = array('id'=>$empresa[0]['Id_empresa'],'Empresa'=>$empresa[0]['Razon_Social'],'ActiveDirectory'=>$activeDir,'PrimerIngresoActiveDir'=>$primerIngreso,'tabla'=>$value['Tabla']);
-								}
 							}
 					}
 			}
@@ -932,6 +941,19 @@ class loginC
 		}
 
 		return $lista_empresas;
+	}
+
+	function validar_dominio($dominio,$correo)
+	{
+
+		$dom = explode('.',$dominio);
+		$pos = strpos($correo, $dom[0]);
+		if ($pos === false) {
+		   return -1;
+		} else
+		{
+			return 1;
+		}
 	}
 
 	function primerInicioActive($parametros)
