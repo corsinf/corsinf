@@ -55,7 +55,33 @@ class activeDirM
 			$sql.=" AND email = '".$email."'";
 		}
 		
+		// print_r($sql);die();
+		$datos = $this->db->datos($sql,1);
+		return $datos;
+	}
 
+	function lista_usuarios_simple_empresa($id=false,$query=false,$ci=false,$email=false)
+	{
+		$sql = "SELECT * FROM USUARIOS U
+				INNER JOIN ACCESOS_EMPRESA AC ON U.id_usuarios = AC.Id_usuario
+				WHERE Id_Empresa = '".$_SESSION['INICIO']['ID_EMPRESA']."'";
+		if($id)
+		{
+			$sql.=" AND id_usuarios = '".$id."'";
+		}
+		if($query)
+		{
+			$sql.=" AND  nombres +' '+apellidos+' '+ci_ruc LIKE '%".$query."%'";
+		}
+		if($ci)
+		{
+			$sql.=" AND ci_ruc = '".$ci."'";
+		}
+		if($email)
+		{
+			$sql.=" AND email = '".$email."'";
+		}
+		
 		// print_r($sql);die();
 		$datos = $this->db->datos($sql,1);
 		return $datos;
