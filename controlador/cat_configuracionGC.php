@@ -1,11 +1,13 @@
 <?php
-include('../modelo/cat_configuracionGM.php');
+require_once('../modelo/cat_configuracionGM.php');
 
 //Idukay
-include('../lib/IDUKAY/Querys.php');
+require_once('../lib/IDUKAY/Querys.php');
 
 //Estudiantes
-include('../modelo/estudiantesM.php');
+require_once('../modelo/estudiantesM.php');
+
+require_once('../db/codigos_globales.php');
 
 $controlador = new cat_configuracionGC();
 
