@@ -43,6 +43,7 @@ class cat_configuracionGC
     private $modelo;
     private $Idukay_API;
     private $estudiantes;
+    private $cod_global;
 
     private $url = 'https://staging.idukay.net/api';
     private $barear_Token = 'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ3b3JraW5nX3NjaG9vbCI6IjVjZDM3OTY1MDQwOTJlYTUwNDgxMmZmOCIsInRpbWVfem9uZSI6Ii0wNTowMCIsImlhdCI6MTY5NDY5OTg4OX0.Ya0sIq6xQ-XNkevoJuFnGqRrZvdVHQ-Oz7OiwfaB7lOqrbkPErJdOETZ_ZPyb_BszA2kcaztGKakw5U5izAxO_15k7OejZ_L4EsQp3F4_EpRMEQooTznquuxxWelxsSvz8Fkv9RmGvoNLNbB4Sllt9X_if4PCXZ0zaJWRfw2MD1uASbtFC7JjkjZYXzXNqzXyoZkm-OFKEtctfwHUHNPWYootRdzpDZ0zBWWTMP4JG7XZlEouusoxgy-0lVzq-n0GmD6EgGWzNa1Jkl6c6DUBkzRdxaLTn1jZX6vvqM00-7x_Su6k_mbs-Zf1loUvKKzx3qInXxUOhcR9kLKS6XnDg';
@@ -53,6 +54,7 @@ class cat_configuracionGC
         $this->Idukay_API = new Querys($this->url, $this->barear_Token);
 
         $this->estudiantes = new estudiantesM();
+        $this->cod_global = new codigos_globales();
     }
 
     function lista_vista_med_ins()
@@ -345,7 +347,7 @@ class cat_configuracionGC
                     array('campo' => 'sa_rep_telefono_2', 'dato' => $parametro['sa_rep_telefono_2']),
                     array('campo' => 'sa_rep_direccion', 'dato' => $parametro['sa_rep_direccion']),
 
-                    array('campo' => 'PASS', 'dato' => md5($parametro['sa_rep_cedula'])),
+                    array('campo' => 'PASS', 'dato' => $this->cod_global->enciptar_clave($parametro['sa_rep_cedula'])),
 
                     array('campo' => 'sa_id_rep_idukay', 'dato' => $parametro['sa_id_rep_idukay']),
                 );
