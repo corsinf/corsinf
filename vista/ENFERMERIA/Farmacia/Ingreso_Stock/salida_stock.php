@@ -5,6 +5,7 @@
     $(document).ready(function() {
         consultar_datos_comunidad_tabla();
         lista_medicamentos();
+        //llenar_telefonos_salida('');
 
         tablaAll = $('#tabla_todos').DataTable({
             language: {
@@ -277,6 +278,16 @@
             $('#sa_tabla').val(sa_tabla);
 
             existePaciente(sa_id, sa_tabla);
+
+            if (sa_tabla == 'estudiantes') {
+                llenar_telefonos_salida(sa_id);
+            } else {
+                $('#pnl_contactos_salida').hide();
+
+                $('#chx_representante').prop('checked', false);
+                $('#chx_representante_2').prop('checked', false);
+
+            }
         });
     }
 
@@ -309,6 +320,15 @@
             parametros_mensaje.push(parametros);
 
         });
+
+        var chx_representante = $('#chx_representante').prop('checked');
+        var chx_representante_2 = $('#chx_representante_2').prop('checked');
+        parametros_correo = {
+            'chx_representante': chx_representante,
+            'chx_representante_2': chx_representante_2,
+        }
+        
+        parametros_mensaje.push(parametros_correo);
 
         mensajeCorreo(parametros_mensaje);
     }
@@ -430,6 +450,81 @@
             }
         });
     }
+
+    function llenar_telefonos_salida(id_estudiante) {
+        $('#pnl_contactos_salida').show();
+        limpiar();
+        //id_estudiante = 258;
+
+        //alert(sa_pac_id);
+
+        $.ajax({
+            data: {
+                id: id_estudiante
+
+            },
+            url: '../controlador/estudiantesC.php?listarEstconRepresentante=true',
+            type: 'post',
+            dataType: 'json',
+            success: function(response) {
+                // console.log(response);
+                mensaje_span = '';
+                telefono_1_1 = '';
+
+                //$('#pnl_contactos_salida').show();
+
+                nombre_completo_1 = response[0].sa_pac_temp_nombre_completo_rep;
+                telefono_1_1 = response[0].sa_pac_temp_telefono_1;
+                telefono_1_2 = response[0].sa_pac_temp_telefono_2;
+                correo = response[0].sa_pac_temp_correo_rep;
+
+                mensaje_span =
+                    nombre_completo_1 +
+                    '<br><label style="color: black;">Teléfono 2:&nbsp;</label>' + telefono_1_2 +
+                    '<br><label style="color: black;">Correo:&nbsp;</label>' + correo;
+
+                //Cuando exista el representate2 
+                if (response[0].sa_rep2_id != null && response[0].sa_rep2_id != '') {
+
+                    $('#pnl_representante_2').show();
+
+                    nombre_completo_2 = response[0].sa_pac_temp_nombre_completo_rep2;
+                    telefono_2_1 = response[0].sa_pac_temp_telefono_2_1;
+                    telefono_2_2 = response[0].sa_pac_temp_telefono_2_2;
+                    correo2 = response[0].sa_pac_temp_correo_rep2;
+
+                    mensaje_span2 =
+                        nombre_completo_2 +
+                        '<br><label style="color: black;">Teléfono 2:&nbsp;</label>' + telefono_2_2 +
+                        '<br><label style="color: black;">Correo:&nbsp;</label>' + correo2;
+
+                    $('#sa_conp_permiso_telefono_padre_2').val(telefono_2_1);
+                    $('#txt_nombre_contacto_2').html(mensaje_span2);
+
+                    $('#chx_representante_2').prop('checked', true);
+                    $('#chx_representante').prop('disabled', false);
+
+
+                } else {
+                    $('#chx_representante').prop('disabled', true);
+                    $('#chx_representante_2').prop('checked', false);
+                    $('#pnl_representante_2').hide();
+                }
+
+                $('#sa_conp_permiso_telefono_padre').val(telefono_1_1);
+                $('#txt_nombre_contacto').html(mensaje_span);
+
+            }
+        });
+
+    }
+
+    function limpiar() {
+        $('#sa_conp_permiso_telefono_padre').val('');
+        $('#sa_conp_permiso_telefono_padre_2').val('');
+        $('#txt_nombre_contacto').html('');
+        $('#txt_nombre_contacto_2').html('');
+    }
 </script>
 
 <input type="hidden" name="sa_id" id="sa_id">
@@ -509,6 +604,51 @@
                                                                 <option value="">Seleccione el Paciente</option>
                                                             </select>
                                                         </div>
+
+                                                        <div class="col-12 mb-2">
+                                                            <div class="row pt-3" id="pnl_contactos_salida" style="display: none;">
+                                                                <div class="col-md-4">
+                                                                    <label for="" class="form-label fw-bold" id="lbl_telefono_emergencia">Telefono Representante 1 </label>
+                                                                    <input type="text" class="form-control form-control-sm" id="sa_conp_permiso_telefono_padre" name="sa_conp_permiso_telefono_padre">
+                                                                    <div class="form-check">
+                                                                        <input class="form-check-input" type="checkbox" id="chx_representante" checked>
+                                                                        <label class="form-check-label" for="chx_representante">Enviar Correo</label>
+                                                                    </div>
+
+                                                                    <p id="txt_nombre_contacto" class="me-0 text-success"></p>
+
+                                                                    <input type="hidden" name="sa_permiso_pac_id" id="sa_permiso_pac_id">
+                                                                    <input type="hidden" name="sa_permiso_pac_tabla" id="sa_permiso_pac_tabla">
+                                                                </div>
+
+                                                                <div class="col-md-4" id="pnl_representante_2" style="display: none;">
+                                                                    <label for="" class="form-label fw-bold" id="lbl_telefono_emergencia_2">Telefono Representante 2 </label>
+                                                                    <input type="text" class="form-control form-control-sm" id="sa_conp_permiso_telefono_padre_2" name="sa_conp_permiso_telefono_padre_2">
+                                                                    <div class="form-check">
+                                                                        <input class="form-check-input" type="checkbox" id="chx_representante_2" checked>
+                                                                        <label class="form-check-label" for="chx_representante_2">Enviar Correo</label>
+                                                                    </div>
+
+                                                                    <p id="txt_nombre_contacto_2" class="me-0 text-success"></p>
+                                                                </div>
+
+                                                                <script>
+                                                                    $(document).ready(function() {
+                                                                        $('#chx_representante, #chx_representante_2').on('change', function() {
+                                                                            if (!$('#chx_representante').prop('checked') && !$('#chx_representante_2').prop('checked')) {
+                                                                                Swal.fire('Error', 'Debe estar seleccionado al menos un Representante.', 'error');
+
+                                                                                $(this).prop('checked', true);
+                                                                            }
+                                                                        });
+                                                                    });
+                                                                </script>
+                                                            </div>
+                                                        </div>
+
+
+
+
 
                                                     </div>
 

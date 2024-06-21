@@ -1593,7 +1593,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                                                         <div class="row pt-3" id="pnl_contactos_salida">
                                                             <div class="col-md-4">
-                                                                <label for="" class="form-label fw-bold" id="lbl_telefono_emergencia">Vienede desde el Paciente </label>
+                                                                <label for="" class="form-label fw-bold" id="lbl_telefono_emergencia">Viene desde el Paciente </label>
                                                                 <input type="text" class="form-control form-control-sm" id="sa_conp_permiso_telefono_padre" name="sa_conp_permiso_telefono_padre">
                                                                 <div class="form-check">
                                                                     <input class="form-check-input" type="checkbox" id="chx_representante" checked>

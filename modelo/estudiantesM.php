@@ -334,7 +334,17 @@ class estudiantesM
                 pr.sa_par_id, 
                 pr.sa_par_nombre,
 
-                rep.sa_rep_id,
+                rep.sa_rep_id AS sa_rep_id,
+                CONCAT(rep.sa_rep_primer_apellido, ' ', rep.sa_rep_segundo_apellido, ' ', rep.sa_rep_primer_nombre, ' ', rep.sa_rep_segundo_nombre) AS sa_pac_temp_nombre_completo_rep,
+                rep.sa_rep_telefono_1 AS sa_pac_temp_telefono_1,
+                rep.sa_rep_telefono_2 AS sa_pac_temp_telefono_2,
+                rep.sa_rep_correo AS sa_pac_temp_correo_rep,
+
+                rep2.sa_rep_id AS sa_rep2_id,
+                CONCAT(rep2.sa_rep_primer_apellido, ' ', rep2.sa_rep_segundo_apellido, ' ', rep2.sa_rep_primer_nombre, ' ', rep2.sa_rep_segundo_nombre) AS sa_pac_temp_nombre_completo_rep2,
+                rep2.sa_rep_telefono_1 AS sa_pac_temp_telefono_2_1,
+                rep2.sa_rep_telefono_2 AS sa_pac_temp_telefono_2_2,
+                rep2.sa_rep_correo AS sa_pac_temp_correo_rep2,
                 
                 CONCAT(
                     est.sa_est_primer_apellido, ' ', 
@@ -348,6 +358,7 @@ class estudiantesM
                 INNER JOIN cat_grado cg ON est.sa_id_grado = cg.sa_gra_id
                 INNER JOIN cat_paralelo pr ON est.sa_id_paralelo = pr.sa_par_id
                 LEFT JOIN representantes rep ON est.sa_id_representante = rep.sa_rep_id
+                LEFT JOIN representantes rep2 ON est.sa_id_representante_2 = rep2.sa_rep_id
 
                 WHERE est.sa_est_estado = 1";
 

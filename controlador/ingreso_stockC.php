@@ -301,18 +301,27 @@ class ingreso_stockC
 		$sa_id = $parametros[0]['sa_id'];
 		$sa_tabla = $parametros[0]['sa_tabla'];
 
+		$chx_representante = $parametros[1]['chx_representante'];
+		$chx_representante_2 = $parametros[1]['chx_representante_2'];
+
 		if ($sa_tabla == 'estudiantes') {
 			$estudiante = $this->estudiantesM->datosEstudianteRepresentante($sa_id);
 			$nombre_estudiante = $estudiante[0]['NombreCompleto'];
 			$id_representante = $estudiante[0]['sa_rep_id'];
+			$id_representante2 = $estudiante[0]['sa_rep2_id'];
 			$medicamentos = '';
 
 			foreach ($parametros as $medicamento) {
 				$medicamentos .= $medicamento['farmacologia'] . ', Cantidad: ' . $medicamento['txt_canti'] . '<br>';
 			}
 
-			//return $medicamentos;
-			return $this->enviar_correo($id_representante, $nombre_estudiante, $medicamentos);
+			if ($chx_representante === true) {
+				return $this->enviar_correo($id_representante, $nombre_estudiante, $medicamentos);
+			}
+			
+			if ($chx_representante_2 === true) {
+				return $this->enviar_correo($id_representante2, $nombre_estudiante, $medicamentos);
+			}
 		}
 	}
 

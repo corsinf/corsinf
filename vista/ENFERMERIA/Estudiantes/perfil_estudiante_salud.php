@@ -19,6 +19,7 @@ if (isset($_GET['paralelo'])) {
 <script type="text/javascript">
     $(document).ready(function() {
         var id_estudiante = '<?php echo $id_estudiante; ?>';
+        cargar_datos_estudiante(id_estudiante);
         existe_paciente();
     });
 
@@ -240,7 +241,7 @@ if (isset($_GET['paralelo'])) {
                 apellidos = response[0].sa_pac_temp_primer_apellido + ' ' + response[0].sa_pac_temp_segundo_apellido;
 
                 $('#txt_nombres').html(apellidos + " " + nombres);
-                $('#title_paciente').html(apellidos + " " + nombres);
+                //$('#title_paciente').html(apellidos + " " + nombres);
 
                 sexo_paciente = '';
                 if (response[0].sa_pac_temp_sexo === 'Masculino') {
@@ -394,6 +395,24 @@ if (isset($_GET['paralelo'])) {
     function ver_pdf(id_consulta, tipo_consulta, id_estudiante) {
         //console.log(id_consulta);
         window.location.href = '../vista/inicio.php?mod=7&acc=detalle_consulta&pdf_consulta=true&id_consulta=' + id_consulta + '&id_estudiante=' + id_estudiante + '&btn_regresar=represententes_consulta' + '&tipo_consulta=' + tipo_consulta;
+    }
+
+    //Datos del paciente
+    function cargar_datos_estudiante(id_estudiante) {
+        $.ajax({
+            data: {
+                id: id_estudiante
+            },
+            url: '../controlador/estudiantesC.php?listar=true',
+            type: 'post',
+            dataType: 'json',
+            success: function(response) {
+
+                nombre_completos = response[0]['sa_est_primer_apellido'] + " " + response[0]['sa_est_segundo_apellido'] + " " + response[0]['sa_est_primer_nombre'] + " " + response[0]['sa_est_segundo_nombre'];
+
+                $('#title_paciente').html(nombre_completos);
+            }
+        });
     }
 </script>
 
