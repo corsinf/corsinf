@@ -60,19 +60,9 @@
     }
   }
 
-  function iniciar_sesion(id)
+  function iniciar_sesion(parametros)
   {
-  	$('#myModal_espera').modal('show');
-  	 var email=$('#email').val();
-    var pass =$('#pass').val();
-    var no_concurente = $('#txt_no_concurente').val();
-       var parametros = 
-       {
-         	'id':id,
-					'email':email,
-         	'pass':pass,
-         	'no_concurente':no_concurente,
-       } 
+  	// $('#myModal_espera').modal('show');
        $.ajax({
          data:  {parametros:parametros},
          url:   'controlador/loginC.php?iniciar_empresa=true',
@@ -115,13 +105,21 @@
 
 
 
-  function empresa_selecconada(empresa)
+  function empresa_selecconada(empresa,activeDir,normal,tipo,primera_vez)
   {
+  		pass = $('#pass').val();
+  		email = $('#email').val();
   		var parametros = 
        {
          'empresa':empresa,
+         'activeDir':activeDir,
+         'normal':normal,
+         'primera_vez':primera_vez,
+         'tipo':tipo,
+         'pass':pass,
+         'email':email,
        } 
-        titulos_cargados();
+        // titulos_cargados();
        $.ajax({
          data:  {parametros:parametros},
          url:   'controlador/loginC.php?empresa_seleccionada=true',
@@ -138,8 +136,8 @@
            	}else if(response.respuesta==1)
            	{
 
-      				$('#myModal_espera').modal('show');
-           		iniciar_sesion(empresa);
+      				// $('#myModal_espera').modal('show');
+           		iniciar_sesion(parametros);
            	}      
          },
          error:function(xhr, status, error)
@@ -328,7 +326,7 @@
 												<input type="hidden" class="form-control" id="txt_no_concurente" name="txt_no_concurente" value="0">
 												<label for="inputEmailAddress" class="form-label">Email</label>
 												<!-- <input type="email" class="form-control" id="inputEmailAddress" placeholder="Email Address"> -->
-												<input type="email" autocomplete="username" class="form-control" id="email" placeholder="Email" onblur="validar_directory()">
+												<input type="email" autocomplete="username" class="form-control" id="email" placeholder="Email" onblur="/*validar_directory()*/">
 											</div>
 											<div class="col-12">
 												<label for="inputChoosePassword" class="form-label">Password</label>

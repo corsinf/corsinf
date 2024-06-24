@@ -129,8 +129,99 @@ class loginC
 		$this->active = new activeDirC();
 	}
 
-
 	function buscar_empresas($parametros)
+	{
+		if(isset($_SESSION['INICIO']))
+			{
+				 session_destroy();
+			}
+
+			 $lista_empresas = array();
+			 $parametros['pass'] = $this->cod_global->enciptar_clave($parametros['pass']);
+			 $no_concurente = 0;
+
+			 //busca la empresa en donde es usuario normal 
+			 // print_r($parametros);die();
+			 $datos = $this->login->buscar_empresas($parametros['email'],false,false,1);
+			 if(count($datos)>0) {
+			 	//valida si es deba  1 siempre va a ser DBA
+			 	 if($datos[0]['Id_Tipo_usuario']==1)
+			 	 {
+			 	 		$datos = $this->login->buscar_empresas($parametros['email'],false,false);
+			 	 }
+			 }
+			 // print_r($datos);die();
+			 $active_Valido = 1;
+			 foreach ($datos as $key => $value) {
+			 		$primera_vez = 0;
+					if($value['ip_directory']=='' || $value['puerto_directory']=='' || $value['basedn_directory']=='' || $value['dominio_directory']=='' || $value['usuario_directory']=='' || $value['password_directory']==''){
+						$active_Valido = 0;
+					}
+					if($value['password']=='' && $value['password']==null)
+					{
+						$primera_vez = 1;
+					}
+
+			 		$lista_empresas[] = array('Logo'=>$value['Logo'],'Id_Empresa'=>$value['Id_Empresa'],'Nombre_Comercial'=>$value['Nombre_Comercial'],'ActiveDirectory'=>$active_Valido,'normal'=>1,'no_concurente'=>0,'PERFIL'=>$value['DESCRIPCION'],'Cod_Perfil'=>$value['Id_Tipo_usuario'],'primera_vez'=>$primera_vez); 
+			 }
+
+			 // print_r($lista_empresas);die();
+			 //buscamos las empresas en donde el usuario es no concurente
+			 	 $datos = array();		
+			 	 $no_concurentes = $this->login->empresa_tabla_noconcurente(false,false,1);
+			 	 foreach ($no_concurentes as $key => $value) {
+			 	 		$primera_vez = 0;
+			 	 		$tipo = $value['tipo'];
+			 	 	 	$empresa = $this->login->lista_empresa($value['Id_Empresa']);
+			 	 	 	$parametros['Campo_Usuario'] = $value['Campo_usuario'];
+			 	 	 	$Campo_Pass = $value['Campo_pass'];
+			 	 	 	$parametros['tabla'] = $value['Tabla'];
+			 	 	 	// print_r($empresa);die();
+			 	 	 	if(count($empresa)>0)
+			 	 	 	{
+					 	 	 	$busqueda_tercero = $this->login->buscar_db_terceros($empresa[0]['Base_datos'],$empresa[0]['Usuario_db'],$empresa[0]['Password_db'],$empresa[0]['Ip_host'],$empresa[0]['Puerto_db'],$parametros);
+					 	 		if(count($busqueda_tercero)>0)
+					 	 	 	{
+					 	 	 		if($busqueda_tercero[0][$Campo_Pass]=='' || $busqueda_tercero[0][$Campo_Pass]==null)
+					 	 	 		{
+					 	 	 			$primera_vez = 1;
+					 	 	 		}
+					 	 	 		$lista_empresas[] = array('Logo'=>$empresa[0]['Logo'],'Id_Empresa'=>$empresa[0]['Id_Empresa'],'Nombre_Comercial'=>$empresa[0]['Nombre_Comercial'],'ActiveDirectory'=>$active_Valido,'normal'=>0,'no_concurente'=>1,'PERFIL'=>$tipo,'Cod_Perfil'=>$value['tipo_perfil'],'primera_vez'=>$primera_vez); 
+					 	 	 	}
+				 	 	 }
+			 	 }
+
+			 	 // print_r($lista_empresas);die();
+			 	 // $datos = $this->login->buscar_empresas_no_concurentes($parametros['email'],$parametros['pass']);
+			 
+
+			 	 $empresas = '';
+			 foreach ($lista_empresas as $key => $value) {
+			 	$foto = 'img/de_sistema/sin-logo.png';
+			 	if(file_exists($value['Logo'])){$foto = str_replace('../','',$value['Logo']); }
+			 	$empresas.= '<li class="list-group-item d-flex align-items-center radius-10 mb-2 shadow-sm" onclick="empresa_selecconada('.$value['Id_Empresa'].','.$value['ActiveDirectory'].','.$value['normal'].','.$value['Cod_Perfil'].','.$value['primera_vez'].','.$_SESSION['INICIO']['EMAIL'].','.$value['primera_vez'].')">
+											<div class="d-flex align-items-center">
+												<div class="font-20"><img style="width:70px; height:50px" src="'.$foto.'" />
+												</div>
+												<div class="flex-grow-1 ms-2">
+													<h6 class="mb-0">'.$value['Nombre_Comercial'].'</h6>
+															<div class="d-flex align-items-center text-primary">	<i class="bx bx-radio-circle-marked bx-burst bx-rotate-90 align-middle font-18 me-1"></i>
+														<span>'.$value['PERFIL'].'</span>
+													</div>
+
+
+												</div>
+											</div>
+											<div class="ms-auto">
+											</div>
+										</li>';
+			 }
+			 return array('lista'=>$empresas,'no_concurente'=>$no_concurente);
+	}
+
+
+
+	function buscar_empresas2($parametros)
 	{
 		if(isset($_SESSION['INICIO']))
 			{
@@ -192,29 +283,83 @@ class loginC
 	function mis_empresas()
 	{
 			$usuario = $this->login->datos_login(false,false,$_SESSION['INICIO']['ID_USUARIO']);
+
+			 $no_concurente = 0;
 			if(count($usuario)>0)
 			{
-				$email = $usuario[0]['email'];
+				// $email = $usuario[0]['email'];
+				$parametros['email'] = $usuario[0]['email'];
 				$pass = $usuario[0]['password'];
+				$parametros['pass'] =  $usuario[0]['password'];
 			}else
 			{
 				 return -1;
 			}
-			$no_concurente = 0;
-			 $datos = $this->login->buscar_empresas($email,$pass);
-			 $empresas = '';
-			 // print_r(count($datos));die();
-
+			 $datos = $this->login->buscar_empresas($parametros['email'],false,false,1);
+			 if(count($datos)>0) {
+			 	//valida si es deba  1 siempre va a ser DBA
+			 	 if($datos[0]['Id_Tipo_usuario']==1)
+			 	 {
+			 	 		$datos = $this->login->buscar_empresas($parametros['email'],false,false);
+			 	 }
+			 }
+			 // print_r($datos);die();
+			 $active_Valido = 1;
 			 foreach ($datos as $key => $value) {
+			 		$primera_vez = 0;
+					if($value['ip_directory']=='' || $value['puerto_directory']=='' || $value['basedn_directory']=='' || $value['dominio_directory']=='' || $value['usuario_directory']=='' || $value['password_directory']==''){
+						$active_Valido = 0;
+					}
+					if($value['password']=='' && $value['password']==null)
+					{
+						$primera_vez = 1;
+					}
+
+			 		$lista_empresas[] = array('Logo'=>$value['Logo'],'Id_Empresa'=>$value['Id_Empresa'],'Nombre_Comercial'=>$value['Nombre_Comercial'],'ActiveDirectory'=>$active_Valido,'normal'=>1,'no_concurente'=>0,'PERFIL'=>$value['DESCRIPCION'],'Cod_Perfil'=>$value['Id_Tipo_usuario'],'primera_vez'=>$primera_vez,'email'=>$parametros['email'],'pass'=>$parametros['pass']); 
+			 }
+
+			 // print_r($lista_empresas);die();
+			 //buscamos las empresas en donde el usuario es no concurente
+			 	 $datos = array();		
+			 	 $no_concurentes = $this->login->empresa_tabla_noconcurente(false,false,1);
+			 	 foreach ($no_concurentes as $key => $value) {
+			 	 		$primera_vez = 0;
+			 	 		$tipo = $value['tipo'];
+			 	 	 	$empresa = $this->login->lista_empresa($value['Id_Empresa']);
+			 	 	 	$parametros['Campo_Usuario'] = $value['Campo_usuario'];
+			 	 	 	$Campo_Pass = $value['Campo_pass'];
+			 	 	 	$parametros['tabla'] = $value['Tabla'];
+			 	 	 	// print_r($empresa);die();
+			 	 	 	if(count($empresa)>0)
+			 	 	 	{
+					 	 	 	$busqueda_tercero = $this->login->buscar_db_terceros($empresa[0]['Base_datos'],$empresa[0]['Usuario_db'],$empresa[0]['Password_db'],$empresa[0]['Ip_host'],$empresa[0]['Puerto_db'],$parametros);
+					 	 		if(count($busqueda_tercero)>0)
+					 	 	 	{
+					 	 	 		if($busqueda_tercero[0][$Campo_Pass]=='' || $busqueda_tercero[0][$Campo_Pass]==null)
+					 	 	 		{
+					 	 	 			$primera_vez = 1;
+					 	 	 		}
+					 	 	 		$lista_empresas[] = array('Logo'=>$empresa[0]['Logo'],'Id_Empresa'=>$empresa[0]['Id_Empresa'],'Nombre_Comercial'=>$empresa[0]['Nombre_Comercial'],'ActiveDirectory'=>$active_Valido,'normal'=>0,'no_concurente'=>1,'PERFIL'=>$tipo,'Cod_Perfil'=>$value['tipo_perfil'],'primera_vez'=>$primera_vez,'email'=>$parametros['email'],'pass'=>$parametros['pass']); 
+					 	 	 	}
+				 	 	 }
+			 	 }
+
+			 	 // print_r($lista_empresas);die();		 
+
+			 	 $empresas = '';
+			 foreach ($lista_empresas as $key => $value) {
 			 	// print_r($value);die();
 			 	$foto = '../img/de_sistema/sin-logo.png';
 			 	if(file_exists($value['Logo'])){$foto = $value['Logo']; }
-			 	$empresas.= '<li class="list-group-item d-flex align-items-center radius-10 mb-2 shadow-sm" onclick="empresa_selecconada('.$value['Id_Empresa'].')">
+			 	$empresas.= '<li class="list-group-item d-flex align-items-center radius-10 mb-2 shadow-sm" onclick="empresa_selecconada('.$value['Id_Empresa'].','.$value['ActiveDirectory'].','.$value['normal'].','.$value['Cod_Perfil'].','.$value['primera_vez'].',\''.$value['email'].'\',\''.$value['pass'].'\')">
 											<div class="d-flex align-items-center">
 												<div class="font-20"><img style="width:70px; height:50px" src="'.$foto.'" />
 												</div>
 												<div class="flex-grow-1 ms-2">
 													<h6 class="mb-0">'.$value['Nombre_Comercial'].'</h6>
+													<div class="d-flex align-items-center text-primary">	<i class="bx bx-radio-circle-marked bx-burst bx-rotate-90 align-middle font-18 me-1"></i>
+				 											<span>'.$value['PERFIL'].'</span>
+			 										</div>
 												</div>
 											</div>
 											<div class="ms-auto">';
@@ -262,8 +407,7 @@ class loginC
 			// print_r($empresa);die();
 			if($empresa[0]['Ip_host']==IP_MASTER)
 			{
-				$tablas_iguales = $this->cod_global->tablas_por_licencias($licencias,$empresa);
-				
+				$tablas_iguales = $this->cod_global->tablas_por_licencias($licencias,$empresa);				
 		 		$res = $this->cod_global->generar_primera_vez($empresa[0]['Base_datos'],$parametros['empresa']);
 		 		if($tablas_iguales==-1)
 		 		foreach ($licencias as $key => $value) {
@@ -288,6 +432,39 @@ class loginC
 
 	function empresa_seleccionada_head($parametros)
 	{
+		// $licencias = $this->login->empresa_licencias($parametros['empresa']);
+		// if(count($licencias)==0)
+		// {
+		// 	// onclick="empresa_selecconada('.$value['Id_Empresa'].')
+		// 	$modulos = $this->login->modulos_empresa();
+		// 	$empresas = '';
+		// 	foreach ($modulos as $key => $value) {
+
+		// 		$empresas.= '<li class="list-group-item d-flex align-items-center radius-10 mb-2 shadow-sm">
+		// 									<div class="d-flex align-items-center">
+		// 										<div class="font-20">'.$value['icono'].'
+		// 										</div>
+		// 										<div class="flex-grow-1 ms-2">
+		// 											<h6 class="mb-0">'.$value['nombre_modulo'].'</h6>
+		// 											<input type="text" name="licencia_'.$value['id_modulos'].'" id="licencia_'.$value['id_modulos'].'" class="form-control" />
+		// 										</div>
+		// 									</div>
+		// 									<div class="ms-auto">
+		// 									<button class="btn btn-sm btn-primary" onclick="registrar_licencia(\''.$parametros['empresa'].'\',\''.$value['id_modulos'].'\')">Registrar</button>
+		// 									</div>
+		// 								</li>';
+		// 	}			
+		// 	return array('respuesta'=>2,'modulos'=>$empresas);
+		// }else
+		// {
+
+		// 	//actualizamos
+		// 	$empresa = $this->login->lista_empresa($parametros['empresa']);
+		//  	$res = $this->cod_global->generar_primera_vez($empresa[0]['Base_datos'],$parametros['empresa']);
+		//  	// print_r("holii");die();
+		// 	return array('respuesta'=>$res);
+		// }
+
 		$licencias = $this->login->empresa_licencias($parametros['empresa']);
 		if(count($licencias)==0)
 		{
@@ -309,15 +486,34 @@ class loginC
 											<button class="btn btn-sm btn-primary" onclick="registrar_licencia(\''.$parametros['empresa'].'\',\''.$value['id_modulos'].'\')">Registrar</button>
 											</div>
 										</li>';
-			}			
+			}
+			
 			return array('respuesta'=>2,'modulos'=>$empresas);
 		}else
 		{
-
 			//actualizamos
 			$empresa = $this->login->lista_empresa($parametros['empresa']);
-		 	$res = $this->cod_global->generar_primera_vez($empresa[0]['Base_datos'],$parametros['empresa']);
-		 	// print_r("holii");die();
+			// print_r($empresa);die();
+			if($empresa[0]['Ip_host']==IP_MASTER)
+			{
+				$tablas_iguales = $this->cod_global->tablas_por_licencias($licencias,$empresa);				
+		 		$res = $this->cod_global->generar_primera_vez($empresa[0]['Base_datos'],$parametros['empresa']);
+		 		if($tablas_iguales==-1)
+		 		foreach ($licencias as $key => $value) {
+		 		// print_r($licencias);die();
+		 				$this->cod_global->Copiar_estructura($value['Id_Modulo'],$empresa[0]['Base_datos']);
+		 		}
+		 	}else{
+
+				$tablas_iguales = $this->cod_global->tablas_por_licencias($licencias,$empresa,1);
+		 		$res = $this->cod_global->generar_primera_vez_terceros($empresa,$parametros['empresa']);
+		 		if($tablas_iguales==-1){
+			 		foreach ($licencias as $key => $value) {
+			 				$this->cod_global->Copiar_estructura($value['Id_Modulo'],$empresa[0]['Base_datos'],1,$empresa);
+			 		}
+			 	}
+		 		// print_r($empresa);die();
+		 	}
 			return array('respuesta'=>$res);
 		}
 	}
@@ -357,7 +553,231 @@ class loginC
 		}
 	}
 
+	function validar_ingreso_usuario_valido($parametros)
+	{
+
+		// print_r($parametros);die();
+		$datos = array();
+		$empresa = $this->login->lista_empresa($parametros['empresa']);
+		// print_r($empresa);die();
+		if($parametros['activeDir']==1)
+		{
+				$respuesta = $this->active->AutentificarUserActiveDir($parametros['email'], $parametros['pass'],$empresa);
+				print_r($respuesta);die();
+				if($respuesta!='1')
+				{
+					return -4;
+				}
+
+				if($parametros['primera_vez']==1)
+				{					
+					print_r($parametros);die();
+						$respuesta = $this->save_update_passActiveUsu($parametros);
+						$datos = $this->login->datos_login($parametros['email'],$this->cod_global->enciptar_clave($parametros['pass']),false,$parametros['tipo']);
+				}else
+				{
+					$datos = $this->login->datos_login($parametros['email'],$this->cod_global->enciptar_clave($parametros['pass']),false,$parametros['tipo']);
+					if(count($datos)==0)
+					{
+						 return -1;
+					}
+				}	
+		}else
+		{
+			$datos = $this->login->datos_login($parametros['email'],$this->cod_global->enciptar_clave($parametros['pass']),false,$parametros['tipo']);
+			if(count($datos)==0)
+			{
+				 return -1;
+			}	
+		}
+			// if($cambiar){
+			// 	$datos = $this->login->datos_login($parametros['email'],$parametros['pass']);
+			// }
+			if(count($datos)>0)
+			{					
+	 			// print_r($parametros);die();
+				// print_r($datos);die();
+				// session_start();
+				$_SESSION['INICIO']['ULTIMO_ACCESO'] = time();
+				$_SESSION["INICIO"]['VER'] = $datos[0]['Ver'];
+				$_SESSION["INICIO"]['EDITAR'] = $datos[0]['editar'];
+				$_SESSION["INICIO"]['ELIMINAR'] = $datos[0]['eliminar'];
+				$_SESSION["INICIO"]['DBA'] = $datos[0]['dba'];
+				$_SESSION["INICIO"]['USUARIO'] = $datos[0]['nombres'].' '.$datos[0]['apellidos'];
+				$_SESSION["INICIO"]['ID_USUARIO'] = $datos[0]['id'];
+				$_SESSION["INICIO"]['EMAIL'] = $datos[0]['email'];
+				$_SESSION["INICIO"]['TIPO'] = $datos[0]['tipo'];
+				$_SESSION["INICIO"]['PERFIL'] = $datos[0]['perfil'];				
+				$_SESSION["INICIO"]['FOTO'] = $datos[0]['foto'];
+				$_SESSION["INICIO"]['NO_CONCURENTE'] = '';
+				$_SESSION["INICIO"]['NO_CONCURENTE_NOM'] ='';
+				$_SESSION["INICIO"]['NO_CONCURENTE_TABLA_ID'] ='';
+				$_SESSION["INICIO"]['NO_CONCURENTE_TABLA'] ='';
+				$_SESSION["INICIO"]['MODULO_SISTEMA_ANT'] ='';
+				$_SESSION["INICIO"]['LISTA_ART'] =1;
+
+					return 1;			
+			}else
+			{
+				 return -3;
+			}
+	}
+
+	function validar_ingreso_noconcurente_valido($parametros)
+	{
+
+				// print_r($parametros);die();
+				$parametros['pass'] = $this->cod_global->enciptar_clave($parametros['pass']);
+				$datos = $this->login->datos_login(false,false,2);
+				// busca en tabla no concurrentes 
+				 $no_concurentes = $this->login->empresa_tabla_noconcurente($parametros['empresa']);
+			 	 $empresa = $this->login->lista_empresa($parametros['empresa']);
+
+			 	 // print_r($no_concurentes);die();
+			 	 $tabla = '';
+			 	 $busqueda_tercero = array();
+			 	 foreach ($no_concurentes as $key => $value) {
+			 	 	// print_r($value);die();
+			 	 	 	$parametros['Campo_Usuario'] = $value['Campo_usuario'];
+			 	 	 	$parametros['Campo_Pass'] = $value['Campo_pass'];
+			 	 	 	$parametros['tabla'] = $value['Tabla'];
+			 	 	 	$parametros['perfil'] = $value['tipo_perfil'];
+			 	 	 	$parametros['tipo'] = $value['tipo'];
+			 	 	 	$parametros['foto'] = $value['campo_img'];
+			 	 	 	$tabla = $value['Tabla'];
+			 	 	 	$busqueda_tercero = $this->login->buscar_db_terceros($empresa[0]['Base_datos'],$empresa[0]['Usuario_db'],$empresa[0]['Password_db'],$empresa[0]['Ip_host'],$empresa[0]['Puerto_db'],$parametros);
+			 	 	 	if(count($busqueda_tercero)>0)
+			 	 	 	{
+			 	 	 		break;
+			 	 	 	}
+			 	 }
+			 	 // print_r($parametros);die();
+
+				 	$id = $this->login->id_tabla_terceros($tabla,$empresa);
+				 	// print_r($tabla);
+				 	// print_r($id);
+				 	// print_r($busqueda_tercero);die();
+
+				 	$datos_usu = $this->login->datos_no_concurente($empresa,$tabla,$id[0]['ID'],$busqueda_tercero[0][$id[0]['ID']]);
+
+			 	 // print_r($busqueda_tercero);
+				 	// print_r($datos_usu[0][$parametros['foto']]);die();
+				 	// print_r($datos_usu);die();
+				 	$_SESSION['INICIO']['ULTIMO_ACCESO'] = time();
+					$_SESSION["INICIO"]['VER'] = $datos[0]['Ver'];
+					$_SESSION["INICIO"]['EDITAR'] = $datos[0]['editar'];
+					$_SESSION["INICIO"]['ELIMINAR'] = $datos[0]['eliminar'];
+					$_SESSION["INICIO"]['DBA'] = $datos[0]['dba'];
+					$_SESSION["INICIO"]['USUARIO'] = $datos[0]['nombres'].' '.$datos[0]['apellidos'];
+					$_SESSION["INICIO"]['ID_USUARIO'] = $datos[0]['id'];
+					$_SESSION["INICIO"]['EMAIL'] = $datos[0]['email'];
+					$_SESSION["INICIO"]['TIPO'] = $parametros['tipo'];
+					$_SESSION["INICIO"]['PERFIL'] = $parametros['perfil'];
+					$_SESSION["INICIO"]['FOTO'] = '';
+					if($parametros['foto']!='' && $parametros['foto']!=null && file_exists($parametros['foto']))
+					{		
+						$_SESSION["INICIO"]['FOTO'] = $datos_usu[0][$parametros['foto']];
+					}
+					$_SESSION["INICIO"]['NO_CONCURENTE'] = $busqueda_tercero[0][$id[0]['ID']] ;
+					$_SESSION["INICIO"]['NO_CONCURENTE_NOM'] =$parametros['email'];
+					$_SESSION["INICIO"]['NO_CONCURENTE_TABLA_ID'] =$id[0]['ID'];
+					$_SESSION["INICIO"]['NO_CONCURENTE_TABLA'] =$tabla;
+					$_SESSION["INICIO"]['NO_CONCURENTE_CAMPO_IMG'] =$parametros['foto'];
+					$_SESSION["INICIO"]['MODULO_SISTEMA_ANT'] ='';
+					$_SESSION["INICIO"]['LISTA_ART'] =1;
+
+
+					// print_r($_SESSION['INICIO']);die();
+
+					return 1;
+
+	}
+
 	function iniciar_sesion($parametros,$cambiar=false)
+	{		
+
+		$empresa = $this->login->lista_empresa($parametros['empresa']);
+		$usuario_validado ='';
+		switch ($parametros['normal']) {
+			case '1':
+					$usuario_validado = $this->validar_ingreso_usuario_valido($parametros);
+				break;
+			case '0':			
+					$usuario_validado = $this->validar_ingreso_noconcurente_valido($parametros);
+				break;	
+		}
+		$msj = '';
+			
+	switch ($usuario_validado) {
+		case '-1':
+			$msj = 'Contraseña incorrecta';
+			break;
+		case '-1':
+			$msj = 'Contraseña incorrecta';
+			break;
+		case '-4':
+			$msj = 'Usuario de active directory no autentificado';
+			break;
+		
+		default:
+			// code...
+			break;
+	}
+
+		//print_r($usuario_validado);die();
+
+	if(count($empresa)>0)
+		{
+				$_SESSION["INICIO"]['ID_EMPRESA'] = $empresa[0]['Id_empresa'];
+				$_SESSION["INICIO"]['ASIGNAR_SEGUROS'] = $empresa[0]['Tabla_seguros'];
+				$_SESSION["INICIO"]['RAZON_SOCIAL'] = $empresa[0]['Razon_Social'];
+				$_SESSION["INICIO"]['IP_HOST'] = $empresa[0]['Ip_host'];
+				$_SESSION["INICIO"]['BASEDATO'] = $empresa[0]['Base_datos'];
+				$_SESSION["INICIO"]['USUARIO_DB'] = $empresa[0]['Usuario_db'];
+				$_SESSION["INICIO"]['PASSWORD_DB'] = $empresa[0]['Password_db'];
+				$_SESSION["INICIO"]['PUERTO_DB'] = $empresa[0]['Puerto_db'];
+				$_SESSION["INICIO"]['TIPO_BASE'] = $empresa[0]['Tipo_base'];
+				$_SESSION["INICIO"]['LOGO'] = $empresa[0]['Logo'];
+				$_SESSION["INICIO"]['IP_API_HIKVISION'] = $empresa[0]['ip_api_hikvision'];
+				$_SESSION["INICIO"]['KEY_API_HIKVISION'] = $empresa[0]['key_api_hikvision'];
+				$_SESSION["INICIO"]['USER_API_HIKVISION'] = $empresa[0]['user_api_hikvision'];
+				$_SESSION["INICIO"]['TCP_PUERTO_HIKVISION'] = $empresa[0]['tcp_puerto_hikvision'];
+				$_SESSION["INICIO"]['PUERTO_API_HIKVISION'] = $empresa[0]['puerto_api_hikvision'];
+		}
+
+		return 1;
+
+
+		/*
+
+
+	 	if($cambiar)
+	 	{
+	 		$usuario = $this->login->datos_usuario($_SESSION['INICIO']['ID_USUARIO']);
+			if(count($usuario)>0)
+			{
+		 		$parametros['email'] =  $usuario[0]['email'];
+		 		$parametros['pass'] =  $usuario[0]['password'];
+		 		$parametros['no_concurente'] = 0;
+		 		$validar_permisos = $this->acceso_en_terceros($parametros);
+		 		if(count($validar_permisos)==0)
+		 		{
+		 			return -3;
+		 		}
+		 	}
+	 	}
+
+	 	*/
+	 	// print_r('sss');die();
+
+			// print_r($empresa);die();
+			
+	 	// print_r($parametros);die();
+
+	}
+
+
+	function iniciar_sesion2($parametros,$cambiar=false)
 	 {		
 	 	// print_r($parametros);die();
 
@@ -1022,7 +1442,7 @@ class loginC
 		 $user = $this->login->buscar_empresas($parametros['user'],$pass=false,$parametros['empresa']);
 
 		 $datos[0]['campo']= 'password';
-		 $datos[0]['dato']= $this->cod_global->enciptar_clave( $parametros['pass']);
+		 $datos[0]['dato']= $this->cod_global->enciptar_clave($parametros['pass']);
 
 
 		 $datosW[0]['campo']= 'id_usuarios';

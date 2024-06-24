@@ -537,6 +537,7 @@ class activeDirC
 		$passwordconfig = $this->pass;
 
 		// print_r($username);die();
+		// print_r($this->ip);die();
 
 		// Intentar la conexión
 		  $ldapconn = ldap_connect($ldapconfig['host'], $ldapconfig['port']);
@@ -588,6 +589,7 @@ class activeDirC
 				    	// echo "Error en la búsqueda LDAP.";
 				   	}			       
 			    } else {
+			    	//no se puede conectar al ldpa
 			    	return -4;
 			    }
 			    ldap_close($ldapconn);

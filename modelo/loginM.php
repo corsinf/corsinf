@@ -18,12 +18,13 @@ class loginM
 		return $datos;
 	}
 
-	function buscar_empresas($email,$pass=false,$id=false)
+	function buscar_empresas($email,$pass=false,$id=false,$ambiente_empresa=false)
 	{
 		$sql = "SELECT * 
 				FROM ACCESOS_EMPRESA AC
 				INNER JOIN USUARIOS US ON AC.Id_usuario = US.id_usuarios
 				INNER JOIN EMPRESAS EM ON AC.Id_Empresa = EM.Id_empresa
+				INNER JOIN TIPO_USUARIO TU ON US.perfil = TU.ID_TIPO
 				WHERE  EM.Estado = 'A' AND US.email = '".$email."' ";
 				if($pass)
 				{
@@ -33,26 +34,35 @@ class loginM
 				{
 					$sql.=" AND AC.Id_empresa='".$id."'";
 				}
+				if($ambiente_empresa)
+				{
+					$sql.="ANd EM.ambiente_empresa = '".$ambiente_empresa."'";
+				}
 				// print_r($sql);die();
 		$datos = $this->db->datos($sql,1);
 		return $datos;
 	}
 
-	function empresa_tabla_noconcurente($id_empresa=false,$tabla=false)
+	function empresa_tabla_noconcurente($id_empresa=false,$tabla=false,$ambiente_empresa = false)
 	{
-		$sql = "SELECT Tabla,Id_Empresa,Campo_usuario,Campo_pass,tipo_perfil,TU.DESCRIPCION as 'tipo',campo_img
+		$sql = "SELECT Tabla,T.Id_Empresa,Campo_usuario,Campo_pass,tipo_perfil,TU.DESCRIPCION as 'tipo',campo_img
 			FROM TABLAS_NOCONCURENTE T
 			INNER JOIN TIPO_USUARIO TU ON T.tipo_perfil = TU.ID_TIPO 
+			INNER JOIN EMPRESAS EM ON T.Id_Empresa = EM.Id_empresa 
 				WHERE 1=1 ";
 				if($id_empresa)
 				{
-					$sql.=" AND Id_Empresa='".$id_empresa."'";
+					$sql.=" AND T.Id_Empresa='".$id_empresa."'";
 				}
 				if($tabla)
 				{
 					$sql.= " AND Tabla = '".$tabla."' ";
 				}
-				$sql.="GROUP BY Tabla,Id_Empresa,Campo_usuario,Campo_pass,tipo_perfil,TU.DESCRIPCION,campo_img";
+				if($ambiente_empresa)
+				{
+					$sql.= " AND  ambiente_empresa = '".$ambiente_empresa."' ";
+				}
+				$sql.="GROUP BY Tabla,T.Id_Empresa,Campo_usuario,Campo_pass,tipo_perfil,TU.DESCRIPCION,campo_img";
 
 				// print_r($sql);die();
 		$datos = $this->db->datos($sql,1);
@@ -62,11 +72,16 @@ class loginM
 	function buscar_db_terceros($database,$usuario,$password,$servidor,$puerto,$parametros)
 	{
 		$item = array();
-		$sql = "SELECT * FROM ".$parametros['tabla']." WHERE ".$parametros['Campo_Usuario']." = '".$parametros['email']."' AND ".$parametros['Campo_Pass']."='".$parametros['pass']."'";
-		// print_r($sql);die();
-		if($this->db->conexion_db_terceros($database,$usuario,$password,$servidor,$puerto)!='-1')
+		$sql = "SELECT * FROM ".$parametros['tabla']." WHERE ".$parametros['Campo_Usuario']." = '".$parametros['email']."' ";
+		if(isset($parametros['Campo_pass']))
 		{
-		 $item = $this->db->datos_db_terceros($database,$usuario,$password,$servidor,$puerto,$sql);
+		    $sql.=" AND ".$parametros['Campo_Pass']."='".$parametros['pass']."'";
+		}
+		// print_r($sql);
+		if($this->db->conexion_db_terceros($database,$usuario,$password,$servidor,$puerto)!=-1)
+		{
+		 	$item = $this->db->datos_db_terceros($database,$usuario,$password,$servidor,$puerto,$sql);
+		 	// print_r($item);
 		}
 		return $item;
 	}
@@ -87,7 +102,7 @@ class loginM
 		return $datos;
 	}
 
-	function datos_login($email=false,$pass=false,$id=false)
+	function datos_login($email=false,$pass=false,$id=false,$tipo=false)
 	{		
 		$sql ="SELECT id_usuarios as 'id',U.*,TU.DESCRIPCION as tipo,A.*  FROM ACCESOS A
 		 INNER JOIN TIPO_USUARIO TU ON A.id_tipo_usu = TU.ID_TIPO
@@ -103,6 +118,10 @@ class loginM
 		if($id)
 		{
 			$sql.=" AND U.id_usuarios = ".$id;
+		}
+		if($tipo)
+		{
+			$sql.=" AND perfil='".$tipo."'";
 		}
 
 		// print_r($_SESSION['INICIO']);
@@ -238,6 +257,7 @@ class loginM
 	function lista_empresa($id,$master=false)
 	{
 		$sql = "SELECT E.*,Id_empresa as 'Id_Empresa' FROM EMPRESAS E WHERE Id_empresa = '".$id."'";
+		// print_r($sql);die();
 		if($master)
 		{
 			return $this->db->datos($sql);
@@ -246,11 +266,18 @@ class loginM
 			return $this->db->datos($sql,1);
 		}
 	}
-	function datos_no_concurente($tabla,$campoid,$id)
+	function datos_no_concurente($empresa,$tabla,$campoid,$id)
 	{
+		$database = $empresa[0]['Base_datos'];
+		$usuario = $empresa[0]['Usuario_db'];
+		$password = $empresa[0]['Password_db'];
+		$servidor = $empresa[0]['Ip_host'];
+		$puerto = $empresa[0]['Puerto_db'];
+		
 		$sql= "SELECT * FROM ".$tabla." WHERE ".$campoid.' = '.$id;
-		$datos = $this->db->datos($sql);
+		$datos = $this->db->datos_db_terceros($database, $usuario, $password, $servidor, $puerto, $sql);
 		return $datos;
+
 		// print_r($sql);die();
 	}
 	function permisos_db_terceros($database, $usuario, $password, $servidor, $puerto)	{

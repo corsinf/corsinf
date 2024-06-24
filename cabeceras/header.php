@@ -311,10 +311,16 @@ if ($dominio != 'localhost') {
 			});
 		}
 
-		function empresa_selecconada(empresa) {
-
+		function empresa_selecconada(empresa,activeDir,normal,tipo,primera_vez,email,pass)
+		{
 			var parametros = {
-				'empresa': empresa,
+				'empresa':empresa,
+		         'activeDir':activeDir,
+		         'normal':normal,
+		         'primera_vez':primera_vez,
+		         'tipo':tipo,
+		         'pass':pass,
+		         'email':email,
 			}
 			$.ajax({
 				data: {
@@ -330,17 +336,17 @@ if ($dominio != 'localhost') {
 						$('#myModal_modulos').modal('show');
 					} else if (response.respuesta == 1) {
 
-						iniciar_sesion(empresa);
+						iniciar_sesion(parametros);
 					}
 				}
 			});
 
 		}
 
-		function iniciar_sesion(id) {
-			var parametros = {
-				'id': id,
-			}
+		function iniciar_sesion(parametros) {
+			// var parametros = {
+			// 	'id': id,
+			// }
 			$.ajax({
 				data: {
 					parametros: parametros
