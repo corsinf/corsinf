@@ -113,8 +113,8 @@ class licenciasC
 			<td>'.$value['Razon_Social'].'</td>
 			<td>'.$value['Codigo_licencia'].'</td>
 			<td>'.$value['nombre_modulo'].'</td>
-			<td>'.$value['Fecha_ini']->format('Y-m-d').'</td>
-			<td>'.$value['Fecha_exp']->format('Y-m-d').'</td>
+			<td>'.$value['Fecha_ini'].'</td>
+			<td>'.$value['Fecha_exp'].'</td>
 			<td>'.$value['Numero_maquinas'].'</td>			
 			<td>'.$estado.'</td>
 			<td>
