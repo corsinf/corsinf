@@ -34,36 +34,36 @@ class cat_examenesC
     function insertar_editar($parametros)
     {
 
-        $datos1[0]['campo'] = 'sa_sec_id';
-        $datos1[0]['dato'] = strval($parametros['sa_sec_id']);
-        $datos[1]['campo'] = 'sa_sec_nombre';
-        $datos[1]['dato'] = $parametros['sa_sec_nombre'];
+        $datos1[0]['campo'] = 'ex_id';
+        $datos1[0]['dato'] = strval($parametros['txt_id_examen']);
+
 
         $datos = array(
-            array('campo' => 'sa_fice_id', 'dato' => $parametros['sa_fice_id']),
-            array('campo' => 'sa_conp_nivel', 'dato' => $parametros['sa_conp_nivel']),
-            array('campo' => 'sa_conp_paralelo', 'dato' => $parametros['sa_conp_paralelo']),
-            array('campo' => 'sa_conp_edad', 'dato' => $parametros['sa_conp_edad']),
+            array('campo' => 'ex_descripcion', 'dato' => $parametros['txt_examen']),
         );
 
-        if ($parametros['sa_sec_id'] == '') {
-           
+        if ($parametros['txt_id_examen'] == '') {
+
+            if (empty($this->modelo->where('ex_descripcion', $parametros['txt_examen'])->listar())) {
                 $datos = $this->modelo->insertar($datos);
-            
+            } else {
+                return -2;
+            }
         } else {
-            $where[0]['campo'] = 'sa_sec_id';
-            $where[0]['dato'] = $parametros['sa_sec_id'];
+            $where[0]['campo'] = 'ex_id';
+            $where[0]['dato'] = $parametros['txt_id_examen'];
             $datos = $this->modelo->editar($datos, $where);
         }
+
         //$datos = $this->modelo->insertar($datos);
         return $datos;
     }
 
     function eliminar($id)
     {
-        $datos[0]['campo'] = 'sa_sec_id';
+        $datos[0]['campo'] = 'ex_id';
         $datos[0]['dato'] = $id;
-        
+
         $datos = $this->modelo->eliminar($datos);
         return $datos;
     }

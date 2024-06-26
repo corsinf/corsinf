@@ -1,5 +1,18 @@
 <?php
 
+/**
+ * Class BaseModel
+ *
+ * BaseModel es un modelo para generar los query de manera mas agil
+ * Tiene los siguiente métodos: (cada metodo se le puede agregar la codicion where y join)
+ * listar
+ * insertar
+ * insertar
+ * editar
+ * eliminar
+ * like -> implentado para los select2
+ */
+
 require_once(dirname(__DIR__, 2) . '/db/db.php');
 
 class BaseModel
@@ -19,8 +32,8 @@ class BaseModel
     function listar()
     {
         // Obtener cláusulas WHERE y JOIN
-        $whereClause = $this->retornaVaroloresWhere();
-        $joinClause = $this->retornaVaroloresJoin();
+        $whereClause = $this->retornaValoresWhere();
+        $joinClause = $this->retornaValoresJoin();
 
         // Validar y construir la selección de campos
         if (empty($joinClause)) {
@@ -65,6 +78,37 @@ class BaseModel
         return $rest;
     }
 
+    // Listar registros basado en condiciones LIKE
+    function like($campos, $valor)
+    {
+        $whereClause = $this->retornaValoresWhere();
+        $joinClause = $this->retornaValoresJoin();
+
+        //$camposSelect = implode(', ', $this->camposPermitidos);
+
+        // Inicializar la cláusula WHERE si no hay condiciones previas
+        if (empty($whereClause)) {
+            $whereClause = " WHERE ";
+        } else {
+            $whereClause .= " AND ";
+        }
+
+        $whereClause .= " CONCAT($campos) LIKE '%" . $valor . "%'";
+
+        $sql = sprintf(
+            "SELECT * FROM %s %s %s",
+            //$camposSelect,
+            $this->tabla,
+            $joinClause,
+            $whereClause
+        );
+
+        //print_r($sql);exit();die();
+
+        $datos = $this->db->datos($sql);
+        return $datos;
+    }
+
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //Para generar consultas dinamicas
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -85,7 +129,7 @@ class BaseModel
     }
 
     // Arma la sentencia del where
-    protected function retornaVaroloresWhere()
+    protected function retornaValoresWhere()
     {
         $whereClause = '';
         if (!empty($this->condicionesWhere)) {
@@ -96,7 +140,7 @@ class BaseModel
     }
 
     // Arma la sentencia del join
-    protected function retornaVaroloresJoin()
+    protected function retornaValoresJoin()
     {
         $joinClause = '';
         foreach ($this->relaciones as $relacion) {
@@ -125,8 +169,8 @@ class BaseModel
     //Si no funciona la funcion listar()
     function listar_1()
     {
-        $whereClause = $this->retornaVaroloresWhere();
-        $joinClause = $this->retornaVaroloresJoin();
+        $whereClause = $this->retornaValoresWhere();
+        $joinClause = $this->retornaValoresJoin();
 
         // Consulta SQL
         if ($joinClause == '') {

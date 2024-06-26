@@ -467,6 +467,9 @@ if ($_GET['acc'] == 'index') {
 		case '7':
 			include('ENFERMERIA/index.php');
 			break;
+		case '10':
+			include('CONSULTORIOS/index.php');
+			break;
 		case 'variable':
 
 			break;

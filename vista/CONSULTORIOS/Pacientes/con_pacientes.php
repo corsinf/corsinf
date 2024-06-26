@@ -1,4 +1,4 @@
-<script src="../js/ENFERMERIA/operaciones_generales.js"></script>
+<script src="../js/RED_CONSULTORIOS/operaciones_generales.js"></script>
 
 <script type="text/javascript">
     $(document).ready(function() {

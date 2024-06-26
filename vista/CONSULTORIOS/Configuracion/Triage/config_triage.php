@@ -40,7 +40,7 @@
             },
             responsive: true,
             ajax: {
-                url: '../controlador/RED_CONSULTORIOS/cat_examenesC.php?listar=true',
+                url: '../controlador/RED_CONSULTORIOS/cat_feat_examenesC.php?listar=true',
                 dataSrc: ''
             },
             columns: [{
@@ -94,7 +94,7 @@
             data: {
                 id: ''
             },
-            url: '../controlador/RED_CONSULTORIOS/cat_examenesC.php?listar=true',
+            url: '../controlador/RED_CONSULTORIOS/cat_feat_examenesC.php?listar=true',
             type: 'post',
             dataType: 'json',
 
