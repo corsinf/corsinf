@@ -199,7 +199,7 @@ class loginC
 			 foreach ($lista_empresas as $key => $value) {
 			 	$foto = 'img/de_sistema/sin-logo.png';
 			 	if(file_exists($value['Logo'])){$foto = str_replace('../','',$value['Logo']); }
-			 	$empresas.= '<li class="list-group-item d-flex align-items-center radius-10 mb-2 shadow-sm" onclick="empresa_selecconada('.$value['Id_Empresa'].','.$value['ActiveDirectory'].','.$value['normal'].','.$value['Cod_Perfil'].','.$value['primera_vez'].','.$_SESSION['INICIO']['EMAIL'].','.$value['primera_vez'].')">
+			 	$empresas.= '<li class="list-group-item d-flex align-items-center radius-10 mb-2 shadow-sm" onclick="empresa_selecconada('.$value['Id_Empresa'].','.$value['ActiveDirectory'].','.$value['normal'].','.$value['Cod_Perfil'].','.$value['primera_vez'].',\''.$parametros['email'].'\','.$value['primera_vez'].')">
 											<div class="d-flex align-items-center">
 												<div class="font-20"><img style="width:70px; height:50px" src="'.$foto.'" />
 												</div>
