@@ -1,6 +1,9 @@
 <?php //include('../cabeceras/header.php'); ?>
+<script src="../js/ACTIVOS_FIJOS/avaluos.js"></script>
+
 <script type="text/javascript">
     $( document ).ready(function() {      
+      cargarAvaluo(<?php if(isset($_GET['id'])){ echo $_GET['id'];} ?>);
   // navegacion();
 
    $('#imprimir_cedula').click(function(){
@@ -1592,7 +1595,16 @@ function guardar_kit()
                     <div class="tab-title">Movimientos</div>
                   </div>
                 </a>
-              </li>              
+              </li>     
+              <li class="nav-item" role="presentation">
+                <a class="nav-link" data-bs-toggle="tab" href="#primaryAvaluos" role="tab" aria-selected="false">
+                  <div class="d-flex align-items-center">
+                    <div class="tab-icon"><i class='bx bx-money font-18 me-1'></i>
+                    </div>
+                    <div class="tab-title">Avalúos</div>
+                  </div>
+                </a>
+              </li>                 
             </ul>
             <div class="tab-content pt-3">
               <div class="tab-pane fade show active" id="primaryhome" role="tabpanel">
@@ -1657,6 +1669,75 @@ function guardar_kit()
                      </table>
                        
                      </div>                 
+                  </div>
+              </div> 
+              <div class="tab-pane fade" id="primaryAvaluos" role="tabpanel">
+                  <h3>Avalúos del artículo</h3>
+                  <div class="row">
+                  <div id="pnl_farmacologia">
+
+                        <?php 
+                            if (
+                              strtoupper($_SESSION['INICIO']['TIPO']) == 'EVALUADOR'
+                              || strtoupper($_SESSION['INICIO']['TIPO']) == 'DBA'
+                            ) { ?> 
+                               <div class="row pt-3">
+
+                                  <input type="hidden" name="txt_id_art_avaluo" id="txt_id_art_avaluo" value="<?php if(isset($_GET["id"])){echo $_GET["id"];}else{echo "-1";} ?>">
+
+                                  <div class="col-md-2">
+                                      <label for="txt_valor_art" class="form-label fw-bold">Valor <label style="color: red;">*</label> </label>
+                                      <input type="number" class="form-control form-control-sm" id="txt_valor_art" name="txt_valor_art">
+                                      
+                                  </div>
+
+                                  <div class="col-md-4">
+                                      <label for="txt_obs_art" class="form-label fw-bold">Observación <label style="color: red;"></label> </label>
+                                      <input type="text" class="form-control form-control-sm" id="txt_obs_art" name="txt_obs_art">
+                                    
+                                  </div>
+
+                                  <div class="col-md-2 mt-4 ">
+                                      <label for="agregarFila" class="form-label fw-bold"></label>
+                                      <button class="btn btn-primary" title="Agregar Avalúo" id="agregarFila" type="button"><i class='bx bx-plus me-0'></i> Agregar</button>
+                                  </div>
+                              </div>
+
+                        <?php  } ?> 
+
+                        <div class="row pt-3">
+                            <div class="col-sm-6">
+                                <div class="mb-2">
+
+                                    <style>
+                                        /* Estilo adicional para cambiar el color de fondo al pasar el ratón por encima de una fila */
+                                      
+                                         /* Color de fondo al pasar el ratón por encima de una fila */
+                                        #lista_avaluos tr:hover {
+                                            background-color: #ddd;
+                                        }
+                                    </style>
+                                    
+                                    <table class="table table-bordered table-hover " id="lista_avaluos">
+                                        <thead class="table-dark">
+                                            <tr>
+                                                <th width="20%">Fecha de Avalúo</th>
+                                                <th width="20%">Valor</th>
+                                                <th width="53%">Observación</th>
+                                                <th width="5%">Acción</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                           
+                                        </tbody>
+                                    </table>
+
+
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
                   </div>
               </div>              
             </div>
