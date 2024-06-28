@@ -231,7 +231,7 @@ class estudiantesM
                     INNER JOIN cat_grado cg ON est.sa_id_grado = cg.sa_gra_id
                     INNER JOIN cat_paralelo pr ON est.sa_id_paralelo = pr.sa_par_id
                     WHERE est.sa_est_estado = 1";
-            $sql .= ' and est.sa_id_representante = ' . $id;
+            $sql .= ' AND (est.sa_id_representante = ' . $id . ' OR est.sa_id_representante_2 =' . $id . ')';
             $sql .= " ORDER BY sa_est_id;";
             $datos = $this->db->datos($sql);
         } else {

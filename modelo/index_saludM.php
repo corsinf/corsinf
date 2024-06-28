@@ -133,10 +133,11 @@ class index_saludM
                     INNER JOIN pacientes pac ON f.sa_fice_pac_id = pac.sa_pac_id
                     
                     LEFT JOIN estudiantes est ON pac.sa_pac_id_comunidad = est.sa_est_id
-                    LEFT JOIN representantes rep ON est.sa_id_representante = rep.sa_rep_id
+                    LEFT JOIN representantes rep ON (est.sa_id_representante = rep.sa_rep_id OR est.sa_id_representante_2 = rep.sa_rep_id)
                     
                     WHERE pac.sa_pac_estado = 1 
-                    AND est.sa_id_representante = $id_representante
+                    AND (est.sa_id_representante = $id_representante OR est.sa_id_representante_2 = $id_representante)
+                    AND (rep.sa_rep_id = $id_representante)
                     AND sa_pac_tabla = 'estudiantes'
                     
                     GROUP BY 
