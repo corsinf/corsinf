@@ -563,7 +563,7 @@ class loginC
 		if($parametros['activeDir']==1)
 		{
 				$respuesta = $this->active->AutentificarUserActiveDir($parametros['email'], $parametros['pass'],$empresa);
-				print_r($respuesta);die();
+				// print_r($respuesta);die();
 				if($respuesta!='1')
 				{
 					return -4;
@@ -571,7 +571,7 @@ class loginC
 
 				if($parametros['primera_vez']==1)
 				{					
-					print_r($parametros);die();
+					// print_r($parametros);die();
 						$respuesta = $this->save_update_passActiveUsu($parametros);
 						$datos = $this->login->datos_login($parametros['email'],$this->cod_global->enciptar_clave($parametros['pass']),false,$parametros['tipo']);
 				}else
@@ -584,7 +584,9 @@ class loginC
 				}	
 		}else
 		{
+
 			$datos = $this->login->datos_login($parametros['email'],$this->cod_global->enciptar_clave($parametros['pass']),false,$parametros['tipo']);
+			// print_r($datos);die();
 			if(count($datos)==0)
 			{
 				 return -1;
@@ -593,6 +595,8 @@ class loginC
 			// if($cambiar){
 			// 	$datos = $this->login->datos_login($parametros['email'],$parametros['pass']);
 			// }
+
+		// print_r($datos);die();
 			if(count($datos)>0)
 			{					
 	 			// print_r($parametros);die();
@@ -696,6 +700,8 @@ class loginC
 	function iniciar_sesion($parametros,$cambiar=false)
 	{		
 
+		// print_r($parametros);die();
+
 		$empresa = $this->login->lista_empresa($parametros['empresa']);
 		$usuario_validado ='';
 		switch ($parametros['normal']) {
@@ -726,6 +732,11 @@ class loginC
 
 		//print_r($usuario_validado);die();
 
+		if($usuario_validado == -1)
+		{
+			return -1;
+		}
+
 	if(count($empresa)>0)
 		{
 				$_SESSION["INICIO"]['ID_EMPRESA'] = $empresa[0]['Id_empresa'];
@@ -743,9 +754,10 @@ class loginC
 				$_SESSION["INICIO"]['USER_API_HIKVISION'] = $empresa[0]['user_api_hikvision'];
 				$_SESSION["INICIO"]['TCP_PUERTO_HIKVISION'] = $empresa[0]['tcp_puerto_hikvision'];
 				$_SESSION["INICIO"]['PUERTO_API_HIKVISION'] = $empresa[0]['puerto_api_hikvision'];
+				return 1;
 		}
 
-		return 1;
+
 
 
 		/*
@@ -1103,7 +1115,7 @@ class loginC
 
 	function modulos_sistema()
 	{		
-		
+		// print_r($_SESSION['INICIO']);die();
 		$mod = '';
 		$datos = $this->login->modulos_sistema();
 		$num_mod = count($datos);
