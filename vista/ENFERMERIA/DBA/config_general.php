@@ -396,6 +396,86 @@
             }
         });
     }
+
+    function sincronizar_docentes() {
+        Swal.fire({
+            title: 'Por favor, espere',
+            text: 'Procesando la solicitud...',
+            allowOutsideClick: false,
+            onOpen: () => {
+                Swal.showLoading();
+            }
+        });
+
+        $.ajax({
+            url: '../controlador/cat_configuracionGC.php?idukay_docentes=true',
+            type: 'post',
+            dataType: 'json',
+            success: function(response) {
+                console.log(response);
+                if (response == 1) {
+                    Swal.close();
+                    Swal.fire('', 'Copia masiva exitosa.', 'success');
+                    $('#pnl_idukay').html('<p>Copia masiva exitosa.</p>');
+                } else if (response == -10) {
+                    Swal.close();
+                    $('#pnl_idukay').html('<p>Error al subir datos a la Base de Datos.</p>');
+                    Swal.fire('', 'Error al subir datos a la Base de Datos.', 'error');
+                } else if (response == -11) {
+                    Swal.close();
+                    $('#pnl_idukay').html('<p>Error al conectarse con la API de Idukay.</p>');
+                    Swal.fire('', 'Error al conectarse con la API de Idukay.', 'error');
+                }
+
+            },
+            error: function() {
+                // Manejo de errores
+                $('#pnl_idukay').html('<p>Error al cargar los configs.</p>');
+            }
+        });
+    }
+
+    function sincronizar_horarios_docentes() {
+        Swal.fire({
+            title: 'Por favor, espere',
+            text: 'Procesando la solicitud...',
+            allowOutsideClick: false,
+            onOpen: () => {
+                Swal.showLoading();
+            }
+        });
+
+        $.ajax({
+            url: '../controlador/cat_configuracionGC.php?idukay_horario_docentes=true',
+            type: 'post',
+            dataType: 'json',
+            success: function(response) {
+                console.log(response);
+                if (response == 1) {
+                    Swal.close();
+                    Swal.fire('', 'Copia masiva exitosa.', 'success');
+                    $('#pnl_idukay').html('<p>Copia masiva exitosa.</p>');
+                } else if (response == -10) {
+                    Swal.close();
+                    $('#pnl_idukay').html('<p>Error al subir datos a la Base de Datos.</p>');
+                    Swal.fire('', 'Error al subir datos a la Base de Datos.', 'error');
+                } else if (response == -11) {
+                    Swal.close();
+                    $('#pnl_idukay').html('<p>Error al conectarse con la API de Idukay.</p>');
+                    Swal.fire('', 'Error al conectarse con la API de Idukay.', 'error');
+                }
+
+            },
+            error: function() {
+                // Manejo de errores
+                $('#pnl_idukay').html('<p>Error al cargar los configs.</p>');
+            }
+        });
+    }
+
+    
+
+
 </script>
 
 <div class="page-wrapper">
@@ -438,7 +518,7 @@
 
                         <div class="content">
                             <!-- Content Header (Page header) -->
-                            <h6>Configuración General</h6>
+                            <h5>Configuración General</h5>
                             <br>
                             <div class="row" id="pnl_config_general">
 
@@ -448,17 +528,26 @@
                             <br>
                             <hr>
 
-                            <h6>Configuración Idukay</h6>
-                            <button class="btn btn-primary btn-sm" onclick="sincronizar_estudiantes()" type="button"><i class='bx bx-sync'></i> Sincronizar Estudiantes Idukay</button>
-
-                            <button class="btn btn-primary btn-sm" onclick="sincronizar_representantes()" type="button"><i class='bx bx-sync'></i> Sincronizar Representantes Idukay</button>
-
-                            <button class="btn btn-primary btn-sm" onclick="sincronizar_idukay()" type="button"><i class='bx bx-sync'></i> Sincronizar con Idukay</button>
-
-
+                            <h5>Configuración Idukay</h5>
                             <div class="row" id="pnl_idukay">
 
                             </div>
+
+                            <h6>Estudiantes - Representantes</h6>
+                            <button class="btn btn-primary btn-sm m-1" onclick="sincronizar_estudiantes()" type="button"><i class='bx bx-sync'></i> Sincronizar Estudiantes Idukay</button>
+
+                            <button class="btn btn-primary btn-sm m-1" onclick="sincronizar_representantes()" type="button"><i class='bx bx-sync'></i> Sincronizar Representantes Idukay</button>
+
+                            <button class="btn btn-primary btn-sm m-1" onclick="sincronizar_idukay()" type="button"><i class='bx bx-sync'></i> Sincronizar con Idukay Estudiantes y Representantes</button>
+
+
+                            <h6 class="pt-3">Docentes</h6>
+                            <button class="btn btn-primary btn-sm m-1" onclick="sincronizar_docentes()" type="button"><i class='bx bx-sync'></i> Sincronizar Docentes Idukay</button>
+                            <button class="btn btn-primary btn-sm m-1" onclick="sincronizar_horarios_docentes()" type="button"><i class='bx bx-sync'></i> Sincronizar Horarios Docentes Idukay</button>
+
+                            
+
+                            
 
                             <br><br>
 

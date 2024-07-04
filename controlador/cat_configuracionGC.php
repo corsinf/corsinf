@@ -40,13 +40,22 @@ if (isset($_GET['listar_idukay_estudiantes'])) {
     echo json_encode($controlador->consultaIdukayEstudiantes_listar());
 }
 
+if (isset($_GET['idukay_docentes'])) {
+    echo json_encode($controlador->cargarDocentesIdukay());
+}
+
+if (isset($_GET['idukay_horario_docentes'])) {
+    echo json_encode($controlador->cargarHorariosDocentesIdukay());
+}
+
+
+
 class cat_configuracionGC
 {
     private $modelo;
     private $Idukay_API;
     private $estudiantes;
     private $cod_global;
-
     private $url = 'https://staging.idukay.net/api';
     private $barear_Token = 'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ3b3JraW5nX3NjaG9vbCI6IjVjZDM3OTY1MDQwOTJlYTUwNDgxMmZmOCIsInRpbWVfem9uZSI6Ii0wNTowMCIsImlhdCI6MTY5NDY5OTg4OX0.Ya0sIq6xQ-XNkevoJuFnGqRrZvdVHQ-Oz7OiwfaB7lOqrbkPErJdOETZ_ZPyb_BszA2kcaztGKakw5U5izAxO_15k7OejZ_L4EsQp3F4_EpRMEQooTznquuxxWelxsSvz8Fkv9RmGvoNLNbB4Sllt9X_if4PCXZ0zaJWRfw2MD1uASbtFC7JjkjZYXzXNqzXyoZkm-OFKEtctfwHUHNPWYootRdzpDZ0zBWWTMP4JG7XZlEouusoxgy-0lVzq-n0GmD6EgGWzNa1Jkl6c6DUBkzRdxaLTn1jZX6vvqM00-7x_Su6k_mbs-Zf1loUvKKzx3qInXxUOhcR9kLKS6XnDg';
     function __construct()
@@ -91,6 +100,7 @@ class cat_configuracionGC
 
     //////////////////////////////////////////////////////////////////////////////////////////////////
 
+    //Sincroniza estudiantes y representantes
     function sincronizarIdukay()
     {
         $estudiantes = $this->cargarEstudiantesIdukay();
@@ -398,6 +408,278 @@ class cat_configuracionGC
 
             $query = $this->estudiantes->ponerRepresentantesEstudiantes();
             return $query;
+        } else {
+            return -11;
+        }
+    }
+
+    function cargarDocentesIdukay()
+    {
+        $data = $this->Idukay_API->lista_Docentes();
+
+        if ($data != -11) {
+            $parametros = [];
+            foreach ($data['response'] as $item) {
+
+                $sa_est_sexo = $item['user']['gender'] ?? '';
+
+                if ($sa_est_sexo === 'M') {
+                    $sa_est_sexo = 'Masculino';
+                } elseif ($sa_est_sexo === 'F') {
+                    $sa_est_sexo = 'Femenino';
+                }
+
+                $parametros[] = [
+                    'sa_doc_primer_apellido' => $item['user']['surname'] ?? '',
+                    'sa_doc_segundo_apellido' => $item['user']['second_surname'] ?? '',
+                    'sa_doc_primer_nombre' => $item['user']['name'] ?? '',
+                    'sa_doc_segundo_nombre' => $item['user']['second_name'] ?? '',
+                    'sa_doc_cedula' => $item['user']['id_card'] ?? '',
+                    'sa_doc_sexo' => $sa_est_sexo,
+                    'sa_doc_fecha_nacimiento' => $item['user']['birthday'] ?? '',
+                    'sa_doc_correo' => $item['user']['email'] ?? '',
+                    'sa_doc_telefono_1' => '.',
+                    'sa_doc_telefono_2' => '.',
+                    'sa_doc_direccion' => '.',
+
+                    'sa_doc_id_idukay' => $item['_id'],
+                ];
+            }
+
+            //print_r($parametros); die();
+
+            $datos = array();
+            foreach ($parametros as $parametro) {
+
+                $fecha_nacimiento = '1900-01-12';
+                if (isset($parametro['sa_doc_fecha_nacimiento']) && $parametro['sa_doc_fecha_nacimiento'] != '') {
+                    $timestamp = $parametro['sa_doc_fecha_nacimiento'];
+                    $fecha_convertida = date('Y-m-d', $timestamp);
+
+                    // Verificar si la fecha convertida es válida
+                    if (preg_match('/^\d{4}-\d{2}-\d{2}$/', $fecha_convertida) && strtotime($fecha_convertida) !== false) {
+                        $fecha_nacimiento = $fecha_convertida;
+                    }
+                }
+
+                $datos[] = array(
+                    array('campo' => 'sa_doc_primer_apellido', 'dato' => $parametro['sa_doc_primer_apellido']),
+                    array('campo' => 'sa_doc_segundo_apellido', 'dato' => $parametro['sa_doc_segundo_apellido']),
+                    array('campo' => 'sa_doc_primer_nombre', 'dato' => $parametro['sa_doc_primer_nombre']),
+                    array('campo' => 'sa_doc_segundo_nombre', 'dato' => $parametro['sa_doc_segundo_nombre']),
+                    array('campo' => 'sa_doc_cedula', 'dato' => $parametro['sa_doc_cedula']),
+                    array('campo' => 'sa_doc_sexo', 'dato' => $parametro['sa_doc_sexo']),
+                    array('campo' => 'sa_doc_fecha_nacimiento', 'dato' => $fecha_nacimiento),
+                    array('campo' => 'sa_doc_correo', 'dato' => $parametro['sa_doc_correo']),
+                    array('campo' => 'sa_doc_telefono_1', 'dato' => $parametro['sa_doc_telefono_1']),
+                    array('campo' => 'sa_doc_telefono_2', 'dato' => $parametro['sa_doc_telefono_2']),
+                    array('campo' => 'sa_doc_direccion', 'dato' => $parametro['sa_doc_direccion']),
+
+                    //array('campo' => 'PASS', 'dato' => $this->cod_global->enciptar_clave($parametro['sa_doc_cedula'])),
+
+                    array('campo' => 'sa_doc_id_idukay', 'dato' => $parametro['sa_doc_id_idukay']),
+                );
+
+                //break;
+            }
+
+            //print_r($datos); die();
+
+            // Dividir los datos en grupos de 300
+            $grupos = array_chunk($datos, 150);
+
+            //print_r($grupos[1]); die();
+
+            // Insertar cada grupo en la base de datos
+            $contador = 0;
+            //$sentenciaSql_global = '';
+            $contador_s = 0;
+
+            foreach ($grupos as $grupo) {
+                $sql = array();
+
+                foreach ($grupo as $dato) {
+                    $sql[] = array($this->inserts('docentes', $dato));
+                }
+
+                // Construir la sentencia SQL para el grupo actual
+                $sentenciaSql = '';
+                foreach ($sql as $dato) {
+                    foreach ($dato as $consulta) {
+                        $sentenciaSql .= $consulta . " ";
+                        //$sentenciaSql_global .= $consulta . "-- " . $contador_s . "<br/> ";
+
+                        //echo $consulta . "-- " . $contador_s . "<br/> ";
+                        $contador_s++;
+                    }
+                }
+
+                // Ejecutar la inserción del grupo actual 1; //
+                $resultado = $this->estudiantes->cargaMasivaIdukay($sentenciaSql);
+
+                // Verificar el resultado
+                if ($resultado !== 1) {
+                    // Manejar el error o detener el proceso si falla la inserción
+                    //echo "Error al insertar grupo de datos en la base de datos.";
+                    return -10;
+                    break;
+                } else {
+                    $contador++;
+                }
+            }
+
+            //$query = $this->estudiantes->ponerRepresentantesEstudiantes();
+            //return $query;
+
+            //print_r($sentenciaSql_global); //die();
+
+
+            return 1;
+        } else {
+            return -11;
+        }
+    }
+
+    function cargarHorariosDocentesIdukay()
+    {
+        $data = $this->Idukay_API->lista_HorariosDocentes();
+
+        if ($data != -11) {
+            $parametros = [];
+            foreach ($data['response'] as $item) {
+
+                $string = $item['reference_name'];
+
+                // Separar el string por la coma
+                $partes = explode(',', $string);
+
+                // Eliminar espacios en blanco de los elementos del array
+                $partes = array_map('trim', $partes);
+
+                // Tomar las palabras del primer fragmento
+                $primer_fragmento = $partes[0];
+                $primer_fragmento_partes = explode(' ', $primer_fragmento);
+
+                // Tomar el último dígito del primer fragmento
+                $ultimo_digito_primer_fragmento = array_pop($primer_fragmento_partes);
+
+                // Reunir el primer fragmento sin el último dígito
+                $primer_fragmento_sin_ultimo_digito = implode(' ', $primer_fragmento_partes);
+
+                if (is_array($partes) && count($partes) > 1) {
+                    $seccion = $partes[1];
+                } else {
+                    $seccion = ''; // Default value if the index 1 does not exist
+                }
+
+                $grado = $primer_fragmento_sin_ultimo_digito;
+                $paralelo = $ultimo_digito_primer_fragmento;
+
+                foreach ($item['schedule'] as $clases) {
+
+                    $dia_clases = '';
+                    if ($clases['day'] == 0) {
+                        $dia_clases = 'lunes';
+                    } else if ($clases['day'] == 1) {
+                        $dia_clases = 'martes';
+                    } else if ($clases['day'] == 2) {
+                        $dia_clases = 'miercoles';
+                    } else if ($clases['day'] == 3) {
+                        $dia_clases = 'jueves';
+                    } else if ($clases['day'] == 4) {
+                        $dia_clases = 'viernes';
+                    }
+
+                    $parametros[] = [
+                        'ac_horarioC_inicio' => $clases['start'] ?? '',
+                        'ac_horarioC_fin' => $clases['end'] ?? '',
+                        'ac_horarioC_dia' => $dia_clases ?? '',
+
+                        'ac_horarioC_materia' => $item['name'] ?? '',
+
+                        'id_docente_idukay' => $item['teacher'] ?? '',
+                        'seccion_idukay' => $seccion ?? '',
+                        'grado_idukay' => $grado ?? '',
+                        'paralelo_idukay' => $paralelo ?? '',
+                    ];
+                }
+            }
+
+            // print_r($parametros);
+            // die();
+
+            $datos = array();
+            foreach ($parametros as $parametro) {
+
+                $datos[] = array(
+                    array('campo' => 'ac_horarioC_inicio', 'dato' => $parametro['ac_horarioC_inicio']),
+                    array('campo' => 'ac_horarioC_fin', 'dato' => $parametro['ac_horarioC_fin']),
+                    array('campo' => 'ac_horarioC_dia', 'dato' => $parametro['ac_horarioC_dia']),
+                    array('campo' => 'ac_horarioC_materia', 'dato' => $parametro['ac_horarioC_materia']),
+                    array('campo' => 'id_docente_idukay', 'dato' => $parametro['id_docente_idukay']),
+                    array('campo' => 'seccion_idukay', 'dato' => $parametro['seccion_idukay']),
+                    array('campo' => 'grado_idukay', 'dato' => $parametro['grado_idukay']),
+                    array('campo' => 'paralelo_idukay', 'dato' => $parametro['paralelo_idukay']),
+                );
+
+                //break;
+            }
+
+            //print_r($datos); die();
+
+            // Dividir los datos en grupos de 300
+            $grupos = array_chunk($datos, 150);
+
+            //print_r($grupos[1]); die();
+
+            // Insertar cada grupo en la base de datos
+            $contador = 0;
+            //$sentenciaSql_global = '';
+            $contador_s = 0;
+
+            foreach ($grupos as $grupo) {
+                $sql = array();
+
+                foreach ($grupo as $dato) {
+                    $sql[] = array($this->inserts('horario_clases', $dato));
+                }
+
+                // Construir la sentencia SQL para el grupo actual
+                $sentenciaSql = '';
+                foreach ($sql as $dato) {
+                    foreach ($dato as $consulta) {
+                        $sentenciaSql .= $consulta . " ";
+                        //$sentenciaSql_global .= $consulta . "-- " . $contador_s . "<br/> ";
+
+                        //echo $consulta . "-- " . $contador_s . "<br/> ";
+                        $contador_s++;
+                    }
+                }
+
+                // Ejecutar la inserción del grupo actual 1; //
+                $resultado = $this->estudiantes->cargaMasivaIdukay($sentenciaSql);
+
+                // Verificar el resultado
+                if ($resultado !== 1) {
+                    // Manejar el error o detener el proceso si falla la inserción
+                    //echo "Error al insertar grupo de datos en la base de datos.";
+                    return -10;
+                    break;
+                } else {
+                    $contador++;
+                }
+            }
+
+            //Tabla horario_clases
+            $query = $this->modelo->ponerIdDocentes();
+            $query = $this->modelo->ponerIdCursosDocentes();
+            //Tabla docente_paralelo
+            $query = $this->modelo->guardaDocenteParalelo();
+            return $query;
+
+            //print_r($sentenciaSql_global); //die(); 
+
+            //return 1;
         } else {
             return -11;
         }
