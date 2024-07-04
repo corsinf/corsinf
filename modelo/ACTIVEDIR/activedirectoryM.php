@@ -157,6 +157,14 @@ class activeDirM
 		// print_r($sql);die();
 		return $this->db->datos($sql,1);
 	}
+
+	function consultar_no_concurente_Tabla($tabla,$campo,$valor)
+	{
+		$sql = "SELECT * FROM ".$tabla." WHERE $campo = '".$valor."' ";	
+		// print_r($sql);
+		// die();
+		return $this->db->datos($sql);
+	}
 	
 }
 

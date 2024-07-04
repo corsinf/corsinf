@@ -408,6 +408,32 @@ $activeRep = 0;
    {
       $('#myModal_tipo_usuario').modal('show');
       $('#id_form').val(Fromgrupo);
+      buscar_claves_correo(Fromgrupo)
+   }
+
+   function buscar_claves_correo(Fromgrupo)
+   {
+     Fromgrupo = $('#id_form').val();
+      grupo = Fromgrupo.replace('form_',"");
+      var checkboxes = document.querySelectorAll('#'+Fromgrupo+' input[type="checkbox"]');
+      var checkboxes_checkeados = [];
+      var contador = 0;
+      checkboxes.forEach(function(checkbox) {
+          if (checkbox.checked) {
+              checkboxes_checkeados.push(checkbox.value);
+              contador+1;
+          }
+      });
+
+      $.ajax({
+      data:  {parametros:checkboxes_checkeados},
+      url:   '../controlador/ACTIVEDIR/activedirectoryC.php?buscar_claves_correo=true',
+      type:  'post',
+      dataType: 'json',
+      success:  function (response) { 
+         $('#tbl_body_claves').html(response)
+       }       
+      });
    }
 
    function Asignar_usuarios()
@@ -429,8 +455,20 @@ $activeRep = 0;
           }
       });
 
+
+      var checkboxes = document.querySelectorAll('#form_claves input[type="password"]');
+      checkboxes.forEach(function(checkbox) {
+        // console.log(checkbox)
+          if (checkbox.value=='') {
+            Swal.fire("","Ingrese todas las claves",'error')
+            return false;
+          }
+      });
+
+    datos = $('#form_claves').serialize();
+
      var parametros = {
-        'usuarios':checkboxes_checkeados,
+        'usuarios':datos,
         'tipo':$('#ddl_tipo_usuario').val(),
         'grupo':grupo,
      }
@@ -480,30 +518,26 @@ $activeRep = 0;
         <!--end breadcrumb-->
         <hr>
         <div class="card">
-          <div class="card-body">
-              <div id="example2_wrapper" class="dataTables_wrapper dt-bootstrap5">
-                <div class="row">
-                  <div class="col-sm-12 col-md-6">
-                    <div class="dt-buttons btn-group"> 
-                      <a class="btn btn-outline-primary buttons-copy btn-sm" href="inicio.php?acc=detalle_usuario">Nuevo</a>     
-                      <button class="btn btn-outline-primary buttons-copy btn-sm" style="display:none;"  id="btn_active" onclick="abrir_modal()" type="button">Nuevo desde Active Directory</button> 
-                      <?php //print_r($_SESSION['INICIO']); ?>
-                    </div>
-                  </div>
-                  <div class="col-sm-12 col-md-6">
-                    <div class="row mb-3">
-                      <div class="col-sm-3 text-end">
-                        <h6 class="mb-0">Buscar</h6>
-                      </div>
-                      <div class="col-sm-9 text-secondary">
-                        <input type="text" name="" id="txt_query" onkeyup="buscar_usuario()" class="form-control form-control-sm" placeholder="Buscar usuario por CI o Nombre">
-                      </div>
-                    </div>                   
+            <div class="row card-body">
+              <div class="col-sm-12 col-md-6">
+                  <div class="dt-buttons btn-group"> 
+                    <a class="btn btn-outline-primary buttons-copy btn-sm" href="inicio.php?acc=detalle_usuario">Nuevo</a>     
+                    <button class="btn btn-outline-primary buttons-copy btn-sm" style="display:none;"  id="btn_active" onclick="abrir_modal()" type="button">Nuevo desde Active Directory</button> 
+                    <?php //print_r($_SESSION['INICIO']); ?>
                   </div>
                 </div>
-              </div>
-          </div>
-        </div>
+               <div class="col-sm-12 col-md-6">
+                  <div class="row">
+                    <div class="col-sm-3 text-end">
+                      <h6 class="mb-0">Buscar</h6>
+                    </div>
+                    <div class="col-sm-9 text-secondary">
+                      <input type="text" name="" id="txt_query" onkeyup="buscar_usuario()" class="form-control form-control-sm" placeholder="Buscar usuario por CI o Nombre" autocomplete="off">
+                    </div>
+                  </div>                   
+                </div>
+            </div>  
+        </div>       
 
         <div class="row row-cols-1 row-cols-lg-2 row-cols-xl-4" id="tbl_datos">
 
@@ -530,19 +564,37 @@ $activeRep = 0;
 </div>
 
 <div class="modal fade" id="myModal_tipo_usuario" tabindex="-1" aria-modal="true" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
-    <div class="modal-dialog modal-dialog-centered  modal-sm">
+    <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
         <div class="modal-header">
           <h5>Tipo de usuario</h5>
         </div>
         <div class="modal-body">
-            <div class="">
-              <input type="hidden" id="id_form" name="id_fomr">
-              <select class="form-select" id="ddl_tipo_usuario" name="ddl_tipo_usuario">
-                <option value="">Seleccione el tipo de usuario</option>
-              </select>
+            <div class="row">
+              <div class="col-sm-12">
+                 <input type="hidden" id="id_form" name="id_fomr">
+                  <select class="form-select" id="ddl_tipo_usuario" name="ddl_tipo_usuario[]" multiple="multiple">
+                    <option value="">Seleccione el tipo de usuario</option>
+                  </select>             
+              </div>
+              <div class="col-sm-12">
+                <form id="form_claves">
+                  <table class="table table-hover">
+                     <thead>
+                       <th>Correo</th>
+                       <th>info</th>
+                       <th>Clave</th>
+                     </thead>
+                     <tbody id="tbl_body_claves">
+                       
+                     </tbody>
+                  </table>              
+                </form>  
+              </div>
+               
             </div>
-          </div> 
+            
+        </div> 
         <div class="modal-footer">        
           <button type="button" class="btn btn-primary btn-sm"  onclick="Asignar_usuarios()">Asignar</button>    
           <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cerrar</button> 
@@ -550,6 +602,20 @@ $activeRep = 0;
       </div>
     </div>
 </div>
+
+<script type="text/javascript">
+   document.addEventListener('DOMContentLoaded', function () {
+            var myModal = document.getElementById('myModal_tipo_usuario');
+
+           myModal.addEventListener('shown.bs.modal', function () {
+                var popoverTriggerList = [].slice.call(myModal.querySelectorAll('[data-bs-toggle="popover"]'));
+                var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
+                    return new bootstrap.Popover(popoverTriggerEl);
+                });
+            });
+        });
+
+</script>
 
 
 <?php //include('../cabeceras/footer.php'); ?>

@@ -477,7 +477,9 @@ function checkKey(e) {
       <div class="page-content">
         <!--breadcrumb-->
         <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
-          <div class="breadcrumb-title pe-3" _msthash="975975" _msttexthash="292578">Perfil de usuario</div>
+          <div class="breadcrumb-title pe-3" _msthash="975975" _msttexthash="292578">
+              <a href="inicio.php?acc=usuarios" class="btn btn-outline-secondary btn-sm mb-1"><i class="bx bx-arrow-back"></i> Regresar</a>
+          </div>
           <div class="ps-3">
             <nav aria-label="miga de pan" _mstaria-label="133588">
               <ol class="breadcrumb mb-0 p-0">
@@ -489,6 +491,14 @@ function checkKey(e) {
           </div>          
         </div>
         <hr>        
+       <!--  <div class="row">
+          <div class="col-sm-12">
+            <div class="card">
+              <div class="card-body">
+              </div>
+            </div>
+          </div>
+        </div> -->
         <!--end breadcrumb-->
         <div class="container">
           <div class="main-body">

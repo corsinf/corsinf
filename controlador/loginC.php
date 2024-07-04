@@ -560,6 +560,7 @@ class loginC
 		$datos = array();
 		$empresa = $this->login->lista_empresa($parametros['empresa']);
 		// print_r($empresa);die();
+		$parametros['activeDir'] = 0; // se setea este valor por que ya no se v aa validar por activedirectory
 		if($parametros['activeDir']==1)
 		{
 				$respuesta = $this->active->AutentificarUserActiveDir($parametros['email'], $parametros['pass'],$empresa);
@@ -584,7 +585,6 @@ class loginC
 				}	
 		}else
 		{
-
 			$datos = $this->login->datos_login($parametros['email'],$this->cod_global->enciptar_clave($parametros['pass']),false,$parametros['tipo']);
 			// print_r($datos);die();
 			if(count($datos)==0)

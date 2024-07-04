@@ -19,6 +19,11 @@ if(isset($_GET['Asignar_usuarios']))
 	$parametros = $_POST['parametros'];
 	echo json_encode($controlado->Asignar_usuarios($parametros));
 }
+if(isset($_GET['buscar_claves_correo']))
+{
+	$parametros = $_POST['parametros'];
+	echo json_encode($controlado->buscar_claves_correo($parametros));
+}
 
 /**
  * 
@@ -193,7 +198,7 @@ class activeDirC
 	                    		{
 
 		                    		// print_r($tabla_enco); die();
-	                    			$tr.='<li><label>'.$value2['nombre'].'/'.$value2['email'].' </label><span class="badge bg-success">Asignado / '.$tabla_enco.'</span></li>';
+	                    			$tr.='<li><label onclick="calcular_usu(\'form_'.$value['id'].'\')"><input type="checkbox" value="'.$value2['nombre'].'-'.$value2['email'].'" /> '.$value2['nombre'].'/'.$value2['email'].' </label><span class="badge bg-success">Asignado / '.$tabla_enco.'</span></li>';
 	                    		}
 	                    	}else
 	                    	{
@@ -338,6 +343,7 @@ class activeDirC
 
 	function Asignar_usuarios($parametros)
 	{
+		print_r($parametros);die();
 		$msg = '';
 		$result = 1;
 		$tipo_usuario = $parametros['tipo'];
@@ -598,6 +604,50 @@ class activeDirC
 			return -4;
 		}
 		
+	}
+
+	function buscar_claves_correo($parametros)
+	{
+		$no_concurentes = $this->modelo->buscar_no_concurente_ligado();
+		$tr = '';
+		foreach ($parametros as $key => $value) {
+			$data = explode('-',$value);
+			$correo = $data[1];
+			$info = '';
+			$tiene_pass = 0;
+			$pass_defaul = '';
+			$pass = '';
+				
+			foreach ($no_concurentes as $key2 => $value2) {
+				
+				$datos = $this->modelo->consultar_no_concurente_Tabla($value2['Tabla'],$value2['Campo_usuario'],$correo);
+				if(count($datos)>0)
+				{
+					$pass = $datos[0][$value2['Campo_pass']];
+					$texto = "Clave de ".$value2['Tabla']." : ".$pass;
+					$tiene_pass = 1; 
+					// $lista[] = $datos[0][$value2['Campo_pass']];
+				}
+			}
+			if($tiene_pass==1)
+			{
+				$info.='<div class="col">
+							<button type="button" class="btn btn-light px-0" data-bs-toggle="popover" data-bs-placement="top" data-bs-content="'.$texto.'" aria-describedby="popover846577"><i class="bx bx-info-circle"></i>
+							</button>
+						</div>';
+			    $pass_defaul = $pass;
+			}
+			$tr.='<tr><td>'.$correo.'</td>
+					  <td>
+					  	'.$info.'	
+					  </td>
+					  <td><input type="password" name="txt_clave_'.$key.'" id="txt_clave_'.$key.'" value="'.$pass_defaul.'" class="form-control form-control-sm" autocomplete="new-password">
+					  	  <input type="hidden" name="txt_usuAD_'.$key.'" id="txt_usuAD_'.$key.'" value="'.$value.'" class="form-control form-control-sm" autocomplete="new-password">
+					  </td>';
+
+		}
+
+		return $tr;
 	}
 }
 

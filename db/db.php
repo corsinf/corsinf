@@ -344,15 +344,17 @@ class db
 		// print_r($sql);		
 		$this->parametros_conexion($master);
 		$conn = $this->conexion();
-		$stmt = sqlsrv_query($conn, $sql);
-		if (!$stmt) {
-			$error = sqlsrv_errors();
-			// print_r($error);die();
-			return $error[0]['code'];
+		// print_r("sqlsrv:Server=".$this->servidor .''. $this->puerto.";Database=".$this->database.' '.$this->usuario.' '.$this->password);die();
+		try {
+			$stmt = $conn->prepare($sql);
+    		$stmt->execute();    		
+		    $conn=null;
+			return 1;			
+		} catch (Exception $e) {
+			$errorInfo = $conn->errorInfo();
+            $errorCode = $errorInfo[1]; // Código de error específico de la base de datos
+            return $errorCode;
 		}
-
-		sqlsrv_close($conn);
-		return 1;
 	}
 
 	function ejecutar_procesos_almacenados($sql, $parametros = false, $retorna = false, $master = false)
