@@ -83,7 +83,7 @@
 
            }else if(response == -1)
            {
-              Swal.fire( '','Empresa Inexistente','info');
+              Swal.fire( '','Contraseña incorrecta','info');
 
            }else if(response == -3)
            {

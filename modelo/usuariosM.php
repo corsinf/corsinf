@@ -310,8 +310,7 @@ class usuariosM
 	}
 	function eliminar_tipo($id)
 	{
-		$sql = " DELETE FROM USUARIO_TIPO_USUARIO WHERE ID_USUARIO = '".$id."' AND ID_EMPRESA = '".$_SESSION['INICIO']['ID_EMPRESA']."'; 
-		DELETE FROM ACCESOS_EMPRESA WHERE id_usuario='".$id."' AND Id_Empresa = '".$_SESSION['INICIO']['ID_EMPRESA']."'";
+		$sql = "DELETE FROM ACCESOS_EMPRESA WHERE id_usuario='".$id."' AND Id_Empresa = '".$_SESSION['INICIO']['ID_EMPRESA']."'";
 		// print_r($sql);die();
 		$datos = $this->db->sql_string_cod_error($sql,1);
 		if($datos==1)
