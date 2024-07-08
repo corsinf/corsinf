@@ -148,6 +148,7 @@ function empresa()
                 $("#txt_direccion").val(response[0].Direccion)
                 $("#txt_telefono").val(response[0].Telefono)
                 $("#txt_Email").val(response[0].Email)
+                $("#txt_titulo_pesta").val(response[0].titulo_pestania)
                 $("#txt_host").val(response[0].smtp_host)
                 $("#txt_usuario").val(response[0].smtp_usuario)
                 $("#txt_pass").val(response[0].smtp_pass)
@@ -261,6 +262,7 @@ Swal.fire({
         'dir':$("#txt_direccion").val(),
         'tel':$("#txt_telefono").val(),
         'ema':$("#txt_Email").val(),
+        'titPes':$("#txt_titulo_pesta").val(),
         'host':$("#txt_host").val(),
         'usu':$("#txt_usuario").val(),
         'pass':$("#txt_pass").val(),

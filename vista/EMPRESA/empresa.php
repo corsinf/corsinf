@@ -87,11 +87,17 @@
 								       	   			<div class="col-sm-12">
 								       	   				<b>Direccion</b>
 								       	   				<textarea class="form-control-sm form-control" style="resize:none" cols="3" name="txt_direccion" id="txt_direccion"></textarea>
-								       	   			</div>								       	   			
+								       	   			</div>	
+													
+													<div class="col-sm-6">
+								       	   				<b>Título de la Pestaña</b>
+								       	   				<input type="text" name="txt_titulo_pesta" id="txt_titulo_pesta" class="form-control form-control-sm">
+								       	   			</div>	
 								       	   		</div>
 								       	   		
 								       	   		
 								       	   	</div>
+											
 								       	   	<div class="col-sm-4">        	   		
 								       	   		<form enctype="multipart/form-data" id="form_img" method="post" class="col-sm-12">
 								                 <div class="">
@@ -103,7 +109,7 @@
 								           		</form>   
 								       	   	</div>
 								       </div>
-								       <div class="row">
+								       <div class="row pt-5">
 									       	<div class="col-sm-6">
 						       	   				<h6 class="mb-0 text-uppercase">Base de datos</h6>
 						       	   				<hr>

@@ -19,7 +19,7 @@
 	<link href="assets/css/bootstrap-extended.css" rel="stylesheet">
 	<link href="assets/css/app.css" rel="stylesheet">
 	<link href="assets/css/icons.css" rel="stylesheet">
-	<title>Activos Fijos| PUCE</title>
+	<title>APUDATA</title>
 	<script src="js/sweetalert2.all.min.js"></script>
   
 	<script type="text/javascript">	

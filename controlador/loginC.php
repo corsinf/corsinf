@@ -754,6 +754,8 @@ class loginC
 				$_SESSION["INICIO"]['USER_API_HIKVISION'] = $empresa[0]['user_api_hikvision'];
 				$_SESSION["INICIO"]['TCP_PUERTO_HIKVISION'] = $empresa[0]['tcp_puerto_hikvision'];
 				$_SESSION["INICIO"]['PUERTO_API_HIKVISION'] = $empresa[0]['puerto_api_hikvision'];
+				$_SESSION["INICIO"]['ACERCA_DE'] = $empresa[0]['acerca_de'];
+				$_SESSION["INICIO"]['TITULO_PESTANIA'] = $empresa[0]['titulo_pestania'];
 				return 1;
 		}
 
@@ -836,6 +838,8 @@ class loginC
 					$_SESSION["INICIO"]['USER_API_HIKVISION'] = $empresa[0]['user_api_hikvision'];
 					$_SESSION["INICIO"]['TCP_PUERTO_HIKVISION'] = $empresa[0]['tcp_puerto_hikvision'];
 					$_SESSION["INICIO"]['PUERTO_API_HIKVISION'] = $empresa[0]['puerto_api_hikvision'];
+					$_SESSION["INICIO"]['ACERCA_DE'] = $empresa[0]['acerca_de'];
+					$_SESSION["INICIO"]['TITULO_PESTANIA'] = $empresa[0]['titulo_pestania'];
 			}
 
 	 	// print_r($parametros);die();
