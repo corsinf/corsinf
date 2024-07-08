@@ -20,19 +20,7 @@
 	    </div>
 	  </div>
 	</div>
-	<div class="modal fade" id="myModal_acerca_de" tabindex="-1" aria-modal="true" role="dialog">
-	  <div class="modal-dialog modal-dialog-centered">
-	    <div class="modal-content">
-	      <div class="modal-header">
-	      </div>
-	      <div class="modal-body">
-	         <div class="text-center"><img src="../img/de_sistema/acerca_de.jpeg" style="width: 100%;"></div>         
-	      </div>
-	      <div class="modal-footer">        
-	      </div>
-	    </div>
-	  </div>
-	</div>
+	<?php include_once('../cabeceras/acercaDe.php'); ?>
 
 	
 

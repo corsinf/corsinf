@@ -247,6 +247,8 @@ class empresaC
 	$datos[29]['campo'] = 'dominio_directory';
 	$datos[29]['dato'] = $parametros['dominio_dir'];
 	
+	$datos[30]['campo'] = 'titulo_pestania';
+	$datos[30]['dato']= $parametros['titPes'];
 
 
 	$where[0]['campo'] = 'id_empresa';

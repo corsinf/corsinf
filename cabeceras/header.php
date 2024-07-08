@@ -12,14 +12,21 @@ if (!isset($_SESSION['INICIO']) || !isset($_SESSION['INICIO']['NO_CONCURENTE']))
 //     exit();
 // }
 
-//Pendiente para revisar, tener en cuenta 
-$dominio = $_SERVER['SERVER_NAME'];
-$url_general = 'http://' . $dominio . '/corsinf';
+$titulo_pestania = 'apudata';
 
-if ($dominio != 'localhost') {
-	$url_general = 'http://' . $dominio . ':8087/corsinf';
+if (($_SESSION['INICIO']['TITULO_PESTANIA']) == '.' || $_SESSION['INICIO']['TITULO_PESTANIA'] == '' || $_SESSION['INICIO']['TITULO_PESTANIA'] == null) {
+    $titulo_pestania;
+} else {
+    $titulo_pestania = $_SESSION['INICIO']['TITULO_PESTANIA'];
 }
 
+$logo = '../assets/images/favicon-32x32.png';
+
+if (($_SESSION['INICIO']['LOGO']) == '.' || $_SESSION['INICIO']['LOGO'] == '' || $_SESSION['INICIO']['LOGO'] == null) {
+    $logo;
+} else {
+    $logo = $_SESSION['INICIO']['LOGO'];
+}
 
 ?>
 
@@ -27,11 +34,12 @@ if ($dominio != 'localhost') {
 <html lang="en">
 
 <head>
+	<title><?= $titulo_pestania; ?></title>
 	<!-- Required meta tags -->
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<!--favicon-->
-	<link rel="icon" href="../assets/images/favicon-32x32.png" type="image/png" />
+	<link rel="icon" href="<?= $logo; ?>" type="image/png" />
 	<!--plugins-->
 	<link href="../assets/plugins/OwlCarousel/css/owl.carousel.min.css" rel="stylesheet">
 	<link href="../assets/plugins/Drag-And-Drop/dist/imageuploadify.min.css" rel="stylesheet" />
@@ -731,13 +739,6 @@ if ($dominio != 'localhost') {
 								</a>
 								<div class="dropdown-menu dropdown-menu-end">
 									<div class="row row-cols-3 g-3 p-3" id="pnl_acceso_rapido_modulo">
-										<div class="col text-center">
-											<a href="inicio.php?mod=<?php echo $_SESSION['INICIO']['MODULO_SISTEMA']; ?>&acc=ats" target="_blank">
-												<div class="app-box mx-auto bg-gradient-burning text-white"><i class='bx bx-clipboard'></i>
-												</div>
-											</a>
-											<div class="app-title">Generar ATS</div>
-										</div>
 										<!-- <div class="col text-center">
 											<div class="app-box mx-auto bg-gradient-burning text-white"><i class='bx bx-atom'></i>
 											</div>
