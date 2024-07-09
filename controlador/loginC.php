@@ -585,7 +585,7 @@ class loginC
 				}	
 		}else
 		{
-			$datos = $this->login->datos_login($parametros['email'],$this->cod_global->enciptar_clave($parametros['pass']),false,$parametros['tipo']);
+			$datos = $this->login->datos_login($parametros['email'],$this->cod_global->desenciptar_clave($parametros['pass']),false,$parametros['tipo']);
 			// print_r($datos);die();
 			if(count($datos)==0)
 			{
