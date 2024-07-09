@@ -416,6 +416,7 @@ class loginC
 		 		}
 		 	}else{
 
+
 				$tablas_iguales = $this->cod_global->tablas_por_licencias($licencias,$empresa,1);
 		 		$res = $this->cod_global->generar_primera_vez_terceros($empresa,$parametros['empresa']);
 		 		if($tablas_iguales==-1){

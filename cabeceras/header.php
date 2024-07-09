@@ -309,11 +309,26 @@ if (($_SESSION['INICIO']['LOGO']) == '.' || $_SESSION['INICIO']['LOGO'] == '' ||
 				success: function(response) {
 					console.log(response);
 
+					if(response!=-1)
+					{
 					if (response.lista != '') {
 						$('#lista_empresas').html(response.lista);
 						$('#myModal_empresas').modal('show');
 					} else {
 						Swal.fire('', 'Usuario No registrado.', 'error');
+					}
+					}else
+					{
+						$('#lista_empresas').html('<li class="list-group-item d-flex align-items-center radius-10 mb-2 shadow-sm">'+
+								'<div class="d-flex align-items-center">'+
+									'<div class="font-20"><i class="bx bx-info-circle"></i>'+
+									'</div>'+
+									'<div class="flex-grow-1 ms-2">'+
+										'<h6 class="mb-0">No tiene otras empresas asociada a este usuario</h6>'+
+									'</div>'+
+								'</div>'+
+								'<div class="ms-auto"></div>'+
+							'</li>');
 					}
 				}
 			});
@@ -889,36 +904,7 @@ if (($_SESSION['INICIO']['LOGO']) == '.' || $_SESSION['INICIO']['LOGO'] == '' ||
 					<div class="modal-body">
 						<ul class="list-group list-group-flush radius-10" id="lista_empresas">
 
-							<li class="list-group-item d-flex align-items-center radius-10 mb-2 shadow-sm">
-								<div class="d-flex align-items-center">
-									<div class="font-20"><i class="flag-icon flag-icon-us"></i>
-									</div>
-									<div class="flex-grow-1 ms-2">
-										<h6 class="mb-0">United States</h6>
-									</div>
-								</div>
-								<div class="ms-auto">435</div>
-							</li>
-							<li class="list-group-item d-flex align-items-center radius-10 mb-2 shadow-sm">
-								<div class="d-flex align-items-center">
-									<div class="font-20"><i class="flag-icon flag-icon-vn"></i>
-									</div>
-									<div class="flex-grow-1 ms-2">
-										<h6 class="mb-0">Vietnam</h6>
-									</div>
-								</div>
-								<div class="ms-auto">287</div>
-							</li>
-							<li class="list-group-item d-flex align-items-center radius-10 mb-2 shadow-sm">
-								<div class="d-flex align-items-center">
-									<div class="font-20"><i class="flag-icon flag-icon-au"></i>
-									</div>
-									<div class="flex-grow-1 ms-2">
-										<h6 class="mb-0">Australia</h6>
-									</div>
-								</div>
-								<div class="ms-auto">432</div>
-							</li>
+							
 					</div>
 					<div class="modal-footer">
 						<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
