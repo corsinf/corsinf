@@ -191,9 +191,9 @@
               '</div>'+
             '</td>'+
             '</tr>')
-    var fi = $('#file').val();
-      if(fi != '')
-      {
+    // var fi = $('#file').val();
+    //   if(fi != '')
+    //   {
             var formData = new FormData(document.getElementById("form_file"));
             $.ajax({
                 url: '../controlador/calcularATS.php?subir_archivo_server=true',
@@ -216,10 +216,10 @@
                   }
                 }
             });
-      }else
-      {
-         alert('Destino o archivo no seleccionados');
-      }
+      // }else
+      // {
+      //    alert('Destino o archivo no seleccionados');
+      // }
   } 
 
   function  subir_archivo_xml(start=0)
@@ -292,7 +292,7 @@
     var parametros = {'f':'d'}
     $.ajax({
          data:  {parametros:parametros},
-         url:   '../controlador/calcularATS.php?calcularexcel=true',
+         url:   '../controlador/calcularATS.php?calcularexcel2=true',
          type:  'post',
          dataType: 'json',         
            success:  function (response) { 
@@ -304,26 +304,31 @@
             $("#lbl_total_sin_iva").text(parseFloat(response.sub_sin_iva).toFixed(2));
             $('#lbl_total_todo').text(parseFloat(response.total).toFixed(2))
             $('#tbl_datos').html(response.tr);
-           
-
             // response.Retencion_val
              $('#retenciones_val').html('')
-            for (var clave in response.Retencion_val) {
-              if (response.Retencion_val.hasOwnProperty(clave)) {
-                var valor = response.Retencion_val[clave];
-                $('#retenciones_val').append('<tr><td>'+clave+'</td><td>'+valor+'</td></tr>');
-                // console.log("Clave: " + clave + ", Valor: " + valor);
-              }
-            }
 
-            // console.log(response.Retencion_val);
 
-            // console.log(response.tipo);
-           var opt = '';
-            response.tipo.forEach(function(item,i){
-            // console.log(item);
-              opt+= '<option value="'+item+'">'+item+'</option>'
-           })
+              $('#retenciones_val').append('<tr><td>Retencione 1%</td><td>'+response.Retencion_1+'</td></tr>');
+              $('#retenciones_val').append('<tr><td>Retencione 70%</td><td>'+response.Retencion_70+'</td></tr>');
+              $('#retenciones_val').append('<tr><td>Retencione otros</td><td>'+response.Retencion_otros+'</td></tr>');
+
+
+           //  for (var clave in response.Retencion_val) {
+           //    if (response.Retencion_val.hasOwnProperty(clave)) {
+           //      var valor = response.Retencion_val[clave];
+           //      $('#retenciones_val').append('<tr><td>'+clave+'</td><td>'+valor+'</td></tr>');
+           //      // console.log("Clave: " + clave + ", Valor: " + valor);
+           //    }
+           //  }
+
+           //  // console.log(response.Retencion_val);
+
+           //  // console.log(response.tipo);
+           // var opt = '';
+           //  response.tipo.forEach(function(item,i){
+           //  // console.log(item);
+           //    opt+= '<option value="'+item+'">'+item+'</option>'
+           // })
 
             $('#ddl_tipo').html(opt);
           

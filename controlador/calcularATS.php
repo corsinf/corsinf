@@ -20,6 +20,12 @@ if(isset($_GET['calcularexcel']))
 	echo json_encode($controlador->generar_tabla());
 }
 
+if(isset($_GET['calcularexcel2']))
+{
+	$parametros = $_POST['parametros'];
+	echo json_encode($controlador->generar_tabla2());
+}
+
 if(isset($_GET['filtrar_doc']))
 {
 	$parametros = $_POST['parametros'];
@@ -43,6 +49,16 @@ class calcular
 {
 		private $linkSriRecepcion;
 		private $documentos;
+		private $gran_subtotal;
+		private $gran_total;
+		private $gran_iva;
+		private $gran_subtotal_0;
+		private $gran_total_0;
+		private $gran_iva_0;
+
+		private $retencion_1;
+		private $retencion_70;
+		private $retencion_otros;
 	function __construct()
 	{
 		$this->sri = new autorizacion_sri();
@@ -260,6 +276,210 @@ class calcular
 		return array('tr'=>$tr);
 
 	}
+
+
+	function generar_tabla2()
+	{
+		set_time_limit(0);
+		$this->leer_xml_carpeta();
+
+
+		$tr = '';
+		foreach ($this->documentos as $key => $value) {
+			$doc_xml = $this->leer_archivo_xmls($value);
+
+			$tr.='<div class="card">
+                     	<div class="card-body">
+                     		<div class="row">
+                     			<div class="col-sm-6">
+	                     			<b>RAZON SOCIAL EMISOR</b><br>
+	                     			'.$doc_xml['tributatio']['razonSocial'].'
+                     			</div>
+                     			<div class="col-sm-3">
+	                     			<b>TIPO DE COMPROBANTE</b><br>
+	                     			<b><u>'.$this->tipo_comprobante($doc_xml['tributatio']['codDoc']).'</u></b>
+                     			</div>
+                     			<div class="col-sm-3">
+	                     			<b>SERIE COMPROBANTE</b><br>
+	                     			'.$doc_xml['tributatio']['estab'].' - '.$doc_xml['tributatio']['ptoEmi'].'
+                     			</div>
+                     			<div class="col-sm-6">
+	                     			<b>RUC: </b>
+	                     			'.$doc_xml['tributatio']['ruc'].'
+                     			</div>
+                     			<div class="col-sm-3">
+	                     			<b>FECHA: </b>
+	                     			'.$doc_xml['cabecera']['fechaEmision'].'
+                     			</div>
+                     			<div class="col-sm-3">
+	                     			<b>TOTAL IMPORTE: </b>
+	                     			32.26
+                     			</div>
+                     		</div>
+                     		<!--- Seccion detalle-->
+                     		<div class="card">
+								<div class="mt-2">
+									<div class="accordion" id="accor-'.$doc_xml['tributatio']['estab'].'-'.$doc_xml['tributatio']['ptoEmi'].'-'.$doc_xml['tributatio']['secuencial'].'">
+										<div class="accordion-item">
+											<h2 class="accordion-header" id="heading'.$doc_xml['tributatio']['estab'].'-'.$doc_xml['tributatio']['ptoEmi'].'-'.$doc_xml['tributatio']['secuencial'].'">
+									  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse'.$doc_xml['tributatio']['estab'].'-'.$doc_xml['tributatio']['ptoEmi'].'-'.$doc_xml['tributatio']['secuencial'].'" aria-expanded="false" aria-controls="collapse'.$doc_xml['tributatio']['estab'].'-'.$doc_xml['tributatio']['ptoEmi'].'-'.$doc_xml['tributatio']['secuencial'].'">
+										DETALLE DE '.$this->tipo_comprobante($doc_xml['tributatio']['codDoc']).'
+									  </button>
+									</h2>
+											<div id="collapse'.$doc_xml['tributatio']['estab'].'-'.$doc_xml['tributatio']['ptoEmi'].'-'.$doc_xml['tributatio']['secuencial'].'" class="accordion-collapse collapse" aria-labelledby="heading'.$doc_xml['tributatio']['estab'].'-'.$doc_xml['tributatio']['ptoEmi'].'-'.$doc_xml['tributatio']['secuencial'].'" data-bs-parent="#accor-'.$doc_xml['tributatio']['estab'].'-'.$doc_xml['tributatio']['ptoEmi'].'-'.$doc_xml['tributatio']['secuencial'].'" style="">
+												<div class="accordion-body">
+												'.$this->lineas_comprobante($doc_xml['tributatio']['codDoc'],$doc_xml['lineas']).'
+
+												</div>
+											</div>
+										</div>							
+									</div>
+								</div>
+							</div>
+
+						</div>
+					</div>';
+
+			// print_r($doc_xml);die();
+			// code...
+		}
+
+
+		// print_r($tr);die();
+		// print_r($this->documentos);die();
+		// $facturas_doc = $this->calcular_excel();
+
+
+		// print_r($lineas_xml);
+		// print_r($facturas_doc);die();
+
+		return array('tr'=>$tr,'tipo'=>'','sub_sin_iva'=>$this->gran_subtotal_0,'sub_con_iva'=>$this->gran_subtotal,'total_con_iva'=>$this->gran_total,'total'=>$this->gran_total_0,'iva_total'=>$this->gran_iva,'Retencion_1'=>$this->retencion_1,'Retencion_70'=>$this->retencion_70,'Retencion_otros'=>$this->retencion_otros);
+
+	}
+
+
+	function tipo_comprobante($tipo)
+	{
+		switch ($tipo) {
+			case '07':
+				return 'RETENCION';
+				break;
+			case '01':
+				return 'FACTURA';
+				break;
+			default:			
+				return 'OTROS';
+				break;
+		}
+	}
+
+	function lineas_comprobante($tipo,$lineas)
+	{
+		$tbl='';
+		//para facturas	
+		$total_iva = 0;
+		$total_iva_0 = 0;
+		$total_sub = 0;
+		$total_sub_0 = 0;
+		$total_total = 0;		
+		$total_total_0 = 0;
+		//-----------------------
+
+		switch ($tipo) {
+			case '07':
+
+			// print_r($lineas);die();
+
+				$tbl.='<table class="table table-sm" style="border: 1px solid;width:100%">
+						<tbody>
+							<tr>
+								<td>Detalle</td>
+								<td>Base Imponible</td>
+								<td>Procentaje %</td>
+								<td>Valor</td>
+							</tr>';
+							foreach ($lineas as $key => $value) {
+								// print_r($value);die();
+								$tbl.='<tr><td>'.$value['detalle'].'</td><td>'.$value['baseImponible'].'</td><td>'.intval($value['Porcentaje']).'</td><td>'.$value['valor'].'</td></tr>';
+								if(intval($value['Porcentaje'])==1)
+								{
+									$this->retencion_1+=$value['valor'];
+								}else if (intval($value['Porcentaje'])==70 || intval($value['Porcentaje'])==30 || intval($value['Porcentaje'])==100)
+								{
+									$this->retencion_70+=$value['valor'];
+								}else
+								{
+									$this->retencion_otros+=$value['valor'];
+								}
+
+		
+
+							}
+							$tbl.='</tbody></table>';
+				//ban sumando en variables locales los totales de las lineas				
+
+				break;
+			case '01':
+			$iva = intval($lineas[0]['iva']); 
+			$tbl.='<table class="table table-sm" style="border: 1px solid;width:100%">
+						<tbody>
+							<tr>
+								<td>Detalle</td>
+								<td>Cantidad</td>
+								<td>Precio</td>
+								<td>Descuento</td>
+								<td>subtotal</td>
+								<td>Iva</td>
+								<td>total</td>
+							</tr>';
+							foreach ($lineas as $key => $value) {
+								// print_r($value);die();
+								$tbl.='<tr><td>'.$value['detalle'].'</td><td>'.$value['cantidad'].'</td><td>'.$value['pvp'].'</td><td>'.$value['descuento'].'</td><td>'.$value['subtotal'].'</td><td>'.$value['iva_v'].'</td><td>'.$value['Total'].'</td></tr>';
+								if($value['iva']==12)
+								{
+									$total_iva+= $value['iva_v'];
+									$total_sub+= $value['subtotal'];
+									$total_total+=$value['Total'];
+
+								}else
+								{
+									$total_iva_0+= $value['iva_v'];
+									$total_sub_0+= $value['subtotal'];
+									$total_total_0+=$value['Total'];
+								}
+
+							}
+							$tbl.='
+								<tr><td colspan="7"></td></tr>
+								<tr><td colspan="4"></td><td colspan="2"><b>Subtotal '.$iva.'%</b></td><td>'.$total_sub.'</td></tr>
+								<tr><td colspan="4"></td><td colspan="2"><b>Subtotal 0%</b></td><td>'.$total_sub_0.'</td></tr>
+								<tr><td colspan="4"></td><td colspan="2"><b>Iva '.$iva.'%</b></td><td>'.$total_iva.'</td></tr>
+								<tr><td colspan="4"></td><td colspan="2"><b>Iva 0%</b></td><td>'.$total_iva_0.'</td></tr>
+								<tr><td colspan="4"></td><td colspan="2"><b>Valor Total</b></td><td>'.$total_total.'</td></tr>
+
+							</tbody></table>';
+				//ban sumando en variables locales los totales de las lineas
+				$this->gran_subtotal+=$total_sub;
+				$this->gran_total+=$total_total;
+				$this->gran_iva+=$total_iva;
+				$this->gran_subtotal_0+=$total_sub_0;
+				$this->gran_total_0+=$total_total_0;
+				$this->gran_iva_0+=$total_iva_0;
+
+				break;
+			default:			
+				return 'OTROS';
+				break;
+		}
+
+
+		
+
+
+		return $tbl;
+	}
+
+
 
 
 	function generar_tabla()
@@ -641,43 +861,36 @@ class calcular
         return $this->documentos;
 	}
 
-	function leer_archivo_xmls()
+	function leer_archivo_xmls($nombre_xml)
 	{
 		$detalle = array();
-		// print_r($this->documentos);die();
-		// if($this->documentos!='')
-		// {
-			foreach ($this->documentos as $key => $value) {
-				$detalle[] = $this->sri->recuperar_xml_a_factura($value,$value);
-				// print_r($detalle);die();
-			}
-		// }
-
+		$detalle = $this->sri->recuperar_xml_a_factura($nombre_xml);
+		
 		return $detalle;
 	}
 
 
 	function subir_archivo_server($file)
 	{
-		$ruta = dirname(__DIR__,1).'/TEMP/';
-		if (!file_exists($ruta)) {
-			    mkdir($ruta, 0777, true);
-		}
+		// $ruta = dirname(__DIR__,1).'/TEMP/';
+		// if (!file_exists($ruta)) {
+		// 	    mkdir($ruta, 0777, true);
+		// }
 
-  		 $uploadfile_temporal=$file['file']['tmp_name'];
-   	     //$tipo = explode('/', $file['file']['type']);	       
-         $nombre = 'datos.txt';	      
-   	     $nuevo_nom=$ruta.$nombre;
-   	     // print_r($nuevo_nom);die();
-   	     if (is_uploaded_file($uploadfile_temporal))
-   	     {
-   		     move_uploaded_file($uploadfile_temporal,$nuevo_nom); 
+  		//  $uploadfile_temporal=$file['file']['tmp_name'];
+   	    //  //$tipo = explode('/', $file['file']['type']);	       
+        //  $nombre = 'datos.txt';	      
+   	    //  $nuevo_nom=$ruta.$nombre;
+   	    //  // print_r($nuevo_nom);die();
+   	    //  if (is_uploaded_file($uploadfile_temporal))
+   	    //  {
+   		//      move_uploaded_file($uploadfile_temporal,$nuevo_nom); 
    		     return 1;  		     
-   	     }
-   	     else
-   	     {
-   		    return -1;
-   	     } 
+   	     // }
+   	     // else
+   	     // {
+   		 //    return -1;
+   	     // } 
 	  
 	}
 

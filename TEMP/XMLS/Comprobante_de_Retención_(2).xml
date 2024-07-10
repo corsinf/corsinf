@@ -1,37 +1,37 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <autorizacion>
 <estado>AUTORIZADO</estado>
-<numeroAutorizacion>0901202407179222757700120010020000049450001992616</numeroAutorizacion>
-<fechaAutorizacion>2024-01-26T11:15:46-05:00</fechaAutorizacion>
+<numeroAutorizacion>3001202407179222757700120010020000049900001998512</numeroAutorizacion>
+<fechaAutorizacion>2024-01-31T08:13:44-05:00</fechaAutorizacion>
 <ambiente>PRODUCCIÓN</ambiente>
-<comprobante><![CDATA[<?xml version="1.0" encoding="UTF-8"?><comprobanteRetencion id="comprobante" version="2.0.0"><infoTributaria><ambiente>2</ambiente><tipoEmision>1</tipoEmision><razonSocial>SACOSGALLARDO CIA. LTDA.</razonSocial><ruc>1792227577001</ruc><claveAcceso>0901202407179222757700120010020000049450001992616</claveAcceso><codDoc>07</codDoc><estab>001</estab><ptoEmi>002</ptoEmi><secuencial>000004945</secuencial><dirMatriz>ROCAFUERTE OE6-190 E IMBABURA</dirMatriz><agenteRetencion>1</agenteRetencion></infoTributaria><infoCompRetencion><fechaEmision>09/01/2024</fechaEmision><obligadoContabilidad>SI</obligadoContabilidad><tipoIdentificacionSujetoRetenido>04</tipoIdentificacionSujetoRetenido><parteRel>NO</parteRel><razonSocialSujetoRetenido>Corporacion de Sistemas Informaticos  Corsinf SAS</razonSocialSujetoRetenido><identificacionSujetoRetenido>1793211628001</identificacionSujetoRetenido><periodoFiscal>01/2024</periodoFiscal></infoCompRetencion><docsSustento><docSustento><codSustento>01</codSustento><codDocSustento>01</codDocSustento><numDocSustento>001001000000004</numDocSustento><fechaEmisionDocSustento>09/01/2024</fechaEmisionDocSustento><pagoLocExt>01</pagoLocExt><totalSinImpuestos>1216.61</totalSinImpuestos><importeTotal>1362.60</importeTotal><impuestosDocSustento><impuestoDocSustento><codImpuestoDocSustento>2</codImpuestoDocSustento><codigoPorcentaje>2</codigoPorcentaje><baseImponible>1216.61</baseImponible><tarifa>12.00</tarifa><valorImpuesto>145.99</valorImpuesto></impuestoDocSustento></impuestosDocSustento><retenciones><retencion><codigo>1</codigo><codigoRetencion>343</codigoRetencion><baseImponible>1216.61</baseImponible><porcentajeRetener>1.00</porcentajeRetener><valorRetenido>12.17</valorRetenido></retencion><retencion><codigo>2</codigo><codigoRetencion>2</codigoRetencion><baseImponible>145.99</baseImponible><porcentajeRetener>70.00</porcentajeRetener><valorRetenido>102.19</valorRetenido></retencion></retenciones><pagos><pago><formaPago>20</formaPago><total>1362.60</total></pago></pagos></docSustento></docsSustento><infoAdicional><campoAdicional nombre="AGENTE DE RETENCIÓN">Resolución No. 1</campoAdicional></infoAdicional><ds:Signature xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xmlns:etsi="http://uri.etsi.org/01903/v1.3.2#" Id="Signature146598">
-<ds:SignedInfo Id="Signature-SignedInfo180368">
+<comprobante><![CDATA[<?xml version="1.0" encoding="UTF-8"?><comprobanteRetencion id="comprobante" version="2.0.0"><infoTributaria><ambiente>2</ambiente><tipoEmision>1</tipoEmision><razonSocial>SACOSGALLARDO CIA. LTDA.</razonSocial><ruc>1792227577001</ruc><claveAcceso>3001202407179222757700120010020000049900001998512</claveAcceso><codDoc>07</codDoc><estab>001</estab><ptoEmi>002</ptoEmi><secuencial>000004990</secuencial><dirMatriz>ROCAFUERTE OE6-190 E IMBABURA</dirMatriz><agenteRetencion>1</agenteRetencion></infoTributaria><infoCompRetencion><fechaEmision>30/01/2024</fechaEmision><obligadoContabilidad>SI</obligadoContabilidad><tipoIdentificacionSujetoRetenido>04</tipoIdentificacionSujetoRetenido><parteRel>NO</parteRel><razonSocialSujetoRetenido>Corporacion de Sistemas Informaticos  Corsinf SAS</razonSocialSujetoRetenido><identificacionSujetoRetenido>1793211628001</identificacionSujetoRetenido><periodoFiscal>01/2024</periodoFiscal></infoCompRetencion><docsSustento><docSustento><codSustento>01</codSustento><codDocSustento>01</codDocSustento><numDocSustento>001001000000014</numDocSustento><fechaEmisionDocSustento>30/01/2024</fechaEmisionDocSustento><pagoLocExt>01</pagoLocExt><totalSinImpuestos>60.00</totalSinImpuestos><importeTotal>67.20</importeTotal><impuestosDocSustento><impuestoDocSustento><codImpuestoDocSustento>2</codImpuestoDocSustento><codigoPorcentaje>2</codigoPorcentaje><baseImponible>60.00</baseImponible><tarifa>12.00</tarifa><valorImpuesto>7.20</valorImpuesto></impuestoDocSustento></impuestosDocSustento><retenciones><retencion><codigo>1</codigo><codigoRetencion>343</codigoRetencion><baseImponible>60.00</baseImponible><porcentajeRetener>1.00</porcentajeRetener><valorRetenido>0.6</valorRetenido></retencion><retencion><codigo>2</codigo><codigoRetencion>2</codigoRetencion><baseImponible>7.20</baseImponible><porcentajeRetener>70.00</porcentajeRetener><valorRetenido>5.04</valorRetenido></retencion></retenciones><pagos><pago><formaPago>20</formaPago><total>67.20</total></pago></pagos></docSustento></docsSustento><infoAdicional><campoAdicional nombre="AGENTE DE RETENCIÓN">Resolución No. 1</campoAdicional></infoAdicional><ds:Signature xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xmlns:etsi="http://uri.etsi.org/01903/v1.3.2#" Id="Signature820533">
+<ds:SignedInfo Id="Signature-SignedInfo872563">
 <ds:CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/>
 <ds:SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/>
-<ds:Reference Id="SignedPropertiesID922974" Type="http://uri.etsi.org/01903#SignedProperties" URI="#Signature146598-SignedProperties629925">
+<ds:Reference Id="SignedPropertiesID598623" Type="http://uri.etsi.org/01903#SignedProperties" URI="#Signature820533-SignedProperties888547">
 <ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/>
-<ds:DigestValue>mlE2sihuaBQPbEbjK0IVoHl/P9E=</ds:DigestValue>
+<ds:DigestValue>ZIWaIqB0+XkgIHaSz4VAkklKuVM=</ds:DigestValue>
 </ds:Reference>
-<ds:Reference URI="#Certificate1479339">
+<ds:Reference URI="#Certificate1546162">
 <ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/>
-<ds:DigestValue>dVoycb/ShSESOYgV8P32FJQpH0U=</ds:DigestValue>
+<ds:DigestValue>Pa7vHORIw+SOva/aQ3oXvI0d4/A=</ds:DigestValue>
 </ds:Reference>
-<ds:Reference Id="Reference-ID-83983" URI="#comprobante">
+<ds:Reference Id="Reference-ID-368913" URI="#comprobante">
 <ds:Transforms>
 <ds:Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/>
 </ds:Transforms>
 <ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/>
-<ds:DigestValue>s/3d+jB6pmKGgTmEQiWxerwTp/E=</ds:DigestValue>
+<ds:DigestValue>HwqECKt7CZFELoxYZ2Z0S5thVyg=</ds:DigestValue>
 </ds:Reference>
 </ds:SignedInfo>
-<ds:SignatureValue Id="SignatureValue482493">
-fBkH7serbLYgPBSxUiTVERdk4+pJ8j9bVWuzhEGbb0ize/MHHPnyfG2Q2llLBgzPpPNVceZzJ2dE
-r1PWUBP88n23v2D/Ekhoz7gf2lkq1V2i9dJ1TK6zkAfdDGH58avoOAJnK5wrKbCXpEQmtVofnOW0
-XZMUANHV2njtdBjMOnvaV/+Wr/hLvboeHvkkyBWcq1qjrkU2OvrcFKEm13qZ5Wg3uL/TbCJlzU+g
-wt8jHIT0SuCJYMNEmaQZhlL9ziEPbYZolvUQxy9zEAf6UkxENqB+Cq9Aqk8ozuYVHsURK1yLD88h
-7NNP9vWCqMaW2pi5CyIrgtEsPrvbg4GlJ9HyXw==
+<ds:SignatureValue Id="SignatureValue693610">
+DBQnOROu4TCl3StEOI9TaMTTgd4EO8ifhS2Z348rDpkmjvhOAvtK0La2BbkbQ3nmxzEzgn16ktKJ
+jw2VHvgWmxG0z53pQ/V8c03EuJUNTjg0RAX8cEBTDHo2VHjjB2vIQR3PVIHDoteQ43wSTs9hdlrz
+lMRAS4VTpc2pC3TxH5x67rTnDrKdOS3jwnJ6q6v7KmH+SV15fO66jByJoSz0meEvb5bLLsOq8Bug
+7jw7WKVPhD0l+eMJ/9Kn8sh3WWVdeNk1k7d7qVp+8+QEjvyw44A9EObKBbCJF5RuXM6egm9807IG
+VCMKU+G+8sTGKqxgU+KkbQ65aOuwDv0AeBgelQ==
 </ds:SignatureValue>
-<ds:KeyInfo Id="Certificate1479339">
+<ds:KeyInfo Id="Certificate1546162">
 <ds:X509Data>
 <ds:X509Certificate>
 MIIMDjCCCfagAwIBAgIEVP4T4DANBgkqhkiG9w0BAQsFADCBmTELMAkGA1UEBhMCRUMxHTAbBgNV
@@ -104,7 +104,7 @@ AezBztk9B/2/6DHhHwM/7U6CHKrMF8drRPiY7w==
 </ds:RSAKeyValue>
 </ds:KeyValue>
 </ds:KeyInfo>
-<ds:Object Id="Signature146598-Object567954"><etsi:QualifyingProperties Target="#Signature146598"><etsi:SignedProperties Id="Signature146598-SignedProperties629925"><etsi:SignedSignatureProperties><etsi:SigningTime>2024-01-26T11:15:45-05:00</etsi:SigningTime><etsi:SigningCertificate><etsi:Cert><etsi:CertDigest><ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/><ds:DigestValue>FhYowtYllIJmGPgRQRTKs4Fz5Rk=</ds:DigestValue></etsi:CertDigest><etsi:IssuerSerial><ds:X509IssuerName>CN=AUTORIDAD DE CERTIFICACION SUBCA-2 SECURITY DATA,OU=ENTIDAD DE CERTIFICACION DE INFORMACION,O=SECURITY DATA S.A. 2,C=EC</ds:X509IssuerName><ds:X509SerialNumber>1425937376</ds:X509SerialNumber></etsi:IssuerSerial></etsi:Cert></etsi:SigningCertificate></etsi:SignedSignatureProperties><etsi:SignedDataObjectProperties><etsi:DataObjectFormat ObjectReference="#Reference-ID-83983"><etsi:Description>contenido comprobante</etsi:Description><etsi:MimeType>text/xml</etsi:MimeType></etsi:DataObjectFormat></etsi:SignedDataObjectProperties></etsi:SignedProperties></etsi:QualifyingProperties></ds:Object></ds:Signature></comprobanteRetencion>]]></comprobante>
+<ds:Object Id="Signature820533-Object62018"><etsi:QualifyingProperties Target="#Signature820533"><etsi:SignedProperties Id="Signature820533-SignedProperties888547"><etsi:SignedSignatureProperties><etsi:SigningTime>2024-01-31T08:13:43-05:00</etsi:SigningTime><etsi:SigningCertificate><etsi:Cert><etsi:CertDigest><ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/><ds:DigestValue>FhYowtYllIJmGPgRQRTKs4Fz5Rk=</ds:DigestValue></etsi:CertDigest><etsi:IssuerSerial><ds:X509IssuerName>CN=AUTORIDAD DE CERTIFICACION SUBCA-2 SECURITY DATA,OU=ENTIDAD DE CERTIFICACION DE INFORMACION,O=SECURITY DATA S.A. 2,C=EC</ds:X509IssuerName><ds:X509SerialNumber>1425937376</ds:X509SerialNumber></etsi:IssuerSerial></etsi:Cert></etsi:SigningCertificate></etsi:SignedSignatureProperties><etsi:SignedDataObjectProperties><etsi:DataObjectFormat ObjectReference="#Reference-ID-368913"><etsi:Description>contenido comprobante</etsi:Description><etsi:MimeType>text/xml</etsi:MimeType></etsi:DataObjectFormat></etsi:SignedDataObjectProperties></etsi:SignedProperties></etsi:QualifyingProperties></ds:Object></ds:Signature></comprobanteRetencion>]]></comprobante>
 <mensajes/>
 </autorizacion>
 
