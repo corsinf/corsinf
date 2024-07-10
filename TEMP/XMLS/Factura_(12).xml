@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<autorizacion>
+<estado>AUTORIZADO</estado>
+<numeroAutorizacion>1602202401010483655600120011000000000318301498912</numeroAutorizacion>
+<fechaAutorizacion>2024-02-16T14:55:09-05:00</fechaAutorizacion>
+<ambiente>PRODUCCIÓN</ambiente>
+<comprobante><![CDATA[<?xml version="1.0" encoding="UTF-8"?><factura id="comprobante" version="1.1.0">
+    <infoTributaria>
+        <ambiente>2</ambiente>
+        <tipoEmision>1</tipoEmision>
+        <razonSocial>URGILEZ GUERRERO MARIELA DEL ROCIO</razonSocial>
+        <ruc>0104836556001</ruc>
+        <claveAcceso>1602202401010483655600120011000000000318301498912</claveAcceso>
+        <codDoc>01</codDoc>
+        <estab>001</estab>
+        <ptoEmi>100</ptoEmi>
+        <secuencial>000000031</secuencial>
+        <dirMatriz>Calle: EL UNIVERSO Número: S/N Intersección: EL MERCURIO </dirMatriz>
+    </infoTributaria>
+    <infoFactura>
+        <fechaEmision>16/02/2024</fechaEmision>
+        <dirEstablecimiento>Calle: EL UNIVERSO Número: S/N Intersección: EL MERCURIO </dirEstablecimiento>
+        <obligadoContabilidad>NO</obligadoContabilidad>
+        <tipoIdentificacionComprador>04</tipoIdentificacionComprador>
+        <razonSocialComprador>CORPORACION DE SISTEMAS INFORMATICOS CORSINF S.A.S.</razonSocialComprador>
+        <identificacionComprador>1793211628001</identificacionComprador>
+        <direccionComprador>DE LOS MOTILONES N40 345 Y CAMILO GALLEGOS</direccionComprador>
+        <totalSinImpuestos>982.14</totalSinImpuestos>
+        <totalDescuento>0.00</totalDescuento>
+        <totalConImpuestos>
+            <totalImpuesto>
+                <codigo>2</codigo>
+                <codigoPorcentaje>2</codigoPorcentaje>
+                <baseImponible>982.14</baseImponible>
+                <valor>117.86</valor>
+            </totalImpuesto>
+        </totalConImpuestos>
+        <propina>0</propina>
+        <importeTotal>1100.00</importeTotal>
+        <moneda>DOLAR</moneda>
+        <pagos>
+            <pago>
+                <formaPago>20</formaPago>
+                <total>1100.00</total>
+            </pago>
+        </pagos>
+    </infoFactura>
+    <detalles>
+        <detalle>
+            <codigoPrincipal>00111</codigoPrincipal>
+            <descripcion>HONORARIOS PROFESIONALES</descripcion>
+            <cantidad>1.0</cantidad>
+            <precioUnitario>982.14</precioUnitario>
+            <descuento>0.00</descuento>
+            <precioTotalSinImpuesto>982.14</precioTotalSinImpuesto>
+            <detallesAdicionales>
+                <detAdicional nombre="informacionAdicional" valor="HONORARIOS MES DE DICIEMBRE"/>
+            </detallesAdicionales>
+            <impuestos>
+                <impuesto>
+                    <codigo>2</codigo>
+                    <codigoPorcentaje>2</codigoPorcentaje>
+                    <tarifa>12.0</tarifa>
+                    <baseImponible>982.14</baseImponible>
+                    <valor>117.86</valor>
+                </impuesto>
+            </impuestos>
+        </detalle>
+    </detalles>
+    <infoAdicional>
+        <campoAdicional nombre="Telefono">3920507</campoAdicional>
+        <campoAdicional nombre="Email">nmorales@corsinf.com</campoAdicional>
+    </infoAdicional>
+<ds:Signature xmlns:ds="http://www.w3.org/2000/09/xmldsig#" Id="xmldsig-52fb41e0-4a82-47a0-b4d8-21e991117742"><ds:SignedInfo><ds:CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/><ds:SignatureMethod Algorithm="http://www.w3.org/2001/04/xmldsig-more#rsa-sha256"/><ds:Reference Id="xmldsig-52fb41e0-4a82-47a0-b4d8-21e991117742-ref0" URI="#comprobante"><ds:Transforms><ds:Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/></ds:Transforms><ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/><ds:DigestValue>Giv/ZpYT0LQp26Qksab+0SA6O76iTtCS+9WIxKGmlrU=</ds:DigestValue></ds:Reference><ds:Reference Type="http://uri.etsi.org/01903#SignedProperties" URI="#xmldsig-52fb41e0-4a82-47a0-b4d8-21e991117742-signedprops"><ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/><ds:DigestValue>tKIm8ZLGoWuV2flsUXYVZZp9cgQ6YNYYYPJ/KuL3LK0=</ds:DigestValue></ds:Reference></ds:SignedInfo><ds:SignatureValue Id="xmldsig-52fb41e0-4a82-47a0-b4d8-21e991117742-sigvalue">l90ci2Op2eDctMmMSYD97xPzsLzF6uXixinLkgKGKnryDh6DgnNm3G4+ts3+3K0wSqqS6rWjKrIy9sn7msCl2Fk4CpcvrsCIdl3ymiVDDdQe9bOY4+KoXDLLw0ioamoN/TcJt4kBVjrwPmU+GJZwC/vD7oG6MiZeMtgYk9IdxGM/y2ZtoGE0PH6EDU1WdlfZ58GhaDS1iMuUt5HtD052kfjpNDxudOmT+E0SPaK4dHMjzcacqf0QwxvBLatcybqh6DQF5et71msBO+IfdMnOuDMTeQErMjxZNCCR6Eikfuyj0h/Uj2xQTfi+iNgvIgb+4OshpjzoqBpw3rBRxrwL8w==</ds:SignatureValue><ds:KeyInfo><ds:X509Data><ds:X509Certificate>MIIL2TCCCcGgAwIBAgIEYgKudzANBgkqhkiG9w0BAQsFADCBmTELMAkGA1UEBhMCRUMxHTAbBgNVBAoMFFNFQ1VSSVRZIERBVEEgUy5BLiAyMTAwLgYDVQQLDCdFTlRJREFEIERFIENFUlRJRklDQUNJT04gREUgSU5GT1JNQUNJT04xOTA3BgNVBAMMMEFVVE9SSURBRCBERSBDRVJUSUZJQ0FDSU9OIFNVQkNBLTIgU0VDVVJJVFkgREFUQTAeFw0yMzA2MDgyMDA5NTlaFw0yNTA2MDcyMDA5NTlaMIGiMSswKQYDVQQDDCJNQVJJRUxBIERFTCBST0NJTyBVUkdJTEVaIEdVRVJSRVJPMRUwEwYDVQQFEwwwODA2MjMxNTE5MzMxMDAuBgNVBAsMJ0VOVElEQUQgREUgQ0VSVElGSUNBQ0lPTiBERSBJTkZPUk1BQ0lPTjEdMBsGA1UECgwUU0VDVVJJVFkgREFUQSBTLkEuIDIxCzAJBgNVBAYTAkVDMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA4OaeK0JpzX3iLlxjGoXlY6XKocS7Koo08RZYnOoQ3d9h0oa9ThmrRKIGX/96cfNzFkxlzcGDkBbdeS7dEd4l35BLWmBN8OAFJz6NEhfgtiTArz34lVJHu2bGEWgIke18mgVJmqInsI23hsDdWSdczT71aHGLhFkZst8z4TI+iuwmy9sH4Ltqu6dZNj5eChnnatj+2MHe6rU7vgyWRilUv7uk4w7U7qo+6Eb/LHF1DLo7cnSVBVJPB3wfPrjB1LVnihgCmm7ybo9zjV4TpyiwYM+lGTR8AyiDGqEFeqzn25FvM+OtF9q3/p8X7Lh3AasDjfnBKY+gFMb53XeG8cHLRwIDAQABo4IHHDCCBxgwDAYDVR0TAQH/BAIwADAfBgNVHSMEGDAWgBSMusoRV3glgB1rCktVv42uYt29jzBZBggrBgEFBQcBAQRNMEswSQYIKwYBBQUHMAGGPWh0dHA6Ly9vY3NwZ3cuc2VjdXJpdHlkYXRhLm5ldC5lYy9lamJjYS9wdWJsaWN3ZWIvc3RhdHVzL29jc3Awgc8GA1UdLgSBxzCBxDCBwaCBvqCBu4aBuGxkYXA6Ly9sZGFwc2RjYTIuc2VjdXJpdHlkYXRhLm5ldC5lYy9DTj1BVVRPUklEQUQgREUgQ0VSVElGSUNBQ0lPTiBTVUJDQS0yIFNFQ1VSSVRZIERBVEEsT1U9RU5USURBRCBERSBDRVJUSUZJQ0FDSU9OIERFIElORk9STUFDSU9OLE89U0VDVVJJVFkgREFUQSBTLkEuIDIsQz1FQz9kZWx0YVJldm9jYXRpb25MaXN0P2Jhc2UwIgYDVR0RBBswGYEXbWFyeXVyZ2lsZXoxMUBnbWFpbC5jb20wggEGBgNVHSAEgf4wgfswWgYKKwYBBAGCpnICBzBMMEoGCCsGAQUFBwICMD4ePABDAGUAcgB0AGkAZgBpAGMAYQBkAG8AIABkAGUAIABQAGUAcgBzAG8AbgBhACAATgBhAHQAdQByAGEAbDCBnAYKKwYBBAGCpnICATCBjTCBigYIKwYBBQUHAgEWfmh0dHBzOi8vd3d3LnNlY3VyaXR5ZGF0YS5uZXQuZWMvd3AtY29udGVudC9kb3dubG9hZHMvTm9ybWF0aXZhcy9QX2RlX0NlcnRpZmljYWRvcy9Qb2xpdGljYXMgZGUgQ2VydGlmaWNhZG8gUGVyc29uYSBOYXR1cmFsLnBkZjCCAqIGA1UdHwSCApkwggKVMIHloEGgP4Y9aHR0cDovL29jc3Bndy5zZWN1cml0eWRhdGEubmV0LmVjL2VqYmNhL3B1YmxpY3dlYi9zdGF0dXMvb2NzcKKBn6SBnDCBmTE5MDcGA1UEAwwwQVVUT1JJREFEIERFIENFUlRJRklDQUNJT04gU1VCQ0EtMiBTRUNVUklUWSBEQVRBMTAwLgYDVQQLDCdFTlRJREFEIERFIENFUlRJRklDQUNJT04gREUgSU5GT1JNQUNJT04xHTAbBgNVBAoMFFNFQ1VSSVRZIERBVEEgUy5BLiAyMQswCQYDVQQGEwJFQzCBx6CBxKCBwYaBvmxkYXA6Ly9sZGFwc2RjYTIuc2VjdXJpdHlkYXRhLm5ldC5lYy9DTj1BVVRPUklEQUQgREUgQ0VSVElGSUNBQ0lPTiBTVUJDQS0yIFNFQ1VSSVRZIERBVEEsT1U9RU5USURBRCBERSBDRVJUSUZJQ0FDSU9OIERFIElORk9STUFDSU9OLE89U0VDVVJJVFkgREFUQSBTLkEuIDIsQz1FQz9jZXJ0aWZpY2F0ZVJldm9jYXRpb25MaXN0P2Jhc2UwgeCggd2ggdqGgddodHRwczovL3BvcnRhbC1vcGVyYWRvcjIuc2VjdXJpdHlkYXRhLm5ldC5lYy9lamJjYS9wdWJsaWN3ZWIvd2ViZGlzdC9jZXJ0ZGlzdD9jbWQ9Y3JsJmlzc3Vlcj1DTj1BVVRPUklEQUQgREUgQ0VSVElGSUNBQ0lPTiBTVUJDQS0yIFNFQ1VSSVRZIERBVEEsT1U9RU5USURBRCBERSBDRVJUSUZJQ0FDSU9OIERFIElORk9STUFDSU9OLE89U0VDVVJJVFkgREFUQSBTLkEuIDIsQz1FQzAdBgNVHQ4EFgQU5ClsTkJhL84oaRn5e9TDzyukdKAwKwYDVR0QBCQwIoAPMjAyMzA2MDgyMDA5NTlagQ8yMDI1MDYwNzIwMDk1OVowCwYDVR0PBAQDAgXgMBoGCisGAQQBgqZyAwEEDAwKMDEwNDgzNjU1NjAWBgorBgEEAYKmcgMJBAgMBkNVRU5DQTARBgorBgEEAYKmcgMiBAMMAS4wLQYKKwYBBAGCpnIDBwQfDB1FTCBVTklWRVJTTyBTIE4gWSBFTCBNRVJDVVJJTzAhBgorBgEEAYKmcgMCBBMMEU1BUklFTEEgREVMIFJPQ0lPMB8GCisGAQQBgqZyAyAEEQwPMDA1MDAxMDAwMDc3MTUwMBEGCisGAQQBgqZyAyMEAwwBLjATBgorBgEEAYKmcgMhBAUMA1BGWDAXBgorBgEEAYKmcgMMBAkMB0VDVUFET1IwFwYKKwYBBAGCpnIDAwQJDAdVUkdJTEVaMBEGCisGAQQBgqZyAx4EAwwBLjAdBgorBgEEAYKmcgMLBA8MDTAxMDQ4MzY1NTYwMDEwEQYKKwYBBAGCpnIDHQQDDAEuMBgGCisGAQQBgqZyAwQECgwIR1VFUlJFUk8wGgYKKwYBBAGCpnIDCAQMDAowOTg0NzgxNTU2MA0GCSqGSIb3DQEBCwUAA4ICAQAXRPHQ4awr376aTYlG6yxfz8QpideGlyHTRaT6lWuqCUlelAtksGUKKEgWJNMaZjg5TyqWhlECF8+oTxA43drvJdnTVVCAFDhtvjHjS4j0hy1k9+WuwTSWEO/ZN7HOxPS+yTcHoiIP0i/aNp6SdTmeXwoDNiv3IxwtRrO8i3KzOlfHjsN2xP+jeI2PBpcOlqpJzRG1jEyfIEgFnyQZtdkHAguvpuX1WSmcilISIQ+0OM231dmnkeOCrJofEnoRv0K5/Zrq+CQIlxzPuPw1JaRiMPpr/j3WiH0nO6qxBTSHBm2CieCWRd7VGyhyHsccN1Ky/iydgW+DfgpiiTxcJFpQTMNzP1+nIcuxE5W9Wa6pyheSqoR8XpEOSn+umWzLC4nYPAhbf4awSQ+snY7MLTZdbvoSqQDJZGfhE6cPjSDglwKcWw6q8NlT2VGty+wgokky/6e2F1dNxuINJG1d0KfGmP8/TiMmzuhX+9aV3VeuxwlotemEYRYe3T4S4NVRC41yYlqm4trljtbywVqKLSBrq4Dd3ThXzbcs5zMr2B3T8JnH+y5WxpZxH85+N5BDxiZ4al0GSuBaYm4or8OHB+j0/l7GdVXqupez2OFfg9c3upAQ4PAP1PkgK3wS5HaOR4Z1PpTULMc4r9xGaT8iS4JyDIAC55lVNwt0TSzeK956xg==</ds:X509Certificate></ds:X509Data></ds:KeyInfo><ds:Object><xades:QualifyingProperties xmlns:xades="http://uri.etsi.org/01903/v1.3.2#" xmlns:xades141="http://uri.etsi.org/01903/v1.4.1#" Target="#xmldsig-52fb41e0-4a82-47a0-b4d8-21e991117742"><xades:SignedProperties Id="xmldsig-52fb41e0-4a82-47a0-b4d8-21e991117742-signedprops"><xades:SignedSignatureProperties><xades:SigningTime>2024-02-16T14:55:09.491-05:00</xades:SigningTime><xades:SigningCertificate><xades:Cert><xades:CertDigest><ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/><ds:DigestValue>3HtH1U8fYFSDq5vmluq9U/yeHTeSQ8QxIhQV8+Jj7YY=</ds:DigestValue></xades:CertDigest><xades:IssuerSerial><ds:X509IssuerName>CN=AUTORIDAD DE CERTIFICACION SUBCA-2 SECURITY DATA,OU=ENTIDAD DE CERTIFICACION DE INFORMACION,O=SECURITY DATA S.A. 2,C=EC</ds:X509IssuerName><ds:X509SerialNumber>1644342903</ds:X509SerialNumber></xades:IssuerSerial></xades:Cert></xades:SigningCertificate></xades:SignedSignatureProperties><xades:SignedDataObjectProperties><xades:DataObjectFormat ObjectReference="#xmldsig-52fb41e0-4a82-47a0-b4d8-21e991117742-ref0"><xades:Description>FIRMA DIGITAL SRI</xades:Description><xades:MimeType>text/xml</xades:MimeType><xades:Encoding>UTF-8</xades:Encoding></xades:DataObjectFormat></xades:SignedDataObjectProperties></xades:SignedProperties></xades:QualifyingProperties></ds:Object></ds:Signature></factura>]]></comprobante>
+<mensajes/>
+</autorizacion>
+
