@@ -208,7 +208,8 @@ function recuperar_xml_a_factura($documento)
 			$encontrado = 0;
 		}
 
-		return $lineas;		
+		
+		return array('lineas' => $lineas,'cabecera'=>$cabecera,"tributatio"=>$tributaria);
 	}
 
 	//-----------------------------------cuando es factura---------------------------
@@ -233,7 +234,8 @@ function recuperar_xml_a_factura($documento)
 				$lineas[] = array('Tipo'=>'F','Autorizacion'=>$tributaria['claveAcceso'],'detalle'=>$value['descripcion'],'cantidad'=>$value['cantidad'],'pvp'=>$value['precioUnitario'],'descuento'=>$value['descuento'],'subtotal'=>$value['precioTotalSinImpuesto'],'iva'=>$iva,'iva_v'=>$valoriva,'Total'=>$value['precioTotalSinImpuesto']+$valoriva);
 			}
 		}
-		return $lineas;
+		
+		return array('lineas' => $lineas,'cabecera'=>$cabecera,"tributatio"=>$tributaria);
 	}
 
 	//----------------------------cuando es nota de credito--------------------
@@ -259,7 +261,7 @@ function recuperar_xml_a_factura($documento)
 			}
 		}
 		// print_r($lineas);die();
-		return $lineas;
+		return array('lineas' => $lineas,'cabecera'=>$cabecera,"tributatio"=>$tributaria);
 
 	}
 	
