@@ -538,7 +538,7 @@
 
                             <button class="btn btn-primary btn-sm m-1" onclick="sincronizar_representantes()" type="button"><i class='bx bx-sync'></i> Sincronizar Representantes Idukay</button>
 
-                            <button class="btn btn-primary btn-sm m-1" onclick="sincronizar_idukay()" type="button"><i class='bx bx-sync'></i> Sincronizar con Idukay Estudiantes y Representantes</button>
+                            <button hidden class="btn btn-primary btn-sm m-1" onclick="sincronizar_idukay()" type="button"><i class='bx bx-sync'></i> Sincronizar con Idukay Estudiantes y Representantes</button>
 
 
                             <h6 class="pt-3">Docentes</h6>

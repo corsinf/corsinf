@@ -1099,6 +1099,45 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                             </div>
                                                         </div>
                                                     <?php } ?>
+
+                                                    <div class="row pt-3" id="pnl_contactos_salida">
+                                                        <div class="col-md-4">
+                                                            <label for="" class="form-label fw-bold" id="lbl_telefono_emergencia">Viene desde el Paciente </label>
+                                                            <input type="text" class="form-control form-control-sm" id="sa_conp_permiso_telefono_padre" name="sa_conp_permiso_telefono_padre">
+                                                            <div class="form-check">
+                                                                <input class="form-check-input" type="checkbox" id="chx_representante" checked>
+                                                                <label class="form-check-label" for="chx_representante">Enviar Correo</label>
+                                                            </div>
+
+                                                            <p id="txt_nombre_contacto" class="me-0 text-success"></p>
+
+                                                            <input type="hidden" name="sa_permiso_pac_id" id="sa_permiso_pac_id">
+                                                            <input type="hidden" name="sa_permiso_pac_tabla" id="sa_permiso_pac_tabla">
+                                                        </div>
+
+                                                        <div class="col-md-4" id="pnl_representante_2" style="display: none;">
+                                                            <label for="" class="form-label fw-bold" id="lbl_telefono_emergencia_2">Telefono Representante 2 <label style="color: red;">*</label> </label>
+                                                            <input type="text" class="form-control form-control-sm" id="sa_conp_permiso_telefono_padre_2" name="sa_conp_permiso_telefono_padre_2">
+                                                            <div class="form-check">
+                                                                <input class="form-check-input" type="checkbox" id="chx_representante_2" checked>
+                                                                <label class="form-check-label" for="chx_representante_2">Enviar Correo</label>
+                                                            </div>
+
+                                                            <p id="txt_nombre_contacto_2" class="me-0 text-success"></p>
+                                                        </div>
+
+                                                        <script>
+                                                            $(document).ready(function() {
+                                                                $('#chx_representante, #chx_representante_2').on('change', function() {
+                                                                    if (!$('#chx_representante').prop('checked') && !$('#chx_representante_2').prop('checked')) {
+                                                                        Swal.fire('Error', 'Debe estar seleccionado al menos un Representante.', 'error');
+
+                                                                        $(this).prop('checked', true);
+                                                                    }
+                                                                });
+                                                            });
+                                                        </script>
+                                                    </div>
                                                 </div>
 
                                                 <div class="modal-footer pt-4" id="seccion_boton_consulta">
