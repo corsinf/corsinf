@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<autorizacion>
+<estado>AUTORIZADO</estado>
+<numeroAutorizacion>2904202401179251243300120010030183907530000000011</numeroAutorizacion>
+<fechaAutorizacion>2024-04-29T15:29:05-05:00</fechaAutorizacion>
+<ambiente>PRODUCCIÓN</ambiente>
+<comprobante><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+<factura id="comprobante" version="2.1.0">
+   <infoTributaria>
+      <ambiente>2</ambiente>
+      <tipoEmision>1</tipoEmision>
+      <razonSocial>DELIVERY HERO DH E-COMMERCE ECUADOR S.A.S.</razonSocial>
+      <nombreComercial>DELIVERY HERO DH E-COMMERCE ECUADOR S.A.S.</nombreComercial>
+      <ruc>1792512433001</ruc>
+      <claveAcceso>2904202401179251243300120010030183907530000000011</claveAcceso>
+      <codDoc>01</codDoc>
+      <estab>001</estab>
+      <ptoEmi>003</ptoEmi>
+      <secuencial>018390753</secuencial>
+      <dirMatriz>Catalina aldas y Portugal, Edificio Recoleta piso 6. Oficina 65</dirMatriz>
+   </infoTributaria>
+   <infoFactura>
+      <fechaEmision>29/04/2024</fechaEmision>
+      <dirEstablecimiento>Catalina aldas y Portugal, Edificio Recoleta piso 6. Oficina 65</dirEstablecimiento>
+      <contribuyenteEspecial>051</contribuyenteEspecial>
+      <obligadoContabilidad>SI</obligadoContabilidad>
+      <tipoIdentificacionComprador>05</tipoIdentificacionComprador>
+      <razonSocialComprador>Milton Rubio</razonSocialComprador>
+      <identificacionComprador>1712605284</identificacionComprador>
+      <totalSinImpuestos>2.08</totalSinImpuestos>
+      <totalDescuento>0.00</totalDescuento>
+      <totalConImpuestos>
+         <totalImpuesto>
+            <codigo>2</codigo>
+            <codigoPorcentaje>4</codigoPorcentaje>
+            <baseImponible>2.08</baseImponible>
+            <tarifa>15.00</tarifa>
+            <valor>0.31</valor>
+         </totalImpuesto>
+      </totalConImpuestos>
+      <propina>0.00</propina>
+      <importeTotal>2.39</importeTotal>
+      <moneda>USD</moneda>
+      <pagos>
+         <pago>
+            <formaPago>20</formaPago>
+            <total>2.39</total>
+            <plazo>30</plazo>
+            <unidadTiempo>DIAS</unidadTiempo>
+         </pago>
+      </pagos>
+      <valorRetRenta>0.31</valorRetRenta>
+   </infoFactura>
+   <detalles>
+      <detalle>
+         <codigoPrincipal>DELIVERY-FEE-EC</codigoPrincipal>
+         <descripcion>Servicio Logistico</descripcion>
+         <unidadMedida>UND</unidadMedida>
+         <cantidad>1.00</cantidad>
+         <precioUnitario>1.90</precioUnitario>
+         <descuento>0.00</descuento>
+         <precioTotalSinImpuesto>1.90</precioTotalSinImpuesto>
+         <impuestos>
+            <impuesto>
+               <codigo>2</codigo>
+               <codigoPorcentaje>4</codigoPorcentaje>
+               <tarifa>15</tarifa>
+               <baseImponible>1.90</baseImponible>
+               <valor>0.29</valor>
+            </impuesto>
+         </impuestos>
+      </detalle>
+      <detalle>
+         <codigoPrincipal>SERVICE-FEE-EC</codigoPrincipal>
+         <descripcion>Tarifa de servicio</descripcion>
+         <unidadMedida>UND</unidadMedida>
+         <cantidad>1.00</cantidad>
+         <precioUnitario>0.17</precioUnitario>
+         <descuento>0.00</descuento>
+         <precioTotalSinImpuesto>0.17</precioTotalSinImpuesto>
+         <impuestos>
+            <impuesto>
+               <codigo>2</codigo>
+               <codigoPorcentaje>4</codigoPorcentaje>
+               <tarifa>15</tarifa>
+               <baseImponible>0.17</baseImponible>
+               <valor>0.03</valor>
+            </impuesto>
+         </impuestos>
+      </detalle>
+   </detalles>
+   <infoAdicional>
+      <campoAdicional nombre="Email">mrubio@corsinf.com</campoAdicional>
+   </infoAdicional>
+<ds:Signature xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xmlns:etsi="http://uri.etsi.org/01903/v1.3.2#" Id="Signature150318">
+<ds:SignedInfo Id="Signature-SignedInfo294752">
+<ds:CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"></ds:CanonicalizationMethod>
+<ds:SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"></ds:SignatureMethod>
+<ds:Reference Id="SignedPropertiesID502965" Type="http://uri.etsi.org/01903#SignedProperties" URI="#Signature150318-SignedProperties359978">
+<ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"></ds:DigestMethod>
+<ds:DigestValue>AqRh1Zvkxuc6Vy0of/ndX/hZPFs=</ds:DigestValue>
+</ds:Reference>
+<ds:Reference URI="#Certificate1115696">
+<ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"></ds:DigestMethod>
+<ds:DigestValue>26Qp/6AtDiV/BmfNPX/st2dfcks=</ds:DigestValue>
+</ds:Reference>
+<ds:Reference Id="Reference-ID-390140" URI="#comprobante">
+<ds:Transforms>
+<ds:Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"></ds:Transform>
+</ds:Transforms>
+<ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"></ds:DigestMethod>
+<ds:DigestValue>BSKEmrdv23NUhEZjNAIcLCKxheU=</ds:DigestValue>
+</ds:Reference>
+</ds:SignedInfo>
+<ds:SignatureValue Id="SignatureValue142911">
+T8hU5jkf1Zl7zmNzBT9yD3A7OeiUxBn92HApOOQ2hpIBXPmfEkGCjX660FAz3dnDTJ6XOJi+B4TW
+54ZF/EYD1+gHryTuNaAjFdDWCkwN8Ix5aifGziwy9XiPk245ztkhy9u1Qaqk+g+ZSHQh2j/cQKQs
+TQ2NtZVyljU4U4MvI+1scinyhWWaGZydk4UKt8lYu7GXj9cHc7VA8LmFH2b5UVek2aHarGy/boKa
+r6/ch9Qjb0htvhZJRKXBo2UWbI7EWpxaTwZKOekXEVJNs8YK0oTdAdgKJj5E2UnSWpixX2GArsfN
+9vDob+849A/cW7TpqizWr9lVeNtKerlP13rQEg==
+</ds:SignatureValue>
+<ds:KeyInfo Id="Certificate1115696">
+<ds:X509Data>
+<ds:X509Certificate>
+MIIINDCCBhygAwIBAgIQA4fOtxwC7FGXGnZAesHKsDANBgkqhkiG9w0BAQsFADCBtTELMAkGA1UE
+BhMCRUMxGDAWBgNVBAoMD0RhdGlsbWVkaWEgUy5BLjEwMC4GA1UECwwnRW50aWRhZCBkZSBjZXJ0
+aWZpY2FjaW9uIGRlIGluZm9ybWFjaW9uMQ8wDQYDVQQIDAZHdWF5YXMxNTAzBgNVBAMMLERhdGls
+IEF1dG9yaWRhZCBkZSBDZXJ0aWZpY2FjaW9uIFN1Ym9yZGluYWRhMRIwEAYDVQQHDAlHdWF5YXF1
+aWwwHhcNMjMwMTE3MTU0OTI4WhcNMjUwMTE2MTY0OTI4WjCBkzElMCMGA1UEAwwcWW9oYW4gU3Rp
+dmVuIENhZGVuYSBCZXJtdWRlejEqMCgGCSqGSIb3DQEJARYbeW9oYW4uY2FkZW5hQHBlZGlkb3N5
+YS5jb20gMQ4wDAYDVQQKDAVEYXRpbDEhMB8GA1UECwwYRW50aWRhZCBkZSBDZXJ0aWZpY2FjaW9u
+MQswCQYDVQQGEwJFQzCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAJyBMysQiS9G7X+I
+8d3Po/ELFyRJdvJ56RQBxcaH2soRXueLIDNrY4HyEUQFSojryR8OgjDgy9cAkt+vFBEm4qo6ilFk
+Zj8oYZjy2PyJk+1+q9N9jCTg6XKeTCc12e1OHMH41f07q3LfGpveoShL/xX5RWik3lX0IEpTzMUF
+9+EUh2fRltHDmwPsZygNx8mlnj1pVMEZ56EuUwf3/hY+83YNLL3VqolVSUaS8B8FIEydg7etnvjs
+pnGiwFhUFFD2z+NVpmInSZijnTCpmt14qPv66T3gWTPT2GUSC9t57XaCuMh9nNcQ9D3dqJ13rgu2
+wOPb25S8yaHhhyK/AZimK5cCAwEAAaOCA14wggNaMCYGA1UdEQQfMB2BG3lvaGFuLmNhZGVuYUBw
+ZWRpZG9zeWEuY29tIDAJBgNVHRMEAjAAMB8GA1UdIwQYMBaAFOVm+bJ4dhtq9M/LeFDFBR86neB3
+MB0GA1UdDgQWBBS6O/jh/x9BQ1MIm+pAsXTvyOqE6zCBkAYDVR0gBIGIMIGFMIGCBgsrBgEEAYOb
+IwIFATBzMHEGCCsGAQUFBwIBFmVodHRwczovL2RhdGlsLW9zLXB1YmxpYy5zMy51cy13ZXN0LTIu
+YW1hem9uYXdzLmNvbS85OGUyMWRiZC1iNmVjLTRlODMtYjllOS1kNGFlMTJiNGQ5NjcvRGF0aWxf
+Q1BTLnBkZjBvBgNVHR8EaDBmMGSgYqBghl5odHRwOi8vZGF0aWwtc3ViY2EtY3JsLnMzLnVzLXdl
+c3QtMi5hbWF6b25hd3MuY29tL2NybC9hMDc4OGVlMC03OGJiLTQwNmItYjM4YS0zMmUzNmFhNGRi
+ZGIuY3JsMEcGCCsGAQUFBwEBBDswOTA3BggrBgEFBQcwAYYraHR0cDovL29jc3AuYWNtLXBjYS51
+cy13ZXN0LTIuYW1hem9uYXdzLmNvbTAOBgNVHQ8BAf8EBAMCBsAwGgYKKwYBBAGDmyMDAQQMDAox
+NzYwODIzMDYwMBwGCisGAQQBg5sjAwIEDgwMWW9oYW4gU3RpdmVuMBYGCisGAQQBg5sjAwMECAwG
+Q2FkZW5hMBgGCisGAQQBg5sjAwQECgwIQmVybXVkZXowHwYKKwYBBAGDmyMDBQQRDA9HZXJlbnRl
+IEdlbmVyYWwwOAYKKwYBBAGDmyMDBwQqDChDYXJsb3MgTW9udHVmYXIgRTEzLTE2IHkgRmVybmFu
+ZG8gQXlhcnphMBoGCisGAQQBg5sjAwgEDAwKMDk5OTk5OTk5OTAVBgorBgEEAYObIwMJBAcMBVF1
+aXRvMDgGCisGAQQBg5sjAwoEKgwoRGVsaXZlcnkgSGVybyBEaCBFLUNvbW1lcmNlIEVjdWFkb3Ig
+Uy5BLjAdBgorBgEEAYObIwMLBA8MDTE3OTI1MTI0MzMwMDEwEgYKKwYBBAGDmyMDDAQEDAJFQzAh
+BgorBgEEAYObIwMgBBMMETAwMS0wMDEtMDAwNDU3MTg5MA0GCSqGSIb3DQEBCwUAA4ICAQBnmStW
+j6sb9d2wAEAHbiFwvG8SEZ5y9N6NE2nlVs1QV1VUAuozBszfjB/7gaLhTb90gJKcRmXaeqC147YB
+6aBTg7Gz+wLp3D3+B6rqD6Q8kTqLSRaVGVLh7rar4bweCp3mH/15nzcfi4ShVZU8mdIHZeGUH8MX
+MYWvtliS571UGjzNaNDSclx6GGUe1uok9sRYWsAvHHrLU5Bu7UBUMfqrDA/BUlpnxIxKGEzAHPUf
+USBRZdCgIWMQvg2lFaqbKcaek+WboIWn/IITF581VTToYN9emLvR93IqSznxuj0iruLI3+oCHUmw
+4WaatmAsvGkhwr+yJfXxDHH0jonwxVQt/I5TGf2BQuIhDrGaDaUSC1MkLHIvfmLNHah5059vKKtJ
+pW3GCYHpwvdpe+e+R8+z3GbLSCoaWbYT48+EBGLLdXi8SaxNq3xUndzWaghvxX8gfMk4ii/s2I0o
+5Lj0V9+GjO1jE0IUsqzBeZNgMBiJGEsk8XyZs5V1xkxxNGQXo0yThYpP8EJXnTZ8pSw2YJ6aqgLL
+19btWKs2AbalYu2mQLrt3O+qqZGhoPKDcZzPF3UVfyXJn6cp+flEyDVMGmkfGpRQMAgzM6XNP+3d
+WuJPItbP4wotfpuHJV0e2r4Izjwv6PE6jAIW2gVv9negQQhiy4ZImIVnHu2CEPzpNjKjQg==
+</ds:X509Certificate>
+</ds:X509Data>
+<ds:KeyValue>
+<ds:RSAKeyValue>
+<ds:Modulus>
+nIEzKxCJL0btf4jx3c+j8QsXJEl28nnpFAHFxofayhFe54sgM2tjgfIRRAVKiOvJHw6CMODL1wCS
+368UESbiqjqKUWRmPyhhmPLY/ImT7X6r032MJODpcp5MJzXZ7U4cwfjV/Turct8am96hKEv/FflF
+aKTeVfQgSlPMxQX34RSHZ9GW0cObA+xnKA3HyaWePWlUwRnnoS5TB/f+Fj7zdg0svdWqiVVJRpLw
+HwUgTJ2Dt62e+OymcaLAWFQUUPbP41WmYidJmKOdMKma3Xio+/rpPeBZM9PYZRIL23ntdoK4yH2c
+1xD0Pd2onXeuC7bA49vblLzJoeGHIr8BmKYrlw==
+</ds:Modulus>
+<ds:Exponent>AQAB</ds:Exponent>
+</ds:RSAKeyValue>
+</ds:KeyValue>
+</ds:KeyInfo>
+<ds:Object Id="Signature150318-Object345218"><etsi:QualifyingProperties Target="#Signature150318"><etsi:SignedProperties Id="Signature150318-SignedProperties359978"><etsi:SignedSignatureProperties><etsi:SigningTime>2024-04-29T20:29:02+00:00</etsi:SigningTime><etsi:SigningCertificate><etsi:Cert><etsi:CertDigest><ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"></ds:DigestMethod><ds:DigestValue>Q4n4bS0809BKviHE7Fww710nHj0=</ds:DigestValue></etsi:CertDigest><etsi:IssuerSerial><ds:X509IssuerName>L=Guayaquil,CN=Datil Autoridad de Certificacion Subordinada,ST=Guayas,OU=Entidad de certificacion de informacion,O=Datilmedia S.A.,C=EC</ds:X509IssuerName><ds:X509SerialNumber>4692836747058155813245414395412073136</ds:X509SerialNumber></etsi:IssuerSerial></etsi:Cert></etsi:SigningCertificate></etsi:SignedSignatureProperties><etsi:SignedDataObjectProperties><etsi:DataObjectFormat ObjectReference="#Reference-ID-390140"><etsi:Description>contenido comprobante</etsi:Description><etsi:MimeType>text/xml</etsi:MimeType></etsi:DataObjectFormat></etsi:SignedDataObjectProperties></etsi:SignedProperties></etsi:QualifyingProperties></ds:Object></ds:Signature></factura>]]></comprobante>
+<mensajes/>
+</autorizacion>
+

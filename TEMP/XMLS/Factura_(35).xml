@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<autorizacion>
+<estado>AUTORIZADO</estado>
+<numeroAutorizacion>2401202401179217168700120021050000157410001574117</numeroAutorizacion>
+<fechaAutorizacion>2024-01-24T16:38:08-05:00</fechaAutorizacion>
+<ambiente>PRODUCCIÓN</ambiente>
+<comprobante><![CDATA[<?xml version="1.0" encoding="utf-8" standalone="no"?><factura xmlns:ds="http://www.w3.org/2000/09/xmldsig#" id="comprobante" version="1.0.0">
+  <infoTributaria>
+    <ambiente>2</ambiente>
+    <tipoEmision>1</tipoEmision>
+    <razonSocial>CENTRO MEDICO AMBULATORIO METROAMBULAT S.A.</razonSocial>
+    <nombreComercial>CENTRO MEDICO AMBULATORIO METROAMBULAT S.A.</nombreComercial>
+    <ruc>1792171687001</ruc>
+    <claveAcceso>2401202401179217168700120021050000157410001574117</claveAcceso>
+    <codDoc>01</codDoc>
+    <estab>002</estab>
+    <ptoEmi>105</ptoEmi>
+    <secuencial>000015741</secuencial>
+    <dirMatriz>AV. AMAZONAS N42-88 y TOMAS DE BERLANGA</dirMatriz>
+  </infoTributaria>
+  <infoFactura>
+    <fechaEmision>24/01/2024</fechaEmision>
+    <dirEstablecimiento>AV DE LA REPUBLICA 481 Y MARTIN CARRION</dirEstablecimiento>
+    <contribuyenteEspecial>181</contribuyenteEspecial>
+    <obligadoContabilidad>SI</obligadoContabilidad>
+    <tipoIdentificacionComprador>05</tipoIdentificacionComprador>
+    <razonSocialComprador>RUBIO PUETATE MILTON ANDRES</razonSocialComprador>
+    <identificacionComprador>1712605284</identificacionComprador>
+    <direccionComprador>SUR  </direccionComprador>
+    <totalSinImpuestos>5</totalSinImpuestos>
+    <totalDescuento>0</totalDescuento>
+    <totalConImpuestos>
+      <totalImpuesto>
+        <codigo>2</codigo>
+        <codigoPorcentaje>0</codigoPorcentaje>
+        <baseImponible>5</baseImponible>
+        <tarifa>0</tarifa>
+        <valor>0</valor>
+      </totalImpuesto>
+      <totalImpuesto>
+        <codigo>2</codigo>
+        <codigoPorcentaje>2</codigoPorcentaje>
+        <baseImponible>0</baseImponible>
+        <tarifa>12</tarifa>
+        <valor>0</valor>
+      </totalImpuesto>
+    </totalConImpuestos>
+    <propina>0</propina>
+    <importeTotal>5</importeTotal>
+    <moneda>DOLAR</moneda>
+    <pagos>
+      <pago>
+        <formaPago>20</formaPago>
+        <total>5</total>
+        <plazo>1</plazo>
+        <unidadTiempo>dias</unidadTiempo>
+      </pago>
+    </pagos>
+  </infoFactura>
+  <detalles>
+    <detalle>
+      <codigoPrincipal>215043</codigoPrincipal>
+      <codigoAuxiliar>01</codigoAuxiliar>
+      <descripcion>COPAGO SERVICIOS MEDICOS</descripcion>
+      <cantidad>1</cantidad>
+      <precioUnitario>5</precioUnitario>
+      <descuento>0</descuento>
+      <precioTotalSinImpuesto>5</precioTotalSinImpuesto>
+      <detallesAdicionales>
+        <detAdicional nombre="Facturas" valor="Factura detallada"/>
+      </detallesAdicionales>
+      <impuestos>
+        <impuesto>
+          <codigo>2</codigo>
+          <codigoPorcentaje>0</codigoPorcentaje>
+          <tarifa>0</tarifa>
+          <baseImponible>5</baseImponible>
+          <valor>0</valor>
+        </impuesto>
+      </impuestos>
+    </detalle>
+  </detalles>
+  <infoAdicional>
+    <campoAdicional nombre="CAJA: ">CMCR3-KROSERO-633</campoAdicional>
+    <campoAdicional nombre="FORMAS DE PAGO: ">CC 5</campoAdicional>
+    <campoAdicional nombre="PACIENTE: ">NHCL:69363501 ADM:29 PRF:86616540115</campoAdicional>
+    <campoAdicional nombre="NOMBRE: ">RUBIO PUETATE MILTON ANDRES</campoAdicional>
+    <campoAdicional nombre="PLAN: ">PLC:24501 PLAN BUPA CVN:31601 BUPA ECUADOR SA</campoAdicional>
+    <campoAdicional nombre="OBSERVACION: ">.</campoAdicional>
+    <campoAdicional nombre="emailCliente">miltonrubio@hotmail.com</campoAdicional>
+    <campoAdicional nombre="CREDITO_SEGURO">.</campoAdicional>
+  </infoAdicional>
+<ds:Signature xmlns:etsi="http://uri.etsi.org/01903/v1.3.2#" Id="Signature680050">
+<ds:SignedInfo Id="Signature-SignedInfo893343">
+<ds:CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/>
+<ds:SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/>
+<ds:Reference Id="SignedPropertiesID895629" Type="http://uri.etsi.org/01903#SignedProperties" URI="#Signature680050-SignedProperties393715">
+<ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/>
+<ds:DigestValue>BoJT4VqdojMw+MxPblH7BPr+qVc=</ds:DigestValue>
+</ds:Reference>
+<ds:Reference URI="#Certificate1928461">
+<ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/>
+<ds:DigestValue>nA5Cbg0K8/3aH92vTLpD5E5GLkM=</ds:DigestValue>
+</ds:Reference>
+<ds:Reference Id="Reference-ID-10534" URI="#comprobante">
+<ds:Transforms>
+<ds:Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/>
+</ds:Transforms>
+<ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/>
+<ds:DigestValue>JyHoapPgnX9NJ1Fdqfq4JO9iEQM=</ds:DigestValue>
+</ds:Reference>
+</ds:SignedInfo>
+<ds:SignatureValue Id="SignatureValue252586">
+XXGDmBn2XdctChh7Hwm/+RaQfzNhf7ln4BzStkaJf0Zr1P13r7fNIW993ZShDdRY/+f4PHg0glU8
+4mLWs6fYelhVjoPY+SgvbLTRzYyC5WU29zJaZnrVYLt759krflwIpBXeH/lBTcasm8hIljCEYk4y
+3TMluSa5cYBEaXrWMyb8urnmkxTKluto+1mnBZBNMHSwipgytstr5u0AmH/LS1BJTQxl3i4Lvmv1
+sYFb8gaJZfgRJZfebqX4U5+6a83eijGfzVv4mUEdM04tZMYccIoVk80P3w7x5e2W/8T6ieBrUrcx
+rFW2NdoJlHjXJnxvVuL8pmNefEbFMvNUpHwN4w==
+</ds:SignatureValue>
+<ds:KeyInfo Id="Certificate1928461">
+<ds:X509Data>
+<ds:X509Certificate>
+MIIKHjCCCAagAwIBAgIEZTRVkTANBgkqhkiG9w0BAQsFADCBoTELMAkGA1UEBhMCRUMxIjAgBgNV
+BAoTGUJBTkNPIENFTlRSQUwgREVMIEVDVUFET1IxNzA1BgNVBAsTLkVOVElEQUQgREUgQ0VSVElG
+SUNBQ0lPTiBERSBJTkZPUk1BQ0lPTi1FQ0lCQ0UxDjAMBgNVBAcTBVFVSVRPMSUwIwYDVQQDExxB
+QyBCQU5DTyBDRU5UUkFMIERFTCBFQ1VBRE9SMB4XDTIzMTEwOTIwMTIzNVoXDTI1MTEwOTIwNDIz
+OVowgbYxCzAJBgNVBAYTAkVDMSIwIAYDVQQKExlCQU5DTyBDRU5UUkFMIERFTCBFQ1VBRE9SMTcw
+NQYDVQQLEy5FTlRJREFEIERFIENFUlRJRklDQUNJT04gREUgSU5GT1JNQUNJT04tRUNJQkNFMQ4w
+DAYDVQQHEwVRVUlUTzE6MBEGA1UEBRMKMDAwMDA5MzU2OTAlBgNVBAMTHkdBQlJJRUxBIEFMRVhB
+TkRSQSBRVUVMIEdBUkNJQTCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAMD+hrYBPHFl
+eVWrHwt9AUuBoQHoaq21Pz7ykk/A3ER62AJDt7gVWbYdhVCvFHu8HO2Z+syvc6wYhjru9+fcZ4jc
+l9kR9y+ia6TQ7ydtCMBdPofzclLVNBB93h1kLyDo6rEyYDCMK9X+wG7qjfQeNdIlO1i/jSFdK0Bi
+W+FvmYcKjXCNzITLcRciVUwnLn3gIZcbDEMnQq1mmkCYleFEjRn0JqoHs/T+SsiJPZJ9m+c9K5w3
+tubWTyLbQ6w6s2taElU0G4bbdlp7PX+v1FkJyN/bPI8aMNJhdvWVsGgAmbzHkmwPU1jqdafyWBo1
++EjMK+qAn5TdIhlDROd4JpYLDscCAwEAAaOCBUUwggVBMAsGA1UdDwQEAwIHgDBnBgNVHSAEYDBe
+MFwGCysGAQQBgqg7AgIBME0wSwYIKwYBBQUHAgEWP2h0dHA6Ly93d3cuZWNpLmJjZS5lYy9wb2xp
+dGljYS1jZXJ0aWZpY2Fkby9wZXJzb25hLWp1cmlkaWNhLnBkZjCBkQYIKwYBBQUHAQEEgYQwgYEw
+PgYIKwYBBQUHMAGGMmh0dHA6Ly9vY3NwLmVjaS5iY2UuZWMvZWpiY2EvcHVibGljd2ViL3N0YXR1
+cy9vY3NwMD8GCCsGAQUFBzABhjNodHRwOi8vb2NzcDEuZWNpLmJjZS5lYy9lamJjYS9wdWJsaWN3
+ZWIvc3RhdHVzL29jc3AwOwYKKwYBBAGCqDsDCgQtEytDRU5UUk8gTUVESUNPIEFNQlVMQVRPUklP
+IE1FVFJPQU1CVUxBVCBTLkEuMB0GCisGAQQBgqg7AwsEDxMNMTc5MjE3MTY4NzAwMTAaBgorBgEE
+AYKoOwMBBAwTCjE3MTU0OTcwNTEwIgYKKwYBBAGCqDsDAgQUExJHQUJSSUVMQSBBTEVYQU5EUkEw
+FAYKKwYBBAGCqDsDAwQGEwRRVUVMMBYGCisGAQQBgqg7AwQECBMGR0FSQ0lBMCEGCisGAQQBgqg7
+AwUEExMRQ09OVEFET1JBIEdFTkVSQUwwOQYKKwYBBAGCqDsDBwQrEylKT0FRVUlOIENISVJJQk9H
+QSBONjQtMTY4IFkgQU5HRUwgU0FMQVpBUjAZBgorBgEEAYKoOwMIBAsTCTAyMzQ1MTE3OTAVBgor
+BgEEAYKoOwMJBAcTBVFVSVRPMBcGCisGAQQBgqg7AwwECRMHRUNVQURPUjAgBgorBgEEAYKoOwMz
+BBITEFNPRlRXQVJFLUFSQ0hJVk8wKAYDVR0RBCEwH4EdZ2FicmllbGEucXVlbEBtZXRyb3JlZC5t
+ZWQuZWMwggHhBgNVHR8EggHYMIIB1DCCAdCgggHMoIIByIaB1mxkYXA6Ly9iY2VxbGRhcHN1YnAx
+LmJjZS5lYy9jbj1DUkwxOTE4LGNuPUFDJTIwQkFOQ08lMjBDRU5UUkFMJTIwREVMJTIwRUNVQURP
+UixsPVFVSVRPLG91PUVOVElEQUQlMjBERSUyMENFUlRJRklDQUNJT04lMjBERSUyMElORk9STUFD
+SU9OLUVDSUJDRSxvPUJBTkNPJTIwQ0VOVFJBTCUyMERFTCUyMEVDVUFET1IsYz1FQz9jZXJ0aWZp
+Y2F0ZVJldm9jYXRpb25MaXN0P2Jhc2WGNGh0dHA6Ly93d3cuZWNpLmJjZS5lYy9DUkwvZWNpX2Jj
+ZV9lY19jcmxmaWxlY29tYi5jcmykgbYwgbMxCzAJBgNVBAYTAkVDMSIwIAYDVQQKExlCQU5DTyBD
+RU5UUkFMIERFTCBFQ1VBRE9SMTcwNQYDVQQLEy5FTlRJREFEIERFIENFUlRJRklDQUNJT04gREUg
+SU5GT1JNQUNJT04tRUNJQkNFMQ4wDAYDVQQHEwVRVUlUTzElMCMGA1UEAxMcQUMgQkFOQ08gQ0VO
+VFJBTCBERUwgRUNVQURPUjEQMA4GA1UEAxMHQ1JMMTkxODArBgNVHRAEJDAigA8yMDIzMTEwOTIw
+MTIzNVqBDzIwMjUxMTA5MjA0MjM5WjAfBgNVHSMEGDAWgBRIot8jHx34LFF6jAPNSTKlCcGUqzAd
+BgNVHQ4EFgQUCRz9JIERQDkadoop9yL7qZKmugkwCQYDVR0TBAIwADAZBgkqhkiG9n0HQQAEDDAK
+GwRWOC4xAwIEMDANBgkqhkiG9w0BAQsFAAOCAgEAOs3wAOgQog2WBr1SVXWnEFOBscOuCk3z0jDX
+i6GA9aM7spHXG9JEYn0UJgiZPrkfN3oV8sRteJsUNgPF59ghwMYVcoVZfM75FJbryXP2CnIFip4l
+ibebKoYVrrvpnUQWNqbEl60Dmob3WQufmZBi9QMn8f87GEIZGzCfw+qojD5vbx5sLZN8203mFB3G
+1Y217InLw+MEeITWMyo3pylP+xxSsDTlaX3zEPhJCMilspQV64BF6qBX+yebCmUlIYwM728JlFTw
+4NTq158deARuaqP4wY4Z2WBkTni0xPn4Z+B4blAKvKoWdMmcT5euESXU+oT0O4kuxa0+LinYU4hz
+sNz80UCukre0s0EM/1VYHli2bVYrFZb0cIGzaqEBZoyYOmNl9VQtaghrWpRGXBezVCOHQstJ0MVo
+GbJHOxET5A/wuLet9h0ANCxEFcEacjDyzVuxDV75mDw2iTjlBNV5nAoH1HsK3La5x83jIQYIMno1
+uew9MIxYJhR6XUl8jXtYC40RN0L3wgbodi2gMR1UDis3lSCHROvvC0umJshqJcmUEBJqhzJtGBoy
+qyGJl+0420qEf+r7Xmc1V4N2d1jCOnR7rAhB9wCD2IFrxOUxjQdVaruaIaJNwQGbGfmGl6ZYNwsJ
+MGajhjn/x1UnHx7/KXrseTNGZMfvhXBKJ3Q/pxg=
+</ds:X509Certificate>
+</ds:X509Data>
+<ds:KeyValue>
+<ds:RSAKeyValue>
+<ds:Modulus>
+wP6GtgE8cWV5VasfC30BS4GhAehqrbU/PvKST8DcRHrYAkO3uBVZth2FUK8Ue7wc7Zn6zK9zrBiG
+Ou7359xniNyX2RH3L6JrpNDvJ20IwF0+h/NyUtU0EH3eHWQvIOjqsTJgMIwr1f7AbuqN9B410iU7
+WL+NIV0rQGJb4W+ZhwqNcI3MhMtxFyJVTCcufeAhlxsMQydCrWaaQJiV4USNGfQmqgez9P5KyIk9
+kn2b5z0rnDe25tZPIttDrDqza1oSVTQbhtt2Wns9f6/UWQnI39s8jxow0mF29ZWwaACZvMeSbA9T
+WOp1p/JYGjX4SMwr6oCflN0iGUNE53gmlgsOxw==
+</ds:Modulus>
+<ds:Exponent>AQAB</ds:Exponent>
+</ds:RSAKeyValue>
+</ds:KeyValue>
+</ds:KeyInfo>
+<ds:Object Id="Signature680050-Object971002"><etsi:QualifyingProperties Target="#Signature680050"><etsi:SignedProperties Id="Signature680050-SignedProperties393715"><etsi:SignedSignatureProperties><etsi:SigningTime>2024-01-24T16:38:06-05:00</etsi:SigningTime><etsi:SigningCertificate><etsi:Cert><etsi:CertDigest><ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/><ds:DigestValue>Cv3ExOINbjPlLVFaZoKcnkNG4/g=</ds:DigestValue></etsi:CertDigest><etsi:IssuerSerial><ds:X509IssuerName>CN=AC BANCO CENTRAL DEL ECUADOR,L=QUITO,OU=ENTIDAD DE CERTIFICACION DE INFORMACION-ECIBCE,O=BANCO CENTRAL DEL ECUADOR,C=EC</ds:X509IssuerName><ds:X509SerialNumber>1697928593</ds:X509SerialNumber></etsi:IssuerSerial></etsi:Cert></etsi:SigningCertificate></etsi:SignedSignatureProperties><etsi:SignedDataObjectProperties><etsi:DataObjectFormat ObjectReference="#Reference-ID-10534"><etsi:Description>comprobante</etsi:Description><etsi:MimeType>text/xml</etsi:MimeType></etsi:DataObjectFormat></etsi:SignedDataObjectProperties></etsi:SignedProperties></etsi:QualifyingProperties></ds:Object></ds:Signature></factura>]]></comprobante>
+<mensajes/>
+</autorizacion>
+
