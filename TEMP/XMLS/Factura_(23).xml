@@ -1,0 +1,280 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<autorizacion>
+<estado>AUTORIZADO</estado>
+<numeroAutorizacion>1904202401171296412900120010020000201731234567815</numeroAutorizacion>
+<fechaAutorizacion>2024-04-19T12:43:48-05:00</fechaAutorizacion>
+<ambiente>PRODUCCIÓN</ambiente>
+<comprobante><![CDATA[<?xml version="1.0" encoding="UTF-8"?><factura id="comprobante" version="1.1.0"><infoTributaria><ambiente>2</ambiente><tipoEmision>1</tipoEmision><razonSocial>GALLARDO ROMERO MONICA ALEXANDRA</razonSocial><nombreComercial>MEYTEX</nombreComercial><ruc>1712964129001</ruc><claveAcceso>1904202401171296412900120010020000201731234567815</claveAcceso><codDoc>01</codDoc><estab>001</estab><ptoEmi>002</ptoEmi><secuencial>000020173</secuencial><dirMatriz>QUITO JOSE DE LA CUADRA N13-349 Y FRATERNIDAD</dirMatriz><agenteRetencion>1</agenteRetencion></infoTributaria>
+  <infoFactura>
+    <fechaEmision>19/04/2024</fechaEmision>
+    <obligadoContabilidad>SI</obligadoContabilidad>
+    <tipoIdentificacionComprador>05</tipoIdentificacionComprador>
+    <razonSocialComprador>RUBIO PUETATE MILTON ANDRES</razonSocialComprador>
+    <identificacionComprador>1712605284</identificacionComprador>
+    <direccionComprador>LOS ENCUENTROS S15-53 Y AV AJAVI</direccionComprador>
+    <totalSinImpuestos>153.68</totalSinImpuestos>
+    <totalDescuento>15.37</totalDescuento>
+    <totalConImpuestos>
+      <totalImpuesto>
+        <codigo>2</codigo>
+        <codigoPorcentaje>4</codigoPorcentaje>
+        <descuentoAdicional>15.37</descuentoAdicional>
+        <baseImponible>153.68</baseImponible>
+        <tarifa>15.00</tarifa>
+        <valor>20.75</valor>
+      </totalImpuesto>
+    </totalConImpuestos>
+    <propina>0.00</propina>
+    <importeTotal>159.06</importeTotal>
+    <moneda>DOLAR</moneda>
+    <pagos>
+      <pago>
+        <formaPago>20</formaPago>
+        <total>159.06</total>
+        <plazo>60</plazo>
+        <unidadTiempo>dias</unidadTiempo>
+      </pago>
+    </pagos>
+  </infoFactura>
+  <detalles>
+    <detalle>
+      <codigoPrincipal>10TPBX222</codigoPrincipal>
+      <descripcion>TOP PASSIONES BX222</descripcion>
+      <cantidad>11.000</cantidad>
+      <precioUnitario>1.0268</precioUnitario>
+      <descuento>0.00</descuento>
+      <precioTotalSinImpuesto>11.29</precioTotalSinImpuesto>
+      <impuestos>
+        <impuesto>
+          <codigo>2</codigo>
+          <codigoPorcentaje>4</codigoPorcentaje>
+          <tarifa>15.00</tarifa>
+          <baseImponible>11.29</baseImponible>
+          <valor>1.69</valor>
+        </impuesto>
+      </impuestos>
+    </detalle>
+    <detalle>
+      <codigoPrincipal>10HPQ8057</codigoPrincipal>
+      <descripcion>HILO PASSIONES Q8057</descripcion>
+      <cantidad>12.000</cantidad>
+      <precioUnitario>1.4807</precioUnitario>
+      <descuento>0.00</descuento>
+      <precioTotalSinImpuesto>17.77</precioTotalSinImpuesto>
+      <impuestos>
+        <impuesto>
+          <codigo>2</codigo>
+          <codigoPorcentaje>4</codigoPorcentaje>
+          <tarifa>15.00</tarifa>
+          <baseImponible>17.77</baseImponible>
+          <valor>2.67</valor>
+        </impuesto>
+      </impuestos>
+    </detalle>
+    <detalle>
+      <codigoPrincipal>10HEXU1032</codigoPrincipal>
+      <descripcion>HILO ESPLIEGO XU1032</descripcion>
+      <cantidad>12.000</cantidad>
+      <precioUnitario>1.1086</precioUnitario>
+      <descuento>0.00</descuento>
+      <precioTotalSinImpuesto>13.30</precioTotalSinImpuesto>
+      <impuestos>
+        <impuesto>
+          <codigo>2</codigo>
+          <codigoPorcentaje>4</codigoPorcentaje>
+          <tarifa>15.00</tarifa>
+          <baseImponible>13.30</baseImponible>
+          <valor>2.00</valor>
+        </impuesto>
+      </impuestos>
+    </detalle>
+    <detalle>
+      <codigoPrincipal>10HPK249</codigoPrincipal>
+      <descripcion>HILO PASSIONES K249</descripcion>
+      <cantidad>12.000</cantidad>
+      <precioUnitario>0.8110</precioUnitario>
+      <descuento>0.00</descuento>
+      <precioTotalSinImpuesto>9.73</precioTotalSinImpuesto>
+      <impuestos>
+        <impuesto>
+          <codigo>2</codigo>
+          <codigoPorcentaje>4</codigoPorcentaje>
+          <tarifa>15.00</tarifa>
+          <baseImponible>9.73</baseImponible>
+          <valor>1.46</valor>
+        </impuesto>
+      </impuestos>
+    </detalle>
+    <detalle>
+      <codigoPrincipal>10HPP3759</codigoPrincipal>
+      <descripcion>HILO PASSIONES P3759</descripcion>
+      <cantidad>12.000</cantidad>
+      <precioUnitario>1.1830</precioUnitario>
+      <descuento>0.00</descuento>
+      <precioTotalSinImpuesto>14.20</precioTotalSinImpuesto>
+      <impuestos>
+        <impuesto>
+          <codigo>2</codigo>
+          <codigoPorcentaje>4</codigoPorcentaje>
+          <tarifa>15.00</tarifa>
+          <baseImponible>14.20</baseImponible>
+          <valor>2.13</valor>
+        </impuesto>
+      </impuestos>
+    </detalle>
+    <detalle>
+      <codigoPrincipal>10148UN</codigoPrincipal>
+      <descripcion>HILO DAMARIS 10148 UNICA</descripcion>
+      <cantidad>12.000</cantidad>
+      <precioUnitario>1.3319</precioUnitario>
+      <descuento>0.00</descuento>
+      <precioTotalSinImpuesto>15.98</precioTotalSinImpuesto>
+      <impuestos>
+        <impuesto>
+          <codigo>2</codigo>
+          <codigoPorcentaje>4</codigoPorcentaje>
+          <tarifa>15.00</tarifa>
+          <baseImponible>15.98</baseImponible>
+          <valor>2.40</valor>
+        </impuesto>
+      </impuestos>
+    </detalle>
+    <detalle>
+      <codigoPrincipal>10PA071L</codigoPrincipal>
+      <descripcion>PANTY ROMA 10PA071 L</descripcion>
+      <cantidad>36.000</cantidad>
+      <precioUnitario>1.4900</precioUnitario>
+      <descuento>0.00</descuento>
+      <precioTotalSinImpuesto>53.64</precioTotalSinImpuesto>
+      <impuestos>
+        <impuesto>
+          <codigo>2</codigo>
+          <codigoPorcentaje>4</codigoPorcentaje>
+          <tarifa>15.00</tarifa>
+          <baseImponible>53.64</baseImponible>
+          <valor>8.05</valor>
+        </impuesto>
+      </impuestos>
+    </detalle>
+    <detalle>
+      <codigoPrincipal>30BO003L</codigoPrincipal>
+      <descripcion>BOXER PEDRO 30BO003 L</descripcion>
+      <cantidad>12.000</cantidad>
+      <precioUnitario>1.4806</precioUnitario>
+      <descuento>0.00</descuento>
+      <precioTotalSinImpuesto>17.77</precioTotalSinImpuesto>
+      <impuestos>
+        <impuesto>
+          <codigo>2</codigo>
+          <codigoPorcentaje>4</codigoPorcentaje>
+          <tarifa>15.00</tarifa>
+          <baseImponible>17.77</baseImponible>
+          <valor>2.67</valor>
+        </impuesto>
+      </impuestos>
+    </detalle>
+  </detalles>
+  <infoAdicional><campoAdicional nombre="AGENTE DE RETENCIÓN">Resolución No. 1</campoAdicional></infoAdicional>
+<ds:Signature xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xmlns:etsi="http://uri.etsi.org/01903/v1.3.2#" Id="Signature946128">
+<ds:SignedInfo Id="Signature-SignedInfo900585">
+<ds:CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/>
+<ds:SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/>
+<ds:Reference Id="SignedPropertiesID984127" Type="http://uri.etsi.org/01903#SignedProperties" URI="#Signature946128-SignedProperties267632">
+<ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/>
+<ds:DigestValue>/aWtmK+jVb0rshAynCYR1kogYew=</ds:DigestValue>
+</ds:Reference>
+<ds:Reference URI="#Certificate1992343">
+<ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/>
+<ds:DigestValue>djIzjmzMVE4hT6yr1JnAwGS/JKQ=</ds:DigestValue>
+</ds:Reference>
+<ds:Reference Id="Reference-ID-487761" URI="#comprobante">
+<ds:Transforms>
+<ds:Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/>
+</ds:Transforms>
+<ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/>
+<ds:DigestValue>Ys/+Q0bmL2Q+Iur+cQtxGBImmZM=</ds:DigestValue>
+</ds:Reference>
+</ds:SignedInfo>
+<ds:SignatureValue Id="SignatureValue877111">
+QKikkUpfbBD0l+H4XdFZUoyRl/L073lNMzOTUTAcng2qZZe6iMcZzLs6ztAy9qTKNQXZILrgSwlh
+dCewWCic2aHr0luV0YcwikokkCprXzH7QPU/F+iHmwEy6GAsq6sTx4wn4JH7UmjFvqbkSPZzbD+h
+mzr3QzQ95JmNDWUB1C9S1EsvLXiL/6sTJUUf3FT5wWVWiT2YZfNThLmqr1nv+T1ckT7nJ9D0PK0P
++lq4oODq44a8wN1uoty8ETC6JZniWu2PfpCWFFSfHxJl84czsP6D/Y8Ik+VIfiTPF+dT2jfrh3Te
+nePPVvVgB/J2mqNM4752Wr/rIfI6+olAfWCQBw==
+</ds:SignatureValue>
+<ds:KeyInfo Id="Certificate1992343">
+<ds:X509Data>
+<ds:X509Certificate>
+MIIL9jCCCd6gAwIBAgIEVnYFfzANBgkqhkiG9w0BAQsFADCBmTELMAkGA1UEBhMCRUMxHTAbBgNV
+BAoMFFNFQ1VSSVRZIERBVEEgUy5BLiAyMTAwLgYDVQQLDCdFTlRJREFEIERFIENFUlRJRklDQUNJ
+T04gREUgSU5GT1JNQUNJT04xOTA3BgNVBAMMMEFVVE9SSURBRCBERSBDRVJUSUZJQ0FDSU9OIFNV
+QkNBLTIgU0VDVVJJVFkgREFUQTAeFw0yNDAxMzEyMjM3MzZaFw0yNzAxMzAyMjM3MzZaMIGrMSkw
+JwYDVQQDDCBNT05JQ0EgQUxFWEFORFJBIEdBTExBUkRPIFJPTUVSTzEgMB4GA1UEBRMXMTcxMjk2
+NDEyOS0zMTAxMjQxNzQ3MjcxMDAuBgNVBAsMJ0VOVElEQUQgREUgQ0VSVElGSUNBQ0lPTiBERSBJ
+TkZPUk1BQ0lPTjEdMBsGA1UECgwUU0VDVVJJVFkgREFUQSBTLkEuIDIxCzAJBgNVBAYTAkVDMIIB
+IjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAnabfhPoAjQLhdO/LgAG9gINat36AlULMW1o/
+pU8/T7okt8yaKRrF91YsJDXHop2wyneESdn9ReK1ZFH25rd3igz2tB6rjyVf7HYidSJs0u1hg5dr
+JuqDAcmzx9kWvBAM8augs3Ob9WNEmcJCsA5S3NtBTLSoW1rWzgVLbEvFFdNM/+eCmAGYnhNMnZrw
+jszouiTwS/4XeRkm9x/HovcZdD1Wydnxnx2MOWG/Zeo998NLvs6/zcndnbBEUCHPFl5nh7JtFSb5
+R72c7wNsWK7ElN0gs8NUpSBZ8y4afd9Cy/aBd0NgriHWfFRnvDYBjRAguY7BGPFS0tNN858wJgvx
+mQIDAQABo4IHMDCCBywwDAYDVR0TAQH/BAIwADAfBgNVHSMEGDAWgBSMusoRV3glgB1rCktVv42u
+Yt29jzBZBggrBgEFBQcBAQRNMEswSQYIKwYBBQUHMAGGPWh0dHA6Ly9vY3NwZ3cuc2VjdXJpdHlk
+YXRhLm5ldC5lYy9lamJjYS9wdWJsaWN3ZWIvc3RhdHVzL29jc3Awgc8GA1UdLgSBxzCBxDCBwaCB
+vqCBu4aBuGxkYXA6Ly9sZGFwc2RjYTIuc2VjdXJpdHlkYXRhLm5ldC5lYy9DTj1BVVRPUklEQUQg
+REUgQ0VSVElGSUNBQ0lPTiBTVUJDQS0yIFNFQ1VSSVRZIERBVEEsT1U9RU5USURBRCBERSBDRVJU
+SUZJQ0FDSU9OIERFIElORk9STUFDSU9OLE89U0VDVVJJVFkgREFUQSBTLkEuIDIsQz1FQz9kZWx0
+YVJldm9jYXRpb25MaXN0P2Jhc2UwIwYDVR0RBBwwGoEYbWVkaWFzeXRleHRpbGVzQHlhaG9vLmVz
+MIIBBgYDVR0gBIH+MIH7MFoGCisGAQQBgqZyAgcwTDBKBggrBgEFBQcCAjA+HjwAQwBlAHIAdABp
+AGYAaQBjAGEAZABvACAAZABlACAAUABlAHIAcwBvAG4AYQAgAE4AYQB0AHUAcgBhAGwwgZwGCisG
+AQQBgqZyAgEwgY0wgYoGCCsGAQUFBwIBFn5odHRwczovL3d3dy5zZWN1cml0eWRhdGEubmV0LmVj
+L3dwLWNvbnRlbnQvZG93bmxvYWRzL05vcm1hdGl2YXMvUF9kZV9DZXJ0aWZpY2Fkb3MvUG9saXRp
+Y2FzIGRlIENlcnRpZmljYWRvIFBlcnNvbmEgTmF0dXJhbC5wZGYwggKiBgNVHR8EggKZMIIClTCB
+5aBBoD+GPWh0dHA6Ly9vY3NwZ3cuc2VjdXJpdHlkYXRhLm5ldC5lYy9lamJjYS9wdWJsaWN3ZWIv
+c3RhdHVzL29jc3CigZ+kgZwwgZkxOTA3BgNVBAMMMEFVVE9SSURBRCBERSBDRVJUSUZJQ0FDSU9O
+IFNVQkNBLTIgU0VDVVJJVFkgREFUQTEwMC4GA1UECwwnRU5USURBRCBERSBDRVJUSUZJQ0FDSU9O
+IERFIElORk9STUFDSU9OMR0wGwYDVQQKDBRTRUNVUklUWSBEQVRBIFMuQS4gMjELMAkGA1UEBhMC
+RUMwgceggcSggcGGgb5sZGFwOi8vbGRhcHNkY2EyLnNlY3VyaXR5ZGF0YS5uZXQuZWMvQ049QVVU
+T1JJREFEIERFIENFUlRJRklDQUNJT04gU1VCQ0EtMiBTRUNVUklUWSBEQVRBLE9VPUVOVElEQUQg
+REUgQ0VSVElGSUNBQ0lPTiBERSBJTkZPUk1BQ0lPTixPPVNFQ1VSSVRZIERBVEEgUy5BLiAyLEM9
+RUM/Y2VydGlmaWNhdGVSZXZvY2F0aW9uTGlzdD9iYXNlMIHgoIHdoIHahoHXaHR0cHM6Ly9wb3J0
+YWwtb3BlcmFkb3IyLnNlY3VyaXR5ZGF0YS5uZXQuZWMvZWpiY2EvcHVibGljd2ViL3dlYmRpc3Qv
+Y2VydGRpc3Q/Y21kPWNybCZpc3N1ZXI9Q049QVVUT1JJREFEIERFIENFUlRJRklDQUNJT04gU1VC
+Q0EtMiBTRUNVUklUWSBEQVRBLE9VPUVOVElEQUQgREUgQ0VSVElGSUNBQ0lPTiBERSBJTkZPUk1B
+Q0lPTixPPVNFQ1VSSVRZIERBVEEgUy5BLiAyLEM9RUMwHQYDVR0OBBYEFG5itl0eOFW4Etw7jCne
+mXDfhr9HMCsGA1UdEAQkMCKADzIwMjQwMTMxMjIzNzM2WoEPMjAyNzAxMzAyMjM3MzZaMAsGA1Ud
+DwQEAwIF4DAaBgorBgEEAYKmcgMBBAwMCjE3MTI5NjQxMjkwGAYKKwYBBAGCpnIDCQQKDAhDT05P
+Q09UTzARBgorBgEEAYKmcgMiBAMMAS4wNgYKKwYBBAGCpnIDBwQoDCZKT1NFIERFIExBIENVQURS
+QSAxMyAzNDkgWSBGUkFURVJOSURBRDAgBgorBgEEAYKmcgMCBBIMEE1PTklDQSBBTEVYQU5EUkEw
+HwYKKwYBBAGCpnIDIAQRDA8wMDIwMDEwMDA3NjI3NjYwEQYKKwYBBAGCpnIDIwQDDAEuMBMGCisG
+AQQBgqZyAyEEBQwDUEZYMBcGCisGAQQBgqZyAwwECQwHRUNVQURPUjAYBgorBgEEAYKmcgMDBAoM
+CEdBTExBUkRPMBsGCisGAQQBgqZyAx4EDQwLQ09NRVJDSUFOVEUwHQYKKwYBBAGCpnIDCwQPDA0x
+NzEyOTY0MTI5MDAxMBEGCisGAQQBgqZyAx0EAwwBLjAWBgorBgEEAYKmcgMEBAgMBlJPTUVSTzAa
+BgorBgEEAYKmcgMIBAwMCjA5ODM4Nzg0MjIwDQYJKoZIhvcNAQELBQADggIBAFTnaJVauj13zGq0
+Mxzq7TtPtx4QP1+ecICRMlYefyzYoO1GSx5Pd3kKVTNMEykCt7qov92lPQIFooad0lNWdX6ApVPz
+y/Evqdn6umhlUhuJQMEelLBA2IElBqE9TLILxRD4kyAivR7h46+4a/uPh+fDcOwVzjDMEomlWUn0
+EeM9CeB9jzwZ71Zj1Kz0BgmnEQ/IF2IVXnzIR89VTsV7z1kwDKOV+rU5KOZAO2jQF8hDvusUlPx0
+HQNHnlJn3TYs9iZyUcAP3J1WETrG2YSpI/OfopWOPWmoYOmyEkFoo4v1xcq3hfhvt7WmZKS4nmP0
+xv8YYmXG9BJpMIfCsDb+oaZbfhaSygITVxRAcfx77pn93qW8d8ffaSihxBmYdMWqQv7eLCHsWmqv
+xzlY8rbLyY4vqCLK9ndoZyLPEbV17yQHBbv6Wjo5trgZIaFPNrL2OA6npIM0e0L+DnGivVTBRUxC
+fDBlt9X5KHnLA8gtnJ+kLtT9Sxoz+8z/F44lQaKCoOhX+05Kwv5dF7XUyeMRhD9VBdHd73h91Wah
+oxjtUH98+NMDFJ8HGn9/upjCCypQ8RzvoDotP1VeKknKWLlqb5tK0cg9R0S9Zvi9VK9KC5YshGVV
+jVzgZAdiKwCQYPLStGIeGXRFPyCe9gDdiYYCyPins1xjdXc5ZyfUhuqZWBz8
+</ds:X509Certificate>
+</ds:X509Data>
+<ds:KeyValue>
+<ds:RSAKeyValue>
+<ds:Modulus>
+nabfhPoAjQLhdO/LgAG9gINat36AlULMW1o/pU8/T7okt8yaKRrF91YsJDXHop2wyneESdn9ReK1
+ZFH25rd3igz2tB6rjyVf7HYidSJs0u1hg5drJuqDAcmzx9kWvBAM8augs3Ob9WNEmcJCsA5S3NtB
+TLSoW1rWzgVLbEvFFdNM/+eCmAGYnhNMnZrwjszouiTwS/4XeRkm9x/HovcZdD1Wydnxnx2MOWG/
+Zeo998NLvs6/zcndnbBEUCHPFl5nh7JtFSb5R72c7wNsWK7ElN0gs8NUpSBZ8y4afd9Cy/aBd0Ng
+riHWfFRnvDYBjRAguY7BGPFS0tNN858wJgvxmQ==
+</ds:Modulus>
+<ds:Exponent>AQAB</ds:Exponent>
+</ds:RSAKeyValue>
+</ds:KeyValue>
+</ds:KeyInfo>
+<ds:Object Id="Signature946128-Object984809"><etsi:QualifyingProperties Target="#Signature946128"><etsi:SignedProperties Id="Signature946128-SignedProperties267632"><etsi:SignedSignatureProperties><etsi:SigningTime>2024-04-19T12:43:47-05:00</etsi:SigningTime><etsi:SigningCertificate><etsi:Cert><etsi:CertDigest><ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/><ds:DigestValue>4vQzxWRdkTVVR3BB30pC80lsLgM=</ds:DigestValue></etsi:CertDigest><etsi:IssuerSerial><ds:X509IssuerName>CN=AUTORIDAD DE CERTIFICACION SUBCA-2 SECURITY DATA,OU=ENTIDAD DE CERTIFICACION DE INFORMACION,O=SECURITY DATA S.A. 2,C=EC</ds:X509IssuerName><ds:X509SerialNumber>1450575231</ds:X509SerialNumber></etsi:IssuerSerial></etsi:Cert></etsi:SigningCertificate></etsi:SignedSignatureProperties><etsi:SignedDataObjectProperties><etsi:DataObjectFormat ObjectReference="#Reference-ID-487761"><etsi:Description>contenido comprobante</etsi:Description><etsi:MimeType>text/xml</etsi:MimeType></etsi:DataObjectFormat></etsi:SignedDataObjectProperties></etsi:SignedProperties></etsi:QualifyingProperties></ds:Object></ds:Signature></factura>]]></comprobante>
+<mensajes/>
+</autorizacion>
+

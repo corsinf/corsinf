@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<autorizacion>
+<estado>AUTORIZADO</estado>
+<numeroAutorizacion>0104202401179184765200120010010276536272765362717</numeroAutorizacion>
+<fechaAutorizacion>2024-04-01T10:42:48-05:00</fechaAutorizacion>
+<ambiente>PRODUCCIÓN</ambiente>
+<comprobante><![CDATA[<?xml version="1.0" encoding="UTF-8" standalone="no"?><factura xmlns:ns2="http://www.w3.org/2000/09/xmldsig#" id="comprobante" version="2.1.0"><infoTributaria><ambiente>2</ambiente><tipoEmision>1</tipoEmision><razonSocial>SERVICIOS DE TELECOMUNICACIONES SETEL S.A.</razonSocial><nombreComercial>1791847652001</nombreComercial><ruc>1791847652001</ruc><claveAcceso>0104202401179184765200120010010276536272765362717</claveAcceso><codDoc>01</codDoc><estab>001</estab><ptoEmi>001</ptoEmi><secuencial>027653627</secuencial><dirMatriz>AV. ELOY ALFARO N44-406 Y DE LAS HIGUERAS EDIF. XTRIM TVCABLE</dirMatriz><agenteRetencion>1</agenteRetencion></infoTributaria><infoFactura><fechaEmision>01/04/2024</fechaEmision><contribuyenteEspecial>1308</contribuyenteEspecial><obligadoContabilidad>SI</obligadoContabilidad><tipoIdentificacionComprador>04</tipoIdentificacionComprador><razonSocialComprador>MILTON ANDRES RUBIO PUETATE</razonSocialComprador><identificacionComprador>1712605284001</identificacionComprador><totalSinImpuestos>60.00</totalSinImpuestos><totalDescuento>0.00</totalDescuento><totalConImpuestos><totalImpuesto><codigo>2</codigo><codigoPorcentaje>4</codigoPorcentaje><baseImponible>60.00</baseImponible><tarifa>15</tarifa><valor>9.00</valor></totalImpuesto></totalConImpuestos><propina>0.00</propina><importeTotal>69.00</importeTotal><moneda>DOLAR</moneda><pagos><pago><formaPago>19</formaPago><total>69.00</total><plazo>10</plazo><unidadTiempo>dias</unidadTiempo></pago></pagos></infoFactura><detalles><detalle><codigoPrincipal>20-0000003-503298</codigoPrincipal><descripcion>Mensual (Linea) 59326055950 Plan Comercial</descripcion><cantidad>1.00</cantidad><precioUnitario>60.000000</precioUnitario><descuento>0.00</descuento><precioTotalSinImpuesto>60.00</precioTotalSinImpuesto><detallesAdicionales><detAdicional nombre="Desde" valor="0"/><detAdicional nombre="Hasta" valor="0"/><detAdicional nombre="Categoria" valor="TELEFONIA|(IVA)"/></detallesAdicionales><impuestos><impuesto><codigo>2</codigo><codigoPorcentaje>4</codigoPorcentaje><tarifa>15</tarifa><baseImponible>60.00</baseImponible><valor>9.00</valor></impuesto></impuestos></detalle></detalles><infoAdicional><campoAdicional nombre="MarketInfo">042024DEFAULT_MK01|042024DEFAULT_PUB01</campoAdicional><campoAdicional nombre="LinkInfo">https://www.xtrim.com.ec/|https://www.tienda.xtrim.com.ec/?utm_source</campoAdicional><campoAdicional nombre="Mensajes">vacio|vacio|vacio</campoAdicional><campoAdicional nombre="CorreoInfo">29 de FEBRERO 2024 al 31 de MARZO 2024|01 de ABRIL 2024|10 de ABRIL 2024</campoAdicional><campoAdicional nombre="FormatoPriori">TIT|MAS|SI</campoAdicional><campoAdicional nombre="DatosExternos">TIT|Descuentos solo aplican IVA</campoAdicional><campoAdicional nombre="ordenCompra">0</campoAdicional><campoAdicional nombre="Correo">miltonrubio@hotmail.com</campoAdicional><campoAdicional nombre="PagueHasta">10/04/2024</campoAdicional><campoAdicional nombre="Convenio">0|0|0.00|0.00</campoAdicional><campoAdicional nombre="CobranzaInteres">0.00|0.00</campoAdicional><campoAdicional nombre="Direcciones">PICHINCHA - QUITO - BATAN - URBANO | CAMILO GALLEGOS #N40-345 Y DE LOS MOTILONES </campoAdicional><campoAdicional nombre="GranContribuyente">Oficio Nro. NAC-GCFOIOC21-00000894-E</campoAdicional><campoAdicional nombre="DatosInternos">4761793|80457522|||0.00|0.00|69.00|29 FEB 2024|31 MAR 2024|01 ABR 2024|10 ABR 2024||||||TARJETA DE CRÉDITO|136996671|69.00</campoAdicional></infoAdicional><ds:Signature xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xmlns:etsi="http://uri.etsi.org/01903/v1.3.2#" Id="Signature1013446">
+<ds:SignedInfo Id="Signature-SignedInfo901376">
+<ds:CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/>
+<ds:SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/>
+<ds:Reference Id="SignedPropertiesID920571" Type="http://uri.etsi.org/01903#SignedProperties" URI="#Signature1013446-SignedProperties532582">
+<ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/>
+<ds:DigestValue>OhNeYMDcwkn3O6wxjfCN+XNYVZc=</ds:DigestValue>
+</ds:Reference>
+<ds:Reference URI="#Certificate11025051">
+<ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/>
+<ds:DigestValue>rRXZfrP1wsi0/uigS5+qOsC3tPo=</ds:DigestValue>
+</ds:Reference>
+<ds:Reference Id="Reference-ID-9219" URI="#comprobante">
+<ds:Transforms>
+<ds:Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/>
+</ds:Transforms>
+<ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/>
+<ds:DigestValue>3fbdB5IZDlnaeqKzf0hqZK1gIHw=</ds:DigestValue>
+</ds:Reference>
+</ds:SignedInfo>
+<ds:SignatureValue Id="SignatureValue258701">
+BLVW/7zq2GuVGHkeMUB4csRaN58yf4E7JzQzEAuSgJl//api5xN6K6Sjwui/aQrLkiizRznhh/c5
+B1rqxr4VUIpKhH+lcHJpuvbunKZBh67wSKljbYe87oXo3d6LJphb+pVQNYP2Dq4IZjnuvezBfbgm
+u+opYY8SDzqdId4R1hZU8XQqNQFtDbnPwFOtYAwb+xpqY5M16KRgBTtmhwtdi9Ji+161RGXc4/mG
+BMqT/6FlucyYj1veOu7QC7Ii0VAKEB9WdCTKbsilG1XPwF7kJTRCbQSwlNRSj8WYT3qHyA1bmCZy
+KJLfImnwGPDBs7fY+DpXlj2Hgp+yCnVbdNg3+A==
+</ds:SignatureValue>
+<ds:KeyInfo Id="Certificate11025051">
+<ds:X509Data>
+<ds:X509Certificate>
+MIIJdDCCB1ygAwIBAgIIYIq3ol/LEcIwDQYJKoZIhvcNAQELBQAwgbgxCzAJBgNVBAYTAkVTMUQw
+QgYDVQQHDDtCYXJjZWxvbmEgKHNlZSBjdXJyZW50IGFkZHJlc3MgYXQgd3d3LnVhbmF0YWNhLmNv
+bS9hZGRyZXNzKTEWMBQGA1UECgwNVUFOQVRBQ0EgUy5BLjEVMBMGA1UECwwMVFNQLVVBTkFUQUNB
+MRowGAYDVQQDDBFVQU5BVEFDQSBDQTIgMjAxNjEYMBYGA1UEYQwPVkFURVMtQTY2NzIxNDk5MB4X
+DTIxMTAxODIxNTkwMFoXDTI0MTAxNzIxNTkwMFowgeExCzAJBgNVBAYTAkVDMTMwMQYDVQQKDCpT
+RVJWSUNJT1MgREUgVEVMRUNPTVVOSUNBQ0lPTkVTIFNFVEVMIFMuQS4xEjAQBgNVBAwMCUFQT0RF
+UkFETzEVMBMGA1UEBAwMU09TQSBFU0NPQkFSMRUwEwYDVQQqDAxNQU5VRUwgTUFSSUExGTAXBgNV
+BAUTEElEQ0VDLTE3MTkwMTM5MzgxIjAgBgNVBAMMGU1BTlVFTCBNQVJJQSBTT1NBIEVTQ09CQVIx
+HDAaBgNVBGEME1ZBVEVDLTE3OTE4NDc2NTIwMDEwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEK
+AoIBAQC9D6UHIN9BxNau8Pv1ewsrkZxt7a8qwMrxnOrwEGr8k4q5ayAeiwe2gq42UdEDRNrXpTXc
+s7YyxSkV3tt2uILWLBT8q4yObiECvVYb2tFjEr1GAyf+SHs/P40MF+MkBuukPTlqIky2+QQK8Wgs
+WF13YnW2go/xUEthK15L1+c7DScxiPt/Ke11rmNyRVOonSU5ceu9LOrCW1TT6wPz2rjGhbg2ZfAs
+PE6RuiaDYODQNxcH/DyvlAbiYST8AjJCNwfu5eNHS7zkxgo1bHgtd/ATeOEMCMIW/a3QbYvkjAJi
+dIPFjY4N0JktC44ITAaY8RhQK6i2fNjZTRz5C4fChS4jAgMBAAGjggRVMIIEUTCB1wYIKwYBBQUH
+AQEEgcowgccwVQYIKwYBBQUHMAKGSWh0dHA6Ly93d3cudWFuYXRhY2EuY29tL3B1YmxpYy9kb3du
+bG9hZC90c3BfY2VydGlmaWNhdGVzL3N1Ym9yZGluYXRlMS5jcnQwNgYIKwYBBQUHMAGGKmh0dHA6
+Ly9vY3NwMS51YW5hdGFjYS5jb20vcHVibGljL3BraS9vY3NwLzA2BggrBgEFBQcwAYYqaHR0cDov
+L29jc3AyLnVhbmF0YWNhLmNvbS9wdWJsaWMvcGtpL29jc3AvMB0GA1UdDgQWBBRGD/pbzJy2uRNe
+nnpXzjj03eCjvDAMBgNVHRMBAf8EAjAAMB8GA1UdIwQYMBaAFH1X52BzzgdGqeKjaPDhEbJ0knP9
+MIGOBgNVHSAEgYYwgYMwgYAGDCsGAQQBgvE2ZgIDATBwMDcGCCsGAQUFBwIBFitodHRwczovL3d3
+dy51YW5hdGFjYS5jb20vcHVibGljL3BraS9kcGMtZWMvMDUGCCsGAQUFBwICMCkMJ0NFUlRJRklD
+QURPIERFIFJFUFJFU0VOVEFOVEUgRU4gQVJDSElWTzCBjwYDVR0fBIGHMIGEMECgPqA8hjpodHRw
+Oi8vY3JsMS51YW5hdGFjYS5jb20vcHVibGljL3BraS9jcmwvQ0Eyc3Vib3JkaW5hZGEuY3JsMECg
+PqA8hjpodHRwOi8vY3JsMi51YW5hdGFjYS5jb20vcHVibGljL3BraS9jcmwvQ0Eyc3Vib3JkaW5h
+ZGEuY3JsMA4GA1UdDwEB/wQEAwIF4DAdBgNVHSUEFjAUBggrBgEFBQcDAgYIKwYBBQUHAwQwggHT
+BgNVHREEggHKMIIBxoEUbXNvc2FAdHZjYWJsZS5jb20uZWOgGwYLKwYBBAGC8TZmAwGgDAwKMTcx
+OTAxMzkzOKAdBgsrBgEEAYLxNmYDAqAODAxNQU5VRUwgTUFSSUGgFQYLKwYBBAGC8TZmAwOgBgwE
+U09TQaAYBgsrBgEEAYLxNmYDBKAJDAdFU0NPQkFSoBoGCysGAQQBgvE2ZgMFoAsMCUFQT0RFUkFE
+T6A6BgsrBgEEAYLxNmYDB6ArDClBVi4gRUxPWSBBTEZBUk8gTjQ0LTQwNiBZIERFIExBUyBISUdV
+RVJBU6AfBgsrBgEEAYLxNmYDCKAQDA4wMDU5Mzk5NjA2NDQ0M6AWBgsrBgEEAYLxNmYDCaAHDAVR
+VUlUT6A7BgsrBgEEAYLxNmYDCqAsDCpTRVJWSUNJT1MgREUgVEVMRUNPTVVOSUNBQ0lPTkVTIFNF
+VEVMIFMuQS6gHgYLKwYBBAGC8TZmAwugDwwNMTc5MTg0NzY1MjAwMaATBgsrBgEEAYLxNmYDDKAE
+DAJFQ6AkBgsrBgEEAYLxNmYDMqAVDBNSRVBSRVNFTlRBTlRFIExFR0FMoBgGCysGAQQBgvE2ZgMz
+oAkMB0FSQ0hJVk8wDQYJKoZIhvcNAQELBQADggIBAMrlFRNCd52qt55kcypwTYIhUL6VErWV88TC
+ifRJXXbqp+PoqaLkXIMG329wBeBt2JyxE/Vo8iUUUWI5JlCXcfbg+i8OeTY7rV2gbYj0jeQg6EmX
+I+/Rd/mMHukJmkAkM67LP7ErsnyogeOql8roTSklLUjRfuWv6Vetjff9MYKmvW14gcZXmpgrhjoJ
+ByH1Q9XZ0JcovPr1Cx3EE7QbZTY/HHfCP1FqK98BNbcvSkVabl3ikNf8tSXfWs9lt1xYGcH+eLLQ
+EenUZUyTr2F8LXwvcs3Sak7jIdN13wjUhHlEVmibMmYqfrpb0KaDtRRI/tHtIvQ8XBaoC9+7alPk
+gtLufu2K2Hjl4YKo5CbauzA2N9dW5TU/hBQVYxWqJ9F2gENqAmP6TftZeCnRZz3cVDLhcpxSfCCk
+tCf/XpgHJZIQFytixmwuGewhIcLyzB1mOyPx8hgaf4bnOd4T3gFM7tCktEy1h0st8EW/r8w+FaP6
+dGAfGm26YbvgjN3sfMnQKKHLXUAetYtjkfMbzzKXMwFwFSphvMhSmI9NTai4NfVe32PFpJMsrCNi
+sMGL49rxUHL3/F9kXXgw6NstA7CXj+HtoltOEfsOuy0X9mJDtJCYo/pM7DLBP0FpvdfkQb7Md9vj
+vTQbelM2cIMa+wb/cx46u0wKMZWXS8NjbGJbB9wn
+</ds:X509Certificate>
+</ds:X509Data>
+<ds:KeyValue>
+<ds:RSAKeyValue>
+<ds:Modulus>
+vQ+lByDfQcTWrvD79XsLK5Gcbe2vKsDK8Zzq8BBq/JOKuWsgHosHtoKuNlHRA0Ta16U13LO2MsUp
+Fd7bdriC1iwU/KuMjm4hAr1WG9rRYxK9RgMn/kh7Pz+NDBfjJAbrpD05aiJMtvkECvFoLFhdd2J1
+toKP8VBLYSteS9fnOw0nMYj7fyntda5jckVTqJ0lOXHrvSzqwltU0+sD89q4xoW4NmXwLDxOkbom
+g2Dg0DcXB/w8r5QG4mEk/AIyQjcH7uXjR0u85MYKNWx4LXfwE3jhDAjCFv2t0G2L5IwCYnSDxY2O
+DdCZLQuOCEwGmPEYUCuotnzY2U0c+QuHwoUuIw==
+</ds:Modulus>
+<ds:Exponent>AQAB</ds:Exponent>
+</ds:RSAKeyValue>
+</ds:KeyValue>
+</ds:KeyInfo>
+<ds:Object Id="Signature1013446-Object783226"><etsi:QualifyingProperties Target="#Signature1013446"><etsi:SignedProperties Id="Signature1013446-SignedProperties532582"><etsi:SignedSignatureProperties><etsi:SigningTime>2024-03-31T23:40:14-05:00</etsi:SigningTime><etsi:SigningCertificate><etsi:Cert><etsi:CertDigest><ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/><ds:DigestValue>RDN1//3RyduhYJzsXpmWIyZk6rM=</ds:DigestValue></etsi:CertDigest><etsi:IssuerSerial><ds:X509IssuerName>2.5.4.97=#0c0f56415445532d413636373231343939,CN=UANATACA CA2 2016,OU=TSP-UANATACA,O=UANATACA S.A.,L=Barcelona (see current address at www.uanataca.com/address),C=ES</ds:X509IssuerName><ds:X509SerialNumber>6956574482446881218</ds:X509SerialNumber></etsi:IssuerSerial></etsi:Cert></etsi:SigningCertificate></etsi:SignedSignatureProperties><etsi:SignedDataObjectProperties><etsi:DataObjectFormat ObjectReference="#Reference-ID-9219"><etsi:Description>comprobateFirma</etsi:Description><etsi:MimeType>text/xml</etsi:MimeType></etsi:DataObjectFormat></etsi:SignedDataObjectProperties></etsi:SignedProperties></etsi:QualifyingProperties></ds:Object></ds:Signature></factura>]]></comprobante>
+<mensajes/>
+</autorizacion>
+

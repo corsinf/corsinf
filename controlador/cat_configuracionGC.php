@@ -96,7 +96,7 @@ class cat_configuracionGC
 
     //////////////////////////////////////////////////////////////////////////////////////////////////
 
-    //API IDUKAY
+    //API IDUKAY - Insertar
 
     //////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -266,7 +266,8 @@ class cat_configuracionGC
                 $sql = array();
 
                 foreach ($grupo as $dato) {
-                    $sql[] = array($this->inserts('estudiantes', $dato));
+                    //$sql[] = array($this->inserts('estudiantes', $dato));
+                    $sql[] = array($this->upsertSQL('estudiantes', $dato, 'sa_id_est_idukay'));
                 }
 
                 // Construir la sentencia SQL para el grupo actual
@@ -371,26 +372,33 @@ class cat_configuracionGC
 
             // Dividir los datos en grupos de 300
             $grupos = array_chunk($datos, 150);
-
+            $sql_global = '';
             // Insertar cada grupo en la base de datos
             $contador = 0;
+            $contador_sql_tab = 0;
             foreach ($grupos as $grupo) {
                 $sql = array();
 
                 foreach ($grupo as $dato) {
-                    $sql[] = array($this->inserts('representantes', $dato));
+                    //$sql[] = array($this->inserts('representantes', $dato));
+                    $sql[] = array($this->upsertSQL('representantes', $dato, 'sa_id_rep_idukay'));
                 }
 
                 // Construir la sentencia SQL para el grupo actual
                 $sentenciaSql = '';
                 foreach ($sql as $dato) {
                     foreach ($dato as $consulta) {
-                        $sentenciaSql .= $consulta . " ";
+                        $sentenciaSql .= $consulta; // . "--" . $contador_sql_tab . "  <br/>";
+                        //$sql_global .= $consulta . "--" . $contador . "  <br/>";
 
                         // echo $consulta . "-- " . $contador . "<br/> ";
-                        // $contador++;
+                        //$contador_sql_tab++;
                     }
                 }
+
+                // print_r($sentenciaSql);
+                // die();
+
 
                 // Ejecutar la inserción del grupo actual
                 $resultado = $this->estudiantes->cargaMasivaIdukay($sentenciaSql);
@@ -399,12 +407,15 @@ class cat_configuracionGC
                 if ($resultado !== 1) {
                     // Manejar el error o detener el proceso si falla la inserción
                     //echo "Error al insertar grupo de datos en la base de datos.";
-                    return -10;
+                    return $resultado;
                     break;
                 } else {
                     $contador++;
                 }
             }
+
+            // print_r($sql_global);
+            //  die();
 
             $query = $this->estudiantes->ponerRepresentantesEstudiantes();
             return $query;
@@ -499,7 +510,8 @@ class cat_configuracionGC
                 $sql = array();
 
                 foreach ($grupo as $dato) {
-                    $sql[] = array($this->inserts('docentes', $dato));
+                    //$sql[] = array($this->inserts('docentes', $dato));
+                    $sql[] = array($this->upsertSQL('docentes', $dato, 'sa_doc_id_idukay'));
                 }
 
                 // Construir la sentencia SQL para el grupo actual
@@ -543,6 +555,10 @@ class cat_configuracionGC
     function cargarHorariosDocentesIdukay()
     {
         $data = $this->Idukay_API->lista_HorariosDocentes();
+        // print_r($data);
+        // die();
+        $resultado = $this->estudiantes->cargaMasivaIdukay('TRUCANTE TABLE horario_clases;');
+
 
         if ($data != -11) {
             $parametros = [];
@@ -635,7 +651,7 @@ class cat_configuracionGC
             // Insertar cada grupo en la base de datos
             $contador = 0;
             //$sentenciaSql_global = '';
-            $contador_s = 0;
+            //$contador_s = 0;
 
             foreach ($grupos as $grupo) {
                 $sql = array();
@@ -652,7 +668,7 @@ class cat_configuracionGC
                         //$sentenciaSql_global .= $consulta . "-- " . $contador_s . "<br/> ";
 
                         //echo $consulta . "-- " . $contador_s . "<br/> ";
-                        $contador_s++;
+                        //$contador_s++;
                     }
                 }
 
@@ -724,6 +740,66 @@ class cat_configuracionGC
         return $sql;
     }
 
+    //Sirve para hacer un update o insert en caso de que no exista 
+    function upsertSQL($tabla, $datos, $where)
+    {
+        $campos = '';
+        $idValor = '';
+
+        // Construcción del SQL INSERT
+        $insertCampos = '';
+        $insertValores = '';
+
+        foreach ($datos as $key => $value) {
+            $campos .= $value['campo'] . ',';
+
+            if (is_string($value['dato'])) {
+                $dato = "'" . str_replace("'", "''", $value['dato']) . "'";
+            } else {
+                $dato = str_replace(',', '', $value['dato']);
+                $dato = is_numeric($dato) ? $dato : "'" . $dato . "'";
+            }
+
+            $insertCampos .= $value['campo'] . ',';
+            $insertValores .= $dato . ',';
+
+            // Suponiendo que el campo para el WHERE es parte de $datos
+            if ($value['campo'] === $where) {
+                $idValor = $dato;
+            }
+        }
+
+        $campos = rtrim($campos, ',');
+        $insertCampos = rtrim($insertCampos, ',');
+        $insertValores = rtrim($insertValores, ',');
+
+        // Construcción del SQL MERGE
+        $mergeSQL =
+            'MERGE INTO ' . $tabla . ' AS target
+                USING (
+                    VALUES (' . $idValor . ')
+                ) AS source (' . $where . ')
+                ON target.' . $where . ' = source.' . $where . '
+                WHEN MATCHED THEN
+                    UPDATE SET ';
+
+        foreach ($datos as $value) {
+            $mergeSQL .= $value['campo'] . ' = ';
+            $mergeSQL .= is_numeric($value['dato']) ? $value['dato'] : "'" . $value['dato'] . "'";
+            $mergeSQL .= ', ';
+        }
+
+        $mergeSQL = rtrim($mergeSQL, ', ');
+
+        $mergeSQL .=
+            'WHEN NOT MATCHED THEN
+                INSERT (' . $campos . ')
+                VALUES (' . $insertValores . '); ';
+
+        return $mergeSQL;
+    }
+
+
 
     function generarUpdate($cursos_modificar)
     {
@@ -792,6 +868,59 @@ class cat_configuracionGC
         }
 
         return $updates;
+    }
+
+    //borrador - Sirve para hacer un update o insert en caso de que no exista - (no se utiliza) 
+    function upsertSQL_1($tabla, $datos, $where)
+    {
+        $valores = '';
+        $campos = '';
+        $updateSet = '';
+        $idValor = '';
+
+        // Construcción del SQL INSERT
+        $insertSQL = 'INSERT INTO ' . $tabla . ' (';
+
+        foreach ($datos as $key => $value) {
+            $campos .= $value['campo'] . ',';
+
+            if (is_string($value['dato'])) {
+                $dato = "'" . str_replace("'", "''", $value['dato']) . "'";
+            } else {
+                $dato = str_replace(',', '', $value['dato']);
+                $dato = is_numeric($dato) ? $dato : "'" . $dato . "'";
+            }
+
+            $valores .= $dato . ',';
+            $updateSet .= $value['campo'] . ' = ' . $dato . ',';
+
+            // Suponiendo que el campo para el WHERE es parte de $datos
+            if ($value['campo'] === $where) {
+                $idValor = $dato;
+            }
+        }
+
+        $campos = rtrim($campos, ',');
+        $valores = rtrim($valores, ',');
+        $updateSet = rtrim($updateSet, ',');
+
+        $insertSQL .= $campos . ') VALUES (' . $valores . ')';
+
+        // Construcción del SQL UPDATE
+        $updateSQL = 'UPDATE ' . $tabla . ' SET ' . $updateSet . ' WHERE ' . $where . ' = ' . $idValor;
+
+        // Construcción de la consulta final con IF
+        $finalSQL =
+            'IF EXISTS (SELECT 1 FROM ' . $tabla . ' WHERE ' . $where . ' = ' . $idValor . ')
+                         BEGIN
+                             ' . $updateSQL . ';
+                         END
+                         ELSE
+                         BEGIN
+                             ' . $insertSQL . ';
+                     END ';
+
+        return $finalSQL;
     }
 }
 

@@ -132,6 +132,7 @@ class autorizacion_sri
 
 function recuperar_xml_a_factura($documento)
 {
+
 	$respuesta = 1;
 	//busco el archivo xml
 	$ruta_G = dirname(__DIR__,2).'/TEMP/XMLS';
@@ -145,7 +146,6 @@ function recuperar_xml_a_factura($documento)
 		return -2;
 	}
 
-	// print_r($texto);die();
 	$xml = simplexml_load_string($texto,"SimpleXMLElement",LIBXML_NOCDATA);
 	$objJsonDocument = json_encode($xml);
 	$documentos = json_decode($objJsonDocument, TRUE);
@@ -176,7 +176,7 @@ function recuperar_xml_a_factura($documento)
 		{
 			$detalle = array($detalle);
 		}
-// print_r($detalle);die();
+		// print_r($documentos['impuestos']['impuesto']);
 // print_r($documentos);die();
 		foreach ($detalle as $key => $value) {
 			// print_r($value);

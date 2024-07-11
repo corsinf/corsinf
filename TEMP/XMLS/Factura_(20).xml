@@ -1,0 +1,343 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<autorizacion>
+<estado>AUTORIZADO</estado>
+<numeroAutorizacion>1604202401179292911300120010010000195363886943419</numeroAutorizacion>
+<fechaAutorizacion>2024-04-16T15:30:41-05:00</fechaAutorizacion>
+<ambiente>PRODUCCIÓN</ambiente>
+<comprobante><![CDATA[<?xml version="1.0" encoding="UTF-8"?><factura id="comprobante" version="2.1.0">
+	<infoTributaria>
+		<ambiente>2</ambiente>
+	    <tipoEmision>1</tipoEmision>
+	    <razonSocial>POWEST-ECUADOR S.A.</razonSocial>
+	    <nombreComercial>POWEST</nombreComercial>
+	    <ruc>1792929113001</ruc>
+	    <claveAcceso>1604202401179292911300120010010000195363886943419</claveAcceso>
+	    <codDoc>01</codDoc>
+	    <estab>001</estab>
+	    <ptoEmi>001</ptoEmi>
+	    <secuencial>000019536</secuencial>
+	    <dirMatriz>PICHINCHA / QUITO / IÑAQUITO / AVENIDA SEIS DE DICIEMBRE N33-12 Y BOSSANO</dirMatriz>
+		
+		
+			<agenteRetencion>1</agenteRetencion>
+		
+		
+  	</infoTributaria>
+	<infoFactura>
+	    <fechaEmision>16/04/2024</fechaEmision>
+		
+			<dirEstablecimiento>PICHINCHA / QUITO / IÑAQUITO / AVENIDA SEIS DE DICIEMBRE N33-12 Y BOSSANO</dirEstablecimiento>
+		
+	    
+	    
+			<obligadoContabilidad>SI</obligadoContabilidad>
+		
+		
+	    
+	    <tipoIdentificacionComprador>04</tipoIdentificacionComprador>
+		
+		<razonSocialComprador>RUBIO PUETATE MILTON ANDRES</razonSocialComprador>
+	    <identificacionComprador>1712605284001</identificacionComprador>
+		<direccionComprador>Cristobal de Acuña E1-18 y Av. 10 de Agosto</direccionComprador>
+	    
+	    <totalSinImpuestos>1256.78000</totalSinImpuestos>
+		
+	  	
+	    <totalDescuento>0.00</totalDescuento>
+	    
+	    <totalConImpuestos>
+		
+			<totalImpuesto>
+				<codigo>2</codigo>
+				<codigoPorcentaje>4</codigoPorcentaje>
+				<descuentoAdicional>0</descuentoAdicional>
+				<baseImponible>1256.78</baseImponible>
+				<valor>188.52000</valor>
+			</totalImpuesto>
+		
+		
+	      
+		  
+		  
+	    </totalConImpuestos>
+	    <propina>0</propina>
+	    <importeTotal>1445.30000</importeTotal>
+	    <moneda>DOLAR</moneda>
+		
+	    
+	    <pagos>
+	    	
+	    	<pago>
+	    		<formaPago>20</formaPago>
+	    		<total>1445.30</total>
+	    		<plazo>30</plazo>
+	    		<unidadTiempo>días</unidadTiempo>
+	    	</pago>
+	    	
+	    </pagos>
+	    
+  	</infoFactura>
+  	<detalles>
+  	
+    <detalle>
+      
+      	<codigoPrincipal>CEBAT-7207</codigoPrincipal>
+		<codigoAuxiliar>CEBAT-7207</codigoAuxiliar>
+      	<descripcion>BATERIA SELLADA 12V- 9 AH REF.FL1290GS</descripcion>
+      
+      <cantidad>10.000000</cantidad>
+      <precioUnitario>13.970000</precioUnitario>
+	  
+      <descuento>0.00</descuento>
+      <precioTotalSinImpuesto>139.70</precioTotalSinImpuesto>
+	  
+	  
+	  	<detallesAdicionales>
+			
+    			<detAdicional nombre="Lote" valor="MRE145"/>
+    		
+      	</detallesAdicionales>
+      
+            
+      
+      <impuestos>
+        <impuesto>
+          <codigo>2</codigo>
+          <codigoPorcentaje>4</codigoPorcentaje>
+          <tarifa>15</tarifa>
+          <baseImponible>139.70000</baseImponible>
+          <valor>20.96</valor>
+        </impuesto>
+        
+		
+		
+      </impuestos>
+	  
+	</detalle>
+    
+    <detalle>
+      
+      	<codigoPrincipal>NUOLT-7283</codigoPrincipal>
+		<codigoAuxiliar>NUOLT-7283</codigoAuxiliar>
+      	<descripcion>UPS ON LINE 3KVA REF.TITAN3KVA</descripcion>
+      
+      <cantidad>1.000000</cantidad>
+      <precioUnitario>372.360000</precioUnitario>
+	  
+      <descuento>0.00</descuento>
+      <precioTotalSinImpuesto>372.36</precioTotalSinImpuesto>
+	  
+	  
+	  	<detallesAdicionales>
+			
+    			<detAdicional nombre="Serie" valor="231211-90240028"/>
+    		
+      	</detallesAdicionales>
+      
+            
+      
+      <impuestos>
+        <impuesto>
+          <codigo>2</codigo>
+          <codigoPorcentaje>4</codigoPorcentaje>
+          <tarifa>15</tarifa>
+          <baseImponible>372.36000</baseImponible>
+          <valor>55.85</valor>
+        </impuesto>
+        
+		
+		
+      </impuestos>
+	  
+	</detalle>
+    
+    <detalle>
+      
+      	<codigoPrincipal>NUOLT-7283</codigoPrincipal>
+		<codigoAuxiliar>NUOLT-7283</codigoAuxiliar>
+      	<descripcion>UPS ON LINE 3KVA REF.TITAN3KVA</descripcion>
+      
+      <cantidad>1.000000</cantidad>
+      <precioUnitario>372.360000</precioUnitario>
+	  
+      <descuento>0.00</descuento>
+      <precioTotalSinImpuesto>372.36</precioTotalSinImpuesto>
+	  
+	  
+	  	<detallesAdicionales>
+			
+    			<detAdicional nombre="Serie" valor="231211-90240116"/>
+    		
+      	</detallesAdicionales>
+      
+            
+      
+      <impuestos>
+        <impuesto>
+          <codigo>2</codigo>
+          <codigoPorcentaje>4</codigoPorcentaje>
+          <tarifa>15</tarifa>
+          <baseImponible>372.36000</baseImponible>
+          <valor>55.85</valor>
+        </impuesto>
+        
+		
+		
+      </impuestos>
+	  
+	</detalle>
+    
+    <detalle>
+      
+      	<codigoPrincipal>NUOLT-7283</codigoPrincipal>
+		<codigoAuxiliar>NUOLT-7283</codigoAuxiliar>
+      	<descripcion>UPS ON LINE 3KVA REF.TITAN3KVA</descripcion>
+      
+      <cantidad>1.000000</cantidad>
+      <precioUnitario>372.360000</precioUnitario>
+	  
+      <descuento>0.00</descuento>
+      <precioTotalSinImpuesto>372.36</precioTotalSinImpuesto>
+	  
+	  
+	  	<detallesAdicionales>
+			
+    			<detAdicional nombre="Serie" valor="231211-90240120"/>
+    		
+      	</detallesAdicionales>
+      
+            
+      
+      <impuestos>
+        <impuesto>
+          <codigo>2</codigo>
+          <codigoPorcentaje>4</codigoPorcentaje>
+          <tarifa>15</tarifa>
+          <baseImponible>372.36000</baseImponible>
+          <valor>55.85</valor>
+        </impuesto>
+        
+		
+		
+      </impuestos>
+	  
+	</detalle>
+    
+	
+    </detalles>
+    
+	
+    
+    <infoAdicional>
+    	
+    		
+    			<campoAdicional nombre="Descripción">SON MIL CUATROCIENTOS CUARENTA Y CINCO CON 30/100  PAGO DE CONTADO  Favor enviar las retenciones al e-mail cintia.arroyo@powest.com  Favor realizar su pago mediante transferencia a la Cta. Cte. 2100191003 Banco Pichincha a nombre de POWEST-ECUADOR S.A.</campoAdicional>
+    		
+    	
+		
+    </infoAdicional>
+	
+	
+<ds:Signature xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xmlns:etsi="http://uri.etsi.org/01903/v1.3.2#" Id="Signature831559">
+<ds:SignedInfo Id="Signature-SignedInfo871672">
+<ds:CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/>
+<ds:SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/>
+<ds:Reference Id="SignedPropertiesID943378" Type="http://uri.etsi.org/01903#SignedProperties" URI="#Signature831559-SignedProperties154466">
+<ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/>
+<ds:DigestValue>3TZldmhD5LRdSq1OKz16orB5LB0=</ds:DigestValue>
+</ds:Reference>
+<ds:Reference URI="#Certificate1595816">
+<ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/>
+<ds:DigestValue>eXjHTH0is7sKcGWsgSE7FMOYHu0=</ds:DigestValue>
+</ds:Reference>
+<ds:Reference Id="Reference-ID-217534" URI="#comprobante">
+<ds:Transforms>
+<ds:Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/>
+</ds:Transforms>
+<ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/>
+<ds:DigestValue>YSeiEcflmBxZlmDZZ5hw8lx7SBc=</ds:DigestValue>
+</ds:Reference>
+</ds:SignedInfo>
+<ds:SignatureValue Id="SignatureValue529081">
+bTDxbM6qQ7tMd4rFTHcqGUCdYZLP7xvMumd4Ejnc6Mwj890b/5e+TV03nfdjxD/Byn6oSAdWr0xF
+CAMvl/LjPfPX+4fR/uxSN62CEa45jUlOUqXFCCN0GaSPGwu6dSlSuM6D/WXYAAuGRGCaJhEpmd5V
+XMd18gHwsp+Krs4dJm0r8iFAotiJawNZMe6Il29/VFyh31SIeu/MC/udGhPLY94BRXA+SxOH0NqR
+hdB4OFlZpjX24pcqOY7B+QhN2Unwzl+9h+Gr0B4pzzmA08RivQgLpuwWJfDOdBox0P+iBwyrEzsL
+Wqs9Jwzk0gKM+gQKoBhid4EvXVhfj1yecY4WkQ==
+</ds:SignatureValue>
+<ds:KeyInfo Id="Certificate1595816">
+<ds:X509Data>
+<ds:X509Certificate>
+MIIL/zCCCeegAwIBAgIEYDtjgTANBgkqhkiG9w0BAQsFADCBmTELMAkGA1UEBhMCRUMxHTAbBgNV
+BAoMFFNFQ1VSSVRZIERBVEEgUy5BLiAyMTAwLgYDVQQLDCdFTlRJREFEIERFIENFUlRJRklDQUNJ
+T04gREUgSU5GT1JNQUNJT04xOTA3BgNVBAMMMEFVVE9SSURBRCBERSBDRVJUSUZJQ0FDSU9OIFNV
+QkNBLTIgU0VDVVJJVFkgREFUQTAeFw0yMzA4MzAxNjA0MDhaFw0yNDA4MjkxNjA0MDhaMIGYMSEw
+HwYDVQQDDBhKVUFOIENBUkxPUyBNRUxFTkEgWUFOWkExFTATBgNVBAUTDDMwMDgyMzExMTM0NTEw
+MC4GA1UECwwnRU5USURBRCBERSBDRVJUSUZJQ0FDSU9OIERFIElORk9STUFDSU9OMR0wGwYDVQQK
+DBRTRUNVUklUWSBEQVRBIFMuQS4gMjELMAkGA1UEBhMCRUMwggEiMA0GCSqGSIb3DQEBAQUAA4IB
+DwAwggEKAoIBAQDDr+jpki0HXYrndV3Ba+NwpsYbBjwDKEaKXDzn7SjypXAPPOYam0rwEWUO4Azs
+IrffZzaW/rApEE8uPRTDxO6KFEGQ6gS2cJ3TpuRU8ujRMcHnIioXMNpdxZ23MOGOcZNIIgTvxqpo
+bGMavq1wJhStLWB+suEB8KEGBzWo7lU1EY1uTtZlDG9cuzoWIpBem0UWXy3mpEp6n638XgjLIWmK
+4fooM0kdsrZ6mNtoBC+4KhrFO1PfPe14a7dGBCYUWy0PSV76wDGd268hcHI0Eb47QrF5cwmTCo2K
+yUNrXMAhlYpT30zatZDsvzHsD4Dj3Xb/JD4ZL7Ki1VhWHv5pEX9fAgMBAAGjggdMMIIHSDAMBgNV
+HRMBAf8EAjAAMB8GA1UdIwQYMBaAFIy6yhFXeCWAHWsKS1W/ja5i3b2PMFkGCCsGAQUFBwEBBE0w
+SzBJBggrBgEFBQcwAYY9aHR0cDovL29jc3Bndy5zZWN1cml0eWRhdGEubmV0LmVjL2VqYmNhL3B1
+YmxpY3dlYi9zdGF0dXMvb2NzcDCBzwYDVR0uBIHHMIHEMIHBoIG+oIG7hoG4bGRhcDovL2xkYXBz
+ZGNhMi5zZWN1cml0eWRhdGEubmV0LmVjL0NOPUFVVE9SSURBRCBERSBDRVJUSUZJQ0FDSU9OIFNV
+QkNBLTIgU0VDVVJJVFkgREFUQSxPVT1FTlRJREFEIERFIENFUlRJRklDQUNJT04gREUgSU5GT1JN
+QUNJT04sTz1TRUNVUklUWSBEQVRBIFMuQS4gMixDPUVDP2RlbHRhUmV2b2NhdGlvbkxpc3Q/YmFz
+ZTAhBgNVHREEGjAYgRZqdWFuLm1lbGVuYUBwb3dlc3QuY29tMIIBFQYDVR0gBIIBDDCCAQgwYgYK
+KwYBBAGCpnICCTBUMFIGCCsGAQUFBwICMEYeRABDAGUAcgB0AGkAZgBpAGMAYQBkAG8AIABkAGUA
+IABSAGUAcAByAGUAcwBlAG4AdABhAG4AdABlACAATABlAGcAYQBsMIGhBgorBgEEAYKmcgIDMIGS
+MIGPBggrBgEFBQcCARaBgmh0dHBzOi8vd3d3LnNlY3VyaXR5ZGF0YS5uZXQuZWMvd3AtY29udGVu
+dC9kb3dubG9hZHMvTm9ybWF0aXZhcy9QX2RlX0NlcnRpZmljYWRvcy9Qb2xpdGljYXMgZGUgQ2Vy
+dGlmaWNhZG8gUmVwcmVzZW50YW50ZSBMZWdhbC5wZGYwggKiBgNVHR8EggKZMIIClTCB5aBBoD+G
+PWh0dHA6Ly9vY3NwZ3cuc2VjdXJpdHlkYXRhLm5ldC5lYy9lamJjYS9wdWJsaWN3ZWIvc3RhdHVz
+L29jc3CigZ+kgZwwgZkxOTA3BgNVBAMMMEFVVE9SSURBRCBERSBDRVJUSUZJQ0FDSU9OIFNVQkNB
+LTIgU0VDVVJJVFkgREFUQTEwMC4GA1UECwwnRU5USURBRCBERSBDRVJUSUZJQ0FDSU9OIERFIElO
+Rk9STUFDSU9OMR0wGwYDVQQKDBRTRUNVUklUWSBEQVRBIFMuQS4gMjELMAkGA1UEBhMCRUMwgceg
+gcSggcGGgb5sZGFwOi8vbGRhcHNkY2EyLnNlY3VyaXR5ZGF0YS5uZXQuZWMvQ049QVVUT1JJREFE
+IERFIENFUlRJRklDQUNJT04gU1VCQ0EtMiBTRUNVUklUWSBEQVRBLE9VPUVOVElEQUQgREUgQ0VS
+VElGSUNBQ0lPTiBERSBJTkZPUk1BQ0lPTixPPVNFQ1VSSVRZIERBVEEgUy5BLiAyLEM9RUM/Y2Vy
+dGlmaWNhdGVSZXZvY2F0aW9uTGlzdD9iYXNlMIHgoIHdoIHahoHXaHR0cHM6Ly9wb3J0YWwtb3Bl
+cmFkb3IyLnNlY3VyaXR5ZGF0YS5uZXQuZWMvZWpiY2EvcHVibGljd2ViL3dlYmRpc3QvY2VydGRp
+c3Q/Y21kPWNybCZpc3N1ZXI9Q049QVVUT1JJREFEIERFIENFUlRJRklDQUNJT04gU1VCQ0EtMiBT
+RUNVUklUWSBEQVRBLE9VPUVOVElEQUQgREUgQ0VSVElGSUNBQ0lPTiBERSBJTkZPUk1BQ0lPTixP
+PVNFQ1VSSVRZIERBVEEgUy5BLiAyLEM9RUMwHQYDVR0OBBYEFN2NCQyJeyWRHqkE/B/7hWR0vmFl
+MCsGA1UdEAQkMCKADzIwMjMwODMwMTYwNDA4WoEPMjAyNDA4MjkxNjA0MDhaMAsGA1UdDwQEAwIF
+4DAfBgorBgEEAYKmcgMFBBEMD0dFUkVOVEUgR0VORVJBTDAaBgorBgEEAYKmcgMBBAwMCjE3MjA1
+MjQ4NDAwFQYKKwYBBAGCpnIDCQQHDAVRVUlUTzARBgorBgEEAYKmcgMiBAMMAS4wOgYKKwYBBAGC
+pnIDBwQsDCpBVkVOSURBIFNFSVMgREUgRElDSUVNQlJFIE4zMyAxMiBZIEJPU1NBTk8wGwYKKwYB
+BAGCpnIDAgQNDAtKVUFOIENBUkxPUzAfBgorBgEEAYKmcgMgBBEMDzAwNzAwMTAwMDAwNTk2MTAT
+BgorBgEEAYKmcgMhBAUMA1BGWDAXBgorBgEEAYKmcgMMBAkMB0VDVUFET1IwFgYKKwYBBAGCpnID
+AwQIDAZNRUxFTkEwIgYKKwYBBAGCpnIDCgQUDBJQT1dFU1QgRUNVQURPUiBTIEEwHQYKKwYBBAGC
+pnIDCwQPDA0xNzkyOTI5MTEzMDAxMBIGCisGAQQBgqZyAx0EBAwCTm8wFQYKKwYBBAGCpnIDBAQH
+DAVZQU5aQTAaBgorBgEEAYKmcgMIBAwMCjA5NTk5MTI4MDcwDQYJKoZIhvcNAQELBQADggIBAJKR
+m6b9hoTwkSjDv/85kq3Cn0/nZghtNbhbJ5u+n+56BGMlwVK85Gz23JcG5aEJUocoVgQeggkfM5bd
+UmXUTiU0x1EH9K2lRA9vofwyoxrvW7/nW478pN2xatJPYPYfFMvC8q/R2FNHNRPRTyV5Yb98zvEY
+ENgeF5DBLk47zgFnAz/zuvfrVlUsGq9a5Rea++yHigI59h/2JDzBNHKB31Vcf/WC02XSkPIAeQSa
+3GqhgUztSM6qywBH99Rd7lmcx7Rl15u6PsbzplsaRXxFnR2Hkvzj7cFZ+zGomRV9lYBj1U6rISPx
+Hvtie0ozMKwHu8JQFaq0/a7sNJk9Jb4Ceb8QIlVT/A9DTtPHl2JyZAwt7cifmWCfm+m3fUeM5mYu
+HQkU5PXHH3BMLpJDIIPocfzhDuAiSGA1EWVR1wAtt1rfMruQTHtiUs9xB3zWzI9yUDPypoK9Cydx
+rxQ0rAVvg5Iwy9fVLmgykxCS8PERRYIMqbjh/BSrlGY+BB9E5GLMKlxSLh7qZczps2btIAWdpZDN
+qJ9BIa+w9veixwS99N/pfldb0S9Y4JZZcip/qD0I1Lm8ezuObGKsoLTH5ZfsyK/1eYqKa6OflU9F
+r3kzvmZfoq06Hds1mBbvSG2dooaN4bKjeGbs6wX0fGGDfJtHZnpb188QChyZ+xg7C1734SBj
+</ds:X509Certificate>
+</ds:X509Data>
+<ds:KeyValue>
+<ds:RSAKeyValue>
+<ds:Modulus>
+w6/o6ZItB12K53VdwWvjcKbGGwY8AyhGilw85+0o8qVwDzzmGptK8BFlDuAM7CK332c2lv6wKRBP
+Lj0Uw8TuihRBkOoEtnCd06bkVPLo0THB5yIqFzDaXcWdtzDhjnGTSCIE78aqaGxjGr6tcCYUrS1g
+frLhAfChBgc1qO5VNRGNbk7WZQxvXLs6FiKQXptFFl8t5qRKep+t/F4IyyFpiuH6KDNJHbK2epjb
+aAQvuCoaxTtT3z3teGu3RgQmFFstD0le+sAxnduvIXByNBG+O0KxeXMJkwqNislDa1zAIZWKU99M
+2rWQ7L8x7A+A4912/yQ+GS+yotVYVh7+aRF/Xw==
+</ds:Modulus>
+<ds:Exponent>AQAB</ds:Exponent>
+</ds:RSAKeyValue>
+</ds:KeyValue>
+</ds:KeyInfo>
+<ds:Object Id="Signature831559-Object126600"><etsi:QualifyingProperties Target="#Signature831559"><etsi:SignedProperties Id="Signature831559-SignedProperties154466"><etsi:SignedSignatureProperties><etsi:SigningTime>2024-04-16T15:30:39-05:00</etsi:SigningTime><etsi:SigningCertificate><etsi:Cert><etsi:CertDigest><ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/><ds:DigestValue>WgY4YWM2alVqINQMbOcI+hj6COg=</ds:DigestValue></etsi:CertDigest><etsi:IssuerSerial><ds:X509IssuerName>CN=AUTORIDAD DE CERTIFICACION SUBCA-2 SECURITY DATA,OU=ENTIDAD DE CERTIFICACION DE INFORMACION,O=SECURITY DATA S.A. 2,C=EC</ds:X509IssuerName><ds:X509SerialNumber>1614504833</ds:X509SerialNumber></etsi:IssuerSerial></etsi:Cert></etsi:SigningCertificate></etsi:SignedSignatureProperties></etsi:SignedProperties></etsi:QualifyingProperties></ds:Object></ds:Signature></factura>]]></comprobante>
+<mensajes/>
+</autorizacion>
+

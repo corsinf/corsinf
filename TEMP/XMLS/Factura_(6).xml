@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<autorizacion>
+<estado>AUTORIZADO</estado>
+<numeroAutorizacion>0504202401172364817400120011000000000228793268011</numeroAutorizacion>
+<fechaAutorizacion>2024-04-05T07:51:39-05:00</fechaAutorizacion>
+<ambiente>PRODUCCIÓN</ambiente>
+<comprobante><![CDATA[<?xml version="1.0" encoding="UTF-8"?><factura id="comprobante" version="1.1.0">
+    <infoTributaria>
+        <ambiente>2</ambiente>
+        <tipoEmision>1</tipoEmision>
+        <razonSocial>ZALDUMBIDE HINOJOSA BRYAN STEVEN</razonSocial>
+        <ruc>1723648174001</ruc>
+        <claveAcceso>0504202401172364817400120011000000000228793268011</claveAcceso>
+        <codDoc>01</codDoc>
+        <estab>001</estab>
+        <ptoEmi>100</ptoEmi>
+        <secuencial>000000022</secuencial>
+        <dirMatriz>Barrio: SANTA ANITA Calle: S13A A. CARRANZA Número: S13-71 Intersección: OE6C </dirMatriz>
+    </infoTributaria>
+    <infoFactura>
+        <fechaEmision>05/04/2024</fechaEmision>
+        <dirEstablecimiento>Barrio: SANTA ANITA Calle: S13A A. CARRANZA Número: S13-71 Intersección: OE6C </dirEstablecimiento>
+        <obligadoContabilidad>NO</obligadoContabilidad>
+        <tipoIdentificacionComprador>05</tipoIdentificacionComprador>
+        <razonSocialComprador>RUBIO PUETATE MILTON ANDRES</razonSocialComprador>
+        <identificacionComprador>1712605284</identificacionComprador>
+        <direccionComprador>De los motilones N40-345</direccionComprador>
+        <totalSinImpuestos>180.00</totalSinImpuestos>
+        <totalDescuento>0.00</totalDescuento>
+        <totalConImpuestos>
+            <totalImpuesto>
+                <codigo>2</codigo>
+                <codigoPorcentaje>0</codigoPorcentaje>
+                <baseImponible>180.00</baseImponible>
+                <valor>0.00</valor>
+            </totalImpuesto>
+        </totalConImpuestos>
+        <propina>0</propina>
+        <importeTotal>180.00</importeTotal>
+        <moneda>DOLAR</moneda>
+        <pagos>
+            <pago>
+                <formaPago>01</formaPago>
+                <total>180.00</total>
+            </pago>
+        </pagos>
+    </infoFactura>
+    <detalles>
+        <detalle>
+            <codigoPrincipal>030</codigoPrincipal>
+            <descripcion>FISIOTERAPIA</descripcion>
+            <cantidad>1.0</cantidad>
+            <precioUnitario>180.00</precioUnitario>
+            <descuento>0.00</descuento>
+            <precioTotalSinImpuesto>180.00</precioTotalSinImpuesto>
+            <impuestos>
+                <impuesto>
+                    <codigo>2</codigo>
+                    <codigoPorcentaje>0</codigoPorcentaje>
+                    <tarifa>0.0</tarifa>
+                    <baseImponible>180.00</baseImponible>
+                    <valor>0.00</valor>
+                </impuesto>
+            </impuestos>
+        </detalle>
+    </detalles>
+    <infoAdicional>
+        <campoAdicional nombre="Telefono">023920507</campoAdicional>
+        <campoAdicional nombre="Email">mrubio@corsinf.com</campoAdicional>
+    </infoAdicional>
+<ds:Signature xmlns:ds="http://www.w3.org/2000/09/xmldsig#" Id="xmldsig-3b2f580a-1abc-45bf-9f5d-bf3de7fc78c0"><ds:SignedInfo><ds:CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/><ds:SignatureMethod Algorithm="http://www.w3.org/2001/04/xmldsig-more#rsa-sha256"/><ds:Reference Id="xmldsig-3b2f580a-1abc-45bf-9f5d-bf3de7fc78c0-ref0" URI="#comprobante"><ds:Transforms><ds:Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/></ds:Transforms><ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/><ds:DigestValue>MVWklYeUIiO8FCqp7W7ouwFr0EFPK09q2funq2L8ifE=</ds:DigestValue></ds:Reference><ds:Reference Type="http://uri.etsi.org/01903#SignedProperties" URI="#xmldsig-3b2f580a-1abc-45bf-9f5d-bf3de7fc78c0-signedprops"><ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/><ds:DigestValue>nKJ0e9qQeOKyRtLV3nTl5M4/X24LAPnoYT0fQLNLDvs=</ds:DigestValue></ds:Reference></ds:SignedInfo><ds:SignatureValue Id="xmldsig-3b2f580a-1abc-45bf-9f5d-bf3de7fc78c0-sigvalue">dDXA5SivIUh9GbJVChGpPQEjSGVRQ5BuVgFjuJNbecwOHiphWcX4eTStr2YzSM2MZriVa5fly3sQnmculSuiHIzPl6qejbIP0mtvhWf2js7fXj189bZcpFCzorgDavjru49/zm61oDCf6ygR1aGDfC3YgSyCPdoi0YxKP7HoKYzDcrxN6Aw1SxxBpqaAT7KAHa1WhucnxO/Tbz+bgOI20GDgmIsC229qiBb/YNQKYNFIWAv4iQVmLCKuxRioPZBVuf3be6CxMCrE29+85R2Jo7nTe/ZzJjIJAbjCMA8fDX8EKgcZxnv9EoB7WRQzgFM466/dF7d/n+pGP7v2tM9W6g==</ds:SignatureValue><ds:KeyInfo><ds:X509Data><ds:X509Certificate>MIIL1jCCCb6gAwIBAgIEYaDKazANBgkqhkiG9w0BAQsFADCBmTELMAkGA1UEBhMCRUMxHTAbBgNVBAoMFFNFQ1VSSVRZIERBVEEgUy5BLiAyMTAwLgYDVQQLDCdFTlRJREFEIERFIENFUlRJRklDQUNJT04gREUgSU5GT1JNQUNJT04xOTA3BgNVBAMMMEFVVE9SSURBRCBERSBDRVJUSUZJQ0FDSU9OIFNVQkNBLTIgU0VDVVJJVFkgREFUQTAeFw0yMzA1MjUxMzE0MzRaFw0yNDA1MjQxMzE0MzRaMIGgMSkwJwYDVQQDDCBCUllBTiBTVEVWRU4gWkFMRFVNQklERSBISU5PSk9TQTEVMBMGA1UEBRMMMjUwNTIzMDgyNDA3MTAwLgYDVQQLDCdFTlRJREFEIERFIENFUlRJRklDQUNJT04gREUgSU5GT1JNQUNJT04xHTAbBgNVBAoMFFNFQ1VSSVRZIERBVEEgUy5BLiAyMQswCQYDVQQGEwJFQzCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAMcbNOM6Kc5tv3z/EqRDOQck2cNTEkI6joC2KbbrNkQYUpIk3LFu9EhsAyPDFRr4TNaLCC7ss8tu/QYp62ZlCRiWdPGCtAq4OvYNhWGdJxkA9DQUv6T7XlLMR9r/CdBnFr150drauylWDvcVs3TsxzX+xuSAX1x7mtC7ihpNqyCZaqX8gi1dWfFI6OAFApGQ81LN78Kuncl4H6q5fzScbjaCW1ZGkKnFXpVB6ywi8Nsxo2EVw3oeBUrB17GvS7DJmkkrus9S/c9HKn7A7bjhLm01haD3sP+sK9vXl7zYXsW9uh5Nwyxzz2+xXYa8NhzGbN3v3lCqPWG0r32EDpBVrdcCAwEAAaOCBxswggcXMAwGA1UdEwEB/wQCMAAwHwYDVR0jBBgwFoAUjLrKEVd4JYAdawpLVb+NrmLdvY8wWQYIKwYBBQUHAQEETTBLMEkGCCsGAQUFBzABhj1odHRwOi8vb2NzcGd3LnNlY3VyaXR5ZGF0YS5uZXQuZWMvZWpiY2EvcHVibGljd2ViL3N0YXR1cy9vY3NwMIHPBgNVHS4EgccwgcQwgcGggb6ggbuGgbhsZGFwOi8vbGRhcHNkY2EyLnNlY3VyaXR5ZGF0YS5uZXQuZWMvQ049QVVUT1JJREFEIERFIENFUlRJRklDQUNJT04gU1VCQ0EtMiBTRUNVUklUWSBEQVRBLE9VPUVOVElEQUQgREUgQ0VSVElGSUNBQ0lPTiBERSBJTkZPUk1BQ0lPTixPPVNFQ1VSSVRZIERBVEEgUy5BLiAyLEM9RUM/ZGVsdGFSZXZvY2F0aW9uTGlzdD9iYXNlMCQGA1UdEQQdMBuBGXphbGR1bWJpZGVicnlhbkBnbWFpbC5jb20wggEGBgNVHSAEgf4wgfswWgYKKwYBBAGCpnICBzBMMEoGCCsGAQUFBwICMD4ePABDAGUAcgB0AGkAZgBpAGMAYQBkAG8AIABkAGUAIABQAGUAcgBzAG8AbgBhACAATgBhAHQAdQByAGEAbDCBnAYKKwYBBAGCpnICATCBjTCBigYIKwYBBQUHAgEWfmh0dHBzOi8vd3d3LnNlY3VyaXR5ZGF0YS5uZXQuZWMvd3AtY29udGVudC9kb3dubG9hZHMvTm9ybWF0aXZhcy9QX2RlX0NlcnRpZmljYWRvcy9Qb2xpdGljYXMgZGUgQ2VydGlmaWNhZG8gUGVyc29uYSBOYXR1cmFsLnBkZjCCAqIGA1UdHwSCApkwggKVMIHloEGgP4Y9aHR0cDovL29jc3Bndy5zZWN1cml0eWRhdGEubmV0LmVjL2VqYmNhL3B1YmxpY3dlYi9zdGF0dXMvb2NzcKKBn6SBnDCBmTE5MDcGA1UEAwwwQVVUT1JJREFEIERFIENFUlRJRklDQUNJT04gU1VCQ0EtMiBTRUNVUklUWSBEQVRBMTAwLgYDVQQLDCdFTlRJREFEIERFIENFUlRJRklDQUNJT04gREUgSU5GT1JNQUNJT04xHTAbBgNVBAoMFFNFQ1VSSVRZIERBVEEgUy5BLiAyMQswCQYDVQQGEwJFQzCBx6CBxKCBwYaBvmxkYXA6Ly9sZGFwc2RjYTIuc2VjdXJpdHlkYXRhLm5ldC5lYy9DTj1BVVRPUklEQUQgREUgQ0VSVElGSUNBQ0lPTiBTVUJDQS0yIFNFQ1VSSVRZIERBVEEsT1U9RU5USURBRCBERSBDRVJUSUZJQ0FDSU9OIERFIElORk9STUFDSU9OLE89U0VDVVJJVFkgREFUQSBTLkEuIDIsQz1FQz9jZXJ0aWZpY2F0ZVJldm9jYXRpb25MaXN0P2Jhc2UwgeCggd2ggdqGgddodHRwczovL3BvcnRhbC1vcGVyYWRvcjIuc2VjdXJpdHlkYXRhLm5ldC5lYy9lamJjYS9wdWJsaWN3ZWIvd2ViZGlzdC9jZXJ0ZGlzdD9jbWQ9Y3JsJmlzc3Vlcj1DTj1BVVRPUklEQUQgREUgQ0VSVElGSUNBQ0lPTiBTVUJDQS0yIFNFQ1VSSVRZIERBVEEsT1U9RU5USURBRCBERSBDRVJUSUZJQ0FDSU9OIERFIElORk9STUFDSU9OLE89U0VDVVJJVFkgREFUQSBTLkEuIDIsQz1FQzAdBgNVHQ4EFgQUrrlnU8rQQrcq+RJs+i3rRY7M+BYwKwYDVR0QBCQwIoAPMjAyMzA1MjUxMzE0MzRagQ8yMDI0MDUyNDEzMTQzNFowCwYDVR0PBAQDAgXgMBoGCisGAQQBgqZyAwEEDAwKMTcyMzY0ODE3NDAVBgorBgEEAYKmcgMJBAcMBVFVSVRPMBEGCisGAQQBgqZyAyIEAwwBLjAtBgorBgEEAYKmcgMHBB8MHVMxM0EgQSBDQVJSQU5aQSBTMTMgNzEgWSBPRTZDMBwGCisGAQQBgqZyAwIEDgwMQlJZQU4gU1RFVkVOMB8GCisGAQQBgqZyAyAEEQwPMDAyMDAxMDAwNjI4ODE0MBEGCisGAQQBgqZyAyMEAwwBLjATBgorBgEEAYKmcgMhBAUMA1BGWDAXBgorBgEEAYKmcgMMBAkMB0VDVUFET1IwGgYKKwYBBAGCpnIDAwQMDApaQUxEVU1CSURFMBEGCisGAQQBgqZyAx4EAwwBLjAdBgorBgEEAYKmcgMLBA8MDTE3MjM2NDgxNzQwMDEwEQYKKwYBBAGCpnIDHQQDDAEuMBgGCisGAQQBgqZyAwQECgwISElOT0pPU0EwGgYKKwYBBAGCpnIDCAQMDAowOTgyNjExMDg3MA0GCSqGSIb3DQEBCwUAA4ICAQDDGhsAshaxNAnDeczujHW/gMPdhDWWkxmXnOuynSHHTRvF2mf7vSucpIyGQW3sfnOMFDr2G7EhpKtKnG7FSPKCp6B8CxmTj9GN4gchOKY30hWf/iHjUhH8/5cJcRLiARrGZM6jDEWm88tf949WOF1bBX0XnA1SLV9eLjUCMsWNP6oAH3+ZyaigMAtjRMtNoPCz9z8RkdubdmsEts0j6X2mVjtOvcQ3q9sv/Tkei5mgIStOb94G11IN+QxhF0TQnBxwwaE06o05T0vRk4pwUlUuSIV7FhFzqvBAKwjFJUx6IFWS9CchHc1URSvmcmkZ9tPf532Ghmya0+SGwaUP91MYq+XOtc4Li7w1P2f60aCihh33Q2mba4Ko0OjQBe4Hhve44YJU4Tfpj7dYkXySCiLv/jBYldBe8PQXjSf1pq9au4/F5JKZo7DplCXDL1oLHCQlIvFF0e9wjuZLLBdTTbmW3tGvJ5rZTErXPPrir8ISDLRnvjJMCVeWdE+Whhr5CEOh6yy+fkUibSPe1Yy4buStp/0UbAKqKY1C975M6g/8ovHd0ZRh6RVFu6RfUzMK3vYnVEYJ7OKPAZ5AZRub0qK7wIT6Hutt3IMerXyNt2Z9UzzFzzs6JH7bz5UuaNBjydm0W2Cy9ayrHnWpw+aZzpiFyCa1ftiase8Wfc73qZZ0gw==</ds:X509Certificate></ds:X509Data></ds:KeyInfo><ds:Object><xades:QualifyingProperties xmlns:xades="http://uri.etsi.org/01903/v1.3.2#" xmlns:xades141="http://uri.etsi.org/01903/v1.4.1#" Target="#xmldsig-3b2f580a-1abc-45bf-9f5d-bf3de7fc78c0"><xades:SignedProperties Id="xmldsig-3b2f580a-1abc-45bf-9f5d-bf3de7fc78c0-signedprops"><xades:SignedSignatureProperties><xades:SigningTime>2024-04-05T07:51:39.179-05:00</xades:SigningTime><xades:SigningCertificate><xades:Cert><xades:CertDigest><ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/><ds:DigestValue>fRRDs4G7X2OGloJaETc8h198xzEFvNuFZGUYDE5UDVo=</ds:DigestValue></xades:CertDigest><xades:IssuerSerial><ds:X509IssuerName>CN=AUTORIDAD DE CERTIFICACION SUBCA-2 SECURITY DATA,OU=ENTIDAD DE CERTIFICACION DE INFORMACION,O=SECURITY DATA S.A. 2,C=EC</ds:X509IssuerName><ds:X509SerialNumber>1637927531</ds:X509SerialNumber></xades:IssuerSerial></xades:Cert></xades:SigningCertificate></xades:SignedSignatureProperties><xades:SignedDataObjectProperties><xades:DataObjectFormat ObjectReference="#xmldsig-3b2f580a-1abc-45bf-9f5d-bf3de7fc78c0-ref0"><xades:Description>FIRMA DIGITAL SRI</xades:Description><xades:MimeType>text/xml</xades:MimeType><xades:Encoding>UTF-8</xades:Encoding></xades:DataObjectFormat></xades:SignedDataObjectProperties></xades:SignedProperties></xades:QualifyingProperties></ds:Object></ds:Signature></factura>]]></comprobante>
+<mensajes/>
+</autorizacion>
+

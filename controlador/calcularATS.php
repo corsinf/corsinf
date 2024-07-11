@@ -49,19 +49,13 @@ class calcular
 {
 		private $linkSriRecepcion;
 		private $documentos;
-		private $gran_subtotal;
-		private $gran_total;
-		private $gran_iva;
-		private $gran_subtotal_0;
-		private $gran_total_0;
-		private $gran_iva_0;
-
-		private $retencion_1;
-		private $retencion_70;
-		private $retencion_otros;
+		
+		private $all_iva;
+		private $all_retencion;
 	function __construct()
 	{
 		$this->sri = new autorizacion_sri();
+		// $this->all_iva = array();
 	}
 
 
@@ -287,7 +281,6 @@ class calcular
 		$tr = '';
 		foreach ($this->documentos as $key => $value) {
 			$doc_xml = $this->leer_archivo_xmls($value);
-
 			$tr.='<div class="card">
                      	<div class="card-body">
                      		<div class="row">
@@ -301,7 +294,7 @@ class calcular
                      			</div>
                      			<div class="col-sm-3">
 	                     			<b>SERIE COMPROBANTE</b><br>
-	                     			'.$doc_xml['tributatio']['estab'].' - '.$doc_xml['tributatio']['ptoEmi'].'
+	                     			'.$doc_xml['tributatio']['estab'].'-'.$doc_xml['tributatio']['ptoEmi'].'
                      			</div>
                      			<div class="col-sm-6">
 	                     			<b>RUC: </b>
@@ -312,9 +305,9 @@ class calcular
 	                     			'.$doc_xml['cabecera']['fechaEmision'].'
                      			</div>
                      			<div class="col-sm-3">
-	                     			<b>TOTAL IMPORTE: </b>
-	                     			32.26
-                     			</div>
+	                     			<b>DOCUMENTO: </b>
+	                     			'.$value.'
+                     			</div>                        			
                      		</div>
                      		<!--- Seccion detalle-->
                      		<div class="card">
@@ -353,7 +346,12 @@ class calcular
 		// print_r($lineas_xml);
 		// print_r($facturas_doc);die();
 
-		return array('tr'=>$tr,'tipo'=>'','sub_sin_iva'=>$this->gran_subtotal_0,'sub_con_iva'=>$this->gran_subtotal,'total_con_iva'=>$this->gran_total,'total'=>$this->gran_total_0,'iva_total'=>$this->gran_iva,'Retencion_1'=>$this->retencion_1,'Retencion_70'=>$this->retencion_70,'Retencion_otros'=>$this->retencion_otros);
+		// reindexado
+
+		$this->all_iva = array_values($this->all_iva);
+		$this->all_retencion = array_values($this->all_retencion);
+
+		return array('tr'=>$tr,'tipo'=>'','datos_iva'=>$this->all_iva,'Retencion'=>$this->all_retencion);
 
 	}
 
@@ -366,6 +364,9 @@ class calcular
 				break;
 			case '01':
 				return 'FACTURA';
+				break;
+			case '04':
+				return 'NOTA DE CREDITO';
 				break;
 			default:			
 				return 'OTROS';
@@ -385,6 +386,9 @@ class calcular
 		$total_total_0 = 0;
 		//-----------------------
 
+		$valor_retencion = 0;
+		$porce_iva = 0;
+
 		switch ($tipo) {
 			case '07':
 
@@ -399,27 +403,29 @@ class calcular
 								<td>Valor</td>
 							</tr>';
 							foreach ($lineas as $key => $value) {
-								// print_r($value);die();
+								// print_r($value);
 								$tbl.='<tr><td>'.$value['detalle'].'</td><td>'.$value['baseImponible'].'</td><td>'.intval($value['Porcentaje']).'</td><td>'.$value['valor'].'</td></tr>';
-								if(intval($value['Porcentaje'])==1)
+								$valor_retencion+= $value['valor'];
+								$porce_iva = intval($value['Porcentaje']);
+								if(!isset($this->all_retencion[intval($porce_iva)]))
 								{
-									$this->retencion_1+=$value['valor'];
-								}else if (intval($value['Porcentaje'])==70 || intval($value['Porcentaje'])==30 || intval($value['Porcentaje'])==100)
-								{
-									$this->retencion_70+=$value['valor'];
+									$this->all_retencion[intval($porce_iva)] = array('retencion'=>'Retencion '.$porce_iva,'valor'=>$valor_retencion);
 								}else
 								{
-									$this->retencion_otros+=$value['valor'];
-								}
-
-		
+									$this->all_retencion[intval($porce_iva)]['valor']+=$valor_retencion;
+							
+								}	
 
 							}
 							$tbl.='</tbody></table>';
-				//ban sumando en variables locales los totales de las lineas				
+							// die();
+							//ban sumando en variables locales los totales de las lineas
+
+										
 
 				break;
 			case '01':
+			case '04':
 			$iva = intval($lineas[0]['iva']); 
 			$tbl.='<table class="table table-sm" style="border: 1px solid;width:100%">
 						<tbody>
@@ -435,20 +441,25 @@ class calcular
 							foreach ($lineas as $key => $value) {
 								// print_r($value);die();
 								$tbl.='<tr><td>'.$value['detalle'].'</td><td>'.$value['cantidad'].'</td><td>'.$value['pvp'].'</td><td>'.$value['descuento'].'</td><td>'.$value['subtotal'].'</td><td>'.$value['iva_v'].'</td><td>'.$value['Total'].'</td></tr>';
-								if($value['iva']==12)
-								{
-									$total_iva+= $value['iva_v'];
-									$total_sub+= $value['subtotal'];
-									$total_total+=$value['Total'];
 
-								}else
-								{
-									$total_iva_0+= $value['iva_v'];
-									$total_sub_0+= $value['subtotal'];
-									$total_total_0+=$value['Total'];
-								}
+								switch ($value['iva']) {
+									case '12':										
+									case '15':										
+									case '8':
+										$total_iva+= $value['iva_v'];
+										$total_sub+= $value['subtotal'];
+										$total_total+=$value['Total'];
+										$iva = $value['iva'];
+										break;
+									default:
+										$total_iva_0+= $value['iva_v'];
+										$total_sub_0+= $value['subtotal'];
+										$total_total_0+=$value['Total'];
+										break;
+								}								
 
 							}
+							
 							$tbl.='
 								<tr><td colspan="7"></td></tr>
 								<tr><td colspan="4"></td><td colspan="2"><b>Subtotal '.$iva.'%</b></td><td>'.$total_sub.'</td></tr>
@@ -459,12 +470,29 @@ class calcular
 
 							</tbody></table>';
 				//ban sumando en variables locales los totales de las lineas
-				$this->gran_subtotal+=$total_sub;
-				$this->gran_total+=$total_total;
-				$this->gran_iva+=$total_iva;
-				$this->gran_subtotal_0+=$total_sub_0;
-				$this->gran_total_0+=$total_total_0;
-				$this->gran_iva_0+=$total_iva_0;
+				if(!isset($this->all_iva[intval($value['iva'])]))
+				{
+					if(intval($value['iva'])==0)
+					{
+						$this->all_iva[intval($value['iva'])] = array('porcentaje'=>$value['iva'],'iva_valor'=>$total_iva_0,'subtotal'=>$total_sub_0,'total'=>$total_total_0);
+					}else
+					{
+						$this->all_iva[intval($value['iva'])] = array('porcentaje'=>$value['iva'],'iva_valor'=>$total_iva,'subtotal'=>$total_sub,'total'=>$total_total);
+					}
+				}else
+				{
+					if(intval($value['iva'])==0)
+					{
+						$this->all_iva[intval($value['iva'])]['subtotal']+=$total_sub_0;
+						$this->all_iva[intval($value['iva'])]['iva_valor']+=$total_iva_0;
+						$this->all_iva[intval($value['iva'])]['total']+=$total_total_0;
+					}else
+					{
+						$this->all_iva[intval($value['iva'])]['subtotal']+=$total_sub;
+						$this->all_iva[intval($value['iva'])]['iva_valor']+=$total_iva;
+						$this->all_iva[intval($value['iva'])]['total']+=$total_total;
+					}
+				}
 
 				break;
 			default:			

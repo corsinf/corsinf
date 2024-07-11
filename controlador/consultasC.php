@@ -535,28 +535,28 @@ class consultasC
                     $chx_representante = $parametros['chx_representante'];
                     $chx_representante_2 = $parametros['chx_representante_2'];
 
-                    
+
                     $nombre_est = $parametros['nombre_paciente'];
                     $diagnostico = '';
                     $permiso_salida = '';
-                    
+
                     if ($parametros['sa_conp_permiso_salida'] == 'SI') {
                         $permiso_salida = $parametros['sa_conp_permiso_tipo'];
                     } else {
                         $permiso_salida = 'NO';
                     }
-                    
+
                     if ($tipo_consulta == 'consulta') {
                         $diagnostico = $parametros['sa_conp_diagnostico_1'];
-                        
+
                         if ($chx_representante === true) {
                             $this->enviar_correo_con($id_representante, $nombre_est, $diagnostico, $tipo_consulta, $permiso_salida);
                         }
-                        
+
                         if ($chx_representante_2 === true) {
                             $this->enviar_correo_con($sa_pac_temp_rep2_id, $nombre_est, $diagnostico, $tipo_consulta, $permiso_salida);
                         }
-                        
+
                         //echo $chx_representante_2; exit; die();
                         //print_r($variable);exit();die();
                     } else {
@@ -1815,17 +1815,19 @@ class consultasC
         $pdf->SetFont('Arial', '', 9);
 
 
-
+        $nombre_medico_tipo = empty($nombre_medico[0]['tipo']) ? 'Vacio' : $usuario;
 
         $tipo_usuario = '';
-        if (strtoupper($nombre_medico[0]['tipo']) == 'MEDICO') {
+        if (strtoupper($nombre_medico_tipo) == 'MEDICO') {
             $tipo_usuario = 'Dra. ';
         } else {
             $tipo_usuario = '';
         }
 
+        $nombre_medico_nombre = empty($nombre_medico[0]['nom']) ? 'Vacio' : $usuario;
+
         $pdf->SetFont('Arial', 'B', 12);
-        $pdf->Cell(60, 10, utf8_decode($tipo_usuario . $nombre_medico[0]['nom']), '0', 0, 'C');
+        $pdf->Cell(60, 10, utf8_decode($tipo_usuario . $nombre_medico_nombre), '0', 0, 'C');
         $pdf->SetFont('Arial', '', 12);
         $pdf->Cell(60, 10, utf8_decode(''), '0', 1, 'R');
 
@@ -2060,7 +2062,7 @@ class consultasC
         }
 
         $pdf->Ln(2);
-        
+
 
         $pdf->SetFont('Arial', 'B', 10);
         $pdf->SetTextColor(0, 0, 0);
@@ -2129,7 +2131,7 @@ class consultasC
         //cERTIFICADO
         $diagnostico_certificado = $sa_conp_diagnostico_certificado;
 
-        $nombre_medico = $usuario;
+        $nombre_medico = empty($usuario) ? 'Vacio' : $usuario;
 
         $pdf = new FPDF('P', 'mm', 'A4');
         $pdf->AddPage();
@@ -2188,14 +2190,20 @@ class consultasC
         $pdf->ln('25');
 
         $tipo_usuario = '';
-        if (strtoupper($nombre_medico[0]['tipo']) == 'MEDICO') {
+
+        //print_r($usuario);die();
+
+        $nombre_medico_tipo = empty($nombre_medico[0]['tipo']) ? 'Vacio' : $usuario;
+        $nombre_medico_nombre = empty($nombre_medico[0]['nom']) ? 'Vacio' : $usuario;
+
+        if (strtoupper($nombre_medico_tipo) == 'MEDICO') {
             $tipo_usuario = 'Dra. ';
         } else {
             $tipo_usuario = '';
         }
 
         $pdf->SetFont('Arial', 'B', 12);
-        $pdf->Cell(60, 10, utf8_decode($tipo_usuario . $nombre_medico[0]['nom']), '0', 0, 'C');
+        $pdf->Cell(60, 10, utf8_decode($tipo_usuario . $nombre_medico_nombre), '0', 0, 'C');
         $pdf->SetFont('Arial', '', 12);
         $pdf->Cell(60, 10, utf8_decode(''), '0', 1, 'R');
 
