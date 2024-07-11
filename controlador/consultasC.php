@@ -532,8 +532,8 @@ class consultasC
                     $tipo_consulta = $parametros['sa_conp_tipo_consulta'];
                     $id_representante = $parametros['sa_pac_temp_rep_id'];
                     $sa_pac_temp_rep2_id = $parametros['sa_pac_temp_rep2_id'];
-                    $chx_representante = $parametros['chx_representante'];
-                    $chx_representante_2 = $parametros['chx_representante_2'];
+                    $chx_representante = $parametros['chx_representante'] ?? '';
+                    $chx_representante_2 = $parametros['chx_representante_2'] ?? '';
 
 
                     $nombre_est = $parametros['nombre_paciente'];
@@ -549,11 +549,11 @@ class consultasC
                     if ($tipo_consulta == 'consulta') {
                         $diagnostico = $parametros['sa_conp_diagnostico_1'];
 
-                        if ($chx_representante === true) {
+                        if ($chx_representante === true && $chx_representante != '') {
                             $this->enviar_correo_con($id_representante, $nombre_est, $diagnostico, $tipo_consulta, $permiso_salida);
                         }
 
-                        if ($chx_representante_2 === true) {
+                        if ($chx_representante_2 === true && $chx_representante != '') {
                             $this->enviar_correo_con($sa_pac_temp_rep2_id, $nombre_est, $diagnostico, $tipo_consulta, $permiso_salida);
                         }
 
@@ -561,14 +561,16 @@ class consultasC
                         //print_r($variable);exit();die();
                     } else {
                         $diagnostico = $parametros['sa_conp_diagnostico_certificado'];
-                        if ($chx_representante === true) {
+                        if ($chx_representante === true && $chx_representante != '') {
                             $this->enviar_correo_con($id_representante, $nombre_est, $diagnostico, $tipo_consulta, $permiso_salida);
                         }
 
-                        if ($chx_representante_2 === true) {
+                        if ($chx_representante_2 === true && $chx_representante != '') {
                             $this->enviar_correo_con($sa_pac_temp_rep2_id, $nombre_est, $diagnostico, $tipo_consulta, $permiso_salida);
                         }
                     }
+
+                    //Notificación para el representante
 
                     $url_rep_noti = '../vista/inicio.php?mod=7&acc=detalle_consulta&pdf_consulta=true&id_consulta=' . $id_insert . '&tipo_consulta=' . $parametros['sa_conp_tipo_consulta'] . '&btn_regresar=represententes';
 
@@ -585,6 +587,21 @@ class consultasC
                         array('campo' => 'GLO_rol', 'dato' => 'REPRESENTANTE'),
                         array('campo' => 'GLO_observacion', 'dato' => ''),
                     );
+
+                    //Para arreglar
+                    // $datos_notificaciones = array(
+                    //     array('campo' => 'GLO_modulo', 'dato' => '7'),
+                    //     array('campo' => 'GLO_titulo', 'dato' => $parametros['sa_conp_tipo_consulta']),
+                    //     array('campo' => 'GLO_cuerpo', 'dato' => $parametros['nombre_paciente']),
+                    //     array('campo' => 'GLO_icono', 'dato' => $icono),
+                    //     array('campo' => 'GLO_tabla', 'dato' => 'representantes'),
+                    //     array('campo' => 'GLO_id_tabla', 'dato' => $sa_pac_temp_rep2_id),
+                    //     array('campo' => 'GLO_busqueda_especifica', 'dato' => $id_insert),
+                    //     array('campo' => 'GLO_desc_busqueda', 'dato' => 'Para mostrar consulta al representante'),
+                    //     array('campo' => 'GLO_link_redirigir', 'dato' => $url_rep_noti),
+                    //     array('campo' => 'GLO_rol', 'dato' => 'REPRESENTANTE'),
+                    //     array('campo' => 'GLO_observacion', 'dato' => ''),
+                    // );
 
                     $this->notificaciones->insertar($datos_notificaciones);
                 }
@@ -752,8 +769,8 @@ class consultasC
                 $tipo_consulta = $parametros['sa_conp_tipo_consulta'];
                 $id_representante = $parametros['sa_pac_temp_rep_id'];
                 $sa_pac_temp_rep2_id = $parametros['sa_pac_temp_rep2_id'];
-                $chx_representante = $parametros['chx_representante'];
-                $chx_representante_2 = $parametros['chx_representante_2'];
+                $chx_representante = $parametros['chx_representante'] ?? '';
+                $chx_representante_2 = $parametros['chx_representante_2'] ?? '';
                 $nombre_est = $parametros['nombre_paciente'];
                 $diagnostico = '';
                 $permiso_salida = '';
@@ -766,20 +783,20 @@ class consultasC
                 if ($tipo_consulta == 'consulta') {
                     $diagnostico = $parametros['sa_conp_diagnostico_1'];
 
-                    if ($chx_representante === true) {
+                    if ($chx_representante === true && $chx_representante != '') {
                         $this->enviar_correo_con($id_representante, $nombre_est, $diagnostico, $tipo_consulta, $permiso_salida);
                     }
 
-                    if ($chx_representante_2 === true) {
+                    if ($chx_representante_2 === true && $chx_representante != '') {
                         $this->enviar_correo_con($id_representante, $nombre_est, $diagnostico, $tipo_consulta, $permiso_salida);
                     }
                 } else {
                     $diagnostico = $parametros['sa_conp_diagnostico_certificado'];
-                    if ($chx_representante === true) {
+                    if ($chx_representante === true && $chx_representante != '') {
                         $this->enviar_correo_con($id_representante, $nombre_est, $diagnostico, $tipo_consulta, $permiso_salida);
                     }
 
-                    if ($chx_representante_2 === true) {
+                    if ($chx_representante_2 === true && $chx_representante != '') {
                         $this->enviar_correo_con($id_representante, $nombre_est, $diagnostico, $tipo_consulta, $permiso_salida);
                     }
                 }
@@ -1815,7 +1832,8 @@ class consultasC
         $pdf->SetFont('Arial', '', 9);
 
 
-        $nombre_medico_tipo = empty($nombre_medico[0]['tipo']) ? 'Vacio' : $usuario;
+        $nombre_medico_tipo = empty($nombre_medico[0]['tipo']) ? 'Vacio' : $nombre_medico[0]['tipo'];
+        $nombre_medico_nombre = empty($nombre_medico[0]['nom']) ? 'Vacio' : $nombre_medico[0]['nom'];
 
         $tipo_usuario = '';
         if (strtoupper($nombre_medico_tipo) == 'MEDICO') {
@@ -1823,8 +1841,6 @@ class consultasC
         } else {
             $tipo_usuario = '';
         }
-
-        $nombre_medico_nombre = empty($nombre_medico[0]['nom']) ? 'Vacio' : $usuario;
 
         $pdf->SetFont('Arial', 'B', 12);
         $pdf->Cell(60, 10, utf8_decode($tipo_usuario . $nombre_medico_nombre), '0', 0, 'C');
@@ -1927,7 +1943,10 @@ class consultasC
 
 
         $tipo_usuario = '';
-        if (strtoupper($usuario[0]['tipo']) == 'MEDICO') {
+        $nombre_medico_tipo = empty($nombre_medico[0]['tipo']) ? 'Vacio' : $nombre_medico[0]['tipo'];
+        $nombre_medico_nombre = empty($nombre_medico[0]['nom']) ? 'Vacio' : $nombre_medico[0]['nom'];
+
+        if (strtoupper($nombre_medico_tipo) == 'MEDICO') {
             $tipo_usuario = 'Dra. ';
         } else {
             $tipo_usuario = '';
@@ -1936,7 +1955,7 @@ class consultasC
         $pdf->SetFont('Arial', 'B', 10);
         $pdf->Cell(27, 7, utf8_decode('Recetado por: '), 0, 0, '');
         $pdf->SetFont('Arial', '', 10);
-        $pdf->Cell(81, 7, utf8_decode($tipo_usuario . $usuario[0]['nom']), 0, 1, 'L');
+        $pdf->Cell(81, 7, utf8_decode($tipo_usuario . $nombre_medico_nombre), 0, 1, 'L');
 
         $pdf->SetFont('Arial', 'B', 10);
         $pdf->SetTextColor(57, 80, 122);
@@ -2191,10 +2210,10 @@ class consultasC
 
         $tipo_usuario = '';
 
-        //print_r($usuario);die();
 
-        $nombre_medico_tipo = empty($nombre_medico[0]['tipo']) ? 'Vacio' : $usuario;
-        $nombre_medico_nombre = empty($nombre_medico[0]['nom']) ? 'Vacio' : $usuario;
+        $nombre_medico_tipo = empty($nombre_medico[0]['tipo']) ? 'Vacio' : $nombre_medico[0]['tipo'];
+        //print_r($nombre_medico_tipo);die();
+        $nombre_medico_nombre = empty($nombre_medico[0]['nom']) ? 'Vacio' : $nombre_medico[0]['nom'];
 
         if (strtoupper($nombre_medico_tipo) == 'MEDICO') {
             $tipo_usuario = 'Dra. ';
