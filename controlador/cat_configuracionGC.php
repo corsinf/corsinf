@@ -258,7 +258,7 @@ class cat_configuracionGC
             /*----------------------------------------------------------------*/
 
             // Dividir los datos en grupos de 300
-            $grupos = array_chunk($datos, 300);
+            $grupos = array_chunk($datos, 100);
 
             // Insertar cada grupo en la base de datos
             $contador = 0;
@@ -371,7 +371,7 @@ class cat_configuracionGC
             //print_r($datos);
 
             // Dividir los datos en grupos de 300
-            $grupos = array_chunk($datos, 150);
+            $grupos = array_chunk($datos, 100);
             $sql_global = '';
             // Insertar cada grupo en la base de datos
             $contador = 0;
@@ -497,7 +497,7 @@ class cat_configuracionGC
             //print_r($datos); die();
 
             // Dividir los datos en grupos de 300
-            $grupos = array_chunk($datos, 150);
+            $grupos = array_chunk($datos, 100);
 
             //print_r($grupos[1]); die();
 
@@ -644,7 +644,7 @@ class cat_configuracionGC
             //print_r($datos); die();
 
             // Dividir los datos en grupos de 300
-            $grupos = array_chunk($datos, 150);
+            $grupos = array_chunk($datos, 100);
 
             //print_r($grupos[1]); die();
 

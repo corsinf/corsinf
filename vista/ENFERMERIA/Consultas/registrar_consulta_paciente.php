@@ -1100,7 +1100,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                         </div>
                                                     <?php } ?>
 
-                                                    <div class="row pt-3" id="pnl_contactos_salida">
+                                                    <!-- <div class="row pt-3" id="pnl_contactos_salida">
                                                         <div class="col-md-4">
                                                             <label for="" class="form-label fw-bold" id="lbl_telefono_emergencia">Viene desde el Paciente </label>
                                                             <input type="text" class="form-control form-control-sm" id="sa_conp_permiso_telefono_padre" name="sa_conp_permiso_telefono_padre">
@@ -1137,7 +1137,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                                 });
                                                             });
                                                         </script>
-                                                    </div>
+                                                    </div> -->
                                                 </div>
 
                                                 <div class="modal-footer pt-4" id="seccion_boton_consulta">
