@@ -43,7 +43,7 @@ class loginM
 		return $datos;
 	}
 
-	function empresa_tabla_noconcurente($id_empresa=false,$tabla=false,$ambiente_empresa = false)
+	function empresa_tabla_noconcurente($id_empresa=false,$tabla=false,$ambiente_empresa = false,$perfil=false)
 	{
 		$sql = "SELECT Tabla,T.Id_Empresa,Campo_usuario,Campo_pass,tipo_perfil,TU.DESCRIPCION as 'tipo',campo_img
 			FROM TABLAS_NOCONCURENTE T
@@ -58,11 +58,15 @@ class loginM
 				{
 					$sql.= " AND Tabla = '".$tabla."' ";
 				}
+				if($perfil)
+				{
+					$sql.=" AND tipo_perfil = '".$perfil."'";
+				}
 				if($ambiente_empresa)
 				{
 					$sql.= " AND  ambiente_empresa = '".$ambiente_empresa."' ";
 				}
-				$sql.="GROUP BY Tabla,T.Id_Empresa,Campo_usuario,Campo_pass,tipo_perfil,TU.DESCRIPCION,campo_img";
+				$sql.=" GROUP BY Tabla,T.Id_Empresa,Campo_usuario,Campo_pass,tipo_perfil,TU.DESCRIPCION,campo_img";
 
 				// print_r($sql);die();
 		$datos = $this->db->datos($sql,1);
@@ -73,7 +77,7 @@ class loginM
 	{
 		$item = array();
 		$sql = "SELECT * FROM ".$parametros['tabla']." WHERE ".$parametros['Campo_Usuario']." = '".$parametros['email']."' ";
-		if(isset($parametros['Campo_pass']))
+		if(isset($parametros['Campo_Pass']))
 		{
 		    $sql.=" AND ".$parametros['Campo_Pass']."='".$parametros['pass']."'";
 		}

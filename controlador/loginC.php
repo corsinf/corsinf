@@ -635,7 +635,7 @@ class loginC
 				$parametros['pass'] = $this->cod_global->enciptar_clave($parametros['pass']);
 				$datos = $this->login->datos_login(false,false,2);
 				// busca en tabla no concurrentes 
-				 $no_concurentes = $this->login->empresa_tabla_noconcurente($parametros['empresa']);
+				 $no_concurentes = $this->login->empresa_tabla_noconcurente($parametros['empresa'],false,false,$parametros['tipo']);
 			 	 $empresa = $this->login->lista_empresa($parametros['empresa']);
 
 			 	 // print_r($no_concurentes);die();
@@ -650,6 +650,8 @@ class loginC
 			 	 	 	$parametros['tipo'] = $value['tipo'];
 			 	 	 	$parametros['foto'] = $value['campo_img'];
 			 	 	 	$tabla = $value['Tabla'];
+
+			 	 	 	// print_r($parametros);die();
 			 	 	 	$busqueda_tercero = $this->login->buscar_db_terceros($empresa[0]['Base_datos'],$empresa[0]['Usuario_db'],$empresa[0]['Password_db'],$empresa[0]['Ip_host'],$empresa[0]['Puerto_db'],$parametros);
 			 	 	 	if(count($busqueda_tercero)>0)
 			 	 	 	{
@@ -663,38 +665,44 @@ class loginC
 				 	// print_r($id);
 				 	// print_r($busqueda_tercero);die();
 
-				 	$datos_usu = $this->login->datos_no_concurente($empresa,$tabla,$id[0]['ID'],$busqueda_tercero[0][$id[0]['ID']]);
+				 	if(count($busqueda_tercero)>0)
+				 	{
+					 	$datos_usu = $this->login->datos_no_concurente($empresa,$tabla,$id[0]['ID'],$busqueda_tercero[0][$id[0]['ID']]);
 
-			 	 // print_r($busqueda_tercero);
-				 	// print_r($datos_usu[0][$parametros['foto']]);die();
-				 	// print_r($datos_usu);die();
-				 	$_SESSION['INICIO']['ULTIMO_ACCESO'] = time();
-					$_SESSION["INICIO"]['VER'] = $datos[0]['Ver'];
-					$_SESSION["INICIO"]['EDITAR'] = $datos[0]['editar'];
-					$_SESSION["INICIO"]['ELIMINAR'] = $datos[0]['eliminar'];
-					$_SESSION["INICIO"]['DBA'] = $datos[0]['dba'];
-					$_SESSION["INICIO"]['USUARIO'] = $datos[0]['nombres'].' '.$datos[0]['apellidos'];
-					$_SESSION["INICIO"]['ID_USUARIO'] = $datos[0]['id'];
-					$_SESSION["INICIO"]['EMAIL'] = $datos[0]['email'];
-					$_SESSION["INICIO"]['TIPO'] = $parametros['tipo'];
-					$_SESSION["INICIO"]['PERFIL'] = $parametros['perfil'];
-					$_SESSION["INICIO"]['FOTO'] = '';
-					if($parametros['foto']!='' && $parametros['foto']!=null && file_exists($parametros['foto']))
-					{		
-						$_SESSION["INICIO"]['FOTO'] = $datos_usu[0][$parametros['foto']];
+				 	 // print_r($busqueda_tercero);
+					 	// print_r($datos_usu[0][$parametros['foto']]);die();
+					 	// print_r($datos_usu);die();
+					 	$_SESSION['INICIO']['ULTIMO_ACCESO'] = time();
+						$_SESSION["INICIO"]['VER'] = $datos[0]['Ver'];
+						$_SESSION["INICIO"]['EDITAR'] = $datos[0]['editar'];
+						$_SESSION["INICIO"]['ELIMINAR'] = $datos[0]['eliminar'];
+						$_SESSION["INICIO"]['DBA'] = $datos[0]['dba'];
+						$_SESSION["INICIO"]['USUARIO'] = $datos[0]['nombres'].' '.$datos[0]['apellidos'];
+						$_SESSION["INICIO"]['ID_USUARIO'] = $datos[0]['id'];
+						$_SESSION["INICIO"]['EMAIL'] = $datos[0]['email'];
+						$_SESSION["INICIO"]['TIPO'] = $parametros['tipo'];
+						$_SESSION["INICIO"]['PERFIL'] = $parametros['perfil'];
+						$_SESSION["INICIO"]['FOTO'] = '';
+						if($parametros['foto']!='' && $parametros['foto']!=null && file_exists($parametros['foto']))
+						{		
+							$_SESSION["INICIO"]['FOTO'] = $datos_usu[0][$parametros['foto']];
+						}
+						$_SESSION["INICIO"]['NO_CONCURENTE'] = $busqueda_tercero[0][$id[0]['ID']] ;
+						$_SESSION["INICIO"]['NO_CONCURENTE_NOM'] =$parametros['email'];
+						$_SESSION["INICIO"]['NO_CONCURENTE_TABLA_ID'] =$id[0]['ID'];
+						$_SESSION["INICIO"]['NO_CONCURENTE_TABLA'] =$tabla;
+						$_SESSION["INICIO"]['NO_CONCURENTE_CAMPO_IMG'] =$parametros['foto'];
+						$_SESSION["INICIO"]['MODULO_SISTEMA_ANT'] ='';
+						$_SESSION["INICIO"]['LISTA_ART'] =1;
+
+
+						// print_r($_SESSION['INICIO']);die();
+
+						return 1;
+					}else
+					{
+						return -1;
 					}
-					$_SESSION["INICIO"]['NO_CONCURENTE'] = $busqueda_tercero[0][$id[0]['ID']] ;
-					$_SESSION["INICIO"]['NO_CONCURENTE_NOM'] =$parametros['email'];
-					$_SESSION["INICIO"]['NO_CONCURENTE_TABLA_ID'] =$id[0]['ID'];
-					$_SESSION["INICIO"]['NO_CONCURENTE_TABLA'] =$tabla;
-					$_SESSION["INICIO"]['NO_CONCURENTE_CAMPO_IMG'] =$parametros['foto'];
-					$_SESSION["INICIO"]['MODULO_SISTEMA_ANT'] ='';
-					$_SESSION["INICIO"]['LISTA_ART'] =1;
-
-
-					// print_r($_SESSION['INICIO']);die();
-
-					return 1;
 
 	}
 
