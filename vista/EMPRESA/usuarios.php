@@ -457,18 +457,23 @@ $activeRep = 0;
 
 
       var checkboxes = document.querySelectorAll('#form_claves input[type="password"]');
+       var input_pass = [];
       checkboxes.forEach(function(checkbox) {
         // console.log(checkbox)
           if (checkbox.value=='') {
             Swal.fire("","Ingrese todas las claves",'error')
             return false;
+          }else
+          {
+            input_pass.push(checkbox.value);
           }
       });
 
-    datos = $('#form_claves').serialize();
+    // datos = $('#form_claves').serialize();
 
      var parametros = {
-        'usuarios':datos,
+        'usuarios':checkboxes_checkeados,
+        'usuariosPass':input_pass,
         'tipo':$('#ddl_tipo_usuario').val(),
         'grupo':grupo,
      }

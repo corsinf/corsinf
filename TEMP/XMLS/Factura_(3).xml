@@ -1,224 +1,100 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <autorizacion>
 <estado>AUTORIZADO</estado>
-<numeroAutorizacion>2301202301171206301300120010020000001121348468914</numeroAutorizacion>
-<fechaAutorizacion>2023-01-23T12:55:30-05:00</fechaAutorizacion>
+<numeroAutorizacion>0404202401179214148600120070500007137514126153314</numeroAutorizacion>
+<fechaAutorizacion>2024-04-05T02:12:49-05:00</fechaAutorizacion>
 <ambiente>PRODUCCIÓN</ambiente>
-<comprobante><![CDATA[<?xml version="1.0" encoding="UTF-8"?><factura id="comprobante" version="2.1.0">
-	<infoTributaria>
-		<ambiente>2</ambiente>
-	    <tipoEmision>1</tipoEmision>
-	    <razonSocial>CARVAJAL CASTRO GABRIELA CRISTINA</razonSocial>
-	    <nombreComercial>CARVAJAL CASTRO GABRIELA CRISTINA</nombreComercial>
-	    <ruc>1712063013001</ruc>
-	    <claveAcceso>2301202301171206301300120010020000001121348468914</claveAcceso>
-	    <codDoc>01</codDoc>
-	    <estab>001</estab>
-	    <ptoEmi>002</ptoEmi>
-	    <secuencial>000000112</secuencial>
-	    <dirMatriz>PICHINCHA / QUITO / TUMBACO / GONZALO PIZARRO N2-36 Y ABDON CALDERON</dirMatriz>
-		
-		
-		
-			<contribuyenteRimpe>CONTRIBUYENTE RÉGIMEN RIMPE</contribuyenteRimpe>
-		
-  	</infoTributaria>
-	<infoFactura>
-	    <fechaEmision>23/01/2023</fechaEmision>
-		
-			<dirEstablecimiento>PICHINCHA / QUITO / TUMBACO / GONZALO PIZARRO N2-36 Y ABDON CALDERON</dirEstablecimiento>
-		
-	    
-	    
-			<obligadoContabilidad>NO</obligadoContabilidad>
-		
-		
-	    
-	    <tipoIdentificacionComprador>04</tipoIdentificacionComprador>
-		
-		<razonSocialComprador>MERAKY ELABORACION Y COMERCIALIZACION DE PRODUCTOS ALIMENTICIOS SOCIEDAD CIVIL Y COMERCIAL</razonSocialComprador>
-	    <identificacionComprador>1793196048001</identificacionComprador>
-		<direccionComprador>GUAMANÍ</direccionComprador>
-	    
-	    <totalSinImpuestos>34.00000</totalSinImpuestos>
-		
-	  	
-	    <totalDescuento>0.00</totalDescuento>
-	    
-	    <totalConImpuestos>
-	      <totalImpuesto>
-	        <codigo>2</codigo>
-	        <codigoPorcentaje>2</codigoPorcentaje>
-	        <descuentoAdicional>0</descuentoAdicional>
-	        <baseImponible>0.00</baseImponible>
-	        <valor>0.00000</valor>
-	      </totalImpuesto>
-	      
-	      
-	      <totalImpuesto>
-	        <codigo>2</codigo>
-	        <codigoPorcentaje>6</codigoPorcentaje>
-	        <descuentoAdicional>0</descuentoAdicional>
-	        <baseImponible>34.00000</baseImponible>
-	        <valor>0</valor>
-	      </totalImpuesto>
-	      
-		  
-		  
-	    </totalConImpuestos>
-	    <propina>0</propina>
-	    <importeTotal>34.00000</importeTotal>
-	    <moneda>DOLAR</moneda>
-		
-	    
-	    <pagos>
-	    	
-	    	<pago>
-	    		<formaPago>20</formaPago>
-	    		<total>34.00</total>
-	    		<plazo>0</plazo>
-	    		<unidadTiempo>días</unidadTiempo>
-	    	</pago>
-	    	
-	    </pagos>
-	    
-  	</infoFactura>
-  	<detalles>
-  	
-    <detalle>
-      
-      	<codigoPrincipal>001</codigoPrincipal>
-		<codigoAuxiliar>001</codigoAuxiliar>
-      	<descripcion>Huevos Grandes</descripcion>
-      
-      <cantidad>10.000000</cantidad>
-      <precioUnitario>3.400000</precioUnitario>
-	  
-      <descuento>0.00</descuento>
-      <precioTotalSinImpuesto>34.00</precioTotalSinImpuesto>
-	  
-	  
-            
-      
-      <impuestos>
-        <impuesto>
-          <codigo>2</codigo>
-          <codigoPorcentaje>6</codigoPorcentaje>
-          <tarifa>0</tarifa>
-          <baseImponible>34.00000</baseImponible>
-          <valor>0.00</valor>
-        </impuesto>
-        
-		
-		
-      </impuestos>
-	  
-	</detalle>
-    
-	
-    </detalles>
-    
-	
-    
-    <infoAdicional>
-    	
-    		
-    			<campoAdicional nombre="Descripción">Factura</campoAdicional>
-    		
-    	
-    </infoAdicional>
-	
-	
-<ds:Signature xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xmlns:etsi="http://uri.etsi.org/01903/v1.3.2#" Id="Signature14497">
-<ds:SignedInfo Id="Signature-SignedInfo55620">
+<comprobante><![CDATA[<?xml version="1.0" encoding="UTF-8" standalone="no"?><factura xmlns:ns2="http://www.w3.org/2000/09/xmldsig#" id="comprobante" version="2.1.0"><infoTributaria><ambiente>2</ambiente><tipoEmision>1</tipoEmision><razonSocial>PROMOTORA ECUATORIANA DE CAFE DE COLOMBIA S.A. PROCAFECOL ECUADOR</razonSocial><nombreComercial>JUAN VALDEZ</nombreComercial><ruc>1792141486001</ruc><claveAcceso>0404202401179214148600120070500007137514126153314</claveAcceso><codDoc>01</codDoc><estab>007</estab><ptoEmi>050</ptoEmi><secuencial>000713751</secuencial><dirMatriz>PICHINCHA / QUITO / INAQUITO / COREA 126 Y AV. AMAZONAS</dirMatriz></infoTributaria><infoFactura><fechaEmision>04/04/2024</fechaEmision><dirEstablecimiento>PICHINCHA / QUITO / AV. NACIONES UNIDAS S/N Y AV. DE LOS SHYRIS</dirEstablecimiento><contribuyenteEspecial>826</contribuyenteEspecial><obligadoContabilidad>SI</obligadoContabilidad><tipoIdentificacionComprador>05</tipoIdentificacionComprador><razonSocialComprador>MILTON RUBIO  </razonSocialComprador><identificacionComprador>1712605284</identificacionComprador><totalSinImpuestos>18.56</totalSinImpuestos><totalDescuento>0.00</totalDescuento><totalConImpuestos><totalImpuesto><codigo>2</codigo><codigoPorcentaje>4</codigoPorcentaje><baseImponible>18.56</baseImponible><tarifa>15</tarifa><valor>2.78</valor></totalImpuesto></totalConImpuestos><propina>0.00</propina><importeTotal>21.34</importeTotal><moneda>DOLAR</moneda><pagos><pago><formaPago>19</formaPago><total>21.34</total><plazo>0</plazo><unidadTiempo>DÍAS</unidadTiempo></pago></pagos></infoFactura><detalles><detalle><codigoPrincipal>138</codigoPrincipal><descripcion>MOCA 12OZ</descripcion><cantidad>1.0</cantidad><precioUnitario>2.913000</precioUnitario><descuento>0.0</descuento><precioTotalSinImpuesto>2.91</precioTotalSinImpuesto><impuestos><impuesto><codigo>2</codigo><codigoPorcentaje>4</codigoPorcentaje><tarifa>15</tarifa><baseImponible>2.91</baseImponible><valor>0.44</valor></impuesto></impuestos></detalle><detalle><codigoPrincipal>850</codigoPrincipal><descripcion>+SABOR AVELLANA                         </descripcion><cantidad>1.0</cantidad><precioUnitario>0.860800</precioUnitario><descuento>0.0</descuento><precioTotalSinImpuesto>0.86</precioTotalSinImpuesto><impuestos><impuesto><codigo>2</codigo><codigoPorcentaje>4</codigoPorcentaje><tarifa>15</tarifa><baseImponible>0.86</baseImponible><valor>0.13</valor></impuesto></impuestos></detalle><detalle><codigoPrincipal>931</codigoPrincipal><descripcion>TORTA DE CHOCLO</descripcion><cantidad>1.0</cantidad><precioUnitario>2.913000</precioUnitario><descuento>0.0</descuento><precioTotalSinImpuesto>2.91</precioTotalSinImpuesto><impuestos><impuesto><codigo>2</codigo><codigoPorcentaje>4</codigoPorcentaje><tarifa>15</tarifa><baseImponible>2.91</baseImponible><valor>0.44</valor></impuesto></impuestos></detalle><detalle><codigoPrincipal>1331</codigoPrincipal><descripcion>FUNDA DE PAPAS PEQUENA</descripcion><cantidad>1.0</cantidad><precioUnitario>1.434700</precioUnitario><descuento>0.0</descuento><precioTotalSinImpuesto>1.43</precioTotalSinImpuesto><impuestos><impuesto><codigo>2</codigo><codigoPorcentaje>4</codigoPorcentaje><tarifa>15</tarifa><baseImponible>1.43</baseImponible><valor>0.22</valor></impuesto></impuestos></detalle><detalle><codigoPrincipal>1950</codigoPrincipal><descripcion>ADICION QUESO T HOLANDES</descripcion><cantidad>1.0</cantidad><precioUnitario>0.869500</precioUnitario><descuento>0.0</descuento><precioTotalSinImpuesto>0.87</precioTotalSinImpuesto><impuestos><impuesto><codigo>2</codigo><codigoPorcentaje>4</codigoPorcentaje><tarifa>15</tarifa><baseImponible>0.87</baseImponible><valor>0.13</valor></impuesto></impuestos></detalle><detalle><codigoPrincipal>1954</codigoPrincipal><descripcion>COMBO HUMITA   CAPU 9 OZ</descripcion><cantidad>1.0</cantidad><precioUnitario>4.782600</precioUnitario><descuento>0.0</descuento><precioTotalSinImpuesto>4.78</precioTotalSinImpuesto><impuestos><impuesto><codigo>2</codigo><codigoPorcentaje>4</codigoPorcentaje><tarifa>15</tarifa><baseImponible>4.78</baseImponible><valor>0.72</valor></impuesto></impuestos></detalle><detalle><codigoPrincipal>56216</codigoPrincipal><descripcion>COMB. SAND PAVO T + JN 12 OZ</descripcion><cantidad>1.0</cantidad><precioUnitario>4.782600</precioUnitario><descuento>0.0</descuento><precioTotalSinImpuesto>4.78</precioTotalSinImpuesto><impuestos><impuesto><codigo>2</codigo><codigoPorcentaje>4</codigoPorcentaje><tarifa>15</tarifa><baseImponible>4.78</baseImponible><valor>0.72</valor></impuesto></impuestos></detalle></detalles><infoAdicional><campoAdicional nombre="CORREO 1">FACTURA@CORSINF.COM</campoAdicional></infoAdicional><ds:Signature xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xmlns:etsi="http://uri.etsi.org/01903/v1.3.2#" Id="Signature983477">
+<ds:SignedInfo Id="Signature-SignedInfo720486">
 <ds:CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/>
 <ds:SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/>
-<ds:Reference Id="SignedPropertiesID973509" Type="http://uri.etsi.org/01903#SignedProperties" URI="#Signature14497-SignedProperties606278">
+<ds:Reference Id="SignedPropertiesID147761" Type="http://uri.etsi.org/01903#SignedProperties" URI="#Signature983477-SignedProperties302800">
 <ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/>
-<ds:DigestValue>VmWHqZNTQN9bmjJezYWvBMFIxUk=</ds:DigestValue>
+<ds:DigestValue>J2QIQfqrwNA/UMzz+QcJoEWlSlc=</ds:DigestValue>
 </ds:Reference>
-<ds:Reference URI="#Certificate123567">
+<ds:Reference URI="#Certificate1394815">
 <ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/>
-<ds:DigestValue>HVlZVRqF96M25PuWbK8cwNZgDCk=</ds:DigestValue>
+<ds:DigestValue>kJFVBZqzXmMLO8TdDIpNCmkEgWc=</ds:DigestValue>
 </ds:Reference>
-<ds:Reference Id="Reference-ID-322300" URI="#comprobante">
+<ds:Reference Id="Reference-ID-157780" URI="#comprobante">
 <ds:Transforms>
 <ds:Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/>
 </ds:Transforms>
 <ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/>
-<ds:DigestValue>xN/5Bs3WTqVos7p2CNBqnRZqktg=</ds:DigestValue>
+<ds:DigestValue>TqC8OCTQLeaVzmBzH93Jwljff3k=</ds:DigestValue>
 </ds:Reference>
 </ds:SignedInfo>
-<ds:SignatureValue Id="SignatureValue922794">
-CWjz7uFYinCdRubyx9YRoVSw9vjAmnA5j0bNJf5B/Q0pKl2jbWTM9+y1Br25O08kzpPZ5rl0hCi9
-QFA8XHICmxACprNFxqPF7FXBxTPojDlffhH5XZwBsDrLrojS0O6+FiDlhFBN7NuHACsJMeSW8vMD
-u4uIcUatAEmoeU1KKe9UH59UP3hNfkJJ2wtlTUnqvdeIelmDmEDblM5Q89yUNUlhkQwtEu/Jvl1n
-Yhk0YmOEihyz3zG+vV2YZpanLuf8oyZBYhRPMw9oS1EmSkY4JzpJ5ZsxuULPZpA8ijZo+gk487R1
-lC6qsIhxno5HQPuu/feJ7Dfu1ebzf7jlfYqiWQ==
+<ds:SignatureValue Id="SignatureValue276190">
+VXeXM1B+8AG8LaR1widYtDYKZEuHv4Pq2aF4K6oCFRgy1QYFFcWew1EGYR9H0+LziD3TSo7F9xuI
+MHwq3FxoA63G0OtgpBxwkUfS6T8sfWlUvPQMHAsM97uwsjJoybcz8iMul4wrrPpsz4XiuL3Ci66w
+ZRtvJMYKqot2WbmYn9VpDcPnXMvnb7tw2Yd+2D1HHMmI6J/TOSWuSEtAvVcy5n8kv9DwAom2Idzb
+XuTT3/gkWGCtqywLe1RpJ6sEjl9NcrYtHJ3SsRh6/OyTvvIj5HOvBOSEYgifGIgKsxriMt7STrGJ
+pn+HHGhxNm4vNI/am/M2UI5JP/kEc80BxkaR4Q==
 </ds:SignatureValue>
-<ds:KeyInfo Id="Certificate123567">
+<ds:KeyInfo Id="Certificate1394815">
 <ds:X509Data>
 <ds:X509Certificate>
-MIIJxzCCB6+gAwIBAgIEW27FSTANBgkqhkiG9w0BAQsFADCBoTELMAkGA1UEBhMCRUMxIjAgBgNV
-BAoTGUJBTkNPIENFTlRSQUwgREVMIEVDVUFET1IxNzA1BgNVBAsTLkVOVElEQUQgREUgQ0VSVElG
-SUNBQ0lPTiBERSBJTkZPUk1BQ0lPTi1FQ0lCQ0UxDjAMBgNVBAcTBVFVSVRPMSUwIwYDVQQDExxB
-QyBCQU5DTyBDRU5UUkFMIERFTCBFQ1VBRE9SMB4XDTIyMTAwNTE2NTcyNloXDTI0MTAwNTE3Mjcy
-NlowgbkxCzAJBgNVBAYTAkVDMSIwIAYDVQQKExlCQU5DTyBDRU5UUkFMIERFTCBFQ1VBRE9SMTcw
-NQYDVQQLEy5FTlRJREFEIERFIENFUlRJRklDQUNJT04gREUgSU5GT1JNQUNJT04tRUNJQkNFMQ4w
-DAYDVQQHEwVRVUlUTzE9MBEGA1UEBRMKMDAwMDc1NTExODAoBgNVBAMTIUdBQlJJRUxBIENSSVNU
-SU5BIENBUlZBSkFMIENBU1RSTzCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBANsYibJF
-8bTm8Y/VU5WsvMmB2fXx9QhRQCgS3dBD1pcQC622u7vVInhZUHlOjU09bBJaZkDqidxr1+BXmB4L
-ALZjVwPqefHdJOlRh45f2wsHmu7X20QJoNjE0PYAiSqmVfTEJc3wWrn3XanpCYX1Yq77AcSzdMJl
-eQPn4roYPUAW0pINKJLGZ4yV2dR1Q9htY/tm7E3zl3UmxQkAnzwvZU6BPm16mjOp7VA7srNbILUQ
-uTOfjBf14tuOv1uc5+Y7E/OleExz0p/ZjmTsDzyKqFhDVFF0uxLxX2wO23K15rkXJrhFOvzp1FfK
-YJu4UjrXOv3yt7oEdXsFzpfAShcG1hkCAwEAAaOCBOswggTnMAsGA1UdDwQEAwIHgDBmBgNVHSAE
-XzBdMFsGCysGAQQBgqg7AgEBMEwwSgYIKwYBBQUHAgEWPmh0dHA6Ly93d3cuZWNpLmJjZS5lYy9w
-b2xpdGljYS1jZXJ0aWZpY2Fkby9wZXJzb25hLW5hdHVyYWwucGRmMIGRBggrBgEFBQcBAQSBhDCB
-gTA+BggrBgEFBQcwAYYyaHR0cDovL29jc3AuZWNpLmJjZS5lYy9lamJjYS9wdWJsaWN3ZWIvc3Rh
-dHVzL29jc3AwPwYIKwYBBQUHMAGGM2h0dHA6Ly9vY3NwMS5lY2kuYmNlLmVjL2VqYmNhL3B1Ymxp
-Y3dlYi9zdGF0dXMvb2NzcDAaBgorBgEEAYKoOwMBBAwTCjE3MTIwNjMwMTMwIQYKKwYBBAGCqDsD
-AgQTExFHQUJSSUVMQSBDUklTVElOQTAYBgorBgEEAYKoOwMDBAoTCENBUlZBSkFMMBYGCisGAQQB
-gqg7AwQECBMGQ0FTVFJPMDcGCisGAQQBgqg7AwcEKRMnQU5UT05JTyBTT0xBTk8gREUgTEEgU0FM
-QSBZIEVMT1kgQUxGQVJPMBkGCisGAQQBgqg7AwgECxMJMDIyMzcyMzE3MBUGCisGAQQBgqg7AwkE
-BxMFUXVpdG8wFwYKKwYBBAGCqDsDDAQJEwdFQ1VBRE9SMB0GCisGAQQBgqg7AwsEDxMNMTcxMjA2
-MzAxMzAwMTAgBgorBgEEAYKoOwMzBBITEFNPRlRXQVJFLUFSQ0hJVk8wLgYDVR0RBCcwJYEjZ2Fi
-eS5jYXJ2YWphbEBncmFuamFpbnRlZ3JhbGcxNC5jb20wggHhBgNVHR8EggHYMIIB1DCCAdCgggHM
-oIIByIaB1mxkYXA6Ly9iY2VxbGRhcHN1YnAxLmJjZS5lYy9jbj1DUkwxNTczLGNuPUFDJTIwQkFO
-Q08lMjBDRU5UUkFMJTIwREVMJTIwRUNVQURPUixsPVFVSVRPLG91PUVOVElEQUQlMjBERSUyMENF
-UlRJRklDQUNJT04lMjBERSUyMElORk9STUFDSU9OLUVDSUJDRSxvPUJBTkNPJTIwQ0VOVFJBTCUy
-MERFTCUyMEVDVUFET1IsYz1FQz9jZXJ0aWZpY2F0ZVJldm9jYXRpb25MaXN0P2Jhc2WGNGh0dHA6
-Ly93d3cuZWNpLmJjZS5lYy9DUkwvZWNpX2JjZV9lY19jcmxmaWxlY29tYi5jcmykgbYwgbMxCzAJ
-BgNVBAYTAkVDMSIwIAYDVQQKExlCQU5DTyBDRU5UUkFMIERFTCBFQ1VBRE9SMTcwNQYDVQQLEy5F
-TlRJREFEIERFIENFUlRJRklDQUNJT04gREUgSU5GT1JNQUNJT04tRUNJQkNFMQ4wDAYDVQQHEwVR
-VUlUTzElMCMGA1UEAxMcQUMgQkFOQ08gQ0VOVFJBTCBERUwgRUNVQURPUjEQMA4GA1UEAxMHQ1JM
-MTU3MzArBgNVHRAEJDAigA8yMDIyMTAwNTE2NTcyNlqBDzIwMjQxMDA1MTcyNzI2WjAfBgNVHSME
-GDAWgBRIot8jHx34LFF6jAPNSTKlCcGUqzAdBgNVHQ4EFgQUmuw5elQtiWzZK1ZtDc9pWBvYn2Iw
-CQYDVR0TBAIwADAZBgkqhkiG9n0HQQAEDDAKGwRWOC4xAwIEsDANBgkqhkiG9w0BAQsFAAOCAgEA
-dxCExVcfT+1RU43uW0XXhB77Lklx1pUFv1+ERJ3qDiYTbgOSsqV/25eNWZmD1QoQsmEVFb/sI6Xl
-KEJwhpAoRTYZvWqLUFpc72d2C7rrgEletHuSkLRAsCg7BX1K6DQnnXFGNhlsi5OseA8rkdC2SjXc
-dpdmHWcOb3CxZ10R4OxHzCkQ86rY+MPJGJBZbOP27O/0FnR+9BpMaCsbsaB9yLyI9COx/ETPkEo+
-VcsTUoG/VqIHVQuVmfBmtxVeDymPoCre28qEAGZAslKLneZiUVIoqUODIDLOojYJ6zr01OiNFiH7
-PxDW1hgOfOaa9RyAP08ZczHvk/fPFQKH6YhzCl2E47HHVu5vf4Uhr7xENMg8ahUyvtA7Czb1fzEw
-9Wgbdx7Rj75UlWeZwqpLrWGkVYfpssu8bn3fSIX9E3QerR8u/wKyAmFIWgENDldhMv/UcljIewC0
-iBMNFdFf7JfIkUlPx9ILzDwHcUlit1Aqre5CC+SQfRDf78FiFySp350654FZpawvWTm1xbAYW3Vw
-6NUicPZ/QmwqsnbfrW4Rhg5h0HZ7FecRo3gUFOgquZt1WxODUxEeqaK9I+4oWgaj8bMzHKIaYcJJ
-StHIxZyEz2JLVpQTS9vVFFQTMgl4EtA9nwGIn/EGyU6FcJVkSwCuhth78bAnlNw2GwFudNulN6E=
+MIIJ3zCCB8egAwIBAgIIEhv4Mndi4NIwDQYJKoZIhvcNAQELBQAwgbgxCzAJBgNVBAYTAkVTMUQw
+QgYDVQQHDDtCYXJjZWxvbmEgKHNlZSBjdXJyZW50IGFkZHJlc3MgYXQgd3d3LnVhbmF0YWNhLmNv
+bS9hZGRyZXNzKTEWMBQGA1UECgwNVUFOQVRBQ0EgUy5BLjEVMBMGA1UECwwMVFNQLVVBTkFUQUNB
+MRowGAYDVQQDDBFVQU5BVEFDQSBDQTIgMjAxNjEYMBYGA1UEYQwPVkFURVMtQTY2NzIxNDk5MB4X
+DTIyMDQyMDIyMjgwMFoXDTI0MDQxOTIyMjgwMFowgf8xCzAJBgNVBAYTAkVDMUowSAYDVQQKDEFQ
+Uk9NT1RPUkEgRUNVQVRPUklBTkEgREUgQ0FGRSBERSBDT0xPTUJJQSBTLkEuIFBST0NBRkVDT0wg
+RUNVQURPUjEZMBcGA1UEDAwQQ09OVEFET1IgR0VORVJBTDETMBEGA1UEBAwKRElBWiBEQUxHTzEX
+MBUGA1UEKgwORElFR08gTUFVUklDSU8xGTAXBgNVBAUTEElEQ0VDLTE3MTMzNDE0MjYxIjAgBgNV
+BAMMGURJRUdPIE1BVVJJQ0lPIERJQVogREFMR08xHDAaBgNVBGEME1ZBVEVDLTE3OTIxNDE0ODYw
+MDEwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCgTY4vOKJsKnRyfQWAA+INuMWsI+Xj
+dcCpEO7VufnPuBZydwaxntSR5YbVbdPwhxMTDa63jYb1mSWItUlaKGeAOuAZ/7VI4eGzv5tY6liq
+b0LoYZb4kbzB3kJPnOFGbWS5mJGg/8NoZi2uhR7VGB4HinAPP8SEwQEyTz8I4QuaClbFSGbxTNvS
+3O0+aP9S70UCHXdtiBOLghg/4PDvIwpdvg9iQBgAMEJicnQJUswj4QzB3D9bVk3o6Ek3/nKYJGXJ
+MZUehIXTsVIDj6gQF5atjRMQBetibC95j4leLbgqMR8RoYTtDa1Ph3Vb8iJsErry8ZIXBJISa164
+/mBPbgI5AgMBAAGjggSiMIIEnjCB1wYIKwYBBQUHAQEEgcowgccwVQYIKwYBBQUHMAKGSWh0dHA6
+Ly93d3cudWFuYXRhY2EuY29tL3B1YmxpYy9kb3dubG9hZC90c3BfY2VydGlmaWNhdGVzL3N1Ym9y
+ZGluYXRlMS5jcnQwNgYIKwYBBQUHMAGGKmh0dHA6Ly9vY3NwMS51YW5hdGFjYS5jb20vcHVibGlj
+L3BraS9vY3NwLzA2BggrBgEFBQcwAYYqaHR0cDovL29jc3AyLnVhbmF0YWNhLmNvbS9wdWJsaWMv
+cGtpL29jc3AvMB0GA1UdDgQWBBSuy1m4kwmpNbETyc4nlRrOM+kCfzAMBgNVHRMBAf8EAjAAMB8G
+A1UdIwQYMBaAFH1X52BzzgdGqeKjaPDhEbJ0knP9MIGxBgNVHSAEgakwgaYwgaMGDCsGAQQBgvE2
+ZgICATCBkjA3BggrBgEFBQcCARYraHR0cHM6Ly93d3cudWFuYXRhY2EuY29tL3B1YmxpYy9wa2kv
+ZHBjLWVjLzBXBggrBgEFBQcCAjBLDElDRVJUSUZJQ0FETyBERSBNSUVNQlJPIERFIEVNUFJFU0Eg
+TyBFTiBSRUxBQ0lPTiBERSBERVBFTkRFTkNJQSBFTiBBUkNISVZPMIGPBgNVHR8EgYcwgYQwQKA+
+oDyGOmh0dHA6Ly9jcmwxLnVhbmF0YWNhLmNvbS9wdWJsaWMvcGtpL2NybC9DQTJzdWJvcmRpbmFk
+YS5jcmwwQKA+oDyGOmh0dHA6Ly9jcmwyLnVhbmF0YWNhLmNvbS9wdWJsaWMvcGtpL2NybC9DQTJz
+dWJvcmRpbmFkYS5jcmwwDgYDVR0PAQH/BAQDAgXgMB0GA1UdJQQWMBQGCCsGAQUFBwMCBggrBgEF
+BQcDBDCCAf0GA1UdEQSCAfQwggHwgRVkaWVnby5kaWF6QGtmYy5jb20uZWOgGwYLKwYBBAGC8TZm
+AwGgDAwKMTcxMzM0MTQyNqAfBgsrBgEEAYLxNmYDAqAQDA5ESUVHTyBNQVVSSUNJT6AVBgsrBgEE
+AYLxNmYDA6AGDARESUFaoBYGCysGAQQBgvE2ZgMEoAcMBURBTEdPoCEGCysGAQQBgvE2ZgMFoBIM
+EENPTlRBRE9SIEdFTkVSQUygKQYLKwYBBAGC8TZmAwegGgwYQ09SRUEgMTI2IFkgQVYuIEFNQVpP
+TkFToB8GCysGAQQBgvE2ZgMIoBAMDjAwNTkzOTk0MDAyNDk2oBYGCysGAQQBgvE2ZgMJoAcMBVFV
+SVRPoFIGCysGAQQBgvE2ZgMKoEMMQVBST01PVE9SQSBFQ1VBVE9SSUFOQSBERSBDQUZFIERFIENP
+TE9NQklBIFMuQS4gUFJPQ0FGRUNPTCBFQ1VBRE9SoB4GCysGAQQBgvE2ZgMLoA8MDTE3OTIxNDE0
+ODYwMDGgEwYLKwYBBAGC8TZmAwygBAwCRUOgQAYLKwYBBAGC8TZmAzKgMQwvTUlFTUJSTyBERSBF
+TVBSRVNBIE8gRU4gUkVMQUNJT04gREUgREVQRU5ERU5DSUGgGAYLKwYBBAGC8TZmAzOgCQwHQVJD
+SElWTzANBgkqhkiG9w0BAQsFAAOCAgEAiwAnNd3yK2JqhAb05kTYv9fy5ttAQqz8t4Ytp/916ZAs
+7VWbSVmMQ9y/qPhtSSJ54UYmfIPHbkphfb+dG85ZeJ4WF9XA0o9ZhBaGjNkDTnjDcpzn08j2X58p
+DlzpbZxPRje9+Hqf4M6fpdnsAOcIDKjg5AiqJpPdthOAD+LJo3XtoqvgDr3q2a89EBner183negn
+u7AqJtirSN5DOHDyfWiKbRZ4I1N6FMAzZbxm1TTsov9ZWsc2i+ihRjaDHODHe+J780CzU0xaXWgD
+VktVNCElhMvziGnFIdcxvKqhcJmstzsnUGxx6ye6fXd1Far8KkA1t6Ytab4g3pQSnbTBZWD1Rz6+
+Rj4h0RNrAHgdb1BUQliuxi+CwuLkLMfZAxQKlJZclztdop9bMBLCp/BZTFCcyxp9Ccbe0Vypm73y
+uFAHi2Lc3JzJb5t4utfP1ROUkSoO2mmmhf+OTO6CxoHzX4ermLEkw4gqzTBY8fFzc/PbT6V2jJqL
+uACDxyGW/D8yw67DhFcE8vOjAMWKduHzTmOEcRYM/qcv5VMnUeJkJy7uUV4sNq99TnKtaT+9wiX8
+7RY7PHUCFb7QcaNpxOOhUG0Nf7Y305cIB6eW8egO9r4zQrwwpos5KgIbuzum7N8f6DFA4ERA+PsT
+A+50WqVrTf4NHzqv+lj1K6g6DSUcrms=
 </ds:X509Certificate>
 </ds:X509Data>
 <ds:KeyValue>
 <ds:RSAKeyValue>
 <ds:Modulus>
-2xiJskXxtObxj9VTlay8yYHZ9fH1CFFAKBLd0EPWlxALrba7u9UieFlQeU6NTT1sElpmQOqJ3GvX
-4FeYHgsAtmNXA+p58d0k6VGHjl/bCwea7tfbRAmg2MTQ9gCJKqZV9MQlzfBaufddqekJhfVirvsB
-xLN0wmV5A+fiuhg9QBbSkg0oksZnjJXZ1HVD2G1j+2bsTfOXdSbFCQCfPC9lToE+bXqaM6ntUDuy
-s1sgtRC5M5+MF/Xi246/W5zn5jsT86V4THPSn9mOZOwPPIqoWENUUXS7EvFfbA7bcrXmuRcmuEU6
-/OnUV8pgm7hSOtc6/fK3ugR1ewXOl8BKFwbWGQ==
+oE2OLziibCp0cn0FgAPiDbjFrCPl43XAqRDu1bn5z7gWcncGsZ7UkeWG1W3T8IcTEw2ut42G9Zkl
+iLVJWihngDrgGf+1SOHhs7+bWOpYqm9C6GGW+JG8wd5CT5zhRm1kuZiRoP/DaGYtroUe1RgeB4pw
+Dz/EhMEBMk8/COELmgpWxUhm8Uzb0tztPmj/Uu9FAh13bYgTi4IYP+Dw7yMKXb4PYkAYADBCYnJ0
+CVLMI+EMwdw/W1ZN6OhJN/5ymCRlyTGVHoSF07FSA4+oEBeWrY0TEAXrYmwveY+JXi24KjEfEaGE
+7Q2tT4d1W/IibBK68vGSFwSSEmteuP5gT24COQ==
 </ds:Modulus>
 <ds:Exponent>AQAB</ds:Exponent>
 </ds:RSAKeyValue>
 </ds:KeyValue>
 </ds:KeyInfo>
-<ds:Object Id="Signature14497-Object198724"><etsi:QualifyingProperties Target="#Signature14497"><etsi:SignedProperties Id="Signature14497-SignedProperties606278"><etsi:SignedSignatureProperties><etsi:SigningTime>2023-01-23T12:47:54-05:00</etsi:SigningTime><etsi:SigningCertificate><etsi:Cert><etsi:CertDigest><ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/><ds:DigestValue>BYrAPzlCe+cNU6r/EWjXSqqaWuA=</ds:DigestValue></etsi:CertDigest><etsi:IssuerSerial><ds:X509IssuerName>CN=AC BANCO CENTRAL DEL ECUADOR,L=QUITO,OU=ENTIDAD DE CERTIFICACION DE INFORMACION-ECIBCE,O=BANCO CENTRAL DEL ECUADOR,C=EC</ds:X509IssuerName><ds:X509SerialNumber>1533986121</ds:X509SerialNumber></etsi:IssuerSerial></etsi:Cert></etsi:SigningCertificate></etsi:SignedSignatureProperties></etsi:SignedProperties></etsi:QualifyingProperties></ds:Object></ds:Signature></factura>]]></comprobante>
+<ds:Object Id="Signature983477-Object570375"><etsi:QualifyingProperties Target="#Signature983477"><etsi:SignedProperties Id="Signature983477-SignedProperties302800"><etsi:SignedSignatureProperties><etsi:SigningTime>2024-04-05T00:25:10-05:00</etsi:SigningTime><etsi:SigningCertificate><etsi:Cert><etsi:CertDigest><ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/><ds:DigestValue>Jgvua2jizhEDwYlK+wheIqRkz6I=</ds:DigestValue></etsi:CertDigest><etsi:IssuerSerial><ds:X509IssuerName>2.5.4.97=#0c0f56415445532d413636373231343939,CN=UANATACA CA2 2016,OU=TSP-UANATACA,O=UANATACA S.A.,L=Barcelona (see current address at www.uanataca.com/address),C=ES</ds:X509IssuerName><ds:X509SerialNumber>1304909412688912594</ds:X509SerialNumber></etsi:IssuerSerial></etsi:Cert></etsi:SigningCertificate></etsi:SignedSignatureProperties><etsi:SignedDataObjectProperties><etsi:DataObjectFormat ObjectReference="#Reference-ID-157780"><etsi:Description>comprobateFirma</etsi:Description><etsi:MimeType>text/xml</etsi:MimeType></etsi:DataObjectFormat></etsi:SignedDataObjectProperties></etsi:SignedProperties></etsi:QualifyingProperties></ds:Object></ds:Signature></factura>]]></comprobante>
 <mensajes/>
 </autorizacion>
 

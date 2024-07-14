@@ -343,7 +343,9 @@ class activeDirC
 
 	function Asignar_usuarios($parametros)
 	{
-		print_r($parametros);die();
+		// print_r($parametros);die();
+
+
 		$msg = '';
 		$result = 1;
 		$tipo_usuario = $parametros['tipo'];
@@ -353,130 +355,142 @@ class activeDirC
 			$list_usuarios = $parametros['usuarios'];
 			foreach ($list_usuarios as $key => $value) {
 				$data = explode('-',$value);
-				$usuarios[] = array('nombre' =>$data[0],'email'=>$data[1]);
+				$usuarios[] = array('nombre' =>$data[0],'email'=>$data[1],'pass'=>$this->cod_global->enciptar_clave($parametros['usuariosPass'][$key]));
 			}
 
-		}else{
-			$usuarios = $this->cargar_usuario_x_grupo($parametros['grupo']);
 		}
+			// else{
+		// 	//$usuarios = $this->cargar_usuario_x_grupo($parametros['grupo']);
+		// }
 		foreach ($usuarios as $key => $value) {
-			$value['tipo'] = $tipo_usuario;
-
-			$name = explode(' ', $value['nombre']);
-			$apellidos = '';
-			switch (count($name)) {
-				case 1:
-					$nombres = $name[0];
-					break;
-				case 2:
-					$nombres = $name[0];
-					$apellidos = $name[1];
-					break;
-				case 3:
-					$nombres = $name[0].' '.$name[1];
-					$apellidos = $name[2];
-					break;
-				case 4:
-					$nombres = $name[0].' '.$name[1];
-					$apellidos = $name[2].' '.$name[3];
-					break;				
-			}
-			// print_r($value);die();
 
 			//verificar si esta el tipo de usuario en no concurente
-			$existe_concurente = $this->modelo->buscar_no_concurente_ligado($tipo_usuario);
-
-			if(count($existe_concurente)>0)
-			{
-				$campos_nombre = $this->modelo->bucar_campos_tabla($existe_concurente[0]['Tabla'],'nombre');
-				$campos_correo = $this->modelo->bucar_campos_tabla($existe_concurente[0]['Tabla'],'correo');
-				if(count($campos_correo)==0)
+			foreach ($tipo_usuario as $key2 => $value2) {
+				$value['tipo'] = $value2;
+				$existe_concurente = $this->modelo->buscar_no_concurente_ligado($value2);
+				// print_r($existe_concurente);die();
+				if(count($existe_concurente)>0)
 				{
-					$campos_correo = $this->modelo->bucar_campos_tabla($existe_concurente[0]['Tabla'],'email');
+					// campos en donde se van a colocar nombres y apellidos
+					$campos_nombre = $this->modelo->bucar_campos_tabla($existe_concurente[0]['Tabla'],'nombre');					
+					$campos_apellido = $this->modelo->bucar_campos_tabla($existe_concurente[0]['Tabla'],'apellido');
+					$campos_nombre = array_merge($campos_nombre,$campos_apellido);
+
+					//busca el campo de correo para colocar el dato
+					$campos_correo = $this->modelo->bucar_campos_tabla($existe_concurente[0]['Tabla'],'correo');
 					if(count($campos_correo)==0)
 					{
-						$campos_correo = $this->modelo->bucar_campos_tabla($existe_concurente[0]['Tabla'],'mail');
-					}
-				}
-					
-				$resp = $this->guardar_no_concurentes($existe_concurente[0]['Tabla'],$campos_nombre,$campos_correo,$value);
-				if($resp['resp']==-1)
-				{
-					$msg.='Usuario '.$value['nombre'].'  existente en '.$existe_concurente[0]['Tabla'].'<br>';
-					$result = 2;
-				}
-
-				//asigno a el usuario en la tabla de no_concurentes
-						//valido que no exista en la atabla
-						$id_tbl = $this->cod_global->id_tabla($existe_concurente[0]['Tabla']);
-
-						// print_r($id_tbl);
-						// print_r($resp);
-						// die();
-
-						if(count($resp['datos']))
+						$campos_correo = $this->modelo->bucar_campos_tabla($existe_concurente[0]['Tabla'],'email');
+						if(count($campos_correo)==0)
 						{
-							$id = $resp['datos'][0][$id_tbl[0]['ID']];
-							$usu = $this->modelo-> buscar_registr_noconcurente(false,$id,$existe_concurente[0]['Tabla'],$tipo_usuario);
-
-							if(count($usu)==0)
-						    {
-								$datos[0]['campo']='Tabla';
-							    $datos[0]['dato']=$existe_concurente[0]['Tabla'];
-							    $datos[1]['campo']='Id_Empresa';
-							    $datos[1]['dato']=$_SESSION['INICIO']['ID_EMPRESA'];	
-							    $datos[2]['campo']='Id_usuario';
-							    $datos[2]['dato']=$id;	
-							    $datos[3]['campo']='tipo_perfil';
-							    $datos[3]['dato']=$tipo_usuario;
-							    $datos[4]['campo']='Campo_usuario';
-							    $datos[4]['dato']=$existe_concurente[0]['Campo_usuario'];
-							    $datos[5]['campo']='Campo_pass';
-							    $datos[5]['dato']=$existe_concurente[0]['Campo_pass'];
-							    $datos[6]['campo']='campo_img';
-							    $datos[6]['dato']=$existe_concurente[0]['campo_img'];
-							    // Guarda los datos del usuario en master
-							    // print_r($datos);die();
-							    $this->modelo->guardar($datos,'TABLAS_NOCONCURENTE'); 
-							}
-						}else
-						{
-							return -1;
+							$campos_correo = $this->modelo->bucar_campos_tabla($existe_concurente[0]['Tabla'],'mail');
 						}
+					}
 
-			}else
-			{
+					//envia los campos y guarda en no concurentes						
+					$resp = $this->guardar_no_concurentes($existe_concurente[0]['Tabla'],$campos_nombre,$campos_correo,$value);
+					if($resp['resp']==-1)
+					{
+						$msg.='Usuario '.$value['nombre'].'  existente en '.$existe_concurente[0]['Tabla'].'<br>';
+						$result = 2;
+					}
 
-			    $usu = $this->modelo->lista_usuarios_simple(false,false,false,$value['email']);
-			    if(count($usu)==0)
-			    {
-					$datos[0]['campo']='nombres';
-				    $datos[0]['dato']=$nombres;
-				    $datos[1]['campo']='apellidos';
-				    $datos[1]['dato']=$apellidos;	
-				    $datos[2]['campo']='email';
-				    $datos[2]['dato']=$value['email'];	
-				    $datos[3]['campo']='perfil';
-				    $datos[3]['dato']=$tipo_usuario;
-				    // Guarda los datos del usuario en master
-				    $this->modelo->guardar($datos,'USUARIOS'); 
-				}
-			    //agregar en acceso empresas de lista empresas.
-			    $usu = $this->modelo->lista_usuarios_simple(false,false,false,$value['email']);
-			    $acceso_usu = $this->modelo->existe_acceso_usuario_empresa($usu[0]['id']);
-			    if(count($acceso_usu)==0)
-			    {
-				    $datosA[0]['campo']='Id_usuario';
-				    $datosA[0]['dato']=$usu[0]['id'];
-				    $datosA[1]['campo']='Id_Empresa';
-				    $datosA[1]['dato']=$_SESSION['INICIO']['ID_EMPRESA'];	
-				    $datosA[2]['campo']='Id_Tipo_usuario';
-				    $datosA[2]['dato']=$tipo_usuario;	
-				    // Guarda los datos del usuario en master
-				  $res =  $this->modelo->guardar($datosA,'ACCESOS_EMPRESA'); 
-				  // print_r($res);die();
-				}
-			}
+					//asigno a el usuario en la tabla de no_concurentes
+							//valido que no exista en la atabla
+							// $id_tbl = $this->cod_global->id_tabla($existe_concurente[0]['Tabla']);
+
+							// print_r($id_tbl);
+							// print_r($resp);
+							// die();
+
+							// if(count($resp['datos']))
+							// {
+							// 	$id = $resp['datos'][0][$id_tbl[0]['ID']];
+							// 	$usu = $this->modelo-> buscar_registr_noconcurente(false,$id,$existe_concurente[0]['Tabla'],$tipo_usuario);
+
+							// 	if(count($usu)==0)
+							//     {
+							// 		$datos[0]['campo']='Tabla';
+							// 	    $datos[0]['dato']=$existe_concurente[0]['Tabla'];
+							// 	    $datos[1]['campo']='Id_Empresa';
+							// 	    $datos[1]['dato']=$_SESSION['INICIO']['ID_EMPRESA'];	
+							// 	    $datos[2]['campo']='Id_usuario';
+							// 	    $datos[2]['dato']=$id;	
+							// 	    $datos[3]['campo']='tipo_perfil';
+							// 	    $datos[3]['dato']=$tipo_usuario;
+							// 	    $datos[4]['campo']='Campo_usuario';
+							// 	    $datos[4]['dato']=$existe_concurente[0]['Campo_usuario'];
+							// 	    $datos[5]['campo']='Campo_pass';
+							// 	    $datos[5]['dato']=$existe_concurente[0]['Campo_pass'];
+							// 	    $datos[6]['campo']='campo_img';
+							// 	    $datos[6]['dato']=$existe_concurente[0]['campo_img'];
+							// 	    // Guarda los datos del usuario en master
+							// 	    // print_r($datos);die();
+							// 	    $this->modelo->guardar($datos,'TABLAS_NOCONCURENTE'); 
+							// 	}
+							// }else
+							// {
+							// 	return -1;
+							// }
+
+				}else
+				{
+
+				    $usu = $this->modelo->lista_usuarios_simple(false,false,false,$value['email']);
+				    $nombres = explode(' ', $value['nombre']);
+				    if(count($usu)==0)
+				    {	
+					    $datos[1]['campo']='email';
+					    $datos[1]['dato']=$value['email'];	
+					    $datos[2]['campo']='perfil';
+					    $datos[2]['dato']=$value2;
+
+						$datos[3]['campo']='nombres';
+					    $datos[3]['dato']=$nombres[0];
+
+					    switch (count($nombres)) {
+					    	case 2:
+					    		$datos[4]['campo']='apellidos';
+					    		$datos[4]['dato']=$nombres[1];
+					    		break;
+					    	case 3:
+						    	$datos[4]['campo']='nombres2';
+						    	$datos[4]['dato']=$nombres[1];
+						    	$datos[5]['campo']='apellidos';
+						    	$datos[5]['dato']=$nombres[2];
+					    		break;
+					    	case 4:
+						    	$datos[4]['campo']='nombres2';
+						    	$datos[4]['dato']=$nombres[1];
+						    	$datos[5]['campo']='apellidos';
+						    	$datos[5]['dato']=$nombres[2];
+						    	$datos[6]['campo']='apellidos2';
+						    	$datos[6]['dato']=$nombres[3];
+					    		break;					    	
+					    	
+					    }					    
+					    // Guarda los datos del usuario en master
+
+					    // print_r($datos);die();
+					    $this->modelo->guardar($datos,'USUARIOS'); 
+					}
+				    //agregar en acceso empresas de lista empresas.
+				    $usu = $this->modelo->lista_usuarios_simple(false,false,false,$value['email']);
+				    $acceso_usu = $this->modelo->existe_acceso_usuario_empresa($usu[0]['id']);
+				    if(count($acceso_usu)==0)
+				    {
+					    $datosA[0]['campo']='Id_usuario';
+					    $datosA[0]['dato']=$usu[0]['id'];
+					    $datosA[1]['campo']='Id_Empresa';
+					    $datosA[1]['dato']=$_SESSION['INICIO']['ID_EMPRESA'];	
+					    $datosA[2]['campo']='Id_Tipo_usuario';
+					    $datosA[2]['dato']=$value2;	
+					    // Guarda los datos del usuario en master
+					  $res =  $this->modelo->guardar($datosA,'ACCESOS_EMPRESA'); 
+					  // print_r($res);die();
+					}
+				}				
+			}		
 
 		}
 
@@ -488,9 +502,15 @@ class activeDirC
 		$camp = '';
 		$vals = '';
 		$val_select = '';
+		// print_r($valores);
+		// print_r($campos_nombre);die();
+		$valor_nombres = explode(' ', $valores['nombre']);
 		foreach ($campos_nombre as $key => $value) {
+			if(isset($valor_nombres[$key]))
+			{
 				$camp.= $value['COLUMN_NAME'].',';
-				$vals.="'".$valores['nombre']."',"; 
+				$vals.="'".$valor_nombres[$key]."',"; 
+			}
 		}
 		foreach ($campos_correo as $key => $value) {
 			$camp.= $value['COLUMN_NAME'].',';
@@ -504,10 +524,11 @@ class activeDirC
 		$sql = "SELECT * FROM ".$tabla." WHERE ".$val_select;
 		// print_r($sql);die();
 		$res = $this->modelo->ejecutar_sql($sql,1);
+		// print_r($res);die();
 		if(count($res)==0)
 		{
 			// print_r('expression');die();
-			$sql2 = 'INSERT INTO '.$tabla.' ('.$camp.',PERFIL) VALUES ('.$vals.','.$valores['tipo'].');';
+			$sql2 = 'INSERT INTO '.$tabla.' ('.$camp.',PERFIL,PASS) VALUES ('.$vals.','.$valores['tipo'].",'".$valores['pass']."');";
 			// print_r($sql2);die();
 			$r =  $this->modelo->ejecutar_sql($sql2);
 			// print_r($r);die();
@@ -523,6 +544,7 @@ class activeDirC
 
 		}else
 		{
+			// print_r($res);die();
 			//existe en los registros
 			return array('resp'=>-1,'datos'=>$res);
 		}

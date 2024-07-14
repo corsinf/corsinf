@@ -144,8 +144,10 @@ function recuperar_xml_a_factura($documento)
 	{
 		return -2;
 	}
-
-	// print_r($texto);die();
+	print_r($documentos=='Comprobante de Retención (2).xml')
+	{
+		print_r($texto);die();
+	}
 	$xml = simplexml_load_string($texto,"SimpleXMLElement",LIBXML_NOCDATA);
 	$objJsonDocument = json_encode($xml);
 	$documentos = json_decode($objJsonDocument, TRUE);
@@ -171,7 +173,7 @@ function recuperar_xml_a_factura($documento)
 		{
 			$detalle = $documentos['docsSustento']['docSustento']['retenciones']['retencion'];
 		}
-// print_r($detalle);die();
+// print_r($documentos['infoCompRetencion']);
 // print_r($documentos);die();
 		foreach ($detalle as $key => $value) {
 			// print_r($value);

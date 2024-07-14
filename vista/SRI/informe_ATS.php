@@ -26,39 +26,26 @@
             <div class="card">
               <div class="card-body">
                 <div class="row">
-                  <div class="col-sm-3">
+                  <div class="col-sm-8">
                      <b>carpeta xmls</b><br>
                       <input type="file" name="file_xml" id="file_xml" webkitdirectory directory style="display:none">
                       <label for="file_xml" class="btn btn-sm btn-primary"><i class="bx bx-folder"></i> Seleccionar carpeta</label>
                       <label id="txt_carpeta"></label>                    
                   </div>
-                  <div class="col-sm-5">
+                 <!--  <div class="col-sm-5">
                      <b>Seleccione un archivo txt</b>
                      <div class="input-group">
                          <form id="form_file">
                           <input type="file" class="form-control form-control-sm" name="file" id="file">
                         </form>       
                       </div>                                          
-                  </div>
+                  </div> -->
                   <div class="col-sm-4 text-end">
                     <br>
-                        <button type="button" class="btn btn-sm btn-primary" onclick="subir_archivo()">Leer archivo</button>                       
+                        <button type="button" class="btn btn-sm btn-primary" onclick="subir_archivo()">Leer archivo</button>
+                        <button class="btn btn-sm btn-primary" onclick="$('#myModal_resumen').modal('show')" >Ver resumen</button>                       
                   </div>
-
-
-                  <div class="col-sm-4">
-                      <b>tipo de documento</b>
-                    <div class="input-group">
-                      <select id="ddl_tipo" name="ddl_tipo" class="form-select form-select-sm">
-                        <option value="">Seleccione documento</option>
-                      </select>           
-                      <button type="button" class="btn btn-sm btn-primary" onclick="filtrar_documentos()">filtrar</button>    
-                    </div>                     
-                  </div>
-                  <div class="col-sm-8 text-end">
-                    <br>
-                    <button class="btn btn-sm btn-primary" onclick="$('#myModal_resumen').modal('show')" >Ver resumen</button>
-                  </div>
+                 
                 </div>
                               
               </div>
@@ -103,21 +90,18 @@
               <b>Total Facturas</b>
               <div class="col-sm-12">
                 <table class="table table-hover">
-                    <tr>
-                        <th>%</th>
-                        <th>SubTotal</th>
-                        <th>iva</th>
-                        <th>Total</th>
-                    </tr>                    
-                    <tr>
-                        <td>12%</td><td id="lbl_com">0</td><td id="lbl_iva">0.00</td><td id="lbl_total_con_iva">0</td>
-                    </tr>
-                    <tr>                      
-                        <td>0%</td><td id="lbl_sin">0</td><td id="">0.00</td><td id="lbl_total_sin_iva">0</td>
-                    </tr>
-                    <tr>                      
-                        <td></td><td></td><td><b>Total</b></td><td id="lbl_total_todo">0</td>
-                    </tr>
+                    <thead>
+                        <tr>
+                            <th>%</th>
+                            <th>SubTotal</th>
+                            <th>iva</th>
+                            <th>Total</th>
+                        </tr>     
+                    </thead>  
+                    <tbody id="lineas_iva">
+                        
+                    </tbody>             
+                    
                 </table>
 
                 <!--   <b>Facturas</b>
@@ -191,14 +175,14 @@
               '</div>'+
             '</td>'+
             '</tr>')
-    var fi = $('#file').val();
-      if(fi != '')
-      {
-            var formData = new FormData(document.getElementById("form_file"));
+    // var fi = $('#file').val();
+    //   if(fi != '')
+    //   {
+            // var formData = new FormData(document.getElementById("form_file"));
             $.ajax({
                 url: '../controlador/calcularATS.php?subir_archivo_server=true',
                 type: 'post',
-                data: formData,
+                // data: formData,
                 contentType: false,
                 processData: false,
                 dataType:'json',
@@ -216,10 +200,10 @@
                   }
                 }
             });
-      }else
-      {
-         alert('Destino o archivo no seleccionados');
-      }
+      // }else
+      // {
+      //    alert('Destino o archivo no seleccionados');
+      // }
   } 
 
   function  subir_archivo_xml(start=0)
@@ -292,40 +276,26 @@
     var parametros = {'f':'d'}
     $.ajax({
          data:  {parametros:parametros},
-         url:   '../controlador/calcularATS.php?calcularexcel=true',
+         url:   '../controlador/calcularATS.php?calcularexcel2=true',
          type:  'post',
          dataType: 'json',         
            success:  function (response) { 
-            // console.log(response);
-            $("#lbl_com").text(parseFloat(response.sub_con_iva).toFixed(2));
-            $("#lbl_sin").text(parseFloat(response.sub_sin_iva).toFixed(2));
-            $("#lbl_iva").text(parseFloat(response.iva_total).toFixed(2));
-            $("#lbl_total_con_iva").text(parseFloat(response.total_con_iva).toFixed(2));
-            $("#lbl_total_sin_iva").text(parseFloat(response.sub_sin_iva).toFixed(2));
-            $('#lbl_total_todo').text(parseFloat(response.total).toFixed(2))
-            $('#tbl_datos').html(response.tr);
-           
+            console.log(response);
 
-            // response.Retencion_val
-             $('#retenciones_val').html('')
-            for (var clave in response.Retencion_val) {
-              if (response.Retencion_val.hasOwnProperty(clave)) {
-                var valor = response.Retencion_val[clave];
-                $('#retenciones_val').append('<tr><td>'+clave+'</td><td>'+valor+'</td></tr>');
-                // console.log("Clave: " + clave + ", Valor: " + valor);
-              }
-            }
+            $('#tbl_datos').html(response.tr)
+            tbl_iva = '';
+            response.datos_iva.forEach(function(item,i){
+                tbl_iva+='<tr><td>'+item.porcentaje+'</td><td>'+item.iva_valor.toFixed(2)+'</td><td>'+item.subtotal.toFixed(2)+'</td><td>'+item.total.toFixed(2)+'</td></tr>'
+            })
 
-            // console.log(response.Retencion_val);
-
-            // console.log(response.tipo);
+            $('#lineas_iva').html(tbl_iva);
+         
            var opt = '';
-            response.tipo.forEach(function(item,i){
+            response.Retencion.forEach(function(item,i){
             // console.log(item);
-              opt+= '<option value="'+item+'">'+item+'</option>'
+              opt+= '<tr><td>'+item.retencion+'</td><td>'+item.valor+'</td></tr>';
            })
-
-            $('#ddl_tipo').html(opt);
+            $('#retenciones_val').html(opt);
           
           } 
           

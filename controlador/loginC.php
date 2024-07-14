@@ -416,6 +416,7 @@ class loginC
 		 		}
 		 	}else{
 
+
 				$tablas_iguales = $this->cod_global->tablas_por_licencias($licencias,$empresa,1);
 		 		$res = $this->cod_global->generar_primera_vez_terceros($empresa,$parametros['empresa']);
 		 		if($tablas_iguales==-1){
@@ -585,7 +586,7 @@ class loginC
 				}	
 		}else
 		{
-			$datos = $this->login->datos_login($parametros['email'],$this->cod_global->enciptar_clave($parametros['pass']),false,$parametros['tipo']);
+			$datos = $this->login->datos_login($parametros['email'],$this->cod_global->desenciptar_clave($parametros['pass']),false,$parametros['tipo']);
 			// print_r($datos);die();
 			if(count($datos)==0)
 			{
