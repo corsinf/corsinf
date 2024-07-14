@@ -671,7 +671,7 @@ class loginC
 
 				 	 // print_r($busqueda_tercero);
 					 	// print_r($datos_usu[0][$parametros['foto']]);die();
-					 	print_r($datos_usu);die();
+					 	// print_r($datos_usu);die();
 					 	$_SESSION['INICIO']['ULTIMO_ACCESO'] = time();
 						$_SESSION["INICIO"]['VER'] = $datos[0]['Ver'];
 						$_SESSION["INICIO"]['EDITAR'] = $datos[0]['editar'];
