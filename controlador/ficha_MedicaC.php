@@ -548,7 +548,6 @@ class ficha_MedicaC
                 $salida .= $detalle['sa_det_fice_nombre'] . ', ';
             }
             $pdf->MultiCell(190, 6, utf8_decode($salida), 1);
-
         } else {
             $pdf->MultiCell(190, 6, utf8_decode('No'), 1);
         }
@@ -599,6 +598,6 @@ Firma del padre de familia o representante legal (o huella digital):
         $pdf->SetFont('Arial', 'B', 12);
 
 
-        $pdf->Output();
+        $pdf->Output('D', $sa_pac_temp_cedula . '-' . $sa_pac_nombre_completos . '.pdf');
     }
 }

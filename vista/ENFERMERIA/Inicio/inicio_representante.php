@@ -225,6 +225,16 @@
     }
 
     function consultar_datos_estudiante_representante(id_representante = '') {
+        Swal.fire({
+            title: 'Por favor, espere',
+            text: 'Procesando la solicitud...',
+            allowOutsideClick: false,
+            onOpen: () => {
+                Swal.showLoading();
+            }
+        });
+
+
         var estudiantes = '';
         var estudiantes2 = '<option value="">-- Seleccione --</option>';
         var ids = '';
@@ -312,7 +322,7 @@
                     } else {
                         estudiantes += '<img src="../img/sin_imagen.jpg" id="file_upload_' + item.sa_est_id + '" width="110" height="110" class="rounded-circle shadow" alt="">'
                     }
-                    <?php if ($_SESSION['INICIO']['TIPO'] != 'DBA') { ?>
+                    <?php if ($_SESSION['INICIO']['TIPO'] != '.') { ?> //DBA
                         estudiantes += '<br><div class="input-file-upload mt-1">' +
                             '<div class="btn-group" role="group" aria-label="Button group with nested dropdown">' +
                             '<span class="upload-label">Seleccionar Imagen</span>' +
@@ -351,7 +361,7 @@
                 $('#lista_estudiantes').html(estudiantes2);
                 $('#ids_est').val(ids);
                 lista_seguros();
-
+                Swal.close();
 
             }
         });
@@ -369,6 +379,8 @@
                 //console.log(response_2[0].sa_fice_estado_realizado + ' conta ' + contador_alertas);
 
                 if (response_2[0].sa_fice_estado_realizado == 1) {
+                    ver_pdf_fm = `<button type="button" class="btn btn-danger btn-sm m-1" title="Detalles de la Consulta" onclick="ver_pdf('${response_2[0].sa_fice_id}')"> <i class='bx bxs-file-pdf me-0'></i> Descargar Ficha Médica</button>`;
+
                     alert_salida =
                         '<div class="alert border-0 border-start border-5 border-success alert-dismissible fade show py-2">' +
                         '<div class="d-flex align-items-center">' +
@@ -376,6 +388,7 @@
                         '</div>' +
                         '<div class="ms-3">' +
                         '<h6 class="mb-0 text-success">La ficha médica se ha guardado correctamente.</h6>' +
+                        ver_pdf_fm +
                         '</div>' +
                         '</div>' +
                         '</div>';
@@ -562,6 +575,11 @@
         } else {
             pa.type = 'password';
         }
+    }
+
+    function ver_pdf(id_fm) {
+        //console.log(id_consulta);
+        window.open('../controlador/ficha_MedicaC.php?pdf_ficha_medica=true&id=' + id_fm);
     }
 </script>
 
@@ -763,6 +781,26 @@
                                             </table>
                                         </div>
                                     </div>
+                                </div>
+
+                                <div class="row pb-4">
+
+                                <div class="col-3"></div>
+
+                                    <div class="col-6">
+                                        <div class="alert alert-info border-0 bg-info alert-dismissible fade show py-2">
+                                            <div class="d-flex align-items-center">
+                                                <div class="font-35 text-dark"><i class='bx bx-info-square'></i>
+                                                </div>
+                                                <div class="ms-3">
+                                                    <h6 class="mb-0 text-dark"><b>Información Importante</b></h6>
+                                                    <div class="text-dark pt-2">Primero, haz clic en "Detalles". Luego, completa el formulario. Una vez que termines, aparecerá un mensaje en verde confirmando que el formulario está completo. El botón para descargar el formulario estará disponible y aparecerá en color rojo.</div>
+                                                </div>
+                                            </div>
+                                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                        </div>
+                                    </div>
+
                                 </div>
 
                                 <div class="row row-cols-1 row-cols-lg-2 row-cols-xl-3" id="card_estudiantes">
