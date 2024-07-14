@@ -109,9 +109,11 @@ class pacientesM
                     sa_pac_fecha_nacimiento,
                     sa_pac_correo,
                     sa_pac_id_comunidad,
-                    sa_pac_tabla
+                    sa_pac_tabla,
+                    sa_fice_id
                 FROM
                     pacientes
+                LEFT JOIN ficha_medica f ON sa_pac_id = f.sa_fice_pac_id
                 WHERE 1 = 1 AND sa_pac_estado = 1";
 
         $sql .= " ORDER BY sa_pac_id DESC;";

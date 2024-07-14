@@ -100,14 +100,17 @@ class ficha_MedicaM
                     sa_fice_fecha_modificacion,
                     sa_fice_estado_realizado,
 
-                    sa_fice_medicamentos_alergia
+                    sa_fice_medicamentos_alergia,
+
+                    sa_fice_rep_1_cedula,
+                    sa_fice_rep_2_cedula
 
                     FROM ficha_medica
                     WHERE sa_fice_estado = 1";
 
 
             $sql .= ' AND sa_fice_pac_id = ' . $id_paciente;
-            $sql .= " ORDER BY sa_fice_id";
+            $sql .= " ORDER BY sa_fice_id;";
         }
 
 
@@ -164,13 +167,16 @@ class ficha_MedicaM
                         sa_fice_fecha_modificacion,
                         sa_fice_estado_realizado,
 
-                        sa_fice_medicamentos_alergia
+                        sa_fice_medicamentos_alergia,
+                        
+                        sa_fice_rep_1_cedula,
+                        sa_fice_rep_2_cedula
     
                         FROM ficha_medica
                         WHERE sa_fice_estado = 1";
 
             $sql .= ' AND sa_fice_id = ' . $id_ficha;
-            $sql .= " ORDER BY sa_fice_id";
+            $sql .= " ORDER BY sa_fice_id;";
         }
 
 
@@ -234,7 +240,10 @@ class ficha_MedicaM
         sa_fice_fecha_creacion,
         sa_fice_fecha_modificar,
 
-        sa_fice_medicamentos_alergia
+        sa_fice_medicamentos_alergia,
+
+        sa_fice_rep_1_cedula,
+        sa_fice_rep_2_cedula
         
         FROM ficha_medica
         WHERE sa_fice_id = '" . $buscar . "'";

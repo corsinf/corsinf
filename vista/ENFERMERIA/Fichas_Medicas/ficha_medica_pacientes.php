@@ -152,6 +152,7 @@ if ($btn_regresar == '') {
                     $('#sa_fice_rep_1_parentesco').val(response[0].sa_fice_rep_1_parentesco);
                     $('#sa_fice_rep_1_telefono_1').val(response[0].sa_fice_rep_1_telefono_1);
                     $('#sa_fice_rep_1_telefono_2').val(response[0].sa_fice_rep_1_telefono_2);
+                    $('#sa_fice_rep_1_cedula').val(response[0].sa_fice_rep_1_cedula);
 
                     // Representante 2
                     $('#sa_fice_rep_2_primer_apellido').val(response[0].sa_fice_rep_2_primer_apellido);
@@ -161,6 +162,7 @@ if ($btn_regresar == '') {
                     $('#sa_fice_rep_2_parentesco').val(response[0].sa_fice_rep_2_parentesco);
                     $('#sa_fice_rep_2_telefono_1').val(response[0].sa_fice_rep_2_telefono_1);
                     $('#sa_fice_rep_2_telefono_2').val(response[0].sa_fice_rep_2_telefono_2);
+                    $('#sa_fice_rep_2_cedula').val(response[0].sa_fice_rep_2_cedula);
 
                     // Preguntas
                     $('input[name=sa_fice_pregunta_1][value=' + response[0].sa_fice_pregunta_1 + ']').prop('checked', true);
@@ -252,6 +254,7 @@ if ($btn_regresar == '') {
             var sa_fice_rep_1_parentesco = $('#sa_fice_rep_1_parentesco').val();
             var sa_fice_rep_1_telefono_1 = $('#sa_fice_rep_1_telefono_1').val();
             var sa_fice_rep_1_telefono_2 = $('#sa_fice_rep_1_telefono_2').val();
+            var sa_fice_rep_1_cedula = $('#sa_fice_rep_1_cedula').val();
 
             // Datos del representante 2
             var sa_fice_rep_2_primer_apellido = $('#sa_fice_rep_2_primer_apellido').val();
@@ -261,6 +264,7 @@ if ($btn_regresar == '') {
             var sa_fice_rep_2_parentesco = $('#sa_fice_rep_2_parentesco').val();
             var sa_fice_rep_2_telefono_1 = $('#sa_fice_rep_2_telefono_1').val();
             var sa_fice_rep_2_telefono_2 = $('#sa_fice_rep_2_telefono_2').val();
+            var sa_fice_rep_2_cedula = $('#sa_fice_rep_2_cedula').val();
 
             // Preguntas
             var sa_fice_pregunta_1 = $('input[name=sa_fice_pregunta_1]:checked').val();
@@ -290,6 +294,7 @@ if ($btn_regresar == '') {
                 'sa_fice_pac_direccion_domicilio': sa_fice_pac_direccion_domicilio,
                 'sa_fice_pac_seguro_medico': sa_fice_pac_seguro_medico,
                 'sa_fice_pac_seguro_predeterminado': sa_fice_pac_nombre_seguro,
+
                 'sa_fice_rep_1_primer_apellido': sa_fice_rep_1_primer_apellido,
                 'sa_fice_rep_1_segundo_apellido': sa_fice_rep_1_segundo_apellido,
                 'sa_fice_rep_1_primer_nombre': sa_fice_rep_1_primer_nombre,
@@ -297,6 +302,8 @@ if ($btn_regresar == '') {
                 'sa_fice_rep_1_parentesco': sa_fice_rep_1_parentesco,
                 'sa_fice_rep_1_telefono_1': sa_fice_rep_1_telefono_1,
                 'sa_fice_rep_1_telefono_2': sa_fice_rep_1_telefono_2,
+                'sa_fice_rep_1_cedula': sa_fice_rep_1_cedula,
+
                 'sa_fice_rep_2_primer_apellido': sa_fice_rep_2_primer_apellido,
                 'sa_fice_rep_2_segundo_apellido': sa_fice_rep_2_segundo_apellido,
                 'sa_fice_rep_2_primer_nombre': sa_fice_rep_2_primer_nombre,
@@ -304,6 +311,8 @@ if ($btn_regresar == '') {
                 'sa_fice_rep_2_parentesco': sa_fice_rep_2_parentesco,
                 'sa_fice_rep_2_telefono_1': sa_fice_rep_2_telefono_1,
                 'sa_fice_rep_2_telefono_2': sa_fice_rep_2_telefono_2,
+                'sa_fice_rep_2_cedula': sa_fice_rep_2_cedula,
+
                 'sa_fice_pregunta_1': sa_fice_pregunta_1,
                 'sa_fice_pregunta_1_obs': sa_fice_pregunta_1_obs,
                 'sa_fice_pregunta_2': sa_fice_pregunta_2,
@@ -664,27 +673,32 @@ if ($btn_regresar == '') {
                                                 <div class="row pt-2">
                                                     <div class="col-md-3">
                                                         <label for="" class="form-label">Primer Apellido <label style="color: red;">*</label> </label>
-                                                        <input type="text" class="form-control form-control-sm" id="sa_fice_rep_1_primer_apellido" name="sa_fice_rep_1_primer_apellido" readonly>
+                                                        <input type="text" class="form-control form-control-sm" id="sa_fice_rep_1_primer_apellido" name="sa_fice_rep_1_primer_apellido">
                                                     </div>
                                                     <div class="col-md-3">
                                                         <label for="" class="form-label">Segundo Apellido <label style="color: red;">*</label> </label>
-                                                        <input type="text" class="form-control form-control-sm" id="sa_fice_rep_1_segundo_apellido" name="sa_fice_rep_1_segundo_apellido" readonly>
+                                                        <input type="text" class="form-control form-control-sm" id="sa_fice_rep_1_segundo_apellido" name="sa_fice_rep_1_segundo_apellido">
                                                     </div>
                                                     <div class="col-md-3">
                                                         <label for="" class="form-label">Primer Nombre <label style="color: red;">*</label> </label>
-                                                        <input type="text" class="form-control form-control-sm" id="sa_fice_rep_1_primer_nombre" name="sa_fice_rep_1_primer_nombre" readonly>
+                                                        <input type="text" class="form-control form-control-sm" id="sa_fice_rep_1_primer_nombre" name="sa_fice_rep_1_primer_nombre">
                                                     </div>
                                                     <div class="col-md-3">
                                                         <label for="" class="form-label">Segundo Nombre <label style="color: red;">*</label> </label>
-                                                        <input type="text" class="form-control form-control-sm" id="sa_fice_rep_1_segundo_nombre" name="sa_fice_rep_1_segundo_nombre" readonly>
+                                                        <input type="text" class="form-control form-control-sm" id="sa_fice_rep_1_segundo_nombre" name="sa_fice_rep_1_segundo_nombre">
                                                     </div>
                                                 </div>
 
                                                 <div class="row pt-3">
-                                                    <div class="col-md-4">
+                                                    <div class="col-md-3">
+                                                        <label for="" class="form-label">Cédula <label style="color: red;"></label> </label>
+                                                        <input type="text" class="form-control form-control-sm" id="sa_fice_rep_1_cedula" name="sa_fice_rep_1_cedula">
+                                                    </div>
+
+                                                    <div class="col-md-3">
                                                         <label for="" class="form-label">Parentesco <label style="color: red;">*</label> </label>
 
-                                                        <select class="form-select form-select-sm" id="sa_fice_rep_1_parentesco" name="sa_fice_rep_1_parentesco" disabled>
+                                                        <select class="form-select form-select-sm" id="sa_fice_rep_1_parentesco" name="sa_fice_rep_1_parentesco">
                                                             <option selected disabled value="">-- Seleccione --</option>
                                                             <option value="Padre">Padre</option>
                                                             <option value="Madre">Madre</option>
@@ -698,14 +712,14 @@ if ($btn_regresar == '') {
 
                                                     </div>
 
-                                                    <div class="col-md-4">
-                                                        <label for="" class="form-label">Teléfono Fijo <label style="color: red;">*</label> </label>
-                                                        <input type="text" class="form-control form-control-sm" id="sa_fice_rep_1_telefono_1" name="sa_fice_rep_1_telefono_1" readonly>
+                                                    <div class="col-md-3">
+                                                        <label for="" class="form-label">Teléfono Celular <label style="color: red;">*</label> </label>
+                                                        <input type="text" class="form-control form-control-sm" id="sa_fice_rep_1_telefono_1" name="sa_fice_rep_1_telefono_1">
                                                     </div>
 
-                                                    <div class="col-md-4">
-                                                        <label for="" class="form-label">Teléfono Celular </label>
-                                                        <input type="text" class="form-control form-control-sm" id="sa_fice_rep_1_telefono_2" name="sa_fice_rep_1_telefono_2" readonly>
+                                                    <div class="col-md-3">
+                                                        <label for="" class="form-label">Teléfono Fijo </label>
+                                                        <input type="text" class="form-control form-control-sm" id="sa_fice_rep_1_telefono_2" name="sa_fice_rep_1_telefono_2">
                                                     </div>
                                                 </div>
                                             </div>
@@ -738,7 +752,12 @@ if ($btn_regresar == '') {
                                                 </div>
 
                                                 <div class="row pt-3">
-                                                    <div class="col-md-4">
+                                                    <div class="col-md-3">
+                                                        <label for="" class="form-label">Cédula <label style="color: red;"></label> </label>
+                                                        <input type="text" class="form-control form-control-sm" id="sa_fice_rep_2_cedula" name="sa_fice_rep_2_cedula">
+                                                    </div>
+
+                                                    <div class="col-md-3">
                                                         <label for="" class="form-label">Parentesco <label style="color: red;"></label> </label>
 
                                                         <select class="form-select form-select-sm" id="sa_fice_rep_2_parentesco" name="sa_fice_rep_2_parentesco">
@@ -753,13 +772,13 @@ if ($btn_regresar == '') {
                                                         </select>
                                                     </div>
 
-                                                    <div class="col-md-4">
-                                                        <label for="" class="form-label">Teléfono Fijo <label style="color: red;"></label> </label>
+                                                    <div class="col-md-3">
+                                                        <label for="" class="form-label">Teléfono Celular <label style="color: red;"></label> </label>
                                                         <input type="text" class="form-control form-control-sm" id="sa_fice_rep_2_telefono_1" name="sa_fice_rep_2_telefono_1">
                                                     </div>
 
-                                                    <div class="col-md-4">
-                                                        <label for="" class="form-label">Teléfono Celular <label style="color: red;"></label> </label>
+                                                    <div class="col-md-3">
+                                                        <label for="" class="form-label">Teléfono Fijo <label style="color: red;"></label> </label>
                                                         <input type="text" class="form-control form-control-sm" id="sa_fice_rep_2_telefono_2" name="sa_fice_rep_2_telefono_2">
                                                     </div>
                                                 </div>

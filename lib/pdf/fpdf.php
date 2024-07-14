@@ -792,6 +792,20 @@ class FPDF
 		$this->x = $this->lMargin;
 	}
 
+	 // Método para manejar MultiCell en la misma fila
+	 function MultiCellRow($width, $height, $text, $border, $align, $fill)
+	 {
+		 // Guardar la posición actual
+		 $x = $this->GetX();
+		 $y = $this->GetY();
+		 
+		 // Imprimir la MultiCell
+		 $this->MultiCell($width, $height, $text, $border, $align, $fill);
+		 
+		 // Regresar a la posición inicial
+		 $this->SetXY($x + $width, $y);
+	 }
+
 	function Write($h, $txt, $link = '')
 	{
 		// Output text in flowing mode

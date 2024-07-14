@@ -63,13 +63,20 @@
                     data: null,
                     render: function(data, type, item) {
                         url = '../vista/inicio.php?mod=7&acc=pacientes';
-                        return '<a title="Editar Ficha Médica" class="text-center btn btn-warning btn-sm" href="#" onclick="gestion_paciente_comunidad(' + item.sa_pac_id_comunidad + ', \'' + item.sa_pac_tabla + '\', \'' + url + '\');"><u>' + '<i class="bx bxs-edit-alt me-0"></i>' + '</u></a>';
+                        ver_pdf_fm = `<button type="button" class="btn btn-primary btn-sm m-1" title="Detalles de la Consulta" onclick="ver_pdf('${item.sa_fice_id}')"> <i class="bx bx-file me-0"></i></button>`;
+                        edita_fm = '<a title="Editar Ficha Médica" class="text-center btn btn-warning btn-sm" href="#" onclick="gestion_paciente_comunidad(' + item.sa_pac_id_comunidad + ', \'' + item.sa_pac_tabla + '\', \'' + url + '\');"><u>' + '<i class="bx bxs-edit-alt me-0"></i>' + '</u></a>';
+                        return ver_pdf_fm + edita_fm;
                     }
                 }
             ],
 
             order: []
         });
+    }
+
+    function ver_pdf(id_fm) {
+        //console.log(id_consulta);
+        window.open('../controlador/ficha_MedicaC.php?pdf_ficha_medica=true&id=' + id_fm, '_blank');
     }
 
     function consultar_tablas_datos(valor_seleccionar) {

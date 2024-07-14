@@ -1158,6 +1158,7 @@ class consultasC
         $id = $this->cod_global->id_tabla($sa_pac_tabla);
         $datos_1 = $this->seguros->lista_articulos_seguro_detalle($sa_pac_tabla, $sa_pac_id_comunidad, $_SESSION['INICIO']['MODULO_SISTEMA'], $id[0]['ID'], false, $sa_conp_permiso_seguro_traslado);
 
+        $nombre_seguro = '';
         if (!empty($datos_1)) {
             $nombre_seguro = ($datos_1[0]['plan_seguro']);
         }
