@@ -75,47 +75,47 @@ if (isset($_GET['paralelo'])) {
 
             allDaySlot: false,
 
-            eventClick: function(info) {
-                // Obtener información del evento
-                var id_horario_clases = info.event.id;
-                var title = info.event.title;
+            // eventClick: function(info) {
+            //     // Obtener información del evento
+            //     var id_horario_clases = info.event.id;
+            //     var title = info.event.title;
 
-                //alert(id_horario_clases)
+            //     //alert(id_horario_clases)
 
-                Swal.fire({
-                    title: '¿Estás seguro de eliminar esta asignatura ' + title + '?',
-                    text: 'Esta acción no se puede deshacer.',
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'Sí, estoy seguro.'
-                }).then((result) => {
-                    // Si el usuario hace clic en "Sí"
-                    if (result.isConfirmed) {
-                        // Ejecuta la solicitud AJAX
-                        $.ajax({
-                            url: '../controlador/horario_clasesC.php?eliminar=true',
-                            type: 'POST',
-                            data: {
-                                id: id_horario_clases
-                            },
-                            success: function(response) {
-                                // Maneja la respuesta exitosa
-                                Swal.fire('Éxito', 'La operación se realizó con éxito', 'success');
-                                cargar_horario_clases();
-                            },
-                            error: function() {
-                                // Maneja el error
-                                Swal.fire('Error', 'Hubo un error en la operación', 'error');
-                            }
-                        });
-                    }
-                });
+            //     Swal.fire({
+            //         title: '¿Estás seguro de eliminar esta asignatura ' + title + '?',
+            //         text: 'Esta acción no se puede deshacer.',
+            //         icon: 'warning',
+            //         showCancelButton: true,
+            //         confirmButtonColor: '#3085d6',
+            //         cancelButtonColor: '#d33',
+            //         confirmButtonText: 'Sí, estoy seguro.'
+            //     }).then((result) => {
+            //         // Si el usuario hace clic en "Sí"
+            //         if (result.isConfirmed) {
+            //             // Ejecuta la solicitud AJAX
+            //             $.ajax({
+            //                 url: '../controlador/horario_clasesC.php?eliminar=true',
+            //                 type: 'POST',
+            //                 data: {
+            //                     id: id_horario_clases
+            //                 },
+            //                 success: function(response) {
+            //                     // Maneja la respuesta exitosa
+            //                     Swal.fire('Éxito', 'La operación se realizó con éxito', 'success');
+            //                     cargar_horario_clases();
+            //                 },
+            //                 error: function() {
+            //                     // Maneja el error
+            //                     Swal.fire('Error', 'Hubo un error en la operación', 'error');
+            //                 }
+            //             });
+            //         }
+            //     });
 
-                info.jsEvent.preventDefault();
+            //     info.jsEvent.preventDefault();
 
-            },
+            // },
 
             eventMouseEnter: function(info) {
                 // Al pasar el ratón, muestra la información completa del evento

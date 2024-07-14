@@ -63,7 +63,7 @@
                     data: null,
                     render: function(data, type, item) {
                         url = '../vista/inicio.php?mod=7&acc=pacientes';
-                        ver_pdf_fm = `<button type="button" class="btn btn-primary btn-sm m-1" title="Detalles de la Consulta" onclick="ver_pdf('${item.sa_fice_id}')"> <i class="bx bx-file me-0"></i></button>`;
+                        ver_pdf_fm = `<button type="button" class="btn btn-primary btn-sm m-1" title="Descargar Ficha Médica" onclick="ver_pdf('${item.sa_fice_id}')"> <i class='bx bx-download me-0'></i></button>`;
                         edita_fm = '<a title="Editar Ficha Médica" class="text-center btn btn-warning btn-sm" href="#" onclick="gestion_paciente_comunidad(' + item.sa_pac_id_comunidad + ', \'' + item.sa_pac_tabla + '\', \'' + url + '\');"><u>' + '<i class="bx bxs-edit-alt me-0"></i>' + '</u></a>';
                         return ver_pdf_fm + edita_fm;
                     }
