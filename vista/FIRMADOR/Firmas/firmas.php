@@ -38,6 +38,9 @@
 
                                     <button type="button" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#modal_pacientes"><i class="bx bx-plus"></i> Nuevo Paciente</button>
 
+                                    <input type="checkbox" name="">
+                                    <input type="radio" name="">
+
                                 </div>
                             </div>
                         </div>
