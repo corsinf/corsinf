@@ -56,7 +56,7 @@
                   <form>
                     <div class="mb-3">
                       <label for="PersonName" class="form-label">Nombre</label>
-                      <input type="text", id="PersonName" class="form-control">
+                      <input type="text", id="PersonName" class="form-control" placeholder="Escriba su nombre completo">
                     </div>
                     <div class="mb-3">
                       <label for="UploadDocument" class="form-label">Subir un documento</label>
@@ -68,11 +68,11 @@
                     </div>
                     <div class="mb-3">
                       <label for="Password" class="form-label">Contraseña</label>
-                      <input type="password" id="Password" class="form-control">
+                      <input type="password" id="Password" class="form-control" placeholder="Ingrese una contraseña">
                     </div>
                     <div class="mb-3">
                       <label for="ConfirmPassword" class="form-label">Verificar Contraseña</label>
-                      <input type="password" id="ConfirmPassword" class="form-control">
+                      <input type="password" id="ConfirmPassword" class="form-control" placeholder="Ingrese nuevamente su contraseña">
                     </div>
                     <div class="mb-3">
                       <button type="submit" id="submitButton" class="btn btn-success">Agregar Firma</button>
