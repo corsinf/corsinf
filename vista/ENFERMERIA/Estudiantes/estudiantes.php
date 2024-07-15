@@ -1,5 +1,5 @@
 <script src="../js/ENFERMERIA/operaciones_generales.js"></script>
-
+ 
 <script type="text/javascript">
     $(document).ready(function() {
         $('#tabla_estudiante').DataTable({
