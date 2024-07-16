@@ -93,7 +93,7 @@
                         <section class="content pt-2">
                             <div class="container-fluid">
                                 <div class="table-responsive">
-                                    <table class="table table-striped responsive " id="tbl_pacientes" style="width:100%">
+                                    <table class="table table-striped responsive " id="tbl_firmas" style="width:100%">
                                         <thead>
                                             <tr>
                                                 <th>Nombre</th>
