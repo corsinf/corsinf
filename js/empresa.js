@@ -185,7 +185,10 @@ function empresa()
                     var t = '<tr><td>'+response[0]['Ruta_Certificado']+'</td><td>'+response[0]['Clave_Certificado']+'</td><td><button class="btn btn-sm btn-danger" onclick="eliminar_cert()"><i class="fa fa-trash"></i></button></td></tr>';  
                 }
                 $('#tbl_certificados').html(t)
-                
+
+                $('#txt_url_api_idukay').val(response[0].url_api_idukay);
+                $('#txt_token_idukay').val(response[0].token_idukay);
+                $('#txt_anio_lectivo_idukay').val(response[0].anio_lectivo_idukay);
         }
       });
 
@@ -285,6 +288,11 @@ Swal.fire({
         'usu_dir': $('#txt_usuario_dir').val(),
         'pass_dir': $('#txt_pass_dir').val(),
         'dominio_dir': $('#txt_dominio_dir').val(),
+
+        //Idukay
+        'idukay_url': $('#txt_url_api_idukay').val(),
+        'idukay_token': $('#txt_token_idukay').val(),
+        'idukay_anio_lec': $('#txt_anio_lectivo_idukay').val(),
     }
      $.ajax({
       data:  {parametros:parametros},

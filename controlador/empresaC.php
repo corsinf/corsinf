@@ -250,6 +250,13 @@ class empresaC
 	$datos[30]['campo'] = 'titulo_pestania';
 	$datos[30]['dato']= $parametros['titPes'];
 
+	$datos[31]['campo'] = 'url_api_idukay';
+	$datos[31]['dato']= $parametros['idukay_url'];
+	$datos[32]['campo'] = 'token_idukay';
+	$datos[32]['dato']= $parametros['idukay_token'];
+	$datos[33]['campo'] = 'anio_lectivo_idukay';
+	$datos[33]['dato']= $parametros['idukay_anio_lec'];
+
 
 	$where[0]['campo'] = 'id_empresa';
 	$where[0]['dato']= $_SESSION['INICIO']['ID_EMPRESA'];
