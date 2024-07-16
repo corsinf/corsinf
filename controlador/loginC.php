@@ -765,6 +765,9 @@ class loginC
 				$_SESSION["INICIO"]['PUERTO_API_HIKVISION'] = $empresa[0]['puerto_api_hikvision'];
 				$_SESSION["INICIO"]['ACERCA_DE'] = $empresa[0]['acerca_de'];
 				$_SESSION["INICIO"]['TITULO_PESTANIA'] = $empresa[0]['titulo_pestania'];
+				$_SESSION["INICIO"]['IDUKAY_URL'] = $empresa[0]['url_api_idukay'];
+				$_SESSION["INICIO"]['IDUKAY_TOKEN'] = $empresa[0]['token_idukay'];
+				$_SESSION["INICIO"]['IDUKAY_ANIO_LEC'] = $empresa[0]['anio_lectivo_idukay'];
 				return 1;
 		}
 
@@ -849,6 +852,9 @@ class loginC
 					$_SESSION["INICIO"]['PUERTO_API_HIKVISION'] = $empresa[0]['puerto_api_hikvision'];
 					$_SESSION["INICIO"]['ACERCA_DE'] = $empresa[0]['acerca_de'];
 					$_SESSION["INICIO"]['TITULO_PESTANIA'] = $empresa[0]['titulo_pestania'];
+					$_SESSION["INICIO"]['IDUKAY_URL'] = $empresa[0]['url_api_idukay'];
+					$_SESSION["INICIO"]['IDUKAY_TOKEN'] = $empresa[0]['token_idukay'];
+					$_SESSION["INICIO"]['IDUKAY_ANIO_LEC'] = $empresa[0]['anio_lectivo_idukay'];
 			}
 
 	 	// print_r($parametros);die();

@@ -80,7 +80,8 @@
         });
     }
 
-    function cargar_estudiantes() {
+    function cargar_estudiantes_tabla() {
+        $('#pnl_tbl_estudiates').show();
         // Mostrar el spinner usando SweetAlert2
         Swal.fire({
             title: 'Por favor, espere',
@@ -191,6 +192,8 @@
                 $('#pnl_idukay').append('<p>Error al cargar los estudiantes.</p>');
             }
         });
+
+        
     }
 
     function cargar_estudiantes2() {
@@ -251,7 +254,7 @@
         });
     }
 
-    function cargar_estudiantes1() {
+    function cargar_estudiantes_JSON() {
         $.ajax({
             url: '../controlador/cat_configuracionGC.php?listar_idukay_estudiantes=true',
             type: 'post',
@@ -472,10 +475,6 @@
             }
         });
     }
-
-    
-
-
 </script>
 
 <div class="page-wrapper">
@@ -529,9 +528,9 @@
                             <hr>
 
                             <h5>Configuración Idukay</h5>
-                            <div class="row" id="pnl_idukay">
 
-                            </div>
+
+                            <br>
 
                             <h6>Estudiantes - Representantes</h6>
                             <button class="btn btn-primary btn-sm m-1" onclick="sincronizar_estudiantes()" type="button"><i class='bx bx-sync'></i> Sincronizar Estudiantes Idukay</button>
@@ -545,13 +544,22 @@
                             <button class="btn btn-primary btn-sm m-1" onclick="sincronizar_docentes()" type="button"><i class='bx bx-sync'></i> Sincronizar Docentes Idukay</button>
                             <button class="btn btn-primary btn-sm m-1" onclick="sincronizar_horarios_docentes()" type="button"><i class='bx bx-sync'></i> Sincronizar Horarios Docentes Idukay</button>
 
-                            
+                            <hr>
 
-                            
+                            <h6>Cargar JSON Estudiantes - Representantes</h6>
+                            <button class="btn btn-primary btn-sm m-1" onclick="cargar_estudiantes_JSON()" type="button"><i class='bx bx-sync'></i> Cargar JSON Estudiantes Idukay</button>
+                            <div class="row" id="pnl_idukay">
+
+                            </div>
+
+                            <br>
+                            <h6>Cargar TABLA Estudiantes - Representantes</h6>
+                            <button class="btn btn-primary btn-sm m-1" onclick="cargar_estudiantes_tabla()" type="button"><i class='bx bx-sync'></i> Cargar Tabla Estudiantes Idukay</button>
+                            <div class="row" id="pnl_idukay">
 
                             <br><br>
 
-                            <section class="content pt-4" hidden>
+                            <section class="content pt-4" id="pnl_tbl_estudiates" style="display: none;">
                                 <div class="container-fluid">
                                     <div class="table-responsive">
                                         <table class="table table-striped responsive" id="tabla_estudiantes" style="width:100%">
