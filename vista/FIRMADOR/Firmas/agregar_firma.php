@@ -1,13 +1,16 @@
 <script type="text/javascript">
  $( document ).ready(function() {
   $("#passwordSection").hide() && $("#validateSection").hide();
+  $('.notShow').each(function(){
+    var originalText = $(this).text();
+    var hiddenText = originalText.replace(/./g, '*');
+    $(this).text(hiddenText);
+  })
   function validateForm() {
     var password = $("#psw_password").val();
     var confirmPassword = $("#psw_validatePassword").val();
     var fileInput = $("#doc_uploadDocument") [0].files[0];
     var fileName = fileInput ? fileInput.name : '';
-    let showPassword = $("#psw_password")
-    let showConfirmpassword = $("psw_validatePassword")
 
     if (password !== confirmPassword) {
       Swal.fire({
@@ -94,13 +97,29 @@
                                         <thead>
                                             <tr>
                                                 <th>Nombre</th>
+                                                <th>Nombre de la firma</th>
                                                 <th>RUC</th>
                                                 <th>Clave</th>
                                                 <th>Fecha de inicio</th>
                                                 <th>Fecha de vencimiento</th>                                            </tr>
                                         </thead>
                                         <tbody>
-
+                                            <tr>
+                                              <td>Adrian Acuña</td>
+                                              <td>Firma Principal</td>
+                                              <td>1726621871001</td>
+                                              <td class="notShow">12345</td>
+                                              <td>2024-07-16</td>
+                                              <td>2025-07-16</td>
+                                            </tr>
+                                            <tr>
+                                              <td>Samuel Estrada</td>
+                                              <td>Firma Secundaria</td>
+                                              <td>1758493871001</td>
+                                              <td class="notShow">cualquiercosa!123</td>
+                                              <td>2024-07-16</td>
+                                              <td>2027-02-01</td>
+                                            </tr>
                                         </tbody>
                                     </table>
                                 </div>
@@ -128,6 +147,10 @@
         <div class="mb-3">
           <label for="txt_personName" class="form-label form-label-sm">Nombre</label>
           <input type="text" class="form-control form-control-sm" name="txt_personName" id="txt_personName" value="" placeholder="Escriba su nombre completo">
+        </div>
+        <div class="mb-3">
+          <label for="txt_signatureName" class="form-label form-label-sm">Nombre de la firma</label>
+          <input type="text" class="form-control form-control-sm" name="txt_signatureName" id="txt_signatureName" value="" placeholder="Escriba el nombre de la firma">
         </div>
         <div class="mb-3">
           <label for="txt_ruc" class="form-label form-label-sm">RUC</label>
