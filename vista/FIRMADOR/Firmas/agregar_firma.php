@@ -1,11 +1,11 @@
 <script type="text/javascript">
  $( document ).ready(function() {
-  $("#passwordSection").hide() && $("#validateSection").hide();
   $('.notShow').each(function(){
     var originalText = $(this).text();
     var hiddenText = originalText.replace(/./g, '*');
     $(this).text(hiddenText);
   })
+  $("#passwordSection").hide() && $("#validateSection").hide();
   function validateForm() {
     var password = $("#psw_password").val();
     var confirmPassword = $("#psw_validatePassword").val();
