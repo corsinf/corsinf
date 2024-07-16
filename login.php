@@ -438,7 +438,7 @@
       <div class="modal-header">
         <h3 class="modal-title" id="titulo">Empresas</h3>
       </div>
-      <div class="modal-body">
+      <div class="modal-body" style="height: 410px;overflow-y: scroll;">
         <ul class="list-group list-group-flush radius-10" id="lista_empresas">
 									
 									<li class="list-group-item d-flex align-items-center radius-10 mb-2 shadow-sm">
