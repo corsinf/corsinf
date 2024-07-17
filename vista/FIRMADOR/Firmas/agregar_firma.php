@@ -2,15 +2,15 @@
   $(document).ready(function() {
 
     $('.noMostrar').each(function() {
-      var textoOriginal = $(this).text();
-      var textoOculto = textoOriginal.replace(/./g, '*');
-      $(this).text(textoOculto);
+      var texto_original = $(this).text();
+      var texto_oculto = texto_original.replace(/./g, '*');
+      $(this).text(texto_oculto);
     })
 
     $("#seccionClave").hide() && $("#seccionValidar").hide();
 
     $("#btn_enviar").click(function(event) {
-      if (!validarForm()) {
+      if (!validar_form()) {
         event.preventDefault();
       }
     });
@@ -33,13 +33,13 @@
 
   });
 
-  function validarForm() {
+  function validar_form() {
     var clave = $("#txt_clave").val();
-    var confirmarClave = $("#txt_validarClave").val();
-    var ingresarArchivo = $("#doc_subirDocumento")[0].files[0];
-    var nombreArchivo = ingresarArchivo ? ingresarArchivo.name : '';
+    var confirmar_clave = $("#txt_validarClave").val();
+    var ingresar_archivo = $("#doc_subirDocumento")[0].files[0];
+    var nombre_archivo = ingresar_archivo ? ingresar_archivo.name : '';
 
-    if (clave !== confirmarClave) {
+    if (clave !== confirmar_clave) {
       Swal.fire({
         icon: "error",
         title: "Oops...",
@@ -47,8 +47,8 @@
       });
     }
 
-    var extensionArchivo = nombreArchivo.split('.').pop().toLowerCase();
-    if (extensionArchivo !== 'p12') {
+    var extension_archivo = nombre_archivo.split('.').pop().toLowerCase();
+    if (extension_archivo !== 'p12') {
       Swal.fire({
         icon: "error",
         title: "Oops...",
