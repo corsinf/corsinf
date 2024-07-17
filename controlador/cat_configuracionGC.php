@@ -499,7 +499,7 @@ class cat_configuracionGC
                     array('campo' => 'sa_doc_telefono_2', 'dato' => $parametro['sa_doc_telefono_2']),
                     array('campo' => 'sa_doc_direccion', 'dato' => $parametro['sa_doc_direccion']),
 
-                    //array('campo' => 'PASS', 'dato' => $this->cod_global->enciptar_clave($parametro['sa_doc_cedula'])),
+                    array('campo' => 'PASS', 'dato' => $this->cod_global->enciptar_clave($parametro['sa_doc_cedula'])),
 
                     array('campo' => 'sa_doc_id_idukay', 'dato' => $parametro['sa_doc_id_idukay']),
                 );
