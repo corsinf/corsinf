@@ -258,7 +258,11 @@
                         sexo_estudiante = 'Femenino';
                     }
 
-                    curso = item.sa_sec_nombre + '/' + item.sa_gra_nombre + '/' + item.sa_par_nombre;
+                    sa_sec_nombre_cur = item.sa_sec_nombre ?? '';
+                    sa_gra_nombre_cur = item.sa_gra_nombre ?? '';
+                    sa_par_nombre_cur = item.sa_par_nombre ?? '';
+
+                    curso = sa_sec_nombre_cur + '/' + sa_gra_nombre_cur + '/' + sa_par_nombre_cur;
 
                     $.ajax({
                         data: {
@@ -785,7 +789,7 @@
 
                                 <div class="row pb-4">
 
-                                <div class="col-3"></div>
+                                    <div class="col-3"></div>
 
                                     <div class="col-6">
                                         <div class="alert alert-info border-0 bg-info alert-dismissible fade show py-2">

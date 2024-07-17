@@ -311,6 +311,12 @@ class cat_configuracionGC
             }
 
             $query = $this->estudiantes->ponerIdCursos();
+            /**
+             * Parche para que todos los estudiantes salgan y puedan sacar su ficha medica
+             */
+
+            $resultado = $this->estudiantes->cargaMasivaIdukay("UPDATE estudiantes set sa_est_estado = '1';");
+
             return $query;
         } else {
             return -11;
