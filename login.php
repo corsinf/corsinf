@@ -341,7 +341,7 @@
 													<label class="form-check-label" for="flexSwitchCheckChecked">Remember Me</label>
 												</div>
 											</div> -->
-											<div class="col-md-12 text-end">
+											<div class="col-md-12 text-end" hidden>
 												<a href="reset.php">Olvido su contraseña ?</a>
 												<br>
 												<a href="Nueva_empresa.php">Nueva empresa</a>
