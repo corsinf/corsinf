@@ -311,6 +311,12 @@ class cat_configuracionGC
             }
 
             $query = $this->estudiantes->ponerIdCursos();
+            /**
+             * Parche para que todos los estudiantes salgan y puedan sacar su ficha medica
+             */
+
+            $resultado = $this->estudiantes->cargaMasivaIdukay("UPDATE estudiantes set sa_est_estado = '1';");
+
             return $query;
         } else {
             return -11;
@@ -499,7 +505,7 @@ class cat_configuracionGC
                     array('campo' => 'sa_doc_telefono_2', 'dato' => $parametro['sa_doc_telefono_2']),
                     array('campo' => 'sa_doc_direccion', 'dato' => $parametro['sa_doc_direccion']),
 
-                    //array('campo' => 'PASS', 'dato' => $this->cod_global->enciptar_clave($parametro['sa_doc_cedula'])),
+                    array('campo' => 'PASS', 'dato' => $this->cod_global->enciptar_clave($parametro['sa_doc_cedula'])),
 
                     array('campo' => 'sa_doc_id_idukay', 'dato' => $parametro['sa_doc_id_idukay']),
                 );
