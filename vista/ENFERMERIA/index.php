@@ -684,7 +684,11 @@
                       sexo_estudiante = 'Femenino';
                     }
 
-                    curso = item.sa_sec_nombre + '/' + item.sa_gra_nombre + '/' + item.sa_par_nombre;
+                    sa_sec_nombre_cur = item.sa_sec_nombre ?? '';
+                    sa_gra_nombre_cur = item.sa_gra_nombre ?? '';
+                    sa_par_nombre_cur = item.sa_par_nombre ?? '';
+
+                    curso = sa_sec_nombre_cur + '/' + sa_gra_nombre_cur + '/' + sa_par_nombre_cur;
                     //pilas mañana
                     estudiantes += `
                                     <div class="col" onclick="redireccionar('perfil_estudiante_salud&id_estudiante=${item.sa_est_id}&paralelo=${item.sa_id_paralelo}');">

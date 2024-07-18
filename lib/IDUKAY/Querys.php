@@ -10,12 +10,13 @@ class Querys
 
     private $Idukay_API;
 
-    private $anio_lectivo = "6308dedb64d9466850b563d9";
+    private $anio_lectivo;
 
-    public function __construct($url_API, $bearerToken)
+    public function __construct($url_API, $bearerToken, $anio_lectivo)
     {
         $this->url_API = $url_API;
         $this->bearerToken = $bearerToken;
+        $this->anio_lectivo = $anio_lectivo;
 
         $this->Idukay_API = new Idukay($this->url_API, $this->bearerToken);
     }
