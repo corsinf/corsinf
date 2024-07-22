@@ -22,7 +22,7 @@ if ($_GET['acc'] == 'firmas') {
 }
 
 if ($_GET['acc'] == 'agregar_firma') {
-    include('FIRMADOR/Firmas/agregar_firma.php');
+    include('FIRMADOR/Firmas/registrar_firma.php');
 }
 
 if ($_GET['acc'] == 'inicio_prueba') {
