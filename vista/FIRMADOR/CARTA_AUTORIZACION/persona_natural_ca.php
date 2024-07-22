@@ -66,37 +66,37 @@
                                                 <div class="row mb-3">
                                                     <label for="txt_direccion_domicilio" class="col-sm-4 col-form-label">Dirección Domicilio</label>
                                                     <div class="col-sm-8">
-                                                        <input type="text" class="form-control" id="txt_direccion_domicilio" placeholder="Dirección Domicilio">
+                                                        <input type="text" class="form-control form-control-sm" id="txt_direccion_domicilio" placeholder="Dirección Domicilio">
                                                     </div>
                                                 </div>
                                                 <div class="row mb-3">
                                                     <label for="txt_provincia" class="col-sm-4 col-form-label">Provincia</label>
                                                     <div class="col-sm-8">
-                                                        <input type="text" class="form-control" id="txt_provincia" placeholder="Provincia">
+                                                        <input type="text" class="form-control form-control-sm" id="txt_provincia" placeholder="Provincia">
                                                     </div>
                                                 </div>
                                                 <div class="row mb-3">
                                                     <label for="txt_ciudad" class="col-sm-4 col-form-label">Ciudad</label>
                                                     <div class="col-sm-8">
-                                                        <input type="text" class="form-control" id="txt_ciudad" placeholder="Ciudad">
+                                                        <input type="text" class="form-control form-control-sm" id="txt_ciudad" placeholder="Ciudad">
                                                     </div>
                                                 </div>
                                                 <div class="row mb-3">
                                                     <label for="txt_correo" class="col-sm-4 col-form-label">Correo Electrónico</label>
                                                     <div class="col-sm-8">
-                                                        <input type="email" class="form-control" id="txt_correo" placeholder="Correo Electrónico">
+                                                        <input type="email" class="form-control form-control-sm" id="txt_correo" placeholder="Correo Electrónico">
                                                     </div>
                                                 </div>
                                                 <div class="row mb-3">
                                                     <label for="txt_celular" class="col-sm-4 col-form-label">No. Celular</label>
                                                     <div class="col-sm-8">
-                                                        <input type="tel" class="form-control" id="txt_celular" placeholder="No. Celular (Poner código de país)">
+                                                        <input type="tel" class="form-control form-control-sm" id="txt_celular" placeholder="No. Celular (Poner código de país)">
                                                     </div>
                                                 </div>
                                                 <div class="row mb-3">
                                                     <label for="txt_fijo" class="col-sm-4 col-form-label">No. Fijo</label>
                                                     <div class="col-sm-8">
-                                                        <input type="tel" class="form-control" id="txt_fijo" placeholder="No. Fijo (Poner código de país)">
+                                                        <input type="tel" class="form-control form-control-sm" id="txt_fijo" placeholder="No. Fijo (Poner código de país)">
                                                     </div>
                                                 </div>
                                                 <div class="row">
