@@ -446,7 +446,7 @@ class cabecera_pdf
 		 }
 		}
 
-		// print_r($this->pdftable->GetPageHeight());die();
+		// print_r($this->pdftable->GetY());die();
 
 		if($contenido)
 		{
@@ -469,15 +469,33 @@ class cabecera_pdf
         }
                 $this->pdftable->SetFont('Arial','',$sizetable);
 		    foreach ($tablaHTML as $key => $value){
+		    	$tama = 9;
+		    	$esti = '';
+
+		    	// if(isset($value['estilo']) && $value['estilo']!='')
+		    	// {
+		    	// 	$this->pdftable->SetFont('Arial',$value['estilo'],$sizetable);
+		    	// 	$estiloRow = $value['estilo'];
+		    	// }else
+		    	// {
+		    	// 	$this->pdftable->SetFont('Arial','',$sizetable);
+		    	// 	$estiloRow ='';
+		    	// }
+
 		    	if(isset($value['estilo']) && $value['estilo']!='')
 		    	{
-		    		$this->pdftable->SetFont('Arial',$value['estilo'],$sizetable);
-		    		$estiloRow = $value['estilo'];
-		    	}else
-		    	{
-		    		$this->pdftable->SetFont('Arial','',$sizetable);
-		    		$estiloRow ='';
+		    		$esti = $value['estilo'];
 		    	}
+		    	if(isset($value['size']) && $value['size']!='')
+		    	{
+		    		$tama = $value['size'];
+		    	}
+
+		    	$this->pdftable->SetFont('Arial',$esti,$tama);
+		    	$estiloRow = $esti;
+
+
+
 		    	if(isset($value['borde']) && $value['borde']!='0')
 		    	{
 		    		$borde=$value['borde'];
@@ -674,6 +692,8 @@ class PDF_MC extends PDF_MC_Table
 
     function Header()
     {
+
+    	$this->Ln($this->salto_header_cuerpo);
    
    // print($_SESSION['INGRESO']['Logo_Tipo']);
     	

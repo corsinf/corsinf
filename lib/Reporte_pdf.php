@@ -60,7 +60,12 @@ if(isset($_GET['reporte_solicitud']))
 	$reporte->reporte_solicitud($parametros);
 	// $reporte-> ejemplo();
 }
-
+if(isset($_GET['gpa_pdf']))
+{
+	$parametros = $_GET;
+	$reporte->reporte_solicitud($parametros);
+	// $reporte-> ejemplo();
+}
 
 class Reporte_pdf
 {
