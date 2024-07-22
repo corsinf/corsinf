@@ -29,33 +29,33 @@
                             <h5 class="my-3">Políticas de Privacidad</h5>
                             <div class="fm-menu">
                                 <div class="list-group list-group-flush">
-                                    <a href="#introduccion" class="list-group-item py-1"><i class='bx bx-chevron-right'></i><span>Introducción</span></a>
-                                    <a href="#informacionRecopilada" class="list-group-item py-1"><i class='bx bx-chevron-right'></i><span>Información que recopilamos</span></a>
-                                    <a href="#usoInformacion" class="list-group-item py-1"><i class='bx bx-chevron-right'></i><span>Uso de su información</span></a>
-                                    <a href="#tiempoConservacion" class="list-group-item py-1"><i class='bx bx-chevron-right'></i><span>Tiempos de conservación de los datos</span></a>
-                                    <a href="#derechosUsuarios" class="list-group-item py-1"><i class='bx bx-chevron-right'></i><span>Derechos de los usuarios</span></a>
-                                    <a href="#responsabilidadUsuarios" class="list-group-item py-1"><i class='bx bx-chevron-right'></i><span>Responsabilidades del usuario</span></a>
-                                    <a href="#seguridadDatos" class="list-group-item py-1"><i class='bx bx-chevron-right'></i><span>Seguridad de los Datos</span></a>
-                                    <a href="#informacionTerceros" class="list-group-item py-1"><i class='bx bx-chevron-right'></i><span>Compartir información con terceros</span></a>
-                                    <a href="#contacto" class="list-group-item py-1"><i class='bx bx-chevron-right'></i><span>Contacto</span></a>
+                                    <a href="#pnl_introduccion" class="list-group-item py-1"><i class='bx bx-chevron-right'></i><span>Introducción</span></a>
+                                    <a href="#pnl_informacion_recopilada" class="list-group-item py-1"><i class='bx bx-chevron-right'></i><span>Información que recopilamos</span></a>
+                                    <a href="#pnl_uso_informacion" class="list-group-item py-1"><i class='bx bx-chevron-right'></i><span>Uso de su información</span></a>
+                                    <a href="#pnl_tiempo_conservacion" class="list-group-item py-1"><i class='bx bx-chevron-right'></i><span>Tiempos de conservación de los datos</span></a>
+                                    <a href="#pnl_derechos_usuarios" class="list-group-item py-1"><i class='bx bx-chevron-right'></i><span>Derechos de los usuarios</span></a>
+                                    <a href="#pnl_responsabilidad_usuarios" class="list-group-item py-1"><i class='bx bx-chevron-right'></i><span>Responsabilidades del usuario</span></a>
+                                    <a href="#pnl_seguridad_datos" class="list-group-item py-1"><i class='bx bx-chevron-right'></i><span>Seguridad de los Datos</span></a>
+                                    <a href="#pnl_informacion_terceros" class="list-group-item py-1"><i class='bx bx-chevron-right'></i><span>Compartir información con terceros</span></a>
+                                    <a href="#pnl_contacto" class="list-group-item py-1"><i class='bx bx-chevron-right'></i><span>Contacto</span></a>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="col-12 col-lg-7">
+                <div class="col-12 col-lg-9">
                     <div class="card">
                         <div class="card-body">
                             <div class="row mt-3">
                                 <div class="col-12 col-lg-12">
                                     <div class="card shadow-none border radius-15">
                                         <div class="card-body">
-                                            <div id="introduccion">
-                                                <h5 class="mb-3">Introducción</h5>
+                                            <div id="pnl_introduccion">
+                                                <h5 class="mb-3 fw-bold text-primary">Introducción</h5>
                                                 <p class="mb-4">En Corsinf valoramos su privacidad y nos comprometemos a proteger sus datos personales. Esta política de privacidad describe cómo recopilamos, usamos, almacenamos y protegemos su información. También te informamos cuáles son tus derechos. Esta política de privacidad rige para toda la información personal que recibe Corsinf sobre personas que no son empleados de Corsinf.</p>
                                             </div>
-                                            <div id="informacionRecopilada">
-                                                <h5 class="mb-3">Información que recopilamos</h5>
+                                            <div id="pnl_informacion_recopilada">
+                                                <h5 class="mb-3 fw-bold text-primary">Información que recopilamos</h5>
                                                 <p class="">Recopilamos los siguientes tipos de información: </p>
                                                 <ul class="list-unstyled mb-4">
                                                     <li class="mb-2"><strong>Datos de identificación: </strong>nombre, dirección, número de teléfono.</li>
@@ -64,8 +64,8 @@
                                                     <li class="mb-2"><strong>Datos de preferencias: </strong>información sobre sus intereses y preferencias. </li>
                                                 </ul>
                                             </div>
-                                            <div id="usoInformacion">
-                                                <h5 class="mb-3">Uso de su información</h5>
+                                            <div id="pnl_uso_informacion">
+                                                <h5 class="mb-3 fw-bold text-primary">Uso de su información</h5>
                                                 <p class="mb-3">Usamos su información para los siguientes propósitos:</p>
                                                 <div class="list-group mb-4">
                                                     <a href="" class="list-group-item list-group-item-action" data-bs-toggle="modal" data-bs-target="#modal_servicios"><i class='bx bx-plus-circle' ></i>&emsp;Proveer y gestionar nuestros servicios.</a>
@@ -73,8 +73,8 @@
                                                 </div>
                                                 <p class="">En Corsinf estamos comprometidos en cumplir todas las obligaciones legales y contractuales con el objetivo de garantizar la seguridad de su información mientras nos mantenemos bajo el marco legal del país.</p>
                                             </div>
-                                            <div id="tiempoConservacion">
-                                                <h5 class="mb-3">Tiempos de conservación de los datos</h5>
+                                            <div id="pnl_tiempo_conservacion">
+                                                <h5 class="mb-3 fw-bold text-primary">Tiempos de conservación de los datos</h5>
                                                 <p class="mb-3">Retenemos sus datos personales el tiempo necesario para cumplir con los propósitos para los que se recopilaron, incluyendo el cumplimiento de obligaciones legales, contables o de informes. Los criterios utilizados para determinar los períodos de retención incluyen:</p>
                                                 <ul class="list-unstyled mb-4">
                                                     <li class="mb-2">El tiempo durante el cual mantenemos una relación continua con usted y le proporcionamos nuestros servicios.</li>
@@ -82,8 +82,8 @@
                                                     <li class="mb-2">El período de tiempo en el que se pueda presentar una reclamación contra nosotros.</li>
                                                 </ul>
                                             </div>
-                                            <div id="derechosUsuarios">
-                                                <h5 class="mb-3">Derechos de los usuarios</h5>
+                                            <div id="pnl_derechos_usuarios">
+                                                <h5 class="mb-3 fw-bold text-primary">Derechos de los usuarios</h5>
                                                 <p class="mb-3">De acuerdo con la Ley Orgánica de Protección de Datos Personales, usted tiene los siguientes derechos:</p>
                                                 <ul class="list-unstyled mb-4">
                                                     <li class="mb-2"><strong>Acceso: </strong>Puede solicitar una copia de sus datos personales que tenemos.</li>
@@ -94,8 +94,8 @@
                                                     <li class="mb-2"><strong>Suspensión: </strong>Puede solicitar la suspensión del tratamiento de sus datos.</li>
                                                 </ul>
                                             </div>
-                                            <div id="responsabilidadUsuarios">
-                                                <h5 class="mb-3">Responsabilidades del usuario</h5>
+                                            <div id="pnl_responsabilidad_usuarios">
+                                                <h5 class="mb-3 fw-bold text-primary">Responsabilidades del usuario</h5>
                                                 <p class="mb-3">En Corsinf respetamos y protegemos la privacidad de los datos personales de nuestros usuarios. En este punto se plantea todas las limitaciones que tienen las personas para usar, transmitir y divulgar los servicio e información de Corsinf. Para garantizar una experiencia segura y conforme a la normativa, pedimos a nuestros usuarios cumplan con las siguientes responsabilidades:</p>
                                                 <div class="list-group mb-4">
                                                     <a href="" class="list-group-item list-group-item-action" data-bs-toggle="modal" data-bs-target="#modal_proveer"><i class='bx bx-plus-circle' ></i>&emsp;Proveer información veraz y actualizada.</a>
@@ -106,16 +106,16 @@
                                                     <a href="" class="list-group-item list-group-item-action" data-bs-toggle="modal" data-bs-target="#modal_derechos"><i class='bx bx-plus-circle' ></i>&emsp;Derechos de los titulares de datos.</a>
                                                 </div>
                                             </div>
-                                            <div id="seguridadDatos">
-                                                <h5 class="mb-3">Seguridad de los Datos</h5>
+                                            <div id="pnl_seguridad_datos">
+                                                <h5 class="mb-3 fw-bold text-primary">Seguridad de los Datos</h5>
                                                 <p class="mb-4">Implementamos medidas razonables para garantizar la seguridad de sus datos personales y protegerlos de pérdidas, usos indebidos, el acceso no autorizado, la alteración, divulgación y destrucción. Corsinf ha implementado los procedimientos necesarios para asegurar y proteger su información.</p>
                                             </div>
-                                            <div id="informacionTerceros">
-                                                <h5 class="mb-3">Compartir información con terceros</h5>
+                                            <div id="pnl_informacion_terceros">
+                                                <h5 class="mb-3 fw-bold text-primary">Compartir información con terceros</h5>
                                                 <p class="mb-4">Podemos compartir su información con socios y proveedores de servicios terceros que nos ayudan a operar nuestro negocio, tales como procesamiento de pagos y servicios de marketing. Estos proveedores están obligados a proteger su información y solo pueden usarla para los fines específicos para los cuales fue compartida.</p>
                                             </div>
-                                            <div id="contacto">
-                                                <h5 class="mb-3">Contacto</h5>
+                                            <div id="pnl_contacto">
+                                                <h5 class="mb-3 fw-bold text-primary">Contacto</h5>
                                                 <p class="mb-4">Si tiene preguntas o inquietudes sobre nuestra política de privacidad o sobre el manejo de sus datos personales, puede contactarnos a través de: </p>
                                                 <ul class="list-unstyled mb-4">
                                                     <li class="mb-2"><strong>Correo electrónico: </strong>contacto@corsinf.com</li>
@@ -141,7 +141,7 @@
 
                 <!-- Modal Header -->
                 <div class="modal-header">
-                    <h5><small class="text-body-secondary">Proveer y gestionar nuestros servicios.</small></h5>
+                    <h5 class="mb-3 fw-bold text-primary">Proveer y gestionar nuestros servicios.</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <!-- Modal body -->
@@ -160,7 +160,7 @@
 
                 <!-- Modal Header -->
                 <div class="modal-header">
-                    <h5><small class="text-body-secondary">Comunicarnos contigo</small></h5>
+                    <h5 class="mb-3 fw-bold text-primary">Comunicarnos contigo</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <!-- Modal body -->
@@ -185,7 +185,7 @@
 
                 <!-- Modal Header -->
                 <div class="modal-header">
-                    <h5><small class="text-body-secondary">Proveer información veraz y actualizada.</small></h5>
+                    <h5 class="mb-3 fw-bold text-primary">Proveer información veraz y actualizada.</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <!-- Modal body -->
@@ -204,7 +204,7 @@
 
                 <!-- Modal Header -->
                 <div class="modal-header">
-                    <h5><small class="text-body-secondary">Protección de sus credenciales.</small></h5>
+                    <h5 class="mb-3 fw-bold text-primary">Protección de sus credenciales.</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <!-- Modal body -->
@@ -223,7 +223,7 @@
 
                 <!-- Modal Header -->
                 <div class="modal-header">
-                    <h5><small class="text-body-secondary">Cumplimiento con la normativa de protección de datos.</small></h5>
+                    <h5 class="mb-3 fw-bold text-primary">Cumplimiento con la normativa de protección de datos.</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <!-- Modal body -->
@@ -242,7 +242,7 @@
 
                 <!-- Modal Header -->
                 <div class="modal-header">
-                    <h5><small class="text-body-secondary">Notificación de incidentes.</small></h5>
+                    <h5 class="mb-3 fw-bold text-primary">Notificación de incidentes.</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <!-- Modal body -->
@@ -261,7 +261,7 @@
 
                 <!-- Modal Header -->
                 <div class="modal-header">
-                    <h5><small class="text-body-secondary">Uso adecuado de los servicios.</small></h5>
+                    <h5 class="mb-3 fw-bold text-primary">Uso adecuado de los servicios.</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <!-- Modal body -->
@@ -280,7 +280,7 @@
 
                 <!-- Modal Header -->
                 <div class="modal-header">
-                    <h5><small class="text-body-secondary">Derechos de los titulares de datos.</small></h5>
+                    <h5 class="mb-3 fw-bold text-primary">Derechos de los titulares de datos.</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <!-- Modal body -->
