@@ -149,6 +149,9 @@ class loginC
 			 	 {
 			 	 		$datos = $this->login->buscar_empresas($parametros['email'],false,false);
 			 	 }
+			 }else
+			 {
+			 		return array('lista'=>'-3','no_concurente'=>$no_concurente);
 			 }
 			 // print_r($datos);die();
 			 $active_Valido = 1;
