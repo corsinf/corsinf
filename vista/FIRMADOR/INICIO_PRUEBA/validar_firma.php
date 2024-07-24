@@ -66,16 +66,6 @@
                 return false
             }
 
-            var extension_archivo = nombre_archivo.split('.').pop().toLowerCase();
-            if (extension_archivo !== 'p12' && extension_archivo !== 'pfx') {
-                Swal.fire({
-                    icon: "error",
-                    title: "Oops...",
-                    text: "El archivo debe estar en formato .p12 o .pfx",
-                });
-                return false
-            }
-
             return true;
         }
     </script>

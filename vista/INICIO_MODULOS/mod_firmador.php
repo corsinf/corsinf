@@ -28,9 +28,15 @@ if ($_GET['acc'] == 'agregar_firma') {
 if ($_GET['acc'] == 'inicio_prueba') {
     include('FIRMADOR/INICIO_PRUEBA/inicio_prueba.php');
 }
+
 if ($_GET['acc'] == 'inicio_prueba_2') {
     include('FIRMADOR/INICIO_PRUEBA/inicio_prueba_2.php');
 }
+
 if ($_GET['acc'] == 'validar_firma') {
     include('FIRMADOR/INICIO_PRUEBA/validar_firma.php');
+}
+
+if ($_GET['acc'] == 'sala_firmado') {
+    include('FIRMADOR/INICIO_PRUEBA/sala_firmado.php');
 }
