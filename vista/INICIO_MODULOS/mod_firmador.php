@@ -31,3 +31,6 @@ if ($_GET['acc'] == 'inicio_prueba') {
 if ($_GET['acc'] == 'inicio_prueba_2') {
     include('FIRMADOR/INICIO_PRUEBA/inicio_prueba_2.php');
 }
+if ($_GET['acc'] == 'validar_firma') {
+    include('FIRMADOR/INICIO_PRUEBA/validar_firma.php');
+}
