@@ -149,9 +149,6 @@ class loginC
 			 	 {
 			 	 		$datos = $this->login->buscar_empresas($parametros['email'],false,false);
 			 	 }
-			 }else
-			 {
-			 		return array('lista'=>'-3','no_concurente'=>$no_concurente);
 			 }
 			 // print_r($datos);die();
 			 $active_Valido = 1;
@@ -196,6 +193,12 @@ class loginC
 
 			 	 // print_r($lista_empresas);die();
 			 	 // $datos = $this->login->buscar_empresas_no_concurentes($parametros['email'],$parametros['pass']);
+
+			 	 if(count($lista_empresa)==0)
+			 	 {
+			 			return array('lista'=>'-3','no_concurente'=>$no_concurente);
+			 
+			 	 }
 			 
 
 			 	 $empresas = '';
