@@ -138,6 +138,7 @@ class loginM
 
 	function datos_login_pass_requiered($email,$pass,$id=false,$tipo=false)
 	{		
+		// print_r($pass);die();
 		$sql ="SELECT id_usuarios as 'id',U.*,TU.DESCRIPCION as tipo,A.*  FROM ACCESOS A
 		 INNER JOIN TIPO_USUARIO TU ON A.id_tipo_usu = TU.ID_TIPO
 		 INNER JOIN USUARIOS U ON TU.ID_TIPO = U.perfil
