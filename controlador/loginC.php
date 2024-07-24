@@ -194,10 +194,9 @@ class loginC
 			 	 // print_r($lista_empresas);die();
 			 	 // $datos = $this->login->buscar_empresas_no_concurentes($parametros['email'],$parametros['pass']);
 
-			 	 if(count($lista_empresa)==0)
+			 	 if(count($lista_empresas)==0)
 			 	 {
-			 			return array('lista'=>'-3','no_concurente'=>$no_concurente);
-			 
+			 			return array('lista'=>'-3','no_concurente'=>$no_concurente);			 
 			 	 }
 			 
 
