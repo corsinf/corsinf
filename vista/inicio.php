@@ -408,12 +408,12 @@ if ($_GET['acc'] == 'config_general') {
 
 //Historial de salud Estudiantes por Paralelo
 if ($_GET['acc'] == 'historial_salud_estudiantil_tutores') {
-	include('ENFERMERIA/Inspeccion/historial_salud_estudiantil_tutores.php');
+	include('ENFERMERIA/Tutores/historial_salud_estudiantil_tutores.php');
 }
 
 //Para DBA Salud integral 
 if ($_GET['acc'] == 'paralelos_tutores') {
-	include('ENFERMERIA/DBA/paralelos_tutores.php');
+	include('ENFERMERIA/Tutores/paralelos_tutores.php');
 }
 
 

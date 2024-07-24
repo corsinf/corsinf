@@ -193,6 +193,11 @@ class loginC
 
 			 	 // print_r($lista_empresas);die();
 			 	 // $datos = $this->login->buscar_empresas_no_concurentes($parametros['email'],$parametros['pass']);
+
+			 	 if(count($lista_empresas)==0)
+			 	 {
+			 			return array('lista'=>'-3','no_concurente'=>$no_concurente);			 
+			 	 }
 			 
 
 			 	 $empresas = '';
@@ -578,7 +583,7 @@ class loginC
 						$datos = $this->login->datos_login($parametros['email'],$this->cod_global->enciptar_clave($parametros['pass']),false,$parametros['tipo']);
 				}else
 				{
-					$datos = $this->login->datos_login($parametros['email'],$this->cod_global->enciptar_clave($parametros['pass']),false,$parametros['tipo']);
+					$datos = $this->login->datos_login_pass_requiered($parametros['email'],$this->cod_global->enciptar_clave($parametros['pass']),false,$parametros['tipo']);
 					if(count($datos)==0)
 					{
 						 return -1;
@@ -586,7 +591,8 @@ class loginC
 				}	
 		}else
 		{
-			$datos = $this->login->datos_login($parametros['email'],$this->cod_global->desenciptar_clave($parametros['pass']),false,$parametros['tipo']);
+			// print_r($parametros);die();
+			$datos = $this->login->datos_login_pass_requiered($parametros['email'],$this->cod_global->enciptar_clave($parametros['pass']),false,$parametros['tipo']);
 			// print_r($datos);die();
 			if(count($datos)==0)
 			{

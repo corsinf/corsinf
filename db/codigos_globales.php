@@ -706,25 +706,28 @@ function para_ftp($nombre,$texto)
 		// print_r($id_empresa);
 		// die();
 		$usu = array();
-		for ($i=1; $i < 4; $i++) {
+		$sql = 'SELECT id_usuarios as id,perfil FROM USUARIOS WHERE all_default_db = 1';
+		$usuarios_defualt = $this->db->datos($sql);
 
+		foreach ($usuarios_defualt as $key => $value)
+		{
 			//valida si los usuarios por default estan creados si no estan los crea
-				$sql = "SELECT * FROM ACCESOS_EMPRESA WHERE Id_Empresa = '".$id_empresa."' AND Id_Usuario = ".$i;
+				$sql = "SELECT * FROM ACCESOS_EMPRESA WHERE Id_Empresa = '".$id_empresa."' AND Id_Usuario = ".$value['id'];
 				$usu = $this->db->datos($sql,1);	
 
 				if(count($usu)==0)
 				{
 					 $datos[0]['campo'] = 'Id_usuario';
-					 $datos[0]['dato']  = $i;
+					 $datos[0]['dato']  = $value['id'];
 					 $datos[1]['campo'] = 'Id_Empresa';
 					 $datos[1]['dato']  = $id_empresa;
 					 $datos[2]['campo'] = 'Id_Tipo_usuario';
-					 $datos[2]['dato']  = $i;
+					 $datos[2]['dato']  = $value['perfil'];
 					 $this->db->inserts('ACCESOS_EMPRESA',$datos,1);		
 				}
 
 			//validar los tipos de usuario con la empresa
-				$sql = "SELECT * FROM TIPO_USUARIO_EMPRESA WHERE id_tipo_usuario = '".$i."' AND id_empresa = '".$id_empresa."'"; 
+				$sql = "SELECT * FROM TIPO_USUARIO_EMPRESA WHERE id_tipo_usuario = '".$value['id']."' AND id_empresa = '".$id_empresa."'"; 
 				$tipo = $this->db->datos($sql,1);	
 
 				if(count($tipo)==0)
@@ -732,7 +735,7 @@ function para_ftp($nombre,$texto)
 					 $datos[0]['campo'] = 'id_empresa';
 					 $datos[0]['dato']  = $id_empresa;
 					 $datos[1]['campo'] = 'id_tipo_usuario';
-					 $datos[1]['dato']  = $i;
+					 $datos[1]['dato']  = $value['id'];
 					 $this->db->inserts('TIPO_USUARIO_EMPRESA',$datos,1);		
 				} 	
 
@@ -823,25 +826,29 @@ function para_ftp($nombre,$texto)
 		// print_r($id_empresa);
 		// die();
 		$usu = array();
-		for ($i=1; $i < 4; $i++) {
+
+		$sql = 'SELECT id_usuarios as id,perfil FROM USUARIOS WHERE all_default_db = 1';
+		$usuarios_defualt = $this->db->datos($sql);
+		foreach ($usuarios_defualt as $key => $value)
+		{
 
 			//valida si los usuarios por default estan creados si no estan los crea
-				$sql = "SELECT * FROM ACCESOS_EMPRESA WHERE Id_Empresa = '".$id_empresa."' AND Id_Usuario = ".$i;
+				$sql = "SELECT * FROM ACCESOS_EMPRESA WHERE Id_Empresa = '".$id_empresa."' AND Id_Usuario = ".$value['id'];
 				$usu = $this->db->datos($sql,1);	
 
 				if(count($usu)==0)
 				{
 					 $datos[0]['campo'] = 'Id_usuario';
-					 $datos[0]['dato']  = $i;
+					 $datos[0]['dato']  = $value['id'];
 					 $datos[1]['campo'] = 'Id_Empresa';
 					 $datos[1]['dato']  = $id_empresa;
 					 $datos[2]['campo'] = 'Id_Tipo_usuario';
-					 $datos[2]['dato']  = $i;
+					 $datos[2]['dato']  = $value['perfil'];
 					 $this->db->inserts('ACCESOS_EMPRESA',$datos,1);		
 				}
 
 			//validar los tipos de usuario con la empresa
-				$sql = "SELECT * FROM TIPO_USUARIO_EMPRESA WHERE id_tipo_usuario = '".$i."' AND id_empresa = '".$id_empresa."'"; 
+				$sql = "SELECT * FROM TIPO_USUARIO_EMPRESA WHERE id_tipo_usuario = '".$value['id']."' AND id_empresa = '".$id_empresa."'"; 
 				$tipo = $this->db->datos($sql,1);	
 
 				if(count($tipo)==0)
@@ -849,7 +856,7 @@ function para_ftp($nombre,$texto)
 					 $datos[0]['campo'] = 'id_empresa';
 					 $datos[0]['dato']  = $id_empresa;
 					 $datos[1]['campo'] = 'id_tipo_usuario';
-					 $datos[1]['dato']  = $i;
+					 $datos[1]['dato']  = $value['id'];
 					 $this->db->inserts('TIPO_USUARIO_EMPRESA',$datos,1);		
 				} 	
 
