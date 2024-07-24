@@ -136,6 +136,29 @@ class loginM
 		return $datos;
 	}
 
+	function datos_login_pass_requiered($email,$pass,$id=false,$tipo=false)
+	{		
+		$sql ="SELECT id_usuarios as 'id',U.*,TU.DESCRIPCION as tipo,A.*  FROM ACCESOS A
+		 INNER JOIN TIPO_USUARIO TU ON A.id_tipo_usu = TU.ID_TIPO
+		 INNER JOIN USUARIOS U ON TU.ID_TIPO = U.perfil
+		WHERE 1=1 AND email = '".$email."'  AND password = '".$pass."' ";
+		if($id)
+		{
+			$sql.=" AND U.id_usuarios = ".$id;
+		}
+		if($tipo)
+		{
+			$sql.=" AND perfil='".$tipo."'";
+		}
+
+		// print_r($_SESSION['INICIO']);
+		// print_r($sql);die();
+
+		$datos = $this->db->datos($sql);
+		// print_r($datos);die();
+		return $datos;
+	}
+
 	function accesos_dba($email,$pass)
 	{
 
