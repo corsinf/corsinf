@@ -44,12 +44,16 @@
 
            	if(response.lista!='')
            	{
-           		$('#lista_empresas').html(response.lista);
-           		$('#txt_no_concurente').val(response.no_concurente);
-  						$('#myModal_empresas').modal('show');
+           		if(response.lista==-3){
+	  						Swal.fire( '','Usuario asignado a una empresa no activa','error');
+	  					}else{
+           			$('#lista_empresas').html(response.lista);
+           			$('#txt_no_concurente').val(response.no_concurente);
+  							$('#myModal_empresas').modal('show');
+  						}
   					}else
-  					{
-  						Swal.fire( '','Usuario No registrado.','error');
+  					{  						
+	  						Swal.fire( '','Usuario No registrado.','error');	  					
   					}           
          }
        });

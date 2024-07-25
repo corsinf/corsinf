@@ -759,8 +759,8 @@ class cat_configuracionGC
         return $sql;
     }
 
-    //Sirve para hacer un update o insert en caso de que no exista 
-    function upsertSQL($tabla, $datos, $where)
+    //Sirve para hacer un update a todas las contraseñas o insert en caso de que no exista 
+    function upsertSQL_normal_upadte($tabla, $datos, $where)
     {
         $campos = '';
         $idValor = '';
@@ -817,6 +817,69 @@ class cat_configuracionGC
 
         return $mergeSQL;
     }
+
+    //Sirve para hacer un update sin tomar en cuenta la PASS o insert en caso de que no exista
+    function upsertSQL($tabla, $datos, $where)
+    {
+        $campos = '';
+        $idValor = '';
+
+        // Construcción del SQL INSERT
+        $insertCampos = '';
+        $insertValores = '';
+
+        foreach ($datos as $key => $value) {
+            $campos .= $value['campo'] . ',';
+
+            if (is_string($value['dato'])) {
+                $dato = "'" . str_replace("'", "''", $value['dato']) . "'";
+            } else {
+                $dato = str_replace(',', '', $value['dato']);
+                $dato = is_numeric($dato) ? $dato : "'" . $dato . "'";
+            }
+
+            $insertCampos .= $value['campo'] . ',';
+            $insertValores .= $dato . ',';
+
+            // Suponiendo que el campo para el WHERE es parte de $datos
+            if ($value['campo'] === $where) {
+                $idValor = $dato;
+            }
+        }
+
+        $campos = rtrim($campos, ',');
+        $insertCampos = rtrim($insertCampos, ',');
+        $insertValores = rtrim($insertValores, ',');
+
+        // Construcción del SQL MERGE
+        $mergeSQL =
+            'MERGE INTO ' . $tabla . ' AS target
+            USING (
+                VALUES (' . $idValor . ')
+            ) AS source (' . $where . ')
+            ON target.' . $where . ' = source.' . $where . '
+            WHEN MATCHED THEN
+                UPDATE SET ';
+
+        foreach ($datos as $value) {
+            // Excluir el campo 'PASS' del UPDATE
+            if ($value['campo'] !== 'PASS') {
+                $mergeSQL .= $value['campo'] . ' = ';
+                $mergeSQL .= is_numeric($value['dato']) ? $value['dato'] : "'" . $value['dato'] . "'";
+                $mergeSQL .= ', ';
+            }
+        }
+
+        $mergeSQL = rtrim($mergeSQL, ', ');
+
+        $mergeSQL .=
+            ' WHEN NOT MATCHED THEN
+            INSERT (' . $campos . ')
+            VALUES (' . $insertValores . '); ';
+
+        return $mergeSQL;
+    }
+
 
 
 
