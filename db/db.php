@@ -174,7 +174,7 @@ class db
 		// print_r($valores);die();
 		foreach ($valores as $value) {
 			// print_r($value.'-');
-			if (strlen($value)==12 && strtotime($value) !== false) 
+			if (is_object($value)) 
 				{
 					// print_r($value);die();
     			    $incognitas.='CAST(? AS DATE),';

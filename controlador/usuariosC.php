@@ -398,7 +398,19 @@ class usuariosC
 
 
 		    // actualiza en empresa logueada
-		    $resp = $this->modelo->generar_primera_vez($_SESSION['INICIO']['BASEDATO'],$_SESSION['INICIO']['ID_EMPRESA']);
+		    $empresa = $this->pagina->lista_empresa($_SESSION['INICIO']['ID_EMPRESA']);
+		
+				if($empresa[0]['Ip_host']==IP_MASTER)
+					{
+							$this->pagina->generar_primera_vez($_SESSION['INICIO']['BASEDATO'],$_SESSION['INICIO']['ID_EMPRESA']);
+					}else
+					{
+						// print_r('tercero');die();
+							$this->pagina->generar_primera_vez_terceros($empresa,$_SESSION['INICIO']['ID_EMPRESA']);
+						 // printf('tercero');die();
+					}
+
+				//$resp = $this->modelo->generar_primera_vez($_SESSION['INICIO']['BASEDATO'],$_SESSION['INICIO']['ID_EMPRESA']);
 
 
 		     return $usuario[0]['id'];
@@ -462,31 +474,19 @@ class usuariosC
 			  	$this->modelo->update('ACCESOS_EMPRESA',$datosA,$whereA);
 			  }
 
-			  // $perfil = $this->modelo->existe_usuario_perfil(false,$parametros['txt_usuario_update']);
-			  // if($perfil==-1)
-			  // {
-			  // 	$datosA[0]['campo']='ID_USUARIO';
-			  //   $datosA[0]['dato']=$parametros['txt_usuario_update'];	
-			  //   $datosA[1]['campo']='ID_EMPRESA';
-			  //   $datosA[1]['dato']=$_SESSION['INICIO']['ID_EMPRESA'];				    
-			  //   $datosA[2]['campo']='ID_TIPO_USUARIO';
-			  //   $datosA[2]['dato']=$parametros['ddl_tipo_usuario'];	
-			  //   $this->modelo->guardar($datosA,'USUARIO_TIPO_USUARIO');
-			  // }else
-			  // {				    
-			  //   $datosA[1]['campo']='ID_TIPO_USUARIO';
-			  //   $datosA[1]['dato']=$parametros['ddl_tipo_usuario'];	
-
-			  //   $where[0]['campo']='ID_USUARIO';
-			  //   $where[0]['dato'] = $parametros['txt_usuario_update'];			    
-			  //   $where[1]['campo']='ID_EMPRESA';
-			  //   $where[1]['dato'] = $_SESSION['INICIO']['ID_EMPRESA'];				   
-			  //   $this->modelo->update('USUARIO_TIPO_USUARIO',$datosA,$where);
-
-			  // }
+			$empresa = $this->pagina->lista_empresa($_SESSION['INICIO']['ID_EMPRESA']);		
+			if($empresa[0]['Ip_host']==IP_MASTER)
+					{
+							return $this->pagina->generar_primera_vez($_SESSION['INICIO']['BASEDATO'],$_SESSION['INICIO']['ID_EMPRESA']);
+					}else
+					{
+						// print_r('tercero');die();
+							return $this->pagina->generar_primera_vez_terceros($empresa,$_SESSION['INICIO']['ID_EMPRESA']);
+						 // printf('tercero');die();
+					}
 
 
-		    return  $this->modelo->generar_primera_vez($_SESSION['INICIO']['BASEDATO'],$_SESSION['INICIO']['ID_EMPRESA']);
+		    // return  $this->modelo->generar_primera_vez($_SESSION['INICIO']['BASEDATO'],$_SESSION['INICIO']['ID_EMPRESA']);
 
 		}
 	}
@@ -553,7 +553,18 @@ class usuariosC
 	function eliminar_tipo($id)
 	{
 		$resp = $this->modelo->eliminar_tipo($id);
-		$this->modelo->generar_primera_vez($_SESSION['INICIO']['BASEDATO'],$_SESSION['INICIO']['ID_EMPRESA']);
+		$empresa = $this->pagina->lista_empresa($_SESSION['INICIO']['ID_EMPRESA']);
+		
+		if($empresa[0]['Ip_host']==IP_MASTER)
+		{
+				$this->pagina->generar_primera_vez($_SESSION['INICIO']['BASEDATO'],$_SESSION['INICIO']['ID_EMPRESA']);
+		}else
+		{
+			// print_r('tercero');die();
+				$this->pagina->generar_primera_vez_terceros($empresa,$_SESSION['INICIO']['ID_EMPRESA']);
+			 // printf('tercero');die();
+		}
+		// $this->modelo->generar_primera_vez($_SESSION['INICIO']['BASEDATO'],$_SESSION['INICIO']['ID_EMPRESA']);
 		return $resp;
 
 	}
@@ -567,7 +578,20 @@ class usuariosC
 		 $where[0]['campo']='id_usuarios';
 		 $where[0]['dato'] = $id;
 		 $this->modelo->update('USUARIOS',$datos,$where);
-	   return  $this->modelo->generar_primera_vez($_SESSION['INICIO']['BASEDATO'],$_SESSION['INICIO']['ID_EMPRESA']);
+
+		 $empresa = $this->pagina->lista_empresa($_SESSION['INICIO']['ID_EMPRESA']);
+		
+		if($empresa[0]['Ip_host']==IP_MASTER)
+		{
+				return $this->pagina->generar_primera_vez($_SESSION['INICIO']['BASEDATO'],$_SESSION['INICIO']['ID_EMPRESA']);
+		}else
+		{
+			// print_r('tercero');die();
+				return $this->pagina->generar_primera_vez_terceros($empresa,$_SESSION['INICIO']['ID_EMPRESA']);
+			 // printf('tercero');die();
+		}
+
+	   // return  $this->modelo->generar_primera_vez($_SESSION['INICIO']['BASEDATO'],$_SESSION['INICIO']['ID_EMPRESA']);
 
 
 	}
@@ -618,6 +642,7 @@ class usuariosC
 	    }
 	    if($this->validar_formato_img($file)==1)
 	    {
+	    	   $empresa = $this->pagina->lista_empresa($_SESSION['INICIO']['ID_EMPRESA']);
 	         $uploadfile_temporal=$file['file_img']['tmp_name'];
 	         $tipo = explode('/', $file['file_img']['type']);
 	         $nombre = $post['name_img'].'.'.$tipo[1];	        
@@ -639,7 +664,19 @@ class usuariosC
 	              $where[0]['dato'] =  $_SESSION['INICIO']['ID_USUARIO'];
 	              $base = $this->modelo->update('USUARIOS',$datosI,$where);
 	            }
-	             $resp = $this->modelo->generar_primera_vez($_SESSION['INICIO']['BASEDATO'],$_SESSION['INICIO']['ID_EMPRESA']);
+
+		
+							if($empresa[0]['Ip_host']==IP_MASTER)
+									{
+											$this->pagina->generar_primera_vez($_SESSION['INICIO']['BASEDATO'],$_SESSION['INICIO']['ID_EMPRESA']);
+									}else
+									{
+										// print_r('tercero');die();
+											$this->pagina->generar_primera_vez_terceros($empresa,$_SESSION['INICIO']['ID_EMPRESA']);
+										 // printf('tercero');die();
+									}
+
+	             // $resp = $this->modelo->generar_primera_vez($_SESSION['INICIO']['BASEDATO'],$_SESSION['INICIO']['ID_EMPRESA']);
 
 
 	              $_SESSION['INICIO']['FOTO'] = $nuevo_nom;

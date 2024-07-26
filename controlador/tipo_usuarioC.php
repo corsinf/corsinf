@@ -403,6 +403,8 @@ class tipo_usuarioC
 	function guardar_accesos_edi($parametros)
 	{
 		// print_r($parametros);die();
+
+		$empresa = $this->pagina->lista_empresa($_SESSION['INICIO']['ID_EMPRESA']);
 		$ver = 0;	$edi =0;$eli =0;
 		if($parametros['ver']=='true'){ $ver = 1;}
 		if($parametros['edi']=='true'){ $edi = 1;} 
@@ -438,7 +440,17 @@ class tipo_usuarioC
 			$this->modelo->guardar($datos,'ACCESOS');	
 		}
 
-		return  $this->pagina->generar_primera_vez($_SESSION['INICIO']['BASEDATO'],$_SESSION['INICIO']['ID_EMPRESA']);	
+		if($empresa[0]['Ip_host']==IP_MASTER)
+			{
+				return $this->pagina->generar_primera_vez($_SESSION['INICIO']['BASEDATO'],$_SESSION['INICIO']['ID_EMPRESA']);
+			}else
+			{
+				return $this->pagina->generar_primera_vez_terceros($empresa,$_SESSION['INICIO']['ID_EMPRESA']);
+				 // printf('tercero');die();
+			}
+
+
+		// return  $this->pagina->generar_primera_vez($_SESSION['INICIO']['BASEDATO'],$_SESSION['INICIO']['ID_EMPRESA']);	
 		// print_r($parametros);die();
 	}
 
@@ -446,6 +458,7 @@ class tipo_usuarioC
 	{
 
 		// print_r($parametros);die();
+		$empresa = $this->pagina->lista_empresa($_SESSION['INICIO']['ID_EMPRESA']);
 		if($parametros['id']=='')
 		{
 				if($parametros['tipo_usu_empresa']!='')
@@ -492,7 +505,16 @@ class tipo_usuarioC
 			 		}
 			 	}
 
-			return $this->pagina->generar_primera_vez($_SESSION['INICIO']['BASEDATO'],$_SESSION['INICIO']['ID_EMPRESA']);
+			 	if($empresa[0]['Ip_host']==IP_MASTER)
+				{
+					return $this->pagina->generar_primera_vez($_SESSION['INICIO']['BASEDATO'],$_SESSION['INICIO']['ID_EMPRESA']);
+				}else
+				{
+					return $this->pagina->generar_primera_vez_terceros($empresa,$_SESSION['INICIO']['ID_EMPRESA']);
+					 // printf('tercero');die();
+				}
+
+
 
     }else
     {
@@ -502,7 +524,14 @@ class tipo_usuarioC
 	     $where [0]['dato']= $parametros['id'];
 	     $this->modelo->update('tipo_usuario',$acceso,$where);	
 
-			return $this->pagina->generar_primera_vez($_SESSION['INICIO']['BASEDATO'],$_SESSION['INICIO']['ID_EMPRESA']);
+				if($empresa[0]['Ip_host']==IP_MASTER)
+				{
+					return $this->pagina->generar_primera_vez($_SESSION['INICIO']['BASEDATO'],$_SESSION['INICIO']['ID_EMPRESA']);
+				}else
+				{
+					return $this->pagina->generar_primera_vez_terceros($empresa,$_SESSION['INICIO']['ID_EMPRESA']);
+					 // printf('tercero');die();
+				}
 
     }
 		
@@ -527,9 +556,20 @@ class tipo_usuarioC
 
 	function eliminar_tipo($id)
 	{
+
+		$empresa = $this->pagina->lista_empresa($_SESSION['INICIO']['ID_EMPRESA']);
 		$resp = $this->modelo->eliminar_tipo($id);
 
-		$this->pagina->generar_primera_vez($_SESSION['INICIO']['BASEDATO'],$_SESSION['INICIO']['ID_EMPRESA']);
+		if($empresa[0]['Ip_host']==IP_MASTER)
+		{
+				$this->pagina->generar_primera_vez($_SESSION['INICIO']['BASEDATO'],$_SESSION['INICIO']['ID_EMPRESA']);
+		}else
+		{
+			// print_r('tercero');die();
+				$this->pagina->generar_primera_vez_terceros($empresa,$_SESSION['INICIO']['ID_EMPRESA']);
+			 // printf('tercero');die();
+		}
+
 		return $resp;
 
 	}
