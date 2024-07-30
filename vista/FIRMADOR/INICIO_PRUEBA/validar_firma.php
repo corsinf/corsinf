@@ -74,6 +74,14 @@
                 });
                 return false
             }
+        if (clave !== confirmar_clave) {
+            Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: "Las contraseñas no coinciden.",
+            });
+            return false
+        }
 
             var extension_archivo = nombre_archivo.split('.').pop().toLowerCase();
             if (extension_archivo !== 'p12' && extension_archivo !== 'pfx') {
