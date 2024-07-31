@@ -40,3 +40,11 @@ if ($_GET['acc'] == 'validar_firma') {
 if ($_GET['acc'] == 'sala_firmado') {
     include('FIRMADOR/INICIO_PRUEBA/sala_firmado.php');
 }
+
+if ($_GET['acc'] == 'student_consent') {
+    include('FIRMADOR/INICIO_PRUEBA/student_consent.php');
+}
+
+if ($_GET['acc'] == 'student_consent_EN') {
+    include('FIRMADOR/INICIO_PRUEBA/student_consent_EN.php');
+}
