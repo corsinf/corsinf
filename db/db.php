@@ -174,7 +174,7 @@ class db
 		// print_r($valores);die();
 		foreach ($valores as $value) {
 			// print_r($value.'-');
-			if (strlen($value)==12 && strtotime($value) !== false) 
+			if (is_object($value)) 
 				{
 					// print_r($value);die();
     			    $incognitas.='CAST(? AS DATE),';
@@ -581,10 +581,31 @@ class db
 		return $this->datos($sql);
 	}
 
-	function existe_tabla($base, $tabla)
-	{
-		$this->database = $base;
+	function existe_tabla($tabla,$master=false,$terceros=false,$database=false, $usuario=false, $password=false, $servidor=false, $puerto=false)
+	{		
+		$this->parametros_conexion($master);
+		if(!$terceros)
+		{
+			$conn = $this->conexion();
+		}else{
+			$conn = $this->conexion_db_terceros($database, $usuario, $password, $servidor, $puerto);
+		}	
+
+		$result = array();
 		$sql = "IF OBJECT_ID('$tabla', 'U') IS NOT NULL  SELECT 1 AS existe  ELSE  SELECT 0 AS existe";
+		try {
+			$stmt = $conn->prepare($sql);
+    		$stmt->execute();
+    		while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+		        $result[] = $row;
+		    }
+		    $conn=null;
+			return $result;
+			
+		} catch (Exception $e) {
+			die(print_r(sqlsrv_errors(), true));
+		}
+
 		return $this->datos($sql);
 	}
 
