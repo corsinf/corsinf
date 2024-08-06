@@ -40,3 +40,7 @@ if ($_GET['acc'] == 'validar_firma') {
 if ($_GET['acc'] == 'sala_firmado') {
     include('FIRMADOR/INICIO_PRUEBA/sala_firmado.php');
 }
+
+if ($_GET['acc'] == 'pagina_jav') {
+    include('FIRMADOR/PRUEBAS/pagina_jav.php');
+}
