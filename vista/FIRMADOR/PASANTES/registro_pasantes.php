@@ -22,104 +22,35 @@
         });
     }
 
-    function editar_insertar() {
 
-        var pas_id = $('#txt_student').val();
-        var pas_usu_id = $('#txt_student').val();
-        var pas_nombre = $('#txt_student').val();
-        var pas_hora_llegada = $('#txt_student').val();
-        var pas_hora_salida = $('#txt_student').val();
-        var pas_horas_total = $('#txt_student').val();
-        var pas_observacion_pasante = $('#txt_student').val();
-        var pas_observacion_tutor = $('#txt_student').val();
-        var pas_usu_id_tutor = $('#txt_student').val();
-        var pas_tutor_estado = $('#txt_student').val();
-        var pas_estado = $('#txt_student').val();
-        var pas_fecha_creacion = $('#txt_student').val();
-        var pas_fecha_modficacion = $('#txt_student').val();
+    function insertar_llegada() {
+        var txt_obs_pasantes = $('#txt_obs_pasantes').val();
+        var txt_obs_tutor = $('#txt_obs_tutor').val();
 
         var parametros = {
-
+            'txt_obs_pasantes': txt_obs_pasantes,
+            'txt_obs_tutor': txt_obs_tutor,
         };
 
-        //alert(validar_email(sa_est_correo));
-        // console.log(parametros);
+        $.ajax({
+            data: {
+                parametros: parametros
+            },
+            url: '../controlador/PASANTES/asistencias_pasantesC.php?insertar=true',
+            type: 'post',
+            dataType: 'json',
 
-        // if (sa_est_id == '') {
-        //     if (
-        //         sa_est_primer_apellido === '' ||
-        //         sa_est_segundo_apellido === '' ||
-        //         sa_est_primer_nombre === '' ||
-        //         sa_est_segundo_nombre === '' ||
-        //         sa_est_cedula === '' ||
-        //         sa_est_sexo == null ||
-        //         sa_est_fecha_nacimiento === '' ||
-        //         sa_id_seccion == null ||
-        //         sa_id_grado == null ||
-        //         sa_id_paralelo == null ||
-        //         validar_email(sa_est_correo) == false ||
-        //         sa_id_representante == null ||
-        //         sa_est_rep_parentesco == null
-
-        //     ) {
-        //         Swal.fire({
-        //             icon: 'error',
-        //             title: 'Oops...',
-        //             text: 'Asegurese de llenar todos los campos',
-        //         })
-
-        //     } else {
-        //         //console.log(parametros);
-        //         insertar(parametros)
-        //     }
-        // } else {
-        //     if (
-        //         sa_est_primer_apellido === '' ||
-        //         sa_est_segundo_apellido === '' ||
-        //         sa_est_primer_nombre === '' ||
-        //         sa_est_segundo_nombre === '' ||
-        //         sa_est_cedula === '' ||
-        //         sa_est_sexo == null ||
-        //         sa_est_fecha_nacimiento === '' ||
-        //         sa_id_seccion == null ||
-        //         sa_id_grado == null ||
-        //         sa_id_paralelo == null ||
-        //         validar_email(sa_est_correo) == false ||
-        //         sa_id_representante == null ||
-        //         sa_est_rep_parentesco == null
-        //     ) {
-        //         Swal.fire({
-        //             icon: 'error',
-        //             title: 'Oops...',
-        //             text: 'Asegurese de llenar todos los campos',
-        //         })
-        //     } else {
-        //         //console.log(parametros);
-        //         insertar(parametros);
-        //     }
-        // }
+            success: function(response) {
+                if (response == 1) {
+                    Swal.fire('', 'Operacion realizada con exito.', 'success').then(function() {
+                        //location.href = '../vista/inicio.php?mod=7&acc=estudiantes';
+                    });
+                } else if (response == -2) {
+                    Swal.fire('', 'Cédula ya registrada.', 'warning');
+                }
+            }
+        });
     }
-
-    // function insertar(parametros) {
-    //     $.ajax({
-    //         data: {
-    //             parametros: parametros
-    //         },
-    //         url: '../controlador/estudiantesC.php?insertar=true',
-    //         type: 'post',
-    //         dataType: 'json',
-
-    //         success: function(response) {
-    //             if (response == 1) {
-    //                 Swal.fire('', 'Operacion realizada con exito.', 'success').then(function() {
-    //                     //location.href = '../vista/inicio.php?mod=7&acc=estudiantes';
-    //                 });
-    //             } else if (response == -2) {
-    //                 Swal.fire('', 'Cédula ya registrada.', 'warning');
-    //             }
-    //         }
-    //     });
-    // }
 </script>
 <div class="page-wrapper">
     <div class="page-content">
@@ -129,122 +60,100 @@
             <div class="breadcrumb-title pe-3">Facturación </div>
             <?php
             // print_r($_SESSION['INICIO']);die();
-
             ?>
-            <div class="ps-3">
-                <nav aria-label="breadcrumb">
-                    <ol class="breadcrumb mb-0 p-0">
-                        <li class="breadcrumb-item"><a href="javascript:;"><i class="bx bx-home-alt"></i></a>
-                        </li>
-                        <li class="breadcrumb-item active" aria-current="page">Registro de Pasantes</li>
-                    </ol>
-                </nav>
-            </div>
         </div>
-        <!--end breadcrumb-->
+        <div class="ps-3">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb mb-0 p-0">
+                    <li class="breadcrumb-item"><a href="javascript:;"><i class="bx bx-home-alt"></i></a>
+                    </li>
+                    <li class="breadcrumb-item active" aria-current="page">Registro de Pasantes</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+    <!--end breadcrumb-->
 
-        <div class="row">
-            <div class="col-xl-12 mx-auto">
-                <div class="card border-top border-0 border-4 border-primary">
-                    <div class="card-body p-5">
+    <div class="row">
+        <div class="col-xl-12 mx-auto">
+            <div class="card border-top border-0 border-4 border-primary">
+                <div class="card-body p-5">
 
-                        <div class="row">
-                            <div class="col-9">
-                                <div class="card-title d-flex align-items-center">
-                                    <div><i class="bx bxs-user me-1 font-22 text-primary"></i>
-                                    </div>
-
-                                    <h5 class="mb-0 text-primary">Registre su asistencia:<b id="title_paciente" class="text-success"></b></h5>
-                                    <?php //print_r($_SESSION)//['INICIO']['USUARIO'])  //TIPO 
-                                    ?>
-
+                    <div class="row">
+                        <div class="col-9">
+                            <div class="card-title d-flex align-items-center">
+                                <div><i class="bx bxs-user me-1 font-22 text-primary"></i>
                                 </div>
+
+                                <h5 class="mb-0 text-primary">Registre su asistencia:<b id="title_paciente" class="text-success"></b></h5>
+                                <?php //print_r($_SESSION)//['INICIO']['USUARIO'])  //TIPO 
+                                ?>
+
                             </div>
-                            <!-- <div class="col-3 text-end">
-                <a href="../vista/inicio.php?mod=7&acc=pacientes" class="btn btn-outline-dark btn-sm"><i class="bx bx-arrow-back"></i> Regresar</a>
-              </div> -->
                         </div>
+                    </div>
 
-                        <hr>
+                    <hr>
 
-                        <div class="content">
-                            <!-- Content Header (Page header) -->
-                            <br>
+                    <div class="content">
+                        <!-- Content Header (Page header) -->
+                        <br>
 
-                            <section class="content">
-                                <div class="container-fluid">
+                        <section class="content">
+                            <div class="container-fluid">
 
-                                    <div class="row justify-content-center" id="btn_nuevo">
+                                <div class="row justify-content-center" id="btn_nuevo">
 
-                                        <div class="col-auto">
+                                    <div class="col-auto">
 
-                                            <div class="card">
-                                                <div class="card-body bg-primary">
-                                                    <!-- <form action="../vista/inicio.php?mod=7&acc=registrar_consulta_paciente" method="post"> -->
-
-                                                    <!-- <input type="hidden" name="id_ficha" id="id_ficha">
-                            <input type="hidden" name="id_paciente" id="id_paciente">
-                            <input type="hidden" name="tipo_consulta" id="tipo_consulta" value="consulta"> -->
-
-                                                    <button type="submit" class="btn btn-primary btn-lg m-4">Hora de entrada</button>
-                                                    </form>
-                                                </div>
+                                        <div class="card">
+                                            <div class="card-body bg-primary">
+                                                <form action="">
+                                                    <button type="button" class="btn btn-primary btn-lg m-4" onclick="insertar_llegada();">Hora de entrada</button>
+                                                </form>
                                             </div>
-
                                         </div>
 
-                                        <div class="col-auto">
+                                    </div>
 
-                                            <div class="card">
-                                                <div class="card-body bg-primary">
-                                                    <!-- <form action="../vista/inicio.php?mod=7&acc=registrar_consulta_paciente" method="post"> -->
+                                    <div class="col-auto">
 
-                                                    <!-- <input type="hidden" name="id_ficha" id="id_ficha">
-                            <input type="hidden" name="id_paciente" id="id_paciente">
-                            <input type="hidden" name="tipo_consulta" id="tipo_consulta" value="certificado"> -->
-
-                                                    <button type="submit" class="btn btn-primary btn-lg m-4"> Hora de salida</button>
-                                                    </form>
-                                                </div>
+                                        <div class="card">
+                                            <div class="card-body bg-primary">
+                                                <form action="">
+                                                    <button type="button" class="btn btn-primary btn-lg m-4" onclick="insertar_fin();"> Hora de salida</button>
+                                                </form>
                                             </div>
-
                                         </div>
 
-                                        <!-- <div class="col-auto" id="pnl_segumiento_personal" style="display: none;">
+                                    </div>
+                                </div>
 
-                      <div class="card">
-                        <div class="card-body bg-primary">
-                          <button type="button" class="btn btn-primary btn-lg m-4" onclick="seguimiento()"> Seguimiento</button>
-                        </div>
-                      </div>
+                                <br>
 
-                    </div> -->
+                                <div>
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <label for="txt_obs_pasantes">Observacion Pasantes</label>
+                                            <input type="text" class="form-control" name="txt_obs_pasantes" id="txt_obs_pasantes">
+                                        </div>
                                     </div>
 
-                                    <br>
-
-                                    <div>
-                                        <form action="" class="form p-3">
-                                            <div class="py-3">
-                                                <label for="txt_pasantes">Observacion Pasantes</label>
-                                                <input type="text" class="form-control" name="txt_pasantes" id="txt_pasantes">
-                                            </div>
-                                            <div class="py-3">
-                                                <label for="txt_tutor">Observacion Tutor</label>
-                                                <input type="text" class="form-control" name="txt_tutor" id="txt_tutor">
-                                            </div>
-                                        </form>
+                                    <div class="row pt-3">
+                                        <div class="col-12">
+                                            <label for="txt_obs_tutor">Observacion Tutor</label>
+                                            <input type="text" class="form-control" name="txt_obs_tutor" id="txt_obs_tutor">
+                                        </div>
                                     </div>
+                                </div>
 
-                                </div><!-- /.container-fluid -->
-                            </section>
-                            <!-- /.content -->
-                        </div>
+                            </div><!-- /.container-fluid -->
+                        </section>
+                        <!-- /.content -->
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
-
-<!-- Observaci+on pasantes y observación tutor -->
+</div>
