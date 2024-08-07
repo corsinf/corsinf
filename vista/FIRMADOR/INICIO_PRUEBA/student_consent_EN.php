@@ -1,3 +1,186 @@
+<script>
+    $(document).ready(function() {
+        cargarDatos();
+    });
+
+    function cargarDatos() {
+        $.ajax({
+            url: '../controlador/FORMULARIOS/student_consentC.php?listar=true',
+            type: 'post',
+            data: {
+                id: 2
+            },
+            dataType: 'json',
+            success: function(response) {
+                console.log(response);
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                // Manejo de errores
+                console.error('Error al cargar los configs:', textStatus, errorThrown);
+                $('#pnl_config_general').append('<p>Error al cargar las configuraciones. Por favor, inténtalo de nuevo más tarde.</p>');
+            }
+        });
+    }
+
+    function editar_insertar() {
+
+        var edu_nombre_estudiante = $('#txt_student').val();
+        var edu_id_estudiante = $('#txt_id_student').val();
+        var edu_fecha_nacimiento = $('#txt_birth_date').val();
+        var edu_proposito_autorizacion = $('#txt_purpose_authorization').val();
+        var edu_primer_nombre_autorizado = $('#txt_first_authorized_name').val();
+        var edu_primer_relacion_autorizada = $('#txt_first_relationship').val();
+        var edu_primera_direccion_autorizada = $('#txt_first_address').val();
+        var edu_primer_email_autorizado = $('#txt_first_email').val();
+        var edu_segundo_nombre_autorizado = $('#txt_second_authorized_name').val();
+        var edu_segunda_relacion_autorizada = $('#txt_second_relationship').val();
+        var edu_segunda_direccion_autorizada = $('#txt_second_address').val();
+        var edu_segundo_email_autorizado = $('#txt_second_email').val();
+        /*var edu_firma_estudiante = $('#').val();
+        var edu_fecha_firma = $('#').val();
+        var edu_nombre_registro = $('#').val();
+        var edu_fecha_registro = $('#').val();
+        var edu_estado = $('#').val();
+        var edu_fecha_creacion = $('#').val();*/
+        var edu_cbx_academic_all = $('#cbx_academic_info').prop('checked');
+        var edu_cbx_academic_1 = $('#cbx_admission').prop('checked');
+        var edu_cbx_academic_2 = $('#cbx_registration').prop('checked');
+        var edu_cbx_academic_3 = $('#cbx_grades').prop('checked');
+        var edu_cbx_academic_4 = $('#cbx_gpa').prop('checked');
+        var edu_cbx_academic_5 = $('#cbx_standing').prop('checked');
+        var edu_cbx_academic_6 = $('#cbx_graduation').prop('checked');
+        var edu_cbx_financial_all = $('#cbx_financial_info').prop('checked');
+        var edu_cbx_financial_1 = $('#cbx_fees').prop('checked');
+        var edu_cbx_financial_2 = $('#cbx_charges').prop('checked');
+        var edu_cbx_financial_3 = $('#cbx_payments').prop('checked');
+        var edu_cbx_aid_financial = $('#cbx_aid_info').prop('checked');
+        var edu_cbx_housing_all = $('#cbx_housing_info').prop('checked');
+        var edu_cbx_housing_1 = $('#cbx_location').prop('checked');
+        var edu_cbx_housing_2 = $('#cbx_room').prop('checked');
+        var edu_cbx_housing_3 = $('#cbx_judicial').prop('checked');
+        var edu_cbx_remove_consent = $('#cbx_remove_consent').prop('checked');
+
+
+
+        var parametros = {
+
+            //'edu_id': edu_id,
+            'edu_nombre_estudiante': edu_nombre_estudiante,
+            'edu_id_estudiante': edu_id_estudiante,
+            'edu_fecha_nacimiento': edu_fecha_nacimiento,
+            'edu_proposito_autorizacion': edu_proposito_autorizacion,
+            'edu_primer_nombre_autorizado': edu_primer_nombre_autorizado,
+            'edu_primer_relacion_autorizada': edu_primer_relacion_autorizada,
+            'edu_primera_direccion_autorizada': edu_primera_direccion_autorizada,
+            'edu_primer_email_autorizado': edu_primer_email_autorizado,
+            'edu_segundo_nombre_autorizado': edu_segundo_nombre_autorizado,
+            'edu_segunda_relacion_autorizada': edu_segunda_relacion_autorizada,
+            'edu_segunda_direccion_autorizada': edu_segunda_direccion_autorizada,
+            'edu_segundo_email_autorizado': edu_segundo_email_autorizado,
+            /*'edu_firma_estudiante': edu_firma_estudiante,
+            'edu_fecha_firma': edu_fecha_firma,
+            'edu_nombre_registro': edu_nombre_registro,
+            'edu_fecha_registro': edu_fecha_registro,
+            'edu_estado': edu_estado,
+            'edu_fecha_creacion': edu_fecha_creacion,*/
+            'edu_cbx_academic_all': edu_cbx_academic_all,
+            'edu_cbx_academic_1': edu_cbx_academic_1,
+            'edu_cbx_academic_2': edu_cbx_academic_2,
+            'edu_cbx_academic_3': edu_cbx_academic_3,
+            'edu_cbx_academic_4': edu_cbx_academic_4,
+            'edu_cbx_academic_5': edu_cbx_academic_5,
+            'edu_cbx_academic_6': edu_cbx_academic_6,
+            'edu_cbx_financial_all': edu_cbx_financial_all,
+            'edu_cbx_financial_1': edu_cbx_financial_1,
+            'edu_cbx_financial_2': edu_cbx_financial_2,
+            'edu_cbx_financial_3': edu_cbx_financial_3,
+            'edu_cbx_aid_financial': edu_cbx_aid_financial,
+            'edu_cbx_housing_all': edu_cbx_housing_all,
+            'edu_cbx_housing_1': edu_cbx_housing_1,
+            'edu_cbx_housing_2': edu_cbx_housing_2,
+            'edu_cbx_housing_3': edu_cbx_housing_3,
+            'edu_cbx_remove_consent': edu_cbx_remove_consent
+        };
+
+        //alert(validar_email(sa_est_correo));
+        console.log(parametros);
+
+        if (sa_est_id == '') {
+            if (
+                sa_est_primer_apellido === '' ||
+                sa_est_segundo_apellido === '' ||
+                sa_est_primer_nombre === '' ||
+                sa_est_segundo_nombre === '' ||
+                sa_est_cedula === '' ||
+                sa_est_sexo == null ||
+                sa_est_fecha_nacimiento === '' ||
+                sa_id_seccion == null ||
+                sa_id_grado == null ||
+                sa_id_paralelo == null ||
+                validar_email(sa_est_correo) == false ||
+                sa_id_representante == null ||
+                sa_est_rep_parentesco == null
+
+            ) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Asegurese de llenar todos los campos',
+                })
+
+            } else {
+                //console.log(parametros);
+                insertar(parametros)
+            }
+        } else {
+            if (
+                sa_est_primer_apellido === '' ||
+                sa_est_segundo_apellido === '' ||
+                sa_est_primer_nombre === '' ||
+                sa_est_segundo_nombre === '' ||
+                sa_est_cedula === '' ||
+                sa_est_sexo == null ||
+                sa_est_fecha_nacimiento === '' ||
+                sa_id_seccion == null ||
+                sa_id_grado == null ||
+                sa_id_paralelo == null ||
+                validar_email(sa_est_correo) == false ||
+                sa_id_representante == null ||
+                sa_est_rep_parentesco == null
+            ) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Asegurese de llenar todos los campos',
+                })
+            } else {
+                //console.log(parametros);
+                insertar(parametros);
+            }
+        }
+    }
+
+    function insertar(parametros) {
+        $.ajax({
+            data: {
+                parametros: parametros
+            },
+            url: '../controlador/estudiantesC.php?insertar=true',
+            type: 'post',
+            dataType: 'json',
+
+            success: function(response) {
+                if (response == 1) {
+                    Swal.fire('', 'Operacion realizada con exito.', 'success').then(function() {
+                        //location.href = '../vista/inicio.php?mod=7&acc=estudiantes';
+                    });
+                } else if (response == -2) {
+                    Swal.fire('', 'Cédula ya registrada.', 'warning');
+                }
+            }
+        });
+    }
+</script>
 <div class="page-wrapper">
     <div class="page-content">
         <!--breadcrumb-->
@@ -47,7 +230,7 @@
                                                         <label for="txt_birth_date" class="col-form-label"><strong>Birth Date:</strong></label>
                                                     </div>
                                                     <div class="col-auto">
-                                                        <input type="text" class="form-control" name="txt_birth_date" id="txt_birth_date">
+                                                        <input type="date" class="form-control" name="txt_birth_date" id="txt_birth_date">
                                                     </div>
                                             </form>
                                         </div>
@@ -151,9 +334,9 @@
                                     <div class="row">
                                         <div class="col-12 col-lg-12">
                                             <div class="mb-3 row">
-                                                <label for="" class="col-sm-2 col-form-label"><strong>My authorization is for the following purpose:</strong></label>
+                                                <label for="txt_purpose_authorization" class="col-sm-2 col-form-label"><strong>My authorization is for the following purpose:</strong></label>
                                                 <div class="col-sm-8">
-                                                    <textarea class="form-control" name="" id=""></textarea>
+                                                    <textarea class="form-control" name="txt_purpose_authorization" id="txt_purpose_authorization"></textarea>
                                                 </div>
                                             </div>
                                         </div>
@@ -163,8 +346,8 @@
                                     <div class="card bg-secondary bg-opacity-10 border border-dark mb-4">
                                         <div class="card-body">
                                             <div class="form-check">
-                                                <input type="checkbox" class="form-check-input" name="" id="">
-                                                <label for="" class="form-check-label">I request to <strong>REMOVE</strong> my consent allowing UI to discuss and verbally release information to all currently designated individuals.</label>
+                                                <input type="checkbox" class="form-check-input" name="cbx_remove_consent" id="cbx_remove_consent">
+                                                <label for="cbx_remove_consent" class="form-check-label">I request to <strong>REMOVE</strong> my consent allowing UI to discuss and verbally release information to all currently designated individuals.</label>
                                             </div>
                                         </div>
                                     </div>
@@ -175,31 +358,31 @@
                                     <div class="row py-4">
                                         <div class="col-12 col-lg-5">
                                             <div class="mb-3 row">
-                                                <label for="" class="col-sm-1 col-form-label"><strong>1.</strong></label>
+                                                <label for="txt_first_authorized_name" class="col-sm-1 col-form-label"><strong>1.</strong></label>
                                                 <div class="col-sm-11">
-                                                    <input type="text" class="form-control" name="" id="" placeholder="Printed Name">
+                                                    <input type="text" class="form-control" name="txt_first_authorized_name" id="txt_first_authorized_name" placeholder="Printed Name">
                                                 </div>
                                             </div>
-                                            <input type="text" class="form-control" name="" id="" placeholder="Complete Address">
+                                            <input type="text" class="form-control" name="txt_first_address" id="txt_first_address" placeholder="Complete Address">
                                         </div>
                                         <div class="col-12 col-lg-5">
-                                            <input type="text" class="form-control mb-3" name="" id="" placeholder="Relationship to Student">
-                                            <input type="email" class="form-control" name="" id="" placeholder="Email">
+                                            <input type="text" class="form-control mb-3" name="txt_first_relationship" id="txt_first_relationship" placeholder="Relationship to Student">
+                                            <input type="email" class="form-control" name="txt_first_email" id="txt_first_email" placeholder="Email">
                                         </div>
                                     </div>
                                     <div class="row py-4">
                                         <div class="col-12 col-lg-5">
                                             <div class="mb-3 row">
-                                                <label for="" class="col-sm-1 col-form-label"><strong>2.</strong></label>
+                                                <label for="txt_second_authorized_name" class="col-sm-1 col-form-label"><strong>2.</strong></label>
                                                 <div class="col-sm-11">
-                                                    <input type="text" class="form-control" name="" id="" placeholder="Printed Name">
+                                                    <input type="text" class="form-control" name="txt_second_authorized_name" id="txt_second_authorized_name" placeholder="Printed Name">
                                                 </div>
                                             </div>
-                                            <input type="text" class="form-control" name="" id="" placeholder="Complete Address">
+                                            <input type="text" class="form-control" name="txt_second_address" id="txt_second_address" placeholder="Complete Address">
                                         </div>
                                         <div class="col-12 col-lg-5">
-                                            <input type="text" class="form-control mb-3" name="" id="" placeholder="Relationship to Student">
-                                            <input type="email" class="form-control" name="" id="" placeholder="Email">
+                                            <input type="text" class="form-control mb-3" name="txt_second_relationship" id="txt_second_relationship" placeholder="Relationship to Student">
+                                            <input type="email" class="form-control" name="txt_second_email" id="txt_second_email" placeholder="Email">
                                         </div>
                                     </div>
                                 </form>
@@ -209,6 +392,10 @@
                                     information can be revoked by me in writing at any time, but will not affect the information released under my previous consent. If I wish
                                     to make any changes to my consent for release, I understand I will need to complete and file a new form. <strong>The authorization on this
                                         form will supersede all prior authorizations for release of my information.</strong></p>
+                            </div>
+                            <div class="modal-footer pt-4">
+                                <button class="btn btn-primary btn-sm px-4 m-1" onclick="editar_insertar()" type="button"><i class="bx bx-save"></i> Guardar</button>
+                                <?php ?>
                             </div>
                         </div>
                     </div>

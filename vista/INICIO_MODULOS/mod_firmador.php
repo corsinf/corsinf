@@ -48,3 +48,7 @@ if ($_GET['acc'] == 'student_consent') {
 if ($_GET['acc'] == 'student_consent_EN') {
     include('FIRMADOR/INICIO_PRUEBA/student_consent_EN.php');
 }
+
+if ($_GET['acc'] == 'registro_pasantes') {
+    include('FIRMADOR/PASANTES/registro_pasantes.php');
+}
