@@ -44,3 +44,6 @@ if ($_GET['acc'] == 'sala_firmado') {
 if ($_GET['acc'] == 'pagina_jav') {
     include('FIRMADOR/PRUEBAS/pagina_jav.php');
 }
+if ($_GET['acc'] == 'Luis') {
+    include('COWORKING/crear_oficina.php');
+}
