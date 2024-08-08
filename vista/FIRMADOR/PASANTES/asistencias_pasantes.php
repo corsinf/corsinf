@@ -3,6 +3,8 @@
 <script type="text/javascript">
     $(document).ready(function() {
         cargarDatos();
+
+
         $('#tbl_pasante').DataTable({
             language: {
                 url: 'https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
@@ -26,35 +28,24 @@
                     filename: 'nombre_archivo_PDF'
                 }
             ],
-            columns: [
-                {
+            columns: [{
                     data: 'pas_nombre',
-                    render: function(data, type, item) {
-                        return item.pas_nombre;
-                    }
                 },
                 {
                     data: 'pas_hora_llegada',
                     render: function(data, type, item) {
-                        return extraerHoraMinutos(item.pas_hora_llegada) || 'No disponible';
+                        return obtener_hora_formateada_arr(item.pas_hora_llegada);
                     }
                 },
                 {
                     data: 'pas_hora_salida',
                     render: function(data, type, item) {
-                        return extraerHoraMinutos(item.pas_hora_salida) || 'No disponible';
+                        return obtener_hora_formateada_arr(item.pas_hora_salida);
                     }
                 },
                 {
-                    data: null,
-                    render: function(data, type, item) {
-                        if (item.pas_hora_llegada && item.pas_hora_salida) {
-                            var totalHoras = calcular_diferencia_horas(item.pas_hora_llegada, item.pas_hora_salida);
-                            return '<span>' + totalHoras.toFixed(2) + '</span>';
-                        } else {
-                            return 'No disponible';
-                        }
-                    }
+                    data: 'pas_horas_total',
+
                 }
             ],
             order: [
@@ -68,8 +59,8 @@
     });
 
     function extraerHoraMinutos(fechaHora) {
-        var partesHora = fechaHora.split("T")[1].split(":");  // Usamos solo la parte de la hora y minutos
-        return partesHora[0] + ':' + partesHora[1];  // Retornamos en formato HH:MM
+        var partesHora = fechaHora.split("T")[1].split(":"); // Usamos solo la parte de la hora y minutos
+        return partesHora[0] + ':' + partesHora[1]; // Retornamos en formato HH:MM
     }
 
     function calcular_diferencia_horas(hora_llegada, hora_salida) {
@@ -112,7 +103,6 @@
             // }
         });
     }
-
 </script>
 
 <div class="page-wrapper">

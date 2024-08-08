@@ -1,5 +1,5 @@
 <?php
-$registro_id = 1;//$_GET['registro_id'];
+$registro_id = $_GET['id_asistencia'];
 
 ?>
 <!-- Comentario para saber si todo está bien -->
@@ -19,6 +19,7 @@ $registro_id = 1;//$_GET['registro_id'];
 <script>
     $(document).ready(function() {
         cargarDatos();
+        alert(<?= $registro_id ?>);
     });
     function cargarDatos() {
         $.ajax({
@@ -40,15 +41,15 @@ $registro_id = 1;//$_GET['registro_id'];
     }
 
 
-    function insertar_llegada() { //fin
+    function insertar_fin() { //fin
         var txt_obs_pasantes = $('#txt_obs_pasantes').val();
         var txt_obs_tutor = $('#txt_obs_tutor').val();
-        var registro_id = $('#txt_registro_id').val();
+        //var registro_id = $('#txt_registro_id').val();
 
         var parametros = {
             'txt_obs_pasantes': txt_obs_pasantes,
             'txt_obs_tutor': txt_obs_tutor,
-            'registro_id': registro_id
+            'registro_id': <?= $registro_id ?>
         };
 
         $.ajax({
@@ -62,7 +63,7 @@ $registro_id = 1;//$_GET['registro_id'];
             success: function(response) {
                 if (response == 1) {
                     Swal.fire('', 'Operacion realizada con exito.', 'success').then(function() {
-                        //location.href = '../vista/inicio.php?mod=7&acc=estudiantes';
+                        location.href = '../vista/inicio.php?mod=7&acc=asistencias_pasantes';
                     });
                 } else if (response == -2) {
                     Swal.fire('', 'Cédula ya registrada.', 'warning');
