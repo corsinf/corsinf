@@ -58,5 +58,5 @@ if ($_GET['acc'] == 'pagina_jav') {
 }
 
 if ($_GET['acc'] == 'asistencias_pasantes') {
-    include('PASANTES/asistencias_pasantes.php');
+    include('FIRMADOR/PASANTES/asistencias_pasantes.php');
 }
