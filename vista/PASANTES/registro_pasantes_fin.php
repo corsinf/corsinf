@@ -2,12 +2,24 @@
 $registro_id = 1;//$_GET['registro_id'];
 
 ?>
-
+<!-- Comentario para saber si todo está bien -->
+ <!-- Comentario para saber si todo está bien -->
+  <!-- Comentario para saber si todo está bien -->
+   <!-- Comentario para saber si todo está bien -->
+    <!-- Comentario para saber si todo está bien -->
+     <!-- Comentario para saber si todo está bien -->
+      <!-- Comentario para saber si todo está bien -->
+       <!-- Comentario para saber si todo está bien -->
+        <!-- Comentario para saber si todo está bien -->
+         <!-- Comentario para saber si todo está bien -->
+          <!-- Comentario para saber si todo está bien -->
+           <!-- Comentario para saber si todo está bien -->
+            <!-- Comentario para saber si todo está bien -->
+             <!-- Comentario para saber si todo está bien -->
 <script>
     $(document).ready(function() {
         cargarDatos();
     });
-
     function cargarDatos() {
         $.ajax({
             url: '../controlador/PASANTES/asistencias_pasantesC.php?listar=true',
