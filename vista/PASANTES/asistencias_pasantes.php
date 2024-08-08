@@ -68,17 +68,13 @@
     });
 
     function extraerHoraMinutos(fechaHora) {
-        var fecha = new Date(fechaHora);
-        var horas = fecha.getHours();
-        var minutos = fecha.getMinutes();
-
-        // Formatear como 'HH:MM'
-        return (horas < 10 ? '0' : '') + horas + ':' + (minutos < 10 ? '0' : '') + minutos;
+        var partesHora = fechaHora.split("T")[1].split(":");  // Usamos solo la parte de la hora y minutos
+        return partesHora[0] + ':' + partesHora[1];  // Retornamos en formato HH:MM
     }
 
     function calcular_diferencia_horas(hora_llegada, hora_salida) {
-        var llegada = hora_llegada.split(":");
-        var salida = hora_salida.split(":");
+        var llegada = extraerHoraMinutos(hora_llegada).split(":");
+        var salida = extraerHoraMinutos(hora_salida).split(":");
 
         var horasLlegada = parseInt(llegada[0], 10);
         var minutosLlegada = parseInt(llegada[1], 10);
