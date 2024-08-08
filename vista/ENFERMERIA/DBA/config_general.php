@@ -13,6 +13,9 @@
         $.ajax({
             url: '../controlador/cat_configuracionGC.php?listar_config_general=true',
             type: 'post',
+            // data: {
+            //     accion: 'correos'
+            // },
             dataType: 'json',
             success: function(response) {
                 console.log(response);
@@ -94,7 +97,7 @@
 
 
         $.ajax({
-            url: '../controlador/cat_configuracionGC.php?listar_idukay_estudiantes=true',
+            url: '../controlador/cat_configuracionGC_IDUKAY.php?listar_idukay_estudiantes=true',
             type: 'post',
             dataType: 'json',
             success: function(data) {
@@ -193,12 +196,12 @@
             }
         });
 
-        
+
     }
 
     function cargar_estudiantes2() {
         $.ajax({
-            url: '../controlador/cat_configuracionGC.php?idukay_estudiantes=true',
+            url: '../controlador/cat_configuracionGC_IDUKAY.php?idukay_estudiantes=true',
             type: 'post',
             dataType: 'json',
             success: function(data) {
@@ -256,7 +259,7 @@
 
     function cargar_estudiantes_JSON() {
         $.ajax({
-            url: '../controlador/cat_configuracionGC.php?listar_idukay_estudiantes=true',
+            url: '../controlador/cat_configuracionGC_IDUKAY.php?listar_idukay_estudiantes=true',
             type: 'post',
             dataType: 'json',
             success: function(response) {
@@ -297,7 +300,7 @@
         });
 
         $.ajax({
-            url: '../controlador/cat_configuracionGC.php?idukay_estudiantes=true',
+            url: '../controlador/cat_configuracionGC_IDUKAY.php?idukay_estudiantes=true',
             type: 'post',
             dataType: 'json',
             success: function(response) {
@@ -335,7 +338,7 @@
         });
 
         $.ajax({
-            url: '../controlador/cat_configuracionGC.php?idukay_representantes=true',
+            url: '../controlador/cat_configuracionGC_IDUKAY.php?idukay_representantes=true',
             type: 'post',
             dataType: 'json',
             success: function(response) {
@@ -373,7 +376,7 @@
         });
 
         $.ajax({
-            url: '../controlador/cat_configuracionGC.php?idukay_sincronizar=true',
+            url: '../controlador/cat_configuracionGC_IDUKAY.php?idukay_sincronizar=true',
             type: 'post',
             dataType: 'json',
             success: function(response) {
@@ -411,7 +414,7 @@
         });
 
         $.ajax({
-            url: '../controlador/cat_configuracionGC.php?idukay_docentes=true',
+            url: '../controlador/cat_configuracionGC_IDUKAY.php?idukay_docentes=true',
             type: 'post',
             dataType: 'json',
             success: function(response) {
@@ -449,7 +452,7 @@
         });
 
         $.ajax({
-            url: '../controlador/cat_configuracionGC.php?idukay_horario_docentes=true',
+            url: '../controlador/cat_configuracionGC_IDUKAY.php?idukay_horario_docentes=true',
             type: 'post',
             dataType: 'json',
             success: function(response) {
@@ -546,49 +549,49 @@
 
                             <hr>
 
-                            <h6>Cargar JSON Estudiantes - Representantes</h6>
+                            <h6>Cargar JSON Estudiantes</h6>
                             <button class="btn btn-primary btn-sm m-1" onclick="cargar_estudiantes_JSON()" type="button"><i class='bx bx-sync'></i> Cargar JSON Estudiantes Idukay</button>
                             <div class="row" id="pnl_idukay">
 
                             </div>
 
                             <br>
-                            <h6>Cargar TABLA Estudiantes - Representantes</h6>
+                            <h6>Cargar TABLA Estudiantes</h6>
                             <button class="btn btn-primary btn-sm m-1" onclick="cargar_estudiantes_tabla()" type="button"><i class='bx bx-sync'></i> Cargar Tabla Estudiantes Idukay</button>
                             <div class="row" id="pnl_idukay">
 
-                            <br><br>
+                                <br><br>
 
-                            <section class="content pt-4" id="pnl_tbl_estudiates" style="display: none;">
-                                <div class="container-fluid">
-                                    <div class="table-responsive">
-                                        <table class="table table-striped responsive" id="tabla_estudiantes" style="width:100%">
-                                            <thead>
-                                                <tr>
-                                                    <th>ID</th>
-                                                    <th>Primer Apellido</th>
-                                                    <th>Segundo Apellido</th>
-                                                    <th>Primer Nombre</th>
-                                                    <th>Segundo Nombre</th>
-                                                    <th>Cédula</th>
-                                                    <th>Género</th>
-                                                    <th>Fecha de Nacimiento</th>
-                                                    <th>Correo</th>
-                                                    <th>Dirección</th>
-                                                    <th>Parientes</th>
-                                                </tr>
-                                            </thead>
-                                        </table>
-                                    </div>
-                                </div><!-- /.container-fluid -->
-                            </section>
+                                <section class="content pt-4" id="pnl_tbl_estudiates" style="display: none;">
+                                    <div class="container-fluid">
+                                        <div class="table-responsive">
+                                            <table class="table table-striped responsive" id="tabla_estudiantes" style="width:100%">
+                                                <thead>
+                                                    <tr>
+                                                        <th>ID</th>
+                                                        <th>Primer Apellido</th>
+                                                        <th>Segundo Apellido</th>
+                                                        <th>Primer Nombre</th>
+                                                        <th>Segundo Nombre</th>
+                                                        <th>Cédula</th>
+                                                        <th>Género</th>
+                                                        <th>Fecha de Nacimiento</th>
+                                                        <th>Correo</th>
+                                                        <th>Dirección</th>
+                                                        <th>Parientes</th>
+                                                    </tr>
+                                                </thead>
+                                            </table>
+                                        </div>
+                                    </div><!-- /.container-fluid -->
+                                </section>
 
-                            <!-- /.content -->
+                                <!-- /.content -->
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
+            <!--end row-->
         </div>
-        <!--end row-->
     </div>
-</div>
