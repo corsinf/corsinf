@@ -1,17 +1,3 @@
-<!-- Comentario para saber si todo está bien -->
- <!-- Comentario para saber si todo está bien -->
-  <!-- Comentario para saber si todo está bien -->
-   <!-- Comentario para saber si todo está bien -->
-    <!-- Comentario para saber si todo está bien -->
-     <!-- Comentario para saber si todo está bien -->
-      <!-- Comentario para saber si todo está bien -->
-       <!-- Comentario para saber si todo está bien -->
-        <!-- Comentario para saber si todo está bien -->
-         <!-- Comentario para saber si todo está bien -->
-          <!-- Comentario para saber si todo está bien -->
-           <!-- Comentario para saber si todo está bien -->
-            <!-- Comentario para saber si todo está bien -->
-             <!-- Comentario para saber si todo está bien -->
 <script src="../js/ENFERMERIA/operaciones_generales.js"></script>
 
 <script type="text/javascript">
