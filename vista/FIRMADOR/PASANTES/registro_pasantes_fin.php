@@ -1,11 +1,11 @@
 <?php
-$registro_id = 1; //$_GET['registro_id'];
+$registro_id = 1;//$_GET['registro_id'];
 
 ?>
+
 <script>
     $(document).ready(function() {
         cargarDatos();
-        inhabilitar_boton()
     });
 
     function cargarDatos() {
@@ -27,81 +27,23 @@ $registro_id = 1; //$_GET['registro_id'];
         });
     }
 
-    function editar_insertar() {
-        var pas_observacion_pasante = $('#txt_pasantes').val();
-        var pas_observacion_tutor = $('#txt_tutor').val();
+
+    function insertar_llegada() { //fin
+        var txt_obs_pasantes = $('#txt_obs_pasantes').val();
+        var txt_obs_tutor = $('#txt_obs_tutor').val();
         var registro_id = $('#txt_registro_id').val();
 
         var parametros = {
-            'pas_observacion_pasante': pas_observacion_pasante,
-            'pas_observacion_tutor': pas_observacion_tutor,
+            'txt_obs_pasantes': txt_obs_pasantes,
+            'txt_obs_tutor': txt_obs_tutor,
             'registro_id': registro_id
         };
 
-        //alert(validar_email(sa_est_correo));
-        // console.log(parametros);
-
-        // if (sa_est_id == '') {
-        //     if (
-        //         sa_est_primer_apellido === '' ||
-        //         sa_est_segundo_apellido === '' ||
-        //         sa_est_primer_nombre === '' ||
-        //         sa_est_segundo_nombre === '' ||
-        //         sa_est_cedula === '' ||
-        //         sa_est_sexo == null ||
-        //         sa_est_fecha_nacimiento === '' ||
-        //         sa_id_seccion == null ||
-        //         sa_id_grado == null ||
-        //         sa_id_paralelo == null ||
-        //         validar_email(sa_est_correo) == false ||
-        //         sa_id_representante == null ||
-        //         sa_est_rep_parentesco == null
-
-        //     ) {
-        //         Swal.fire({
-        //             icon: 'error',
-        //             title: 'Oops...',
-        //             text: 'Asegurese de llenar todos los campos',
-        //         })
-
-        //     } else {
-        //         //console.log(parametros);
-        //         insertar(parametros)
-        //     }
-        // } else {
-        //     if (
-        //         sa_est_primer_apellido === '' ||
-        //         sa_est_segundo_apellido === '' ||
-        //         sa_est_primer_nombre === '' ||
-        //         sa_est_segundo_nombre === '' ||
-        //         sa_est_cedula === '' ||
-        //         sa_est_sexo == null ||
-        //         sa_est_fecha_nacimiento === '' ||
-        //         sa_id_seccion == null ||
-        //         sa_id_grado == null ||
-        //         sa_id_paralelo == null ||
-        //         validar_email(sa_est_correo) == false ||
-        //         sa_id_representante == null ||
-        //         sa_est_rep_parentesco == null
-        //     ) {
-        //         Swal.fire({
-        //             icon: 'error',
-        //             title: 'Oops...',
-        //             text: 'Asegurese de llenar todos los campos',
-        //         })
-        //     } else {
-        //         //console.log(parametros);
-        //         insertar(parametros);
-        //     }
-        // }
-    }
-
-    function insertar_llegada(parametros) {
         $.ajax({
             data: {
                 parametros: parametros
             },
-            url: '../controlador/PASANTES/asistencias_pasantesC.php?insertar=true',
+            url: '../controlador/PASANTES/asistencias_pasantesC.php?editar=true',
             type: 'post',
             dataType: 'json',
 
@@ -111,18 +53,14 @@ $registro_id = 1; //$_GET['registro_id'];
                         //location.href = '../vista/inicio.php?mod=7&acc=estudiantes';
                     });
                 } else if (response == -2) {
-                    Swal.fire('', 'Ya has registrado tu hora de llegada.', 'warning');
+                    Swal.fire('', 'Cédula ya registrada.', 'warning');
                 }
             }
         });
     }
-    
-    function inhabilitar_boton(){
-        $('#btn_llegada').on('click', function(){
-            $(this).prop('disabled', true)
-        })
-    }
 </script>
+
+<input type="hidden" name="txt_registro_id" id="txt_registro_id" value="<?= $registro_id ?>">
 <div class="page-wrapper">
     <div class="page-content">
 
@@ -179,28 +117,36 @@ $registro_id = 1; //$_GET['registro_id'];
 
                                         <div class="card">
                                             <div class="card-body bg-primary">
-                                                <button type="button" class="btn btn-primary btn-lg m-4" onclick="insertar_llegada();">Hora de entrada</button>
+                                                <form action="">
+                                                    <button type="button" class="btn btn-primary btn-lg m-4" onclick="insertar_llegada();">Hora de entrada</button>
+                                                </form>
                                             </div>
                                         </div>
 
-                                    </div> -->
+                                    </div>
 
-                                    <!-- <div class="col-auto">
+                                    <div class="col-auto">
 
                                         <div class="card">
                                             <div class="card-body bg-primary">
-                                                <button type="button" class="btn btn-primary btn-lg m-4" onclick="insertar_fin();"> Hora de salida</button>
+                                                <form action="">
+                                                    <button type="button" class="btn btn-primary btn-lg m-4" onclick="insertar_fin();"> Hora de salida</button>
+                                                </form>
                                             </div>
                                         </div>
 
                                     </div> -->
+
                                     <div class="col-auto">
-                                    <button type="button" class="btn btn-primary btn-lg m-4 p-5" id="btn_llegada" onclick="insertar_llegada();">Hora de entrada</button>
+                                        <button type="button" class="btn btn-primary btn-lg m-4 p-5" onclick="insertar_fin();">Hora de salida</button>
                                     </div>
+
                                 </div>
 
+                                <br>
+
                                 <div>
-                                    <div class="row pt-3">
+                                    <div class="row">
                                         <div class="col-12">
                                             <label for="txt_obs_pasantes">Observacion Pasantes</label>
                                             <input type="text" class="form-control" name="txt_obs_pasantes" id="txt_obs_pasantes">
