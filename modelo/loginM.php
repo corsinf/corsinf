@@ -20,23 +20,21 @@ class loginM
 
 	function buscar_empresas($email,$pass=false,$id=false,$ambiente_empresa=false)
 	{
-		$sql = "SELECT * 
-				FROM ACCESOS_EMPRESA AC
-				INNER JOIN USUARIOS US ON AC.Id_usuario = US.id_usuarios
-				INNER JOIN EMPRESAS EM ON AC.Id_Empresa = EM.Id_empresa
-				INNER JOIN TIPO_USUARIO TU ON US.perfil = TU.ID_TIPO
-				WHERE  EM.Estado = 'A' AND US.email = '".$email."' ";
+		$sql = "SELECT DISTINCT  E.*,U.password,A.Id_Empresa FROM USUARIOS U
+				INNER JOIN ACCESOS_EMPRESA A ON U.id_usuarios = A.Id_usuario
+				INNER JOIN EMPRESAS E ON A.Id_Empresa = E.Id_empresa
+				WHERE U.email = '".$email."' ";
 				if($pass)
 				{
-					$sql.=" AND US.password = '".$pass."' ";
+					$sql.=" AND U.password = '".$pass."' ";
 				}
 				if($id)
 				{
-					$sql.=" AND AC.Id_empresa='".$id."'";
+					$sql.=" AND A.Id_empresa='".$id."'";
 				}
 				if($ambiente_empresa)
 				{
-					$sql.="ANd EM.ambiente_empresa = '".$ambiente_empresa."'";
+					$sql.="ANd E.ambiente_empresa = '".$ambiente_empresa."'";
 				}
 				// print_r($sql);die();
 		$datos = $this->db->datos($sql,1);
@@ -141,7 +139,8 @@ class loginM
 		// print_r($pass);die();
 		$sql ="SELECT id_usuarios as 'id',U.*,TU.DESCRIPCION as tipo,A.*  FROM ACCESOS A
 		 INNER JOIN TIPO_USUARIO TU ON A.id_tipo_usu = TU.ID_TIPO
-		 INNER JOIN USUARIOS U ON TU.ID_TIPO = U.perfil
+		 INNER JOIN ACCESOS_EMPRESA AE ON A.id_tipo_usu= AE.Id_Tipo_usuario
+		 INNER JOIN USUARIOS U ON U.id_usuarios = AE.Id_usuario
 		WHERE 1=1 AND email = '".$email."'  AND password = '".$pass."' ";
 		if($id)
 		{
@@ -149,7 +148,7 @@ class loginM
 		}
 		if($tipo)
 		{
-			$sql.=" AND perfil='".$tipo."'";
+			$sql.=" AND id_tipo_usu='".$tipo."'";
 		}
 
 		// print_r($_SESSION['INICIO']);
@@ -159,6 +158,33 @@ class loginM
 		// print_r($datos);die();
 		return $datos;
 	}
+
+
+	// function datos_login_pass_requiered_acceso($email,$pass,$empresa,$id=false,$tipo=false)
+	// {		
+	// 	// print_r($pass);die();
+	// 	$sql ="SELECT * FROM ACCESOS_EMPRESA A
+	// 	INNER JOIN TIPO_USUARIO TU ON A.Id_Tipo_usuario = TU.ID_TIPO
+	// 	INNER JOIN USUARIOS U ON A.Id_usuario = U.id_usuarios
+	// 	INNER JOIN ACCESOS AC ON A.Id_Tipo_usuario = AC.id_tipo_usu
+	// 	WHERE Id_Empresa = '".$empresa."' AND email = '".$email."'  AND password = '".$pass."' ";
+	// 	if($id)
+	// 	{
+	// 		$sql.=" AND U.id_usuarios = ".$id;
+	// 	}
+	// 	if($tipo)
+	// 	{
+	// 		$sql.=" AND Id_Tipo_usuario='".$tipo."'";
+	// 	}
+
+	// 	// print_r($_SESSION['INICIO']);
+	// 	print_r($sql);die();
+
+	// 	$datos = $this->db->datos($sql);
+	// 	// print_r($datos);die();
+	// 	return $datos;
+	// }
+
 
 	function accesos_dba($email,$pass)
 	{
@@ -388,6 +414,17 @@ class loginM
 		$puerto = $empresa[0]['Puerto_db'];
 		$datos2 = $this->db->sql_string_db_terceros($database, $usuario, $password, $servidor, $puerto, $sql);
 		return $datos2;
+	}
+
+	function roles_x_empresa($id,$usuario)
+	{
+		$sql = "SELECT * 
+				FROM ACCESOS_EMPRESA  A
+				INNER JOIN TIPO_USUARIO T ON A.Id_Tipo_usuario = T.ID_TIPO
+				INNER JOIN USUARIOS U ON A.Id_usuario = U.id_usuarios
+				WHERE Id_Empresa = '".$id."' AND U.email = '".$usuario."' ";
+				// print_r($sql);die();
+		return  $this->db->datos($sql,1);
 	}		
 
 }

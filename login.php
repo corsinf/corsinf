@@ -64,9 +64,19 @@
     }
   }
 
-  function iniciar_sesion(parametros)
+  function iniciar_sesion()
   {
   	// $('#myModal_espera').modal('show');
+  		var parametros = { 
+  		 	'tipo':$('#txt_tipo_rol').val(),
+  		 	'empresa':$('#txt_empresa').val(),
+  		 	'ActiveDir':$('#txt_activeDir').val(),
+  		 	'normal':$('#txt_normal').val(),
+  		 	'primera_vez':$('#txt_primera_vez').val(),
+  		 	'pass':$('#pass').val(),
+        'email': $('#email').val(),
+  		 }
+
        $.ajax({
          data:  {parametros:parametros},
          url:   'controlador/loginC.php?iniciar_empresa=true',
@@ -109,7 +119,73 @@
 
 
 
-  function empresa_selecconada(empresa,activeDir,normal,tipo,primera_vez)
+  function empresa_selecconada(empresa,activeDir,primera_vez)
+  {
+  		pass = $('#pass').val();
+  		email = $('#email').val();
+  		$('#txt_empresa').val(empresa);
+      $('#txt_activeDir').val(activeDir);
+      $('#txt_primera_vez').val(primera_vez);
+
+  		var parametros = 
+       {
+         'empresa':empresa,
+         'activeDir':activeDir,
+         'primera_vez':primera_vez,
+         'pass':pass,
+         'email':email,
+       } 
+        // titulos_cargados();
+
+         	 $('#myModal_espera').modal('show');
+       $.ajax({
+         data:  {parametros:parametros},
+         url:   'controlador/loginC.php?empresa_seleccionada=true',
+         type:  'post',
+         dataType: 'json',        
+           success:  function (response) {  
+
+         	 $('#myModal_espera').modal('hide');
+           	if(response.respuesta==2)
+           	{
+           		$('#lista_modulos_empresas').html(response.modulos);
+           		$('#txt_id').val(empresa);
+           		$('#myModal_modulos').modal('show');
+       			// $('#myModal_espera').modal('hide');
+           	}else if(response.respuesta==1)
+           	{
+
+      				// $('#myModal_espera').modal('show');
+      				if(response.num_roles>1 && response.roles!='')
+      				{
+      					$('#lista_roles').html(response.roles);
+       					$('#myModal_empresas').modal('hide');
+       					$('#myModal_rol').modal('show');
+       				}else
+       				{
+       						$('#txt_tipo_rol').val(response.roles);
+       						$('#txt_normal').val(response.normal);
+           				iniciar_sesion();
+       				}
+
+           	}      
+         },
+         error:function(xhr, status, error)
+         {
+         	 $('#myModal_espera').modal('hide');
+         }
+       });
+
+  }
+
+	function seleccionar_perfil(rol,usu_normal)
+	{
+		$('#txt_tipo_rol').val(rol);
+		$('#txt_normal').val(usu_normal);
+		iniciar_sesion();
+	}
+
+  function rol_selecconada(empresa,activeDir,normal,tipo,primera_vez)
   {
   		pass = $('#pass').val();
   		email = $('#email').val();
@@ -442,42 +518,44 @@
       <div class="modal-header">
         <h3 class="modal-title" id="titulo">Empresas</h3>
       </div>
-      <div class="modal-body" style="height: 410px;overflow-y: scroll;">
-        <ul class="list-group list-group-flush radius-10" id="lista_empresas">
+      <div class="modal-body" style=" overflow-y: scroll;  height: 300px;">
+      	<input type="hidden" name="txt_empresa" id="txt_empresa">
+				<input type="hidden" name="txt_activeDir" id="txt_activeDir">
+				<input type="hidden" name="txt_normal" id="txt_normal">
+				<input type="hidden" name="txt_primera_vez" id="txt_primera_vez">
+
+				 <div class="product-list mb-3 ps ps--active-y" id="lista_empresas" style="height: auto;">
 									
-									<li class="list-group-item d-flex align-items-center radius-10 mb-2 shadow-sm">
-										<div class="d-flex align-items-center">
-											<div class="font-20"><i class="flag-icon flag-icon-us"></i>
-											</div>
-											<div class="flex-grow-1 ms-2">
-												<h6 class="mb-0">United States</h6>
-											</div>
-										</div>
-										<div class="ms-auto">435</div>
-									</li>
-									<li class="list-group-item d-flex align-items-center radius-10 mb-2 shadow-sm">
-										<div class="d-flex align-items-center">
-											<div class="font-20"><i class="flag-icon flag-icon-vn"></i>
-											</div>
-											<div class="flex-grow-1 ms-2">
-												<h6 class="mb-0">Vietnam</h6>
-											</div>
-										</div>
-										<div class="ms-auto">287</div>
-									</li>
-									<li class="list-group-item d-flex align-items-center radius-10 mb-2 shadow-sm">
-										<div class="d-flex align-items-center">
-											<div class="font-20"><i class="flag-icon flag-icon-au"></i>
-											</div>
-											<div class="flex-grow-1 ms-2">
-												<h6 class="mb-0">Australia</h6>
-											</div>
-										</div>
-										<div class="ms-auto">432</div>
-									</li>
+								
+				</div>	
+
+
+      
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="myModal_rol" tabindex="-1" role="dialog" data-bs-backdrop="static" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title" id="titulo">Perfil de usuario</h3>
+      </div>
+      <div class="modal-body" style=" overflow-y: scroll;  height: 300px;">
+      	<input type="hidden" name="txt_tipo_rol" id="txt_tipo_rol">
+        <div class="product-list mb-3 ps ps--active-y" id="lista_roles" style="height: auto;">
+									
+								
+				</div>	
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" onclick="
+       			$('#myModal_empresas').modal('show');
+       			$('#myModal_rol').modal('hide');">Cerrar</button>
       </div>
     </div>
   </div>
