@@ -1,0 +1,106 @@
+
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro de Miembros y Compras</title>
+    <link rel="stylesheet" href="bootstrap.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <div class="container">
+        <h1 class="mt-4">Registro de Miembros de la Oficina</h1>
+
+        <form id="formulario_miembro" class="mt-3">
+            <div class="form-row">
+                <div class="form-group col-md-3">
+                    <label for="txt_nombre">Nombre:</label>
+                    <input type="text" class="form-control form-control-sm" name="nombre" id="txt_nombre" required>
+                </div>
+                <div class="form-group col-md-3">
+                    <label for="txt_correo">Correo:</label>
+                    <input type="email" class="form-control form-control-sm" name="correo" id="txt_correo" required>
+                </div>
+                <div class="form-group col-md-3">
+                    <label for="ddl_categoria">Categoría:</label>
+                    <select class="form-control form-control-sm" name="categoria" id="ddl_categoria" required>
+                        <option value="">Seleccione una categoría</option>
+                        <option value="oficina">Oficina</option>
+                        <option value="sala">Sala</option>
+                        <option value="otro">Otro</option>
+                    </select>
+                </div>
+                <div class="form-group col-md-3">
+                    <label for="txt_numero">Número:</label>
+                    <input type="number" class="form-control form-control-sm" name="numero" id="txt_numero" step="1" required>
+                </div>
+            </div>
+
+            <button type="button" class="btn btn-primary" id="btn_registrar_miembro">Registrar Miembro</button>
+        </form>
+
+        <h2 class="mt-4">Miembros Registrados</h2>
+        <table class="table table-bordered" id="tbl_miembros">
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Correo</th>
+                    <th>Categoría</th>
+                    <th>Número</th>
+                    <th>Compras</th>
+                </tr>
+            </thead>
+        </table>
+
+        <div class="modal fade" id="modal_registrar_compras" tabindex="-1" aria-labelledby="modal_label" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modal_label">Registrar Compras</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="formulario_compras">
+                            <div class="form-group">
+                                <label for="txt_producto">Producto:</label>
+                                <input type="text" class="form-control-sm" name="producto" id="txt_producto" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="txt_cantidad">Cantidad:</label>
+                                <input type="number" class="form-control" name="cantidad" id="txt_cantidad" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="txt_precio">Precio:</label>
+                                <input type="number" class="form-control-sm" name="precio" id="txt_precio" step="0.01" required>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                        <button type="button" class="btn btn-primary" id="btn_guardar_compra">Guardar Compra</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <h2 class="mt-4">Compras Registradas</h2>
+        <table class="table table-bordered" id="tbl_compras">
+            <thead>
+                <tr>
+                    <th>Miembro</th>
+                    <th>Producto</th>
+                    <th>Cantidad</th>
+                    <th>Precio</th>
+                    <th>Total</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+</body>
+
+</html>
