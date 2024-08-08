@@ -69,7 +69,7 @@ class usuariosM
 
 	function lista_usuarios($id=false,$query=false,$tipo=false,$ci=false,$email=false)
 	{
-		$sql="SELECT id_usuarios as 'id',ci_ruc as 'ci',nombres as 'nombre',apellidos as 'apellido',nombres +' '+apellidos as 'nom', direccion as 'direccion',telefono as 'telefono',password as 'pass',email as 'email', T.ID_TIPO as 'idt',DESCRIPCION as 'tipo',foto,link_fb,link_gmail,link_ins,link_tw,link_web,usu=null 
+		$sql="SELECT id_usuarios as 'id',ci_ruc as 'ci',nombres as 'nombre',apellidos as 'apellido',nombres +' '+apellidos as 'nom', direccion as 'direccion',telefono as 'telefono',password as 'pass',email as 'email',DESCRIPCION as 'tipo',foto,link_fb,link_gmail,link_ins,link_tw,link_web,usu=null 
 			FROM ACCESOS_EMPRESA UT
 			RIGHT JOIN USUARIOS U ON UT.ID_USUARIO = U.id_usuarios 
 			LEFT JOIN TIPO_USUARIO T ON UT.ID_TIPO_USUARIO = T.ID_TIPO
@@ -357,9 +357,13 @@ class usuariosM
 		return $this->db->datos($sql,1);
 	}
 
-	function existe_acceso_usuario_empresa($usuario=false)
+	function existe_acceso_usuario_empresa($usuario=false,$tipo=false)
 	{
-		$sql = "SELECT * FROM ACCESOS_EMPRESA WHERE Id_Empresa = '".$_SESSION['INICIO']['ID_EMPRESA']."' ";
+		$sql = "SELECT * FROM ACCESOS_EMPRESA WHERE Id_Empresa = '".$_SESSION['INICIO']['ID_EMPRESA']."'";
+		if($tipo)
+		{
+			$sql.=" AND Id_Tipo_usuario = '".$tipo."'"; 
+		}	
 		if($usuario)
 		{
 			$sql.=" AND Id_usuario = '".$usuario."'"; 
@@ -393,6 +397,24 @@ class usuariosM
 		  return $resp;
 
 	}
+
+	function acceso_usuario_empresa_rol($usuario=false,$tipo=false)
+	{
+		$sql = "SELECT * FROM ACCESOS_EMPRESA  AE 
+		INNER JOIN TIPO_USUARIO TU ON AE.Id_Tipo_usuario = TU.ID_TIPO
+		WHERE Id_Empresa = '".$_SESSION['INICIO']['ID_EMPRESA']."'";
+		if($tipo)
+		{
+			$sql.=" AND Id_Tipo_usuario = '".$tipo."'"; 
+		}	
+		if($usuario)
+		{
+			$sql.=" AND Id_usuario = '".$usuario."'"; 
+		}		
+		// print_r($sql);die();
+		return $this->db->datos($sql,1);
+	}
+
 
 }
 ?>

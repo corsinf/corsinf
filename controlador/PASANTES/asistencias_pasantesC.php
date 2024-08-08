@@ -9,7 +9,7 @@ if (isset($_GET['listar'])) {
 }
 
 if (isset($_GET['insertar'])) {
-    echo json_encode($controlador->insertar_editar($_POST['parametros']));
+    echo json_encode($controlador->insertar_editar());
 }
 
 if (isset($_GET['eliminar'])) {
@@ -35,13 +35,16 @@ class asistencias_pasantesC
         return $datos;
     }
 
-    function insertar_editar($parametros)
+    function insertar_editar()
     {
+        //print_r();
+        //die();
+
         $datos = array(
-            array('campo' => 'pas_usu_id', 'dato' => $_SESSION(['INICIO']['ID_USUARIO'])),
-            array('campo' => 'pas_nombre', 'dato' => $_SESSION(['INICIO']['USUARIO'])),
-            // array('campo' => 'pas_observacion_pasante', 'dato' => $parametros['txt_primer_nombre']),
-            // array('campo' => 'pas_observacion_tutor', 'dato' => $parametros['txt_segundo_nombre']),
+            array('campo' => 'pas_usu_id', 'dato' => ($_SESSION['INICIO']['ID_USUARIO'])),
+            array('campo' => 'pas_nombre', 'dato' => ($_SESSION['INICIO']['USUARIO'])),
+            // array('campo' => 'pas_observacion_pasante', 'dato' => $parametros['txt_obs_pasantes']),
+            // array('campo' => 'pas_observacion_tutor', 'dato' => $parametros['txt_obs_tutor']),
             // array('campo' => 'pas_usu_id_tutor', 'dato' => $parametros['txt_cedula']),
             // array('campo' => 'pas_tutor_estado', 'dato' => $parametros['ddl_sexo']),
         );
@@ -61,6 +64,4 @@ class asistencias_pasantesC
         $datos = $this->modelo->editar($datos, $where);
         return $datos;
     }
-
-    
 }
