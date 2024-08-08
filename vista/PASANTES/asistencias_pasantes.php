@@ -36,13 +36,13 @@
                 {
                     data: 'pas_hora_llegada',
                     render: function(data, type, item) {
-                        return obtener_hora_formateada(data) || 'No disponible';
+                        return extraerHoraMinutos(item.pas_hora_llegada) || 'No disponible';
                     }
                 },
                 {
                     data: 'pas_hora_salida',
                     render: function(data, type, item) {
-                        return obtener_hora_formateada(data) || 'No disponible';
+                        return extraerHoraMinutos(item.pas_hora_salida) || 'No disponible';
                     }
                 },
                 {
@@ -67,16 +67,13 @@
         });
     });
 
-    function obtener_hora_formateada(hora) {
-        // Dividir la cadena de hora en horas y minutos
-        var partesHora = hora.split(":");
-        var horas = parseInt(partesHora[0], 10);
-        var minutos = parseInt(partesHora[1], 10);
+    function extraerHoraMinutos(fechaHora) {
+        var fecha = new Date(fechaHora);
+        var horas = fecha.getHours();
+        var minutos = fecha.getMinutes();
 
-        // Formatear la hora como una cadena
-        var horaFormateada = (horas < 10 ? '0' : '') + horas + ':' +
-            (minutos < 10 ? '0' : '') + minutos;
-        return horaFormateada;
+        // Formatear como 'HH:MM'
+        return (horas < 10 ? '0' : '') + horas + ':' + (minutos < 10 ? '0' : '') + minutos;
     }
 
     function calcular_diferencia_horas(hora_llegada, hora_salida) {
@@ -119,7 +116,7 @@
             // }
         });
     }
-    
+
 </script>
 
 <div class="page-wrapper">
