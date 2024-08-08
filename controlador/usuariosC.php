@@ -380,13 +380,24 @@ class usuariosC
 		    $usuario =  $this->modelo->lista_usuarios_simple($id=false,$query=false,$ci=$parametros['txt_ci'],$email=$parametros['txt_emial']);
 
 		    // guardar el usuario en accesos de empresa actual en master(acceso empresa)
-		    $datosAE[0]['campo']='Id_usuario';
-		    $datosAE[0]['dato']=$usuario[0]['id'];
-		    $datosAE[1]['campo']='Id_Empresa';
-		    $datosAE[1]['dato']=$_SESSION['INICIO']['ID_EMPRESA'];	
-		    $datosAE[2]['campo']='Id_Tipo_usuario';
-		    $datosAE[2]['dato']=$parametros['ddl_tipo_usuario'];	
-		    $this->modelo->guardar($datosAE,'ACCESOS_EMPRESA'); 
+		     foreach ($parametros['ddl_tipo_usuario'] as $key2 => $value2) {
+		    	  	$datosA[0]['campo']='Id_usuario';
+					    $datosA[0]['dato']=$usuario[0]['id'];
+					    $datosA[1]['campo']='Id_Empresa';
+					    $datosA[1]['dato']=$_SESSION['INICIO']['ID_EMPRESA'];
+					    $datosA[2]['campo']='Id_Tipo_usuario';
+				    	$datosA[2]['dato']=$value2;	
+
+				    	$this->modelo->guardar($datosA,'ACCESOS_EMPRESA');
+		    }
+
+		    // $datosAE[0]['campo']='Id_usuario';
+		    // $datosAE[0]['dato']=$usuario[0]['id'];
+		    // $datosAE[1]['campo']='Id_Empresa';
+		    // $datosAE[1]['dato']=$_SESSION['INICIO']['ID_EMPRESA'];	
+		    // $datosAE[2]['campo']='Id_Tipo_usuario';
+		    // $datosAE[2]['dato']=$parametros['ddl_tipo_usuario'];	
+		    // $this->modelo->guardar($datosAE,'ACCESOS_EMPRESA'); 
 
 		    
 		     // $datosT[0]['campo']='ID_USUARIO';
