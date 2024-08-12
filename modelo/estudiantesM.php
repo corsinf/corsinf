@@ -242,62 +242,6 @@ class estudiantesM
         return $datos;
     }
 
-    function cargaMasivaIdukay($sql)
-    {
-        //echo $sql;
-        $datos = $this->db->sql_string($sql);
-        return $datos;
-    }
-
-    function ponerRepresentantesEstudiantes()
-    {
-        $sql =
-            "UPDATE e
-
-            SET e.sa_id_representante = r.sa_rep_id
-
-            FROM estudiantes e
-
-            INNER JOIN representantes r
-
-            ON e.sa_id_rep_idukay = r.sa_id_rep_idukay;";
-
-
-        $sql .=
-            "UPDATE e
-
-            SET e.sa_id_representante_2 = r.sa_rep_id
-            
-            FROM estudiantes e
-            
-            INNER JOIN representantes r
-            
-            ON e.sa_id_rep_idukay_2 = r.sa_id_rep_idukay;";
-
-        $datos = $this->db->sql_string($sql);
-        return $datos;
-    }
-
-    function ponerIdCursos()
-    {
-        $sql =
-            "UPDATE e
-            SET e.sa_id_seccion = mappings.sa_sec_id,
-                e.sa_id_grado = mappings.sa_gra_id,
-                e.sa_id_paralelo = mappings.sa_par_id
-            FROM estudiantes e
-            JOIN (
-                SELECT cs.sa_sec_nombre AS seccion_nombre, cg.sa_gra_nombre AS grado_nombre, cp.sa_par_nombre AS paralelo_nombre, sa_sec_id, sa_gra_id, sa_par_id
-                FROM cat_paralelo cp
-                INNER JOIN cat_seccion cs ON cp.sa_id_seccion = cs.sa_sec_id
-                INNER JOIN cat_grado cg ON cp.sa_id_grado = cg.sa_gra_id
-                WHERE cp.sa_par_estado = 1
-            ) AS mappings ON e.seccion_estudiante_idukay = mappings.seccion_nombre AND e.grado_estudiante_idukay = mappings.grado_nombre AND e.paralelo_estudiante_idukay = mappings.paralelo_nombre;";
-
-        $datos = $this->db->sql_string($sql);
-        return $datos;
-    }
-
     function datosEstudianteRepresentante($id)
     {
         if ($id) {

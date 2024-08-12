@@ -195,6 +195,7 @@ class usuariosC
 				$usuario_existente = $this->modelo->usuarios_all_empresa_actual($id=false,$parametros['query'],$tipo=false,$ci=false,$email=false);
 				// print_r($usuario_existente);die();
 				if(empty($usuario_existente)){
+					$value['pass'] = $this->pagina->desenciptar_clave($value['pass']);
 					$lista[] = array('value'=>$value['id'],'label'=>$value['nom'],'data'=>$value);
 				}
 			}
@@ -220,7 +221,7 @@ class usuariosC
                 <div class="p-4 border radius-15">
                   <img src="../'.$value['foto'].'" width="110" height="110" class="rounded-circle shadow" alt="">
                   <h5 class="mb-0 mt-5">'.$value['nombre'].' '.$value['apellido'].'</h5>
-                  <p class="mb-3">'.$value['tipo'].'</p>
+                <!--  <p class="mb-3">'.$value['tipo'].'</p> --!>
                   <div class="list-inline contacts-social mt-3 mb-3"> <a href="javascript:;" class="list-inline-item bg-facebook text-white border-0"><i class="bx bxl-facebook"></i></a>
                     <a href="javascript:;" class="list-inline-item bg-twitter text-white border-0"><i class="bx bxl-twitter"></i></a>
                    <!-- <a href="javascript:;" class="list-inline-item bg-google text-white border-0"><i class="bx bxl-google"></i></a> -->
@@ -247,7 +248,7 @@ class usuariosC
                 <div class="p-4 border radius-15">
                   <img src="'.$value['foto'].'" width="110" height="110" class="rounded-circle shadow" alt="">
                   <h5 class="mb-0 mt-5">'.$value['nombre'].' '.$value['apellido'].'</h5>
-                  <p class="mb-3">'.$value['tipo'].'</p>
+                 <!-- <p class="mb-3">'.$value['tipo'].'</p> --!>
                   <div class="list-inline contacts-social mt-3 mb-3"> <a href="javascript:;" class="list-inline-item bg-facebook text-white border-0"><i class="bx bxl-facebook"></i></a>
                     <a href="javascript:;" class="list-inline-item bg-twitter text-white border-0"><i class="bx bxl-twitter"></i></a>
                    <!-- <a href="javascript:;" class="list-inline-item bg-google text-white border-0"><i class="bx bxl-google"></i></a> -->
@@ -379,13 +380,24 @@ class usuariosC
 		    $usuario =  $this->modelo->lista_usuarios_simple($id=false,$query=false,$ci=$parametros['txt_ci'],$email=$parametros['txt_emial']);
 
 		    // guardar el usuario en accesos de empresa actual en master(acceso empresa)
-		    $datosAE[0]['campo']='Id_usuario';
-		    $datosAE[0]['dato']=$usuario[0]['id'];
-		    $datosAE[1]['campo']='Id_Empresa';
-		    $datosAE[1]['dato']=$_SESSION['INICIO']['ID_EMPRESA'];	
-		    $datosAE[2]['campo']='Id_Tipo_usuario';
-		    $datosAE[2]['dato']=$parametros['ddl_tipo_usuario'];	
-		    $this->modelo->guardar($datosAE,'ACCESOS_EMPRESA'); 
+		     foreach ($parametros['ddl_tipo_usuario'] as $key2 => $value2) {
+		    	  	$datosA[0]['campo']='Id_usuario';
+					    $datosA[0]['dato']=$usuario[0]['id'];
+					    $datosA[1]['campo']='Id_Empresa';
+					    $datosA[1]['dato']=$_SESSION['INICIO']['ID_EMPRESA'];
+					    $datosA[2]['campo']='Id_Tipo_usuario';
+				    	$datosA[2]['dato']=$value2;	
+
+				    	$this->modelo->guardar($datosA,'ACCESOS_EMPRESA');
+		    }
+
+		    // $datosAE[0]['campo']='Id_usuario';
+		    // $datosAE[0]['dato']=$usuario[0]['id'];
+		    // $datosAE[1]['campo']='Id_Empresa';
+		    // $datosAE[1]['dato']=$_SESSION['INICIO']['ID_EMPRESA'];	
+		    // $datosAE[2]['campo']='Id_Tipo_usuario';
+		    // $datosAE[2]['dato']=$parametros['ddl_tipo_usuario'];	
+		    // $this->modelo->guardar($datosAE,'ACCESOS_EMPRESA'); 
 
 		    
 		     // $datosT[0]['campo']='ID_USUARIO';
@@ -455,24 +467,41 @@ class usuariosC
 
 
 		    //ingresa el acceso al usuario en la empresa 
+		     $rep = $this->modelo->eliminar_tipo($parametros['txt_usuario_update']);
 
-		    $acceso = $this->modelo->existe_acceso_usuario_empresa($parametros['txt_usuario_update']);
-		    	$datosA[0]['campo']='Id_usuario';
-			    $datosA[0]['dato']=$parametros['txt_usuario_update'];	
-			    $datosA[1]['campo']='Id_Empresa';
-			    $datosA[1]['dato']=$_SESSION['INICIO']['ID_EMPRESA'];
-			    $datosA[2]['campo']='Id_Tipo_usuario';
-		    	$datosA[2]['dato']=$parametros['ddl_tipo_usuario'];	
-		    if(count($acceso)==0)
-		    {			    
-			    $this->modelo->guardar($datosA,'ACCESOS_EMPRESA');
-			  }else
-			  {
-			  	// print_r($acceso);die();
-			  	$whereA[0]['campo']='Id_accesos_empresa';
-			    $whereA[0]['dato']=$acceso[0]['Id_accesos_empresa'];	
-			  	$this->modelo->update('ACCESOS_EMPRESA',$datosA,$whereA);
-			  }
+		    foreach ($parametros['ddl_tipo_usuario'] as $key2 => $value2) {
+		    	  	$datosA[0]['campo']='Id_usuario';
+					    $datosA[0]['dato']=$parametros['txt_usuario_update'];	
+					    $datosA[1]['campo']='Id_Empresa';
+					    $datosA[1]['dato']=$_SESSION['INICIO']['ID_EMPRESA'];
+					    $datosA[2]['campo']='Id_Tipo_usuario';
+				    	$datosA[2]['dato']=$value2;	
+
+				    	$this->modelo->guardar($datosA,'ACCESOS_EMPRESA');
+
+
+		    }
+		    // print_r('expression');
+		    // die();
+		    // 	// $acceso = $this->modelo->existe_acceso_usuario_empresa($parametros['txt_usuario_update']);
+		    // 	$datosA[0]['campo']='Id_usuario';
+			  //   $datosA[0]['dato']=$parametros['txt_usuario_update'];	
+			  //   $datosA[1]['campo']='Id_Empresa';
+			  //   $datosA[1]['dato']=$_SESSION['INICIO']['ID_EMPRESA'];
+			  //   $datosA[2]['campo']='Id_Tipo_usuario';
+		    // 	$datosA[2]['dato']=$parametros['ddl_tipo_usuario'];	
+
+		    // 	// print_r($acceso);die();
+		    // if(count($acceso)==0)
+		    // {			    
+			  //   $this->modelo->guardar($datosA,'ACCESOS_EMPRESA');
+			  // }else
+			  // {
+			  // 	// print_r($acceso);die();
+			  // 	$whereA[0]['campo']='Id_accesos_empresa';
+			  //   $whereA[0]['dato']=$acceso[0]['Id_accesos_empresa'];	
+			  // 	$this->modelo->update('ACCESOS_EMPRESA',$datosA,$whereA);
+			  // }
 
 			$empresa = $this->pagina->lista_empresa($_SESSION['INICIO']['ID_EMPRESA']);		
 			if($empresa[0]['Ip_host']==IP_MASTER)
@@ -505,6 +534,8 @@ class usuariosC
 		if($_SESSION['INICIO']['NO_CONCURENTE']=='')
 		{
 			$datos  = $this->modelo->lista_usuarios($parametros['id'],$parametros['query']);	
+			$accesos = $this->modelo->acceso_usuario_empresa_rol($parametros['id']);
+			$datos[0]['tipo'] = $accesos;
 		}else
 		{
 			$datos  = $this->modelo->no_concurente_data();

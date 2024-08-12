@@ -69,6 +69,11 @@ class Querys
 
         return $this->Idukay_API->respuesta_Json($body, $query);
     }
+
+    function mostrarDatos()
+    {
+        //echo $this->url_API . ' ' . $this->bearerToken . ' ' . $this->anio_lectivo;
+    }
 }
 
 

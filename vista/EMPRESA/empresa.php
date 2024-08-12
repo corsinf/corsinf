@@ -327,6 +327,7 @@
 												<select class="form-select form-select-sm" name="txt_anio_lectivo_idukay" id="txt_anio_lectivo_idukay">
 													<option value="">Seleccione el Año Lectivo</option>
 													<option value="6308dedb64d9466850b563d9">2023 - 2024</option>
+													<option value="64d4f946782ad5085bd5da42">2024 - 2025</option>
 												</select>
 
 												<div class="pt-3">

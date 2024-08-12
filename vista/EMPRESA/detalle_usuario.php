@@ -174,7 +174,10 @@ if(isset($_GET["usuario"]))
            $('#txt_ci').val(response[0].ci);
            $('#txt_telefono').val(response[0].telefono);
   	       $('#txt_emial').val(response[0].email);
-  	       $('#ddl_tipo_usuario').append($('<option>',{value: response[0].idt, text:response[0].tipo,selected: true }));;
+
+           response[0].tipo.forEach(function(item,i){
+              $('#ddl_tipo_usuario').append($('<option>',{value: item.Id_Tipo_usuario, text:item.DESCRIPCION,selected: true }));;
+           }) 
   	       $('#txt_apellido').val(response[0].apellido);
   	       $('#txt_pass').val(response[0].pass);
   	       $('#txt_dir').val(response[0].direccion);
@@ -580,7 +583,7 @@ function checkKey(e) {
                         <h6 class="mb-0">Correo electrónico</h6>
                       </div>
                       <div class="col-sm-9 text-secondary">
-                      <input type="text"  class="form-control form-control-sm" name="txt_emial" id="txt_emial" required="">
+                      <input type="text"  class="form-control form-control-sm" name="txt_emial" id="txt_emial" required="" autocomplete="off">
                       </div>
                     </div>
                     <div class="row mb-3">
@@ -589,7 +592,7 @@ function checkKey(e) {
                       </div>
                       <div class="col-sm-9 text-secondary">
                         <div class="input-group mb-3">
-                           <input type="password" class="form-control form-control-sm" name="txt_pass" id="txt_pass" required="">
+                           <input type="password" class="form-control form-control-sm" name="txt_pass" id="txt_pass" required="" autocomplete="new-password">
                            <?php if($_SESSION['INICIO']['TIPO']=='DBA') { ?>
                                <button type="button" class="btn btn-info btn-flat btn-sm" onclick="pass()"><i class="lni lni-eye" id="eye"></i></button>                          
                           <?php } ?>
@@ -603,7 +606,7 @@ function checkKey(e) {
                       </div>
                       <div class="col-sm-9 text-secondary">
                         <div class="input-group mb-3">
-                           <select class="form-select form-select-sm" id="ddl_tipo_usuario" name="ddl_tipo_usuario">
+                           <select class="form-select form-select-sm" id="ddl_tipo_usuario" name="ddl_tipo_usuario[]" multiple="multiple">
                              <option value="">Seleccione rol de usuario</option>
                            </select>
                         </div>
