@@ -9,6 +9,10 @@ if (isset($_GET['listar_config_general'])) {
     echo json_encode($controlador->lista_vista_med_ins('correos'));
 }
 
+if (isset($_GET['listar_config_idukay'])) {
+    echo json_encode($controlador->lista_vista_med_ins('idukay'));
+}
+
 if (isset($_GET['listar_config_idukay_cron'])) {
     echo json_encode($controlador->lista_vista_med_ins('idukay_cron'));
 }
@@ -40,8 +44,13 @@ class cat_configuracionGC
 
     function editar($parametros)
     {
+        $sa_config_valor = '';
+        if (isset($parametros['sa_config_valor'])) {
+            $sa_config_valor = $parametros['sa_config_valor'];
+        }
+
         $datos = array(
-            array('campo' => 'sa_config_valor', 'dato' => $parametros['sa_config_valor']),
+            array('campo' => 'sa_config_valor', 'dato' =>  $sa_config_valor),
             array('campo' => 'sa_config_estado', 'dato' => $parametros['sa_config_estado']),
         );
 
@@ -60,7 +69,8 @@ class cat_configuracionGC
             'nombre_empresa' => $parametros['txt_nombre_empresa'],
             'url_guardar_bat' => $parametros['txt_url_guardar_bat'],
             'script_php_motor' => $parametros['txt_script_php_motor'],
-            'motor_bat' => $parametros['txt_motor_bat']
+            'motor_bat' => $parametros['txt_motor_bat'],
+            'hora_ejecucion_PW' => $parametros['txt_hora_PW'],
         ];
 
         // Itera sobre cada par clave-valor y realiza la actualización

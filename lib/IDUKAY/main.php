@@ -227,6 +227,9 @@ class main
             $ponerIdCursos = $this->SQL_idukay->ponerIdCursos();
             $query = $this->clase_llamada->sql_string($ponerIdCursos);
 
+            $ponerSegurosPredeterminados = $this->SQL_idukay->ponerSegurosPredeterminados();
+            $query = $this->clase_llamada->sql_string($ponerSegurosPredeterminados);
+
             /**
              * Parche para que todos los estudiantes salgan y puedan sacar su ficha medica
              */

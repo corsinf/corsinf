@@ -6,6 +6,7 @@
 <script type="text/javascript">
     $(document).ready(function() {
         cargar_datos_v_config();
+        cargar_datos_v_config_idukay();
         //cargar_estudiantes1();
     });
 
@@ -48,6 +49,49 @@
             error: function() {
                 // Manejo de errores
                 $('#pnl_config_general').append('<p>Error al cargar los configs.</p>');
+            }
+        });
+    }
+
+    function cargar_datos_v_config_idukay() {
+        $.ajax({
+            url: '../controlador/cat_configuracionGC.php?listar_config_idukay=true',
+            type: 'post',
+            // data: {
+            //     accion: 'correos'
+            // },
+            dataType: 'json',
+            success: function(response) {
+                console.log(response);
+
+                // Limpiar el contenido previo del div
+                $('#pnl_config_idukay').empty();
+
+                // Verificar si la respuesta contiene datos
+                if (response && response.length > 0) {
+                    response.forEach(function(config) {
+                        // Crear el HTML para cada config
+                        var isChecked = config.sa_config_estado == 1 ? 'checked' : '';
+                        var htmlconfig = '<div class="col-md-12">';
+                        htmlconfig += '<input type="checkbox" class="config-checkbox" name="config[]" id="' + config.sa_config_validar + '" value="' + config.sa_config_id + '" ' + isChecked + '> ';
+                        htmlconfig += '<label>' + config.sa_config_descripcion + '</label>';
+                        htmlconfig += '</div>';
+
+                        // Agregar el HTML generado al div
+                        $('#pnl_config_idukay').append(htmlconfig);
+                    });
+
+                    // Agregar evento change a los checkboxes generados
+                    $('.config-checkbox').change(function() {
+                        var sa_config_id = $(this).val();
+                        var sa_config_estado = $(this).is(':checked') ? 1 : 0;
+                        insertar(sa_config_id, sa_config_estado);
+                    });
+                }
+            },
+            error: function() {
+                // Manejo de errores
+                $('#pnl_config_idukay').append('<p>Error al cargar los configs.</p>');
             }
         });
     }
@@ -532,6 +576,9 @@
 
                             <h5>Configuración Idukay</h5>
 
+                            <div class="row pt-3" id="pnl_config_idukay">
+
+                            </div>
 
                             <br>
 
