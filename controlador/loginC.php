@@ -445,7 +445,6 @@ class loginC
 
 				$roles =  $this->login->roles_x_empresa($parametros['empresa'],$parametros['email']);
 
-				$roles_no = array();
 				$no_concurentes = $this->login->empresa_tabla_noconcurente($parametros['empresa'],false,1);
 			 	 foreach ($no_concurentes as $key => $value) {
 			 	 		$primera_vez = 0;
@@ -466,7 +465,6 @@ class loginC
 				 	 	 }
 			 	 }
 
-				// print_r($roles);die();
 
 			//actualizamos
 			$empresa = $this->login->lista_empresa($parametros['empresa']);
@@ -494,6 +492,7 @@ class loginC
 		 	}
 		 	$rol = '';
 		 	$noConcu = 0;		 	
+		 	$num_roles = count($roles);
 		 	if(count($roles)>1)
 		 	{
 		 		// print_r($roles);die();
@@ -502,20 +501,7 @@ class loginC
 		 			if(isset($value['normal']))
 		 			{
 		 				$normal = 0;
-		 			}
-
-
-		 			 // $rol.= '<li class="list-group-item d-flex align-items-center radius-10 mb-2 shadow-sm" onclick="seleccionar_perfil(\''.$value['ID_TIPO'].'\',\''.$normal.'\')">
-					// 					<div class="d-flex align-items-center">
-					// 					<div class="widgets-icons bg-light-info text-info ms-auto"><i class="bx bxs-group"></i>
-					// 				</div>
-					// 						<div class="flex-grow-1 ms-2">
-					// 							<h6 class="mb-0">'.$value['DESCRIPCION'].'</h6>
-					// 						</div>
-					// 					</div>
-					// 					<div class="ms-auto">
-					// 					<button class="btn btn-sm btn-primary">Ingresar</button></div> 
-					// 				</li>';		 
+		 			} 
 
 
 								$rol.='<div class="row border mx-0 mb-2 py-2 radius-10 cursor-pointer" onclick="seleccionar_perfil(\''.$value['ID_TIPO'].'\',\''.$normal.'\')">
@@ -537,19 +523,36 @@ class loginC
 								</div>';
 
 		 		}
+		 	}elseif(count($roles)==1)
+		 	{
+		 		// print_r($roles);die();
+		 		$num_roles = 1;
+		 		$noConcu = 1;	
+		 		$rol = $roles[0]['ID_TIPO'];	
+		 		if(isset($roles[0]['normal']))
+		 			{
+		 					$noConcu = 0;		
+		 			} 
 		 	}
 
+		 	// print_r($roles);
+		 	// print_r($roles_no);
+		 	// die();
 
-		 	$num_roles = count($roles)+count($roles_no);
-		 	if(count($roles)==1 && count($roles_no)==0)
-		 	{
-		 		$rol = $roles[0]['ID_TIPO'];
-		 		$noConcu = 1;		
-		 	} else if(count($roles)==0 && count($roles_no)==1)
-		 	{
-		 		$rol = $roles_no[0]['ID_TIPO'];
-		 		$noConcu = 0;		
-		 	}
+
+		 	// $num_roles = count($roles)+count($roles_no);
+		 	// if(count($roles)==1 && count($roles_no)==0)
+		 	// {
+		 	// 	$rol = $roles[0]['ID_TIPO'];
+		 	// 	$noConcu = 1;		
+		 	// } else if(count($roles)==0 && count($roles_no)==1)
+		 	// {
+		 	// 	$rol = $roles_no[0]['ID_TIPO'];
+		 	// 	$noConcu = 0;		
+		 	// }
+
+		 	// print_r(array('respuesta'=>$res,'num_roles'=>$num_roles,'roles'=>$rol,'normal'=>$noConcu));die();
+
 
 			return array('respuesta'=>$res,'num_roles'=>$num_roles,'roles'=>$rol,'normal'=>$noConcu);
 		}
