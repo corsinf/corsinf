@@ -54,11 +54,6 @@
                                 <th>Cantidad</th>
                                 <th>Acciones</th>
                             </tr>
-                            <tr>
-                                <th>Nombre del Mueble</th>
-                                <th>Cantidad</th>
-                                <th>Acciones</th>
-                            </tr>
                         </thead>
                         <tbody>
                             <tr>
@@ -77,27 +72,7 @@
     </div>
 
     <!-- JavaScript -->
-    <script>
-        function add_row() {
-            const table = document.getElementById('tbl_furniture').getElementsByTagName('tbody')[0];
-            const new_row = table.insertRow();
-            new_row.innerHTML = `
-                <td><input type="text" class="form-control" name="txt_furniture_name[]" placeholder="Nombre del mueble" required></td>
-                <td><input type="number" class="form-control" name="txt_furniture_quantity[]" placeholder="Cantidad" required></td>
-                <td><button type="button" class="btn btn-danger px-3 radius-30" onclick="remove_row(this)">Eliminar</button></td>
-            `;
-        }
-
-        function remove_row(button) {
-            const row = button.parentElement.parentElement;
-            row.remove();
-        }
-
-        document.getElementById('rental_form').addEventListener('submit', function(event) {
-            event.preventDefault();
-            alert('Formulario enviado!');
-        });
-    </script>
+   
 
     <!-- Bootstrap JS -->
     <script src="bootstrap.bundle.min.js"></script>
