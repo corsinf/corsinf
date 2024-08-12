@@ -143,13 +143,13 @@ class loginC
 			 //busca la empresa en donde es usuario normal 
 			 // print_r($parametros);die();
 			 $datos = $this->login->buscar_empresas($parametros['email'],false,false,1);
-			 if(count($datos)>0) {
-			 	//valida si es deba  1 siempre va a ser DBA
-			 	 if($datos[0]['Id_Tipo_usuario']==1)
-			 	 {
-			 	 		$datos = $this->login->buscar_empresas($parametros['email'],false,false);
-			 	 }
-			 }
+			 // if(count($datos)>0) {
+			 // 	//valida si es deba  1 siempre va a ser DBA
+			 // 	 if($datos[0]['Id_Tipo_usuario']==1)
+			 // 	 {
+			 // 	 		$datos = $this->login->buscar_empresas($parametros['email'],false,false);
+			 // 	 }
+			 // }
 			 // print_r($datos);die();
 			 $active_Valido = 1;
 			 foreach ($datos as $key => $value) {
@@ -162,7 +162,7 @@ class loginC
 						$primera_vez = 1;
 					}
 
-			 		$lista_empresas[] = array('Logo'=>$value['Logo'],'Id_Empresa'=>$value['Id_Empresa'],'Nombre_Comercial'=>$value['Nombre_Comercial'],'ActiveDirectory'=>$active_Valido,'normal'=>1,'no_concurente'=>0,'PERFIL'=>$value['DESCRIPCION'],'Cod_Perfil'=>$value['Id_Tipo_usuario'],'primera_vez'=>$primera_vez); 
+			 		$lista_empresas[] = array('Logo'=>$value['Logo'],'Id_Empresa'=>$value['Id_Empresa'],'Nombre_Comercial'=>$value['Nombre_Comercial'],'ActiveDirectory'=>$active_Valido,'normal'=>1,'no_concurente'=>0,'primera_vez'=>$primera_vez); 
 			 }
 
 			 // print_r($lista_empresas);die();
@@ -186,7 +186,20 @@ class loginC
 					 	 	 		{
 					 	 	 			$primera_vez = 1;
 					 	 	 		}
-					 	 	 		$lista_empresas[] = array('Logo'=>$empresa[0]['Logo'],'Id_Empresa'=>$empresa[0]['Id_Empresa'],'Nombre_Comercial'=>$empresa[0]['Nombre_Comercial'],'ActiveDirectory'=>$active_Valido,'normal'=>0,'no_concurente'=>1,'PERFIL'=>$tipo,'Cod_Perfil'=>$value['tipo_perfil'],'primera_vez'=>$primera_vez); 
+					 	 	 		$existe_en_lista = 0;
+					 	 	 		foreach ($lista_empresas as $key2 => $value2) {
+					 	 	 				if($value2['Id_Empresa']==$empresa[0]['Id_empresa'])
+					 	 	 				{
+					 	 	 					 $existe_en_lista = 1;
+					 	 	 					 break;
+					 	 	 				}
+					 	 	 		}
+
+					 	 	 		if($existe_en_lista==0)
+					 	 	 		{
+					 	 	 			$lista_empresas[] = array('Logo'=>$empresa[0]['Logo'],'Id_Empresa'=>$empresa[0]['Id_Empresa'],'Nombre_Comercial'=>$empresa[0]['Nombre_Comercial'],'ActiveDirectory'=>$active_Valido,'normal'=>0,'no_concurente'=>1,'PERFIL'=>$tipo,'Cod_Perfil'=>$value['tipo_perfil'],'primera_vez'=>$primera_vez); 
+					 	 	 				$existe_en_lista = 0;
+					 	 	 		}
 					 	 	 	}
 				 	 	 }
 			 	 }
@@ -201,25 +214,45 @@ class loginC
 			 
 
 			 	 $empresas = '';
+
+			 	 // print_r($lista_empresas);die();
 			 foreach ($lista_empresas as $key => $value) {
-			 	$foto = 'img/de_sistema/sin-logo.png';
+			 	$foto = 'img/de_sistema/apudata.jpeg';
 			 	if(file_exists($value['Logo'])){$foto = str_replace('../','',$value['Logo']); }
-			 	$empresas.= '<li class="list-group-item d-flex align-items-center radius-10 mb-2 shadow-sm" onclick="empresa_selecconada('.$value['Id_Empresa'].','.$value['ActiveDirectory'].','.$value['normal'].','.$value['Cod_Perfil'].','.$value['primera_vez'].',\''.$parametros['email'].'\','.$value['primera_vez'].')">
-											<div class="d-flex align-items-center">
-												<div class="font-20"><img style="width:70px; height:50px" src="'.$foto.'" />
-												</div>
-												<div class="flex-grow-1 ms-2">
-													<h6 class="mb-0">'.$value['Nombre_Comercial'].'</h6>
-															<div class="d-flex align-items-center text-primary">	<i class="bx bx-radio-circle-marked bx-burst bx-rotate-90 align-middle font-18 me-1"></i>
-														<span>'.$value['PERFIL'].'</span>
-													</div>
+
+			 	// $empresas.= '<li class="list-group-item d-flex align-items-center radius-10 mb-2 shadow-sm" onclick="empresa_selecconada('.$value['Id_Empresa'].','.$value['ActiveDirectory'].','.$value['primera_vez'].',\''.$parametros['email'].'\','.$value['primera_vez'].')">
+				// 							<div class="d-flex align-items-center">
+				// 								<div class="font-20"><img style="width:70px; height:50px" src="'.$foto.'" />
+				// 								</div>
+				// 								<div class="flex-grow-1 ms-2">
+				// 									<h6 class="mb-0">'.$value['Nombre_Comercial'].'</h6>
+				// 										<!--	<div class="d-flex align-items-center text-primary">	<i class="bx bx-radio-circle-marked bx-burst bx-rotate-90 align-middle font-18 me-1"></i>
+														
+				// 									</div> --!>
 
 
-												</div>
+				// 								</div>
+				// 							</div>
+				// 							<div class="ms-auto">
+				// 							</div>
+				// 						</li>';
+
+				$empresas.='<div class="row border mx-0 mb-2 py-2 radius-10 cursor-pointer" onclick="empresa_selecconada('.$value['Id_Empresa'].','.$value['ActiveDirectory'].','.$value['primera_vez'].',\''.$parametros['email'].'\','.$value['primera_vez'].')">
+									<div class="col-sm-9">
+										<div class="d-flex align-items-center">
+											<div class="product-img">
+												<img style="width:70px; height:50px" src="'.$foto.'" />
 											</div>
-											<div class="ms-auto">
+											<div class="flex-grow-1 ms-2">
+												<h6 class="mb-1">'.$value['Nombre_Comercial'].'</h6>
 											</div>
-										</li>';
+										</div>
+									</div>
+									<div class="col-sm-3">
+									<br>
+										<div class="badge rounded-pill bg-success w-100">Ingresar</div>
+									</div>									
+								</div>';
 			 }
 			 return array('lista'=>$empresas,'no_concurente'=>$no_concurente);
 	}
@@ -407,6 +440,34 @@ class loginC
 			return array('respuesta'=>2,'modulos'=>$empresas);
 		}else
 		{
+
+			// buscamos los roles
+
+				$roles =  $this->login->roles_x_empresa($parametros['empresa'],$parametros['email']);
+
+				$roles_no = array();
+				$no_concurentes = $this->login->empresa_tabla_noconcurente($parametros['empresa'],false,1);
+			 	 foreach ($no_concurentes as $key => $value) {
+			 	 		$primera_vez = 0;
+			 	 		$tipo = $value['tipo'];
+			 	 	 	$empresa = $this->login->lista_empresa($value['Id_Empresa']);
+			 	 	 	$parametros['Campo_Usuario'] = $value['Campo_usuario'];
+			 	 	 	$Campo_Pass = $value['Campo_pass'];
+			 	 	 	$parametros['tabla'] = $value['Tabla'];
+			 	 	 	// print_r($empresa);die();
+			 	 	 	if(count($empresa)>0)
+			 	 	 	{
+					 	 	 	$busqueda_tercero = $this->login->buscar_db_terceros($empresa[0]['Base_datos'],$empresa[0]['Usuario_db'],$empresa[0]['Password_db'],$empresa[0]['Ip_host'],$empresa[0]['Puerto_db'],$parametros);
+
+					 	 	 	if(count($busqueda_tercero)>0)
+					 	 	 	{
+					 	 	 		$roles[] = array('DESCRIPCION'=>$value['tipo'],'ID_TIPO'=>$value['tipo_perfil'],'normal'=>0);
+					 	 	 	}
+				 	 	 }
+			 	 }
+
+				// print_r($roles);die();
+
 			//actualizamos
 			$empresa = $this->login->lista_empresa($parametros['empresa']);
 			// print_r($empresa);die();
@@ -431,7 +492,66 @@ class loginC
 			 	}
 		 		// print_r($empresa);die();
 		 	}
-			return array('respuesta'=>$res);
+		 	$rol = '';
+		 	$noConcu = 0;		 	
+		 	if(count($roles)>1)
+		 	{
+		 		// print_r($roles);die();
+		 		foreach ($roles as $key => $value) {
+		 			$normal = 1;
+		 			if(isset($value['normal']))
+		 			{
+		 				$normal = 0;
+		 			}
+
+
+		 			 // $rol.= '<li class="list-group-item d-flex align-items-center radius-10 mb-2 shadow-sm" onclick="seleccionar_perfil(\''.$value['ID_TIPO'].'\',\''.$normal.'\')">
+					// 					<div class="d-flex align-items-center">
+					// 					<div class="widgets-icons bg-light-info text-info ms-auto"><i class="bx bxs-group"></i>
+					// 				</div>
+					// 						<div class="flex-grow-1 ms-2">
+					// 							<h6 class="mb-0">'.$value['DESCRIPCION'].'</h6>
+					// 						</div>
+					// 					</div>
+					// 					<div class="ms-auto">
+					// 					<button class="btn btn-sm btn-primary">Ingresar</button></div> 
+					// 				</li>';		 
+
+
+								$rol.='<div class="row border mx-0 mb-2 py-2 radius-10 cursor-pointer" onclick="seleccionar_perfil(\''.$value['ID_TIPO'].'\',\''.$normal.'\')">
+									<div class="col-sm-9">
+										<div class="d-flex align-items-center">
+											<div class="product-img widgets-icons bg-light-info text-info ms-auto">
+													<i class="bx bxs-user"></i>
+									
+											</div>
+											<div class="flex-grow-1 ms-2">
+												<h6 class="mb-1"> <i class="bx bx-radio-circle-marked bx-burst bx-rotate-90 align-middle font-18 me-1"></i>'.$value['DESCRIPCION'].'</h6>
+											</div>
+										</div>
+									</div>
+									<div class="col-sm-3">
+									<br>
+										<div class="badge rounded-pill bg-success w-100">Ingresar</div>
+									</div>									
+								</div>';
+
+		 		}
+		 	}
+
+
+		 	$num_roles = count($roles)+count($roles_no);
+		 	if(count($roles)==1 && count($roles_no)==0)
+		 	{
+		 		$rol = $roles[0]['ID_TIPO'];
+		 		$noConcu = 1;		
+		 	} else if(count($roles)==0 && count($roles_no)==1)
+		 	{
+		 		$rol = $roles_no[0]['ID_TIPO'];
+		 		$noConcu = 0;		
+		 	}
+
+			return array('respuesta'=>$res,'num_roles'=>$num_roles,'roles'=>$rol,'normal'=>$noConcu);
 		}
 	}
 
@@ -592,6 +712,11 @@ class loginC
 		}else
 		{
 			// print_r($parametros);die();
+			// $empresa = $this->cod_global->lista_empresa($parametros['empresa'],1);
+
+			// print_r($empresa);die();
+			// $r = $this->cod_global->generar_primera_vez($empresa[0]['Base_datos'],$parametros['empresa']);
+			// print_r($r);die();
 			$datos = $this->login->datos_login_pass_requiered($parametros['email'],$this->cod_global->enciptar_clave($parametros['pass']),false,$parametros['tipo']);
 			// print_r($datos);die();
 			if(count($datos)==0)
