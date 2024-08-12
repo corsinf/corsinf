@@ -17,11 +17,11 @@
             <div class="row">
                 <div class="col-md-3 mb-3">
                     <label for="txt_nombre" class="form-label">Nombre:</label>
-                    <input type="text" class="form-control form-control-sm" name="txt_nombre" id="txt_nombre" required>
+                    <input type="text" class="form-control form-control-sm" name="txt_nombre" id="txt_nombre" value="" placeholder="Nombre" required>
                 </div>
                 <div class="col-md-3 mb-3">
                     <label for="txt_correo" class="form-label">Correo:</label>
-                    <input type="email" class="form-control form-control-sm" name="txt_correo" id="txt_correo" required>
+                    <input type="email" class="form-control form-control-sm" name="txt_correo" id="txt_correo" value="" placeholder="Correo electrónico" required>
                 </div>
                 <div class="col-md-3 mb-3">
                     <label for="ddl_categoria" class="form-label">Categoría:</label>
@@ -34,7 +34,7 @@
                 </div>
                 <div class="col-md-3 mb-3">
                     <label for="txt_numero" class="form-label">Número:</label>
-                    <input type="number" class="form-control form-control-sm" name="txt_numero" id="txt_numero" step="1" required>
+                    <input type="number" class="form-control form-control-sm" name="txt_numero" id="txt_numero" value="" placeholder="Número" step="1" required>
                 </div>
             </div>
             <button type="button" class="btn btn-custom" id="btn_registrar_miembro">Registrar Miembro</button>
@@ -61,7 +61,7 @@
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="center-title" id="modal_label"><strong>Registrar Compras</strong></h5>
+                        <h5 class="center-title" id="modal_label"><strong>Bar</strong></h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
@@ -70,20 +70,20 @@
                                 <label for="ddl_producto" class="form-label"><strong>Producto:</strong></label>
                                 <select class="form-control form-control-sm" name="ddl_producto" id="ddl_producto" required>
                                     <option value="">Seleccione un producto</option>
-                                    <option value="gaseosa">Gaeseosa</option>
-                                    <option value="snakcs">Snacks</option>
-                                    <option value="gomitas">Gomitas</option>
-                                    <option value="frutas">Frutas</option>
+                                    <option value="gaseosa" data-precio="1.50">Gaseosa - $1.50</option>
+                                    <option value="snacks" data-precio="2.00">Snacks - $2.00</option>
+                                    <option value="gomitas" data-precio="1.00">Gomitas - $1.00</option>
+                                    <option value="frutas" data-precio="3.00">Frutas - $3.00</option>
                                 </select>
                             </div>
                             
                             <div class="mb-3">
                                 <label for="txt_cantidad" class="form-label"><strong>Cantidad:</strong></label>
-                                <input type="number" class="form-control form-control-sm" name="txt_cantidad" id="txt_cantidad" required>
+                                <input type="number" class="form-control form-control-sm" name="txt_cantidad" id="txt_cantidad" value="" placeholder="Cantidad" required>
                             </div>
                             <div class="mb-3">
                                 <label for="txt_precio" class="form-label"><strong>Precio:</strong></label>
-                                <input type="number" class="form-control form-control-sm" name="txt_precio" id="txt_precio" step="0.01" required>
+                                <input type="number" class="form-control form-control-sm" name="txt_precio" id="txt_precio" value="" placeholder="Precio" step="0.01" required readonly>
                             </div>
                         </form>
                     </div>
@@ -117,91 +117,98 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
     <script>
         let current_miembro_id = null;
-    
+
         function validar_formulario_miembro() {
             const txt_nombre = document.getElementById('txt_nombre').value.trim();
             const txt_correo = document.getElementById('txt_correo').value.trim();
             const ddl_categoria = document.getElementById('ddl_categoria').value.trim();
             const txt_numero = document.getElementById('txt_numero').value.trim();
-    
+
             if (!txt_nombre || !txt_correo || !ddl_categoria || !txt_numero) {
                 alert("Por favor, completa todos los campos antes de registrar un miembro.");
                 return false;
             }
             return true;
         }
-    
+
         function btn_registrar_miembro_click() {
             if (!validar_formulario_miembro()) {
                 return;
             }
-    
+
             const txt_nombre = document.getElementById('txt_nombre').value.trim();
             const txt_correo = document.getElementById('txt_correo').value.trim();
             const ddl_categoria = document.getElementById('ddl_categoria').value.trim();
             const txt_numero = document.getElementById('txt_numero').value.trim();
-    
+
             const tbl_miembros = document.getElementById('tbl_miembros').getElementsByTagName('tbody')[0];
             const row = tbl_miembros.insertRow();
             row.setAttribute('data-id', txt_numero);
-    
+
             row.insertCell(0).textContent = txt_nombre;
             row.insertCell(1).textContent = txt_correo;
             row.insertCell(2).textContent = ddl_categoria;
             row.insertCell(3).textContent = txt_numero;
-    
+
             const actions_cell = row.insertCell(4);
             actions_cell.innerHTML = `
                 <button type="button" class="btn btn-primary btn-sm" onclick="mostrar_modal_registrar_compras('${txt_numero}')">Comprar</button>
             `;
         }
-    
+
         function mostrar_modal_registrar_compras(miembro_id) {
             current_miembro_id = miembro_id;
             const modal = new bootstrap.Modal(document.getElementById('modal_registrar_compras'));
             modal.show();
         }
-    
+
+        function actualizar_precio_producto() {
+            const ddl_producto = document.getElementById('ddl_producto');
+            const txt_precio = document.getElementById('txt_precio');
+            const selectedOption = ddl_producto.options[ddl_producto.selectedIndex];
+            txt_precio.value = selectedOption ? selectedOption.getAttribute('data-precio') : '';
+        }
+
         function btn_guardar_compra_click() {
             const formulario_compras = document.getElementById('formulario_compras');
             const ddl_producto = formulario_compras['ddl_producto'].value;
             const txt_cantidad = formulario_compras['txt_cantidad'].value;
             const txt_precio = formulario_compras['txt_precio'].value;
             const total = txt_cantidad * txt_precio;
-    
-            // Validar los campos antes de proceder
+
+            
             if (!ddl_producto || !txt_cantidad || !txt_precio) {
-                alert("Por favor, completa todos los campos antes de guardar la compra.");
+                alert("Por favor, completa todos los campos antes de guardar una compra.");
                 return;
             }
-    
+
             const tbl_compras = document.getElementById('tbl_compras').getElementsByTagName('tbody')[0];
             const row = tbl_compras.insertRow();
-    
-            const miembro_nombre = document.querySelector(`#tbl_miembros tbody tr[data-id="${current_miembro_id}"] td:first-child`).textContent;
-            row.insertCell(0).textContent = miembro_nombre;
+            row.insertCell(0).textContent = current_miembro_id;
             row.insertCell(1).textContent = ddl_producto;
             row.insertCell(2).textContent = txt_cantidad;
             row.insertCell(3).textContent = txt_precio;
             row.insertCell(4).textContent = total.toFixed(2);
-    
+
             const actions_cell = row.insertCell(5);
             actions_cell.innerHTML = `
-                <button type="button" class="btn btn-danger btn-sm" onclick="eliminar_compra(this)">Eliminar</button>
+                <button type="button" class="btn btn-danger btn-sm" onclick="eliminar_fila(this)">Eliminar</button>
             `;
-    
+
             
             const modal = bootstrap.Modal.getInstance(document.getElementById('modal_registrar_compras'));
             modal.hide();
         }
-    
-        function eliminar_compra(button) {
-            const row = button.closest('tr');
+
+        function eliminar_fila(boton) {
+            const row = boton.closest('tr');
             row.remove();
         }
-    
-        document.getElementById('btn_guardar_compra').addEventListener('click', btn_guardar_compra_click);
+
         document.getElementById('btn_registrar_miembro').addEventListener('click', btn_registrar_miembro_click);
+        document.getElementById('ddl_producto').addEventListener('change', actualizar_precio_producto);
+        document.getElementById('btn_guardar_compra').addEventListener('click', btn_guardar_compra_click);
     </script>
 </body>
+
 </html>
