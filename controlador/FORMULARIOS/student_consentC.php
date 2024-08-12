@@ -18,7 +18,7 @@ if (isset($_GET['eliminar'])) {
 }
 
 if (isset($_GET['pdf_studentconsent'])) {
-    echo json_encode($controlador->pdf_studentconsent());
+    echo ($controlador->pdf_studentconsent($_GET['id']));
 }
 
 
@@ -41,38 +41,80 @@ class student_consentC
 
     function insertar_editar($parametros)
     {
+        $edu_cbx_academic_all = isset($_POST['edu_cbx_academic_all']) && $_POST['edu_cbx_academic_all'] == 'true' ? 1 : 0;
+        $edu_cbx_academic_1 = isset($_POST['edu_cbx_academic_1']) && $_POST['edu_cbx_academic_1'] == 'true' ? 1 : 0;
+        $edu_cbx_academic_2 = isset($_POST['edu_cbx_academic_2']) && $_POST['edu_cbx_academic_2'] == 'true' ? 1 : 0;
+        $edu_cbx_academic_3 = isset($_POST['edu_cbx_academic_3']) && $_POST['edu_cbx_academic_3'] == 'true' ? 1 : 0;
+        $edu_cbx_academic_4 = isset($_POST['edu_cbx_academic_4']) && $_POST['edu_cbx_academic_4'] == 'true' ? 1 : 0;
+        $edu_cbx_academic_5 = isset($_POST['edu_cbx_academic_5']) && $_POST['edu_cbx_academic_5'] == 'true' ? 1 : 0;
+        $edu_cbx_academic_6 = isset($_POST['edu_cbx_academic_6']) && $_POST['edu_cbx_academic_6'] == 'true' ? 1 : 0;
+        $edu_cbx_financial_all = isset($_POST['edu_cbx_financial_all']) && $_POST['edu_cbx_financial_all'] == 'true' ? 1 : 0;
+        $edu_cbx_financial_1 = isset($_POST['edu_cbx_financial_1']) && $_POST['edu_cbx_financial_1'] == 'true' ? 1 : 0;
+        $edu_cbx_financial_2 = isset($_POST['edu_cbx_financial_2']) && $_POST['edu_cbx_financial_2'] == 'true' ? 1 : 0;
+        $edu_cbx_financial_3 = isset($_POST['edu_cbx_financial_3']) && $_POST['edu_cbx_financial_3'] == 'true' ? 1 : 0;
+        $edu_cbx_aid_financial = isset($_POST['edu_cbx_aid_financial']) && $_POST['edu_cbx_aid_financial'] == 'true' ? 1 : 0;
+        $edu_cbx_housing_all = isset($_POST['edu_cbx_housing_all']) && $_POST['edu_cbx_housing_all'] == 'true' ? 1 : 0;
+        $edu_cbx_housing_1 = isset($_POST['edu_cbx_housing_1']) && $_POST['edu_cbx_housing_1'] == 'true' ? 1 : 0;
+        $edu_cbx_housing_2 = isset($_POST['edu_cbx_housing_2']) && $_POST['edu_cbx_housing_2'] == 'true' ? 1 : 0;
+        $edu_cbx_housing_3 = isset($_POST['edu_cbx_housing_3']) && $_POST['edu_cbx_housing_3'] == 'true' ? 1 : 0;
+        $edu_cbx_remove_consent = isset($_POST['edu_cbx_remove_consent']) && $_POST['edu_cbx_remove_consent'] == 'true' ? 1 : 0;
 
-        $datos1[0]['campo'] = 'pac_id';
-        $datos1[0]['dato'] = strval($parametros['txt_id']);
+        $datos1[0]['campo'] = 'edu_id';
+        $datos1[0]['dato'] = strval($parametros['txt_student']);
 
         $datos = array(
-            array('campo' => 'pac_primer_apellido', 'dato' => $parametros['txt_primer_apellido']),
-            array('campo' => 'pac_segundo_apellido', 'dato' => $parametros['txt_segundo_apellido']),
-            array('campo' => 'pac_primer_nombre', 'dato' => $parametros['txt_primer_nombre']),
-            array('campo' => 'pac_segundo_nombre', 'dato' => $parametros['txt_segundo_nombre']),
-            array('campo' => 'pac_cedula', 'dato' => $parametros['txt_cedula']),
-            array('campo' => 'pac_sexo', 'dato' => $parametros['ddl_sexo']),
-            array('campo' => 'pac_tipo_sangre', 'dato' => $parametros['txt_tipo_sangre']),
-            array('campo' => 'pac_fecha_nacimiento', 'dato' => $parametros['txt_fecha_nacimiento']),
-            array('campo' => 'pac_telefono_1', 'dato' => $parametros['txt_telefono_1']),
-            array('campo' => 'pac_telefono_2', 'dato' => $parametros['txt_telefono_2']),
-            array('campo' => 'pac_correo', 'dato' => $parametros['txt_correo']),
-            array('campo' => 'pac_direccion', 'dato' => $parametros['txt_direccion']),
+            array('campo' => 'edu_nombre_estudiante', 'dato' => $parametros['txt_student']),
+            array('campo' => 'edu_id_estudiante', 'dato' => $parametros['txt_id_student']),
+            array('campo' => 'edu_fecha_nacimiento', 'dato' => $parametros['txt_birth_date']),
+            array('campo' => 'edu_proposito_autorizacion', 'dato' => $parametros['txt_purpose_authorization']),
+            array('campo' => 'edu_primer_nombre_autorizado', 'dato' => $parametros['txt_first_authorized_name']),
+            array('campo' => 'edu_primer_relacion_autorizada', 'dato' => $parametros['txt_first_relationship']),
+            array('campo' => 'edu_primera_direccion_autorizada', 'dato' => $parametros['txt_first_address']),
+            array('campo' => 'edu_primer_email_autorizado', 'dato' => $parametros['txt_first_email']),
+            array('campo' => 'edu_segundo_nombre_autorizado', 'dato' => $parametros['txt_second_authorized_name']),
+            array('campo' => 'edu_segunda_relacion_autorizada', 'dato' => $parametros['txt_second_relationship']),
+            array('campo' => 'edu_segunda_direccion_autorizada', 'dato' => $parametros['txt_second_address']),
+            array('campo' => 'edu_segundo_email_autorizado', 'dato' => $parametros['txt_second_email']),
+            // array('campo' => 'edu_firma_estudiante', 'dato' => $parametros['']),
+            // array('campo' => 'edu_fecha_firma', 'dato' => $parametros['']),
+            // array('campo' => 'edu_nombre_registro', 'dato' => $parametros['']),
+            // array('campo' => 'edu_fecha_registro', 'dato' => $parametros['']),
+            array('campo' => 'edu_cbx_academic_all', 'dato' => $edu_cbx_academic_all),
+            array('campo' => 'edu_cbx_academic_1', 'dato' => $edu_cbx_academic_1),
+            array('campo' => 'edu_cbx_academic_2', 'dato' => $edu_cbx_academic_2),
+            array('campo' => 'edu_cbx_academic_3', 'dato' => $edu_cbx_academic_3),
+            array('campo' => 'edu_cbx_academic_4', 'dato' => $edu_cbx_academic_4),
+            array('campo' => 'edu_cbx_academic_5', 'dato' => $edu_cbx_academic_5),
+            array('campo' => 'edu_cbx_academic_6', 'dato' => $edu_cbx_academic_6),
+            array('campo' => 'edu_cbx_financial_all', 'dato' => $edu_cbx_financial_all),
+            array('campo' => 'edu_cbx_financial_1', 'dato' => $edu_cbx_financial_1),
+            array('campo' => 'edu_cbx_financial_2', 'dato' => $edu_cbx_financial_2),
+            array('campo' => 'edu_cbx_financial_3', 'dato' => $edu_cbx_financial_3),
+            array('campo' => 'edu_cbx_aid_financial', 'dato' => $edu_cbx_aid_financial),
+            array('campo' => 'edu_cbx_housing_all', 'dato' => $edu_cbx_housing_all),
+            array('campo' => 'edu_cbx_housing_1', 'dato' => $edu_cbx_housing_1),
+            array('campo' => 'edu_cbx_housing_2', 'dato' => $edu_cbx_housing_2),
+            array('campo' => 'edu_cbx_housing_3', 'dato' => $edu_cbx_housing_3),
+            array('campo' => 'edu_cbx_remove_consent', 'dato' => $edu_cbx_remove_consent),
+            // array('campo' => 'edu_fecha_creacion', 'dato' => $parametros['']),
+            // array('campo' => 'edu_fecha_modificacion', 'dato' => $parametros['']),
+            // array('campo' => 'edu_estado', 'dato' => $parametros['']),
         );
 
-        if ($parametros['txt_id'] == '') {
-            if (count($this->modelo->where('pac_cedula', $parametros['txt_cedula'])->listar()) == 0) {
-                $datos = $this->modelo->insertar($datos);
-            } else {
-                return -2;
-            }
-        } else {
-            $where[0]['campo'] = 'pac_id';
-            $where[0]['dato'] = $parametros['pac_id'];
-            $datos = $this->modelo->editar($datos, $where);
-        }
-        //$datos = $this->modelo->insertar($datos);
+        // if ($parametros['txt_id'] == '') {
+        //     if (count($this->modelo->where('pac_cedula', $parametros['txt_cedula'])->listar()) == 0) {
+        //         $datos = $this->modelo->insertar($datos);
+        //     } else {
+        //         return -2;
+        //     }
+        // } else {
+        //     $where[0]['campo'] = 'edu_id';
+        //     $where[0]['dato'] = $parametros['edu_id'];
+        //     $datos = $this->modelo->editar($datos, $where);
+        // }
+        $datos = $this->modelo->insertar($datos);
         return $datos;
+        return ($parametros);
     }
 
     function eliminar($id)

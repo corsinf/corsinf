@@ -1,7 +1,73 @@
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.21.0/jquery.validate.min.js" integrity="sha512-KFHXdr2oObHKI9w4Hv1XPKc898mE4kgYx58oqsc/JqqdLMDI4YjOLzom+EMlW8HFUd0QfjfAvxSL6sEq/a42fQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script>
     $(document).ready(function() {
         cargarDatos();
+
     });
+    // $("form").validate({
+    //     rules: {
+    //         txt_student: {
+    //             required: true,
+    //         },
+    //         txt_id_student: {
+    //             required: true,
+    //             digits: true,
+    //         },
+    //         txt_birth_date: {
+    //             required: true,
+    //             date: true
+    //         },
+    //         txt_purpose_authorization: {
+    //             required: true,
+    //         },
+    //         txt_first_authorized_name: {
+    //             required: true,
+    //         },
+    //         txt_first_address: {
+    //             required: true,
+    //         },
+    //         txt_first_relationship: {
+    //             required: true,
+    //         },
+    //         txt_first_email: {
+    //             required: true,
+    //             email: true
+    //         },
+    //         txt_second_authorized_name: {
+    //             required: true,
+    //         },
+    //         txt_second_address: {
+    //             required: true,
+    //         },
+    //         txt_second_relationship: {
+    //             required: true,
+    //         },
+    //         txt_second_email: {
+    //             required: true,
+    //             email: true
+    //         },
+    //         cbx_academic_info: {
+    //             required: true
+    //         },
+    //         cbx_financial_info: {
+    //             required: true
+    //         },
+    //         cbx_aid_info: {
+    //             required: true
+    //         },
+    //         cbx_housing_info: {
+    //             required: true
+    //         },
+    //         cbx_remove_consent: {
+    //             required: true
+    //         }
+    //     }
+
+    // });
+
+    // $('#btn_guardar').on('click', function() {
+    //     console.log($('form').valid());
+    // });
 
     function cargarDatos() {
         $.ajax({
@@ -24,140 +90,155 @@
 
     function editar_insertar() {
 
-        var edu_nombre_estudiante = $('#txt_student').val();
-        var edu_id_estudiante = $('#txt_id_student').val();
-        var edu_fecha_nacimiento = $('#txt_birth_date').val();
-        var edu_proposito_autorizacion = $('#txt_purpose_authorization').val();
-        var edu_primer_nombre_autorizado = $('#txt_first_authorized_name').val();
-        var edu_primer_relacion_autorizada = $('#txt_first_relationship').val();
-        var edu_primera_direccion_autorizada = $('#txt_first_address').val();
-        var edu_primer_email_autorizado = $('#txt_first_email').val();
-        var edu_segundo_nombre_autorizado = $('#txt_second_authorized_name').val();
-        var edu_segunda_relacion_autorizada = $('#txt_second_relationship').val();
-        var edu_segunda_direccion_autorizada = $('#txt_second_address').val();
-        var edu_segundo_email_autorizado = $('#txt_second_email').val();
+        var txt_student = $('#txt_student').val();
+        var txt_id_student = $('#txt_id_student').val();
+        var txt_birth_date = $('#txt_birth_date').val();
+        var txt_purpose_authorization = $('#txt_purpose_authorization').val();
+        var txt_first_authorized_name = $('#txt_first_authorized_name').val();
+        var txt_first_relationship = $('#txt_first_relationship').val();
+        var txt_first_address = $('#txt_first_address').val();
+        var txt_first_email = $('#txt_first_email').val();
+        var txt_second_authorized_name = $('#txt_second_authorized_name').val();
+        var txt_second_relationship = $('#txt_second_relationship').val();
+        var txt_second_address = $('#txt_second_address').val();
+        var txt_second_email = $('#txt_second_email').val();
         /*var edu_firma_estudiante = $('#').val();
         var edu_fecha_firma = $('#').val();
         var edu_nombre_registro = $('#').val();
         var edu_fecha_registro = $('#').val();
         var edu_estado = $('#').val();
         var edu_fecha_creacion = $('#').val();*/
-        var edu_cbx_academic_all = $('#cbx_academic_info').prop('checked');
-        var edu_cbx_academic_1 = $('#cbx_admission').prop('checked');
-        var edu_cbx_academic_2 = $('#cbx_registration').prop('checked');
-        var edu_cbx_academic_3 = $('#cbx_grades').prop('checked');
-        var edu_cbx_academic_4 = $('#cbx_gpa').prop('checked');
-        var edu_cbx_academic_5 = $('#cbx_standing').prop('checked');
-        var edu_cbx_academic_6 = $('#cbx_graduation').prop('checked');
-        var edu_cbx_financial_all = $('#cbx_financial_info').prop('checked');
-        var edu_cbx_financial_1 = $('#cbx_fees').prop('checked');
-        var edu_cbx_financial_2 = $('#cbx_charges').prop('checked');
-        var edu_cbx_financial_3 = $('#cbx_payments').prop('checked');
-        var edu_cbx_aid_financial = $('#cbx_aid_info').prop('checked');
-        var edu_cbx_housing_all = $('#cbx_housing_info').prop('checked');
-        var edu_cbx_housing_1 = $('#cbx_location').prop('checked');
-        var edu_cbx_housing_2 = $('#cbx_room').prop('checked');
-        var edu_cbx_housing_3 = $('#cbx_judicial').prop('checked');
-        var edu_cbx_remove_consent = $('#cbx_remove_consent').prop('checked');
+        var cbx_academic_info = $('#cbx_academic_info').prop('checked');
+        var cbx_admission = $('#cbx_admission').prop('checked');
+        var cbx_registration = $('#cbx_registration').prop('checked');
+        var cbx_grades = $('#cbx_grades').prop('checked');
+        var cbx_gpa = $('#cbx_gpa').prop('checked');
+        var cbx_standing = $('#cbx_standing').prop('checked');
+        var cbx_graduation = $('#cbx_graduation').prop('checked');
+        var cbx_financial_info = $('#cbx_financial_info').prop('checked');
+        var cbx_fees = $('#cbx_fees').prop('checked');
+        var cbx_charges = $('#cbx_charges').prop('checked');
+        var cbx_payments = $('#cbx_payments').prop('checked');
+        var cbx_aid_info = $('#cbx_aid_info').prop('checked');
+        var cbx_housing_info = $('#cbx_housing_info').prop('checked');
+        var cbx_location = $('#cbx_location').prop('checked');
+        var cbx_room = $('#cbx_room').prop('checked');
+        var cbx_judicial = $('#cbx_judicial').prop('checked');
+        var cbx_remove_consent = $('#cbx_remove_consent').prop('checked');
 
+        (function() {
+            'use strict'
 
+            var forms = document.querySelectorAll('.needs-validation');
+
+            Array.prototype.slice.call(forms)
+                .forEach(function(form) {
+                    form.addEventListener('click', function(event) {
+                        if (!form.checkValidity()) {
+                            event.stopPropagation();
+                        }
+
+                        form.classList.add('was-validated');
+                    }, false);
+                });
+        })();
 
         var parametros = {
 
             //'edu_id': edu_id,
-            'edu_nombre_estudiante': edu_nombre_estudiante,
-            'edu_id_estudiante': edu_id_estudiante,
-            'edu_fecha_nacimiento': edu_fecha_nacimiento,
-            'edu_proposito_autorizacion': edu_proposito_autorizacion,
-            'edu_primer_nombre_autorizado': edu_primer_nombre_autorizado,
-            'edu_primer_relacion_autorizada': edu_primer_relacion_autorizada,
-            'edu_primera_direccion_autorizada': edu_primera_direccion_autorizada,
-            'edu_primer_email_autorizado': edu_primer_email_autorizado,
-            'edu_segundo_nombre_autorizado': edu_segundo_nombre_autorizado,
-            'edu_segunda_relacion_autorizada': edu_segunda_relacion_autorizada,
-            'edu_segunda_direccion_autorizada': edu_segunda_direccion_autorizada,
-            'edu_segundo_email_autorizado': edu_segundo_email_autorizado,
+            'txt_student': txt_student,
+            'txt_id_student': txt_id_student,
+            'txt_birth_date': txt_birth_date,
+            'txt_purpose_authorization': txt_purpose_authorization,
+            'txt_first_authorized_name': txt_first_authorized_name,
+            'txt_first_relationship': txt_first_relationship,
+            'txt_first_address': txt_first_address,
+            'txt_first_email': txt_first_email,
+            'txt_second_authorized_name': txt_second_authorized_name,
+            'txt_second_relationship': txt_second_relationship,
+            'txt_second_address': txt_second_address,
+            'txt_second_email': txt_second_email,
             /*'edu_firma_estudiante': edu_firma_estudiante,
             'edu_fecha_firma': edu_fecha_firma,
             'edu_nombre_registro': edu_nombre_registro,
             'edu_fecha_registro': edu_fecha_registro,
             'edu_estado': edu_estado,
             'edu_fecha_creacion': edu_fecha_creacion,*/
-            'edu_cbx_academic_all': edu_cbx_academic_all,
-            'edu_cbx_academic_1': edu_cbx_academic_1,
-            'edu_cbx_academic_2': edu_cbx_academic_2,
-            'edu_cbx_academic_3': edu_cbx_academic_3,
-            'edu_cbx_academic_4': edu_cbx_academic_4,
-            'edu_cbx_academic_5': edu_cbx_academic_5,
-            'edu_cbx_academic_6': edu_cbx_academic_6,
-            'edu_cbx_financial_all': edu_cbx_financial_all,
-            'edu_cbx_financial_1': edu_cbx_financial_1,
-            'edu_cbx_financial_2': edu_cbx_financial_2,
-            'edu_cbx_financial_3': edu_cbx_financial_3,
-            'edu_cbx_aid_financial': edu_cbx_aid_financial,
-            'edu_cbx_housing_all': edu_cbx_housing_all,
-            'edu_cbx_housing_1': edu_cbx_housing_1,
-            'edu_cbx_housing_2': edu_cbx_housing_2,
-            'edu_cbx_housing_3': edu_cbx_housing_3,
-            'edu_cbx_remove_consent': edu_cbx_remove_consent
+            'cbx_academic_info': cbx_academic_info,
+            'cbx_admission': cbx_admission,
+            'cbx_registration': cbx_registration,
+            'cbx_grades': cbx_grades,
+            'cbx_gpa': cbx_gpa,
+            'cbx_standing': cbx_standing,
+            'cbx_graduation': cbx_graduation,
+            'cbx_financial_info': cbx_financial_info,
+            'cbx_fees': cbx_fees,
+            'cbx_charges': cbx_charges,
+            'cbx_payments': cbx_payments,
+            'cbx_aid_info': cbx_aid_info,
+            'cbx_housing_info': cbx_housing_info,
+            'cbx_location': cbx_location,
+            'cbx_room': cbx_room,
+            'cbx_judicial': cbx_judicial,
+            'cbx_remove_consent': cbx_remove_consent
         };
 
         //alert(validar_email(sa_est_correo));
         console.log(parametros);
+        insertar(parametros);
+        // if (sa_est_id == '') {
+        //     if (
+        //         sa_est_primer_apellido === '' ||
+        //         sa_est_segundo_apellido === '' ||
+        //         sa_est_primer_nombre === '' ||
+        //         sa_est_segundo_nombre === '' ||
+        //         sa_est_cedula === '' ||
+        //         sa_est_sexo == null ||
+        //         sa_est_fecha_nacimiento === '' ||
+        //         sa_id_seccion == null ||
+        //         sa_id_grado == null ||
+        //         sa_id_paralelo == null ||
+        //         validar_email(sa_est_correo) == false ||
+        //         sa_id_representante == null ||
+        //         sa_est_rep_parentesco == null
 
-        if (sa_est_id == '') {
-            if (
-                sa_est_primer_apellido === '' ||
-                sa_est_segundo_apellido === '' ||
-                sa_est_primer_nombre === '' ||
-                sa_est_segundo_nombre === '' ||
-                sa_est_cedula === '' ||
-                sa_est_sexo == null ||
-                sa_est_fecha_nacimiento === '' ||
-                sa_id_seccion == null ||
-                sa_id_grado == null ||
-                sa_id_paralelo == null ||
-                validar_email(sa_est_correo) == false ||
-                sa_id_representante == null ||
-                sa_est_rep_parentesco == null
+        //     ) {
+        //         Swal.fire({
+        //             icon: 'error',
+        //             title: 'Oops...',
+        //             text: 'Asegurese de llenar todos los campos',
+        //         })
 
-            ) {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Oops...',
-                    text: 'Asegurese de llenar todos los campos',
-                })
-
-            } else {
-                //console.log(parametros);
-                insertar(parametros)
-            }
-        } else {
-            if (
-                sa_est_primer_apellido === '' ||
-                sa_est_segundo_apellido === '' ||
-                sa_est_primer_nombre === '' ||
-                sa_est_segundo_nombre === '' ||
-                sa_est_cedula === '' ||
-                sa_est_sexo == null ||
-                sa_est_fecha_nacimiento === '' ||
-                sa_id_seccion == null ||
-                sa_id_grado == null ||
-                sa_id_paralelo == null ||
-                validar_email(sa_est_correo) == false ||
-                sa_id_representante == null ||
-                sa_est_rep_parentesco == null
-            ) {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Oops...',
-                    text: 'Asegurese de llenar todos los campos',
-                })
-            } else {
-                //console.log(parametros);
-                insertar(parametros);
-            }
-        }
+        //     } else {
+        //         //console.log(parametros);
+        //         insertar(parametros)
+        //     }
+        // } else {
+        //     if (
+        //         sa_est_primer_apellido === '' ||
+        //         sa_est_segundo_apellido === '' ||
+        //         sa_est_primer_nombre === '' ||
+        //         sa_est_segundo_nombre === '' ||
+        //         sa_est_cedula === '' ||
+        //         sa_est_sexo == null ||
+        //         sa_est_fecha_nacimiento === '' ||
+        //         sa_id_seccion == null ||
+        //         sa_id_grado == null ||
+        //         sa_id_paralelo == null ||
+        //         validar_email(sa_est_correo) == false ||
+        //         sa_id_representante == null ||
+        //         sa_est_rep_parentesco == null
+        //     ) {
+        //         Swal.fire({
+        //             icon: 'error',
+        //             title: 'Oops...',
+        //             text: 'Asegurese de llenar todos los campos',
+        //         })
+        //     } else {
+        //         //console.log(parametros);
+        //         
+        //     }
+        // }
     }
 
     function insertar(parametros) {
@@ -165,7 +246,7 @@
             data: {
                 parametros: parametros
             },
-            url: '../controlador/estudiantesC.php?insertar=true',
+            url: '../controlador/FORMULARIOS/student_consentC.php?insertar=true',
             type: 'post',
             dataType: 'json',
 
@@ -203,199 +284,205 @@
                             <div>
                                 <h3>CONSENT FOR RELEASE</h3>
                                 <h5>of Student Information</h5>
-                                <div>
-                                    <div class="row py-3">
-                                        <div class="col-12 col-lg-8">
-                                            <form action="">
+                                <form class="needs-validation">
+                                    <div>
+                                        <div class="row py-3">
+                                            <div class="col-12 col-lg-8">
                                                 <div class="mb-3 row">
                                                     <label for="txt_student" class="col-sm-1 col-form-label"><strong>Student:</strong></label>
-                                                    <div class="col-sm-10">
-                                                        <input type="text" class="form-control" name="txt_student" id="txt_student">
+                                                    <div class="col-sm-10 has-validation">
+                                                        <input type="text" class="form-control" name="txt_student" id="txt_student" placeholder="first middle and last name" required>
+                                                        <div class="invalid-feedback">Please provide a valid name.</div>
                                                     </div>
                                                 </div>
-                                            </form>
-                                        </div>
-                                        <div class="col-12 col-lg-4">
-                                            <form action="">
+                                            </div>
+                                            <div class="col-12 col-lg-4">
                                                 <div class="row g-3 align-items-center mb-3">
                                                     <div class="col-auto">
                                                         <label for="txt_id_student" class="col-form-label"><strong>Student ID:</strong></label>
                                                     </div>
-                                                    <div class="col-auto">
-                                                        <input type="text" class="form-control" name="txt_id_student" id="txt_id_student">
+                                                    <div class="col-auto has-validation">
+                                                        <input type="text" class="form-control" name="txt_id_student" id="txt_id_student" required>
+                                                        <div class="invalid-feedback">Please provide a valid ID.</div>
                                                     </div>
                                                 </div>
                                                 <div class="row g-3 align-items-center">
                                                     <div class="col-auto">
                                                         <label for="txt_birth_date" class="col-form-label"><strong>Birth Date:</strong></label>
                                                     </div>
-                                                    <div class="col-auto">
-                                                        <input type="date" class="form-control" name="txt_birth_date" id="txt_birth_date">
+                                                    <div class="col-auto has-validation">
+                                                        <input type="date" class="form-control" name="txt_birth_date" id="txt_birth_date" required>
+                                                        <div class="invalid-feedback">Please provide a valid birth date.</div>
                                                     </div>
-                                            </form>
-                                        </div>
-                                    </div>
+                                                </div>
+                                            </div>
 
-                                    <p class="py-3"><strong>I hereby authorize the University of Idaho to discuss and verbally release the following information: </strong></p>
+                                            <p class="py-3"><strong>I hereby authorize the University of Idaho to discuss and verbally release the following information: </strong></p>
 
-                                    <div class="form-check">
-                                        <form action="">
-                                            <input type="checkbox" class="form-check-input" name="cbx_academic_info" id="cbx_academic_info">
-                                            <label for="cbx_academic_info" class="form-check-label"><strong>ALL</strong> academic information <strong>OR</strong> these individual items:</label>
-                                            <div class="row p-4">
-                                                <div class="col-12 col-lg-2">
-                                                    <div>
-                                                        <input type="checkbox" class="form-check-input cbx_items_academic_info" name="cbx_admission" id="cbx_admission">
-                                                        <label for="cbx_admission" class="form-check-label">Admission</label>
+                                            <div class="form-check ">
+                                                <input type="checkbox" class="form-check-input" name="cbx_academic_info" id="cbx_academic_info" required>
+                                                <label for="cbx_academic_info" class="form-check-label"><strong>ALL</strong> academic information <strong>OR</strong> these individual items:</label>
+                                                <div class="invalid-feedback">You must select at least one.</div>
+                                                <div class="row p-4">
+                                                    <div class="col-12 col-lg-2">
+                                                        <div>
+                                                            <input type="checkbox" class="form-check-input cbx_items_academic_info" name="cbx_admission" id="cbx_admission" required>
+                                                            <label for="cbx_admission" class="form-check-label">Admission</label>
+                                                        </div>
+                                                        <div>
+                                                            <input type="checkbox" class="form-check-input cbx_items_academic_info" name="cbx_gpa" id="cbx_gpa" required>
+                                                            <label for="cbx_gpa" class="form-check-label">GPA</label>
+                                                        </div>
                                                     </div>
-                                                    <div>
-                                                        <input type="checkbox" class="form-check-input cbx_items_academic_info" name="cbx_gpa" id="cbx_gpa">
-                                                        <label for="cbx_gpa" class="form-check-label">GPA</label>
+                                                    <div class="col-12 col-lg-2">
+                                                        <div>
+                                                            <input type="checkbox" class="form-check-input cbx_items_academic_info" name="cbx_registration" id="cbx_registration" required>
+                                                            <label for="cbx_registration" class="form-check-label">Registration/Enrollment</label>
+                                                        </div>
+                                                        <div>
+                                                            <input type="checkbox" class="form-check-input cbx_items_academic_info" name="cbx_standing" id="cbx_standing" required>
+                                                            <label for="cbx_standing" class="form-check-label">Academic Standing</label>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                                <div class="col-12 col-lg-2">
-                                                    <div>
-                                                        <input type="checkbox" class="form-check-input cbx_items_academic_info" name="cbx_registration" id="cbx_registration">
-                                                        <label for="cbx_registration" class="form-check-label">Registration/Enrollment</label>
-                                                    </div>
-                                                    <div>
-                                                        <input type="checkbox" class="form-check-input cbx_items_academic_info" name="cbx_standing" id="cbx_standing">
-                                                        <label for="cbx_standing" class="form-check-label">Academic Standing</label>
-                                                    </div>
-                                                </div>
-                                                <div class="col-12 col-lg-2">
-                                                    <div>
-                                                        <input type="checkbox" class="form-check-input cbx_items_academic_info" name="cbx_grades" id="cbx_grades">
-                                                        <label for="cbx_grades" class="form-check-label">Grades</label>
-                                                    </div>
-                                                    <div>
-                                                        <input type="checkbox" class="form-check-input cbx_items_academic_info" name="cbx_graduation" id="cbx_graduation">
-                                                        <label for="cbx_graduation" class="form-check-label">Graduation</label>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </form>
-                                        <form action="">
-                                            <input type="checkbox" class="form-check-input" name="cbx_financial_info" id="cbx_financial_info">
-                                            <label for="cbx_financial_info" class="form-check-label"><strong>ALL</strong> financial account information <strong>OR</strong> these individual items:</label>
-                                            <div class="row p-4">
-                                                <div class="col-12 col-lg-2">
-                                                    <div>
-                                                        <input type="checkbox" class="form-check-input cbx_items_financial_info" name="cbx_fees" id="cbx_fees">
-                                                        <label for="cbx_fees" class="form-check-label">Fees</label>
+                                                    <div class="col-12 col-lg-2">
+                                                        <div>
+                                                            <input type="checkbox" class="form-check-input cbx_items_academic_info" name="cbx_grades" id="cbx_grades" required>
+                                                            <label for="cbx_grades" class="form-check-label">Grades</label>
+                                                        </div>
+                                                        <div>
+                                                            <input type="checkbox" class="form-check-input cbx_items_academic_info" name="cbx_graduation" id="cbx_graduation" required>
+                                                            <label for="cbx_graduation" class="form-check-label">Graduation</label>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                                <div class="col-12 col-lg-2">
-                                                    <div>
-                                                        <input type="checkbox" class="form-check-input cbx_items_financial_info" name="cbx_charges" id="cbx_charges">
-                                                        <label for="cbx_charges" class="form-check-label">Charges</label>
+                                                <input type="checkbox" class="form-check-input" name="cbx_financial_info" id="cbx_financial_info" required>
+                                                <label for="cbx_financial_info" class="form-check-label"><strong>ALL</strong> financial account information <strong>OR</strong> these individual items:</label>
+                                                <div class="invalid-feedback">You must select at least one.</div>
+                                                <div class="row p-4">
+                                                    <div class="col-12 col-lg-2">
+                                                        <div>
+                                                            <input type="checkbox" class="form-check-input cbx_items_financial_info" name="cbx_fees" id="cbx_fees" required>
+                                                            <label for="cbx_fees" class="form-check-label">Fees</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-12 col-lg-2">
+                                                        <div>
+                                                            <input type="checkbox" class="form-check-input cbx_items_financial_info" name="cbx_charges" id="cbx_charges" required>
+                                                            <label for="cbx_charges" class="form-check-label">Charges</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-12 col-lg-2">
+                                                        <div>
+                                                            <input type="checkbox" class="form-check-input cbx_items_financial_info" name="cbx_payments" id="cbx_payments" required>
+                                                            <label for="cbx_payments" class="form-check-label">Payments</label>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                                <div class="col-12 col-lg-2">
-                                                    <div>
-                                                        <input type="checkbox" class="form-check-input cbx_items_financial_info" name="cbx_payments" id="cbx_payments">
-                                                        <label for="cbx_payments" class="form-check-label">Payments</label>
-                                                    </div>
+                                                <div class="py-4">
+                                                    <input type="checkbox" class="form-check-input" name="cbx_aid_info" id="cbx_aid_info" required>
+                                                    <label for="cbx_aid_info" class="form-check-label"><strong>ALL</strong> financial aid information</label>
+                                                    <div class="invalid-feedback">You must select this.</div>
                                                 </div>
-                                            </div>
-                                        </form>
-                                        <form action="">
-                                            <div class="py-4">
-                                                <input type="checkbox" class="form-check-input" name="cbx_aid_info" id="cbx_aid_info">
-                                                <label for="cbx_aid_info" class="form-check-label"><strong>ALL</strong> financial aid information</label>
-                                            </div>
-                                        </form>
-                                        <form action="">
-                                            <input type="checkbox" class="form-check-input" name="cbx_housing_info" id="cbx_housing_info">
-                                            <label for="cbx_housing_info" class="form-check-label"><strong>ALL</strong> university housing information <strong>OR</strong> these individual items:</label>
-                                            <div class="row p-4">
-                                                <div class="col-12 col-lg-2">
-                                                    <div>
-                                                        <input type="checkbox" class="form-check-input cbx_items_housing_info" name="cbx_location" id="cbx_location">
-                                                        <label for="cbx_location" class="form-check-label">Location</label>
+                                                <input type="checkbox" class="form-check-input" name="cbx_housing_info" id="cbx_housing_info" required>
+                                                <label for="cbx_housing_info" class="form-check-label"><strong>ALL</strong> university housing information <strong>OR</strong> these individual items:</label>
+                                                <div class="invalid-feedback">You must select at least one.</div>
+                                                <div class="row p-4">
+                                                    <div class="col-12 col-lg-2">
+                                                        <div>
+                                                            <input type="checkbox" class="form-check-input cbx_items_housing_info" name="cbx_location" id="cbx_location" required>
+                                                            <label for="cbx_location" class="form-check-label">Location</label>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                                <div class="col-12 col-lg-2">
-                                                    <div>
-                                                        <input type="checkbox" class="form-check-input cbx_items_housing_info" name="cbx_room" id="cbx_room">
-                                                        <label for="cbx_room" class="form-check-label">Room Assignment</label>
+                                                    <div class="col-12 col-lg-2">
+                                                        <div>
+                                                            <input type="checkbox" class="form-check-input cbx_items_housing_info" name="cbx_room" id="cbx_room" required>
+                                                            <label for="cbx_room" class="form-check-label">Room Assignment</label>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                                <div class="col-12 col-lg-2">
-                                                    <div>
-                                                        <input type="checkbox" class="form-check-input cbx_items_housing_info" name="cbx_judicial" id="cbx_judicial">
-                                                        <label for="cbx_judicial" class="form-check-label">Judicial Matters</label>
+                                                    <div class="col-12 col-lg-2">
+                                                        <div>
+                                                            <input type="checkbox" class="form-check-input cbx_items_housing_info" name="cbx_judicial" id="cbx_judicial" required>
+                                                            <label for="cbx_judicial" class="form-check-label">Judicial Matters</label>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </form>
-                                    </div>
 
-                                    <div class="row">
-                                        <div class="col-12 col-lg-12">
-                                            <div class="mb-3 row">
-                                                <label for="txt_purpose_authorization" class="col-sm-2 col-form-label"><strong>My authorization is for the following purpose:</strong></label>
-                                                <div class="col-sm-8">
-                                                    <textarea class="form-control" name="txt_purpose_authorization" id="txt_purpose_authorization"></textarea>
+                                            <div class="row">
+                                                <div class="col-12 col-lg-12">
+                                                    <div class="mb-3 row">
+                                                        <label for="txt_purpose_authorization" class="col-sm-2 col-form-label"><strong>My authorization is for the following purpose:</strong></label>
+                                                        <div class="col-sm-8">
+                                                            <textarea class="form-control" name="txt_purpose_authorization" id="txt_purpose_authorization" required></textarea>
+                                                            <div class="invalid-feedback">Please provide a valid purpose.</div>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                </div>
-                                <div class="col-12 col-lg-9">
-                                    <div class="card bg-secondary bg-opacity-10 border border-dark mb-4">
-                                        <div class="card-body">
-                                            <div class="form-check">
-                                                <input type="checkbox" class="form-check-input" name="cbx_remove_consent" id="cbx_remove_consent">
-                                                <label for="cbx_remove_consent" class="form-check-label">I request to <strong>REMOVE</strong> my consent allowing UI to discuss and verbally release information to all currently designated individuals.</label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <p><strong>I give consent for the following individual(s) to obtain the authorized information on request</strong></p>
-                                <p>(all information required):</p>
-                                <form action="">
-                                    <div class="row py-4">
-                                        <div class="col-12 col-lg-5">
-                                            <div class="mb-3 row">
-                                                <label for="txt_first_authorized_name" class="col-sm-1 col-form-label"><strong>1.</strong></label>
-                                                <div class="col-sm-11">
-                                                    <input type="text" class="form-control" name="txt_first_authorized_name" id="txt_first_authorized_name" placeholder="Printed Name">
+                                        <div class="col-12 col-lg-9">
+                                            <div class="card bg-secondary bg-opacity-10 border border-dark mb-4">
+                                                <div class="card-body">
+                                                    <div class="form-check">
+                                                        <input type="checkbox" class="form-check-input" name="cbx_remove_consent" id="cbx_remove_consent" required>
+                                                        <label for="cbx_remove_consent" class="form-check-label">I request to <strong>REMOVE</strong> my consent allowing UI to discuss and verbally release information to all currently designated individuals.</label>
+                                                        <div class="invalid-feedback">You must select this.</div>
+                                                    </div>
                                                 </div>
                                             </div>
-                                            <input type="text" class="form-control" name="txt_first_address" id="txt_first_address" placeholder="Complete Address">
                                         </div>
-                                        <div class="col-12 col-lg-5">
-                                            <input type="text" class="form-control mb-3" name="txt_first_relationship" id="txt_first_relationship" placeholder="Relationship to Student">
-                                            <input type="email" class="form-control" name="txt_first_email" id="txt_first_email" placeholder="Email">
-                                        </div>
-                                    </div>
-                                    <div class="row py-4">
-                                        <div class="col-12 col-lg-5">
-                                            <div class="mb-3 row">
-                                                <label for="txt_second_authorized_name" class="col-sm-1 col-form-label"><strong>2.</strong></label>
-                                                <div class="col-sm-11">
-                                                    <input type="text" class="form-control" name="txt_second_authorized_name" id="txt_second_authorized_name" placeholder="Printed Name">
+                                        <p><strong>I give consent for the following individual(s) to obtain the authorized information on request</strong></p>
+                                        <p>(all information required):</p>
+                                        <div class="row py-4">
+                                            <div class="col-12 col-lg-5">
+                                                <div class="mb-3 row">
+                                                    <label for="txt_first_authorized_name" class="col-sm-1 col-form-label"><strong>1.</strong></label>
+                                                    <div class="col-sm-11">
+                                                        <input type="text" class="form-control" name="txt_first_authorized_name" id="txt_first_authorized_name" placeholder="Printed Name" required>
+                                                        <div class="invalid-feedback">Please provide a valid name.</div>
+                                                    </div>
                                                 </div>
+                                                <input type="text" class="form-control" name="txt_first_address" id="txt_first_address" placeholder="Complete Address" required>
+                                                <div class="invalid-feedback">Please provide a valid address.</div>
                                             </div>
-                                            <input type="text" class="form-control" name="txt_second_address" id="txt_second_address" placeholder="Complete Address">
+                                            <div class="col-12 col-lg-5">
+                                                <input type="text" class="form-control mb-3" name="txt_first_relationship" id="txt_first_relationship" placeholder="Relationship to Student" required>
+                                                <div class="invalid-feedback">Please provide a valid relationship.</div>
+                                                <input type="email" class="form-control" name="txt_first_email" id="txt_first_email" placeholder="Email" required>
+                                                <div class="invalid-feedback">Please provide a valid email.</div>
+                                            </div>
                                         </div>
-                                        <div class="col-12 col-lg-5">
-                                            <input type="text" class="form-control mb-3" name="txt_second_relationship" id="txt_second_relationship" placeholder="Relationship to Student">
-                                            <input type="email" class="form-control" name="txt_second_email" id="txt_second_email" placeholder="Email">
+                                        <div class="row py-4">
+                                            <div class="col-12 col-lg-5">
+                                                <div class="mb-3 row">
+                                                    <label for="txt_second_authorized_name" class="col-sm-1 col-form-label"><strong>2.</strong></label>
+                                                    <div class="col-sm-11">
+                                                        <input type="text" class="form-control" name="txt_second_authorized_name" id="txt_second_authorized_name" placeholder="Printed Name" required>
+                                                        <div class="invalid-feedback">Please provide a valid name.</div>
+                                                    </div>
+                                                </div>
+                                                <input type="text" class="form-control" name="txt_second_address" id="txt_second_address" placeholder="Complete Address" required>
+                                                <div class="invalid-feedback">Please provide a valid address.</div>
+                                            </div>
+                                            <div class="col-12 col-lg-5">
+                                                <input type="text" class="form-control mb-3" name="txt_second_relationship" id="txt_second_relationship" placeholder="Relationship to Student" required>
+                                                <div class="invalid-feedback">Please provide a valid relationship.</div>
+                                                <input type="email" class="form-control" name="txt_second_email" id="txt_second_email" placeholder="Email" required>
+                                                <div class="invalid-feedback">Please provide a valid email.</div>
+                                            </div>
                                         </div>
+                                        <p class="py-4">I understand that this information is considered a student education, financial, and/or housing record. Further, I understand that by
+                                            signing this release, I am waiving my right to keep this information confidential under the Family Educational Rights and Privacy Act
+                                            (FERPA). I certify that my consent for disclosure of this information is entirely voluntary. I understand this consent for disclosure of
+                                            information can be revoked by me in writing at any time, but will not affect the information released under my previous consent. If I wish
+                                            to make any changes to my consent for release, I understand I will need to complete and file a new form. <strong>The authorization on this
+                                                form will supersede all prior authorizations for release of my information.</strong></p>
+                                    </div>
+                                    <div class="modal-footer pt-4">
+                                        <button class="btn btn-primary btn-sm px-4 m-1" onclick="editar_insertar()" type="button"><i class="bx bx-save" id="btn_guardar"></i> Guardar</button>
+                                        <?php ?>
                                     </div>
                                 </form>
-                                <p class="py-4">I understand that this information is considered a student education, financial, and/or housing record. Further, I understand that by
-                                    signing this release, I am waiving my right to keep this information confidential under the Family Educational Rights and Privacy Act
-                                    (FERPA). I certify that my consent for disclosure of this information is entirely voluntary. I understand this consent for disclosure of
-                                    information can be revoked by me in writing at any time, but will not affect the information released under my previous consent. If I wish
-                                    to make any changes to my consent for release, I understand I will need to complete and file a new form. <strong>The authorization on this
-                                        form will supersede all prior authorizations for release of my information.</strong></p>
-                            </div>
-                            <div class="modal-footer pt-4">
-                                <button class="btn btn-primary btn-sm px-4 m-1" onclick="editar_insertar()" type="button"><i class="bx bx-save"></i> Guardar</button>
-                                <?php ?>
                             </div>
                         </div>
                     </div>
@@ -403,22 +490,35 @@
             </div>
         </div>
     </div>
-</div>
+    <script>
 
-<script>
-    $(document).ready(function() {
-        function cambiar_checkboxes_dependientes(checkbox_principal, checkboxes_dependientes) {
-            $(document).on('change', checkbox_principal, function() {
-                if ($(this).is(':checked')) {
-                    $(checkboxes_dependientes).prop('disabled', true).prop('checked', false);
-                } else {
-                    $(checkboxes_dependientes).prop('disabled', false);
-                }
-            });
-        }
+    </script>
+    <script>
+        $(document).ready(function() {
+            function cambiar_checkboxes_dependientes(checkbox_principal, checkboxes_dependientes) {
+                $(document).on('change', checkbox_principal, function() {
+                    if ($(this).is(':checked')) {
+                        $(checkboxes_dependientes).prop('disabled', true).prop('checked', false);
+                    } else {
+                        $(checkboxes_dependientes).prop('disabled', false);
+                    }
+                });
+            }
 
-        cambiar_checkboxes_dependientes('#cbx_academic_info', '.cbx_items_academic_info');
-        cambiar_checkboxes_dependientes('#cbx_financial_info', '.cbx_items_financial_info');
-        cambiar_checkboxes_dependientes('#cbx_housing_info', '.cbx_items_housing_info');
-    });
-</script>
+            function require_checkboxes_dependientes(checkbox_principal, checkboxes_dependientes) {
+                $(document).on('change', checkboxes_dependientes, function() {
+                    var anyChecked = $(checkboxes_dependientes + ':checked').length > 0;
+                    $(checkbox_principal).prop('required', !anyChecked);
+                    $(checkboxes_dependientes).prop('required', !anyChecked);
+                });
+            }
+
+            cambiar_checkboxes_dependientes('#cbx_academic_info', '.cbx_items_academic_info');
+            cambiar_checkboxes_dependientes('#cbx_financial_info', '.cbx_items_financial_info');
+            cambiar_checkboxes_dependientes('#cbx_housing_info', '.cbx_items_housing_info');
+
+            require_checkboxes_dependientes('#cbx_academic_info', '.cbx_items_academic_info');
+            require_checkboxes_dependientes('#cbx_financial_info', '.cbx_items_financial_info');
+            require_checkboxes_dependientes('#cbx_housing_info', '.cbx_items_housing_info');
+        });
+    </script>

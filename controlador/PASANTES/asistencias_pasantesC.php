@@ -44,7 +44,7 @@ class asistencias_pasantesC
         //print_r();
         //die();
         //tomar la hora del sistema
-        $hora_del_sistema = '2024-08-07 12:23:33.767';
+        $hora_del_sistema = date('Y-m-d H:i:s');
         $datos = array(
             array('campo' => 'pas_usu_id', 'dato' => ($_SESSION['INICIO']['ID_USUARIO'])),
             array('campo' => 'pas_nombre', 'dato' => ($_SESSION['INICIO']['USUARIO'])),
@@ -64,7 +64,7 @@ class asistencias_pasantesC
         //print_r();
         //die();
         //tomar la hora del sistema
-        $hora_del_sistema = '2024-08-07 12:23:33.767';
+        $hora_del_sistema = date('Y-m-d H:i:s');
         $datos = array(
             array('campo' => 'pas_observacion_pasante', 'dato' => $parametros['txt_obs_pasantes']),
             array('campo' => 'pas_observacion_tutor', 'dato' => $parametros['txt_obs_tutor']),
@@ -83,7 +83,15 @@ class asistencias_pasantesC
 
         $pas_hora_llegada = $datos[0]['pas_hora_llegada'];
         $pas_hora_salida = $datos[0]['pas_hora_salida'];
-        $calcular_total = '4.30';
+
+        $pas_hora_llegada = new DateTime($pas_hora_llegada);
+        $pas_hora_salida = new DateTime($pas_hora_salida);
+
+        $diferencia = $pas_hora_salida->diff($pas_hora_llegada);
+
+        $horas_totales = $diferencia->h + ($diferencia->i / 60);
+
+        $calcular_total = number_format($horas_totales, 1);
 
         $datos = array(
             array('campo' => 'pas_horas_total', 'dato' => $calcular_total),
