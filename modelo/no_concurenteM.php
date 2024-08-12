@@ -75,6 +75,7 @@ class no_concurenteM
 	function existe_no_concurente($tabla)
 	 {
 	 	$sql = "SELECT * FROM TABLAS_NOCONCURENTE WHERE Id_Empresa = '".$_SESSION['INICIO']['ID_EMPRESA']."' AND Tabla = '".$tabla."'";
+	 	// print_r($sql);die();
 		return $this->db->datos($sql,1);
 	 }
 

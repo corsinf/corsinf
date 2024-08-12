@@ -30,6 +30,9 @@
             ],
             columns: [{
                     data: 'pas_nombre',
+                    render: function(data, type, item) {
+                        return `<a href="../vista/inicio.php?mod=1010&acc=registro_pasantes_fin&id_asistencia=${item.pas_id}">${data}</a>`;
+                    }
                 },
                 {
                     data: 'pas_hora_llegada',
@@ -45,6 +48,9 @@
                 },
                 {
                     data: 'pas_horas_total',
+                    render: function(data, type, item) {
+                        return parseFloat(data).toFixed(1);
+                    }
 
                 }
             ],
