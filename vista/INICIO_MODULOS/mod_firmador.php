@@ -60,3 +60,7 @@ if ($_GET['acc'] == 'pagina_jav') {
 if ($_GET['acc'] == 'asistencias_pasantes') {
     include('FIRMADOR/PASANTES/asistencias_pasantes.php');
 }
+
+if ($_GET['acc'] == 'Paul') {
+    include('COWORKING/crear_cliente.php');
+}

@@ -6,7 +6,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registro de Miembros y Compras</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="styles.css">
+    <style>
+        .table-header th {
+            background-color: #0d6efd; 
+            color: #ffffff; 
+            font-weight: bold; 
+        }
+    </style>
 </head>
 
 <body>
@@ -16,15 +22,15 @@
         <form id="formulario_miembro" class="mb-4">
             <div class="row">
                 <div class="col-md-3 mb-3">
-                    <label for="txt_nombre" class="form-label">Nombre:</label>
+                    <label for="txt_nombre" class="form-label"><strong>Nombre:</strong></label>
                     <input type="text" class="form-control form-control-sm" name="txt_nombre" id="txt_nombre" value="" placeholder="Nombre" required>
                 </div>
                 <div class="col-md-3 mb-3">
-                    <label for="txt_correo" class="form-label">Correo:</label>
+                    <label for="txt_correo" class="form-label"><strong>Correo:</strong></label>
                     <input type="email" class="form-control form-control-sm" name="txt_correo" id="txt_correo" value="" placeholder="Correo electrónico" required>
                 </div>
                 <div class="col-md-3 mb-3">
-                    <label for="ddl_categoria" class="form-label">Categoría:</label>
+                    <label for="ddl_categoria" class="form-label"><strong>Categoría:</strong></label>
                     <select class="form-control form-control-sm" name="ddl_categoria" id="ddl_categoria" required>
                         <option value="">Seleccione una categoría</option>
                         <option value="oficina">Oficina</option>
@@ -33,11 +39,11 @@
                     </select>
                 </div>
                 <div class="col-md-3 mb-3">
-                    <label for="txt_numero" class="form-label">Número:</label>
+                    <label for="txt_numero" class="form-label"><strong>Número:</strong></label>
                     <input type="number" class="form-control form-control-sm" name="txt_numero" id="txt_numero" value="" placeholder="Número" step="1" required>
                 </div>
             </div>
-            <button type="button" class="btn btn-custom" id="btn_registrar_miembro">Registrar Miembro</button>
+            <button type="button" class="btn btn-primary" id="btn_registrar_miembro">Registrar Miembro</button>
         </form>
 
         <h2 class="mb-4">Miembros Registrados</h2>
@@ -52,44 +58,45 @@
                 </tr>
             </thead>
             <tbody>
-                <!--aqui los miembros registrados -->
+                <!-- se registran los miembros registrados -->
             </tbody>
         </table>
 
-        <!-- Modal para registrar compras -->
-        <div class="modal fade" id="modal_registrar_compras" tabindex="-1" aria-labelledby="modal_label" aria-hidden="true">
+        
+        <div class="modal fade" id="modal_registrar_compras" tabindex="-1" aria-labelledby="modal_registrar_comprasLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="center-title" id="modal_label"><strong>Bar</strong></h5>
+                        <h5 class="modal-title" id="modal_registrar_comprasLabel">Registrar Compra</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
+                        
                         <form id="formulario_compras">
                             <div class="mb-3">
                                 <label for="ddl_producto" class="form-label"><strong>Producto:</strong></label>
-                                <select class="form-control form-control-sm" name="ddl_producto" id="ddl_producto" required>
-                                    <option value="">Seleccione un producto</option>
-                                    <option value="gaseosa" data-precio="1.50">Gaseosa - $1.50</option>
-                                    <option value="snacks" data-precio="2.00">Snacks - $2.00</option>
-                                    <option value="gomitas" data-precio="1.00">Gomitas - $1.00</option>
-                                    <option value="frutas" data-precio="3.00">Frutas - $3.00</option>
+                                <select class="form-control" id="ddl_producto" name="ddl_producto" required>
+                                    <option value="" data-precio="">Seleccione un producto</option>
+                                    <option value="Doritos" data-precio="0.45">Doritos - $0.45</option>
+                                    <option value="Papas" data-precio="0.70">Papas - $0.70</option>
+                                    <option value="Coca Cola" data-precio="1.70">Coca Cola - $1.70</option>
+                                    <option value="Gomitas" data-precio="1.00">Gomitas - $1.00</option>
+                                    <option value="Cramelos" data-precio="2.70">Caramelos - $2.70</option>
                                 </select>
                             </div>
-                            
                             <div class="mb-3">
                                 <label for="txt_cantidad" class="form-label"><strong>Cantidad:</strong></label>
-                                <input type="number" class="form-control form-control-sm" name="txt_cantidad" id="txt_cantidad" value="" placeholder="Cantidad" required>
+                                <input type="number" class="form-control" id="txt_cantidad" name="txt_cantidad" value="1" min="1" required>
                             </div>
                             <div class="mb-3">
                                 <label for="txt_precio" class="form-label"><strong>Precio:</strong></label>
-                                <input type="number" class="form-control form-control-sm" name="txt_precio" id="txt_precio" value="" placeholder="Precio" step="0.01" required readonly>
+                                <input type="text" class="form-control" id="txt_precio" name="txt_precio" readonly>
                             </div>
                         </form>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                        <button type="button" class="btn btn-custom" id="btn_guardar_compra">Guardar Compra</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><strong>Cerrar</strong></button>
+                        <button type="button" class="btn btn-primary" id="btn_guardar_compra"><strong>Guardar compra</strong></button>
                     </div>
                 </div>
             </div>
@@ -108,7 +115,7 @@
                 </tr>
             </thead>
             <tbody>
-                <!-- aqui se registran las compras  -->
+                <!-- Aquí se registran las compras -->
             </tbody>
         </table>
     </div>
@@ -117,98 +124,97 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
     <script>
         let current_miembro_id = null;
-
+        let current_miembro_nombre = null; // Variable para almacenar el nombre del miembro
+    
         function validar_formulario_miembro() {
             const txt_nombre = document.getElementById('txt_nombre').value.trim();
             const txt_correo = document.getElementById('txt_correo').value.trim();
             const ddl_categoria = document.getElementById('ddl_categoria').value.trim();
             const txt_numero = document.getElementById('txt_numero').value.trim();
-
+    
             if (!txt_nombre || !txt_correo || !ddl_categoria || !txt_numero) {
                 alert("Por favor, completa todos los campos antes de registrar un miembro.");
                 return false;
             }
             return true;
         }
-
+    
         function btn_registrar_miembro_click() {
             if (!validar_formulario_miembro()) {
                 return;
             }
-
+    
             const txt_nombre = document.getElementById('txt_nombre').value.trim();
             const txt_correo = document.getElementById('txt_correo').value.trim();
             const ddl_categoria = document.getElementById('ddl_categoria').value.trim();
             const txt_numero = document.getElementById('txt_numero').value.trim();
-
+    
             const tbl_miembros = document.getElementById('tbl_miembros').getElementsByTagName('tbody')[0];
             const row = tbl_miembros.insertRow();
             row.setAttribute('data-id', txt_numero);
-
+    
             row.insertCell(0).textContent = txt_nombre;
             row.insertCell(1).textContent = txt_correo;
             row.insertCell(2).textContent = ddl_categoria;
             row.insertCell(3).textContent = txt_numero;
-
+    
             const actions_cell = row.insertCell(4);
             actions_cell.innerHTML = `
-                <button type="button" class="btn btn-primary btn-sm" onclick="mostrar_modal_registrar_compras('${txt_numero}')">Comprar</button>
+                <button type="button" class="btn btn-primary btn-sm" onclick="mostrar_modal_registrar_compras('${txt_numero}', '${txt_nombre}')">Comprar</button>
             `;
         }
-
-        function mostrar_modal_registrar_compras(miembro_id) {
+    
+        function mostrar_modal_registrar_compras(miembro_id, miembro_nombre) {
             current_miembro_id = miembro_id;
+            current_miembro_nombre = miembro_nombre; // Guardar el nombre del miembro
             const modal = new bootstrap.Modal(document.getElementById('modal_registrar_compras'));
             modal.show();
         }
-
+    
         function actualizar_precio_producto() {
             const ddl_producto = document.getElementById('ddl_producto');
             const txt_precio = document.getElementById('txt_precio');
             const selectedOption = ddl_producto.options[ddl_producto.selectedIndex];
             txt_precio.value = selectedOption ? selectedOption.getAttribute('data-precio') : '';
         }
-
+    
         function btn_guardar_compra_click() {
             const formulario_compras = document.getElementById('formulario_compras');
             const ddl_producto = formulario_compras['ddl_producto'].value;
             const txt_cantidad = formulario_compras['txt_cantidad'].value;
             const txt_precio = formulario_compras['txt_precio'].value;
             const total = txt_cantidad * txt_precio;
-
-            
+    
             if (!ddl_producto || !txt_cantidad || !txt_precio) {
                 alert("Por favor, completa todos los campos antes de guardar una compra.");
                 return;
             }
-
+    
             const tbl_compras = document.getElementById('tbl_compras').getElementsByTagName('tbody')[0];
             const row = tbl_compras.insertRow();
-            row.insertCell(0).textContent = current_miembro_id;
+            row.insertCell(0).textContent = current_miembro_nombre; // Usar el nombre del miembro
             row.insertCell(1).textContent = ddl_producto;
             row.insertCell(2).textContent = txt_cantidad;
             row.insertCell(3).textContent = txt_precio;
             row.insertCell(4).textContent = total.toFixed(2);
-
+    
             const actions_cell = row.insertCell(5);
             actions_cell.innerHTML = `
                 <button type="button" class="btn btn-danger btn-sm" onclick="eliminar_fila(this)">Eliminar</button>
             `;
-
-            
+    
             const modal = bootstrap.Modal.getInstance(document.getElementById('modal_registrar_compras'));
             modal.hide();
         }
-
+    
         function eliminar_fila(boton) {
             const row = boton.closest('tr');
             row.remove();
         }
-
+    
         document.getElementById('btn_registrar_miembro').addEventListener('click', btn_registrar_miembro_click);
         document.getElementById('ddl_producto').addEventListener('change', actualizar_precio_producto);
         document.getElementById('btn_guardar_compra').addEventListener('click', btn_guardar_compra_click);
     </script>
-</body>
-
+</body>    
 </html>
