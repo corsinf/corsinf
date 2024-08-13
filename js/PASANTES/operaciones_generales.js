@@ -24,7 +24,7 @@ function calcular_edad_fecha_nacimiento(fecha_nacimiento) {
 }
 
 //Fecha con formato de los input
-function fecha_nacimiento_formateada(fecha) {
+function fecha_formateada(fecha) {
     fechaYHora = fecha;
     fecha = new Date(fechaYHora);
     anio = fecha.getFullYear();
