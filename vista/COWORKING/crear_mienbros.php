@@ -15,7 +15,7 @@
 
         <div class="row">
             <div class="col-xl-12 mx-auto">
-                <h6 class="mb-0 text-uppercase">Registro de Miembros y Compras</h6>
+                <h6 class="mb-0 text-uppercase"><strong>Registro de Miembros y Compras</strong></h6>
                 <hr>
                 <div class="card">
                     <div class="card-body">
@@ -40,7 +40,7 @@
                                     <input type="text" class="form-control form-control-sm" name="txt_numero_celular" id="txt_numero_celular" placeholder="Número" step="1" required>
                                 </div>
                             </div>
-                            <button type="button" class="btn btn-primary" id="btn_registrar_miembro">Registrar Miembro</button>
+                            <button type="button" class="btn btn-primary" id="btn_registrar_miembro"><strong>Registrar Miembro</strong></button>
                         </form>
 
                         <h2 class="mb-4">Miembros Registrados</h2>
