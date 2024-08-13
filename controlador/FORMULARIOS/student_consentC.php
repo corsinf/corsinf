@@ -22,8 +22,8 @@ if (isset($_GET['pdf_studentconsent'])) {
 }
 
 
-
-
+//falta esa parte le viste? Si le estaba intentando arreglar, pero queda descuadrado cuando le intento arreglar jaja el dos esta bien el uno no le puedes poner el 1 arriba y despues los inputs
+//algo asi como en el dos mirale
 class student_consentC
 {
     private $modelo;
@@ -41,23 +41,24 @@ class student_consentC
 
     function insertar_editar($parametros)
     {
-        $edu_cbx_academic_all = isset($_POST['edu_cbx_academic_all']) && $_POST['edu_cbx_academic_all'] == 'true' ? 1 : 0;
-        $edu_cbx_academic_1 = isset($_POST['edu_cbx_academic_1']) && $_POST['edu_cbx_academic_1'] == 'true' ? 1 : 0;
-        $edu_cbx_academic_2 = isset($_POST['edu_cbx_academic_2']) && $_POST['edu_cbx_academic_2'] == 'true' ? 1 : 0;
-        $edu_cbx_academic_3 = isset($_POST['edu_cbx_academic_3']) && $_POST['edu_cbx_academic_3'] == 'true' ? 1 : 0;
-        $edu_cbx_academic_4 = isset($_POST['edu_cbx_academic_4']) && $_POST['edu_cbx_academic_4'] == 'true' ? 1 : 0;
-        $edu_cbx_academic_5 = isset($_POST['edu_cbx_academic_5']) && $_POST['edu_cbx_academic_5'] == 'true' ? 1 : 0;
-        $edu_cbx_academic_6 = isset($_POST['edu_cbx_academic_6']) && $_POST['edu_cbx_academic_6'] == 'true' ? 1 : 0;
-        $edu_cbx_financial_all = isset($_POST['edu_cbx_financial_all']) && $_POST['edu_cbx_financial_all'] == 'true' ? 1 : 0;
-        $edu_cbx_financial_1 = isset($_POST['edu_cbx_financial_1']) && $_POST['edu_cbx_financial_1'] == 'true' ? 1 : 0;
-        $edu_cbx_financial_2 = isset($_POST['edu_cbx_financial_2']) && $_POST['edu_cbx_financial_2'] == 'true' ? 1 : 0;
-        $edu_cbx_financial_3 = isset($_POST['edu_cbx_financial_3']) && $_POST['edu_cbx_financial_3'] == 'true' ? 1 : 0;
-        $edu_cbx_aid_financial = isset($_POST['edu_cbx_aid_financial']) && $_POST['edu_cbx_aid_financial'] == 'true' ? 1 : 0;
-        $edu_cbx_housing_all = isset($_POST['edu_cbx_housing_all']) && $_POST['edu_cbx_housing_all'] == 'true' ? 1 : 0;
-        $edu_cbx_housing_1 = isset($_POST['edu_cbx_housing_1']) && $_POST['edu_cbx_housing_1'] == 'true' ? 1 : 0;
-        $edu_cbx_housing_2 = isset($_POST['edu_cbx_housing_2']) && $_POST['edu_cbx_housing_2'] == 'true' ? 1 : 0;
-        $edu_cbx_housing_3 = isset($_POST['edu_cbx_housing_3']) && $_POST['edu_cbx_housing_3'] == 'true' ? 1 : 0;
-        $edu_cbx_remove_consent = isset($_POST['edu_cbx_remove_consent']) && $_POST['edu_cbx_remove_consent'] == 'true' ? 1 : 0;
+        $edu_cbx_academic_all = (isset($parametros['cbx_academic_info']) && $parametros['cbx_academic_info'] == 'true') ? 1 : 0;
+        $edu_cbx_academic_1 = (isset($parametros['cbx_admission']) && $parametros['cbx_admission'] == 'true') ? 1 : 0;
+        $edu_cbx_academic_2 = (isset($parametros['cbx_registration']) && $parametros['cbx_registration'] == 'true') ? 1 : 0;
+        $edu_cbx_academic_3 = (isset($parametros['cbx_grades']) && $parametros['cbx_grades'] == 'true') ? 1 : 0;
+        $edu_cbx_academic_4 = (isset($parametros['cbx_gpa']) && $parametros['cbx_gpa'] == 'true') ? 1 : 0;
+        $edu_cbx_academic_5 = (isset($parametros['cbx_standing']) && $parametros['cbx_standing'] == 'true') ? 1 : 0;
+        $edu_cbx_academic_6 = (isset($parametros['cbx_graduation']) && $parametros['cbx_graduation'] == 'true') ? 1 : 0;
+        $edu_cbx_financial_all = (isset($parametros['cbx_financial_info']) && $parametros['cbx_financial_info'] == 'true') ? 1 : 0;
+        $edu_cbx_financial_1 = (isset($parametros['cbx_fees']) && $parametros['cbx_fees'] == 'true') ? 1 : 0;
+        $edu_cbx_financial_2 = (isset($parametros['cbx_charges']) && $parametros['cbx_charges'] == 'true') ? 1 : 0;
+        $edu_cbx_financial_3 = (isset($parametros['cbx_payments']) && $parametros['cbx_payments'] == 'true') ? 1 : 0;
+        $edu_cbx_aid_financial = (isset($parametros['cbx_aid_info']) && $parametros['cbx_aid_info'] == 'true') ? 1 : 0;
+        $edu_cbx_housing_all = (isset($parametros['cbx_housing_info']) && $parametros['cbx_housing_info'] == 'true') ? 1 : 0;
+        $edu_cbx_housing_1 = (isset($parametros['cbx_location']) && $parametros['cbx_location'] == 'true') ? 1 : 0;
+        $edu_cbx_housing_2 = (isset($parametros['cbx_room']) && $parametros['cbx_room'] == 'true') ? 1 : 0;
+        $edu_cbx_housing_3 = (isset($parametros['cbx_judicial']) && $parametros['cbx_judicial'] == 'true') ? 1 : 0;
+        $edu_cbx_remove_consent = (isset($parametros['cbx_remove_consent']) && $parametros['cbx_remove_consent'] == 'true') ? 1 : 0;
+
 
         $datos1[0]['campo'] = 'edu_id';
         $datos1[0]['dato'] = strval($parametros['txt_student']);
@@ -101,6 +102,10 @@ class student_consentC
             // array('campo' => 'edu_estado', 'dato' => $parametros['']),
         );
 
+        //print_r($datos);
+        //exit();
+        //die();
+
         // if ($parametros['txt_id'] == '') {
         //     if (count($this->modelo->where('pac_cedula', $parametros['txt_cedula'])->listar()) == 0) {
         //         $datos = $this->modelo->insertar($datos);
@@ -130,8 +135,10 @@ class student_consentC
         return $datos;
     }
 
-    function pdf_studentconsent($id = 1)
+
+    function pdf_studentconsent($id)
     {
+
         $datos = $this->modelo->where('edu_id', $id)->listar();
 
         $edu_nombre_estudiante = $datos[0]['edu_nombre_estudiante'];
@@ -150,23 +157,24 @@ class student_consentC
         $edu_fecha_firma = $datos[0]['edu_fecha_firma'];
         $edu_nombre_registro = $datos[0]['edu_nombre_registro'];
         $edu_fecha_registro = $datos[0]['edu_fecha_registro'];
-        $edu_cbx_academic_all = $datos[0]['edu_cbx_academic_all'];
-        $edu_cbx_academic_1 = $datos[0]['edu_cbx_academic_1'];
-        $edu_cbx_academic_2 = $datos[0]['edu_cbx_academic_2'];
-        $edu_cbx_academic_3 = $datos[0]['edu_cbx_academic_3'];
-        $edu_cbx_academic_4 = $datos[0]['edu_cbx_academic_4'];
-        $edu_cbx_academic_5 = $datos[0]['edu_cbx_academic_5'];
-        $edu_cbx_academic_6 = $datos[0]['edu_cbx_academic_6'];
-        $edu_cbx_financial_all = $datos[0]['edu_cbx_financial_all'];
-        $edu_cbx_financial_1 = $datos[0]['edu_cbx_financial_1'];
-        $edu_cbx_financial_2 = $datos[0]['edu_cbx_financial_2'];
-        $edu_cbx_financial_3 = $datos[0]['edu_cbx_financial_3'];
-        $edu_cbx_aid_financial = $datos[0]['edu_cbx_aid_financial'];
-        $edu_cbx_housing_all = $datos[0]['edu_cbx_housing_all'];
-        $edu_cbx_housing_1 = $datos[0]['edu_cbx_housing_1'];
-        $edu_cbx_housing_2 = $datos[0]['edu_cbx_housing_2'];
-        $edu_cbx_housing_3 = $datos[0]['edu_cbx_housing_3'];
-        $edu_cbx_remove_consent = $datos[0]['edu_cbx_remove_consent'];
+
+        $edu_cbx_academic_all = $datos[0]['edu_cbx_academic_all'] == '1' ? true : false;
+        $edu_cbx_academic_1 = ($datos[0]['edu_cbx_academic_1']) == '1' ? true : false;
+        $edu_cbx_academic_2 = ($datos[0]['edu_cbx_academic_2']) == '1' ? true : false;
+        $edu_cbx_academic_3 = ($datos[0]['edu_cbx_academic_3']) == '1' ? true : false;
+        $edu_cbx_academic_4 = ($datos[0]['edu_cbx_academic_4']) == '1' ? true : false;
+        $edu_cbx_academic_5 = ($datos[0]['edu_cbx_academic_5']) == '1' ? true : false;
+        $edu_cbx_academic_6 = ($datos[0]['edu_cbx_academic_6']) == '1' ? true : false;
+        $edu_cbx_financial_all = ($datos[0]['edu_cbx_financial_all']) == '1' ? true : false;
+        $edu_cbx_financial_1 = ($datos[0]['edu_cbx_financial_1']) == '1' ? true : false;
+        $edu_cbx_financial_2 = ($datos[0]['edu_cbx_financial_2']) == '1' ? true : false;
+        $edu_cbx_financial_3 = ($datos[0]['edu_cbx_financial_3']) == '1' ? true : false;
+        $edu_cbx_aid_financial = ($datos[0]['edu_cbx_aid_financial']) == '1' ? true : false;
+        $edu_cbx_housing_all = ($datos[0]['edu_cbx_housing_all']) == '1' ? true : false;
+        $edu_cbx_housing_1 = ($datos[0]['edu_cbx_housing_1']) == '1' ? true : false;
+        $edu_cbx_housing_2 = ($datos[0]['edu_cbx_housing_2']) == '1' ? true : false;
+        $edu_cbx_housing_3 = ($datos[0]['edu_cbx_housing_3']) == '1' ? true : false;
+        $edu_cbx_remove_consent = ($datos[0]['edu_cbx_remove_consent']) == '1' ? true : false;
 
         $pdf = new FPDF('P', 'mm', 'A4');
         $pdf->SetMargins(10, 15, 10);
@@ -188,7 +196,6 @@ class student_consentC
 
         $pdf->SetFont('Arial', '', 11);
 
-        // Student Information
         $pdf->SetFont('Arial', 'B', 22);
         $pdf->Cell(18);
         $pdf->Cell(0, 15, 'CONSENT FOR RELEASE', 0, 1, 'J');
@@ -196,7 +203,6 @@ class student_consentC
         $pdf->SetFont('Arial', 'B', 20);
         $pdf->Cell(0, 3, 'of Student Information', 0, 1, 'J');
 
-        // University of Idaho contact info
         $pdf->Image(('../../img/formularios/logo.png'), 146, 12, 60);
         $pdf->Cell(120);
         $pdf->SetFont('Arial', '', 8);
@@ -361,7 +367,7 @@ class student_consentC
         CheckBox($pdf, 12, $y, $edu_cbx_aid_financial);
         $pdf->Cell(6);
 
-        // Establece la posición inicial
+        // Posición inicial
         $start_x = $pdf->GetX();
         $start_y = $pdf->GetY();
 
@@ -379,7 +385,7 @@ class student_consentC
         CheckBox($pdf, 12, $y, $edu_cbx_housing_all);
         $pdf->Cell(6);
 
-        // Establece la posición inicial
+        // Posición inicial
         $start_x = $pdf->GetX();
         $start_y = $pdf->GetY();
 
@@ -506,13 +512,11 @@ class student_consentC
         $pdf->SetFont('Arial', '', 10);
         $pdf->Cell(3, 2, '', 0, 0);
         $pdf->Cell(80, 5, utf8_decode($edu_firma_estudiante), 'B', 0, 'L', true);
-        //$pdf->Cell(103, 5, utf8_decode($edu_firma_estudiante), 0, 0);
         $pdf->SetFont('Arial', '', 10);
         $pdf->Cell(12, 2, '', 0, 0);
         $pdf->Cell(10, 5, 'Date:', 0, 0);
         $pdf->Cell(3, 2, '', 0, 0);
         $pdf->Cell(45, 5, utf8_decode($edu_fecha_firma), 'B', 1, 'L', true);
-        //$pdf->Cell(30, 5, utf8_decode($edu_fecha_firma), 0, 1);
 
         $pdf->Ln(7);
         $xStart = 10;
@@ -532,12 +536,10 @@ class student_consentC
         $pdf->Cell(20, 5, "Recorded by", 0, 0, '');
         $pdf->Cell(3, 2, '', 0, 0);
         $pdf->Cell(55, 5, utf8_decode($edu_nombre_registro), 'B', 0, 'L', true);
-        //$pdf->Cell(75, 5, utf8_decode($edu_nombre_registro), 0, 0, '');
         $pdf->Cell(18, 2, '', 0, 0);
         $pdf->Cell(8, 5, 'Date:', 0, 0, '', 1);
         $pdf->Cell(3, 2, '', 0, 0);
         $pdf->Cell(45, 5, utf8_decode($edu_fecha_registro), 'B', 0, 'L', true);
-        //$pdf->Cell(45, 5, utf8_decode($edu_fecha_registro), 0, 0, '');
         $pdf->SetFont('Arial', '', 8);
         $pdf->Cell(8, 2, '', 0, 0);
         $pdf->Cell(20, 5, 'Rev 12/18', 0, 0, 'R');

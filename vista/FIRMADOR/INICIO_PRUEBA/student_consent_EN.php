@@ -1,73 +1,38 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.21.0/jquery.validate.min.js" integrity="sha512-KFHXdr2oObHKI9w4Hv1XPKc898mE4kgYx58oqsc/JqqdLMDI4YjOLzom+EMlW8HFUd0QfjfAvxSL6sEq/a42fQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script>
+    var form_valido;
     $(document).ready(function() {
         cargarDatos();
 
+
     });
-    // $("form").validate({
-    //     rules: {
-    //         txt_student: {
-    //             required: true,
-    //         },
-    //         txt_id_student: {
-    //             required: true,
-    //             digits: true,
-    //         },
-    //         txt_birth_date: {
-    //             required: true,
-    //             date: true
-    //         },
-    //         txt_purpose_authorization: {
-    //             required: true,
-    //         },
-    //         txt_first_authorized_name: {
-    //             required: true,
-    //         },
-    //         txt_first_address: {
-    //             required: true,
-    //         },
-    //         txt_first_relationship: {
-    //             required: true,
-    //         },
-    //         txt_first_email: {
-    //             required: true,
-    //             email: true
-    //         },
-    //         txt_second_authorized_name: {
-    //             required: true,
-    //         },
-    //         txt_second_address: {
-    //             required: true,
-    //         },
-    //         txt_second_relationship: {
-    //             required: true,
-    //         },
-    //         txt_second_email: {
-    //             required: true,
-    //             email: true
-    //         },
-    //         cbx_academic_info: {
-    //             required: true
-    //         },
-    //         cbx_financial_info: {
-    //             required: true
-    //         },
-    //         cbx_aid_info: {
-    //             required: true
-    //         },
-    //         cbx_housing_info: {
-    //             required: true
-    //         },
-    //         cbx_remove_consent: {
-    //             required: true
-    //         }
-    //     }
 
-    // });
+    //deberias ocupar lo de la libreria ese codigo no iria Ese código saqué de los templates de vertical y la libreria? Es de la libreria pero así le han hecho en el template, te muestro?si
+    function validar() {
+        'use strict'
 
-    // $('#btn_guardar').on('click', function() {
-    //     console.log($('form').valid());
-    // });
+        var forms = document.querySelectorAll('.needs-validation');
+
+        Array.prototype.slice.call(forms)
+            .forEach(function(form) {
+                form.addEventListener('click', function(event) {
+                    if (!form.checkValidity()) {
+                        form_valido = false;
+                        event.stopPropagation();
+                    } else {
+                        form_valido = true;
+                    }
+
+                    form.classList.add('was-validated');
+                }, false);
+            });
+
+        if (form_valido) {
+            editar_insertar()
+        } else {
+            console.log("Nada")
+        }
+    }
 
     function cargarDatos() {
         $.ajax({
@@ -126,23 +91,6 @@
         var cbx_judicial = $('#cbx_judicial').prop('checked');
         var cbx_remove_consent = $('#cbx_remove_consent').prop('checked');
 
-        (function() {
-            'use strict'
-
-            var forms = document.querySelectorAll('.needs-validation');
-
-            Array.prototype.slice.call(forms)
-                .forEach(function(form) {
-                    form.addEventListener('click', function(event) {
-                        if (!form.checkValidity()) {
-                            event.stopPropagation();
-                        }
-
-                        form.classList.add('was-validated');
-                    }, false);
-                });
-        })();
-
         var parametros = {
 
             //'edu_id': edu_id,
@@ -183,62 +131,9 @@
             'cbx_remove_consent': cbx_remove_consent
         };
 
-        //alert(validar_email(sa_est_correo));
         console.log(parametros);
-        insertar(parametros);
-        // if (sa_est_id == '') {
-        //     if (
-        //         sa_est_primer_apellido === '' ||
-        //         sa_est_segundo_apellido === '' ||
-        //         sa_est_primer_nombre === '' ||
-        //         sa_est_segundo_nombre === '' ||
-        //         sa_est_cedula === '' ||
-        //         sa_est_sexo == null ||
-        //         sa_est_fecha_nacimiento === '' ||
-        //         sa_id_seccion == null ||
-        //         sa_id_grado == null ||
-        //         sa_id_paralelo == null ||
-        //         validar_email(sa_est_correo) == false ||
-        //         sa_id_representante == null ||
-        //         sa_est_rep_parentesco == null
+        insertar(parametros)
 
-        //     ) {
-        //         Swal.fire({
-        //             icon: 'error',
-        //             title: 'Oops...',
-        //             text: 'Asegurese de llenar todos los campos',
-        //         })
-
-        //     } else {
-        //         //console.log(parametros);
-        //         insertar(parametros)
-        //     }
-        // } else {
-        //     if (
-        //         sa_est_primer_apellido === '' ||
-        //         sa_est_segundo_apellido === '' ||
-        //         sa_est_primer_nombre === '' ||
-        //         sa_est_segundo_nombre === '' ||
-        //         sa_est_cedula === '' ||
-        //         sa_est_sexo == null ||
-        //         sa_est_fecha_nacimiento === '' ||
-        //         sa_id_seccion == null ||
-        //         sa_id_grado == null ||
-        //         sa_id_paralelo == null ||
-        //         validar_email(sa_est_correo) == false ||
-        //         sa_id_representante == null ||
-        //         sa_est_rep_parentesco == null
-        //     ) {
-        //         Swal.fire({
-        //             icon: 'error',
-        //             title: 'Oops...',
-        //             text: 'Asegurese de llenar todos los campos',
-        //         })
-        //     } else {
-        //         //console.log(parametros);
-        //         
-        //     }
-        // }
     }
 
     function insertar(parametros) {
@@ -256,7 +151,7 @@
                         //location.href = '../vista/inicio.php?mod=7&acc=estudiantes';
                     });
                 } else if (response == -2) {
-                    Swal.fire('', 'Cédula ya registrada.', 'warning');
+                    Swal.fire('', 'Operación fallida', 'warning');
                 }
             }
         });
@@ -277,7 +172,7 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-xl-12 mx-auto">
+            <div class="col-xl-8 mx-auto">
                 <div class="card border-top border-0 border-4 border-primary">
                     <div class="card-body p-5">
                         <div class="card-title d-flex align-items-center">
@@ -289,7 +184,7 @@
                                         <div class="row py-3">
                                             <div class="col-12 col-lg-8">
                                                 <div class="mb-3 row">
-                                                    <label for="txt_student" class="col-sm-1 col-form-label"><strong>Student:</strong></label>
+                                                    <label for="txt_student" class="col-auto col-form-label"><strong>Student:</strong></label>
                                                     <div class="col-sm-10 has-validation">
                                                         <input type="text" class="form-control" name="txt_student" id="txt_student" placeholder="first middle and last name" required>
                                                         <div class="invalid-feedback">Please provide a valid name.</div>
@@ -297,20 +192,20 @@
                                                 </div>
                                             </div>
                                             <div class="col-12 col-lg-4">
-                                                <div class="row g-3 align-items-center mb-3">
-                                                    <div class="col-auto">
-                                                        <label for="txt_id_student" class="col-form-label"><strong>Student ID:</strong></label>
+                                                <div class="row g-2 align-items-center mb-3">
+                                                    <div class="col-4">
+                                                        <label for="txt_id_student" class="col-auto col-form-label"><strong>Student ID:</strong></label>
                                                     </div>
-                                                    <div class="col-auto has-validation">
+                                                    <div class="col-8 has-validation">
                                                         <input type="text" class="form-control" name="txt_id_student" id="txt_id_student" required>
                                                         <div class="invalid-feedback">Please provide a valid ID.</div>
                                                     </div>
                                                 </div>
-                                                <div class="row g-3 align-items-center">
-                                                    <div class="col-auto">
-                                                        <label for="txt_birth_date" class="col-form-label"><strong>Birth Date:</strong></label>
+                                                <div class="row g-2 align-items-center">
+                                                    <div class="col-4">
+                                                        <label for="txt_birth_date" class="col-auto col-form-label fw-bold">Birth Date:</label>
                                                     </div>
-                                                    <div class="col-auto has-validation">
+                                                    <div class="col-8 has-validation">
                                                         <input type="date" class="form-control" name="txt_birth_date" id="txt_birth_date" required>
                                                         <div class="invalid-feedback">Please provide a valid birth date.</div>
                                                     </div>
@@ -323,33 +218,33 @@
                                                 <input type="checkbox" class="form-check-input" name="cbx_academic_info" id="cbx_academic_info" required>
                                                 <label for="cbx_academic_info" class="form-check-label"><strong>ALL</strong> academic information <strong>OR</strong> these individual items:</label>
                                                 <div class="invalid-feedback">You must select at least one.</div>
-                                                <div class="row p-4">
-                                                    <div class="col-12 col-lg-2">
-                                                        <div>
+                                                <div class="row py-4 input-group">
+                                                    <div class="col-12 col-lg-2 col-md-2 col-sm-12">
+                                                        <div class="form-check">
                                                             <input type="checkbox" class="form-check-input cbx_items_academic_info" name="cbx_admission" id="cbx_admission" required>
                                                             <label for="cbx_admission" class="form-check-label">Admission</label>
                                                         </div>
-                                                        <div>
+                                                        <div class="form-check">
                                                             <input type="checkbox" class="form-check-input cbx_items_academic_info" name="cbx_gpa" id="cbx_gpa" required>
                                                             <label for="cbx_gpa" class="form-check-label">GPA</label>
                                                         </div>
                                                     </div>
-                                                    <div class="col-12 col-lg-2">
-                                                        <div>
+                                                    <div class="col-12 col-lg-2 col-md-3 col-sm-12">
+                                                        <div class="form-check">
                                                             <input type="checkbox" class="form-check-input cbx_items_academic_info" name="cbx_registration" id="cbx_registration" required>
-                                                            <label for="cbx_registration" class="form-check-label">Registration/Enrollment</label>
+                                                            <label for="cbx_registration" class="form-check-label">Registration / Enrollment</label>
                                                         </div>
-                                                        <div>
+                                                        <div class="form-check">
                                                             <input type="checkbox" class="form-check-input cbx_items_academic_info" name="cbx_standing" id="cbx_standing" required>
                                                             <label for="cbx_standing" class="form-check-label">Academic Standing</label>
                                                         </div>
                                                     </div>
-                                                    <div class="col-12 col-lg-2">
-                                                        <div>
+                                                    <div class="col-12 col-lg-2 col-md-2 col-sm-12">
+                                                        <div class="form-check">
                                                             <input type="checkbox" class="form-check-input cbx_items_academic_info" name="cbx_grades" id="cbx_grades" required>
                                                             <label for="cbx_grades" class="form-check-label">Grades</label>
                                                         </div>
-                                                        <div>
+                                                        <div class="form-check">
                                                             <input type="checkbox" class="form-check-input cbx_items_academic_info" name="cbx_graduation" id="cbx_graduation" required>
                                                             <label for="cbx_graduation" class="form-check-label">Graduation</label>
                                                         </div>
@@ -411,8 +306,8 @@
                                             <div class="row">
                                                 <div class="col-12 col-lg-12">
                                                     <div class="mb-3 row">
-                                                        <label for="txt_purpose_authorization" class="col-sm-2 col-form-label"><strong>My authorization is for the following purpose:</strong></label>
-                                                        <div class="col-sm-8">
+                                                        <label for="txt_purpose_authorization" class="col-auto col-form-label"><strong>My authorization is for the following purpose:</strong></label>
+                                                        <div class="col-sm-7">
                                                             <textarea class="form-control" name="txt_purpose_authorization" id="txt_purpose_authorization" required></textarea>
                                                             <div class="invalid-feedback">Please provide a valid purpose.</div>
                                                         </div>
@@ -420,7 +315,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-12 col-lg-9">
+                                        <div class="col-12 col-lg-12">
                                             <div class="card bg-secondary bg-opacity-10 border border-dark mb-4">
                                                 <div class="card-body">
                                                     <div class="form-check">
@@ -433,38 +328,38 @@
                                         </div>
                                         <p><strong>I give consent for the following individual(s) to obtain the authorized information on request</strong></p>
                                         <p>(all information required):</p>
-                                        <div class="row py-4">
-                                            <div class="col-12 col-lg-5">
+                                        <label for="txt_first_authorized_name" class="col-auto col-form-label"><strong>1.</strong></label>
+                                        <div class="row pb-4">
+                                            <div class="col-12 col-lg-6">
                                                 <div class="mb-3 row">
-                                                    <label for="txt_first_authorized_name" class="col-sm-1 col-form-label"><strong>1.</strong></label>
-                                                    <div class="col-sm-11">
+                                                    <div class="col-sm-12">
                                                         <input type="text" class="form-control" name="txt_first_authorized_name" id="txt_first_authorized_name" placeholder="Printed Name" required>
                                                         <div class="invalid-feedback">Please provide a valid name.</div>
                                                     </div>
                                                 </div>
-                                                <input type="text" class="form-control" name="txt_first_address" id="txt_first_address" placeholder="Complete Address" required>
+                                                <input type="text" class="form-control mb-3" name="txt_first_address" id="txt_first_address" placeholder="Complete Address" required>
                                                 <div class="invalid-feedback">Please provide a valid address.</div>
                                             </div>
-                                            <div class="col-12 col-lg-5">
+                                            <div class="col-12 col-lg-6">
                                                 <input type="text" class="form-control mb-3" name="txt_first_relationship" id="txt_first_relationship" placeholder="Relationship to Student" required>
                                                 <div class="invalid-feedback">Please provide a valid relationship.</div>
                                                 <input type="email" class="form-control" name="txt_first_email" id="txt_first_email" placeholder="Email" required>
                                                 <div class="invalid-feedback">Please provide a valid email.</div>
                                             </div>
                                         </div>
-                                        <div class="row py-4">
-                                            <div class="col-12 col-lg-5">
+                                        <label for="txt_second_authorized_name" class="col-auto col-form-label"><strong>2.</strong></label>
+                                        <div class="row pb-4">
+                                            <div class="col-12 col-lg-6">
                                                 <div class="mb-3 row">
-                                                    <label for="txt_second_authorized_name" class="col-sm-1 col-form-label"><strong>2.</strong></label>
-                                                    <div class="col-sm-11">
+                                                    <div class="col-lg-12">
                                                         <input type="text" class="form-control" name="txt_second_authorized_name" id="txt_second_authorized_name" placeholder="Printed Name" required>
                                                         <div class="invalid-feedback">Please provide a valid name.</div>
                                                     </div>
                                                 </div>
-                                                <input type="text" class="form-control" name="txt_second_address" id="txt_second_address" placeholder="Complete Address" required>
+                                                <input type="text" class="form-control mb-3" name="txt_second_address" id="txt_second_address" placeholder="Complete Address" required>
                                                 <div class="invalid-feedback">Please provide a valid address.</div>
                                             </div>
-                                            <div class="col-12 col-lg-5">
+                                            <div class="col-12 col-lg-6">
                                                 <input type="text" class="form-control mb-3" name="txt_second_relationship" id="txt_second_relationship" placeholder="Relationship to Student" required>
                                                 <div class="invalid-feedback">Please provide a valid relationship.</div>
                                                 <input type="email" class="form-control" name="txt_second_email" id="txt_second_email" placeholder="Email" required>
@@ -479,7 +374,7 @@
                                                 form will supersede all prior authorizations for release of my information.</strong></p>
                                     </div>
                                     <div class="modal-footer pt-4">
-                                        <button class="btn btn-primary btn-sm px-4 m-1" onclick="editar_insertar()" type="button"><i class="bx bx-save" id="btn_guardar"></i> Guardar</button>
+                                        <button class="btn btn-primary btn-sm px-4 m-1" onclick="validar()" type="button"><i class="bx bx-save" id="btn_guardar"></i> Guardar</button>
                                         <?php ?>
                                     </div>
                                 </form>
@@ -495,24 +390,6 @@
     </script>
     <script>
         $(document).ready(function() {
-            function cambiar_checkboxes_dependientes(checkbox_principal, checkboxes_dependientes) {
-                $(document).on('change', checkbox_principal, function() {
-                    if ($(this).is(':checked')) {
-                        $(checkboxes_dependientes).prop('disabled', true).prop('checked', false);
-                    } else {
-                        $(checkboxes_dependientes).prop('disabled', false);
-                    }
-                });
-            }
-
-            function require_checkboxes_dependientes(checkbox_principal, checkboxes_dependientes) {
-                $(document).on('change', checkboxes_dependientes, function() {
-                    var anyChecked = $(checkboxes_dependientes + ':checked').length > 0;
-                    $(checkbox_principal).prop('required', !anyChecked);
-                    $(checkboxes_dependientes).prop('required', !anyChecked);
-                });
-            }
-
             cambiar_checkboxes_dependientes('#cbx_academic_info', '.cbx_items_academic_info');
             cambiar_checkboxes_dependientes('#cbx_financial_info', '.cbx_items_financial_info');
             cambiar_checkboxes_dependientes('#cbx_housing_info', '.cbx_items_housing_info');
@@ -521,4 +398,22 @@
             require_checkboxes_dependientes('#cbx_financial_info', '.cbx_items_financial_info');
             require_checkboxes_dependientes('#cbx_housing_info', '.cbx_items_housing_info');
         });
+
+        function cambiar_checkboxes_dependientes(checkbox_principal, checkboxes_dependientes) {
+            $(document).on('change', checkbox_principal, function() {
+                if ($(this).is(':checked')) {
+                    $(checkboxes_dependientes).prop('disabled', true).prop('checked', false);
+                } else {
+                    $(checkboxes_dependientes).prop('disabled', false);
+                }
+            });
+        }
+
+        function require_checkboxes_dependientes(checkbox_principal, checkboxes_dependientes) {
+            $(document).on('change', checkboxes_dependientes, function() {
+                var anyChecked = $(checkboxes_dependientes + ':checked').length > 0;
+                $(checkbox_principal).prop('required', !anyChecked);
+                $(checkboxes_dependientes).prop('required', !anyChecked);
+            });
+        }
     </script>
