@@ -12,10 +12,10 @@
                 </nav>
             </div>
         </div>
-
+        
         <div class="row">
             <div class="col-xl-12 mx-auto">
-                <h6 class="mb-0 text-uppercase">Registro de Miembros y Compras</h6>
+                <h6 class="mb-0 text-uppercase"><strong>Registro de Miembros y Compras</strong></h6>
                 <hr>
                 <div class="card">
                     <div class="card-body">
@@ -40,7 +40,7 @@
                                     <input type="text" class="form-control form-control-sm" name="txt_numero_celular" id="txt_numero_celular" placeholder="Número" step="1" required>
                                 </div>
                             </div>
-                            <button type="button" class="btn btn-primary" id="btn_registrar_miembro">Registrar Miembro</button>
+                            <button type="button" class="btn btn-primary" id="btn_registrar_miembro"><strong>Registrar Miembro</strong></button>
                         </form>
 
                         <h2 class="mb-4">Miembros Registrados</h2>
@@ -63,7 +63,7 @@
                             <div class="modal-dialog modal-lg">
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <h5 class="modal-title" id="modal_registrar_compra_label">Registrar Compra</h5>
+                                        <h5 class="modal-title" id="modal_registrar_compra_label"><strong>Registrar Compra</strong></h5>
                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
                                     <div class="modal-body">
@@ -101,17 +101,17 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    <!-- Aquí se registran las compras -->
+                                                    
                                                 </tbody>
                                             </table>
                                             <button type="button" class="btn btn-primary" id="btn_agregar_compra">
-                                                <i class="bi bi-bag-plus-fill"></i> Agregar
+                                                <i class="bi bi-bag-plus-fill"></i> <strong>Agregar</strong>
                                             </button>
                                         </form>
                                     </div>
                                     <div class="modal-footer">
-                                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">
-                                            Cerrar <i class="bi bi-file-x"></i>
+                                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal"> <strong>Cerrar<strong>
+                                            <i class="bi bi-file-x"></i>
                                         </button>
                                     </div>
                                 </div>
@@ -124,6 +124,11 @@
         </div>
     </div>
 </div>
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.min.css">
+
 
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.4/dist/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
