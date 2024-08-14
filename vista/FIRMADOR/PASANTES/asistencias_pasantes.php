@@ -1,8 +1,8 @@
-<script src="../js/ENFERMERIA/operaciones_generales.js"></script>
+<script src="../js/PASANTES/operaciones_generales.js"></script>
 
 <script type="text/javascript">
     $(document).ready(function() {
-        cargarDatos();
+        //cargarDatos();
 
 
         $('#tbl_pasante').DataTable({
@@ -28,8 +28,22 @@
                     filename: 'nombre_archivo_PDF'
                 }
             ],
-            columns: [{
+             columns: [{
+                    data: null,
+                    render: function(data, type, item) {
+                        return fecha_formateada(item.pas_fecha_creacion);
+                    }
+                },
+                {
                     data: 'pas_nombre',
+                    render: function(data, type, item) {
+                        if (item.pas_hora_salida != null && item.pas_hora_salida != '') {
+                            return `<button type="button" class="btn btn-primary badge" onclick="abrir_modal(${item.pas_id});">${data}</button>`;
+                        } else {
+                            return `<a href="../vista/inicio.php?mod=1010&acc=registro_pasantes_fin&id_asistencia=${item.pas_id}">${data}</a>`;
+                        }
+
+                    }
                 },
                 {
                     data: 'pas_hora_llegada',
@@ -40,16 +54,23 @@
                 {
                     data: 'pas_hora_salida',
                     render: function(data, type, item) {
-                        return obtener_hora_formateada_arr(item.pas_hora_salida);
+                        if (item.pas_hora_salida != null && item.pas_hora_salida != '') {
+                            return obtener_hora_formateada_arr(item.pas_hora_salida);
+                        } else {
+                            return item.pas_hora_salida
+                        }
                     }
                 },
                 {
                     data: 'pas_horas_total',
+                    render: function(data, type, item) {
+                        return parseFloat(data).toFixed(2);
+                    }
 
                 }
             ],
             order: [
-                [0, 'asc']
+                [0, 'DESC']
             ],
             initComplete: function() {
                 // Mover los botones al contenedor personalizado
@@ -58,49 +79,62 @@
         });
     });
 
-    function extraerHoraMinutos(fechaHora) {
-        var partesHora = fechaHora.split("T")[1].split(":"); // Usamos solo la parte de la hora y minutos
-        return partesHora[0] + ':' + partesHora[1]; // Retornamos en formato HH:MM
-    }
+    function abrir_modal(id) {
 
-    function calcular_diferencia_horas(hora_llegada, hora_salida) {
-        var llegada = extraerHoraMinutos(hora_llegada).split(":");
-        var salida = extraerHoraMinutos(hora_salida).split(":");
-
-        var horasLlegada = parseInt(llegada[0], 10);
-        var minutosLlegada = parseInt(llegada[1], 10);
-
-        var horasSalida = parseInt(salida[0], 10);
-        var minutosSalida = parseInt(salida[1], 10);
-
-        var minutosLlegadaTotales = horasLlegada * 60 + minutosLlegada;
-        var minutosSalidaTotales = horasSalida * 60 + minutosSalida;
-
-        var diferenciaMinutos = minutosSalidaTotales - minutosLlegadaTotales;
-
-        if (diferenciaMinutos < 0) {
-            diferenciaMinutos += 24 * 60; // Ajuste para horas pasadas de la medianoche
-        }
-
-        return diferenciaMinutos / 60; // Diferencia en horas
-    }
-
-    function cargarDatos() {
         $.ajax({
             url: '../controlador/PASANTES/asistencias_pasantesC.php?listar=true',
             type: 'post',
-            // data: {
-            //     id: 1
-            // },
+            data: {
+                id: id,
+                modal: 1,
+            },
             dataType: 'json',
             success: function(response) {
                 console.log(response);
+
+                $('#txt_obs_pasantes').val(response[0]['pas_observacion_pasante']);
+                $('#txt_obs_tutor').val(response[0]['pas_observacion_tutor']);
+                $('#txt_id_registro').val(response[0]['pas_id']);
+
             },
-            // error: function(jqXHR, textStatus, errorThrown) {
-            //     // Manejo de errores
-            //     console.error('Error al cargar los configs:', textStatus, errorThrown);
-            //     $('#pnl_config_general').append('<p>Error al cargar las configuraciones. Por favor, inténtalo de nuevo más tarde.</p>');
-            // }
+            //error: function(jqXHR, textStatus, errorThrown) {
+            // Manejo de errores
+            //console.error('Error al cargar los configs:', textStatus, errorThrown);
+            //$('#pnl_config_general').append('<p>Error al cargar las configuraciones. Por favor, inténtalo de nuevo más tarde.</p>');
+            //}
+        });
+
+        $('#modal_pasantes').modal('show');
+    }
+
+    function obs_tutor() {
+        var txt_id_registro = $('#txt_id_registro').val();
+        var txt_obs_tutor = $('#txt_obs_tutor').val();
+        var txt_obs_tutor = $('#txt_obs_tutor').val();
+
+
+        var parametros = {
+            'txt_id_registro': txt_id_registro,
+            'txt_obs_tutor': txt_obs_tutor,
+        };
+
+        $.ajax({
+            data: {
+                parametros: parametros
+            },
+            url: '../controlador/PASANTES/asistencias_pasantesC.php?editar_tutor=true',
+            type: 'post',
+            dataType: 'json',
+
+            success: function(response) {
+                if (response == 1) {
+                    Swal.fire('', 'Operacion realizada con exito.', 'success').then(function() {
+                        location.href = '../vista/inicio.php?mod=7&acc=asistencias_pasantes';
+                    });
+                } else {
+                    Swal.fire('', 'Error', 'error');
+                }
+            }
         });
     }
 </script>
@@ -135,7 +169,7 @@
                                     <h5 class="mb-0 text-primary">Pasantes</h5>
                                     <div class="row mx-1">
                                         <div class="col-sm-12" id="btn_nuevo">
-                                            <a href="../vista/inicio.php?mod=7&acc=registrar_pasantes" class="btn btn-success btn-sm"><i class="bx bx-plus"></i> Nuevo</a>
+                                            <a href="../vista/inicio.php?mod=7&acc=registro_pasantes" class="btn btn-success btn-sm"><i class="bx bx-plus"></i> Registro</a>
                                         </div>
                                     </div>
                                 </div>
@@ -151,6 +185,7 @@
                                     <table class="table table-striped responsive" id="tbl_pasante" style="width:100%">
                                         <thead>
                                             <tr>
+                                                <th>Fecha Creación</th>
                                                 <th>Nombre Pasante</th>
                                                 <th>Hora de llegada</th>
                                                 <th>Hora de salida</th>
@@ -169,5 +204,53 @@
             </div>
         </div>
         <!--end row-->
+    </div>
+</div>
+
+<div class="modal" id="modal_pasantes" abindex="-1" aria-modal="true" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <!-- Modal body -->
+            <div class="modal-body">
+                <div>
+                    <input type="hidden" name="txt_id_registro" id="txt_id_registro">
+                    <div class="row pt-3">
+                        <div class="col-12">
+                            <label for="txt_obs_pasantes">Observacion Pasantes</label>
+                            <textarea class="form-control form-control-sm" name="txt_obs_pasantes" id="txt_obs_pasantes" readonly></textarea>
+
+                        </div>
+                    </div>
+
+                    <?php
+                    if ($_SESSION['INICIO']['ID_USUARIO'] == 1) {
+                    ?>
+                        <div class="row pt-3">
+                            <div class="col-12">
+                                <label for="txt_obs_tutor">Observacion Tutor</label>
+                                <textarea class="form-control form-control-sm" name="txt_obs_tutor" id="txt_obs_tutor"></textarea>
+                            </div>
+                        </div>
+
+                        <div class="d-flex justify-content-end pt-3">
+                            <button type="button" class="btn btn-success btn-sm px-4" onclick="obs_tutor();"><i class="bx bx-save"></i> Guardar</button>
+                        </div>
+                    <?php  } else { ?>
+                        <div class="row pt-3">
+                            <div class="col-12">
+                                <label for="txt_obs_tutor">Observacion Tutor</label>
+                                <textarea class="form-control form-control-sm" name="txt_obs_tutor" id="txt_obs_tutor" readonly></textarea>
+                            </div>
+                        </div>
+                    <?php  }  ?>
+                </div>
+            </div>
+        </div>
     </div>
 </div>

@@ -68,18 +68,18 @@ class no_concurenteC
 			if(count($datos)>0)
 			{
 
-				foreach ($datos as $key => $value) {
+				// foreach ($datos as $key => $value) {
 						$datosADD = array(
 						array('campo'=>'Tabla','dato'=>$parametros['tabla']),
 						array('campo'=>'Id_Empresa','dato'=>$_SESSION['INICIO']['ID_EMPRESA']),
-						array('campo'=>'Id_Usuario','dato'=>$value[$id]),
+						// array('campo'=>'Id_Usuario','dato'=>$value[$id]),
 						array('campo'=>'Campo_usuario','dato'=>$parametros['usuario']),
 						array('campo'=>'Campo_pass','dato'=>$parametros['pass']),
 						array('campo'=>'tipo_perfil','dato'=>$parametros['perfil_usu']),
 						array('campo'=>'campo_img','dato'=>$parametros['foto']),
 					);
 					$this->modelo->insertar('TABLAS_NOCONCURENTE',$datosADD,1);
-				}
+				// }
 			}else
 			{
 				return -3;
