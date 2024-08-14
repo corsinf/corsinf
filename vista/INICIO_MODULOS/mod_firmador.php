@@ -56,18 +56,16 @@ if ($_GET['acc'] == 'registro_pasantes') {
 if ($_GET['acc'] == 'pagina_jav') {
     include('FIRMADOR/PRUEBAS/pagina_jav.php');
 }
-<<<<<<< HEAD
+
 
 if ($_GET['acc'] == 'asistencias_pasantes') {
     include('FIRMADOR/PASANTES/asistencias_pasantes.php');
 }
 
-<<<<<<< HEAD
+
 if ($_GET['acc'] == 'crear_mienbros') {
     include('COWORKING/crear_mienbros.php');
 }
-=======
-if ($_GET['acc'] == 'Paul') {
-    include('COWORKING/crear_cliente.php');
-}
+
+
 
