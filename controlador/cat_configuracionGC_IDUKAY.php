@@ -16,6 +16,9 @@ require_once(dirname(__DIR__, 1) . '/lib/IDUKAY/Querys.php');
 require_once(dirname(__DIR__, 1) . '/lib/IDUKAY/main.php');
 //Para llamar a la libreria donde se va a ejecutar los comandos de CRON
 require_once(dirname(__DIR__, 1) . '/lib/IDUKAY/idukay_actualizacion_datos.php');
+//Para buscar el id de IDUKAY de un estudiante
+require_once(dirname(__DIR__, 1) . '/modelo/estudiantesM.php');
+
 
 
 $controlador = new cat_configuracionGC_IDUKAY();
@@ -23,6 +26,10 @@ $controlador = new cat_configuracionGC_IDUKAY();
 if (isset($_GET['idukay_estudiantes'])) {
     echo ($controlador->cargarEstudiantesIdukay());
     //print_r($_POST['parametros']); exit;
+}
+
+if (isset($_GET['idukay_actualizar_estudiante'])) {
+    echo json_encode($controlador->actualizarEstudiantesIdukay($_POST['id_estudiante']));
 }
 
 if (isset($_GET['idukay_representantes'])) {
@@ -145,6 +152,22 @@ class cat_configuracionGC_IDUKAY
     function cargarEstudiantesIdukay()
     {
         $data = $this->Idukay_API->lista_Estudiante();
+        $selecionar_anio_lectivo = $this->anio_lectivo;
+        $desarrollo_idukay = $this->desarrollo_idukay;
+        $estudiatesUP = $this->estudiante_paralelos_idukay;
+
+        return $this->idukay_motor->cargarEstudiantesIdukay($data, $selecionar_anio_lectivo, $desarrollo_idukay, $estudiatesUP);
+    }
+
+    function actualizarEstudiantesIdukay($id_estudiante)
+    {
+        $estudiante = new estudiantesM();
+        $estudiante = $estudiante->lista_estudiantes($id_estudiante);
+        $estudiante = $estudiante[0]['sa_id_est_idukay'];
+
+        //return($estudiante) ;exit();die();
+
+        $data = $this->Idukay_API->lista_Estudiante_especifico($estudiante);
         $selecionar_anio_lectivo = $this->anio_lectivo;
         $desarrollo_idukay = $this->desarrollo_idukay;
         $estudiatesUP = $this->estudiante_paralelos_idukay;
@@ -293,7 +316,7 @@ class cat_configuracionGC_IDUKAY
         if ($handle) {
             // Leer cada línea del archivo
             while (($line = fgets($handle)) !== false) {
-                echo $line.'</br>';
+                echo $line . '</br>';
             }
 
             // Cerrar el archivo

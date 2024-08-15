@@ -234,6 +234,9 @@ class main
              * Parche para que todos los estudiantes salgan y puedan sacar su ficha medica
              */
 
+            $ponerRepresentantesEstudiantes = $this->SQL_idukay->ponerRepresentantesEstudiantes();
+            $query = $this->clase_llamada->sql_string($ponerRepresentantesEstudiantes);
+
 
             if ($estudiatesUP == false) {
                 $resultado = $this->clase_llamada->sql_string("UPDATE estudiantes set sa_est_estado = '1';");

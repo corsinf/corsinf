@@ -1,8 +1,8 @@
 <script src="../js/ENFERMERIA/operaciones_generales.js"></script>
- 
+
 <script type="text/javascript">
     $(document).ready(function() {
-        $('#tabla_estudiante').DataTable({
+        tabla_estudiante = $('#tabla_estudiante').DataTable({
             language: {
                 url: 'https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
             },
@@ -52,6 +52,12 @@
                         return salida;
                     }
                 },
+                {
+                    data: null,
+                    render: function(data, type, item) {
+                        return `<button type="button" class="btn btn-primary btn-sm m-1" onclick="actualizar_idukay('${item.sa_est_id}')"><i class="lni lni-spinner-arrow fs-6 me-0 fw-bold"></i></button>`;
+                    }
+                },
             ],
             order: [
                 [1, 'asc']
@@ -74,6 +80,86 @@
 
         // Envía el formulario por POST
         $('#form_enviar').submit();
+    }
+
+    function actualizar_idukay(id_estudiante) {
+        Swal.fire({
+            title: 'Por favor, espere',
+            text: 'Procesando la solicitud...',
+            allowOutsideClick: false,
+            onOpen: () => {
+                Swal.showLoading();
+            }
+        });
+
+        $.ajax({
+            url: '../controlador/cat_configuracionGC_IDUKAY.php?idukay_actualizar_estudiante=true',
+            data: {
+                id_estudiante: id_estudiante
+            },
+            type: 'post',
+            dataType: 'json',
+            success: function(response) {
+                console.log(response);
+                if (response == 1) {
+                    Swal.close();
+                    Swal.fire('', 'Actualización exitosa.', 'success');
+                    tabla_estudiante.ajax.reload();
+                    $('#pnl_idukay').html('<p>Actualización exitosa.</p>');
+                } else if (response == -10) {
+                    Swal.close();
+                    $('#pnl_idukay').html('<p>Error al subir datos a la Base de Datos.</p>');
+                    Swal.fire('', 'Error al subir datos a la Base de Datos.', 'error');
+                } else if (response == -11) {
+                    Swal.close();
+                    $('#pnl_idukay').html('<p>Error al conectarse con la API de Idukay.</p>');
+                    Swal.fire('', 'Error al conectarse con la API de Idukay.', 'error');
+                }
+
+            },
+            error: function() {
+                // Manejo de errores
+                $('#pnl_idukay').html('<p>Error al cargar los configs.</p>');
+            }
+        });
+    }
+
+    function actualizar_idukay_json(id_estudiante_idukay) {
+
+
+        alert(id_estudiante_idukay);
+
+        $.ajax({
+            url: '../controlador/cat_configuracionGC_IDUKAY.php?idukay_actualizar_estudiante=true',
+            data: {
+                id_estudiante_idukay: id_estudiante_idukay
+            },
+            type: 'post',
+            dataType: 'json',
+            success: function(response) {
+                console.log(response);
+
+                // Contar el número de registros
+                var numRegistros = response.response.length;
+
+                // Mostrar el número de registros
+                var contadorElement = $('<p></p>').text('Número de registros: ' + numRegistros);
+                $('#pnl_idukay').append(contadorElement);
+
+                // Convertir el JSON a una cadena con formato
+                var formattedJson = JSON.stringify(response, null, 2);
+
+                // Crear un elemento <pre> para mostrar el JSON con formato
+                var preElement = $('<pre></pre>').text(formattedJson);
+
+                // Agregar el <pre> al panel
+                $('#pnl_idukay').append(preElement);
+            },
+            error: function() {
+                // Manejo de errores
+                $('#pnl_idukay').append('<p>Error al cargar los configs.</p>');
+            }
+        });
     }
 </script>
 
@@ -136,6 +222,9 @@
                                 <div id="contenedor_botones"></div>
                             </div>
 
+                            <div id="pnl_idukay">
+
+                            </div>
 
                         </div>
 
@@ -154,6 +243,7 @@
                                                 <th>Nombre</th>
                                                 <th>Sección/Grado/Paralelo</th>
                                                 <th>Edad</th>
+                                                <th>Acciones</th>
                                             </tr>
                                         </thead>
                                         <tbody>

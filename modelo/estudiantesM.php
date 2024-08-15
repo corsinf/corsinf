@@ -31,6 +31,7 @@ class estudiantesM
                     est.sa_id_paralelo,
                     est.sa_id_representante,
                     sa_est_rep_parentesco,
+                    sa_id_est_idukay,
 
 
                     sa_id_representante_2,
@@ -74,6 +75,7 @@ class estudiantesM
                     est.sa_id_paralelo,
                     est.sa_id_representante,
                     est.sa_est_rep_parentesco,
+                    est.sa_id_est_idukay,
 
                     sa_id_representante_2,
                     sa_est_rep_parentesco_2,
