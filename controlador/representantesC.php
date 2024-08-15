@@ -1,5 +1,8 @@
 <?php
-include('../modelo/representantesM.php');
+require_once(dirname(__DIR__, 1) .  '/modelo/representantesM.php');
+
+require_once(dirname(__DIR__, 1) . '/db/codigos_globales.php');
+
 
 $controlador = new representantesC();
 
@@ -34,10 +37,12 @@ if (isset($_GET['lista_representantes_select'])) {
 class representantesC
 {
     private $modelo;
+    private $cod_global;
 
     function __construct()
     {
         $this->modelo = new representantesM();
+        $this->cod_global = new codigos_globales();
     }
 
     function lista_todo_representantes()
@@ -74,6 +79,7 @@ class representantesC
             array('campo' => 'sa_rep_correo', 'dato' => $parametros['sa_rep_correo']),
             array('campo' => 'sa_rep_telefono_1', 'dato' => $parametros['sa_rep_telefono_1']),
             array('campo' => 'sa_rep_telefono_2', 'dato' => $parametros['sa_rep_telefono_2']),
+            array('campo' => 'PASS', 'dato' => $this->cod_global->enciptar_clave($parametros['sa_rep_cedula'])),
         );
 
         if ($parametros['sa_rep_id'] == '') {
