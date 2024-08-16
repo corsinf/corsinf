@@ -67,8 +67,3 @@ if ($_GET['acc'] == 'crear_mienbros') {
     include('COWORKING/crear_mienbros.php');
 }
 
-<<<<<<< HEAD
-=======
-
-
->>>>>>> pasante_alejo
