@@ -62,7 +62,13 @@ if ($_GET['acc'] == 'asistencias_pasantes') {
     include('FIRMADOR/PASANTES/asistencias_pasantes.php');
 }
 
-if ($_GET['acc'] == 'Paul') {
-    include('COWORKING/crear_cliente.php');
+
+if ($_GET['acc'] == 'crear_mienbros') {
+    include('COWORKING/crear_mienbros.php');
 }
 
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> pasante_alejo
