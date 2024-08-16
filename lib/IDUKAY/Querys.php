@@ -37,6 +37,18 @@ class Querys
         return $this->Idukay_API->respuesta_Json($body, $query);
     }
 
+    function lista_Estudiante_especifico($id_estudiante_idukay)
+    {
+        //select={"user": 1,  "relatives":1, "relational_data":1, "years":{"$elemMatch":{"year":"64d4f946782ad5085bd5da42", "registered": true}}}
+
+
+        $query_regla = '_id=' . $id_estudiante_idukay . '&select={"user": 1,  "relatives":1, "relational_data":1, "years":{"$elemMatch":{"year":"' . $this->anio_lectivo . '", "registered": true}}}';
+        $query = '/students?' . $query_regla;
+        $body = array();
+
+        return $this->Idukay_API->respuesta_Json($body, $query);
+    }
+
     function lista_Padres()
     {
         //students?_id=5cdc79d6fcdc87a26653992c&select=_id+user+school+emergency+relatives+addresses+phone

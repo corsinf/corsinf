@@ -1,0 +1,155 @@
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+    * {
+        font-family: 'Poppins', sans-serif;
+        margin: 0;
+        padding: 0;
+    }
+
+
+
+    .contenedor {
+        position: relative;
+        width: 400px;
+        border: 2px solid rgba(255, 255, 255, 6);
+        border-radius: 20px;
+        backdrop-filter: blur(15px);
+        height: 450px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .contenedor h2 {
+        font-size: 2.3rem;
+        color: #fff;
+        text-align: center;
+    }
+
+    .input-contenedor {
+        position: relative;
+        margin: 30px 0;
+        width: 300px;
+        border-bottom: 2px solid #fff;
+    }
+
+    .input-contenedor label {
+        position: absolute;
+        top: 50%;
+        left: 5px;
+        transform: translateY(-50%);
+        color: #fff;
+        font-size: 1rem;
+        pointer-events: none;
+        transition: .6s;
+        font-weight: bold;
+    }
+
+    input:focus~label,
+    input:valid~label {
+        top: -5px;
+    }
+
+    .input-contenedor input {
+        width: 100%;
+        height: 45px;
+        background-color: transparent;
+        border: none !important;
+        outline: none;
+        font-size: 1rem;
+        padding: - 35px 0;
+        color: #fff;
+    }
+
+    .input-contenedor i {
+        position: absolute;
+        color: #fff;
+        font-size: 1.6rem;
+        top: 19px;
+        right: 8px;
+    }
+
+    /* Cambiar el fondo a un color leve cuando se autocompleta */
+    input:-webkit-autofill {
+        background-color: rgba(11, 13, 67, 0.2) !important;
+        /* Fondo rojo leve con transparencia */
+        color: rgb(0, 0, 0) !important;
+        /* Texto en color negro */
+        font-size: 1rem;
+        -webkit-box-shadow: 0 0 0px 800px rgba(11, 13, 67, 0.2) inset !important;
+        /* Fondo leve */
+        box-shadow: 0 0 0px 800px rgba(11, 13, 67, 0.2) inset !important;
+        /* Fondo leve */
+    }
+
+    /* Mantener el fondo leve cuando el campo está enfocado después de autocompletar */
+    input:-webkit-autofill:focus {
+        background-color: rgba(11, 13, 67, 0.2) !important;
+        /* Fondo rojo leve con transparencia */
+        color: #fff !important;
+        /* Texto blanco */
+        box-shadow: none;
+        /* Sin sombra adicional */
+    }
+
+    .olvidar {
+        margin: -15px 0 15px;
+        font-size: .9em;
+        color: #fff;
+        display: flex;
+        justify-content: center;
+    }
+
+    .olvidar label input {
+        margin: 3px;
+    }
+
+    .olvidar label a {
+        color: #fff;
+        text-decoration: none;
+        transition: .3s;
+        font-size: .9em;
+    }
+
+    .olvidar label a:hover {
+        text-decoration: underline;
+    }
+
+    button {
+        width: 100%;
+        height: 45px;
+        border-radius: 40px;
+        background-color: #fff;
+        border: none;
+        font-weight: bold;
+        cursor: pointer;
+        outline: none;
+        font-size: 1rem;
+        transition: .4s;
+    }
+
+    button:hover {
+        opacity: 0.5;
+    }
+
+    .registrar {
+        font-size: .8rem;
+        color: #fff;
+        text-align: center;
+        margin: 20px 0 10px;
+    }
+
+    .registrar p a {
+        text-decoration: none;
+        color: #fff;
+        font-weight: bold;
+        transition: .3s;
+    }
+
+    .registrar p a:hover {
+        text-decoration: underline;
+    }
+
+    .formulario img {
+        color: #fff;
+    }

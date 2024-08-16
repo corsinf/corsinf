@@ -67,5 +67,3 @@ if ($_GET['acc'] == 'crear mienbros') {
     include('COWORKING/crear_mienbros.php');
 }
 
-
-

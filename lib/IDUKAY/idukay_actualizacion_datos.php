@@ -27,13 +27,17 @@ class idukay_actualizacion_datos
     private $anio_lectivo;
 
     private $datos_empresa;
-    private $datos_config_cron = array();
 
     private $nombre_modulo; //= 'ENFERMERIA';
     private $nombre_empresa; //= 'SALUD_DESARROLLO';
     private $url_guardar_bat; //= 'C:\xampp\htdocs\corsinf\CRON';
     private $script_php_motor; //= 'idukay_actualizacion_datos_saint.php';
     private $motor_bat; //= 'SD';
+    private $hora_ejecucion_PW; //= '08:30';
+
+
+    private $desarrollo_idukay; //Para poner desarrollo a los correos
+    private $estudiante_paralelos_idukay; //Sirve para poner los estudiantes que ya tienen asignado un paralelo
 
     private $idukay_motor;
 
@@ -71,6 +75,22 @@ class idukay_actualizacion_datos
             // Inicializa los objetos relacionados con IDUKAY
             $this->Idukay_API = new Querys($this->url, $this->barear_Token, $this->anio_lectivo);
             $this->idukay_motor = new main($this);
+
+            $validacion_generalGC = $this->validacion('desarrollo_idukay');
+
+            $this->desarrollo_idukay = '';
+            if ($validacion_generalGC == 1) {
+                $this->desarrollo_idukay = 'desarrollo_';
+            }
+
+            $validacion_generalGC_estudiantes_paralelos_idukay = $this->validacion('estudiantes_paralelos_idukay');
+
+            $this->estudiante_paralelos_idukay = '';
+            if ($validacion_generalGC_estudiantes_paralelos_idukay == 1) {
+                $this->estudiante_paralelos_idukay = true;
+            } else {
+                $this->estudiante_paralelos_idukay = false;
+            }
         } else {
             // Manejo de errores si la sesión no está definida
             throw new Exception("La sesión 'INICIO' no está definida.");
@@ -92,8 +112,8 @@ class idukay_actualizacion_datos
 
         $data = $this->Idukay_API->lista_Estudiante();
         $selecionar_anio_lectivo = $this->anio_lectivo;
-        $desarrollo_idukay = 1; //$this->desarrollo_idukay;
-        $estudiatesUP = false;
+        $desarrollo_idukay = $this->desarrollo_idukay;
+        $estudiatesUP = $this->estudiante_paralelos_idukay;
 
         $salida = $this->idukay_motor->cargarEstudiantesIdukay($data, $selecionar_anio_lectivo, $desarrollo_idukay, $estudiatesUP);
 
@@ -106,7 +126,23 @@ class idukay_actualizacion_datos
         }
     }
 
+    function cargarRepresentantesIdukay()
+    {
+        $this->crearLOG('Sincronización de Representantes con Idukay inicio');
 
+        $data = $this->Idukay_API->lista_Padres();
+        $desarrollo_idukay = $this->desarrollo_idukay;
+
+        $salida = $this->idukay_motor->cargarRepresentantesIdukay($data, $desarrollo_idukay);
+
+        if ($salida = 1) {
+            $this->crearLOG('Sincronización de Estudiantes con Idukay fin -> Status 200');
+            return $salida;
+        } else {
+            $this->crearLOG('Sincronización de Estudiantes con Idukay fin -> Status 502');
+            return $salida;
+        }
+    }
 
     function crearLOG($variable)
     {
@@ -170,6 +206,14 @@ class idukay_actualizacion_datos
         $url_guardar_bat = $this->url_guardar_bat; // C:\xampp\htdocs\corsinf\CRON
         $script_php_motor = $this->script_php_motor; // idukay_actualizacion_datos_saint.php
 
+        $usuario = $this->usuario;
+        $password = $this->password;
+        $servidor = $this->servidor;
+        $database = $this->database;
+        $puerto = $this->puerto;
+
+
+
         // Definir el directorio y el nombre del archivo
         $directory = $url_guardar_bat . "\\" . $nombre_modulo . "\\" . $nombre_empresa;
         $filename = $directory . "\\" . $script_php_motor;
@@ -185,17 +229,18 @@ class idukay_actualizacion_datos
                     
                     require_once(dirname(__DIR__, 3) . '/lib/IDUKAY/idukay_actualizacion_datos.php');
                     
-                    \$usuario = 'sa';
-                    \$password = 'Tango456';
-                    \$servidor = '186.4.219.172, 1487';
-                    \$database = 'SALUD_DESARROLLO';
+                    \$usuario = '$usuario';
+                    \$password = '$password';
+                    \$servidor = '$servidor';
+                    \$database = '$database';
                     \$puerto = '';
                     
                     // Crear una instancia de la clase y llamar al método
                     \$proceso = new idukay_actualizacion_datos(\$usuario, \$password, \$servidor, \$database, \$puerto);
                     
-                    //\$proceso->cargarEstudiantesIdukay();
-                    \$proceso->crearLOG('estudiantes');
+                    \$proceso->cargarEstudiantesIdukay();
+                    \$proceso->cargarRepresentantesIdukay();
+                    //\$proceso->crearLOG('estudiantes');
                     
                 
                     PHP;
@@ -211,6 +256,7 @@ class idukay_actualizacion_datos
         $url_guardar_bat = $this->url_guardar_bat; // C:\xampp\htdocs\corsinf\CRON
         $script_php_motor = $this->script_php_motor; // idukay_actualizacion_datos_saint.php
         $motor_bat = $this->motor_bat; //idukay_actualizacion_datos_saint.php
+        $hora_ejecucion_PW = $this->hora_ejecucion_PW; //08:30
 
 
         // Definir el directorio y el nombre del archivo
@@ -226,9 +272,9 @@ class idukay_actualizacion_datos
 
         $content = <<<PS
                         \$action = New-ScheduledTaskAction -Execute $filename
-                        \$trigger = New-ScheduledTaskTrigger -Daily -At 17:06
+                        \$trigger = New-ScheduledTaskTrigger -Daily -At $hora_ejecucion_PW
                         \$principal = New-ScheduledTaskPrincipal -UserId "SYSTEM" -LogonType ServiceAccount
-                        Register-ScheduledTask -Action \$action -Trigger \$trigger -Principal \$principal -TaskName "CORSINF_Motor_bat_$nombre_empresa" -Description "Actualización de datos desde IDUKAY - CORSINF"
+                        Register-ScheduledTask -Action \$action -Trigger \$trigger -Principal \$principal -TaskName "CORSINF_$motor_bat PW $nombre_empresa" -Description "Actualización de datos desde IDUKAY - CORSINF"
                     PS;
 
         // Crear el archivo .ps1 y agregar el contenido
@@ -241,14 +287,14 @@ class idukay_actualizacion_datos
         $nombre_empresa = $this->nombre_empresa; // SALUD_DESARROLLO
         $url_guardar_bat = $this->url_guardar_bat; // C:\xampp\htdocs\corsinf\CRON
         $script_php_motor = $this->script_php_motor; // idukay_actualizacion_datos_saint.php
-        $motor_bat = $this->motor_bat; //idukay_actualizacion_datos_saint.php
+        $motor_bat = $this->motor_bat; //SD
 
         // Definir el directorio y el nombre del archivo
         $directory = $url_guardar_bat . "\\" . $nombre_modulo . "\\" . $nombre_empresa;
         $filename = $directory . '\ejecutar_idukay_' . $motor_bat . '.ps1';
 
         // Ruta al script de PowerShell
-        $scriptPath = $filename;//'C:\\xampp\\htdocs\\pruebas_cron\\CrearTarea.ps1';
+        $scriptPath = $filename; //'C:\\xampp\\htdocs\\pruebas_cron\\CrearTarea.ps1';
 
         // Comando para ejecutar el script de PowerShell
         $command = "powershell -ExecutionPolicy Bypass -File \"$scriptPath\" 2>&1";
@@ -353,6 +399,8 @@ class idukay_actualizacion_datos
                     $this->script_php_motor = $valor;
                 } elseif ($validar === 'motor_bat') {
                     $this->motor_bat = $valor;
+                } elseif ($validar === 'hora_ejecucion_PW') {
+                    $this->hora_ejecucion_PW = $valor;
                 }
             }
         }
@@ -395,6 +443,27 @@ class idukay_actualizacion_datos
             return -1;
             die(print_r(sqlsrv_errors(), true));
         }
+    }
+
+    function validacion($validar)
+    {
+        $sql =
+            "SELECT 
+                sa_config_id,
+                sa_config_nombre,
+                sa_config_descripcion,
+                sa_config_validar,
+                sa_config_estado,
+                sa_config_fecha_creacion
+
+                FROM cat_configuracionG
+                WHERE sa_config_validar = '$validar';";
+
+        $datos = $this->datos($sql);
+
+        $datos[0]['sa_config_estado'];
+
+        return $datos[0]['sa_config_estado'];
     }
 }
 
