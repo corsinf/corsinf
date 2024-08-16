@@ -63,7 +63,7 @@ if ($_GET['acc'] == 'asistencias_pasantes') {
 }
 
 
-if ($_GET['acc'] == 'crear_mienbros') {
+if ($_GET['acc'] == 'crear mienbros') {
     include('COWORKING/crear_mienbros.php');
 }
 
