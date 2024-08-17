@@ -125,7 +125,7 @@ if (($_SESSION['INICIO']['LOGO']) == '.' || $_SESSION['INICIO']['LOGO'] == '' ||
 			'id_tabla': id_tabla,
 		}
 
-		menu_lateral();
+		//menu_lateral();
 		$(document).ready(function() {
 			restriccion();
 			//notificaciones();
@@ -428,7 +428,7 @@ if (($_SESSION['INICIO']['LOGO']) == '.' || $_SESSION['INICIO']['LOGO'] == '' ||
 			</div>
 			<!--navigation-->
 			<ul class="metismenu" id="menu">
-
+				<?= $_SESSION['MENU_LATERAL'] ?? '' ?>
 			</ul>
 			<!-- <ul class="metismenu" id="menu1">
 				
