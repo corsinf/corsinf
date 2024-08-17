@@ -342,7 +342,7 @@
 		align-items: center;
 		width: 100%;
 		min-height: 100vh;
-		background: url(img/inicio/login1.jpg);
+		background: url(img/inicio/login1.webp);
 		background-position: center;
 		background-size: cover;
 	}
