@@ -16,7 +16,6 @@
         <!--end breadcrumb-->
         <div class="card">
             <div class="card-body">
-                <h2 id="lbl_form_title" class="text-center mb-4">Alquiler de Espacios</h2>
                 <form id="rental_form">
                     <div class="form-group mb-3">
                         <label for="txt_name">Nombre del Espacio:</label>
