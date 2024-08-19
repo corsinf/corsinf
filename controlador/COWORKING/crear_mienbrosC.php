@@ -16,11 +16,11 @@ class crear_mienbrosC
        {
          $tr ='<tr>
                     
-                <td><input type="text" class="form-control form-control-sm" value="${nombre}" readonly></td>
-                <td><input type="text" class="form-control form-control-sm" value="${producto}" readonly></td>
-                <td><input type="number" class="form-control form-control-sm" value="${cantidad}" readonly></td>
-                <td><input type="text" class="form-control form-control-sm" value="${precio}" readonly></td>
-                <td><input type="text" class="form-control form-control-sm" value="${total}" readonly></td>
+                <td><input type="text" class="form-control form-control-sm"></td>
+                <td><input type="text" class="form-control form-control-sm"></td>
+                <td><input type="number" class="form-control form-control-sm"></td>
+                <td><input type="text" class="form-control form-control-sm"></td>
+                <td><input type="text" class="form-control form-control-sm"></td>
                 <td>
                     <button class="btn btn-danger btn-sm btn_eliminar_compra">
                           <i class="bx bx-x"></i>

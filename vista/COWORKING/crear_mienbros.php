@@ -1,5 +1,7 @@
+<!--start page wrapper -->
 <div class="page-wrapper">
     <div class="page-content">
+        <!--breadcrumb-->
         <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
             <div class="breadcrumb-title pe-3"><strong>Formulario</strong></div>
             <div class="breadcrumb-separator"></div>
@@ -16,6 +18,7 @@
                 </nav>
             </div>
         </div>
+        <!--end breadcrumb-->
         
         <div class="row">
             <div class="col-xl-12 mx-auto">
@@ -62,6 +65,7 @@
                             </tbody>
                         </table>
 
+                        <!-- Modal -->
                         <div class="modal fade" id="modal_registrar_compra" tabindex="-1" aria-labelledby="modal_registrar_compra_label" aria-hidden="true">
                             <div class="modal-dialog modal-lg">
                                 <div class="modal-content">
@@ -96,7 +100,7 @@
                                                         <th>Acciones</th>
                                                     </tr>
                                                 </thead>
-                                                <tbody id="tbl_boby">
+                                                <tbody id="tbl_body_compras">
                                                     
                                                 </tbody>
                                             </table>
@@ -120,6 +124,7 @@
         </div>
     </div>
 </div>
+
 
 
 <script>
