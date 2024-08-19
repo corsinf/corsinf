@@ -753,7 +753,7 @@ class loginC
 				$_SESSION["INICIO"]['ID_USUARIO'] = $datos[0]['id'];
 				$_SESSION["INICIO"]['EMAIL'] = $datos[0]['email'];
 				$_SESSION["INICIO"]['TIPO'] = $datos[0]['tipo'];
-				$_SESSION["INICIO"]['PERFIL'] = $datos[0]['perfil'];				
+				$_SESSION["INICIO"]['PERFIL'] = $parametros['tipo'];				
 				$_SESSION["INICIO"]['FOTO'] = $datos[0]['foto'];
 				$_SESSION["INICIO"]['NO_CONCURENTE'] = '';
 				$_SESSION["INICIO"]['NO_CONCURENTE_NOM'] ='';
