@@ -110,6 +110,8 @@
 		}
 
 		function empresa_selecconada(empresa, activeDir, primera_vez) {
+
+			// $('#myModal_espera').modal('show');
 			pass = $('#pass').val();
 			email = $('#email').val();
 			$('#txt_empresa').val(empresa);
@@ -125,7 +127,6 @@
 			}
 			// titulos_cargados();
 
-			$('#myModal_espera').modal('show');
 			$.ajax({
 				data: {
 					parametros: parametros
@@ -134,8 +135,8 @@
 				type: 'post',
 				dataType: 'json',
 				success: function(response) {
+					
 
-					$('#myModal_espera').modal('hide');
 					if (response.respuesta == 2) {
 						$('#lista_modulos_empresas').html(response.modulos);
 						$('#txt_id').val(empresa);
@@ -154,6 +155,8 @@
 							iniciar_sesion();
 						}
 					}
+					
+					$('#myModal_espera').modal('hide');
 				},
 				error: function(xhr, status, error) {
 					$('#myModal_espera').modal('hide');

@@ -206,22 +206,17 @@ class usuariosC
 
 	function usuarios($parametros)
 	{
-		$datos = $this->modelo->lista_usuarios($parametros['id'],$parametros['query']);
-		$tabla='';
-		foreach ($datos as $key => $value) {
-			if($value['tipo']=='DBA')
-			{
-					if($_SESSION['INICIO']['TIPO']=='DBA')
-					{
 
-						$tabla.='
+		$tabla='';
+		$datos_db = $this->modelo->lista_usuarios($parametros['id'],$parametros['query'],1);
+		foreach ($datos_db as $key => $value) {
+					$tabla.='
 						<div class="col">
             <div class="card radius-15">
               <div class="card-body text-center">
                 <div class="p-4 border radius-15">
                   <img src="../'.$value['foto'].'" width="110" height="110" class="rounded-circle shadow" alt="">
                   <h5 class="mb-0 mt-5">'.$value['nombre'].' '.$value['apellido'].'</h5>
-                <!--  <p class="mb-3">'.$value['tipo'].'</p> --!>
                   <div class="list-inline contacts-social mt-3 mb-3"> <a href="javascript:;" class="list-inline-item bg-facebook text-white border-0"><i class="bx bxl-facebook"></i></a>
                     <a href="javascript:;" class="list-inline-item bg-twitter text-white border-0"><i class="bx bxl-twitter"></i></a>
                    <!-- <a href="javascript:;" class="list-inline-item bg-google text-white border-0"><i class="bx bxl-google"></i></a> -->
@@ -236,11 +231,20 @@ class usuariosC
             </div>
           </div>'; 
 						
-					}
-				}else
-				{
-// print_r($value);die();
+		}
 
+		$datos_usu = $this->modelo->lista_usuarios_sin_dba($parametros['id'],$parametros['query']);
+		foreach ($datos_usu as $key => $value) {
+				$existe = 0;
+				foreach ($datos_db as $key2 => $value2) {
+						if($value['id']==$value2['id'])
+						{
+								$existe = 1;
+								break;
+						}
+				}
+				if($existe==0)
+				{
 						$tabla.='
 						<div class="col">
             <div class="card radius-15">
@@ -248,7 +252,6 @@ class usuariosC
                 <div class="p-4 border radius-15">
                   <img src="'.$value['foto'].'" width="110" height="110" class="rounded-circle shadow" alt="">
                   <h5 class="mb-0 mt-5">'.$value['nombre'].' '.$value['apellido'].'</h5>
-                 <!-- <p class="mb-3">'.$value['tipo'].'</p> --!>
                   <div class="list-inline contacts-social mt-3 mb-3"> <a href="javascript:;" class="list-inline-item bg-facebook text-white border-0"><i class="bx bxl-facebook"></i></a>
                     <a href="javascript:;" class="list-inline-item bg-twitter text-white border-0"><i class="bx bxl-twitter"></i></a>
                    <!-- <a href="javascript:;" class="list-inline-item bg-google text-white border-0"><i class="bx bxl-google"></i></a> -->
@@ -262,10 +265,8 @@ class usuariosC
               </div>
             </div>
           </div>
-          '; 
-
-					
-				}
+          ';
+        }
 		}
 		
 		return $tabla;
