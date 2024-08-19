@@ -1,25 +1,25 @@
 <?php
 @session_start();
-include('../modelo/ingreso_stockM.php');
-include('../modelo/insumosM.php');
-include('../modelo/medicamentosM.php');
-include('../db/codigos_globales.php');
+include_once('../modelo/ingreso_stockM.php');
+include_once('../modelo/insumosM.php');
+include_once('../modelo/medicamentosM.php');
+include_once('../db/codigos_globales.php');
 
-include('../modelo/estudiantesM.php');
+include_once('../modelo/estudiantesM.php');
 //Email
-//include('../lib/phpmailer/enviar_emails.php');
+include_once('../lib/phpmailer/enviar_emails.php');
 
 //Representante
-//include('../modelo/representantesM.php');
+include_once('../modelo/representantesM.php');
 
 //Estudiante
 
 
 //Usuarios
-//include('../modelo/usuariosM.php');
+include_once('../modelo/usuariosM.php');
 
 //Configuracion General
-//include('../modelo/cat_configuracionGM.php');
+include_once('../modelo/cat_configuracionGM.php');
 
 /**
  * 
@@ -69,11 +69,12 @@ class ingreso_stockC
 	private $cod_global;
 	private $estudiantesM;
 
-	/*private $email;
 	private $representantesM;
+	private $configGM;
+	private $email;
 
 	private $usuariosM;
-	private $configGM;*/
+
 	function __construct()
 	{
 		$this->modelo = new ingreso_stockM();
@@ -82,10 +83,10 @@ class ingreso_stockC
 		$this->cod_global = new codigos_globales();
 
 		$this->estudiantesM = new estudiantesM();
-		/*$this->email = new enviar_emails();
 		$this->representantesM = new representantesM();
+		$this->configGM = new cat_configuracionGM();
+		$this->email = new enviar_emails();
 		$this->usuariosM = new usuariosM();
-		$this->configGM = new cat_configuracionGM();*/
 	}
 
 	function lista_articulos($parametros)
@@ -298,11 +299,11 @@ class ingreso_stockC
 
 	function enviarCorreo($parametros)
 	{
-		$sa_id = $parametros[0]['sa_id'];
-		$sa_tabla = $parametros[0]['sa_tabla'];
+		$sa_id = $parametros[1]['sa_id'];
+		$sa_tabla = $parametros[1]['sa_tabla'];
 
-		$chx_representante = $parametros[1]['chx_representante'];
-		$chx_representante_2 = $parametros[1]['chx_representante_2'];
+		$chx_representante = $parametros[0]['chx_representante'];
+		$chx_representante_2 = $parametros[0]['chx_representante_2'];
 
 		if ($sa_tabla == 'estudiantes') {
 			$estudiante = $this->estudiantesM->datosEstudianteRepresentante($sa_id);
@@ -311,15 +312,23 @@ class ingreso_stockC
 			$id_representante2 = $estudiante[0]['sa_rep2_id'];
 			$medicamentos = '';
 
+			$primero = true;
+			$medicamentos = '';
+
 			foreach ($parametros as $medicamento) {
+				if ($primero) {
+					$primero = false;
+					continue;
+				}
+
 				$medicamentos .= $medicamento['farmacologia'] . ', Cantidad: ' . $medicamento['txt_canti'] . '<br>';
 			}
 
-			if ($chx_representante === true) {
+			if ($chx_representante === 'true' && $chx_representante != '') {
 				return $this->enviar_correo($id_representante, $nombre_estudiante, $medicamentos);
 			}
-			
-			if ($chx_representante_2 === true) {
+
+			if ($chx_representante_2 === 'true' && $chx_representante_2 != '') {
 				return $this->enviar_correo($id_representante2, $nombre_estudiante, $medicamentos);
 			}
 		}

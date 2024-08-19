@@ -299,6 +299,16 @@
     function ingresar_salida() {
 
         parametros_mensaje = [];
+
+        var chx_representante = $('#chx_representante').prop('checked');
+        var chx_representante_2 = $('#chx_representante_2').prop('checked');
+        parametros_correo = {
+            'chx_representante': chx_representante,
+            'chx_representante_2': chx_representante_2,
+        }
+
+        parametros_mensaje.push(parametros_correo);
+
         $('#lista_medicamentos tbody tr').each(function() {
             var id = $(this).find('td:eq(1)').text();
             var orden = $(this).find('td:eq(3)').text();
@@ -320,15 +330,6 @@
             parametros_mensaje.push(parametros);
 
         });
-
-        var chx_representante = $('#chx_representante').prop('checked');
-        var chx_representante_2 = $('#chx_representante_2').prop('checked');
-        parametros_correo = {
-            'chx_representante': chx_representante,
-            'chx_representante_2': chx_representante_2,
-        }
-        
-        parametros_mensaje.push(parametros_correo);
 
         mensajeCorreo(parametros_mensaje);
     }

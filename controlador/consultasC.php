@@ -2,31 +2,31 @@
 
 use function Complex\ln;
 
-include('../modelo/consultasM.php');
-include('../modelo/ficha_MedicaM.php');
-include('../modelo/pacientesM.php');
-include('../lib/phpmailer/enviar_emails.php');
-include('../lib/pdf/fpdf.php');
-include('../modelo/det_consultaM.php');
+include_once('../modelo/consultasM.php');
+include_once('../modelo/ficha_MedicaM.php');
+include_once('../modelo/pacientesM.php');
+include_once('../lib/phpmailer/enviar_emails.php');
+include_once('../lib/pdf/fpdf.php');
+include_once('../modelo/det_consultaM.php');
 
 //Seguros
-include('../modelo/contratosM.php');
+include_once('../modelo/contratosM.php');
 
 
-include('ingreso_stockC.php');
-include('../modelo/notificacionesM.php');
+include_once('ingreso_stockC.php');
+include_once('../modelo/notificacionesM.php');
 
 //HIKVISION
-include('../lib/HIKVISION/Notificaciones.php');
-include('../lib/HIKVISION/HIK_TCP.php');
+include_once('../lib/HIKVISION/Notificaciones.php');
+include_once('../lib/HIKVISION/HIK_TCP.php');
 
-include('../modelo/representantesM.php');
+include_once('../modelo/representantesM.php');
 
 //Usuarios
-include('../modelo/usuariosM.php');
+include_once('../modelo/usuariosM.php');
 
 //Configuracion General
-include('../modelo/cat_configuracionGM.php');
+include_once('../modelo/cat_configuracionGM.php');
 
 $controlador = new consultasC();
 
@@ -549,11 +549,11 @@ class consultasC
                     if ($tipo_consulta == 'consulta') {
                         $diagnostico = $parametros['sa_conp_diagnostico_1'];
 
-                        if ($chx_representante === true && $chx_representante != '') {
+                        if ($chx_representante === 'true' && $chx_representante != '') {
                             $this->enviar_correo_con($id_representante, $nombre_est, $diagnostico, $tipo_consulta, $permiso_salida);
                         }
 
-                        if ($chx_representante_2 === true && $chx_representante != '') {
+                        if ($chx_representante_2 === 'true' && $chx_representante != '') {
                             $this->enviar_correo_con($sa_pac_temp_rep2_id, $nombre_est, $diagnostico, $tipo_consulta, $permiso_salida);
                         }
 
@@ -561,11 +561,11 @@ class consultasC
                         //print_r($variable);exit();die();
                     } else {
                         $diagnostico = $parametros['sa_conp_diagnostico_certificado'];
-                        if ($chx_representante === true && $chx_representante != '') {
+                        if ($chx_representante === 'true' && $chx_representante != '') {
                             $this->enviar_correo_con($id_representante, $nombre_est, $diagnostico, $tipo_consulta, $permiso_salida);
                         }
 
-                        if ($chx_representante_2 === true && $chx_representante != '') {
+                        if ($chx_representante_2 === 'true' && $chx_representante != '') {
                             $this->enviar_correo_con($sa_pac_temp_rep2_id, $nombre_est, $diagnostico, $tipo_consulta, $permiso_salida);
                         }
                     }
@@ -783,20 +783,20 @@ class consultasC
                 if ($tipo_consulta == 'consulta') {
                     $diagnostico = $parametros['sa_conp_diagnostico_1'];
 
-                    if ($chx_representante === true && $chx_representante != '') {
+                    if ($chx_representante === 'true' && $chx_representante != '') {
                         $this->enviar_correo_con($id_representante, $nombre_est, $diagnostico, $tipo_consulta, $permiso_salida);
                     }
 
-                    if ($chx_representante_2 === true && $chx_representante != '') {
+                    if ($chx_representante_2 === 'true' && $chx_representante != '') {
                         $this->enviar_correo_con($id_representante, $nombre_est, $diagnostico, $tipo_consulta, $permiso_salida);
                     }
                 } else {
                     $diagnostico = $parametros['sa_conp_diagnostico_certificado'];
-                    if ($chx_representante === true && $chx_representante != '') {
+                    if ($chx_representante === 'true' && $chx_representante != '') {
                         $this->enviar_correo_con($id_representante, $nombre_est, $diagnostico, $tipo_consulta, $permiso_salida);
                     }
 
-                    if ($chx_representante_2 === true && $chx_representante != '') {
+                    if ($chx_representante_2 === 'true' && $chx_representante != '') {
                         $this->enviar_correo_con($id_representante, $nombre_est, $diagnostico, $tipo_consulta, $permiso_salida);
                     }
                 }
