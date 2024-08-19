@@ -117,7 +117,7 @@ if (isset($_GET['pdf_notificacion'])) {
         $id_consulta = $_POST['id_consulta'];
     }
 
-    echo json_encode($controlador->pdf_notificacion($id_consulta));
+    echo ($controlador->pdf_notificacion($id_consulta));
 }
 
 if (isset($_GET['listar_todo'])) {
@@ -1868,7 +1868,7 @@ class consultasC
         $paciente = $this->pacientesM->obtener_informacion_pacienteM($ficha_medica[0]['sa_fice_pac_id']);
         $detalle_consulta = $this->det_consultaM->lista_det_consulta_consulta($id_consulta);
         $usuario = $this->usuariosM->lista_usuarios($datos[0]['sa_conp_usu_id']);
-
+        $nombre_medico = $usuario;
 
         //Pacientes
         $sa_pac_temp_cedula = $paciente[0]['sa_pac_temp_cedula'];
@@ -2039,7 +2039,7 @@ class consultasC
         $pdf->SetFont('Arial', 'B', 10);
         $pdf->Cell(27, 7, utf8_decode('Recetado por: '), 0, 0, '');
         $pdf->SetFont('Arial', '', 10);
-        $pdf->Cell(81, 7, utf8_decode($tipo_usuario . $usuario[0]['nom']), 0, 1, 'L');
+        $pdf->Cell(81, 7, utf8_decode($tipo_usuario . $nombre_medico_nombre), 0, 1, 'L');
 
         $pdf->SetFont('Arial', 'B', 10);
         $pdf->SetTextColor(57, 80, 122);
