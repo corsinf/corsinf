@@ -1211,9 +1211,9 @@ class loginC
 	function menu_lateral()
 	{
 		 // Verificar si el menú ya está en la sesión
-		 if (isset($_SESSION['MENU_LATERAL']) && !empty($_SESSION['MENU_LATERAL'])) {
-			return $_SESSION['MENU_LATERAL']; // Devolver menú cacheado
-		}
+		//  if (isset($_SESSION['MENU_LATERAL']) && !empty($_SESSION['MENU_LATERAL'])) {
+		// 	return $_SESSION['MENU_LATERAL']; // Devolver menú cacheado
+		// }
 
 		$opciones = '<li><a href="inicio.php?acc=index"><div class="parent-icon"><i class="bx bx-home"></i></div><div class="menu-title">Inicio</div></a></li>';
 		$sin_modulo = $this->tipo->lista_modulos('sin modulo',false,$_SESSION['INICIO']['MODULO_SISTEMA']);
