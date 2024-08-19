@@ -57,7 +57,7 @@
                                     <th>Acciones</th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody id="tbl_body">
                                 
                             </tbody>
                         </table>
@@ -96,7 +96,7 @@
                                                         <th>Acciones</th>
                                                     </tr>
                                                 </thead>
-                                                <tbody>
+                                                <tbody id="tbl_boby">
                                                     
                                                 </tbody>
                                             </table>
@@ -124,69 +124,22 @@
 
 <script>
     $(document).ready(function() {
-        $('#ddl_producto').change(function() {
-            var precio = $(this).find(':selected').data('precio');
-            $('#txt_precio').val(precio ? '$' + parseFloat(precio).toFixed(2) : '');
-        });
+        lista_usuario()
+        })
+    
+    function lista_usuario()
+    {       
+        $.ajax({
+         // data:  {parametros:parametros},
+         url:   '../controlador/COWORKING/crear_mienbrosC.php?lista_mienbro=true',
+         type:  'post',
+         dataType: 'json',        
+           success:  function (response) {  
+            $('#tbl_body').html(response);
+            $('#tbl_boby').html(response);
+            console.log(response);
+          }       
+       });
+      }
 
-        $('#btn_registrar_miembro').click(function() {
-            var nombre = $('#txt_nombre').val();
-            var correo = $('#txt_correo').val();
-            var cedula = $('#txt_cedula').val();
-            var numero = $('#txt_numero_celular').val();
-
-            if (nombre && correo && cedula && numero) {
-                var nuevaFila = `<tr>
-                    <td>${nombre}</td>
-                    <td>${correo}</td>
-                    <td>${cedula}</td>
-                    <td>${numero}</td>
-                    <td class="acciones">
-                        <button class="btn btn-danger btn-sm btn-eliminar"><i class="bi bi-file-x"></i></button>
-                        <button class="btn btn-primary btn-sm btn-registrar-compras" data-bs-toggle="modal" data-bs-target="#modal_registrar_compra"><i class="bi bi-cart4"></i></button>
-                    </td>
-                </tr>`;
-                $('#tbl_miembros tbody').append(nuevaFila);
-                $('#formulario_miembro')[0].reset();
-            }
-        });
-
-        $('#btn_agregar_compra').click(function() {
-            var producto = $('#ddl_producto').val();
-            var cantidad = $('#txt_cantidad').val();
-            var precio = $('#txt_precio').val();
-            var miembro = $('#btn_agregar_compra').data('miembro');
-
-            if (producto && cantidad && precio) {
-                var total = parseFloat(precio.replace('$', '')) * cantidad;
-                var nuevaFilaCompra = `<tr>
-                    <td>${miembro}</td>
-                    <td>${producto}</td>
-                    <td>${cantidad}</td>
-                    <td>${precio}</td>
-                    <td>$${total.toFixed(2)}</td>
-                    <td style="display: flex; justify-content: center; align-items: center;">
-                        <button type="button" class="btn btn-danger btn-sm btn-eliminar-compra">
-                            <i class="bi bi-file-x"></i>
-                        </button>
-                    </td>
-                </tr>`;
-                $('#tbl_compras tbody').append(nuevaFilaCompra);
-                $('#formulario_compras')[0].reset();
-            }
-        });
-
-        $('#tbl_miembros').on('click', '.btn-eliminar', function() {
-            $(this).closest('tr').remove();
-        });
-
-        $('#tbl_compras').on('click', '.btn-eliminar-compra', function() {
-            $(this).closest('tr').remove();
-        });
-
-        $('#tbl_miembros').on('click', '.btn-registrar-compras', function() {
-            var miembro = $(this).closest('tr').find('td:first').text();
-            $('#btn_agregar_compra').data('miembro', miembro);
-        });
-    });
 </script>
