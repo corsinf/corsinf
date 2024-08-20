@@ -60,6 +60,7 @@ if(isset($_GET['restriccion']))
 if(isset($_GET['menu_lateral']))
 {
   echo json_encode($controlador->menu_lateral());
+  //file_put_contents('debug_menu_lateral.log', print_r($_SESSION['MENU_LATERAL'], true), FILE_APPEND);
 }
 if(isset($_GET['modulos_sistema']))
 {
@@ -73,7 +74,8 @@ if(isset($_GET['modulos_sistema_selected']))
 {
 	$_SESSION['INICIO']['MODULO_SISTEMA'] = $_POST['modulo_sistema'];
 	$_SESSION['INICIO']['MODULO_SISTEMA_NOMBRE'] = $controlador->nombre_modulo();
-	 echo json_encode(1);
+	$controlador->menu_lateral();
+	echo json_encode(1);
 }
 if(isset($_GET['reseteo']))
 {
@@ -84,12 +86,16 @@ if(isset($_GET['change_settings']))
 {
 	 $_SESSION['INICIO']['MODULO_SISTEMA_ANT'] =  $_SESSION['INICIO']['MODULO_SISTEMA']; 
 	 $_SESSION['INICIO']['MODULO_SISTEMA'] = '1';
+	 $controlador->menu_lateral();
+
 	echo json_encode('1');
 }
 if(isset($_GET['regresar_modulo']))
 {
 	 $_SESSION['INICIO']['MODULO_SISTEMA'] =  $_SESSION['INICIO']['MODULO_SISTEMA_ANT']; 
 	 // $_SESSION['INICIO']['MODULO_SISTEMA'] = '1';
+	 $controlador->menu_lateral();
+
 	echo json_encode($_SESSION['INICIO']['MODULO_SISTEMA']);
 }
 if(isset($_GET['primer_inicio']))
@@ -118,6 +124,7 @@ class loginC
 	private $globales;
 	private $noconcurente;
 	private $active;
+	private $cod_global;
 	function __construct()
 	{
 		$this->login = new loginM();
@@ -746,7 +753,7 @@ class loginC
 				$_SESSION["INICIO"]['ID_USUARIO'] = $datos[0]['id'];
 				$_SESSION["INICIO"]['EMAIL'] = $datos[0]['email'];
 				$_SESSION["INICIO"]['TIPO'] = $datos[0]['tipo'];
-				$_SESSION["INICIO"]['PERFIL'] = $datos[0]['perfil'];				
+				$_SESSION["INICIO"]['PERFIL'] = $parametros['tipo'];				
 				$_SESSION["INICIO"]['FOTO'] = $datos[0]['foto'];
 				$_SESSION["INICIO"]['NO_CONCURENTE'] = '';
 				$_SESSION["INICIO"]['NO_CONCURENTE_NOM'] ='';
@@ -1203,7 +1210,12 @@ class loginC
 
 	function menu_lateral()
 	{
-		$opciones = '';
+		 // Verificar si el menú ya está en la sesión
+		//  if (isset($_SESSION['MENU_LATERAL']) && !empty($_SESSION['MENU_LATERAL'])) {
+		// 	return $_SESSION['MENU_LATERAL']; // Devolver menú cacheado
+		// }
+
+		$opciones = '<li><a href="inicio.php?acc=index"><div class="parent-icon"><i class="bx bx-home"></i></div><div class="menu-title">Inicio</div></a></li>';
 		$sin_modulo = $this->tipo->lista_modulos('sin modulo',false,$_SESSION['INICIO']['MODULO_SISTEMA']);
 		if(count($sin_modulo)>0)
 		{
@@ -1261,6 +1273,8 @@ class loginC
 				}
 		}
 
+		// Guardar el menú generado en la sesión
+		$_SESSION['MENU_LATERAL'] = $opciones;
 		// print_r($opciones);die();
 
 		return $opciones;

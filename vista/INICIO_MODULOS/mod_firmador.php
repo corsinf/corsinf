@@ -49,14 +49,17 @@ if ($_GET['acc'] == 'student_consent_EN') {
     include('FIRMADOR/INICIO_PRUEBA/student_consent_EN.php');
 }
 
-if ($_GET['acc'] == 'registro_pasantes') {
-    include('FIRMADOR/PASANTES/registro_pasantes.php');
-}
+
 
 if ($_GET['acc'] == 'pagina_jav') {
     include('FIRMADOR/PRUEBAS/pagina_jav.php');
 }
 
-if ($_GET['acc'] == 'asistencias_pasantes') {
-    include('FIRMADOR/PASANTES/asistencias_pasantes.php');
+
+
+
+
+if ($_GET['acc'] == 'crear_mienbros') {
+    include('COWORKING/crear_mienbros.php');
 }
+

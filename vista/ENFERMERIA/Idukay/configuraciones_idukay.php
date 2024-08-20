@@ -16,13 +16,14 @@
                 $('#pnl_config_general').empty();
 
                 // Verificar si la respuesta es un array y tiene al menos 5 elementos
-                if (Array.isArray(response) && response.length >= 5) {
+                if (Array.isArray(response) && response.length >= 6) {
                     const [
                         nombre_modulo,
                         nombre_empresa,
                         url_guardar_bat,
                         script_php_motor,
-                        motor_bat
+                        motor_bat,
+                        hora_ejecucion_PW,
                     ] = response;
 
                     $('#txt_nombre_modulo').val(nombre_modulo.sa_config_valor || '');
@@ -30,6 +31,7 @@
                     $('#txt_url_guardar_bat').val(url_guardar_bat.sa_config_valor || '');
                     $('#txt_script_php_motor').val(script_php_motor.sa_config_valor || '');
                     $('#txt_motor_bat').val(motor_bat.sa_config_valor || '');
+                    $('#txt_hora_PW').val(hora_ejecucion_PW.sa_config_valor || '');
                 } else {
                     // Mensaje de error si la respuesta no es válida
                     $('#pnl_config_general').append('<p>No se encontraron configuraciones suficientes.</p>');
@@ -49,6 +51,7 @@
         var txt_url_guardar_bat = $('#txt_url_guardar_bat').val();
         var txt_script_php_motor = $('#txt_script_php_motor').val();
         var txt_motor_bat = $('#txt_motor_bat').val();
+        var txt_hora_PW = $('#txt_hora_PW').val();
 
         var parametros = {
             'txt_nombre_modulo': txt_nombre_modulo,
@@ -56,6 +59,7 @@
             'txt_url_guardar_bat': txt_url_guardar_bat,
             'txt_script_php_motor': txt_script_php_motor,
             'txt_motor_bat': txt_motor_bat,
+            'txt_hora_PW': txt_hora_PW,
         };
 
         console.log(parametros);
@@ -109,8 +113,6 @@
         });
     }
 
-    
-
     function ejecutar_PW_PT() {
         $.ajax({
             // data: {
@@ -124,9 +126,28 @@
                 console.log('response');
 
                 console.log(response);
-                
+
                 $('#txt_salida_pw').html(response);
 
+            },
+        });
+    }
+
+    function mostrar_logs() {
+        $.ajax({
+            // data: {
+            //     parametros: parametros
+            // },
+            url: '../controlador/cat_configuracionGC_IDUKAY.php?leer_archivo_log=true',
+            type: 'post',
+            dataType: 'text',
+
+            success: function(response) {
+                console.log('response');
+
+                console.log(response);
+
+                $('#txt_salida_pw').html(response);
             },
         });
     }
@@ -214,6 +235,12 @@
                                                 <input type="text" class="form-control form-control-sm" id="txt_motor_bat" placeholder="SD">
                                             </div>
                                         </div>
+                                        <div class="row mb-3">
+                                            <label for="txt_motor_bat" class="col-sm-4 col-form-label">Hora Ejecución PW</label>
+                                            <div class="col-sm-8">
+                                                <input type="time" class="form-control form-control-sm" id="txt_hora_PW" placeholder="08:30">
+                                            </div>
+                                        </div>
 
                                         <div class="d-flex justify-content-end">
                                             <button type="button" class="btn btn-success btn-sm px-4" onclick="editar_insertar()"><i class="bx bx-save"></i> Guardar</button>
@@ -221,22 +248,22 @@
 
                                     </div>
 
-                                    <div class="col-4">
+                                    <div class="col-4 col-md-12 col-lg-4">
                                         <div class="card text-start">
                                             <div class="card-body">
                                                 <h4 class="card-title">Acciones</h4>
                                                 <p class="card-text">Para ejecutar CRON</p>
 
                                                 <div class="d-flex justify-content-start m-4">
-                                                    <button type="button" class="btn btn-success btn-sm px-2" onclick="crear_archivos_CRON()"><i class="bx bx-save"></i> Crear CRON</button>
+                                                    <button type="button" class="btn btn-success btn-sm px-2" onclick="crear_archivos_CRON()"><i class='bx bx-folder-plus'></i> Crear CRON</button>
                                                 </div>
 
                                                 <div class="d-flex justify-content-start m-4">
-                                                    <button type="button" class="btn btn-success btn-sm px-2" onclick="ejecutar_PW_PT()"><i class="bx bx-save"></i> Ejecutar CRON PW</button>
+                                                    <button type="button" class="btn btn-success btn-sm px-2" onclick="ejecutar_PW_PT()"><i class='bx bx-task'></i> Ejecutar CRON PW</button>
                                                 </div>
 
                                                 <div class="d-flex justify-content-start m-4">
-                                                    <button type="button" class="btn btn-success btn-sm px-2" onclick="mostrar_logs()"><i class="bx bx-save"></i> Mostrar LOGs</button>
+                                                    <button type="button" class="btn btn-success btn-sm px-2" onclick="mostrar_logs()"><i class='bx bx-book-open'></i> Mostrar LOGs</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -244,7 +271,7 @@
                                     </div>
                                 </div>
 
-                                <div class="row">
+                                <div class="row pt-3">
                                     <div class="col-12" id="txt_salida_pw">
                                         <textarea class="form-control" name="txt_salida_pw_1" id="txt_salida_pw_1"></textarea>
                                     </div>

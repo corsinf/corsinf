@@ -29,6 +29,44 @@ class SQL_idukay
         return $sql;
     }
 
+    //Tener en cuenta que en saint son estos valores 50 y 51
+    function ponerSegurosPredeterminados()
+    {
+        $sql =
+            "INSERT INTO ARTICULOS_ASEGURADOS (id_seguro, id_articulos, tabla, modulo)
+            SELECT 
+                50,                    
+                e.sa_est_id,           
+                'estudiantes',         
+                7                      
+            FROM estudiantes e
+            WHERE e.sa_est_estado = 1
+            AND NOT EXISTS (
+                SELECT 1
+                FROM ARTICULOS_ASEGURADOS aa
+                WHERE aa.id_seguro = 50
+                AND aa.id_articulos = e.sa_est_id
+                AND aa.tabla = 'estudiantes');";
+
+        $sql .=
+            "INSERT INTO ARTICULOS_ASEGURADOS (id_seguro, id_articulos, tabla, modulo)
+            SELECT 
+                51,                    
+                e.sa_est_id,           
+                'estudiantes',         
+                7                      
+            FROM estudiantes e
+            WHERE e.sa_est_estado = 1
+            AND NOT EXISTS (
+                SELECT 1
+                FROM ARTICULOS_ASEGURADOS aa
+                WHERE aa.id_seguro = 51
+                AND aa.id_articulos = e.sa_est_id
+                AND aa.tabla = 'estudiantes');";
+
+        return $sql;
+    }
+
 
     /**
      * 

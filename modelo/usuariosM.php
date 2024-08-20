@@ -92,8 +92,81 @@ class usuariosM
 		}
 		if($tipo)
 		{
+			$sql.=" AND T.id_tipo='".$tipo."'";
+		}
+
+		// print_r($sql);die();
+
+		// la lista de usuarios la busca en la base de datos especifica
+		$datos = $this->db->datos($sql,1);
+		return $datos;
+	}
+
+	function lista_usuarios_sin_dba($id=false,$query=false,$ci=false,$email=false)
+	{
+		$sql="SELECT id_usuarios as 'id',ci_ruc as 'ci',nombres as 'nombre',apellidos as 'apellido',nombres +' '+apellidos as 'nom', direccion as 'direccion',telefono as 'telefono',password as 'pass',email as 'email',foto,link_fb,link_gmail,link_ins,link_tw,link_web,usu=null 
+			FROM ACCESOS_EMPRESA UT
+			RIGHT JOIN USUARIOS U ON UT.ID_USUARIO = U.id_usuarios 
+			LEFT JOIN TIPO_USUARIO T ON UT.ID_TIPO_USUARIO = T.ID_TIPO
+			WHERE ID_EMPRESA = '".$_SESSION['INICIO']['ID_EMPRESA']."'
+			 AND T.id_tipo <>1 ";
+		if($id)
+		{
+			$sql.=" AND id_usuarios = '".$id."'";
+		}
+		if($query)
+		{
+			$sql.=" AND  nombres +' '+apellidos+' '+ci_ruc LIKE '%".$query."%'";
+		}
+		if($ci)
+		{
+			$sql.=" AND ci_ruc = '".$ci."'";
+		}
+		if($email)
+		{
+			$sql.=" AND email = '".$email."'";
+		}
+
+		$sql.=" GROUP BY id_usuarios,ci_ruc,nombres,apellidos,nombres +' '+apellidos,direccion,telefono,password,email,
+foto,link_fb,link_gmail,link_ins,link_tw,link_web";
+		
+		
+		// print_r($sql);die();
+
+		// la lista de usuarios la busca en la base de datos especifica
+		$datos = $this->db->datos($sql,1);
+		return $datos;
+	}
+
+	function lista_usuarios_sin_tipo($id=false,$query=false,$tipo=false,$ci=false,$email=false)
+	{
+		$sql="SELECT id_usuarios as 'id',ci_ruc as 'ci',nombres as 'nombre',apellidos as 'apellido',nombres +' '+apellidos as 'nom', direccion as 'direccion',telefono as 'telefono',password as 'pass',email as 'email',foto,link_fb,link_gmail,link_ins,link_tw,link_web,usu=null 
+			FROM ACCESOS_EMPRESA UT
+			RIGHT JOIN USUARIOS U ON UT.ID_USUARIO = U.id_usuarios 
+			LEFT JOIN TIPO_USUARIO T ON UT.ID_TIPO_USUARIO = T.ID_TIPO
+			WHERE ID_EMPRESA = '".$_SESSION['INICIO']['ID_EMPRESA']."' ";
+		if($id)
+		{
+			$sql.=" AND id_usuarios = '".$id."'";
+		}
+		if($query)
+		{
+			$sql.=" AND  nombres +' '+apellidos+' '+ci_ruc LIKE '%".$query."%'";
+		}
+		if($ci)
+		{
+			$sql.=" AND ci_ruc = '".$ci."'";
+		}
+		if($email)
+		{
+			$sql.=" AND email = '".$email."'";
+		}
+		if($tipo)
+		{
 			$sql.=" AND U.id_tipo='".$tipo."'";
 		}
+
+		$sql.=" GROUP BY  id_usuarios,ci_ruc,nombres,apellidos,nombres +' '+apellidos,direccion,telefono,password,email,foto,link_fb,link_gmail,link_ins,link_tw,link_web";
 
 		// print_r($sql);die();
 

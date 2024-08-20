@@ -67,15 +67,13 @@ class cat_configuracionGM
         return $datos[0]['sa_config_estado'];
     }
 
-    function ejecutarQuery($sql)
+    function datos($sql)
     {
         //echo $sql;
-        $datos = $this->db->sql_string($sql);
+        $datos = $this->db->datos($sql);
         return $datos;
     }
-
-   
-
+    
     function sql_string($sql)
     {
         //echo $sql;
