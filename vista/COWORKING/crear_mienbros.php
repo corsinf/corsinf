@@ -1,7 +1,5 @@
-<!--start page wrapper -->
 <div class="page-wrapper">
     <div class="page-content">
-        <!--breadcrumb-->
         <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
             <div class="breadcrumb-title pe-3"><strong>Formulario</strong></div>
             <div class="breadcrumb-separator"></div>
@@ -18,7 +16,6 @@
                 </nav>
             </div>
         </div>
-        <!--end breadcrumb-->
         
         <div class="row">
             <div class="col-xl-12 mx-auto">
@@ -65,7 +62,6 @@
                             </tbody>
                         </table>
 
-                        <!-- Modal -->
                         <div class="modal fade" id="modal_registrar_compra" tabindex="-1" aria-labelledby="modal_registrar_compra_label" aria-hidden="true">
                             <div class="modal-dialog modal-lg">
                                 <div class="modal-content">
@@ -78,8 +74,15 @@
                                             <div class="row mb-3">
                                                 <div class="col-md-6">
                                                     <label for="txt_producto" class="form-label"><strong>Producto:</strong></label>
-                                                    <input type="text" class="form-control" id="txt_producto" name="txt_producto" placeholder="Producto" required>
-                                                </div>
+                                                    <select class="form-control" id="ddl_producto" name="ddl_producto" required>
+                                                        <option value="" data-precio="">Seleccione un producto</option>
+                                                        <option value="Doritos" data-precio="0.45">Doritos - $0.45</option>
+                                                        <option value="Papas" data-precio="0.70">Papas - $0.70</option>
+                                                        <option value="Coca Cola" data-precio="1.70">Coca Cola - $1.70</option>
+                                                        <option value="Gomitas" data-precio="1.00">Gomitas - $1.00</option>
+                                                        <option value="Caramelos" data-precio="2.70">Caramelos - $2.70</option>
+                                                    </select>
+                                            </div>
                                                 <div class="col-md-3">
                                                     <label for="txt_cantidad" class="form-label"><strong>Cantidad:</strong></label>
                                                     <input type="number" class="form-control" id="txt_cantidad" name="txt_cantidad" value="1" min="1" required>
@@ -100,7 +103,7 @@
                                                         <th>Acciones</th>
                                                     </tr>
                                                 </thead>
-                                                <tbody id="tbl_body_compras">
+                                                <tbody id="tbl_boby">
                                                     
                                                 </tbody>
                                             </table>
@@ -124,7 +127,6 @@
         </div>
     </div>
 </div>
-
 
 
 <script>
