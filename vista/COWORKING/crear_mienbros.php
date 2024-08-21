@@ -43,7 +43,7 @@
                                     <input type="text" class="form-control form-control-sm" name="txt_numero_celular" id="txt_numero_celular" placeholder="Número" required>
                                 </div>
                             </div>
-                            <button type="button" class="btn btn-primary" id="btn_registrar_miembro"><strong>Registrar Miembro</strong></button>
+                            <button type="button" onclick="enviardatos()"class="btn btn-primary" id="btn_registrar_miembro"><strong>Registrar Miembro</strong></button>
                         </form>
 
                         <h2 class="mb-4">Miembros Registrados</h2>
@@ -75,13 +75,9 @@
                                                 <div class="col-md-6">
                                                     <label for="txt_producto" class="form-label"><strong>Producto:</strong></label>
                                                     <select class="form-control" id="ddl_producto" name="ddl_producto" required>
-                                                        <option value="" data-precio="">Seleccione un producto</option>
-                                                        <option value="Doritos" data-precio="0.45">Doritos - $0.45</option>
-                                                        <option value="Papas" data-precio="0.70">Papas - $0.70</option>
-                                                        <option value="Coca Cola" data-precio="1.70">Coca Cola - $1.70</option>
-                                                        <option value="Gomitas" data-precio="1.00">Gomitas - $1.00</option>
-                                                        <option value="Caramelos" data-precio="2.70">Caramelos - $2.70</option>
+
                                                     </select>
+
                                             </div>
                                                 <div class="col-md-3">
                                                     <label for="txt_cantidad" class="form-label"><strong>Cantidad:</strong></label>
@@ -132,6 +128,7 @@
 <script>
     $(document).ready(function() {
         lista_usuario()
+        lista_compra()
         })
     
     function lista_usuario()
@@ -143,10 +140,66 @@
          dataType: 'json',        
            success:  function (response) {  
             $('#tbl_body').html(response);
-            $('#tbl_boby').html(response);
+            
             console.log(response);
           }       
        });
       }
+
+      function lista_compra() {       
+        $.ajax({
+            url: '../controlador/COWORKING/crear_mienbrosC.php?lista_compra=true',
+            type: 'post',
+            dataType: 'json ', 
+            success: function(response) {  
+                $('#tbl_boby').html(response);
+                console.log(response);
+            }       
+        });
+    }
+
+      function enviardatos()
+      {
+        var parametros = 
+        {
+           'nombre': $('#txt_nombre').val(),
+           'correo': $('#txt_correo').val(),
+           'cedula': $('#txt_cedula').val(),
+           'numero': $('#txt_numero_celular').val(),
+        }
+        //var form = ('#').serialize();
+        //console.Log(form);
+        $.ajax({
+            data:{data:parametros},
+            url: '../controlador/COWORKING/crear_mienbrosC.php?add=true',
+            type: 'post',
+            dataType: 'json ', 
+             success: function(response) {  
+                $('#tbl_body').html(response);
+                console.log(response);
+            }       
+        });
+      }
+
+
+
+      function select_productos()
+    {       
+        $.ajax({
+         // data:  {parametros:parametros},
+         url:   '../controlador/COWORKING/crear_mienbrosC.php?listar_productos=true',
+         type:  'post',
+         dataType: 'json',        
+           success:  function (response ) {  
+
+
+            $('#ddl_producto').html(response);
+            
+
+            console.log(response);
+          }       
+       });
+      }
+
 
 </script>
