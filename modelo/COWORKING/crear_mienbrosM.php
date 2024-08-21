@@ -15,6 +15,13 @@ class crear_mienbrosM
         return $resp;
         //print_r($sql);die();
      }
+
+     function listardebase()
+     {
+      $sql = 'select * from pasantes_prueba';
+      $resp = $this->db->datos($sql);
+      return $resp;
+     }
      
 
 

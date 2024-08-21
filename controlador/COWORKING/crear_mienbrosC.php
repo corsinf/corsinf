@@ -40,7 +40,7 @@ class crear_mienbrosC
             array('Producto' => 'Producto4'),
             array('Producto' => 'Producto5')
         );
-
+       
         $str = '';
         foreach ($slista as $key => $value) {
             $str .= '<option value="' . $value['Producto'] . '">' . $value['Producto'] . '</option>';
@@ -84,20 +84,21 @@ class crear_mienbrosC
     }
     function listar()
     {
-        $slista = array(
-            array('Nombre' => 'hola', 'correo' => 'ale@puce', 'Cedula' => '1708542312'),
-            array('Nombre' => 'hola2', 'correo' => 'ale@puce', 'Cedula' => '1708542312'),
-            array('Nombre' => 'hola3', 'correo' => 'ale@puce', 'Cedula' => '1708542312'),
-            array('Nombre' => 'hola4', 'correo' => 'ale@puce', 'Cedula' => '1708542312'),
-            array('Nombre' => 'hola5', 'correo' => 'ale@puce', 'Cedula' => '1708542312'),
-        );
-
+        //$slista = array(
+          //  array('Nombre' => 'hola', 'correo' => 'ale@puce', 'Cedula' => '1708542312'),
+            //array('Nombre' => 'hola2', 'correo' => 'ale@puce', 'Cedula' => '1708542312'),
+            //array('Nombre' => 'hola3', 'correo' => 'ale@puce', 'Cedula' => '1708542312'),
+            //array('Nombre' => 'hola4', 'correo' => 'ale@puce', 'Cedula' => '1708542312'),
+            //array('Nombre' => 'hola5', 'correo' => 'ale@puce', 'Cedula' => '1708542312'),
+        //);
+        $slista = $this->modelo->listardebase();
+        //print_r($slista);die();
         $str = '';
         foreach ($slista as $key => $value) {
             $str .= '<tr>
-                        <td>' . $value['Nombre'] . '</td>
-                        <td>' . $value['correo'] . '</td>
-                        <td>' . $value['Cedula'] . '</td>
+                        <td>' . $value['nombre'] . '</td>
+                        <td>' . $value['detalle'] . '</td>
+                        <td>' . $value['id_categoria'] . '</td>
                         <td></td>
                         <td></td>
                         <td>
