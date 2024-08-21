@@ -175,8 +175,14 @@
             type: 'post',
             dataType: 'json ', 
              success: function(response) {  
-                $('#tbl_body').html(response);
-                console.log(response);
+               if(response==1)
+               {
+                    alert('Ingresado')
+                }
+                else{
+                    alert('Error')
+                }
+                
             }       
         });
       }

@@ -10,9 +10,10 @@ class crear_mienbrosM
     
      function insertarnombre($param)
      {
-        $sql = "insert into crear_mienbros (nombre) value ('".$param."')";
-        //return 1;
-        print_r($sql);die();
+        $sql = "insert into pasantes_prueba (nombre) values ('".$param."')";
+        $resp = $this->db->sql_string($sql);
+        return $resp;
+        //print_r($sql);die();
      }
      
 

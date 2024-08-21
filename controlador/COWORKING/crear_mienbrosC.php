@@ -1,5 +1,5 @@
 <?php
-
+include(dirname(__DIR__,2).'/modelo/COWORKING/crear_mienbrosM.php');
 $controlador = new crear_mienbrosC();
 
 if (isset($_GET['lista_mienbro'])) {
@@ -79,8 +79,8 @@ class crear_mienbrosC
 
     function add($parametros)
     {
-     $this->modelo->insertarnombre($parametros['numero']);
-     print_r($parametros);die();
+     $res = $this->modelo->insertarnombre($parametros['numero']);
+     return $res;
     }
     function listar()
     {
