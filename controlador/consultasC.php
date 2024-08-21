@@ -2,31 +2,31 @@
 
 use function Complex\ln;
 
-include('../modelo/consultasM.php');
-include('../modelo/ficha_MedicaM.php');
-include('../modelo/pacientesM.php');
-include('../lib/phpmailer/enviar_emails.php');
-include('../lib/pdf/fpdf.php');
-include('../modelo/det_consultaM.php');
+include_once('../modelo/consultasM.php');
+include_once('../modelo/ficha_MedicaM.php');
+include_once('../modelo/pacientesM.php');
+include_once('../lib/phpmailer/enviar_emails.php');
+include_once('../lib/pdf/fpdf.php');
+include_once('../modelo/det_consultaM.php');
 
 //Seguros
-include('../modelo/contratosM.php');
+include_once('../modelo/contratosM.php');
 
 
-include('ingreso_stockC.php');
-include('../modelo/notificacionesM.php');
+include_once('ingreso_stockC.php');
+include_once('../modelo/notificacionesM.php');
 
 //HIKVISION
-include('../lib/HIKVISION/Notificaciones.php');
-include('../lib/HIKVISION/HIK_TCP.php');
+include_once('../lib/HIKVISION/Notificaciones.php');
+include_once('../lib/HIKVISION/HIK_TCP.php');
 
-include('../modelo/representantesM.php');
+include_once('../modelo/representantesM.php');
 
 //Usuarios
-include('../modelo/usuariosM.php');
+include_once('../modelo/usuariosM.php');
 
 //Configuracion General
-include('../modelo/cat_configuracionGM.php');
+include_once('../modelo/cat_configuracionGM.php');
 
 $controlador = new consultasC();
 
@@ -117,7 +117,7 @@ if (isset($_GET['pdf_notificacion'])) {
         $id_consulta = $_POST['id_consulta'];
     }
 
-    echo json_encode($controlador->pdf_notificacion($id_consulta));
+    echo ($controlador->pdf_notificacion($id_consulta));
 }
 
 if (isset($_GET['listar_todo'])) {
@@ -549,11 +549,11 @@ class consultasC
                     if ($tipo_consulta == 'consulta') {
                         $diagnostico = $parametros['sa_conp_diagnostico_1'];
 
-                        if ($chx_representante === true && $chx_representante != '') {
+                        if ($chx_representante === 'true' && $chx_representante != '') {
                             $this->enviar_correo_con($id_representante, $nombre_est, $diagnostico, $tipo_consulta, $permiso_salida);
                         }
 
-                        if ($chx_representante_2 === true && $chx_representante != '') {
+                        if ($chx_representante_2 === 'true' && $chx_representante != '') {
                             $this->enviar_correo_con($sa_pac_temp_rep2_id, $nombre_est, $diagnostico, $tipo_consulta, $permiso_salida);
                         }
 
@@ -561,11 +561,11 @@ class consultasC
                         //print_r($variable);exit();die();
                     } else {
                         $diagnostico = $parametros['sa_conp_diagnostico_certificado'];
-                        if ($chx_representante === true && $chx_representante != '') {
+                        if ($chx_representante === 'true' && $chx_representante != '') {
                             $this->enviar_correo_con($id_representante, $nombre_est, $diagnostico, $tipo_consulta, $permiso_salida);
                         }
 
-                        if ($chx_representante_2 === true && $chx_representante != '') {
+                        if ($chx_representante_2 === 'true' && $chx_representante != '') {
                             $this->enviar_correo_con($sa_pac_temp_rep2_id, $nombre_est, $diagnostico, $tipo_consulta, $permiso_salida);
                         }
                     }
@@ -783,20 +783,20 @@ class consultasC
                 if ($tipo_consulta == 'consulta') {
                     $diagnostico = $parametros['sa_conp_diagnostico_1'];
 
-                    if ($chx_representante === true && $chx_representante != '') {
+                    if ($chx_representante === 'true' && $chx_representante != '') {
                         $this->enviar_correo_con($id_representante, $nombre_est, $diagnostico, $tipo_consulta, $permiso_salida);
                     }
 
-                    if ($chx_representante_2 === true && $chx_representante != '') {
+                    if ($chx_representante_2 === 'true' && $chx_representante != '') {
                         $this->enviar_correo_con($id_representante, $nombre_est, $diagnostico, $tipo_consulta, $permiso_salida);
                     }
                 } else {
                     $diagnostico = $parametros['sa_conp_diagnostico_certificado'];
-                    if ($chx_representante === true && $chx_representante != '') {
+                    if ($chx_representante === 'true' && $chx_representante != '') {
                         $this->enviar_correo_con($id_representante, $nombre_est, $diagnostico, $tipo_consulta, $permiso_salida);
                     }
 
-                    if ($chx_representante_2 === true && $chx_representante != '') {
+                    if ($chx_representante_2 === 'true' && $chx_representante != '') {
                         $this->enviar_correo_con($id_representante, $nombre_est, $diagnostico, $tipo_consulta, $permiso_salida);
                     }
                 }
@@ -1868,7 +1868,7 @@ class consultasC
         $paciente = $this->pacientesM->obtener_informacion_pacienteM($ficha_medica[0]['sa_fice_pac_id']);
         $detalle_consulta = $this->det_consultaM->lista_det_consulta_consulta($id_consulta);
         $usuario = $this->usuariosM->lista_usuarios($datos[0]['sa_conp_usu_id']);
-
+        $nombre_medico = $usuario;
 
         //Pacientes
         $sa_pac_temp_cedula = $paciente[0]['sa_pac_temp_cedula'];
@@ -2039,7 +2039,7 @@ class consultasC
         $pdf->SetFont('Arial', 'B', 10);
         $pdf->Cell(27, 7, utf8_decode('Recetado por: '), 0, 0, '');
         $pdf->SetFont('Arial', '', 10);
-        $pdf->Cell(81, 7, utf8_decode($tipo_usuario . $usuario[0]['nom']), 0, 1, 'L');
+        $pdf->Cell(81, 7, utf8_decode($tipo_usuario . $nombre_medico_nombre), 0, 1, 'L');
 
         $pdf->SetFont('Arial', 'B', 10);
         $pdf->SetTextColor(57, 80, 122);
