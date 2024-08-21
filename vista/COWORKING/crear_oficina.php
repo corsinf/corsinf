@@ -7,13 +7,16 @@
             <div class="ps-3">
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb mb-0 p-0">
-                        <li class="breadcrumb-item"><a href="javascript:;"><i class="bx bx-home-alt"></i></a></li>
+                        <li class="breadcrumb-item">
+                            <a href="javascript:;"><i class="bx bx-home-alt"></i></a>
+                        </li>
                         <li class="breadcrumb-item active" aria-current="page">Crear una oficina</li>
                     </ol>
                 </nav>
             </div>
         </div>
         <!--end breadcrumb-->
+
         <div class="card">
             <div class="card-body">
                 <form id="rental_form">
@@ -23,12 +26,10 @@
                     </div>
 
                     <div class="form-group mb-3">
-                        <label for="categoriaEspacio">Categoría:</label>
-                        <select class="form-select" id="categoriaEspacio" name="categoriaEspacio" required>
+                        <label for="ddl_categoriaEspacio">Categoría:</label>
+                        <select class="form-select" id="ddl_categoriaEspacio" name="ddl_categoriaEspacio" required>
                             <option value="" disabled selected>Selecciona una categoría</option>
-                            <option value="Oficina">Oficina</option>
-                            <option value="Auditorio">Auditorio</option>
-                            <option value="Local">Local</option>
+                            <!-- Opciones cargadas dinámicamente -->
                         </select>
                     </div>
 
@@ -48,98 +49,143 @@
                         </div>
                     </div>
 
-                    <h6 class="mb-0 text-uppercase">Espacios</h6>
-                    <hr/>
-                    <div class="card">
-                        <div class="card-body">
-                            <table class="table mb-0 table-striped">
-                                <thead>
-                                    <tr>
-                                        <th scope="col">#</th>
-                                        <th scope="col">Nombre de espacios</th>
-                                        <th scope="col">Categoría</th>
-                                        <th scope="col">Aforo</th>
-                                        <th scope="col">Precio</th>
-                                        <th scope="col">Gestionar Inventario</th>
-                                        <th scope="col">Enviar</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <th scope="row">1</th>
-                                        <td>Ministerio</td>
-                                        <td>Oficina</td>
-                                        <td>140</td>
-                                        <td>200.00</td>
-                                        <td>
-                                            <button type="button" class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#furnitureModal">
-                                                <i class="bx bx-cog"></i> Gestionar Mueblería
-                                            </button>
-                                        </td>
-                                        <td>
-                                            <button type="button" class="btn btn-primary btn-sm">
-                                                <i class="bx bx-send"></i> Enviar
-                                            </button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">2</th>
-                                        <td>Instituto</td>
-                                        <td>Auditorio</td>
-                                        <td>140</td>
-                                        <td>200.00</td>
-                                        <td>
-                                            <button type="button" class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#furnitureModal">
-                                                <i class="bx bx-cog"></i> Gestionar Mueblería
-                                            </button>
-                                        </td>
-                                        <td>
-                                            <button type="button" class="btn btn-primary btn-sm">
-                                                <i class="bx bx-send"></i> Enviar
-                                            </button>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                    <div class="text-end mb-4">
+                        <button type="button" onclick="enviarDatos()" class="btn btn-primary btn-sm">Guardar</button>
+                        <button type="reset" class="btn btn-secondary btn-sm">Limpiar</button>
+                    </div>
+                </form>
+
+                <h6 class="mb-0 text-uppercase">Espacios</h6>
+                <hr />
+                <div class="card">
+                    <div class="card-body">
+                        <table class="table mb-0 table-striped">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Género</th>
+                                    <th scope="col">Campo 2</th>
+                                    <th scope="col">Campo 3</th>
+                                    <th scope="col">Campo 4</th>
+                                    <th scope="col">Campo 5</th>
+                                    <th scope="col">Nombre</th>
+                                    <th scope="col">Campo 7</th>
+                                    <th scope="col">Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tbl_ingresos_body">
+                                <!-- Filas cargadas dinámicamente -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Modal -->
+                <div class="modal fade" id="furnitureModal" tabindex="-1" aria-labelledby="furnitureModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="furnitureModalLabel">Gestionar Mobiliario</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <h3 id="lbl_furniture" class="text-center mb-3">Mobiliario</h3>
+                                <table id="tbl_furniture" class="table table-bordered mb-4">
+                                    <thead class="thead-dark">
+                                        <tr>
+                                            <th>Nombre del Mueble</th>
+                                            <th>Cantidad</th>
+                                            <th>Acciones</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tbl_furniture_body">
+                                        <!-- Filas de mobiliario cargadas dinámicamente -->
+                                    </tbody>
+                                </table>
+                                <div class="text-center">
+                                    <button type="button" class="btn btn-success btn-sm mb-3">Agregar Mueble</button>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Guardar Cambios</button>
+                            </div>
                         </div>
                     </div>
-               
-<!-- Modal -->
-<div class="modal fade" id="furnitureModal" tabindex="-1" aria-labelledby="furnitureModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="furnitureModalLabel">Gestionar Mobiliario</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <h3 id="lbl_furniture" class="text-center mb-3">Mobiliario</h3>
-                <table id="tbl_furniture" class="table table-bordered mb-4">
-                    <thead class="thead-dark">
-                        <tr>
-                            <th>Nombre del Mueble</th>
-                            <th>Cantidad</th>
-                            <th>Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td><input type="text" class="form-control" name="txt_furniture_name[]" placeholder="Nombre del mueble" required></td>
-                            <td><input type="number" class="form-control" name="txt_furniture_quantity[]" placeholder="Cantidad" required></td>
-                            <td><button type="button" class="btn btn-danger btn-sm" >Eliminar</button></td>
-                        </tr>
-                    </tbody>
-                </table>
-                <div class="text-center">
-                    <button type="button" class="btn btn-success btn-sm mb-3" >Agregar Mueble</button>
                 </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Guardar Cambios</button>
+
             </div>
         </div>
     </div>
 </div>
+<!--end page wrapper-->
+
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<!-- Bootstrap JS -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+<script>
+    $(document).ready(function () {
+        lista_categorias()
+        listarIngresos();
+    });
+
+    function lista_categorias()
+  {
+    
+    $.ajax({
+         // data:  {parametros:parametros},
+         url:   '../controlador/COWORKING/crear_oficinaC.php?categoria=true',
+         type:  'post',
+         dataType: 'json',
+           success:  function (response) {  
+                console.log(response);
+                $('#ddl_categoriaEspacio').html(response);
+          } 
+    });
+  }
 
 
+    function listarIngresos() {
+        $.ajax({
+            url: '../controlador/COWORKING/crear_oficinaC.php?listaIngresos=true',
+            type: 'post',
+            dataType: 'json',
+            success: function (response) {
+                $('#tbl_ingresos_body').html(response);
+            },
+            error: function (xhr, status, error) {
+                console.error('Error al cargar ingresos:', error);
+            }
+        });
+    }
+
+    function enviarDatos() {
+        if ($('#rental_form')[0].checkValidity() === false) {
+            $('#rental_form')[0].reportValidity();
+            return;
+        }
+
+        var datos = {
+            nombre: $('#txt_name').val(),
+            categoria: $('#ddl_categoriaEspacio').val(),
+            aforo: $('#txt_capacity').val(),
+            costo: $('#txt_price').val()
+        };
+
+        $.ajax({
+            url: '../controlador/COWORKING/crear_oficinaC.php?add=true',
+            type: 'POST',
+            dataType: 'json',
+            data: { data: datos },
+            success: function (response) {
+                alert('Datos guardados correctamente.');
+                $('#rental_form')[0].reset();
+                listarIngresos();
+            },
+            error: function (xhr, status, error) {
+                console.error('Error al enviar los datos:', error);
+                alert('Hubo un error al guardar los datos. Por favor, intenta de nuevo.');
+            }
+        });
+    }
+</script>
