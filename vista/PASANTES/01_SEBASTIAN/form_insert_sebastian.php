@@ -15,7 +15,7 @@
     function enviar_datos(){
         var primer_nombre = $('#txt_primer_nombre').val();
         var segundo_nombre = $('#txt_segundo_nombre').val();
-        var select_costo = $('#categoriaEspacio').val();
+        var select_costo = $('#categoriaEspacio option:selected').text();
         var parametros = {
             'primer_nombre': primer_nombre,
             'segundo_nombre': segundo_nombre,
@@ -28,8 +28,14 @@
             type: 'post',
             dataType: 'json',
                 success: function (response) {
-                    console.log(response);
-                    $('#tbl_body').html(response);
+                    if(response==1)
+                    {
+                        alert('Ingresado')
+                    }
+                    else
+                    {
+                        alert('Error')
+                    }
                 }
         });
     }
@@ -82,7 +88,7 @@
                 </div>
             </div>
             <!--end breadcrumb-->
-
+            
             <div class="row">
                 <div class="col-xl-12 mx-auto">
                     <div class="card border-top border-0 border-4 border-primary">

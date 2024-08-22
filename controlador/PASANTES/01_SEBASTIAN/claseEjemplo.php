@@ -39,16 +39,8 @@ class claseEjemplo
 
 
 	function add($parametros){
-		$res = $this->modelo->insertarnombre($parametros['costo']);
-		if($res==1)
-		{
-			print_r('Ingresado');
-		}
-		else
-		{
-			print_r('Error');
-		}
-		die();
+		$res = $this->modelo->insertarnombre($parametros['primer_nombre']);
+		return $res;
 	}
 
 	function lista()
@@ -72,28 +64,30 @@ class claseEjemplo
 
 	function listaIngresos()
 	{
-		$lista = array( array('Nombre' =>'hola', 'genero'=>"hombre"),
-						array('Nombre' =>'hola', 'genero'=>"hombre"),
-						array('Nombre' =>'hola', 'genero'=>3),
-						array('Nombre' =>'hola', 'genero'=>4),
-						array('Nombre' =>'hola', 'genero'=>5),
-						array('Nombre' =>'sebastian', 'genero'=>"hola"),
+		$lista = array( array('Nombre' =>'hola', 'id'=>"hombre"),
+						array('Nombre' =>'hola', 'id'=>"hombre"),
+						array('Nombre' =>'hola', 'id'=>3),
+						array('Nombre' =>'hola', 'id'=>4),
+						array('Nombre' =>'hola', 'id'=>5),
+						array('Nombre' =>'sebastian', 'id'=>"hola"),
 						
 						array('Nombre' =>'hola',
-							   'genero'=>7,
+							   'id'=>7,
 							   'costo'=>10
 							),
 
 					);
+		$lista = $this->modelo->listardebase();
 		$tr='';
+		//print_r($lista);die();
 		foreach ($lista as $key => $value) {
 			$tr.= '<tr>
-				<td>'.$value['genero'].'</td>
+				<td>'.$value['id'].'</td>
 				<td>2</td>
 				<td>3</td>
 				<td>4</td>
 				<td>4.5</td>
-				<td>'.$value['Nombre'].'</td>
+				<td>'.$value['nombre'].'</td>
 				<td>5</td>
 				<td><button class="btn btn-sm btn-primary"><i class="bx bx-save"></i></button></td>
 				</tr>';
