@@ -22,8 +22,7 @@ if (isset($_GET['pdf_studentconsent'])) {
 }
 
 
-//falta esa parte le viste? Si le estaba intentando arreglar, pero queda descuadrado cuando le intento arreglar jaja el dos esta bien el uno no le puedes poner el 1 arriba y despues los inputs
-//algo asi como en el dos mirale
+
 class student_consentC
 {
     private $modelo;
