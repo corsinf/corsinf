@@ -231,8 +231,8 @@ class empresaC
 	$datos[18]['dato']= $parametros['pass'];
 	$datos[19]['campo'] = 'smtp_secure';
 	$datos[19]['dato']= $parametros['secure'];
-	// $datos[20]['campo'] = 'N_MESAS';
-	// $datos[20]['dato']= $parametros['mesa'];
+	$datos[20]['campo'] = 'smtp_port';
+	$datos[20]['dato']= $parametros['puesto'];
 
 	$datos[21]['campo'] = 'facturacion_electronica';
 	$datos[21]['dato']= $parametros['fact'];
@@ -264,6 +264,7 @@ class empresaC
 	$datos[33]['campo'] = 'anio_lectivo_idukay';
 	$datos[33]['dato']= $parametros['idukay_anio_lec'];
 
+// print_r($datos);die();
 
 	$where[0]['campo'] = 'id_empresa';
 	$where[0]['dato']= $_SESSION['INICIO']['ID_EMPRESA'];
