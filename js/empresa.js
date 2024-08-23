@@ -449,3 +449,33 @@ Swal.fire({
                 break;
         }
     }
+
+    function enviar_correo_prueba()
+    {
+        var parametros = {
+            'host':$('#txt_host').val(),
+            'usuario':$('#txt_usuario').val(),
+            'pass':$('#txt_pass').val(),
+            'puerto':$('#txt_puerto').val(),
+            'secure':$('#txt_secure').val(),
+            'email_prueba':$('#txt_email_prueba').val(),
+        }
+        $.ajax({
+            data:  {parametros:parametros},
+            url:   '../controlador/empresaC.php?probar_conexion_email=true',
+            type:  'post',
+            dataType: 'json',
+            success:  function (response) { 
+                if(response)
+                {
+                    Swal.fire("Email enviado","","success")
+                }else
+                {
+                    Swal.fire("No se pudo enviar el email","","error")
+                }
+                console.log(response);
+            }
+        });
+
+
+    }
