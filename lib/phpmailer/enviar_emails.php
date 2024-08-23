@@ -1,4 +1,5 @@
 <?php 
+require_once(dirname(__DIR__,2).'/modelo/empresaM.php');
 /**
  * 
  */
@@ -17,15 +18,14 @@ class enviar_emails
   private $modelo;
 	function __construct()
 	{
-    // $this->modelo = new facturacionM();
+    $this->modelo = new empresaM();
 		
 	}
 
 
 	function enviar_email($to_correo,$cuerpo_correo,$titulo_correo,$correo_respaldo='soporte@corsinf.com',$archivos=false,$nombre='Email envio',$HTML=false)
 	{
-
-    // print_r('dasd');die();
+     // print_r($empresa);die();
     $host = 'corsinf.com';  
     $port =  465;
     $pass = '62839300' ;
@@ -33,6 +33,21 @@ class enviar_emails
     $secure = 'ssl';
     $respuesta = true;
     $correo_respaldo = 'soporte@corsinf.com';
+
+    $id_empresa = $_SESSION['INICIO']['ID_EMPRESA'];
+    $empresa = $this->modelo->datos_empresa($id_empresa);
+    if(count($empresa)>0)
+    {
+       // print_r($empresa);die();
+        $host = $empresa[0]['smtp_host'];  
+        $port =  $empresa[0]['smtp_port'];  
+        $pass = $empresa[0]['smtp_pass'];  
+        $user =  $empresa[0]['smtp_usuario'];  
+        $secure = $empresa[0]['smtp_secure'];  
+        $correo_respaldo = $empresa[0]['smtp_usuario'];  
+    }
+
+   
 
 		$to =explode(';', $to_correo);
     // print_r($to);die();

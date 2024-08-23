@@ -150,9 +150,33 @@ function empresa()
                 $("#txt_Email").val(response[0].Email)
                 $("#txt_titulo_pesta").val(response[0].titulo_pestania)
                 $("#txt_host").val(response[0].smtp_host)
+
+
+                if (response[0].smtp_host.includes('gmail')) {
+                    $('#rbl_tipo_smtp_gmail').prop('checked',true);
+                    $('#txt_host').prop('readonly',true);
+                } else if(response[0].smtp_host.includes('office365')) {
+                    $('#rbl_tipo_smtp_oficce').prop('checked',true);
+                    $('#txt_host').prop('readonly',true);
+                }
+
+
                 $("#txt_usuario").val(response[0].smtp_usuario)
                 $("#txt_pass").val(response[0].smtp_pass)
                 $("#txt_puerto").val(response[0].smtp_port)
+                if(response[0].smtp_port=='465')
+                {
+                    $('#rbl_puerto_465').prop('checked',true);
+                    $('#txt_puerto').prop('readonly',true);
+                    $('#txt_secure').prop('readonly',true);
+
+                }else if(response[0].smtp_port=='587')
+                {
+                    $('#rbl_puerto_587').prop('checked',true);
+                    $('#txt_puerto').prop('readonly',true);
+                    $('#txt_secure').prop('readonly',true);
+                }
+
                 $("#txt_secure").val(response[0].smtp_secure)
 
                 $("#txt_db_host").val(response[0].Ip_host)
@@ -371,3 +395,57 @@ Swal.fire({
         }
       });
   }
+
+    function smtp_type()
+    {
+        var smtpType = $('input[name="rbl_tipo_smtp"]:checked').val();
+
+        switch(smtpType)
+        {
+            case '1':
+                $('#txt_host').val('smtp.office365.com')
+                $('#txt_host').prop('readonly',true);
+                break;
+
+            case '2':               
+                $('#txt_host').val('smtp.gmail.com')
+                $('#txt_host').prop('readonly',true);
+                break;
+
+            case '3':               
+                $('#txt_host').val('')
+                $('#txt_host').prop('readonly',false);
+                break;
+        }
+
+        console.log(smtpType);
+
+    }
+
+    function smtp_puerto()
+    {
+        var smtpType = $('input[name="rbl_puerto"]:checked').val();
+        switch(smtpType)
+        {
+            case '1':
+                $('#txt_puerto').val('465')
+                $('#txt_secure').val('ssl')
+                $('#txt_puerto').prop('readonly',true);
+                $('#txt_secure').prop('readonly',true);
+                break;
+
+            case '2':               
+                $('#txt_puerto').val('587')
+                $('#txt_secure').val('tls')
+                $('#txt_puerto').prop('readonly',true);
+                $('#txt_secure').prop('readonly',true);
+                break;
+
+            case '3':               
+                $('#txt_puerto').val('')
+                $('#txt_secure').val('')
+                $('#txt_puerto').prop('readonly',false);
+                $('#txt_secure').prop('readonly',false);
+                break;
+        }
+    }
