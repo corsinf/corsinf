@@ -5,7 +5,7 @@ require_once(dirname(__DIR__, 3) . '/modelo/PASANTES/01_SEBASTIAN/formularios_fi
 $controlador = new formularios_firmasC();
 
 if (isset($_GET['persona_natural'])) {
-    echo $controlador->persona_natural();
+    echo $controlador->persona_natural($_GET['id']);
 }
 
 if (isset($_GET['hola'])) {
@@ -28,15 +28,27 @@ class formularios_firmasC
         $this->modelo = new formularios_firmasM();
     }
 
-    function persona_natural()
+    function persona_natural($id)
     {
         //////////////////////////////////////////////////////////////////////////////////////////////////////
-        $fir_segundo_apellido = 'Pilca';
-        $fir_primer_apellido = 'Ortiz';
-        $fir_primer_nombre = 'Ruben';
-        $fir_segundo_nombre = 'Andres';
-
-        $nombres_completos =  $fir_primer_apellido . ' ' . $fir_segundo_apellido  . ' ' . $fir_primer_nombre . ' ' . $fir_segundo_nombre;
+        $datos = $this->modelo->where('fir_sol_id', $id)->listar();
+        $fir_sol_primer_nombre = $datos[0]['fir_sol_primer_nombre'];
+        $fir_sol_segundo_nombre = $datos[0]['fir_sol_segundo_nombre'];
+        $fir_sol_primer_apellido = $datos[0]['fir_sol_primer_apellido'];
+        $fir_sol_segundo_apellido = $datos[0]['fir_sol_segundo_apellido'];
+        $fir_sol_numero_identificacion = $datos[0]['fir_sol_numero_identificacion'];
+        $fir_sol_direccion_domicilio = $datos[0]['fir_sol_direccion_domicilio'];
+        $fir_sol_correo = $datos[0]['fir_sol_correo'];
+        $fir_sol_ciudad = $datos[0]['fir_sol_ciudad'];
+        $fir_sol_provincia = $datos[0]['fir_sol_provincia'];
+        $fir_sol_numero_celular = $datos[0]['fir_sol_numero_celular'];
+        $fir_sol_numero_fijo = $datos[0]['fir_sol_numero_fijo'];
+        $fir_sol_razon_social = $datos[0]['fir_sol_razon_social'];
+        $fir_sol_ruc_juridico = $datos[0]['fir_sol_ruc_juridico'];
+        $fir_sol_direccion_ruc_juridico = $datos[0]['fir_sol_direccion_ruc_juridico'];
+        $fir_sol_correo_empresarial = $datos[0]['fir_sol_correo_empresarial'];
+        $fir_sol_tipo_formulario = $datos[0]['fir_sol_tipo_formulario'];
+        $fir_sol_nombres_completos =  $fir_sol_primer_apellido . ' ' . $fir_sol_segundo_apellido  . ' ' . $fir_sol_primer_nombre . ' ' . $fir_sol_segundo_nombre;
 
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -73,29 +85,44 @@ class formularios_firmasC
         $pdf->Cell(0, 7, utf8_decode('DATOS REPRESENTANTE LEGAL'), 1, 1, 'C');
 
         $pdf->SetFont('Arial', 'B', 9);
-        $pdf->Cell(60, 7, utf8_decode('NOMBRES COMPLETOS'), 1, 0, 'L');
+        $pdf->Cell(64, 7, utf8_decode('NOMBRES COMPLETOS'), 1, 0, 'L');
         $pdf->SetFont('Arial', '', 9);
-        $pdf->Cell(94, 7, utf8_decode($nombres_completos), 1, 1, 'L');
+        $pdf->Cell(90, 7, utf8_decode($fir_sol_nombres_completos), 1, 1, 'L');
 
         $pdf->SetFont('Arial', 'B', 9);
-        $pdf->Cell(60, 7, utf8_decode('NÚMERO DE RUC:'), 1, 0, 'L');
+        $pdf->Cell(64, 7, utf8_decode('NÚMERO DE RUC:'), 1, 0, 'L');
         $pdf->SetFont('Arial', '', 9);
-        $pdf->Cell(94, 7, utf8_decode('Ruben Pilca'), 1, 1, 'L');
+        $pdf->Cell(90, 7, utf8_decode($fir_sol_numero_identificacion), 1, 1, 'L');
 
         $pdf->SetFont('Arial', 'B', 9);
-        $pdf->Cell(60, 7, utf8_decode('NOMBRES COMPLETOS'), 1, 0, 'L');
+        $pdf->Cell(64, 7, utf8_decode('DIRECCIÓN DOMICILIO'), 1, 0, 'L');
         $pdf->SetFont('Arial', '', 9);
-        $pdf->Cell(94, 7, utf8_decode('Ruben Pilca'), 1, 1, 'L');
+        $pdf->Cell(90, 7, utf8_decode($fir_sol_direccion_domicilio), 1, 1, 'L');
 
         $pdf->SetFont('Arial', 'B', 9);
-        $pdf->Cell(60, 7, utf8_decode('NOMBRES COMPLETOS'), 1, 0, 'L');
+        $pdf->Cell(64, 7, utf8_decode('PROVINCIA'), 1, 0, 'L');
         $pdf->SetFont('Arial', '', 9);
-        $pdf->Cell(94, 7, utf8_decode('Ruben Pilca'), 1, 1, 'L');
+        $pdf->Cell(90, 7, utf8_decode($fir_sol_provincia), 1, 1, 'L');
 
         $pdf->SetFont('Arial', 'B', 9);
-        $pdf->Cell(60, 7, utf8_decode('DIRECCION CORREO ELECTRONICO:'), 1, 0, 'L');
+        $pdf->Cell(64, 7, utf8_decode('CIUDAD:'), 1, 0, 'L');
         $pdf->SetFont('Arial', '', 9);
-        $pdf->Cell(94, 7, utf8_decode('Ruben Pilca'), 1, 1, 'L');
+        $pdf->Cell(90, 7, utf8_decode($fir_sol_ciudad), 1, 1, 'L');
+
+        $pdf->SetFont('Arial', 'B', 9);
+        $pdf->Cell(64, 7, utf8_decode('DIRECCION CORREO ELECTRONICO:'), 1, 0, 'L');
+        $pdf->SetFont('Arial', '', 9);
+        $pdf->Cell(90, 7, utf8_decode($fir_sol_correo), 1, 1, 'L');
+
+        $pdf->SetFont('Arial', 'B', 9);
+        $pdf->Cell(64, 7, utf8_decode('NO. CELULAR PONER CÓDIGO DE PAÍS'), 1, 0, 'L');
+        $pdf->SetFont('Arial', '', 9);
+        $pdf->Cell(90, 7, utf8_decode($fir_sol_numero_celular), 1, 1, 'L');
+
+        $pdf->SetFont('Arial', 'B', 9);
+        $pdf->Cell(64, 7, utf8_decode('NO. FIJO PONER CÓDIGO DE PAÍS'), 1, 0, 'L');
+        $pdf->SetFont('Arial', '', 9);
+        $pdf->Cell(90, 7, utf8_decode($fir_sol_numero_fijo), 1, 1, 'L');
 
         $pdf->AddPage();
 
@@ -121,7 +148,7 @@ class formularios_firmasC
         $pdf->SetFont('Arial', '', 9.5);
         $pdf->SetTextColor(0, 0, 0);   // Cambia el color del texto (Azul oscuro)
         $authorization_text_natural =
-            'Yo ' . $nombres_completos . ' con número de cédula o pasaporte 100456789654; autorizo a ANFAC AUTORIDAD DE CERTIFICACION ECUADOR C.A. la emision de mi certificado digital de Firma Electronica. 
+            'Yo ' . $fir_sol_nombres_completos . ' con número de cédula o pasaporte ' . $fir_sol_numero_identificacion . '; autorizo a ANFAC AUTORIDAD DE CERTIFICACION ECUADOR C.A. la emision de mi certificado digital de Firma Electronica. 
             
 Particular que pongo en su conocimiento para los fines pertinentes. 
             
