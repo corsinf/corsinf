@@ -63,13 +63,13 @@
                     data: 'fir_sol_fecha_creacion',
                     render: function(data) {
                         var date = new Date(data);
-                        var fechaFormateada = date.getFullYear() + '-' + 
-                        ('0' + (date.getMonth() + 1)).slice(-2) + '-' + 
-                        ('0' + date.getDate()).slice(-2) + ' ' + 
-                        ('0' + date.getHours()).slice(-2) + ':' + 
-                        ('0' + date.getMinutes()).slice(-2);
+                        var fechaFormateada = date.getFullYear() + '-' +
+                            ('0' + (date.getMonth() + 1)).slice(-2) + '-' +
+                            ('0' + date.getDate()).slice(-2) + ' ' +
+                            ('0' + date.getHours()).slice(-2) + ':' +
+                            ('0' + date.getMinutes()).slice(-2);
                         return fechaFormateada;
-                        }
+                    }
                 }
             ],
             order: [
@@ -99,7 +99,14 @@
     }
 
     function revisar_pdf(id, tipo_formulario) {
-        window.open('../controlador/PASANTES/01_SEBASTIAN/formularios_firmasC.php?persona_natural=true&id='+id, '_blank');
+        if (tipo_formulario == 'persona_natural') {
+            return window.open('../controlador/PASANTES/01_SEBASTIAN/formularios_firmasC.php?persona_natural=true&id=' + id, '_blank');
+        } else if (tipo_formulario == 'persona_natural_ruc') {
+            alert('Falta este formulario');
+        } else if (tipo_formulario == 'persona_juridica') {
+            return window.open('../controlador/PASANTES/01_SEBASTIAN/formularios_firmasC_Adrian.php?persona_juridica=true&id=' + id, '_blank');
+        }
+
         // $.ajax({
         //     data:  {id: 1},
         //     url: '../controlador/PASANTES/01_SEBASTIAN/formularios_firmasC.php?persona_natural=true',
@@ -111,7 +118,6 @@
         //     }
         // });
     }
-
 </script>
 
 <div class="page-wrapper">
@@ -170,7 +176,7 @@
                                                 <th>Nombre Completo</th>
                                                 <th>Ciudad</th>
                                                 <th>Tipo</th>
-                                                <th>Fecha</th>    
+                                                <th>Fecha</th>
                                             </tr>
                                         </thead>
                                         <tbody>

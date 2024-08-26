@@ -195,7 +195,7 @@
                                                     <label for="txt_student" class="col-auto col-form-label fw-bold">Student:</label>
                                                 </div>
                                                 <div class="col-7 col-sm-7 has-validation">
-                                                    <input type="text" class="form-control form-control-sm" name="txt_student" id="txt_student" placeholder="First, Middle & Last Name" required>
+                                                    <input type="text" class="form-control form-control-sm" name="txt_student" id="txt_student" placeholder="First, Middle & Last Name" required maxlength="200">
                                                     <div class="invalid-feedback">Please provide a valid name.</div>
                                                 </div>
                                             </div>
@@ -204,7 +204,7 @@
                                                     <label for="txt_id_student" class="col-auto col-form-label fw-bold">Student ID:</label>
                                                 </div>
                                                 <div class="col-7 col-sm-7 has-validation">
-                                                    <input type="text" class="form-control form-control-sm" name="txt_id_student" id="txt_id_student" required>
+                                                    <input type="text" class="form-control form-control-sm" name="txt_id_student" id="txt_id_student" required maxlength="200">
                                                     <div class="invalid-feedback">Please provide a valid ID.</div>
                                                 </div>
                                             </div>
@@ -316,7 +316,7 @@
                                                             <label for="txt_purpose_authorization" class="col-auto col-form-label fw-bold">My authorization is for the following purpose:</label>
                                                         </div>
                                                         <div class="col-12 col-lg-8">
-                                                            <textarea class="form-control form-control-sm w-100" name="txt_purpose_authorization" id="txt_purpose_authorization" required></textarea>
+                                                            <textarea class="form-control form-control-sm w-100" name="txt_purpose_authorization" id="txt_purpose_authorization" required maxlength="500"></textarea>
                                                             <div class="invalid-feedback">Please provide a valid purpose.</div>
                                                         </div>
                                                     </div>
@@ -343,11 +343,11 @@
                                             <div class="col-12 col-lg-6">
                                                 <div class="mb-3 row">
                                                     <div class="col-sm-12">
-                                                        <input type="text" class="form-control form-control-sm" name="txt_first_authorized_name" id="txt_first_authorized_name" placeholder="Printed Name" required>
+                                                        <input type="text" class="form-control form-control-sm" name="txt_first_authorized_name" id="txt_first_authorized_name" placeholder="Printed Name" required maxlength="200">
                                                         <div class="invalid-feedback">Please provide a valid name.</div>
                                                     </div>
                                                 </div>
-                                                <input type="text" class="form-control form-control-sm mb-3" name="txt_first_address" id="txt_first_address" placeholder="Complete Address" required>
+                                                <input type="text" class="form-control form-control-sm mb-3" name="txt_first_address" id="txt_first_address" placeholder="Complete Address" required maxlength="500">
                                                 <div class="invalid-feedback">Please provide a valid address.</div>
                                             </div>
                                             <div class="col-12 col-lg-6">
@@ -363,7 +363,7 @@
                                                 </select>
                                                 <div class="invalid-feedback">Please provide a valid relationship.</div>
 
-                                                <input type="email" class="form-control form-control-sm mt-3" name="txt_first_email" id="txt_first_email" placeholder="Email" required>
+                                                <input type="email" class="form-control form-control-sm mt-3" name="txt_first_email" id="txt_first_email" placeholder="Email" required maxlength="200">
                                                 <div class="invalid-feedback">Please provide a valid email.</div>
                                             </div>
                                         </div>
@@ -372,11 +372,11 @@
                                             <div class="col-12 col-lg-6">
                                                 <div class="mb-3 row">
                                                     <div class="col-lg-12">
-                                                        <input type="text" class="form-control form-control-sm" name="txt_second_authorized_name" id="txt_second_authorized_name" placeholder="Printed Name" required>
+                                                        <input type="text" class="form-control form-control-sm" name="txt_second_authorized_name" id="txt_second_authorized_name" placeholder="Printed Name" required maxlength="200">
                                                         <div class="invalid-feedback">Please provide a valid name.</div>
                                                     </div>
                                                 </div>
-                                                <input type="text" class="form-control form-control-sm mb-3" name="txt_second_address" id="txt_second_address" placeholder="Complete Address" required>
+                                                <input type="text" class="form-control form-control-sm mb-3" name="txt_second_address" id="txt_second_address" placeholder="Complete Address" required maxlength="500">
                                                 <div class="invalid-feedback">Please provide a valid address.</div>
                                             </div>
                                             <div class="col-12 col-lg-6">
@@ -391,7 +391,7 @@
                                                     <option value="Otro">Otro/a</option>
                                                 </select>
                                                 <div class="invalid-feedback">Please provide a valid relationship.</div>
-                                                <input type="email" class="form-control form-control-sm mt-3" name="txt_second_email" id="txt_second_email" placeholder="Email" required>
+                                                <input type="email" class="form-control form-control-sm mt-3" name="txt_second_email" id="txt_second_email" placeholder="Email" required maxlength="200">
                                                 <div class="invalid-feedback">Please provide a valid email.</div>
                                             </div>
                                         </div>
