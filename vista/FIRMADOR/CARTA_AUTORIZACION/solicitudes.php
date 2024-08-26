@@ -1,6 +1,5 @@
 <script type="text/javascript">
     $(document).ready(function() {
-        //listar();
 
         tabla_solicitudes = $('#tabla_solicitudes').DataTable({
             language: {
@@ -23,9 +22,19 @@
                     text: '<i class="bx bxs-spreadsheet me-0"></i> Exportar a PDF',
                     title: 'Título del archivo PDF',
                     filename: 'nombre_archivo_PDF'
-                }
+                },
             ],
             columns: [{
+                    data: null,
+                    render: function(data) {
+                        //botones += `<button type="button" class="btn btn-primary btn-sm m-1" title="Detalles de la Consulta" onclick="ver_pdf('${item.sa_conp_id}');`;
+                        return `<a href="javascript:;" class="btn btn-primary btn-sm" onclick="revisar_pdf('${data.fir_sol_id}','${data.fir_sol_tipo_formulario}')"><i class="bx bxs-file-pdf"></i></a>`;
+                    }
+                    //extend: 'pdf',
+                    //text: '<i class="bx bxs-spreadsheet me-0"></i> ',
+                    //filename: 'nombre_archivo_PDF'
+                },
+                {
                     data: 'fir_sol_numero_identificacion'
                 },
                 {
@@ -78,7 +87,7 @@
     function listar() {
 
         $.ajax({
-            // data:  {parametros:parametros},
+            // data:  {id: 1},
             url: '../controlador/PASANTES/01_SEBASTIAN/formularios_firmasC.php?listar=true',
             type: 'post',
             dataType: 'json',
@@ -88,6 +97,21 @@
             }
         });
     }
+
+    function revisar_pdf(id, tipo_formulario) {
+        window.open('../controlador/PASANTES/01_SEBASTIAN/formularios_firmasC.php?persona_natural=true&id='+id, '_blank');
+        // $.ajax({
+        //     data:  {id: 1},
+        //     url: '../controlador/PASANTES/01_SEBASTIAN/formularios_firmasC.php?persona_natural=true',
+        //     type: 'post',
+        //     dataType: 'json',
+        //     success: function(response) {
+        //         console.log(response);
+        //         location.href = 'http://localhost/corsinf/controlador/PASANTES/01_SEBASTIAN/formularios_firmasC.php?persona_natural=true';
+        //     }
+        // });
+    }
+
 </script>
 
 <div class="page-wrapper">
@@ -141,7 +165,8 @@
                                     <table class="table table-striped responsive" id="tabla_solicitudes" style="width:100%">
                                         <thead>
                                             <tr>
-                                                <th>Cédula</th>
+                                                <th>Revisar PDF</th>
+                                                <th>N&uacute;mero de Identificaci&oacute;n</th>
                                                 <th>Nombre Completo</th>
                                                 <th>Ciudad</th>
                                                 <th>Tipo</th>
