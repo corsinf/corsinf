@@ -55,17 +55,17 @@ class Formulario_ReporteC
         $pdf->Cell(0, 7, utf8_decode('Información del Solicitante'), 1, 1, 'C');
         
         $pdf->SetFont('Arial', 'B', 11);
-        $pdf->Cell(90, 6, utf8_decode('Nombre Completo'), 1, 0, 'C');
-        $pdf->Cell(90, 6, utf8_decode('Número de identificación'), 1, 1, 'C');
+        $pdf->Cell(115, 6, utf8_decode('Nombre Completo'), 1, 0, 'C');
+        $pdf->Cell(65, 6, utf8_decode('Número de identificación'), 1, 1, 'C');
         $pdf->SetFont('Arial', '', 11);
-        $pdf->Cell(90, 6, utf8_decode($nombre_completo), 1, 0, 'C');
-        $pdf->Cell(90, 6, utf8_decode($numero_identificacion), 1, 1, 'C');
+        $pdf->Cell(115, 6, utf8_decode($nombre_completo), 1, 0, 'C');
+        $pdf->Cell(65, 6, utf8_decode($numero_identificacion), 1, 1, 'C');
         $pdf->SetFont('Arial', 'B', 11);
-        $pdf->Cell(90, 6, utf8_decode('Correo Electrónico'), 1, 0, 'C');
-        $pdf->Cell(90, 6, utf8_decode('Teléfono'), 1, 1, 'C');
+        $pdf->Cell(115, 6, utf8_decode('Correo Electrónico'), 1, 0, 'C');
+        $pdf->Cell(65, 6, utf8_decode('Teléfono'), 1, 1, 'C');
         $pdf->SetFont('Arial', '', 11);
-        $pdf->Cell(90, 6, utf8_decode($correo), 1, 0, 'C');
-        $pdf->Cell(90, 6, utf8_decode($telefono), 1, 1, 'C');
+        $pdf->Cell(115, 6, utf8_decode($correo), 1, 0, 'C');
+        $pdf->Cell(65, 6, utf8_decode($telefono), 1, 1, 'C');
         $pdf->SetFont('Arial', 'B', 11);
         $pdf->Cell(0, 6, utf8_decode('Dirección'), 1, 1, 'C');
         $pdf->SetFont('Arial', '', 11);
@@ -138,7 +138,7 @@ class Formulario_ReporteC
         $pdf->Ln(10);
         
         $pdf->SetFont('Arial', 'B', 11);
-        $pdf->Cell(100, 6, utf8_decode('Firma del Solicitantes'), 1, 0, 'C');
+        $pdf->Cell(100, 6, utf8_decode('Firma del Solicitante'), 1, 0, 'C');
         $pdf->Cell(80, 6, utf8_decode('Fecha'), 1, 1, 'C');
         $pdf->SetFont('Arial', '', 11);
         $pdf->Cell(100, 8, utf8_decode($firma_solicitante), 1, 0, 'C');

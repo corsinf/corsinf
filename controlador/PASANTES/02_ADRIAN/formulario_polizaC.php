@@ -42,23 +42,23 @@ class Formulario_PolizaC
         $pdf->Cell(0, 9, utf8_decode('Información de la Póliza'), 1, 1, 'C');
         
         $pdf->SetFont('Arial', 'B', 12);
-        $pdf->Cell(75, 8, utf8_decode('Tipo de Seguro'), 1, 0, 'C');
+        $pdf->Cell(75, 8, utf8_decode('Tipo de Seguro'), 1, 0, 'R');
         $pdf->SetFont('Arial', '', 11);
         $pdf->Cell(0, 8, utf8_decode($tipo_seguro), 1, 1, 'L');
 
         $pdf->SetFont('Arial', 'B', 12);
-        $pdf->Cell(75, 8, utf8_decode('Cobertura Solicitada'), 1, 0, 'C');
+        $pdf->Cell(75, 8, utf8_decode('Cobertura Solicitada'), 1, 0, 'R');
         $pdf->SetFont('Arial', '', 11);
         $pdf->Cell(0, 8, utf8_decode($cobertura_solicitada), 1, 1, 'L');
 
         $pdf->SetFont('Arial', 'B', 12);
-        $pdf->Cell(75, 8, utf8_decode('Monto Asegurado'), 1, 0, 'C');
+        $pdf->Cell(75, 8, utf8_decode('Monto Asegurado'), 1, 0, 'R');
         $pdf->SetFont('Arial', '', 11);
         $pdf->Cell(0, 8, utf8_decode('$'.$monto_asegurado), 1, 1, 'L');
         
 
         $pdf->SetFont('Arial', 'B', 12);
-        $pdf->Cell(75, 8, utf8_decode('Fecha de Inicio de la Cobertura'), 1, 0, 'C');
+        $pdf->Cell(75, 8, utf8_decode('Fecha de Inicio de la Cobertura'), 1, 0, 'R');
         $pdf->SetFont('Arial', '', 11);
         $pdf->Cell(0, 8, utf8_decode($fecha_cobertura), 1, 1, 'L');
 
