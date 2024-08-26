@@ -1,5 +1,6 @@
 <?php
 require_once(dirname(__DIR__, 3) . '/lib/pdf/fpdf.php');
+require_once(dirname(__DIR__, 3) . '/modelo/PASANTES/01_SEBASTIAN/formularios_firmasM.php');
 
 $controlador = new formularios_firmasC();
 
@@ -11,8 +12,21 @@ if (isset($_GET['hola'])) {
     echo $controlador->persona();
 }
 
+if (isset($_GET['listar'])) {
+    echo json_encode($controlador->listar());
+}
+
+if (isset($_GET['insertar'])) {
+    echo json_encode($controlador->insertar_editar($_POST['parametros']));
+}
 class formularios_firmasC
 {
+    private $modelo;
+
+    function __construct()
+    {
+        $this->modelo = new formularios_firmasM();
+    }
 
     function persona_natural()
     {
@@ -107,7 +121,7 @@ class formularios_firmasC
         $pdf->SetFont('Arial', '', 9.5);
         $pdf->SetTextColor(0, 0, 0);   // Cambia el color del texto (Azul oscuro)
         $authorization_text_natural =
-            'Yo '.$nombres_completos.' con número de cédula o pasaporte 100456789654; autorizo a ANFAC AUTORIDAD DE CERTIFICACION ECUADOR C.A. la emision de mi certificado digital de Firma Electronica. 
+            'Yo ' . $nombres_completos . ' con número de cédula o pasaporte 100456789654; autorizo a ANFAC AUTORIDAD DE CERTIFICACION ECUADOR C.A. la emision de mi certificado digital de Firma Electronica. 
             
 Particular que pongo en su conocimiento para los fines pertinentes. 
             
@@ -131,5 +145,61 @@ Atentamente,';
     function persona()
     {
         echo 'hola';
+    }
+
+    function listar()
+    {
+        $lista = $this->modelo->listar();
+        return $lista;
+    }
+
+    function insertar_editar($parametros)
+    {
+        $fir_sol_razon_social = '';
+        if (!empty($parametros['txt_razon_social'])) {
+            $fir_sol_razon_social = $parametros['txt_razon_social'];
+        }
+        $fir_sol_direccion_ruc_juridico = '';
+        if (!empty($parametros['txt_direccion_ruc'])) {
+            $fir_sol_direccion_ruc_juridico = $parametros['txt_direccion_ruc'];
+        }
+        $fir_sol_ruc_juridico = '';
+        if (!empty($parametros['txt_ruc'])) {
+            $fir_sol_ruc_juridico = $parametros['txt_ruc'];
+        }
+        $fir_sol_correo_empresarial = '';
+        if (!empty($parametros['txt_correo_empresarial'])) {
+            $fir_sol_correo_empresarial = $parametros['txt_correo_empresarial'];
+        }
+        $fir_sol_direccion_domicilio = '';
+        if (!empty($parametros['txt_direccion_domicilio'])) {
+            $fir_direccion_domicilio = $parametros['txt_direccion_domicilio'];
+        }
+        $fir_sol_correo = '';
+        if (!empty($parametros['txt_correo'])) {
+            $fir_sol_correo = $parametros['txt_correo'];
+        }
+        $datos = array(
+            array('campo' => 'fir_sol_primer_nombre', 'dato' => $parametros['txt_primer_nombre']),
+            array('campo' => 'fir_sol_segundo_nombre', 'dato' => $parametros['txt_segundo_nombre']),
+            array('campo' => 'fir_sol_primer_apellido', 'dato' => $parametros['txt_primer_apellido']),
+            array('campo' => 'fir_sol_segundo_apellido', 'dato' => $parametros['txt_segundo_apellido']),
+            array('campo' => 'fir_sol_numero_identificacion', 'dato' => $parametros['txt_numero_identificacion']),
+            array('campo' => 'fir_sol_direccion_domicilio', 'dato' => $fir_sol_direccion_domicilio),
+            array('campo' => 'fir_sol_correo', 'dato' => $fir_sol_correo),
+            array('campo' => 'fir_sol_ciudad', 'dato' => $parametros['txt_ciudad']),
+            array('campo' => 'fir_sol_provincia', 'dato' => $parametros['txt_provincia']),
+            array('campo' => 'fir_sol_numero_celular', 'dato' => $parametros['txt_celular']),
+            array('campo' => 'fir_sol_numero_fijo', 'dato' => $parametros['txt_fijo']),
+            array('campo' => 'fir_sol_razon_social', 'dato' => $fir_sol_razon_social),
+            array('campo' => 'fir_sol_ruc_juridico', 'dato' => $fir_sol_ruc_juridico),
+            array('campo' => 'fir_sol_direccion_ruc_juridico', 'dato' => $fir_sol_direccion_ruc_juridico),
+            array('campo' => 'fir_sol_correo_empresarial', 'dato' => $fir_sol_correo_empresarial),
+            array('campo' => 'fir_sol_tipo_formulario', 'dato' => $parametros['txt_tipo']),
+        );
+
+        $datos = $this->modelo->insertar($datos);
+
+        return $datos;
     }
 }
