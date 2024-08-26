@@ -1,7 +1,8 @@
 <?php
-include('../modelo/empresaM.php');
-include('../modelo/licenciasM.php');
-include('../db/codigos_globales.php');
+require_once('../modelo/empresaM.php');
+require_once('../modelo/licenciasM.php');
+require_once('../lib/phpmailer/enviar_emails.php');
+require_once('../db/codigos_globales.php');
 if(isset($_SESSION['INICIO']))
 {	
   @session_start();
@@ -47,15 +48,21 @@ if(isset($_GET['probar_conexion_dir']))
 	echo json_encode($controlador->probar_conexion_dir($_POST['parametros']));
 }
 
+if(isset($_GET['probar_conexion_email']))
+{
+	echo json_encode($controlador->probar_conexion_email($_POST['parametros']));
+}
 
 class empresaC
 {
 	private $modelo;
+	private $email;
 	private $cod_global;
 	function __construct()
 	{
 			$this->modelo = new empresaM();
 			$this->cod_global = new codigos_globales();
+			$this->email = new enviar_emails();
 	}
 
 	function empresa_dato()
@@ -224,8 +231,8 @@ class empresaC
 	$datos[18]['dato']= $parametros['pass'];
 	$datos[19]['campo'] = 'smtp_secure';
 	$datos[19]['dato']= $parametros['secure'];
-	// $datos[20]['campo'] = 'N_MESAS';
-	// $datos[20]['dato']= $parametros['mesa'];
+	$datos[20]['campo'] = 'smtp_port';
+	$datos[20]['dato']= $parametros['puesto'];
 
 	$datos[21]['campo'] = 'facturacion_electronica';
 	$datos[21]['dato']= $parametros['fact'];
@@ -257,6 +264,7 @@ class empresaC
 	$datos[33]['campo'] = 'anio_lectivo_idukay';
 	$datos[33]['dato']= $parametros['idukay_anio_lec'];
 
+// print_r($datos);die();
 
 	$where[0]['campo'] = 'id_empresa';
 	$where[0]['dato']= $_SESSION['INICIO']['ID_EMPRESA'];
@@ -316,6 +324,17 @@ class empresaC
 			    // Cerrar la conexión LDAP
 			    ldap_close($ldapconn);
 			}
+  }
+
+  function probar_conexion_email($parametros)
+  {
+  	$to_correo = $parametros['email_prueba'];
+  	$cuerpo_correo = 'Prueba';
+  	$titulo_correo = 'Email prueba';
+  	$res = $this->email->enviar_email_prueba($parametros,$to_correo,$cuerpo_correo,$titulo_correo,$correo_respaldo='soporte@corsinf.com',$archivos=false,$nombre='Email envio',$HTML=false);
+
+  	return $res;
+  	// print_r($parametros);die();
   }
 
 }

@@ -334,7 +334,8 @@ class db
 			return 1;
 			
 		} catch (Exception $e) {
-			//return -1;
+			
+			return -1;
 			die(print_r($e, true));
 		}
 	}
