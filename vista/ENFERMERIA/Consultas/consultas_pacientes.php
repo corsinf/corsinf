@@ -307,48 +307,28 @@ if (isset($_GET['pac_id'])) {
 
                   <div class="row justify-content-center" id="btn_nuevo">
 
-                    <div class="col-auto">
+                    <div class="col-auto pt-2">
+                      <form action="../vista/inicio.php?mod=7&acc=registrar_consulta_paciente" method="post">
+                        <input type="hidden" name="id_ficha" id="id_ficha">
+                        <input type="hidden" name="id_paciente" id="id_paciente">
+                        <input type="hidden" name="tipo_consulta" id="tipo_consulta" value="consulta">
 
-                      <div class="card">
-                        <div class="card-body bg-primary">
-                          <form action="../vista/inicio.php?mod=7&acc=registrar_consulta_paciente" method="post">
-
-                            <input type="hidden" name="id_ficha" id="id_ficha">
-                            <input type="hidden" name="id_paciente" id="id_paciente">
-                            <input type="hidden" name="tipo_consulta" id="tipo_consulta" value="consulta">
-
-                            <button type="submit" class="btn btn-primary btn-lg m-4">Atención Médica</button>
-                          </form>
-                        </div>
-                      </div>
-
+                        <button type="submit" class="btn btn-primary btn-lg m-0 p-5">Atención Médica</button>
+                      </form>
                     </div>
 
-                    <div class="col-auto">
+                    <div class="col-auto pt-2">
+                      <form action="../vista/inicio.php?mod=7&acc=registrar_consulta_paciente" method="post">
+                        <input type="hidden" name="id_ficha" id="id_ficha">
+                        <input type="hidden" name="id_paciente" id="id_paciente">
+                        <input type="hidden" name="tipo_consulta" id="tipo_consulta" value="certificado">
 
-                      <div class="card">
-                        <div class="card-body bg-primary">
-                          <form action="../vista/inicio.php?mod=7&acc=registrar_consulta_paciente" method="post">
-
-                            <input type="hidden" name="id_ficha" id="id_ficha">
-                            <input type="hidden" name="id_paciente" id="id_paciente">
-                            <input type="hidden" name="tipo_consulta" id="tipo_consulta" value="certificado">
-
-                            <button type="submit" class="btn btn-primary btn-lg m-4"> Certificado</button>
-                          </form>
-                        </div>
-                      </div>
-
+                        <button type="submit" class="btn btn-primary btn-lg m-0 p-5"> Certificado</button>
+                      </form>
                     </div>
 
-                    <div class="col-auto" id="pnl_segumiento_personal" style="display: none;">
-
-                      <div class="card">
-                        <div class="card-body bg-primary">
-                          <button type="button" class="btn btn-primary btn-lg m-4" onclick="seguimiento()"> Seguimiento</button>
-                        </div>
-                      </div>
-
+                    <div class="col-auto  pt-2" id="pnl_segumiento_personal" style="display: none;">
+                      <button type="button" class="btn btn-primary btn-lg m-0 p-5" onclick="seguimiento()"> Seguimiento</button>
                     </div>
                   </div>
 

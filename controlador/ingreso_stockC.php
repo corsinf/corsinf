@@ -351,7 +351,7 @@ class ingreso_stockC
 			$tipo_usuario = '';
 		}
 
-		$mensaje .= 'Me comunico con usted para informarle sobre la entrega de medicamentos para ' . $nombres_est . ".<br><br>";
+		$mensaje .= 'Me comunico con usted para informarle sobre la entrega de medicamentos para <b>' . $nombres_est . ".</b><br><br>";
 		$mensaje .= '<b>Hora de atención: </b>' . $fecha_actual . "<br><br>";
 		$mensaje .= '<b>Medicamento/s recetado/s: </b>' . "<br>";
 		$mensaje .= $medicamentos . "<br>";
@@ -362,7 +362,7 @@ class ingreso_stockC
 		$to_correo = $correo_rep;
 		$titulo_correo = 'ATENCION - DEPARTAMENTO MEDICO';
 		$cuerpo_correo = $mensaje;
-
+		$cuerpo_correo = utf8_decode($mensaje);
 		//echo $to_correo . '<br>' . $titulo_correo . '<br>' . $cuerpo_correo;
 
 		//Declarado en el controlador de consulta

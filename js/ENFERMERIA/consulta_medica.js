@@ -30,6 +30,26 @@ $(document).ready(function () {
         }
     });
 
+    $(document).on('input', '.solo_numeros_int', function (event) {
+        // Convertir el valor a entero
+        var value = $(this).val();
+
+        // Eliminar cualquier cosa que no sea un número
+        value = value.replace(/[^0-9]/g, '');
+
+        // Actualizar el valor del campo
+        $(this).val(value);
+    });
+
+    $(document).on('input', '.solo_3_numeros', function() {
+        var value = $(this).val();
+
+        // Limitar a 3 dígitos
+        if (value.length > 3) {
+            $(this).val(value.slice(0, 3));
+        }
+    });
+
     var validacion_numeros_slash = $('.solo_numeros_slash');
 
     validacion_numeros_slash.on('keypress', function (event) {
