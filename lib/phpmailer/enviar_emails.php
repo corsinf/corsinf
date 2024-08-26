@@ -29,7 +29,7 @@ class enviar_emails
     $host = 'corsinf.com';  
     $port =  465;
     $pass = '62839300' ;
-    $user =  'soporte';
+    $user =  'soporte@corsinf.com';
     $secure = 'ssl';
     $respuesta = true;
     $correo_respaldo = 'soporte@corsinf.com';
@@ -53,7 +53,7 @@ class enviar_emails
     // print_r($to);die();
      foreach ($to as $key => $value) {
   		   $mail = new PHPMailer();
-         $mail->SMTPDebug = SMTP::DEBUG_SERVER;                      
+         // $mail->SMTPDebug = SMTP::DEBUG_SERVER;                      
          $mail->isSMTP();                                           
          $mail->Host       = $host;
          $mail->SMTPAuth   = true;                             
