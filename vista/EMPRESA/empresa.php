@@ -5,6 +5,8 @@
 	$(document).ready(function() {
 
 	})
+
+
 </script>
 <div class="page-wrapper">
 	<div class="page-content">
@@ -138,11 +140,22 @@
 											</div>
 											<div class="col-sm-6">
 												<h6 class="mb-0 text-uppercase">Configuracion SMTP </h6>
-												<hr>
+												<hr>												
+												<div class="row">
+													<div class="col-sm-4">
+														<b>SMTP Host</b>
+													</div>
+													<div class="col-sm-8 text-end">
+														<label onchange="smtp_type()"><b><input type="radio" value="1" name="rbl_tipo_smtp" id="rbl_tipo_smtp_oficce">  Outlook / hotmail</b></label>
+														<label onchange="smtp_type()"><b><input type="radio" value="2" name="rbl_tipo_smtp" id="rbl_tipo_smtp_gmail">  Gmail</b></label>
+														<label onchange="smtp_type()"><b><input type="radio" value="3" name="rbl_tipo_smtp" checked>  Otros</b></label>
+													</div>
+													<div class="col-sm-12">
+														<input type="text" name="txt_host" id="txt_host" class="form-control form-control-sm">														
+													</div>
+												</div>
 												<div class="row">
 													<div class="col-sm-12">
-														<b>SMTP Host</b>
-														<input type="text" name="txt_host" id="txt_host" class="form-control form-control-sm">
 														<b>SMTP Usuario</b>
 														<input type="text" name="txt_usuario" id="txt_usuario" class="form-control form-control-sm">
 														<b>SMTP Pass</b>
@@ -151,11 +164,36 @@
 															<?php if ($_SESSION['INICIO']['TIPO'] == 'DBA') { ?>
 																<button type="button" class="btn btn-info btn-flat btn-sm" onclick="pass('txt_pass')"><i class="lni lni-eye" id="eye"></i></button>
 															<?php } ?>
+														</div>																	
+													</div>
+												</div>
+												<div class="row">
+													<div class="col-sm-7">
+														<div class="row">
+															<div class="col-sm-5">
+																<b>SMTP Puerto</b>														
+															</div>
+															<div class="col-sm-7 text-end">
+																<label onchange="smtp_puerto()"><b><input type="radio" name="rbl_puerto" id="rbl_puerto_465" value="1"> 465</b></label>
+																<label onchange="smtp_puerto()"><b><input type="radio" name="rbl_puerto" id="rbl_puerto_587" value="2"> 587</b></label>
+																<label onchange="smtp_puerto()"><b><input type="radio" name="rbl_puerto" value="3" checked> Otros</b></label>
+															</div>															
 														</div>
-														<b>SMTP Puerto</b>
-														<input type="text" name="txt_puerto" id="txt_puerto" class="form-control form-control-sm">
+															<input type="text" name="txt_puerto" id="txt_puerto" class="form-control form-control-sm">					
+													</div>
+													<div class="col-sm-5">
 														<b>SMTP Secure</b>
-														<input type="text" name="txt_secure" id="txt_secure" class="form-control form-control-sm">
+														<input type="text" name="txt_secure" id="txt_secure" class="form-control form-control-sm">												
+													</div>
+												</div>
+												<div class="row">
+													<div class="col-sm-7">
+														<b>Email para prueba</b>
+														<input type="text" name="txt_email_prueba" id="txt_email_prueba" class="form-control form-control-sm">												
+													</div>
+													<div class="col-sm-5 text-end ">
+														<br>
+														<button class="btn btn-primary btn-sm" onclick="enviar_correo_prueba()" >Enviar Correo prueba</button>	
 													</div>
 												</div>
 											</div>
@@ -344,11 +382,12 @@
 
 							</div>
 						</div>
+						<br>
 						<div class="row">
 							<div class="col-sm-9">
 								<!-- <h1 class="h3 mb-4 text-gray-800">Empresa</h1> -->
 							</div>
-							<div class="col-sm-3">
+							<div class="col-sm-3 text-end">
 								<button type="button" class="btn btn-primary" onclick="guardar_datos()">Guardar datos de empresa</button>
 							</div>
 						</div>
