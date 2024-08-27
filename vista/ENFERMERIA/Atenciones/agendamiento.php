@@ -205,14 +205,14 @@
                 <input type="hidden" name="tipo_consulta" id="tipo_consulta" value="consulta">
                 <input type="hidden" name="txt_fecha_consulta" id="txt_fecha_consulta" class="form-control form-control-sm" value="<?php echo date('Y-m-d'); ?>" readonly>
 
-                <button type="submit" class="btn btn-primary btn-lg m-4"><i class='bx bx-file-find'></i>Atención Médica</button>
+                <button type="submit" class="btn btn-primary btn-lg m-0 p-3"><i class='bx bx-file-find'></i>Atención Médica</button>
 
               </form>
 
             </div>
           </div>
 
-          <div class="row justify-content-center">
+          <div class="row justify-content-center pt-3">
             <div class="col-auto">
 
               <form action="../vista/inicio.php?mod=7&acc=agendamiento_asistente" method="post">
@@ -220,7 +220,7 @@
                 <input type="hidden" name="tipo_consulta" id="tipo_consulta" value="certificado">
                 <input type="hidden" name="txt_fecha_consulta" id="txt_fecha_consulta" class="form-control form-control-sm" value="<?php echo date('Y-m-d'); ?>" readonly>
 
-                <button type="submit" class="btn btn-primary btn-lg m-4"><i class='bx bx-file-blank'></i> Certificado</button>
+                <button type="submit" class="btn btn-primary btn-lg m-0 p-3"><i class='bx bx-file-blank'></i> Certificado</button>
 
               </form>
 

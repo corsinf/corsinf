@@ -44,7 +44,7 @@
     <div class="row pt-3">
         <div class="col-md-12">
             <label for="" class="form-label fw-bold">Motivo de la consulta <label style="color: red;">*</label> </label>
-            <textarea name="sa_conp_motivo_consulta" id="sa_conp_motivo_consulta" cols="30" rows="4" class="form-control" placeholder="Motivo de la consulta"></textarea>
+            <textarea name="sa_conp_motivo_consulta" id="sa_conp_motivo_consulta" cols="30" rows="4" class="form-control" placeholder="Motivo de la consulta" maxlength="1000"></textarea>
         </div>
     </div>
 </div>
