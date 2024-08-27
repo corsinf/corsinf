@@ -226,7 +226,12 @@ if ($btn_regresar == '') {
                         $("#pnl_farmacologia").hide();
                     }
 
-
+                    // Para autorizar al paciente recibir medicamentos 
+                    if (response[0].sa_fice_autoriza_medicamentos == 1) {
+                        $('#chk_terminos_medicamentos').prop('checked', true);
+                    } else {
+                        $('#chk_terminos_medicamentos').prop('checked', false);
+                    }
 
                 }
             });
@@ -285,6 +290,8 @@ if ($btn_regresar == '') {
 
             var sa_fice_medicamentos_alergia = $('input[name=sa_fice_medicamentos_alergia]:checked').val();
 
+            var sa_fice_autoriza_medicamentos = $('#chk_terminos_medicamentos').is(':checked') ? 1 : 0;
+
             // Crear objeto de parámetros
 
             var parametros = {
@@ -323,6 +330,7 @@ if ($btn_regresar == '') {
                 'sa_fice_pregunta_4_obs': sa_fice_pregunta_4_obs,
                 'sa_fice_pregunta_5_obs': sa_fice_pregunta_5_obs,
                 'sa_fice_medicamentos_alergia': sa_fice_medicamentos_alergia,
+                'sa_fice_autoriza_medicamentos': sa_fice_autoriza_medicamentos,
             };
 
             if (sa_fice_id != '') {
@@ -908,19 +916,19 @@ if ($btn_regresar == '') {
                                                     <div id="pnl_farmacologia" style="display: none;">
                                                         <div class="row pt-3">
 
-                                                            <div class="col-md-3">
+                                                            <div class="col-md-3" hidden>
                                                                 <label for="tipo_farmacologia" class="form-label fw-bold">Farmacología <label style="color: red;">*</label> </label>
-                                                                <select class="form-select form-select-sm" id="tipo_farmacologia" name="tipo_farmacologia" onchange="consultar_medicinas_insumos(this.value);">
-                                                                    <option selected disabled>-- Seleccione --</option>
-                                                                    <option value="medicamentos">Medicamentos</option>
-                                                                    <option value="insumos">Insumos</option>
+                                                                <select class="form-select form-select-sm" id="tipo_farmacologia" name="tipo_farmacologia" disabled>
+                                                                    <!-- <option selected disabled>-- Seleccione --</option> -->
+                                                                    <option selected value="medicamentos">Medicamentos</option>
+                                                                    <!-- <option value="insumos">Insumos</option> -->
                                                                 </select>
                                                             </div>
 
                                                             <div class="col-md-5">
-                                                                <label for="tipo_farmacologia_presentacion" class="form-label fw-bold">Presentación <label style="color: red;">*</label> </label>
+                                                                <label for="tipo_farmacologia_presentacion" class="form-label fw-bold">Medicamentos <label style="color: red;">*</label> </label>
                                                                 <select class="form-select form-select-sm" id="tipo_farmacologia_presentacion" name="tipo_farmacologia_presentacion">
-                                                                    <option selected disabled>-- Seleccione --</option>
+                                                                    <option selected>-- Seleccione --</option>
                                                                 </select>
                                                             </div>
 
@@ -946,7 +954,7 @@ if ($btn_regresar == '') {
                                                                         <tr>
                                                                             <th width="2%"><input id="checkAll_Medicamentos" class="form-check" type="checkbox"></th>
 
-                                                                            <th width="98%">Farmacología</th>
+                                                                            <th width="98%">Medicamentos</th>
 
                                                                         </tr>
 
@@ -971,54 +979,82 @@ if ($btn_regresar == '') {
 
                                         <div class="card bg-transparent shadow-none">
                                             <div class="card-body">
-                                                <div class="alert border-0 border-start border-5 border-dark alert-dismissible fade show">
-                                                    <br>
+
+                                                <div class="row">
+                                                    <div class="alert border-0 border-start border-5 border-dark alert-dismissible fade show">
+                                                        <br>
+                                                        <div class="row">
+                                                            <div class="col-12">
+                                                                <p><b>Consentimiento para el Uso de Medicamentos</b></p>
+                                                            </div>
+
+                                                            <div class="col-12 mx-4 text-start">
+
+                                                                <p>Para garantizar un tratamiento médico adecuado, solicitamos su consentimiento para que los doctores y profesionales de la institución administren y supervisen el uso de medicamentos durante su atención.</p>
 
 
-                                                    <div class="row">
+                                                                <p>Al hacer clic en "Aceptar términos y condiciones," usted autoriza la administración de los medicamentos necesarios para su tratamiento.</p>
 
-                                                        <div class="col-12">
-                                                            <p><b>Consentimiento para el Uso de Datos de Ficha Médica</b></p>
+                                                            </div>
 
-                                                        </div>
-
-                                                        <div class="col-12 mx-4 text-start">
-
-                                                            <p>Para garantizar una atención médica eficaz, solicitamos su consentimiento para que los doctores y profesionales de la salud accedan y utilicen la información de su ficha médica.</p>
-
-
-                                                            <p>Al dar click en aceptar términos y condiciones, usted autoriza el acceso a su ficha médica para brindarle una atención médica adecuada.</p>
-
-                                                        </div>
-
-                                                        <div class="col-12 mx-4">
-                                                            <div class="form-check">
-                                                                <input class="form-check-input" type="checkbox" id="chk_terminos">
-                                                                <label class="form-check-label" for="chk_terminos">Aceptar términos y condiciones</label>
+                                                            <div class="col-12 mx-4">
+                                                                <div class="form-check">
+                                                                    <input class="form-check-input" type="checkbox" id="chk_terminos_medicamentos">
+                                                                    <label class="form-check-label" for="chk_terminos_medicamentos">Aceptar términos y condiciones</label>
+                                                                </div>
                                                             </div>
                                                         </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="row pt-4">
+                                                    <div class="alert border-0 border-start border-5 border-dark alert-dismissible fade show pt-4">
+                                                        <br>
+                                                        <div>
+                                                            <div class="col-12">
+                                                                <p><b>Consentimiento para el Uso de Datos de Ficha Médica</b></p>
+                                                            </div>
+
+                                                            <div class="col-12 mx-4 text-start">
+
+                                                                <p>Para garantizar una atención médica eficaz, solicitamos su consentimiento para que los doctores y profesionales de la salud accedan y utilicen la información de su ficha médica.</p>
+
+
+                                                                <p>Al dar click en aceptar términos y condiciones, usted autoriza el acceso a su ficha médica para brindarle una atención médica adecuada.</p>
+
+                                                            </div>
+
+                                                            <div class="col-12 mx-4">
+                                                                <div class="form-check">
+                                                                    <input class="form-check-input" type="checkbox" id="chk_terminos">
+                                                                    <label class="form-check-label" for="chk_terminos">Aceptar términos y condiciones</label>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
 
                                                         <div class="modal-footer pt-4">
                                                             <button class="btn btn-success px-4 m-1" onclick="editar_insertar()" type="button" id="btn_editar_fm" style="display: none;"><i class="bx bx-save"></i> Guardar Datos</button>
                                                         </div>
 
+
+                                                        <script>
+                                                            // Agrega un evento de escucha al cambio en la casilla de verificación usando jQuery
+                                                            $('#chk_terminos').change(function() {
+                                                                // Verifica si la casilla de verificación está marcada
+                                                                if ($(this).prop('checked')) {
+                                                                    // Muestra el botón usando jQuery
+                                                                    $('#btn_editar_fm').show();
+                                                                } else {
+                                                                    // Oculta el botón si la casilla de verificación no está marcada
+                                                                    $('#btn_editar_fm').hide();
+                                                                }
+                                                            });
+                                                        </script>
+
                                                     </div>
-
-                                                    <script>
-                                                        // Agrega un evento de escucha al cambio en la casilla de verificación usando jQuery
-                                                        $('#chk_terminos').change(function() {
-                                                            // Verifica si la casilla de verificación está marcada
-                                                            if ($(this).prop('checked')) {
-                                                                // Muestra el botón usando jQuery
-                                                                $('#btn_editar_fm').show();
-                                                            } else {
-                                                                // Oculta el botón si la casilla de verificación no está marcada
-                                                                $('#btn_editar_fm').hide();
-                                                            }
-                                                        });
-                                                    </script>
-
                                                 </div>
+
                                             </div>
                                         </div>
                                     </div>
