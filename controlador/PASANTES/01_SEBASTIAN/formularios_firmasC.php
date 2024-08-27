@@ -90,7 +90,7 @@ class formularios_firmasC
         $pdf->Cell(90, 7, utf8_decode($fir_sol_nombres_completos), 1, 1, 'L');
 
         $pdf->SetFont('Arial', 'B', 9);
-        $pdf->Cell(64, 7, utf8_decode('NÚMERO DE RUC:'), 1, 0, 'L');
+        $pdf->Cell(64, 7, utf8_decode('NÚMERO DE CEDULA O PASAPORTE:'), 1, 0, 'L');
         $pdf->SetFont('Arial', '', 9);
         $pdf->Cell(90, 7, utf8_decode($fir_sol_numero_identificacion), 1, 1, 'L');
 
@@ -191,8 +191,8 @@ Atentamente,';
             $fir_sol_direccion_ruc_juridico = $parametros['txt_direccion_ruc'];
         }
         $fir_sol_ruc_juridico = '';
-        if (!empty($parametros['txt_ruc'])) {
-            $fir_sol_ruc_juridico = $parametros['txt_ruc'];
+        if (!empty($parametros['txt_ruc_juridico'])) {
+            $fir_sol_ruc_juridico = $parametros['txt_ruc_juridico'];
         }
         $fir_sol_correo_empresarial = '';
         if (!empty($parametros['txt_correo_empresarial'])) {
@@ -200,7 +200,7 @@ Atentamente,';
         }
         $fir_sol_direccion_domicilio = '';
         if (!empty($parametros['txt_direccion_domicilio'])) {
-            $fir_direccion_domicilio = $parametros['txt_direccion_domicilio'];
+            $fir_sol_direccion_domicilio = $parametros['txt_direccion_domicilio'];
         }
         $fir_sol_correo = '';
         if (!empty($parametros['txt_correo'])) {

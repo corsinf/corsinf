@@ -106,17 +106,6 @@
         } else if (tipo_formulario == 'persona_juridica') {
             return window.open('../controlador/PASANTES/01_SEBASTIAN/formularios_firmasC_Adrian.php?persona_juridica=true&id=' + id, '_blank');
         }
-
-        // $.ajax({
-        //     data:  {id: 1},
-        //     url: '../controlador/PASANTES/01_SEBASTIAN/formularios_firmasC.php?persona_natural=true',
-        //     type: 'post',
-        //     dataType: 'json',
-        //     success: function(response) {
-        //         console.log(response);
-        //         location.href = 'http://localhost/corsinf/controlador/PASANTES/01_SEBASTIAN/formularios_firmasC.php?persona_natural=true';
-        //     }
-        // });
     }
 </script>
 
