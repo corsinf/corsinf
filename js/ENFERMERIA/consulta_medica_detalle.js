@@ -43,9 +43,15 @@ $(document).ready(function () {
 
         var stock = $('#stock_farmacologia').val();
         var cant = $('#cantidad_farmacologia').val();
+        //alert(parseFloat(stock))
+        if (cant == '') { Swal.fire('', 'Ingrese un valor valido', 'info'); return false; }
 
-        if (cant == '' || cant == '0') { Swal.fire('', 'Ingrese un valor valido', 'info'); return false; }
-        if (parseFloat(cant) > parseFloat(stock)) { Swal.fire('', 'Valor supera al stock', 'info'); return false; }
+        //if (parseFloat(cant) > parseFloat(stock) && parseFloat(stock) === 0) { Swal.fire('', 'Valor supera al stock', 'info'); return false; }
+
+        if ((parseFloat(cant) > parseFloat(stock)) && parseFloat(stock) === 0) {
+            Swal.fire('', 'Valor supera al stock', 'info');
+            return false;
+        }
 
         var farmaco = $("#tipo_farmacologia_presentacion option:selected").text();
         var farmaco = farmaco.split('-');
@@ -68,7 +74,7 @@ $(document).ready(function () {
             htmlFila += '<td><input class="itemFila_Medicamento" type="checkbox"></td>';
             htmlFila += '<td><label id="sa_det_conp_nombre_temp_' + count_medicamento + '"></label></td>';
             htmlFila += '<td><input type="text" class="form-control form-control-sm" id="sa_det_conp_dosificacion_' + count_medicamento + '" name="sa_det_conp_dosificacion[]"></td>';
-            htmlFila += '<td><input type="number" class="form-control form-control-sm solo_numeros" min="1" id="sa_det_conp_cantidad_' + count_medicamento + '" name="sa_det_conp_cantidad[]" onblur="limitarMaximo(' + count_medicamento + ')" max="' + stock + '" value="' + cant + '"></td>';
+            htmlFila += '<td><input disabled type="number" class="form-control form-control-sm solo_numeros_int" min="1" id="sa_det_conp_cantidad_' + count_medicamento + '" name="sa_det_conp_cantidad[]" onblur="limitarMaximo(' + count_medicamento + ')" max="' + stock + '" value="' + cant + '"></td>';
 
             htmlFila += '<td><div class="form-check d-flex justify-content-center">';
             htmlFila += '<input class="form-check-input" type="checkbox" value="" id="sa_det_conp_estado_entrega_' + count_medicamento + '" name="sa_det_conp_estado_entrega_' + count_medicamento + '" checked>';
@@ -340,7 +346,7 @@ function cargar_farmacologia(id_consulta) {
                     htmlFila += '<td><input class="itemFila_Medicamento" type="checkbox"></td>';
                     htmlFila += '<td><label id="sa_det_conp_nombre_temp_' + count_medicamento + '">' + medicamento.sa_det_conp_nombre + '</label></td>';
                     htmlFila += '<td><input type="text" class="form-control form-control-sm" id="sa_det_conp_dosificacion_' + count_medicamento + '" name="sa_det_conp_dosificacion[]" value="' + medicamento.sa_det_conp_dosificacion + '"></td>';
-                    htmlFila += '<td><input type="number" class="form-control form-control-sm solo_numeros" min="1" id="sa_det_conp_cantidad_' + count_medicamento + '" name="sa_det_conp_cantidad[]" value="' + medicamento.sa_det_conp_cantidad + '"></td>';
+                    htmlFila += '<td><input disabled type="number" class="form-control form-control-sm solo_numeros_int" min="1" id="sa_det_conp_cantidad_' + count_medicamento + '" name="sa_det_conp_cantidad[]" value="' + medicamento.sa_det_conp_cantidad + '"></td>';
 
                     var checked = medicamento.sa_det_conp_estado_entrega === 1 ? 'checked' : '';
                     htmlFila += '<td>';
