@@ -48,7 +48,7 @@ $(document).ready(function () {
 
         //if (parseFloat(cant) > parseFloat(stock) && parseFloat(stock) === 0) { Swal.fire('', 'Valor supera al stock', 'info'); return false; }
 
-        if ((parseFloat(cant) > parseFloat(stock))) {
+        if ((parseFloat(cant) > parseFloat(stock)) || stock == 0) {
             Swal.fire('', 'Valor supera al stock', 'info');
             return false;
         }
