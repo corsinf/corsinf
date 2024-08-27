@@ -278,17 +278,19 @@ foto,link_fb,link_gmail,link_ins,link_tw,link_web";
 
 	function credenciales_no_concurentes_campos()
 	{
-		$usuario= $_SESSION['INICIO']['NO_CONCURENTE'];
+		$tipo= $_SESSION['INICIO']['PERFIL'];
 		$tabla= $_SESSION['INICIO']['NO_CONCURENTE_TABLA'];
 		$campo= $_SESSION['INICIO']['NO_CONCURENTE_TABLA_ID'];
 		$empresa = $_SESSION['INICIO']['ID_EMPRESA'];
+
 
 		$sql = "SELECT Campo_Usuario as 'usu',Campo_pass as 'pass'
 		FROM TABLAS_NOCONCURENTE
 		WHERE Tabla = '".$tabla."'
 		AND Id_Empresa = '".$empresa."'
-		AND Id_Usuario = '".$usuario."'";
+		AND tipo_perfil = '".$tipo."'";
 		$datos = $this->db->datos($sql,1);
+		// print_r($datos);die();
 		return $datos;
 	}
 	function credenciales_no_concurentes_datos($campo_usu,$campo_pass)
