@@ -103,7 +103,9 @@ class ficha_MedicaM
                     sa_fice_medicamentos_alergia,
 
                     sa_fice_rep_1_cedula,
-                    sa_fice_rep_2_cedula
+                    sa_fice_rep_2_cedula,
+
+                    sa_fice_autoriza_medicamentos
 
                     FROM ficha_medica
                     WHERE sa_fice_estado = 1";
@@ -170,7 +172,9 @@ class ficha_MedicaM
                         sa_fice_medicamentos_alergia,
                         
                         sa_fice_rep_1_cedula,
-                        sa_fice_rep_2_cedula
+                        sa_fice_rep_2_cedula,
+
+                        sa_fice_autoriza_medicamentos
     
                         FROM ficha_medica
                         WHERE sa_fice_estado = 1";
@@ -243,7 +247,9 @@ class ficha_MedicaM
         sa_fice_medicamentos_alergia,
 
         sa_fice_rep_1_cedula,
-        sa_fice_rep_2_cedula
+        sa_fice_rep_2_cedula,
+
+        sa_fice_autoriza_medicamentos
         
         FROM ficha_medica
         WHERE sa_fice_id = '" . $buscar . "'";
