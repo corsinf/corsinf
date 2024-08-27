@@ -124,9 +124,9 @@
                                                     </div>
                                                 </div>
                                                 <div class="row mb-3">
-                                                    <label for="txt_numero_identificacion" class="col-sm-4 col-form-label">N&uacute;mero de C&eacute;dula o Pasaporte</label>
+                                                    <label for="txt_numero_identificacion" class="col-sm-4 col-form-label">N&uacute;mero de RUC</label>
                                                     <div class="col-sm-8">
-                                                        <input type="text" class="form-control form-control-sm" id="txt_numero_identificacion" placeholder="N&uacute;mero de C&eacute;dula o Pasaporte" maxlength="10">
+                                                        <input type="text" class="form-control form-control-sm" id="txt_numero_identificacion" placeholder="N&uacute;mero de RUC" maxlength="13">
                                                     </div>
                                                 </div>
                                                 <div class="row mb-3">
