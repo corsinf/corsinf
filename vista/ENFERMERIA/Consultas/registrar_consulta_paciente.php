@@ -1055,12 +1055,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                     <div class="row pt-1">
                                                         <div class="col-md-3">
                                                             <label for="" class="form-label fw-bold">Certificado por Salud <label style="color: red;">*</label> </label>
-                                                            <input type="text" class="form-control form-control-sm" id="sa_conp_salud_certificado" name="sa_conp_salud_certificado">
+                                                            <input type="text" class="form-control form-control-sm" id="sa_conp_salud_certificado" name="sa_conp_salud_certificado" maxlength="1000">
                                                         </div>
 
                                                         <div class="col-md-9">
                                                             <label for="" class="form-label fw-bold">Motivo Certificado <label style="color: red;">*</label> </label>
-                                                            <input type="text" class="form-control form-control-sm" id="sa_conp_motivo_certificado" name="sa_conp_motivo_certificado">
+                                                            <input type="text" class="form-control form-control-sm" id="sa_conp_motivo_certificado" name="sa_conp_motivo_certificado" maxlength="1000">
                                                         </div>
                                                     </div>
 
@@ -1096,7 +1096,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                         </div>
                                                         <div class="col-md-3">
                                                             <label for="" class="form-label fw-bold"># Días de Permiso <label style="color: red;">*</label> </label>
-                                                            <input type="text" class="form-control form-control-sm" id="sa_conp_dias_permiso_certificado" name="sa_conp_dias_permiso_certificado">
+                                                            <input type="text" class="form-control form-control-sm" id="sa_conp_dias_permiso_certificado" name="sa_conp_dias_permiso_certificado" readonly>
                                                         </div>
                                                     </div>
 
@@ -1653,7 +1653,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                         <div class="row pt-3" id="pnl_contactos_salida">
                                                             <div class="col-md-4">
                                                                 <label for="" class="form-label fw-bold" id="lbl_telefono_emergencia">Viene desde el Paciente </label>
-                                                                <input type="text" class="form-control form-control-sm" id="sa_conp_permiso_telefono_padre" name="sa_conp_permiso_telefono_padre">
+                                                                <input type="text" class="form-control form-control-sm solo_numeros_int" id="sa_conp_permiso_telefono_padre" name="sa_conp_permiso_telefono_padre" maxlength="15">
                                                                 <div class="form-check">
                                                                     <input class="form-check-input" type="checkbox" id="chx_representante" checked>
                                                                     <label class="form-check-label" for="chx_representante">Enviar Correo</label>
@@ -1667,7 +1667,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                                                             <div class="col-md-4" id="pnl_representante_2" style="display: none;">
                                                                 <label for="" class="form-label fw-bold" id="lbl_telefono_emergencia_2">Telefono Representante 2 <label style="color: red;">*</label> </label>
-                                                                <input type="text" class="form-control form-control-sm" id="sa_conp_permiso_telefono_padre_2" name="sa_conp_permiso_telefono_padre_2">
+                                                                <input type="text" class="form-control form-control-sm solo_numeros_int" id="sa_conp_permiso_telefono_padre_2" name="sa_conp_permiso_telefono_padre_2" maxlength="15" readonly>
                                                                 <div class="form-check">
                                                                     <input class="form-check-input" type="checkbox" id="chx_representante_2" checked>
                                                                     <label class="form-check-label" for="chx_representante_2">Enviar Correo</label>
@@ -1761,7 +1761,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                             <div class="row pt-3">
                                                                 <div class="col-md-4">
                                                                     <label for="" class="form-label fw-bold">Teléfono Seguro <label style="color: red;">*</label> </label>
-                                                                    <input type="text" class="form-control form-control-sm" id="sa_conp_permiso_telefono_seguro" name="sa_conp_permiso_telefono_seguro">
+                                                                    <input type="text" class="form-control form-control-sm solo_numeros_int" id="sa_conp_permiso_telefono_seguro" name="sa_conp_permiso_telefono_seguro" maxlength="15">
                                                                 </div>
 
                                                             </div>
