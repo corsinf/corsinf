@@ -35,7 +35,8 @@ if (isset($_GET['btn_regresar'])) {
         $btn_regresar = '../vista/inicio.php?acc=consultas';
     } else if ($btn_regresar == 'represententes_consulta') {
         $id_estudiante = $_GET['id_estudiante'] ?? '';
-        $btn_regresar = '../vista/inicio.php?mod=7&acc=perfil_estudiante_salud&id_estudiante='.$id_estudiante;
+        $paralelo = $_GET['paralelo'] ?? '';
+        $btn_regresar = '../vista/inicio.php?mod=7&acc=perfil_estudiante_salud&id_estudiante=' . $id_estudiante . '&paralelo=' . $paralelo;
     } else {
         $btn_regresar = '../vista/inicio.php?mod=7&acc=index';
     }

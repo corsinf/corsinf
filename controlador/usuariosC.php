@@ -541,6 +541,7 @@ class usuariosC
 		{
 			$datos  = $this->modelo->no_concurente_data();
 			$datosNOCon = $this->modelo->credenciales_no_concurentes_campos();
+			// print_r($datosNOCon);die();
 			if(count($datosNOCon)>0)
 			{
 				$datosNo = $this->modelo->credenciales_no_concurentes_datos($datosNOCon[0]['usu'],$datosNOCon[0]['pass']);

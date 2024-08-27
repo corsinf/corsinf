@@ -345,7 +345,7 @@
 		align-items: center;
 		width: 100%;
 		min-height: 100vh;
-		background: url(img/inicio/login1.webp);
+		background: url(img/inicio/login6.webp);
 		background-position: center;
 		background-size: cover;
 	}
@@ -377,9 +377,9 @@
 					<div class="input-contenedor">
 						<div id="show_hide_password">
 							<!-- <i class='bx bxs-lock-alt'></i> -->
-							<a href="javascript:;" class=""><i class='bx bx-hide'></i></a>
 							<input type="password" class="m-1" id="pass" name="pass" placeholder="" autocomplete="current-password" required> <!-- <a href="javascript:;" class="input-group-text bg-transparent"><i class='bx bx-hide'></i></a> -->
 							<label for="pass">Contraseña</label>
+							<a href="javascript:;" class=""><i class='bx bx-hide'></i></a>
 						</div>
 					</div>
 
