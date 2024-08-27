@@ -44,11 +44,11 @@ $(document).ready(function () {
         var stock = $('#stock_farmacologia').val();
         var cant = $('#cantidad_farmacologia').val();
         //alert(parseFloat(stock))
-        if (cant == '') { Swal.fire('', 'Ingrese un valor valido', 'info'); return false; }
+        if (cant == '' || cant < 0) { Swal.fire('', 'Ingrese un valor valido', 'info'); return false; }
 
         //if (parseFloat(cant) > parseFloat(stock) && parseFloat(stock) === 0) { Swal.fire('', 'Valor supera al stock', 'info'); return false; }
 
-        if ((parseFloat(cant) > parseFloat(stock)) && parseFloat(stock) === 0) {
+        if ((parseFloat(cant) > parseFloat(stock))) {
             Swal.fire('', 'Valor supera al stock', 'info');
             return false;
         }

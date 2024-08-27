@@ -103,4 +103,15 @@ function base_url() {
     return (window.document.location.origin + "/" + window.location.pathname.split('/')[1]);
 }
 
+$(document).on('input', '.solo_numeros_int', function (event) {
+    // Convertir el valor a entero
+    var value = $(this).val();
+
+    // Eliminar cualquier cosa que no sea un número
+    value = value.replace(/[^0-9]/g, '');
+
+    // Actualizar el valor del campo
+    $(this).val(value);
+});
+
 
