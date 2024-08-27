@@ -718,7 +718,7 @@
                                                             <input type="" name="" id="txt_telefono" class="form-control form-control-sm" value="">
                                                         </td>
                                                     </tr>
-                                                    <tr>
+                                                    <tr hidden>
                                                         <td colspan="2" class="text-end">
                                                             <button class="btn btn-sm btn-primary" onclick="editar_datos()">Guardar</button>
                                                         </td>

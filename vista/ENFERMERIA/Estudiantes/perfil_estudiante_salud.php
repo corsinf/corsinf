@@ -394,7 +394,7 @@ if (isset($_GET['paralelo'])) {
 
     function ver_pdf(id_consulta, tipo_consulta, id_estudiante) {
         //console.log(id_consulta);
-        window.location.href = '../vista/inicio.php?mod=7&acc=detalle_consulta&pdf_consulta=true&id_consulta=' + id_consulta + '&id_estudiante=' + id_estudiante + '&btn_regresar=represententes_consulta' + '&tipo_consulta=' + tipo_consulta;
+        window.location.href = '../vista/inicio.php?mod=7&acc=detalle_consulta&pdf_consulta=true&id_consulta=' + id_consulta + '&id_estudiante=' + id_estudiante + '&btn_regresar=represententes_consulta' + '&tipo_consulta=' + tipo_consulta+ '&paralelo=' + '<?= $paralelo; ?>';;
     }
 
     //Datos del paciente
