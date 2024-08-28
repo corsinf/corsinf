@@ -37,9 +37,11 @@
             dataType: 'json',
             success: function(response) {
                 if (response == 1) {
-                    alert('Ingresado')
+                    Swal.fire('', 'Operacion realizada con exito.', 'success').then(function() {
+                        location.href = 'http://localhost/corsinf/vista/inicio.php?mod=1010&acc=solicitudes';
+                    });
                 } else {
-                    alert('Error')
+                    Swal.fire('', 'Operación fallida', 'error');
                 }
             }
         });
@@ -132,7 +134,7 @@
         if (allFilled) {
             insertar();
         } else {
-            alert('Por favor, complete todos los campos obligatorios.');
+            Swal.fire('', 'Operación fallida', 'error');
         }
     }
 </script>
@@ -193,67 +195,78 @@
                                                 <div class="row mb-3">
                                                     <label for="txt_primer_nombre" class="col-sm-4 col-form-label">Primer Nombre</label>
                                                     <div class="col-sm-8">
-                                                        <input type="text" class="form-control form-control-sm" id="txt_primer_nombre" placeholder="Primer Nombre" maxlength="20" oninput="this.value = this.value.replace(/[^a-zA-ZñÑ\s]/g, '')"> 
+                                                        <input type="text" class="form-control form-control-sm" id="txt_primer_nombre" placeholder="Primer Nombre" maxlength="20" oninput="this.value = this.value.replace(/[^a-zA-ZñÑ\s]/g, '')">
+                                                        <div class="invalid-feedback">Porfavor ingresa un nombre valido</div> 
                                                     </div>
                                                 </div>
                                                 <div class="row mb-3">
                                                     <label for="txt_segundo_nombre" class="col-sm-4 col-form-label">Segundo Nombre</label>
                                                     <div class="col-sm-8">
                                                         <input type="text" class="form-control form-control-sm" id="txt_segundo_nombre" placeholder="Segundo Nombre" maxlength="20" oninput="this.value = this.value.replace(/[^a-zA-ZñÑ\s]/g, '')">
+                                                        <div class="invalid-feedback">Porfavor ingresa un nombre valido</div> 
                                                     </div>
                                                 </div>
                                                 <div class="row mb-3">
                                                     <label for="txt_primer_apellido" class="col-sm-4 col-form-label">Primer Apellido</label>
                                                     <div class="col-sm-8">
                                                         <input type="text" class="form-control form-control-sm" id="txt_primer_apellido" placeholder="Primer Apellido" maxlength="20" oninput="this.value = this.value.replace(/[^a-zA-ZñÑ\s]/g, '')">
+                                                        <div class="invalid-feedback">Porfavor ingresa un apellido valido</div> 
                                                     </div>
                                                 </div>
                                                 <div class="row mb-3">
                                                     <label for="txt_segundo_apellido" class="col-sm-4 col-form-label">Segundo Apellido</label>
                                                     <div class="col-sm-8">
                                                         <input type="text" class="form-control form-control-sm" id="txt_segundo_apellido" placeholder="Segundo Apellido" maxlength="20" oninput="this.value = this.value.replace(/[^a-zA-ZñÑ\s]/g, '')">
+                                                        <div class="invalid-feedback">Porfavor ingresa un apellido valido</div>
                                                     </div>
                                                 </div>
                                                 <div class="row mb-3">
                                                     <label for="txt_numero_identificacion" class="col-sm-4 col-form-label">Número de C&eacute;dula o Pasaporte</label>
                                                     <div class="col-sm-8">
                                                         <input type="text" class="form-control form-control-sm" id="txt_numero_identificacion" placeholder="Número de C&eacute;dula o Pasaporte" maxlength="10" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+                                                        <div class="invalid-feedback">Porfavor ingresa un número de cédula o pasaporte valido</div>
                                                     </div>
                                                 </div>
                                                 <div class="row mb-3">
                                                     <label for="txt_direccion_domicilio" class="col-sm-4 col-form-label">Dirección Domicilio</label>
                                                     <div class="col-sm-8">
                                                         <input type="text" class="form-control form-control-sm" id="txt_direccion_domicilio" placeholder="Dirección Domicilio" maxlength="150">
+                                                        <div class="invalid-feedback">Porfavor ingresa una dirección valida</div>
                                                     </div>
                                                 </div>
                                                 <div class="row mb-3">
                                                     <label for="txt_provincia" class="col-sm-4 col-form-label">Provincia</label>
                                                     <div class="col-sm-8">
                                                         <input type="text" class="form-control form-control-sm" id="txt_provincia" placeholder="Provincia" maxlength="27" oninput="this.value = this.value.replace(/[^a-zA-ZñÑ\s]/g, '')">
+                                                        <div class="invalid-feedback">Porfavor ingresa una provincia valida</div>
                                                     </div>
                                                 </div>
                                                 <div class="row mb-3">
                                                     <label for="txt_ciudad" class="col-sm-4 col-form-label">Ciudad</label>
                                                     <div class="col-sm-8">
                                                         <input type="text" class="form-control form-control-sm" id="txt_ciudad" placeholder="Ciudad" maxlength="38" oninput="this.value = this.value.replace(/[^a-zA-ZñÑ\s]/g, '')">
+                                                        <div class="invalid-feedback">Porfavor ingresa una ciudad valida</div>
                                                     </div>
                                                 </div>
                                                 <div class="row mb-3">
                                                     <label for="txt_correo" class="col-sm-4 col-form-label">Correo Electrónico</label>
                                                     <div class="col-sm-8">
                                                         <input type="email" class="form-control form-control-sm" id="txt_correo" placeholder="Correo Electrónico" maxlenght="150">
+                                                        <div class="invalid-feedback">Porfavor ingresa un correo valido</div>
                                                     </div>
                                                 </div>
                                                 <div class="row mb-3">
                                                     <label for="txt_celular" class="col-sm-4 col-form-label">No. Celular</label>
                                                     <div class="col-sm-8">
                                                         <input type="tel" class="form-control form-control-sm" id="txt_celular" placeholder="No. Celular (Poner código de país)" maxlength="13" oninput="this.value = this.value.replace(/[^0-9+]/g, '')">
+                                                        <div class="invalid-feedback">Porfavor ingresa un número de celular valido</div>
                                                     </div>
                                                 </div>
                                                 <div class="row mb-3">
                                                     <label for="txt_fijo" class="col-sm-4 col-form-label">No. Fijo</label>
                                                     <div class="col-sm-8">
                                                         <input type="tel" class="form-control form-control-sm" id="txt_fijo" placeholder="No. Fijo (Poner código de país)" maxlength="9" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+                                                        <div class="invalid-feedback">Porfavor ingresa un número fijo valido</div>
                                                     </div>
                                                 </div>
                                                 <div class="row">
