@@ -44,6 +44,97 @@
             }
         });
     }
+
+    function validar() {
+        var txt_primer_nombre = $('#txt_primer_nombre').val().trim();
+        var txt_segundo_nombre = $('#txt_segundo_nombre').val().trim();
+        var txt_primer_apellido = $('#txt_primer_apellido').val().trim();
+        var txt_segundo_apellido = $('#txt_segundo_apellido').val().trim();
+        var txt_numero_identificacion = $('#txt_numero_identificacion').val().trim();
+        var txt_direccion_domicilio = $('#txt_direccion_domicilio').val().trim();
+        var txt_provincia = $('#txt_provincia').val().trim();
+        var txt_ciudad = $('#txt_ciudad').val().trim();
+        var txt_correo = $('#txt_correo').val().trim();
+        var txt_celular = $('#txt_celular').val().trim();
+        var txt_fijo = $('#txt_fijo').val().trim();
+        var allFilled = true;
+
+        if (!txt_primer_nombre) {
+            $('#txt_primer_nombre').addClass('is-invalid');
+            allFilled = false;
+        } else {
+            $('#txt_primer_nombre').removeClass('is-invalid');
+        }
+
+        if (!txt_segundo_nombre) {
+            $('#txt_segundo_nombre').addClass('is-invalid');
+            allFilled = false;
+        } else {
+            $('#txt_segundo_nombre').removeClass('is-invalid');
+        }
+
+        if (!txt_primer_apellido) {
+            $('#txt_primer_apellido').addClass('is-invalid');
+            allFilled = false;
+        } else {
+            $('#txt_primer_apellido').removeClass('is-invalid');
+        }
+
+        if (!txt_segundo_apellido) {
+            $('#txt_segundo_apellido').addClass('is-invalid');
+            allFilled = false;
+        } else {
+            $('#txt_segundo_apellido').removeClass('is-invalid');
+        }
+
+        if (!txt_numero_identificacion) {
+            $('#txt_numero_identificacion').addClass('is-invalid');
+            allFilled = false;
+        } else {
+            $('#txt_numero_identificacion').removeClass('is-invalid');
+        }
+
+        if (!txt_direccion_domicilio) {
+            $('#txt_direccion_domicilio').addClass('is-invalid');
+            allFilled = false;
+        } else {
+            $('#txt_direccion_domicilio').removeClass('is-invalid');
+        }
+
+        if (!txt_provincia) {
+            $('#txt_provincia').addClass('is-invalid');
+            allFilled = false;
+        } else {
+            $('#txt_provincia').removeClass('is-invalid');
+        }
+
+        if (!txt_ciudad) {
+            $('#txt_ciudad').addClass('is-invalid');
+            allFilled = false;
+        } else {
+            $('#txt_ciudad').removeClass('is-invalid');
+        }
+
+        if (!txt_correo) {
+            $('#txt_correo').addClass('is-invalid');
+            allFilled = false;
+        } else {
+            $('#txt_correo').removeClass('is-invalid');
+        }
+
+        if (!txt_celular) {
+            $('#txt_celular').addClass('is-invalid');
+            allFilled = false;
+        } else {
+            $('#txt_celular').removeClass('is-invalid');
+        }
+
+        if (allFilled) {
+            insertar();
+        } else {
+            alert('Por favor, complete todos los campos obligatorios.');
+        }
+    }
 </script>
 
 <div class="page-wrapper">
@@ -102,31 +193,31 @@
                                                 <div class="row mb-3">
                                                     <label for="txt_primer_nombre" class="col-sm-4 col-form-label">Primer Nombre</label>
                                                     <div class="col-sm-8">
-                                                        <input type="text" class="form-control form-control-sm" id="txt_primer_nombre" placeholder="Primer Nombre" maxlength="20">
+                                                        <input type="text" class="form-control form-control-sm" id="txt_primer_nombre" placeholder="Primer Nombre" maxlength="20" oninput="this.value = this.value.replace(/[^a-zA-ZñÑ\s]/g, '')">
                                                     </div>
                                                 </div>
                                                 <div class="row mb-3">
                                                     <label for="txt_segundo_nombre" class="col-sm-4 col-form-label">Segundo Nombre</label>
                                                     <div class="col-sm-8">
-                                                        <input type="text" class="form-control form-control-sm" id="txt_segundo_nombre" placeholder="Segundo Nombre" maxlength="20">
+                                                        <input type="text" class="form-control form-control-sm" id="txt_segundo_nombre" placeholder="Segundo Nombre" maxlength="20" oninput="this.value = this.value.replace(/[^a-zA-ZñÑ\s]/g, '')">
                                                     </div>
                                                 </div>
                                                 <div class="row mb-3">
                                                     <label for="txt_primer_apellido" class="col-sm-4 col-form-label">Primer Apellido</label>
                                                     <div class="col-sm-8">
-                                                        <input type="text" class="form-control form-control-sm" id="txt_primer_apellido" placeholder="Primer Apellido" maxlength="20">
+                                                        <input type="text" class="form-control form-control-sm" id="txt_primer_apellido" placeholder="Primer Apellido" maxlength="20" oninput="this.value = this.value.replace(/[^a-zA-ZñÑ\s]/g, '')">
                                                     </div>
                                                 </div>
                                                 <div class="row mb-3">
                                                     <label for="txt_segundo_apellido" class="col-sm-4 col-form-label">Segundo Apellido</label>
                                                     <div class="col-sm-8">
-                                                        <input type="text" class="form-control form-control-sm" id="txt_segundo_apellido" placeholder="Segundo Apellido" maxlength="20">
+                                                        <input type="text" class="form-control form-control-sm" id="txt_segundo_apellido" placeholder="Segundo Apellido" maxlength="20" oninput="this.value = this.value.replace(/[^a-zA-ZñÑ\s]/g, '')">
                                                     </div>
                                                 </div>
                                                 <div class="row mb-3">
                                                     <label for="txt_numero_identificacion" class="col-sm-4 col-form-label">N&uacute;mero de RUC</label>
                                                     <div class="col-sm-8">
-                                                        <input type="text" class="form-control form-control-sm" id="txt_numero_identificacion" placeholder="N&uacute;mero de RUC" maxlength="13">
+                                                        <input type="text" class="form-control form-control-sm" id="txt_numero_identificacion" placeholder="N&uacute;mero de RUC" maxlength="13" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
                                                     </div>
                                                 </div>
                                                 <div class="row mb-3">
@@ -138,13 +229,13 @@
                                                 <div class="row mb-3">
                                                     <label for="txt_provincia" class="col-sm-4 col-form-label">Provincia</label>
                                                     <div class="col-sm-8">
-                                                        <input type="text" class="form-control form-control-sm" id="txt_provincia" placeholder="Provincia" maxlength="27">
+                                                        <input type="text" class="form-control form-control-sm" id="txt_provincia" placeholder="Provincia" maxlength="27" oninput="this.value = this.value.replace(/[^a-zA-ZñÑ\s]/g, '')">
                                                     </div>
                                                 </div>
                                                 <div class="row mb-3">
                                                     <label for="txt_ciudad" class="col-sm-4 col-form-label">Ciudad</label>
                                                     <div class="col-sm-8">
-                                                        <input type="text" class="form-control form-control-sm" id="txt_ciudad" placeholder="Ciudad" maxlength="38">
+                                                        <input type="text" class="form-control form-control-sm" id="txt_ciudad" placeholder="Ciudad" maxlength="38" oninput="this.value = this.value.replace(/[^a-zA-ZñÑ\s]/g, '')">
                                                     </div>
                                                 </div>
                                                 <div class="row mb-3">
@@ -156,19 +247,19 @@
                                                 <div class="row mb-3">
                                                     <label for="txt_celular" class="col-sm-4 col-form-label">No. Celular</label>
                                                     <div class="col-sm-8">
-                                                        <input type="tel" class="form-control form-control-sm" id="txt_celular" placeholder="No. Celular (Poner código de país)" maxlength="13">
+                                                        <input type="tel" class="form-control form-control-sm" id="txt_celular" placeholder="No. Celular (Poner código de país)" maxlength="13" oninput="this.value = this.value.replace(/[^0-9+]/g, '')">
                                                     </div>
                                                 </div>
                                                 <div class="row mb-3">
                                                     <label for="txt_fijo" class="col-sm-4 col-form-label">No. Fijo</label>
                                                     <div class="col-sm-8">
-                                                        <input type="tel" class="form-control form-control-sm" id="txt_fijo" placeholder="No. Fijo (Poner código de país)" maxlength="9">
+                                                        <input type="tel" class="form-control form-control-sm" id="txt_fijo" placeholder="No. Fijo (Poner código de país)" maxlength="9" oninput="this.value = this.value.replace(/[^0-9+]/g, '')">
                                                     </div>
                                                 </div>
                                                 <div class="row">
                                                     <div class="col-sm-4"></div>
                                                     <div class="col-sm-8">
-                                                        <button type="button" class="btn btn-success btn-sm px-5" onclick="insertar();">Guardar</button>
+                                                        <button type="button" class="btn btn-success btn-sm px-5" onclick="validar();">Guardar</button>
                                                     </div>
                                                 </div>
                                             </div>

@@ -94,10 +94,27 @@ class formularios_firmasC
         $pdf->SetFont('Arial', '', 9);
         $pdf->Cell(90, 7, utf8_decode($fir_sol_numero_identificacion), 1, 1, 'L');
 
-        $pdf->SetFont('Arial', 'B', 9);
-        $pdf->Cell(64, 7, utf8_decode('DIRECCIÓN DOMICILIO'), 1, 0, 'L');
-        $pdf->SetFont('Arial', '', 9);
-        $pdf->Cell(90, 7, utf8_decode($fir_sol_direccion_domicilio), 1, 1, 'L');
+        if (strlen($fir_sol_direccion_domicilio) > 50 & strlen($fir_sol_direccion_domicilio) < 101) {
+            $pdf->SetFont('Arial', 'B', 9);
+            $pdf->Cell(64, 14, utf8_decode('DIRECCIÓN DOMICILIO'), 1, 0, 'L');
+            $pdf->SetFont('Arial', '', 9);
+            $pdf->MultiCellRow(90, 7, utf8_decode($fir_sol_direccion_domicilio), 1, 1, 'L');
+            $pdf->Ln(14);
+        } else {
+            if (strlen($fir_sol_direccion_domicilio) < 51){
+                $pdf->SetFont('Arial', 'B', 9);
+                $pdf->Cell(64, 7, utf8_decode('DIRECCIÓN DOMICILIO'), 1, 0, 'L');
+                $pdf->SetFont('Arial', '', 9);
+                $pdf->Cell(90, 7, utf8_decode($fir_sol_direccion_domicilio), 1, 1, 'L');
+            }
+            if (strlen($fir_sol_direccion_domicilio) > 100 & strlen($fir_sol_direccion_domicilio) < 151) {
+                $pdf->SetFont('Arial', 'B', 9);
+                $pdf->Cell(64, 21, utf8_decode('DIRECCIÓN DOMICILIO'), 1, 0, 'L');
+                $pdf->SetFont('Arial', '', 9);
+                $pdf->MultiCellRow(90, 7, utf8_decode($fir_sol_direccion_domicilio), 1, 1, 'L');
+                $pdf->Ln(21);
+            }
+        }
 
         $pdf->SetFont('Arial', 'B', 9);
         $pdf->Cell(64, 7, utf8_decode('PROVINCIA'), 1, 0, 'L');
@@ -230,11 +247,27 @@ Atentamente,';
         $pdf->SetFont('Arial', '', 9);
         $pdf->Cell(90, 7, utf8_decode($fir_sol_numero_identificacion), 1, 1, 'L');
 
-        $pdf->SetFont('Arial', 'B', 9);
-        $pdf->Cell(64, 7, utf8_decode('DIRECCIÓN DOMICILIO'), 1, 0, 'L');
-        $pdf->SetFont('Arial', '', 9);
-        $pdf->MultiCellRow(90, 14, utf8_decode($fir_sol_direccion_domicilio), 1, 1, 'L');
-        $pdf->Ln(7);
+        if (strlen($fir_sol_direccion_domicilio) > 50 & strlen($fir_sol_direccion_domicilio) < 101) {
+            $pdf->SetFont('Arial', 'B', 9);
+            $pdf->Cell(64, 14, utf8_decode('DIRECCIÓN DOMICILIO'), 1, 0, 'L');
+            $pdf->SetFont('Arial', '', 9);
+            $pdf->MultiCellRow(90, 7, utf8_decode($fir_sol_direccion_domicilio), 1, 1, 'L');
+            $pdf->Ln(14);
+        } else {
+            if (strlen($fir_sol_direccion_domicilio) < 51){
+                $pdf->SetFont('Arial', 'B', 9);
+                $pdf->Cell(64, 7, utf8_decode('DIRECCIÓN DOMICILIO'), 1, 0, 'L');
+                $pdf->SetFont('Arial', '', 9);
+                $pdf->Cell(90, 7, utf8_decode($fir_sol_direccion_domicilio), 1, 1, 'L');
+            }
+            if (strlen($fir_sol_direccion_domicilio) > 100 & strlen($fir_sol_direccion_domicilio) < 151) {
+                $pdf->SetFont('Arial', 'B', 9);
+                $pdf->Cell(64, 21, utf8_decode('DIRECCIÓN DOMICILIO'), 1, 0, 'L');
+                $pdf->SetFont('Arial', '', 9);
+                $pdf->MultiCellRow(90, 7, utf8_decode($fir_sol_direccion_domicilio), 1, 1, 'L');
+                $pdf->Ln(21);
+            }
+        }
 
         $pdf->SetFont('Arial', 'B', 9);
         $pdf->Cell(64, 7, utf8_decode('PROVINCIA'), 1, 0, 'L');
