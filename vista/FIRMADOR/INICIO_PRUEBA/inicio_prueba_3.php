@@ -510,6 +510,22 @@
                             </div>
                         </a>
                     </div>
+                    <div class="row border mx-0 mb-2 py-2 radius-10 cursor-pointer">
+									<div class="col-sm-9">
+										<div class="d-flex align-items-center">
+											<div class="product-img">
+												<img style="width:70px; height:50px" src="img/de_sistema/sin-logo.png">
+											</div>
+											<div class="flex-grow-1 ms-2">
+												<h6 class="mb-1">FACTURACION - DESARROLLO</h6>
+											</div>
+										</div>
+									</div>
+									<div class="col-sm-3">
+									<br>
+										<div class="badge rounded-pill bg-success w-100">Ingresar</div>
+									</div>									
+								</div>
                 </div>
                 <button type="button" class="btn animation back-link" style="--i:21; --j:4;">Volver</button>
                 <div class="logreg-link animation" style="--i:22; --j:5;">
