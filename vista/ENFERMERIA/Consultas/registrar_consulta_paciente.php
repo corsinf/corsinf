@@ -296,6 +296,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $('#txt_sa_fice_pregunta_4_obs').html(response[0].sa_fice_pregunta_4_obs);
                 $('#txt_sa_fice_pregunta_5_obs').html(response[0].sa_fice_pregunta_5_obs);
                 lista_seguros(response[0].sa_fice_pac_seguro_predeterminado);
+                
+                if(response[0].sa_fice_autoriza_medicamentos == '0'){
+                    $('#recetario_tab_paciente').hide();
+                }
+                
                 // $('#sa_conp_permiso_seguro_traslado').val(response[0].sa_fice_pac_seguro_predeterminado);
             }
         });
@@ -605,6 +610,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         var chx_representante = $('#chx_representante').prop('checked');
         var chx_representante_2 = $('#chx_representante_2').prop('checked');
         //alert(nombre_paciente)
+        //Condicion de alta agregado 21/08/2024
+        var sa_conp_condicion_alta = $('#sa_conp_condicion_alta').val();
 
         // Crear objeto de parámetros
         var parametros = {
@@ -680,6 +687,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'sa_pac_temp_rep2_id': sa_pac_temp_rep2_id,
             'chx_representante': chx_representante,
             'chx_representante_2': chx_representante_2,
+
+            'sa_conp_condicion_alta': sa_conp_condicion_alta,
         };
 
         //alert(sa_conp_tipo_consulta)
@@ -1010,7 +1019,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                     <?php if ($tipo_consulta == 'consulta') { ?>
                                         <li <?php if ($tipo_consulta != 'consulta') {
                                                 echo 'hidden';
-                                            } ?> class="nav-item" role="presentation" id="">
+                                            } ?> class="nav-item" role="presentation" id="recetario_tab_paciente">
                                             <a class="nav-link" data-bs-toggle="tab" href="#recetario_tab" role="tab" aria-selected="false">
                                                 <div class="d-flex align-items-center">
                                                     <div class="tab-icon"><i class='bx bx-receipt font-20 me-1'></i>
@@ -1046,12 +1055,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                     <div class="row pt-1">
                                                         <div class="col-md-3">
                                                             <label for="" class="form-label fw-bold">Certificado por Salud <label style="color: red;">*</label> </label>
-                                                            <input type="text" class="form-control form-control-sm" id="sa_conp_salud_certificado" name="sa_conp_salud_certificado">
+                                                            <input type="text" class="form-control form-control-sm" id="sa_conp_salud_certificado" name="sa_conp_salud_certificado" maxlength="1000">
                                                         </div>
 
                                                         <div class="col-md-9">
                                                             <label for="" class="form-label fw-bold">Motivo Certificado <label style="color: red;">*</label> </label>
-                                                            <input type="text" class="form-control form-control-sm" id="sa_conp_motivo_certificado" name="sa_conp_motivo_certificado">
+                                                            <input type="text" class="form-control form-control-sm" id="sa_conp_motivo_certificado" name="sa_conp_motivo_certificado" maxlength="1000">
                                                         </div>
                                                     </div>
 
@@ -1087,7 +1096,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                         </div>
                                                         <div class="col-md-3">
                                                             <label for="" class="form-label fw-bold"># Días de Permiso <label style="color: red;">*</label> </label>
-                                                            <input type="text" class="form-control form-control-sm" id="sa_conp_dias_permiso_certificado" name="sa_conp_dias_permiso_certificado">
+                                                            <input type="text" class="form-control form-control-sm" id="sa_conp_dias_permiso_certificado" name="sa_conp_dias_permiso_certificado" readonly>
                                                         </div>
                                                     </div>
 
@@ -1095,7 +1104,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                         <div class="row pt-3">
                                                             <div class="col-md-12">
                                                                 <label for="" class="form-label fw-bold">Observaciones <label style="color: red;">*</label> </label>
-                                                                <textarea name="sa_conp_observaciones" id="sa_conp_observaciones" cols="30" rows="1" class="form-control" placeholder="Observaciones"></textarea>
+                                                                <textarea name="sa_conp_observaciones" id="sa_conp_observaciones" cols="30" rows="1" class="form-control" placeholder="Observaciones" maxlength="1000"></textarea>
                                                             </div>
                                                         </div>
                                                     <?php } ?>
@@ -1253,7 +1262,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                         <div class="row pt-3">
                                                             <div class="col-md-12">
                                                                 <label for="" class="form-label fw-bold">Enfermedad Actual <label style="color: red;">*</label> </label>
-                                                                <textarea name="sa_conp_enfermedad_actual" id="sa_conp_enfermedad_actual" cols="30" rows="2" class="form-control" placeholder="Enfermedad Actual"></textarea>
+                                                                <textarea name="sa_conp_enfermedad_actual" id="sa_conp_enfermedad_actual" cols="30" rows="2" class="form-control" placeholder="Enfermedad Actual" maxlength="1000"></textarea>
                                                             </div>
                                                         </div>
 
@@ -1581,7 +1590,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                                 <div class="row pt-3">
                                                                     <div class="col-md-12">
                                                                         <label for="" class="form-label fw-bold">Observaciones <label style="color: red;">*</label> </label>
-                                                                        <textarea name="sa_examen_fisico_regional_obs" id="sa_examen_fisico_regional_obs" cols="30" rows="2" class="form-control" placeholder="OBSERVACIONES  EXAMEN FÍSICO REGIONAL" disabled></textarea>
+                                                                        <textarea name="sa_examen_fisico_regional_obs" id="sa_examen_fisico_regional_obs" cols="30" rows="2" class="form-control" placeholder="OBSERVACIONES  EXAMEN FÍSICO REGIONAL" disabled maxlength="4000"></textarea>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -1625,15 +1634,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                         <div class="row pt-3">
                                                             <div class="col-md-12">
                                                                 <label for="" class="form-label fw-bold">Observaciones <label style="color: red;">*</label> </label>
-                                                                <textarea name="sa_conp_observaciones" id="sa_conp_observaciones" cols="30" rows="1" class="form-control" placeholder="Observaciones"></textarea>
+                                                                <textarea name="sa_conp_observaciones" id="sa_conp_observaciones" cols="30" rows="1" class="form-control" placeholder="Observaciones" maxlength="1000"></textarea>
                                                             </div>
                                                         </div>
 
+                                                        <div class="row pt-3">
+                                                            <div class="col-md-6">
+                                                                <label for="" class="form-label fw-bold">Condición de Alta <label style="color: red;">*</label> </label>
+                                                                <select class="form-select form-select-sm" id="sa_conp_condicion_alta" name="sa_conp_condicion_alta" required>
+                                                                    <option selected disabled>-- Seleccione --</option>
+                                                                    <option value="Estudiante reposa en enfermeria">Estudiante reposa en enfermería</option>
+                                                                    <option value="Estudiante regresa a clases">Estudiante regresa a clases</option>
+                                                                    <option id="ddlo_ca_salida" style="display: none;" value="Estudiante se retira de la institucion con representante">Estudiante se retira de la institución con representante</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
 
                                                         <div class="row pt-3" id="pnl_contactos_salida">
                                                             <div class="col-md-4">
                                                                 <label for="" class="form-label fw-bold" id="lbl_telefono_emergencia">Viene desde el Paciente </label>
-                                                                <input type="text" class="form-control form-control-sm" id="sa_conp_permiso_telefono_padre" name="sa_conp_permiso_telefono_padre">
+                                                                <input type="text" class="form-control form-control-sm solo_numeros_int" id="sa_conp_permiso_telefono_padre" name="sa_conp_permiso_telefono_padre" maxlength="15">
                                                                 <div class="form-check">
                                                                     <input class="form-check-input" type="checkbox" id="chx_representante" checked>
                                                                     <label class="form-check-label" for="chx_representante">Enviar Correo</label>
@@ -1647,7 +1667,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                                                             <div class="col-md-4" id="pnl_representante_2" style="display: none;">
                                                                 <label for="" class="form-label fw-bold" id="lbl_telefono_emergencia_2">Telefono Representante 2 <label style="color: red;">*</label> </label>
-                                                                <input type="text" class="form-control form-control-sm" id="sa_conp_permiso_telefono_padre_2" name="sa_conp_permiso_telefono_padre_2">
+                                                                <input type="text" class="form-control form-control-sm solo_numeros_int" id="sa_conp_permiso_telefono_padre_2" name="sa_conp_permiso_telefono_padre_2" maxlength="15" readonly>
                                                                 <div class="form-check">
                                                                     <input class="form-check-input" type="checkbox" id="chx_representante_2" checked>
                                                                     <label class="form-check-label" for="chx_representante_2">Enviar Correo</label>
@@ -1741,7 +1761,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                             <div class="row pt-3">
                                                                 <div class="col-md-4">
                                                                     <label for="" class="form-label fw-bold">Teléfono Seguro <label style="color: red;">*</label> </label>
-                                                                    <input type="text" class="form-control form-control-sm" id="sa_conp_permiso_telefono_seguro" name="sa_conp_permiso_telefono_seguro">
+                                                                    <input type="text" class="form-control form-control-sm solo_numeros_int" id="sa_conp_permiso_telefono_seguro" name="sa_conp_permiso_telefono_seguro" maxlength="15">
                                                                 </div>
 
                                                             </div>
@@ -1802,7 +1822,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                                                                 <div class="col-md-1">
                                                                     <label for="cantidad_farmacologia" class="form-label fw-bold">Cant <label style="color: red;">*</label> </label>
-                                                                    <input type="number" name="cantidad_farmacologia" id="cantidad_farmacologia" class="form-control form-control-sm solo_numeros" min="1">
+                                                                    <input type="number" name="cantidad_farmacologia" id="cantidad_farmacologia" class="form-control form-control-sm solo_numeros_int solo_3_numeros" min="0" maxlength="3">
                                                                 </div>
 
                                                                 <div class="col-md-2 mt-4 ">
@@ -1838,7 +1858,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                             <div class="row pt-2">
                                                                 <div class="col-md-12">
                                                                     <label for="" class="form-label fw-bold">Observaciones Recetario <label style="color: red;">*</label> </label>
-                                                                    <textarea name="sa_conp_tratamiento" id="sa_conp_tratamiento" cols="30" rows="2" class="form-control" placeholder="Observaciones Recetario"></textarea>
+                                                                    <textarea name="sa_conp_tratamiento" id="sa_conp_tratamiento" cols="30" rows="2" class="form-control" placeholder="Observaciones Recetario" maxlength="1000"></textarea>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -1873,6 +1893,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $('#permiso_salida').show();
             //llenar_telefonos_salida();
 
+            //Para condicion de alta
+            $('#ddlo_ca_salida').show().prop('selected', true);
+            $('#sa_conp_condicion_alta').prop('disabled', true);
+
 
             hora_hasta = obtener_hora_hasta();
             $('#sa_conp_hora_permiso_salida').val(hora_hasta);
@@ -1880,6 +1904,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } else if ($(this).val() === 'NO') {
             $('#permiso_salida').hide();
             $('#permiso_salida_tipo').hide();
+
+            //Para condicion de alta
+            $('#sa_conp_condicion_alta').prop('disabled', false);
+            $('#sa_conp_condicion_alta option:first').prop('selected', true);
+            $('#ddlo_ca_salida').hide();
+
         }
     });
 

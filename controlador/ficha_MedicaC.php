@@ -182,6 +182,7 @@ class ficha_MedicaC
             //Este campo es para que valide que ya esta hecha la ficha medica
             array('campo' => 'sa_fice_estado_realizado', 'dato' => 1),
             array('campo' => 'sa_fice_medicamentos_alergia', 'dato' => $parametros['sa_fice_medicamentos_alergia']),
+            array('campo' => 'sa_fice_autoriza_medicamentos', 'dato' => $parametros['sa_fice_autoriza_medicamentos']),
         );
 
         if ($parametros['sa_fice_id'] == '') {
@@ -304,6 +305,7 @@ class ficha_MedicaC
 
         $sa_fice_fecha_creacion = $ficha_medica[0]['sa_fice_fecha_creacion'];
         $sa_fice_medicamentos_alergia = $ficha_medica[0]['sa_fice_medicamentos_alergia'];
+        $sa_fice_autoriza_medicamentos = $ficha_medica[0]['sa_fice_autoriza_medicamentos'];
 
         //Pacientes
         $sa_pac_temp_cedula = $paciente[0]['sa_pac_temp_cedula'];
@@ -344,12 +346,21 @@ class ficha_MedicaC
         //Detalle Ficha medica 
         $detalles_FM = $this->detalleFM->lista_det_fm($ficha_medica[0]['sa_fice_id']);
 
+        $logo = '../assets/images/favicon-32x32.png';
+
+        if (($_SESSION['INICIO']['LOGO']) == '.' || $_SESSION['INICIO']['LOGO'] == '' || $_SESSION['INICIO']['LOGO'] == null) {
+            $logo;
+        } else {
+            $logo = $_SESSION['INICIO']['LOGO'];
+        }
+
 
 
         $pdf = new FPDF('P', 'mm', 'A4');
 
         $pdf->AddPage();
 
+        $pdf->Image($logo, 15, 10, 30, 30);
 
         $pdf->Cell(36, 10, utf8_decode(''), 'L T', 0);
         $pdf->SetFont('Arial', 'B', 12);
@@ -564,9 +575,24 @@ class ficha_MedicaC
         $timestamp = strtotime(substr($fecha_entrada, 0, 19));
         $fecha_formateada = date('d \d\e M \d\e Y', $timestamp);
 
-        $pdf->MultiCell(190, 7, utf8_decode('Yo, ' . $sa_fice_rep_1_completo . ', con número de cédula ' . $sa_fice_rep_1_cedula . ' , SI autorizo que mi representado ' . $sa_pac_nombre_completos . ', con número de cédula ' . $sa_pac_temp_cedula . ' reciba atención médica escolar, y en caso de una urgencia, sea trasladado al establecimiento de salud respectivo en el Distrito o fuera de él si es necesario. Declaro que la información consignada en esta ficha corresponde a la realidad y se comprometen a comunicar por escrito a la Unidad Educativa Particular “Saint Dominic School” cualquier modificación de ésta.
+        $pdf->MultiCell(190, 7, utf8_decode('Yo, ' . $sa_fice_rep_1_completo . ', con número de cédula ' . $sa_fice_rep_1_cedula . ' , SI autorizo que mi representado ' . $sa_pac_nombre_completos . ', con número de cédula ' . $sa_pac_temp_cedula . ' reciba atención médica escolar, y en caso de una urgencia, sea trasladado al establecimiento de salud respectivo en el Distrito o fuera de él si es necesario. Declaro que la información consignada en esta ficha corresponde a la realidad y se comprometen a comunicar por escrito a la Unidad Educativa Particular "Saint Dominic School" cualquier modificación de ésta.
 
 Fecha: ' . $fecha_formateada), 1);
+
+        $pdf->SetFont('Arial', 'B', 8.5);
+        $pdf->Cell(190, 7, utf8_decode('Autorización para recibir medicamentos por parte del departamento médico:'), 1, 1, 'L', true);
+        $pdf->SetFont('Arial', '', 9);
+
+        $autoriza = '';
+        if ($sa_fice_autoriza_medicamentos === '0') {
+            $autoriza = 'No está autorizado';
+            $pdf->MultiCell(190, 6, utf8_decode($autoriza), 1);
+        } else {
+            $autoriza = 'Autorizado';
+            $pdf->MultiCell(190, 6, utf8_decode($autoriza), 1);
+        }
+
+
 
 
         $pdf->SetFont('Arial', 'B', 8.5);
@@ -598,6 +624,7 @@ Firma del padre de familia o representante legal (o huella digital):
         $pdf->SetFont('Arial', 'B', 12);
 
 
-        $pdf->Output('D', $sa_pac_temp_cedula . '-' . $sa_pac_nombre_completos . '.pdf');
+        //$pdf->Output('F', $sa_pac_temp_cedula . '-' . $sa_pac_nombre_completos . '.pdf');
+        $pdf->Output();
     }
 }

@@ -22,9 +22,9 @@ class Comunidad_TablasM
         sa_tbl_pac_prefijo, 
         sa_tbl_pac_estado
         FROM cat_comunidad_tablas 
-        WHERE 1 = 1 ";
+        WHERE sa_tbl_pac_estado = 1";
 
-        $sql .= " ORDER BY sa_tbl_pac_id";
+        $sql .= " ORDER BY sa_tbl_pac_id;";
         $datos = $this->db->datos($sql);
         return $datos;
     }

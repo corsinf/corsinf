@@ -94,10 +94,13 @@ function preguntas_ficha_medica() {
     $('input[name=sa_fice_medicamentos_alergia]').change(function () {
         if ($(this).val() === 'Si') {
             $('#pnl_farmacologia').show();
-            ajustarAlturaContenedor()
+            ajustarAlturaContenedor();
+            consultar_medicinas_insumos('medicamentos');
+
         } else if ($(this).val() === 'No') {
             $('#pnl_farmacologia').hide();
-            ajustarAlturaContenedor()
+            ajustarAlturaContenedor();
+
             //$('#sa_fice_pregunta_4_obs').val('');
         }
     });
@@ -358,22 +361,22 @@ function consultar_medicinas_insumos(entrada) {
                     return "No se encontraron resultados";
                 }
             },
-            minimumInputLength: 1,
+            //minimumInputLength: 1,
             ajax: {
                 url: '../controlador/medicamentosC.php?listar_todo=true',
                 dataType: 'json',
                 delay: 250,
                 data: function (params) {
                     return {
-                        searchTerm: params.term // Envía el término de búsqueda al servidor
+                        searchTerm: params.term || '' // Envía el término de búsqueda al servidor
                     };
                 },
                 processResults: function (data, params) { // Agrega 'params' como parámetro
-                    var searchTerm = params.term.toLowerCase();
+                    var searchTerm = (params.term || '').toLowerCase();
 
                     var options = data.reduce(function (filtered, item) {
 
-                        var fullName = item['sa_cmed_presentacion'] + " - " + item['sa_cmed_concentracion'] + " - " + item['sa_cmed_dosis'];
+                        var fullName = item['sa_cmed_presentacion'] + " - " + item['sa_cmed_nombre_comercial'];
 
                         if (fullName.toLowerCase().includes(searchTerm)) {
                             filtered.push({
@@ -426,11 +429,11 @@ function consultar_medicinas_insumos(entrada) {
                 delay: 250,
                 data: function (params) {
                     return {
-                        searchTerm: params.term // Envía el término de búsqueda al servidor
+                        searchTerm: params.term || ''// Envía el término de búsqueda al servidor
                     };
                 },
                 processResults: function (data, params) { // Agrega 'params' como parámetro
-                    var searchTerm = params.term.toLowerCase();
+                    var searchTerm = (params.term || '').toLowerCase();
 
                     var options = data.reduce(function (filtered, item) {
 
@@ -533,17 +536,19 @@ function cargar_farmacologia_fm(id) {
 }
 
 function limpiar() {
-    $('#tipo_farmacologia').val('');
+    //$('#tipo_farmacologia').val('');
     //$('#sa_det_fice_id_cmed_cins').val('');
     //$('#sa_det_fice_nombre').val('');
     //$('#sa_det_fice_tipo').val('');
 
-    var select = $('#tipo_farmacologia_presentacion');
+   /*  var select = $('#tipo_farmacologia_presentacion');
     // Destruir la instancia de Select2
     select.select2('destroy');
 
     // Agrega la opción predeterminada
-    select.html('<option selected disabled> -- Selecciona una opción -- </option>');
+    select.html('<option selected disabled> -- Selecciona una opción -- </option>'); */
+
+    $('#tipo_farmacologia_presentacion').val(null).trigger('change');
 
 }
 

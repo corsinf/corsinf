@@ -226,7 +226,13 @@ if ($btn_regresar == '') {
                         $("#pnl_farmacologia").hide();
                     }
 
-
+                    // Para autorizar al paciente recibir medicamentos 
+                    if (response[0].sa_fice_autoriza_medicamentos == 1) {
+                        $('#chk_terminos_medicamentos').prop('checked', true);
+                        consultar_medicinas_insumos('medicamentos');
+                    } else {
+                        $('#chk_terminos_medicamentos').prop('checked', false);
+                    }
 
                 }
             });
@@ -285,6 +291,8 @@ if ($btn_regresar == '') {
 
             var sa_fice_medicamentos_alergia = $('input[name=sa_fice_medicamentos_alergia]:checked').val();
 
+            var sa_fice_autoriza_medicamentos = $('#chk_terminos_medicamentos').is(':checked') ? 1 : 0;
+
             // Crear objeto de parámetros
 
             var parametros = {
@@ -323,6 +331,7 @@ if ($btn_regresar == '') {
                 'sa_fice_pregunta_4_obs': sa_fice_pregunta_4_obs,
                 'sa_fice_pregunta_5_obs': sa_fice_pregunta_5_obs,
                 'sa_fice_medicamentos_alergia': sa_fice_medicamentos_alergia,
+                'sa_fice_autoriza_medicamentos': sa_fice_autoriza_medicamentos,
             };
 
             if (sa_fice_id != '') {
@@ -607,7 +616,7 @@ if ($btn_regresar == '') {
                                                     <div class="row pt-3">
                                                         <div class="col-md-11">
                                                             <label for="" class="form-label">Dirección del Domicilio <label style="color: red;">*</label> </label>
-                                                            <input type="text" class="form-control form-control-sm" id="sa_fice_pac_direccion_domicilio" name="sa_fice_pac_direccion_domicilio" required>
+                                                            <input type="text" class="form-control form-control-sm" id="sa_fice_pac_direccion_domicilio" name="sa_fice_pac_direccion_domicilio" required maxlength="100">
                                                         </div>
                                                     </div>
 
@@ -673,26 +682,26 @@ if ($btn_regresar == '') {
                                                 <div class="row pt-2">
                                                     <div class="col-md-3">
                                                         <label for="" class="form-label">Primer Apellido <label style="color: red;">*</label> </label>
-                                                        <input type="text" class="form-control form-control-sm" id="sa_fice_rep_1_primer_apellido" name="sa_fice_rep_1_primer_apellido">
+                                                        <input type="text" class="form-control form-control-sm" id="sa_fice_rep_1_primer_apellido" name="sa_fice_rep_1_primer_apellido" maxlength="50">
                                                     </div>
                                                     <div class="col-md-3">
                                                         <label for="" class="form-label">Segundo Apellido <label style="color: red;">*</label> </label>
-                                                        <input type="text" class="form-control form-control-sm" id="sa_fice_rep_1_segundo_apellido" name="sa_fice_rep_1_segundo_apellido">
+                                                        <input type="text" class="form-control form-control-sm" id="sa_fice_rep_1_segundo_apellido" name="sa_fice_rep_1_segundo_apellido" maxlength="50">
                                                     </div>
                                                     <div class="col-md-3">
                                                         <label for="" class="form-label">Primer Nombre <label style="color: red;">*</label> </label>
-                                                        <input type="text" class="form-control form-control-sm" id="sa_fice_rep_1_primer_nombre" name="sa_fice_rep_1_primer_nombre">
+                                                        <input type="text" class="form-control form-control-sm" id="sa_fice_rep_1_primer_nombre" name="sa_fice_rep_1_primer_nombre" maxlength="50">
                                                     </div>
                                                     <div class="col-md-3">
                                                         <label for="" class="form-label">Segundo Nombre <label style="color: red;">*</label> </label>
-                                                        <input type="text" class="form-control form-control-sm" id="sa_fice_rep_1_segundo_nombre" name="sa_fice_rep_1_segundo_nombre">
+                                                        <input type="text" class="form-control form-control-sm" id="sa_fice_rep_1_segundo_nombre" name="sa_fice_rep_1_segundo_nombre" maxlength="50">
                                                     </div>
                                                 </div>
 
                                                 <div class="row pt-3">
                                                     <div class="col-md-3">
                                                         <label for="" class="form-label">Cédula <label style="color: red;"></label> </label>
-                                                        <input type="text" class="form-control form-control-sm" id="sa_fice_rep_1_cedula" name="sa_fice_rep_1_cedula">
+                                                        <input type="text" class="form-control form-control-sm" id="sa_fice_rep_1_cedula" name="sa_fice_rep_1_cedula" maxlength="15">
                                                     </div>
 
                                                     <div class="col-md-3">
@@ -714,12 +723,12 @@ if ($btn_regresar == '') {
 
                                                     <div class="col-md-3">
                                                         <label for="" class="form-label">Teléfono Celular <label style="color: red;">*</label> </label>
-                                                        <input type="text" class="form-control form-control-sm" id="sa_fice_rep_1_telefono_1" name="sa_fice_rep_1_telefono_1">
+                                                        <input type="text" class="form-control form-control-sm" id="sa_fice_rep_1_telefono_1" name="sa_fice_rep_1_telefono_1" maxlength="15">
                                                     </div>
 
                                                     <div class="col-md-3">
                                                         <label for="" class="form-label">Teléfono Fijo </label>
-                                                        <input type="text" class="form-control form-control-sm" id="sa_fice_rep_1_telefono_2" name="sa_fice_rep_1_telefono_2">
+                                                        <input type="text" class="form-control form-control-sm" id="sa_fice_rep_1_telefono_2" name="sa_fice_rep_1_telefono_2" maxlength="15">
                                                     </div>
                                                 </div>
                                             </div>
@@ -735,26 +744,26 @@ if ($btn_regresar == '') {
                                                 <div class="row pt-2">
                                                     <div class="col-md-3">
                                                         <label for="" class="form-label">Primer Apellido <label style="color: red;"></label> </label>
-                                                        <input type="text" class="form-control form-control-sm" id="sa_fice_rep_2_primer_apellido" name="sa_fice_rep_2_primer_apellido">
+                                                        <input type="text" class="form-control form-control-sm" id="sa_fice_rep_2_primer_apellido" name="sa_fice_rep_2_primer_apellido" maxlength="50">
                                                     </div>
                                                     <div class="col-md-3">
                                                         <label for="" class="form-label">Segundo Apellido <label style="color: red;"></label> </label>
-                                                        <input type="text" class="form-control form-control-sm" id="sa_fice_rep_2_segundo_apellido" name="sa_fice_rep_2_segundo_apellido">
+                                                        <input type="text" class="form-control form-control-sm" id="sa_fice_rep_2_segundo_apellido" name="sa_fice_rep_2_segundo_apellido" maxlength="50">
                                                     </div>
                                                     <div class="col-md-3">
                                                         <label for="" class="form-label">Primer Nombre <label style="color: red;"></label> </label>
-                                                        <input type="text" class="form-control form-control-sm" id="sa_fice_rep_2_primer_nombre" name="sa_fice_rep_2_primer_nombre">
+                                                        <input type="text" class="form-control form-control-sm" id="sa_fice_rep_2_primer_nombre" name="sa_fice_rep_2_primer_nombre" maxlength="50">
                                                     </div>
                                                     <div class="col-md-3">
                                                         <label for="" class="form-label">Segundo Nombre <label style="color: red;"></label> </label>
-                                                        <input type="text" class="form-control form-control-sm" id="sa_fice_rep_2_segundo_nombre" name="sa_fice_rep_2_segundo_nombre">
+                                                        <input type="text" class="form-control form-control-sm" id="sa_fice_rep_2_segundo_nombre" name="sa_fice_rep_2_segundo_nombre" maxlength="50">
                                                     </div>
                                                 </div>
 
                                                 <div class="row pt-3">
                                                     <div class="col-md-3">
                                                         <label for="" class="form-label">Cédula <label style="color: red;"></label> </label>
-                                                        <input type="text" class="form-control form-control-sm" id="sa_fice_rep_2_cedula" name="sa_fice_rep_2_cedula">
+                                                        <input type="text" class="form-control form-control-sm" id="sa_fice_rep_2_cedula" name="sa_fice_rep_2_cedula" maxlength="15">
                                                     </div>
 
                                                     <div class="col-md-3">
@@ -774,12 +783,12 @@ if ($btn_regresar == '') {
 
                                                     <div class="col-md-3">
                                                         <label for="" class="form-label">Teléfono Celular <label style="color: red;"></label> </label>
-                                                        <input type="text" class="form-control form-control-sm" id="sa_fice_rep_2_telefono_1" name="sa_fice_rep_2_telefono_1">
+                                                        <input type="text" class="form-control form-control-sm" id="sa_fice_rep_2_telefono_1" name="sa_fice_rep_2_telefono_1" maxlength="15">
                                                     </div>
 
                                                     <div class="col-md-3">
                                                         <label for="" class="form-label">Teléfono Fijo <label style="color: red;"></label> </label>
-                                                        <input type="text" class="form-control form-control-sm" id="sa_fice_rep_2_telefono_2" name="sa_fice_rep_2_telefono_2">
+                                                        <input type="text" class="form-control form-control-sm" id="sa_fice_rep_2_telefono_2" name="sa_fice_rep_2_telefono_2" maxlength="15">
                                                     </div>
                                                 </div>
                                             </div>
@@ -814,7 +823,7 @@ if ($btn_regresar == '') {
                                                             </div>
                                                         </div>
                                                         <div class="col-11">
-                                                            <textarea name="sa_fice_pregunta_1_obs" id="sa_fice_pregunta_1_obs" cols="30" rows="2" class="form-control form-control-sm" placeholder="¿Cúal?"></textarea>
+                                                            <textarea name="sa_fice_pregunta_1_obs" id="sa_fice_pregunta_1_obs" cols="30" rows="2" class="form-control form-control-sm" placeholder="¿Cúal?" maxlength="300"></textarea>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -833,7 +842,7 @@ if ($btn_regresar == '') {
                                                             </div>
                                                         </div>
                                                         <div class="col-11">
-                                                            <textarea name="sa_fice_pregunta_2_obs" id="sa_fice_pregunta_2_obs" cols="30" rows="2" class="form-control form-control-sm " placeholder="¿Cúal?"></textarea>
+                                                            <textarea name="sa_fice_pregunta_2_obs" id="sa_fice_pregunta_2_obs" cols="30" rows="2" class="form-control form-control-sm " placeholder="¿Cúal?" maxlength="300"></textarea>
                                                         </div>
                                                     </div>
 
@@ -854,7 +863,7 @@ if ($btn_regresar == '') {
                                                         </div>
 
                                                         <div class="col-11">
-                                                            <textarea name="sa_fice_pregunta_3_obs" id="sa_fice_pregunta_3_obs" cols="30" rows="2" class="form-control form-control-sm" placeholder="¿Cuál?"></textarea>
+                                                            <textarea name="sa_fice_pregunta_3_obs" id="sa_fice_pregunta_3_obs" cols="30" rows="2" class="form-control form-control-sm" placeholder="¿Cuál?" maxlength="300"></textarea>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -873,7 +882,7 @@ if ($btn_regresar == '') {
                                                             </div>
                                                         </div>
                                                         <div class="col-11">
-                                                            <textarea name="sa_fice_pregunta_4_obs" id="sa_fice_pregunta_4_obs" cols="30" rows="2" class="form-control form-control-sm" placeholder="¿Cúal?"></textarea>
+                                                            <textarea name="sa_fice_pregunta_4_obs" id="sa_fice_pregunta_4_obs" cols="30" rows="2" class="form-control form-control-sm" placeholder="¿Cúal?" maxlength="300"></textarea>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -884,7 +893,7 @@ if ($btn_regresar == '') {
                                                     <p style="color: red;">*Si el estudiante requiere algún tratamiento específico durante el horario escolar, el representante deberá enviar el medicamento con la indicación médica correspondiente por agenda a través del docente tutor</p>
 
                                                     <div>
-                                                        <textarea name="sa_fice_pregunta_5_obs" id="sa_fice_pregunta_5_obs" cols="30" rows="2" class="form-control form-control-sm" required></textarea>
+                                                        <textarea name="sa_fice_pregunta_5_obs" id="sa_fice_pregunta_5_obs" cols="30" rows="2" class="form-control form-control-sm" required maxlength="300"></textarea>
                                                     </div>
                                                 </div>
 
@@ -908,19 +917,19 @@ if ($btn_regresar == '') {
                                                     <div id="pnl_farmacologia" style="display: none;">
                                                         <div class="row pt-3">
 
-                                                            <div class="col-md-3">
+                                                            <div class="col-md-3" hidden>
                                                                 <label for="tipo_farmacologia" class="form-label fw-bold">Farmacología <label style="color: red;">*</label> </label>
-                                                                <select class="form-select form-select-sm" id="tipo_farmacologia" name="tipo_farmacologia" onchange="consultar_medicinas_insumos(this.value);">
-                                                                    <option selected disabled>-- Seleccione --</option>
-                                                                    <option value="medicamentos">Medicamentos</option>
-                                                                    <option value="insumos">Insumos</option>
+                                                                <select class="form-select form-select-sm" id="tipo_farmacologia" name="tipo_farmacologia" disabled>
+                                                                    <!-- <option selected disabled>-- Seleccione --</option> -->
+                                                                    <option selected value="medicamentos">Medicamentos</option>
+                                                                    <!-- <option value="insumos">Insumos</option> -->
                                                                 </select>
                                                             </div>
 
                                                             <div class="col-md-5">
-                                                                <label for="tipo_farmacologia_presentacion" class="form-label fw-bold">Presentación <label style="color: red;">*</label> </label>
+                                                                <label for="tipo_farmacologia_presentacion" class="form-label fw-bold">Medicamentos <label style="color: red;">*</label> </label>
                                                                 <select class="form-select form-select-sm" id="tipo_farmacologia_presentacion" name="tipo_farmacologia_presentacion">
-                                                                    <option selected disabled>-- Seleccione --</option>
+                                                                    <option selected>-- Seleccione --</option>
                                                                 </select>
                                                             </div>
 
@@ -946,7 +955,7 @@ if ($btn_regresar == '') {
                                                                         <tr>
                                                                             <th width="2%"><input id="checkAll_Medicamentos" class="form-check" type="checkbox"></th>
 
-                                                                            <th width="98%">Farmacología</th>
+                                                                            <th width="98%">Medicamentos</th>
 
                                                                         </tr>
 
@@ -971,54 +980,82 @@ if ($btn_regresar == '') {
 
                                         <div class="card bg-transparent shadow-none">
                                             <div class="card-body">
-                                                <div class="alert border-0 border-start border-5 border-dark alert-dismissible fade show">
-                                                    <br>
+
+                                                <div class="row">
+                                                    <div class="alert border-0 border-start border-5 border-dark alert-dismissible fade show">
+                                                        <br>
+                                                        <div class="row">
+                                                            <div class="col-12">
+                                                                <p><b>Consentimiento para el Uso de Medicamentos</b></p>
+                                                            </div>
+
+                                                            <div class="col-12 mx-4 text-start">
+
+                                                                <p>Para garantizar un tratamiento médico adecuado, solicitamos su consentimiento para que los doctores y profesionales de la institución administren y supervisen el uso de medicamentos durante su atención.</p>
 
 
-                                                    <div class="row">
+                                                                <p>Al hacer clic en "Aceptar términos y condiciones," usted autoriza la administración de los medicamentos necesarios para su tratamiento.</p>
 
-                                                        <div class="col-12">
-                                                            <p><b>Consentimiento para el Uso de Datos de Ficha Médica</b></p>
+                                                            </div>
 
-                                                        </div>
-
-                                                        <div class="col-12 mx-4 text-start">
-
-                                                            <p>Para garantizar una atención médica eficaz, solicitamos su consentimiento para que los doctores y profesionales de la salud accedan y utilicen la información de su ficha médica.</p>
-
-
-                                                            <p>Al dar click en aceptar términos y condiciones, usted autoriza el acceso a su ficha médica para brindarle una atención médica adecuada.</p>
-
-                                                        </div>
-
-                                                        <div class="col-12 mx-4">
-                                                            <div class="form-check">
-                                                                <input class="form-check-input" type="checkbox" id="chk_terminos">
-                                                                <label class="form-check-label" for="chk_terminos">Aceptar términos y condiciones</label>
+                                                            <div class="col-12 mx-4">
+                                                                <div class="form-check">
+                                                                    <input class="form-check-input" type="checkbox" id="chk_terminos_medicamentos">
+                                                                    <label class="form-check-label" for="chk_terminos_medicamentos">Aceptar términos y condiciones</label>
+                                                                </div>
                                                             </div>
                                                         </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="row pt-4">
+                                                    <div class="alert border-0 border-start border-5 border-dark alert-dismissible fade show pt-4">
+                                                        <br>
+                                                        <div>
+                                                            <div class="col-12">
+                                                                <p><b>Consentimiento para el Uso de Datos de Ficha Médica</b></p>
+                                                            </div>
+
+                                                            <div class="col-12 mx-4 text-start">
+
+                                                                <p>Para garantizar una atención médica eficaz, solicitamos su consentimiento para que los doctores y profesionales de la salud accedan y utilicen la información de su ficha médica.</p>
+
+
+                                                                <p>Al dar click en aceptar términos y condiciones, usted autoriza el acceso a su ficha médica para brindarle una atención médica adecuada.</p>
+
+                                                            </div>
+
+                                                            <div class="col-12 mx-4">
+                                                                <div class="form-check">
+                                                                    <input class="form-check-input" type="checkbox" id="chk_terminos">
+                                                                    <label class="form-check-label" for="chk_terminos">Aceptar términos y condiciones</label>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
 
                                                         <div class="modal-footer pt-4">
                                                             <button class="btn btn-success px-4 m-1" onclick="editar_insertar()" type="button" id="btn_editar_fm" style="display: none;"><i class="bx bx-save"></i> Guardar Datos</button>
                                                         </div>
 
+
+                                                        <script>
+                                                            // Agrega un evento de escucha al cambio en la casilla de verificación usando jQuery
+                                                            $('#chk_terminos').change(function() {
+                                                                // Verifica si la casilla de verificación está marcada
+                                                                if ($(this).prop('checked')) {
+                                                                    // Muestra el botón usando jQuery
+                                                                    $('#btn_editar_fm').show();
+                                                                } else {
+                                                                    // Oculta el botón si la casilla de verificación no está marcada
+                                                                    $('#btn_editar_fm').hide();
+                                                                }
+                                                            });
+                                                        </script>
+
                                                     </div>
-
-                                                    <script>
-                                                        // Agrega un evento de escucha al cambio en la casilla de verificación usando jQuery
-                                                        $('#chk_terminos').change(function() {
-                                                            // Verifica si la casilla de verificación está marcada
-                                                            if ($(this).prop('checked')) {
-                                                                // Muestra el botón usando jQuery
-                                                                $('#btn_editar_fm').show();
-                                                            } else {
-                                                                // Oculta el botón si la casilla de verificación no está marcada
-                                                                $('#btn_editar_fm').hide();
-                                                            }
-                                                        });
-                                                    </script>
-
                                                 </div>
+
                                             </div>
                                         </div>
                                     </div>

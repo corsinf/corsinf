@@ -124,10 +124,10 @@ class main
                     'sa_id_est_idukay' => $item['_id'],
 
                     'sa_id_rep_idukay' => $item['relatives'][0]['parent'] ?? '',
-                    'sa_est_rep_parentesco' => $item['relatives'][0]['relationship'] ?? '',
+                    'sa_est_rep_parentesco' => ucwords(strtolower($item['relatives'][0]['relationship'] ?? '')),
 
                     'sa_id_rep_idukay_2' => $item['relatives'][1]['parent'] ?? '',
-                    'sa_est_rep_parentesco_2' => $item['relatives'][1]['relationship'] ?? '',
+                    'sa_est_rep_parentesco_2' => ucwords(strtolower($item['relatives'][1]['relationship'] ?? '')),
 
                     'sa_est_estado' => $estado_est,
 
