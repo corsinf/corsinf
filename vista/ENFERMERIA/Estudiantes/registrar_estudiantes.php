@@ -5,6 +5,7 @@ $id_seccion = '';
 $id_grado = '';
 $id_paralelo = '';
 $id_representante = '';
+$id_representante_2 = '';
 
 if (isset($_POST['sa_est_id'])) {
   $id = $_POST['sa_est_id'];
