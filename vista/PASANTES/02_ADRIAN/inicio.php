@@ -7,3 +7,7 @@ if ($_GET['acc'] == 'form_insert_adrian') {
 if ($_GET['acc'] == 'inicio_prueba_3') {
     include('FIRMADOR/INICIO_PRUEBA/inicio_prueba_3.php');
 }
+
+if ($_GET['acc'] == 'inicio_prueba_4') {
+    include('FIRMADOR/INICIO_PRUEBA/inicio_prueba_4.php');
+}
