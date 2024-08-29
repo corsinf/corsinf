@@ -67,7 +67,7 @@
 
 
         .wrapper .form-box.register {
-            right: -20px;
+            right: 50px;
             padding: 0px 40px 0 0;
             pointer-events: none;
         }
@@ -77,7 +77,7 @@
         }
 
         .wrapper .form-box.register .animation {
-            transform: translateX(-120%);
+            transform: translateX(120%);
             opacity: 0;
             filter: blur(10px);
             transition: .8s ease;
@@ -117,7 +117,7 @@
         }
 
         .wrapper.active-empresas .form-box.register .animation {
-            transform: translateX(-120%);
+            transform: translateX(120%);
             opacity: 0;
             filter: blur(10px);
             transition-delay: calc(.02s * var(--i));
@@ -217,41 +217,58 @@
             color: #0ef;
         }
 
-        .card {
-            position: relative;
-            width: 15rem;
-            height: 50px;
-            outline: none;
-            background: #081b29;
-            border: 1px solid #0ef;
-            border-radius: 10px;
-            cursor: pointer;
-            font-size: 15px;
-            color: #fff;
-            font-weight: 600;
-            z-index: 1;
+        .card-option {
+            width: 120%;
+            min-width: 250px;
+            height: 60px;
+            margin-left: auto;
+            margin-right: auto;
+            transition: all 0.3s ease;
             display: flex;
-            justify-content: center;
             align-items: center;
-            text-align: center;
+            overflow: hidden;
+            padding: 10px;
         }
 
-        .card .card-link {
-            position: absolute;
-            top: -3.5;
-            left: 0;
-            width: 100%;
-            height: 110%;
-            border-radius: 10px;
-            text-decoration: none;
-            color: inherit;
-            z-index: 1;
+        .card-option:hover {
+            transform: scale(1.02);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
         }
 
-        .card .card-link:hover {
-            background-color: rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
+        .card-option .product-img {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 60px;
+            height: 40px;
+            overflow: hidden;
+            flex-shrink: 0;
         }
+
+        .card-option .product-img img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+
+        .card-option .badge {
+            font-size: 0.9em;
+            padding: 4px 8px;
+        }
+
+        .card-option .flex-grow-1 {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            min-width: 0;
+        }
+
+        .card-option .col-sm-3 {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+        }
+
 
         .col-md-4 {
             display: flex;
@@ -273,6 +290,7 @@
             font-weight: 600;
             z-index: 1;
             overflow: hidden;
+            align-self: center;
         }
 
         .btn::before {
@@ -290,23 +308,6 @@
 
         .btn:hover::before {
             top: 0;
-        }
-
-        .form-box .logreg-link {
-            font-size: 14.5px;
-            color: #fff;
-            text-align: center;
-            margin: 20px 0 10px;
-        }
-
-        .logreg-link p a {
-            color: #0ef;
-            text-decoration: none;
-            font-weight: 600;
-        }
-
-        .logreg-link p a:hover {
-            text-decoration: underline;
         }
 
         .wrapper .info-text {
@@ -352,7 +353,7 @@
         }
 
         .wrapper .info-text.register .animation {
-            transform: translateX(120%);
+            transform: translateX(-120%);
             opacity: 0;
             filter: blur(10px);
             transition: .8s ease;
@@ -360,6 +361,38 @@
         }
 
         .wrapper.active .info-text.register .animation {
+            transform: translateX(0);
+            opacity: 1;
+            filter: blur(0);
+            transition-delay: calc(.1s * var(--i));
+        }
+
+        .wrapper.active-empresas .info-text.register .animation {
+            transform: translateX(-120%);
+            opacity: 1;
+            filter: blur(10px);
+            transition-delay: calc(.02s * var(--i));
+        }
+
+        .wrapper .info-text.users {
+            right: -350px;
+            text-align: right;
+            padding: 0 0px 0px -130px;
+            pointer-events: none;
+        }
+        .wrapper.active-users .info-text.users {
+            pointer-events: auto;
+        }
+
+        .wrapper .info-text.users .animation {
+            transform: translateX(-120%);
+            opacity: 0;
+            filter: blur(10px);
+            transition: .7s ease;
+            transition-delay: calc(.1s * var(--j));
+        }
+
+        .wrapper.active-users .info-text.users .animation {
             transform: translateX(0);
             opacity: 1;
             filter: blur(0);
@@ -380,13 +413,13 @@
 
         .wrapper .bg-animate {
             position: absolute;
-            top: -4px;
-            right: 0;
-            width: 950px;
-            height: 800px;
+            top: -200px;
+            right: -80px;
+            width: 1000px;
+            height: 850px;
             background: linear-gradient(45deg, #081b29, #0ef);
             border-bottom: 3px solid #0ef;
-            transform: rotate(18deg) skewY(40deg);
+            transform: rotate(18deg) skewY(40deg) translateY(150px);
             /*transform: rotate(0) skewY(0);*/
             transform-origin: bottom right;
             transition: 1.5s ease;
@@ -419,12 +452,12 @@
         }
 
         .wrapper.active-users .bg-animate {
-            transform: rotate(30deg) skewY(60deg) translateY(400px) translateX(50px);
+            transform: rotate(30deg) skewY(60deg) translateY(700px) translateX(100px);
             transition-delay: 1.8s;
         }
 
         .wrapper.active-users .bg-animate2 {
-            transform: rotate(0deg) skewY(0deg) translateY(100px) translateX(-400px);
+            transform: rotate(0deg) skewY(0deg);
             transition-delay: .8s;
         }
     </style>
@@ -451,9 +484,6 @@
                     <i class='bx bxs-lock-alt'></i>
                 </div>
                 <button type="button" class="btn animation ingresar-link" style="--i:3; --j:24">Ingresar</button>
-                <div class="logreg-link animation" style="--i:4; --j:25">
-                    <p><a href="#">Bienvenido</a></p>
-                </div>
             </form>
         </div>
         <div class="info-text login">
@@ -464,58 +494,53 @@
         <div class="form-box register">
             <h2 class="animation" style="--i:17; --j:0;">Empresa</h2>
             <form action="#">
-                <div class="input-box animation" style="--i:18; --j:1;">
-                    <div class="card mb-3">
-                        <a href="#" class="card-link">
-                            <div class="row g-0">
-                                <div class="col-md-4">
-                                    <img src="../img/sin_imagen.jpg" class="img-fluid rounded-start" alt="" style="width:70px; height:40px;">
-                                </div>
-                                <div class="col-md-8">
-                                    <div class="card-body text-center">
-                                        <span class="fw-bold user-link">Facturación</span>
-                                    </div>
-                                </div>
+                <div class="input-box animation pb-2" style="--i:18; --j:1;">
+                    <div class="row border mx-0 mb-2 py-2 radius-10 cursor-pointer card-option user-link">
+                        <div class="col-sm-9 d-flex align-items-center">
+                            <div class="product-img me-3">
+                                <img src="../img/de_sistema/sin-logo.png" alt="">
                             </div>
-                        </a>
+                            <div>
+                                <h6 class="mb-0 text-white">Facturación</h6>
+                            </div>
+                        </div>
+                        <div class="col-sm-3 d-flex align-items-center justify-content-end">
+                            <div class="badge rounded-pill bg-success">Ingresar</div>
+                        </div>
                     </div>
                 </div>
-                <div class="input-box animation" style="--i:19; --j:2;">
-                    <div class="card mb-3">
-                        <a href="#" class="card-link">
-                            <div class="row g-0">
-                                <div class="col-md-4">
-                                    <img src="../img/sin_imagen.jpg" class="img-fluid rounded-start" alt="" style="width:70px; height:40px;">
-                                </div>
-                                <div class="col-md-8">
-                                    <div class="card-body text-center">
-                                        <span class="fw-bold user-link">Desarrollo</span>
-                                    </div>
-                                </div>
+                <div class="input-box animation pb-2" style="--i:19; --j:2;">
+                    <div class="row border mx-0 mb-2 py-2 radius-10 cursor-pointer card-option user-link">
+                        <div class="col-sm-9 d-flex align-items-center">
+                            <div class="product-img me-3">
+                                <img src="../img/de_sistema/sin-logo.png" alt="">
                             </div>
-                        </a>
+                            <div>
+                                <h6 class="mb-0 text-white">Desarrollo</h6>
+                            </div>
+                        </div>
+                        <div class="col-sm-3 d-flex align-items-center justify-content-end">
+                            <div class="badge rounded-pill bg-success">Ingresar</div>
+                        </div>
                     </div>
                 </div>
-                <div class="input-box animation" style="--i:20; --j:3;">
-                    <div class="card mb-3">
-                        <a href="#" class="card-link">
-                            <div class="row g-0">
-                                <div class="col-md-4">
-                                    <img src="../img/sin_imagen.jpg" class="img-fluid rounded-start" alt="" style="width:70px; height:40px;">
-                                </div>
-                                <div class="col-md-8">
-                                    <div class="card-body text-center">
-                                        <span class="fw-bold user-link">Hospital</span>
-                                    </div>
-                                </div>
+                <div class="input-box animation pb-4" style="--i:20; --j:3;">
+                    <div class="row border mx-0 mb-2 py-2 radius-10 cursor-pointer card-option user-link">
+                        <div class="col-sm-9 d-flex align-items-center">
+                            <div class="product-img me-3">
+                                <img src="../img/de_sistema/sin-logo.png" alt="">
                             </div>
-                        </a>
+                            <div>
+                                <h6 class="mb-0 text-white">Hospital</h6>
+                            </div>
+                        </div>
+                        <div class="col-sm-3 d-flex align-items-center justify-content-end">
+                            <div class="badge rounded-pill bg-success">Ingresar</div>
+                        </div>
                     </div>
                 </div>
+                <br>
                 <button type="button" class="btn animation back-link" style="--i:21; --j:4;">Volver</button>
-                <div class="logreg-link animation" style="--i:22; --j:5;">
-                    <p><a href="#">Bienvenido</a></p>
-                </div>
             </form>
         </div>
         <div class="info-text register">
@@ -527,59 +552,58 @@
         <div class="form-box users">
             <h2 class="animation" style="--i:17; --j:0;">Usuarios</h2>
             <form action="#">
-                <div class="input-box animation" style="--i:18; --j:1">
-                    <div class="card mb-3">
-                        <a href="#" class="card-link">
-                            <div class="row g-0">
-                                <div class="col-md-4">
-                                    <img src="../img/sin_imagen.jpg" class="img-fluid rounded-start" alt="" style="width:70px; height:40px;">
-                                </div>
-                                <div class="col-md-8">
-                                    <div class="card-body text-center">
-                                        <span class="fw-bold user-link">Médico</span>
-                                    </div>
-                                </div>
+                <div class="input-box animation pb-2" style="--i:18; --j:1">
+                    <div class="row border mx-0 mb-2 py-2 radius-10 cursor-pointer card-option">
+                        <div class="col-sm-9 d-flex align-items-center">
+                            <div class="product-img me-3">
+                                <img src="../img/de_sistema/sin-logo.png" alt="">
                             </div>
-                        </a>
+                            <div>
+                                <h6 class="mb-0 text-white">Médico</h6>
+                            </div>
+                        </div>
+                        <div class="col-sm-3 d-flex align-items-center justify-content-end">
+                            <div class="badge rounded-pill bg-success">Ingresar</div>
+                        </div>
                     </div>
                 </div>
-                <div class="input-box animation" style="--i:19; --j:2">
-                    <div class="card mb-3">
-                        <a href="#" class="card-link">
-                            <div class="row g-0">
-                                <div class="col-md-4">
-                                    <img src="../img/sin_imagen.jpg" class="img-fluid rounded-start" alt="" style="width:70px; height:40px;">
-                                </div>
-                                <div class="col-md-8">
-                                    <div class="card-body text-center">
-                                        <span class="fw-bold user-link">Estudiante</span>
-                                    </div>
-                                </div>
+                <div class="input-box animation pb-2" style="--i:19; --j:2">
+                    <div class="row border mx-0 mb-2 py-2 radius-10 cursor-pointer card-option">
+                        <div class="col-sm-9 d-flex align-items-center">
+                            <div class="product-img me-3">
+                                <img src="../img/de_sistema/sin-logo.png" alt="">
                             </div>
-                        </a>
+                            <div>
+                                <h6 class="mb-0 text-white">Estudiante</h6>
+                            </div>
+                        </div>
+                        <div class="col-sm-3 d-flex align-items-center justify-content-end">
+                            <div class="badge rounded-pill bg-success">Ingresar</div>
+                        </div>
                     </div>
                 </div>
-                <div class="input-box animation" style="--i:20; --j:3">
-                    <div class="card mb-3">
-                        <a href="#" class="card-link">
-                            <div class="row g-0">
-                                <div class="col-md-4">
-                                    <img src="../img/sin_imagen.jpg" class="img-fluid rounded-start" alt="" style="width:70px; height:40px;">
-                                </div>
-                                <div class="col-md-8">
-                                    <div class="card-body text-center">
-                                        <span class="fw-bold user-link">Profesor</span>
-                                    </div>
-                                </div>
+                <div class="input-box animation pb-2" style="--i:20; --j:3">
+                    <div class="row border mx-0 mb-2 py-2 radius-10 cursor-pointer card-option">
+                        <div class="col-sm-9 d-flex align-items-center">
+                            <div class="product-img me-3">
+                                <img src="../img/de_sistema/sin-logo.png" alt="">
                             </div>
-                        </a>
+                            <div>
+                                <h6 class="mb-0 text-white">Profesor</h6>
+                            </div>
+                        </div>
+                        <div class="col-sm-3 d-flex align-items-center justify-content-end">
+                            <div class="badge rounded-pill bg-success">Ingresar</div>
+                        </div>
                     </div>
                 </div>
-                <button type="button" class="btn animation back-link1" style="--i:21; --j:4">Volver</button>
-                <div class="logreg-link animation" style="--i:21; --j:4">
-                    <p><a href="#">Bienvenido</a></p>
-                </div>
+                <br>
+                <button type="button" class="btn animation back-link1 mt-2" style="--i:21; --j:4">Volver</button>
             </form>
+            <div class="info-text users">
+                <img src="../img/de_sistema/apudata_blanco.svg" class="animation" style="--i:17; --j:0;" width="180" alt="" />
+                <p class="animation" style="--i:18; --j:1;">Soluciones de desarrollo de Software.</p>
+            </div>
         </div>
 
     </div>
