@@ -161,6 +161,25 @@ $(document).ready(function () {
     });
 });
 
+function limpiar() {
+    $('#stock_farmacologia').val('');
+    $('#cantidad_farmacologia').val('');
+    $('#tipo_farmacologia').val('');
+    var select = $('#tipo_farmacologia_presentacion');
+
+    // Verificar si el select está usando Select2 antes de destruir
+    if (select.hasClass('select2-hidden-accessible')) {
+        // Destruir la instancia de Select2
+        select.select2('destroy');
+    }
+
+    // Agrega la opción predeterminada
+    select.html('<option selected disabled> -- Selecciona una opción -- </option>');
+
+    $('#txt_indicaciones_jarabe').text('');
+    $('#txt_indicaciones_jarabe').hide();
+}
+
 function eliminar_det_consulta_item(id_item) {
 
     $.ajax({
@@ -241,13 +260,46 @@ function consultar_medicinas_insumos(entrada) {
         })
             .off('select2:select')
             .on('select2:select', function (e) {
+                $('#txt_indicaciones_jarabe').text('');
+                $('#txt_indicaciones_jarabe').hide();
+
                 var data = e.params.data.data;
 
                 $('#sa_det_fice_id_cmed_cins').val(data.sa_cmed_id);
                 $('#sa_det_fice_tipo').val(data.sa_cmed_tipo);
                 $('#stock_farmacologia').val(data.sa_cmed_stock);
 
-                listar_farmacos_alergia()
+                listar_farmacos_alergia();
+
+                if (data.sa_cmed_es_jarabe == '1') {
+                    let resultado = '';
+                    if (data.sa_cmed_formula == 'formula_ibuprofeno_paracetamol') {
+                        let peso = $('#sa_conp_peso').val();
+                        if (peso != '') {
+                            let sa_cmed_mg = data.sa_cmed_mg;
+                            let sa_cmed_dosis = data.sa_cmed_dosis;
+                            let sa_cmed_concentracion = data.sa_cmed_concentracion;
+
+                            resultado = formula_ibuprofeno_paracetamol(peso, sa_cmed_concentracion, sa_cmed_dosis, sa_cmed_mg);
+                            $('#txt_indicaciones_jarabe').text('Debe tomar: ' + resultado + ' mg');
+                            $('#txt_indicaciones_jarabe').show();
+                        } else {
+                            Swal.fire('', 'No hay peso para realizar el cálculo.', 'error');
+                        }
+
+                    } else if (data.sa_cmed_formula == 'formula_loratadina_levocetirizina') {
+                        let peso = $('#sa_conp_peso').val();
+                        if (peso != '') {
+                            resultado = formula_loratadina_levocetirizina(peso);
+                            $('#txt_indicaciones_jarabe').text('Debe tomar: ' + resultado + ' mg');
+                            $('#txt_indicaciones_jarabe').show();
+                        } else {
+                            Swal.fire('', 'No hay peso para realizar el cálculo.', 'error');
+                        }
+                    }
+
+                }
+
 
                 //console.log(data);
             });
@@ -486,4 +538,31 @@ function listar_farmacos_alergia() {
             }
         }
     });
-} 
+}
+
+/**
+ * 
+ * 
+ * Formulas para cuando son jarabes y toca calcular
+ * 
+ */
+
+function formula_ibuprofeno_paracetamol(peso, concentracion, dosis, mg) {
+    peso = parseFloat(peso);
+    concentracion = parseFloat(concentracion);
+    dosis = parseFloat(dosis);
+    mg = parseFloat(mg);
+
+    let formula = (peso * dosis * concentracion) / mg;
+    return parseFloat(formula.toFixed(2));
+}
+
+
+function formula_loratadina_levocetirizina(peso) {
+    peso = parseFloat(peso);
+
+    let formula = peso * 0.2
+    return parseFloat(formula.toFixed(2));
+}
+
+
