@@ -67,6 +67,7 @@
 
 
         .wrapper .form-box.register {
+            right: -20px;
             padding: 0px 40px 0 0;
             pointer-events: none;
         }
@@ -340,8 +341,8 @@
         }
 
         .wrapper .info-text.register {
-            right: 0;
-            text-align: right;
+            left: -30px;
+            text-align: left;
             padding: 0 40px 60px 60px;
             pointer-events: none;
         }
@@ -381,11 +382,11 @@
             position: absolute;
             top: -4px;
             right: 0;
-            width: 850px;
-            height: 600px;
+            width: 950px;
+            height: 800px;
             background: linear-gradient(45deg, #081b29, #0ef);
             border-bottom: 3px solid #0ef;
-            transform: rotate(10deg) skewY(40deg);
+            transform: rotate(18deg) skewY(40deg);
             /*transform: rotate(0) skewY(0);*/
             transform-origin: bottom right;
             transition: 1.5s ease;
@@ -393,38 +394,38 @@
         }
 
         .wrapper.active .bg-animate {
-            transform: rotate(0deg) skewY(0deg);
+            transform: rotate(0) skewY(0);
             transition-delay: .5s;
         }
 
         .wrapper .bg-animate2 {
             position: absolute;
             top: 100%;
-            right: 250px;
-            width: 850px;
-            height: 600px;
+            left: 850px;
+            width: 1000px;
+            height: 900px;
             background: #081b29;
             border-top: 3px solid #0ef;
             /*transform: rotate(-11deg) skewY(-41deg);*/
-            transform: rotate(0deg) skewY(0deg);
-            transform-origin: bottom right;
+            transform: rotate(0) skewY(0);
+            transform-origin: bottom left;
             transition: 1.5s ease;
             transition-delay: .5s;
         }
 
         .wrapper.active .bg-animate2 {
-            transform: rotate(10deg) skewY(40deg);
-            transition-delay: 1.5s;
+            transform: rotate(-30deg) skewY(-60deg) translateY(-200px) translateX(-400px);
+            transition-delay: 1.2s;
         }
 
         .wrapper.active-users .bg-animate {
-            transform: rotate(10deg) skewY(40deg);
+            transform: rotate(30deg) skewY(60deg) translateY(400px) translateX(50px);
             transition-delay: 1.8s;
         }
 
         .wrapper.active-users .bg-animate2 {
-            transform: rotate(-10deg) skewY(-10deg);
-            transition-delay: .7s;
+            transform: rotate(0deg) skewY(0deg) translateY(100px) translateX(-400px);
+            transition-delay: .8s;
         }
     </style>
 </head>
@@ -518,7 +519,7 @@
             </form>
         </div>
         <div class="info-text register">
-            <img src="../img/de_sistema/apudata_blanco.svg" class="animation" style="--i:17; --j:0;" width="300" alt="" />
+            <img src="../img/de_sistema/apudata_blanco.svg" class="animation" style="--i:17; --j:0;" width="180" alt="" />
             <p class="animation" style="--i:18; --j:1;">Soluciones de desarrollo de Software.</p>
         </div>
 
