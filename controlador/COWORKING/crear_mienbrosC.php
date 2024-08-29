@@ -27,6 +27,13 @@ if (isset($_GET['add_compra'])) {
     echo json_encode($controlador->add_compra($data));
 }
 
+if (isset($_GET['eliminar_miembro'])) {
+    $id_miembro = isset($_POST['id_miembro']) ? intval($_POST['id_miembro']) : 0;
+    echo json_encode($controlador->eliminar_miembro($id_miembro));
+}
+
+
+
 class crear_mienbrosC
 {
     private $modelo;
@@ -62,6 +69,7 @@ class crear_mienbrosC
         $str = '';
         foreach ($slista as $key => $value) {
             $id_miembro = isset($value['id_miembro']) ? $value['id_miembro'] : 'id_miembro';
+            
             $str .= '<tr>
                         <td>' . $id_miembro . '</td>
                         <td>' . ($value['id_producto']) . '</td>
@@ -69,11 +77,7 @@ class crear_mienbrosC
                         <td>' . ($value['pvp_compra']) . '</td>
                         <td>' . ($value['total_compra']) . '</td>
                         
-                        <td>
-                            <button type="button" class="btn btn-danger btn-sm">
-                                <i class="bx bx-trash"></i>
-                            </button>
-                        </td>
+
                     </tr>';
         }
 
@@ -108,7 +112,7 @@ class crear_mienbrosC
                             <button type="button" onclick="abrirModal(' . $id_miembro . ')" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modal_registrar_compra">
                                 <i class="bx bx-save"></i>
                             </button>
-                            <button type="button" class="btn btn-danger btn-sm">
+                            <button type="button" onclick="eliminarMiembro(' . $id_miembro . ')" class="btn btn-danger btn-sm">
                                 <i class="bx bx-trash"></i>
                             </button>
                         </td>
@@ -116,6 +120,18 @@ class crear_mienbrosC
         }
     
         return $str;
+    }
+
+    function eliminar_compra($id_compra)
+    {
+        $res = $this->modelo->eliminar_compra($id_compra);
+        return $res;
+    }
+
+    function eliminar_miembro($id_miembro)
+    {
+        $res = $this->modelo->eliminar_miembro($id_miembro);
+        return $res;
     }
 }
 ?>

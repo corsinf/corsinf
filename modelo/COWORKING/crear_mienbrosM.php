@@ -18,9 +18,6 @@ class crear_mienbrosM
         $direccion = $parametros['direccion_miembro'];
         $id_espacio = $parametros['id_espacio'];
         
-
-        
-        // Validación de campos vacíos
         if(empty($nombre) || empty($apellido) || empty($telefono) || empty($direccion) || empty($id_espacio)) {
             return "Error: Campos vacíos";
         }
@@ -76,10 +73,41 @@ class crear_mienbrosM
         $resp = $this->db->datos($sql);
         return $resp;
     }
+
+    function eliminar_miembro($id_miembro)
+    {
+        if (empty($id_miembro)) {
+            return "Error: ID de miembro vacío";
+        }
     
+        $datos = [
+            ['campo' => 'id_miembro', 'dato' => $id_miembro]
+        ];
+        $resultado = $this->db->delete('co_miembro', $datos);
+    
+        return $resultado == 1 ? "Miembro eliminado con éxito" : "Error al eliminar el miembro";
+    }
+    
+    function eliminar_compra($id_compra)
+    {
+        if (empty($id_compra)) {
+            return "Error: ID de compra vacío";
+        }
+    
+        $datos = [
+            ['campo' => 'id_compra', 'dato' => $id_compra]
+        ];
+        $resultado = $this->db->delete('co_compra', $datos);
+    
+        return $resultado == 1 ? "Compra eliminada con éxito" : "Error al eliminar la compra";
+    }
     
 }
+
 ?>
+    
+    
+
 
 
 

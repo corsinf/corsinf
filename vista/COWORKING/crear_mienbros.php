@@ -108,7 +108,7 @@
                                                         <th>Cantidad</th>
                                                         <th>Precio</th>
                                                         <th>Total</th>
-                                                        <th>Acciones</th>
+                                                        
                                                     </tr>
                                                 </thead>
                                                 <tbody id="tbl_boby">
@@ -223,22 +223,22 @@
     }
     $(document).ready(function() {
     select_productos();
-    $('#txt_cantidad').on('input', calcularTotal); // Escucha cambios en cantidad
+    $('#txt_cantidad').on('input', calcularTotal); 
     $('#txt_producto').on('change', function() {
         var precio = $(this).find('option:selected').data('precio');
         $('#txt_precio').val(precio);
-        calcularTotal(); // Recalcula el total cuando cambie el producto
+        calcularTotal(); 
     });
 });
 
 function abrirModal(id_miembro) {
-    // Verifica si id_miembro está siendo recibido correctamente
+    
     console.log('ID Miembro:', id_miembro);
 
-    // Asigna el id_miembro al campo del modal
+    
     $('#id_miembro').val(id_miembro);
 
-    // Llama a la función para cargar los productos
+    
     select_productos();
 }
     
@@ -246,7 +246,49 @@ function abrirModal(id_miembro) {
         var cantidad = parseFloat($('#txt_cantidad').val()) || 0;
         var precio = parseFloat($('#txt_precio').val()) || 0;
         $('#txt_total').val((cantidad * precio).toFixed(2));
+        }
+
+    function eliminarCompra(id_compra) {
+        $.ajax({
+        url: '../controlador/COWORKING/crear_mienbrosC.php?eliminar_compra=true',
+        type: 'POST',
+        data: { id_compra: id_compra },
+        dataType: 'json',
+        success: function(response) {
+            if (response === "Compra eliminada con éxito") {
+                
+                $('#row-compra-' + id_compra).remove();
+                alert('Compra eliminada con éxito');
+                
+            } 
+            else {
+                alert('Error al eliminar la compra');
+            }
+        }
+    });
 }
+
+
+    function eliminarMiembro(id_miembro) {
+    $.ajax({
+        url: '../controlador/COWORKING/crear_mienbrosC.php?eliminar_miembro=true',
+        type: 'POST',
+        data: { id_miembro: id_miembro },
+        dataType: 'json',
+        success: function(response) {
+            if (response === "Miembro eliminado con éxito") {
+                
+                $('#row-miembro-' + id_miembro).remove();
+                alert('Miembro eliminado con éxito');
+                lista_usuario();
+            }
+             else {
+                alert('Error al eliminar el miembro');
+            }
+        }
+    });
+}
+
     function select_productos() {       
         $.ajax({
             url: '../controlador/COWORKING/crear_mienbrosC.php?listar_productos=true',
