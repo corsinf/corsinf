@@ -4,43 +4,35 @@ include(dirname(__DIR__, 2).'/modelo/COWORKING/ClaseEjemploM.php');
 $controlador = new claseEjemplo();
 
 if (isset($_GET['categoria'])) {
-    echo json_encode($controlador->lista());
+    echo json_encode($controlador->listaCategorias());
 }
 
-if (isset($_GET['listaIngresos'])) {
-    echo json_encode($controlador->listaIngresos());
+if (isset($_GET['listaEspacios'])) {
+    echo json_encode($controlador->listaEspacios());
 }
 
-if (isset($_GET['add'])) {
+if (isset($_POST['add'])) {
     $data = $_POST["data"];
-	//print_r($data);
     echo json_encode($controlador->add($data));
 }
 
-class claseEjemplo
-{
+class claseEjemplo {
     private $modelo;
 
-    function __construct()
-    {
+    function __construct() {
         $this->modelo = new claseEjemploM();
     }
 
-     function add($parametros)
-    {
-        
-        $res = $this->modelo->insertarnombre($parametros['costo']);
-           
+    function add($parametros) {
+        $res = $this->modelo->insertarnombre($parametros);
+        return $res;
     }
 
-     function lista()
-    {
+    function listaCategorias() {
         $lista = [
-            ['Nombre' =>'hola', 'id'=>1],
-            ['Nombre' =>'hola2', 'id'=>2],
-            ['Nombre' =>'hola3', 'id'=>3],
-            ['Nombre' =>'hola4', 'id'=>4],
-            ['Nombre' =>'hola5', 'id'=>5],
+            ['Nombre' =>'Categoria 1', 'id'=>1],
+            ['Nombre' =>'Categoría 2', 'id'=>2],
+            ['Nombre' =>'Categoría 3', 'id'=>3]
         ];
 
         $select = '';
@@ -51,34 +43,54 @@ class claseEjemplo
         return $select;
     }
 
-     function listaIngresos()
-    {
-        $lista = [
-            ['Nombre' =>'hola', 'genero'=>"hombre"],
-            ['Nombre' =>'hola2', 'genero'=>"hombre"],
-            ['Nombre' =>'hola3', 'genero'=>3],
-            ['Nombre' =>'hola4', 'genero'=>4],
-            ['Nombre' =>'hola5', 'genero'=>5],
-            ['Nombre' =>'sebastian', 'genero'=>"hola"],
-            ['Nombre' =>'hola', 'genero'=>7, 'costo'=>10]
-        ];
-
+    function listaEspacios() {
+        $lista = $this->modelo->listardebase();
         $tr = '';
         foreach ($lista as $value) {
             $tr .= '<tr>
-                <td>'.$value['genero'].'</td>
-                <td>2</td>
-                <td>3</td>
-                <td>4</td>
-                <td>4.5</td>
-                <td>'.$value['Nombre'].'</td>
-                <td>5</td>
+                <td>'.htmlspecialchars($value['id_espacio'], ENT_QUOTES, 'UTF-8').'</td>
+                <td>'.htmlspecialchars($value['nombre_espacio'], ENT_QUOTES, 'UTF-8').'</td>
+                <td>'.htmlspecialchars($value['aforo_espacio'], ENT_QUOTES, 'UTF-8').'</td>
+                <td>'.htmlspecialchars($value['precio_espacio'], ENT_QUOTES, 'UTF-8').'</td>
+                <td>'.htmlspecialchars($value['estado_espacio'], ENT_QUOTES, 'UTF-8').'</td>
+                <td>'.htmlspecialchars($value['id_categoria'], ENT_QUOTES, 'UTF-8').'</td>
                 <td><button class="btn btn-sm btn-primary"><i class="bx bx-save"></i></button></td>
-                </tr>';
+                <td><button class="btn btn-sm btn-primary" onclick="openFurnitureModal('.htmlspecialchars($value['id_espacio'], ENT_QUOTES, 'UTF-8').')">Gestionar Mobiliario</button></td>
+            </tr>';
         }
-        
+    
         return $tr;
     }
+    
+    function addMobiliario($parametros) {
+        $res = $this->modelo->insertarMobiliario($parametros);
+        return $res;
+    }
 
+    function listarMobiliario($id_espacio) {
+        $lista = $this->modelo->listarMobiliario($id_espacio);
+        $tr = '';
+        foreach ($lista as $value) {
+            $tr .= '<tr>
+                        <td>'.$value['nombre_mobiliario'].'</td>
+                        <td>'.$value['cantidad'].'</td>
+                        <td><button class="btn btn-sm btn-danger" onclick="eliminarMobiliario('.$value['id'].')">Eliminar</button></td>
+                    </tr>';
+        }
+        return $tr;
+    }
 }
+
+$controlador = new claseEjemplo();
+
+if (isset($_GET['listaMobiliario'])) {
+    $id_espacio = $_GET['id_espacio'];
+    echo json_encode($controlador->listarMobiliario($id_espacio));
+}
+
+if (isset($_GET['addMobiliario'])) {
+    $data = $_POST["data"];
+    echo json_encode($controlador->addMobiliario($data));
+}
+
 ?>

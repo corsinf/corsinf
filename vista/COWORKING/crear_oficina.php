@@ -29,7 +29,16 @@
                         <label for="ddl_categoriaEspacio">Categoría:</label>
                         <select class="form-select" id="ddl_categoriaEspacio" name="ddl_categoriaEspacio" required>
                             <option value="" disabled selected>Selecciona una categoría</option>
-                            <!-- Opciones cargadas dinámicamente -->
+                        </select>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label for="txt_estadoEspacio">Estado:</label>
+                        <select class="form-select" id="txt_estadoEspacio" name="txt_estadoEspacio" required>
+                            <option value="" disabled selected>Selecciona el estado</option>
+                            <option value="A">Disponible</option>
+                            <option value="B">No disponible</option>
+                            <!-- Otros estados si es necesario -->
                         </select>
                     </div>
 
@@ -59,133 +68,161 @@
                 <hr />
                 <div class="card">
                     <div class="card-body">
-                        <table class="table mb-0 table-striped">
-                            <thead>
-                                <tr>
-                                    <th scope="col">Género</th>
-                                    <th scope="col">Campo 2</th>
-                                    <th scope="col">Campo 3</th>
-                                    <th scope="col">Campo 4</th>
-                                    <th scope="col">Campo 5</th>
-                                    <th scope="col">Nombre</th>
-                                    <th scope="col">Campo 7</th>
-                                    <th scope="col">Acciones</th>
-                                </tr>
-                            </thead>
-                            <tbody id="tbl_ingresos_body">
-                                <!-- Filas cargadas dinámicamente -->
-                            </tbody>
-                        </table>
+                    <table id="tbl_espacios" class="table table-bordered mb-4">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th>ID</th>
+                            <th>Nombre</th>
+                            <th>Aforo</th>
+                            <th>Precio</th>
+                            <th>Estado</th>
+                            <th>Categoría</th>
+                            <th>Acciones</th> 
+                        </tr>
+                    </thead>
+                    <tbody id="tbl_espacios_body">
+    
+                    </tbody>
+                </table>
+
                     </div>
                 </div>
 
-                <!-- Modal -->
-                <div class="modal fade" id="furnitureModal" tabindex="-1" aria-labelledby="furnitureModalLabel" aria-hidden="true">
-                    <div class="modal-dialog modal-lg">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="furnitureModalLabel">Gestionar Mobiliario</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                            </div>
-                            <div class="modal-body">
-                                <h3 id="lbl_furniture" class="text-center mb-3">Mobiliario</h3>
-                                <table id="tbl_furniture" class="table table-bordered mb-4">
-                                    <thead class="thead-dark">
-                                        <tr>
-                                            <th>Nombre del Mueble</th>
-                                            <th>Cantidad</th>
-                                            <th>Acciones</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="tbl_furniture_body">
-                                        <!-- Filas de mobiliario cargadas dinámicamente -->
-                                    </tbody>
-                                </table>
-                                <div class="text-center">
-                                    <button type="button" class="btn btn-success btn-sm mb-3">Agregar Mueble</button>
-                                </div>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Guardar Cambios</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+             <!-- Modal -->
+<div class="modal fade" id="furnitureModal" tabindex="-1" aria-labelledby="furnitureModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="furnitureModalLabel">Gestionar Mobiliario</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <h3 id="lbl_furniture" class="text-center mb-3">Mobiliario</h3>
 
+                <form id="furniture_form">
+                    <div class="form-group mb-3">
+                        <label for="txt_furniture_name">Nombre del Mueble:</label>
+                        <input type="text" class="form-control" name="txt_furniture_name" id="txt_furniture_name" placeholder="Introduce el nombre del mueble" required>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="txt_furniture_quantity">Cantidad:</label>
+                        <input type="number" class="form-control" name="txt_furniture_quantity" id="txt_furniture_quantity" placeholder="Introduce la cantidad" required>
+                    </div>
+                    <input type="hidden" id="hidden_espacio_id" name="hidden_espacio_id">
+                    <div class="text-end mb-4">
+                        <button type="button" onclick="enviarMobiliario()" class="btn btn-primary btn-sm">Guardar Mobiliario</button>
+                    </div>
+                </form>
+
+                <table id="tbl_furniture" class="table table-bordered mb-4">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th>Nombre del Mueble</th>
+                            <th>Cantidad</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbl_furniture_body">
+                        <!-- Filas de mobiliario cargadas dinámicamente -->
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Guardar Cambios</button>
             </div>
         </div>
     </div>
 </div>
+
 <!--end page wrapper-->
 
-<!-- jQuery -->
-<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
-<!-- Bootstrap JS -->
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+
 <script>
     $(document).ready(function () {
-        lista_categorias()
-        listarIngresos();
+        lista_categorias();
+        listarEspacios();
     });
 
-    function lista_categorias()
-  {
-    
-    $.ajax({
-         // data:  {parametros:parametros},
-         url:   '../controlador/COWORKING/crear_oficinaC.php?categoria=true',
-         type:  'post',
-         dataType: 'json',
-           success:  function (response) {  
-                console.log(response);
-                $('#ddl_categoriaEspacio').html(response);
-          } 
-    });
-  }
-
-
-    function listarIngresos() {
+    function lista_categorias() {
         $.ajax({
-            url: '../controlador/COWORKING/crear_oficinaC.php?listaIngresos=true',
-            type: 'post',
+            url: '../controlador/COWORKING/crear_oficinaC.php',
+            method: 'GET',
+            data: { categoria: true },
+            dataType: 'json',
+            success: function (response) {
+                $('#ddl_categoriaEspacio').html(response);
+            }
+        });
+    }
+
+    function listarEspacios() {
+        $.ajax({
+            url: '../controlador/COWORKING/crear_oficinaC.php',
+            method: 'GET',
+            data: { listaEspacios: true },
             dataType: 'json',
             success: function (response) {
                 $('#tbl_ingresos_body').html(response);
-            },
-            error: function (xhr, status, error) {
-                console.error('Error al cargar ingresos:', error);
             }
         });
     }
 
     function enviarDatos() {
-        if ($('#rental_form')[0].checkValidity() === false) {
-            $('#rental_form')[0].reportValidity();
-            return;
-        }
-
         var datos = {
             nombre: $('#txt_name').val(),
-            categoria: $('#ddl_categoriaEspacio').val(),
             aforo: $('#txt_capacity').val(),
-            costo: $('#txt_price').val()
+            precio: $('#txt_price').val(),
+            estado: $('#txt_estadoEspacio').val(),
+            categoria: $('#ddl_categoriaEspacio').val()
         };
 
         $.ajax({
-            url: '../controlador/COWORKING/crear_oficinaC.php?add=true',
-            type: 'POST',
-            dataType: 'json',
-            data: { data: datos },
+            url: '../controlador/COWORKING/crear_oficinaC.php',
+            method: 'POST',
+            data: { add: true, data: datos },
             success: function (response) {
-                alert('Datos guardados correctamente.');
-                $('#rental_form')[0].reset();
-                listarIngresos();
+                alert('Espacio agregado correctamente');
+                listarEspacios();
+            }
+        });
+    }
+    function listarMobiliario(id_espacio) {
+        $.ajax({
+            url: '../controlador/COWORKING/crear_oficinaC.php',
+            method: 'GET',
+            data: { listaMobiliario: true, id_espacio: id_espacio },
+            success: function (response) {
+                $('#tbl_furniture_body').html(response);
+            }
+        });
+    }
+
+    function enviarMobiliario() {
+        var datos = {
+            nombre: $('#txt_furniture_name').val(),
+            cantidad: $('#txt_furniture_quantity').val(),
+            id_espacio: $('#hidden_espacio_id').val()
+        };
+
+        $.ajax({
+            url: '../controlador/COWORKING/crear_oficinaC.php',
+            method: 'POST',
+            data: { addMobiliario: true, data: datos },
+            success: function (response) {
+                alert('Mobiliario agregado correctamente');
+                listarMobiliario(datos.id_espacio);
             },
             error: function (xhr, status, error) {
                 console.error('Error al enviar los datos:', error);
                 alert('Hubo un error al guardar los datos. Por favor, intenta de nuevo.');
             }
         });
+    }
+
+    function openFurnitureModal(id_espacio) {
+        $('#hidden_espacio_id').val(id_espacio);
+        listarMobiliario(id_espacio);
+        $('#furnitureModal').modal('show');
     }
 </script>
