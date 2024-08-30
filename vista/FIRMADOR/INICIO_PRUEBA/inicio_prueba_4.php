@@ -540,7 +540,9 @@
                     </div>
                 </div>
                 <br>
-                <button type="button" class="btn animation back-link" style="--i:21; --j:4;">Volver</button>
+                <div class="position-relative">
+                    <button type="button" class="btn animation back-link position-absolute top-50 start-50 translate-middle" style="--i:21; --j:4;">Volver</button>
+                </div>
             </form>
         </div>
         <div class="info-text register">
