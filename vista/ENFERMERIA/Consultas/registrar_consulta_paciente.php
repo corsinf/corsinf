@@ -119,23 +119,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 
-    function limpiar() {
-        $('#stock_farmacologia').val('');
-        $('#cantidad_farmacologia').val('');
-        $('#tipo_farmacologia').val('');
-        var select = $('#tipo_farmacologia_presentacion');
-
-        // Verificar si el select está usando Select2 antes de destruir
-        if (select.hasClass('select2-hidden-accessible')) {
-            // Destruir la instancia de Select2
-            select.select2('destroy');
-        }
-
-        // Agrega la opción predeterminada
-        select.html('<option selected disabled> -- Selecciona una opción -- </option>');
-    }
-
-
     //Para traer los datos necesarios para cargar el formulario
     function carga_datos_consulta(id_consulta = '') {
         //alert(id_consulta)
@@ -296,11 +279,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $('#txt_sa_fice_pregunta_4_obs').html(response[0].sa_fice_pregunta_4_obs);
                 $('#txt_sa_fice_pregunta_5_obs').html(response[0].sa_fice_pregunta_5_obs);
                 lista_seguros(response[0].sa_fice_pac_seguro_predeterminado);
-                
-                if(response[0].sa_fice_autoriza_medicamentos == '0'){
+
+                if (response[0].sa_fice_autoriza_medicamentos == '0') {
                     $('#recetario_tab_paciente').hide();
                 }
-                
+
                 // $('#sa_conp_permiso_seguro_traslado').val(response[0].sa_fice_pac_seguro_predeterminado);
             }
         });
@@ -1810,6 +1793,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                                     <select class="form-select form-select-sm" id="tipo_farmacologia_presentacion" name="tipo_farmacologia_presentacion">
                                                                         <option selected disabled>-- Seleccione --</option>
                                                                     </select>
+                                                                    <div class="pt-1">
+                                                                        <span class="badge bg-dark" id=txt_indicaciones_jarabe style="display: none;"></span>
+                                                                    </div>
                                                                 </div>
 
                                                                 <input type="hidden" name="sa_det_fice_id_cmed_cins" id="sa_det_fice_id_cmed_cins">

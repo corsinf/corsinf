@@ -50,6 +50,17 @@ if (isset($_GET['id'])) {
         $('#sa_cmed_uso').val(response[0].sa_cmed_uso);
         $('#sa_cmed_observaciones').val(response[0].sa_cmed_observaciones);
         $('#sa_cmed_nombre_comercial').val(response[0].sa_cmed_nombre_comercial);
+        $('#sa_cmed_mg').val(response[0].sa_cmed_mg);
+        $('#sa_cmed_formula').val(response[0].sa_cmed_formula);
+
+        // Para autorizar al paciente recibir medicamentos 
+        if (response[0].sa_cmed_es_jarabe == 1) {
+          $('#cbx_jarabe').prop('checked', true);
+          $('#pnl_formula_jarabes').show();
+        } else {
+          $('#cbx_jarabe').prop('checked', false);
+        }
+
       }
     });
   }
@@ -71,6 +82,9 @@ if (isset($_GET['id'])) {
     var sa_cmed_observaciones = $('#sa_cmed_observaciones').val();
     var sa_cmed_nombre_comercial = $('#sa_cmed_nombre_comercial').val();
 
+    var cbx_jarabe = $('#cbx_jarabe').is(':checked') ? 1 : 0;
+    var sa_cmed_mg = $('#sa_cmed_mg').val();
+    var sa_cmed_formula = $('#sa_cmed_formula').val();
 
     var parametros = {
       'sa_cmed_id': sa_cmed_id,
@@ -88,6 +102,9 @@ if (isset($_GET['id'])) {
       'sa_cmed_uso': sa_cmed_uso,
       'sa_cmed_observaciones': sa_cmed_observaciones,
       'sa_cmed_nombre_comercial': sa_cmed_nombre_comercial,
+      'cbx_jarabe': cbx_jarabe,
+      'sa_cmed_mg': sa_cmed_mg,
+      'sa_cmed_formula': sa_cmed_formula,
     }
 
     if (sa_cmed_id == '') {
@@ -134,7 +151,7 @@ if (isset($_GET['id'])) {
             location.href = '../vista/inicio.php?mod=7&acc=medicamentos';
           });
         } else if (response == -2) {
-          Swal.fire('', 'Código ya regitrado', 'success');
+          Swal.fire('', 'Código ya regitrado', 'error');
         }
       }
     });
@@ -267,12 +284,7 @@ if (isset($_GET['id'])) {
 
               <input type="hidden" name="sa_cmed_id" id="sa_cmed_id">
 
-              <div class="row pt-3" id="sa_cmed_concentracion_inputs" style="display: none;">
-                <div class="col-12">
-                  <label for="" class="form-label">Concentración <label style="color: red;">*</label> </label>
-                  <input type="text" class="form-control form-control-sm" name="sa_cmed_concentracion" id="sa_cmed_concentracion">
-                </div>
-              </div>
+
 
               <div class="row pt-3" id="sa_cmed_presentacion_inputs" style="display: none;">
                 <div class="col-12">
@@ -290,10 +302,6 @@ if (isset($_GET['id'])) {
               </div>
 
               <div class="row pt-3">
-                <div class="col-3" id="sa_cmed_dosis_inputs" style="display: none;">
-                  <label for="" class="form-label">Dosis <label style="color: red;">*</label> </label>
-                  <input type="text" class="form-control form-control-sm" name="sa_cmed_dosis" id="sa_cmed_dosis">
-                </div>
                 <div class="col-3" id="sa_cmed_serie_inputs" style="display: none;">
                   <label for="" class="form-label">Serie <label style="color: red;">*</label> </label>
                   <input type="text" class="form-control form-control-sm" name="sa_cmed_serie" id="sa_cmed_serie">
@@ -351,6 +359,43 @@ if (isset($_GET['id'])) {
                 </div>
               </div>
 
+              <hr class="mt-4">
+
+              <div class="row pt-2" id="sa_cmed_es_jarabe_inputs" style="display: none;">
+                <div class="col-12">
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="cbx_jarabe">
+                    <label class="form-check-label" for="cbx_jarabe">Es jarabe?</label>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row pt-3" id="pnl_formula_jarabes" style="display: none;">
+
+                <div class="col-3" id="sa_cmed_concentracion_inputs" style="display: none;">
+                  <label for="" class="form-label">Concentración (ml)<label style="color: red;">*</label> </label>
+                  <input type="text" class="form-control form-control-sm solo_numeros_int" name="sa_cmed_concentracion" id="sa_cmed_concentracion">
+                </div>
+
+                <div class="col-2" id="sa_cmed_dosis_inputs" style="display: none;">
+                  <label for="" class="form-label">Dosis <label style="color: red;">*</label> </label>
+                  <input type="text" class="form-control form-control-sm solo_numeros_int" name="sa_cmed_dosis" id="sa_cmed_dosis">
+                </div>
+
+                <div class="col-2" id="sa_cmed_mg_inputs" style="display: none;">
+                  <label for="" class="form-label">Mg <label style="color: red;">*</label> </label>
+                  <input type="text" class="form-control form-control-sm solo_numeros_int" name="sa_cmed_mg" id="sa_cmed_mg">
+                </div>
+
+                <div class="col-5" id="sa_cmed_formula_inputs">
+                  <label for="" class="form-label">Fórmula <label style="color: red;">*</label> </label>
+                  <select class="form-select form-select-sm" id="sa_cmed_formula" name="sa_cmed_formula">
+                    <option selected disabled>-- Seleccione --</option>
+                    <option value="formula_ibuprofeno_paracetamol">Fórmula Ibuprofeno y Paracetamol</option>
+                    <option value="formula_loratadina_levocetirizina">Fórmula Loratadina y Levocetirizina</option>
+                  </select>
+                </div>
+              </div>
 
               <div class="modal-footer pt-4">
 
@@ -371,8 +416,34 @@ if (isset($_GET['id'])) {
 </div>
 <!--plugins-->
 
-<!--app JS-->
-<!-- <script src="assets/js/app.js"></script> -->
+<script>
+  $(document).ready(function() {
+    $('#cbx_jarabe').change(function() {
+      if ($(this).is(':checked')) {
+        $('#pnl_formula_jarabes').show(); // Muestra el div con un efecto deslizante
+      } else {
+        $('#pnl_formula_jarabes').hide(); // Oculta el div con un efecto deslizante
 
-<?php //include('../../../../cabeceras/footer.php'); 
-?>
+        $('#sa_cmed_concentracion').prop('disabled', true).val('');
+        $('#sa_cmed_dosis').prop('disabled', true).val('');
+        $('#sa_cmed_mg').prop('disabled', true).val('');
+        $('#sa_cmed_formula').prop('selectedIndex', 0);
+      }
+    });
+
+    $('#sa_cmed_formula').change(function() {
+      var valor = $(this).val();
+
+      if (valor === 'formula_loratadina_levocetirizina') {
+        $('#sa_cmed_concentracion').prop('disabled', true).val('0');
+        $('#sa_cmed_dosis').prop('disabled', true).val('0');
+        $('#sa_cmed_mg').prop('disabled', true).val('0');
+      } else {
+        $('#sa_cmed_concentracion').prop('disabled', false).val('5');
+        $('#sa_cmed_dosis').prop('disabled', false).val('10');
+        $('#sa_cmed_mg').prop('disabled', false).val('150');
+      }
+    });
+
+  });
+</script>
