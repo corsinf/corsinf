@@ -67,7 +67,9 @@ if (isset($_GET['pac_id'])) {
           cargar_datos_seguimiento(sa_pac_id)
         }
 
-        $('#title_paciente').html(apellidos + " " + nombres);
+        //$('#title_paciente').html(apellidos + " " + nombres);
+        $('b[name="title_paciente"]').html(apellidos + " " + nombres);
+
       }
     });
   }
@@ -249,6 +251,84 @@ if (isset($_GET['pac_id'])) {
       }
     });
   }
+
+  function modal_datos_adicionales_agregar() {
+    $('#modal_datos_adicionales_agregar').modal('show');
+  }
+
+  function insertar_datos_adicionales() {
+    var sa_pac_id = <?= ($sa_pac_id); ?>;
+    var sa_pacda_peso = $('#sa_pacda_peso').val();
+    var sa_pacda_altura = $('#sa_pacda_altura').val();
+
+    var parametros = {
+      'sa_pac_id': sa_pac_id,
+      'sa_pacda_peso': sa_pacda_peso,
+      'sa_pacda_altura': sa_pacda_altura,
+    };
+
+    $.ajax({
+      data: {
+        parametros: parametros
+      },
+      url: '../controlador/SALUD_INTEGRAL/paciente_datos_adicionalesC.php?insertar=true',
+      type: 'post',
+      dataType: 'json',
+
+      success: function(response) {
+        if (response == 1) {
+          Swal.fire('', 'Operacion realizada con exito.', 'success');
+
+          $('#modal_datos_adicionales_agregar').modal('hide');
+          $('#sa_pacda_peso').val('');
+          $('#sa_pacda_altura').val('');
+
+        } else if (response == -2) {
+          Swal.fire('', 'Error', 'error');
+        }
+      }
+    });
+  }
+
+  function modal_datos_adicionales_ver() {
+    $('#modal_datos_adicionales_ver').modal('show');
+
+    id_paciente = '<?= $sa_pac_id ?>';
+
+    $.ajax({
+      data: {
+        id: id_paciente
+      },
+      url: '../controlador/SALUD_INTEGRAL/paciente_datos_adicionalesC.php?listar_paciente=true',
+      type: 'post',
+      dataType: 'json',
+
+      success: function(response) {
+        if (response && response.length > 0) {
+          let salida = '';
+
+          response.forEach(function(item) {
+            salida +=
+              `<tr>
+                <th>${fecha_nacimiento_formateada(item.sa_pacda_fecha_creacion)}</th>
+                <td>${item.sa_pacda_peso}</td>
+                <td>${item.sa_pacda_altura}</td>
+              </tr>`;
+          });
+
+          $('#tbl_datos_adicionales').html(salida);
+
+        } else {
+          Swal.fire('', 'No tiene registros', 'warning');
+          $('#modal_datos_adicionales_ver').modal('hide');
+        }
+      },
+      error: function(xhr, status, error) {
+        // Cerrar el spinner en caso de error también
+        Swal.fire('Error', 'Ocurrió un error en la solicitud: ' + error, 'error');
+      }
+    });
+  }
 </script>
 
 <div class="page-wrapper">
@@ -284,7 +364,7 @@ if (isset($_GET['pac_id'])) {
                   <div><i class="bx bxs-user me-1 font-22 text-primary"></i>
                   </div>
 
-                  <h5 class="mb-0 text-primary">Historial de Atenciones Médicas del Paciente: <b id="title_paciente" class="text-success"></b></h5>
+                  <h5 class="mb-0 text-primary">Historial de Atenciones Médicas del Paciente: <b id="title_paciente" name="title_paciente" class="text-success"></b></h5>
 
                   <?php //print_r($_SESSION)//['INICIO']['USUARIO'])  //TIPO 
                   ?>
@@ -296,7 +376,35 @@ if (isset($_GET['pac_id'])) {
               </div>
             </div>
 
-            <hr>
+            <div class="row m-0 pt-2">
+              <nav class="navbar navbar-expand-lg navbar-dark bg-dark rounded">
+                <div class="container-fluid"> <a class="navbar-brand" href="#"></a>
+                  <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent1" aria-controls="navbarSupportedContent1" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span>
+                  </button>
+
+                  <div class="collapse navbar-collapse" id="navbarSupportedContent1">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                      <li class="nav-item dropdown"> <a class="nav-link dropdown-toggle active" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"> <i class='bx bxs-file-plus fs-6'></i> Datos Adicionales</a>
+                        <ul class="dropdown-menu">
+                          <li>
+                            <a class="dropdown-item" onclick="modal_datos_adicionales_ver();">Ver</a>
+                          </li>
+                          <li>
+                            <hr class="dropdown-divider">
+                          </li>
+                          <li>
+                            <a type="button" class="dropdown-item" onclick="modal_datos_adicionales_agregar();">Agregar</a>
+                          </li>
+                        </ul>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </nav>
+            </div>
+
+
+
 
             <div class="content">
               <!-- Content Header (Page header) -->
@@ -410,6 +518,81 @@ if (isset($_GET['pac_id'])) {
               </section>
               <!-- /.content -->
             </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="modal" id="modal_datos_adicionales_agregar" abindex="-1" aria-modal="true" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <b id="title_paciente" name="title_paciente" class="text-success">sfsdf</b>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+
+      <!-- Modal body -->
+      <div class="modal-body">
+
+        <div class="row">
+          <div class="col-12">
+            <label for="sa_pac_tabla">Peso <label class="text-danger">*</label></label>
+            <input type="text" class="form-control form-control-sm solo_numeros" id="sa_pacda_peso" name="sa_pacda_peso">
+          </div>
+        </div>
+
+        <div class="row pt-3">
+          <div class="col-12">
+            <label for="sa_pac_id_comunidad">Altura <label class="text-danger">*</label></label>
+            <input type="text" class="form-control form-control-sm solo_numeros" id="sa_pacda_altura" name="sa_pacda_altura">
+          </div>
+        </div>
+
+        <div class="row pt-3">
+          <div class="col-12 text-end">
+            <button type="submit" class="btn btn-success btn-sm" onclick="insertar_datos_adicionales();"><i class="bx bx-save"></i> Agregar</button>
+
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="modal_datos_adicionales_ver" abindex="-1" aria-modal="true" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <b id="title_paciente" name="title_paciente" class="text-success">sfsdf</b>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+
+      <!-- Modal body -->
+      <div class="modal-body">
+
+        <div class="row">
+          <div class="col-12">
+            <table class="table table-hover">
+              <thead class="thead-dark">
+                <tr>
+                  <th>Fecha Creación</th>
+                  <th>Peso</th>
+                  <th>Altura</th>
+                </tr>
+              </thead>
+              <tbody id="tbl_datos_adicionales">
+
+              </tbody>
+
+            </table>
           </div>
         </div>
       </div>

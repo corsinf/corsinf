@@ -78,9 +78,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (id_consulta !== '') {
             datos_col_consulta(id_consulta);
             cargar_farmacologia(id_consulta);
+        } else {
+            cargar_datos_adcicionales_paciente(id_paciente);
         }
 
-
+        
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         //Para la consulta - llenado de datos
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -852,6 +854,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 // Para verificar los datos en la consola
             });
 
+    }
+
+    function cargar_datos_adcicionales_paciente(id_paciente) {
+        $.ajax({
+            data: {
+                id: id_paciente
+            },
+            url: '../controlador/SALUD_INTEGRAL/paciente_datos_adicionalesC.php?listar_ultimo=true',
+            type: 'post',
+            dataType: 'json',
+
+            success: function(response) {
+                if (response && response.length > 0) {
+                    $('#sa_conp_peso').val(response[0]['sa_pacda_peso']);
+                    $('#sa_conp_altura').val(response[0]['sa_pacda_altura']);
+
+                    calcularIMC();
+                }
+            },
+            error: function(xhr, status, error) {
+                // Cerrar el spinner en caso de error también
+                Swal.fire('Error', 'Ocurrió un error en la solicitud: ' + error, 'error');
+            }
+        });
     }
 </script>
 

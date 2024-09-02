@@ -1,6 +1,6 @@
 <?php
 
-$id = $_SESSION['INICIO']['ID_USUARIO'];
+$id = $_SESSION['INICIO']['ID_USUARIO'] ?? '';
 $id_tutor = '';
 if ($id != null && $id != '') {
     $id_tutor = $id;
