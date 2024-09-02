@@ -2161,10 +2161,14 @@ class consultasC
         $sa_conp_fecha_ingreso = $sa_conp_fecha_ingreso;
 
         $sa_conp_desde_hora = $datos[0]['sa_conp_desde_hora'];
-        $sa_conp_desde_hora = $sa_conp_desde_hora;
+        if ($sa_conp_desde_hora !== null) {
+            $sa_conp_desde_hora = preg_replace('/\.?0+$/', '', $sa_conp_desde_hora);
+        }
 
         $sa_conp_hasta_hora = $datos[0]['sa_conp_hasta_hora'];
-        $sa_conp_hasta_hora = $sa_conp_hasta_hora;
+        if ($sa_conp_hasta_hora !== null) {
+            $sa_conp_hasta_hora = preg_replace('/\.?0+$/', '', $sa_conp_hasta_hora);
+        }
 
         $sa_conp_diagnostico_1 = $datos[0]['sa_conp_diagnostico_1'];
 
