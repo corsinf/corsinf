@@ -108,12 +108,11 @@ class crear_mienbrosM
 
     function tiene_compras($id_miembro)
     {
-        $id_miembro = intval($id_miembro); // Asegúrate de que $id_miembro sea un número entero
-    
-        // Prepara la consulta con el ID del miembro
+        $id_miembro = intval($id_miembro); 
+        
         $sql = "SELECT COUNT(*) AS total FROM co_compra WHERE id_miembro = $id_miembro";
         
-        // Ejecutar la consulta con el método datos, que maneja SELECT
+        
         $result = $this->db->datos($sql);
         
         // Comprobar el resultado de la consulta

@@ -307,7 +307,7 @@ function abrirModal(id_miembro) {
 
 
 function eliminarMiembro(id_miembro) {
-    // Paso 1: Verificar si el miembro tiene compras
+    
     $.ajax({
         url: '../controlador/COWORKING/crear_mienbrosC.php',
         type: 'POST',
@@ -316,7 +316,7 @@ function eliminarMiembro(id_miembro) {
         success: function(response) {
             console.log('Respuesta de verificar_compras:', response);
 
-            // Manejo de errores en la respuesta
+            
             if (response.error) {
                 Swal.fire({
                     title: 'Error',
@@ -327,7 +327,7 @@ function eliminarMiembro(id_miembro) {
                 return;
             }
 
-            // Si el miembro tiene compras asociadas
+            
             if (response.tiene_compras) {
                 Swal.fire({
                     title: 'El Usuario está ligado a uno o varios registros y no se podrá eliminar.',
@@ -335,7 +335,7 @@ function eliminarMiembro(id_miembro) {
                     confirmButtonText: 'Entendido'
                 });
             } else {
-                // Confirmar la eliminación
+               
                 Swal.fire({
                     title: '¿Estás seguro?',
                     text: "Esta acción eliminará al miembro seleccionado.",
@@ -345,7 +345,7 @@ function eliminarMiembro(id_miembro) {
                     cancelButtonText: 'Cancelar'
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        // Paso 2: Eliminar al miembro
+                        
                         $.ajax({
                             url: '../controlador/COWORKING/crear_mienbrosC.php?eliminar_miembro=true',
                             type: 'POST',
@@ -354,7 +354,7 @@ function eliminarMiembro(id_miembro) {
                             success: function(response) {
                                 console.log('Respuesta de eliminar_miembro:', response);
 
-                                // Manejo de la respuesta de eliminación
+                                
                                 if (response === "Miembro eliminado con éxito") {
                                     $('#row-miembro-' + id_miembro).remove();
                                     Swal.fire('Eliminado', 'Miembro eliminado con éxito', 'success');
