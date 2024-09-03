@@ -32,7 +32,7 @@
                                     <div class="mt-3">
                                         <div class="row">
                                             <div class="col-10">
-                                                <h5 class="fw-bold">Información Personal</h5>
+                                                <h5 class="fw-bold text-primary">Información Personal</h5>
                                             </div>
                                             <div class="col-2">
                                                 <a href="#" data-bs-toggle="modal" data-bs-target="#modal_informacion_personal">
@@ -45,15 +45,15 @@
                                             <div class="col-6">
                                                 <h6 class="fw-bold">Nombre Completo</h6>
                                             </div>
-                                            <div class="col-6">
+                                            <div class="col-6 d-flex align-items-center">
                                                 <p>Adrian Acuña Estrada</p>
                                             </div>
                                         </div>
-                                        <div class="row">
+                                        <div class="row mb-2">
                                             <div class="col-6">
                                                 <h6 class="fw-bold">Fecha de Nacimiento</h6>
                                             </div>
-                                            <div class="col-6">
+                                            <div class="col-6 d-flex align-items-center">
                                                 <p>2002-10-07</p>
                                             </div>
                                         </div>
@@ -61,7 +61,7 @@
                                             <div class="col-6">
                                                 <h6 class="fw-bold">Nacionalidad</h6>
                                             </div>
-                                            <div class="col-6">
+                                            <div class="col-6 d-flex align-items-center">
                                                 <p>Ecuatoriano</p>
                                             </div>
                                         </div>
@@ -69,7 +69,7 @@
                                             <div class="col-6">
                                                 <h6 class="fw-bold">Estado Civil</h6>
                                             </div>
-                                            <div class="col-6">
+                                            <div class="col-6 d-flex align-items-center">
                                                 <p>Soltero</p>
                                             </div>
                                         </div>
@@ -83,7 +83,7 @@
                                     <div class="mt-3">
                                         <div class="row">
                                             <div class="col-10">
-                                                <h5 class="fw-bold">Información de Contacto</h5>
+                                                <h5 class="fw-bold text-primary">Información de Contacto</h5>
                                             </div>
                                             <div class="col-2">
                                                 <a href="#" data-bs-toggle="modal" data-bs-target="#modal_informacion_contacto">
@@ -92,18 +92,18 @@
                                         </div>
                                         <hr />
                                         <div class="row">
-                                            <div class="col-6">
+                                            <div class="col-6 d-flex align-items-center">
                                                 <h6 class="fw-bold">Dirección</h6>
                                             </div>
-                                            <div class="col-6">
-                                                <p>Adrian Acuña Estrada</p>
+                                            <div class="col-6 d-flex align-items-center">
+                                                <p>Profeta Miqueas, OE11A, Quito, Pichincha, 07173</p>
                                             </div>
                                         </div>
                                         <div class="row">
-                                            <div class="col-6">
+                                            <div class="col-6 d-flex align-items-center">
                                                 <h6 class="fw-bold">Teléfono</h6>
                                             </div>
-                                            <div class="col-6">
+                                            <div class="col-6 d-flex align-items-center">
                                                 <p>2002-10-07</p>
                                             </div>
                                         </div>
@@ -111,7 +111,7 @@
                                             <div class="col-6">
                                                 <h6 class="fw-bold">Correo Electrónico</h6>
                                             </div>
-                                            <div class="col-6">
+                                            <div class="col-6 d-flex align-items-center">
                                                 <p>Ecuatoriano</p>
                                             </div>
                                         </div>
@@ -120,7 +120,8 @@
                                                 <h6 class="fw-bold">Contacto de Emergencia</h6>
                                             </div>
                                             <div class="col-6">
-                                                <p>Soltero</p>
+                                                <p class="my-0">Adrian Acuña</p>
+                                                <p>09914654645</p>
                                             </div>
                                         </div>
                                     </div>
@@ -141,15 +142,15 @@
                                         </div>
                                     </a>
                                 </li>
-                                <!-- <li class="nav-item" role="presentation">
+                                <li class="nav-item" role="presentation">
                                     <a class="nav-link" data-bs-toggle="tab" href="#successprofile" role="tab" aria-selected="false" tabindex="-1">
                                         <div class="d-flex align-items-center">
                                             <div class="tab-icon"><i class="bx bx-user-pin font-18 me-1"></i>
                                             </div>
-                                            <div class="tab-title">Documentos Relevantes</div>
+                                            <div class="tab-title">Idiomas y Aptitudes</div>
                                         </div>
                                     </a>
-                                </li> -->
+                                </li>
                                 <li class="nav-item" role="presentation">
                                     <a class="nav-link" data-bs-toggle="tab" href="#successcontact" role="tab" aria-selected="false" tabindex="-1">
                                         <div class="d-flex align-items-center">
@@ -159,15 +160,6 @@
                                         </div>
                                     </a>
                                 </li>
-                                <!-- <li class="nav-item" role="presentation">
-                                    <a class="nav-link" data-bs-toggle="tab" href="#successcontact" role="tab" aria-selected="false" tabindex="-1">
-                                        <div class="d-flex align-items-center">
-                                            <div class="tab-icon"><i class="bx bx-microphone font-18 me-1"></i>
-                                            </div>
-                                            <div class="tab-title">Idiomas</div>
-                                        </div>
-                                    </a>
-                                </li> -->
                             </ul>
                             <div class="tab-content pt-3">
                                 <div class="tab-pane fade show active" id="successhome" role="tabpanel">
@@ -177,12 +169,12 @@
                                             <div class="card-body">
                                                 <div class="mb-2">
                                                     <div class="row">
-                                                        <div class="col-6">
-                                                            <h6 class="mb-0 fw-bold text-success">Experiencia Previa:</h6>
+                                                        <div class="col-6 d-flex align-items-center">
+                                                            <h6 class="mb-0 fw-bold text-primary">Experiencia Previa:</h6>
                                                         </div>
                                                         <div class="col-6 d-flex justify-content-end">
-                                                            <a href="#" class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#modal_agregar_experiencia">
-                                                                <i class='bx bx-plus-circle bx-sm'></i>
+                                                            <a href="#" class="text-success d-flex align-items-center" data-bs-toggle="modal" data-bs-target="#modal_agregar_experiencia">
+                                                                <i class='bx bx-plus-circle bx-sm me-1'></i>
                                                                 <span>Agregar Experiencia</span>
                                                             </a>
                                                         </div>
@@ -204,12 +196,12 @@
                                             <div class="card-body">
                                                 <div class="mb-2">
                                                     <div class="row">
-                                                        <div class="col-6">
-                                                            <h6 class="mb-0 fw-bold text-success">Formación Académica:</h6>
+                                                        <div class="col-6 d-flex align-items-center">
+                                                            <h6 class="mb-0 fw-bold text-primary">Formación Académica:</h6>
                                                         </div>
                                                         <div class="col-6 d-flex justify-content-end">
-                                                            <a href="#" class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#modal_agregar_formacion">
-                                                                <i class='bx bx-plus-circle bx-sm'></i>
+                                                            <a href="#" class="text-success d-flex align-items-center" data-bs-toggle="modal" data-bs-target="#modal_agregar_formacion">
+                                                                <i class='bx bx-plus-circle bx-sm me-1'></i>
                                                                 <span>Agregar Formación</span>
                                                             </a>
                                                         </div>
@@ -231,12 +223,12 @@
                                             <div class="card-body">
                                                 <div class="mb-2">
                                                     <div class="row">
-                                                        <div class="col-6">
-                                                            <h6 class="mb-0 fw-bold text-success">Certificaciones y Capacitación:</h6>
+                                                        <div class="col-6 d-flex align-items-center">
+                                                            <h6 class="mb-0 fw-bold text-primary">Certificaciones y Capacitación:</h6>
                                                         </div>
                                                         <div class="col-6 d-flex justify-content-end">
-                                                            <a href="#" class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#modal_agregar_certificaciones">
-                                                                <i class='bx bx-plus-circle bx-sm'></i>
+                                                            <a href="#" class="text-success d-flex align-items-center" data-bs-toggle="modal" data-bs-target="#modal_agregar_certificaciones">
+                                                                <i class='bx bx-plus-circle bx-sm me-1'></i>
                                                                 <span>Agregar Certificaciones</span>
                                                             </a>
                                                         </div>
@@ -256,21 +248,89 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="tab-content">
+                                <!-- Segunda Sección, Idiomas y aptitudes -->
+                                <div class="tab-pane fade" id="successprofile" role="tabpanel">
+                                    <div class="card">
+                                        <div class="d-flex flex-column mx-4">
+                                            <div class="card-body">
+                                                <div class="mb-1">
+                                                    <div class="row">
+                                                        <div class="col-6 d-flex align-items-center">
+                                                            <h6 class="mb-0 fw-bold text-primary">Idiomas</h6>
+                                                        </div>
+                                                        <div class="col-6 d-flex justify-content-end">
+                                                            <a href="#" class="text-success d-flex align-items-center" data-bs-toggle="modal" data-bs-target="#modal_agregar_idioma">
+                                                                <i class='bx bx-plus-circle bx-sm me-1'></i>
+                                                                <span>Agregar Idioma</span>
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <hr class="my-0">
+                                                <div class="row mt-3">
+                                                    <div class="col-8">
+                                                        <h6 class="fw-bold">Inglés</h6>
+                                                        <p>B1</p>
+                                                    </div>
+                                                    <div class="col-4">
+                                                        <a href="#" class="d-flex justify-content-end"><i class='text-dark bx bx-pencil bx-sm'></i></a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="card-body">
+                                                <div class="mb-1">
+                                                    <div class="row">
+                                                        <div class="col-6 d-flex align-items-center">
+                                                            <h6 class="mb-0 fw-bold text-primary">Aptitudes</h6>
+                                                        </div>
+                                                        <div class="col-6 d-flex justify-content-end">
+                                                            <a href="#" class="text-success d-flex align-items-center" data-bs-toggle="modal" data-bs-target="#modal_agregar_aptitudes">
+                                                                <i class='bx bx-plus-circle bx-sm me-1'></i>
+                                                                <span>Agregar Aptitudes</span>
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <hr class="my-0">
+                                                <div class="row mt-3">
+                                                    <div class="col-8">
+                                                        <p class="fw-bold">Aptitudes Técnicas</p>
+                                                        <ul>
+                                                            <li>Dominio de paquete Office</li>
+                                                        </ul>
+                                                    </div>
+                                                    <div class="col-4">
+                                                        <a href="#" class="d-flex justify-content-end"><i class='text-dark bx bx-pencil bx-sm'></i></a>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-8">
+                                                        <p class="fw-bold">Aptitudes Blandas</p>
+                                                        <ul>
+                                                            <li>Liderazgo</li>
+                                                        </ul>
+                                                    </div>
+                                                    <div class="col-4">
+                                                        <a href="#" class="d-flex justify-content-end"><i class='text-dark bx bx-pencil bx-sm'></i></a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                                 <div class="tab-pane fade" id="successcontact" role="tabpanel">
-                                    <!-- Segunda Sección, Estado del Empleado -->
+                                    <!-- Tercera Sección, Estado del Empleado -->
                                     <div class="card">
                                         <div class="d-flex flex-column mx-4">
                                             <div class="card-body">
                                                 <div class="mb-2">
                                                     <div class="row">
-                                                        <div class="col-6">
-                                                            <h6 class="mb-0 fw-bold text-success">Estado laboral:</h6>
+                                                        <div class="col-6 d-flex align-items-center">
+                                                            <h6 class="mb-0 fw-bold text-primary">Estado laboral:</h6>
                                                         </div>
                                                         <div class="col-6 d-flex justify-content-end">
-                                                            <a href="#" class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#modal_estado_laboral">
-                                                                <i class='bx bx-plus-circle bx-sm'></i>
+                                                            <a href="#" class="text-success d-flex align-items-center" data-bs-toggle="modal" data-bs-target="#modal_estado_laboral">
+                                                                <i class='bx bx-plus-circle bx-sm me-1'></i>
                                                                 <span>Agregar Estado</span>
                                                             </a>
                                                         </div>
@@ -302,12 +362,12 @@
                                 <div class="card-body">
                                     <div class="mb-2">
                                         <div class="row">
-                                            <div class="col-7">
-                                                <h6 class="mb-0 fw-bold text-success">Documento de Identidad:</h6>
+                                            <div class="col-7 d-flex align-items-center">
+                                                <h6 class="mb-0 fw-bold text-primary">Documento de Identidad:</h6>
                                             </div>
                                             <div class="col-5 d-flex justify-content-end align-items-center">
-                                                <a href="#" class="btn btn-sm btn-outline-primary d-flex align-items-center" id="btn_agregar_documento_identidad">
-                                                    <i class='bx bx-plus-circle bx-sm me-0'></i>
+                                                <a href="#" class="text-success d-flex align-items-center" id="btn_agregar_documento_identidad">
+                                                    <i class='bx bx-plus-circle bx-sm me-1'></i>
                                                     <span class="fw-bold">Subir</span>
                                                 </a>
                                                 <input type="file" name="txt_agregar_documento_identidad" id="txt_agregar_documento_identidad" accept=".pdf" hidden>
@@ -339,12 +399,12 @@
                                 <div class="card-body">
                                     <div class="mb-2">
                                         <div class="row">
-                                            <div class="col-7">
-                                                <h6 class="mb-0 fw-bold text-success">Contratos de Trabajo:</h6>
+                                            <div class="col-7 d-flex align-items-center">
+                                                <h6 class="mb-0 fw-bold text-primary">Contratos de Trabajo:</h6>
                                             </div>
                                             <div class="col-5 d-flex justify-content-end align-items-center">
-                                                <a href="#" class="btn btn-sm btn-outline-primary d-flex align-items-center" data-bs-toggle="modal" data-bs-target="#modal_agregar_contratos">
-                                                    <i class='bx bx-plus-circle bx-sm me-0'></i>
+                                                <a href="#" class="text-success d-flex align-items-center" data-bs-toggle="modal" data-bs-target="#modal_agregar_contratos">
+                                                    <i class='bx bx-plus-circle bx-sm me-1'></i>
                                                     <span class="fw-bold">Subir</span>
                                                 </a>
                                             </div>
@@ -372,22 +432,22 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="card-body">
+                                <div class="card-body my-0">
                                     <div class="mb-2">
                                         <div class="row">
-                                            <div class="col-7">
-                                                <h6 class="mb-0 fw-bold text-success">Certificados Médicos:</h6>
+                                            <div class="col-7 d-flex align-items-center">
+                                                <h6 class="mb-0 fw-bold text-primary">Certificados Médicos:</h6>
                                             </div>
                                             <div class="col-5 d-flex justify-content-end align-items-center">
-                                                <a href="#" class="btn btn-sm btn-outline-primary d-flex align-items-center" data-bs-toggle="modal" data-bs-target="#modal_agregar_certificado_medico">
-                                                    <i class='bx bx-plus-circle bx-sm me-0'></i>
+                                                <a href="#" class="text-success d-flex align-items-center" data-bs-toggle="modal" data-bs-target="#modal_agregar_certificado_medico">
+                                                    <i class='bx bx-plus-circle bx-sm me-1'></i>
                                                     <span class="fw-bold">Subir</span>
                                                 </a>
                                             </div>
                                         </div>
                                     </div>
                                     <hr class="my-0">
-                                    <div class="row">
+                                    <div class="row my-0">
                                         <div class="col-12 table-responsive">
                                             <table class="table table-borderless align-middle">
                                                 <thead>
@@ -411,19 +471,19 @@
                                 <div class="card-body">
                                     <div class="mb-2">
                                         <div class="row">
-                                            <div class="col-7">
-                                                <h6 class="mb-0 fw-bold text-success">Referencias laborales:</h6>
+                                            <div class="col-7 d-flex align-items-center">
+                                                <h6 class="mb-0 fw-bold text-primary">Referencias laborales:</h6>
                                             </div>
                                             <div class="col-5 d-flex justify-content-end align-items-center">
-                                                <a href="#" class="btn btn-sm btn-outline-primary d-flex align-items-center" data-bs-toggle="modal" data-bs-target="#modal_agregar_referencia_laboral">
-                                                    <i class='bx bx-plus-circle bx-sm me-0'></i>
+                                                <a href="#" class="text-success d-flex align-items-center" data-bs-toggle="modal" data-bs-target="#modal_agregar_referencia_laboral">
+                                                    <i class='bx bx-plus-circle bx-sm me-1'></i>
                                                     <span class="fw-bold">Añadir</span>
                                                 </a>
                                             </div>
                                         </div>
                                     </div>
                                     <hr class="my-0">
-                                    <div class="row">
+                                    <div class="row my-0">
                                         <div class="col-12 table-responsive">
                                             <table class="table table-borderless align-middle">
                                                 <thead>
@@ -435,27 +495,13 @@
                                                 <tbody>
                                                     <tr>
                                                         <td>
-                                                            <p class="fw-bold">Ing. Roberto Carapaz</p>
-                                                            <p>+593 994645643</p>
+                                                            <p class="fw-bold my-0 d-flex align-items-center">Ing. Roberto Carapaz</p>
+                                                            <p class="d-flex align-items-center">+593 994645643</p>
                                                         </td>
-                                                        <td><a href="#" class=""><i class='text-info bx bx-pencil me-2' style="font-size: 20px;"></i></a>
+                                                        <td class="d-flex align-items-center"><a href="#" class=""><i class='text-info bx bx-pencil me-2' style="font-size: 20px;"></i></a>
                                                             <a href="#" class=""><i class='text-danger bx bx-trash me-0' style="font-size: 20px;"></i></a>
                                                         </td>
                                                     </tr>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-12 table-responsive">
-                                            <table class="table table-borderless align-middle">
-                                                <thead>
-                                                    <tr>
-                                                        <th width="90%"></th>
-                                                        <th width="10%"></th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
                                                     <tr>
                                                         <td class="fw-bold">Carta A</td>
                                                         <td><a href="#" class=""><i class='text-info bx bx-download me-2' style="font-size: 20px;"></i></a>
@@ -551,21 +597,48 @@
             </div>
             <!-- Modal body -->
             <div class="modal-body">
+                <p class="fw-bold">Dirección:</p>
                 <div class="mb-3">
-                    <label for="txt_direccion" class="form-label form-label-sm">Dirección</label>
-                    <input type="text" class="form-control form-control-sm" name="txt_direccion" id="txt_direccion" value="" placeholder="Escriba su dirección">
+                    <label for="txt_direccion_calle" class="form-label form-label-sm">Calle</label>
+                    <input type="text" class="form-control form-control-sm" name="txt_direccion_calle" id="txt_direccion_calle" value="" placeholder="Escriba su dirección">
                 </div>
                 <div class="mb-3">
-                    <label for="txt_telefono" class="form-label form-label-sm">Teléfono</label>
-                    <input type="date" class="form-control form-control-sm" name="txt_telefono" id="txt_telefono" value="" placeholder="Escriba su teléfono">
+                    <label for="txt_direccion_calle" class="form-label form-label-sm">Número</label>
+                    <input type="text" class="form-control form-control-sm" name="txt_direccion_numero" id="txt_direccion_calle" value="" placeholder="Escriba su dirección">
+                </div>
+                <div class="mb-3">
+                    <label for="txt_direccion_calle" class="form-label form-label-sm">Ciudad</label>
+                    <input type="text" class="form-control form-control-sm" name="txt_direccion_ciudad" id="txt_direccion_calle" value="" placeholder="Escriba su dirección">
+                </div>
+                <div class="mb-3">
+                    <label for="txt_direccion_calle" class="form-label form-label-sm">Estado/Provincia</label>
+                    <input type="text" class="form-control form-control-sm" name="txt_direccion_estado" id="txt_direccion_calle" value="" placeholder="Escriba su dirección">
+                </div>
+                <div class="mb-3">
+                    <label for="txt_direccion_calle" class="form-label form-label-sm">Código Postal</label>
+                    <input type="text" class="form-control form-control-sm" name="txt_direccion_postal" id="txt_direccion_calle" value="" placeholder="Escriba su dirección">
+                </div>
+                <hr>
+                <div class="mb-3">
+                    <label for="txt_telefono_1" class="form-label form-label-sm">Teléfono 1 (personal o fijo)</label>
+                    <input type="text" class="form-control form-control-sm" name="txt_telefono_1" id="txt_telefono_1" value="" placeholder="Escriba su teléfono">
+                </div>
+                <div class="mb-3">
+                    <label for="txt_telefono_2" class="form-label form-label-sm">Teléfono 2 (opcional)</label>
+                    <input type="text" class="form-control form-control-sm" name="txt_telefono_2" id="txt_telefono_2" value="" placeholder="Escriba su teléfono">
                 </div>
                 <div class="mb-3">
                     <label for="txt_correo" class="form-label form-label-sm">Correo Electrónico</label>
-                    <input type="text" class="form-control form-control-sm" name="txt_correo" id="txt_correo" value="" placeholder="Escriba su correo electrónico">
+                    <input type="email" class="form-control form-control-sm" name="txt_correo" id="txt_correo" value="" placeholder="Escriba su correo electrónico">
+                </div>
+                <p class="fw-bold">Contacto de Emergencia:</p>
+                <div class="mb-3">
+                    <label for="txt_nombre_contacto_emergencia" class="form-label form-label-sm">Nombre del contacto de Emergencia</label>
+                    <input type="text" class="form-control form-control-sm" name="txt_nombre_contacto_emergencia" id="txt_nombre_contacto_emergencia" value="" placeholder="Escriba un contacto de emergencia">
                 </div>
                 <div class="mb-3">
-                    <label for="txt_contacto_emergencia" class="form-label form-label-sm">Contacto de Emergencia</label>
-                    <input type="text" class="form-control form-control-sm" name="txt_contacto_emergencia" id="txt_contacto_emergencia" value="" placeholder="Escriba un contacto de emergencia">
+                    <label for="txt_telefono_contacto_emergencia" class="form-label form-label-sm">Teléfono del contacto de Emergencia</label>
+                    <input type="text" class="form-control form-control-sm" name="txt_telefono_contacto_emergencia" id="txt_telefono_contacto_emergencia" value="" placeholder="Escriba un contacto de emergencia">
                 </div>
             </div>
             <div class="modal-footer d-flex justify-content-center">
@@ -724,11 +797,11 @@
                 <div id="contacto_empleador">
                     <div class="mb-3">
                         <label for="txt_nombre_certificacion" class="form-label form-label-sm">Nombre del empleador</label>
-                        <input type="text" class="form-control form-control-sm" name="txt_nombre_certificacion" id="txt_nombre_empresa_contrato" value="" placeholder="Escriba el nombre de el empleador">
+                        <input type="text" class="form-control form-control-sm" name="txt_nombre_certificacion" id="txt_nombre_certificacion" value="" placeholder="Escriba el nombre de el empleador">
                     </div>
                     <div class="mb-3">
-                        <label for="txt_nombre_certificacion" class="form-label form-label-sm">Número del empleador</label>
-                        <input type="text" class="form-control form-control-sm" name="txt_nombre_certificacion" id="txt_nombre_empresa_contrato" value="" placeholder="Escriba el número de contacto de el empleador">
+                        <label for="txt_telefono_certificacion" class="form-label form-label-sm">Teléfono del empleador</label>
+                        <input type="text" class="form-control form-control-sm" name="txt_telefono_certificacion" id="txt_telefono_certificacion" value="" placeholder="Escriba el número de contacto de el empleador">
                     </div>
                 </div>
                 <div id="carta_recomendación">
@@ -782,7 +855,7 @@
             <!-- Modal body -->
             <div class="modal-body">
                 <div class="mb-3">
-                    <label for="txt_nombre_certificacion" class="form-label form-label-sm">Estado laboral:</label>
+                    <label for="ddl_estado_laboral" class="form-label form-label-sm">Estado laboral:</label>
                     <select class="form-select form-select-sm" id="ddl_estado_laboral" name="ddl_estado_laboral" required>
                         <option selected disabled value="">-- Selecciona un Estado Laboral --</option>
                         <option value="Activo">Activo</option>
@@ -808,12 +881,112 @@
         </div>
     </div>
 </div>
+<div class="modal" id="modal_agregar_idioma" tabindex="-1" aria-modal="true" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h5><small class="text-body-secondary">Agregue un idioma</small></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <!-- Modal body -->
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label for="txt_idioma" class="form-label form-label-sm">Idioma</label>
+                    <input type="text" class="form-control form-control-sm mb-3" name="txt_idioma" id="txt_idioma" value="" required>
+                </div>
+                <div class="mb-3">
+                    <label for="ddl_dominio_idioma" class="form-label form-label-sm">Dominio del Idioma</label>
+                    <select class="form-select form-select-sm" id="ddl_dominio_idioma" name="ddl_dominio_idioma" required>
+                        <option selected disabled value="">-- Selecciona una opción --</option>
+                        <option value="Nativo">Nativo</option>
+                        <option value="C1">C1</option>
+                        <option value="C2">C2</option>
+                        <option value="B1">B1</option>
+                        <option value="B2">B2</option>
+                        <option value="C1">C1</option>
+                        <option value="C2">C2</option>
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer d-flex justify-content-center">
+                <button type="button" class="btn btn-success btn-sm" id="btn_guardar_idioma">Guardar Idioma</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal" id="modal_agregar_aptitudes" tabindex="-1" aria-modal="true" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h5><small class="text-body-secondary">Agregue Aptitudes</small></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <!-- Modal body -->
+            <div class="modal-body">
+                <select class="form-select form-select-sm mb-4" id="ddl_tipo_aptitudes" name="ddl_tipo_aptitudes" required>
+                    <option selected disabled value="">-- Selecciona el tipo de Aptitudes --</option>
+                    <option value="Blandas">Aptitudes Blandas</option>
+                    <option value="Tecnicas">Aptitudes Técnicas</option>
+                </select>
+                <div id="aptitudes_blandas">
+                    <div class="mb-3">
+                        <div class="row mb-3">
+                            <div class="col-10 d-flex align-items-center">
+                                <label for="txt_aptitud_blanda" class="form-label form-label-sm fw-bold">Escriba sus Aptitudes</label>
+                            </div>
+                            <div class="col-2 d-flex justify-content-end align-items-center">
+                                <button class="btn btn-sm btn-primary" id="btn_agregar_aptitudes_blandas"><i class='bx bx-list-plus me-0'></i></button>
+                            </div>
+                        </div>
+                        <div class="blandas_contenedor">
+                            <div class="row mb-2">
+                                <div class="col-12">
+                                    <input type="text" class="form-control form-control-sm" name="txt_aptitud_blanda" id="txt_aptitud_blanda" value="" placeholder="Ejemplo: Liderazgo">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="aptitudes_tecnicas">
+                    <div class="mb-3">
+                        <div class="row mb-3">
+                            <div class="col-10 d-flex align-items-center">
+                                <label for="txt_aptitud_tecnica" class="form-label form-label-sm fw-bold">Escriba sus Aptitudes</label>
+                            </div>
+                            <div class="col-2 d-flex justify-content-end align-items-center">
+                                <button class="btn btn-sm btn-primary" id="btn_agregar_aptitudes_tecnicas"><i class='bx bx-list-plus me-0'></i></button>
+                            </div>
+                        </div>
+                        <div class="tecnicas_contenedor">
+                            <div class="row mb-2">
+                                <div class="col-12">
+                                    <input type="text" class="form-control form-control-sm" name="txt_aptitud_tecnica" id="txt_aptitud_tecnica" value="" placeholder="Ejemplo: Manejo de Office">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer d-flex justify-content-center">
+                <button type="button" class="btn btn-success btn-sm" id="btn_guardar_aptitudes">Guardar Aptitudes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
 
 <script>
     $(document).ready(function() {
         mostrar_referencia_laboral()
         cambiar_foto()
         ocultar_opciones_estado()
+        mostrar_tipo_aptitudes()
 
         $('#ddl_tipo_referencia').change(function() {
             mostrar_referencia_laboral();
@@ -822,11 +995,30 @@
         $('#ddl_estado_laboral').change(function() {
             ocultar_opciones_estado();
         });
+        $('#ddl_tipo_aptitudes').change(function() {
+            mostrar_tipo_aptitudes();
+        });
 
         $('#contacto_empleador').hide();
         $('#carta_recomendación').hide();
 
         $('#txt_elegir_foto').hide();
+
+        $('#btn_agregar_aptitudes_blandas').on('click', function() {
+            var nueva_aptitud = $('.blandas_contenedor .row').first().clone();
+
+            nueva_aptitud.find('input').val('');
+
+            $('.blandas_contenedor').append(nueva_aptitud);
+        });
+
+        $('#btn_agregar_aptitudes_tecnicas').on('click', function() {
+            var nueva_aptitud = $('.tecnicas_contenedor .row').first().clone();
+
+            nueva_aptitud.find('input').val('');
+
+            $('.tecnicas_contenedor').append(nueva_aptitud);
+        });
     });
 
 
@@ -873,6 +1065,22 @@
         if (valor_seleccionado === "Inactivo" || valor_seleccionado === "Freelancer" || valor_seleccionado === "Autonomo") {
             $('#txt_fecha_contratacion_estado').prop('disabled', true);
             $('#txt_fecha_salida_estado').prop('disabled', true);
+        }
+    }
+
+    function mostrar_tipo_aptitudes() {
+        var select_tipo_aptitudes = $('#ddl_tipo_aptitudes');
+        var div_aptitudes_blandas = $('#aptitudes_blandas')
+        var div_aptitudes_tecnicas = $('#aptitudes_tecnicas')
+
+        div_aptitudes_blandas.hide();
+        div_aptitudes_tecnicas.hide();
+
+
+        if (select_tipo_aptitudes.val() == 'Blandas') {
+            div_aptitudes_blandas.show()
+        } else if (select_tipo_aptitudes.val() == 'Tecnicas') {
+            div_aptitudes_tecnicas.show()
         }
     }
 </script>
