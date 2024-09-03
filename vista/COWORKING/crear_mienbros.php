@@ -1,3 +1,4 @@
+
 <div class="page-wrapper">
     <div class="page-content">
         <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
@@ -47,23 +48,25 @@
                                     <input type="number" class="form-control form-control-sm" name="ddl_id_espacio" id="ddl_id_espacio" placeholder="Numero de espacio" required>
                                 </div>
                             </div>
-                            <button type="button" onclick="enviardatos()"class="btn btn-primary" id="btn_registrar_miembro"><strong>Registrar Miembro</strong></button>
+                            <button type="button" onclick="enviardatos()" class="btn btn-primary" id="btn_registrar_miembro">
+                                <strong>Registrar Miembro</strong>
+                            </button>
                         </form>
 
                         <h2 class="mb-4">Miembros Registrados</h2>
                         <table class="table table-bordered table-striped" id="tbl_miembros">
                             <thead class="table-header">
                                 <tr>
+                                    <th>Comprar</th>
                                     <th>Nombre</th>
                                     <th>Apellido</th>
                                     <th>Telefono</th>
                                     <th>Direccion</th>
                                     <th>Espacio</th>
-                                    <th>Acciones</th>
+                                    <th>Eliminar</th>
                                 </tr>
                             </thead>
                             <tbody id="tbl_body">
-                                
                             </tbody>
                         </table>
 
@@ -77,14 +80,11 @@
                                     <div class="modal-body">
                                         <form id="formulario_compras">
                                             <div class="row mb-3">
-                                                <div class="col-md-3">
-                                                    <label for="id_miembro" class="form-label">ID Miembro:</label>
-                                                    <input type="text" name="id_miembro" id="id_miembro" class="form-control" value="<?php echo htmlspecialchars($id_miembro); ?>" readonly>
-                                                </div>
+                                                <input type="hidden" name="id_compra" id="id_compra" class="form-control" value="<?php echo htmlspecialchars($id_compra); ?>" readonly>
+                                                <input type="hidden" name="id_miembro" id="id_miembro" class="form-control" value="<?php echo htmlspecialchars($id_miembro); ?>" readonly>
                                                 <div class="col-md-3">
                                                     <label for="txt_producto" class="form-label"><strong>Producto:</strong></label>
                                                     <select class="form-control" id="txt_producto" name="txt_producto" required>
-
                                                     </select>
                                                 </div>
                                                 <div class="col-md-3">
@@ -99,30 +99,32 @@
                                                     <label for="txt_total" class="form-label"><strong>Total:</strong></label>
                                                     <input type="text" class="form-control" id="txt_total" name="txt_total" readonly>
                                                 </div>
+                                                <div class="col-md-3 d-flex align-items-end ms-auto">
+                                                    <button style="margin-top: 20px;" type="button" onclick="enviarCompras()" class="btn btn-primary w-100 btn-margin-top" id="btn_agregar_compra">
+                                                        <i class='bx bx-cart'></i> <strong>Agregar</strong>
+                                                    </button>
+                                                </div>
                                             </div>
                                             <table class="table table-bordered table-striped mt-4" id="tbl_compras">
                                                 <thead class="table-header">
                                                     <tr>
+                                                        <th>Compra</th>
                                                         <th>Miembro</th>
                                                         <th>Producto</th>
                                                         <th>Cantidad</th>
                                                         <th>Precio</th>
                                                         <th>Total</th>
-                                                        
+                                                        <th>Eliminar</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody id="tbl_boby">
-                                                    
                                                 </tbody>
                                             </table>
-                                            <button type="button" onclick="enviarCompras()" class="btn btn-primary" id="btn_agregar_compra">
-                                                <i class="bx bx-save"></i> <strong>Agregar</strong>
-                                            </button>
                                         </form>
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-danger" data-bs-dismiss="modal">
-                                            <strong>Cerrar</strong> <i class="bi bi-file-x"></i>
+                                            <i class='bx bx-x'></i><strong>Cerrar</strong> 
                                         </button>
                                     </div>
                                 </div>
@@ -135,6 +137,7 @@
         </div>
     </div>
 </div>
+
 
 
 <script>
@@ -173,32 +176,46 @@
     }
 
     function enviardatos() {
-        var parametros = {
-            'nombre_miembro': $('#txt_nombre').val(),
-            'apellido_miembro': $('#txt_apellido').val(),
-            'telefono_miembro': $('#txt_numero_celular').val(),
-            'direccion_miembro': $('#txt_direccion').val(),
-            'id_espacio': $('#ddl_id_espacio').val()
-        };
+    var parametros = {
+        'nombre_miembro': $('#txt_nombre').val(),
+        'apellido_miembro': $('#txt_apellido').val(),
+        'telefono_miembro': $('#txt_numero_celular').val(),
+        'direccion_miembro': $('#txt_direccion').val(),
+        'id_espacio': $('#ddl_id_espacio').val()
+    };
 
-        $.ajax({
-            data: {data: parametros},
-            url: '../controlador/COWORKING/crear_mienbrosC.php?add=true',
-            type: 'post',
-            dataType: 'json',
-            success: function(response) {  
-                if (response == 1) {
-                    alert('Miembro agregado con éxito');
-                    lista_usuario();
-                } else {
-                    alert('Error al agregar el miembro');
-                }
-            }       
-        });
-    }
+    $.ajax({
+        data: {data: parametros},
+        url: '../controlador/COWORKING/crear_mienbrosC.php?add=true',
+        type: 'post',
+        dataType: 'json',
+        success: function(response) {  
+            if (response === 1) {
+                // Muestra un mensaje de éxito al agregar el miembro
+                Swal.fire({
+                    title: 'Miembro agregado con éxito',
+                    icon: 'success',
+                    confirmButtonText: 'Aceptar'
+                }).then(() => {
+                    lista_usuario(); // Actualiza la lista de miembros
+                    $('#formulario_miembro')[0].reset(); // Resetea el formulario
+                });
+            } else {
+                // Muestra un mensaje de error si hubo un problema
+                Swal.fire({
+                    title: 'Error al agregar el miembro',
+                    icon: 'error',
+                    confirmButtonText: 'Aceptar'
+                });
+            }
+        }
+    });
+}
+
 
     function enviarCompras() {
         var parametros = {
+            'id_compra': $('#id_compra').val(),
             'id_miembro': $('#id_miembro').val(),
             'id_producto': $('#txt_producto').val(),
             'cantidad_compra': $('#txt_cantidad').val(),
@@ -249,45 +266,92 @@ function abrirModal(id_miembro) {
         }
 
     function eliminarCompra(id_compra) {
-        $.ajax({
-        url: '../controlador/COWORKING/crear_mienbrosC.php?eliminar_compra=true',
-        type: 'POST',
-        data: { id_compra: id_compra },
-        dataType: 'json',
-        success: function(response) {
-            if (response === "Compra eliminada con éxito") {
-                
-                $('#row-compra-' + id_compra).remove();
-                alert('Compra eliminada con éxito');
-                
-            } 
-            else {
-                alert('Error al eliminar la compra');
-            }
+    Swal.fire({
+        title: '¿Estás seguro?',
+        text: "Esta acción eliminará la compra seleccionada.",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Sí, eliminar',
+        cancelButtonText: 'Cancelar'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                url: '../controlador/COWORKING/crear_mienbrosC.php?eliminar_compra=true',
+                type: 'POST',
+                data: { id_compra: id_compra },
+                dataType: 'json',
+                success: function(response) {
+                    if (response === "Compra eliminada con éxito") {
+                        $('#row-compra-' + id_compra).remove();
+                        Swal.fire('Eliminado', 'Compra eliminada con éxito', 'success');
+                        lista_compra();
+                    } else {
+                        Swal.fire('Error', 'Error al eliminar la compra', 'error');
+                    }
+                }
+            });
         }
     });
 }
 
 
-    function eliminarMiembro(id_miembro) {
+
+function eliminarMiembro(id_miembro) {
     $.ajax({
-        url: '../controlador/COWORKING/crear_mienbrosC.php?eliminar_miembro=true',
+        url: '../controlador/COWORKING/crear_mienbrosC.php',
         type: 'POST',
-        data: { id_miembro: id_miembro },
+        data: { id_miembro: id_miembro, action: 'verificar_compras' },
         dataType: 'json',
         success: function(response) {
-            if (response === "Miembro eliminado con éxito") {
-                
-                $('#row-miembro-' + id_miembro).remove();
-                alert('Miembro eliminado con éxito');
-                lista_usuario();
+            if (response.tiene_compras) {
+                Swal.fire({
+                    title: 'El Usuario está ligado a uno o varios registros y no se podrá eliminar.',
+                    icon: 'warning',
+                    confirmButtonText: 'Entendido'
+                });
+            } else {
+                Swal.fire({
+                    title: '¿Estás seguro?',
+                    text: "Esta acción eliminará al miembro seleccionado.",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Sí, eliminar',
+                    cancelButtonText: 'Cancelar'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: '../controlador/COWORKING/crear_mienbrosC.php',
+                            type: 'POST',
+                            data: { id_miembro: id_miembro, action: 'eliminar_miembro' },
+                            dataType: 'json',
+                            success: function(response) {
+                                if (response.success) {
+                                    $('#row-miembro-' + id_miembro).remove();
+                                    Swal.fire('Eliminado', response.message, 'success');
+                                    lista_usuario();  // Actualiza la lista de usuarios si es necesario
+                                } else {
+                                    Swal.fire('Error', response.message, 'error');
+                                }
+                            },
+                            error: function(jqXHR, textStatus, errorThrown) {
+                                console.error('Error:', textStatus, errorThrown);
+                                Swal.fire('Error', 'Error al eliminar el miembro', 'error');
+                            }
+                        });
+                    }
+                });
             }
-             else {
-                alert('Error al eliminar el miembro');
-            }
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            console.error('Error:', textStatus, errorThrown);
+            Swal.fire('Error', 'Error al verificar las compras del miembro', 'error');
         }
     });
 }
+
+
+
+
 
     function select_productos() {       
         $.ajax({
