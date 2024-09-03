@@ -450,23 +450,24 @@ class cabecera_pdf
 
 		if($contenido)
 		{
-		 foreach ($contenido as $key => $value) {
-		 	 if($value['tipo'] == 'texto' && $value['posicion']=='top-tabla')
-		 	 {
-		 	 	//print_r($value);
-		 	 	$this->pdftable->SetFont('Arial','',11);
-		 	 	$this->pdftable->MultiCell(0,3,$value['valor']);
-		 	 	$this->pdftable->Ln(5);
+			 foreach ($contenido as $key => $value) 
+			 {
+			 	 if($value['tipo'] == 'texto' && $value['posicion']=='top-tabla')
+			 	 {
+			 	 	//print_r($value);
+			 	 	$this->pdftable->SetFont('Arial','',11);
+			 	 	$this->pdftable->MultiCell(0,3,$value['valor']);
+			 	 	$this->pdftable->Ln(5);
 
-		 	 }else if($value['tipo'] == 'titulo' && $value['posicion']=='top-tabla')
-		 	 {
-		 	 	$this->pdftable->SetFont('Arial','',18);
-		 	 	$this->pdftable->Cell(0,3,$value['valor'],0,0,'C');
-		 	 	$this->pdftable->Ln(5);
+			 	 }else if($value['tipo'] == 'titulo' && $value['posicion']=='top-tabla')
+			 	 {
+			 	 	$this->pdftable->SetFont('Arial','',18);
+			 	 	$this->pdftable->Cell(0,3,$value['valor'],0,0,'C');
+			 	 	$this->pdftable->Ln(5);
 
-		 	 }
-		 }
-        }
+			 	 }
+			 }
+	        }
                 $this->pdftable->SetFont('Arial','',$sizetable);
 		    foreach ($tablaHTML as $key => $value){
 		    	$tama = 9;
