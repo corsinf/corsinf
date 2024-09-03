@@ -624,7 +624,7 @@ Firma del padre de familia o representante legal (o huella digital):
         $pdf->SetFont('Arial', 'B', 12);
 
 
-        $pdf->Output('F', $sa_pac_temp_cedula . '-' . $sa_pac_nombre_completos . '.pdf');
+        $pdf->Output('D', $sa_pac_temp_cedula . '-' . $sa_pac_nombre_completos . '.pdf');
         //$pdf->Output();
     }
 }

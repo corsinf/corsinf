@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<factura id="comprobante" version="1.1.0">
+  <infoTributaria>
+    <ambiente>1</ambiente>
+    <tipoEmision>1</tipoEmision>
+    <razonSocial>empresa xyz</razonSocial>
+    <nombreComercial>empresa xyz</nombreComercial>
+    <ruc>1234567890001</ruc>
+    <claveAcceso>1104202301123456789000110010010000000011234567814</claveAcceso>
+    <codDoc>01</codDoc>
+    <estab>001</estab>
+    <ptoEmi>001</ptoEmi>
+    <secuencial>000000001</secuencial>
+    <dirMatriz>la madrid</dirMatriz>
+  </infoTributaria>
+  <infoFactura>
+    <fechaEmision>11/04/2023</fechaEmision>
+    <dirEstablecimiento>consumidos final</dirEstablecimiento>
+    <obligadoContabilidad>NO</obligadoContabilidad>
+    <tipoIdentificacionComprador>06</tipoIdentificacionComprador>
+    <razonSocialComprador>CONSUMIDOR FINAL</razonSocialComprador>
+    <identificacionComprador>999999999999</identificacionComprador>
+    <totalSinImpuestos>1</totalSinImpuestos>
+    <totalDescuento>0.00</totalDescuento>
+    <totalConImpuestos>
+      <totalImpuesto>
+        <codigo>2</codigo>
+        <codigoPorcentaje>0</codigoPorcentaje>
+        <descuentoAdicional>0</descuentoAdicional>
+        <baseImponible>1.00</baseImponible>
+        <valor>0.00</valor>
+      </totalImpuesto>
+    </totalConImpuestos>
+    <propina>0.00</propina>
+    <importeTotal>1.00</importeTotal>
+    <moneda>DOLAR</moneda>
+    <pagos>
+      <pago>
+        <formaPago>01</formaPago>
+        <total>1.00</total>
+      </pago>
+    </pagos>
+  </infoFactura>
+  <detalles>
+    <detalle>
+      <codigoPrincipal>001.001</codigoPrincipal>
+      <descripcion>prueba 1</descripcion>
+      <unidadMedida>DOLAR</unidadMedida>
+      <cantidad>1</cantidad>
+      <precioUnitario>1.000000</precioUnitario>
+      <descuento>0.00</descuento>
+      <precioTotalSinImpuesto>1.00</precioTotalSinImpuesto>
+      <detallesAdicionales>
+        <detAdicional nombre="Serie_No" valor="001-001"/>
+      </detallesAdicionales>
+      <impuestos>
+        <impuesto>
+          <codigo>2</codigo>
+          <codigoPorcentaje>0</codigoPorcentaje>
+          <tarifa>0</tarifa>
+          <baseImponible>1.00</baseImponible>
+          <valor>0.00</valor>
+        </impuesto>
+      </impuestos>
+    </detalle>
+  </detalles>
+  <infoAdicional>
+    <campoAdicional nombre="Ubicacion">0</campoAdicional>
+    <campoAdicional nombre="Direccion">consumidos final</campoAdicional>
+    <campoAdicional nombre="Telefono">99999999</campoAdicional>
+    <campoAdicional nombre="Email">consumidos@final.com</campoAdicional>
+    <campoAdicional nombre="Email2">consumidos@final.com</campoAdicional>
+    <campoAdicional nombre="Referencia">99999999</campoAdicional>
+  </infoAdicional>
+</factura>

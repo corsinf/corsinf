@@ -31,19 +31,23 @@
                                     <input type="text" class="form-control form-control-sm" name="txt_nombre" id="txt_nombre" placeholder="Nombre" required>
                                 </div>
                                 <div class="col-md-3 mb-3">
-                                    <label for="txt_correo" class="form-label"><strong>Correo:</strong></label>
-                                    <input type="email" class="form-control form-control-sm" name="txt_correo" id="txt_correo" placeholder="Correo electrónico" required>
+                                    <label for="txt_apellido" class="form-label"><strong>Apellido:</strong></label>
+                                    <input type="text" class="form-control form-control-sm" name="txt_apellido" id="txt_apellido" placeholder="Apellido" required>
                                 </div>
                                 <div class="col-md-3 mb-3">
-                                    <label for="txt_cedula" class="form-label"><strong>Cédula:</strong></label>
-                                    <input type="text" class="form-control form-control-sm" name="txt_cedula" id="txt_cedula" placeholder="Cédula" required>
+                                    <label for="txt_numero_celular" class="form-label"><strong>Telefono:</strong></label>
+                                    <input type="text" class="form-control form-control-sm" name="txt_numero_celular" id="txt_numero_celular" placeholder="Celular" required>
                                 </div>
                                 <div class="col-md-3 mb-3">
-                                    <label for="txt_numero_celular" class="form-label"><strong>Número Celular:</strong></label>
-                                    <input type="text" class="form-control form-control-sm" name="txt_numero_celular" id="txt_numero_celular" placeholder="Número" required>
+                                    <label for="txt_direccion" class="form-label"><strong>Direccion:</strong></label>
+                                    <input type="text" class="form-control form-control-sm" name="txt_direccion" id="txt_direccion" placeholder="Direccion" required>
+                                </div>
+                                <div class="col-md-3 mb-3">
+                                    <label for="ddl_id_espacio" class="form-label"><strong>Espacio:</strong></label>
+                                    <input type="number" class="form-control form-control-sm" name="ddl_id_espacio" id="ddl_id_espacio" placeholder="Numero de espacio" required>
                                 </div>
                             </div>
-                            <button type="button" class="btn btn-primary" id="btn_registrar_miembro"><strong>Registrar Miembro</strong></button>
+                            <button type="button" onclick="enviardatos()"class="btn btn-primary" id="btn_registrar_miembro"><strong>Registrar Miembro</strong></button>
                         </form>
 
                         <h2 class="mb-4">Miembros Registrados</h2>
@@ -51,13 +55,14 @@
                             <thead class="table-header">
                                 <tr>
                                     <th>Nombre</th>
-                                    <th>Correo</th>
-                                    <th>Cédula</th>
-                                    <th>Número</th>
+                                    <th>Apellido</th>
+                                    <th>Telefono</th>
+                                    <th>Direccion</th>
+                                    <th>Espacio</th>
                                     <th>Acciones</th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody id="tbl_body">
                                 
                             </tbody>
                         </table>
@@ -72,9 +77,15 @@
                                     <div class="modal-body">
                                         <form id="formulario_compras">
                                             <div class="row mb-3">
-                                                <div class="col-md-6">
+                                                <div class="col-md-3">
+                                                    <label for="id_miembro" class="form-label">ID Miembro:</label>
+                                                    <input type="text" name="id_miembro" id="id_miembro" class="form-control" value="<?php echo htmlspecialchars($id_miembro); ?>" readonly>
+                                                </div>
+                                                <div class="col-md-3">
                                                     <label for="txt_producto" class="form-label"><strong>Producto:</strong></label>
-                                                    <input type="text" class="form-control" id="txt_producto" name="txt_producto" placeholder="Producto" required>
+                                                    <select class="form-control" id="txt_producto" name="txt_producto" required>
+
+                                                    </select>
                                                 </div>
                                                 <div class="col-md-3">
                                                     <label for="txt_cantidad" class="form-label"><strong>Cantidad:</strong></label>
@@ -83,6 +94,10 @@
                                                 <div class="col-md-3">
                                                     <label for="txt_precio" class="form-label"><strong>Precio:</strong></label>
                                                     <input type="text" class="form-control" id="txt_precio" name="txt_precio" readonly>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <label for="txt_total" class="form-label"><strong>Total:</strong></label>
+                                                    <input type="text" class="form-control" id="txt_total" name="txt_total" readonly>
                                                 </div>
                                             </div>
                                             <table class="table table-bordered table-striped mt-4" id="tbl_compras">
@@ -93,15 +108,15 @@
                                                         <th>Cantidad</th>
                                                         <th>Precio</th>
                                                         <th>Total</th>
-                                                        <th>Acciones</th>
+                                                        
                                                     </tr>
                                                 </thead>
-                                                <tbody>
+                                                <tbody id="tbl_boby">
                                                     
                                                 </tbody>
                                             </table>
-                                            <button type="button" class="btn btn-primary" id="btn_agregar_compra">
-                                                <i class="bi bi-bag-plus-fill"></i> <strong>Agregar</strong>
+                                            <button type="button" onclick="enviarCompras()" class="btn btn-primary" id="btn_agregar_compra">
+                                                <i class="bx bx-save"></i> <strong>Agregar</strong>
                                             </button>
                                         </form>
                                     </div>
@@ -124,69 +139,172 @@
 
 <script>
     $(document).ready(function() {
-        $('#ddl_producto').change(function() {
-            var precio = $(this).find(':selected').data('precio');
-            $('#txt_precio').val(precio ? '$' + parseFloat(precio).toFixed(2) : '');
-        });
-
-        $('#btn_registrar_miembro').click(function() {
-            var nombre = $('#txt_nombre').val();
-            var correo = $('#txt_correo').val();
-            var cedula = $('#txt_cedula').val();
-            var numero = $('#txt_numero_celular').val();
-
-            if (nombre && correo && cedula && numero) {
-                var nuevaFila = `<tr>
-                    <td>${nombre}</td>
-                    <td>${correo}</td>
-                    <td>${cedula}</td>
-                    <td>${numero}</td>
-                    <td class="acciones">
-                        <button class="btn btn-danger btn-sm btn-eliminar"><i class="bi bi-file-x"></i></button>
-                        <button class="btn btn-primary btn-sm btn-registrar-compras" data-bs-toggle="modal" data-bs-target="#modal_registrar_compra"><i class="bi bi-cart4"></i></button>
-                    </td>
-                </tr>`;
-                $('#tbl_miembros tbody').append(nuevaFila);
-                $('#formulario_miembro')[0].reset();
-            }
-        });
-
-        $('#btn_agregar_compra').click(function() {
-            var producto = $('#ddl_producto').val();
-            var cantidad = $('#txt_cantidad').val();
-            var precio = $('#txt_precio').val();
-            var miembro = $('#btn_agregar_compra').data('miembro');
-
-            if (producto && cantidad && precio) {
-                var total = parseFloat(precio.replace('$', '')) * cantidad;
-                var nuevaFilaCompra = `<tr>
-                    <td>${miembro}</td>
-                    <td>${producto}</td>
-                    <td>${cantidad}</td>
-                    <td>${precio}</td>
-                    <td>$${total.toFixed(2)}</td>
-                    <td style="display: flex; justify-content: center; align-items: center;">
-                        <button type="button" class="btn btn-danger btn-sm btn-eliminar-compra">
-                            <i class="bi bi-file-x"></i>
-                        </button>
-                    </td>
-                </tr>`;
-                $('#tbl_compras tbody').append(nuevaFilaCompra);
-                $('#formulario_compras')[0].reset();
-            }
-        });
-
-        $('#tbl_miembros').on('click', '.btn-eliminar', function() {
-            $(this).closest('tr').remove();
-        });
-
-        $('#tbl_compras').on('click', '.btn-eliminar-compra', function() {
-            $(this).closest('tr').remove();
-        });
-
-        $('#tbl_miembros').on('click', '.btn-registrar-compras', function() {
-            var miembro = $(this).closest('tr').find('td:first').text();
-            $('#btn_agregar_compra').data('miembro', miembro);
-        });
+        lista_usuario();
+        lista_compra();
+        select_productos();
+        
+        //$('#btn_agregar_compra').click(function() {
+        //    enviarCompras();
+        //});
     });
+    
+    function lista_usuario() {       
+        $.ajax({
+            url: '../controlador/COWORKING/crear_mienbrosC.php?lista_mienbro=true',
+            type: 'post',
+            dataType: 'json',        
+            success: function(response) {  
+                $('#tbl_body').html(response);
+                console.log(response);
+            }       
+        });
+    }
+
+    function lista_compra() {       
+        $.ajax({
+            url: '../controlador/COWORKING/crear_mienbrosC.php?lista_compra=true',
+            type: 'post',
+            dataType: 'json', 
+            success: function(response) {  
+                $('#tbl_boby').html(response);
+                console.log(response);
+            }       
+        });
+    }
+
+    function enviardatos() {
+        var parametros = {
+            'nombre_miembro': $('#txt_nombre').val(),
+            'apellido_miembro': $('#txt_apellido').val(),
+            'telefono_miembro': $('#txt_numero_celular').val(),
+            'direccion_miembro': $('#txt_direccion').val(),
+            'id_espacio': $('#ddl_id_espacio').val()
+        };
+
+        $.ajax({
+            data: {data: parametros},
+            url: '../controlador/COWORKING/crear_mienbrosC.php?add=true',
+            type: 'post',
+            dataType: 'json',
+            success: function(response) {  
+                if (response == 1) {
+                    alert('Miembro agregado con éxito');
+                    lista_usuario();
+                } else {
+                    alert('Error al agregar el miembro');
+                }
+            }       
+        });
+    }
+
+    function enviarCompras() {
+        var parametros = {
+            'id_miembro': $('#id_miembro').val(),
+            'id_producto': $('#txt_producto').val(),
+            'cantidad_compra': $('#txt_cantidad').val(),
+            'pvp_compra': $('#txt_precio').val(),
+            'total_compra': $('#txt_total').val()
+        };
+
+        $.ajax({
+            data: {data: parametros},
+            url: '../controlador/COWORKING/crear_mienbrosC.php?add_compra=true',
+            type: 'post',
+            dataType: 'json',
+            success: function(response) {  
+                if (response == 1) {
+                    alert('Compra agregada con éxito');
+                    lista_compra();
+                } else {
+                    alert('Error al realizar la compra');
+                }
+            }      
+        });
+    }
+    $(document).ready(function() {
+    select_productos();
+    $('#txt_cantidad').on('input', calcularTotal); 
+    $('#txt_producto').on('change', function() {
+        var precio = $(this).find('option:selected').data('precio');
+        $('#txt_precio').val(precio);
+        calcularTotal(); 
+    });
+});
+
+function abrirModal(id_miembro) {
+    
+    console.log('ID Miembro:', id_miembro);
+
+    
+    $('#id_miembro').val(id_miembro);
+
+    
+    select_productos();
+}
+    
+    function calcularTotal() {
+        var cantidad = parseFloat($('#txt_cantidad').val()) || 0;
+        var precio = parseFloat($('#txt_precio').val()) || 0;
+        $('#txt_total').val((cantidad * precio).toFixed(2));
+        }
+
+    function eliminarCompra(id_compra) {
+        $.ajax({
+        url: '../controlador/COWORKING/crear_mienbrosC.php?eliminar_compra=true',
+        type: 'POST',
+        data: { id_compra: id_compra },
+        dataType: 'json',
+        success: function(response) {
+            if (response === "Compra eliminada con éxito") {
+                
+                $('#row-compra-' + id_compra).remove();
+                alert('Compra eliminada con éxito');
+                
+            } 
+            else {
+                alert('Error al eliminar la compra');
+            }
+        }
+    });
+}
+
+
+    function eliminarMiembro(id_miembro) {
+    $.ajax({
+        url: '../controlador/COWORKING/crear_mienbrosC.php?eliminar_miembro=true',
+        type: 'POST',
+        data: { id_miembro: id_miembro },
+        dataType: 'json',
+        success: function(response) {
+            if (response === "Miembro eliminado con éxito") {
+                
+                $('#row-miembro-' + id_miembro).remove();
+                alert('Miembro eliminado con éxito');
+                lista_usuario();
+            }
+             else {
+                alert('Error al eliminar el miembro');
+            }
+        }
+    });
+}
+
+    function select_productos() {       
+        $.ajax({
+            url: '../controlador/COWORKING/crear_mienbrosC.php?listar_productos=true',
+            type: 'post',
+            dataType: 'json', 
+            success: function(response) {  
+                $('#txt_producto').html(response);
+
+                $('#txt_producto').on('change', function() {
+                    let precio = $(this).find('option:selected').data('precio');
+                    $('#txt_precio').val(precio);
+                });
+            }       
+        });
+    }
+
+
+
 </script>
