@@ -1,4 +1,3 @@
-
 <div class="page-wrapper">
     <div class="page-content">
         <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
@@ -8,7 +7,7 @@
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb mb-0 p-0">
                         <li class="breadcrumb-item">
-                            <a href="javascript:;"><i class="bi bi-house"></i></a>
+                            <a href="javascript:;"><i class="bx bx-house"></i></a>
                         </li>
                         <li class="breadcrumb-item active" aria-current="page">
                             <strong>Registro Miembros</strong>
@@ -191,17 +190,17 @@
         dataType: 'json',
         success: function(response) {  
             if (response === 1) {
-                // Muestra un mensaje de éxito al agregar el miembro
+                
                 Swal.fire({
                     title: 'Miembro agregado con éxito',
                     icon: 'success',
                     confirmButtonText: 'Aceptar'
                 }).then(() => {
-                    lista_usuario(); // Actualiza la lista de miembros
-                    $('#formulario_miembro')[0].reset(); // Resetea el formulario
+                    lista_usuario(); 
+                    $('#formulario_miembro')[0].reset(); 
                 });
             } else {
-                // Muestra un mensaje de error si hubo un problema
+                
                 Swal.fire({
                     title: 'Error al agregar el miembro',
                     icon: 'error',
@@ -230,14 +229,25 @@
             dataType: 'json',
             success: function(response) {  
                 if (response == 1) {
-                    alert('Compra agregada con éxito');
-                    lista_compra();
-                } else {
-                    alert('Error al realizar la compra');
-                }
-            }      
-        });
-    }
+                    Swal.fire({
+                    title: 'Compra agregada con éxito',
+                    icon: 'success',
+                    confirmButtonText: 'Aceptar'
+                }).then(() => {
+                    lista_compra(); 
+                    $('#formulario_compras')[0].reset(); 
+                });
+            } else {
+                
+                Swal.fire({
+                    title: 'Error al agregar el compra',
+                    icon: 'error',
+                    confirmButtonText: 'Aceptar'
+                });
+            }
+        }
+    });
+}
     $(document).ready(function() {
     select_productos();
     $('#txt_cantidad').on('input', calcularTotal); 
@@ -303,6 +313,20 @@ function eliminarMiembro(id_miembro) {
         data: { id_miembro: id_miembro, action: 'verificar_compras' },
         dataType: 'json',
         success: function(response) {
+            console.log('Respuesta de verificar_compras:', response);
+
+            
+            if (response.error) {
+                Swal.fire({
+                    title: 'Error',
+                    text: response.error,
+                    icon: 'error',
+                    confirmButtonText: 'Entendido'
+                });
+                return;
+            }
+
+            
             if (response.tiene_compras) {
                 Swal.fire({
                     title: 'El Usuario está ligado a uno o varios registros y no se podrá eliminar.',
@@ -310,6 +334,7 @@ function eliminarMiembro(id_miembro) {
                     confirmButtonText: 'Entendido'
                 });
             } else {
+                
                 Swal.fire({
                     title: '¿Estás seguro?',
                     text: "Esta acción eliminará al miembro seleccionado.",
@@ -319,22 +344,31 @@ function eliminarMiembro(id_miembro) {
                     cancelButtonText: 'Cancelar'
                 }).then((result) => {
                     if (result.isConfirmed) {
+                        
                         $.ajax({
                             url: '../controlador/COWORKING/crear_mienbrosC.php',
                             type: 'POST',
                             data: { id_miembro: id_miembro, action: 'eliminar_miembro' },
                             dataType: 'json',
                             success: function(response) {
-                                if (response.success) {
-                                    $('#row-miembro-' + id_miembro).remove();
-                                    Swal.fire('Eliminado', response.message, 'success');
-                                    lista_usuario();  // Actualiza la lista de usuarios si es necesario
+                                console.log('Respuesta de eliminar_miembro:', response);
+
+                                
+                                if (response.error) {
+                                    Swal.fire({
+                                        title: 'Error',
+                                        text: response.error,
+                                        icon: 'error',
+                                        confirmButtonText: 'Entendido'
+                                    });
                                 } else {
-                                    Swal.fire('Error', response.message, 'error');
+                                    $('#row-miembro-' + id_miembro).remove();
+                                    Swal.fire('Eliminado', response.success, 'success');
+                                    lista_usuario();  
                                 }
                             },
                             error: function(jqXHR, textStatus, errorThrown) {
-                                console.error('Error:', textStatus, errorThrown);
+                                console.error('Error al eliminar miembro:', textStatus, errorThrown);
                                 Swal.fire('Error', 'Error al eliminar el miembro', 'error');
                             }
                         });
@@ -343,11 +377,12 @@ function eliminarMiembro(id_miembro) {
             }
         },
         error: function(jqXHR, textStatus, errorThrown) {
-            console.error('Error:', textStatus, errorThrown);
+            console.error('Error al verificar compras:', textStatus, errorThrown);
             Swal.fire('Error', 'Error al verificar las compras del miembro', 'error');
         }
     });
 }
+
 
 
 
