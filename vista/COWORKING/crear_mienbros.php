@@ -307,6 +307,7 @@ function abrirModal(id_miembro) {
 
 
 function eliminarMiembro(id_miembro) {
+    // Paso 1: Verificar si el miembro tiene compras
     $.ajax({
         url: '../controlador/COWORKING/crear_mienbrosC.php',
         type: 'POST',
@@ -315,7 +316,7 @@ function eliminarMiembro(id_miembro) {
         success: function(response) {
             console.log('Respuesta de verificar_compras:', response);
 
-            
+            // Manejo de errores en la respuesta
             if (response.error) {
                 Swal.fire({
                     title: 'Error',
@@ -326,7 +327,7 @@ function eliminarMiembro(id_miembro) {
                 return;
             }
 
-            
+            // Si el miembro tiene compras asociadas
             if (response.tiene_compras) {
                 Swal.fire({
                     title: 'El Usuario está ligado a uno o varios registros y no se podrá eliminar.',
@@ -334,7 +335,7 @@ function eliminarMiembro(id_miembro) {
                     confirmButtonText: 'Entendido'
                 });
             } else {
-                
+                // Confirmar la eliminación
                 Swal.fire({
                     title: '¿Estás seguro?',
                     text: "Esta acción eliminará al miembro seleccionado.",
@@ -344,27 +345,22 @@ function eliminarMiembro(id_miembro) {
                     cancelButtonText: 'Cancelar'
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        
+                        // Paso 2: Eliminar al miembro
                         $.ajax({
-                            url: '../controlador/COWORKING/crear_mienbrosC.php',
+                            url: '../controlador/COWORKING/crear_mienbrosC.php?eliminar_miembro=true',
                             type: 'POST',
-                            data: { id_miembro: id_miembro, action: 'eliminar_miembro' },
+                            data: { id_miembro: id_miembro },
                             dataType: 'json',
                             success: function(response) {
                                 console.log('Respuesta de eliminar_miembro:', response);
 
-                                
-                                if (response.error) {
-                                    Swal.fire({
-                                        title: 'Error',
-                                        text: response.error,
-                                        icon: 'error',
-                                        confirmButtonText: 'Entendido'
-                                    });
-                                } else {
+                                // Manejo de la respuesta de eliminación
+                                if (response === "Miembro eliminado con éxito") {
                                     $('#row-miembro-' + id_miembro).remove();
-                                    Swal.fire('Eliminado', response.success, 'success');
+                                    Swal.fire('Eliminado', 'Miembro eliminado con éxito', 'success');
                                     lista_usuario();  
+                                } else {
+                                    Swal.fire('Error', 'Error al eliminar el miembro', 'error');
                                 }
                             },
                             error: function(jqXHR, textStatus, errorThrown) {
@@ -382,6 +378,9 @@ function eliminarMiembro(id_miembro) {
         }
     });
 }
+
+
+
 
 
 

@@ -152,26 +152,8 @@ class crear_mienbrosC
 
     function eliminar_miembro($id_miembro)
     {
-        try {
-            $verificar = $this->modelo->verificar_compras($id_miembro);
-            $datos = json_decode($verificar, true);
-            
-            if ($datos['tiene_compras']) {
-                return json_encode(['error' => 'El miembro no puede ser eliminado porque tiene compras']);
-            }
-            
-            $res = $this->modelo->eliminar_miembro($id_miembro);
-            
-            if ($res) {
-                return json_encode(['success' => 'Miembro eliminado correctamente']);
-            } else {
-                error_log('Error en la eliminación: Miembro no encontrado o no se pudo eliminar');
-                return json_encode(['error' => 'Error al eliminar el miembro']);
-            }
-        } catch (Exception $e) {
-            error_log('Error en eliminar_miembro: ' . $e->getMessage());
-            return json_encode(['error' => 'Error al eliminar el miembro']);
-        }
+        $res = $this->modelo->eliminar_miembro($id_miembro);
+        return $res;
     }
     
     

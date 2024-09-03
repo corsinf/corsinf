@@ -74,22 +74,18 @@ class crear_mienbrosM
 
     function eliminar_miembro($id_miembro)
     {
-        try {
-            $query = "DELETE FROM miembros WHERE id_miembro = :id_miembro";
-            $stmt = $this->db->prepare($query);
-            $stmt->bindParam(':id_miembro', $id_miembro);
-            $stmt->execute();
-            
-            if ($stmt->rowCount() > 0) {
-                return true; // Eliminación exitosa
-            } else {
-                return false; // No se eliminó ningún registro
-            }
-        } catch (Exception $e) {
-            error_log('Error en eliminar_miembro: ' . $e->getMessage());
-            return false; // Error al eliminar
+        if (empty($id_miembro)) {
+            return "Error: ID de miembro vacío";
         }
+    
+        $datos = [
+            ['campo' => 'id_miembro', 'dato' => $id_miembro]
+        ];
+        $resultado = $this->db->delete('co_miembro', $datos);
+    
+        return $resultado == 1 ? "Miembro eliminado con éxito" : "Error al eliminar el miembro";
     }
+    
     
     
     
