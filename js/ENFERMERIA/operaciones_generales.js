@@ -114,4 +114,22 @@ $(document).on('input', '.solo_numeros_int', function (event) {
     $(this).val(value);
 });
 
+$(document).on('input', '.solo_numeros', function(event) {
+    // Obtener el valor actual del campo
+    var value = $(this).val();
+
+    // Reemplazar cualquier cosa que no sea un número o un punto
+    var nuevoValor = value.replace(/[^0-9.]/g, '');
+
+    // Permitir solo un punto decimal
+    var partes = nuevoValor.split('.');
+    if (partes.length > 2) {
+        nuevoValor = partes[0] + '.' + partes.slice(1).join('');
+    }
+
+    // Actualizar el valor del campo
+    $(this).val(nuevoValor);
+});
+
+
 

@@ -14,40 +14,6 @@ class tutores_paraleloM
         $this->db = new db();
     }
 
-    //Para mostrar todos los registros con campos especificos para la vista principal
-    function lista_tutor_paralelo_todo()
-    {
-        $sql =
-            "SELECT 
-                    tutp.ac_tutor_paralelo_id,
-                    tutp.ac_tutor_id,
-                    tutp.ac_paralelo_id,
-                    tutp.ac_tutor_paralelo_fecha_creacion,
-                   
-                    cs.sa_sec_id, 
-                    cs.sa_sec_nombre, 
-                    cg.sa_gra_id, 
-                    cg.sa_gra_nombre,
-                    cp.sa_par_id, 
-                    cp.sa_par_nombre,
-
-                    CONCAT(tut.sa_tut_primer_apellido, ' ', tut.sa_tut_segundo_apellido, ' ', tut.sa_tut_primer_nombre, ' ', tut.sa_tut_segundo_nombre) AS tutor_nombres
-
-                    FROM tutor_paralelo tutp
-
-                    INNER JOIN cat_paralelo cp ON tutp.ac_paralelo_id = cp.sa_par_id
-                    INNER JOIN cat_seccion cs ON cp.sa_id_seccion = cs.sa_sec_id
-                    INNER JOIN cat_grado cg ON cp.sa_id_grado = cg.sa_gra_id
-
-                    INNER JOIN tutors tut ON tutp.ac_tutor_id = tut.sa_tut_id
-
-                    WHERE 1 = 1";
-
-        $sql .= " ORDER BY ac_tutor_paralelo_id;";
-        $datos = $this->db->datos($sql);
-        return $datos;
-    }
-
     //Primera - uso
     function lista_tutor_paralelo($id_tutor = '')
     {
@@ -105,71 +71,6 @@ class tutores_paraleloM
         return $datos;
     }
 
-    function lista_estudiante_tutor_paralelo($id_paralelo = '')
-    {
-        if ($id_paralelo != '') {
-            $sql =
-                "SELECT 
-                    tutp.ac_tutor_paralelo_id,
-                    tutp.ac_tutor_id,
-                    tutp.ac_paralelo_id,
-                    tutp.ac_tutor_paralelo_fecha_creacion,
-                   
-                    cs.sa_sec_id, 
-                    cs.sa_sec_nombre, 
-                    cg.sa_gra_id, 
-                    cg.sa_gra_nombre,
-                    cp.sa_par_id, 
-                    cp.sa_par_nombre,
-
-                    CONCAT(tut.sa_tut_primer_apellido, ' ', tut.sa_tut_segundo_apellido, ' ', tut.sa_tut_primer_nombre, ' ', tut.sa_tut_segundo_nombre) AS tutor_nombres,
-                    CONCAT(cs.sa_sec_nombre, ' / ', cg.sa_gra_nombre, ' / ', cp.sa_par_nombre) AS sec_gra_par
-
-                    FROM tutor_paralelo tutp
-
-                    INNER JOIN cat_paralelo cp ON tutp.ac_paralelo_id = cp.sa_par_id
-                    INNER JOIN cat_seccion cs ON cp.sa_id_seccion = cs.sa_sec_id
-                    INNER JOIN cat_grado cg ON cp.sa_id_grado = cg.sa_gra_id
-
-                    INNER JOIN tutors tut ON tutp.ac_tutor_id = tut.sa_tut_id
-
-                    WHERE 1 = 1 AND cp.sa_par_id = $id_paralelo";
-
-            $sql .= " ORDER BY ac_tutor_paralelo_id;";
-            $datos = $this->db->datos($sql);
-            return $datos;
-        }
-    }
-
-    function lista_estudiantes_representantes_tutor_paralelo($id_tutor = '')
-    {
-        if ($id_tutor != '') {
-            $sql =
-                "SELECT 
-                    est.sa_est_id,
-                    est.sa_est_cedula,
-            
-                    CONCAT(est.sa_est_primer_apellido, ' ', est.sa_est_segundo_apellido, ' ', est.sa_est_primer_nombre, ' ', est.sa_est_segundo_nombre) AS estudiante_nombres,
-                    est.sa_id_paralelo,
-                    est.sa_id_representante,
-                    est.sa_est_rep_parentesco,
-                    est.sa_est_tabla,
-            
-                    rep.sa_rep_cedula,
-                    CONCAT(rep.sa_rep_primer_apellido, ' ', rep.sa_rep_segundo_apellido, ' ', rep.sa_rep_primer_nombre, ' ', rep.sa_rep_segundo_nombre) AS representante_nombres,
-                    rep.sa_rep_correo
-              
-                FROM estudiantes est
-                INNER JOIN tutor_paralelo dp ON est.sa_id_paralelo = dp.ac_paralelo_id
-                INNER JOIN representantes rep ON est.sa_id_representante = rep.sa_rep_id
-                WHERE dp.ac_tutor_id = '$id_tutor';";
-
-            $datos = $this->db->datos($sql);
-            return $datos;
-        }
-    }
-
-
     /*/////////////////////////////////////////////////////////////////////
 
     ROL - Tutor
@@ -207,6 +108,58 @@ class tutores_paraleloM
     {
         $sql = "SELECT * FROM tutor_paralelo WHERE ac_paralelo_id = '" . $buscar . "'";
         $datos = $this->db->datos($sql);
+        return $datos;
+    }
+
+    //Para buscar todas las consultas asosiadas al tutor de acuerdo a su id
+    function lista_consultas_todo($paralelo, $fecha_inicio, $fecha_fin)
+    {
+        $datos = [];
+        if ($paralelo != '') {
+            $sql = "SELECT
+                    cm.sa_conp_id,
+                    cm.sa_fice_id,
+                    cm.sa_conp_nivel,
+                    
+                    cm.sa_conp_fecha_ingreso,
+                    cm.sa_conp_desde_hora,
+                    cm.sa_conp_hasta_hora,
+                    cm.sa_conp_permiso_salida,
+                    cm.sa_conp_estado_revision,
+                    
+                    cm.sa_conp_notificacion_envio_representante,
+                    cm.sa_conp_notificacion_envio_inspector,
+                    cm.sa_conp_notificacion_envio_guardia,
+
+                    cm.sa_conp_tipo_consulta,
+                    cm.sa_conp_estado,
+                    cm.sa_conp_fecha_creacion,
+
+                    pac.sa_pac_id,
+					pac.sa_pac_cedula,
+					pac.sa_pac_apellidos,
+					pac.sa_pac_nombres,
+					pac.sa_pac_tabla
+
+                    FROM consultas_medicas cm
+                    
+                    INNER JOIN ficha_medica fm ON cm.sa_fice_id = fm.sa_fice_id
+                    INNER JOIN pacientes pac ON fm.sa_fice_pac_id = pac.sa_pac_id
+                    INNER JOIN estudiantes est ON pac.sa_pac_id_comunidad = est.sa_est_id
+                    
+                    WHERE sa_conp_estado = 1 AND sa_conp_estado_revision = 1";
+
+
+            $sql .= " AND est.sa_id_paralelo = '$paralelo' ";
+
+            if ($fecha_inicio != '' && $fecha_fin != '') {
+                $sql .= " AND CONVERT(DATE, sa_conp_fecha_creacion) BETWEEN '$fecha_inicio' AND '$fecha_fin' ";
+            }
+
+            $sql .= " ORDER BY cm.sa_conp_id;";
+            $datos = $this->db->datos($sql);
+        }
+
         return $datos;
     }
 }

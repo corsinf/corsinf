@@ -28,7 +28,7 @@
 
                     $('#txt_nombre_modulo').val(nombre_modulo.sa_config_valor || '');
                     $('#txt_nombre_empresa').val(nombre_empresa.sa_config_valor || '');
-                    $('#txt_url_guardar_bat').val(url_guardar_bat.sa_config_valor || '');
+                    //$('#txt_url_guardar_bat').val(url_guardar_bat.sa_config_valor || '');
                     $('#txt_script_php_motor').val(script_php_motor.sa_config_valor || '');
                     $('#txt_motor_bat').val(motor_bat.sa_config_valor || '');
                     $('#txt_hora_PW').val(hora_ejecucion_PW.sa_config_valor || '');
@@ -220,7 +220,7 @@
                                         <div class="row mb-3">
                                             <label for="txt_url_guardar_bat" class="col-sm-4 col-form-label">URL Archivo .bat</label>
                                             <div class="col-sm-8">
-                                                <input type="text" class="form-control form-control-sm" id="txt_url_guardar_bat" placeholder="C:\xampp\htdocs\corsinf\CRON">
+                                                <input type="text" class="form-control form-control-sm" id="txt_url_guardar_bat" value="<?= dirname(__DIR__, 3) . '\CRON'?>" placeholder="C:\xampp\htdocs\corsinf\CRON" disabled>
                                             </div>
                                         </div>
                                         <div class="row mb-3">

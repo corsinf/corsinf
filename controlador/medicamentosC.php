@@ -71,8 +71,10 @@ class medicamentosC
             array('campo' => 'sa_cmed_uso', 'dato' => $parametros['sa_cmed_uso']),
             array('campo' => 'sa_cmed_observaciones', 'dato' => $parametros['sa_cmed_observaciones']),
             array('campo' => 'sa_cmed_nombre_comercial', 'dato' => $parametros['sa_cmed_nombre_comercial']),
+            array('campo' => 'sa_cmed_es_jarabe', 'dato' => $parametros['cbx_jarabe']),
+            array('campo' => 'sa_cmed_mg', 'dato' => $parametros['sa_cmed_mg']),
+            array('campo' => 'sa_cmed_formula', 'dato' => $parametros['sa_cmed_formula']),
         );
-
 
         if ($parametros['sa_cmed_id'] == '') {
             if (count($this->modelo->buscar_medicamentos_CODIGO($datos1[0]['dato'])) == 0) {

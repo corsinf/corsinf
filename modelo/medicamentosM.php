@@ -28,7 +28,10 @@ class medicamentosM
 					sa_cmed_movimiento,
 					sa_cmed_dosis,
 					sa_cmed_tipo,
-					sa_cmed_nombre_comercial
+					sa_cmed_nombre_comercial,
+					sa_cmed_es_jarabe,
+					sa_cmed_mg,
+					sa_cmed_formula
 				FROM cat_medicamentos WHERE 1 = 1 and sa_cmed_estado = 1 ";
 
 		$sql .= " ORDER BY sa_cmed_id ";
@@ -62,7 +65,10 @@ class medicamentosM
 					sa_cmed_fecha_exp,
 					sa_cmed_fecha_elab,
 					sa_cmed_referencia,
-					sa_cmed_nombre_comercial
+					sa_cmed_nombre_comercial,
+					sa_cmed_es_jarabe,
+					sa_cmed_mg,
+					sa_cmed_formula
 				FROM cat_medicamentos 
 				WHERE sa_cmed_estado = 1 ";
 
