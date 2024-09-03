@@ -265,7 +265,7 @@ $(document).ready(function () {
 
             var valor = $("#tipo_farmacologia_presentacion").val();
             insertarMedicamentos(valor);
-            //limpiar();
+            limpiar();
         } else {
             Swal.fire('', 'Campos vacíos', 'error');
         }
@@ -536,17 +536,19 @@ function cargar_farmacologia_fm(id) {
 }
 
 function limpiar() {
-    $('#tipo_farmacologia').val('');
+    //$('#tipo_farmacologia').val('');
     //$('#sa_det_fice_id_cmed_cins').val('');
     //$('#sa_det_fice_nombre').val('');
     //$('#sa_det_fice_tipo').val('');
 
-    var select = $('#tipo_farmacologia_presentacion');
+   /*  var select = $('#tipo_farmacologia_presentacion');
     // Destruir la instancia de Select2
     select.select2('destroy');
 
     // Agrega la opción predeterminada
-    select.html('<option selected disabled> -- Selecciona una opción -- </option>');
+    select.html('<option selected disabled> -- Selecciona una opción -- </option>'); */
+
+    $('#tipo_farmacologia_presentacion').val(null).trigger('change');
 
 }
 

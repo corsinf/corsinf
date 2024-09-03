@@ -1005,8 +1005,8 @@ class consultasC
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         if ($tipo_consulta == 'consulta') {
-            $mensaje .= 'Me comunico con usted para informarle sobre el diagnóstico médico reciente de <b>' . $nombres_est . ".</b><br><br>";
-            $mensaje .= '<b>Diagnóstico: </b>' . $diagnostico . "<br><br>";
+            $mensaje .= 'Le comunico sobre la atención brindada a <b>' . $nombres_est . ".</b><br><br>";
+            $mensaje .= '<b>Diagnóstico presuntivo: </b>' . $diagnostico . "<br><br>";
             $mensaje .= '<b>Hora de atención: </b>' . $fecha_actual . "<br><br>";
             $mensaje .= '<b>Motivo: </b>' . strtoupper($tipo_consulta) . "<br><br>";
             $mensaje .= '<b>Permiso de salida: </b>' . strtoupper($permiso_salida) . "<br><br>";
@@ -1014,8 +1014,8 @@ class consultasC
             $mensaje .= $salida_farmacos . "<br>";
             $mensaje .= '<b>Atendido por: </b>' . $tipo_usuario . strtoupper($_SESSION['INICIO']['USUARIO']) . "<br><br>";
         } else {
-            $mensaje .= 'Me comunico con usted para informarle sobre la entrega del certficado médico reciente de <b>' . $nombres_est . ".</b><br><br>";
-            $mensaje .= '<b>Diagnóstico: </b>' . $diagnostico . "<br><br>";
+            $mensaje .= 'Le comunico para informarle que se recibió el certficado médico de <b>' . $nombres_est . ".</b><br><br>";
+            $mensaje .= '<b>Diagnóstico presuntivo: </b>' . $diagnostico . "<br><br>";
             $mensaje .= '<b>Hora de recepción: </b>' . $fecha_actual . "<br><br>";
             $mensaje .= '<b>Motivo: </b>' . strtoupper($tipo_consulta) . "<br><br>";
             $mensaje .= '<b>Atendido por: </b>' . $tipo_usuario . strtoupper($_SESSION['INICIO']['USUARIO']) . "<br><br>";
@@ -2161,10 +2161,14 @@ class consultasC
         $sa_conp_fecha_ingreso = $sa_conp_fecha_ingreso;
 
         $sa_conp_desde_hora = $datos[0]['sa_conp_desde_hora'];
-        $sa_conp_desde_hora = $sa_conp_desde_hora;
+        if ($sa_conp_desde_hora !== null) {
+            $sa_conp_desde_hora = preg_replace('/\.?0+$/', '', $sa_conp_desde_hora);
+        }
 
         $sa_conp_hasta_hora = $datos[0]['sa_conp_hasta_hora'];
-        $sa_conp_hasta_hora = $sa_conp_hasta_hora;
+        if ($sa_conp_hasta_hora !== null) {
+            $sa_conp_hasta_hora = preg_replace('/\.?0+$/', '', $sa_conp_hasta_hora);
+        }
 
         $sa_conp_diagnostico_1 = $datos[0]['sa_conp_diagnostico_1'];
 

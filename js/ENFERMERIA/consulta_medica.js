@@ -20,27 +20,6 @@ $(document).ready(function () {
         }
     });
 
-    var validacion_numeros = $('.solo_numeros');
-
-    validacion_numeros.on('keypress', function (event) {
-        var charCode = (event.which) ? event.which : event.keyCode;
-        // Permitir números (48-57) y el punto (46)
-        if (charCode !== 46 && (charCode < 48 || charCode > 57)) {
-            event.preventDefault();
-        }
-    });
-
-    $(document).on('input', '.solo_numeros_int', function (event) {
-        // Convertir el valor a entero
-        var value = $(this).val();
-
-        // Eliminar cualquier cosa que no sea un número
-        value = value.replace(/[^0-9]/g, '');
-
-        // Actualizar el valor del campo
-        $(this).val(value);
-    });
-
     $(document).on('input', '.solo_3_numeros', function() {
         var value = $(this).val();
 
