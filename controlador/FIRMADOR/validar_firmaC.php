@@ -99,7 +99,7 @@ class validar_firmaC
     				}
     				$tr.='<tr>
     							<td>'.$ci.'</td>
-    							<td>'.$value['CN'].'</td>
+    							<td>'.str_replace($ci,"",$value['CN']).'</td>
     							<td>'.$value['EMC_O'].'</td>
     							<td>'.$value['FechaFirma'].'</td>
     						</tr>';
