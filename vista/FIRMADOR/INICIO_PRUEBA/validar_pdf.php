@@ -51,9 +51,9 @@
                 event.preventDefault();
             }
 
-            var formData = new FormData(document.getElementById("form_firma"));
+            var formData = new FormData(document.getElementById("form_doc"));
             $.ajax({
-                url: '../controlador/FIRMADOR/validar_firmaC.php?validar_firma=true',
+                url: '../controlador/FIRMADOR/validar_firmaC.php?validar_documento=true',
                 type: 'post',
                 data: formData,
                 contentType: false,
@@ -64,7 +64,8 @@
                 //     },
                 success: function(response) {
                     if (response.resp == 1) {
-                        Swal.fire(response.msj, "", "success")
+                        $('#tbl_body').html(response.tr);
+                        Swal.fire("Firmas Validas en documento", "", "success")
                     } else {
                         Swal.fire(response.msj, "", "error")
                     }
@@ -106,11 +107,11 @@
         }
 
         var extension_archivo = nombre_archivo.split('.').pop().toLowerCase();
-        if (extension_archivo !== 'p12' && extension_archivo !== 'pfx') {
+        if (extension_archivo !== 'pdf') {
             Swal.fire({
                 icon: "error",
                 title: "Oops...",
-                text: "El archivo debe estar en formato .p12 o .pfx",
+                text: "El archivo debe estar en formato .pdf ",
             });
             return false
         }
@@ -140,12 +141,14 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="card">
-                            <div class="card-body">
-                                <input id="txt_cargar_imagen" name="txt_cargar_imagen" type="file" accept=".p12,.pfx" multiple>
-                                <div class="mb-3 mt-4 d-grid gap-2 col-3 mx-auto">
-                                    <button class="btn btn-dark p-2">Validar PDF</button>
+                            <form id="form_doc" enctype="multipart/form-data" method="post">
+                                <div class="card-body">
+                                    <input id="txt_cargar_imagen" name="txt_cargar_imagen" type="file" accept=".pdf" multiple>
+                                    <div class="mb-3 mt-4 d-grid gap-2 col-3 mx-auto">
+                                        <button  type="button" class="btn btn-dark p-2" id="btn_validar">Validar PDF</button>
+                                    </div>
                                 </div>
-                            </div>
+                            </form>
                         </div>
                     </div>
                     <div class="ms-4 py-1">
@@ -168,13 +171,8 @@
                                         <th>Fecha y hora</th>
                                     </tr>
                                 </thead>
-                                <tbody>
-                                    <tr>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                    </tr>
+                                <tbody id="tbl_body">
+                                   
                                 </tbody>
                             </table>
                         </div>
@@ -189,7 +187,7 @@
                 $('#txt_cargar_imagen').imageuploadify({
                     //'swf': 'path/to/uploadify.swf',
                     //'uploader': 'path/to/uploadify.php', // Archivo PHP que manejará la subida
-                    'fileTypeExts': '*.p12; *.pfx',
+                    'fileTypeExts': '*.pdf;',
                     'multi': true,
                     // 'onUploadSuccess': function(file, data, response) {
                     //     console.log('El archivo ' + file.name + ' se ha subido correctamente.');
