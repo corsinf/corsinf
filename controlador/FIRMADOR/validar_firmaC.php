@@ -90,13 +90,17 @@ class validar_firmaC
     			// print_r($firmas);die();
     			$tr='';
     			foreach ($firmas as $key => $value) {
-    				$ci = $value['SERIALNUMBER'];
-    				$serie = explode('-',$value['SERIALNUMBER']); 
-    				if(count($serie)>1){$ci = $serie[0];}
+    				$ci='';
+    				if(isset($value['SERIALNUMBER']))
+    				{
+    					$ci = $value['SERIALNUMBER'];
+    					$serie = explode('-',$value['SERIALNUMBER']); 
+    					if(count($serie)>1){$ci = $serie[0];}
+    				}
     				$tr.='<tr>
     							<td>'.$ci.'</td>
     							<td>'.$value['CN'].'</td>
-    							<td>'.$value['O'].'</td>
+    							<td>'.$value['EMC_O'].'</td>
     							<td>'.$value['FechaFirma'].'</td>
     						</tr>';
     			}
