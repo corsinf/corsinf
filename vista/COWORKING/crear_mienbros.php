@@ -33,7 +33,7 @@
                             </li>
                             <li class="nav-item" role="presentation">
                                 <button class="nav-link" id="servicios-tab" data-bs-toggle="tab" data-bs-target="#servicios" type="button" role="tab" aria-controls="servicios" aria-selected="false">
-                                <i class='bx bx-store-alt'></i> <strong>Servicios Extra</strong>
+                                    <i class='bx bx-store-alt'></i> <strong>Servicios Extra</strong>
                                 </button>
                             </li>
                         </ul>
@@ -114,7 +114,54 @@
                             <div class="tab-pane fade" id="servicios" role="tabpanel" aria-labelledby="servicios-tab">
                                 <h2 class="mb-4">Servicios Extra</h2>
 
+                                <form id="formulario_servicios">
+                                    <div class="row mb-3">
+                                        <input type="hidden" name="id_servicio" id="id_servicio" class="form-control" readonly>
+                                        <div class="col-md-3">
+                                            <label for="txt_servicio" class="form-label"><strong>Servicio:</strong></label>
+                                            <select class="form-control" id="txt_servicio" name="txt_servicio" required>
+                                                <option value="" disabled selected>Seleccionar servicio</option>
+                                                <option value="Servicio 1">Servicio 1</option>
+                                                <option value="Servicio 2">Servicio 2</option>
+                                                <option value="Servicio 3">Servicio 3</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label for="txt_cantidad_servicio" class="form-label"><strong>Cantidad:</strong></label>
+                                            <input type="number" class="form-control" id="txt_cantidad_servicio" name="txt_cantidad_servicio" value="1" min="1" required>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label for="txt_precio_servicio" class="form-label"><strong>Precio:</strong></label>
+                                            <input type="text" class="form-control" id="txt_precio_servicio" name="txt_precio_servicio" readonly>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label for="txt_total_servicio" class="form-label"><strong>Total:</strong></label>
+                                            <input type="text" class="form-control" id="txt_total_servicio" name="txt_total_servicio" readonly>
+                                        </div>
+                                        <div class="col-md-3 d-flex align-items-end ms-auto">
+                                            <button style="margin-top: 20px;" type="button" onclick="enviarServicio()" class="btn btn-primary w-100 btn-margin-top" id="btn_agregar_servicio">
+                                                <i class='bx bx-cart'></i> <strong>Agregar Servicio</strong>
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <table class="table table-bordered table-striped mt-4" id="tbl_servicios">
+                                        <thead class="table-header">
+                                            <tr>
+                                                <th>Servicio</th>
+                                                <th>Cantidad</th>
+                                                <th>Precio</th>
+                                                <th>Total</th>
+                                                <th>Eliminar</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="tbl_body_servicios">
+                                            <!-- Filas generadas dinámicamente -->
+                                        </tbody>
+                                    </table>
+                                </form>
                             </div>
+
                         </div>
                     </div>
                 </div>
@@ -122,6 +169,7 @@
         </div>
     </div>
 </div>
+
 
 
                         <div class="modal fade" id="modal_registrar_compra" tabindex="-1" aria-labelledby="modal_registrar_compra_label" aria-hidden="true">
@@ -134,7 +182,6 @@
                                     <div class="modal-body">
                                         <form id="formulario_compras">
                                             <div class="row mb-3">
-                                                <input type="hidden" name="id_sala" id="id_sala" class="form-control" value="<?php echo htmlspecialchars($id_sala); ?>" readonly> 
                                                 <input type="hidden" name="id_compra" id="id_compra" class="form-control" value="<?php echo htmlspecialchars($id_compra); ?>" readonly>
                                                 <input type="hidden" name="id_miembro" id="id_miembro" class="form-control" value="<?php echo htmlspecialchars($id_miembro); ?>" readonly>
                                                 <div class="col-md-3">
@@ -163,7 +210,7 @@
                                             <table class="table table-bordered table-striped mt-4" id="tbl_compras">
                                                 <thead class="table-header">
                                                     <tr>
-                                                        <th>Sala</th>
+                                                        
                                                         <th>Compra</th>
                                                         <th>Miembro</th>
                                                         <th>Producto</th>
@@ -271,7 +318,6 @@
 
     function enviarCompras() {
         var parametros = {
-            'id_sala':$('#id_sala').val(),
             'id_compra': $('#id_compra').val(),
             'id_miembro': $('#id_miembro').val(),
             'id_producto': $('#txt_producto').val(),
@@ -319,8 +365,6 @@
 function abrirModal(id_miembro) {
     
     console.log('ID Miembro:', id_miembro);
-    console.log('Sala:', id_sala);
-    $('#id_sala').val(id_sala);
     $('#id_miembro').val(id_miembro);
 
     
