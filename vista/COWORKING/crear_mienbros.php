@@ -24,50 +24,105 @@
                     <div class="card-body">
                         <h1 class="titulo mb-4">Oficina 5</h1>
 
-                        <form id="formulario_miembro" class="mb-4">
-                            <div class="row">
-                                <div class="col-md-3 mb-3">
-                                    <label for="txt_nombre" class="form-label"><strong>Nombre:</strong></label>
-                                    <input type="text" class="form-control form-control-sm" name="txt_nombre" id="txt_nombre" placeholder="Nombre" required>
-                                </div>
-                                <div class="col-md-3 mb-3">
-                                    <label for="txt_apellido" class="form-label"><strong>Apellido:</strong></label>
-                                    <input type="text" class="form-control form-control-sm" name="txt_apellido" id="txt_apellido" placeholder="Apellido" required>
-                                </div>
-                                <div class="col-md-3 mb-3">
-                                    <label for="txt_numero_celular" class="form-label"><strong>Telefono:</strong></label>
-                                    <input type="text" class="form-control form-control-sm" name="txt_numero_celular" id="txt_numero_celular" placeholder="Celular" required>
-                                </div>
-                                <div class="col-md-3 mb-3">
-                                    <label for="txt_direccion" class="form-label"><strong>Direccion:</strong></label>
-                                    <input type="text" class="form-control form-control-sm" name="txt_direccion" id="txt_direccion" placeholder="Direccion" required>
-                                </div>
-                                <div class="col-md-3 mb-3">
-                                    <label for="ddl_id_espacio" class="form-label"><strong>Espacio:</strong></label>
-                                    <input type="number" class="form-control form-control-sm" name="ddl_id_espacio" id="ddl_id_espacio" placeholder="Numero de espacio" required>
-                                </div>
-                            </div>
-                            <button type="button" onclick="enviardatos()" class="btn btn-primary" id="btn_registrar_miembro">
-                                <strong>Registrar Miembro</strong>
-                            </button>
-                        </form>
+                        <!-- Pestañas -->
+                        <ul class="nav nav-tabs" id="myTab" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link active" id="miembros-tab" data-bs-toggle="tab" data-bs-target="#miembros" type="button" role="tab" aria-controls="miembros" aria-selected="true">
+                                    <i class='bx bx-user'></i> <strong>Miembros</strong>
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="servicios-tab" data-bs-toggle="tab" data-bs-target="#servicios" type="button" role="tab" aria-controls="servicios" aria-selected="false">
+                                <i class='bx bx-store-alt'></i> <strong>Servicios Extra</strong>
+                                </button>
+                            </li>
+                        </ul>
 
-                        <h2 class="mb-4">Miembros Registrados</h2>
-                        <table class="table table-bordered table-striped" id="tbl_miembros">
-                            <thead class="table-header">
-                                <tr>
-                                    <th>Comprar</th>
-                                    <th>Nombre</th>
-                                    <th>Apellido</th>
-                                    <th>Telefono</th>
-                                    <th>Direccion</th>
-                                    <th>Espacio</th>
-                                    <th>Eliminar</th>
-                                </tr>
-                            </thead>
-                            <tbody id="tbl_body">
-                            </tbody>
-                        </table>
+                        <div class="tab-content mt-3" id="myTabContent">
+                            <!-- Tab de Miembros -->
+                            <div class="tab-pane fade show active" id="miembros" role="tabpanel" aria-labelledby="miembros-tab">
+                                <form id="formulario_miembro" class="mb-4">
+                                    <div class="row">
+                                        <div class="col-md-3 mb-3">
+                                            <label for="txt_nombre" class="form-label"><strong>Nombre:</strong></label>
+                                            <input type="text" class="form-control form-control-sm" name="txt_nombre" id="txt_nombre" placeholder="Nombre" required>
+                                        </div>
+                                        <div class="col-md-3 mb-3">
+                                            <label for="txt_apellido" class="form-label"><strong>Apellido:</strong></label>
+                                            <input type="text" class="form-control form-control-sm" name="txt_apellido" id="txt_apellido" placeholder="Apellido" required>
+                                        </div>
+                                        <div class="col-md-3 mb-3">
+                                            <label for="txt_numero_celular" class="form-label"><strong>Telefono:</strong></label>
+                                            <input type="text" class="form-control form-control-sm" name="txt_numero_celular" id="txt_numero_celular" placeholder="Celular" required>
+                                        </div>
+                                        <div class="col-md-3 mb-3">
+                                            <label for="txt_direccion" class="form-label"><strong>Direccion:</strong></label>
+                                            <input type="text" class="form-control form-control-sm" name="txt_direccion" id="txt_direccion" placeholder="Direccion" required>
+                                        </div>
+                                        <div class="col-md-3 mb-3">
+                                            <label for="ddl_id_espacio" class="form-label"><strong>Espacio:</strong></label>
+                                            <input type="number" class="form-control form-control-sm" name="ddl_id_espacio" id="ddl_id_espacio" placeholder="Numero de espacio" required>
+                                        </div>
+                                    </div>
+                                    <button type="button" onclick="enviardatos()" class="btn btn-primary" id="btn_registrar_miembro">
+                                        <strong>Registrar Miembro</strong>
+                                    </button>
+                                </form>
+
+                                <h2 class="mb-4">Miembros Registrados</h2>
+                                <div class="row mb-3">
+                                    <div class="col-12 d-flex justify-content-end">
+                                        <div class="btn-group me-2">
+                                            <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                                <i class='bx bxs-report'></i><strong>Informe de Miembros</strong>
+                                            </button>
+                                            <ul class="dropdown-menu">
+                                                <li><a class="dropdown-item" href="#">Informe en Excel</a></li>
+                                                <li><a class="dropdown-item" href="#">Informe en PDF</a></li>
+                                            </ul>
+                                        </div>
+                                        <div class="btn-group">
+                                            <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                                <i class='bx bxs-report'></i><strong>Informe de Compras Total</strong>
+                                            </button>
+                                            <ul class="dropdown-menu">
+                                                <li><a class="dropdown-item" href="#">Informe en Excel</a></li>
+                                                <li><a class="dropdown-item" href="#">Informe en PDF</a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <table class="table table-bordered table-striped" id="tbl_miembros">
+                                    <thead class="table-header">
+                                        <tr>
+                                            <th>Comprar</th>
+                                            <th>Nombre</th>
+                                            <th>Apellido</th>
+                                            <th>Telefono</th>
+                                            <th>Direccion</th>
+                                            <th>Espacio</th>
+                                            <th>Eliminar</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tbl_body">
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <!-- Tab de Servicios Extra -->
+                            <div class="tab-pane fade" id="servicios" role="tabpanel" aria-labelledby="servicios-tab">
+                                <h2 class="mb-4">Servicios Extra</h2>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 
                         <div class="modal fade" id="modal_registrar_compra" tabindex="-1" aria-labelledby="modal_registrar_compra_label" aria-hidden="true">
                             <div class="modal-dialog modal-lg">
@@ -330,7 +385,7 @@ function eliminarMiembro(id_miembro) {
             
             if (response.tiene_compras) {
                 Swal.fire({
-                    title: 'El Usuario está ligado a uno o varios registros y no se podrá eliminar.',
+                    title: 'Esta persona tiene compras agregadas y no se puede eliminar',
                     icon: 'warning',
                     confirmButtonText: 'Entendido'
                 });
