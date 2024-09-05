@@ -7,7 +7,7 @@
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb mb-0 p-0">
                         <li class="breadcrumb-item">
-                            <a href="javascript:;"><i class="bx bx-house"></i></a>
+                            <a href="javascript:;"><i class="bx bx-home"></i></a>
                         </li>
                         <li class="breadcrumb-item active" aria-current="page">
                             <strong>Registro Miembros</strong>
