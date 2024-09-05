@@ -1,4 +1,375 @@
 <script>
+    $(document).ready(function() {
+
+        $('#ddl_estado_laboral').change(function() {
+            ocultar_opciones_estado();
+        });
+        $('#ddl_tipo_aptitudes').change(function() {
+            mostrar_tipo_aptitudes();
+        });
+
+        agregar_contacto_emergencia()
+        
+    });
+
+    function insertar_editar_foto() {
+        var txt_elegir_foto = $('#txt_elegir_foto').val();
+
+        var parametro_foto = {
+            'txt_elegir_foto': txt_elegir_foto
+        }
+
+        console.log(parametro_foto)
+    }
+
+
+    function insertar_editar_informacion_personal() {
+
+        var txt_primer_nombre = $('#txt_primer_nombre').val();
+        var txt_primer_apellido = $('#txt_primer_apellido').val();
+        var txt_segundo_apellido = $('#txt_segundo_apellido').val();
+        var txt_fecha_nacimiento = $('#txt_fecha_nacimiento').val();
+        var ddl_nacionalidad = $('#ddl_nacionalidad').val();
+        var ddl_estado_civil = $('#ddl_estado_civil').val();
+
+        var parametros_informacion_personal = {
+            'txt_primer_nombre': txt_primer_nombre,
+            'txt_primer_apellido': txt_primer_apellido,
+            'txt_segundo_apellido': txt_segundo_apellido,
+            'txt_fecha_nacimiento': txt_fecha_nacimiento,
+            'ddl_nacionalidad': ddl_nacionalidad,
+            'ddl_estado_civil': ddl_estado_civil,
+        }
+
+        console.log(parametros_informacion_personal)
+
+    }
+
+
+    function insertar_editar_informacion_contacto() {
+        var txt_direccion_calle = $('#txt_direccion_calle').val();
+        var txt_direccion_numero = $('#txt_direccion_numero').val();
+        var txt_direccion_ciudad = $('#txt_direccion_ciudad').val();
+        var txt_direccion_estado = $('#txt_direccion_estado').val();
+        var txt_direccion_postal = $('#txt_direccion_postal').val();
+        var txt_telefono_1 = $('#txt_telefono_1').val();
+        var txt_telefono_2 = $('#txt_telefono_2').val();
+        var txt_correo = $('#txt_correo').val();
+        var txt_nombre_contacto_emergencia = [];
+        $('.txt_nombre_contacto_emergencia').each(function() {
+            txt_nombre_contacto_emergencia.push($(this).val());
+        });
+        var txt_telefono_contacto_emergencia = [];
+        $('.txt_telefono_contacto_emergencia').each(function() {
+            txt_telefono_contacto_emergencia.push($(this).val());
+        });
+
+        var parametros_informacion_contacto = {
+            'txt_direccion_calle': txt_direccion_calle,
+            'txt_direccion_numero': txt_direccion_numero,
+            'txt_direccion_ciudad': txt_direccion_ciudad,
+            'txt_direccion_estado': txt_direccion_estado,
+            'txt_direccion_postal': txt_direccion_postal,
+            'txt_telefono_1': txt_telefono_1,
+            'txt_telefono_2': txt_telefono_2,
+            'txt_correo': txt_correo,
+            'txt_nombre_contacto_emergencia': txt_nombre_contacto_emergencia,
+            'txt_telefono_contacto_emergencia': txt_telefono_contacto_emergencia,
+        }
+
+        console.log(parametros_informacion_contacto)
+    }
+
+    function insertar_editar_experiencia_laboral() {
+        var txt_nombre_empresa = $('#txt_nombre_empresa').val();
+        var txt_cargos_ocupados = $('#txt_cargos_ocupados').val();
+        var txt_fecha_inicio_laboral = $('#txt_fecha_inicio_laboral').val();
+        var txt_fecha_final_laboral = $('#txt_fecha_final_laboral').val();
+        var cbx_fecha_final_laboral = $('#cbx_fecha_final_laboral').prop('checked');
+        var txt_responsabilidades_logros = $('#txt_responsabilidades_logros').val();
+
+        var parametros_experiencia_laboral = {
+            'txt_nombre_empresa': txt_nombre_empresa,
+            'txt_cargos_ocupados': txt_cargos_ocupados,
+            'txt_fecha_inicio_laboral': txt_fecha_inicio_laboral,
+            'txt_fecha_final_laboral': txt_fecha_final_laboral,
+            'cbx_fecha_final_laboral': cbx_fecha_final_laboral,
+            'txt_responsabilidades_logros': txt_responsabilidades_logros,
+        }
+
+        console.log(parametros_experiencia_laboral)
+    }
+
+    function insertar_editar_formacion_academica() {
+        var txt_titulo_obtenido = $('#txt_titulo_obtenido').val();
+        var txt_institucion = $('#txt_institucion').val();
+        var txt_fecha_inicio_academico = $('#txt_fecha_inicio_academico').val();
+        var txt_fecha_final_academico = $('#txt_fecha_final_academico').val();
+
+        var parametros_formacion_academica = {
+            'txt_titulo_obtenido': txt_titulo_obtenido,
+            'txt_institucion': txt_institucion,
+            'txt_fecha_inicio_academico': txt_fecha_inicio_academico,
+            'txt_fecha_final_academico': txt_fecha_final_academico,
+        }
+
+        console.log(parametros_formacion_academica)
+    }
+
+    function insertar_editar_certificaciones_capacitaciones() {
+        var txt_nombre_certificacion = $('#txt_nombre_certificacion').val();
+        var txt_enlace_certificado = $('#txt_enlace_certificado').val();
+        var txt_pdf_certificado = $('#txt_pdf_certificado').val();
+
+        var parametros_certificaciones_capacitaciones = {
+            'txt_nombre_certificacion': txt_nombre_certificacion,
+            'txt_enlace_certificado': txt_enlace_certificado,
+            'txt_pdf_certificado': txt_pdf_certificado,
+        }
+
+        console.log(parametros_certificaciones_capacitaciones)
+    }
+
+    function insertar_editar_certificado_medico() {
+        var txt_nombre_certificado_medico = $('#txt_nombre_certificado_medico').val();
+        var txt_respaldo_medico = $('#txt_respaldo_medico').val();
+
+        var parametros_certificado_medico = {
+            'txt_nombre_certificado_medico': txt_nombre_certificado_medico,
+            'txt_respaldo_medico': txt_respaldo_medico,
+        }
+
+        console.log(parametros_certificado_medico)
+    }
+
+    function insertar_editar_referencias() {
+        var txt_nombre_referencia = $('#txt_nombre_referencia').val();
+        var txt_telefono_referencia = $('#txt_telefono_referencia').val();
+        var txt_copia_carta_recomendacion = $('#txt_copia_carta_recomendacion').val();
+
+        var parametros_referencias = {
+            'txt_nombre_referencia': txt_nombre_referencia,
+            'txt_telefono_referencia': txt_telefono_referencia,
+            'txt_copia_carta_recomendacion': txt_copia_carta_recomendacion,
+        }
+
+        console.log(parametros_referencias)
+    }
+
+    function insertar_editar_contrato_laboral() {
+        var txt_nombre_empresa_contrato = $('#txt_nombre_empresa_contrato').val();
+        var txt_copia_contrato = $('#txt_copia_contrato').val();
+
+        var parametros_contrato_laboral = {
+            'txt_nombre_empresa_contrato': txt_nombre_empresa_contrato,
+            'txt_copia_contrato': txt_copia_contrato,
+        }
+
+        console.log(parametros_contrato_laboral)
+    }
+
+    function insertar_editar_estado_laboral() {
+        var ddl_estado_laboral = $('#ddl_estado_laboral').val();
+        var txt_fecha_contratacion_estado = $('#txt_fecha_contratacion_estado').val();
+        var txt_fecha_salida_estado = $('#txt_fecha_salida_estado').val();
+
+        var parametros_estado_laboral = {
+            'ddl_estado_laboral': ddl_estado_laboral,
+            'txt_fecha_contratacion_estado': txt_fecha_contratacion_estado,
+            'txt_fecha_salida_estado': txt_fecha_salida_estado,
+        }
+
+        console.log(parametros_estado_laboral)
+
+    }
+
+    function insertar_editar_idiomas() {
+        var ddl_seleccionar_idioma = $('#ddl_seleccionar_idioma').val();
+        var ddl_dominio_idioma = $('#ddl_dominio_idioma').val();
+
+        var parametros_idiomas = {
+            'ddl_seleccionar_idioma': ddl_seleccionar_idioma,
+            'ddl_dominio_idioma': ddl_dominio_idioma,
+        }
+
+        console.log(parametros_idiomas)
+    }
+
+    function insertar_editar_aptitudes() {
+        var ddl_tipo_aptitudes = $('#ddl_tipo_aptitudes').val();
+        var ddl_seleccionar_aptitud_blanda = [];
+        $('.ddl_seleccionar_aptitud_blanda').each(function() {
+            ddl_seleccionar_aptitud_blanda.push($(this).val());
+        });
+
+        var ddl_seleccionar_aptitud_tecnica = [];
+        $('.ddl_seleccionar_aptitud_tecnica').each(function() {
+            ddl_seleccionar_aptitud_tecnica.push($(this).val());
+        });
+
+        var select_tipo_aptitudes = $('#ddl_tipo_aptitudes');
+        if (select_tipo_aptitudes.val() == 'Blandas') {
+            var parametros_aptitudes = {
+                'ddl_tipo_aptitudes': ddl_tipo_aptitudes,
+                'ddl_seleccionar_aptitud_blanda': ddl_seleccionar_aptitud_blanda.flat(),
+            }
+        } else if (select_tipo_aptitudes.val() == 'Tecnicas') {
+            var parametros_aptitudes = {
+                'ddl_tipo_aptitudes': ddl_tipo_aptitudes,
+                'ddl_seleccionar_aptitud_tecnica': ddl_seleccionar_aptitud_tecnica.flat(),
+            }
+        }
+
+        console.log(parametros_aptitudes)
+    }
+
+    function insertar_editar_documento_identidad() {
+        var ddl_tipo_documento_identidad = $('#ddl_tipo_documento_identidad').val();
+        var txt_agregar_documento_identidad = $('#txt_agregar_documento_identidad').val();
+
+        var parametros_documento_identidad = {
+            'ddl_tipo_documento_identidad': ddl_tipo_documento_identidad,
+            'txt_agregar_documento_identidad': txt_agregar_documento_identidad,
+        }
+
+        console.log(parametros_documento_identidad)
+    }
+
+    // function mostrar_parametros() {
+    //     //Limpiar parámetros
+
+    //     $('#txt_agregar_documento_identidad').val('');
+    //     $('#txt_nombre_completo').val('');
+    //     $('#txt_fecha_nacimiento').val('');
+    //     $('#ddl_nacionalidad').val('');
+    //     $('#ddl_estado_civil').val('');
+    //     $('#txt_direccion_calle').val('');
+    //     $('#txt_direccion_numero').val('');
+    //     $('#txt_direccion_ciudad').val('');
+    //     $('#txt_direccion_estado').val('');
+    //     $('#txt_direccion_postal').val('');
+    //     $('#txt_telefono_1').val('');
+    //     $('#txt_telefono_2').val('');
+    //     $('#txt_correo').val('');
+    //     $('#txt_nombre_contacto_emergencia').val('');
+    //     $('#txt_telefono_contacto_emergencia').val('');
+    //     $('#txt_nombre_empresa').val('');
+    //     $('#txt_cargos_ocupados').val('');
+    //     $('#txt_fecha_inicio_laboral').val('');
+    //     $('#txt_fecha_final_laboral').val('');
+    //     $('#cbx_fecha_final_laboral').val('');
+    //     $('#txt_responsabilidades_logros').val('');
+    //     $('#txt_titulo_obtenido').val('');
+    //     $('#txt_institucion').val('');
+    //     $('#txt_fecha_inicio_academico').val('');
+    //     $('#txt_fecha_final_academico').val('');
+    //     $('#txt_nombre_certificacion').val('');
+    //     $('#txt_enlace_certificado').val('');
+    //     $('#txt_pdf_certificado').val('');
+    //     $('#txt_nombre_certificado_medico').val('');
+    //     $('#txt_respaldo_medico').val('');
+    //     $('#ddl_tipo_referencia').val('');
+    //     $('#txt_nombre_referencia').val('');
+    //     $('#txt_telefono_referencia').val('');
+    //     $('#txt_copia_carta_recomendacion').val('');
+    //     $('#txt_nombre_empresa_contrato').val('');
+    //     $('#txt_copia_contrato').val('');
+    //     $('#ddl_estado_laboral').val('');
+    //     $('#txt_fecha_contratacion_estado').val('');
+    //     $('#txt_fecha_salida_estado').val('');
+    //     $('#ddl_seleccionar_idioma').val('');
+    //     $('#ddl_dominio_idioma').val('');
+    //     $('#ddl_tipo_aptitudes').val('');
+    //     $('.ddl_seleccionar_aptitud_blanda').val('');
+    //     $('.ddl_seleccionar_aptitud_tecnica').val('');
+
+    // }
+
+    function cambiar_foto() {
+        var btn_elegir_foto = $('#btn_elegir_foto')
+        var input_elegir_foto = $('#txt_elegir_foto')
+
+        btn_elegir_foto.click(function() {
+            input_elegir_foto.click();
+        });
+    }
+
+    function ocultar_opciones_estado() {
+        var select_opciones_estado = $('#ddl_estado_laboral');
+        var valor_seleccionado = select_opciones_estado.val();
+
+        $('#txt_fecha_contratacion_estado').prop('disabled', false);
+        $('#txt_fecha_salida_estado').prop('disabled', false);
+
+        if (valor_seleccionado === "Freelancer" || valor_seleccionado === "Autonomo") {
+            $('#txt_fecha_contratacion_estado').prop('disabled', true);
+            $('#txt_fecha_salida_estado').prop('disabled', true);
+        }
+    }
+
+    function mostrar_tipo_aptitudes() {
+        var select_tipo_aptitudes = $('#ddl_tipo_aptitudes');
+        var div_aptitudes_blandas = $('#sec_blandas')
+        var div_aptitudes_tecnicas = $('#sec_tecnicas')
+
+        div_aptitudes_blandas.hide();
+        div_aptitudes_tecnicas.hide();
+
+
+        if (select_tipo_aptitudes.val() == 'Blandas') {
+            div_aptitudes_blandas.show()
+            $('#ddl_seleccionar_aptitud_blanda').select2({
+                placeholder: 'Selecciona una opción',
+                dropdownParent: $('#modal_agregar_aptitudes'),
+                language: {
+                    inputTooShort: function() {
+                        return "Por favor ingresa 1 o más caracteres";
+                    },
+                    noResults: function() {
+                        return "No se encontraron resultados";
+                    },
+                    searching: function() {
+                        return "Buscando...";
+                    },
+                    errorLoading: function() {
+                        return "No se encontraron resultados";
+                    }
+                },
+                minimumInputLength: 1,
+            });
+        } else if (select_tipo_aptitudes.val() == 'Tecnicas') {
+            div_aptitudes_tecnicas.show()
+            $('#ddl_seleccionar_aptitud_tecnica').select2({
+                placeholder: 'Selecciona una opción',
+                dropdownParent: $('#modal_agregar_aptitudes'),
+                language: {
+                    inputTooShort: function() {
+                        return "Por favor ingresa 1 o más caracteres";
+                    },
+                    noResults: function() {
+                        return "No se encontraron resultados";
+                    },
+                    searching: function() {
+                        return "Buscando...";
+                    },
+                    errorLoading: function() {
+                        return "No se encontraron resultados";
+                    }
+                },
+                minimumInputLength: 1,
+            });
+        }
+    }
+
+    function agregar_contacto_emergencia() {
+        $('#btn_agregar_contacto_emergencia').on('click', function() {
+            var nueva_aptitud = $('.sec_contacto_emergencia .row').first().clone();
+
+            nueva_aptitud.find('input').val('');
+
+            $('.sec_contacto_emergencia').append(nueva_aptitud);
+        });
+    }
 
 </script>
 
@@ -22,6 +393,7 @@
             <div class="main-body">
                 <div class="row d-flex justify-content-center">
                     <div class="col-xs-5 col-sm-5 col-md-5 col-lg-4 col-xxl-3">
+                        <!-- Cards de la izquierda -->
                         <div class="card">
                             <div class="card-body">
                                 <div class="align-items-center">
@@ -135,12 +507,13 @@
                     </div>
 
                     <div class="col-xs-7 col-sm-7 col-md-7 col-lg-8 col-xxl-8">
+                        <!-- Cards de la derecha -->
                         <div class="card-body">
                             <ul class="nav nav-tabs nav-success" role="tablist">
                                 <li class="nav-item" role="presentation">
                                     <a class="nav-link active" data-bs-toggle="tab" href="#tab_experiencia" role="tab" aria-selected="true">
                                         <div class="d-flex align-items-center">
-                                            <div class="tab-icon"><i class="bx bxs-report font-18 me-1"></i>
+                                            <div class="tab-icon"><i class="bx bxs-briefcase font-18 me-1"></i>
                                             </div>
                                             <div class="tab-title">Experiencia</div>
                                         </div>
@@ -149,7 +522,7 @@
                                 <li class="nav-item" role="presentation">
                                     <a class="nav-link" data-bs-toggle="tab" href="#successdocs" role="tab" aria-selected="true">
                                         <div class="d-flex align-items-center">
-                                            <div class="tab-icon"><i class="bx bxs-report font-18 me-1"></i>
+                                            <div class="tab-icon"><i class="bx bxs-file-doc font-18 me-1"></i>
                                             </div>
                                             <div class="tab-title">Documentos</div>
                                         </div>
@@ -158,7 +531,7 @@
                                 <li class="nav-item" role="presentation">
                                     <a class="nav-link" data-bs-toggle="tab" href="#successprofile" role="tab" aria-selected="false" tabindex="-1">
                                         <div class="d-flex align-items-center">
-                                            <div class="tab-icon"><i class="bx bx-user-pin font-18 me-1"></i>
+                                            <div class="tab-icon"><i class="bx bx-brain font-18 me-1"></i>
                                             </div>
                                             <div class="tab-title">Habilidades</div>
                                         </div>
@@ -167,7 +540,7 @@
                                 <li class="nav-item" role="presentation">
                                     <a class="nav-link" data-bs-toggle="tab" href="#successcontact" role="tab" aria-selected="false" tabindex="-1">
                                         <div class="d-flex align-items-center">
-                                            <div class="tab-icon"><i class="bx bxs-briefcase font-18 me-1"></i>
+                                            <div class="tab-icon"><i class="bx bxs-user-check font-18 me-1"></i>
                                             </div>
                                             <div class="tab-title">Estado del Empleado</div>
                                         </div>
@@ -175,8 +548,8 @@
                                 </li>
                             </ul>
                             <div class="tab-content pt-3">
+                                <!-- Primera Sección, Historial Laboral -->
                                 <div class="tab-pane fade show active" id="tab_experiencia" role="tabpanel">
-                                    <!-- Primera Sección, Historial Laboral -->
                                     <div class="card">
                                         <div class="d-flex flex-column mx-4">
                                             <div class="card-body">
@@ -215,7 +588,7 @@
                                                         <div class="col-6 d-flex justify-content-end">
                                                             <a href="#" class="text-success d-flex align-items-center" data-bs-toggle="modal" data-bs-target="#modal_agregar_formacion">
                                                                 <i class='bx bx-plus-circle bx-sm me-1'></i>
-                                                                <span>Agregar Formación</span>
+                                                                <span>Agregar</span>
                                                             </a>
                                                         </div>
                                                     </div>
@@ -274,30 +647,19 @@
                                                         <div class="col-5 d-flex justify-content-end align-items-center">
                                                             <a href="#" class="text-success d-flex align-items-center" data-bs-toggle="modal" data-bs-target="#modal_agregar_documento_identidad">
                                                                 <i class='bx bx-plus-circle bx-sm me-1'></i>
-                                                                <span class="">Subir Documento de Identidad</span>
+                                                                <span class="">Subir</span>
                                                             </a>
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <hr class="my-0">
-                                                <div class="row">
-                                                    <div class="col-12 table-responsive">
-                                                        <table class="table table-borderless align-middle">
-                                                            <thead>
-                                                                <tr>
-                                                                    <th width="90%"></th>
-                                                                    <th width="10%"></th>
-                                                                </tr>
-                                                            </thead>
-                                                            <tbody>
-                                                                <tr>
-                                                                    <td class="fw-bold">Cédula de identidad</td>
-                                                                    <td class="d-flex justify-content-end align-items-center"><a href="#" class=""><i class='text-info bx bx-download me-2' style="font-size: 20px;"></i></a>
-                                                                        <a href="#" class=""><i class='text-danger bx bx-trash me-0' style="font-size: 20px;"></i></a>
-                                                                    </td>
-                                                                </tr>
-                                                            </tbody>
-                                                        </table>
+                                                <hr class="my-0 mb-3">
+                                                <div class="row mb-2">
+                                                    <div class="col-10 d-flex align-items-center">
+                                                        <p class="fw-bold">Cédula de Identidad</p>
+                                                    </div>
+                                                    <div class="col-2 d-flex justify-content-end">
+                                                        <a href="#" class=""><i class='text-info bx bx-download me-2' style="font-size: 20px;"></i></a>
+                                                        <a href="#" class=""><i class='text-danger bx bx-trash me-0' style="font-size: 20px;"></i></a>
                                                     </div>
                                                 </div>
                                             </div>
@@ -310,30 +672,19 @@
                                                         <div class="col-5 d-flex justify-content-end align-items-center">
                                                             <a href="#" class="text-success d-flex align-items-center" data-bs-toggle="modal" data-bs-target="#modal_agregar_contratos">
                                                                 <i class='bx bx-plus-circle bx-sm me-1'></i>
-                                                                <span class="">Subir Contrato</span>
+                                                                <span class="">Subir</span>
                                                             </a>
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <hr class="my-0">
-                                                <div class="row">
-                                                    <div class="col-12 table-responsive">
-                                                        <table class="table table-borderless align-middle">
-                                                            <thead>
-                                                                <tr>
-                                                                    <th width="90%"></th>
-                                                                    <th width="10%"></th>
-                                                                </tr>
-                                                            </thead>
-                                                            <tbody>
-                                                                <tr>
-                                                                    <td class="fw-bold">Contrato de trabajo - Sambitours</td>
-                                                                    <td class="d-flex justify-content-end align-items-center"><a href="#" class=""><i class='text-info bx bx-download me-2' style="font-size: 20px;"></i></a>
-                                                                        <a href="#" class=""><i class='text-danger bx bx-trash me-0' style="font-size: 20px;"></i></a>
-                                                                    </td>
-                                                                </tr>
-                                                            </tbody>
-                                                        </table>
+                                                <hr class="my-0 mb-3">
+                                                <div class="row mb-2">
+                                                    <div class="col-10 d-flex align-items-center">
+                                                        <p class="fw-bold">Contrato de trabajo - Sambitours</p>
+                                                    </div>
+                                                    <div class="col-2 d-flex justify-content-end">
+                                                        <a href="#" class=""><i class='text-info bx bx-download me-2' style="font-size: 20px;"></i></a>
+                                                        <a href="#" class=""><i class='text-danger bx bx-trash me-0' style="font-size: 20px;"></i></a>
                                                     </div>
                                                 </div>
                                             </div>
@@ -346,30 +697,19 @@
                                                         <div class="col-5 d-flex justify-content-end align-items-center">
                                                             <a href="#" class="text-success d-flex align-items-center" data-bs-toggle="modal" data-bs-target="#modal_agregar_certificado_medico">
                                                                 <i class='bx bx-plus-circle bx-sm me-1'></i>
-                                                                <span class="">Subir Certificado</span>
+                                                                <span class="">Subir</span>
                                                             </a>
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <hr class="my-0">
-                                                <div class="row my-0">
-                                                    <div class="col-12 table-responsive">
-                                                        <table class="table table-borderless align-middle">
-                                                            <thead>
-                                                                <tr>
-                                                                    <th width="90%"></th>
-                                                                    <th width="10%"></th>
-                                                                </tr>
-                                                            </thead>
-                                                            <tbody>
-                                                                <tr>
-                                                                    <td class="fw-bold">Certificado médico de enfermedad cualquiera</td>
-                                                                    <td class="d-flex justify-content-end align-items-center"><a href="#" class=""><i class='text-info bx bx-download me-2' style="font-size: 20px;"></i></a>
-                                                                        <a href="#" class=""><i class='text-danger bx bx-trash me-0' style="font-size: 20px;"></i></a>
-                                                                    </td>
-                                                                </tr>
-                                                            </tbody>
-                                                        </table>
+                                                <hr class="my-0 mb-3">
+                                                <div class="row mb-2">
+                                                    <div class="col-10 d-flex align-items-center">
+                                                        <p class="fw-bold">Certificado médico de enfermedad cualquiera</p>
+                                                    </div>
+                                                    <div class="col-2 d-flex justify-content-end">
+                                                        <a href="#" class=""><i class='text-info bx bx-download me-2' style="font-size: 20px;"></i></a>
+                                                        <a href="#" class=""><i class='text-danger bx bx-trash me-0' style="font-size: 20px;"></i></a>
                                                     </div>
                                                 </div>
                                             </div>
@@ -382,39 +722,21 @@
                                                         <div class="col-5 d-flex justify-content-end align-items-center">
                                                             <a href="#" class="text-success d-flex align-items-center" data-bs-toggle="modal" data-bs-target="#modal_agregar_referencia_laboral">
                                                                 <i class='bx bx-plus-circle bx-sm me-1'></i>
-                                                                <span class="">Añadir Referencia</span>
+                                                                <span class="">Agregar</span>
                                                             </a>
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <hr class="my-0">
-                                                <div class="row my-0">
-                                                    <div class="col-12 table-responsive">
-                                                        <table class="table table-borderless align-middle">
-                                                            <thead>
-                                                                <tr>
-                                                                    <th width="90%"></th>
-                                                                    <th width="10%"></th>
-                                                                </tr>
-                                                            </thead>
-                                                            <tbody>
-                                                                <tr>
-                                                                    <td>
-                                                                        <p class="fw-bold my-0 d-flex align-items-center">Ing. Roberto Carapaz</p>
-                                                                        <p class="d-flex align-items-center">+593 994645643</p>
-                                                                    </td>
-                                                                    <td class="d-flex align-items-center justify-content-end"><a href="#" class=""><i class='text-info bx bx-pencil me-2' style="font-size: 20px;"></i></a>
-                                                                        <a href="#" class=""><i class='text-danger bx bx-trash me-0' style="font-size: 20px;"></i></a>
-                                                                    </td>
-                                                                </tr>
-                                                                <tr>
-                                                                    <td class="fw-bold">Carta de recomendación - Doc. Panchez</td>
-                                                                    <td class="d-flex align-items-center justify-content-end"><a href="#" class=""><i class='text-info bx bx-download me-2' style="font-size: 20px;"></i></a>
-                                                                        <a href="#" class=""><i class='text-danger bx bx-trash me-0' style="font-size: 20px;"></i></a>
-                                                                    </td>
-                                                                </tr>
-                                                            </tbody>
-                                                        </table>
+                                                <hr class="my-0 mb-3">
+                                                <div class="row mb-2">
+                                                    <div class="col-10">
+                                                        <p class="fw-bold my-0 d-flex align-items-center">Ing. Roberto Carapaz</p>
+                                                        <p class="my-0 d-flex align-items-center">+593 994645643</p>
+                                                        <a href="#">Carta de Recomendación</a>
+                                                    </div>
+                                                    <div class="col-2 d-flex justify-content-end align-items-center">
+                                                        <a href="#" class=""><i class='text-info bx bx-pencil me-2' style="font-size: 20px;"></i></a>
+                                                        <a href="#" class=""><i class='text-danger bx bx-trash me-0' style="font-size: 20px;"></i></a>
                                                     </div>
                                                 </div>
                                             </div>
@@ -434,7 +756,7 @@
                                                         <div class="col-6 d-flex justify-content-end">
                                                             <a href="#" class="text-success d-flex align-items-center" data-bs-toggle="modal" data-bs-target="#modal_agregar_idioma">
                                                                 <i class='bx bx-plus-circle bx-sm me-1'></i>
-                                                                <span>Agregar Idioma</span>
+                                                                <span>Agregar</span>
                                                             </a>
                                                         </div>
                                                     </div>
@@ -459,7 +781,7 @@
                                                         <div class="col-6 d-flex justify-content-end">
                                                             <a href="#" class="text-success d-flex align-items-center" data-bs-toggle="modal" data-bs-target="#modal_agregar_aptitudes">
                                                                 <i class='bx bx-plus-circle bx-sm me-1'></i>
-                                                                <span>Agregar Aptitudes</span>
+                                                                <span>Agregar</span>
                                                             </a>
                                                         </div>
                                                     </div>
@@ -491,8 +813,8 @@
                                         </div>
                                     </div>
                                 </div>
+                                <!-- Cuarta Sección, Estado del Empleado -->
                                 <div class="tab-pane fade" id="successcontact" role="tabpanel">
-                                    <!-- Cuarta Sección, Estado del Empleado -->
                                     <div class="card">
                                         <div class="d-flex flex-column mx-4">
                                             <div class="card-body">
@@ -504,7 +826,7 @@
                                                         <div class="col-6 d-flex justify-content-end">
                                                             <a href="#" class="text-success d-flex align-items-center" data-bs-toggle="modal" data-bs-target="#modal_estado_laboral">
                                                                 <i class='bx bx-plus-circle bx-sm me-1'></i>
-                                                                <span>Agregar Estado</span>
+                                                                <span>Agregar</span>
                                                             </a>
                                                         </div>
                                                     </div>
@@ -551,16 +873,16 @@
                     <input type="file" id="txt_elegir_foto" accept="image/*" style="display: none;">
                 </div>
                 <div class="mb-3 d-flex justify-content-center">
-                    <input type="button" class="btn btn-success" name="btn_confirmar_foto" id="btn_confirmar_foto" value="Confirmar">
+                    <input type="button" class="btn btn-success" name="btn_confirmar_foto" id="btn_confirmar_foto" value="Confirmar" onclick="insertar_editar_foto();">
                 </div>
             </div>
         </div>
     </div>
 </div>
 
-<!-- Modal la informacion personal -->
+<!-- Modal para la informacion personal -->
 <div class="modal" id="modal_informacion_personal" tabindex="-1" aria-modal="true" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
-    <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-dialog modal-dialog-centered modal-xl">
         <div class="modal-content">
 
             <!-- Modal Header -->
@@ -571,54 +893,73 @@
             <!-- Modal body -->
             <div class="modal-body">
                 <p class="fw-bold">Nombres Completos</p>
-                <div class="mb-3">
-                    <label for="txt_primer_nombre_completo" class="form-label form-label-sm">Primer Nombre</label>
-                    <input type="text" class="form-control form-control-sm" name="txt_primer_nombre" id="txt_primer_nombre_completo" value="" placeholder="Escriba su nombre completo">
-                </div>
-                <div class="mb-3">
-                    <label for="txt_segundo_nombre_completo" class="form-label form-label-sm">Segundo Nombre</label>
-                    <input type="text" class="form-control form-control-sm" name="txt_segundo_nombre_completo" id="txt_segundo_nombre_completo" value="" placeholder="Escriba su nombre completo">
-                </div>
-                <div class="mb-3">
-                    <label for="txt_primer_apellido_completo" class="form-label form-label-sm">Primer Apellido</label>
-                    <input type="text" class="form-control form-control-sm" name="txt_primer_apellido_completo" id="txt_primer_apellido_completo" value="" placeholder="Escriba su nombre completo">
-                </div>
-                <div class="mb-3">
-                    <label for="txt_segundo_apellido_completo" class="form-label form-label-sm">Segundo Apellido</label>
-                    <input type="text" class="form-control form-control-sm" name="txt_segundo_apellido_completo" id="txt_segundo_apellido_completo" value="" placeholder="Escriba su nombre completo">
+                <div class="row">
+                    <div class="col-4">
+                        <div class="mb-3">
+                            <label for="txt_primer_nombre" class="form-label form-label-sm">Primer Nombre</label>
+                            <input type="text" class="form-control form-control-sm" name="txt_primer_nombre" id="txt_primer_nombre" placeholder="Escriba su primer nombre">
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="mb-3">
+                            <label for="txt_primer_apellido" class="form-label form-label-sm">Primer Apellido</label>
+                            <input type="text" class="form-control form-control-sm" name="txt_primer_apellido" id="txt_primer_apellido" placeholder="Escriba su apellido paterno">
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="mb-3">
+                            <label for="txt_segundo_apellido" class="form-label form-label-sm">Segundo Apellido</label>
+                            <input type="text" class="form-control form-control-sm" name="txt_segundo_apellido" id="txt_segundo_apellido" placeholder="Escriba su apellido materno">
+                        </div>
+                    </div>
                 </div>
                 <hr>
-                <div class="mb-3">
-                    <label for="txt_fecha_nacimiento" class="form-label form-label-sm">Fecha de nacimiento</label>
-                    <input type="date" class="form-control form-control-sm" name="txt_fecha_nacimiento" id="txt_fecha_nacimiento" value="">
-                </div>
-                <div class="mb-3">
-                    <label for="txt_nacionalidad" class="form-label form-label-sm">Nacionalidad</label>
-                    <input type="text" class="form-control form-control-sm" name="txt_nacionalidad" id="txt_nacionalidad" value="" placeholder="Escriba su Nacionalidad">
-                </div>
-                <div class="mb-3">
-                    <label for="ddl_estado_civil" class="form-label form-label-sm">Estado civil</label>
-                    <select class="form-select form-select-sm" id="ddl_estado_civil" name="ddl_estado_civil" required>
-                        <option selected disabled value="">-- Selecciona un Estado Civil --</option>
-                        <option value="Soltero">Soltero/a</option>
-                        <option value="Casado">Casado/a</option>
-                        <option value="Divorciado">Divorciado/a</option>
-                        <option value="Viudo">Viudo/a</option>
-                        <option value="Union">Unión de hecho</option>
-                    </select>
+                <div class="row">
+                    <div class="col-4">
+                        <div class="mb-3">
+                            <label for="txt_fecha_nacimiento" class="form-label form-label-sm">Fecha de nacimiento</label>
+                            <input type="date" class="form-control form-control-sm" name="txt_fecha_nacimiento" id="txt_fecha_nacimiento">
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="mb-3">
+                            <label for="ddl_nacionalidad" class="form-label form-label-sm">Nacionalidad</label>
+                            <select class="form-select form-select-sm" id="ddl_nacionalidad" name="ddl_nacionalidad" required>
+                                <option selected disabled value="">-- Selecciona una Nacionalidad --</option>
+                                <option value="Ecuatoriano">Ecuatoriano</option>
+                                <option value="Colombiano">Colombiano</option>
+                                <option value="Peruano">Peruano</option>
+                                <option value="Venezolano">Venezolano</option>
+                                <option value="Paraguayo">Paraguayo</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="mb-3">
+                            <label for="ddl_estado_civil" class="form-label form-label-sm">Estado civil</label>
+                            <select class="form-select form-select-sm" id="ddl_estado_civil" name="ddl_estado_civil" required>
+                                <option selected disabled value="">-- Selecciona un Estado Civil --</option>
+                                <option value="Soltero">Soltero/a</option>
+                                <option value="Casado">Casado/a</option>
+                                <option value="Divorciado">Divorciado/a</option>
+                                <option value="Viudo">Viudo/a</option>
+                                <option value="Union">Unión de hecho</option>
+                            </select>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="modal-footer d-flex justify-content-center">
-                <button type="button" class="btn btn-success btn-sm" id="btn_guardar_informacion_personal" onclick="insertar_editar_informacion_personal();">Guardar Información Personal</button>
+                <button type="button" class="btn btn-success btn-sm" id="btn_guardar_informacion_personal" onclick="insertar_editar_informacion_personal();">Guardar</button>
             </div>
         </div>
     </div>
 </div>
 
 
-<!-- Modal la informacion contactos -->
+<!-- Modal para la informacion contactos -->
 <div class="modal" id="modal_informacion_contacto" tabindex="-1" aria-modal="true" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
-    <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-dialog modal-dialog-centered modal-xl">
         <div class="modal-content">
 
             <!-- Modal Header -->
@@ -629,56 +970,94 @@
             <!-- Modal body -->
             <div class="modal-body">
                 <p class="fw-bold">Dirección:</p>
-                <div class="mb-3">
-                    <label for="txt_direccion_calle" class="form-label form-label-sm">Calle</label>
-                    <input type="text" class="form-control form-control-sm" name="txt_direccion_calle" id="txt_direccion_calle" value="" placeholder="Escriba su dirección">
-                </div>
-                <div class="mb-3">
-                    <label for="txt_direccion_numero" class="form-label form-label-sm">Número</label>
-                    <input type="text" class="form-control form-control-sm" name="txt_direccion_numero" id="txt_direccion_numero" value="" placeholder="Escriba su dirección">
-                </div>
-                <div class="mb-3">
-                    <label for="txt_direccion_ciudad" class="form-label form-label-sm">Ciudad</label>
-                    <input type="text" class="form-control form-control-sm" name="txt_direccion_ciudad" id="txt_direccion_ciudad" value="" placeholder="Escriba su dirección">
-                </div>
-                <div class="mb-3">
-                    <label for="txt_direccion_estado" class="form-label form-label-sm">Estado/Provincia</label>
-                    <input type="text" class="form-control form-control-sm" name="txt_direccion_estado" id="txt_direccion_estado" value="" placeholder="Escriba su dirección">
-                </div>
-                <div class="mb-3">
-                    <label for="txt_direccion_postal" class="form-label form-label-sm">Código Postal</label>
-                    <input type="text" class="form-control form-control-sm" name="txt_direccion_postal" id="txt_direccion_postal" value="" placeholder="Escriba su dirección">
+                <div class="row">
+                    <div class="col-4">
+                        <div class="mb-3">
+                            <label for="txt_direccion_calle" class="form-label form-label-sm">Calle</label>
+                            <input type="text" class="form-control form-control-sm" name="txt_direccion_calle" id="txt_direccion_calle" value="" placeholder="Escriba la calle de su dirección">
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="mb-3">
+                            <label for="txt_direccion_numero" class="form-label form-label-sm">Número</label>
+                            <input type="text" class="form-control form-control-sm" name="txt_direccion_numero" id="txt_direccion_numero" value="" placeholder="Escriba el número de su dirección">
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="mb-3">
+                            <label for="txt_direccion_ciudad" class="form-label form-label-sm">Ciudad</label>
+                            <input type="text" class="form-control form-control-sm" name="txt_direccion_ciudad" id="txt_direccion_ciudad" value="" placeholder="Escriba la ciudad de su dirección">
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="mb-3">
+                            <label for="txt_direccion_estado" class="form-label form-label-sm">Provincia</label>
+                            <input type="text" class="form-control form-control-sm" name="txt_direccion_estado" id="txt_direccion_estado" value="" placeholder="Escriba la provincia de su dirección">
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="mb-3">
+                            <label for="txt_direccion_postal" class="form-label form-label-sm">Código Postal</label>
+                            <div class="row">
+                                <div class="col-11 me-0">
+                                    <input type="text" class="form-control form-control-sm" name="txt_direccion_postal" id="txt_direccion_postal" placeholder="Escriba su código postal o de click en 'Obtener'">
+                                </div>
+                                <div class="col-1 d-flex justify-content-start">
+                                    <button class="btn btn-sm btn-outline-primary">Obtener</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <hr>
-                <div class="mb-3">
-                    <label for="txt_telefono_1" class="form-label form-label-sm">Teléfono 1 (personal o fijo)</label>
-                    <input type="text" class="form-control form-control-sm" name="txt_telefono_1" id="txt_telefono_1" value="" placeholder="Escriba su teléfono">
+                <div class="row">
+                    <div class="col-4">
+                        <div class="mb-3">
+                            <label for="txt_telefono_1" class="form-label form-label-sm">Teléfono 1 (personal o fijo)</label>
+                            <input type="text" class="form-control form-control-sm" name="txt_telefono_1" id="txt_telefono_1" value="" placeholder="Escriba su teléfono personal o fijo">
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="mb-3">
+                            <label for="txt_telefono_2" class="form-label form-label-sm">Teléfono 2 (opcional)</label>
+                            <input type="text" class="form-control form-control-sm" name="txt_telefono_2" id="txt_telefono_2" value="" placeholder="Escriba su teléfono personal o fijo (opcional)">
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="mb-3">
+                            <label for="txt_correo" class="form-label form-label-sm">Correo Electrónico</label>
+                            <input type="email" class="form-control form-control-sm" name="txt_correo" id="txt_correo" value="" placeholder="Escriba su correo electrónico">
+                        </div>
+                    </div>
                 </div>
-                <div class="mb-3">
-                    <label for="txt_telefono_2" class="form-label form-label-sm">Teléfono 2 (opcional)</label>
-                    <input type="text" class="form-control form-control-sm" name="txt_telefono_2" id="txt_telefono_2" value="" placeholder="Escriba su teléfono">
+                <hr>
+                <p class="fw-bold my-0 mb-2">Contacto de Emergencia:</p>
+                <div class="sec_contacto_emergencia">
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="mb-3">
+                                <label for="txt_nombre_contacto_emergencia" class="form-label form-label-sm">Nombre del contacto de Emergencia</label>
+                                <input type="text" class="form-control form-control-sm txt_nombre_contacto_emergencia" name="txt_nombre_contacto_emergencia" id="txt_nombre_contacto_emergencia" value="" placeholder="Escriba el nombre de un contacto de emergencia">
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="mb-3">
+                                <label for="txt_telefono_contacto_emergencia" class="form-label form-label-sm">Teléfono del contacto de Emergencia</label>
+                                <input type="text" class="form-control form-control-sm txt_telefono_contacto_emergencia" name="txt_telefono_contacto_emergencia" id="txt_telefono_contacto_emergencia" value="" placeholder="Escriba el número de un contacto de emergencia">
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="mb-3">
-                    <label for="txt_correo" class="form-label form-label-sm">Correo Electrónico</label>
-                    <input type="email" class="form-control form-control-sm" name="txt_correo" id="txt_correo" value="" placeholder="Escriba su correo electrónico">
-                </div>
-                <p class="fw-bold">Contacto de Emergencia:</p>
-                <div class="mb-3">
-                    <label for="txt_nombre_contacto_emergencia" class="form-label form-label-sm">Nombre del contacto de Emergencia</label>
-                    <input type="text" class="form-control form-control-sm" name="txt_nombre_contacto_emergencia" id="txt_nombre_contacto_emergencia" value="" placeholder="Escriba un contacto de emergencia">
-                </div>
-                <div class="mb-3">
-                    <label for="txt_telefono_contacto_emergencia" class="form-label form-label-sm">Teléfono del contacto de Emergencia</label>
-                    <input type="text" class="form-control form-control-sm" name="txt_telefono_contacto_emergencia" id="txt_telefono_contacto_emergencia" value="" placeholder="Escriba un contacto de emergencia">
-                </div>
+                <button class="btn btn-sm btn-primary mb-2 d-flex align-items-center" id="btn_agregar_contacto_emergencia"><i class='bx bx-list-plus me-0'></i>Añadir otro contacto</button>
             </div>
             <div class="modal-footer d-flex justify-content-center">
-                <button type="button" class="btn btn-success btn-sm" id="btn_guardar_informacion_contacto" onclick="mostrar_parametros()">Guardar Información de Contacto</button>
+                <button type="button" class="btn btn-success btn-sm" id="btn_guardar_informacion_contacto" onclick="insertar_editar_informacion_contacto();">Guardar</button>
             </div>
         </div>
     </div>
 </div>
 
+<!-- Modal para agregar experiencia laboral-->
 <div class="modal" id="modal_agregar_experiencia" tabindex="-1" aria-modal="true" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
@@ -705,7 +1084,7 @@
                 <div class="mb-3">
                     <label for="txt_fecha_final_laboral" class="form-label form-label-sm">Fecha de finalización</label>
                     <input type="date" class="form-control form-control-sm mb-2" name="txt_fecha_final_laboral" id="txt_fecha_final_laboral" value="">
-                    <input type="checkbox" class="form-check-input" name="cbx_fecha_final_laboral" id="cbx_fecha_final_laboral" value="Actualidad">
+                    <input type="checkbox" class="form-check-input" name="cbx_fecha_final_laboral" id="cbx_fecha_final_laboral">
                     <label for="cbx_fecha_final_laboral" class="form-label form-label-sm">Actualidad</label>
                 </div>
                 <div class="mb-3">
@@ -714,13 +1093,13 @@
                 </div>
             </div>
             <div class="modal-footer d-flex justify-content-center">
-                <button type="button" class="btn btn-success btn-sm" id="btn_agregar_experiencia_laboral" onclick="mostrar_parametros()">Agregar Experiencia Laboral</button>
+                <button type="button" class="btn btn-success btn-sm" id="btn_agregar_experiencia_laboral" onclick="insertar_editar_experiencia_laboral();">Agregar</button>
             </div>
         </div>
     </div>
 </div>
 
-
+<!-- Modal para agregar formación académica-->
 <div class="modal" id="modal_agregar_formacion" tabindex="-1" aria-modal="true" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
@@ -750,13 +1129,13 @@
                 </div>
             </div>
             <div class="modal-footer d-flex justify-content-center">
-                <button type="button" class="btn btn-success btn-sm" id="btn_guardar_formacion" onclick="mostrar_parametros()">Agregar Formación Académica</button>
+                <button type="button" class="btn btn-success btn-sm" id="btn_guardar_formacion" onclick="insertar_editar_formacion_academica();">Agregar</button>
             </div>
         </div>
     </div>
 </div>
 
-
+<!-- Modal para agregar certificaciones y capacitaciones-->
 <div class="modal" id="modal_agregar_certificaciones" tabindex="-1" aria-modal="true" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
@@ -781,13 +1160,13 @@
                 </div>
             </div>
             <div class="modal-footer d-flex justify-content-center">
-                <button type="button" class="btn btn-success btn-sm" id="btn_guardar_certificaciones" onclick="mostrar_parametros()">Guardar Certificación o Capacitación</button>
+                <button type="button" class="btn btn-success btn-sm" id="btn_guardar_certificaciones" onclick="insertar_editar_certificaciones_capacitaciones();">Guardar Certificación o Capacitación</button>
             </div>
         </div>
     </div>
 </div>
 
-
+<!-- Modal para agregar certificados médicos-->
 <div class="modal" id="modal_agregar_certificado_medico" tabindex="-1" aria-modal="true" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
@@ -809,13 +1188,13 @@
                 </div>
             </div>
             <div class="modal-footer d-flex justify-content-center">
-                <button type="button" class="btn btn-success btn-sm" id="btn_guardar_certificado_medico" onclick="mostrar_parametros()">Guardar Certificado Médico</button>
+                <button type="button" class="btn btn-success btn-sm" id="btn_guardar_certificado_medico" onclick="insertar_editar_certificado_medico()">Guardar Certificado Médico</button>
             </div>
         </div>
     </div>
 </div>
 
-
+<!-- Modal para agregar referencias laborales-->
 <div class="modal" id="modal_agregar_referencia_laboral" tabindex="-1" aria-modal="true" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
@@ -827,36 +1206,27 @@
             </div>
             <!-- Modal body -->
             <div class="modal-body">
-                <select class="form-select form-select-sm mb-4" id="ddl_tipo_referencia" name="ddl_tipo_referencia" required>
-                    <option selected disabled value="">-- Selecciona el tipo de referencia laboral --</option>
-                    <option value="Contacto">Contacto de empleador</option>
-                    <option value="Carta">Carta de recomendación</option>
-                </select>
-                <div id="contacto_empleador">
-                    <div class="mb-3">
-                        <label for="txt_nombre_referencia" class="form-label form-label-sm">Nombre del empleador</label>
-                        <input type="text" class="form-control form-control-sm" name="txt_nombre_referencia" id="txt_nombre_referencia" value="" placeholder="Escriba el nombre de el empleador">
-                    </div>
-                    <div class="mb-3">
-                        <label for="txt_telefono_referencia" class="form-label form-label-sm">Teléfono del empleador</label>
-                        <input type="text" class="form-control form-control-sm" name="txt_telefono_referencia" id="txt_telefono_referencia" value="" placeholder="Escriba el número de contacto de el empleador">
-                    </div>
+                <div class="mb-3">
+                    <label for="txt_nombre_referencia" class="form-label form-label-sm">Nombre del empleador</label>
+                    <input type="text" class="form-control form-control-sm" name="txt_nombre_referencia" id="txt_nombre_referencia" value="" placeholder="Escriba el nombre de el empleador">
                 </div>
-                <div id="carta_recomendación">
-                    <div class="mb-3">
-                        <label for="txt_copia_carta_recomendacion" class="form-label form-label-sm">Copia de la carta de recomendación</label>
-                        <input type="file" class="form-control form-control-sm mb-3" name="txt_copia_carta_recomendacion" id="txt_copia_carta_recomendacion" accept=".pdf" value="">
-                    </div>
+                <div class="mb-3">
+                    <label for="txt_telefono_referencia" class="form-label form-label-sm">Teléfono del empleador</label>
+                    <input type="text" class="form-control form-control-sm" name="txt_telefono_referencia" id="txt_telefono_referencia" value="" placeholder="Escriba el número de contacto de el empleador">
+                </div>
+                <div class="mb-3">
+                    <label for="txt_copia_carta_recomendacion" class="form-label form-label-sm">Copia de la carta de recomendación</label>
+                    <input type="file" class="form-control form-control-sm mb-3" name="txt_copia_carta_recomendacion" id="txt_copia_carta_recomendacion" accept=".pdf" value="">
                 </div>
             </div>
             <div class="modal-footer d-flex justify-content-center">
-                <button type="button" class="btn btn-success btn-sm" id="btn_guardar_referencia" onclick="mostrar_parametros()">Guardar Referencia Laboral</button>
+                <button type="button" class="btn btn-success btn-sm" id="btn_guardar_referencia" onclick="insertar_editar_referencias();">Guardar Referencia Laboral</button>
             </div>
         </div>
     </div>
 </div>
 
-
+<!-- Modal para agregar contratos de trabajo-->
 <div class="modal" id="modal_agregar_contratos" tabindex="-1" aria-modal="true" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
@@ -878,11 +1248,13 @@
                 </div>
             </div>
             <div class="modal-footer d-flex justify-content-center">
-                <button type="button" class="btn btn-success btn-sm" id="btn_guardar_contratos" onclick="mostrar_parametros()">Guardar Contrato de Trabajo</button>
+                <button type="button" class="btn btn-success btn-sm" id="btn_guardar_contratos" onclick="insertar_editar_contrato_laboral();">Guardar Contrato de Trabajo</button>
             </div>
         </div>
     </div>
 </div>
+
+<!-- Modal para agregar estado laboral-->
 <div class="modal" id="modal_estado_laboral" tabindex="-1" aria-modal="true" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
@@ -916,13 +1288,13 @@
                 </div>
             </div>
             <div class="modal-footer d-flex justify-content-center">
-                <button type="button" class="btn btn-success btn-sm" id="btn_guardar_estado_laboral" onclick="mostrar_parametros()">Guardar Estado Laboral</button>
+                <button type="button" class="btn btn-success btn-sm" id="btn_guardar_estado_laboral" onclick="insertar_editar_estado_laboral();">Guardar Estado Laboral</button>
             </div>
         </div>
     </div>
 </div>
 
-
+<!-- Modal para agregar idiomas-->
 <div class="modal" id="modal_agregar_idioma" tabindex="-1" aria-modal="true" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
@@ -935,13 +1307,21 @@
             <!-- Modal body -->
             <div class="modal-body">
                 <div class="mb-3">
-                    <label for="txt_idioma" class="form-label form-label-sm">Idioma</label>
-                    <input type="text" class="form-control form-control-sm mb-3" name="txt_idioma" id="txt_idioma" value="" required>
+                    <label for="ddl_seleccionar_idioma" class="form-label form-label-sm">Idioma</label>
+                    <select class="form-select form-select-sm" id="ddl_seleccionar_idioma" name="ddl_seleccionar_idioma">
+                        <option selected disabled value="">-- Selecciona un Idioma --</option>
+                        <option value="Español">Español</option>
+                        <option value="Inglés">Inglés</option>
+                        <option value="Francés">Francés</option>
+                        <option value="Alemán">Alemán</option>
+                        <option value="Chino">Chino</option>
+                        <option value="Italiano">Italiano</option>
+                    </select>
                 </div>
                 <div class="mb-3">
                     <label for="ddl_dominio_idioma" class="form-label form-label-sm">Dominio del Idioma</label>
                     <select class="form-select form-select-sm" id="ddl_dominio_idioma" name="ddl_dominio_idioma" required>
-                        <option selected disabled value="">-- Selecciona una opción --</option>
+                        <option selected disabled value="">-- Selecciona su nivel de dominio del idioma --</option>
                         <option value="Nativo">Nativo</option>
                         <option value="C1">C1</option>
                         <option value="C2">C2</option>
@@ -953,11 +1333,13 @@
                 </div>
             </div>
             <div class="modal-footer d-flex justify-content-center">
-                <button type="button" class="btn btn-success btn-sm" id="btn_guardar_idioma" onclick="mostrar_parametros()">Guardar Idioma</button>
+                <button type="button" class="btn btn-success btn-sm" id="btn_guardar_idioma" onclick="insertar_editar_idiomas();">Guardar Idioma</button>
             </div>
         </div>
     </div>
 </div>
+
+<!-- Modal para agregar aptitudes técnicas y blandas-->
 <div class="modal" id="modal_agregar_aptitudes" tabindex="-1" aria-modal="true" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
@@ -974,53 +1356,57 @@
                     <option value="Blandas">Aptitudes Blandas</option>
                     <option value="Tecnicas">Aptitudes Técnicas</option>
                 </select>
-                <div id="aptitudes_blandas">
+                <div id="sec_blandas" style="display: none;">
                     <div class="mb-3">
                         <div class="row mb-3">
-                            <div class="col-10 d-flex align-items-center">
-                                <label for="txt_aptitud_blanda" class="form-label form-label-sm fw-bold">Escriba sus Aptitudes</label>
-                            </div>
-                            <div class="col-2 d-flex justify-content-end align-items-center">
-                                <button class="btn btn-sm btn-primary" id="btn_agregar_aptitudes_blandas"><i class='bx bx-list-plus me-0'></i></button>
+                            <div class="col-12 d-flex align-items-center">
+                                <label for="ddl_seleccionar_aptitud_blanda" class="form-label form-label-sm fw-bold">Seleccione sus Aptitudes Blandas</label>
                             </div>
                         </div>
-                        <div class="blandas_contenedor">
-                            <div class="row mb-2">
-                                <div class="col-12">
-                                    <input type="text" class="form-control form-control-sm txt_aptitud_blanda" name="txt_aptitud_blanda" id="txt_aptitud_blanda" value="" placeholder="Ejemplo: Liderazgo">
-                                </div>
+                        <div class="row mb-2">
+                            <div class="col-12">
+                                <select class="form-select form-select-sm ddl_seleccionar_aptitud_blanda" id="ddl_seleccionar_aptitud_blanda" name="ddl_seleccionar_aptitud_blanda" multiple="multiple">
+                                    <option value="Liderazgo">Liderazgo</option>
+                                    <option value="Comunicación Efectiva">Comunicación Efectiva</option>
+                                    <option value="Trabajo en equipo">Trabajo en equipo</option>
+                                    <option value="etc">etc</option>
+                                    <option value="etc">etc</option>
+                                    <option value="etc">etc</option>
+                                </select>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div id="aptitudes_tecnicas">
+                <div id="sec_tecnicas" style="display: none;">
                     <div class="mb-3">
                         <div class="row mb-3">
-                            <div class="col-10 d-flex align-items-center">
-                                <label for="txt_aptitud_tecnica" class="form-label form-label-sm fw-bold">Escriba sus Aptitudes</label>
-                            </div>
-                            <div class="col-2 d-flex justify-content-end align-items-center">
-                                <button class="btn btn-sm btn-primary" id="btn_agregar_aptitudes_tecnicas"><i class='bx bx-list-plus me-0'></i></button>
+                            <div class="col-12 d-flex align-items-center">
+                                <label for="ddl_seleccionar_aptitud_tecnica" class="form-label form-label-sm fw-bold">Seleccione sus Aptitudes Técnicas</label>
                             </div>
                         </div>
-                        <div class="tecnicas_contenedor">
-                            <div class="row mb-2">
-                                <div class="col-12">
-                                    <input type="text" class="form-control form-control-sm txt_aptitud_tecnica" name="txt_aptitud_tecnica" id="txt_aptitud_tecnica" value="" placeholder="Ejemplo: Manejo de Office">
-                                </div>
+                        <div class="row mb-2">
+                            <div class="col-12">
+                                <select class="form-select form-select-sm ddl_seleccionar_aptitud_tecnica" id="ddl_seleccionar_aptitud_tecnica" name="ddl_seleccionar_aptitud_tecnica" multiple="multiple">
+                                    <option value="Manejo de office">Manejo de office</option>
+                                    <option value="Django">Django</option>
+                                    <option value="Laravel">Laravel</option>
+                                    <option value="Photoshop">Photoshop</option>
+                                    <option value="Illustrator">Illustrator</option>
+                                    <option value="etc">etc</option>
+                                </select>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="modal-footer d-flex justify-content-center">
-                <button type="button" class="btn btn-success btn-sm" id="btn_guardar_aptitudes" onclick="mostrar_parametros()">Guardar Aptitudes</button>
+                <button type="button" class="btn btn-success btn-sm" id="btn_guardar_aptitudes" onclick="insertar_editar_aptitudes();">Guardar Aptitudes</button>
             </div>
         </div>
     </div>
 </div>
 
-
+<!-- Modal para agregar documento de identidad-->
 <div class="modal" id="modal_agregar_documento_identidad" tabindex="-1" aria-modal="true" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
@@ -1050,271 +1436,8 @@
                 </div>
             </div>
             <div class="modal-footer d-flex justify-content-center">
-                <button type="button" class="btn btn-success btn-sm" id="btn_guardar_documento_identidad" onclick="mostrar_parametros()">Guardar Documento de Identidad</button>
+                <button type="button" class="btn btn-success btn-sm" id="btn_guardar_documento_identidad" onclick="insertar_editar_documento_identidad();">Guardar Documento de Identidad</button>
             </div>
         </div>
     </div>
 </div>
-
-
-
-
-<script>
-    $(document).ready(function() {
-        mostrar_referencia_laboral()
-        ocultar_opciones_estado()
-        mostrar_tipo_aptitudes()
-
-        $('#ddl_tipo_referencia').change(function() {
-            mostrar_referencia_laboral();
-        });
-
-        $('#ddl_estado_laboral').change(function() {
-            ocultar_opciones_estado();
-        });
-        $('#ddl_tipo_aptitudes').change(function() {
-            mostrar_tipo_aptitudes();
-        });
-
-        $('#contacto_empleador').hide();
-        $('#carta_recomendación').hide();
-
-
-        $('#btn_agregar_aptitudes_blandas').on('click', function() {
-            var nueva_aptitud = $('.blandas_contenedor .row').first().clone();
-
-            nueva_aptitud.find('input').val('');
-
-            $('.blandas_contenedor').append(nueva_aptitud);
-        });
-
-        $('#btn_agregar_aptitudes_tecnicas').on('click', function() {
-            var nueva_aptitud = $('.tecnicas_contenedor .row').first().clone();
-
-            nueva_aptitud.find('input').val('');
-
-            $('.tecnicas_contenedor').append(nueva_aptitud);
-        });
-    });
-
-    function mostrar_parametros() {
-
-        var ddl_tipo_documento_identidad = $('#ddl_tipo_documento_identidad').val()
-        var txt_agregar_documento_identidad = $('#txt_agregar_documento_identidad').val();
-        var txt_elegir_foto = $('#txt_elegir_foto').val();
-        var txt_primer_nombre_completo = $('#txt_primer_nombre_completo').val()
-        var txt_segundo_nombre_completo = $('#txt_segundo_nombre_completo').val()
-        var txt_primer_apellido_completo = $('#txt_primer_apellido_completo').val()
-        var txt_segundo_apellido_completo = $('#txt_segundo_apellido_completo').val()
-        var txt_fecha_nacimiento = $('#txt_fecha_nacimiento').val();
-        var txt_nacionalidad = $('#txt_nacionalidad').val();
-        var ddl_estado_civil = $('#ddl_estado_civil').val();
-        var txt_direccion_calle = $('#txt_direccion_calle').val();
-        var txt_direccion_numero = $('#txt_direccion_numero').val();
-        var txt_direccion_ciudad = $('#txt_direccion_ciudad').val();
-        var txt_direccion_estado = $('#txt_direccion_estado').val();
-        var txt_direccion_postal = $('#txt_direccion_postal').val();
-        var txt_telefono_1 = $('#txt_telefono_1').val();
-        var txt_telefono_2 = $('#txt_telefono_2').val();
-        var txt_correo = $('#txt_correo').val();
-        var txt_nombre_contacto_emergencia = $('#txt_nombre_contacto_emergencia').val();
-        var txt_telefono_contacto_emergencia = $('#txt_telefono_contacto_emergencia').val();
-        var txt_nombre_empresa = $('#txt_nombre_empresa').val();
-        var txt_cargos_ocupados = $('#txt_cargos_ocupados').val();
-        var txt_fecha_inicio_laboral = $('#txt_fecha_inicio_laboral').val();
-        var txt_fecha_final_laboral = $('#txt_fecha_final_laboral').val();
-        var cbx_fecha_final_laboral = $('#cbx_fecha_final_laboral').val();
-        var txt_responsabilidades_logros = $('#txt_responsabilidades_logros').val();
-        var txt_titulo_obtenido = $('#txt_titulo_obtenido').val();
-        var txt_institucion = $('#txt_institucion').val();
-        var txt_fecha_inicio_academico = $('#txt_fecha_inicio_academico').val();
-        var txt_fecha_final_academico = $('#txt_fecha_final_academico').val();
-        var txt_nombre_certificacion = $('#txt_nombre_certificacion').val();
-        var txt_enlace_certificado = $('#txt_enlace_certificado').val();
-        var txt_pdf_certificado = $('#txt_pdf_certificado').val();
-        var txt_nombre_certificado_medico = $('#txt_nombre_certificado_medico').val();
-        var txt_respaldo_medico = $('#txt_respaldo_medico').val();
-        var ddl_tipo_referencia = $('#ddl_tipo_referencia').val();
-        var txt_nombre_referencia = $('#txt_nombre_referencia').val();
-        var txt_telefono_referencia = $('#txt_telefono_referencia').val();
-        var txt_copia_carta_recomendacion = $('#txt_copia_carta_recomendacion').val();
-        var txt_nombre_empresa_contrato = $('#txt_nombre_empresa_contrato').val();
-        var txt_copia_contrato = $('#txt_copia_contrato').val();
-        var ddl_estado_laboral = $('#ddl_estado_laboral').val();
-        var txt_fecha_contratacion_estado = $('#txt_fecha_contratacion_estado').val();
-        var txt_fecha_salida_estado = $('#txt_fecha_salida_estado').val();
-        var txt_idioma = $('#txt_idioma').val();
-        var ddl_dominio_idioma = $('#ddl_dominio_idioma').val();
-        var ddl_tipo_aptitudes = $('#ddl_tipo_aptitudes').val();
-        var txt_aptitud_blanda = [];
-        $('.txt_aptitud_blanda').each(function() {
-            txt_aptitud_blanda.push($(this).val());
-        });
-
-        var txt_aptitud_tecnica = [];
-        $('.txt_aptitud_tecnica').each(function() {
-            txt_aptitud_tecnica.push($(this).val());
-        });
-
-        var parametros = {
-            'txt_agregar_documento_identidad': txt_agregar_documento_identidad,
-            'txt_elegir_foto': txt_elegir_foto,
-            'txt_nombre_completo': txt_nombre_completo,
-            'txt_fecha_nacimiento': txt_fecha_nacimiento,
-            'txt_nacionalidad': txt_nacionalidad,
-            'ddl_estado_civil': ddl_estado_civil,
-            'txt_direccion_calle': txt_direccion_calle,
-            'txt_direccion_numero': txt_direccion_numero,
-            'txt_direccion_ciudad': txt_direccion_ciudad,
-            'txt_direccion_estado': txt_direccion_estado,
-            'txt_direccion_postal': txt_direccion_postal,
-            'txt_telefono_1': txt_telefono_1,
-            'txt_telefono_2': txt_telefono_2,
-            'txt_correo': txt_correo,
-            'txt_nombre_contacto_emergencia': txt_nombre_contacto_emergencia,
-            'txt_telefono_contacto_emergencia': txt_telefono_contacto_emergencia,
-            'txt_nombre_empresa': txt_nombre_empresa,
-            'txt_cargos_ocupados': txt_cargos_ocupados,
-            'txt_fecha_inicio_laboral': txt_fecha_inicio_laboral,
-            'txt_fecha_final_laboral': txt_fecha_final_laboral,
-            'cbx_fecha_final_laboral': cbx_fecha_final_laboral,
-            'txt_responsabilidades_logros': txt_responsabilidades_logros,
-            'txt_titulo_obtenido': txt_titulo_obtenido,
-            'txt_institucion': txt_institucion,
-            'txt_fecha_inicio_academico': txt_fecha_inicio_academico,
-            'txt_fecha_final_academico': txt_fecha_final_academico,
-            'txt_nombre_certificacion': txt_nombre_certificacion,
-            'txt_enlace_certificado': txt_enlace_certificado,
-            'txt_pdf_certificado': txt_pdf_certificado,
-            'txt_nombre_certificado_medico': txt_nombre_certificado_medico,
-            'txt_respaldo_medico': txt_respaldo_medico,
-            'ddl_tipo_referencia': ddl_tipo_referencia,
-            'txt_nombre_referencia': txt_nombre_referencia,
-            'txt_telefono_referencia': txt_telefono_referencia,
-            'txt_copia_carta_recomendacion': txt_copia_carta_recomendacion,
-            'txt_nombre_empresa_contrato': txt_nombre_empresa_contrato,
-            'txt_copia_contrato': txt_copia_contrato,
-            'ddl_estado_laboral': ddl_estado_laboral,
-            'txt_fecha_contratacion_estado': txt_fecha_contratacion_estado,
-            'txt_fecha_salida_estado': txt_fecha_salida_estado,
-            'txt_idioma': txt_idioma,
-            'ddl_dominio_idioma': ddl_dominio_idioma,
-            'ddl_tipo_aptitudes': ddl_tipo_aptitudes,
-            'txt_aptitud_blanda': txt_aptitud_blanda,
-            'txt_aptitud_tecnica': txt_aptitud_tecnica,
-        }
-
-        console.log(parametros)
-
-        //Limpiar parámetros
-
-        $('#txt_agregar_documento_identidad').val('');
-        $('#txt_elegir_foto').val('');
-        $('#txt_nombre_completo').val('');
-        $('#txt_fecha_nacimiento').val('');
-        $('#txt_nacionalidad').val('');
-        $('#ddl_estado_civil').val('');
-        $('#txt_direccion_calle').val('');
-        $('#txt_direccion_numero').val('');
-        $('#txt_direccion_ciudad').val('');
-        $('#txt_direccion_estado').val('');
-        $('#txt_direccion_postal').val('');
-        $('#txt_telefono_1').val('');
-        $('#txt_telefono_2').val('');
-        $('#txt_correo').val('');
-        $('#txt_nombre_contacto_emergencia').val('');
-        $('#txt_telefono_contacto_emergencia').val('');
-        $('#txt_nombre_empresa').val('');
-        $('#txt_cargos_ocupados').val('');
-        $('#txt_fecha_inicio_laboral').val('');
-        $('#txt_fecha_final_laboral').val('');
-        $('#cbx_fecha_final_laboral').val('');
-        $('#txt_responsabilidades_logros').val('');
-        $('#txt_titulo_obtenido').val('');
-        $('#txt_institucion').val('');
-        $('#txt_fecha_inicio_academico').val('');
-        $('#txt_fecha_final_academico').val('');
-        $('#txt_nombre_certificacion').val('');
-        $('#txt_enlace_certificado').val('');
-        $('#txt_pdf_certificado').val('');
-        $('#txt_nombre_certificado_medico').val('');
-        $('#txt_respaldo_medico').val('');
-        $('#ddl_tipo_referencia').val('');
-        $('#txt_nombre_referencia').val('');
-        $('#txt_telefono_referencia').val('');
-        $('#txt_copia_carta_recomendacion').val('');
-        $('#txt_nombre_empresa_contrato').val('');
-        $('#txt_copia_contrato').val('');
-        $('#ddl_estado_laboral').val('');
-        $('#txt_fecha_contratacion_estado').val('');
-        $('#txt_fecha_salida_estado').val('');
-        $('#txt_idioma').val('');
-        $('#ddl_dominio_idioma').val('');
-        $('#ddl_tipo_aptitudes').val('');
-        $('.txt_aptitud_blanda').val('');
-        $('.txt_aptitud_tecnica').val('');
-
-    }
-
-
-    const btn_agregar_documento_identidad = document.querySelector('#btn_agregar_documento_identidad')
-    const input_agregar_documento_identidad = document.querySelector('#txt_agregar_documento_identidad')
-
-    btn_agregar_documento_identidad.onclick = () => {
-        input_agregar_documento_identidad.click()
-    }
-
-    function mostrar_referencia_laboral() {
-        var select_tipo_referencia = $('#ddl_tipo_referencia');
-        var div_contacto_empleador = $('#contacto_empleador')
-        var div_carta_recomendación = $('#carta_recomendación')
-
-        div_contacto_empleador.hide();
-        div_carta_recomendación.hide();
-
-
-        if (select_tipo_referencia.val() == 'Contacto') {
-            div_contacto_empleador.show()
-        } else if (select_tipo_referencia.val() == 'Carta') {
-            div_carta_recomendación.show()
-        }
-    }
-
-    function cambiar_foto() {
-        var btn_elegir_foto = $('#btn_elegir_foto')
-        var input_elegir_foto = $('#txt_elegir_foto')
-
-        btn_elegir_foto.click(function() {
-            input_elegir_foto.click();
-        });
-    }
-
-    function ocultar_opciones_estado() {
-        var select_opciones_estado = $('#ddl_estado_laboral');
-        var valor_seleccionado = select_opciones_estado.val();
-
-        $('#txt_fecha_contratacion_estado').prop('disabled', false);
-        $('#txt_fecha_salida_estado').prop('disabled', false);
-
-        if (valor_seleccionado === "Freelancer" || valor_seleccionado === "Autonomo") {
-            $('#txt_fecha_contratacion_estado').prop('disabled', true);
-            $('#txt_fecha_salida_estado').prop('disabled', true);
-        }
-    }
-
-    function mostrar_tipo_aptitudes() {
-        var select_tipo_aptitudes = $('#ddl_tipo_aptitudes');
-        var div_aptitudes_blandas = $('#aptitudes_blandas')
-        var div_aptitudes_tecnicas = $('#aptitudes_tecnicas')
-
-        div_aptitudes_blandas.hide();
-        div_aptitudes_tecnicas.hide();
-
-
-        if (select_tipo_aptitudes.val() == 'Blandas') {
-            div_aptitudes_blandas.show()
-        } else if (select_tipo_aptitudes.val() == 'Tecnicas') {
-            div_aptitudes_tecnicas.show()
-        }
-    }
-</script>
