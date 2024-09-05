@@ -8,6 +8,10 @@ if (isset($_GET['mantenimiento_preventivo'])) {
     echo $controlador->mantenimiento_preventivo($_GET['id']);
 }
 
+if (isset($_GET['mantenimiento_impresora'])) {
+    echo $controlador->mantenimiento_impresora($_GET['id']);
+}
+
 class formularios_mantenimiento_pc_impresoraC{
     private $modelo;
 
@@ -521,6 +525,236 @@ class formularios_mantenimiento_pc_impresoraC{
                 $pdf->MultiCell(0, 21, utf8_decode($for_man_condicion_teclado), 1, 'C', 1, 1);
             }
         }
+
+        $pdf->Output();
+    }
+
+    function mantenimiento_impresora($id){ 
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
+        //$datos = $this->modelo->where('form_man_id', $id)->listar();
+        //* Datos de la empresa
+        $for_imp_empresa = 'Corsinf';//$datos[0]->for_imp_empresa;
+        $for_imp_consecutivo = 'CONSECUTIVO';//$datos[0]->for_imp_consecutivo;
+        $for_imp_fecha = '05/09/2024';//$datos[0]->for_imp_fecha;
+        $for_imp_sede = 'SEDE';//$datos[0]->for_imp_sede;
+        $for_imp_dependencia = 'DEPENDENCIA';//$datos[0]->for_imp_dependencia;
+        $for_imp_telefono = 'TELEFONO';//$datos[0]->for_imp_telefono;
+        $for_imp_usuario = 'USUARIO';//$datos[0]->for_imp_usuario;
+        $for_imp_email_usuario = 'EMAIL USUARIO';//$datos[0]->for_imp_email_usuario;
+
+        //? Datos del equipo
+        $for_imp_impresora = 'Si';//$datos[0]->for_imp_impresora;
+        $for_imp_ploter = 'Si';//$datos[0]->for_imp_marca;
+        $for_imp_marca = 'MARCA';//$datos[0]->for_imp_marca;
+        $for_imp_procesador = 'Si';//$datos[0]->for_imp_modelo;
+        $for_imp_serial = 'SERIAL';//$datos[0]->for_imp_serial;
+        $for_imp_modelo = 'MODELO';//$datos[0]->for_imp_modelo;
+        $for_imp_placa = 'PLACA';//$datos[0]->for_imp_placa;
+        $for_imp_memoria = 'Si';//$datos[0]->for_imp_memoria;
+        $for_imp_duplex = 'Si';//$datos[0]->for_imp_duplex;
+        $for_imp_disco_duro = 'Si';//$datos[0]->for_imp_disco_duro;
+        $for_imp_toner = 'Si';//$datos[0]->for_imp_toner;
+
+        //* Inspección inicial
+        $for_imp_danos_externos = 'Si';//$datos[0]->for_imp_danos_externos;
+        $for_imp_danos_externos_detalle = 'DAÑOS EXTERNOS';//$datos[0]->for_imp_danos_externos_detalle;
+        $for_imp_encendido = 'Si';//$datos[0]->for_imp_encendido;
+        $for_imp_hoja_prueba = 'Si';//$datos[0]->for_imp_hoja_prueba;
+        $for_imp_cantidad_hojas_impresas = 'Si';//$datos[0]->for_imp_cantidad_hojas_impresas;
+        $for_imp_verificacion_funcionamiento_red = 'Si';//$datos[0]->for_imp_verificacion_funcionamiento_red;
+
+        //? Etapas de mantenimiento
+        $for_imp_verificar_funcionamiento = 'Si';//$datos[0]->for_imp_verificar_funcionamiento;
+        $for_imp_limpiar_interna_externa = 'No';//$datos[0]->for_imp_limpiar_interna_externa;
+        $for_imp_desconectar = 'Si';//$datos[0]->for_imp´_desconectar;
+        $for_imp_limpiar_perifericos = 'No';//$datos[0]->for_imp_limpiar_perifericos;
+        $for_imp_destapar_maquina = 'Si';//$datos[0]->for_imp_destapar_maquina;
+        $for_imp_limpiar_cables = 'No';//$datos[0]->for_imp_limpiar_cables;
+        $for_imp_soplado = 'Si';//$datos[0]->for_imp_soplado;
+        $for_imp_pruebas_funcionamiento = 'No';//$datos[0]->for_imp_pruebas_funcionamiento;
+        $for_imp_verificar_conexiones = 'Si';//$datos[0]->for_imp_verificar_conexiones;
+        $for_imp_entregar_equipo = 'No';//$datos[0]->for_imp_entregar_equipo;
+
+        //* Observaciones
+        $for_imp_observaciones = 'La impresora fue entregada con exito';//$datos[0]->for_imp_observaciones;
+        $for_imp_satisfaccion = 'Si';//$datos[0]->for_imp_satisfaccion;
+
+        //? Firmas
+        $for_imp_nombre_usuario = 'USUARIO';//$datos[0]->for_imp_firma_usuario;
+        $for_imp_nombre_contratista = 'TECNICO';//$datos[0]->for_imp_firma_contratista;
+        $for_imp_nombre_udistrital = 'UDISTRITAL';//$datos[0]->for_imp_firma_udistrital;
+        $for_imp_cedula_usuario = '1734567890';//$datos[0]->for_imp_cedula_usuario;
+        $for_imp_cedula_contratista = '1234567890';//$datos[0]->for_imp_cedula_contratista;
+        $for_imp_cedula_udistrital = '9876543210';//$datos[0]->for_imp_cedula_udistrital;
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        $pdf = new FPDF('P','mm','A4');
+        $pdf->SetMargins(28, 15, 28);
+        $pdf->SetAutoPageBreak(true, 15);
+        $pdf->AddPage();
+
+        $pdf->SetFont('Arial', 'B', 9);
+        $pdf->Cell(40, 14, utf8_decode('EMPRESA'), 1, 0,'C');
+        $pdf->Cell(120, 14 , utf8_decode('MANTENIMIENTO PREVENTIVO PARA IMPRESORAS Y PLOTERS'), 1, 1, 'C');
+        $pdf->SetFont('Arial', '', 9);
+        $pdf->Cell(40, 6, utf8_decode($for_imp_empresa), 1, 0, 'C');
+        $pdf->Ln(5);
+
+        $pdf->SetFont('Arial', 'B', 9);
+        $pdf->Cell(40, 5, utf8_decode(''), 0, 0,'C');
+        $pdf->Cell(40, 5, utf8_decode(''), 0, 0,'C');
+        $pdf->Cell(20, 5, utf8_decode(''), 0, 0,'C');
+        $pdf->Cell(30, 5, utf8_decode('Consecutivo:'), 1, 0,'C');
+        $pdf->SetFont('Arial', '', 9);
+        $pdf->Cell(27, 5, utf8_decode($for_imp_consecutivo), 1, 0,'C');
+        $pdf->Ln(10);
+
+        $pdf->SetFillColor(192, 192, 192);
+        $pdf->SetFont('Arial', 'B', 9);
+        $pdf->Cell(160, 5, utf8_decode('1. IDENTIFICACIÓN'), 1, 1,'C', 1);
+        $pdf->SetFillColor(255, 255, 255);
+        $pdf->SetFont('Arial', 'B', 9);
+        $pdf->Cell(26.665, 5, utf8_decode(' Fecha:'), 1, 0,'L', 1);
+        $pdf->SetFont('Arial', '', 9);
+        $pdf->Cell(26.665, 5, utf8_decode($for_imp_fecha), 1, 0,'L', 1);
+        $pdf->SetFont('Arial', 'B', 9);
+        $pdf->Cell(26.665, 5, utf8_decode(' Sede:'), 1, 0,'L', 1);
+        $pdf->SetFont('Arial', '', 9);
+        $pdf->Cell(26.665, 5, utf8_decode($for_imp_sede), 1, 0,'L', 1);
+        $pdf->SetFont('Arial', 'B', 9);
+        $pdf->Cell(26.665, 5, utf8_decode(' Dependencia:'), 1, 0,'L', 1);
+        $pdf->SetFont('Arial', '', 9);
+        $pdf->Cell(26.665, 5, utf8_decode($for_imp_dependencia), 1, 1,'L', 1);
+        $pdf->SetFont('Arial', 'B', 9);
+        $pdf->Cell(26.665, 5, utf8_decode(' Teléfono:'), 1, 0,'L', 1);
+        $pdf->SetFont('Arial', '', 9);
+        $pdf->Cell(26.665, 5, utf8_decode($for_imp_telefono), 1, 0,'L', 1);
+        $pdf->SetFont('Arial', 'B', 9);
+        $pdf->Cell(26.665, 5, utf8_decode(' Usuario:'), 1, 0,'L', 1);
+        $pdf->SetFont('Arial', '', 9);
+        $pdf->Cell(26.665, 5, utf8_decode($for_imp_usuario), 1, 0,'L', 1);
+        $pdf->SetFont('Arial', 'B', 9);
+        $pdf->Cell(26.665, 5, utf8_decode(' Email usuario:'), 1, 0,'L', 1);
+        $pdf->SetFont('Arial', '', 9);
+        $pdf->Cell(26.665, 5, utf8_decode($for_imp_email_usuario), 1, 1,'L', 1);
+        $pdf->Ln(5);
+
+        $pdf->SetFillColor(192, 192, 192);
+        $pdf->SetFont('Arial', 'B', 9);
+        $pdf->Cell(160, 5, utf8_decode('2. INFORMACIÓN DEL EQUIPO'), 1, 1,'C', 1);
+
+        $pdf->SetFillColor(255, 255, 255);
+        $pdf->SetFont('Arial', 'B', 9);
+        $pdf->Cell(26.665, 5, utf8_decode(' Impresora:'), 1, 0,'L', 1);
+        $pdf->SetFont('Arial', '', 9);
+        $pdf->Cell(53.335, 5, utf8_decode($for_imp_impresora), 1, 0,'L', 1);
+        $pdf->SetFont('Arial', 'B', 9);
+        $pdf->Cell(35, 5, utf8_decode(' Ploter:'), 1, 0,'L', 1);
+        $pdf->SetFont('Arial', '', 9);
+        $pdf->Cell(45, 5, utf8_decode($for_imp_ploter), 1, 1,'L', 1);
+        $pdf->SetFont('Arial', 'B', 9);
+        $pdf->Cell(26.665, 5, utf8_decode(' Marca:'), 1, 0,'L', 1);
+        $pdf->SetFont('Arial', '', 9);
+        $pdf->Cell(26.665, 5, utf8_decode($for_imp_marca), 1, 0,'L', 1);
+        $pdf->SetFont('Arial', 'B', 9);
+        $pdf->Cell(26.665, 5, utf8_decode(' Procesador:'), 1, 0,'L', 1);
+        $pdf->SetFont('Arial', '', 9);
+        $pdf->Cell(26.665, 5, utf8_decode($for_imp_procesador), 1, 0,'L', 1);
+        $pdf->SetFont('Arial', 'B', 9);
+        $pdf->Cell(26.665, 5, utf8_decode(' Serial:'), 1, 0,'L', 1);
+        $pdf->SetFont('Arial', '', 9);
+        $pdf->Cell(26.665, 5, utf8_decode($for_imp_serial), 1, 1,'L', 1);
+        $pdf->SetFont('Arial', 'B', 9);
+        $pdf->Cell(26.665, 5, utf8_decode(' Modelo:'), 1, 0,'L', 1);
+        $pdf->SetFont('Arial', '', 9);
+        $pdf->Cell(53.335, 5, utf8_decode($for_imp_modelo), 1, 0,'L', 1);
+        $pdf->SetFont('Arial', 'B', 9);
+        $pdf->Cell(35, 5, utf8_decode(' Placa de Inventario:'), 1, 0,'L', 1);
+        $pdf->SetFont('Arial', '', 9);
+        $pdf->Cell(45, 5, utf8_decode($for_imp_placa), 1, 1,'L', 1);
+        $pdf->SetFont('Arial', 'B', 9);
+        $pdf->Cell(26.665, 5, utf8_decode(' Memoria:'), 1, 0,'L', 1);
+        $pdf->SetFont('Arial', '', 9);
+        $pdf->Cell(53.335, 5, utf8_decode($for_imp_memoria), 1, 0,'L', 1);
+        $pdf->SetFont('Arial', 'B', 9);
+        $pdf->Cell(35, 5, utf8_decode(' Duplex:'), 1, 0,'L', 1);
+        $pdf->SetFont('Arial', '', 9);
+        $pdf->Cell(45, 5, utf8_decode($for_imp_duplex), 1, 1,'L', 1);
+        $pdf->SetFont('Arial', 'B', 9);
+        $pdf->Cell(26.665, 5, utf8_decode(' Disco Duro:'), 1, 0,'L', 1);
+        $pdf->SetFont('Arial', '', 9);
+        $pdf->Cell(53.335, 5, utf8_decode($for_imp_disco_duro), 1, 0,'L', 1);
+        $pdf->SetFont('Arial', 'B', 9);
+        $pdf->Cell(35, 5, utf8_decode(' Toner:'), 1, 0,'L', 1);
+        $pdf->SetFont('Arial', '', 9);
+        $pdf->Cell(45, 5, utf8_decode($for_imp_toner), 1, 1,'L', 1);
+        $pdf->Ln(5);
+
+        $pdf->SetFillColor(192, 192, 192);
+        $pdf->SetFont('Arial', 'B', 9);
+        $pdf->Cell(160, 5, utf8_decode('3. INSPECCIÓN INICIAL'), 1, 1,'C', 1);
+
+        $pdf->SetFillColor(255, 255, 255);
+        $pdf->Cell(80, 5, utf8_decode(' Se observan daños externos:'), 1, 0,'L', 1);
+        $pdf->Cell(80, 5, utf8_decode(''), 1, 1,'L', 1);
+        $pdf->Cell(80, 5, utf8_decode(' Verificación de encendido:'), 1, 0,'L', 1);
+        $pdf->Cell(80, 5, utf8_decode(''), 1, 1,'L', 1);
+        $pdf->Cell(80, 5, utf8_decode(' Hoja de impresión de prueba:'), 1, 0,'L', 1);
+        $pdf->Cell(80, 5, utf8_decode(''), 1, 1,'L', 1);
+        $pdf->Cell(80, 5, utf8_decode(' Cantidad de hojas impresas:'), 1, 0,'L', 1);
+        $pdf->Cell(80, 5, utf8_decode(''), 1, 1,'L', 1);
+        $pdf->Cell(80, 5, utf8_decode(' Verificación de funcionamiento en red:'), 1, 0,'L', 1);
+        $pdf->Cell(80, 5, utf8_decode(''), 1, 1,'L', 1);
+        $pdf->Ln(5);
+
+        $pdf->SetFillColor(192, 192, 192);
+        $pdf->SetFont('Arial', 'B', 9);
+        $pdf->Cell(160, 5, utf8_decode('4. ETAPAS DE MANTENIMIENTO'), 1, 1,'C', 1);
+
+        $pdf->SetFillColor(255, 255, 255);
+        $pdf->Cell(80, 5, utf8_decode(' 1. Recibir maquina y verificar su funcionamiento:'), 1, 0,'L', 1);
+        $pdf->Cell(80, 5, utf8_decode(' 6. Limpiar interna y externa de toda la máquina'), 1, 1,'L', 1);
+        $pdf->Cell(80, 5, utf8_decode(' 2. Desconectar las máquinas:'), 1, 0,'L', 1);
+        $pdf->Cell(80, 5, utf8_decode(' 7. Limpiar periféricos:'), 1, 1,'L', 1);
+        $pdf->Cell(80, 5, utf8_decode(' 3. Destapar y verificar máquina:'), 1, 0,'L', 1);
+        $pdf->Cell(80, 5, utf8_decode(' 8. Limpieza de cables'), 1, 1,'L', 1);
+        $pdf->Cell(80, 5, utf8_decode(' 4. Llevar al equipo a un lugar de soplado:'), 1, 0,'L', 1);
+        $pdf->Cell(80, 5, utf8_decode(' 9. Pruebas de funcionamiento:'), 1, 1,'L', 1);
+        $pdf->Cell(80, 5, utf8_decode(' 5. Verificar conexiones y limpiar tarjetas:'), 1, 0,'L', 1);
+        $pdf->Cell(80, 5, utf8_decode(' 10. Entrega de la máquina al usuario:'), 1, 1,'L', 1);
+        $pdf->Ln(5);
+
+        $pdf->SetFillColor(192, 192, 192);
+        $pdf->SetFont('Arial', 'B', 9);
+        $pdf->Cell(160, 5, utf8_decode('5. OBSERVACIONES'), 1, 1,'C', 1);
+
+        $pdf->SetFillColor(255, 255, 255);
+        $pdf->SetFont('Arial', '', 9);
+        $pdf->MultiCell(160, 5, utf8_decode('test'), 1, 'C', 1, 1);
+        $pdf->Ln(5);
+
+        $pdf->Cell(0, 5, utf8_decode('Se recibe a satisfacción:'), 0, 1, 'L');
+        $pdf->Ln(15);
+
+        $pdf->SetFont('Arial', '', 8);
+        $pdf->Cell(53.33, 5, utf8_decode('____________________________'), 0, 0, 'L');
+        $pdf->Cell(53.33, 5, utf8_decode('____________________________'), 0, 0, 'L');
+        $pdf->Cell(53.33, 5, utf8_decode('____________________________'), 0, 1, 'L');
+
+        $pdf->Cell(53.33, 5, utf8_decode('FIRMA DEL USUARIO DEL EQUIPO'), 0, 0, 'L');
+        $pdf->Cell(53.33, 5, utf8_decode('FIRMA FUNCIONARIO CONTRATISTA'), 0, 0, 'L');
+        $pdf->Cell(53.33, 5, utf8_decode('FIRMA FUNCIONARIO UDISTRITAL'), 0, 1, 'L');
+
+        $pdf->Cell(53.33, 5, utf8_decode('NOMBRE:'), 0, 0, 'L');
+        $pdf->Cell(53.33, 5, utf8_decode('NOMBRE:'), 0, 0, 'L');
+        $pdf->Cell(53.33, 5, utf8_decode('NOMBRE:'), 0, 1, 'L');
+
+        $pdf->Cell(53.33, 5, utf8_decode('CEDULA:'), 0, 0, 'L');
+        $pdf->Cell(53.33, 5, utf8_decode('CEDULA:'), 0, 0, 'L');
+        $pdf->Cell(53.33, 5, utf8_decode('CEDULA:'), 0, 1, 'L');
+        $pdf->Ln(5);
+
+        $pdf->Cell(0, 5, utf8_decode('Nota: el consecutivo y el numeral CUATRO será llenado por el funcionario SUPERVISOR'), 0, 0, 'L');
 
         $pdf->Output();
     }
