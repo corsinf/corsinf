@@ -50,6 +50,30 @@
             if (!validar_form()) {
                 event.preventDefault();
             }
+
+            var formData = new FormData(document.getElementById("form_firma"));
+             $.ajax({
+                url: '../controlador/FIRMADOR/validar_firmaC.php?validar_firma=true',
+                type: 'post',
+                data: formData,
+                contentType: false,
+                processData: false,
+                dataType:'json',
+             // beforeSend: function () {
+             //        $("#foto_alumno").attr('src',"../img/gif/proce.gif");
+             //     },
+                success: function(response) {
+                    if(response.resp==1)
+                    {
+                        Swal.fire(response.msj,"","success")
+                    }else
+                    {
+                        Swal.fire(response.msj,"","error")                        
+                    }
+                }
+            });
+
+
         });
         $('#tbl_firmas').DataTable({
             language: {
@@ -138,42 +162,44 @@
                     </ul>
                     <div class="tab-content py-3">
                         <div class="tab-pane fade show active" id="successhome" role="tabpanel">
-                            <div class="row">
-                                <div class="col-12 col-lg-6">
-                                    <div class="card">
-                                        <div class="card-body">
-                                            <form>
-                                                <input id="txt_cargar_imagen" type="file" accept=".p12,.pfx" multiple>
-                                            </form>
+                            <form id="form_firma" enctype="multipart/form-data" method="post" >
+                                <div class="row">
+                                    <div class="col-12 col-lg-6">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                    <input id="txt_cargar_imagen" name="txt_cargar_imagen" type="file" accept=".p12,.pfx" multiple>
+                                               
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="col-12 col-lg-6">
-                                    <div class="card">
-                                        <div class="card-body">
-                                            <div class="row mt-3">
-                                                <div class="col-12 col-lg-12">
-                                                    <div class="card shadow-none">
-                                                        <div class="card-body">
-                                                            <h5 class="text-center mb-4 text-bold"><strong>Ingrese su Contraseña</strong></h5>
-                                                            <div class="mb-4">
-                                                                <input type="password" class="form-control form-control" name="txt_ingresarClave" id="txt_ingresarClave" value="" placeholder="Ingrese la contraseña de su firma electrónica.">
+                                    <div class="col-12 col-lg-6">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <div class="row mt-3">
+                                                    <div class="col-12 col-lg-12">
+                                                        <div class="card shadow-none">
+                                                            <div class="card-body">
+                                                                <h5 class="text-center mb-4 text-bold"><strong>Ingrese su Contraseña</strong></h5>
+                                                                <div class="mb-4">
+                                                                    <input type="password" class="form-control form-control" name="txt_ingresarClave" id="txt_ingresarClave" value="" placeholder="Ingrese la contraseña de su firma electrónica.">
+                                                                </div>
+                                                                <div class="mb-4">
+                                                                    <input type="password" class="form-control form-control" name="txt_comprobarClave" id="txt_comprobarClave" value="" placeholder="Confirme su contraseña ingresada.">
+                                                                </div>
+                                                                <div class=" d-grid gap-2 mb-4">
+                                                                    <button type="button" class="btn btn-dark" id="btn_validar">Validar</button>
+                                                                </div>
+                                                                <p><strong>Nota: </strong>Recuerde que su contraseña y firma electrónica no se almacenan en nuestros sistemas. Estos datos solo se utilizan una única vez para llevar a cabo el proceso de validación.</p>
                                                             </div>
-                                                            <div class="mb-4">
-                                                                <input type="password" class="form-control form-control" name="txt_comprobarClave" id="txt_comprobarClave" value="" placeholder="Confirme su contraseña ingresada.">
-                                                            </div>
-                                                            <div class=" d-grid gap-2 mb-4">
-                                                                <button type="button" class="btn btn-dark" id="btn_validar">Validar</button>
-                                                            </div>
-                                                            <p><strong>Nota: </strong>Recuerde que su contraseña y firma electrónica no se almacenan en nuestros sistemas. Estos datos solo se utilizan una única vez para llevar a cabo el proceso de validación.</p>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
+
                                 </div>
-                            </div>
+                            </form>
                             <div class="py-3">
                                 <h6 class="mb-4"><strong>Indicaciones para validar un certificado:</strong></h6>
                                 <ol>
