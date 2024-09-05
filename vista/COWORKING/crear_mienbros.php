@@ -134,6 +134,7 @@
                                     <div class="modal-body">
                                         <form id="formulario_compras">
                                             <div class="row mb-3">
+                                                <input type="hidden" name="id_sala" id="id_sala" class="form-control" value="<?php echo htmlspecialchars($id_sala); ?>" readonly> 
                                                 <input type="hidden" name="id_compra" id="id_compra" class="form-control" value="<?php echo htmlspecialchars($id_compra); ?>" readonly>
                                                 <input type="hidden" name="id_miembro" id="id_miembro" class="form-control" value="<?php echo htmlspecialchars($id_miembro); ?>" readonly>
                                                 <div class="col-md-3">
@@ -162,6 +163,7 @@
                                             <table class="table table-bordered table-striped mt-4" id="tbl_compras">
                                                 <thead class="table-header">
                                                     <tr>
+                                                        <th>Sala</th>
                                                         <th>Compra</th>
                                                         <th>Miembro</th>
                                                         <th>Producto</th>
@@ -269,6 +271,7 @@
 
     function enviarCompras() {
         var parametros = {
+            'id_sala':$('#id_sala').val(),
             'id_compra': $('#id_compra').val(),
             'id_miembro': $('#id_miembro').val(),
             'id_producto': $('#txt_producto').val(),
@@ -316,8 +319,8 @@
 function abrirModal(id_miembro) {
     
     console.log('ID Miembro:', id_miembro);
-
-    
+    console.log('Sala:', id_sala);
+    $('#id_sala').val(id_sala);
     $('#id_miembro').val(id_miembro);
 
     

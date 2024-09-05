@@ -61,6 +61,7 @@ class crear_mienbrosM
         $sql = "SELECT 
                 miembro.id_miembro,  
                 miembro.nombre_miembro,
+                compra.id_sala,
                 compra.id_compra, 
                 compra.id_producto, 
                 compra.cantidad_compra, 

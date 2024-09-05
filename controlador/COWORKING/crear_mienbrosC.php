@@ -4,6 +4,8 @@ include(dirname(__DIR__, 2) . '/modelo/COWORKING/crear_mienbrosM.php');
 $controlador = new crear_mienbrosC();
 $id_miembro = isset($_GET['id_miembro']) ? intval($_GET['id_miembro']) : '';
 $id_compra = isset($_GET['id_compra']) ? intval($_GET['id_compra']) : '';
+$id_sala = isset($_GET['id_sala']) ? intval($_GET['id_sala']) : '';
+
 if (isset($_GET['lista_mienbro'])) {
     echo json_encode($controlador->listar());
 }
@@ -82,8 +84,9 @@ class crear_mienbrosC
         foreach ($slista as $key => $value) {
             $id_miembro = isset($value['id_miembro']) ? $value['id_miembro'] : 'id_miembro';
             $id_compra = isset($value['id_compra']) ? $value['id_compra'] : 'id_compra';
-            
+            $id_sala = isset($value['id_sala']) ? $value['id_sala'] : 'sala';
             $str .= '<tr>
+                        <td>' . $id_sala .'</td>
                         <td>' . $id_compra .'</td>
                         <td>' . $id_miembro . '</td>
                         <td>' . ($value['id_producto']) . '</td>
