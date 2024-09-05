@@ -1,3 +1,7 @@
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.4/xlsx.full.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.19/jspdf.plugin.autotable.min.js"></script>
+
 <div class="page-wrapper">
     <div class="page-content">
         <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
@@ -16,7 +20,7 @@
                 </nav>
             </div>
         </div>
-        
+
         <div class="row">
             <div class="col-xl-12 mx-auto">
                 <hr>
@@ -77,8 +81,8 @@
                                                 <i class='bx bxs-report'></i><strong>Informe de Miembros</strong>
                                             </button>
                                             <ul class="dropdown-menu">
-                                                <li><a class="dropdown-item" href="#">Informe en Excel</a></li>
-                                                <li><a class="dropdown-item" href="#">Informe en PDF</a></li>
+                                                <li><a class="dropdown-item" href="#" onclick="generarExcelMiembros()">Informe en Excel</a></li>
+                                                <li><a class="dropdown-item" href="#" onclick="generarPDFMiembros()">Informe en PDF</a></li>
                                             </ul>
                                         </div>
                                         <div class="btn-group">
@@ -86,8 +90,8 @@
                                                 <i class='bx bxs-report'></i><strong>Informe de Compras Total</strong>
                                             </button>
                                             <ul class="dropdown-menu">
-                                                <li><a class="dropdown-item" href="#">Informe en Excel</a></li>
-                                                <li><a class="dropdown-item" href="#">Informe en PDF</a></li>
+                                                <li><a class="dropdown-item" href="#" onclick="generarExcelCompras()">Informe en Excel</a></li>
+                                                <li><a class="dropdown-item" href="#" onclick="generarPDFCompras()">Informe en PDF</a></li>
                                             </ul>
                                         </div>
                                     </div>
@@ -156,12 +160,10 @@
                                             </tr>
                                         </thead>
                                         <tbody id="tbl_body_servicios">
-                                            <!-- Filas generadas dinámicamente -->
                                         </tbody>
                                     </table>
                                 </form>
                             </div>
-
                         </div>
                     </div>
                 </div>
@@ -504,6 +506,40 @@ function eliminarMiembro(id_miembro) {
             }       
         });
     }
+
+
+    function generarExcelMiembros() {
+            const ws = XLSX.utils.table_to_sheet(document.getElementById('tbl_miembros'));
+            const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, "Miembros");
+            XLSX.writeFile(wb, "miembros.xlsx");
+        }
+
+        function generarExcelCompras() {
+            const ws = XLSX.utils.table_to_sheet(document.getElementById('tbl_compras'));
+            const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, "Compras");
+            XLSX.writeFile(wb, "compras.xlsx");
+        }
+
+        async function generarPDFMiembros() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            doc.text('Informe de Miembros', 10, 10);
+            const table = document.getElementById('tbl_miembros');
+            doc.autoTable({ html: table });
+            doc.save('miembros.pdf');
+        }
+
+        async function generarPDFCompras() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            doc.text('Informe de Compras', 10, 10);
+            const table = document.getElementById('tbl_compras');
+            doc.autoTable({ html: table });
+            doc.save('compras.pdf');
+        }
+
 
 
 
