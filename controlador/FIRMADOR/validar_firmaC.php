@@ -18,6 +18,12 @@ if(isset($_GET['validar_documento']))
 	// print_r($_FILES);
 	// print_r($_POST);die();
 }
+if(isset($_GET['firmar_documento']))
+{
+	$parametros = $_POST;
+	$doc = $_FILES;
+	echo json_encode($controlador->firmar_documento($doc,$parametros));
+}
 
 /**
  * 
@@ -114,6 +120,62 @@ class validar_firmaC
 		print_r($ruta_p12);
 		print_r($parametros);die();
 
+	}
+
+
+	function firmar_documento($file,$parametros)
+	{
+
+		$datos_firmas = json_decode($parametros['insertedImages'],true);
+
+		$ruta_doc = '';
+		$ruta_p12 = $this->rutaTemp.'EDISON_JAVIER_FARINANGO_CABEZAS_0102024.p12';		
+		$pass_p12 ='Fa19071992';		
+    	
+
+
+      $uploadfile_temporal=$file['uploadPDF']['tmp_name'];
+      $nombre = $file['uploadPDF']['name'];     
+      $ruta_doc=$this->rutaTemp.str_replace(' ','_',$nombre);
+      // print_r($ruta_p12);die();
+      if (is_uploaded_file($uploadfile_temporal))
+      {
+         move_uploaded_file($uploadfile_temporal,$ruta_doc);
+      }
+
+
+      $rutaJar = dirname(__DIR__,2).'/lib/firmarPdf/FirmarPDF.jar';
+
+    	foreach ($datos_firmas as $key => $value) {
+
+    		$ruta_final = $this->rutaTemp.'Firmado_'.$key.'_'.str_replace(' ','_',$nombre);
+    		$pag = $value['page'];
+    		$x = intval($value['x']+50);
+   	 	$y = 842 - intval($value['y']+50); //intval($datos_firmas[0]['y']);
+
+    		$comando = "java -jar $rutaJar 1 $ruta_p12 $pass_p12 $ruta_doc $ruta_final $x $y $pag";
+    		// print_r($comando);
+    		$respuesta = shell_exec($comando);	    		
+    		$this->delete_update_pdf($ruta_doc);
+
+    		$ruta_doc = $ruta_final;
+    	}    
+
+	}
+
+
+	function delete_update_pdf($archivo_a_eliminar)
+	{
+		// Eliminar el archivo PDF
+		if (file_exists($archivo_a_eliminar)) {
+		    if (unlink($archivo_a_eliminar)) {
+		        echo "El archivo PDF ha sido eliminado correctamente.<br>";
+		    } else {
+		       return -1;
+		    }
+		}
+
+		
 	}
 }
 ?>
