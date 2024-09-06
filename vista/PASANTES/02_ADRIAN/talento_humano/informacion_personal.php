@@ -1,16 +1,177 @@
+<?php
+
+$id = '';
+
+if (isset($_GET['id'])) {
+    $id = $_GET['id'];
+}
+
+?>
 <script>
     $(document).ready(function() {
 
         $('#ddl_estado_laboral').change(function() {
             ocultar_opciones_estado();
-        });
-        $('#ddl_tipo_aptitudes').change(function() {
-            mostrar_tipo_aptitudes();
-        });
+        }); //loo mismo de aca
+
 
         agregar_contacto_emergencia()
-        
+
     });
+
+    function cambiar_foto() {
+        var btn_elegir_foto = $('#btn_elegir_foto')
+        var input_elegir_foto = $('#txt_elegir_foto')
+
+        btn_elegir_foto.click(function() {
+            input_elegir_foto.click();
+        });
+    }
+
+    function ocultar_opciones_estado() {
+        var select_opciones_estado = $('#ddl_estado_laboral');
+        var valor_seleccionado = select_opciones_estado.val();
+
+        $('#txt_fecha_contratacion_estado').prop('disabled', false);
+        $('#txt_fecha_salida_estado').prop('disabled', false);
+
+        if (valor_seleccionado === "Freelancer" || valor_seleccionado === "Autonomo") {
+            $('#txt_fecha_contratacion_estado').prop('disabled', true);
+            $('#txt_fecha_salida_estado').prop('disabled', true);
+        }
+    }
+
+    //pense que era de otra cosa si te dije que trates de evitar cargar 
+    //justo aqui codigo lo menos que se pueda de codigo todo por eventos en los inputs
+
+    //Para mostrar los tipos de aptitudes
+    function mostrar_tipo_aptitudes() {
+        var select_tipo_aptitudes = $('#ddl_tipo_aptitudes');
+        var div_aptitudes_blandas = $('#sec_blandas')
+        var div_aptitudes_tecnicas = $('#sec_tecnicas')
+
+        div_aptitudes_blandas.hide();
+        div_aptitudes_tecnicas.hide();
+
+
+        if (select_tipo_aptitudes.val() == 'Blandas') {
+            div_aptitudes_blandas.show()
+            $('#ddl_seleccionar_aptitud_blanda').select2({
+                placeholder: 'Selecciona una opción',
+                dropdownParent: $('#modal_agregar_aptitudes'),
+                language: {
+                    inputTooShort: function() {
+                        return "Por favor ingresa 1 o más caracteres";
+                    },
+                    noResults: function() {
+                        return "No se encontraron resultados";
+                    },
+                    searching: function() {
+                        return "Buscando...";
+                    },
+                    errorLoading: function() {
+                        return "No se encontraron resultados";
+                    }
+                },
+                minimumInputLength: 1,
+            });
+        } else if (select_tipo_aptitudes.val() == 'Tecnicas') {
+            div_aptitudes_tecnicas.show()
+            $('#ddl_seleccionar_aptitud_tecnica').select2({
+                placeholder: 'Selecciona una opción',
+                dropdownParent: $('#modal_agregar_aptitudes'),
+                language: {
+                    inputTooShort: function() {
+                        return "Por favor ingresa 1 o más caracteres";
+                    },
+                    noResults: function() {
+                        return "No se encontraron resultados";
+                    },
+                    searching: function() {
+                        return "Buscando...";
+                    },
+                    errorLoading: function() {
+                        return "No se encontraron resultados";
+                    }
+                },
+                minimumInputLength: 1,
+            });
+        }
+    }
+
+    function agregar_contacto_emergencia() {
+        $('#btn_agregar_contacto_emergencia').on('click', function() {
+            var nueva_aptitud = $('.sec_contacto_emergencia .row').first().clone();
+
+            nueva_aptitud.find('input').val('');
+
+            $('.sec_contacto_emergencia').append(nueva_aptitud);
+        });
+    }
+
+</script>
+<script type="text/javascript">
+    var form_valido;
+    $(document).ready(function() {
+        var id = '<?= $id ?>';
+        //alert(id)
+
+        if (id != '') {
+            cargarDatos_informacion_personal(id);
+        }
+    });
+
+    function validar_informacion_personal() {
+        'use strict'
+
+        var forms = document.querySelectorAll('.needs-validation');
+
+        Array.prototype.slice.call(forms)
+            .forEach(function(form) {
+                form.addEventListener('click', function(event) {
+                    if (!form.checkValidity()) {
+                        form_valido = false;
+                        event.stopPropagation();
+                    } else {
+                        form_valido = true;
+                    }
+
+                    form.classList.add('was-validated');
+                }, false);
+            });
+
+        if (form_valido) {
+            insertar_editar_informacion_personal()
+        } else {
+            console.log("Nada")
+        }
+    }
+
+    function validar_informacion_contacto() {
+        'use strict'
+
+        var forms = document.querySelectorAll('.needs-validation');
+
+        Array.prototype.slice.call(forms)
+            .forEach(function(form) {
+                form.addEventListener('click', function(event) {
+                    if (!form.checkValidity()) {
+                        form_valido = false;
+                        event.stopPropagation();
+                    } else {
+                        form_valido = true;
+                    }
+
+                    form.classList.add('was-validated');
+                }, false);
+            });
+
+        if (form_valido) {
+            insertar_editar_informacion_contacto()
+        } else {
+            console.log("Nada")
+        }
+    }
 
     function insertar_editar_foto() {
         var txt_elegir_foto = $('#txt_elegir_foto').val();
@@ -22,27 +183,96 @@
         console.log(parametro_foto)
     }
 
+    function cargarDatos_informacion_personal(id) {
+        $.ajax({
+            url: '../controlador/PASANTES/02_ADRIAN/talento_humano/th_postulantesC.php?listar=true',
+            type: 'post',
+            data: {
+                id: id
+            },
+            dataType: 'json',
+            success: function(response) {
+                $('#txt_primer_nombre').val(response[0].th_pos_primer_nombre);
+                $('#txt_segundo_nombre').val(response[0].th_pos_segundo_nombre);
+                $('#txt_primer_apellido').val(response[0].th_pos_primer_apellido);
+                $('#txt_segundo_apellido').val(response[0].th_pos_segundo_apellido);
+                $('#txt_fecha_nacimiento').val(response[0].th_pos_fecha_nacimiento);
+                $('#ddl_nacionalidad').val(response[0].th_pos_nacionalidad);
+                $('#txt_numero_cedula').val(response[0].th_pos_cedula);
+                $('#ddl_estado_civil').val(response[0].th_pos_estado_civil);
+                $('#ddl_sexo').val(response[0].th_pos_sexo);
+                $('#txt_telefono_1').val(response[0].th_pos_telefono_1);
+                $('#txt_telefono_2').val(response[0].th_pos_telefono_2);
+                $('#txt_correo').val(response[0].th_pos_correo);
+                console.log(response);
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                // Manejo de errores
+                console.error('Error al cargar la informacion:', textStatus, errorThrown);
+                $('#pnl_config_general').append('<p>Error al cargar las configuraciones. Por favor, inténtalo de nuevo más tarde.</p>'); //modifica los mensajes 
+            }
+        });
+    }
 
     function insertar_editar_informacion_personal() {
 
         var txt_primer_nombre = $('#txt_primer_nombre').val();
+        var txt_segundo_nombre = $('#txt_segundo_nombre').val();
         var txt_primer_apellido = $('#txt_primer_apellido').val();
         var txt_segundo_apellido = $('#txt_segundo_apellido').val();
         var txt_fecha_nacimiento = $('#txt_fecha_nacimiento').val();
         var ddl_nacionalidad = $('#ddl_nacionalidad').val();
+        var txt_numero_cedula = $('#txt_numero_cedula').val();
         var ddl_estado_civil = $('#ddl_estado_civil').val();
+        var ddl_sexo = $('#ddl_sexo').val();
+        var txt_telefono_1 = $('#txt_telefono_1').val();
+        var txt_telefono_2 = $('#txt_telefono_2').val();
+        var txt_correo = $('#txt_correo').val();
+
 
         var parametros_informacion_personal = {
             'txt_primer_nombre': txt_primer_nombre,
+            'txt_segundo_nombre': txt_segundo_nombre,
             'txt_primer_apellido': txt_primer_apellido,
             'txt_segundo_apellido': txt_segundo_apellido,
             'txt_fecha_nacimiento': txt_fecha_nacimiento,
             'ddl_nacionalidad': ddl_nacionalidad,
+            'txt_numero_cedula': txt_numero_cedula,
             'ddl_estado_civil': ddl_estado_civil,
-        }
+            'ddl_sexo': ddl_sexo,
+            'txt_telefono_1': txt_telefono_1,
+            'txt_telefono_2': txt_telefono_2,
+            'txt_correo': txt_correo,
 
-        console.log(parametros_informacion_personal)
+        };
 
+        console.log(parametros_informacion_personal);
+        insertar_informacion_personal(parametros_informacion_personal); 
+
+        //procura poner al final simepre la ;
+
+    }
+
+    function insertar_informacion_personal(parametros) {
+        $.ajax({
+            data: {
+                parametros: parametros
+            },
+            url: '../controlador/PASANTES/02_ADRIAN/talento_humano/th_postulantesC.php?insertar=true',
+            type: 'post',
+            dataType: 'json',
+
+            success: function(response) {
+                if (response == 1) {
+                    Swal.fire('', 'Operacion realizada con exito.', 'success').then(function() {
+                        //location.href = '../vista/inicio.php?mod=7&acc=estudiantes';
+
+                    });
+                } else if (response == -2) {
+                    Swal.fire('', 'Operación fallida', 'warning');
+                }
+            }
+        });
     }
 
 
@@ -235,142 +465,74 @@
         console.log(parametros_documento_identidad)
     }
 
-    // function mostrar_parametros() {
-    //     //Limpiar parámetros
+    function limpiar_parametros() {
+        //Limpiar parámetros
 
-    //     $('#txt_agregar_documento_identidad').val('');
-    //     $('#txt_nombre_completo').val('');
-    //     $('#txt_fecha_nacimiento').val('');
-    //     $('#ddl_nacionalidad').val('');
-    //     $('#ddl_estado_civil').val('');
-    //     $('#txt_direccion_calle').val('');
-    //     $('#txt_direccion_numero').val('');
-    //     $('#txt_direccion_ciudad').val('');
-    //     $('#txt_direccion_estado').val('');
-    //     $('#txt_direccion_postal').val('');
-    //     $('#txt_telefono_1').val('');
-    //     $('#txt_telefono_2').val('');
-    //     $('#txt_correo').val('');
-    //     $('#txt_nombre_contacto_emergencia').val('');
-    //     $('#txt_telefono_contacto_emergencia').val('');
-    //     $('#txt_nombre_empresa').val('');
-    //     $('#txt_cargos_ocupados').val('');
-    //     $('#txt_fecha_inicio_laboral').val('');
-    //     $('#txt_fecha_final_laboral').val('');
-    //     $('#cbx_fecha_final_laboral').val('');
-    //     $('#txt_responsabilidades_logros').val('');
-    //     $('#txt_titulo_obtenido').val('');
-    //     $('#txt_institucion').val('');
-    //     $('#txt_fecha_inicio_academico').val('');
-    //     $('#txt_fecha_final_academico').val('');
-    //     $('#txt_nombre_certificacion').val('');
-    //     $('#txt_enlace_certificado').val('');
-    //     $('#txt_pdf_certificado').val('');
-    //     $('#txt_nombre_certificado_medico').val('');
-    //     $('#txt_respaldo_medico').val('');
-    //     $('#ddl_tipo_referencia').val('');
-    //     $('#txt_nombre_referencia').val('');
-    //     $('#txt_telefono_referencia').val('');
-    //     $('#txt_copia_carta_recomendacion').val('');
-    //     $('#txt_nombre_empresa_contrato').val('');
-    //     $('#txt_copia_contrato').val('');
-    //     $('#ddl_estado_laboral').val('');
-    //     $('#txt_fecha_contratacion_estado').val('');
-    //     $('#txt_fecha_salida_estado').val('');
-    //     $('#ddl_seleccionar_idioma').val('');
-    //     $('#ddl_dominio_idioma').val('');
-    //     $('#ddl_tipo_aptitudes').val('');
-    //     $('.ddl_seleccionar_aptitud_blanda').val('');
-    //     $('.ddl_seleccionar_aptitud_tecnica').val('');
+        //informacion personal
+        $('#txt_primer_nombre').val('')
+        $('#txt_segundo_nombre').val('')
+        $('#txt_primer_apellido').val('')
+        $('#txt_segundo_apellido').val('')
+        $('#txt_fecha_nacimiento').val('')
+        $('#ddl_nacionalidad').val('')
+        $('#txt_numero_cedula').val('')
+        $('#ddl_estado_civil').val('')
+        $('#ddl_sexo').val('')
+        $('#txt_telefono_1').val('')
+        $('#txt_telefono_2').val('')
+        $('#txt_correo').val('')
 
-    // }
+        //informacion contacto
+        $('#txt_direccion_calle').val('');
+        $('#txt_direccion_numero').val('');
+        $('#txt_direccion_ciudad').val('');
+        $('#txt_direccion_estado').val('');
+        $('#txt_direccion_postal').val('');
+        $('#txt_telefono_1').val('');
+        $('#txt_telefono_2').val('');
+        $('#txt_correo').val('');
+        $('.txt_nombre_contacto_emergencia').val('');
+        $('.txt_telefono_contacto_emergencia').val('');
 
-    function cambiar_foto() {
-        var btn_elegir_foto = $('#btn_elegir_foto')
-        var input_elegir_foto = $('#txt_elegir_foto')
+        //experiencia laboral
+        $('#txt_nombre_empresa').val('');
+        $('#txt_cargos_ocupados').val('');
+        $('#txt_fecha_inicio_laboral').val('');
+        $('#txt_fecha_final_laboral').val('');
+        $('#cbx_fecha_final_laboral').val('');
+        $('#txt_responsabilidades_logros').prop('');
 
-        btn_elegir_foto.click(function() {
-            input_elegir_foto.click();
-        });
+        //formacion académica
+        $('#txt_titulo_obtenido').val('');
+        $('#txt_institucion').val('');
+        $('#txt_fecha_inicio_academico').val('');
+        $('#txt_fecha_final_academico').val('');
+
+        //certificaciones capacitaciones
+        $('#txt_nombre_certificacion').val('');
+        $('#txt_enlace_certificado').val('');
+        $('#txt_pdf_certificado').val('');
+
+
+        $('#txt_agregar_documento_identidad').val('');
+        $('#txt_nombre_certificado_medico').val('');
+        $('#txt_respaldo_medico').val('');
+        $('#ddl_tipo_referencia').val('');
+        $('#txt_nombre_referencia').val('');
+        $('#txt_telefono_referencia').val('');
+        $('#txt_copia_carta_recomendacion').val('');
+        $('#txt_nombre_empresa_contrato').val('');
+        $('#txt_copia_contrato').val('');
+        $('#ddl_estado_laboral').val('');
+        $('#txt_fecha_contratacion_estado').val('');
+        $('#txt_fecha_salida_estado').val('');
+        $('#ddl_seleccionar_idioma').val('');
+        $('#ddl_dominio_idioma').val('');
+        $('#ddl_tipo_aptitudes').val('');
+        $('.ddl_seleccionar_aptitud_blanda').val('');
+        $('.ddl_seleccionar_aptitud_tecnica').val('');
+
     }
-
-    function ocultar_opciones_estado() {
-        var select_opciones_estado = $('#ddl_estado_laboral');
-        var valor_seleccionado = select_opciones_estado.val();
-
-        $('#txt_fecha_contratacion_estado').prop('disabled', false);
-        $('#txt_fecha_salida_estado').prop('disabled', false);
-
-        if (valor_seleccionado === "Freelancer" || valor_seleccionado === "Autonomo") {
-            $('#txt_fecha_contratacion_estado').prop('disabled', true);
-            $('#txt_fecha_salida_estado').prop('disabled', true);
-        }
-    }
-
-    function mostrar_tipo_aptitudes() {
-        var select_tipo_aptitudes = $('#ddl_tipo_aptitudes');
-        var div_aptitudes_blandas = $('#sec_blandas')
-        var div_aptitudes_tecnicas = $('#sec_tecnicas')
-
-        div_aptitudes_blandas.hide();
-        div_aptitudes_tecnicas.hide();
-
-
-        if (select_tipo_aptitudes.val() == 'Blandas') {
-            div_aptitudes_blandas.show()
-            $('#ddl_seleccionar_aptitud_blanda').select2({
-                placeholder: 'Selecciona una opción',
-                dropdownParent: $('#modal_agregar_aptitudes'),
-                language: {
-                    inputTooShort: function() {
-                        return "Por favor ingresa 1 o más caracteres";
-                    },
-                    noResults: function() {
-                        return "No se encontraron resultados";
-                    },
-                    searching: function() {
-                        return "Buscando...";
-                    },
-                    errorLoading: function() {
-                        return "No se encontraron resultados";
-                    }
-                },
-                minimumInputLength: 1,
-            });
-        } else if (select_tipo_aptitudes.val() == 'Tecnicas') {
-            div_aptitudes_tecnicas.show()
-            $('#ddl_seleccionar_aptitud_tecnica').select2({
-                placeholder: 'Selecciona una opción',
-                dropdownParent: $('#modal_agregar_aptitudes'),
-                language: {
-                    inputTooShort: function() {
-                        return "Por favor ingresa 1 o más caracteres";
-                    },
-                    noResults: function() {
-                        return "No se encontraron resultados";
-                    },
-                    searching: function() {
-                        return "Buscando...";
-                    },
-                    errorLoading: function() {
-                        return "No se encontraron resultados";
-                    }
-                },
-                minimumInputLength: 1,
-            });
-        }
-    }
-
-    function agregar_contacto_emergencia() {
-        $('#btn_agregar_contacto_emergencia').on('click', function() {
-            var nueva_aptitud = $('.sec_contacto_emergencia .row').first().clone();
-
-            nueva_aptitud.find('input').val('');
-
-            $('.sec_contacto_emergencia').append(nueva_aptitud);
-        });
-    }
-
 </script>
 
 <div class="page-wrapper">
@@ -864,7 +1026,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <!-- Modal body -->
-            <div class="modal-body">
+            <div class="modal-body needs-validation">
                 <div class="text-center">
                     <img src="../img\usuarios\2043.jpeg" alt="Admin" class="img-fluid mb-3 p-2 bg-secondary" width="240">
                 </div>
@@ -891,67 +1053,111 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <!-- Modal body -->
-            <div class="modal-body">
-                <p class="fw-bold">Nombres Completos</p>
-                <div class="row">
-                    <div class="col-4">
-                        <div class="mb-3">
-                            <label for="txt_primer_nombre" class="form-label form-label-sm">Primer Nombre</label>
-                            <input type="text" class="form-control form-control-sm" name="txt_primer_nombre" id="txt_primer_nombre" placeholder="Escriba su primer nombre">
+            <form class="needs-validation">
+                <div class="modal-body">
+                    <p class="fw-bold">Nombres Completos</p>
+                    <div class="row">
+                        <div class="col-3">
+                            <div class="mb-3">
+                                <label for="txt_primer_nombre" class="form-label form-label-sm">Primer Nombre</label>
+                                <input type="text" class="form-control form-control-sm" name="txt_primer_nombre" id="txt_primer_nombre" placeholder="Escriba su primer nombre" required>
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <div class="mb-3">
+                                <label for="txt_segundo_nombre" class="form-label form-label-sm">Segundo Nombre</label>
+                                <input type="text" class="form-control form-control-sm" name="txt_segundo_nombre" id="txt_segundo_nombre" placeholder="Escriba su primer nombre" required>
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <div class="mb-3">
+                                <label for="txt_primer_apellido" class="form-label form-label-sm">Primer Apellido</label>
+                                <input type="text" class="form-control form-control-sm" name="txt_primer_apellido" id="txt_primer_apellido" placeholder="Escriba su apellido paterno" required>
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <div class="mb-3">
+                                <label for="txt_segundo_apellido" class="form-label form-label-sm">Segundo Apellido</label>
+                                <input type="text" class="form-control form-control-sm" name="txt_segundo_apellido" id="txt_segundo_apellido" placeholder="Escriba su apellido materno" required>
+                            </div>
                         </div>
                     </div>
-                    <div class="col-4">
-                        <div class="mb-3">
-                            <label for="txt_primer_apellido" class="form-label form-label-sm">Primer Apellido</label>
-                            <input type="text" class="form-control form-control-sm" name="txt_primer_apellido" id="txt_primer_apellido" placeholder="Escriba su apellido paterno">
+                    <hr>
+                    <div class="row mb-3">
+                        <div class="col-3">
+                            <div class="mb-3">
+                                <label for="txt_fecha_nacimiento" class="form-label form-label-sm">Fecha de nacimiento</label>
+                                <input type="date" class="form-control form-control-sm" name="txt_fecha_nacimiento" id="txt_fecha_nacimiento" required>
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <div class="mb-3">
+                                <label for="ddl_nacionalidad" class="form-label form-label-sm">Nacionalidad</label>
+                                <select class="form-select form-select-sm" id="ddl_nacionalidad" name="ddl_nacionalidad" required>
+                                    <option selected disabled value="">-- Selecciona una Nacionalidad --</option>
+                                    <option value="Ecuatoriano">Ecuatoriano</option>
+                                    <option value="Colombiano">Colombiano</option>
+                                    <option value="Peruano">Peruano</option>
+                                    <option value="Venezolano">Venezolano</option>
+                                    <option value="Paraguayo">Paraguayo</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <div class="mb-3">
+                                <label for="txt_numero_cedula" class="form-label form-label-sm">N° de Cédula</label>
+                                <input type="text" class="form-control form-control-sm" name="txt_numero_cedula" id="txt_numero_cedula" placeholder="Digite su número de cédula" required>
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <div class="mb-3">
+                                <label for="ddl_estado_civil" class="form-label form-label-sm">Estado civil</label>
+                                <select class="form-select form-select-sm" id="ddl_estado_civil" name="ddl_estado_civil" required>
+                                    <option selected disabled value="">-- Selecciona un Estado Civil --</option>
+                                    <option value="Soltero">Soltero/a</option>
+                                    <option value="Casado">Casado/a</option>
+                                    <option value="Divorciado">Divorciado/a</option>
+                                    <option value="Viudo">Viudo/a</option>
+                                    <option value="Union">Unión de hecho</option>
+                                </select>
+                            </div>
                         </div>
                     </div>
-                    <div class="col-4">
-                        <div class="mb-3">
-                            <label for="txt_segundo_apellido" class="form-label form-label-sm">Segundo Apellido</label>
-                            <input type="text" class="form-control form-control-sm" name="txt_segundo_apellido" id="txt_segundo_apellido" placeholder="Escriba su apellido materno">
+                    <div class="row">
+                        <div class="col-3">
+                            <div class="mb-3">
+                                <label for="ddl_sexo" class="form-label form-label-sm">Sexo</label>
+                                <select class="form-select form-select-sm" id="ddl_sexo" name="ddl_sexo" required>
+                                    <option selected disabled value="">-- Selecciona una opción --</option>
+                                    <option value="Masculino">Masculino</option>
+                                    <option value="Femenino">Femenino</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <div class="mb-3">
+                                <label for="txt_telefono_1" class="form-label form-label-sm">Teléfono 1 (personal o fijo)</label>
+                                <input type="text" class="form-control form-control-sm" name="txt_telefono_1" id="txt_telefono_1" value="" placeholder="Escriba su teléfono personal o fijo" required>
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <div class="mb-3">
+                                <label for="txt_telefono_2" class="form-label form-label-sm">Teléfono 2 (opcional)</label>
+                                <input type="text" class="form-control form-control-sm" name="txt_telefono_2" id="txt_telefono_2" value="" placeholder="Escriba su teléfono personal o fijo (opcional)">
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <div class="mb-3">
+                                <label for="txt_correo" class="form-label form-label-sm">Correo Electrónico</label>
+                                <input type="email" class="form-control form-control-sm" name="txt_correo" id="txt_correo" value="" placeholder="Escriba su correo electrónico" required>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <hr>
-                <div class="row">
-                    <div class="col-4">
-                        <div class="mb-3">
-                            <label for="txt_fecha_nacimiento" class="form-label form-label-sm">Fecha de nacimiento</label>
-                            <input type="date" class="form-control form-control-sm" name="txt_fecha_nacimiento" id="txt_fecha_nacimiento">
-                        </div>
-                    </div>
-                    <div class="col-4">
-                        <div class="mb-3">
-                            <label for="ddl_nacionalidad" class="form-label form-label-sm">Nacionalidad</label>
-                            <select class="form-select form-select-sm" id="ddl_nacionalidad" name="ddl_nacionalidad" required>
-                                <option selected disabled value="">-- Selecciona una Nacionalidad --</option>
-                                <option value="Ecuatoriano">Ecuatoriano</option>
-                                <option value="Colombiano">Colombiano</option>
-                                <option value="Peruano">Peruano</option>
-                                <option value="Venezolano">Venezolano</option>
-                                <option value="Paraguayo">Paraguayo</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-4">
-                        <div class="mb-3">
-                            <label for="ddl_estado_civil" class="form-label form-label-sm">Estado civil</label>
-                            <select class="form-select form-select-sm" id="ddl_estado_civil" name="ddl_estado_civil" required>
-                                <option selected disabled value="">-- Selecciona un Estado Civil --</option>
-                                <option value="Soltero">Soltero/a</option>
-                                <option value="Casado">Casado/a</option>
-                                <option value="Divorciado">Divorciado/a</option>
-                                <option value="Viudo">Viudo/a</option>
-                                <option value="Union">Unión de hecho</option>
-                            </select>
-                        </div>
-                    </div>
+                <div class="modal-footer d-flex justify-content-center">
+                    <button type="button" class="btn btn-success btn-sm" id="btn_guardar_informacion_personal" onclick="validar_informacion_personal();">Guardar</button>
                 </div>
-            </div>
-            <div class="modal-footer d-flex justify-content-center">
-                <button type="button" class="btn btn-success btn-sm" id="btn_guardar_informacion_personal" onclick="insertar_editar_informacion_personal();">Guardar</button>
-            </div>
+            </form>
         </div>
     </div>
 </div>
@@ -968,91 +1174,72 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <!-- Modal body -->
-            <div class="modal-body">
-                <p class="fw-bold">Dirección:</p>
-                <div class="row">
-                    <div class="col-4">
-                        <div class="mb-3">
-                            <label for="txt_direccion_calle" class="form-label form-label-sm">Calle</label>
-                            <input type="text" class="form-control form-control-sm" name="txt_direccion_calle" id="txt_direccion_calle" value="" placeholder="Escriba la calle de su dirección">
-                        </div>
-                    </div>
-                    <div class="col-4">
-                        <div class="mb-3">
-                            <label for="txt_direccion_numero" class="form-label form-label-sm">Número</label>
-                            <input type="text" class="form-control form-control-sm" name="txt_direccion_numero" id="txt_direccion_numero" value="" placeholder="Escriba el número de su dirección">
-                        </div>
-                    </div>
-                    <div class="col-4">
-                        <div class="mb-3">
-                            <label for="txt_direccion_ciudad" class="form-label form-label-sm">Ciudad</label>
-                            <input type="text" class="form-control form-control-sm" name="txt_direccion_ciudad" id="txt_direccion_ciudad" value="" placeholder="Escriba la ciudad de su dirección">
-                        </div>
-                    </div>
-                    <div class="col-4">
-                        <div class="mb-3">
-                            <label for="txt_direccion_estado" class="form-label form-label-sm">Provincia</label>
-                            <input type="text" class="form-control form-control-sm" name="txt_direccion_estado" id="txt_direccion_estado" value="" placeholder="Escriba la provincia de su dirección">
-                        </div>
-                    </div>
-                    <div class="col-4">
-                        <div class="mb-3">
-                            <label for="txt_direccion_postal" class="form-label form-label-sm">Código Postal</label>
-                            <div class="row">
-                                <div class="col-11 me-0">
-                                    <input type="text" class="form-control form-control-sm" name="txt_direccion_postal" id="txt_direccion_postal" placeholder="Escriba su código postal o de click en 'Obtener'">
-                                </div>
-                                <div class="col-1 d-flex justify-content-start">
-                                    <button class="btn btn-sm btn-outline-primary">Obtener</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <hr>
-                <div class="row">
-                    <div class="col-4">
-                        <div class="mb-3">
-                            <label for="txt_telefono_1" class="form-label form-label-sm">Teléfono 1 (personal o fijo)</label>
-                            <input type="text" class="form-control form-control-sm" name="txt_telefono_1" id="txt_telefono_1" value="" placeholder="Escriba su teléfono personal o fijo">
-                        </div>
-                    </div>
-                    <div class="col-4">
-                        <div class="mb-3">
-                            <label for="txt_telefono_2" class="form-label form-label-sm">Teléfono 2 (opcional)</label>
-                            <input type="text" class="form-control form-control-sm" name="txt_telefono_2" id="txt_telefono_2" value="" placeholder="Escriba su teléfono personal o fijo (opcional)">
-                        </div>
-                    </div>
-                    <div class="col-4">
-                        <div class="mb-3">
-                            <label for="txt_correo" class="form-label form-label-sm">Correo Electrónico</label>
-                            <input type="email" class="form-control form-control-sm" name="txt_correo" id="txt_correo" value="" placeholder="Escriba su correo electrónico">
-                        </div>
-                    </div>
-                </div>
-                <hr>
-                <p class="fw-bold my-0 mb-2">Contacto de Emergencia:</p>
-                <div class="sec_contacto_emergencia">
+            <form class="needs-validation">
+                <div class="modal-body">
+                    <p class="fw-bold">Dirección:</p>
                     <div class="row">
-                        <div class="col-6">
+                        <div class="col-4">
                             <div class="mb-3">
-                                <label for="txt_nombre_contacto_emergencia" class="form-label form-label-sm">Nombre del contacto de Emergencia</label>
-                                <input type="text" class="form-control form-control-sm txt_nombre_contacto_emergencia" name="txt_nombre_contacto_emergencia" id="txt_nombre_contacto_emergencia" value="" placeholder="Escriba el nombre de un contacto de emergencia">
+                                <label for="txt_direccion_calle" class="form-label form-label-sm">Calle</label>
+                                <input type="text" class="form-control form-control-sm" name="txt_direccion_calle" id="txt_direccion_calle" value="" placeholder="Escriba la calle de su dirección" required>
                             </div>
                         </div>
-                        <div class="col-6">
+                        <div class="col-4">
                             <div class="mb-3">
-                                <label for="txt_telefono_contacto_emergencia" class="form-label form-label-sm">Teléfono del contacto de Emergencia</label>
-                                <input type="text" class="form-control form-control-sm txt_telefono_contacto_emergencia" name="txt_telefono_contacto_emergencia" id="txt_telefono_contacto_emergencia" value="" placeholder="Escriba el número de un contacto de emergencia">
+                                <label for="txt_direccion_numero" class="form-label form-label-sm">Número</label>
+                                <input type="text" class="form-control form-control-sm" name="txt_direccion_numero" id="txt_direccion_numero" value="" placeholder="Escriba el número de su dirección" required>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="mb-3">
+                                <label for="txt_direccion_ciudad" class="form-label form-label-sm">Ciudad</label>
+                                <input type="text" class="form-control form-control-sm" name="txt_direccion_ciudad" id="txt_direccion_ciudad" value="" placeholder="Escriba la ciudad de su dirección" required>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="mb-3">
+                                <label for="txt_direccion_estado" class="form-label form-label-sm">Provincia</label>
+                                <input type="text" class="form-control form-control-sm" name="txt_direccion_estado" id="txt_direccion_estado" value="" placeholder="Escriba la provincia de su dirección" required>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="mb-3">
+                                <label for="txt_direccion_postal" class="form-label form-label-sm">Código Postal</label>
+                                <div class="row">
+                                    <div class="col-11 me-0">
+                                        <input type="text" class="form-control form-control-sm" name="txt_direccion_postal" id="txt_direccion_postal" placeholder="Escriba su código postal o de click en 'Obtener'" required>
+                                    </div>
+                                    <div class="col-1 d-flex justify-content-start">
+                                        <button class="btn btn-sm btn-outline-primary">Obtener</button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
+                    <hr>
+                    <p class="fw-bold my-0 mb-2">Contacto de Emergencia:</p>
+                    <div class="sec_contacto_emergencia">
+                        <div class="row">
+                            <div class="col-6">
+                                <div class="mb-3">
+                                    <label for="txt_nombre_contacto_emergencia" class="form-label form-label-sm">Nombre del contacto de Emergencia</label>
+                                    <input type="text" class="form-control form-control-sm txt_nombre_contacto_emergencia" name="txt_nombre_contacto_emergencia" id="txt_nombre_contacto_emergencia" value="" placeholder="Escriba el nombre de un contacto de emergencia" required>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="mb-3">
+                                    <label for="txt_telefono_contacto_emergencia" class="form-label form-label-sm">Teléfono del contacto de Emergencia</label>
+                                    <input type="text" class="form-control form-control-sm txt_telefono_contacto_emergencia" name="txt_telefono_contacto_emergencia" id="txt_telefono_contacto_emergencia" value="" placeholder="Escriba el número de un contacto de emergencia" required>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="btn btn-sm btn-primary mb-2 d-flex align-items-center" id="btn_agregar_contacto_emergencia"><i class='bx bx-list-plus me-0'></i>Añadir otro contacto</button>
                 </div>
-                <button class="btn btn-sm btn-primary mb-2 d-flex align-items-center" id="btn_agregar_contacto_emergencia"><i class='bx bx-list-plus me-0'></i>Añadir otro contacto</button>
-            </div>
-            <div class="modal-footer d-flex justify-content-center">
-                <button type="button" class="btn btn-success btn-sm" id="btn_guardar_informacion_contacto" onclick="insertar_editar_informacion_contacto();">Guardar</button>
-            </div>
+                <div class="modal-footer d-flex justify-content-center">
+                    <button type="button" class="btn btn-success btn-sm" id="btn_guardar_informacion_contacto" onclick="validar_informacion_contacto();">Guardar</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
@@ -1065,10 +1252,10 @@
             <!-- Modal Header -->
             <div class="modal-header">
                 <h5><small class="text-body-secondary">Agregue una experiencia laboral</small></h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="limpiar_parametros()"></button>
             </div>
             <!-- Modal body -->
-            <div class="modal-body">
+            <div class="modal-body needs-validation">
                 <div class="mb-3">
                     <label for="txt_nombre_empresa" class="form-label form-label-sm">Nombre de la empresa</label>
                     <input type="text" class="form-control form-control-sm" name="txt_nombre_empresa" id="txt_nombre_empresa" value="" placeholder="Escriba el nombre de la empresa donde trabajó">
@@ -1107,10 +1294,10 @@
             <!-- Modal Header -->
             <div class="modal-header">
                 <h5><small class="text-body-secondary">Agregue una formación académica</small></h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="limpiar_parametros()"></button>
             </div>
             <!-- Modal body -->
-            <div class="modal-body">
+            <div class="modal-body needs-validation">
                 <div class="mb-3">
                     <label for="txt_titulo_obtenido" class="form-label form-label-sm">Título obtenido</label>
                     <input type="text" class="form-control form-control-sm" name="txt_titulo_obtenido" id="txt_titulo_obtenido" value="" placeholder="Escriba su título académico">
@@ -1143,10 +1330,10 @@
             <!-- Modal Header -->
             <div class="modal-header">
                 <h5><small class="text-body-secondary">Agregue una Certificación o Capacitación</small></h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="limpiar_parametros()"></button>
             </div>
             <!-- Modal body -->
-            <div class="modal-body">
+            <div class="modal-body needs-validation">
                 <div class="mb-3">
                     <label for="txt_nombre_certificacion" class="form-label form-label-sm">Nombre del curso o capacitación</label>
                     <input type="text" class="form-control form-control-sm" name="txt_nombre_certificacion" id="txt_nombre_certificacion" value="" placeholder="Escriba el nombre del curso o capacitación">
@@ -1174,10 +1361,10 @@
             <!-- Modal Header -->
             <div class="modal-header">
                 <h5><small class="text-body-secondary">Agregue un Certificado Médico</small></h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="limpiar_parametros()"></button>
             </div>
             <!-- Modal body -->
-            <div class="modal-body">
+            <div class="modal-body needs-validation">
                 <div class="mb-3">
                     <label for="txt_nombre_certificado_medico" class="form-label form-label-sm">Nombre del certificado</label>
                     <input type="text" class="form-control form-control-sm" name="txt_nombre_certificado_medico" id="txt_nombre_certificado_medico" value="" placeholder="Escriba el nombre del certificado médico">
@@ -1202,10 +1389,10 @@
             <!-- Modal Header -->
             <div class="modal-header">
                 <h5><small class="text-body-secondary">Agregue una referencia</small></h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="limpiar_parametros()"></button>
             </div>
             <!-- Modal body -->
-            <div class="modal-body">
+            <div class="modal-body needs-validation">
                 <div class="mb-3">
                     <label for="txt_nombre_referencia" class="form-label form-label-sm">Nombre del empleador</label>
                     <input type="text" class="form-control form-control-sm" name="txt_nombre_referencia" id="txt_nombre_referencia" value="" placeholder="Escriba el nombre de el empleador">
@@ -1234,10 +1421,10 @@
             <!-- Modal Header -->
             <div class="modal-header">
                 <h5><small class="text-body-secondary">Agregue un Contrato</small></h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="limpiar_parametros()"></button>
             </div>
             <!-- Modal body -->
-            <div class="modal-body">
+            <div class="modal-body needs-validation">
                 <div class="mb-3">
                     <label for="txt_nombre_empresa_contrato" class="form-label form-label-sm">Nombre de la empresa</label>
                     <input type="text" class="form-control form-control-sm" name="txt_nombre_empresa_contrato" id="txt_nombre_empresa_contrato" value="" placeholder="Escriba el nombre de la empresa que emitió el contrato">
@@ -1262,10 +1449,10 @@
             <!-- Modal Header -->
             <div class="modal-header">
                 <h5><small class="text-body-secondary">Agregue su estado laboral</small></h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="limpiar_parametros()"></button>
             </div>
             <!-- Modal body -->
-            <div class="modal-body">
+            <div class="modal-body needs-validation">
                 <div class="mb-3">
                     <label for="ddl_estado_laboral" class="form-label form-label-sm">Estado laboral:</label>
                     <select class="form-select form-select-sm" id="ddl_estado_laboral" name="ddl_estado_laboral" required>
@@ -1302,10 +1489,10 @@
             <!-- Modal Header -->
             <div class="modal-header">
                 <h5><small class="text-body-secondary">Agregue un idioma</small></h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="limpiar_parametros()"></button>
             </div>
             <!-- Modal body -->
-            <div class="modal-body">
+            <div class="modal-body needs-validation">
                 <div class="mb-3">
                     <label for="ddl_seleccionar_idioma" class="form-label form-label-sm">Idioma</label>
                     <select class="form-select form-select-sm" id="ddl_seleccionar_idioma" name="ddl_seleccionar_idioma">
@@ -1347,11 +1534,11 @@
             <!-- Modal Header -->
             <div class="modal-header">
                 <h5><small class="text-body-secondary">Agregue Aptitudes</small></h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="limpiar_parametros()"></button>
             </div>
             <!-- Modal body -->
-            <div class="modal-body">
-                <select class="form-select form-select-sm mb-4" id="ddl_tipo_aptitudes" name="ddl_tipo_aptitudes" required>
+            <div class="modal-body needs-validation">
+                <select class="form-select form-select-sm mb-4" id="ddl_tipo_aptitudes" name="ddl_tipo_aptitudes" onchange="mostrar_tipo_aptitudes();" required>
                     <option selected disabled value="">-- Selecciona el tipo de Aptitudes --</option>
                     <option value="Blandas">Aptitudes Blandas</option>
                     <option value="Tecnicas">Aptitudes Técnicas</option>
@@ -1414,10 +1601,10 @@
             <!-- Modal Header -->
             <div class="modal-header">
                 <h5><small class="text-body-secondary">Agregue un Documento de Identidad</small></h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="limpiar_parametros()"></button>
             </div>
             <!-- Modal body -->
-            <div class="modal-body">
+            <div class="modal-body needs-validation">
                 <div class="mb-3">
                     <label for="ddl_tipo_documento_identidad" class="form-label form-label-sm">Tipo de Documento</label>
                     <select class="form-select form-select-sm" id="ddl_tipo_documento_identidad" name="ddl_tipo_documento_identidad" required>

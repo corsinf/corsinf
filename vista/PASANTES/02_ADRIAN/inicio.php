@@ -13,7 +13,7 @@ if ($_GET['acc'] == 'inicio_prueba_4') {
 }
 
 if ($_GET['acc'] == 'informacion_personal') {
-    include('PASANTES/02_ADRIAN/informacion_personal.php');
+    include('PASANTES/02_ADRIAN/talento_humano/informacion_personal.php');
 }
 
 if ($_GET['acc'] == 'validar_pdf') {
