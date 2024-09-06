@@ -159,7 +159,16 @@ class validar_firmaC
     		$this->delete_update_pdf($ruta_doc);
 
     		$ruta_doc = $ruta_final;
-    	}    
+    	} 
+
+    	$resp = json_decode($respuesta,true);
+
+    	// print_r($resp);die();   
+
+
+    	$resp = array('resp'=>1,'ruta'=>str_replace(dirname(__DIR__,2),"..",$ruta_doc));
+// print_r($resp);die();
+    	return $resp;
 
 	}
 
@@ -169,7 +178,7 @@ class validar_firmaC
 		// Eliminar el archivo PDF
 		if (file_exists($archivo_a_eliminar)) {
 		    if (unlink($archivo_a_eliminar)) {
-		        echo "El archivo PDF ha sido eliminado correctamente.<br>";
+		       return 1;
 		    } else {
 		       return -1;
 		    }

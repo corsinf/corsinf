@@ -28,12 +28,21 @@
              //        $("#foto_alumno").attr('src',"../img/gif/proce.gif");
              //     },
                 success: function(response) {
+                    console.log(response);
                     if(response.resp==1)
                     {
-                        Swal.fire(response.msj,"","success")
-                    }else
-                    {
-                        Swal.fire(response.msj,"","error")                        
+                        Swal.fire('Documento Firmado','Descargar Documento','success').then(function()
+                        {
+
+                             const url = response.ruta; // Reemplaza con la URL del archivo PDF
+                            const link = document.createElement('a');
+                            link.href = url;
+                            link.download = 'archivo.pdf'; // Nombre del archivo al descargarse
+                            document.body.appendChild(link);
+                            link.click();
+                            document.body.removeChild(link);
+
+                        })                
                     }
                 }
             });
