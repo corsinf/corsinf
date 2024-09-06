@@ -7,7 +7,7 @@
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb mb-0 p-0">
                         <li class="breadcrumb-item">
-                            <a href="javascript:;"><i class="bx bx-house"></i></a>
+                            <a href="javascript:;"><i class="bi bi-house"></i></a>
                         </li>
                         <li class="breadcrumb-item active" aria-current="page">
                             <strong>Registro Miembros</strong>
@@ -31,41 +31,34 @@
                                     <input type="text" class="form-control form-control-sm" name="txt_nombre" id="txt_nombre" placeholder="Nombre" required>
                                 </div>
                                 <div class="col-md-3 mb-3">
-                                    <label for="txt_apellido" class="form-label"><strong>Apellido:</strong></label>
-                                    <input type="text" class="form-control form-control-sm" name="txt_apellido" id="txt_apellido" placeholder="Apellido" required>
+                                    <label for="txt_correo" class="form-label"><strong>Correo:</strong></label>
+                                    <input type="email" class="form-control form-control-sm" name="txt_correo" id="txt_correo" placeholder="Correo electrónico" required>
                                 </div>
                                 <div class="col-md-3 mb-3">
-                                    <label for="txt_numero_celular" class="form-label"><strong>Telefono:</strong></label>
-                                    <input type="text" class="form-control form-control-sm" name="txt_numero_celular" id="txt_numero_celular" placeholder="Celular" required>
+                                    <label for="txt_cedula" class="form-label"><strong>Cédula:</strong></label>
+                                    <input type="text" class="form-control form-control-sm" name="txt_cedula" id="txt_cedula" placeholder="Cédula" required>
                                 </div>
                                 <div class="col-md-3 mb-3">
-                                    <label for="txt_direccion" class="form-label"><strong>Direccion:</strong></label>
-                                    <input type="text" class="form-control form-control-sm" name="txt_direccion" id="txt_direccion" placeholder="Direccion" required>
-                                </div>
-                                <div class="col-md-3 mb-3">
-                                    <label for="ddl_id_espacio" class="form-label"><strong>Espacio:</strong></label>
-                                    <input type="number" class="form-control form-control-sm" name="ddl_id_espacio" id="ddl_id_espacio" placeholder="Numero de espacio" required>
+                                    <label for="txt_numero_celular" class="form-label"><strong>Número Celular:</strong></label>
+                                    <input type="text" class="form-control form-control-sm" name="txt_numero_celular" id="txt_numero_celular" placeholder="Número" required>
                                 </div>
                             </div>
-                            <button type="button" onclick="enviardatos()" class="btn btn-primary" id="btn_registrar_miembro">
-                                <strong>Registrar Miembro</strong>
-                            </button>
+                            <button type="button" class="btn btn-primary" id="btn_registrar_miembro"><strong>Registrar Miembro</strong></button>
                         </form>
 
                         <h2 class="mb-4">Miembros Registrados</h2>
                         <table class="table table-bordered table-striped" id="tbl_miembros">
                             <thead class="table-header">
                                 <tr>
-                                    <th>Comprar</th>
                                     <th>Nombre</th>
-                                    <th>Apellido</th>
-                                    <th>Telefono</th>
-                                    <th>Direccion</th>
-                                    <th>Espacio</th>
-                                    <th>Eliminar</th>
+                                    <th>Correo</th>
+                                    <th>Cédula</th>
+                                    <th>Número</th>
+                                    <th>Acciones</th>
                                 </tr>
                             </thead>
-                            <tbody id="tbl_body">
+                            <tbody>
+                                
                             </tbody>
                         </table>
 
@@ -79,12 +72,9 @@
                                     <div class="modal-body">
                                         <form id="formulario_compras">
                                             <div class="row mb-3">
-                                                <input type="hidden" name="id_compra" id="id_compra" class="form-control" value="<?php echo htmlspecialchars($id_compra); ?>" readonly>
-                                                <input type="hidden" name="id_miembro" id="id_miembro" class="form-control" value="<?php echo htmlspecialchars($id_miembro); ?>" readonly>
-                                                <div class="col-md-3">
+                                                <div class="col-md-6">
                                                     <label for="txt_producto" class="form-label"><strong>Producto:</strong></label>
-                                                    <select class="form-control" id="txt_producto" name="txt_producto" required>
-                                                    </select>
+                                                    <input type="text" class="form-control" id="txt_producto" name="txt_producto" placeholder="Producto" required>
                                                 </div>
                                                 <div class="col-md-3">
                                                     <label for="txt_cantidad" class="form-label"><strong>Cantidad:</strong></label>
@@ -94,36 +84,30 @@
                                                     <label for="txt_precio" class="form-label"><strong>Precio:</strong></label>
                                                     <input type="text" class="form-control" id="txt_precio" name="txt_precio" readonly>
                                                 </div>
-                                                <div class="col-md-3">
-                                                    <label for="txt_total" class="form-label"><strong>Total:</strong></label>
-                                                    <input type="text" class="form-control" id="txt_total" name="txt_total" readonly>
-                                                </div>
-                                                <div class="col-md-3 d-flex align-items-end ms-auto">
-                                                    <button style="margin-top: 20px;" type="button" onclick="enviarCompras()" class="btn btn-primary w-100 btn-margin-top" id="btn_agregar_compra">
-                                                        <i class='bx bx-cart'></i> <strong>Agregar</strong>
-                                                    </button>
-                                                </div>
                                             </div>
                                             <table class="table table-bordered table-striped mt-4" id="tbl_compras">
                                                 <thead class="table-header">
                                                     <tr>
-                                                        <th>Compra</th>
                                                         <th>Miembro</th>
                                                         <th>Producto</th>
                                                         <th>Cantidad</th>
                                                         <th>Precio</th>
                                                         <th>Total</th>
-                                                        <th>Eliminar</th>
+                                                        <th>Acciones</th>
                                                     </tr>
                                                 </thead>
-                                                <tbody id="tbl_boby">
+                                                <tbody>
+                                                    
                                                 </tbody>
                                             </table>
+                                            <button type="button" class="btn btn-primary" id="btn_agregar_compra">
+                                                <i class="bi bi-bag-plus-fill"></i> <strong>Agregar</strong>
+                                            </button>
                                         </form>
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-danger" data-bs-dismiss="modal">
-                                            <i class='bx bx-x'></i><strong>Cerrar</strong> 
+                                            <strong>Cerrar</strong> <i class="bi bi-file-x"></i>
                                         </button>
                                     </div>
                                 </div>
@@ -138,271 +122,71 @@
 </div>
 
 
-
 <script>
     $(document).ready(function() {
-        lista_usuario();
-        lista_compra();
-        select_productos();
-        
-        //$('#btn_agregar_compra').click(function() {
-        //    enviarCompras();
-        //});
-    });
-    
-    function lista_usuario() {       
-        $.ajax({
-            url: '../controlador/COWORKING/crear_mienbrosC.php?lista_mienbro=true',
-            type: 'post',
-            dataType: 'json',        
-            success: function(response) {  
-                $('#tbl_body').html(response);
-                console.log(response);
-            }       
+        $('#ddl_producto').change(function() {
+            var precio = $(this).find(':selected').data('precio');
+            $('#txt_precio').val(precio ? '$' + parseFloat(precio).toFixed(2) : '');
         });
-    }
 
-    function lista_compra() {       
-        $.ajax({
-            url: '../controlador/COWORKING/crear_mienbrosC.php?lista_compra=true',
-            type: 'post',
-            dataType: 'json', 
-            success: function(response) {  
-                $('#tbl_boby').html(response);
-                console.log(response);
-            }       
+        $('#btn_registrar_miembro').click(function() {
+            var nombre = $('#txt_nombre').val();
+            var correo = $('#txt_correo').val();
+            var cedula = $('#txt_cedula').val();
+            var numero = $('#txt_numero_celular').val();
+
+            if (nombre && correo && cedula && numero) {
+                var nuevaFila = `<tr>
+                    <td>${nombre}</td>
+                    <td>${correo}</td>
+                    <td>${cedula}</td>
+                    <td>${numero}</td>
+                    <td class="acciones">
+                        <button class="btn btn-danger btn-sm btn-eliminar"><i class="bi bi-file-x"></i></button>
+                        <button class="btn btn-primary btn-sm btn-registrar-compras" data-bs-toggle="modal" data-bs-target="#modal_registrar_compra"><i class="bi bi-cart4"></i></button>
+                    </td>
+                </tr>`;
+                $('#tbl_miembros tbody').append(nuevaFila);
+                $('#formulario_miembro')[0].reset();
+            }
         });
-    }
 
-    function enviardatos() {
-    var parametros = {
-        'nombre_miembro': $('#txt_nombre').val(),
-        'apellido_miembro': $('#txt_apellido').val(),
-        'telefono_miembro': $('#txt_numero_celular').val(),
-        'direccion_miembro': $('#txt_direccion').val(),
-        'id_espacio': $('#ddl_id_espacio').val()
-    };
+        $('#btn_agregar_compra').click(function() {
+            var producto = $('#ddl_producto').val();
+            var cantidad = $('#txt_cantidad').val();
+            var precio = $('#txt_precio').val();
+            var miembro = $('#btn_agregar_compra').data('miembro');
 
-    $.ajax({
-        data: {data: parametros},
-        url: '../controlador/COWORKING/crear_mienbrosC.php?add=true',
-        type: 'post',
-        dataType: 'json',
-        success: function(response) {  
-            if (response === 1) {
-                
-                Swal.fire({
-                    title: 'Miembro agregado con éxito',
-                    icon: 'success',
-                    confirmButtonText: 'Aceptar'
-                }).then(() => {
-                    lista_usuario(); 
-                    $('#formulario_miembro')[0].reset(); 
-                });
-            } else {
-                
-                Swal.fire({
-                    title: 'Error al agregar el miembro',
-                    icon: 'error',
-                    confirmButtonText: 'Aceptar'
-                });
+            if (producto && cantidad && precio) {
+                var total = parseFloat(precio.replace('$', '')) * cantidad;
+                var nuevaFilaCompra = `<tr>
+                    <td>${miembro}</td>
+                    <td>${producto}</td>
+                    <td>${cantidad}</td>
+                    <td>${precio}</td>
+                    <td>$${total.toFixed(2)}</td>
+                    <td style="display: flex; justify-content: center; align-items: center;">
+                        <button type="button" class="btn btn-danger btn-sm btn-eliminar-compra">
+                            <i class="bi bi-file-x"></i>
+                        </button>
+                    </td>
+                </tr>`;
+                $('#tbl_compras tbody').append(nuevaFilaCompra);
+                $('#formulario_compras')[0].reset();
             }
-        }
-    });
-}
-
-
-    function enviarCompras() {
-        var parametros = {
-            'id_compra': $('#id_compra').val(),
-            'id_miembro': $('#id_miembro').val(),
-            'id_producto': $('#txt_producto').val(),
-            'cantidad_compra': $('#txt_cantidad').val(),
-            'pvp_compra': $('#txt_precio').val(),
-            'total_compra': $('#txt_total').val()
-        };
-
-        $.ajax({
-            data: {data: parametros},
-            url: '../controlador/COWORKING/crear_mienbrosC.php?add_compra=true',
-            type: 'post',
-            dataType: 'json',
-            success: function(response) {  
-                if (response == 1) {
-                    Swal.fire({
-                    title: 'Compra agregada con éxito',
-                    icon: 'success',
-                    confirmButtonText: 'Aceptar'
-                }).then(() => {
-                    lista_compra(); 
-                    $('#formulario_compras')[0].reset(); 
-                });
-            } else {
-                
-                Swal.fire({
-                    title: 'Error al agregar el compra',
-                    icon: 'error',
-                    confirmButtonText: 'Aceptar'
-                });
-            }
-        }
-    });
-}
-    $(document).ready(function() {
-    select_productos();
-    $('#txt_cantidad').on('input', calcularTotal); 
-    $('#txt_producto').on('change', function() {
-        var precio = $(this).find('option:selected').data('precio');
-        $('#txt_precio').val(precio);
-        calcularTotal(); 
-    });
-});
-
-function abrirModal(id_miembro) {
-    
-    console.log('ID Miembro:', id_miembro);
-
-    
-    $('#id_miembro').val(id_miembro);
-
-    
-    select_productos();
-}
-    
-    function calcularTotal() {
-        var cantidad = parseFloat($('#txt_cantidad').val()) || 0;
-        var precio = parseFloat($('#txt_precio').val()) || 0;
-        $('#txt_total').val((cantidad * precio).toFixed(2));
-        }
-
-    function eliminarCompra(id_compra) {
-    Swal.fire({
-        title: '¿Estás seguro?',
-        text: "Esta acción eliminará la compra seleccionada.",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonText: 'Sí, eliminar',
-        cancelButtonText: 'Cancelar'
-    }).then((result) => {
-        if (result.isConfirmed) {
-            $.ajax({
-                url: '../controlador/COWORKING/crear_mienbrosC.php?eliminar_compra=true',
-                type: 'POST',
-                data: { id_compra: id_compra },
-                dataType: 'json',
-                success: function(response) {
-                    if (response === "Compra eliminada con éxito") {
-                        $('#row-compra-' + id_compra).remove();
-                        Swal.fire('Eliminado', 'Compra eliminada con éxito', 'success');
-                        lista_compra();
-                    } else {
-                        Swal.fire('Error', 'Error al eliminar la compra', 'error');
-                    }
-                }
-            });
-        }
-    });
-}
-
-
-
-function eliminarMiembro(id_miembro) {
-    
-    $.ajax({
-        url: '../controlador/COWORKING/crear_mienbrosC.php',
-        type: 'POST',
-        data: { id_miembro: id_miembro, action: 'verificar_compras' },
-        dataType: 'json',
-        success: function(response) {
-            console.log('Respuesta de verificar_compras:', response);
-
-            
-            if (response.error) {
-                Swal.fire({
-                    title: 'Error',
-                    text: response.error,
-                    icon: 'error',
-                    confirmButtonText: 'Entendido'
-                });
-                return;
-            }
-
-            
-            if (response.tiene_compras) {
-                Swal.fire({
-                    title: 'El Usuario está ligado a uno o varios registros y no se podrá eliminar.',
-                    icon: 'warning',
-                    confirmButtonText: 'Entendido'
-                });
-            } else {
-               
-                Swal.fire({
-                    title: '¿Estás seguro?',
-                    text: "Esta acción eliminará al miembro seleccionado.",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonText: 'Sí, eliminar',
-                    cancelButtonText: 'Cancelar'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        
-                        $.ajax({
-                            url: '../controlador/COWORKING/crear_mienbrosC.php?eliminar_miembro=true',
-                            type: 'POST',
-                            data: { id_miembro: id_miembro },
-                            dataType: 'json',
-                            success: function(response) {
-                                console.log('Respuesta de eliminar_miembro:', response);
-
-                                
-                                if (response === "Miembro eliminado con éxito") {
-                                    $('#row-miembro-' + id_miembro).remove();
-                                    Swal.fire('Eliminado', 'Miembro eliminado con éxito', 'success');
-                                    lista_usuario();  
-                                } else {
-                                    Swal.fire('Error', 'Error al eliminar el miembro', 'error');
-                                }
-                            },
-                            error: function(jqXHR, textStatus, errorThrown) {
-                                console.error('Error al eliminar miembro:', textStatus, errorThrown);
-                                Swal.fire('Error', 'Error al eliminar el miembro', 'error');
-                            }
-                        });
-                    }
-                });
-            }
-        },
-        error: function(jqXHR, textStatus, errorThrown) {
-            console.error('Error al verificar compras:', textStatus, errorThrown);
-            Swal.fire('Error', 'Error al verificar las compras del miembro', 'error');
-        }
-    });
-}
-
-
-
-
-
-
-
-
-
-    function select_productos() {       
-        $.ajax({
-            url: '../controlador/COWORKING/crear_mienbrosC.php?listar_productos=true',
-            type: 'post',
-            dataType: 'json', 
-            success: function(response) {  
-                $('#txt_producto').html(response);
-
-                $('#txt_producto').on('change', function() {
-                    let precio = $(this).find('option:selected').data('precio');
-                    $('#txt_precio').val(precio);
-                });
-            }       
         });
-    }
 
+        $('#tbl_miembros').on('click', '.btn-eliminar', function() {
+            $(this).closest('tr').remove();
+        });
 
+        $('#tbl_compras').on('click', '.btn-eliminar-compra', function() {
+            $(this).closest('tr').remove();
+        });
 
+        $('#tbl_miembros').on('click', '.btn-registrar-compras', function() {
+            var miembro = $(this).closest('tr').find('td:first').text();
+            $('#btn_agregar_compra').data('miembro', miembro);
+        });
+    });
 </script>
