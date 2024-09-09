@@ -3,7 +3,7 @@ include(dirname(__DIR__, 2) . '/modelo/COWORKING/crear_mienbrosM.php');
 
 $controlador = new crear_mienbrosC();
 $id_miembro = isset($_GET['id_miembro']) ? intval($_GET['id_miembro']) : '';
-
+$id_sala = isset($_POST['id_sala']) ? $_POST['id_sala'] : '';
 
 
 if (isset($_GET['lista_mienbro'])) {
@@ -45,7 +45,9 @@ if (isset($_POST['action']) && $_POST['action'] === 'verificar_compras') {
     echo $response;}
 
 
-
+    
+    
+    
 
 
 class crear_mienbrosC
@@ -121,11 +123,13 @@ class crear_mienbrosC
         $str = '';
         foreach ($slista as $key => $value) {
             $id_miembro = isset($value['id_miembro']) ? $value['id_miembro'] : 'desconocido';
+            $id_espacio = isset($value['id_espacio']) ? $value['id_espacio'] : 'desconocido';  // Obtén el ID del espacio
+    
             $str .= '<tr id="row-' . ($id_miembro) . '">
                         <td>
-                                <button type="button" onclick="abrirModal(' . $id_miembro . ')" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modal_registrar_compra">
-                                    <i class="bx bx-cart"></i></i>
-                                </button>
+                            <button type="button" onclick="abrirModal(' . $id_miembro . ', ' . $id_espacio . ')" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modal_registrar_compra">
+                                <i class="bx bx-cart"></i>
+                            </button>
                         </td>
                         <td>' . ($value['nombre_miembro']) . '</td>
                         <td>' . ($value['apellido_miembro']) . '</td>
@@ -142,6 +146,7 @@ class crear_mienbrosC
     
         return $str;
     }
+    
 
     function eliminar_compra($id_compra)
     {

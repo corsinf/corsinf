@@ -10,6 +10,28 @@ class crear_mienbrosM
         $this->db = new db();
     }
 
+    function get_id_espacio($id_miembro)
+{
+    try {
+        $query = "SELECT id_espacio FROM co_miembro WHERE id_miembro = ?";
+        $stmt = $this->db->conexion()->prepare($query);
+        $stmt->bind_param('i', $id_miembro);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $row = $result->fetch_assoc();
+        $stmt->close();
+        
+        if ($row) {
+            return $row['id_espacio'];
+        } else {
+            return null;
+        }
+    } catch (Exception $e) {
+        error_log('Error en get_id_espacio: ' . $e->getMessage());
+        return null;
+    }
+}
+
     function insertarnombre($parametros)
     {
         $nombre = $parametros['nombre_miembro'];

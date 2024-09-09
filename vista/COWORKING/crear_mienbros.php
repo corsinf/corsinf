@@ -187,7 +187,7 @@
                                             <div class="row mb-3">
                                             
                                                 <input type="hidden" name="id_miembro" id="id_miembro" class="form-control" value="<?php echo htmlspecialchars($id_miembro); ?>" readonly>
-                                                <input type="hidden" name="id_sala" id="id_sala" class="form-control" value="">
+                                                <input type="hidden" name="id_sala" id="id_sala" class="form-control" >
                                                 <div class="col-md-3">
                                                     <label for="txt_producto" class="form-label"><strong>Producto:</strong></label>
                                                     <select class="form-control" id="txt_producto" name="txt_producto" required>
@@ -367,14 +367,17 @@
     });
 });
 
-function abrirModal(id_miembro) {
-    
-    console.log('ID Miembro:', id_miembro);
-    $('#id_miembro').val(id_miembro);
+function abrirModal(id_miembro, id_sala) {
+    console.log('ID Miembro:', id_miembro);  // Verifica que el ID del miembro se pase correctamente
+    $('#id_miembro').val(id_miembro);        // Asigna el ID del miembro al campo en el modal
 
-    
-    select_productos();
+    console.log('ID Sala:', id_sala);        // Verifica que el ID de la sala (espacio) se pase correctamente
+    $('#id_sala').val(id_sala);              // Asigna el ID de la sala (espacio) al campo correspondiente en el modal
+
+    select_productos();                      // Cualquier otra lógica adicional que necesites al abrir el modal
 }
+
+
     
     function calcularTotal() {
         var cantidad = parseFloat($('#txt_cantidad').val()) || 0;
