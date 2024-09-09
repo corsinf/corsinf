@@ -77,15 +77,15 @@ class crear_mienbrosC
     function compraslista()
     {
         $slista = $this->modelo->compraslista();
-
-
-
+    
         $str = '';
         foreach ($slista as $key => $value) {
             $id_miembro = isset($value['id_miembro']) ? $value['id_miembro'] : 'id_miembro';
             $id_compra = isset($value['id_compra']) ? $value['id_compra'] : 'id_compra';
+            $id_sala = isset($value['id_sala']) ? $value['id_sala'] : 'sala';
             
             $str .= '<tr>
+                        <td>' . $id_sala . '</td> 
                         <td>' . $id_compra .'</td>
                         <td>' . $id_miembro . '</td>
                         <td>' . ($value['id_producto']) . '</td>
@@ -97,11 +97,9 @@ class crear_mienbrosC
                                 <i class="bx bx-trash"></i>
                             </button>
                         </td>
-                        
-
-                    </tr>';
+                     </tr>';
         }
-
+    
         return $str;
     }
 

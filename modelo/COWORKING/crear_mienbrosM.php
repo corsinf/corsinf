@@ -37,6 +37,7 @@ class crear_mienbrosM
     
     function insertarcompra($parametros)
     {
+        $id_sala = isset($parametros['id_sala']) ? intval($parametros['id_sala']) : null;
         $id_compra = isset($parametros['id_compra']) ? intval($parametros['id_compra']) : null;
         $cantidad_compra = isset($parametros['cantidad_compra']) ? intval($parametros['cantidad_compra']) : null;
         $id_producto = isset($parametros['id_producto']) ? intval($parametros['id_producto']) : null;
@@ -49,8 +50,9 @@ class crear_mienbrosM
         }
     
         // Construye la consulta SQL con placeholders
-        $sql = "INSERT INTO co_compra (cantidad_compra, id_producto, pvp_compra, total_compra, id_miembro) 
-                VALUES ($cantidad_compra, $id_producto, $pvp_compra, $total_compra, $id_miembro)";
+        $sql = "INSERT INTO co_compra (cantidad_compra, id_producto, pvp_compra, total_compra, id_miembro, id_sala) 
+        VALUES ($cantidad_compra, $id_producto, $pvp_compra, $total_compra, $id_miembro, $id_sala)";
+
     
         // Ejecuta la consulta
         $resp = $this->db->sql_string($sql);
@@ -65,7 +67,8 @@ class crear_mienbrosM
         $sql = "SELECT 
                 miembro.id_miembro,  
                 miembro.nombre_miembro,
-                compra.id_compra AS id_compra, 
+                miembro.id_espacio AS id_sala, 
+                compra.id_compra , 
                 compra.id_producto, 
                 compra.cantidad_compra, 
                 compra.pvp_compra, 

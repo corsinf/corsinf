@@ -187,6 +187,7 @@
                                             <div class="row mb-3">
                                             
                                                 <input type="hidden" name="id_miembro" id="id_miembro" class="form-control" value="<?php echo htmlspecialchars($id_miembro); ?>" readonly>
+                                                <input type="hidden" name="id_sala" id="id_sala" class="form-control" value="">
                                                 <div class="col-md-3">
                                                     <label for="txt_producto" class="form-label"><strong>Producto:</strong></label>
                                                     <select class="form-control" id="txt_producto" name="txt_producto" required>
@@ -213,7 +214,7 @@
                                             <table class="table table-bordered table-striped mt-4" id="tbl_compras">
                                                 <thead class="table-header">
                                                     <tr>
-                                                        
+                                                        <th>Sala</th>
                                                         <th>Compra</th>
                                                         <th>Miembro</th>
                                                         <th>Producto</th>
@@ -326,7 +327,8 @@
             'id_producto': $('#txt_producto').val(),
             'cantidad_compra': $('#txt_cantidad').val(),
             'pvp_compra': $('#txt_precio').val(),
-            'total_compra': $('#txt_total').val()
+            'total_compra': $('#txt_total').val(),
+            'id_sala': $('#id_sala').val()
         };
 
         $.ajax({
