@@ -1,0 +1,268 @@
+<?php
+
+$id = '';
+
+if (isset($_GET['id'])) {
+    $id = $_GET['id'];
+}
+
+?>
+
+<script src="../js/ENFERMERIA/operaciones_generales.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        var id = '<?= $id ?>';
+        //alert(id)
+
+        if (id != '') {
+            cargarDatos_informacion_personal(id);
+        }
+    });
+
+    function cargarDatos_informacion_personal(id) {
+        $.ajax({
+            url: '../controlador/PASANTES/02_ADRIAN/talento_humano/th_postulantesC.php?listar=true',
+            type: 'post',
+            data: {
+                id: id
+            },
+            dataType: 'json',
+            success: function(response) {
+                $('#txt_primer_nombre').val(response[0].th_pos_primer_nombre);
+                $('#txt_segundo_nombre').val(response[0].th_pos_segundo_nombre);
+                $('#txt_primer_apellido').val(response[0].th_pos_primer_apellido);
+                $('#txt_segundo_apellido').val(response[0].th_pos_segundo_apellido);
+                $('#txt_fecha_nacimiento').val(response[0].th_pos_fecha_nacimiento);
+                $('#txt_edad').val(calcular_edad_fecha_nacimiento(response[0].th_pos_fecha_nacimiento));
+                $('#ddl_nacionalidad').val(response[0].th_pos_nacionalidad);
+                $('#txt_numero_cedula').val(response[0].th_pos_cedula);
+                $('#ddl_estado_civil').val(response[0].th_pos_estado_civil);
+                $('#ddl_sexo').val(response[0].th_pos_sexo);
+                $('#txt_telefono_1').val(response[0].th_pos_telefono_1);
+                $('#txt_telefono_2').val(response[0].th_pos_telefono_2);
+                $('#txt_correo').val(response[0].th_pos_correo);
+                console.log(response);
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                // Manejo de errores
+                console.error('Error al cargar la informacion:', textStatus, errorThrown);
+                $('#pnl_config_general').append('<p>Error al cargar información. Por favor, inténtalo de nuevo más tarde.</p>');
+            }
+        });
+    }
+</script>
+
+
+<script>
+    var form_valido;
+
+    function validar() {
+        'use strict'
+
+        var forms = document.querySelectorAll('.needs-validation');
+
+        Array.prototype.slice.call(forms)
+            .forEach(function(form) {
+                form.addEventListener('click', function(event) {
+                    if (!form.checkValidity()) {
+                        form_valido = false;
+                        event.stopPropagation();
+                        console.log("Nada");
+                    } else {
+                        form_valido = true;
+                    }
+
+                    form.classList.add('was-validated');
+                }, false);
+            });
+
+        if (form_valido) {
+            insertar_editar();
+        }
+    }
+
+    function insertar_editar() {
+
+        var txt_primer_nombre = $('#txt_primer_nombre').val();
+        var txt_segundo_nombre = $('#txt_segundo_nombre').val();
+        var txt_primer_apellido = $('#txt_primer_apellido').val();
+        var txt_segundo_apellido = $('#txt_segundo_apellido').val();
+        var txt_fecha_nacimiento = $('#txt_fecha_nacimiento').val();
+        var ddl_nacionalidad = $('#ddl_nacionalidad').val();
+        var txt_numero_cedula = $('#txt_numero_cedula').val();
+        var ddl_estado_civil = $('#ddl_estado_civil').val();
+        var ddl_sexo = $('#ddl_sexo').val();
+        var txt_telefono_1 = $('#txt_telefono_1').val();
+        var txt_telefono_2 = $('#txt_telefono_2').val();
+        var txt_correo = $('#txt_correo').val();
+
+
+        var parametros_informacion_personal = {
+            'txt_primer_nombre': txt_primer_nombre,
+            'txt_segundo_nombre': txt_segundo_nombre,
+            'txt_primer_apellido': txt_primer_apellido,
+            'txt_segundo_apellido': txt_segundo_apellido,
+            'txt_fecha_nacimiento': txt_fecha_nacimiento,
+            'ddl_nacionalidad': ddl_nacionalidad,
+            'txt_numero_cedula': txt_numero_cedula,
+            'ddl_estado_civil': ddl_estado_civil,
+            'ddl_sexo': ddl_sexo,
+            'txt_telefono_1': txt_telefono_1,
+            'txt_telefono_2': txt_telefono_2,
+            'txt_correo': txt_correo,
+
+        };
+
+        console.log(parametros_informacion_personal);
+        insertar(parametros_informacion_personal);
+
+    }
+
+    function insertar(parametros) {
+        $.ajax({
+            data: {
+                parametros: parametros
+            },
+            url: '../controlador/PASANTES/02_ADRIAN/talento_humano/th_postulantesC.php?insertar=true',
+            type: 'post',
+            dataType: 'json',
+
+            success: function(response) {
+                if (response == 1) {
+                    Swal.fire('', 'Operacion realizada con exito.', 'success').then(function() {
+                        //location.href = '../vista/inicio.php?mod=7&acc=estudiantes';
+
+                    });
+                } else if (response == -2) {
+                    Swal.fire('', 'Operación fallida', 'warning');
+                }
+            }
+        });
+    }
+
+    function edad_normal(fecha_nacimiento) {
+        $('#txt_edad').val(calcular_edad_fecha_nacimiento(fecha_nacimiento));
+    }
+</script>
+
+<div class="page-wrapper">
+    <div class="page-content">
+        <!--breadcrumb-->
+        <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
+            <div class="breadcrumb-title pe-3">Postulantes</div>
+            <div class="ps-3">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb mb-0 p-0">
+                        <li class="breadcrumb-item"><a href="javascript:;"><i class="bx bx-home-alt"></i></a>
+                        </li>
+                        <li class="breadcrumb-item active" aria-current="page">Registrar Postulantes</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+        <!--end breadcrumb-->
+        <div class="container-fluid">
+            <div class="main-body">
+                <div class="card border-top border-0 border-4 border-primary">
+                    <div class="card-body p-5">
+                        <div class="card-title d-flex align-items-center">
+                            <div><i class="bx bxs-id-card me-1 font-24 text-primary"></i>
+                            </div>
+                            <h5 class="mb-0 text-primary">Registrar Postulantes</h5>
+                            <div class="row m-2">
+                                <div class="col-sm-12">
+                                    <a href="../vista/inicio.php?mod=1010&acc=postulantes" class="btn btn-outline-dark btn-sm d-flex align-items-center"><i class="bx bx-arrow-back"></i> Regresar</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <hr>
+                        <form class="needs-validation">
+                            <div class="row mb-3">
+                                <div class="col-3">
+                                    <div class="mb-3">
+                                        <label for="txt_primer_apellido" class="form-label form-label-sm">Primer Apellido <label style="color: red;">*</label></label>
+                                        <input type="text" class="form-control form-control-sm" name="txt_primer_apellido" id="txt_primer_apellido" placeholder="Escriba su apellido paterno" required>
+                                    </div>
+                                </div>
+                                <div class="col-3">
+                                    <div class="mb-3">
+                                        <label for="txt_segundo_apellido" class="form-label form-label-sm">Segundo Apellido <label style="color: red;">*</label></label>
+                                        <input type="text" class="form-control form-control-sm" name="txt_segundo_apellido" id="txt_segundo_apellido" placeholder="Escriba su apellido materno" required>
+                                    </div>
+                                </div>
+                                <div class="col-3">
+                                    <div class="mb-3">
+                                        <label for="txt_primer_nombre" class="form-label form-label-sm">Primer Nombre <label style="color: red;">*</label></label>
+                                        <input type="text" class="form-control form-control-sm" name="txt_primer_nombre" id="txt_primer_nombre" placeholder="Escriba su primer nombre" required>
+                                    </div>
+                                </div>
+                                <div class="col-3">
+                                    <div class="mb-3">
+                                        <label for="txt_segundo_nombre" class="form-label form-label-sm">Segundo Nombre <label style="color: red;">*</label></label>
+                                        <input type="text" class="form-control form-control-sm" name="txt_segundo_nombre" id="txt_segundo_nombre" placeholder="Escriba su primer nombre" required>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-3">
+                                    <div class="mb-3">
+                                        <label for="txt_numero_cedula" class="form-label form-label-sm">Cédula de Identidad <label style="color: red;">*</label></label>
+                                        <input type="text" class="form-control form-control-sm" name="txt_numero_cedula" id="txt_numero_cedula" placeholder="Digite su número de cédula" required>
+                                    </div>
+                                </div>
+                                <div class="col-3">
+                                    <div class="mb-3">
+                                        <label for="ddl_sexo" class="form-label form-label-sm">Sexo <label style="color: red;">*</label></label>
+                                        <select class="form-select form-select-sm" id="ddl_sexo" name="ddl_sexo" required>
+                                            <option selected disabled value="">-- Selecciona una opción --</option>
+                                            <option value="Masculino">Masculino</option>
+                                            <option value="Femenino">Femenino</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-3">
+                                    <div class="mb-3">
+                                        <label for="txt_fecha_nacimiento" class="form-label form-label-sm">Fecha de nacimiento <label style="color: red;">*</label></label>
+                                        <input type="date" class="form-control form-control-sm" name="txt_fecha_nacimiento" id="txt_fecha_nacimiento" onchange="edad_normal(this.value);" required>
+                                    </div>
+                                </div>
+                                <div class="col-3">
+                                    <div class="mb-3">
+                                        <label for="txt_edad" class="form-label form-label-sm">Edad <label style="color: red;">*</label></label>
+                                        <input type="text" class="form-control form-control-sm" name="txt_edad" id="txt_edad" readonly>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-4">
+                                    <div class="mb-3">
+                                        <label for="txt_telefono_1" class="form-label form-label-sm">Teléfono 1 <label style="color: red;">*</label></label>
+                                        <input type="text" class="form-control form-control-sm" name="txt_telefono_1" id="txt_telefono_1" value="" placeholder="Escriba su teléfono personal o fijo" required>
+                                    </div>
+                                </div>
+                                <div class="col-4">
+                                    <div class="mb-3">
+                                        <label for="txt_telefono_2" class="form-label form-label-sm">Teléfono 2 <label style="color: red;">*</label></label>
+                                        <input type="text" class="form-control form-control-sm" name="txt_telefono_2" id="txt_telefono_2" value="" placeholder="Escriba su teléfono personal o fijo (opcional)">
+                                    </div>
+                                </div>
+                                <div class="col-4">
+                                    <div class="mb-3">
+                                        <label for="txt_correo" class="form-label form-label-sm">Correo Electrónico <label style="color: red;">*</label></label>
+                                        <input type="email" class="form-control form-control-sm" name="txt_correo" id="txt_correo" value="" placeholder="Escriba su correo electrónico" required>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="d-flex justify-content-end">
+                                <button type="button" class="btn btn-sm btn-primary d-flex align-items-center px-4 m-1" onclick="validar();"><i class='bx bx-save'></i>Guardar</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>

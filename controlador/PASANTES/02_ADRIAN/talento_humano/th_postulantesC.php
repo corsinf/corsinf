@@ -7,6 +7,10 @@ if (isset($_GET['listar'])) {
     echo json_encode($controlador->listar($_POST['id']));
 }
 
+if (isset($_GET['listar_todo'])) {
+    echo json_encode($controlador->listar_todo());
+}
+
 if (isset($_GET['insertar'])) {
     echo json_encode($controlador->insertar_editar($_POST['parametros']));
 }
@@ -25,6 +29,12 @@ class th_postulantesC
     {
         $datos = $this->modelo->where('th_pos_id', $id)->listar($id);
         return $datos;
+    }
+
+    function listar_todo()
+    {
+        $lista = $this->modelo->listar();
+        return $lista;
     }
 
     function insertar_editar($parametros)

@@ -10,11 +10,6 @@ if (isset($_GET['id'])) {
 <script>
     $(document).ready(function() {
 
-        $('#ddl_estado_laboral').change(function() {
-            ocultar_opciones_estado();
-        }); //loo mismo de aca
-
-
         agregar_contacto_emergencia()
 
     });
@@ -41,14 +36,11 @@ if (isset($_GET['id'])) {
         }
     }
 
-    //pense que era de otra cosa si te dije que trates de evitar cargar 
-    //justo aqui codigo lo menos que se pueda de codigo todo por eventos en los inputs
-
     //Para mostrar los tipos de aptitudes
     function mostrar_tipo_aptitudes() {
         var select_tipo_aptitudes = $('#ddl_tipo_aptitudes');
-        var div_aptitudes_blandas = $('#sec_blandas')
-        var div_aptitudes_tecnicas = $('#sec_tecnicas')
+        var div_aptitudes_blandas = $('#pnl_blandas')
+        var div_aptitudes_tecnicas = $('#pnl_tecnicas')
 
         div_aptitudes_blandas.hide();
         div_aptitudes_tecnicas.hide();
@@ -72,8 +64,7 @@ if (isset($_GET['id'])) {
                     errorLoading: function() {
                         return "No se encontraron resultados";
                     }
-                },
-                minimumInputLength: 1,
+                }
             });
         } else if (select_tipo_aptitudes.val() == 'Tecnicas') {
             div_aptitudes_tecnicas.show()
@@ -93,22 +84,20 @@ if (isset($_GET['id'])) {
                     errorLoading: function() {
                         return "No se encontraron resultados";
                     }
-                },
-                minimumInputLength: 1,
+                }
             });
         }
     }
 
     function agregar_contacto_emergencia() {
         $('#btn_agregar_contacto_emergencia').on('click', function() {
-            var nueva_aptitud = $('.sec_contacto_emergencia .row').first().clone();
+            var nueva_aptitud = $('.pnl_contacto_emergencia .row').first().clone();
 
             nueva_aptitud.find('input').val('');
 
-            $('.sec_contacto_emergencia').append(nueva_aptitud);
+            $('.pnl_contacto_emergencia').append(nueva_aptitud);
         });
     }
-
 </script>
 <script type="text/javascript">
     var form_valido;
@@ -205,11 +194,6 @@ if (isset($_GET['id'])) {
                 $('#txt_telefono_2').val(response[0].th_pos_telefono_2);
                 $('#txt_correo').val(response[0].th_pos_correo);
                 console.log(response);
-            },
-            error: function(jqXHR, textStatus, errorThrown) {
-                // Manejo de errores
-                console.error('Error al cargar la informacion:', textStatus, errorThrown);
-                $('#pnl_config_general').append('<p>Error al cargar las configuraciones. Por favor, inténtalo de nuevo más tarde.</p>'); //modifica los mensajes 
             }
         });
     }
@@ -247,9 +231,7 @@ if (isset($_GET['id'])) {
         };
 
         console.log(parametros_informacion_personal);
-        insertar_informacion_personal(parametros_informacion_personal); 
-
-        //procura poner al final simepre la ;
+        insertar_informacion_personal(parametros_informacion_personal);
 
     }
 
@@ -468,32 +450,6 @@ if (isset($_GET['id'])) {
     function limpiar_parametros() {
         //Limpiar parámetros
 
-        //informacion personal
-        $('#txt_primer_nombre').val('')
-        $('#txt_segundo_nombre').val('')
-        $('#txt_primer_apellido').val('')
-        $('#txt_segundo_apellido').val('')
-        $('#txt_fecha_nacimiento').val('')
-        $('#ddl_nacionalidad').val('')
-        $('#txt_numero_cedula').val('')
-        $('#ddl_estado_civil').val('')
-        $('#ddl_sexo').val('')
-        $('#txt_telefono_1').val('')
-        $('#txt_telefono_2').val('')
-        $('#txt_correo').val('')
-
-        //informacion contacto
-        $('#txt_direccion_calle').val('');
-        $('#txt_direccion_numero').val('');
-        $('#txt_direccion_ciudad').val('');
-        $('#txt_direccion_estado').val('');
-        $('#txt_direccion_postal').val('');
-        $('#txt_telefono_1').val('');
-        $('#txt_telefono_2').val('');
-        $('#txt_correo').val('');
-        $('.txt_nombre_contacto_emergencia').val('');
-        $('.txt_telefono_contacto_emergencia').val('');
-
         //experiencia laboral
         $('#txt_nombre_empresa').val('');
         $('#txt_cargos_ocupados').val('');
@@ -548,6 +504,11 @@ if (isset($_GET['id'])) {
                         <li class="breadcrumb-item active" aria-current="page">Información personal</li>
                     </ol>
                 </nav>
+            </div>
+            <div class="row m-2">
+                <div class="col-sm-12">
+                    <a href="../vista/inicio.php?mod=1010&acc=postulantes" class="btn btn-outline-dark btn-sm d-flex align-items-center"><i class="bx bx-arrow-back"></i> Postulantes</a>
+                </div>
             </div>
         </div>
         <!--end breadcrumb-->
@@ -1055,30 +1016,29 @@ if (isset($_GET['id'])) {
             <!-- Modal body -->
             <form class="needs-validation">
                 <div class="modal-body">
-                    <p class="fw-bold">Nombres Completos</p>
                     <div class="row">
                         <div class="col-3">
                             <div class="mb-3">
-                                <label for="txt_primer_nombre" class="form-label form-label-sm">Primer Nombre</label>
-                                <input type="text" class="form-control form-control-sm" name="txt_primer_nombre" id="txt_primer_nombre" placeholder="Escriba su primer nombre" required>
-                            </div>
-                        </div>
-                        <div class="col-3">
-                            <div class="mb-3">
-                                <label for="txt_segundo_nombre" class="form-label form-label-sm">Segundo Nombre</label>
-                                <input type="text" class="form-control form-control-sm" name="txt_segundo_nombre" id="txt_segundo_nombre" placeholder="Escriba su primer nombre" required>
-                            </div>
-                        </div>
-                        <div class="col-3">
-                            <div class="mb-3">
-                                <label for="txt_primer_apellido" class="form-label form-label-sm">Primer Apellido</label>
+                                <label for="txt_primer_apellido" class="form-label form-label-sm">Primer Apellido <label style="color: red;">*</label></label>
                                 <input type="text" class="form-control form-control-sm" name="txt_primer_apellido" id="txt_primer_apellido" placeholder="Escriba su apellido paterno" required>
                             </div>
                         </div>
                         <div class="col-3">
                             <div class="mb-3">
-                                <label for="txt_segundo_apellido" class="form-label form-label-sm">Segundo Apellido</label>
+                                <label for="txt_segundo_apellido" class="form-label form-label-sm">Segundo Apellido <label style="color: red;">*</label></label>
                                 <input type="text" class="form-control form-control-sm" name="txt_segundo_apellido" id="txt_segundo_apellido" placeholder="Escriba su apellido materno" required>
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <div class="mb-3">
+                                <label for="txt_primer_nombre" class="form-label form-label-sm">Primer Nombre <label style="color: red;">*</label></label>
+                                <input type="text" class="form-control form-control-sm" name="txt_primer_nombre" id="txt_primer_nombre" placeholder="Escriba su primer nombre" required>
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <div class="mb-3">
+                                <label for="txt_segundo_nombre" class="form-label form-label-sm">Segundo Nombre <label style="color: red;">*</label></label>
+                                <input type="text" class="form-control form-control-sm" name="txt_segundo_nombre" id="txt_segundo_nombre" placeholder="Escriba su primer nombre" required>
                             </div>
                         </div>
                     </div>
@@ -1086,13 +1046,13 @@ if (isset($_GET['id'])) {
                     <div class="row mb-3">
                         <div class="col-3">
                             <div class="mb-3">
-                                <label for="txt_fecha_nacimiento" class="form-label form-label-sm">Fecha de nacimiento</label>
+                                <label for="txt_fecha_nacimiento" class="form-label form-label-sm">Fecha de nacimiento <label style="color: red;">*</label></label>
                                 <input type="date" class="form-control form-control-sm" name="txt_fecha_nacimiento" id="txt_fecha_nacimiento" required>
                             </div>
                         </div>
                         <div class="col-3">
                             <div class="mb-3">
-                                <label for="ddl_nacionalidad" class="form-label form-label-sm">Nacionalidad</label>
+                                <label for="ddl_nacionalidad" class="form-label form-label-sm">Nacionalidad <label style="color: red;">*</label></label>
                                 <select class="form-select form-select-sm" id="ddl_nacionalidad" name="ddl_nacionalidad" required>
                                     <option selected disabled value="">-- Selecciona una Nacionalidad --</option>
                                     <option value="Ecuatoriano">Ecuatoriano</option>
@@ -1105,13 +1065,13 @@ if (isset($_GET['id'])) {
                         </div>
                         <div class="col-3">
                             <div class="mb-3">
-                                <label for="txt_numero_cedula" class="form-label form-label-sm">N° de Cédula</label>
+                                <label for="txt_numero_cedula" class="form-label form-label-sm">N° de Cédula <label style="color: red;">*</label></label>
                                 <input type="text" class="form-control form-control-sm" name="txt_numero_cedula" id="txt_numero_cedula" placeholder="Digite su número de cédula" required>
                             </div>
                         </div>
                         <div class="col-3">
                             <div class="mb-3">
-                                <label for="ddl_estado_civil" class="form-label form-label-sm">Estado civil</label>
+                                <label for="ddl_estado_civil" class="form-label form-label-sm">Estado civil <label style="color: red;">*</label></label>
                                 <select class="form-select form-select-sm" id="ddl_estado_civil" name="ddl_estado_civil" required>
                                     <option selected disabled value="">-- Selecciona un Estado Civil --</option>
                                     <option value="Soltero">Soltero/a</option>
@@ -1124,9 +1084,9 @@ if (isset($_GET['id'])) {
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-3">
+                        <div class="col-4">
                             <div class="mb-3">
-                                <label for="ddl_sexo" class="form-label form-label-sm">Sexo</label>
+                                <label for="ddl_sexo" class="form-label form-label-sm">Sexo <label style="color: red;">*</label></label>
                                 <select class="form-select form-select-sm" id="ddl_sexo" name="ddl_sexo" required>
                                     <option selected disabled value="">-- Selecciona una opción --</option>
                                     <option value="Masculino">Masculino</option>
@@ -1134,21 +1094,21 @@ if (isset($_GET['id'])) {
                                 </select>
                             </div>
                         </div>
-                        <div class="col-3">
+                        <div class="col-4">
                             <div class="mb-3">
-                                <label for="txt_telefono_1" class="form-label form-label-sm">Teléfono 1 (personal o fijo)</label>
+                                <label for="txt_telefono_1" class="form-label form-label-sm">Teléfono 1 (personal o fijo) <label style="color: red;">*</label></label>
                                 <input type="text" class="form-control form-control-sm" name="txt_telefono_1" id="txt_telefono_1" value="" placeholder="Escriba su teléfono personal o fijo" required>
                             </div>
                         </div>
-                        <div class="col-3">
+                        <div class="col-4">
                             <div class="mb-3">
                                 <label for="txt_telefono_2" class="form-label form-label-sm">Teléfono 2 (opcional)</label>
                                 <input type="text" class="form-control form-control-sm" name="txt_telefono_2" id="txt_telefono_2" value="" placeholder="Escriba su teléfono personal o fijo (opcional)">
                             </div>
                         </div>
-                        <div class="col-3">
+                        <div class="col-8 mx-auto">
                             <div class="mb-3">
-                                <label for="txt_correo" class="form-label form-label-sm">Correo Electrónico</label>
+                                <label for="txt_correo" class="form-label form-label-sm">Correo Electrónico <label style="color: red;">*</label></label>
                                 <input type="email" class="form-control form-control-sm" name="txt_correo" id="txt_correo" value="" placeholder="Escriba su correo electrónico" required>
                             </div>
                         </div>
@@ -1180,31 +1140,31 @@ if (isset($_GET['id'])) {
                     <div class="row">
                         <div class="col-4">
                             <div class="mb-3">
-                                <label for="txt_direccion_calle" class="form-label form-label-sm">Calle</label>
+                                <label for="txt_direccion_calle" class="form-label form-label-sm">Calle <label style="color: red;">*</label></label>
                                 <input type="text" class="form-control form-control-sm" name="txt_direccion_calle" id="txt_direccion_calle" value="" placeholder="Escriba la calle de su dirección" required>
                             </div>
                         </div>
                         <div class="col-4">
                             <div class="mb-3">
-                                <label for="txt_direccion_numero" class="form-label form-label-sm">Número</label>
+                                <label for="txt_direccion_numero" class="form-label form-label-sm">Número <label style="color: red;">*</label></label>
                                 <input type="text" class="form-control form-control-sm" name="txt_direccion_numero" id="txt_direccion_numero" value="" placeholder="Escriba el número de su dirección" required>
                             </div>
                         </div>
                         <div class="col-4">
                             <div class="mb-3">
-                                <label for="txt_direccion_ciudad" class="form-label form-label-sm">Ciudad</label>
+                                <label for="txt_direccion_ciudad" class="form-label form-label-sm">Ciudad <label style="color: red;">*</label></label>
                                 <input type="text" class="form-control form-control-sm" name="txt_direccion_ciudad" id="txt_direccion_ciudad" value="" placeholder="Escriba la ciudad de su dirección" required>
                             </div>
                         </div>
                         <div class="col-4">
                             <div class="mb-3">
-                                <label for="txt_direccion_estado" class="form-label form-label-sm">Provincia</label>
+                                <label for="txt_direccion_estado" class="form-label form-label-sm">Provincia <label style="color: red;">*</label></label>
                                 <input type="text" class="form-control form-control-sm" name="txt_direccion_estado" id="txt_direccion_estado" value="" placeholder="Escriba la provincia de su dirección" required>
                             </div>
                         </div>
                         <div class="col-4">
                             <div class="mb-3">
-                                <label for="txt_direccion_postal" class="form-label form-label-sm">Código Postal</label>
+                                <label for="txt_direccion_postal" class="form-label form-label-sm">Código Postal <label style="color: red;">*</label></label>
                                 <div class="row">
                                     <div class="col-11 me-0">
                                         <input type="text" class="form-control form-control-sm" name="txt_direccion_postal" id="txt_direccion_postal" placeholder="Escriba su código postal o de click en 'Obtener'" required>
@@ -1218,17 +1178,17 @@ if (isset($_GET['id'])) {
                     </div>
                     <hr>
                     <p class="fw-bold my-0 mb-2">Contacto de Emergencia:</p>
-                    <div class="sec_contacto_emergencia">
+                    <div class="pnl_contacto_emergencia">
                         <div class="row">
                             <div class="col-6">
                                 <div class="mb-3">
-                                    <label for="txt_nombre_contacto_emergencia" class="form-label form-label-sm">Nombre del contacto de Emergencia</label>
+                                    <label for="txt_nombre_contacto_emergencia" class="form-label form-label-sm">Nombre del contacto de Emergencia <label style="color: red;">*</label></label>
                                     <input type="text" class="form-control form-control-sm txt_nombre_contacto_emergencia" name="txt_nombre_contacto_emergencia" id="txt_nombre_contacto_emergencia" value="" placeholder="Escriba el nombre de un contacto de emergencia" required>
                                 </div>
                             </div>
                             <div class="col-6">
                                 <div class="mb-3">
-                                    <label for="txt_telefono_contacto_emergencia" class="form-label form-label-sm">Teléfono del contacto de Emergencia</label>
+                                    <label for="txt_telefono_contacto_emergencia" class="form-label form-label-sm">Teléfono del contacto de Emergencia <label style="color: red;">*</label></label>
                                     <input type="text" class="form-control form-control-sm txt_telefono_contacto_emergencia" name="txt_telefono_contacto_emergencia" id="txt_telefono_contacto_emergencia" value="" placeholder="Escriba el número de un contacto de emergencia" required>
                                 </div>
                             </div>
@@ -1257,25 +1217,25 @@ if (isset($_GET['id'])) {
             <!-- Modal body -->
             <div class="modal-body needs-validation">
                 <div class="mb-3">
-                    <label for="txt_nombre_empresa" class="form-label form-label-sm">Nombre de la empresa</label>
+                    <label for="txt_nombre_empresa" class="form-label form-label-sm">Nombre de la empresa <label style="color: red;">*</label></label>
                     <input type="text" class="form-control form-control-sm" name="txt_nombre_empresa" id="txt_nombre_empresa" value="" placeholder="Escriba el nombre de la empresa donde trabajó">
                 </div>
                 <div class="mb-3">
-                    <label for="txt_cargos_ocupados" class="form-label form-label-sm">Cargos ocupados</label>
+                    <label for="txt_cargos_ocupados" class="form-label form-label-sm">Cargos ocupados <label style="color: red;">*</label></label>
                     <input type="text" class="form-control form-control-sm" name="txt_cargos_ocupados" id="txt_cargos_ocupados" value="" placeholder="Escriba los cargos que ocupo en la empresa">
                 </div>
                 <div class="mb-3">
-                    <label for="txt_fecha_inicio_laboral" class="form-label form-label-sm">Fecha de inicio</label>
+                    <label for="txt_fecha_inicio_laboral" class="form-label form-label-sm">Fecha de inicio <label style="color: red;">*</label></label>
                     <input type="date" class="form-control form-control-sm" name="txt_fecha_inicio_laboral" id="txt_fecha_inicio_laboral" value="">
                 </div>
                 <div class="mb-3">
-                    <label for="txt_fecha_final_laboral" class="form-label form-label-sm">Fecha de finalización</label>
+                    <label for="txt_fecha_final_laboral" class="form-label form-label-sm">Fecha de finalización <label style="color: red;">*</label></label>
                     <input type="date" class="form-control form-control-sm mb-2" name="txt_fecha_final_laboral" id="txt_fecha_final_laboral" value="">
                     <input type="checkbox" class="form-check-input" name="cbx_fecha_final_laboral" id="cbx_fecha_final_laboral">
                     <label for="cbx_fecha_final_laboral" class="form-label form-label-sm">Actualidad</label>
                 </div>
                 <div class="mb-3">
-                    <label for="txt_responsabilidades_logros" class="form-label form-label-sm">Descripción de responsabilidades y logros</label>
+                    <label for="txt_responsabilidades_logros" class="form-label form-label-sm">Descripción de responsabilidades y logros <label style="color: red;">*</label></label>
                     <textarea type="text" class="form-control form-control-sm" name="txt_responsabilidades_logros" id="txt_responsabilidades_logros" value="" placeholder=""></textarea>
                 </div>
             </div>
@@ -1299,19 +1259,19 @@ if (isset($_GET['id'])) {
             <!-- Modal body -->
             <div class="modal-body needs-validation">
                 <div class="mb-3">
-                    <label for="txt_titulo_obtenido" class="form-label form-label-sm">Título obtenido</label>
+                    <label for="txt_titulo_obtenido" class="form-label form-label-sm">Título obtenido <label style="color: red;">*</label></label>
                     <input type="text" class="form-control form-control-sm" name="txt_titulo_obtenido" id="txt_titulo_obtenido" value="" placeholder="Escriba su título académico">
                 </div>
                 <div class="mb-3">
-                    <label for="txt_institucion" class="form-label form-label-sm">Institución</label>
+                    <label for="txt_institucion" class="form-label form-label-sm">Institución <label style="color: red;">*</label></label>
                     <input type="text" class="form-control form-control-sm" name="txt_institucion" id="txt_institucion" value="" placeholder="Escriba la institución en la que se formó">
                 </div>
                 <div class="mb-3">
-                    <label for="txt_fecha_inicio_academico" class="form-label form-label-sm">Fecha de inicio</label>
+                    <label for="txt_fecha_inicio_academico" class="form-label form-label-sm">Fecha de inicio <label style="color: red;">*</label></label>
                     <input type="date" class="form-control form-control-sm" name="txt_fecha_inicio_academico" id="txt_fecha_inicio_academico" value="">
                 </div>
                 <div class="mb-3">
-                    <label for="txt_fecha_final_academico" class="form-label form-label-sm">Fecha de finalización</label>
+                    <label for="txt_fecha_final_academico" class="form-label form-label-sm">Fecha de finalización <label style="color: red;">*</label></label>
                     <input type="date" class="form-control form-control-sm mb-2" name="txt_fecha_final_academico" id="txt_fecha_final_academico" value="">
                 </div>
             </div>
@@ -1335,7 +1295,7 @@ if (isset($_GET['id'])) {
             <!-- Modal body -->
             <div class="modal-body needs-validation">
                 <div class="mb-3">
-                    <label for="txt_nombre_certificacion" class="form-label form-label-sm">Nombre del curso o capacitación</label>
+                    <label for="txt_nombre_certificacion" class="form-label form-label-sm">Nombre del curso o capacitación <label style="color: red;">*</label></label>
                     <input type="text" class="form-control form-control-sm" name="txt_nombre_certificacion" id="txt_nombre_certificacion" value="" placeholder="Escriba el nombre del curso o capacitación">
                 </div>
                 <div class="mb-3">
@@ -1366,11 +1326,11 @@ if (isset($_GET['id'])) {
             <!-- Modal body -->
             <div class="modal-body needs-validation">
                 <div class="mb-3">
-                    <label for="txt_nombre_certificado_medico" class="form-label form-label-sm">Nombre del certificado</label>
+                    <label for="txt_nombre_certificado_medico" class="form-label form-label-sm">Nombre del certificado <label style="color: red;">*</label></label>
                     <input type="text" class="form-control form-control-sm" name="txt_nombre_certificado_medico" id="txt_nombre_certificado_medico" value="" placeholder="Escriba el nombre del certificado médico">
                 </div>
                 <div class="mb-3">
-                    <label for="txt_respaldo_medico" class="form-label form-label-sm">Documentación que respalde la aptitud para el trabajo</label>
+                    <label for="txt_respaldo_medico" class="form-label form-label-sm">Documentación que respalde la aptitud para el trabajo <label style="color: red;">*</label></label>
                     <input type="file" class="form-control form-control-sm mb-3" name="txt_respaldo_medico" id="txt_respaldo_medico" accept=".pdf" value="">
                 </div>
             </div>
@@ -1394,15 +1354,15 @@ if (isset($_GET['id'])) {
             <!-- Modal body -->
             <div class="modal-body needs-validation">
                 <div class="mb-3">
-                    <label for="txt_nombre_referencia" class="form-label form-label-sm">Nombre del empleador</label>
+                    <label for="txt_nombre_referencia" class="form-label form-label-sm">Nombre del empleador <label style="color: red;">*</label></label>
                     <input type="text" class="form-control form-control-sm" name="txt_nombre_referencia" id="txt_nombre_referencia" value="" placeholder="Escriba el nombre de el empleador">
                 </div>
                 <div class="mb-3">
-                    <label for="txt_telefono_referencia" class="form-label form-label-sm">Teléfono del empleador</label>
+                    <label for="txt_telefono_referencia" class="form-label form-label-sm">Teléfono del empleador <label style="color: red;">*</label></label>
                     <input type="text" class="form-control form-control-sm" name="txt_telefono_referencia" id="txt_telefono_referencia" value="" placeholder="Escriba el número de contacto de el empleador">
                 </div>
                 <div class="mb-3">
-                    <label for="txt_copia_carta_recomendacion" class="form-label form-label-sm">Copia de la carta de recomendación</label>
+                    <label for="txt_copia_carta_recomendacion" class="form-label form-label-sm">Copia de la carta de recomendación <label style="color: red;">*</label></label>
                     <input type="file" class="form-control form-control-sm mb-3" name="txt_copia_carta_recomendacion" id="txt_copia_carta_recomendacion" accept=".pdf" value="">
                 </div>
             </div>
@@ -1426,11 +1386,11 @@ if (isset($_GET['id'])) {
             <!-- Modal body -->
             <div class="modal-body needs-validation">
                 <div class="mb-3">
-                    <label for="txt_nombre_empresa_contrato" class="form-label form-label-sm">Nombre de la empresa</label>
+                    <label for="txt_nombre_empresa_contrato" class="form-label form-label-sm">Nombre de la empresa <label style="color: red;">*</label></label>
                     <input type="text" class="form-control form-control-sm" name="txt_nombre_empresa_contrato" id="txt_nombre_empresa_contrato" value="" placeholder="Escriba el nombre de la empresa que emitió el contrato">
                 </div>
                 <div class="mb-3">
-                    <label for="txt_copia_contrato" class="form-label form-label-sm">Copia del contrato firmado</label>
+                    <label for="txt_copia_contrato" class="form-label form-label-sm">Copia del contrato firmado <label style="color: red;">*</label></label>
                     <input type="file" class="form-control form-control-sm mb-3" name="txt_copia_contrato" id="txt_copia_contrato" accept=".pdf" value="">
                 </div>
             </div>
@@ -1454,9 +1414,9 @@ if (isset($_GET['id'])) {
             <!-- Modal body -->
             <div class="modal-body needs-validation">
                 <div class="mb-3">
-                    <label for="ddl_estado_laboral" class="form-label form-label-sm">Estado laboral:</label>
-                    <select class="form-select form-select-sm" id="ddl_estado_laboral" name="ddl_estado_laboral" required>
-                        <option selected disabled value="">-- Selecciona un Estado Laboral --</option>
+                    <label for="ddl_estado_laboral" class="form-label form-label-sm">Estado laboral: <label style="color: red;">*</label></label>
+                    <select class="form-select form-select-sm" id="ddl_estado_laboral" name="ddl_estado_laboral" onchange="ocultar_opciones_estado()" required>
+                        <option selected disabled value="">-- Selecciona un Estado Laboral -- <label style="color: red;">*</label></option>
                         <option value="Activo">Activo</option>
                         <option value="Inactivo">Inactivo</option>
                         <option value="Prueba">En prueba</option>
@@ -1466,11 +1426,11 @@ if (isset($_GET['id'])) {
                     </select>
                 </div>
                 <div class="mb-3">
-                    <label for="txt_fecha_contratacion_estado" class="form-label form-label-sm">Fecha de contratación</label>
+                    <label for="txt_fecha_contratacion_estado" class="form-label form-label-sm">Fecha de contratación <label style="color: red;">*</label></label>
                     <input type="date" class="form-control form-control-sm mb-3" name="txt_fecha_contratacion_estado" id="txt_fecha_contratacion_estado" value="">
                 </div>
                 <div class="mb-3">
-                    <label for="txt_fecha_salida_estado" class="form-label form-label-sm">Fecha de salida</label>
+                    <label for="txt_fecha_salida_estado" class="form-label form-label-sm">Fecha de salida <label style="color: red;">*</label></label>
                     <input type="date" class="form-control form-control-sm mb-3" name="txt_fecha_salida_estado" id="txt_fecha_salida_estado" value="">
                 </div>
             </div>
@@ -1494,7 +1454,7 @@ if (isset($_GET['id'])) {
             <!-- Modal body -->
             <div class="modal-body needs-validation">
                 <div class="mb-3">
-                    <label for="ddl_seleccionar_idioma" class="form-label form-label-sm">Idioma</label>
+                    <label for="ddl_seleccionar_idioma" class="form-label form-label-sm">Idioma <label style="color: red;">*</label></label>
                     <select class="form-select form-select-sm" id="ddl_seleccionar_idioma" name="ddl_seleccionar_idioma">
                         <option selected disabled value="">-- Selecciona un Idioma --</option>
                         <option value="Español">Español</option>
@@ -1506,7 +1466,7 @@ if (isset($_GET['id'])) {
                     </select>
                 </div>
                 <div class="mb-3">
-                    <label for="ddl_dominio_idioma" class="form-label form-label-sm">Dominio del Idioma</label>
+                    <label for="ddl_dominio_idioma" class="form-label form-label-sm">Dominio del Idioma <label style="color: red;">*</label></label>
                     <select class="form-select form-select-sm" id="ddl_dominio_idioma" name="ddl_dominio_idioma" required>
                         <option selected disabled value="">-- Selecciona su nivel de dominio del idioma --</option>
                         <option value="Nativo">Nativo</option>
@@ -1543,11 +1503,11 @@ if (isset($_GET['id'])) {
                     <option value="Blandas">Aptitudes Blandas</option>
                     <option value="Tecnicas">Aptitudes Técnicas</option>
                 </select>
-                <div id="sec_blandas" style="display: none;">
+                <div id="pnl_blandas" style="display: none;">
                     <div class="mb-3">
                         <div class="row mb-3">
                             <div class="col-12 d-flex align-items-center">
-                                <label for="ddl_seleccionar_aptitud_blanda" class="form-label form-label-sm fw-bold">Seleccione sus Aptitudes Blandas</label>
+                                <label for="ddl_seleccionar_aptitud_blanda" class="form-label form-label-sm fw-bold">Seleccione sus Aptitudes Blandas <label style="color: red;">*</label></label>
                             </div>
                         </div>
                         <div class="row mb-2">
@@ -1564,11 +1524,11 @@ if (isset($_GET['id'])) {
                         </div>
                     </div>
                 </div>
-                <div id="sec_tecnicas" style="display: none;">
+                <div id="pnl_tecnicas" style="display: none;">
                     <div class="mb-3">
                         <div class="row mb-3">
                             <div class="col-12 d-flex align-items-center">
-                                <label for="ddl_seleccionar_aptitud_tecnica" class="form-label form-label-sm fw-bold">Seleccione sus Aptitudes Técnicas</label>
+                                <label for="ddl_seleccionar_aptitud_tecnica" class="form-label form-label-sm fw-bold">Seleccione sus Aptitudes Técnicas <label style="color: red;">*</label></label>
                             </div>
                         </div>
                         <div class="row mb-2">
@@ -1606,7 +1566,7 @@ if (isset($_GET['id'])) {
             <!-- Modal body -->
             <div class="modal-body needs-validation">
                 <div class="mb-3">
-                    <label for="ddl_tipo_documento_identidad" class="form-label form-label-sm">Tipo de Documento</label>
+                    <label for="ddl_tipo_documento_identidad" class="form-label form-label-sm">Tipo de Documento <label style="color: red;">*</label></label>
                     <select class="form-select form-select-sm" id="ddl_tipo_documento_identidad" name="ddl_tipo_documento_identidad" required>
                         <option selected disabled value="">-- Selecciona una opción --</option>
                         <option value="Cédula de Identidad">Cédula de Identidad</option>
@@ -1618,7 +1578,7 @@ if (isset($_GET['id'])) {
                     </select>
                 </div>
                 <div class="mb-3">
-                    <label for="txt_agregar_documento_identidad" class="form-label form-label-sm">Copia del Documento de identidad</label>
+                    <label for="txt_agregar_documento_identidad" class="form-label form-label-sm">Copia del Documento de identidad <label style="color: red;">*</label></label>
                     <input type="file" class="form-control form-control-sm" name="txt_agregar_documento_identidad" id="txt_agregar_documento_identidad" accept=".pdf">
                 </div>
             </div>

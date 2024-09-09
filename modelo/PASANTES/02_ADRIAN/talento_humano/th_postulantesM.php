@@ -1,6 +1,6 @@
 <?php
 
-require_once 'BaseModel.php';
+require_once(dirname(__DIR__,2).'/BaseModel.php');
 
 class th_postulantesM extends BaseModel
 {
