@@ -1,0 +1,4 @@
+.mb-col>[class*="col-"] {
+    margin-bottom: 0.8rem;
+    /* Similar a mb-3 */
+}
