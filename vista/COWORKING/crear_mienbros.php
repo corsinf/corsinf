@@ -1,13 +1,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.4/xlsx.full.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.19/jspdf.plugin.autotable.min.js"></script>
-<?php
-// Para una solicitud POST
-$id_compra = isset($_POST['id_compra']) ? $_POST['id_compra'] : null;
 
-// Para una solicitud GET
-$id_compra = isset($_GET['id_compra']) ? $_GET['id_compra'] : null;
-?>
 
 <div class="page-wrapper">
     <div class="page-content">

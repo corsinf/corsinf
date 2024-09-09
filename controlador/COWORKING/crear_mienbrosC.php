@@ -3,7 +3,7 @@ include(dirname(__DIR__, 2) . '/modelo/COWORKING/crear_mienbrosM.php');
 
 $controlador = new crear_mienbrosC();
 $id_miembro = isset($_GET['id_miembro']) ? intval($_GET['id_miembro']) : '';
-$id_compra = isset($_GET['id_compra']) ? intval($_GET['id_compra']) : '';
+
 
 
 if (isset($_GET['lista_mienbro'])) {
