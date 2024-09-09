@@ -38,7 +38,7 @@
             success: function(response) {
                 if (response == 1) {
                     Swal.fire('', 'Operacion realizada con exito.', 'success').then(function() {
-                        location.href = 'http://localhost/corsinf/vista/inicio.php?mod=1010&acc=solicitudes';
+                        location.href = '../vista/inicio.php?mod=1010&acc=solicitudes';
                     });
                 } else {
                     Swal.fire('', 'Operación fallida', 'error');
@@ -221,9 +221,9 @@
                                                     </div>
                                                 </div>
                                                 <div class="row mb-3">
-                                                    <label for="txt_numero_identificacion" class="col-sm-4 col-form-label">Número de C&eacute;dula o Pasaporte</label>
+                                                    <label for="txt_numero_identificacion" class="col-sm-4 col-form-label">Número de Cédula o Pasaporte</label>
                                                     <div class="col-sm-8">
-                                                        <input type="text" class="form-control form-control-sm" id="txt_numero_identificacion" placeholder="Número de C&eacute;dula o Pasaporte" maxlength="10" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+                                                        <input type="text" class="form-control form-control-sm" id="txt_numero_identificacion" placeholder="Número de Cédula o Pasaporte" maxlength="10" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
                                                         <div class="invalid-feedback">Porfavor ingresa un número de cédula o pasaporte valido</div>
                                                     </div>
                                                 </div>
