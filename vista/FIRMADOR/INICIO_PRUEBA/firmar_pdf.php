@@ -9,44 +9,71 @@
     insertedImages = [];
     $(document).ready(function() {
 
+
      $("#btn_firmantes").click(function(event) {
 
-        console.log($('#uploadPDF').val())
+        if($('#uploadFirma').val()=='')
+        {
+            Swal.fire("Firma electronica no seleccionada ","","info")
+            return false;
+        }
 
-       
-            var formData = new FormData(document.getElementById("form_documento"));
-            formData.append('insertedImages', JSON.stringify(insertedImages));
-            console.log(formData);
-             $.ajax({
-                url: '../controlador/FIRMADOR/validar_firmaC.php?firmar_documento=true',
-                type: 'post',
-                data: formData,
-                contentType: false,
-                processData: false,
-                dataType:'json',
-             // beforeSend: function () {
-             //        $("#foto_alumno").attr('src',"../img/gif/proce.gif");
-             //     },
-                success: function(response) {
-                    console.log(response);
-                    if(response.resp==1)
+        if($('#txt_passFirma').val()=='')
+        {
+            Swal.fire("Clave de firma vacia","","info")
+            return false;
+        }
+
+        if($('#uploadPDF').val()=='')
+        {
+            Swal.fire("Seleccione un documento pdf","","info")
+            return false;
+        }
+
+        if(insertedImages.length==0)
+        {
+            Swal.fire("No se a encontrado un firma en el documento ","","info")
+            return false;
+        }
+
+        $('#myModal_espera').modal('show');       
+        var formData = new FormData(document.getElementById("form_documento"));
+        formData.append('insertedImages', JSON.stringify(insertedImages));
+         $.ajax({
+            url: '../controlador/FIRMADOR/validar_firmaC.php?firmar_documento=true',
+            type: 'post',
+            data: formData,
+            contentType: false,
+            processData: false,
+            dataType:'json',
+         // beforeSend: function () {
+         //        $("#foto_alumno").attr('src',"../img/gif/proce.gif");
+         //     },
+            success: function(response) {
+                $('#myModal_espera').modal('hide');
+                console.log(response);
+                if(response.resp==1)
+                {
+                    Swal.fire('Documento Firmado','Descargar Documento','success').then(function()
                     {
-                        Swal.fire('Documento Firmado','Descargar Documento','success').then(function()
-                        {
 
-                             const url = response.ruta; // Reemplaza con la URL del archivo PDF
-                            const link = document.createElement('a');
-                            link.href = url;
-                            link.download = 'archivo.pdf'; // Nombre del archivo al descargarse
-                            document.body.appendChild(link);
-                            link.click();
-                            document.body.removeChild(link);
+                         const url = response.ruta; // Reemplaza con la URL del archivo PDF
+                        const link = document.createElement('a');
+                        link.href = url;
+                        link.download = 'archivo_Firmado.pdf'; // Nombre del archivo al descargarse
+                        document.body.appendChild(link);
+                        link.click();
+                        document.body.removeChild(link);
 
-                        })                
-                    }
+                    })                
                 }
-            });
+                if(response.resp==-2)
+                {
+                    Swal.fire("Certificado o clave invalido","","error")
+                }
+            }
         });
+    });
  })
 </script>
 <div class="page-wrapper">
@@ -66,18 +93,32 @@
 
         <form id="form_documento" enctype="multipart/form-data" method="post" >
                 <div class="row">
-                    <div class="col-12 col-lg-9">
+                    <div class="col-12 col-lg-12">
                         <div class="card">
                             <div class="card-body">
-                                    <h6><strong>1) Documentos a firmar: </strong></h6>
+                                <div class="row">
+                                    <div class="col-8">
+                                        <label for="txt_nombreSala" class="form-label form-label-sm">
+                                            <h6><strong>1) Seleccione Firma (.p12):</strong></h6>
+                                        </label>
+                                        <input id="uploadFirma" name="uploadFirma"  accept=".p12,.pfx" class="form-control" type="file">
+                                    </div>
+                                    <div class="col-4">
+                                        <label for="txt_passFirma" class="form-label form-label-sm">
+                                        <h6><strong>2) Clave de la Firma:</strong></h6>
+                                        </label>
+                                        <input type="text" class="form-control" name="txt_passFirma" id="txt_passFirma" value="" placeholder="" required>                                        
+                                    </div>                                    
+                                    <div class="col-lg-12">
+                                        <h6><strong>3) Documentos a firmar: </strong></h6>
+                                        <input id="uploadPDF" name="uploadPDF" class="form-control" type="file" accept="application/pdf">
+                                    </div>                                           
+                                </div>
                                     <div class="row">                                
                                         <div class="col-12 col-lg-12">
                                             <div class="card">
                                                 <div class="card-body">
-                                                    <div class="row">	 
-                                                        <div class="col-lg-12">
-                                                            <input id="uploadPDF" name="uploadPDF" class="form-control" type="file" accept="application/pdf">
-                                                        </div>  
+                                                    <div class="row">	  
                                                         <div class="col-lg-12">
                                                             <br>
                                                             <h3><b>Vista previa del pdf</b></h3>
@@ -85,15 +126,15 @@
                                                         </div>
                                                         <div class="col-lg-12" id="vista_previa" style="display:none">
                                                             <div id="paginationControls" class="text-end">
-                                                                <button type="button" id="prevPage2">Página Anterior</button>
+                                                                <button type="button" class="btn btn-primary btn-sm" id="prevPage2"> <b><</b> </button>
                                                                 <span id="pageNumber2"></span> de <span id="totalPages2"></span>
-                                                                <button type="button" id="nextPage2">Página Siguiente</button>
+                                                                <button type="button" class="btn btn-primary btn-sm" id="nextPage2"> <b>></b> </button>
                                                             </div>
                                                             <div id="pdfContainer" style="text-align: center;"></div>
                                                             <div id="paginationControls" class="text-end">
-                                                                <button type="button" id="prevPage">Página Anterior</button>
+                                                                <button type="button" class="btn btn-primary btn-sm" id="prevPage"><b><</b></button>
                                                                 <span id="pageNumber"></span> de <span id="totalPages"></span>
-                                                                <button type="button" id="nextPage">Página Siguiente</button>
+                                                                <button type="button" class="btn btn-primary btn-sm" id="nextPage"><b>></b></button>
                                                             </div>
 
                                                             <!-- Imagen del cursor personalizada -->
@@ -103,48 +144,20 @@
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>  
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-12 col-lg-3">
-                        <div class="card">
-                            <div class="card-body">
-                                <div class="row mt-3">
-                                    <div class="col-12 col-lg-12">
-                                        <div class="card shadow-none">
-                                            <div class="card-body" id="validar_form">
-                                                <section class="bg-secondary bg-opacity-25 mb-2">
-                                                    <div class="p-3">
-                                                        <label for="txt_nombreSala" class="form-label form-label-sm">
-                                                            <h6><strong>2) Seleccione Firma (.p12):</strong></h6>
-                                                        </label>
-                                                        <input type="text" class="form-control" name="txt_nombreSala" id="txt_nombreSala" value="" placeholder="" required>
-                                                    </div>
-                                                </section>
-                                                <section class="bg-secondary bg-opacity-25 mb-2">
-                                                    <div class="p-3">
-                                                        <label for="txt_descripcionSala" class="form-label form-label-sm">
-                                                            <h6><strong>3) Clave de la Firma:</strong></h6>
-                                                        </label>
-                                                        <input type="text" class="form-control" name="txt_descripcionSala" id="txt_descripcionSala" value="" placeholder="" required>
-                                                    </div>
-                                                </section>
-                                                <section class="bg-secondary bg-opacity-25 mb-4">
+                                        <div class="row">
+                                             <section class="bg-secondary bg-opacity-25 mb-4">
                                                     <div class="d-grid gap-2 p-3">                                                  
                                                         <button type="button" class="btn btn-dark" name="btn_firmantes" id="btn_firmantes">
                                                             <i class='bx bxs-user-plus'></i>Firmar documento
                                                         </button>
-                                                        <button type="button" onclick="NumFirmas()">Página Siguiente</button>
+                                                        <!-- <button type="button" onclick="NumFirmas()">Página Siguiente</button> -->
                                                     </div>
-                                                </section>                                            
-                                            </div>
+                                                </section>                                                       
                                         </div>
-                                    </div>
-                                </div>
+                                    </div>  
                             </div>
                         </div>
-                    </div>
+                    </div>                    
                 </div>
 
         </form>
@@ -263,6 +276,8 @@ canvas.addEventListener('click', function(event) {
     }
 });
 
+
+
 // Función para insertar una imagen
 function insertImage(x, y, pageNumber) {
     let img = new Image();
@@ -273,15 +288,21 @@ function insertImage(x, y, pageNumber) {
         let width = (150 * 96) / 72;   // Convierte el ancho de puntos a píxeles
         let height = (50 * 96) / 72;
 
-          let xLeft = x - width / 2;
-        let yTop = y - height / 2;
+        // let xLeft = x - width / 2;
+        // let yTop = y - height / 2;
+
+
+        let xLeft = x;
+        let yTop = y ;
+
 
         // Dibuja la imagen en las coordenadas calculadas
         ctx.drawImage(img, xLeft, yTop, width, height);
 
         ctx.strokeStyle = 'red';  // Puedes cambiar el color del borde
-        ctx.lineWidth = 2;        // Puedes ajustar el grosor del borde
-        ctx.strokeRect(x - width / 2, y - height / 2, width, height);  // Dibuja el borde
+        ctx.lineWidth = 1;        // Puedes ajustar el grosor del borde
+        // ctx.strokeRect(x - width / 2, y - height / 2, width, height);  // Dibuja el borde
+        ctx.strokeRect(x,y, width, height);  // Dibuja el borde
 
 
         // Guardar la imagen y sus coordenadas con el nuevo tamaño
@@ -335,6 +356,12 @@ function reinsertImages(pageNumber) {
             image.onload = function() {
                 // Usa las dimensiones almacenadas
                 ctx.drawImage(image, img.x, img.y, img.width, img.height);
+
+                ctx.strokeStyle = 'red';  // Puedes cambiar el color del borde
+                ctx.lineWidth = 1;        // Puedes ajustar el grosor del borde
+                // ctx.strokeRect(x - width / 2, y - height / 2, width, height);  // Dibuja el borde
+                ctx.strokeRect(img.x, img.y, img.width, img.height);  // Dibuja el borde
+
             };
         }
 
