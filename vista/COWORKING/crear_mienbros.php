@@ -1,6 +1,13 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.4/xlsx.full.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.19/jspdf.plugin.autotable.min.js"></script>
+<?php
+// Para una solicitud POST
+$id_compra = isset($_POST['id_compra']) ? $_POST['id_compra'] : null;
+
+// Para una solicitud GET
+$id_compra = isset($_GET['id_compra']) ? $_GET['id_compra'] : null;
+?>
 
 <div class="page-wrapper">
     <div class="page-content">
@@ -184,7 +191,7 @@
                                     <div class="modal-body">
                                         <form id="formulario_compras">
                                             <div class="row mb-3">
-                                                <input type="hidden" name="id_compra" id="id_compra" class="form-control" value="<?php echo htmlspecialchars($id_compra); ?>" readonly>
+                                            
                                                 <input type="hidden" name="id_miembro" id="id_miembro" class="form-control" value="<?php echo htmlspecialchars($id_miembro); ?>" readonly>
                                                 <div class="col-md-3">
                                                     <label for="txt_producto" class="form-label"><strong>Producto:</strong></label>
@@ -320,7 +327,7 @@
 
     function enviarCompras() {
         var parametros = {
-            'id_compra': $('#id_compra').val(),
+            
             'id_miembro': $('#id_miembro').val(),
             'id_producto': $('#txt_producto').val(),
             'cantidad_compra': $('#txt_cantidad').val(),

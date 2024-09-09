@@ -44,16 +44,20 @@ class crear_mienbrosM
         $total_compra = isset($parametros['total_compra']) ? floatval($parametros['total_compra']) : null;
         $id_miembro = isset($parametros['id_miembro']) ? intval($parametros['id_miembro']) : null;
     
-        if (empty($id_miembro) || empty($id_producto) || empty($cantidad_compra) || empty($pvp_compra) || empty($total_compra)) {
+        if (empty($cantidad_compra) || empty($id_producto) || empty($pvp_compra) || empty($total_compra) || empty($id_miembro)) {
             return "Error: Campos vacíos";
         }
     
-        $sql = "INSERT INTO co_compra (cantidad_compra, id_producto, pvp_compra, total_compra, id_miembro)
-                VALUES ('$cantidad_compra', '$id_producto', '$pvp_compra', '$total_compra', '$id_miembro')";
+        // Construye la consulta SQL con placeholders
+        $sql = "INSERT INTO co_compra (cantidad_compra, id_producto, pvp_compra, total_compra, id_miembro) 
+                VALUES ($cantidad_compra, $id_producto, $pvp_compra, $total_compra, $id_miembro)";
+    
+        // Ejecuta la consulta
         $resp = $this->db->sql_string($sql);
     
         return $resp;
     }
+    
     
 
     function compraslista()
@@ -61,7 +65,7 @@ class crear_mienbrosM
         $sql = "SELECT 
                 miembro.id_miembro,  
                 miembro.nombre_miembro,
-                compra.id_compra, 
+                compra.id_compra AS id_compra, 
                 compra.id_producto, 
                 compra.cantidad_compra, 
                 compra.pvp_compra, 
@@ -85,13 +89,7 @@ class crear_mienbrosM
     
         return $resultado == 1 ? "Miembro eliminado con éxito" : "Error al eliminar el miembro";
     }
-    
-    
-    
-    
-    
-    
-    
+
     function eliminar_compra($id_compra)
     {
         if (empty($id_compra)) {
@@ -112,7 +110,6 @@ class crear_mienbrosM
         
         $sql = "SELECT COUNT(*) AS total FROM co_compra WHERE id_miembro = $id_miembro";
         
-        
         $result = $this->db->datos($sql);
         
         // Comprobar el resultado de la consulta
@@ -122,8 +119,6 @@ class crear_mienbrosM
     
         return false;
     }
-    
-    
-    
-}    
+}
 ?>
+
