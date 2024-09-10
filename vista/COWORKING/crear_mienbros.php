@@ -145,7 +145,7 @@
                                             <input type="text" class="form-control" id="txt_total_servicio" name="txt_total_servicio" readonly>
                                         </div>
                                         <div class="col-md-3 d-flex align-items-end ms-auto">
-                                            <button style="margin-top: 20px;" type="button" onclick="enviarServicio()" class="btn btn-primary w-100 btn-margin-top" id="btn_agregar_servicio">
+                                            <button style="margin-top: 20px;" type="button" onclick="enviarComprassala()" class="btn btn-primary w-100 btn-margin-top" id="btn_agregar_servicio">
                                                 <i class='bx bx-cart'></i> <strong>Agregar Servicio</strong>
                                             </button>
                                         </div>
@@ -162,7 +162,7 @@
                                                 <th>Eliminar</th>
                                             </tr>
                                         </thead>
-                                        <tbody id="tbl_body_servicios">
+                                        <tbody id="tbl_body_servicio">
                                         </tbody>
                                     </table>
                                 </form>
@@ -285,6 +285,17 @@
         });
     }
 
+    function lista_comprassala() {       
+        $.ajax({
+            url: '../controlador/COWORKING/crear_mienbrosC.php?lista_comprasala=true',
+            type: 'post',
+            dataType: 'json', 
+            success: function(response) {  
+                $('#tbl_body_servicio').html(response);
+                console.log(response);
+            }       
+        });
+    }
     function enviardatos() {
     var parametros = {
         'nombre_miembro': $('#txt_nombre').val(),
@@ -327,7 +338,7 @@
         var parametros = {
             
             'id_miembro': $('#id_miembro').val(),
-            'id_producto': $('#txt_producto').val(),
+            'id_producto': $('#txt_productos').val(),
             'cantidad_compra': $('#txt_cantidad').val(),
             'pvp_compra': $('#txt_precio').val(),
             'total_compra': $('#txt_total').val(),
@@ -348,6 +359,44 @@
                 }).then(() => {
                     lista_compra(); 
                     $('#formulario_compras')[0].reset(); 
+                });
+            } else {
+                
+                Swal.fire({
+                    title: 'Error al agregar el compra',
+                    icon: 'error',
+                    confirmButtonText: 'Aceptar'
+                });
+            }
+        }
+    });
+}
+
+function enviarComprassala() {
+        var parametros = {
+            
+            
+            'id_producto': $('#txt_productos').val(),
+            'cantidad_compra': $('#txt_cantidad_servicio').val(),
+            'pvp_compra': $('#txt_precios').val(),
+            'total_compra': $('#txt_total_servicio').val(),
+            'id_sala': $('#did_sala').val()
+        };
+
+        $.ajax({
+            data: {data: parametros},
+            url: '../controlador/COWORKING/crear_mienbrosC.php?add_compra=true',
+            type: 'post',
+            dataType: 'json',
+            success: function(response) {  
+                if (response == 1) {
+                    Swal.fire({
+                    title: 'Compra agregada con éxito',
+                    icon: 'success',
+                    confirmButtonText: 'Aceptar'
+                }).then(() => {
+                    lista_comprassala(); 
+                    $('#formulario_servicios')[0].reset(); 
                 });
             } else {
                 
