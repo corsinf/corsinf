@@ -15,6 +15,10 @@ if (isset($_GET['insertar'])) {
     echo json_encode($controlador->insertar_editar($_POST['parametros']));
 }
 
+if (isset($_GET['eliminar'])) {
+    echo json_encode($controlador->eliminar($_POST['id']));
+}
+
 
 class th_postulantesC
 {
@@ -39,9 +43,6 @@ class th_postulantesC
 
     function insertar_editar($parametros)
     {
-        $datos1[0]['campo'] = 'th_pos_id';
-        $datos1[0]['dato'] = strval($parametros['txt_primer_nombre']);
-
         $datos = array(
             array('campo' => 'th_pos_primer_nombre', 'dato' => $parametros['txt_primer_nombre']),
             array('campo' => 'th_pos_segundo_nombre', 'dato' => $parametros['txt_segundo_nombre']),
@@ -57,8 +58,32 @@ class th_postulantesC
             array('campo' => 'th_pos_correo', 'dato' => $parametros['txt_correo']),
 
         );
-        $datos = $this->modelo->insertar($datos);
+
+        if ($parametros['_id'] == '') {
+            if (count($this->modelo->where('th_pos_cedula', $parametros['txt_numero_cedula'])->listar()) == 0) {
+                $datos = $this->modelo->insertar($datos);
+            } else {
+                return -2;
+            }
+        } else {
+            $where[0]['campo'] = 'th_pos_id';
+            $where[0]['dato'] = $parametros['_id'];
+            $datos = $this->modelo->editar($datos, $where);
+        }
+
         return $datos;
-        return ($parametros);
+    }
+
+    function eliminar($id)
+    {
+        $datos = array(
+            array('campo' => 'th_pos_estado', 'dato' => 0),
+        );
+
+        $where[0]['campo'] = 'th_pos_id';
+        $where[0]['dato'] = $id;
+
+        $datos = $this->modelo->eliminar($datos, $where);
+        return $datos;
     }
 }

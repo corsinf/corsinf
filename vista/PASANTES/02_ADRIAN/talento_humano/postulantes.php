@@ -1,3 +1,9 @@
+<?php
+$modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
+
+
+?>
+
 <script src="../js/ENFERMERIA/operaciones_generales.js"></script>
 <script>
     $(document).ready(function() {
@@ -11,15 +17,17 @@
                 dataSrc: ''
             },
             columns: [{
-                    data: 'th_pos_id',
+                    data: null,
                     render: function(data, type, item) {
-                        return '<a href="../vista/inicio.php?mod=1010&acc=informacion_personal&id=' + item.th_pos_id + '" class="btn btn-sm btn-primary"><i class="bx bxs-user-pin bx-sm me-0"></i></a>'
+                        href = `../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=informacion_personal&id=${item._id}`;
+                        return `<a href="${href}" class="btn btn-sm btn-primary"><i class="bx bxs-user-pin bx-sm me-0"></i></a>`;
                     }
                 },
                 {
                     data: null,
                     render: function(data, type, item) {
-                        return '<a href="../vista/inicio.php?mod=1010&acc=registrar_postulantes&id=' + item.th_pos_id + '"><u>' + item.th_pos_primer_apellido + ' ' + item.th_pos_segundo_apellido + ' ' + item.th_pos_primer_nombre + '</u></a>';
+                        href = `../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=registrar_postulantes&id=${item._id}`;
+                        return `<a href="${href}"><u>` + item.th_pos_primer_apellido + ` ` + item.th_pos_segundo_apellido + ` ` + item.th_pos_primer_nombre + `</u></a>`;
                     }
                 },
                 {
@@ -75,7 +83,7 @@
 
                             <div class="row mx-1">
                                 <div class="col-12">
-                                    <a href="../vista/inicio.php?mod=1010&acc=registrar_postulantes" class="btn btn-sm btn-success d-flex align-items-center"><i class="bx bx-plus me-1"></i><span>Nuevo</span></a>
+                                    <a href="../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=registrar_postulantes" class="btn btn-sm btn-success d-flex align-items-center"><i class="bx bx-plus me-1"></i><span>Nuevo</span></a>
                                 </div>
                             </div>
                         </div>

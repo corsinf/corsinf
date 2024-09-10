@@ -1,9 +1,11 @@
 <?php
+$modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
 
-$id = '';
+
+$_id = '';
 
 if (isset($_GET['id'])) {
-    $id = $_GET['id'];
+    $_id = $_GET['id'];
 }
 
 ?>
@@ -12,15 +14,14 @@ if (isset($_GET['id'])) {
 
 <script type="text/javascript">
     $(document).ready(function() {
-        var id = '<?= $id ?>';
-        //alert(id)
+        <?php if (isset($_GET['id'])) { ?>
+            cargarDatos(<?= $_id ?>);
+        <?php } ?>
 
-        if (id != '') {
-            cargarDatos_informacion_personal(id);
-        }
+
     });
 
-    function cargarDatos_informacion_personal(id) {
+    function cargarDatos(id) {
         $.ajax({
             url: '../controlador/PASANTES/02_ADRIAN/talento_humano/th_postulantesC.php?listar=true',
             type: 'post',
@@ -44,42 +45,7 @@ if (isset($_GET['id'])) {
                 $('#txt_correo').val(response[0].th_pos_correo);
                 console.log(response);
             },
-            error: function(jqXHR, textStatus, errorThrown) {
-                // Manejo de errores
-                console.error('Error al cargar la informacion:', textStatus, errorThrown);
-                $('#pnl_config_general').append('<p>Error al cargar información. Por favor, inténtalo de nuevo más tarde.</p>');
-            }
         });
-    }
-</script>
-
-
-<script>
-    var form_valido;
-
-    function validar() {
-        'use strict'
-
-        var forms = document.querySelectorAll('.needs-validation');
-
-        Array.prototype.slice.call(forms)
-            .forEach(function(form) {
-                form.addEventListener('click', function(event) {
-                    if (!form.checkValidity()) {
-                        form_valido = false;
-                        event.stopPropagation();
-                        console.log("Nada");
-                    } else {
-                        form_valido = true;
-                    }
-
-                    form.classList.add('was-validated');
-                }, false);
-            });
-
-        if (form_valido) {
-            insertar_editar();
-        }
     }
 
     function insertar_editar() {
@@ -99,6 +65,7 @@ if (isset($_GET['id'])) {
 
 
         var parametros_informacion_personal = {
+            '_id': '<?= $_id ?>',
             'txt_primer_nombre': txt_primer_nombre,
             'txt_segundo_nombre': txt_segundo_nombre,
             'txt_primer_apellido': txt_primer_apellido,
@@ -131,11 +98,47 @@ if (isset($_GET['id'])) {
             success: function(response) {
                 if (response == 1) {
                     Swal.fire('', 'Operacion realizada con exito.', 'success').then(function() {
-                        //location.href = '../vista/inicio.php?mod=7&acc=estudiantes';
+                        location.href = '../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=postulantes';
+
 
                     });
                 } else if (response == -2) {
                     Swal.fire('', 'Operación fallida', 'warning');
+                }
+            }
+        });
+    }
+
+    function delete_datos() {
+        var id = '<?php echo $_id; ?>';
+        Swal.fire({
+            title: 'Eliminar Registro?',
+            text: "Esta seguro de eliminar este registro?",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Si'
+        }).then((result) => {
+            if (result.value) {
+                eliminar(id);
+            }
+        })
+    }
+
+    function eliminar(id) {
+        $.ajax({
+            data: {
+                id: id
+            },
+            url: '../controlador/PASANTES/02_ADRIAN/talento_humano/th_postulantesC.php?eliminar=true',
+            type: 'post',
+            dataType: 'json',
+            success: function(response) {
+                if (response == 1) {
+                    Swal.fire('Eliminado!', 'Registro Eliminado.', 'success').then(function() {
+                        location.href = '../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=postulantes';
+                    });
                 }
             }
         });
@@ -169,10 +172,18 @@ if (isset($_GET['id'])) {
                         <div class="card-title d-flex align-items-center">
                             <div><i class="bx bxs-id-card me-1 font-24 text-primary"></i>
                             </div>
-                            <h5 class="mb-0 text-primary">Registrar Postulantes</h5>
+                            <h5 class="mb-0 text-primary">
+                                <?php
+                                if ($_id == '') {
+                                    echo 'Registrar Postulante';
+                                } else {
+                                    echo 'Modificar Postulante';
+                                }
+                                ?>
+                            </h5>
                             <div class="row m-2">
                                 <div class="col-sm-12">
-                                    <a href="../vista/inicio.php?mod=1010&acc=postulantes" class="btn btn-outline-dark btn-sm d-flex align-items-center"><i class="bx bx-arrow-back"></i> Regresar</a>
+                                    <a href="../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=postulantes" class="btn btn-outline-dark btn-sm d-flex align-items-center"><i class="bx bx-arrow-back"></i> Regresar</a>
                                 </div>
                             </div>
                         </div>
@@ -255,8 +266,40 @@ if (isset($_GET['id'])) {
                                     </div>
                                 </div>
                             </div>
-                            <div class="d-flex justify-content-end">
-                                <button type="button" class="btn btn-sm btn-primary d-flex align-items-center px-4 m-1" onclick="validar();"><i class='bx bx-save'></i>Guardar</button>
+                            <div class="col-3" style="display: none;">
+                                <div class="mb-3">
+                                    <label for="ddl_nacionalidad" class="form-label form-label-sm">Nacionalidad <label style="color: red;">*</label></label>
+                                    <select class="form-select form-select-sm" id="ddl_nacionalidad" name="ddl_nacionalidad">
+                                        <option selected disabled value="">-- Selecciona una Nacionalidad --</option>
+                                        <option value="Ecuatoriano">Ecuatoriano</option>
+                                        <option value="Colombiano">Colombiano</option>
+                                        <option value="Peruano">Peruano</option>
+                                        <option value="Venezolano">Venezolano</option>
+                                        <option value="Paraguayo">Paraguayo</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-3" style="display: none;">
+                                <div class="mb-3">
+                                    <label for="ddl_estado_civil" class="form-label form-label-sm">Estado civil <label style="color: red;">*</label></label>
+                                    <select class="form-select form-select-sm" id="ddl_estado_civil" name="ddl_estado_civil">
+                                        <option selected disabled value="">-- Selecciona un Estado Civil --</option>
+                                        <option value="Soltero">Soltero/a</option>
+                                        <option value="Casado">Casado/a</option>
+                                        <option value="Divorciado">Divorciado/a</option>
+                                        <option value="Viudo">Viudo/a</option>
+                                        <option value="Union">Unión de hecho</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="d-flex justify-content-end pt-2">
+
+                                <?php if ($_id == '') { ?>
+                                    <button class="btn btn-primary btn-sm px-4 m-0 d-flex align-items-center" onclick="insertar_editar();" type="button"><i class="bx bx-save"></i> Guardar</button>
+                                <?php } else { ?>
+                                    <button class="btn btn-primary btn-sm px-4 m-1 d-flex align-items-center" onclick="insertar_editar();" type="button"><i class="bx bx-save"></i> Guardar</button>
+                                    <button class="btn btn-danger btn-sm px-4 m-1 d-flex align-items-center" onclick="delete_datos()" type="button"><i class="bx bx-trash"></i> Eliminar</button>
+                                <?php } ?>
                             </div>
                         </form>
                     </div>

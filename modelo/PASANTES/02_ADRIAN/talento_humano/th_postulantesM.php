@@ -5,7 +5,7 @@ require_once(dirname(__DIR__,2).'/BaseModel.php');
 class th_postulantesM extends BaseModel
 {
     protected $tabla = 'th_postulantes';
-    protected $primaryKey = 'th_pos_id';
+    protected $primaryKey = 'th_pos_id AS _id';
 
     protected $camposPermitidos = [
         'th_pos_primer_nombre',

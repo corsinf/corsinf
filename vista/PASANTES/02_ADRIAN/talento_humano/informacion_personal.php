@@ -1,4 +1,6 @@
 <?php
+$modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
+
 
 $id = '';
 
@@ -9,11 +11,9 @@ if (isset($_GET['id'])) {
 ?>
 <script>
     $(document).ready(function() {
-
-        agregar_contacto_emergencia()
-
     });
 
+    //Funciones del formulario
     function cambiar_foto() {
         var btn_elegir_foto = $('#btn_elegir_foto')
         var input_elegir_foto = $('#txt_elegir_foto')
@@ -42,12 +42,10 @@ if (isset($_GET['id'])) {
         var div_aptitudes_blandas = $('#pnl_blandas')
         var div_aptitudes_tecnicas = $('#pnl_tecnicas')
 
-        div_aptitudes_blandas.hide();
-        div_aptitudes_tecnicas.hide();
-
 
         if (select_tipo_aptitudes.val() == 'Blandas') {
             div_aptitudes_blandas.show()
+            div_aptitudes_tecnicas.hide()
             $('#ddl_seleccionar_aptitud_blanda').select2({
                 placeholder: 'Selecciona una opción',
                 dropdownParent: $('#modal_agregar_aptitudes'),
@@ -67,6 +65,7 @@ if (isset($_GET['id'])) {
                 }
             });
         } else if (select_tipo_aptitudes.val() == 'Tecnicas') {
+            div_aptitudes_blandas.hide()
             div_aptitudes_tecnicas.show()
             $('#ddl_seleccionar_aptitud_tecnica').select2({
                 placeholder: 'Selecciona una opción',
@@ -89,78 +88,15 @@ if (isset($_GET['id'])) {
         }
     }
 
-    function agregar_contacto_emergencia() {
-        $('#btn_agregar_contacto_emergencia').on('click', function() {
-            var nueva_aptitud = $('.pnl_contacto_emergencia .row').first().clone();
-
-            nueva_aptitud.find('input').val('');
-
-            $('.pnl_contacto_emergencia').append(nueva_aptitud);
-        });
-    }
 </script>
+
 <script type="text/javascript">
     var form_valido;
     $(document).ready(function() {
-        var id = '<?= $id ?>';
-        //alert(id)
-
-        if (id != '') {
-            cargarDatos_informacion_personal(id);
-        }
+        <?php if (isset($_GET['id'])) { ?>
+            cargarDatos_informacion_personal(<?= $id ?>);
+        <?php } ?>
     });
-
-    function validar_informacion_personal() {
-        'use strict'
-
-        var forms = document.querySelectorAll('.needs-validation');
-
-        Array.prototype.slice.call(forms)
-            .forEach(function(form) {
-                form.addEventListener('click', function(event) {
-                    if (!form.checkValidity()) {
-                        form_valido = false;
-                        event.stopPropagation();
-                    } else {
-                        form_valido = true;
-                    }
-
-                    form.classList.add('was-validated');
-                }, false);
-            });
-
-        if (form_valido) {
-            insertar_editar_informacion_personal()
-        } else {
-            console.log("Nada")
-        }
-    }
-
-    function validar_informacion_contacto() {
-        'use strict'
-
-        var forms = document.querySelectorAll('.needs-validation');
-
-        Array.prototype.slice.call(forms)
-            .forEach(function(form) {
-                form.addEventListener('click', function(event) {
-                    if (!form.checkValidity()) {
-                        form_valido = false;
-                        event.stopPropagation();
-                    } else {
-                        form_valido = true;
-                    }
-
-                    form.classList.add('was-validated');
-                }, false);
-            });
-
-        if (form_valido) {
-            insertar_editar_informacion_contacto()
-        } else {
-            console.log("Nada")
-        }
-    }
 
     function insertar_editar_foto() {
         var txt_elegir_foto = $('#txt_elegir_foto').val();
@@ -193,6 +129,16 @@ if (isset($_GET['id'])) {
                 $('#txt_telefono_1').val(response[0].th_pos_telefono_1);
                 $('#txt_telefono_2').val(response[0].th_pos_telefono_2);
                 $('#txt_correo').val(response[0].th_pos_correo);
+
+                nombres_completos = response[0].th_pos_primer_apellido + ' ' + response[0].th_pos_segundo_apellido + ' ' + response[0].th_pos_primer_nombre + ' ' + response[0].th_pos_segundo_nombre;
+                $('#txt_nombres_completos_v').html(nombres_completos);
+                $('#txt_fecha_nacimiento_v').html(response[0].th_pos_fecha_nacimiento);
+                $('#txt_nacionalidad_v').html(response[0].th_pos_nacionalidad);
+                $('#txt_estado_civil_v').html(response[0].th_pos_estado_civil);
+                $('#txt_numero_cedula_v').html(response[0].th_pos_cedula);
+                $('#txt_telefono_1_v').html(response[0].th_pos_telefono_1);
+                $('#txt_correo_v').html(response[0].th_pos_correo);
+
                 console.log(response);
             }
         });
@@ -215,6 +161,7 @@ if (isset($_GET['id'])) {
 
 
         var parametros_informacion_personal = {
+            '_id': '<?= $id ?>',
             'txt_primer_nombre': txt_primer_nombre,
             'txt_segundo_nombre': txt_segundo_nombre,
             'txt_primer_apellido': txt_primer_apellido,
@@ -247,9 +194,11 @@ if (isset($_GET['id'])) {
             success: function(response) {
                 if (response == 1) {
                     Swal.fire('', 'Operacion realizada con exito.', 'success').then(function() {
-                        //location.href = '../vista/inicio.php?mod=7&acc=estudiantes';
 
                     });
+                    <?php if (isset($_GET['id'])) { ?>
+                        cargarDatos_informacion_personal(<?= $id ?>);
+                    <?php } ?>
                 } else if (response == -2) {
                     Swal.fire('', 'Operación fallida', 'warning');
                 }
@@ -545,7 +494,7 @@ if (isset($_GET['id'])) {
                                                 <h6 class="fw-bold">Nombre Completo</h6>
                                             </div>
                                             <div class="col-6 d-flex align-items-center">
-                                                <p>Adrian Acuña Estrada</p>
+                                                <p id="txt_nombres_completos_v"></p>
                                             </div>
                                         </div>
                                         <div class="row mb-2">
@@ -553,23 +502,47 @@ if (isset($_GET['id'])) {
                                                 <h6 class="fw-bold">Fecha de Nacimiento</h6>
                                             </div>
                                             <div class="col-6 d-flex align-items-center">
-                                                <p>2002-10-07</p>
+                                                <p id="txt_fecha_nacimiento_v"></p>
                                             </div>
                                         </div>
-                                        <div class="row">
+                                        <div class="row mb-2">
                                             <div class="col-6">
                                                 <h6 class="fw-bold">Nacionalidad</h6>
                                             </div>
                                             <div class="col-6 d-flex align-items-center">
-                                                <p>Ecuatoriano</p>
+                                                <p id="txt_nacionalidad_v"></p>
                                             </div>
                                         </div>
-                                        <div class="row">
+                                        <div class="row mb-2">
+                                            <div class="col-6">
+                                                <h6 class="fw-bold">Número de Cédula</h6>
+                                            </div>
+                                            <div class="col-6 d-flex align-items-center">
+                                                <p id="txt_numero_cedula_v"></p>
+                                            </div>
+                                        </div>
+                                        <div class="row mb-2">
                                             <div class="col-6">
                                                 <h6 class="fw-bold">Estado Civil</h6>
                                             </div>
                                             <div class="col-6 d-flex align-items-center">
-                                                <p>Soltero</p>
+                                                <p id="txt_estado_civil_v">Soltero</p>
+                                            </div>
+                                        </div>
+                                        <div class="row mb-2">
+                                            <div class="col-6 d-flex align-items-center">
+                                                <h6 class="fw-bold">Teléfono</h6>
+                                            </div>
+                                            <div class="col-6 d-flex align-items-center">
+                                                <p id="txt_telefono_1_v"></p>
+                                            </div>
+                                        </div>
+                                        <div class="row mb-2">
+                                            <div class="col-6">
+                                                <h6 class="fw-bold">Correo Electrónico</h6>
+                                            </div>
+                                            <div class="col-6 d-flex align-items-center">
+                                                <p id="txt_correo_v"></p>
                                             </div>
                                         </div>
                                     </div>
@@ -582,15 +555,15 @@ if (isset($_GET['id'])) {
                                     <div class="mt-3">
                                         <div class="row">
                                             <div class="col-10">
-                                                <h5 class="fw-bold text-primary">Información de Contacto</h5>
+                                                <h5 class="fw-bold text-primary">Información Adicional</h5>
                                             </div>
                                             <div class="col-2">
-                                                <a href="#" data-bs-toggle="modal" data-bs-target="#modal_informacion_contacto">
+                                                <a href="#" data-bs-toggle="modal" data-bs-target="#modal_informacion_adicional">
                                                     <i class='text-dark bx bx-pencil bx-sm'></i></a>
                                             </div>
                                         </div>
                                         <hr />
-                                        <div class="row">
+                                        <div class="row mb-3">
                                             <div class="col-6 d-flex align-items-center">
                                                 <h6 class="fw-bold">Dirección</h6>
                                             </div>
@@ -598,28 +571,21 @@ if (isset($_GET['id'])) {
                                                 <p>Profeta Miqueas, OE11A, Quito, Pichincha, 07173</p>
                                             </div>
                                         </div>
+
                                         <div class="row">
-                                            <div class="col-6 d-flex align-items-center">
-                                                <h6 class="fw-bold">Teléfono</h6>
+                                            <div class="col-9">
+                                                <h5 class="fw-bold text-primary">Contacto de Emergencia</h5>
                                             </div>
-                                            <div class="col-6 d-flex align-items-center">
-                                                <p>2002-10-07</p>
+                                            <div class="col-3 d-flex justify-content-end">
+                                                <button class="btn btn-sm btn-outline-dark" data-bs-toggle="modal" data-bs-target="#modal_contacto_emergencia"><i class='bx bx-plus bx-xs me-0'></i></button>
                                             </div>
                                         </div>
+                                        <hr>
                                         <div class="row">
-                                            <div class="col-6">
-                                                <h6 class="fw-bold">Correo Electrónico</h6>
-                                            </div>
-                                            <div class="col-6 d-flex align-items-center">
-                                                <p>Ecuatoriano</p>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-6">
-                                                <h6 class="fw-bold">Contacto de Emergencia</h6>
-                                            </div>
                                             <div class="col-6">
                                                 <p class="my-0">Adrian Acuña</p>
+                                            </div>
+                                            <div class="col-6">
                                                 <p>09914654645</p>
                                             </div>
                                         </div>
@@ -1115,7 +1081,7 @@ if (isset($_GET['id'])) {
                     </div>
                 </div>
                 <div class="modal-footer d-flex justify-content-center">
-                    <button type="button" class="btn btn-success btn-sm" id="btn_guardar_informacion_personal" onclick="validar_informacion_personal();">Guardar</button>
+                    <button type="button" class="btn btn-success btn-sm" id="btn_guardar_informacion_personal" onclick="insertar_editar_informacion_personal();">Guardar</button>
                 </div>
             </form>
         </div>
@@ -1124,7 +1090,7 @@ if (isset($_GET['id'])) {
 
 
 <!-- Modal para la informacion contactos -->
-<div class="modal" id="modal_informacion_contacto" tabindex="-1" aria-modal="true" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
+<div class="modal" id="modal_informacion_adicional" tabindex="-1" aria-modal="true" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
     <div class="modal-dialog modal-dialog-centered modal-xl">
         <div class="modal-content">
 
@@ -1167,16 +1133,42 @@ if (isset($_GET['id'])) {
                                 <label for="txt_direccion_postal" class="form-label form-label-sm">Código Postal <label style="color: red;">*</label></label>
                                 <div class="row">
                                     <div class="col-11 me-0">
-                                        <input type="text" class="form-control form-control-sm" name="txt_direccion_postal" id="txt_direccion_postal" placeholder="Escriba su código postal o de click en 'Obtener'" required>
+                                        <input type="text" class="form-control form-control-sm locationResult" name="txt_direccion_postal" id="txt_direccion_postal" placeholder="Escriba su código postal o de click en 'Obtener'">
+                                    </div>
+                                    <div class="col-11 me-0">
+                                        <a id="locationResult" target="_blank"></a>
+                                        <p id="postalCodeResult"></p>
+                                        <input type="text" class="form-control form-control-sm locationResult" name="txt_direccion_postal" id="txt_direccion_postal" placeholder="Escriba su código postal o de click en 'Obtener'">
                                     </div>
                                     <div class="col-1 d-flex justify-content-start">
-                                        <button class="btn btn-sm btn-outline-primary">Obtener</button>
+                                        <button type="button" class="btn btn-sm btn-outline-primary" id="getLocation">Obtener</button>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <hr>
+                </div>
+                <div class="modal-footer d-flex justify-content-center">
+                    <button type="button" class="btn btn-success btn-sm" id="btn_guardar_informacion_contacto" onclick="validar_informacion_contacto();">Guardar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Modal para los contactos de Emergencia -->
+<div class="modal" id="modal_contacto_emergencia" tabindex="-1" aria-modal="true" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog modal-dialog-centered modal-xl">
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h5><small class="text-body-secondary">Ingrese sus datos de contacto</small></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <!-- Modal body -->
+            <form class="needs-validation">
+                <div class="modal-body">
                     <p class="fw-bold my-0 mb-2">Contacto de Emergencia:</p>
                     <div class="pnl_contacto_emergencia">
                         <div class="row">
@@ -1194,10 +1186,9 @@ if (isset($_GET['id'])) {
                             </div>
                         </div>
                     </div>
-                    <button class="btn btn-sm btn-primary mb-2 d-flex align-items-center" id="btn_agregar_contacto_emergencia"><i class='bx bx-list-plus me-0'></i>Añadir otro contacto</button>
                 </div>
                 <div class="modal-footer d-flex justify-content-center">
-                    <button type="button" class="btn btn-success btn-sm" id="btn_guardar_informacion_contacto" onclick="validar_informacion_contacto();">Guardar</button>
+                    <button type="button" class="btn btn-success btn-sm" id="btn_guardar_informacion_contacto" onclick="">Guardar</button>
                 </div>
             </form>
         </div>
