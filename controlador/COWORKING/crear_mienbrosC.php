@@ -221,21 +221,13 @@ class crear_mienbrosC
 
     function verificar_compras($id_miembro)
     {
-        $compras = $this->modelo->verificar_compras($id_miembro);
-        $total_compra = 0;
-        $response = '';
-
-        foreach ($compras as $compra) {
-            $total_compra += floatval($compra['total_compra']);
+        try {
+            $tiene_compras = $this->modelo->tiene_compras($id_miembro);
+            return json_encode(['tiene_compras' => $tiene_compras]);
+        } catch (Exception $e) {
+            error_log('Error en verificar_compras: ' . $e->getMessage());
+            return json_encode(['error' => 'Error al verificar las compras del miembro']);
         }
-
-        if ($total_compra > 0) {
-            $response = 'Total compra: $' . number_format($total_compra, 2);
-        } else {
-            $response = 'No hay compras registradas.';
-        }
-
-        return $response;
     }
 }
 

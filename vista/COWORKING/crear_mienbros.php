@@ -485,63 +485,86 @@
     }
 
     function eliminarMiembro(id_miembro) {
-        $.ajax({
-            url: '../controlador/COWORKING/crear_mienbrosC.php',
-            type: 'POST',
-            data: { id_miembro: id_miembro, action: 'verificar_compras' },
-            dataType: 'json',
-            success: function(response) {
-                console.log('Respuesta de verificar_compras:', response);
+    // Primero, verifica si el miembro tiene compras asociadas
+    $.ajax({
+        url: '../controlador/COWORKING/crear_mienbrosC.php',
+        type: 'POST',
+        data: { id_miembro: id_miembro, action: 'verificar_compras' },
+        dataType: 'json',
+        success: function(response) {
+            console.log('Respuesta de verificar_compras:', response);
 
-                if (response.error) {
-                    Swal.fire({
-                        title: 'Error',
-                        text: response.error,
-                        icon: 'error',
-                        confirmButtonText: 'Entendido'
-                    });
-                    return;
-                }
-
-                if (response.tiene_compras) {
-                    Swal.fire({
-                        title: 'Esta persona tiene compras agregadas y no se puede eliminar',
-                        icon: 'warning',
-                        confirmButtonText: 'Entendido'
-                    });
-                } else {
-                    Swal.fire({
-                        title: '¿Estás seguro?',
-                        text: "Esta acción eliminará al miembro seleccionado.",
-                        icon: 'warning',
-                        showCancelButton: true,
-                        confirmButtonText: 'Sí, eliminar',
-                        cancelButtonText: 'Cancelar'
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            $.ajax({
-                                url: '../controlador/COWORKING/crear_mienbrosC.php?eliminar_miembro=true',
-                                type: 'POST',
-                                data: { id_miembro: id_miembro },
-                                dataType: 'json',
-                                success: function(response) {
-                                    console.log('Respuesta de eliminar_miembro:', response);
-
-                                    if (response === "Miembro eliminado con éxito") {
-                                        $('#row-miembro-' + id_miembro).remove();
-                                        Swal.fire('Eliminado', 'Miembro eliminado con éxito', 'success');
-                                        lista_usuario();
-                                    } else {
-                                        Swal.fire('Error', 'Error al eliminar el miembro', 'error');
-                                    }
-                                }
-                            });
-                        }
-                    });
-                }
+            if (response.error) {
+                Swal.fire({
+                    title: 'Error',
+                    text: response.error,
+                    icon: 'error',
+                    confirmButtonText: 'Entendido'
+                });
+                return;
             }
-        });
-    }
+
+            if (response.tiene_compras) {
+                Swal.fire({
+                    title: 'Advertencia',
+                    text: 'Este miembro tiene compras asociadas y no puede ser eliminado.',
+                    icon: 'warning',
+                    confirmButtonText: 'Entendido'
+                });
+            } else {
+                // Si no tiene compras, solicita confirmación para eliminar el miembro
+                Swal.fire({
+                    title: 'Confirmación',
+                    text: '¿Estás seguro de que quieres eliminar a este miembro?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Sí, eliminar',
+                    cancelButtonText: 'Cancelar'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // Si el usuario confirma, procede con la eliminación
+                        $.ajax({
+                            url: '../controlador/COWORKING/crear_mienbrosC.php',
+                            type: 'POST',
+                            data: { id_miembro: id_miembro, action: 'eliminar_miembro' },
+                            dataType: 'json',
+                            success: function(response) {
+                                console.log('Respuesta de eliminar_miembro:', response);
+
+                                if (response.status === 'success') {
+                                    $('#row-miembro-' + id_miembro).remove();
+                                    Swal.fire('Eliminado', 'Miembro eliminado con éxito', 'success');
+                                    lista_usuario();
+                                } else {
+                                    Swal.fire('Error', 'Error al eliminar el miembro', 'error');
+                                }
+                            },
+                            error: function(jqXHR, textStatus, errorThrown) {
+                                console.error('Error en la solicitud de eliminación:', textStatus, errorThrown);
+                                Swal.fire({
+                                    title: 'Error',
+                                    text: 'Ocurrió un problema al eliminar el miembro. Por favor, inténtalo de nuevo.',
+                                    icon: 'error',
+                                    confirmButtonText: 'Aceptar'
+                                });
+                            }
+                        });
+                    }
+                });
+            }
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            console.error('Error en la solicitud de verificación:', textStatus, errorThrown);
+            Swal.fire({
+                title: 'Error',
+                text: 'Ocurrió un problema al verificar el miembro. Por favor, inténtalo de nuevo.',
+                icon: 'error',
+                confirmButtonText: 'Aceptar'
+            });
+        }
+    });
+}
+
 
     function select_productos() {       
         $.ajax({
