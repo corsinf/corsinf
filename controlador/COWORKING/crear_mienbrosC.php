@@ -14,7 +14,9 @@ if (isset($_GET['lista_mienbro'])) {
 if (isset($_GET['listar_productos'])) {
     echo json_encode($controlador->listar_productos());
 }
-
+if (isset($_GET['listar_productossala'])) {
+    echo json_encode($controlador->listar_productossala());
+}
 if (isset($_GET['lista_compra'])) {
     echo json_encode($controlador->compraslista());
 }
@@ -76,6 +78,23 @@ class crear_mienbrosC
         return $str;
     }
 
+    function listar_productossala()
+    {
+        $slista = array(
+            array('id_producto' => 1, 'Producto' => 'Producto1', 'Precio' => 10.00),
+            array('id_producto' => 2, 'Producto' => 'Producto2', 'Precio' => 20.00),
+            array('id_producto' => 3, 'Producto' => 'Producto3', 'Precio' => 30.00),
+            array('id_producto' => 4, 'Producto' => 'Producto4', 'Precio' => 40.00),
+            array('id_producto' => 5, 'Producto' => 'Producto5', 'Precio' => 50.00)
+        );
+    
+        $str = '';
+        foreach ($slista as $key => $value) {
+            $str .= '<option value="' . ($value['id_producto']) . '" data-precio="' . ($value['Precio']) . '">' . ($value['Producto']) . '</option>';
+        }
+        return $str;
+    }
+    
     function compraslista()
     {
         $slista = $this->modelo->compraslista();

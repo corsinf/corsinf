@@ -121,14 +121,11 @@
 
                                 <form id="formulario_servicios">
                                     <div class="row mb-3">
-                                        <input type="hidden" name="id_servicio" id="id_servicio" class="form-control" readonly>
+                                        
                                         <div class="col-md-3">
-                                            <label for="txt_servicio" class="form-label"><strong>Servicio:</strong></label>
-                                            <select class="form-control" id="txt_servicio" name="txt_servicio" required>
-                                                <option value="" disabled selected>Seleccionar servicio</option>
-                                                <option value="Servicio 1">Servicio 1</option>
-                                                <option value="Servicio 2">Servicio 2</option>
-                                                <option value="Servicio 3">Servicio 3</option>
+                                            <label for="txt_productos" class="form-label"><strong>Producto:</strong></label>
+                                            <select class="form-control" id="txt_productos" name="txt_productos" required>
+
                                             </select>
                                         </div>
                                         <div class="col-md-3">
@@ -136,8 +133,12 @@
                                             <input type="number" class="form-control" id="txt_cantidad_servicio" name="txt_cantidad_servicio" value="1" min="1" required>
                                         </div>
                                         <div class="col-md-3">
-                                            <label for="txt_precio_servicio" class="form-label"><strong>Precio:</strong></label>
-                                            <input type="text" class="form-control" id="txt_precio_servicio" name="txt_precio_servicio" readonly>
+                                            <label for="did_sala" class="form-label"><strong>Sala:</strong></label>
+                                            <input type="number" class="form-control" id="did_sala" name="txt_cantidad_servicio" value="1" min="1" required>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label for="txt_precios" class="form-label"><strong>Precio:</strong></label>
+                                            <input type="text" class="form-control" id="txt_precios" name="txt_precios" readonly>
                                         </div>
                                         <div class="col-md-3">
                                             <label for="txt_total_servicio" class="form-label"><strong>Total:</strong></label>
@@ -153,8 +154,9 @@
                                     <table class="table table-bordered table-striped mt-4" id="tbl_servicios">
                                         <thead class="table-header">
                                             <tr>
-                                                <th>Servicio</th>
-                                                <th>Cantidad</th>
+                                                <th>Sala</th>
+                                                <th>Compra</th>
+                                                <th>Producto</th>
                                                 <th>Precio</th>
                                                 <th>Total</th>
                                                 <th>Eliminar</th>
@@ -252,6 +254,7 @@
         lista_usuario();
         lista_compra();
         select_productos();
+        select_productossala();
         
         //$('#btn_agregar_compra').click(function() {
         //    enviarCompras();
@@ -513,6 +516,37 @@ function eliminarMiembro(id_miembro) {
         });
     }
 
+    function select_productossala() {       
+        $.ajax({
+            url: '../controlador/COWORKING/crear_mienbrosC.php?listar_productossala=true',
+            type: 'post',
+            dataType: 'json', 
+            success: function(response) {  
+                $('#txt_productos').html(response);
+
+                $('#txt_productos').on('change', function() {
+                    let precio = $(this).find('option:selected').data('precio');
+                    $('#txt_precios').val(precio);
+                });
+            }       
+        });
+    }
+    
+    $(document).ready(function() {
+    select_productos();
+    $('#txt_cantidad_servicio').on('input', calcularTotalsala); 
+    $('#txt_productos').on('change', function() {
+        var precio = $(this).find('option:selected').data('precio');
+        $('#txt_precios').val(precio);
+        calcularTotalsala(); 
+    });
+});
+
+function calcularTotalsala() {
+        var cantidad = parseFloat($('#txt_cantidad_servicio').val()) || 0;
+        var precio = parseFloat($('#txt_precios').val()) || 0;
+        $('#txt_total_servicio').val((cantidad * precio).toFixed(2));
+        }
 
     function generarExcelMiembros() {
             const ws = XLSX.utils.table_to_sheet(document.getElementById('tbl_miembros'));
