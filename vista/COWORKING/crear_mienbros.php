@@ -253,8 +253,9 @@
     $(document).ready(function() {
         lista_usuario();
         lista_compra();
+        lista_comprassala();
         select_productos();
-        select_productossala();
+        select_productossala();;
         
         //$('#btn_agregar_compra').click(function() {
         //    enviarCompras();
@@ -457,6 +458,7 @@ function abrirModal(id_miembro, id_sala) {
                         $('#row-compra-' + id_compra).remove();
                         Swal.fire('Eliminado', 'Compra eliminada con éxito', 'success');
                         lista_compra();
+                        lista_comprassala();
                     } else {
                         Swal.fire('Error', 'Error al eliminar la compra', 'error');
                     }
