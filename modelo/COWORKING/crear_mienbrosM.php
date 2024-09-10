@@ -10,23 +10,34 @@ class crear_mienbrosM
         $this->db = new db();
     }
 
-    function insertarnombre($parametros)
-    {
+    function insertarnombre($parametros) {
         $nombre = $parametros['nombre_miembro'];
         $apellido = $parametros['apellido_miembro'];
         $telefono = $parametros['telefono_miembro'];
         $direccion = $parametros['direccion_miembro'];
         $id_espacio = intval($parametros['id_espacio']);
         
-        
-        if (empty($nombre) || empty($apellido) || empty($telefono) || empty($direccion) || empty($id_espacio)) {
-            return "Error: Campos vacíos";
-        }
-
+        // Construye la consulta SQL manualmente
         $sql = "INSERT INTO co_miembro (nombre_miembro, apellido_miembro, telefono_miembro, direccion_miembro, id_espacio)
-                VALUES ($nombre, $apellido, $telefono, $direccion, $id_espacio)";
-        return $this->db->sql_string($sql);
+                VALUES ('".$nombre."', '".$apellido."', '".$telefono."', '".$direccion."', ".$id_espacio.")";
+        
+        // Ejecuta la consulta usando sql_string
+        $resp = $this->db->sql_string($sql);
+        
+        // Imprime la respuesta para depuración
+        
+        
+        // Retorna la respuesta
+        return $resp;
     }
+    
+    
+    
+    
+    
+    
+    
+    
 
     function listardebase()
     {

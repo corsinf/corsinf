@@ -317,39 +317,49 @@
     }
 
     function enviardatos() {
-        var parametros = {
-            'nombre_miembro': $('#txt_nombre').val(),
-            'apellido_miembro': $('#txt_apellido').val(),
-            'telefono_miembro': $('#txt_numero_celular').val(),
-            'direccion_miembro': $('#txt_direccion').val(),
-            'id_espacio': $('#ddl_id_espacio').val()
-        };
+    var parametros = {
+        'nombre_miembro': $('#txt_nombre').val(),
+        'apellido_miembro': $('#txt_apellido').val(),
+        'telefono_miembro': $('#txt_numero_celular').val(),
+        'direccion_miembro': $('#txt_direccion').val(),
+        'id_espacio': $('#ddl_id_espacio').val()
+    };
 
-        $.ajax({
-            data: {data: parametros},
-            url: '../controlador/COWORKING/crear_mienbrosC.php?add=true',
-            type: 'post',
-            dataType: 'json',
-            success: function(response) {  
-                if (response === 1) {
-                    Swal.fire({
-                        title: 'Miembro agregado con éxito',
-                        icon: 'success',
-                        confirmButtonText: 'Aceptar'
-                    }).then(() => {
-                        lista_usuario(); 
-                        $('#formulario_miembro')[0].reset(); 
-                    });
-                } else {
-                    Swal.fire({
-                        title: 'Error al agregar el miembro',
-                        icon: 'error',
-                        confirmButtonText: 'Aceptar'
-                    });
-                }
+    $.ajax({
+        data: {data: parametros},
+        url: '../controlador/COWORKING/crear_mienbrosC.php?add=true',
+        type: 'post',
+        dataType: 'json',
+        success: function(response) {  
+            if (response.status === 'success') {
+                Swal.fire({
+                    title: 'Miembro agregado con éxito',
+                    icon: 'success',
+                    confirmButtonText: 'Aceptar'
+                }).then(() => {
+                    lista_usuario(); 
+                    $('#formulario_miembro')[0].reset(); 
+                });
+            } else {
+                Swal.fire({
+                    title: 'Error al agregar el miembro',
+                    text: response.message,
+                    icon: 'error',
+                    confirmButtonText: 'Aceptar'
+                });
             }
-        });
-    }
+        },
+        error: function() {
+            Swal.fire({
+                title: 'Error',
+                text: 'Ocurrió un problema en el servidor',
+                icon: 'error',
+                confirmButtonText: 'Aceptar'
+            });
+        }
+    });
+}
+
 
     function enviarCompras() {
         var parametros = {

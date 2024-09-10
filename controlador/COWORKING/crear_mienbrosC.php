@@ -27,8 +27,15 @@ if (isset($_GET['lista_comprasala'])) {
 
 if (isset($_GET['add'])) {
     $data = isset($_POST['data']) ? $_POST['data'] : [];
-    echo json_encode($controlador->add($data));
+    $resultado = $controlador->add($data);
+    if ($resultado === 1) {
+        echo json_encode(['status' => 'success', 'message' => 'Miembro registrado con éxito']);
+    } else {
+        echo json_encode(['status' => 'error', 'message' => 'Error al registrar miembro']);
+    }
 }
+
+
 
 if (isset($_GET['add_compra'])) {
     $data = isset($_POST['data']) ? $_POST['data'] : [];
@@ -157,7 +164,8 @@ class crear_mienbrosC
     function add($parametros)
     {
         $res = $this->modelo->insertarnombre($parametros);
-        return $res;
+
+
     }
 
     function add_compra($parametros)
