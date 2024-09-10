@@ -255,7 +255,7 @@
         lista_comprassala();
         select_productos();
         select_productossala();
-
+        
         $('#txt_cantidad').on('input', calcularTotal); 
         $('#txt_producto').on('change', function() {
             var precio = $(this).find('option:selected').data('precio');

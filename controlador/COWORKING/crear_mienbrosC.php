@@ -37,6 +37,8 @@ if (isset($_GET['add'])) {
 
 
 
+
+
 if (isset($_GET['add_compra'])) {
     $data = isset($_POST['data']) ? $_POST['data'] : [];
     echo json_encode($controlador->add_compra($data));
@@ -164,8 +166,6 @@ class crear_mienbrosC
     function add($parametros)
     {
         $res = $this->modelo->insertarnombre($parametros);
-
-
     }
 
     function add_compra($parametros)
@@ -229,9 +229,7 @@ class crear_mienbrosC
             return json_encode(['error' => 'Error al verificar las compras del miembro']);
         }
     }
-}
-
-    
+} 
 
 
 
@@ -247,6 +245,6 @@ class crear_mienbrosC
 
 
 
-    
-    
-    
+
+
+
