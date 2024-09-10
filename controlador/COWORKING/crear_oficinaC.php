@@ -24,8 +24,7 @@ class claseEjemplo {
     }
 
     function add($parametros) {
-        $res = $this->modelo->insertarnombre($parametros);
-        return $res;
+        return $this->modelo->insertarnombre($parametros);
     }
 
     function listaCategorias() {
@@ -55,9 +54,9 @@ class claseEjemplo {
                 <td>'.htmlspecialchars($value['estado_espacio'], ENT_QUOTES, 'UTF-8').'</td>
                 <td>'.htmlspecialchars($value['id_categoria'], ENT_QUOTES, 'UTF-8').'</td>
                 <td><button class="btn btn-sm btn-primary"><i class="bx bx-save"></i></button></td>
-                <td><button class="btn btn-sm btn-primary" onclick="openFurnitureModal('.htmlspecialchars($value['id_espacio'], ENT_QUOTES, 'UTF-8').')">Gestionar Mobiliario</button></td>
+                <td><button class="btn btn-sm btn-secondary" onclick="openFurnitureModal('.htmlspecialchars($value['id_espacio'], ENT_QUOTES, 'UTF-8').')">Gestionar Mobiliario</button></td>
             </tr>';
-        }
+        }   
     
         return $tr;
     }
@@ -69,7 +68,7 @@ class claseEjemplo {
 
     function listarMobiliario($id_espacio) {
         $lista = $this->modelo->listarMobiliario($id_espacio);
-        $tr = '';
+        $tr = 1;
         foreach ($lista as $value) {
             $tr .= '<tr>
                         <td>'.$value['nombre_mobiliario'].'</td>

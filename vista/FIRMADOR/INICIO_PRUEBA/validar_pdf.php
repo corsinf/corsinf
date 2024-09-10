@@ -51,6 +51,7 @@
                 event.preventDefault();
             }
 
+            $('#myModal_espera').modal('show');
             var formData = new FormData(document.getElementById("form_doc"));
             $.ajax({
                 url: '../controlador/FIRMADOR/validar_firmaC.php?validar_documento=true',
@@ -63,6 +64,7 @@
                 //        $("#foto_alumno").attr('src',"../img/gif/proce.gif");
                 //     },
                 success: function(response) {
+                    $('#myModal_espera').modal('hide');
                     if (response.resp == 1) {
                         $('#tbl_body').html(response.tr);
                         Swal.fire("Firmas Validas en documento", "", "success")

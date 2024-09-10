@@ -245,9 +245,9 @@ if (isset($_POST['sa_adm_id'])) {
 
                             <input type="hidden" id="sa_adm_id" name="sa_adm_id">
 
-                            <div class="row pt-3">
+                            <div class="row pt-3 mb-col">
                                 <div class="col-md-3">
-                                    <label for="" class="form-label">Primer Apellido <label style="color: red;">*</label> </label>
+                                    <label for="sa_adm_primer_apellido" class="form-label">Primer Apellido <label style="color: red;">*</label> </label>
                                     <input type="text" class="form-control form-control-sm" id="sa_adm_primer_apellido" name="sa_adm_primer_apellido">
                                 </div>
 
@@ -267,7 +267,7 @@ if (isset($_POST['sa_adm_id'])) {
                                 </div>
                             </div>
 
-                            <div class="row pt-3">
+                            <div class="row mb-col">
                                 <div class="col-md-3">
                                     <label for="" class="form-label">Cédula de Identidad <label style="color: red;">*</label> </label>
                                     <input type="text" class="form-control form-control-sm" id="sa_adm_cedula" name="sa_adm_cedula" maxlength="10" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
@@ -293,7 +293,7 @@ if (isset($_POST['sa_adm_id'])) {
                                 </div>
                             </div>
 
-                            <div class="row pt-3">
+                            <div class="row mb-col">
                                 <div class="col-md-4">
                                     <label for="" class="form-label">Teléfono 1 <label style="color: red;">*</label> </label>
                                     <input type="text" class="form-control form-control-sm" id="sa_adm_telefono_1" name="sa_adm_telefono_1">
@@ -310,9 +310,11 @@ if (isset($_POST['sa_adm_id'])) {
                                 </div>
                             </div>
 
-                            <div class="modal-footer pt-4">
+                            
+
+                            <div class="modal-footer pt-2">
                                 <?php if ($id == '') { ?>
-                                    <button class="btn btn-primary btn-sm px-4 m-1" onclick="editar_insertar()" type="button"><i class="bx bx-save"></i> Guardar</button>
+                                    <button class="btn btn-primary btn-sm px-4 m-0" onclick="editar_insertar()" type="button"><i class="bx bx-save"></i> Guardar</button>
                                 <?php } else { ?>
                                     <button class="btn btn-primary btn-sm px-4 m-1" onclick="editar_insertar()" type="button"><i class="bx bx-save"></i> Guardar</button>
                                     <button class="btn btn-danger btn-sm px-4 m-1" onclick="delete_datos()" type="button"><i class="bx bx-trash"></i> Eliminar</button>
