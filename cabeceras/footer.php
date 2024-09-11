@@ -13,7 +13,26 @@
 	      <div class="modal-header">
 	      </div>
 	      <div class="modal-body">
-	         <div class="text-center"><img src="../img/de_sistema/loader_puce.gif" width="100" height="100">ESPERE...</div>         
+	         <div class="text-center">
+	         	<?php if (file_exists($_SESSION['INICIO']['LOGO'])) { ?>					
+					<img src="<?php echo $_SESSION['INICIO']['LOGO']; ?>" style="width: 35%;" alt="logo icon">
+				<?php } ?>ESPERE...
+	         </div>
+
+	         <div class="text-center">
+					<div class="spinner-grow text-primary spinner-grow-sm" role="status"> <span class="visually-hidden">Loading...</span>
+					</div>
+					<div class="spinner-grow text-secondary spinner-grow-sm" role="status"> <span class="visually-hidden">Loading...</span>
+					</div>
+					<div class="spinner-grow text-success spinner-grow-sm" role="status"> <span class="visually-hidden">Loading...</span>
+					</div>
+					<div class="spinner-grow text-danger spinner-grow-sm" role="status"> <span class="visually-hidden">Loading...</span>
+					</div>
+					<div class="spinner-grow text-warning spinner-grow-sm" role="status"> <span class="visually-hidden">Loading...</span>
+					</div>
+					<div class="spinner-grow text-info spinner-grow-sm" role="status"> <span class="visually-hidden">Loading...</span>
+					</div>
+				</div>
 	      </div>
 	      <div class="modal-footer">        
 	      </div>
