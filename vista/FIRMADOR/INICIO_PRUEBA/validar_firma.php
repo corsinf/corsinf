@@ -46,35 +46,11 @@
 
 <script type="text/javascript">
     $(document).ready(function() {
-        $("#btn_validar").click(function(event) {
-            if (!validar_form()) {
-                event.preventDefault();
-            }
+        $('input[id="txt_cargar_imagen"]').imageuploadify();
 
-            var formData = new FormData(document.getElementById("form_firma"));
-             $.ajax({
-                url: '../controlador/FIRMADOR/validar_firmaC.php?validar_firma=true',
-                type: 'post',
-                data: formData,
-                contentType: false,
-                processData: false,
-                dataType:'json',
-             // beforeSend: function () {
-             //        $("#foto_alumno").attr('src',"../img/gif/proce.gif");
-             //     },
-                success: function(response) {
-                    if(response.resp==1)
-                    {
-                        Swal.fire(response.msj,"","success")
-                    }else
-                    {
-                        Swal.fire(response.msj,"","error")                        
-                    }
-                }
-            });
+        iniciar_validaciones();
 
 
-        });
         $('#tbl_firmas').DataTable({
             language: {
                 url: 'https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
@@ -82,22 +58,126 @@
             responsive: true,
             order: []
         });
+
+        // Modificar el texto de los elementos
+        $('.imageuploadify-message').html('Arrastre y suelte sus archivos aquí para cargarlos');
+        $('.btn-default').text('O seleccione el archivo para cargar');
+
+        // Agregar manejo de eventos para drag and drop
+        const drop_area = $('.imageuploadify');
+
+        drop_area.on('dragover', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        });
+
+        drop_area.on('dragleave', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        });
+
+        // Interceptar el evento drop antes de que lo maneje imageuploadify
+        drop_area.on('drop', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            const transferir_datos = e.originalEvent.dataTransfer;
+            const archivos = transferir_datos.files;
+
+            if (archivos.length > 0) {
+                // Tomar solo el primer archivo
+                const archivo = archivos[0];
+
+                if (validar_archivos([archivo])) {
+                    // Crear un nuevo FileList con solo el archivo validado
+                    const transferir_datos = new DataTransfer();
+                    transferir_datos.items.add(archivo);
+
+                    // Actualizar el input file con el nuevo archivo
+                    document.getElementById('txt_cargar_imagen').files = transferir_datos.files;
+
+                    $('.imageuploadify-container').delete();
+
+                    // Disparar el evento change manualmente
+                    $('#txt_cargar_imagen').trigger('change');
+
+                } else {
+                    // Prevenir que imageuploadify procese archivos inválidos
+                    return false;
+                }
+            }
+        });
     });
+
+    function iniciar_validaciones() {
+        const input_archivo = $("#txt_cargar_imagen");
+        input_archivo.on("change", function() {
+            validar_archivos(this.files);
+        });
+    }
+
+    function validar_archivos(archivos) {
+        for (let i = 0; i < archivos.length; i++) {
+            const archivo = archivos[i];
+            const nombre_archivo = archivo.name;
+            const extension = obtener_extension_archivo(nombre_archivo);
+
+            if (!extension_valida(extension)) {
+                mostrar_alerta("Oops...", "El archivo debe estar en formato .p12 o .pfx");
+                return false;
+            }
+        }
+        return true;
+    }
+
+    function obtener_extension_archivo(nombre_archivo) {
+        return nombre_archivo.split('.').pop().toLowerCase();
+    }
+
+    function extension_valida(extension) {
+        return extension === 'p12' || extension === 'pfx';
+    }
+
+    function mostrar_alerta(titulo, mensaje) {
+        Swal.fire({
+            icon: "error",
+            title: titulo,
+            text: mensaje,
+        });
+    }
+
+    function validar_firma() {
+
+        if (!validar_form()) {
+            event.preventDefault();
+        }
+
+        var formData = new FormData(document.getElementById("form_firma"));
+        $.ajax({
+            url: '../controlador/FIRMADOR/validar_firmaC.php?validar_firma=true',
+            type: 'post',
+            data: formData,
+            contentType: false,
+            processData: false,
+            dataType: 'json',
+            // beforeSend: function () {
+            //        $("#foto_alumno").attr('src',"../img/gif/proce.gif");
+            //     },
+            success: function(response) {
+                if (response.resp == 1) {
+                    Swal.fire(response.msj, "", "success")
+                } else {
+                    Swal.fire(response.msj, "", "error")
+                }
+            }
+        });
+
+    }
 
     function validar_form() {
         var clave = $("#txt_ingresarClave").val();
         var confirmar_clave = $("#txt_comprobarClave").val();
-        var ingresar_archivo = $("#txt_cargar_imagen")[0].files[0];
-        var nombre_archivo = ingresar_archivo ? ingresar_archivo.name : '';
 
-            if (clave !== confirmar_clave) {
-                Swal.fire({
-                    icon: "error",
-                    title: "Oops...",
-                    text: "Las contraseñas no coinciden.",
-                });
-                return false
-            }
         if (clave !== confirmar_clave) {
             Swal.fire({
                 icon: "error",
@@ -105,17 +185,14 @@
                 text: "Las contraseñas no coinciden.",
             });
             return false
+        } else if (confirmar_clave !== clave) {
+            Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: "Las contraseñas no coinciden.",
+            });
+            return false
         }
-
-            var extension_archivo = nombre_archivo.split('.').pop().toLowerCase();
-            if (extension_archivo !== 'p12' && extension_archivo !== 'pfx') {
-                Swal.fire({
-                    icon: "error",
-                    title: "Oops...",
-                    text: "El archivo debe estar en formato .p12 o .pfx",
-                });
-                return false
-            }
 
         return true;
     }
@@ -162,13 +239,13 @@
                     </ul>
                     <div class="tab-content py-3">
                         <div class="tab-pane fade show active" id="successhome" role="tabpanel">
-                            <form id="form_firma" enctype="multipart/form-data" method="post" >
+                            <form id="form_firma" enctype="multipart/form-data" method="post">
                                 <div class="row">
                                     <div class="col-12 col-lg-6">
                                         <div class="card">
                                             <div class="card-body">
-                                                    <input id="txt_cargar_imagen" name="txt_cargar_imagen" type="file" accept=".p12,.pfx" multiple>
-                                               
+                                                <input id="txt_cargar_imagen" name="txt_cargar_imagen" type="file" accept=".p12,.pfx" multiple>
+
                                             </div>
                                         </div>
                                     </div>
@@ -187,7 +264,7 @@
                                                                     <input type="password" class="form-control form-control" name="txt_comprobarClave" id="txt_comprobarClave" value="" placeholder="Confirme su contraseña ingresada.">
                                                                 </div>
                                                                 <div class=" d-grid gap-2 mb-4">
-                                                                    <button type="button" class="btn btn-dark" id="btn_validar">Validar</button>
+                                                                    <button type="button" class="btn btn-dark" id="btn_validar" onclick="validar_firma();">Validar</button>
                                                                 </div>
                                                                 <p><strong>Nota: </strong>Recuerde que su contraseña y firma electrónica no se almacenan en nuestros sistemas. Estos datos solo se utilizan una única vez para llevar a cabo el proceso de validación.</p>
                                                             </div>
@@ -239,21 +316,3 @@
         </div>
     </div>
 </div>
-
-<script>
-    $(document).ready(function() {
-        $('#txt_cargar_imagen').imageuploadify({
-            //'swf': 'path/to/uploadify.swf',
-            //'uploader': 'path/to/uploadify.php', // Archivo PHP que manejará la subida
-            'fileTypeExts': '*.p12; *.pfx',
-            'multi': true,
-            // 'onUploadSuccess': function(file, data, response) {
-            //     console.log('El archivo ' + file.name + ' se ha subido correctamente.');
-            // }
-        });
-
-        $('.imageuploadify-message').html('Arrastre y suelte sus archivos aquí para cargarlos');
-        $('.btn-default').text('O seleccione el archivo para cargar');
-
-    });
-</script>

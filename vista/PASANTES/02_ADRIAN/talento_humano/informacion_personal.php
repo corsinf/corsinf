@@ -11,9 +11,36 @@ if (isset($_GET['id'])) {
 ?>
 <script>
     $(document).ready(function() {
+
     });
 
     //Funciones del formulario
+    function obtener_codigo_postal() {
+        var ubicacion = $('#ubicacion');
+        var codigo_postal = $('#txt_direccion_postal');
+
+        function success(position) {
+            var lat = position.coords.latitude;
+            var lon = position.coords.longitude;
+
+            // Llamada a la API de Nominatim para obtener el código postal
+            var url = `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json`;
+
+            $.getJSON(url, function(data) {
+                if (data && data.address && data.address.postcode) {
+                    codigo_postal.val(data.address.postcode);
+                } else {
+                    codigo_postal.val('No se pudo obtener');
+                }
+            }).fail(function() {
+                codigo_postal.val('Error al obtener el código postal');
+            });
+        }
+
+        // Obtener la ubicación del usuario
+        navigator.geolocation.getCurrentPosition(success);
+    }
+
     function cambiar_foto() {
         var btn_elegir_foto = $('#btn_elegir_foto')
         var input_elegir_foto = $('#txt_elegir_foto')
@@ -87,7 +114,6 @@ if (isset($_GET['id'])) {
             });
         }
     }
-
 </script>
 
 <script type="text/javascript">
@@ -440,6 +466,7 @@ if (isset($_GET['id'])) {
     }
 </script>
 
+<!-- Vista de la página -->
 <div class="page-wrapper">
     <div class="page-content">
         <!--breadcrumb-->
@@ -526,7 +553,7 @@ if (isset($_GET['id'])) {
                                                 <h6 class="fw-bold">Estado Civil</h6>
                                             </div>
                                             <div class="col-6 d-flex align-items-center">
-                                                <p id="txt_estado_civil_v">Soltero</p>
+                                                <p id="txt_estado_civil_v"></p>
                                             </div>
                                         </div>
                                         <div class="row mb-2">
@@ -1089,7 +1116,7 @@ if (isset($_GET['id'])) {
 </div>
 
 
-<!-- Modal para la informacion contactos -->
+<!-- Modal para la informacion Adicional -->
 <div class="modal" id="modal_informacion_adicional" tabindex="-1" aria-modal="true" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
     <div class="modal-dialog modal-dialog-centered modal-xl">
         <div class="modal-content">
@@ -1133,15 +1160,13 @@ if (isset($_GET['id'])) {
                                 <label for="txt_direccion_postal" class="form-label form-label-sm">Código Postal <label style="color: red;">*</label></label>
                                 <div class="row">
                                     <div class="col-11 me-0">
-                                        <input type="text" class="form-control form-control-sm locationResult" name="txt_direccion_postal" id="txt_direccion_postal" placeholder="Escriba su código postal o de click en 'Obtener'">
+                                        <input type="text" class="form-control form-control-sm" name="txt_direccion_postal" id="txt_direccion_postal" placeholder="Escriba su código postal o de click en 'Obtener'">
                                     </div>
-                                    <div class="col-11 me-0">
-                                        <a id="locationResult" target="_blank"></a>
-                                        <p id="postalCodeResult"></p>
-                                        <input type="text" class="form-control form-control-sm locationResult" name="txt_direccion_postal" id="txt_direccion_postal" placeholder="Escriba su código postal o de click en 'Obtener'">
+                                    <div class="col-11 me-0" style="display: none;">
+                                        <a id="ubicacion" target="_blank"></a>
                                     </div>
                                     <div class="col-1 d-flex justify-content-start">
-                                        <button type="button" class="btn btn-sm btn-outline-primary" id="getLocation">Obtener</button>
+                                        <button type="button" class="btn btn-sm btn-outline-primary" onclick="obtener_codigo_postal();">Obtener</button>
                                     </div>
                                 </div>
                             </div>
