@@ -77,11 +77,15 @@ class th_dispositivosC
                 return -2;
             }
         } else {
-            $where[0]['campo'] = 'th_dis_id';
-            $where[0]['dato'] = $parametros['_id'];
-            $datos = $this->modelo->editar($datos, $where);
+            if (count($this->modelo->where('th_dis_nombre', $parametros['txt_nombre'])->listar()) == 0) {
+                $where[0]['campo'] = 'th_dis_id';
+                $where[0]['dato'] = $parametros['_id'];
+                $datos = $this->modelo->editar($datos, $where);
+            } else {
+                return -2;
+            }
         }
-        
+
         return $datos;
     }
 
