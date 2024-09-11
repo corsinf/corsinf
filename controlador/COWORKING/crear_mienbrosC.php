@@ -2,41 +2,45 @@
 include(dirname(__DIR__, 2) . '/modelo/COWORKING/crear_mienbrosM.php');
 
 $controlador = new crear_mienbrosC();
-$id_miembro = isset($_GET['id_miembro']) ? intval($_GET['id_miembro']) : '';
+$id_miembro = isset($_GET['id_miembro']) ? intval($_GET['id_miembro']) : 0;
 $id_sala = isset($_POST['id_sala']) ? $_POST['id_sala'] : '';
+
 
 if (isset($_GET['lista_mienbro'])) {
     echo json_encode($controlador->listar());
 }
 
+
 if (isset($_GET['listar_productos'])) {
     echo json_encode($controlador->listar_productos());
 }
+
 
 if (isset($_GET['listar_productossala'])) {
     echo json_encode($controlador->listar_productossala());
 }
 
+
 if (isset($_GET['lista_compra'])) {
     echo json_encode($controlador->compraslista());
 }
+
 
 if (isset($_GET['lista_comprasala'])) {
     echo json_encode($controlador->listacomprasala($id_sala));
 }
 
+// Añadir nuevo miembro
 if (isset($_GET['add'])) {
     $data = isset($_POST['data']) ? $_POST['data'] : [];
     $resultado = $controlador->add($data);
+
     if ($resultado === 1) {
         echo json_encode(['status' => 'success', 'message' => 'Miembro registrado con éxito']);
     } else {
-        echo json_encode(['status' => 'error', 'message' => 'Error al registrar miembro']);
+        echo json_encode(['status' => 'error', 'message' => 'Error al registrar miembro. ' . $resultado]);
     }
 }
-
-
-
 
 
 if (isset($_GET['add_compra'])) {
@@ -44,20 +48,24 @@ if (isset($_GET['add_compra'])) {
     echo json_encode($controlador->add_compra($data));
 }
 
+
 if (isset($_GET['add_comprasala'])) {
     $data = isset($_POST['data']) ? $_POST['data'] : [];
     echo json_encode($controlador->add_comprasala($data));
 }
+
 
 if (isset($_GET['eliminar_miembro'])) {
     $id_miembro = isset($_POST['id_miembro']) ? intval($_POST['id_miembro']) : 0;
     echo json_encode($controlador->eliminar_miembro($id_miembro));
 }
 
+
 if (isset($_GET['eliminar_compra'])) {
     $id_compra = isset($_POST['id_compra']) ? intval($_POST['id_compra']) : 0;
     echo json_encode($controlador->eliminar_compra($id_compra));
 }
+
 
 if (isset($_POST['action']) && $_POST['action'] === 'verificar_compras') {
     $id_miembro = isset($_POST['id_miembro']) ? intval($_POST['id_miembro']) : 0;
@@ -69,7 +77,7 @@ class crear_mienbrosC
 {
     private $modelo;
 
-    function __construct() 
+    public function __construct() 
     {
         $this->modelo = new crear_mienbrosM();
     }
@@ -91,6 +99,7 @@ class crear_mienbrosC
         return $str;
     }
 
+    
     function listar_productossala()
     {
         $slista = array(
@@ -108,6 +117,7 @@ class crear_mienbrosC
         return $str;
     }
 
+    // Listar compras por sala
     function listacomprasala()
     {
         $slista = $this->modelo->listacomprasala();
@@ -115,7 +125,7 @@ class crear_mienbrosC
         $str = '';
         foreach ($slista as $key => $value) {
             $id_compra = isset($value['id_compra']) ? $value['id_compra'] : 'id_compra';
-
+            
             $str .= '<tr>
                         <td>' . $value['id_sala'] . '</td> 
                         <td>' . $id_compra . '</td>
@@ -133,6 +143,7 @@ class crear_mienbrosC
 
         return $str;
     }
+
 
     function compraslista()
     {
@@ -163,22 +174,24 @@ class crear_mienbrosC
         return $str;
     }
 
+
     function add($parametros)
     {
-        $res = $this->modelo->insertarnombre($parametros);
+        return $this->modelo->insertarnombre($parametros);
     }
+
 
     function add_compra($parametros)
     {
-        $res = $this->modelo->insertarcompra($parametros);
-        return $res;
+        return $this->modelo->insertarcompra($parametros);
     }
+
 
     function add_comprasala($parametros)
     {
-        $res = $this->modelo->insertarcompra($parametros);
-        return $res;
+        return $this->modelo->insertarcompra($parametros);
     }
+
 
     function listar()
     {
@@ -209,15 +222,18 @@ class crear_mienbrosC
         return $str;
     }
 
+
     function eliminar_miembro($id_miembro)
     {
         return $this->modelo->eliminar_miembro($id_miembro);
     }
 
+
     function eliminar_compra($id_compra)
     {
         return $this->modelo->eliminar_compra($id_compra);
     }
+
 
     function verificar_compras($id_miembro)
     {
@@ -229,7 +245,8 @@ class crear_mienbrosC
             return json_encode(['error' => 'Error al verificar las compras del miembro']);
         }
     }
-} 
+}
+
 
 
 

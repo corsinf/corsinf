@@ -364,7 +364,7 @@
     function enviarCompras() {
         var parametros = {
             'id_miembro': $('#id_miembro').val(),
-            'id_producto': $('#txt_productos').val(),
+            'id_producto': $('#txt_producto').val(),
             'cantidad_compra': $('#txt_cantidad').val(),
             'pvp_compra': $('#txt_precio').val(),
             'total_compra': $('#txt_total').val(),

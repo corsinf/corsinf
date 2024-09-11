@@ -10,8 +10,7 @@ class crear_mienbrosM
         $this->db = new db();
     }
 
-    function insertarnombre($parametros)
-    {
+    function insertarnombre($parametros) {
         $nombre = $parametros['nombre_miembro'];
         $apellido = $parametros['apellido_miembro'];
         $telefono = $parametros['telefono_miembro'];
@@ -21,12 +20,13 @@ class crear_mienbrosM
         if(empty($nombre) || empty($apellido) || empty($telefono) || empty($direccion) || empty($id_espacio)) {
             return "Error: Campos vacíos";
         }
-
+    
         $sql = "INSERT INTO co_miembro (nombre_miembro, apellido_miembro, telefono_miembro, direccion_miembro, id_espacio)
                 VALUES ('$nombre', '$apellido', '$telefono', '$direccion', '$id_espacio')";
         $resp = $this->db->sql_string($sql);
         return $resp;
     }
+    
     
     
     function listardebase()
@@ -95,7 +95,7 @@ class crear_mienbrosM
                 miembro.id_miembro,  
                 miembro.nombre_miembro,
                 miembro.id_espacio AS id_sala, 
-                compra.id_compra, 
+                id_compra, 
                 compra.id_producto, 
                 compra.cantidad_compra, 
                 compra.pvp_compra, 
