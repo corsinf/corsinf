@@ -9,7 +9,7 @@ if (isset($_GET['_id'])) {
 
 ?>
 
-
+<script src="../lib/jquery_validation/jquery.validate.js"></script>
 
 <script type="text/javascript">
     $(document).ready(function() {
@@ -17,6 +17,7 @@ if (isset($_GET['_id'])) {
             datos_col(<?= $_id ?>);
         <?php } ?>
 
+        //$("#miFormulario").validate();
 
     });
 
@@ -65,9 +66,11 @@ if (isset($_GET['_id'])) {
             'cbx_ssl': cbx_ssl,
         };
 
+        if ($("#form_dispositivo").valid()) {
+            // Si es válido, puedes proceder a enviar los datos por AJAX
+            insertar(parametros);
+        }
         //console.log(parametros);
-
-        insertar(parametros);
 
     }
 
@@ -177,7 +180,7 @@ if (isset($_GET['_id'])) {
                         </div>
                         <hr>
 
-                        <section>
+                        <form id="form_dispositivo">
 
                             <div class="row pt-3 mb-col">
                                 <div class="col-md-4">
@@ -196,7 +199,6 @@ if (isset($_GET['_id'])) {
 
                             </div>
 
-
                             <div class="row mb-col">
                                 <div class="col-md-4 ">
                                     <label for="txt_host" class="form-label">IP/Host <label style="color: red;">*</label> </label>
@@ -204,24 +206,24 @@ if (isset($_GET['_id'])) {
                                 </div>
 
                                 <div class="col-md-2 ">
-                                    <label for="txt_puerto" class="form-label">Puerto <label style="color: red;">*</label> </label>
+                                    <label for="txt_puerto" class="form-label">Puerto </label>
                                     <input type="text" class="form-control form-control-sm" id="txt_puerto" name="txt_puerto">
                                 </div>
 
                                 <div class="col-md-6 ">
-                                    <label for="txt_serial" class="form-label">Número de Serie <label style="color: red;">*</label> </label>
+                                    <label for="txt_serial" class="form-label">Número de Serie </label>
                                     <input type="text" class="form-control form-control-sm" id="txt_serial" name="txt_serial">
                                 </div>
                             </div>
 
                             <div class="row mb-col">
                                 <div class="col-md-4 ">
-                                    <label for="txt_usuario" class="form-label">Usuario <label style="color: red;">*</label> </label>
+                                    <label for="txt_usuario" class="form-label">Usuario </label>
                                     <input type="text" class="form-control form-control-sm" id="txt_usuario" name="txt_usuario">
                                 </div>
 
                                 <div class="col-md-8 ">
-                                    <label for="txt_pass" class="form-label">Contraseña <label style="color: red;">*</label> </label>
+                                    <label for="txt_pass" class="form-label">Contraseña </label>
                                     <input type="text" class="form-control form-control-sm" id="txt_pass" name="txt_pass">
                                 </div>
                             </div>
@@ -237,7 +239,7 @@ if (isset($_GET['_id'])) {
 
                             <div class="row mb-col">
                                 <div class="col-md-12">
-                                
+
                                     <button class="btn btn-primary btn-sm px-4" onclick="probar_coneccion()" type="button"><i class="lni lni-play fs-6 me-0"></i> Probar conexión</button>
                                 </div>
                             </div>
@@ -253,7 +255,8 @@ if (isset($_GET['_id'])) {
                             </div>
 
 
-                        </section>
+                        </form>
+
                     </div>
                 </div>
             </div>
@@ -261,3 +264,52 @@ if (isset($_GET['_id'])) {
         <!--end row-->
     </div>
 </div>
+
+<style>
+    label.error {
+        color: red;
+        /* Cambia "red" por el color que desees */
+
+    }
+</style>
+
+<script>
+    //Validacion de formulario
+    $(document).ready(function() {
+        $("#form_dispositivo").validate({
+            rules: {
+                ddl_modelo: {
+                    required: true,
+                },
+                txt_nombre: {
+                    required: true,
+                },
+                txt_host: {
+                    required: true,
+                },
+            },
+            messages: {
+                ddl_modelo: {
+                    required: "Por favor ingresa tu nombre",
+                    minlength: "El nombre debe tener al menos 2 caracteres"
+                },
+                txt_nombre: {
+                    required: "Por favor ingresa tu correo electrónico",
+                    email: "Por favor ingresa un correo electrónico válido"
+                }
+            },
+
+            highlight: function(element) {
+                // Agrega la clase 'is-invalid' al input que falla la validación
+                $(element).addClass('is-invalid');
+                $(element).removeClass('is-valid');
+            },
+            unhighlight: function(element) {
+                // Elimina la clase 'is-invalid' si la validación pasa
+                $(element).removeClass('is-invalid');
+                $(element).addClass('is-valid');
+
+            }
+        });
+    });
+</script>
