@@ -60,7 +60,6 @@
 
                     <div class="text-end mb-4">
                         <button type="button" onclick="enviarDatos()" class="btn btn-primary btn-sm">Guardar</button>
-                        <button type="reset" class="btn btn-secondary btn-sm">Limpiar</button>
                     </div>
                 </form>
 
@@ -163,30 +162,67 @@
             data: { listaEspacios: true },
             dataType: 'json',
             success: function (response) {
-                $('#tbl_ingresos_body').html(response);
+                $('#tbl_espacios_body').html(response);
             }
         });
     }
 
     function enviarDatos() {
-        var datos = {
-            nombre: $('#txt_name').val(),
-            aforo: $('#txt_capacity').val(),
-            precio: $('#txt_price').val(),
-            estado: $('#txt_estadoEspacio').val(),
-            categoria: $('#ddl_categoriaEspacio').val()
-        };
+    // Obtiene los valores de los campos
+    var nombre = $('#txt_name').val();
+    var aforo = $('#txt_capacity').val();
+    var precio = $('#txt_price').val();
+    var estado = $('#txt_estadoEspacio').val();
+    var categoria = $('#ddl_categoriaEspacio').val();
 
-        $.ajax({
-            url: '../controlador/COWORKING/crear_oficinaC.php',
-            method: 'POST',
-            data: { add: true, data: datos },
-            success: function (response) {
-                alert('Espacio agregado correctamente');
-                listarEspacios();
-            }
+    // Verifica si algún campo está vacío
+    if (!nombre || !aforo || !precio || !estado || !categoria) {
+        // Si hay un campo vacío, muestra una alerta y detiene la función
+        Swal.fire({
+            title: 'Error',
+            text: 'Todos los campos son obligatorios.',
+            icon: 'error',
+            confirmButtonText: 'Ok'
         });
+        return;  // Detiene el envío de los datos
     }
+
+    // Si todos los campos están completos, procede con el envío de los datos
+    var datos = {
+        nombre: nombre,
+        aforo: aforo,
+        precio: precio,
+        estado: estado,
+        categoria: categoria
+    };
+
+    $.ajax({
+        url: '../controlador/COWORKING/crear_oficinaC.php',
+        method: 'POST',
+        data: { add: true, data: datos },
+        success: function (response) {
+            // Mostrar alerta de éxito si el espacio se agregó correctamente
+            Swal.fire({
+                title: 'Espacio agregado correctamente',
+                icon: 'success',
+                confirmButtonText: 'Ok'
+            });
+
+            // Luego recargar la lista de espacios
+            listarEspacios();
+        },
+        error: function (xhr, status, error) {
+            // En caso de error, mostrar otra alerta
+            Swal.fire({
+                title: 'Error al agregar espacio',
+                text: 'Por favor, intenta nuevamente.',
+                icon: 'error',
+                confirmButtonText: 'Ok'
+            });
+        }
+    });
+}
+    
     function listarMobiliario(id_espacio) {
         $.ajax({
             url: '../controlador/COWORKING/crear_oficinaC.php',
