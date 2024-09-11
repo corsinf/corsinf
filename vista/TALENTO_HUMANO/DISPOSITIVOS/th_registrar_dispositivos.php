@@ -10,14 +10,13 @@ if (isset($_GET['_id'])) {
 ?>
 
 <script src="../lib/jquery_validation/jquery.validate.js"></script>
+<script src="../js/GENERAL/operaciones_generales.js"></script>
 
 <script type="text/javascript">
     $(document).ready(function() {
         <?php if (isset($_GET['_id'])) { ?>
             datos_col(<?= $_id ?>);
         <?php } ?>
-
-        //$("#miFormulario").validate();
 
     });
 
@@ -89,9 +88,18 @@ if (isset($_GET['_id'])) {
                         location.href = '../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_dispositivos';
                     });
                 } else if (response == -2) {
-                    Swal.fire('', 'Dispositivo ya registrado', 'warning');
+                    //Swal.fire('', 'El nombre del dispositivo ya está en uso', 'warning');
+                    $(txt_nombre).addClass('is-invalid');
+                    $('#error_txt_nombre').text('El nombre del dispositivo ya está en uso.');
                 }
+            },
+            error: function() {
+                Swal.fire('', 'Ocurrió un error inesperado. Por favor, inténtalo de nuevo.', 'error');
             }
+        });
+
+        $('#txt_nombre').on('input', function() {
+            $('#error_txt_nombre').text('');
         });
     }
 
@@ -184,7 +192,7 @@ if (isset($_GET['_id'])) {
 
                             <div class="row pt-3 mb-col">
                                 <div class="col-md-4">
-                                    <label for="ddl_modelo" class="form-label">Modelo <label style="color: red;">*</label> </label>
+                                    <label for="ddl_modelo" class="form-label">Modelo </label>
                                     <select class="form-select form-select-sm" id="ddl_modelo" name="ddl_modelo">
                                         <option selected disabled>-- Seleccione --</option>
                                         <option value="1">HIK</option>
@@ -193,38 +201,39 @@ if (isset($_GET['_id'])) {
                                 </div>
 
                                 <div class="col-md-8">
-                                    <label for="txt_nombre" class="form-label">Nombre <label style="color: red;">*</label></label>
-                                    <input type="text" class="form-control form-control-sm" id="txt_nombre" name="txt_nombre">
+                                    <label for="txt_nombre" class="form-label">Nombre </label>
+                                    <input type="text" class="form-control form-control-sm no_caracteres" id="txt_nombre" name="txt_nombre" maxlength="50">
+                                    <span id="error_txt_nombre" class="text-danger"></span>
                                 </div>
 
                             </div>
 
                             <div class="row mb-col">
                                 <div class="col-md-4 ">
-                                    <label for="txt_host" class="form-label">IP/Host <label style="color: red;">*</label> </label>
-                                    <input type="text" class="form-control form-control-sm" id="txt_host" name="txt_host">
+                                    <label for="txt_host" class="form-label">IP/Host </label>
+                                    <input type="text" class="form-control form-control-sm no_caracteres" id="txt_host" name="txt_host" maxlength="50" oninput="textoMinusculas(this);">
                                 </div>
 
                                 <div class="col-md-2 ">
                                     <label for="txt_puerto" class="form-label">Puerto </label>
-                                    <input type="text" class="form-control form-control-sm" id="txt_puerto" name="txt_puerto">
+                                    <input type="text" class="form-control form-control-sm solo_numeros_int" id="txt_puerto" name="txt_puerto" maxlength="4">
                                 </div>
 
                                 <div class="col-md-6 ">
                                     <label for="txt_serial" class="form-label">Número de Serie </label>
-                                    <input type="text" class="form-control form-control-sm" id="txt_serial" name="txt_serial">
+                                    <input type="text" class="form-control form-control-sm no_caracteres" id="txt_serial" name="txt_serial" maxlength="100">
                                 </div>
                             </div>
 
                             <div class="row mb-col">
                                 <div class="col-md-4 ">
                                     <label for="txt_usuario" class="form-label">Usuario </label>
-                                    <input type="text" class="form-control form-control-sm" id="txt_usuario" name="txt_usuario">
+                                    <input type="text" class="form-control form-control-sm no_caracteres" id="txt_usuario" name="txt_usuario" maxlength="50">
                                 </div>
 
                                 <div class="col-md-8 ">
                                     <label for="txt_pass" class="form-label">Contraseña </label>
-                                    <input type="text" class="form-control form-control-sm" id="txt_pass" name="txt_pass">
+                                    <input type="text" class="form-control form-control-sm" id="txt_pass" name="txt_pass" maxlength="50">
                                 </div>
                             </div>
 
@@ -240,7 +249,7 @@ if (isset($_GET['_id'])) {
                             <div class="row mb-col">
                                 <div class="col-md-12">
 
-                                    <button class="btn btn-primary btn-sm px-4" onclick="probar_coneccion()" type="button"><i class="lni lni-play fs-6 me-0"></i> Probar conexión</button>
+                                    <button class="btn btn-primary btn-sm px-4" onclick="probar_conexion()" type="button"><i class="lni lni-play fs-6 me-0"></i> Probar conexión</button>
                                 </div>
                             </div>
 
@@ -265,17 +274,14 @@ if (isset($_GET['_id'])) {
     </div>
 </div>
 
-<style>
-    label.error {
-        color: red;
-        /* Cambia "red" por el color que desees */
-
-    }
-</style>
-
 <script>
     //Validacion de formulario
     $(document).ready(function() {
+        // Selecciona el label existente y añade el nuevo label
+
+        agregar_asterisco_campo_obligatorio('ddl_modelo');
+        agregar_asterisco_campo_obligatorio('txt_nombre');
+
         $("#form_dispositivo").validate({
             rules: {
                 ddl_modelo: {
@@ -285,17 +291,26 @@ if (isset($_GET['_id'])) {
                     required: true,
                 },
                 txt_host: {
-                    required: true,
+
+                },
+                txt_puerto: {
+                    digits: true,
+                    maxlength: 4,
+                    minlength: 1
                 },
             },
             messages: {
                 ddl_modelo: {
-                    required: "Por favor ingresa tu nombre",
-                    minlength: "El nombre debe tener al menos 2 caracteres"
+                    required: "El campo 'Modelo' es obligatorio",
                 },
                 txt_nombre: {
-                    required: "Por favor ingresa tu correo electrónico",
-                    email: "Por favor ingresa un correo electrónico válido"
+                    required: "El campo 'Nombre' es obligatorio",
+                },
+                txt_host: {
+                    required: "El campo 'IP/Host' es obligatorio",
+                },
+                txt_puerto: {
+                    digits: "El campo 'Puerto' permite solo números",
                 }
             },
 
