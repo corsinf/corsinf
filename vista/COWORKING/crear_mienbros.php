@@ -157,6 +157,7 @@
                                                 <th>Sala</th>
                                                 <th>Compra</th>
                                                 <th>Producto</th>
+                                                <th>Cantidad</th>
                                                 <th>Precio</th>
                                                 <th>Total</th>
                                                 <th>Eliminar</th>
