@@ -232,9 +232,6 @@
         doc_subirDocumento: {
           required: true,
         },
-        cbx_guardarClave: {
-          required: true,
-        },
         txt_clave: {
           required: true,
         },
@@ -248,7 +245,19 @@
         },
         txt_nombreFirma: {
           required: "Por favor ingresa el nombre de la firma",
-        }
+        },
+        txt_ruc: {
+          required: "Por favor ingresa un RUC",
+        },
+        doc_subirDocumento: {
+          required: "Por favor sube un documento",
+        },
+        txt_clave: {
+          required: "Por favor ingresa una clave",
+        },
+        txt_validarClave: {
+          required: "Por favor ingrese la misma clave",
+        },
       },
 
       highlight: function(element) {

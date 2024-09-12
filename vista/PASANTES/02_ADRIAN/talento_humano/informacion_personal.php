@@ -9,9 +9,55 @@ if (isset($_GET['id'])) {
 }
 
 ?>
-<script>
-    $(document).ready(function() {
+<script src="../lib/jquery_validation/jquery.validate.js"></script>
+<style>
+    label.error {
+        color: red;
+        /* Cambia "red" por el color que desees */
 
+    }
+</style>
+<script type="text/javascript">
+    $(document).ready(function() {
+        <?php if (isset($_GET['id'])) { ?>
+            cargarDatos_informacion_personal(<?= $id ?>);
+        <?php } ?>
+        $('#ddl_seleccionar_aptitud_blanda').select2({
+            placeholder: 'Selecciona una opción',
+            dropdownParent: $('#modal_agregar_aptitudes'),
+            language: {
+                inputTooShort: function() {
+                    return "Por favor ingresa 1 o más caracteres";
+                },
+                noResults: function() {
+                    return "No se encontraron resultados";
+                },
+                searching: function() {
+                    return "Buscando...";
+                },
+                errorLoading: function() {
+                    return "No se encontraron resultados";
+                }
+            }
+        });
+        $('#ddl_seleccionar_aptitud_tecnica').select2({
+            placeholder: 'Selecciona una opción',
+            dropdownParent: $('#modal_agregar_aptitudes'),
+            language: {
+                inputTooShort: function() {
+                    return "Por favor ingresa 1 o más caracteres";
+                },
+                noResults: function() {
+                    return "No se encontraron resultados";
+                },
+                searching: function() {
+                    return "Buscando...";
+                },
+                errorLoading: function() {
+                    return "No se encontraron resultados";
+                }
+            }
+        });
     });
 
     //Funciones del formulario
@@ -63,67 +109,6 @@ if (isset($_GET['id'])) {
         }
     }
 
-    //Para mostrar los tipos de aptitudes
-    function mostrar_tipo_aptitudes() {
-        var select_tipo_aptitudes = $('#ddl_tipo_aptitudes');
-        var div_aptitudes_blandas = $('#pnl_blandas')
-        var div_aptitudes_tecnicas = $('#pnl_tecnicas')
-
-
-        if (select_tipo_aptitudes.val() == 'Blandas') {
-            div_aptitudes_blandas.show()
-            div_aptitudes_tecnicas.hide()
-            $('#ddl_seleccionar_aptitud_blanda').select2({
-                placeholder: 'Selecciona una opción',
-                dropdownParent: $('#modal_agregar_aptitudes'),
-                language: {
-                    inputTooShort: function() {
-                        return "Por favor ingresa 1 o más caracteres";
-                    },
-                    noResults: function() {
-                        return "No se encontraron resultados";
-                    },
-                    searching: function() {
-                        return "Buscando...";
-                    },
-                    errorLoading: function() {
-                        return "No se encontraron resultados";
-                    }
-                }
-            });
-        } else if (select_tipo_aptitudes.val() == 'Tecnicas') {
-            div_aptitudes_blandas.hide()
-            div_aptitudes_tecnicas.show()
-            $('#ddl_seleccionar_aptitud_tecnica').select2({
-                placeholder: 'Selecciona una opción',
-                dropdownParent: $('#modal_agregar_aptitudes'),
-                language: {
-                    inputTooShort: function() {
-                        return "Por favor ingresa 1 o más caracteres";
-                    },
-                    noResults: function() {
-                        return "No se encontraron resultados";
-                    },
-                    searching: function() {
-                        return "Buscando...";
-                    },
-                    errorLoading: function() {
-                        return "No se encontraron resultados";
-                    }
-                }
-            });
-        }
-    }
-</script>
-
-<script type="text/javascript">
-    var form_valido;
-    $(document).ready(function() {
-        <?php if (isset($_GET['id'])) { ?>
-            cargarDatos_informacion_personal(<?= $id ?>);
-        <?php } ?>
-    });
-
     function insertar_editar_foto() {
         var txt_elegir_foto = $('#txt_elegir_foto').val();
 
@@ -134,6 +119,7 @@ if (isset($_GET['id'])) {
         console.log(parametro_foto)
     }
 
+    //Información Personal
     function cargarDatos_informacion_personal(id) {
         $.ajax({
             url: '../controlador/PASANTES/02_ADRIAN/talento_humano/th_postulantesC.php?listar=true',
@@ -203,9 +189,11 @@ if (isset($_GET['id'])) {
 
         };
 
-        console.log(parametros_informacion_personal);
-        insertar_informacion_personal(parametros_informacion_personal);
-
+        if ($("#form_informacion_personal").valid()) {
+            // Si es válido, puedes proceder a enviar los datos por AJAX
+            console.log(parametros_informacion_personal);
+            insertar_informacion_personal(parametros_informacion_personal);
+        }
     }
 
     function insertar_informacion_personal(parametros) {
@@ -232,41 +220,47 @@ if (isset($_GET['id'])) {
         });
     }
 
-
-    function insertar_editar_informacion_contacto() {
+    //Información Adicional
+    function insertar_editar_informacion_adicional() {
         var txt_direccion_calle = $('#txt_direccion_calle').val();
         var txt_direccion_numero = $('#txt_direccion_numero').val();
         var txt_direccion_ciudad = $('#txt_direccion_ciudad').val();
         var txt_direccion_estado = $('#txt_direccion_estado').val();
         var txt_direccion_postal = $('#txt_direccion_postal').val();
-        var txt_telefono_1 = $('#txt_telefono_1').val();
-        var txt_telefono_2 = $('#txt_telefono_2').val();
-        var txt_correo = $('#txt_correo').val();
-        var txt_nombre_contacto_emergencia = [];
-        $('.txt_nombre_contacto_emergencia').each(function() {
-            txt_nombre_contacto_emergencia.push($(this).val());
-        });
-        var txt_telefono_contacto_emergencia = [];
-        $('.txt_telefono_contacto_emergencia').each(function() {
-            txt_telefono_contacto_emergencia.push($(this).val());
-        });
 
-        var parametros_informacion_contacto = {
+        var parametros_informacion_adicional = {
             'txt_direccion_calle': txt_direccion_calle,
             'txt_direccion_numero': txt_direccion_numero,
             'txt_direccion_ciudad': txt_direccion_ciudad,
             'txt_direccion_estado': txt_direccion_estado,
             'txt_direccion_postal': txt_direccion_postal,
-            'txt_telefono_1': txt_telefono_1,
-            'txt_telefono_2': txt_telefono_2,
-            'txt_correo': txt_correo,
+        }
+
+        if ($("#form_informacion_adicional").valid()) {
+            // Si es válido, puedes proceder a enviar los datos por AJAX
+            console.log(parametros_informacion_adicional)
+        }
+
+    }
+
+    //Contacto de Emergencia
+    function insertar_editar_contacto_emergencia() {
+        var txt_nombre_contacto_emergencia = $('#txt_nombre_contacto_emergencia').val();
+        var txt_telefono_contacto_emergencia = $('#txt_telefono_contacto_emergencia').val();
+
+        var parametros_contacto_emergencia = {
             'txt_nombre_contacto_emergencia': txt_nombre_contacto_emergencia,
             'txt_telefono_contacto_emergencia': txt_telefono_contacto_emergencia,
         }
 
-        console.log(parametros_informacion_contacto)
+        if ($("#form_contacto_emergencia").valid()) {
+            // Si es válido, puedes proceder a enviar los datos por AJAX
+            console.log(parametros_contacto_emergencia)
+        }
+
     }
 
+    //Experiencia Laboral
     function insertar_editar_experiencia_laboral() {
         var txt_nombre_empresa = $('#txt_nombre_empresa').val();
         var txt_cargos_ocupados = $('#txt_cargos_ocupados').val();
@@ -284,9 +278,13 @@ if (isset($_GET['id'])) {
             'txt_responsabilidades_logros': txt_responsabilidades_logros,
         }
 
-        console.log(parametros_experiencia_laboral)
+        if ($("#form_experiencia_laboral").valid()) {
+            // Si es válido, puedes proceder a enviar los datos por AJAX
+            console.log(parametros_experiencia_laboral)
+        }
     }
 
+    //Formación Académica
     function insertar_editar_formacion_academica() {
         var txt_titulo_obtenido = $('#txt_titulo_obtenido').val();
         var txt_institucion = $('#txt_institucion').val();
@@ -300,9 +298,13 @@ if (isset($_GET['id'])) {
             'txt_fecha_final_academico': txt_fecha_final_academico,
         }
 
-        console.log(parametros_formacion_academica)
+        if ($("#form_formacion_academica").valid()) {
+            // Si es válido, puedes proceder a enviar los datos por AJAX
+            console.log(parametros_formacion_academica)
+        }
     }
 
+    //Certificaciones y Capacitaciones
     function insertar_editar_certificaciones_capacitaciones() {
         var txt_nombre_certificacion = $('#txt_nombre_certificacion').val();
         var txt_enlace_certificado = $('#txt_enlace_certificado').val();
@@ -314,9 +316,13 @@ if (isset($_GET['id'])) {
             'txt_pdf_certificado': txt_pdf_certificado,
         }
 
-        console.log(parametros_certificaciones_capacitaciones)
+        if ($("#form_certificaciones_capacitaciones").valid()) {
+            // Si es válido, puedes proceder a enviar los datos por AJAX
+            console.log(parametros_certificaciones_capacitaciones)
+        }
     }
 
+    //Certificados Médicos
     function insertar_editar_certificado_medico() {
         var txt_nombre_certificado_medico = $('#txt_nombre_certificado_medico').val();
         var txt_respaldo_medico = $('#txt_respaldo_medico').val();
@@ -326,9 +332,13 @@ if (isset($_GET['id'])) {
             'txt_respaldo_medico': txt_respaldo_medico,
         }
 
-        console.log(parametros_certificado_medico)
+        if ($("#form_certificado_medico").valid()) {
+            // Si es válido, puedes proceder a enviar los datos por AJAX
+            console.log(parametros_certificado_medico)
+        }
     }
 
+    //Referencias Laborales
     function insertar_editar_referencias() {
         var txt_nombre_referencia = $('#txt_nombre_referencia').val();
         var txt_telefono_referencia = $('#txt_telefono_referencia').val();
@@ -340,9 +350,13 @@ if (isset($_GET['id'])) {
             'txt_copia_carta_recomendacion': txt_copia_carta_recomendacion,
         }
 
-        console.log(parametros_referencias)
+        if ($("#form_referencias_laborales").valid()) {
+            // Si es válido, puedes proceder a enviar los datos por AJAX
+            console.log(parametros_referencias)
+        }
     }
 
+    //Contratos de Trabajo
     function insertar_editar_contrato_laboral() {
         var txt_nombre_empresa_contrato = $('#txt_nombre_empresa_contrato').val();
         var txt_copia_contrato = $('#txt_copia_contrato').val();
@@ -352,9 +366,13 @@ if (isset($_GET['id'])) {
             'txt_copia_contrato': txt_copia_contrato,
         }
 
-        console.log(parametros_contrato_laboral)
+        if ($("#form_contrato_trabajo").valid()) {
+            // Si es válido, puedes proceder a enviar los datos por AJAX
+            console.log(parametros_contrato_laboral)
+        }
     }
 
+    //Estado Laboral
     function insertar_editar_estado_laboral() {
         var ddl_estado_laboral = $('#ddl_estado_laboral').val();
         var txt_fecha_contratacion_estado = $('#txt_fecha_contratacion_estado').val();
@@ -366,10 +384,14 @@ if (isset($_GET['id'])) {
             'txt_fecha_salida_estado': txt_fecha_salida_estado,
         }
 
-        console.log(parametros_estado_laboral)
+        if ($("#form_estado_laboral").valid()) {
+            // Si es válido, puedes proceder a enviar los datos por AJAX
+            console.log(parametros_estado_laboral)
+        }
 
     }
 
+    //Idiomas
     function insertar_editar_idiomas() {
         var ddl_seleccionar_idioma = $('#ddl_seleccionar_idioma').val();
         var ddl_dominio_idioma = $('#ddl_dominio_idioma').val();
@@ -379,11 +401,15 @@ if (isset($_GET['id'])) {
             'ddl_dominio_idioma': ddl_dominio_idioma,
         }
 
-        console.log(parametros_idiomas)
+        if ($("#form_agregar_idioma").valid()) {
+            // Si es válido, puedes proceder a enviar los datos por AJAX
+            console.log(parametros_idiomas)
+        }
+
     }
 
+    //Aptitudes
     function insertar_editar_aptitudes() {
-        var ddl_tipo_aptitudes = $('#ddl_tipo_aptitudes').val();
         var ddl_seleccionar_aptitud_blanda = [];
         $('.ddl_seleccionar_aptitud_blanda').each(function() {
             ddl_seleccionar_aptitud_blanda.push($(this).val());
@@ -394,22 +420,18 @@ if (isset($_GET['id'])) {
             ddl_seleccionar_aptitud_tecnica.push($(this).val());
         });
 
-        var select_tipo_aptitudes = $('#ddl_tipo_aptitudes');
-        if (select_tipo_aptitudes.val() == 'Blandas') {
-            var parametros_aptitudes = {
-                'ddl_tipo_aptitudes': ddl_tipo_aptitudes,
-                'ddl_seleccionar_aptitud_blanda': ddl_seleccionar_aptitud_blanda.flat(),
-            }
-        } else if (select_tipo_aptitudes.val() == 'Tecnicas') {
-            var parametros_aptitudes = {
-                'ddl_tipo_aptitudes': ddl_tipo_aptitudes,
-                'ddl_seleccionar_aptitud_tecnica': ddl_seleccionar_aptitud_tecnica.flat(),
-            }
+        var parametros_aptitudes = {
+            'ddl_seleccionar_aptitud_blanda':ddl_seleccionar_aptitud_blanda,
+            'ddl_seleccionar_aptitud_tecnica':ddl_seleccionar_aptitud_tecnica,
         }
 
-        console.log(parametros_aptitudes)
+        if ($("#form_aptitudes").valid()) {
+            // Si es válido, puedes proceder a enviar los datos por AJAX
+            console.log(parametros_aptitudes)
+        }
     }
 
+    //Documento de Identidad
     function insertar_editar_documento_identidad() {
         var ddl_tipo_documento_identidad = $('#ddl_tipo_documento_identidad').val();
         var txt_agregar_documento_identidad = $('#txt_agregar_documento_identidad').val();
@@ -419,7 +441,10 @@ if (isset($_GET['id'])) {
             'txt_agregar_documento_identidad': txt_agregar_documento_identidad,
         }
 
-        console.log(parametros_documento_identidad)
+        if ($("#form_documento_identidad").valid()) {
+            // Si es válido, puedes proceder a enviar los datos por AJAX
+            console.log(parametros_documento_identidad)
+        }
     }
 
     function limpiar_parametros() {
@@ -1007,31 +1032,31 @@ if (isset($_GET['id'])) {
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <!-- Modal body -->
-            <form class="needs-validation">
+            <form id="form_informacion_personal">
                 <div class="modal-body">
                     <div class="row">
                         <div class="col-3">
                             <div class="mb-3">
                                 <label for="txt_primer_apellido" class="form-label form-label-sm">Primer Apellido <label style="color: red;">*</label></label>
-                                <input type="text" class="form-control form-control-sm" name="txt_primer_apellido" id="txt_primer_apellido" placeholder="Escriba su apellido paterno" required>
+                                <input type="text" class="form-control form-control-sm" name="txt_primer_apellido" id="txt_primer_apellido" placeholder="Escriba su apellido paterno">
                             </div>
                         </div>
                         <div class="col-3">
                             <div class="mb-3">
                                 <label for="txt_segundo_apellido" class="form-label form-label-sm">Segundo Apellido <label style="color: red;">*</label></label>
-                                <input type="text" class="form-control form-control-sm" name="txt_segundo_apellido" id="txt_segundo_apellido" placeholder="Escriba su apellido materno" required>
+                                <input type="text" class="form-control form-control-sm" name="txt_segundo_apellido" id="txt_segundo_apellido" placeholder="Escriba su apellido materno">
                             </div>
                         </div>
                         <div class="col-3">
                             <div class="mb-3">
                                 <label for="txt_primer_nombre" class="form-label form-label-sm">Primer Nombre <label style="color: red;">*</label></label>
-                                <input type="text" class="form-control form-control-sm" name="txt_primer_nombre" id="txt_primer_nombre" placeholder="Escriba su primer nombre" required>
+                                <input type="text" class="form-control form-control-sm" name="txt_primer_nombre" id="txt_primer_nombre" placeholder="Escriba su primer nombre">
                             </div>
                         </div>
                         <div class="col-3">
                             <div class="mb-3">
                                 <label for="txt_segundo_nombre" class="form-label form-label-sm">Segundo Nombre <label style="color: red;">*</label></label>
-                                <input type="text" class="form-control form-control-sm" name="txt_segundo_nombre" id="txt_segundo_nombre" placeholder="Escriba su primer nombre" required>
+                                <input type="text" class="form-control form-control-sm" name="txt_segundo_nombre" id="txt_segundo_nombre" placeholder="Escriba su primer nombre">
                             </div>
                         </div>
                     </div>
@@ -1040,13 +1065,13 @@ if (isset($_GET['id'])) {
                         <div class="col-3">
                             <div class="mb-3">
                                 <label for="txt_fecha_nacimiento" class="form-label form-label-sm">Fecha de nacimiento <label style="color: red;">*</label></label>
-                                <input type="date" class="form-control form-control-sm" name="txt_fecha_nacimiento" id="txt_fecha_nacimiento" required>
+                                <input type="date" class="form-control form-control-sm" name="txt_fecha_nacimiento" id="txt_fecha_nacimiento">
                             </div>
                         </div>
                         <div class="col-3">
                             <div class="mb-3">
                                 <label for="ddl_nacionalidad" class="form-label form-label-sm">Nacionalidad <label style="color: red;">*</label></label>
-                                <select class="form-select form-select-sm" id="ddl_nacionalidad" name="ddl_nacionalidad" required>
+                                <select class="form-select form-select-sm" id="ddl_nacionalidad" name="ddl_nacionalidad">
                                     <option selected disabled value="">-- Selecciona una Nacionalidad --</option>
                                     <option value="Ecuatoriano">Ecuatoriano</option>
                                     <option value="Colombiano">Colombiano</option>
@@ -1059,13 +1084,13 @@ if (isset($_GET['id'])) {
                         <div class="col-3">
                             <div class="mb-3">
                                 <label for="txt_numero_cedula" class="form-label form-label-sm">N° de Cédula <label style="color: red;">*</label></label>
-                                <input type="text" class="form-control form-control-sm" name="txt_numero_cedula" id="txt_numero_cedula" placeholder="Digite su número de cédula" required>
+                                <input type="text" class="form-control form-control-sm" name="txt_numero_cedula" id="txt_numero_cedula" placeholder="Digite su número de cédula">
                             </div>
                         </div>
                         <div class="col-3">
                             <div class="mb-3">
                                 <label for="ddl_estado_civil" class="form-label form-label-sm">Estado civil <label style="color: red;">*</label></label>
-                                <select class="form-select form-select-sm" id="ddl_estado_civil" name="ddl_estado_civil" required>
+                                <select class="form-select form-select-sm" id="ddl_estado_civil" name="ddl_estado_civil">
                                     <option selected disabled value="">-- Selecciona un Estado Civil --</option>
                                     <option value="Soltero">Soltero/a</option>
                                     <option value="Casado">Casado/a</option>
@@ -1080,7 +1105,7 @@ if (isset($_GET['id'])) {
                         <div class="col-4">
                             <div class="mb-3">
                                 <label for="ddl_sexo" class="form-label form-label-sm">Sexo <label style="color: red;">*</label></label>
-                                <select class="form-select form-select-sm" id="ddl_sexo" name="ddl_sexo" required>
+                                <select class="form-select form-select-sm" id="ddl_sexo" name="ddl_sexo">
                                     <option selected disabled value="">-- Selecciona una opción --</option>
                                     <option value="Masculino">Masculino</option>
                                     <option value="Femenino">Femenino</option>
@@ -1090,19 +1115,19 @@ if (isset($_GET['id'])) {
                         <div class="col-4">
                             <div class="mb-3">
                                 <label for="txt_telefono_1" class="form-label form-label-sm">Teléfono 1 (personal o fijo) <label style="color: red;">*</label></label>
-                                <input type="text" class="form-control form-control-sm" name="txt_telefono_1" id="txt_telefono_1" value="" placeholder="Escriba su teléfono personal o fijo" required>
+                                <input type="text" class="form-control form-control-sm" name="txt_telefono_1" id="txt_telefono_1" placeholder="Escriba su teléfono personal o fijo">
                             </div>
                         </div>
                         <div class="col-4">
                             <div class="mb-3">
                                 <label for="txt_telefono_2" class="form-label form-label-sm">Teléfono 2 (opcional)</label>
-                                <input type="text" class="form-control form-control-sm" name="txt_telefono_2" id="txt_telefono_2" value="" placeholder="Escriba su teléfono personal o fijo (opcional)">
+                                <input type="text" class="form-control form-control-sm" name="txt_telefono_2" id="txt_telefono_2" placeholder="Escriba su teléfono personal o fijo (opcional)">
                             </div>
                         </div>
                         <div class="col-8 mx-auto">
                             <div class="mb-3">
                                 <label for="txt_correo" class="form-label form-label-sm">Correo Electrónico <label style="color: red;">*</label></label>
-                                <input type="email" class="form-control form-control-sm" name="txt_correo" id="txt_correo" value="" placeholder="Escriba su correo electrónico" required>
+                                <input type="email" class="form-control form-control-sm" name="txt_correo" id="txt_correo" placeholder="Escriba su correo electrónico">
                             </div>
                         </div>
                     </div>
@@ -1115,7 +1140,6 @@ if (isset($_GET['id'])) {
     </div>
 </div>
 
-
 <!-- Modal para la informacion Adicional -->
 <div class="modal" id="modal_informacion_adicional" tabindex="-1" aria-modal="true" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
     <div class="modal-dialog modal-dialog-centered modal-xl">
@@ -1123,11 +1147,11 @@ if (isset($_GET['id'])) {
 
             <!-- Modal Header -->
             <div class="modal-header">
-                <h5><small class="text-body-secondary">Ingrese sus datos de contacto</small></h5>
+                <h5><small class="text-body-secondary">Ingrese sus datos de su dirección</small></h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <!-- Modal body -->
-            <form class="needs-validation">
+            <form id="form_informacion_adicional">
                 <div class="modal-body">
                     <p class="fw-bold">Dirección:</p>
                     <div class="row">
@@ -1174,7 +1198,7 @@ if (isset($_GET['id'])) {
                     </div>
                 </div>
                 <div class="modal-footer d-flex justify-content-center">
-                    <button type="button" class="btn btn-success btn-sm" id="btn_guardar_informacion_contacto" onclick="validar_informacion_contacto();">Guardar</button>
+                    <button type="button" class="btn btn-success btn-sm" id="btn_guardar_informacion_contacto" onclick="insertar_editar_informacion_adicional();">Guardar</button>
                 </div>
             </form>
         </div>
@@ -1188,11 +1212,11 @@ if (isset($_GET['id'])) {
 
             <!-- Modal Header -->
             <div class="modal-header">
-                <h5><small class="text-body-secondary">Ingrese sus datos de contacto</small></h5>
+                <h5><small class="text-body-secondary">Ingrese los datos de contacto</small></h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <!-- Modal body -->
-            <form class="needs-validation">
+            <form id="form_contacto_emergencia">
                 <div class="modal-body">
                     <p class="fw-bold my-0 mb-2">Contacto de Emergencia:</p>
                     <div class="pnl_contacto_emergencia">
@@ -1213,7 +1237,7 @@ if (isset($_GET['id'])) {
                     </div>
                 </div>
                 <div class="modal-footer d-flex justify-content-center">
-                    <button type="button" class="btn btn-success btn-sm" id="btn_guardar_informacion_contacto" onclick="">Guardar</button>
+                    <button type="button" class="btn btn-success btn-sm" id="btn_guardar_informacion_contacto" onclick="insertar_editar_contacto_emergencia();">Guardar</button>
                 </div>
             </form>
         </div>
@@ -1231,33 +1255,37 @@ if (isset($_GET['id'])) {
                 <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="limpiar_parametros()"></button>
             </div>
             <!-- Modal body -->
-            <div class="modal-body needs-validation">
-                <div class="mb-3">
-                    <label for="txt_nombre_empresa" class="form-label form-label-sm">Nombre de la empresa <label style="color: red;">*</label></label>
-                    <input type="text" class="form-control form-control-sm" name="txt_nombre_empresa" id="txt_nombre_empresa" value="" placeholder="Escriba el nombre de la empresa donde trabajó">
+            <form id="form_experiencia_laboral">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="txt_nombre_empresa" class="form-label form-label-sm">Nombre de la empresa <label style="color: red;">*</label></label>
+                        <input type="text" class="form-control form-control-sm" name="txt_nombre_empresa" id="txt_nombre_empresa" placeholder="Escriba el nombre de la empresa donde trabajó">
+                    </div>
+                    <div class="mb-3">
+                        <label for="txt_cargos_ocupados" class="form-label form-label-sm">Cargos ocupados <label style="color: red;">*</label></label>
+                        <input type="text" class="form-control form-control-sm" name="txt_cargos_ocupados" id="txt_cargos_ocupados" placeholder="Escriba los cargos que ocupo en la empresa">
+                    </div>
+                    <div class="mb-3">
+                        <label for="txt_fecha_inicio_laboral" class="form-label form-label-sm">Fecha de inicio <label style="color: red;">*</label></label>
+                        <input type="date" class="form-control form-control-sm" name="txt_fecha_inicio_laboral" id="txt_fecha_inicio_laboral">
+                    </div>
+                    <div>
+                        <label for="txt_fecha_final_laboral" class="form-label form-label-sm">Fecha de finalización <label style="color: red;">*</label></label>
+                        <input type="date" class="form-control form-control-sm" name="txt_fecha_final_laboral" id="txt_fecha_final_laboral">
+                    </div>
+                    <div class="mt-1 mb-3">
+                        <input type="checkbox" class="form-check-input" name="cbx_fecha_final_laboral" id="cbx_fecha_final_laboral" onchange="checkbox_actualidad();">
+                        <label for="cbx_fecha_final_laboral" class="form-label form-label-sm">Actualidad</label>
+                    </div>
+                    <div class="mb-3">
+                        <label for="txt_responsabilidades_logros" class="form-label form-label-sm">Descripción de responsabilidades y logros <label style="color: red;">*</label></label>
+                        <textarea type="text" class="form-control form-control-sm" name="txt_responsabilidades_logros" id="txt_responsabilidades_logros" placeholder=""></textarea>
+                    </div>
                 </div>
-                <div class="mb-3">
-                    <label for="txt_cargos_ocupados" class="form-label form-label-sm">Cargos ocupados <label style="color: red;">*</label></label>
-                    <input type="text" class="form-control form-control-sm" name="txt_cargos_ocupados" id="txt_cargos_ocupados" value="" placeholder="Escriba los cargos que ocupo en la empresa">
+                <div class="modal-footer d-flex justify-content-center">
+                    <button type="button" class="btn btn-success btn-sm" id="btn_agregar_experiencia_laboral" onclick="insertar_editar_experiencia_laboral();">Agregar</button>
                 </div>
-                <div class="mb-3">
-                    <label for="txt_fecha_inicio_laboral" class="form-label form-label-sm">Fecha de inicio <label style="color: red;">*</label></label>
-                    <input type="date" class="form-control form-control-sm" name="txt_fecha_inicio_laboral" id="txt_fecha_inicio_laboral" value="">
-                </div>
-                <div class="mb-3">
-                    <label for="txt_fecha_final_laboral" class="form-label form-label-sm">Fecha de finalización <label style="color: red;">*</label></label>
-                    <input type="date" class="form-control form-control-sm mb-2" name="txt_fecha_final_laboral" id="txt_fecha_final_laboral" value="">
-                    <input type="checkbox" class="form-check-input" name="cbx_fecha_final_laboral" id="cbx_fecha_final_laboral">
-                    <label for="cbx_fecha_final_laboral" class="form-label form-label-sm">Actualidad</label>
-                </div>
-                <div class="mb-3">
-                    <label for="txt_responsabilidades_logros" class="form-label form-label-sm">Descripción de responsabilidades y logros <label style="color: red;">*</label></label>
-                    <textarea type="text" class="form-control form-control-sm" name="txt_responsabilidades_logros" id="txt_responsabilidades_logros" value="" placeholder=""></textarea>
-                </div>
-            </div>
-            <div class="modal-footer d-flex justify-content-center">
-                <button type="button" class="btn btn-success btn-sm" id="btn_agregar_experiencia_laboral" onclick="insertar_editar_experiencia_laboral();">Agregar</button>
-            </div>
+            </form>
         </div>
     </div>
 </div>
@@ -1273,27 +1301,29 @@ if (isset($_GET['id'])) {
                 <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="limpiar_parametros()"></button>
             </div>
             <!-- Modal body -->
-            <div class="modal-body needs-validation">
-                <div class="mb-3">
-                    <label for="txt_titulo_obtenido" class="form-label form-label-sm">Título obtenido <label style="color: red;">*</label></label>
-                    <input type="text" class="form-control form-control-sm" name="txt_titulo_obtenido" id="txt_titulo_obtenido" value="" placeholder="Escriba su título académico">
+            <form id="form_formacion_academica">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="txt_titulo_obtenido" class="form-label form-label-sm">Título obtenido <label style="color: red;">*</label></label>
+                        <input type="text" class="form-control form-control-sm" name="txt_titulo_obtenido" id="txt_titulo_obtenido" placeholder="Escriba su título académico">
+                    </div>
+                    <div class="mb-3">
+                        <label for="txt_institucion" class="form-label form-label-sm">Institución <label style="color: red;">*</label></label>
+                        <input type="text" class="form-control form-control-sm" name="txt_institucion" id="txt_institucion" placeholder="Escriba la institución en la que se formó">
+                    </div>
+                    <div class="mb-3">
+                        <label for="txt_fecha_inicio_academico" class="form-label form-label-sm">Fecha de inicio <label style="color: red;">*</label></label>
+                        <input type="date" class="form-control form-control-sm" name="txt_fecha_inicio_academico" id="txt_fecha_inicio_academico">
+                    </div>
+                    <div class="mb-3">
+                        <label for="txt_fecha_final_academico" class="form-label form-label-sm">Fecha de finalización <label style="color: red;">*</label></label>
+                        <input type="date" class="form-control form-control-sm mb-2" name="txt_fecha_final_academico" id="txt_fecha_final_academico">
+                    </div>
                 </div>
-                <div class="mb-3">
-                    <label for="txt_institucion" class="form-label form-label-sm">Institución <label style="color: red;">*</label></label>
-                    <input type="text" class="form-control form-control-sm" name="txt_institucion" id="txt_institucion" value="" placeholder="Escriba la institución en la que se formó">
+                <div class="modal-footer d-flex justify-content-center">
+                    <button type="button" class="btn btn-success btn-sm" id="btn_guardar_formacion" onclick="insertar_editar_formacion_academica();">Agregar</button>
                 </div>
-                <div class="mb-3">
-                    <label for="txt_fecha_inicio_academico" class="form-label form-label-sm">Fecha de inicio <label style="color: red;">*</label></label>
-                    <input type="date" class="form-control form-control-sm" name="txt_fecha_inicio_academico" id="txt_fecha_inicio_academico" value="">
-                </div>
-                <div class="mb-3">
-                    <label for="txt_fecha_final_academico" class="form-label form-label-sm">Fecha de finalización <label style="color: red;">*</label></label>
-                    <input type="date" class="form-control form-control-sm mb-2" name="txt_fecha_final_academico" id="txt_fecha_final_academico" value="">
-                </div>
-            </div>
-            <div class="modal-footer d-flex justify-content-center">
-                <button type="button" class="btn btn-success btn-sm" id="btn_guardar_formacion" onclick="insertar_editar_formacion_academica();">Agregar</button>
-            </div>
+            </form>
         </div>
     </div>
 </div>
@@ -1309,22 +1339,25 @@ if (isset($_GET['id'])) {
                 <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="limpiar_parametros()"></button>
             </div>
             <!-- Modal body -->
-            <div class="modal-body needs-validation">
-                <div class="mb-3">
-                    <label for="txt_nombre_certificacion" class="form-label form-label-sm">Nombre del curso o capacitación <label style="color: red;">*</label></label>
-                    <input type="text" class="form-control form-control-sm" name="txt_nombre_certificacion" id="txt_nombre_certificacion" value="" placeholder="Escriba el nombre del curso o capacitación">
+            <form id="form_certificaciones_capacitaciones">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="txt_nombre_certificacion" class="form-label form-label-sm">Nombre del curso o capacitación <label style="color: red;">*</label></label>
+                        <input type="text" class="form-control form-control-sm" name="txt_nombre_certificacion" id="txt_nombre_certificacion" value="" placeholder="Escriba el nombre del curso o capacitación">
+                    </div>
+                    <div class="mb-3">
+                        <label for="txt_enlace_certificado" class="form-label form-label-sm">1. Enlace del Certificado obtenido <label style="color: red;">*</label></label>
+                        <input type="text" class="form-control form-control-sm" name="txt_enlace_certificado" id="txt_enlace_certificado" value="" placeholder="Escriba el enlace a su certificado">
+                    </div>
+                    <div class="mb-3">
+                        <label for="txt_pdf_certificado" class="form-label form-label-sm">2. PDF del Certificado obtenido <label style="color: red;">*</label></label>
+                        <input type="file" class="form-control form-control-sm" name="txt_pdf_certificado" id="txt_pdf_certificado" accept=".pdf" value="" placeholder="">
+                    </div>
                 </div>
-                <div class="mb-3">
-                    <p class="fw-bold">Eliga una de las opciones:</p>
-                    <label for="txt_enlace_certificado" class="form-label form-label-sm">1. Enlace del Certificado obtenido</label>
-                    <input type="text" class="form-control form-control-sm mb-3" name="txt_enlace_certificado" id="txt_enlace_certificado" value="" placeholder="Escriba el enlace a su certificado">
-                    <label for="txt_pdf_certificado" class="form-label form-label-sm">2. PDF del Certificado obtenido</label>
-                    <input type="file" class="form-control form-control-sm" name="txt_pdf_certificado" id="txt_pdf_certificado" accept=".pdf" value="" placeholder="">
+                <div class="modal-footer d-flex justify-content-center">
+                    <button type="button" class="btn btn-success btn-sm" id="btn_guardar_certificaciones" onclick="insertar_editar_certificaciones_capacitaciones();">Guardar Certificación o Capacitación</button>
                 </div>
-            </div>
-            <div class="modal-footer d-flex justify-content-center">
-                <button type="button" class="btn btn-success btn-sm" id="btn_guardar_certificaciones" onclick="insertar_editar_certificaciones_capacitaciones();">Guardar Certificación o Capacitación</button>
-            </div>
+            </form>
         </div>
     </div>
 </div>
@@ -1340,19 +1373,21 @@ if (isset($_GET['id'])) {
                 <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="limpiar_parametros()"></button>
             </div>
             <!-- Modal body -->
-            <div class="modal-body needs-validation">
-                <div class="mb-3">
-                    <label for="txt_nombre_certificado_medico" class="form-label form-label-sm">Nombre del certificado <label style="color: red;">*</label></label>
-                    <input type="text" class="form-control form-control-sm" name="txt_nombre_certificado_medico" id="txt_nombre_certificado_medico" value="" placeholder="Escriba el nombre del certificado médico">
+            <form id="form_certificado_medico">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="txt_nombre_certificado_medico" class="form-label form-label-sm">Nombre del certificado <label style="color: red;">*</label></label>
+                        <input type="text" class="form-control form-control-sm" name="txt_nombre_certificado_medico" id="txt_nombre_certificado_medico" placeholder="Escriba el nombre del certificado médico">
+                    </div>
+                    <div class="mb-3">
+                        <label for="txt_respaldo_medico" class="form-label form-label-sm">Documentación que respalde la aptitud para el trabajo <label style="color: red;">*</label></label>
+                        <input type="file" class="form-control form-control-sm" name="txt_respaldo_medico" id="txt_respaldo_medico" accept=".pdf">
+                    </div>
                 </div>
-                <div class="mb-3">
-                    <label for="txt_respaldo_medico" class="form-label form-label-sm">Documentación que respalde la aptitud para el trabajo <label style="color: red;">*</label></label>
-                    <input type="file" class="form-control form-control-sm mb-3" name="txt_respaldo_medico" id="txt_respaldo_medico" accept=".pdf" value="">
+                <div class="modal-footer d-flex justify-content-center">
+                    <button type="button" class="btn btn-success btn-sm" id="btn_guardar_certificado_medico" onclick="insertar_editar_certificado_medico()">Guardar Certificado Médico</button>
                 </div>
-            </div>
-            <div class="modal-footer d-flex justify-content-center">
-                <button type="button" class="btn btn-success btn-sm" id="btn_guardar_certificado_medico" onclick="insertar_editar_certificado_medico()">Guardar Certificado Médico</button>
-            </div>
+            </form>
         </div>
     </div>
 </div>
@@ -1368,23 +1403,25 @@ if (isset($_GET['id'])) {
                 <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="limpiar_parametros()"></button>
             </div>
             <!-- Modal body -->
-            <div class="modal-body needs-validation">
-                <div class="mb-3">
-                    <label for="txt_nombre_referencia" class="form-label form-label-sm">Nombre del empleador <label style="color: red;">*</label></label>
-                    <input type="text" class="form-control form-control-sm" name="txt_nombre_referencia" id="txt_nombre_referencia" value="" placeholder="Escriba el nombre de el empleador">
+            <form id="form_referencias_laborales">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="txt_nombre_referencia" class="form-label form-label-sm">Nombre del empleador <label style="color: red;">*</label></label>
+                        <input type="text" class="form-control form-control-sm" name="txt_nombre_referencia" id="txt_nombre_referencia" placeholder="Escriba el nombre de el empleador">
+                    </div>
+                    <div class="mb-3">
+                        <label for="txt_telefono_referencia" class="form-label form-label-sm">Teléfono del empleador <label style="color: red;">*</label></label>
+                        <input type="text" class="form-control form-control-sm" name="txt_telefono_referencia" id="txt_telefono_referencia" placeholder="Escriba el número de contacto de el empleador">
+                    </div>
+                    <div class="mb-3">
+                        <label for="txt_copia_carta_recomendacion" class="form-label form-label-sm">Copia de la carta de recomendación <label style="color: red;">*</label></label>
+                        <input type="file" class="form-control form-control-sm" name="txt_copia_carta_recomendacion" id="txt_copia_carta_recomendacion" accept=".pdf">
+                    </div>
                 </div>
-                <div class="mb-3">
-                    <label for="txt_telefono_referencia" class="form-label form-label-sm">Teléfono del empleador <label style="color: red;">*</label></label>
-                    <input type="text" class="form-control form-control-sm" name="txt_telefono_referencia" id="txt_telefono_referencia" value="" placeholder="Escriba el número de contacto de el empleador">
+                <div class="modal-footer d-flex justify-content-center">
+                    <button type="button" class="btn btn-success btn-sm" id="btn_guardar_referencia" onclick="insertar_editar_referencias();">Guardar Referencia Laboral</button>
                 </div>
-                <div class="mb-3">
-                    <label for="txt_copia_carta_recomendacion" class="form-label form-label-sm">Copia de la carta de recomendación <label style="color: red;">*</label></label>
-                    <input type="file" class="form-control form-control-sm mb-3" name="txt_copia_carta_recomendacion" id="txt_copia_carta_recomendacion" accept=".pdf" value="">
-                </div>
-            </div>
-            <div class="modal-footer d-flex justify-content-center">
-                <button type="button" class="btn btn-success btn-sm" id="btn_guardar_referencia" onclick="insertar_editar_referencias();">Guardar Referencia Laboral</button>
-            </div>
+            </form>
         </div>
     </div>
 </div>
@@ -1400,19 +1437,21 @@ if (isset($_GET['id'])) {
                 <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="limpiar_parametros()"></button>
             </div>
             <!-- Modal body -->
-            <div class="modal-body needs-validation">
-                <div class="mb-3">
-                    <label for="txt_nombre_empresa_contrato" class="form-label form-label-sm">Nombre de la empresa <label style="color: red;">*</label></label>
-                    <input type="text" class="form-control form-control-sm" name="txt_nombre_empresa_contrato" id="txt_nombre_empresa_contrato" value="" placeholder="Escriba el nombre de la empresa que emitió el contrato">
+            <form id="form_contrato_trabajo">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="txt_nombre_empresa_contrato" class="form-label form-label-sm">Nombre de la empresa <label style="color: red;">*</label></label>
+                        <input type="text" class="form-control form-control-sm" name="txt_nombre_empresa_contrato" id="txt_nombre_empresa_contrato" placeholder="Escriba el nombre de la empresa que emitió el contrato">
+                    </div>
+                    <div class="mb-3">
+                        <label for="txt_copia_contrato" class="form-label form-label-sm">Copia del contrato firmado <label style="color: red;">*</label></label>
+                        <input type="file" class="form-control form-control-sm" name="txt_copia_contrato" id="txt_copia_contrato" accept=".pdf">
+                    </div>
                 </div>
-                <div class="mb-3">
-                    <label for="txt_copia_contrato" class="form-label form-label-sm">Copia del contrato firmado <label style="color: red;">*</label></label>
-                    <input type="file" class="form-control form-control-sm mb-3" name="txt_copia_contrato" id="txt_copia_contrato" accept=".pdf" value="">
+                <div class="modal-footer d-flex justify-content-center">
+                    <button type="button" class="btn btn-success btn-sm" id="btn_guardar_contratos" onclick="insertar_editar_contrato_laboral();">Guardar Contrato de Trabajo</button>
                 </div>
-            </div>
-            <div class="modal-footer d-flex justify-content-center">
-                <button type="button" class="btn btn-success btn-sm" id="btn_guardar_contratos" onclick="insertar_editar_contrato_laboral();">Guardar Contrato de Trabajo</button>
-            </div>
+            </form>
         </div>
     </div>
 </div>
@@ -1428,31 +1467,33 @@ if (isset($_GET['id'])) {
                 <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="limpiar_parametros()"></button>
             </div>
             <!-- Modal body -->
-            <div class="modal-body needs-validation">
-                <div class="mb-3">
-                    <label for="ddl_estado_laboral" class="form-label form-label-sm">Estado laboral: <label style="color: red;">*</label></label>
-                    <select class="form-select form-select-sm" id="ddl_estado_laboral" name="ddl_estado_laboral" onchange="ocultar_opciones_estado()" required>
-                        <option selected disabled value="">-- Selecciona un Estado Laboral -- <label style="color: red;">*</label></option>
-                        <option value="Activo">Activo</option>
-                        <option value="Inactivo">Inactivo</option>
-                        <option value="Prueba">En prueba</option>
-                        <option value="Pasante">Pasante</option>
-                        <option value="Freelancer">Freelancer</option>
-                        <option value="Autonomo">Autónomo</option>
-                    </select>
+            <form id="form_estado_laboral">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="ddl_estado_laboral" class="form-label form-label-sm">Estado laboral: <label style="color: red;">*</label></label>
+                        <select class="form-select form-select-sm" id="ddl_estado_laboral" name="ddl_estado_laboral" onchange="ocultar_opciones_estado();" required>
+                            <option selected disabled value="">-- Selecciona un Estado Laboral -- <label style="color: red;">*</label></option>
+                            <option value="Activo">Activo</option>
+                            <option value="Inactivo">Inactivo</option>
+                            <option value="Prueba">En prueba</option>
+                            <option value="Pasante">Pasante</option>
+                            <option value="Freelancer">Freelancer</option>
+                            <option value="Autonomo">Autónomo</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="txt_fecha_contratacion_estado" class="form-label form-label-sm">Fecha de contratación <label style="color: red;">*</label></label>
+                        <input type="date" class="form-control form-control-sm" name="txt_fecha_contratacion_estado" id="txt_fecha_contratacion_estado">
+                    </div>
+                    <div class="mb-3">
+                        <label for="txt_fecha_salida_estado" class="form-label form-label-sm">Fecha de salida <label style="color: red;">*</label></label>
+                        <input type="date" class="form-control form-control-sm" name="txt_fecha_salida_estado" id="txt_fecha_salida_estado">
+                    </div>
                 </div>
-                <div class="mb-3">
-                    <label for="txt_fecha_contratacion_estado" class="form-label form-label-sm">Fecha de contratación <label style="color: red;">*</label></label>
-                    <input type="date" class="form-control form-control-sm mb-3" name="txt_fecha_contratacion_estado" id="txt_fecha_contratacion_estado" value="">
+                <div class="modal-footer d-flex justify-content-center">
+                    <button type="button" class="btn btn-success btn-sm" id="btn_guardar_estado_laboral" onclick="insertar_editar_estado_laboral();">Guardar Estado Laboral</button>
                 </div>
-                <div class="mb-3">
-                    <label for="txt_fecha_salida_estado" class="form-label form-label-sm">Fecha de salida <label style="color: red;">*</label></label>
-                    <input type="date" class="form-control form-control-sm mb-3" name="txt_fecha_salida_estado" id="txt_fecha_salida_estado" value="">
-                </div>
-            </div>
-            <div class="modal-footer d-flex justify-content-center">
-                <button type="button" class="btn btn-success btn-sm" id="btn_guardar_estado_laboral" onclick="insertar_editar_estado_laboral();">Guardar Estado Laboral</button>
-            </div>
+            </form>
         </div>
     </div>
 </div>
@@ -1468,36 +1509,38 @@ if (isset($_GET['id'])) {
                 <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="limpiar_parametros()"></button>
             </div>
             <!-- Modal body -->
-            <div class="modal-body needs-validation">
-                <div class="mb-3">
-                    <label for="ddl_seleccionar_idioma" class="form-label form-label-sm">Idioma <label style="color: red;">*</label></label>
-                    <select class="form-select form-select-sm" id="ddl_seleccionar_idioma" name="ddl_seleccionar_idioma">
-                        <option selected disabled value="">-- Selecciona un Idioma --</option>
-                        <option value="Español">Español</option>
-                        <option value="Inglés">Inglés</option>
-                        <option value="Francés">Francés</option>
-                        <option value="Alemán">Alemán</option>
-                        <option value="Chino">Chino</option>
-                        <option value="Italiano">Italiano</option>
-                    </select>
+            <form id="form_agregar_idioma">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="ddl_seleccionar_idioma" class="form-label form-label-sm">Idioma <label style="color: red;">*</label></label>
+                        <select class="form-select form-select-sm" id="ddl_seleccionar_idioma" name="ddl_seleccionar_idioma">
+                            <option selected disabled value="">-- Selecciona un Idioma --</option>
+                            <option value="Español">Español</option>
+                            <option value="Inglés">Inglés</option>
+                            <option value="Francés">Francés</option>
+                            <option value="Alemán">Alemán</option>
+                            <option value="Chino">Chino</option>
+                            <option value="Italiano">Italiano</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="ddl_dominio_idioma" class="form-label form-label-sm">Dominio del Idioma <label style="color: red;">*</label></label>
+                        <select class="form-select form-select-sm" id="ddl_dominio_idioma" name="ddl_dominio_idioma" required>
+                            <option selected disabled value="">-- Selecciona su nivel de dominio del idioma --</option>
+                            <option value="Nativo">Nativo</option>
+                            <option value="C1">C1</option>
+                            <option value="C2">C2</option>
+                            <option value="B1">B1</option>
+                            <option value="B2">B2</option>
+                            <option value="C1">C1</option>
+                            <option value="C2">C2</option>
+                        </select>
+                    </div>
                 </div>
-                <div class="mb-3">
-                    <label for="ddl_dominio_idioma" class="form-label form-label-sm">Dominio del Idioma <label style="color: red;">*</label></label>
-                    <select class="form-select form-select-sm" id="ddl_dominio_idioma" name="ddl_dominio_idioma" required>
-                        <option selected disabled value="">-- Selecciona su nivel de dominio del idioma --</option>
-                        <option value="Nativo">Nativo</option>
-                        <option value="C1">C1</option>
-                        <option value="C2">C2</option>
-                        <option value="B1">B1</option>
-                        <option value="B2">B2</option>
-                        <option value="C1">C1</option>
-                        <option value="C2">C2</option>
-                    </select>
+                <div class="modal-footer d-flex justify-content-center">
+                    <button type="button" class="btn btn-success btn-sm" id="btn_guardar_idioma" onclick="insertar_editar_idiomas();">Guardar Idioma</button>
                 </div>
-            </div>
-            <div class="modal-footer d-flex justify-content-center">
-                <button type="button" class="btn btn-success btn-sm" id="btn_guardar_idioma" onclick="insertar_editar_idiomas();">Guardar Idioma</button>
-            </div>
+            </form>
         </div>
     </div>
 </div>
@@ -1513,58 +1556,51 @@ if (isset($_GET['id'])) {
                 <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="limpiar_parametros()"></button>
             </div>
             <!-- Modal body -->
-            <div class="modal-body needs-validation">
-                <select class="form-select form-select-sm mb-4" id="ddl_tipo_aptitudes" name="ddl_tipo_aptitudes" onchange="mostrar_tipo_aptitudes();" required>
-                    <option selected disabled value="">-- Selecciona el tipo de Aptitudes --</option>
-                    <option value="Blandas">Aptitudes Blandas</option>
-                    <option value="Tecnicas">Aptitudes Técnicas</option>
-                </select>
-                <div id="pnl_blandas" style="display: none;">
-                    <div class="mb-3">
-                        <div class="row mb-3">
-                            <div class="col-12 d-flex align-items-center">
-                                <label for="ddl_seleccionar_aptitud_blanda" class="form-label form-label-sm fw-bold">Seleccione sus Aptitudes Blandas <label style="color: red;">*</label></label>
-                            </div>
-                        </div>
-                        <div class="row mb-2">
-                            <div class="col-12">
-                                <select class="form-select form-select-sm ddl_seleccionar_aptitud_blanda" id="ddl_seleccionar_aptitud_blanda" name="ddl_seleccionar_aptitud_blanda" multiple="multiple">
-                                    <option value="Liderazgo">Liderazgo</option>
-                                    <option value="Comunicación Efectiva">Comunicación Efectiva</option>
-                                    <option value="Trabajo en equipo">Trabajo en equipo</option>
-                                    <option value="etc">etc</option>
-                                    <option value="etc">etc</option>
-                                    <option value="etc">etc</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div id="pnl_tecnicas" style="display: none;">
-                    <div class="mb-3">
-                        <div class="row mb-3">
-                            <div class="col-12 d-flex align-items-center">
-                                <label for="ddl_seleccionar_aptitud_tecnica" class="form-label form-label-sm fw-bold">Seleccione sus Aptitudes Técnicas <label style="color: red;">*</label></label>
-                            </div>
-                        </div>
-                        <div class="row mb-2">
-                            <div class="col-12">
-                                <select class="form-select form-select-sm ddl_seleccionar_aptitud_tecnica" id="ddl_seleccionar_aptitud_tecnica" name="ddl_seleccionar_aptitud_tecnica" multiple="multiple">
-                                    <option value="Manejo de office">Manejo de office</option>
-                                    <option value="Django">Django</option>
-                                    <option value="Laravel">Laravel</option>
-                                    <option value="Photoshop">Photoshop</option>
-                                    <option value="Illustrator">Illustrator</option>
-                                    <option value="etc">etc</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer d-flex justify-content-center">
-                <button type="button" class="btn btn-success btn-sm" id="btn_guardar_aptitudes" onclick="insertar_editar_aptitudes();">Guardar Aptitudes</button>
-            </div>
+             <form id="form_aptitudes">
+                 <div class="modal-body">
+                     <div class="mb-4">
+                         <div class="row mb-1">
+                             <div class="col-12 d-flex align-items-center">
+                                 <label for="ddl_seleccionar_aptitud_blanda" class="form-label form-label-sm fw-bold">Seleccione sus Aptitudes Blandas <label style="color: red;">*</label></label>
+                             </div>
+                         </div>
+                         <div class="row mb-3">
+                             <div class="col-12">
+                                 <select class="form-select form-select-sm ddl_seleccionar_aptitud_blanda" id="ddl_seleccionar_aptitud_blanda" name="ddl_seleccionar_aptitud_blanda" multiple="multiple">
+                                     <option value="Liderazgo">Liderazgo</option>
+                                     <option value="Comunicación Efectiva">Comunicación Efectiva</option>
+                                     <option value="Trabajo en equipo">Trabajo en equipo</option>
+                                     <option value="etc">etc</option>
+                                     <option value="etc">etc</option>
+                                     <option value="etc">etc</option>
+                                 </select>
+                             </div>
+                         </div>
+                     </div>
+                     <div class="mb-2">
+                         <div class="row mb-1">
+                             <div class="col-12 d-flex align-items-center">
+                                 <label for="ddl_seleccionar_aptitud_tecnica" class="form-label form-label-sm fw-bold">Seleccione sus Aptitudes Técnicas <label style="color: red;">*</label></label>
+                             </div>
+                         </div>
+                         <div class="row mb-3">
+                             <div class="col-12">
+                                 <select class="form-select form-select-sm ddl_seleccionar_aptitud_tecnica" id="ddl_seleccionar_aptitud_tecnica" name="ddl_seleccionar_aptitud_tecnica" multiple="multiple">
+                                     <option value="Manejo de office">Manejo de office</option>
+                                     <option value="Django">Django</option>
+                                     <option value="Laravel">Laravel</option>
+                                     <option value="Photoshop">Photoshop</option>
+                                     <option value="Illustrator">Illustrator</option>
+                                     <option value="etc">etc</option>
+                                 </select>
+                             </div>
+                         </div>
+                     </div>
+                 </div>
+                 <div class="modal-footer d-flex justify-content-center">
+                     <button type="button" class="btn btn-success btn-sm" id="btn_guardar_aptitudes" onclick="insertar_editar_aptitudes();">Guardar Aptitudes</button>
+                 </div>
+             </form>
         </div>
     </div>
 </div>
@@ -1580,27 +1616,594 @@ if (isset($_GET['id'])) {
                 <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="limpiar_parametros()"></button>
             </div>
             <!-- Modal body -->
-            <div class="modal-body needs-validation">
-                <div class="mb-3">
-                    <label for="ddl_tipo_documento_identidad" class="form-label form-label-sm">Tipo de Documento <label style="color: red;">*</label></label>
-                    <select class="form-select form-select-sm" id="ddl_tipo_documento_identidad" name="ddl_tipo_documento_identidad" required>
-                        <option selected disabled value="">-- Selecciona una opción --</option>
-                        <option value="Cédula de Identidad">Cédula de Identidad</option>
-                        <option value="Pasaporte">Pasaporte</option>
-                        <option value="Tarjeta de identificación">Tarjeta de identificación</option>
-                        <option value="Licencia">Licencia</option>
-                        <option value="Carnét o Certificado para miembro de la Fuerza Pública Ecuatoriana">Carnét o Certificado para miembro de la Fuerza Pública Ecuatoriana</option>
-                        <option value="Carnét de discapacidad">Carnét de discapacidad</option>
-                    </select>
-                </div>
-                <div class="mb-3">
-                    <label for="txt_agregar_documento_identidad" class="form-label form-label-sm">Copia del Documento de identidad <label style="color: red;">*</label></label>
-                    <input type="file" class="form-control form-control-sm" name="txt_agregar_documento_identidad" id="txt_agregar_documento_identidad" accept=".pdf">
-                </div>
-            </div>
-            <div class="modal-footer d-flex justify-content-center">
-                <button type="button" class="btn btn-success btn-sm" id="btn_guardar_documento_identidad" onclick="insertar_editar_documento_identidad();">Guardar Documento de Identidad</button>
-            </div>
+             <form id="form_documento_identidad">
+                 <div class="modal-body">
+                     <div class="mb-3">
+                         <label for="ddl_tipo_documento_identidad" class="form-label form-label-sm">Tipo de Documento <label style="color: red;">*</label></label>
+                         <select class="form-select form-select-sm" id="ddl_tipo_documento_identidad" name="ddl_tipo_documento_identidad">
+                             <option selected disabled value="">-- Selecciona una opción --</option>
+                             <option value="Cédula de Identidad">Cédula de Identidad</option>
+                             <option value="Pasaporte">Pasaporte</option>
+                             <option value="Tarjeta de identificación">Tarjeta de identificación</option>
+                             <option value="Licencia">Licencia</option>
+                             <option value="Carnét o Certificado para miembro de la Fuerza Pública Ecuatoriana">Carnét o Certificado para miembro de la Fuerza Pública Ecuatoriana</option>
+                             <option value="Carnét de discapacidad">Carnét de discapacidad</option>
+                         </select>
+                     </div>
+                     <div class="mb-3">
+                         <label for="txt_agregar_documento_identidad" class="form-label form-label-sm">Copia del Documento de identidad <label style="color: red;">*</label></label>
+                         <input type="file" class="form-control form-control-sm" name="txt_agregar_documento_identidad" id="txt_agregar_documento_identidad" accept=".pdf">
+                     </div>
+                 </div>
+                 <div class="modal-footer d-flex justify-content-center">
+                     <button type="button" class="btn btn-success btn-sm" id="btn_guardar_documento_identidad" onclick="insertar_editar_documento_identidad();">Guardar Documento de Identidad</button>
+                 </div>
+             </form>
         </div>
     </div>
 </div>
+
+<script>
+    //Validacion de formulario
+    $(document).ready(function() {
+        //Validación Información Personal
+        $("#form_informacion_personal").validate({
+            rules: {
+                txt_primer_apellido: {
+                    required: true,
+                },
+                txt_segundo_apellido: {
+                    required: true,
+                },
+                txt_primer_nombre: {
+                    required: true,
+                },
+                txt_segundo_nombre: {
+                    required: true,
+                },
+                txt_numero_cedula: {
+                    required: true,
+                },
+                ddl_sexo: {
+                    required: true,
+                },
+                txt_fecha_nacimiento: {
+                    required: true,
+                },
+                txt_edad: {
+                    required: true,
+                },
+                txt_telefono_1: {
+                    required: true,
+                },
+                txt_telefono_2: {
+                    required: true,
+                },
+                txt_correo: {
+                    required: true,
+                },
+                ddl_nacionalidad: {
+                    required: true,
+                },
+                ddl_estado_civil: {
+                    required: true,
+                },
+            },
+            messages: {
+                txt_primer_apellido: {
+                    required: "Por favor ingrese el primer apellido",
+                },
+                txt_segundo_apellido: {
+                    required: "Por favor ingrese el segundo apellido",
+                },
+                txt_primer_nombre: {
+                    required: "Por favor ingrese el primer nombre",
+                },
+                txt_segundo_nombre: {
+                    required: "Por favor ingrese el segundo nombre",
+                },
+                txt_numero_cedula: {
+                    required: "Por favor ingresa un número de cédula",
+                },
+                ddl_sexo: {
+                    required: "Por favor seleccione el sexo",
+                },
+                txt_fecha_nacimiento: {
+                    required: "Por favor ingrese la fecha de nacimiento",
+                },
+                txt_edad: {
+                    required: "Por favor ingrese la edad (fecha de nacimiento)",
+                },
+                txt_telefono_1: {
+                    required: "Por favor ingrese el primero teléfono",
+                },
+                txt_telefono_2: {
+                    required: "Por favor ingrese el segundo teléfono",
+                },
+                txt_correo: {
+                    required: "Por favor ingrese un correo",
+                },
+                ddl_nacionalidad: {
+                    required: "Por favor seleccione su nacionalidad",
+                },
+                ddl_estado_civil: {
+                    required: "Por favor seleccione su estado civil",
+                },
+            },
+
+            highlight: function(element) {
+                // Agrega la clase 'is-invalid' al input que falla la validación
+                $(element).addClass('is-invalid');
+                $(element).removeClass('is-valid');
+            },
+            unhighlight: function(element) {
+                // Elimina la clase 'is-invalid' si la validación pasa
+                $(element).removeClass('is-invalid');
+                $(element).addClass('is-valid');
+
+            }
+        });
+
+        //Validación Información Adicional
+        $("#form_informacion_adicional").validate({
+            rules: {
+                txt_direccion_calle: {
+                    required: true,
+                },
+                txt_direccion_numero: {
+                    required: true,
+                },
+                txt_direccion_ciudad: {
+                    required: true,
+                },
+                txt_direccion_estado: {
+                    required: true,
+                },
+                txt_direccion_postal: {
+                    required: true,
+                },
+            },
+            messages: {
+                txt_direccion_calle: {
+                    required: "Por favor ingrese la calle de su dirección",
+                },
+                txt_direccion_numero: {
+                    required: "Por favor ingrese el número de su dirección",
+                },
+                txt_direccion_ciudad: {
+                    required: "Por favor ingrese la ciudad en la que reside",
+                },
+                txt_direccion_estado: {
+                    required: "Por favor ingrese la provincia en la que reside",
+                },
+                txt_direccion_postal: {
+                    required: "Por favor ingrese su código postal o de click en 'Obtener'",
+                },
+            },
+
+            highlight: function(element) {
+                // Agrega la clase 'is-invalid' al input que falla la validación
+                $(element).addClass('is-invalid');
+                $(element).removeClass('is-valid');
+            },
+            unhighlight: function(element) {
+                // Elimina la clase 'is-invalid' si la validación pasa
+                $(element).removeClass('is-invalid');
+                $(element).addClass('is-valid');
+
+            }
+        });
+
+        //Validación Contacto de Emergencia
+        $("#form_contacto_emergencia").validate({
+            rules: {
+                txt_nombre_contacto_emergencia: {
+                    required: true,
+                },
+                txt_telefono_contacto_emergencia: {
+                    required: true,
+                },
+            },
+            messages: {
+                txt_nombre_contacto_emergencia: {
+                    required: "Por favor ingrese el nombre de su contacto",
+                },
+                txt_telefono_contacto_emergencia: {
+                    required: "Por favor ingrese el teléfono de su contacto",
+                },
+            },
+
+            highlight: function(element) {
+                // Agrega la clase 'is-invalid' al input que falla la validación
+                $(element).addClass('is-invalid');
+                $(element).removeClass('is-valid');
+            },
+            unhighlight: function(element) {
+                // Elimina la clase 'is-invalid' si la validación pasa
+                $(element).removeClass('is-invalid');
+                $(element).addClass('is-valid');
+
+            }
+        });
+
+        //Validación Experiencia Laboral
+        $("#form_experiencia_laboral").validate({
+            rules: {
+                txt_nombre_empresa: {
+                    required: true,
+                },
+                txt_cargos_ocupados: {
+                    required: true,
+                },
+                txt_fecha_inicio_laboral: {
+                    required: true,
+                },
+                txt_fecha_final_laboral: {
+                    required: true,
+                },
+                txt_responsabilidades_logros: {
+                    required: true,
+                },
+            },
+            messages: {
+                txt_nombre_empresa: {
+                    required: "Por favor ingrese el nombre de la empresa",
+                },
+                txt_cargos_ocupados: {
+                    required: "Por favor ingrese los cargos ocupados",
+                },
+                txt_fecha_inicio_laboral: {
+                    required: "Por favor ingrese la fecha en la que iniciaron sus funciones",
+                },
+                txt_fecha_final_laboral: {
+                    required: "Por favor ingrese la fecha de finalización o seleccione 'Actualidad' si sigue trabajando.",
+                },
+                txt_responsabilidades_logros: {
+                    required: "Por favor ingrese sus responsabilidades y logros",
+                },
+            },
+
+            highlight: function(element) {
+                // Agrega la clase 'is-invalid' al input que falla la validación
+                $(element).addClass('is-invalid');
+                $(element).removeClass('is-valid');
+            },
+            unhighlight: function(element) {
+                // Elimina la clase 'is-invalid' si la validación pasa
+                $(element).removeClass('is-invalid');
+                $(element).addClass('is-valid');
+
+            }
+        });
+
+        //Validación Formación Académica
+        $("#form_formacion_academica").validate({
+            rules: {
+                txt_titulo_obtenido: {
+                    required: true,
+                },
+                txt_institucion: {
+                    required: true,
+                },
+                txt_fecha_inicio_academico: {
+                    required: true,
+                },
+                txt_fecha_final_academico: {
+                    required: true,
+                },
+            },
+            messages: {
+                txt_titulo_obtenido: {
+                    required: "Por favor ingrese el título obtenido",
+                },
+                txt_institucion: {
+                    required: "Por favor ingrese la institución en la que se graduó",
+                },
+                txt_fecha_inicio_academico: {
+                    required: "Por favor ingrese la fecha en la que inició sus estudios",
+                },
+                txt_fecha_final_academico: {
+                    required: "Por favor ingrese la fecha en la que finalizó o finalizará sus estudios",
+                },
+            },
+
+            highlight: function(element) {
+                // Agrega la clase 'is-invalid' al input que falla la validación
+                $(element).addClass('is-invalid');
+                $(element).removeClass('is-valid');
+            },
+            unhighlight: function(element) {
+                // Elimina la clase 'is-invalid' si la validación pasa
+                $(element).removeClass('is-invalid');
+                $(element).addClass('is-valid');
+
+            }
+        });
+
+        //Validación Certificaciones y Capacitaciones
+        $("#form_certificaciones_capacitaciones").validate({
+            rules: {
+                txt_nombre_certificacion: {
+                    required: true,
+                },
+                txt_enlace_certificado: {
+                    required: true,
+                },
+                txt_pdf_certificado: {
+                    required: true,
+                },
+            },
+            messages: {
+                txt_nombre_certificacion: {
+                    required: "Por favor ingrese el nombre del certificado",
+                },
+                txt_enlace_certificado: {
+                    required: "Por favor ingrese el enlace de su certificado",
+                },
+                txt_pdf_certificado: {
+                    required: "Por favor ingrese el PDF de su certificado",
+                },
+            },
+
+            highlight: function(element) {
+                // Agrega la clase 'is-invalid' al input que falla la validación
+                $(element).addClass('is-invalid');
+                $(element).removeClass('is-valid');
+            },
+            unhighlight: function(element) {
+                // Elimina la clase 'is-invalid' si la validación pasa
+                $(element).removeClass('is-invalid');
+                $(element).addClass('is-valid');
+
+            }
+        });
+
+        //Validación Certificados Médicos
+        $("#form_certificado_medico").validate({
+            rules: {
+                txt_nombre_certificado_medico: {
+                    required: true,
+                },
+                txt_respaldo_medico: {
+                    required: true,
+                },
+            },
+            messages: {
+                txt_nombre_certificado_medico: {
+                    required: "Por favor ingrese un nombre para su certificado médico",
+                },
+                txt_respaldo_medico: {
+                    required: "Por favor suba un documento que lo respalde",
+                },
+            },
+
+            highlight: function(element) {
+                // Agrega la clase 'is-invalid' al input que falla la validación
+                $(element).addClass('is-invalid');
+                $(element).removeClass('is-valid');
+            },
+            unhighlight: function(element) {
+                // Elimina la clase 'is-invalid' si la validación pasa
+                $(element).removeClass('is-invalid');
+                $(element).addClass('is-valid');
+
+            }
+        });
+
+        //Validación Referencias Laborales
+        $("#form_referencias_laborales").validate({
+            rules: {
+                txt_nombre_referencia: {
+                    required: true,
+                },
+                txt_telefono_referencia: {
+                    required: true,
+                },
+                txt_copia_carta_recomendacion: {
+                    required: true,
+                },
+            },
+            messages: {
+                txt_nombre_referencia: {
+                    required: "Por favor ingrese el nombre de su referencia laboral",
+                },
+                txt_telefono_referencia: {
+                    required: "Por favor ingrese el teléfono de su referencia laboral",
+                },
+                txt_copia_carta_recomendacion: {
+                    required: "Por favor suba la carta de recomendación",
+                },
+            },
+
+            highlight: function(element) {
+                // Agrega la clase 'is-invalid' al input que falla la validación
+                $(element).addClass('is-invalid');
+                $(element).removeClass('is-valid');
+            },
+            unhighlight: function(element) {
+                // Elimina la clase 'is-invalid' si la validación pasa
+                $(element).removeClass('is-invalid');
+                $(element).addClass('is-valid');
+
+            }
+        });
+
+        //Validación Contratos de Trabajo
+        $("#form_contrato_trabajo").validate({
+            rules: {
+                txt_nombre_empresa_contrato: {
+                    required: true,
+                },
+                txt_copia_contrato: {
+                    required: true,
+                },
+            },
+            messages: {
+                txt_nombre_empresa_contrato: {
+                    required: "Por favor ingrese el nombre de la empresa",
+                },
+                txt_copia_contrato: {
+                    required: "Por favor suba la copia de su contrato",
+                },
+            },
+
+            highlight: function(element) {
+                // Agrega la clase 'is-invalid' al input que falla la validación
+                $(element).addClass('is-invalid');
+                $(element).removeClass('is-valid');
+            },
+            unhighlight: function(element) {
+                // Elimina la clase 'is-invalid' si la validación pasa
+                $(element).removeClass('is-invalid');
+                $(element).addClass('is-valid');
+
+            }
+        });
+
+        //Validación Estado Laboral
+        $("#form_estado_laboral").validate({
+            rules: {
+                ddl_estado_laboral: {
+                    required: true,
+                },
+                txt_fecha_contratacion_estado: {
+                    required: true,
+                },
+                txt_fecha_salida_estado: {
+                    required: true,
+                },
+            },
+            messages: {
+                ddl_estado_laboral: {
+                    required: "Por favor seleccione su estado laboral",
+                },
+                txt_fecha_contratacion_estado: {
+                    required: "Por favor ingrese la fecha de su contratación",
+                },
+                txt_fecha_salida_estado: {
+                    required: "Por favor ingrese la fecha de su salida",
+                },
+            },
+
+            highlight: function(element) {
+                // Agrega la clase 'is-invalid' al input que falla la validación
+                $(element).addClass('is-invalid');
+                $(element).removeClass('is-valid');
+            },
+            unhighlight: function(element) {
+                // Elimina la clase 'is-invalid' si la validación pasa
+                $(element).removeClass('is-invalid');
+                $(element).addClass('is-valid');
+
+            }
+        });
+
+        //Validación Idiomas
+        $("#form_agregar_idioma").validate({
+            rules: {
+                ddl_seleccionar_idioma: {
+                    required: true,
+                },
+                ddl_dominio_idioma: {
+                    required: true,
+                },
+            },
+            messages: {
+                ddl_seleccionar_idioma: {
+                    required: "Por favor seleccione un idioma",
+                },
+                ddl_dominio_idioma: {
+                    required: "Por favor seleccione su dominio con el idioma",
+                },
+            },
+
+            highlight: function(element) {
+                // Agrega la clase 'is-invalid' al input que falla la validación
+                $(element).addClass('is-invalid');
+                $(element).removeClass('is-valid');
+            },
+            unhighlight: function(element) {
+                // Elimina la clase 'is-invalid' si la validación pasa
+                $(element).removeClass('is-invalid');
+                $(element).addClass('is-valid');
+
+            }
+        });
+
+        //Validación Aptitudes
+        $("#form_aptitudes").validate({
+            rules: {
+                ddl_seleccionar_aptitud_blanda: {
+                    required: true,
+                },
+                ddl_seleccionar_aptitud_tecnica: {
+                    required: true,
+                },
+            },
+            messages: {
+                ddl_seleccionar_aptitud_blanda: {
+                    required: "Por favor eliga al menos una aptitud blanda",
+                },
+                ddl_seleccionar_aptitud_tecnica: {
+                    required: "Por favor eliga al menos una aptitud técnica",
+                },
+            },
+
+            highlight: function(element) {
+                // Agrega la clase 'is-invalid' al input que falla la validación
+                $(element).addClass('is-invalid');
+                $(element).removeClass('is-valid');
+            },
+            unhighlight: function(element) {
+                // Elimina la clase 'is-invalid' si la validación pasa
+                $(element).removeClass('is-invalid');
+                $(element).addClass('is-valid');
+
+            }
+        });
+
+        //Validación Documento de Identidad
+        $("#form_documento_identidad").validate({
+            rules: {
+                ddl_tipo_documento_identidad: {
+                    required: true,
+                },
+                txt_agregar_documento_identidad: {
+                    required: true,
+                },
+            },
+            messages: {
+                ddl_tipo_documento_identidad: {
+                    required: "Por favor eliga el documento de identidad que va a subir",
+                },
+                txt_agregar_documento_identidad: {
+                    required: "Por favor suba su documento de identidad",
+                },
+            },
+
+            highlight: function(element) {
+                // Agrega la clase 'is-invalid' al input que falla la validación
+                $(element).addClass('is-invalid');
+                $(element).removeClass('is-valid');
+            },
+            unhighlight: function(element) {
+                // Elimina la clase 'is-invalid' si la validación pasa
+                $(element).removeClass('is-invalid');
+                $(element).addClass('is-valid');
+
+            }
+        });
+        
+    });
+
+    function checkbox_actualidad() {
+        if ($('#cbx_fecha_final_laboral').is(':checked')) {
+            $('#txt_fecha_final_laboral').rules("remove", "required");
+        } else {
+            $('#txt_fecha_final_laboral').rules("add", {
+                required: true
+            });
+        }
+        $("#form_experiencia_laboral").validate().element('#txt_fecha_final_laboral');
+    }
+</script>

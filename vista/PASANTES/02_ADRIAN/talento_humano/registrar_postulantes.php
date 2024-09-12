@@ -9,8 +9,15 @@ if (isset($_GET['id'])) {
 }
 
 ?>
-
+<script src="../lib/jquery_validation/jquery.validate.js"></script>
 <script src="../js/ENFERMERIA/operaciones_generales.js"></script>
+<style>
+    label.error {
+        color: red;
+        /* Cambia "red" por el color que desees */
+
+    }
+</style>
 
 <script type="text/javascript">
     $(document).ready(function() {
@@ -64,7 +71,7 @@ if (isset($_GET['id'])) {
         var txt_correo = $('#txt_correo').val();
 
 
-        var parametros_informacion_personal = {
+        var parametros = {
             '_id': '<?= $_id ?>',
             'txt_primer_nombre': txt_primer_nombre,
             'txt_segundo_nombre': txt_segundo_nombre,
@@ -81,8 +88,12 @@ if (isset($_GET['id'])) {
 
         };
 
-        console.log(parametros_informacion_personal);
-        insertar(parametros_informacion_personal);
+        if ($("#registrar_postulantes").valid()) {
+            // Si es válido, puedes proceder a enviar los datos por AJAX
+            console.log(parametros);
+            insertar(parametros);
+        }
+
 
     }
 
@@ -189,7 +200,7 @@ if (isset($_GET['id'])) {
                         </div>
 
                         <hr>
-                        <form class="needs-validation">
+                        <form id="registrar_postulantes">
                             <div class="row mb-3">
                                 <div class="col-3">
                                     <div class="mb-3">
@@ -308,4 +319,92 @@ if (isset($_GET['id'])) {
         </div>
     </div>
 </div>
-</div>
+<script>
+  //Validacion de formulario
+  $(document).ready(function() {
+    $("#registrar_postulantes").validate({
+      rules: {
+        txt_primer_apellido:{
+          required: true,
+        },
+        txt_segundo_apellido: {
+          required: true,
+        },
+        txt_primer_nombre: {
+          required: true,
+        },
+        txt_segundo_nombre: {
+          required: true,
+        },
+        txt_numero_cedula: {
+          required: true,
+        },
+        ddl_sexo: {
+          required: true,
+        },
+        txt_fecha_nacimiento: {
+          required: true,
+        },
+        txt_edad: {
+          required: true,
+        },
+        txt_telefono_1: {
+          required: true,
+        },
+        txt_telefono_2: {
+          required: true,
+        },
+        txt_correo: {
+          required: true,
+        },
+      },
+      messages: {
+        txt_primer_apellido: {
+          required: "Por favor ingrese el primer apellido",
+        },
+        txt_segundo_apellido: {
+          required: "Por favor ingrese el segundo apellido",
+        },
+        txt_primer_nombre: {
+          required: "Por favor ingrese el primer nombre",
+        },
+        txt_segundo_nombre: {
+          required: "Por favor ingrese el segundo nombre",
+        },
+        txt_numero_cedula: {
+          required: "Por favor ingresa un número de cédula",
+        },
+        ddl_sexo: {
+          required: "Por favor seleccione el sexo",
+        },
+        txt_fecha_nacimiento: {
+          required: "Por favor ingrese la fecha de nacimiento",
+        },
+        txt_edad: {
+          required: "Por favor ingrese la edad (fecha de nacimiento)",
+        },
+        txt_telefono_1: {
+          required: "Por favor ingrese el primero teléfono",
+        },
+        txt_telefono_2: {
+          required: "Por favor ingrese el segundo teléfono",
+        },
+        txt_correo: {
+          required: "Por favor ingrese un correo",
+        },
+      },
+
+      highlight: function(element) {
+        // Agrega la clase 'is-invalid' al input que falla la validación
+        $(element).addClass('is-invalid');
+        $(element).removeClass('is-valid');
+      },
+      unhighlight: function(element) {
+        // Elimina la clase 'is-invalid' si la validación pasa
+        $(element).removeClass('is-invalid');
+        $(element).addClass('is-valid');
+
+      }
+    });
+  });
+</script>
