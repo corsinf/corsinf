@@ -1,7 +1,7 @@
 <?php
-require_once(dirname(__DIR__, 4) . '/modelo/PASANTES/02_ADRIAN/talento_humano/th_adicionalM.php');
+require_once(dirname(__DIR__, 4) . '/modelo/PASANTES/02_ADRIAN/POSTULANTES/th_postulante_inf_adicionalM.php');
 
-$controlador = new th_adicionalC();
+$controlador = new th_postulante_inf_adicionalC();
 
 if (isset($_GET['listar'])) {
     echo json_encode($controlador->listar($_POST['id']));
@@ -16,13 +16,13 @@ if (isset($_GET['eliminar'])) {
 }
 
 
-class th_adicionalC
+class th_postulante_inf_adicionalC
 {
     private $modelo;
 
     function __construct()
     {
-        $this->modelo = new th_adicionalM();
+        $this->modelo = new th_postulante_inf_adicionalM();
     }
 
     function listar($id)

@@ -13,7 +13,7 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
             },
             responsive: false,
             ajax: {
-                url: '../controlador/PASANTES/02_ADRIAN/talento_humano/th_postulantesC.php?listar_todo=true',
+                url: '../controlador/PASANTES/02_ADRIAN/POSTULANTES/th_postulantesC.php?listar_todo=true',
                 dataSrc: ''
             },
             columns: [{
