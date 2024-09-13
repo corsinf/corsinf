@@ -1,6 +1,3 @@
-<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.4/xlsx.full.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.19/jspdf.plugin.autotable.min.js"></script>
 
 
 <div class="page-wrapper">
@@ -12,11 +9,7 @@
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb mb-0 p-0">
                         <li class="breadcrumb-item">
-<<<<<<< HEAD
                             <a href="javascript:;"><i class="bx bx-home"></i></a>
-=======
-                            <a href="javascript:;"><i class="bi bi-house"></i></a>
->>>>>>> 311c86844178ed67946c2771601a38ae4cc73447
                         </li>
                         <li class="breadcrumb-item active" aria-current="page">
                             <strong>Registro Miembros</strong>
@@ -33,7 +26,6 @@
                     <div class="card-body">
                         <h1 class="titulo mb-4">Oficina 5</h1>
 
-<<<<<<< HEAD
                         <!-- Pestañas -->
                         <ul class="nav nav-tabs" id="myTab" role="tablist">
                             <li class="nav-item" role="presentation">
@@ -182,45 +174,6 @@
 </div>
 
 
-=======
-                        <form id="formulario_miembro" class="mb-4">
-                            <div class="row">
-                                <div class="col-md-3 mb-3">
-                                    <label for="txt_nombre" class="form-label"><strong>Nombre:</strong></label>
-                                    <input type="text" class="form-control form-control-sm" name="txt_nombre" id="txt_nombre" placeholder="Nombre" required>
-                                </div>
-                                <div class="col-md-3 mb-3">
-                                    <label for="txt_correo" class="form-label"><strong>Correo:</strong></label>
-                                    <input type="email" class="form-control form-control-sm" name="txt_correo" id="txt_correo" placeholder="Correo electrónico" required>
-                                </div>
-                                <div class="col-md-3 mb-3">
-                                    <label for="txt_cedula" class="form-label"><strong>Cédula:</strong></label>
-                                    <input type="text" class="form-control form-control-sm" name="txt_cedula" id="txt_cedula" placeholder="Cédula" required>
-                                </div>
-                                <div class="col-md-3 mb-3">
-                                    <label for="txt_numero_celular" class="form-label"><strong>Número Celular:</strong></label>
-                                    <input type="text" class="form-control form-control-sm" name="txt_numero_celular" id="txt_numero_celular" placeholder="Número" required>
-                                </div>
-                            </div>
-                            <button type="button" class="btn btn-primary" id="btn_registrar_miembro"><strong>Registrar Miembro</strong></button>
-                        </form>
-
-                        <h2 class="mb-4">Miembros Registrados</h2>
-                        <table class="table table-bordered table-striped" id="tbl_miembros">
-                            <thead class="table-header">
-                                <tr>
-                                    <th>Nombre</th>
-                                    <th>Correo</th>
-                                    <th>Cédula</th>
-                                    <th>Número</th>
-                                    <th>Acciones</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                
-                            </tbody>
-                        </table>
->>>>>>> 311c86844178ed67946c2771601a38ae4cc73447
 
                         <div class="modal fade" id="modal_registrar_compra" tabindex="-1" aria-labelledby="modal_registrar_compra_label" aria-hidden="true">
                             <div class="modal-dialog modal-lg">
@@ -232,16 +185,13 @@
                                     <div class="modal-body">
                                         <form id="formulario_compras">
                                             <div class="row mb-3">
-<<<<<<< HEAD
                                             
                                                 <input type="hidden" name="id_miembro" id="id_miembro" class="form-control" value="<?php echo htmlspecialchars($id_miembro); ?>" readonly>
                                                 <input type="hidden" name="id_sala" id="id_sala" class="form-control" >
                                                 <div class="col-md-3">
-=======
-                                                <div class="col-md-6">
->>>>>>> 311c86844178ed67946c2771601a38ae4cc73447
                                                     <label for="txt_producto" class="form-label"><strong>Producto:</strong></label>
-                                                    <input type="text" class="form-control" id="txt_producto" name="txt_producto" placeholder="Producto" required>
+                                                    <select class="form-control" id="txt_producto" name="txt_producto" required>
+                                                    </select>
                                                 </div>
                                                 <div class="col-md-3">
                                                     <label for="txt_cantidad" class="form-label"><strong>Cantidad:</strong></label>
@@ -251,35 +201,37 @@
                                                     <label for="txt_precio" class="form-label"><strong>Precio:</strong></label>
                                                     <input type="text" class="form-control" id="txt_precio" name="txt_precio" readonly>
                                                 </div>
+                                                <div class="col-md-3">
+                                                    <label for="txt_total" class="form-label"><strong>Total:</strong></label>
+                                                    <input type="text" class="form-control" id="txt_total" name="txt_total" readonly>
+                                                </div>
+                                                <div class="col-md-3 d-flex align-items-end ms-auto">
+                                                    <button style="margin-top: 20px;" type="button" onclick="enviarCompras()" class="btn btn-primary w-100 btn-margin-top" id="btn_agregar_compra">
+                                                        <i class='bx bx-cart'></i> <strong>Agregar</strong>
+                                                    </button>
+                                                </div>
                                             </div>
                                             <table class="table table-bordered table-striped mt-4" id="tbl_compras">
                                                 <thead class="table-header">
                                                     <tr>
-<<<<<<< HEAD
                                                         <th>Sala</th>
                                                         <th>Compra</th>
-=======
->>>>>>> 311c86844178ed67946c2771601a38ae4cc73447
                                                         <th>Miembro</th>
                                                         <th>Producto</th>
                                                         <th>Cantidad</th>
                                                         <th>Precio</th>
                                                         <th>Total</th>
-                                                        <th>Acciones</th>
+                                                        <th>Eliminar</th>
                                                     </tr>
                                                 </thead>
-                                                <tbody>
-                                                    
+                                                <tbody id="tbl_boby">
                                                 </tbody>
                                             </table>
-                                            <button type="button" class="btn btn-primary" id="btn_agregar_compra">
-                                                <i class="bi bi-bag-plus-fill"></i> <strong>Agregar</strong>
-                                            </button>
                                         </form>
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-danger" data-bs-dismiss="modal">
-                                            <strong>Cerrar</strong> <i class="bi bi-file-x"></i>
+                                            <i class='bx bx-x'></i><strong>Cerrar</strong> 
                                         </button>
                                     </div>
                                 </div>
@@ -296,7 +248,6 @@
 
 <script>
     $(document).ready(function() {
-<<<<<<< HEAD
         lista_usuario();
         lista_compra();
         lista_comprassala();
@@ -336,36 +287,21 @@
                 $('#tbl_body').html(response);
                 console.log(response);
             }       
-=======
-        $('#ddl_producto').change(function() {
-            var precio = $(this).find(':selected').data('precio');
-            $('#txt_precio').val(precio ? '$' + parseFloat(precio).toFixed(2) : '');
->>>>>>> 311c86844178ed67946c2771601a38ae4cc73447
         });
+    }
 
-        $('#btn_registrar_miembro').click(function() {
-            var nombre = $('#txt_nombre').val();
-            var correo = $('#txt_correo').val();
-            var cedula = $('#txt_cedula').val();
-            var numero = $('#txt_numero_celular').val();
-
-            if (nombre && correo && cedula && numero) {
-                var nuevaFila = `<tr>
-                    <td>${nombre}</td>
-                    <td>${correo}</td>
-                    <td>${cedula}</td>
-                    <td>${numero}</td>
-                    <td class="acciones">
-                        <button class="btn btn-danger btn-sm btn-eliminar"><i class="bi bi-file-x"></i></button>
-                        <button class="btn btn-primary btn-sm btn-registrar-compras" data-bs-toggle="modal" data-bs-target="#modal_registrar_compra"><i class="bi bi-cart4"></i></button>
-                    </td>
-                </tr>`;
-                $('#tbl_miembros tbody').append(nuevaFila);
-                $('#formulario_miembro')[0].reset();
-            }
+    function lista_compra() {       
+        $.ajax({
+            url: '../controlador/COWORKING/crear_mienbrosC.php?lista_compra=true',
+            type: 'post',
+            dataType: 'json', 
+            success: function(response) {  
+                $('#tbl_boby').html(response);
+                console.log(response);
+            }       
         });
+    }
 
-<<<<<<< HEAD
     function lista_comprassala() {       
         $.ajax({
             url: '../controlador/COWORKING/crear_mienbrosC.php?lista_comprasala=true',
@@ -624,38 +560,10 @@
             success: function(response) {
                 $('#txt_productos').html(response);
             }       
-=======
-        $('#btn_agregar_compra').click(function() {
-            var producto = $('#ddl_producto').val();
-            var cantidad = $('#txt_cantidad').val();
-            var precio = $('#txt_precio').val();
-            var miembro = $('#btn_agregar_compra').data('miembro');
-
-            if (producto && cantidad && precio) {
-                var total = parseFloat(precio.replace('$', '')) * cantidad;
-                var nuevaFilaCompra = `<tr>
-                    <td>${miembro}</td>
-                    <td>${producto}</td>
-                    <td>${cantidad}</td>
-                    <td>${precio}</td>
-                    <td>$${total.toFixed(2)}</td>
-                    <td style="display: flex; justify-content: center; align-items: center;">
-                        <button type="button" class="btn btn-danger btn-sm btn-eliminar-compra">
-                            <i class="bi bi-file-x"></i>
-                        </button>
-                    </td>
-                </tr>`;
-                $('#tbl_compras tbody').append(nuevaFilaCompra);
-                $('#formulario_compras')[0].reset();
-            }
->>>>>>> 311c86844178ed67946c2771601a38ae4cc73447
         });
+    }
 
-        $('#tbl_miembros').on('click', '.btn-eliminar', function() {
-            $(this).closest('tr').remove();
-        });
 
-<<<<<<< HEAD
     function generarExcelMiembros() {
             const ws = XLSX.utils.table_to_sheet(document.getElementById('tbl_miembros'));
             const wb = XLSX.utils.book_new();
@@ -687,15 +595,4 @@
             doc.autoTable({ html: table });
             doc.save('compras.pdf');
         }
-=======
-        $('#tbl_compras').on('click', '.btn-eliminar-compra', function() {
-            $(this).closest('tr').remove();
-        });
-
-        $('#tbl_miembros').on('click', '.btn-registrar-compras', function() {
-            var miembro = $(this).closest('tr').find('td:first').text();
-            $('#btn_agregar_compra').data('miembro', miembro);
-        });
-    });
->>>>>>> 311c86844178ed67946c2771601a38ae4cc73447
 </script>
