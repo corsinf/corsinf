@@ -73,7 +73,7 @@
 
                                 <h2 class="mb-4">Miembros Registrados</h2>
                                 <div class="row mb-3">
-                                    <div class="col-12 d-flex justify-content-end">
+                                    <div class="col-12 d-flex justify-content-start">
                                         <div class="btn-group me-2">
                                             <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
                                                 <i class='bx bxs-report'></i><strong>Informe de Miembros</strong>
@@ -119,6 +119,8 @@
                                 <form id="formulario_servicios">
                                     <div class="row mb-3">
                                         
+                                        <input type="hidden" class="form-control" id="did_sala" name="txt_cantidad_servicio" value="1" required>
+
                                         <div class="col-md-3">
                                             <label for="txt_productos" class="form-label"><strong>Producto:</strong></label>
                                             <select class="form-control" id="txt_productos" name="txt_productos" required>
@@ -129,10 +131,10 @@
                                             <label for="txt_cantidad_servicio" class="form-label"><strong>Cantidad:</strong></label>
                                             <input type="number" class="form-control" id="txt_cantidad_servicio" name="txt_cantidad_servicio" value="1" min="1" required>
                                         </div>
-                                        <div class="col-md-3">
-                                            <label for="did_sala" class="form-label"><strong>Sala:</strong></label>
-                                            <input type="number" class="form-control" id="did_sala" name="txt_cantidad_servicio" value="1" min="1" required>
-                                        </div>
+                                        
+                                            
+
+                                        
                                         <div class="col-md-3">
                                             <label for="txt_precios" class="form-label"><strong>Precio:</strong></label>
                                             <input type="text" class="form-control" id="txt_precios" name="txt_precios" readonly>
