@@ -17,7 +17,7 @@
         var txt_correo_empresarial = $('#txt_correo_empresarial').val();
         var txt_celular = $('#txt_celular').val();
         var txt_fijo = $('#txt_fijo').val();
-        
+
         var parametros = {
             'txt_tipo': txt_tipo,
             'txt_razon_social': txt_razon_social,
@@ -37,8 +37,8 @@
 
         if ($("#form_juridico").valid()) {
             // Si es válido, puedes proceder a enviar los datos por AJAX
-            //insertar(parametros);
-            console.log(parametros);
+            insertar(parametros);
+            //console.log(parametros);
         }
     }
 
@@ -61,113 +61,6 @@
             }
         });
     }
-
-    // function validar(){
-    //     var txt_razon_social = $('#txt_razon_social').val().trim();
-    //     var txt_ruc_juridico = $('#txt_ruc_juridico').val().trim();
-    //     var txt_primer_nombre = $('#txt_primer_nombre').val().trim();
-    //     var txt_segundo_nombre = $('#txt_segundo_nombre').val().trim();
-    //     var txt_primer_apellido = $('#txt_primer_apellido').val().trim();
-    //     var txt_segundo_apellido = $('#txt_segundo_apellido').val().trim();
-    //     var txt_numero_identificacion = $('#txt_numero_identificacion').val().trim();
-    //     var txt_direccion_ruc = $('#txt_direccion_ruc').val().trim();
-    //     var txt_provincia = $('#txt_provincia').val().trim();
-    //     var txt_ciudad = $('#txt_ciudad').val().trim();
-    //     var txt_correo_empresarial = $('#txt_correo_empresarial').val().trim();
-    //     var txt_celular = $('#txt_celular').val().trim();
-    //     var txt_fijo = $('#txt_fijo').val().trim();
-    //     var allFilled = true;
-
-    //     if (!txt_razon_social) {
-    //         $('#txt_razon_social').addClass('is-invalid');
-    //         allFilled = false;
-    //     } else {
-    //         $('#txt_razon_social').removeClass('is-invalid');
-    //     }
-
-    //     if (!txt_ruc_juridico) {
-    //         $('#txt_ruc_juridico').addClass('is-invalid');
-    //         allFilled = false;
-    //     } else {
-    //         $('#txt_ruc_juridico').removeClass('is-invalid');
-    //     }
-
-    //     if (!txt_primer_nombre) {
-    //         $('#txt_primer_nombre').addClass('is-invalid');
-    //         allFilled = false;
-    //     } else {
-    //         $('#txt_primer_nombre').removeClass('is-invalid');
-    //     }
-
-    //     if (!txt_segundo_nombre) {
-    //         $('#txt_segundo_nombre').addClass('is-invalid');
-    //         allFilled = false;
-    //     } else {
-    //         $('#txt_segundo_nombre').removeClass('is-invalid');
-    //     }
-
-    //     if (!txt_primer_apellido) {
-    //         $('#txt_primer_apellido').addClass('is-invalid');
-    //         allFilled = false;
-    //     } else {
-    //         $('#txt_primer_apellido').removeClass('is-invalid');
-    //     }
-
-    //     if (!txt_segundo_apellido) {
-    //         $('#txt_segundo_apellido').addClass('is-invalid');
-    //         allFilled = false;
-    //     } else {
-    //         $('#txt_segundo_apellido').removeClass('is-invalid');
-    //     }
-
-    //     if (!txt_numero_identificacion) {
-    //         $('#txt_numero_identificacion').addClass('is-invalid');
-    //         allFilled = false;
-    //     } else {
-    //         $('#txt_numero_identificacion').removeClass('is-invalid');
-    //     }
-
-    //     if (!txt_direccion_ruc) {
-    //         $('#txt_direccion_ruc').addClass('is-invalid');
-    //         allFilled = false;
-    //     } else {
-    //         $('#txt_direccion_ruc').removeClass('is-invalid');
-    //     }
-
-    //     if (!txt_provincia) {
-    //         $('#txt_provincia').addClass('is-invalid');
-    //         allFilled = false;
-    //     } else {
-    //         $('#txt_provincia').removeClass('is-invalid');
-    //     }
-
-    //     if (!txt_ciudad) {
-    //         $('#txt_ciudad').addClass('is-invalid');
-    //         allFilled = false;
-    //     } else {
-    //         $('#txt_ciudad').removeClass('is-invalid');
-    //     }
-
-    //     if (!txt_correo_empresarial) {
-    //         $('#txt_correo_empresarial').addClass('is-invalid');
-    //         allFilled = false;
-    //     } else {
-    //         $('#txt_correo_empresarial').removeClass('is-invalid');
-    //     }
-
-    //     if (!txt_celular) {
-    //         $('#txt_celular').addClass('is-invalid');
-    //         allFilled = false;
-    //     } else {
-    //         $('#txt_celular').removeClass('is-invalid');
-    //     }
-
-    //     if (allFilled) {
-    //         insertar();
-    //     } else {
-    //         Swal.fire('', 'Operación fallida', 'error');
-    //     }
-    // }
 </script>
 
 <div class="page-wrapper">
@@ -221,98 +114,100 @@
                                                 <div><i class="bx bxs-user me-1 font-22 text-primary"></i></div>
                                                 <h5 class="mb-0 text-primary">Formulario Persona Juridica</h5>
                                             </div>
-                                            <hr/>
+                                            <hr />
                                             <form id="form_juridico">
                                                 <div class="form-group">
+
+
                                                     <div class="row mb-col">
-                                                        <label for="txt_razon_social" class="col-sm-4 col-form-label">Raz&oacute;n Social</label>
+                                                        <label for="txt_razon_social" class="col-sm-4 col-form-label">Razón Social</label>
                                                         <div class="col-sm-8">
-                                                            <input type="text" class="form-control form-control-sm" id="txt_razon_social" placeholder="Raz&oacute;n Social" maxlength="50">
-                                                            
+                                                            <input type="text" class="form-control form-control-sm" id="txt_razon_social" name="txt_razon_social" placeholder="Razón Social" maxlength="50">
                                                         </div>
                                                     </div>
+
                                                     <div class="row mb-col">
                                                         <label for="txt_ruc_juridico" class="col-sm-4 col-form-label">R.U.C</label>
                                                         <div class="col-sm-8">
-                                                            <input type="text" class="form-control form-control-sm" id="txt_ruc_juridico" placeholder="R.U.C" maxlength="13">
-                                                            
+                                                            <input type="text" class="form-control form-control-sm" id="txt_ruc_juridico" name="txt_ruc_juridico" placeholder="R.U.C" maxlength="13">
+
                                                         </div>
                                                     </div>
                                                     <div class="row mb-col">
                                                         <label for="txt_primer_nombre" class="col-sm-4 col-form-label">Primer Nombre</label>
                                                         <div class="col-sm-8">
-                                                            <input type="text" class="form-control form-control-sm" id="txt_primer_nombre" placeholder="Primer Nombre" maxlength="20">
-                                                           
+                                                            <input type="text" class="form-control form-control-sm" id="txt_primer_nombre" name="txt_primer_nombre" placeholder="Primer Nombre" maxlength="20">
+
                                                         </div>
                                                     </div>
                                                     <div class="row mb-col">
                                                         <label for="txt_segundo_nombre" class="col-sm-4 col-form-label">Segundo Nombre</label>
                                                         <div class="col-sm-8">
-                                                            <input type="text" class="form-control form-control-sm" id="txt_segundo_nombre" placeholder="Segundo Nombre" maxlength="20">
-                                                      
+                                                            <input type="text" class="form-control form-control-sm" id="txt_segundo_nombre" name="txt_segundo_nombre" placeholder="Segundo Nombre" maxlength="20">
+
                                                         </div>
                                                     </div>
                                                     <div class="row mb-col">
                                                         <label for="txt_primer_apellido" class="col-sm-4 col-form-label">Primer Apellido</label>
                                                         <div class="col-sm-8">
-                                                            <input type="text" class="form-control form-control-sm" id="txt_primer_apellido" placeholder="Primer Apellido" maxlength="20">
-                                                     
+                                                            <input type="text" class="form-control form-control-sm" id="txt_primer_apellido" name="txt_primer_apellido" placeholder="Primer Apellido" maxlength="20">
+
                                                         </div>
                                                     </div>
                                                     <div class="row mb-3">
                                                         <label for="txt_segundo_apellido" class="col-sm-4 col-form-label">Segundo Apellido</label>
                                                         <div class="col-sm-8">
-                                                            <input type="text" class="form-control form-control-sm" id="txt_segundo_apellido" placeholder="Segundo Apellido" maxlength="20">
-                                                           
+                                                            <input type="text" class="form-control form-control-sm" id="txt_segundo_apellido" name="txt_segundo_apellido" placeholder="Segundo Apellido" maxlength="20">
+
                                                         </div>
                                                     </div>
                                                     <div class="row mb-3">
                                                         <label for="txt_numero_identificacion" class="col-sm-4 col-form-label">N&uacute;mero de C&eacute;dula o Pasaporte</label>
                                                         <div class="col-sm-8">
-                                                            <input type="text" class="form-control form-control-sm" id="txt_numero_identificacion" placeholder="N&uacute;mero de C&eacute;dula o Pasaporte" maxlength="10">
-                                                          
+                                                            <input type="text" class="form-control form-control-sm" id="txt_numero_identificacion" name="txt_numero_identificacion" placeholder="N&uacute;mero de C&eacute;dula o Pasaporte" maxlength="10">
+
                                                         </div>
                                                     </div>
                                                     <div class="row mb-3">
                                                         <label for="txt_direccion_ruc" class="col-sm-4 col-form-label">Direcci&oacute;n como está en el RUC</label>
                                                         <div class="col-sm-8">
-                                                            <input type="text" class="form-control form-control-sm" id="txt_direccion_ruc" placeholder="Direcci&oacute;n como está en el RUC" maxlength="150">
-                                                         
+                                                            <input type="text" class="form-control form-control-sm" id="txt_direccion_ruc" name="txt_direccion_ruc" placeholder="Direcci&oacute;n como está en el RUC" maxlength="150">
+
                                                         </div>
                                                     </div>
                                                     <div class="row mb-3">
                                                         <label for="txt_provincia" class="col-sm-4 col-form-label">Provincia</label>
                                                         <div class="col-sm-8">
-                                                            <input type="text" class="form-control form-control-sm" id="txt_provincia" placeholder="Provincia" maxlength="27">
-                                                          
+                                                            <input type="text" class="form-control form-control-sm" id="txt_provincia" name="txt_provincia" placeholder="Provincia" maxlength="27">
+
                                                         </div>
                                                     </div>
                                                     <div class="row mb-3">
                                                         <label for="txt_ciudad" class="col-sm-4 col-form-label">Ciudad</label>
                                                         <div class="col-sm-8">
-                                                            <input type="text" class="form-control form-control-sm" id="txt_ciudad" placeholder="Ciudad" maxlenght="38">
-                                                          
+                                                            <input type="text" class="form-control form-control-sm" id="txt_ciudad" name="txt_ciudad" placeholder="Ciudad" maxlenght="38">
+
                                                         </div>
                                                     </div>
                                                     <div class="row mb-3">
                                                         <label for="txt_correo_empresarial" class="col-sm-4 col-form-label">Correo Electr&oacute;nico Empresarial</label>
                                                         <div class="col-sm-8">
-                                                            <input type="email" class="form-control form-control-sm" id="txt_correo_empresarial" placeholder="Correo Electr&oacute;nico Empresarial" maxlength="38">
-                                                       
+                                                            <input type="email" class="form-control form-control-sm" id="txt_correo_empresarial" name="txt_correo_empresarial" placeholder="Correo Electr&oacute;nico Empresarial" maxlength="38">
+
                                                         </div>
                                                     </div>
                                                     <div class="row mb-3">
                                                         <label for="txt_celular" class="col-sm-4 col-form-label">No. Celular</label>
                                                         <div class="col-sm-8">
-                                                            <input type="tel" class="form-control form-control-sm" id="txt_celular" placeholder="No. Celular (Poner código de país)" maxlength="13">
-                                                            
+                                                            <input type="tel" class="form-control form-control-sm" id="txt_celular" name="txt_celular" placeholder="No. Celular (Poner código de país)" maxlength="13">
+
                                                         </div>
                                                     </div>
                                                     <div class="row mb-3">
                                                         <label for="txt_fijo" class="col-sm-4 col-form-label">No. Fijo</label>
                                                         <div class="col-sm-8">
-                                                            <input type="tel" class="form-control form-control-sm" id="txt_fijo" placeholder="No. Fijo (Poner código de país)" maxlength="9">
-                                                     
+                                                            <input type="tel" class="form-control form-control-sm" id="txt_fijo" name="txt_fijo" placeholder="No. Fijo (Poner código de país)" maxlength="9">
+
                                                         </div>
                                                     </div>
                                                     <div class="row">
@@ -341,11 +236,46 @@
         $("#form_juridico").validate({
             rules: {
                 txt_razon_social: {
-                    required: true,
+                    required: true
                 },
-                
+                txt_ruc_juridico: {
+                    required: true
+                },
+                txt_primer_nombre: {
+                    required: true
+                },
+                txt_segundo_nombre: {
+                    required: true
+                },
+                txt_primer_apellido: {
+                    required: true
+                },
+                txt_segundo_apellido: {
+                    required: true
+                },
+                txt_numero_identificacion: {
+                    required: true
+                },
+                txt_direccion_ruc: {
+                    required: true
+                },
+                txt_provincia: {
+                    required: true
+                },
+                txt_ciudad: {
+                    required: true
+                },
+                txt_correo_empresarial: {
+                    required: true,
+                    email: true
+                },
+                txt_celular: {
+                    required: true
+                },
+                txt_fijo: {
+                    required: true
+                },
             },
-            
 
             highlight: function(element) {
                 // Agrega la clase 'is-invalid' al input que falla la validación
@@ -358,5 +288,6 @@
                 $(element).addClass('is-valid');
             }
         });
+
     });
 </script>
