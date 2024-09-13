@@ -102,7 +102,7 @@
         if (tipo_formulario == 'persona_natural') {
             return window.open('../controlador/PASANTES/01_SEBASTIAN/formularios_firmasC.php?persona_natural=true&id=' + id, '_blank');
         } else if (tipo_formulario == 'persona_natural_ruc') {
-            alert('Falta este formulario');
+            return window.open('../controlador/PASANTES/01_SEBASTIAN/formularios_firmasC.php?persona_natural_ruc=true&id=' + id, '_blank');
         } else if (tipo_formulario == 'persona_juridica') {
             return window.open('../controlador/PASANTES/01_SEBASTIAN/formularios_firmasC_Adrian.php?persona_juridica=true&id=' + id, '_blank');
         }

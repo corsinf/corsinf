@@ -63,6 +63,10 @@ if (($_SESSION['INICIO']['LOGO']) == '.' || $_SESSION['INICIO']['LOGO'] == '' ||
 	<link href="../assets/css/bootstrap-extended.css" rel="stylesheet">
 	<link href="../assets/css/app.css" rel="stylesheet">
 	<link href="../assets/css/icons.css" rel="stylesheet">
+
+	<!-- CSS adicionales Generales -->
+	<link href="../assets/css/css_adicionales.css" rel="stylesheet">
+
 	<!-- Theme Style CSS -->
 
 

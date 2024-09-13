@@ -94,10 +94,27 @@ class formularios_firmasC
         $pdf->SetFont('Arial', '', 11);
         $pdf->Cell(0, 7, utf8_decode($fir_sol_numero_identificacion), 1, 1, 'L');
 
-        $pdf->SetFont('Arial', 'B', 11);
-        $pdf->Cell(85, 7, utf8_decode('DIRECCIÓN (COMO ESTÁ EN EL RUC)'), 1, 0, 'R');
-        $pdf->SetFont('Arial', '', 11);
-        $pdf->Cell(0, 7, utf8_decode($fir_sol_direccion_ruc_juridico), 1, 1, 'L');
+        if (strlen($fir_sol_direccion_ruc_juridico) > 50 & strlen($fir_sol_direccion_ruc_juridico) < 101) {
+            $pdf->SetFont('Arial', 'B', 11);
+            $pdf->Cell(85, 14, utf8_decode('DIRECCIÓN (COMO ESTÁ EN EL RUC)'), 1, 0, 'R');
+            $pdf->SetFont('Arial', '', 11);
+            $pdf->MultiCellRow(0, 7, utf8_decode($fir_sol_direccion_ruc_juridico), 1, 1, 'L');
+            $pdf->Ln(14);
+        } else {
+            if (strlen($fir_sol_direccion_ruc_juridico) < 51) {
+                $pdf->SetFont('Arial', 'B', 11);
+                $pdf->Cell(85, 7, utf8_decode('DIRECCIÓN (COMO ESTÁ EN EL RUC)'), 1, 0, 'R');
+                $pdf->SetFont('Arial', '', 11);
+                $pdf->Cell(0, 7, utf8_decode($fir_sol_direccion_ruc_juridico), 1, 1, 'L');
+            }
+            if (strlen($fir_sol_direccion_ruc_juridico) > 100 & strlen($fir_sol_direccion_ruc_juridico) < 151) {
+                $pdf->SetFont('Arial', 'B', 11);
+                $pdf->Cell(85, 21, utf8_decode('DIRECCIÓN (COMO ESTÁ EN EL RUC)'), 1, 0, 'R');
+                $pdf->SetFont('Arial', '', 11);
+                $pdf->MultiCellRow(0, 7, utf8_decode($fir_sol_direccion_ruc_juridico), 1, 1, 'L');
+                $pdf->Ln(21);
+            }
+        }
 
         $pdf->SetFont('Arial', 'B', 11);
         $pdf->Cell(85, 7, utf8_decode('PROVINCIA'), 1, 0, 'R');

@@ -1,3 +1,11 @@
+<script src="../lib/jquery_validation/jquery.validate.js"></script>
+<style>
+    label.error {
+        color: red;
+        /* Cambia "red" por el color que desees */
+
+    }
+</style>
 <script type="text/javascript">
   $(document).ready(function() {
 
@@ -9,15 +17,10 @@
 
     $("#seccionClave").hide() && $("#seccionValidar").hide();
 
-    $("#btn_enviar").click(function(event) {
-      if (!validar_form()) {
-        event.preventDefault();
-      }
-    });
-
     $(document).on('change', '#cbx_guardarClave', function() {
       if ($(this).is(':checked')) {
         $("#seccionClave").show() && $("#seccionValidar").show();
+        $("#txt_clave").prop('required', true) && $("#txt_validarClave").prop('required', true);
       } else {
         $("#seccionClave").hide() && $("#seccionValidar").hide();
       }
@@ -36,27 +39,46 @@
   function validar_form() {
     var clave = $("#txt_clave").val();
     var confirmar_clave = $("#txt_validarClave").val();
-    var ingresar_archivo = $("#doc_subirDocumento")[0].files[0];
-    var nombre_archivo = ingresar_archivo ? ingresar_archivo.name : '';
 
-    if (clave !== confirmar_clave) {
-      Swal.fire({
-        icon: "error",
-        title: "Oops...",
-        text: "Las contraseñas no coinciden.",
-      });
+    if ($('#cbx_guardarClave').is(':checked')) {
+      if ($("#txt_clave").prop('required', true) && $("#txt_validarClave").prop('required', true)) {
+        if (clave !== confirmar_clave) {
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "Las contraseñas no coinciden.",
+          });
+          return false;
+        }
+      }
     }
-
-    var extension_archivo = nombre_archivo.split('.').pop().toLowerCase();
-    if (extension_archivo !== 'p12') {
-      Swal.fire({
-        icon: "error",
-        title: "Oops...",
-        text: "El archivo debe estar en formato .p12",
-      });
-    }
-
     return true;
+  }
+
+  function insertar_editar() {
+    var txt_nombrePersona = $('#txt_nombrePersona').val();
+    var txt_nombreFirma = $('#txt_nombreFirma').val();
+    var txt_ruc = $('#txt_ruc').val();
+    var doc_subirDocumento = $('#doc_subirDocumento').val();
+    var cbx_guardarClave = $('#cbx_guardarClave').val();
+    var txt_clave = $('#txt_clave').val();
+    var txt_validarClave = $('#txt_validarClave').val();
+
+    var parametros = {
+      'txt_nombrePersona': txt_nombrePersona,
+      'txt_nombreFirma': txt_nombreFirma,
+      'txt_ruc': txt_ruc,
+      'doc_subirDocumento': doc_subirDocumento,
+      'cbx_guardarClave': cbx_guardarClave,
+      'txt_clave': txt_clave,
+      'txt_validarClave': txt_validarClave,
+    };
+
+    if ($("#registrar_firma").valid()) {
+      // Si es válido, puedes proceder a enviar los datos por AJAX
+      console.log(parametros);
+      validar_form();
+    }
   }
 </script>
 <div class="page-wrapper">
@@ -156,38 +178,99 @@
       </div>
       <!-- Modal body -->
       <div class="modal-body">
-        <div class="mb-3">
-          <label for="txt_nombrePersona" class="form-label form-label-sm">Nombre</label>
-          <input type="text" class="form-control form-control-sm" name="txt_nombrePersona" id="txt_nombrePersona" value="" placeholder="Escriba su nombre completo">
-        </div>
-        <div class="mb-3">
-          <label for="txt_nombreFirma" class="form-label form-label-sm">Nombre de la firma</label>
-          <input type="text" class="form-control form-control-sm" name="txt_nombreFirma" id="txt_nombreFirma" value="" placeholder="Escriba el nombre de la firma">
-        </div>
-        <div class="mb-3">
-          <label for="txt_ruc" class="form-label form-label-sm">RUC</label>
-          <input type="text" class="form-control form-control-sm" name="txt_ruc" id="txt_ruc" value="" placeholder="Escriba su RUC">
-        </div>
-        <div class="mb-3">
-          <label for="doc_subirDocumento" class="form-label form-label-sm">Subir un documento</label>
-          <input type="file" class="form-control form-control-sm" name="doc_subirDocumento" id="doc_subirDocumento" value="">
-        </div>
-        <div class="mb-3">
-          <label for="cbx_guardarClave" class="form-check-label">¿Quiere guardar su contraseña?</label>
-          <input type="checkbox" class="form-check-input form-check-input-sm" name="cbx_guardarClave" id="cbx_guardarClave" value="">
-        </div>
-        <div class="mb-3" id="seccionClave">
-          <label for="txt_clave" class="form-label form-label-sm">Contraseña</label>
-          <input type="password" class="form-control form-control-sm" name="txt_clave" id="txt_clave" value="" placeholder="Ingrese una contraseña">
-        </div>
-        <div class="mb-3" id="seccionValidar">
-          <label for="txt_validarClave" class="form-label form-label-sm">Verificar Contraseña</label>
-          <input type="password" class="form-control form-control-sm" name="txt_validarClave" id="txt_validarClave" value="" placeholder="Ingrese nuevamente su contraseña">
-        </div>
-        <div class="mb-3">
-          <button type="button" class="btn btn-primary btn-sm" id="btn_enviar">Agregar</button>
-        </div>
+        <form id="registrar_firma">
+          <div class="mb-3">
+            <label for="txt_nombrePersona" class="form-label form-label-sm">Nombre <label style="color: red;">*</label></label>
+            <input type="text" class="form-control form-control-sm" name="txt_nombrePersona" id="txt_nombrePersona" value="" placeholder="Escriba su nombre completo">
+          </div>
+          <div class="mb-3">
+            <label for="txt_nombreFirma" class="form-label form-label-sm">Nombre de la firma <label style="color: red;">*</label></label>
+            <input type="text" class="form-control form-control-sm" name="txt_nombreFirma" id="txt_nombreFirma" value="" placeholder="Escriba el nombre de la firma">
+          </div>
+          <div class="mb-3">
+            <label for="txt_ruc" class="form-label form-label-sm">RUC <label style="color: red;">*</label></label>
+            <input type="text" class="form-control form-control-sm" name="txt_ruc" id="txt_ruc" value="" placeholder="Escriba su RUC">
+          </div>
+          <div class="mb-3">
+            <label for="doc_subirDocumento" class="form-label form-label-sm">Subir un documento <label style="color: red;">*</label></label>
+            <input type="file" class="form-control form-control-sm" name="doc_subirDocumento" id="doc_subirDocumento" value="">
+          </div>
+          <div class="mb-3">
+            <label for="cbx_guardarClave" class="form-check-label">¿Quiere guardar su contraseña?</label>
+            <input type="checkbox" class="form-check-input form-check-input-sm" name="cbx_guardarClave" id="cbx_guardarClave" value="">
+          </div>
+          <div class="mb-3" id="seccionClave">
+            <label for="txt_clave" class="form-label form-label-sm">Contraseña <label style="color: red;">*</label></label>
+            <input type="password" class="form-control form-control-sm" name="txt_clave" id="txt_clave" value="" placeholder="Ingrese una contraseña">
+          </div>
+          <div class="mb-3" id="seccionValidar">
+            <label for="txt_validarClave" class="form-label form-label-sm">Verificar Contraseña <label style="color: red;">*</label></label>
+            <input type="password" class="form-control form-control-sm" name="txt_validarClave" id="txt_validarClave" value="" placeholder="Ingrese nuevamente su contraseña">
+          </div>
+          <div class="mb-3">
+            <button type="button" class="btn btn-primary btn-sm" id="btn_enviar" onclick="insertar_editar();">Agregar</button>
+          </div>
+        </form>
       </div>
     </div>
   </div>
 </div>
+<script>
+  //Validacion de formulario
+  $(document).ready(function() {
+    $("#registrar_firma").validate({
+      rules: {
+        txt_nombrePersona:{
+          required: true,
+        },
+        txt_nombreFirma: {
+          required: true,
+        },
+        txt_ruc: {
+          required: true,
+        },
+        doc_subirDocumento: {
+          required: true,
+        },
+        txt_clave: {
+          required: true,
+        },
+        txt_validarClave: {
+          required: true,
+        },
+      },
+      messages: {
+        txt_nombrePersona: {
+          required: "Por favor ingresa tu nombre",
+        },
+        txt_nombreFirma: {
+          required: "Por favor ingresa el nombre de la firma",
+        },
+        txt_ruc: {
+          required: "Por favor ingresa un RUC",
+        },
+        doc_subirDocumento: {
+          required: "Por favor sube un documento",
+        },
+        txt_clave: {
+          required: "Por favor ingresa una clave",
+        },
+        txt_validarClave: {
+          required: "Por favor ingrese la misma clave",
+        },
+      },
+
+      highlight: function(element) {
+        // Agrega la clase 'is-invalid' al input que falla la validación
+        $(element).addClass('is-invalid');
+        $(element).removeClass('is-valid');
+      },
+      unhighlight: function(element) {
+        // Elimina la clase 'is-invalid' si la validación pasa
+        $(element).removeClass('is-invalid');
+        $(element).addClass('is-valid');
+
+      }
+    });
+  });
+</script>

@@ -95,9 +95,9 @@ class estudiantesM
                     pr.sa_par_nombre
 
                     FROM estudiantes est
-                    INNER JOIN cat_seccion cs ON est.sa_id_seccion = cs.sa_sec_id
-                    INNER JOIN cat_grado cg ON est.sa_id_grado = cg.sa_gra_id
-                    INNER JOIN cat_paralelo pr ON est.sa_id_paralelo = pr.sa_par_id
+                    LEFT JOIN cat_seccion cs ON est.sa_id_seccion = cs.sa_sec_id
+                    LEFT JOIN cat_grado cg ON est.sa_id_grado = cg.sa_gra_id
+                    LEFT JOIN cat_paralelo pr ON est.sa_id_paralelo = pr.sa_par_id
                     WHERE est.sa_est_estado = 1";
 
         if ($id) {
@@ -300,9 +300,9 @@ class estudiantesM
 
 
                 FROM estudiantes est
-                INNER JOIN cat_seccion cs ON est.sa_id_seccion = cs.sa_sec_id
-                INNER JOIN cat_grado cg ON est.sa_id_grado = cg.sa_gra_id
-                INNER JOIN cat_paralelo pr ON est.sa_id_paralelo = pr.sa_par_id
+                LEFT JOIN cat_seccion cs ON est.sa_id_seccion = cs.sa_sec_id
+                LEFT JOIN cat_grado cg ON est.sa_id_grado = cg.sa_gra_id
+                LEFT JOIN cat_paralelo pr ON est.sa_id_paralelo = pr.sa_par_id
                 LEFT JOIN representantes rep ON est.sa_id_representante = rep.sa_rep_id
                 LEFT JOIN representantes rep2 ON est.sa_id_representante_2 = rep2.sa_rep_id
 
