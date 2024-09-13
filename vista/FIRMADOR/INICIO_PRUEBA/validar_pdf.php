@@ -47,9 +47,6 @@
 <script type="text/javascript">
     $(document).ready(function() {
         $("#btn_validar").click(function(event) {
-            if (!validar_form()) {
-                event.preventDefault();
-            }
 
             $('#myModal_espera').modal('show');
             var formData = new FormData(document.getElementById("form_doc"));
@@ -83,43 +80,98 @@
             responsive: true,
             order: []
         });
+
+        $('input[id="txt_cargar_imagen"]').imageuploadify();
+
+        iniciar_validaciones();
+
+        // Modificar el texto de los elementos
+        $('.imageuploadify-message').html('Arrastre y suelte sus archivos aquí para cargarlos');
+        $('.btn-default').text('O seleccione el archivo para cargar');
+
+        // Agregar manejo de eventos para drag and drop
+        const drop_area = $('.imageuploadify');
+
+        drop_area.on('dragover', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        });
+
+        drop_area.on('dragleave', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        });
+
+        // Interceptar el evento drop antes de que lo maneje imageuploadify
+        drop_area.on('drop', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            const transferir_datos = e.originalEvent.dataTransfer;
+            const archivos = transferir_datos.files;
+
+            if (archivos.length > 0) {
+                // Tomar solo el primer archivo
+                const archivo = archivos[0];
+
+                if (validar_archivos([archivo])) {
+                    // Crear un nuevo FileList con solo el archivo validado
+                    const transferir_datos = new DataTransfer();
+                    transferir_datos.items.add(archivo);
+
+                    // Actualizar el input file con el nuevo archivo
+                    document.getElementById('txt_cargar_imagen').files = transferir_datos.files;
+
+                    $('.imageuploadify-container').delete();
+
+                    // Disparar el evento change manualmente
+                    $('#txt_cargar_imagen').trigger('change');
+
+                } else {
+                    // Prevenir que imageuploadify procese archivos inválidos
+                    return false;
+                }
+            }
+        });
     });
 
-    function validar_form() {
-        var clave = $("#txt_ingresarClave").val();
-        var confirmar_clave = $("#txt_comprobarClave").val();
-        var ingresar_archivo = $("#txt_cargar_imagen")[0].files[0];
-        var nombre_archivo = ingresar_archivo ? ingresar_archivo.name : '';
+    function iniciar_validaciones() {
+        const input_archivo = $("#txt_cargar_imagen");
+        input_archivo.on("change", function() {
+            validar_archivos(this.files);
+        });
+    }
 
-        if (clave !== confirmar_clave) {
-            Swal.fire({
-                icon: "error",
-                title: "Oops...",
-                text: "Las contraseñas no coinciden.",
-            });
-            return false
-        }
-        if (clave !== confirmar_clave) {
-            Swal.fire({
-                icon: "error",
-                title: "Oops...",
-                text: "Las contraseñas no coinciden.",
-            });
-            return false
-        }
+    function validar_archivos(archivos) {
+        for (let i = 0; i < archivos.length; i++) {
+            const archivo = archivos[i];
+            const nombre_archivo = archivo.name;
+            const extension = obtener_extension_archivo(nombre_archivo);
 
-        var extension_archivo = nombre_archivo.split('.').pop().toLowerCase();
-        if (extension_archivo !== 'pdf') {
-            Swal.fire({
-                icon: "error",
-                title: "Oops...",
-                text: "El archivo debe estar en formato .pdf ",
-            });
-            return false
+            if (!extension_valida(extension)) {
+                mostrar_alerta("Oops...", "El archivo debe estar en formato PDF");
+                return false;
+            }
         }
-
         return true;
     }
+
+    function obtener_extension_archivo(nombre_archivo) {
+        return nombre_archivo.split('.').pop().toLowerCase();
+    }
+
+    function extension_valida(extension) {
+        return extension === 'pdf';
+    }
+
+    function mostrar_alerta(titulo, mensaje) {
+        Swal.fire({
+            icon: "error",
+            title: titulo,
+            text: mensaje,
+        });
+    }
+
 </script>
 
 <div class="page-wrapper">
@@ -182,22 +234,3 @@
                 </div>
             </div>
         </div>
-
-
-        <script>
-            $(document).ready(function() {
-                $('#txt_cargar_imagen').imageuploadify({
-                    //'swf': 'path/to/uploadify.swf',
-                    //'uploader': 'path/to/uploadify.php', // Archivo PHP que manejará la subida
-                    'fileTypeExts': '*.pdf;',
-                    'multi': true,
-                    // 'onUploadSuccess': function(file, data, response) {
-                    //     console.log('El archivo ' + file.name + ' se ha subido correctamente.');
-                    // }
-                });
-
-                $('.imageuploadify-message').html('Arrastre y suelte sus archivos aquí para cargarlos');
-                $('.btn-default').text('O seleccione el archivo para cargar');
-
-            });
-        </script>
