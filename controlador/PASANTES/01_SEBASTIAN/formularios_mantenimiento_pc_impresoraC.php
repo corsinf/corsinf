@@ -99,311 +99,283 @@ class formularios_mantenimiento_pc_impresoraC{
         $pdf->AddPage();
 
         $pdf->SetFont('Arial', 'B', 10);
-        $pdf->Cell(0, 7, utf8_decode('FORMULARIO DE MANTENIMIENTO PREVENTIVO RECEPCION DEL EQUIPO'), 1, 1, 'C');
+        $pdf->Cell(0, 6, utf8_decode('FORMULARIO DE MANTENIMIENTO PREVENTIVO RECEPCION DEL EQUIPO'), 1, 1, 'C');
 
         $pdf->SetFillColor(0, 0, 0);
         $pdf->SetTextColor(255, 255, 255);
         $pdf->SetFont('Arial', 'B', 9);
-        $pdf->Cell(0, 7, utf8_decode('DATOS DEL CLIENTE'), 1, 1, 'C', 1);
+        $pdf->Cell(0, 6, utf8_decode('DATOS DEL CLIENTE'), 1, 1, 'C', 1);
 
         $pdf->SetTextColor(0, 0, 0);
         $pdf->SetFont('Arial', 'B', 9);
-        $pdf->Cell(33, 7, utf8_decode('Nombre: '), 1, 0, 'L');
+        $pdf->Cell(33, 6, utf8_decode('Nombre: '), 1, 0, 'L');
         $pdf->SetFont('Arial', '', 9);
-        $pdf->Cell(121, 7, utf8_decode($for_man_nombres_completos), 1, 1, 'L');
+        $pdf->Cell(121, 6, utf8_decode($for_man_nombres_completos), 1, 1, 'L');
 
         $pdf->SetFont('Arial', 'B', 9);
-        $pdf->Cell(33, 7, utf8_decode('Empresa: '), 1, 0, 'L');
+        $pdf->Cell(33, 6, utf8_decode('Empresa: '), 1, 0, 'L');
         $pdf->SetFont('Arial', '', 9);
-        $pdf->Cell(121, 7, utf8_decode($for_man_empresa), 1, 1, 'L');
+        $pdf->Cell(121, 6, utf8_decode($for_man_empresa), 1, 1, 'L');
 
         $pdf->SetFont('Arial', 'B', 9);
-        $pdf->Cell(33, 7, utf8_decode('Teléfono: '), 1, 0, 'L');
+        $pdf->Cell(33, 6, utf8_decode('Teléfono: '), 1, 0, 'L');
         $pdf->SetFont('Arial', '', 9);
-        $pdf->Cell(121, 7, utf8_decode($for_man_telefono), 1, 1, 'L');
+        $pdf->Cell(121, 6, utf8_decode($for_man_telefono), 1, 1, 'L');
 
         $pdf->SetFont('Arial', 'B', 9);
-        $pdf->Cell(33, 7, utf8_decode('Correo Electrónico: '), 1, 0, 'L');
+        $pdf->Cell(33, 6, utf8_decode('Correo Electrónico: '), 1, 0, 'L');
         $pdf->SetFont('Arial', '', 9);
-        $pdf->Cell(121, 7, utf8_decode($for_man_correo), 1, 1, 'L');
+        $pdf->Cell(121, 6, utf8_decode($for_man_correo), 1, 1, 'L');
 
         $pdf->SetFont('Arial', 'B', 9);
-        $pdf->Cell(33, 7, utf8_decode('Equipo N°: '), 1, 0, 'L');
+        $pdf->Cell(33, 6, utf8_decode('Equipo N°: '), 1, 0, 'L');
         $pdf->SetFont('Arial', '', 9);
-        $pdf->Cell(121, 7, utf8_decode($for_man_equipo), 1, 1, 'L');
+        $pdf->Cell(121, 6, utf8_decode($for_man_equipo), 1, 1, 'L');
 
         $pdf->SetFont('Arial', 'B', 9);
-        $pdf->Cell(33, 7, utf8_decode('Tipo de equipo: '), 1, 0, 'L');
+        $pdf->Cell(33, 6, utf8_decode('Tipo de equipo: '), 1, 0, 'L');
         $pdf->SetFont('Arial', '', 9);
-        $pdf->Cell(121, 7, utf8_decode($for_man_tipo_equipo), 1, 1, 'L');
+        $pdf->Cell(121, 6, utf8_decode($for_man_tipo_equipo), 1, 1, 'L');
 
         $pdf->SetFont('Arial', 'B', 9);
-        $pdf->Cell(33, 7, utf8_decode('Fecha'), 1, 0, 'L');
+        $pdf->Cell(33, 6, utf8_decode('Fecha'), 1, 0, 'L');
         $pdf->SetFillColor(201, 200, 199);
         $pdf->SetFont('Arial', 'B', 9);
-        $pdf->Cell(10, 7, utf8_decode('Dia'), 1, 0, 'C', 1);
+        $pdf->Cell(10, 6, utf8_decode('Dia'), 1, 0, 'C', 1);
         $pdf->SetFont('Arial', '', 9);
-        $pdf->Cell(33, 7, utf8_decode($for_man_dia), 1, 0, 'L');
-
-        $pdf->SetFillColor(201, 200, 199);
-        $pdf->SetFont('Arial', 'B', 9);
-        $pdf->Cell(10, 7, utf8_decode('Mes'), 1, 0, 'C', 1);
-        $pdf->SetFont('Arial', '', 9);
-        $pdf->Cell(33, 7, utf8_decode($for_man_mes), 1, 0, 'L');
+        $pdf->Cell(33, 6, utf8_decode($for_man_dia), 1, 0, 'L');
 
         $pdf->SetFillColor(201, 200, 199);
         $pdf->SetFont('Arial', 'B', 9);
-        $pdf->Cell(10, 7, utf8_decode('Año'), 1, 0, 'C', 1);
+        $pdf->Cell(10, 6, utf8_decode('Mes'), 1, 0, 'C', 1);
         $pdf->SetFont('Arial', '', 9);
-        $pdf->Cell(25, 7, utf8_decode($for_man_ano), 1, 1, 'L');
+        $pdf->Cell(33, 6, utf8_decode($for_man_mes), 1, 0, 'L');
+
+        $pdf->SetFillColor(201, 200, 199);
+        $pdf->SetFont('Arial', 'B', 9);
+        $pdf->Cell(10, 6, utf8_decode('Año'), 1, 0, 'C', 1);
+        $pdf->SetFont('Arial', '', 9);
+        $pdf->Cell(25, 6, utf8_decode($for_man_ano), 1, 1, 'L');
 
         $pdf->SetFillColor(0, 0, 0);
         $pdf->SetTextColor(255, 255, 255);
         $pdf->SetFont('Arial', 'B', 9);
-        $pdf->Cell(0, 7, utf8_decode('CONFIGURACIÓN DE HARDWARE'), 1, 1, 'C', 1);
+        $pdf->Cell(0, 6, utf8_decode('CONFIGURACIÓN DE HARDWARE'), 1, 1, 'C', 1);
 
         $pdf->SetFillColor(201, 200, 199);
         $pdf->SetTextColor(0, 0, 0);
         $pdf->SetFont('Arial', 'B', 9);
-        $pdf->Cell(32, 14, utf8_decode('Marca PC'), 1, 0, 'L', 1);
+        $pdf->Cell(77, 6, utf8_decode('Marca PC'), 1, 0, 'L', 1);
+        $pdf->SetFont('Arial', 'B', 9);
+        $pdf->Cell(77, 6, utf8_decode('Marca monitor'), 1, 1, 'L', 1);
         $pdf->SetFont('Arial', '', 9);
-        $pdf->Cell(89, 14, utf8_decode($for_man_marca_pc), 1, 0, 'L');
+        $pdf->Cell(77, 5, utf8_decode($for_man_marca_pc), 1, 0, 'L');
+        $pdf->SetFont('Arial', '', 9);
+        $pdf->Cell(77, 5, utf8_decode($for_man_marca_monitor), 1, 1, 'L');
 
         $pdf->SetFont('Arial', 'B', 9);
-        $pdf->Cell(23, 14, utf8_decode('Marca monitor'), 1, 0, 'L', 1);
+        $pdf->Cell(38.5, 6, utf8_decode('Procesador'), 1, 0, 'L', 1);
+        $pdf->SetFont('Arial', 'B', 9);
+        $pdf->Cell(38.5, 6, utf8_decode('Velocidad GHZ'), 1, 0, 'L', 1);
+        $pdf->SetFont('Arial', 'B', 9);
+        $pdf->Cell(38.5, 6, utf8_decode('Serial'), 1, 0, 'L', 1);
+        $pdf->SetFont('Arial', 'B', 9);
+        $pdf->Cell(38.5, 6, utf8_decode('Teclado'), 1, 1, 'L', 1);
         $pdf->SetFont('Arial', '', 9);
-        $pdf->Cell(10, 14, utf8_decode($for_man_marca_monitor), 1, 1, 'L');
+        $pdf->Cell(38.5, 5, utf8_decode($for_man_procesador), 1, 0, 'L');
+        $pdf->SetFont('Arial', '', 9);
+        $pdf->Cell(38.5, 5, utf8_decode($for_man_velocidad_ghz), 1, 0, 'L');
+        $pdf->SetFont('Arial', '', 9);
+        $pdf->Cell(38.5, 5, utf8_decode($for_man_serial), 1, 0, 'L');
+        $pdf->SetFont('Arial', '', 9);
+        $pdf->Cell(38.5, 5, utf8_decode($for_man_teclado), 1, 1, 'L');
 
         $pdf->SetFont('Arial', 'B', 9);
-        $pdf->Cell(32, 7, utf8_decode('Procesador'), 1, 0, 'L', 1);
+        $pdf->Cell(38.5, 6, utf8_decode('Placa'), 1, 0, 'L', 1);
+        $pdf->SetFont('Arial', 'B', 9);
+        $pdf->Cell(38.5, 6, utf8_decode('Velocidad MB'), 1, 0, 'L', 1);
+        $pdf->SetFont('Arial', 'B', 9);
+        $pdf->Cell(38.5, 6, utf8_decode('Serial'), 1, 0, 'L', 1);
+        $pdf->SetFont('Arial', 'B', 9);
+        $pdf->Cell(38.5, 6, utf8_decode('Mouse'), 1, 1, 'L', 1);
         $pdf->SetFont('Arial', '', 9);
-        $pdf->Cell(24, 7, utf8_decode($for_man_procesador), 1, 0, 'L');
+        $pdf->Cell(38.5, 5, utf8_decode($for_man_placa), 1, 0, 'L');
+        $pdf->SetFont('Arial', '', 9);
+        $pdf->Cell(38.5, 5, utf8_decode($for_man_velocidad_mb), 1, 0, 'L');
+        $pdf->SetFont('Arial', '', 9);
+        $pdf->Cell(38.5, 5, utf8_decode($for_man_serial_placa), 1, 0, 'L');
+        $pdf->SetFont('Arial', '', 9);
+        $pdf->Cell(38.5, 5, utf8_decode($for_man_mouse), 1, 1, 'L');
 
         $pdf->SetFont('Arial', 'B', 9);
-        $pdf->Cell(25, 7, utf8_decode('Velocidad GHZ'), 1, 0, 'L', 1);
+        $pdf->Cell(38.5, 6, utf8_decode('Memoria RAM'), 1, 0, 'L', 1);
+        $pdf->SetFont('Arial', 'B', 9);
+        $pdf->Cell(38.5, 6, utf8_decode('Capacidad GB'), 1, 0, 'L', 1);
+        $pdf->SetFont('Arial', 'B', 9);
+        $pdf->Cell(38.5, 6, utf8_decode('Serial'), 1, 0, 'L', 1);
+        $pdf->SetFont('Arial', 'B', 9);
+        $pdf->Cell(38.5, 6, utf8_decode('CD ROM'), 1, 1, 'L', 1);
         $pdf->SetFont('Arial', '', 9);
-        $pdf->Cell(12, 7, utf8_decode($for_man_velocidad_ghz), 1, 0, 'L');
+        $pdf->Cell(38.5, 5, utf8_decode($for_man_memoria_ram), 1, 0, 'L');
+        $pdf->SetFont('Arial', '', 9);
+        $pdf->Cell(38.5, 5, utf8_decode($for_man_capacidad_gb), 1, 0, 'L');
+        $pdf->SetFont('Arial', '', 9);
+        $pdf->Cell(38.5, 5, utf8_decode($for_man_serial_procesador), 1, 0, 'L');
+        $pdf->SetFont('Arial', '', 9);
+        $pdf->Cell(38.5, 5, utf8_decode($for_man_cd_rom), 1, 1, 'L');
 
         $pdf->SetFont('Arial', 'B', 9);
-        $pdf->Cell(11, 7, utf8_decode('Serial'), 1, 0, 'L', 1);
+        $pdf->Cell(38.5, 6, utf8_decode('Marca Disco Duro'), 1, 0, 'L', 1);
+        $pdf->SetFont('Arial', 'B', 9);
+        $pdf->Cell(38.5, 6, utf8_decode('Capacidad MB'), 1, 0, 'L', 1);
+        $pdf->SetFont('Arial', 'B', 9);
+        $pdf->Cell(38.5, 6, utf8_decode('Serial'), 1, 0, 'L', 1);
+        $pdf->SetFont('Arial', 'B', 9);
+        $pdf->Cell(38.5, 6, utf8_decode('Unidad DVD'), 1, 1, 'L', 1);
         $pdf->SetFont('Arial', '', 9);
-        $pdf->Cell(17, 7, utf8_decode($for_man_serial), 1, 0, 'L');
+        $pdf->Cell(38.5, 5, utf8_decode($for_man_marca_disco_duro), 1, 0, 'L');
+        $pdf->SetFont('Arial', '', 9);
+        $pdf->Cell(38.5, 5, utf8_decode($for_man_capacidad_mb), 1, 0, 'L');
+        $pdf->SetFont('Arial', '', 9);
+        $pdf->Cell(38.5, 5, utf8_decode($for_man_serial_ram), 1, 0, 'L');
+        $pdf->SetFont('Arial', '', 9);
+        $pdf->Cell(38.5, 5, utf8_decode($for_man_unidad_dvd), 1, 1, 'L');
 
         $pdf->SetFont('Arial', 'B', 9);
-        $pdf->Cell(23, 7, utf8_decode('Teclado'), 1, 0, 'L', 1);
+        $pdf->Cell(38.5, 6, utf8_decode('Tarjeta de video'), 1, 0, 'L', 1);
+        $pdf->SetFont('Arial', 'B', 9);
+        $pdf->Cell(38.5, 6, utf8_decode('Capacidad GB'), 1, 0, 'L', 1);
+        $pdf->SetFont('Arial', 'B', 9);
+        $pdf->Cell(38.5, 6, utf8_decode('Serial'), 1, 0, 'L', 1);
+        $pdf->SetFont('Arial', 'B', 9);
+        $pdf->Cell(38.5, 6, utf8_decode('Otros devices'), 1, 1, 'L', 1);
         $pdf->SetFont('Arial', '', 9);
-        $pdf->Cell(10, 7, utf8_decode($for_man_teclado), 1, 1, 'L');
+        $pdf->Cell(38.5, 5, utf8_decode($for_man_tarjeta_video), 1, 0, 'L');
+        $pdf->SetFont('Arial', '', 9);
+        $pdf->Cell(38.5, 5, utf8_decode($for_man_capacidad_gpu_gb), 1, 0, 'L');
+        $pdf->SetFont('Arial', '', 9);
+        $pdf->Cell(38.5, 5, utf8_decode($for_man_serial_hd), 1, 0, 'L');
+        $pdf->SetFont('Arial', '', 9);
+        $pdf->Cell(38.5, 5, utf8_decode($for_man_otros_dispositivos), 1, 1, 'L');
 
         $pdf->SetFont('Arial', 'B', 9);
-        $pdf->Cell(32, 7, utf8_decode('Placa'), 1, 0, 'L', 1);
-        $pdf->SetFont('Arial', '', 9);
-        $pdf->Cell(24, 7, utf8_decode($for_man_placa), 1, 0, 'L');
-
+        $pdf->Cell(38.5, 6, utf8_decode('Tarjeta de sonido'), 1, 0, 'L', 1);
         $pdf->SetFont('Arial', 'B', 9);
-        $pdf->Cell(25, 7, utf8_decode('Velocidad MB'), 1, 0, 'L', 1);
-        $pdf->SetFont('Arial', '', 9);
-        $pdf->Cell(12, 7, utf8_decode($for_man_velocidad_mb), 1, 0, 'L');
-
+        $pdf->Cell(38.5, 6, utf8_decode('Capacidad MB'), 1, 0, 'L', 1);
         $pdf->SetFont('Arial', 'B', 9);
-        $pdf->Cell(11, 7, utf8_decode('Serial'), 1, 0, 'L', 1);
-        $pdf->SetFont('Arial', '', 9);
-        $pdf->Cell(17, 7, utf8_decode($for_man_serial_placa), 1, 0, 'L');
-
+        $pdf->Cell(38.5, 6, utf8_decode('Serial'), 1, 0, 'L', 1);
         $pdf->SetFont('Arial', 'B', 9);
-        $pdf->Cell(23, 7, utf8_decode('Mouse'), 1, 0, 'L', 1);
+        $pdf->Cell(38.5, 6, utf8_decode('Otros devices'), 1, 1, 'L', 1);
         $pdf->SetFont('Arial', '', 9);
-        $pdf->Cell(10, 7, utf8_decode($for_man_mouse), 1, 1, 'L');
-
-        $pdf->SetFont('Arial', 'B', 9);
-        $pdf->Cell(32, 7, utf8_decode('Memoria RAM'), 1, 0, 'L', 1);
+        $pdf->Cell(38.5, 5, utf8_decode($for_man_tarjeta_sonido), 1, 0, 'L');
         $pdf->SetFont('Arial', '', 9);
-        $pdf->Cell(24, 7, utf8_decode($for_man_memoria_ram), 1, 0, 'L');
-
-        $pdf->SetFont('Arial', 'B', 9);
-        $pdf->Cell(25, 7, utf8_decode('Capacidad GB'), 1, 0, 'L', 1);
+        $pdf->Cell(38.5, 5, utf8_decode($for_man_capacidad_mb_sonido), 1, 0, 'L');
         $pdf->SetFont('Arial', '', 9);
-        $pdf->Cell(12, 7, utf8_decode($for_man_capacidad_gb), 1, 0, 'L');
-
-        $pdf->SetFont('Arial', 'B', 9);
-        $pdf->Cell(11, 7, utf8_decode('Serial'), 1, 0, 'L', 1);
+        $pdf->Cell(38.5, 5, utf8_decode($for_man_serial_video), 1, 0, 'L');
         $pdf->SetFont('Arial', '', 9);
-        $pdf->Cell(17, 7, utf8_decode($for_man_serial_procesador), 1, 0, 'L');
-
-        $pdf->SetFont('Arial', 'B', 9);
-        $pdf->Cell(23, 7, utf8_decode('CD ROM'), 1, 0, 'L', 1);
-        $pdf->SetFont('Arial', '', 9);
-        $pdf->Cell(10, 7, utf8_decode($for_man_cd_rom), 1, 1, 'L');
-
-        $pdf->SetFont('Arial', 'B', 9);
-        $pdf->Cell(32, 7, utf8_decode('Marca Disco Duro'), 1, 0, 'L', 1);
-        $pdf->SetFont('Arial', '', 9);
-        $pdf->Cell(24, 7, utf8_decode($for_man_marca_disco_duro), 1, 0, 'L');
-
-        $pdf->SetFont('Arial', 'B', 9);
-        $pdf->Cell(25, 7, utf8_decode('Capacidad MB'), 1, 0, 'L', 1);
-        $pdf->SetFont('Arial', '', 9);
-        $pdf->Cell(12, 7, utf8_decode($for_man_capacidad_mb), 1, 0, 'L');
-
-        $pdf->SetFont('Arial', 'B', 9);
-        $pdf->Cell(11, 7, utf8_decode('Serial'), 1, 0, 'L', 1);
-        $pdf->SetFont('Arial', '', 9);
-        $pdf->Cell(17, 7, utf8_decode($for_man_serial_ram), 1, 0, 'L');
-
-        $pdf->SetFont('Arial', 'B', 9);
-        $pdf->Cell(23, 7, utf8_decode('Unidad DVD'), 1, 0, 'L', 1);
-        $pdf->SetFont('Arial', '', 9);
-        $pdf->Cell(10, 7, utf8_decode($for_man_unidad_dvd), 1, 1, 'L');
-
-        $pdf->SetFont('Arial', 'B', 9);
-        $pdf->Cell(32, 7, utf8_decode('Tarjeta de video'), 1, 0, 'L', 1);
-        $pdf->SetFont('Arial', '', 9);
-        $pdf->Cell(24, 7, utf8_decode($for_man_tarjeta_video), 1, 0, 'L');
-
-        $pdf->SetFont('Arial', 'B', 9);
-        $pdf->Cell(25, 7, utf8_decode('Capacidad GB'), 1, 0, 'L', 1);
-        $pdf->SetFont('Arial', '', 9);
-        $pdf->Cell(12, 7, utf8_decode($for_man_capacidad_gpu_gb), 1, 0, 'L');
-
-        $pdf->SetFont('Arial', 'B', 9);
-        $pdf->Cell(11, 7, utf8_decode('Serial'), 1, 0, 'L', 1);
-        $pdf->SetFont('Arial', '', 9);
-        $pdf->Cell(17, 7, utf8_decode($for_man_serial_hd), 1, 0, 'L');
-
-        $pdf->SetFont('Arial', 'B', 9);
-        $pdf->Cell(23, 7, utf8_decode('Otros devices'), 1, 0, 'L', 1);
-        $pdf->SetFont('Arial', '', 9);
-        $pdf->Cell(10, 7, utf8_decode($for_man_otros_dispositivos), 1, 1, 'L');
-
-        $pdf->SetFont('Arial', 'B', 9);
-        $pdf->Cell(32, 7, utf8_decode('Tarjeta de sonido'), 1, 0, 'L', 1);
-        $pdf->SetFont('Arial', '', 9);
-        $pdf->Cell(24, 7, utf8_decode($for_man_tarjeta_sonido), 1, 0, 'L');
-
-        $pdf->SetFont('Arial', 'B', 9);
-        $pdf->Cell(25, 7, utf8_decode('Capacidad MB'), 1, 0, 'L', 1);
-        $pdf->SetFont('Arial', '', 9);
-        $pdf->Cell(12, 7, utf8_decode($for_man_capacidad_mb_sonido), 1, 0, 'L');
-
-        $pdf->SetFont('Arial', 'B', 9);
-        $pdf->Cell(11, 7, utf8_decode('Serial'), 1, 0, 'L', 1);
-        $pdf->SetFont('Arial', '', 9);
-        $pdf->Cell(17, 7, utf8_decode($for_man_serial_video), 1, 0, 'L');
-
-        $pdf->SetFont('Arial', 'B', 9);
-        $pdf->Cell(23, 7, utf8_decode('Otros devices'), 1, 0, 'L', 1);
-        $pdf->SetFont('Arial', '', 9);
-        $pdf->Cell(10, 7, utf8_decode($for_man_otros_dispositivos_sonido), 1, 1, 'L');
-
-        $pdf->SetFillColor(255, 255, 255);
-        $pdf->SetFont('Arial', 'B', 9);
-        $pdf->Cell(0, 7, utf8_decode('Software'), 1, 1, 'C', 1);
-
-        $pdf->SetFillColor(201, 200, 199);
-        $pdf->SetTextColor(0, 0, 0);
-        $pdf->SetFont('Arial', 'B', 9);
-        $pdf->Cell(32, 7, utf8_decode('Sistema Operativo'), 1, 0, 'C', 1);
-        $pdf->SetFont('Arial', '', 9);
-        $pdf->Cell(49, 7, utf8_decode($for_man_sistema_operativo), 1, 0, 'C');
-
-        $pdf->SetFont('Arial', 'B', 9);
-        $pdf->Cell(25, 7, utf8_decode('Antivirus'), 1, 0, 'C', 1);
-        $pdf->SetFont('Arial', '', 9);
-        $pdf->Cell(48, 7, utf8_decode($for_man_antivirus), 1, 1, 'C');
-
-        $pdf->SetFont('Arial', 'B', 9);
-        $pdf->Cell(32, 7, utf8_decode('Paquete de Office'), 1, 0, 'C', 1);
-        $pdf->SetFont('Arial', '', 9);
-        $pdf->Cell(49, 7, utf8_decode($for_man_paquete_office), 1, 0, 'C');
-
-        $pdf->SetFont('Arial', 'B', 9);
-        $pdf->Cell(25, 7, utf8_decode('Multimedia'), 1, 0, 'C', 1);
-        $pdf->SetFont('Arial', '', 9);
-        $pdf->Cell(48, 7, utf8_decode($for_man_multimedia), 1, 1, 'C');
-
-        $pdf->SetFont('Arial', 'B', 9);
-        $pdf->Cell(32, 7, utf8_decode('Internet'), 1, 0, 'C', 1);
-        $pdf->SetFont('Arial', '', 9);
-        $pdf->Cell(49, 7, utf8_decode($for_man_internet), 1, 0, 'C');
-
-        $pdf->SetFont('Arial', 'B', 9);
-        $pdf->Cell(25, 7, utf8_decode('Otros'), 1, 0, 'C', 1);
-        $pdf->SetFont('Arial', '', 9);
-        $pdf->Cell(48, 7, utf8_decode($for_man_otros), 1, 1, 'C');
+        $pdf->Cell(38.5, 5, utf8_decode($for_man_otros_dispositivos_sonido), 1, 1, 'L');
 
         $pdf->SetFillColor(0, 0, 0);
         $pdf->SetTextColor(255, 255, 255);
         $pdf->SetFont('Arial', 'B', 9);
-        $pdf->Cell(0, 7, utf8_decode('PC'), 1, 1, 'C', 1);
+        $pdf->Cell(0, 6, utf8_decode('Software'), 1, 1, 'C', 1);
+
+        $pdf->SetFillColor(201, 200, 199);
+        $pdf->SetTextColor(0, 0, 0);
+        $pdf->SetFont('Arial', 'B', 9);
+        $pdf->Cell(51.33, 6, utf8_decode('Sistema Operativo'), 1, 0, 'C', 1);
+        $pdf->SetFont('Arial', 'B', 9);
+        $pdf->Cell(51.33, 6, utf8_decode('Antivirus'), 1, 0, 'C', 1);
+        $pdf->SetFont('Arial', 'B', 9);
+        $pdf->Cell(51.33, 6, utf8_decode('Paquete de Office'), 1, 1, 'C', 1);
+        $pdf->SetFont('Arial', '', 9);
+        $pdf->Cell(51.33, 5, utf8_decode($for_man_sistema_operativo), 1, 0, 'C');
+        $pdf->SetFont('Arial', '', 9);
+        $pdf->Cell(51.33, 5, utf8_decode($for_man_antivirus), 1, 0, 'C');
+        $pdf->SetFont('Arial', '', 9);
+        $pdf->Cell(51.33, 5, utf8_decode($for_man_paquete_office), 1, 1, 'C');
+
+        $pdf->SetFont('Arial', 'B', 9);
+        $pdf->Cell(51.33, 6, utf8_decode('Multimedia'), 1, 0, 'C', 1);
+        $pdf->SetFont('Arial', 'B', 9);
+        $pdf->Cell(51.33, 6, utf8_decode('Internet'), 1, 0, 'C', 1);
+        $pdf->SetFont('Arial', 'B', 9);
+        $pdf->Cell(51.33, 6, utf8_decode('Otros'), 1, 1, 'C', 1);
+        $pdf->SetFont('Arial', '', 9);
+        $pdf->Cell(51.33, 5, utf8_decode($for_man_multimedia), 1, 0, 'C');
+        $pdf->SetFont('Arial', '', 9);
+        $pdf->Cell(51.33, 5, utf8_decode($for_man_internet), 1, 0, 'C');
+        $pdf->SetFont('Arial', '', 9);
+        $pdf->Cell(51.33, 5, utf8_decode($for_man_otros), 1, 1, 'C');
+
+        $pdf->SetFillColor(0, 0, 0);
+        $pdf->SetTextColor(255, 255, 255);
+        $pdf->SetFont('Arial', 'B', 9);
+        $pdf->Cell(0, 6, utf8_decode('PC'), 1, 1, 'C', 1);
 
         $pdf->SetFillColor(255, 255, 255);
         $pdf->SetTextColor(0, 0, 0);
         $pdf->SetFont('Arial', 'B', 9);
-        $pdf->Cell(49.5, 7, utf8_decode('Enciende'), 1, 0, 'C', 1);
-        $pdf->Cell(46.5, 7, utf8_decode('Unidades'), 1, 0, 'C', 1);
-        $pdf->Cell(58, 7, utf8_decode('¿Botones Completos?'), 1, 1, 'C', 1);
-        
-        $pdf->Cell(24.75, 7, utf8_decode('Si'), 1, 0, 'C', 1);
-        $pdf->Cell(24.75, 7, utf8_decode('No'), 1, 0, 'C', 1);
+        $pdf->Cell(49.5, 6, utf8_decode('Enciende'), 1, 0, 'C', 1);
+        $pdf->Cell(46.5, 6, utf8_decode('Unidades'), 1, 0, 'C', 1);
+        $pdf->Cell(58, 6, utf8_decode('¿Botones Completos?'), 1, 1, 'C', 1);
+        $pdf->SetFont('Arial', '', 9);
+        $pdf->Cell(49.5, 5, utf8_decode($for_man_enciende_pc), 1, 0, 'C', 1);
+        $pdf->Cell(46.5, 5, utf8_decode($for_man_unidades_pc), 1, 0, 'C', 1);
+        $pdf->Cell(58, 5, utf8_decode($for_man_botones_pc), 1, 1, 'C', 1);
+        // if ($for_man_enciende_pc == 'Si'){
+        //     $pdf->SetFont('Arial', '', 9);
+        //     $pdf->Cell(24.75, 7, utf8_decode('X'), 1, 0, 'C', 1);
+        //     $pdf->Cell(24.75, 7, utf8_decode(''), 1, 0, 'C', 1);
+        // } else {
+        //     $pdf->SetFont('Arial', '', 9);
+        //     $pdf->Cell(24.75, 7, utf8_decode(''), 1, 0, 'C', 1);
+        //     $pdf->Cell(24.75, 7, utf8_decode('X'), 1, 0, 'C', 1);
+        // }
 
-        $pdf->Cell(24.5, 7, utf8_decode('Disco Flexible'), 1, 0, 'C', 1);
-        $pdf->Cell(22, 7, utf8_decode('CD/DVD'), 1, 0, 'C', 1);
+        // if ($for_man_unidades_pc == 'Disco Flexible'){
+        //     $pdf->SetFont('Arial', '', 9);
+        //     $pdf->Cell(24.5, 7, utf8_decode('X'), 1, 0, 'C', 1);
+        //     $pdf->Cell(22, 7, utf8_decode(''), 1, 0, 'C', 1);
+        // } else {
+        //     $pdf->SetFont('Arial', '', 9);
+        //     $pdf->Cell(24.5, 7, utf8_decode(''), 1, 0, 'C', 1);
+        //     $pdf->Cell(22, 7, utf8_decode('X'), 1, 0, 'C', 1);
+        // }
 
-        $pdf->Cell(29, 7, utf8_decode('Si'), 1, 0, 'C', 1);
-        $pdf->Cell(29, 7, utf8_decode('No'), 1, 1, 'C', 1);
-
-        if ($for_man_enciende_pc == 'Si'){
-            $pdf->SetFont('Arial', '', 9);
-            $pdf->Cell(24.75, 7, utf8_decode('X'), 1, 0, 'C', 1);
-            $pdf->Cell(24.75, 7, utf8_decode(''), 1, 0, 'C', 1);
-        } else {
-            $pdf->SetFont('Arial', '', 9);
-            $pdf->Cell(24.75, 7, utf8_decode(''), 1, 0, 'C', 1);
-            $pdf->Cell(24.75, 7, utf8_decode('X'), 1, 0, 'C', 1);
-        }
-
-        if ($for_man_unidades_pc == 'Disco Flexible'){
-            $pdf->SetFont('Arial', '', 9);
-            $pdf->Cell(24.5, 7, utf8_decode('X'), 1, 0, 'C', 1);
-            $pdf->Cell(22, 7, utf8_decode(''), 1, 0, 'C', 1);
-        } else {
-            $pdf->SetFont('Arial', '', 9);
-            $pdf->Cell(24.5, 7, utf8_decode(''), 1, 0, 'C', 1);
-            $pdf->Cell(22, 7, utf8_decode('X'), 1, 0, 'C', 1);
-        }
-
-        if ($for_man_botones_pc == 'Si'){
-            $pdf->SetFont('Arial', '', 9);
-            $pdf->Cell(29, 7, utf8_decode('X'), 1, 0, 'C', 1);
-            $pdf->Cell(29, 7, utf8_decode(''), 1, 1, 'C', 1);
-        } else {
-            $pdf->SetFont('Arial', '', 9);
-            $pdf->Cell(29, 7, utf8_decode(''), 1, 0, 'C', 1);
-            $pdf->Cell(29, 7, utf8_decode('X'), 1, 1, 'C', 1);
-        }
+        // if ($for_man_botones_pc == 'Si'){
+        //     $pdf->SetFont('Arial', '', 9);
+        //     $pdf->Cell(29, 7, utf8_decode('X'), 1, 0, 'C', 1);
+        //     $pdf->Cell(29, 7, utf8_decode(''), 1, 1, 'C', 1);
+        // } else {
+        //     $pdf->SetFont('Arial', '', 9);
+        //     $pdf->Cell(29, 7, utf8_decode(''), 1, 0, 'C', 1);
+        //     $pdf->Cell(29, 7, utf8_decode('X'), 1, 1, 'C', 1);
+        // }
 
         $pdf->SetFont('Arial', 'B', 9);
-        $pdf->Cell(49.5, 7, utf8_decode('Procesador'), 1, 0, 'C', 1);
-        $pdf->Cell(46.5, 7, utf8_decode('Memoria RAM'), 1, 0, 'C', 1);
-        $pdf->Cell(58, 7, utf8_decode('Disco Duro'), 1, 1, 'C', 1);
+        $pdf->Cell(49.5, 6, utf8_decode('Procesador'), 1, 0, 'C', 1);
+        $pdf->Cell(46.5, 6, utf8_decode('Memoria RAM'), 1, 0, 'C', 1);
+        $pdf->Cell(58, 6, utf8_decode('Disco Duro'), 1, 1, 'C', 1);
 
         $pdf->SetFont('Arial', '', 9);
-        $pdf->Cell(49.5, 7, utf8_decode($for_man_procesador), 1, 0, 'C', 1);
-        $pdf->Cell(46.5, 7, utf8_decode($for_man_memoria_ram), 1, 0, 'C', 1);
-        $pdf->Cell(58, 7, utf8_decode($for_man_disco_duro_pc), 1, 1, 'C', 1);
+        $pdf->Cell(49.5, 5, utf8_decode($for_man_procesador), 1, 0, 'C', 1);
+        $pdf->Cell(46.5, 5, utf8_decode($for_man_memoria_ram), 1, 0, 'C', 1);
+        $pdf->Cell(58, 5, utf8_decode($for_man_disco_duro_pc), 1, 1, 'C', 1);
 
         $pdf->SetFont('Arial', 'B', 9);
-        $pdf->Cell(0, 7, utf8_decode('Condición Física'), 1, 1, 'C', 1);
+        $pdf->Cell(0, 6, utf8_decode('Condición Física'), 1, 1, 'C', 1);
         if (strlen($for_man_condicion_pc) > 100 & strlen($for_man_condicion_pc) < 201 ){ 
             $pdf->SetFont('Arial', '', 9);
-            $pdf->MultiCell(0, 14, utf8_decode($for_man_condicion_pc), 1, 'C', 1, 1);  
+            $pdf->MultiCell(0, 10, utf8_decode($for_man_condicion_pc), 1, 'C', 1, 1);  
         } else {
             if (strlen($for_man_condicion_pc) < 101){
                 $pdf->SetFont('Arial', '', 9);
-                $pdf->MultiCell(0, 7, utf8_decode($for_man_condicion_pc), 1, 'C', 1, 1);  
+                $pdf->MultiCell(0, 5, utf8_decode($for_man_condicion_pc), 1, 'C', 1, 1);  
             }
             if (strlen($for_man_condicion_pc) > 200 & strlen($for_man_condicion_pc) < 301 ){
                 $pdf->SetFont('Arial', '', 9);
-                $pdf->MultiCell(0, 21, utf8_decode($for_man_condicion_pc), 1, 'C', 1, 1);
+                $pdf->MultiCell(0, 15, utf8_decode($for_man_condicion_pc), 1, 'C', 1, 1);
             }
         }
 
@@ -416,63 +388,56 @@ class formularios_mantenimiento_pc_impresoraC{
         $pdf->SetFillColor(255, 255, 255);
         $pdf->SetTextColor(0, 0, 0);
         $pdf->SetFont('Arial', 'B', 9);
-        $pdf->Cell(49.5, 7, utf8_decode('Enciende'), 1, 0, 'C', 1);
-        $pdf->Cell(46.5, 7, utf8_decode('¿Colores correctos?'), 1, 0, 'C', 1);
-        $pdf->Cell(58, 7, utf8_decode('¿Botones Completos?'), 1, 1, 'C', 1);
+        $pdf->Cell(49.5, 6, utf8_decode('Enciende'), 1, 0, 'C', 1);
+        $pdf->Cell(46.5, 6, utf8_decode('¿Colores correctos?'), 1, 0, 'C', 1);
+        $pdf->Cell(58, 6, utf8_decode('¿Botones Completos?'), 1, 1, 'C', 1);
+        $pdf->SetFont('Arial', '', 9);
+        $pdf->Cell(49.5, 5, utf8_decode($for_man_enciende_pantalla), 1, 0, 'C', 1);
+        $pdf->Cell(46.5, 5, utf8_decode($for_man_colores_pantalla), 1, 0, 'C', 1);
+        $pdf->Cell(58, 5, utf8_decode($for_man_botones_pantalla), 1, 1, 'C', 1);
+        // if ($for_man_enciende_pantalla == 'Si'){
+        //     $pdf->SetFont('Arial', '', 9);
+        //     $pdf->Cell(24.75, 7, utf8_decode('X'), 1, 0, 'C', 1);
+        //     $pdf->Cell(24.75, 7, utf8_decode(''), 1, 0, 'C', 1);
+        // } else {
+        //     $pdf->SetFont('Arial', '', 9);
+        //     $pdf->Cell(24.75, 7, utf8_decode(''), 1, 0, 'C', 1);
+        //     $pdf->Cell(24.75, 7, utf8_decode('X'), 1, 0, 'C', 1);
+        // }
 
-        $pdf->Cell(24.75, 7, utf8_decode('Si'), 1, 0, 'C', 1);
-        $pdf->Cell(24.75, 7, utf8_decode('No'), 1, 0, 'C', 1);
+        // if ($for_man_colores_pantalla == 'Si'){
+        //     $pdf->SetFont('Arial', '', 9);
+        //     $pdf->Cell(24.5, 7, utf8_decode('X'), 1, 0, 'C', 1);
+        //     $pdf->Cell(22, 7, utf8_decode(''), 1, 0, 'C', 1);
+        // } else {
+        //     $pdf->SetFont('Arial', '', 9);
+        //     $pdf->Cell(24.5, 7, utf8_decode(''), 1, 0, 'C', 1);
+        //     $pdf->Cell(22, 7, utf8_decode('X'), 1, 0, 'C', 1);
+        // }
 
-        $pdf->Cell(24.5, 7, utf8_decode('Si'), 1, 0, 'C', 1);
-        $pdf->Cell(22, 7, utf8_decode('No'), 1, 0, 'C', 1);
-
-        $pdf->Cell(29, 7, utf8_decode('Si'), 1, 0, 'C', 1);
-        $pdf->Cell(29, 7, utf8_decode('No'), 1, 1, 'C', 1);
-
-        if ($for_man_enciende_pantalla == 'Si'){
-            $pdf->SetFont('Arial', '', 9);
-            $pdf->Cell(24.75, 7, utf8_decode('X'), 1, 0, 'C', 1);
-            $pdf->Cell(24.75, 7, utf8_decode(''), 1, 0, 'C', 1);
-        } else {
-            $pdf->SetFont('Arial', '', 9);
-            $pdf->Cell(24.75, 7, utf8_decode(''), 1, 0, 'C', 1);
-            $pdf->Cell(24.75, 7, utf8_decode('X'), 1, 0, 'C', 1);
-        }
-
-        if ($for_man_colores_pantalla == 'Si'){
-            $pdf->SetFont('Arial', '', 9);
-            $pdf->Cell(24.5, 7, utf8_decode('X'), 1, 0, 'C', 1);
-            $pdf->Cell(22, 7, utf8_decode(''), 1, 0, 'C', 1);
-        } else {
-            $pdf->SetFont('Arial', '', 9);
-            $pdf->Cell(24.5, 7, utf8_decode(''), 1, 0, 'C', 1);
-            $pdf->Cell(22, 7, utf8_decode('X'), 1, 0, 'C', 1);
-        }
-
-        if ($for_man_botones_pantalla == 'Si'){
-            $pdf->SetFont('Arial', '', 9);
-            $pdf->Cell(29, 7, utf8_decode('X'), 1, 0, 'C', 1);
-            $pdf->Cell(29, 7, utf8_decode(''), 1, 1, 'C', 1);
-        } else {
-            $pdf->SetFont('Arial', '', 9);
-            $pdf->Cell(29, 7, utf8_decode(''), 1, 0, 'C', 1);
-            $pdf->Cell(29, 7, utf8_decode('X'), 1, 1, 'C', 1);
-
-        }
+        // if ($for_man_botones_pantalla == 'Si'){
+        //     $pdf->SetFont('Arial', '', 9);
+        //     $pdf->Cell(29, 7, utf8_decode('X'), 1, 0, 'C', 1);
+        //     $pdf->Cell(29, 7, utf8_decode(''), 1, 1, 'C', 1);
+        // } else {
+        //     $pdf->SetFont('Arial', '', 9);
+        //     $pdf->Cell(29, 7, utf8_decode(''), 1, 0, 'C', 1);
+        //     $pdf->Cell(29, 7, utf8_decode('X'), 1, 1, 'C', 1);
+        // }
 
         $pdf->SetFont('Arial', 'B', 9);
-        $pdf->Cell(0, 7, utf8_decode('Condición Física'), 1, 1, 'C', 1);
+        $pdf->Cell(0, 6, utf8_decode('Condición Física'), 1, 1, 'C', 1);
         if (strlen($for_man_condicion_pantalla) > 100 & strlen($for_man_condicion_pantalla) < 201 ){ 
             $pdf->SetFont('Arial', '', 9);
-            $pdf->MultiCell(0, 14, utf8_decode($for_man_condicion_pantalla), 1, 'C', 1, 1);
+            $pdf->MultiCell(0, 10, utf8_decode($for_man_condicion_pantalla), 1, 'C', 1, 1);
         } else {
             if (strlen($for_man_condicion_pantalla) < 101){
                 $pdf->SetFont('Arial', '', 9);
-                $pdf->MultiCell(0, 7, utf8_decode($for_man_condicion_pantalla), 1, 'C', 1, 1);
+                $pdf->MultiCell(0, 5, utf8_decode($for_man_condicion_pantalla), 1, 'C', 1, 1);
             }
             if (strlen($for_man_condicion_pantalla) > 200 & strlen($for_man_condicion_pantalla) < 301 ){
                 $pdf->SetFont('Arial', '', 9);
-                $pdf->MultiCell(0, 21, utf8_decode($for_man_condicion_pantalla), 1, 'C', 1, 1);
+                $pdf->MultiCell(0, 15, utf8_decode($for_man_condicion_pantalla), 1, 'C', 1, 1);
             }
         }
 
@@ -484,43 +449,39 @@ class formularios_mantenimiento_pc_impresoraC{
         $pdf->SetFillColor(255, 255, 255);
         $pdf->SetTextColor(0, 0, 0);
         $pdf->SetFont('Arial', 'B', 9);
-        $pdf->Cell(77, 7, utf8_decode('¿FUNCIONA CORRECTAMENTE?'), 1, 0, 'C', 1);
-        $pdf->Cell(77, 7, utf8_decode('¿Botones Completos?'), 1, 1, 'C', 1);
+        $pdf->Cell(77, 6, utf8_decode('¿Funciona Correctamente?'), 1, 0, 'C', 1);
+        $pdf->Cell(77, 6, utf8_decode('¿Botones Completos?'), 1, 1, 'C', 1);
+        $pdf->SetFont('Arial', '', 9);
+        $pdf->Cell(77, 5, utf8_decode($for_man_funciona_teclado), 1, 0, 'C', 1);
+        $pdf->Cell(77, 5, utf8_decode($for_man_botones_teclado), 1, 1, 'C', 1);
+        // if ($for_man_funciona_teclado == 'Si'){
+        //     $pdf->Cell(38.5, 7, utf8_decode('X'), 1, 0, 'C', 1);
+        //     $pdf->Cell(38.5, 7, utf8_decode(''), 1, 0, 'C', 1);
+        // } else {
+        //     $pdf->Cell(38.5, 7, utf8_decode(''), 1, 0, 'C', 1);
+        //     $pdf->Cell(38.5, 7, utf8_decode('X'), 1, 0, 'C', 1);
+        // }
 
-        $pdf->Cell(38.5, 7, utf8_decode('Si'), 1, 0, 'C', 1);
-        $pdf->Cell(38.5, 7, utf8_decode('No'), 1, 0, 'C', 1);
-
-        $pdf->Cell(38.5, 7, utf8_decode('Si'), 1, 0, 'C', 1);
-        $pdf->Cell(38.5, 7, utf8_decode('No'), 1, 1, 'C', 1);
-
-        if ($for_man_funciona_teclado == 'Si'){
-            $pdf->Cell(38.5, 7, utf8_decode('X'), 1, 0, 'C', 1);
-            $pdf->Cell(38.5, 7, utf8_decode(''), 1, 0, 'C', 1);
-        } else {
-            $pdf->Cell(38.5, 7, utf8_decode(''), 1, 0, 'C', 1);
-            $pdf->Cell(38.5, 7, utf8_decode('X'), 1, 0, 'C', 1);
-        }
-
-        if ($for_man_botones_teclado == 'Si'){
-            $pdf->Cell(38.5, 7, utf8_decode('X'), 1, 0, 'C', 1);
-            $pdf->Cell(38.5, 7, utf8_decode(''), 1, 1, 'C', 1);
-        } else {
-            $pdf->Cell(38.5, 7, utf8_decode(''), 1, 0, 'C', 1);
-            $pdf->Cell(38.5, 7, utf8_decode('X'), 1, 1, 'C', 1);
-        }
-
-        $pdf->Cell(0, 7, utf8_decode('Condición Física'), 1, 1, 'C', 1);
+        // if ($for_man_botones_teclado == 'Si'){
+        //     $pdf->Cell(38.5, 7, utf8_decode('X'), 1, 0, 'C', 1);
+        //     $pdf->Cell(38.5, 7, utf8_decode(''), 1, 1, 'C', 1);
+        // } else {
+        //     $pdf->Cell(38.5, 7, utf8_decode(''), 1, 0, 'C', 1);
+        //     $pdf->Cell(38.5, 7, utf8_decode('X'), 1, 1, 'C', 1);
+        //}
+        $pdf->SetFont('Arial', 'B', 9);
+        $pdf->Cell(0, 6, utf8_decode('Condición Física'), 1, 1, 'C', 1);
         if (strlen($for_man_condicion_teclado) > 100 & strlen($for_man_condicion_teclado) < 201 ){ 
             $pdf->SetFont('Arial', '', 9);
-            $pdf->MultiCell(0, 14, utf8_decode($for_man_condicion_teclado), 1, 'C', 1, 1);
+            $pdf->MultiCell(0, 10, utf8_decode($for_man_condicion_teclado), 1, 'C', 1, 1);
         } else {
             if (strlen($for_man_condicion_teclado) < 101){
                 $pdf->SetFont('Arial', '', 9);
-                $pdf->MultiCell(0, 7, utf8_decode($for_man_condicion_teclado), 1, 'C', 1, 1);
+                $pdf->MultiCell(0, 5, utf8_decode($for_man_condicion_teclado), 1, 'C', 1, 1);
             }
             if (strlen($for_man_condicion_teclado) > 200 & strlen($for_man_condicion_teclado) < 301 ){
                 $pdf->SetFont('Arial', '', 9);
-                $pdf->MultiCell(0, 21, utf8_decode($for_man_condicion_teclado), 1, 'C', 1, 1);
+                $pdf->MultiCell(0, 15, utf8_decode($for_man_condicion_teclado), 1, 'C', 1, 1);
             }
         }
 
@@ -618,151 +579,122 @@ class formularios_mantenimiento_pc_impresoraC{
         $pdf->Cell(27, 5, utf8_decode($for_imp_consecutivo), 1, 0,'C');
         $pdf->Ln(10);
 
-        $pdf->SetFillColor(192, 192, 192);
+        $pdf->SetFillColor(0, 0, 0);
+        $pdf->SetTextColor(255, 255, 255);
         $pdf->SetFont('Arial', 'B', 9);
         $pdf->Cell(160, 5, utf8_decode('1. IDENTIFICACIÓN'), 1, 1,'C', 1);
+        
         $pdf->SetFillColor(255, 255, 255);
+        $pdf->SetTextColor(0, 0, 0);
         $pdf->SetFont('Arial', 'B', 9);
-        $pdf->Cell(26.665, 5, utf8_decode(' Fecha:'), 1, 0,'L', 1);
+        $pdf->Cell(53.33, 6, utf8_decode(' Fecha:'), 1, 0,'L', 1);
+        $pdf->Cell(53.33, 6, utf8_decode(' Sede:'), 1, 0,'L', 1);
+        $pdf->Cell(53.33, 6, utf8_decode(' Dependencia:'), 1, 1,'L', 1);
         $pdf->SetFont('Arial', '', 9);
-        $pdf->Cell(26.665, 5, utf8_decode($for_imp_fecha), 1, 0,'L', 1);
+        $pdf->Cell(53.33, 5, utf8_decode($for_imp_fecha), 1, 0,'L', 1);
+        $pdf->Cell(53.33, 5, utf8_decode($for_imp_sede), 1, 0,'L', 1);
+        $pdf->Cell(53.33, 5, utf8_decode($for_imp_dependencia), 1, 1,'L', 1);
+
         $pdf->SetFont('Arial', 'B', 9);
-        $pdf->Cell(26.665, 5, utf8_decode(' Sede:'), 1, 0,'L', 1);
+        $pdf->Cell(53.33, 6, utf8_decode(' Teléfono:'), 1, 0,'L', 1);
+        $pdf->Cell(28, 6, utf8_decode(' Usuario:'), 1, 0,'L', 1);
+        $pdf->Cell(78.67, 6, utf8_decode(' Correo:'), 1, 1,'L', 1);
         $pdf->SetFont('Arial', '', 9);
-        $pdf->Cell(26.665, 5, utf8_decode($for_imp_sede), 1, 0,'L', 1);
-        $pdf->SetFont('Arial', 'B', 9);
-        $pdf->Cell(26.665, 5, utf8_decode(' Dependencia:'), 1, 0,'L', 1);
-        $pdf->SetFont('Arial', '', 9);
-        $pdf->Cell(26.665, 5, utf8_decode($for_imp_dependencia), 1, 1,'L', 1);
-        $pdf->SetFont('Arial', 'B', 9);
-        $pdf->Cell(26.665, 5, utf8_decode(' Teléfono:'), 1, 0,'L', 1);
-        $pdf->SetFont('Arial', '', 9);
-        $pdf->Cell(26.665, 5, utf8_decode($for_imp_telefono), 1, 0,'L', 1);
-        $pdf->SetFont('Arial', 'B', 9);
-        $pdf->Cell(26.665, 5, utf8_decode(' Usuario:'), 1, 0,'L', 1);
-        $pdf->SetFont('Arial', '', 9);
-        $pdf->Cell(26.665, 5, utf8_decode($for_imp_usuario), 1, 0,'L', 1);
-        $pdf->SetFont('Arial', 'B', 9);
-        $pdf->Cell(26.665, 5, utf8_decode(' Email usuario:'), 1, 0,'L', 1);
-        $pdf->SetFont('Arial', '', 9);
-        $pdf->MultiCell(26.665, 5, utf8_decode($for_imp_email_usuario), 1, 1,'L', 1);
+        $pdf->Cell(53.33, 5, utf8_decode($for_imp_telefono), 1, 0,'L', 1);
+        $pdf->Cell(28, 5, utf8_decode($for_imp_usuario), 1, 0,'L', 1);
+        $pdf->MultiCell(78.67, 5, utf8_decode($for_imp_email_usuario), 1, 1,'L', 1);
         $pdf->Ln(5);
 
-        $pdf->SetFillColor(192, 192, 192);
+        $pdf->SetFillColor(0, 0, 0);
+        $pdf->SetTextColor(255, 255, 255);
         $pdf->SetFont('Arial', 'B', 9);
         $pdf->Cell(160, 5, utf8_decode('2. INFORMACIÓN DEL EQUIPO'), 1, 1,'C', 1);
 
         $pdf->SetFillColor(255, 255, 255);
+        $pdf->SetTextColor(0, 0, 0);
         $pdf->SetFont('Arial', 'B', 9);
-        $pdf->Cell(26.665, 5, utf8_decode(' Impresora:'), 1, 0,'L', 1);
+        $pdf->Cell(80, 6, utf8_decode(' Impresora:'), 1, 0,'L', 1);
+        $pdf->Cell(80, 6, utf8_decode(' Ploter:'), 1, 1,'L', 1);
         $pdf->SetFont('Arial', '', 9);
-        $pdf->Cell(53.335, 5, utf8_decode($for_imp_impresora), 1, 0,'L', 1);
+        $pdf->Cell(80, 5, utf8_decode($for_imp_impresora), 1, 0,'L', 1);
+        $pdf->Cell(80, 5, utf8_decode($for_imp_ploter), 1, 1,'L', 1);
+
         $pdf->SetFont('Arial', 'B', 9);
-        $pdf->Cell(35, 5, utf8_decode(' Ploter:'), 1, 0,'L', 1);
+        $pdf->Cell(53.33, 6, utf8_decode(' Marca:'), 1, 0,'L', 1);
+        $pdf->Cell(53.33, 6, utf8_decode(' Procesador:'), 1, 0,'L', 1);
+        $pdf->Cell(53.33, 6, utf8_decode(' Serial:'), 1, 1,'L', 1);
         $pdf->SetFont('Arial', '', 9);
-        $pdf->Cell(45, 5, utf8_decode($for_imp_ploter), 1, 1,'L', 1);
+        $pdf->Cell(53.33, 5, utf8_decode($for_imp_marca), 1, 0,'L', 1);
+        $pdf->Cell(53.33, 5, utf8_decode($for_imp_procesador), 1, 0,'L', 1);
+        $pdf->Cell(53.33, 5, utf8_decode($for_imp_serial), 1, 1,'L', 1);
+
         $pdf->SetFont('Arial', 'B', 9);
-        $pdf->Cell(26.665, 5, utf8_decode(' Marca:'), 1, 0,'L', 1);
+        $pdf->Cell(53.33, 6, utf8_decode(' Modelo:'), 1, 0,'L', 1);
+        $pdf->Cell(53.33, 6, utf8_decode(' Placa de Inventario:'), 1, 0,'L', 1);
+        $pdf->Cell(53.33, 6, utf8_decode(' Memoria:'), 1, 1,'L', 1);
         $pdf->SetFont('Arial', '', 9);
-        $pdf->Cell(26.665, 5, utf8_decode($for_imp_marca), 1, 0,'L', 1);
+        $pdf->Cell(53.33, 5, utf8_decode($for_imp_modelo), 1, 0,'L', 1);
+        $pdf->Cell(53.33, 5, utf8_decode($for_imp_placa), 1, 0,'L', 1);
+        $pdf->Cell(53.33, 5, utf8_decode($for_imp_memoria), 1, 1,'L', 1);
+
         $pdf->SetFont('Arial', 'B', 9);
-        $pdf->Cell(26.665, 5, utf8_decode(' Procesador:'), 1, 0,'L', 1);
+        $pdf->Cell(53.33, 6, utf8_decode(' Duplex:'), 1, 0,'L', 1);
+        $pdf->Cell(53.33, 6, utf8_decode(' Disco Duro:'), 1, 0,'L', 1);
+        $pdf->Cell(53.33, 6, utf8_decode(' Toner:'), 1, 1,'L', 1);
         $pdf->SetFont('Arial', '', 9);
-        $pdf->Cell(26.665, 5, utf8_decode($for_imp_procesador), 1, 0,'L', 1);
-        $pdf->SetFont('Arial', 'B', 9);
-        $pdf->Cell(26.665, 5, utf8_decode(' Serial:'), 1, 0,'L', 1);
-        $pdf->SetFont('Arial', '', 9);
-        $pdf->Cell(26.665, 5, utf8_decode($for_imp_serial), 1, 1,'L', 1);
-        $pdf->SetFont('Arial', 'B', 9);
-        $pdf->Cell(26.665, 5, utf8_decode(' Modelo:'), 1, 0,'L', 1);
-        $pdf->SetFont('Arial', '', 9);
-        $pdf->Cell(53.335, 5, utf8_decode($for_imp_modelo), 1, 0,'L', 1);
-        $pdf->SetFont('Arial', 'B', 9);
-        $pdf->Cell(35, 5, utf8_decode(' Placa de Inventario:'), 1, 0,'L', 1);
-        $pdf->SetFont('Arial', '', 9);
-        $pdf->Cell(45, 5, utf8_decode($for_imp_placa), 1, 1,'L', 1);
-        $pdf->SetFont('Arial', 'B', 9);
-        $pdf->Cell(26.665, 5, utf8_decode(' Memoria:'), 1, 0,'L', 1);
-        $pdf->SetFont('Arial', '', 9);
-        $pdf->Cell(53.335, 5, utf8_decode($for_imp_memoria), 1, 0,'L', 1);
-        $pdf->SetFont('Arial', 'B', 9);
-        $pdf->Cell(35, 5, utf8_decode(' Duplex:'), 1, 0,'L', 1);
-        $pdf->SetFont('Arial', '', 9);
-        $pdf->Cell(45, 5, utf8_decode($for_imp_duplex), 1, 1,'L', 1);
-        $pdf->SetFont('Arial', 'B', 9);
-        $pdf->Cell(26.665, 5, utf8_decode(' Disco Duro:'), 1, 0,'L', 1);
-        $pdf->SetFont('Arial', '', 9);
-        $pdf->Cell(53.335, 5, utf8_decode($for_imp_disco_duro), 1, 0,'L', 1);
-        $pdf->SetFont('Arial', 'B', 9);
-        $pdf->Cell(35, 5, utf8_decode(' Toner:'), 1, 0,'L', 1);
-        $pdf->SetFont('Arial', '', 9);
-        $pdf->Cell(45, 5, utf8_decode($for_imp_toner), 1, 1,'L', 1);
+        $pdf->Cell(53.33, 5, utf8_decode($for_imp_duplex), 1, 0,'L', 1);
+        $pdf->Cell(53.33, 5, utf8_decode($for_imp_disco_duro), 1, 0,'L', 1);
+        $pdf->Cell(53.33, 5, utf8_decode($for_imp_toner), 1, 1,'L', 1);
         $pdf->Ln(5);
 
-        $pdf->SetFillColor(192, 192, 192);
+        $pdf->SetFillColor(0, 0, 0);
+        $pdf->SetTextColor(255, 255, 255);
         $pdf->SetFont('Arial', 'B', 9);
         $pdf->Cell(160, 5, utf8_decode('3. INSPECCIÓN INICIAL'), 1, 1,'C', 1);
 
         $pdf->SetFillColor(255, 255, 255);
+        $pdf->SetTextColor(0, 0, 0);
         $pdf->SetFont('Arial', 'B', 9);
+        $pdf->Cell(80, 5, utf8_decode(''), 1, 0,'C', 1);
+        $pdf->Cell(40, 5, utf8_decode('SI'), 1, 0,'C', 1);
+        $pdf->Cell(40, 5, utf8_decode('NO'), 1, 1,'C', 1);
         $pdf->Cell(80, 5, utf8_decode(' Se observan daños externos:'), 1, 0,'L', 1);
-        $pdf->Cell(20, 5, utf8_decode('SI'), 1, 0,'C', 1);
         if ($for_imp_danos_externos == 'Si'){
             $pdf->SetFont('Arial', '', 9);
-            $pdf->Cell(20, 5, utf8_decode('X'), 1, 0,'C', 1);
-            $pdf->SetFont('Arial', 'B', 9);
-            $pdf->Cell(20, 5, utf8_decode('NO'), 1, 0,'C', 1);
-            $pdf->Cell(20, 5, utf8_decode(''), 1, 1,'C', 1);
+            $pdf->Cell(40, 5, utf8_decode('X'), 1, 0,'C', 1);
+            $pdf->Cell(40, 5, utf8_decode(''), 1, 1,'C', 1);
             $pdf->SetFillColor(192, 192, 192);
+            $pdf->SetFont('Arial', 'B', 9);
             $pdf->Cell(160, 5, utf8_decode('Cual daño externo observas?'), 1, 1,'C', 1);
             $pdf->SetFillColor(255, 255, 255);
             $pdf->SetFont('Arial', '', 9);
             $pdf->MultiCell(160, 5, utf8_decode($for_imp_danos_externos_detalle), 1, 'C', 1, 1);
         } else {
-            $pdf->SetFont('Arial', 'B', 9);
-            $pdf->Cell(20, 5, utf8_decode(''), 1, 0,'C', 1);
-            $pdf->Cell(20, 5, utf8_decode('NO'), 1, 0,'C', 1);
             $pdf->SetFont('Arial', '', 9);
-            $pdf->Cell(20, 5, utf8_decode('X'), 1, 1,'C', 1);
+            $pdf->Cell(40, 5, utf8_decode(''), 1, 0,'C', 1);
+            $pdf->Cell(40, 5, utf8_decode('X'), 1, 1,'C', 1);
         }
         $pdf->SetFont('Arial', 'B', 9);
         $pdf->Cell(80, 5, utf8_decode(' Verificación de encendido:'), 1, 0,'L', 1);
         if ($for_imp_encendido == 'Si'){
-            $pdf->SetFont('Arial', 'B', 9);
-            $pdf->Cell(20, 5, utf8_decode('SI'), 1, 0,'C', 1);
             $pdf->SetFont('Arial', '', 9);
-            $pdf->Cell(20, 5, utf8_decode('X'), 1, 0,'C', 1);
-            $pdf->SetFont('Arial', 'B', 9);
-            $pdf->Cell(20, 5, utf8_decode('NO'), 1, 0,'C', 1);
-            $pdf->Cell(20, 5, utf8_decode(''), 1, 1,'C', 1);
+            $pdf->Cell(40, 5, utf8_decode('X'), 1, 0,'C', 1);
+            $pdf->Cell(40, 5, utf8_decode(''), 1, 1,'C', 1);
         } else {
             $pdf->SetFont('Arial', 'B', 9);
-            $pdf->Cell(20, 5, utf8_decode('SI'), 1, 0,'C', 1);
-            $pdf->Cell(20, 5, utf8_decode(''), 1, 0,'C', 1);
-            $pdf->SetFont('Arial', 'B', 9);
-            $pdf->Cell(20, 5, utf8_decode('NO'), 1, 0,'C', 1);
-            $pdf->SetFont('Arial', '', 9);
-            $pdf->Cell(20, 5, utf8_decode('X'), 1, 1,'C', 1);
-            $pdf->Cell(20, 5, utf8_decode('SI'), 1, 0,'C', 1);
+            $pdf->Cell(40, 5, utf8_decode(''), 1, 0,'C', 1);
+            $pdf->Cell(40, 5, utf8_decode('X'), 1, 1,'C', 1);
         }
         $pdf->SetFont('Arial', 'B', 9);
         $pdf->Cell(80, 5, utf8_decode(' Hoja de impresión de prueba:'), 1, 0,'L', 1);
         if ($for_imp_hoja_prueba == 'Si'){
-            $pdf->SetFont('Arial', 'B', 9);
-            $pdf->Cell(20, 5, utf8_decode('SI'), 1, 0,'C', 1);
             $pdf->SetFont('Arial', '', 9);
-            $pdf->Cell(20, 5, utf8_decode('X'), 1, 0,'C', 1);
-            $pdf->SetFont('Arial', 'B', 9);
-            $pdf->Cell(20, 5, utf8_decode('NO'), 1, 0,'C', 1);
-            $pdf->Cell(20, 5, utf8_decode(''), 1, 1,'C', 1);
+            $pdf->Cell(40, 5, utf8_decode('X'), 1, 0,'C', 1);
+            $pdf->Cell(40, 5, utf8_decode(''), 1, 1,'C', 1);
         } else {
-            $pdf->SetFont('Arial', 'B', 9);
-            $pdf->Cell(20, 5, utf8_decode('SI'), 1, 0,'C', 1);
-            $pdf->Cell(20, 5, utf8_decode(''), 1, 0,'C', 1);
-            $pdf->SetFont('Arial', 'B', 9);
-            $pdf->Cell(20, 5, utf8_decode('NO'), 1, 0,'C', 1);
             $pdf->SetFont('Arial', '', 9);
-            $pdf->Cell(20, 5, utf8_decode('X'), 1, 1,'C', 1);
+            $pdf->Cell(40, 5, utf8_decode(''), 1, 0,'C', 1);
+            $pdf->Cell(40, 5, utf8_decode('X'), 1, 1,'C', 1);
         }
         $pdf->SetFont('Arial', 'B', 9);
         $pdf->Cell(80, 5, utf8_decode(' Cantidad de hojas impresas:'), 1, 0,'L', 1);
@@ -771,226 +703,145 @@ class formularios_mantenimiento_pc_impresoraC{
         $pdf->SetFont('Arial', 'B', 9);
         $pdf->Cell(80, 5, utf8_decode(' Verificación de funcionamiento en red:'), 1, 0,'L', 1);
         if ($for_imp_verificacion_funcionamiento_red == 'Si'){
-            $pdf->SetFont('Arial', 'B', 9);
-            $pdf->Cell(20, 5, utf8_decode('SI'), 1, 0,'C', 1);
             $pdf->SetFont('Arial', '', 9);
-            $pdf->Cell(20, 5, utf8_decode('X'), 1, 0,'C', 1);
-            $pdf->SetFont('Arial', 'B', 9);
-            $pdf->Cell(20, 5, utf8_decode('NO'), 1, 0,'C', 1);
-            $pdf->Cell(20, 5, utf8_decode(''), 1, 1,'C', 1);
+            $pdf->Cell(40, 5, utf8_decode('X'), 1, 0,'C', 1);
+            $pdf->Cell(40, 5, utf8_decode(''), 1, 1,'C', 1);
         } else {
-            $pdf->SetFont('Arial', 'B', 9);
-            $pdf->Cell(20, 5, utf8_decode('SI'), 1, 0,'C', 1);
-            $pdf->Cell(20, 5, utf8_decode(''), 1, 0,'C', 1);
-            $pdf->SetFont('Arial', 'B', 9);
-            $pdf->Cell(20, 5, utf8_decode('NO'), 1, 0,'C', 1);
             $pdf->SetFont('Arial', '', 9);
-            $pdf->Cell(20, 5, utf8_decode('X'), 1, 1,'C', 1);
+            $pdf->Cell(40, 5, utf8_decode(''), 1, 0,'C', 1);
+            $pdf->Cell(40, 5, utf8_decode('X'), 1, 1,'C', 1);
         }
         $pdf->Ln(5);
 
-        $pdf->SetFillColor(192, 192, 192);
+        $pdf->SetFillColor(0, 0, 0);
+        $pdf->SetTextColor(255, 255, 255);
         $pdf->SetFont('Arial', 'B', 9);
         $pdf->Cell(160, 5, utf8_decode('4. ETAPAS DE MANTENIMIENTO'), 1, 1,'C', 1);
 
         $pdf->SetFillColor(255, 255, 255);
+        $pdf->SetTextColor(0, 0, 0);
+        $pdf->Cell(80, 5, utf8_decode(''), 1, 0,'C', 1);
+        $pdf->Cell(40, 5, utf8_decode('SI'), 1, 0,'C', 1);
+        $pdf->Cell(40, 5, utf8_decode('NO'), 1, 1,'C', 1);
         $pdf->SetFont('Arial', 'B', 9);
         $pdf->Cell(80, 5, utf8_decode(' 1. Recibir maquina y verificar su funcionamiento:'), 1, 0,'L', 1);
         if ($for_imp_verificar_funcionamiento == 'Si'){
-            $pdf->SetFont('Arial', 'B', 9);
-            $pdf->Cell(20, 5, utf8_decode('SI'), 1, 0,'C', 1);
             $pdf->SetFont('Arial', '', 9);
-            $pdf->Cell(20, 5, utf8_decode('X'), 1, 0,'C', 1);
-            $pdf->SetFont('Arial', 'B', 9);
-            $pdf->Cell(20, 5, utf8_decode('NO'), 1, 0,'C', 1);
-            $pdf->Cell(20, 5, utf8_decode(''), 1, 1,'C', 1);
+            $pdf->Cell(40, 5, utf8_decode('X'), 1, 0,'C', 1);
+            $pdf->Cell(40, 5, utf8_decode(''), 1, 1,'C', 1);
         } else {
-            $pdf->SetFont('Arial', 'B', 9);
-            $pdf->Cell(20, 5, utf8_decode('SI'), 1, 0,'C', 1);
-            $pdf->Cell(20, 5, utf8_decode(''), 1, 0,'C', 1);
-            $pdf->SetFont('Arial', 'B', 9);
-            $pdf->Cell(20, 5, utf8_decode('NO'), 1, 0,'C', 1);
             $pdf->SetFont('Arial', '', 9);
-            $pdf->Cell(20, 5, utf8_decode('X'), 1, 1,'C', 1);
+            $pdf->Cell(40, 5, utf8_decode(''), 1, 0,'C', 1);
+            $pdf->Cell(40, 5, utf8_decode('X'), 1, 1,'C', 1);
         }
         $pdf->SetFont('Arial', 'B', 9);
         $pdf->Cell(80, 5, utf8_decode(' 2. Desconectar las máquinas:'), 1, 0,'L', 1);
         if ($for_imp_desconectar == 'Si'){
-            $pdf->SetFont('Arial', 'B', 9);
-            $pdf->Cell(20, 5, utf8_decode('SI'), 1, 0,'C', 1);
             $pdf->SetFont('Arial', '', 9);
-            $pdf->Cell(20, 5, utf8_decode('X'), 1, 0,'C', 1);
-            $pdf->SetFont('Arial', 'B', 9);
-            $pdf->Cell(20, 5, utf8_decode('NO'), 1, 0,'C', 1);
-            $pdf->Cell(20, 5, utf8_decode(''), 1, 1,'C', 1);
+            $pdf->Cell(40, 5, utf8_decode('X'), 1, 0,'C', 1);
+            $pdf->Cell(40, 5, utf8_decode(''), 1, 1,'C', 1);
         } else {
-            $pdf->SetFont('Arial', 'B', 9);
-            $pdf->Cell(20, 5, utf8_decode('SI'), 1, 0,'C', 1);
-            $pdf->Cell(20, 5, utf8_decode(''), 1, 0,'C', 1);
-            $pdf->SetFont('Arial', 'B', 9);
-            $pdf->Cell(20, 5, utf8_decode('NO'), 1, 0,'C', 1);
             $pdf->SetFont('Arial', '', 9);
-            $pdf->Cell(20, 5, utf8_decode('X'), 1, 1,'C', 1);
+            $pdf->Cell(40, 5, utf8_decode(''), 1, 0,'C', 1);
+            $pdf->Cell(40, 5, utf8_decode('X'), 1, 1,'C', 1);
         }
         $pdf->SetFont('Arial', 'B', 9);
         $pdf->Cell(80, 5, utf8_decode(' 3. Destapar y verificar máquina:'), 1, 0,'L', 1);
         if ($for_imp_destapar_maquina == 'Si'){
-            $pdf->SetFont('Arial', 'B', 9);
-            $pdf->Cell(20, 5, utf8_decode('SI'), 1, 0,'C', 1);
             $pdf->SetFont('Arial', '', 9);
-            $pdf->Cell(20, 5, utf8_decode('X'), 1, 0,'C', 1);
-            $pdf->SetFont('Arial', 'B', 9);
-            $pdf->Cell(20, 5, utf8_decode('NO'), 1, 0,'C', 1);
-            $pdf->Cell(20, 5, utf8_decode(''), 1, 1,'C', 1);
+            $pdf->Cell(40, 5, utf8_decode('X'), 1, 0,'C', 1);
+            $pdf->Cell(40, 5, utf8_decode(''), 1, 1,'C', 1);
         } else {
-            $pdf->SetFont('Arial', 'B', 9);
-            $pdf->Cell(20, 5, utf8_decode('SI'), 1, 0,'C', 1);
-            $pdf->Cell(20, 5, utf8_decode(''), 1, 0,'C', 1);
-            $pdf->SetFont('Arial', 'B', 9);
-            $pdf->Cell(20, 5, utf8_decode('NO'), 1, 0,'C', 1);
             $pdf->SetFont('Arial', '', 9);
-            $pdf->Cell(20, 5, utf8_decode('X'), 1, 1,'C', 1);
+            $pdf->Cell(40, 5, utf8_decode(''), 1, 0,'C', 1);
+            $pdf->Cell(40, 5, utf8_decode('X'), 1, 1,'C', 1);
         }
         $pdf->SetFont('Arial', 'B', 9);
         $pdf->Cell(80, 5, utf8_decode(' 4. Llevar al equipo a un lugar de soplado:'), 1, 0,'L', 1);
         if ($for_imp_soplado == 'Si'){
-            $pdf->SetFont('Arial', 'B', 9);
-            $pdf->Cell(20, 5, utf8_decode('SI'), 1, 0,'C', 1);
             $pdf->SetFont('Arial', '', 9);
-            $pdf->Cell(20, 5, utf8_decode('X'), 1, 0,'C', 1);
-            $pdf->SetFont('Arial', 'B', 9);
-            $pdf->Cell(20, 5, utf8_decode('NO'), 1, 0,'C', 1);
-            $pdf->Cell(20, 5, utf8_decode(''), 1, 1,'C', 1);
+            $pdf->Cell(40, 5, utf8_decode('X'), 1, 0,'C', 1);
+            $pdf->Cell(40, 5, utf8_decode(''), 1, 1,'C', 1);
         } else {
-            $pdf->SetFont('Arial', 'B', 9);
-            $pdf->Cell(20, 5, utf8_decode('SI'), 1, 0,'C', 1);
-            $pdf->Cell(20, 5, utf8_decode(''), 1, 0,'C', 1);
-            $pdf->SetFont('Arial', 'B', 9);
-            $pdf->Cell(20, 5, utf8_decode('NO'), 1, 0,'C', 1);
             $pdf->SetFont('Arial', '', 9);
-            $pdf->Cell(20, 5, utf8_decode('X'), 1, 1,'C', 1);
+            $pdf->Cell(40, 5, utf8_decode(''), 1, 0,'C', 1);
+            $pdf->Cell(40, 5, utf8_decode('X'), 1, 1,'C', 1);
         }
         $pdf->SetFont('Arial', 'B', 9);
         $pdf->Cell(80, 5, utf8_decode(' 5. Verificar conexiones y limpiar tarjetas:'), 1, 0,'L', 1);
         if ($for_imp_verificar_conexiones == 'Si'){
-            $pdf->SetFont('Arial', 'B', 9);
-            $pdf->Cell(20, 5, utf8_decode('SI'), 1, 0,'C', 1);
             $pdf->SetFont('Arial', '', 9);
-            $pdf->Cell(20, 5, utf8_decode('X'), 1, 0,'C', 1);
-            $pdf->SetFont('Arial', 'B', 9);
-            $pdf->Cell(20, 5, utf8_decode('NO'), 1, 0,'C', 1);
-            $pdf->Cell(20, 5, utf8_decode(''), 1, 1,'C', 1);
+            $pdf->Cell(40, 5, utf8_decode('X'), 1, 0,'C', 1);
+            $pdf->Cell(40, 5, utf8_decode(''), 1, 1,'C', 1);
         } else {
-            $pdf->SetFont('Arial', 'B', 9);
-            $pdf->Cell(20, 5, utf8_decode('SI'), 1, 0,'C', 1);
-            $pdf->Cell(20, 5, utf8_decode(''), 1, 0,'C', 1);
-            $pdf->SetFont('Arial', 'B', 9);
-            $pdf->Cell(20, 5, utf8_decode('NO'), 1, 0,'C', 1);
             $pdf->SetFont('Arial', '', 9);
-            $pdf->Cell(20, 5, utf8_decode('X'), 1, 1,'C', 1);
+            $pdf->Cell(40, 5, utf8_decode(''), 1, 0,'C', 1);
+            $pdf->Cell(40, 5, utf8_decode('X'), 1, 1,'C', 1);
         }
         $pdf->SetFont('Arial', 'B', 9);
         $pdf->Cell(80, 5, utf8_decode(' 6. Limpiar interna y externa de toda la máquina'), 1, 0,'L', 1);
         if ($for_imp_limpiar_interna_externa == 'Si'){
-            $pdf->SetFont('Arial', 'B', 9);
-            $pdf->Cell(20, 5, utf8_decode('SI'), 1, 0,'C', 1);
             $pdf->SetFont('Arial', '', 9);
-            $pdf->Cell(20, 5, utf8_decode('X'), 1, 0,'C', 1);
-            $pdf->SetFont('Arial', 'B', 9);
-            $pdf->Cell(20, 5, utf8_decode('NO'), 1, 0,'C', 1);
-            $pdf->Cell(20, 5, utf8_decode(''), 1, 1,'C', 1);
+            $pdf->Cell(40, 5, utf8_decode('X'), 1, 0,'C', 1);
+            $pdf->Cell(40, 5, utf8_decode(''), 1, 1,'C', 1);
         } else {
-            $pdf->SetFont('Arial', 'B', 9);
-            $pdf->Cell(20, 5, utf8_decode('SI'), 1, 0,'C', 1);
-            $pdf->Cell(20, 5, utf8_decode(''), 1, 0,'C', 1);
-            $pdf->SetFont('Arial', 'B', 9);
-            $pdf->Cell(20, 5, utf8_decode('NO'), 1, 0,'C', 1);
             $pdf->SetFont('Arial', '', 9);
-            $pdf->Cell(20, 5, utf8_decode('X'), 1, 1,'C', 1);
+            $pdf->Cell(40, 5, utf8_decode(''), 1, 0,'C', 1);
+            $pdf->Cell(40, 5, utf8_decode('X'), 1, 1,'C', 1);
         }
         $pdf->SetFont('Arial', 'B', 9);
         $pdf->Cell(80, 5, utf8_decode(' 7. Limpiar periféricos:'), 1, 0,'L', 1);
         if ($for_imp_limpiar_perifericos == 'Si'){
-            $pdf->SetFont('Arial', 'B', 9);
-            $pdf->Cell(20, 5, utf8_decode('SI'), 1, 0,'C', 1);
             $pdf->SetFont('Arial', '', 9);
-            $pdf->Cell(20, 5, utf8_decode('X'), 1, 0,'C', 1);
-            $pdf->SetFont('Arial', 'B', 9);
-            $pdf->Cell(20, 5, utf8_decode('NO'), 1, 0,'C', 1);
-            $pdf->Cell(20, 5, utf8_decode(''), 1, 1,'C', 1);
+            $pdf->Cell(40, 5, utf8_decode('X'), 1, 0,'C', 1);
+            $pdf->Cell(40, 5, utf8_decode(''), 1, 1,'C', 1);
         } else {
-            $pdf->SetFont('Arial', 'B', 9);
-            $pdf->Cell(20, 5, utf8_decode('SI'), 1, 0,'C', 1);
-            $pdf->Cell(20, 5, utf8_decode(''), 1, 0,'C', 1);
-            $pdf->SetFont('Arial', 'B', 9);
-            $pdf->Cell(20, 5, utf8_decode('NO'), 1, 0,'C', 1);
             $pdf->SetFont('Arial', '', 9);
-            $pdf->Cell(20, 5, utf8_decode('X'), 1, 1,'C', 1);
+            $pdf->Cell(40, 5, utf8_decode(''), 1, 0,'C', 1);
+            $pdf->Cell(40, 5, utf8_decode('X'), 1, 1,'C', 1);
         }
         $pdf->SetFont('Arial', 'B', 9);
         $pdf->Cell(80, 5, utf8_decode(' 8. Limpieza de cables'), 1, 0,'L', 1);
         if ($for_imp_limpiar_cables == 'Si'){
-            $pdf->SetFont('Arial', 'B', 9);
-            $pdf->Cell(20, 5, utf8_decode('SI'), 1, 0,'C', 1);
             $pdf->SetFont('Arial', '', 9);
-            $pdf->Cell(20, 5, utf8_decode('X'), 1, 0,'C', 1);
-            $pdf->SetFont('Arial', 'B', 9);
-            $pdf->Cell(20, 5, utf8_decode('NO'), 1, 0,'C', 1);
-            $pdf->Cell(20, 5, utf8_decode(''), 1, 1,'C', 1);
+            $pdf->Cell(40, 5, utf8_decode('X'), 1, 0,'C', 1);
+            $pdf->Cell(40, 5, utf8_decode(''), 1, 1,'C', 1);
         } else {
-            $pdf->SetFont('Arial', 'B', 9);
-            $pdf->Cell(20, 5, utf8_decode('SI'), 1, 0,'C', 1);
-            $pdf->Cell(20, 5, utf8_decode(''), 1, 0,'C', 1);
-            $pdf->SetFont('Arial', 'B', 9);
-            $pdf->Cell(20, 5, utf8_decode('NO'), 1, 0,'C', 1);
             $pdf->SetFont('Arial', '', 9);
-            $pdf->Cell(20, 5, utf8_decode('X'), 1, 1,'C', 1);
+            $pdf->Cell(40, 5, utf8_decode(''), 1, 0,'C', 1);
+            $pdf->Cell(40, 5, utf8_decode('X'), 1, 1,'C', 1);
         }
         $pdf->SetFont('Arial', 'B', 9);
         $pdf->Cell(80, 5, utf8_decode(' 9. Pruebas de funcionamiento:'), 1, 0,'L', 1);
         if ($for_imp_pruebas_funcionamiento == 'Si'){
-            $pdf->SetFont('Arial', 'B', 9);
-            $pdf->Cell(20, 5, utf8_decode('SI'), 1, 0,'C', 1);
             $pdf->SetFont('Arial', '', 9);
-            $pdf->Cell(20, 5, utf8_decode('X'), 1, 0,'C', 1);
-            $pdf->SetFont('Arial', 'B', 9);
-            $pdf->Cell(20, 5, utf8_decode('NO'), 1, 0,'C', 1);
-            $pdf->Cell(20, 5, utf8_decode(''), 1, 1,'C', 1);
+            $pdf->Cell(40, 5, utf8_decode('X'), 1, 0,'C', 1);
+            $pdf->Cell(40, 5, utf8_decode(''), 1, 1,'C', 1);
         } else {
-            $pdf->SetFont('Arial', 'B', 9);
-            $pdf->Cell(20, 5, utf8_decode('SI'), 1, 0,'C', 1);
-            $pdf->Cell(20, 5, utf8_decode(''), 1, 0,'C', 1);
-            $pdf->SetFont('Arial', 'B', 9);
-            $pdf->Cell(20, 5, utf8_decode('NO'), 1, 0,'C', 1);
             $pdf->SetFont('Arial', '', 9);
-            $pdf->Cell(20, 5, utf8_decode('X'), 1, 1,'C', 1);
+            $pdf->Cell(40, 5, utf8_decode(''), 1, 0,'C', 1);
+            $pdf->Cell(40, 5, utf8_decode('X'), 1, 1,'C', 1);
         }
         $pdf->SetFont('Arial', 'B', 9);
         $pdf->Cell(80, 5, utf8_decode(' 10. Entrega de la máquina al usuario:'), 1, 0,'L', 1);
         if ($for_imp_entregar_equipo == 'Si'){
-            $pdf->SetFont('Arial', 'B', 9);
-            $pdf->Cell(20, 5, utf8_decode('SI'), 1, 0,'C', 1);
             $pdf->SetFont('Arial', '', 9);
-            $pdf->Cell(20, 5, utf8_decode('X'), 1, 0,'C', 1);
-            $pdf->SetFont('Arial', 'B', 9);
-            $pdf->Cell(20, 5, utf8_decode('NO'), 1, 0,'C', 1);
-            $pdf->Cell(20, 5, utf8_decode(''), 1, 1,'C', 1);
+            $pdf->Cell(40, 5, utf8_decode('X'), 1, 0,'C', 1);
+            $pdf->Cell(40, 5, utf8_decode(''), 1, 1,'C', 1);
         } else {
-            $pdf->SetFont('Arial', 'B', 9);
-            $pdf->Cell(20, 5, utf8_decode('SI'), 1, 0,'C', 1);
-            $pdf->Cell(20, 5, utf8_decode(''), 1, 0,'C', 1);
-            $pdf->SetFont('Arial', 'B', 9);
-            $pdf->Cell(20, 5, utf8_decode('NO'), 1, 0,'C', 1);
             $pdf->SetFont('Arial', '', 9);
-            $pdf->Cell(20, 5, utf8_decode('X'), 1, 1,'C', 1);
+            $pdf->Cell(40, 5, utf8_decode(''), 1, 0,'C', 1);
+            $pdf->Cell(40, 5, utf8_decode('X'), 1, 1,'C', 1);
         }
         $pdf->Ln(5);
 
-        $pdf->SetFillColor(192, 192, 192);
+        $pdf->SetFillColor(0, 0, 0);
+        $pdf->SetTextColor(255, 255, 255);
         $pdf->SetFont('Arial', 'B', 9);
         $pdf->Cell(160, 5, utf8_decode('5. OBSERVACIONES'), 1, 1,'C', 1);
 
         $pdf->SetFillColor(255, 255, 255);
+        $pdf->SetTextColor(0, 0, 0);
         $pdf->SetFont('Arial', '', 9);
         if (strlen($for_imp_observaciones) > 100 & strlen($for_imp_observaciones) < 201) {
             $pdf->MultiCell(160, 9, utf8_decode($for_imp_observaciones), 1, 'C', 1, 1);
@@ -1006,15 +857,18 @@ class formularios_mantenimiento_pc_impresoraC{
         }
         $pdf->Ln(5);
 
+        $pdf->AddPage();
         $pdf->Cell(35, 5, utf8_decode('Se recibe a satisfacción:'), 0, 0, 'L');
         $pdf->SetFont('Arial', 'B', 8);
         $pdf->Cell(0, 5, utf8_decode($for_imp_satisfaccion), 0, 1, 'L');
         $pdf->Ln(15);
 
         $pdf->SetFont('Arial', '', 8);
-        $pdf->Cell(53.33, 5, utf8_decode('____________________________'), 0, 0, 'L');
-        $pdf->Cell(53.33, 5, utf8_decode('____________________________'), 0, 0, 'L');
-        $pdf->Cell(53.33, 5, utf8_decode('____________________________'), 0, 1, 'L');
+        $pdf->Cell(50, 5, utf8_decode(''), 'B', 0, 'L');
+        $pdf->Cell(3.33, 5, utf8_decode(''), 0, 0, 'L');
+        $pdf->Cell(52, 5, utf8_decode(''), 'B', 0, 'L');
+        $pdf->Cell(2.33, 5, utf8_decode(''), 0, 0, 'L');
+        $pdf->Cell(50, 5, utf8_decode(''), 'B', 1, 'L');
 
         $pdf->SetFont('Arial', 'B', 8);
         $pdf->Cell(53.33, 5, utf8_decode('FIRMA DEL USUARIO DEL EQUIPO'), 0, 0, 'L');

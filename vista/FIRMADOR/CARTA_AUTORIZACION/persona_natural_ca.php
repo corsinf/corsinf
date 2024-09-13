@@ -184,7 +184,7 @@
                             <div class="container-fluid">
 
                                 <div class="row">
-                                    <div class="col-6">
+                                    <div class="col-12 col-lg-9 mx-auto">
                                         <div>
                                             <div class="card-title d-flex align-items-center">
                                                 <div><i class="bx bxs-user me-1 font-22 text-primary"></i></div>
