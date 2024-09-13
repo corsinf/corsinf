@@ -22,6 +22,9 @@ if (isset($_GET['id'])) {
         <?php if (isset($_GET['id'])) { ?>
             cargarDatos_informacion_personal(<?= $id ?>);
         <?php } ?>
+        <?php if (isset($_GET['id'])) { ?>
+            cargarDatos_informacion_adicional(<?= $id ?>);
+        <?php } ?>
         $('#ddl_seleccionar_aptitud_blanda').select2({
             placeholder: 'Selecciona una opción',
             dropdownParent: $('#modal_agregar_aptitudes'),
@@ -221,6 +224,29 @@ if (isset($_GET['id'])) {
     }
 
     //Información Adicional
+    function cargarDatos_informacion_adicional(id) {
+        $.ajax({
+            url: '../controlador/PASANTES/02_ADRIAN/talento_humano/th_adicionalC.php?listar=true',
+            type: 'post',
+            data: {
+                id: id
+            },
+            dataType: 'json',
+            success: function(response) {
+                $('#txt_direccion_calle').val(response[0].th_posa_direccion_calle);
+                $('#txt_direccion_numero').val(response[0].th_posa_direccion_numero);
+                $('#txt_direccion_ciudad').val(response[0].th_posa_direccion_ciudad);
+                $('#txt_direccion_estado').val(response[0].th_posa_direccion_estado);
+                $('#txt_direccion_postal').val(response[0].th_posa_direccion_codpos);
+
+                direccion_completa = response[0].th_posa_direccion_calle + ', ' + response[0].th_posa_direccion_numero + ', ' + th_posa_direccion_ciudad + ', ' + th_posa_direccion_estado + ', ' + th_posa_direccion_codpos
+                $('#txt_direccion_v').html(direccion_completa);
+
+                console.log(response);
+            }
+        });
+    }
+
     function insertar_editar_informacion_adicional() {
         var txt_direccion_calle = $('#txt_direccion_calle').val();
         var txt_direccion_numero = $('#txt_direccion_numero').val();
@@ -239,8 +265,33 @@ if (isset($_GET['id'])) {
         if ($("#form_informacion_adicional").valid()) {
             // Si es válido, puedes proceder a enviar los datos por AJAX
             console.log(parametros_informacion_adicional)
+            insertar_informacion_adicional(parametros_informacion_adicional)
         }
 
+    }
+
+    function insertar_informacion_adicional(parametros) {
+        $.ajax({
+            data: {
+                parametros: parametros
+            },
+            url: '../controlador/PASANTES/02_ADRIAN/talento_humano/th_adicionalC.php?insertar=true',
+            type: 'post',
+            dataType: 'json',
+
+            success: function(response) {
+                if (response == 1) {
+                    Swal.fire('', 'Operacion realizada con exito.', 'success').then(function() {
+
+                    });
+                    <?php if (isset($_GET['id'])) { ?>
+                        cargarDatos_informacion_adicional(<?= $id ?>);
+                    <?php } ?>
+                } else if (response == -2) {
+                    Swal.fire('', 'Operación fallida', 'warning');
+                }
+            }
+        });
     }
 
     //Contacto de Emergencia
@@ -620,7 +671,7 @@ if (isset($_GET['id'])) {
                                                 <h6 class="fw-bold">Dirección</h6>
                                             </div>
                                             <div class="col-6 d-flex align-items-center">
-                                                <p>Profeta Miqueas, OE11A, Quito, Pichincha, 07173</p>
+                                                <p id="txt_direccion_v"></p>
                                             </div>
                                         </div>
 
