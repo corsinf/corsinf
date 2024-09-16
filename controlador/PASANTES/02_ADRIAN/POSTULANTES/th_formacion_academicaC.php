@@ -29,21 +29,36 @@ class th_formacion_academicaC
         $this->modelo = new th_formacion_academicaM();
     }
 
+    //Funcion para listar la formacion academica del postulante
     function listar($id)
     {
-        $datos = $this->modelo->where('th_fora_id_formacion_academica', $id)->listar($id);
-        $p = '';
+        $datos = $this->modelo->where('th_pos_id', $id)->where('th_fora_estado', 1)->listar($id);
+        $texto = '';
         foreach ($datos as $key => $value) {
-            $p .= '<h6 class="fw-bold my-1">'. $value['th_fora_titulo_obtenido'] .'</h6>
-            <p class="my-1">'. $value['th_fora_institución'] .'</p>
-            <p class="my-1">'. $value['th_fora_fecha_inicio_formacion']. ' - '. $value['th_fora_fecha_fin_formacion'] .'</p>';
+            $texto .=
+                '<div class="row mb-3">' .
+                '<div class="col-10">' .
+                '<h6 class="fw-bold">' . $value['th_fora_titulo_obtenido'] . '</h6>' .
+                '<p>' . $value['th_fora_institución'] . '</p>' .
+                '<p>' . $value['th_fora_fecha_inicio_formacion'] . ' - ' . $value['th_fora_fecha_fin_formacion'] . '</p>' .
+                '</div>' .
+                '<div class="col-2 d-flex justify-content-end align-items-start">' .
+
+                "<button class='btn' style='color: white;' onclick='abrir_modal_formacion_academica(" . $value['_id'] . ");'><i class='text-dark bx bx-pencil bx-sm' ></i></button>" .
+                '</div>' .
+                '</div>';
         }
-        return $p;
+        return $texto;
     }
 
     function listar_modal($id)
     {
-        $datos = $this->modelo->where('th_fora_id_formacion_academica', $id)->listar($id);
+        
+        if ($id == '') {
+            $datos = $this->modelo->where('th_fora_estado', 1)->listar();
+        } else {
+            $datos = $this->modelo->where('th_fora_id_formacion_academica', $id)->listar();
+        }
         return $datos;
     }
 
@@ -54,6 +69,7 @@ class th_formacion_academicaC
             array('campo' => 'th_fora_institución', 'dato' => $parametros['txt_institucion']),
             array('campo' => 'th_fora_fecha_inicio_formacion', 'dato' => $parametros['txt_fecha_inicio_academico']),
             array('campo' => 'th_fora_fecha_fin_formacion', 'dato' => $parametros['txt_fecha_final_academico']),
+            array('campo' => 'th_pos_id', 'dato' => $parametros['txt_id_postulante']),
 
         );
 
@@ -70,14 +86,16 @@ class th_formacion_academicaC
 
     function eliminar($id)
     {
+
         $datos = array(
             array('campo' => 'th_fora_estado', 'dato' => 0),
         );
 
         $where[0]['campo'] = 'th_fora_id_formacion_academica';
-        $where[0]['dato'] = $id;
+        $where[0]['dato'] = strval($id);
 
-        $datos = $this->modelo->eliminar($datos, $where);
+        $datos = $this->modelo->editar($datos, $where);
+
         return $datos;
     }
 }

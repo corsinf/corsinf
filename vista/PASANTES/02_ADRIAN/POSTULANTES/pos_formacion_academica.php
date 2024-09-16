@@ -2,10 +2,10 @@
     $(document).ready(function() {
         <?php if (isset($_GET['id'])) { ?>
             cargar_datos_formacion_academica(<?= $id ?>);
-            cargar_datos_modal_formacion_academica(<?= $id ?>);
         <?php } ?>
 
     });
+
     //Formación Académica
     function cargar_datos_formacion_academica(id) {
         $.ajax({
@@ -17,7 +17,6 @@
             dataType: 'json',
             success: function(response) {
                 $('#pnl_formacion_academica').html(response);
-
                 console.log(response);
             }
         });
@@ -32,10 +31,13 @@
             },
             dataType: 'json',
             success: function(response) {
+
                 $('#txt_titulo_obtenido').val(response[0].th_fora_titulo_obtenido);
                 $('#txt_institucion').val(response[0].th_fora_institución);
                 $('#txt_fecha_inicio_academico').val(response[0].th_fora_fecha_inicio_formacion);
                 $('#txt_fecha_final_academico').val(response[0].th_fora_fecha_fin_formacion);
+
+                $('#txt_formacion_id').val(response[0]._id);
 
                 console.log(response);
             }
@@ -47,9 +49,12 @@
         var txt_institucion = $('#txt_institucion').val();
         var txt_fecha_inicio_academico = $('#txt_fecha_inicio_academico').val();
         var txt_fecha_final_academico = $('#txt_fecha_final_academico').val();
+        var txt_id_postulante = '<?= $id ?>';
+        var txt_id_formacion_academica = $('#txt_formacion_id').val();
 
         var parametros_formacion_academica = {
-            '_id': '<?= $id ?>',
+            '_id': txt_id_formacion_academica,
+            'txt_id_postulante': txt_id_postulante,
             'txt_titulo_obtenido': txt_titulo_obtenido,
             'txt_institucion': txt_institucion,
             'txt_fecha_inicio_academico': txt_fecha_inicio_academico,
@@ -58,9 +63,10 @@
 
         if ($("#form_formacion_academica").valid()) {
             // Si es válido, puedes proceder a enviar los datos por AJAX
-            console.log(parametros_formacion_academica)
-            insertar_formacion_academica(parametros_formacion_academica)
+            console.log(parametros_formacion_academica);
+            insertar_formacion_academica(parametros_formacion_academica);
         }
+
     }
 
     function insertar_formacion_academica(parametros) {
@@ -74,9 +80,10 @@
 
             success: function(response) {
                 if (response == 1) {
-                    Swal.fire('', 'Operacion realizada con exito.', 'success').then(function() {});
+                    Swal.fire('', 'Operacion realizada con exito.', 'success');
                     <?php if (isset($_GET['id'])) { ?>
                         cargar_datos_formacion_academica(<?= $id ?>);
+                        limpiar_campos_formacion_academica_modal();
                     <?php } ?>
                     $('#modal_agregar_formacion').modal('hide');
                 } else if (response == -2) {
@@ -85,15 +92,66 @@
             }
         });
     }
+
+    function abrir_modal_formacion_academica(id) {
+        cargar_datos_modal_formacion_academica(id);
+
+        $('#modal_agregar_formacion').modal('show');
+
+    }
+
+    function delete_datos() {
+        id = $('#txt_formacion_id').val();
+        Swal.fire({
+            title: 'Eliminar Registro?',
+            text: "Esta seguro de eliminar este registro?",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Si'
+        }).then((result) => {
+            if (result.value) {
+                eliminar(id);
+            }
+        })
+    }
+    
+    function eliminar(id) {
+        $.ajax({
+            data: {
+                id: id
+            },
+            url: '../controlador/PASANTES/02_ADRIAN/POSTULANTES/th_formacion_academicaC.php?eliminar=true',
+            type: 'post',
+            dataType: 'json',
+            success: function(response) {
+                if (response == 1) {
+                    Swal.fire('Eliminado!', 'Registro Eliminado.', 'success');
+                    <?php if (isset($_GET['id'])) { ?>
+                        cargar_datos_formacion_academica(<?= $id ?>);
+                        limpiar_campos_formacion_academica_modal();
+                    <?php } ?>
+                    $('#modal_agregar_formacion').modal('hide');
+                }
+            }
+        });
+    }
+
+    function limpiar_campos_formacion_academica_modal() {
+        $('#txt_titulo_obtenido').val('');
+        $('#txt_institucion').val('');
+        $('#txt_fecha_inicio_academico').val('');
+        $('#txt_fecha_final_academico').val('');
+        $('#txt_formacion_id').val('');
+    }
 </script>
 
-<div class="row mb-3">
-    <div class="col-8" id="pnl_formacion_academica">
-    </div>
-    <div class="col-4">
-        <a href="#" class="d-flex justify-content-end"><i class='text-dark bx bx-pencil bx-sm'></i></a>
-    </div>
+
+<div id="pnl_formacion_academica">
+
 </div>
+
 
 <!-- Modal para agregar formación académica-->
 <div class="modal" id="modal_agregar_formacion" tabindex="-1" aria-modal="true" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
@@ -103,30 +161,38 @@
             <!-- Modal Header -->
             <div class="modal-header">
                 <h5><small class="text-body-secondary">Agregue una formación académica</small></h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="limpiar_parametros()"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="limpiar_campos_formacion_academica_modal();"></button>
             </div>
             <!-- Modal body -->
             <form id="form_formacion_academica">
+                <input type="text" id="txt_formacion_id" hidden>
                 <div class="modal-body">
                     <div class="mb-3">
                         <label for="txt_titulo_obtenido" class="form-label form-label-sm">Título obtenido <label style="color: red;">*</label></label>
-                        <input type="text" class="form-control form-control-sm" name="txt_titulo_obtenido" id="txt_titulo_obtenido" placeholder="Escriba su título académico">
+                        <input type="text" class="form-control form-control-sm no_caracteres" name="txt_titulo_obtenido" id="txt_titulo_obtenido" placeholder="Escriba su título académico">
                     </div>
                     <div class="mb-3">
                         <label for="txt_institucion" class="form-label form-label-sm">Institución <label style="color: red;">*</label></label>
-                        <input type="text" class="form-control form-control-sm" name="txt_institucion" id="txt_institucion" placeholder="Escriba la institución en la que se formó">
+                        <input type="text" class="form-control form-control-sm no_caracteres" name="txt_institucion" id="txt_institucion" placeholder="Escriba la institución en la que se formó">
                     </div>
                     <div class="mb-3">
                         <label for="txt_fecha_inicio_academico" class="form-label form-label-sm">Fecha de inicio <label style="color: red;">*</label></label>
-                        <input type="date" class="form-control form-control-sm" name="txt_fecha_inicio_academico" id="txt_fecha_inicio_academico">
+                        <input type="date" class="form-control form-control-sm no_caracteres" name="txt_fecha_inicio_academico" id="txt_fecha_inicio_academico">
                     </div>
                     <div class="mb-3">
                         <label for="txt_fecha_final_academico" class="form-label form-label-sm">Fecha de finalización <label style="color: red;">*</label></label>
-                        <input type="date" class="form-control form-control-sm mb-2" name="txt_fecha_final_academico" id="txt_fecha_final_academico">
+                        <input type="date" class="form-control form-control-sm mb-2 no_caracteres" name="txt_fecha_final_academico" id="txt_fecha_final_academico">
                     </div>
                 </div>
-                <div class="modal-footer d-flex justify-content-center">
-                    <button type="button" class="btn btn-success btn-sm" id="btn_guardar_formacion" onclick="insertar_editar_formacion_academica();">Agregar</button>
+                <div class="modal-footer">
+                    <div class="row mx-auto">
+                        <div class="col-6">
+                            <button type="button" class="btn btn-success btn-sm" id="btn_guardar_formacion" onclick="insertar_editar_formacion_academica();">Agregar</button>
+                        </div>
+                        <div class="col-6">
+                            <button type="button" class="btn btn-danger btn-sm" id="btn_eliminar_formacion" value="" onclick="delete_datos();">Eliminar</button>
+                        </div>
+                    </div>
                 </div>
             </form>
         </div>

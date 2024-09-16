@@ -10,14 +10,18 @@ if (isset($_GET['id'])) {
 
 ?>
 <script src="../lib/jquery_validation/jquery.validate.js"></script>
+<script src="../js/GENERAL/operaciones_generales.js"></script>
+
 <script type="text/javascript">
     $(document).ready(function() {
+
         <?php if (isset($_GET['id'])) { ?>
             cargarDatos_informacion_personal(<?= $id ?>);
         <?php } ?>
         <?php if (isset($_GET['id'])) { ?>
             cargarDatos_informacion_adicional(<?= $id ?>);
         <?php } ?>
+
         $('#ddl_seleccionar_aptitud_blanda').select2({
             placeholder: 'Selecciona una opción',
             dropdownParent: $('#modal_agregar_aptitudes'),
@@ -36,6 +40,7 @@ if (isset($_GET['id'])) {
                 }
             }
         });
+
         $('#ddl_seleccionar_aptitud_tecnica').select2({
             placeholder: 'Selecciona una opción',
             dropdownParent: $('#modal_agregar_aptitudes'),
@@ -54,6 +59,7 @@ if (isset($_GET['id'])) {
                 }
             }
         });
+
     });
 
     //Funciones del formulario
@@ -113,6 +119,12 @@ if (isset($_GET['id'])) {
         }
 
         console.log(parametro_foto)
+    }
+
+    function modal_formacion_academica() {
+        if ($('$btn_modal_agregar_formacion_academica').modal()) {
+            alert('Simón')
+        }
     }
 
     //Información Personal
@@ -232,6 +244,7 @@ if (isset($_GET['id'])) {
                 $('#txt_direccion_ciudad').val(response[0].th_posa_direccion_ciudad);
                 $('#txt_direccion_estado').val(response[0].th_posa_direccion_estado);
                 $('#txt_direccion_postal').val(response[0].th_posa_direccion_codpos);
+                $('#txt_inf_adicional_id').val(response[0]._id)
 
                 direccion_completa = response[0].th_posa_direccion_calle + ', ' + response[0].th_posa_direccion_numero + ', ' + response[0].th_posa_direccion_ciudad + ', ' + response[0].th_posa_direccion_estado + ', ' + response[0].th_posa_direccion_codpos
                 $('#txt_direccion_v').html(direccion_completa);
@@ -247,14 +260,19 @@ if (isset($_GET['id'])) {
         var txt_direccion_ciudad = $('#txt_direccion_ciudad').val();
         var txt_direccion_estado = $('#txt_direccion_estado').val();
         var txt_direccion_postal = $('#txt_direccion_postal').val();
+        var txt_id_postulante = '<?= $id ?>';
+        var txt_id_formacion_academica = $('#txt_inf_adicional_id').val();
+
 
         var parametros_informacion_adicional = {
-            '_id': '<?= $id ?>',
+            '_id' : txt_id_formacion_academica,
+            'txt_id_postulante': txt_id_postulante, 
             'txt_direccion_calle': txt_direccion_calle,
             'txt_direccion_numero': txt_direccion_numero,
             'txt_direccion_ciudad': txt_direccion_ciudad,
             'txt_direccion_estado': txt_direccion_estado,
             'txt_direccion_postal': txt_direccion_postal,
+            
         }
 
         if ($("#form_informacion_adicional").valid()) {
@@ -653,7 +671,7 @@ if (isset($_GET['id'])) {
                     <div class="col-xs-7 col-sm-7 col-md-7 col-lg-8 col-xxl-8">
                         <!-- Cards de la derecha -->
                         <div class="card-body">
-                            <!-- Navs de Cards -->
+                            <!-- Nav Cards -->
                             <ul class="nav nav-tabs nav-success" role="tablist">
                                 <li class="nav-item" role="presentation">
                                     <a class="nav-link active" data-bs-toggle="tab" href="#tab_experiencia" role="tab" aria-selected="true">
@@ -697,6 +715,7 @@ if (isset($_GET['id'])) {
                                 <div class="tab-pane fade show active" id="tab_experiencia" role="tabpanel">
                                     <div class="card">
                                         <div class="d-flex flex-column mx-4">
+                                            <!-- Experiencia Previa -->
                                             <div class="card-body">
                                                 <div class="mb-2">
                                                     <div class="row">
@@ -716,6 +735,7 @@ if (isset($_GET['id'])) {
                                                 <?php include_once('../vista/PASANTES/02_ADRIAN/POSTULANTES/pos_experiencia_previa.php'); ?>
 
                                             </div>
+                                            <!-- Formación Académica -->
                                             <div class="card-body">
                                                 <div class="mb-2">
                                                     <div class="row">
@@ -723,7 +743,7 @@ if (isset($_GET['id'])) {
                                                             <h6 class="mb-0 fw-bold text-primary">Formación Académica:</h6>
                                                         </div>
                                                         <div class="col-6 d-flex justify-content-end">
-                                                            <a href="#" class="text-success d-flex align-items-center" data-bs-toggle="modal" data-bs-target="#modal_agregar_formacion">
+                                                            <a href="#" class="text-success d-flex align-items-center" id="btn_modal_agregar_formacion_academica" data-bs-toggle="modal" data-bs-target="#modal_agregar_formacion">
                                                                 <i class='bx bx-plus-circle bx-sm me-1'></i>
                                                                 <span>Agregar</span>
                                                             </a>
@@ -735,6 +755,7 @@ if (isset($_GET['id'])) {
                                                 <?php include_once('../vista/PASANTES/02_ADRIAN/POSTULANTES/pos_formacion_academica.php'); ?>
 
                                             </div>
+                                            <!-- Certificaciones y capacitación -->
                                             <div class="card-body">
                                                 <div class="mb-2">
                                                     <div class="row">
@@ -1143,6 +1164,7 @@ if (isset($_GET['id'])) {
                 <div class="modal-body">
                     <p class="fw-bold">Dirección:</p>
                     <div class="row">
+                        <input type="text" id="txt_inf_adicional_id" hidden>
                         <div class="col-4">
                             <div class="mb-3">
                                 <label for="txt_direccion_calle" class="form-label form-label-sm">Calle <label style="color: red;">*</label></label>
