@@ -75,8 +75,8 @@
                                         <i class='bx bxs-report'></i><strong>Informe de Miembros</strong>
                                     </button>
                                     <ul class="dropdown-menu">
-                                        <li><a class="dropdown-item" href="#" onclick="generarExcelMiembros()">Informe en Excel</a></li>
-                                        <li><a class="dropdown-item" href="#" onclick="generarPDFMiembros()">Informe en PDF</a></li>
+                                        <li><a class="dropdown-item" href="" onclick="generarExcelMiembros()">Informe en Excel</a></li>
+                                        <li><a class="dropdown-item" href="" onclick="generarPDFMiembros()">Informe en PDF</a></li>
                                     </ul>
                                 </div>
                                 <div class="btn-group">
@@ -344,7 +344,7 @@
                     confirmButtonText: 'Aceptar'
                 });
             }
-        }
+        },
         error: function() {
             Swal.fire({
                 title: 'Error',
@@ -562,14 +562,12 @@
         });
     }
 
-
-
-        function generarPDFMiembros() {
+    function generarPDFMiembros() {
             var url ='../controlador/COWORKING/crear_mienbrosC.php?generarPDFMiembros=true'
             window.open(url,"_blank");
         }
 
-        function generarPDFCompras() {
+    function generarPDFCompras() {
             var url ='../controlador/COWORKING/crear_mienbrosC.php?generarPDFCompras=true'
             window.open(url,"_blank");
         }
