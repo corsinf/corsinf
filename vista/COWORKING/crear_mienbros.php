@@ -1,6 +1,4 @@
-<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.4/xlsx.full.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.19/jspdf.plugin.autotable.min.js"></script>
+
 
 <div class="page-wrapper">
     <div class="page-content">
@@ -113,7 +111,7 @@
                                 </table>
                             </div>
 
-                            <!-- Tab de Servicios Extra -->
+                            
                             <div class="tab-pane fade" id="servicios" role="tabpanel" aria-labelledby="servicios-tab">
                                 <h2 class="mb-4">Servicios Extra</h2>
 
@@ -563,35 +561,5 @@
     }
 
 
-    function generarExcelMiembros() {
-            const ws = XLSX.utils.table_to_sheet(document.getElementById('tbl_miembros'));
-            const wb = XLSX.utils.book_new();
-            XLSX.utils.book_append_sheet(wb, ws, "Miembros");
-            XLSX.writeFile(wb, "miembros.xlsx");
-        }
 
-        function generarExcelCompras() {
-            const ws = XLSX.utils.table_to_sheet(document.getElementById('tbl_compras'));
-            const wb = XLSX.utils.book_new();
-            XLSX.utils.book_append_sheet(wb, ws, "Compras");
-            XLSX.writeFile(wb, "compras.xlsx");
-        }
-
-        async function generarPDFMiembros() {
-            const { jsPDF } = window.jspdf;
-            const doc = new jsPDF();
-            doc.text('Informe de Miembros', 10, 10);
-            const table = document.getElementById('tbl_miembros');
-            doc.autoTable({ html: table });
-            doc.save('miembros.pdf');
-        }
-
-        async function generarPDFCompras() {
-            const { jsPDF } = window.jspdf;
-            const doc = new jsPDF();
-            doc.text('Informe de Compras', 10, 10);
-            const table = document.getElementById('tbl_compras');
-            doc.autoTable({ html: table });
-            doc.save('compras.pdf');
-        }
 </script>
