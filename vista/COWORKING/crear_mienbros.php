@@ -55,18 +55,19 @@
 
                         <!-- Contenedor flex para pestañas y botones -->
                         <div class="d-flex justify-content-between mb-4">
-                            <ul class="nav nav-pills mb-3" id="myTab" role="tablist">
-                                <li class="nav-item" role="presentation">
-                                    <button class="nav-link" id="miembros-tab" data-bs-toggle="tab" data-bs-target="#miembros" type="button" role="tab" aria-controls="miembros" aria-selected="true">
-                                        <i class='bx bx-user'></i> <strong>Miembros</strong>
-                                    </button>
-                                </li>
-                                <li class="nav-item" role="presentation">
-                                    <button class="nav-link" id="servicios-tab" data-bs-toggle="tab" data-bs-target="#servicios" type="button" role="tab" aria-controls="servicios" aria-selected="false">
-                                        <i class='bx bx-store-alt'></i> <strong>Servicios Extra</strong>
-                                    </button>
-                                </li>
-                            </ul>
+                        <ul class="nav nav-pills mb-3" id="myTab" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link active d-flex align-items-center" id="miembros-tab" data-bs-toggle="tab" data-bs-target="#miembros" type="button" role="tab" aria-controls="miembros" aria-selected="true">
+                                    <i class='bx bx-user'></i> <strong>Miembros</strong>
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link d-flex align-items-center" id="servicios-tab" data-bs-toggle="tab" data-bs-target="#servicios" type="button" role="tab" aria-controls="servicios" aria-selected="false">
+                                    <i class='bx bx-store-alt'></i> <strong>Servicios Extra</strong>
+                                </button>
+                            </li>
+                        </ul>
+
 
                             <div class="d-flex align-items-center">
                                 <div class="btn-group me-2">
