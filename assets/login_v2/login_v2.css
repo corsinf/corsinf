@@ -43,12 +43,34 @@
         pointer-events: none;
         transition: .6s;
         font-weight: bold;
+        z-index: 1;
     }
 
     input:focus~label,
     input:valid~label {
         top: -5px;
     }
+
+    input:-webkit-autofill,
+    input:-webkit-autofill:hover,
+    input:-webkit-autofill:focus,
+    input:-webkit-autofill:active {
+        -webkit-box-shadow: 0px 0px 0px 30px #ffffff00 inset !important;
+        -webkit-text-fill-color: #fff !important;
+        -webkit-background-clip: text;
+        background-color: transparent;
+        transition: background-color 5000s ease-in-out 0s;
+    }
+
+    .input-contenedor input:-webkit-autofill~label,
+    .input-contenedor input:-webkit-autofill:hover~label,
+    .input-contenedor input:-webkit-autofill:focus~label,
+    .input-contenedor input:-webkit-autofill:active~label {
+        top: -5px;
+        color: #fff;
+    }
+
+
 
     .input-contenedor input {
         width: 100%;
@@ -59,6 +81,7 @@
         font-size: 1rem;
         padding: - 35px 0;
         color: #fff;
+        transition: all 0.3s ease;
     }
 
     .input-contenedor i {
@@ -69,28 +92,6 @@
         right: 8px;
     }
 
-    /* Cambiar el fondo a un color leve cuando se autocompleta */
-    input:-webkit-autofill {
-        background-color: rgba(11, 13, 67, 0.2) !important;
-        /* Fondo rojo leve con transparencia */
-        color: rgb(0, 0, 0) !important;
-        /* Texto en color negro */
-        font-size: 1rem;
-        -webkit-box-shadow: 0 0 0px 800px rgba(11, 13, 67, 0.2) inset !important;
-        /* Fondo leve */
-        box-shadow: 0 0 0px 800px rgba(11, 13, 67, 0.2) inset !important;
-        /* Fondo leve */
-    }
-
-    /* Mantener el fondo leve cuando el campo está enfocado después de autocompletar */
-    input:-webkit-autofill:focus {
-        background-color: rgba(11, 13, 67, 0.2) !important;
-        /* Fondo rojo leve con transparencia */
-        color: #fff !important;
-        /* Texto blanco */
-        box-shadow: none;
-        /* Sin sombra adicional */
-    }
 
     .olvidar {
         margin: -15px 0 15px;

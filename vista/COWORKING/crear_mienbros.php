@@ -560,6 +560,28 @@
         });
     }
 
+        function generarExcelCompras() {
+            const ws = XLSX.utils.table_to_sheet(document.getElementById('tbl_compras'));
+            const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, "Compras");
+            XLSX.writeFile(wb, "compras.xlsx");
+        }
 
+        async function generarPDFMiembros() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            doc.text('Informe de Miembros', 10, 10);
+            const table = document.getElementById('tbl_miembros');
+            doc.autoTable({ html: table });
+            doc.save('miembros.pdf');
+        }
 
+        async function generarPDFCompras() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            doc.text('Informe de Compras', 10, 10);
+            const table = document.getElementById('tbl_compras');
+            doc.autoTable({ html: table });
+            doc.save('compras.pdf');
+        }
 </script>

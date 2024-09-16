@@ -1,6 +1,35 @@
+<script type="text/javascript">
+    function btn()
+    {
+        Swal.fire('Ingresado','','success');
+    }
+
+    function btn1()
+    {
+         Swal.fire({
+              title: 'El Usuario esta ligado a uno o varios registros y no se podra eliminar.?',
+              text: "Desea inhabilitado a este usuario?",
+              icon:'error',
+              showDenyButton: true,
+              showCancelButton: true,
+              confirmButtonText:'Si!',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire('eliminado','','success');
+                    
+          }
+        })
+    }
+</script>
+
 <div class="page-wrapper">
     <div class="page-content">
         <!--breadcrumb-->
+
+                                    <button type="button" onclick="btn()">click me</button>
+                                    <button type="button" onclick="btn1()">click me</button>
+
+                                    
         <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
             <div class="breadcrumb-title pe-3">Enfermería</div>
             <?php
