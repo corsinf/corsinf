@@ -1,3 +1,6 @@
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.4/xlsx.full.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.19/jspdf.plugin.autotable.min.js"></script>
 
 
 <div class="page-wrapper">
@@ -25,75 +28,76 @@
                 <div class="card">
                     <div class="card-body">
                         <h1 class="titulo mb-4">Oficina 5</h1>
-                        <form id="formulario_miembro" class="mb-4">
-                            <div class="row">
-                                <div class="col-md-3 mb-3">
-                                    <label for="txt_nombre" class="form-label"><strong>Nombre:</strong></label>
-                                    <input type="text" class="form-control form-control-sm" name="txt_nombre" id="txt_nombre" placeholder="Nombre" required>
-                                </div>
-                                <div class="col-md-3 mb-3">
-                                    <label for="txt_apellido" class="form-label"><strong>Apellido:</strong></label>
-                                    <input type="text" class="form-control form-control-sm" name="txt_apellido" id="txt_apellido" placeholder="Apellido" required>
-                                </div>
-                                <div class="col-md-3 mb-3">
-                                    <label for="txt_numero_celular" class="form-label"><strong>Telefono:</strong></label>
-                                    <input type="text" class="form-control form-control-sm" name="txt_numero_celular" id="txt_numero_celular" placeholder="Celular" required>
-                                </div>
-                                <div class="col-md-3 mb-3">
-                                    <label for="txt_direccion" class="form-label"><strong>Direccion:</strong></label>
-                                    <input type="text" class="form-control form-control-sm" name="txt_direccion" id="txt_direccion" placeholder="Direccion" required>
-                                </div>
-                                <div class="col-md-3 mb-3">
-                                    <label for="ddl_id_espacio" class="form-label"><strong>Espacio:</strong></label>
-                                    <input type="number" class="form-control form-control-sm" name="ddl_id_espacio" id="ddl_id_espacio" placeholder="Numero de espacio" required>
-                                </div>
-                            </div>
-                            <button type="button" onclick="enviardatos()" class="btn btn-primary" id="btn_registrar_miembro">
-                                <i class="bx bx-user-plus"></i><strong>Registrar Miembro</strong>
-                            </button>
-                        </form>
 
-                        <!-- Contenedor flex para pestañas y botones -->
-                        <div class="d-flex justify-content-between mb-4">
-                            <ul class="nav nav-tabs" id="myTab" role="tablist">
-                                <li class="nav-item" role="presentation">
-                                    <button class="nav-link active" id="miembros-tab" data-bs-toggle="tab" data-bs-target="#miembros" type="button" role="tab" aria-controls="miembros" aria-selected="true">
-                                        <i class='bx bx-user'></i> <strong>Miembros</strong>
-                                    </button>
-                                </li>
-                                <li class="nav-item" role="presentation">
-                                    <button class="nav-link" id="servicios-tab" data-bs-toggle="tab" data-bs-target="#servicios" type="button" role="tab" aria-controls="servicios" aria-selected="false">
-                                        <i class='bx bx-store-alt'></i> <strong>Servicios Extra</strong>
-                                    </button>
-                                </li>
-                            </ul>
+                        <!-- Pestañas -->
+                        <ul class="nav nav-tabs" id="myTab" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link active" id="miembros-tab" data-bs-toggle="tab" data-bs-target="#miembros" type="button" role="tab" aria-controls="miembros" aria-selected="true">
+                                    <i class='bx bx-user'></i> <strong>Miembros</strong>
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="servicios-tab" data-bs-toggle="tab" data-bs-target="#servicios" type="button" role="tab" aria-controls="servicios" aria-selected="false">
+                                    <i class='bx bx-store-alt'></i> <strong>Servicios Extra</strong>
+                                </button>
+                            </li>
+                        </ul>
 
-                            <div class="d-flex align-items-center">
-                                <div class="btn-group me-2">
-                                    <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                                        <i class='bx bxs-report'></i><strong>Informe de Miembros</strong>
-                                    </button>
-                                    <ul class="dropdown-menu">
-                                        <li><a class="dropdown-item" href="#" onclick="generarExcelMiembros()">Informe en Excel</a></li>
-                                        <li><a class="dropdown-item" href="#" onclick="generarPDFMiembros()">Informe en PDF</a></li>
-                                    </ul>
-                                </div>
-                                <div class="btn-group">
-                                    <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                                        <i class='bx bxs-report'></i><strong>Informe de Compras Total</strong>
-                                    </button>
-                                    <ul class="dropdown-menu">
-                                        <li><a class="dropdown-item" href="#" onclick="generarExcelCompras()">Informe en Excel</a></li>
-                                        <li><a class="dropdown-item" href="#" onclick="generarPDFCompras()">Informe en PDF</a></li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Contenido de las pestañas -->
                         <div class="tab-content mt-3" id="myTabContent">
+                            <!-- Tab de Miembros -->
                             <div class="tab-pane fade show active" id="miembros" role="tabpanel" aria-labelledby="miembros-tab">
+                                <form id="formulario_miembro" class="mb-4">
+                                    <div class="row">
+                                        <div class="col-md-3 mb-3">
+                                            <label for="txt_nombre" class="form-label"><strong>Nombre:</strong></label>
+                                            <input type="text" class="form-control form-control-sm" name="txt_nombre" id="txt_nombre" placeholder="Nombre" required>
+                                        </div>
+                                        <div class="col-md-3 mb-3">
+                                            <label for="txt_apellido" class="form-label"><strong>Apellido:</strong></label>
+                                            <input type="text" class="form-control form-control-sm" name="txt_apellido" id="txt_apellido" placeholder="Apellido" required>
+                                        </div>
+                                        <div class="col-md-3 mb-3">
+                                            <label for="txt_numero_celular" class="form-label"><strong>Telefono:</strong></label>
+                                            <input type="text" class="form-control form-control-sm" name="txt_numero_celular" id="txt_numero_celular" placeholder="Celular" required>
+                                        </div>
+                                        <div class="col-md-3 mb-3">
+                                            <label for="txt_direccion" class="form-label"><strong>Direccion:</strong></label>
+                                            <input type="text" class="form-control form-control-sm" name="txt_direccion" id="txt_direccion" placeholder="Direccion" required>
+                                        </div>
+                                        <div class="col-md-3 mb-3">
+                                            <label for="ddl_id_espacio" class="form-label"><strong>Espacio:</strong></label>
+                                            <input type="number" class="form-control form-control-sm" name="ddl_id_espacio" id="ddl_id_espacio" placeholder="Numero de espacio" required>
+                                        </div>
+                                    </div>
+                                    <button type="button" onclick="enviardatos()" class="btn btn-primary" id="btn_registrar_miembro">
+                                        <strong>Registrar Miembro</strong>
+                                    </button>
+                                </form>
+
                                 <h2 class="mb-4">Miembros Registrados</h2>
+                                <div class="row mb-3">
+                                    <div class="col-12 d-flex justify-content-start">
+                                        <div class="btn-group me-2">
+                                            <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                                <i class='bx bxs-report'></i><strong>Informe de Miembros</strong>
+                                            </button>
+                                            <ul class="dropdown-menu">
+                                                <li><a class="dropdown-item" href="#" onclick="generarExcelMiembros()">Informe en Excel</a></li>
+                                                <li><a class="dropdown-item" href="#" onclick="generarPDFMiembros()">Informe en PDF</a></li>
+                                            </ul>
+                                        </div>
+                                        <div class="btn-group">
+                                            <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                                <i class='bx bxs-report'></i><strong>Informe de Compras Total</strong>
+                                            </button>
+                                            <ul class="dropdown-menu">
+                                                <li><a class="dropdown-item" href="#" onclick="generarExcelCompras()">Informe en Excel</a></li>
+                                                <li><a class="dropdown-item" href="#" onclick="generarPDFCompras()">Informe en PDF</a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+
                                 <table class="table table-bordered table-striped" id="tbl_miembros">
                                     <thead class="table-header">
                                         <tr>
@@ -111,23 +115,29 @@
                                 </table>
                             </div>
 
-                            
+                            <!-- Tab de Servicios Extra -->
                             <div class="tab-pane fade" id="servicios" role="tabpanel" aria-labelledby="servicios-tab">
                                 <h2 class="mb-4">Servicios Extra</h2>
 
                                 <form id="formulario_servicios">
                                     <div class="row mb-3">
+                                        
                                         <input type="hidden" class="form-control" id="did_sala" name="txt_cantidad_servicio" value="1" required>
+
                                         <div class="col-md-3">
                                             <label for="txt_productos" class="form-label"><strong>Producto:</strong></label>
                                             <select class="form-control" id="txt_productos" name="txt_productos" required>
-                                                <!-- Opciones de productos aquí -->
+
                                             </select>
                                         </div>
                                         <div class="col-md-3">
                                             <label for="txt_cantidad_servicio" class="form-label"><strong>Cantidad:</strong></label>
                                             <input type="number" class="form-control" id="txt_cantidad_servicio" name="txt_cantidad_servicio" value="1" min="1" required>
                                         </div>
+                                        
+                                            
+
+                                        
                                         <div class="col-md-3">
                                             <label for="txt_precios" class="form-label"><strong>Precio:</strong></label>
                                             <input type="text" class="form-control" id="txt_precios" name="txt_precios" readonly>
@@ -167,8 +177,6 @@
         </div>
     </div>
 </div>
-
-
 
 
 
@@ -560,6 +568,14 @@
             }       
         });
     }
+
+
+    function generarExcelMiembros() {
+            const ws = XLSX.utils.table_to_sheet(document.getElementById('tbl_miembros'));
+            const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, "Miembros");
+            XLSX.writeFile(wb, "miembros.xlsx");
+        }
 
         function generarExcelCompras() {
             const ws = XLSX.utils.table_to_sheet(document.getElementById('tbl_compras'));
