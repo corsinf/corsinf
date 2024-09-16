@@ -1,4 +1,5 @@
 
+
 <div class="page-wrapper">
     <div class="page-content">
         <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
@@ -25,7 +26,9 @@
                     <div class="card-body">
                         <h1 class="titulo mb-4">Oficina 5</h1>
 <<<<<<< HEAD
+<<<<<<< HEAD
 
+<<<<<<< HEAD
                         <!-- Pestañas -->
                         <ul class="nav nav-tabs" id="myTab" role="tablist">
                             <li class="nav-item" role="presentation">
@@ -94,12 +97,17 @@
                                         </div>
                                     </div>
 =======
+=======
+>>>>>>> a385c0c3186cf50863b2cdd70074df4bc5466866
                         <form id="formulario_miembro" class="mb-4">
                             <div class="row">
                                 <div class="col-md-3 mb-3">
                                     <label for="txt_nombre" class="form-label"><strong>Nombre:</strong></label>
                                     <input type="text" class="form-control form-control-sm" name="txt_nombre" id="txt_nombre" placeholder="Nombre" required>
+<<<<<<< HEAD
 >>>>>>> af2ea8741f61af2b66be5e024de460f0958c4d9c
+=======
+>>>>>>> a385c0c3186cf50863b2cdd70074df4bc5466866
                                 </div>
                                 <div class="col-md-3 mb-3">
                                     <label for="txt_apellido" class="form-label"><strong>Apellido:</strong></label>
@@ -181,7 +189,7 @@
                                 </table>
                             </div>
 
-                            <!-- Tab de Servicios Extra -->
+                            
                             <div class="tab-pane fade" id="servicios" role="tabpanel" aria-labelledby="servicios-tab">
                                 <h2 class="mb-4">Servicios Extra</h2>
 
@@ -629,14 +637,6 @@
             }       
         });
     }
-
-
-    function generarExcelMiembros() {
-            const ws = XLSX.utils.table_to_sheet(document.getElementById('tbl_miembros'));
-            const wb = XLSX.utils.book_new();
-            XLSX.utils.book_append_sheet(wb, ws, "Miembros");
-            XLSX.writeFile(wb, "miembros.xlsx");
-        }
 
         function generarExcelCompras() {
             const ws = XLSX.utils.table_to_sheet(document.getElementById('tbl_compras'));
