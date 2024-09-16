@@ -401,6 +401,7 @@
             'id_sala': $('#did_sala').val()
         };
 
+        
         $.ajax({
             data: {data: parametros},
             url: '../controlador/COWORKING/crear_mienbrosC.php?add_compra=true',
