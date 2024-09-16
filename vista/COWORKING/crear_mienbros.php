@@ -57,7 +57,7 @@
                         <div class="d-flex justify-content-between mb-4">
                             <ul class="nav nav-pills mb-3" id="myTab" role="tablist">
                                 <li class="nav-item" role="presentation">
-                                    <button class="nav-link active" id="miembros-tab" data-bs-toggle="tab" data-bs-target="#miembros" type="button" role="tab" aria-controls="miembros" aria-selected="true">
+                                    <button class="nav-link" id="miembros-tab" data-bs-toggle="tab" data-bs-target="#miembros" type="button" role="tab" aria-controls="miembros" aria-selected="true">
                                         <i class='bx bx-user'></i> <strong>Miembros</strong>
                                     </button>
                                 </li>
