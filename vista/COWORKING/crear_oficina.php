@@ -18,29 +18,64 @@
         <!--end breadcrumb-->
 
         <div class="card">
-            <div class="card-body">
-                <form id="rental_form">
-                    <div class="form-group mb-3">
-                        <label for="txt_name">Nombre del Espacio:</label>
-                        <input type="text" class="form-control" name="txt_name" id="txt_name" placeholder="Introduce el nombre del espacio" required>
-                    </div>
+    <div class="card-body">
+        <form id="rental_form">
+            <div class="form-group mb-3">
+                <label for="txt_name">Nombre del Espacio:</label>
+                <input type="text" class="form-control" name="txt_name" id="txt_name" placeholder="Introduce el nombre del espacio" required>
+            </div>
 
+            <div class="form-group mb-3">
+                <label for="ddl_categoriaEspacio">Categoría:</label>
+                <div class="d-flex align-items-center">
+                    <select class="form-select me-2" id="ddl_categoriaEspacio" name="ddl_categoriaEspacio" required>
+                        <option value="" disabled selected>Selecciona una categoría</option>
+                        <!-- Aquí irán las opciones cargadas dinámicamente -->
+                    </select>
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#categoryModal">
+                    <i class='bx bx-plus-circle'></i>
+                    </button>
+                </div>
+            </div>
+        </form>
+        
+        
+<!-- Modal para registrar nueva categoría -->
+<div class="modal fade" id="categoryModal" tabindex="-1" aria-labelledby="categoryModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="categoryModalLabel">Registrar Nueva Categoría</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="categoryForm">
                     <div class="form-group mb-3">
-                        <label for="ddl_categoriaEspacio">Categoría:</label>
-                        <select class="form-select" id="ddl_categoriaEspacio" name="ddl_categoriaEspacio" required>
-                            <option value="" disabled selected>Selecciona una categoría</option>
-                        </select>
+                        <label for="category_name">Nombre de la Categoría:</label>
+                        <input type="text" class="form-control" id="category_name" name="category_name" placeholder="Introduce el nombre de la categoría" required>
                     </div>
+                    <div class="text-end">
+                        <button type="button" class="btn btn-primary" onclick="enviarCategoria()">Guardar Categoría</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 
-                    <div class="form-group mb-3">
-                        <label for="txt_estadoEspacio">Estado:</label>
-                        <select class="form-select" id="txt_estadoEspacio" name="txt_estadoEspacio" required>
-                            <option value="" disabled selected>Selecciona el estado</option>
-                            <option value="A">Disponible</option>
-                            <option value="B">No disponible</option>
-                            <!-- Otros estados si es necesario -->
-                        </select>
-                    </div>
+<!-- Estado check -->
+
+<form id="estadoForm" method="POST" action="controlador.php">
+    <div class="form-check">
+        <label for="estadoActivo">Estado:</label>
+        <input class="form-check-input" type="checkbox" id="estadoActivo" name="estado" value="activo" checked onclick="toggleEstado('activo')">
+        <label class="form-check-label" for="estadoActivo">Activo</label>
+    </div>
+    <div class="form-check">
+        <input class="form-check-input" type="checkbox" id="estadoInactivo" name="estado" value="inactivo" onclick="toggleEstado('inactivo')">
+        <label class="form-check-label" for="estadoInactivo">Inactivo</label>
+    </div>
+</form>
 
                     <!-- Grupo de Aforo y Precio en la misma fila -->
                     <div class="row mb-4">
@@ -62,6 +97,44 @@
                         <button type="button" onclick="enviarDatos()" class="btn btn-primary btn-sm">Guardar</button>
                     </div>
                 </form>
+                <!-- Contenedor flex para pestañas y botones -->
+                <div class="d-flex justify-content-between mb-4">
+                        <ul class="nav nav-pills mb-3" id="myTab" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link active d-flex align-items-center" id="miembros-tab" data-bs-toggle="tab" data-bs-target="#miembros" type="button" role="tab" aria-controls="miembros" aria-selected="true">
+                                <i class="lni lni-codepen"></i> <strong>Espacios</strong>
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link d-flex align-items-center" id="servicios-tab" data-bs-toggle="tab" data-bs-target="#servicios" type="button" role="tab" aria-controls="servicios" aria-selected="false">
+                                    <i class='bx bx-store-alt'></i> <strong>Mobiliario Extra</strong>
+                                </button>
+                            </li>
+                        </ul>
+
+
+                            <div class="d-flex align-items-center">
+                                <div class="btn-group me-2">
+                                    <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <i class='bx bxs-report'></i><strong>Informe de Mobiliario</strong>
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item" href="#" onclick="generarExcelMiembros()">Informe en Excel</a></li>
+                                        <li><a class="dropdown-item" href="#" onclick="generarPDFMiembros()">Informe en PDF</a></li>
+                                    </ul>
+                                </div>
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <i class='bx bxs-report'></i><strong>Informe de Compras Total</strong>
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item" href="#" onclick="generarExcelCompras()">Informe en Excel</a></li>
+                                        <li><a class="dropdown-item" href="#" onclick="generarPDFCompras()">Informe en PDF</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
 
                 <h6 class="mb-0 text-uppercase">Espacios</h6>
                 <hr />
@@ -138,10 +211,23 @@
 
 
 <script>
+
     $(document).ready(function () {
         lista_categorias();
         listarEspacios();
     });
+    function toggleEstado(estado) {
+        const checkboxActivo = document.getElementById('estadoActivo');
+        const checkboxInactivo = document.getElementById('estadoInactivo');
+
+        if (estado === 'activo') {
+            checkboxActivo.checked = true;
+            checkboxInactivo.checked = false;
+        } else {
+            checkboxActivo.checked = false;
+            checkboxInactivo.checked = true;
+        }
+}
 
     function lista_categorias() {
         $.ajax({
@@ -166,33 +252,149 @@
             }
         });
     }
+    
+    function editarEspacio(id_espacio) {
+    $.ajax({
+        url: '../controlador/COWORKING/crear_oficinaC.php',
+        method: 'POST',
+        data: { getEspacio: true, id_espacio: id_espacio },
+        dataType: 'json',
+        success: function (data) {
+            if (data.success) {
+                $('#edit_id_espacio').val(data.espacio.id_espacio);
+                $('#edit_nombre_espacio').val(data.espacio.nombre_espacio);
+                $('#edit_aforo_espacio').val(data.espacio.aforo_espacio);
+                $('#edit_precio_espacio').val(data.espacio.precio_espacio);
+                $('#edit_estado_espacio').val(data.espacio.estado_espacio);
+                $('#edit_categoria_espacio').val(data.espacio.id_categoria);
+                
+                // Mostrar el modal
+                $('#editEspacioModal').modal('show');
+            } else {
+                Swal.fire(
+                    'Error',
+                    'No se pudieron cargar los datos del espacio.',
+                    'error'
+                );
+            }
+        },
+        error: function (xhr, status, error) {
+            console.error('Error al cargar los datos del espacio:', error);
+            Swal.fire(
+                'Error',
+                'Hubo un problema al cargar los datos del espacio.',
+                'error'
+            );
+        }
+    });
+}
 
-    function enviarDatos() {
-    // Obtiene los valores de los campos
+function guardarEdicion() {
+    const formData = $('#editEspacioForm').serialize();
+    $.ajax({
+        url: '../controlador/COWORKING/crear_oficinaC.php',
+        method: 'POST',
+        data: { edit: true, data: formData },
+        success: function (response) {
+            Swal.fire('Guardado!', 'Los cambios han sido guardados.', 'success');
+            $('#editEspacioModal').modal('hide');
+            listarEspacios(); // Recargar la lista de espacios
+        },
+        error: function (xhr, status, error) {
+            console.error('Error al guardar los cambios:', error);
+            Swal.fire(
+                'Error',
+                'Hubo un problema al guardar los cambios.',
+                'error'
+            );
+        }
+    });
+}
+
+function eliminarEspacio(button) {
+    // Obtener el ID del espacio del atributo data-id del botón
+    var idEspacio = $(button).data('id');
+
+    // Usar SweetAlert2 para la confirmación
+    Swal.fire({
+        title: '¿Estás seguro?',
+        text: 'Una vez eliminado, no podrás recuperar este espacio.',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Sí, eliminar',
+        cancelButtonText: 'Cancelar'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                url: '../controlador/COWORKING/crear_oficinaC.php',
+                method: 'POST',
+                data: { delete: true, id: idEspacio },
+                dataType: 'json',
+                success: function(response) {
+                    if (response.success) {
+        
+                        Swal.fire(
+                            'Eliminado',
+                            'El espacio ha sido eliminado.',
+                            'success'
+                        ).then(() => {
+                            $(button).closest('tr').remove();
+                        });
+                    } else {
+                        // Mostrar mensaje de error
+                        Swal.fire(
+                            'Error',
+                            'No se pudo eliminar el espacio.',
+                            'error'
+                        );
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error al eliminar el espacio:', error);
+                    Swal.fire(
+                        'Error',
+                        'Hubo un problema al eliminar el espacio.',
+                        'error'
+                    );
+                }
+            });
+        }
+    });
+}
+
+function enviarDatos() {
     var nombre = $('#txt_name').val();
     var aforo = $('#txt_capacity').val();
     var precio = $('#txt_price').val();
-    var estado = $('#txt_estadoEspacio').val();
     var categoria = $('#ddl_categoriaEspacio').val();
 
+    // Obtener los valores de los checkboxes
+    var estados = [];
+    if ($('#estadoActivo').is(':checked')) {
+        estados.push('activo');
+    }
+    if ($('#estadoInactivo').is(':checked')) {
+        estados.push('inactivo');
+    }
+
     // Verifica si algún campo está vacío
-    if (!nombre || !aforo || !precio || !estado || !categoria) {
-        // Si hay un campo vacío, muestra una alerta y detiene la función
+    if (!nombre || !aforo || !precio || !categoria || estados.length === 0) {
         Swal.fire({
             title: 'Error',
-            text: 'Todos los campos son obligatorios.',
+            text: 'Todos los campos son obligatorios y debe seleccionar al menos un estado.',
             icon: 'error',
             confirmButtonText: 'Ok'
         });
         return;  // Detiene el envío de los datos
     }
 
-    // Si todos los campos están completos, procede con el envío de los datos
     var datos = {
         nombre: nombre,
         aforo: aforo,
         precio: precio,
-        estado: estado,
+        estados: estados,  // Pasar los estados seleccionados
         categoria: categoria
     };
 
@@ -201,18 +403,14 @@
         method: 'POST',
         data: { add: true, data: datos },
         success: function (response) {
-            // Mostrar alerta de éxito si el espacio se agregó correctamente
             Swal.fire({
                 title: 'Espacio agregado correctamente',
                 icon: 'success',
                 confirmButtonText: 'Ok'
             });
-
-            // Luego recargar la lista de espacios
             listarEspacios();
         },
         error: function (xhr, status, error) {
-            // En caso de error, mostrar otra alerta
             Swal.fire({
                 title: 'Error al agregar espacio',
                 text: 'Por favor, intenta nuevamente.',
@@ -222,6 +420,7 @@
         }
     });
 }
+    
     
     function listarMobiliario(id_espacio) {
         $.ajax({
@@ -256,9 +455,42 @@
         });
     }
 
-    function openFurnitureModal(id_espacio) {
+        function openFurnitureModal(id_espacio) {
         $('#hidden_espacio_id').val(id_espacio);
         listarMobiliario(id_espacio);
         $('#furnitureModal').modal('show');
     }
+
+    function enviarCategoria() {
+    var nombreCategoria = $('#category_name').val();
+    
+    if (nombreCategoria.trim() === "") {
+        Swal.fire('Error', 'El nombre de la categoría no puede estar vacío.', 'error');
+        return;
+    }
+
+    var datos = {
+        nombre: nombreCategoria
+    };
+
+    $.ajax({
+        url: '../controlador/COWORKING/crear_oficinaC.php', 
+        method: 'POST',
+        data: { addCategoria: true, data: datos },
+        success: function(response) {
+            if (response==1){
+            Swal.fire('Éxito', 'Categoría agregada correctamente.', 'success');
+            $('#categoryModal').modal('hide');
+            lista_categorias(); 
+            }
+            else{console.log("Error al inicia")}
+        },
+            
+        error: function(xhr, status, error) {
+            console.error('Error al enviar los datos:', error);
+            Swal.fire('Error', 'Hubo un error al agregar la categoría. Por favor, intenta de nuevo.', 'error');
+        }
+    });
+}
+
 </script>
