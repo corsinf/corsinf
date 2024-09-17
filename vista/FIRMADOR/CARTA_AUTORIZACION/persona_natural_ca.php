@@ -1,5 +1,8 @@
+<script src="../lib/jquery_validation/jquery.validate.js"></script>
+<script src="../js/GENERAL/operaciones_generales.js"></script>
+
 <script>
-    function insertar() {
+    function editar_insertar() {
         var txt_tipo = 'persona_natural';
         var txt_direccion_domicilio = $('#txt_direccion_domicilio').val();
         var txt_primer_nombre = $('#txt_primer_nombre').val();
@@ -27,7 +30,15 @@
             'txt_celular': txt_celular,
             'txt_fijo': txt_fijo,
         };
+        
+        if ($("#form_natural").valid()) {
+            // Si es válido, puedes proceder a enviar los datos por AJAX
+            insertar(parametros);
+            //console.log(parametros);
+        }
+    }
 
+    function insertar(parametros) {
         $.ajax({
             data: {
                 parametros: parametros,
@@ -45,97 +56,6 @@
                 }
             }
         });
-    }
-
-    function validar() {
-        var txt_primer_nombre = $('#txt_primer_nombre').val().trim();
-        var txt_segundo_nombre = $('#txt_segundo_nombre').val().trim();
-        var txt_primer_apellido = $('#txt_primer_apellido').val().trim();
-        var txt_segundo_apellido = $('#txt_segundo_apellido').val().trim();
-        var txt_numero_identificacion = $('#txt_numero_identificacion').val().trim();
-        var txt_direccion_domicilio = $('#txt_direccion_domicilio').val().trim();
-        var txt_provincia = $('#txt_provincia').val().trim();
-        var txt_ciudad = $('#txt_ciudad').val().trim();
-        var txt_correo = $('#txt_correo').val().trim();
-        var txt_celular = $('#txt_celular').val().trim();
-        var txt_fijo = $('#txt_fijo').val().trim();
-        var allFilled = true;
-
-        if (!txt_primer_nombre) {
-            $('#txt_primer_nombre').addClass('is-invalid');
-            allFilled = false;
-        } else {
-            $('#txt_primer_nombre').removeClass('is-invalid');
-        }
-
-        if (!txt_segundo_nombre) {
-            $('#txt_segundo_nombre').addClass('is-invalid');
-            allFilled = false;
-        } else {
-            $('#txt_segundo_nombre').removeClass('is-invalid');
-        }
-
-        if (!txt_primer_apellido) {
-            $('#txt_primer_apellido').addClass('is-invalid');
-            allFilled = false;
-        } else {
-            $('#txt_primer_apellido').removeClass('is-invalid');
-        }
-
-        if (!txt_segundo_apellido) {
-            $('#txt_segundo_apellido').addClass('is-invalid');
-            allFilled = false;
-        } else {
-            $('#txt_segundo_apellido').removeClass('is-invalid');
-        }
-
-        if (!txt_numero_identificacion) {
-            $('#txt_numero_identificacion').addClass('is-invalid');
-            allFilled = false;
-        } else {
-            $('#txt_numero_identificacion').removeClass('is-invalid');
-        }
-
-        if (!txt_direccion_domicilio) {
-            $('#txt_direccion_domicilio').addClass('is-invalid');
-            allFilled = false;
-        } else {
-            $('#txt_direccion_domicilio').removeClass('is-invalid');
-        }
-
-        if (!txt_provincia) {
-            $('#txt_provincia').addClass('is-invalid');
-            allFilled = false;
-        } else {
-            $('#txt_provincia').removeClass('is-invalid');
-        }
-
-        if (!txt_ciudad) {
-            $('#txt_ciudad').addClass('is-invalid');
-            allFilled = false;
-        } else {
-            $('#txt_ciudad').removeClass('is-invalid');
-        }
-
-        if (!txt_correo) {
-            $('#txt_correo').addClass('is-invalid');
-            allFilled = false;
-        } else {
-            $('#txt_correo').removeClass('is-invalid');
-        }
-
-        if (!txt_celular) {
-            $('#txt_celular').addClass('is-invalid');
-            allFilled = false;
-        } else {
-            $('#txt_celular').removeClass('is-invalid');
-        }
-
-        if (allFilled) {
-            insertar();
-        } else {
-            Swal.fire('', 'Operación fallida', 'error');
-        }
     }
 </script>
 
@@ -184,98 +104,100 @@
                             <div class="container-fluid">
 
                                 <div class="row">
-                                    <div class="col-12 col-lg-9 mx-auto">
+                                    <div class="col-xl-9 mx-12">
                                         <div>
                                             <div class="card-title d-flex align-items-center">
                                                 <div><i class="bx bxs-user me-1 font-22 text-primary"></i></div>
                                                 <h5 class="mb-0 text-primary">Formulario Persona Natural</h5>
                                             </div>
                                             <hr />
-                                            <div>
-                                                <div class="row mb-3">
-                                                    <label for="txt_primer_nombre" class="col-sm-4 col-form-label">Primer Nombre</label>
-                                                    <div class="col-sm-8">
-                                                        <input type="text" class="form-control form-control-sm" id="txt_primer_nombre" placeholder="Primer Nombre" maxlength="20" oninput="this.value = this.value.replace(/[^a-zA-ZñÑ\s]/g, '')">
-                                                        <div class="invalid-feedback">Porfavor ingresa un nombre valido</div> 
+                                            <form id="form_natural">
+                                                <div>
+                                                    <div class="row mb-3">
+                                                        <label for="txt_primer_nombre" class="col-sm-4 col-form-label">Primer Nombre</label>
+                                                        <div class="col-sm-8">
+                                                            <input type="text" class="form-control form-control-sm" id="txt_primer_nombre" name="txt_primer_nombre" placeholder="Primer Nombre" maxlength="20" oninput="this.value = this.value.replace(/[^a-zA-ZñÑ\s]/g, '')">
+                                                            <div class="invalid-feedback">Porfavor ingresa un nombre valido</div> 
+                                                        </div>
+                                                    </div>
+                                                    <div class="row mb-3">
+                                                        <label for="txt_segundo_nombre" class="col-sm-4 col-form-label">Segundo Nombre</label>
+                                                        <div class="col-sm-8">
+                                                            <input type="text" class="form-control form-control-sm" id="txt_segundo_nombre" name="txt_segundo_nombre" placeholder="Segundo Nombre" maxlength="20" oninput="this.value = this.value.replace(/[^a-zA-ZñÑ\s]/g, '')">
+                                                            <div class="invalid-feedback">Porfavor ingresa un nombre valido</div> 
+                                                        </div>
+                                                    </div>
+                                                    <div class="row mb-3">
+                                                        <label for="txt_primer_apellido" class="col-sm-4 col-form-label">Primer Apellido</label>
+                                                        <div class="col-sm-8">
+                                                            <input type="text" class="form-control form-control-sm" id="txt_primer_apellido" name="txt_primer_apellido" placeholder="Primer Apellido" maxlength="20" oninput="this.value = this.value.replace(/[^a-zA-ZñÑ\s]/g, '')">
+                                                            <div class="invalid-feedback">Porfavor ingresa un apellido valido</div> 
+                                                        </div>
+                                                    </div>
+                                                    <div class="row mb-3">
+                                                        <label for="txt_segundo_apellido" class="col-sm-4 col-form-label">Segundo Apellido</label>
+                                                        <div class="col-sm-8">
+                                                            <input type="text" class="form-control form-control-sm" id="txt_segundo_apellido" name="txt_segundo_apellido" placeholder="Segundo Apellido" maxlength="20" oninput="this.value = this.value.replace(/[^a-zA-ZñÑ\s]/g, '')">
+                                                            <div class="invalid-feedback">Porfavor ingresa un apellido valido</div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row mb-3">
+                                                        <label for="txt_numero_identificacion" class="col-sm-4 col-form-label">Número de Cédula o Pasaporte</label>
+                                                        <div class="col-sm-8">
+                                                            <input type="text" class="form-control form-control-sm" id="txt_numero_identificacion" name="txt_numero_identificacion" placeholder="Número de Cédula o Pasaporte" maxlength="10" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+                                                            <div class="invalid-feedback">Porfavor ingresa un número de cédula o pasaporte valido</div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row mb-3">
+                                                        <label for="txt_direccion_domicilio" class="col-sm-4 col-form-label">Dirección Domicilio</label>
+                                                        <div class="col-sm-8">
+                                                            <input type="text" class="form-control form-control-sm" id="txt_direccion_domicilio" name="txt_direccion_domicilio" placeholder="Dirección Domicilio" maxlength="150">
+                                                            <div class="invalid-feedback">Porfavor ingresa una dirección valida</div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row mb-3">
+                                                        <label for="txt_provincia" class="col-sm-4 col-form-label">Provincia</label>
+                                                        <div class="col-sm-8">
+                                                            <input type="text" class="form-control form-control-sm" id="txt_provincia" name="txt_provincia" placeholder="Provincia" maxlength="27" oninput="this.value = this.value.replace(/[^a-zA-ZñÑ\s]/g, '')">
+                                                            <div class="invalid-feedback">Porfavor ingresa una provincia valida</div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row mb-3">
+                                                        <label for="txt_ciudad" class="col-sm-4 col-form-label">Ciudad</label>
+                                                        <div class="col-sm-8">
+                                                            <input type="text" class="form-control form-control-sm" id="txt_ciudad" name="txt_ciudad" placeholder="Ciudad" maxlength="38" oninput="this.value = this.value.replace(/[^a-zA-ZñÑ\s]/g, '')">
+                                                            <div class="invalid-feedback">Porfavor ingresa una ciudad valida</div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row mb-3">
+                                                        <label for="txt_correo" class="col-sm-4 col-form-label">Correo Electrónico</label>
+                                                        <div class="col-sm-8">
+                                                            <input type="email" class="form-control form-control-sm" id="txt_correo" name="txt_correo" placeholder="Correo Electrónico" maxlenght="150">
+                                                            <div class="invalid-feedback">Porfavor ingresa un correo valido</div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row mb-3">
+                                                        <label for="txt_celular" class="col-sm-4 col-form-label">No. Celular</label>
+                                                        <div class="col-sm-8">
+                                                            <input type="tel" class="form-control form-control-sm" id="txt_celular" name="txt_celular" placeholder="No. Celular (Poner código de país)" maxlength="13" oninput="this.value = this.value.replace(/[^0-9+]/g, '')">
+                                                            <div class="invalid-feedback">Porfavor ingresa un número de celular valido</div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row mb-3">
+                                                        <label for="txt_fijo" class="col-sm-4 col-form-label">No. Fijo</label>
+                                                        <div class="col-sm-8">
+                                                            <input type="tel" class="form-control form-control-sm" id="txt_fijo" name="txt_fijo" placeholder="No. Fijo (Poner código de país)" maxlength="9" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+                                                            <div class="invalid-feedback">Porfavor ingresa un número fijo valido</div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-sm-4"></div>
+                                                        <div class="col-sm-8">
+                                                            <button type="button" class="btn btn-success btn-sm px-5" onclick="editar_insertar();">Guardar</button>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                                <div class="row mb-3">
-                                                    <label for="txt_segundo_nombre" class="col-sm-4 col-form-label">Segundo Nombre</label>
-                                                    <div class="col-sm-8">
-                                                        <input type="text" class="form-control form-control-sm" id="txt_segundo_nombre" placeholder="Segundo Nombre" maxlength="20" oninput="this.value = this.value.replace(/[^a-zA-ZñÑ\s]/g, '')">
-                                                        <div class="invalid-feedback">Porfavor ingresa un nombre valido</div> 
-                                                    </div>
-                                                </div>
-                                                <div class="row mb-3">
-                                                    <label for="txt_primer_apellido" class="col-sm-4 col-form-label">Primer Apellido</label>
-                                                    <div class="col-sm-8">
-                                                        <input type="text" class="form-control form-control-sm" id="txt_primer_apellido" placeholder="Primer Apellido" maxlength="20" oninput="this.value = this.value.replace(/[^a-zA-ZñÑ\s]/g, '')">
-                                                        <div class="invalid-feedback">Porfavor ingresa un apellido valido</div> 
-                                                    </div>
-                                                </div>
-                                                <div class="row mb-3">
-                                                    <label for="txt_segundo_apellido" class="col-sm-4 col-form-label">Segundo Apellido</label>
-                                                    <div class="col-sm-8">
-                                                        <input type="text" class="form-control form-control-sm" id="txt_segundo_apellido" placeholder="Segundo Apellido" maxlength="20" oninput="this.value = this.value.replace(/[^a-zA-ZñÑ\s]/g, '')">
-                                                        <div class="invalid-feedback">Porfavor ingresa un apellido valido</div>
-                                                    </div>
-                                                </div>
-                                                <div class="row mb-3">
-                                                    <label for="txt_numero_identificacion" class="col-sm-4 col-form-label">Número de Cédula o Pasaporte</label>
-                                                    <div class="col-sm-8">
-                                                        <input type="text" class="form-control form-control-sm" id="txt_numero_identificacion" placeholder="Número de Cédula o Pasaporte" maxlength="10" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
-                                                        <div class="invalid-feedback">Porfavor ingresa un número de cédula o pasaporte valido</div>
-                                                    </div>
-                                                </div>
-                                                <div class="row mb-3">
-                                                    <label for="txt_direccion_domicilio" class="col-sm-4 col-form-label">Dirección Domicilio</label>
-                                                    <div class="col-sm-8">
-                                                        <input type="text" class="form-control form-control-sm" id="txt_direccion_domicilio" placeholder="Dirección Domicilio" maxlength="150">
-                                                        <div class="invalid-feedback">Porfavor ingresa una dirección valida</div>
-                                                    </div>
-                                                </div>
-                                                <div class="row mb-3">
-                                                    <label for="txt_provincia" class="col-sm-4 col-form-label">Provincia</label>
-                                                    <div class="col-sm-8">
-                                                        <input type="text" class="form-control form-control-sm" id="txt_provincia" placeholder="Provincia" maxlength="27" oninput="this.value = this.value.replace(/[^a-zA-ZñÑ\s]/g, '')">
-                                                        <div class="invalid-feedback">Porfavor ingresa una provincia valida</div>
-                                                    </div>
-                                                </div>
-                                                <div class="row mb-3">
-                                                    <label for="txt_ciudad" class="col-sm-4 col-form-label">Ciudad</label>
-                                                    <div class="col-sm-8">
-                                                        <input type="text" class="form-control form-control-sm" id="txt_ciudad" placeholder="Ciudad" maxlength="38" oninput="this.value = this.value.replace(/[^a-zA-ZñÑ\s]/g, '')">
-                                                        <div class="invalid-feedback">Porfavor ingresa una ciudad valida</div>
-                                                    </div>
-                                                </div>
-                                                <div class="row mb-3">
-                                                    <label for="txt_correo" class="col-sm-4 col-form-label">Correo Electrónico</label>
-                                                    <div class="col-sm-8">
-                                                        <input type="email" class="form-control form-control-sm" id="txt_correo" placeholder="Correo Electrónico" maxlenght="150">
-                                                        <div class="invalid-feedback">Porfavor ingresa un correo valido</div>
-                                                    </div>
-                                                </div>
-                                                <div class="row mb-3">
-                                                    <label for="txt_celular" class="col-sm-4 col-form-label">No. Celular</label>
-                                                    <div class="col-sm-8">
-                                                        <input type="tel" class="form-control form-control-sm" id="txt_celular" placeholder="No. Celular (Poner código de país)" maxlength="13" oninput="this.value = this.value.replace(/[^0-9+]/g, '')">
-                                                        <div class="invalid-feedback">Porfavor ingresa un número de celular valido</div>
-                                                    </div>
-                                                </div>
-                                                <div class="row mb-3">
-                                                    <label for="txt_fijo" class="col-sm-4 col-form-label">No. Fijo</label>
-                                                    <div class="col-sm-8">
-                                                        <input type="tel" class="form-control form-control-sm" id="txt_fijo" placeholder="No. Fijo (Poner código de país)" maxlength="9" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
-                                                        <div class="invalid-feedback">Porfavor ingresa un número fijo valido</div>
-                                                    </div>
-                                                </div>
-                                                <div class="row">
-                                                    <div class="col-sm-4"></div>
-                                                    <div class="col-sm-8">
-                                                        <button type="button" class="btn btn-success btn-sm px-5" onclick="validar();">Guardar</button>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                            </form>
                                         </div>
                                     </div>
                                 </div>
@@ -288,3 +210,78 @@
         <!--end row-->
     </div>
 </div>
+<script>
+    //Validacion de formulario
+    $(document).ready(function() {
+        $("#form_natural").validate({
+            rules: {
+                txt_primer_nombre: {
+                    required: true,
+                    minlength: 2,
+                    maxlength: 20
+                },
+                txt_segundo_nombre: {
+                    required: true,
+                    minlength: 2,
+                    maxlength: 20
+                },
+                txt_primer_apellido: {
+                    required: true,
+                    minlength: 2,
+                    maxlength: 20
+                },
+                txt_segundo_apellido: {
+                    required: true,
+                    minlength: 2,
+                    maxlength: 20
+                },
+                txt_numero_identificacion: {
+                    required: true,
+                    minlength: 10,
+                    maxlength: 13
+                },
+                txt_direccion_domicilio: {
+                    required: true,
+                    minlength: 5,
+                    maxlength: 150
+                },
+                txt_provincia: {
+                    required: true,
+                    minlength: 3,
+                    maxlength: 27
+                },
+                txt_ciudad: {
+                    required: true,
+                    minlength: 3,
+                    maxlength: 38
+                },
+                txt_correo: {
+                    required: true,
+                    email: true,
+                    maxlength: 150
+                },
+                txt_celular: {
+                    required: true,
+                    minlength: 9,
+                    maxlength: 13
+                },
+                txt_fijo: {
+                    required: true,
+                    minlength: 9,
+                    maxlength: 9
+                }
+            },
+
+            highlight: function(element) {
+                // Agrega la clase 'is-invalid' al input que falla la validación
+                $(element).addClass('is-invalid');
+                $(element).removeClass('is-valid');
+            },
+            unhighlight: function(element) {
+                // Elimina la clase 'is-invalid' si la validación pasa
+                $(element).removeClass('is-invalid');
+                $(element).addClass('is-valid');
+            }
+        });
+    });
+</script>
