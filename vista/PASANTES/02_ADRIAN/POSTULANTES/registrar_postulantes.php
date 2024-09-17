@@ -30,7 +30,7 @@ if (isset($_GET['id'])) {
 
     function cargarDatos(id) {
         $.ajax({
-            url: '../controlador/PASANTES/02_ADRIAN/talento_humano/th_postulantesC.php?listar=true',
+            url: '../controlador/PASANTES/02_ADRIAN/POSTULANTES/th_postulantesC.php?listar=true',
             type: 'post',
             data: {
                 id: id
@@ -102,7 +102,7 @@ if (isset($_GET['id'])) {
             data: {
                 parametros: parametros
             },
-            url: '../controlador/PASANTES/02_ADRIAN/talento_humano/th_postulantesC.php?insertar=true',
+            url: '../controlador/PASANTES/02_ADRIAN/POSTULANTES/th_postulantesC.php?insertar=true',
             type: 'post',
             dataType: 'json',
 
@@ -142,7 +142,7 @@ if (isset($_GET['id'])) {
             data: {
                 id: id
             },
-            url: '../controlador/PASANTES/02_ADRIAN/talento_humano/th_postulantesC.php?eliminar=true',
+            url: '../controlador/PASANTES/02_ADRIAN/POSTULANTES/th_postulantesC.php?eliminar=true',
             type: 'post',
             dataType: 'json',
             success: function(response) {

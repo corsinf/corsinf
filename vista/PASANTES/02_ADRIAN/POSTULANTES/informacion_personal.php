@@ -10,21 +10,18 @@ if (isset($_GET['id'])) {
 
 ?>
 <script src="../lib/jquery_validation/jquery.validate.js"></script>
-<style>
-    label.error {
-        color: red;
-        /* Cambia "red" por el color que desees */
+<script src="../js/GENERAL/operaciones_generales.js"></script>
 
-    }
-</style>
 <script type="text/javascript">
     $(document).ready(function() {
+
         <?php if (isset($_GET['id'])) { ?>
             cargarDatos_informacion_personal(<?= $id ?>);
         <?php } ?>
         <?php if (isset($_GET['id'])) { ?>
             cargarDatos_informacion_adicional(<?= $id ?>);
         <?php } ?>
+
         $('#ddl_seleccionar_aptitud_blanda').select2({
             placeholder: 'Selecciona una opción',
             dropdownParent: $('#modal_agregar_aptitudes'),
@@ -43,6 +40,7 @@ if (isset($_GET['id'])) {
                 }
             }
         });
+
         $('#ddl_seleccionar_aptitud_tecnica').select2({
             placeholder: 'Selecciona una opción',
             dropdownParent: $('#modal_agregar_aptitudes'),
@@ -61,6 +59,7 @@ if (isset($_GET['id'])) {
                 }
             }
         });
+
     });
 
     //Funciones del formulario
@@ -122,10 +121,16 @@ if (isset($_GET['id'])) {
         console.log(parametro_foto)
     }
 
+    function modal_formacion_academica() {
+        if ($('$btn_modal_agregar_formacion_academica').modal()) {
+            alert('Simón')
+        }
+    }
+
     //Información Personal
     function cargarDatos_informacion_personal(id) {
         $.ajax({
-            url: '../controlador/PASANTES/02_ADRIAN/talento_humano/th_postulantesC.php?listar=true',
+            url: '../controlador/PASANTES/02_ADRIAN/POSTULANTES/th_postulantesC.php?listar=true',
             type: 'post',
             data: {
                 id: id
@@ -204,7 +209,7 @@ if (isset($_GET['id'])) {
             data: {
                 parametros: parametros
             },
-            url: '../controlador/PASANTES/02_ADRIAN/talento_humano/th_postulantesC.php?insertar=true',
+            url: '../controlador/PASANTES/02_ADRIAN/POSTULANTES/th_postulantesC.php?insertar=true',
             type: 'post',
             dataType: 'json',
 
@@ -216,6 +221,7 @@ if (isset($_GET['id'])) {
                     <?php if (isset($_GET['id'])) { ?>
                         cargarDatos_informacion_personal(<?= $id ?>);
                     <?php } ?>
+                    $('#modal_informacion_personal').modal('hide');
                 } else if (response == -2) {
                     Swal.fire('', 'Operación fallida', 'warning');
                 }
@@ -226,7 +232,7 @@ if (isset($_GET['id'])) {
     //Información Adicional
     function cargarDatos_informacion_adicional(id) {
         $.ajax({
-            url: '../controlador/PASANTES/02_ADRIAN/talento_humano/th_adicionalC.php?listar=true',
+            url: '../controlador/PASANTES/02_ADRIAN/POSTULANTES/th_postulante_inf_adicionalC.php?listar=true',
             type: 'post',
             data: {
                 id: id
@@ -238,8 +244,9 @@ if (isset($_GET['id'])) {
                 $('#txt_direccion_ciudad').val(response[0].th_posa_direccion_ciudad);
                 $('#txt_direccion_estado').val(response[0].th_posa_direccion_estado);
                 $('#txt_direccion_postal').val(response[0].th_posa_direccion_codpos);
+                $('#txt_inf_adicional_id').val(response[0]._id)
 
-                direccion_completa = response[0].th_posa_direccion_calle + ', ' + response[0].th_posa_direccion_numero + ', ' + th_posa_direccion_ciudad + ', ' + th_posa_direccion_estado + ', ' + th_posa_direccion_codpos
+                direccion_completa = response[0].th_posa_direccion_calle + ', ' + response[0].th_posa_direccion_numero + ', ' + response[0].th_posa_direccion_ciudad + ', ' + response[0].th_posa_direccion_estado + ', ' + response[0].th_posa_direccion_codpos
                 $('#txt_direccion_v').html(direccion_completa);
 
                 console.log(response);
@@ -253,13 +260,19 @@ if (isset($_GET['id'])) {
         var txt_direccion_ciudad = $('#txt_direccion_ciudad').val();
         var txt_direccion_estado = $('#txt_direccion_estado').val();
         var txt_direccion_postal = $('#txt_direccion_postal').val();
+        var txt_id_postulante = '<?= $id ?>';
+        var txt_id_formacion_academica = $('#txt_inf_adicional_id').val();
+
 
         var parametros_informacion_adicional = {
+            '_id' : txt_id_formacion_academica,
+            'txt_id_postulante': txt_id_postulante, 
             'txt_direccion_calle': txt_direccion_calle,
             'txt_direccion_numero': txt_direccion_numero,
             'txt_direccion_ciudad': txt_direccion_ciudad,
             'txt_direccion_estado': txt_direccion_estado,
             'txt_direccion_postal': txt_direccion_postal,
+            
         }
 
         if ($("#form_informacion_adicional").valid()) {
@@ -275,18 +288,17 @@ if (isset($_GET['id'])) {
             data: {
                 parametros: parametros
             },
-            url: '../controlador/PASANTES/02_ADRIAN/talento_humano/th_adicionalC.php?insertar=true',
+            url: '../controlador/PASANTES/02_ADRIAN/POSTULANTES/th_postulante_inf_adicionalC.php?insertar=true',
             type: 'post',
             dataType: 'json',
 
             success: function(response) {
                 if (response == 1) {
-                    Swal.fire('', 'Operacion realizada con exito.', 'success').then(function() {
-
-                    });
+                    Swal.fire('', 'Operacion realizada con exito.', 'success').then(function() {});
                     <?php if (isset($_GET['id'])) { ?>
                         cargarDatos_informacion_adicional(<?= $id ?>);
                     <?php } ?>
+                    $('#modal_informacion_adicional').modal('hide');
                 } else if (response == -2) {
                     Swal.fire('', 'Operación fallida', 'warning');
                 }
@@ -309,27 +321,6 @@ if (isset($_GET['id'])) {
             console.log(parametros_contacto_emergencia)
         }
 
-    }
-
-
-    //Formación Académica
-    function insertar_editar_formacion_academica() {
-        var txt_titulo_obtenido = $('#txt_titulo_obtenido').val();
-        var txt_institucion = $('#txt_institucion').val();
-        var txt_fecha_inicio_academico = $('#txt_fecha_inicio_academico').val();
-        var txt_fecha_final_academico = $('#txt_fecha_final_academico').val();
-
-        var parametros_formacion_academica = {
-            'txt_titulo_obtenido': txt_titulo_obtenido,
-            'txt_institucion': txt_institucion,
-            'txt_fecha_inicio_academico': txt_fecha_inicio_academico,
-            'txt_fecha_final_academico': txt_fecha_final_academico,
-        }
-
-        if ($("#form_formacion_academica").valid()) {
-            // Si es válido, puedes proceder a enviar los datos por AJAX
-            console.log(parametros_formacion_academica)
-        }
     }
 
     //Certificaciones y Capacitaciones
@@ -547,6 +538,7 @@ if (isset($_GET['id'])) {
                     <div class="col-xs-5 col-sm-5 col-md-5 col-lg-4 col-xxl-3">
                         <!-- Cards de la izquierda -->
                         <div class="card">
+                            <!-- Información Personal -->
                             <div class="card-body">
                                 <div class="align-items-center">
                                     <div class="text-center">
@@ -622,7 +614,7 @@ if (isset($_GET['id'])) {
                                                 <h6 class="fw-bold">Correo Electrónico</h6>
                                             </div>
                                             <div class="col-6 d-flex align-items-center">
-                                                <p id="txt_correo_v"></p>
+                                                <p class="text-wrap" style="width: 9rem;" id="txt_correo_v"></p>
                                             </div>
                                         </div>
                                     </div>
@@ -630,6 +622,7 @@ if (isset($_GET['id'])) {
                             </div>
                         </div>
                         <div class="card">
+                            <!-- Información Adicional -->
                             <div class="card-body">
                                 <div class="align-items-center">
                                     <div class="mt-3">
@@ -678,6 +671,7 @@ if (isset($_GET['id'])) {
                     <div class="col-xs-7 col-sm-7 col-md-7 col-lg-8 col-xxl-8">
                         <!-- Cards de la derecha -->
                         <div class="card-body">
+                            <!-- Nav Cards -->
                             <ul class="nav nav-tabs nav-success" role="tablist">
                                 <li class="nav-item" role="presentation">
                                     <a class="nav-link active" data-bs-toggle="tab" href="#tab_experiencia" role="tab" aria-selected="true">
@@ -721,6 +715,7 @@ if (isset($_GET['id'])) {
                                 <div class="tab-pane fade show active" id="tab_experiencia" role="tabpanel">
                                     <div class="card">
                                         <div class="d-flex flex-column mx-4">
+                                            <!-- Experiencia Previa -->
                                             <div class="card-body">
                                                 <div class="mb-2">
                                                     <div class="row">
@@ -740,6 +735,7 @@ if (isset($_GET['id'])) {
                                                 <?php include_once('../vista/PASANTES/02_ADRIAN/POSTULANTES/pos_experiencia_previa.php'); ?>
 
                                             </div>
+                                            <!-- Formación Académica -->
                                             <div class="card-body">
                                                 <div class="mb-2">
                                                     <div class="row">
@@ -747,7 +743,7 @@ if (isset($_GET['id'])) {
                                                             <h6 class="mb-0 fw-bold text-primary">Formación Académica:</h6>
                                                         </div>
                                                         <div class="col-6 d-flex justify-content-end">
-                                                            <a href="#" class="text-success d-flex align-items-center" data-bs-toggle="modal" data-bs-target="#modal_agregar_formacion">
+                                                            <a href="#" class="text-success d-flex align-items-center" id="btn_modal_agregar_formacion_academica" data-bs-toggle="modal" data-bs-target="#modal_agregar_formacion">
                                                                 <i class='bx bx-plus-circle bx-sm me-1'></i>
                                                                 <span>Agregar</span>
                                                             </a>
@@ -755,18 +751,11 @@ if (isset($_GET['id'])) {
                                                     </div>
                                                 </div>
                                                 <hr>
-                                                <div class="row">
-                                                    <div class="col-8">
-                                                        <h6 class="fw-bold">Tecnólogo Superior en Desarrollo de Software</h6>
-                                                        <p>Pontificia Universidad Católica del Ecuador</p>
-                                                        <p>2023-10-15 - Actualidad</p>
-                                                        <p>Diseñar, codificar, probar y mantener aplicaciones y sistemas de software de alta calidad.</p>
-                                                    </div>
-                                                    <div class="col-4">
-                                                        <a href="#" class="d-flex justify-content-end"><i class='text-dark bx bx-pencil bx-sm'></i></a>
-                                                    </div>
-                                                </div>
+
+                                                <?php include_once('../vista/PASANTES/02_ADRIAN/POSTULANTES/pos_formacion_academica.php'); ?>
+
                                             </div>
+                                            <!-- Certificaciones y capacitación -->
                                             <div class="card-body">
                                                 <div class="mb-2">
                                                     <div class="row">
@@ -1175,6 +1164,7 @@ if (isset($_GET['id'])) {
                 <div class="modal-body">
                     <p class="fw-bold">Dirección:</p>
                     <div class="row">
+                        <input type="text" id="txt_inf_adicional_id" hidden>
                         <div class="col-4">
                             <div class="mb-3">
                                 <label for="txt_direccion_calle" class="form-label form-label-sm">Calle <label style="color: red;">*</label></label>
@@ -1258,46 +1248,6 @@ if (isset($_GET['id'])) {
                 </div>
                 <div class="modal-footer d-flex justify-content-center">
                     <button type="button" class="btn btn-success btn-sm" id="btn_guardar_informacion_contacto" onclick="insertar_editar_contacto_emergencia();">Guardar</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-
-
-
-<!-- Modal para agregar formación académica-->
-<div class="modal" id="modal_agregar_formacion" tabindex="-1" aria-modal="true" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-
-            <!-- Modal Header -->
-            <div class="modal-header">
-                <h5><small class="text-body-secondary">Agregue una formación académica</small></h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="limpiar_parametros()"></button>
-            </div>
-            <!-- Modal body -->
-            <form id="form_formacion_academica">
-                <div class="modal-body">
-                    <div class="mb-3">
-                        <label for="txt_titulo_obtenido" class="form-label form-label-sm">Título obtenido <label style="color: red;">*</label></label>
-                        <input type="text" class="form-control form-control-sm" name="txt_titulo_obtenido" id="txt_titulo_obtenido" placeholder="Escriba su título académico">
-                    </div>
-                    <div class="mb-3">
-                        <label for="txt_institucion" class="form-label form-label-sm">Institución <label style="color: red;">*</label></label>
-                        <input type="text" class="form-control form-control-sm" name="txt_institucion" id="txt_institucion" placeholder="Escriba la institución en la que se formó">
-                    </div>
-                    <div class="mb-3">
-                        <label for="txt_fecha_inicio_academico" class="form-label form-label-sm">Fecha de inicio <label style="color: red;">*</label></label>
-                        <input type="date" class="form-control form-control-sm" name="txt_fecha_inicio_academico" id="txt_fecha_inicio_academico">
-                    </div>
-                    <div class="mb-3">
-                        <label for="txt_fecha_final_academico" class="form-label form-label-sm">Fecha de finalización <label style="color: red;">*</label></label>
-                        <input type="date" class="form-control form-control-sm mb-2" name="txt_fecha_final_academico" id="txt_fecha_final_academico">
-                    </div>
-                </div>
-                <div class="modal-footer d-flex justify-content-center">
-                    <button type="button" class="btn btn-success btn-sm" id="btn_guardar_formacion" onclick="insertar_editar_formacion_academica();">Agregar</button>
                 </div>
             </form>
         </div>
@@ -2123,7 +2073,4 @@ if (isset($_GET['id'])) {
         });
 
     });
-
-   
 </script>
-

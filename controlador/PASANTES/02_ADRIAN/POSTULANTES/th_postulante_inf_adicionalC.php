@@ -1,7 +1,7 @@
 <?php
-require_once(dirname(__DIR__, 4) . '/modelo/PASANTES/02_ADRIAN/talento_humano/th_adicionalM.php');
+require_once(dirname(__DIR__, 4) . '/modelo/PASANTES/02_ADRIAN/POSTULANTES/th_postulante_inf_adicionalM.php');
 
-$controlador = new th_adicionalC();
+$controlador = new th_postulante_inf_adicionalC();
 
 if (isset($_GET['listar'])) {
     echo json_encode($controlador->listar($_POST['id']));
@@ -16,18 +16,18 @@ if (isset($_GET['eliminar'])) {
 }
 
 
-class th_adicionalC
+class th_postulante_inf_adicionalC
 {
     private $modelo;
 
     function __construct()
     {
-        $this->modelo = new th_adicionalM();
+        $this->modelo = new th_postulante_inf_adicionalM();
     }
 
     function listar($id)
     {
-        $datos = $this->modelo->where('th_posa_id', $id)->listar($id);
+        $datos = $this->modelo->where('th_pos_id', $id)->listar($id);
         return $datos;
     }
 
@@ -39,15 +39,12 @@ class th_adicionalC
             array('campo' => 'th_posa_direccion_ciudad', 'dato' => $parametros['txt_direccion_ciudad']),
             array('campo' => 'th_posa_direccion_estado', 'dato' => $parametros['txt_direccion_estado']),
             array('campo' => 'th_posa_direccion_codpos', 'dato' => $parametros['txt_direccion_postal']),
+            array('campo' => 'th_pos_id', 'dato' => $parametros['txt_id_postulante']),
 
         );
 
         if ($parametros['_id'] == '') {
-            if (count($this->modelo->where('th_posa_direccion_numero', $parametros['txt_direccion_numero'])->listar()) == 0) {
-                $datos = $this->modelo->insertar($datos);
-            } else {
-                return -2;
-            }
+            $datos = $this->modelo->insertar($datos);
         } else {
             $where[0]['campo'] = 'th_posa_id';
             $where[0]['dato'] = $parametros['_id'];
