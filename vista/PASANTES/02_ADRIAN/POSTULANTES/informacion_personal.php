@@ -121,12 +121,6 @@ if (isset($_GET['id'])) {
         console.log(parametro_foto)
     }
 
-    function modal_formacion_academica() {
-        if ($('$btn_modal_agregar_formacion_academica').modal()) {
-            alert('Simón')
-        }
-    }
-
     //Información Personal
     function cargarDatos_informacion_personal(id) {
         $.ajax({
@@ -304,23 +298,6 @@ if (isset($_GET['id'])) {
                 }
             }
         });
-    }
-
-    //Contacto de Emergencia
-    function insertar_editar_contacto_emergencia() {
-        var txt_nombre_contacto_emergencia = $('#txt_nombre_contacto_emergencia').val();
-        var txt_telefono_contacto_emergencia = $('#txt_telefono_contacto_emergencia').val();
-
-        var parametros_contacto_emergencia = {
-            'txt_nombre_contacto_emergencia': txt_nombre_contacto_emergencia,
-            'txt_telefono_contacto_emergencia': txt_telefono_contacto_emergencia,
-        }
-
-        if ($("#form_contacto_emergencia").valid()) {
-            // Si es válido, puedes proceder a enviar los datos por AJAX
-            console.log(parametros_contacto_emergencia)
-        }
-
     }
 
     //Certificaciones y Capacitaciones
@@ -622,7 +599,7 @@ if (isset($_GET['id'])) {
                             </div>
                         </div>
                         <div class="card">
-                            <!-- Información Adicional -->
+                            <!-- Información Adicional y Contacto de Emergencia -->
                             <div class="card-body">
                                 <div class="align-items-center">
                                     <div class="mt-3">
@@ -650,18 +627,12 @@ if (isset($_GET['id'])) {
                                                 <h5 class="fw-bold text-primary">Contacto de Emergencia</h5>
                                             </div>
                                             <div class="col-3 d-flex justify-content-end">
-                                                <button class="btn btn-sm btn-outline-dark" data-bs-toggle="modal" data-bs-target="#modal_contacto_emergencia"><i class='bx bx-plus bx-xs me-0'></i></button>
+                                                <button class="btn btn-sm" style='color: white;' data-bs-toggle="modal" data-bs-target="#modal_contacto_emergencia"><i class='text-dark bx bx-show bx-sm me-0'></i></button>
                                             </div>
                                         </div>
-                                        <hr>
-                                        <div class="row">
-                                            <div class="col-6">
-                                                <p class="my-0">Adrian Acuña</p>
-                                            </div>
-                                            <div class="col-6">
-                                                <p>09914654645</p>
-                                            </div>
-                                        </div>
+                                        
+                                        <?php include_once('../vista/PASANTES/02_ADRIAN/POSTULANTES/pos_contacto_emergencia.php'); ?>
+
                                     </div>
                                 </div>
                             </div>
@@ -1215,45 +1186,6 @@ if (isset($_GET['id'])) {
     </div>
 </div>
 
-<!-- Modal para los contactos de Emergencia -->
-<div class="modal" id="modal_contacto_emergencia" tabindex="-1" aria-modal="true" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
-    <div class="modal-dialog modal-dialog-centered modal-xl">
-        <div class="modal-content">
-
-            <!-- Modal Header -->
-            <div class="modal-header">
-                <h5><small class="text-body-secondary">Ingrese los datos de contacto</small></h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-            <!-- Modal body -->
-            <form id="form_contacto_emergencia">
-                <div class="modal-body">
-                    <p class="fw-bold my-0 mb-2">Contacto de Emergencia:</p>
-                    <div class="pnl_contacto_emergencia">
-                        <div class="row">
-                            <div class="col-6">
-                                <div class="mb-3">
-                                    <label for="txt_nombre_contacto_emergencia" class="form-label form-label-sm">Nombre del contacto de Emergencia <label style="color: red;">*</label></label>
-                                    <input type="text" class="form-control form-control-sm txt_nombre_contacto_emergencia" name="txt_nombre_contacto_emergencia" id="txt_nombre_contacto_emergencia" value="" placeholder="Escriba el nombre de un contacto de emergencia" required>
-                                </div>
-                            </div>
-                            <div class="col-6">
-                                <div class="mb-3">
-                                    <label for="txt_telefono_contacto_emergencia" class="form-label form-label-sm">Teléfono del contacto de Emergencia <label style="color: red;">*</label></label>
-                                    <input type="text" class="form-control form-control-sm txt_telefono_contacto_emergencia" name="txt_telefono_contacto_emergencia" id="txt_telefono_contacto_emergencia" value="" placeholder="Escriba el número de un contacto de emergencia" required>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer d-flex justify-content-center">
-                    <button type="button" class="btn btn-success btn-sm" id="btn_guardar_informacion_contacto" onclick="insertar_editar_contacto_emergencia();">Guardar</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-
 <!-- Modal para agregar certificaciones y capacitaciones-->
 <div class="modal" id="modal_agregar_certificaciones" tabindex="-1" aria-modal="true" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
     <div class="modal-dialog modal-dialog-centered">
@@ -1751,8 +1683,6 @@ if (isset($_GET['id'])) {
 
             }
         });
-
-
 
         //Validación Formación Académica
         $("#form_formacion_academica").validate({

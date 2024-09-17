@@ -117,7 +117,7 @@
             }
         })
     }
-    
+
     function eliminar(id) {
         $.ajax({
             data: {
@@ -145,6 +145,27 @@
         $('#txt_fecha_inicio_academico').val('');
         $('#txt_fecha_final_academico').val('');
         $('#txt_formacion_id').val('');
+
+        //Limpiar validaciones
+        $("#form_formacion_academica").validate().resetForm();
+        $('.form-control').removeClass('is-valid is-invalid');
+
+    }
+
+    function validar_fechas() {
+        var fecha_inicio = $('#txt_fecha_inicio_academico').val();
+        var fecha_final = $('#txt_fecha_final_academico').val();
+
+        if (fecha_inicio && fecha_final) {
+            if (Date.parse(fecha_final) < Date.parse(fecha_inicio)) {
+                Swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    text: "La fecha final no puede ser menor a la fecha de inicio.",
+                });
+                return $('#txt_fecha_final_academico').val('');
+            }
+        }
     }
 </script>
 
@@ -182,7 +203,7 @@
                     </div>
                     <div class="mb-3">
                         <label for="txt_fecha_final_academico" class="form-label form-label-sm">Fecha de finalización <label style="color: red;">*</label></label>
-                        <input type="date" class="form-control form-control-sm mb-2 no_caracteres" name="txt_fecha_final_academico" id="txt_fecha_final_academico">
+                        <input type="date" class="form-control form-control-sm mb-2 no_caracteres" name="txt_fecha_final_academico" id="txt_fecha_final_academico" onchange="validar_fechas();">
                     </div>
                 </div>
                 <div class="modal-footer">
