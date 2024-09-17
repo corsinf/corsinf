@@ -1,5 +1,5 @@
 <?php
-require_once(dirname(__DIR__, 4) . '/modelo/PASANTES/02_ADRIAN/talento_humano/th_postulantesM.php');
+require_once(dirname(__DIR__, 4) . '/modelo/PASANTES/02_ADRIAN/POSTULANTES/th_postulantesM.php');
 
 $controlador = new th_postulantesC();
 
@@ -31,13 +31,19 @@ class th_postulantesC
 
     function listar($id)
     {
-        $datos = $this->modelo->where('th_pos_id', $id)->listar($id);
+        if ($id == '') {
+            $datos = $this->modelo->where('th_pos_estado', 1)->listar();
+        } else {
+            $datos = $this->modelo->where('th_pos_id', $id)->listar();
+        }
         return $datos;
+        // $datos = $this->modelo->where('th_pos_id', $id)->listar($id);
+        // return $datos;
     }
 
     function listar_todo()
     {
-        $lista = $this->modelo->listar();
+        $lista = $this->modelo->where('th_pos_estado', 1)->listar();
         return $lista;
     }
 
@@ -83,7 +89,7 @@ class th_postulantesC
         $where[0]['campo'] = 'th_pos_id';
         $where[0]['dato'] = $id;
 
-        $datos = $this->modelo->eliminar($datos, $where);
+        $datos = $this->modelo->editar($datos, $where);
         return $datos;
     }
 }
