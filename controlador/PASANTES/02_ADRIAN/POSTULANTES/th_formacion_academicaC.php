@@ -32,7 +32,8 @@ class th_formacion_academicaC
     //Funcion para listar la formacion academica del postulante
     function listar($id)
     {
-        $datos = $this->modelo->where('th_pos_id', $id)->where('th_fora_estado', 1)->listar($id);
+        $datos = $this->modelo->where('th_pos_id', $id)->where('th_fora_estado', 1)->listar();
+
         $texto = '';
         foreach ($datos as $key => $value) {
             $texto .=
@@ -51,6 +52,7 @@ class th_formacion_academicaC
         return $texto;
     }
 
+    //Buscando registros por id de la formacion academica
     function listar_modal($id)
     {
         
@@ -69,7 +71,7 @@ class th_formacion_academicaC
             array('campo' => 'th_fora_institución', 'dato' => $parametros['txt_institucion']),
             array('campo' => 'th_fora_fecha_inicio_formacion', 'dato' => $parametros['txt_fecha_inicio_academico']),
             array('campo' => 'th_fora_fecha_fin_formacion', 'dato' => $parametros['txt_fecha_final_academico']),
-            array('campo' => 'th_pos_id', 'dato' => $parametros['txt_id_postulante']),
+            array('campo' => 'th_pos_id', 'dato' => $parametros['txt_id_postulante']), 
 
         );
 
