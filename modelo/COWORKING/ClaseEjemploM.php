@@ -8,10 +8,10 @@ class claseEjemploM {
         $this->db = new db();
     }
 
-    // Inserta un nuevo espacio en la base de datos
     function insertarnombre($param) {
+        $estado = ($param['estado'] == 'Activo') ? 'A' : 'I'; // A para Activo, I para Inactivo
         $sql = "INSERT INTO co_espacio (nombre_espacio, aforo_espacio, precio_espacio, estado_espacio, id_categoria) 
-                VALUES ('".$param['nombre']."', '".$param['aforo']."', '".$param['precio']."', '".$param['estado']."', '".$param['categoria']."')";
+                VALUES ('".$param['nombre']."', '".$param['aforo']."', '".$param['precio']."', '".$estado."', '".$param['categoria']."')";
         $resp = $this->db->sql_string($sql);
         return $resp;
     }
@@ -24,16 +24,18 @@ class claseEjemploM {
 
    // Actualiza un espacio
     function actualizarEspacio($param) {
+        $estado = ($param['estado'] == 'Activo') ? 'A' : 'I'; // A para Activo, I para Inactivo
         $sql = "UPDATE co_espacio SET 
                 nombre_espacio = '".$param['nombre']."', 
                 aforo_espacio = '".$param['aforo']."', 
                 precio_espacio = '".$param['precio']."', 
-                estado_espacio = '".$param['estado']."', 
+                estado_espacio = '".$estado."', 
                 id_categoria = '".$param['categoria']."'
                 WHERE id_espacio = ".$param['id_espacio'];
         $resp = $this->db->sql_string($sql);
         return $resp;
-    }
+}
+
 
     // Obtiene todos los espacios
     function listardebase() {
@@ -58,16 +60,16 @@ class claseEjemploM {
     }
 
      // Insertar una nueva categoría
-     function insertarCategoria($datos) {
-        $stmt = $this->db->prepare("INSERT INTO co_categoria (nombre_categoria) VALUES (:nombre)");
-        $stmt->bindParam(':nombre', $datos['nombre']);
-        return $stmt->execute();
+     function insertarCategoria($datos, $tabla) {
+        $stmt = $this->db->inserts($tabla, $datos);
+        return $stmt;
     }
 
     // Listar categorías
     function listarCategorias() {
-        $stmt = $this->db->query("SELECT id_categoria, nombre_categoria FROM co_categoria");
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $stmt = $this->db->datos("SELECT id_categoria, nombre_categoria FROM co_categoria");
+        return $stmt;
     }
+    
 }
 ?>

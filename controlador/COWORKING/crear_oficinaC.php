@@ -1,4 +1,4 @@
-<?php
+<?php 
 include(dirname(__DIR__, 2).'/modelo/COWORKING/ClaseEjemploM.php');
 
 $controlador = new claseEjemplo();
@@ -28,7 +28,16 @@ if (isset($_POST['edit'])) {
 // Eliminar espacio
 if (isset($_POST['delete'])) {
     $id = $_POST['id'];
-    echo json_encode($controlador->delete($id));
+    if (isset($id) && is_numeric($id)) {
+        $resultado = $controlador->delete($id);
+        if ($resultado) {
+            echo json_encode(['success' => true]);
+        } else {
+            echo json_encode(['success' => false, 'message' => 'No se pudo eliminar el espacio.']);
+        }
+    } else {
+        echo json_encode(['success' => false, 'message' => 'ID inválido.']);
+    }
 }
 
 // Agregar nueva categoría
@@ -60,20 +69,15 @@ class claseEjemplo {
     function add($parametros) {
         return $this->modelo->insertarnombre($parametros);
     }
-    
+
     // Editar espacio
     function edit($parametros) {
         return $this->modelo->actualizarEspacio($parametros);
     }
 
     // Eliminar espacio
-    function delete($id) {
-        return $this->modelo->eliminarEspacio($id);
-    }
-
-    // Agregar nueva categoría
-    function addCategoria($parametros) {
-        return $this->modelo->insertarCategoria($parametros);
+    function delete($id_espacio) {
+        return $this->modelo->eliminarEspacio($id_espacio);
     }
 
     // Listar categorías
@@ -81,9 +85,16 @@ class claseEjemplo {
         $lista = $this->modelo->listarCategorias(); 
         $select = '';
         foreach ($lista as $value) {
-            $select .= '<option value="'.$value['id'].'">'.$value['Nombre'].'</option>';
+            $select .= '<option value="'.$value['id_categoria'].'">'.$value['nombre_categoria'].'</option>';
         }
         return $select;
+    }
+
+    // Añadir categoría
+    function addCategoria($parametros) {
+        $datos[0]["campo"] = "nombre_categoria";
+        $datos[0]["dato"] = $parametros["nombre"]; 
+        return $this->modelo->insertarCategoria($datos, "co_categoria");
     }
 
     // Listar espacios
@@ -91,42 +102,41 @@ class claseEjemplo {
         $lista = $this->modelo->listardebase();
         $tr = '';
         foreach ($lista as $value) {
+            $estado = $value['estado_espacio'] == 'A' ? 'Activo' : 'Inactivo';
             $tr .= '<tr>
-                <td>'.htmlspecialchars($value['id_espacio'], ENT_QUOTES, 'UTF-8').'</td>
-                <td>'.htmlspecialchars($value['nombre_espacio'], ENT_QUOTES, 'UTF-8').'</td>
-                <td>'.htmlspecialchars($value['aforo_espacio'], ENT_QUOTES, 'UTF-8').'</td>
-                <td>'.htmlspecialchars($value['precio_espacio'], ENT_QUOTES, 'UTF-8').'</td>
-                <td>'.htmlspecialchars($value['estado_espacio'], ENT_QUOTES, 'UTF-8').'</td>
-                <td>'.htmlspecialchars($value['id_categoria'], ENT_QUOTES, 'UTF-8').'</td>
+                <td>' . htmlspecialchars($value['id_espacio'], ENT_QUOTES, 'UTF-8') . '</td>
+                <td>' . htmlspecialchars($value['nombre_espacio'], ENT_QUOTES, 'UTF-8') . '</td>
+                <td>' . htmlspecialchars($value['aforo_espacio'], ENT_QUOTES, 'UTF-8') . '</td>
+                <td>' . htmlspecialchars($value['precio_espacio'], ENT_QUOTES, 'UTF-8') . '</td>
+                <td>' . htmlspecialchars($estado, ENT_QUOTES, 'UTF-8') . '</td>
+                <td>' . htmlspecialchars($value['id_categoria'], ENT_QUOTES, 'UTF-8') . '</td>
                 <td>
-                <button class="btn btn-sm btn-primary" onclick="editarEspacio('.$value['id_espacio'].')"><i class="bx bx-edit"></i></button>
-                <button class="btn btn-sm btn-danger" onclick="eliminarEspacio('.$value['id_espacio'].')"><i class="bx bx-trash"></i></button>
+                <button class="btn btn-sm btn-primary" onclick="editarEspacio(' . htmlspecialchars($value['id_espacio'], ENT_QUOTES, 'UTF-8') . ')"><i class="bx bx-edit"></i></button>
+                <button class="btn btn-sm btn-danger" onclick="eliminarEspacio(this)" data-id="' . htmlspecialchars($value['id_espacio'], ENT_QUOTES, 'UTF-8') . '"><i class="bx bx-trash"></i></button>
+                <button class="btn btn-sm btn-secondary" onclick="openFurnitureModal(' . htmlspecialchars($value['id_espacio'], ENT_QUOTES, 'UTF-8') . ')">Gestionar Mobiliario</button>
                 </td>
-               <button class="btn btn-sm btn-secondary" onclick="openFurnitureModal('.htmlspecialchars($value['id_espacio'], ENT_QUOTES, 'UTF-8').')">Gestionar Mobiliario</button>
-            </tr>';
+                </tr>';
         }   
         return $tr;
     }
-    
+
     // Agregar mobiliario
     function addMobiliario($parametros) {
-        $res = $this->modelo->insertarMobiliario($parametros);
-        return $res;
+        return $this->modelo->insertarMobiliario($parametros);
     }
 
     // Listar mobiliario por espacio
     function listarMobiliario($id_espacio) {
         $lista = $this->modelo->listarMobiliario($id_espacio);
-        $tr = '';  // Inicialización corregida
+        $tr = '';  
         foreach ($lista as $value) {
             $tr .= '<tr>
                         <td>'.htmlspecialchars($value['nombre_mobiliario'], ENT_QUOTES, 'UTF-8').'</td>
                         <td>'.htmlspecialchars($value['cantidad'], ENT_QUOTES, 'UTF-8').'</td>
-                        <td><button class="btn btn-sm btn-danger" onclick="eliminarMobiliario('.$value['id'].')">Eliminar</button></td>
+                        <td><button class="btn btn-sm btn-danger" onclick="eliminarMobiliario('.$value['id_espacio'].')">Eliminar</button></td>
                     </tr>';
         }
         return $tr;
     }
 }
-
 ?>
