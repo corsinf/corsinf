@@ -86,7 +86,7 @@
                         limpiar_campos_formacion_academica_modal();
                     <?php } ?>
                     $('#modal_agregar_formacion').modal('hide');
-                } else if (response == -2) {
+                } else {
                     Swal.fire('', 'Operación fallida', 'warning');
                 }
             }
@@ -101,6 +101,7 @@
     }
 
     function delete_datos() {
+        //Para revisar y enviar el dato como parametro 
         id = $('#txt_formacion_id').val();
         Swal.fire({
             title: 'Eliminar Registro?',

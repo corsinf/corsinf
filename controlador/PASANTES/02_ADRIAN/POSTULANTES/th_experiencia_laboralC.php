@@ -27,7 +27,7 @@ class th_experiencia_laboralC
 
     function listar($id)
     {
-        $datos = $this->modelo->where('th_pos_id', $id)->listar($id);
+        $datos = $this->modelo->where('th_pos_id', $id)->listar();
         return $datos;
     }
 
