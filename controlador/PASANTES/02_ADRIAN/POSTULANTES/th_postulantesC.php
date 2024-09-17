@@ -43,7 +43,7 @@ class th_postulantesC
 
     function listar_todo()
     {
-        $lista = $this->modelo->listar();
+        $lista = $this->modelo->where('th_pos_estado', 1)->listar();
         return $lista;
     }
 

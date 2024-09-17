@@ -57,7 +57,7 @@ class th_formacion_academicaC
         if ($id == '') {
             $datos = $this->modelo->where('th_fora_estado', 1)->listar();
         } else {
-            $datos = $this->modelo->where('th_fora_id_formacion_academica', $id)->listar();
+            $datos = $this->modelo->where('th_fora_id', $id)->listar();
         }
         return $datos;
     }
@@ -76,7 +76,7 @@ class th_formacion_academicaC
         if ($parametros['_id'] == '') {
             $datos = $this->modelo->insertar($datos);
         } else {
-            $where[0]['campo'] = 'th_fora_id_formacion_academica';
+            $where[0]['campo'] = 'th_fora_id';
             $where[0]['dato'] = $parametros['_id'];
             $datos = $this->modelo->editar($datos, $where);
         }
@@ -91,7 +91,7 @@ class th_formacion_academicaC
             array('campo' => 'th_fora_estado', 'dato' => 0),
         );
 
-        $where[0]['campo'] = 'th_fora_id_formacion_academica';
+        $where[0]['campo'] = 'th_fora_id';
         $where[0]['dato'] = strval($id);
 
         $datos = $this->modelo->editar($datos, $where);
