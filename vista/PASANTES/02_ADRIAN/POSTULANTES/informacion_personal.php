@@ -1652,37 +1652,7 @@ if (isset($_GET['id'])) {
             }
         });
 
-        //Validación Contacto de Emergencia
-        $("#form_contacto_emergencia").validate({
-            rules: {
-                txt_nombre_contacto_emergencia: {
-                    required: true,
-                },
-                txt_telefono_contacto_emergencia: {
-                    required: true,
-                },
-            },
-            messages: {
-                txt_nombre_contacto_emergencia: {
-                    required: "Por favor ingrese el nombre de su contacto",
-                },
-                txt_telefono_contacto_emergencia: {
-                    required: "Por favor ingrese el teléfono de su contacto",
-                },
-            },
-
-            highlight: function(element) {
-                // Agrega la clase 'is-invalid' al input que falla la validación
-                $(element).addClass('is-invalid');
-                $(element).removeClass('is-valid');
-            },
-            unhighlight: function(element) {
-                // Elimina la clase 'is-invalid' si la validación pasa
-                $(element).removeClass('is-invalid');
-                $(element).addClass('is-valid');
-
-            }
-        });
+        
 
         //Validación Formación Académica
         $("#form_formacion_academica").validate({
