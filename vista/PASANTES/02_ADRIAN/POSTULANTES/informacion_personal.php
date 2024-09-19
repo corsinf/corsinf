@@ -334,24 +334,6 @@ if (isset($_GET['id'])) {
         }
     }
 
-    //Referencias Laborales
-    function insertar_editar_referencias() {
-        var txt_nombre_referencia = $('#txt_nombre_referencia').val();
-        var txt_telefono_referencia = $('#txt_telefono_referencia').val();
-        var txt_copia_carta_recomendacion = $('#txt_copia_carta_recomendacion').val();
-
-        var parametros_referencias = {
-            'txt_nombre_referencia': txt_nombre_referencia,
-            'txt_telefono_referencia': txt_telefono_referencia,
-            'txt_copia_carta_recomendacion': txt_copia_carta_recomendacion,
-        }
-
-        if ($("#form_referencias_laborales").valid()) {
-            // Si es válido, puedes proceder a enviar los datos por AJAX
-            console.log(parametros_referencias)
-        }
-    }
-
     //Contratos de Trabajo
     function insertar_editar_contrato_laboral() {
         var txt_nombre_empresa_contrato = $('#txt_nombre_empresa_contrato').val();
@@ -469,7 +451,6 @@ if (isset($_GET['id'])) {
         $('#txt_agregar_documento_identidad').val('');
         $('#txt_nombre_certificado_medico').val('');
         $('#txt_respaldo_medico').val('');
-        $('#ddl_tipo_referencia').val('');
         $('#txt_nombre_referencia').val('');
         $('#txt_telefono_referencia').val('');
         $('#txt_copia_carta_recomendacion').val('');
@@ -512,8 +493,8 @@ if (isset($_GET['id'])) {
         <div class="container-fluid">
             <div class="main-body">
                 <div class="row d-flex justify-content-center">
+                    <!-- Cards de la izquierda -->
                     <div class="col-xs-5 col-sm-5 col-md-5 col-lg-4 col-xxl-3">
-                        <!-- Cards de la izquierda -->
                         <div class="card">
                             <!-- Información Personal -->
                             <div class="card-body">
@@ -639,8 +620,8 @@ if (isset($_GET['id'])) {
                         </div>
                     </div>
 
+                    <!-- Cards de la derecha -->
                     <div class="col-xs-7 col-sm-7 col-md-7 col-lg-8 col-xxl-8">
-                        <!-- Cards de la derecha -->
                         <div class="card-body">
                             <!-- Nav Cards -->
                             <ul class="nav nav-tabs nav-success" role="tablist">
@@ -849,17 +830,9 @@ if (isset($_GET['id'])) {
                                                     </div>
                                                 </div>
                                                 <hr class="my-0 mb-3">
-                                                <div class="row mb-2">
-                                                    <div class="col-10">
-                                                        <p class="fw-bold my-0 d-flex align-items-center">Ing. Roberto Carapaz</p>
-                                                        <p class="my-0 d-flex align-items-center">+593 994645643</p>
-                                                        <a href="#">Carta de Recomendación</a>
-                                                    </div>
-                                                    <div class="col-2 d-flex justify-content-end align-items-center">
-                                                        <a href="#" class=""><i class='text-info bx bx-pencil me-2' style="font-size: 20px;"></i></a>
-                                                        <a href="#" class=""><i class='text-danger bx bx-trash me-0' style="font-size: 20px;"></i></a>
-                                                    </div>
-                                                </div>
+                                                
+                                                <?php include_once('../vista/PASANTES/02_ADRIAN/POSTULANTES/pos_referencias_laborales.php'); ?>
+
                                             </div>
                                         </div>
                                     </div>
@@ -1250,40 +1223,6 @@ if (isset($_GET['id'])) {
     </div>
 </div>
 
-<!-- Modal para agregar referencias laborales-->
-<div class="modal" id="modal_agregar_referencia_laboral" tabindex="-1" aria-modal="true" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-
-            <!-- Modal Header -->
-            <div class="modal-header">
-                <h5><small class="text-body-secondary">Agregue una referencia</small></h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="limpiar_parametros()"></button>
-            </div>
-            <!-- Modal body -->
-            <form id="form_referencias_laborales">
-                <div class="modal-body">
-                    <div class="mb-3">
-                        <label for="txt_nombre_referencia" class="form-label form-label-sm">Nombre del empleador <label style="color: red;">*</label></label>
-                        <input type="text" class="form-control form-control-sm" name="txt_nombre_referencia" id="txt_nombre_referencia" placeholder="Escriba el nombre de el empleador">
-                    </div>
-                    <div class="mb-3">
-                        <label for="txt_telefono_referencia" class="form-label form-label-sm">Teléfono del empleador <label style="color: red;">*</label></label>
-                        <input type="text" class="form-control form-control-sm" name="txt_telefono_referencia" id="txt_telefono_referencia" placeholder="Escriba el número de contacto de el empleador">
-                    </div>
-                    <div class="mb-3">
-                        <label for="txt_copia_carta_recomendacion" class="form-label form-label-sm">Copia de la carta de recomendación <label style="color: red;">*</label></label>
-                        <input type="file" class="form-control form-control-sm" name="txt_copia_carta_recomendacion" id="txt_copia_carta_recomendacion" accept=".pdf">
-                    </div>
-                </div>
-                <div class="modal-footer d-flex justify-content-center">
-                    <button type="button" class="btn btn-success btn-sm" id="btn_guardar_referencia" onclick="insertar_editar_referencias();">Guardar Referencia Laboral</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-
 <!-- Modal para agregar contratos de trabajo-->
 <div class="modal" id="modal_agregar_contratos" tabindex="-1" aria-modal="true" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
     <div class="modal-dialog modal-dialog-centered">
@@ -1652,8 +1591,6 @@ if (isset($_GET['id'])) {
             }
         });
 
-        
-
         //Validación Formación Académica
         $("#form_formacion_academica").validate({
             rules: {
@@ -1752,44 +1689,6 @@ if (isset($_GET['id'])) {
                 },
                 txt_respaldo_medico: {
                     required: "Por favor suba un documento que lo respalde",
-                },
-            },
-
-            highlight: function(element) {
-                // Agrega la clase 'is-invalid' al input que falla la validación
-                $(element).addClass('is-invalid');
-                $(element).removeClass('is-valid');
-            },
-            unhighlight: function(element) {
-                // Elimina la clase 'is-invalid' si la validación pasa
-                $(element).removeClass('is-invalid');
-                $(element).addClass('is-valid');
-
-            }
-        });
-
-        //Validación Referencias Laborales
-        $("#form_referencias_laborales").validate({
-            rules: {
-                txt_nombre_referencia: {
-                    required: true,
-                },
-                txt_telefono_referencia: {
-                    required: true,
-                },
-                txt_copia_carta_recomendacion: {
-                    required: true,
-                },
-            },
-            messages: {
-                txt_nombre_referencia: {
-                    required: "Por favor ingrese el nombre de su referencia laboral",
-                },
-                txt_telefono_referencia: {
-                    required: "Por favor ingrese el teléfono de su referencia laboral",
-                },
-                txt_copia_carta_recomendacion: {
-                    required: "Por favor suba la carta de recomendación",
                 },
             },
 
