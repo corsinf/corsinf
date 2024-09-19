@@ -22,32 +22,36 @@ class claseEjemploM {
         return $resp;
     }
 
-   // Actualiza un espacio
-    function actualizarEspacio($param) {
-        $estado = ($param['estado'] == 'Activo') ? 'A' : 'I'; // A para Activo, I para Inactivo
-        $sql = "UPDATE co_espacio SET 
-                nombre_espacio = '".$param['nombre']."', 
-                aforo_espacio = '".$param['aforo']."', 
-                precio_espacio = '".$param['precio']."', 
-                estado_espacio = '".$estado."', 
-                id_categoria = '".$param['categoria']."'
-                WHERE id_espacio = ".$param['id_espacio'];
-        $resp = $this->db->sql_string($sql);
-        return $resp;
+// Actualiza un espacio
+function actualizarEspacio($param) {
+    $estado = ($param['estado'] == 'Activo') ? 'A' : 'I';
+    $sql = "UPDATE co_espacio SET 
+                nombre_espacio = '" . $param['nombre'] . "',
+                aforo_espacio = '" . $param['aforo'] . "',
+                precio_espacio = '" . $param['precio'] . "',
+                estado_espacio = '" . $estado . "',
+                id_categoria = '" . $param['categoria'] . "'
+            WHERE id_espacio = " . intval($param['id_espacio']);
+
+    $resp = $this->db->sql_string($sql);
+    return $resp;
 }
 
-
-    // Obtiene todos los espacios
+    //Obtiene espacios
+    
     function listardebase() {
-        $sql = "SELECT * FROM co_espacio";
+        $sql = "SELECT e.*, c.nombre_categoria
+                FROM co_espacio e
+                INNER JOIN co_categoria c ON e.id_categoria = c.id_categoria
+                ORDER BY id_espacio DESC";
         $resp = $this->db->datos($sql);
         return $resp;
     }
 
     // Inserta un nuevo mobiliario
     function insertarMobiliario($datos) {
-        $sql = "INSERT INTO co_mobiliario (nombre_mobilario, cantidad, id_espacio) 
-                VALUES ('".$datos['nombre']."', ".$datos['cantidad'].", ".$datos['id_espacio'].")";
+        $sql = "INSERT INTO co_mobiliario (detalle_mobiliario, cantidad, id_espacio) 
+                VALUES ('".$datos['detalle']."', ".$datos['cantidad'].", ".$datos['id_espacio'].")";
         $resp = $this->db->sql_string($sql);
         return $resp;
     }
@@ -70,6 +74,12 @@ class claseEjemploM {
         $stmt = $this->db->datos("SELECT id_categoria, nombre_categoria FROM co_categoria");
         return $stmt;
     }
+    function listarMobiliario($id_espacio) {
+        $sql = "SELECT * FROM co_mobiliario WHERE id_espacio = " . intval($id_espacio);
+        $resp = $this->db->datos($sql);
+        return $resp;
+    }
+    
     
 }
 ?>

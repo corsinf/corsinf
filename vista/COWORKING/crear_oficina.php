@@ -66,8 +66,8 @@
 <!-- Estado check -->
 
 <form id="estadoForm" method="POST" action="controlador.php">
+    <label for="estadoActivo">Estado:</label>
     <div class="form-check">
-        <label for="estadoActivo">Estado:</label>
         <input class="form-check-input" type="checkbox" id="estadoActivo" name="estado" value="activo" checked onclick="toggleEstado('activo')">
         <label class="form-check-label" for="estadoActivo">Activo</label>
     </div>
@@ -159,7 +159,57 @@
 
                     </div>
                 </div>
-
+ <!-- Modal para editar -->
+ <div class="modal fade" id="editEspacioModal" tabindex="-1" aria-labelledby="editEspacioModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editEspacioModalLabel">Editar Espacio</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="editEspacioForm">
+                    <input type="hidden" id="edit_id_espacio" name="edit_id_espacio">
+                    <div class="mb-3">
+                        <label for="edit_nombre_espacio" class="form-label">Nombre</label>
+                        <input type="text" class="form-control" id="edit_nombre_espacio" name="edit_nombre_espacio" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="edit_aforo_espacio" class="form-label">Aforo</label>
+                        <input type="number" class="form-control" id="edit_aforo_espacio" name="edit_aforo_espacio" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="edit_precio_espacio" class="form-label">Precio</label>
+                        <input type="number" class="form-control" id="edit_precio_espacio" name="edit_precio_espacio" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="edit_estado_espacio" class="form-label">Estado</label>
+                        <select class="form-select" id="edit_estado_espacio" name="edit_estado_espacio" required>
+                            <option value="Activo">Activo</option>
+                            <option value="Inactivo">Inactivo</option>
+                        </select>
+                    </div>
+                    <div class="form-group mb-3">
+                <label for="ddl_categoriaEspacio">Categoría:</label>
+                <div class="d-flex align-items-center">
+                    <select class="form-select me-2" id="ddl_categoriaEspacio" name="ddl_categoriaEspacio" required>
+                        <option value="" disabled selected>Selecciona una categoría</option>
+                        <!-- Aquí irán las opciones cargadas dinámicamente -->
+                    </select>
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#categoryModal">
+                    <i class='bx bx-plus-circle'></i>
+                    </button>
+                </div>
+            </div>
+        </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-primary" onclick="guardarEdicion()">Guardar cambios</button>
+            </div>
+        </div>
+    </div>
+</div>
              <!-- Modal -->
 <div class="modal fade" id="furnitureModal" tabindex="-1" aria-labelledby="furnitureModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
@@ -173,25 +223,24 @@
 
                 <form id="furniture_form">
                     <div class="form-group mb-3">
-                        <label for="txt_furniture_name">Nombre del Mueble:</label>
-                        <input type="text" class="form-control" name="txt_furniture_name" id="txt_furniture_name" placeholder="Introduce el nombre del mueble" required>
+                        <label for="txt_furniture_detail">Detalle del Mueble:</label>
+                        <input type="text" class="form-control" name="txt_furniture_detail" id="txt_furniture_detail" placeholder="Introduce el detalle del mueble" required>
                     </div>
                     <div class="form-group mb-3">
                         <label for="txt_furniture_quantity">Cantidad:</label>
                         <input type="number" class="form-control" name="txt_furniture_quantity" id="txt_furniture_quantity" placeholder="Introduce la cantidad" required>
                     </div>
                     <input type="hidden" id="hidden_espacio_id" name="hidden_espacio_id">
-                    <div class="text-end mb-4">
-                        <button type="button" onclick="enviarMobiliario()" class="btn btn-primary btn-sm">Guardar Mobiliario</button>
-                    </div>
+                        <div class="text-end mb-4">
+                            <button type="button" onclick="enviarMobiliario()" class="btn btn-primary btn-sm">Guardar Mobiliario</button>
+                        </div>
                 </form>
 
                 <table id="tbl_furniture" class="table table-bordered mb-4">
                     <thead class="thead-dark">
                         <tr>
-                            <th>Nombre del Mueble</th>
+                            <th>Detalle del mueble</th>
                             <th>Cantidad</th>
-                            <th>Acciones</th>
                         </tr>
                     </thead>
                     <tbody id="tbl_furniture_body">
@@ -237,6 +286,7 @@
             dataType: 'json',
             success: function (response) {
                 $('#ddl_categoriaEspacio').html(response);
+                
             }
         });
     }
@@ -290,27 +340,35 @@
 }
 
 function guardarEdicion() {
-    const formData = $('#editEspacioForm').serialize();
+    var formData = {
+        id_espacio: $('#edit_id_espacio').val(),
+        nombre: $('#edit_nombre_espacio').val(),
+        aforo: $('#edit_aforo_espacio').val(),
+        precio: $('#edit_precio_espacio').val(),
+        estado: $('#edit_estado_espacio').val(),
+        categoria: $('#edit_categoria_espacio').val()
+    };
+
     $.ajax({
         url: '../controlador/COWORKING/crear_oficinaC.php',
         method: 'POST',
         data: { edit: true, data: formData },
+        dataType: 'json',
         success: function (response) {
-            Swal.fire('Guardado!', 'Los cambios han sido guardados.', 'success');
-            $('#editEspacioModal').modal('hide');
-            listarEspacios(); // Recargar la lista de espacios
+            if (response.success) {
+                Swal.fire('Guardado', 'Los cambios han sido guardados.', 'success');
+                $('#editEspacioModal').modal('hide');
+                listarEspacios(); // Recargar la lista de espacios
+            } else {
+                Swal.fire('Error', response.message, 'error');
+            }
         },
         error: function (xhr, status, error) {
             console.error('Error al guardar los cambios:', error);
-            Swal.fire(
-                'Error',
-                'Hubo un problema al guardar los cambios.',
-                'error'
-            );
+            Swal.fire('Error', 'Hubo un problema al guardar los cambios.', 'error');
         }
     });
 }
-
 function eliminarEspacio(button) {
     // Obtener el ID del espacio del atributo data-id del botón
     var idEspacio = $(button).data('id');
@@ -379,7 +437,7 @@ function enviarDatos() {
         estados.push('inactivo');
     }
 
-    // Verifica si algún campo está vacío
+    
     if (!nombre || !aforo || !precio || !categoria || estados.length === 0) {
         Swal.fire({
             title: 'Error',
@@ -387,14 +445,14 @@ function enviarDatos() {
             icon: 'error',
             confirmButtonText: 'Ok'
         });
-        return;  // Detiene el envío de los datos
+        return;  
     }
 
     var datos = {
         nombre: nombre,
         aforo: aforo,
         precio: precio,
-        estados: estados,  // Pasar los estados seleccionados
+        estados: estados,  
         categoria: categoria
     };
 
@@ -428,35 +486,54 @@ function enviarDatos() {
             method: 'GET',
             data: { listaMobiliario: true, id_espacio: id_espacio },
             success: function (response) {
-                $('#tbl_furniture_body').html(response);
+                $('#tbl_furniture_body').html(response);    
             }
         });
     }
 
     function enviarMobiliario() {
-        var datos = {
-            nombre: $('#txt_furniture_name').val(),
-            cantidad: $('#txt_furniture_quantity').val(),
-            id_espacio: $('#hidden_espacio_id').val()
-        };
+    var datos = {
+        detalle: $('#txt_furniture_detail').val(),  
+        cantidad: $('#txt_furniture_quantity').val(),
+        id_espacio: $('#hidden_espacio_id').val()
+    };
 
-        $.ajax({
-            url: '../controlador/COWORKING/crear_oficinaC.php',
-            method: 'POST',
-            data: { addMobiliario: true, data: datos },
-            success: function (response) {
-                alert('Mobiliario agregado correctamente');
-                listarMobiliario(datos.id_espacio);
-            },
-            error: function (xhr, status, error) {
-                console.error('Error al enviar los datos:', error);
-                alert('Hubo un error al guardar los datos. Por favor, intenta de nuevo.');
-            }
+    if (!datos.detalle || !datos.cantidad || !datos.id_espacio) {
+        Swal.fire({
+            title: 'Error',
+            text: 'Todos los campos son obligatorios.',
+            icon: 'error',
+            confirmButtonText: 'Ok'
         });
+        return;  
     }
 
+    $.ajax({
+        url: '../controlador/COWORKING/crear_oficinaC.php',
+        method: 'POST',
+        data: { addMobiliario: true, data: datos },
+        success: function (response) {
+            Swal.fire({
+                title: 'Mobiliario agregado correctamente',
+                icon: 'success',
+                confirmButtonText: 'Ok'
+            });
+            listarMobiliario(datos.id_espacio); 
+        },
+        error: function (xhr, status, error) {
+            Swal.fire({
+                title: 'Error al agregar mobiliario',
+                text: 'Hubo un problema. Por favor, intenta nuevamente.',
+                icon: 'error',
+                confirmButtonText: 'Ok'
+            });
+        }
+    });
+}
+
+
         function openFurnitureModal(id_espacio) {
-        $('#hidden_espacio_id').val(id_espacio);
+        $('#hidden_espacio_id').val(id_espacio);    
         listarMobiliario(id_espacio);
         $('#furnitureModal').modal('show');
     }
