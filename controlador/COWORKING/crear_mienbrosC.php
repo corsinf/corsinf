@@ -1,10 +1,21 @@
 <?php
 include(dirname(__DIR__, 2) . '/modelo/COWORKING/crear_mienbrosM.php');
+require_once(dirname(__DIR__, 2) . '/lib/pdf/cabecera_pdf.php');
 
 $controlador = new crear_mienbrosC();
 $id_miembro = isset($_GET['id_miembro']) ? intval($_GET['id_miembro']) : 0;
 $id_sala = isset($_POST['id_sala']) ? $_POST['id_sala'] : '';
 
+
+if (isset($_GET['generarPDFMiembros'])) {
+    
+    echo json_encode($controlador->generarPDFMiembros());
+}
+
+if (isset($_GET['generarPDFCompras'])) {
+    
+    echo json_encode($controlador->generarPDFCompras());
+}
 
 if (isset($_GET['lista_mienbro'])) {
     echo json_encode($controlador->listar());
@@ -76,10 +87,12 @@ if (isset($_POST['action']) && $_POST['action'] === 'verificar_compras') {
 class crear_mienbrosC
 {
     private $modelo;
-
+    private $pdf;
+    
     public function __construct() 
     {
         $this->modelo = new crear_mienbrosM();
+        $this->pdf = new cabecera_pdf();
     }
 
     function listar_productos()
@@ -245,6 +258,133 @@ class crear_mienbrosC
             return json_encode(['error' => 'Error al verificar las compras del miembro']);
         }
     }
+
+
+
+    function generarPDFMiembros(){
+        $titulo = 'MI PRIMER PDF';
+        $tablaHTML = array();
+        $fechaini = '';
+        $fechafin = '';
+        $sizetable = 8  ; 
+        $mostrar = 1;
+        
+        
+        $tablaHTML[0]['medidas']=$medidas = array(195);
+		$tablaHTML[0]['alineado']=$alineado  = array('C');
+		$tablaHTML[0]['datos']=$header = array('Informe de miembros');
+        $tablaHTML[0]['estilo']='B';
+        $tablaHTML[0]['size'] = 20;
+
+        $tablaHTML[1]['medidas']=$medidas = array(195);
+		$tablaHTML[1]['alineado']=$alineado  = array('C');
+		$tablaHTML[1]['datos']=$header = array('');
+
+        $tablaHTML[2]['medidas']=$medidas = array(195);
+		$tablaHTML[2]['alineado']=$alineado  = array('C');
+		$tablaHTML[2]['datos']=$header = array('');
+
+        //$tablaHTML[3]['medidas']=$medidas = array(25, 100);
+		//$tablaHTML[3]['alineado']=$alineado  = array('C');
+		//$tablaHTML[3]['datos']=$header = array('Nombre', 'Alejandro');
+		//$tablaHTML[0]['borde'] = '1';
+
+        $data = $this->modelo->listardebase();
+        $tablaHTML[3]['medidas']=$medidas = array(38, 38, 38, 38, 38);
+		$tablaHTML[3]['alineado']=$alineado  = array('C', 'C', 'C', 'C', 'C');
+		$tablaHTML[3]['datos']= array('Nombre', 'Apellido', 'Telefono', 'Direccion', 'Espacio');
+		$tablaHTML[3]['estilo']='B';
+		$tablaHTML[3]['borde'] = '1';
+        $tablaHTML[3]['size'] = 10;
+ 
+        $posicion = 4;
+
+        foreach($data as $key => $value)
+        {
+        //print_r($value);die();
+        $tablaHTML[$posicion]['medidas']= $tablaHTML[3]['medidas'];
+		$tablaHTML[$posicion]['alineado']= $tablaHTML[3]['alineado'];
+		$tablaHTML[$posicion]['datos']= array($value['nombre_miembro'], $value['apellido_miembro'], $value['telefono_miembro'], $value['direccion_miembro'], $value['id_espacio']);
+		$tablaHTML[$posicion]['estilo']='';
+		$tablaHTML[$posicion]['borde'] = '  1';
+        $tablaHTML[$posicion]['size'] = 9;
+        $posicion ++;
+        }
+        
+        $this->pdf->cabecera_reporte_MC($titulo,$tablaHTML,$contenido=false, $image=false, $fechaini,$fechafin,$sizetable,$mostrar, 5);
+        //print_r('HOLA MUNDO');die();
+    }
+
+
+    function generarPDFCompras() {
+        $titulo = 'MI PRIMER PDF';
+        $tablaHTML = array();
+        $fechaini = '';
+        $fechafin = '';
+        $sizetable = 8; 
+        $mostrar = 1;
+    
+        $tablaHTML[0]['medidas'] = array(195);
+        $tablaHTML[0]['alineado'] = array('C');
+        $tablaHTML[0]['datos'] = array('Informe de compras');
+        $tablaHTML[0]['estilo'] = 'B';
+        $tablaHTML[0]['size'] = 20;
+    
+        $tablaHTML[1]['medidas'] = array(195);
+        $tablaHTML[1]['alineado'] = array('C');
+        $tablaHTML[1]['datos'] = array('');
+    
+        $tablaHTML[2]['medidas'] = array(195);
+        $tablaHTML[2]['alineado'] = array('C');
+        $tablaHTML[2]['datos'] = array('');
+    
+        $tablaHTML[3]['medidas'] = array(27, 27, 27, 27, 27, 27, 27);
+        $tablaHTML[3]['alineado'] = array('C', 'C', 'C', 'C', 'C', 'C', 'C');
+        $tablaHTML[3]['datos'] = array('Sala', 'Compra', 'Miembro', 'Producto', 'Cantidad', 'Precio', 'Total');
+        $tablaHTML[3]['estilo'] = 'B';
+        $tablaHTML[3]['borde'] = '1';
+        $tablaHTML[3]['size'] = 10;
+    
+        $posicion = 4;
+    
+        $compras_sala = $this->modelo->listacomprasala();
+        $compras_lista = $this->modelo->compraslista();
+    
+        // Crear un array asociativo para mapear id_compra a datos de compraslista
+        $compras_lista_map = array();
+        foreach ($compras_lista as $compra) {
+            $compras_lista_map[$compra['id_compra']] = $compra;
+        }
+    
+        foreach ($compras_sala as $key => $value) {
+            // Obtener datos adicionales de compraslista si existen, con nombre_completo
+            $datos_adicionales = $compras_lista_map[$value['id_compra']] ?? array('nombre_completo' => 'N/A');
+            
+            $tablaHTML[$posicion]['medidas'] = $tablaHTML[3]['medidas'];
+            $tablaHTML[$posicion]['alineado'] = $tablaHTML[3]['alineado'];
+            $tablaHTML[$posicion]['datos'] = array(
+                $value['id_sala'], 
+                $value['id_compra'], 
+                $datos_adicionales['nombre_completo'],  // Usamos nombre_completo
+                $value['id_producto'], 
+                $value['cantidad_compra'], 
+                $value['pvp_compra'], 
+                $value['total_compra']
+            );
+            $tablaHTML[$posicion]['estilo'] = '';
+            $tablaHTML[$posicion]['borde'] = '1';
+            $tablaHTML[$posicion]['size'] = 9;
+            $posicion++;
+        }
+    
+        $this->pdf->cabecera_reporte_MC($titulo, $tablaHTML, $contenido=false, $image=false, $fechaini, $fechafin, $sizetable, $mostrar, 5);
+    }
+    
+    
+    
+
+
+    
 }
 
 

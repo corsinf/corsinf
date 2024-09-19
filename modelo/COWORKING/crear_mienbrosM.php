@@ -89,21 +89,22 @@ class crear_mienbrosM
         return $this->db->sql_string($sql);
     }
 
-    function compraslista()
-    {
+    function compraslista() {
         $sql = "SELECT 
-                miembro.id_miembro,  
-                miembro.nombre_miembro,
-                miembro.id_espacio AS id_sala, 
-                id_compra, 
-                compra.id_producto, 
-                compra.cantidad_compra, 
-                compra.pvp_compra, 
-                compra.total_compra 
-            FROM co_compra AS compra
-            JOIN co_miembro AS miembro ON compra.id_miembro = miembro.id_miembro";
+                    miembro.id_miembro,  
+                    CONCAT(miembro.nombre_miembro, ' ', miembro.apellido_miembro) AS nombre_completo,  -- Concatenamos nombre y apellido
+                    miembro.id_espacio AS id_sala, 
+                    id_compra, 
+                    compra.id_producto, 
+                    compra.cantidad_compra, 
+                    compra.pvp_compra, 
+                    compra.total_compra 
+                FROM co_compra AS compra
+                JOIN co_miembro AS miembro ON compra.id_miembro = miembro.id_miembro";
         return $this->db->datos($sql);
     }
+    
+    
 
     function eliminar_miembro($id_miembro)
     {

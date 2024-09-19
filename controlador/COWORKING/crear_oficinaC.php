@@ -2,6 +2,11 @@
 include(dirname(__DIR__, 2).'/modelo/COWORKING/ClaseEjemploM.php');
 
 $controlador = new claseEjemplo();
+// Obtener datos de un espacio específico
+if (isset($_POST['getEspacio'])) {
+    $id_espacio = $_POST['id_espacio'];
+    echo json_encode($controlador->getEspacio($id_espacio));
+}
 
 // Listar categorías
 if (isset($_GET['categoria'])) {
@@ -64,16 +69,29 @@ class claseEjemplo {
     function __construct() {
         $this->modelo = new claseEjemploM();
     }
-
+    // Obtener datos de un espacio específico
+    function getEspacio($id_espacio) {
+        $espacio = $this->modelo->obtenerEspacio($id_espacio);
+        if ($espacio) {
+            return ['success' => true, 'espacio' => $espacio];
+        } else {
+            return ['success' => false, 'message' => 'No se pudo obtener el espacio.'];
+        }
+    }
     // Agregar espacio
     function add($parametros) {
         return $this->modelo->insertarnombre($parametros);
     }
 
     // Editar espacio
-    function edit($parametros) {
-        return $this->modelo->actualizarEspacio($parametros);
-    }
+        function edit($parametros) {
+            $resultado = $this->modelo->actualizarEspacio($parametros);
+            if ($resultado) {
+                return ['success' => true, 'message' => 'Espacio actualizado correctamente.'];
+            } else {
+                return ['success' => false, 'message' => 'No se pudo actualizar el espacio.'];
+            }
+        }
 
     // Eliminar espacio
     function delete($id_espacio) {
@@ -102,14 +120,14 @@ class claseEjemplo {
         $lista = $this->modelo->listardebase();
         $tr = '';
         foreach ($lista as $value) {
-            $estado = $value['estado_espacio'] == 'A' ? 'Activo' : 'Inactivo';
+            $estado = $value['estado_espacio'] == 'A' ? 'Inactivo' : 'Activo';
             $tr .= '<tr>
                 <td>' . htmlspecialchars($value['id_espacio'], ENT_QUOTES, 'UTF-8') . '</td>
                 <td>' . htmlspecialchars($value['nombre_espacio'], ENT_QUOTES, 'UTF-8') . '</td>
                 <td>' . htmlspecialchars($value['aforo_espacio'], ENT_QUOTES, 'UTF-8') . '</td>
                 <td>' . htmlspecialchars($value['precio_espacio'], ENT_QUOTES, 'UTF-8') . '</td>
                 <td>' . htmlspecialchars($estado, ENT_QUOTES, 'UTF-8') . '</td>
-                <td>' . htmlspecialchars($value['id_categoria'], ENT_QUOTES, 'UTF-8') . '</td>
+                <td>' . htmlspecialchars($value['nombre_categoria'], ENT_QUOTES, 'UTF-8') . '</td>
                 <td>
                 <button class="btn btn-sm btn-primary" onclick="editarEspacio(' . htmlspecialchars($value['id_espacio'], ENT_QUOTES, 'UTF-8') . ')"><i class="bx bx-edit"></i></button>
                 <button class="btn btn-sm btn-danger" onclick="eliminarEspacio(this)" data-id="' . htmlspecialchars($value['id_espacio'], ENT_QUOTES, 'UTF-8') . '"><i class="bx bx-trash"></i></button>
@@ -131,11 +149,11 @@ class claseEjemplo {
         $tr = '';  
         foreach ($lista as $value) {
             $tr .= '<tr>
-                        <td>'.htmlspecialchars($value['nombre_mobiliario'], ENT_QUOTES, 'UTF-8').'</td>
+                        <td>'.htmlspecialchars($value['detalle_mobiliario'], ENT_QUOTES, 'UTF-8').'</td>
                         <td>'.htmlspecialchars($value['cantidad'], ENT_QUOTES, 'UTF-8').'</td>
-                        <td><button class="btn btn-sm btn-danger" onclick="eliminarMobiliario('.$value['id_espacio'].')">Eliminar</button></td>
                     </tr>';
         }
+        $tr = str_replace(array("\r", "\n"), '', $tr);
         return $tr;
     }
 }
