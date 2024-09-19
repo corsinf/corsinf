@@ -93,8 +93,13 @@ if (isset($_GET['_id'])) {
                     $('#error_txt_nombre').text('El nombre del dispositivo ya está en uso.');
                 }
             },
-            error: function() {
-                Swal.fire('', 'Ocurrió un error inesperado. Por favor, inténtalo de nuevo.', 'error');
+            
+            error: function(xhr, status, error) {
+                console.log('Status: ' + status); 
+                console.log('Error: ' + error); 
+                console.log('XHR Response: ' + xhr.responseText); 
+
+                Swal.fire('', 'Error: ' + xhr.responseText, 'error');
             }
         });
 
@@ -256,9 +261,9 @@ if (isset($_GET['_id'])) {
                             <div class="d-flex justify-content-end pt-2">
 
                                 <?php if ($_id == '') { ?>
-                                    <button class="btn btn-primary btn-sm px-4 m-0" onclick="editar_insertar()" type="button"><i class="bx bx-save"></i> Guardar</button>
+                                    <button class="btn btn-success btn-sm px-4 m-0" onclick="editar_insertar()" type="button"><i class="bx bx-save"></i> Guardar</button>
                                 <?php } else { ?>
-                                    <button class="btn btn-primary btn-sm px-4 m-1" onclick="editar_insertar()" type="button"><i class="bx bx-save"></i> Guardar</button>
+                                    <button class="btn btn-success btn-sm px-4 m-1" onclick="editar_insertar()" type="button"><i class="bx bx-save"></i> Editar</button>
                                     <button class="btn btn-danger btn-sm px-4 m-1" onclick="delete_datos()" type="button"><i class="bx bx-trash"></i> Eliminar</button>
                                 <?php } ?>
                             </div>
