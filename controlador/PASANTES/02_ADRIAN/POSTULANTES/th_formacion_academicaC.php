@@ -41,7 +41,7 @@ class th_formacion_academicaC
                 '<div class="col-10">' .
                 '<h6 class="fw-bold">' . $value['th_fora_titulo_obtenido'] . '</h6>' .
                 '<p class="mb-2">' . $value['th_fora_institución'] . '</p>' .
-                '<p>' . $value['th_fora_fecha_inicio_formacion'] . ' - ' . (($value['th_fora_fecha_fin_formacion'] == '1900-01-01') ? 'Actualidad' : $value['th_fora_fecha_fin_formacion']) . '</p>' .
+                '<p>' . $value['th_fora_fecha_inicio_formacion'] . ' - ' . (($value['th_fora_fecha_fin_formacion'] == '') ? 'Actualidad' : $value['th_fora_fecha_fin_formacion']) . '</p>' .
                 '</div>' .
                 '<div class="col-2 d-flex justify-content-end align-items-start">' .
 

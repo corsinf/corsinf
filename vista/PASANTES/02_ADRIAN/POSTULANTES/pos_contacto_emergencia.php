@@ -82,10 +82,13 @@
             'txt_telefono_contacto_emergencia': txt_telefono_contacto_emergencia,
         };
 
-        if ($("#form_contacto_emergencia_1").valid()) {
+        if ((txt_nombre_contacto_emergencia)!= '' && (txt_nombre_contacto_emergencia)!= null &&
+        (txt_telefono_contacto_emergencia)!= '' && (txt_telefono_contacto_emergencia)!= null) {
             // Si es válido, puedes proceder a enviar los datos por AJAX
             console.log(parametros_guardar_contacto_emergencia);
             guardar_contacto_emergencia(parametros_guardar_contacto_emergencia);
+        } else {
+            Swal.fire('', 'No se pueden guardar campos vacios', 'warning')
         }
     }
 
@@ -272,17 +275,4 @@
             }
         });
     });
-
-    function validar_form_id(id) {
-        $('#txt_nombre_contacto_emergencia_'+id).rules("add", {
-            required: true,
-            maxlength: 100
-        });
-        $('#txt_telefono_contacto_emergencia_'+id).rules("add", {
-            required: true,
-            maxlength: 15
-        });
-        $("#form_contacto_emergencia_1").validate().element('#txt_nombre_contacto_emergencia_'+id)
-        $("#form_contacto_emergencia_1").validate().element('#txt_telefono_contacto_emergencia_'+id)
-    }
 </script>
