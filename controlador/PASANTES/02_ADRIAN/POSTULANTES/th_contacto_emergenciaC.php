@@ -32,8 +32,8 @@ class th_contacto_emergenciaC
 
         $tr = '';
         foreach ($datos as $key => $value) {
-            $tr .= "<form id='form_contacto_emergencia_" . $value['_id'] . "'>
-            <tr>
+            $tr .= "<tr>
+            
             <td>
                 <input type='text' id='txt_id_contacto_emergencia_" . $value['_id'] . "' value='" . $value['_id'] . "'style='display:none;'>
                 <span id='span_nombre_" . $value['_id'] . "'>" . $value['th_coem_nombre_emergencia'] . "</span>
@@ -44,12 +44,12 @@ class th_contacto_emergenciaC
                 <input type='text' id='txt_telefono_contacto_emergencia_" . $value['_id'] . "' value='" . $value['th_coem_telefono_emergencia'] . "' style='display:none;' required>
             </td>
             <td>
-                <button id='btn_editar_" . $value['_id'] . "' class='btn btn-sm btn-primary' onclick='mostrar_contacto_emergencia(" . $value['_id'] . ");'><i class='text-white bx bx-pencil bx-xs me-0'></i></button>
-                <button id='btn_guardar_" . $value['_id'] . "' class='btn btn-sm btn-success' onclick='guardar_cambios_contacto_emergencia(" . $value['_id'] . ");' style='display:none;'><i class='text-white bx bx-check bx-xs me-0'></i></button>
-                <button class='btn btn-sm btn-danger' onclick='delete_datos_contacto_emergencia(" . $value['_id'] . ");'><i class='text-white bx bx-trash bx-xs me-0'></i></button>
+                <button type='button' id='btn_editar_" . $value['_id'] . "' class='btn btn-sm btn-primary' onclick='mostrar_contacto_emergencia(" . $value['_id'] . ");'><i class='text-white bx bx-pencil bx-xs me-0'></i></button>
+                <button type='button' id='btn_guardar_" . $value['_id'] . "' class='btn btn-sm btn-success' onclick='validar_form_id(" . $value['_id'] . "); guardar_cambios_contacto_emergencia(" . $value['_id'] . ");' style='display:none;'><i class='text-white bx bx-check bx-xs me-0'></i></button>
+                <button type='button' class='btn btn-sm btn-danger' onclick='delete_datos_contacto_emergencia(" . $value['_id'] . ");'><i class='text-white bx bx-trash bx-xs me-0'></i></button>
             </td>
-        </tr>
-        </form>";
+            
+        </tr>";
         }
         return $tr;
     }

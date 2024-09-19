@@ -82,7 +82,7 @@
             'txt_telefono_contacto_emergencia': txt_telefono_contacto_emergencia,
         };
 
-        if ($("#form_contacto_emergencia_" + id).valid()) {
+        if ($("#form_contacto_emergencia_1").valid()) {
             // Si es válido, puedes proceder a enviar los datos por AJAX
             console.log(parametros_guardar_contacto_emergencia);
             guardar_contacto_emergencia(parametros_guardar_contacto_emergencia);
@@ -124,8 +124,6 @@
     }
 
     function delete_datos_contacto_emergencia(id) {
-        //Para revisar y enviar el dato como parametro 
-        //var id = id
         Swal.fire({
             title: 'Eliminar Registro?',
             text: "Esta seguro de eliminar este registro?",
@@ -214,18 +212,20 @@
                 </form>
                 <hr>
                 <div class="table-responsive">
-                    <table class="table table-striped table-hover align-middle">
-                        <thead>
-                            <tr>
-                                <th>Nombre del Contacto</th>
-                                <th>Teléfono del Contacto</th>
-                                <th>Acción</th>
-                            </tr>
-                        </thead>
-                        <tbody id="tbl_contacto_emergencia">
+                    <form id='form_contacto_emergencia_1'>
+                        <table class="table table-striped table-hover align-middle">
+                            <thead>
+                                <tr>
+                                    <th>Nombre del Contacto</th>
+                                    <th>Teléfono del Contacto</th>
+                                    <th>Acción</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tbl_contacto_emergencia">
 
-                        </tbody>
-                    </table>
+                            </tbody>
+                        </table>
+                    </form>
                 </div>
             </div>
         </div>
@@ -271,6 +271,18 @@
 
             }
         });
-
     });
+
+    function validar_form_id(id) {
+        $('#txt_nombre_contacto_emergencia_'+id).rules("add", {
+            required: true,
+            maxlength: 100
+        });
+        $('#txt_telefono_contacto_emergencia_'+id).rules("add", {
+            required: true,
+            maxlength: 15
+        });
+        $("#form_contacto_emergencia_1").validate().element('#txt_nombre_contacto_emergencia_'+id)
+        $("#form_contacto_emergencia_1").validate().element('#txt_telefono_contacto_emergencia_'+id)
+    }
 </script>
