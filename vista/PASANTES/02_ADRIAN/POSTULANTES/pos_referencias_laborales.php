@@ -17,7 +17,6 @@
             dataType: 'json',
             success: function(response) {
                 $('#pnl_referencias_laborales').html(response);
-                console.log(response);
             }
         });
     }
@@ -34,24 +33,11 @@
 
                 $('#txt_nombre_referencia').val(response[0].th_refl_nombre_referencia);
                 $('#txt_telefono_referencia').val(response[0].th_refl_telefono_referencia);
-
-                // if (response[0].th_refl_carta_recomendacion) {
-                //     $('#archivo_carta_recomendacion').html('<a href="#" target="_blank" data-bs-toggle="modal" data-bs-target="#modal_ver_pdf" onclick="definir_ruta_iframe(' + id + ')">Ver carta de recomendación</a>');
-                //     $('#txt_copia_carta_recomendacion').rules("remove", "required");
-                // } else {
-                //     $('#archivo_carta_recomendacion').html('No se ha subido una carta de recomendación.');
-                //     $('#txt_copia_carta_recomendacion').rules("add", {
-                //         required: true
-                //     });
-                // }
-                $('#txt_copia_carta_recomendacion').val(response[0].th_refl_carta_recomendacion)
-                console.log(response[0].th_refl_carta_recomendacion)
+                $('#txt_ruta_guardada_carta_recomendacion').val(response[0].th_refl_carta_recomendacion)
 
 
 
                 $('#txt_referencias_laborales_id').val(response[0]._id);
-
-                console.log(response);
             }
         });
     }
@@ -59,9 +45,17 @@
     function insertar_editar_referencias_laborales() {
         var txt_nombre_referencia = $('#txt_nombre_referencia').val();
         var txt_telefono_referencia = $('#txt_telefono_referencia').val();
-        var txt_copia_carta_recomendacion = $('#txt_copia_carta_recomendacion').val();
         var txt_id_postulante = '<?= $id ?>';
         var txt_id_referencias_laborales = $('#txt_referencias_laborales_id').val();
+        if ($('#txt_copia_carta_recomendacion').val() === '' && txt_id_referencias_laborales != '') {
+            var txt_copia_carta_recomendacion = $('#txt_ruta_guardada_carta_recomendacion').val()
+            $('#txt_copia_carta_recomendacion').rules("remove", "required");
+        } else {
+            var txt_copia_carta_recomendacion = $('#txt_copia_carta_recomendacion').val();
+            $('#txt_copia_carta_recomendacion').rules("add", {
+                required: true
+            });
+        }
 
         var parametros_referencias = {
             '_id': txt_id_referencias_laborales,
@@ -73,7 +67,7 @@
 
         if ($("#form_referencias_laborales").valid()) {
             // Si es válido, puedes proceder a enviar los datos por AJAX
-            console.log(parametros_referencias)
+            //console.log(parametros_referencias)
             insertar_referencias_laborales(parametros_referencias)
 
         }
@@ -158,6 +152,7 @@
         $('#txt_copia_carta_recomendacion').val('');
         $('#txt_referencias_laborales_id').val('');
         $('#archivo_carta_recomendacion').html('')
+        $('#txt_ruta_guardada_carta_recomendacion').val('')
 
         //Limpiar validaciones
         $("#form_referencias_laborales").validate().resetForm();
@@ -211,6 +206,7 @@
                     </div>
                     <div class="mb-3">
                         <label for="txt_copia_carta_recomendacion" class="form-label form-label-sm">Copia de la carta de recomendación <label style="color: red;">*</label></label>
+                        <input type="text" name="txt_ruta_guardada_carta_recomendacion" id="txt_ruta_guardada_carta_recomendacion" hidden>
                         <input type="file" class="form-control form-control-sm" name="txt_copia_carta_recomendacion" id="txt_copia_carta_recomendacion" accept=".pdf">
                         <div class="mt-2" id="archivo_carta_recomendacion"></div>
                     </div>
@@ -230,7 +226,7 @@
     </div>
 </div>
 <div class="modal" id="modal_ver_pdf" tabindex="-1" aria-modal="true" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
-    <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-dialog modal-dialog-centered modal-xl">
         <div class="modal-content">
 
             <!-- Modal Header -->
@@ -241,7 +237,7 @@
             <!-- Modal body -->
             <form id="form_referencias_laborales">
                 <div class="modal-body d-flex justify-content-center">
-                    <iframe src='' id="iframe_pdf" frameborder="0" width="600px" height="400px"></iframe>
+                    <iframe src='' id="iframe_pdf" frameborder="0" width="900px" height="700px"></iframe>
                 </div>
             </form>
         </div>

@@ -17,7 +17,6 @@
             dataType: 'json',
             success: function(response) {
                 $('#pnl_formacion_academica').html(response);
-                console.log(response);
             }
         });
     }
@@ -55,7 +54,6 @@
 
                 $('#txt_formacion_id').val(response[0]._id);
 
-                console.log(response);
             }
         });
     }
@@ -83,7 +81,6 @@
 
         if ($("#form_formacion_academica").valid()) {
             // Si es válido, puedes proceder a enviar los datos por AJAX
-            console.log(parametros_formacion_academica);
             insertar_formacion_academica(parametros_formacion_academica);
         }
 
