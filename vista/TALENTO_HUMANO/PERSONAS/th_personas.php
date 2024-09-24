@@ -7,24 +7,24 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
 <script src="../js/GENERAL/operaciones_generales.js"></script>
 <script type="text/javascript">
     $(document).ready(function() {
-        tbl_dispositivos = $('#tbl_dispositivos').DataTable($.extend({}, configuracion_datatable('Dispostivos', 'dispostivos'), {
+        tbl_dispositivos = $('#tbl_dispositivos').DataTable($.extend({}, configuracion_datatable('Personas', 'personas'), {
             reponsive: true,
             language: {
                 url: 'https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
             },
             ajax: {
-                url: '../controlador/TALENTO_HUMANO/th_dispositivosC.php?listar=true',
+                url: '../controlador/TALENTO_HUMANO/th_personasC.php?listar=true',
                 dataSrc: ''
             },
             columns: [{
                     data: null,
                     render: function(data, type, item) {
-                        href = `../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_registrar_dispositivos&_id=${item._id}`;
-                        return `<a href="${href}"><u>${item.nombre}</u></a>`;
+                        href = `../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_registrar_personas&_id=${item._id}`;
+                        return `<a href="${href}"><u>${item.primer_apellido}</u></a>`;
                     }
                 },
                 {
-                    data: 'host'
+                    data: 'primer_apellido'
                 },
 
                 {
@@ -45,7 +45,7 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
     <div class="page-content">
         <!--breadcrumb-->
         <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
-            <div class="breadcrumb-title pe-3">Dispositivos</div>
+            <div class="breadcrumb-title pe-3">Personas</div>
             <?php
             // print_r($_SESSION['INICIO']);die();
 
@@ -56,7 +56,7 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                         <li class="breadcrumb-item"><a href="javascript:;"><i class="bx bx-home-alt"></i></a>
                         </li>
                         <li class="breadcrumb-item active" aria-current="page">
-                            Lista de Dispositivos
+                            Lista de Personas
                         </li>
                     </ol>
                 </nav>
@@ -74,12 +74,14 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                                 <div class="card-title d-flex align-items-center">
 
                                     <div class="" id="btn_nuevo">
-                                        <a href="../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_registrar_dispositivos"
+
+                                        <a href="../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_registrar_personas"
                                             type="button" class="btn btn-success btn-sm">
                                             <i class="bx bx-plus me-0 pb-1"></i> Nuevo
                                         </a>
+
                                     </div>
-                                    
+
                                 </div>
                             </div>
 
@@ -97,7 +99,7 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                                         <thead>
                                             <tr>
                                                 <th>Nombre</th>
-                                                <th>Host</th>
+                                                <th>Apellido</th>
                                                 <th width="10px">Acción</th>
                                             </tr>
                                         </thead>
