@@ -5,6 +5,32 @@
         <?php } ?>
     });
 
+    function obtener_codigo_postal() {
+        var ubicacion = $('#ubicacion');
+        var codigo_postal = $('#txt_direccion_postal');
+
+        function success(position) {
+            var lat = position.coords.latitude;
+            var lon = position.coords.longitude;
+
+            // Llamada a la API de Nominatim para obtener el código postal
+            var url = `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json`;
+
+            $.getJSON(url, function(data) {
+                if (data && data.address && data.address.postcode) {
+                    codigo_postal.val(data.address.postcode);
+                } else {
+                    codigo_postal.val('No se pudo obtener');
+                }
+            }).fail(function() {
+                codigo_postal.val('Error al obtener el código postal');
+            });
+        }
+
+        // Obtener la ubicación del usuario
+        navigator.geolocation.getCurrentPosition(success);
+    }
+
     //Información Adicional
     function cargarDatos_informacion_adicional(id) {
         $.ajax({
