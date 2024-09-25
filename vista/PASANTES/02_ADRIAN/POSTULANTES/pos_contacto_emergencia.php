@@ -18,7 +18,6 @@
             dataType: 'json',
             success: function(response) {
                 $('#tbl_contacto_emergencia').html(response);
-                console.log(response);
             }
         });
     }
@@ -40,7 +39,6 @@
 
         if ($("#form_contacto_emergencia").valid()) {
             // Si es válido, puedes proceder a enviar los datos por AJAX
-            console.log(parametros_contacto_emergencia);
             insertar_contacto_emergencia(parametros_contacto_emergencia);
         }
     }

@@ -11,9 +11,9 @@ if (isset($_GET['cargar_datos_aptitudes_blandas'])) {
     echo json_encode($controlador->listar_aptitudes_blandas($_POST['id']));
 }
 
-// if (isset($_GET['listar_modal'])) {
-//     echo json_encode($controlador->listar_modal($_POST['id']));
-// }
+if (isset($_GET['listar_modal'])) {
+    echo json_encode($controlador->listar_modal($_POST['id']));
+}
 
 if (isset($_GET['insertar'])) {
     echo json_encode($controlador->insertar_editar($_POST['parametros']));
@@ -35,20 +35,20 @@ class th_pos_habilidadesC
 
     function listar_aptitudes_tecnicas($id)
     {
-        $datos = $this->modelo->where('th_pos_id', $id)->where('th_habp_estado', 1)->listar();
+        $datos = $this->modelo->where('th_pos_id', $id)->where('th_tiph_id', 2)->listarJoin(); 
 
         $texto = '';
         foreach ($datos as $key => $value) {
             $texto .=
-                '<div class="row mt-3">
+                '<div class="row mt-1">
                     <div class="col-8">
-                        <p class="fw-bold">Aptitudes Técnicas</p>
                         <ul>
-                            <li>' . $value['th_hab_id'] . '</li>
+                            <li>' . $value['th_hab_nombre'] . '</li>
                         </ul>
                     </div>
-                    <div class="col-4">
-                        <a href="#" class="d-flex justify-content-end"><i class="text-dark bx bx-pencil bx-sm"></i></a>
+                            
+                    <div class="col-4 d-flex justify-content-end">
+                        <button type="button" class="btn btn-sm" style="color: white;" onclick="delete_datos_aptitudes(' . $value['th_habp_id'] . ')"><i class="me-0 text-danger bx bx-trash" style="font-size: 20px;"></i></button>
                     </div>
                 </div>';
         }
@@ -58,20 +58,20 @@ class th_pos_habilidadesC
 
     function listar_aptitudes_blandas($id)
     {
-        $datos = $this->modelo->where('th_pos_id', $id)->where('th_habp_estado', 1)->listar();
+        $datos = $this->modelo->where('th_pos_id', $id)->where('th_tiph_id', 1)->listarJoin(); 
 
         $texto = '';
         foreach ($datos as $key => $value) {
             $texto .=
-                '<div class="row mt-3">
+                '<div class="row mt-1">
                     <div class="col-8">
-                        <p class="fw-bold">Aptitudes Técnicas</p>
                         <ul>
-                            <li>' . $value['th_hab_id'] . '</li>
+                            <li>' . $value['th_hab_nombre'] . '</li>
                         </ul>
                     </div>
-                    <div class="col-4">
-                        <a href="#" class="d-flex justify-content-end"><i class="text-dark bx bx-pencil bx-sm"></i></a>
+                            
+                    <div class="col-4 d-flex justify-content-end">
+                        <button type="button" class="btn btn-sm" style="color: white;" onclick="delete_datos_aptitudes(' . $value['th_habp_id'] . ')"><i class="me-0 text-danger bx bx-trash" style="font-size: 20px;"></i></button>
                     </div>
                 </div>';
         }
@@ -80,34 +80,39 @@ class th_pos_habilidadesC
     }
 
     //Buscando registros por id de la formacion academica
-    // function listar_modal($id)
-    // {
+    function listar_modal($id)
+    {
 
-    //     if ($id == '') {
-    //         $datos = $this->modelo->where('th_fora_estado', 1)->listar();
-    //     } else {
-    //         $datos = $this->modelo->where('th_fora_id', $id)->listar();
-    //     }
-    //     return $datos;
-    // }
+        if ($id == '') {
+            $datos = $this->modelo->where('th_habp_estado', 1)->listar();
+        } else {
+            $datos = $this->modelo->where('th_habp_id', $id)->listar();
+        }
+        return $datos;
+    }
 
     function insertar_editar($parametros)
     {
-        $datos = array(
-            array('campo' => 'th_hab_id', 'dato' => $parametros['////////////////']),
-            array('campo' => 'th_pos_id', 'dato' => $parametros['txt_id_postulante']),
 
-        );
-
-        if ($parametros['_id'] == '') {
-            $datos = $this->modelo->insertar($datos);
-        } else {
-            $where[0]['campo'] = 'th_habp_id';
-            $where[0]['dato'] = $parametros['_id'];
-            $datos = $this->modelo->editar($datos, $where);
+        foreach ($parametros['txt_id_aptitudes'] as $aptitud_id) {
+            $datos = array(
+                array('campo' => 'th_hab_id', 'dato' => intval($aptitud_id)),
+                array('campo' => 'th_pos_id', 'dato' => $parametros['txt_id_postulante']),
+            );
+            
+            if ($parametros['_id'] == '') {
+                $datos = $this->modelo->insertar($datos);
+                
+            } else {
+                $where[0]['campo'] = 'th_habp_id';
+                $where[0]['dato'] = $parametros['_id'];
+                $datos = $this->modelo->editar($datos, $where);
+            }
+            
         }
-
+        
         return $datos;
+
     }
 
     function eliminar($id)
