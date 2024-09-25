@@ -1,14 +1,70 @@
 <script>
+    $(document).ready(function() {
+        <?php if (isset($_GET['id'])) { ?>
+            cargar_datos_experiencia_laboral(<?= $id ?>);
+        <?php } ?>
+
+    });
+
+    //Experiencia Laboral
+    function cargar_datos_experiencia_laboral(id) {
+        $.ajax({
+            url: '../controlador/PASANTES/02_ADRIAN/POSTULANTES/th_experiencia_laboralC.php?listar=true',
+            type: 'post',
+            data: {
+                id: id
+            },
+            dataType: 'json',
+            success: function(response) {
+                $('#pnl_experiencia_laboral').html(response);
+                console.log(response);
+            }
+        });
+    }
+
+    function cargar_datos_modal_experiencia_laboral(id) {
+        $.ajax({
+            url: '../controlador/PASANTES/02_ADRIAN/POSTULANTES/th_experiencia_laboralC.php?listar_modal=true',
+            type: 'post',
+            data: {
+                id: id
+            },
+            dataType: 'json',
+            success: function(response) {
+
+                $('#txt_nombre_empresa').val(response[0].th_expl_nombre_empresa);
+                $('#txt_cargos_ocupados').val(response[0].th_expl_cargos_ocupados);
+                $('#txt_fecha_inicio_laboral').val(response[0].th_expl_fecha_inicio_experiencia);
+                
+                var fecha_fin_laboral = response[0].th_expl_fecha_fin_experiencia;
+                if (fecha_fin_laboral == '1900-01-01') {
+                    $('#cbx_fecha_final_laboral').prop('checked', true);
+                    $('#txt_fecha_final_laboral').val('');
+                } else {
+                    $('#txt_fecha_final_laboral').val(response[0].th_expl_fecha_fin_experiencia);
+                }
+
+                $('#txt_experiencia_id').val(response[0]._id);
+                
+                console.log(response);
+            }
+        });
+    }
+
     //Experiencia Laboral
     function insertar_editar_experiencia_laboral() {
         var txt_nombre_empresa = $('#txt_nombre_empresa').val();
         var txt_cargos_ocupados = $('#txt_cargos_ocupados').val();
         var txt_fecha_inicio_laboral = $('#txt_fecha_inicio_laboral').val();
         var txt_fecha_final_laboral = $('#txt_fecha_final_laboral').val();
-        var cbx_fecha_final_laboral = $('#cbx_fecha_final_laboral').prop('checked');
+        var cbx_fecha_final_laboral = $('#cbx_fecha_final_laboral').prop('checked') ? 1 : 0;
         var txt_responsabilidades_logros = $('#txt_responsabilidades_logros').val();
+        var txt_id_postulante = '<?= $id ?>';
+        var txt_id_experiencia_laboral = $('#txt_experiencia_id').val();
 
         var parametros_experiencia_laboral = {
+            '_id': txt_id_experiencia_laboral,
+            'txt_id_postulante': txt_id_postulante,
             'txt_nombre_empresa': txt_nombre_empresa,
             'txt_cargos_ocupados': txt_cargos_ocupados,
             'txt_fecha_inicio_laboral': txt_fecha_inicio_laboral,
@@ -20,36 +76,114 @@
         if ($("#form_experiencia_laboral").valid()) {
             // Si es válido, puedes proceder a enviar los datos por AJAX
             console.log(parametros_experiencia_laboral)
+            insertar_experiencia_laboral(parametros_experiencia_laboral);
         }
     }
 
-    function limpiar_parametros_experiencia_laboral() {
-        //Limpiar parámetros
+    function insertar_experiencia_laboral(parametros) {
+        $.ajax({
+            data: {
+                parametros: parametros
+            },
+            url: '../controlador/PASANTES/02_ADRIAN/POSTULANTES/th_experiencia_laboralC.php?insertar=true',
+            type: 'post',
+            dataType: 'json',
 
-        //experiencia laboral
+            success: function(response) {
+                if (response == 1) {
+                    Swal.fire('', 'Operacion realizada con exito.', 'success');
+                    <?php if (isset($_GET['id'])) { ?>
+                        cargar_datos_experiencia_laboral(<?= $id ?>);
+                        limpiar_campos_experiencia_laboral_modal();
+                    <?php } ?>
+                    $('#modal_agregar_experiencia').modal('hide');
+                } else {
+                    Swal.fire('', 'Operación fallida', 'warning');
+                }
+            }
+        });
+    }
+
+    //* Función para editar el registro de formación academica
+    function abrir_modal_experiencia_laboral(id) {
+        cargar_datos_modal_experiencia_laboral(id);
+
+        $('#modal_agregar_experiencia').modal('show');
+        $('#lbl_titulo_experiencia_laboral').html('Editar Experiencia Laboral');
+        $('#btn_guardar_experiencia').html('Editar');
+
+    }
+
+    function delete_datos_experiencia_laboral() {
+        //Para revisar y enviar el dato como parametro 
+        id = $('#txt_experiencia_id').val();
+        Swal.fire({
+            title: 'Eliminar Registro?',
+            text: "Esta seguro de eliminar este registro?",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Si'
+        }).then((result) => {
+            if (result.value) {
+                eliminar_experiencia_laboral(id);
+            }
+        })
+    }
+
+    function eliminar_experiencia_laboral(id) {
+        $.ajax({
+            data: {
+                id: id
+            },
+            url: '../controlador/PASANTES/02_ADRIAN/POSTULANTES/th_experiencia_laboralC.php?eliminar=true',
+            type: 'post',
+            dataType: 'json',
+            success: function(response) {
+                if (response == 1) {
+                    Swal.fire('Eliminado!', 'Registro Eliminado.', 'success');
+                    <?php if (isset($_GET['id'])) { ?>
+                        cargar_datos_experiencia_laboral(<?= $id ?>);
+                        limpiar_campos_experiencia_laboral_modal();
+                    <?php } ?>
+                    $('#modal_agregar_experiencia').modal('hide');
+                }
+            }
+        });
+    }
+
+    function limpiar_campos_experiencia_laboral_modal() {
+        $('#form_experiencia_laboral').validate().resetForm();
+        $('.form-control').removeClass('is-valid is-invalid');
         $('#txt_nombre_empresa').val('');
         $('#txt_cargos_ocupados').val('');
         $('#txt_fecha_inicio_laboral').val('');
         $('#txt_fecha_final_laboral').val('');
-        $('#cbx_fecha_final_laboral').val('');
-        $('#txt_responsabilidades_logros').prop('');
+        $('#cbx_fecha_final_laboral').prop('checked', false);
+        $('#txt_responsabilidades_logros').val('');
+    }
+
+    function validar_fechas_exp_prev() {
+        var fecha_inicio = $('#txt_fecha_inicio_laboral').val();
+        var fecha_final = $('#txt_fecha_final_laboral').val();
+
+        if (fecha_inicio && fecha_final) {
+            if (Date.parse(fecha_final) < Date.parse(fecha_inicio)) {
+                Swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    text: "La fecha final no puede ser menor a la fecha de inicio.",
+                });
+                $('.form-control').removeClass('is-valid is-invalid');
+                $('#txt_fecha_final_laboral').val('');
+            }
+        }
     }
 </script>
 
-<div id="pnl_experiencia_previa">
+<div id="pnl_experiencia_laboral">
 
-</div>
-
-<div class="row mb-3">
-    <div class="col-10">
-        <h6 class="fw-bold">Corsinf</h6>
-        <p>Desarrollador de Software</p>
-        <p>2024-06-25 - 2024-09-25</p>
-        <p>Diseñar, codificar, probar y mantener aplicaciones y sistemas de software de alta calidad.</p>
-    </div>
-    <div class="col-2">
-        <a href="#" class="d-flex justify-content-end"><i class='text-dark bx bx-pencil bx-sm'></i></a>
-    </div>
 </div>
 
 <!-- Modal para agregar experiencia laboral-->
@@ -59,39 +193,47 @@
 
             <!-- Modal Header -->
             <div class="modal-header">
-                <h5><small class="text-body-secondary">Agregue una experiencia laboral</small></h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="limpiar_parametros()"></button>
+                <h5><label class="text-body-secondary" id="lbl_titulo_experiencia_laboral">Agregue una experiencia laboral</small></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="limpiar_campos_experiencia_laboral_modal()"></button>
             </div>
             <!-- Modal body -->
             <form id="form_experiencia_laboral">
+                <input type="text" id="txt_experiencia_id" hidden>
                 <div class="modal-body">
                     <div class="mb-3">
-                        <label for="txt_nombre_empresa" class="form-label form-label-sm">Nombre de la empresa <label style="color: red;">*</label></label>
-                        <input type="text" class="form-control form-control-sm" name="txt_nombre_empresa" id="txt_nombre_empresa" placeholder="Escriba el nombre de la empresa donde trabajó">
+                        <label for="txt_nombre_empresa" class="form-label form-label-sm">Nombre de la empresa </label>
+                        <input type="text" class="form-control form-control-sm no_caracteres" name="txt_nombre_empresa" id="txt_nombre_empresa" placeholder="Escriba el nombre de la empresa donde trabajó" maxlength="200">
                     </div>
                     <div class="mb-3">
-                        <label for="txt_cargos_ocupados" class="form-label form-label-sm">Cargos ocupados <label style="color: red;">*</label></label>
-                        <input type="text" class="form-control form-control-sm" name="txt_cargos_ocupados" id="txt_cargos_ocupados" placeholder="Escriba los cargos que ocupo en la empresa">
+                        <label for="txt_cargos_ocupados" class="form-label form-label-sm">Cargos ocupados </label>
+                        <input type="text" class="form-control form-control-sm no_caracteres" name="txt_cargos_ocupados" id="txt_cargos_ocupados" placeholder="Escriba los cargos que ocupo en la empresa" maxlength="200">
                     </div>
                     <div class="mb-3">
-                        <label for="txt_fecha_inicio_laboral" class="form-label form-label-sm">Fecha de inicio <label style="color: red;">*</label></label>
-                        <input type="date" class="form-control form-control-sm" name="txt_fecha_inicio_laboral" id="txt_fecha_inicio_laboral">
+                        <label for="txt_fecha_inicio_laboral" class="form-label form-label-sm">Fecha de inicio </label>
+                        <input type="date" class="form-control form-control-sm no_caracteres" name="txt_fecha_inicio_laboral" id="txt_fecha_inicio_laboral" onchange="validar_fechas_exp_prev();">
                     </div>
                     <div>
-                        <label for="txt_fecha_final_laboral" class="form-label form-label-sm">Fecha de finalización <label style="color: red;">*</label></label>
-                        <input type="date" class="form-control form-control-sm" name="txt_fecha_final_laboral" id="txt_fecha_final_laboral">
+                        <label for="txt_fecha_final_laboral" class="form-label form-label-sm">Fecha de finalización </label>
+                        <input type="date" class="form-control form-control-sm no_caracteres" name="txt_fecha_final_laboral" id="txt_fecha_final_laboral" onchange="validar_fechas_exp_prev();">
                     </div>
                     <div class="mt-1 mb-3">
-                        <input type="checkbox" class="form-check-input" name="cbx_fecha_final_laboral" id="cbx_fecha_final_laboral" onchange="checkbox_actualidad();">
+                        <input type="checkbox" class="form-check-input" name="cbx_fecha_final_laboral" id="cbx_fecha_final_laboral" onchange="checkbox_actualidad_exp_prev();">
                         <label for="cbx_fecha_final_laboral" class="form-label form-label-sm">Actualidad</label>
                     </div>
                     <div class="mb-3">
-                        <label for="txt_responsabilidades_logros" class="form-label form-label-sm">Descripción de responsabilidades y logros <label style="color: red;">*</label></label>
-                        <textarea type="text" class="form-control form-control-sm" name="txt_responsabilidades_logros" id="txt_responsabilidades_logros" placeholder=""></textarea>
+                        <label for="txt_responsabilidades_logros" class="form-label form-label-sm">Descripción de responsabilidades y logros</label>
+                        <textarea type="text" class="form-control form-control-sm no_caracteres" name="txt_responsabilidades_logros" id="txt_responsabilidades_logros" placeholder="" maxlength="700"></textarea>
                     </div>
                 </div>
-                <div class="modal-footer d-flex justify-content-center">
-                    <button type="button" class="btn btn-success btn-sm" id="btn_agregar_experiencia_laboral" onclick="insertar_editar_experiencia_laboral();">Agregar</button>
+                <div class="modal-footer">
+                    <div class="row mx-auto">
+                        <div class="col-6">
+                            <button type="button" class="btn btn-success btn-sm" id="btn_guardar_experiencia" onclick="insertar_editar_experiencia_laboral();">Agregar</button>
+                        </div>
+                        <div class="col-6">
+                            <button type="button" class="btn btn-danger btn-sm" id="btn_eliminar_experiencia" onclick="delete_datos_experiencia_laboral();">Eliminar</button>
+                        </div>
+                    </div>
                 </div>
             </form>
         </div>
@@ -100,14 +242,22 @@
 
 <script>
     $(document).ready(function() {
-        //Validación Experiencia Laboral
+        agregar_asterisco_campo_obligatorio('txt_nombre_empresa');
+        agregar_asterisco_campo_obligatorio('txt_cargos_ocupados');
+        agregar_asterisco_campo_obligatorio('txt_fecha_inicio_laboral');
+        agregar_asterisco_campo_obligatorio('txt_fecha_final_laboral');
+        agregar_asterisco_campo_obligatorio('txt_responsabilidades_logros');
+
+        //! Validación Experiencia Laboral
         $("#form_experiencia_laboral").validate({
             rules: {
                 txt_nombre_empresa: {
                     required: true,
+                    maxlength:"200"
                 },
                 txt_cargos_ocupados: {
                     required: true,
+                    maxlength:"200"
                 },
                 txt_fecha_inicio_laboral: {
                     required: true,
@@ -117,6 +267,7 @@
                 },
                 txt_responsabilidades_logros: {
                     required: true,
+                    maxlength:"700"
                 },
             },
             messages: {
@@ -151,14 +302,27 @@
         });
     });
 
-    function checkbox_actualidad() {
-        if ($('#cbx_fecha_final_laboral').is(':checked')) {
-            $('#txt_fecha_final_laboral').rules("remove", "required");
+    function checkbox_actualidad_exp_prev() {
+        var actualidad = new Date();
+        var dia = String(actualidad.getDate()).padStart(2, '0');
+        var mes = String(actualidad.getMonth() + 1).padStart(2, '0');
+        var ano = actualidad.getFullYear();
+        var fecha_formateada = ano + '-' + mes + '-' + dia;
+
+        if ($('#txt_fecha_final_laboral').val() === '') {
+            if ($('#cbx_fecha_final_laboral').is(':checked')) {
+                $('#txt_fecha_final_laboral').val(fecha_formateada);
+                $('#txt_fecha_final_laboral').prop('disabled', true);
+                $('#txt_fecha_final_laboral').rules("remove", "required");
+            } else {
+                $('#txt_fecha_final_laboral').rules("add", {
+                    required: true
+                });
+                $('#txt_fecha_final_laboral').prop('disabled', false);
+            }
         } else {
-            $('#txt_fecha_final_laboral').rules("add", {
-                required: true
-            });
+            $('#cbx_fecha_final_laboral').prop('checked', false);
+            $('#txt_fecha_final_laboral').prop('disabled', false);
         }
-        $("#form_experiencia_laboral").validate().element('#txt_fecha_final_laboral');
     }
 </script>
