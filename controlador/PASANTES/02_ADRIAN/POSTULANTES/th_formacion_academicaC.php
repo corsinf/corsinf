@@ -38,15 +38,14 @@ class th_formacion_academicaC
         foreach ($datos as $key => $value) {
             $texto .=
                 '<div class="row mb-3">' .
-                '<div class="col-10">' .
-                '<h6 class="fw-bold">' . $value['th_fora_titulo_obtenido'] . '</h6>' .
-                '<p class="mb-2">' . $value['th_fora_institución'] . '</p>' .
-                '<p>' . $value['th_fora_fecha_inicio_formacion'] . ' - ' . (($value['th_fora_fecha_fin_formacion'] == '') ? 'Actualidad' : $value['th_fora_fecha_fin_formacion']) . '</p>' .
-                '</div>' .
-                '<div class="col-2 d-flex justify-content-end align-items-start">' .
-
-                "<button class='btn' style='color: white;' onclick='abrir_modal_formacion_academica(" . $value['_id'] . ");'><i class='text-dark bx bx-pencil bx-sm' ></i></button>" .
-                '</div>' .
+                    '<div class="col-10">' .
+                        '<h6 class="fw-bold">' . $value['th_fora_titulo_obtenido'] . '</h6>' .
+                        '<p class="mb-2">' . $value['th_fora_institución'] . '</p>' .
+                        '<p>' . $value['th_fora_fecha_inicio_formacion'] . ' - ' . (($value['th_fora_fecha_fin_formacion'] == '') ? 'Actualidad' : $value['th_fora_fecha_fin_formacion']) . '</p>' .
+                    '</div>' .
+                    '<div class="col-2 d-flex justify-content-end align-items-start">' .
+                        "<button class='btn' style='color: white;' onclick='abrir_modal_formacion_academica(" . $value['_id'] . ");'><i class='text-dark bx bx-pencil bx-sm' ></i></button>" .
+                    '</div>' .
                 '</div>';
         }
         return $texto;
