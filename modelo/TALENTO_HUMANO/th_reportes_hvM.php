@@ -33,7 +33,7 @@ class th_reportes_hvM extends BaseModel
             FROM 
                 [dbo].[Prueba]
             WHERE 
-                date2 = '2024-09-11' -- Filtrar por fecha
+                date2 BETWEEN '2024-09-16' AND '2024-09-19'
             GROUP BY 
                 personid,
                 Last_Name,
@@ -43,7 +43,7 @@ class th_reportes_hvM extends BaseModel
                 date2
 
             ORDER BY 
-                Last_Name;
+                date2;
         ";
         return $this->db->datos($sql);
     }
