@@ -1,4 +1,12 @@
 <script>
+    $(document).ready(function() {
+        lista_aptitudes_tecnicas();
+        lista_aptitudes_blandas();
+        <?php if (isset($_GET['id'])) { ?>
+            cargar_datos_aptitudes_tecnicas(<?= $id ?>);
+        <?php } ?>
+    });
+
     function activar_select2() {
         $('#ddl_seleccionar_aptitud_blanda').select2({
             placeholder: 'Selecciona una opción',
@@ -39,7 +47,60 @@
         });
     }
 
-    //Aptitudes
+    //Aptitudes 
+    function cargar_datos_aptitudes_tecnicas(id) {
+        $.ajax({
+            url: '../controlador/PASANTES/02_ADRIAN/POSTULANTES/th_pos_habilidadesC.php?cargar_datos_aptitudes_tecnicas=true',
+            type: 'post',
+            data: {
+                id: id
+            },
+            dataType: 'json',
+            success: function(response) {
+                $('#pnl_aptitudes_tecnicas').html(response);
+                console.log(response)
+            }
+        });
+    }
+
+    function cargar_datos_aptitudes_blandas(id) {
+        $.ajax({
+            url: '../controlador/PASANTES/02_ADRIAN/POSTULANTES/th_pos_habilidadesC.php?cargar_datos_aptitudes_blandas=true',
+            type: 'post',
+            data: {
+                id: id
+            },
+            dataType: 'json',
+            success: function(response) {
+                $('#pnl_aptitudes_blandas').html(response);
+                console.log(response)
+            }
+        });
+    }
+
+
+    function lista_aptitudes_tecnicas() {
+        $.ajax({
+            url: '../controlador/PASANTES/02_ADRIAN/POSTULANTES/th_cat_habilidadesC.php?listar_tecnicas=true',
+            type: 'post',
+            dataType: 'json',
+            success: function(response) {
+                $('#ddl_seleccionar_aptitud_tecnica').html(response);
+            }
+        });
+    }
+
+    function lista_aptitudes_blandas() {
+        $.ajax({
+            url: '../controlador/PASANTES/02_ADRIAN/POSTULANTES/th_cat_habilidadesC.php?listar_blandas=true',
+            type: 'post',
+            dataType: 'json',
+            success: function(response) {
+                $('#ddl_seleccionar_aptitud_blanda').html(response);
+            }
+        });
+    }
+
     function insertar_editar_aptitudes() {
         var ddl_seleccionar_aptitud_blanda = [];
         $('.ddl_seleccionar_aptitud_blanda').each(function() {
@@ -50,6 +111,9 @@
         $('.ddl_seleccionar_aptitud_tecnica').each(function() {
             ddl_seleccionar_aptitud_tecnica.push($(this).val());
         });
+
+        var txt_id_postulante = '<?= $id ?>';
+        var txt_id_formacion_academica = $('#txt_formacion_id').val();
 
         var parametros_aptitudes = {
             'ddl_seleccionar_aptitud_blanda': ddl_seleccionar_aptitud_blanda,
@@ -63,27 +127,31 @@
     }
 </script>
 
-<div class="row mt-3">
-    <div class="col-8">
-        <p class="fw-bold">Aptitudes Técnicas</p>
-        <ul>
-            <li>Dominio de paquete Office</li>
-        </ul>
-    </div>
-    <div class="col-4">
-        <a href="#" class="d-flex justify-content-end"><i class='text-dark bx bx-pencil bx-sm'></i></a>
-    </div>
+<div id="pnl_aptitudes_tecnicas">
+    <!-- <div class="row mt-3">
+        <div class="col-8">
+            <p class="fw-bold">Aptitudes Técnicas</p>
+            <ul>
+                <li>Dominio de paquete Office</li>
+            </ul>
+        </div>
+        <div class="col-4">
+            <a href="#" class="d-flex justify-content-end"><i class='text-dark bx bx-pencil bx-sm'></i></a>
+        </div>
+    </div> -->
 </div>
-<div class="row">
-    <div class="col-8">
-        <p class="fw-bold">Aptitudes Blandas</p>
-        <ul>
-            <li>Liderazgo</li>
-        </ul>
-    </div>
-    <div class="col-4">
-        <a href="#" class="d-flex justify-content-end"><i class='text-dark bx bx-pencil bx-sm'></i></a>
-    </div>
+<div id="pnl_aptitudes_blandas">
+    <!-- <div class="row">
+        <div class="col-8">
+            <p class="fw-bold">Aptitudes Blandas</p>
+            <ul>
+                <li>Liderazgo</li>
+            </ul>
+        </div>
+        <div class="col-4">
+            <a href="#" class="d-flex justify-content-end"><i class='text-dark bx bx-pencil bx-sm'></i></a>
+        </div>
+    </div> -->
 </div>
 
 <!-- Modal para agregar aptitudes técnicas y blandas-->
@@ -108,12 +176,6 @@
                         <div class="row mb-3">
                             <div class="col-12">
                                 <select class="form-select form-select-sm ddl_seleccionar_aptitud_blanda" id="ddl_seleccionar_aptitud_blanda" name="ddl_seleccionar_aptitud_blanda" multiple="multiple">
-                                    <option value="Liderazgo">Liderazgo</option>
-                                    <option value="Comunicación Efectiva">Comunicación Efectiva</option>
-                                    <option value="Trabajo en equipo">Trabajo en equipo</option>
-                                    <option value="etc">etc</option>
-                                    <option value="etc">etc</option>
-                                    <option value="etc">etc</option>
                                 </select>
                             </div>
                         </div>
@@ -127,12 +189,6 @@
                         <div class="row mb-3">
                             <div class="col-12">
                                 <select class="form-select form-select-sm ddl_seleccionar_aptitud_tecnica" id="ddl_seleccionar_aptitud_tecnica" name="ddl_seleccionar_aptitud_tecnica" multiple="multiple">
-                                    <option value="Manejo de office">Manejo de office</option>
-                                    <option value="Django">Django</option>
-                                    <option value="Laravel">Laravel</option>
-                                    <option value="Photoshop">Photoshop</option>
-                                    <option value="Illustrator">Illustrator</option>
-                                    <option value="etc">etc</option>
                                 </select>
                             </div>
                         </div>
