@@ -9,14 +9,8 @@ class th_reportes_hvM extends BaseModel
 
     function conectar_saint()
     {
-        $database = 'HIK_DB';
-        $usuario = 'sa';
-        $password = 'Tango654';
-        $servidor = '45.162.74.226, 1458';
-        $puerto = '';
 
-
-        $this->db->conexion_db_terceros($database, $usuario, $password, $servidor, $puerto);
+     //   $this->db->conexion_db_terceros($database, $usuario, $password, $servidor, $puerto);
 
         //$sql = "SELECT * FROM Prueba ORDER BY date2 DESC;";
 
@@ -47,8 +41,8 @@ class th_reportes_hvM extends BaseModel
                 date2;
         ";
 
-        //return $this->db->datos($sql);
-        return $this->db->datos_db_terceros($database, $usuario, $password, $servidor, $puerto, $sql); 
+        return $this->db->datos($sql);
+        //return $this->db->datos_db_terceros($database, $usuario, $password, $servidor, $puerto, $sql); 
 
     }
 }
