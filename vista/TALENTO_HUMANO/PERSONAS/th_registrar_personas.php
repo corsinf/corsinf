@@ -136,8 +136,8 @@ if (isset($_GET['_id'])) {
                     });
                 } else if (response == -2) {
                     //Swal.fire('', 'El nombre del dispositivo ya está en uso', 'warning');
-                    $(txt_nombre).addClass('is-invalid');
-                    $('#error_txt_nombre').text('El nombre del dispositivo ya está en uso.');
+                    $(txt_cedula).addClass('is-invalid');
+                    $('#error_txt_cedula').text('La cédula ya está en uso.');
                 }
             },
 
@@ -150,8 +150,8 @@ if (isset($_GET['_id'])) {
             }
         });
 
-        $('#txt_nombre').on('input', function() {
-            $('#error_txt_nombre').text('');
+        $('#txt_cedula').on('input', function() {
+            $('#error_txt_cedula').text('');
         });
     }
 
@@ -256,7 +256,7 @@ if (isset($_GET['_id'])) {
                                         <div class="d-flex align-items-center">
                                             <div class="tab-icon"><i class='bx bx-credit-card font-18 me-1'></i>
                                             </div>
-                                            <div class="tab-title">Tarjetas</div>
+                                            <div class="tab-title">Biométricos</div>
                                         </div>
                                     </a>
                                 </li>
@@ -275,27 +275,6 @@ if (isset($_GET['_id'])) {
                             <div class="tab-content py-3">
                                 <div class="tab-pane fade show active" id="datos" role="tabpanel">
 
-                                    <!-- txt_foto_url
-                                    
-                                            
-                                            
-                                            
-                                            
-                                            
-                                            
-                                            
-                                            txt_observaciones 
-                                            
-                                            ddl_estado_civil
-                                            txt_postal
-                                            txt_direccion
-                                            cbx_admin
-                                            cbx_habilitado
-                                            txt_fecha_aut_limite
-                                            txt_fecha_aut_inicio
-                                            txt_cargo
-txt_fecha_admision
-                                            -->
                                     <form id="form_persona">
 
                                         <div class="accordion" id="acordeon_persona">
@@ -310,30 +289,30 @@ txt_fecha_admision
                                                         <div>
                                                             <div class="row pt-3 mb-col">
                                                                 <div class="col-md-3">
-                                                                    <label for="sa_adm_primer_apellido" class="form-label">Primer Apellido </label>
-                                                                    <input type="text" class="form-control form-control-sm no_caracteres" id="txt_primer_apellido" name="txt_primer_apellido">
+                                                                    <label for="txt_primer_apellido" class="form-label">Primer Apellido </label>
+                                                                    <input type="text" class="form-control form-control-sm no_caracteres" id="txt_primer_apellido" name="txt_primer_apellido" maxlength="30">
                                                                 </div>
 
                                                                 <div class="col-md-3">
                                                                     <label for="txt_segundo_apellido" class="form-label">Segundo Apellido </label>
-                                                                    <input type="text" class="form-control form-control-sm no_caracteres" id="txt_segundo_apellido" name="txt_segundo_apellido">
+                                                                    <input type="text" class="form-control form-control-sm no_caracteres" id="txt_segundo_apellido" name="txt_segundo_apellido" maxlength="30">
                                                                 </div>
 
                                                                 <div class="col-md-3">
                                                                     <label for="txt_primer_nombre" class="form-label">Primer Nombre </label>
-                                                                    <input type="text" class="form-control form-control-sm no_caracteres" id="txt_primer_nombre" name="txt_primer_nombre">
+                                                                    <input type="text" class="form-control form-control-sm no_caracteres" id="txt_primer_nombre" name="txt_primer_nombre" maxlength="30">
                                                                 </div>
 
                                                                 <div class="col-md-3">
                                                                     <label for="txt_segundo_nombre" class="form-label">Segundo Nombre </label>
-                                                                    <input type="text" class="form-control form-control-sm no_caracteres" id="txt_segundo_nombre" name="txt_segundo_nombre">
+                                                                    <input type="text" class="form-control form-control-sm no_caracteres" id="txt_segundo_nombre" name="txt_segundo_nombre" maxlength="30">
                                                                 </div>
                                                             </div>
 
                                                             <div class="row mb-col">
                                                                 <div class="col-md-3">
                                                                     <label for="txt_cedula" class="form-label">Cédula de Identidad </label>
-                                                                    <input type="text" class="form-control form-control-sm no_caracteres" id="txt_cedula" name="txt_cedula" maxlength="10">
+                                                                    <input type="text" class="form-control form-control-sm solo_numeros_int" id="txt_cedula" name="txt_cedula" maxlength="15">
                                                                     <span id="error_txt_cedula" class="text-danger"></span>
                                                                 </div>
 
@@ -360,17 +339,17 @@ txt_fecha_admision
                                                             <div class="row mb-col">
                                                                 <div class="col-md-6">
                                                                     <label for="txt_correo" class="form-label">Correo </label>
-                                                                    <input type="email" class="form-control form-control-sm" id="txt_correo" name="txt_correo">
+                                                                    <input type="email" class="form-control form-control-sm" id="txt_correo" name="txt_correo" maxlength="100">
                                                                 </div>
 
                                                                 <div class="col-md-3">
                                                                     <label for="txt_telefono_1" class="form-label">Teléfono 1 </label>
-                                                                    <input type="text" class="form-control form-control-sm no_caracteres" id="txt_telefono_1" name="txt_telefono_1">
+                                                                    <input type="text" class="form-control form-control-sm solo_numeros_int" id="txt_telefono_1" name="txt_telefono_1" maxlength="15">
                                                                 </div>
 
                                                                 <div class="col-md-3">
                                                                     <label for="txt_telefono_2" class="form-label">Teléfono 2 </label>
-                                                                    <input type="text" class="form-control form-control-sm no_caracteres" id="txt_telefono_2" name="txt_telefono_2">
+                                                                    <input type="text" class="form-control form-control-sm solo_numeros_int" id="txt_telefono_2" name="txt_telefono_2" maxlength="15">
                                                                 </div>
 
 
@@ -382,6 +361,7 @@ txt_fecha_admision
                                                                         <input class="form-check-input" type="checkbox" id="cbx_admin" name="cbx_admin">
                                                                         <label class="form-label" for="cbx_admin">Administrador </label>
                                                                     </div>
+                                                                    <label class="error" style="display: none;" for="cbx_admin"></label>
                                                                 </div>
 
                                                                 <div class="col-auto">
@@ -389,14 +369,11 @@ txt_fecha_admision
                                                                         <input class="form-check-input" type="checkbox" id="cbx_habilitado" name="cbx_habilitado">
                                                                         <label class="form-label" for="cbx_habilitado">Habilitado </label>
                                                                     </div>
+                                                                    <label class="error" style="display: none;" for="cbx_habilitado"></label>
                                                                 </div>
                                                             </div>
 
-
                                                         </div>
-
-
-
                                                     </div>
                                                 </div>
                                             </div>
@@ -412,17 +389,24 @@ txt_fecha_admision
                                                             <div class="row pt-3 mb-col">
                                                                 <div class="col-md-3">
                                                                     <label for="ddl_estado_civil" class="form-label">Estado Civíl </label>
-                                                                    <input type="text" class="form-control form-control-sm no_caracteres" id="ddl_estado_civil" name="ddl_estado_civil">
+                                                                    <select class="form-select form-select-sm" id="ddl_estado_civil" name="ddl_estado_civil">
+                                                                        <option selected disabled value="">-- Selecciona un Estado Civil --</option>
+                                                                        <option value="Soltero">Soltero/a</option>
+                                                                        <option value="Casado">Casado/a</option>
+                                                                        <option value="Divorciado">Divorciado/a</option>
+                                                                        <option value="Viudo">Viudo/a</option>
+                                                                        <option value="Union">Unión de hecho</option>
+                                                                    </select>
                                                                 </div>
 
                                                                 <div class="col-md-3">
                                                                     <label for="txt_postal" class="form-label">Cod. Postal </label>
-                                                                    <input type="text" class="form-control form-control-sm no_caracteres" id="txt_postal" name="txt_postal">
+                                                                    <input type="text" class="form-control form-control-sm no_caracteres" id="txt_postal" name="txt_postal" maxlength="20">
                                                                 </div>
 
                                                                 <div class="col-md-6">
                                                                     <label for="txt_direccion" class="form-label">Dirección </label>
-                                                                    <input type="email" class="form-control form-control-sm no_caracteres" id="txt_direccion" name="txt_direccion">
+                                                                    <input type="text" class="form-control form-control-sm no_caracteres" id="txt_direccion" name="txt_direccion" maxlength="400">
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -454,14 +438,14 @@ txt_fecha_admision
                                                                 </div>
                                                                 <div class="col-md-3">
                                                                     <label for="txt_cargo" class="form-label">Cargo </label>
-                                                                    <input type="text" class="form-control form-control-sm no_caracteres" id="txt_cargo" name="txt_cargo">
+                                                                    <input type="text" class="form-control form-control-sm no_caracteres" id="txt_cargo" name="txt_cargo" maxlength="100">
                                                                 </div>
                                                             </div>
 
                                                             <div class="row mb-col">
                                                                 <div class="col-md-12">
                                                                     <label for="txt_observaciones" class="form-label">Observaciones </label>
-                                                                    <textarea class="form-control form-control-sm no_caracteres" name="txt_observaciones" id="txt_observaciones" rows="3"></textarea>
+                                                                    <textarea class="form-control form-control-sm no_caracteres" name="txt_observaciones" id="txt_observaciones" rows="3" maxlength="200"></textarea>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -483,17 +467,13 @@ txt_fecha_admision
                                         </div>
                                     </form>
 
-
-
-
-
                                 </div>
 
                                 <div class="tab-pane fade" id="tarjetas" role="tabpanel">
 
                                     <div class="row pt-3">
                                         <div class="col-sm-12" id="btn_nuevo">
-                                            <button type="button" class="btn btn-success btn-sm" onclick="abrir_modal_personas();"><i class="bx bx-plus"></i> Agregar Personas</button>
+                                            <button type="button" class="btn btn-success btn-sm" onclick="abrir_modal_personas();"><i class="bx bx-plus"></i> Agregar Biometricos</button>
                                         </div>
                                     </div>
 
@@ -521,7 +501,7 @@ txt_fecha_admision
 
                                     <div class="row pt-3">
                                         <div class="col-sm-12" id="btn_nuevo">
-                                            <button type="button" class="btn btn-success btn-sm" onclick="abrir_modal_personas();"><i class="bx bx-plus"></i> Agregar Personas</button>
+                                            <button type="button" class="btn btn-success btn-sm" onclick="abrir_modal_personas();"><i class="bx bx-plus"></i> Agregar Departamentos</button>
                                         </div>
                                     </div>
 
@@ -561,8 +541,10 @@ txt_fecha_admision
     $(document).ready(function() {
         // Selecciona el label existente y añade el nuevo label
 
-        agregar_asterisco_campo_obligatorio('ddl_modelo');
-        agregar_asterisco_campo_obligatorio('txt_nombre');
+        agregar_asterisco_campo_obligatorio('txt_primer_apellido');
+        agregar_asterisco_campo_obligatorio('txt_segundo_apellido');
+        agregar_asterisco_campo_obligatorio('txt_primer_nombre');
+        agregar_asterisco_campo_obligatorio('txt_segundo_nombre');
 
         $("#form_persona").validate({
             rules: {
@@ -580,6 +562,7 @@ txt_fecha_admision
                 },
                 txt_cedula: {
                     required: true,
+                    minlength: 10,
                 },
                 ddl_sexo: {
                     required: true,
@@ -587,62 +570,47 @@ txt_fecha_admision
                 txt_fecha_nacimiento: {
                     required: true,
                 },
-                txt_edad: {
-                    required: true,
-                },
                 txt_correo: {
                     required: true,
                 },
                 txt_telefono_1: {
                     required: true,
+                    minlength: 10,
+                    digits: true
                 },
                 txt_telefono_2: {
-                    required: true,
+                    //required: true,
                 },
                 cbx_admin: {
                     required: true,
                 },
                 cbx_habilitado: {
-                    required: true,
+                    //required: true,
                 },
                 ddl_estado_civil: {
-                    required: true,
+                    //required: true,
                 },
                 txt_postal: {
-                    required: true,
+                    //required: true,
                 },
                 txt_direccion: {
-                    required: true,
+                    //required: true,
                 },
                 txt_fecha_aut_inicio: {
-                    required: true,
+                    //required: true,
                 },
                 txt_fecha_aut_limite: {
-                    required: true,
+                    //required: true,
                 },
                 txt_fecha_admision: {
-                    required: true,
+                    //required: true,
                 },
                 txt_cargo: {
-                    required: true,
+                    //required: true,
                 },
                 txt_observaciones: {
-                    required: true,
+                    //required: true,
                 },
-            },
-            messages: {
-                ddl_modelo: {
-                    required: "El campo 'Modelo' es obligatorio",
-                },
-                txt_nombre: {
-                    required: "El campo 'Nombre' es obligatorio",
-                },
-                txt_host: {
-                    required: "El campo 'IP/Host' es obligatorio",
-                },
-                txt_puerto: {
-                    digits: "El campo 'Puerto' permite solo números",
-                }
             },
 
             highlight: function(element) {

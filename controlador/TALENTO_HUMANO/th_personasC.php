@@ -39,6 +39,11 @@ class th_personasC
 
     function insertar_editar($parametros)
     {
+        $txt_fecha_nacimiento = !empty($parametros['txt_fecha_nacimiento']) ? $parametros['txt_fecha_nacimiento'] : null;
+        $txt_fecha_aut_inicio = !empty($parametros['txt_fecha_aut_inicio']) ? $parametros['txt_fecha_aut_inicio'] : null;
+        $txt_fecha_aut_limite = !empty($parametros['txt_fecha_aut_limite']) ? $parametros['txt_fecha_aut_limite'] : null;
+        $txt_fecha_admision = !empty($parametros['txt_fecha_admision']) ? $parametros['txt_fecha_admision'] : null;
+
         $datos = array(
 
             array('campo' => 'th_per_primer_apellido', 'dato' => $parametros['txt_primer_apellido']),
@@ -47,7 +52,7 @@ class th_personasC
             array('campo' => 'th_per_segundo_nombre', 'dato' => $parametros['txt_segundo_nombre']),
             array('campo' => 'th_per_cedula', 'dato' => $parametros['txt_cedula']),
             array('campo' => 'th_per_sexo', 'dato' => $parametros['ddl_sexo']),
-            array('campo' => 'th_per_fecha_nacimiento', 'dato' => $parametros['txt_fecha_nacimiento']),
+            array('campo' => 'th_per_fecha_nacimiento', 'dato' => $txt_fecha_nacimiento),
             array('campo' => 'th_per_correo', 'dato' => $parametros['txt_correo']),
             array('campo' => 'th_per_telefono_1', 'dato' => $parametros['txt_telefono_1']),
             array('campo' => 'th_per_telefono_2', 'dato' => $parametros['txt_telefono_2']),
@@ -56,9 +61,9 @@ class th_personasC
             array('campo' => 'th_per_estado_civil', 'dato' => $parametros['ddl_estado_civil']),
             array('campo' => 'th_per_postal', 'dato' => $parametros['txt_postal']),
             array('campo' => 'th_per_direccion', 'dato' => $parametros['txt_direccion']),
-            array('campo' => 'th_per_fecha_aut_inicio', 'dato' => $parametros['txt_fecha_aut_inicio']),
-            array('campo' => 'th_per_fecha_aut_limite', 'dato' => $parametros['txt_fecha_aut_limite']),
-            array('campo' => 'th_per_fecha_admision', 'dato' => $parametros['txt_fecha_admision']),
+            array('campo' => 'th_per_fecha_aut_inicio', 'dato' => $txt_fecha_aut_inicio),
+            array('campo' => 'th_per_fecha_aut_limite', 'dato' => $txt_fecha_aut_limite),
+            array('campo' => 'th_per_fecha_admision', 'dato' => $txt_fecha_admision),
             array('campo' => 'th_per_cargo', 'dato' => $parametros['txt_cargo']),
             array('campo' => 'th_per_observaciones', 'dato' => $parametros['txt_observaciones']),
             array('campo' =>  'th_per_fecha_modificacion', 'dato' => date('Y-m-d H:i:s')),
