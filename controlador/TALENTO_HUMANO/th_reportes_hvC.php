@@ -198,11 +198,11 @@ class th_reportes_hvC
 
         $horarios = array(
             array('Departamento' => 'Docentes', 'hora_entrada' => '07:00', 'hora_salida' => '15:30'),
-            array('Departamento' => 'Dece', 'hora_entrada' => '08:00', 'hora_salida' => '15:30'),
-            array('Departamento' => 'Servicios Generales', 'hora_entrada' => '09:00', 'hora_salida' => '15:30'),
-            array('Departamento' => 'Administrativos', 'hora_entrada' => '10:00', 'hora_salida' => '15:30'),
-            array('Departamento' => 'TI', 'hora_entrada' => '11:00', 'hora_salida' => '15:30'),
-            array('Departamento' => 'Salud', 'hora_entrada' => '12:00', 'hora_salida' => '15:30'),
+            array('Departamento' => 'Dece', 'hora_entrada' => '07:00', 'hora_salida' => '15:30'),
+            array('Departamento' => 'Servicios Generales', 'hora_entrada' => '07:00', 'hora_salida' => '15:30'),
+            array('Departamento' => 'Administrativos', 'hora_entrada' => '07:00', 'hora_salida' => '15:30'),
+            array('Departamento' => 'TI', 'hora_entrada' => '07:00', 'hora_salida' => '15:30'),
+            array('Departamento' => 'Salud', 'hora_entrada' => '07:00', 'hora_salida' => '15:30'),
         );
 
         $hora_entrada = '00:00';

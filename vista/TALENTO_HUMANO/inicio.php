@@ -32,3 +32,13 @@ if ($_GET['acc'] == 'th_registrar_personas') {
 	include('TALENTO_HUMANO/PERSONAS/th_registrar_personas.php');
 }
 
+//Asistencias
+//Turnos
+if ($_GET['acc'] == 'th_registrar_turnos') {
+	include('TALENTO_HUMANO/ASISTENCIAS/TURNOS/th_registrar_turnos.php');
+}
+
+if ($_GET['acc'] == 'th_turnos') {
+	include('TALENTO_HUMANO/ASISTENCIAS/TURNOS/th_turnos.php');
+}
+

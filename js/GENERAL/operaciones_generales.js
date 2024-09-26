@@ -174,6 +174,11 @@ function textoMinusculas(input) {
     input.value = texto.toLowerCase();
 }
 
+function minutos_formato_hora(num) {
+    let hours = Math.floor(num / 60);
+    let minutes = num % 60;
+    return (hours < 10 ? '0' : '') + hours + ':' + (minutes < 10 ? '0' : '') + minutes;
+}
 
 
 //Funcion para agregar asterisco en un label para resaltar que es campo obligatorio
