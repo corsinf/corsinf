@@ -17,7 +17,6 @@
             dataType: 'json',
             success: function(response) {
                 $('#pnl_experiencia_laboral').html(response);
-                console.log(response);
             }
         });
     }
@@ -31,33 +30,47 @@
             },
             dataType: 'json',
             success: function(response) {
-
                 $('#txt_nombre_empresa').val(response[0].th_expl_nombre_empresa);
                 $('#txt_cargos_ocupados').val(response[0].th_expl_cargos_ocupados);
                 $('#txt_fecha_inicio_laboral').val(response[0].th_expl_fecha_inicio_experiencia);
                 
                 var fecha_fin_laboral = response[0].th_expl_fecha_fin_experiencia;
-                if (fecha_fin_laboral == '1900-01-01') {
+
+                if (fecha_fin_laboral === '') {
+                    var hoy = new Date();
+                    var dia = String(hoy.getDate()).padStart(2, '0');
+                    var mes = String(hoy.getMonth() + 1).padStart(2, '0');
+                    var year = hoy.getFullYear();
+
+                    var fecha_actual_laboral = year + '-' + mes + '-' + dia;
+                    $('#txt_fecha_final_laboral').val(fecha_actual_laboral);
+                    $('#txt_fecha_final_laboral').prop('disabled', true);
                     $('#cbx_fecha_final_laboral').prop('checked', true);
-                    $('#txt_fecha_final_laboral').val('');
                 } else {
-                    $('#txt_fecha_final_laboral').val(response[0].th_expl_fecha_fin_experiencia);
+                    $('#cbx_fecha_final_laboral').prop('checked', false);
+                    $('#txt_fecha_final_laboral').prop('disabled', false);
+                    $('#txt_fecha_final_laboral').val(fecha_fin_laboral);
                 }
 
+                $('#txt_responsabilidades_logros').val(response[0].th_expl_responsabilidades_logros);
                 $('#txt_experiencia_id').val(response[0]._id);
-                
-                console.log(response);
             }
         });
     }
 
-    //Experiencia Laboral
     function insertar_editar_experiencia_laboral() {
         var txt_nombre_empresa = $('#txt_nombre_empresa').val();
         var txt_cargos_ocupados = $('#txt_cargos_ocupados').val();
         var txt_fecha_inicio_laboral = $('#txt_fecha_inicio_laboral').val();
-        var txt_fecha_final_laboral = $('#txt_fecha_final_laboral').val();
         var cbx_fecha_final_laboral = $('#cbx_fecha_final_laboral').prop('checked') ? 1 : 0;
+        var txt_fecha_final_laboral = '';
+
+        if ($('#cbx_fecha_final_laboral').is(':checked')) {
+            txt_fecha_final_laboral = '';
+        } else {
+            txt_fecha_final_laboral = $('#txt_fecha_final_laboral').val();
+        }
+
         var txt_responsabilidades_logros = $('#txt_responsabilidades_logros').val();
         var txt_id_postulante = '<?= $id ?>';
         var txt_id_experiencia_laboral = $('#txt_experiencia_id').val();
@@ -160,14 +173,21 @@
         $('#txt_cargos_ocupados').val('');
         $('#txt_fecha_inicio_laboral').val('');
         $('#txt_fecha_final_laboral').val('');
+        $('#txt_fecha_final_laboral').prop('disabled', false);
         $('#cbx_fecha_final_laboral').prop('checked', false);
         $('#txt_responsabilidades_logros').val('');
+        $('#txt_experiencia_id').val('');
+        //Cambiar texto
+        $('#lbl_titulo_experiencia_laboral').html('Agregue una Experiencia Laboral');
+        $('#btn_guardar_experiencia').html('Agregar');
     }
 
     function validar_fechas_exp_prev() {
         var fecha_inicio = $('#txt_fecha_inicio_laboral').val();
         var fecha_final = $('#txt_fecha_final_laboral').val();
-
+        var hoy = new Date();
+        var fecha_actual = hoy.toISOString().split('T')[0];
+        //* Validar que la fecha final no sea menor a la fecha de inicio
         if (fecha_inicio && fecha_final) {
             if (Date.parse(fecha_final) < Date.parse(fecha_inicio)) {
                 Swal.fire({
@@ -177,7 +197,43 @@
                 });
                 $('.form-control').removeClass('is-valid is-invalid');
                 $('#txt_fecha_final_laboral').val('');
+                $('#cbx_fecha_final_laboral').prop('checked', false);
+                $('#txt_fecha_final_laboral').prop('disabled', false);
             }
+            if (Date.parse(fecha_inicio) > Date.parse(fecha_final)) {
+                Swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    text: "La fecha de inicio no puede ser mayor a la fecha final.",
+                });
+                $('.form-control').removeClass('is-valid is-invalid');
+                $('#txt_fecha_inicio_laboral').val('');
+                $('#cbx_fecha_final_laboral').prop('checked', false);
+                $('#txt_fecha_final_laboral').prop('disabled', false);
+            }
+        }
+
+        //* Validar que la fecha de inicio y final no sean mayores a la fecha actual
+        if (fecha_inicio && Date.parse(fecha_inicio) > Date.parse(fecha_actual)) {
+            Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: "La fecha de inicio no puede ser mayor a la fecha actual.",
+            });
+            $('.form-control').removeClass('is-valid is-invalid');
+            $('#txt_fecha_inicio_laboral').val('');
+        }
+
+        if (fecha_final && Date.parse(fecha_final) > Date.parse(fecha_actual)) {
+            Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: "La fecha de finalización no puede ser mayor a la fecha actual.",
+            });
+            $('.form-control').removeClass('is-valid is-invalid');
+            $('#txt_fecha_final_laboral').val('');
+            $('#cbx_fecha_final_laboral').prop('checked', false);
+            $('#txt_fecha_final_laboral').prop('disabled', false);
         }
     }
 </script>
@@ -193,7 +249,7 @@
 
             <!-- Modal Header -->
             <div class="modal-header">
-                <h5><label class="text-body-secondary" id="lbl_titulo_experiencia_laboral">Agregue una experiencia laboral</small></h5>
+                <h6><label class="text-body-secondary fw-bold" id="lbl_titulo_experiencia_laboral">Agregue una experiencia laboral</small></h6>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="limpiar_campos_experiencia_laboral_modal()"></button>
             </div>
             <!-- Modal body -->
@@ -210,11 +266,11 @@
                     </div>
                     <div class="mb-3">
                         <label for="txt_fecha_inicio_laboral" class="form-label form-label-sm">Fecha de inicio </label>
-                        <input type="date" class="form-control form-control-sm no_caracteres" name="txt_fecha_inicio_laboral" id="txt_fecha_inicio_laboral" onchange="validar_fechas_exp_prev();">
+                        <input type="date" class="form-control form-control-sm no_caracteres" name="txt_fecha_inicio_laboral" id="txt_fecha_inicio_laboral" onchange="checkbox_actualidad_exp_prev();">
                     </div>
                     <div>
                         <label for="txt_fecha_final_laboral" class="form-label form-label-sm">Fecha de finalización </label>
-                        <input type="date" class="form-control form-control-sm no_caracteres" name="txt_fecha_final_laboral" id="txt_fecha_final_laboral" onchange="validar_fechas_exp_prev();">
+                        <input type="date" class="form-control form-control-sm no_caracteres" name="txt_fecha_final_laboral" id="txt_fecha_final_laboral" onchange="checkbox_actualidad_exp_prev();">
                     </div>
                     <div class="mt-1 mb-3">
                         <input type="checkbox" class="form-check-input" name="cbx_fecha_final_laboral" id="cbx_fecha_final_laboral" onchange="checkbox_actualidad_exp_prev();">
@@ -228,7 +284,7 @@
                 <div class="modal-footer">
                     <div class="row mx-auto">
                         <div class="col-6">
-                            <button type="button" class="btn btn-success btn-sm" id="btn_guardar_experiencia" onclick="insertar_editar_experiencia_laboral();">Agregar</button>
+                            <button type="button" class="btn btn-success btn-sm" id="btn_guardar_experiencia" onclick="validar_fechas_exp_prev();insertar_editar_experiencia_laboral();">Agregar</button>
                         </div>
                         <div class="col-6">
                             <button type="button" class="btn btn-danger btn-sm" id="btn_eliminar_experiencia" onclick="delete_datos_experiencia_laboral();">Eliminar</button>
@@ -303,26 +359,38 @@
     });
 
     function checkbox_actualidad_exp_prev() {
-        var actualidad = new Date();
-        var dia = String(actualidad.getDate()).padStart(2, '0');
-        var mes = String(actualidad.getMonth() + 1).padStart(2, '0');
-        var ano = actualidad.getFullYear();
-        var fecha_formateada = ano + '-' + mes + '-' + dia;
+        if ($('#cbx_fecha_final_laboral').is(':checked')) {
+            var hoy = new Date();
+            var dia = String(hoy.getDate()).padStart(2, '0');
+            var mes = String(hoy.getMonth() + 1).padStart(2, '0');
+            var year = hoy.getFullYear();
 
-        if ($('#txt_fecha_final_laboral').val() === '') {
-            if ($('#cbx_fecha_final_laboral').is(':checked')) {
-                $('#txt_fecha_final_laboral').val(fecha_formateada);
-                $('#txt_fecha_final_laboral').prop('disabled', true);
-                $('#txt_fecha_final_laboral').rules("remove", "required");
-            } else {
-                $('#txt_fecha_final_laboral').rules("add", {
-                    required: true
-                });
-                $('#txt_fecha_final_laboral').prop('disabled', false);
-            }
+            var fecha_actual = year + '-' + mes + '-' + dia;
+            $('#txt_fecha_final_laboral').val(fecha_actual);
+
+            $('#txt_fecha_final_laboral').prop('disabled', true);
+            $('#txt_fecha_final_laboral').rules("remove", "required");
+
+            // Agregar clase 'is-valid' para poner el campo en verde
+            $('#txt_fecha_final_laboral').addClass('is-valid');
+            $('#txt_fecha_final_laboral').removeClass('is-invalid');
+
         } else {
-            $('#cbx_fecha_final_laboral').prop('checked', false);
+            // Solo limpiar el campo si estaba previamente deshabilitado
+            if ($('#txt_fecha_final_laboral').prop('disabled')) {
+                $('#txt_fecha_final_laboral').val('');
+            }
+
             $('#txt_fecha_final_laboral').prop('disabled', false);
+            $('#txt_fecha_final_laboral').rules("add", {
+                required: true
+            });
+            $('#txt_fecha_final_laboral').removeClass('is-valid');
+            $('#form_experiencia_laboral').validate().resetForm();
+            $('.form-control').removeClass('is-valid is-invalid');
         }
+
+        // Validar fechas
+        validar_fechas_exp_prev();
     }
 </script>

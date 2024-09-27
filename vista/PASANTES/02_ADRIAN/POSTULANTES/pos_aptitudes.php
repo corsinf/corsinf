@@ -13,7 +13,7 @@
         lista_aptitudes_blandas();
 
         $('#ddl_seleccionar_aptitud_blanda').select2({
-            placeholder: 'Selecciona una opción',
+            placeholder: ' Selecciona una opción',
             dropdownParent: $('#modal_agregar_aptitudes'),
             language: {
                 inputTooShort: function() {
@@ -32,7 +32,7 @@
         });
 
         $('#ddl_seleccionar_aptitud_tecnica').select2({
-            placeholder: 'Selecciona una opción',
+            placeholder: ' Selecciona una opción',
             dropdownParent: $('#modal_agregar_aptitudes'),
             language: {
                 inputTooShort: function() {
@@ -225,12 +225,12 @@
                     <div class="mb-4">
                         <div class="row mb-1">
                             <div class="col-12 d-flex align-items-center">
-                                <label for="ddl_seleccionar_aptitud_blanda" class="form-label form-label-sm fw-bold">Seleccione sus Aptitudes Blandas <label style="color: red;">*</label></label>
+                                <label for="ddl_seleccionar_aptitud_blanda" class="form-label form-label-sm fw-bold">Seleccione sus Aptitudes Blandas </label>
                             </div>
                         </div>
                         <div class="row mb-3">
                             <div class="col-12">
-                                <select class="form-select form-select-sm ddl_seleccionar_aptitud" id="ddl_seleccionar_aptitud_blanda" name="ddl_seleccionar_aptitud_blanda" multiple="multiple">
+                                <select class="form-select form-select-sm ddl_seleccionar_aptitud" id="ddl_seleccionar_aptitud_blanda" name="ddl_seleccionar_aptitud_blanda" multiple="multiple" maxlength="5000">
                                 </select>
                             </div>
                         </div>
@@ -238,12 +238,12 @@
                     <div class="mb-2">
                         <div class="row mb-1">
                             <div class="col-12 d-flex align-items-center">
-                                <label for="ddl_seleccionar_aptitud_tecnica" class="form-label form-label-sm fw-bold">Seleccione sus Aptitudes Técnicas <label style="color: red;">*</label></label>
+                                <label for="ddl_seleccionar_aptitud_tecnica" class="form-label form-label-sm fw-bold">Seleccione sus Aptitudes Técnicas </label>
                             </div>
                         </div>
                         <div class="row mb-3">
                             <div class="col-12">
-                                <select class="form-select form-select-sm ddl_seleccionar_aptitud" id="ddl_seleccionar_aptitud_tecnica" name="ddl_seleccionar_aptitud_tecnica" multiple="multiple">
+                                <select class="form-select form-select-sm ddl_seleccionar_aptitud" id="ddl_seleccionar_aptitud_tecnica" name="ddl_seleccionar_aptitud_tecnica" multiple="multiple" maxlength="5000">
                                 </select>
                             </div>
                         </div>
@@ -259,14 +259,19 @@
 
 <script>
     $(document).ready(function() {
+        agregar_asterisco_campo_obligatorio('ddl_seleccionar_aptitud_blanda');
+        agregar_asterisco_campo_obligatorio('ddl_seleccionar_aptitud_tecnica');
+
         //Validación Aptitudes
         $("#form_aptitudes").validate({
             rules: {
                 ddl_seleccionar_aptitud_blanda: {
                     required: true,
+                    maxlength: 5000
                 },
                 ddl_seleccionar_aptitud_tecnica: {
                     required: true,
+                    maxlength: 5000
                 },
             },
             messages: {
@@ -292,3 +297,5 @@
         });
     })
 </script>
+
+

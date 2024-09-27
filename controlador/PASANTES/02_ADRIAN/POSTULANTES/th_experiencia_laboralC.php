@@ -38,16 +38,15 @@ class th_experiencia_laboralC
         foreach ($datos as $key => $value) {
             $texto .=
                 '<div class="row mb-3">' .
-                '<div class="col-10">' .
-                '<h6 class="fw-bold">' . $value['th_expl_nombre_empresa'] . '</h6>' .
-                '<p>' . $value['th_expl_cargos_ocupados'] . '</p>' .
-                '<p>' . $value['th_expl_fecha_inicio_experiencia'] . ' - ' . $value['th_expl_fecha_fin_experiencia'] . '</p>' .
-                '<p>' . $value['th_expl_responsabilidades_logros'] . '</p>' .
-                '</div>' .
-                '<div class="col-2 d-flex justify-content-end align-items-start">' .
-
-                "<button class='btn' style='color: white;' onclick='abrir_modal_experiencia_laboral(" . $value['_id'] . ");'><i class='text-dark bx bx-pencil bx-sm' ></i></button>" .
-                '</div>' .
+                    '<div class="col-10">' .
+                        '<h6 class="fw-bold">' . $value['th_expl_nombre_empresa'] . '</h6>' .
+                        '<p>' . $value['th_expl_cargos_ocupados'] . '</p>' .
+                        '<p>' . $value['th_expl_fecha_inicio_experiencia'] . ' - ' . (($value['th_expl_fecha_fin_experiencia'] == '') ? 'Actualidad' : $value['th_expl_fecha_fin_experiencia']) . '</p>' .
+                        '<p>' . $value['th_expl_responsabilidades_logros'] . '</p>' .
+                    '</div>' .
+                    '<div class="col-2 d-flex justify-content-end align-items-start">' .
+                        "<button class='btn' style='color: white;' onclick='abrir_modal_experiencia_laboral(" . $value['_id'] . ");'><i class='text-dark bx bx-pencil bx-sm' ></i></button>" .
+                    '</div>' .
                 '</div>';
         }
         return $texto;
