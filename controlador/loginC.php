@@ -60,7 +60,7 @@ if(isset($_GET['restriccion']))
 if(isset($_GET['menu_lateral']))
 {
   echo json_encode($controlador->menu_lateral());
-  //file_put_contents('debug_menu_lateral.log', print_r($_SESSION['MENU_LATERAL'], true), FILE_APPEND);
+  //file_put_contents('debug_menu_lateral.log', print_r($_SESSION['INICIO']['MENU_LATERAL'], true), FILE_APPEND);
 }
 if(isset($_GET['modulos_sistema']))
 {
@@ -1211,8 +1211,8 @@ class loginC
 	function menu_lateral()
 	{
 		 // Verificar si el menú ya está en la sesión
-		//  if (isset($_SESSION['MENU_LATERAL']) && !empty($_SESSION['MENU_LATERAL'])) {
-		// 	return $_SESSION['MENU_LATERAL']; // Devolver menú cacheado
+		//  if (isset($_SESSION['INICIO']['MENU_LATERAL']) && !empty($_SESSION['INICIO']['MENU_LATERAL'])) {
+		// 	return $_SESSION['INICIO']['MENU_LATERAL']; // Devolver menú cacheado
 		// }
 
 		$opciones = '<li><a href="inicio.php?acc=index"><div class="parent-icon"><i class="bx bx-home"></i></div><div class="menu-title">Inicio</div></a></li>';
@@ -1274,7 +1274,7 @@ class loginC
 		}
 
 		// Guardar el menú generado en la sesión
-		$_SESSION['MENU_LATERAL'] = $opciones;
+		$_SESSION['INICIO']['MENU_LATERAL'] = $opciones;
 		// print_r($opciones);die();
 
 		return $opciones;

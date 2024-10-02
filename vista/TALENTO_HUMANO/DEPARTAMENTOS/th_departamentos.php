@@ -26,12 +26,12 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                 {
                     data: 'tiempo_maximo_dentro'
                 },
-                {
-                    data: null,
-                    render: function(data, type, item) {
-                        return `<button type="button" class="btn btn-primary btn-xs" onclick=""><i class="lni lni-spinner-arrow fs-7 me-0 fw-bold"></i></button>`;
-                    }
-                }
+                // {
+                //     data: null,
+                //     render: function(data, type, item) {
+                //         return `<button type="button" class="btn btn-primary btn-xs" onclick=""><i class="lni lni-spinner-arrow fs-7 me-0 fw-bold"></i></button>`;
+                //     }
+                // }
             ],
             order: [
                 [1, 'asc']
@@ -70,10 +70,10 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                     <div class="card-body p-5">
 
                         <div class="row">
-                            
+
                             <div class="col-12 col-md-6">
                                 <div class="card-title d-flex align-items-center">
-                                    
+
                                     <div class="" id="btn_nuevo">
                                         <a href="../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_registrar_departamentos"
                                             type="button" class="btn btn-success btn-sm ">
@@ -101,7 +101,7 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                                             <tr>
                                                 <th>Nombre</th>
                                                 <th>Cantidad de Personas</th>
-                                                <th width="10px">Acción</th>
+                                                <!-- <th width="10px">Acción</th> -->
                                             </tr>
                                         </thead>
                                         <tbody class="">

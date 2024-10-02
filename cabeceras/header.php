@@ -506,7 +506,7 @@ if (($_SESSION['INICIO']['LOGO']) == '.' || $_SESSION['INICIO']['LOGO'] == '' ||
 			</div>
 			<!--navigation-->
 			<ul class="metismenu" id="menu">
-				<?= $_SESSION['MENU_LATERAL'] ?? '' ?>
+				<?= $_SESSION['INICIO']['MENU_LATERAL'] ?? '' ?>
 			</ul>
 			<!-- <ul class="metismenu" id="menu1">
 				
