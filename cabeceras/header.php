@@ -338,17 +338,24 @@ if (($_SESSION['INICIO']['LOGO']) == '.' || $_SESSION['INICIO']['LOGO'] == '' ||
 			});
 		}
 
-		function empresa_selecconada(empresa,activeDir,normal,tipo,primera_vez,email,pass)
-		{
+		function empresa_selecconada(empresa, activeDir, primera_vez) {
+
+			// $('#myModal_espera').modal('show');
+			pass = $('#pass').val();
+			email = $('#email').val();
+			$('#txt_empresa').val(empresa);
+			$('#txt_activeDir').val(activeDir);
+			$('#txt_primera_vez').val(primera_vez);
+
 			var parametros = {
-				'empresa':empresa,
-		         'activeDir':activeDir,
-		         'normal':normal,
-		         'primera_vez':primera_vez,
-		         'tipo':tipo,
-		         'pass':pass,
-		         'email':email,
+				'empresa': empresa,
+				'activeDir': activeDir,
+				'primera_vez': primera_vez,
+				'pass': pass,
+				'email': email,
 			}
+			// titulos_cargados();
+
 			$.ajax({
 				data: {
 					parametros: parametros
@@ -357,23 +364,82 @@ if (($_SESSION['INICIO']['LOGO']) == '.' || $_SESSION['INICIO']['LOGO'] == '' ||
 				type: 'post',
 				dataType: 'json',
 				success: function(response) {
+					
+
 					if (response.respuesta == 2) {
 						$('#lista_modulos_empresas').html(response.modulos);
 						$('#txt_id').val(empresa);
 						$('#myModal_modulos').modal('show');
+						// $('#myModal_espera').modal('hide');
 					} else if (response.respuesta == 1) {
 
-						iniciar_sesion(parametros);
+						// $('#myModal_espera').modal('show');
+						if (response.num_roles > 1 && response.roles != '') {
+							$('#lista_roles').html(response.roles);
+							$('#myModal_empresas').modal('hide');
+							$('#myModal_rol').modal('show');
+						} else {
+							$('#txt_tipo_rol').val(response.roles);
+							$('#txt_normal').val(response.normal);
+							iniciar_sesion();
+						}
 					}
+					
+					$('#myModal_espera').modal('hide');
+				},
+				error: function(xhr, status, error) {
+					$('#myModal_espera').modal('hide');
 				}
 			});
 
 		}
 
-		function iniciar_sesion(parametros) {
-			// var parametros = {
-			// 	'id': id,
-			// }
+		// function iniciar_sesion(parametros) {
+		// 	// var parametros = {
+		// 	// 	'id': id,
+		// 	// }
+		// 	$.ajax({
+		// 		data: {
+		// 			parametros: parametros
+		// 		},
+		// 		url: '../controlador/loginC.php?cambiar_empresa=true',
+		// 		type: 'post',
+		// 		dataType: 'json',
+		// 		/*beforeSend: function () {   
+		// 		     var spiner = '<div class="text-center"><img src="../../img/gif/proce.gif" width="100" height="100"></div>'     
+		// 		   $('#tabla_').html(spiner);
+		// 		},*/
+		// 		success: function(response) {
+
+		// 			console.log(response);
+		// 			if (response == -2) {
+		// 				Swal.fire('', 'Email no registrado.', 'error');
+
+		// 			} else if (response == -1) {
+		// 				Swal.fire('', 'Empresa Inexistente', 'info');
+
+		// 			} else if (response == -3) {
+		// 				Swal.fire('', 'Usuario sin acceso', 'error');
+
+		// 			} else if (response == 1) {
+		// 				window.location.href = "modulos_sistema.php";
+		// 			}
+		// 		}
+		// 	});
+		// }
+
+			function iniciar_sesion() {
+			// $('#myModal_espera').modal('show');
+			var parametros = {
+				'tipo': $('#txt_tipo_rol').val(),
+				'empresa': $('#txt_empresa').val(),
+				'ActiveDir': $('#txt_activeDir').val(),
+				'normal': $('#txt_normal').val(),
+				'primera_vez': $('#txt_primera_vez').val(),
+				'pass': $('#pass').val(),
+				'email': $('#email').val(),
+			}
+
 			$.ajax({
 				data: {
 					parametros: parametros
@@ -387,24 +453,32 @@ if (($_SESSION['INICIO']['LOGO']) == '.' || $_SESSION['INICIO']['LOGO'] == '' ||
 				},*/
 				success: function(response) {
 
+					$('#myModal_espera').modal('hide');
+
 					console.log(response);
 					if (response == -2) {
 						Swal.fire('', 'Email no registrado.', 'error');
 
 					} else if (response == -1) {
-						Swal.fire('', 'Empresa Inexistente', 'info');
+						Swal.fire('', 'Contraseña incorrecta', 'info');
 
 					} else if (response == -3) {
 						Swal.fire('', 'Usuario sin acceso', 'error');
 
+					} else if (response == -4) {
+						Swal.fire('', 'Usuario de active directory no autentificado', 'error');
 					} else if (response == 1) {
 						window.location.href = "modulos_sistema.php";
 					}
 				}
 			});
-
-
 		}
+		function seleccionar_perfil(rol, usu_normal) {
+			$('#txt_tipo_rol').val(rol);
+			$('#txt_normal').val(usu_normal);
+			iniciar_sesion();
+		}
+
 	</script>
 </head>
 
@@ -827,12 +901,13 @@ if (($_SESSION['INICIO']['LOGO']) == '.' || $_SESSION['INICIO']['LOGO'] == '' ||
 									</div>
 								</div>
 							</li>
+							<?php if($_SESSION['INICIO']['NUM_MODULOS']>1) { ?>
 							<li>
 								<a class="nav-link dropdown-toggle dropdown-toggle-nocaret position-relative" href="modulos_sistema.php" role="button" aria-expanded="false" title="Salir del modulo">
 									<i class='bx bx-log-out'></i>
 								</a>
 							</li>
-							<?php if ($_SESSION['INICIO']['NO_CONCURENTE'] == '') { ?>
+							<?php }  if ($_SESSION['INICIO']['NO_CONCURENTE'] == '' && $_SESSION['INICIO']['NUM_EMPRESAS']>1) { ?>
 								<li>
 									<a class="nav-link dropdown-toggle dropdown-toggle-nocaret position-relative" onclick="cargar_empresas()" role="button" aria-expanded="false" title="Cambiar empresa">
 										<i class='bx bx-building-house'></i>
@@ -905,10 +980,15 @@ if (($_SESSION['INICIO']['LOGO']) == '.' || $_SESSION['INICIO']['LOGO'] == '' ||
 					<div class="modal-header">
 						<h3 class="modal-title" id="titulo">Empresas</h3>
 					</div>
-					<div class="modal-body">
-						<ul class="list-group list-group-flush radius-10" id="lista_empresas">
+					<div class="modal-body" style=" overflow-y: scroll;  height: 300px;">
+						<input type="hidden" name="txt_empresa" id="txt_empresa">
+						<input type="hidden" name="txt_activeDir" id="txt_activeDir">
+						<input type="hidden" name="txt_normal" id="txt_normal">
+						<input type="hidden" name="txt_primera_vez" id="txt_primera_vez">
 
-							
+						<div class="product-list mb-3 ps ps--active-y" id="lista_empresas" style="height: auto;">
+
+						</div>
 					</div>
 					<div class="modal-footer">
 						<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
@@ -916,4 +996,23 @@ if (($_SESSION['INICIO']['LOGO']) == '.' || $_SESSION['INICIO']['LOGO'] == '' ||
 				</div>
 			</div>
 		</div>
+<div class="modal fade" id="myModal_rol" tabindex="-1" role="dialog" data-bs-backdrop="static" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h3 class="modal-title" id="titulo">Perfil de usuario</h3>
+			</div>
+			<div class="modal-body" style=" overflow-y: scroll;  height: 300px;">
+				<input type="hidden" name="txt_tipo_rol" id="txt_tipo_rol">
+				<div class="product-list mb-3 ps ps--active-y" id="lista_roles" style="height: auto;">
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" onclick="
+       			$('#myModal_empresas').modal('show');
+       			$('#myModal_rol').modal('hide');">Cerrar</button>
+			</div>
+		</div>
+	</div>
+</div>
 		
