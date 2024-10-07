@@ -13,4 +13,12 @@ class th_provinciasM extends BaseModel
         'th_prov_fecha_creacion',
         'th_prov_fecha_modificacion',
     ];
+
+    function buscar_provincia($buscar)
+    {
+        $sql = "SELECT * FROM th_provincias WHERE th_prov_estado = 1 AND th_prov_nombre LIKE '%" . $buscar . "%'";
+
+        $datos = $this->db->datos($sql);
+        return $datos;
+    }
 }

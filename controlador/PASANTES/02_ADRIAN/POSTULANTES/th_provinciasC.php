@@ -3,8 +3,19 @@ require_once(dirname(__DIR__, 4) . '/modelo/PASANTES/02_ADRIAN/POSTULANTES/th_pr
 
 $controlador = new th_provinciasC();
 
-if (isset($_GET['listar_provincias'])) {
-    echo json_encode($controlador->listar_provincias());
+if (isset($_GET['buscar'])) {
+    $query = '';
+    $tipo = '';
+
+    if (isset($_GET['q'])) {
+        $query = $_GET['q'];
+    }
+
+    $parametros = array(
+        'query' => $query,
+    );
+
+    echo json_encode($controlador->buscar($parametros));
 }
 
 class th_provinciasC
@@ -16,15 +27,17 @@ class th_provinciasC
         $this->modelo = new th_provinciasM();
     }
 
-    function listar_provincias()
-    {
-        $datos = $this->modelo->where('th_prov_id', 1)->listar();
 
-        $option = '';
+    function buscar($parametros)
+    {
+        $lista = array();
+
+        $datos = $this->modelo->buscar_provincia($parametros['query']);
         foreach ($datos as $key => $value) {
-            $option .= "<option id='ddl_opcion_" . $value['th_prov_id'] . "' value='" . $value['th_prov_id'] . "'>" . $value['th_prov_nombre'] . "</option>";
+            $lista[] = array('id' => ($value['th_prov_id']), 'text' => ($value['th_prov_nombre']), 'data' => '');
         }
-        return $option;
+
+        return $lista;
     }
 }
 
