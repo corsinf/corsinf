@@ -246,7 +246,7 @@ if (isset($_GET['_id'])) {
                                 <div class="col-md-12">
                                     <div class="form-check">
                                         <input class="form-check-input" type="checkbox" value="" name="cbx_ssl" id="cbx_ssl">
-                                        <label class="form-label" for="cbx_serial">SSL </label>
+                                        <label class="form-label" for="cbx_ssl">SSL </label>
                                     </div>
                                 </div>
                             </div>

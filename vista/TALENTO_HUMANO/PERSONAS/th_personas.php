@@ -7,7 +7,7 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
 <script src="../js/GENERAL/operaciones_generales.js"></script>
 <script type="text/javascript">
     $(document).ready(function() {
-        tbl_dispositivos = $('#tbl_dispositivos').DataTable($.extend({}, configuracion_datatable('Personas', 'personas'), {
+        tbl_personas = $('#tbl_personas').DataTable($.extend({}, configuracion_datatable('Personas', 'personas'), {
             reponsive: true,
             language: {
                 url: 'https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
@@ -99,11 +99,11 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                         <section class="content pt-2">
                             <div class="container-fluid">
                                 <div class="table-responsive">
-                                    <table class="table table-striped responsive " id="tbl_dispositivos" style="width:100%">
+                                    <table class="table table-striped responsive " id="tbl_personas" style="width:100%">
                                         <thead>
                                             <tr>
                                                 <th>Nombre</th>
-                                                <th>Apellido</th>
+                                                <th>Cédula</th>
                                                 <th>Correo</th>
                                                 <th>Teléfono</th>
                                             </tr>

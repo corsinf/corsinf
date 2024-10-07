@@ -17,4 +17,22 @@ class th_departamentosM extends BaseModel
         'th_dep_fecha_creacion AS fecha_creacion',
         'th_dep_fecha_modificacion AS fecha_modificacion',
     ];
+
+    function listar_departamentos_contar_personas()
+    {
+        $sql =
+            "SELECT
+                dep.th_dep_id AS _id,
+                dep.th_dep_nombre AS nombre,
+                COUNT ( per_dep.th_per_id ) AS total_personas 
+            FROM th_departamentos dep
+            LEFT JOIN th_personas_departamentos per_dep ON per_dep.th_dep_id = dep.th_dep_id 
+            WHERE dep.th_dep_estado = 1 
+            GROUP BY
+            dep.th_dep_id,
+            dep.th_dep_nombre;";
+
+        $datos = $this->db->datos($sql);
+        return $datos;
+    }
 }

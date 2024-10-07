@@ -54,7 +54,8 @@ class BaseModel
 
         // Mostrar la consulta SQL para depuración y salir
         //print_r($sql); exit();
-
+        //return $sql;
+        
         // Ejecutar consulta y devolver resultados
         $datos = $this->db->datos($sql);
         return $datos;
@@ -107,6 +108,12 @@ class BaseModel
 
         $datos = $this->db->datos($sql);
         return $datos;
+    }
+
+    //Para resetear los valores de los arrays y en un bucle no se acumulen los where o join
+    function reset() {
+        $this->condicionesWhere = [];
+        $this->relaciones = [];
     }
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////

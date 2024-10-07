@@ -134,7 +134,7 @@ class loginM
 		return $datos;
 	}
 
-	function datos_login_pass_requiered($email,$pass,$id=false,$tipo=false)
+	function datos_login_pass_requiered($email,$pass,$id=false,$tipo=false,$master=false)
 	{		
 		// print_r($pass);die();
 		$sql ="SELECT id_usuarios as 'id',U.*,TU.DESCRIPCION as tipo,A.*  FROM ACCESOS A
@@ -151,10 +151,16 @@ class loginM
 			$sql.=" AND id_tipo_usu='".$tipo."'";
 		}
 
+		if($master)
+		{
+			$datos = $this->db->datos($sql,1);
+		}else{
+			$datos = $this->db->datos($sql);
+		}
+
 		// print_r($_SESSION['INICIO']);
 		// print_r($sql);die();
 
-		$datos = $this->db->datos($sql);
 		// print_r($datos);die();
 		return $datos;
 	}
