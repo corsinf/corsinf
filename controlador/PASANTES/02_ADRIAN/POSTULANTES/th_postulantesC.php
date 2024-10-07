@@ -3,6 +3,10 @@ require_once(dirname(__DIR__, 4) . '/modelo/PASANTES/02_ADRIAN/POSTULANTES/th_po
 
 $controlador = new th_postulantesC();
 
+if (isset($_GET['cargar_datos_provincias'])) {
+    echo json_encode($controlador->listar_provincias($_POST['id']));
+}
+
 if (isset($_GET['listar'])) {
     echo json_encode($controlador->listar($_POST['id']));
 }
@@ -27,6 +31,29 @@ class th_postulantesC
     function __construct()
     {
         $this->modelo = new th_postulantesM();
+    }
+
+    function listar_provincias($id)
+    {
+        $datos = $this->modelo->where('th_pos_id', $id)->where('th_tiph_id', 2)->listarJoin(); 
+
+        $texto = '';
+        foreach ($datos as $key => $value) {
+            $texto .=
+                '<div class="row mt-1">
+                    <div class="col-8">
+                        <ul>
+                            <li>' . $value['th_hab_nombre'] . '</li>
+                        </ul>
+                    </div>
+                            
+                    <div class="col-4 d-flex justify-content-end">
+                        <button type="button" class="btn btn-sm" style="color: white;" onclick="delete_datos_aptitudes(' . $value['th_habp_id'] . ')"><i class="me-0 text-danger bx bx-trash" style="font-size: 20px;"></i></button>
+                    </div>
+                </div>';
+        }
+
+        return $texto;
     }
 
     function listar($id)
@@ -56,6 +83,11 @@ class th_postulantesC
             array('campo' => 'th_pos_segundo_apellido', 'dato' => $parametros['txt_segundo_apellido']),
             array('campo' => 'th_pos_cedula', 'dato' => $parametros['txt_numero_cedula']),
             array('campo' => 'th_pos_sexo', 'dato' => $parametros['ddl_sexo']),
+            array('campo' => 'th_prov_id', 'dato' => $parametros['ddl_provincia']),
+            array('campo' => 'th_ciu_id', 'dato' => $parametros['ddl_ciudad']),
+            array('campo' => 'th_parr_id', 'dato' => $parametros['ddl_parroquia']),
+            array('campo' => 'th_pos_direccion', 'dato' => $parametros['txt_direccion']),
+            array('campo' => 'th_pos_postal', 'dato' => $parametros['txt_codigo_postal']),
             array('campo' => 'th_pos_fecha_nacimiento', 'dato' => $parametros['txt_fecha_nacimiento']),
             array('campo' => 'th_pos_nacionalidad', 'dato' => $parametros['ddl_nacionalidad']),
             array('campo' => 'th_pos_estado_civil', 'dato' => $parametros['ddl_estado_civil']),

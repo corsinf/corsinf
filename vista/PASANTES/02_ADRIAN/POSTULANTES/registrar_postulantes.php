@@ -28,6 +28,114 @@ if (isset($_GET['id'])) {
 
     });
 
+    function activar_select2_postulantes() {
+
+        listar_provincias();
+
+        listar_ciudades();
+
+        listar_parroquias();
+
+        $('#ddl_provincia').select2({
+            placeholder: "Seleccione una provincia",
+            dropdownParent: $('#registrar_postulantes'),
+            language: {
+                inputTooShort: function() {
+                    return "Por favor ingrese 1 o más caracteres";
+                },
+                noResults: function() {
+                    return "No se encontraron resultados";
+                },
+                searching: function() {
+                    return "Buscando..";
+                },
+                errorLoading: function() {
+                    return "Error cargando los resultados";
+                }
+            }
+        });
+
+        $('#ddl_ciudad').select2({
+            placeholder: "Seleccione una ciudad",
+            dropdownParent: $('#registrar_postulantes'),
+            language: {
+                inputTooShort: function() {
+                    return "Por favor ingrese 1 o más caracteres";
+                },
+                noResults: function() {
+                    return "No se encontraron resultados";
+                },
+                searching: function() {
+                    return "Buscando..";
+                },
+                errorLoading: function() {
+                    return "Error cargando los resultados";
+                }
+            }
+        });
+
+        $('#ddl_parroquia').select2({
+            placeholder: "Seleccione una parroquia",
+            dropdownParent: $('#registrar_postulantes'),
+            language: {
+                inputTooShort: function() {
+                    return "Por favor ingrese 1 o más caracteres";
+                },
+                noResults: function() {
+                    return "No se encontraron resultados";
+                },
+                searching: function() {
+                    return "Buscando..";
+                },
+                errorLoading: function() {
+                    return "Error cargando los resultados";
+                }
+            }
+        });
+    }
+
+    function cargar_datos_provincias(id) {
+        $.ajax({
+            url: '../controlador/PASANTES/02_ADRIAN/POSTULANTES/th_postulantesC.php?cargar_datos_provincias=true',
+            type: 'post',
+            data: {
+                id: id
+            },
+            dataType: 'json',
+            success: function(response) {
+                $('#ddl_provincia').html(response);
+            },
+        });
+    }
+
+    function cargar_datos_ciudades(id) {
+        $.ajax({
+            url: '../controlador/PASANTES/02_ADRIAN/POSTULANTES/th_postulantesC.php?cargar_datos_ciudades=true',
+            type: 'post',
+            data: {
+                id: id
+            },
+            dataType: 'json',
+            success: function(response) {
+                $('#ddl_ciudad').html(response);
+            },
+        });
+    }
+
+    function cargar_datos_parroquias(id) {
+        $.ajax({
+            url: '../controlador/PASANTES/02_ADRIAN/POSTULANTES/th_postulantesC.php?cargar_datos_parroquias=true',
+            type: 'post',
+            data: {
+                id: id
+            },
+            dataType: 'json',
+            success: function(response) {
+                $('#ddl_parroquia').html(response);
+            },
+        });
+    }
+
     function cargarDatos(id) {
         $.ajax({
             url: '../controlador/PASANTES/02_ADRIAN/POSTULANTES/th_postulantesC.php?listar=true',
@@ -50,6 +158,11 @@ if (isset($_GET['id'])) {
                 $('#txt_telefono_1').val(response[0].th_pos_telefono_1);
                 $('#txt_telefono_2').val(response[0].th_pos_telefono_2);
                 $('#txt_correo').val(response[0].th_pos_correo);
+                $('#ddl_provincia').val(response[0].th_prov_id);
+                $('#ddl_ciudad').val(response[0].th_ciu_id);
+                $('#ddl_parroquia').val(response[0].th_parr_id);
+                $('#txt_codigo_postal').val(response[0].th_pos_postal);
+                $('#txt_direccion').val(response[0].th_pos_direccion);
                 console.log(response);
             },
         });
@@ -69,7 +182,11 @@ if (isset($_GET['id'])) {
         var txt_telefono_1 = $('#txt_telefono_1').val();
         var txt_telefono_2 = $('#txt_telefono_2').val();
         var txt_correo = $('#txt_correo').val();
-
+        var ddl_provincia = $('#ddl_provincia').val();
+        var ddl_ciudad = $('#ddl_ciudad').val();
+        var ddl_parroquia = $('#ddl_parroquia').val();
+        var txt_codigo_postal = $('#txt_codigo_postal').val();
+        var txt_direccion = $('#txt_direccion').val();
 
         var parametros = {
             '_id': '<?= $_id ?>',
@@ -85,6 +202,11 @@ if (isset($_GET['id'])) {
             'txt_telefono_1': txt_telefono_1,
             'txt_telefono_2': txt_telefono_2,
             'txt_correo': txt_correo,
+            'ddl_provincia': ddl_provincia,
+            'ddl_ciudad': ddl_ciudad,
+            'ddl_parroquia': ddl_parroquia,
+            'txt_codigo_postal': txt_codigo_postal,
+            'txt_direccion': txt_direccion,
 
         };
 
@@ -116,6 +238,17 @@ if (isset($_GET['id'])) {
                 } else if (response == -2) {
                     Swal.fire('', 'Operación fallida', 'warning');
                 }
+            }
+        });
+    }
+
+    function listar_provincias() {
+        $.ajax({
+            url: '../controlador/PASANTES/02_ADRIAN/POSTULANTES/th_provinciasC.php?listar_provincias=true',
+            type: 'post',
+            dataType: 'json',
+            success: function(response) {
+                $('#ddl_provincia').html(response);
             }
         });
     }
@@ -204,25 +337,25 @@ if (isset($_GET['id'])) {
                             <div class="row mb-3">
                                 <div class="col-3">
                                     <div class="mb-3">
-                                        <label for="txt_primer_apellido" class="form-label form-label-sm">Primer Apellido <label style="color: red;">*</label></label>
+                                        <label for="txt_primer_apellido" class="form-label form-label-sm">Primer Apellido </label>
                                         <input type="text" class="form-control form-control-sm" name="txt_primer_apellido" id="txt_primer_apellido" placeholder="Escriba su apellido paterno" required>
                                     </div>
                                 </div>
                                 <div class="col-3">
                                     <div class="mb-3">
-                                        <label for="txt_segundo_apellido" class="form-label form-label-sm">Segundo Apellido <label style="color: red;">*</label></label>
+                                        <label for="txt_segundo_apellido" class="form-label form-label-sm">Segundo Apellido </label>
                                         <input type="text" class="form-control form-control-sm" name="txt_segundo_apellido" id="txt_segundo_apellido" placeholder="Escriba su apellido materno" required>
                                     </div>
                                 </div>
                                 <div class="col-3">
                                     <div class="mb-3">
-                                        <label for="txt_primer_nombre" class="form-label form-label-sm">Primer Nombre <label style="color: red;">*</label></label>
+                                        <label for="txt_primer_nombre" class="form-label form-label-sm">Primer Nombre </label>
                                         <input type="text" class="form-control form-control-sm" name="txt_primer_nombre" id="txt_primer_nombre" placeholder="Escriba su primer nombre" required>
                                     </div>
                                 </div>
                                 <div class="col-3">
                                     <div class="mb-3">
-                                        <label for="txt_segundo_nombre" class="form-label form-label-sm">Segundo Nombre <label style="color: red;">*</label></label>
+                                        <label for="txt_segundo_nombre" class="form-label form-label-sm">Segundo Nombre </label>
                                         <input type="text" class="form-control form-control-sm" name="txt_segundo_nombre" id="txt_segundo_nombre" placeholder="Escriba su primer nombre" required>
                                     </div>
                                 </div>
@@ -230,13 +363,13 @@ if (isset($_GET['id'])) {
                             <div class="row mb-3">
                                 <div class="col-3">
                                     <div class="mb-3">
-                                        <label for="txt_numero_cedula" class="form-label form-label-sm">Cédula de Identidad <label style="color: red;">*</label></label>
+                                        <label for="txt_numero_cedula" class="form-label form-label-sm">Cédula de Identidad </label>
                                         <input type="text" class="form-control form-control-sm" name="txt_numero_cedula" id="txt_numero_cedula" placeholder="Digite su número de cédula" required>
                                     </div>
                                 </div>
                                 <div class="col-3">
                                     <div class="mb-3">
-                                        <label for="ddl_sexo" class="form-label form-label-sm">Sexo <label style="color: red;">*</label></label>
+                                        <label for="ddl_sexo" class="form-label form-label-sm">Sexo </label>
                                         <select class="form-select form-select-sm" id="ddl_sexo" name="ddl_sexo" required>
                                             <option selected disabled value="">-- Selecciona una opción --</option>
                                             <option value="Masculino">Masculino</option>
@@ -246,13 +379,13 @@ if (isset($_GET['id'])) {
                                 </div>
                                 <div class="col-3">
                                     <div class="mb-3">
-                                        <label for="txt_fecha_nacimiento" class="form-label form-label-sm">Fecha de nacimiento <label style="color: red;">*</label></label>
+                                        <label for="txt_fecha_nacimiento" class="form-label form-label-sm">Fecha de nacimiento </label>
                                         <input type="date" class="form-control form-control-sm" name="txt_fecha_nacimiento" id="txt_fecha_nacimiento" onchange="edad_normal(this.value);" required>
                                     </div>
                                 </div>
                                 <div class="col-3">
                                     <div class="mb-3">
-                                        <label for="txt_edad" class="form-label form-label-sm">Edad <label style="color: red;">*</label></label>
+                                        <label for="txt_edad" class="form-label form-label-sm">Edad </label>
                                         <input type="text" class="form-control form-control-sm" name="txt_edad" id="txt_edad" readonly>
                                     </div>
                                 </div>
@@ -260,51 +393,61 @@ if (isset($_GET['id'])) {
                             <div class="row mb-3">
                                 <div class="col-4">
                                     <div class="mb-3">
-                                        <label for="txt_telefono_1" class="form-label form-label-sm">Teléfono 1 <label style="color: red;">*</label></label>
+                                        <label for="txt_telefono_1" class="form-label form-label-sm">Teléfono 1 </label>
                                         <input type="text" class="form-control form-control-sm" name="txt_telefono_1" id="txt_telefono_1" value="" placeholder="Escriba su teléfono personal o fijo" required>
                                     </div>
                                 </div>
                                 <div class="col-4">
                                     <div class="mb-3">
-                                        <label for="txt_telefono_2" class="form-label form-label-sm">Teléfono 2 <label style="color: red;">*</label></label>
+                                        <label for="txt_telefono_2" class="form-label form-label-sm">Teléfono 2 </label>
                                         <input type="text" class="form-control form-control-sm" name="txt_telefono_2" id="txt_telefono_2" value="" placeholder="Escriba su teléfono personal o fijo (opcional)">
                                     </div>
                                 </div>
                                 <div class="col-4">
                                     <div class="mb-3">
-                                        <label for="txt_correo" class="form-label form-label-sm">Correo Electrónico <label style="color: red;">*</label></label>
+                                        <label for="txt_correo" class="form-label form-label-sm">Correo Electrónico </label>
                                         <input type="email" class="form-control form-control-sm" name="txt_correo" id="txt_correo" value="" placeholder="Escriba su correo electrónico" required>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-3" style="display: none;">
-                                <div class="mb-3">
-                                    <label for="ddl_nacionalidad" class="form-label form-label-sm">Nacionalidad <label style="color: red;">*</label></label>
-                                    <select class="form-select form-select-sm" id="ddl_nacionalidad" name="ddl_nacionalidad">
-                                        <option selected disabled value="">-- Selecciona una Nacionalidad --</option>
-                                        <option value="Ecuatoriano">Ecuatoriano</option>
-                                        <option value="Colombiano">Colombiano</option>
-                                        <option value="Peruano">Peruano</option>
-                                        <option value="Venezolano">Venezolano</option>
-                                        <option value="Paraguayo">Paraguayo</option>
-                                    </select>
+                            <div class="row mb-3">
+                                <div class="col-3">
+                                    <div class="mb-3">
+                                        <label for="ddl_provincia" class="form-label form-label-sm">Provincia </label>
+                                        <select class="form-select form-select-sm" id="ddl_provincia" name="ddl_provincia" maxlenght="5000" required>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-3">
+                                    <div class="mb-3">
+                                        <label for="ddl_ciudad" class="form-label form-label-sm">Ciudad </label>
+                                        <select class="form-select form-select-sm" id="ddl_ciudad" name="ddl_ciudad" maxlenght="5000" required>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-3">
+                                    <div class="mb-3">
+                                        <label for="ddl_parroquia" class="form-label form-label-sm">Parroquia </label>
+                                        <select class="form-select form-select-sm"  id="ddl_parroquia" name="ddl_parroquia" maxlenght="5000" required>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-3">
+                                    <div class="mb-3">
+                                        <label for="txt_codigo_postal" class="form-label form-label-sm">Codigo Postal </label>
+                                        <input type="text" class="form-control form-control-sm" name="txt_codigo_postal" id="codigo_postal" readonly>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="col-3" style="display: none;">
-                                <div class="mb-3">
-                                    <label for="ddl_estado_civil" class="form-label form-label-sm">Estado civil <label style="color: red;">*</label></label>
-                                    <select class="form-select form-select-sm" id="ddl_estado_civil" name="ddl_estado_civil">
-                                        <option selected disabled value="">-- Selecciona un Estado Civil --</option>
-                                        <option value="Soltero">Soltero/a</option>
-                                        <option value="Casado">Casado/a</option>
-                                        <option value="Divorciado">Divorciado/a</option>
-                                        <option value="Viudo">Viudo/a</option>
-                                        <option value="Union">Unión de hecho</option>
-                                    </select>
+                            <div class="row mb-3">
+                                <div class="col-3">
+                                    <div class="mb-3">
+                                        <label for="txt_direccion" class="form-label form-label-sm">Dirección </label>
+                                        <input type="text" class="form-control form-control-sm" name="txt_direccion" id="txt_direccion" placeholder="Escriba su dirección" required>
+                                    </div>
                                 </div>
                             </div>
                             <div class="d-flex justify-content-end pt-2">
-
                                 <?php if ($_id == '') { ?>
                                     <button class="btn btn-primary btn-sm px-4 m-0 d-flex align-items-center" onclick="insertar_editar();" type="button"><i class="bx bx-save"></i> Guardar</button>
                                 <?php } else { ?>
@@ -319,92 +462,138 @@ if (isset($_GET['id'])) {
         </div>
     </div>
 </div>
+
 <script>
-  //Validacion de formulario
-  $(document).ready(function() {
-    $("#registrar_postulantes").validate({
-      rules: {
-        txt_primer_apellido:{
-          required: true,
-        },
-        txt_segundo_apellido: {
-          required: true,
-        },
-        txt_primer_nombre: {
-          required: true,
-        },
-        txt_segundo_nombre: {
-          required: true,
-        },
-        txt_numero_cedula: {
-          required: true,
-        },
-        ddl_sexo: {
-          required: true,
-        },
-        txt_fecha_nacimiento: {
-          required: true,
-        },
-        txt_edad: {
-          required: true,
-        },
-        txt_telefono_1: {
-          required: true,
-        },
-        txt_telefono_2: {
-          required: true,
-        },
-        txt_correo: {
-          required: true,
-        },
-      },
-      messages: {
-        txt_primer_apellido: {
-          required: "Por favor ingrese el primer apellido",
-        },
-        txt_segundo_apellido: {
-          required: "Por favor ingrese el segundo apellido",
-        },
-        txt_primer_nombre: {
-          required: "Por favor ingrese el primer nombre",
-        },
-        txt_segundo_nombre: {
-          required: "Por favor ingrese el segundo nombre",
-        },
-        txt_numero_cedula: {
-          required: "Por favor ingresa un número de cédula",
-        },
-        ddl_sexo: {
-          required: "Por favor seleccione el sexo",
-        },
-        txt_fecha_nacimiento: {
-          required: "Por favor ingrese la fecha de nacimiento",
-        },
-        txt_edad: {
-          required: "Por favor ingrese la edad (fecha de nacimiento)",
-        },
-        txt_telefono_1: {
-          required: "Por favor ingrese el primero teléfono",
-        },
-        txt_telefono_2: {
-          required: "Por favor ingrese el segundo teléfono",
-        },
-        txt_correo: {
-          required: "Por favor ingrese un correo",
-        },
-      },
+    $(document).ready(function() {
+        agregar_asterisco_campo_obligatorio('txt_primer_apellido');
+        agregar_asterisco_campo_obligatorio('txt_segundo_apellido');
+        agregar_asterisco_campo_obligatorio('txt_primer_nombre');
+        agregar_asterisco_campo_obligatorio('txt_segundo_nombre');
+        agregar_asterisco_campo_obligatorio('txt_numero_cedula');
+        agregar_asterisco_campo_obligatorio('ddl_sexo');
+        agregar_asterisco_campo_obligatorio('txt_fecha_nacimiento');
+        agregar_asterisco_campo_obligatorio('txt_edad');
+        agregar_asterisco_campo_obligatorio('txt_telefono_1');
+        agregar_asterisco_campo_obligatorio('txt_telefono_2');
+        agregar_asterisco_campo_obligatorio('txt_correo');
+        agregar_asterisco_campo_obligatorio('ddl_provincia');
+        agregar_asterisco_campo_obligatorio('ddl_ciudad');
+        agregar_asterisco_campo_obligatorio('ddl_parroquia');
+        agregar_asterisco_campo_obligatorio('txt_codigo_postal');
+        agregar_asterisco_campo_obligatorio('txt_direccion');
 
-      highlight: function(element) {
-        // Agrega la clase 'is-invalid' al input que falla la validación
-        $(element).addClass('is-invalid');
-        $(element).removeClass('is-valid');
-      },
-      unhighlight: function(element) {
-        // Elimina la clase 'is-invalid' si la validación pasa
-        $(element).removeClass('is-invalid');
-        $(element).addClass('is-valid');
-
-      }
+        //* Validacion de formulario
+        $("#registrar_postulantes").validate({
+            rules: {
+                txt_primer_apellido: {
+                    required: true,
+                },
+                txt_segundo_apellido: {
+                    required: true,
+                },
+                txt_primer_nombre: {
+                    required: true,
+                },
+                txt_segundo_nombre: {
+                    required: true,
+                },
+                txt_numero_cedula: {
+                    required: true,
+                },
+                ddl_sexo: {
+                    required: true,
+                },
+                txt_fecha_nacimiento: {
+                    required: true,
+                },
+                txt_edad: {
+                    required: true,
+                },
+                txt_telefono_1: {
+                    required: true,
+                },
+                txt_telefono_2: {
+                    required: true,
+                },
+                txt_correo: {
+                    required: true,
+                },
+                ddl_provincia: {
+                    required: true,
+                },
+                ddl_ciudad: {
+                    required: true,
+                },
+                ddl_parroquia: {
+                    required: true,
+                },
+                txt_codigo_postal: {
+                    required: true,
+                },
+                txt_direccion: {
+                    required: true,
+                },
+            },
+            messages: {
+                txt_primer_apellido: {
+                    required: "Por favor ingrese el primer apellido",
+                },
+                txt_segundo_apellido: {
+                    required: "Por favor ingrese el segundo apellido",
+                },
+                txt_primer_nombre: {
+                    required: "Por favor ingrese el primer nombre",
+                },
+                txt_segundo_nombre: {
+                    required: "Por favor ingrese el segundo nombre",
+                },
+                txt_numero_cedula: {
+                    required: "Por favor ingresa un número de cédula",
+                },
+                ddl_sexo: {
+                    required: "Por favor seleccione el sexo",
+                },
+                txt_fecha_nacimiento: {
+                    required: "Por favor ingrese la fecha de nacimiento",
+                },
+                txt_edad: {
+                    required: "Por favor ingrese la edad (fecha de nacimiento)",
+                },
+                txt_telefono_1: {
+                    required: "Por favor ingrese el primero teléfono",
+                },
+                txt_telefono_2: {
+                    required: "Por favor ingrese el segundo teléfono",
+                },
+                txt_correo: {
+                    required: "Por favor ingrese un correo",
+                },
+                ddl_provincia: {
+                    required: "Por favor seleccione la provincia",
+                },
+                ddl_ciudad: {
+                    required: "Por favor seleccione la ciudad",
+                },
+                ddl_parroquia: {
+                    required: "Por favor seleccione la parroquia",
+                },
+                txt_codigo_postal: {
+                    required: "Por favor ingrese el código postal",
+                },
+                txt_direccion: {
+                    required: "Por favor ingrese la dirección",
+                },
+            },
+            highlight: function(element) {
+                // Agrega la clase 'is-invalid' al input que falla la validación
+                $(element).addClass('is-invalid');
+                $(element).removeClass('is-valid');
+            },
+            unhighlight: function(element) {
+                // Elimina la clase 'is-invalid' si la validación pasa
+                $(element).removeClass('is-invalid');
+                $(element).addClass('is-valid');
+            }
+        });
     });
-  });
 </script>

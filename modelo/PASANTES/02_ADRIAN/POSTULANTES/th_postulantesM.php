@@ -20,10 +20,33 @@ class th_postulantesM extends BaseModel
         'th_pos_telefono_1',
         'th_pos_telefono_2',
         'th_pos_correo',
+        'th_prov_id',
+        'th_ciu_id',
+        'th_parr_id',
+        'th_pos_direccion',
+        'th_pos_postal',
         'th_pos_tabla',
         'th_pos_estado',
         'th_pos_fecha_creacion',
         'th_pos_fecha_modificacion',
 
     ];
+
+    function listarJoin()
+    {
+        // Construir la parte JOIN de la consulta
+        $this->join('th_ciudad', 'th_postulantes.th_ciu_id = th_ciudad.th_ciu_id');
+        $this->join('th_provincias', 'th_ciudad.th_prov_id = th_provincias.th_prov_id');
+        $this->join('th_parroquias', 'th_postulantes.th_parr_id = th_parroquias.th_parr_id');
+
+        // Aplicar condiciones WHERE para cada tabla
+        $this->where('th_provincias.th_prov_estado', '1');
+        $this->where('th_ciudad.th_ciu_estado', '1');
+        $this->where('th_parroquias.th_parr_estado', '1');
+
+        // Ejecutar la consulta y obtener los datos
+        $datos = $this->listar();
+        
+        return $datos;
+    }
 }
