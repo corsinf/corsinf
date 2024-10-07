@@ -20,6 +20,34 @@ if (isset($_GET['_id'])) {
         <?php } ?>
 
 
+        /**
+         * 
+         * Datatable
+         */
+
+        //Para seleccionar a cada persona
+        $('#tbl_personas tbody').on('change', '.cbx_dep_per', function() {
+            var id = $(this).val();
+
+            if (this.checked) {
+                if (!personas_seleccionadas.includes(id)) {
+                    personas_seleccionadas.push(id);
+                }
+            } else {
+                // Eliminar el ID si el checkbox no está seleccionado
+                personas_seleccionadas = personas_seleccionadas.filter(item => item !== id);
+            }
+
+            console.log('Seleccionados:', personas_seleccionadas);
+        });
+
+        // Evento para detectar cuando se cambia de página
+        $('#tbl_personas').on('page.dt', function() {
+            // Aquí colocas la acción que quieres realizar al cambiar de página
+            $('#cbx_per_dep_all').prop('checked', false);
+            console.log('Página cambiada');
+        });
+
     });
 
     /**
@@ -264,28 +292,37 @@ if (isset($_GET['_id'])) {
                                 <input class="form-check-input cbx_dep_per" type="checkbox" value="${item._id}" name="cbx_dep_per_${item._id}" id="cbx_dep_per_${item._id}">
                                 <label class="form-label" for="cbx_dep_per_${item._id}">Seleccionar</label>
                             </div>`;
-                    }
+                    },
+                    orderable: false
                 }
             ],
             order: [
                 [1, 'asc']
-            ]
+            ],
+
         });
 
-        $('#tbl_personas tbody').on('change', '.cbx_dep_per', function() {
-            var id = $(this).val();
+    }
 
-            if (this.checked) {
+    // Función para marcar/desmarcar todos los cbx_per_dep_all
+    function marcar_cbx_modal_departamentos_personas(source) {
+        var cbx_per_dep_all = document.querySelectorAll('.cbx_dep_per');
+
+        cbx_per_dep_all.forEach(function(cbx) {
+            cbx.checked = source.checked; // Marca o desmarca todos
+            var id = cbx.value;
+
+            // Actualiza el array de personas seleccionadas
+            if (source.checked) {
                 if (!personas_seleccionadas.includes(id)) {
                     personas_seleccionadas.push(id);
                 }
             } else {
-                // Eliminar el ID si el checkbox no está seleccionado
                 personas_seleccionadas = personas_seleccionadas.filter(item => item !== id);
             }
-
-            //console.log('Seleccionados:', personas_seleccionadas);
         });
+
+        console.log('Seleccionados:', personas_seleccionadas);
     }
 
     function insertar_editar_personas_departamentos() {
@@ -301,6 +338,15 @@ if (isset($_GET['_id'])) {
     }
 
     function insertar_personas_departamentos(parametros) {
+        Swal.fire({
+            title: 'Por favor, espere',
+            text: 'Procesando la solicitud...',
+            allowOutsideClick: false,
+            onOpen: () => {
+                Swal.showLoading();
+            }
+        });
+
         $.ajax({
             data: {
                 parametros: parametros
@@ -316,6 +362,8 @@ if (isset($_GET['_id'])) {
                         tbl_departamento_personas.ajax.reload();
                         tbl_personas.ajax.reload();
                         personas_seleccionadas = [];
+                        $('#cbx_per_dep_all').prop('checked', false);
+                        Swal.close();
                     });
 
                 } else if (response == -2 || response == null) {
@@ -510,7 +558,14 @@ if (isset($_GET['_id'])) {
                                     <th>Cédula</th>
                                     <th>Correo</th>
                                     <th>Teléfono</th>
-                                    <th>Acción</th>
+                                    <th>
+                                        <div class="form-check" style="display: block;">
+                                            <input class="form-check-input" type="checkbox" id="cbx_per_dep_all" onchange="marcar_cbx_modal_departamentos_personas(this)">
+                                            <label class="form-check-label" for="cbx_per_dep_all">
+                                                Todo
+                                            </label>
+                                        </div>
+                                    </th>
                                 </tr>
                             </thead>
                             <tbody>

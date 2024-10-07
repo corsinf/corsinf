@@ -24,7 +24,7 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                     }
                 },
                 {
-                    data: 'tiempo_maximo_dentro'
+                    data: 'total_personas'
                 },
                 // {
                 //     data: null,

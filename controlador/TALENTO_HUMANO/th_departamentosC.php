@@ -30,7 +30,7 @@ class th_departamentosC
     function listar($id = '')
     {
         if ($id == '') {
-            $datos = $this->modelo->where('th_dep_estado', 1)->listar();
+            $datos = $this->modelo->listar_departamentos_contar_personas();
         } else {
             $datos = $this->modelo->where('th_dep_id', $id)->listar();
         }

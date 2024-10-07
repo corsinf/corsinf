@@ -103,7 +103,7 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                                         <thead>
                                             <tr>
                                                 <th>Nombre</th>
-                                                <th>Apellido</th>
+                                                <th>Cédula</th>
                                                 <th>Correo</th>
                                                 <th>Teléfono</th>
                                             </tr>

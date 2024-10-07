@@ -582,7 +582,7 @@ if (isset($_GET['_id'])) {
                     //required: true,
                 },
                 cbx_admin: {
-                    required: true,
+                    //required: true,
                 },
                 cbx_habilitado: {
                     //required: true,
