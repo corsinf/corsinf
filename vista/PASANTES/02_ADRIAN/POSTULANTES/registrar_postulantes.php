@@ -27,6 +27,8 @@ if (isset($_GET['id'])) {
         <?php } ?>
 
         cargar_datos_provincias();
+        cargar_datos_ciudades();
+        cargar_datos_parroquias();
     });
 
     function cargar_datos_provincias() {
@@ -65,97 +67,76 @@ if (isset($_GET['id'])) {
             .off('select2:select');
     }
 
-    function activar_select2_postulantes() {
-
-        //debes cargar cada que pase una accion no todo de una
-        // listar_provincias();
-
-        // listar_ciudades();
-
-        // listar_parroquias();
-
-
-
+    function cargar_datos_ciudades() {
         $('#ddl_ciudad').select2({
-            placeholder: "Seleccione una ciudad",
-            dropdownParent: $('#registrar_postulantes'),
-            language: {
-                inputTooShort: function() {
-                    return "Por favor ingrese 1 o más caracteres";
+                language: {
+                    inputTooShort: function() {
+                        return "Por favor ingresa 0 o más caracteres";
+                    },
+                    noResults: function() {
+                        return "No se encontraron resultados";
+                    },
+                    searching: function() {
+                        return "Buscando...";
+                    },
+                    errorLoading: function() {
+                        return "No se encontraron resultados";
+                    }
                 },
-                noResults: function() {
-                    return "No se encontraron resultados";
-                },
-                searching: function() {
-                    return "Buscando..";
-                },
-                errorLoading: function() {
-                    return "Error cargando los resultados";
-                }
-            }
-        });
+                minimumInputLength: 0,
 
+                placeholder: '-- Seleccione --',
+                width: '100%',
+                ajax: {
+                    //url: '../controlador/cat_cie10C.php?buscar_cie10=true',
+                    url: '../controlador/PASANTES/02_ADRIAN/POSTULANTES/th_ciudadC.php?buscar=true',
+                    dataType: 'json',
+                    delay: 250,
+                    processResults: function(data) {
+                        return {
+                            results: data
+                        };
+                    },
+                    cache: true
+                }
+            })
+            .off('select2:select');
+    }
+
+    function cargar_datos_parroquias() {
         $('#ddl_parroquia').select2({
-            placeholder: "Seleccione una parroquia",
-            dropdownParent: $('#registrar_postulantes'),
-            language: {
-                inputTooShort: function() {
-                    return "Por favor ingrese 1 o más caracteres";
+                language: {
+                    inputTooShort: function() {
+                        return "Por favor ingresa 0 o más caracteres";
+                    },
+                    noResults: function() {
+                        return "No se encontraron resultados";
+                    },
+                    searching: function() {
+                        return "Buscando...";
+                    },
+                    errorLoading: function() {
+                        return "No se encontraron resultados";
+                    }
                 },
-                noResults: function() {
-                    return "No se encontraron resultados";
-                },
-                searching: function() {
-                    return "Buscando..";
-                },
-                errorLoading: function() {
-                    return "Error cargando los resultados";
+                minimumInputLength: 0,
+
+                placeholder: '-- Seleccione --',
+                width: '100%',
+                ajax: {
+                    //url: '../controlador/cat_cie10C.php?buscar_cie10=true',
+                    url: '../controlador/PASANTES/02_ADRIAN/POSTULANTES/th_parroquiasC.php?buscar=true',
+                    dataType: 'json',
+                    delay: 250,
+                    processResults: function(data) {
+                        return {
+                            results: data
+                        };
+                    },
+                    cache: true
                 }
-            }
-        });
-    }
-
-    //de esta manera no debes cargar los datos toca cargar como en el ejemplo que te dejo 
-    function cargar_datos_provincias_borrar(id) {
-        $.ajax({
-            url: '../controlador/PASANTES/02_ADRIAN/POSTULANTES/th_postulantesC.php?cargar_datos_provincias=true',
-            type: 'post',
-            data: {
-                id: id
-            },
-            dataType: 'json',
-            success: function(response) {
-                $('#ddl_provincia').html(response);
-            },
-        });
-    }
-
-    function cargar_datos_ciudades(id) {
-        $.ajax({
-            url: '../controlador/PASANTES/02_ADRIAN/POSTULANTES/th_postulantesC.php?cargar_datos_ciudades=true',
-            type: 'post',
-            data: {
-                id: id
-            },
-            dataType: 'json',
-            success: function(response) {
-                $('#ddl_ciudad').html(response);
-            },
-        });
-    }
-
-    function cargar_datos_parroquias(id) {
-        $.ajax({
-            url: '../controlador/PASANTES/02_ADRIAN/POSTULANTES/th_postulantesC.php?cargar_datos_parroquias=true',
-            type: 'post',
-            data: {
-                id: id
-            },
-            dataType: 'json',
-            success: function(response) {
-                $('#ddl_parroquia').html(response);
-            },
-        });
+            })
+            .off('select2:select');
     }
 
     function cargarDatos(id) {
@@ -272,6 +253,28 @@ if (isset($_GET['id'])) {
             dataType: 'json',
             success: function(response) {
                 $('#ddl_provincia').html(response);
+            }
+        });
+    }
+
+    function listar_ciudades() {
+        $.ajax({
+            url: '../controlador/PASANTES/02_ADRIAN/POSTULANTES/th_ciudadC.php?listar_ciudades=true',
+            type: 'post',
+            dataType: 'json',
+            success: function(response) {
+                $('#ddl_ciudad').html(response);
+            }
+        });
+    }
+
+    function listar_parroquias() {
+        $.ajax({
+            url: '../controlador/PASANTES/02_ADRIAN/POSTULANTES/th_parroquiasC.php?listar_parroquias=true',
+            type: 'post',
+            dataType: 'json',
+            success: function(response) {
+                $('#ddl_parroquia').html(response);
             }
         });
     }
@@ -470,13 +473,13 @@ if (isset($_GET['id'])) {
         agregar_asterisco_campo_obligatorio('txt_fecha_nacimiento');
         agregar_asterisco_campo_obligatorio('txt_edad');
         agregar_asterisco_campo_obligatorio('txt_telefono_1');
-        // agregar_asterisco_campo_obligatorio('txt_telefono_2');
-        // agregar_asterisco_campo_obligatorio('txt_correo');
-        // agregar_asterisco_campo_obligatorio('ddl_provincia');
-        // agregar_asterisco_campo_obligatorio('ddl_ciudad');
-        // agregar_asterisco_campo_obligatorio('ddl_parroquia');
-        // agregar_asterisco_campo_obligatorio('txt_codigo_postal');
-        // agregar_asterisco_campo_obligatorio('txt_direccion');
+        agregar_asterisco_campo_obligatorio('txt_telefono_2');
+        agregar_asterisco_campo_obligatorio('txt_correo');
+        agregar_asterisco_campo_obligatorio('ddl_provincias');
+        agregar_asterisco_campo_obligatorio('ddl_ciudad');
+        agregar_asterisco_campo_obligatorio('ddl_parroquia');
+        agregar_asterisco_campo_obligatorio('txt_codigo_postal');
+        agregar_asterisco_campo_obligatorio('txt_direccion');
 
         //* Validacion de formulario
         $("#registrar_postulantes").validate({
