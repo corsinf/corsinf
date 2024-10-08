@@ -74,8 +74,13 @@ function actualizarEspacio($param) {
         $stmt = $this->db->datos("SELECT id_categoria, nombre_categoria FROM co_categoria");
         return $stmt;
     }
+    
     function listarMobiliario($id_espacio) {
-        $sql = "SELECT * FROM co_mobiliario WHERE id_espacio = " . intval($id_espacio);
+        
+        $sql = "SELECT id_mobiliario, id_espacio, cantidad, detalle_mobiliario 
+        FROM co_mobiliario 
+        WHERE id_espacio = " . intval($id_espacio);
+        //print_r($sql); die();
         $resp = $this->db->datos($sql);
         return $resp;
     }

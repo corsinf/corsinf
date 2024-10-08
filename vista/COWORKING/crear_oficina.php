@@ -105,35 +105,24 @@
                                 <i class="lni lni-codepen"></i> <strong>Espacios</strong>
                                 </button>
                             </li>
+                            
                             <li class="nav-item" role="presentation">
                                 <button class="nav-link d-flex align-items-center" id="servicios-tab" data-bs-toggle="tab" data-bs-target="#servicios" type="button" role="tab" aria-controls="servicios" aria-selected="false">
                                     <i class='bx bx-store-alt'></i> <strong>Mobiliario Extra</strong>
                                 </button>
                             </li>
                         </ul>
-
-
-                            <div class="d-flex align-items-center">
-                                <div class="btn-group me-2">
-                                    <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                                        <i class='bx bxs-report'></i><strong>Informe de Mobiliario</strong>
-                                    </button>
-                                    <ul class="dropdown-menu">
-                                        <li><a class="dropdown-item" href="#" onclick="generarExcelMiembros()">Informe en Excel</a></li>
-                                        <li><a class="dropdown-item" href="#" onclick="generarPDFMiembros()">Informe en PDF</a></li>
-                                    </ul>
-                                </div>
                                 <div class="btn-group">
                                     <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                                        <i class='bx bxs-report'></i><strong>Informe de Compras Total</strong>
+                                        <i class='bx bxs-report'></i><strong>Informe listado de espacios</strong>
                                     </button>
                                     <ul class="dropdown-menu">
-                                        <li><a class="dropdown-item" href="#" onclick="generarExcelCompras()">Informe en Excel</a></li>
-                                        <li><a class="dropdown-item" href="#" onclick="generarPDFCompras()">Informe en PDF</a></li>
+                                        <li><a class="dropdown-item" href="#" onclick="generarExcelEspacios()">Informe en Excel</a></li>
+                                        <li><a class="dropdown-item" href="#" onclick="generarPDFEspacios()">Informe en PDF</a></li>
                                     </ul>
                                 </div>
-                            </div>
-                        </div>
+                            
+                </div>
 
 
                 <h6 class="mb-0 text-uppercase">Espacios</h6>
@@ -211,11 +200,11 @@
     </div>
 </div>
              <!-- Modal -->
-<div class="modal fade" id="furnitureModal" tabindex="-1" aria-labelledby="furnitureModalLabel" aria-hidden="true">
+<div class="modal fade" id="furnitureModal" tabindex="-1" aria-labelledby="furnitureModalLabel" data-id_espacios="1" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="furnitureModalLabel">Gestionar Mobiliario</h5>
+                <h5 class="modal-title" id="furnitureModalLabel" onclick="abrirModalMobiliario(id_espacio)">Gestionar Mobiliario</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -235,6 +224,18 @@
                             <button type="button" onclick="enviarMobiliario()" class="btn btn-primary btn-sm">Guardar Mobiliario</button>
                         </div>
                 </form>
+                <div class="btn-group me-2">
+                                    <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <i class='bx bxs-report'></i><strong>Informe de Mobiliario</strong>
+                                    </button>
+                                    <div class="d-flex align-items-center">
+                                    <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item" href="#" onclick="generarExcelMobiliario()">Informe en Excel</a></li>
+                                        <li><a class="dropdown-item" href="#" onclick="generarPDFMobiliario()">Informe en PDF</a></li>
+                                    </ul>
+                                    </div>
+                    </div>
+                
 
                 <table id="tbl_furniture" class="table table-bordered mb-4">
                     <thead class="thead-dark">
@@ -276,7 +277,29 @@
             checkboxActivo.checked = false;
             checkboxInactivo.checked = true;
         }
+        
+    function abrirModalMobiliario(id_espacio) {
+        
+        document.getElementById("hidden_espacio_id").value = id_espacio;
+
+        // Muestra el modal
+        var myModal = new bootstrap.Modal(document.getElementById('furnitureModal'));
+        myModal.show();
 }
+
+}
+    function generarPDFMobiliario() {
+
+        var id_espacio = document.getElementById("hidden_espacio_id").value;
+        console.log("ID del espacio para PDF: ", id_espacio);
+        var url = '../controlador/COWORKING/crear_oficinaC.php?generarPDFMobiliario=true&id_espacio=' + id_espacio;
+        window.open(url, "_blank");
+    }
+
+    function generarPDFEspacios() {
+                var url ='../controlador/COWORKING/crear_oficinaC.php?generarPDFEspacios=true'
+                window.open(url,"_blank");
+            }
 
     function lista_categorias() {
         $.ajax({
@@ -484,6 +507,7 @@ function enviarDatos() {
         $.ajax({
             url: '../controlador/COWORKING/crear_oficinaC.php',
             method: 'GET',
+            dataType:"json",
             data: { listaMobiliario: true, id_espacio: id_espacio },
             success: function (response) {
                 $('#tbl_furniture_body').html(response);    
