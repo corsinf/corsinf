@@ -26,10 +26,33 @@ if (isset($_GET['id'])) {
             cargarDatos(<?= $_id ?>);
         <?php } ?>
 
+
         cargar_datos_provincias();
-        cargar_datos_ciudades();
-        cargar_datos_parroquias();
-    });
+
+        //? Evento para cuando se selecciona una provincia
+        $('#ddl_ciudad').prop('disabled', true);
+        $('#ddl_parroquia').prop('disabled', true);
+    
+        $('#ddl_provincias').on('change', function() {
+            if ($(this).val()) {
+                $('#ddl_ciudad').prop('disabled', false);
+                cargar_datos_ciudades($(this).val());
+            } else {
+                $('#ddl_ciudad').prop('disabled', true).val(''); 
+                $('#ddl_parroquia').prop('disabled', true).val('');
+            }
+        });
+
+        //! Evento para cuando se selecciona una ciudad
+        $('#ddl_ciudad').on('change', function() {
+            if ($(this).val()) {
+                $('#ddl_parroquia').prop('disabled', false); 
+                cargar_datos_parroquias($(this).val()); 
+            } else {
+                $('#ddl_parroquia').prop('disabled', true).val('');
+            }
+        });
+    })
 
     function cargar_datos_provincias() {
         $('#ddl_provincias').select2({
@@ -52,7 +75,6 @@ if (isset($_GET['id'])) {
                 placeholder: '-- Seleccione --',
                 width: '100%',
                 ajax: {
-                    //url: '../controlador/cat_cie10C.php?buscar_cie10=true',
                     url: '../controlador/PASANTES/02_ADRIAN/POSTULANTES/th_provinciasC.php?buscar=true',
                     dataType: 'json',
                     delay: 250,
@@ -67,7 +89,7 @@ if (isset($_GET['id'])) {
             .off('select2:select');
     }
 
-    function cargar_datos_ciudades() {
+    function cargar_datos_ciudades(th_prov_id) {
         $('#ddl_ciudad').select2({
                 language: {
                     inputTooShort: function() {
@@ -88,10 +110,12 @@ if (isset($_GET['id'])) {
                 placeholder: '-- Seleccione --',
                 width: '100%',
                 ajax: {
-                    //url: '../controlador/cat_cie10C.php?buscar_cie10=true',
                     url: '../controlador/PASANTES/02_ADRIAN/POSTULANTES/th_ciudadC.php?buscar=true',
                     dataType: 'json',
                     delay: 250,
+                    data: {
+                        th_prov_id: th_prov_id
+                    },
                     processResults: function(data) {
                         return {
                             results: data
@@ -103,7 +127,7 @@ if (isset($_GET['id'])) {
             .off('select2:select');
     }
 
-    function cargar_datos_parroquias() {
+    function cargar_datos_parroquias(th_ciu_id) {
         $('#ddl_parroquia').select2({
                 language: {
                     inputTooShort: function() {
@@ -124,10 +148,12 @@ if (isset($_GET['id'])) {
                 placeholder: '-- Seleccione --',
                 width: '100%',
                 ajax: {
-                    //url: '../controlador/cat_cie10C.php?buscar_cie10=true',
                     url: '../controlador/PASANTES/02_ADRIAN/POSTULANTES/th_parroquiasC.php?buscar=true',
                     dataType: 'json',
                     delay: 250,
+                    data: {
+                        th_ciu_id: th_ciu_id
+                    },
                     processResults: function(data) {
                         return {
                             results: data
@@ -246,38 +272,6 @@ if (isset($_GET['id'])) {
         });
     }
 
-    function listar_provincias() {
-        $.ajax({
-            url: '../controlador/PASANTES/02_ADRIAN/POSTULANTES/th_provinciasC.php?listar_provincias=true',
-            type: 'post',
-            dataType: 'json',
-            success: function(response) {
-                $('#ddl_provincia').html(response);
-            }
-        });
-    }
-
-    function listar_ciudades() {
-        $.ajax({
-            url: '../controlador/PASANTES/02_ADRIAN/POSTULANTES/th_ciudadC.php?listar_ciudades=true',
-            type: 'post',
-            dataType: 'json',
-            success: function(response) {
-                $('#ddl_ciudad').html(response);
-            }
-        });
-    }
-
-    function listar_parroquias() {
-        $.ajax({
-            url: '../controlador/PASANTES/02_ADRIAN/POSTULANTES/th_parroquiasC.php?listar_parroquias=true',
-            type: 'post',
-            dataType: 'json',
-            success: function(response) {
-                $('#ddl_parroquia').html(response);
-            }
-        });
-    }
 
     function delete_datos() {
         var id = '<?php echo $_id; ?>';
@@ -314,9 +308,6 @@ if (isset($_GET['id'])) {
         });
     }
 
-    function edad_normal(fecha_nacimiento) {
-        $('#txt_edad').val(calcular_edad_fecha_nacimiento(fecha_nacimiento));
-    }
 </script>
 
 <div class="page-wrapper">
@@ -413,25 +404,25 @@ if (isset($_GET['id'])) {
                                 </div>
                                 <div class="col-4">
                                     <label for="txt_correo" class="form-label form-label-sm">Correo Electrónico </label>
-                                    <input type="email" class="form-control form-control-sm" name="txt_correo" id="txt_correo" value="" placeholder="Escriba su correo electrónico" required>
+                                    <input type="email" class="form-control form-control-sm" name="txt_correo" id="txt_correo" value="" placeholder="Escriba su correo electrónico">
                                 </div>
                             </div>
 
                             <div class="row mb-col">
                                 <div class="col-3">
                                     <label for="ddl_provincias" class="form-label form-label-sm">Provincia </label>
-                                    <select class="form-select form-select-sm" id="ddl_provincias" name="ddl_provincias" maxlenght="5000" required>
+                                    <select class="form-select form-select-sm" id="ddl_provincias" name="ddl_provincias" maxlenght="5000">
                                         <option value="">Seleccione</option>
                                     </select>
                                 </div>
                                 <div class="col-3">
                                     <label for="ddl_ciudad" class="form-label form-label-sm">Ciudad </label>
-                                    <select class="form-select form-select-sm" id="ddl_ciudad" name="ddl_ciudad" maxlenght="5000" required>
+                                    <select class="form-select form-select-sm" id="ddl_ciudad" name="ddl_ciudad" maxlenght="5000">
                                     </select>
                                 </div>
                                 <div class="col-3">
                                     <label for="ddl_parroquia" class="form-label form-label-sm">Parroquia </label>
-                                    <select class="form-select form-select-sm" id="ddl_parroquia" name="ddl_parroquia" maxlenght="5000" required>
+                                    <select class="form-select form-select-sm" id="ddl_parroquia" name="ddl_parroquia" maxlenght="5000">
                                     </select>
                                 </div>
                                 <div class="col-3">
@@ -443,7 +434,7 @@ if (isset($_GET['id'])) {
                             <div class="row mb-col">
                                 <div class="col-12">
                                     <label for="txt_direccion" class="form-label form-label-sm">Dirección </label>
-                                    <input type="text" class="form-control form-control-sm" name="txt_direccion" id="txt_direccion" placeholder="Escriba su dirección" required>
+                                    <input type="text" class="form-control form-control-sm" name="txt_direccion" id="txt_direccion" placeholder="Escriba su dirección">
                                 </div>
                             </div>
                             <div class="d-flex justify-content-end pt-2">
@@ -473,13 +464,13 @@ if (isset($_GET['id'])) {
         agregar_asterisco_campo_obligatorio('txt_fecha_nacimiento');
         agregar_asterisco_campo_obligatorio('txt_edad');
         agregar_asterisco_campo_obligatorio('txt_telefono_1');
-        agregar_asterisco_campo_obligatorio('txt_telefono_2');
-        agregar_asterisco_campo_obligatorio('txt_correo');
-        agregar_asterisco_campo_obligatorio('ddl_provincias');
-        agregar_asterisco_campo_obligatorio('ddl_ciudad');
-        agregar_asterisco_campo_obligatorio('ddl_parroquia');
-        agregar_asterisco_campo_obligatorio('txt_codigo_postal');
-        agregar_asterisco_campo_obligatorio('txt_direccion');
+        // agregar_asterisco_campo_obligatorio('txt_telefono_2');
+        // agregar_asterisco_campo_obligatorio('txt_correo'); 
+        // agregar_asterisco_campo_obligatorio('ddl_provincias');
+        // agregar_asterisco_campo_obligatorio('ddl_ciudad');
+        // agregar_asterisco_campo_obligatorio('ddl_parroquia');
+        // agregar_asterisco_campo_obligatorio('txt_codigo_postal');
+        // agregar_asterisco_campo_obligatorio('txt_direccion');
 
         //* Validacion de formulario
         $("#registrar_postulantes").validate({
@@ -511,27 +502,6 @@ if (isset($_GET['id'])) {
                 txt_telefono_1: {
                     required: true,
                 },
-                txt_telefono_2: {
-                    required: true,
-                },
-                txt_correo: {
-                    required: true,
-                },
-                ddl_provincia: {
-                    required: true,
-                },
-                ddl_ciudad: {
-                    required: true,
-                },
-                ddl_parroquia: {
-                    required: true,
-                },
-                txt_codigo_postal: {
-                    required: true,
-                },
-                txt_direccion: {
-                    required: true,
-                },
             },
             messages: {
                 txt_primer_apellido: {
@@ -560,27 +530,6 @@ if (isset($_GET['id'])) {
                 },
                 txt_telefono_1: {
                     required: "Por favor ingrese el primero teléfono",
-                },
-                txt_telefono_2: {
-                    required: "Por favor ingrese el segundo teléfono",
-                },
-                txt_correo: {
-                    required: "Por favor ingrese un correo",
-                },
-                ddl_provincia: {
-                    required: "Por favor seleccione la provincia",
-                },
-                ddl_ciudad: {
-                    required: "Por favor seleccione la ciudad",
-                },
-                ddl_parroquia: {
-                    required: "Por favor seleccione la parroquia",
-                },
-                txt_codigo_postal: {
-                    required: "Por favor ingrese el código postal",
-                },
-                txt_direccion: {
-                    required: "Por favor ingrese la dirección",
                 },
             },
             highlight: function(element) {

@@ -16,9 +16,13 @@ class th_parroquiasM extends BaseModel
         'th_parr_fecha_modificacion',
     ];
 
-    function buscar_parroquias($buscar)
+    function buscar_parroquias($buscar, $th_ciu_id)
     {
         $sql = "SELECT * FROM th_parroquias WHERE th_parr_estado = 1 AND th_parr_nombre LIKE '%" . $buscar . "%'";
+
+        if ($th_ciu_id !== null) {
+            $sql .= " AND th_ciu_id = " . intval($th_ciu_id);
+        }
 
         $datos = $this->db->datos($sql);
         return $datos;
