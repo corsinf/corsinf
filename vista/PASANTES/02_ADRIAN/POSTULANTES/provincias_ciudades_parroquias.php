@@ -15,6 +15,9 @@
                 $('#ddl_ciudad').prop('disabled', true).val('');
                 $('#ddl_parroquia').prop('disabled', true).val('');
             }
+
+            $('#ddl_ciudad').val(null).trigger('change');
+            $('#ddl_parroquia').val(null).trigger('change');
         });
 
         // Evento para cuando se selecciona una ciudad 
@@ -25,8 +28,9 @@
             } else {
                 $('#ddl_parroquia').prop('disabled', true).val('');
             }
+            $('#ddl_parroquia').val(null).trigger('change');
         });
-    })
+    });
 
     function cargar_datos_provincias() {
         $('#ddl_provincias').select2({

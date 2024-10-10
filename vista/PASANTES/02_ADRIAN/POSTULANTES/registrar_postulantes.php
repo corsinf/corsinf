@@ -163,6 +163,16 @@ if (isset($_GET['id'])) {
             }
         });
     }
+    
+    function verificar_fecha_actual(input_name, fecha_actual, input_adicional) {
+        let hoy = new Date().toISOString().split('T')[0];
+
+        if (fecha_actual > hoy) {
+            $('#' + input_name).val('');
+            $('#' + input_adicional).val('');
+        } 
+    }
+
 </script>
 
 <div class="page-wrapper">
@@ -209,26 +219,26 @@ if (isset($_GET['id'])) {
                             <div class="row mb-col pt-3">
                                 <div class="col-3">
                                     <label for="txt_primer_apellido" class="form-label form-label-sm">Primer Apellido </label>
-                                    <input type="text" class="form-control form-control-sm" name="txt_primer_apellido" id="txt_primer_apellido" placeholder="Escriba su apellido paterno" required>
+                                    <input type="text" class="form-control form-control-sm" name="txt_primer_apellido" id="txt_primer_apellido" placeholder="Escriba su apellido paterno" maxlength="50" required>
                                 </div>
                                 <div class="col-3">
                                     <label for="txt_segundo_apellido" class="form-label form-label-sm">Segundo Apellido </label>
-                                    <input type="text" class="form-control form-control-sm" name="txt_segundo_apellido" id="txt_segundo_apellido" placeholder="Escriba su apellido materno" required>
+                                    <input type="text" class="form-control form-control-sm" name="txt_segundo_apellido" id="txt_segundo_apellido" placeholder="Escriba su apellido materno" maxlength="50" required>
                                 </div>
                                 <div class="col-3">
                                     <label for="txt_primer_nombre" class="form-label form-label-sm">Primer Nombre </label>
-                                    <input type="text" class="form-control form-control-sm" name="txt_primer_nombre" id="txt_primer_nombre" placeholder="Escriba su primer nombre" required>
+                                    <input type="text" class="form-control form-control-sm" name="txt_primer_nombre" id="txt_primer_nombre" placeholder="Escriba su primer nombre" maxlength="50" required>
                                 </div>
                                 <div class="col-3">
                                     <label for="txt_segundo_nombre" class="form-label form-label-sm">Segundo Nombre </label>
-                                    <input type="text" class="form-control form-control-sm" name="txt_segundo_nombre" id="txt_segundo_nombre" placeholder="Escriba su primer nombre" required>
+                                    <input type="text" class="form-control form-control-sm" name="txt_segundo_nombre" id="txt_segundo_nombre" placeholder="Escriba su primer nombre" maxlength="50" required>
                                 </div>
                             </div>
 
                             <div class="row mb-col">
                                 <div class="col-3">
                                     <label for="txt_numero_cedula" class="form-label form-label-sm">Cédula de Identidad </label>
-                                    <input type="text" class="form-control form-control-sm" name="txt_numero_cedula" id="txt_numero_cedula" placeholder="Digite su número de cédula" required>
+                                    <input type="text" class="form-control form-control-sm solo_numeros_int" name="txt_numero_cedula" id="txt_numero_cedula" placeholder="Digite su número de cédula" maxlength="10" required>
                                 </div>
                                 <div class="col-3">
                                     <label for="ddl_sexo" class="form-label form-label-sm">Sexo </label>
@@ -240,7 +250,7 @@ if (isset($_GET['id'])) {
                                 </div>
                                 <div class="col-3">
                                     <label for="txt_fecha_nacimiento" class="form-label form-label-sm">Fecha de nacimiento </label>
-                                    <input type="date" class="form-control form-control-sm" name="txt_fecha_nacimiento" id="txt_fecha_nacimiento" onchange="edad_normal(this.value);" required>
+                                    <input type="date" class="form-control form-control-sm" name="txt_fecha_nacimiento" id="txt_fecha_nacimiento" onblur="calcular_edad('txt_edad', this.value); verificar_fecha_actual('txt_fecha_nacimiento', this.value, 'txt_edad');" required>
                                 </div>
                                 <div class="col-3">
                                     <label for="txt_edad" class="form-label form-label-sm">Edad </label>
@@ -251,11 +261,11 @@ if (isset($_GET['id'])) {
                             <div class="row mb-col">
                                 <div class="col-4">
                                     <label for="txt_telefono_1" class="form-label form-label-sm">Teléfono 1 </label>
-                                    <input type="text" class="form-control form-control-sm solo_numeros_int" name="txt_telefono_1" id="txt_telefono_1" value="" placeholder="Escriba su teléfono personal o fijo" required>
+                                    <input type="text" class="form-control form-control-sm solo_numeros_int" name="txt_telefono_1" id="txt_telefono_1" value="" placeholder="Escriba su teléfono personal o fijo" maxlength="12" required>
                                 </div>
                                 <div class="col-4">
                                     <label for="txt_telefono_2" class="form-label form-label-sm">Teléfono 2 </label>
-                                    <input type="text" class="form-control form-control-sm" name="txt_telefono_2" id="txt_telefono_2" value="" placeholder="Escriba su teléfono personal o fijo (opcional)">
+                                    <input type="text" class="form-control form-control-sm solo_numeros_int" name="txt_telefono_2" id="txt_telefono_2" value="" placeholder="Escriba su teléfono personal o fijo (opcional)" maxlength="12">
                                 </div>
                                 <div class="col-4">
                                     <label for="txt_correo" class="form-label form-label-sm">Correo Electrónico </label>
