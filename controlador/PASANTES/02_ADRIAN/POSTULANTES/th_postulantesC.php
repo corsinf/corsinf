@@ -157,6 +157,7 @@ class th_postulantesC
         $th_pos_correo = 'milton@corsinf.com';//$datos[0]['th_pos_correo'];
         $th_pos_telefono_1 = '(023) 310-2928';//$datos[0]['th_pos_telefono_1'];
         $point = ' ° ';
+        $guion = ' - ';
 
         //? Educación
         $th_fora_institucion = 'Universidad de Harvard, Escuela Corsinf';//$datos[0]['th_fora_institución'];
@@ -281,9 +282,9 @@ class th_postulantesC
         $pdf->Cell(40, 7, utf8_decode($th_expl_cargos_ocupados), 0, 0,'R');
         $pdf->SetFont('Arial', '', 11);
         $pdf->SetFont('Arial', '', 11);
-        $pdf->Cell(60, 7, utf8_decode('Associate - Information Technology'), 0, 0,'L');
+        $pdf->Cell(60, 7, utf8_decode($th_expl_responsabilidades_logros), 0, 0,'L');
         $pdf->Cell(40, 7, utf8_decode(''), 0, 0,'R');
-        $pdf->Cell(55, 7, utf8_decode('Septiembre 2013 - Presente'), 0, 1,'R');
+        $pdf->Cell(55, 7, utf8_decode($th_expl_fecha_inicio_experiencia . $guion . $th_expl_fecha_fin_experiencia), 0, 1,'R');
         $pdf->SetFillColor(255, 255, 255);
         $pdf->Cell(10, 5.5, $bullet, 0, 0,'L');
         $pdf->MultiCell(0, 5.5, utf8_decode('Built Command & Command System for Singapore Civil Defence Force using C# .NET WCF Services'), 0, 1,'L');
