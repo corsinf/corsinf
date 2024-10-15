@@ -83,6 +83,7 @@ function actualizarEspacio($param) {
         //print_r($sql); die();
         $resp = $this->db->datos($sql);
         return $resp;
+       
     }
     
     

@@ -1,3 +1,6 @@
+<?php
+// Asegúrate de que $id_compra esté definido antes de usarlo
+$id_espacio  = isset($_POST['id_espacio']) ? intval($_POST['id_espacio']) : null; ?>
 <!--start page wrapper -->
 <div class="page-wrapper">
     <div class="page-content">
@@ -219,7 +222,7 @@
                         <label for="txt_furniture_quantity">Cantidad:</label>
                         <input type="number" class="form-control" name="txt_furniture_quantity" id="txt_furniture_quantity" placeholder="Introduce la cantidad" required>
                     </div>
-                    <input type="hidden" id="hidden_espacio_id" name="hidden_espacio_id">
+                    <input type="hidden" id="hidden_espacio_id" name="hidden_espacio_id" class="form-control" value="<?php echo htmlspecialchars($id_espacio); ?>" readonly>
                         <div class="text-end mb-4">
                             <button type="button" onclick="enviarMobiliario()" class="btn btn-primary btn-sm">Guardar Mobiliario</button>
                         </div>

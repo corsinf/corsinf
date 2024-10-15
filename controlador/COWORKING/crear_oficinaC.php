@@ -2,7 +2,10 @@
 include(dirname(__DIR__, 2).'/modelo/COWORKING/ClaseEjemploM.php');
 require_once(dirname(__DIR__, 2 ) . '/lib/pdf/cabecera_pdf.php');
 
+
 $controlador = new claseEjemplo();
+
+$id_espacio = isset($_POST['id_espacio']) ? $_POST['id_espacio'] : '';
 // Obtener datos de un espacio específico
 if (isset($_POST['getEspacio'])) {
     $id_espacio = $_POST['id_espacio'];
@@ -126,120 +129,114 @@ class claseEjemplo {
 
     }
     function generarPDFMobiliario(){
-        $titulo = 'MI PRIMER PDF';
+        $titulo = 'Informe de Mobiliario';
         $tablaHTML = array();
-        $fechaini = '';
-        $fechafin = '';
-        $sizetable = 8  ; 
-        $mostrar = 1;
-        
-        
-        $tablaHTML[0]['medidas']=$medidas = array(195);
-		$tablaHTML[0]['alineado']=$alineado  = array('C');
-		$tablaHTML[0]['datos']=$header = array('Informe de mobiliario');
-        $tablaHTML[0]['estilo']='B';
-        $tablaHTML[0]['size'] = 20;
-
-        $tablaHTML[1]['medidas']=$medidas = array(195);
-		$tablaHTML[1]['alineado']=$alineado  = array('C');
-		$tablaHTML[1]['datos']=$header = array('');
-
-        $tablaHTML[2]['medidas']=$medidas = array(195);
-		$tablaHTML[2]['alineado']=$alineado  = array('C');
-		$tablaHTML[2]['datos']=$header = array('');
-
-        //$tablaHTML[3]['medidas']=$medidas = array(25, 100);
-		//$tablaHTML[3]['alineado']=$alineado  = array('C');
-		//$tablaHTML[3]['datos']=$header = array('Nombre', 'Alejandro');
-		//$tablaHTML[0]['borde'] = '1';
-        $id_espacio = isset($_POST['id_espacio']) ? intval($_POST['id_espacio']) : null;
-        
-        $data = $this->modelo->listarMobiliario($id_espacio);
-        //print_r($data); die();
-        $tablaHTML[3]['medidas']=$medidas = array(38, 38, 38, 38);
-		$tablaHTML[3]['alineado']=$alineado  = array('C', 'C', 'C', 'C');
-		$tablaHTML[3]['datos']= array( 'Mobiliario', 'Espacio', 'Cantidad', 'Detalle');
-		$tablaHTML[3]['estilo']='B';
-		$tablaHTML[3]['borde'] = '1';
-        $tablaHTML[3]['size'] = 10;
- 
-        $posicion = 4;
-
-        foreach($data as $key => $value)
-        {
-        //print_r($value);die();
-        $tablaHTML[$posicion]['medidas']= $tablaHTML[3]['medidas'];
-		$tablaHTML[$posicion]['alineado']= $tablaHTML[3]['alineado'];
-		$tablaHTML[$posicion]['datos']= array($value['id_mobiliario'], $value['id_espacio'], $value['cantidad'], $value['detalle_mobiliario'] );
-		$tablaHTML[$posicion]['estilo']='';
-		$tablaHTML[$posicion]['borde'] = '  1';
-        $tablaHTML[$posicion]['size'] = 9;
-        $posicion ++;
+        $id_espacio = isset($_GET['id_espacio']) ? intval($_GET['id_espacio']) : null;
+    
+        if (!$id_espacio) {
+            return ['success' => false, 'message' => 'No se ha proporcionado un ID válido.'];
         }
-        
-        $this->pdf->cabecera_reporte_MC($titulo,$tablaHTML,$contenido=false, $image=false, $fechaini,$fechafin,$sizetable,$mostrar, 5);
-        //print_r('HOLA MUNDO');die();
-    }
-
-function generarPDFEspacios(){
-    $titulo = 'PDF Espacios';
-    $tablaHTML = array();
-    $fechaini = '';
-    $fechafin = '';
-    $sizetable = 8  ; 
-    $mostrar = 1;
     
+        $data = $this->modelo->listarMobiliario($id_espacio);
+        if (empty($data)) {
+            return ['success' => false, 'message' => 'No hay datos de mobiliario para este espacio.'];
+        }
     
-    $tablaHTML[0]['medidas']=$medidas = array(195);
-    $tablaHTML[0]['alineado']=$alineado  = array('C');
-    $tablaHTML[0]['datos']=$header = array('Informe de espacios');
-    $tablaHTML[0]['estilo']='B';
-    $tablaHTML[0]['size'] = 20;
-
-    $tablaHTML[1]['medidas']=$medidas = array(195);
-    $tablaHTML[1]['alineado']=$alineado  = array('C');
-    $tablaHTML[1]['datos']=$header = array('');
-
-    $tablaHTML[2]['medidas']=$medidas = array(195);
-    $tablaHTML[2]['alineado']=$alineado  = array('C');
-    $tablaHTML[2]['datos']=$header = array('');
-
-    //$tablaHTML[3]['medidas']=$medidas = array(25, 100);
-    //$tablaHTML[3]['alineado']=$alineado  = array('C');
-    //$tablaHTML[3]['datos']=$header = array('Nombre', 'Alejandro');
-    //$tablaHTML[0]['borde'] = '1';
-    $id_espacio = isset($_POST['id_espacio']) ? intval($_POST['id_espacio']) : null;
-    $data = $this->modelo->listardebase($id_espacio);
-    $tablaHTML[3]['medidas']=$medidas = array(38, 38, 38, 38, 38);
-    $tablaHTML[3]['alineado']=$alineado  = array('C', 'C', 'C', 'C', 'C');
-    $tablaHTML[3]['datos']= array('Id del espacio', 'Nombre del espacio', 'Aforo del espacio', 'Precio del espacio', 'Estado del espacio');
-    $tablaHTML[3]['estilo']='B';
-    $tablaHTML[3]['borde'] = '1';
-    $tablaHTML[3]['size'] = 10;
-
-    $posicion = 4;
-
-    foreach($data as $key => $value)
-    {
-    //print_r($value);die();
-    $tablaHTML[$posicion]['medidas']= $tablaHTML[3]['medidas'];
-    $tablaHTML[$posicion]['alineado']= $tablaHTML[3]['alineado'];
-    $tablaHTML[$posicion]['datos']= array($value['id_espacio'], $value['nombre_espacio'], $value['aforo_espacio'], $value['precio_espacio'], $value['estado_espacio'] );
-    $tablaHTML[$posicion]['estilo']='';
-    $tablaHTML[$posicion]['borde'] = '  1';
-    $tablaHTML[$posicion]['size'] = 9;
-    $posicion ++;
+        // Título del informe
+        $tablaHTML[0]['medidas'] = array(195);
+        $tablaHTML[0]['alineado'] = array('C');
+        $tablaHTML[0]['datos'] = array('Informe de Mobiliario');
+        $tablaHTML[0]['estilo'] = 'B';
+        $tablaHTML[0]['size'] = 20;
+    
+        // Espacio vacío entre título y tabla
+        $tablaHTML[1]['medidas'] = array(195);
+        $tablaHTML[1]['alineado'] = array('C');
+        $tablaHTML[1]['datos'] = array(''); // Fila vacía para el espacio
+        $tablaHTML[1]['estilo'] = '';
+        $tablaHTML[1]['size'] = 10;
+    
+        // Encabezado de la tabla de mobiliario
+        $tablaHTML[2]['medidas'] = array(38, 38, 38, 38);
+        $tablaHTML[2]['alineado'] = array('C', 'C', 'C', 'C');
+        $tablaHTML[2]['datos'] = array('ID Mobiliario', 'Espacio', 'Cantidad', 'Detalle');
+        $tablaHTML[2]['estilo'] = 'B';
+        $tablaHTML[2]['borde'] = '1';
+        $tablaHTML[2]['size'] = 10;
+    
+        // Agregar los datos del mobiliario
+        $posicion = 3;
+        foreach($data as $key => $value) {
+            $tablaHTML[$posicion]['medidas'] = $tablaHTML[2]['medidas'];
+            $tablaHTML[$posicion]['alineado'] = $tablaHTML[2]['alineado'];
+            $tablaHTML[$posicion]['datos'] = array($value['id_mobiliario'], $value['id_espacio'], $value['cantidad'], $value['detalle_mobiliario']);
+            $tablaHTML[$posicion]['estilo'] = '';
+            $tablaHTML[$posicion]['borde'] = '1';
+            $tablaHTML[$posicion]['size'] = 9;
+            $posicion++;
+        }
+    
+        // Generar el PDF
+        $this->pdf->cabecera_reporte_MC($titulo, $tablaHTML, false, false, '', '', 8, true, 5);
     }
     
-    $this->pdf->cabecera_reporte_MC($titulo,$tablaHTML,$contenido=false, $image=false, $fechaini,$fechafin,$sizetable,$mostrar, 5);
-    //print_r('HOLA MUNDO');die();
-}
+
+    function generarPDFEspacios(){
+        $titulo = 'Informe de Espacios';
+        $tablaHTML = array();
+        $data = $this->modelo->listardebase();
+    
+        if (empty($data)) {
+            return ['success' => false, 'message' => 'No hay espacios para listar.'];
+        }
+    
+        // Título del informe
+        $tablaHTML[0]['medidas'] = array(195);
+        $tablaHTML[0]['alineado'] = array('C');
+        $tablaHTML[0]['datos'] = array('Informe de Espacios');
+        $tablaHTML[0]['estilo'] = 'B';
+        $tablaHTML[0]['size'] = 20;
+    
+        // Espacio vacío entre título y tabla
+        $tablaHTML[1]['medidas'] = array(195);
+        $tablaHTML[1]['alineado'] = array('C');
+        $tablaHTML[1]['datos'] = array(''); 
+        $tablaHTML[1]['estilo'] = '';
+        $tablaHTML[1]['size'] = 10;
+    
+        // Encabezado de la tabla de espacios
+        $tablaHTML[2]['medidas'] = array(38, 38, 38, 38, 38);
+        $tablaHTML[2]['alineado'] = array('C', 'C', 'C', 'C', 'C');
+        $tablaHTML[2]['datos'] = array('ID Espacio', 'Nombre Espacio', 'Aforo', 'Precio', 'Estado');
+        $tablaHTML[2]['estilo'] = 'B';
+        $tablaHTML[2]['borde'] = '1';
+        $tablaHTML[2]['size'] = 10;
+    
+        // Agregar los datos de los espacios
+        $posicion = 3;
+        foreach($data as $key => $value) {
+            $estado = ($value['estado_espacio'] == 'A') ? 'Activo' : 'Inactivo';
+            $tablaHTML[$posicion]['medidas'] = $tablaHTML[2]['medidas'];
+            $tablaHTML[$posicion]['alineado'] = $tablaHTML[2]['alineado'];
+            $tablaHTML[$posicion]['datos'] = array($value['id_espacio'], $value['nombre_espacio'], $value['aforo_espacio'], $value['precio_espacio'], $estado);
+            $tablaHTML[$posicion]['estilo'] = '';
+            $tablaHTML[$posicion]['borde'] = '1';
+            $tablaHTML[$posicion]['size'] = 9;
+            $posicion++;
+        }
+    
+        // Generar el PDF
+        $this->pdf->cabecera_reporte_MC($titulo, $tablaHTML, false, false, '', '', 8, true, 5);
+    }
+    
+    
 
     // Listar espacios
     function listaEspacios() {
         $lista = $this->modelo->listardebase();
         $tr = '';
         foreach ($lista as $value) {
+            $id_espacio = isset($value['id_espacio']) ? $value['id_espacio'] : 'desconocido';
             $estado = $value['estado_espacio'] == 'A' ? 'Inactivo' : 'Activo';
             $tr .= '<tr>
                 <td>' . htmlspecialchars($value['id_espacio'], ENT_QUOTES, 'UTF-8') . '</td>
@@ -252,7 +249,6 @@ function generarPDFEspacios(){
                 <button class="btn btn-sm btn-primary" onclick="editarEspacio(' . htmlspecialchars($value['id_espacio'], ENT_QUOTES, 'UTF-8') . ')"><i class="bx bx-edit"></i></button>
                 <button class="btn btn-sm btn-danger" onclick="eliminarEspacio(this)" data-id="' . htmlspecialchars($value['id_espacio'], ENT_QUOTES, 'UTF-8') . '"><i class="bx bx-trash"></i></button>
                 <button class="btn btn-sm btn-secondary" onclick="openFurnitureModal(' . htmlspecialchars($value['id_espacio'], ENT_QUOTES, 'UTF-8') . ')">Gestionar Mobiliario</button>
-                </td>
                 </tr>';
         }   
         return $tr;
