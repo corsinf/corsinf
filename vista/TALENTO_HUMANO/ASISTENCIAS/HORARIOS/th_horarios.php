@@ -7,38 +7,25 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
 <script type="text/javascript">
     $(document).ready(function() {
 
-        tbl_turnos = $('#tbl_turnos').DataTable($.extend({}, configuracion_datatable('Turnos', 'turnos'), {
+        tbl_horarios = $('#tbl_horarios').DataTable($.extend({}, configuracion_datatable('Horarios', 'horarios'), {
             reponsive: true,
             language: {
                 url: 'https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
             },
             ajax: {
-                url: '../controlador/TALENTO_HUMANO/th_turnosC.php?listar=true',
+                url: '../controlador/TALENTO_HUMANO/th_horariosC.php?listar=true',
                 dataSrc: ''
             },
             columns: [{
                     data: null,
                     render: function(data, type, item) {
-                        href = `../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_registrar_turnos&_id=${item._id}&hora_entrada=${item.hora_entrada}&hora_salida=${item.hora_salida}`;
+                        href = `../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_registrar_horarios&_id=${item._id}`;
                         return `<a href="${href}"><u>${item.nombre}</u></a>`;
                     }
                 },
-                {
-                    data: null,
-                    render: function(data, type, item) {
-                        salida = minutos_formato_hora(item.hora_entrada) + ' - ' + minutos_formato_hora(item.hora_salida);
-                        return salida;
-                    }
-                },
-                {
-                    data: null,
-                    render: function(data, type, item) {
-                        return `<button type="button" class="btn btn-primary btn-xs" onclick=""><i class="lni lni-spinner-arrow fs-7 me-0 fw-bold"></i></button>`;
-                    }
-                }
             ],
             order: [
-                [1, 'asc']
+                [0, 'asc']
             ]
         }));
 
@@ -49,7 +36,7 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
     <div class="page-content">
         <!--breadcrumb-->
         <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
-            <div class="breadcrumb-title pe-3">Turnos</div>
+            <div class="breadcrumb-title pe-3">Horarios</div>
             <?php
             // print_r($_SESSION['INICIO']);die();
 
@@ -60,7 +47,7 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                         <li class="breadcrumb-item"><a href="javascript:;"><i class="bx bx-home-alt"></i></a>
                         </li>
                         <li class="breadcrumb-item active" aria-current="page">
-                            Lista de Turnos
+                            Lista de Horarios
                         </li>
                     </ol>
                 </nav>
@@ -79,7 +66,7 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                                 <div class="card-title d-flex align-items-center">
 
                                     <div class="" id="btn_nuevo">
-                                        <a href="../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_registrar_turnos"
+                                        <a href="../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_registrar_horarios"
                                             type="button" class="btn btn-success btn-sm ">
                                             <i class="bx bx-plus me-0 pb-1"></i> Nuevo
                                         </a>
@@ -100,12 +87,10 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                             <div class="container-fluid">
 
                                 <div class="table-responsive">
-                                    <table class="table table-striped responsive " id="tbl_turnos" style="width:100%">
+                                    <table class="table table-striped responsive " id="tbl_horarios" style="width:100%">
                                         <thead>
                                             <tr>
                                                 <th>Nombre</th>
-                                                <th>Horario</th>
-                                                <th width="10px">Acción</th>
                                             </tr>
                                         </thead>
                                         <tbody class="">
