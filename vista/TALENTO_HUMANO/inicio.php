@@ -9,10 +9,6 @@ if ($_GET['acc'] == 'th_registrar_dispositivos') {
 	include('TALENTO_HUMANO/DISPOSITIVOS/th_registrar_dispositivos.php');
 }
 
-if ($_GET['acc'] == 'th_tomar_datos_biometricos') {
-	include('TALENTO_HUMANO/DISPOSITIVOS/th_tomar_datos_biometricos.php');
-}
-
 //Reportes
 if ($_GET['acc'] == 'th_reportes_hv') {
 	include('TALENTO_HUMANO/REPORTES/th_reportes_hv.php');
@@ -36,10 +32,6 @@ if ($_GET['acc'] == 'th_registrar_personas') {
 	include('TALENTO_HUMANO/PERSONAS/th_registrar_personas.php');
 }
 
-<<<<<<< HEAD
-if ($_GET['acc'] == 'th_detectar_dispositivos') {
-	include('TALENTO_HUMANO/DISPOSITIVOS/th_detectar_dispositivos.php');
-=======
 //Asistencias
 //Turnos
 if ($_GET['acc'] == 'th_registrar_turnos') {
@@ -57,6 +49,12 @@ if ($_GET['acc'] == 'th_registrar_horarios') {
 
 if ($_GET['acc'] == 'th_horarios') {
 	include('TALENTO_HUMANO/ASISTENCIAS/HORARIOS/th_horarios.php');
->>>>>>> a58373fc7c50756f34da3d850086d9ba34f819b5
 }
 
+if ($_GET['acc'] == 'th_detectar_dispositivos') {
+	include('TALENTO_HUMANO/DISPOSITIVOS/th_detectar_dispositivos.php');
+}
+
+if ($_GET['acc'] == 'th_tomar_datos_biometricos') {
+	include('TALENTO_HUMANO/DISPOSITIVOS/th_tomar_datos_biometricos.php');
+}
