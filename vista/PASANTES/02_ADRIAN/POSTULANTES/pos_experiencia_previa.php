@@ -33,7 +33,7 @@
                 $('#txt_nombre_empresa').val(response[0].th_expl_nombre_empresa);
                 $('#txt_cargos_ocupados').val(response[0].th_expl_cargos_ocupados);
                 $('#txt_fecha_inicio_laboral').val(response[0].th_expl_fecha_inicio_experiencia);
-                
+
                 var fecha_fin_laboral = response[0].th_expl_fecha_fin_experiencia;
 
                 if (fecha_fin_laboral === '') {
@@ -309,11 +309,11 @@
             rules: {
                 txt_nombre_empresa: {
                     required: true,
-                    maxlength:"200"
+                    maxlength: "200"
                 },
                 txt_cargos_ocupados: {
                     required: true,
-                    maxlength:"200"
+                    maxlength: "200"
                 },
                 txt_fecha_inicio_laboral: {
                     required: true,
@@ -323,7 +323,7 @@
                 },
                 txt_responsabilidades_logros: {
                     required: true,
-                    maxlength:"700"
+                    maxlength: "700"
                 },
             },
             messages: {
