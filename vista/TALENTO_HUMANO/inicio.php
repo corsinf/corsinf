@@ -9,6 +9,10 @@ if ($_GET['acc'] == 'th_registrar_dispositivos') {
 	include('TALENTO_HUMANO/DISPOSITIVOS/th_registrar_dispositivos.php');
 }
 
+if ($_GET['acc'] == 'th_tomar_datos_biometricos') {
+	include('TALENTO_HUMANO/DISPOSITIVOS/th_tomar_datos_biometricos.php');
+}
+
 //Reportes
 if ($_GET['acc'] == 'th_reportes_hv') {
 	include('TALENTO_HUMANO/REPORTES/th_reportes_hv.php');
@@ -30,5 +34,9 @@ if ($_GET['acc'] == 'th_personas') {
 
 if ($_GET['acc'] == 'th_registrar_personas') {
 	include('TALENTO_HUMANO/PERSONAS/th_registrar_personas.php');
+}
+
+if ($_GET['acc'] == 'th_detectar_dispositivos') {
+	include('TALENTO_HUMANO/DISPOSITIVOS/th_detectar_dispositivos.php');
 }
 
