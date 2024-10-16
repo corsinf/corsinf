@@ -30,14 +30,14 @@ if (isset($_GET['_id'])) {
             dataType: 'json',
             success: function(response) {
                 console.log(response);
-                $('#ddl_modelo').val(response[0].th_dis_modelo);
+                $('#ddl_modelo').val(response[0].modelo);
                 $('#txt_nombre').val(response[0].nombre);
                 $('#txt_host').val(response[0].host);
-                $('#txt_puerto').val(response[0].th_dis_port);
-                $('#txt_serial').val(response[0].th_dis_serial);
-                $('#txt_usuario').val(response[0].th_dis_usuario);
-                $('#txt_pass').val(response[0].th_dis_pass);
-                $('#cbx_ssl').prop('checked', (response[0].th_dis_ssl == 1));
+                $('#txt_puerto').val(response[0].port);
+                $('#txt_serial').val(response[0].serial);
+                $('#txt_usuario').val(response[0].usuario);
+                $('#txt_pass').val(response[0].pass);
+                $('#cbx_ssl').prop('checked', (response[0].ssl == 1));
 
             }
         });
@@ -245,8 +245,8 @@ if (isset($_GET['_id'])) {
                             <div class="row mb-col">
                                 <div class="col-md-12">
                                     <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" value="" id="cbx_ssl">
-                                        <label class="form-label" for="cbx_serial">SSL </label>
+                                        <input class="form-check-input" type="checkbox" value="" name="cbx_ssl" id="cbx_ssl">
+                                        <label class="form-label" for="cbx_ssl">SSL </label>
                                     </div>
                                 </div>
                             </div>

@@ -36,7 +36,27 @@ if ($_GET['acc'] == 'th_registrar_personas') {
 	include('TALENTO_HUMANO/PERSONAS/th_registrar_personas.php');
 }
 
+<<<<<<< HEAD
 if ($_GET['acc'] == 'th_detectar_dispositivos') {
 	include('TALENTO_HUMANO/DISPOSITIVOS/th_detectar_dispositivos.php');
+=======
+//Asistencias
+//Turnos
+if ($_GET['acc'] == 'th_registrar_turnos') {
+	include('TALENTO_HUMANO/ASISTENCIAS/TURNOS/th_registrar_turnos.php');
+}
+
+if ($_GET['acc'] == 'th_turnos') {
+	include('TALENTO_HUMANO/ASISTENCIAS/TURNOS/th_turnos.php');
+}
+
+//Horarios
+if ($_GET['acc'] == 'th_registrar_horarios') {
+	include('TALENTO_HUMANO/ASISTENCIAS/HORARIOS/th_registrar_horarios.php');
+}
+
+if ($_GET['acc'] == 'th_horarios') {
+	include('TALENTO_HUMANO/ASISTENCIAS/HORARIOS/th_horarios.php');
+>>>>>>> a58373fc7c50756f34da3d850086d9ba34f819b5
 }
 

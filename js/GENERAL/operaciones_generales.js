@@ -39,6 +39,44 @@ function fecha_nacimiento_formateada(fecha) {
     return salida;
 }
 
+//Fecha con formato de los input
+function fecha_formateada(fecha) {
+    fechaYHora = fecha;
+    fecha = new Date(fechaYHora);
+    anio = fecha.getFullYear();
+    mes = (fecha.getMonth() + 1).toString().padStart(2, '0'); // Añade un 0 si es necesario
+    dia = fecha.getDate().toString().padStart(2, '0'); // Añade un 0 si es necesario
+    fechaFormateada = `${anio}-${mes}-${dia}`;
+
+    var salida = '';
+    salida = fechaFormateada;
+
+    return salida;
+}
+
+//Para sacar los valores de un datetime2 la fecha y la hora
+//Salida 2024/10/14 11:31:06
+function fecha_formateada_hora(fecha) {
+    fechaYHora = fecha;
+    fecha = new Date(fechaYHora);
+    
+    // Obtener el año, mes y día
+    anio = fecha.getFullYear();
+    mes = (fecha.getMonth() + 1).toString().padStart(2, '0'); // Añade un 0 si es necesario
+    dia = fecha.getDate().toString().padStart(2, '0'); // Añade un 0 si es necesario
+    
+    // Obtener las horas, minutos y segundos
+    horas = fecha.getHours().toString().padStart(2, '0');
+    minutos = fecha.getMinutes().toString().padStart(2, '0');
+    segundos = fecha.getSeconds().toString().padStart(2, '0');
+    
+    // Formato de fecha y hora
+    fechaFormateada = `${anio}/${mes}/${dia} ${horas}:${minutos}:${segundos}`;
+
+    return fechaFormateada;
+}
+
+
 //Valida si tiene el formato de email
 function validar_email(sa_rep_correo) {
 
@@ -174,6 +212,11 @@ function textoMinusculas(input) {
     input.value = texto.toLowerCase();
 }
 
+function minutos_formato_hora(num) {
+    let hours = Math.floor(num / 60);
+    let minutes = num % 60;
+    return (hours < 10 ? '0' : '') + hours + ':' + (minutes < 10 ? '0' : '') + minutes;
+}
 
 
 //Funcion para agregar asterisco en un label para resaltar que es campo obligatorio

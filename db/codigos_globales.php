@@ -1044,12 +1044,13 @@ function para_ftp($nombre,$texto)
 
 			}else
 			{
+				// print_r($sql);die();
 				$cant =  $this->db->datos($sql);
 				$totalTablas = $totalTablas+$cant[0]['CantidadDeTablas'];
 			}
 
 		}
-
+// print_r('expression');die();
 
 		if(count($licencias)>1)
 		{
@@ -1080,7 +1081,8 @@ function para_ftp($nombre,$texto)
 
 		}else
 		{
-			$cant =  $this->db->datos($sql);
+			// print_r('E');die();
+			$cant =  $this->db->datos($sql,1);
 			$totalActual = $cant[0]['CantidadDeTablas'];
 		}
 

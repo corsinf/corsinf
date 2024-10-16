@@ -28,6 +28,10 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                 },
 
                 {
+                    data: 'modelo'
+                },
+
+                {
                     data: null,
                     render: function(data, type, item) {
                         return `<button type="button" class="btn btn-primary btn-xs" onclick=""><i class="lni lni-spinner-arrow fs-7 me-0 fw-bold"></i></button>`;
@@ -98,6 +102,7 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                                             <tr>
                                                 <th>Nombre</th>
                                                 <th>Host</th>
+                                                <th>Modelo</th>
                                                 <th width="10px">Acción</th>
                                             </tr>
                                         </thead>

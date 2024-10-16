@@ -7,7 +7,7 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
 <script src="../js/GENERAL/operaciones_generales.js"></script>
 <script type="text/javascript">
     $(document).ready(function() {
-        tbl_dispositivos = $('#tbl_dispositivos').DataTable($.extend({}, configuracion_datatable('Personas', 'personas'), {
+        tbl_personas = $('#tbl_personas').DataTable($.extend({}, configuracion_datatable('Personas', 'personas'), {
             reponsive: true,
             language: {
                 url: 'https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
@@ -20,18 +20,22 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                     data: null,
                     render: function(data, type, item) {
                         href = `../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_registrar_personas&_id=${item._id}`;
-                        return `<a href="${href}"><u>${item.primer_apellido}</u></a>`;
+                        return `<a href="${href}"><u>${item.primer_apellido} ${item.segundo_apellido} ${item.primer_nombre} ${item.segundo_nombre}</u></a>`;
                     }
                 },
                 {
-                    data: 'primer_apellido'
+                    data: 'cedula'
                 },
 
                 {
-                    data: null,
-                    render: function(data, type, item) {
-                        return `<button type="button" class="btn btn-primary btn-xs" onclick=""><i class="lni lni-spinner-arrow fs-7 me-0 fw-bold"></i></button>`;
-                    }
+                    // data: null,
+                    // render: function(data, type, item) {
+                    //     return `<button type="button" class="btn btn-primary btn-xs" onclick=""><i class="lni lni-spinner-arrow fs-7 me-0 fw-bold"></i></button>`;
+                    // }
+                    data: 'correo'
+                },
+                {
+                    data: 'telefono_1'
                 },
             ],
             order: [
@@ -95,12 +99,13 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                         <section class="content pt-2">
                             <div class="container-fluid">
                                 <div class="table-responsive">
-                                    <table class="table table-striped responsive " id="tbl_dispositivos" style="width:100%">
+                                    <table class="table table-striped responsive " id="tbl_personas" style="width:100%">
                                         <thead>
                                             <tr>
                                                 <th>Nombre</th>
-                                                <th>Apellido</th>
-                                                <th width="10px">Acción</th>
+                                                <th>Cédula</th>
+                                                <th>Correo</th>
+                                                <th>Teléfono</th>
                                             </tr>
                                         </thead>
                                         <tbody>

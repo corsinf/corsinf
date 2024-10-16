@@ -17,7 +17,6 @@
             dataType: 'json',
             success: function(response) {
                 $('#pnl_formacion_academica').html(response);
-                console.log(response);
             }
         });
     }
@@ -37,17 +36,23 @@
                 $('#txt_fecha_inicio_academico').val(response[0].th_fora_fecha_inicio_formacion);
 
                 var fecha_fin = response[0].th_fora_fecha_fin_formacion;
-                if (fecha_fin === '1900-01-01') {
-                    $("#txt_fecha_final_academico").val('');
-                    $('#cbx_fecha_final_academico').prop('checked', true)
+
+                if (fecha_fin === '') {
+                    var hoy = new Date();
+                    var dia = String(hoy.getDate()).padStart(2, '0');
+                    var mes = String(hoy.getMonth() + 1).padStart(2, '0');
+                    var year = hoy.getFullYear();
+
+                    var fecha_actual = year + '-' + mes + '-' + dia;
+                    $('#txt_fecha_final_academico').val(fecha_actual);
+                    $('#txt_fecha_final_academico').prop('disabled', true);
+                    $('#cbx_fecha_final_academico').prop('checked', true);
                 } else {
                     $('#txt_fecha_final_academico').val(fecha_fin);
                 }
 
 
                 $('#txt_formacion_id').val(response[0]._id);
-
-                console.log(response);
             }
         });
     }
@@ -56,7 +61,11 @@
         var txt_titulo_obtenido = $('#txt_titulo_obtenido').val();
         var txt_institucion = $('#txt_institucion').val();
         var txt_fecha_inicio_academico = $('#txt_fecha_inicio_academico').val();
-        var txt_fecha_final_academico = $('#txt_fecha_final_academico').val();
+        if ($('#cbx_fecha_final_academico').is(':checked')) {
+            var txt_fecha_final_academico = '';
+        } else {
+            var txt_fecha_final_academico = $('#txt_fecha_final_academico').val();
+        }
         var txt_id_postulante = '<?= $id ?>';
         var txt_id_formacion_academica = $('#txt_formacion_id').val();
 
@@ -71,7 +80,6 @@
 
         if ($("#form_formacion_academica").valid()) {
             // Si es válido, puedes proceder a enviar los datos por AJAX
-            console.log(parametros_formacion_academica);
             insertar_formacion_academica(parametros_formacion_academica);
         }
 
@@ -107,12 +115,12 @@
 
         $('#modal_agregar_formacion').modal('show');
 
-        $('#lbl_titulo_formacion_acedemica').html('Editar');
+        $('#lbl_titulo_formacion_acedemica').html('Editar su Formación Académica');
         $('#btn_guardar_formacion').html('Editar');
 
     }
 
-    function delete_datos() {
+    function delete_datos_form_acad() {
         //Para revisar y enviar el dato como parametro 
         id = $('#txt_formacion_id').val();
         Swal.fire({
@@ -125,12 +133,12 @@
             confirmButtonText: 'Si'
         }).then((result) => {
             if (result.value) {
-                eliminar(id);
+                eliminar_form_acad(id);
             }
         })
     }
 
-    function eliminar(id) {
+    function eliminar_form_acad(id) {
         $.ajax({
             data: {
                 id: id
@@ -158,17 +166,24 @@
         $('#txt_fecha_final_academico').val('');
         $('#txt_formacion_id').val('');
         $('#cbx_fecha_final_academico').prop('checked', false)
+        $('#txt_fecha_final_academico').prop('disabled', false);
 
         //Limpiar validaciones
         $("#form_formacion_academica").validate().resetForm();
         $('.form-control').removeClass('is-valid is-invalid');
 
+        //Cambiar texto
+        $('#lbl_titulo_formacion_acedemica').html('Agregue una Formación Académica');
+        $('#btn_guardar_formacion').html('Agregar');
+
     }
 
-    function validar_fechas() {
+    function validar_fechas_form_acad() {
         var fecha_inicio = $('#txt_fecha_inicio_academico').val();
         var fecha_final = $('#txt_fecha_final_academico').val();
-
+        var hoy = new Date();
+        var fecha_actual = hoy.toISOString().split('T')[0];
+        //* Validar que la fecha final no sea menor a la fecha de inicio
         if (fecha_inicio && fecha_final) {
             if (Date.parse(fecha_final) < Date.parse(fecha_inicio)) {
                 Swal.fire({
@@ -178,7 +193,44 @@
                 });
                 $('.form-control').removeClass('is-valid is-invalid');
                 $('#txt_fecha_final_academico').val('');
+                $('#txt_fecha_inicio_academico').val('');
+                $('#cbx_fecha_final_academico').prop('checked', false);
+                $('$txt_fecha_final_academico').prop('disabled', false);
             }
+            if (Date.parse(fecha_inicio) > Date.parse(fecha_actual)) {
+                Swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    text: "La fecha de inicio no puede ser mayor a la fecha final.",
+                });
+                $('.form-control').removeClass('is-valid is-invalid');
+                $('#txt_fecha_inicio_academico').val('');
+                $('#cbx_fecha_final_academico').prop('checked', false);
+                $('$txt_fecha_final_academico').prop('disabled', false);
+            }
+        }
+
+        //* Validar que la fecha de inicio y final no sean mayores a la fecha actual
+        if (fecha_inicio && Date.parse(fecha_inicio) > Date.parse(fecha_actual)) {
+            Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: "La fecha de inicio no puede ser mayor a la fecha actual.",
+            });
+            $('.form-control').removeClass('is-valid is-invalid');
+            $('#txt_fecha_inicio_academico').val('');
+        }
+
+        if (fecha_final && Date.parse(fecha_final) > Date.parse(fecha_actual)) {
+            Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: "La fecha final no puede ser mayor a la fecha actual.",
+            });
+            $('.form-control').removeClass('is-valid is-invalid');
+            $('#txt_fecha_final_academico').val('');
+            $('#cbx_fecha_final_academico').prop('checked', false);
+            $('$txt_fecha_final_academico').prop('disabled', false);
         }
     }
 </script>
@@ -213,24 +265,24 @@
                     </div>
                     <div class="mb-3">
                         <label for="txt_fecha_inicio_academico" class="form-label form-label-sm">Fecha de inicio </label>
-                        <input type="date" class="form-control form-control-sm no_caracteres" name="txt_fecha_inicio_academico" id="txt_fecha_inicio_academico" onchange="validar_fechas(); checkbox_actualidad();">
+                        <input type="date" class="form-control form-control-sm no_caracteres" name="txt_fecha_inicio_academico" id="txt_fecha_inicio_academico" onchange="checkbox_actualidad_form_acad();">
                     </div>
                     <div class="mb-1">
                         <label for="txt_fecha_final_academico" class="form-label form-label-sm">Fecha de finalización </label>
-                        <input type="date" class="form-control form-control-sm mb-2 no_caracteres" name="txt_fecha_final_academico" id="txt_fecha_final_academico" onchange="validar_fechas(); checkbox_actualidad();">
+                        <input type="date" class="form-control form-control-sm mb-2 no_caracteres" name="txt_fecha_final_academico" id="txt_fecha_final_academico" onchange="checkbox_actualidad_form_acad();">
                     </div>
                     <div class="mt-1 mb-3">
-                        <input type="checkbox" class="form-check-input" name="cbx_fecha_final_academico" id="cbx_fecha_final_academico" onchange="checkbox_actualidad();">
+                        <input type="checkbox" class="form-check-input" name="cbx_fecha_final_academico" id="cbx_fecha_final_academico" onchange="checkbox_actualidad_form_acad();">
                         <label for="cbx_fecha_final_academico" class="form-label form-label-sm">Actualidad</label>
                     </div>
                 </div>
                 <div class="modal-footer">
                     <div class="row mx-auto">
                         <div class="col-6">
-                            <button type="button" class="btn btn-success btn-sm" id="btn_guardar_formacion" onclick="insertar_editar_formacion_academica();">Agregar</button>
+                            <button type="button" class="btn btn-success btn-sm" id="btn_guardar_formacion" onclick="validar_fechas_form_acad();insertar_editar_formacion_academica();">Agregar</button>
                         </div>
                         <div class="col-6">
-                            <button type="button" class="btn btn-danger btn-sm" id="btn_eliminar_formacion" onclick="delete_datos();">Eliminar</button>
+                            <button type="button" class="btn btn-danger btn-sm" id="btn_eliminar_formacion" onclick="delete_datos_form_acad();">Eliminar</button>
                         </div>
                     </div>
                 </div>
@@ -293,19 +345,39 @@
         });
     });
 
-    function checkbox_actualidad() {
-        if ($('#txt_fecha_final_academico').val() === '') {
-            if ($('#cbx_fecha_final_academico').is(':checked')) {
-                $('#txt_fecha_final_academico').val('')
+    function checkbox_actualidad_form_acad() {
+        if ($('#cbx_fecha_final_academico').is(':checked')) {
+            var hoy = new Date();
+            var dia = String(hoy.getDate()).padStart(2, '0');
+            var mes = String(hoy.getMonth() + 1).padStart(2, '0');
+            var year = hoy.getFullYear();
 
-                $('#txt_fecha_final_academico').rules("remove", "required");
-            } else {
-                $('#txt_fecha_final_academico').rules("add", {
-                    required: true
-                });
-            }
+            var fecha_actual = year + '-' + mes + '-' + dia;
+            $('#txt_fecha_final_academico').val(fecha_actual);
+
+            $('#txt_fecha_final_academico').prop('disabled', true);
+            $('#txt_fecha_final_academico').rules("remove", "required");
+
+            // Agregar clase 'is-valid' para poner el campo en verde
+            $('#txt_fecha_final_academico').addClass('is-valid');
+            $('#txt_fecha_final_academico').removeClass('is-invalid');
+
         } else {
-            $('#cbx_fecha_final_academico').prop('checked', false)
+            // Solo limpiar el campo si estaba previamente deshabilitado
+            if ($('#txt_fecha_final_academico').prop('disabled')) {
+                $('#txt_fecha_final_academico').val('');
+            }
+
+            $('#txt_fecha_final_academico').prop('disabled', false)
+            $('#txt_fecha_final_academico').rules("add", {
+                required: true
+            });
+            $('#txt_fecha_final_academico').removeClass('is-valid');
+            $('#form_formacion_academica').validate().resetForm();
+            $('.form-control').removeClass('is-valid is-invalid');
         }
+
+        // Validar fechas
+        validar_fechas_form_acad();
     }
 </script>
