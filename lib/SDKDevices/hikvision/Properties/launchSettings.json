@@ -1,0 +1,11 @@
+{
+  "profiles": {
+    "libreriasHik": {
+      "commandName": "Project",
+      "commandLineArgs": "2"
+    },
+    "Container (Dockerfile)": {
+      "commandName": "Docker"
+    }
+  }
+}
