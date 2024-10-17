@@ -325,6 +325,7 @@ if (isset($_GET['id'])) {
                                                         <div class="col-9 d-flex align-items-center">
                                                             <h6 class="mb-0 fw-bold text-primary">Experiencia Previa:</h6>
                                                         </div>
+                                        
                                                         <div class="col-3 d-flex justify-content-end">
                                                             <a href="#" class="text-success d-flex align-items-center" data-bs-toggle="modal" data-bs-target="#modal_agregar_experiencia">
                                                                 <i class='bx bx-plus-circle bx-sm me-1'></i>
@@ -590,7 +591,7 @@ if (isset($_GET['id'])) {
                         </div>
                     </div>
                     <hr>
-                    <div class="row mb-3">
+                    <div class="row mb-col">
                         <div class="col-3">
                             <div class="mb-3">
                                 <label for="txt_fecha_nacimiento" class="form-label form-label-sm">Fecha de nacimiento <label style="color: red;">*</label></label>
@@ -661,6 +662,7 @@ if (isset($_GET['id'])) {
                         </div>
                     </div>
                 </div>
+
                 <div class="modal-footer d-flex justify-content-center">
                     <button type="button" class="btn btn-success btn-sm" id="btn_guardar_informacion_personal" onclick="insertar_editar_informacion_personal();">Guardar</button>
                 </div>
