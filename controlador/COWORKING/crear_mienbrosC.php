@@ -12,6 +12,8 @@ if (isset($_GET['generarPDFMiembros'])) {
     echo json_encode($controlador->generarPDFMiembros());
 }
 
+
+
 if (isset($_GET['generarPDFCompras'])) {
     
     echo json_encode($controlador->generarPDFCompras());

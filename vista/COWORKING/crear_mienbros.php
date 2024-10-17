@@ -75,8 +75,8 @@
                                         <i class='bx bxs-report'></i><strong>Informe de Miembros</strong>
                                     </button>
                                     <ul class="dropdown-menu">
-                                        <li><a class="dropdown-item" href="" onclick="generarExcelMiembros()">Informe en Excel</a></li>
-                                        <li><a class="dropdown-item" href="" onclick="generarPDFMiembros()">Informe en PDF</a></li>
+                                        <li><a class="dropdown-item" href="#" onclick="generarExcelMiembros()">Informe en Excel</a></li>
+                                        <li><a class="dropdown-item" href="#" onclick="generarPDFMiembros()">Informe en PDF</a></li>
                                     </ul>
                                 </div>
                                 <div class="btn-group">
@@ -569,6 +569,18 @@
 
     function generarPDFCompras() {
             var url ='../controlador/COWORKING/crear_mienbrosC.php?generarPDFCompras=true'
+            window.open(url,"_blank");
+        }
+
+    function generarExcelMiembros(){
+            var url ='../lib/excel_spout.php?generarExcelMiembros=true'
+            window.open(url,"_blank");
+
+
+        }
+
+    function generarExcelCompras(){
+            var url ='../lib/excel_spout.php?generarExcelCompras=true'
             window.open(url,"_blank");
         }
 </script>
