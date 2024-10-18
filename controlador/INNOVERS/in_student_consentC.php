@@ -67,7 +67,7 @@ class student_consentC
         $in_stc_cbx_housing_3 = (isset($parametros['cbx_judicial']) && $parametros['cbx_judicial'] == 'true') ? 1 : 0;
         $in_stc_cbx_remove_consent = (isset($parametros['cbx_remove_consent']) && $parametros['cbx_remove_consent'] == 'true') ? 1 : 0;
 
-        $ip_publica_get = file_get_contents('https://api.ipify.org');
+        //$ip_publica_get = file_get_contents('https://api.ipify.org');
 
         $ip_cliente_host = $_SERVER['REMOTE_ADDR'] ?? '';
 
@@ -111,7 +111,7 @@ class student_consentC
             array('campo' => 'in_stc_cbx_remove_consent', 'dato' => $in_stc_cbx_remove_consent),
             array('campo' => 'in_stc_fecha_modificacion', 'dato' => date('Y-m-d H:i:s')),
 
-            array('campo' => 'in_stc_ip_publica', 'dato' =>  $ip_publica_get),
+            array('campo' => 'in_stc_ip_publica', 'dato' =>  '$ip_publica_get'),
             array('campo' => 'SERVER_NAME', 'dato' => $_SERVER['SERVER_NAME'] ?? ''),
             array('campo' => 'SERVER_SOFTWARE', 'dato' => $_SERVER['SERVER_SOFTWARE'] ?? ''),
             array('campo' => 'SERVER_PROTOCOL', 'dato' => $_SERVER['SERVER_PROTOCOL'] ?? ''),
@@ -616,7 +616,7 @@ class student_consentC
         $cedula = $persona[0]['cedula'];
         $correo = $persona[0]['correo'];
 
-        $ip_publica = $datos_privados[0]['IP_PUBLICA'];
+        $ip_publica = $datos_privados[0]['REMOTE_ADDR'];
 
 
         //print_r($datos); die(); exit;
