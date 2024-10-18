@@ -141,6 +141,9 @@ if (isset($_GET['_id'])) {
         var cbx_room = $('#cbx_room').prop('checked');
         var cbx_judicial = $('#cbx_judicial').prop('checked');
         var cbx_remove_consent = $('#cbx_remove_consent').prop('checked');
+        var txt_cedula = $('#txt_cedula').val();
+
+        var txt_firma_estudiante = 1;
 
         var parametros = {
             'id_persona': id_persona,
@@ -171,12 +174,14 @@ if (isset($_GET['_id'])) {
             'cbx_location': cbx_location,
             'cbx_room': cbx_room,
             'cbx_judicial': cbx_judicial,
-            'cbx_remove_consent': cbx_remove_consent
+            'cbx_remove_consent': cbx_remove_consent,
+            'txt_firma_estudiante': txt_firma_estudiante,
+            'txt_cedula': txt_cedula,
         };
 
         if ($("#form_student_consent").valid()) {
             // Si es válido, puedes proceder a enviar los datos por AJAX
-            console.log(parametros);
+            //console.log(parametros);
             insertar(parametros);
         }
 
@@ -242,6 +247,7 @@ if (isset($_GET['_id'])) {
                                 <form id="form_student_consent">
 
                                     <input type="hidden" name="id_persona" id="id_persona">
+                                    <input type="hidden" name="txt_cedula" id="txt_cedula">
 
                                     <div class="row pt-3 mb-col">
                                         <div class="col-md-8">
@@ -265,10 +271,13 @@ if (isset($_GET['_id'])) {
                                         <p class="mb-1 py-3 fw-bold">I hereby authorize the University of Idaho to discuss and verbally release the following information: </p>
 
                                         <div class="form-check mb-3">
-                                            <input type="checkbox" class="form-check-input" name="cbx_academic_info" id="cbx_academic_info">
-                                            <label for="cbx_academic_info" class="form-check-label mb-2"><strong>ALL</strong> academic information <strong>OR</strong> these individual items: <label style="color: red;">*</label></label>
+                                            <!-- Primera fila de checks -->
+                                            <div class="form-check">
+                                                <input type="checkbox" class="form-check-input" name="cbx_academic_info" id="cbx_academic_info">
+                                                <label for="cbx_academic_info" class="form-check-label"><strong>ALL</strong> academic information <strong>OR</strong> these individual items: <span class="text-danger">*</span></label>
+                                            </div>
 
-                                            <div class="row mb-3 input-group">
+                                            <div class="row input-group">
                                                 <div class="col-12 col-lg-4 col-md-4 col-sm-12">
                                                     <div class="form-check">
                                                         <input type="checkbox" class="form-check-input cbx_items_academic_info" name="cbx_admission" id="cbx_admission">
@@ -300,11 +309,15 @@ if (isset($_GET['_id'])) {
                                                     </div>
                                                 </div>
                                             </div>
+                                            <label class="error" style="display: none;" for="cbx_academic_info"></label>
 
-                                            <input type="checkbox" class="form-check-input" name="cbx_financial_info" id="cbx_financial_info">
-                                            <label for="cbx_financial_info" class="form-check-label mb-2"><strong>ALL</strong> financial account information <strong>OR</strong> these individual items: <label style="color: red;">*</label></label>
+                                            <!-- Segunda fila de checks -->
+                                            <div class="mt-3 form-check">
+                                                <input type="checkbox" class="form-check-input" name="cbx_financial_info" id="cbx_financial_info">
+                                                <label for="cbx_financial_info" class="form-check-label"><strong>ALL</strong> financial account information <strong>OR</strong> these individual items: <span class="text-danger">*</span></label>
+                                            </div>
 
-                                            <div class="row mb-3 ms-2 input-group">
+                                            <div class="row ms-2 input-group">
                                                 <div class="col-12 col-lg-4 col-md-4 col-sm-12">
                                                     <div>
                                                         <input type="checkbox" class="form-check-input cbx_items_financial_info" name="cbx_fees" id="cbx_fees">
@@ -324,14 +337,21 @@ if (isset($_GET['_id'])) {
                                                     </div>
                                                 </div>
                                             </div>
+                                            <label class="error" style="display: none;" for="cbx_financial_info"></label>
 
-                                            <div class="mb-3">
+                                            <!-- Tercera fila de checks -->
+                                            <div class="form-check mt-3">
                                                 <input type="checkbox" class="form-check-input" name="cbx_aid_info" id="cbx_aid_info">
-                                                <label for="cbx_aid_info" class="form-check-label"><strong>ALL</strong> financial aid information <label style="color: red;">*</label></label>
+                                                <label for="cbx_aid_info" class="form-check-label"><strong>ALL</strong> financial aid information <span class="text-danger">*</span></label>
+                                            </div>
+                                            <label class="error" style="display: none;" for="cbx_aid_info"></label>
+
+                                            <!-- Cuarta fila de checks -->
+                                            <div class="form-check mt-3">
+                                                <input type="checkbox" class="form-check-input" name="cbx_housing_info" id="cbx_housing_info">
+                                                <label for="cbx_housing_info" class="form-check-label"><strong>ALL</strong> university housing information <strong>OR</strong> these individual items: <span class="text-danger">*</span></label>
                                             </div>
 
-                                            <input type="checkbox" class="form-check-input" name="cbx_housing_info" id="cbx_housing_info">
-                                            <label for="cbx_housing_info" class="form-check-label mb-2"><strong>ALL</strong> university housing information <strong>OR</strong> these individual items: <label style="color: red;">*</label></label>
                                             <div class="row ms-2 input-group">
                                                 <div class="col-12 col-lg-4">
                                                     <div>
@@ -352,7 +372,9 @@ if (isset($_GET['_id'])) {
                                                     </div>
                                                 </div>
                                             </div>
+                                            <label class="error" style="display: none;" for="cbx_housing_info"></label>
                                         </div>
+
 
 
                                         <div class="row pt-3">
@@ -370,6 +392,7 @@ if (isset($_GET['_id'])) {
                                                     <input type="checkbox" class="form-check-input" name="cbx_remove_consent" id="cbx_remove_consent">
                                                     <label for="cbx_remove_consent" class="form-check-label">I request to <strong>REMOVE</strong> my consent allowing UI to discuss and verbally release information to all currently designated individuals. <label style="color: red;">*</label></label>
                                                 </div>
+                                                <label class="error" style="display: none;" for="cbx_remove_consent"></label>
                                             </div>
                                         </div>
                                     </div>
@@ -415,7 +438,7 @@ if (isset($_GET['_id'])) {
                                     </div>
 
                                     <label for="txt_second_authorized_name" class="form-label fw-bold">2.</label>
-                                    
+
                                     <div>
                                         <div class="row pt-1 mb-col">
                                             <div class="col-md-6">
@@ -523,16 +546,16 @@ if (isset($_GET['_id'])) {
                     required: true,
                 },
                 txt_second_authorized_name: {
-                    required: true,
+                    //required: true,
                 },
                 txt_second_address: {
-                    required: true,
+                    //required: true,
                 },
                 txt_second_relationship: {
-                    required: true,
+                    //required: true,
                 },
                 txt_second_email: {
-                    required: true,
+                    //required: true,
                 },
             },
             messages: {

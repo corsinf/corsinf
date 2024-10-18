@@ -45,4 +45,32 @@ class student_consentM extends BaseModel
         'in_stc_fecha_modificacion AS fecha_modificacion',
         'in_stc_estado AS estado',
     ];
+
+    function listar_datos_privados($per_id)
+    {
+        if ($per_id != '' && $per_id != null) {
+            $sql =
+                "SELECT 
+                    SERVER_NAME,
+                    SERVER_SOFTWARE,
+                    SERVER_PROTOCOL,
+                    SERVER_PORT,
+                    HTTP_HOST,
+                    REMOTE_ADDR,
+                    HTTP_USER_AGENT,
+                    REQUEST_METHOD,
+                    REQUEST_URI,
+                    in_stc_ip_publica AS IP_PUBLICA,
+                    HOST_CLIENTE
+                FROM 
+                    in_student_consent
+                WHERE 
+                    in_per_id = '$per_id';
+                ";
+
+            $datos = $this->db->datos($sql);
+            return $datos;
+        }
+        return null;
+    }
 }
