@@ -4,6 +4,7 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
 
 ?>
 
+<script src="../lib/jquery_validation/jquery.validate.js"></script>
 <script src="../js/GENERAL/operaciones_generales.js"></script>
 <script type="text/javascript">
     $(document).ready(function() {
@@ -26,7 +27,9 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                     { data: 'MAC' }, // MAC Address
                     { data: null,
                         render: function(data, type, item) {
-                        return `<button type="button" class="btn btn-primary btn-xs" onclick="cambiar_clave('${item.ipv4}','${item.puerto}')"><i class="bx bx-key fs-7 me-0 fw-bold"></i></button>`;
+                        data1 = String(item);
+                        return `<button type="button" class="btn btn-primary btn-xs" onclick="registrar_device('${item.ipv4}','${item.puerto}','${item.serie}')"><i class="bx bx-save fs-7 me-0 fw-bold"></i></button>
+                                <button type="button" class="btn btn-primary btn-xs" onclick="cambiar_clave('${item.ipv4}','${item.puerto}')"><i class="bx bx-key fs-7 me-0 fw-bold"></i></button>`;
                     }
                 },
                
@@ -35,6 +38,46 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                 [1, 'asc']
             ],
         }));
+
+
+         $("#form_dispositivo").validate({
+            rules: {
+              
+                txt_nombre: {
+                    required: true,
+                },
+                txt_pass: {
+                    required : true
+                },
+                txt_usuario: {
+                    required : true
+                }
+            },
+            messages: {                
+                txt_nombre: {
+                    required: "El campo 'Nombre' es obligatorio",
+                },
+                txt_pass: {
+                    required: "El campo 'Contraseña' es obligatorio",
+                },
+                txt_usuario: {
+                    digits: "El campo 'Usuario' permite solo números",
+                }
+            },
+
+            highlight: function(element) {
+                // Agrega la clase 'is-invalid' al input que falla la validación
+                $(element).addClass('is-invalid');
+                $(element).removeClass('is-valid');
+            },
+            unhighlight: function(element) {
+                // Elimina la clase 'is-invalid' si la validación pasa
+                $(element).removeClass('is-invalid');
+                $(element).addClass('is-valid');
+
+            }
+        });
+
     });
 
     function detectar()
@@ -55,6 +98,14 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
         $('#txt_ipv4').val(ip);
         $('#txt_ipv4_port').val(port);
         $('#cambio_clave').modal('show');
+    }
+
+    function registrar_device(ip,port,serial)
+    {
+        $('#txt_host').val(ip);
+        $('#txt_puerto').val(port);
+        $('#txt_serial').val(serial);
+        $('#registrar_dispositivo').modal('show');
     }
 
     function cambiar_pass()
@@ -78,6 +129,118 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
             }          
         });
     }
+
+      function editar_insertar() {
+        var ddl_modelo = 1; //$('#ddl_modelo').val();
+        var txt_nombre = $('#txt_nombre').val();
+        var txt_host = $('#txt_host').val();
+        var txt_puerto = $('#txt_puerto').val();
+        var txt_serial = $('#txt_serial').val();
+        var txt_usuario = $('#txt_usuario').val();
+        var txt_pass = $('#txt_pass').val();
+        var cbx_ssl = $('#cbx_ssl').prop('checked') ? 1 : 0;
+
+        var parametros = {
+            '_id': '',
+            'ddl_modelo': ddl_modelo,
+            'txt_nombre': txt_nombre,
+            'txt_host': txt_host,
+            'txt_puerto': txt_puerto,
+            'txt_serial': txt_serial,
+            'txt_usuario': txt_usuario,
+            'txt_pass': txt_pass,
+            'cbx_ssl': cbx_ssl,
+        };
+
+        if ($("#form_dispositivo").valid()) {
+            // Si es válido, puedes proceder a enviar los datos por AJAX
+            insertar(parametros);
+        }
+        //console.log(parametros);
+
+    }
+
+    function insertar(parametros) {
+        $.ajax({
+            data: {
+                parametros: parametros
+            },
+            url: '../controlador/TALENTO_HUMANO/th_dispositivosC.php?insertar=true',
+            type: 'post',
+            dataType: 'json',
+
+            success: function(response) {
+                if (response == 1) {
+                    Swal.fire('', 'Operacion realizada con exito.', 'success').then(function() {
+                        location.href = '../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_dispositivos';
+                    });
+                } else if (response == -2) {
+                    //Swal.fire('', 'El nombre del dispositivo ya está en uso', 'warning');
+                    $(txt_nombre).addClass('is-invalid');
+                    $('#error_txt_nombre').text('El nombre del dispositivo ya está en uso.');
+                }
+            },
+            
+            error: function(xhr, status, error) {
+                console.log('Status: ' + status); 
+                console.log('Error: ' + error); 
+                console.log('XHR Response: ' + xhr.responseText); 
+
+                Swal.fire('', 'Error: ' + xhr.responseText, 'error');
+            }
+        });
+
+        $('#txt_nombre').on('input', function() {
+            $('#error_txt_nombre').text('');
+        });
+    }
+    function probar_conexion()
+    {
+        var txt_host = $('#txt_host').val();
+        var txt_puerto = $('#txt_puerto').val();
+        var txt_usuario = $('#txt_usuario').val();
+        var txt_pass = $('#txt_pass').val();
+        if(txt_pass=='' || txt_usuario=='' || txt_host=='')
+        {
+            Swal.fire("Ingrese todos los datos","","info")
+            return false;
+        }
+
+        var parametros = {
+            'txt_host': txt_host,
+            'txt_puerto': txt_puerto,
+            'txt_usuario': txt_usuario,
+            'txt_pass': txt_pass,
+        };
+
+         $.ajax({
+            data: {
+                parametros: parametros
+            },
+            url: '../controlador/TALENTO_HUMANO/th_detectar_dispositivosC.php?ProbarConexion=true',
+            type: 'post',
+            dataType: 'json',
+
+            success: function(response) {
+                if (response.respuesta.resp == 1) {
+                    Swal.fire('', 'Operacion realizada con exito.', 'success');
+                } else{
+                    Swal.fire('No se pudo conectar', response.respuesta.msj, 'error')
+                }
+            },
+            
+            error: function(xhr, status, error) {
+                console.log('Status: ' + status); 
+                console.log('Error: ' + error); 
+                console.log('XHR Response: ' + xhr.responseText); 
+
+                Swal.fire('', 'Error: ' + xhr.responseText, 'error');
+            }
+        });
+
+
+    }
+
 </script>
 
 <div class="page-wrapper">
@@ -210,3 +373,99 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
         </div>
     </div>
 </div>
+
+
+
+<div class="modal" id="registrar_dispositivo" abindex="-1" aria-modal="true" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h2>Cambio de clave</h2>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <!-- Modal body -->
+            <div class="modal-body">
+                    <form id="form_dispositivo" novalidate="novalidate">
+
+                            <div class="row pt-3 mb-col">
+                               <!--  <div class="col-md-4">
+                                    <label for="ddl_modelo" class="form-label">Modelo <label style="color: red;">*</label></label>
+                                    <select class="form-select form-select-sm is-valid" id="ddl_modelo" name="ddl_modelo" aria-invalid="false">
+                                        <option selected="" disabled="">-- Seleccione --</option>
+                                        <option value="1">HIK</option>
+                                        <option value="2">Vision</option>
+                                    </select>
+                                </div> -->
+
+                                <div class="col-md-8">
+                                    <label for="txt_nombre" class="form-label">Nombre <label style="color: red;">*</label></label>
+                                    <input type="text" class="form-control form-control-sm no_caracteres" id="txt_nombre" name="txt_nombre" maxlength="50">
+                                    <span id="error_txt_nombre" class="text-danger"></span>
+                                </div>
+
+                            </div>
+
+                            <div class="row mb-col">
+                                <div class="col-md-4 ">
+                                    <label for="txt_host" class="form-label">IP/Host </label>
+                                    <input type="text" class="form-control form-control-sm no_caracteres" id="txt_host" name="txt_host" maxlength="50" oninput="textoMinusculas(this);" readonly>
+                                </div>
+
+                                <div class="col-md-2 ">
+                                    <label for="txt_puerto" class="form-label">Puerto </label>
+                                    <input type="text" class="form-control form-control-sm solo_numeros_int" id="txt_puerto" name="txt_puerto" maxlength="4" readonly>
+                                </div>
+
+                                <div class="col-md-6 ">
+                                    <label for="txt_serial" class="form-label">Número de Serie </label>
+                                    <input type="text" class="form-control form-control-sm no_caracteres" id="txt_serial" name="txt_serial" maxlength="100" readonly>
+                                </div>
+                            </div>
+
+                            <div class="row mb-col">
+                                <div class="col-md-4 ">
+                                    <label for="txt_usuario" class="form-label">Usuario <label style="color: red;">*</label></label>
+                                    <input type="text" class="form-control form-control-sm no_caracteres" id="txt_usuario" name="txt_usuario" maxlength="50">
+                                    <span id="error_txt_usuario" class="text-danger"></span>
+                                </div>
+
+                                <div class="col-md-8 ">
+                                    <label for="txt_pass" class="form-label">Contraseña <label style="color: red;">*</label></label>
+                                    <input type="text" class="form-control form-control-sm" id="txt_pass" name="txt_pass" maxlength="50">                                    
+                                    <span id="error_txt_pass" class="text-danger"></span>
+                                </div>
+                            </div>
+
+                            <div class="row mb-col">
+                                <div class="col-md-12">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="" name="cbx_ssl" id="cbx_ssl">
+                                        <label class="form-label" for="cbx_ssl">SSL </label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row mb-col">
+                                <div class="col-md-12">
+
+                                    <button class="btn btn-primary btn-sm px-4" onclick="probar_conexion()" type="button"><i class="lni lni-play fs-6 me-0"></i> Probar conexión</button>
+                                </div>
+                            </div>
+
+                            <div class="d-flex justify-content-end pt-2">
+
+                            <button class="btn btn-success btn-sm px-4 m-0" onclick="editar_insertar()" type="button"><i class="bx bx-save"></i> Guardar</button>
+                        </div>
+
+
+                    </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+

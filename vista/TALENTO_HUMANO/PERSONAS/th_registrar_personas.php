@@ -14,10 +14,38 @@ if (isset($_GET['_id'])) {
 
 <script type="text/javascript">
     $(document).ready(function() {
+        dispositivos();
         <?php if (isset($_GET['_id'])) { ?>
-            datos_col(<?= $_id ?>);
-
+         datos_col(<?= $_id ?>);
         <?php } ?>
+
+        //------------------------------tabla de biometria finger ---------------------------
+         tbl_dispositivos = $('#tbl_bio_finger').DataTable($.extend({}, configuracion_datatable('Dispostivos', 'dispostivos'), {
+            reponsive: true,
+            language: {
+                url: 'https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
+            },
+            ajax: {
+                type:'POST',
+                url: '../controlador/TALENTO_HUMANO/th_personasC.php?registros_biometria=true',
+                data: function (d) {
+                    d.id = '<?php echo $_id; ?>';  // Parámetro personalizado
+                },
+                dataSrc: ''
+            },
+            columns: [
+                    {data: 'detalle' },                   
+                    { data: null,
+                        render: function(data, type, item) {
+                        return `<button type="button" class="btn btn-danger btn-xs" onclick="eliminarfinger('${item.id}')"><i class="bx bx-trash fs-7 me-0 fw-bold"></i></button>`;
+                    }
+                },        
+               
+            ],
+            order: [
+                [1, 'asc']
+            ],
+        }));
 
 
     });
@@ -189,6 +217,112 @@ if (isset($_GET['_id'])) {
             }
         });
     }
+
+    function cambiar(finger)
+    {
+        $('.btn-outline-primary').removeClass('active');
+        $('#img_palma').attr('src','../img/de_sistema/palma'+finger+'.gif');
+        $('#btn_finger_'+finger).addClass('active');
+        $('#txt_dedo_num').val(finger);
+    }
+
+    function leerDedo()
+    {
+        $('#myModal_espera').modal('show');
+        var parametros = 
+        {
+            'dispostivos':$('#ddl_dispositivos option:selected').text(),
+            'iddispostivos':$('#ddl_dispositivos').val(),
+            'usuario':<?php echo $_id ; ?>,
+            'dedo':$('#txt_dedo_num').val(),
+        }
+        $.ajax({
+            data:  {parametros:parametros},
+            url:   '../controlador/TALENTO_HUMANO/th_detectar_dispositivosC.php?CapturarFinger=true',
+            type:  'post',
+            dataType: 'json',
+            success:  function (response) { 
+                $('#myModal_espera').modal('hide');
+
+                if(response.respuesta.resp==1)
+                {
+                    Swal.fire("Huella capturada",response.respuesta.patch,"success");
+                     tbl_dispositivos.ajax.reload(null, false);
+                }
+                console.log(response);
+            } ,
+              error: function(xhr, status, error) {
+                console.log('Status: ' + status); 
+                console.log('Error: ' + error); 
+                console.log('XHR Response: ' + xhr.responseText); 
+
+                Swal.fire('', 'Error: ' + xhr.responseText, 'error');
+                $('#myModal_espera').modal('hide');
+            }         
+        });
+    }
+
+     function dispositivos() {
+        $.ajax({
+            // data: {
+            //     id: id
+            // },
+            url: '../controlador/TALENTO_HUMANO/th_dispositivosC.php?listar=true',
+            type: 'post',
+            dataType: 'json',
+            success: function(response) {
+                console.log(response);
+                op = '';
+                response.forEach(function(item,i){
+                    op+='<option value="'+item._id+'">'+item.nombre+'</option>';
+                })
+                $('#ddl_dispositivos').html(op);
+               
+            },  error: function(xhr, status, error) {
+                console.log('Status: ' + status); 
+                console.log('Error: ' + error); 
+                console.log('XHR Response: ' + xhr.responseText); 
+
+                Swal.fire('', 'Error: ' + xhr.responseText, 'error');
+            }
+        });
+    }
+
+    function eliminarfinger(id) {
+        Swal.fire({
+            title: 'Eliminar Registro?',
+            text: "Esta seguro de eliminar este registro?",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Si'
+        }).then((result) => {
+            if (result.value) {
+                eliminarFing(id);
+            }
+        })
+    }
+
+    function eliminarFing(id) {
+        $.ajax({
+            data: {
+                id: id
+            },
+            url: '../controlador/TALENTO_HUMANO/th_personasC.php?eliminarFing=true',
+            type: 'post',
+            dataType: 'json',
+            success: function(response) {
+                if (response == 1) {
+                    Swal.fire('Eliminado!', 'Registro Eliminado.', 'success').then(function() {
+                        tbl_dispositivos.ajax.reload(null, false);
+                    });
+                }
+            }
+        });
+    }
+
+  
 </script>
 
 <div class="page-wrapper">
@@ -470,11 +604,100 @@ if (isset($_GET['_id'])) {
                                 </div>
 
                                 <div class="tab-pane fade" id="tarjetas" role="tabpanel">
-
                                     <div class="row pt-3">
-                                        <div class="col-sm-12" id="btn_nuevo">
-                                            <button type="button" class="btn btn-success btn-sm" onclick="abrir_modal_personas();"><i class="bx bx-plus"></i> Agregar Biometricos</button>
+                                        <div class="card-body">
+                                            <ul class="nav nav-tabs nav-danger" role="tablist">
+                                                <li class="nav-item" role="presentation">
+                                                    <a class="nav-link active" data-bs-toggle="tab" href="#dangerhome" role="tab" aria-selected="true">
+                                                        <div class="d-flex align-items-center">
+                                                            <div class="tab-icon"><i class="bx bx-credit-card-front font-18 me-1"></i>
+                                                            </div>
+                                                            <div class="tab-title">Targeta</div>
+                                                        </div>
+                                                    </a>
+                                                </li>
+                                                <li class="nav-item" role="presentation">
+                                                    <a class="nav-link" data-bs-toggle="tab" href="#dangerprofile" role="tab" aria-selected="false" tabindex="-1">
+                                                        <div class="d-flex align-items-center">
+                                                            <div class="tab-icon"><i class="bx bx-fingerprint font-18 me-1"></i>
+                                                            </div>
+                                                            <div class="tab-title">Biometrico</div>
+                                                        </div>
+                                                    </a>
+                                                </li>
+                                                <li class="nav-item" role="presentation">
+                                                    <a class="nav-link" data-bs-toggle="tab" href="#dangercontact" role="tab" aria-selected="false" tabindex="-1">
+                                                        <div class="d-flex align-items-center">
+                                                            <div class="tab-icon"><i class="bx bx-face font-18 me-1"></i>
+                                                            </div>
+                                                            <div class="tab-title">Facial</div>
+                                                        </div>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                            <div class="tab-content py-3">
+                                                <div class="tab-pane fade active show" id="dangerhome" role="tabpanel">
+                                                    <p>Raw denim you probably haven't heard of them jean shorts Austin. Nesciunt tofu stumptown aliqua, retro synth master cleanse. Mustache cliche tempor, williamsburg carles vegan helvetica. Reprehenderit butcher retro keffiyeh dreamcatcher synth. Cosby sweater eu banh mi, qui irure terry richardson ex squid. Aliquip placeat salvia cillum iphone. Seitan aliquip quis cardigan american apparel, butcher voluptate nisi.</p>
+                                                </div>
+                                                <div class="tab-pane fade" id="dangerprofile" role="tabpanel">
+                                                   <div class="row">                            
+                                                        <div class="col-sm-6">
+                                                            <div class="row">
+                                                                <div class="col-12">
+                                                                    <div class="col">
+                                                                        <div class="btn-group" role="group" aria-label="First group">
+                                                                            <button type="button" id="btn_finger_1" class="btn btn-sm btn-outline-primary active" onclick="cambiar(1)">Dedo 1</button>
+                                                                            <button type="button" id="btn_finger_2" class="btn btn-sm btn-outline-primary " onclick="cambiar(2)">Dedo 2</button>
+                                                                            <button type="button" id="btn_finger_3" class="btn btn-sm btn-outline-primary " onclick="cambiar(3)">Dedo 3</button>
+                                                                            <button type="button" id="btn_finger_4" class="btn btn-sm btn-outline-primary " onclick="cambiar(4)">Dedo 4</button>
+                                                                            <button type="button" id="btn_finger_5" class="btn btn-sm btn-outline-primary " onclick="cambiar(5)">Dedo 5</button>
+                                                                            <input type="hidden" name="txt_dedo_num" value="1" id="txt_dedo_num">
+                                                                        </div>
+                                                                    </div>
+                                                                </div>                                                               
+                                                            </div>
+                                                            <img id="img_palma" src="../img/de_sistema/palma1.gif">
+                                                        </div>
+                                                        <div class="col-sm-6">
+                                                            <div class="row">
+                                                                <div class="col-sm-8">
+                                                                     <select class="form-select" id="ddl_dispositivos" name="ddl_dispositivos">
+                                                                        <option value="" >Seleccione Dispositivo</option>
+                                                                    </select>                                                                    
+                                                                </div>
+                                                                 <div class="col-4 text-end">
+                                                                    <button type="button" class="btn btn-sm btn-primary" onclick="leerDedo()">Comenzar Lectura</button>     
+                                                                </div>
+                                                            </div>
+                                                            <div class="row">
+                                                                <div class="col-md-12">
+                                                                    <table class="table table-hover" id="tbl_bio_finger" style="width:100%">
+                                                                        <thead>
+                                                                            <th>Numero de Dedo</th>
+                                                                            <th>Acción</th>
+                                                                        </thead>
+                                                                        <tbody>
+                                                                            <tr>
+                                                                                <td></td>
+                                                                                <td></td>
+                                                                            </tr>
+                                                                        </tbody>
+                                                                    </table>                                                            
+                                                                </div>
+                                                            </div>                                                            
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="tab-pane fade" id="dangercontact" role="tabpanel">
+                                                    <p>Etsy mixtape wayfarers, ethical wes anderson tofu before they sold out mcsweeney's organic lomo retro fanny pack lo-fi farm-to-table readymade. Messenger bag gentrify pitchfork tattooed craft beer, iphone skateboard locavore carles etsy salvia banksy hoodie helvetica. DIY synth PBR banksy irony. Leggings gentrify squid 8-bit cred pitchfork. Williamsburg banh mi whatever gluten-free, carles pitchfork biodiesel fixie etsy retro mlkshk vice blog. Scenester cred you probably haven't heard of them, vinyl craft beer blog stumptown. Pitchfork sustainable tofu synth chambray yr.</p>
+                                                </div>
+                                            </div>
                                         </div>
+
+
+
+
+                                       
                                     </div>
 
                                     <div class="row pt-4">

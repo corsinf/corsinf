@@ -5,9 +5,37 @@
 
     function cambiar(finger)
     {
-         $('.btn-outline-primary').removeClass('active');
+        $('.btn-outline-primary').removeClass('active');
         $('#img_palma').attr('src','../img/de_sistema/palma'+finger+'.gif');
         $('#btn_finger_'+finger).addClass('active');
+        $('#txt_dedo_num').val(finger);
+    }
+
+    function leerDedo()
+    {
+        $('#myModal_espera').modal('show');
+        var parametros = 
+        {
+            'dispostivos':$('#ddl_dispositivos option:selected').text(),
+            'dispostivospwd':$('#ddl_dispositivos').val(),
+            'usuario':$('#ddl_usuario').val(),
+            'dedo':$('#txt_dedo_num').val(),
+        }
+        $.ajax({
+            data:  {parametros:parametros},
+            url:   '../controlador/TALENTO_HUMANO/th_detectar_dispositivosC.php?CapturarFinger=true',
+            type:  'post',
+            dataType: 'json',
+            success:  function (response) { 
+                $('#myModal_espera').modal('hide');
+
+                if(response.respuesta.resp==1)
+                {
+                    Swal.fire("Huella capturada",response.respuesta.patch,"success");
+                }
+                console.log(response);
+            }          
+        });
     }
 </script>
 
@@ -40,36 +68,14 @@
                     <div class="card-body p-5">      
                     	<div class="row">
                     		<div class="col-sm-6">
-                                <select class="form-select">
+                                <select class="form-select" id="ddl_dispositivos">
                                     <option value="" >Seleccione Dispositivo</option>
                                     <option value="Data12/*">192.168.100.132</option>
                                 </select>
-                                 <select class="form-select">
+                                 <select class="form-select" id="ddl_usuario">
                                     <option value="" >Seleccione usuario</option>
                                     <option value="1">usuario 1</option>
                                 </select>
-
-                                <?php
-// Ruta del archivo .dat (huella digital)
-$filePath = 'C:/huellas/javierPrintcapFinger.dat';
-
-// Verifica si el archivo existe
-if (!file_exists($filePath)) {
-    die("El archivo no se encuentra.");
-}
-
-// Lee el contenido del archivo binario
-$imageData = file_get_contents($filePath);
-
-// Determina el tipo MIME para mostrarlo en el navegador
-$finfo = new finfo(FILEINFO_MIME_TYPE);
-$mimeType = $finfo->buffer($imageData);
-
-// Establece las cabeceras para mostrar la imagen
-header("Content-Type: $mimeType");
-echo $imageData;
-?>
-
                     			<br>
                     			<button type="button" class="btn btn-primary">Detectar Finger</button>
                                 <table class="table table-hover">
@@ -97,11 +103,12 @@ echo $imageData;
                                                 <button type="button" id="btn_finger_3" class="btn btn-sm btn-outline-primary " onclick="cambiar(3)">Dedo 3</button>
                                                 <button type="button" id="btn_finger_4" class="btn btn-sm btn-outline-primary " onclick="cambiar(4)">Dedo 4</button>
                                                 <button type="button" id="btn_finger_5" class="btn btn-sm btn-outline-primary " onclick="cambiar(5)">Dedo 5</button>
+                                                <input type="hidden" name="txt_dedo_num" id="txt_dedo_num">
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col-4 text-end">
-                                        <button type="button" class="btn btn-sm btn-primary">Comenzar Letura</button>     
+                                        <button type="button" class="btn btn-sm btn-primary" onclick="leerDedo()">Comenzar Lectura</button>     
                                     </div>
                                 </div>
 
