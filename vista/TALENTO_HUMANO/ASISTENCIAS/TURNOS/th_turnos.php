@@ -7,7 +7,7 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
 <script type="text/javascript">
     $(document).ready(function() {
 
-        tbl_turnos = $('#tbl_turnos').DataTable($.extend({}, configuracion_datatable('Departamentos', 'turnos'), {
+        tbl_turnos = $('#tbl_turnos').DataTable($.extend({}, configuracion_datatable('Turnos', 'turnos'), {
             reponsive: true,
             language: {
                 url: 'https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
@@ -49,7 +49,7 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
     <div class="page-content">
         <!--breadcrumb-->
         <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
-            <div class="breadcrumb-title pe-3">Departamentos</div>
+            <div class="breadcrumb-title pe-3">Turnos</div>
             <?php
             // print_r($_SESSION['INICIO']);die();
 
@@ -60,7 +60,7 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                         <li class="breadcrumb-item"><a href="javascript:;"><i class="bx bx-home-alt"></i></a>
                         </li>
                         <li class="breadcrumb-item active" aria-current="page">
-                            Lista de Departamentos
+                            Lista de Turnos
                         </li>
                     </ol>
                 </nav>

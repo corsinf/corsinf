@@ -42,3 +42,19 @@ if ($_GET['acc'] == 'th_turnos') {
 	include('TALENTO_HUMANO/ASISTENCIAS/TURNOS/th_turnos.php');
 }
 
+//Horarios
+if ($_GET['acc'] == 'th_registrar_horarios') {
+	include('TALENTO_HUMANO/ASISTENCIAS/HORARIOS/th_registrar_horarios.php');
+}
+
+if ($_GET['acc'] == 'th_horarios') {
+	include('TALENTO_HUMANO/ASISTENCIAS/HORARIOS/th_horarios.php');
+}
+
+if ($_GET['acc'] == 'th_detectar_dispositivos') {
+	include('TALENTO_HUMANO/DISPOSITIVOS/th_detectar_dispositivos.php');
+}
+
+if ($_GET['acc'] == 'th_tomar_datos_biometricos') {
+	include('TALENTO_HUMANO/DISPOSITIVOS/th_tomar_datos_biometricos.php');
+}

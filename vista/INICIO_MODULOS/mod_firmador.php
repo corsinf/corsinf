@@ -48,12 +48,6 @@ if ($_GET['acc'] == 'student_consent') {
     include('FIRMADOR/INICIO_PRUEBA/student_consent.php');
 }
 
-if ($_GET['acc'] == 'student_consent_EN') {
-    include('FIRMADOR/INICIO_PRUEBA/student_consent_EN.php');
-}
-
-
-
 if ($_GET['acc'] == 'pagina_jav') {
     include('FIRMADOR/PRUEBAS/pagina_jav.php');
 }
