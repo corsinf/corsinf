@@ -60,3 +60,7 @@ if ($_GET['acc'] == 'crear_mienbros') {
     include('COWORKING/crear_mienbros.php');
 }
 
+
+if ($_GET['acc'] == 'crear_mienbrosdos') {
+    include('COWORKING/crear_mienbrosdos.php');
+}
