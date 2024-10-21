@@ -39,6 +39,44 @@ function fecha_nacimiento_formateada(fecha) {
     return salida;
 }
 
+//Fecha con formato de los input
+function fecha_formateada(fecha) {
+    fechaYHora = fecha;
+    fecha = new Date(fechaYHora);
+    anio = fecha.getFullYear();
+    mes = (fecha.getMonth() + 1).toString().padStart(2, '0'); // Añade un 0 si es necesario
+    dia = fecha.getDate().toString().padStart(2, '0'); // Añade un 0 si es necesario
+    fechaFormateada = `${anio}-${mes}-${dia}`;
+
+    var salida = '';
+    salida = fechaFormateada;
+
+    return salida;
+}
+
+//Para sacar los valores de un datetime2 la fecha y la hora
+//Salida 2024/10/14 11:31:06
+function fecha_formateada_hora(fecha) {
+    fechaYHora = fecha;
+    fecha = new Date(fechaYHora);
+    
+    // Obtener el año, mes y día
+    anio = fecha.getFullYear();
+    mes = (fecha.getMonth() + 1).toString().padStart(2, '0'); // Añade un 0 si es necesario
+    dia = fecha.getDate().toString().padStart(2, '0'); // Añade un 0 si es necesario
+    
+    // Obtener las horas, minutos y segundos
+    horas = fecha.getHours().toString().padStart(2, '0');
+    minutos = fecha.getMinutes().toString().padStart(2, '0');
+    segundos = fecha.getSeconds().toString().padStart(2, '0');
+    
+    // Formato de fecha y hora
+    fechaFormateada = `${anio}/${mes}/${dia} ${horas}:${minutos}:${segundos}`;
+
+    return fechaFormateada;
+}
+
+
 //Valida si tiene el formato de email
 function validar_email(sa_rep_correo) {
 
@@ -161,7 +199,7 @@ $(document).on('input', '.no_caracteres', function (event) {
     var value = $(this).val();
 
     // Reemplazar cualquier cosa que no sea números, letras, puntos, espacios, guiones bajos, guiones medios o barras
-    var nuevoValor = value.replace(/[^a-zA-Z0-9.\s_/-]/g, ''); 
+    var nuevoValor = value.replace(/[^a-zA-Z0-9.\s_/-]/g, '');
 
     // Actualizar el valor del campo
     $(this).val(nuevoValor);
@@ -171,17 +209,78 @@ $(document).on('input', '.no_caracteres', function (event) {
 // Actualizar el valor del campo a minusculas
 function textoMinusculas(input) {
     let texto = input.value;
-    input.value = texto.toLowerCase(); 
+    input.value = texto.toLowerCase();
+}
+
+function minutos_formato_hora(num) {
+    let hours = Math.floor(num / 60);
+    let minutes = num % 60;
+    return (hours < 10 ? '0' : '') + hours + ':' + (minutes < 10 ? '0' : '') + minutes;
+}
+
+
+//Funcion para agregar asterisco en un label para resaltar que es campo obligatorio
+function agregar_asterisco_campo_obligatorio(label) {
+    $('label[for="' + label + '"]').append('<label style="color: red;">*</label>');
+}
+
+//calcula la edad en base a un input date y lo coloca en un input
+function calcular_edad(input, fecha_nacimiento) {
+    $('#' + input).val(calcular_edad_fecha(fecha_nacimiento));
+}
+
+//Datatable
+function configuracion_datatable(title, filename) {
+    return {
+        dom:
+            // Botones en la parte superior con margen inferior
+            '<"d-flex justify-content-start top mb-4"B>' +
+            // Selector de registros y barra de búsqueda en una fila
+            '<"row"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6"f>>' +
+            // Tabla en su propia fila
+            'rt' +
+            // Información y paginación en la parte inferior
+            '<"row"<"col-sm-12 col-md-5"i><"col-sm-12 col-md-7"p>>',
+        // Opciones adicionales que podrían ser comunes en todas las tablas
+        buttons: [{
+            extend: 'excel',
+            text: '<i class="bx bx-grid me-0 pb-1"></i> Excel',
+            title: title,
+            filename: filename,
+            className: 'btn btn-outline-success btn-sm me-1'
+        },
+        {
+            extend: 'pdf',
+            text: '<i class="bx bxs-file-pdf me-0 pb-1"></i> PDF',
+            title: title,
+            filename: filename,
+            className: 'btn btn-outline-danger btn-sm me-1'
+        },
+        {
+            extend: 'csv',
+            text: '<i class="bx bx-align-justify me-0 pb-1"></i> CSV',
+            title: title,
+            filename: filename,
+            className: 'btn btn-outline-primary btn-sm me-1'
+        },
+        {
+            extend: 'colvis',
+            text: 'Columnas',
+            className: 'btn btn-dark btn-sm text-white'
+        },
+        ],
+        initComplete: function () {
+            // Añadir clase btn-sm a los botones de paginación
+            $('.dataTables_paginate').find('a').addClass('btn btn-sm');
+            // Mover los botones al contenedor personalizado
+            $('#contenedor_botones').append($('.dt-buttons'));
+        }
+    };
 }
 
 //Para reajustar un datatable cuando se lo usa en modales
 function reajustarDataTable() {
     $($.fn.dataTable.tables(true)).DataTable().columns.adjust().responsive.recalc();
-}
-
-//Funcion para agregar asterisco en un label para resaltar que es campo obligatorio
-function agregar_asterisco_campo_obligatorio(label) {
-    $('label[for="' + label + '"]').append('<label style="color: red;">*</label>');
 }
 
 

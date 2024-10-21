@@ -198,21 +198,21 @@ class th_reportes_hvC
 
         $horarios = array(
             array('Departamento' => 'Docentes', 'hora_entrada' => '07:00', 'hora_salida' => '15:30'),
-            array('Departamento' => 'Dece', 'hora_entrada' => '08:00', 'hora_salida' => '15:30'),
-            array('Departamento' => 'Servicios Generales', 'hora_entrada' => '09:00', 'hora_salida' => '15:30'),
-            array('Departamento' => 'Administrativos', 'hora_entrada' => '10:00', 'hora_salida' => '15:30'),
-            array('Departamento' => 'TI', 'hora_entrada' => '11:00', 'hora_salida' => '15:30'),
-            array('Departamento' => 'Salud', 'hora_entrada' => '12:00', 'hora_salida' => '15:30'),
+            array('Departamento' => 'Dece', 'hora_entrada' => '07:00', 'hora_salida' => '15:30'),
+            array('Departamento' => 'Servicios Generales', 'hora_entrada' => '07:00', 'hora_salida' => '15:30'),
+            array('Departamento' => 'Administrativos', 'hora_entrada' => '07:00', 'hora_salida' => '15:30'),
+            array('Departamento' => 'TI', 'hora_entrada' => '07:00', 'hora_salida' => '15:30'),
+            array('Departamento' => 'Salud', 'hora_entrada' => '07:00', 'hora_salida' => '15:30'),
         );
 
         $hora_entrada = '00:00';
         $hora_salida = '00:00';
         $hora_contrato = '';
-        
+
         // Procesar cada fila de datos y agregarla a la hoja de cálculo
         foreach ($datos as $dato) {
-            // Crear una fila de datos en el mismo orden que los encabezados
 
+            //Para calcular las jornadas en base a los horarios
             foreach ($horarios as $horario) {
                 // Verificar si el departamento coincide
                 if ($dato['DEPARTAMENTO'] == $horario['Departamento']) {
@@ -227,6 +227,13 @@ class th_reportes_hvC
                 }
             }
 
+            $extra_100 = '';
+            if ($this->calcular_dia($dato['FECHA']) == 'Sábado' || $this->calcular_dia($dato['FECHA']) == 'Domingo') {
+                $extra_100 = $salida['duracion_programada'];
+            }
+
+
+            // Crear una fila de datos en el mismo orden que los encabezados
             $filas_datos = [
                 $dato['APELLIDOS'], // APELLIDOS
                 $dato['NOMBRES'], // NOMBRES
@@ -245,11 +252,11 @@ class th_reportes_hvC
                 $salida['cumplimiento_jornada'], // Cumplimiento de jornada (8 horas)
                 $salida['horas_faltantes_format'], // Horas faltantes por cumplir jornada
                 $salida['horas_excedentes'], // Horas excedentes
-                'antes de la hora h', // Salidas Temprano
+                $salida['salida_temprano'], // Salidas Temprano
                 $salida['atrasos'], // Atrasos
-                'si no tiene registro b', // Ausente
-                'no se de que es', // Suplem 25%
-                'sabados o domingos', // Extra 100%
+                '0', // Ausente 
+                $salida['sumplementaria'], // Suplem 25%
+                $extra_100, // Extra 100%
                 $dato['_id'] // Extra 100%
             ];
 
@@ -305,6 +312,10 @@ class th_reportes_hvC
             $atrasos = $this->minutos_a_horas($atrasos_calc);
         }
 
+        $sumplementaria = ($horas_excedentes > 0) ? 1 : 0;
+
+        $salida_temprano = ($horas_faltantes_format > 0) ? 1 : 0;
+
         $salida = array(
             "horas_faltantes_format" => $horas_faltantes_format,
             "horas_excedentes" => $horas_excedentes,
@@ -313,8 +324,11 @@ class th_reportes_hvC
             "cumplimiento_jornada" => $cumplimiento_jornada,
             "horas_faltantes" => $horas_faltantes,
 
-            "duracion_programada" => $duracion_programada,
+            "duracion_programada" => $this->minutos_a_horas($duracion_programada),
             "duracion_trabajada" => $duracion_trabajada,
+
+            "sumplementaria" => $sumplementaria,
+            "salida_temprano" => $salida_temprano,
         );
 
         return $salida;

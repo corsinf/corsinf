@@ -30,14 +30,14 @@ if (isset($_GET['_id'])) {
             dataType: 'json',
             success: function(response) {
                 console.log(response);
-                $('#ddl_modelo').val(response[0].th_dis_modelo);
+                $('#ddl_modelo').val(response[0].modelo);
                 $('#txt_nombre').val(response[0].nombre);
                 $('#txt_host').val(response[0].host);
-                $('#txt_puerto').val(response[0].th_dis_port);
-                $('#txt_serial').val(response[0].th_dis_serial);
-                $('#txt_usuario').val(response[0].th_dis_usuario);
-                $('#txt_pass').val(response[0].th_dis_pass);
-                $('#cbx_ssl').prop('checked', (response[0].th_dis_ssl == 1));
+                $('#txt_puerto').val(response[0].port);
+                $('#txt_serial').val(response[0].serial);
+                $('#txt_usuario').val(response[0].usuario);
+                $('#txt_pass').val(response[0].pass);
+                $('#cbx_ssl').prop('checked', (response[0].ssl == 1));
 
             }
         });
@@ -93,8 +93,13 @@ if (isset($_GET['_id'])) {
                     $('#error_txt_nombre').text('El nombre del dispositivo ya está en uso.');
                 }
             },
-            error: function() {
-                Swal.fire('', 'Ocurrió un error inesperado. Por favor, inténtalo de nuevo.', 'error');
+            
+            error: function(xhr, status, error) {
+                console.log('Status: ' + status); 
+                console.log('Error: ' + error); 
+                console.log('XHR Response: ' + xhr.responseText); 
+
+                Swal.fire('', 'Error: ' + xhr.responseText, 'error');
             }
         });
 
@@ -240,8 +245,8 @@ if (isset($_GET['_id'])) {
                             <div class="row mb-col">
                                 <div class="col-md-12">
                                     <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" value="" id="cbx_ssl">
-                                        <label class="form-label" for="cbx_serial">SSL </label>
+                                        <input class="form-check-input" type="checkbox" value="" name="cbx_ssl" id="cbx_ssl">
+                                        <label class="form-label" for="cbx_ssl">SSL </label>
                                     </div>
                                 </div>
                             </div>
@@ -256,9 +261,9 @@ if (isset($_GET['_id'])) {
                             <div class="d-flex justify-content-end pt-2">
 
                                 <?php if ($_id == '') { ?>
-                                    <button class="btn btn-primary btn-sm px-4 m-0" onclick="editar_insertar()" type="button"><i class="bx bx-save"></i> Guardar</button>
+                                    <button class="btn btn-success btn-sm px-4 m-0" onclick="editar_insertar()" type="button"><i class="bx bx-save"></i> Guardar</button>
                                 <?php } else { ?>
-                                    <button class="btn btn-primary btn-sm px-4 m-1" onclick="editar_insertar()" type="button"><i class="bx bx-save"></i> Guardar</button>
+                                    <button class="btn btn-success btn-sm px-4 m-1" onclick="editar_insertar()" type="button"><i class="bx bx-save"></i> Editar</button>
                                     <button class="btn btn-danger btn-sm px-4 m-1" onclick="delete_datos()" type="button"><i class="bx bx-trash"></i> Eliminar</button>
                                 <?php } ?>
                             </div>

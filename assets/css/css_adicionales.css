@@ -8,3 +8,32 @@ label.error {
     /* Cambia "red" por el color que desees */
 
 }
+
+/*En prueba*/
+.btn-compact {
+    width: auto;
+    padding: 0.25rem 0.5rem;
+    font-size: 0.75rem;
+    line-height: 1;
+    /* Asegura que la altura de línea sea pequeña */
+    display: inline-flex;
+    /* Para ajustar el tamaño al contenido */
+    align-items: center;
+    /* Alinea el contenido verticalmente */
+}
+
+/*Para ajustar la paginacion de la datatables */
+
+.pagination .page-link {
+    padding: 0.25rem 0.5rem;
+    /* Ajusta el padding para hacer los botones más pequeños */
+    font-size: 0.875rem;
+    /* Tamaño de fuente más pequeño */
+}
+
+.pagination-sm .page-link {
+    padding: 0.25rem 0.5rem;
+    /* Asegúrate de que el padding sea pequeño */
+    font-size: 0.75rem;
+    /* Tamaño de fuente más pequeño */
+}

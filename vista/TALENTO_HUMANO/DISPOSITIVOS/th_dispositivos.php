@@ -2,35 +2,20 @@
 $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
 
 
-
 ?>
 
-
+<script src="../js/GENERAL/operaciones_generales.js"></script>
 <script type="text/javascript">
     $(document).ready(function() {
-        tbl_dispositivos = $('#tbl_dispositivos').DataTable({
+        tbl_dispositivos = $('#tbl_dispositivos').DataTable($.extend({}, configuracion_datatable('Dispostivos', 'dispostivos'), {
+            reponsive: true,
             language: {
                 url: 'https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
             },
-            responsive: true,
             ajax: {
                 url: '../controlador/TALENTO_HUMANO/th_dispositivosC.php?listar=true',
                 dataSrc: ''
             },
-            dom: '<"top"Bfr>t<"bottom"lip>',
-            buttons: [{
-                    extend: 'excel',
-                    text: '<i class="bx bxs-file-pdf me-0"></i> Exportar a Excel',
-                    title: 'Título del archivo Excel',
-                    filename: 'nombre_archivo_excel'
-                },
-                {
-                    extend: 'pdf',
-                    text: '<i class="bx bxs-spreadsheet me-0"></i> Exportar a PDF',
-                    title: 'Título del archivo PDF',
-                    filename: 'nombre_archivo_PDF'
-                }
-            ],
             columns: [{
                     data: null,
                     render: function(data, type, item) {
@@ -43,21 +28,20 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                 },
 
                 {
+                    data: 'modelo'
+                },
+
+                {
                     data: null,
                     render: function(data, type, item) {
-                        return `<button type="button" class="btn btn-primary btn-sm m-1" onclick=""><i class="lni lni-spinner-arrow fs-6 me-0 fw-bold"></i></button>`;
+                        return `<button type="button" class="btn btn-primary btn-xs" onclick=""><i class="lni lni-spinner-arrow fs-7 me-0 fw-bold"></i></button>`;
                     }
                 },
             ],
             order: [
                 [1, 'asc']
             ],
-
-            initComplete: function() {
-                // Mover los botones al contenedor personalizado
-                $('#contenedor_botones').append($('.dt-buttons'));
-            }
-        });
+        }));
     });
 </script>
 
@@ -90,25 +74,22 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                     <div class="card-body p-5">
 
                         <div class="row">
-
-                            <div class="col-6">
+                            <div class="col-12 col-md-6">
                                 <div class="card-title d-flex align-items-center">
 
-
-                                    <div class="row mx-1">
-                                        <div class="col-sm-12" id="btn_nuevo">
-
-                                            <a href="../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_registrar_dispositivos" type="button" class="btn btn-success btn-sm"><i class="bx bx-plus"></i> Nuevo</a>
-
-                                        </div>
+                                    <div class="" id="btn_nuevo">
+                                        <a href="../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_registrar_dispositivos"
+                                            type="button" class="btn btn-success btn-sm">
+                                            <i class="bx bx-plus me-0 pb-1"></i> Nuevo
+                                        </a>
                                     </div>
+                                    
                                 </div>
                             </div>
 
-                            <div class="col-6 text-end">
+                            <div class="col-12 col-md-6 text-md-end text-start">
                                 <div id="contenedor_botones"></div>
                             </div>
-
                         </div>
 
                         <hr>
@@ -121,6 +102,7 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                                             <tr>
                                                 <th>Nombre</th>
                                                 <th>Host</th>
+                                                <th>Modelo</th>
                                                 <th width="10px">Acción</th>
                                             </tr>
                                         </thead>

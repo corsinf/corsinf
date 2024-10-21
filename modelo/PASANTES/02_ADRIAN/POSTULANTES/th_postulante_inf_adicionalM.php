@@ -2,7 +2,7 @@
 
 require_once(dirname(__DIR__, 2) . '/BaseModel.php');
 
-class th_adicionalM extends BaseModel
+class th_postulante_inf_adicionalM extends BaseModel
 {
     protected $tabla = 'th_postulante_inf_adicional';
     protected $primaryKey = 'th_posa_id AS _id';

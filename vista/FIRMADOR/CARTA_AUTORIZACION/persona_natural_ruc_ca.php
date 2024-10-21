@@ -1,5 +1,8 @@
+<script src="../lib/jquery_validation/jquery.validate.js"></script>
+<script src="../js/GENERAL/operaciones_generales.js"></script>
+
 <script>
-    function insertar() {
+    function editar_insertar() {
         var txt_tipo = 'persona_natural_ruc';
         var txt_direccion_domicilio = $('#txt_direccion_domicilio').val();
         var txt_primer_nombre = $('#txt_primer_nombre').val();
@@ -39,6 +42,26 @@
                 if (response == 1) {
                     Swal.fire('', 'Operacion realizada con exito.', 'success').then(function() {
                         location.href = 'http://localhost/corsinf/vista/inicio.php?mod=1010&acc=solicitudes';
+                    });
+                } else {
+                    Swal.fire('', 'Operación fallida', 'error');
+                }
+            }
+        });
+    }
+
+    function insertar(parametros) {
+        $.ajax({
+            data: {
+                parametros: parametros,
+            },
+            url: '../controlador/PASANTES/01_SEBASTIAN/formularios_firmasC.php?insertar=true',
+            type: 'post',
+            dataType: 'json',
+            success: function(response) {
+                if (response == 1) {
+                    Swal.fire('', 'Operacion realizada con exito.', 'success').then(function() {
+                        location.href = '../vista/inicio.php?mod=1010&acc=solicitudes';
                     });
                 } else {
                     Swal.fire('', 'Operación fallida', 'error');

@@ -1,3 +1,6 @@
+<?php
+// Asegúrate de que $id_compra esté definido antes de usarlo
+$id_espacio  = isset($_POST['id_espacio']) ? intval($_POST['id_espacio']) : null; ?>
 <!--start page wrapper -->
 <div class="page-wrapper">
     <div class="page-content">
@@ -18,24 +21,28 @@
         <!--end breadcrumb-->
 
         <div class="card">
-            <div class="card-body">
-                <form id="rental_form">
-                    <div class="form-group mb-3">
-                        <label for="txt_name">Nombre del Espacio:</label>
-                        <input type="text" class="form-control" name="txt_name" id="txt_name" placeholder="Introduce el nombre del espacio" required>
-                    </div>
+    <div class="card-body">
+        <form id="rental_form">
+            <div class="form-group mb-3">
+                <label for="txt_name">Nombre del Espacio:</label>
+                <input type="text" class="form-control" name="txt_name" id="txt_name" placeholder="Introduce el nombre del espacio" required>
+            </div>
 
-                    <div class="form-group mb-3">
-                        <label for="ddl_categoriaEspacio">Categoría:</label>
-                        <select class="form-select" id="ddl_categoriaEspacio" name="ddl_categoriaEspacio" required>
-                            <option value="" disabled selected>Selecciona una categoría</option>
-                        </select>
-                    </div>
-<!-- Botón para abrir el modal -->
-<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#categoryModal">
-    Registrar Nueva Categoría
-</button>
-
+            <div class="form-group mb-3">
+                <label for="ddl_categoriaEspacio">Categoría:</label>
+                <div class="d-flex align-items-center">
+                    <select class="form-select me-2" id="ddl_categoriaEspacio" name="ddl_categoriaEspacio" required>
+                        <option value="" disabled selected>Selecciona una categoría</option>
+                        <!-- Aquí irán las opciones cargadas dinámicamente -->
+                    </select>
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#categoryModal">
+                    <i class='bx bx-plus-circle'></i>
+                    </button>
+                </div>
+            </div>
+        </form>
+        
+        
 <!-- Modal para registrar nueva categoría -->
 <div class="modal fade" id="categoryModal" tabindex="-1" aria-labelledby="categoryModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -58,15 +65,20 @@
         </div>
     </div>
 </div>
-                    <div class="form-group mb-3">
-                        <label for="txt_estadoEspacio">Estado:</label>
-                        <select class="form-select" id="txt_estadoEspacio" name="txt_estadoEspacio" required>
-                            <option value="" disabled selected>Selecciona el estado</option>
-                            <option value="A">Disponible</option>
-                            <option value="B">No disponible</option>
-                        </select>
-                    </div>
-                    
+
+<!-- Estado check -->
+
+<form id="estadoForm" method="POST" action="controlador.php">
+    <label for="estadoActivo">Estado:</label>
+    <div class="form-check">
+        <input class="form-check-input" type="checkbox" id="estadoActivo" name="estado" value="activo" checked onclick="toggleEstado('activo')">
+        <label class="form-check-label" for="estadoActivo">Activo</label>
+    </div>
+    <div class="form-check">
+        <input class="form-check-input" type="checkbox" id="estadoInactivo" name="estado" value="inactivo" onclick="toggleEstado('inactivo')">
+        <label class="form-check-label" for="estadoInactivo">Inactivo</label>
+    </div>
+</form>
 
                     <!-- Grupo de Aforo y Precio en la misma fila -->
                     <div class="row mb-4">
@@ -88,6 +100,33 @@
                         <button type="button" onclick="enviarDatos()" class="btn btn-primary btn-sm">Guardar</button>
                     </div>
                 </form>
+                <!-- Contenedor flex para pestañas y botones -->
+                <div class="d-flex justify-content-between mb-4">
+                        <ul class="nav nav-pills mb-3" id="myTab" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link active d-flex align-items-center" id="miembros-tab" data-bs-toggle="tab" data-bs-target="#miembros" type="button" role="tab" aria-controls="miembros" aria-selected="true">
+                                <i class="lni lni-codepen"></i> <strong>Espacios</strong>
+                                </button>
+                            </li>
+                            
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link d-flex align-items-center" id="servicios-tab" data-bs-toggle="tab" data-bs-target="#servicios" type="button" role="tab" aria-controls="servicios" aria-selected="false">
+                                    <i class='bx bx-store-alt'></i> <strong>Mobiliario Extra</strong>
+                                </button>
+                            </li>
+                        </ul>
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <i class='bx bxs-report'></i><strong>Informe listado de espacios</strong>
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item" href="#" onclick="generarExcelEspacios()">Informe en Excel</a></li>
+                                        <li><a class="dropdown-item" href="#" onclick="generarPDFEspacios()">Informe en PDF</a></li>
+                                    </ul>
+                                </div>
+                            
+                </div>
+
 
                 <h6 class="mb-0 text-uppercase">Espacios</h6>
                 <hr />
@@ -112,13 +151,63 @@
 
                     </div>
                 </div>
-
+ <!-- Modal para editar -->
+ <div class="modal fade" id="editEspacioModal" tabindex="-1" aria-labelledby="editEspacioModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editEspacioModalLabel">Editar Espacio</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="editEspacioForm">
+                    <input type="hidden" id="edit_id_espacio" name="edit_id_espacio">
+                    <div class="mb-3">
+                        <label for="edit_nombre_espacio" class="form-label">Nombre</label>
+                        <input type="text" class="form-control" id="edit_nombre_espacio" name="edit_nombre_espacio" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="edit_aforo_espacio" class="form-label">Aforo</label>
+                        <input type="number" class="form-control" id="edit_aforo_espacio" name="edit_aforo_espacio" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="edit_precio_espacio" class="form-label">Precio</label>
+                        <input type="number" class="form-control" id="edit_precio_espacio" name="edit_precio_espacio" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="edit_estado_espacio" class="form-label">Estado</label>
+                        <select class="form-select" id="edit_estado_espacio" name="edit_estado_espacio" required>
+                            <option value="Activo">Activo</option>
+                            <option value="Inactivo">Inactivo</option>
+                        </select>
+                    </div>
+                    <div class="form-group mb-3">
+                <label for="ddl_categoriaEspacio">Categoría:</label>
+                <div class="d-flex align-items-center">
+                    <select class="form-select me-2" id="ddl_categoriaEspacio" name="ddl_categoriaEspacio" required>
+                        <option value="" disabled selected>Selecciona una categoría</option>
+                        <!-- Aquí irán las opciones cargadas dinámicamente -->
+                    </select>
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#categoryModal">
+                    <i class='bx bx-plus-circle'></i>
+                    </button>
+                </div>
+            </div>
+        </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-primary" onclick="guardarEdicion()">Guardar cambios</button>
+            </div>
+        </div>
+    </div>
+</div>
              <!-- Modal -->
-<div class="modal fade" id="furnitureModal" tabindex="-1" aria-labelledby="furnitureModalLabel" aria-hidden="true">
+<div class="modal fade" id="furnitureModal" tabindex="-1" aria-labelledby="furnitureModalLabel" data-id_espacios="1" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="furnitureModalLabel">Gestionar Mobiliario</h5>
+                <h5 class="modal-title" id="furnitureModalLabel" onclick="abrirModalMobiliario(id_espacio)">Gestionar Mobiliario</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -126,25 +215,36 @@
 
                 <form id="furniture_form">
                     <div class="form-group mb-3">
-                        <label for="txt_furniture_name">Nombre del Mueble:</label>
-                        <input type="text" class="form-control" name="txt_furniture_name" id="txt_furniture_name" placeholder="Introduce el nombre del mueble" required>
+                        <label for="txt_furniture_detail">Detalle del Mueble:</label>
+                        <input type="text" class="form-control" name="txt_furniture_detail" id="txt_furniture_detail" placeholder="Introduce el detalle del mueble" required>
                     </div>
                     <div class="form-group mb-3">
                         <label for="txt_furniture_quantity">Cantidad:</label>
                         <input type="number" class="form-control" name="txt_furniture_quantity" id="txt_furniture_quantity" placeholder="Introduce la cantidad" required>
                     </div>
-                    <input type="hidden" id="hidden_espacio_id" name="hidden_espacio_id">
-                    <div class="text-end mb-4">
-                        <button type="button" onclick="enviarMobiliario()" class="btn btn-primary btn-sm">Guardar Mobiliario</button>
-                    </div>
+                    <input type="hidden" id="hidden_espacio_id" name="hidden_espacio_id" class="form-control" value="<?php echo htmlspecialchars($id_espacio); ?>" readonly>
+                        <div class="text-end mb-4">
+                            <button type="button" onclick="enviarMobiliario()" class="btn btn-primary btn-sm">Guardar Mobiliario</button>
+                        </div>
                 </form>
+                <div class="btn-group me-2">
+                                    <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <i class='bx bxs-report'></i><strong>Informe de Mobiliario</strong>
+                                    </button>
+                                    <div class="d-flex align-items-center">
+                                    <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item" href="#" onclick="generarExcelMobiliario()">Informe en Excel</a></li>
+                                        <li><a class="dropdown-item" href="#" onclick="generarPDFMobiliario()">Informe en PDF</a></li>
+                                    </ul>
+                                    </div>
+                    </div>
+                
 
                 <table id="tbl_furniture" class="table table-bordered mb-4">
                     <thead class="thead-dark">
                         <tr>
-                            <th>Nombre del Mueble</th>
+                            <th>Detalle del mueble</th>
                             <th>Cantidad</th>
-                            <th>Acciones</th>
                         </tr>
                     </thead>
                     <tbody id="tbl_furniture_body">
@@ -164,10 +264,45 @@
 
 
 <script>
+
     $(document).ready(function () {
         lista_categorias();
         listarEspacios();
     });
+    function toggleEstado(estado) {
+        const checkboxActivo = document.getElementById('estadoActivo');
+        const checkboxInactivo = document.getElementById('estadoInactivo');
+
+        if (estado === 'activo') {
+            checkboxActivo.checked = true;
+            checkboxInactivo.checked = false;
+        } else {
+            checkboxActivo.checked = false;
+            checkboxInactivo.checked = true;
+        }
+        
+    function abrirModalMobiliario(id_espacio) {
+        
+        document.getElementById("hidden_espacio_id").value = id_espacio;
+
+        // Muestra el modal
+        var myModal = new bootstrap.Modal(document.getElementById('furnitureModal'));
+        myModal.show();
+}
+
+}
+    function generarPDFMobiliario() {
+
+        var id_espacio = document.getElementById("hidden_espacio_id").value;
+        console.log("ID del espacio para PDF: ", id_espacio);
+        var url = '../controlador/COWORKING/crear_oficinaC.php?generarPDFMobiliario=true&id_espacio=' + id_espacio;
+        window.open(url, "_blank");
+    }
+
+    function generarPDFEspacios() {
+                var url ='../controlador/COWORKING/crear_oficinaC.php?generarPDFEspacios=true'
+                window.open(url,"_blank");
+            }
 
     function lista_categorias() {
         $.ajax({
@@ -177,6 +312,7 @@
             dataType: 'json',
             success: function (response) {
                 $('#ddl_categoriaEspacio').html(response);
+                
             }
         });
     }
@@ -230,27 +366,35 @@
 }
 
 function guardarEdicion() {
-    const formData = $('#editEspacioForm').serialize();
+    var formData = {
+        id_espacio: $('#edit_id_espacio').val(),
+        nombre: $('#edit_nombre_espacio').val(),
+        aforo: $('#edit_aforo_espacio').val(),
+        precio: $('#edit_precio_espacio').val(),
+        estado: $('#edit_estado_espacio').val(),
+        categoria: $('#edit_categoria_espacio').val()
+    };
+
     $.ajax({
         url: '../controlador/COWORKING/crear_oficinaC.php',
         method: 'POST',
         data: { edit: true, data: formData },
+        dataType: 'json',
         success: function (response) {
-            Swal.fire('Guardado!', 'Los cambios han sido guardados.', 'success');
-            $('#editEspacioModal').modal('hide');
-            listarEspacios(); // Recargar la lista de espacios
+            if (response.success) {
+                Swal.fire('Guardado', 'Los cambios han sido guardados.', 'success');
+                $('#editEspacioModal').modal('hide');
+                listarEspacios(); // Recargar la lista de espacios
+            } else {
+                Swal.fire('Error', response.message, 'error');
+            }
         },
         error: function (xhr, status, error) {
             console.error('Error al guardar los cambios:', error);
-            Swal.fire(
-                'Error',
-                'Hubo un problema al guardar los cambios.',
-                'error'
-            );
+            Swal.fire('Error', 'Hubo un problema al guardar los cambios.', 'error');
         }
     });
 }
-
 function eliminarEspacio(button) {
     // Obtener el ID del espacio del atributo data-id del botón
     var idEspacio = $(button).data('id');
@@ -304,36 +448,37 @@ function eliminarEspacio(button) {
     });
 }
 
-
-
-
-
-    function enviarDatos() {
-    // Obtiene los valores de los campos
+function enviarDatos() {
     var nombre = $('#txt_name').val();
     var aforo = $('#txt_capacity').val();
     var precio = $('#txt_price').val();
-    var estado = $('#txt_estadoEspacio').val();
     var categoria = $('#ddl_categoriaEspacio').val();
 
-    // Verifica si algún campo está vacío
-    if (!nombre || !aforo || !precio || !estado || !categoria) {
-        // Si hay un campo vacío, muestra una alerta y detiene la función
+    // Obtener los valores de los checkboxes
+    var estados = [];
+    if ($('#estadoActivo').is(':checked')) {
+        estados.push('activo');
+    }
+    if ($('#estadoInactivo').is(':checked')) {
+        estados.push('inactivo');
+    }
+
+    
+    if (!nombre || !aforo || !precio || !categoria || estados.length === 0) {
         Swal.fire({
             title: 'Error',
-            text: 'Todos los campos son obligatorios.',
+            text: 'Todos los campos son obligatorios y debe seleccionar al menos un estado.',
             icon: 'error',
             confirmButtonText: 'Ok'
         });
-        return;  // Detiene el envío de los datos
+        return;  
     }
 
-    // Si todos los campos están completos, procede con el envío de los datos
     var datos = {
         nombre: nombre,
         aforo: aforo,
         precio: precio,
-        estado: estado,
+        estados: estados,  
         categoria: categoria
     };
 
@@ -342,18 +487,14 @@ function eliminarEspacio(button) {
         method: 'POST',
         data: { add: true, data: datos },
         success: function (response) {
-            // Mostrar alerta de éxito si el espacio se agregó correctamente
             Swal.fire({
                 title: 'Espacio agregado correctamente',
                 icon: 'success',
                 confirmButtonText: 'Ok'
             });
-
-            // Luego recargar la lista de espacios
             listarEspacios();
         },
         error: function (xhr, status, error) {
-            // En caso de error, mostrar otra alerta
             Swal.fire({
                 title: 'Error al agregar espacio',
                 text: 'Por favor, intenta nuevamente.',
@@ -364,41 +505,62 @@ function eliminarEspacio(button) {
     });
 }
     
+    
     function listarMobiliario(id_espacio) {
         $.ajax({
             url: '../controlador/COWORKING/crear_oficinaC.php',
             method: 'GET',
+            dataType:"json",
             data: { listaMobiliario: true, id_espacio: id_espacio },
             success: function (response) {
-                $('#tbl_furniture_body').html(response);
+                $('#tbl_furniture_body').html(response);    
             }
         });
     }
 
     function enviarMobiliario() {
-        var datos = {
-            nombre: $('#txt_furniture_name').val(),
-            cantidad: $('#txt_furniture_quantity').val(),
-            id_espacio: $('#hidden_espacio_id').val()
-        };
+    var datos = {
+        detalle: $('#txt_furniture_detail').val(),  
+        cantidad: $('#txt_furniture_quantity').val(),
+        id_espacio: $('#hidden_espacio_id').val()
+    };
 
-        $.ajax({
-            url: '../controlador/COWORKING/crear_oficinaC.php',
-            method: 'POST',
-            data: { addMobiliario: true, data: datos },
-            success: function (response) {
-                alert('Mobiliario agregado correctamente');
-                listarMobiliario(datos.id_espacio);
-            },
-            error: function (xhr, status, error) {
-                console.error('Error al enviar los datos:', error);
-                alert('Hubo un error al guardar los datos. Por favor, intenta de nuevo.');
-            }
+    if (!datos.detalle || !datos.cantidad || !datos.id_espacio) {
+        Swal.fire({
+            title: 'Error',
+            text: 'Todos los campos son obligatorios.',
+            icon: 'error',
+            confirmButtonText: 'Ok'
         });
+        return;  
     }
 
+    $.ajax({
+        url: '../controlador/COWORKING/crear_oficinaC.php',
+        method: 'POST',
+        data: { addMobiliario: true, data: datos },
+        success: function (response) {
+            Swal.fire({
+                title: 'Mobiliario agregado correctamente',
+                icon: 'success',
+                confirmButtonText: 'Ok'
+            });
+            listarMobiliario(datos.id_espacio); 
+        },
+        error: function (xhr, status, error) {
+            Swal.fire({
+                title: 'Error al agregar mobiliario',
+                text: 'Hubo un problema. Por favor, intenta nuevamente.',
+                icon: 'error',
+                confirmButtonText: 'Ok'
+            });
+        }
+    });
+}
+
+
         function openFurnitureModal(id_espacio) {
-        $('#hidden_espacio_id').val(id_espacio);
+        $('#hidden_espacio_id').val(id_espacio);    
         listarMobiliario(id_espacio);
         $('#furnitureModal').modal('show');
     }
@@ -420,31 +582,19 @@ function eliminarEspacio(button) {
         method: 'POST',
         data: { addCategoria: true, data: datos },
         success: function(response) {
+            if (response==1){
             Swal.fire('Éxito', 'Categoría agregada correctamente.', 'success');
             $('#categoryModal').modal('hide');
-            recargarCategorias(); 
+            lista_categorias(); 
+            }
+            else{console.log("Error al inicia")}
         },
+            
         error: function(xhr, status, error) {
             console.error('Error al enviar los datos:', error);
             Swal.fire('Error', 'Hubo un error al agregar la categoría. Por favor, intenta de nuevo.', 'error');
         }
     });
 }
-
-function recargarCategorias() {
-    $.ajax({
-        url: '../controlador/COWORKING/crear_oficinaC.php',
-        method: 'GET',
-        data: { categoria: true },
-        dataType: 'html',
-        success: function (data) {
-            $('#categoriaSelect').html(data);
-        },
-        error: function (xhr, status, error) {
-            console.error('Error al cargar las categorías:', error);
-        }
-    });
-}
-
 
 </script>
