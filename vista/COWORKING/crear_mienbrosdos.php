@@ -67,13 +67,13 @@
                                     </select>
                                 </div>
                             </div>
-                            <!-- Aquí puedes continuar con el resto del contenido, como la lista de productos -->
 
+                            <!-- Aquí puedes continuar con el resto del contenido, como la lista de productos -->
                             <div class="row">
                                 <!-- Product 1 -->
                                 <div class="col-md-3 mb-4">
                                     <div class="product-card ms-2"> <!-- Agrega margen a la izquierda -->
-                                        <img src="https://via.placeholder.com/200" alt="Product Image" class="product-image">
+                                        <img src="https://media.istockphoto.com/id/157334256/es/foto/auditorio.jpg?s=1024x1024&w=is&k=20&c=FcTLVow6mKMcNk76ybgTuo04L39IOB3qnsZHDN1h4xI=" alt="Product Image" class="product-image" style="width: 150px; height: auto;">
                                         <h5 class="product-title mt-4">Nest Shaped Chair</h5>
                                         <p>134 Sales</p>
                                         <div class="product-price">
@@ -91,6 +91,7 @@
                                         <button class="btn btn-primary" onclick="window.location.href='http://localhost/corsinf/vista/inicio.php?mod=1010&acc=crear_mienbros';">Detalles</button>
                                     </div>
                                 </div>
+
                                 <!-- Puedes repetir las tarjetas de producto según sea necesario -->
                             </div>
                         </div>
