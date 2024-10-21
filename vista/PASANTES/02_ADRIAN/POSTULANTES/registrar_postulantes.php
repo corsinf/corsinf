@@ -163,15 +163,6 @@ if (isset($_GET['id'])) {
             }
         });
     }
-    
-    function verificar_fecha_actual(input_name, fecha_actual, input_adicional) {
-        let hoy = new Date().toISOString().split('T')[0];
-
-        if (fecha_actual > hoy) {
-            $('#' + input_name).val('');
-            $('#' + input_adicional).val('');
-        } 
-    }
 
 </script>
 

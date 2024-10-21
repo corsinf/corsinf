@@ -229,6 +229,16 @@ function calcular_edad(input, fecha_nacimiento) {
     $('#' + input).val(calcular_edad_fecha(fecha_nacimiento));
 }
 
+//No deja que se coloque una fecha mayor a la actual
+function verificar_fecha_actual(input_name, fecha_actual, input_adicional) {
+    let hoy = new Date().toISOString().split('T')[0];
+
+    if (fecha_actual > hoy) {
+        $('#' + input_name).val('');
+        $('#' + input_adicional).val('');
+    } 
+}
+
 //Datatable
 function configuracion_datatable(title, filename) {
     return {
