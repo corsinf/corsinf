@@ -53,7 +53,9 @@ if ($_GET['acc'] == 'pagina_jav') {
 }
 
 
-
+if ($_GET['acc'] == 'calendario_espacio') {
+    include('COWORKING/calendario_espacio.php');
+}
 
 
 if ($_GET['acc'] == 'crear_mienbros') {
