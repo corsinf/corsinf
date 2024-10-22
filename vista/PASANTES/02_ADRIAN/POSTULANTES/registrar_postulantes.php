@@ -208,30 +208,30 @@ if (isset($_GET['id'])) {
                         <hr>
                         <form id="registrar_postulantes">
                             <div class="row mb-col pt-3">
-                                <div class="col-3">
+                                <div class="col-md-3">
                                     <label for="txt_primer_apellido" class="form-label form-label-sm">Primer Apellido </label>
-                                    <input type="text" class="form-control form-control-sm" name="txt_primer_apellido" id="txt_primer_apellido" placeholder="Escriba su apellido paterno" maxlength="50" required>
+                                    <input type="text" class="form-control form-control-sm no_caracteres" name="txt_primer_apellido" id="txt_primer_apellido" placeholder="Escriba su apellido paterno" maxlength="50" required>
                                 </div>
-                                <div class="col-3">
+                                <div class="col-md-3">
                                     <label for="txt_segundo_apellido" class="form-label form-label-sm">Segundo Apellido </label>
-                                    <input type="text" class="form-control form-control-sm" name="txt_segundo_apellido" id="txt_segundo_apellido" placeholder="Escriba su apellido materno" maxlength="50" required>
+                                    <input type="text" class="form-control form-control-sm no_caracteres" name="txt_segundo_apellido" id="txt_segundo_apellido" placeholder="Escriba su apellido materno" maxlength="50" required>
                                 </div>
-                                <div class="col-3">
+                                <div class="col-md-3">
                                     <label for="txt_primer_nombre" class="form-label form-label-sm">Primer Nombre </label>
-                                    <input type="text" class="form-control form-control-sm" name="txt_primer_nombre" id="txt_primer_nombre" placeholder="Escriba su primer nombre" maxlength="50" required>
+                                    <input type="text" class="form-control form-control-sm no_caracteres" name="txt_primer_nombre" id="txt_primer_nombre" placeholder="Escriba su primer nombre" maxlength="50" required>
                                 </div>
-                                <div class="col-3">
+                                <div class="col-md-3">
                                     <label for="txt_segundo_nombre" class="form-label form-label-sm">Segundo Nombre </label>
-                                    <input type="text" class="form-control form-control-sm" name="txt_segundo_nombre" id="txt_segundo_nombre" placeholder="Escriba su primer nombre" maxlength="50" required>
+                                    <input type="text" class="form-control form-control-sm no_caracteres" name="txt_segundo_nombre" id="txt_segundo_nombre" placeholder="Escriba su primer nombre" maxlength="50" required>
                                 </div>
                             </div>
 
                             <div class="row mb-col">
-                                <div class="col-3">
+                                <div class="col-md-3">
                                     <label for="txt_numero_cedula" class="form-label form-label-sm">Cédula de Identidad </label>
                                     <input type="text" class="form-control form-control-sm solo_numeros_int" name="txt_numero_cedula" id="txt_numero_cedula" placeholder="Digite su número de cédula" maxlength="10" required>
                                 </div>
-                                <div class="col-3">
+                                <div class="col-md-3">
                                     <label for="ddl_sexo" class="form-label form-label-sm">Sexo </label>
                                     <select class="form-select form-select-sm" id="ddl_sexo" name="ddl_sexo" required>
                                         <option selected disabled value="">-- Selecciona una opción --</option>
@@ -239,13 +239,13 @@ if (isset($_GET['id'])) {
                                         <option value="Femenino">Femenino</option>
                                     </select>
                                 </div>
-                                <div class="col-3">
+                                <div class="col-md-3">
                                     <label for="txt_fecha_nacimiento" class="form-label form-label-sm">Fecha de nacimiento </label>
                                     <input type="date" class="form-control form-control-sm" name="txt_fecha_nacimiento" id="txt_fecha_nacimiento" onblur="calcular_edad('txt_edad', this.value); verificar_fecha_actual('txt_fecha_nacimiento', this.value, 'txt_edad');" required>
                                 </div>
-                                <div class="col-3">
+                                <div class="col-md-3">
                                     <label for="txt_edad" class="form-label form-label-sm">Edad </label>
-                                    <input type="text" class="form-control form-control-sm" name="txt_edad" id="txt_edad" readonly>
+                                    <input type="text" class="form-control form-control-sm solo_numeros_int" name="txt_edad" id="txt_edad" readonly>
                                 </div>
                             </div>
 

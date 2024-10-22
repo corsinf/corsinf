@@ -196,15 +196,15 @@
             <form id="form_referencias_laborales">
                 <div class="modal-body">
                     <input type="text" id="txt_referencias_laborales_id" hidden>
-                    <div class="mb-3">
+                    <div class="md-3">
                         <label for="txt_nombre_referencia" class="form-label form-label-sm">Nombre del empleador <label style="color: red;">*</label></label>
                         <input type="text" class="form-control form-control-sm" name="txt_nombre_referencia" id="txt_nombre_referencia" placeholder="Escriba el nombre de el empleador">
                     </div>
-                    <div class="mb-3">
+                    <div class="md-3">
                         <label for="txt_telefono_referencia" class="form-label form-label-sm">Teléfono del empleador <label style="color: red;">*</label></label>
                         <input type="text" class="form-control form-control-sm" name="txt_telefono_referencia" id="txt_telefono_referencia" placeholder="Escriba el número de contacto de el empleador">
                     </div>
-                    <div class="mb-3">
+                    <div class="md-3">
                         <label for="txt_copia_carta_recomendacion" class="form-label form-label-sm">Copia de la carta de recomendación <label style="color: red;">*</label></label>
                         <input type="text" name="txt_ruta_guardada_carta_recomendacion" id="txt_ruta_guardada_carta_recomendacion" hidden>
                         <input type="file" class="form-control form-control-sm" name="txt_copia_carta_recomendacion" id="txt_copia_carta_recomendacion" accept=".pdf">

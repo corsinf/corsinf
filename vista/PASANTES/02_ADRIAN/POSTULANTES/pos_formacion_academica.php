@@ -255,15 +255,15 @@
             <form id="form_formacion_academica">
                 <input type="text" id="txt_formacion_id" hidden>
                 <div class="modal-body">
-                    <div class="mb-3">
+                    <div class="md-3">
                         <label for="txt_titulo_obtenido" class="form-label form-label-sm">Título obtenido </label>
                         <input type="text" class="form-control form-control-sm no_caracteres" name="txt_titulo_obtenido" id="txt_titulo_obtenido" placeholder="Escriba su título académico" maxlength="200">
                     </div>
-                    <div class="mb-3">
+                    <div class="md-3">
                         <label for="txt_institucion" class="form-label form-label-sm">Institución </label>
                         <input type="text" class="form-control form-control-sm no_caracteres" name="txt_institucion" id="txt_institucion" placeholder="Escriba la institución en la que se formó" maxlength="200">
                     </div>
-                    <div class="mb-3">
+                    <div class="md-3">
                         <label for="txt_fecha_inicio_academico" class="form-label form-label-sm">Fecha de inicio </label>
                         <input type="date" class="form-control form-control-sm no_caracteres" name="txt_fecha_inicio_academico" id="txt_fecha_inicio_academico" onchange="checkbox_actualidad_form_acad();">
                     </div>
@@ -271,7 +271,7 @@
                         <label for="txt_fecha_final_academico" class="form-label form-label-sm">Fecha de finalización </label>
                         <input type="date" class="form-control form-control-sm mb-2 no_caracteres" name="txt_fecha_final_academico" id="txt_fecha_final_academico" onchange="checkbox_actualidad_form_acad();">
                     </div>
-                    <div class="mt-1 mb-3">
+                    <div class="mt-1 md-3">
                         <input type="checkbox" class="form-check-input" name="cbx_fecha_final_academico" id="cbx_fecha_final_academico" onchange="checkbox_actualidad_form_acad();">
                         <label for="cbx_fecha_final_academico" class="form-label form-label-sm">Actualidad</label>
                     </div>

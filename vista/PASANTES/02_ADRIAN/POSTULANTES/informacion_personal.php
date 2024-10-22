@@ -325,7 +325,7 @@ if (isset($_GET['id'])) {
                                                         <div class="col-9 d-flex align-items-center">
                                                             <h6 class="mb-0 fw-bold text-primary">Experiencia Previa:</h6>
                                                         </div>
-                                        
+
                                                         <div class="col-3 d-flex justify-content-end">
                                                             <a href="#" class="text-success d-flex align-items-center" data-bs-toggle="modal" data-bs-target="#modal_agregar_experiencia">
                                                                 <i class='bx bx-plus-circle bx-sm me-1'></i>
@@ -564,101 +564,89 @@ if (isset($_GET['id'])) {
             <!-- Modal body -->
             <form id="form_informacion_personal">
                 <div class="modal-body">
-                    <div class="row">
-                        <div class="col-3">
-                            <div class="mb-3">
-                                <label for="txt_primer_apellido" class="form-label form-label-sm">Primer Apellido <label style="color: red;">*</label></label>
-                                <input type="text" class="form-control form-control-sm" name="txt_primer_apellido" id="txt_primer_apellido" placeholder="Escriba su apellido paterno">
-                            </div>
+
+                    <div class="row pt-3 mb-col">
+                        <div class="col-md-3">
+                            <label for="txt_primer_apellido" class="form-label form-label-sm">Primer Apellido <label style="color: red;">*</label></label>
+                            <input type="text" class="form-control form-control-sm no_caracteres" name="txt_primer_apellido" id="txt_primer_apellido" placeholder="Escriba su apellido paterno">
                         </div>
-                        <div class="col-3">
-                            <div class="mb-3">
-                                <label for="txt_segundo_apellido" class="form-label form-label-sm">Segundo Apellido <label style="color: red;">*</label></label>
-                                <input type="text" class="form-control form-control-sm" name="txt_segundo_apellido" id="txt_segundo_apellido" placeholder="Escriba su apellido materno">
-                            </div>
+
+                        <div class="col-md-3">
+                            <label for="txt_segundo_apellido" class="form-label form-label-sm">Segundo Apellido <label style="color: red;">*</label></label>
+                            <input type="text" class="form-control form-control-sm no_caracteres" name="txt_segundo_apellido" id="txt_segundo_apellido" placeholder="Escriba su apellido materno">
                         </div>
-                        <div class="col-3">
-                            <div class="mb-3">
-                                <label for="txt_primer_nombre" class="form-label form-label-sm">Primer Nombre <label style="color: red;">*</label></label>
-                                <input type="text" class="form-control form-control-sm" name="txt_primer_nombre" id="txt_primer_nombre" placeholder="Escriba su primer nombre">
-                            </div>
+
+                        <div class="col-md-3">
+                            <label for="txt_primer_nombre" class="form-label form-label-sm">Primer Nombre <label style="color: red;">*</label></label>
+                            <input type="text" class="form-control form-control-sm no_caracteres" name="txt_primer_nombre" id="txt_primer_nombre" placeholder="Escriba su primer nombre">
                         </div>
-                        <div class="col-3">
-                            <div class="mb-3">
-                                <label for="txt_segundo_nombre" class="form-label form-label-sm">Segundo Nombre <label style="color: red;">*</label></label>
-                                <input type="text" class="form-control form-control-sm" name="txt_segundo_nombre" id="txt_segundo_nombre" placeholder="Escriba su primer nombre">
-                            </div>
+
+                        <div class="col-md-3">
+                            <label for="txt_segundo_nombre" class="form-label form-label-sm">Segundo Nombre <label style="color: red;">*</label></label>
+                            <input type="text" class="form-control form-control-sm no_caracteres" name="txt_segundo_nombre" id="txt_segundo_nombre" placeholder="Escriba su segundo nombre">                        </div>
                         </div>
-                    </div>
+
                     <hr>
+
                     <div class="row mb-col">
-                        <div class="col-3">
-                            <div class="mb-3">
-                                <label for="txt_fecha_nacimiento" class="form-label form-label-sm">Fecha de nacimiento <label style="color: red;">*</label></label>
-                                <input type="date" class="form-control form-control-sm" name="txt_fecha_nacimiento" id="txt_fecha_nacimiento">
-                            </div>
+                        <div class="col-md-3">                            
+                            <label for="txt_fecha_nacimiento" class="form-label form-label-sm">Fecha de nacimiento <label style="color: red;">*</label></label>
+                            <input type="date" class="form-control form-control-sm" name="txt_fecha_nacimiento" id="txt_fecha_nacimiento">                            
                         </div>
-                        <div class="col-3">
-                            <div class="mb-3">
-                                <label for="ddl_nacionalidad" class="form-label form-label-sm">Nacionalidad <label style="color: red;">*</label></label>
-                                <select class="form-select form-select-sm" id="ddl_nacionalidad" name="ddl_nacionalidad">
-                                    <option selected disabled value="">-- Selecciona una Nacionalidad --</option>
-                                    <option value="Ecuatoriano">Ecuatoriano</option>
-                                    <option value="Colombiano">Colombiano</option>
-                                    <option value="Peruano">Peruano</option>
-                                    <option value="Venezolano">Venezolano</option>
-                                    <option value="Paraguayo">Paraguayo</option>
-                                </select>
-                            </div>
+
+                        <div class="col-md-3">
+                            <label for="ddl_nacionalidad" class="form-label form-label-sm">Nacionalidad <label style="color: red;">*</label></label>
+                            <select class="form-select form-select-sm" id="ddl_nacionalidad" name="ddl_nacionalidad">
+                                <option selected disabled value="">-- Selecciona una Nacionalidad --</option>
+                                <option value="Ecuatoriano">Ecuatoriano</option>
+                                <option value="Colombiano">Colombiano</option>
+                                <option value="Peruano">Peruano</option>
+                                <option value="Venezolano">Venezolano</option>
+                                <option value="Paraguayo">Paraguayo</option>
+                            </select>                            
                         </div>
-                        <div class="col-3">
-                            <div class="mb-3">
+
+                        <div class="col-md-3">                            
                                 <label for="txt_numero_cedula" class="form-label form-label-sm">N° de Cédula <label style="color: red;">*</label></label>
-                                <input type="text" class="form-control form-control-sm" name="txt_numero_cedula" id="txt_numero_cedula" placeholder="Digite su número de cédula">
-                            </div>
+                                <input type="text" class="form-control form-control-sm solo_numeros_int" name="txt_numero_cedula" id="txt_numero_cedula" placeholder="Digite su número de cédula">
                         </div>
-                        <div class="col-3">
-                            <div class="mb-3">
-                                <label for="ddl_estado_civil" class="form-label form-label-sm">Estado civil <label style="color: red;">*</label></label>
-                                <select class="form-select form-select-sm" id="ddl_estado_civil" name="ddl_estado_civil">
-                                    <option selected disabled value="">-- Selecciona un Estado Civil --</option>
-                                    <option value="Soltero">Soltero/a</option>
-                                    <option value="Casado">Casado/a</option>
-                                    <option value="Divorciado">Divorciado/a</option>
-                                    <option value="Viudo">Viudo/a</option>
-                                    <option value="Union">Unión de hecho</option>
-                                </select>
-                            </div>
+
+                        <div class="col-md-3">                            
+                            <label for="ddl_estado_civil" class="form-label form-label-sm">Estado civil <label style="color: red;">*</label></label>
+                            <select class="form-select form-select-sm" id="ddl_estado_civil" name="ddl_estado_civil">
+                                <option selected disabled value="">-- Selecciona un Estado Civil --</option>
+                                <option value="Soltero">Soltero/a</option>
+                                <option value="Casado">Casado/a</option>
+                                <option value="Divorciado">Divorciado/a</option>
+                                <option value="Viudo">Viudo/a</option>
+                                <option value="Union">Unión de hecho</option>
+                            </select>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-4">
-                            <div class="mb-3">
-                                <label for="ddl_sexo" class="form-label form-label-sm">Sexo <label style="color: red;">*</label></label>
-                                <select class="form-select form-select-sm" id="ddl_sexo" name="ddl_sexo">
-                                    <option selected disabled value="">-- Selecciona una opción --</option>
-                                    <option value="Masculino">Masculino</option>
-                                    <option value="Femenino">Femenino</option>
-                                </select>
-                            </div>
+
+                    <div class="row mb-col">
+                        <div class="col-md-3">                            
+                            <label for="ddl_sexo" class="form-label form-label-sm">Sexo <label style="color: red;">*</label></label>
+                            <select class="form-select form-select-sm" id="ddl_sexo" name="ddl_sexo">
+                                <option selected disabled value="">-- Selecciona una opción --</option>
+                                <option value="Masculino">Masculino</option>
+                                <option value="Femenino">Femenino</option>
+                            </select>                            
                         </div>
-                        <div class="col-4">
-                            <div class="mb-3">
-                                <label for="txt_telefono_1" class="form-label form-label-sm">Teléfono 1 (personal o fijo) <label style="color: red;">*</label></label>
-                                <input type="text" class="form-control form-control-sm" name="txt_telefono_1" id="txt_telefono_1" placeholder="Escriba su teléfono personal o fijo">
-                            </div>
+
+                        <div class="col-md-3">                            
+                            <label for="txt_telefono_1" class="form-label form-label-sm">Teléfono 1 (personal o fijo) <label style="color: red;">*</label></label>
+                            <input type="text" class="form-control form-control-sm solo_numeros_int" name="txt_telefono_1" id="txt_telefono_1" placeholder="Escriba su teléfono personal o fijo">                            
                         </div>
-                        <div class="col-4">
-                            <div class="mb-3">
+
+                        <div class="col-md-3">                            
                                 <label for="txt_telefono_2" class="form-label form-label-sm">Teléfono 2 (opcional)</label>
-                                <input type="text" class="form-control form-control-sm" name="txt_telefono_2" id="txt_telefono_2" placeholder="Escriba su teléfono personal o fijo (opcional)">
-                            </div>
+                                <input type="text" class="form-control form-control-sm solo_numeros_int" name="txt_telefono_2" id="txt_telefono_2" placeholder="Escriba su teléfono personal o fijo (opcional)">                            
                         </div>
-                        <div class="col-8 mx-auto">
-                            <div class="mb-3">
-                                <label for="txt_correo" class="form-label form-label-sm">Correo Electrónico <label style="color: red;">*</label></label>
-                                <input type="email" class="form-control form-control-sm" name="txt_correo" id="txt_correo" placeholder="Escriba su correo electrónico">
-                            </div>
+
+                        <div class="col-md-3">                            
+                            <label for="txt_correo" class="form-label form-label-sm">Correo Electrónico <label style="color: red;">*</label></label>
+                            <input type="email" class="form-control form-control-sm" name="txt_correo" id="txt_correo" placeholder="Escriba su correo electrónico">                            
                         </div>
                     </div>
                 </div>

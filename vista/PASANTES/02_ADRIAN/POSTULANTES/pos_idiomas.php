@@ -40,7 +40,7 @@
             <!-- Modal body -->
             <form id="form_agregar_idioma">
                 <div class="modal-body">
-                    <div class="mb-3">
+                    <div class="md-3">
                         <label for="ddl_seleccionar_idioma" class="form-label form-label-sm">Idioma <label style="color: red;">*</label></label>
                         <select class="form-select form-select-sm" id="ddl_seleccionar_idioma" name="ddl_seleccionar_idioma">
                             <option selected disabled value="">-- Selecciona un Idioma --</option>
@@ -52,7 +52,7 @@
                             <option value="Italiano">Italiano</option>
                         </select>
                     </div>
-                    <div class="mb-3">
+                    <div class="md-3">
                         <label for="ddl_dominio_idioma" class="form-label form-label-sm">Dominio del Idioma <label style="color: red;">*</label></label>
                         <select class="form-select form-select-sm" id="ddl_dominio_idioma" name="ddl_dominio_idioma" required>
                             <option selected disabled value="">-- Selecciona su nivel de dominio del idioma --</option>

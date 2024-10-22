@@ -256,15 +256,15 @@
             <form id="form_experiencia_laboral">
                 <input type="text" id="txt_experiencia_id" hidden>
                 <div class="modal-body">
-                    <div class="mb-3">
+                    <div class="md-3">
                         <label for="txt_nombre_empresa" class="form-label form-label-sm">Nombre de la empresa </label>
                         <input type="text" class="form-control form-control-sm no_caracteres" name="txt_nombre_empresa" id="txt_nombre_empresa" placeholder="Escriba el nombre de la empresa donde trabajó" maxlength="200">
                     </div>
-                    <div class="mb-3">
+                    <div class="md-3">
                         <label for="txt_cargos_ocupados" class="form-label form-label-sm">Cargos ocupados </label>
                         <input type="text" class="form-control form-control-sm no_caracteres" name="txt_cargos_ocupados" id="txt_cargos_ocupados" placeholder="Escriba los cargos que ocupo en la empresa" maxlength="200">
                     </div>
-                    <div class="mb-3">
+                    <div class="md-3">
                         <label for="txt_fecha_inicio_laboral" class="form-label form-label-sm">Fecha de inicio </label>
                         <input type="date" class="form-control form-control-sm no_caracteres" name="txt_fecha_inicio_laboral" id="txt_fecha_inicio_laboral" onchange="checkbox_actualidad_exp_prev();">
                     </div>
@@ -272,11 +272,11 @@
                         <label for="txt_fecha_final_laboral" class="form-label form-label-sm">Fecha de finalización </label>
                         <input type="date" class="form-control form-control-sm no_caracteres" name="txt_fecha_final_laboral" id="txt_fecha_final_laboral" onchange="checkbox_actualidad_exp_prev();">
                     </div>
-                    <div class="mt-1 mb-3">
+                    <div class="mt-1 md-3">
                         <input type="checkbox" class="form-check-input" name="cbx_fecha_final_laboral" id="cbx_fecha_final_laboral" onchange="checkbox_actualidad_exp_prev();">
                         <label for="cbx_fecha_final_laboral" class="form-label form-label-sm">Actualidad</label>
                     </div>
-                    <div class="mb-3">
+                    <div class="md-3">
                         <label for="txt_responsabilidades_logros" class="form-label form-label-sm">Descripción de responsabilidades y logros</label>
                         <textarea type="text" class="form-control form-control-sm no_caracteres" name="txt_responsabilidades_logros" id="txt_responsabilidades_logros" placeholder="" maxlength="700"></textarea>
                     </div>

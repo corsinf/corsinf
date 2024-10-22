@@ -222,31 +222,25 @@
             <form id="form_aptitudes">
                 <div class="modal-body">
                     <input type="text" class="txt_id_habilidades_postulante" hidden>
-                    <div class="mb-4">
-                        <div class="row mb-1">
-                            <div class="col-12 d-flex align-items-center">
-                                <label for="ddl_seleccionar_aptitud_blanda" class="form-label form-label-sm fw-bold">Seleccione sus Aptitudes Blandas </label>
-                            </div>
-                        </div>
-                        <div class="row mb-3">
-                            <div class="col-12">
-                                <select class="form-select form-select-sm ddl_seleccionar_aptitud" id="ddl_seleccionar_aptitud_blanda" name="ddl_seleccionar_aptitud_blanda" multiple="multiple" maxlength="5000">
-                                </select>
-                            </div>
-                        </div>
+                    <div class="row mb-col pt-3">
+                        <div class="col-md-12">
+                            <label for="ddl_seleccionar_aptitud_blanda" class="form-label form-label-sm fw-bold">Seleccione sus Aptitudes Blandas </label>
+                        </div>                        
+                        
+                        <div class="col-md-12">
+                            <select class="form-select form-select-sm ddl_seleccionar_aptitud" id="ddl_seleccionar_aptitud_blanda" name="ddl_seleccionar_aptitud_blanda" multiple="multiple" maxlength="5000"></select>
+                        </div>                        
                     </div>
-                    <div class="mb-2">
-                        <div class="row mb-1">
-                            <div class="col-12 d-flex align-items-center">
-                                <label for="ddl_seleccionar_aptitud_tecnica" class="form-label form-label-sm fw-bold">Seleccione sus Aptitudes Técnicas </label>
-                            </div>
+
+                    <div class="row mb-col">                        
+                        <div class="col-md-12">
+                            <label for="ddl_seleccionar_aptitud_tecnica" class="form-label form-label-sm fw-bold">Seleccione sus Aptitudes Técnicas </label>
                         </div>
-                        <div class="row mb-3">
-                            <div class="col-12">
-                                <select class="form-select form-select-sm ddl_seleccionar_aptitud" id="ddl_seleccionar_aptitud_tecnica" name="ddl_seleccionar_aptitud_tecnica" multiple="multiple" maxlength="5000">
-                                </select>
-                            </div>
-                        </div>
+                       
+                        
+                        <div class="col-md-12">
+                            <select class="form-select form-select-sm ddl_seleccionar_aptitud" id="ddl_seleccionar_aptitud_tecnica" name="ddl_seleccionar_aptitud_tecnica" multiple="multiple" maxlength="5000"></select>
+                        </div>                        
                     </div>
                 </div>
                 <div class="modal-footer d-flex justify-content-center">

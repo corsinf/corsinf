@@ -187,18 +187,18 @@
                 <h6 class="fw-bold mb-3">Registrar Contactos</h6>
                 <form id="form_contacto_emergencia">
                     <div class="pnl_contacto_emergencia">
-                        <div class="row">
+                        <div class="row pt-3 mb-col">
                             <input type="text" id="txt_id_contacto_emergencia" hidden>
                             <div class="col-11">
-                                <div class="row">
+                                <div class="row mb-col">
                                     <div class="col-6">
-                                        <div class="mb-3">
+                                        <div class="md-3">
                                             <label for="txt_nombre_contacto_emergencia" class="form-label form-label-sm">Nombre del contacto de Emergencia </label>
-                                            <input type="text" class="form-control form-control-sm txt_nombre_contacto_emergencia" name="txt_nombre_contacto_emergencia" id="txt_nombre_contacto_emergencia" value="" placeholder="Escriba el nombre de un contacto de emergencia" maxlength="100">
+                                            <input type="text" class="form-control form-control-sm txt_nombre_contacto_emergencia no_caracteres" name="txt_nombre_contacto_emergencia" id="txt_nombre_contacto_emergencia" value="" placeholder="Escriba el nombre de un contacto de emergencia" maxlength="100">
                                         </div>
                                     </div>
                                     <div class="col-6">
-                                        <div class="mb-3">
+                                        <div class="md-3">
                                             <label for="txt_telefono_contacto_emergencia" class="form-label form-label-sm">Teléfono del contacto de Emergencia </label>
                                             <input type="text" class="form-control form-control-sm txt_telefono_contacto_emergencia solo_numeros_int" name="txt_telefono_contacto_emergencia" id="txt_telefono_contacto_emergencia" value="" placeholder="Escriba el número de un contacto de emergencia" maxlength="15">
                                         </div>
