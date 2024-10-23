@@ -13,12 +13,17 @@ if (isset($_GET['_id'])) {
 <script src="../js/GENERAL/operaciones_generales.js"></script>
 <link href="../assets/plugins/fullcalendar/css/main.min.css" rel="stylesheet" />
 
+<!-- Notificaciones -->
+<link rel="stylesheet" href="../assets/plugins/notifications/css/lobibox.min.css" />
+
+
 <script type="text/javascript">
     $(document).ready(function() {
         <?php if (isset($_GET['_id'])) { ?>
             datos_col(<?= $_id ?>);
         <?php } ?>
 
+        cargar_turnos();
     });
 
     function datos_col(id) {
@@ -31,39 +36,26 @@ if (isset($_GET['_id'])) {
             dataType: 'json',
             success: function(response) {
                 console.log(response);
-                $('#ddl_modelo').val(response[0].modelo);
                 $('#txt_nombre').val(response[0].nombre);
-                $('#txt_host').val(response[0].host);
-                $('#txt_puerto').val(response[0].port);
-                $('#txt_serial').val(response[0].serial);
-                $('#txt_usuario').val(response[0].usuario);
-                $('#txt_pass').val(response[0].pass);
-                $('#cbx_ssl').prop('checked', (response[0].ssl == 1));
-
+                $('#txt_tipo').val(response[0].tipo);
+                $('#txt_ciclos').val(response[0].ciclos);
+                $('#txt_inicio').val(fecha_formateada(response[0].inicio));
             }
         });
     }
 
     function editar_insertar() {
-        var ddl_modelo = $('#ddl_modelo').val();
         var txt_nombre = $('#txt_nombre').val();
-        var txt_host = $('#txt_host').val();
-        var txt_puerto = $('#txt_puerto').val();
-        var txt_serial = $('#txt_serial').val();
-        var txt_usuario = $('#txt_usuario').val();
-        var txt_pass = $('#txt_pass').val();
-        var cbx_ssl = $('#cbx_ssl').prop('checked') ? 1 : 0;
+        var txt_tipo = $('#txt_tipo').val();
+        var txt_ciclos = $('#txt_ciclos').val();
+        var txt_inicio = $('#txt_inicio').val();
 
         var parametros = {
             '_id': '<?= $_id ?>',
-            'ddl_modelo': ddl_modelo,
             'txt_nombre': txt_nombre,
-            'txt_host': txt_host,
-            'txt_puerto': txt_puerto,
-            'txt_serial': txt_serial,
-            'txt_usuario': txt_usuario,
-            'txt_pass': txt_pass,
-            'cbx_ssl': cbx_ssl,
+            'txt_tipo': txt_tipo,
+            'txt_ciclos': txt_ciclos,
+            'txt_inicio': txt_inicio,
         };
 
         if ($("#form_horario").valid()) {
@@ -143,8 +135,35 @@ if (isset($_GET['_id'])) {
             }
         });
     }
+
+    // Para los turnos
+
+    function cargar_turnos() {
+        $.ajax({
+            // data: {
+            //     id: id
+            // },
+            url: '../controlador/TALENTO_HUMANO/th_turnosC.php?listar=true',
+            type: 'post',
+            dataType: 'json',
+            success: function(response) {
+                let html = '';
+                response.forEach(evento => {
+                    html += `<div class="external-event" data-title="${evento.nombre}" data-start="${minutos_formato_hora(evento.hora_entrada)}" data-end="${minutos_formato_hora(evento.hora_salida)}" style="background-color: ${evento.color};">`;
+                    html += `<div class="event-title text-center">${evento.nombre}</div>`;
+                    html += `<div class="event-body text-center">${minutos_formato_hora(evento.hora_entrada)} - ${minutos_formato_hora(evento.hora_salida)}</div>`;
+                    html += `</div>`;
+                });
+                $('#pnl_turnos').html(html); // Inserta el HTML generado en el contenedor
+
+                console.log(response);
+                inicializar_draggable();
+            }
+        });
+    }
 </script>
 
+<!-- Ajustes de css para la vista -->
 <style>
     .fc-col-header-cell-cushion {
         text-transform: uppercase;
@@ -157,37 +176,96 @@ if (isset($_GET['_id'])) {
         /* Color de fondo para sábado y domingo */
     }
 
+
+
+    /* Estilo para el contenedor de eventos */
+    .event-container {
+        display: flex;
+        overflow-x: auto;
+        /* Para el scroll horizontal */
+        white-space: nowrap;
+        /* Evitar que los elementos se rompan en línea */
+        padding: 10px;
+    }
+
     /* Estilo para los eventos arrastrables */
     .external-event {
-        margin: 10px 0;
-        padding: 8px;
+        flex: 0 0 auto;
+        /* Para que los eventos mantengan su tamaño y no se ajusten automáticamente */
+        margin-right: 10px;
+        /* Espacio entre eventos */
+        padding: 2px;
+        padding-left: 12px;
+        padding-right: 12px;
         background-color: #3788d8;
         color: white;
-        cursor: pointer;
+        cursor: grab;
+        border-radius: 2px;
+    }
+
+    .external-event:active {
+        cursor: grabbing;
+    }
+
+    /* Estilo para el título del evento */
+    .event-title {
+        font-weight: bold;
+        font-size: 0.9em;
+        /* Aumenta el tamaño de la fuente del título */
+    }
+
+    /* Estilo para el cuerpo del evento */
+    .event-body {
+        margin-top: 1px;
+        font-size: 0.7em;
+        /* Un tamaño de fuente un poco más pequeño para el body */
+        color: #e0e0e0;
+        /* Un color ligeramente más claro para diferenciarlo */
+    }
+
+    /* Opcional: estilo para el scrollbar si deseas personalizarlo */
+    .event-container::-webkit-scrollbar {
+        height: 8px;
+        /* Altura del scrollbar */
+    }
+
+    .event-container::-webkit-scrollbar-thumb {
+        background-color: #888;
+        /* Color de la barra */
+        border-radius: 10px;
+    }
+
+    .event-container::-webkit-scrollbar-thumb:hover {
+        background-color: #555;
+        /* Color de la barra al pasar el mouse */
     }
 </style>
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        var calendarEl = document.getElementById('calendar');
 
-        // Hacer los eventos externos arrastrables
+<!-- Configuracion del Calendario -->
+<script>
+    function inicializar_draggable() {
         var externalEvents = document.querySelectorAll('.external-event');
         externalEvents.forEach(function(eventEl) {
-            // Extraer datos dinámicos de los atributos data- del elemento
             var eventTitle = eventEl.getAttribute('data-title');
             var eventStart = eventEl.getAttribute('data-start');
             var eventEnd = eventEl.getAttribute('data-end');
+            var eventColor = eventEl.style.backgroundColor; // Obtener el color del estilo
 
             new FullCalendar.Draggable(eventEl, {
                 eventData: {
-                    title: eventTitle, // Título dinámico
+                    title: eventTitle,
                     extendedProps: {
-                        startHour: eventStart, // Hora de inicio dinámica
-                        endHour: eventEnd // Hora de fin dinámica
+                        startHour: eventStart,
+                        endHour: eventEnd,
+                        color: eventColor
                     }
                 }
             });
         });
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        var calendarEl = document.getElementById('calendar');
 
         var calendar = new FullCalendar.Calendar(calendarEl, {
             initialDate: '2024-02-15',
@@ -228,8 +306,10 @@ if (isset($_GET['_id'])) {
                     return ['fc-day-sat', 'fc-day-sun']; // Agregar clase personalizada a sábados y domingos
                 }
             },
+
             eventReceive: function(info) {
                 // Obtener las horas dinámicas desde los datos extendidos
+                var titulo = info.event.title;
                 var startHour = info.draggedEl.getAttribute('data-start');
                 var endHour = info.draggedEl.getAttribute('data-end');
                 var startDate = info.event.start;
@@ -243,12 +323,70 @@ if (isset($_GET['_id'])) {
                 info.event.setEnd(new Date(startDate.setHours(endTimeArray[0], endTimeArray[1], 0)));
 
                 //alert('Nuevo evento añadido: ' + info.event.title + ' con horario ' + startHour + ' a ' + endHour);
+
+                var color = info.draggedEl.style.backgroundColor;
+                info.event.setProp('backgroundColor', color);
+                info.event.setProp('borderColor', color);
+
+                /**
+                 * Para validacion que no se repitan
+                 * 
+                 */
+
+                var eventos_existentes = calendar.getEvents();
+                var fecha_calendario_arrastrable = formatear_fecha_calendar(startDate);
+
+                var eventosCoincidentes = eventos_existentes.filter(function(event) {
+                    fecha_calendario_existente = formatear_fecha_calendar(event.start);
+                    return fecha_calendario_existente === fecha_calendario_arrastrable;
+                });
+
+                // Contar cuántos eventos coinciden
+                var conteoEventos = eventosCoincidentes.length;
+
+                if (conteoEventos > 1) {
+                    error_notificacion('Tenga en cuenta que solo puede asignar un turno por día.')
+                    info.event.remove();
+                    return;
+                }
             }
 
         });
 
         calendar.render();
     });
+
+    //Formatear la fecha de la libreria calendar
+    function formatear_fecha_calendar(fecha) {
+        var dia = fecha.getDate();
+        var mes = fecha.getMonth() + 1;
+        var anio = fecha.getFullYear(); // Obtener el año
+
+        // Asegurarse de que el día y el mes tengan dos dígitos
+        if (dia < 10) {
+            dia = '0' + dia;
+        }
+        if (mes < 10) {
+            mes = '0' + mes;
+        }
+
+        // Formatear la fecha como dd/mm/yyyy
+        return dia + '/' + mes + '/' + anio;
+    }
+
+    function error_notificacion(msg) {
+        Lobibox.notify('error', {
+            pauseDelayOnHover: true,
+            size: 'mini',
+            rounded: true,
+            delayIndicator: false,
+            icon: 'bx bx-x-circle',
+            continueDelayOnInactiveTab: false,
+            position: 'top right',
+            msg: msg,
+            sound: false, 
+        });
+    }
 </script>
 
 <div class="page-wrapper">
@@ -303,16 +441,16 @@ if (isset($_GET['_id'])) {
                         <form id="form_horario">
 
                             <div class="row pt-3 mb-col">
-                                
-                                <div class="col-ms-6">
+
+                                <div class="col-md-6">
                                     <label for="txt_nombre" class="form-label">Nombre </label>
                                     <input type="text" class="form-control form-control-sm no_caracteres" id="txt_nombre" name="txt_nombre" maxlength="50">
                                     <span id="error_txt_nombre" class="text-danger"></span>
                                 </div>
 
-                                <div class="col-ms-6">
-                                    <label for="ddl_modelo" class="form-label">Tipo </label>
-                                    <select class="form-select form-select-sm" id="ddl_modelo" name="ddl_modelo">
+                                <div class="col-md-6">
+                                    <label for="txt_tipo" class="form-label">Tipo </label>
+                                    <select class="form-select form-select-sm" id="txt_tipo" name="txt_tipo">
                                         <option value="1">Diario</option>
                                         <option selected value="7">Semanal</option>
                                         <option value="31">Mensual</option>
@@ -321,23 +459,40 @@ if (isset($_GET['_id'])) {
 
                             </div>
 
+                            <div class="row mb-col">
+                                <div class="col-md-6">
+                                </div>
+
+                                <div class="col-md-3">
+                                    <label for="txt_ciclo" class="form-label">Ciclo </label>
+                                    <input type="text" class="form-control form-control-sm no_caracteres" id="txt_ciclos" name="txt_ciclos">
+                                </div>
+
+                                <div class="col-md-3">
+                                    <label for="txt_inicio" class="form-label">Inicio </label>
+                                    <input type="date" class="form-control form-control-sm no_caracteres" id="txt_inicio" name="txt_inicio">
+                                </div>
+                            </div>
+
                             <div class="row">
                                 <b>Turnos</b>
 
                                 <div class="row mb-col">
-                                    <div class="col-ms-12">
-                                        <div id="external-events">
-                                            <div class="external-event" data-title="Evento A" data-start="07:00:00" data-end="15:30:00">Evento A</div>
-                                            <div class="external-event" data-title="Evento B" data-start="08:00:00" data-end="16:00:00">Evento B</div>
+                                    <div class="col-md-12 col-12">
+                                        <div class="event-container border border-2 bg-secondary border-opacity-10 bg-opacity-10" id="pnl_turnos">
+                                            <!-- <div class="external-event" data-title="Evento A" data-start="07:00:00" data-end="15:30:00">
+                                                <div class="event-title text-center">Evento A</div>
+                                                <div class="event-body text-center">07:00 - 15:30</div>
+                                            </div> -->
                                         </div>
                                     </div>
                                 </div>
                             </div>
 
                             <div class="row mb-col">
-                                <div class="col-md-9 col-12">
+                                <div class="col-md-10 col-12">
                                     <div class="row">
-                                        <div class="col-ms-12">
+                                        <div class="col-md-12">
                                             <div id="calendar"></div>
                                         </div>
                                     </div>
@@ -377,34 +532,17 @@ if (isset($_GET['_id'])) {
 
         $("#form_horario").validate({
             rules: {
-                ddl_modelo: {
-                    required: true,
-                },
+
                 txt_nombre: {
                     required: true,
                 },
-                txt_host: {
 
-                },
-                txt_puerto: {
-                    digits: true,
-                    maxlength: 4,
-                    minlength: 1
-                },
             },
             messages: {
-                ddl_modelo: {
-                    required: "El campo 'Modelo' es obligatorio",
-                },
                 txt_nombre: {
                     required: "El campo 'Nombre' es obligatorio",
                 },
-                txt_host: {
-                    required: "El campo 'IP/Host' es obligatorio",
-                },
-                txt_puerto: {
-                    digits: "El campo 'Puerto' permite solo números",
-                }
+
             },
 
             highlight: function(element) {
@@ -424,3 +562,4 @@ if (isset($_GET['_id'])) {
 
 <script src="../assets/plugins/fullcalendar/js/main.min.js"></script>
 <script src="../assets/js/app-fullcalendar.js"></script>
+<script src="../assets/plugins/notifications/js/lobibox.min.js"></script>

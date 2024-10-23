@@ -63,6 +63,7 @@ class th_turnosC
             array('campo' => 'th_tur_valor_min_trabajar', 'dato' => $parametros['txt_valor_trabajar_min']),
             //array('campo' => 'th_tur_valor_trabajar', 'dato' => $parametros['txt_valor_trabajar']),
             array('campo' => 'th_tur_fecha_modificacion', 'dato' => date('Y-m-d H:i:s')),
+            array('campo' => 'th_tur_color', 'dato' => $parametros['txt_color']),
         );
 
         if ($parametros['_id'] == '') {
