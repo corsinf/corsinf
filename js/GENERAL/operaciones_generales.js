@@ -198,8 +198,9 @@ $(document).on('input', '.no_caracteres', function (event) {
     // Obtener el valor actual del campo
     var value = $(this).val();
 
-    // Reemplazar cualquier cosa que no sea números, letras, puntos, espacios, guiones bajos, guiones medios o barras
-    var nuevoValor = value.replace(/[^a-zA-Z0-9.\s_/-]/g, '');
+    // Reemplazar cualquier cosa que no sea números, letras, puntos, espacios, guiones bajos, guiones medios o barras o tildes o ñ
+    //var nuevoValor = value.replace(/[^a-zA-Z0-9.\s_/-]/g, '');
+    var nuevoValor = value.replace(/[^a-zA-Z0-9áéíóúÁÉÍÓÚüÜñÑ.\s_/-]/g, '');
 
     // Actualizar el valor del campo
     $(this).val(nuevoValor);

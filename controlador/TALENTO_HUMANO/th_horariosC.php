@@ -41,15 +41,11 @@ class th_horariosC
     {
         $datos = array(
             array('campo' => 'th_hor_nombre', 'dato' => $parametros['txt_nombre']),
-            array('campo' => 'th_dis_host', 'dato' => $parametros['txt_host']),
-            array('campo' => 'th_dis_port', 'dato' => $parametros['txt_puerto']),
-            array('campo' => 'th_dis_ssl', 'dato' => $parametros['cbx_ssl']),
-            array('campo' => 'th_dis_usuario', 'dato' => $parametros['txt_usuario']),
-            array('campo' => 'th_dis_pass', 'dato' => $parametros['txt_pass']),
-            array('campo' => 'th_dis_modelo', 'dato' => $parametros['ddl_modelo']),
-
-            array('campo' => 'th_dis_serial', 'dato' => $parametros['txt_serial']),
-            array('campo' => 'th_dis_fecha_modificacion', 'dato' => date('Y-m-d H:i:s')),
+            array('campo' => 'th_hor_tipo', 'dato' => $parametros['txt_tipo']),
+            array('campo' => 'th_hor_ciclos', 'dato' => $parametros['txt_ciclos']),
+            array('campo' => 'th_hor_inicio', 'dato' => $parametros['txt_inicio']),
+            
+            array('campo' => 'th_hor_fecha_modificacion', 'dato' => date('Y-m-d H:i:s')),
         );
 
         if ($parametros['_id'] == '') {

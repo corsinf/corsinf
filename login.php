@@ -6,10 +6,8 @@ if ($_SERVER['HTTP_HOST'] == 'corsinf.com:447') {
 ?>
 	<script>
 		$('#pnl_loading').hide();
-
 		$('#pnl_login').show();
 	</script>
-
 	<style>
 		section {
 			display: flex;
@@ -22,19 +20,16 @@ if ($_SERVER['HTTP_HOST'] == 'corsinf.com:447') {
 			background-size: cover;
 		}
 	</style>
-<?php } ?>
 
 <?php
-if ($_SERVER['HTTP_HOST'] == 'medico.saintdominic.edu.ec:448') {
+} else if ($_SERVER['HTTP_HOST'] == 'medico.saintdominic.edu.ec:448') {
 	require_once('login/login_general.php');
 	sleep(1);
 ?>
 	<script>
 		$('#pnl_loading').hide();
-
 		$('#pnl_login').show();
 	</script>
-
 	<style>
 		section {
 			display: flex;
@@ -47,16 +42,15 @@ if ($_SERVER['HTTP_HOST'] == 'medico.saintdominic.edu.ec:448') {
 			background-size: cover;
 		}
 	</style>
-<?php } else {
+<?php
+} else {
 	require_once('login/login_general.php');
 	sleep(1);
 ?>
 	<script>
 		$('#pnl_loading').hide();
-
 		$('#pnl_login').show();
 	</script>
-
 	<style>
 		section {
 			display: flex;
@@ -65,10 +59,10 @@ if ($_SERVER['HTTP_HOST'] == 'medico.saintdominic.edu.ec:448') {
 			width: 100%;
 			min-height: 100vh;
 			background: url(img/inicio/login_apudata.svg);
-			/* background: url(img/inicio/login1.webp); */
 			background-position: center;
 			background-size: cover;
 		}
 	</style>
-
-<?php } ?>
+<?php
+}
+?>
