@@ -134,60 +134,63 @@
 
             <!-- Modal Header -->
             <div class="modal-header">
-                <h5><small class="text-body-secondary">Ingrese su dirección</small></h5>
+                <h5><small class="text-body-secondary">Dirección</small></h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="limpiar_validaciones_informacion_adicional();"></button>
             </div>
             <!-- Modal body -->
             <form id="form_informacion_adicional">
                 <div class="modal-body">
-                    <p class="w-100 text-wrap">Dirección:</p>
-                    <div class="row pt-3 mb-col">
-                        <input type="text" id="txt_inf_adicional_id" hidden>
-                        <div class="row  mb-col">    
-                            <div class="col-md-12">                                                        
-                                    <label for="txt_direccion_calle" class="form-label form-label-sm">Calle <label style="color: red;">*</label></label>
-                                    <input type="text" class="form-control form-control-sm" name="txt_direccion_calle" id="txt_direccion_calle" value="" placeholder="Escriba la calle de su dirección" required>                            
+                    <div class="row mb-col">
+                        <input type="hidden" id="txt_inf_adicional_id">
+                        <div class="row mb-col">
+                            <div class="col-md-12">
+                                <label for="txt_direccion_calle" class="form-label form-label-sm">Calle <label style="color: red;">*</label></label>
+                                <input type="text" class="form-control form-control-sm" name="txt_direccion_calle" id="txt_direccion_calle" value="" placeholder="Escriba la calle de su dirección" required>
                             </div>
                         </div>
-                        <div class="row  mb-col">
-                            <div class="col-md-12">                            
+
+                        <div class="row mb-col">
+                            <div class="col-md-12">
                                 <label for="txt_direccion_numero" class="form-label form-label-sm">Número <label style="color: red;">*</label></label>
-                                <input type="text" class="form-control form-control-sm solo_numeros_int" name="txt_direccion_numero" id="txt_direccion_numero" value="" placeholder="Escriba el número de su dirección" required>                           
+                                <input type="text" class="form-control form-control-sm solo_numeros_int" name="txt_direccion_numero" id="txt_direccion_numero" value="" placeholder="Escriba el número de su dirección" required>
                             </div>
                         </div>
-                            <div class="row mb-col">
-                                <div class="col-md-12">
-                                    <label for="txt_direccion_ciudad" class="form-label form-label-sm">Ciudad <label style="color: red;">*</label></label>
-                                    <input type="text" class="form-control form-control-sm no_caracteres" name="txt_direccion_ciudad" id="txt_direccion_ciudad" value="" placeholder="Escriba la ciudad de su dirección" required>
-                                </div>
+
+                        <div class="row mb-col">
+                            <div class="col-md-12">
+                                <label for="txt_direccion_ciudad" class="form-label form-label-sm">Ciudad <label style="color: red;">*</label></label>
+                                <input type="text" class="form-control form-control-sm no_caracteres" name="txt_direccion_ciudad" id="txt_direccion_ciudad" value="" placeholder="Escriba la ciudad de su dirección" required>
                             </div>
-                            
-                            <div class="row mb-col">
-                                <div class="col-md-12">
-                                    <label for="txt_direccion_estado" class="form-label form-label-sm">Provincia <label style="color: red;">*</label></label>
-                                    <input type="text" class="form-control form-control-sm no_caracteres" name="txt_direccion_estado" id="txt_direccion_estado" value="" placeholder="Escriba la provincia de su dirección" required>
-                                </div>
+                        </div>
+
+                        <div class="row mb-col">
+                            <div class="col-md-12">
+                                <label for="txt_direccion_estado" class="form-label form-label-sm">Provincia <label style="color: red;">*</label></label>
+                                <input type="text" class="form-control form-control-sm no_caracteres" name="txt_direccion_estado" id="txt_direccion_estado" value="" placeholder="Escriba la provincia de su dirección" required>
                             </div>
+                        </div>
+
+                        <div class="row mb-col">
                             <div class="col-4">
-                                <div class="mb-3">
-                                    <label for="txt_direccion_postal" class="form-label form-label-sm">Código Postal <label style="color: red;">*</label></label>
-                                    <div class="row">
-                                        <div class="col-11 me-0">
-                                            <input type="text" class="form-control form-control-sm" name="txt_direccion_postal" id="txt_direccion_postal" placeholder="Escriba su código postal o de click en 'Obtener'">
-                                        </div>
-                                        <div class="col-11 me-0" style="display: none;">
-                                            <a id="ubicacion" target="_blank"></a>
-                                        </div>
-                                        <div class="col-1 d-flex justify-content-start">
-                                            <button type="button" class="btn btn-sm btn-outline-primary" onclick="obtener_codigo_postal();">Obtener</button>
-                                        </div>
+                                <label for="txt_direccion_postal" class="form-label form-label-sm">Código Postal <label style="color: red;">*</label></label>
+                                <div class="row">
+                                    <div class="col-11 me-0">
+                                        <input type="text" class="form-control form-control-sm" name="txt_direccion_postal" id="txt_direccion_postal" placeholder="Escriba su código postal o de click en 'Obtener'">
+                                    </div>
+                                    <div class="col-11 me-0" style="display: none;">
+                                        <a id="ubicacion" target="_blank"></a>
+                                    </div>
+                                    <div class="col-1 d-flex justify-content-start">
+                                        <button type="button" class="btn btn-sm btn-outline-primary" onclick="obtener_codigo_postal();">Obtener</button>
                                     </div>
                                 </div>
                             </div>
+                        </div>
+
+                        <div class="d-flex justify-content-center">
+                            <button type="button" class="btn btn-success btn-sm" id="btn_guardar_informacion_contacto" onclick="insertar_editar_informacion_adicional();">Guardar</button>
+                        </div>
                     </div>
-                </div>
-                <div class="modal-footer d-flex justify-content-center">
-                    <button type="button" class="btn btn-success btn-sm" id="btn_guardar_informacion_contacto" onclick="insertar_editar_informacion_adicional();">Guardar</button>
                 </div>
             </form>
         </div>

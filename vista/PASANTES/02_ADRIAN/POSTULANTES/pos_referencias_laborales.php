@@ -195,20 +195,23 @@
             <!-- Modal body -->
             <form id="form_referencias_laborales">
                 <div class="modal-body">
-                    <input type="text" id="txt_referencias_laborales_id" hidden>
-                    <div class="row pt-3 mb-col">
+                    <input type="hidden" id="txt_referencias_laborales_id">
+
+                    <div class="row mb-col">
                         <div class="col-md-12">
                             <label for="txt_nombre_referencia" class="form-label form-label-sm">Nombre del empleador <label style="color: red;">*</label></label>
                             <input type="text" class="form-control form-control-sm" name="txt_nombre_referencia" id="txt_nombre_referencia" placeholder="Escriba el nombre de el empleador">
                         </div>
                     </div>
-                    <div class="row  mb-col">
+
+                    <div class="row mb-col">
                         <div class="col-md-12">
                             <label for="txt_telefono_referencia" class="form-label form-label-sm">Teléfono del empleador <label style="color: red;">*</label></label>
                             <input type="text" class="form-control form-control-sm" name="txt_telefono_referencia" id="txt_telefono_referencia" placeholder="Escriba el número de contacto de el empleador">
                         </div>
                     </div>
-                    <div class="row  mb-col">
+
+                    <div class="row mb-col">
                         <div class="col-md-12">
                             <label for="txt_copia_carta_recomendacion" class="form-label form-label-sm">Copia de la carta de recomendación <label style="color: red;">*</label></label>
                             <input type="text" name="txt_ruta_guardada_carta_recomendacion" id="txt_ruta_guardada_carta_recomendacion" hidden>
@@ -216,28 +219,24 @@
                             <div class="mt-2" id="archivo_carta_recomendacion"></div>
                         </div>
                     </div>
-                </div>
-                <div class="modal-footer">
-                    <div class="row mx-auto">
-                        <div class="col-6">
-                            <button type="button" class="btn btn-success btn-sm" id="btn_guardar_referencia_laboral" onclick="insertar_editar_referencias_laborales();">Agregar</button>
-                        </div>
-                        <div class="col-6">
-                            <button type="button" class="btn btn-danger btn-sm" id="btn_eliminar_formacion" onclick="delete_datos_referencias_laborales();">Eliminar</button>
-                        </div>
+
+                    <div class="d-flex justify-content-center">
+                        <button type="button" class="btn btn-success btn-sm px-4 m-1" id="btn_guardar_referencia_laboral" onclick="insertar_editar_referencias_laborales();">Agregar</button>
+                        <button type="button" class="btn btn-danger btn-sm px-4 m-1" id="btn_eliminar_formacion" onclick="delete_datos_referencias_laborales();">Eliminar</button>
                     </div>
                 </div>
             </form>
         </div>
     </div>
 </div>
+
 <div class="modal" id="modal_ver_pdf" tabindex="-1" aria-modal="true" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
     <div class="modal-dialog modal-dialog-centered modal-xl">
         <div class="modal-content">
 
             <!-- Modal Header -->
             <div class="modal-header">
-                <h5><small class="text-body-secondary" id="lbl_titulo_referencia_laboral">Agregue una referencia</small></h5>
+                <h5><small class="text-body-secondary" id="lbl_titulo_referencia_laboral">Referencias laborales</small></h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="limpiar_parametros_iframe();"></button>
             </div>
             <!-- Modal body -->

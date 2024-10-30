@@ -57,7 +57,7 @@
             <!-- Modal body -->
             <form id="form_estado_laboral">
                 <div class="modal-body">
-                    <div class="row pt-3 mb-col">
+                    <div class="row mb-col">
                         <div class="col-md-12">
                             <label for="ddl_estado_laboral" class="form-label form-label-sm">Estado laboral: <label style="color: red;">*</label></label>
                             <select class="form-select form-select-sm" id="ddl_estado_laboral" name="ddl_estado_laboral" onchange="ocultar_opciones_estado();" required>
@@ -71,13 +71,13 @@
                             </select>
                         </div>
                     </div>
-                    <div class="row pt-3 mb-col">
+                    <div class="row mb-col">
                         <div class="col-md-12">
                             <label for="txt_fecha_contratacion_estado" class="form-label form-label-sm">Fecha de contratación <label style="color: red;">*</label></label>
                             <input type="date" class="form-control form-control-sm" name="txt_fecha_contratacion_estado" id="txt_fecha_contratacion_estado">
                         </div>
                     </div>
-                    <div class="row pt-3 mb-col">
+                    <div class="row mb-col">
                         <div class="col-md-12">
                             <label for="txt_fecha_salida_estado" class="form-label form-label-sm">Fecha de salida <label style="color: red;">*</label></label>
                             <input type="date" class="form-control form-control-sm" name="txt_fecha_salida_estado" id="txt_fecha_salida_estado">

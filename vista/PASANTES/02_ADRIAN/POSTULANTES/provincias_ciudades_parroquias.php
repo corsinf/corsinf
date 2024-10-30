@@ -1,6 +1,7 @@
 <script type="text/javascript">
+    //corregir para cargar los id
     $(document).ready(function() {
-       
+
         cargar_datos_provincias();
 
         // Evento para cuando se selecciona una provincia
@@ -142,7 +143,6 @@
             })
             .off('select2:select');
     }
-
 </script>
 
 <div class="row mb-col">

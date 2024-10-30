@@ -39,7 +39,7 @@
             <!-- Modal body -->
             <form id="form_documento_identidad">
             <div class="modal-body">
-                <div class="row pt-3 mb-col">
+                <div class="row mb-col">
                     <div class="col-md-12">
                         <label for="ddl_tipo_documento_identidad" class="form-label form-label-sm">Tipo de Documento <label style="color: red;">*</label></label>
                         <select class="form-select form-select-sm" id="ddl_tipo_documento_identidad" name="ddl_tipo_documento_identidad">
@@ -53,7 +53,7 @@
                         </select>
                     </div>
                 </div>
-                <div class="row pt-3 mb-col">
+                <div class="row mb-col">
                     <div class="col-md-12">
                         <label for="txt_agregar_documento_identidad" class="form-label form-label-sm">Copia del Documento de identidad <label style="color: red;">*</label></label>
                         <input type="file" class="form-control form-control-sm" name="txt_agregar_documento_identidad" id="txt_agregar_documento_identidad" accept=".pdf">

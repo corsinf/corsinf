@@ -42,7 +42,7 @@
             <!-- Modal body -->
             <form id="form_certificaciones_capacitaciones">
                 <div class="modal-body">
-                    <div class="row pt-3 mb-col">
+                    <div class="row mb-col">
                         <div class="col-md-12">
                             <label for="txt_nombre_certificacion" class="form-label form-label-sm">Nombre del curso o capacitación <label style="color: red;">*</label></label>
                             <input type="text" class="form-control form-control-sm " name="txt_nombre_certificacion" id="txt_nombre_certificacion" value="" placeholder="Escriba el nombre del curso o capacitación">

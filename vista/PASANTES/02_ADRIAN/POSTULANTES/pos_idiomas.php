@@ -40,7 +40,7 @@
             <!-- Modal body -->
             <form id="form_agregar_idioma">
                 <div class="modal-body">
-                    <div class="row pt-3 mb-col">
+                    <div class="row mb-col">
                         <div class="col-md-12">
                             <label for="ddl_seleccionar_idioma" class="form-label form-label-sm">Idioma <label style="color: red;">*</label></label>
                             <select class="form-select form-select-sm" id="ddl_seleccionar_idioma" name="ddl_seleccionar_idioma">
@@ -54,7 +54,8 @@
                             </select>
                         </div>
                     </div>
-                    <div class="row pt-3 mb-col">
+
+                    <div class="row mb-col">
                         <div class="col-md-12">
                             <label for="ddl_dominio_idioma" class="form-label form-label-sm">Dominio del Idioma <label style="color: red;">*</label></label>
                             <select class="form-select form-select-sm" id="ddl_dominio_idioma" name="ddl_dominio_idioma" required>
@@ -70,7 +71,8 @@
                         </div>
                     </div>
                 </div>
-                <div class="modal-footer d-flex justify-content-center">
+
+                <div class="d-flex justify-content-center">
                     <button type="button" class="btn btn-success btn-sm" id="btn_guardar_idioma" onclick="insertar_editar_idiomas();">Guardar Idioma</button>
                 </div>
             </form>

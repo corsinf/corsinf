@@ -35,7 +35,7 @@ if (isset($_GET['id'])) {
                 $('#txt_primer_apellido').val(response[0].th_pos_primer_apellido);
                 $('#txt_segundo_apellido').val(response[0].th_pos_segundo_apellido);
                 $('#txt_fecha_nacimiento').val(response[0].th_pos_fecha_nacimiento);
-                $('#ddl_nacionalidad').val(response[0].th_pos_nacionalidad);
+                //$('#ddl_nacionalidad').val(response[0].th_pos_nacionalidad);
                 $('#txt_numero_cedula').val(response[0].th_pos_cedula);
                 $('#ddl_estado_civil').val(response[0].th_pos_estado_civil);
                 $('#ddl_sexo').val(response[0].th_pos_sexo);
@@ -49,7 +49,9 @@ if (isset($_GET['id'])) {
                 $('#txt_direccion').val(response[0].th_pos_direccion);
 
                 calcular_edad('txt_edad', response[0].th_pos_fecha_nacimiento);
-                console.log(response);
+                cargar_datos_ciudades(response[0].th_ciu_id);
+
+                console.log(response[0].th_ciu_id);
             },
         });
     }
@@ -61,17 +63,17 @@ if (isset($_GET['id'])) {
         var txt_primer_apellido = $('#txt_primer_apellido').val();
         var txt_segundo_apellido = $('#txt_segundo_apellido').val();
         var txt_fecha_nacimiento = $('#txt_fecha_nacimiento').val();
-        var ddl_nacionalidad = $('#ddl_nacionalidad').val();
+        //var ddl_nacionalidad = $('#ddl_nacionalidad').val();
         var txt_numero_cedula = $('#txt_numero_cedula').val();
-        var ddl_estado_civil = $('#ddl_estado_civil').val();
+        //var ddl_estado_civil = $('#ddl_estado_civil').val();
         var ddl_sexo = $('#ddl_sexo').val();
         var txt_telefono_1 = $('#txt_telefono_1').val();
         var txt_telefono_2 = $('#txt_telefono_2').val();
         var txt_correo = $('#txt_correo').val();
-        var ddl_provincia = $('#ddl_provincia').val();
+        var ddl_provincias = $('#ddl_provincias').val();
         var ddl_ciudad = $('#ddl_ciudad').val();
         var ddl_parroquia = $('#ddl_parroquia').val();
-        var txt_codigo_postal = $('#txt_codigo_postal').val();
+        //var txt_codigo_postal = $('#txt_codigo_postal').val();
         var txt_direccion = $('#txt_direccion').val();
 
         var parametros = {
@@ -81,17 +83,17 @@ if (isset($_GET['id'])) {
             'txt_primer_apellido': txt_primer_apellido,
             'txt_segundo_apellido': txt_segundo_apellido,
             'txt_fecha_nacimiento': txt_fecha_nacimiento,
-            'ddl_nacionalidad': ddl_nacionalidad,
+            //'ddl_nacionalidad': ddl_nacionalidad,
             'txt_numero_cedula': txt_numero_cedula,
-            'ddl_estado_civil': ddl_estado_civil,
+            //'ddl_estado_civil': ddl_estado_civil,
             'ddl_sexo': ddl_sexo,
             'txt_telefono_1': txt_telefono_1,
             'txt_telefono_2': txt_telefono_2,
             'txt_correo': txt_correo,
-            'ddl_provincia': ddl_provincia,
+            'ddl_provincias': ddl_provincias,
             'ddl_ciudad': ddl_ciudad,
             'ddl_parroquia': ddl_parroquia,
-            'txt_codigo_postal': txt_codigo_postal,
+            //'txt_codigo_postal': txt_codigo_postal,
             'txt_direccion': txt_direccion,
 
         };
