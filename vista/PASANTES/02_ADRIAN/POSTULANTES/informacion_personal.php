@@ -218,7 +218,7 @@ if (isset($_GET['id'])) {
                                         </div>
                                         <div class="row mb-2">
                                             <div class="col-6 d-flex align-items-center">
-                                                <h6 class="w-100 text-wrap" class="fw-bold">Teléfono</h6>
+                                                <h6 class="w-100 text-wrap fw-bold">Teléfono</h6>
                                             </div>
                                             <div class="col-6 d-flex align-items-center">
                                                 <p class="w-100 text-wrap" id="txt_telefono_1_v"></p>
@@ -565,31 +565,31 @@ if (isset($_GET['id'])) {
             <form id="form_informacion_personal">
                 <div class="modal-body">
 
-                        <div class="row pt-3 mb-col">
-                            <div class="col-md-12">
-                                <label for="txt_primer_apellido" class="form-label form-label-sm">Primer Apellido <label style="color: red;">*</label></label>
-                                <input type="text" class="form-control form-control-sm no_caracteres" name="txt_primer_apellido" id="txt_primer_apellido" placeholder="Escriba su apellido paterno">
-                            </div>
+                    <div class="row pt-3 mb-col">
+                        <div class="col-md-12">
+                            <label for="txt_primer_apellido" class="form-label form-label-sm">Primer Apellido <label style="color: red;">*</label></label>
+                            <input type="text" class="form-control form-control-sm no_caracteres" name="txt_primer_apellido" id="txt_primer_apellido" placeholder="Escriba su apellido paterno">
                         </div>
-                        <div class="row mb-col">
-                            <div class="col-md-12">
-                                <label for="txt_segundo_apellido" class="form-label form-label-sm">Segundo Apellido <label style="color: red;">*</label></label>
-                                <input type="text" class="form-control form-control-sm no_caracteres" name="txt_segundo_apellido" id="txt_segundo_apellido" placeholder="Escriba su apellido materno">
-                            </div>
+                    </div>
+                    <div class="row mb-col">
+                        <div class="col-md-12">
+                            <label for="txt_segundo_apellido" class="form-label form-label-sm">Segundo Apellido <label style="color: red;">*</label></label>
+                            <input type="text" class="form-control form-control-sm no_caracteres" name="txt_segundo_apellido" id="txt_segundo_apellido" placeholder="Escriba su apellido materno">
                         </div>
-                        <div class="row mb-col">
-                            <div class="col-md-12">
-                                <label for="txt_primer_nombre" class="form-label form-label-sm">Primer Nombre <label style="color: red;">*</label></label>
-                                <input type="text" class="form-control form-control-sm no_caracteres" name="txt_primer_nombre" id="txt_primer_nombre" placeholder="Escriba su primer nombre">
-                            </div>
+                    </div>
+                    <div class="row mb-col">
+                        <div class="col-md-12">
+                            <label for="txt_primer_nombre" class="form-label form-label-sm">Primer Nombre <label style="color: red;">*</label></label>
+                            <input type="text" class="form-control form-control-sm no_caracteres" name="txt_primer_nombre" id="txt_primer_nombre" placeholder="Escriba su primer nombre">
                         </div>
-                        <div class="row mb-col">
-                            <div class="col-md-12">
-                                <label for="txt_segundo_nombre" class="form-label form-label-sm">Segundo Nombre <label style="color: red;">*</label></label>
-                                <input type="text" class="form-control form-control-sm no_caracteres" name="txt_segundo_nombre" id="txt_segundo_nombre" placeholder="Escriba su segundo nombre">
-                            </div>
+                    </div>
+                    <div class="row mb-col">
+                        <div class="col-md-12">
+                            <label for="txt_segundo_nombre" class="form-label form-label-sm">Segundo Nombre <label style="color: red;">*</label></label>
+                            <input type="text" class="form-control form-control-sm no_caracteres" name="txt_segundo_nombre" id="txt_segundo_nombre" placeholder="Escriba su segundo nombre">
                         </div>
-                    
+                    </div>
+
                     <hr>
                     <div class="row mb-col">
                         <div class="col-md-12">
@@ -659,114 +659,118 @@ if (isset($_GET['id'])) {
                         </div>
                     </div>
                 </div>
-        <div class="modal-footer d-flex justify-content-center">
-            <button type="button" class="btn btn-success btn-sm" id="btn_guardar_informacion_personal" onclick="insertar_editar_informacion_personal();">Guardar</button>
+                <div class="modal-footer">
+                    <div class="row mx-auto">
+                        <div class="col-6">
+                            <button type="button" class="btn btn-success btn-sm" id="btn_guardar_informacion_personal" onclick="insertar_editar_informacion_personal();">Guardar</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
         </div>
-        </form>
     </div>
-</div>
 
 
-<script>
-    //Validacion de formulario
-    $(document).ready(function() {
-        //Validación Información Personal
-        $("#form_informacion_personal").validate({
-            rules: {
-                txt_primer_apellido: {
-                    required: true,
+    <script>
+        //Validacion de formulario
+        $(document).ready(function() {
+            //Validación Información Personal
+            $("#form_informacion_personal").validate({
+                rules: {
+                    txt_primer_apellido: {
+                        required: true,
+                    },
+                    txt_segundo_apellido: {
+                        required: true,
+                    },
+                    txt_primer_nombre: {
+                        required: true,
+                    },
+                    txt_segundo_nombre: {
+                        required: true,
+                    },
+                    txt_numero_cedula: {
+                        required: true,
+                    },
+                    ddl_sexo: {
+                        required: true,
+                    },
+                    txt_fecha_nacimiento: {
+                        required: true,
+                    },
+                    txt_edad: {
+                        required: true,
+                    },
+                    txt_telefono_1: {
+                        required: true,
+                    },
+                    txt_telefono_2: {
+                        required: true,
+                    },
+                    txt_correo: {
+                        required: true,
+                    },
+                    ddl_nacionalidad: {
+                        required: true,
+                    },
+                    ddl_estado_civil: {
+                        required: true,
+                    },
                 },
-                txt_segundo_apellido: {
-                    required: true,
+                messages: {
+                    txt_primer_apellido: {
+                        required: "Por favor ingrese el primer apellido",
+                    },
+                    txt_segundo_apellido: {
+                        required: "Por favor ingrese el segundo apellido",
+                    },
+                    txt_primer_nombre: {
+                        required: "Por favor ingrese el primer nombre",
+                    },
+                    txt_segundo_nombre: {
+                        required: "Por favor ingrese el segundo nombre",
+                    },
+                    txt_numero_cedula: {
+                        required: "Por favor ingresa un número de cédula",
+                    },
+                    ddl_sexo: {
+                        required: "Por favor seleccione el sexo",
+                    },
+                    txt_fecha_nacimiento: {
+                        required: "Por favor ingrese la fecha de nacimiento",
+                    },
+                    txt_edad: {
+                        required: "Por favor ingrese la edad (fecha de nacimiento)",
+                    },
+                    txt_telefono_1: {
+                        required: "Por favor ingrese el primero teléfono",
+                    },
+                    txt_telefono_2: {
+                        required: "Por favor ingrese el segundo teléfono",
+                    },
+                    txt_correo: {
+                        required: "Por favor ingrese un correo",
+                    },
+                    ddl_nacionalidad: {
+                        required: "Por favor seleccione su nacionalidad",
+                    },
+                    ddl_estado_civil: {
+                        required: "Por favor seleccione su estado civil",
+                    },
                 },
-                txt_primer_nombre: {
-                    required: true,
-                },
-                txt_segundo_nombre: {
-                    required: true,
-                },
-                txt_numero_cedula: {
-                    required: true,
-                },
-                ddl_sexo: {
-                    required: true,
-                },
-                txt_fecha_nacimiento: {
-                    required: true,
-                },
-                txt_edad: {
-                    required: true,
-                },
-                txt_telefono_1: {
-                    required: true,
-                },
-                txt_telefono_2: {
-                    required: true,
-                },
-                txt_correo: {
-                    required: true,
-                },
-                ddl_nacionalidad: {
-                    required: true,
-                },
-                ddl_estado_civil: {
-                    required: true,
-                },
-            },
-            messages: {
-                txt_primer_apellido: {
-                    required: "Por favor ingrese el primer apellido",
-                },
-                txt_segundo_apellido: {
-                    required: "Por favor ingrese el segundo apellido",
-                },
-                txt_primer_nombre: {
-                    required: "Por favor ingrese el primer nombre",
-                },
-                txt_segundo_nombre: {
-                    required: "Por favor ingrese el segundo nombre",
-                },
-                txt_numero_cedula: {
-                    required: "Por favor ingresa un número de cédula",
-                },
-                ddl_sexo: {
-                    required: "Por favor seleccione el sexo",
-                },
-                txt_fecha_nacimiento: {
-                    required: "Por favor ingrese la fecha de nacimiento",
-                },
-                txt_edad: {
-                    required: "Por favor ingrese la edad (fecha de nacimiento)",
-                },
-                txt_telefono_1: {
-                    required: "Por favor ingrese el primero teléfono",
-                },
-                txt_telefono_2: {
-                    required: "Por favor ingrese el segundo teléfono",
-                },
-                txt_correo: {
-                    required: "Por favor ingrese un correo",
-                },
-                ddl_nacionalidad: {
-                    required: "Por favor seleccione su nacionalidad",
-                },
-                ddl_estado_civil: {
-                    required: "Por favor seleccione su estado civil",
-                },
-            },
 
-            highlight: function(element) {
-                // Agrega la clase 'is-invalid' al input que falla la validación
-                $(element).addClass('is-invalid');
-                $(element).removeClass('is-valid');
-            },
-            unhighlight: function(element) {
-                // Elimina la clase 'is-invalid' si la validación pasa
-                $(element).removeClass('is-invalid');
-                $(element).addClass('is-valid');
+                highlight: function(element) {
+                    // Agrega la clase 'is-invalid' al input que falla la validación
+                    $(element).addClass('is-invalid');
+                    $(element).removeClass('is-valid');
+                },
+                unhighlight: function(element) {
+                    // Elimina la clase 'is-invalid' si la validación pasa
+                    $(element).removeClass('is-invalid');
+                    $(element).addClass('is-valid');
 
-            }
+                }
+            });
+
         });
-
-    });
-</script>
+    </script>
