@@ -39,13 +39,17 @@
             <!-- Modal body -->
             <form id="form_certificado_medico">
                 <div class="modal-body">
-                    <div class="md-3">
-                        <label for="txt_nombre_certificado_medico" class="form-label form-label-sm">Nombre del certificado <label style="color: red;">*</label></label>
-                        <input type="text" class="form-control form-control-sm" name="txt_nombre_certificado_medico" id="txt_nombre_certificado_medico" placeholder="Escriba el nombre del certificado médico">
+                    <div class="row pt-3 mb-col">
+                        <div class="col-md-12">
+                            <label for="txt_nombre_certificado_medico" class="form-label form-label-sm">Nombre del certificado <label style="color: red;">*</label></label>
+                            <input type="text" class="form-control form-control-sm" name="txt_nombre_certificado_medico" id="txt_nombre_certificado_medico" placeholder="Escriba el nombre del certificado médico">
+                        </div>
                     </div>
-                    <div class="md-3">
-                        <label for="txt_respaldo_medico" class="form-label form-label-sm">Documentación que respalde la aptitud para el trabajo <label style="color: red;">*</label></label>
-                        <input type="file" class="form-control form-control-sm" name="txt_respaldo_medico" id="txt_respaldo_medico" accept=".pdf">
+                    <div class="row  mb-col">
+                        <div class="col-md-12">
+                            <label for="txt_respaldo_medico" class="form-label form-label-sm">Documentación que respalde la aptitud para el trabajo <label style="color: red;">*</label></label>
+                            <input type="file" class="form-control form-control-sm" name="txt_respaldo_medico" id="txt_respaldo_medico" accept=".pdf">
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer d-flex justify-content-center">

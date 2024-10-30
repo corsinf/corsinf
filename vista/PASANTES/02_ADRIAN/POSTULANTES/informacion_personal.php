@@ -181,7 +181,7 @@ if (isset($_GET['id'])) {
                                                 <h6 class="fw-bold">Nombre Completo</h6>
                                             </div>
                                             <div class="col-6 d-flex align-items-center">
-                                                <p id="txt_nombres_completos_v"></p>
+                                                <p class="w-100 text-wrap" id="txt_nombres_completos_v"></p>
                                             </div>
                                         </div>
                                         <div class="row mb-2">
@@ -205,7 +205,7 @@ if (isset($_GET['id'])) {
                                                 <h6 class="fw-bold">Número de Cédula</h6>
                                             </div>
                                             <div class="col-6 d-flex align-items-center">
-                                                <p id="txt_numero_cedula_v"></p>
+                                                <p class="w-100 text-wrap" id="txt_numero_cedula_v"></p>
                                             </div>
                                         </div>
                                         <div class="row mb-2">
@@ -218,10 +218,10 @@ if (isset($_GET['id'])) {
                                         </div>
                                         <div class="row mb-2">
                                             <div class="col-6 d-flex align-items-center">
-                                                <h6 class="fw-bold">Teléfono</h6>
+                                                <h6 class="w-100 text-wrap" class="fw-bold">Teléfono</h6>
                                             </div>
                                             <div class="col-6 d-flex align-items-center">
-                                                <p id="txt_telefono_1_v"></p>
+                                                <p class="w-100 text-wrap" id="txt_telefono_1_v"></p>
                                             </div>
                                         </div>
                                         <div class="row mb-2">
@@ -229,7 +229,7 @@ if (isset($_GET['id'])) {
                                                 <h6 class="fw-bold">Correo Electrónico</h6>
                                             </div>
                                             <div class="col-6 d-flex align-items-center">
-                                                <p class="text-wrap" style="width: 9rem;" id="txt_correo_v"></p>
+                                                <p class="w-100 text-wrap" id="txt_correo_v"></p>
                                             </div>
                                         </div>
                                     </div>
@@ -343,10 +343,10 @@ if (isset($_GET['id'])) {
                                             <div class="card-body">
                                                 <div class="mb-2">
                                                     <div class="row">
-                                                        <div class="col-6 d-flex align-items-center">
+                                                        <div class="col-9 d-flex align-items-center">
                                                             <h6 class="mb-0 fw-bold text-primary">Formación Académica:</h6>
                                                         </div>
-                                                        <div class="col-6 d-flex justify-content-end">
+                                                        <div class="col-3 d-flex justify-content-end">
                                                             <a href="#" class="text-success d-flex align-items-center" id="btn_modal_agregar_formacion_academica" data-bs-toggle="modal" data-bs-target="#modal_agregar_formacion">
                                                                 <i class='bx bx-plus-circle bx-sm me-1'></i>
                                                                 <span>Agregar</span>
@@ -363,10 +363,10 @@ if (isset($_GET['id'])) {
                                             <div class="card-body">
                                                 <div class="mb-2">
                                                     <div class="row">
-                                                        <div class="col-8 d-flex align-items-center">
+                                                        <div class="col-9 d-flex align-items-center">
                                                             <h6 class="mb-0 fw-bold text-primary">Certificaciones y Capacitación:</h6>
                                                         </div>
-                                                        <div class="col-4 d-flex justify-content-end">
+                                                        <div class="col-3 d-flex justify-content-end">
                                                             <a href="#" class="text-success d-flex align-items-center" data-bs-toggle="modal" data-bs-target="#modal_agregar_certificaciones">
                                                                 <i class='bx bx-plus-circle bx-sm me-1'></i>
                                                                 <span>Agregar</span>
@@ -565,36 +565,40 @@ if (isset($_GET['id'])) {
             <form id="form_informacion_personal">
                 <div class="modal-body">
 
-                    <div class="row pt-3 mb-col">
-                        <div class="col-md-3">
-                            <label for="txt_primer_apellido" class="form-label form-label-sm">Primer Apellido <label style="color: red;">*</label></label>
-                            <input type="text" class="form-control form-control-sm no_caracteres" name="txt_primer_apellido" id="txt_primer_apellido" placeholder="Escriba su apellido paterno">
+                        <div class="row pt-3 mb-col">
+                            <div class="col-md-12">
+                                <label for="txt_primer_apellido" class="form-label form-label-sm">Primer Apellido <label style="color: red;">*</label></label>
+                                <input type="text" class="form-control form-control-sm no_caracteres" name="txt_primer_apellido" id="txt_primer_apellido" placeholder="Escriba su apellido paterno">
+                            </div>
                         </div>
-
-                        <div class="col-md-3">
-                            <label for="txt_segundo_apellido" class="form-label form-label-sm">Segundo Apellido <label style="color: red;">*</label></label>
-                            <input type="text" class="form-control form-control-sm no_caracteres" name="txt_segundo_apellido" id="txt_segundo_apellido" placeholder="Escriba su apellido materno">
+                        <div class="row mb-col">
+                            <div class="col-md-12">
+                                <label for="txt_segundo_apellido" class="form-label form-label-sm">Segundo Apellido <label style="color: red;">*</label></label>
+                                <input type="text" class="form-control form-control-sm no_caracteres" name="txt_segundo_apellido" id="txt_segundo_apellido" placeholder="Escriba su apellido materno">
+                            </div>
                         </div>
-
-                        <div class="col-md-3">
-                            <label for="txt_primer_nombre" class="form-label form-label-sm">Primer Nombre <label style="color: red;">*</label></label>
-                            <input type="text" class="form-control form-control-sm no_caracteres" name="txt_primer_nombre" id="txt_primer_nombre" placeholder="Escriba su primer nombre">
+                        <div class="row mb-col">
+                            <div class="col-md-12">
+                                <label for="txt_primer_nombre" class="form-label form-label-sm">Primer Nombre <label style="color: red;">*</label></label>
+                                <input type="text" class="form-control form-control-sm no_caracteres" name="txt_primer_nombre" id="txt_primer_nombre" placeholder="Escriba su primer nombre">
+                            </div>
                         </div>
-
-                        <div class="col-md-3">
-                            <label for="txt_segundo_nombre" class="form-label form-label-sm">Segundo Nombre <label style="color: red;">*</label></label>
-                            <input type="text" class="form-control form-control-sm no_caracteres" name="txt_segundo_nombre" id="txt_segundo_nombre" placeholder="Escriba su segundo nombre">                        </div>
+                        <div class="row mb-col">
+                            <div class="col-md-12">
+                                <label for="txt_segundo_nombre" class="form-label form-label-sm">Segundo Nombre <label style="color: red;">*</label></label>
+                                <input type="text" class="form-control form-control-sm no_caracteres" name="txt_segundo_nombre" id="txt_segundo_nombre" placeholder="Escriba su segundo nombre">
+                            </div>
                         </div>
-
+                    
                     <hr>
-
                     <div class="row mb-col">
-                        <div class="col-md-3">                            
+                        <div class="col-md-12">
                             <label for="txt_fecha_nacimiento" class="form-label form-label-sm">Fecha de nacimiento <label style="color: red;">*</label></label>
-                            <input type="date" class="form-control form-control-sm" name="txt_fecha_nacimiento" id="txt_fecha_nacimiento">                            
+                            <input type="date" class="form-control form-control-sm" name="txt_fecha_nacimiento" id="txt_fecha_nacimiento">
                         </div>
-
-                        <div class="col-md-3">
+                    </div>
+                    <div class="row mb-col">
+                        <div class="col-md-12">
                             <label for="ddl_nacionalidad" class="form-label form-label-sm">Nacionalidad <label style="color: red;">*</label></label>
                             <select class="form-select form-select-sm" id="ddl_nacionalidad" name="ddl_nacionalidad">
                                 <option selected disabled value="">-- Selecciona una Nacionalidad --</option>
@@ -603,15 +607,17 @@ if (isset($_GET['id'])) {
                                 <option value="Peruano">Peruano</option>
                                 <option value="Venezolano">Venezolano</option>
                                 <option value="Paraguayo">Paraguayo</option>
-                            </select>                            
+                            </select>
                         </div>
-
-                        <div class="col-md-3">                            
-                                <label for="txt_numero_cedula" class="form-label form-label-sm">N° de Cédula <label style="color: red;">*</label></label>
-                                <input type="text" class="form-control form-control-sm solo_numeros_int" name="txt_numero_cedula" id="txt_numero_cedula" placeholder="Digite su número de cédula">
+                    </div>
+                    <div class="row mb-col">
+                        <div class="col-md-12">
+                            <label for="txt_numero_cedula" class="form-label form-label-sm">N° de Cédula <label style="color: red;">*</label></label>
+                            <input type="text" class="form-control form-control-sm solo_numeros_int" name="txt_numero_cedula" id="txt_numero_cedula" placeholder="Digite su número de cédula">
                         </div>
-
-                        <div class="col-md-3">                            
+                    </div>
+                    <div class="row mb-col">
+                        <div class="col-md-12">
                             <label for="ddl_estado_civil" class="form-label form-label-sm">Estado civil <label style="color: red;">*</label></label>
                             <select class="form-select form-select-sm" id="ddl_estado_civil" name="ddl_estado_civil">
                                 <option selected disabled value="">-- Selecciona un Estado Civil --</option>
@@ -625,37 +631,38 @@ if (isset($_GET['id'])) {
                     </div>
 
                     <div class="row mb-col">
-                        <div class="col-md-3">                            
+                        <div class="col-md-12">
                             <label for="ddl_sexo" class="form-label form-label-sm">Sexo <label style="color: red;">*</label></label>
                             <select class="form-select form-select-sm" id="ddl_sexo" name="ddl_sexo">
                                 <option selected disabled value="">-- Selecciona una opción --</option>
                                 <option value="Masculino">Masculino</option>
                                 <option value="Femenino">Femenino</option>
-                            </select>                            
+                            </select>
                         </div>
-
-                        <div class="col-md-3">                            
+                    </div>
+                    <div class="row mb-col">
+                        <div class="col-md-12">
                             <label for="txt_telefono_1" class="form-label form-label-sm">Teléfono 1 (personal o fijo) <label style="color: red;">*</label></label>
-                            <input type="text" class="form-control form-control-sm solo_numeros_int" name="txt_telefono_1" id="txt_telefono_1" placeholder="Escriba su teléfono personal o fijo">                            
+                            <input type="text" class="form-control form-control-sm solo_numeros_int" name="txt_telefono_1" id="txt_telefono_1" placeholder="Escriba su teléfono personal o fijo">
                         </div>
-
-                        <div class="col-md-3">                            
-                                <label for="txt_telefono_2" class="form-label form-label-sm">Teléfono 2 (opcional)</label>
-                                <input type="text" class="form-control form-control-sm solo_numeros_int" name="txt_telefono_2" id="txt_telefono_2" placeholder="Escriba su teléfono personal o fijo (opcional)">                            
+                    </div>
+                    <div class="row mb-col">
+                        <div class="col-md-12">
+                            <label for="txt_telefono_2" class="form-label form-label-sm">Teléfono 2 (opcional)</label>
+                            <input type="text" class="form-control form-control-sm solo_numeros_int" name="txt_telefono_2" id="txt_telefono_2" placeholder="Escriba su teléfono personal o fijo (opcional)">
                         </div>
-
-                        <div class="col-md-3">                            
+                    </div>
+                    <div class="row mb-col">
+                        <div class="col-md-12">
                             <label for="txt_correo" class="form-label form-label-sm">Correo Electrónico <label style="color: red;">*</label></label>
-                            <input type="email" class="form-control form-control-sm" name="txt_correo" id="txt_correo" placeholder="Escriba su correo electrónico">                            
+                            <input type="email" class="form-control form-control-sm" name="txt_correo" id="txt_correo" placeholder="Escriba su correo electrónico">
                         </div>
                     </div>
                 </div>
-
-                <div class="modal-footer d-flex justify-content-center">
-                    <button type="button" class="btn btn-success btn-sm" id="btn_guardar_informacion_personal" onclick="insertar_editar_informacion_personal();">Guardar</button>
-                </div>
-            </form>
+        <div class="modal-footer d-flex justify-content-center">
+            <button type="button" class="btn btn-success btn-sm" id="btn_guardar_informacion_personal" onclick="insertar_editar_informacion_personal();">Guardar</button>
         </div>
+        </form>
     </div>
 </div>
 

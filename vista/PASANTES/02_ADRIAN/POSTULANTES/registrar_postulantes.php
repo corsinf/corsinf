@@ -250,15 +250,15 @@ if (isset($_GET['id'])) {
                             </div>
 
                             <div class="row mb-col">
-                                <div class="col-4">
+                                <div class="col-md-4">
                                     <label for="txt_telefono_1" class="form-label form-label-sm">Teléfono 1 </label>
                                     <input type="text" class="form-control form-control-sm solo_numeros_int" name="txt_telefono_1" id="txt_telefono_1" value="" placeholder="Escriba su teléfono personal o fijo" maxlength="12" required>
                                 </div>
-                                <div class="col-4">
+                                <div class="col-md-4">
                                     <label for="txt_telefono_2" class="form-label form-label-sm">Teléfono 2 </label>
                                     <input type="text" class="form-control form-control-sm solo_numeros_int" name="txt_telefono_2" id="txt_telefono_2" value="" placeholder="Escriba su teléfono personal o fijo (opcional)" maxlength="12">
                                 </div>
-                                <div class="col-4">
+                                <div class="col-md-4">
                                     <label for="txt_correo" class="form-label form-label-sm">Correo Electrónico </label>
                                     <input type="email" class="form-control form-control-sm" name="txt_correo" id="txt_correo" value="" placeholder="Escriba su correo electrónico">
                                 </div>
@@ -269,7 +269,7 @@ if (isset($_GET['id'])) {
 
 
                             <div class="row mb-col">
-                                <div class="col-12">
+                                <div class="col-md-12">
                                     <label for="txt_direccion" class="form-label form-label-sm">Dirección </label>
                                     <input type="text" class="form-control form-control-sm" name="txt_direccion" id="txt_direccion" placeholder="Escriba su dirección">
                                 </div>

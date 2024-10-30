@@ -239,8 +239,6 @@
 <div id="pnl_formacion_academica">
 
 </div>
-
-
 <!-- Modal para agregar formación académica-->
 <div class="modal" id="modal_agregar_formacion" tabindex="-1" aria-modal="true" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
     <div class="modal-dialog modal-dialog-centered">
@@ -255,25 +253,35 @@
             <form id="form_formacion_academica">
                 <input type="text" id="txt_formacion_id" hidden>
                 <div class="modal-body">
-                    <div class="md-3">
-                        <label for="txt_titulo_obtenido" class="form-label form-label-sm">Título obtenido </label>
-                        <input type="text" class="form-control form-control-sm no_caracteres" name="txt_titulo_obtenido" id="txt_titulo_obtenido" placeholder="Escriba su título académico" maxlength="200">
+                    <div class="row pt-3 mb-col">
+                        <div class="col-md-12">
+                            <label for="txt_titulo_obtenido" class="form-label form-label-sm">Título obtenido </label>
+                            <input type="text" class="form-control form-control-sm no_caracteres" name="txt_titulo_obtenido" id="txt_titulo_obtenido" placeholder="Escriba su título académico" maxlength="200">
+                        </div>
                     </div>
-                    <div class="md-3">
-                        <label for="txt_institucion" class="form-label form-label-sm">Institución </label>
-                        <input type="text" class="form-control form-control-sm no_caracteres" name="txt_institucion" id="txt_institucion" placeholder="Escriba la institución en la que se formó" maxlength="200">
+                    <div class="row mb-col">
+                        <div class="col-md-12">
+                            <label for="txt_institucion" class="form-label form-label-sm">Institución </label>
+                            <input type="text" class="form-control form-control-sm no_caracteres" name="txt_institucion" id="txt_institucion" placeholder="Escriba la institución en la que se formó" maxlength="200">
+                        </div>
                     </div>
-                    <div class="md-3">
-                        <label for="txt_fecha_inicio_academico" class="form-label form-label-sm">Fecha de inicio </label>
-                        <input type="date" class="form-control form-control-sm no_caracteres" name="txt_fecha_inicio_academico" id="txt_fecha_inicio_academico" onchange="checkbox_actualidad_form_acad();">
+                    <div class="row mb-col">
+                        <div class="col-md-12">
+                            <label for="txt_fecha_inicio_academico" class="form-label form-label-sm">Fecha de inicio </label>
+                            <input type="date" class="form-control form-control-sm no_caracteres" name="txt_fecha_inicio_academico" id="txt_fecha_inicio_academico" onchange="checkbox_actualidad_form_acad();">
+                        </div>
                     </div>
-                    <div class="mb-1">
-                        <label for="txt_fecha_final_academico" class="form-label form-label-sm">Fecha de finalización </label>
-                        <input type="date" class="form-control form-control-sm mb-2 no_caracteres" name="txt_fecha_final_academico" id="txt_fecha_final_academico" onchange="checkbox_actualidad_form_acad();">
+                    <div class="row mb-col">
+                        <div class="col-md-12">
+                            <label for="txt_fecha_final_academico" class="form-label form-label-sm">Fecha de finalización </label>
+                            <input type="date" class="form-control form-control-sm mb-2 no_caracteres" name="txt_fecha_final_academico" id="txt_fecha_final_academico" onchange="checkbox_actualidad_form_acad();">
+                        </div>
                     </div>
-                    <div class="mt-1 md-3">
-                        <input type="checkbox" class="form-check-input" name="cbx_fecha_final_academico" id="cbx_fecha_final_academico" onchange="checkbox_actualidad_form_acad();">
-                        <label for="cbx_fecha_final_academico" class="form-label form-label-sm">Actualidad</label>
+                    <div class="row mb-col">
+                        <div class="mt-1 col-md-12">
+                            <input type="checkbox" class="form-check-input" name="cbx_fecha_final_academico" id="cbx_fecha_final_academico" onchange="checkbox_actualidad_form_acad();">
+                            <label for="cbx_fecha_final_academico" class="form-label form-label-sm">Actualidad</label>
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -290,7 +298,6 @@
         </div>
     </div>
 </div>
-
 <script>
     $(document).ready(function() {
         agregar_asterisco_campo_obligatorio('txt_titulo_obtenido');
