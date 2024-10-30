@@ -30,7 +30,6 @@
         }
 
     }
-    
 </script>
 
 <div class="row pt-3 mb-col">
