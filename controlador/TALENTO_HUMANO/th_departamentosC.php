@@ -17,6 +17,20 @@ if (isset($_GET['eliminar'])) {
     echo json_encode($controlador->eliminar($_POST['id']));
 }
 
+if (isset($_GET['buscar'])) {
+    $query = '';
+
+    if (isset($_GET['q'])) {
+        $query = $_GET['q'];
+    }
+
+    $parametros = array(
+        'query' => $query,
+    );
+
+    echo json_encode($controlador->buscar($parametros));
+}
+
 
 class th_departamentosC
 {
@@ -79,5 +93,20 @@ class th_departamentosC
 
         $datos = $this->modelo->editar($datos, $where);
         return $datos;
+    }
+
+    //Para usar en select2
+    function buscar($parametros)
+    {
+        $lista = array();
+        $concat = "th_dep_nombre, th_dep_estado";
+        $datos = $this->modelo->where('th_dep_estado', 1)->like($concat, $parametros['query']);
+
+        foreach ($datos as $key => $value) {
+            $text = $value['th_dep_nombre'];
+            $lista[] = array('id' => ($value['th_dep_id']), 'text' => ($text), /* 'data' => $value */);
+        }
+
+        return $lista;
     }
 }

@@ -43,8 +43,11 @@ if (isset($_GET['_id'])) {
             }
         });
     }
+    
+    //Varia global para guardar los eventos del calendario
+    var arr_eventos_horario = [];
 
-    function editar_insertar() {
+    function editar_insertar(eventos) {
         var txt_nombre = $('#txt_nombre').val();
         var txt_tipo = $('#txt_tipo').val();
         var txt_ciclos = $('#txt_ciclos').val();
@@ -56,13 +59,14 @@ if (isset($_GET['_id'])) {
             'txt_tipo': txt_tipo,
             'txt_ciclos': txt_ciclos,
             'txt_inicio': txt_inicio,
+            'arr_eventos_horario': eventos,
         };
 
         if ($("#form_horario").valid()) {
             // Si es válido, puedes proceder a enviar los datos por AJAX
             insertar(parametros);
         }
-        //console.log(parametros);
+        console.log(parametros);
 
     }
 
@@ -149,7 +153,7 @@ if (isset($_GET['_id'])) {
             success: function(response) {
                 let html = '';
                 response.forEach(evento => {
-                    html += `<div class="external-event" data-title="${evento.nombre}" data-start="${minutos_formato_hora(evento.hora_entrada)}" data-end="${minutos_formato_hora(evento.hora_salida)}" style="background-color: ${evento.color};">`;
+                    html += `<div class="external-event" data-id="${evento._id}" data-title="${evento.nombre}" data-start="${minutos_formato_hora(evento.hora_entrada)}" data-end="${minutos_formato_hora(evento.hora_salida)}" style="background-color: ${evento.color};">`;
                     html += `<div class="event-title text-center">${evento.nombre}</div>`;
                     html += `<div class="event-body text-center">${minutos_formato_hora(evento.hora_entrada)} - ${minutos_formato_hora(evento.hora_salida)}</div>`;
                     html += `</div>`;
@@ -244,30 +248,33 @@ if (isset($_GET['_id'])) {
 <!-- Configuracion del Calendario -->
 <script>
     function inicializar_draggable() {
-        var externalEvents = document.querySelectorAll('.external-event');
-        externalEvents.forEach(function(eventEl) {
-            var eventTitle = eventEl.getAttribute('data-title');
-            var eventStart = eventEl.getAttribute('data-start');
-            var eventEnd = eventEl.getAttribute('data-end');
-            var eventColor = eventEl.style.backgroundColor; // Obtener el color del estilo
+        var external_events = document.querySelectorAll('.external-event');
+        external_events.forEach(function(eventEl) {
+            var event_title = eventEl.getAttribute('data-title');
+            var event_start = eventEl.getAttribute('data-start');
+            var event_end = eventEl.getAttribute('data-end');
+            var event_color = eventEl.style.backgroundColor; // Obtener el color del estilo
+            var event_ID = eventEl.getAttribute('data-id');
 
             new FullCalendar.Draggable(eventEl, {
                 eventData: {
-                    title: eventTitle,
+                    title: event_title,
                     extendedProps: {
-                        startHour: eventStart,
-                        endHour: eventEnd,
-                        color: eventColor
+                        start_hour: event_start,
+                        end_hour: event_end,
+                        color: event_color,
+                        id_turno: event_ID
                     }
                 }
             });
         });
     }
 
+
     document.addEventListener('DOMContentLoaded', function() {
         var calendarEl = document.getElementById('calendar');
 
-        var calendar = new FullCalendar.Calendar(calendarEl, {
+        calendar = new FullCalendar.Calendar(calendarEl, {
             initialDate: '2024-02-15',
             initialView: 'timeGridWeek',
             locale: 'es',
@@ -310,19 +317,20 @@ if (isset($_GET['_id'])) {
             eventReceive: function(info) {
                 // Obtener las horas dinámicas desde los datos extendidos
                 var titulo = info.event.title;
-                var startHour = info.draggedEl.getAttribute('data-start');
-                var endHour = info.draggedEl.getAttribute('data-end');
-                var startDate = info.event.start;
+                var start_hour = info.draggedEl.getAttribute('data-start');
+                var end_hour = info.draggedEl.getAttribute('data-end');
+                var start_date = info.event.start;
+                var id_turno = info.draggedEl.getAttribute('data-id');
 
                 // Aplicar horas dinámicas
-                var startTimeArray = startHour.split(':');
-                var endTimeArray = endHour.split(':');
+                var startTimeArray = start_hour.split(':');
+                var endTimeArray = end_hour.split(':');
 
                 // Establecer la hora de inicio y fin según los valores dinámicos
-                info.event.setStart(new Date(startDate.setHours(startTimeArray[0], startTimeArray[1], 0)));
-                info.event.setEnd(new Date(startDate.setHours(endTimeArray[0], endTimeArray[1], 0)));
+                info.event.setStart(new Date(start_date.setHours(startTimeArray[0], startTimeArray[1], 0)));
+                info.event.setEnd(new Date(start_date.setHours(endTimeArray[0], endTimeArray[1], 0)));
 
-                //alert('Nuevo evento añadido: ' + info.event.title + ' con horario ' + startHour + ' a ' + endHour);
+                //alert('Nuevo evento añadido: ' + info.event.title + ' con horario ' + start_hour + ' a ' + end_hour);
 
                 var color = info.draggedEl.style.backgroundColor;
                 info.event.setProp('backgroundColor', color);
@@ -334,7 +342,7 @@ if (isset($_GET['_id'])) {
                  */
 
                 var eventos_existentes = calendar.getEvents();
-                var fecha_calendario_arrastrable = formatear_fecha_calendar(startDate);
+                var fecha_calendario_arrastrable = formatear_fecha_calendar(start_date);
 
                 var eventosCoincidentes = eventos_existentes.filter(function(event) {
                     fecha_calendario_existente = formatear_fecha_calendar(event.start);
@@ -353,8 +361,92 @@ if (isset($_GET['_id'])) {
 
         });
 
-        calendar.render();
+        <?php if (isset($_GET['_id'])) { ?>
+            cargar_turnos_horario(<?= $_id ?>);
+        <?php } else { ?>
+            calendar.render();
+        <?php }  ?>
+
+        // Manejar el clic en el botón
+        document.getElementById('btn_guardar').addEventListener('click', function() {
+            var events = calendar.getEvents();
+
+            if (events.length > 0) {
+                arr_eventos_horario = [];
+                events.forEach(function(event) {
+                    //console.log("Dia: ", dia_numero(event.start), " - ID_turno: ", event.extendedProps.id_turno);
+
+                    var eventos_datos = {
+                        id_turno: event.extendedProps.id_turno,
+                        dia: dia_numero(event.start),
+                    };
+
+                    arr_eventos_horario.push(eventos_datos);
+                });
+
+            } else {
+                console.log("No hay eventos en el calendario.");
+            }
+
+            editar_insertar(arr_eventos_horario);
+        });
+
     });
+
+    //Cargar turnos - horario 
+    function cargar_turnos_horario(id_horario) {
+
+        $.ajax({
+            url: '../controlador/TALENTO_HUMANO/th_turnos_horarioC.php?listar=true',
+            type: 'post',
+            data: {
+                id: id_horario,
+            },
+            dataType: 'json',
+
+            success: function(response) {
+                
+                calendar.removeAllEvents();
+                // Recorrer la respuesta y agregar eventos al arreglo events
+                response.forEach(function(evento) {
+                    //console.log(evento);
+
+                    if (evento.dia == '1') {
+                        fecha_dia_estatico = '2024-02-11';
+                    } else if (evento.dia == '2') {
+                        fecha_dia_estatico = '2024-02-12';
+                    } else if (evento.dia == '3') {
+                        fecha_dia_estatico = '2024-02-13';
+                    } else if (evento.dia == '4') {
+                        fecha_dia_estatico = '2024-02-14';
+                    } else if (evento.dia == '5') {
+                        fecha_dia_estatico = '2024-02-15';
+                    } else if (evento.dia == '6') {
+                        fecha_dia_estatico = '2024-02-16';
+                    } else if (evento.dia == '7') {
+                        fecha_dia_estatico = '2024-02-17';
+                    }
+
+                    calendar.addEvent({
+                        //id: evento.id_turno,
+                        title: (evento.nombre),
+                        start: fecha_dia_estatico + 'T' + minutos_formato_hora(evento.hora_entrada),
+                        end: fecha_dia_estatico + 'T' + minutos_formato_hora(evento.hora_salida),
+                        extendedProps: {
+                            id_turno: evento._id,
+                        },
+
+                        color: evento.color
+
+                    });
+                });
+                // Renderizar el calendario después de agregar los eventos
+                calendar.render();
+
+            }
+        });
+
+    }
 
     //Formatear la fecha de la libreria calendar
     function formatear_fecha_calendar(fecha) {
@@ -374,6 +466,14 @@ if (isset($_GET['_id'])) {
         return dia + '/' + mes + '/' + anio;
     }
 
+    function dia_numero(fecha) {
+        var date = new Date(fecha);
+        var dia_date = date.getDay();
+
+        var ajustar_dia = dia_date === 0 ? 1 : dia_date + 1;
+        return (ajustar_dia);
+    }
+
     function error_notificacion(msg) {
         Lobibox.notify('error', {
             pauseDelayOnHover: true,
@@ -384,9 +484,30 @@ if (isset($_GET['_id'])) {
             continueDelayOnInactiveTab: false,
             position: 'top right',
             msg: msg,
-            sound: false, 
+            sound: false,
         });
     }
+</script>
+
+
+<script>
+    //Funciones adicionales 
+
+    $(document).ready(function() {
+        $('#txt_tipo').change(function() {
+            var seleccionado = $(this).val();
+
+            $('#pnl_tipo_diario').hide();
+
+            if (seleccionado == '1') {
+                $('#pnl_tipo_diario').show();
+            } else {
+                $('#pnl_tipo_diario').hide();
+            }
+
+            $(this).blur(); 
+        });
+    });
 </script>
 
 <div class="page-wrapper">
@@ -459,7 +580,7 @@ if (isset($_GET['_id'])) {
 
                             </div>
 
-                            <div class="row mb-col">
+                            <div class="row mb-col" id="pnl_tipo_diario" style="display: none;">
                                 <div class="col-md-6">
                                 </div>
 
@@ -504,10 +625,10 @@ if (isset($_GET['_id'])) {
                                 <div class="d-flex justify-content-start pt-2">
 
                                     <?php if ($_id == '') { ?>
-                                        <button class="btn btn-success btn-sm px-4 m-0" onclick="editar_insertar()" type="button"><i class="bx bx-save"></i> Guardar</button>
+                                        <button type="button" class="btn btn-success btn-sm px-4 m-0" id="btn_guardar" onclick=""><i class="bx bx-save"></i> Guardar</button>
                                     <?php } else { ?>
-                                        <button class="btn btn-success btn-sm px-4 m-1" onclick="editar_insertar()" type="button"><i class="bx bx-save"></i> Editar</button>
-                                        <button class="btn btn-danger btn-sm px-4 m-1" onclick="delete_datos()" type="button"><i class="bx bx-trash"></i> Eliminar</button>
+                                        <button type="button" class="btn btn-success btn-sm px-4 m-1" id="btn_guardar" onclick=""><i class="bx bx-save"></i> Editar</button>
+                                        <button type="button" class="btn btn-danger btn-sm px-4 m-1" id="" onclick="delete_datos()"><i class="bx bx-trash"></i> Eliminar</button>
                                     <?php } ?>
                                 </div>
                             </div>

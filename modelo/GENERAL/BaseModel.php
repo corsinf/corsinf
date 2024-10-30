@@ -45,7 +45,7 @@ class BaseModel
 
         // Construir consulta SQL
         $sql = sprintf(
-            "SELECT %s FROM %s %s %s",
+            "SELECT %s FROM %s %s %s;",
             $camposSelect,
             $this->tabla,
             $joinClause,
@@ -55,7 +55,7 @@ class BaseModel
         // Mostrar la consulta SQL para depuración y salir
         //print_r($sql); exit();
         //return $sql;
-        
+
         // Ejecutar consulta y devolver resultados
         $datos = $this->db->datos($sql);
         return $datos;
@@ -64,6 +64,13 @@ class BaseModel
     function insertar($datos)
     {
         $rest = $this->db->inserts($this->tabla, $datos);
+        return $rest;
+    }
+
+    //Retorno el valor del id insertado
+    function insertar_id($datos)
+    {
+        $rest = $this->db->inserts_id($this->tabla, $datos);
         return $rest;
     }
 
@@ -111,7 +118,8 @@ class BaseModel
     }
 
     //Para resetear los valores de los arrays y en un bucle no se acumulen los where o join
-    function reset() {
+    function reset()
+    {
         $this->condicionesWhere = [];
         $this->relaciones = [];
     }
