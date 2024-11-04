@@ -40,33 +40,39 @@
             <!-- Modal body -->
             <form id="form_agregar_idioma">
                 <div class="modal-body">
-                    <div class="mb-3">
-                        <label for="ddl_seleccionar_idioma" class="form-label form-label-sm">Idioma <label style="color: red;">*</label></label>
-                        <select class="form-select form-select-sm" id="ddl_seleccionar_idioma" name="ddl_seleccionar_idioma">
-                            <option selected disabled value="">-- Selecciona un Idioma --</option>
-                            <option value="Español">Español</option>
-                            <option value="Inglés">Inglés</option>
-                            <option value="Francés">Francés</option>
-                            <option value="Alemán">Alemán</option>
-                            <option value="Chino">Chino</option>
-                            <option value="Italiano">Italiano</option>
-                        </select>
+                    <div class="row mb-col">
+                        <div class="col-md-12">
+                            <label for="ddl_seleccionar_idioma" class="form-label form-label-sm">Idioma <label style="color: red;">*</label></label>
+                            <select class="form-select form-select-sm" id="ddl_seleccionar_idioma" name="ddl_seleccionar_idioma">
+                                <option selected disabled value="">-- Selecciona un Idioma --</option>
+                                <option value="Español">Español</option>
+                                <option value="Inglés">Inglés</option>
+                                <option value="Francés">Francés</option>
+                                <option value="Alemán">Alemán</option>
+                                <option value="Chino">Chino</option>
+                                <option value="Italiano">Italiano</option>
+                            </select>
+                        </div>
                     </div>
-                    <div class="mb-3">
-                        <label for="ddl_dominio_idioma" class="form-label form-label-sm">Dominio del Idioma <label style="color: red;">*</label></label>
-                        <select class="form-select form-select-sm" id="ddl_dominio_idioma" name="ddl_dominio_idioma" required>
-                            <option selected disabled value="">-- Selecciona su nivel de dominio del idioma --</option>
-                            <option value="Nativo">Nativo</option>
-                            <option value="C1">C1</option>
-                            <option value="C2">C2</option>
-                            <option value="B1">B1</option>
-                            <option value="B2">B2</option>
-                            <option value="C1">C1</option>
-                            <option value="C2">C2</option>
-                        </select>
+
+                    <div class="row mb-col">
+                        <div class="col-md-12">
+                            <label for="ddl_dominio_idioma" class="form-label form-label-sm">Dominio del Idioma <label style="color: red;">*</label></label>
+                            <select class="form-select form-select-sm" id="ddl_dominio_idioma" name="ddl_dominio_idioma" required>
+                                <option selected disabled value="">-- Selecciona su nivel de dominio del idioma --</option>
+                                <option value="Nativo">Nativo</option>
+                                <option value="C1">C1</option>
+                                <option value="C2">C2</option>
+                                <option value="B1">B1</option>
+                                <option value="B2">B2</option>
+                                <option value="C1">C1</option>
+                                <option value="C2">C2</option>
+                            </select>
+                        </div>
                     </div>
                 </div>
-                <div class="modal-footer d-flex justify-content-center">
+
+                <div class="d-flex justify-content-center">
                     <button type="button" class="btn btn-success btn-sm" id="btn_guardar_idioma" onclick="insertar_editar_idiomas();">Guardar Idioma</button>
                 </div>
             </form>

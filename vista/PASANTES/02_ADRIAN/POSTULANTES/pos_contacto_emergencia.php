@@ -80,8 +80,8 @@
             'txt_telefono_contacto_emergencia': txt_telefono_contacto_emergencia,
         };
 
-        if ((txt_nombre_contacto_emergencia)!= '' && (txt_nombre_contacto_emergencia)!= null &&
-        (txt_telefono_contacto_emergencia)!= '' && (txt_telefono_contacto_emergencia)!= null) {
+        if ((txt_nombre_contacto_emergencia) != '' && (txt_nombre_contacto_emergencia) != null &&
+            (txt_telefono_contacto_emergencia) != '' && (txt_telefono_contacto_emergencia) != null) {
             // Si es válido, puedes proceder a enviar los datos por AJAX
             console.log(parametros_guardar_contacto_emergencia);
             guardar_contacto_emergencia(parametros_guardar_contacto_emergencia);
@@ -174,7 +174,7 @@
 
 <!-- Modal para los contactos de Emergencia -->
 <div class="modal" id="modal_contacto_emergencia" tabindex="-1" aria-modal="true" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
-    <div class="modal-dialog modal-dialog-centered modal-xl">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content">
 
             <!-- Modal Header -->
@@ -184,34 +184,32 @@
             </div>
             <!-- Modal body -->
             <div class="modal-body">
-                <h6 class="fw-bold mb-3">Registrar Contactos</h6>
                 <form id="form_contacto_emergencia">
                     <div class="pnl_contacto_emergencia">
-                        <div class="row">
-                            <input type="text" id="txt_id_contacto_emergencia" hidden>
-                            <div class="col-11">
-                                <div class="row">
-                                    <div class="col-6">
-                                        <div class="mb-3">
-                                            <label for="txt_nombre_contacto_emergencia" class="form-label form-label-sm">Nombre del contacto de Emergencia </label>
-                                            <input type="text" class="form-control form-control-sm txt_nombre_contacto_emergencia" name="txt_nombre_contacto_emergencia" id="txt_nombre_contacto_emergencia" value="" placeholder="Escriba el nombre de un contacto de emergencia" maxlength="100">
-                                        </div>
-                                    </div>
-                                    <div class="col-6">
-                                        <div class="mb-3">
-                                            <label for="txt_telefono_contacto_emergencia" class="form-label form-label-sm">Teléfono del contacto de Emergencia </label>
-                                            <input type="text" class="form-control form-control-sm txt_telefono_contacto_emergencia solo_numeros_int" name="txt_telefono_contacto_emergencia" id="txt_telefono_contacto_emergencia" value="" placeholder="Escriba el número de un contacto de emergencia" maxlength="15">
-                                        </div>
-                                    </div>
-                                </div>
+                        <input type="text" id="txt_id_contacto_emergencia" hidden>
+
+                        <div class="row mb-col">
+                            <div class="col-md-12">
+                                <label for="txt_nombre_contacto_emergencia" class="form-label form-label-sm">Nombre del contacto de Emergencia </label>
+                                <input type="text" class="form-control form-control-sm txt_nombre_contacto_emergencia no_caracteres" name="txt_nombre_contacto_emergencia" id="txt_nombre_contacto_emergencia" value="" placeholder="Escriba el nombre de un contacto de emergencia" maxlength="100">
                             </div>
-                            <div id="btn_agregar_editar_contacto_emergencia" class="col-1 d-flex justify-content-start align-items-center mt-2">
-                                <button type="button" class="btn btn-sm btn-success" id="btn_agregar_contacto_emergencia" onclick="insertar_editar_contacto_emergencia();"><i class="bx bx-plus me-0"></i></button>
+                        </div>
+
+                        <div class="row mb-col">
+                            <div class="col-md-12">
+                                <label for="txt_telefono_contacto_emergencia" class="form-label form-label-sm">Teléfono del contacto de Emergencia </label>
+                                <input type="text" class="form-control form-control-sm txt_telefono_contacto_emergencia solo_numeros_int" name="txt_telefono_contacto_emergencia" id="txt_telefono_contacto_emergencia" value="" placeholder="Escriba el número de un contacto de emergencia" maxlength="15">
                             </div>
                         </div>
                     </div>
+
+                    <div id="btn_agregar_editar_contacto_emergencia" class="d-flex justify-content-end align-items-end mt-1">
+                        <button type="button" class="btn btn-sm btn-success" id="btn_agregar_contacto_emergencia" onclick="insertar_editar_contacto_emergencia();"><i class="bx bx-plus me-0"></i> Agregar</button>
+                    </div>
                 </form>
+                
                 <hr>
+                
                 <div class="table-responsive">
                     <form id='form_contacto_emergencia_1'>
                         <table class="table table-striped table-hover align-middle">

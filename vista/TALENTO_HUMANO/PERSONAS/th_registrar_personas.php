@@ -424,7 +424,7 @@ if (isset($_GET['_id'])) {
                                                             <div class="row pt-3 mb-col">
                                                                 <div class="col-md-3">
                                                                     <label for="txt_primer_apellido" class="form-label">Primer Apellido </label>
-                                                                    <input type="text" class="form-control form-control-sm no_caracteres" id="txt_primer_apellido" name="txt_primer_apellido" maxlength="30">
+                                                                    <input type="text" class="form-control form-control-sm no_caracteres" name="txt_primer_apellido" id="txt_primer_apellido"  maxlength="30">
                                                                 </div>
 
                                                                 <div class="col-md-3">

@@ -17,6 +17,20 @@ if (isset($_GET['eliminar'])) {
     echo json_encode($controlador->eliminar($_POST['id']));
 }
 
+if (isset($_GET['buscar'])) {
+    $query = '';
+
+    if (isset($_GET['q'])) {
+        $query = $_GET['q'];
+    }
+
+    $parametros = array(
+        'query' => $query,
+    );
+
+    echo json_encode($controlador->buscar($parametros));
+}
+
 
 class th_personasC
 {
@@ -104,5 +118,22 @@ class th_personasC
 
         $datos = $this->modelo->editar($datos, $where);
         return $datos;
+    }
+
+    //Para usar en select2
+    function buscar($parametros)
+    {
+        $lista = array();
+        $concat = "th_per_cedula, th_per_primer_apellido, th_per_segundo_apellido, th_per_primer_nombre, th_per_segundo_nombre";
+        $datos = $this->modelo->where('th_per_estado', 1)->like($concat, $parametros['query']);
+
+        //print_r($datos); exit();die();
+
+        foreach ($datos as $key => $value) {
+            $text = $value['th_per_cedula'] . ' - ' . $value['th_per_primer_apellido'] . ' ' . $value['th_per_segundo_apellido'] . ' ' . $value['th_per_primer_nombre'] . ' ' . $value['th_per_segundo_nombre'];
+            $lista[] = array('id' => ($value['th_per_id']), 'text' => ($text), /* 'data' => $value */);
+        }
+
+        return $lista;
     }
 }

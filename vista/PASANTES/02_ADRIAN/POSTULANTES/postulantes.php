@@ -20,7 +20,7 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                     data: null,
                     render: function(data, type, item) {
                         href = `../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=informacion_personal&id=${item._id}`;
-                        return `<a href="${href}" class="btn btn-sm btn-primary"><i class="bx bxs-user-pin bx-sm me-0"></i></a>`;
+                        return `<a href="${href}" class="btn btn-xs btn-primary"><i class="bx bxs-user-pin fs-6 me-0"></i></a>`;
                     }
                 },
                 {

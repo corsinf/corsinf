@@ -30,14 +30,15 @@
         }
 
     }
-    
 </script>
 
-<div class="row mb-3">
-    <div class="col-6">
+<div class="row pt-3 mb-col">
+    <div class="col-md-12">
         <h6 class="fw-bold mb-2">Inactivo</h6>
         <p>Ene 2022 - Oct 2023</p>
     </div>
+</div>
+<div class="row pt-3 mb-col">
     <div class="col-6">
         <a href="#" class="d-flex justify-content-end"><i class='text-dark bx bx-pencil bx-sm'></i></a>
     </div>
@@ -56,25 +57,31 @@
             <!-- Modal body -->
             <form id="form_estado_laboral">
                 <div class="modal-body">
-                    <div class="mb-3">
-                        <label for="ddl_estado_laboral" class="form-label form-label-sm">Estado laboral: <label style="color: red;">*</label></label>
-                        <select class="form-select form-select-sm" id="ddl_estado_laboral" name="ddl_estado_laboral" onchange="ocultar_opciones_estado();" required>
-                            <option selected disabled value="">-- Selecciona un Estado Laboral -- <label style="color: red;">*</label></option>
-                            <option value="Activo">Activo</option>
-                            <option value="Inactivo">Inactivo</option>
-                            <option value="Prueba">En prueba</option>
-                            <option value="Pasante">Pasante</option>
-                            <option value="Freelancer">Freelancer</option>
-                            <option value="Autonomo">Autónomo</option>
-                        </select>
+                    <div class="row mb-col">
+                        <div class="col-md-12">
+                            <label for="ddl_estado_laboral" class="form-label form-label-sm">Estado laboral: <label style="color: red;">*</label></label>
+                            <select class="form-select form-select-sm" id="ddl_estado_laboral" name="ddl_estado_laboral" onchange="ocultar_opciones_estado();" required>
+                                <option selected disabled value="">-- Selecciona un Estado Laboral -- <label style="color: red;">*</label></option>
+                                <option value="Activo">Activo</option>
+                                <option value="Inactivo">Inactivo</option>
+                                <option value="Prueba">En prueba</option>
+                                <option value="Pasante">Pasante</option>
+                                <option value="Freelancer">Freelancer</option>
+                                <option value="Autonomo">Autónomo</option>
+                            </select>
+                        </div>
                     </div>
-                    <div class="mb-3">
-                        <label for="txt_fecha_contratacion_estado" class="form-label form-label-sm">Fecha de contratación <label style="color: red;">*</label></label>
-                        <input type="date" class="form-control form-control-sm" name="txt_fecha_contratacion_estado" id="txt_fecha_contratacion_estado">
+                    <div class="row mb-col">
+                        <div class="col-md-12">
+                            <label for="txt_fecha_contratacion_estado" class="form-label form-label-sm">Fecha de contratación <label style="color: red;">*</label></label>
+                            <input type="date" class="form-control form-control-sm" name="txt_fecha_contratacion_estado" id="txt_fecha_contratacion_estado">
+                        </div>
                     </div>
-                    <div class="mb-3">
-                        <label for="txt_fecha_salida_estado" class="form-label form-label-sm">Fecha de salida <label style="color: red;">*</label></label>
-                        <input type="date" class="form-control form-control-sm" name="txt_fecha_salida_estado" id="txt_fecha_salida_estado">
+                    <div class="row mb-col">
+                        <div class="col-md-12">
+                            <label for="txt_fecha_salida_estado" class="form-label form-label-sm">Fecha de salida <label style="color: red;">*</label></label>
+                            <input type="date" class="form-control form-control-sm" name="txt_fecha_salida_estado" id="txt_fecha_salida_estado">
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer d-flex justify-content-center">

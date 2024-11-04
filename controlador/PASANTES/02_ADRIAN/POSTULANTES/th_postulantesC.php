@@ -1,17 +1,8 @@
 <?php
 require_once(dirname(__DIR__, 4) . '/lib/pdf/fpdf.php');
 require_once(dirname(__DIR__, 4) . '/modelo/PASANTES/02_ADRIAN/POSTULANTES/th_postulantesM.php');
-require_once(dirname(__DIR__, 4) . '/modelo/PASANTES/02_ADRIAN/POSTULANTES/th_formacion_academicaM.php');
-require_once(dirname(__DIR__, 4) . '/modelo/PASANTES/02_ADRIAN/POSTULANTES/th_cat_tip_habilidadesM.php');
-require_once(dirname(__DIR__, 4) . '/modelo/PASANTES/02_ADRIAN/POSTULANTES/th_cat_habilidadesM.php');
-require_once(dirname(__DIR__, 4) . '/modelo/PASANTES/02_ADRIAN/POSTULANTES/th_experiencia_laboralM.php');
-
 
 $controlador = new th_postulantesC();
-
-if (isset($_GET['cargar_datos_provincias'])) {
-    echo json_encode($controlador->listar_provincias($_POST['id']));
-}
 
 if (isset($_GET['listar'])) {
     echo json_encode($controlador->listar($_POST['id']));
@@ -33,44 +24,14 @@ if (isset($_GET['hoja_de_vida'])) {
     echo $controlador->hoja_de_vida($_GET['id']);
 }
 
+
 class th_postulantesC
 {
     private $modelo;
-    private $modelo2;
-    private $modelo3;
-    private $modelo4;
-    private $modelo5;
 
     function __construct()
     {
         $this->modelo = new th_postulantesM();
-        $this->modelo2 = new th_formacion_academicaM();
-        $this->modelo3 = new th_cat_tip_habilidadesM();
-        $this->modelo4 = new th_cat_habilidadesM();
-        $this->modelo5 = new th_experiencia_laboralM();
-    }
-
-    function listar_provincias($id)
-    {
-        $datos = $this->modelo->where('th_pos_id', $id)->where('th_tiph_id', 2)->listarJoin(); 
-
-        $texto = '';
-        foreach ($datos as $key => $value) {
-            $texto .=
-                '<div class="row mt-1">
-                    <div class="col-8">
-                        <ul>
-                            <li>' . $value['th_hab_nombre'] . '</li>
-                        </ul>
-                    </div>
-                            
-                    <div class="col-4 d-flex justify-content-end">
-                        <button type="button" class="btn btn-sm" style="color: white;" onclick="delete_datos_aptitudes(' . $value['th_habp_id'] . ')"><i class="me-0 text-danger bx bx-trash" style="font-size: 20px;"></i></button>
-                    </div>
-                </div>';
-        }
-
-        return $texto;
     }
 
     function listar($id)
@@ -93,6 +54,7 @@ class th_postulantesC
 
     function insertar_editar($parametros)
     {
+       // print_r($parametros); exit(); die();
         $datos = array(
             array('campo' => 'th_pos_primer_nombre', 'dato' => $parametros['txt_primer_nombre']),
             array('campo' => 'th_pos_segundo_nombre', 'dato' => $parametros['txt_segundo_nombre']),
@@ -100,14 +62,14 @@ class th_postulantesC
             array('campo' => 'th_pos_segundo_apellido', 'dato' => $parametros['txt_segundo_apellido']),
             array('campo' => 'th_pos_cedula', 'dato' => $parametros['txt_numero_cedula']),
             array('campo' => 'th_pos_sexo', 'dato' => $parametros['ddl_sexo']),
-            array('campo' => 'th_prov_id', 'dato' => $parametros['ddl_provincia']),
+            array('campo' => 'th_prov_id', 'dato' => $parametros['ddl_provincias']),
             array('campo' => 'th_ciu_id', 'dato' => $parametros['ddl_ciudad']),
             array('campo' => 'th_parr_id', 'dato' => $parametros['ddl_parroquia']),
             array('campo' => 'th_pos_direccion', 'dato' => $parametros['txt_direccion']),
-            array('campo' => 'th_pos_postal', 'dato' => $parametros['txt_codigo_postal']),
+            //array('campo' => 'th_pos_postal', 'dato' => $parametros['txt_codigo_postal']),
             array('campo' => 'th_pos_fecha_nacimiento', 'dato' => $parametros['txt_fecha_nacimiento']),
-            array('campo' => 'th_pos_nacionalidad', 'dato' => $parametros['ddl_nacionalidad']),
-            array('campo' => 'th_pos_estado_civil', 'dato' => $parametros['ddl_estado_civil']),
+            //array('campo' => 'th_pos_nacionalidad', 'dato' => $parametros['ddl_nacionalidad']),
+            //array('campo' => 'th_pos_estado_civil', 'dato' => $parametros['ddl_estado_civil']),
             array('campo' => 'th_pos_telefono_1', 'dato' => $parametros['txt_telefono_1']),
             array('campo' => 'th_pos_telefono_2', 'dato' => $parametros['txt_telefono_2']),
             array('campo' => 'th_pos_correo', 'dato' => $parametros['txt_correo']),
