@@ -57,8 +57,11 @@ if ($_GET['acc'] == 'calendario_espacio') {
     include('COWORKING/calendario_espacio.php');
 }
 
-
 if ($_GET['acc'] == 'crear_mienbros') {
     include('COWORKING/crear_mienbros.php');
+}
+
+if ($_GET['acc'] == 'Espacios') {
+    include('COWORKING/Espacios.php');
 }
 

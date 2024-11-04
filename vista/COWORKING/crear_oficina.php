@@ -1,5 +1,4 @@
 <?php
-// Asegúrate de que $id_compra esté definido antes de usarlo
 $id_espacio  = isset($_POST['id_espacio']) ? intval($_POST['id_espacio']) : null; ?>
 <!--start page wrapper -->
 <div class="page-wrapper">
