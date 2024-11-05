@@ -2,7 +2,6 @@
 require_once(dirname(__DIR__, 2) . '/modelo/PASANTES/asistencias_pasantesM.php');
 require_once(dirname(__DIR__, 2) . '/lib/pdf/fpdf.php');
 
-
 $controlador = new asistencias_pasantesC();
 
 if (isset($_GET['listar'])) {
@@ -28,9 +27,6 @@ if (isset($_GET['editar_tutor'])) {
 if (isset($_GET['pdf_pasante_actividad'])) {
     echo ($controlador->pdf_pasante_actividad($_GET['id']));
 }
-
-
-
 
 
 class asistencias_pasantesC
