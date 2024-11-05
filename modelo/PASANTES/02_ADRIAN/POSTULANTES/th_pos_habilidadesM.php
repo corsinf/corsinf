@@ -24,4 +24,17 @@ class th_pos_habilidadesM extends BaseModel
 		
 		return $datos;
 	}
+
+    function listar_habilidades_postulante($id_postulante)
+    {
+        $sql =
+            "SELECT 
+                *
+                FROM th_cat_habilidades hab
+                WHERE hab.th_hab_estado = 1";
+
+        $sql .= " ORDER BY th_hab_id;";
+        $datos = $this->db->datos($sql);
+        return $datos;
+    }
 }

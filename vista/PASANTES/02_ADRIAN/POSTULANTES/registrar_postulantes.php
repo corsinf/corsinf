@@ -35,7 +35,7 @@ if (isset($_GET['id'])) {
                 $('#txt_primer_apellido').val(response[0].th_pos_primer_apellido);
                 $('#txt_segundo_apellido').val(response[0].th_pos_segundo_apellido);
                 $('#txt_fecha_nacimiento').val(response[0].th_pos_fecha_nacimiento);
-                $('#ddl_nacionalidad').val(response[0].th_pos_nacionalidad);
+                //$('#ddl_nacionalidad').val(response[0].th_pos_nacionalidad);
                 $('#txt_numero_cedula').val(response[0].th_pos_cedula);
                 $('#ddl_estado_civil').val(response[0].th_pos_estado_civil);
                 $('#ddl_sexo').val(response[0].th_pos_sexo);
@@ -49,7 +49,9 @@ if (isset($_GET['id'])) {
                 $('#txt_direccion').val(response[0].th_pos_direccion);
 
                 calcular_edad('txt_edad', response[0].th_pos_fecha_nacimiento);
-                console.log(response);
+                cargar_datos_ciudades(response[0].th_ciu_id);
+
+                console.log(response[0].th_ciu_id);
             },
         });
     }
@@ -61,17 +63,17 @@ if (isset($_GET['id'])) {
         var txt_primer_apellido = $('#txt_primer_apellido').val();
         var txt_segundo_apellido = $('#txt_segundo_apellido').val();
         var txt_fecha_nacimiento = $('#txt_fecha_nacimiento').val();
-        var ddl_nacionalidad = $('#ddl_nacionalidad').val();
+        //var ddl_nacionalidad = $('#ddl_nacionalidad').val();
         var txt_numero_cedula = $('#txt_numero_cedula').val();
-        var ddl_estado_civil = $('#ddl_estado_civil').val();
+        //var ddl_estado_civil = $('#ddl_estado_civil').val();
         var ddl_sexo = $('#ddl_sexo').val();
         var txt_telefono_1 = $('#txt_telefono_1').val();
         var txt_telefono_2 = $('#txt_telefono_2').val();
         var txt_correo = $('#txt_correo').val();
-        var ddl_provincia = $('#ddl_provincia').val();
+        var ddl_provincias = $('#ddl_provincias').val();
         var ddl_ciudad = $('#ddl_ciudad').val();
         var ddl_parroquia = $('#ddl_parroquia').val();
-        var txt_codigo_postal = $('#txt_codigo_postal').val();
+        //var txt_codigo_postal = $('#txt_codigo_postal').val();
         var txt_direccion = $('#txt_direccion').val();
 
         var parametros = {
@@ -81,17 +83,17 @@ if (isset($_GET['id'])) {
             'txt_primer_apellido': txt_primer_apellido,
             'txt_segundo_apellido': txt_segundo_apellido,
             'txt_fecha_nacimiento': txt_fecha_nacimiento,
-            'ddl_nacionalidad': ddl_nacionalidad,
+            //'ddl_nacionalidad': ddl_nacionalidad,
             'txt_numero_cedula': txt_numero_cedula,
-            'ddl_estado_civil': ddl_estado_civil,
+            //'ddl_estado_civil': ddl_estado_civil,
             'ddl_sexo': ddl_sexo,
             'txt_telefono_1': txt_telefono_1,
             'txt_telefono_2': txt_telefono_2,
             'txt_correo': txt_correo,
-            'ddl_provincia': ddl_provincia,
+            'ddl_provincias': ddl_provincias,
             'ddl_ciudad': ddl_ciudad,
             'ddl_parroquia': ddl_parroquia,
-            'txt_codigo_postal': txt_codigo_postal,
+            //'txt_codigo_postal': txt_codigo_postal,
             'txt_direccion': txt_direccion,
 
         };
@@ -163,15 +165,6 @@ if (isset($_GET['id'])) {
             }
         });
     }
-    
-    function verificar_fecha_actual(input_name, fecha_actual, input_adicional) {
-        let hoy = new Date().toISOString().split('T')[0];
-
-        if (fecha_actual > hoy) {
-            $('#' + input_name).val('');
-            $('#' + input_adicional).val('');
-        } 
-    }
 
 </script>
 
@@ -217,30 +210,30 @@ if (isset($_GET['id'])) {
                         <hr>
                         <form id="registrar_postulantes">
                             <div class="row mb-col pt-3">
-                                <div class="col-3">
+                                <div class="col-md-3">
                                     <label for="txt_primer_apellido" class="form-label form-label-sm">Primer Apellido </label>
-                                    <input type="text" class="form-control form-control-sm" name="txt_primer_apellido" id="txt_primer_apellido" placeholder="Escriba su apellido paterno" maxlength="50" required>
+                                    <input type="text" class="form-control form-control-sm no_caracteres" name="txt_primer_apellido" id="txt_primer_apellido" placeholder="Escriba su apellido paterno" maxlength="50" required>
                                 </div>
-                                <div class="col-3">
+                                <div class="col-md-3">
                                     <label for="txt_segundo_apellido" class="form-label form-label-sm">Segundo Apellido </label>
-                                    <input type="text" class="form-control form-control-sm" name="txt_segundo_apellido" id="txt_segundo_apellido" placeholder="Escriba su apellido materno" maxlength="50" required>
+                                    <input type="text" class="form-control form-control-sm no_caracteres" name="txt_segundo_apellido" id="txt_segundo_apellido" placeholder="Escriba su apellido materno" maxlength="50" required>
                                 </div>
-                                <div class="col-3">
+                                <div class="col-md-3">
                                     <label for="txt_primer_nombre" class="form-label form-label-sm">Primer Nombre </label>
-                                    <input type="text" class="form-control form-control-sm" name="txt_primer_nombre" id="txt_primer_nombre" placeholder="Escriba su primer nombre" maxlength="50" required>
+                                    <input type="text" class="form-control form-control-sm no_caracteres" name="txt_primer_nombre" id="txt_primer_nombre" placeholder="Escriba su primer nombre" maxlength="50" required>
                                 </div>
-                                <div class="col-3">
+                                <div class="col-md-3">
                                     <label for="txt_segundo_nombre" class="form-label form-label-sm">Segundo Nombre </label>
-                                    <input type="text" class="form-control form-control-sm" name="txt_segundo_nombre" id="txt_segundo_nombre" placeholder="Escriba su primer nombre" maxlength="50" required>
+                                    <input type="text" class="form-control form-control-sm no_caracteres" name="txt_segundo_nombre" id="txt_segundo_nombre" placeholder="Escriba su primer nombre" maxlength="50" required>
                                 </div>
                             </div>
 
                             <div class="row mb-col">
-                                <div class="col-3">
+                                <div class="col-md-3">
                                     <label for="txt_numero_cedula" class="form-label form-label-sm">Cédula de Identidad </label>
                                     <input type="text" class="form-control form-control-sm solo_numeros_int" name="txt_numero_cedula" id="txt_numero_cedula" placeholder="Digite su número de cédula" maxlength="10" required>
                                 </div>
-                                <div class="col-3">
+                                <div class="col-md-3">
                                     <label for="ddl_sexo" class="form-label form-label-sm">Sexo </label>
                                     <select class="form-select form-select-sm" id="ddl_sexo" name="ddl_sexo" required>
                                         <option selected disabled value="">-- Selecciona una opción --</option>
@@ -248,37 +241,37 @@ if (isset($_GET['id'])) {
                                         <option value="Femenino">Femenino</option>
                                     </select>
                                 </div>
-                                <div class="col-3">
+                                <div class="col-md-3">
                                     <label for="txt_fecha_nacimiento" class="form-label form-label-sm">Fecha de nacimiento </label>
                                     <input type="date" class="form-control form-control-sm" name="txt_fecha_nacimiento" id="txt_fecha_nacimiento" onblur="calcular_edad('txt_edad', this.value); verificar_fecha_actual('txt_fecha_nacimiento', this.value, 'txt_edad');" required>
                                 </div>
-                                <div class="col-3">
+                                <div class="col-md-3">
                                     <label for="txt_edad" class="form-label form-label-sm">Edad </label>
-                                    <input type="text" class="form-control form-control-sm" name="txt_edad" id="txt_edad" readonly>
+                                    <input type="text" class="form-control form-control-sm solo_numeros_int" name="txt_edad" id="txt_edad" readonly>
                                 </div>
                             </div>
 
                             <div class="row mb-col">
-                                <div class="col-4">
+                                <div class="col-md-4">
                                     <label for="txt_telefono_1" class="form-label form-label-sm">Teléfono 1 </label>
                                     <input type="text" class="form-control form-control-sm solo_numeros_int" name="txt_telefono_1" id="txt_telefono_1" value="" placeholder="Escriba su teléfono personal o fijo" maxlength="12" required>
                                 </div>
-                                <div class="col-4">
+                                <div class="col-md-4">
                                     <label for="txt_telefono_2" class="form-label form-label-sm">Teléfono 2 </label>
                                     <input type="text" class="form-control form-control-sm solo_numeros_int" name="txt_telefono_2" id="txt_telefono_2" value="" placeholder="Escriba su teléfono personal o fijo (opcional)" maxlength="12">
                                 </div>
-                                <div class="col-4">
+                                <div class="col-md-4">
                                     <label for="txt_correo" class="form-label form-label-sm">Correo Electrónico </label>
                                     <input type="email" class="form-control form-control-sm" name="txt_correo" id="txt_correo" value="" placeholder="Escriba su correo electrónico">
                                 </div>
                             </div>
 
 
-                            <?php include('../vista/PASANTES/02_ADRIAN/POSTULANTES/provincias_ciudades_parroquias.php'); ?>
+                            <?php include_once('../vista/PASANTES/02_ADRIAN/POSTULANTES/provincias_ciudades_parroquias.php'); ?>
 
 
                             <div class="row mb-col">
-                                <div class="col-12">
+                                <div class="col-md-12">
                                     <label for="txt_direccion" class="form-label form-label-sm">Dirección </label>
                                     <input type="text" class="form-control form-control-sm" name="txt_direccion" id="txt_direccion" placeholder="Escriba su dirección">
                                 </div>

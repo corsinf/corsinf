@@ -1,5 +1,10 @@
 <link rel="stylesheet" href="../lib/ion-rangeSlider/ion.rangeSlider.min.css" />
 
+<!-- Color picker -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@simonwep/pickr/dist/themes/nano.min.css" />
+<script src="https://cdn.jsdelivr.net/npm/@simonwep/pickr"></script>
+
+
 <?php
 $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
 
@@ -21,6 +26,10 @@ $hora_salida = isset($_GET['hora_salida']) ? $_GET['hora_salida'] : 930;
     $(document).ready(function() {
         <?php if (isset($_GET['_id'])) { ?>
             datos_col(<?= $_id ?>);
+        <?php } else { ?>
+            color = '#2196F3';
+            color_input(color);
+            $('#txt_color').val(color);
         <?php } ?>
 
     });
@@ -47,6 +56,8 @@ $hora_salida = isset($_GET['hora_salida']) ? $_GET['hora_salida'] : 930;
                 $('#txt_checkout_salida_inicio').val(minutos_formato_hora(response[0].checkout_salida_inicio));
                 $('#txt_checkout_salida_fin').val(minutos_formato_hora(response[0].checkout_salida_fin));
                 $('#txt_limite_tardanza_out').val(response[0].limite_tardanza_out);
+                $('#txt_color').val(response[0].color);
+                color_input(response[0].color);
             }
         });
     }
@@ -64,6 +75,7 @@ $hora_salida = isset($_GET['hora_salida']) ? $_GET['hora_salida'] : 930;
         var txt_checkout_salida_inicio = $('#txt_checkout_salida_inicio').val();
         var txt_checkout_salida_fin = $('#txt_checkout_salida_fin').val();
         var txt_limite_tardanza_out = $('#txt_limite_tardanza_out').val();
+        var txt_color = $('#txt_color').val();
 
 
         var parametros = {
@@ -80,6 +92,7 @@ $hora_salida = isset($_GET['hora_salida']) ? $_GET['hora_salida'] : 930;
             'txt_checkout_salida_inicio': txt_checkout_salida_inicio,
             'txt_checkout_salida_fin': txt_checkout_salida_fin,
             'txt_limite_tardanza_out': txt_limite_tardanza_out,
+            'txt_color': txt_color,
 
         };
 
@@ -231,6 +244,18 @@ $hora_salida = isset($_GET['hora_salida']) ? $_GET['hora_salida'] : 930;
     }
 </style>
 
+<style>
+    .pcr-button {
+        width: 100% !important;
+        height: 100% !important;
+        padding: 0 !important;
+        /* border-radius: 10px !important; */
+        /* border: 1px solid #000 !important; */
+        height: 31px !important;
+        box-sizing: border-box;
+    }
+</style>
+
 <div class="page-wrapper">
     <div class="page-content">
         <!--breadcrumb-->
@@ -284,34 +309,42 @@ $hora_salida = isset($_GET['hora_salida']) ? $_GET['hora_salida'] : 930;
                         <form id="form_turnos">
 
                             <div class="row pt-3 mb-col">
-                                <div class="col-md-6">
-                                    <label for="txt_nombre" class="form-label">Nombre del turno</label>
+                                <div class="col-md-12">
+                                    <label for="txt_nombre" class="form-label">Nombre del turno </label>
                                     <input type="text" class="form-control form-control-sm no_caracteres" name="txt_nombre" id="txt_nombre" maxlength="50">
                                     <span id="error_txt_nombre" class="text-danger"></span>
                                 </div>
+                            </div>
 
-                                <div class="col-md-3">
-                                    <div class="form-check mt-4">
-                                        <input type="checkbox" class="form-check-input" name="cbx_turno_nocturno" id="cbx_turno_nocturno">
-                                        <label class="form-check-label" for="cbx_turno_nocturno">Finaliza el día siguiente</label>
+                            <div class="row mb-col">
+
+                                <div class="col-md-9">
+                                    <label for="txt_color" class="form-label">Color picker</label>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div id="color-picker"></div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <input type="text" class="form-control form-control-sm no_caracteres" name="txt_color" id="txt_color" maxlength="50" readonly>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
 
                             <div class="row mb-col">
                                 <div class="col-md-6">
-                                    <label for="value" class="form-label">Min. Horas Trabajadas</label>
-                                    <div class="row">
-                                        <div class="col-md-2">
-                                            <div class="input-group input-group-sm">
-                                                <input type="number" class="form-control" name="txt_valor_trabajar_hora" id="txt_valor_trabajar_hora" value="8">
-                                                <span class="input-group-text" id="txt_valor_trabajar_hora">hora(s)</span>
+                                    <label for="value" class="form-label">Mínimo de Horas Trabajadas</label>
+                                    <div class="row mb-col">
+                                        <div class="col-md-3">
+                                            <div class="">
+                                                <input type="number" class="form-control form-control-sm" name="txt_valor_trabajar_hora" id="txt_valor_trabajar_hora" value="8">
+                                                <label class="" id="txt_valor_trabajar_hora">hora(s)</label>
                                             </div>
                                         </div>
-                                        <div class="col-md-2">
-                                            <div class="input-group input-group-sm">
-                                                <input type="number" class="form-control" name="txt_valor_trabajar_min" id="txt_valor_trabajar_min" value="30">
-                                                <span class="input-group-text" id="txt_valor_trabajar_min">min</span>
+                                        <div class="col-md-3">
+                                            <div class="">
+                                                <input type="number" class="form-control form-control-sm" name="txt_valor_trabajar_min" id="txt_valor_trabajar_min" value="30">
+                                                <label class="" id="txt_valor_trabajar_min">min</label>
                                             </div>
                                         </div>
 
@@ -319,77 +352,84 @@ $hora_salida = isset($_GET['hora_salida']) ? $_GET['hora_salida'] : 930;
 
                                 </div>
                             </div>
-
-                            <!-- Rango -->
+                            <hr>
 
                             <div class="row mb-col pt-3">
                                 <input id="timerangeSlider" type="text" />
                             </div>
 
+                            <hr>
 
                             <div class="row pt-4">
-                                <div class="col-md-5">
+                                <div class="col-md-11">
+                                    <div class="row mb-col">
+                                        <label for="txt_hora_entrada" class="col-sm-4 col-form-label text-end fw-bold">Horario de trabajo asignado </label>
 
-                                    <div class="row mb-3">
-                                        <label for="txt_hora_entrada" class="col-sm-8 col-form-label text-start fw-bold">Hora de Entrada</label>
-                                        <div class="col-sm-4">
+                                        <div class="col-sm-3">
                                             <input type="time" class="form-control form-control-sm" name="txt_hora_entrada" id="txt_hora_entrada" value="07:00">
                                         </div>
+
+                                        <div class="col-sm-3">
+                                            <input type="time" class="form-control form-control-sm" name="txt_hora_salida" id="txt_hora_salida" value="15:30">
+                                        </div>
+
+                                        <div class="col-md-2">
+                                            <div class="form-check ">
+                                                <input type="checkbox" class="form-check-input" name="cbx_turno_nocturno" id="cbx_turno_nocturno">
+                                                <label class="form-check-label" for="cbx_turno_nocturno">Finaliza el día siguiente</label>
+                                            </div>
+                                        </div>
                                     </div>
 
-                                    <div class="row mb-3">
-                                        <label for="txt_checkin_registro_inicio" class="col-sm-8 col-form-label text-start">Inicio del período de Entrada</label>
-                                        <div class="col-sm-4">
+
+                                    <div class="row mb-col">
+                                        <label for="txt_checkin_registro_inicio" class="col-sm-4 col-form-label text-end fw-bold">Rango de tiempo válido para el registro de entrada </label>
+
+                                        <div class="col-sm-3">
                                             <input type="time" class="form-control form-control-sm" name="txt_checkin_registro_inicio" id="txt_checkin_registro_inicio" value="06:30">
                                         </div>
-                                    </div>
 
-                                    <div class="row mb-3">
-                                        <label for="txt_checkin_registro_fin" class="col-sm-8 col-form-label text-start">Fin del período de Entrada </label>
-                                        <div class="col-sm-4">
+                                        <div class="col-sm-3">
                                             <input type="time" class="form-control form-control-sm" name="txt_checkin_registro_fin" id="txt_checkin_registro_fin" value="07:30">
+                                        </div>
+
+                                        <div class="col-md-2">
+                                            <div class="form-check ">
+                                                <input type="checkbox" class="form-check-input" name="cbx_checkin_late" id="cbx_checkin_late">
+                                                <label class="form-check-label" for="cbx_checkin_late">Finaliza el día siguiente</label>
+                                            </div>
                                         </div>
                                     </div>
 
-                                    <div class="row mb-3">
-                                        <label for="txt_limite_tardanza_in" class="col-sm-8 col-form-label text-start">Tolerancia de llegada tarde (min) </label>
-                                        <div class="col-sm-4">
+                                    <div class="row mb-col">
+                                        <label for="txt_checkout_salida_inicio" class="col-sm-4 col-form-label text-end fw-bold">Rango de tiempo válido para el registro de salida </label>
+
+                                        <div class="col-sm-3">
+                                            <input type="time" class="form-control form-control-sm" name="txt_checkout_salida_inicio" id="txt_checkout_salida_inicio" value="15:00">
+                                        </div>
+
+                                        <div class="col-sm-3">
+                                            <input type="time" class="form-control form-control-sm" name="txt_checkout_salida_fin" id="txt_checkout_salida_fin" value="16:00">
+                                        </div>
+
+                                        <div class="col-md-2">
+                                            <div class="form-check ">
+                                                <input type="checkbox" class="form-check-input" name="cbx_checkout_late" id="cbx_checkout_late">
+                                                <label class="form-check-label" for="cbx_checkout_late">Finaliza el día siguiente</label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row mb-col">
+                                        <label for="txt_limite_tardanza_in" class="col-sm-4 col-form-label text-end fw-bold">Tolerancia de llegada tarde (min) </label>
+                                        <div class="col-sm-6">
                                             <input type="number" class="form-control form-control-sm" name="txt_limite_tardanza_in" id="txt_limite_tardanza_in" value="5">
                                         </div>
                                     </div>
 
-
-                                </div>
-
-                                <div class="col-md-2">
-
-                                </div>
-
-                                <div class="col-md-5">
-                                    <div class="row mb-3">
-                                        <label for="txt_hora_salida" class="col-sm-8 col-form-label text-start fw-bold">Hora de Salida</label>
-                                        <div class="col-sm-4">
-                                            <input type="time" class="form-control form-control-sm" name="txt_hora_salida" id="txt_hora_salida" value="15:30">
-                                        </div>
-                                    </div>
-
-                                    <div class="row mb-3">
-                                        <label for="txt_checkout_salida_inicio" class="col-sm-8 col-form-label text-start">Inicio del período de Salida </label>
-                                        <div class="col-sm-4">
-                                            <input type="time" class="form-control form-control-sm" name="txt_checkout_salida_inicio" id="txt_checkout_salida_inicio" value="15:00">
-                                        </div>
-                                    </div>
-
-                                    <div class="row mb-3">
-                                        <label for="txt_checkout_salida_fin" class="col-sm-8 col-form-label text-start">Fin del período de Salida </label>
-                                        <div class="col-sm-4">
-                                            <input type="time" class="form-control form-control-sm" name="txt_checkout_salida_fin" id="txt_checkout_salida_fin" value="16:00">
-                                        </div>
-                                    </div>
-
-                                    <div class="row mb-3">
-                                        <label for="txt_limite_tardanza_out" class="col-sm-8 col-form-label text-start">Tolerancia de salida anticipada (min) </label>
-                                        <div class="col-sm-4">
+                                    <div class="row mb-col">
+                                        <label for="txt_limite_tardanza_out" class="col-sm-4 col-form-label text-end fw-bold">Tolerancia de salida anticipada (min) </label>
+                                        <div class="col-sm-6">
                                             <input type="number" class="form-control form-control-sm" name="txt_limite_tardanza_out" id="txt_limite_tardanza_out" value="5">
                                         </div>
                                     </div>
@@ -424,6 +464,11 @@ $hora_salida = isset($_GET['hora_salida']) ? $_GET['hora_salida'] : 930;
     $(document).ready(function() {
         // Selecciona el label existente y añade el nuevo label
         agregar_asterisco_campo_obligatorio('txt_nombre');
+        agregar_asterisco_campo_obligatorio('txt_hora_entrada');
+        agregar_asterisco_campo_obligatorio('txt_checkin_registro_inicio');
+        agregar_asterisco_campo_obligatorio('txt_checkout_salida_inicio');
+        agregar_asterisco_campo_obligatorio('txt_limite_tardanza_in');
+        agregar_asterisco_campo_obligatorio('txt_limite_tardanza_out');
 
         $("#form_turnos").validate({
             rules: {
@@ -498,4 +543,59 @@ $hora_salida = isset($_GET['hora_salida']) ? $_GET['hora_salida'] : 930;
 
 
     });
+</script>
+
+<script>
+    function color_input(txt_color) {
+        pickr = Pickr.create({
+            el: '#color-picker',
+            theme: 'nano',
+            default: txt_color, // Color por defecto
+            swatches: [
+                'rgba(244, 67, 54, 1)',
+                'rgba(233, 30, 99, 1)',
+                'rgba(156, 39, 176, 1)',
+                'rgba(103, 58, 183, 1)',
+                'rgba(63, 81, 181, 1)',
+                'rgba(33, 150, 243, 1)',
+                'rgba(3, 169, 244, 1)',
+                'rgba(0, 188, 212, 1)',
+                'rgba(0, 150, 136, 1)',
+                'rgba(76, 175, 80, 1)',
+                'rgba(139, 195, 74, 1)',
+                'rgba(205, 220, 57, 1)',
+                'rgba(255, 235, 59, 1)',
+                'rgba(255, 193, 7, 1)',
+            ],
+
+            components: {
+
+                preview: true,
+                opacity: true,
+                hue: true,
+
+                interaction: {
+                    hex: true,
+                    rgba: true,
+                    //hsla: true,
+                    //hsva: true,
+                    //cmyk: true,
+                    input: true,
+                    clear: true,
+                    save: true
+                },
+            },
+
+            i18n: {
+                'btn:save': 'Guardar',
+                'btn:cancel': 'Cancelar',
+                'btn:clear': 'Limpiar',
+            }
+        });
+
+        pickr.on('change', (color) => {
+            hex_color = color.toHEXA().toString();
+            $txt_color = $('#txt_color').val(hex_color);
+        });
+    }
 </script>

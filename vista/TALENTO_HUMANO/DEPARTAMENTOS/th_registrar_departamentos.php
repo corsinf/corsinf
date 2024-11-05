@@ -576,7 +576,7 @@ if (isset($_GET['_id'])) {
 
                 </div>
 
-                <div class="d-flex justify-content-center pt-2">
+                <div class="d-flex justify-content-center">
                     <button class="btn btn-success btn-sm px-4 m-1" onclick="insertar_editar_personas_departamentos();" type="button"><i class="bx bx-plus me-0"></i> Agregar</button>
                     <button class="btn btn-secondary btn-sm px-4 m-1" data-bs-dismiss="modal" type="button"><b>X </b> Cancelar</button>
                 </div>

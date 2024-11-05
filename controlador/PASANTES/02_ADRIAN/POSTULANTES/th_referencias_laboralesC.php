@@ -36,18 +36,24 @@ class th_referencias_laboralesC
 
         $texto = '';
         foreach ($datos as $key => $value) {
+
             $texto .=
-            '<div class="row mb-3">
-                <div class="col-10">
-                    <p class="fw-bold my-0 d-flex align-items-center">' . $value['th_refl_nombre_referencia'] . '</p>
-                    <p class="my-0 d-flex align-items-center">' . $value['th_refl_telefono_referencia'] . '</p>
-                    <a href="#" data-bs-toggle="modal" data-bs-target="#modal_ver_pdf" onclick="definir_ruta_iframe(' . $value['_id'] . ');">Ver Carta de Recomendación</a>
-                </div>
-                <div class="col-2 d-flex justify-content-end align-items-center">
-                    <button class="btn btn-xs" style="color: white;" onclick="abrir_modal_referencias_laborales(' . $value['_id'] . ')"><i class="text-dark bx bx-pencil me-0" style="font-size: 20px;"></i></button>
-                </div>
-            </div>';
+                <<<HTML
+                    <div class="row mb-3">
+                        <div class="col-10">
+                            <p class="fw-bold my-0 d-flex align-items-center">{$value['th_refl_nombre_referencia']}</p>
+                            <p class="my-0 d-flex align-items-center">{$value['th_refl_telefono_referencia']}</p>
+                            <a href="#" data-bs-toggle="modal" data-bs-target="#modal_ver_pdf" onclick="definir_ruta_iframe({$value['_id']});">Ver Carta de Recomendación</a>
+                        </div>
+                        <div class="col-2 d-flex justify-content-end align-items-center">
+                            <button class="btn btn-xs" style="color: white;" onclick="abrir_modal_referencias_laborales({$value['_id']})">
+                                <i class="text-dark bx bx-pencil me-0" style="font-size: 20px;"></i>
+                            </button>
+                        </div>
+                    </div>
+                HTML;
         }
+        
         return $texto;
     }
 

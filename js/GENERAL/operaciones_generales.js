@@ -59,17 +59,17 @@ function fecha_formateada(fecha) {
 function fecha_formateada_hora(fecha) {
     fechaYHora = fecha;
     fecha = new Date(fechaYHora);
-    
+
     // Obtener el año, mes y día
     anio = fecha.getFullYear();
     mes = (fecha.getMonth() + 1).toString().padStart(2, '0'); // Añade un 0 si es necesario
     dia = fecha.getDate().toString().padStart(2, '0'); // Añade un 0 si es necesario
-    
+
     // Obtener las horas, minutos y segundos
     horas = fecha.getHours().toString().padStart(2, '0');
     minutos = fecha.getMinutes().toString().padStart(2, '0');
     segundos = fecha.getSeconds().toString().padStart(2, '0');
-    
+
     // Formato de fecha y hora
     fechaFormateada = `${anio}/${mes}/${dia} ${horas}:${minutos}:${segundos}`;
 
@@ -198,8 +198,9 @@ $(document).on('input', '.no_caracteres', function (event) {
     // Obtener el valor actual del campo
     var value = $(this).val();
 
-    // Reemplazar cualquier cosa que no sea números, letras, puntos, espacios, guiones bajos, guiones medios o barras
-    var nuevoValor = value.replace(/[^a-zA-Z0-9.\s_/-]/g, '');
+    // Reemplazar cualquier cosa que no sea números, letras, puntos, espacios, guiones bajos, guiones medios o barras o tildes o ñ
+    //var nuevoValor = value.replace(/[^a-zA-Z0-9.\s_/-]/g, '');
+    var nuevoValor = value.replace(/[^a-zA-Z0-9áéíóúÁÉÍÓÚüÜñÑ.\s_/-]/g, '');
 
     // Actualizar el valor del campo
     $(this).val(nuevoValor);
@@ -229,12 +230,28 @@ function calcular_edad(input, fecha_nacimiento) {
     $('#' + input).val(calcular_edad_fecha(fecha_nacimiento));
 }
 
-//Datatable
-function configuracion_datatable(title, filename) {
+//No deja que se coloque una fecha mayor a la actual
+function verificar_fecha_actual(input_name, fecha_actual, input_adicional) {
+    let hoy = new Date().toISOString().split('T')[0];
+
+    if (fecha_actual > hoy) {
+        $('#' + input_name).val('');
+        $('#' + input_adicional).val('');
+    }
+}
+
+/**
+ * 
+ * Datatable
+ * 
+ */
+
+//Para generar los botones de una tabla
+function configuracion_datatable(title, filename, buttons = 'contenedor_botones') {
     return {
         dom:
             // Botones en la parte superior con margen inferior
-            '<"d-flex justify-content-start top mb-4"B>' +
+            '<"d-flex justify-content-end top mb-4"B>' +
             // Selector de registros y barra de búsqueda en una fila
             '<"row"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6"f>>' +
             // Tabla en su propia fila
@@ -273,7 +290,7 @@ function configuracion_datatable(title, filename) {
             // Añadir clase btn-sm a los botones de paginación
             $('.dataTables_paginate').find('a').addClass('btn btn-sm');
             // Mover los botones al contenedor personalizado
-            $('#contenedor_botones').append($('.dt-buttons'));
+            $('#' + buttons).append($('.dt-buttons'));
         }
     };
 }
@@ -281,6 +298,69 @@ function configuracion_datatable(title, filename) {
 //Para reajustar un datatable cuando se lo usa en modales
 function reajustarDataTable() {
     $($.fn.dataTable.tables(true)).DataTable().columns.adjust().responsive.recalc();
+}
+
+/**
+ * 
+ * Select2
+ * 
+ */
+
+//Funcion para cargar datos en un select2, es una funcion simple cuando se quiere cargar los datos
+
+function cargar_select2_url(ddl, url_controlador) {
+    $('#' + ddl).select2({
+        language: {
+            inputTooShort: function () {
+                return "Por favor ingresa 3 o más caracteres";
+            },
+            noResults: function () {
+                return "No se encontraron resultados";
+            },
+            searching: function () {
+                return "Buscando...";
+            },
+            errorLoading: function () {
+                return "No se encontraron resultados";
+            }
+        },
+        placeholder: '-- Seleccione --',
+        width: '100%',
+        ajax: {
+            url: url_controlador,
+            dataType: 'json',
+            delay: 250,
+
+            processResults: function (data) {
+                return {
+                    results: data
+                };
+            },
+            cache: true
+        }
+    });
+}
+
+function cargar_select2_con_id(ddl, url_controlador, id_seleccionado, texto) {
+    $.ajax({
+        data: {
+            id: id_seleccionado
+        },
+        url: url_controlador,
+        type: 'post',
+        dataType: 'json',
+        
+        success: function (response) {
+            $('#' + ddl).html(`<option value='${id_seleccionado}'>${response[0][texto]}</option>`);
+        },
+
+        error: function (xhr, status, error) {
+            console.log('Status: ' + status);
+            console.log('Error: ' + error);
+            console.log('XHR Response: ' + xhr.responseText);
+            Swal.fire('', 'Error: ' + xhr.responseText, 'error');
+        }
+    });
 }
 
 

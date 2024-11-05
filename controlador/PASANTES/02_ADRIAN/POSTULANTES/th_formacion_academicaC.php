@@ -36,25 +36,33 @@ class th_formacion_academicaC
 
         $texto = '';
         foreach ($datos as $key => $value) {
+
+            $fechaFin = $value['th_fora_fecha_fin_formacion'] == '' ? 'Actualidad' : $value['th_fora_fecha_fin_formacion'];
+
             $texto .=
-                '<div class="row mb-3">' .
-                    '<div class="col-10">' .
-                        '<h6 class="fw-bold">' . $value['th_fora_titulo_obtenido'] . '</h6>' .
-                        '<p class="mb-2">' . $value['th_fora_institución'] . '</p>' .
-                        '<p>' . $value['th_fora_fecha_inicio_formacion'] . ' - ' . (($value['th_fora_fecha_fin_formacion'] == '') ? 'Actualidad' : $value['th_fora_fecha_fin_formacion']) . '</p>' .
-                    '</div>' .
-                    '<div class="col-2 d-flex justify-content-end align-items-start">' .
-                        "<button class='btn' style='color: white;' onclick='abrir_modal_formacion_academica(" . $value['_id'] . ");'><i class='text-dark bx bx-pencil bx-sm' ></i></button>" .
-                    '</div>' .
-                '</div>';
+                <<<HTML
+                    <div class="row mb-col">
+                        <div class="col-10">
+                            <h6 class="fw-bold">{$value['th_fora_titulo_obtenido']}</h6>
+                            <p class="m-0">{$value['th_fora_institución']}</p>
+                            <p class="m-0">{$value['th_fora_fecha_inicio_formacion']} - {$fechaFin}</p>
+                        </div>
+                        <div class="col-2 d-flex justify-content-end align-items-start">
+                            <button class="btn" style="color: white;" onclick="abrir_modal_formacion_academica({$value['_id']});">
+                                <i class="text-dark bx bx-pencil bx-sm"></i>
+                            </button>
+                        </div>
+                    </div>
+                HTML;
         }
+        
         return $texto;
     }
 
     //Buscando registros por id de la formacion academica
     function listar_modal($id)
     {
-        
+
         if ($id == '') {
             $datos = $this->modelo->where('th_fora_estado', 1)->listar();
         } else {
@@ -70,7 +78,7 @@ class th_formacion_academicaC
             array('campo' => 'th_fora_institución', 'dato' => $parametros['txt_institucion']),
             array('campo' => 'th_fora_fecha_inicio_formacion', 'dato' => $parametros['txt_fecha_inicio_academico']),
             array('campo' => 'th_fora_fecha_fin_formacion', 'dato' => $parametros['txt_fecha_final_academico']),
-            array('campo' => 'th_pos_id', 'dato' => $parametros['txt_id_postulante']), 
+            array('campo' => 'th_pos_id', 'dato' => $parametros['txt_id_postulante']),
 
         );
 

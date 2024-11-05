@@ -51,6 +51,16 @@ if ($_GET['acc'] == 'th_horarios') {
 	include('TALENTO_HUMANO/ASISTENCIAS/HORARIOS/th_horarios.php');
 }
 
+if ($_GET['acc'] == 'th_programar_horarios') {
+	include('TALENTO_HUMANO/ASISTENCIAS/PROGRAMAR_HORARIOS/th_programar_horarios.php');
+}
+
+if ($_GET['acc'] == 'th_registrar_programar_horarios') {
+	include('TALENTO_HUMANO/ASISTENCIAS/PROGRAMAR_HORARIOS/th_registrar_programar_horarios.php');
+}
+
+//Deteccion de dispositivos
+
 if ($_GET['acc'] == 'th_detectar_dispositivos') {
 	include('TALENTO_HUMANO/DISPOSITIVOS/th_detectar_dispositivos.php');
 }

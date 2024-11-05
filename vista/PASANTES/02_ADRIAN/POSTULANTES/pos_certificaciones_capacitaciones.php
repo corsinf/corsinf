@@ -18,12 +18,12 @@
     }
 </script>
 
-<div class="row">
-    <div class="col-8">
+<div class="row pt-3 mb-col">
+    <div class="col-md-3">
         <h6 class="fw-bold">CS50: Introduction to Computer Science</h6>
         <a href="#" class="fw-bold">Ver Certificado</a>
     </div>
-    <div class="col-4">
+    <div class="col-md-3">
         <a href="#" class="d-flex justify-content-end"><i class='text-dark bx bx-pencil bx-sm'></i></a>
     </div>
 </div>
@@ -42,17 +42,23 @@
             <!-- Modal body -->
             <form id="form_certificaciones_capacitaciones">
                 <div class="modal-body">
-                    <div class="mb-3">
-                        <label for="txt_nombre_certificacion" class="form-label form-label-sm">Nombre del curso o capacitación <label style="color: red;">*</label></label>
-                        <input type="text" class="form-control form-control-sm" name="txt_nombre_certificacion" id="txt_nombre_certificacion" value="" placeholder="Escriba el nombre del curso o capacitación">
+                    <div class="row mb-col">
+                        <div class="col-md-12">
+                            <label for="txt_nombre_certificacion" class="form-label form-label-sm">Nombre del curso o capacitación <label style="color: red;">*</label></label>
+                            <input type="text" class="form-control form-control-sm " name="txt_nombre_certificacion" id="txt_nombre_certificacion" value="" placeholder="Escriba el nombre del curso o capacitación">
+                        </div>
                     </div>
-                    <div class="mb-3">
-                        <label for="txt_enlace_certificado" class="form-label form-label-sm">1. Enlace del Certificado obtenido <label style="color: red;">*</label></label>
-                        <input type="text" class="form-control form-control-sm" name="txt_enlace_certificado" id="txt_enlace_certificado" value="" placeholder="Escriba el enlace a su certificado">
+                    <div class="row mb-col">
+                        <div class="col-md-12">
+                            <label for="txt_enlace_certificado" class="form-label form-label-sm">1. Enlace del Certificado obtenido <label style="color: red;">*</label></label>
+                            <input type="text" class="form-control form-control-sm " name="txt_enlace_certificado" id="txt_enlace_certificado" value="" placeholder="Escriba el enlace a su certificado">
+                        </div>
                     </div>
-                    <div class="mb-3">
-                        <label for="txt_pdf_certificado" class="form-label form-label-sm">2. PDF del Certificado obtenido <label style="color: red;">*</label></label>
-                        <input type="file" class="form-control form-control-sm" name="txt_pdf_certificado" id="txt_pdf_certificado" accept=".pdf" value="" placeholder="">
+                    <div class="row mb-col">
+                        <div class="col-md-12">
+                            <label for="txt_pdf_certificado" class="form-label form-label-sm">2. PDF del Certificado obtenido <label style="color: red;">*</label></label>
+                            <input type="file" class="form-control form-control-sm" name="txt_pdf_certificado" id="txt_pdf_certificado" accept=".pdf" value="" placeholder="">
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer d-flex justify-content-center">

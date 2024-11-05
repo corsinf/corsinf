@@ -38,8 +38,9 @@
             </div>
             <!-- Modal body -->
             <form id="form_documento_identidad">
-                <div class="modal-body">
-                    <div class="mb-3">
+            <div class="modal-body">
+                <div class="row mb-col">
+                    <div class="col-md-12">
                         <label for="ddl_tipo_documento_identidad" class="form-label form-label-sm">Tipo de Documento <label style="color: red;">*</label></label>
                         <select class="form-select form-select-sm" id="ddl_tipo_documento_identidad" name="ddl_tipo_documento_identidad">
                             <option selected disabled value="">-- Selecciona una opción --</option>
@@ -51,11 +52,14 @@
                             <option value="Carnét de discapacidad">Carnét de discapacidad</option>
                         </select>
                     </div>
-                    <div class="mb-3">
+                </div>
+                <div class="row mb-col">
+                    <div class="col-md-12">
                         <label for="txt_agregar_documento_identidad" class="form-label form-label-sm">Copia del Documento de identidad <label style="color: red;">*</label></label>
                         <input type="file" class="form-control form-control-sm" name="txt_agregar_documento_identidad" id="txt_agregar_documento_identidad" accept=".pdf">
                     </div>
                 </div>
+            </div>
                 <div class="modal-footer d-flex justify-content-center">
                     <button type="button" class="btn btn-success btn-sm" id="btn_guardar_documento_identidad" onclick="insertar_editar_documento_identidad();">Guardar Documento de Identidad</button>
                 </div>

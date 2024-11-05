@@ -39,13 +39,17 @@
             <!-- Modal body -->
             <form id="form_contrato_trabajo">
                 <div class="modal-body">
-                    <div class="mb-3">
-                        <label for="txt_nombre_empresa_contrato" class="form-label form-label-sm">Nombre de la empresa <label style="color: red;">*</label></label>
-                        <input type="text" class="form-control form-control-sm" name="txt_nombre_empresa_contrato" id="txt_nombre_empresa_contrato" placeholder="Escriba el nombre de la empresa que emitió el contrato">
+                    <div class="row mb-col">
+                        <div class="col-md-12">
+                            <label for="txt_nombre_empresa_contrato" class="form-label form-label-sm">Nombre de la empresa <label style="color: red;">*</label></label>
+                            <input type="text" class="form-control form-control-sm" name="txt_nombre_empresa_contrato" id="txt_nombre_empresa_contrato" placeholder="Escriba el nombre de la empresa que emitió el contrato">
+                        </div>
                     </div>
-                    <div class="mb-3">
-                        <label for="txt_copia_contrato" class="form-label form-label-sm">Copia del contrato firmado <label style="color: red;">*</label></label>
-                        <input type="file" class="form-control form-control-sm" name="txt_copia_contrato" id="txt_copia_contrato" accept=".pdf">
+                    <div class="row mb-col">
+                        <div class="col-md-12">
+                            <label for="txt_copia_contrato" class="form-label form-label-sm">Copia del contrato firmado <label style="color: red;">*</label></label>
+                            <input type="file" class="form-control form-control-sm" name="txt_copia_contrato" id="txt_copia_contrato" accept=".pdf">
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer d-flex justify-content-center">

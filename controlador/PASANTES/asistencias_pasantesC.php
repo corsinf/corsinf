@@ -1,6 +1,6 @@
 <?php
 require_once(dirname(__DIR__, 2) . '/modelo/PASANTES/asistencias_pasantesM.php');
-
+require_once(dirname(__DIR__, 2) . '/lib/pdf/fpdf.php');
 
 $controlador = new asistencias_pasantesC();
 
@@ -24,8 +24,9 @@ if (isset($_GET['editar_tutor'])) {
     echo json_encode($controlador->editar_tutor($_POST['parametros']));
 }
 
-
-
+if (isset($_GET['pdf_pasante_actividad'])) {
+    echo ($controlador->pdf_pasante_actividad($_GET['id']));
+}
 
 
 class asistencias_pasantesC
@@ -143,7 +144,7 @@ class asistencias_pasantesC
         $where[0]['campo'] = 'pas_id';
         $where[0]['dato'] = $parametros['txt_id_registro'];
         $datos = $this->modelo->editar($datos, $where);
-        
+
         return $datos;
     }
 
@@ -158,5 +159,111 @@ class asistencias_pasantesC
 
         $datos = $this->modelo->editar($datos, $where);
         return $datos;
+    }
+
+    function pdf_pasante_actividad($id = '')
+    {
+        $HEADER_LOGO1 = 'logo.png';
+        $HEADER_LOGO2 = 'logo2.png';
+        $FOOTER_LOGO3 = 'jesuita.png';
+        $FOOTER_LOGO4 = 'redes.png';
+        $HEADER_FONT = 'Arial';
+        $FOOTER_FONT = 'Arial';
+
+        // Crear objeto PDF
+        $pdf = new FPDF();
+        $pdf->SetMargins(18, 30, 15);
+        $pdf->SetAutoPageBreak(true, 15);
+        $pdf->AddPage();
+
+        function Header_1($pdf, $HEADER_FONT)
+        {
+            //$pdf->SetFont($HEADER_FONT, 'B', 12);
+            //$pdf->Image($HEADER_FONT, 20, 8, 70);
+            //$pdf->Image($HEADER_FONT, 110, 8, 60);
+            $pdf->Ln(10);
+        }
+
+        function crear_tabla($pdf, $data)
+        {
+            $pdf->SetFont('Arial', 'B', 12);
+            $pdf->SetX(($pdf->GetPageWidth() - 175) / 2);
+            $pdf->Cell(160, 5, 'Formato registro de horas de las Practicas Pre-profesionales', 0, 1, 'C');
+            $pdf->Ln(4);
+
+            foreach ($data as $row) {
+                $pdf->Cell(82.5, 8, $row[0], 1, 0, 'L');
+                $pdf->Cell(82.5, 8, $row[1], 1, 0, 'C');
+                $pdf->Ln();
+            }
+        }
+
+        function CreateActivityTable($pdf, $rowCount)
+        {
+            $pdf->SetX(($pdf->GetPageWidth() - 175) / 2);
+            $pdf->SetFont('Times', 'B', 11);
+            $pdf->Cell(36.2, 9, 'Fecha:dd/mm/aaaa', 1);
+            $pdf->Cell(56.7, 9, 'Actividades/Fases', 1);
+            $pdf->Cell(36.2, 9, 'Horas', 1);
+            $pdf->Cell(36.2, 9, 'Firma', 1);
+            $pdf->Ln();
+
+            for ($i = 1; $i <= $rowCount; $i++) {
+                if ($i % 20 == 0 && $i > 0) {
+                    $pdf->AddPage();
+                    //$pdf->CreateActivityTableHeader($pdf);
+                }
+                $pdf->SetX(($pdf->GetPageWidth() - 175) / 2);
+                $pdf->Cell(36.2, 8, 'Fila ' . $i . ' - 1', 1);
+                $pdf->Cell(56.7, 8, 'Fila ' . $i . ' - 2', 1);
+                $pdf->Cell(36.2, 8, 'Fila ' . $i . ' - 3', 1);
+                $pdf->Cell(36.2, 8, 'Fila ' . $i . ' - 4', 1);
+                $pdf->Ln();
+            }
+        }
+
+        function CreateActivityTableHeader($pdf)
+        {
+            $pdf->SetX(($pdf->GetPageWidth() - 175) / 2);
+            $pdf->SetFont('Times', 'B', 11);
+            $pdf->Cell(36.2, 9, 'Fecha:dd/mm/aaaa', 1);
+            $pdf->Cell(56.7, 9, 'Actividades/Fases', 1);
+            $pdf->Cell(36.2, 9, 'Horas', 1);
+            $pdf->Cell(36.2, 9, 'Firma', 1);
+            $pdf->Ln();
+        }
+
+        function AddTotalHours($pdf)
+        {
+            $pdf->Ln(5);
+            $pdf->Cell(0, 10, "Total de horas: 240 Horas minimo", 0, 1, 'C');
+            $pdf->Ln();
+            $pdf->Cell(0, 10, "Firma Tutor Institucion/Empresa __________________________ ");
+        }
+
+        // Datos para la tabla
+        $data = [
+            ['Nombre del Estudiante:', ''],
+            ['Codigo Banner del Estudiante:', ''],
+            ['Carrera:', ''],
+            ['Nombre de la Institucion / Empresa:', ''],
+            ['Nombre del Tutor Institucion / Empresa:', ''],
+            ['Nombre del Tutor PPP / PUCE:', '']
+        ];
+
+
+        //Crear tablas
+        crear_tabla($pdf, $data);
+        $pdf->Ln(10);
+        CreateActivityTable($pdf, 45);
+        AddTotalHours($pdf);
+
+        // Verificar si necesitamos página adicional para el pie de página
+        if ($pdf->GetY() + 30 > 276) {
+            $pdf->AddPage();
+        }
+
+        // Salida del PDF
+        $pdf->Output();
     }
 }
