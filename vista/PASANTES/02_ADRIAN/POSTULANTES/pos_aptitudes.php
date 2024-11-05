@@ -10,7 +10,8 @@
 
     function activar_select2() {
 
-        lista_aptitudes_tecnicas();
+        //lista_aptitudes_tecnicas();
+        lista_aptitudes_tecnicas_postulante('<?= $id ?>');
 
         lista_aptitudes_blandas();
 
@@ -102,6 +103,20 @@
             dataType: 'json',
             success: function(response) {
                 $('#ddl_seleccionar_aptitud_blanda').html(response);
+            }
+        });
+    }
+
+    function lista_aptitudes_tecnicas_postulante(id) {
+        $.ajax({
+            url: '../controlador/PASANTES/02_ADRIAN/POSTULANTES/th_pos_habilidadesC.php?listar_aptitudes_tecnicas_postulante=true',
+            data: {
+                id_postulante: id
+            },
+            type: 'post',
+            dataType: 'json',
+            success: function(response) {
+                $('#ddl_seleccionar_aptitud_tecnica').html(response);
             }
         });
     }
