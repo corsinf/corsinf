@@ -267,7 +267,7 @@ if (isset($_GET['id'])) {
                             </div>
 
 
-                            <?php include('../vista/PASANTES/02_ADRIAN/POSTULANTES/provincias_ciudades_parroquias.php'); ?>
+                            <?php include_once('../vista/PASANTES/02_ADRIAN/POSTULANTES/provincias_ciudades_parroquias.php'); ?>
 
 
                             <div class="row mb-col">
