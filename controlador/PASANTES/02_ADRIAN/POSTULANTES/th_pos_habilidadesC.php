@@ -35,22 +35,26 @@ class th_pos_habilidadesC
 
     function listar_aptitudes_tecnicas($id)
     {
-        $datos = $this->modelo->where('th_pos_id', $id)->where('th_tiph_id', 2)->listarJoin(); 
+        $datos = $this->modelo->where('th_pos_id', $id)->where('th_tiph_id', 2)->listarJoin();
 
         $texto = '';
         foreach ($datos as $key => $value) {
             $texto .=
-                '<div class="row mt-1">
-                    <div class="col-8">
-                        <ul>
-                            <li>' . $value['th_hab_nombre'] . '</li>
-                        </ul>
+                <<<HTML
+                    <div class="row mt-1">
+                        <div class="col-8">
+                            <ul>
+                                <li>{$value['th_hab_nombre']}</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="col-4 d-flex justify-content-end">
+                            <button type="button" class="btn btn-sm" style="color: white;" onclick="delete_datos_aptitudes({$value['th_habp_id']})">
+                                <i class="me-0 text-danger bx bx-trash" style="font-size: 20px;"></i>
+                            </button>
+                        </div>
                     </div>
-                            
-                    <div class="col-4 d-flex justify-content-end">
-                        <button type="button" class="btn btn-sm" style="color: white;" onclick="delete_datos_aptitudes(' . $value['th_habp_id'] . ')"><i class="me-0 text-danger bx bx-trash" style="font-size: 20px;"></i></button>
-                    </div>
-                </div>';
+                HTML;
         }
 
         return $texto;
@@ -58,7 +62,7 @@ class th_pos_habilidadesC
 
     function listar_aptitudes_blandas($id)
     {
-        $datos = $this->modelo->where('th_pos_id', $id)->where('th_tiph_id', 1)->listarJoin(); 
+        $datos = $this->modelo->where('th_pos_id', $id)->where('th_tiph_id', 1)->listarJoin();
 
         $texto = '';
         foreach ($datos as $key => $value) {
@@ -99,20 +103,17 @@ class th_pos_habilidadesC
                 array('campo' => 'th_hab_id', 'dato' => intval($aptitud_id)),
                 array('campo' => 'th_pos_id', 'dato' => $parametros['txt_id_postulante']),
             );
-            
+
             if ($parametros['_id'] == '') {
                 $datos = $this->modelo->insertar($datos);
-                
             } else {
                 $where[0]['campo'] = 'th_habp_id';
                 $where[0]['dato'] = $parametros['_id'];
                 $datos = $this->modelo->editar($datos, $where);
             }
-            
         }
-        
-        return $datos;
 
+        return $datos;
     }
 
     function eliminar($id)
