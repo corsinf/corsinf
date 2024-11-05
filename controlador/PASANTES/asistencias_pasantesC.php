@@ -2,7 +2,7 @@
 require_once(dirname(__DIR__, 2) . '/modelo/PASANTES/asistencias_pasantesM.php');
 require_once(dirname(__DIR__, 2) . '/lib/pdf/fpdf.php');
 
-
+// Comentario 1//
 $controlador = new asistencias_pasantesC();
 
 if (isset($_GET['listar'])) {
