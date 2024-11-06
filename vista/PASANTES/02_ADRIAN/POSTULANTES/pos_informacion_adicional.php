@@ -187,10 +187,11 @@
                             </div>
                         </div>
 
-                        <div class="d-flex justify-content-center">
-                            <button type="button" class="btn btn-success btn-sm" id="btn_guardar_informacion_contacto" onclick="insertar_editar_informacion_adicional();">Guardar</button>
-                        </div>
                     </div>
+                </div>
+
+                <div class="modal-footer d-flex justify-content-center">
+                    <button type="button" class="btn btn-success btn-sm" id="btn_guardar_informacion_contacto" onclick="insertar_editar_informacion_adicional();">Guardar</button>
                 </div>
             </form>
         </div>

@@ -276,6 +276,7 @@ if (isset($_GET['id'])) {
                                     <input type="text" class="form-control form-control-sm" name="txt_direccion" id="txt_direccion" placeholder="Escriba su dirección">
                                 </div>
                             </div>
+                            
                             <div class="d-flex justify-content-end pt-2">
                                 <?php if ($_id == '') { ?>
                                     <button class="btn btn-primary btn-sm px-4 m-0 d-flex align-items-center" onclick="insertar_editar();" type="button"><i class="bx bx-save"></i> Guardar</button>

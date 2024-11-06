@@ -284,12 +284,12 @@
                         </div>
                     </div>
 
-                    <div class="d-flex justify-content-center">
-                        <button type="button" class="btn btn-success btn-sm px-4 m-1" id="btn_guardar_formacion" onclick="validar_fechas_form_acad();insertar_editar_formacion_academica();">Agregar</button>
-                        <button type="button" class="btn btn-danger btn-sm px-4 m-1" id="btn_eliminar_formacion" onclick="delete_datos_form_acad();">Eliminar</button>
-                    </div>
                 </div>
 
+                <div class="modal-footer d-flex justify-content-center">
+                    <button type="button" class="btn btn-success btn-sm px-4 m-1" id="btn_guardar_formacion" onclick="validar_fechas_form_acad();insertar_editar_formacion_academica();">Agregar</button>
+                    <button type="button" class="btn btn-danger btn-sm px-4 m-1" id="btn_eliminar_formacion" onclick="delete_datos_form_acad();">Eliminar</button>
+                </div>
             </form>
         </div>
     </div>

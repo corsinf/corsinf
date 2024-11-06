@@ -284,6 +284,7 @@
                         </div>
                     </div>
                 </div>
+
                 <div class="modal-footer d-flex justify-content-center">
                     <button type="button" class="btn btn-success btn-sm" id="btn_guardar_aptitudes" onclick="insertar_editar_aptitudes();">Guardar Aptitudes</button>
                 </div>

@@ -19,6 +19,10 @@ if (isset($_GET['eliminar'])) {
     echo json_encode($controlador->eliminar($_POST['id']));
 }
 
+if (isset($_GET['cargar_archivo'])) {
+    echo json_encode($controlador->guardar_archivo($_FILES, $_POST));
+}
+
 
 class th_referencias_laboralesC
 {
@@ -53,7 +57,7 @@ class th_referencias_laboralesC
                     </div>
                 HTML;
         }
-        
+
         return $texto;
     }
 
@@ -102,5 +106,57 @@ class th_referencias_laboralesC
         $datos = $this->modelo->editar($datos, $where);
 
         return $datos;
+    }
+
+    function guardar_archivo($file, $post)
+    {
+        $ruta = dirname(__DIR__, 4) . '/REPOSITORIO/talento_humano_1/'; //ruta carpeta donde queremos copiar las imágenes
+
+        if (!file_exists($ruta)) {
+            mkdir($ruta, 0777, true);
+        }
+
+        if ($this->validar_formato_archivo($file) === 1) {
+            $uploadfile_temporal = $file['pos_ref_lab_file']['tmp_name'];
+            $extension = pathinfo($file['pos_ref_lab_file']['name'], PATHINFO_EXTENSION);
+            $nombre = 'referencia_laboral_' . $post['txt_id'] . '.' . $extension;
+            $nuevo_nom = $ruta . $nombre;
+
+            if (is_uploaded_file($uploadfile_temporal)) {
+                if (move_uploaded_file($uploadfile_temporal, $nuevo_nom)) {
+
+                    $datos = [
+                        ['campo' => 'th_refl_carta_recomendacion', 'dato' => $nuevo_nom],
+                    ];
+
+                    $where = [
+                        ['campo' => 'th_refl_id', 'dato' => $post['txt_id']],
+                    ];
+
+                    // Ejecutar la actualización en la base de datos
+                    $base = $this->modelo->editar($datos, $where);
+
+                    return $base == 1 ? 1 : -1;
+                } else {
+                    return -1;
+                }
+            } else {
+                return -1;
+            }
+        } else {
+            return -2;
+        }
+    }
+
+    private function validar_formato_archivo($file)
+    {
+        switch ($file['pos_ref_lab_file']['type']) {
+            case 'application/pdf':
+                return 1;
+                break;
+            default:
+                return -1;
+                break;
+        }
     }
 }
