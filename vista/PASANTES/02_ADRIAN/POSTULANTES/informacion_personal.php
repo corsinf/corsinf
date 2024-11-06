@@ -53,6 +53,10 @@ if (isset($_GET['id'])) {
                 $('#txt_telefono_1_v').html(response[0].th_pos_telefono_1);
                 $('#txt_correo_v').html(response[0].th_pos_correo);
 
+                //Input para las referencias laborales
+                $('#txt_numero_cedula_referencia_laboral').val(response[0].th_pos_cedula);
+
+
                 console.log(response);
             }
         });

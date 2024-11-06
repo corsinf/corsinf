@@ -30,14 +30,12 @@
             },
             dataType: 'json',
             success: function(response) {
+                $('#txt_referencias_laborales_id').val(response[0]._id);
 
                 $('#txt_nombre_referencia').val(response[0].th_refl_nombre_referencia);
                 $('#txt_telefono_referencia').val(response[0].th_refl_telefono_referencia);
-                $('#txt_ruta_guardada_carta_recomendacion').val(response[0].th_refl_carta_recomendacion)
+                $('#txt_ruta_guardada_carta_recomendacion').val(response[0].th_refl_carta_recomendacion);
 
-
-
-                $('#txt_referencias_laborales_id').val(response[0]._id);
             }
         });
     }
@@ -47,6 +45,7 @@
         var txt_telefono_referencia = $('#txt_telefono_referencia').val();
         var txt_id_postulante = '<?= $id ?>';
         var txt_id_referencias_laborales = $('#txt_referencias_laborales_id').val();
+
         if ($('#txt_copia_carta_recomendacion').val() === '' && txt_id_referencias_laborales != '') {
             var txt_copia_carta_recomendacion = $('#txt_ruta_guardada_carta_recomendacion').val()
             $('#txt_copia_carta_recomendacion').rules("remove", "required");
@@ -71,6 +70,8 @@
             insertar_referencias_laborales(parametros_referencias)
 
         }
+
+        subir_pdf_ref_lab();
     }
 
     function insertar_referencias_laborales(parametros) {
@@ -163,20 +164,19 @@
     }
 
     function definir_ruta_iframe(id) {
-        var cambiar_ruta = $('#iframe_pdf').attr('src', '../controlador/PASANTES/01_SEBASTIAN/formularios_firmasC_Adrian.php?persona_juridica=true&id=' + id);
+        var cambiar_ruta = $('#iframe_referencias_laborales_pdf').attr('src', '../REPOSITORIO/talento_humano_1/referencia_laboral_2.pdf');
     }
 
     function limpiar_parametros_iframe() {
-        $('#iframe_pdf').attr('src', '');
+        $('#iframe_referencias_laborales_pdf').attr('src', '');
     }
 </script>
 
 <script>
     function subir_pdf_ref_lab() {
 
-        var file_input = $('#pos_ref_lab_file').val();
-        //var id = id;
-        var id = $('#txt_id').val();
+        var file_input = $('#txt_copia_carta_recomendacion').val();
+        var id = $('#txt_referencias_laborales_id').val();
 
         if (id == '') {
             Swal.fire('', 'Asegurese de llenar los datos primero', 'warning');
@@ -188,7 +188,7 @@
             return false;
         }
 
-        var form_data = new FormData(document.getElementById("form_file_ref_lab"));
+        var form_data = new FormData(document.getElementById("form_referencias_laborales"));
 
         // console.log([...form_data.keys()]);
         // console.log([...form_data.values()]);
@@ -203,15 +203,26 @@
 
             success: function(response) {
                 if (response == -1) {
-                    Swal.fire('', 'Algo extraño a pasado intente mas tarde.', 'error');
-
+                    Swal.fire({
+                        title: '',
+                        text: 'Algo extraño a pasado intente mas tarde.',
+                        icon: 'error',
+                        allowOutsideClick: false,
+                        showConfirmButton: true,
+                        confirmButtonText: 'Cerrar'
+                    });
                 } else if (response == -2) {
-                    Swal.fire('', 'Asegurese que el archivo subido sea un PDF.', 'error');
+                    Swal.fire({
+                        title: '',
+                        text: 'Asegurese que el archivo subido sea un PDF.',
+                        icon: 'error',
+                        allowOutsideClick: false,
+                        showConfirmButton: true,
+                        confirmButtonText: 'Cerrar'
+                    });
                 } else {
-                    Swal.fire('', 'Se subio con exito.', 'success');
-                    $('#pos_ref_lab_file').val('');
-                    //var id = '<?php echo $id; ?>';
-                    //Editar(id);
+                    //Swal.fire('', 'Se subio con exito.', 'success');
+                    $('#txt_copia_carta_recomendacion').val('');
                 }
             }
         });
@@ -222,20 +233,6 @@
 <div id="pnl_referencias_laborales">
 
 </div>
-
-<form enctype="multipart/form-data" id="form_file_ref_lab" method="post" style="width: inherit;">
-    <!-- <input type="hidden" name="txt_id" id="txt_id" value="<?php echo $id; ?>" class="form-control"> -->
-    <input type="hidden" name="txt_id" id="txt_id" value="2" class="form-control">
-
-    <div class="widget-user-image text-center">
-        <img class="rounded-circle p-1 bg-primary" src="../img/sin_imagen.jpg" alt="User Avatar" width="110" height="110" id="img_foto">
-    </div><br>
-
-    <input type="file" name="pos_ref_lab_file" id="pos_ref_lab_file" class="form-control form-control-sm">
-    <input type="hidden" name="txt_nom_img" id="txt_nom_img">
-
-    <button class="btn btn-outline-primary btn" onclick="subir_pdf_ref_lab();" type="button">Cargar imagen</button>
-</form>
 
 
 <!-- Modal para agregar referencias laborales-->
@@ -248,10 +245,29 @@
                 <h5><small class="text-body-secondary" id="lbl_titulo_referencia_laboral">Agregue una referencia</small></h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="limpiar_parametros_referencias_laborales()"></button>
             </div>
+
+
+            <!-- <form enctype="multipart/form-data" id="form_referencias_laborales_1" method="post" style="width: inherit;">
+                <input type="hidden" name="txt_id" id="txt_id" value="7" class="form-control">
+
+                <div class="widget-user-image text-center">
+                    <img class="rounded-circle p-1 bg-primary" src="../img/sin_imagen.jpg" alt="User Avatar" width="110" height="110" id="img_foto">
+                </div><br>
+
+                <input type="file" name="txt_copia_carta_recomendacion" id="txt_copia_carta_recomendacion" class="form-control form-control-sm">
+                <input type="hidden" name="txt_nom_img" id="txt_nom_img">
+
+                <button class="btn btn-outline-primary btn" onclick="subir_pdf_ref_lab();" type="button">Cargar imagen</button>
+            </form> -->
+
+
             <!-- Modal body -->
-            <form id="form_referencias_laborales">
+            <form id="form_referencias_laborales" enctype="multipart/form-data" method="post" style="width: inherit;">
+
                 <div class="modal-body">
-                    <input type="hidden" id="txt_referencias_laborales_id">
+
+                    <input type="hidden" name="txt_referencias_laborales_id" id="txt_referencias_laborales_id">
+                    <input type="hidden" name="txt_numero_cedula_referencia_laboral" id="txt_numero_cedula_referencia_laboral">
 
                     <div class="row mb-col">
                         <div class="col-md-12">
@@ -270,8 +286,9 @@
                     <div class="row mb-col">
                         <div class="col-md-12">
                             <label for="txt_copia_carta_recomendacion" class="form-label form-label-sm">Copia de la carta de recomendación <label style="color: red;">*</label></label>
-                            <input type="text" name="txt_ruta_guardada_carta_recomendacion" id="txt_ruta_guardada_carta_recomendacion" hidden>
                             <input type="file" class="form-control form-control-sm" name="txt_copia_carta_recomendacion" id="txt_copia_carta_recomendacion" accept=".pdf">
+                            <div class="pt-2"></div>
+                            <input type="text" class="form-control form-control-sm" name="txt_ruta_guardada_carta_recomendacion" id="txt_ruta_guardada_carta_recomendacion">
                         </div>
                     </div>
 
@@ -298,7 +315,7 @@
             <!-- Modal body -->
             <form id="form_referencias_laborales">
                 <div class="modal-body d-flex justify-content-center">
-                    <iframe src='' id="iframe_pdf" frameborder="0" width="900px" height="700px"></iframe>
+                    <iframe src='' id="iframe_referencias_laborales_pdf" frameborder="0" width="900px" height="700px"></iframe>
                 </div>
             </form>
         </div>

@@ -47,7 +47,7 @@ class th_referencias_laboralesC
                         <div class="col-10">
                             <p class="fw-bold my-0 d-flex align-items-center">{$value['th_refl_nombre_referencia']}</p>
                             <p class="my-0 d-flex align-items-center">{$value['th_refl_telefono_referencia']}</p>
-                            <a href="#" data-bs-toggle="modal" data-bs-target="#modal_ver_pdf" onclick="definir_ruta_iframe({$value['_id']});">Ver Carta de Recomendación</a>
+                            <a href="#" data-bs-toggle="modal" data-bs-target="#modal_ver_pdf" onclick="definir_ruta_iframe('../img/sin_imagen.jpg');">Ver Carta de Recomendación</a>
                         </div>
                         <div class="col-2 d-flex justify-content-end align-items-center">
                             <button class="btn btn-xs" style="color: white;" onclick="abrir_modal_referencias_laborales({$value['_id']})">
@@ -117,10 +117,12 @@ class th_referencias_laboralesC
         }
 
         if ($this->validar_formato_archivo($file) === 1) {
-            $uploadfile_temporal = $file['pos_ref_lab_file']['tmp_name'];
-            $extension = pathinfo($file['pos_ref_lab_file']['name'], PATHINFO_EXTENSION);
-            $nombre = 'referencia_laboral_' . $post['txt_id'] . '.' . $extension;
+            $uploadfile_temporal = $file['txt_copia_carta_recomendacion']['tmp_name'];
+            $extension = pathinfo($file['txt_copia_carta_recomendacion']['name'], PATHINFO_EXTENSION);
+            $nombre = 'referencia_laboral_' . $post['txt_referencias_laborales_id'] . '.' . $extension;
             $nuevo_nom = $ruta . $nombre;
+
+            //print_r($post); exit(); die();
 
             if (is_uploaded_file($uploadfile_temporal)) {
                 if (move_uploaded_file($uploadfile_temporal, $nuevo_nom)) {
@@ -130,7 +132,7 @@ class th_referencias_laboralesC
                     ];
 
                     $where = [
-                        ['campo' => 'th_refl_id', 'dato' => $post['txt_id']],
+                        ['campo' => 'th_refl_id', 'dato' => $post['txt_referencias_laborales_id']],
                     ];
 
                     // Ejecutar la actualización en la base de datos
@@ -150,7 +152,7 @@ class th_referencias_laboralesC
 
     private function validar_formato_archivo($file)
     {
-        switch ($file['pos_ref_lab_file']['type']) {
+        switch ($file['txt_copia_carta_recomendacion']['type']) {
             case 'application/pdf':
                 return 1;
                 break;
