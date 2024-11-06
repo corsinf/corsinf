@@ -45,6 +45,7 @@
                             <input type="text" class="form-control form-control-sm" name="txt_nombre_certificado_medico" id="txt_nombre_certificado_medico" placeholder="Escriba el nombre del certificado médico">
                         </div>
                     </div>
+
                     <div class="row mb-col">
                         <div class="col-md-12">
                             <label for="txt_respaldo_medico" class="form-label form-label-sm">Documentación que respalde la aptitud para el trabajo <label style="color: red;">*</label></label>
@@ -52,6 +53,7 @@
                         </div>
                     </div>
                 </div>
+                
                 <div class="modal-footer d-flex justify-content-center">
                     <button type="button" class="btn btn-success btn-sm" id="btn_guardar_certificado_medico" onclick="insertar_editar_certificado_medico()">Guardar Certificado Médico</button>
                 </div>

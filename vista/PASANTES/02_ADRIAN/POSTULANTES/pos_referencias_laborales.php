@@ -151,7 +151,6 @@
         $('#txt_telefono_referencia').val('');
         $('#txt_copia_carta_recomendacion').val('');
         $('#txt_referencias_laborales_id').val('');
-        $('#archivo_carta_recomendacion').html('')
         $('#txt_ruta_guardada_carta_recomendacion').val('')
 
         //Limpiar validaciones
@@ -172,14 +171,71 @@
     }
 </script>
 
+<script>
+    function subir_pdf_ref_lab() {
 
+        var file_input = $('#pos_ref_lab_file').val();
+        //var id = id;
+        var id = $('#txt_id').val();
+
+        if (id == '') {
+            Swal.fire('', 'Asegurese de llenar los datos primero', 'warning');
+            return false;
+        }
+
+        if (file_input == '') {
+            Swal.fire('', 'Seleccione un archivo', 'warning');
+            return false;
+        }
+
+        var form_data = new FormData(document.getElementById("form_file_ref_lab"));
+
+        // console.log([...form_data.keys()]);
+        // console.log([...form_data.values()]);
+
+        $.ajax({
+            url: '../controlador/PASANTES/02_ADRIAN/POSTULANTES/th_referencias_laboralesC.php?cargar_archivo=true',
+            type: 'post',
+            data: form_data,
+            contentType: false,
+            processData: false,
+            dataType: 'json',
+
+            success: function(response) {
+                if (response == -1) {
+                    Swal.fire('', 'Algo extraño a pasado intente mas tarde.', 'error');
+
+                } else if (response == -2) {
+                    Swal.fire('', 'Asegurese que el archivo subido sea un PDF.', 'error');
+                } else {
+                    Swal.fire('', 'Se subio con exito.', 'success');
+                    $('#pos_ref_lab_file').val('');
+                    //var id = '<?php echo $id; ?>';
+                    //Editar(id);
+                }
+            }
+        });
+    }
+</script>
 
 
 <div id="pnl_referencias_laborales">
 
 </div>
 
+<form enctype="multipart/form-data" id="form_file_ref_lab" method="post" style="width: inherit;">
+    <!-- <input type="hidden" name="txt_id" id="txt_id" value="<?php echo $id; ?>" class="form-control"> -->
+    <input type="hidden" name="txt_id" id="txt_id" value="2" class="form-control">
 
+    <div class="widget-user-image text-center">
+        <img class="rounded-circle p-1 bg-primary" src="../img/sin_imagen.jpg" alt="User Avatar" width="110" height="110" id="img_foto">
+    </div><br>
+
+    <input type="file" name="pos_ref_lab_file" id="pos_ref_lab_file" class="form-control form-control-sm">
+    <input type="hidden" name="txt_nom_img" id="txt_nom_img">
+
+    <button class="btn btn-outline-primary btn" onclick="subir_pdf_ref_lab();" type="button">Cargar imagen</button>
+</form>
 
 
 <!-- Modal para agregar referencias laborales-->
@@ -216,14 +272,14 @@
                             <label for="txt_copia_carta_recomendacion" class="form-label form-label-sm">Copia de la carta de recomendación <label style="color: red;">*</label></label>
                             <input type="text" name="txt_ruta_guardada_carta_recomendacion" id="txt_ruta_guardada_carta_recomendacion" hidden>
                             <input type="file" class="form-control form-control-sm" name="txt_copia_carta_recomendacion" id="txt_copia_carta_recomendacion" accept=".pdf">
-                            <div class="mt-2" id="archivo_carta_recomendacion"></div>
                         </div>
                     </div>
 
-                    <div class="d-flex justify-content-center">
-                        <button type="button" class="btn btn-success btn-sm px-4 m-1" id="btn_guardar_referencia_laboral" onclick="insertar_editar_referencias_laborales();">Agregar</button>
-                        <button type="button" class="btn btn-danger btn-sm px-4 m-1" id="btn_eliminar_formacion" onclick="delete_datos_referencias_laborales();">Eliminar</button>
-                    </div>
+                </div>
+
+                <div class="modal-footer d-flex justify-content-center">
+                    <button type="button" class="btn btn-success btn-sm px-4 m-1" id="btn_guardar_referencia_laboral" onclick="insertar_editar_referencias_laborales();">Agregar</button>
+                    <button type="button" class="btn btn-danger btn-sm px-4 m-1" id="btn_eliminar_formacion" onclick="delete_datos_referencias_laborales();">Eliminar</button>
                 </div>
             </form>
         </div>
@@ -248,6 +304,7 @@
         </div>
     </div>
 </div>
+
 <script>
     $(document).ready(function() {
         //Validación Referencias Laborales

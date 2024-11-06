@@ -71,12 +71,14 @@
                             </select>
                         </div>
                     </div>
+
                     <div class="row mb-col">
                         <div class="col-md-12">
                             <label for="txt_fecha_contratacion_estado" class="form-label form-label-sm">Fecha de contratación <label style="color: red;">*</label></label>
                             <input type="date" class="form-control form-control-sm" name="txt_fecha_contratacion_estado" id="txt_fecha_contratacion_estado">
                         </div>
                     </div>
+
                     <div class="row mb-col">
                         <div class="col-md-12">
                             <label for="txt_fecha_salida_estado" class="form-label form-label-sm">Fecha de salida <label style="color: red;">*</label></label>
@@ -84,6 +86,7 @@
                         </div>
                     </div>
                 </div>
+                
                 <div class="modal-footer d-flex justify-content-center">
                     <button type="button" class="btn btn-success btn-sm" id="btn_guardar_estado_laboral" onclick="insertar_editar_estado_laboral();">Guardar Estado Laboral</button>
                 </div>
