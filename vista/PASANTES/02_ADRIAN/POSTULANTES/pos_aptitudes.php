@@ -6,6 +6,7 @@
         <?php } ?>
 
         cargar_datos_select_postulante(<?= $id ?>);
+        cargar_datos_select_postulante1(<?= $id ?>);
     });
 
     function activar_select2() {
@@ -204,6 +205,19 @@
     function cargar_datos_select_postulante(id) {
         $.ajax({
             url: '../controlador/PASANTES/02_ADRIAN/POSTULANTES/th_pos_habilidadesC.php?listar_aptitudes_blandas_postulante=true',
+            type: 'post',
+            data: {
+                id_postulante: id
+            },
+            dataType: 'json',
+            success: function(response) {
+                console.log(response)
+            }
+        });
+    }
+    function cargar_datos_select_postulante1(id) {
+        $.ajax({
+            url: '../controlador/PASANTES/02_ADRIAN/POSTULANTES/th_pos_habilidadesC.php?listar_aptitudes_tecnicas_postulante=true',
             type: 'post',
             data: {
                 id_postulante: id

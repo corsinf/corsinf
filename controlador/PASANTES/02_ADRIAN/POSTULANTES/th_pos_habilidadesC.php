@@ -27,6 +27,9 @@ if (isset($_GET['listar_aptitudes_blandas_postulante'])) {
     echo json_encode($controlador->listar_aptitudes_blandas_postulante($_POST['id_postulante']));
 }
 
+if (isset($_GET['listar_aptitudes_tecnicas_postulante'])) {
+    echo json_encode($controlador->listar_aptitudes_tecnicas_postulante($_POST['id_postulante']));
+}
 
 class th_pos_habilidadesC
 {
@@ -137,6 +140,15 @@ class th_pos_habilidadesC
 
 
     function listar_aptitudes_blandas_postulante($id_postulante){
+
+        $datos = $this->modelo->listar_habilidades_postulante($id_postulante);
+
+        return $datos;
+
+    }
+
+
+    function listar_aptitudes_tecnicas_postulante($id_postulante){
 
         $datos = $this->modelo->listar_habilidades_postulante($id_postulante);
 
