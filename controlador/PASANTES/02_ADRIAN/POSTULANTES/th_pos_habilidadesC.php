@@ -143,7 +143,13 @@ class th_pos_habilidadesC
     {
         //corregir
         $datos = $this->modelo->listar_habilidades_postulante($id_postulante, 1);
-        return $datos;
+        
+        $option = '';
+        foreach ($datos as $key => $value) {
+            $option .= "<option value='" . $value['th_hab_id'] . "'>" . $value['th_hab_nombre'] . "</option>";
+        }
+
+        return $option;
     }
 
     function listar_aptitudes_tecnicas_postulante($id_postulante)

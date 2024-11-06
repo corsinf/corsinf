@@ -83,7 +83,17 @@
     }
 
     function lista_aptitudes_blandas_postulante(id) {
-       //aqui
+        $.ajax({
+            url: '../controlador/PASANTES/02_ADRIAN/POSTULANTES/th_pos_habilidadesC.php?listar_aptitudes_blandas_postulante=true',
+            data: {
+                id_postulante: id
+            },
+            type: 'post',
+            dataType: 'json',
+            success: function(response) {
+                $('#ddl_seleccionar_aptitud_blanda').html(response);
+            }
+        });
     }
 
     function lista_aptitudes_tecnicas_postulante(id) {
