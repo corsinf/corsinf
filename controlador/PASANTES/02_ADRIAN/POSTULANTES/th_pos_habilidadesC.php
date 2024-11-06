@@ -141,13 +141,20 @@ class th_pos_habilidadesC
 
     function listar_aptitudes_blandas_postulante($id_postulante)
     {
-        $datos = $this->modelo->listar_habilidades_postulante($id_postulante, 2);
+        //corregir
+        $datos = $this->modelo->listar_habilidades_postulante($id_postulante, 1);
         return $datos;
     }
 
     function listar_aptitudes_tecnicas_postulante($id_postulante)
     {
-        $datos = $this->modelo->listar_habilidades_postulante($id_postulante, 1);
-        return $datos;
+        $datos = $this->modelo->listar_habilidades_postulante($id_postulante, 2);
+
+        $option = '';
+        foreach ($datos as $key => $value) {
+            $option .= "<option value='" . $value['th_hab_id'] . "'>" . $value['th_hab_nombre'] . "</option>";
+        }
+
+        return $option;
     }
 }

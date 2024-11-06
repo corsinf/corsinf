@@ -24,10 +24,11 @@ class th_pos_habilidadesM extends BaseModel
 
         return $datos;
     }
+
     function listar_habilidades_postulante($id_postulante, $tipo_habilidad)
     {
-        $sql = 
-        "SELECT 
+        $sql =
+            "SELECT 
                 cah.th_hab_id, cah.th_hab_nombre
             FROM 
                  th_cat_habilidades cah
@@ -42,7 +43,7 @@ class th_pos_habilidadesM extends BaseModel
                 poh.th_hab_id;";
 
         $datos = $this->db->datos($sql);
-        
+
         return $datos;
     }
 }
