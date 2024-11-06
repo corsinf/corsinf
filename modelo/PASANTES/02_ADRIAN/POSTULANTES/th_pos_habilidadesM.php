@@ -24,7 +24,7 @@ class th_pos_habilidadesM extends BaseModel
 
         return $datos;
     }
-    function listar_habilidades_postulante($id_postulante)
+    function listar_habilidades_postulante($id_postulante, $tipo_habilidad)
     {
         $sql = 
         "SELECT 
@@ -36,13 +36,13 @@ class th_pos_habilidadesM extends BaseModel
                 AND poh.th_habp_estado = 1             
                 AND poh.th_pos_id = $id_postulante
             WHERE 
-                poh.th_hab_id IS NULL                
+                poh.th_hab_id IS NULL 
+                AND cah.th_tiph_id = $tipo_habilidad         
             ORDER BY 
-                poh.th_hab_id;
-        ";
+                poh.th_hab_id;";
 
-        // Suponiendo que $this->db tiene un método para ejecutar consultas con parámetros
         $datos = $this->db->datos($sql);
+        
         return $datos;
     }
 }
