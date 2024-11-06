@@ -24,7 +24,7 @@
                 <hr>
                 <div class="card">
                     <div class="card-body">
-                        <h1 class="titulo mb-4">Oficina 5</h1>
+                        <h1 class="titulo mb-4">Espacios</h1>
                         <form id="formulario_miembro" class="mb-4">
                             <div class="row">
                                 <div class="col-md-3 mb-3">
@@ -49,7 +49,7 @@
                                 </div>
                             </div>
                             <button type="button" onclick="enviardatos()" class="btn btn-primary" id="btn_registrar_miembro">
-                                <i class="bx bx-user-plus"></i><strong>Registrar Miembro</strong>
+                                <i class="bx bx-user-plus"></i><strong>Registrar Espacio</strong>
                             </button>
                         </form>
 
@@ -71,21 +71,10 @@
 
                             <div class="d-flex align-items-center">
                                 <div class="btn-group me-2">
-                                    <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                                        <i class='bx bxs-report'></i><strong>Informe de Miembros</strong>
-                                    </button>
-                                    <ul class="dropdown-menu">
-                                        <li><a class="dropdown-item" href="" onclick="generarExcelMiembros()">Informe en Excel</a></li>
-                                        <li><a class="dropdown-item" href="" onclick="generarPDFMiembros()">Informe en PDF</a></li>
-                                    </ul>
+                                    
                                 </div>
                                 <div class="btn-group">
-                                    <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                                        <i class='bx bxs-report'></i><strong>Informe de Compras Total</strong>
-                                    </button>
-                                    <ul class="dropdown-menu">
-                                        <li><a class="dropdown-item" href="#" onclick="generarExcelCompras()">Informe en Excel</a></li>
-                                        <li><a class="dropdown-item" href="#" onclick="generarPDFCompras()">Informe en PDF</a></li>
+                                    
                                     </ul>
                                 </div>
                             </div>
@@ -246,8 +235,6 @@
 
 <script>
     $(document).ready(function() {
-        lista_usuario();
-        lista_compra();
         lista_comprassala();
         select_productos();
         select_productossala();
@@ -276,30 +263,6 @@
     });
 })
 
-    function lista_usuario() {       
-        $.ajax({
-            url: '../controlador/COWORKING/crear_mienbrosC.php?lista_mienbro=true',
-            type: 'post',
-            dataType: 'json',        
-            success: function(response) {  
-                $('#tbl_body').html(response);
-                console.log(response);
-            }       
-        });
-    }
-
-    function lista_compra() {       
-        $.ajax({
-            url: '../controlador/COWORKING/crear_mienbrosC.php?lista_compra=true',
-            type: 'post',
-            dataType: 'json', 
-            success: function(response) {  
-                $('#tbl_boby').html(response);
-                console.log(response);
-            }       
-        });
-    }
-
     function lista_comprassala() {       
         $.ajax({
             url: '../controlador/COWORKING/crear_mienbrosC.php?lista_comprasala=true',
@@ -312,263 +275,10 @@
         });
     }
 
-    function enviardatos() {
-    var parametros = {
-        'nombre_miembro': $('#txt_nombre').val(),
-        'apellido_miembro': $('#txt_apellido').val(),
-        'telefono_miembro': $('#txt_numero_celular').val(),
-        'direccion_miembro': $('#txt_direccion').val(),
-        'id_espacio': $('#ddl_id_espacio').val()
-    };
-
-    $.ajax({
-        data: {data: parametros},
-        url: '../controlador/COWORKING/crear_mienbrosC.php?add=true',
-        type: 'post',
-        dataType: 'json',
-        success: function(response) {  
-            if (response.status === 'success') {
-                Swal.fire({
-                    title: 'Miembro agregado con éxito',
-                    icon: 'success',
-                    confirmButtonText: 'Aceptar'
-                }).then(() => {
-                    lista_usuario(); 
-                    $('#formulario_miembro')[0].reset(); 
-                });
-            } else {
-                Swal.fire({
-                    title: 'Error al agregar el miembro',
-                    text: response.message,
-                    icon: 'error',
-                    confirmButtonText: 'Aceptar'
-                });
-            }
-        },
-        error: function() {
-            Swal.fire({
-                title: 'Error',
-                text: 'Ocurrió un problema en el servidor',
-                icon: 'error',
-                confirmButtonText: 'Aceptar'
-            });
-        }
-    });
-}
+R
 
 
-    function enviarCompras() {
-        var parametros = {
-            'id_miembro': $('#id_miembro').val(),
-            'id_producto': $('#txt_producto').val(),
-            'cantidad_compra': $('#txt_cantidad').val(),
-            'pvp_compra': $('#txt_precio').val(),
-            'total_compra': $('#txt_total').val(),
-            'id_sala': $('#id_sala').val()
-        };
+    
 
-        $.ajax({
-            data: {data: parametros},
-            url: '../controlador/COWORKING/crear_mienbrosC.php?add_compra=true',
-            type: 'post',
-            dataType: 'json',
-            success: function(response) {  
-                if (response == 1) {
-                    Swal.fire({
-                        title: 'Compra agregada con éxito',
-                        icon: 'success',
-                        confirmButtonText: 'Aceptar'
-                    }).then(() => {
-                        lista_compra(); 
-                        $('#formulario_compras')[0].reset(); 
-                    });
-                } else {
-                    Swal.fire({
-                        title: 'Error al agregar la compra',
-                        icon: 'error',
-                        confirmButtonText: 'Aceptar'
-                    });
-                }
-            }
-        });
-    }
-
-    function enviarComprassala() {
-        var parametros = {
-            'id_producto': $('#txt_productos').val(),
-            'cantidad_compra': $('#txt_cantidad_servicio').val(),
-            'pvp_compra': $('#txt_precios').val(),
-            'total_compra': $('#txt_total_servicio').val(),
-            'id_sala': $('#did_sala').val()
-        };
-
-        
-        $.ajax({
-            data: {data: parametros},
-            url: '../controlador/COWORKING/crear_mienbrosC.php?add_compra=true',
-            type: 'post',
-            dataType: 'json',
-            success: function(response) {  
-                if (response == 1) {
-                    Swal.fire({
-                        title: 'Compra agregada con éxito',
-                        icon: 'success',
-                        confirmButtonText: 'Aceptar'
-                    }).then(() => {
-                        lista_comprassala(); 
-                        $('#formulario_servicios')[0].reset(); 
-                    });
-                } else {
-                    Swal.fire({
-                        title: 'Error al agregar la compra',
-                        icon: 'error',
-                        confirmButtonText: 'Aceptar'
-                    });
-                }
-            }
-        });
-    }
-
-    function abrirModal(id_miembro, id_sala) {
-        console.log('ID Miembro:', id_miembro);  // Verifica que el ID del miembro se pase correctamente
-        $('#id_miembro').val(id_miembro);        // Asigna el ID del miembro al campo en el modal
-
-        console.log('ID Sala:', id_sala);        // Verifica que el ID de la sala (espacio) se pase correctamente
-        $('#id_sala').val(id_sala);              // Asigna el ID de la sala (espacio) al campo correspondiente en el modal
-
-        select_productos();                      // Cualquier otra lógica adicional que necesites al abrir el modal
-    }
-
-    function calcularTotal() {
-        var cantidad = parseFloat($('#txt_cantidad').val()) || 0;
-        var precio = parseFloat($('#txt_precio').val()) || 0;
-        $('#txt_total').val((cantidad * precio).toFixed(2));
-    }
-
-    function calcularTotalsala() {
-        var cantidad = parseFloat($('#txt_cantidad_servicio').val()) || 0;
-        var precio = parseFloat($('#txt_precios').val()) || 0;
-        $('#txt_total_servicio').val((cantidad * precio).toFixed(2));
-    }
-
-    function eliminarCompra(id_compra) {
-        Swal.fire({
-            title: '¿Estás seguro?',
-            text: "Esta acción eliminará la compra seleccionada.",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonText: 'Sí, eliminar',
-            cancelButtonText: 'Cancelar'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                $.ajax({
-                    url: '../controlador/COWORKING/crear_mienbrosC.php?eliminar_compra=true',
-                    type: 'POST',
-                    data: { id_compra: id_compra },
-                    dataType: 'json',
-                    success: function(response) {
-                        if (response === "Compra eliminada con éxito") {
-                            $('#row-compra-' + id_compra).remove();
-                            Swal.fire('Eliminado', 'Compra eliminada con éxito', 'success');
-                            lista_compra();
-                            lista_comprassala();    
-                        } else {
-                            Swal.fire('Error', 'Error al eliminar la compra', 'error');
-                        }
-                    }
-                });
-            }
-        });
-    }
-
-    function eliminarMiembro(id_miembro) {
-        $.ajax({
-            url: '../controlador/COWORKING/crear_mienbrosC.php',
-            type: 'POST',
-            data: { id_miembro: id_miembro, action: 'verificar_compras' },
-            dataType: 'json',
-            success: function(response) {
-                console.log('Respuesta de verificar_compras:', response);
-
-                if (response.error) {
-                    Swal.fire({
-                        title: 'Error',
-                        text: response.error,
-                        icon: 'error',
-                        confirmButtonText: 'Entendido'
-                    });
-                    return;
-                }
-
-                if (response.tiene_compras) {
-                    Swal.fire({
-                        title: 'Esta persona tiene compras agregadas y no se puede eliminar',
-                        icon: 'warning',
-                        confirmButtonText: 'Entendido'
-                    });
-                } else {
-                    Swal.fire({
-                        title: '¿Estás seguro?',
-                        text: "Esta acción eliminará al miembro seleccionado.",
-                        icon: 'warning',
-                        showCancelButton: true,
-                        confirmButtonText: 'Sí, eliminar',
-                        cancelButtonText: 'Cancelar'
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            $.ajax({
-                                url: '../controlador/COWORKING/crear_mienbrosC.php?eliminar_miembro=true',
-                                type: 'POST',
-                                data: { id_miembro: id_miembro },
-                                dataType: 'json',
-                                success: function(response) {
-                                    console.log('Respuesta de eliminar_miembro:', response);
-
-                                    if (response === "Miembro eliminado con éxito") {
-                                        $('#row-miembro-' + id_miembro).remove();
-                                        Swal.fire('Eliminado', 'Miembro eliminado con éxito', 'success');
-                                        lista_usuario();
-                                    } else {
-                                        Swal.fire('Error', 'Error al eliminar el miembro', 'error');
-                                    }
-                                }
-                            });
-                        }
-                    });
-                }
-            }
-        });
-    }
-
-    function select_productos() {       
-        $.ajax({
-            url: '../controlador/COWORKING/crear_mienbrosC.php?listar_productos=true',
-            type: 'post',
-            dataType: 'json',        
-            success: function(response) {
-                $('#txt_producto').html(response);
-            }       
-        });
-    }
-
-    function select_productossala() {       
-        $.ajax({
-            url: '../controlador/COWORKING/crear_mienbrosC.php?listar_productossala=true',
-            type: 'post',
-            dataType: 'json',        
-            success: function(response) {
-                $('#txt_productos').html(response);
-            }       
-        });
-    }
-
-    function generarPDFMiembros() {
-            var url ='../controlador/COWORKING/crear_mienbrosC.php?generarPDFMiembros=true'
-            window.open(url,"_blank");
-        }
-
-    function generarPDFCompras() {
-            var url ='../controlador/COWORKING/crear_mienbrosC.php?generarPDFCompras=true'
-            window.open(url,"_blank");
-        }
+    
 </script>
