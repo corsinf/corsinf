@@ -43,7 +43,7 @@ if (isset($_GET['id'])) {
                 $('#txt_telefono_1').val(response[0].th_pos_telefono_1);
                 $('#txt_telefono_2').val(response[0].th_pos_telefono_2);
                 $('#txt_correo').val(response[0].th_pos_correo);
-                $('#txt_direccion_postal').val("response[0].th_pos_postal");
+                $('#txt_direccion_postal').val(response[0].th_pos_postal);
 
                 nombres_completos = response[0].th_pos_primer_apellido + ' ' + response[0].th_pos_segundo_apellido + ' ' + response[0].th_pos_primer_nombre + ' ' + response[0].th_pos_segundo_nombre;
                 $('#txt_nombres_completos_v').html(nombres_completos);
@@ -82,8 +82,8 @@ if (isset($_GET['id'])) {
         var ddl_parroquia = $('#ddl_parroquia').val();
         var txt_direccion_postal = $('#txt_direccion_postal').val();
         var txt_direccion = $('#txt_direccion').val();
-
-        var parametros_informacion_persona = {            
+            
+        var parametros_informacion_personal = {
             '_id': '<?= $id ?>',
             'txt_primer_nombre': txt_primer_nombre,
             'txt_segundo_nombre': txt_segundo_nombre,
@@ -104,7 +104,7 @@ if (isset($_GET['id'])) {
             'txt_direccion': txt_direccion,
 
         };
-        
+
         if ($("#form_informacion_personal").valid()) {
             // Si es válido, puedes proceder a enviar los datos por AJAX
             console.log(parametros_informacion_personal);
@@ -266,7 +266,8 @@ if (isset($_GET['id'])) {
                                         </div>
                                         <hr />
 
-                                        <?php include_once('../vista/PASANTES/02_ADRIAN/POSTULANTES/pos_informacion_adicional.php'); ?>
+                                        <!-- Queda en espera este parte del modulo -->
+                                        <!-- <?php include_once('../vista/PASANTES/02_ADRIAN/POSTULANTES/pos_informacion_adicional.php'); ?> -->
 
                                         <div class="row">
                                             <div class="col-9">
@@ -654,8 +655,16 @@ if (isset($_GET['id'])) {
                             <input type="email" class="form-control form-control-sm" name="txt_correo" id="txt_correo" placeholder="Escriba su correo electrónico">
                         </div>
                     </div>
-                    
+
                     <?php include_once('../vista/PASANTES/02_ADRIAN/POSTULANTES/provincias_ciudades_parroquias.php'); ?>
+
+                    <div class="row mb-col">
+                                <div class="col-md-12">
+                                    <label for="txt_direccion" class="form-label form-label-sm">Dirección </label>
+                                    <input type="text" class="form-control form-control-sm" name="txt_direccion" id="txt_direccion" placeholder="Escriba su dirección">
+                                </div>
+                            </div>
+         
                 </div>
 
 
