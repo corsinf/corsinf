@@ -1,5 +1,6 @@
 <?php
 require_once(dirname(__DIR__, 2) . '/modelo/COWORKING/ClaseEjemploM.php'); // Incluye la clase
+
 $buscar = isset($_GET['buscar']) ? $_GET['buscar'] : '';
 $categoria = isset($_GET['categoria']) ? $_GET['categoria'] : '';
 $rango_precio = isset($_GET['rango_precio']) ? $_GET['rango_precio'] : '';
@@ -80,10 +81,10 @@ $id_espacio = $resultado ? $resultado : []; // Asigna $resultado a $id_espacio o
                             <div class="row" id="espaciosLista">
                                 <?php foreach ($resultado as $espacio): ?>
                                     <div class="col-md-3 mb-4 espacio" 
-                                         data-nombre="<?php echo htmlspecialchars($espacio['nombre_espacio']); ?>"
-                                         data-estado="<?php echo strtoupper($espacio['estado_espacio']); ?>"
-                                         data-categoria="<?php echo htmlspecialchars($espacio['nombre_categoria']); ?>"
-                                         data-precio="<?php echo htmlspecialchars($espacio['precio_espacio']); ?>">
+                                        data-nombre="<?php echo htmlspecialchars($espacio['nombre_espacio']); ?>"
+                                        data-estado="<?php echo strtoupper($espacio['estado_espacio']); ?>"
+                                        data-categoria="<?php echo htmlspecialchars($espacio['nombre_categoria']); ?>"
+                                        data-precio="<?php echo htmlspecialchars($espacio['precio_espacio']); ?>">
 
                                         <div class="product-card ms-2">
                                             <img src="https://media.istockphoto.com/id/157334256/es/foto/auditorio.jpg?s=1024x1024&w=is&k=20&c=FcTLVow6mKMcNk76ybgTuo04L39IOB3qnsZHDN1h4xI=" alt="Product Image" class="product-image img-fluid" style="width: 150px; height: auto;">
@@ -101,11 +102,8 @@ $id_espacio = $resultado ? $resultado : []; // Asigna $resultado a $id_espacio o
                                                 <?php echo (trim(strtoupper($espacio['estado_espacio'])) === 'A') ? 'Activo' : 'Inactivo'; ?>
                                             </p>
 
-                                            <?php if (trim(strtoupper($espacio['estado_espacio'])) === 'A'): ?>
-                                                <button class="btn btn-primary" onclick="window.location.href='http://localhost/corsinf/vista/inicio.php?mod=1010&acc=crear_mienbros';">Detalles</button>
-                                            <?php else: ?>
-                                                <button class="btn btn-primary" onclick="alert('No se puede ver el detalle porque el espacio está inactivo');">Detalles</button>
-                                            <?php endif; ?>
+                                            <!-- Botón de detalles sin condición de estado -->
+                                            <button class="btn btn-primary" onclick="window.location.href='http://localhost/corsinf/vista/inicio.php?mod=1010&acc=crear_mienbros';">Detalles</button>
                                         </div>
                                     </div>
                                 <?php endforeach; ?>
