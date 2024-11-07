@@ -57,8 +57,11 @@ if (isset($_GET['id'])) {
                 //Input para las referencias laborales
                 $('#txt_numero_cedula_referencia_laboral').val(response[0].th_pos_cedula);
 
+                //Input para todos los pos_id que se vayan a colocar en los modales
+                $('input[name="txt_postulante_id"]').val(response[0]._id);
+                $('input[name="txt_postulante_cedula"]').val(response[0].th_pos_cedula);
 
-                console.log(response);
+                //console.log(response);
             }
         });
     }
@@ -107,7 +110,7 @@ if (isset($_GET['id'])) {
 
         if ($("#form_informacion_personal").valid()) {
             // Si es válido, puedes proceder a enviar los datos por AJAX
-            console.log(parametros_informacion_personal);
+            //console.log(parametros_informacion_personal);
             insertar_informacion_personal(parametros_informacion_personal);
         }
     }

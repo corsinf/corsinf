@@ -12,15 +12,11 @@ if (isset($_GET['listar_modal'])) {
 }
 
 if (isset($_GET['insertar'])) {
-    echo json_encode($controlador->insertar_editar($_POST['parametros']));
+    echo json_encode($controlador->insertar_editar($_FILES, $_POST));
 }
 
 if (isset($_GET['eliminar'])) {
     echo json_encode($controlador->eliminar($_POST['id']));
-}
-
-if (isset($_GET['cargar_archivo'])) {
-    echo json_encode($controlador->guardar_archivo($_FILES, $_POST));
 }
 
 
@@ -73,22 +69,35 @@ class th_referencias_laboralesC
         return $datos;
     }
 
-    function insertar_editar($parametros)
+    function insertar_editar($file, $parametros)
     {
+        // print_r('$parametros');
+        // exit();
+        // die();
+
         $datos = array(
             array('campo' => 'th_refl_nombre_referencia', 'dato' => $parametros['txt_nombre_referencia']),
             array('campo' => 'th_refl_telefono_referencia', 'dato' => $parametros['txt_telefono_referencia']),
-            array('campo' => 'th_refl_carta_recomendacion', 'dato' => $parametros['txt_copia_carta_recomendacion']),
-            array('campo' => 'th_pos_id', 'dato' => $parametros['txt_id_postulante']),
-
+            //array('campo' => 'th_refl_carta_recomendacion', 'dato' => $parametros['txt_copia_carta_recomendacion']), 
+            array('campo' => 'th_pos_id', 'dato' => $parametros['txt_postulante_id']),
         );
 
-        if ($parametros['_id'] == '') {
-            $datos = $this->modelo->insertar($datos);
+        $id_referencias_laboral = $parametros['txt_referencias_laborales_id'];
+
+        if ($id_referencias_laboral == '') {
+            $datos = $this->modelo->insertar_id($datos);
+            $this->guardar_archivo($file, $parametros, $datos);
+            return 1;
         } else {
-            $where[0]['campo'] = 'th_refl_id';
-            $where[0]['dato'] = $parametros['_id'];
+
+            $where = array(
+                array('campo' => 'th_refl_id', 'dato' => $id_referencias_laboral),
+            );
+
             $datos = $this->modelo->editar($datos, $where);
+            if ($parametros['txt_ruta_guardada_carta_recomendacion'] == '' || $parametros['txt_ruta_guardada_carta_recomendacion'] == null) {
+                $datos = $this->guardar_archivo($file, $parametros, $id_referencias_laboral);
+            }
         }
 
         return $datos;
@@ -109,14 +118,11 @@ class th_referencias_laboralesC
         return $datos;
     }
 
-    function guardar_archivo($file, $post)
+    private function guardar_archivo($file, $post, $id_insertar_editar)
     {
-        // print_r($_SESSION['INICIO']['ID_EMPRESA']);
-        // exit();
-
         $id_empresa = $_SESSION['INICIO']['ID_EMPRESA'];
         $ruta = dirname(__DIR__, 4) . '/REPOSITORIO/TALENTO_HUMANO/' . $id_empresa . '/'; //ruta carpeta donde queremos copiar los archivos
-        $ruta .= $post['txt_numero_cedula_referencia_laboral'] . '/' . 'REFERENCIAS_LABORALES/';
+        $ruta .= $post['txt_postulante_cedula'] . '/' . 'REFERENCIAS_LABORALES/';
 
         if (!file_exists($ruta)) {
             mkdir($ruta, 0777, true);
@@ -126,23 +132,23 @@ class th_referencias_laboralesC
             $uploadfile_temporal = $file['txt_copia_carta_recomendacion']['tmp_name'];
             $extension = pathinfo($file['txt_copia_carta_recomendacion']['name'], PATHINFO_EXTENSION);
             //Para referencias laborales
-            $nombre = 'referencia_laboral_' . $post['txt_referencias_laborales_id'] . '.' . $extension;
+            $nombre = 'referencia_laboral_' . $id_insertar_editar . '.' . $extension;
             $nuevo_nom = $ruta . $nombre;
 
-            $nombre_ruta = '../REPOSITORIO/TALENTO_HUMANO/' . $id_empresa . '/' . $post['txt_numero_cedula_referencia_laboral'] . '/' . 'REFERENCIAS_LABORALES/';
+            $nombre_ruta = '../REPOSITORIO/TALENTO_HUMANO/' . $id_empresa . '/' . $post['txt_postulante_cedula'] . '/' . 'REFERENCIAS_LABORALES/';
             $nombre_ruta .= $nombre;
             //print_r($post); exit(); die();
 
             if (is_uploaded_file($uploadfile_temporal)) {
                 if (move_uploaded_file($uploadfile_temporal, $nuevo_nom)) {
 
-                    $datos = [
-                        ['campo' => 'th_refl_carta_recomendacion', 'dato' => $nombre_ruta],
-                    ];
+                    $datos = array(
+                        array('campo' => 'th_refl_carta_recomendacion', 'dato' => $nombre_ruta),
+                    );
 
-                    $where = [
-                        ['campo' => 'th_refl_id', 'dato' => $post['txt_referencias_laborales_id']],
-                    ];
+                    $where = array(
+                        array('campo' => 'th_refl_id', 'dato' => $id_insertar_editar),
+                    );
 
                     // Ejecutar la actualización en la base de datos
                     $base = $this->modelo->editar($datos, $where);
