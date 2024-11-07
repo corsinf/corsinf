@@ -43,6 +43,7 @@ if (isset($_GET['id'])) {
                 $('#txt_telefono_1').val(response[0].th_pos_telefono_1);
                 $('#txt_telefono_2').val(response[0].th_pos_telefono_2);
                 $('#txt_correo').val(response[0].th_pos_correo);
+                $('#txt_direccion_postal').val("response[0].th_pos_postal");
 
                 nombres_completos = response[0].th_pos_primer_apellido + ' ' + response[0].th_pos_segundo_apellido + ' ' + response[0].th_pos_primer_nombre + ' ' + response[0].th_pos_segundo_nombre;
                 $('#txt_nombres_completos_v').html(nombres_completos);
@@ -76,9 +77,13 @@ if (isset($_GET['id'])) {
         var txt_telefono_1 = $('#txt_telefono_1').val();
         var txt_telefono_2 = $('#txt_telefono_2').val();
         var txt_correo = $('#txt_correo').val();
+        var ddl_provincias = $('#ddl_provincias').val();
+        var ddl_ciudad = $('#ddl_ciudad').val();
+        var ddl_parroquia = $('#ddl_parroquia').val();
+        var txt_direccion_postal = $('#txt_direccion_postal').val();
+        var txt_direccion = $('#txt_direccion').val();
 
-
-        var parametros_informacion_personal = {
+        var parametros_informacion_persona = {            
             '_id': '<?= $id ?>',
             'txt_primer_nombre': txt_primer_nombre,
             'txt_segundo_nombre': txt_segundo_nombre,
@@ -92,9 +97,14 @@ if (isset($_GET['id'])) {
             'txt_telefono_1': txt_telefono_1,
             'txt_telefono_2': txt_telefono_2,
             'txt_correo': txt_correo,
+            'ddl_provincias': ddl_provincias,
+            'ddl_ciudad': ddl_ciudad,
+            'ddl_parroquia': ddl_parroquia,
+            'txt_direccion_postal': txt_direccion_postal,
+            'txt_direccion': txt_direccion,
 
         };
-
+        
         if ($("#form_informacion_personal").valid()) {
             // Si es válido, puedes proceder a enviar los datos por AJAX
             console.log(parametros_informacion_personal);

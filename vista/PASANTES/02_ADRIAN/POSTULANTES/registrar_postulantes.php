@@ -45,7 +45,7 @@ if (isset($_GET['id'])) {
                 $('#ddl_provincia').val(response[0].th_prov_id);
                 $('#ddl_ciudad').val(response[0].th_ciu_id);
                 $('#ddl_parroquia').val(response[0].th_parr_id);
-                $('#txt_codigo_postal').val(response[0].th_pos_postal);
+                $('#txt_direccion_postal').val(response[0].th_pos_postal);
                 $('#txt_direccion').val(response[0].th_pos_direccion);
 
                 calcular_edad('txt_edad', response[0].th_pos_fecha_nacimiento);
@@ -73,7 +73,7 @@ if (isset($_GET['id'])) {
         var ddl_provincias = $('#ddl_provincias').val();
         var ddl_ciudad = $('#ddl_ciudad').val();
         var ddl_parroquia = $('#ddl_parroquia').val();
-        var txt_codigo_postal = $('#txt_direccion_postal').val();
+        var txt_direccion_postal = $('#txt_direccion_postal').val();
         var txt_direccion = $('#txt_direccion').val();
 
         var parametros = {
@@ -93,7 +93,7 @@ if (isset($_GET['id'])) {
             'ddl_provincias': ddl_provincias,
             'ddl_ciudad': ddl_ciudad,
             'ddl_parroquia': ddl_parroquia,
-            'txt_codigo_postal': txt_codigo_postal,
+            'txt_direccion_postal': txt_direccion_postal,
             'txt_direccion': txt_direccion,
 
         };
@@ -266,7 +266,7 @@ if (isset($_GET['id'])) {
                             </div>
 
                             <div class="row mb-col">
-                                <div class="col-md-4">
+                                <div class="col-md-6">
                                     <label for="ddl_nacionalidad" class="form-label form-label-sm">Nacionalidad <label style="color: red;">*</label></label>
                                     <select class="form-select form-select-sm" id="ddl_nacionalidad" name="ddl_nacionalidad">
                                         <option selected disabled value="">-- Selecciona una Nacionalidad --</option>
@@ -277,7 +277,7 @@ if (isset($_GET['id'])) {
                                         <option value="Paraguayo">Paraguayo</option>
                                     </select>
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-md-6">
                                     <label for="ddl_estado_civil" class="form-label form-label-sm">Estado civil <label style="color: red;">*</label></label>
                                     <select class="form-select form-select-sm" id="ddl_estado_civil" name="ddl_estado_civil">
                                         <option selected disabled value="">-- Selecciona un Estado Civil --</option>
@@ -288,25 +288,29 @@ if (isset($_GET['id'])) {
                                         <option value="Union">Unión de hecho</option>
                                     </select>
                                 </div>
-                                
 
-                                <?php include_once('../vista/PASANTES/02_ADRIAN/POSTULANTES/provincias_ciudades_parroquias.php'); ?>
+                            </div>
 
-                                <div class="row mb-col">
-                                    <div class="col-md-12">
-                                        <label for="txt_direccion" class="form-label form-label-sm">Dirección </label>
-                                        <input type="text" class="form-control form-control-sm" name="txt_direccion" id="txt_direccion" placeholder="Escriba su dirección">
-                                    </div>
+                            
+                            <?php include_once('../vista/PASANTES/02_ADRIAN/POSTULANTES/provincias_ciudades_parroquias.php'); ?>
+                           
+
+                            <div class="row mb-col">
+                                <div class="col-md-12">
+                                    <label for="txt_direccion" class="form-label form-label-sm">Dirección </label>
+                                    <input type="text" class="form-control form-control-sm" name="txt_direccion" id="txt_direccion" placeholder="Escriba su dirección">
                                 </div>
+                            </div>
 
-                                <div class="d-flex justify-content-end pt-2">
-                                    <?php if ($_id == '') { ?>
-                                        <button class="btn btn-primary btn-sm px-4 m-0 d-flex align-items-center" onclick="insertar_editar();" type="button"><i class="bx bx-save"></i> Guardar</button>
-                                    <?php } else { ?>
-                                        <button class="btn btn-primary btn-sm px-4 m-1 d-flex align-items-center" onclick="insertar_editar();" type="button"><i class="bx bx-save"></i> Guardar</button>
-                                        <button class="btn btn-danger btn-sm px-4 m-1 d-flex align-items-center" onclick="delete_datos()" type="button"><i class="bx bx-trash"></i> Eliminar</button>
-                                    <?php } ?>
-                                </div>
+                            <div class="d-flex justify-content-end pt-2">
+                                <?php if ($_id == '') { ?>
+                                    <button class="btn btn-primary btn-sm px-4 m-0 d-flex align-items-center" onclick="insertar_editar();" type="button"><i class="bx bx-save"></i> Guardar</button>
+                                <?php } else { ?>
+                                    <button class="btn btn-primary btn-sm px-4 m-1 d-flex align-items-center" onclick="insertar_editar();" type="button"><i class="bx bx-save"></i> Guardar</button>
+                                    <button class="btn btn-danger btn-sm px-4 m-1 d-flex align-items-center" onclick="delete_datos()" type="button"><i class="bx bx-trash"></i> Eliminar</button>
+                                <?php } ?>
+                            </div>
+
                         </form>
                     </div>
                 </div>
