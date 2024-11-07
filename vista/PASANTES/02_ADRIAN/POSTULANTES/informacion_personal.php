@@ -267,7 +267,7 @@ if (isset($_GET['id'])) {
                                         <hr />
 
                                         <!-- Queda en espera este parte del modulo -->
-                                        <!-- <?php include_once('../vista/PASANTES/02_ADRIAN/POSTULANTES/pos_informacion_adicional.php'); ?> -->
+                                        <?php //include_once('../vista/PASANTES/02_ADRIAN/POSTULANTES/pos_informacion_adicional.php'); ?>
 
                                         <div class="row">
                                             <div class="col-9">
