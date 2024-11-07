@@ -40,6 +40,7 @@ class th_referencias_laboralesC
 
         $texto = '';
         foreach ($datos as $key => $value) {
+            $url_pdf = '../REPOSITORIO/TALENTO_HUMANO.pdf';
 
             $texto .=
                 <<<HTML
@@ -47,10 +48,10 @@ class th_referencias_laboralesC
                         <div class="col-10">
                             <p class="fw-bold my-0 d-flex align-items-center">{$value['th_refl_nombre_referencia']}</p>
                             <p class="my-0 d-flex align-items-center">{$value['th_refl_telefono_referencia']}</p>
-                            <a href="#" data-bs-toggle="modal" data-bs-target="#modal_ver_pdf" onclick="definir_ruta_iframe('../img/sin_imagen.jpg');">Ver Carta de Recomendación</a>
+                            <a href="#" data-bs-toggle="modal" data-bs-target="#modal_ver_pdf" onclick="definir_ruta_iframe('{$value['th_refl_carta_recomendacion']}');">Ver Carta de Recomendación</a>
                         </div>
                         <div class="col-2 d-flex justify-content-end align-items-center">
-                            <button class="btn btn-xs" style="color: white;" onclick="abrir_modal_referencias_laborales({$value['_id']})">
+                            <button class="btn btn-xs" style="color: white;" onclick="abrir_modal_referencias_laborales('{$value['_id']}')">
                                 <i class="text-dark bx bx-pencil me-0" style="font-size: 20px;"></i>
                             </button>
                         </div>
@@ -110,7 +111,12 @@ class th_referencias_laboralesC
 
     function guardar_archivo($file, $post)
     {
-        $ruta = dirname(__DIR__, 4) . '/REPOSITORIO/talento_humano_1/'; //ruta carpeta donde queremos copiar las imágenes
+        // print_r($_SESSION['INICIO']['ID_EMPRESA']);
+        // exit();
+
+        $id_empresa = $_SESSION['INICIO']['ID_EMPRESA'];
+        $ruta = dirname(__DIR__, 4) . '/REPOSITORIO/TALENTO_HUMANO/' . $id_empresa . '/'; //ruta carpeta donde queremos copiar los archivos
+        $ruta .= $post['txt_numero_cedula_referencia_laboral'] . '/' . 'REFERENCIAS_LABORALES/';
 
         if (!file_exists($ruta)) {
             mkdir($ruta, 0777, true);
@@ -119,16 +125,19 @@ class th_referencias_laboralesC
         if ($this->validar_formato_archivo($file) === 1) {
             $uploadfile_temporal = $file['txt_copia_carta_recomendacion']['tmp_name'];
             $extension = pathinfo($file['txt_copia_carta_recomendacion']['name'], PATHINFO_EXTENSION);
+            //Para referencias laborales
             $nombre = 'referencia_laboral_' . $post['txt_referencias_laborales_id'] . '.' . $extension;
             $nuevo_nom = $ruta . $nombre;
 
+            $nombre_ruta = '../REPOSITORIO/TALENTO_HUMANO/' . $id_empresa . '/' . $post['txt_numero_cedula_referencia_laboral'] . '/' . 'REFERENCIAS_LABORALES/';
+            $nombre_ruta .= $nombre;
             //print_r($post); exit(); die();
 
             if (is_uploaded_file($uploadfile_temporal)) {
                 if (move_uploaded_file($uploadfile_temporal, $nuevo_nom)) {
 
                     $datos = [
-                        ['campo' => 'th_refl_carta_recomendacion', 'dato' => $nuevo_nom],
+                        ['campo' => 'th_refl_carta_recomendacion', 'dato' => $nombre_ruta],
                     ];
 
                     $where = [
