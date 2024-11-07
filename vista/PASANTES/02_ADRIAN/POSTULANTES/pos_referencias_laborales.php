@@ -145,7 +145,6 @@
         });
     }
 
-
     function limpiar_parametros_referencias_laborales() {
         //certificaciones capacitaciones
         $('#txt_nombre_referencia').val('');
@@ -163,8 +162,8 @@
         $('#btn_guardar_referencia_laboral').html('Agregar');
     }
 
-    function definir_ruta_iframe(id) {
-        var cambiar_ruta = $('#iframe_referencias_laborales_pdf').attr('src', '../REPOSITORIO/talento_humano_1/referencia_laboral_2.pdf');
+    function definir_ruta_iframe(url) {
+        var cambiar_ruta = $('#iframe_referencias_laborales_pdf').attr('src', url);
     }
 
     function limpiar_parametros_iframe() {
@@ -189,9 +188,6 @@
         }
 
         var form_data = new FormData(document.getElementById("form_referencias_laborales"));
-
-        // console.log([...form_data.keys()]);
-        // console.log([...form_data.values()]);
 
         $.ajax({
             url: '../controlador/PASANTES/02_ADRIAN/POSTULANTES/th_referencias_laboralesC.php?cargar_archivo=true',
@@ -246,21 +242,6 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="limpiar_parametros_referencias_laborales()"></button>
             </div>
 
-
-            <!-- <form enctype="multipart/form-data" id="form_referencias_laborales_1" method="post" style="width: inherit;">
-                <input type="hidden" name="txt_id" id="txt_id" value="7" class="form-control">
-
-                <div class="widget-user-image text-center">
-                    <img class="rounded-circle p-1 bg-primary" src="../img/sin_imagen.jpg" alt="User Avatar" width="110" height="110" id="img_foto">
-                </div><br>
-
-                <input type="file" name="txt_copia_carta_recomendacion" id="txt_copia_carta_recomendacion" class="form-control form-control-sm">
-                <input type="hidden" name="txt_nom_img" id="txt_nom_img">
-
-                <button class="btn btn-outline-primary btn" onclick="subir_pdf_ref_lab();" type="button">Cargar imagen</button>
-            </form> -->
-
-
             <!-- Modal body -->
             <form id="form_referencias_laborales" enctype="multipart/form-data" method="post" style="width: inherit;">
 
@@ -297,6 +278,7 @@
                 <div class="modal-footer d-flex justify-content-center">
                     <button type="button" class="btn btn-success btn-sm px-4 m-1" id="btn_guardar_referencia_laboral" onclick="insertar_editar_referencias_laborales();">Agregar</button>
                     <button type="button" class="btn btn-danger btn-sm px-4 m-1" id="btn_eliminar_formacion" onclick="delete_datos_referencias_laborales();">Eliminar</button>
+                    <!-- <button type="button" class="btn btn-danger btn-sm px-4 m-1" id="btn_eliminar_formacion" onclick="subir_pdf_ref_lab();">Subir imagen</button> -->
                 </div>
             </form>
         </div>
