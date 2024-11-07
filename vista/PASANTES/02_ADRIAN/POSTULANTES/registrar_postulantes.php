@@ -73,7 +73,7 @@ if (isset($_GET['id'])) {
         var ddl_provincias = $('#ddl_provincias').val();
         var ddl_ciudad = $('#ddl_ciudad').val();
         var ddl_parroquia = $('#ddl_parroquia').val();
-        var txt_codigo_postal = $('#txt_codigo_postal').val();
+        var txt_codigo_postal = $('#txt_direccion_postal').val();
         var txt_direccion = $('#txt_direccion').val();
 
         var parametros = {

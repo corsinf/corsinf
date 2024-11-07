@@ -27,7 +27,7 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                     data: null,
                     render: function(data, type, item) {
                         href = `../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=registrar_postulantes&id=${item._id}`;
-                        return `<a href="${href}"><u>` + item.th_pos_primer_apellido + ` ` + item.th_pos_segundo_apellido + ` ` + item.th_pos_primer_nombre + `</u></a>`;
+                        return `<a href="${href}"><u> ${item.th_pos_primer_apellido} ${item.th_pos_segundo_apellido} ${item.th_pos_primer_nombre} ${item.th_pos_segundo_nombre}</u></a>`;
                     }
                 },
                 {

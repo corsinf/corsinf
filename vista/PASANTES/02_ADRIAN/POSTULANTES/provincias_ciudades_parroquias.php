@@ -191,10 +191,10 @@
     <div class="col-md-3">
         <label for="txt_direccion_postal" class="form-label form-label-sm">Código Postal <label style="color: red;">*</label></label>
         <div class="row align-items-center">
-            <div class="col-5"> <!-- Cambia a col-9 para dar espacio al botón -->
+            <div class="col-9"> <!-- Cambia a col-9 para dar espacio al botón -->
                 <input type="text" class="form-control form-control-sm" name="txt_direccion_postal" id="txt_direccion_postal" placeholder="Escriba su código postal o de click en 'Obtener'">
             </div>
-            <div class="col-3 d-flex justify-content-start"> <!-- Cambia a col-3 para que se ajuste el botón -->
+            <div class="col-3 d-flex justify-content-end"> <!-- Cambia a col-3 para que se ajuste el botón -->
                 <button type="button" class="btn btn-sm btn-outline-primary" onclick="obtener_codigo_postal();">Obtener</button>
             </div>
         </div>

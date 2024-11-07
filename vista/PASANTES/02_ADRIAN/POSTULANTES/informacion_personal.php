@@ -644,7 +644,10 @@ if (isset($_GET['id'])) {
                             <input type="email" class="form-control form-control-sm" name="txt_correo" id="txt_correo" placeholder="Escriba su correo electrónico">
                         </div>
                     </div>
+                    
+                    <?php include_once('../vista/PASANTES/02_ADRIAN/POSTULANTES/provincias_ciudades_parroquias.php'); ?>
                 </div>
+
 
                 <div class="modal-footer d-flex justify-content-center">
                     <button type="button" class="btn btn-success btn-sm" id="btn_guardar_informacion_personal" onclick="insertar_editar_informacion_personal();">Guardar</button>
