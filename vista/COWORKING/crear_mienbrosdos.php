@@ -22,7 +22,7 @@ $id_espacio = $resultado ? $resultado : []; // Asigna $resultado a $id_espacio o
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb mb-0 p-0">
                         <li class="breadcrumb-item">
-                            <a href="/"><i class="bx bx-home"></i></a>
+                            <a href="javascript:;"><i class="bx bx-home"></i></a>
                         </li>
                         <li class="breadcrumb-item active" aria-current="page">
                             <strong>Lista de espacios</strong>
