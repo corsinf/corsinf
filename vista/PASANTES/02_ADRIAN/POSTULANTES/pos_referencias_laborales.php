@@ -60,7 +60,7 @@
         // console.log([...form_data.values()]);
         //return;
 
-        if ($("#form_referencias_laborales").valid()) { 
+        if ($("#form_referencias_laborales").valid()) {
             $.ajax({
                 url: '../controlador/PASANTES/02_ADRIAN/POSTULANTES/th_referencias_laboralesC.php?insertar=true',
                 type: 'post',
