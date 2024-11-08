@@ -30,23 +30,21 @@
             },
             dataType: 'json',
             success: function(response) {
+                $('#txt_referencias_laborales_id').val(response[0]._id);
 
                 $('#txt_nombre_referencia').val(response[0].th_refl_nombre_referencia);
                 $('#txt_telefono_referencia').val(response[0].th_refl_telefono_referencia);
-                $('#txt_ruta_guardada_carta_recomendacion').val(response[0].th_refl_carta_recomendacion)
+                $('#txt_ruta_guardada_carta_recomendacion').val(response[0].th_refl_carta_recomendacion);
 
-
-
-                $('#txt_referencias_laborales_id').val(response[0]._id);
             }
         });
     }
 
     function insertar_editar_referencias_laborales() {
-        var txt_nombre_referencia = $('#txt_nombre_referencia').val();
-        var txt_telefono_referencia = $('#txt_telefono_referencia').val();
-        var txt_id_postulante = '<?= $id ?>';
+        var form_data = new FormData(document.getElementById("form_referencias_laborales")); // Captura todos los campos y archivos
+
         var txt_id_referencias_laborales = $('#txt_referencias_laborales_id').val();
+
         if ($('#txt_copia_carta_recomendacion').val() === '' && txt_id_referencias_laborales != '') {
             var txt_copia_carta_recomendacion = $('#txt_ruta_guardada_carta_recomendacion').val()
             $('#txt_copia_carta_recomendacion').rules("remove", "required");
@@ -57,42 +55,51 @@
             });
         }
 
-        var parametros_referencias = {
-            '_id': txt_id_referencias_laborales,
-            'txt_id_postulante': txt_id_postulante,
-            'txt_nombre_referencia': txt_nombre_referencia,
-            'txt_telefono_referencia': txt_telefono_referencia,
-            'txt_copia_carta_recomendacion': txt_copia_carta_recomendacion,
-        }
+        //console.log([...form_data]);
+        // console.log([...form_data.keys()]);
+        // console.log([...form_data.values()]);
+        //return;
 
-        if ($("#form_referencias_laborales").valid()) {
-            // Si es válido, puedes proceder a enviar los datos por AJAX
-            //console.log(parametros_referencias)
-            insertar_referencias_laborales(parametros_referencias)
+        if ($("#form_referencias_laborales").valid()) { 
+            $.ajax({
+                url: '../controlador/PASANTES/02_ADRIAN/POSTULANTES/th_referencias_laboralesC.php?insertar=true',
+                type: 'post',
+                data: form_data,
+                contentType: false,
+                processData: false,
 
-        }
-    }
-
-    function insertar_referencias_laborales(parametros) {
-        $.ajax({
-            data: {
-                parametros: parametros
-            },
-            url: '../controlador/PASANTES/02_ADRIAN/POSTULANTES/th_referencias_laboralesC.php?insertar=true',
-            type: 'post',
-            dataType: 'json',
-
-            success: function(response) {
-                if (response == 1) {
-                    Swal.fire('', 'Operacion realizada con exito.', 'success');
-                    <?php if (isset($_GET['id'])) { ?>
-                        cargar_datos_referencias_laborales(<?= $id ?>);
-                    <?php } ?>
-                    limpiar_parametros_referencias_laborales();
-                    $('#modal_agregar_referencia_laboral').modal('hide');
+                dataType: 'json',
+                success: function(response) {
+                    //console.log(response);
+                    if (response == -1) {
+                        Swal.fire({
+                            title: '',
+                            text: 'Algo extraño ha ocurrido, intente más tarde.',
+                            icon: 'error',
+                            allowOutsideClick: false,
+                            showConfirmButton: true,
+                            confirmButtonText: 'Cerrar'
+                        });
+                    } else if (response == -2) {
+                        Swal.fire({
+                            title: '',
+                            text: 'Asegúrese de que el archivo subido sea un PDF.',
+                            icon: 'error',
+                            allowOutsideClick: false,
+                            showConfirmButton: true,
+                            confirmButtonText: 'Cerrar'
+                        });
+                    } else if (response == 1) {
+                        Swal.fire('', 'Operación realizada con éxito.', 'success');
+                        <?php if (isset($_GET['id'])) { ?>
+                            cargar_datos_referencias_laborales(<?= $id ?>);
+                        <?php } ?>
+                        limpiar_parametros_referencias_laborales();
+                        $('#modal_agregar_referencia_laboral').modal('hide');
+                    }
                 }
-            }
-        });
+            });
+        }
     }
 
     //Funcion para editar el registro de referencias laborales
@@ -144,14 +151,12 @@
         });
     }
 
-
     function limpiar_parametros_referencias_laborales() {
         //certificaciones capacitaciones
         $('#txt_nombre_referencia').val('');
         $('#txt_telefono_referencia').val('');
         $('#txt_copia_carta_recomendacion').val('');
         $('#txt_referencias_laborales_id').val('');
-        $('#archivo_carta_recomendacion').html('')
         $('#txt_ruta_guardada_carta_recomendacion').val('')
 
         //Limpiar validaciones
@@ -163,23 +168,18 @@
         $('#btn_guardar_referencia_laboral').html('Agregar');
     }
 
-    function definir_ruta_iframe(id) {
-        var cambiar_ruta = $('#iframe_pdf').attr('src', '../controlador/PASANTES/01_SEBASTIAN/formularios_firmasC_Adrian.php?persona_juridica=true&id=' + id);
+    function definir_ruta_iframe(url) {
+        var cambiar_ruta = $('#iframe_referencias_laborales_pdf').attr('src', url);
     }
 
     function limpiar_parametros_iframe() {
-        $('#iframe_pdf').attr('src', '');
+        $('#iframe_referencias_laborales_pdf').attr('src', '');
     }
 </script>
-
-
-
 
 <div id="pnl_referencias_laborales">
 
 </div>
-
-
 
 
 <!-- Modal para agregar referencias laborales-->
@@ -192,38 +192,44 @@
                 <h5><small class="text-body-secondary" id="lbl_titulo_referencia_laboral">Agregue una referencia</small></h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="limpiar_parametros_referencias_laborales()"></button>
             </div>
+
             <!-- Modal body -->
-            <form id="form_referencias_laborales">
+            <form id="form_referencias_laborales" enctype="multipart/form-data" method="post" style="width: inherit;">
+
                 <div class="modal-body">
-                    <input type="hidden" id="txt_referencias_laborales_id">
+
+                    <input type="hidden" name="txt_referencias_laborales_id" id="txt_referencias_laborales_id">
+                    <input type="hidden" name="txt_postulante_cedula" id="txt_postulante_cedula">
+                    <input type="hidden" name="txt_postulante_id" id="txt_postulante_id">
 
                     <div class="row mb-col">
                         <div class="col-md-12">
                             <label for="txt_nombre_referencia" class="form-label form-label-sm">Nombre del empleador <label style="color: red;">*</label></label>
-                            <input type="text" class="form-control form-control-sm" name="txt_nombre_referencia" id="txt_nombre_referencia" placeholder="Escriba el nombre de el empleador">
+                            <input type="text" class="form-control form-control-sm" name="txt_nombre_referencia" id="txt_nombre_referencia" placeholder="Escriba el nombre de el empleador" maxlength="50">
                         </div>
                     </div>
 
                     <div class="row mb-col">
                         <div class="col-md-12">
                             <label for="txt_telefono_referencia" class="form-label form-label-sm">Teléfono del empleador <label style="color: red;">*</label></label>
-                            <input type="text" class="form-control form-control-sm" name="txt_telefono_referencia" id="txt_telefono_referencia" placeholder="Escriba el número de contacto de el empleador">
+                            <input type="text" class="form-control form-control-sm solo_numeros_int" name="txt_telefono_referencia" id="txt_telefono_referencia" placeholder="Escriba el número de contacto de el empleador" maxlength="15">
                         </div>
                     </div>
 
                     <div class="row mb-col">
                         <div class="col-md-12">
                             <label for="txt_copia_carta_recomendacion" class="form-label form-label-sm">Copia de la carta de recomendación <label style="color: red;">*</label></label>
-                            <input type="text" name="txt_ruta_guardada_carta_recomendacion" id="txt_ruta_guardada_carta_recomendacion" hidden>
                             <input type="file" class="form-control form-control-sm" name="txt_copia_carta_recomendacion" id="txt_copia_carta_recomendacion" accept=".pdf">
-                            <div class="mt-2" id="archivo_carta_recomendacion"></div>
+                            <!-- <div class="pt-2"></div> -->
+                            <input type="text" class="form-control form-control-sm" name="txt_ruta_guardada_carta_recomendacion" id="txt_ruta_guardada_carta_recomendacion" hidden>
                         </div>
                     </div>
 
-                    <div class="d-flex justify-content-center">
-                        <button type="button" class="btn btn-success btn-sm px-4 m-1" id="btn_guardar_referencia_laboral" onclick="insertar_editar_referencias_laborales();">Agregar</button>
-                        <button type="button" class="btn btn-danger btn-sm px-4 m-1" id="btn_eliminar_formacion" onclick="delete_datos_referencias_laborales();">Eliminar</button>
-                    </div>
+                </div>
+
+                <div class="modal-footer d-flex justify-content-center">
+                    <button type="button" class="btn btn-success btn-sm px-4 m-1" id="btn_guardar_referencia_laboral" onclick="insertar_editar_referencias_laborales();">Agregar</button>
+                    <button type="button" class="btn btn-danger btn-sm px-4 m-1" id="btn_eliminar_formacion" onclick="delete_datos_referencias_laborales();">Eliminar</button>
                 </div>
             </form>
         </div>
@@ -242,12 +248,13 @@
             <!-- Modal body -->
             <form id="form_referencias_laborales">
                 <div class="modal-body d-flex justify-content-center">
-                    <iframe src='' id="iframe_pdf" frameborder="0" width="900px" height="700px"></iframe>
+                    <iframe src='' id="iframe_referencias_laborales_pdf" frameborder="0" width="900px" height="700px"></iframe>
                 </div>
             </form>
         </div>
     </div>
 </div>
+
 <script>
     $(document).ready(function() {
         //Validación Referencias Laborales

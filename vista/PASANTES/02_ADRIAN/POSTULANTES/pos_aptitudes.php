@@ -5,14 +5,12 @@
             cargar_datos_aptitudes_blandas(<?= $id ?>);
         <?php } ?>
 
-        cargar_datos_select_postulante(<?= $id ?>);
     });
 
     function activar_select2() {
 
-        lista_aptitudes_tecnicas();
-
-        lista_aptitudes_blandas();
+        lista_aptitudes_tecnicas_postulante('<?= $id ?>');
+        lista_aptitudes_blandas_postulante('<?= $id ?>');
 
         $('#ddl_seleccionar_aptitud_blanda').select2({
             placeholder: ' Selecciona una opción',
@@ -84,24 +82,30 @@
         });
     }
 
-    function lista_aptitudes_tecnicas() {
+    function lista_aptitudes_blandas_postulante(id) {
         $.ajax({
-            url: '../controlador/PASANTES/02_ADRIAN/POSTULANTES/th_cat_habilidadesC.php?listar_tecnicas=true',
-            type: 'post',
-            dataType: 'json',
-            success: function(response) {
-                $('#ddl_seleccionar_aptitud_tecnica').html(response);
-            }
-        });
-    }
-
-    function lista_aptitudes_blandas() {
-        $.ajax({
-            url: '../controlador/PASANTES/02_ADRIAN/POSTULANTES/th_cat_habilidadesC.php?listar_blandas=true',
+            url: '../controlador/PASANTES/02_ADRIAN/POSTULANTES/th_pos_habilidadesC.php?listar_aptitudes_blandas_postulante=true',
+            data: {
+                id_postulante: id
+            },
             type: 'post',
             dataType: 'json',
             success: function(response) {
                 $('#ddl_seleccionar_aptitud_blanda').html(response);
+            }
+        });
+    }
+
+    function lista_aptitudes_tecnicas_postulante(id) {
+        $.ajax({
+            url: '../controlador/PASANTES/02_ADRIAN/POSTULANTES/th_pos_habilidadesC.php?listar_aptitudes_tecnicas_postulante=true',
+            data: {
+                id_postulante: id
+            },
+            type: 'post',
+            dataType: 'json',
+            success: function(response) {
+                $('#ddl_seleccionar_aptitud_tecnica').html(response);
             }
         });
     }
@@ -200,20 +204,6 @@
         $('.form-control').removeClass('is-valid is-invalid');
     }
 
-    //Actividad Marco
-    function cargar_datos_select_postulante(id) {
-        $.ajax({
-            url: '../controlador/PASANTES/02_ADRIAN/POSTULANTES/th_pos_habilidadesC.php?listar_aptitudes_blandas_postulante=true',
-            type: 'post',
-            data: {
-                id_postulante: id
-            },
-            dataType: 'json',
-            success: function(response) {
-                console.log(response)
-            }
-        });
-    }
 </script>
 
 <h6 class="fw-bold mt-3 mb-2">Técnicas</h6>
@@ -254,6 +244,7 @@
                         </div>
                     </div>
                 </div>
+
                 <div class="modal-footer d-flex justify-content-center">
                     <button type="button" class="btn btn-success btn-sm" id="btn_guardar_aptitudes" onclick="insertar_editar_aptitudes();">Guardar Aptitudes</button>
                 </div>

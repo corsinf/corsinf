@@ -32,6 +32,7 @@ include('../modelo/coloresM.php');
 include('../modelo/clase_movimientoM.php');
 include('../modelo/detalle_articuloM.php');
 include('../modelo/cargar_datosM.php');
+include('../modelo/COWORKING/crear_oficinaM.php');
 
 
 /**
@@ -48,7 +49,20 @@ if(isset($_GET['reporte_marca']))
 	$reporte->reporte_marca();
 	// $reporte-> ejemplo();
 }
+if(isset($_GET['generarExcelEspacios']))
+{
+	$reporte->generarExcelEspacios();
+	// $reporte-> ejemplo();
+}
+if (isset($_GET['generarExcelMobiliario'])) 
+{
+    $id_espacio = $_GET['id_espacio'];  
+    $reporte->generarExcelMobiliario($id_espacio);  
+	// $reporte-> ejemplo();
+}
+	
 
+	
 class excel_spout
 {
 	private $reportes;
@@ -70,7 +84,9 @@ class excel_spout
 		$this->colores = new coloresM();	
 		$this->mov = new clase_movimientoM();		
 		$this->detalle_art = new detalle_articuloM();		
-		$this->carga_datos = new cargar_datosM();		
+		$this->carga_datos = new cargar_datosM();
+
+		$this->crear_oficinas = new crear_oficinaM();			
 		
 	}
 
@@ -412,6 +428,59 @@ class excel_spout
 		
 		$writer->close();
     }
+	function generarExcelEspacios()
+    {
+    	$datos = $this->crear_oficinas->listardebase();
+		//print_r($datos);die();
+    	//$writer = WriterEntityFactory::createXLSXWriter();
+		$writer = WriterEntityFactory::createCSVWriter();
+		$fileName = 'Listado_de_oficinas.CSV';
+		$writer->openToBrowser($fileName);
+
+    	//print_r($datos);die();
+    	$CABECERA2= array('ID','Nombre','Aforo','Precio','Estado','Categoria');
+		$rowFromValues = WriterEntityFactory::createRowFromArray($CABECERA2);
+		$writer->addRow($rowFromValues);
+		
+		foreach ($datos as $key => $value) {
+			$SALIDA = array($value['id_espacio'],$value['nombre_espacio'],$value['aforo_espacio'],$value['precio_espacio'],$value['estado_espacio'],$value['nombre_categoria']);
+		  	$rowFromValues = WriterEntityFactory::createRowFromArray($SALIDA);
+		    $writer->addRow($rowFromValues);
+		}
+		
+		$writer->close();
+    }
+	function generarExcelMobiliario($id_espacio)
+	{
+    
+    $datos = $this->crear_oficinas->listarMobiliario($id_espacio);
+    
+    // Verificar que $datos no esté vacío
+    if (empty($datos)) {
+        echo "Error: No hay datos disponibles para el mobiliario.";
+        return; // Salir de la función si no hay datos
+    }
+	//print_r($datos);die();
+    
+    $writer = WriterEntityFactory::createCSVWriter();
+    $fileName = 'Listado_del_mobiliario.CSV';
+    $writer->openToBrowser($fileName);
+
+    
+    $CABECERA2 = array('Id mobiliario', 'Id espacio', 'cantidad', 'detalle');
+    $rowFromValues = WriterEntityFactory::createRowFromArray($CABECERA2);
+    $writer->addRow($rowFromValues);
+    
+   
+    foreach ($datos as $key => $value) {
+        $SALIDA = array($value['id_mobiliario'], $value['id_espacio'], $value['cantidad'], $value['detalle_mobiliario']);
+        $rowFromValues = WriterEntityFactory::createRowFromArray($SALIDA);
+        $writer->addRow($rowFromValues);
+    }
+
+    // Cerrar el archivo
+    $writer->close();
+	}
 
 
 }

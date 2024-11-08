@@ -54,7 +54,8 @@ class th_postulantesC
 
     function insertar_editar($parametros)
     {
-       // print_r($parametros); exit(); die();
+       //print_r($parametros); exit(); die();
+
         $datos = array(
             array('campo' => 'th_pos_primer_nombre', 'dato' => $parametros['txt_primer_nombre']),
             array('campo' => 'th_pos_segundo_nombre', 'dato' => $parametros['txt_segundo_nombre']),
@@ -66,10 +67,10 @@ class th_postulantesC
             array('campo' => 'th_ciu_id', 'dato' => $parametros['ddl_ciudad']),
             array('campo' => 'th_parr_id', 'dato' => $parametros['ddl_parroquia']),
             array('campo' => 'th_pos_direccion', 'dato' => $parametros['txt_direccion']),
-            //array('campo' => 'th_pos_postal', 'dato' => $parametros['txt_codigo_postal']),
+            array('campo' => 'th_pos_postal', 'dato' => $parametros['txt_direccion_postal']),
             array('campo' => 'th_pos_fecha_nacimiento', 'dato' => $parametros['txt_fecha_nacimiento']),
-            //array('campo' => 'th_pos_nacionalidad', 'dato' => $parametros['ddl_nacionalidad']),
-            //array('campo' => 'th_pos_estado_civil', 'dato' => $parametros['ddl_estado_civil']),
+            array('campo' => 'th_pos_nacionalidad', 'dato' => $parametros['ddl_nacionalidad']),
+            array('campo' => 'th_pos_estado_civil', 'dato' => $parametros['ddl_estado_civil']),
             array('campo' => 'th_pos_telefono_1', 'dato' => $parametros['txt_telefono_1']),
             array('campo' => 'th_pos_telefono_2', 'dato' => $parametros['txt_telefono_2']),
             array('campo' => 'th_pos_correo', 'dato' => $parametros['txt_correo']),

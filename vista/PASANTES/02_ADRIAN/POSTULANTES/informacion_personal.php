@@ -43,6 +43,7 @@ if (isset($_GET['id'])) {
                 $('#txt_telefono_1').val(response[0].th_pos_telefono_1);
                 $('#txt_telefono_2').val(response[0].th_pos_telefono_2);
                 $('#txt_correo').val(response[0].th_pos_correo);
+                $('#txt_direccion_postal').val(response[0].th_pos_postal);
 
                 nombres_completos = response[0].th_pos_primer_apellido + ' ' + response[0].th_pos_segundo_apellido + ' ' + response[0].th_pos_primer_nombre + ' ' + response[0].th_pos_segundo_nombre;
                 $('#txt_nombres_completos_v').html(nombres_completos);
@@ -53,7 +54,14 @@ if (isset($_GET['id'])) {
                 $('#txt_telefono_1_v').html(response[0].th_pos_telefono_1);
                 $('#txt_correo_v').html(response[0].th_pos_correo);
 
-                console.log(response);
+                //Input para las referencias laborales
+                $('#txt_numero_cedula_referencia_laboral').val(response[0].th_pos_cedula);
+
+                //Input para todos los pos_id que se vayan a colocar en los modales
+                $('input[name="txt_postulante_id"]').val(response[0]._id);
+                $('input[name="txt_postulante_cedula"]').val(response[0].th_pos_cedula);
+
+                //console.log(response);
             }
         });
     }
@@ -72,8 +80,12 @@ if (isset($_GET['id'])) {
         var txt_telefono_1 = $('#txt_telefono_1').val();
         var txt_telefono_2 = $('#txt_telefono_2').val();
         var txt_correo = $('#txt_correo').val();
-
-
+        var ddl_provincias = $('#ddl_provincias').val();
+        var ddl_ciudad = $('#ddl_ciudad').val();
+        var ddl_parroquia = $('#ddl_parroquia').val();
+        var txt_direccion_postal = $('#txt_direccion_postal').val();
+        var txt_direccion = $('#txt_direccion').val();
+            
         var parametros_informacion_personal = {
             '_id': '<?= $id ?>',
             'txt_primer_nombre': txt_primer_nombre,
@@ -88,12 +100,17 @@ if (isset($_GET['id'])) {
             'txt_telefono_1': txt_telefono_1,
             'txt_telefono_2': txt_telefono_2,
             'txt_correo': txt_correo,
+            'ddl_provincias': ddl_provincias,
+            'ddl_ciudad': ddl_ciudad,
+            'ddl_parroquia': ddl_parroquia,
+            'txt_direccion_postal': txt_direccion_postal,
+            'txt_direccion': txt_direccion,
 
         };
 
         if ($("#form_informacion_personal").valid()) {
             // Si es válido, puedes proceder a enviar los datos por AJAX
-            console.log(parametros_informacion_personal);
+            //console.log(parametros_informacion_personal);
             insertar_informacion_personal(parametros_informacion_personal);
         }
     }
@@ -252,7 +269,8 @@ if (isset($_GET['id'])) {
                                         </div>
                                         <hr />
 
-                                        <?php include_once('../vista/PASANTES/02_ADRIAN/POSTULANTES/pos_informacion_adicional.php'); ?>
+                                        <!-- Queda en espera este parte del modulo -->
+                                        <?php //include_once('../vista/PASANTES/02_ADRIAN/POSTULANTES/pos_informacion_adicional.php'); ?>
 
                                         <div class="row">
                                             <div class="col-9">
@@ -602,10 +620,8 @@ if (isset($_GET['id'])) {
                             </select>
                         </div>
                         <div class="col-md-3">
-                            <div class="mb-3">
-                                <label for="txt_numero_cedula" class="form-label form-label-sm">N° de Cédula <label style="color: red;">*</label></label>
-                                <input type="text" class="form-control form-control-sm" name="txt_numero_cedula" id="txt_numero_cedula" placeholder="Digite su número de cédula">
-                            </div>
+                            <label for="txt_numero_cedula" class="form-label form-label-sm">N° de Cédula <label style="color: red;">*</label></label>
+                            <input type="text" class="form-control form-control-sm" name="txt_numero_cedula" id="txt_numero_cedula" placeholder="Digite su número de cédula">
                         </div>
                         <div class="col-md-3">
                             <label for="ddl_estado_civil" class="form-label form-label-sm">Estado civil <label style="color: red;">*</label></label>
@@ -642,7 +658,18 @@ if (isset($_GET['id'])) {
                             <input type="email" class="form-control form-control-sm" name="txt_correo" id="txt_correo" placeholder="Escriba su correo electrónico">
                         </div>
                     </div>
+
+                    <?php include_once('../vista/PASANTES/02_ADRIAN/POSTULANTES/provincias_ciudades_parroquias.php'); ?>
+
+                    <div class="row mb-col">
+                                <div class="col-md-12">
+                                    <label for="txt_direccion" class="form-label form-label-sm">Dirección </label>
+                                    <input type="text" class="form-control form-control-sm" name="txt_direccion" id="txt_direccion" placeholder="Escriba su dirección">
+                                </div>
+                            </div>
+         
                 </div>
+
 
                 <div class="modal-footer d-flex justify-content-center">
                     <button type="button" class="btn btn-success btn-sm" id="btn_guardar_informacion_personal" onclick="insertar_editar_informacion_personal();">Guardar</button>

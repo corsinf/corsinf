@@ -45,6 +45,7 @@
                             <input type="text" class="form-control form-control-sm" name="txt_nombre_empresa_contrato" id="txt_nombre_empresa_contrato" placeholder="Escriba el nombre de la empresa que emitió el contrato">
                         </div>
                     </div>
+
                     <div class="row mb-col">
                         <div class="col-md-12">
                             <label for="txt_copia_contrato" class="form-label form-label-sm">Copia del contrato firmado <label style="color: red;">*</label></label>
@@ -52,6 +53,7 @@
                         </div>
                     </div>
                 </div>
+
                 <div class="modal-footer d-flex justify-content-center">
                     <button type="button" class="btn btn-success btn-sm" id="btn_guardar_contratos" onclick="insertar_editar_contrato_laboral();">Guardar Contrato de Trabajo</button>
                 </div>

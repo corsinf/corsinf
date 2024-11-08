@@ -72,7 +72,7 @@
                     </div>
                 </div>
 
-                <div class="d-flex justify-content-center">
+                <div class="modal-footer d-flex justify-content-center">
                     <button type="button" class="btn btn-success btn-sm" id="btn_guardar_idioma" onclick="insertar_editar_idiomas();">Guardar Idioma</button>
                 </div>
             </form>
