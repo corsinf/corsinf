@@ -43,7 +43,15 @@ if (isset($_GET['id'])) {
                 $('#txt_telefono_1').val(response[0].th_pos_telefono_1);
                 $('#txt_telefono_2').val(response[0].th_pos_telefono_2);
                 $('#txt_correo').val(response[0].th_pos_correo);
+                $('#ddl_provincia').val(response[0].th_prov_id);
+                $('#ddl_ciudad').val(response[0].th_ciu_id);
+                $('#ddl_parroquia').val(response[0].th_parr_id);
                 $('#txt_direccion_postal').val(response[0].th_pos_postal);
+                $('#txt_direccion').val(response[0].th_pos_direccion);
+
+                calcular_edad('txt_edad', response[0].th_pos_fecha_nacimiento);
+                cargar_datos_ciudades(response[0].th_ciu_id);
+
 
                 nombres_completos = response[0].th_pos_primer_apellido + ' ' + response[0].th_pos_segundo_apellido + ' ' + response[0].th_pos_primer_nombre + ' ' + response[0].th_pos_segundo_nombre;
                 $('#txt_nombres_completos_v').html(nombres_completos);
@@ -54,10 +62,7 @@ if (isset($_GET['id'])) {
                 $('#txt_telefono_1_v').html(response[0].th_pos_telefono_1);
                 $('#txt_correo_v').html(response[0].th_pos_correo);
 
-                //Input para las referencias laborales
-                $('#txt_numero_cedula_referencia_laboral').val(response[0].th_pos_cedula);
-
-
+                
                 console.log(response);
             }
         });
@@ -82,7 +87,7 @@ if (isset($_GET['id'])) {
         var ddl_parroquia = $('#ddl_parroquia').val();
         var txt_direccion_postal = $('#txt_direccion_postal').val();
         var txt_direccion = $('#txt_direccion').val();
-            
+
         var parametros_informacion_personal = {
             '_id': '<?= $id ?>',
             'txt_primer_nombre': txt_primer_nombre,
@@ -598,14 +603,47 @@ if (isset($_GET['id'])) {
                         </div>
                     </div>
 
-                    <hr>
-
                     <div class="row mb-col">
+
+                        <div class="col-md-3">
+                            <label for="txt_numero_cedula" class="form-label form-label-sm">N° de Cédula <label style="color: red;">*</label></label>
+                            <input type="text" class="form-control form-control-sm" name="txt_numero_cedula" id="txt_numero_cedula" placeholder="Digite su número de cédula">
+                        </div>
+                        <div class="col-md-3">
+                            <label for="ddl_sexo" class="form-label form-label-sm">Sexo <label style="color: red;">*</label></label>
+                            <select class="form-select form-select-sm" id="ddl_sexo" name="ddl_sexo">
+                                <option selected disabled value="">-- Selecciona una opción --</option>
+                                <option value="Masculino">Masculino</option>
+                                <option value="Femenino">Femenino</option>
+                            </select>
+                        </div>
                         <div class="col-md-3">
                             <label for="txt_fecha_nacimiento" class="form-label form-label-sm">Fecha de nacimiento <label style="color: red;">*</label></label>
                             <input type="date" class="form-control form-control-sm" name="txt_fecha_nacimiento" id="txt_fecha_nacimiento">
                         </div>
                         <div class="col-md-3">
+                            <label for="txt_edad" class="form-label form-label-sm">Edad </label>
+                            <input type="text" class="form-control form-control-sm solo_numeros_int" name="txt_edad" id="txt_edad" readonly>
+                        </div>
+                    </div>
+
+                    <div class="row mb-col">
+                        <div class="col-md-4">
+                            <label for="txt_telefono_1" class="form-label form-label-sm">Teléfono 1 </label>
+                            <input type="text" class="form-control form-control-sm solo_numeros_int" name="txt_telefono_1" id="txt_telefono_1" value="" placeholder="Escriba su teléfono personal o fijo" maxlength="12" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="txt_telefono_2" class="form-label form-label-sm">Teléfono 2 </label>
+                            <input type="text" class="form-control form-control-sm solo_numeros_int" name="txt_telefono_2" id="txt_telefono_2" value="" placeholder="Escriba su teléfono personal o fijo (opcional)" maxlength="12">
+                        </div>
+                        <div class="col-md-4">
+                            <label for="txt_correo" class="form-label form-label-sm">Correo Electrónico </label>
+                            <input type="email" class="form-control form-control-sm" name="txt_correo" id="txt_correo" value="" placeholder="Escriba su correo electrónico">
+                        </div>
+                    </div>
+
+                    <div class="row mb-col">
+                        <div class="col-md-6">
                             <label for="ddl_nacionalidad" class="form-label form-label-sm">Nacionalidad <label style="color: red;">*</label></label>
                             <select class="form-select form-select-sm" id="ddl_nacionalidad" name="ddl_nacionalidad">
                                 <option selected disabled value="">-- Selecciona una Nacionalidad --</option>
@@ -616,11 +654,7 @@ if (isset($_GET['id'])) {
                                 <option value="Paraguayo">Paraguayo</option>
                             </select>
                         </div>
-                        <div class="col-md-3">
-                            <label for="txt_numero_cedula" class="form-label form-label-sm">N° de Cédula <label style="color: red;">*</label></label>
-                            <input type="text" class="form-control form-control-sm" name="txt_numero_cedula" id="txt_numero_cedula" placeholder="Digite su número de cédula">
-                        </div>
-                        <div class="col-md-3">
+                        <div class="col-md-6">
                             <label for="ddl_estado_civil" class="form-label form-label-sm">Estado civil <label style="color: red;">*</label></label>
                             <select class="form-select form-select-sm" id="ddl_estado_civil" name="ddl_estado_civil">
                                 <option selected disabled value="">-- Selecciona un Estado Civil --</option>
@@ -633,38 +667,16 @@ if (isset($_GET['id'])) {
                         </div>
                     </div>
 
-                    <div class="row mb-col">
-                        <div class="col-md-3">
-                            <label for="ddl_sexo" class="form-label form-label-sm">Sexo <label style="color: red;">*</label></label>
-                            <select class="form-select form-select-sm" id="ddl_sexo" name="ddl_sexo">
-                                <option selected disabled value="">-- Selecciona una opción --</option>
-                                <option value="Masculino">Masculino</option>
-                                <option value="Femenino">Femenino</option>
-                            </select>
-                        </div>
-                        <div class="col-md-3">
-                            <label for="txt_telefono_1" class="form-label form-label-sm">Teléfono 1 (personal o fijo) <label style="color: red;">*</label></label>
-                            <input type="text" class="form-control form-control-sm" name="txt_telefono_1" id="txt_telefono_1" placeholder="Escriba su teléfono personal o fijo">
-                        </div>
-                        <div class="col-md-3">
-                            <label for="txt_telefono_2" class="form-label form-label-sm">Teléfono 2 (opcional)</label>
-                            <input type="text" class="form-control form-control-sm" name="txt_telefono_2" id="txt_telefono_2" placeholder="Escriba su teléfono personal o fijo (opcional)">
-                        </div>
-                        <div class="col-md-3">
-                            <label for="txt_correo" class="form-label form-label-sm">Correo Electrónico <label style="color: red;">*</label></label>
-                            <input type="email" class="form-control form-control-sm" name="txt_correo" id="txt_correo" placeholder="Escriba su correo electrónico">
-                        </div>
-                    </div>
 
                     <?php include_once('../vista/PASANTES/02_ADRIAN/POSTULANTES/provincias_ciudades_parroquias.php'); ?>
 
                     <div class="row mb-col">
-                                <div class="col-md-12">
-                                    <label for="txt_direccion" class="form-label form-label-sm">Dirección </label>
-                                    <input type="text" class="form-control form-control-sm" name="txt_direccion" id="txt_direccion" placeholder="Escriba su dirección">
-                                </div>
-                            </div>
-         
+                        <div class="col-md-12">
+                            <label for="txt_direccion" class="form-label form-label-sm">Dirección </label>
+                            <input type="text" class="form-control form-control-sm" name="txt_direccion" id="txt_direccion" placeholder="Escriba su dirección">
+                        </div>
+                    </div>
+
                 </div>
 
 
