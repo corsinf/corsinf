@@ -118,10 +118,15 @@ class th_referencias_laboralesC
         }
 
         $datos = array(
+            array('campo' => 'th_refl_estado', 'dato' => 0),
+        );
+
+        $where = array(
             array('campo' => 'th_refl_id', 'dato' => strval($id)),
         );
 
-        $datos = $this->modelo->eliminar($datos);
+
+        $datos = $this->modelo->editar($datos, $where);
         return $datos;
     }
 
