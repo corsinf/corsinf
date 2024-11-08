@@ -4,7 +4,7 @@ require_once(dirname(__DIR__, 2) . '/BaseModel.php');
 
 class th_referencias_laboralesM extends BaseModel
 {
-    protected $tabla = 'th_referencias_laborales';
+    protected $tabla = 'th_pos_referencias_laborales';
     protected $primaryKey = 'th_refl_id AS _id';
 
     protected $camposPermitidos = [

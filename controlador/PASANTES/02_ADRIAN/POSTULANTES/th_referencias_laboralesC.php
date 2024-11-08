@@ -12,7 +12,7 @@ if (isset($_GET['listar_modal'])) {
 }
 
 if (isset($_GET['insertar'])) {
-    echo json_encode($controlador->insertar_editar($_POST['parametros']));
+    echo json_encode($controlador->insertar_editar($_FILES, $_POST));
 }
 
 if (isset($_GET['eliminar'])) {
@@ -36,6 +36,7 @@ class th_referencias_laboralesC
 
         $texto = '';
         foreach ($datos as $key => $value) {
+            $url_pdf = '../REPOSITORIO/TALENTO_HUMANO.pdf';
 
             $texto .=
                 <<<HTML
@@ -43,17 +44,17 @@ class th_referencias_laboralesC
                         <div class="col-10">
                             <p class="fw-bold my-0 d-flex align-items-center">{$value['th_refl_nombre_referencia']}</p>
                             <p class="my-0 d-flex align-items-center">{$value['th_refl_telefono_referencia']}</p>
-                            <a href="#" data-bs-toggle="modal" data-bs-target="#modal_ver_pdf" onclick="definir_ruta_iframe({$value['_id']});">Ver Carta de Recomendación</a>
+                            <a href="#" data-bs-toggle="modal" data-bs-target="#modal_ver_pdf" onclick="definir_ruta_iframe('{$value['th_refl_carta_recomendacion']}');">Ver Carta de Recomendación</a>
                         </div>
                         <div class="col-2 d-flex justify-content-end align-items-center">
-                            <button class="btn btn-xs" style="color: white;" onclick="abrir_modal_referencias_laborales({$value['_id']})">
+                            <button class="btn btn-xs" style="color: white;" onclick="abrir_modal_referencias_laborales('{$value['_id']}')">
                                 <i class="text-dark bx bx-pencil me-0" style="font-size: 20px;"></i>
                             </button>
                         </div>
                     </div>
                 HTML;
         }
-        
+
         return $texto;
     }
 
@@ -68,22 +69,35 @@ class th_referencias_laboralesC
         return $datos;
     }
 
-    function insertar_editar($parametros)
+    function insertar_editar($file, $parametros)
     {
+        // print_r('$parametros');
+        // exit();
+        // die();
+
         $datos = array(
             array('campo' => 'th_refl_nombre_referencia', 'dato' => $parametros['txt_nombre_referencia']),
             array('campo' => 'th_refl_telefono_referencia', 'dato' => $parametros['txt_telefono_referencia']),
-            array('campo' => 'th_refl_carta_recomendacion', 'dato' => $parametros['txt_copia_carta_recomendacion']),
-            array('campo' => 'th_pos_id', 'dato' => $parametros['txt_id_postulante']),
-
+            //array('campo' => 'th_refl_carta_recomendacion', 'dato' => $parametros['txt_copia_carta_recomendacion']), 
+            array('campo' => 'th_pos_id', 'dato' => $parametros['txt_postulante_id']),
         );
 
-        if ($parametros['_id'] == '') {
-            $datos = $this->modelo->insertar($datos);
+        $id_referencias_laboral = $parametros['txt_referencias_laborales_id'];
+
+        if ($id_referencias_laboral == '') {
+            $datos = $this->modelo->insertar_id($datos);
+            $this->guardar_archivo($file, $parametros, $datos);
+            return 1;
         } else {
-            $where[0]['campo'] = 'th_refl_id';
-            $where[0]['dato'] = $parametros['_id'];
+
+            $where = array(
+                array('campo' => 'th_refl_id', 'dato' => $id_referencias_laboral),
+            );
+
             $datos = $this->modelo->editar($datos, $where);
+            if ($parametros['txt_ruta_guardada_carta_recomendacion'] == '' || $parametros['txt_ruta_guardada_carta_recomendacion'] == null) {
+                $datos = $this->guardar_archivo($file, $parametros, $id_referencias_laboral);
+            }
         }
 
         return $datos;
@@ -102,5 +116,64 @@ class th_referencias_laboralesC
         $datos = $this->modelo->editar($datos, $where);
 
         return $datos;
+    }
+
+    private function guardar_archivo($file, $post, $id_insertar_editar)
+    {
+        $id_empresa = $_SESSION['INICIO']['ID_EMPRESA'];
+        $ruta = dirname(__DIR__, 4) . '/REPOSITORIO/TALENTO_HUMANO/' . $id_empresa . '/'; //ruta carpeta donde queremos copiar los archivos
+        $ruta .= $post['txt_postulante_cedula'] . '/' . 'REFERENCIAS_LABORALES/';
+
+        if (!file_exists($ruta)) {
+            mkdir($ruta, 0777, true);
+        }
+
+        if ($this->validar_formato_archivo($file) === 1) {
+            $uploadfile_temporal = $file['txt_copia_carta_recomendacion']['tmp_name'];
+            $extension = pathinfo($file['txt_copia_carta_recomendacion']['name'], PATHINFO_EXTENSION);
+            //Para referencias laborales
+            $nombre = 'referencia_laboral_' . $id_insertar_editar . '.' . $extension;
+            $nuevo_nom = $ruta . $nombre;
+
+            $nombre_ruta = '../REPOSITORIO/TALENTO_HUMANO/' . $id_empresa . '/' . $post['txt_postulante_cedula'] . '/' . 'REFERENCIAS_LABORALES/';
+            $nombre_ruta .= $nombre;
+            //print_r($post); exit(); die();
+
+            if (is_uploaded_file($uploadfile_temporal)) {
+                if (move_uploaded_file($uploadfile_temporal, $nuevo_nom)) {
+
+                    $datos = array(
+                        array('campo' => 'th_refl_carta_recomendacion', 'dato' => $nombre_ruta),
+                    );
+
+                    $where = array(
+                        array('campo' => 'th_refl_id', 'dato' => $id_insertar_editar),
+                    );
+
+                    // Ejecutar la actualización en la base de datos
+                    $base = $this->modelo->editar($datos, $where);
+
+                    return $base == 1 ? 1 : -1;
+                } else {
+                    return -1;
+                }
+            } else {
+                return -1;
+            }
+        } else {
+            return -2;
+        }
+    }
+
+    private function validar_formato_archivo($file)
+    {
+        switch ($file['txt_copia_carta_recomendacion']['type']) {
+            case 'application/pdf':
+                return 1;
+                break;
+            default:
+                return -1;
+                break;
+        }
     }
 }

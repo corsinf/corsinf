@@ -35,7 +35,7 @@ if (isset($_GET['id'])) {
                 $('#txt_primer_apellido').val(response[0].th_pos_primer_apellido);
                 $('#txt_segundo_apellido').val(response[0].th_pos_segundo_apellido);
                 $('#txt_fecha_nacimiento').val(response[0].th_pos_fecha_nacimiento);
-                //$('#ddl_nacionalidad').val(response[0].th_pos_nacionalidad);
+                $('#ddl_nacionalidad').val(response[0].th_pos_nacionalidad);
                 $('#txt_numero_cedula').val(response[0].th_pos_cedula);
                 $('#ddl_estado_civil').val(response[0].th_pos_estado_civil);
                 $('#ddl_sexo').val(response[0].th_pos_sexo);
@@ -45,7 +45,7 @@ if (isset($_GET['id'])) {
                 $('#ddl_provincia').val(response[0].th_prov_id);
                 $('#ddl_ciudad').val(response[0].th_ciu_id);
                 $('#ddl_parroquia').val(response[0].th_parr_id);
-                $('#txt_codigo_postal').val(response[0].th_pos_postal);
+                $('#txt_direccion_postal').val(response[0].th_pos_postal);
                 $('#txt_direccion').val(response[0].th_pos_direccion);
 
                 calcular_edad('txt_edad', response[0].th_pos_fecha_nacimiento);
@@ -63,9 +63,9 @@ if (isset($_GET['id'])) {
         var txt_primer_apellido = $('#txt_primer_apellido').val();
         var txt_segundo_apellido = $('#txt_segundo_apellido').val();
         var txt_fecha_nacimiento = $('#txt_fecha_nacimiento').val();
-        //var ddl_nacionalidad = $('#ddl_nacionalidad').val();
+        var ddl_nacionalidad = $('#ddl_nacionalidad').val();
         var txt_numero_cedula = $('#txt_numero_cedula').val();
-        //var ddl_estado_civil = $('#ddl_estado_civil').val();
+        var ddl_estado_civil = $('#ddl_estado_civil').val();
         var ddl_sexo = $('#ddl_sexo').val();
         var txt_telefono_1 = $('#txt_telefono_1').val();
         var txt_telefono_2 = $('#txt_telefono_2').val();
@@ -73,7 +73,7 @@ if (isset($_GET['id'])) {
         var ddl_provincias = $('#ddl_provincias').val();
         var ddl_ciudad = $('#ddl_ciudad').val();
         var ddl_parroquia = $('#ddl_parroquia').val();
-        //var txt_codigo_postal = $('#txt_codigo_postal').val();
+        var txt_direccion_postal = $('#txt_direccion_postal').val();
         var txt_direccion = $('#txt_direccion').val();
 
         var parametros = {
@@ -83,9 +83,9 @@ if (isset($_GET['id'])) {
             'txt_primer_apellido': txt_primer_apellido,
             'txt_segundo_apellido': txt_segundo_apellido,
             'txt_fecha_nacimiento': txt_fecha_nacimiento,
-            //'ddl_nacionalidad': ddl_nacionalidad,
+            'ddl_nacionalidad': ddl_nacionalidad,
             'txt_numero_cedula': txt_numero_cedula,
-            //'ddl_estado_civil': ddl_estado_civil,
+            'ddl_estado_civil': ddl_estado_civil,
             'ddl_sexo': ddl_sexo,
             'txt_telefono_1': txt_telefono_1,
             'txt_telefono_2': txt_telefono_2,
@@ -93,7 +93,7 @@ if (isset($_GET['id'])) {
             'ddl_provincias': ddl_provincias,
             'ddl_ciudad': ddl_ciudad,
             'ddl_parroquia': ddl_parroquia,
-            //'txt_codigo_postal': txt_codigo_postal,
+            'txt_direccion_postal': txt_direccion_postal,
             'txt_direccion': txt_direccion,
 
         };
@@ -165,7 +165,6 @@ if (isset($_GET['id'])) {
             }
         });
     }
-
 </script>
 
 <div class="page-wrapper">
@@ -266,9 +265,35 @@ if (isset($_GET['id'])) {
                                 </div>
                             </div>
 
+                            <div class="row mb-col">
+                                <div class="col-md-6">
+                                    <label for="ddl_nacionalidad" class="form-label form-label-sm">Nacionalidad <label style="color: red;">*</label></label>
+                                    <select class="form-select form-select-sm" id="ddl_nacionalidad" name="ddl_nacionalidad">
+                                        <option selected disabled value="">-- Selecciona una Nacionalidad --</option>
+                                        <option value="Ecuatoriano">Ecuatoriano</option>
+                                        <option value="Colombiano">Colombiano</option>
+                                        <option value="Peruano">Peruano</option>
+                                        <option value="Venezolano">Venezolano</option>
+                                        <option value="Paraguayo">Paraguayo</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="ddl_estado_civil" class="form-label form-label-sm">Estado civil <label style="color: red;">*</label></label>
+                                    <select class="form-select form-select-sm" id="ddl_estado_civil" name="ddl_estado_civil">
+                                        <option selected disabled value="">-- Selecciona un Estado Civil --</option>
+                                        <option value="Soltero">Soltero/a</option>
+                                        <option value="Casado">Casado/a</option>
+                                        <option value="Divorciado">Divorciado/a</option>
+                                        <option value="Viudo">Viudo/a</option>
+                                        <option value="Union">Unión de hecho</option>
+                                    </select>
+                                </div>
 
+                            </div>
+
+                            
                             <?php include_once('../vista/PASANTES/02_ADRIAN/POSTULANTES/provincias_ciudades_parroquias.php'); ?>
-
+                           
 
                             <div class="row mb-col">
                                 <div class="col-md-12">
@@ -276,6 +301,7 @@ if (isset($_GET['id'])) {
                                     <input type="text" class="form-control form-control-sm" name="txt_direccion" id="txt_direccion" placeholder="Escriba su dirección">
                                 </div>
                             </div>
+
                             <div class="d-flex justify-content-end pt-2">
                                 <?php if ($_id == '') { ?>
                                     <button class="btn btn-primary btn-sm px-4 m-0 d-flex align-items-center" onclick="insertar_editar();" type="button"><i class="bx bx-save"></i> Guardar</button>
@@ -284,6 +310,7 @@ if (isset($_GET['id'])) {
                                     <button class="btn btn-danger btn-sm px-4 m-1 d-flex align-items-center" onclick="delete_datos()" type="button"><i class="bx bx-trash"></i> Eliminar</button>
                                 <?php } ?>
                             </div>
+
                         </form>
                     </div>
                 </div>
@@ -303,13 +330,13 @@ if (isset($_GET['id'])) {
         agregar_asterisco_campo_obligatorio('txt_fecha_nacimiento');
         agregar_asterisco_campo_obligatorio('txt_edad');
         agregar_asterisco_campo_obligatorio('txt_telefono_1');
-        // agregar_asterisco_campo_obligatorio('txt_telefono_2');
-        // agregar_asterisco_campo_obligatorio('txt_correo'); 
-        // agregar_asterisco_campo_obligatorio('ddl_provincias');
-        // agregar_asterisco_campo_obligatorio('ddl_ciudad');
-        // agregar_asterisco_campo_obligatorio('ddl_parroquia');
-        // agregar_asterisco_campo_obligatorio('txt_codigo_postal');
-        // agregar_asterisco_campo_obligatorio('txt_direccion');
+        agregar_asterisco_campo_obligatorio('txt_telefono_2');
+        agregar_asterisco_campo_obligatorio('txt_correo');
+        agregar_asterisco_campo_obligatorio('ddl_provincias');
+        agregar_asterisco_campo_obligatorio('ddl_ciudad');
+        agregar_asterisco_campo_obligatorio('ddl_parroquia');
+        agregar_asterisco_campo_obligatorio('txt_codigo_postal');
+        agregar_asterisco_campo_obligatorio('txt_direccion');
 
         //* Validacion de formulario
         $("#registrar_postulantes").validate({
@@ -339,6 +366,9 @@ if (isset($_GET['id'])) {
                     required: true,
                 },
                 txt_telefono_1: {
+                    required: true,
+                },
+                txt_direccion_postal: {
                     required: true,
                 },
             },

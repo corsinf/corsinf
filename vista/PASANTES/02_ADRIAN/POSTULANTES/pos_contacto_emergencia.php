@@ -186,7 +186,7 @@
             <div class="modal-body">
                 <form id="form_contacto_emergencia">
                     <div class="pnl_contacto_emergencia">
-                        <input type="text" id="txt_id_contacto_emergencia" hidden>
+                        <input type="hidden" id="txt_id_contacto_emergencia">
 
                         <div class="row mb-col">
                             <div class="col-md-12">

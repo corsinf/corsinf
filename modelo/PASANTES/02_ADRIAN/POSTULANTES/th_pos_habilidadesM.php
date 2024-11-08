@@ -16,25 +16,34 @@ class th_pos_habilidadesM extends BaseModel
     ];
 
     function listarJoin()
-	{
-		// Construir la parte JOIN de la consulta
-		$this->join('th_cat_habilidades', 'th_pos_habilidades.th_hab_id = th_cat_habilidades.th_hab_id');
+    {
+        // Construir la parte JOIN de la consulta
+        $this->join('th_cat_habilidades', 'th_pos_habilidades.th_hab_id = th_cat_habilidades.th_hab_id');
 
         $datos = $this->where('th_habp_estado', '1')->listar();
-		
-		return $datos;
-	}
 
-    function listar_habilidades_postulante($id_postulante)
+        return $datos;
+    }
+
+    function listar_habilidades_postulante($id_postulante, $tipo_habilidad)
     {
         $sql =
             "SELECT 
-                *
-                FROM th_cat_habilidades hab
-                WHERE hab.th_hab_estado = 1";
+                cah.th_hab_id, cah.th_hab_nombre
+            FROM 
+                 th_cat_habilidades cah
+            LEFT JOIN 
+                th_pos_habilidades poh  ON poh.th_hab_id = cah.th_hab_id
+                AND poh.th_habp_estado = 1             
+                AND poh.th_pos_id = $id_postulante
+            WHERE 
+                poh.th_hab_id IS NULL 
+                AND cah.th_tiph_id = $tipo_habilidad         
+            ORDER BY 
+                poh.th_hab_id;";
 
-        $sql .= " ORDER BY th_hab_id;";
         $datos = $this->db->datos($sql);
+
         return $datos;
     }
 }

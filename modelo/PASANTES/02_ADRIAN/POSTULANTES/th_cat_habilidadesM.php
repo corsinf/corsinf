@@ -13,3 +13,4 @@ class th_cat_habilidadesM extends BaseModel
         'th_tiph_id',
     ];
 }
+
