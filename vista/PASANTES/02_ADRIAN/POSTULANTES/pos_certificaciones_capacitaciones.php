@@ -18,16 +18,17 @@
     }
 </script>
 
-<div class="row pt-3 mb-col">
-    <div class="col-md-3">
+<div class="row mb-col">
+    <div class="col-10">
         <h6 class="fw-bold">CS50: Introduction to Computer Science</h6>
         <a href="#" class="fw-bold">Ver Certificado</a>
     </div>
-    <div class="col-md-3">
-        <a href="#" class="d-flex justify-content-end"><i class='text-dark bx bx-pencil bx-sm'></i></a>
+    <div class="col-2 d-flex justify-content-end align-items-start">
+        <button class="btn">
+            <i class='text-dark bx bx-pencil bx-sm'></i>
+        </button>
     </div>
 </div>
-
 
 <!-- Modal para agregar certificaciones y capacitaciones-->
 <div class="modal" id="modal_agregar_certificaciones" tabindex="-1" aria-modal="true" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
@@ -48,6 +49,7 @@
                             <input type="text" class="form-control form-control-sm " name="txt_nombre_certificacion" id="txt_nombre_certificacion" value="" placeholder="Escriba el nombre del curso o capacitación">
                         </div>
                     </div>
+                    
                     <div class="row mb-col">
                         <div class="col-md-12">
                             <label for="txt_enlace_certificado" class="form-label form-label-sm">1. Enlace del Certificado obtenido <label style="color: red;">*</label></label>
@@ -61,6 +63,7 @@
                         </div>
                     </div>
                 </div>
+                
                 <div class="modal-footer d-flex justify-content-center">
                     <button type="button" class="btn btn-success btn-sm" id="btn_guardar_certificaciones" onclick="insertar_editar_certificaciones_capacitaciones();">Guardar Certificación o Capacitación</button>
                 </div>

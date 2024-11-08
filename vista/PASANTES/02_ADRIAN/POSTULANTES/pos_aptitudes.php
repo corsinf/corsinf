@@ -4,13 +4,13 @@
             cargar_datos_aptitudes_tecnicas(<?= $id ?>);
             cargar_datos_aptitudes_blandas(<?= $id ?>);
         <?php } ?>
+
     });
 
     function activar_select2() {
 
-        lista_aptitudes_tecnicas();
-
-        lista_aptitudes_blandas();
+        lista_aptitudes_tecnicas_postulante('<?= $id ?>');
+        lista_aptitudes_blandas_postulante('<?= $id ?>');
 
         $('#ddl_seleccionar_aptitud_blanda').select2({
             placeholder: ' Selecciona una opción',
@@ -82,24 +82,30 @@
         });
     }
 
-    function lista_aptitudes_tecnicas() {
+    function lista_aptitudes_blandas_postulante(id) {
         $.ajax({
-            url: '../controlador/PASANTES/02_ADRIAN/POSTULANTES/th_cat_habilidadesC.php?listar_tecnicas=true',
-            type: 'post',
-            dataType: 'json',
-            success: function(response) {
-                $('#ddl_seleccionar_aptitud_tecnica').html(response);
-            }
-        });
-    }
-
-    function lista_aptitudes_blandas() {
-        $.ajax({
-            url: '../controlador/PASANTES/02_ADRIAN/POSTULANTES/th_cat_habilidadesC.php?listar_blandas=true',
+            url: '../controlador/PASANTES/02_ADRIAN/POSTULANTES/th_pos_habilidadesC.php?listar_aptitudes_blandas_postulante=true',
+            data: {
+                id_postulante: id
+            },
             type: 'post',
             dataType: 'json',
             success: function(response) {
                 $('#ddl_seleccionar_aptitud_blanda').html(response);
+            }
+        });
+    }
+
+    function lista_aptitudes_tecnicas_postulante(id) {
+        $.ajax({
+            url: '../controlador/PASANTES/02_ADRIAN/POSTULANTES/th_pos_habilidadesC.php?listar_aptitudes_tecnicas_postulante=true',
+            data: {
+                id_postulante: id
+            },
+            type: 'post',
+            dataType: 'json',
+            success: function(response) {
+                $('#ddl_seleccionar_aptitud_tecnica').html(response);
             }
         });
     }
@@ -197,6 +203,7 @@
         $("#form_aptitudes").validate().resetForm();
         $('.form-control').removeClass('is-valid is-invalid');
     }
+
 </script>
 
 <h6 class="fw-bold mt-3 mb-2">Técnicas</h6>
@@ -222,12 +229,6 @@
             <form id="form_aptitudes">
                 <div class="modal-body">
                     <input type="hidden" class="txt_id_habilidades_postulante">
-                    <div class="row mb-col">
-                        <div class="col-md-12">
-                            <label for="ddl_seleccionar_aptitud_blanda" class="form-label form-label-sm fw-bold">Seleccione sus Aptitudes Blandas </label>
-                            <select class="form-select form-select-sm ddl_seleccionar_aptitud" id="ddl_seleccionar_aptitud_blanda" name="ddl_seleccionar_aptitud_blanda" multiple="multiple" maxlength="5000"></select>
-                        </div>
-                    </div>
 
                     <div class="row mb-col">
                         <div class="col-md-12">
@@ -235,7 +236,15 @@
                             <select class="form-select form-select-sm ddl_seleccionar_aptitud" id="ddl_seleccionar_aptitud_tecnica" name="ddl_seleccionar_aptitud_tecnica" multiple="multiple" maxlength="5000"></select>
                         </div>
                     </div>
+
+                    <div class="row mb-col">
+                        <div class="col-md-12">
+                            <label for="ddl_seleccionar_aptitud_blanda" class="form-label form-label-sm fw-bold">Seleccione sus Aptitudes Blandas </label>
+                            <select class="form-select form-select-sm ddl_seleccionar_aptitud" id="ddl_seleccionar_aptitud_blanda" name="ddl_seleccionar_aptitud_blanda" multiple="multiple" maxlength="5000"></select>
+                        </div>
+                    </div>
                 </div>
+
                 <div class="modal-footer d-flex justify-content-center">
                     <button type="button" class="btn btn-success btn-sm" id="btn_guardar_aptitudes" onclick="insertar_editar_aptitudes();">Guardar Aptitudes</button>
                 </div>

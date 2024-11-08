@@ -1,35 +1,9 @@
 <script>
     $(document).ready(function() {
         <?php if (isset($_GET['id'])) { ?>
-            cargarDatos_informacion_adicional(<?= $id ?>);
+            //cargarDatos_informacion_adicional(<?= $id ?>);
         <?php } ?>
     });
-
-    function obtener_codigo_postal() {
-        var ubicacion = $('#ubicacion');
-        var codigo_postal = $('#txt_direccion_postal');
-
-        function success(position) {
-            var lat = position.coords.latitude;
-            var lon = position.coords.longitude;
-
-            // Llamada a la API de Nominatim para obtener el código postal
-            var url = `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json`;
-
-            $.getJSON(url, function(data) {
-                if (data && data.address && data.address.postcode) {
-                    codigo_postal.val(data.address.postcode);
-                } else {
-                    codigo_postal.val('No se pudo obtener');
-                }
-            }).fail(function() {
-                codigo_postal.val('Error al obtener el código postal');
-            });
-        }
-
-        // Obtener la ubicación del usuario
-        navigator.geolocation.getCurrentPosition(success);
-    }
 
     //Información Adicional
     function cargarDatos_informacion_adicional(id) {
@@ -170,27 +144,12 @@
                             </div>
                         </div>
 
-                        <div class="row mb-col">
-                            <div class="col-4">
-                                <label for="txt_direccion_postal" class="form-label form-label-sm">Código Postal <label style="color: red;">*</label></label>
-                                <div class="row">
-                                    <div class="col-11 me-0">
-                                        <input type="text" class="form-control form-control-sm" name="txt_direccion_postal" id="txt_direccion_postal" placeholder="Escriba su código postal o de click en 'Obtener'">
-                                    </div>
-                                    <div class="col-11 me-0" style="display: none;">
-                                        <a id="ubicacion" target="_blank"></a>
-                                    </div>
-                                    <div class="col-1 d-flex justify-content-start">
-                                        <button type="button" class="btn btn-sm btn-outline-primary" onclick="obtener_codigo_postal();">Obtener</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="d-flex justify-content-center">
-                            <button type="button" class="btn btn-success btn-sm" id="btn_guardar_informacion_contacto" onclick="insertar_editar_informacion_adicional();">Guardar</button>
-                        </div>
+        
                     </div>
+                </div>
+
+                <div class="modal-footer d-flex justify-content-center">
+                    <button type="button" class="btn btn-success btn-sm" id="btn_guardar_informacion_contacto" onclick="insertar_editar_informacion_adicional();">Guardar</button>
                 </div>
             </form>
         </div>
