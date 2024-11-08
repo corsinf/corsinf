@@ -71,7 +71,7 @@ class th_referencias_laboralesC
 
     function insertar_editar($file, $parametros)
     {
-        // print_r('$parametros');
+        // print_r($file);
         // exit();
         // die();
 
@@ -95,7 +95,8 @@ class th_referencias_laboralesC
             );
 
             $datos = $this->modelo->editar($datos, $where);
-            if ($parametros['txt_ruta_guardada_carta_recomendacion'] == '' || $parametros['txt_ruta_guardada_carta_recomendacion'] == null) {
+
+            if ($file['txt_copia_carta_recomendacion']['tmp_name'] != '' && $file['txt_copia_carta_recomendacion']['tmp_name'] != null) {
                 $datos = $this->guardar_archivo($file, $parametros, $id_referencias_laboral);
             }
         }
@@ -105,16 +106,22 @@ class th_referencias_laboralesC
 
     function eliminar($id)
     {
+        $datos_archivo = $this->modelo->where('th_refl_id', $id)->where('th_refl_estado', 1)->listar();
+
+        if ($datos_archivo && isset($datos_archivo[0]['th_refl_carta_recomendacion'])) {
+            $ruta_relativa = ltrim($datos_archivo[0]['th_refl_carta_recomendacion'], './');
+            $ruta_archivo = dirname(__DIR__, 4) . '/' . $ruta_relativa;
+
+            if (file_exists($ruta_archivo)) {
+                unlink($ruta_archivo);
+            }
+        }
 
         $datos = array(
-            array('campo' => 'th_refl_estado', 'dato' => 0),
+            array('campo' => 'th_refl_id', 'dato' => strval($id)),
         );
 
-        $where[0]['campo'] = 'th_refl_id';
-        $where[0]['dato'] = strval($id);
-
-        $datos = $this->modelo->editar($datos, $where);
-
+        $datos = $this->modelo->eliminar($datos);
         return $datos;
     }
 
