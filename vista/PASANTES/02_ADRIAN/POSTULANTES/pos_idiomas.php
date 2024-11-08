@@ -1,20 +1,57 @@
 <script>
+   
     //Idiomas
     function insertar_editar_idiomas() {
         var ddl_seleccionar_idioma = $('#ddl_seleccionar_idioma').val();
         var ddl_dominio_idioma = $('#ddl_dominio_idioma').val();
+        var txt_institucion_1 = $('#txt_institucion_1').val();
+        var txt_fecha_inicio_idioma = $('#txt_fecha_inicio_idioma').val();
+        var txt_fecha_fin_idioma   = $('#txt_fecha_fin_idioma').val();
 
+        
         var parametros_idiomas = {
             'ddl_seleccionar_idioma': ddl_seleccionar_idioma,
             'ddl_dominio_idioma': ddl_dominio_idioma,
+            'txt_institucion_1': txt_institucion_1,
+            'txt_fecha_inicio_idioma': txt_fecha_inicio_idioma,
+            'txt_fecha_fin_idioma': txt_fecha_fin_idioma,
+
         }
 
         if ($("#form_agregar_idioma").valid()) {
             // Si es válido, puedes proceder a enviar los datos por AJAX
             console.log(parametros_idiomas)
+            insertar_idiomas(parametros_idiomas);
         }
 
     }
+
+    function insertar_idiomas(parametros) {
+        alert ("hola2")
+    
+        $.ajax({
+            data: {
+                parametros: parametros
+            },
+            url: '../controlador/PASANTES/02_ADRIAN/POSTULANTES/th_pos_idiomasC.php?hola=true',
+            type: 'post',
+            dataType: 'json',
+
+            success: function(response) {
+                if (response == 1) {
+                    Swal.fire('', 'Operacion realizada con exito.', 'success');
+                    <?php if (isset($_GET['id'])) { ?>
+                       /* cargar_datos_idiomas(<?= $id ?>);
+                        limpiar_campos_idiomas();*/
+                    <?php } ?>
+                    $('#modal_agregar_idioma').modal('hide');
+                } else {
+                    Swal.fire('', 'Operación fallida', 'warning');
+                }
+            }
+        });
+    }
+
 </script>
 
 <div class="row mt-3">
@@ -70,6 +107,24 @@
                             </select>
                         </div>
                     </div>
+                    <div class="row mb-col">
+                        <div class="col-md-12">
+                            <label for="txt_institucion" class="form-label form-label-sm">Instución </label>
+                            <input type="text" class="form-control form-control-sm no_caracteres" name="txt_institucion_1" id="txt_institucion_1" placeholder="Escriba la institución donde recibió su certificado" maxlength="200">
+                        </div>
+                    </div>
+                    <div class="row mb-col">
+                        <div class="col-md-12">
+                            <label for="txt_fecha_inicio_idioma" class="form-label form-label-sm">Fecha de Inicio  </label>
+                            <input type="date" class="form-control form-control-sm no_caracteres" name="txt_fecha_inicio_idioma" id="txt_fecha_inicio_idioma" placeholder="Escriba la fecha de inicio de estudios " maxlength="200">
+                        </div>
+                    </div>
+                    <div class="row mb-col">
+                        <div class="col-md-12">
+                            <label for="txt_fecha_fin_idioma" class="form-label form-label-sm">Fecha de fin del curso </label>
+                            <input type="date" class="form-control form-control-sm no_caracteres" name="txt_fecha_fin_idioma" id="txt_fecha_fin_idioma" placeholder="Escriba la fecha de fin de los estudios" maxlength="200">
+                        </div>
+                    </div>
                 </div>
 
                 <div class="modal-footer d-flex justify-content-center">
@@ -79,6 +134,7 @@
         </div>
     </div>
 </div>
+
 
 <script>
     $(document).ready(function() {
