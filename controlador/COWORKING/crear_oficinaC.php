@@ -1,5 +1,5 @@
 <?php 
-include(dirname(__DIR__, 2).'/modelo/COWORKING/ClaseEjemploM.php');
+include(dirname(__DIR__, 2).'/modelo/COWORKING/crear_oficinaM.php');
 require_once(dirname(__DIR__, 2 ) . '/lib/pdf/cabecera_pdf.php');
 
 
@@ -79,7 +79,7 @@ class claseEjemplo {
     private $modelo;
     private $pdf;
     function __construct() {
-        $this->modelo = new claseEjemploM();
+        $this->modelo = new crear_oficinaM();
         $this->pdf = new cabecera_pdf();
     }
     // Obtener datos de un espacio específico

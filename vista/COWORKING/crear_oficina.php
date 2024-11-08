@@ -1,5 +1,4 @@
 <?php
-// Asegúrate de que $id_compra esté definido antes de usarlo
 $id_espacio  = isset($_POST['id_espacio']) ? intval($_POST['id_espacio']) : null; ?>
 <!--start page wrapper -->
 <div class="page-wrapper">
@@ -284,25 +283,42 @@ $id_espacio  = isset($_POST['id_espacio']) ? intval($_POST['id_espacio']) : null
     function abrirModalMobiliario(id_espacio) {
         
         document.getElementById("hidden_espacio_id").value = id_espacio;
-
+        listarMobiliario(id_espacio);
         // Muestra el modal
-        var myModal = new bootstrap.Modal(document.getElementById('furnitureModal'));
-        myModal.show();
+        $('#furnitureModal').modal('show');
 }
 
 }
     function generarPDFMobiliario() {
-
         var id_espacio = document.getElementById("hidden_espacio_id").value;
-        console.log("ID del espacio para PDF: ", id_espacio);
+        if (!id_espacio) {
+            Swal.fire("Error", "No se ha proporcionado el ID del espacio.", "error");
+            return;
+        }
         var url = '../controlador/COWORKING/crear_oficinaC.php?generarPDFMobiliario=true&id_espacio=' + id_espacio;
         window.open(url, "_blank");
     }
 
+
     function generarPDFEspacios() {
                 var url ='../controlador/COWORKING/crear_oficinaC.php?generarPDFEspacios=true'
                 window.open(url,"_blank");
-            }
+    }
+    function generarExcelEspacios() {
+                var url ='../lib/excel_spout.php?generarExcelEspacios=true'
+                window.open(url,"_blank");
+    }
+
+    function generarExcelMobiliario() {
+    var id_espacio = document.getElementById("hidden_espacio_id").value;  
+    if (!id_espacio) {
+        Swal.fire("Error", "No se ha proporcionado el ID del espacio.", "error");
+        return;
+    }
+    var url = '../lib/excel_spout.php?generarExcelMobiliario=true&id_espacio=' + id_espacio;
+    window.open(url, "_blank");
+}
+
 
     function lista_categorias() {
         $.ajax({
