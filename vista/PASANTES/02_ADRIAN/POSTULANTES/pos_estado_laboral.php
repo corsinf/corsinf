@@ -1,4 +1,62 @@
 <script>
+    $(document).ready(function() {
+        <?php if (isset($_GET['id'])) { ?>
+            cargar_datos_estado_laboral(<?= $id ?>);
+        <?php } ?>
+
+    });
+   
+    function cargar_datos_estado_laboral(id) {
+        $.ajax({
+            url: '../controlador/PASANTES/02_ADRIAN/POSTULANTES/th_estado_laboralC.php?listar=true',
+            type: 'post',
+            data: {
+                id: id
+            },
+            dataType: 'json',
+            success: function(response) {
+                $('#pnl_estado_laboral').html(response);
+            }
+        });
+    }
+
+    function cargar_datos_modal_estado_laboral(id) {
+        $.ajax({
+            url: '../controlador/PASANTES/02_ADRIAN/POSTULANTES/th_estado_laboralC.php?listar_modal=true',
+            type: 'post',
+            data: {
+                id: id
+            },
+            dataType: 'json',
+            success: function(response) {
+                $('#txt_nombre_empresa').val(response[0].th_expl_nombre_empresa);
+                $('#txt_cargos_ocupados').val(response[0].th_expl_cargos_ocupados);
+                $('#txt_fecha_inicio_laboral').val(response[0].th_expl_fecha_inicio_experiencia);
+
+                var fecha_fin_laboral = response[0].th_expl_fecha_fin_experiencia;
+
+                if (fecha_fin_laboral === '') {
+                    var hoy = new Date();
+                    var dia = String(hoy.getDate()).padStart(2, '0');
+                    var mes = String(hoy.getMonth() + 1).padStart(2, '0');
+                    var year = hoy.getFullYear();
+
+                    var fecha_actual_laboral = year + '-' + mes + '-' + dia;
+                    $('#txt_fecha_final_laboral').val(fecha_actual_laboral);
+                    $('#txt_fecha_final_laboral').prop('disabled', true);
+                    $('#cbx_fecha_final_laboral').prop('checked', true);
+                } else {
+                    $('#cbx_fecha_final_laboral').prop('checked', false);
+                    $('#txt_fecha_final_laboral').prop('disabled', false);
+                    $('#txt_fecha_final_laboral').val(fecha_fin_laboral);
+                }
+
+                $('#txt_responsabilidades_logros').val(response[0].th_expl_responsabilidades_logros);
+                $('#txt_experiencia_id').val(response[0]._id);
+            }
+        });
+    }
+
     function ocultar_opciones_estado() {
         var select_opciones_estado = $('#ddl_estado_laboral');
         var valor_seleccionado = select_opciones_estado.val();
@@ -26,9 +84,34 @@
 
         if ($("#form_estado_laboral").valid()) {
             // Si es válido, puedes proceder a enviar los datos por AJAX
-            console.log(parametros_estado_laboral)
+            console.log(parametros_estado_laboral);
+            insertar_estado_laboral(parametros_estado_laboral);
         }
 
+    }
+
+    function insertar_estado_laboral(parametros) {
+        $.ajax({
+            data: {
+                parametros: parametros
+            },
+            url: '../controlador/PASANTES/02_ADRIAN/POSTULANTES/th_pos_estado_laboralC.php?insertar=true',
+            type: 'post',
+            dataType: 'json',
+
+            success: function(response) {
+                if (response == 1) {
+                    Swal.fire('', 'Operacion realizada con exito.', 'success');
+                    <?php if (isset($_GET['id'])) { ?>
+                        //cargar_datos_estado_laboral(<?= $id ?>);//
+                        //limpiar_campos_estado_laboral_modal();//
+                    <?php } ?>
+                    $('#modal_estado_laboral').modal('hide');
+                } else {
+                    Swal.fire('', 'Operación fallida', 'warning');
+                }
+            }
+        });
     }
 </script>
 
