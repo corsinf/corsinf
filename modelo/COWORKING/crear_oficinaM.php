@@ -48,6 +48,25 @@ function actualizarEspacio($param) {
         return $resp;
     }
 
+    function listardebaseFiltros($categoria=false) {
+        $sql = "SELECT e.*, c.nombre_categoria
+                FROM co_espacio e
+                INNER JOIN co_categoria c ON e.id_categoria = c.id_categoria
+                WHERE 1 = 1";
+                if($categoria)
+                {
+                    $sql.=" AND nombre_categoria like '%".$categoria."%'";
+                }
+                
+
+                $sql.="ORDER BY id_espacio DESC";
+                
+        $resp = $this->db->datos($sql);
+        return $resp;
+    }
+
+    
+
     // Inserta un nuevo mobiliario
     function insertarMobiliario($datos) {
         $sql = "INSERT INTO co_mobiliario (detalle_mobiliario, cantidad, id_espacio) 
