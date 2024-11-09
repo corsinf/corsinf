@@ -48,14 +48,14 @@ function actualizarEspacio($param) {
         return $resp;
     }
 
-    function listardebaseFiltros($categoria=false) {
+    function listardebaseFiltros($nombre=false) {
         $sql = "SELECT e.*, c.nombre_categoria
                 FROM co_espacio e
                 INNER JOIN co_categoria c ON e.id_categoria = c.id_categoria
                 WHERE 1 = 1";
-                if($categoria)
+                if($nombre)
                 {
-                    $sql.=" AND nombre_categoria like '%".$categoria."%'";
+                    $sql.=" AND nombre_categoria like '%".$nombre."%'";
                 }
                 
 

@@ -97,8 +97,8 @@ function lista_espaciostarjetas() {
 
     var parametros = {
             'nombre_espacio': $('#buscar').val(),
-            'estado_espacio': $('#buscar').val(),
-            'nombre_categoria': $('#buscar').val(),
+            //'estado_espacio': $('#buscar').val(),
+            //'nombre_categoria': $('#buscar').val(),
         };
 
         $.ajax({
