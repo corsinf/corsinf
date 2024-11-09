@@ -55,7 +55,7 @@ function actualizarEspacio($param) {
                 WHERE 1 = 1";
                 if($nombre)
                 {
-                    $sql.=" AND nombre_categoria like '%".$nombre."%'";
+                    $sql.=" AND nombre_espacio like '%".$nombre."%'";
                 }
                 
 

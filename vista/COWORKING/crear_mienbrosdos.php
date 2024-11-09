@@ -1,12 +1,4 @@
-<?php
-// Verificar si la variable $buscar está definida en la solicitud GET
-$buscar = isset($_GET['buscar']) ? $_GET['buscar'] : ''; // Si no existe 'buscar', se asigna un valor vacío
 
-// O, si viene de un formulario POST:
-$buscar = isset($_POST['buscar']) ? $_POST['buscar'] : '';
-
-// Ahora puedes usar la variable $buscar de forma segura
-?>
 
 
 
@@ -98,7 +90,7 @@ function lista_espaciostarjetas() {
     var parametros = {
             'nombre_espacio': $('#buscar').val(),
             //'estado_espacio': $('#buscar').val(),
-            //'nombre_categoria': $('#buscar').val(),
+            //'nombre_categoria': $('#rango_precio').val(),
         };
 
         $.ajax({

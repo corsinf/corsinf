@@ -37,8 +37,8 @@ class crear_mienbrosdosC
     {
         // print_r($parametros);die;
         // Llamamos al método listardebase() del modelo crear_oficinaM para obtener los datos
-        $nombre = $parametros['nombre_espacio'];
-        //$categoria = $parametros['nombre_categoria'];
+        $nombre = isset($parametros['nombre_espacio']) ? $parametros['nombre_espacio'] : '';
+        //$categoria = isset($parametros['nombre_categoria']) ? $parametros['nombre_categoria'] : '';
         //$estado = $parametros['estado_espacio'];
         $resultado = $this->oficinas->listardebaseFiltros($nombre);
         // print_r($resultado);die();
