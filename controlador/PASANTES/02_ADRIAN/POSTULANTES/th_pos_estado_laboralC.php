@@ -43,6 +43,7 @@ class th_pos_estado_laboralC
 
         $datos = array(
 
+            array('campo' => 'th_pos_id', 'dato' => $parametros['id_postulante']),
             array('campo' => 'th_est_estado_laboral', 'dato' => $parametros['ddl_estado_laboral']),
             array('campo' => 'th_est_fecha_contratacion', 'dato' => $parametros['txt_fecha_contratacion_estado']),
             array('campo' => 'th_est_fecha_salida', 'dato' => $parametros['txt_fecha_salida_estado']),

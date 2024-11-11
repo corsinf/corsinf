@@ -75,8 +75,9 @@
         var ddl_estado_laboral = $('#ddl_estado_laboral').val();
         var txt_fecha_contratacion_estado = $('#txt_fecha_contratacion_estado').val();
         var txt_fecha_salida_estado = $('#txt_fecha_salida_estado').val();
-
+        var id_postulante = '<?= $id ?>';
         var parametros_estado_laboral = {
+            'id_postulante': id_postulante,
             'ddl_estado_laboral': ddl_estado_laboral,
             'txt_fecha_contratacion_estado': txt_fecha_contratacion_estado,
             'txt_fecha_salida_estado': txt_fecha_salida_estado,
