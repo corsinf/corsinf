@@ -52,7 +52,6 @@ if (isset($_GET['id'])) {
                 calcular_edad('txt_edad', response[0].th_pos_fecha_nacimiento);
                 cargar_datos_ciudades(response[0].th_ciu_id);
 
-
                 nombres_completos = response[0].th_pos_primer_apellido + ' ' + response[0].th_pos_segundo_apellido + ' ' + response[0].th_pos_primer_nombre + ' ' + response[0].th_pos_segundo_nombre;
                 $('#txt_nombres_completos_v').html(nombres_completos);
                 $('#txt_fecha_nacimiento_v').html(response[0].th_pos_fecha_nacimiento);
@@ -62,19 +61,12 @@ if (isset($_GET['id'])) {
                 $('#txt_telefono_1_v').html(response[0].th_pos_telefono_1);
                 $('#txt_correo_v').html(response[0].th_pos_correo);
 
-<<<<<<< HEAD
-                //Input para las referencias laborales
-                $('#txt_numero_cedula_referencia_laboral').val(response[0].th_pos_cedula);
-
                 //Input para todos los pos_id que se vayan a colocar en los modales
                 $('input[name="txt_postulante_id"]').val(response[0]._id);
                 $('input[name="txt_postulante_cedula"]').val(response[0].th_pos_cedula);
 
                 //console.log(response);
-=======
-                
-                console.log(response);
->>>>>>> 923f5d0a0f486c6572b7326d29bd496886e55f83
+
             }
         });
     }
