@@ -16,6 +16,10 @@ if (isset($_GET['eliminar'])) {
     echo json_encode($controlador->eliminar($_POST['id']));
 }
 
+if (isset($_GET['listar_modal'])) {
+    echo json_encode($controlador->listar_modal($_POST['id']));
+}
+
 
 
 class th_pos_estado_laboralC
@@ -29,17 +33,42 @@ class th_pos_estado_laboralC
 
     function listar($id)
     {
+        $datos = $this->modelo->where('th_pos_id', $id)->listar();
+
+        $texto = '';
+        foreach ($datos as $key => $value) {
+
+            $texto .=
+                <<<HTML
+                    <div class="row mb-col">
+                        <div class="col-10">
+                            <h6 class="fw-bold">{$value['th_est_estado_laboral']}</h6>
+                        </div>
+                        <div class="col-2 d-flex justify-content-end align-items-start">
+                            <button class="btn" style="color: white;" onclick="abrir_modal_estado_laboral({$value['_id']});">
+                                <i class="text-dark bx bx-pencil bx-sm"></i>
+                            </button>
+                        </div>
+                    </div>
+                HTML;
+        }
+        return $texto;
+    }
+
+    function listar_modal($id)
+    {
+
         if ($id == '') {
-            $datos = $this->modelo->where('th_pos_estado_laboral', 1)->listar();
+            $datos = $this->modelo->listar();
         } else {
-            $datos = $this->modelo->where('th_pos_id', $id)->listar();
+            $datos = $this->modelo->where('th_est_id', $id)->listar();
         }
         return $datos;
     }
 
     function insertar_editar_estado_laboral($parametros)
     {
-       //print_r($parametros); exit(); die();
+        //print_r($parametros); exit(); die();
 
         $datos = array(
 
@@ -49,18 +78,16 @@ class th_pos_estado_laboralC
             array('campo' => 'th_est_fecha_salida', 'dato' => $parametros['txt_fecha_salida_estado']),
 
         );
-        $datos = $this->modelo->insertar($datos);
-        
-        /* if ($parametros['_id'] == '') {
-           $datos = $this->modelo->insertar($datos);
+
+        if ($parametros['_id'] == '') {
+            $datos = $this->modelo->insertar($datos);
         } else {
             $where[0]['campo'] = 'th_est_id';
             $where[0]['dato'] = $parametros['_id'];
             $datos = $this->modelo->editar($datos, $where);
-        }*/
+        }
 
         return $datos;
-
     }
 
     function eliminar($id)
@@ -75,5 +102,4 @@ class th_pos_estado_laboralC
         $datos = $this->modelo->editar($datos, $where);
         return $datos;
     }
-
 }
