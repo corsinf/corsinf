@@ -53,6 +53,7 @@ class th_pos_idiomasC
        //print_r($parametros); exit(); die();
 
         $datos = array(
+            array('campo' => 'th_pos_id', 'dato' => $parametros['id_postulante']),
             array('campo' => 'th_idi_nombre_idioma', 'dato' => $parametros['ddl_seleccionar_idioma']),
             array('campo' => 'th_idi_nivel', 'dato' => $parametros['ddl_dominio_idioma']),
             array('campo' => 'th_idi_institucion', 'dato' => $parametros['txt_institucion_1']),

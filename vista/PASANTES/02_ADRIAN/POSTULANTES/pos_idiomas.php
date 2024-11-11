@@ -1,15 +1,18 @@
 <script>
    
     //Idiomas
-    function insertar_editar_idiomas() {
+    function insertar_editar_idiomas() 
+    {
         var ddl_seleccionar_idioma = $('#ddl_seleccionar_idioma').val();
         var ddl_dominio_idioma = $('#ddl_dominio_idioma').val();
         var txt_institucion_1 = $('#txt_institucion_1').val();
         var txt_fecha_inicio_idioma = $('#txt_fecha_inicio_idioma').val();
         var txt_fecha_fin_idioma   = $('#txt_fecha_fin_idioma').val();
 
+        var id_postulante = '<?= $id ?>';
         
         var parametros_idiomas = {
+            'id_postulante': id_postulante,
             'ddl_seleccionar_idioma': ddl_seleccionar_idioma,
             'ddl_dominio_idioma': ddl_dominio_idioma,
             'txt_institucion_1': txt_institucion_1,
@@ -98,8 +101,8 @@
                             <select class="form-select form-select-sm" id="ddl_dominio_idioma" name="ddl_dominio_idioma" required>
                                 <option selected disabled value="">-- Selecciona su nivel de dominio del idioma --</option>
                                 <option value="Nativo">Nativo</option>
-                                <option value="C1">C1</option>
-                                <option value="C2">C2</option>
+                                <option value="C1">A1</option>
+                                <option value="C2">A2</option>
                                 <option value="B1">B1</option>
                                 <option value="B2">B2</option>
                                 <option value="C1">C1</option>
