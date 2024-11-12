@@ -9,7 +9,7 @@ if (isset($_GET['listar'])) {
 }
 
 if (isset($_GET['insertar'])) {
-    echo json_encode($controlador->insertar_editar_estado_laboral($_POST['parametros']));
+    echo json_encode($controlador->insertar_editar($_POST['parametros']));
 }
 
 if (isset($_GET['eliminar'])) {
@@ -37,12 +37,17 @@ class th_pos_estado_laboralC
 
         $texto = '';
         foreach ($datos as $key => $value) {
+            // Formatear las fechas antes de incluirlas en el HTML
+            $fecha_contratacion = date('d/m/Y', strtotime($value['th_est_fecha_contratacion']));
+            $fecha_salida = date('d/m/Y', strtotime($value['th_est_fecha_salida']));
+
 
             $texto .=
                 <<<HTML
                     <div class="row mb-col">
                         <div class="col-10">
                             <h6 class="fw-bold">{$value['th_est_estado_laboral']}</h6>
+                            <p class="m-0">{$fecha_contratacion} - {$fecha_salida}</p>                            
                         </div>
                         <div class="col-2 d-flex justify-content-end align-items-start">
                             <button class="btn" style="color: white;" onclick="abrir_modal_estado_laboral({$value['_id']});">
@@ -66,7 +71,7 @@ class th_pos_estado_laboralC
         return $datos;
     }
 
-    function insertar_editar_estado_laboral($parametros)
+    function insertar_editar($parametros)
     {
         //print_r($parametros); exit(); die();
 
@@ -93,10 +98,10 @@ class th_pos_estado_laboralC
     function eliminar($id)
     {
         $datos = array(
-            array('campo' => 'th_pos_estado', 'dato' => 0),
+            array('campo' => 'th_pos_id', 'dato' => 0),
         );
 
-        $where[0]['campo'] = 'th_pos_id';
+        $where[0]['campo'] = 'th_est_id';
         $where[0]['dato'] = $id;
 
         $datos = $this->modelo->editar($datos, $where);

@@ -4,23 +4,11 @@
             cargar_datos_estado_laboral(<?= $id ?>);
         <?php } ?>
 
-        //cargar_datos_masivos(1);
+        
     });
 
-    /* function cargar_datos_masivos(id) {
-        $.ajax({
-            url: '../controlador/PASANTES/02_ADRIAN/POSTULANTES/th_pos_estado_laboralC.php?listar=true',
-            type: 'post',
-            data: {
-                id: id
-            },
-            dataType: 'json',
-            success: function(response) {
-                console.log(response);
-            }
-        });
-    } */
-
+  
+    //Estado Laboral
     function cargar_datos_estado_laboral(id) {
         $.ajax({
             url: '../controlador/PASANTES/02_ADRIAN/POSTULANTES/th_pos_estado_laboralC.php?listar=true',
@@ -47,27 +35,12 @@
                 $('#ddl_estado_laboral').val(response[0].th_est_estado_laboral);
                 $('#txt_fecha_contratacion_estado').val(response[0].th_est_fecha_contratacion);
                 $('#txt_fecha_salida_estado').val(response[0].th_est_fecha_salida);
-
                 $('#txt_experiencia_estado_id').val(response[0]._id);
             }
         });
     }
 
-    function ocultar_opciones_estado() {
-        var select_opciones_estado = $('#ddl_estado_laboral');
-        var valor_seleccionado = select_opciones_estado.val();
-
-        $('#txt_fecha_contratacion_estado').prop('disabled', false);
-        $('#txt_fecha_salida_estado').prop('disabled', false);
-
-        if (valor_seleccionado === "Freelancer" || valor_seleccionado === "Autonomo") {
-            $('#txt_fecha_contratacion_estado').prop('disabled', true);
-            $('#txt_fecha_salida_estado').prop('disabled', true);
-        }
-    }
-
-    //Estado Laboral
-    function insertar_editar_estado_laboral() {
+ function insertar_editar_estado_laboral() {
         var ddl_estado_laboral = $('#ddl_estado_laboral').val();
         var txt_fecha_contratacion_estado = $('#txt_fecha_contratacion_estado').val();
         var txt_fecha_salida_estado = $('#txt_fecha_salida_estado').val();
@@ -114,13 +87,67 @@
         });
     }
 
+    function ocultar_opciones_estado() {
+        var select_opciones_estado = $('#ddl_estado_laboral');
+        var valor_seleccionado = select_opciones_estado.val();
+
+        $('#txt_fecha_contratacion_estado').prop('disabled', false);
+        $('#txt_fecha_salida_estado').prop('disabled', false);
+
+        if (valor_seleccionado === "Freelancer" || valor_seleccionado === "Autonomo") {
+            $('#txt_fecha_contratacion_estado').prop('disabled', true);
+            $('#txt_fecha_salida_estado').prop('disabled', true);
+        }
+    }
+
+
+
     function abrir_modal_estado_laboral(id) {
         cargar_datos_modal_estado_laboral(id);
 
         $('#modal_estado_laboral').modal('show');
-        $('#lbl_titulo_experiencia_laboral').html('Editar Estado Laboral');
+        $('#lbl_titulo_estado_laboral').html('Editar Estado Laboral');
         $('#btn_guardar_estado_laboral').html('Editar');
 
+    }
+
+    function delete_datos_estado_laboral() {
+        //Para revisar y enviar el dato como parametro 
+        id = $('#txt_experiencia_estado_id').val();
+        Swal.fire({
+            title: 'Eliminar Registro?',
+            text: "Esta seguro de eliminar este registro?",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Si'
+        }).then((result) => {
+            if (result.value) {
+                eliminar_estado_laboral(id);
+            }
+        })
+    }
+
+    function eliminar_estado_laboral(id) {
+        $.ajax({
+            data: {
+                id: id
+            },
+            url: '../controlador/PASANTES/02_ADRIAN/POSTULANTES/th_pos_estado_laboralC.php?eliminar=true',
+            type: 'post',
+            dataType: 'json',
+            success: function(response) {
+                if (response == 1) {
+                    Swal.fire('Eliminado!', 'Registro Eliminado.', 'success');
+                    <?php if (isset($_GET['id'])) { ?>
+                        cargar_datos_estado_laboral(<?= $id ?>);
+                        limpiar_campos_estado_laboral_modal();
+                    <?php } ?>
+                    $('#modal_estado_laboral').modal('hide');
+                }
+            }
+        });
     }
 
     function limpiar_campos_estado_laboral_modal() {
@@ -131,24 +158,73 @@
         $('#txt_fecha_contratacion_estado').val('');
         $('#txt_fecha_salida_estado').val('');
         $('#txt_experiencia_estado_id').val('');
+        //Cambiar texto
+        $('#lbl_titulo_estado_laboral').html('Agregue su Estado Laboral');
+        $('#btn_guardar_estado_laboral').html('Agregar');
     }
+
+
+
+    function validar_fechas_est_lab() {
+        var fecha_inicio = $('#txt_fecha_contratacion_estado').val();
+        var fecha_final = $('#txt_fecha_salida_estado').val();
+        var hoy = new Date();
+        var fecha_actual = hoy.toISOString().split('T')[0];
+        //* Validar que la fecha final no sea menor a la fecha de inicio
+        if (fecha_inicio && fecha_final) {
+            if (Date.parse(fecha_final) < Date.parse(fecha_inicio)) {
+                Swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    text: "La fecha final no puede ser menor a la fecha de inicio.",
+                });
+                $('.form-control').removeClass('is-valid is-invalid');
+                $('#txt_fecha_salida_estado').val('');
+                $('#cbx_fecha_salida_estado').prop('checked', false);
+                $('#txt_fecha_salida_estado').prop('disabled', false);
+            }
+            if (Date.parse(fecha_inicio) > Date.parse(fecha_final)) {
+                Swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    text: "La fecha de inicio no puede ser mayor a la fecha final.",
+                });
+                $('.form-control').removeClass('is-valid is-invalid');
+                $('#txt_fecha_contratacion_estado').val('');
+                $('#cbx_fecha_salida_estado').prop('checked', false);
+                $('#txt_fecha_salida_estado').prop('disabled', false);
+            }
+        }
+
+        //* Validar que la fecha de inicio y final no sean mayores a la fecha actual
+        if (fecha_inicio && Date.parse(fecha_inicio) > Date.parse(fecha_actual)) {
+            Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: "La fecha de inicio no puede ser mayor a la fecha actual.",
+            });
+            $('.form-control').removeClass('is-valid is-invalid');
+            $('#txt_fecha_contratacion_estado').val('');
+        }
+
+        if (fecha_final && Date.parse(fecha_final) > Date.parse(fecha_actual)) {
+            Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: "La fecha de finalización no puede ser mayor a la fecha actual.",
+            });
+            $('.form-control').removeClass('is-valid is-invalid');
+            $('#txt_fecha_salida_estado').val('');
+            $('#cbx_fecha_salida_estado').prop('checked', false);
+            $('#txt_fecha_salida_estado').prop('disabled', false);
+        }
+    }
+
 </script>
 
 <div id="pnl_estado_laboral">
 
 </div>
-
-<!-- <div class="row pt-3 mb-col">
-    <div class="col-md-12">
-        <h6 class="fw-bold mb-2">Inactivo</h6>
-        <p>Ene 2022 - Oct 2023</p>
-    </div>
-</div>
-<div class="row pt-3 mb-col">
-    <div class="col-6">
-        <a href="#" class="d-flex justify-content-end"><i class='text-dark bx bx-pencil bx-sm'></i></a>
-    </div>
-</div> -->
 
 <!-- Modal para agregar estado laboral-->
 <div class="modal" id="modal_estado_laboral" tabindex="-1" aria-modal="true" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
@@ -157,7 +233,7 @@
 
             <!-- Modal Header -->
             <div class="modal-header">
-                <h5><small class="text-body-secondary">Agregue su estado laboral</small></h5>
+                <h6><label class="text-body-secondary fw-bold" id="lbl_titulo_estado_laboral">Agregue su estado laboral</small></h6>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="limpiar_campos_estado_laboral_modal()"></button>
             </div>
             <!-- Modal body -->
@@ -195,8 +271,9 @@
                 </div>
 
                 <div class="modal-footer d-flex justify-content-center">
-                    <button type="button" class="btn btn-success btn-sm" id="btn_guardar_estado_laboral" onclick="insertar_editar_estado_laboral();">Guardar Estado Laboral</button>
-                </div>
+                    <button type="button" class="btn btn-success btn-sm" id="btn_guardar_estado_laboral" onclick="validar_fechas_est_lab(); insertar_editar_estado_laboral();">Agregar</button>
+                    <button type="button" class="btn btn-danger btn-sm px-4 m-1" id="btn_eliminar_estado" onclick="delete_datos_estado_laboral();">Eliminar</button>
+                    </div>
             </form>
         </div>
     </div>
@@ -242,4 +319,42 @@
             }
         });
     })
+
+    function checkbox_actualidad_est_lab() {
+        if ($('#cbx_fecha_salida_estado').is(':checked')) {
+            var hoy = new Date();
+            var dia = String(hoy.getDate()).padStart(2, '0');
+            var mes = String(hoy.getMonth() + 1).padStart(2, '0');
+            var year = hoy.getFullYear();
+            
+            txt_fecha_contratacion_estado
+            txt_fecha_salida_estado
+
+            var fecha_actual = year + '-' + mes + '-' + dia;
+            $('#txt_fecha_salida_estado').val(fecha_actual);txt_fecha_salida_estado
+            $('#txt_fecha_salida_estado').prop('disabled', true);
+            $('#txt_fecha_salida_estado').rules("remove", "required");
+
+            // Agregar clase 'is-valid' para poner el campo en verde
+            $('#txt_fecha_salida_estado').addClass('is-valid');
+            $('#txt_fecha_salida_estado').removeClass('is-invalid');
+
+        } else {
+            // Solo limpiar el campo si estaba previamente deshabilitado
+            if ($('#txt_fecha_salida_estado').prop('disabled')) {
+                $('#txt_fecha_salida_estado').val('');
+            }
+
+            $('#txt_fecha_salida_estado').prop('disabled', false);
+            $('#txt_fecha_salida_estado').rules("add", {
+                required: true
+            });
+            $('#txt_fecha_salida_estado').removeClass('is-valid');
+            $('#form_experiencia_laboral').validate().resetForm();
+            $('.form-control').removeClass('is-valid is-invalid');
+        }
+
+        // Validar fechas
+        validar_fechas_est_lab();
+    }
 </script>
