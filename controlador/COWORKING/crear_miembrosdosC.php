@@ -1,62 +1,54 @@
 <?php
 // Incluir el archivo que contiene la clase crear_oficinaM
 require_once(dirname(__DIR__, 2) . '/modelo/COWORKING/crear_oficinaM.php');
-
 include(__DIR__ . '/../../modelo/COWORKING/crear_miembrosdosM.php');
-
 
 // Crear una instancia del controlador
 $controlador = new crear_mienbrosdosC();
 
 if (isset($_GET['lista_tarjetas'])) {
     
-    $filtros = $_POST['data'];
-    echo json_encode($controlador->lista_tarjetas($filtros));
+    // Obtener los datos enviados desde el formulario (AJAX)
+    $filtros = $_POST['data']; // Los filtros llegan como un array
+
+    // Llamar al método lista_tarjetas y pasar los filtros
+    echo json_encode($controlador->lista_tarjetas($filtros)); 
 }
-
-
 
 class crear_mienbrosdosC
 {
     private $modelo;
-    private $oficinaModelo;
     private $oficinas;
 
     public function __construct() 
     {
-        
-        // $this->modelo = new crear_mienbrosdosM(); 
-        $this->oficinas = new crear_oficinaM(); 
-        
-        // Instanciar el modelo de oficinas
-        $this->oficinaModelo = new crear_oficinaM(); 
+        $this->oficinas = new crear_oficinaM();
     }
 
     // Listar las tarjetas (espacios)
     function lista_tarjetas($parametros)
     {
-        // print_r($parametros);die;
-        // Llamamos al método listardebase() del modelo crear_oficinaM para obtener los datos
-        $nombre = isset($parametros['nombre_espacio']) ? $parametros['nombre_espacio'] : '';
-        //$categoria = isset($parametros['nombre_categoria']) ? $parametros['nombre_categoria'] : '';
-        //$estado = $parametros['estado_espacio'];
-        $resultado = $this->oficinas->listardebaseFiltros($nombre);
-        // print_r($resultado);die();
+        // Obtener los filtros
+        $nombre = isset($parametros['nombre_espacio']) ? $parametros['nombre_espacio'] : false;
+        $rango_precio = isset($parametros['rango_precio']) ? $parametros['rango_precio'] : false;
+        $estado = isset($parametros['estado']) ? $parametros['estado'] : false;
+
+        // Llamar al método listardebaseFiltros() del modelo para obtener los datos
+        $resultado = $this->oficinas->listardebaseFiltros($nombre, $rango_precio, $estado);
+        
         // Inicializamos la variable que contendrá el HTML
         $str = '';
-    
+
         // Iteramos sobre los resultados obtenidos
         foreach ($resultado as $key => $espacio) {
-            // print_r($espacio);die();
-            // Obtenemos los valores de cada espacio
             $nombre_espacio = isset($espacio['nombre_espacio']) ? $espacio['nombre_espacio'] : '';
             $id_espacio = isset($espacio['id_espacio']) ? $espacio['id_espacio'] : '';
             $categoria = isset($espacio['nombre_categoria']) ? $espacio['nombre_categoria'] : '';
             $aforo = isset($espacio['aforo_espacio']) ? $espacio['aforo_espacio'] : '';
             $precio = isset($espacio['precio_espacio']) ? $espacio['precio_espacio'] : '';
             $estado = isset($espacio['estado_espacio']) ? strtoupper($espacio['estado_espacio']) : 'I'; // 'A' para activo, 'I' para inactivo
-    
-            
+
+            // Generar el HTML para cada espacio
             $str .= '<div class="col-md-3 mb-4 espacio" 
                         data-nombre="' . htmlspecialchars($nombre_espacio) . '" 
                         data-estado="' . $estado . '" 
@@ -76,15 +68,14 @@ class crear_mienbrosdosC
                         </div>
                     </div>';
         }
-    
+
         // Retornamos el HTML generado
         return $str;
     }
-
-
-
 }
+
 ?>
+
 
 
     

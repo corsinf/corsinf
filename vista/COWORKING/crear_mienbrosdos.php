@@ -1,7 +1,3 @@
-
-
-
-
 <div class="page-wrapper">
     <div class="page-content">
         <!-- Breadcrumb Section -->
@@ -39,21 +35,21 @@
                                     <!-- Formulario de búsqueda y filtros -->
                                     <form id="filterForm" method="GET" class="d-flex">
                                         <div class="input-group me-3" style="width: 300px;">
-                                            <input type="search" name="buscar" id="buscar"  class="form-control" placeholder="Buscar Espacio..." onkeyup='lista_espaciostarjetas()'>
+                                            <input type="search" name="buscar" id="buscar" class="form-control" placeholder="Buscar Espacio..." onkeyup='lista_espaciostarjetas()'>
                                             <button class="btn btn-outline-secondary" type="button">
                                                 <i class="bx bx-search"></i>
                                             </button>
                                         </div>
 
-                                        <!-- Selector de rango de precio -->
-                                        <select name="rango_precio" id="rango_precio" class="form-select me-3" style="width: 130px;">
+                                        <!-- Selector de rango de precio con onchange -->
+                                        <select name="rango_precio" id="rango_precio" class="form-select me-3" style="width: 130px;" onchange="lista_espaciostarjetas()">
                                             <option value="">Rango de Precio</option>
-                                            <option value="1">0 - 5</option>
-                                            <option value="2">100 - 500</option>
+                                            <option value="1">$1 - $100</option>
+                                            <option value="2">$100 - $500</option>
                                         </select>
 
                                         <!-- Selector de estado -->
-                                        <select name="estado" id="estado" class="form-select me-3" style="width: 130px;">
+                                        <select name="estado" id="estado" class="form-select me-3" style="width: 130px;" onchange="lista_espaciostarjetas()">
                                             <option value="">Estado</option>
                                             <option value="A">Activo</option>
                                             <option value="I">Inactivo</option>
@@ -64,12 +60,12 @@
 
                             <!-- Mensaje de "sin resultados" -->
                             <div id="noResultsMessage" class="text-center text-muted my-4" style="display: none;">
-                                No se encontraron espacios que coincidan con la búsqueda.
+                                <big><strong>No se encontraron espacios que coincidan con la búsqueda.</strong></big>
                             </div>
 
                             <!-- Lista de Espacios -->
                             <div class="row" id="espaciosLista">
-
+                                <!-- Los espacios filtrados se mostrarán aquí -->
                             </div>
                         </div>
                     </div>
@@ -80,40 +76,46 @@
 </div>
 
 <script>
-    $(document).ready(function() {
-        lista_espaciostarjetas();
-    });
+$(document).ready(function() {
+    lista_espaciostarjetas();
+});
 
-
-function lista_espaciostarjetas() {   
-
+function lista_espaciostarjetas() {
     var parametros = {
-            'nombre_espacio': $('#buscar').val(),
-            //'estado_espacio': $('#buscar').val(),
-            //'nombre_categoria': $('#rango_precio').val(),
-        };
+        'nombre_espacio': $('#buscar').val(),
+        'rango_precio': $('#rango_precio').val(),
+        'estado': $('#estado').val(),
+    };
 
-        $.ajax({
-            url: '../controlador/COWORKING/crear_miembrosdosC.php?lista_tarjetas=true',
-            type: 'post',
-            data:{data:parametros},
-            dataType: 'json',        
-            success: function(response) {  
+    $.ajax({
+        url: '../controlador/COWORKING/crear_miembrosdosC.php?lista_tarjetas=true',
+        type: 'post',
+        data: { data: parametros },
+        dataType: 'json',
+        success: function(response) {
+            if (response.length === 0) {
+                // Si no hay resultados, mostramos el mensaje
+                $('#noResultsMessage').show();
+                $('#espaciosLista').html(''); // Limpiar cualquier espacio previo mostrado
+            } else {
+                // Si hay resultados, mostramos las tarjetas
+                $('#noResultsMessage').hide();
                 $('#espaciosLista').html(response);
-                console.log(response);
-            }       
-        });
-    }
+            }
+            console.log(response);
+        },
+        error: function() {
+            // Manejo de errores, en caso de que la solicitud AJAX falle
+            $('#noResultsMessage').show();
+            $('#espaciosLista').html('');
+        }
+    });
+}
 
 
-    
 
-
-
-    function enviardatostarjetas() {
-        
-    }
 </script>
+
 
 
 

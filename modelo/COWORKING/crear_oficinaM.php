@@ -48,22 +48,49 @@ function actualizarEspacio($param) {
         return $resp;
     }
 
-    function listardebaseFiltros($nombre=false) {
+    function listardebaseFiltros($nombre = false, $rango_precio = false, $estado = false) { 
+        // Consulta base
         $sql = "SELECT e.*, c.nombre_categoria
                 FROM co_espacio e
-                INNER JOIN co_categoria c ON e.id_categoria = c.id_categoria
+                LEFT JOIN co_categoria c ON e.id_categoria = c.id_categoria
                 WHERE 1 = 1";
-                if($nombre)
-                {
-                    $sql.=" AND nombre_espacio like '%".$nombre."%'";
-                }
-                
-
-                $sql.="ORDER BY id_espacio DESC";
-                
+        
+        // Filtrar por nombre si está disponible
+        if ($nombre) {
+            $sql .= " AND e.nombre_espacio LIKE '%" . $nombre . "%'";
+        }
+    
+        // Filtrar por rango de precio si está disponible
+        if ($rango_precio) {
+            if ($rango_precio == 1) {
+                $sql .= " AND e.precio_espacio BETWEEN 1 AND 100";
+            } elseif ($rango_precio == 2) {
+                $sql .= " AND e.precio_espacio BETWEEN 101 AND 500";
+            }
+        }
+        
+        // Filtrar por estado si está disponible
+        if ($estado) {
+            $sql .= " AND e.estado_espacio = '" . $estado . "'"; // Asegúrate que 'estado_espacio' es el nombre correcto del campo en la base de datos
+        }
+    
+        // Ordenar los resultados
+        $sql .= " ORDER BY e.id_espacio DESC";
+        
+        // Ejecutar la consulta y devolver los resultados
         $resp = $this->db->datos($sql);
         return $resp;
     }
+    
+    
+    
+
+    
+    
+    
+
+    
+
 
     
 
