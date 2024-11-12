@@ -1,6 +1,63 @@
 <script>
+     $(document).ready(function() {
+        <?php if (isset($_GET['id'])) { ?>
+            cargar_datos_idiomas(<?= $id ?>);
+        <?php } ?>
+
+    });
    
     //Idiomas
+    function cargar_datos_idiomas(id) {
+        $.ajax({
+            url: '../controlador/PASANTES/02_ADRIAN/POSTULANTES/th_pos_idiomasC.php?listar=true',
+            type: 'post',
+            data: {
+                id: id
+            },
+            dataType: 'json',
+            success: function(response) {
+                $('#pnl_idiomas').html(response);
+            }
+        });
+    }
+
+    function cargar_datos_modal_idiomas(id) {
+        $.ajax({
+            url: '../controlador/PASANTES/02_ADRIAN/POSTULANTES/th_pos_idiomasC.php?listar_modal=true',
+            type: 'post',
+            data: {
+                id: id
+            },
+            dataType: 'json',
+            success: function(response) {
+                $('#ddl_seleccionar_idioma').val(response[0].th_idi_nombre);
+                $('#ddl_dominio_idioma').val(response[0].th_idi_nivel);
+                $('#txt_institucion_1').val(response[0].th_idi_institucion);
+                $('#txt_fecha_inicio_idioma').val(response[0].th_idi_fecha_inicio_idioma);
+
+                var fecha_fin_idioma = response[0].th_idi_fecha_fin_idioma;
+
+                if (fecha_fin_idioma === '') {
+                    var hoy = new Date();
+                    var dia = String(hoy.getDate()).padStart(2, '0');
+                    var mes = String(hoy.getMonth() + 1).padStart(2, '0');
+                    var year = hoy.getFullYear();
+
+                    var fecha_actual_idioma = year + '-' + mes + '-' + dia;
+                    $('#txt_fecha_fin_idioma').val(fecha_actual_idioma);
+                    $('#txt_fecha_fin_idioma').prop('disabled', true);
+                    $('#txt_fecha_fin_idioma').prop('checked', true);
+                } else {
+                    $('#txt_fecha_fin_idioma').prop('checked', false);
+                    $('#txt_fecha_fin_idioma').prop('disabled', false);
+                    $('#txt_fecha_fin_idioma').val(fecha_fin_idioma);
+                }
+                
+            }
+        });
+    }
+
+
     function insertar_editar_idiomas() 
     {
         var ddl_seleccionar_idioma = $('#ddl_seleccionar_idioma').val();
@@ -44,8 +101,8 @@
                 if (response == 1) {
                     Swal.fire('', 'Operacion realizada con exito.', 'success');
                     <?php if (isset($_GET['id'])) { ?>
-                       /* cargar_datos_idiomas(<?= $id ?>);
-                        limpiar_campos_idiomas();*/
+                        cargar_datos_idiomas(<?= $id ?>);
+                        //limpiar_campos_idiomas();
                     <?php } ?>
                     $('#modal_agregar_idioma').modal('hide');
                 } else {
@@ -55,9 +112,22 @@
         });
     }
 
-</script>
+    //* Función para editar el registro de idiomas
+    function abrir_modal_idiomas(id) {
+        cargar_datos_modal_idiomas(id);
 
-<div class="row mt-3">
+        $('#modal_agregar_idiomas').modal('show');
+        $('#lbl_nombre_idioma').html('Editar Idioma');
+        $('#btn_guardar_experiencia').html('Editar');
+
+    }
+
+</script>
+<div id="pnl_idiomas">
+
+</div>
+
+<!-- <div class="row mt-3">
     <div class="col-8">
         <h6 class="fw-bold">Inglés</h6>
         <p>B1</p>
@@ -65,7 +135,7 @@
     <div class="col-4">
         <a href="#" class="d-flex justify-content-end"><i class='text-dark bx bx-pencil bx-sm'></i></a>
     </div>
-</div>
+</div> -->
 
 <!-- Modal para agregar idiomas-->
 <div class="modal" id="modal_agregar_idioma" tabindex="-1" aria-modal="true" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
@@ -74,8 +144,8 @@
 
             <!-- Modal Header -->
             <div class="modal-header">
-                <h5><small class="text-body-secondary">Agregue un idioma</small></h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="limpiar_parametros()"></button>
+                <h6><label class="text-body-secondary fw-bold" id="lbl_nombre_idioma">Agregue un idioma</small></h6>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="limpiar_campos_idiomas_modal()"></button>
             </div>
             <!-- Modal body -->
             <form id="form_agregar_idioma">
@@ -150,13 +220,34 @@
                 ddl_dominio_idioma: {
                     required: true,
                 },
+                txt_institucion_1: {
+                    required: true,
+                    maxlength: "200"
+                },
+                txt_fecha_inicio_idioma: {
+                    required: true,
+                },
+                txt_fecha_fin_idioma: {
+                    required: true,
+                },
             },
+
             messages: {
                 ddl_seleccionar_idioma: {
                     required: "Por favor seleccione un idioma",
                 },
                 ddl_dominio_idioma: {
                     required: "Por favor seleccione su dominio con el idioma",
+                },
+                txt_institucion_1: {
+                    required: "Por favor escriba la institución donde recibió su certificado",
+                    maxlength: "El campo no puede tener más de 200 caracteres"
+                },
+                txt_fecha_inicio_idioma: {
+                    required: "Por favor escriba la fecha de inicio de estudios",
+                },
+                txt_fecha_fin_idioma: {
+                    required: "Por favor escriba la fecha de fin de los estudios",
                 },
             },
 
