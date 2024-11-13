@@ -20,8 +20,6 @@ if (isset($_GET['listar_modal'])) {
     echo json_encode($controlador->listar_modal($_POST['id']));
 }
 
-
-
 class th_pos_estado_laboralC
 {
     private $modelo;
@@ -40,8 +38,6 @@ class th_pos_estado_laboralC
             // Formatear las fechas antes de incluirlas en el HTML
             $fecha_contratacion = date('d/m/Y', strtotime($value['th_est_fecha_contratacion']));
             $fecha_salida = date('d/m/Y', strtotime($value['th_est_fecha_salida']));
-
-
             $texto .=
                 <<<HTML
                     <div class="row mb-col">
@@ -98,13 +94,10 @@ class th_pos_estado_laboralC
     function eliminar($id)
     {
         $datos = array(
-            array('campo' => 'th_pos_id', 'dato' => 0),
+            array('campo' => 'th_est_id', 'dato' =>$id),
         );
 
-        $where[0]['campo'] = 'th_est_id';
-        $where[0]['dato'] = $id;
-
-        $datos = $this->modelo->editar($datos, $where);
+        $datos = $this->modelo->eliminar($datos);
         return $datos;
     }
 }

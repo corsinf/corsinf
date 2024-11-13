@@ -1,4 +1,4 @@
-<?php
+.<?php
 require_once(dirname(__DIR__, 4) . '/modelo/PASANTES/02_ADRIAN/POSTULANTES/th_referencias_laboralesM.php');
 
 $controlador = new th_referencias_laboralesC();

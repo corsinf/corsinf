@@ -4,10 +4,9 @@
             cargar_datos_estado_laboral(<?= $id ?>);
         <?php } ?>
 
-        
+
     });
 
-  
     //Estado Laboral
     function cargar_datos_estado_laboral(id) {
         $.ajax({
@@ -40,7 +39,7 @@
         });
     }
 
- function insertar_editar_estado_laboral() {
+    function insertar_editar_estado_laboral() {
         var ddl_estado_laboral = $('#ddl_estado_laboral').val();
         var txt_fecha_contratacion_estado = $('#txt_fecha_contratacion_estado').val();
         var txt_fecha_salida_estado = $('#txt_fecha_salida_estado').val();
@@ -100,8 +99,6 @@
         }
     }
 
-
-
     function abrir_modal_estado_laboral(id) {
         cargar_datos_modal_estado_laboral(id);
 
@@ -152,8 +149,8 @@
 
     function limpiar_campos_estado_laboral_modal() {
         $('#form_estado_laboral').validate().resetForm();
-        $('.form-control').removeClass('is-valid is-invalid');
-
+        $('.form-control, .form-select').removeClass('is-valid is-invalid');
+        
         $('#ddl_estado_laboral').val('');
         $('#txt_fecha_contratacion_estado').val('');
         $('#txt_fecha_salida_estado').val('');
@@ -162,8 +159,6 @@
         $('#lbl_titulo_estado_laboral').html('Agregue su Estado Laboral');
         $('#btn_guardar_estado_laboral').html('Agregar');
     }
-
-
 
     function validar_fechas_est_lab() {
         var fecha_inicio = $('#txt_fecha_contratacion_estado').val();
@@ -196,30 +191,7 @@
             }
         }
 
-        //* Validar que la fecha de inicio y final no sean mayores a la fecha actual
-        if (fecha_inicio && Date.parse(fecha_inicio) > Date.parse(fecha_actual)) {
-            Swal.fire({
-                icon: "error",
-                title: "Oops...",
-                text: "La fecha de inicio no puede ser mayor a la fecha actual.",
-            });
-            $('.form-control').removeClass('is-valid is-invalid');
-            $('#txt_fecha_contratacion_estado').val('');
-        }
-
-        if (fecha_final && Date.parse(fecha_final) > Date.parse(fecha_actual)) {
-            Swal.fire({
-                icon: "error",
-                title: "Oops...",
-                text: "La fecha de finalización no puede ser mayor a la fecha actual.",
-            });
-            $('.form-control').removeClass('is-valid is-invalid');
-            $('#txt_fecha_salida_estado').val('');
-            $('#cbx_fecha_salida_estado').prop('checked', false);
-            $('#txt_fecha_salida_estado').prop('disabled', false);
-        }
-    }
-
+            }            
 </script>
 
 <div id="pnl_estado_laboral">
@@ -244,7 +216,7 @@
                         <div class="col-md-12">
                             <label for="ddl_estado_laboral" class="form-label form-label-sm">Estado laboral: <label style="color: red;">*</label></label>
                             <select class="form-select form-select-sm" id="ddl_estado_laboral" name="ddl_estado_laboral" onchange="ocultar_opciones_estado();" required>
-                                <option selected disabled value="">-- Selecciona un Estado Laboral -- <label style="color: red;">*</label></option>
+                                <option selected disabled value="">-- Selecciona un Estado Laboral -- <label style="color: red;"></label></option>
                                 <option value="Activo">Activo</option>
                                 <option value="Inactivo">Inactivo</option>
                                 <option value="Prueba">En prueba</option>
@@ -254,14 +226,12 @@
                             </select>
                         </div>
                     </div>
-
                     <div class="row mb-col">
                         <div class="col-md-12">
                             <label for="txt_fecha_contratacion_estado" class="form-label form-label-sm">Fecha de contratación <label style="color: red;">*</label></label>
                             <input type="date" class="form-control form-control-sm" name="txt_fecha_contratacion_estado" id="txt_fecha_contratacion_estado">
                         </div>
                     </div>
-
                     <div class="row mb-col">
                         <div class="col-md-12">
                             <label for="txt_fecha_salida_estado" class="form-label form-label-sm">Fecha de salida <label style="color: red;">*</label></label>
@@ -269,11 +239,10 @@
                         </div>
                     </div>
                 </div>
-
                 <div class="modal-footer d-flex justify-content-center">
                     <button type="button" class="btn btn-success btn-sm" id="btn_guardar_estado_laboral" onclick="validar_fechas_est_lab(); insertar_editar_estado_laboral();">Agregar</button>
                     <button type="button" class="btn btn-danger btn-sm px-4 m-1" id="btn_eliminar_estado" onclick="delete_datos_estado_laboral();">Eliminar</button>
-                    </div>
+                </div>
             </form>
         </div>
     </div>
@@ -326,12 +295,13 @@
             var dia = String(hoy.getDate()).padStart(2, '0');
             var mes = String(hoy.getMonth() + 1).padStart(2, '0');
             var year = hoy.getFullYear();
-            
+
             txt_fecha_contratacion_estado
             txt_fecha_salida_estado
 
             var fecha_actual = year + '-' + mes + '-' + dia;
-            $('#txt_fecha_salida_estado').val(fecha_actual);txt_fecha_salida_estado
+            $('#txt_fecha_salida_estado').val(fecha_actual);
+            txt_fecha_salida_estado
             $('#txt_fecha_salida_estado').prop('disabled', true);
             $('#txt_fecha_salida_estado').rules("remove", "required");
 

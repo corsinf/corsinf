@@ -8,11 +8,12 @@ class th_pos_estado_laboralM extends BaseModel
     protected $primaryKey = 'th_est_id AS _id';
 
     protected $camposPermitidos = [
-        'th_pos_id',
+        'th_pos_id',        
         'th_est_estado_laboral',
         'th_est_fecha_contratacion',
         'th_est_fecha_salida',
         'th_est_fecha_creacion',
         'th_est_fecha_modificacion',
+        'th_est_estado',
     ];
 }
