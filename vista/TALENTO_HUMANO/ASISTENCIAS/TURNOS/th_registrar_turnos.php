@@ -1,8 +1,8 @@
 <link rel="stylesheet" href="../lib/ion-rangeSlider/ion.rangeSlider.min.css" />
 
 <!-- Color picker -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@simonwep/pickr/dist/themes/nano.min.css" />
-<script src="https://cdn.jsdelivr.net/npm/@simonwep/pickr"></script>
+<link rel="stylesheet" href="../lib/Pickr/nano.min.css" />
+<script src="../lib/Pickr/pickr.js"></script>
 
 
 <?php
@@ -58,6 +58,13 @@ $hora_salida = isset($_GET['hora_salida']) ? $_GET['hora_salida'] : 930;
                 $('#txt_limite_tardanza_out').val(response[0].limite_tardanza_out);
                 $('#txt_color').val(response[0].color);
                 color_input(response[0].color);
+                $('#cbx_descanso').prop('checked', (response[0].descanso == 1));
+                $('#txt_tiempo_descanso').val(minutos_formato_hora(response[0].hora_descanso));
+
+                if (response[0].descanso == 1) {
+                    $('#pnl_tiempo_descanso').show();
+                }
+
             }
         });
     }
@@ -76,7 +83,8 @@ $hora_salida = isset($_GET['hora_salida']) ? $_GET['hora_salida'] : 930;
         var txt_checkout_salida_fin = $('#txt_checkout_salida_fin').val();
         var txt_limite_tardanza_out = $('#txt_limite_tardanza_out').val();
         var txt_color = $('#txt_color').val();
-
+        var cbx_descanso = $('#cbx_descanso').prop('checked') ? 1 : 0;
+        var txt_tiempo_descanso = $('#txt_tiempo_descanso').val();
 
         var parametros = {
             '_id': '<?= $_id ?>',
@@ -93,6 +101,8 @@ $hora_salida = isset($_GET['hora_salida']) ? $_GET['hora_salida'] : 930;
             'txt_checkout_salida_fin': txt_checkout_salida_fin,
             'txt_limite_tardanza_out': txt_limite_tardanza_out,
             'txt_color': txt_color,
+            'cbx_descanso': cbx_descanso,
+            'txt_tiempo_descanso': txt_tiempo_descanso,
 
         };
 
@@ -175,6 +185,7 @@ $hora_salida = isset($_GET['hora_salida']) ? $_GET['hora_salida'] : 930;
     }
 </script>
 
+<!-- Slider -->
 <style>
     /* Cambiar color del rango seleccionado */
     .irs .irs-from,
@@ -244,6 +255,7 @@ $hora_salida = isset($_GET['hora_salida']) ? $_GET['hora_salida'] : 930;
     }
 </style>
 
+<!-- Color -->
 <style>
     .pcr-button {
         width: 100% !important;
@@ -324,7 +336,7 @@ $hora_salida = isset($_GET['hora_salida']) ? $_GET['hora_salida'] : 930;
                                         <div class="col-md-6">
                                             <div id="color-picker"></div>
                                         </div>
-                                        <div class="col-md-6">
+                                        <div class="col-md-6" hidden>
                                             <input type="text" class="form-control form-control-sm no_caracteres" name="txt_color" id="txt_color" maxlength="50" readonly>
                                         </div>
                                     </div>
@@ -337,17 +349,33 @@ $hora_salida = isset($_GET['hora_salida']) ? $_GET['hora_salida'] : 930;
                                     <div class="row mb-col">
                                         <div class="col-md-3">
                                             <div class="">
-                                                <input type="number" class="form-control form-control-sm" name="txt_valor_trabajar_hora" id="txt_valor_trabajar_hora" value="8">
+                                                <input type="number" class="form-control form-control-sm" name="txt_valor_trabajar_hora" id="txt_valor_trabajar_hora" value="8" readonly>
                                                 <label class="" id="txt_valor_trabajar_hora">hora(s)</label>
                                             </div>
                                         </div>
                                         <div class="col-md-3">
                                             <div class="">
-                                                <input type="number" class="form-control form-control-sm" name="txt_valor_trabajar_min" id="txt_valor_trabajar_min" value="30">
+                                                <input type="number" class="form-control form-control-sm" name="txt_valor_trabajar_min" id="txt_valor_trabajar_min" value="30" readonly>
                                                 <label class="" id="txt_valor_trabajar_min">min</label>
                                             </div>
                                         </div>
 
+                                    </div>
+
+                                    <div class="row mb-col">
+                                        <div class="col-md-6">
+                                            <div class="form-check ">
+                                                <input type="checkbox" class="form-check-input" name="cbx_descanso" id="cbx_descanso">
+                                                <label class="form-check-label" for="cbx_descanso">Descanso</label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row mb-col" id="pnl_tiempo_descanso" style="display: none;">
+                                        <div class="col-md-6">
+                                            <label for="txt_nombre" class="form-label">Tiempo de descanso </label>
+                                            <input type="time" class="form-control form-control-sm" name="txt_tiempo_descanso" id="txt_tiempo_descanso" value="00:00">
+                                        </div>
                                     </div>
 
                                 </div>
@@ -355,7 +383,7 @@ $hora_salida = isset($_GET['hora_salida']) ? $_GET['hora_salida'] : 930;
                             <hr>
 
                             <div class="row mb-col pt-3">
-                                <input id="timerangeSlider" type="text" />
+                                <input id="slider_hora_dia" type="text" />
                             </div>
 
                             <hr>
@@ -393,12 +421,12 @@ $hora_salida = isset($_GET['hora_salida']) ? $_GET['hora_salida'] : 930;
                                             <input type="time" class="form-control form-control-sm" name="txt_checkin_registro_fin" id="txt_checkin_registro_fin" value="07:30">
                                         </div>
 
-                                        <div class="col-md-2">
+                                        <!-- <div class="col-md-2">
                                             <div class="form-check ">
                                                 <input type="checkbox" class="form-check-input" name="cbx_checkin_late" id="cbx_checkin_late">
                                                 <label class="form-check-label" for="cbx_checkin_late">Finaliza el día siguiente</label>
                                             </div>
-                                        </div>
+                                        </div> -->
                                     </div>
 
                                     <div class="row mb-col">
@@ -412,12 +440,12 @@ $hora_salida = isset($_GET['hora_salida']) ? $_GET['hora_salida'] : 930;
                                             <input type="time" class="form-control form-control-sm" name="txt_checkout_salida_fin" id="txt_checkout_salida_fin" value="16:00">
                                         </div>
 
-                                        <div class="col-md-2">
+                                        <!-- <div class="col-md-2">
                                             <div class="form-check ">
                                                 <input type="checkbox" class="form-check-input" name="cbx_checkout_late" id="cbx_checkout_late">
                                                 <label class="form-check-label" for="cbx_checkout_late">Finaliza el día siguiente</label>
                                             </div>
-                                        </div>
+                                        </div> -->
                                     </div>
 
                                     <div class="row mb-col">
@@ -506,13 +534,14 @@ $hora_salida = isset($_GET['hora_salida']) ? $_GET['hora_salida'] : 930;
 
 <script src="../lib/ion-rangeSlider/ion.rangeSlider.min.js"></script>
 
+<!-- Para el slider -->
 <script>
     $(document).ready(function() {
         hora_entrada = '<?= $hora_entrada ?>' ?? 420;
         hora_salida = '<?= $hora_salida ?>' ?? 930;
-        $("#timerangeSlider").ionRangeSlider({
+        slider_hora_dia = $("#slider_hora_dia").ionRangeSlider({
             min: 0,
-            max: 1439, // 23 horas y 59 minutos
+            max: 2879, // 23 horas y 59 minutos
             from: hora_entrada, // Hora de inicio
             to: hora_salida, // Hora de finalización
             step: 1,
@@ -535,16 +564,77 @@ $hora_salida = isset($_GET['hora_salida']) ? $_GET['hora_salida'] : 930;
                 $('#txt_hora_salida').val(minutos_formato_hora(data.to));
                 $('#txt_checkout_salida_inicio').val(minutos_formato_hora((data.to) - 30 * 1));
                 $('#txt_checkout_salida_fin').val(minutos_formato_hora((data.to) + (30 * 1)));
-
+                calcular_horas_trabajadas();
 
                 //console.log(minutos_formato_hora(data.to));
             }
         });
 
+        $('#txt_hora_entrada, #txt_hora_salida').on('change', actualizar_slider);
 
     });
+
+    /* $(document).ready(function() {
+        let hora_entrada = '<?= $hora_entrada ?>' ?? 420;
+        let hora_salida = '<?= $hora_salida ?>' ?? 930;
+
+        slider_hora_dia = $("#slider_hora_dia").ionRangeSlider({
+            min: 0,
+            max: 2879, // Hasta 47:59 (48 horas en minutos)
+            from: hora_entrada,
+            to: hora_salida,
+            step: 1,
+            grid: true,
+            grid_num: 48,
+            type: "double",
+            prettify: function(num) {
+                // Convertir el tiempo en un formato de reloj de 24 horas
+                num = num % 1440; // Restringir el valor al rango de 0-1440 minutos (24 horas)
+                let hours = Math.floor(num / 60);
+                let minutes = num % 60;
+                return (hours < 10 ? '0' : '') + hours + ':' + (minutes < 10 ? '0' : '') + minutes;
+            },
+
+            onFinish: function(data) {
+                if (data.from > 1439) {
+                    $("#slider_hora_dia").data('ionRangeSlider').update({
+                        from: 1439
+                    });
+                }
+
+                if (data.to < 1440) {
+                    $("#slider_hora_dia").data('ionRangeSlider').update({
+                        to: 1440
+                    });
+                }
+
+                // Actualizar los valores de los campos de entrada con el formato correcto
+                $('#txt_hora_entrada').val(minutos_formato_hora(data.from % 1440));
+                $('#txt_checkin_registro_inicio').val(minutos_formato_hora((data.from % 1440) - 30));
+                $('#txt_checkin_registro_fin').val(minutos_formato_hora((data.from % 1440) + 30));
+
+                $('#txt_hora_salida').val(minutos_formato_hora(data.to % 1440));
+                $('#txt_checkout_salida_inicio').val(minutos_formato_hora((data.to % 1440) - 30));
+                $('#txt_checkout_salida_fin').val(minutos_formato_hora((data.to % 1440) + 30));
+                calcular_horas_trabajadas();
+            }
+        });
+    }); */
+
+    function actualizar_slider() {
+        let hora_entrada_min = hora_a_minutos($('#txt_hora_entrada').val());
+        let hora_salida_min = hora_a_minutos($('#txt_hora_salida').val());
+
+        let slider_instancia = slider_hora_dia.data("ionRangeSlider");
+
+        slider_instancia.update({
+            from: hora_entrada_min,
+            to: hora_salida_min
+        });
+    }
 </script>
 
+<!-- Para tomar el color -->
 <script>
     function color_input(txt_color) {
         pickr = Pickr.create({
@@ -597,5 +687,135 @@ $hora_salida = isset($_GET['hora_salida']) ? $_GET['hora_salida'] : 930;
             hex_color = color.toHEXA().toString();
             $txt_color = $('#txt_color').val(hex_color);
         });
+    }
+</script>
+
+
+<!-- Validaciones de hora -->
+<script>
+    $(document).ready(function() {
+        $('#cbx_descanso').on('change', function() {
+            if ($(this).is(':checked')) {
+                $('#pnl_tiempo_descanso').show();
+            } else {
+                $('#pnl_tiempo_descanso').hide();
+                $('#txt_tiempo_descanso').val(`00:00`);
+                calcular_horas_trabajadas();
+            }
+        });
+
+        $('#txt_hora_entrada, #txt_hora_salida, #txt_tiempo_descanso').on('change', function() {
+            calcular_horas_trabajadas();
+        });
+
+        // Validar que `txt_checkin_registro_inicio` no sea mayor a `txt_hora_entrada`
+        $('#txt_checkin_registro_inicio').on('blur', function() {
+            let checkin_inicio_min = hora_a_minutos($(this).val());
+            let hora_entrada_min = hora_a_minutos($('#txt_hora_entrada').val());
+
+            if (checkin_inicio_min > hora_entrada_min) {
+                $(this).val(minutos_formato_hora((hora_entrada_min) - 30 * 1));
+                Swal.fire('', 'El tiempo de check-in inicio no puede ser mayor que la hora de entrada.', 'warning');
+            }
+        });
+
+        // Validar que `txt_checkin_registro_fin` no sea mayor a `txt_hora_entrada`
+        $('#txt_checkin_registro_fin').on('blur', function() {
+            let checkin_fin_min = hora_a_minutos($(this).val());
+            let hora_entrada_min = hora_a_minutos($('#txt_hora_entrada').val());
+            let hora_salida_min = hora_a_minutos($('#txt_hora_salida').val());
+
+            if (checkin_fin_min >= hora_salida_min) {
+                $(this).val(minutos_formato_hora((hora_entrada_min) + 30 * 1));
+                Swal.fire('', 'El tiempo de check-in fin no puede ser mayor que la hora de salida', 'warning');
+            }
+
+            if (checkin_fin_min < hora_entrada_min) {
+                $(this).val(minutos_formato_hora((hora_entrada_min) + 30 * 1));
+                Swal.fire('', 'El tiempo de check-in fin no puede ser menor a la hora de entrada.', 'warning');
+            }
+        });
+
+        // Validar que `txt_checkout_registro_inicio` no sea mayor a `txt_hora_entrada`
+        $('#txt_checkout_salida_inicio').on('blur', function() {
+            let checkout_inicio_min = hora_a_minutos($(this).val());
+            let hora_salida_min = hora_a_minutos($('#txt_hora_salida').val());
+            let checkin_fin_min = hora_a_minutos($('#txt_checkin_registro_fin').val());
+
+            if (checkout_inicio_min <= checkin_fin_min) {
+                $(this).val(minutos_formato_hora((hora_salida_min) - 30 * 1));
+                Swal.fire('', 'El tiempo de check-out inicio no puede ser menos que el check-in fin.', 'warning');
+                return;
+            }
+
+            if (checkout_inicio_min > hora_salida_min) {
+                $(this).val(minutos_formato_hora((hora_salida_min) - 30 * 1));
+                Swal.fire('', 'El tiempo de check-out inicio no puede ser mayor que la hora de salida.', 'warning');
+            }
+
+        });
+
+        // Validar que `txt_checkout_registro_fin` no sea mayor a `txt_hora_entrada`
+        $('#txt_checkout_salida_fin').on('blur', function() {
+            let checkout_fin_min = hora_a_minutos($(this).val());
+            let hora_salida_min = hora_a_minutos($('#txt_hora_salida').val());
+
+            if (checkout_fin_min < hora_salida_min) {
+                $(this).val(minutos_formato_hora((hora_salida_min) + 30 * 1));
+                Swal.fire('', 'El tiempo de check-out fin no puede ser menor que la hora de salida', 'warning');
+            }
+        });
+
+
+    });
+
+    function calcular_horas_trabajadas() {
+        var entrada = $('#txt_hora_entrada').val();
+        var salida = $('#txt_hora_salida').val();
+        var descanso = $('#txt_tiempo_descanso').val();
+
+        if (entrada && salida) {
+            hora_entrada = new Date(`1970-01-01T${entrada}:00`);
+            hora_salida = new Date(`1970-01-01T${salida}:00`);
+
+            diferencia = hora_salida.getTime() - hora_entrada.getTime();
+
+            if (diferencia < 0) {
+                diferencia += 24 * 60 * 60 * 1000;
+            }
+
+            horas = Math.floor(diferencia / (1000 * 60 * 60));
+            minutos = Math.floor((diferencia % (1000 * 60 * 60)) / (1000 * 60));
+
+            if (descanso && descanso !== "00:00") {
+                [descanso_horas, descanso_minutos] = descanso.split(':').map(Number);
+
+                minutos -= descanso_minutos;
+                if (minutos < 0) {
+                    minutos += 60;
+                    horas -= 1;
+                }
+
+                horas -= descanso_horas;
+            }
+
+            if (horas < 0) horas = 0;
+            if (minutos < 0) minutos = 0;
+
+            $('#txt_valor_trabajar_hora').val(`${horas}`);
+            $('#txt_valor_trabajar_min').val(`${minutos}`);
+
+            //Calculo para checkin y checkout
+            let hora_entrada_min = hora_a_minutos($('#txt_hora_entrada').val());
+            let hora_salida_min = hora_a_minutos($('#txt_hora_salida').val());
+
+            $('#txt_checkin_registro_inicio').val(minutos_formato_hora((hora_entrada_min) - 30 * 1));
+            $('#txt_checkin_registro_fin').val(minutos_formato_hora((hora_entrada_min) + 30 * 1));
+            $('#txt_checkout_salida_inicio').val(minutos_formato_hora((hora_salida_min) - 30 * 1));
+            $('#txt_checkout_salida_fin').val(minutos_formato_hora((hora_salida_min) + 30 * 1));
+
+        } else {
+            $('#txt_valor_trabajar_hora').val("");
+        }
     }
 </script>

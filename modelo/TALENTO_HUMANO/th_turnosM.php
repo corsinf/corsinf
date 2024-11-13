@@ -25,5 +25,9 @@ class th_turnosM extends BaseModel
         //'th_tur_estado AS estado',
         //'th_tur_fecha_creacion AS fecha_creacion',
         //'th_tur_fecha_modificacion AS fecha_modificacion',
+        'th_tur_color AS color',
+        'th_tur_descanso AS descanso',
+        'th_tur_hora_descanso AS hora_descanso',
+        
     ];
 }
