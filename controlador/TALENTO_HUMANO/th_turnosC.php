@@ -39,13 +39,15 @@ class th_turnosC
 
     function insertar_editar($parametros)
     {
-        $txt_checkin_registro_inicio = $this->time_formato_minutos($parametros['txt_checkin_registro_inicio']);
-        $txt_hora_entrada = $this->time_formato_minutos($parametros['txt_hora_entrada']);
-        $txt_checkin_registro_fin = $this->time_formato_minutos($parametros['txt_checkin_registro_fin']);
+        $txt_checkin_registro_inicio = $this->hora_a_minutos($parametros['txt_checkin_registro_inicio']);
+        $txt_hora_entrada = $this->hora_a_minutos($parametros['txt_hora_entrada']);
+        $txt_checkin_registro_fin = $this->hora_a_minutos($parametros['txt_checkin_registro_fin']);
 
-        $txt_checkout_salida_inicio = $this->time_formato_minutos($parametros['txt_checkout_salida_inicio']);
-        $txt_hora_salida = $this->time_formato_minutos($parametros['txt_hora_salida']);
-        $txt_checkout_salida_fin = $this->time_formato_minutos($parametros['txt_checkout_salida_fin']);
+        $txt_checkout_salida_inicio = $this->hora_a_minutos($parametros['txt_checkout_salida_inicio']);
+        $txt_hora_salida = $this->hora_a_minutos($parametros['txt_hora_salida']);
+        $txt_checkout_salida_fin = $this->hora_a_minutos($parametros['txt_checkout_salida_fin']);
+
+        $txt_tiempo_descanso = $this->hora_a_minutos($parametros['txt_tiempo_descanso']);
 
         $datos = array(
             array('campo' => 'th_tur_nombre', 'dato' => $parametros['txt_nombre']),
@@ -64,6 +66,8 @@ class th_turnosC
             //array('campo' => 'th_tur_valor_trabajar', 'dato' => $parametros['txt_valor_trabajar']),
             array('campo' => 'th_tur_fecha_modificacion', 'dato' => date('Y-m-d H:i:s')),
             array('campo' => 'th_tur_color', 'dato' => $parametros['txt_color']),
+            array('campo' => 'th_tur_descanso', 'dato' => $parametros['cbx_descanso']),
+            array('campo' => 'th_tur_hora_descanso', 'dato' => $txt_tiempo_descanso),
         );
 
         if ($parametros['_id'] == '') {
@@ -98,7 +102,8 @@ class th_turnosC
         return $datos;
     }
 
-    function time_formato_minutos($time)
+    //Transforma
+    function hora_a_minutos($time)
     {
         list($horas, $minutos) = explode(':', $time);
         return ($horas * 60) + $minutos;
