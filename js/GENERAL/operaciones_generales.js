@@ -208,17 +208,27 @@ $(document).on('input', '.no_caracteres', function (event) {
 
 
 // Actualizar el valor del campo a minusculas
-function textoMinusculas(input) {
+function texto_minusculas(input) {
     let texto = input.value;
     input.value = texto.toLowerCase();
 }
 
+//Para convertir de minutos a hora (HH:mm)
 function minutos_formato_hora(num) {
-    let hours = Math.floor(num / 60);
-    let minutes = num % 60;
-    return (hours < 10 ? '0' : '') + hours + ':' + (minutes < 10 ? '0' : '') + minutes;
+    if (num < 0) return "00:00";
+    if (num > 1439) return "23:59";
+
+    let horas = Math.floor(num / 60);
+    let minutos = num % 60;
+
+    return (horas < 10 ? '0' : '') + horas + ':' + (minutos < 10 ? '0' : '') + minutos;
 }
 
+//Para convertir horas (HH:mm) a minutos
+function hora_a_minutos(hora) {
+    let [horas, minutos] = hora.split(':').map(Number);
+    return horas * 60 + minutos;
+}
 
 //Funcion para agregar asterisco en un label para resaltar que es campo obligatorio
 function agregar_asterisco_campo_obligatorio(label) {
@@ -349,7 +359,7 @@ function cargar_select2_con_id(ddl, url_controlador, id_seleccionado, texto) {
         url: url_controlador,
         type: 'post',
         dataType: 'json',
-        
+
         success: function (response) {
             $('#' + ddl).html(`<option value='${id_seleccionado}'>${response[0][texto]}</option>`);
         },

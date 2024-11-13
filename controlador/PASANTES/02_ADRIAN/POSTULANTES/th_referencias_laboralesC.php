@@ -80,6 +80,8 @@ class th_referencias_laboralesC
             array('campo' => 'th_refl_telefono_referencia', 'dato' => $parametros['txt_telefono_referencia']),
             //array('campo' => 'th_refl_carta_recomendacion', 'dato' => $parametros['txt_copia_carta_recomendacion']), 
             array('campo' => 'th_pos_id', 'dato' => $parametros['txt_postulante_id']),
+            array('campo' => 'th_refl_correo', 'dato' => $parametros['txt_referencia_correo']),
+            array('campo' => 'th_refl_nombre_empresa', 'dato' => $parametros['txt_referencia_nombre_empresa']),
         );
 
         $id_referencias_laboral = $parametros['txt_referencias_laborales_id'];
