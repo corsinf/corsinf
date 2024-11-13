@@ -30,8 +30,9 @@
             },
             dataType: 'json',
             success: function(response) {
-                $('#ddl_seleccionar_idioma').val(response[0].th_idi_nombre);
-                $('#ddl_dominio_idioma').val(response[0].th_idi_nivel);
+                
+                $('#txt_seleccionar_idioma').val(response[0].th_idi_nombre);
+                $('#txt_dominio_idioma').val(response[0].th_idi_nivel);
                 $('#txt_institucion_1').val(response[0].th_idi_institucion);
                 $('#txt_fecha_inicio_idioma').val(response[0].th_idi_fecha_inicio_idioma);
 
@@ -60,8 +61,8 @@
 
     function insertar_editar_idiomas() 
     {
-        var ddl_seleccionar_idioma = $('#ddl_seleccionar_idioma').val();
-        var ddl_dominio_idioma = $('#ddl_dominio_idioma').val();
+        var txt_seleccionar_idioma = $('#txt_seleccionar_idioma').val();
+        var txt_dominio_idioma = $('#txt_dominio_idioma').val();
         var txt_institucion_1 = $('#txt_institucion_1').val();
         var txt_fecha_inicio_idioma = $('#txt_fecha_inicio_idioma').val();
         var txt_fecha_fin_idioma   = $('#txt_fecha_fin_idioma').val();
@@ -70,8 +71,8 @@
         
         var parametros_idiomas = {
             'id_postulante': id_postulante,
-            'ddl_seleccionar_idioma': ddl_seleccionar_idioma,
-            'ddl_dominio_idioma': ddl_dominio_idioma,
+            'txt_seleccionar_idioma': txt_seleccionar_idioma,
+            'txt_dominio_idioma': txt_dominio_idioma,
             'txt_institucion_1': txt_institucion_1,
             'txt_fecha_inicio_idioma': txt_fecha_inicio_idioma,
             'txt_fecha_fin_idioma': txt_fecha_fin_idioma,
@@ -102,7 +103,7 @@
                     Swal.fire('', 'Operacion realizada con exito.', 'success');
                     <?php if (isset($_GET['id'])) { ?>
                         cargar_datos_idiomas(<?= $id ?>);
-                        //limpiar_campos_idiomas();
+                        limpiar_campos_idiomas();
                     <?php } ?>
                     $('#modal_agregar_idioma').modal('hide');
                 } else {
@@ -118,24 +119,31 @@
 
         $('#modal_agregar_idiomas').modal('show');
         $('#lbl_nombre_idioma').html('Editar Idioma');
-        $('#btn_guardar_experiencia').html('Editar');
+        //$('#btn_guardar_experiencia').html('Editar');
 
     }
 
+    function limpiar_campos_() {
+        $('#form_agregar_idioma').validate().resetForm();
+        $('.form-control').removeClass('is-valid is-invalid');
+        $('#txt_seleccionar_idioma').val('');
+        $('#txt_dominio_idioma').val('');
+        // $('#txt_fecha_inicio_laboral').val('');
+        // $('#txt_fecha_final_laboral').val('');
+        // $('#txt_fecha_final_laboral').prop('disabled', false);
+        // $('#cbx_fecha_final_laboral').prop('checked', false);
+        // $('#txt_responsabilidades_logros').val('');
+        // $('#txt_experiencia_id').val('');
+        // //Cambiar texto
+        // $('#lbl_titulo_experiencia_laboral').html('Agregue una Experiencia Laboral');
+        // $('#btn_guardar_experiencia').html('Agregar');
+    }    
+
 </script>
+
 <div id="pnl_idiomas">
 
 </div>
-
-<!-- <div class="row mt-3">
-    <div class="col-8">
-        <h6 class="fw-bold">Inglés</h6>
-        <p>B1</p>
-    </div>
-    <div class="col-4">
-        <a href="#" class="d-flex justify-content-end"><i class='text-dark bx bx-pencil bx-sm'></i></a>
-    </div>
-</div> -->
 
 <!-- Modal para agregar idiomas-->
 <div class="modal" id="modal_agregar_idioma" tabindex="-1" aria-modal="true" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
@@ -152,8 +160,8 @@
                 <div class="modal-body">
                     <div class="row mb-col">
                         <div class="col-md-12">
-                            <label for="ddl_seleccionar_idioma" class="form-label form-label-sm">Idioma <label style="color: red;">*</label></label>
-                            <select class="form-select form-select-sm" id="ddl_seleccionar_idioma" name="ddl_seleccionar_idioma">
+                            <label for="txt_seleccionar_idioma" class="form-label form-label-sm">Idioma <label style="color: red;">*</label></label>
+                            <select class="form-select form-select-sm" id="txt_seleccionar_idioma" name="txt_seleccionar_idioma">
                                 <option selected disabled value="">-- Selecciona un Idioma --</option>
                                 <option value="Español">Español</option>
                                 <option value="Inglés">Inglés</option>
@@ -167,8 +175,8 @@
 
                     <div class="row mb-col">
                         <div class="col-md-12">
-                            <label for="ddl_dominio_idioma" class="form-label form-label-sm">Dominio del Idioma <label style="color: red;">*</label></label>
-                            <select class="form-select form-select-sm" id="ddl_dominio_idioma" name="ddl_dominio_idioma" required>
+                            <label for="txt_dominio_idioma" class="form-label form-label-sm">Dominio del Idioma <label style="color: red;">*</label></label>
+                            <select class="form-select form-select-sm" id="txt_dominio_idioma" name="txt_dominio_idioma" required>
                                 <option selected disabled value="">-- Selecciona su nivel de dominio del idioma --</option>
                                 <option value="Nativo">Nativo</option>
                                 <option value="C1">A1</option>
@@ -214,10 +222,10 @@
         //Validación Idiomas
         $("#form_agregar_idioma").validate({
             rules: {
-                ddl_seleccionar_idioma: {
+                txt_seleccionar_idioma: {
                     required: true,
                 },
-                ddl_dominio_idioma: {
+                txt_dominio_idioma: {
                     required: true,
                 },
                 txt_institucion_1: {
@@ -233,10 +241,10 @@
             },
 
             messages: {
-                ddl_seleccionar_idioma: {
+                txt_seleccionar_idioma: {
                     required: "Por favor seleccione un idioma",
                 },
-                ddl_dominio_idioma: {
+                txt_dominio_idioma: {
                     required: "Por favor seleccione su dominio con el idioma",
                 },
                 txt_institucion_1: {

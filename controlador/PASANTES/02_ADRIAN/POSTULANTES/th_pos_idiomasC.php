@@ -21,7 +21,6 @@ if (isset($_GET['eliminar'])) {
 }
 
 
-
 class th_pos_idiomasC
 {
     private $modelo;
@@ -32,14 +31,17 @@ class th_pos_idiomasC
     }
 
      //Funcion para listar los idiomas del postulante
-    function listar()
+    function listar($id)
     {
-        $datos = $this->modelo->where('th_idi_id', 1)->listar();
+        $datos = $this->modelo->where('th_pos_id', $id)->where('th_idi_id',1)->listar();
 
-        $option = '';
+        $texto = '';
         foreach ($datos as $key => $value) {
-            $option .= "<option id='ddl_seleccionar_idioma" . $value['th_idi_id'] . "' value='" . $value['th_idi_id'] . "'>" . $value['th_idi_nombre_idioma'] . "</option>";
-                <<<HTML
+
+            
+            //$option .= "<option id='txt_seleccionar_idioma" . $value['th_idi_id']. "'>" . $value['th_idi_nombre_idioma'] . "</option>";
+            
+            $texto .= <<<HTML
                     <div class="row mb-col">
                         <div class="col-10">
                             <h6 class="fw-bold">{$value['th_idi_nombre']}</h6>
@@ -56,18 +58,18 @@ class th_pos_idiomasC
                     </div>
                 HTML;
         }
-        return $option;
+        return $texto;
     }
 
-    function listar_modal($id)
-    {
-        if ($id == '') {
-            $datos = $this->modelo->where('th_idi_nombre_idioma', 1)->listar();
-        } else {
-            $datos = $this->modelo->where('th_idi_id', $id)->listar();
+        function listar_modal($id)
+        {
+            if ($id == '') {
+                $datos = $this->modelo->where('th_idi_nombre_idioma', 1)->listar();
+            } else {
+                $datos = $this->modelo->where('th_idi_id', $id)->listar();
+            }
+            return $datos;
         }
-        return $datos;
-    }
 
     function insertar_editar($parametros)
     {
