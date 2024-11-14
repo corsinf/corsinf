@@ -57,7 +57,6 @@
         });
     }
 
-
     function insertar_editar_idiomas() {
 
         var ddl_seleccionar_idioma = $('#ddl_seleccionar_idioma').val();

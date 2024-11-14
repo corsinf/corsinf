@@ -88,7 +88,6 @@ class th_pos_idiomasC
         // //if ($parametros['_id'] == '') {
         // if (count($this->modelo->where('th_pos_cedula', $parametros['txt_numero_cedula'])->listar()) == 0) {
         //         $datos = $this->modelo->insertar($datos);
-
         //     } else {
         //         return -2;
         //     }
