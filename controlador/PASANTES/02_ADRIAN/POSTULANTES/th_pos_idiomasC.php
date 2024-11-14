@@ -12,7 +12,7 @@ if (isset($_GET['listar_modal'])) {
     echo json_encode($controlador->listar_modal($_POST['id']));
 }
 
-if (isset($_GET['hola'])) {
+if (isset($_GET['insertar'])) {
     echo json_encode($controlador->insertar_editar($_POST['parametros']));
 }
 
@@ -84,16 +84,25 @@ class th_pos_idiomasC
             array('campo' => 'th_idi_fecha_fin_idioma', 'dato' => $parametros['txt_fecha_fin_idioma']),
          
         );
-        $datos = $this->modelo->insertar($datos);
-        if ($parametros['_id'] == '') {
-            if (count($this->modelo->where('th_pos_cedula', $parametros['txt_numero_cedula'])->listar()) == 0) {
-                $datos = $this->modelo->insertar($datos);
+        // //$datos = $this->modelo->insertar($datos);
+        // //if ($parametros['_id'] == '') {
+        // if (count($this->modelo->where('th_pos_cedula', $parametros['txt_numero_cedula'])->listar()) == 0) {
+        //         $datos = $this->modelo->insertar($datos);
            
-            } else {
-                return -2;
-            }
+        //     } else {
+        //         return -2;
+        //     }
+        // } else {
+        //     $where[0]['campo'] = 'th_pos_id';
+        //     $where[0]['dato'] = $parametros['_id'];
+        //     $datos = $this->modelo->editar($datos, $where);
+        // }
+
+        // return $datos;
+        if ($parametros['_id'] == '') {
+            $datos = $this->modelo->insertar($datos);
         } else {
-            $where[0]['campo'] = 'th_pos_id';
+            $where[0]['campo'] = 'th_idi_id';
             $where[0]['dato'] = $parametros['_id'];
             $datos = $this->modelo->editar($datos, $where);
         }

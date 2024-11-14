@@ -30,39 +30,38 @@
             },
             dataType: 'json',
             success: function(response) {
-                
-                $('#txt_seleccionar_idioma').val(response[0].th_idi_nombre);
-                $('#txt_dominio_idioma').val(response[0].th_idi_nivel);
+                $('#ddl_seleccionar_idioma').val(response[0].th_idi_nombre);
+                $('#ddl_dominio_idioma').val(response[0].th_idi_nivel);
                 $('#txt_institucion_1').val(response[0].th_idi_institucion);
                 $('#txt_fecha_inicio_idioma').val(response[0].th_idi_fecha_inicio_idioma);
 
-                var fecha_fin_idioma = response[0].th_idi_fecha_fin_idioma;
+                // var fecha_fin_idioma = response[0].th_idi_fecha_fin_idioma;
 
-                if (fecha_fin_idioma === '') {
-                    var hoy = new Date();
-                    var dia = String(hoy.getDate()).padStart(2, '0');
-                    var mes = String(hoy.getMonth() + 1).padStart(2, '0');
-                    var year = hoy.getFullYear();
+                // if (fecha_fin_idioma === '') {
+                //     var hoy = new Date();
+                //     var dia = String(hoy.getDate()).padStart(2, '0');
+                //     var mes = String(hoy.getMonth() + 1).padStart(2, '0');
+                //     var year = hoy.getFullYear();
 
-                    var fecha_actual_idioma = year + '-' + mes + '-' + dia;
-                    $('#txt_fecha_fin_idioma').val(fecha_actual_idioma);
-                    $('#txt_fecha_fin_idioma').prop('disabled', true);
-                    $('#txt_fecha_fin_idioma').prop('checked', true);
-                } else {
-                    $('#txt_fecha_fin_idioma').prop('checked', false);
-                    $('#txt_fecha_fin_idioma').prop('disabled', false);
-                    $('#txt_fecha_fin_idioma').val(fecha_fin_idioma);
-                }
+                //     var fecha_actual_idioma = year + '-' + mes + '-' + dia;
+                //     $('#txt_fecha_fin_idioma').val(fecha_actual_idioma);
+                //     $('#txt_fecha_fin_idioma').prop('disabled', true);
+                //     $('#txt_fecha_fin_idioma').prop('checked', true);
+                // } else {
+                //     $('#txt_fecha_fin_idioma').prop('checked', false);
+                //     $('#txt_fecha_fin_idioma').prop('disabled', false);
+                //     $('#txt_fecha_fin_idioma').val(fecha_fin_idioma);
+                // }
                 
             }
         });
     }
 
 
-    function insertar_editar_idiomas() 
-    {
-        var txt_seleccionar_idioma = $('#txt_seleccionar_idioma').val();
-        var txt_dominio_idioma = $('#txt_dominio_idioma').val();
+    function insertar_editar_idiomas() {
+    
+        var ddl_seleccionar_idioma = $('#ddl_seleccionar_idioma').val();
+        var ddl_dominio_idioma = $('#ddl_dominio_idioma').val();
         var txt_institucion_1 = $('#txt_institucion_1').val();
         var txt_fecha_inicio_idioma = $('#txt_fecha_inicio_idioma').val();
         var txt_fecha_fin_idioma   = $('#txt_fecha_fin_idioma').val();
@@ -71,8 +70,8 @@
         
         var parametros_idiomas = {
             'id_postulante': id_postulante,
-            'txt_seleccionar_idioma': txt_seleccionar_idioma,
-            'txt_dominio_idioma': txt_dominio_idioma,
+            'ddl_seleccionar_idioma': ddl_seleccionar_idioma,
+            'ddl_dominio_idioma': ddl_dominio_idioma,
             'txt_institucion_1': txt_institucion_1,
             'txt_fecha_inicio_idioma': txt_fecha_inicio_idioma,
             'txt_fecha_fin_idioma': txt_fecha_fin_idioma,
@@ -119,15 +118,15 @@
 
         $('#modal_agregar_idiomas').modal('show');
         $('#lbl_nombre_idioma').html('Editar Idioma');
-        //$('#btn_guardar_experiencia').html('Editar');
+        $('#btn_guardar_idioma').html('Editar');
 
     }
 
     function limpiar_campos_() {
         $('#form_agregar_idioma').validate().resetForm();
         $('.form-control').removeClass('is-valid is-invalid');
-        $('#txt_seleccionar_idioma').val('');
-        $('#txt_dominio_idioma').val('');
+        $('#ddl_seleccionar_idioma').val('');
+        $('#ddl_dominio_idioma').val('');
         // $('#txt_fecha_inicio_laboral').val('');
         // $('#txt_fecha_final_laboral').val('');
         // $('#txt_fecha_final_laboral').prop('disabled', false);
@@ -160,8 +159,8 @@
                 <div class="modal-body">
                     <div class="row mb-col">
                         <div class="col-md-12">
-                            <label for="txt_seleccionar_idioma" class="form-label form-label-sm">Idioma <label style="color: red;">*</label></label>
-                            <select class="form-select form-select-sm" id="txt_seleccionar_idioma" name="txt_seleccionar_idioma">
+                            <label for="ddl_seleccionar_idioma" class="form-label form-label-sm">Idioma <label style="color: red;">*</label></label>
+                            <select class="form-select form-select-sm" id="ddl_seleccionar_idioma" name="ddl_seleccionar_idioma">
                                 <option selected disabled value="">-- Selecciona un Idioma --</option>
                                 <option value="Español">Español</option>
                                 <option value="Inglés">Inglés</option>
@@ -175,8 +174,8 @@
 
                     <div class="row mb-col">
                         <div class="col-md-12">
-                            <label for="txt_dominio_idioma" class="form-label form-label-sm">Dominio del Idioma <label style="color: red;">*</label></label>
-                            <select class="form-select form-select-sm" id="txt_dominio_idioma" name="txt_dominio_idioma" required>
+                            <label for="ddl_dominio_idioma" class="form-label form-label-sm">Dominio del Idioma <label style="color: red;">*</label></label>
+                            <select class="form-select form-select-sm" id="ddl_dominio_idioma" name="ddl_dominio_idioma" required>
                                 <option selected disabled value="">-- Selecciona su nivel de dominio del idioma --</option>
                                 <option value="Nativo">Nativo</option>
                                 <option value="C1">A1</option>
@@ -209,7 +208,7 @@
                 </div>
 
                 <div class="modal-footer d-flex justify-content-center">
-                    <button type="button" class="btn btn-success btn-sm" id="btn_guardar_idioma" onclick="insertar_editar_idiomas();">Guardar Idioma</button>
+                    <button type="button" class="btn btn-success btn-sm px-4 m-1" id="btn_guardar_idioma" onclick="insertar_editar_idiomas();">Agregar</button>
                 </div>
             </form>
         </div>
@@ -219,13 +218,14 @@
 
 <script>
     $(document).ready(function() {
+
         //Validación Idiomas
         $("#form_agregar_idioma").validate({
             rules: {
-                txt_seleccionar_idioma: {
+                ddl_seleccionar_idioma: {
                     required: true,
                 },
-                txt_dominio_idioma: {
+                ddl_dominio_idioma: {
                     required: true,
                 },
                 txt_institucion_1: {
@@ -241,10 +241,10 @@
             },
 
             messages: {
-                txt_seleccionar_idioma: {
+                ddl_seleccionar_idioma: {
                     required: "Por favor seleccione un idioma",
                 },
-                txt_dominio_idioma: {
+                ddl_dominio_idioma: {
                     required: "Por favor seleccione su dominio con el idioma",
                 },
                 txt_institucion_1: {
