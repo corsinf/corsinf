@@ -1,8 +1,16 @@
-<?php $espacio = $_GET['id']; ?>
-<?php $sala = $_GET['id'];
+<?php
+// Verificar si los parámetros no están presentes
+if (!isset($_GET['id']) || !isset($_GET['nombre_espacio'])) {
+    echo "<script>window.location.href = '../vista/inicio.php?mod=1010&acc=crear_mienbrosdos';</script>";
+    exit;
+}
 
-$nombre = isset($_GET['nombre_espacio']) ? $_GET['nombre_espacio'] : '';
+// Continuar con el resto del código si los parámetros están presentes
+$espacio = $_GET['id'];
+$sala = $_GET['id'];
+$nombre = $_GET['nombre_espacio'];
 ?>
+
 
 
 
