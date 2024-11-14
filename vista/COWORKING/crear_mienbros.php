@@ -1,5 +1,12 @@
+<?php $espacio = $_GET['id']; ?>
+<?php $sala = $_GET['id'];
+
+$nombre = isset($_GET['nombre_espacio']) ? $_GET['nombre_espacio'] : '';
+?>
 
 
+
+<?$nombre = isset($_GET['nombre_espacio']) ? $_GET['nombre_espacio'] : '';?>
 <div class="page-wrapper">
     <div class="page-content">
         <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
@@ -24,7 +31,7 @@
                 <hr>
                 <div class="card">
                     <div class="card-body">
-                        <h1 class="titulo mb-4">Oficina 5</h1>
+                        <h1 class="titulo mb-4"><?php echo htmlspecialchars($nombre); ?></h1>
                         <form id="formulario_miembro" class="mb-4">
                             <div class="row">
                                 <div class="col-md-3 mb-3">
@@ -43,10 +50,8 @@
                                     <label for="txt_direccion" class="form-label"><strong>Direccion:</strong></label>
                                     <input type="text" class="form-control form-control-sm" name="txt_direccion" id="txt_direccion" placeholder="Direccion" required>
                                 </div>
-                                <div class="col-md-3 mb-3">
-                                    <label for="ddl_id_espacio" class="form-label"><strong>Espacio:</strong></label>
-                                    <input type="number" class="form-control form-control-sm" name="ddl_id_espacio" id="ddl_id_espacio" placeholder="Numero de espacio" required>
-                                </div>
+                                <input type="hidden" class="form-control form-control-sm" name="ddl_id_espacio" id="ddl_id_espacio" placeholder="Numero de espacio" value = "<?php echo $espacio; ?>"  required>
+                               
                             </div>
                             <button type="button" onclick="enviardatos()" class="btn btn-primary" id="btn_registrar_miembro">
                                 <i class="bx bx-user-plus"></i><strong>Registrar Miembro</strong>
@@ -103,7 +108,6 @@
                                             <th>Apellido</th>
                                             <th>Telefono</th>
                                             <th>Direccion</th>
-                                            <th>Espacio</th>
                                             <th>Eliminar</th>
                                         </tr>
                                     </thead>
@@ -276,10 +280,16 @@
     });
 })
 
-    function lista_usuario() {       
+    function lista_usuario() {    
+        var id = '<?php echo $espacio; ?>'
+        data = 
+        {
+            'id':id,
+        }   
         $.ajax({
             url: '../controlador/COWORKING/crear_mienbrosC.php?lista_mienbro=true',
             type: 'post',
+            data: { data: data },
             dataType: 'json',        
             success: function(response) {  
                 $('#tbl_body').html(response);
@@ -288,17 +298,25 @@
         });
     }
 
-    function lista_compra() {       
-        $.ajax({
-            url: '../controlador/COWORKING/crear_mienbrosC.php?lista_compra=true',
-            type: 'post',
-            dataType: 'json', 
-            success: function(response) {  
-                $('#tbl_boby').html(response);
-                console.log(response);
-            }       
-        });
+    function lista_compra() {  
+    var id = '<?php echo $sala; ?>'// Asegúrate de que este valor está disponible.
+    //console.log(id_espacio);
+    data = 
+    {
+        'id':id,
     }
+    $.ajax({
+        url: '../controlador/COWORKING/crear_mienbrosC.php?lista_compra=true',
+        type: 'post',
+        data: { data: data }, 
+        dataType: 'json', 
+        success: function(response) {  
+            $('#tbl_boby').html(response);
+            console.log(response);
+        }       
+    });
+}
+
 
     function lista_comprassala() {       
         $.ajax({

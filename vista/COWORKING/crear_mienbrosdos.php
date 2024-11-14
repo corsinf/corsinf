@@ -75,6 +75,11 @@
     </div>
 </div>
 
+
+
+
+
+
 <script>
 $(document).ready(function() {
     lista_espaciostarjetas();

@@ -32,13 +32,13 @@ class crear_mienbrosdosC
         $nombre = isset($parametros['nombre_espacio']) ? $parametros['nombre_espacio'] : false;
         $rango_precio = isset($parametros['rango_precio']) ? $parametros['rango_precio'] : false;
         $estado = isset($parametros['estado']) ? $parametros['estado'] : false;
-
+    
         // Llamar al método listardebaseFiltros() del modelo para obtener los datos
         $resultado = $this->oficinas->listardebaseFiltros($nombre, $rango_precio, $estado);
         
         // Inicializamos la variable que contendrá el HTML
         $str = '';
-
+    
         // Iteramos sobre los resultados obtenidos
         foreach ($resultado as $key => $espacio) {
             $nombre_espacio = isset($espacio['nombre_espacio']) ? $espacio['nombre_espacio'] : '';
@@ -47,7 +47,7 @@ class crear_mienbrosdosC
             $aforo = isset($espacio['aforo_espacio']) ? $espacio['aforo_espacio'] : '';
             $precio = isset($espacio['precio_espacio']) ? $espacio['precio_espacio'] : '';
             $estado = isset($espacio['estado_espacio']) ? strtoupper($espacio['estado_espacio']) : 'I'; // 'A' para activo, 'I' para inactivo
-
+    
             // Generar el HTML para cada espacio
             $str .= '<div class="col-md-3 mb-4 espacio" 
                         data-nombre="' . htmlspecialchars($nombre_espacio) . '" 
@@ -64,15 +64,15 @@ class crear_mienbrosdosC
                                 <span><strong>Precio:</strong> $' . htmlspecialchars($precio) . '</span>
                             </div>
                             <strong><p class="text-muted">Estado:</strong> ' . ($estado === 'A' ? 'Activo' : 'Inactivo') . '</p>
-                            <a class="btn btn-primary" href="../vista/inicio.php?mod=1010&acc=crear_mienbros&id='.$espacio['id_espacio'].'">Detalle</a>
+                            <a class="btn btn-primary" href="../vista/inicio.php?mod=1010&acc=crear_mienbros&id=' . $id_espacio . '&nombre_espacio=' . urlencode($nombre_espacio) . '">Detalle</a>
                         </div>
                     </div>';
         }
-
+    
         // Retornamos el HTML generado
         return $str;
     }
-}
+}    
 
 ?>
 
