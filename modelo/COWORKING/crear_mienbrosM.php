@@ -65,7 +65,8 @@ class crear_mienbrosM
                     pvp_compra, 
                     total_compra,
                     id_sala
-                FROM co_compra";
+                FROM co_compra
+                WHERE id_sala = 1";
         
         return $this->db->datos($sql);
     }
