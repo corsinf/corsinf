@@ -9,13 +9,14 @@ class th_pos_idiomasM extends BaseModel
 
     protected $camposPermitidos = [
         'th_pos_id',
-        'th_idi_nombre',
+        'th_idi_nombre_idioma',
         'th_idi_nivel',
         'th_idi_institucion',
         'th_idi_fecha_inicio_idioma',
         'th_idi_fecha_fin_idioma',
         'th_idi_fecha_creacion',
         'th_idi_fecha_modificacion',
+        'th_idi_estado',
 
     ];
 }

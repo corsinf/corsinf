@@ -12,7 +12,7 @@ if (isset($_GET['listar_modal'])) {
     echo json_encode($controlador->listar_modal($_POST['id']));
 }
 
-if (isset($_GET['hola'])) {
+if (isset($_GET['insertar'])) {
     echo json_encode($controlador->insertar_editar($_POST['parametros']));
 }
 
@@ -30,21 +30,18 @@ class th_pos_idiomasC
         $this->modelo = new th_pos_idiomasM();
     }
 
-     //Funcion para listar los idiomas del postulante
+    //Funcion para listar los idiomas del postulante
     function listar($id)
     {
-        $datos = $this->modelo->where('th_pos_id', $id)->where('th_idi_id',1)->listar();
+        $datos = $this->modelo->where('th_pos_id', $id)->where('th_idi_estado', 1)->listar();
 
         $texto = '';
         foreach ($datos as $key => $value) {
 
-            
-            //$option .= "<option id='txt_seleccionar_idioma" . $value['th_idi_id']. "'>" . $value['th_idi_nombre_idioma'] . "</option>";
-            
             $texto .= <<<HTML
                     <div class="row mb-col">
                         <div class="col-10">
-                            <h6 class="fw-bold">{$value['th_idi_nombre']}</h6>
+                            <h6 class="fw-bold">{$value['th_idi_nombre_idioma']}</h6>
                             <p class="m-0">{$value['th_idi_nivel']}</p>
                             <p class="m-0">{$value['th_idi_institucion']} </p>
                             <p class="m-0">{$value['th_idi_fecha_inicio_idioma']}</p>
@@ -58,22 +55,25 @@ class th_pos_idiomasC
                     </div>
                 HTML;
         }
+
         return $texto;
     }
 
-        function listar_modal($id)
-        {
-            if ($id == '') {
-                $datos = $this->modelo->where('th_idi_nombre_idioma', 1)->listar();
-            } else {
-                $datos = $this->modelo->where('th_idi_id', $id)->listar();
-            }
-            return $datos;
+    function listar_modal($id)
+    {
+        if ($id == '') {
+            $datos = $this->modelo->where('th_idi_nombre_idioma', 1)->listar();
+        } else {
+            $datos = $this->modelo->where('th_idi_id', $id)->listar();
         }
+        return $datos;
+    }
 
     function insertar_editar($parametros)
     {
-        print_r($parametros); exit(); die();
+        print_r($parametros);
+        exit();
+        die();
 
         $datos = array(
             array('campo' => 'th_pos_id', 'dato' => $parametros['id_postulante']),
@@ -82,18 +82,27 @@ class th_pos_idiomasC
             array('campo' => 'th_idi_institucion', 'dato' => $parametros['txt_institucion_1']),
             array('campo' => 'th_idi_fecha_inicio_idioma', 'dato' => $parametros['txt_fecha_inicio_idioma']),
             array('campo' => 'th_idi_fecha_fin_idioma', 'dato' => $parametros['txt_fecha_fin_idioma']),
-         
+
         );
-        $datos = $this->modelo->insertar($datos);
+        // //$datos = $this->modelo->insertar($datos);
+        // //if ($parametros['_id'] == '') {
+        // if (count($this->modelo->where('th_pos_cedula', $parametros['txt_numero_cedula'])->listar()) == 0) {
+        //         $datos = $this->modelo->insertar($datos);
+
+        //     } else {
+        //         return -2;
+        //     }
+        // } else {
+        //     $where[0]['campo'] = 'th_pos_id';
+        //     $where[0]['dato'] = $parametros['_id'];
+        //     $datos = $this->modelo->editar($datos, $where);
+        // }
+
+        // return $datos;
         if ($parametros['_id'] == '') {
-            if (count($this->modelo->where('th_pos_cedula', $parametros['txt_numero_cedula'])->listar()) == 0) {
-                $datos = $this->modelo->insertar($datos);
-           
-            } else {
-                return -2;
-            }
+            $datos = $this->modelo->insertar($datos);
         } else {
-            $where[0]['campo'] = 'th_pos_id';
+            $where[0]['campo'] = 'th_idi_id';
             $where[0]['dato'] = $parametros['_id'];
             $datos = $this->modelo->editar($datos, $where);
         }
@@ -113,5 +122,4 @@ class th_pos_idiomasC
         $datos = $this->modelo->editar($datos, $where);
         return $datos;
     }
-
 }
