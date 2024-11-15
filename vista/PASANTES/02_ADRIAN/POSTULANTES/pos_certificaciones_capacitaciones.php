@@ -1,5 +1,5 @@
 <script>
-      $(document).ready(function() {
+    $(document).ready(function() {
         <?php if (isset($_GET['id'])) { ?>
             cargar_datos_certificaciones_capacitaciones(<?= $id ?>);
         <?php } ?>
@@ -19,6 +19,7 @@
             }
         });
     }
+
     function cargar_datos_modal_certificaciones_capacitaciones(id) {
         $.ajax({
             url: '../controlador/PASANTES/02_ADRIAN/POSTULANTES/th_certificaciones_capacitacionesC.php?listar_modal=true',
@@ -41,19 +42,15 @@
 
 
     function insertar_editar_certificaciones_capacitaciones() {
-        var txt_nombre_certificacion = $('#txt_nombre_certificacion').val();
-        var txt_enlace_certificado = $('#txt_enlace_certificado').val();
-        var txt_pdf_certificado = $('#txt_pdf_certificado').val();
+        var form_data = new FormData(document.getElementById("form_certificaciones_capacitaciones")); // Captura todos los campos y archivos
 
-        var parametros_certificaciones_capacitaciones = {
-            'txt_nombre_certificacion': txt_nombre_certificacion,
-            'txt_enlace_certificado': txt_enlace_certificado,
-            'txt_pdf_certificado': txt_pdf_certificado,
-        }
+        // console.log([...form_data]);
+        // console.log([...form_data.keys()]);
+        // console.log([...form_data.values()]);
+        // return;
 
         if ($("#form_certificaciones_capacitaciones").valid()) {
-            // Si es válido, puedes proceder a enviar los datos por AJAX
-            // console.log(parametros_certificaciones_capacitaciones)
+
             $.ajax({
                 url: '../controlador/PASANTES/02_ADRIAN/POSTULANTES/th_certificaciones_capacitacionesC.php?insertar=true',
                 type: 'post',
@@ -143,6 +140,7 @@
             }
         });
     }
+
     function limpiar_parametros_certificaciones_capacitaciones() {
         //certificaciones capacitaciones
         $('#txt_nombre_curso').val('');
@@ -193,7 +191,11 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" onclick=""></button>
             </div>
             <!-- Modal body -->
-            <form id="form_certificaciones_capacitaciones">
+            <form id="form_certificaciones_capacitaciones" enctype="multipart/form-data" method="post" style="width: inherit;">
+                <input type="hidden" name="txt_certificaciones_capacitaciones_id" id="txt_certificaciones_capacitaciones_id">
+                <input type="hidden" name="txt_postulante_cedula" id="txt_postulante_cedula">
+                <input type="hidden" name="txt_postulante_id" id="txt_postulante_id">
+
                 <div class="modal-body">
                     <div class="row mb-col">
                         <div class="col-md-12">
@@ -201,7 +203,7 @@
                             <input type="text" class="form-control form-control-sm " name="txt_nombre_certificacion" id="txt_nombre_certificacion" value="" placeholder="Escriba el nombre del curso o capacitación">
                         </div>
                     </div>
-                    
+
                     <!-- <div class="row mb-col">
                         <div class="col-md-12">
                             <label for="txt_enlace_certificado" class="form-label form-label-sm">1. Enlace del Certificado obtenido <label style="color: red;">*</label></label>
@@ -215,7 +217,7 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="modal-footer d-flex justify-content-center">
                     <button type="button" class="btn btn-success btn-sm" id="btn_guardar_certificaciones" onclick="insertar_editar_certificaciones_capacitaciones();">Guardar Certificación o Capacitación</button>
                 </div>
