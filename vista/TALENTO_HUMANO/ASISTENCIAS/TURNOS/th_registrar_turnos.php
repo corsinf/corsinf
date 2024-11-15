@@ -382,8 +382,12 @@ $hora_salida = isset($_GET['hora_salida']) ? $_GET['hora_salida'] : 930;
                             </div>
                             <hr>
 
-                            <div class="row mb-col pt-3">
+                            <div class="row mb-col pt-3" id="pnl_slider_hora_dia">
                                 <input id="slider_hora_dia" type="text" />
+                            </div>
+
+                            <div class="row mb-col pt-3" id="pnl_slider_hora_dia_48">
+                                <input id="slider_hora_dia_48" type="text" />
                             </div>
 
                             <hr>
@@ -539,9 +543,11 @@ $hora_salida = isset($_GET['hora_salida']) ? $_GET['hora_salida'] : 930;
     $(document).ready(function() {
         hora_entrada = '<?= $hora_entrada ?>' ?? 420;
         hora_salida = '<?= $hora_salida ?>' ?? 930;
+
+        //Slider para las 24 horas
         slider_hora_dia = $("#slider_hora_dia").ionRangeSlider({
             min: 0,
-            max: 2879, // 23 horas y 59 minutos
+            max: 1439, // 23 horas y 59 minutos
             from: hora_entrada, // Hora de inicio
             to: hora_salida, // Hora de finalización
             step: 1,
@@ -570,15 +576,8 @@ $hora_salida = isset($_GET['hora_salida']) ? $_GET['hora_salida'] : 930;
             }
         });
 
-        $('#txt_hora_entrada, #txt_hora_salida').on('change', actualizar_slider);
-
-    });
-
-    /* $(document).ready(function() {
-        let hora_entrada = '<?= $hora_entrada ?>' ?? 420;
-        let hora_salida = '<?= $hora_salida ?>' ?? 930;
-
-        slider_hora_dia = $("#slider_hora_dia").ionRangeSlider({
+        //Slider para las 48 horas
+        slider_hora_dia_48 = $("#slider_hora_dia_48").ionRangeSlider({
             min: 0,
             max: 2879, // Hasta 47:59 (48 horas en minutos)
             from: hora_entrada,
@@ -597,13 +596,13 @@ $hora_salida = isset($_GET['hora_salida']) ? $_GET['hora_salida'] : 930;
 
             onFinish: function(data) {
                 if (data.from > 1439) {
-                    $("#slider_hora_dia").data('ionRangeSlider').update({
+                    $("#slider_hora_dia_48").data('ionRangeSlider').update({
                         from: 1439
                     });
                 }
 
                 if (data.to < 1440) {
-                    $("#slider_hora_dia").data('ionRangeSlider').update({
+                    $("#slider_hora_dia_48").data('ionRangeSlider').update({
                         to: 1440
                     });
                 }
@@ -619,8 +618,13 @@ $hora_salida = isset($_GET['hora_salida']) ? $_GET['hora_salida'] : 930;
                 calcular_horas_trabajadas();
             }
         });
-    }); */
 
+        $('#txt_hora_entrada, #txt_hora_salida').on('change', actualizar_slider);
+        $('#txt_hora_entrada, #txt_hora_salida').on('change', actualizar_slider_48);
+
+    });
+
+    //Para acualizar el slider cuando se cambia en los inputs
     function actualizar_slider() {
         let hora_entrada_min = hora_a_minutos($('#txt_hora_entrada').val());
         let hora_salida_min = hora_a_minutos($('#txt_hora_salida').val());
@@ -631,6 +635,47 @@ $hora_salida = isset($_GET['hora_salida']) ? $_GET['hora_salida'] : 930;
             from: hora_entrada_min,
             to: hora_salida_min
         });
+    }
+
+    //Para acualizar el slider cuando se cambia en los inputs
+    function actualizar_slider_48() {
+        let hora_entrada_min = hora_a_minutos($('#txt_hora_entrada').val());
+        let hora_salida_min = hora_a_minutos($('#txt_hora_salida').val());
+
+        let slider_instancia_48 = slider_hora_dia_48.data("ionRangeSlider");
+
+        slider_instancia_48.update({
+            from: hora_entrada_min,
+            to: hora_salida_min + 1440
+        });
+    }
+
+    //Para cuando se cambia de slider
+    function establecer_hora_defecto() {
+        let habilitar_48_horas = $('#cbx_turno_nocturno').is(':checked');
+
+        if (habilitar_48_horas) {
+            let slider_instancia_48 = slider_hora_dia_48.data("ionRangeSlider");
+
+            slider_instancia_48.update({
+                from: 1200,
+                to: 1680
+            });
+
+            $('#txt_hora_entrada').val('20:00');
+            $('#txt_hora_salida').val('04:00');
+        } else {
+            let slider_instancia = slider_hora_dia.data("ionRangeSlider");
+
+            slider_instancia.update({
+                from: 420,
+                to: 930
+            });
+
+            $('#txt_hora_entrada').val('07:00');
+            $('#txt_hora_salida').val('15:30');
+        }
+        calcular_horas_trabajadas();
     }
 </script>
 
@@ -694,6 +739,7 @@ $hora_salida = isset($_GET['hora_salida']) ? $_GET['hora_salida'] : 930;
 <!-- Validaciones de hora -->
 <script>
     $(document).ready(function() {
+        //Para la hora de descanso
         $('#cbx_descanso').on('change', function() {
             if ($(this).is(':checked')) {
                 $('#pnl_tiempo_descanso').show();
@@ -702,6 +748,20 @@ $hora_salida = isset($_GET['hora_salida']) ? $_GET['hora_salida'] : 930;
                 $('#txt_tiempo_descanso').val(`00:00`);
                 calcular_horas_trabajadas();
             }
+        });
+
+
+
+        //Para activar segundo slider con 48 horas
+        $('#pnl_slider_hora_dia_48').hide();
+        $('#cbx_turno_nocturno').on('change', function() {
+            var es_turno_nocturno = $(this).is(':checked');
+
+            $('#pnl_slider_hora_dia').toggle(!es_turno_nocturno);
+            $('#pnl_slider_hora_dia_48').toggle(es_turno_nocturno);
+
+            // Establecer las horas por defecto
+            establecer_hora_defecto();
         });
 
         $('#txt_hora_entrada, #txt_hora_salida, #txt_tiempo_descanso').on('change', function() {
@@ -769,53 +829,57 @@ $hora_salida = isset($_GET['hora_salida']) ? $_GET['hora_salida'] : 930;
 
     });
 
+    //Validacion para 24 y 48 horas
     function calcular_horas_trabajadas() {
-        var entrada = $('#txt_hora_entrada').val();
-        var salida = $('#txt_hora_salida').val();
-        var descanso = $('#txt_tiempo_descanso').val();
+        var hora_entrada_min = hora_a_minutos($('#txt_hora_entrada').val());
+        var hora_salida_min = hora_a_minutos($('#txt_hora_salida').val());
+        var descanso = hora_a_minutos($('#txt_tiempo_descanso').val());
+        var habilitar_48_horas = $('#cbx_turno_nocturno').is(':checked');
 
-        if (entrada && salida) {
-            hora_entrada = new Date(`1970-01-01T${entrada}:00`);
-            hora_salida = new Date(`1970-01-01T${salida}:00`);
+        if (hora_entrada_min !== null && hora_salida_min !== null) {
+            var diferencia = hora_salida_min - hora_entrada_min;
 
-            diferencia = hora_salida.getTime() - hora_entrada.getTime();
-
+            // Si la salida es menor que la entrada, agregar 24 horas (1440 minutos)
             if (diferencia < 0) {
-                diferencia += 24 * 60 * 60 * 1000;
+                diferencia += 24 * 60; // 24 horas en minutos
             }
 
-            horas = Math.floor(diferencia / (1000 * 60 * 60));
-            minutos = Math.floor((diferencia % (1000 * 60 * 60)) / (1000 * 60));
-
-            if (descanso && descanso !== "00:00") {
-                [descanso_horas, descanso_minutos] = descanso.split(':').map(Number);
-
-                minutos -= descanso_minutos;
-                if (minutos < 0) {
-                    minutos += 60;
-                    horas -= 1;
-                }
-
-                horas -= descanso_horas;
+            // Restar el tiempo de descanso si es necesario
+            if (descanso && descanso > 0) {
+                diferencia -= descanso;
             }
 
+            // Si el checkbox de 48 horas está activado y la salida es menor o igual a la entrada, añadir 24 horas adicionales al cálculo de salida
+            if (habilitar_48_horas && hora_salida_min >= hora_entrada_min) {
+                diferencia += 24 * 60; // Extender el rango de cálculo al siguiente día
+            }
+
+            // Ajustar horas y minutos si la resta de descanso hizo que los minutos sean negativos
+            var horas = Math.floor(diferencia / 60);
+            var minutos = diferencia % 60;
+
+            if (minutos < 0) {
+                minutos += 60;
+                horas -= 1;
+            }
+
+            // Asegurarse de que los valores de horas y minutos no sean negativos
             if (horas < 0) horas = 0;
             if (minutos < 0) minutos = 0;
 
-            $('#txt_valor_trabajar_hora').val(`${horas}`);
-            $('#txt_valor_trabajar_min').val(`${minutos}`);
+            // Actualizar los campos con el resultado
+            $('#txt_valor_trabajar_hora').val(horas);
+            $('#txt_valor_trabajar_min').val(minutos);
 
-            //Calculo para checkin y checkout
-            let hora_entrada_min = hora_a_minutos($('#txt_hora_entrada').val());
-            let hora_salida_min = hora_a_minutos($('#txt_hora_salida').val());
-
-            $('#txt_checkin_registro_inicio').val(minutos_formato_hora((hora_entrada_min) - 30 * 1));
-            $('#txt_checkin_registro_fin').val(minutos_formato_hora((hora_entrada_min) + 30 * 1));
-            $('#txt_checkout_salida_inicio').val(minutos_formato_hora((hora_salida_min) - 30 * 1));
-            $('#txt_checkout_salida_fin').val(minutos_formato_hora((hora_salida_min) + 30 * 1));
+            // Calculo para check-in y check-out
+            $('#txt_checkin_registro_inicio').val(minutos_formato_hora(hora_entrada_min - 30));
+            $('#txt_checkin_registro_fin').val(minutos_formato_hora(hora_entrada_min + 30));
+            $('#txt_checkout_salida_inicio').val(minutos_formato_hora(hora_salida_min - 30));
+            $('#txt_checkout_salida_fin').val(minutos_formato_hora(hora_salida_min + 30));
 
         } else {
             $('#txt_valor_trabajar_hora').val("");
+            $('#txt_valor_trabajar_min').val("");
         }
     }
 </script>
