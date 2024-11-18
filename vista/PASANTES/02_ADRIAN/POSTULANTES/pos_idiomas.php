@@ -73,7 +73,6 @@
     }
 
     function insertar_idiomas(parametros) {
-        alert("hola2")
 
         $.ajax({
             data: {

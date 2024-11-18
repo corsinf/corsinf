@@ -35,7 +35,7 @@ class th_pos_idiomasC
         // $datos = $this->modelo->where('th_pos_id', $id)->listar();
         // return $datos;
 
-        $datos = $this->modelo->where('th_pos_id', $id)->where('th_idi_estado', 1)->listar();
+       $datos = $this->modelo->where('th_pos_id', $id)->where('th_idi_estado', 1)->listar();
 
         $texto = '';
         foreach ($datos as $key => $value) {
@@ -66,7 +66,7 @@ class th_pos_idiomasC
     function listar_modal($id)
     {
         if ($id == '') {
-            $datos = $this->modelo->where('th_idi_estado', 1)->listar();
+            $datos = $this->modelo->where('th_idi_estado', 0)->listar();
         } else {
             $datos = $this->modelo->where('th_idi_id', $id)->listar();
         }
@@ -105,7 +105,7 @@ class th_pos_idiomasC
 
         $where[0]['campo'] = 'th_idi_id';
         $where[0]['dato'] = strval($id);
-        $datos = $this->modelo->editar($datos, $where);
+        $datos = $this->modelo->eliminar($where);
 
         return $datos;
     }
