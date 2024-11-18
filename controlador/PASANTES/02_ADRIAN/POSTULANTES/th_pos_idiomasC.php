@@ -44,8 +44,7 @@ class th_pos_idiomasC
                             <h6 class="fw-bold">{$value['th_idi_nombre_idioma']}</h6>
                             <p class="m-0">{$value['th_idi_nivel']}</p>
                             <p class="m-0">{$value['th_idi_institucion']} </p>
-                            <p class="m-0">{$value['th_idi_fecha_inicio_idioma']}</p>
-                            <p class="m-0">{$value['th_idi_fecha_fin_idioma']}</p>
+                            <p class="m-0">{$value['th_idi_fecha_inicio_idioma']} - {$value['th_idi_fecha_fin_idioma']}</p>
                         </div>
                         <div class="col-2 d-flex justify-content-end align-items-start">
                             <button class="btn" style="color: white;" onclick="abrir_modal_idiomas({$value['_id']});">
@@ -62,7 +61,7 @@ class th_pos_idiomasC
     function listar_modal($id)
     {
         if ($id == '') {
-            $datos = $this->modelo->where('th_idi_nombre_idioma', 1)->listar();
+            $datos = $this->modelo->where('th_idi_estado', 1)->listar();
         } else {
             $datos = $this->modelo->where('th_idi_id', $id)->listar();
         }
@@ -84,19 +83,7 @@ class th_pos_idiomasC
             array('campo' => 'th_idi_fecha_fin_idioma', 'dato' => $parametros['txt_fecha_fin_idioma']),
 
         );
-        // //$datos = $this->modelo->insertar($datos);
-        // //if ($parametros['_id'] == '') {
-        // if (count($this->modelo->where('th_pos_cedula', $parametros['txt_numero_cedula'])->listar()) == 0) {
-        //         $datos = $this->modelo->insertar($datos);
-        //     } else {
-        //         return -2;
-        //     }
-        // } else {
-        //     $where[0]['campo'] = 'th_pos_id';
-        //     $where[0]['dato'] = $parametros['_id'];
-        //     $datos = $this->modelo->editar($datos, $where);
-        // }
-
+       
         // return $datos;
         if ($parametros['_id'] == '') {
             $datos = $this->modelo->insertar($datos);
@@ -112,13 +99,14 @@ class th_pos_idiomasC
     function eliminar($id)
     {
         $datos = array(
-            array('campo' => 'th_pos_estado', 'dato' => 0),
+            array('campo' => 'th_idi_estado', 'dato' => 0),
         );
 
-        $where[0]['campo'] = 'th_pos_id';
-        $where[0]['dato'] = $id;
+        $where[0]['campo'] = 'th_idi_id';
+        $where[0]['dato'] = strval($id);
 
-        $datos = $this->modelo->editar($datos, $where);
+        $datos = $this->modelo->eliminar($datos, $where);
+
         return $datos;
     }
 }
