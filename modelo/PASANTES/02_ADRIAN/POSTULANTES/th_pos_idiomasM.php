@@ -17,6 +17,7 @@ class th_pos_idiomasM extends BaseModel
         'th_idi_fecha_creacion',
         'th_idi_fecha_modificacion',
         'th_idi_estado',
+        'th_idi_cbx_fecha_fin_idioma',
 
     ];
 }
