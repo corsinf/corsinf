@@ -1,14 +1,13 @@
 <?php
-
 require_once(dirname(__DIR__, 4) . '/modelo/PASANTES/02_ADRIAN/POSTULANTES/th_pos_idiomasM.php');
 
 $controlador = new th_pos_idiomasC();
 
-if (isset($_GET['listar'])) {
+if (isset($_GET['listar_idioma'])) {
     echo json_encode($controlador->listar($_POST['id']));
 }
 
-if (isset($_GET['listar_modal'])) {
+if (isset($_GET['listar_modal_idioma'])) {
     echo json_encode($controlador->listar_modal($_POST['id']));
 }
 
@@ -37,6 +36,9 @@ class th_pos_idiomasC
 
         $texto = '';
         foreach ($datos as $key => $value) {
+            $fecha_fin = $value['th_idi_fecha_fin_idioma'] == '' ? 'Actualidad' : $value['th_idi_fecha_fin_idioma'];
+
+
 
             $texto .= <<<HTML
                     <div class="row mb-col">
@@ -70,10 +72,6 @@ class th_pos_idiomasC
 
     function insertar_editar($parametros)
     {
-        print_r($parametros);
-        exit();
-        die();
-
         $datos = array(
             array('campo' => 'th_pos_id', 'dato' => $parametros['id_postulante']),
             array('campo' => 'th_idi_nombre_idioma', 'dato' => $parametros['ddl_seleccionar_idioma']),
@@ -81,6 +79,7 @@ class th_pos_idiomasC
             array('campo' => 'th_idi_institucion', 'dato' => $parametros['txt_institucion_1']),
             array('campo' => 'th_idi_fecha_inicio_idioma', 'dato' => $parametros['txt_fecha_inicio_idioma']),
             array('campo' => 'th_idi_fecha_fin_idioma', 'dato' => $parametros['txt_fecha_fin_idioma']),
+            array('campo' => 'th_idi_cbx_fecha_fin_idioma', 'dato' => $parametros['cbx_fecha_fin_idioma']),
 
         );
        
@@ -104,8 +103,7 @@ class th_pos_idiomasC
 
         $where[0]['campo'] = 'th_idi_id';
         $where[0]['dato'] = strval($id);
-
-        $datos = $this->modelo->eliminar($datos, $where);
+        $datos = $this->modelo->editar($datos, $where);
 
         return $datos;
     }
