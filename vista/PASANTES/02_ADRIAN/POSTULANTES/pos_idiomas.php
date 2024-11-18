@@ -52,6 +52,7 @@
                 //     $('#txt_fecha_fin_idioma').prop('disabled', false);
                 //     $('#txt_fecha_fin_idioma').val(fecha_fin_idioma);
                 // }
+                $('#txt_idiomas_id').val(response[0]._id);
 
             }
         });
@@ -66,6 +67,7 @@
         var txt_fecha_fin_idioma = $('#txt_fecha_fin_idioma').val();
 
         var id_postulante = '<?= $id ?>';
+        var txt_idi_idiomas_id = $('#txt_idiomas_id').val();
 
         var parametros_idiomas = {
             'id_postulante': id_postulante,
@@ -92,7 +94,7 @@
             data: {
                 parametros: parametros
             },
-            url: '../controlador/PASANTES/02_ADRIAN/POSTULANTES/th_pos_idiomasC.php?hola=true',
+            url: '../controlador/PASANTES/02_ADRIAN/POSTULANTES/th_pos_idiomasC.php?insertar=true',
             type: 'post',
             dataType: 'json',
 
@@ -115,13 +117,52 @@
     function abrir_modal_idiomas(id) {
         cargar_datos_modal_idiomas(id);
 
-        $('#modal_agregar_idiomas').modal('show');
+        $('#modal_agregar_idioma').modal('show');
         $('#lbl_nombre_idioma').html('Editar Idioma');
         $('#btn_guardar_idioma').html('Editar');
 
     }
 
-    function limpiar_campos_() {
+    function borrar_datos_idiomas() {
+        //Para revisar y enviar el dato como parametro 
+        id = $('#txt_idiomas_id').val();
+        Swal.fire({
+            title: 'Eliminar Registro?',
+            text: "Esta seguro de eliminar este registro?",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Si'
+        }).then((result) => {
+            if (result.value) {
+                eliminar_idioma(id);
+            }
+        })
+    }
+
+    function eliminar_idiomas(id) {
+        $.ajax({
+            data: {
+                id: id
+            },
+            url: '../controlador/PASANTES/02_ADRIAN/POSTULANTES/th_pos_idiomasC.php?eliminar=true',
+            type: 'post',
+            dataType: 'json',
+            success: function(response) {
+                if (response == 1) {
+                    Swal.fire('Eliminado!', 'Registro Eliminado.', 'success');
+                    <?php if (isset($_GET['id'])) { ?>
+                        cargar_datos_idiomas(<?= $id ?>);
+                        //limpiar_campos_idiomas();
+                    <?php } ?>
+                    $('#modal_agregar_idiomas').modal('hide');
+                }
+            }
+        });
+    }
+
+    function limpiar_campos_idiomas_modal() {
         $('#form_agregar_idioma').validate().resetForm();
         $('.form-control').removeClass('is-valid is-invalid');
         $('#ddl_seleccionar_idioma').val('');
@@ -133,8 +174,8 @@
         // $('#txt_responsabilidades_logros').val('');
         // $('#txt_experiencia_id').val('');
         // //Cambiar texto
-        // $('#lbl_titulo_experiencia_laboral').html('Agregue una Experiencia Laboral');
-        // $('#btn_guardar_experiencia').html('Agregar');
+        $('#lbl_nombre_idioma').html('Agregue un idioma');
+        $('#btn_guardar_idioma').html('Agregar');
     }
 </script>
 
@@ -207,6 +248,7 @@
 
                 <div class="modal-footer d-flex justify-content-center">
                     <button type="button" class="btn btn-success btn-sm px-4 m-1" id="btn_guardar_idioma" onclick="insertar_editar_idiomas();">Agregar</button>
+                    <button type="button" class="btn btn-danger btn-sm px-4 m-1" id="btn_eliminar_formacion" onclick="borrar_datos_idiomas();">Eliminar</button>
                 </div>
             </form>
         </div>
