@@ -9,7 +9,7 @@
     //Idiomas
     function cargar_datos_idiomas(id) {
         $.ajax({
-            url: '../controlador/PASANTES/02_ADRIAN/POSTULANTES/th_pos_idiomasC.php?_idioma=true',
+            url: '../controlador/PASANTES/02_ADRIAN/POSTULANTES/th_pos_idiomasC.php?listar=true',
             type: 'post',
             data: {
                 id: id
@@ -23,7 +23,7 @@
 
     function cargar_datos_modal_idiomas(id) {
         $.ajax({
-            url: '../controlador/PASANTES/02_ADRIAN/POSTULANTES/th_pos_idiomasC.php?listar_modal_idioma=true',
+            url: '../controlador/PASANTES/02_ADRIAN/POSTULANTES/th_pos_idiomasC.php?listar_modal=true',
             type: 'post',
             data: {
                 id: id
@@ -34,24 +34,8 @@
                 $('#ddl_dominio_idioma').val(response[0].th_idi_nivel);
                 $('#txt_institucion_1').val(response[0].th_idi_institucion);
                 $('#txt_fecha_inicio_idioma').val(response[0].th_idi_fecha_inicio_idioma);
+                $('#txt_fecha_fin_idioma').val(response[0].th_idi_fecha_fin_idioma);
 
-                var fecha_fin_idioma = response[0].th_idi_fecha_fin_idioma;
-
-                if (fecha_fin_idioma === '') {
-                    var hoy = new Date();
-                    var dia = String(hoy.getDate()).padStart(2, '0');
-                    var mes = String(hoy.getMonth() + 1).padStart(2, '0');
-                    var year = hoy.getFullYear();
-
-                    var fecha_actual_idioma = year + '-' + mes + '-' + dia;
-                    $('#txt_fecha_fin_idioma').val(fecha_actual_idioma);
-                    $('#txt_fecha_fin_idioma').prop('disabled', true);
-                    $('#cbx_fecha_fin_idioma').prop('checked', true);
-                } else {
-                    $('#cbx_fecha_fin_idioma').prop('checked', false);
-                    $('#txt_fecha_fin_idioma').prop('disabled', false);
-                    $('#txt_fecha_fin_idioma').val(fecha_fin_idioma);
-                }
                 $('#txt_idiomas_id').val(response[0]._id);
 
             }
@@ -64,14 +48,8 @@
         var ddl_dominio_idioma = $('#ddl_dominio_idioma').val();
         var txt_institucion_1 = $('#txt_institucion_1').val();
         var txt_fecha_inicio_idioma = $('#txt_fecha_inicio_idioma').val();
-        var cbx_fecha_fin_idioma = $('#cbx_fecha_fin_idioma').prop('checked') ? 1 : 0;
-        var txt_fecha_fin_idioma = '';
-        if ($('#cbx_fecha_fin_idioma').is(':checked')) {
-            txt_fecha_fin_idioma = '';
-        } else {
-            txt_fecha_fin_idioma = $('#txt_fecha_fin_idioma').val();
-        }
-
+        var txt_fecha_fin_idioma = $('#txt_fecha_fin_idioma').val();
+       
         var id_postulante = '<?= $id ?>';
         var txt_idi_idiomas_id = $('#txt_idiomas_id').val();
 
@@ -83,8 +61,7 @@
             'txt_institucion_1': txt_institucion_1,
             'txt_fecha_inicio_idioma': txt_fecha_inicio_idioma,
             'txt_fecha_fin_idioma': txt_fecha_fin_idioma,
-            'cbx_fecha_fin_idioma': cbx_fecha_fin_idioma,
-
+            '_id': txt_idi_idiomas_id
         }
 
         if ($("#form_agregar_idioma").valid()) {
@@ -176,8 +153,7 @@
         $('#ddl_seleccionar_idioma').val('');
         $('#ddl_dominio_idioma').val('');
         $('#txt_fecha_inicio_idioma').val('');
-        $('#txt_fecha_fin_idioma').prop('disabled', false);
-        $('#cbx_fecha_fin_idioma').prop('checked', false);
+        $('#txt_fecha_fin_idioma').val('');
          $('#txt_idiomas_id').val('');
         // //Cambiar texto
         $('#lbl_nombre_idioma').html('Agregue un idioma');
@@ -198,46 +174,30 @@
                     text: "La fecha final no puede ser menor a la fecha de inicio.",
                 });
                 $('.form-control').removeClass('is-valid is-invalid');
-                $('#txt_fecha_fin_idioma').val('');
-                $('#cbx_fecha_fin_idioma').prop('checked', false);
-                $('#txt_fecha_fin_idioma').prop('disabled', false);
+                $('#txt_fecha_fin_idioma').val('').prop('disabled', false);
             }
-            if (Date.parse(fecha_inicio) > Date.parse(fecha_final)) {
-                Swal.fire({
-                    icon: "error",
-                    title: "Oops...",
-                    text: "La fecha de inicio no puede ser mayor a la fecha final.",
-                });
-                $('.form-control').removeClass('is-valid is-invalid');
-                $('#txt_fecha_inicio_idioma').val('');
-                $('#cbx_fecha_fin_idioma').prop('checked', false);
-                $('#txt_fecha_fin_idioma').prop('disabled', false);
-            }
-        }
-               //* Validar que la fecha de inicio y final no sean mayores a la fecha actual
-               if (fecha_inicio && Date.parse(fecha_inicio) > Date.parse(fecha_actual)) {
-            Swal.fire({
-                icon: "error",
-                title: "Oops...",
-                text: "La fecha de inicio no puede ser mayor a la fecha actual.",
-            });
-            $('.form-control').removeClass('is-valid is-invalid');
-            $('#txt_fecha_inicio_idioma').val('');
-        }
-
-        if (fecha_final && Date.parse(fecha_final) > Date.parse(fecha_actual)) {
-            Swal.fire({
-                icon: "error",
-                title: "Oops...",
-                text: "La fecha de finalización no puede ser mayor a la fecha actual.",
-            });
-            $('.form-control').removeClass('is-valid is-invalid');
-            $('#txt_fecha_fin_idioma').val('');
-            $('#cbx_fecha_fin_idioma').prop('checked', false);
-            $('#txt_fecha_fin_idioma').prop('disabled', false);
-        }
+            if (fecha_inicio && Date.parse(fecha_inicio) > Date.parse(fecha_actual)) {
+        Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "La fecha de inicio no puede ser mayor a la fecha actual.",
+        });
+        $('#txt_fecha_inicio_idioma').val('');
+        return; 
     }
 
+    //* Validar que la fecha final no sea mayor a la fecha actual
+    if (fecha_final && Date.parse(fecha_final) > Date.parse(fecha_actual)) {
+        Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "La fecha de finalización no puede ser mayor a la fecha actual.",
+        });
+        $('#txt_fecha_fin_idioma').val('').prop('disabled', false);
+        return; 
+    }
+    }
+    }
 </script>
 
 <div id="pnl_idioma">
@@ -297,19 +257,13 @@
                     <div class="row mb-col">
                         <div class="col-md-12">
                             <label for="txt_fecha_inicio_idioma" class="form-label form-label-sm">Fecha de Inicio </label>
-                            <input type="date" class="form-control form-control-sm no_caracteres" name="txt_fecha_inicio_idioma" id="txt_fecha_inicio_idioma" onchange="checkbox_fecha_idioma();">
+                            <input type="date" class="form-control form-control-sm no_caracteres" name="txt_fecha_inicio_idioma" id="txt_fecha_inicio_idioma">
                         </div>
                     </div>
                     <div class="row mb-col">
                         <div class="col-md-12">
                             <label for="txt_fecha_fin_idioma" class="form-label form-label-sm">Fecha de fin del curso </label>
-                            <input type="date" class="form-control form-control-sm no_caracteres" name="txt_fecha_fin_idioma" id="txt_fecha_fin_idioma" onchange="checkbox_fecha_idioma();">
-                        </div>
-                    </div>
-                    <div class="row mb-col">
-                        <div class="col md-12">
-                            <input type="checkbox" class="form-check-input" name="cbx_fecha_fin_idioma" id="cbx_fecha_fin_idioma" onchange="checkbox_fecha_idioma();">
-                            <label for="cbx_fecha_fin_idioma" class="form-label form-label-sm">Actualidad</label>
+                            <input type="date" class="form-control form-control-sm no_caracteres" name="txt_fecha_fin_idioma" id="txt_fecha_fin_idioma">
                         </div>
                     </div>
                 </div>
@@ -381,39 +335,5 @@
             }
         });
     })
-    function checkbox_fecha_idioma() {
-        if ($('#cbx_fecha_fin_idioma').is(':checked')) {
-            var hoy = new Date();
-            var dia = String(hoy.getDate()).padStart(2, '0');
-            var mes = String(hoy.getMonth() + 1).padStart(2, '0');
-            var year = hoy.getFullYear();
-
-            var fecha_actual = year + '-' + mes + '-' + dia;
-            $('#txt_fecha_fin_idioma').val(fecha_actual);
-
-            $('#txt_fecha_fin_idioma').prop('disabled', true);
-            $('#txt_fecha_fin_idioma').rules("remove", "required");
-
-            // Agregar clase 'is-valid' para poner el campo en verde
-            $('#txt_fecha_fin_idioma').addClass('is-valid');
-            $('#txt_fecha_fin_idioma').removeClass('is-invalid');
-
-        } else {
-            // Solo limpiar el campo si estaba previamente deshabilitado
-            if ($('#txt_fecha_fin_idioma').prop('disabled')) {
-                $('#txt_fecha_fin_idioma').val('');
-            }
-
-            $('#txt_fecha_fin_idioma').prop('disabled', false);
-            $('#txt_fecha_fin_idioma').rules("add", {
-                required: true
-            });
-            $('#validar_fechas_idioma').removeClass('is-valid');
-            $('#form_agregar_idioma').validate().resetForm();
-            $('.form-control').removeClass('is-valid is-invalid');
-        }
-
-        // Validar fechas
-        validar_fechas_idioma();
-    }
+  
 </script>

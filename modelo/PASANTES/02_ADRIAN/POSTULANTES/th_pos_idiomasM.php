@@ -17,7 +17,15 @@ class th_pos_idiomasM extends BaseModel
         'th_idi_fecha_creacion',
         'th_idi_fecha_modificacion',
         'th_idi_estado',
-        'th_idi_cbx_fecha_fin_idioma',
-
+        
     ];
+
+    // function select_all(){
+    //     $sql = "SELECT * FROM th_pos_idiomas";
+
+    //     $datos = $this->db->datos($sql);
+    //     return $datos;
+
+    // }
 }
+

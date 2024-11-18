@@ -3,11 +3,11 @@ require_once(dirname(__DIR__, 4) . '/modelo/PASANTES/02_ADRIAN/POSTULANTES/th_po
 
 $controlador = new th_pos_idiomasC();
 
-if (isset($_GET['listar_idioma'])) {
+if (isset($_GET['listar'])) {
     echo json_encode($controlador->listar($_POST['id']));
 }
 
-if (isset($_GET['listar_modal_idioma'])) {
+if (isset($_GET['listar_modal'])) {
     echo json_encode($controlador->listar_modal($_POST['id']));
 }
 
@@ -32,6 +32,9 @@ class th_pos_idiomasC
     //Funcion para listar los idiomas del postulante
     function listar($id)
     {
+        // $datos = $this->modelo->where('th_pos_id', $id)->listar();
+        // return $datos;
+
         $datos = $this->modelo->where('th_pos_id', $id)->where('th_idi_estado', 1)->listar();
 
         $texto = '';
@@ -79,8 +82,7 @@ class th_pos_idiomasC
             array('campo' => 'th_idi_institucion', 'dato' => $parametros['txt_institucion_1']),
             array('campo' => 'th_idi_fecha_inicio_idioma', 'dato' => $parametros['txt_fecha_inicio_idioma']),
             array('campo' => 'th_idi_fecha_fin_idioma', 'dato' => $parametros['txt_fecha_fin_idioma']),
-            array('campo' => 'th_idi_cbx_fecha_fin_idioma', 'dato' => $parametros['cbx_fecha_fin_idioma']),
-
+            
         );
        
         // return $datos;
