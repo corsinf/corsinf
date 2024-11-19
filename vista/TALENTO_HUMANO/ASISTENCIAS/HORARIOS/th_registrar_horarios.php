@@ -43,7 +43,7 @@ if (isset($_GET['_id'])) {
             }
         });
     }
-    
+
     //Varia global para guardar los eventos del calendario
     var arr_eventos_horario = [];
 
@@ -152,10 +152,17 @@ if (isset($_GET['_id'])) {
             dataType: 'json',
             success: function(response) {
                 let html = '';
+
                 response.forEach(evento => {
-                    html += `<div class="external-event" data-id="${evento._id}" data-title="${evento.nombre}" data-start="${minutos_formato_hora(evento.hora_entrada)}" data-end="${minutos_formato_hora(evento.hora_salida)}" style="background-color: ${evento.color};">`;
+                    let turno_nocturno_msg = '';
+
+                    if (evento.turno_nocturno == '1') {
+                        turno_nocturno_msg = '(+1)';
+                    }
+
+                    html += `<div class="external-event" data-info='${JSON.stringify(evento)}' data-id="${evento._id}" data-title="${evento.nombre}" data-start="${minutos_formato_hora(evento.hora_entrada)}" data-end="${minutos_formato_hora(evento.hora_salida)}" style="background-color: ${evento.color};">`;
                     html += `<div class="event-title text-center">${evento.nombre}</div>`;
-                    html += `<div class="event-body text-center">${minutos_formato_hora(evento.hora_entrada)} - ${minutos_formato_hora(evento.hora_salida)}</div>`;
+                    html += `<div class="event-body text-center">${minutos_formato_hora(evento.hora_entrada)} - ${minutos_formato_hora(evento.hora_salida)} ${turno_nocturno_msg}</div>`;
                     html += `</div>`;
                 });
                 $('#pnl_turnos').html(html); // Inserta el HTML generado en el contenedor
@@ -322,13 +329,27 @@ if (isset($_GET['_id'])) {
                 var start_date = info.event.start;
                 var id_turno = info.draggedEl.getAttribute('data-id');
 
-                // Aplicar horas dinámicas
-                var startTimeArray = start_hour.split(':');
-                var endTimeArray = end_hour.split(':');
+                // Obtener el JSON desde data-info
+                var info_json = info.draggedEl.getAttribute('data-info');
+                var evento = JSON.parse(info_json);
+                var turno_nocturno_drag = evento.turno_nocturno;
 
-                // Establecer la hora de inicio y fin según los valores dinámicos
-                info.event.setStart(new Date(start_date.setHours(startTimeArray[0], startTimeArray[1], 0)));
-                info.event.setEnd(new Date(start_date.setHours(endTimeArray[0], endTimeArray[1], 0)));
+                // Aplicar horas dinámicas
+                var start_time_array = start_hour.split(':');
+                var end_time_array = end_hour.split(':');
+
+                if (turno_nocturno_drag == 0) {
+                    // Establecer la hora de inicio y fin según los valores dinámicos
+                    info.event.setStart(new Date(start_date.setHours(start_time_array[0], start_time_array[1], 0)));
+                    info.event.setEnd(new Date(start_date.setHours(end_time_array[0], end_time_array[1], 0)));
+                } else {
+                    // Establecer la hora de inicio y fin según los valores dinámicos, sumando un día al fin
+                    info.event.setStart(new Date(start_date.setHours(start_time_array[0], start_time_array[1], 0)));
+
+                    let end_date = new Date(start_date); // Copiar la fecha para no modificar `start_date`
+                    end_date.setDate(end_date.getDate() + 1); // Sumar un día
+                    info.event.setEnd(new Date(end_date.setHours(end_time_array[0], end_time_array[1], 0)));
+                }
 
                 //alert('Nuevo evento añadido: ' + info.event.title + ' con horario ' + start_hour + ' a ' + end_hour);
 
@@ -337,29 +358,94 @@ if (isset($_GET['_id'])) {
                 info.event.setProp('borderColor', color);
 
                 /**
-                 * Para validacion que no se repitan
+                 * Para validacion que no se repitan en las horas y dias
                  * 
                  */
 
+                // Mostrar los valores de inicio y fin del evento en la consola
+                // console.log(`Fecha de inicio evento: ${info.event.start}`);
+                // console.log(`Fecha de fin evento: ${info.event.end}`);
+
+
+                /////////////////////////////////////////////////////////////////////////
+                // Para poner los limites de las horas relacionado con los turnos
+                /////////////////////////////////////////////////////////////////////////
+
+                var checkin_registro_inicio_drag = evento.checkin_registro_inicio;
+                var checkout_salida_fin_drag = evento.checkout_salida_fin;
+
+                // Convertir los minutos a horas y minutos
+                var hora_inicio = Math.floor(checkin_registro_inicio_drag / 60); // Hora de inicio
+                var minutos_inicio = checkin_registro_inicio_drag % 60; // Minutos de inicio
+
+                var hora_fin = Math.floor(checkout_salida_fin_drag / 60); // Hora de fin
+                var minutos_fin = checkout_salida_fin_drag % 60; // Minutos de fin
+
+                // Copiar las fechas originales sin alterarlas
+                var fecha_inicio_temporal = new Date(info.event.start); // Copiar la fecha de inicio
+                var fecha_fin_temporal = new Date(info.event.end); // Copiar la fecha de fin
+
+                // Ajustar las horas y minutos de las copias sin alterar las fechas originales
+                fecha_inicio_temporal.setHours(hora_inicio, minutos_inicio, 0, 0); // Establece la hora de inicio
+                fecha_fin_temporal.setHours(hora_fin, minutos_fin, 0, 0); // Establece la hora de fin
+
+
+                /////////////////////////////////////////////////////////////////////////
+                // Para no tomar en cuanta los limites
+                /////////////////////////////////////////////////////////////////////////
+
+                // var fecha_inicio_temporal = info.event.start;
+                // var fecha_fin_temporal = info.event.end;
+
+                /////////////////////////////////////////////////////////////////////////
+                /////////////////////////////////////////////////////////////////////////
+
+
                 var eventos_existentes = calendar.getEvents();
-                var fecha_calendario_arrastrable = formatear_fecha_calendar(start_date);
 
-                var eventosCoincidentes = eventos_existentes.filter(function(event) {
-                    fecha_calendario_existente = formatear_fecha_calendar(event.start);
-                    return fecha_calendario_existente === fecha_calendario_arrastrable;
-                });
+                if (eventos_existentes.length != 0) {
 
-                // Contar cuántos eventos coinciden
-                var conteoEventos = eventosCoincidentes.length;
+                    var eventos_coincidentes = eventos_existentes.filter(function(event) {
+                        // Obtener el rango de fechas del evento existente
+                        var inicio_evento_existente = event.start;
+                        var fin_evento_existente = event.end;
 
-                if (conteoEventos > 1) {
-                    error_notificacion('Tenga en cuenta que solo puede asignar un turno por día.')
-                    info.event.remove();
-                    return;
+                        // Validar si hay superposición de rangos
+                        return (
+                            (fecha_inicio_temporal >= inicio_evento_existente && fecha_inicio_temporal <= fin_evento_existente) || // Empieza dentro del rango
+                            (fecha_fin_temporal >= inicio_evento_existente && fecha_fin_temporal <= fin_evento_existente) || // Termina dentro del rango
+                            (fecha_inicio_temporal <= inicio_evento_existente && fecha_fin_temporal >= fin_evento_existente) // Contiene completamente al rango
+                        );
+                    });
+
+                    // Contar cuántos eventos coinciden
+                    var conteoEventos = eventos_coincidentes.length;
+
+                    if (conteoEventos > 1) {
+                        // Mostrar mensaje de error y remover el evento
+                        error_notificacion('Tenga en cuenta que solo puede asignar un turno por día en este rango.');
+                        info.event.remove();
+                        return;
+                    }
                 }
-            }
+
+                //Mostrar eventos
+                // eventos_existentes.forEach(evento => {
+                //     var fecha_inicio = evento.start; // Fecha de inicio
+                //     var fecha_fin = evento.end; // Fecha de fin
+
+                //     console.log(`Evento: ${evento.title || 'Sin título'}`);
+                //     console.log(`Inicio: ${fecha_inicio}`);
+                //     console.log(`Fin: ${fecha_fin}`);
+                // });
+            },
+
+
+
 
         });
+
+
 
         <?php if (isset($_GET['_id'])) { ?>
             cargar_turnos_horario(<?= $_id ?>);
@@ -405,7 +491,7 @@ if (isset($_GET['_id'])) {
             dataType: 'json',
 
             success: function(response) {
-                
+
                 calendar.removeAllEvents();
                 // Recorrer la respuesta y agregar eventos al arreglo events
                 response.forEach(function(evento) {
@@ -426,6 +512,8 @@ if (isset($_GET['_id'])) {
                     } else if (evento.dia == '7') {
                         fecha_dia_estatico = '2024-02-17';
                     }
+
+
 
                     calendar.addEvent({
                         //id: evento.id_turno,
@@ -505,7 +593,7 @@ if (isset($_GET['_id'])) {
                 $('#pnl_tipo_diario').hide();
             }
 
-            $(this).blur(); 
+            $(this).blur();
         });
     });
 </script>
