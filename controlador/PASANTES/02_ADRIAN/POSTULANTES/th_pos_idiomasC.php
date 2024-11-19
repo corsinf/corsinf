@@ -55,7 +55,7 @@ class th_pos_idiomasC
                 <<<HTML
                     <div class="row mb-col">
                         <div class="col-10">
-                            <h6 class="fw-bold">{$value['th_idi_nombre_idioma']}</h6>
+                            <h6 class="fw-bold mt-3 mb-2">{$value['th_idi_nombre_idioma']}</h6>
                             <p class="m-0">{$value['th_idi_nivel']}</p>
                             <p class="m-0">{$value['th_idi_institucion']} </p>
                             <p class="m-0">{$value['th_idi_fecha_inicio_idioma']} - {$fecha_fin}</p>
