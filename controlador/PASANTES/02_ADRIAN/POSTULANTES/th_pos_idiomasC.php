@@ -38,18 +38,27 @@ class th_pos_idiomasC
        $datos = $this->modelo->where('th_pos_id', $id)->where('th_idi_estado', 1)->listar();
 
         $texto = '';
+
+        usort($datos, function($txt_fecha_fin_1, $txt_fecha_fin_2) {
+            $txt_fecha_fin_1= strtotime($txt_fecha_fin_1['th_idi_fecha_fin_idioma']);
+            $txt_fecha_fin_2 = strtotime($txt_fecha_fin_2['th_idi_fecha_fin_idioma']);
+            return $txt_fecha_fin_2 <=> $txt_fecha_fin_1; 
+        });
+
         foreach ($datos as $key => $value) {
+
             $fecha_fin = $value['th_idi_fecha_fin_idioma'] == '' ? 'Actualidad' : $value['th_idi_fecha_fin_idioma'];
 
 
 
-            $texto .= <<<HTML
+            $texto .= 
+                <<<HTML
                     <div class="row mb-col">
                         <div class="col-10">
                             <h6 class="fw-bold">{$value['th_idi_nombre_idioma']}</h6>
                             <p class="m-0">{$value['th_idi_nivel']}</p>
                             <p class="m-0">{$value['th_idi_institucion']} </p>
-                            <p class="m-0">{$value['th_idi_fecha_inicio_idioma']} - {$value['th_idi_fecha_fin_idioma']}</p>
+                            <p class="m-0">{$value['th_idi_fecha_inicio_idioma']} - {$fecha_fin}</p>
                         </div>
                         <div class="col-2 d-flex justify-content-end align-items-start">
                             <button class="btn" style="color: white;" onclick="abrir_modal_idiomas({$value['_id']});">

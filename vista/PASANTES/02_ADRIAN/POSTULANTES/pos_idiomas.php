@@ -30,7 +30,7 @@
             },
             dataType: 'json',
             success: function(response) {
-                $('#ddl_seleccionar_idioma').val(response[0].th_idi_nombre);
+                $('#ddl_seleccionar_idioma').val(response[0].th_idi_nombre_idioma);
                 $('#ddl_dominio_idioma').val(response[0].th_idi_nivel);
                 $('#txt_institucion_1').val(response[0].th_idi_institucion);
                 $('#txt_fecha_inicio_idioma').val(response[0].th_idi_fecha_inicio_idioma);
@@ -140,7 +140,7 @@
                         cargar_datos_idiomas(<?= $id ?>);
                         limpiar_campos_idiomas_modal();
                     <?php } ?>
-                    $('#modal_agregar_idiomas').modal('hide');
+                    $('#modal_agregar_idioma').modal('hide');
                 }
             }
         });
@@ -148,41 +148,46 @@
 
     function limpiar_campos_idiomas_modal() {
         $('#form_agregar_idioma').validate().resetForm();
-        $('.form-control').removeClass('is-valid is-invalid');
+        $('.form-control, .form-select').removeClass('is-valid is-invalid');
         $('#ddl_seleccionar_idioma').val('');
         $('#ddl_dominio_idioma').val('');
+        $('#txt_institucion_1').val('');
         $('#txt_fecha_inicio_idioma').val('');
         $('#txt_fecha_fin_idioma').val('');
-         $('#txt_idiomas_id').val('');
+        $('#txt_idiomas_id').val('');
         // //Cambiar texto
         $('#lbl_nombre_idioma').html('Agregue un idioma');
         $('#btn_guardar_idioma').html('Agregar');
     }
 
     function validar_fechas_idioma() {
-        var fecha_inicio = $('#txt_fecha_inicio_idioma').val();
-        var fecha_final = $('#txt_fecha_fin_idioma').val();
-        var hoy = new Date();
-        var fecha_actual = hoy.toISOString().split('T')[0];
-        //* Validar que la fecha final no sea menor a la fecha de inicio
-        if (fecha_inicio && fecha_final) {
-            if (Date.parse(fecha_final) < Date.parse(fecha_inicio)) {
-                Swal.fire({
-                    icon: "error",
-                    title: "Oops...",
-                    text: "La fecha final no puede ser menor a la fecha de inicio.",
-                });
-                $('.form-control').removeClass('is-valid is-invalid');
-                $('#txt_fecha_fin_idioma').val('').prop('disabled', false);
-            }
-            if (fecha_inicio && Date.parse(fecha_inicio) > Date.parse(fecha_actual)) {
+    var fecha_inicio = $('#txt_fecha_inicio_idioma').val();
+    var fecha_final = $('#txt_fecha_fin_idioma').val();
+    var hoy = new Date();
+    var fecha_actual = hoy.toISOString().split('T')[0];
+
+    //* Validar que la fecha final no sea menor a la fecha de inicio
+    if (fecha_inicio && fecha_final) {
+        if (Date.parse(fecha_final) < Date.parse(fecha_inicio)) {
+            Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: "La fecha final no puede ser menor a la fecha de inicio.",
+            });
+            reiniciar_campos_fecha('#txt_fecha_fin_idioma');
+            return;
+        }
+    }
+
+    //* Validar que la fecha de inicio no sea mayor a la fecha actual
+    if (fecha_inicio && Date.parse(fecha_inicio) > Date.parse(fecha_actual)) {
         Swal.fire({
             icon: "error",
             title: "Oops...",
             text: "La fecha de inicio no puede ser mayor a la fecha actual.",
         });
-        $('#txt_fecha_inicio_idioma').val('');
-        return; 
+        reiniciar_campos_fecha('#txt_fecha_inicio_idioma');
+        return;
     }
 
     //* Validar que la fecha final no sea mayor a la fecha actual
@@ -190,13 +195,20 @@
         Swal.fire({
             icon: "error",
             title: "Oops...",
-            text: "La fecha de finalización no puede ser mayor a la fecha actual.",
+            text: "La fecha final no puede ser mayor a la fecha actual.",
         });
-        $('#txt_fecha_fin_idioma').val('').prop('disabled', false);
-        return; 
+        reiniciar_campos_fecha('#txt_fecha_fin_idioma');
+        return;
     }
-    }
-    }
+}
+
+//* Función para reiniciar campos
+function reiniciar_campos_fecha(campo) {
+    $(campo).val('');
+    $(campo).removeClass('is-valid is-invalid');
+    $('.form-control').removeClass('is-valid is-invalid');
+}
+
 </script>
 
 <div id="pnl_idioma">
@@ -238,12 +250,12 @@
                             <select class="form-select form-select-sm" id="ddl_dominio_idioma" name="ddl_dominio_idioma" required>
                                 <option selected disabled value="">-- Selecciona su nivel de dominio del idioma --</option>
                                 <option value="Nativo">Nativo</option>
-                                <option value="A0: Principiante">A0: Principiante</option>
-                                <option value="A1-A2: Básico">A1-A2: Básico</option>
-                                <option value="A2-B1: Pre-intermedio">A2-B1: Pre-intermedio</option>
-                                <option value="B1: Intermedio">B1: Intermedio</option>
-                                <option value="B2: Intermedio-Alto">B2: Intermedio-Alto</option>
-                                <option value="C1-C2: Avanzado">C1-C2: Avanzado</option>
+                                <option value="A1: Principiante">A1: Principiante</option>
+                                <option value="A2: Básico">A2: Básico</option>
+                                <option value="B1: Pre-intermedio">B1: Pre-intermedio</option>
+                                <option value="B2: Intermedio">B2: Intermedio</option>
+                                <option value="c1: Intermedio-Alto">c1: Intermedio-Alto</option>
+                                <option value="C2: Avanzado">C2: Avanzado</option>
                             </select>
                         </div>
                     </div>
@@ -256,17 +268,16 @@
                     <div class="row mb-col">
                         <div class="col-md-12">
                             <label for="txt_fecha_inicio_idioma" class="form-label form-label-sm">Fecha de Inicio </label>
-                            <input type="date" class="form-control form-control-sm no_caracteres" name="txt_fecha_inicio_idioma" id="txt_fecha_inicio_idioma">
+                            <input type="date" class="form-control form-control-sm no_caracteres" name="txt_fecha_inicio_idioma" id="txt_fecha_inicio_idioma" onchange="txt_fecha_fin_idioma_1();">
                         </div>
                     </div>
                     <div class="row mb-col">
                         <div class="col-md-12">
                             <label for="txt_fecha_fin_idioma" class="form-label form-label-sm">Fecha de fin del curso </label>
-                            <input type="date" class="form-control form-control-sm no_caracteres" name="txt_fecha_fin_idioma" id="txt_fecha_fin_idioma">
+                            <input type="date" class="form-control form-control-sm no_caracteres" name="txt_fecha_fin_idioma" id="txt_fecha_fin_idioma" onchange="txt_fecha_fin_idioma_1();">
                         </div>
                     </div>
-                </div>
-
+                    </div>
                 <div class="modal-footer d-flex justify-content-center">
                     <button type="button" class="btn btn-success btn-sm px-4 m-1" id="btn_guardar_idioma" onclick="insertar_editar_idiomas(); validar_fechas_idioma();">Agregar</button>
                     <button type="button" class="btn btn-danger btn-sm px-4 m-1" id="btn_eliminar_formacion" onclick="borrar_datos_idioma();">Eliminar</button>
@@ -335,4 +346,39 @@
         });
     })
   
+    function txt_fecha_fin_idioma_1() {
+        if ($('#txt_fecha_fin_idioma').is(':checked')) {
+            var hoy = new Date();
+            var dia = String(hoy.getDate()).padStart(2, '0');
+            var mes = String(hoy.getMonth() + 1).padStart(2, '0');
+            var year = hoy.getFullYear();
+            var fecha_actual = year + '-' + mes + '-' + dia;
+
+            // Configurar automáticamente la fecha final como "hoy"
+            $('#txt_fecha_fin_idioma').val(fecha_actual);
+            $('#txt_fecha_fin_idioma').prop('disabled', true);
+            $('#txt_fecha_fin_idioma').rules("remove", "required");
+
+            // Agregar clase 'is-valid' para mostrar el campo como válido
+            $('#txt_fecha_fin_idioma').addClass('is-valid');
+            $('#txt_fecha_fin_idioma').removeClass('is-invalid');
+
+        } else {
+            if ($('#txt_fecha_fin_idioma').prop('disabled')) {
+                $('#txt_fecha_fin_idioma').val('');
+            }
+
+            $('#txt_fecha_fin_idioma').prop('disabled', false);
+            $('#txt_fecha_fin_idioma').rules("add", {
+                required: true
+            });
+            $('#txt_fecha_fin_idioma').removeClass('is-valid');
+            $('#form_agregar_idioma').validate().resetForm();
+            $('.form-control').removeClass('is-valid is-invalid');
+        }
+
+        // Validar las fechas (llama a tu función de validación)
+        validar_fechas_idioma();
+}
+
 </script>
