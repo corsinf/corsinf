@@ -174,7 +174,8 @@
         $('#btn_guardar_referencia_laboral').html('Agregar');
     }
 
-    function definir_ruta_iframe(url) {
+    function definir_ruta_iframe_referencias_laborales(url) {
+        $('#modal_ver_pdf_referencias_laborales').modal('show');
         var cambiar_ruta = $('#iframe_referencias_laborales_pdf').attr('src', url);
     }
 
@@ -256,7 +257,7 @@
     </div>
 </div>
 
-<div class="modal" id="modal_ver_pdf" tabindex="-1" aria-modal="true" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
+<div class="modal" id="modal_ver_pdf_referencias_laborales" tabindex="-1" aria-modal="true" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
     <div class="modal-dialog modal-dialog-centered modal-xl">
         <div class="modal-content">
 

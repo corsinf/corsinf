@@ -43,7 +43,7 @@ class th_certificaciones_capacitacionesC
                     <div class="row mb-3">
                         <div class="col-10">
                             <p class="fw-bold my-0 d-flex align-items-center">{$value['th_cert_nombre_curso']}</p>
-                            <a href="#" data-bs-toggle="modal" data-bs-target="#modal_ver_pdf" onclick="definir_ruta_iframe('{$value['th_cert_ruta_archivo']}');">Ver Certifiacado o Capacitacion PDF</a>
+                            <a href="#" data-bs-toggle="modal" data-bs-target="#modal_ver_pdf_certificaciones" onclick="definir_ruta_iframe_certificaciones('{$value['th_cert_ruta_archivo']}');">Ver Certifiacado o Capacitacion PDF</a>
                         </div>
                         <div class="col-2 d-flex justify-content-end align-items-center">
                             <button class="btn btn-xs" style="color: white;" onclick="abrir_modal_certificaciones_capacitaciones('{$value['_id']}')">

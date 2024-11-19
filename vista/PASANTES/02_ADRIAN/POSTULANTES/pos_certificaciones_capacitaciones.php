@@ -169,7 +169,7 @@
         $('#btn_guardar_certificaciones_capacitaciones').html('Agregar');
     }
 
-    function definir_ruta_iframe(url) {
+    function definir_ruta_iframe_certificaciones(url) {
         var cambiar_ruta = $('#iframe_certificaciones_capacitaciones_pdf').attr('src', url);
     }
 
@@ -229,7 +229,7 @@
     </div>
 </div>
 
-<div class="modal" id="modal_ver_pdf" tabindex="-1" aria-modal="true" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
+<div class="modal" id="modal_ver_pdf_certificaciones" tabindex="-1" aria-modal="true" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
     <div class="modal-dialog modal-dialog-centered modal-xl">
         <div class="modal-content">
 
