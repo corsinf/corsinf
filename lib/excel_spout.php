@@ -32,7 +32,11 @@ include('../modelo/coloresM.php');
 include('../modelo/clase_movimientoM.php');
 include('../modelo/detalle_articuloM.php');
 include('../modelo/cargar_datosM.php');
+<<<<<<< HEAD
+include('../modelo/COWORKING/crear_mienbrosM.php');
+=======
 include('../modelo/COWORKING/crear_oficinaM.php');
+>>>>>>> 73a6bfa6ba1dc1fccde89ce32a2646b22b801e96
 
 
 /**
@@ -62,7 +66,23 @@ if (isset($_GET['generarExcelMobiliario']))
 }
 	
 
+<<<<<<< HEAD
+if(isset($_GET['generarExcelMiembros']))
+{
+	$reporte->generarExcelMiembros();
+	// $reporte-> ejemplo();
+}
+
+
+if(isset($_GET['generarExcelCompras']))
+{
+	$reporte->generarExcelCompras();
+	// $reporte-> ejemplo();
+}
+
+=======
 	
+>>>>>>> 73a6bfa6ba1dc1fccde89ce32a2646b22b801e96
 class excel_spout
 {
 	private $reportes;
@@ -84,10 +104,16 @@ class excel_spout
 		$this->colores = new coloresM();	
 		$this->mov = new clase_movimientoM();		
 		$this->detalle_art = new detalle_articuloM();		
+<<<<<<< HEAD
+		$this->carga_datos = new cargar_datosM();		
+		$this->crear_miembro = new crear_mienbrosM();
+
+=======
 		$this->carga_datos = new cargar_datosM();
 
 		$this->crear_oficinas = new crear_oficinaM();			
 		
+>>>>>>> 73a6bfa6ba1dc1fccde89ce32a2646b22b801e96
 	}
 
 	function generar_excel($parametros)
@@ -480,6 +506,87 @@ class excel_spout
 
     // Cerrar el archivo
     $writer->close();
+	}
+
+
+	function generarExcelCompras() {
+		// Obtener las compras por sala y la lista de compras con miembros
+		$compras_sala = $this->crear_miembro->listacomprasala(); 
+		$compras_lista = $this->crear_miembro->compraslista();
+	
+		// Crear un array asociativo para mapear id_compra a datos de compras_lista
+		$compras_lista_map = array();
+		foreach ($compras_lista as $compra) {
+			$compras_lista_map[$compra['id_compra']] = $compra; // Relacionar id_compra con los detalles de miembro
+		}
+	
+		
+		$writer = WriterEntityFactory::createCSVWriter();
+		$fileName = 'InformeDeCompras.csv';
+		$writer->openToBrowser($fileName);
+	
+		
+		$CABECERA2 = array('Sala', 'Compra', 'Miembro', 'Producto', 'Cantidad', 'Precio', 'Total');
+		$rowFromValues = WriterEntityFactory::createRowFromArray($CABECERA2);
+		$writer->addRow($rowFromValues);
+	
+		// Recorrer las compras por sala
+		foreach ($compras_sala as $value) {
+			// Verificar si existe un miembro asociado a esta compra
+			$datos_adicionales = $compras_lista_map[$value['id_compra']] ?? null;
+	
+			// Si hay miembro, usar su nombre completo, si no, asignar "N/H"
+			$nombre_completo = 'N/H';
+			if ($datos_adicionales !== null) {
+				$nombre_completo = $datos_adicionales['nombre_completo']; // Nombre completo del miembro
+			}
+	
+			// Crear la fila para el CSV
+			$SALIDA = array($value['id_sala'], $value['id_compra'], $nombre_completo, $value['id_producto'], $value['cantidad_compra'], $value['pvp_compra'], $value['total_compra']);
+	
+			
+			$rowFromValues = WriterEntityFactory::createRowFromArray($SALIDA);
+			$writer->addRow($rowFromValues);
+		}
+	
+		$writer->close();
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+
+
+
+	function generarExcelMiembros(){
+        $datos = $this->crear_miembro->listardebase();
+        //print_r($datos);die();
+    	//$writer = WriterEntityFactory::createXLSXWriter();
+		$writer = WriterEntityFactory::createCSVWriter();
+		$fileName = 'InformeDeMiembros.csv';
+		$writer->openToBrowser($fileName);
+
+    	
+    	$CABECERA2= array('Nombre','Apellido','Telefono', 'Direccion', 'Espacio');
+		$rowFromValues = WriterEntityFactory::createRowFromArray($CABECERA2);
+		$writer->addRow($rowFromValues);
+		
+		foreach ($datos as $key => $value) {
+		$SALIDA = array($value['nombre_miembro'],$value['apellido_miembro'],$value['telefono_miembro'],$value['direccion_miembro'],$value['id_espacio']);
+		    $rowFromValues = WriterEntityFactory::createRowFromArray($SALIDA);
+		    $writer->addRow($rowFromValues);
+			
+		}
+		
+		$writer->close();
+    
+	
+		//print_r('datos');die();
+
 	}
 
 
