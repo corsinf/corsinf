@@ -42,61 +42,121 @@
     }
 
     function insertar_editar_documentos_identidad() {
-        var form_data = new FormData(document.getElementById("form_documento_identidad")); 
 
-        var txt_id_documentos_identidad = $('#txt_id_documentos_identidad').val();
+        var ddl_tipo_documento_identidad = $('#ddl_tipo_documento_identidad').val();
+        
+       
+        var id_postulante = '<?= $id ?>';
+        var txt_idi_idiomas_id = $('#txt_idiomas_id').val();
 
-        if ($('#txt_copia_documentos_identidad').val() === '' && txt_id_referencias_laborales != '') {
-            var txt_copia_documentos_identidad = $('#txt_ruta_guardada_carta_recomendacion').val()
-            $('#txt_copia_documentos_identidad').rules("remove", "required");
-        } else {
-            var txt_copia_documentos_identidad = $('#txt_copia_documentos_identidad').val();
-            $('#txt_copia_documentos_identidad').rules("add", {
-                required: true
-            });
+        var parametros_idiomas = {
+            //'_id': txt_idi_idiomas_id,
+            'id_postulante': id_postulante,
+            'ddl_seleccionar_idioma': ddl_seleccionar_idioma,
+            'ddl_dominio_idioma': ddl_dominio_idioma,
+            'txt_institucion_1': txt_institucion_1,
+            'txt_fecha_inicio_idioma': txt_fecha_inicio_idioma,
+            'txt_fecha_fin_idioma': txt_fecha_fin_idioma,
+            '_id': txt_idi_idiomas_id
         }
-        if ($("#form_documento_identidad").valid()) {
-            $.ajax({
-                url: '../controlador/PASANTES/02_ADRIAN/POSTULANTES/th_pos_documentosC.php?insertar=true',
-                type: 'post',
-                data: form_data,
-                contentType: false,
-                processData: false,
 
-                dataType: 'json',
-                success: function(response) {
-                    //console.log(response);
-                    if (response == -1) {
-                        Swal.fire({
-                            title: '',
-                            text: 'Algo extraño ha ocurrido, intente más tarde.',
-                            icon: 'error',
-                            allowOutsideClick: false,
-                            showConfirmButton: true,
-                            confirmButtonText: 'Cerrar'
-                        });
-                    } else if (response == -2) {
-                        Swal.fire({
-                            title: '',
-                            text: 'Asegúrese de que el archivo subido sea un PDF.',
-                            icon: 'error',
-                            allowOutsideClick: false,
-                            showConfirmButton: true,
-                            confirmButtonText: 'Cerrar'
-                        });
-                    } else if (response == 1) {
-                        Swal.fire('', 'Operación realizada con éxito.', 'success');
-                        <?php if (isset($_GET['id'])) { ?>
-                            cargar_datos_documentos_identidad(<?= $id ?>);
-                        <?php } ?>
-                        limpiar_parametros_documentos_identidad();
-                        $('#modal_agregar_documentos_identidad').modal('hide');
-                    }
-                }
-            });
+        if ($("#form_agregar_idioma").valid()) {
+            // Si es válido, puedes proceder a enviar los datos por AJAX
+            console.log(parametros_idiomas)
+            insertar_idiomas(parametros_idiomas);
         }
+
     }
 
+    function insertar_documentos_identidad(parametros) {
+
+        $.ajax({
+            data: {
+                parametros: parametros
+            },
+            url: '../controlador/PASANTES/02_ADRIAN/POSTULANTES/th_pos_idiomasC.php?insertar=true',
+            type: 'post',
+            dataType: 'json',
+
+            success: function(response) {
+                if (response == 1) {
+                    Swal.fire('', 'Operacion realizada con exito.', 'success');
+                    <?php if (isset($_GET['id'])) { ?>
+                        cargar_datos_idiomas(<?= $id ?>);
+                        limpiar_campos_idiomas_modal();
+                    <?php } ?>
+                    $('#modal_agregar_idioma').modal('hide');
+                } else {
+                    Swal.fire('', 'Operación fallida', 'warning');
+                }
+            }
+        });
+    }
+
+        
+    
+    
+
+    // function insertar_editar_documentos_identidad() {
+
+        
+    //     //var ddl_tipo_documento_identidad = $('#ddl_tipo_documento_identidad').val();
+    //     var form_data = new FormData(document.getElementById("form_documento_identidad")); 
+
+    //     var txt_id_documentos_identidad = $('#txt_id_documentos_identidad').val();
+
+    //     if ($('#txt_copia_documentos_identidad').val() === '' && txt_id_referencias_laborales != '') {
+    //         var txt_copia_documentos_identidad = $('#txt_ruta_guardada_carta_recomendacion').val()
+    //         $('#txt_copia_documentos_identidad').rules("remove", "required");
+    //     } else {
+    //         var txt_copia_documentos_identidad = $('#txt_copia_documentos_identidad').val();
+    //         $('#txt_copia_documentos_identidad').rules("add", {
+    //             required: true
+    //         });
+    //     }
+    //     if ($("#form_documento_identidad").valid()) {
+    //         $.ajax({
+    //             url: '../controlador/PASANTES/02_ADRIAN/POSTULANTES/th_pos_documentosC.php?insertar=true',
+    //             type: 'post',
+    //             data: form_data,
+    //             contentType: false,
+    //             processData: false,
+
+    //             dataType: 'json',
+    //             success: function(response) {
+    //                 //console.log(response);
+    //                 if (response == -1) {
+    //                     Swal.fire({
+    //                         title: '',
+    //                         text: 'Algo extraño ha ocurrido, intente más tarde.',
+    //                         icon: 'error',
+    //                         allowOutsideClick: false,
+    //                         showConfirmButton: true,
+    //                         confirmButtonText: 'Cerrar'
+    //                     });
+    //                 } else if (response == -2) {
+    //                     Swal.fire({
+    //                         title: '',
+    //                         text: 'Asegúrese de que el archivo subido sea un PDF.',
+    //                         icon: 'error',
+    //                         allowOutsideClick: false,
+    //                         showConfirmButton: true,
+    //                         confirmButtonText: 'Cerrar'
+    //                     });
+    //                 } else if (response == 1) {
+    //                     Swal.fire('', 'Operación realizada con éxito.', 'success');
+    //                     <?php if (isset($_GET['id'])) { ?>
+    //                         cargar_datos_documentos_identidad(<?= $id ?>);
+    //                     <?php } ?>
+    //                     limpiar_parametros_documentos_identidad();
+    //                     $('#modal_agregar_documentos_identidad').modal('hide');
+    //                 }
+    //             }
+    //         });
+    //     }
+    // }
+
+    
 //Funcion para editar el registro de documentos identidad
     function abrir_modal_documentos_identidad(id) {
         cargar_datos_modal_documentos_identidad(id);
@@ -186,12 +246,15 @@
 
             <!-- Modal Header -->
             <div class="modal-header">
-                <h5><small class="text-body-secondary" id="lbl_titulo_documentos_identidad">Agregue un Documento de Identidad</small></h5>
+                <h6><label class="text-body-secondary fw-bold" id="lbl_nombre_idioma">Agregue un Documento de Identidad</small></h6>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="limpiar_parametros_documentos_identidad()"></button>
             </div>
-            <!-- Modal body -->
-            <form id="form_documento_identidad" enctype="multipart/form-data" method="post" style="width: inherit;">
-                <div class="modal-body">
+
+            <!-- Modal Body -->
+            <form id="form_documento_identidad">
+            <input type="hidden" >
+                <div class="modal-body"> 
+
                     <div class="row mb-col">
                         <div class="col-md-12">
                             <label for="ddl_tipo_documento_identidad" class="form-label form-label-sm">Tipo de Documento <label style="color: red;">*</label></label>
@@ -208,9 +271,9 @@
                     </div>
 
                     
-                </div>
-
                 
+
+                </div>
                 <div class="modal-footer d-flex justify-content-center">
                     <button type="button" class="btn btn-success btn-sm px-4 m-1" id="btn_guardar_documentos_identidad" onclick="insertar_editar_documentos_identidad();">Agregar</button>
                     <button type="button" class="btn btn-danger btn-sm px-4 m-1" id="btn_eliminar_formacion" onclick="delete_datos_referencias_laborales();">Eliminar</button>
@@ -219,8 +282,11 @@
         </div>
     </div>
 </div>
+            
+        
 
-<script>
+
+<!-- <script>
     $(document).ready(function() {
         //Validación Documento de Identidad
         $("#form_documento_identidad").validate({
@@ -253,5 +319,5 @@
 
             }
         });
-    })
-</script>
+    }) -->
+<!-- </script> -->
