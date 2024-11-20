@@ -12,7 +12,7 @@ if (isset($_GET['listar_modal'])) {
 }
 
 if (isset($_GET['insertar'])) {
-    echo json_encode($controlador->insertar_editar($_POST['parametros']));
+    echo json_encode($controlador->insertar_editar($_FILES, $_POST));
 }
 
 if (isset($_GET['eliminar'])) {
@@ -36,6 +36,7 @@ class th_pos_documentosC
 
         $texto = '';
         foreach ($datos as $key => $value) {
+            $url_pdf = '../REPOSITORIO/TALENTO_HUMANO.pdf';   
 
             //$fecha_fin = $value['th_expl_fecha_fin_experiencia'] == '' ? 'Actualidad' : $value['th_expl_fecha_fin_experiencia'];
 
@@ -44,11 +45,11 @@ class th_pos_documentosC
                     <div class="row mb-col">
                         <div class="col-10">
                             <h6 class="fw-bold mt-3 mb-2">{$value['th_poi_tipo']}</h6>
-                            <!-- <p class="m-0">{$value['th_expl_cargos_ocupados']}</p> -->
+                            <a href="#" onclick="ruta_iframe_documento_identificacion('{$value['th_poi_ruta_archivo']}');">Ver Documento de Identificación</a>
                           
                         </div>
                         <div class="col-2 d-flex justify-content-end align-items-start">
-                            <button class="btn" style="color: white;" onclick="abrir_modal_documento_identificacion({$value['_id']});">
+                            <button class="btn" style="color: white;" onclick="abrir_modal_documentos_identificacion({$value['_id']});">
                                 <i class="text-dark bx bx-pencil bx-sm"></i>
                             </button>
                         </div>
@@ -69,37 +70,123 @@ class th_pos_documentosC
         return $datos;
     }
 
-    function insertar_editar($parametros)
+    function insertar_editar($file, $parametros)
     {
         $datos = array(
-            array('campo' => 'th_pos_id', 'dato' => $parametros['txt_id_postulante']),
+            //array('campo' => 'th_pos_id', 'dato' => $parametros['txt_id_postulante']),
             array('campo' => 'th_poi_tipo', 'dato' => $parametros['ddl_tipo_documento_identidad']),
-            array('campo' => 'th_poi_ruta_archivo', 'dato' => $parametros['txt_agregar_documento_identidad']),
+            array('campo' => 'th_poi_ruta_archivo', 'dato' => $parametros['txt_cargar_documento_identidad']),
       
         );
 
-        if ($parametros['_id'] == '') {
-            $datos = $this->modelo->insertar($datos);
+        $id_documentos_identidad = $parametros['txt_documentos_identificacion_id'];
+
+        if ($id_documentos_identidad == '') {
+            $datos = $this->modelo->insertar_id($datos);
+            $this->guardar_archivo($file, $parametros, $datos);
+            return 1;
         } else {
-            $where[0]['campo'] = 'th_poi_id';
-            $where[0]['dato'] = $parametros['_id'];
+
+            $where = array(
+                array('campo' => 'th_poi_id', 'dato' => $id_documentos_identidad),
+            );
+
             $datos = $this->modelo->editar($datos, $where);
+
+            if ($file['txt_copia_documentos_identidad']['tmp_name'] != '' && $file['txt_copia_documentos_identidad']['tmp_name'] != null) {
+                $datos = $this->guardar_archivo($file, $parametros, $id_documentos_identidad);
+            }
         }
 
         return $datos;
+
     }
 
     function eliminar($id)
     {
+        $datos_archivo = $this->modelo->where('th_poi_id', $id)->where('th_poi_estado', 1)->listar();
+
+        if ($datos_archivo && isset($datos_archivo[0]['th_poi_ruta_archivo'])) {
+            $ruta_relativa = ltrim($datos_archivo[0]['th_poi_ruta_archivo'], './');
+            $ruta_archivo = dirname(__DIR__, 4) . '/' . $ruta_relativa;
+
+            if (file_exists($ruta_archivo)) {
+                unlink($ruta_archivo);
+            }
+        }
+
         $datos = array(
             array('campo' => 'th_poi_estado', 'dato' => 0),
         );
 
-        $where[0]['campo'] = 'th_poi_id';
-        $where[0]['dato'] = strval($id);
+        $where = array(
+            array('campo' => 'th_poi_id', 'dato' => strval($id)),
+        );
 
-        $datos = $this->modelo->eliminar($datos, $where);
 
+        $datos = $this->modelo->editar($datos, $where);
         return $datos;
     }
+
+    private function guardar_archivo($file, $id_insertar_editar)
+{
+    $ruta = dirname(__DIR__, 4) . '/REPOSITORIO/TALENTO_HUMANO/DOCUMENTOS_IDENTIDAD/'; // Ruta fija para guardar los archivos.
+
+    // Crear la carpeta si no existe.
+    if (!file_exists($ruta)) {
+        mkdir($ruta, 0777, true);
+    }
+
+    // Validar formato del archivo.
+    if ($this->validar_formato_archivo($file) === 1) {
+        $uploadfile_temporal = $file['txt_copia_documentos_identidad']['tmp_name'];
+        $extension = pathinfo($file['txt_copia_documentos_identidad']['name'], PATHINFO_EXTENSION);
+
+        // Nombrar el archivo con el ID recibido.
+        $nombre = 'referencia_laboral_' . $id_insertar_editar . '.' . $extension;
+        $nuevo_nom = $ruta . $nombre;
+
+        // Ruta relativa para guardar en la base de datos.
+        $nombre_ruta = '../REPOSITORIO/TALENTO_HUMANO/DOCUMENTOS_IDENTIDAD/' . $nombre;
+
+        // Verificar y mover el archivo.
+        if (is_uploaded_file($uploadfile_temporal)) {
+            if (move_uploaded_file($uploadfile_temporal, $nuevo_nom)) {
+
+                // Preparar datos para actualizar en la base de datos.
+                $datos = array(
+                    array('campo' => 'th_poi_ruta_archivo', 'dato' => $nombre_ruta),
+                );
+
+                $where = array(
+                    array('campo' => 'th_poi_id', 'dato' => $id_insertar_editar),
+                );
+
+                // Ejecutar la actualización en la base de datos.
+                $base = $this->modelo->editar($datos, $where);
+
+                return $base == 1 ? 1 : -1;
+            } else {
+                return -1;
+            }
+        } else {
+            return -1;
+        }
+    } else {
+        return -2;
+    }
+}
+
+private function validar_formato_archivo($file)
+{
+    switch ($file['txt_copia_documentos_identidad']['type']) {
+        case 'application/pdf':
+            return 1;
+            break;
+        default:
+            return -1;
+            break;
+    }
+}
+
 }
