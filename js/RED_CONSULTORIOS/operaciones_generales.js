@@ -103,7 +103,7 @@ function base_url() {
     return (window.document.location.origin + "/" + window.location.pathname.split('/')[1]);
 }
 
-function textoMinusculas(input) {
+function texto_minusculas(input) {
     let texto = input.value;
     input.value = texto.toLowerCase(); 
 }

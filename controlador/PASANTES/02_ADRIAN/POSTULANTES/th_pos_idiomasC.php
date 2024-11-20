@@ -1,11 +1,14 @@
 <?php
-
 require_once(dirname(__DIR__, 4) . '/modelo/PASANTES/02_ADRIAN/POSTULANTES/th_pos_idiomasM.php');
 
 $controlador = new th_pos_idiomasC();
 
 if (isset($_GET['listar'])) {
     echo json_encode($controlador->listar($_POST['id']));
+}
+
+if (isset($_GET['listar_modal'])) {
+    echo json_encode($controlador->listar_modal($_POST['id']));
 }
 
 if (isset($_GET['insertar'])) {
@@ -17,7 +20,6 @@ if (isset($_GET['eliminar'])) {
 }
 
 
-
 class th_pos_idiomasC
 {
     private $modelo;
@@ -27,49 +29,76 @@ class th_pos_idiomasC
         $this->modelo = new th_pos_idiomasM();
     }
 
+    //Funcion para listar los idiomas del postulante
     function listar($id)
     {
+        // $datos = $this->modelo->where('th_pos_id', $id)->listar();
+        // return $datos;
+
+       $datos = $this->modelo->where('th_pos_id', $id)->where('th_idi_estado', 1)->listar();
+
+        $texto = '';
+
+        usort($datos, function($txt_fecha_fin_1, $txt_fecha_fin_2) {
+            $txt_fecha_fin_1= strtotime($txt_fecha_fin_1['th_idi_fecha_fin_idioma']);
+            $txt_fecha_fin_2 = strtotime($txt_fecha_fin_2['th_idi_fecha_fin_idioma']);
+            return $txt_fecha_fin_2 <=> $txt_fecha_fin_1; 
+        });
+
+        foreach ($datos as $key => $value) {
+
+            $fecha_fin = $value['th_idi_fecha_fin_idioma'] == '' ? 'Actualidad' : $value['th_idi_fecha_fin_idioma'];
+
+
+
+            $texto .= 
+                <<<HTML
+                    <div class="row mb-col">
+                        <div class="col-10">
+                            <h6 class="fw-bold">{$value['th_idi_nombre_idioma']}</h6>
+                            <p class="m-0">{$value['th_idi_nivel']}</p>
+                            <p class="m-0">{$value['th_idi_institucion']} </p>
+                            <p class="m-0">{$value['th_idi_fecha_inicio_idioma']} - {$fecha_fin}</p>
+                        </div>
+                        <div class="col-2 d-flex justify-content-end align-items-start">
+                            <button class="btn" style="color: white;" onclick="abrir_modal_idiomas({$value['_id']});">
+                                <i class="text-dark bx bx-pencil bx-sm"></i>
+                            </button>
+                        </div>
+                    </div>
+                HTML;
+        }
+
+        return $texto;
+    }
+
+    function listar_modal($id)
+    {
         if ($id == '') {
-            $datos = $this->modelo->where('th_pos_estado', 1)->listar();
+            $datos = $this->modelo->where('th_idi_estado', 0)->listar();
         } else {
-            $datos = $this->modelo->where('th_pos_id', $id)->listar();
+            $datos = $this->modelo->where('th_idi_id', $id)->listar();
         }
         return $datos;
     }
 
     function insertar_editar($parametros)
     {
-       //print_r($parametros); exit(); die();
-
         $datos = array(
-            array('campo' => 'th_pos_primer_nombre', 'dato' => $parametros['txt_primer_nombre']),
-            array('campo' => 'th_pos_segundo_nombre', 'dato' => $parametros['txt_segundo_nombre']),
-            array('campo' => 'th_pos_primer_apellido', 'dato' => $parametros['txt_primer_apellido']),
-            array('campo' => 'th_pos_segundo_apellido', 'dato' => $parametros['txt_segundo_apellido']),
-            array('campo' => 'th_pos_cedula', 'dato' => $parametros['txt_numero_cedula']),
-            array('campo' => 'th_pos_sexo', 'dato' => $parametros['ddl_sexo']),
-            array('campo' => 'th_prov_id', 'dato' => $parametros['ddl_provincias']),
-            array('campo' => 'th_ciu_id', 'dato' => $parametros['ddl_ciudad']),
-            array('campo' => 'th_parr_id', 'dato' => $parametros['ddl_parroquia']),
-            array('campo' => 'th_pos_direccion', 'dato' => $parametros['txt_direccion']),
-            array('campo' => 'th_pos_postal', 'dato' => $parametros['txt_codigo_postal']),
-            array('campo' => 'th_pos_fecha_nacimiento', 'dato' => $parametros['txt_fecha_nacimiento']),
-            array('campo' => 'th_pos_nacionalidad', 'dato' => $parametros['ddl_nacionalidad']),
-            array('campo' => 'th_pos_estado_civil', 'dato' => $parametros['ddl_estado_civil']),
-            array('campo' => 'th_pos_telefono_1', 'dato' => $parametros['txt_telefono_1']),
-            array('campo' => 'th_pos_telefono_2', 'dato' => $parametros['txt_telefono_2']),
-            array('campo' => 'th_pos_correo', 'dato' => $parametros['txt_correo']),
-
+            array('campo' => 'th_pos_id', 'dato' => $parametros['id_postulante']),
+            array('campo' => 'th_idi_nombre_idioma', 'dato' => $parametros['ddl_seleccionar_idioma']),
+            array('campo' => 'th_idi_nivel', 'dato' => $parametros['ddl_dominio_idioma']),
+            array('campo' => 'th_idi_institucion', 'dato' => $parametros['txt_institucion_1']),
+            array('campo' => 'th_idi_fecha_inicio_idioma', 'dato' => $parametros['txt_fecha_inicio_idioma']),
+            array('campo' => 'th_idi_fecha_fin_idioma', 'dato' => $parametros['txt_fecha_fin_idioma']),
+            
         );
-
+       
+        // return $datos;
         if ($parametros['_id'] == '') {
-            if (count($this->modelo->where('th_pos_cedula', $parametros['txt_numero_cedula'])->listar()) == 0) {
-                $datos = $this->modelo->insertar($datos);
-            } else {
-                return -2;
-            }
+            $datos = $this->modelo->insertar($datos);
         } else {
-            $where[0]['campo'] = 'th_pos_id';
+            $where[0]['campo'] = 'th_idi_id';
             $where[0]['dato'] = $parametros['_id'];
             $datos = $this->modelo->editar($datos, $where);
         }
@@ -80,14 +109,13 @@ class th_pos_idiomasC
     function eliminar($id)
     {
         $datos = array(
-            array('campo' => 'th_pos_estado', 'dato' => 0),
+            array('campo' => 'th_idi_estado', 'dato' => 0),
         );
 
-        $where[0]['campo'] = 'th_pos_id';
-        $where[0]['dato'] = $id;
+        $where[0]['campo'] = 'th_idi_id';
+        $where[0]['dato'] = strval($id);
+        $datos = $this->modelo->eliminar($where);
 
-        $datos = $this->modelo->editar($datos, $where);
         return $datos;
     }
-
 }

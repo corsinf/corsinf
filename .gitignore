@@ -1,7 +1,11 @@
-<<<<<<< HEAD
+# Ignorar archivo específico
 /db/db.php
-/TEMP//TEMP/
+
+# Ignorar carpeta TEMP en el nivel raíz
 /TEMP/
-=======
-/db/db.php/TEMP/
->>>>>>> d5b40b1d5b3e20e5dcb85d0d0866aea5244585c0
+
+# Ignorar cualquier carpeta TEMP en cualquier nivel del proyecto
+**/TEMP/
+
+#Ignorario la carpeta REPOSITORIO
+/REPOSITORIO/

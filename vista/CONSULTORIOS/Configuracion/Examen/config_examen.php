@@ -489,7 +489,7 @@
                 <div class="row">
                     <div class="col-12">
                         <label for="sa_pac_tabla">Exámen <label class="text-danger">*</label></label>
-                        <input type="text" class="form-control form-control-sm" id="txt_examen" name="txt_examen" oninput="textoMinusculas(this)">
+                        <input type="text" class="form-control form-control-sm" id="txt_examen" name="txt_examen" oninput="texto_minusculas(this)">
                         <span class="font-10 text-danger">*El texto se guardará en minúsculas.</span>
                     </div>
                 </div>

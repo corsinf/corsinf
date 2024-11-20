@@ -26,7 +26,11 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                 {
                     data: null,
                     render: function(data, type, item) {
-                        salida = minutos_formato_hora(item.hora_entrada) + ' - ' + minutos_formato_hora(item.hora_salida);
+                        mensaje = '';
+                        if(item.turno_nocturno == 1){
+                            mensaje = ' (siguiente día)';
+                        }
+                        salida = minutos_formato_hora(item.hora_entrada) + ' - ' + minutos_formato_hora(item.hora_salida) + mensaje;
                         return salida;
                     }
                 },

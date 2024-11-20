@@ -411,7 +411,7 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                             <div class="row mb-col">
                                 <div class="col-md-4 ">
                                     <label for="txt_host" class="form-label">IP/Host </label>
-                                    <input type="text" class="form-control form-control-sm no_caracteres" id="txt_host" name="txt_host" maxlength="50" oninput="textoMinusculas(this);" readonly>
+                                    <input type="text" class="form-control form-control-sm no_caracteres" id="txt_host" name="txt_host" maxlength="50" oninput="texto_minusculas(this);" readonly>
                                 </div>
 
                                 <div class="col-md-2 ">

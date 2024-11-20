@@ -16,6 +16,8 @@
             },
             dataType: 'json',
             success: function(response) {
+                console.log('response');
+                console.log(response);
                 $('#pnl_referencias_laborales').html(response);
             }
         });
@@ -35,6 +37,8 @@
                 $('#txt_nombre_referencia').val(response[0].th_refl_nombre_referencia);
                 $('#txt_telefono_referencia').val(response[0].th_refl_telefono_referencia);
                 $('#txt_ruta_guardada_carta_recomendacion').val(response[0].th_refl_carta_recomendacion);
+                $('#txt_referencia_correo').val(response[0].th_refl_correo);
+                $('#txt_referencia_nombre_empresa').val(response[0].th_refl_nombre_empresa);
 
             }
         });
@@ -60,7 +64,7 @@
         // console.log([...form_data.values()]);
         //return;
 
-        if ($("#form_referencias_laborales").valid()) { 
+        if ($("#form_referencias_laborales").valid()) {
             $.ajax({
                 url: '../controlador/PASANTES/02_ADRIAN/POSTULANTES/th_referencias_laboralesC.php?insertar=true',
                 type: 'post',
@@ -157,7 +161,9 @@
         $('#txt_telefono_referencia').val('');
         $('#txt_copia_carta_recomendacion').val('');
         $('#txt_referencias_laborales_id').val('');
-        $('#txt_ruta_guardada_carta_recomendacion').val('')
+        $('#txt_ruta_guardada_carta_recomendacion').val('');
+        $('#txt_referencia_correo').val('');
+        $('#txt_referencia_nombre_empresa').val('');
 
         //Limpiar validaciones
         $("#form_referencias_laborales").validate().resetForm();
@@ -168,7 +174,8 @@
         $('#btn_guardar_referencia_laboral').html('Agregar');
     }
 
-    function definir_ruta_iframe(url) {
+    function definir_ruta_iframe_referencias_laborales(url) {
+        $('#modal_ver_pdf_referencias_laborales').modal('show');
         var cambiar_ruta = $('#iframe_referencias_laborales_pdf').attr('src', url);
     }
 
@@ -218,6 +225,20 @@
 
                     <div class="row mb-col">
                         <div class="col-md-12">
+                            <label for="txt_referencia_correo" class="form-label form-label-sm">Correo del empleador <label style="color: red;">*</label></label>
+                            <input type="email" class="form-control form-control-sm" name="txt_referencia_correo" id="txt_referencia_correo" placeholder="Escriba el correo del empleador" maxlength="100">
+                        </div>
+                    </div>
+
+                    <div class="row mb-col">
+                        <div class="col-md-12">
+                            <label for="txt_referencia_nombre_empresa" class="form-label form-label-sm">Empresa/Institución <label style="color: red;">*</label></label>
+                            <input type="text" class="form-control form-control-sm no_caracteres" name="txt_referencia_nombre_empresa" id="txt_referencia_nombre_empresa"  maxlength="100">
+                        </div>
+                    </div>
+
+                    <div class="row mb-col">
+                        <div class="col-md-12">
                             <label for="txt_copia_carta_recomendacion" class="form-label form-label-sm">Copia de la carta de recomendación <label style="color: red;">*</label></label>
                             <input type="file" class="form-control form-control-sm" name="txt_copia_carta_recomendacion" id="txt_copia_carta_recomendacion" accept=".pdf">
                             <!-- <div class="pt-2"></div> -->
@@ -236,7 +257,7 @@
     </div>
 </div>
 
-<div class="modal" id="modal_ver_pdf" tabindex="-1" aria-modal="true" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
+<div class="modal" id="modal_ver_pdf_referencias_laborales" tabindex="-1" aria-modal="true" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
     <div class="modal-dialog modal-dialog-centered modal-xl">
         <div class="modal-content">
 
@@ -267,6 +288,12 @@
                     required: true,
                 },
                 txt_copia_carta_recomendacion: {
+                    required: true,
+                },
+                txt_referencia_correo: {
+                    required: true,
+                },
+                txt_referencia_nombre_empresa: {
                     required: true,
                 },
             },
