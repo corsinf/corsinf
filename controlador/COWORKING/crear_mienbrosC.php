@@ -7,10 +7,13 @@ $id_miembro = isset($_GET['id_miembro']) ? intval($_GET['id_miembro']) : 0;
 $id_sala = isset($_POST['id_sala']) ? $_POST['id_sala'] : '';
 
 
+
 if (isset($_GET['generarPDFMiembros'])) {
     
     echo json_encode($controlador->generarPDFMiembros());
 }
+
+
 
 if (isset($_GET['generarPDFCompras'])) {
     
@@ -18,7 +21,10 @@ if (isset($_GET['generarPDFCompras'])) {
 }
 
 if (isset($_GET['lista_mienbro'])) {
-    echo json_encode($controlador->listar());
+    // print_r($_POST);die();
+    $parametros = $_POST['data'];
+    // print_r($parametros);die();
+    echo json_encode($controlador->listar($parametros));
 }
 
 
@@ -33,8 +39,10 @@ if (isset($_GET['listar_productossala'])) {
 
 
 if (isset($_GET['lista_compra'])) {
-    echo json_encode($controlador->compraslista());
+    $parametros = $_POST['data'];
+    echo json_encode($controlador->compraslista($parametros)); // Pasamos el ID del espacio al método
 }
+
 
 
 if (isset($_GET['lista_comprasala'])) {
@@ -158,9 +166,11 @@ class crear_mienbrosC
     }
 
 
-    function compraslista()
+    function compraslista($parametros)
     {
-        $slista = $this->modelo->compraslista();
+        $id = $parametros['id'];
+        $slista = $this->modelo->compraslista($id);
+        //print_r($slista); die();
 
         $str = '';
         foreach ($slista as $key => $value) {
@@ -206,9 +216,11 @@ class crear_mienbrosC
     }
 
 
-    function listar()
+    function listar($parametros)
     {
-        $slista = $this->modelo->listardebase();
+        //print_r($parametros);die();
+        $id = $parametros['id'];
+        $slista = $this->modelo->listardebase($id);
         $str = '';
         foreach ($slista as $key => $value) {
             $id_miembro = isset($value['id_miembro']) ? $value['id_miembro'] : 'desconocido';
@@ -224,7 +236,7 @@ class crear_mienbrosC
                         <td>' . $value['apellido_miembro'] . '</td>
                         <td>' . $value['telefono_miembro'] . '</td>
                         <td>' . $value['direccion_miembro'] . '</td>
-                        <td>' . $value['id_espacio'] . '</td>
+                        
                         <td>
                             <button type="button" onclick="eliminarMiembro(' . $id_miembro . ')" class="btn btn-danger btn-sm">
                                 <i class="bx bx-trash"></i>
