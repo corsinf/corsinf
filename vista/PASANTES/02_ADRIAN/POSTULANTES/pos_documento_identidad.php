@@ -166,7 +166,8 @@
         
         //Limpiar validaciones
         $("#form_documento_identidad").validate().resetForm();
-        $('.form-control').removeClass('is-valid is-invalid');
+        $('.form-control, .form-select').removeClass('is-valid is-invalid');
+      
 
         //Cambiar texto
         $('#lbl_titulo_documentos_identidad').html('Agregue un documento de identidad');
