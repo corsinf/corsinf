@@ -35,126 +35,74 @@
                 $('#txt_documentos_identificacion_id').val(response[0]._id);
 
                 $('#ddl_tipo_documento_identidad').val(response[0].th_poi_tipo);
-                $('#txt_cargar_documento_identidad').val(response[0].th_poi_ruta_archivo);
+                $('#txt_ruta_guardada_documentos_identidad').val(response[0].th_pos_documentos);
+                $('#txt_ruta_documentos_identidad').val(response[0].th_poi_ruta_archivo);
                 
             }
         });
     }
 
+            
+    
+
     function insertar_editar_documentos_identidad() {
 
-        var ddl_tipo_documento_identidad = $('#ddl_tipo_documento_identidad').val();
         
-       
-        var id_postulante = '<?= $id ?>';
-        var txt_idi_idiomas_id = $('#txt_idiomas_id').val();
+        
+        var form_data = new FormData(document.getElementById("form_documento_identidad")); 
 
-        var parametros_idiomas = {
-            //'_id': txt_idi_idiomas_id,
-            'id_postulante': id_postulante,
-            'ddl_seleccionar_idioma': ddl_seleccionar_idioma,
-            'ddl_dominio_idioma': ddl_dominio_idioma,
-            'txt_institucion_1': txt_institucion_1,
-            'txt_fecha_inicio_idioma': txt_fecha_inicio_idioma,
-            'txt_fecha_fin_idioma': txt_fecha_fin_idioma,
-            '_id': txt_idi_idiomas_id
+        var txt_id_documentos_identidad = $('#txt_documentos_identificacion_id').val();
+
+        if ($('#txt_ruta_documentos_identidad').val() === '' && txt_id_documentos_identidad != '') {
+            var txt_ruta_documentos_identidad = $('#txt_ruta_guardada_documentos_identidad').val()
+            $('#txt_ruta_documentos_identidad').rules("remove", "required");
+        } else {
+            var txt_ruta_documentos_identidad = $('#txt_ruta_documentos_identidad').val();
+            $('#txt_ruta_documentos_identidad').rules("add", {
+                required: true
+            });
         }
+        if ($("#form_documento_identidad").valid()) {
+            $.ajax({
+                url: '../controlador/PASANTES/02_ADRIAN/POSTULANTES/th_pos_documentosC.php?insertar=true',
+                type: 'post',
+                data: form_data,
+                contentType: false,
+                processData: false,
 
-        if ($("#form_agregar_idioma").valid()) {
-            // Si es válido, puedes proceder a enviar los datos por AJAX
-            console.log(parametros_idiomas)
-            insertar_idiomas(parametros_idiomas);
-        }
-
-    }
-
-    function insertar_documentos_identidad(parametros) {
-
-        $.ajax({
-            data: {
-                parametros: parametros
-            },
-            url: '../controlador/PASANTES/02_ADRIAN/POSTULANTES/th_pos_idiomasC.php?insertar=true',
-            type: 'post',
-            dataType: 'json',
-
-            success: function(response) {
-                if (response == 1) {
-                    Swal.fire('', 'Operacion realizada con exito.', 'success');
-                    <?php if (isset($_GET['id'])) { ?>
-                        cargar_datos_idiomas(<?= $id ?>);
-                        limpiar_campos_idiomas_modal();
-                    <?php } ?>
-                    $('#modal_agregar_idioma').modal('hide');
-                } else {
-                    Swal.fire('', 'Operación fallida', 'warning');
+                dataType: 'json',
+                success: function(response) {
+                    //console.log(response);
+                    if (response == -1) {
+                        Swal.fire({
+                            title: '',
+                            text: 'Algo extraño ha ocurrido, intente más tarde.',
+                            icon: 'error',
+                            allowOutsideClick: false,
+                            showConfirmButton: true,
+                            confirmButtonText: 'Cerrar'
+                        });
+                    } else if (response == -2) {
+                        Swal.fire({
+                            title: '',
+                            text: 'Asegúrese de que el archivo subido sea un PDF.',
+                            icon: 'error',
+                            allowOutsideClick: false,
+                            showConfirmButton: true,
+                            confirmButtonText: 'Cerrar'
+                        });
+                    } else if (response == 1) {
+                        Swal.fire('', 'Operación realizada con éxito.', 'success');
+                        <?php if (isset($_GET['id'])) { ?>
+                            cargar_datos_documentos_identidad(<?= $id ?>);
+                        <?php } ?>
+                        limpiar_parametros_documentos_identidad();
+                        $('#modal_agregar_documentos_identidad').modal('hide');
+                    }
                 }
-            }
-        });
+            });
+        }
     }
-
-        
-    
-    
-
-    // function insertar_editar_documentos_identidad() {
-
-        
-    //     //var ddl_tipo_documento_identidad = $('#ddl_tipo_documento_identidad').val();
-    //     var form_data = new FormData(document.getElementById("form_documento_identidad")); 
-
-    //     var txt_id_documentos_identidad = $('#txt_id_documentos_identidad').val();
-
-    //     if ($('#txt_copia_documentos_identidad').val() === '' && txt_id_referencias_laborales != '') {
-    //         var txt_copia_documentos_identidad = $('#txt_ruta_guardada_carta_recomendacion').val()
-    //         $('#txt_copia_documentos_identidad').rules("remove", "required");
-    //     } else {
-    //         var txt_copia_documentos_identidad = $('#txt_copia_documentos_identidad').val();
-    //         $('#txt_copia_documentos_identidad').rules("add", {
-    //             required: true
-    //         });
-    //     }
-    //     if ($("#form_documento_identidad").valid()) {
-    //         $.ajax({
-    //             url: '../controlador/PASANTES/02_ADRIAN/POSTULANTES/th_pos_documentosC.php?insertar=true',
-    //             type: 'post',
-    //             data: form_data,
-    //             contentType: false,
-    //             processData: false,
-
-    //             dataType: 'json',
-    //             success: function(response) {
-    //                 //console.log(response);
-    //                 if (response == -1) {
-    //                     Swal.fire({
-    //                         title: '',
-    //                         text: 'Algo extraño ha ocurrido, intente más tarde.',
-    //                         icon: 'error',
-    //                         allowOutsideClick: false,
-    //                         showConfirmButton: true,
-    //                         confirmButtonText: 'Cerrar'
-    //                     });
-    //                 } else if (response == -2) {
-    //                     Swal.fire({
-    //                         title: '',
-    //                         text: 'Asegúrese de que el archivo subido sea un PDF.',
-    //                         icon: 'error',
-    //                         allowOutsideClick: false,
-    //                         showConfirmButton: true,
-    //                         confirmButtonText: 'Cerrar'
-    //                     });
-    //                 } else if (response == 1) {
-    //                     Swal.fire('', 'Operación realizada con éxito.', 'success');
-    //                     <?php if (isset($_GET['id'])) { ?>
-    //                         cargar_datos_documentos_identidad(<?= $id ?>);
-    //                     <?php } ?>
-    //                     limpiar_parametros_documentos_identidad();
-    //                     $('#modal_agregar_documentos_identidad').modal('hide');
-    //                 }
-    //             }
-    //         });
-    //     }
-    // }
 
     
 //Funcion para editar el registro de documentos identidad
@@ -169,7 +117,7 @@
     }
 
     
-    function delete_datos_referencias_laborales() {
+    function delete_datos_documentos_identidad() {
         var id = $('#txt_documentos_identificacion_id').val();
         Swal.fire({
             title: 'Eliminar Registro?',
@@ -211,6 +159,10 @@
         //certificaciones capacitaciones
         $('#ddl_tipo_documento_identidad').val('');
         $('#txt_cargar_documento_identidad').val('');
+        $('#txt_ruta_documentos_identidad').val('');
+        
+        $('#txt_documentos_identificacion_id').val('');
+        $('#txt_ruta_guardada_documentos_identidad').val('');
         
         //Limpiar validaciones
         $("#form_documento_identidad").validate().resetForm();
@@ -246,7 +198,7 @@
 
             <!-- Modal Header -->
             <div class="modal-header">
-                <h6><label class="text-body-secondary fw-bold" id="lbl_nombre_idioma">Agregue un Documento de Identidad</small></h6>
+                <h6><label class="text-body-secondary fw-bold" id="lbl_titulo_documentos_identidad">Agregue un Documento de Identidad</small></h6>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="limpiar_parametros_documentos_identidad()"></button>
             </div>
 
@@ -254,6 +206,13 @@
             <form id="form_documento_identidad">
             <input type="hidden" >
                 <div class="modal-body"> 
+
+                    <input type="hidden" name="txt_documentos_identificacion_id" id="txt_documentos_identificacion_id">
+                    <input type="hidden" name="txt_postulante_cedula" id="txt_postulante_cedula">
+                    <input type="hidden" name="txt_postulante_id" id="txt_postulante_id">
+                    
+                    
+
 
                     <div class="row mb-col">
                         <div class="col-md-12">
@@ -269,6 +228,14 @@
                             </select>
                         </div>
                     </div>
+                    <div class="row mb-col">
+                        <div class="col-md-12">
+                            <label for="txt_ruta_documentos_identidad" class="form-label form-label-sm">Copia de la carta de recomendación <label style="color: red;">*</label></label>
+                            <input type="file" class="form-control form-control-sm" name="txt_ruta_documentos_identidad" id="txt_ruta_documentos_identidad" accept=".pdf">
+                            <!-- <div class="pt-2"></div> -->
+                            <input type="text" class="form-control form-control-sm" name="txt_ruta_guardada_documentos_identidad" id="txt_ruta_guardada_documentos_identidad" hidden>
+                        </div>
+                    </div>
 
                     
                 
@@ -276,17 +243,34 @@
                 </div>
                 <div class="modal-footer d-flex justify-content-center">
                     <button type="button" class="btn btn-success btn-sm px-4 m-1" id="btn_guardar_documentos_identidad" onclick="insertar_editar_documentos_identidad();">Agregar</button>
-                    <button type="button" class="btn btn-danger btn-sm px-4 m-1" id="btn_eliminar_formacion" onclick="delete_datos_referencias_laborales();">Eliminar</button>
+                    <button type="button" class="btn btn-danger btn-sm px-4 m-1" id="btn_eliminar_formacion" onclick="delete_datos_documentos_identidad();">Eliminar</button>
                 </div>
             </form>
         </div>
     </div>
 </div>
             
-        
+<div class="modal" id="modal_ver_pdf_documentos_identidad" tabindex="-1" aria-modal="true" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog modal-dialog-centered modal-xl">
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h5><small class="text-body-secondary" id="lbl_titulo_documentos_identidad">Documento Identidad</small></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="limpiar_parametros_iframe();"></button>
+            </div>
+            <!-- Modal body -->
+            <form id="form_documento_identidad">
+                <div class="modal-body d-flex justify-content-center">
+                    <iframe src='' id="iframe_documentos_identidad_pdf" frameborder="0" width="900px" height="700px"></iframe>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>       
 
 
-<!-- <script>
+<script>
     $(document).ready(function() {
         //Validación Documento de Identidad
         $("#form_documento_identidad").validate({
@@ -294,7 +278,7 @@
                 ddl_tipo_documento_identidad: {
                     required: true,
                 },
-                txt_cargar_documento_identidad: {
+                txt_ruta_documentos_identidad: {
                     required: true,
                 },
             },
@@ -302,7 +286,7 @@
                 ddl_tipo_documento_identidad: {
                     required: "Por favor eliga el documento de identidad que va a subir",
                 },
-                txt_cargar_documento_identidad: {
+                txt_ruta_documentos_identidad: {
                     required: "Por favor suba su documento de identidad",
                 },
             },
@@ -319,5 +303,5 @@
 
             }
         });
-    }) -->
-<!-- </script> -->
+    })
+</script>

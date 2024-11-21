@@ -73,9 +73,9 @@ class th_pos_documentosC
     function insertar_editar($file, $parametros)
     {
         $datos = array(
-            //array('campo' => 'th_pos_id', 'dato' => $parametros['txt_id_postulante']),
+            array('campo' => 'th_pos_id', 'dato' => $parametros['txt_postulante_id']),
             array('campo' => 'th_poi_tipo', 'dato' => $parametros['ddl_tipo_documento_identidad']),
-            array('campo' => 'th_poi_ruta_archivo', 'dato' => $parametros['txt_cargar_documento_identidad']),
+            //array('campo' => 'th_poi_ruta_archivo', 'dato' => $parametros['txt_cargar_documento_identidad']),
       
         );
 
@@ -93,7 +93,7 @@ class th_pos_documentosC
 
             $datos = $this->modelo->editar($datos, $where);
 
-            if ($file['txt_copia_documentos_identidad']['tmp_name'] != '' && $file['txt_copia_documentos_identidad']['tmp_name'] != null) {
+            if ($file['txt_ruta_documentos_identidad']['tmp_name'] != '' && $file['txt_ruta_documentos_identidad']['tmp_name'] != null) {
                 $datos = $this->guardar_archivo($file, $parametros, $id_documentos_identidad);
             }
         }
@@ -128,58 +128,58 @@ class th_pos_documentosC
         return $datos;
     }
 
-    private function guardar_archivo($file, $id_insertar_editar)
-{
-    $ruta = dirname(__DIR__, 4) . '/REPOSITORIO/TALENTO_HUMANO/DOCUMENTOS_IDENTIDAD/'; // Ruta fija para guardar los archivos.
+    private function guardar_archivo($file, $post, $id_insertar_editar)
+    {
+        $id_empresa = $_SESSION['INICIO']['ID_EMPRESA'];
+        $ruta = dirname(__DIR__, 4) . '/REPOSITORIO/TALENTO_HUMANO/' . $id_empresa . '/'; //ruta carpeta donde queremos copiar los archivos
+        $ruta .= $post['txt_postulante_cedula'] . '/' . 'DOCUMENTOS_IDENTIDAD/';
+        
+        
+        if (!file_exists($ruta)) {
+            mkdir($ruta, 0777, true);
+        }
 
-    // Crear la carpeta si no existe.
-    if (!file_exists($ruta)) {
-        mkdir($ruta, 0777, true);
-    }
+        if ($this->validar_formato_archivo($file) === 1) {
+            $uploadfile_temporal = $file['txt_ruta_documentos_identidad']['tmp_name'];
+            $extension = pathinfo($file['txt_ruta_documentos_identidad']['name'], PATHINFO_EXTENSION);
+            //Para referencias laborales
+            $nombre = 'documentos_identidad_' . $id_insertar_editar . '.' . $extension;
+            $nuevo_nom = $ruta . $nombre;
 
-    // Validar formato del archivo.
-    if ($this->validar_formato_archivo($file) === 1) {
-        $uploadfile_temporal = $file['txt_copia_documentos_identidad']['tmp_name'];
-        $extension = pathinfo($file['txt_copia_documentos_identidad']['name'], PATHINFO_EXTENSION);
+            $nombre_ruta = '../REPOSITORIO/TALENTO_HUMANO/' . $id_empresa . '/' . $post['txt_postulante_cedula'] . '/' . 'DOCUMENTOS_IDENTIDAD/';
+            $nombre_ruta .= $nombre;
+            //print_r($post); exit(); die();
 
-        // Nombrar el archivo con el ID recibido.
-        $nombre = 'referencia_laboral_' . $id_insertar_editar . '.' . $extension;
-        $nuevo_nom = $ruta . $nombre;
+            if (is_uploaded_file($uploadfile_temporal)) {
+                if (move_uploaded_file($uploadfile_temporal, $nuevo_nom)) {
 
-        // Ruta relativa para guardar en la base de datos.
-        $nombre_ruta = '../REPOSITORIO/TALENTO_HUMANO/DOCUMENTOS_IDENTIDAD/' . $nombre;
+                    $datos = array(
+                        array('campo' => 'th_poi_ruta_archivo', 'dato' => $nombre_ruta),
+                    );
 
-        // Verificar y mover el archivo.
-        if (is_uploaded_file($uploadfile_temporal)) {
-            if (move_uploaded_file($uploadfile_temporal, $nuevo_nom)) {
+                    $where = array(
+                        array('campo' => 'th_poi_id', 'dato' => $id_insertar_editar),
+                    );
 
-                // Preparar datos para actualizar en la base de datos.
-                $datos = array(
-                    array('campo' => 'th_poi_ruta_archivo', 'dato' => $nombre_ruta),
-                );
+                    // Ejecutar la actualización en la base de datos
+                    $base = $this->modelo->editar($datos, $where);
 
-                $where = array(
-                    array('campo' => 'th_poi_id', 'dato' => $id_insertar_editar),
-                );
-
-                // Ejecutar la actualización en la base de datos.
-                $base = $this->modelo->editar($datos, $where);
-
-                return $base == 1 ? 1 : -1;
+                    return $base == 1 ? 1 : -1;
+                } else {
+                    return -1;
+                }
             } else {
                 return -1;
             }
         } else {
-            return -1;
+            return -2;
         }
-    } else {
-        return -2;
     }
-}
+
 
 private function validar_formato_archivo($file)
 {
-    switch ($file['txt_copia_documentos_identidad']['type']) {
+    switch ($file['txt_ruta_documentos_identidad']['type']) {
         case 'application/pdf':
             return 1;
             break;
