@@ -21,12 +21,14 @@ class th_turnos_horarioM extends BaseModel
         if ($id_horario != '' && $id_horario != null) {
             $sql =
                 "SELECT
-                    th_tuh_id AS _id,
-                    th_tur_nombre AS nombre,
-                    th_tur_hora_entrada AS hora_entrada,
-                    th_tur_hora_salida AS hora_salida,
-                    th_tur_color AS color,
-                    th_tuh_dia AS dia
+                    tur_hor.th_tuh_id AS _id,
+                    tur.th_tur_nombre AS nombre,
+                    tur.th_tur_hora_entrada AS hora_entrada,
+                    tur.th_tur_hora_salida AS hora_salida,
+                    tur.th_tur_color AS color,
+                    tur_hor.th_tur_id AS id_turno,
+                    tur_hor.th_tuh_dia AS dia,
+                    th_hor_id AS id_horario
                 FROM
                 th_turnos_horario tur_hor
                 INNER JOIN th_turnos tur ON tur_hor.th_tur_id = tur.th_tur_id 

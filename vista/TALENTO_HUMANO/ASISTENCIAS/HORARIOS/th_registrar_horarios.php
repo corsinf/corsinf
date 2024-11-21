@@ -35,7 +35,7 @@ if (isset($_GET['_id'])) {
             type: 'post',
             dataType: 'json',
             success: function(response) {
-                console.log(response);
+                //console.log(response);
                 $('#txt_nombre').val(response[0].nombre);
                 $('#txt_tipo').val(response[0].tipo);
                 $('#txt_ciclos').val(response[0].ciclos);
@@ -66,7 +66,7 @@ if (isset($_GET['_id'])) {
             // Si es válido, puedes proceder a enviar los datos por AJAX
             insertar(parametros);
         }
-        console.log(parametros);
+        //console.log(parametros);
 
     }
 
@@ -144,9 +144,6 @@ if (isset($_GET['_id'])) {
 
     function cargar_turnos() {
         $.ajax({
-            // data: {
-            //     id: id
-            // },
             url: '../controlador/TALENTO_HUMANO/th_turnosC.php?listar=true',
             type: 'post',
             dataType: 'json',
@@ -167,7 +164,7 @@ if (isset($_GET['_id'])) {
                 });
                 $('#pnl_turnos').html(html); // Inserta el HTML generado en el contenedor
 
-                console.log(response);
+                //console.log(response);
                 inicializar_draggable();
             }
         });
@@ -190,7 +187,7 @@ if (isset($_GET['_id'])) {
 
 
     /* Estilo para el contenedor de eventos */
-    .event-container {
+    .event-contenedor {
         display: flex;
         overflow-x: auto;
         /* Para el scroll horizontal */
@@ -235,20 +232,39 @@ if (isset($_GET['_id'])) {
     }
 
     /* Opcional: estilo para el scrollbar si deseas personalizarlo */
-    .event-container::-webkit-scrollbar {
+    .event-contenedor::-webkit-scrollbar {
         height: 8px;
         /* Altura del scrollbar */
     }
 
-    .event-container::-webkit-scrollbar-thumb {
+    .event-contenedor::-webkit-scrollbar-thumb {
         background-color: #888;
         /* Color de la barra */
         border-radius: 10px;
     }
 
-    .event-container::-webkit-scrollbar-thumb:hover {
+    .event-contenedor::-webkit-scrollbar-thumb:hover {
         background-color: #555;
         /* Color de la barra al pasar el mouse */
+    }
+</style>
+
+<style>
+    /* Estilos para el contenedor del evento */
+    .event-content {
+        display: flex;
+        flex-direction: column;
+        /* Coloca los elementos en una columna */
+        justify-content: space-between;
+        /* Espacio uniforme entre los elementos */
+        height: 100%;
+        /* Asegúrate de que el contenido ocupe todo el alto del evento */
+        overflow: hidden;
+        /* Evita que el contenido desborde */
+        padding: 2px;
+        /* Establece el padding */
+        margin: 0;
+        /* Establece el margen a 0 */
     }
 </style>
 
@@ -400,7 +416,6 @@ if (isset($_GET['_id'])) {
                 /////////////////////////////////////////////////////////////////////////
                 /////////////////////////////////////////////////////////////////////////
 
-
                 var eventos_existentes = calendar.getEvents();
 
                 if (eventos_existentes.length != 0) {
@@ -419,9 +434,9 @@ if (isset($_GET['_id'])) {
                     });
 
                     // Contar cuántos eventos coinciden
-                    var conteoEventos = eventos_coincidentes.length;
+                    var conteo_eventos = eventos_coincidentes.length;
 
-                    if (conteoEventos > 1) {
+                    if (conteo_eventos > 1) {
                         // Mostrar mensaje de error y remover el evento
                         error_notificacion('Tenga en cuenta que solo puede asignar un turno por día en este rango.');
                         info.event.remove();
@@ -440,20 +455,109 @@ if (isset($_GET['_id'])) {
                 // });
             },
 
+            eventContent: function(arg) {
+                var fecha = arg.event.start;
+                var start_time = fecha ?
+                    fecha.toLocaleTimeString([], {
+                        hour: '2-digit',
+                        minute: '2-digit',
+                        hour12: false
+                    }) :
+                    "00:00";
 
+                var end_time = arg.event.end ?
+                    arg.event.end.toLocaleTimeString([], {
+                        hour: '2-digit',
+                        minute: '2-digit',
+                        hour12: false
+                    }) :
+                    "00:00";
 
+                var id_turno_horario = arg.event.extendedProps.id_turno_horario;
 
+                // Crear contenedor principal
+                var contenedor = document.createElement('div');
+                contenedor.className = 'event-content';
+
+                // Crear etiqueta para el tiempo del evento
+                var tiempo_evento = document.createElement('p');
+                tiempo_evento.className = 'event-time';
+                tiempo_evento.style.margin = '0';
+                tiempo_evento.style.fontSize = '9px';
+                tiempo_evento.textContent = `${start_time} - ${end_time}`;
+
+                // Crear etiqueta para el título del evento
+                var titulo_evento = document.createElement('p');
+                titulo_evento.className = 'event-title';
+                titulo_evento.style.margin = '0';
+                titulo_evento.style.fontSize = '12px';
+                titulo_evento.style.fontWeight = 'bold';
+                titulo_evento.textContent = arg.event.title;
+
+                // Botón de eliminar
+                var eliminar_boton = document.createElement('a');
+                eliminar_boton.title = 'Eliminar Turno';
+                eliminar_boton.className = 'btn btn-dark';
+                eliminar_boton.style.padding = '2px';
+                eliminar_boton.style.fontSize = '10px';
+                eliminar_boton.innerHTML = '<i class="bx bx-trash-alt me-0" style="font-size: 12px;"></i>';
+                eliminar_boton.onclick = function() {
+                    eliminar_evento(id_turno_horario, arg.event.title, arg.event);
+                };
+
+                // Botón de duplicar
+                var duplicar_boton = document.createElement('a');
+                duplicar_boton.title = 'Duplicar Turno';
+                duplicar_boton.className = 'btn btn-secondary';
+                duplicar_boton.style.padding = '2px';
+                duplicar_boton.style.fontSize = '10px';
+                duplicar_boton.innerHTML = '<i class="bx bxs-arrow-to-right me-0" style="font-size: 12px;"></i>';
+                // Asignar la función de duplicar al botón
+                duplicar_boton.onclick = function() {
+                    // Obtener la fecha del evento actual
+                    var fecha_actual = new Date(fecha); // Convertir a objeto Date
+                    var siguiente_dia = new Date(fecha_actual); // Copiar la fecha actual
+                    siguiente_dia.setDate(fecha_actual.getDate() + 1); // Incrementar en 1 día
+
+                    // Formatear la fecha al formato necesario (si es requerido, por ejemplo 'YYYY-MM-DD')
+                    var fecha_formateada = siguiente_dia.toISOString().split('T')[0];
+
+                    // Llamar a la función con la nueva fecha
+                    crear_turno_horario_igual(
+                        arg.event.title,
+                        start_time,
+                        end_time,
+                        fecha_formateada, // Pasar la fecha del día siguiente
+                        arg.event.extendedProps.id_turno,
+                        arg.event.backgroundColor
+                    );
+                }
+
+                // Contenedor de botones
+                var grupo_botones = document.createElement('div');
+                grupo_botones.className = 'btn-group';
+                grupo_botones.style.display = 'flex';
+                grupo_botones.style.justifyContent = 'flex-end';
+                grupo_botones.appendChild(eliminar_boton);
+                grupo_botones.appendChild(duplicar_boton);
+
+                // Ensamblar todo
+                contenedor.appendChild(tiempo_evento);
+                contenedor.appendChild(titulo_evento);
+                contenedor.appendChild(grupo_botones);
+
+                return {
+                    domNodes: [contenedor]
+                };
+            }
         });
 
-
-
-        <?php if (isset($_GET['_id'])) { ?>
-            cargar_turnos_horario(<?= $_id ?>);
-        <?php } else { ?>
-            calendar.render();
+        //Validacion para cuando se va a hacer un registro o editar
+        <?php if (isset($_GET['_id'])) { ?> cargar_turnos_horario(<?= $_id ?>);
+        <?php } else { ?> calendar.render();
         <?php }  ?>
 
-        // Manejar el clic en el botón
+        // Manejar el clic en el botón - Funcion para guardar o editar todo el formulario 
         document.getElementById('btn_guardar').addEventListener('click', function() {
             var events = calendar.getEvents();
 
@@ -513,15 +617,14 @@ if (isset($_GET['_id'])) {
                         fecha_dia_estatico = '2024-02-17';
                     }
 
-
-
                     calendar.addEvent({
                         //id: evento.id_turno,
                         title: (evento.nombre),
                         start: fecha_dia_estatico + 'T' + minutos_formato_hora(evento.hora_entrada),
                         end: fecha_dia_estatico + 'T' + minutos_formato_hora(evento.hora_salida),
                         extendedProps: {
-                            id_turno: evento._id,
+                            id_turno_horario: evento._id,
+                            id_turno: evento.id_turno,
                         },
 
                         color: evento.color
@@ -534,6 +637,125 @@ if (isset($_GET['_id'])) {
             }
         });
 
+    }
+
+    //Duplicar evento
+    function crear_turno_horario_igual(title, start_time, end_time, fecha, id_turno, color) {
+        // Combinar fecha y horas para crear el rango temporal del nuevo turno
+        var fecha_inicio_temporal = new Date(`${fecha}T${start_time}`);
+        var fecha_fin_temporal = new Date(`${fecha}T${end_time}`);
+
+        // Obtener todos los eventos existentes del calendario
+        var eventos_existentes = calendar.getEvents();
+
+        // Filtrar los eventos que coincidan en el rango
+        var eventos_coincidentes = eventos_existentes.filter(function(event) {
+            // Obtener el rango de fechas del evento existente
+            var inicio_evento_existente = new Date(event.start);
+            var fin_evento_existente = new Date(event.end);
+
+            // Validar si hay superposición de rangos
+            return (
+                (fecha_inicio_temporal >= inicio_evento_existente && fecha_inicio_temporal <= fin_evento_existente) || // Empieza dentro del rango
+                (fecha_fin_temporal >= inicio_evento_existente && fecha_fin_temporal <= fin_evento_existente) || // Termina dentro del rango
+                (fecha_inicio_temporal <= inicio_evento_existente && fecha_fin_temporal >= fin_evento_existente) // Contiene completamente al rango
+            );
+        });
+
+        // Validar si hay eventos coincidentes
+        if (eventos_coincidentes.length > 0) {
+            // Mostrar mensaje de error
+            error_notificacion('Tenga en cuenta que solo puede asignar un turno por día en este rango.');
+            return; // Detener la ejecución si hay conflictos
+        }
+
+        // Si no hay conflictos, crear el nuevo turno
+        var nuevo_turno = {
+            title: title,
+            start: `${fecha}T${start_time}`, // Combinar fecha y hora de inicio
+            end: `${fecha}T${end_time}`, // Combinar fecha y hora de fin
+            extendedProps: {
+                id_turno: id_turno // Relacionar con el turno original
+            },
+            color: color
+        };
+
+        // Agregar el evento al calendario
+        calendar.addEvent(nuevo_turno);
+    }
+
+    //Eliminar turnos - horario 
+    function eliminar_evento(id_turno_horario, titulo, evento) {
+
+        //alert(id_horarioD + ' - ' + titulo);
+
+        Swal.fire({
+            title: '¿Está seguro de eliminar el turno ' + titulo + '?',
+            text: 'Esta acción no se puede deshacer.',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Sí, estoy seguro.'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                if (id_turno_horario != null && id_turno_horario != '') {
+                    $.ajax({
+                        url: '../controlador/TALENTO_HUMANO/th_turnos_horarioC.php?eliminar=true',
+                        type: 'POST',
+                        data: {
+                            id: id_turno_horario
+                        },
+                        success: function(response) {
+                            Swal.fire('Éxito', 'La operación se realizó con éxito', 'success');
+                        },
+                        error: function() {
+                            Swal.fire('Error', 'Hubo un error en la operación', 'error');
+                        }
+                    });
+                }
+
+                evento.remove();
+            }
+        });
+    }
+
+    //Eliminar todos los turnos - horario 
+    function eliminar_todos_turnos_horarios(id_horario) {
+
+        Swal.fire({
+            title: '¿Está seguro de eliminar todos los turnos?',
+            text: 'Esta acción no se puede deshacer.',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Sí, estoy seguro.'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                if (id_horario != null && id_horario != '') {
+                    $.ajax({
+                        url: '../controlador/TALENTO_HUMANO/th_turnos_horarioC.php?eliminar_todos=true',
+                        type: 'POST',
+                        data: {
+                            id_horario: id_horario
+                        },
+                        success: function(response) {
+                            if (response == 1) {
+                                Swal.fire('Éxito', 'La operación se realizó con éxito', 'success');
+                            } else {
+                                Swal.fire('Error', 'Hubo un error en la operación', 'error');
+                            }
+                        },
+                        error: function() {
+                            Swal.fire('Error', 'Hubo un error en la operación', 'error');
+                        }
+                    });
+                }
+            }
+        });
+
+        calendar.removeAllEvents();
     }
 
     //Formatear la fecha de la libreria calendar
@@ -659,7 +881,7 @@ if (isset($_GET['_id'])) {
 
                                 <div class="col-md-6">
                                     <label for="txt_tipo" class="form-label">Tipo </label>
-                                    <select class="form-select form-select-sm" id="txt_tipo" name="txt_tipo">
+                                    <select class="form-select form-select-sm" id="txt_tipo" name="txt_tipo" disabled>
                                         <option value="1">Diario</option>
                                         <option selected value="7">Semanal</option>
                                         <option value="31">Mensual</option>
@@ -673,7 +895,7 @@ if (isset($_GET['_id'])) {
                                 </div>
 
                                 <div class="col-md-3">
-                                    <label for="txt_ciclo" class="form-label">Ciclo </label>
+                                    <label for="txt_ciclos" class="form-label">Ciclo </label>
                                     <input type="text" class="form-control form-control-sm no_caracteres" id="txt_ciclos" name="txt_ciclos">
                                 </div>
 
@@ -688,7 +910,7 @@ if (isset($_GET['_id'])) {
 
                                 <div class="row mb-col">
                                     <div class="col-md-12 col-12">
-                                        <div class="event-container border border-2 bg-secondary border-opacity-10 bg-opacity-10" id="pnl_turnos">
+                                        <div class="event-contenedor border border-2 bg-secondary border-opacity-10 bg-opacity-10" id="pnl_turnos">
                                             <!-- <div class="external-event" data-title="Evento A" data-start="07:00:00" data-end="15:30:00">
                                                 <div class="event-title text-center">Evento A</div>
                                                 <div class="event-body text-center">07:00 - 15:30</div>
@@ -704,6 +926,14 @@ if (isset($_GET['_id'])) {
                                         <div class="col-md-12">
                                             <div id="calendar"></div>
                                         </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row mb-col">
+                                <div class="col-md-10 col-12">
+                                    <div class="d-flex justify-content-end">
+                                        <button type="button" class="btn btn-outline-danger btn-sm px-4 m-0" onclick="eliminar_todos_turnos_horarios(<?= $_id ?>);"><i class="bx bxs-trash pb-1 me-0"></i> Eliminar todos los eventos</button>
                                     </div>
                                 </div>
                             </div>

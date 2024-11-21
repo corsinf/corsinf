@@ -9,6 +9,13 @@ if (isset($_GET['listar'])) {
     echo json_encode($controlador->listar($_POST['id'] ?? ''));
 }
 
+if (isset($_GET['eliminar'])) {
+    echo json_encode($controlador->eliminar($_POST['id']));
+}
+
+if (isset($_GET['eliminar_todos'])) {
+    echo json_encode($controlador->eliminar_todos($_POST['id_horario']));
+}
 
 class th_turnos_horarioC
 {
@@ -29,4 +36,25 @@ class th_turnos_horarioC
 
         return $datos;
     }
+
+    function eliminar($id)
+    {
+        $datos = array(
+            array('campo' => 'th_tuh_id', 'dato' => $id),
+        );
+
+        $datos = $this->modelo->eliminar($datos);
+        return $datos;
+    }
+
+    function eliminar_todos($id_horario)
+    {
+        $datos = array(
+            array('campo' => 'th_hor_id', 'dato' => $id_horario),
+        );
+
+        $datos = $this->modelo->eliminar($datos);
+        return $datos;
+    }
+
 }
