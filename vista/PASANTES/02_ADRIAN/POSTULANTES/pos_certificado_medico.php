@@ -11,7 +11,7 @@
 
         if ($("#form_certificado_medico").valid()) {
             // Si es válido, puedes proceder a enviar los datos por AJAX
-            console.log(parametros_certificado_medico)
+            //console.log(parametros_certificado_medico)
         }
     }
 </script>

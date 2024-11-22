@@ -62,7 +62,7 @@
             dataType: 'json',
             success: function(response) {
                 $('#pnl_aptitudes_tecnicas').html(response);
-                console.log(response)
+                //console.log(response)
             }
         });
     }
@@ -77,7 +77,7 @@
             dataType: 'json',
             success: function(response) {
                 $('#pnl_aptitudes_blandas').html(response);
-                console.log(response)
+                //console.log(response)
             }
         });
     }

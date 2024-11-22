@@ -88,7 +88,7 @@
 
         if ($("#form_experiencia_laboral").valid()) {
             // Si es válido, puedes proceder a enviar los datos por AJAX
-            console.log(parametros_experiencia_laboral)
+            //console.log(parametros_experiencia_laboral)
             insertar_experiencia_laboral(parametros_experiencia_laboral);
         }
     }

@@ -83,7 +83,7 @@
         if ((txt_nombre_contacto_emergencia) != '' && (txt_nombre_contacto_emergencia) != null &&
             (txt_telefono_contacto_emergencia) != '' && (txt_telefono_contacto_emergencia) != null) {
             // Si es válido, puedes proceder a enviar los datos por AJAX
-            console.log(parametros_guardar_contacto_emergencia);
+            //console.log(parametros_guardar_contacto_emergencia);
             guardar_contacto_emergencia(parametros_guardar_contacto_emergencia);
         } else {
             Swal.fire('', 'No se pueden guardar campos vacios', 'warning')

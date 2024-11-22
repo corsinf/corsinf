@@ -31,10 +31,8 @@
             dataType: 'json',
             success: function(response) {
                 $('#txt_certificaciones_capacitaciones_id').val(response[0]._id);
-                $('#txt_ruta_guardada_certificaciones_capacitaciones').val(response[0].th_cert_certificaciones_capacitaciones);
+                $('#txt_ruta_guardada_certificaciones_capacitaciones').val(response[0].th_cert_ruta_archivo);
                 $('#txt_nombre_curso').val(response[0].th_cert_nombre_curso);
-                $('#txt_ruta_archivo').val(response[0].th_cert_ruta_archivo);
-                
             }
         });
     }
@@ -215,7 +213,7 @@
                         <div class="col-md-12">
                             <label for="txt_ruta_archivo" class="form-label form-label-sm">1. PDF del Certificado obtenido <label style="color: red;">*</label></label>
                             <input type="file" class="form-control form-control-sm" name="txt_ruta_archivo" id="txt_ruta_archivo" accept=".pdf" value="" placeholder="">                          
-                            <input type="text" class="form-control form-control-sm" name="txt_ruta_guardada_certificaciones_capacitaciones" id="txt_ruta_guardada_certificaciones_capacitaciones" hidden>
+                            <input type="hidden" class="form-control form-control-sm" name="txt_ruta_guardada_certificaciones_capacitaciones" id="txt_ruta_guardada_certificaciones_capacitaciones">
                         </div>
                     </div>
                 </div>
