@@ -204,14 +204,14 @@
                 
                     <div class="row mb-col">
                         <div class="col-md-12">
-                            <label for="txt_nombre_curso" class="form-label form-label-sm">Nombre del curso o capacitación <label style="color: red;">*</label></label>
+                            <label for="txt_nombre_curso" class="form-label form-label-sm">Nombre del curso o capacitación </label>
                             <input type="text" class="form-control form-control-sm " name="txt_nombre_curso" id="txt_nombre_curso" value="" placeholder="Escriba el nombre del curso o capacitación">
                         </div>
                     </div>
                     
                     <div class="row mb-col">
                         <div class="col-md-12">
-                            <label for="txt_ruta_archivo" class="form-label form-label-sm">1. PDF del Certificado obtenido <label style="color: red;">*</label></label>
+                            <label for="txt_ruta_archivo" class="form-label form-label-sm">1. PDF del Certificado obtenido </label>
                             <input type="file" class="form-control form-control-sm" name="txt_ruta_archivo" id="txt_ruta_archivo" accept=".pdf" value="" placeholder="">                          
                             <input type="hidden" class="form-control form-control-sm" name="txt_ruta_guardada_certificaciones_capacitaciones" id="txt_ruta_guardada_certificaciones_capacitaciones">
                         </div>
@@ -248,6 +248,9 @@
 
 <script>
     $(document).ready(function() {
+        agregar_asterisco_campo_obligatorio('txt_nombre_curso');
+        agregar_asterisco_campo_obligatorio('txt_ruta_archivo');
+
         //Validación Certificaciones y Capacitaciones
         $("#form_certificaciones_capacitaciones").validate({
             rules: {

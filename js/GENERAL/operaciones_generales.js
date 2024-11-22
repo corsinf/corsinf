@@ -232,7 +232,7 @@ function hora_a_minutos(hora) {
 
 //Funcion para agregar asterisco en un label para resaltar que es campo obligatorio
 function agregar_asterisco_campo_obligatorio(label) {
-    $('label[for="' + label + '"]').append('<label style="color: red;">*</label>');
+    $('label[for="' + label + '"]').append('<b style="color: red;">*</b>');
 }
 
 //calcula la edad en base a un input date y lo coloca en un input
