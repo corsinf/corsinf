@@ -79,9 +79,12 @@ class th_contratos_trabajosC
              array('campo' => 'th_ctr_fecha_inicio_contrato', 'dato' => $parametros['txt_fecha_inicio_contrato']),
              array('campo' => 'th_ctr_fecha_fin_contrato', 'dato' => $parametros['txt_fecha_fin_contrato']),
              array('campo' => 'th_pos_id', 'dato' => $parametros['txt_postulante_id']),
+            
+             array('campo' => 'th_ctr_cbx_fecha_fin_contrato', 'dato' => $parametros['cbx_fecha_fin_contrato']),
          );
  
- 
+         $in_stc_cbx_fecha_fin_contrato = (isset($parametros['cbx_fecha_fin_contrato']) && $parametros['cbx_fecha_fin_contrato'] == 'true') ? 1 : 0;
+         
          $txt_id_contratos_trabajos = $parametros['txt_contratos_trabajos_id'];
  
          if ($txt_id_contratos_trabajos == '') {

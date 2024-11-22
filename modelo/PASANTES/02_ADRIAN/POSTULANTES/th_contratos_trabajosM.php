@@ -15,9 +15,10 @@ class th_contratos_trabajosM extends BaseModel
         'th_ctr_ruta_archivo',
         'th_ctr_fecha_inicio_contrato',
         'th_ctr_fecha_fin_contrato',
-        'th_ctr_estado',
+        'th_ctr_estado',        
         'th_ctr_fecha_creacion',
         'th_ctr_fecha_modificacion',
+        'th_ctr_cbx_fecha_fin_experiencia',
         
 
     ];
