@@ -88,7 +88,7 @@
 
         if ($("#form_experiencia_laboral").valid()) {
             // Si es válido, puedes proceder a enviar los datos por AJAX
-            console.log(parametros_experiencia_laboral)
+            //console.log(parametros_experiencia_laboral)
             insertar_experiencia_laboral(parametros_experiencia_laboral);
         }
     }
@@ -249,7 +249,7 @@
 
             <!-- Modal Header -->
             <div class="modal-header">
-                <h6><label class="text-body-secondary fw-bold" id="lbl_titulo_experiencia_laboral">Agregue una experiencia laboral</small></h6>
+                <h6><small class="text-body-secondary fw-bold" id="lbl_titulo_experiencia_laboral">Agregue una experiencia laboral</small></h6>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="limpiar_campos_experiencia_laboral_modal()"></button>
             </div>
             <!-- Modal body -->

@@ -56,7 +56,7 @@
 
         if ($("#form_estado_laboral").valid()) {
             // Si es válido, puedes proceder a enviar los datos por AJAX
-            console.log(parametros_estado_laboral);
+            //console.log(parametros_estado_laboral);
             insertar_estado_laboral(parametros_estado_laboral);
         }
 

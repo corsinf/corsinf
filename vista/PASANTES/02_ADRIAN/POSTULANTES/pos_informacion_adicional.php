@@ -25,7 +25,7 @@
                 direccion_completa = response[0].th_posa_direccion_calle + ', ' + response[0].th_posa_direccion_numero + ', ' + response[0].th_posa_direccion_ciudad + ', ' + response[0].th_posa_direccion_estado + ', ' + response[0].th_posa_direccion_codpos
                 $('#txt_direccion_v').html(direccion_completa);
 
-                console.log(response);
+                //console.log(response);
             }
         });
     }
@@ -53,7 +53,7 @@
 
         if ($("#form_informacion_adicional").valid()) {
             // Si es válido, puedes proceder a enviar los datos por AJAX
-            console.log(parametros_informacion_adicional)
+            //console.log(parametros_informacion_adicional)
             insertar_informacion_adicional(parametros_informacion_adicional)
         }
 

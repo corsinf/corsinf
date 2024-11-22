@@ -66,7 +66,7 @@
 
         if ($("#form_agregar_idioma").valid()) {
             // Si es válido, puedes proceder a enviar los datos por AJAX
-            console.log(parametros_idiomas)
+            //console.log(parametros_idiomas)
             insertar_idiomas(parametros_idiomas);
         }
 
