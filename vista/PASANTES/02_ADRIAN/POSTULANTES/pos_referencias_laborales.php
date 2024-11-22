@@ -16,8 +16,6 @@
             },
             dataType: 'json',
             success: function(response) {
-                console.log('response');
-                console.log(response);
                 $('#pnl_referencias_laborales').html(response);
             }
         });

@@ -51,7 +51,7 @@ if (isset($_GET['id'])) {
                 calcular_edad('txt_edad', response[0].th_pos_fecha_nacimiento);
                 cargar_datos_ciudades(response[0].th_ciu_id);
 
-                console.log(response[0].th_ciu_id);
+                //console.log(response[0].th_ciu_id);
             },
         });
     }
@@ -100,7 +100,7 @@ if (isset($_GET['id'])) {
 
         if ($("#registrar_postulantes").valid()) {
             // Si es válido, puedes proceder a enviar los datos por AJAX
-            console.log(parametros);
+            //.log(parametros);
             insertar(parametros);
         }
 

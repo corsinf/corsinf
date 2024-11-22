@@ -16,9 +16,23 @@
             },
             dataType: 'json',
             success: function(response) {
-                console.log('response');
-                console.log(response);
                 $('#pnl_documentos_identidad').html(response);
+            }
+        });
+    }
+
+    function obtener_documentos_repetidos() {
+        documentos_identidad = $('input[name="documentos_identidad[]"]').map(function() {
+            return $(this).val();
+        }).get();
+
+        console.log(documentos_identidad);
+
+        $('#ddl_tipo_documento_identidad option').each(function() {
+            if (documentos_identidad.includes($(this).val())) {
+                $(this).hide();
+            } else {
+                $(this).show();
             }
         });
     }
@@ -36,16 +50,11 @@
 
                 $('#ddl_tipo_documento_identidad').val(response[0].th_poi_tipo);
                 $('#txt_ruta_guardada_documentos_identidad').val(response[0].th_pos_documentos);
-                $('#txt_ruta_documentos_identidad').val(response[0].th_poi_ruta_archivo);
-
             }
         });
     }
 
     function insertar_editar_documentos_identidad() {
-
-
-
         var form_data = new FormData(document.getElementById("form_documento_identidad"));
 
         var txt_id_documentos_identidad = $('#txt_documentos_identificacion_id').val();
@@ -180,6 +189,7 @@
     }
 </script>
 
+
 <div id="pnl_documentos_identidad">
 
 </div>
@@ -207,7 +217,7 @@
                     <div class="row mb-col">
                         <div class="col-md-12">
                             <label for="ddl_tipo_documento_identidad" class="form-label form-label-sm">Tipo de Documento <label style="color: red;">*</label></label>
-                            <select class="form-select form-select-sm" id="ddl_tipo_documento_identidad" name="ddl_tipo_documento_identidad">
+                            <select class="form-select form-select-sm" id="ddl_tipo_documento_identidad" name="ddl_tipo_documento_identidad" onclick="obtener_documentos_repetidos();">
                                 <option selected disabled value="">-- Selecciona una opción --</option>
                                 <option value="Cédula de Identidad">Cédula de Identidad</option>
                                 <option value="Pasaporte">Pasaporte</option>
@@ -223,7 +233,7 @@
                             <label for="txt_ruta_documentos_identidad" class="form-label form-label-sm">Copia de la carta de recomendación <label style="color: red;">*</label></label>
                             <input type="file" class="form-control form-control-sm" name="txt_ruta_documentos_identidad" id="txt_ruta_documentos_identidad" accept=".pdf">
                             <!-- <div class="pt-2"></div> -->
-                            <input type="text" class="form-control form-control-sm" name="txt_ruta_guardada_documentos_identidad" id="txt_ruta_guardada_documentos_identidad" hidden>
+                            <input type="hidden" class="form-control form-control-sm" name="txt_ruta_guardada_documentos_identidad" id="txt_ruta_guardada_documentos_identidad">
                         </div>
                     </div>
 

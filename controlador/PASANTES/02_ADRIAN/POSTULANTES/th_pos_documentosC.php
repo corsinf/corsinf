@@ -36,7 +36,11 @@ class th_pos_documentosC
 
         $texto = '';
         foreach ($datos as $key => $value) {
-            $url_pdf = '../REPOSITORIO/TALENTO_HUMANO.pdf';
+
+            $documentos_repetidos = '';
+            if ($value['th_poi_estado'] == 1) {
+                $documentos_repetidos .= '<input type="hidden" name="documentos_identidad[]" value="' . $value['th_poi_tipo'] . '">';
+            }
 
             $texto .=
                 <<<HTML
@@ -47,11 +51,14 @@ class th_pos_documentosC
                           
                         </div>
                         <div class="col-2 d-flex justify-content-end align-items-start">
-                            <button class="btn" style="color: white;" onclick="abrir_modal_documentos_identidad({$value['_id']});">
+                            <button class="btn" style="color: white;" onclick="abrir_modal_documentos_identidad('{$value['_id']}');">
                                 <i class="text-dark bx bx-pencil bx-sm"></i>
                             </button>
                         </div>
                     </div>
+
+                    {$documentos_repetidos}
+
                 HTML;
         }
         return $texto;
