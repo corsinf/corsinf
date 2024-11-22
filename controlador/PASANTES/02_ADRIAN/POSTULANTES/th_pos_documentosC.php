@@ -36,9 +36,7 @@ class th_pos_documentosC
 
         $texto = '';
         foreach ($datos as $key => $value) {
-            $url_pdf = '../REPOSITORIO/TALENTO_HUMANO.pdf';   
-
-            //$fecha_fin = $value['th_expl_fecha_fin_experiencia'] == '' ? 'Actualidad' : $value['th_expl_fecha_fin_experiencia'];
+            $url_pdf = '../REPOSITORIO/TALENTO_HUMANO.pdf';
 
             $texto .=
                 <<<HTML
@@ -75,8 +73,6 @@ class th_pos_documentosC
         $datos = array(
             array('campo' => 'th_pos_id', 'dato' => $parametros['txt_postulante_id']),
             array('campo' => 'th_poi_tipo', 'dato' => $parametros['ddl_tipo_documento_identidad']),
-            //array('campo' => 'th_poi_ruta_archivo', 'dato' => $parametros['txt_cargar_documento_identidad']),
-      
         );
 
         $id_documentos_identidad = $parametros['txt_documentos_identificacion_id'];
@@ -99,7 +95,6 @@ class th_pos_documentosC
         }
 
         return $datos;
-
     }
 
     function eliminar($id)
@@ -133,8 +128,8 @@ class th_pos_documentosC
         $id_empresa = $_SESSION['INICIO']['ID_EMPRESA'];
         $ruta = dirname(__DIR__, 4) . '/REPOSITORIO/TALENTO_HUMANO/' . $id_empresa . '/'; //ruta carpeta donde queremos copiar los archivos
         $ruta .= $post['txt_postulante_cedula'] . '/' . 'DOCUMENTOS_IDENTIDAD/';
-        
-        
+
+
         if (!file_exists($ruta)) {
             mkdir($ruta, 0777, true);
         }
@@ -176,17 +171,15 @@ class th_pos_documentosC
         }
     }
 
-
-private function validar_formato_archivo($file)
-{
-    switch ($file['txt_ruta_documentos_identidad']['type']) {
-        case 'application/pdf':
-            return 1;
-            break;
-        default:
-            return -1;
-            break;
+    private function validar_formato_archivo($file)
+    {
+        switch ($file['txt_ruta_documentos_identidad']['type']) {
+            case 'application/pdf':
+                return 1;
+                break;
+            default:
+                return -1;
+                break;
+        }
     }
-}
-
 }

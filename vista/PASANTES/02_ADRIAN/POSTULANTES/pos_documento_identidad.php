@@ -37,19 +37,16 @@
                 $('#ddl_tipo_documento_identidad').val(response[0].th_poi_tipo);
                 $('#txt_ruta_guardada_documentos_identidad').val(response[0].th_pos_documentos);
                 $('#txt_ruta_documentos_identidad').val(response[0].th_poi_ruta_archivo);
-                
+
             }
         });
     }
 
-            
-    
-
     function insertar_editar_documentos_identidad() {
 
-        
-        
-        var form_data = new FormData(document.getElementById("form_documento_identidad")); 
+
+
+        var form_data = new FormData(document.getElementById("form_documento_identidad"));
 
         var txt_id_documentos_identidad = $('#txt_documentos_identificacion_id').val();
 
@@ -104,8 +101,7 @@
         }
     }
 
-    
-//Funcion para editar el registro de documentos identidad
+    //Funcion para editar el registro de documentos identidad
     function abrir_modal_documentos_identidad(id) {
         cargar_datos_modal_documentos_identidad(id);
 
@@ -116,7 +112,7 @@
 
     }
 
-    
+
     function delete_datos_documentos_identidad() {
         var id = $('#txt_documentos_identificacion_id').val();
         Swal.fire({
@@ -160,14 +156,14 @@
         $('#ddl_tipo_documento_identidad').val('');
         $('#txt_cargar_documento_identidad').val('');
         $('#txt_ruta_documentos_identidad').val('');
-        
+
         $('#txt_documentos_identificacion_id').val('');
         $('#txt_ruta_guardada_documentos_identidad').val('');
-        
+
         //Limpiar validaciones
         $("#form_documento_identidad").validate().resetForm();
         $('.form-control, .form-select').removeClass('is-valid is-invalid');
-      
+
 
         //Cambiar texto
         $('#lbl_titulo_documentos_identidad').html('Agregue un documento de identidad');
@@ -182,15 +178,11 @@
     function limpiar_parametros_iframe() {
         $('#iframe_documentos_identidad_pdf').attr('src', '');
     }
-
 </script>
 
 <div id="pnl_documentos_identidad">
 
 </div>
-
-
-
 
 <!-- Modal para agregar documento de identidad-->
 <div class="modal" id="modal_agregar_documentos_identidad" tabindex="-1" aria-modal="true" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
@@ -205,15 +197,12 @@
 
             <!-- Modal Body -->
             <form id="form_documento_identidad">
-            <input type="hidden" >
-                <div class="modal-body"> 
+                <input type="hidden">
+                <div class="modal-body">
 
                     <input type="hidden" name="txt_documentos_identificacion_id" id="txt_documentos_identificacion_id">
                     <input type="hidden" name="txt_postulante_cedula" id="txt_postulante_cedula">
                     <input type="hidden" name="txt_postulante_id" id="txt_postulante_id">
-                    
-                    
-
 
                     <div class="row mb-col">
                         <div class="col-md-12">
@@ -238,9 +227,6 @@
                         </div>
                     </div>
 
-                    
-                
-
                 </div>
                 <div class="modal-footer d-flex justify-content-center">
                     <button type="button" class="btn btn-success btn-sm px-4 m-1" id="btn_guardar_documentos_identidad" onclick="insertar_editar_documentos_identidad();">Agregar</button>
@@ -250,7 +236,7 @@
         </div>
     </div>
 </div>
-            
+
 <div class="modal" id="modal_ver_pdf_documentos_identidad" tabindex="-1" aria-modal="true" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
     <div class="modal-dialog modal-dialog-centered modal-xl">
         <div class="modal-content">
@@ -268,8 +254,7 @@
             </form>
         </div>
     </div>
-</div>       
-
+</div>
 
 <script>
     $(document).ready(function() {
