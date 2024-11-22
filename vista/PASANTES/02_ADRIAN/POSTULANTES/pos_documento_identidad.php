@@ -201,7 +201,7 @@
 
             <!-- Modal Header -->
             <div class="modal-header">
-                <h6><label class="text-body-secondary fw-bold" id="lbl_titulo_documentos_identidad">Agregue un Documento de Identidad</small></h6>
+                <h6><small class="text-body-secondary fw-bold" id="lbl_titulo_documentos_identidad">Agregue un Documento de Identidad</small></h6>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="limpiar_parametros_documentos_identidad()"></button>
             </div>
 
@@ -216,7 +216,7 @@
 
                     <div class="row mb-col">
                         <div class="col-md-12">
-                            <label for="ddl_tipo_documento_identidad" class="form-label form-label-sm">Tipo de Documento <label style="color: red;">*</label></label>
+                            <label for="ddl_tipo_documento_identidad" class="form-label form-label-sm">Tipo de Documento </label>
                             <select class="form-select form-select-sm" id="ddl_tipo_documento_identidad" name="ddl_tipo_documento_identidad" onclick="obtener_documentos_repetidos();">
                                 <option selected disabled value="">-- Selecciona una opción --</option>
                                 <option value="Cédula de Identidad">Cédula de Identidad</option>
@@ -230,7 +230,7 @@
                     </div>
                     <div class="row mb-col">
                         <div class="col-md-12">
-                            <label for="txt_ruta_documentos_identidad" class="form-label form-label-sm">Copia de la carta de recomendación <label style="color: red;">*</label></label>
+                            <label for="txt_ruta_documentos_identidad" class="form-label form-label-sm">Copia de la carta de recomendación </label>
                             <input type="file" class="form-control form-control-sm" name="txt_ruta_documentos_identidad" id="txt_ruta_documentos_identidad" accept=".pdf">
                             <!-- <div class="pt-2"></div> -->
                             <input type="hidden" class="form-control form-control-sm" name="txt_ruta_guardada_documentos_identidad" id="txt_ruta_guardada_documentos_identidad">
@@ -268,6 +268,9 @@
 
 <script>
     $(document).ready(function() {
+        agregar_asterisco_campo_obligatorio('ddl_tipo_documento_identidad');
+        agregar_asterisco_campo_obligatorio('txt_ruta_documentos_identidad');
+
         //Validación Documento de Identidad
         $("#form_documento_identidad").validate({
             rules: {
