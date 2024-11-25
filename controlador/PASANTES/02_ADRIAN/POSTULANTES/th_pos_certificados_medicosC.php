@@ -1,7 +1,7 @@
 <?php
-require_once(dirname(__DIR__, 4) . '/modelo/PASANTES/02_ADRIAN/POSTULANTES/th_pos_cert_medicosM.php');
+require_once(dirname(__DIR__, 4) . '/modelo/PASANTES/02_ADRIAN/POSTULANTES/th_pos_certificados_medicosM.php');
 
-$controlador = new th_pos_cert_medicosC();
+$controlador = new th_pos_certificados_medicosC();
 
 if (isset($_GET['listar'])) {
     echo json_encode($controlador->listar($_POST['id']));
@@ -20,13 +20,14 @@ if (isset($_GET['eliminar'])) {
 }
 
 
-class th_pos_cert_medicosC
+class th_pos_certificados_medicosC 
 {
     private $modelo;
 
-    function __construct()
+    function __construct() 
     {
-        $this->modelo = new th_pos_cert_medicosC();
+       
+        $this-> modelo = new th_pos_certificados_medicosM();
     }
 
     //Funcion para listar los certidicados médicos del postulante
