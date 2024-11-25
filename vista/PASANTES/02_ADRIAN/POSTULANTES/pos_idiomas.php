@@ -326,7 +326,7 @@ function reiniciar_campos_fecha(campo) {
                 },
                 txt_institucion_1: {
                     required: "Por favor escriba la institución donde recibió su certificado",
-                    maxlength: "El campo no puede tener más de 200 caracteres"
+                    maxlength: "200"
                 },
                 txt_fecha_inicio_idioma: {
                     required: "Por favor escriba la fecha de inicio de estudios",
