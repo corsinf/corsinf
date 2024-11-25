@@ -289,9 +289,13 @@ function reiniciar_campos_fecha(campo) {
 
 
 <script>
-
     $(document).ready(function() {
 
+        agregar_asterisco_campo_obligatorio('ddl_seleccionar_idioma');
+        agregar_asterisco_campo_obligatorio('ddl_dominio_idioma');
+        agregar_asterisco_campo_obligatorio('txt_institucion_1');
+        agregar_asterisco_campo_obligatorio('txt_fecha_inicio_idioma');
+        agregar_asterisco_campo_obligatorio('txt_fecha_fin_idioma');
         //Validación Idiomas
         $("#form_agregar_idioma").validate({
             rules: {

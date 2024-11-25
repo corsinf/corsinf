@@ -250,6 +250,10 @@
 
 <script>
     $(document).ready(function() {
+        agregar_asterisco_campo_obligatorio('ddl_estado_laboral');
+        agregar_asterisco_campo_obligatorio('txt_fecha_contratacion_estado');
+        agregar_asterisco_campo_obligatorio('txt_fecha_salida_estado');
+
         //Validación Estado Laboral
         $("#form_estado_laboral").validate({
             rules: {

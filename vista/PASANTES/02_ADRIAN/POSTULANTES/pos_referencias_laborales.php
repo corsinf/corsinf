@@ -276,6 +276,13 @@
 
 <script>
     $(document).ready(function() {
+
+        agregar_asterisco_campo_obligatorio('txt_nombre_referencia');
+        agregar_asterisco_campo_obligatorio('txt_telefono_referencia');
+        agregar_asterisco_campo_obligatorio('txt_copia_carta_recomendacion');
+        agregar_asterisco_campo_obligatorio('txt_referencia_correo');
+        agregar_asterisco_campo_obligatorio('txt_referencia_nombre_empresa');
+       
         //Validación Referencias Laborales
         $("#form_referencias_laborales").validate({
             rules: {

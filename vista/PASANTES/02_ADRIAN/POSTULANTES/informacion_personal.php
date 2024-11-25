@@ -694,6 +694,24 @@ if (isset($_GET['id'])) {
     <script>
         //Validacion de formulario
         $(document).ready(function() {
+            agregar_asterisco_campo_obligatorio('txt_primer_apellido');
+            agregar_asterisco_campo_obligatorio('txt_segundo_apellido');
+            agregar_asterisco_campo_obligatorio('txt_primer_nombre');
+            agregar_asterisco_campo_obligatorio('txt_segundo_nombre');
+            agregar_asterisco_campo_obligatorio('txt_numero_cedula');
+            agregar_asterisco_campo_obligatorio('ddl_sexo');
+            agregar_asterisco_campo_obligatorio('txt_fecha_nacimiento');
+            agregar_asterisco_campo_obligatorio('txt_edad');
+            agregar_asterisco_campo_obligatorio('txt_telefono_1');
+            agregar_asterisco_campo_obligatorio('txt_telefono_2');
+            agregar_asterisco_campo_obligatorio('txt_correo');
+            agregar_asterisco_campo_obligatorio('ddl_nacionalidad');
+            agregar_asterisco_campo_obligatorio('ddl_estado_civil');
+            agregar_asterisco_campo_obligatorio('ddl_provincias');
+            agregar_asterisco_campo_obligatorio('ddl_ciudad');
+            agregar_asterisco_campo_obligatorio('ddl_parroquia');
+            agregar_asterisco_campo_obligatorio('txt_codigo_postal');
+            agregar_asterisco_campo_obligatorio('txt_direccion');
             //Validación Información Personal
             $("#form_informacion_personal").validate({
                 rules: {
