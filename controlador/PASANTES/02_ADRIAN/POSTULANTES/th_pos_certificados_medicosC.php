@@ -70,9 +70,9 @@ class th_pos_certificados_medicosC
     {
 
         if ($id == '') {
-            $datos = $this->modelo->where('th_med_estado', 1)->listar();
+            $datos = $this->modelo->where('th_cer_estado', 1)->listar();
         } else {
-            $datos = $this->modelo->where('th_med_id', $id)->listar();
+            $datos = $this->modelo->where('th_cer_id', $id)->listar();
         }
         return $datos;
     }
@@ -81,11 +81,11 @@ class th_pos_certificados_medicosC
     {
         $datos = array(
             array('campo' => 'th_pos_id', 'dato' => $parametros['txt_postulante_id']),
-            array('campo' => 'th_med_motivo_certificado', 'dato' => $parametros['txt_med_motivo_certificado']),
-            array('campo' => 'th_med_nom_medico', 'dato' => $parametros['txt_med_nom_medico']),
-            array('campo' => 'th_med_ins_medico', 'dato' => $parametros['txt_med_ins_medico']),
-            array('campo' => 'th_med_fecha_inicio_certificado', 'dato' => $parametros['txt_med_fecha_inicio_certificado']),
-            array('campo' => 'th_med_fecha_fin_certificado', 'dato' => $parametros['txt_med_fecha_fin_certificado']),
+            array('campo' => 'th_cer_motivo_certificado', 'dato' => $parametros['txt_med_motivo_certificado']),
+            array('campo' => 'th_cer_nom_medico', 'dato' => $parametros['txt_med_nom_medico']),
+            array('campo' => 'th_cer_ins_medico', 'dato' => $parametros['txt_med_ins_medico']),
+            array('campo' => 'th_cer_fecha_inicio_certificado', 'dato' => $parametros['txt_med_fecha_inicio_certificado']),
+            array('campo' => 'th_cer_fecha_fin_certificado', 'dato' => $parametros['txt_med_fecha_fin_certificado']),
         );
 
         $id_certificados_medicos = $parametros['txt_certificados_medicos_id'];
@@ -97,7 +97,7 @@ class th_pos_certificados_medicosC
         } else {
 
             $where = array(
-                array('campo' => 'th_med_id', 'dato' => $id_certificados_medicos),
+                array('campo' => 'th_cer_id', 'dato' => $id_certificados_medicos),
             );
 
             $datos = $this->modelo->editar($datos, $where);
@@ -112,10 +112,10 @@ class th_pos_certificados_medicosC
 
     function eliminar($id)
     {
-        $datos_archivo = $this->modelo->where('th_med_id', $id)->where('th_med_estado', 1)->listar();
+        $datos_archivo = $this->modelo->where('th_cer_id', $id)->where('th_cer_estado', 1)->listar();
 
-        if ($datos_archivo && isset($datos_archivo[0]['th_med_ruta_certficado'])) {
-            $ruta_relativa = ltrim($datos_archivo[0]['th_med_ruta_certficado'], './');
+        if ($datos_archivo && isset($datos_archivo[0]['th_cer_ruta_certficado'])) {
+            $ruta_relativa = ltrim($datos_archivo[0]['th_cer_ruta_certficado'], './');
             $ruta_archivo = dirname(__DIR__, 4) . '/' . $ruta_relativa;
 
             if (file_exists($ruta_archivo)) {
@@ -124,11 +124,11 @@ class th_pos_certificados_medicosC
         }
 
         $datos = array(
-            array('campo' => 'th_med_estado', 'dato' => 0),
+            array('campo' => 'th_cer_estado', 'dato' => 0),
         );
 
         $where = array(
-            array('campo' => 'th_med_id', 'dato' => strval($id)),
+            array('campo' => 'th_cer_id', 'dato' => strval($id)),
         );
 
 
@@ -162,11 +162,11 @@ class th_pos_certificados_medicosC
                 if (move_uploaded_file($uploadfile_temporal, $nuevo_nom)) {
 
                     $datos = array(
-                        array('campo' => 'th_med_ruta_certficado', 'dato' => $nombre_ruta),
+                        array('campo' => 'th_cer_ruta_certficado', 'dato' => $nombre_ruta),
                     );
 
                     $where = array(
-                        array('campo' => 'th_med_id', 'dato' => $id_insertar_editar),
+                        array('campo' => 'th_cer_id', 'dato' => $id_insertar_editar),
                     );
 
                     // Ejecutar la actualización en la base de datos

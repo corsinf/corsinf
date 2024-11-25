@@ -231,7 +231,7 @@
                     </div>
 
                     
-                    <!-- <div class="row mb-col">
+                    <div class="row mb-col">
                         <div class="col-md-12">
                             <label for="txt_med_fecha_inicio_certificado" class="form-label form-label-sm">Fecha de Inicio del Certificado</label>
                             <input type="date" class="form-control form-control-sm no_caracteres" name="txt_med_fecha_inicio_certificado" id="txt_med_fecha_inicio_certificado" onchange="txt_fecha_fin_certificado_1();">
@@ -241,7 +241,7 @@
                         <div class="col-md-12">
                             <label for="txt_med_fecha_fin_certificado" class="form-label form-label-sm">Fecha de fin del Certificado</label>
                             <input type="date" class="form-control form-control-sm no_caracteres" name="txt_med_fecha_fin_certificado" id="txt_med_fecha_fin_certificado" onchange="txt_fecha_fin_certificado_1();">
-                        </div> -->
+                        </div>
                     </div>
                     <div class="row mb-col">
                         <div class="col-md-12">
