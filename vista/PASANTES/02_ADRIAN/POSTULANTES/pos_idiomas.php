@@ -222,7 +222,7 @@ function reiniciar_campos_fecha(campo) {
 
             <!-- Modal Header -->
             <div class="modal-header">
-                <h6><label class="text-body-secondary fw-bold" id="lbl_nombre_idioma">Agregue un idioma</small></h6>
+                <h5><small class="text-body-secondary fw-bold" id="lbl_nombre_idioma">Agregue un idioma </small></h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="limpiar_campos_idiomas_modal()"></button>
             </div>
             <!-- Modal body -->
@@ -231,7 +231,7 @@ function reiniciar_campos_fecha(campo) {
                 <div class="modal-body">
                     <div class="row mb-col">
                         <div class="col-md-12">
-                            <label for="ddl_seleccionar_idioma" class="form-label form-label-sm">Idioma <label style="color: red;">*</label></label>
+                            <label for="ddl_seleccionar_idioma" class="form-label form-label-sm">Idioma </label>
                             <select class="form-select form-select-sm" id="ddl_seleccionar_idioma" name="ddl_seleccionar_idioma">
                                 <option selected disabled value="">-- Selecciona un Idioma --</option>
                                 <option value="Español">Español</option>
@@ -246,7 +246,7 @@ function reiniciar_campos_fecha(campo) {
 
                     <div class="row mb-col">
                         <div class="col-md-12">
-                            <label for="ddl_dominio_idioma" class="form-label form-label-sm">Dominio del Idioma <label style="color: red;">*</label></label>
+                            <label for="ddl_dominio_idioma" class="form-label form-label-sm">Dominio del Idioma </label>
                             <select class="form-select form-select-sm" id="ddl_dominio_idioma" name="ddl_dominio_idioma" required>
                                 <option selected disabled value="">-- Selecciona su nivel de dominio del idioma --</option>
                                 <option value="Nativo">Nativo</option>

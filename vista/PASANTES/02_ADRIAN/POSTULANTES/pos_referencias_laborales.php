@@ -209,35 +209,35 @@
 
                     <div class="row mb-col">
                         <div class="col-md-12">
-                            <label for="txt_nombre_referencia" class="form-label form-label-sm">Nombre del empleador <label style="color: red;">*</label></label>
+                            <label for="txt_nombre_referencia" class="form-label form-label-sm">Nombre del empleador</label>
                             <input type="text" class="form-control form-control-sm" name="txt_nombre_referencia" id="txt_nombre_referencia" placeholder="Escriba el nombre de el empleador" maxlength="50">
                         </div>
                     </div>
 
                     <div class="row mb-col">
                         <div class="col-md-12">
-                            <label for="txt_telefono_referencia" class="form-label form-label-sm">Teléfono del empleador <label style="color: red;">*</label></label>
+                            <label for="txt_telefono_referencia" class="form-label form-label-sm">Teléfono del empleador </label>
                             <input type="text" class="form-control form-control-sm solo_numeros_int" name="txt_telefono_referencia" id="txt_telefono_referencia" placeholder="Escriba el número de contacto de el empleador" maxlength="15">
                         </div>
                     </div>
 
                     <div class="row mb-col">
                         <div class="col-md-12">
-                            <label for="txt_referencia_correo" class="form-label form-label-sm">Correo del empleador <label style="color: red;">*</label></label>
+                            <label for="txt_referencia_correo" class="form-label form-label-sm">Correo del empleador</label>
                             <input type="email" class="form-control form-control-sm" name="txt_referencia_correo" id="txt_referencia_correo" placeholder="Escriba el correo del empleador" maxlength="100">
                         </div>
                     </div>
 
                     <div class="row mb-col">
                         <div class="col-md-12">
-                            <label for="txt_referencia_nombre_empresa" class="form-label form-label-sm">Empresa/Institución <label style="color: red;">*</label></label>
+                            <label for="txt_referencia_nombre_empresa" class="form-label form-label-sm">Empresa/Institución </label>
                             <input type="text" class="form-control form-control-sm no_caracteres" name="txt_referencia_nombre_empresa" id="txt_referencia_nombre_empresa"  maxlength="100">
                         </div>
                     </div>
 
                     <div class="row mb-col">
                         <div class="col-md-12">
-                            <label for="txt_copia_carta_recomendacion" class="form-label form-label-sm">Copia de la carta de recomendación <label style="color: red;">*</label></label>
+                            <label for="txt_copia_carta_recomendacion" class="form-label form-label-sm">Copia de la carta de recomendación </label>
                             <input type="file" class="form-control form-control-sm" name="txt_copia_carta_recomendacion" id="txt_copia_carta_recomendacion" accept=".pdf">
                             <!-- <div class="pt-2"></div> -->
                             <input type="text" class="form-control form-control-sm" name="txt_ruta_guardada_carta_recomendacion" id="txt_ruta_guardada_carta_recomendacion" hidden>

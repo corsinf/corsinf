@@ -189,7 +189,7 @@
         </select>
     </div>
     <div class="col-md-3">
-        <label for="txt_direccion_postal" class="form-label form-label-sm">Código Postal <label style="color: red;">*</label></label>
+        <label for="txt_direccion_postal" class="form-label form-label-sm">Código Postal </label>
         <div class="input-group mb-3">
             <input type="text" class="form-control form-control-sm" name="txt_direccion_postal" id="txt_direccion_postal" placeholder="Escriba su código postal o de click en 'Obtener'">
             <button type="button" class="btn btn-sm btn-outline-secondary" onclick="obtener_codigo_postal();" id="button-addon2">Obtener</button>
