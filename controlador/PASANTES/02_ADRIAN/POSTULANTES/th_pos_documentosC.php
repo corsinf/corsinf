@@ -50,6 +50,7 @@ class th_pos_documentosC
                             <a href="#" onclick="ruta_iframe_documento_identificacion('{$value['th_poi_ruta_archivo']}');">Ver Documento de Identificación</a>
                           
                         </div>
+                        
                         <div class="col-2 d-flex justify-content-end align-items-start">
                             <button class="btn" style="color: white;" onclick="abrir_modal_documentos_identidad('{$value['_id']}');">
                                 <i class="text-dark bx bx-pencil bx-sm"></i>
