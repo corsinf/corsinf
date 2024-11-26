@@ -33,12 +33,12 @@
             success: function(response) {
                 $('#txt_certificados_medicos_id').val(response[0]._id);
 
-                $('#txt_med_motivo_certificado').val(response[0].th_med_motivo_certificado);
-                $('#txt_med_nom_medico').val(response[0].th_med_nom_medico);
-                $('#txt_med_ins_medico').val(response[0].th_med_ins_medico);
-                $('#txt_med_fecha_inicio_certificado').val(response[0].th_med_fecha_inicio_certificado);
-                $('#txt_med_fecha_fin_certificado').val(response[0].th_med_fecha_fin_certificado);
-                $('#txt_ruta_guardada_certificados_medicos').val(response[0].th_med_ruta_certficado);
+                $('#txt_med_motivo_certificado').val(response[0].th_cer_motivo_certificado);
+                $('#txt_med_nom_medico').val(response[0].th_cer_nom_medico);
+                $('#txt_med_ins_medico').val(response[0].th_cer_ins_medico);
+                $('#txt_med_fecha_inicio_certificado').val(response[0].th_cer_fecha_inicio_certificado);
+                $('#txt_med_fecha_fin_certificado').val(response[0].th_cer_fecha_fin_certificado);
+                $('#txt_ruta_guardada_certificados_medicos').val(response[0].th_cer_ruta_certficado);
 
                 
             }
@@ -189,6 +189,20 @@
     var hoy = new Date();
     var fecha_actual = hoy.toISOString().split('T')[0];
 
+     //* Validar que la fecha final no sea menor a la fecha de inicio
+     if (fecha_inicio && fecha_final) {
+        if (Date.parse(fecha_final) < Date.parse(fecha_inicio)) {
+            Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: "La fecha final no puede ser menor a la fecha de inicio.",
+            });
+            reiniciar_campos_fecha('#txt_med_fecha_fin_certificado');
+            return;
+        }
+    }
+
+
     //* Validar que la fecha final no sea menor a la fecha de inicio
     if (fecha_inicio && fecha_final) {
         if (Date.parse(fecha_final) < Date.parse(fecha_inicio)) {
@@ -219,7 +233,7 @@ function reiniciar_campos_fecha(campo) {
 
 </div>
 <!-- Modal para agregar certificados médicos-->
-<div class="modal" id="modal_agregar_certificado_medico" tabindex="-1" aria-modal="true" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
+<div class="modal" id="modal_agregar_certificados_medicos" tabindex="-1" aria-modal="true" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
 
@@ -231,7 +245,7 @@ function reiniciar_campos_fecha(campo) {
             <!-- Modal body -->
             <form id="form_certificados_medicos">
                 <div class="modal-body">
-                <div class="modal-body">
+                
 
                     <input type="hidden" name="txt_certificados_medicos_id" id="txt_certificados_medicos_id">
                     <input type="hidden" name="txt_postulante_cedula" id="txt_postulante_cedula">
@@ -298,7 +312,7 @@ function reiniciar_campos_fecha(campo) {
 
             <!-- Modal Header -->
             <div class="modal-header">
-                <h5><small class="text-body-secondary" id="lbl_titulo_certificados_medicos">Certificado Médico</small></h5>
+                <h5><small class="text-body-secondary" id="lbl_titulo_certificados_medicos">Certificados Médicos:</small></h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="limpiar_parametros_iframe();"></button>
             </div>
             <!-- Modal body -->
@@ -310,7 +324,6 @@ function reiniciar_campos_fecha(campo) {
         </div>
     </div>
 </div>
-
 
 <script>
     $(document).ready(function() {
