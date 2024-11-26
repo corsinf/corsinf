@@ -38,7 +38,15 @@ class th_pos_certificados_medicosC
         
 
         $texto = '';
+        usort($datos, function($txt_fecha_fin_1, $txt_fecha_fin_2) {
+            $txt_fecha_fin_1= strtotime($txt_fecha_fin_1['th_cer_fecha_fin_certificado']);
+            $txt_fecha_fin_2 = strtotime($txt_fecha_fin_2['th_cer_fecha_fin_certificado']);
+            return $txt_fecha_fin_2 <=> $txt_fecha_fin_1; 
+        });
+
         foreach ($datos as $key => $value) {
+
+            $fecha_fin = $value['th_cer_fecha_fin_certificado'] == '' ? 'Actualidad' : $value['th_cer_fecha_fin_certificado'];
 
             
             $texto .=
@@ -46,15 +54,16 @@ class th_pos_certificados_medicosC
                     <div class="row mb-col">
                         <div class="col-10">
                             <h6 class="fw-bold mt-3 mb-2">{$value['th_cer_motivo_certificado']}</h6>
-                            <h6 class="fw-bold mt-3 mb-2">{$value['th_cer_nom_medico']}</h6>
-                            <h6 class="fw-bold mt-3 mb-2">{$value['th_cer_ins_medico']}</h6>
-                            <h6 class="fw-bold mt-3 mb-2">{$value['th_cer_fecha_inicio_certificado']}</h6>
-                            <h6 class="fw-bold mt-3 mb-2">{$value['th_cer_fecha_fin_certificado']}</h6>
-                            <a href="#" onclick="ruta_iframe_certificado_medico('{$value['th_poi_ruta_archivo']}');">Ver Certificado Médico</a>
+                            <p class="m-0">{$value['th_cer_nom_medico']}</p>
+                            <p class="m-0">{$value['th_cer_ins_medico']}</p>
+                            <p class="m-0">{$value['th_cer_fecha_inicio_certificado']} - {$fecha_fin} </p>
+                            <a href="#" onclick="ruta_iframe_certificados_medicos('{$value['th_cer_ruta_certficado']}');">Ver Certificado Médico</a>
                           
                         </div>
+
+                        
                         <div class="col-2 d-flex justify-content-end align-items-start">
-                            <button class="btn" style="color: white;" onclick="abrir_modal_certificado_medico('{$value['_id']}');">
+                            <button class="btn" style="color: white;" onclick="abrir_modal_certificados_medicos('{$value['_id']}');">
                                 <i class="text-dark bx bx-pencil bx-sm"></i>
                             </button>
                         </div>

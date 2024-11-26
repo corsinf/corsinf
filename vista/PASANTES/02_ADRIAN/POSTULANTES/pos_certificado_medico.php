@@ -48,9 +48,9 @@
     function insertar_editar_certificados_medicos() {
         var form_data = new FormData(document.getElementById("form_certificados_medicos"));
 
-        var txt_ruta_certificados_medicos = $('#txt_certificados_medicos_id').val();
+        var txt_id_certificados_medicos = $('#txt_certificados_medicos_id').val();
 
-        if ($('#txt_ruta_certificados_medicos').val() === '' && txt_ruta_certificados_medicos != '') {
+        if ($('#txt_ruta_certificados_medicos').val() === '' && txt_id_certificados_medicos != '') {
             var txt_ruta_certificados_medicos = $('#txt_ruta_guardada_certificados_medicos').val()
             $('#txt_ruta_certificados_medicos').rules("remove", "required");
         } else {
@@ -159,7 +159,7 @@
         $('#txt_med_fecha_inicio_certificado').val('');
         $('#txt_med_fecha_fin_certificado').val('');
         $('#txt_ruta_certificados_medicos').val('');
-        $('#txt_ruta_certificados_medicos').val('');
+        
 
         $('#txt_certificados_medicos_id').val('');
         $('#txt_ruta_guardada_certificados_medicos').val('');
@@ -182,6 +182,36 @@
     function limpiar_parametros_iframe() {
         $('#iframe_certificados_medicos_pdf').attr('src', '');
     }
+
+    function validar_fechas_certificados_medicos() {
+    var fecha_inicio = $('#txt_med_fecha_inicio_certificado').val();
+    var fecha_final = $('#txt_med_fecha_fin_certificado').val();
+    var hoy = new Date();
+    var fecha_actual = hoy.toISOString().split('T')[0];
+
+    //* Validar que la fecha final no sea menor a la fecha de inicio
+    if (fecha_inicio && fecha_final) {
+        if (Date.parse(fecha_final) < Date.parse(fecha_inicio)) {
+            Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: "La fecha final no puede ser menor a la fecha de inicio.",
+            });
+            reiniciar_campos_fecha('#txt_med_fecha_fin_certificado');
+            return;
+        }
+    }
+       
+}
+
+
+//* Función para reiniciar campos
+
+function reiniciar_campos_fecha(campo) {
+    $(campo).val('');
+    $(campo).removeClass('is-valid is-invalid');
+    $('.form-control').removeClass('is-valid is-invalid');
+}
 </script>
 
 
@@ -195,7 +225,7 @@
 
             <!-- Modal Header -->
             <div class="modal-header">
-                <h5><small class="text-body-secondary">Agregue un Certificado Médico</small></h5>
+                <h5><small class="text-body-secondary" id="lbl_titulo_certificados_medicos">Agregue un Certificado Médico</small></h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="limpiar_parametros_certificados_medicos()"></button>
             </div>
             <!-- Modal body -->
@@ -203,7 +233,7 @@
                 <div class="modal-body">
                 <div class="modal-body">
 
-                    <input type="hidden" name="txt_certificados_medicos_id" id="txt_documentos_identificacion_id">
+                    <input type="hidden" name="txt_certificados_medicos_id" id="txt_certificados_medicos_id">
                     <input type="hidden" name="txt_postulante_cedula" id="txt_postulante_cedula">
                     <input type="hidden" name="txt_postulante_id" id="txt_postulante_id">
 
@@ -226,7 +256,7 @@
                     <div class="row mb-col">
                         <div class="col-md-12">
                             <label for="txt_med_ins_medico" class="form-label form-label-sm">Nombre de la Institución Médica  </label>
-                            <input type="text" class="form-control form-control-sm" name="txt_med_ins_medico" id="txt_med_ins_medico" placeholder="Escriba el motivo del certificado médico">
+                            <input type="text" class="form-control form-control-sm no_caracteres" name="txt_med_ins_medico" id="txt_med_ins_medico" placeholder="Escriba el motivo del certificado médico">
                         </div>
                     </div>
 
@@ -245,20 +275,42 @@
                     </div>
                     <div class="row mb-col">
                         <div class="col-md-12">
-                            <label for="txt_respaldo_medico" class="form-label form-label-sm">Documentación que respalde la aptitud para el trabajo </label>
-                            <input type="file" class="form-control form-control-sm" name="txt_respaldo_medico" id="txt_respaldo_medico" accept=".pdf">
+                            <label for="txt_ruta_certificados_medicos" class="form-label form-label-sm">Copia del Certificado Médico </label>
+                            <input type="file" class="form-control form-control-sm" name="txt_ruta_certificados_medicos" id="txt_ruta_certificados_medicos" accept=".pdf">
+                            <input type="text" class="form-control form-control-sm" name="txt_ruta_guardada_certificados_medicos" id="txt_ruta_guardada_certificados_medicos" hidden>
                         </div>
                     </div>
                 </div>
                 
                 <div class="modal-footer d-flex justify-content-center">
-                    <button type="button" class="btn btn-success btn-sm" id="btn_guardar_certificados_medicos" onclick="insertar_editar_certificados_medicos()">Agregar Certificado Médico</button>
+                    <button type="button" class="btn btn-success btn-sm" id="btn_guardar_certificados_medicos" onclick="insertar_editar_certificados_medicos(); validar_fechas_certificados_medicos()">Agregar Certificado Médico</button>
                     <button type="button" class="btn btn-danger btn-sm px-4 m-1" id="btn_eliminar_formacion" onclick="delete_datos_certificados_medicos();">Eliminar</button>
                 </div>
             </form>
         </div>
     </div>
 </div>
+
+<!-- Modal para ver certificados médicos -->
+<div class="modal" id="modal_ver_pdf_certificados_medicos" tabindex="-1" aria-modal="true" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog modal-dialog-centered modal-xl">
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h5><small class="text-body-secondary" id="lbl_titulo_certificados_medicos">Certificado Médico</small></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="limpiar_parametros_iframe();"></button>
+            </div>
+            <!-- Modal body -->
+            <form id="form_certificados_medicos">
+                <div class="modal-body d-flex justify-content-center">
+                    <iframe src='' id="iframe_certificados_medicos_pdf" frameborder="0" width="900px" height="700px"></iframe>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 
 <script>
     $(document).ready(function() {
@@ -268,20 +320,21 @@
         agregar_asterisco_campo_obligatorio('txt_med_ins_medico');
         agregar_asterisco_campo_obligatorio('txt_med_fecha_inicio_certificado');
         agregar_asterisco_campo_obligatorio('txt_med_fecha_fin_certificado');
+        agregar_asterisco_campo_obligatorio('txt_ruta_certificados_medicos');
         //Validación Idiomas
         $("#form_certificados_medicos").validate({
             rules: {
-                txt_med_motiivo_certiificado: {
+                txt_med_motivo_certificado: {
                     required: true,
-                    maxlength: "200"
+                    maxlength: 200
                 },
                 txt_med_nom_medico: {
                     required: true,
-                    maxlength: "200"
+                    maxlength: 200
                 },
                 txt_med_ins_medico: {
                     required: true,
-                    maxlength: "200"
+                    maxlength: 200
                 },
                 txt_med_fecha_inicio_certificado: {
                     required: true,
@@ -289,11 +342,14 @@
                 txt_med_fecha_fin_certificado: {
                     required: true,
                 },
+                txt_ruta_certificados_medicos: {
+                    required: true,
+                }
 
             },
 
             messages: {
-                txt_med_motiivo_certiificado: {
+                txt_med_motivo_certificado: {
                     required: "Por favor, escriba el motivo del certificado médico",
                     maxlength: "El motivo del certificado médico no puede tener más de 200 caracteres"
                 },
@@ -311,6 +367,9 @@
                 txt_med_fecha_fin_certificado: {
                     required: "Por favor, seleccione la fecha de fin del certificado médico",
                 },
+                txt_ruta_certificados_medicos: {
+                    required: "Por favor, seleccione el certificado médico",
+                }
                 
             },
 
@@ -355,12 +414,12 @@
                 required: true
             });
             $('#txt_med_fecha_fin_certificado').removeClass('is-valid');
-            $('#form_agregar_idioma').validate().resetForm();
+            $('#form_certificados_medicos').validate().resetForm();
             $('.form-control').removeClass('is-valid is-invalid');
         }
 
         // Validar las fechas (llama a tu función de validación)
-        validar_fechas_idioma();
+        validar_fechas_certificados_medicos();
 }
 
 </script>
