@@ -30,16 +30,3 @@ class th_pos_certificados_medicosM extends BaseModel
     // }
 }
 
-// CREATE TABLE th_pos_certificados_medicos (
-//     th_cer_id INT IDENTITY ( 1, 1 ) PRIMARY KEY,
-//     th_pos_id INT,
-//     th_cer_motivo_certificado VARCHAR ( 100 ),
-//     th_cer_nom_medico VARCHAR ( 200 ),
-//     th_cer_ins_medico VARCHAR ( 200 ),
-//     th_cer_fecha_inicio_certificado DATE,
-//     th_cer_fecha_fin_certificado DATE,
-//     th_cer_ruta_certficado VARCHAR ( 400 ),
-//     th_cer_fecha_creacion DATETIME2 DEFAULT GETDATE( ),
-//     th_cer_fecha_modificacion DATETIME2,
-//     th_cer_estado SMALLINT DEFAULT  1 
-//   );

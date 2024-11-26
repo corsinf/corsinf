@@ -49,6 +49,7 @@ class th_pos_certificados_medicosC
             $fecha_fin = $value['th_cer_fecha_fin_certificado'] == '' ? 'Actualidad' : $value['th_cer_fecha_fin_certificado'];
 
             
+            
             $texto .=
                 <<<HTML
                     <div class="row mb-col">

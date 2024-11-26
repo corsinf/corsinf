@@ -387,6 +387,7 @@ function reiniciar_campos_fecha(campo) {
         });
     })
   
+    
     function txt_fecha_fin_certificado_1() {
         if ($('#txt_med_fecha_fin_certificado').is(':checked')) {
             var hoy = new Date();
