@@ -142,7 +142,7 @@
                 if (response == 1) {
                     Swal.fire('Eliminado!', 'Registro Eliminado.', 'success');
                     <?php if (isset($_GET['id'])) { ?>
-                        cargar_datos_documentos_identidad(<?= $id ?>);
+                        cargar_datos_cerficados_medicos(<?= $id ?>);
                     <?php } ?>
                     limpiar_parametros_certificados_medicos();
                     $('#modal_agregar_certificados_medicos').modal('hide');
