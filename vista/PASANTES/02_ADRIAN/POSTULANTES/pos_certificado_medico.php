@@ -179,7 +179,7 @@
         var cambiar_ruta = $('#iframe_certificados_medicos_pdf').attr('src', url);
     }
 
-    function limpiar_parametros_iframe() {
+    function limpiar_parametros_iframe_cert_medicos() {
         $('#iframe_certificados_medicos_pdf').attr('src', '');
     }
 
@@ -197,7 +197,7 @@
                 title: "Oops...",
                 text: "La fecha final no puede ser menor a la fecha de inicio.",
             });
-            reiniciar_campos_fecha('#txt_med_fecha_fin_certificado');
+            reiniciar_campos_fecha_cer_medicos('#txt_med_fecha_fin_certificado');
             return;
         }
     }
@@ -211,7 +211,7 @@
                 title: "Oops...",
                 text: "La fecha final no puede ser menor a la fecha de inicio.",
             });
-            reiniciar_campos_fecha('#txt_med_fecha_fin_certificado');
+            reiniciar_campos_fecha_cer_medicos('#txt_med_fecha_fin_certificado');
             return;
         }
     }
@@ -221,7 +221,7 @@
 
 //* Función para reiniciar campos
 
-function reiniciar_campos_fecha(campo) {
+function reiniciar_campos_fecha_cer_medicos(campo) {
     $(campo).val('');
     $(campo).removeClass('is-valid is-invalid');
     $('.form-control').removeClass('is-valid is-invalid');
@@ -313,7 +313,7 @@ function reiniciar_campos_fecha(campo) {
             <!-- Modal Header -->
             <div class="modal-header">
                 <h5><small class="text-body-secondary" id="lbl_titulo_certificados_medicos">Certificados Médicos:</small></h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="limpiar_parametros_iframe();"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="limpiar_parametros_iframe_cert_medicos();"></button>
             </div>
             <!-- Modal body -->
             <form id="form_certificados_medicos">
@@ -334,7 +334,7 @@ function reiniciar_campos_fecha(campo) {
         agregar_asterisco_campo_obligatorio('txt_med_fecha_inicio_certificado');
         agregar_asterisco_campo_obligatorio('txt_med_fecha_fin_certificado');
         agregar_asterisco_campo_obligatorio('txt_ruta_certificados_medicos');
-        //Validación Idiomas
+        //Validación de campos certificados medicos
         $("#form_certificados_medicos").validate({
             rules: {
                 txt_med_motivo_certificado: {
@@ -409,10 +409,7 @@ function reiniciar_campos_fecha(campo) {
             var year = hoy.getFullYear();
             var fecha_actual = year + '-' + mes + '-' + dia;
 
-            // Configurar automáticamente la fecha final como "hoy"
-            $('#txt_med_fecha_fin_certificado').val(fecha_actual);
-            $('#txt_med_fecha_fin_certificado').prop('disabled', true);
-            $('#txt_med_fecha_fin_certificado').rules("remove", "required");
+       
 
             // Agregar clase 'is-valid' para mostrar el campo como válido
             $('#txt_med_fecha_fin_certificado').addClass('is-valid');
