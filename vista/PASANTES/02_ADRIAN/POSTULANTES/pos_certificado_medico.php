@@ -233,7 +233,7 @@ function reiniciar_campos_fecha_cer_medicos(campo) {
 
 </div>
 <!-- Modal para agregar certificados médicos-->
-<div class="modal" id="modal_agregar_certificados_medicos" tabindex="-1" aria-modal="true" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
+<div class="modal" id="modal_agregar_certificados_medicos" tabindex="-1" aria-hidden="true" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
 
@@ -263,14 +263,14 @@ function reiniciar_campos_fecha_cer_medicos(campo) {
                     <div class="row mb-col">
                         <div class="col-md-12">
                             <label for="txt_med_nom_medico" class="form-label form-label-sm">Nombre del Médico Tratante </label>
-                            <input type="text" class="form-control form-control-sm" name="txt_med_nom_medico" id="txt_med_nom_medico" placeholder="Escriba el motivo del certificado médico">
+                            <input type="text" class="form-control form-control-sm" name="txt_med_nom_medico" id="txt_med_nom_medico" placeholder="Escriba el nombre del médico tratante">
                         </div>
                     </div>
 
                     <div class="row mb-col">
                         <div class="col-md-12">
                             <label for="txt_med_ins_medico" class="form-label form-label-sm">Nombre de la Institución Médica  </label>
-                            <input type="text" class="form-control form-control-sm no_caracteres" name="txt_med_ins_medico" id="txt_med_ins_medico" placeholder="Escriba el motivo del certificado médico">
+                            <input type="text" class="form-control form-control-sm " name="txt_med_ins_medico" id="txt_med_ins_medico" placeholder="Escriba el nombre de la Institución">
                         </div>
                     </div>
 
@@ -278,13 +278,13 @@ function reiniciar_campos_fecha_cer_medicos(campo) {
                     <div class="row mb-col">
                         <div class="col-md-12">
                             <label for="txt_med_fecha_inicio_certificado" class="form-label form-label-sm">Fecha de Inicio del Certificado</label>
-                            <input type="date" class="form-control form-control-sm no_caracteres" name="txt_med_fecha_inicio_certificado" id="txt_med_fecha_inicio_certificado" onchange="txt_fecha_fin_certificado_1();">
+                            <input type="date" class="form-control form-control-sm " name="txt_med_fecha_inicio_certificado" id="txt_med_fecha_inicio_certificado" onchange="txt_fecha_fin_certificado_1();">
                         </div>
                     </div>
                     <div class="row mb-col">
                         <div class="col-md-12">
                             <label for="txt_med_fecha_fin_certificado" class="form-label form-label-sm">Fecha de fin del Certificado</label>
-                            <input type="date" class="form-control form-control-sm no_caracteres" name="txt_med_fecha_fin_certificado" id="txt_med_fecha_fin_certificado" onchange="txt_fecha_fin_certificado_1();">
+                            <input type="date" class="form-control form-control-sm " name="txt_med_fecha_fin_certificado" id="txt_med_fecha_fin_certificado" onchange="txt_fecha_fin_certificado_1();">
                         </div>
                     </div>
                     <div class="row mb-col">
@@ -402,35 +402,38 @@ function reiniciar_campos_fecha_cer_medicos(campo) {
   
     
     function txt_fecha_fin_certificado_1() {
-        if ($('#txt_med_fecha_fin_certificado').is(':checked')) {
-            var hoy = new Date();
-            var dia = String(hoy.getDate()).padStart(2, '0');
-            var mes = String(hoy.getMonth() + 1).padStart(2, '0');
-            var year = hoy.getFullYear();
-            var fecha_actual = year + '-' + mes + '-' + dia;
+    // Obtén el valor actual del campo de fecha
+    var fechaFin = $('#txt_med_fecha_fin_certificado').val();
 
-       
+    // Si el campo tiene un valor, se marca como válido
+    if (fechaFin) {
+        // Agregar clase 'is-valid' y remover 'is-invalid'
+        $('#txt_med_fecha_fin_certificado')
+            .addClass('is-valid')
+            .removeClass('is-invalid');
+    } else {
+        // Si no tiene valor, mostrar como inválido
+        $('#txt_med_fecha_fin_certificado')
+            .addClass('is-invalid')
+            .removeClass('is-valid');
+    }
 
-            // Agregar clase 'is-valid' para mostrar el campo como válido
-            $('#txt_med_fecha_fin_certificado').addClass('is-valid');
-            $('#txt_med_fecha_fin_certificado').removeClass('is-invalid');
+    // Si el campo está deshabilitado, se habilita y se limpia el valor
+    if ($('#txt_med_fecha_fin_certificado').prop('disabled')) {
+        $('#txt_med_fecha_fin_certificado').prop('disabled', false);
+        $('#txt_med_fecha_fin_certificado').val('');
+    }
 
-        } else {
-            if ($('#txt_med_fecha_fin_certificado').prop('disabled')) {
-                $('#txt_med_fecha_fin_certificado').val('');
-            }
-
-            $('#txt_med_fecha_fin_certificado').prop('disabled', false);
-            $('#txt_med_fecha_fin_certificado').rules("add", {
-                required: true
-            });
-            $('#txt_med_fecha_fin_certificado').removeClass('is-valid');
-            $('#form_certificados_medicos').validate().resetForm();
-            $('.form-control').removeClass('is-valid is-invalid');
+    // Agregar validación dinámica al campo con jQuery Validate
+    $('#txt_med_fecha_fin_certificado').rules("add", {
+        required: true,
+        messages: {
+            required: "La fecha de fin es obligatoria."
         }
+    });
 
-        // Validar las fechas (llama a tu función de validación)
-        validar_fechas_certificados_medicos();
+    // Validar las fechas usando la función personalizada
+    validar_fechas_certificados_medicos();
 }
 
 </script>
