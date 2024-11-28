@@ -256,21 +256,21 @@ function reiniciar_campos_fecha_cer_medicos(campo) {
                     <div class="row mb-col">
                         <div class="col-md-12">
                             <label for="txt_med_motivo_certificado" class="form-label form-label-sm">Motivo del certificado </label>
-                            <input type="text" class="form-control form-control-sm" name="txt_med_motivo_certificado" id="txt_med_motivo_certificado" placeholder="Escriba el motivo del certificado médico">
+                            <input type="text" class="form-control form-control-sm no_caracteres" name="txt_med_motivo_certificado" id="txt_med_motivo_certificado" placeholder="Escriba el motivo del certificado médico">
                         </div>
                     </div>
 
                     <div class="row mb-col">
                         <div class="col-md-12">
                             <label for="txt_med_nom_medico" class="form-label form-label-sm">Nombre del Médico Tratante </label>
-                            <input type="text" class="form-control form-control-sm" name="txt_med_nom_medico" id="txt_med_nom_medico" placeholder="Escriba el nombre del médico tratante">
+                            <input type="text" class="form-control form-control-sm no_caracteres" name="txt_med_nom_medico" id="txt_med_nom_medico" placeholder="Escriba el nombre del médico tratante">
                         </div>
                     </div>
 
                     <div class="row mb-col">
                         <div class="col-md-12">
                             <label for="txt_med_ins_medico" class="form-label form-label-sm">Nombre de la Institución Médica  </label>
-                            <input type="text" class="form-control form-control-sm " name="txt_med_ins_medico" id="txt_med_ins_medico" placeholder="Escriba el nombre de la Institución">
+                            <input type="text" class="form-control form-control-sm no_caracteres" name="txt_med_ins_medico" id="txt_med_ins_medico" placeholder="Escriba el nombre de la Institución">
                         </div>
                     </div>
 
