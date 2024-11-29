@@ -150,7 +150,7 @@
     function limpiar_campos_estado_laboral_modal() {
         $('#form_estado_laboral').validate().resetForm();
         $('.form-control, .form-select').removeClass('is-valid is-invalid');
-        
+
         $('#ddl_estado_laboral').val('');
         $('#txt_fecha_contratacion_estado').val('');
         $('#txt_fecha_salida_estado').val('');
@@ -191,7 +191,7 @@
             }
         }
 
-            }            
+    }
 </script>
 
 <div id="pnl_estado_laboral">
@@ -216,11 +216,7 @@
                         <div class="col-md-12">
                             <label for="ddl_estado_laboral" class="form-label form-label-sm">Estado laboral:</label>
                             <select class="form-select form-select-sm" id="ddl_estado_laboral" name="ddl_estado_laboral" onchange="ocultar_opciones_estado();" required>
-<<<<<<< HEAD
                                 <option selected disabled value="">-- Selecciona un Estado Laboral --</option>
-=======
-                                <option selected disabled value="">-- Selecciona un Estado Laboral -- </option>
->>>>>>> pasante_stalin
                                 <option value="Activo">Activo</option>
                                 <option value="Inactivo">Inactivo</option>
                                 <option value="Prueba">En prueba</option>
