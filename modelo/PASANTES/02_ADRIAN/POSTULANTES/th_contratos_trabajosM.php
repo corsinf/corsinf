@@ -23,3 +23,4 @@ class th_contratos_trabajosM extends BaseModel
 
     ];
 }
+

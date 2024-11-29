@@ -33,29 +33,13 @@
             dataType: 'json',
             success: function(response) {
                 $('#txt_contratos_trabajos_id').val(response[0]._id);
-                $('#txt_ruta_guardada_contratos_trabajos').val(response[0].th_ctr_contratos_trabajos);
                 $('#txt_nombre_empresa_contrato').val(response[0].th_ctr_nombre_empresa);
                 $('#txt_tipo_contrato').val(response[0].th_ctr_tipo_contrato);
-                $('#txt_ruta_archivo_contrato').val(response[0].th_ctr_ruta_archivo);
-                $('#txt_fecha_inicio_contrato').val(response[0].th_ctr_fecha_inicio_contrato);
-                
-                var fecha_fin_contrato = response[0].th_expl_fecha_fin_experiencia;
-
-                if (fecha_fin_contrato === '') {
-                    var hoy = new Date();
-                    var dia = String(hoy.getDate()).padStart(2, '0');
-                    var mes = String(hoy.getMonth() + 1).padStart(2, '0');
-                    var year = hoy.getFullYear();
-
-                    var fecha_actual_contrato = year + '-' + mes + '-' + dia;
-                    $('#txt_fecha_fin_contrato').val(fecha_actual_contrato);
-                    $('#txt_fecha_fin_contrato').prop('disabled', true);
-                    $('#cbx_fecha_fin_contrato').prop('checked', true);
-                } else {
-                    $('#cbx_fecha_fin_contrato').prop('checked', false);
-                    $('#txt_fecha_fin_contrato').prop('disabled', false);
-                    $('#txt_fecha_fin_contrato').val(fecha_fin_contrato);
-                }
+                $('#txt_ruta_guardada_contratos_trabajos').val(response[0].th_ctr_contratos_trabajos);        
+                $('#txt_fecha_inicio_contrato').val(response[0].th_ctr_fecha_inicio_contrato); 
+                $cbx_fecha_fin_experiencia.val(response[0].th_ctr_cbx_fecha_fin_experiencia); 
+                            
+                                         
             }
         });
 
@@ -63,7 +47,9 @@
 
     function insertar_editar_contratos_trabajos() {
         var form_data = new FormData(document.getElementById("form_contratos_trabajos")); // Captura todos los campos y archivos
-
+        var in_cbx_fecha_fin_experiencia = $('#cbx_fecha_fin_experiencia').is(':checked') ? 1 : 0;
+        form_data.append('cbx_fecha_fin_experiencia', in_cbx_fecha_fin_experiencia);
+                  
         var txt_id_contratos_trabajos = $('#txt_contratos_trabajos_id').val();
 
         if ($('#txt_ruta_archivo_contrato').val() === '' && txt_id_contratos_trabajos != '') {
@@ -74,9 +60,7 @@
             $('#txt_ruta_archivo_contrato').rules("add", {
                 required: true
             });
-        }
-
-        
+        }       
       
         //   console.log([...form_data]);
         //   console.log([...form_data.keys()]);
@@ -180,14 +164,13 @@
         //contratos capacitaciones
         $('#txt_nombre_empresa_contrato').val('');
         $('#txt_ruta_archivo_contrato').val('');
-
+        $('#txt_tipo_contrato').val('');
         $('#txt_contratos_trabajos_id').val('');
         $('#txt_ruta_guardada_contratos_trabajos').val('');
-
-        $('#txt_fecha_inicio_contrato').val('');
-        $('#txt_fecha_fin_contrato').val('');
+        $('#txt_fecha_inicio_contrato').val('')
+        $('#txt_fecha_fin_contrato').val('')       
         $('#txt_fecha_fin_contrato').prop('disabled', false);
-        $('#cbx_fecha_fin_contrato').prop('checked', false);
+        $('#cbx_fecha_fin_experiencia').prop('checked', false);
 
         //Limpiar validaciones
         $("#form_contratos_trabajos").validate().resetForm();
@@ -198,15 +181,7 @@
         $('#btn_guardar_contratos_trabajos').html('Agregar');
     }
 
-    function definir_ruta_iframe_contratos(url) {
-        var cambiar_ruta = $('#iframe_contratos_trabajos_pdf').attr('src', url);
-    }
-
-    function limpiar_parametros_iframe() {
-        $('#iframe_contratos_trabajos_pdf').attr('src', '');
-    }
-
-
+    
     function validar_fechas_contratos_trabajos() {
         var fecha_inicio = $('#txt_fecha_inicio_contrato').val();
         var fecha_final = $('#txt_fecha_fin_contrato').val();
@@ -222,7 +197,7 @@
                 });
                 $('.form-control').removeClass('is-valid is-invalid');
                 $('#txt_fecha_fin_contrato').val('');
-                $('#cbx_fecha_fin_contrato').prop('checked', false);
+                $('#cbx_fecha_fin_experiencia').prop('checked', false);
                 $('#txt_fecha_fin_contrato').prop('disabled', false);
             }
             if (Date.parse(fecha_inicio) > Date.parse(fecha_final)) {
@@ -233,11 +208,20 @@
                 });
                 $('.form-control').removeClass('is-valid is-invalid');
                 $('#txt_fecha_inicio_contrato').val('');
-                $('#cbx_fecha_fin_contrato').prop('checked', false);
+                $('#cbx_fecha_fin_experiencia').prop('checked', false);
                 $('#txt_fecha_fin_contrato').prop('disabled', false);
             }
         }
     }
+
+    function definir_ruta_iframe_contratos(url) {
+       var cambiar_ruta = $('#iframe_contratos_trabajos_pdf').attr('src', url);
+    }
+
+    function limpiar_parametros_iframe() {
+        $('#iframe_contratos_trabajos_pdf').attr('src', '');
+    } 
+
 </script>
 
 <div id="pnl_contratos_trabajos">
@@ -261,7 +245,8 @@
 
                     <input type="hidden" name="txt_contratos_trabajos_id" id="txt_contratos_trabajos_id">
                     <input type="hidden" name="txt_postulante_cedula" id="txt_postulante_cedula">
-                    <input type="hidden" name="txt_postulante_id" id="txt_postulante_id">
+                    <input type="hidden" name="txt_postulante_id" id="txt_postulan
+                    te_id">
 
 
                     <div class="row mb-col">
@@ -292,8 +277,8 @@
                     </div>
                     <div class="row mb-col">
                         <div class="col md-12">
-                            <input type="checkbox" class="form-check-input" name="cbx_fecha_fin_contrato" id="cbx_fecha_fin_contrato" onchange="checkbox_actualidad_contratos_trabajos();">
-                            <label for="cbx_fecha_fin_contrato" class="form-label form-label-sm">Actualidad</label>
+                            <input type="checkbox" class="form-check-input" name="cbx_fecha_fin_experiencia" id="cbx_fecha_fin_experiencia"  onchange="checkbox_actualidad_contratos_trabajos();">
+                            <label for="cbx_fecha_fin_experiencia" class="form-label form-label-sm">Actualidad</label>
                         </div>
                     </div>
 
@@ -339,6 +324,9 @@
     $(document).ready(function() {
         agregar_asterisco_campo_obligatorio('txt_nombre_empresa_contrato');
         agregar_asterisco_campo_obligatorio('txt_tipo_contrato');
+        agregar_asterisco_campo_obligatorio('txt_fecha_inicio_contrato');
+        agregar_asterisco_campo_obligatorio('txt_fecha_fin_contrato');
+        agregar_asterisco_campo_obligatorio('txt_ruta_archivo_contrato');
 
         //Validación Contratos de Trabajo
         $("#form_contratos_trabajos").validate({
@@ -394,29 +382,26 @@
     });
 
     function checkbox_actualidad_contratos_trabajos() {
-        if ($('#cbx_fecha_fin_contrato').is(':checked')) {
+        if ($('#cbx_fecha_fin_experiencia').is(':checked')) {
             var hoy = new Date();
             var dia = String(hoy.getDate()).padStart(2, '0');
             var mes = String(hoy.getMonth() + 1).padStart(2, '0');
             var year = hoy.getFullYear();
-
             var fecha_actual = year + '-' + mes + '-' + dia;
-            $('#txt_fecha_fin_contrato').val(fecha_actual);
 
-            $('#txt_fecha_fin_contrato').prop('readonly', true);
-            $('#txt_fecha_fin_contrato').rules("remove", "required");
+            $('#txt_fecha_fin_contrato').val(fecha_actual); // Coloca la fecha de hoy en la fecha final
+            $('#txt_fecha_fin_contrato').prop('readonly', true); // Hace solo lectura el campo
+            $('#txt_fecha_fin_contrato').rules("remove", "required"); // Elimina la validación de "required"
 
-            // Agregar clase 'is-valid' para poner el campo en verde
+            // Agrega clase válida
             $('#txt_fecha_fin_contrato').addClass('is-valid');
             $('#txt_fecha_fin_contrato').removeClass('is-invalid');
-
         } else {
-            // Solo limpiar el campo si estaba previamente deshabilitado
             if ($('#txt_fecha_fin_contrato').prop('readonly')) {
                 $('#txt_fecha_fin_contrato').val('');
             }
 
-            $('#txt_fecha_fin_contrato').prop('readonly', false);
+            $('#txt_fecha_fin_contrato').prop('readonly', false); // Habilita para edición
             $('#txt_fecha_fin_contrato').rules("add", {
                 required: true
             });
