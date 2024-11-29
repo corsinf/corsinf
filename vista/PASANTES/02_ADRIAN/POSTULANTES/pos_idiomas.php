@@ -222,7 +222,7 @@ function reiniciar_campos_fecha(campo) {
 
             <!-- Modal Header -->
             <div class="modal-header">
-                <h6><label class="text-body-secondary fw-bold" id="lbl_nombre_idioma">Agregue un idioma</small></h6>
+                <h5><small class="text-body-secondary fw-bold" id="lbl_nombre_idioma">Agregue un idioma </small></h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="limpiar_campos_idiomas_modal()"></button>
             </div>
             <!-- Modal body -->
@@ -231,7 +231,7 @@ function reiniciar_campos_fecha(campo) {
                 <div class="modal-body">
                     <div class="row mb-col">
                         <div class="col-md-12">
-                            <label for="ddl_seleccionar_idioma" class="form-label form-label-sm">Idioma <label style="color: red;">*</label></label>
+                            <label for="ddl_seleccionar_idioma" class="form-label form-label-sm">Idioma </label>
                             <select class="form-select form-select-sm" id="ddl_seleccionar_idioma" name="ddl_seleccionar_idioma">
                                 <option selected disabled value="">-- Selecciona un Idioma --</option>
                                 <option value="Español">Español</option>
@@ -246,7 +246,7 @@ function reiniciar_campos_fecha(campo) {
 
                     <div class="row mb-col">
                         <div class="col-md-12">
-                            <label for="ddl_dominio_idioma" class="form-label form-label-sm">Dominio del Idioma <label style="color: red;">*</label></label>
+                            <label for="ddl_dominio_idioma" class="form-label form-label-sm">Dominio del Idioma </label>
                             <select class="form-select form-select-sm" id="ddl_dominio_idioma" name="ddl_dominio_idioma" required>
                                 <option selected disabled value="">-- Selecciona su nivel de dominio del idioma --</option>
                                 <option value="Nativo">Nativo</option>
@@ -289,9 +289,13 @@ function reiniciar_campos_fecha(campo) {
 
 
 <script>
-
     $(document).ready(function() {
 
+        agregar_asterisco_campo_obligatorio('ddl_seleccionar_idioma');
+        agregar_asterisco_campo_obligatorio('ddl_dominio_idioma');
+        agregar_asterisco_campo_obligatorio('txt_institucion_1');
+        agregar_asterisco_campo_obligatorio('txt_fecha_inicio_idioma');
+        agregar_asterisco_campo_obligatorio('txt_fecha_fin_idioma');
         //Validación Idiomas
         $("#form_agregar_idioma").validate({
             rules: {
@@ -322,7 +326,7 @@ function reiniciar_campos_fecha(campo) {
                 },
                 txt_institucion_1: {
                     required: "Por favor escriba la institución donde recibió su certificado",
-                    maxlength: "El campo no puede tener más de 200 caracteres"
+                    maxlength: "200"
                 },
                 txt_fecha_inicio_idioma: {
                     required: "Por favor escriba la fecha de inicio de estudios",

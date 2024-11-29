@@ -457,9 +457,9 @@ if (isset($_GET['id'])) {
                                                             <h6 class="mb-0 fw-bold text-primary">Certificados Médicos:</h6>
                                                         </div>
                                                         <div class="col-5 d-flex justify-content-end align-items-center">
-                                                            <a href="#" class="text-success d-flex align-items-center" data-bs-toggle="modal" data-bs-target="#modal_agregar_certificado_medico">
+                                                            <a href="#" class="text-success d-flex align-items-center" data-bs-toggle="modal" data-bs-target="#modal_agregar_certificados_medicos">
                                                                 <i class='bx bx-plus-circle bx-sm me-1'></i>
-                                                                <span class="">Subir</span>
+                                                                <span class="">Agregar</span>
                                                             </a>
                                                         </div>
                                                     </div>
@@ -589,19 +589,19 @@ if (isset($_GET['id'])) {
                 <div class="modal-body">
                     <div class="row mb-col">
                         <div class="col-md-3">
-                            <label for="txt_primer_apellido" class="form-label form-label-sm">Primer Apellido <label style="color: red;">*</label></label>
+                            <label for="txt_primer_apellido" class="form-label form-label-sm">Primer Apellido</label>
                             <input type="text" class="form-control form-control-sm" name="txt_primer_apellido" id="txt_primer_apellido" placeholder="Escriba su apellido paterno">
                         </div>
                         <div class="col-md-3">
-                            <label for="txt_segundo_apellido" class="form-label form-label-sm">Segundo Apellido <label style="color: red;">*</label></label>
+                            <label for="txt_segundo_apellido" class="form-label form-label-sm">Segundo Apellido</label>
                             <input type="text" class="form-control form-control-sm" name="txt_segundo_apellido" id="txt_segundo_apellido" placeholder="Escriba su apellido materno">
                         </div>
                         <div class="col-md-3">
-                            <label for="txt_primer_nombre" class="form-label form-label-sm">Primer Nombre <label style="color: red;">*</label></label>
+                            <label for="txt_primer_nombre" class="form-label form-label-sm">Primer Nombre</label>
                             <input type="text" class="form-control form-control-sm" name="txt_primer_nombre" id="txt_primer_nombre" placeholder="Escriba su primer nombre">
                         </div>
                         <div class="col-md-3">
-                            <label for="txt_segundo_nombre" class="form-label form-label-sm">Segundo Nombre <label style="color: red;">*</label></label>
+                            <label for="txt_segundo_nombre" class="form-label form-label-sm">Segundo Nombre</label>
                             <input type="text" class="form-control form-control-sm" name="txt_segundo_nombre" id="txt_segundo_nombre" placeholder="Escriba su primer nombre">
                         </div>
                     </div>
@@ -609,11 +609,11 @@ if (isset($_GET['id'])) {
                     <div class="row mb-col">
 
                         <div class="col-md-3">
-                            <label for="txt_numero_cedula" class="form-label form-label-sm">N° de Cédula <label style="color: red;">*</label></label>
+                            <label for="txt_numero_cedula" class="form-label form-label-sm">N° de Cédula</label>
                             <input type="text" class="form-control form-control-sm" name="txt_numero_cedula" id="txt_numero_cedula" placeholder="Digite su número de cédula">
                         </div>
                         <div class="col-md-3">
-                            <label for="ddl_sexo" class="form-label form-label-sm">Sexo <label style="color: red;">*</label></label>
+                            <label for="ddl_sexo" class="form-label form-label-sm">Sexo</label>
                             <select class="form-select form-select-sm" id="ddl_sexo" name="ddl_sexo">
                                 <option selected disabled value="">-- Selecciona una opción --</option>
                                 <option value="Masculino">Masculino</option>
@@ -621,7 +621,7 @@ if (isset($_GET['id'])) {
                             </select>
                         </div>
                         <div class="col-md-3">
-                            <label for="txt_fecha_nacimiento" class="form-label form-label-sm">Fecha de nacimiento <label style="color: red;">*</label></label>
+                            <label for="txt_fecha_nacimiento" class="form-label form-label-sm">Fecha de nacimiento</label>
                             <input type="date" class="form-control form-control-sm" name="txt_fecha_nacimiento" id="txt_fecha_nacimiento">
                         </div>
                         <div class="col-md-3">
@@ -647,7 +647,7 @@ if (isset($_GET['id'])) {
 
                     <div class="row mb-col">
                         <div class="col-md-6">
-                            <label for="ddl_nacionalidad" class="form-label form-label-sm">Nacionalidad <label style="color: red;">*</label></label>
+                            <label for="ddl_nacionalidad" class="form-label form-label-sm">Nacionalidad</label>
                             <select class="form-select form-select-sm" id="ddl_nacionalidad" name="ddl_nacionalidad">
                                 <option selected disabled value="">-- Selecciona una Nacionalidad --</option>
                                 <option value="Ecuatoriano">Ecuatoriano</option>
@@ -658,7 +658,7 @@ if (isset($_GET['id'])) {
                             </select>
                         </div>
                         <div class="col-md-6">
-                            <label for="ddl_estado_civil" class="form-label form-label-sm">Estado civil <label style="color: red;">*</label></label>
+                            <label for="ddl_estado_civil" class="form-label form-label-sm">Estado civil</label>
                             <select class="form-select form-select-sm" id="ddl_estado_civil" name="ddl_estado_civil">
                                 <option selected disabled value="">-- Selecciona un Estado Civil --</option>
                                 <option value="Soltero">Soltero/a</option>
@@ -694,6 +694,24 @@ if (isset($_GET['id'])) {
     <script>
         //Validacion de formulario
         $(document).ready(function() {
+            agregar_asterisco_campo_obligatorio('txt_primer_apellido');
+            agregar_asterisco_campo_obligatorio('txt_segundo_apellido');
+            agregar_asterisco_campo_obligatorio('txt_primer_nombre');
+            agregar_asterisco_campo_obligatorio('txt_segundo_nombre');
+            agregar_asterisco_campo_obligatorio('txt_numero_cedula');
+            agregar_asterisco_campo_obligatorio('ddl_sexo');
+            agregar_asterisco_campo_obligatorio('txt_fecha_nacimiento');
+            agregar_asterisco_campo_obligatorio('txt_edad');
+            agregar_asterisco_campo_obligatorio('txt_telefono_1');
+            agregar_asterisco_campo_obligatorio('txt_telefono_2');
+            agregar_asterisco_campo_obligatorio('txt_correo');
+            agregar_asterisco_campo_obligatorio('ddl_nacionalidad');
+            agregar_asterisco_campo_obligatorio('ddl_estado_civil');
+            agregar_asterisco_campo_obligatorio('ddl_provincias');
+            agregar_asterisco_campo_obligatorio('ddl_ciudad');
+            agregar_asterisco_campo_obligatorio('ddl_parroquia');
+            agregar_asterisco_campo_obligatorio('txt_codigo_postal');
+            agregar_asterisco_campo_obligatorio('txt_direccion');
             //Validación Información Personal
             $("#form_informacion_personal").validate({
                 rules: {

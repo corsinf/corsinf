@@ -205,7 +205,7 @@
 
             <!-- Modal Header -->
             <div class="modal-header">
-                <h6><label class="text-body-secondary fw-bold" id="lbl_titulo_estado_laboral">Agregue su estado laboral</small></h6>
+                <h6><small class="text-body-secondary fw-bold" id="lbl_titulo_estado_laboral">Agregue su estado laboral</small></h6>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="limpiar_campos_estado_laboral_modal()"></button>
             </div>
             <!-- Modal body -->
@@ -214,9 +214,13 @@
                 <div class="modal-body">
                     <div class="row mb-col">
                         <div class="col-md-12">
-                            <label for="ddl_estado_laboral" class="form-label form-label-sm">Estado laboral: <label style="color: red;">*</label></label>
+                            <label for="ddl_estado_laboral" class="form-label form-label-sm">Estado laboral:</label>
                             <select class="form-select form-select-sm" id="ddl_estado_laboral" name="ddl_estado_laboral" onchange="ocultar_opciones_estado();" required>
+<<<<<<< HEAD
                                 <option selected disabled value="">-- Selecciona un Estado Laboral --</option>
+=======
+                                <option selected disabled value="">-- Selecciona un Estado Laboral -- </option>
+>>>>>>> pasante_stalin
                                 <option value="Activo">Activo</option>
                                 <option value="Inactivo">Inactivo</option>
                                 <option value="Prueba">En prueba</option>
@@ -228,13 +232,13 @@
                     </div>
                     <div class="row mb-col">
                         <div class="col-md-12">
-                            <label for="txt_fecha_contratacion_estado" class="form-label form-label-sm">Fecha de contratación <label style="color: red;">*</label></label>
+                            <label for="txt_fecha_contratacion_estado" class="form-label form-label-sm">Fecha de contratación</label>
                             <input type="date" class="form-control form-control-sm" name="txt_fecha_contratacion_estado" id="txt_fecha_contratacion_estado">
                         </div>
                     </div>
                     <div class="row mb-col">
                         <div class="col-md-12">
-                            <label for="txt_fecha_salida_estado" class="form-label form-label-sm">Fecha de salida <label style="color: red;">*</label></label>
+                            <label for="txt_fecha_salida_estado" class="form-label form-label-sm">Fecha de salida </label>
                             <input type="date" class="form-control form-control-sm" name="txt_fecha_salida_estado" id="txt_fecha_salida_estado">
                         </div>
                     </div>
@@ -250,6 +254,10 @@
 
 <script>
     $(document).ready(function() {
+        agregar_asterisco_campo_obligatorio('ddl_estado_laboral');
+        agregar_asterisco_campo_obligatorio('txt_fecha_contratacion_estado');
+        agregar_asterisco_campo_obligatorio('txt_fecha_salida_estado');
+
         //Validación Estado Laboral
         $("#form_estado_laboral").validate({
             rules: {
