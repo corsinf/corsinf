@@ -24,6 +24,10 @@ if (isset($_GET['hoja_de_vida'])) {
     echo $controlador->hoja_de_vida($_GET['id']);
 }
 
+if (isset($_GET['subir_foto'])) {
+   
+}
+
 
 class th_postulantesC
 {
@@ -54,7 +58,7 @@ class th_postulantesC
 
     function insertar_editar($parametros)
     {
-       //print_r($parametros); exit(); die();
+        //print_r($parametros); exit(); die();
 
         $datos = array(
             array('campo' => 'th_pos_primer_nombre', 'dato' => $parametros['txt_primer_nombre']),
@@ -112,38 +116,38 @@ class th_postulantesC
         //$datos = $this->modelo->where('th_pos_id', $id)->listar();
         //$datos = $this->modelo2->where('th_pos_id', $id)->listar();
         //$datos = $this->modelo3->where('th_pos_id', $id)->listar();
-        $th_pos_primer_nombre = 'Ruben';//$datos[0]['th_pos_primer_nombre'];
-        $th_pos_segundo_nombre = 'Ruben';//$datos[0]['th_pos_segundo_nombre'];
-        $th_pos_primer_apellido = 'Ruben';//$datos[0]['th_pos_primer_apellido'];
-        $th_pos_segundo_apellido = 'Ruben';//$datos[0]['th_pos_segundo_apellido'];
+        $th_pos_primer_nombre = 'Ruben'; //$datos[0]['th_pos_primer_nombre'];
+        $th_pos_segundo_nombre = 'Ruben'; //$datos[0]['th_pos_segundo_nombre'];
+        $th_pos_primer_apellido = 'Ruben'; //$datos[0]['th_pos_primer_apellido'];
+        $th_pos_segundo_apellido = 'Ruben'; //$datos[0]['th_pos_segundo_apellido'];
         $th_pos_nombres_completos = $th_pos_primer_nombre . ' ' . $th_pos_segundo_nombre . ' ' . $th_pos_primer_apellido . ' ' . $th_pos_segundo_apellido;
-        $th_pos_correo = 'milton@corsinf.com';//$datos[0]['th_pos_correo'];
-        $th_pos_telefono_1 = '(023) 310-2928';//$datos[0]['th_pos_telefono_1'];
+        $th_pos_correo = 'milton@corsinf.com'; //$datos[0]['th_pos_correo'];
+        $th_pos_telefono_1 = '(023) 310-2928'; //$datos[0]['th_pos_telefono_1'];
         $point = ' ° ';
         $guion = ' - ';
 
         //? Educación
-        $th_fora_institucion = 'Universidad de Harvard, Escuela Corsinf';//$datos[0]['th_fora_institución'];
-        $th_fora_titulo_obtenido = 'Licenciatura en Ciencias de la Computación';//$datos[0]['th_fora_titulo_obtenido'];
-        $th_fora_fecha_inicio_formacion = 'Septiembre 2012';//$datos[0]['th_fora_fecha_inicio_formacion'];
+        $th_fora_institucion = 'Universidad de Harvard, Escuela Corsinf'; //$datos[0]['th_fora_institución'];
+        $th_fora_titulo_obtenido = 'Licenciatura en Ciencias de la Computación'; //$datos[0]['th_fora_titulo_obtenido'];
+        $th_fora_fecha_inicio_formacion = 'Septiembre 2012'; //$datos[0]['th_fora_fecha_inicio_formacion'];
         //! No pongo becas o premios porque en la tabla no hay campos para eso, ni tampoco para una segunda formación academica.
 
         //* Habilidades Tecnicas
-        $th_hab_nombre = 'Machine Learning';//$datos[0]['th_hab_nombre'];
-        $th_tiph_nombre = 'Python/Scrikit-learn';//$datos[0]['th_tiph_nombre'];
+        $th_hab_nombre = 'Machine Learning'; //$datos[0]['th_hab_nombre'];
+        $th_tiph_nombre = 'Python/Scrikit-learn'; //$datos[0]['th_tiph_nombre'];
         //! Sucede lo mismo que en el anterior comentario, no hay campos para habilidades tecnicas, por lo que no se puede hacer un bucle para mostrar más de una habilidad.
-        
+
         //? Experiencia Laboral
-        $th_expl_nombre_empresa = 'Corsinf';//$datos[0]['th_expl_nombre_empresa'];
-        $th_expl_cargos_ocupados = 'Desarrollador de Software';//$datos[0]['th_expl_cargos_ocupados'];
-        $th_expl_fecha_inicio_experiencia = 'Septiembre 2012';//$datos[0]['th_expl_fecha_inicio_experiencia'];
-        $th_expl_fecha_fin_experiencia = 'Presente';//$datos[0]['th_expl_fecha_fin_experiencia'];
-        $th_expl_responsabilidades_logros = 'Desarrollo de software para la empresa';//$datos[0]['th_expl_responsabilidades_logros'];
+        $th_expl_nombre_empresa = 'Corsinf'; //$datos[0]['th_expl_nombre_empresa'];
+        $th_expl_cargos_ocupados = 'Desarrollador de Software'; //$datos[0]['th_expl_cargos_ocupados'];
+        $th_expl_fecha_inicio_experiencia = 'Septiembre 2012'; //$datos[0]['th_expl_fecha_inicio_experiencia'];
+        $th_expl_fecha_fin_experiencia = 'Presente'; //$datos[0]['th_expl_fecha_fin_experiencia'];
+        $th_expl_responsabilidades_logros = 'Desarrollo de software para la empresa'; //$datos[0]['th_expl_responsabilidades_logros'];
         //! No pongo más de una experiencia laboral porque no hay campos para eso en la tabla, por lo tanto no se puede hacer un bucle para mostrar más de una experiencia laboral.
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        $pdf = new FPDF('P','mm','A4');
+        $pdf = new FPDF('P', 'mm', 'A4');
         $pdf->SetMargins(28, 15, 28);
         $pdf->SetAutoPageBreak(true, 15);
         $pdf->AddPage();
@@ -155,23 +159,23 @@ class th_postulantesC
 
         //* Nombre, Apellido, Correo y Teléfono
         $pdf->SetFont('Arial', 'B', 11);
-        $pdf->Cell(60, 7, utf8_decode(''), 0, 0,'C');
-        $pdf->Cell(40, 7, utf8_decode($th_pos_nombres_completos), 0, 1,'C');
+        $pdf->Cell(60, 7, utf8_decode(''), 0, 0, 'C');
+        $pdf->Cell(40, 7, utf8_decode($th_pos_nombres_completos), 0, 1, 'C');
         $pdf->SetFont('Arial', '', 11);
-        $pdf->Cell(60, 7, utf8_decode(''), 0, 0,'C');
-        $pdf->Cell(40, 7, utf8_decode($th_pos_correo . $point . $th_pos_telefono_1), 0, 0,'C');
+        $pdf->Cell(60, 7, utf8_decode(''), 0, 0, 'C');
+        $pdf->Cell(40, 7, utf8_decode($th_pos_correo . $point . $th_pos_telefono_1), 0, 0, 'C');
         $pdf->Ln(10);
 
         //* Educación
         $pdf->SetFont('Arial', 'B', 11);
-        $pdf->Cell(60, 7, utf8_decode(''), 0, 0,'C');
-        $pdf->Cell(40, 14, utf8_decode('Educación'), 0, 1,'C');
-        $pdf->Cell(0, 2, utf8_decode(''), 'T', 1,'C');
-        $pdf->Cell(60, 7, utf8_decode($th_fora_institucion), 0, 1,'L');
+        $pdf->Cell(60, 7, utf8_decode(''), 0, 0, 'C');
+        $pdf->Cell(40, 14, utf8_decode('Educación'), 0, 1, 'C');
+        $pdf->Cell(0, 2, utf8_decode(''), 'T', 1, 'C');
+        $pdf->Cell(60, 7, utf8_decode($th_fora_institucion), 0, 1, 'L');
         $pdf->SetFont('Arial', '', 11);
-        $pdf->Cell(60, 7, utf8_decode($th_fora_titulo_obtenido), 0, 0,'L');
-        $pdf->Cell(40, 7, utf8_decode(''), 0, 0,'R');
-        $pdf->Cell(55, 7, utf8_decode($th_fora_fecha_inicio_formacion), 0, 1,'R');
+        $pdf->Cell(60, 7, utf8_decode($th_fora_titulo_obtenido), 0, 0, 'L');
+        $pdf->Cell(40, 7, utf8_decode(''), 0, 0, 'R');
+        $pdf->Cell(55, 7, utf8_decode($th_fora_fecha_inicio_formacion), 0, 1, 'R');
         // $pdf->Cell(10, 5.5, $bullet, 0, 0,'L');
         // $pdf->Cell(0, 5.5, utf8_decode('Premio Marshall'), 0, 1,'L');
         // $pdf->Cell(10, 5.5, $bullet, 0, 0,'L');
@@ -193,89 +197,96 @@ class th_postulantesC
 
         //? Habilidades Tecnicas
         $pdf->SetFont('Arial', 'B', 11);
-        $pdf->Cell(60, 7, utf8_decode(''), 0, 0,'C');
-        $pdf->Cell(40, 14, utf8_decode('Habilidades Tecnicas'), 0, 1,'C');
-        $pdf->Cell(0, 2, utf8_decode(''), 'T', 1,'C');
+        $pdf->Cell(60, 7, utf8_decode(''), 0, 0, 'C');
+        $pdf->Cell(40, 14, utf8_decode('Habilidades Tecnicas'), 0, 1, 'C');
+        $pdf->Cell(0, 2, utf8_decode(''), 'T', 1, 'C');
         $pdf->SetFont('Arial', '', 11);
-        $pdf->Cell(2.5, 5.5, $bullet, 0, 0,'L');
-        $pdf->Cell(35, 5.5, utf8_decode($th_hab_nombre), 0, 0,'L');
-        $pdf->Cell(2.5, 5.5, $bullet, 0, 0,'L');
-        $pdf->Cell(40, 5.5, utf8_decode($th_tiph_nombre), 0, 0,'L');
-        $pdf->Cell(2.5, 5.5, $bullet, 0, 0,'L');
-        $pdf->Cell(35, 5.5, utf8_decode('Spark'), 0, 0,'L');
-        $pdf->Cell(2.5, 5.5, $bullet, 0, 0,'L');
-        $pdf->Cell(20, 5.5, utf8_decode('Data Visualization'), 0, 1,'L');
+        $pdf->Cell(2.5, 5.5, $bullet, 0, 0, 'L');
+        $pdf->Cell(35, 5.5, utf8_decode($th_hab_nombre), 0, 0, 'L');
+        $pdf->Cell(2.5, 5.5, $bullet, 0, 0, 'L');
+        $pdf->Cell(40, 5.5, utf8_decode($th_tiph_nombre), 0, 0, 'L');
+        $pdf->Cell(2.5, 5.5, $bullet, 0, 0, 'L');
+        $pdf->Cell(35, 5.5, utf8_decode('Spark'), 0, 0, 'L');
+        $pdf->Cell(2.5, 5.5, $bullet, 0, 0, 'L');
+        $pdf->Cell(20, 5.5, utf8_decode('Data Visualization'), 0, 1, 'L');
 
-        $pdf->Cell(2.5, 5.5, $bullet, 0, 0,'L');
-        $pdf->Cell(35, 5.5, utf8_decode('Quantitative'), 0, 0,'L');
-        $pdf->Cell(2.5, 5.5, $bullet, 0, 0,'L');
-        $pdf->Cell(40, 5.5, utf8_decode('Cloud Scripting'), 0, 0,'L');
-        $pdf->Cell(2.5, 5.5, $bullet, 0, 0,'L');
-        $pdf->Cell(35, 5.5, utf8_decode('Hadoop'), 0, 0,'L');
-        $pdf->Cell(2.5, 5.5, $bullet, 0, 0,'L');
-        $pdf->Cell(20, 5.5, utf8_decode('Java C#'), 0, 1,'L');
+        $pdf->Cell(2.5, 5.5, $bullet, 0, 0, 'L');
+        $pdf->Cell(35, 5.5, utf8_decode('Quantitative'), 0, 0, 'L');
+        $pdf->Cell(2.5, 5.5, $bullet, 0, 0, 'L');
+        $pdf->Cell(40, 5.5, utf8_decode('Cloud Scripting'), 0, 0, 'L');
+        $pdf->Cell(2.5, 5.5, $bullet, 0, 0, 'L');
+        $pdf->Cell(35, 5.5, utf8_decode('Hadoop'), 0, 0, 'L');
+        $pdf->Cell(2.5, 5.5, $bullet, 0, 0, 'L');
+        $pdf->Cell(20, 5.5, utf8_decode('Java C#'), 0, 1, 'L');
 
-        $pdf->Cell(2.5, 5.5, $bullet, 0, 0,'L');
-        $pdf->Cell(35, 5.5, utf8_decode('Unix Scripting'), 0, 0,'L');
-        $pdf->Cell(2.5, 5.5, $bullet, 0, 0,'L');
-        $pdf->Cell(40, 5.5, utf8_decode('Oracle/SQL Server'), 0, 0,'L');
-        $pdf->Cell(2.5, 5.5, $bullet, 0, 0,'L');
-        $pdf->Cell(35, 5.5, utf8_decode('PLSQL/T-SQL'), 0, 0,'L');
-        $pdf->Cell(2.5, 5.5, $bullet, 0, 0,'L');
-        $pdf->Cell(20, 5.5, utf8_decode('Data Warehouse/ETL'), 0, 1,'L');
+        $pdf->Cell(2.5, 5.5, $bullet, 0, 0, 'L');
+        $pdf->Cell(35, 5.5, utf8_decode('Unix Scripting'), 0, 0, 'L');
+        $pdf->Cell(2.5, 5.5, $bullet, 0, 0, 'L');
+        $pdf->Cell(40, 5.5, utf8_decode('Oracle/SQL Server'), 0, 0, 'L');
+        $pdf->Cell(2.5, 5.5, $bullet, 0, 0, 'L');
+        $pdf->Cell(35, 5.5, utf8_decode('PLSQL/T-SQL'), 0, 0, 'L');
+        $pdf->Cell(2.5, 5.5, $bullet, 0, 0, 'L');
+        $pdf->Cell(20, 5.5, utf8_decode('Data Warehouse/ETL'), 0, 1, 'L');
 
-        $pdf->Cell(2.5, 5.5, $bullet, 0, 0,'L');
-        $pdf->Cell(35, 5.5, utf8_decode('RDBMS Tuning'), 0, 0,'L');
-        $pdf->Cell(2.5, 5.5, $bullet, 0, 0,'L');
-        $pdf->Cell(40, 5.5, utf8_decode('Network Protocals'), 0, 0,'L');
-        $pdf->Cell(2.5, 5.5, $bullet, 0, 0,'L');
-        $pdf->Cell(35, 5.5, utf8_decode('Agile & DevOps'), 0, 0,'L');
-        $pdf->Cell(2.5, 5.5, $bullet, 0, 0,'L');
-        $pdf->Cell(20, 5.5, utf8_decode('Web Development'), 0, 1,'L');
+        $pdf->Cell(2.5, 5.5, $bullet, 0, 0, 'L');
+        $pdf->Cell(35, 5.5, utf8_decode('RDBMS Tuning'), 0, 0, 'L');
+        $pdf->Cell(2.5, 5.5, $bullet, 0, 0, 'L');
+        $pdf->Cell(40, 5.5, utf8_decode('Network Protocals'), 0, 0, 'L');
+        $pdf->Cell(2.5, 5.5, $bullet, 0, 0, 'L');
+        $pdf->Cell(35, 5.5, utf8_decode('Agile & DevOps'), 0, 0, 'L');
+        $pdf->Cell(2.5, 5.5, $bullet, 0, 0, 'L');
+        $pdf->Cell(20, 5.5, utf8_decode('Web Development'), 0, 1, 'L');
         $pdf->Ln(6);
 
         //* Experiencia Laboral
         $pdf->SetFont('Arial', 'B', 11);
-        $pdf->Cell(60, 7, utf8_decode(''), 0, 0,'C');
-        $pdf->Cell(40, 14, utf8_decode('Experiencia Profesional'), 0, 1,'C');
-        $pdf->Cell(0, 2, utf8_decode(''), 'T', 1,'C');
+        $pdf->Cell(60, 7, utf8_decode(''), 0, 0, 'C');
+        $pdf->Cell(40, 14, utf8_decode('Experiencia Profesional'), 0, 1, 'C');
+        $pdf->Cell(0, 2, utf8_decode(''), 'T', 1, 'C');
 
         $pdf->SetFont('Arial', 'B', 11);
-        $pdf->Cell(60, 7, utf8_decode($th_expl_nombre_empresa), 0, 0,'L');
-        $pdf->Cell(40, 7, utf8_decode($th_expl_cargos_ocupados), 0, 0,'R');
+        $pdf->Cell(60, 7, utf8_decode($th_expl_nombre_empresa), 0, 0, 'L');
+        $pdf->Cell(40, 7, utf8_decode($th_expl_cargos_ocupados), 0, 0, 'R');
         $pdf->SetFont('Arial', '', 11);
         $pdf->SetFont('Arial', '', 11);
-        $pdf->Cell(60, 7, utf8_decode($th_expl_responsabilidades_logros), 0, 0,'L');
-        $pdf->Cell(40, 7, utf8_decode(''), 0, 0,'R');
-        $pdf->Cell(55, 7, utf8_decode($th_expl_fecha_inicio_experiencia . $guion . $th_expl_fecha_fin_experiencia), 0, 1,'R');
+        $pdf->Cell(60, 7, utf8_decode($th_expl_responsabilidades_logros), 0, 0, 'L');
+        $pdf->Cell(40, 7, utf8_decode(''), 0, 0, 'R');
+        $pdf->Cell(55, 7, utf8_decode($th_expl_fecha_inicio_experiencia . $guion . $th_expl_fecha_fin_experiencia), 0, 1, 'R');
         $pdf->SetFillColor(255, 255, 255);
-        $pdf->Cell(10, 5.5, $bullet, 0, 0,'L');
-        $pdf->MultiCell(0, 5.5, utf8_decode('Built Command & Command System for Singapore Civil Defence Force using C# .NET WCF Services'), 0, 1,'L');
-        $pdf->Cell(10, 5.5, $bullet, 0, 0,'L');
-        $pdf->MultiCell(0, 5.5, utf8_decode('Integrated propietary software components with commercial off the shell software product'), 0, 1,'L');
+        $pdf->Cell(10, 5.5, $bullet, 0, 0, 'L');
+        $pdf->MultiCell(0, 5.5, utf8_decode('Built Command & Command System for Singapore Civil Defence Force using C# .NET WCF Services'), 0, 1, 'L');
+        $pdf->Cell(10, 5.5, $bullet, 0, 0, 'L');
+        $pdf->MultiCell(0, 5.5, utf8_decode('Integrated propietary software components with commercial off the shell software product'), 0, 1, 'L');
         $pdf->Ln(5);
 
         //? Certificaciones
         $pdf->SetFont('Arial', 'B', 11);
-        $pdf->Cell(60, 7, utf8_decode(''), 0, 0,'C');
-        $pdf->Cell(40, 14, utf8_decode('Certificaciones'), 0, 1,'C');
-        $pdf->Cell(0, 2, utf8_decode(''), 'T', 1,'C');
+        $pdf->Cell(60, 7, utf8_decode(''), 0, 0, 'C');
+        $pdf->Cell(40, 14, utf8_decode('Certificaciones'), 0, 1, 'C');
+        $pdf->Cell(0, 2, utf8_decode(''), 'T', 1, 'C');
 
         $pdf->SetFont('Arial', '', 11);
-        $pdf->Cell(10, 7, $bullet, 0, 0,'L');
-        $pdf->Cell(60, 7, utf8_decode('4-Course graduado en ciencias de datos'), 0, 0,'L');
-        $pdf->Cell(30, 7, utf8_decode(''), 0, 0,'R');
-        $pdf->Cell(55, 7, utf8_decode('Septiembre 2013'), 0, 1,'R');
-        $pdf->Cell(10, 7, $bullet, 0, 0,'L');
-        $pdf->Cell(60, 7, utf8_decode('ITIL fundation V3'), 0, 0,'L');
-        $pdf->Cell(30, 7, utf8_decode(''), 0, 0,'R');
-        $pdf->Cell(55, 7, utf8_decode('Enero 2015'), 0, 1,'R');
-        $pdf->Cell(10, 7, $bullet, 0, 0,'L');
-        $pdf->Cell(60, 7, utf8_decode('Project Management Professional PMP'), 0, 0,'L');
-        $pdf->Cell(30, 7, utf8_decode(''), 0, 0,'R');
-        $pdf->Cell(55, 7, utf8_decode('Octubre 2012'), 0, 1,'R');
+        $pdf->Cell(10, 7, $bullet, 0, 0, 'L');
+        $pdf->Cell(60, 7, utf8_decode('4-Course graduado en ciencias de datos'), 0, 0, 'L');
+        $pdf->Cell(30, 7, utf8_decode(''), 0, 0, 'R');
+        $pdf->Cell(55, 7, utf8_decode('Septiembre 2013'), 0, 1, 'R');
+        $pdf->Cell(10, 7, $bullet, 0, 0, 'L');
+        $pdf->Cell(60, 7, utf8_decode('ITIL fundation V3'), 0, 0, 'L');
+        $pdf->Cell(30, 7, utf8_decode(''), 0, 0, 'R');
+        $pdf->Cell(55, 7, utf8_decode('Enero 2015'), 0, 1, 'R');
+        $pdf->Cell(10, 7, $bullet, 0, 0, 'L');
+        $pdf->Cell(60, 7, utf8_decode('Project Management Professional PMP'), 0, 0, 'L');
+        $pdf->Cell(30, 7, utf8_decode(''), 0, 0, 'R');
+        $pdf->Cell(55, 7, utf8_decode('Octubre 2012'), 0, 1, 'R');
 
         //! Salida del PDF
         $pdf->Output();
     }
+
+    function agregar_foto_perfil($file, $parametros) {}
+
+    private function guardar_archivo($file, $post, $id_insertar_editar) {}
+
+    //Sirve para guardar imagenes 
+    private function validar_formato_archivo($file) {}
 }
