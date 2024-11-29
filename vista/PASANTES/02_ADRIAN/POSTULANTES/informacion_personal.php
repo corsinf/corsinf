@@ -439,7 +439,7 @@ if (isset($_GET['id'])) {
                                                         <div class="col-5 d-flex justify-content-end align-items-center">
                                                             <a href="#" class="text-success d-flex align-items-center" data-bs-toggle="modal" data-bs-target="#modal_agregar_contratos">
                                                                 <i class='bx bx-plus-circle bx-sm me-1'></i>
-                                                                <span class="">Subir</span>
+                                                                <span class="">Agregar</span>
                                                             </a>
                                                         </div>
                                                     </div>

@@ -46,9 +46,8 @@ class th_pos_documentosC
                 <<<HTML
                     <div class="row mb-col">
                         <div class="col-10">
-                            <h6 class="fw-bold mt-3 mb-2">{$value['th_poi_tipo']}</h6>
+                            <p class="fw-bold my-0 d-flex align-items-center">{$value['th_poi_tipo']}</p>
                             <a href="#" onclick="ruta_iframe_documento_identificacion('{$value['th_poi_ruta_archivo']}');">Ver Documento de Identificación</a>
-                          
                         </div>
                         
                         <div class="col-2 d-flex justify-content-end align-items-start">
