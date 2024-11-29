@@ -216,7 +216,7 @@
                         <div class="col-md-12">
                             <label for="ddl_estado_laboral" class="form-label form-label-sm">Estado laboral: <label style="color: red;">*</label></label>
                             <select class="form-select form-select-sm" id="ddl_estado_laboral" name="ddl_estado_laboral" onchange="ocultar_opciones_estado();" required>
-                                <option selected disabled value="">-- Selecciona un Estado Laboral -- <label style="color: red;"></label></option>
+                                <option selected disabled value="">-- Selecciona un Estado Laboral --</option>
                                 <option value="Activo">Activo</option>
                                 <option value="Inactivo">Inactivo</option>
                                 <option value="Prueba">En prueba</option>
