@@ -32,7 +32,7 @@ class th_referencias_laboralesC
     //Funcion para listar la formacion academica del postulante
     function listar($id)
     {
-        $datos = $this->modelo->where('th_pos_id', $id)->where('th_refl_estado', 1)->listar();
+        $datos = $this->modelo->where('th_pos_id', $id)->where('th_refl_estado', 1)->orderBy('th_refl_nombre_referencia', 'DESC')->listar();
 
         $texto = '';
         foreach ($datos as $key => $value) {
