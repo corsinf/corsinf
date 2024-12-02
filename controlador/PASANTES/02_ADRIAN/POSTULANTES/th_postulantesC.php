@@ -25,7 +25,8 @@ if (isset($_GET['hoja_de_vida'])) {
 }
 
 if (isset($_GET['subir_foto'])) {
-   
+//
+//
 }
 
 
@@ -288,5 +289,20 @@ class th_postulantesC
     private function guardar_archivo($file, $post, $id_insertar_editar) {}
 
     //Sirve para guardar imagenes 
-    private function validar_formato_archivo($file) {}
+
+    private function validar_formato_img($file)
+    {
+
+        switch ($file['file_img']['type']) {
+            case 'image/jpeg':
+            case 'image/pjpeg':
+            case 'image/gif':
+            case 'image/png':
+                return 1;
+                break;
+            default:
+                return -1;
+                break;
+        }
+    }
 }

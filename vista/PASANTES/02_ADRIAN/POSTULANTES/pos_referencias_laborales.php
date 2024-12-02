@@ -194,7 +194,7 @@
 
             <!-- Modal Header -->
             <div class="modal-header">
-                <h5><small class="text-body-secondary" id="lbl_titulo_referencia_laboral">Agregue una referencia</small></h5>
+                <h6><small class="text-body-secondary fw-bold" id="lbl_titulo_referencia_laboral">Agregue una referencia</small></h6>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="limpiar_parametros_referencias_laborales()"></button>
             </div>
 

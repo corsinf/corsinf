@@ -42,12 +42,12 @@ class th_certificaciones_capacitacionesC
                 <<<HTML
                     <div class="row mb-3">
                         <div class="col-10">
-                            <p class="fw-bold my-0 d-flex align-items-center">{$value['th_cert_nombre_curso']}</p>
+                            <h6 class="fw-bold my-0 d-flex align-items-center">{$value['th_cert_nombre_curso']}</h6>
                             <a href="#" data-bs-toggle="modal" data-bs-target="#modal_ver_pdf_certificaciones" onclick="definir_ruta_iframe_certificaciones('{$value['th_cert_ruta_archivo']}');">Ver Certifiacado o Capacitacion PDF</a>
                         </div>
                         <div class="col-2 d-flex justify-content-end align-items-center">
-                            <button class="btn btn-xs" style="color: white;" onclick="abrir_modal_certificaciones_capacitaciones('{$value['_id']}')">
-                                <i class="text-dark bx bx-pencil me-0" style="font-size: 20px;"></i>
+                            <button class="btn" style="color: white;" onclick="abrir_modal_certificaciones_capacitaciones('{$value['_id']}')">
+                                <i class="text-dark bx bx-pencil bx-sm"></i>
                             </button>
                         </div>
                     </div>
