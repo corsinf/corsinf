@@ -253,21 +253,21 @@ if (isset($_GET['id'])) {
                             <div class="row mb-col">
                                 <div class="col-md-4">
                                     <label for="txt_telefono_1" class="form-label form-label-sm">Teléfono 1 </label>
-                                    <input type="text" class="form-control form-control-sm solo_numeros_int" name="txt_telefono_1" id="txt_telefono_1" value="" placeholder="Escriba su teléfono personal o fijo" maxlength="12" required>
+                                    <input type="text" class="form-control form-control-sm solo_numeros_int" name="txt_telefono_1" id="txt_telefono_1" value="" maxlength="12">
                                 </div>
                                 <div class="col-md-4">
                                     <label for="txt_telefono_2" class="form-label form-label-sm">Teléfono 2 </label>
-                                    <input type="text" class="form-control form-control-sm solo_numeros_int" name="txt_telefono_2" id="txt_telefono_2" value="" placeholder="Escriba su teléfono personal o fijo (opcional)" maxlength="12">
+                                    <input type="text" class="form-control form-control-sm solo_numeros_int" name="txt_telefono_2" id="txt_telefono_2" value="" maxlength="12">
                                 </div>
                                 <div class="col-md-4">
                                     <label for="txt_correo" class="form-label form-label-sm">Correo Electrónico </label>
-                                    <input type="email" class="form-control form-control-sm" name="txt_correo" id="txt_correo" value="" placeholder="Escriba su correo electrónico">
+                                    <input type="email" class="form-control form-control-sm" name="txt_correo" id="txt_correo" value="" maxlength="100">
                                 </div>
                             </div>
 
                             <div class="row mb-col">
                                 <div class="col-md-6">
-                                    <label for="ddl_nacionalidad" class="form-label form-label-sm">Nacionalidad <label style="color: red;">*</label></label>
+                                    <label for="ddl_nacionalidad" class="form-label form-label-sm">Nacionalidad </label>
                                     <select class="form-select form-select-sm" id="ddl_nacionalidad" name="ddl_nacionalidad">
                                         <option selected disabled value="">-- Selecciona una Nacionalidad --</option>
                                         <option value="Ecuatoriano">Ecuatoriano</option>
@@ -278,7 +278,7 @@ if (isset($_GET['id'])) {
                                     </select>
                                 </div>
                                 <div class="col-md-6">
-                                    <label for="ddl_estado_civil" class="form-label form-label-sm">Estado civil <label style="color: red;">*</label></label>
+                                    <label for="ddl_estado_civil" class="form-label form-label-sm">Estado civil</label>
                                     <select class="form-select form-select-sm" id="ddl_estado_civil" name="ddl_estado_civil">
                                         <option selected disabled value="">-- Selecciona un Estado Civil --</option>
                                         <option value="Soltero">Soltero/a</option>
@@ -298,7 +298,7 @@ if (isset($_GET['id'])) {
                             <div class="row mb-col">
                                 <div class="col-md-12">
                                     <label for="txt_direccion" class="form-label form-label-sm">Dirección </label>
-                                    <input type="text" class="form-control form-control-sm" name="txt_direccion" id="txt_direccion" placeholder="Escriba su dirección">
+                                    <input type="text" class="form-control form-control-sm" name="txt_direccion" id="txt_direccion" maxlength="200">
                                 </div>
                             </div>
 
@@ -368,7 +368,31 @@ if (isset($_GET['id'])) {
                 txt_telefono_1: {
                     required: true,
                 },
+                txt_telefono_2: {
+                    required: true,
+                },
+                txt_correo: {
+                    required: true,
+                },
+                ddl_nacionalidad: {
+                    required: true,
+                },
+                ddl_estado_civil: {
+                    required: true,
+                },
+                ddl_provincias: {
+                    required: true,
+                },
+                ddl_ciudad: {
+                    required: true,
+                },
+                ddl_parroquia: {
+                    required: true,
+                },
                 txt_direccion_postal: {
+                    required: true,
+                },
+                txt_direccion: {
                     required: true,
                 },
             },
@@ -398,7 +422,34 @@ if (isset($_GET['id'])) {
                     required: "Por favor ingrese la edad (fecha de nacimiento)",
                 },
                 txt_telefono_1: {
-                    required: "Por favor ingrese el primero teléfono",
+                    required: "Por favor ingrese un número de teléfono",
+                },
+                txt_telefono_2: {
+                    required: "Por favor ingrese un número de teléfono",
+                },
+                txt_correo: {
+                    required: "Por favor ingrese un correo electrónico",
+                },
+                ddl_nacionalidad: {
+                    required: "Por favor seleccione una nacionalidad",
+                },
+                ddl_estado_civil: {
+                    required: "Por favor seleccione un estado civil",
+                },
+                ddl_provincias: {
+                    required: "Por favor seleccione una provincia",
+                },
+                ddl_ciudad: {
+                    required: "Por favor seleccione una ciudad",
+                },
+                ddl_parroquia: {
+                    required: "Por favor seleccione una parroquia",
+                },
+                txt_direccion_postal: {
+                    required: "Por favor ingrese una dirección postal",
+                },
+                txt_direccion: {
+                    required: "Por favor ingrese una dirección",
                 },
             },
             highlight: function(element) {

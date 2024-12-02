@@ -252,14 +252,14 @@
                     <div class="row mb-col">
                         <div class="col-md-12">
                             <label for="txt_nombre_empresa_contrato" class="form-label form-label-sm">Nombre de la empresa </label>
-                            <input type="text" class="form-control form-control-sm" name="txt_nombre_empresa_contrato" id="txt_nombre_empresa_contrato" placeholder="Escriba el nombre de la empresa que emitió el contrato">
+                            <input type="text" class="form-control form-control-sm no_caracteres" name="txt_nombre_empresa_contrato" id="txt_nombre_empresa_contrato" maxlength="100">
                         </div>
                     </div>
 
                     <div class="row mb-col">
                         <div class="col-md-12">
                             <label for="txt_tipo_contrato" class="form-label form-label-sm">Tipo de Contrato </label>
-                            <input type="text" class="form-control form-control-sm" name="txt_tipo_contrato" id="txt_tipo_contrato" placeholder="Escriba el tipo de contrato">
+                            <input type="text" class="form-control form-control-sm no_caracteres" name="txt_tipo_contrato" id="txt_tipo_contrato" maxlength="100">
                         </div>
                     </div>
 
@@ -285,7 +285,7 @@
                     <div class="row mb-col">
                         <div class="col-md-12">
                             <label for="txt_ruta_archivo_contrato" class="form-label form-label-sm">Copia del contrato firmado </label>
-                            <input type="file" class="form-control form-control-sm" name="txt_ruta_archivo_contrato" id="txt_ruta_archivo_contrato" accept=".pdf" value="" placeholder="">
+                            <input type="file" class="form-control form-control-sm" name="txt_ruta_archivo_contrato" id="txt_ruta_archivo_contrato" accept=".pdf" value="">
                         </div>
                     </div>
 
@@ -333,14 +333,12 @@
             rules: {
                 txt_nombre_empresa_contrato: {
                     required: true,
-                    maxlength: "200"
                 },
                 txt_ruta_archivo_contrato: {
                     required: true,
                 },
                 txt_tipo_contrato: {
                     required: true,
-                    maxlength: "200"
                 },
                 txt_fecha_inicio_contrato: {
                     required: true,

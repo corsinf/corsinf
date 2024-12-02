@@ -262,19 +262,19 @@ function reiniciar_campos_fecha(campo) {
                     <div class="row mb-col">
                         <div class="col-md-12">
                             <label for="txt_institucion" class="form-label form-label-sm">Instución </label>
-                            <input type="text" class="form-control form-control-sm no_caracteres" name="txt_institucion_1" id="txt_institucion_1" placeholder="Escriba la institución donde recibió su certificado" maxlength="200">
+                            <input type="text" class="form-control form-control-sm no_caracteres" name="txt_institucion_1" id="txt_institucion_1" placeholder="Escriba la institución donde recibió su certificado" maxlength="100">
                         </div>
                     </div>
                     <div class="row mb-col">
                         <div class="col-md-12">
                             <label for="txt_fecha_inicio_idioma" class="form-label form-label-sm">Fecha de Inicio </label>
-                            <input type="date" class="form-control form-control-sm no_caracteres" name="txt_fecha_inicio_idioma" id="txt_fecha_inicio_idioma" onchange="txt_fecha_fin_idioma_1();">
+                            <input type="date" class="form-control form-control-sm" name="txt_fecha_inicio_idioma" id="txt_fecha_inicio_idioma" onchange="txt_fecha_fin_idioma_1();">
                         </div>
                     </div>
                     <div class="row mb-col">
                         <div class="col-md-12">
                             <label for="txt_fecha_fin_idioma" class="form-label form-label-sm">Fecha de fin del curso </label>
-                            <input type="date" class="form-control form-control-sm no_caracteres" name="txt_fecha_fin_idioma" id="txt_fecha_fin_idioma" onchange="txt_fecha_fin_idioma_1();">
+                            <input type="date" class="form-control form-control-sm" name="txt_fecha_fin_idioma" id="txt_fecha_fin_idioma" onchange="txt_fecha_fin_idioma_1();">
                         </div>
                     </div>
                     </div>
@@ -307,7 +307,6 @@ function reiniciar_campos_fecha(campo) {
                 },
                 txt_institucion_1: {
                     required: true,
-                    maxlength: "200"
                 },
                 txt_fecha_inicio_idioma: {
                     required: true,

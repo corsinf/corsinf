@@ -210,21 +210,21 @@
                     <div class="row mb-col">
                         <div class="col-md-12">
                             <label for="txt_nombre_referencia" class="form-label form-label-sm">Nombre del empleador</label>
-                            <input type="text" class="form-control form-control-sm" name="txt_nombre_referencia" id="txt_nombre_referencia" placeholder="Escriba el nombre de el empleador" maxlength="50">
+                            <input type="text" class="form-control form-control-sm no_caracteres" name="txt_nombre_referencia" id="txt_nombre_referencia"  maxlength="50">
                         </div>
                     </div>
 
                     <div class="row mb-col">
                         <div class="col-md-12">
                             <label for="txt_telefono_referencia" class="form-label form-label-sm">Teléfono del empleador </label>
-                            <input type="text" class="form-control form-control-sm solo_numeros_int" name="txt_telefono_referencia" id="txt_telefono_referencia" placeholder="Escriba el número de contacto de el empleador" maxlength="15">
+                            <input type="text" class="form-control form-control-sm solo_numeros_int" name="txt_telefono_referencia" id="txt_telefono_referencia" maxlength="15">
                         </div>
                     </div>
 
                     <div class="row mb-col">
                         <div class="col-md-12">
                             <label for="txt_referencia_correo" class="form-label form-label-sm">Correo del empleador</label>
-                            <input type="email" class="form-control form-control-sm" name="txt_referencia_correo" id="txt_referencia_correo" placeholder="Escriba el correo del empleador" maxlength="100">
+                            <input type="email" class="form-control form-control-sm" name="txt_referencia_correo" id="txt_referencia_correo"  maxlength="100">
                         </div>
                     </div>
 
@@ -311,6 +311,12 @@
                 },
                 txt_copia_carta_recomendacion: {
                     required: "Por favor suba la carta de recomendación",
+                },
+                txt_referencia_correo: {
+                    required: "Por favor ingrese el correo de su referencia laboral",
+                },
+                txt_referencia_nombre_empresa: {
+                    required: "Por favor ingrese el nombre de la empresa de su referencia laboral",
                 },
             },
 

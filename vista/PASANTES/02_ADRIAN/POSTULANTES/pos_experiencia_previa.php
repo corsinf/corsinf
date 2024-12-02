@@ -259,14 +259,14 @@
                     <div class="row mb-col">
                         <div class="col-md-12">
                             <label for="txt_nombre_empresa" class="form-label form-label-sm">Nombre de la empresa </label>
-                            <input type="text" class="form-control form-control-sm no_caracteres" name="txt_nombre_empresa" id="txt_nombre_empresa" placeholder="Escriba el nombre de la empresa donde trabajó" maxlength="200">
+                            <input type="text" class="form-control form-control-sm no_caracteres" name="txt_nombre_empresa" id="txt_nombre_empresa" maxlength="100">
                         </div>
                     </div>
 
                     <div class="row mb-col">
                         <div class="col-md-12">
                             <label for="txt_cargos_ocupados" class="form-label form-label-sm">Cargos ocupados </label>
-                            <input type="text" class="form-control form-control-sm no_caracteres" name="txt_cargos_ocupados" id="txt_cargos_ocupados" placeholder="Escriba los cargos que ocupo en la empresa" maxlength="200">
+                            <input type="text" class="form-control form-control-sm no_caracteres" name="txt_cargos_ocupados" id="txt_cargos_ocupados" maxlength="100">
                         </div>
                     </div>
 
@@ -294,7 +294,7 @@
                     <div class="row mb-col">
                         <div class="col-md-12">
                             <label for="txt_responsabilidades_logros" class="form-label form-label-sm">Descripción de responsabilidades y logros</label>
-                            <textarea type="text" class="form-control form-control-sm no_caracteres" name="txt_responsabilidades_logros" id="txt_responsabilidades_logros" placeholder="" maxlength="700"></textarea>
+                            <textarea type="text" class="form-control form-control-sm no_caracteres" name="txt_responsabilidades_logros" id="txt_responsabilidades_logros" maxlength="300"></textarea>
                         </div>
                     </div>
                 </div>
@@ -321,11 +321,9 @@
             rules: {
                 txt_nombre_empresa: {
                     required: true,
-                    maxlength: "200"
                 },
                 txt_cargos_ocupados: {
                     required: true,
-                    maxlength: "200"
                 },
                 txt_fecha_inicio_laboral: {
                     required: true,
@@ -335,7 +333,6 @@
                 },
                 txt_responsabilidades_logros: {
                     required: true,
-                    maxlength: "700"
                 },
             },
             messages: {

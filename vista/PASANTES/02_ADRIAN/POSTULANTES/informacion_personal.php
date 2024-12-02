@@ -590,19 +590,19 @@ if (isset($_GET['id'])) {
                     <div class="row mb-col">
                         <div class="col-md-3">
                             <label for="txt_primer_apellido" class="form-label form-label-sm">Primer Apellido</label>
-                            <input type="text" class="form-control form-control-sm" name="txt_primer_apellido" id="txt_primer_apellido" placeholder="Escriba su apellido paterno">
+                            <input type="text" class="form-control form-control-sm no_caracteres" name="txt_primer_apellido" id="txt_primer_apellido" maxlength="50">
                         </div>
                         <div class="col-md-3">
                             <label for="txt_segundo_apellido" class="form-label form-label-sm">Segundo Apellido</label>
-                            <input type="text" class="form-control form-control-sm" name="txt_segundo_apellido" id="txt_segundo_apellido" placeholder="Escriba su apellido materno">
+                            <input type="text" class="form-control form-control-sm no_caracteres" name="txt_segundo_apellido" id="txt_segundo_apellido" maxlength="50">
                         </div>
                         <div class="col-md-3">
                             <label for="txt_primer_nombre" class="form-label form-label-sm">Primer Nombre</label>
-                            <input type="text" class="form-control form-control-sm" name="txt_primer_nombre" id="txt_primer_nombre" placeholder="Escriba su primer nombre">
+                            <input type="text" class="form-control form-control-sm no_caracteres" name="txt_primer_nombre" id="txt_primer_nombre" maxlength="50">
                         </div>
                         <div class="col-md-3">
                             <label for="txt_segundo_nombre" class="form-label form-label-sm">Segundo Nombre</label>
-                            <input type="text" class="form-control form-control-sm" name="txt_segundo_nombre" id="txt_segundo_nombre" placeholder="Escriba su primer nombre">
+                            <input type="text" class="form-control form-control-sm no_caracteres" name="txt_segundo_nombre" id="txt_segundo_nombre" maxlength="50">
                         </div>
                     </div>
 
@@ -610,7 +610,7 @@ if (isset($_GET['id'])) {
 
                         <div class="col-md-3">
                             <label for="txt_numero_cedula" class="form-label form-label-sm">N° de Cédula</label>
-                            <input type="text" class="form-control form-control-sm" name="txt_numero_cedula" id="txt_numero_cedula" placeholder="Digite su número de cédula">
+                            <input type="text" class="form-control form-control-sm no_caracteres" name="txt_numero_cedula" id="txt_numero_cedula" maxlength="10">
                         </div>
                         <div class="col-md-3">
                             <label for="ddl_sexo" class="form-label form-label-sm">Sexo</label>
@@ -633,15 +633,15 @@ if (isset($_GET['id'])) {
                     <div class="row mb-col">
                         <div class="col-md-4">
                             <label for="txt_telefono_1" class="form-label form-label-sm">Teléfono 1 </label>
-                            <input type="text" class="form-control form-control-sm solo_numeros_int" name="txt_telefono_1" id="txt_telefono_1" value="" placeholder="Escriba su teléfono personal o fijo" maxlength="12" required>
+                            <input type="text" class="form-control form-control-sm solo_numeros_int" name="txt_telefono_1" id="txt_telefono_1" value="" maxlength="12" required>
                         </div>
                         <div class="col-md-4">
                             <label for="txt_telefono_2" class="form-label form-label-sm">Teléfono 2 </label>
-                            <input type="text" class="form-control form-control-sm solo_numeros_int" name="txt_telefono_2" id="txt_telefono_2" value="" placeholder="Escriba su teléfono personal o fijo (opcional)" maxlength="12">
+                            <input type="text" class="form-control form-control-sm solo_numeros_int" name="txt_telefono_2" id="txt_telefono_2" value=""  maxlength="12">
                         </div>
                         <div class="col-md-4">
                             <label for="txt_correo" class="form-label form-label-sm">Correo Electrónico </label>
-                            <input type="email" class="form-control form-control-sm" name="txt_correo" id="txt_correo" value="" placeholder="Escriba su correo electrónico">
+                            <input type="email" class="form-control form-control-sm" name="txt_correo" id="txt_correo" value="" maxlength="100">
                         </div>
                     </div>
 
@@ -676,7 +676,7 @@ if (isset($_GET['id'])) {
                     <div class="row mb-col">
                         <div class="col-md-12">
                             <label for="txt_direccion" class="form-label form-label-sm">Dirección </label>
-                            <input type="text" class="form-control form-control-sm" name="txt_direccion" id="txt_direccion" placeholder="Escriba su dirección">
+                            <input type="text" class="form-control form-control-sm no_caracteres" name="txt_direccion" id="txt_direccion" >
                         </div>
                     </div>
 
@@ -794,7 +794,7 @@ if (isset($_GET['id'])) {
                     },
                     ddl_estado_civil: {
                         required: "Por favor seleccione su estado civil",
-                    },
+                    },               
                 },
 
                 highlight: function(element) {

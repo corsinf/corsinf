@@ -256,21 +256,21 @@ function reiniciar_campos_fecha_cer_medicos(campo) {
                     <div class="row mb-col">
                         <div class="col-md-12">
                             <label for="txt_med_motivo_certificado" class="form-label form-label-sm">Motivo del certificado </label>
-                            <input type="text" class="form-control form-control-sm no_caracteres" name="txt_med_motivo_certificado" id="txt_med_motivo_certificado" placeholder="Escriba el motivo del certificado médico">
+                            <input type="text" class="form-control form-control-sm no_caracteres" name="txt_med_motivo_certificado" id="txt_med_motivo_certificado" maxlength="50">
                         </div>
                     </div>
 
                     <div class="row mb-col">
                         <div class="col-md-12">
                             <label for="txt_med_nom_medico" class="form-label form-label-sm">Nombre del Médico Tratante </label>
-                            <input type="text" class="form-control form-control-sm no_caracteres" name="txt_med_nom_medico" id="txt_med_nom_medico" placeholder="Escriba el nombre del médico tratante">
+                            <input type="text" class="form-control form-control-sm no_caracteres" name="txt_med_nom_medico" id="txt_med_nom_medico" maxlength="50">
                         </div>
                     </div>
 
                     <div class="row mb-col">
                         <div class="col-md-12">
                             <label for="txt_med_ins_medico" class="form-label form-label-sm">Nombre de la Institución Médica  </label>
-                            <input type="text" class="form-control form-control-sm no_caracteres" name="txt_med_ins_medico" id="txt_med_ins_medico" placeholder="Escriba el nombre de la Institución">
+                            <input type="text" class="form-control form-control-sm no_caracteres" name="txt_med_ins_medico" id="txt_med_ins_medico" maxlength="50">
                         </div>
                     </div>
 
@@ -339,15 +339,12 @@ function reiniciar_campos_fecha_cer_medicos(campo) {
             rules: {
                 txt_med_motivo_certificado: {
                     required: true,
-                    maxlength: 200
                 },
                 txt_med_nom_medico: {
                     required: true,
-                    maxlength: 200
                 },
                 txt_med_ins_medico: {
                     required: true,
-                    maxlength: 200
                 },
                 txt_med_fecha_inicio_certificado: {
                     required: true,
@@ -364,15 +361,12 @@ function reiniciar_campos_fecha_cer_medicos(campo) {
             messages: {
                 txt_med_motivo_certificado: {
                     required: "Por favor, escriba el motivo del certificado médico",
-                    maxlength: "El motivo del certificado médico no puede tener más de 200 caracteres"
                 },
                 txt_med_nom_medico: {
                     required: "Por favor, escriba el nombre del médico tratante",
-                    maxlength: "El nombre del médico tratante no puede tener más de 200 caracteres"
                 },
                 txt_med_ins_medico: {
                     required: "Por favor, escriba el nombre de la institución médica",
-                    maxlength: "El nombre de la institución médica no puede tener más de 200 caracteres"
                 },
                 txt_med_fecha_inicio_certificado: {
                     required: "Por favor, seleccione la fecha de inicio del certificado médico",
