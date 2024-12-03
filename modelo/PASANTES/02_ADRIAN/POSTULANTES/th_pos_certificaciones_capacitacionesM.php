@@ -2,7 +2,7 @@
 
 require_once(dirname(__DIR__, 2) . '/BaseModel.php');
 
-class th_certificaciones_capacitacionesM extends BaseModel
+class th_pos_certificaciones_capacitacionesM extends BaseModel
 {
     protected $tabla = 'th_pos_certificaciones_capacitaciones';
     protected $primaryKey = 'th_cert_id AS _id';

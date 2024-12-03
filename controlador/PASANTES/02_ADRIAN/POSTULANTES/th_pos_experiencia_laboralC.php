@@ -1,7 +1,7 @@
 <?php
-require_once(dirname(__DIR__, 4) . '/modelo/PASANTES/02_ADRIAN/POSTULANTES/th_experiencia_laboralM.php');
+require_once(dirname(__DIR__, 4) . '/modelo/PASANTES/02_ADRIAN/POSTULANTES/th_pos_experiencia_laboralM.php');
 
-$controlador = new th_experiencia_laboralC();
+$controlador = new th_pos_experiencia_laboralC();
 
 if (isset($_GET['listar'])) {
     echo json_encode($controlador->listar($_POST['id']));
@@ -20,13 +20,13 @@ if (isset($_GET['eliminar'])) {
 }
 
 
-class th_experiencia_laboralC
+class th_pos_experiencia_laboralC
 {
     private $modelo;
 
     function __construct()
     {
-        $this->modelo = new th_experiencia_laboralM();
+        $this->modelo = new th_pos_experiencia_laboralM();
     }
 
     //Funcion para listar la experiencia previa del postulante

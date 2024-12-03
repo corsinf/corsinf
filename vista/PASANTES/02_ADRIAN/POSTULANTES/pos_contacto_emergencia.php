@@ -10,7 +10,7 @@
     //Formación Académica
     function cargar_datos_contactos_emergencia(id) {
         $.ajax({
-            url: '../controlador/PASANTES/02_ADRIAN/POSTULANTES/th_contacto_emergenciaC.php?listar=true',
+            url: '../controlador/PASANTES/02_ADRIAN/POSTULANTES/th_pos_contacto_emergenciaC.php?listar=true',
             type: 'post',
             data: {
                 id: id
@@ -48,7 +48,7 @@
             data: {
                 parametros: parametros
             },
-            url: '../controlador/PASANTES/02_ADRIAN/POSTULANTES/th_contacto_emergenciaC.php?insertar=true',
+            url: '../controlador/PASANTES/02_ADRIAN/POSTULANTES/th_pos_contacto_emergenciaC.php?insertar=true',
             type: 'post',
             dataType: 'json',
 
@@ -95,7 +95,7 @@
             data: {
                 parametros: parametros
             },
-            url: '../controlador/PASANTES/02_ADRIAN/POSTULANTES/th_contacto_emergenciaC.php?insertar=true',
+            url: '../controlador/PASANTES/02_ADRIAN/POSTULANTES/th_pos_contacto_emergenciaC.php?insertar=true',
             type: 'post',
             dataType: 'json',
 
@@ -145,7 +145,7 @@
             data: {
                 id: id
             },
-            url: '../controlador/PASANTES/02_ADRIAN/POSTULANTES/th_contacto_emergenciaC.php?eliminar=true',
+            url: '../controlador/PASANTES/02_ADRIAN/POSTULANTES/th_pos_contacto_emergenciaC.php?eliminar=true',
             type: 'post',
             dataType: 'json',
             success: function(response) {

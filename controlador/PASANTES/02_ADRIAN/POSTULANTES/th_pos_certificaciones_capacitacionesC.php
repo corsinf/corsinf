@@ -1,10 +1,7 @@
 <?php
+require_once(dirname(__DIR__, 4) . '/modelo/PASANTES/02_ADRIAN/POSTULANTES/th_pos_certificaciones_capacitacionesM.php');
 
-require_once(dirname(__DIR__, 4) . '/modelo/PASANTES/02_ADRIAN/POSTULANTES/th_contratos_trabajosM.php');
-
-$controlador = new th_contratos_trabajosC();
-
-
+$controlador = new th_pos_certificaciones_capacitacionesC();
 
 if (isset($_GET['listar'])) {
     echo json_encode($controlador->listar($_POST['id']));
@@ -23,22 +20,19 @@ if (isset($_GET['eliminar'])) {
 }
 
 
-
-class th_contratos_trabajosC
+class th_pos_certificaciones_capacitacionesC
 {
     private $modelo;
 
     function __construct()
     {
-        $this->modelo = new th_contratos_trabajosM();
+        $this->modelo = new th_pos_certificaciones_capacitacionesM();
     }
 
     //Funcion para listar la formacion academica del postulante
-
-
     function listar($id)
     {
-        $datos = $this->modelo->where('th_pos_id', $id)->where('th_ctr_estado', 1)->listar();
+        $datos = $this->modelo->where('th_pos_id', $id)->where('th_cert_estado', 1)->listar();
 
         $texto = '';
         foreach ($datos as $key => $value) {
@@ -48,12 +42,11 @@ class th_contratos_trabajosC
                 <<<HTML
                     <div class="row mb-3">
                         <div class="col-10">
-                            <h6 class="fw-bold my-0 d-flex align-items-center">{$value['th_ctr_nombre_empresa']}</h6>
-                            <p class="my-0 d-flex align-items-center">{$value['th_ctr_tipo_contrato']}</p>
-                            <a href="#" data-bs-toggle="modal" data-bs-target="#modal_ver_pdf_contratos" onclick="definir_ruta_iframe_contratos('{$value['th_ctr_ruta_archivo']}');">Ver Certifiacado o Capacitacion PDF</a>
+                            <h6 class="fw-bold my-0 d-flex align-items-center">{$value['th_cert_nombre_curso']}</h6>
+                            <a href="#" data-bs-toggle="modal" data-bs-target="#modal_ver_pdf_certificaciones" onclick="definir_ruta_iframe_certificaciones('{$value['th_cert_ruta_archivo']}');">Ver Certifiacado o Capacitacion PDF</a>
                         </div>
                         <div class="col-2 d-flex justify-content-end align-items-center">
-                            <button class="btn " style="color: white;" onclick="abrir_modal_contratos_trabajos('{$value['_id']}')">
+                            <button class="btn" style="color: white;" onclick="abrir_modal_certificaciones_capacitaciones('{$value['_id']}')">
                                 <i class="text-dark bx bx-pencil bx-sm"></i>
                             </button>
                         </div>
@@ -68,9 +61,9 @@ class th_contratos_trabajosC
     function listar_modal($id)
     {
         if ($id == '') {
-            $datos = $this->modelo->where('th_ctr_estado', 1)->listar();
+            $datos = $this->modelo->where('th_cert_estado', 1)->listar();
         } else {
-            $datos = $this->modelo->where('th_ctr_id', $id)->listar();
+            $datos = $this->modelo->where('th_cert_id', $id)->listar();
         }
         return $datos;
     }
@@ -80,54 +73,43 @@ class th_contratos_trabajosC
         // print_r($file);
         // exit();
         // die();
-      
-        $in_cbx_fecha_fin_experiencia = (isset($parametros['cbx_fecha_fin_experiencia']) && $parametros['cbx_fecha_fin_experiencia'] == 'true') ? 1 : 0;
-
-        $datos = array(
-            array('campo' => 'th_ctr_nombre_empresa', 'dato' => $parametros['txt_nombre_empresa_contrato']),
-            array('campo' => 'th_ctr_tipo_contrato', 'dato' => $parametros['txt_tipo_contrato']),
-            //array('campo' => 'th_ctr_ruta_archivo', 'dato' => $parametros['txt_ruta_archivo']),
-            array('campo' => 'th_ctr_fecha_inicio_contrato', 'dato' => $parametros['txt_fecha_inicio_contrato']),
-            array('campo' => 'th_ctr_cbx_fecha_fin_experiencia', 'dato' => $in_cbx_fecha_fin_experiencia),
+        $datos = array(            
+            array('campo' => 'th_cert_nombre_curso', 'dato' => $parametros['txt_nombre_curso']),
+            // array('campo' => 'th_cert_ruta_archivo', 'dato' => $parametros['txt_ruta_archivo']),
             array('campo' => 'th_pos_id', 'dato' => $parametros['txt_postulante_id']),
-
-
         );
 
-        if (!isset($parametros['cbx_fecha_fin_experiencia']) || !in_array($in_cbx_fecha_fin_experiencia, [0, 1])) {
-            return "El campo de fecha fin de experiencia es inválido o no se ha proporcionado correctamente.";
-        }
 
-        $id_contratos_trabajos = $parametros['txt_contratos_trabajos_id'];
+        $id_certificaciones_capacitaciones = $parametros['txt_certificaciones_capacitaciones_id'];
 
-        if ($id_contratos_trabajos == '') {
+        if ($id_certificaciones_capacitaciones == '') {
             $datos = $this->modelo->insertar_id($datos);
             $this->guardar_archivo($file, $parametros, $datos);
             return 1;
         } else {
 
             $where = array(
-                array('campo' => 'th_ctr_id', 'dato' => $id_contratos_trabajos),
+                array('campo' => 'th_cert_id', 'dato' => $id_certificaciones_capacitaciones),
             );
 
             $datos = $this->modelo->editar($datos, $where);
 
-            if ($file['txt_ruta_archivo_contrato']['tmp_name'] != '' && $file['txt_ruta_archivo_contrato']['tmp_name'] != null) {
-                $datos = $this->guardar_archivo($file, $parametros, $id_contratos_trabajos);
+            if ($file['txt_ruta_archivo']['tmp_name'] != '' && $file['txt_ruta_archivo']['tmp_name'] != null) {
+                $datos = $this->guardar_archivo($file, $parametros, $id_certificaciones_capacitaciones);
             }
         }
 
         return $datos;
     }
-
+           
 
 
     function eliminar($id)
     {
-        $datos_archivo = $this->modelo->where('th_ctr_id', $id)->where('th_ctr_estado', 1)->listar();
+        $datos_archivo = $this->modelo->where('th_cert_id', $id)->where('th_cert_estado', 1)->listar();
 
-        if ($datos_archivo && isset($datos_archivo[0]['th_ctr_ruta_archivo'])) {
-            $ruta_relativa = ltrim($datos_archivo[0]['th_ctr_ruta_archivo'], './');
+        if ($datos_archivo && isset($datos_archivo[0]['th_cert_ruta_archivo'])) {
+            $ruta_relativa = ltrim($datos_archivo[0]['th_cert_ruta_archivo'], './');
             $ruta_archivo = dirname(__DIR__, 4) . '/' . $ruta_relativa;
 
             if (file_exists($ruta_archivo)) {
@@ -136,11 +118,11 @@ class th_contratos_trabajosC
         }
 
         $datos = array(
-            array('campo' => 'th_ctr_estado', 'dato' => 0),
+            array('campo' => 'th_cert_estado', 'dato' => 0),
         );
 
         $where = array(
-            array('campo' => 'th_ctr_id', 'dato' => strval($id)),
+            array('campo' => 'th_cert_id', 'dato' => strval($id)),
         );
 
 
@@ -152,20 +134,20 @@ class th_contratos_trabajosC
     {
         $id_empresa = $_SESSION['INICIO']['ID_EMPRESA'];
         $ruta = dirname(__DIR__, 4) . '/REPOSITORIO/TALENTO_HUMANO/' . $id_empresa . '/'; //ruta carpeta donde queremos copiar los archivos
-        $ruta .= $post['txt_postulante_cedula'] . '/' . 'CONTRATOS_TRABAJOS/';
+        $ruta .= $post['txt_postulante_cedula'] . '/' . 'CERTIFICACIONES_CAPACITACIONES/';
 
         if (!file_exists($ruta)) {
             mkdir($ruta, 0777, true);
         }
 
         if ($this->validar_formato_archivo($file) === 1) {
-            $uploadfile_temporal = $file['txt_ruta_archivo_contrato']['tmp_name'];
-            $extension = pathinfo($file['txt_ruta_archivo_contrato']['name'], PATHINFO_EXTENSION);
-
-            $nombre = 'contratos_trabajos_' . $id_insertar_editar . '.' . $extension;
+            $uploadfile_temporal = $file['txt_ruta_archivo']['tmp_name'];
+            $extension = pathinfo($file['txt_ruta_archivo']['name'], PATHINFO_EXTENSION);
+            //Para CERTIFICACIONES y CAPACITACIONES
+            $nombre = 'certificaciones_capacitaciones_' . $id_insertar_editar . '.' . $extension;
             $nuevo_nom = $ruta . $nombre;
 
-            $nombre_ruta = '../REPOSITORIO/TALENTO_HUMANO/' . $id_empresa . '/' . $post['txt_postulante_cedula'] . '/' . 'CONTRATOS_TRABAJOS/';
+            $nombre_ruta = '../REPOSITORIO/TALENTO_HUMANO/' . $id_empresa . '/' . $post['txt_postulante_cedula'] . '/' . 'CERTIFICACIONES_CAPACITACIONES/';
             $nombre_ruta .= $nombre;
             //print_r($post); exit(); die();
 
@@ -173,11 +155,11 @@ class th_contratos_trabajosC
                 if (move_uploaded_file($uploadfile_temporal, $nuevo_nom)) {
 
                     $datos = array(
-                        array('campo' => 'th_ctr_ruta_archivo', 'dato' => $nombre_ruta),
+                        array('campo' => 'th_cert_ruta_archivo', 'dato' => $nombre_ruta),
                     );
 
                     $where = array(
-                        array('campo' => 'th_ctr_id', 'dato' => $id_insertar_editar),
+                        array('campo' => 'th_cert_id', 'dato' => $id_insertar_editar),
                     );
 
                     // Ejecutar la actualización en la base de datos
@@ -197,7 +179,7 @@ class th_contratos_trabajosC
 
     private function validar_formato_archivo($file)
     {
-        switch ($file['txt_ruta_archivo_contrato']['type']) {
+        switch ($file['txt_ruta_archivo']['type']) {
             case 'application/pdf':
                 return 1;
                 break;

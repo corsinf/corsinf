@@ -1,7 +1,7 @@
 <?php
-require_once(dirname(__DIR__, 4) . '/modelo/PASANTES/02_ADRIAN/POSTULANTES/th_contacto_emergenciaM.php');
+require_once(dirname(__DIR__, 4) . '/modelo/PASANTES/02_ADRIAN/POSTULANTES/th_pos_contacto_emergenciaM.php');
 
-$controlador = new th_contacto_emergenciaC();
+$controlador = new th_pos_contacto_emergenciaC();
 
 if (isset($_GET['listar'])) {
     echo json_encode($controlador->listar($_POST['id']));
@@ -16,13 +16,13 @@ if (isset($_GET['eliminar'])) {
 }
 
 
-class th_contacto_emergenciaC
+class th_pos_contacto_emergenciaC
 {
     private $modelo;
 
     function __construct()
     {
-        $this->modelo = new th_contacto_emergenciaM();
+        $this->modelo = new th_pos_contacto_emergenciaM();
     }
 
     //Funcion para listar la formacion academica del postulante

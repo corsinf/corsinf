@@ -9,7 +9,7 @@
     //Formación Académica
     function cargar_datos_referencias_laborales(id) {
         $.ajax({
-            url: '../controlador/PASANTES/02_ADRIAN/POSTULANTES/th_referencias_laboralesC.php?listar=true',
+            url: '../controlador/PASANTES/02_ADRIAN/POSTULANTES/th_pos_referencias_laboralesC.php?listar=true',
             type: 'post',
             data: {
                 id: id
@@ -23,7 +23,7 @@
 
     function cargar_datos_modal_referencias_laborales(id) {
         $.ajax({
-            url: '../controlador/PASANTES/02_ADRIAN/POSTULANTES/th_referencias_laboralesC.php?listar_modal=true',
+            url: '../controlador/PASANTES/02_ADRIAN/POSTULANTES/th_pos_referencias_laboralesC.php?listar_modal=true',
             type: 'post',
             data: {
                 id: id
@@ -64,7 +64,7 @@
 
         if ($("#form_referencias_laborales").valid()) {
             $.ajax({
-                url: '../controlador/PASANTES/02_ADRIAN/POSTULANTES/th_referencias_laboralesC.php?insertar=true',
+                url: '../controlador/PASANTES/02_ADRIAN/POSTULANTES/th_pos_referencias_laboralesC.php?insertar=true',
                 type: 'post',
                 data: form_data,
                 contentType: false,
@@ -137,7 +137,7 @@
             data: {
                 id: id
             },
-            url: '../controlador/PASANTES/02_ADRIAN/POSTULANTES/th_referencias_laboralesC.php?eliminar=true',
+            url: '../controlador/PASANTES/02_ADRIAN/POSTULANTES/th_pos_referencias_laboralesC.php?eliminar=true',
             type: 'post',
             dataType: 'json',
             success: function(response) {

@@ -2,7 +2,7 @@
 
 require_once(dirname(__DIR__, 2) . '/BaseModel.php');
 
-class th_contacto_emergenciaM extends BaseModel
+class th_pos_contacto_emergenciaM extends BaseModel
 {
     protected $tabla = 'th_contacto_emergencia';
     protected $primaryKey = 'th_coem_id AS _id';

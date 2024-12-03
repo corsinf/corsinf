@@ -56,9 +56,9 @@ class th_pos_habilidadesC
                             </ul>
                         </div>
                         
-                        <div class="col-4 d-flex justify-content-end">
-                            <button type="button" class="btn btn-sm" style="color: white;" onclick="delete_datos_aptitudes({$value['th_habp_id']})">
-                                <i class="me-0 text-danger bx bx-trash" style="font-size: 20px;"></i>
+                        <div class="col-4 d-flex justify-content-end align-items-center">
+                            <button class="btn" style="color: white;" onclick="delete_datos_aptitudes({$value['th_habp_id']})">
+                                <i class="text-danger bx bx-trash bx-sm"></i>
                             </button>
                         </div>
                     </div>
@@ -82,8 +82,10 @@ class th_pos_habilidadesC
                         </ul>
                     </div>
                             
-                    <div class="col-4 d-flex justify-content-end">
-                        <button type="button" class="btn btn-sm" style="color: white;" onclick="delete_datos_aptitudes(' . $value['th_habp_id'] . ')"><i class="me-0 text-danger bx bx-trash" style="font-size: 20px;"></i></button>
+                    <div class="col-4 d-flex justify-content-end align-items-center">
+                        <button class="btn" style="color: white;" onclick="delete_datos_aptitudes(' . $value['th_habp_id'] . ')">
+                        <i class="text-danger bx bx-trash bx-sm"></i>
+                        </button>
                     </div>
                 </div>';
         }

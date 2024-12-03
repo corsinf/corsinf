@@ -29,6 +29,9 @@ class th_postulantesM extends BaseModel
         'th_pos_estado',
         'th_pos_fecha_creacion',
         'th_pos_fecha_modificacion',
+        'PERFIL',
+        'PASS',
+        'th_pos_foto_url',
 
     ];
 

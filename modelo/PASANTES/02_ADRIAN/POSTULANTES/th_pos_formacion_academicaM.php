@@ -2,7 +2,7 @@
 
 require_once(dirname(__DIR__, 2) . '/BaseModel.php');
 
-class th_formacion_academicaM extends BaseModel
+class th_pos_formacion_academicaM extends BaseModel
 {
     protected $tabla = 'th_formacion_academica';
     protected $primaryKey = 'th_fora_id AS _id';

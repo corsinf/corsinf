@@ -24,9 +24,9 @@ if (isset($_GET['hoja_de_vida'])) {
     echo $controlador->hoja_de_vida($_GET['id']);
 }
 
-if (isset($_GET['subir_foto'])) {
-//
-//
+ if(isset($_GET['guardar_foto_perfil']))
+ {
+    echo json_encode($controlador->guardar_foto_perfil($_FILES,$_POST));
 }
 
 
@@ -284,25 +284,60 @@ class th_postulantesC
         $pdf->Output();
     }
 
-    function agregar_foto_perfil($file, $parametros) {}
-
-    private function guardar_archivo($file, $post, $id_insertar_editar) {}
-
-    //Sirve para guardar imagenes 
-
-    private function validar_formato_img($file)
-    {
-
-        switch ($file['file_img']['type']) {
-            case 'image/jpeg':
-            case 'image/pjpeg':
-            case 'image/gif':
-            case 'image/png':
-                return 1;
-                break;
-            default:
-                return -1;
-                break;
+    
+//Sirve para fuardar imagenes 
+function guardar_foto_perfil($file, $post)
+{
+    $ruta = '../img/usuarios/';
+    
+    if (!file_exists($ruta)) {
+        mkdir($ruta, 0777, true);
+    }
+    
+    if ($this->validar_formato_($file) == 1) {
+        $uploadfile_temporal = $file['txt_copia_cambiar_foto']['tmp_name'];
+        $tipo = explode('/', $file['txt_copia_cambiar_foto']['type']);
+        $nombre = $post['txt_cambiar_foto_id'] . '.' . $tipo[1]; // Asegúrate de que 'id' está correcto
+        $nuevo_nom = $ruta . $nombre;
+        
+        if (is_uploaded_file($uploadfile_temporal)) {
+            move_uploaded_file($uploadfile_temporal, $nuevo_nom);
+            
+            $datosI[0]['campo'] = 'th_pos_foto_url';
+            $datosI[0]['dato'] = $nuevo_nom; // Asegúrate que el campo en la base de datos es correcto
+            $where[0]['campo'] = 'th_pos_id'; // Asegúrate de que este es el campo correcto
+            $where[0]['dato'] = $post['txt_cambiar_foto_id']; // Asegúrate de que el ID está correcto
+            
+            $base = $this->modelo->editar($datosI, $where);
+            return ($base == 1) ? 1 : -1;
+        } else {
+            return -1; // error al mover el archivo
         }
+    } else {
+        return -2; // formato no permitido
     }
 }
+
+
+          //Sirve para validar imagenes 
+ function validar_formato_($file)
+  {
+    switch ($file['file_']['type']) {
+      case 'image/jpeg':
+      case 'image/pjpeg':
+      case 'image/gif':
+      case 'image/png':
+         return 1;
+        break;      
+      default:
+        return -1;
+        break;
+    }
+  }
+}
+
+   
+
+
+
+ 

@@ -9,7 +9,7 @@
     //Certificaciones y Capacitaciones
     function cargar_datos_certificaciones_capacitaciones(id) {
         $.ajax({
-            url: '../controlador/PASANTES/02_ADRIAN/POSTULANTES/th_certificaciones_capacitacionesC.php?listar=true',
+            url: '../controlador/PASANTES/02_ADRIAN/POSTULANTES/th_pos_certificaciones_capacitacionesC.php?listar=true',
             type: 'post',
             data: {
                 id: id
@@ -23,7 +23,7 @@
 
     function cargar_datos_modal_certificaciones_capacitaciones(id) {
         $.ajax({
-            url: '../controlador/PASANTES/02_ADRIAN/POSTULANTES/th_certificaciones_capacitacionesC.php?listar_modal=true',
+            url: '../controlador/PASANTES/02_ADRIAN/POSTULANTES/th_pos_certificaciones_capacitacionesC.php?listar_modal=true',
             type: 'post',
             data: {
                 id: id
@@ -61,7 +61,7 @@
         if ($("#form_certificaciones_capacitaciones").valid()) {
 
             $.ajax({
-                url: '../controlador/PASANTES/02_ADRIAN/POSTULANTES/th_certificaciones_capacitacionesC.php?insertar=true',
+                url: '../controlador/PASANTES/02_ADRIAN/POSTULANTES/th_pos_certificaciones_capacitacionesC.php?insertar=true',
                 type: 'post',
                 data: form_data,
                 contentType: false,
@@ -134,7 +134,7 @@
             data: {
                 id: id
             },
-            url: '../controlador/PASANTES/02_ADRIAN/POSTULANTES/th_certificaciones_capacitacionesC.php?eliminar=true',
+            url: '../controlador/PASANTES/02_ADRIAN/POSTULANTES/th_pos_certificaciones_capacitacionesC.php?eliminar=true',
             type: 'post',
             dataType: 'json',
             success: function(response) {

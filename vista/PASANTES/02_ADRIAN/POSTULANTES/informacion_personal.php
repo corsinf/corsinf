@@ -180,7 +180,7 @@ if (isset($_GET['id'])) {
                                     <div class="text-center">
                                         <?php include_once('../vista/PASANTES/02_ADRIAN/POSTULANTES/pos_cambiar_foto.php'); ?>
                                         <div>
-                                            <a href="#" class="d-flex justify-content-center" data-bs-toggle="modal" data-bs-target="#modal_cambiar_foto" onclick="cambiar_foto();">
+                                            <a href="#" class="d-flex justify-content-center" data-bs-toggle="modal" data-bs-target="#modal_agregar_cambiar_foto" onclick="modal_agregar_cambiar_foto();">
                                                 <i class='bx bxs-camera bx-sm'></i>
                                             </a>
                                         </div>
@@ -278,11 +278,12 @@ if (isset($_GET['id'])) {
                                         <?php //include_once('../vista/PASANTES/02_ADRIAN/POSTULANTES/pos_informacion_adicional.php'); ?>
 
                                         <div class="row">
-                                            <div class="col-9">
+                                            <div class="col-10">
                                                 <h5 class="fw-bold text-primary">Contacto de Emergencia</h5>
                                             </div>
-                                            <div class="col-3 d-flex justify-content-end">
-                                                <button class="btn btn-sm" style='color: white;' data-bs-toggle="modal" data-bs-target="#modal_contacto_emergencia"><i class='text-dark bx bx-show bx-sm me-0'></i></button>
+                                            <div class="col-2">
+                                            <a href="#" data-bs-toggle="modal" data-bs-target="#modal_contacto_emergencia">
+                                            <i class='text-dark bx bx-show bx-sm'></i></a>
                                             </div>
                                         </div>
 
