@@ -31,7 +31,7 @@ class th_pos_estado_laboralC
 
     function listar($id)
     {
-        $datos = $this->modelo->where('th_pos_id', $id)->listar();
+        $datos = $this->modelo->where('th_pos_id', $id)-> orderBy('th_est_fecha_salida','DESC')->listar();
 
         $texto = '';
         foreach ($datos as $key => $value) {

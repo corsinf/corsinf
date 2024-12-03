@@ -3,7 +3,6 @@
         <?php if (isset($_GET['id'])) { ?>
             cargar_datos_idiomas(<?= $id ?>);
         <?php } ?>
-
     });
 
     //Idiomas
@@ -35,7 +34,6 @@
                 $('#txt_institucion_1').val(response[0].th_idi_institucion);
                 $('#txt_fecha_inicio_idioma').val(response[0].th_idi_fecha_inicio_idioma);
                 $('#txt_fecha_fin_idioma').val(response[0].th_idi_fecha_fin_idioma);
-
                 $('#txt_idiomas_id').val(response[0]._id);
 
             }
@@ -49,12 +47,9 @@
         var txt_institucion_1 = $('#txt_institucion_1').val();
         var txt_fecha_inicio_idioma = $('#txt_fecha_inicio_idioma').val();
         var txt_fecha_fin_idioma = $('#txt_fecha_fin_idioma').val();
-       
         var id_postulante = '<?= $id ?>';
         var txt_idi_idiomas_id = $('#txt_idiomas_id').val();
-
         var parametros_idiomas = {
-            //'_id': txt_idi_idiomas_id,
             'id_postulante': id_postulante,
             'ddl_seleccionar_idioma': ddl_seleccionar_idioma,
             'ddl_dominio_idioma': ddl_dominio_idioma,
@@ -63,13 +58,9 @@
             'txt_fecha_fin_idioma': txt_fecha_fin_idioma,
             '_id': txt_idi_idiomas_id
         }
-
         if ($("#form_agregar_idioma").valid()) {
-            // Si es válido, puedes proceder a enviar los datos por AJAX
-            //console.log(parametros_idiomas)
             insertar_idiomas(parametros_idiomas);
         }
-
     }
 
     function insertar_idiomas(parametros) {
@@ -100,15 +91,12 @@
     //* Función para editar el registro de idiomas
     function abrir_modal_idiomas(id) {
         cargar_datos_modal_idiomas(id);
-
         $('#modal_agregar_idioma').modal('show');
         $('#lbl_nombre_idioma').html('Editar Idioma');
         $('#btn_guardar_idioma').html('Editar');
-
     }
 
     function borrar_datos_idioma() {
-        //Para revisar y enviar el dato como parametro 
         id = $('#txt_idiomas_id').val();
         Swal.fire({
             title: 'Eliminar Registro?',
@@ -155,18 +143,19 @@
         $('#txt_fecha_inicio_idioma').val('');
         $('#txt_fecha_fin_idioma').val('');
         $('#txt_idiomas_id').val('');
-        // //Cambiar texto
+        //Cambiar texto
         $('#lbl_nombre_idioma').html('Agregue un idioma');
         $('#btn_guardar_idioma').html('Agregar');
     }
 
+    //Funcion para validar las fechas de ingreso
     function validar_fechas_idioma() {
     var fecha_inicio = $('#txt_fecha_inicio_idioma').val();
     var fecha_final = $('#txt_fecha_fin_idioma').val();
     var hoy = new Date();
     var fecha_actual = hoy.toISOString().split('T')[0];
 
-    //* Validar que la fecha final no sea menor a la fecha de inicio
+    //Funcion para validar que la fecha final no sea menor a la fecha de inicio
     if (fecha_inicio && fecha_final) {
         if (Date.parse(fecha_final) < Date.parse(fecha_inicio)) {
             Swal.fire({
@@ -179,7 +168,7 @@
         }
     }
 
-    //* Validar que la fecha de inicio no sea mayor a la fecha actual
+    // Validar que la fecha de inicio no sea mayor a la fecha actual
     if (fecha_inicio && Date.parse(fecha_inicio) > Date.parse(fecha_actual)) {
         Swal.fire({
             icon: "error",
@@ -190,7 +179,7 @@
         return;
     }
 
-    //* Validar que la fecha final no sea mayor a la fecha actual
+    // Validar que la fecha final no sea mayor a la fecha actual
     if (fecha_final && Date.parse(fecha_final) > Date.parse(fecha_actual)) {
         Swal.fire({
             icon: "error",
@@ -200,15 +189,14 @@
         reiniciar_campos_fecha('#txt_fecha_fin_idioma');
         return;
     }
-}
 
-//* Función para reiniciar campos
-function reiniciar_campos_fecha(campo) {
-    $(campo).val('');
-    $(campo).removeClass('is-valid is-invalid');
-    $('.form-control').removeClass('is-valid is-invalid');
+    //Función para reiniciar campos
+    function reiniciar_campos_fecha(campo) {
+        $(campo).val('');
+        $(campo).removeClass('is-valid is-invalid');
+        $('.form-control').removeClass('is-valid is-invalid');
+    }
 }
-
 </script>
 
 <div id="pnl_idioma">
@@ -262,7 +250,7 @@ function reiniciar_campos_fecha(campo) {
                     <div class="row mb-col">
                         <div class="col-md-12">
                             <label for="txt_institucion" class="form-label form-label-sm">Instución </label>
-                            <input type="text" class="form-control form-control-sm no_caracteres" name="txt_institucion_1" id="txt_institucion_1" placeholder="Escriba la institución donde recibió su certificado" maxlength="100">
+                            <input type="text" class="form-control form-control-sm no_caracteres" name="txt_institucion_1" id="txt_institucion_1" maxlength="100">
                         </div>
                     </div>
                     <div class="row mb-col">
@@ -325,7 +313,6 @@ function reiniciar_campos_fecha(campo) {
                 },
                 txt_institucion_1: {
                     required: "Por favor escriba la institución donde recibió su certificado",
-                    maxlength: "200"
                 },
                 txt_fecha_inicio_idioma: {
                     required: "Por favor escriba la fecha de inicio de estudios",

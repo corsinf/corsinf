@@ -32,22 +32,18 @@
             dataType: 'json',
             success: function(response) {
                 $('#txt_certificados_medicos_id').val(response[0]._id);
-
                 $('#txt_med_motivo_certificado').val(response[0].th_cer_motivo_certificado);
                 $('#txt_med_nom_medico').val(response[0].th_cer_nom_medico);
                 $('#txt_med_ins_medico').val(response[0].th_cer_ins_medico);
                 $('#txt_med_fecha_inicio_certificado').val(response[0].th_cer_fecha_inicio_certificado);
                 $('#txt_med_fecha_fin_certificado').val(response[0].th_cer_fecha_fin_certificado);
-                $('#txt_ruta_guardada_certificados_medicos').val(response[0].th_cer_ruta_certficado);
-
-                
+                $('#txt_ruta_guardada_certificados_medicos').val(response[0].th_cer_ruta_certficado);  
             }
         });
     }
 
     function insertar_editar_certificados_medicos() {
         var form_data = new FormData(document.getElementById("form_certificados_medicos"));
-
         var txt_id_certificados_medicos = $('#txt_certificados_medicos_id').val();
 
         if ($('#txt_ruta_certificados_medicos').val() === '' && txt_id_certificados_medicos != '') {
@@ -104,14 +100,10 @@
     //Funcion para editar el registro de certificados médicos
     function abrir_modal_certificados_medicos(id) {
         cargar_datos_modal_certificados_medicos(id);
-
         $('#modal_agregar_certificados_medicos').modal('show');
-
         $('#lbl_titulo_certificados_medicos').html('Editar el certificado médico');
         $('#btn_guardar_certificados_medicos').html('Guardar');
-
     }
-
 
     function delete_datos_certificados_medicos() {
         var id = $('#txt_certificados_medicos_id').val();
@@ -159,16 +151,11 @@
         $('#txt_med_fecha_inicio_certificado').val('');
         $('#txt_med_fecha_fin_certificado').val('');
         $('#txt_ruta_certificados_medicos').val('');
-        
-
         $('#txt_certificados_medicos_id').val('');
         $('#txt_ruta_guardada_certificados_medicos').val('');
-
         //Limpiar validaciones
         $("#form_certificados_medicos").validate().resetForm();
         $('.form-control, .form-select').removeClass('is-valid is-invalid');
-
-
         //Cambiar texto
         $('#lbl_titulo_certificados_medicos').html('Agregue un certificado médico');
         $('#btn_guardar_certificados_medicos').html('Agregar');
@@ -182,7 +169,7 @@
     function limpiar_parametros_iframe_cert_medicos() {
         $('#iframe_certificados_medicos_pdf').attr('src', '');
     }
-
+    //Función para validar fechas de certificados médicos
     function validar_fechas_certificados_medicos() {
     var fecha_inicio = $('#txt_med_fecha_inicio_certificado').val();
     var fecha_final = $('#txt_med_fecha_fin_certificado').val();
@@ -202,7 +189,6 @@
         }
     }
 
-
     //* Validar que la fecha final no sea menor a la fecha de inicio
     if (fecha_inicio && fecha_final) {
         if (Date.parse(fecha_final) < Date.parse(fecha_inicio)) {
@@ -215,28 +201,24 @@
             return;
         }
     }
+
+    //* Función para reiniciar campos
+    function reiniciar_campos_fecha_cer_medicos(campo) {
+        $(campo).val('');
+        $(campo).removeClass('is-valid is-invalid');
+        $('.form-control').removeClass('is-valid is-invalid');
+    }
        
 }
 
-
-//* Función para reiniciar campos
-
-function reiniciar_campos_fecha_cer_medicos(campo) {
-    $(campo).val('');
-    $(campo).removeClass('is-valid is-invalid');
-    $('.form-control').removeClass('is-valid is-invalid');
-}
 </script>
 
-
 <div id="pnl_certificados_medicos">
-
 </div>
 <!-- Modal para agregar certificados médicos-->
 <div class="modal" id="modal_agregar_certificados_medicos" tabindex="-1" aria-hidden="true" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
-
             <!-- Modal Header -->
             <div class="modal-header">
                 <h5><small class="text-body-secondary" id="lbl_titulo_certificados_medicos">Agregue un Certificado Médico</small></h5>
@@ -246,12 +228,9 @@ function reiniciar_campos_fecha_cer_medicos(campo) {
             <form id="form_certificados_medicos">
                 <div class="modal-body">
                 
-
                     <input type="hidden" name="txt_certificados_medicos_id" id="txt_certificados_medicos_id">
                     <input type="hidden" name="txt_postulante_cedula" id="txt_postulante_cedula">
                     <input type="hidden" name="txt_postulante_id" id="txt_postulante_id">
-
-
 
                     <div class="row mb-col">
                         <div class="col-md-12">
@@ -259,22 +238,18 @@ function reiniciar_campos_fecha_cer_medicos(campo) {
                             <input type="text" class="form-control form-control-sm no_caracteres" name="txt_med_motivo_certificado" id="txt_med_motivo_certificado" maxlength="50">
                         </div>
                     </div>
-
                     <div class="row mb-col">
                         <div class="col-md-12">
                             <label for="txt_med_nom_medico" class="form-label form-label-sm">Nombre del Médico Tratante </label>
                             <input type="text" class="form-control form-control-sm no_caracteres" name="txt_med_nom_medico" id="txt_med_nom_medico" maxlength="50">
                         </div>
                     </div>
-
                     <div class="row mb-col">
                         <div class="col-md-12">
                             <label for="txt_med_ins_medico" class="form-label form-label-sm">Nombre de la Institución Médica  </label>
                             <input type="text" class="form-control form-control-sm no_caracteres" name="txt_med_ins_medico" id="txt_med_ins_medico" maxlength="50">
                         </div>
-                    </div>
-
-                    
+                    </div>                
                     <div class="row mb-col">
                         <div class="col-md-12">
                             <label for="txt_med_fecha_inicio_certificado" class="form-label form-label-sm">Fecha de Inicio del Certificado</label>
@@ -295,7 +270,6 @@ function reiniciar_campos_fecha_cer_medicos(campo) {
                         </div>
                     </div>
                 </div>
-                
                 <div class="modal-footer d-flex justify-content-center">
                     <button type="button" class="btn btn-success btn-sm" id="btn_guardar_certificados_medicos" onclick="insertar_editar_certificados_medicos(); validar_fechas_certificados_medicos()">Agregar Certificado Médico</button>
                     <button type="button" class="btn btn-danger btn-sm px-4 m-1" id="btn_eliminar_formacion" onclick="delete_datos_certificados_medicos();">Eliminar</button>
@@ -327,7 +301,6 @@ function reiniciar_campos_fecha_cer_medicos(campo) {
 
 <script>
     $(document).ready(function() {
-
         agregar_asterisco_campo_obligatorio('txt_med_motivo_certificado');
         agregar_asterisco_campo_obligatorio('txt_med_nom_medico');
         agregar_asterisco_campo_obligatorio('txt_med_ins_medico');
@@ -377,7 +350,6 @@ function reiniciar_campos_fecha_cer_medicos(campo) {
                 txt_ruta_certificados_medicos: {
                     required: "Por favor, seleccione el certificado médico",
                 }
-                
             },
 
             highlight: function(element) {
@@ -389,12 +361,10 @@ function reiniciar_campos_fecha_cer_medicos(campo) {
                 // Elimina la clase 'is-invalid' si la validación pasa
                 $(element).removeClass('is-invalid');
                 $(element).addClass('is-valid');
-
             }
         });
     })
   
-    
     function txt_fecha_fin_certificado_1() {
     // Obtén el valor actual del campo de fecha
     var fechaFin = $('#txt_med_fecha_fin_certificado').val();
