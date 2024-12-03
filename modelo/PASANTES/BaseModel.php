@@ -23,6 +23,7 @@ class BaseModel
     protected $camposPermitidos = [];
     protected $condicionesWhere = [];
     protected $relaciones = [];
+    protected $ordenamientos = [];
 
     function __construct()
     {
@@ -34,6 +35,7 @@ class BaseModel
         // Obtener cláusulas WHERE y JOIN
         $whereClause = $this->retornaValoresWhere();
         $joinClause = $this->retornaValoresJoin();
+        $orderByClause = $this->retornaValoresOrderBy();
 
         // Validar y construir la selección de campos
         if (empty($joinClause)) {
@@ -45,16 +47,17 @@ class BaseModel
 
         // Construir consulta SQL
         $sql = sprintf(
-            "SELECT %s FROM %s %s %s;",
+            "SELECT %s FROM %s %s %s %s;",
             $camposSelect,
             $this->tabla,
             $joinClause,
-            $whereClause
+            $whereClause,
+            $orderByClause
         );
 
         // Mostrar la consulta SQL para depuración y salir
-        //print_r($sql); exit();
-        //return $sql;
+        // print_r($sql); exit();
+        // return $sql;
 
         // Ejecutar consulta y devolver resultados
         $datos = $this->db->datos($sql);
@@ -143,6 +146,12 @@ class BaseModel
         return $this;
     }
 
+    function orderBy($campo, $direccion = 'ASC')
+    {
+        $this->ordenamientos[] = "$campo $direccion";
+        return $this;
+    }
+
     // Arma la sentencia del where
     protected function retornaValoresWhere()
     {
@@ -163,6 +172,15 @@ class BaseModel
         }
 
         return $joinClause;
+    }
+
+    protected function retornaValoresOrderBy()
+    {
+        $orderByClause = '';
+        if (!empty($this->ordenamientos)) {
+            $orderByClause = " ORDER BY " . implode(', ', $this->ordenamientos);
+        }
+        return $orderByClause;
     }
 
 
