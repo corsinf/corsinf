@@ -46,11 +46,11 @@ class th_pos_documentosC
                 <<<HTML
                     <div class="row mb-col">
                         <div class="col-10">
-                            <p class="fw-bold my-0 d-flex align-items-center">{$value['th_poi_tipo']}</p>
+                            <h6 class="fw-bold my-0 d-flex align-items-center">{$value['th_poi_tipo']}</h6>
                             <a href="#" onclick="ruta_iframe_documento_identificacion('{$value['th_poi_ruta_archivo']}');">Ver Documento de Identificación</a>
                         </div>
                         
-                        <div class="col-2 d-flex justify-content-end align-items-start">
+                        <div class="col-2 d-flex justify-content-end align-items-center">
                             <button class="btn" style="color: white;" onclick="abrir_modal_documentos_identidad('{$value['_id']}');">
                                 <i class="text-dark bx bx-pencil bx-sm"></i>
                             </button>

@@ -221,7 +221,7 @@
         <div class="modal-content">
             <!-- Modal Header -->
             <div class="modal-header">
-                <h5><small class="text-body-secondary" id="lbl_titulo_certificados_medicos">Agregue un Certificado Médico</small></h5>
+                <h6><small class="text-body-secondary fw-bold" id="lbl_titulo_certificados_medicos">Agregue un Certificado Médico</small></h6>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="limpiar_parametros_certificados_medicos()"></button>
             </div>
             <!-- Modal body -->

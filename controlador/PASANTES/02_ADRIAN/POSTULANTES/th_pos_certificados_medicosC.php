@@ -54,7 +54,7 @@ class th_pos_certificados_medicosC
                 <<<HTML
                     <div class="row mb-col">
                         <div class="col-10">
-                            <p class="fw-bold my-0 d-flex align-items-center">{$value['th_cer_motivo_certificado']}</p>
+                            <h6 class="fw-bold my-0 d-flex align-items-center">{$value['th_cer_motivo_certificado']}</h6>
                             <p class="m-0">{$value['th_cer_nom_medico']}</p>
                             <p class="m-0">{$value['th_cer_ins_medico']}</p>
                             <p class="m-0">{$value['th_cer_fecha_inicio_certificado']} - {$fecha_fin} </p>
