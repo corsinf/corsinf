@@ -3,7 +3,6 @@
         <?php if (isset($_GET['id'])) { ?>
             cargar_datos_certificaciones_capacitaciones(<?= $id ?>);
         <?php } ?>
-
     });
     
     //Certificaciones y Capacitaciones
@@ -37,7 +36,6 @@
         });
     }
 
-
     function insertar_editar_certificaciones_capacitaciones() {
         var form_data = new FormData(document.getElementById("form_certificaciones_capacitaciones")); // Captura todos los campos y archivos
         
@@ -52,12 +50,7 @@
                 required: true
             });
         }
-
-        // console.log([...form_data]);
-        // console.log([...form_data.keys()]);
-        // console.log([...form_data.values()]);
-        // return;
-
+  
         if ($("#form_certificaciones_capacitaciones").valid()) {
 
             $.ajax({
@@ -153,15 +146,12 @@
     function limpiar_parametros_certificaciones_capacitaciones() {
         //certificaciones capacitaciones
         $('#txt_nombre_curso').val('');
-        $('#txt_ruta_archivo').val('');
-        
+        $('#txt_ruta_archivo').val('');       
         $('#txt_certificaciones_capacitaciones_id').val('');
         $('#txt_ruta_guardada_certificaciones_capacitaciones').val('');
-
         //Limpiar validaciones
         $("#form_certificaciones_capacitaciones").validate().resetForm();
         $('.form-control').removeClass('is-valid is-invalid');
-
         //Cambiar texto
         $('#lbl_titulo_certificaciones_capacitaciones').html('Agregue un certificado o capacitacion');
         $('#btn_guardar_certificaciones_capacitaciones').html('Agregar');
@@ -177,9 +167,7 @@
 </script>
 
 <div id="pnl_certificaciones_capacitaciones">
-
 </div>
-
 
 <!-- Modal para agregar certificaciones y capacitaciones-->
 <div class="modal" id="modal_agregar_certificaciones" tabindex="-1" aria-modal="true" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
@@ -196,12 +184,10 @@
             <form id="form_certificaciones_capacitaciones" enctype="multipart/form-data" method="post" style="width: inherit;">
             
                 <div class="modal-body">
-                    
                     <input type="hidden" name="txt_certificaciones_capacitaciones_id" id="txt_certificaciones_capacitaciones_id">
                     <input type="hidden" name="txt_postulante_cedula" id="txt_postulante_cedula">
                     <input type="hidden" name="txt_postulante_id" id="txt_postulante_id">
-
-                
+               
                     <div class="row mb-col">
                         <div class="col-md-12">
                             <label for="txt_nombre_curso" class="form-label form-label-sm">Nombre del curso o capacitación </label>
@@ -260,8 +246,7 @@
                 },
                 txt_ruta_archivo: {
                     required: true,
-                },
-                
+                },   
             },
             messages: {
                 

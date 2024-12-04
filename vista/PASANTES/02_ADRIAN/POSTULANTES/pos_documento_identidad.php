@@ -3,7 +3,6 @@
         <?php if (isset($_GET['id'])) { ?>
             cargar_datos_documentos_identidad(<?= $id ?>);
         <?php } ?>
-
     });
 
     //Documentos de Identidad
@@ -56,7 +55,6 @@
 
     function insertar_editar_documentos_identidad() {
         var form_data = new FormData(document.getElementById("form_documento_identidad"));
-
         var txt_id_documentos_identidad = $('#txt_documentos_identificacion_id').val();
 
         if ($('#txt_ruta_documentos_identidad').val() === '' && txt_id_documentos_identidad != '') {
@@ -75,7 +73,6 @@
                 data: form_data,
                 contentType: false,
                 processData: false,
-
                 dataType: 'json',
                 success: function(response) {
                     //console.log(response);
@@ -113,9 +110,7 @@
     //Funcion para editar el registro de documentos identidad
     function abrir_modal_documentos_identidad(id) {
         cargar_datos_modal_documentos_identidad(id);
-
         $('#modal_agregar_documentos_identidad').modal('show');
-
         $('#lbl_titulo_documentos_identidad').html('Editar su documento de identidad');
         $('#btn_guardar_documentos_identidad').html('Guardar');
 
@@ -165,15 +160,11 @@
         $('#ddl_tipo_documento_identidad').val('');
         $('#txt_cargar_documento_identidad').val('');
         $('#txt_ruta_documentos_identidad').val('');
-
         $('#txt_documentos_identificacion_id').val('');
         $('#txt_ruta_guardada_documentos_identidad').val('');
-
         //Limpiar validaciones
         $("#form_documento_identidad").validate().resetForm();
         $('.form-control, .form-select').removeClass('is-valid is-invalid');
-
-
         //Cambiar texto
         $('#lbl_titulo_documentos_identidad').html('Agregue un documento de identidad');
         $('#btn_guardar_documentos_identidad').html('Agregar');
@@ -191,7 +182,6 @@
 
 
 <div id="pnl_documentos_identidad">
-
 </div>
 
 <!-- Modal para agregar documento de identidad-->

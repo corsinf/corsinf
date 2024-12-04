@@ -30,19 +30,16 @@
             },
             dataType: 'json',
             success: function(response) {
-
                 $('#txt_titulo_obtenido').val(response[0].th_fora_titulo_obtenido);
                 $('#txt_institucion').val(response[0].th_fora_institución);
                 $('#txt_fecha_inicio_academico').val(response[0].th_fora_fecha_inicio_formacion);
 
                 var fecha_fin = response[0].th_fora_fecha_fin_formacion;
-
                 if (fecha_fin === '') {
                     var hoy = new Date();
                     var dia = String(hoy.getDate()).padStart(2, '0');
                     var mes = String(hoy.getMonth() + 1).padStart(2, '0');
                     var year = hoy.getFullYear();
-
                     var fecha_actual = year + '-' + mes + '-' + dia;
                     $('#txt_fecha_final_academico').val(fecha_actual);
                     $('#txt_fecha_final_academico').prop('disabled', true);
@@ -50,8 +47,6 @@
                 } else {
                     $('#txt_fecha_final_academico').val(fecha_fin);
                 }
-
-
                 $('#txt_formacion_id').val(response[0]._id);
             }
         });
@@ -82,7 +77,6 @@
             // Si es válido, puedes proceder a enviar los datos por AJAX
             insertar_formacion_academica(parametros_formacion_academica);
         }
-
     }
 
     function insertar_formacion_academica(parametros) {
@@ -93,7 +87,6 @@
             url: '../controlador/PASANTES/02_ADRIAN/POSTULANTES/th_pos_formacion_academicaC.php?insertar=true',
             type: 'post',
             dataType: 'json',
-
             success: function(response) {
                 if (response == 1) {
                     Swal.fire('', 'Operacion realizada con exito.', 'success');
@@ -112,12 +105,9 @@
     //Funcion para editar el registro de formacion academica
     function abrir_modal_formacion_academica(id) {
         cargar_datos_modal_formacion_academica(id);
-
         $('#modal_agregar_formacion').modal('show');
-
         $('#lbl_titulo_formacion_acedemica').html('Editar su Formación Académica');
         $('#btn_guardar_formacion').html('Editar');
-
     }
 
     function delete_datos_form_acad() {
@@ -167,15 +157,12 @@
         $('#txt_formacion_id').val('');
         $('#cbx_fecha_final_academico').prop('checked', false)
         $('#txt_fecha_final_academico').prop('disabled', false);
-
         //Limpiar validaciones
         $("#form_formacion_academica").validate().resetForm();
         $('.form-control').removeClass('is-valid is-invalid');
-
         //Cambiar texto
         $('#lbl_titulo_formacion_acedemica').html('Agregue una Formación Académica');
         $('#btn_guardar_formacion').html('Agregar');
-
     }
 
     function validar_fechas_form_acad() {
@@ -235,9 +222,7 @@
     }
 </script>
 
-
 <div id="pnl_formacion_academica">
-
 </div>
 <!-- Modal para agregar formación académica-->
 <div class="modal" id="modal_agregar_formacion" tabindex="-1" aria-modal="true" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">

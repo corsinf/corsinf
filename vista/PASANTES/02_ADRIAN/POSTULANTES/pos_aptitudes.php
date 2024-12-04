@@ -198,7 +198,6 @@
     function limpiar_campos_aptitudes_modal() {
         $('#ddl_seleccionar_aptitud_blanda').val('');
         $('#ddl_seleccionar_aptitud_tecnica').val('');
-
         //Limpiar validaciones
         $("#form_aptitudes").validate().resetForm();
         $('.form-control').removeClass('is-valid is-invalid');
@@ -209,7 +208,6 @@
 <h6 class="fw-bold mt-3 mb-2">Técnicas</h6>
 <div id="pnl_aptitudes_tecnicas">
 </div>
-
 
 <h6 class="fw-bold mt-4 mb-2">Blandas</h6>
 <div id="pnl_aptitudes_blandas">
@@ -233,14 +231,14 @@
                     <div class="row mb-col">
                         <div class="col-md-12">
                             <label for="ddl_seleccionar_aptitud_tecnica" class="form-label form-label-sm fw-bold">Seleccione sus Aptitudes Técnicas </label>
-                            <select class="form-select form-select-sm ddl_seleccionar_aptitud" id="ddl_seleccionar_aptitud_tecnica" name="ddl_seleccionar_aptitud_tecnica" multiple="multiple" maxlength="5000"></select>
+                            <select class="form-select form-select-sm ddl_seleccionar_aptitud" id="ddl_seleccionar_aptitud_tecnica" name="ddl_seleccionar_aptitud_tecnica" multiple="multiple"></select>
                         </div>
                     </div>
 
                     <div class="row mb-col">
                         <div class="col-md-12">
                             <label for="ddl_seleccionar_aptitud_blanda" class="form-label form-label-sm fw-bold">Seleccione sus Aptitudes Blandas </label>
-                            <select class="form-select form-select-sm ddl_seleccionar_aptitud" id="ddl_seleccionar_aptitud_blanda" name="ddl_seleccionar_aptitud_blanda" multiple="multiple" maxlength="5000"></select>
+                            <select class="form-select form-select-sm ddl_seleccionar_aptitud" id="ddl_seleccionar_aptitud_blanda" name="ddl_seleccionar_aptitud_blanda" multiple="multiple" ></select>
                         </div>
                     </div>
                 </div>
@@ -263,11 +261,9 @@
             rules: {
                 ddl_seleccionar_aptitud_blanda: {
                     required: true,
-                    maxlength: 5000
                 },
                 ddl_seleccionar_aptitud_tecnica: {
                     required: true,
-                    maxlength: 5000
                 },
             },
             messages: {

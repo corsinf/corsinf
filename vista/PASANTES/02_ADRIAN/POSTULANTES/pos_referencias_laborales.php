@@ -31,13 +31,11 @@
             dataType: 'json',
             success: function(response) {
                 $('#txt_referencias_laborales_id').val(response[0]._id);
-
                 $('#txt_nombre_referencia').val(response[0].th_refl_nombre_referencia);
                 $('#txt_telefono_referencia').val(response[0].th_refl_telefono_referencia);
                 $('#txt_ruta_guardada_carta_recomendacion').val(response[0].th_refl_carta_recomendacion);
                 $('#txt_referencia_correo').val(response[0].th_refl_correo);
                 $('#txt_referencia_nombre_empresa').val(response[0].th_refl_nombre_empresa);
-
             }
         });
     }
@@ -56,11 +54,6 @@
                 required: true
             });
         }
-
-        //console.log([...form_data]);
-        // console.log([...form_data.keys()]);
-        // console.log([...form_data.values()]);
-        //return;
 
         if ($("#form_referencias_laborales").valid()) {
             $.ajax({
@@ -107,12 +100,9 @@
     //Funcion para editar el registro de referencias laborales
     function abrir_modal_referencias_laborales(id) {
         cargar_datos_modal_referencias_laborales(id);
-
         $('#modal_agregar_referencia_laboral').modal('show');
-
         $('#lbl_titulo_referencia_laboral').html('Editar su referencia');
         $('#btn_guardar_referencia_laboral').html('Guardar');
-
     }
 
     function delete_datos_referencias_laborales() {
@@ -162,11 +152,9 @@
         $('#txt_ruta_guardada_carta_recomendacion').val('');
         $('#txt_referencia_correo').val('');
         $('#txt_referencia_nombre_empresa').val('');
-
         //Limpiar validaciones
         $("#form_referencias_laborales").validate().resetForm();
         $('.form-control').removeClass('is-valid is-invalid');
-
         //Cambiar texto
         $('#lbl_titulo_referencia_laboral').html('Agregue una referencia');
         $('#btn_guardar_referencia_laboral').html('Agregar');
@@ -183,9 +171,7 @@
 </script>
 
 <div id="pnl_referencias_laborales">
-
 </div>
-
 
 <!-- Modal para agregar referencias laborales-->
 <div class="modal" id="modal_agregar_referencia_laboral" tabindex="-1" aria-modal="true" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
@@ -202,7 +188,6 @@
             <form id="form_referencias_laborales" enctype="multipart/form-data" method="post" style="width: inherit;">
 
                 <div class="modal-body">
-
                     <input type="hidden" name="txt_referencias_laborales_id" id="txt_referencias_laborales_id">
                     <input type="hidden" name="txt_postulante_cedula" id="txt_postulante_cedula">
                     <input type="hidden" name="txt_postulante_id" id="txt_postulante_id">
@@ -243,7 +228,6 @@
                             <input type="text" class="form-control form-control-sm" name="txt_ruta_guardada_carta_recomendacion" id="txt_ruta_guardada_carta_recomendacion" hidden>
                         </div>
                     </div>
-
                 </div>
 
                 <div class="modal-footer d-flex justify-content-center">
@@ -276,7 +260,6 @@
 
 <script>
     $(document).ready(function() {
-
         agregar_asterisco_campo_obligatorio('txt_nombre_referencia');
         agregar_asterisco_campo_obligatorio('txt_telefono_referencia');
         agregar_asterisco_campo_obligatorio('txt_copia_carta_recomendacion');

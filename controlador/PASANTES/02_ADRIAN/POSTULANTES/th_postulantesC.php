@@ -79,7 +79,7 @@ class th_postulantesC
             array('campo' => 'th_pos_telefono_1', 'dato' => $parametros['txt_telefono_1']),
             array('campo' => 'th_pos_telefono_2', 'dato' => $parametros['txt_telefono_2']),
             array('campo' => 'th_pos_correo', 'dato' => $parametros['txt_correo']),
-
+            
         );
 
         if ($parametros['_id'] == '') {

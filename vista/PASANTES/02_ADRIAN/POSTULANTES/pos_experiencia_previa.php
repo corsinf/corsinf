@@ -85,7 +85,6 @@
             'cbx_fecha_final_laboral': cbx_fecha_final_laboral,
             'txt_responsabilidades_logros': txt_responsabilidades_logros,
         }
-
         if ($("#form_experiencia_laboral").valid()) {
             // Si es válido, puedes proceder a enviar los datos por AJAX
             //console.log(parametros_experiencia_laboral)
@@ -120,7 +119,6 @@
     //* Función para editar el registro de formación academica
     function abrir_modal_experiencia_laboral(id) {
         cargar_datos_modal_experiencia_laboral(id);
-
         $('#modal_agregar_experiencia').modal('show');
         $('#lbl_titulo_experiencia_laboral').html('Editar Experiencia Laboral');
         $('#btn_guardar_experiencia').html('Editar');
@@ -239,7 +237,6 @@
 </script>
 
 <div id="pnl_experiencia_laboral">
-
 </div>
 
 <!-- Modal para agregar experiencia laboral-->

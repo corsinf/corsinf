@@ -3,8 +3,6 @@
         <?php if (isset($_GET['id'])) { ?>
             cargar_datos_estado_laboral(<?= $id ?>);
         <?php } ?>
-
-
     });
 
     //Estado Laboral
@@ -53,13 +51,11 @@
             'txt_fecha_salida_estado': txt_fecha_salida_estado,
             '_id': txt_experiencia_estado_id,
         }
-
         if ($("#form_estado_laboral").valid()) {
             // Si es válido, puedes proceder a enviar los datos por AJAX
             //console.log(parametros_estado_laboral);
             insertar_estado_laboral(parametros_estado_laboral);
         }
-
     }
 
     function insertar_estado_laboral(parametros) {
@@ -92,7 +88,6 @@
 
         $('#txt_fecha_contratacion_estado').prop('disabled', false);
         $('#txt_fecha_salida_estado').prop('disabled', false);
-
         if (valor_seleccionado === "Freelancer" || valor_seleccionado === "Autonomo") {
             $('#txt_fecha_contratacion_estado').prop('disabled', true);
             $('#txt_fecha_salida_estado').prop('disabled', true);
@@ -101,7 +96,6 @@
 
     function abrir_modal_estado_laboral(id) {
         cargar_datos_modal_estado_laboral(id);
-
         $('#modal_estado_laboral').modal('show');
         $('#lbl_titulo_estado_laboral').html('Editar Estado Laboral');
         $('#btn_guardar_estado_laboral').html('Editar');
@@ -150,7 +144,6 @@
     function limpiar_campos_estado_laboral_modal() {
         $('#form_estado_laboral').validate().resetForm();
         $('.form-control, .form-select').removeClass('is-valid is-invalid');
-
         $('#ddl_estado_laboral').val('');
         $('#txt_fecha_contratacion_estado').val('');
         $('#txt_fecha_salida_estado').val('');
@@ -190,12 +183,10 @@
                 $('#txt_fecha_salida_estado').prop('disabled', false);
             }
         }
-
     }
 </script>
 
 <div id="pnl_estado_laboral">
-
 </div>
 
 <!-- Modal para agregar estado laboral-->

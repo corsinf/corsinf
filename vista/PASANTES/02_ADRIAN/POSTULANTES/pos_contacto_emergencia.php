@@ -4,7 +4,6 @@
         <?php if (isset($_GET['id'])) { ?>
             cargar_datos_contactos_emergencia(<?= $id ?>);
         <?php } ?>
-
     });
 
     //Formación Académica
@@ -29,7 +28,6 @@
         var txt_telefono_contacto_emergencia = $('#txt_telefono_contacto_emergencia').val();
         var txt_id_postulante = '<?= $id ?>';
         var txt_id_contacto_emergencia = $('#txt_id_contacto_emergencia').val();
-
         var parametros_contacto_emergencia = {
             '_id': txt_id_contacto_emergencia,
             'txt_id_postulante': txt_id_postulante,
@@ -82,8 +80,6 @@
 
         if ((txt_nombre_contacto_emergencia) != '' && (txt_nombre_contacto_emergencia) != null &&
             (txt_telefono_contacto_emergencia) != '' && (txt_telefono_contacto_emergencia) != null) {
-            // Si es válido, puedes proceder a enviar los datos por AJAX
-            //console.log(parametros_guardar_contacto_emergencia);
             guardar_contacto_emergencia(parametros_guardar_contacto_emergencia);
         } else {
             Swal.fire('', 'No se pueden guardar campos vacios', 'warning')
@@ -114,12 +110,10 @@
     }
 
     function mostrar_contacto_emergencia(id) {
-
         $('#span_nombre_' + id).hide();
         $('#span_telefono_' + id).hide();
         $('#txt_nombre_contacto_emergencia_' + id).show().focus();
         $('#txt_telefono_contacto_emergencia_' + id).show();
-
         $('#btn_editar_' + id).hide();
         $('#btn_guardar_' + id).show();
     }
@@ -164,7 +158,6 @@
         $('#txt_nombre_contacto_emergencia').val('');
         $('#txt_telefono_contacto_emergencia').val('');
         $('#txt_id_contacto_emergencia').val('');
-
         //Limpiar validaciones
         $("#form_contacto_emergencia").validate().resetForm();
         $('.form-control').removeClass('is-valid is-invalid');
@@ -191,14 +184,14 @@
                         <div class="row mb-col">
                             <div class="col-md-12">
                                 <label for="txt_nombre_contacto_emergencia" class="form-label form-label-sm">Nombre del contacto de Emergencia </label>
-                                <input type="text" class="form-control form-control-sm txt_nombre_contacto_emergencia no_caracteres" name="txt_nombre_contacto_emergencia" id="txt_nombre_contacto_emergencia" value="" placeholder="Escriba el nombre de un contacto de emergencia" maxlength="100">
+                                <input type="text" class="form-control form-control-sm txt_nombre_contacto_emergencia no_caracteres" name="txt_nombre_contacto_emergencia" id="txt_nombre_contacto_emergencia" value="" maxlength="100">
                             </div>
                         </div>
 
                         <div class="row mb-col">
                             <div class="col-md-12">
                                 <label for="txt_telefono_contacto_emergencia" class="form-label form-label-sm">Teléfono del contacto de Emergencia </label>
-                                <input type="text" class="form-control form-control-sm txt_telefono_contacto_emergencia solo_numeros_int" name="txt_telefono_contacto_emergencia" id="txt_telefono_contacto_emergencia" value="" placeholder="Escriba el número de un contacto de emergencia" maxlength="15">
+                                <input type="text" class="form-control form-control-sm txt_telefono_contacto_emergencia solo_numeros_int" name="txt_telefono_contacto_emergencia" id="txt_telefono_contacto_emergencia" value="" maxlength="15">
                             </div>
                         </div>
                     </div>
@@ -242,11 +235,9 @@
             rules: {
                 txt_nombre_contacto_emergencia: {
                     required: true,
-                    maxlength: 100
                 },
                 txt_telefono_contacto_emergencia: {
                     required: true,
-                    maxlength: 15
                 },
             },
             messages: {

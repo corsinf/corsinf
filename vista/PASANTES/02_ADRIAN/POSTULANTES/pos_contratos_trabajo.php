@@ -3,9 +3,7 @@
         <?php if (isset($_GET['id'])) { ?>
             cargar_datos_contratos_trabajos(<?= $id ?>);
         <?php } ?>
-
     });
-
 
     //Contratos de Trabajo
 
@@ -37,9 +35,7 @@
                 $('#txt_tipo_contrato').val(response[0].th_ctr_tipo_contrato);
                 $('#txt_ruta_guardada_contratos_trabajos').val(response[0].th_ctr_contratos_trabajos);        
                 $('#txt_fecha_inicio_contrato').val(response[0].th_ctr_fecha_inicio_contrato); 
-                $cbx_fecha_fin_experiencia.val(response[0].th_ctr_cbx_fecha_fin_experiencia); 
-                            
-                                         
+                $cbx_fecha_fin_experiencia.val(response[0].th_ctr_cbx_fecha_fin_experiencia);                                          
             }
         });
 
@@ -62,11 +58,6 @@
             });
         }       
       
-        //   console.log([...form_data]);
-        //   console.log([...form_data.keys()]);
-        //  console.log([...form_data.values()]);
-        //  return;
-
         if ($("#form_contratos_trabajos").valid()) {
 
             $.ajax({
@@ -78,7 +69,6 @@
 
                 dataType: 'json',
                 success: function(response) {
-                    //console.log(response);
                     if (response == -1) {
                         Swal.fire({
                             title: '',
@@ -114,12 +104,9 @@
     //Funcion para editar el registro de contratos y capacitaciones
     function abrir_modal_contratos_trabajos(id) {
         cargar_datos_modal_contratos_trabajos(id);
-
         $('#modal_agregar_contratos').modal('show');
-
         $('#lbl_titulo_contratos_trabajos').html('Editar Contrato');
         $('#btn_guardar_contratos_trabajos').html('Guardar');
-
     }
 
     function delete_datos_contratos_trabajos() {
@@ -171,11 +158,9 @@
         $('#txt_fecha_fin_contrato').val('')       
         $('#txt_fecha_fin_contrato').prop('disabled', false);
         $('#cbx_fecha_fin_experiencia').prop('checked', false);
-
         //Limpiar validaciones
         $("#form_contratos_trabajos").validate().resetForm();
         $('.form-control').removeClass('is-valid is-invalid');
-
         //Cambiar texto
         $('#lbl_titulo_contratos_trabajos').html('Agregue un Contrato');
         $('#btn_guardar_contratos_trabajos').html('Agregar');
@@ -225,7 +210,6 @@
 </script>
 
 <div id="pnl_contratos_trabajos">
-
 </div>
 
 <!-- Modal para agregar contratos de trabajo-->
@@ -242,11 +226,9 @@
             <form id="form_contratos_trabajos" enctype="multipart/form-data" method="post" style="width: inherit;">
 
                 <div class="modal-body">
-
                     <input type="hidden" name="txt_contratos_trabajos_id" id="txt_contratos_trabajos_id">
                     <input type="hidden" name="txt_postulante_cedula" id="txt_postulante_cedula">
-                    <input type="hidden" name="txt_postulante_id" id="txt_postulan
-                    te_id">
+                    <input type="hidden" name="txt_postulante_id" id="txt_postulante_id">
 
 
                     <div class="row mb-col">

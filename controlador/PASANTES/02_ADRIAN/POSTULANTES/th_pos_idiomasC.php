@@ -75,7 +75,7 @@ class th_pos_idiomasC
     function listar_modal($id)
     {
         if ($id == '') {
-            $datos = $this->modelo->where('th_idi_estado', 0)->listar();
+            $datos = $this->modelo->where('th_idi_estado', 1)->listar();
         } else {
             $datos = $this->modelo->where('th_idi_id', $id)->listar();
         }

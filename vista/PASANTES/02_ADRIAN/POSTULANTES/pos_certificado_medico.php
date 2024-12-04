@@ -3,7 +3,6 @@
         <?php if (isset($_GET['id'])) { ?>
             cargar_datos_cerficados_medicos(<?= $id ?>);
         <?php } ?>
-
     });
 
  //Certificados Médicos
@@ -20,7 +19,6 @@
             }
         });
     }
-
     
     function cargar_datos_modal_certificados_medicos(id) {
         $.ajax({
@@ -215,6 +213,7 @@
 
 <div id="pnl_certificados_medicos">
 </div>
+
 <!-- Modal para agregar certificados médicos-->
 <div class="modal" id="modal_agregar_certificados_medicos" tabindex="-1" aria-hidden="true" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
     <div class="modal-dialog modal-dialog-centered">
@@ -226,8 +225,7 @@
             </div>
             <!-- Modal body -->
             <form id="form_certificados_medicos">
-                <div class="modal-body">
-                
+                <div class="modal-body">               
                     <input type="hidden" name="txt_certificados_medicos_id" id="txt_certificados_medicos_id">
                     <input type="hidden" name="txt_postulante_cedula" id="txt_postulante_cedula">
                     <input type="hidden" name="txt_postulante_id" id="txt_postulante_id">
