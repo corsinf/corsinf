@@ -50,7 +50,7 @@
                             </div>
                             <button type="button" onclick="enviardatos()" class="btn btn-primary" id="btn_registrar_miembro">
                                 <i class="bx bx-user-plus"></i><strong>Registrar Espacio</strong>
-                            </button>
+                            </button>   
                         </form>
 
                         <!-- Contenedor flex para pestañas y botones -->

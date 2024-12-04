@@ -6,6 +6,32 @@ require_once(dirname(__DIR__, 2 ) . '/lib/pdf/cabecera_pdf.php');
 $controlador = new claseEjemplo();
 
 $id_espacio = isset($_POST['id_espacio']) ? $_POST['id_espacio'] : '';
+// Listar nombres de los espacios para el modal
+if (isset($_POST['accion']) && $_POST['accion'] === 'listarEspacios') {
+    $espacios = $controlador->getModelo()->listardebase(); // Llama al método del modelo
+    $response = [];
+
+    foreach ($espacios as $espacio) {
+        $response[] = [
+            'id' => $espacio['id_espacio'],
+            'nombre' => $espacio['nombre_espacio'] 
+        ];
+    }
+
+    echo json_encode(['success' => true, 'data' => $response]);
+}
+// Listar eventos para el calendario
+if (isset($_POST['accion']) && $_POST['accion'] === 'listarEventos') {
+    $eventos = $controlador->listarEventos(); // Llama al método del modelo
+    if ($eventos) {
+        echo json_encode($eventos);
+    } else {
+        echo json_encode([]);
+    }
+    exit;
+}
+
+
 // Obtener datos de un espacio específico
 if (isset($_POST['getEspacio'])) {
     $id_espacio = $_POST['id_espacio'];
@@ -56,6 +82,26 @@ if (isset($_POST['delete'])) {
         echo json_encode(['success' => false, 'message' => 'ID inválido.']);
     }
 }
+if (isset($_POST['accion']) && $_POST['accion'] === 'guardarEvento') {
+    $data = [
+        'titulo' => $_POST['titulo'] ?? '',
+        'detalle' => $_POST['detalle'] ?? '',
+        'id_espacio' => $_POST['id_espacio'] ?? 0,
+        'fechaInicio' => $_POST['fechaInicio'] ?? '',
+        'fechaFin' => $_POST['fechaFin'] ?? '',
+        'estado_pago' => $_POST['estado_pago'] ?? 0,
+        'contacto' => $_POST['contacto'] ?? '',
+        'responsable' => $_POST['responsable'] ?? '',
+    ];
+
+    $resultado = $controlador->addEvento($data);
+    if ($resultado) {
+        echo json_encode(['success' => true, 'message' => 'Evento guardado con éxito.']);
+    } else {
+        echo json_encode(['success' => false, 'message' => 'No se pudo guardar el evento.']);
+    }
+}
+
 
 // Agregar nueva categoría
 if (isset($_POST['addCategoria'])) {
@@ -78,6 +124,19 @@ if (isset($_POST['addMobiliario'])) {
 class claseEjemplo {
     private $modelo;
     private $pdf;
+
+    public function getModelo() {
+        return $this->modelo;
+    }
+    function listarEventos() {
+        $eventos = $this->modelo->obtenerEventos(); 
+        return $eventos;
+    }
+    
+    
+    function addEvento($parametros) {
+        return $this->modelo->insertarEvento($parametros);
+    }
     function __construct() {
         $this->modelo = new crear_oficinaM();
         $this->pdf = new cabecera_pdf();
@@ -91,7 +150,7 @@ class claseEjemplo {
             return ['success' => false, 'message' => 'No se pudo obtener el espacio.'];
         }
     }
-    // Agregar espacio
+    // Agregar espacio  
     function add($parametros) {
         return $this->modelo->insertarnombre($parametros);
     }

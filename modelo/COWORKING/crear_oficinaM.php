@@ -71,7 +71,7 @@ function actualizarEspacio($param) {
         
         // Filtrar por estado si está disponible
         if ($estado) {
-            $sql .= " AND e.estado_espacio = '" . $estado . "'"; // Asegúrate que 'estado_espacio' es el nombre correcto del campo en la base de datos
+            $sql .= " AND e.estado_espacio = '" . $estado . "'"; 
         }
     
         // Ordenar los resultados
@@ -81,18 +81,6 @@ function actualizarEspacio($param) {
         $resp = $this->db->datos($sql);
         return $resp;
     }
-    
-    
-    
-
-    
-    
-    
-
-    
-
-
-    
 
     // Inserta un nuevo mobiliario
     function insertarMobiliario($datos) {
@@ -131,6 +119,37 @@ function actualizarEspacio($param) {
         return $resp;
        
     }
+    function insertarEvento($datos) {
+        $sql = "INSERT INTO co_agenda (
+                    co_agenda_titulo, 
+                    co_agenda_detalle, 
+                    Id_espacio, 
+                    co_agenda_fechaIni, 
+                    co_agenda_fechaFin, 
+                    co_agenda_estado_pago, 
+                    co_agenda_contacto, 
+                    co_agenda_responsable
+                ) VALUES (
+                    '" . $datos['titulo'] . "', 
+                    '" . $datos['detalle'] . "', 
+                    " . intval($datos['id_espacio']) . ", 
+                    '" . $datos['fechaInicio'] . "', 
+                    '" . $datos['fechaFin'] . "', 
+                    " . intval($datos['estado_pago']) . ", 
+                    '" . $datos['contacto'] . "', 
+                    '" . $datos['responsable'] . "'
+                )";
+        return $this->db->sql_string($sql);
+    }
+    function obtenerEventos() {
+        $sql = "SELECT 
+                    co_agenda_titulo AS title, 
+                    co_agenda_fechaIni AS start, 
+                    co_agenda_fechaFin AS end 
+                FROM co_agenda";
+        return $this->db->datos($sql); 
+    }
+    
     
     
 }
