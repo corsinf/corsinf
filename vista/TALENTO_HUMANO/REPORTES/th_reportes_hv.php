@@ -1,6 +1,6 @@
 <script type="text/javascript">
     $(document).ready(function() {
-
+        generar_reporte_control_acceso();
     });
 
     function generar_reporte_excel() {
@@ -20,6 +20,20 @@
                 } else {
                     console.log('Error al generar el reporte');
                 }
+            },
+            error: function() {
+                console.log('Error en la solicitud AJAX');
+            }
+        });
+    }
+
+    function generar_reporte_control_acceso() {
+        $.ajax({
+            url: '../controlador/TALENTO_HUMANO/th_reportesC.php?con=true',
+            type: 'post',
+            dataType: 'json',
+            success: function(response) {
+                console.log(response);
             },
             error: function() {
                 console.log('Error en la solicitud AJAX');
@@ -63,6 +77,7 @@
                                 <div class="col-sm-12" id="btn_nuevo">
 
                                     <a href="../controlador/TALENTO_HUMANO/th_reportes_hvC.php?descargarExcel=true" class="btn btn-success btn-sm"><i class="bx bx-plus"></i> Reporte Excel</a>
+                                    <a href="../controlador/TALENTO_HUMANO/th_reportesC.php?descargarExcel=true" class="btn btn-success btn-sm"><i class="bx bx-plus"></i> Reporte Excel 2</a>
 
                                 </div>
                             </div>

@@ -202,7 +202,6 @@
         $("#form_aptitudes").validate().resetForm();
         $('.form-control').removeClass('is-valid is-invalid');
     }
-
 </script>
 
 <h6 class="fw-bold mt-3 mb-2">Técnicas</h6>
@@ -238,7 +237,7 @@
                     <div class="row mb-col">
                         <div class="col-md-12">
                             <label for="ddl_seleccionar_aptitud_blanda" class="form-label form-label-sm fw-bold">Seleccione sus Aptitudes Blandas </label>
-                            <select class="form-select form-select-sm ddl_seleccionar_aptitud" id="ddl_seleccionar_aptitud_blanda" name="ddl_seleccionar_aptitud_blanda" multiple="multiple" ></select>
+                            <select class="form-select form-select-sm ddl_seleccionar_aptitud" id="ddl_seleccionar_aptitud_blanda" name="ddl_seleccionar_aptitud_blanda" multiple="multiple"></select>
                         </div>
                     </div>
                 </div>

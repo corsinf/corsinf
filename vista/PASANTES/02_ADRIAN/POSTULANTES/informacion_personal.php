@@ -275,15 +275,16 @@ if (isset($_GET['id'])) {
                                         <hr />
 
                                         <!-- Queda en espera este parte del modulo -->
-                                        <?php //include_once('../vista/PASANTES/02_ADRIAN/POSTULANTES/pos_informacion_adicional.php'); ?>
+                                        <?php //include_once('../vista/PASANTES/02_ADRIAN/POSTULANTES/pos_informacion_adicional.php'); 
+                                        ?>
 
                                         <div class="row">
                                             <div class="col-10">
                                                 <h5 class="fw-bold text-primary">Contacto de Emergencia</h5>
                                             </div>
                                             <div class="col-2">
-                                            <a href="#" data-bs-toggle="modal" data-bs-target="#modal_contacto_emergencia">
-                                            <i class='text-dark bx bx-show bx-sm'></i></a>
+                                                <a href="#" data-bs-toggle="modal" data-bs-target="#modal_contacto_emergencia">
+                                                    <i class='text-dark bx bx-show bx-sm'></i></a>
                                             </div>
                                         </div>
 
@@ -638,7 +639,7 @@ if (isset($_GET['id'])) {
                         </div>
                         <div class="col-md-4">
                             <label for="txt_telefono_2" class="form-label form-label-sm">Teléfono 2 </label>
-                            <input type="text" class="form-control form-control-sm solo_numeros_int" name="txt_telefono_2" id="txt_telefono_2" value=""  maxlength="12">
+                            <input type="text" class="form-control form-control-sm solo_numeros_int" name="txt_telefono_2" id="txt_telefono_2" value="" maxlength="12">
                         </div>
                         <div class="col-md-4">
                             <label for="txt_correo" class="form-label form-label-sm">Correo Electrónico </label>
@@ -677,7 +678,7 @@ if (isset($_GET['id'])) {
                     <div class="row mb-col">
                         <div class="col-md-12">
                             <label for="txt_direccion" class="form-label form-label-sm">Dirección </label>
-                            <input type="text" class="form-control form-control-sm no_caracteres" name="txt_direccion" id="txt_direccion" >
+                            <input type="text" class="form-control form-control-sm no_caracteres" name="txt_direccion" id="txt_direccion">
                         </div>
                     </div>
 
@@ -795,7 +796,7 @@ if (isset($_GET['id'])) {
                     },
                     ddl_estado_civil: {
                         required: "Por favor seleccione su estado civil",
-                    },               
+                    },
                 },
 
                 highlight: function(element) {

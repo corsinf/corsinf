@@ -241,14 +241,14 @@
                     <div class="row mb-col">
                         <div class="col-md-12">
                             <label for="txt_titulo_obtenido" class="form-label form-label-sm">Título obtenido </label>
-                            <input type="text" class="form-control form-control-sm no_caracteres" name="txt_titulo_obtenido" id="txt_titulo_obtenido"  maxlength="100">
+                            <input type="text" class="form-control form-control-sm no_caracteres" name="txt_titulo_obtenido" id="txt_titulo_obtenido" maxlength="100">
                         </div>
                     </div>
 
                     <div class="row mb-col">
                         <div class="col-md-12">
                             <label for="txt_institucion" class="form-label form-label-sm">Institución </label>
-                            <input type="text" class="form-control form-control-sm no_caracteres" name="txt_institucion" id="txt_institucion"  maxlength="100">
+                            <input type="text" class="form-control form-control-sm no_caracteres" name="txt_institucion" id="txt_institucion" maxlength="100">
                         </div>
                     </div>
 

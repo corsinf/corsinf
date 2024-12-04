@@ -200,9 +200,9 @@
                         <button type="button" class="btn btn-sm btn-success" id="btn_agregar_contacto_emergencia" onclick="insertar_editar_contacto_emergencia();"><i class="bx bx-plus me-0"></i> Agregar</button>
                     </div>
                 </form>
-                
+
                 <hr>
-                
+
                 <div class="table-responsive">
                     <form id='form_contacto_emergencia_1'>
                         <table class="table table-striped table-hover align-middle">

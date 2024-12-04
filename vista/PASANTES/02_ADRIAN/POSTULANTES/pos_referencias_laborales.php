@@ -55,6 +55,11 @@
             });
         }
 
+        // console.log([...form_data]);
+        // console.log([...form_data.keys()]);
+        // console.log([...form_data.values()]);
+        // return;
+
         if ($("#form_referencias_laborales").valid()) {
             $.ajax({
                 url: '../controlador/PASANTES/02_ADRIAN/POSTULANTES/th_pos_referencias_laboralesC.php?insertar=true',
@@ -195,7 +200,7 @@
                     <div class="row mb-col">
                         <div class="col-md-12">
                             <label for="txt_nombre_referencia" class="form-label form-label-sm">Nombre del empleador</label>
-                            <input type="text" class="form-control form-control-sm no_caracteres" name="txt_nombre_referencia" id="txt_nombre_referencia"  maxlength="50">
+                            <input type="text" class="form-control form-control-sm no_caracteres" name="txt_nombre_referencia" id="txt_nombre_referencia" maxlength="50">
                         </div>
                     </div>
 
@@ -209,14 +214,14 @@
                     <div class="row mb-col">
                         <div class="col-md-12">
                             <label for="txt_referencia_correo" class="form-label form-label-sm">Correo del empleador</label>
-                            <input type="email" class="form-control form-control-sm" name="txt_referencia_correo" id="txt_referencia_correo"  maxlength="100">
+                            <input type="email" class="form-control form-control-sm" name="txt_referencia_correo" id="txt_referencia_correo" maxlength="100">
                         </div>
                     </div>
 
                     <div class="row mb-col">
                         <div class="col-md-12">
                             <label for="txt_referencia_nombre_empresa" class="form-label form-label-sm">Empresa/Institución </label>
-                            <input type="text" class="form-control form-control-sm no_caracteres" name="txt_referencia_nombre_empresa" id="txt_referencia_nombre_empresa"  maxlength="100">
+                            <input type="text" class="form-control form-control-sm no_caracteres" name="txt_referencia_nombre_empresa" id="txt_referencia_nombre_empresa" maxlength="100">
                         </div>
                     </div>
 
@@ -265,7 +270,7 @@
         agregar_asterisco_campo_obligatorio('txt_copia_carta_recomendacion');
         agregar_asterisco_campo_obligatorio('txt_referencia_correo');
         agregar_asterisco_campo_obligatorio('txt_referencia_nombre_empresa');
-       
+
         //Validación Referencias Laborales
         $("#form_referencias_laborales").validate({
             rules: {

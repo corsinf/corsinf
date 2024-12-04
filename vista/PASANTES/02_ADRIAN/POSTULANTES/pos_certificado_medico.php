@@ -5,8 +5,8 @@
         <?php } ?>
     });
 
- //Certificados Médicos
- function cargar_datos_cerficados_medicos(id) {
+    //Certificados Médicos
+    function cargar_datos_cerficados_medicos(id) {
         $.ajax({
             url: '../controlador/PASANTES/02_ADRIAN/POSTULANTES/th_pos_certificados_medicosC.php?listar=true',
             type: 'post',
@@ -19,7 +19,7 @@
             }
         });
     }
-    
+
     function cargar_datos_modal_certificados_medicos(id) {
         $.ajax({
             url: '../controlador/PASANTES/02_ADRIAN/POSTULANTES/th_pos_certificados_medicosC.php?listar_modal=true',
@@ -35,7 +35,7 @@
                 $('#txt_med_ins_medico').val(response[0].th_cer_ins_medico);
                 $('#txt_med_fecha_inicio_certificado').val(response[0].th_cer_fecha_inicio_certificado);
                 $('#txt_med_fecha_fin_certificado').val(response[0].th_cer_fecha_fin_certificado);
-                $('#txt_ruta_guardada_certificados_medicos').val(response[0].th_cer_ruta_certficado);  
+                $('#txt_ruta_guardada_certificados_medicos').val(response[0].th_cer_ruta_certficado);
             }
         });
     }
@@ -169,46 +169,45 @@
     }
     //Función para validar fechas de certificados médicos
     function validar_fechas_certificados_medicos() {
-    var fecha_inicio = $('#txt_med_fecha_inicio_certificado').val();
-    var fecha_final = $('#txt_med_fecha_fin_certificado').val();
-    var hoy = new Date();
-    var fecha_actual = hoy.toISOString().split('T')[0];
+        var fecha_inicio = $('#txt_med_fecha_inicio_certificado').val();
+        var fecha_final = $('#txt_med_fecha_fin_certificado').val();
+        var hoy = new Date();
+        var fecha_actual = hoy.toISOString().split('T')[0];
 
-     //* Validar que la fecha final no sea menor a la fecha de inicio
-     if (fecha_inicio && fecha_final) {
-        if (Date.parse(fecha_final) < Date.parse(fecha_inicio)) {
-            Swal.fire({
-                icon: "error",
-                title: "Oops...",
-                text: "La fecha final no puede ser menor a la fecha de inicio.",
-            });
-            reiniciar_campos_fecha_cer_medicos('#txt_med_fecha_fin_certificado');
-            return;
+        //* Validar que la fecha final no sea menor a la fecha de inicio
+        if (fecha_inicio && fecha_final) {
+            if (Date.parse(fecha_final) < Date.parse(fecha_inicio)) {
+                Swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    text: "La fecha final no puede ser menor a la fecha de inicio.",
+                });
+                reiniciar_campos_fecha_cer_medicos('#txt_med_fecha_fin_certificado');
+                return;
+            }
         }
-    }
 
-    //* Validar que la fecha final no sea menor a la fecha de inicio
-    if (fecha_inicio && fecha_final) {
-        if (Date.parse(fecha_final) < Date.parse(fecha_inicio)) {
-            Swal.fire({
-                icon: "error",
-                title: "Oops...",
-                text: "La fecha final no puede ser menor a la fecha de inicio.",
-            });
-            reiniciar_campos_fecha_cer_medicos('#txt_med_fecha_fin_certificado');
-            return;
+        //* Validar que la fecha final no sea menor a la fecha de inicio
+        if (fecha_inicio && fecha_final) {
+            if (Date.parse(fecha_final) < Date.parse(fecha_inicio)) {
+                Swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    text: "La fecha final no puede ser menor a la fecha de inicio.",
+                });
+                reiniciar_campos_fecha_cer_medicos('#txt_med_fecha_fin_certificado');
+                return;
+            }
         }
-    }
 
-    //* Función para reiniciar campos
-    function reiniciar_campos_fecha_cer_medicos(campo) {
-        $(campo).val('');
-        $(campo).removeClass('is-valid is-invalid');
-        $('.form-control').removeClass('is-valid is-invalid');
-    }
-       
-}
+        //* Función para reiniciar campos
+        function reiniciar_campos_fecha_cer_medicos(campo) {
+            $(campo).val('');
+            $(campo).removeClass('is-valid is-invalid');
+            $('.form-control').removeClass('is-valid is-invalid');
+        }
 
+    }
 </script>
 
 <div id="pnl_certificados_medicos">
@@ -225,7 +224,7 @@
             </div>
             <!-- Modal body -->
             <form id="form_certificados_medicos">
-                <div class="modal-body">               
+                <div class="modal-body">
                     <input type="hidden" name="txt_certificados_medicos_id" id="txt_certificados_medicos_id">
                     <input type="hidden" name="txt_postulante_cedula" id="txt_postulante_cedula">
                     <input type="hidden" name="txt_postulante_id" id="txt_postulante_id">
@@ -244,10 +243,10 @@
                     </div>
                     <div class="row mb-col">
                         <div class="col-md-12">
-                            <label for="txt_med_ins_medico" class="form-label form-label-sm">Nombre de la Institución Médica  </label>
+                            <label for="txt_med_ins_medico" class="form-label form-label-sm">Nombre de la Institución Médica </label>
                             <input type="text" class="form-control form-control-sm no_caracteres" name="txt_med_ins_medico" id="txt_med_ins_medico" maxlength="50">
                         </div>
-                    </div>                
+                    </div>
                     <div class="row mb-col">
                         <div class="col-md-12">
                             <label for="txt_med_fecha_inicio_certificado" class="form-label form-label-sm">Fecha de Inicio del Certificado</label>
@@ -362,40 +361,39 @@
             }
         });
     })
-  
+
     function txt_fecha_fin_certificado_1() {
-    // Obtén el valor actual del campo de fecha
-    var fechaFin = $('#txt_med_fecha_fin_certificado').val();
+        // Obtén el valor actual del campo de fecha
+        var fechaFin = $('#txt_med_fecha_fin_certificado').val();
 
-    // Si el campo tiene un valor, se marca como válido
-    if (fechaFin) {
-        // Agregar clase 'is-valid' y remover 'is-invalid'
-        $('#txt_med_fecha_fin_certificado')
-            .addClass('is-valid')
-            .removeClass('is-invalid');
-    } else {
-        // Si no tiene valor, mostrar como inválido
-        $('#txt_med_fecha_fin_certificado')
-            .addClass('is-invalid')
-            .removeClass('is-valid');
-    }
-
-    // Si el campo está deshabilitado, se habilita y se limpia el valor
-    if ($('#txt_med_fecha_fin_certificado').prop('disabled')) {
-        $('#txt_med_fecha_fin_certificado').prop('disabled', false);
-        $('#txt_med_fecha_fin_certificado').val('');
-    }
-
-    // Agregar validación dinámica al campo con jQuery Validate
-    $('#txt_med_fecha_fin_certificado').rules("add", {
-        required: true,
-        messages: {
-            required: "La fecha de fin es obligatoria."
+        // Si el campo tiene un valor, se marca como válido
+        if (fechaFin) {
+            // Agregar clase 'is-valid' y remover 'is-invalid'
+            $('#txt_med_fecha_fin_certificado')
+                .addClass('is-valid')
+                .removeClass('is-invalid');
+        } else {
+            // Si no tiene valor, mostrar como inválido
+            $('#txt_med_fecha_fin_certificado')
+                .addClass('is-invalid')
+                .removeClass('is-valid');
         }
-    });
 
-    // Validar las fechas usando la función personalizada
-    validar_fechas_certificados_medicos();
-}
+        // Si el campo está deshabilitado, se habilita y se limpia el valor
+        if ($('#txt_med_fecha_fin_certificado').prop('disabled')) {
+            $('#txt_med_fecha_fin_certificado').prop('disabled', false);
+            $('#txt_med_fecha_fin_certificado').val('');
+        }
 
+        // Agregar validación dinámica al campo con jQuery Validate
+        $('#txt_med_fecha_fin_certificado').rules("add", {
+            required: true,
+            messages: {
+                required: "La fecha de fin es obligatoria."
+            }
+        });
+
+        // Validar las fechas usando la función personalizada
+        validar_fechas_certificados_medicos();
+    }
 </script>

@@ -150,53 +150,53 @@
 
     //Funcion para validar las fechas de ingreso
     function validar_fechas_idioma() {
-    var fecha_inicio = $('#txt_fecha_inicio_idioma').val();
-    var fecha_final = $('#txt_fecha_fin_idioma').val();
-    var hoy = new Date();
-    var fecha_actual = hoy.toISOString().split('T')[0];
+        var fecha_inicio = $('#txt_fecha_inicio_idioma').val();
+        var fecha_final = $('#txt_fecha_fin_idioma').val();
+        var hoy = new Date();
+        var fecha_actual = hoy.toISOString().split('T')[0];
 
-    //Funcion para validar que la fecha final no sea menor a la fecha de inicio
-    if (fecha_inicio && fecha_final) {
-        if (Date.parse(fecha_final) < Date.parse(fecha_inicio)) {
+        //Funcion para validar que la fecha final no sea menor a la fecha de inicio
+        if (fecha_inicio && fecha_final) {
+            if (Date.parse(fecha_final) < Date.parse(fecha_inicio)) {
+                Swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    text: "La fecha final no puede ser menor a la fecha de inicio.",
+                });
+                reiniciar_campos_fecha('#txt_fecha_fin_idioma');
+                return;
+            }
+        }
+
+        // Validar que la fecha de inicio no sea mayor a la fecha actual
+        if (fecha_inicio && Date.parse(fecha_inicio) > Date.parse(fecha_actual)) {
             Swal.fire({
                 icon: "error",
                 title: "Oops...",
-                text: "La fecha final no puede ser menor a la fecha de inicio.",
+                text: "La fecha de inicio no puede ser mayor a la fecha actual.",
+            });
+            reiniciar_campos_fecha('#txt_fecha_inicio_idioma');
+            return;
+        }
+
+        // Validar que la fecha final no sea mayor a la fecha actual
+        if (fecha_final && Date.parse(fecha_final) > Date.parse(fecha_actual)) {
+            Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: "La fecha final no puede ser mayor a la fecha actual.",
             });
             reiniciar_campos_fecha('#txt_fecha_fin_idioma');
             return;
         }
-    }
 
-    // Validar que la fecha de inicio no sea mayor a la fecha actual
-    if (fecha_inicio && Date.parse(fecha_inicio) > Date.parse(fecha_actual)) {
-        Swal.fire({
-            icon: "error",
-            title: "Oops...",
-            text: "La fecha de inicio no puede ser mayor a la fecha actual.",
-        });
-        reiniciar_campos_fecha('#txt_fecha_inicio_idioma');
-        return;
+        //Función para reiniciar campos
+        function reiniciar_campos_fecha(campo) {
+            $(campo).val('');
+            $(campo).removeClass('is-valid is-invalid');
+            $('.form-control').removeClass('is-valid is-invalid');
+        }
     }
-
-    // Validar que la fecha final no sea mayor a la fecha actual
-    if (fecha_final && Date.parse(fecha_final) > Date.parse(fecha_actual)) {
-        Swal.fire({
-            icon: "error",
-            title: "Oops...",
-            text: "La fecha final no puede ser mayor a la fecha actual.",
-        });
-        reiniciar_campos_fecha('#txt_fecha_fin_idioma');
-        return;
-    }
-
-    //Función para reiniciar campos
-    function reiniciar_campos_fecha(campo) {
-        $(campo).val('');
-        $(campo).removeClass('is-valid is-invalid');
-        $('.form-control').removeClass('is-valid is-invalid');
-    }
-}
 </script>
 
 <div id="pnl_idioma">
@@ -265,7 +265,7 @@
                             <input type="date" class="form-control form-control-sm" name="txt_fecha_fin_idioma" id="txt_fecha_fin_idioma" onchange="txt_fecha_fin_idioma_1();">
                         </div>
                     </div>
-                    </div>
+                </div>
                 <div class="modal-footer d-flex justify-content-center">
                     <button type="button" class="btn btn-success btn-sm px-4 m-1" id="btn_guardar_idioma" onclick="insertar_editar_idiomas(); validar_fechas_idioma();">Agregar</button>
                     <button type="button" class="btn btn-danger btn-sm px-4 m-1" id="btn_eliminar_formacion" onclick="borrar_datos_idioma();">Eliminar</button>
@@ -335,7 +335,7 @@
             }
         });
     })
-  
+
     function txt_fecha_fin_idioma_1() {
         if ($('#txt_fecha_fin_idioma').is(':checked')) {
             var hoy = new Date();
@@ -369,6 +369,5 @@
 
         // Validar las fechas (llama a tu función de validación)
         validar_fechas_idioma();
-}
-
+    }
 </script>

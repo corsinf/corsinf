@@ -4,7 +4,7 @@
             cargar_datos_certificaciones_capacitaciones(<?= $id ?>);
         <?php } ?>
     });
-    
+
     //Certificaciones y Capacitaciones
     function cargar_datos_certificaciones_capacitaciones(id) {
         $.ajax({
@@ -38,9 +38,9 @@
 
     function insertar_editar_certificaciones_capacitaciones() {
         var form_data = new FormData(document.getElementById("form_certificaciones_capacitaciones")); // Captura todos los campos y archivos
-        
+
         var txt_id_certificaciones_capacitaciones = $('#txt_certificaciones_capacitaciones_id').val();
-        
+
         if ($('#txt_ruta_archivo').val() === '' && txt_id_certificaciones_capacitaciones != '') {
             var txt_ruta_archivo = $('#txt_ruta_guardada_certificaciones_capacitaciones').val()
             $('#txt_ruta_archivo').rules("remove", "required");
@@ -50,7 +50,7 @@
                 required: true
             });
         }
-  
+
         if ($("#form_certificaciones_capacitaciones").valid()) {
 
             $.ajax({
@@ -146,7 +146,7 @@
     function limpiar_parametros_certificaciones_capacitaciones() {
         //certificaciones capacitaciones
         $('#txt_nombre_curso').val('');
-        $('#txt_ruta_archivo').val('');       
+        $('#txt_ruta_archivo').val('');
         $('#txt_certificaciones_capacitaciones_id').val('');
         $('#txt_ruta_guardada_certificaciones_capacitaciones').val('');
         //Limpiar validaciones
@@ -182,23 +182,23 @@
 
             <!-- Modal body -->
             <form id="form_certificaciones_capacitaciones" enctype="multipart/form-data" method="post" style="width: inherit;">
-            
+
                 <div class="modal-body">
                     <input type="hidden" name="txt_certificaciones_capacitaciones_id" id="txt_certificaciones_capacitaciones_id">
                     <input type="hidden" name="txt_postulante_cedula" id="txt_postulante_cedula">
                     <input type="hidden" name="txt_postulante_id" id="txt_postulante_id">
-               
+
                     <div class="row mb-col">
                         <div class="col-md-12">
                             <label for="txt_nombre_curso" class="form-label form-label-sm">Nombre del curso o capacitación </label>
                             <input type="text" class="form-control form-control-sm no_caracteres" name="txt_nombre_curso" id="txt_nombre_curso" value="" maxlength="100">
                         </div>
                     </div>
-                    
+
                     <div class="row mb-col">
                         <div class="col-md-12">
                             <label for="txt_ruta_archivo" class="form-label form-label-sm">1. PDF del Certificado obtenido </label>
-                            <input type="file" class="form-control form-control-sm" name="txt_ruta_archivo" id="txt_ruta_archivo" accept=".pdf" value="">                          
+                            <input type="file" class="form-control form-control-sm" name="txt_ruta_archivo" id="txt_ruta_archivo" accept=".pdf" value="">
                             <input type="hidden" class="form-control form-control-sm" name="txt_ruta_guardada_certificaciones_capacitaciones" id="txt_ruta_guardada_certificaciones_capacitaciones">
                         </div>
                     </div>
@@ -240,25 +240,25 @@
         //Validación Certificaciones y Capacitaciones
         $("#form_certificaciones_capacitaciones").validate({
             rules: {
-                
+
                 txt_nombre_curso: {
                     required: true,
                 },
                 txt_ruta_archivo: {
                     required: true,
-                },   
+                },
             },
             messages: {
-                
+
                 txt_nombre_curso: {
 
                     required: "Por favor ingrese el nombre de su certificado",
                 },
                 txt_ruta_archivo: {
-                   
-                   required: "Por favor ingrese el PDF de su certificado",
-                   
-               },
+
+                    required: "Por favor ingrese el PDF de su certificado",
+
+                },
             },
 
             highlight: function(element) {

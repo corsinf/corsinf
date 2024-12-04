@@ -33,9 +33,9 @@
                 $('#txt_contratos_trabajos_id').val(response[0]._id);
                 $('#txt_nombre_empresa_contrato').val(response[0].th_ctr_nombre_empresa);
                 $('#txt_tipo_contrato').val(response[0].th_ctr_tipo_contrato);
-                $('#txt_ruta_guardada_contratos_trabajos').val(response[0].th_ctr_contratos_trabajos);        
-                $('#txt_fecha_inicio_contrato').val(response[0].th_ctr_fecha_inicio_contrato); 
-                $cbx_fecha_fin_experiencia.val(response[0].th_ctr_cbx_fecha_fin_experiencia);                                          
+                $('#txt_ruta_guardada_contratos_trabajos').val(response[0].th_ctr_contratos_trabajos);
+                $('#txt_fecha_inicio_contrato').val(response[0].th_ctr_fecha_inicio_contrato);
+                $cbx_fecha_fin_experiencia.val(response[0].th_ctr_cbx_fecha_fin_experiencia);
             }
         });
 
@@ -45,7 +45,7 @@
         var form_data = new FormData(document.getElementById("form_contratos_trabajos")); // Captura todos los campos y archivos
         var in_cbx_fecha_fin_experiencia = $('#cbx_fecha_fin_experiencia').is(':checked') ? 1 : 0;
         form_data.append('cbx_fecha_fin_experiencia', in_cbx_fecha_fin_experiencia);
-                  
+
         var txt_id_contratos_trabajos = $('#txt_contratos_trabajos_id').val();
 
         if ($('#txt_ruta_archivo_contrato').val() === '' && txt_id_contratos_trabajos != '') {
@@ -56,8 +56,8 @@
             $('#txt_ruta_archivo_contrato').rules("add", {
                 required: true
             });
-        }       
-      
+        }
+
         if ($("#form_contratos_trabajos").valid()) {
 
             $.ajax({
@@ -155,7 +155,7 @@
         $('#txt_contratos_trabajos_id').val('');
         $('#txt_ruta_guardada_contratos_trabajos').val('');
         $('#txt_fecha_inicio_contrato').val('')
-        $('#txt_fecha_fin_contrato').val('')       
+        $('#txt_fecha_fin_contrato').val('')
         $('#txt_fecha_fin_contrato').prop('disabled', false);
         $('#cbx_fecha_fin_experiencia').prop('checked', false);
         //Limpiar validaciones
@@ -166,7 +166,7 @@
         $('#btn_guardar_contratos_trabajos').html('Agregar');
     }
 
-    
+
     function validar_fechas_contratos_trabajos() {
         var fecha_inicio = $('#txt_fecha_inicio_contrato').val();
         var fecha_final = $('#txt_fecha_fin_contrato').val();
@@ -200,13 +200,12 @@
     }
 
     function definir_ruta_iframe_contratos(url) {
-       var cambiar_ruta = $('#iframe_contratos_trabajos_pdf').attr('src', url);
+        var cambiar_ruta = $('#iframe_contratos_trabajos_pdf').attr('src', url);
     }
 
     function limpiar_parametros_iframe() {
         $('#iframe_contratos_trabajos_pdf').attr('src', '');
-    } 
-
+    }
 </script>
 
 <div id="pnl_contratos_trabajos">
@@ -259,7 +258,7 @@
                     </div>
                     <div class="row mb-col">
                         <div class="col md-12">
-                            <input type="checkbox" class="form-check-input" name="cbx_fecha_fin_experiencia" id="cbx_fecha_fin_experiencia"  onchange="checkbox_actualidad_contratos_trabajos();">
+                            <input type="checkbox" class="form-check-input" name="cbx_fecha_fin_experiencia" id="cbx_fecha_fin_experiencia" onchange="checkbox_actualidad_contratos_trabajos();">
                             <label for="cbx_fecha_fin_experiencia" class="form-label form-label-sm">Actualidad</label>
                         </div>
                     </div>
