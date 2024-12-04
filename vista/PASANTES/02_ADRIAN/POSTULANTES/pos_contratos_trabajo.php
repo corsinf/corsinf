@@ -38,7 +38,6 @@
                 $cbx_fecha_fin_experiencia.val(response[0].th_ctr_cbx_fecha_fin_experiencia);
             }
         });
-
     }
 
     function insertar_editar_contratos_trabajos() {
@@ -99,7 +98,6 @@
             });
         }
     }
-
 
     //Funcion para editar el registro de contratos y capacitaciones
     function abrir_modal_contratos_trabajos(id) {
@@ -166,7 +164,6 @@
         $('#btn_guardar_contratos_trabajos').html('Agregar');
     }
 
-
     function validar_fechas_contratos_trabajos() {
         var fecha_inicio = $('#txt_fecha_inicio_contrato').val();
         var fecha_final = $('#txt_fecha_fin_contrato').val();
@@ -218,7 +215,7 @@
 
             <!-- Modal Header -->
             <div class="modal-header">
-                <h6><small class="text-body-secondary fw-bold" id="lbl_titulo_contratos_trabajos">Agregue un Contrato de Trabajo</small></h6>
+                <h5><small class="text-body-secondary fw-bold" id="lbl_titulo_contratos_trabajos">Agregue un Contrato de Trabajo</small></h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="limpiar_parametros_contratos_trabajos()"></button>
             </div>
             <!-- Modal body -->
@@ -288,7 +285,7 @@
 
             <!-- Modal Header -->
             <div class="modal-header">
-                <h5><small class="text-body-secondary" id="lbl_titulo_contratos_trabajos">Visualizacion Documento</small></h5>
+                <h5><small class="text-body-secondary fw-bold" id="lbl_titulo_contratos_trabajos">Visualizacion Documento</small></h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="limpiar_parametros_iframe();"></button>
             </div>
             <!-- Modal body -->

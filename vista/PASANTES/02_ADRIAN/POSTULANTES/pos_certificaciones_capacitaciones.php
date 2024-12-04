@@ -176,7 +176,7 @@
 
             <!-- Modal Header -->
             <div class="modal-header">
-                <h6><small class="text-body-secondary fw-bold" id="lbl_titulo_certificaciones_capacitaciones">Agregue una Certificación o Capacitación</small></h6>
+                <h5><small class="text-body-secondary fw-bold" id="lbl_titulo_certificaciones_capacitaciones">Agregue una Certificación o Capacitación</small></h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="limpiar_parametros_certificaciones_capacitaciones()"></button>
             </div>
 
@@ -219,7 +219,7 @@
 
             <!-- Modal Header -->
             <div class="modal-header">
-                <h5><small class="text-body-secondary" id="lbl_titulo_certificaciones_capacitaciones">Visualizacion Documento</small></h5>
+                <h5><small class="text-body-secondary fw-bold" id="lbl_titulo_certificaciones_capacitaciones">Visualizacion Documento</small></h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="limpiar_parametros_iframe();"></button>
             </div>
             <!-- Modal body -->
@@ -240,7 +240,6 @@
         //Validación Certificaciones y Capacitaciones
         $("#form_certificaciones_capacitaciones").validate({
             rules: {
-
                 txt_nombre_curso: {
                     required: true,
                 },
@@ -249,15 +248,11 @@
                 },
             },
             messages: {
-
                 txt_nombre_curso: {
-
                     required: "Por favor ingrese el nombre de su certificado",
                 },
                 txt_ruta_archivo: {
-
                     required: "Por favor ingrese el PDF de su certificado",
-
                 },
             },
 

@@ -43,14 +43,20 @@ if (isset($_GET['id'])) {
                 $('#txt_telefono_1').val(response[0].th_pos_telefono_1);
                 $('#txt_telefono_2').val(response[0].th_pos_telefono_2);
                 $('#txt_correo').val(response[0].th_pos_correo);
-                $('#ddl_provincia').val(response[0].th_prov_id);
-                $('#ddl_ciudad').val(response[0].th_ciu_id);
-                $('#ddl_parroquia').val(response[0].th_parr_id);
                 $('#txt_direccion_postal').val(response[0].th_pos_postal);
                 $('#txt_direccion').val(response[0].th_pos_direccion);
-
                 calcular_edad('txt_edad', response[0].th_pos_fecha_nacimiento);
-                cargar_datos_ciudades(response[0].th_ciu_id);
+
+                //Cargar Selects de provincia-ciudad-parroquia
+                url_provinciaC = '../controlador/PASANTES/02_ADRIAN/POSTULANTES/th_provinciasC.php?listar=true';
+                cargar_select2_con_id('ddl_provincias', url_provinciaC, response[0].th_prov_id, 'th_prov_nombre');
+
+                url_ciudadC = '../controlador/PASANTES/02_ADRIAN/POSTULANTES/th_ciudadC.php?listar=true';
+                cargar_select2_con_id('ddl_ciudad', url_ciudadC, response[0].th_ciu_id, 'th_ciu_nombre');
+
+                url_parroquiaC = '../controlador/PASANTES/02_ADRIAN/POSTULANTES/th_parroquiasC.php?listar=true';
+                cargar_select2_con_id('ddl_parroquia', url_parroquiaC, response[0].th_parr_id, 'th_parr_nombre');
+
 
                 nombres_completos = response[0].th_pos_primer_apellido + ' ' + response[0].th_pos_segundo_apellido + ' ' + response[0].th_pos_primer_nombre + ' ' + response[0].th_pos_segundo_nombre;
                 $('#txt_nombres_completos_v').html(nombres_completos);
@@ -192,8 +198,8 @@ if (isset($_GET['id'])) {
                                                 <h5 class="fw-bold text-primary">Información Personal</h5>
                                             </div>
                                             <div class="col-2">
-                                                <a href="#" data-bs-toggle="modal" data-bs-target="#modal_informacion_personal">
-                                                    <i class='text-dark bx bx-pencil bx-sm'></i>
+                                                <a href="#" class="text-dark icon-hover" data-bs-toggle="modal" data-bs-target="#modal_informacion_personal">
+                                                    <i class="bx bx-pencil bx-sm"></i>
                                                 </a>
                                             </div>
                                         </div>
@@ -263,7 +269,7 @@ if (isset($_GET['id'])) {
                             <div class="card-body">
                                 <div class="align-items-center">
                                     <div class="mt-3">
-                                        <div class="row">
+                                        <!-- <div class="row">
                                             <div class="col-10">
                                                 <h5 class="fw-bold text-primary">Información Adicional</h5>
                                             </div>
@@ -272,7 +278,7 @@ if (isset($_GET['id'])) {
                                                     <i class='text-dark bx bx-pencil bx-sm'></i></a>
                                             </div>
                                         </div>
-                                        <hr />
+                                        <hr /> -->
 
                                         <!-- Queda en espera este parte del modulo -->
                                         <?php //include_once('../vista/PASANTES/02_ADRIAN/POSTULANTES/pos_informacion_adicional.php'); 
@@ -283,8 +289,8 @@ if (isset($_GET['id'])) {
                                                 <h5 class="fw-bold text-primary">Contacto de Emergencia</h5>
                                             </div>
                                             <div class="col-2">
-                                                <a href="#" data-bs-toggle="modal" data-bs-target="#modal_contacto_emergencia">
-                                                    <i class='text-dark bx bx-show bx-sm'></i></a>
+                                                <a href="#" class="text-dark icon-hover" data-bs-toggle="modal" data-bs-target="#modal_contacto_emergencia">
+                                                    <i class='bx bx-show bx-sm'></i></a>
                                             </div>
                                         </div>
 
@@ -352,7 +358,7 @@ if (isset($_GET['id'])) {
                                                         </div>
 
                                                         <div class="col-3 d-flex justify-content-end">
-                                                            <a href="#" class="text-success d-flex align-items-center" data-bs-toggle="modal" data-bs-target="#modal_agregar_experiencia">
+                                                            <a href="#" class="text-success icon-hover d-flex align-items-center" data-bs-toggle="modal" data-bs-target="#modal_agregar_experiencia">
                                                                 <i class='bx bx-plus-circle bx-sm me-1'></i>
                                                                 <span>Agregar</span>
                                                             </a>
@@ -372,7 +378,7 @@ if (isset($_GET['id'])) {
                                                             <h6 class="mb-0 fw-bold text-primary">Formación Académica:</h6>
                                                         </div>
                                                         <div class="col-3 d-flex justify-content-end">
-                                                            <a href="#" class="text-success d-flex align-items-center" id="btn_modal_agregar_formacion_academica" data-bs-toggle="modal" data-bs-target="#modal_agregar_formacion">
+                                                            <a href="#" class="text-success icon-hover d-flex align-items-center" id="btn_modal_agregar_formacion_academica" data-bs-toggle="modal" data-bs-target="#modal_agregar_formacion">
                                                                 <i class='bx bx-plus-circle bx-sm me-1'></i>
                                                                 <span>Agregar</span>
                                                             </a>
@@ -392,7 +398,7 @@ if (isset($_GET['id'])) {
                                                             <h6 class="mb-0 fw-bold text-primary">Certificaciones y Capacitación:</h6>
                                                         </div>
                                                         <div class="col-3 d-flex justify-content-end">
-                                                            <a href="#" class="text-success d-flex align-items-center" data-bs-toggle="modal" data-bs-target="#modal_agregar_certificaciones">
+                                                            <a href="#" class="text-success icon-hover d-flex align-items-center" data-bs-toggle="modal" data-bs-target="#modal_agregar_certificaciones">
                                                                 <i class='bx bx-plus-circle bx-sm me-1'></i>
                                                                 <span>Agregar</span>
                                                             </a>
@@ -419,7 +425,7 @@ if (isset($_GET['id'])) {
                                                             <h6 class="mb-0 fw-bold text-primary">Documento de Identidad:</h6>
                                                         </div>
                                                         <div class="col-5 d-flex justify-content-end align-items-center">
-                                                            <a href="#" class="text-success d-flex align-items-center" data-bs-toggle="modal" data-bs-target="#modal_agregar_documentos_identidad">
+                                                            <a href="#" class="text-success icon-hover d-flex align-items-center" data-bs-toggle="modal" data-bs-target="#modal_agregar_documentos_identidad">
                                                                 <i class='bx bx-plus-circle bx-sm me-1'></i>
                                                                 <span class="">Agregar</span>
                                                             </a>
@@ -439,7 +445,7 @@ if (isset($_GET['id'])) {
                                                             <h6 class="mb-0 fw-bold text-primary">Contratos de Trabajo:</h6>
                                                         </div>
                                                         <div class="col-5 d-flex justify-content-end align-items-center">
-                                                            <a href="#" class="text-success d-flex align-items-center" data-bs-toggle="modal" data-bs-target="#modal_agregar_contratos">
+                                                            <a href="#" class="text-success icon-hover d-flex align-items-center" data-bs-toggle="modal" data-bs-target="#modal_agregar_contratos">
                                                                 <i class='bx bx-plus-circle bx-sm me-1'></i>
                                                                 <span class="">Agregar</span>
                                                             </a>
@@ -459,7 +465,7 @@ if (isset($_GET['id'])) {
                                                             <h6 class="mb-0 fw-bold text-primary">Certificados Médicos:</h6>
                                                         </div>
                                                         <div class="col-5 d-flex justify-content-end align-items-center">
-                                                            <a href="#" class="text-success d-flex align-items-center" data-bs-toggle="modal" data-bs-target="#modal_agregar_certificados_medicos">
+                                                            <a href="#" class="text-success icon-hover d-flex align-items-center" data-bs-toggle="modal" data-bs-target="#modal_agregar_certificados_medicos">
                                                                 <i class='bx bx-plus-circle bx-sm me-1'></i>
                                                                 <span class="">Agregar</span>
                                                             </a>
@@ -479,7 +485,7 @@ if (isset($_GET['id'])) {
                                                             <h6 class="mb-0 fw-bold text-primary">Referencias laborales:</h6>
                                                         </div>
                                                         <div class="col-5 d-flex justify-content-end align-items-center">
-                                                            <a href="#" class="text-success d-flex align-items-center" data-bs-toggle="modal" data-bs-target="#modal_agregar_referencia_laboral">
+                                                            <a href="#" class="text-success icon-hover d-flex align-items-center" data-bs-toggle="modal" data-bs-target="#modal_agregar_referencia_laboral">
                                                                 <i class='bx bx-plus-circle bx-sm me-1'></i>
                                                                 <span class="">Agregar</span>
                                                             </a>
@@ -506,7 +512,7 @@ if (isset($_GET['id'])) {
                                                             <h6 class="mb-0 fw-bold text-primary">Idiomas</h6>
                                                         </div>
                                                         <div class="col-6 d-flex justify-content-end">
-                                                            <a href="#" class="text-success d-flex align-items-center" data-bs-toggle="modal" data-bs-target="#modal_agregar_idioma">
+                                                            <a href="#" class="text-success icon-hover d-flex align-items-center" data-bs-toggle="modal" data-bs-target="#modal_agregar_idioma">
                                                                 <i class='bx bx-plus-circle bx-sm me-1'></i>
                                                                 <span>Agregar</span>
                                                             </a>
@@ -526,7 +532,7 @@ if (isset($_GET['id'])) {
                                                             <h6 class="mb-0 fw-bold text-primary">Aptitudes</h6>
                                                         </div>
                                                         <div class="col-6 d-flex justify-content-end">
-                                                            <a href="#" class="text-success d-flex align-items-center" data-bs-toggle="modal" data-bs-target="#modal_agregar_aptitudes" onclick="activar_select2();">
+                                                            <a href="#" class="text-success icon-hover d-flex align-items-center" data-bs-toggle="modal" data-bs-target="#modal_agregar_aptitudes" onclick="activar_select2();">
                                                                 <i class='bx bx-plus-circle bx-sm me-1'></i>
                                                                 <span>Agregar</span>
                                                             </a>
@@ -552,7 +558,7 @@ if (isset($_GET['id'])) {
                                                             <h6 class="mb-0 fw-bold text-primary">Estado laboral:</h6>
                                                         </div>
                                                         <div class="col-6 d-flex justify-content-end">
-                                                            <a href="#" class="text-success d-flex align-items-center" data-bs-toggle="modal" data-bs-target="#modal_estado_laboral">
+                                                            <a href="#" class="text-success icon-hover d-flex align-items-center" data-bs-toggle="modal" data-bs-target="#modal_estado_laboral">
                                                                 <i class='bx bx-plus-circle bx-sm me-1'></i>
                                                                 <span>Agregar</span>
                                                             </a>
@@ -577,13 +583,14 @@ if (isset($_GET['id'])) {
 </div>
 
 <!-- Modal para la informacion personal -->
-<div class="modal" id="modal_informacion_personal" tabindex="-1" aria-modal="true" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
+<div class="modal modal_general" id="modal_informacion_personal" tabindex="-1" aria-modal="true" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
     <div class="modal-dialog modal-dialog-centered modal-xl">
         <div class="modal-content">
 
             <!-- Modal Header -->
             <div class="modal-header">
-                <h5><small class="text-body-secondary">Ingrese sus datos</small></h5>
+                <h5><small class="text-body-secondary fw-bold">Información Personal</small></h5>
+
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <!-- Modal body -->

@@ -53,6 +53,7 @@
                 required: true
             });
         }
+
         if ($("#form_certificados_medicos").valid()) {
             $.ajax({
                 url: '../controlador/PASANTES/02_ADRIAN/POSTULANTES/th_pos_certificados_medicosC.php?insertar=true',
@@ -167,6 +168,7 @@
     function limpiar_parametros_iframe_cert_medicos() {
         $('#iframe_certificados_medicos_pdf').attr('src', '');
     }
+
     //Función para validar fechas de certificados médicos
     function validar_fechas_certificados_medicos() {
         var fecha_inicio = $('#txt_med_fecha_inicio_certificado').val();
@@ -206,7 +208,6 @@
             $(campo).removeClass('is-valid is-invalid');
             $('.form-control').removeClass('is-valid is-invalid');
         }
-
     }
 </script>
 
@@ -219,7 +220,7 @@
         <div class="modal-content">
             <!-- Modal Header -->
             <div class="modal-header">
-                <h6><small class="text-body-secondary fw-bold" id="lbl_titulo_certificados_medicos">Agregue un Certificado Médico</small></h6>
+                <h5><small class="text-body-secondary fw-bold" id="lbl_titulo_certificados_medicos">Agregue un Certificado Médico</small></h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="limpiar_parametros_certificados_medicos()"></button>
             </div>
             <!-- Modal body -->
@@ -283,7 +284,7 @@
 
             <!-- Modal Header -->
             <div class="modal-header">
-                <h5><small class="text-body-secondary" id="lbl_titulo_certificados_medicos">Certificados Médicos:</small></h5>
+                <h5><small class="text-body-secondary fw-bold" id="lbl_titulo_certificados_medicos">Certificados Médicos:</small></h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="limpiar_parametros_iframe_cert_medicos();"></button>
             </div>
             <!-- Modal body -->

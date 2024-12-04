@@ -85,6 +85,7 @@
             'cbx_fecha_final_laboral': cbx_fecha_final_laboral,
             'txt_responsabilidades_logros': txt_responsabilidades_logros,
         }
+
         if ($("#form_experiencia_laboral").valid()) {
             // Si es válido, puedes proceder a enviar los datos por AJAX
             //console.log(parametros_experiencia_laboral)
@@ -246,7 +247,7 @@
 
             <!-- Modal Header -->
             <div class="modal-header">
-                <h6><small class="text-body-secondary fw-bold" id="lbl_titulo_experiencia_laboral">Agregue una experiencia laboral</small></h6>
+                <h5><small class="text-body-secondary fw-bold" id="lbl_titulo_experiencia_laboral">Agregue una experiencia laboral</small></h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="limpiar_campos_experiencia_laboral_modal()"></button>
             </div>
             <!-- Modal body -->

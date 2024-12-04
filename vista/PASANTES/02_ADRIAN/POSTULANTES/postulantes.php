@@ -56,6 +56,7 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
         });
     });
 </script>
+
 <div class="page-wrapper">
     <div class="page-content">
         <!--breadcrumb-->

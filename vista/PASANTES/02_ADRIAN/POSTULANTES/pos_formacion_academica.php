@@ -231,7 +231,7 @@
 
             <!-- Modal Header -->
             <div class="modal-header">
-                <h6><small class="text-body-secondary fw-bold" id="lbl_titulo_formacion_acedemica">Agregue una formación académica</small></h6>
+                <h5><small class="text-body-secondary fw-bold" id="lbl_titulo_formacion_acedemica">Agregue una formación académica</small></h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="limpiar_campos_formacion_academica_modal();"></button>
             </div>
             <!-- Modal body -->

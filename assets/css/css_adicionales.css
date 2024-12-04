@@ -37,3 +37,9 @@ label.error {
     font-size: 0.75rem;
     /* Tamaño de fuente más pequeño */
 }
+
+/*Para que los iconos o botones que no tienen estilo se haga un hover*/
+.icon-hover:hover i,
+.icon-hover:hover span {
+    opacity: 0.65;
+}

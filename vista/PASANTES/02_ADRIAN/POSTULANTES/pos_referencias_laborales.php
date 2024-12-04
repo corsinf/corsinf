@@ -185,7 +185,7 @@
 
             <!-- Modal Header -->
             <div class="modal-header">
-                <h6><small class="text-body-secondary fw-bold" id="lbl_titulo_referencia_laboral">Agregue una referencia</small></h6>
+                <h5><small class="text-body-secondary fw-bold" id="lbl_titulo_referencia_laboral">Agregue una referencia</small></h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="limpiar_parametros_referencias_laborales()"></button>
             </div>
 
@@ -250,7 +250,7 @@
 
             <!-- Modal Header -->
             <div class="modal-header">
-                <h5><small class="text-body-secondary" id="lbl_titulo_referencia_laboral">Referencias laborales</small></h5>
+                <h5><small class="text-body-secondary fw-bold" id="lbl_titulo_referencia_laboral">Referencias laborales</small></h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="limpiar_parametros_iframe();"></button>
             </div>
             <!-- Modal body -->

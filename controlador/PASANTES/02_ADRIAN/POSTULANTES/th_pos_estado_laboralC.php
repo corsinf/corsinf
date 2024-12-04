@@ -46,7 +46,7 @@ class th_pos_estado_laboralC
                             <p class="m-0">{$fecha_contratacion} - {$fecha_salida}</p>                            
                         </div>
                         <div class="col-2 d-flex justify-content-end align-items-start">
-                            <button class="btn" style="color: white;" onclick="abrir_modal_estado_laboral({$value['_id']});">
+                            <button class="btn icon-hover" style="color: white;" onclick="abrir_modal_estado_laboral({$value['_id']});">
                                 <i class="text-dark bx bx-pencil bx-sm"></i>
                             </button>
                         </div>

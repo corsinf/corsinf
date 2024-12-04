@@ -128,7 +128,7 @@
 
         if ($("#form_aptitudes").valid()) {
             // Si es válido, puedes proceder a enviar los datos por AJAX
-            console.log(parametros_aptitudes)
+            //console.log(parametros_aptitudes)
             insertar_aptitudes(parametros_aptitudes)
         }
     }
@@ -219,7 +219,7 @@
 
             <!-- Modal Header -->
             <div class="modal-header">
-                <h5><small class="text-body-secondary">Agregue Aptitudes</small></h5>
+                <h5><small class="text-body-secondary fw-bold">Agregue Aptitudes</small></h5>                
                 <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="limpiar_campos_aptitudes_modal();"></button>
             </div>
             <!-- Modal body -->
@@ -229,14 +229,14 @@
 
                     <div class="row mb-col">
                         <div class="col-md-12">
-                            <label for="ddl_seleccionar_aptitud_tecnica" class="form-label form-label-sm fw-bold">Seleccione sus Aptitudes Técnicas </label>
+                            <label for="ddl_seleccionar_aptitud_tecnica" class="form-label form-label-sm">Seleccione sus Aptitudes Técnicas </label>
                             <select class="form-select form-select-sm ddl_seleccionar_aptitud" id="ddl_seleccionar_aptitud_tecnica" name="ddl_seleccionar_aptitud_tecnica" multiple="multiple"></select>
                         </div>
                     </div>
 
                     <div class="row mb-col">
                         <div class="col-md-12">
-                            <label for="ddl_seleccionar_aptitud_blanda" class="form-label form-label-sm fw-bold">Seleccione sus Aptitudes Blandas </label>
+                            <label for="ddl_seleccionar_aptitud_blanda" class="form-label form-label-sm">Seleccione sus Aptitudes Blandas </label>
                             <select class="form-select form-select-sm ddl_seleccionar_aptitud" id="ddl_seleccionar_aptitud_blanda" name="ddl_seleccionar_aptitud_blanda" multiple="multiple"></select>
                         </div>
                     </div>

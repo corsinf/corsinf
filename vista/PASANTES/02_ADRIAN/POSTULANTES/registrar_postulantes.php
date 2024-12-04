@@ -42,16 +42,20 @@ if (isset($_GET['id'])) {
                 $('#txt_telefono_1').val(response[0].th_pos_telefono_1);
                 $('#txt_telefono_2').val(response[0].th_pos_telefono_2);
                 $('#txt_correo').val(response[0].th_pos_correo);
-                $('#ddl_provincia').val(response[0].th_prov_id);
-                $('#ddl_ciudad').val(response[0].th_ciu_id);
-                $('#ddl_parroquia').val(response[0].th_parr_id);
                 $('#txt_direccion_postal').val(response[0].th_pos_postal);
                 $('#txt_direccion').val(response[0].th_pos_direccion);
 
                 calcular_edad('txt_edad', response[0].th_pos_fecha_nacimiento);
-                cargar_datos_ciudades(response[0].th_ciu_id);
 
-                //console.log(response[0].th_ciu_id);
+                //Cargar Selects de provincia-ciudad-parroquia
+                url_provinciaC = '../controlador/PASANTES/02_ADRIAN/POSTULANTES/th_provinciasC.php?listar=true';
+                cargar_select2_con_id('ddl_provincias', url_provinciaC, response[0].th_prov_id, 'th_prov_nombre');
+
+                url_ciudadC = '../controlador/PASANTES/02_ADRIAN/POSTULANTES/th_ciudadC.php?listar=true';
+                cargar_select2_con_id('ddl_ciudad', url_ciudadC, response[0].th_ciu_id, 'th_ciu_nombre');
+
+                url_parroquiaC = '../controlador/PASANTES/02_ADRIAN/POSTULANTES/th_parroquiasC.php?listar=true';
+                cargar_select2_con_id('ddl_parroquia', url_parroquiaC, response[0].th_parr_id, 'th_parr_nombre');
             },
         });
     }
@@ -103,8 +107,6 @@ if (isset($_GET['id'])) {
             //.log(parametros);
             insertar(parametros);
         }
-
-
     }
 
     function insertar(parametros) {
@@ -129,7 +131,6 @@ if (isset($_GET['id'])) {
             }
         });
     }
-
 
     function delete_datos() {
         var id = '<?php echo $_id; ?>';

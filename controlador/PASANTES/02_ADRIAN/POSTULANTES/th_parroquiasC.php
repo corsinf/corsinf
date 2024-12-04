@@ -3,6 +3,10 @@ require_once(dirname(__DIR__, 4) . '/modelo/PASANTES/02_ADRIAN/POSTULANTES/th_pa
 
 $controlador = new th_parroquiasC();
 
+if (isset($_GET['listar'])) {
+    echo json_encode($controlador->listar($_POST['id']));
+}
+
 if (isset($_GET['buscar'])) {
     $query = '';
     $th_ciu_id = $_GET['th_ciu_id'];
@@ -32,6 +36,16 @@ class th_parroquiasC
         $this->modelo = new th_parroquiasM();
     }
 
+    function listar($id)
+    {
+        if ($id == '') {
+            $datos = $this->modelo->where('th_parr_estado', 1)->listar();
+        } else {
+            $datos = $this->modelo->where('th_parr_id', $id)->listar();
+        }
+
+        return $datos;
+    }
 
     function buscar($parametros)
     {
@@ -45,4 +59,3 @@ class th_parroquiasC
         return $lista;
     }
 }
-

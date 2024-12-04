@@ -46,7 +46,7 @@ class th_pos_certificaciones_capacitacionesC
                             <a href="#" data-bs-toggle="modal" data-bs-target="#modal_ver_pdf_certificaciones" onclick="definir_ruta_iframe_certificaciones('{$value['th_cert_ruta_archivo']}');">Ver Certifiacado o Capacitacion PDF</a>
                         </div>
                         <div class="col-2 d-flex justify-content-end align-items-center">
-                            <button class="btn" style="color: white;" onclick="abrir_modal_certificaciones_capacitaciones('{$value['_id']}')">
+                            <button class="btn icon-hover" style="color: white;" onclick="abrir_modal_certificaciones_capacitaciones('{$value['_id']}')">
                                 <i class="text-dark bx bx-pencil bx-sm"></i>
                             </button>
                         </div>

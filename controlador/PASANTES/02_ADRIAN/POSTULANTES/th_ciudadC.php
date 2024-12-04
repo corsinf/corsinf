@@ -3,6 +3,10 @@ require_once(dirname(__DIR__, 4) . '/modelo/PASANTES/02_ADRIAN/POSTULANTES/th_ci
 
 $controlador = new th_ciudadC();
 
+if (isset($_GET['listar'])) {
+    echo json_encode($controlador->listar($_POST['id']));
+}
+
 if (isset($_GET['buscar'])) {
     $query = '';
     $th_prov_id = $_GET['th_prov_id'];
@@ -32,6 +36,16 @@ class th_ciudadC
         $this->modelo = new th_ciudadM();
     }
 
+    function listar($id)
+    {
+        if ($id == '') {
+            $datos = $this->modelo->where('th_ciu_estado', 1)->listar();
+        } else {
+            $datos = $this->modelo->where('th_ciu_id', $id)->listar();
+        }
+
+        return $datos;
+    }
 
     function buscar($parametros)
     {
@@ -45,4 +59,3 @@ class th_ciudadC
         return $lista;
     }
 }
-

@@ -49,7 +49,7 @@ class th_pos_experiencia_laboralC
                             <p class="m-0">{$value['th_expl_responsabilidades_logros']}</p>
                         </div>
                         <div class="col-2 d-flex justify-content-end align-items-start">
-                            <button class="btn" style="color: white;" onclick="abrir_modal_experiencia_laboral({$value['_id']});">
+                            <button class="btn icon-hover" style="color: white;" onclick="abrir_modal_experiencia_laboral({$value['_id']});">
                                 <i class="text-dark bx bx-pencil bx-sm"></i>
                             </button>
                         </div>

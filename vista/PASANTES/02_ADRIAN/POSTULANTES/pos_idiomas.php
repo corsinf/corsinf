@@ -41,7 +41,6 @@
     }
 
     function insertar_editar_idiomas() {
-
         var ddl_seleccionar_idioma = $('#ddl_seleccionar_idioma').val();
         var ddl_dominio_idioma = $('#ddl_dominio_idioma').val();
         var txt_institucion_1 = $('#txt_institucion_1').val();
@@ -64,7 +63,6 @@
     }
 
     function insertar_idiomas(parametros) {
-
         $.ajax({
             data: {
                 parametros: parametros
@@ -200,7 +198,6 @@
 </script>
 
 <div id="pnl_idioma">
-
 </div>
 
 <!-- Modal para agregar idiomas-->
@@ -303,7 +300,6 @@
                     required: true,
                 },
             },
-
             messages: {
                 ddl_seleccionar_idioma: {
                     required: "Por favor seleccione un idioma",

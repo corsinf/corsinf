@@ -51,7 +51,7 @@ class th_pos_documentosC
                         </div>
                         
                         <div class="col-2 d-flex justify-content-end align-items-center">
-                            <button class="btn" style="color: white;" onclick="abrir_modal_documentos_identidad('{$value['_id']}');">
+                            <button class="btn icon-hover" style="color: white;" onclick="abrir_modal_documentos_identidad('{$value['_id']}');">
                                 <i class="text-dark bx bx-pencil bx-sm"></i>
                             </button>
                         </div>

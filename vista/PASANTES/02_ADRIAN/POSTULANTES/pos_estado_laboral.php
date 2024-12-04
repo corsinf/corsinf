@@ -196,7 +196,7 @@
 
             <!-- Modal Header -->
             <div class="modal-header">
-                <h6><small class="text-body-secondary fw-bold" id="lbl_titulo_estado_laboral">Agregue su estado laboral</small></h6>
+                <h5><small class="text-body-secondary fw-bold" id="lbl_titulo_estado_laboral">Agregue su estado laboral</small></h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="limpiar_campos_estado_laboral_modal()"></button>
             </div>
             <!-- Modal body -->

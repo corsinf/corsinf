@@ -47,7 +47,7 @@ class th_pos_referencias_laboralesC
                             <a href="#" onclick="definir_ruta_iframe_referencias_laborales('{$value['th_refl_carta_recomendacion']}');">Ver Carta de Recomendación</a>
                         </div>
                         <div class="col-2 d-flex justify-content-end align-items-center">
-                            <button class="btn" style="color: white;" onclick="abrir_modal_referencias_laborales('{$value['_id']}')">
+                            <button class="btn icon-hover" style="color: white;" onclick="abrir_modal_referencias_laborales('{$value['_id']}')">
                                 <i class="text-dark bx bx-pencil bx-sm"></i>
                             </button>
                         </div>

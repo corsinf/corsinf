@@ -57,7 +57,7 @@ class th_pos_habilidadesC
                         </div>
                         
                         <div class="col-4 d-flex justify-content-end align-items-center">
-                            <button class="btn" style="color: white;" onclick="delete_datos_aptitudes({$value['th_habp_id']})">
+                            <button class="btn icon-hover" style="color: white;" onclick="delete_datos_aptitudes({$value['th_habp_id']})">
                                 <i class="text-danger bx bx-trash bx-sm"></i>
                             </button>
                         </div>
@@ -75,19 +75,20 @@ class th_pos_habilidadesC
         $texto = '';
         foreach ($datos as $key => $value) {
             $texto .=
-                '<div class="row mt-1">
-                    <div class="col-8">
-                        <ul>
-                            <li>' . $value['th_hab_nombre'] . '</li>
-                        </ul>
+                <<<HTML
+                    <div class="row mt-1">
+                        <div class="col-8">
+                            <ul>
+                                <li>{$value['th_hab_nombre']}</li>
+                            </ul>
+                        </div>
+                        <div class="col-4 d-flex justify-content-end align-items-center">
+                            <button class="btn icon-hover" style="color: white;" onclick="delete_datos_aptitudes({$value['th_habp_id']})">
+                                <i class="text-danger bx bx-trash bx-sm"></i>
+                            </button>
+                        </div>
                     </div>
-                            
-                    <div class="col-4 d-flex justify-content-end align-items-center">
-                        <button class="btn" style="color: white;" onclick="delete_datos_aptitudes(' . $value['th_habp_id'] . ')">
-                        <i class="text-danger bx bx-trash bx-sm"></i>
-                        </button>
-                    </div>
-                </div>';
+                HTML;
         }
 
         return $texto;
@@ -145,7 +146,7 @@ class th_pos_habilidadesC
     {
         //corregir
         $datos = $this->modelo->listar_habilidades_postulante($id_postulante, 1);
-        
+
         $option = '';
         foreach ($datos as $key => $value) {
             $option .= "<option value='" . $value['th_hab_id'] . "'>" . $value['th_hab_nombre'] . "</option>";

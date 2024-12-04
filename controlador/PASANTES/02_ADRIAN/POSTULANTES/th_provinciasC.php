@@ -3,6 +3,10 @@ require_once(dirname(__DIR__, 4) . '/modelo/PASANTES/02_ADRIAN/POSTULANTES/th_pr
 
 $controlador = new th_provinciasC();
 
+if (isset($_GET['listar'])) {
+    echo json_encode($controlador->listar($_POST['id']));
+}
+
 if (isset($_GET['buscar'])) {
     $query = '';
     $tipo = '';
@@ -27,6 +31,16 @@ class th_provinciasC
         $this->modelo = new th_provinciasM();
     }
 
+    function listar($id)
+    {
+        if ($id == '') {
+            $datos = $this->modelo->where('th_prov_estado', 1)->listar();
+        } else {
+            $datos = $this->modelo->where('th_prov_id', $id)->listar();
+        }
+
+        return $datos;
+    }
 
     function buscar($parametros)
     {
@@ -40,4 +54,3 @@ class th_provinciasC
         return $lista;
     }
 }
-

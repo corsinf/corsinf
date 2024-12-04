@@ -61,7 +61,7 @@ class th_pos_idiomasC
                             <p class="m-0">{$value['th_idi_fecha_inicio_idioma']} - {$fecha_fin}</p>
                         </div>
                         <div class="col-2 d-flex justify-content-end align-items-center">
-                            <button class="btn" style="color: white;" onclick="abrir_modal_idiomas({$value['_id']});">
+                            <button class="btn icon-hover" style="color: white;" onclick="abrir_modal_idiomas({$value['_id']});">
                                 <i class="text-dark bx bx-pencil bx-sm"></i>
                             </button>
                         </div>
