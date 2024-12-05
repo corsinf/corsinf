@@ -203,14 +203,15 @@ if (isset($_GET['id'])) {
                                         <?php include_once('../vista/PASANTES/02_ADRIAN/POSTULANTES/pos_cambiar_foto.php'); ?>
 
                                         <div class="position-relative">
-
-
+                                            
                                             <div class="widget-user-image text-center">
                                                 <img class="rounded-circle p-1 bg-primary" src="../img/sin_imagen.jpg" class="img-fluid" id="img_postulante_inf" alt="Imagen Perfil Postulante" width="110" height="110" />
                                             </div>
 
                                             <div>
                                                 <a href="#" class="d-flex justify-content-center" data-bs-toggle="modal" data-bs-target="#modal_agregar_cambiar_foto" onclick="abrir_modal_cambiar_foto('<?= $id ?>');">
+                                                    <i class='bx bxs-camera bx-sm'></i>
+                                                </a>
                                             </div>
                                         </div>
                                     </div>
@@ -607,7 +608,7 @@ if (isset($_GET['id'])) {
 </div>
 
 <!-- Modal para la informacion personal -->
-<div class="modal modal_general_provincias" id="modal_informacion_personal" tabindex="-1" aria-modal="true" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
+<div class="modal modal_general" id="modal_informacion_personal" tabindex="-1" aria-modal="true" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
     <div class="modal-dialog modal-dialog-centered modal-xl">
         <div class="modal-content">
 
