@@ -50,7 +50,7 @@
                     }
                 },
                 minimumInputLength: 0,
-                dropdownParent: $('.modal_general'),
+                dropdownParent: $('.modal_general_provincias'),
                 placeholder: '-- Seleccione --',
                 width: '100%',
                 ajax: {
@@ -85,7 +85,7 @@
                     }
                 },
                 minimumInputLength: 0,
-                dropdownParent: $('.modal_general'),
+                dropdownParent: $('.modal_general_provincias'),
                 placeholder: '-- Seleccione --',
                 width: '100%',
                 ajax: {
@@ -123,7 +123,7 @@
                     }
                 },
                 minimumInputLength: 0,
-                dropdownParent: $('.modal_general'),
+                dropdownParent: $('.modal_general_provincias'),
                 placeholder: '-- Seleccione --',
                 width: '100%',
                 ajax: {
