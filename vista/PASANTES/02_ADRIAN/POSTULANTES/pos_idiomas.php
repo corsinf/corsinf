@@ -91,12 +91,12 @@
         cargar_datos_modal_idiomas(id);
         $('#modal_agregar_idioma').modal('show');
         $('#lbl_nombre_idioma').html('Editar Idioma');
-        $('#btn_guardar_idioma').html('<i class="bx bx-save"></i>Guardar');
+        $('#btn_guardar_idioma').html('Guardar');
  
     }
 
     function borrar_datos_idioma() {
-        id = $('#txt_idiomas_id').val();
+        var id = '<?php echo $id; ?>';
         Swal.fire({
             title: 'Eliminar Registro?',
             text: "Esta seguro de eliminar este registro?",
@@ -144,8 +144,8 @@
         $('#txt_fecha_fin_idioma').val('');
         $('#txt_idiomas_id').val('');
         //Cambiar texto
-        $('#lbl_nombre_idioma').html('Agregue un Idioma');
-        $('#btn_guardar_idioma').html('<i class="bx bx-save"></i>Guardar');
+        $('#lbl_nombre_idioma').html('Agregar Idioma');
+        $('#btn_guardar_idioma').html('Guardar');
     }
 
     //Funcion para validar las fechas de ingreso
@@ -203,7 +203,7 @@
 </div>
 
 <!-- Modal para agregar idiomas-->
-<div class="modal" id="modal_agregar_idioma" tabindex="-1" aria-modal="true" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
+<div class="modal fade" id="modal_agregar_idioma" tabindex="-1" aria-modal="true" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
 
@@ -267,19 +267,19 @@
                 </div>
                
 
-                <!-- <div class="modal-footer d-flex justify-content-center">
-                    <button class="btn btn-primary btn-sm px-4 m-1" id="btn_guardar_idioma" onclick="insertar_editar_idiomas(); validar_fechas_idioma();" type="button">Guardar</button>
-                    <button class="btn btn-danger btn-sm px-4 m-1" id="btn_eliminar_formacion" onclick="borrar_datos_idioma();" type="button"> Eliminar</button>
-                </div> -->
-
                 <div class="modal-footer d-flex justify-content-center">
+                    <button class="btn btn-primary btn-sm px-4 m-1" id="btn_guardar_idioma" onclick="insertar_editar_idiomas(); validar_fechas_idioma();" type="button"><i class="bx bx-save"></i>Guardar</button>
+                    <button class="btn btn-danger btn-sm px-4 m-1" id="btn_eliminar_formacion" onclick="borrar_datos_idioma();" type="button"><i class="bx bx-trash"></i> Eliminar</button>
+                </div>
+
+                <!-- <div class="modal-footer d-flex justify-content-center">
                     <?php if ($id == '') { ?>
                         <button class="btn btn-primary btn-sm px-4 m-0 d-flex align-items-center" onclick="insertar_editar_idiomas(); validar_fechas_idioma();" type="button"><i class="bx bx-save"></i> Guardar</button>
                     <?php } else { ?>
-                        <button class="btn btn-primary btn-sm px-4 m-1 d-flex align-items-center" onclick="insertar_editar_idiomas();" type="button"><i class="bx bx-save"></i> Guardar</button>
+                        <button class="btn btn-primary btn-sm px-4 m-1 d-flex align-items-center" onclick="insertar_editar_idiomas(); validar_fechas_idioma();" type="button"><i class="bx bx-save"></i> Guardar</button>
                         <button class="btn btn-danger btn-sm px-4 m-1 d-flex align-items-center" onclick="borrar_datos_idioma()" type="button"><i class="bx bx-trash"></i> Eliminar</button>
                     <?php } ?>
-                </div>
+                </div> -->
             </form>
         </div>
     </div>

@@ -43,7 +43,7 @@ class th_pos_habilidadesC
 
     function listar_aptitudes_tecnicas($id)
     {
-        $datos = $this->modelo->where('th_pos_id', $id)->where('th_tiph_id', 2)->listarJoin();
+        $datos = $this->modelo->where('th_pos_id', $id)->where('th_tiph_id', 2)->orderBy('th_hab_nombre', 'ASC')->listarJoin();
 
         $texto = '';
         foreach ($datos as $key => $value) {
@@ -70,7 +70,7 @@ class th_pos_habilidadesC
 
     function listar_aptitudes_blandas($id)
     {
-        $datos = $this->modelo->where('th_pos_id', $id)->where('th_tiph_id', 1)->listarJoin();
+        $datos = $this->modelo->where('th_pos_id', $id)->where('th_tiph_id', 1)->orderBy('th_hab_nombre', 'ASC')->listarJoin();
 
         $texto = '';
         foreach ($datos as $key => $value) {

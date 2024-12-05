@@ -106,7 +106,7 @@
     function abrir_modal_referencias_laborales(id) {
         cargar_datos_modal_referencias_laborales(id);
         $('#modal_agregar_referencia_laboral').modal('show');
-        $('#lbl_titulo_referencia_laboral').html('Editar su referencia');
+        $('#lbl_titulo_referencia_laboral').html('Editar Referencia Laboral');
         $('#btn_guardar_referencia_laboral').html('Guardar');
     }
 
@@ -119,7 +119,8 @@
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
             cancelButtonColor: '#d33',
-            confirmButtonText: 'Si'
+            confirmButtonText: 'Si',
+            cancelButtonText: 'Cancelar'
         }).then((result) => {
             if (result.value) {
                 eliminar_referencias_laborales(id);
@@ -161,7 +162,7 @@
         $("#form_referencias_laborales").validate().resetForm();
         $('.form-control').removeClass('is-valid is-invalid');
         //Cambiar texto
-        $('#lbl_titulo_referencia_laboral').html('Agregue una referencia');
+        $('#lbl_titulo_referencia_laboral').html('Agregar Referencia Laboral');
         $('#btn_guardar_referencia_laboral').html('Agregar');
     }
 
@@ -185,7 +186,7 @@
 
             <!-- Modal Header -->
             <div class="modal-header">
-                <h5><small class="text-body-secondary fw-bold" id="lbl_titulo_referencia_laboral">Agregue una referencia</small></h5>
+                <h5><small class="text-body-secondary fw-bold" id="lbl_titulo_referencia_laboral">Agregar Referencia Laboral</small></h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="limpiar_parametros_referencias_laborales()"></button>
             </div>
 
@@ -235,9 +236,18 @@
                     </div>
                 </div>
 
-                <div class="modal-footer d-flex justify-content-center">
+                <!-- <div class="modal-footer d-flex justify-content-center">
                     <button type="button" class="btn btn-success btn-sm px-4 m-1" id="btn_guardar_referencia_laboral" onclick="insertar_editar_referencias_laborales();">Agregar</button>
                     <button type="button" class="btn btn-danger btn-sm px-4 m-1" id="btn_eliminar_formacion" onclick="delete_datos_referencias_laborales();">Eliminar</button>
+                </div> -->
+
+                <div class="modal-footer d-flex justify-content-center">
+                    <?php if ($id == '') { ?>
+                        <button class="btn btn-primary btn-sm px-4 m-0 d-flex align-items-center" onclick="insertar_editar_referencias_laborales()" type="button"><i class="bx bx-save"></i> Guardar</button>
+                    <?php } else { ?>
+                        <button class="btn btn-primary btn-sm px-4 m-1 d-flex align-items-center" onclick="insertar_editar_referencias_laborales();" type="button"><i class="bx bx-save"></i> Guardar</button>
+                        <button class="btn btn-danger btn-sm px-4 m-1 d-flex align-items-center" onclick="delete_datos_referencias_laborales()" type="button"><i class="bx bx-trash"></i> Eliminar</button>
+                    <?php } ?>
                 </div>
             </form>
         </div>
