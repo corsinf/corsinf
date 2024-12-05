@@ -166,7 +166,8 @@
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
             cancelButtonColor: '#d33',
-            confirmButtonText: 'Si'
+            confirmButtonText: 'Si',
+            cancelButtonText: 'Cancelar'
         }).then((result) => {
             if (result.value) {
                 eliminar_aptitudes(id);
@@ -243,7 +244,7 @@
                 </div>
 
                 <div class="modal-footer d-flex justify-content-center">
-                    <button type="button" class="btn btn-success btn-sm" id="btn_guardar_aptitudes" onclick="insertar_editar_aptitudes();">Guardar Aptitudes</button>
+                    <button  class="btn btn-primary btn-sm px-4 m-0 d-flex align-items-center" id="btn_guardar_aptitudes" onclick="insertar_editar_aptitudes();" type="button"><i class="bx bx-save"></i>Guardar Aptitudes</button>
                 </div>
             </form>
         </div>
