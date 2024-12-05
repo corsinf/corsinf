@@ -46,6 +46,8 @@ if (isset($_GET['id'])) {
                 $('#txt_direccion_postal').val(response[0].th_pos_postal);
                 $('#txt_direccion').val(response[0].th_pos_direccion);
                 calcular_edad('txt_edad', response[0].th_pos_fecha_nacimiento);
+                //Cargar foto
+                $('#img_postulante_inf').attr('src', response[0].th_pos_foto_url + '?' + Math.random());
 
                 //Cargar Selects de provincia-ciudad-parroquia
                 url_provinciaC = '../controlador/PASANTES/02_ADRIAN/POSTULANTES/th_provinciasC.php?listar=true';
@@ -73,6 +75,20 @@ if (isset($_GET['id'])) {
 
                 //console.log(response);
 
+            }
+        });
+    }
+
+    function recargar_imagen(id) {
+        $.ajax({
+            url: '../controlador/PASANTES/02_ADRIAN/POSTULANTES/th_postulantesC.php?listar=true',
+            type: 'post',
+            data: {
+                id: id
+            },
+            dataType: 'json',
+            success: function(response) {
+                $('#img_postulante_inf').attr('src', response[0].th_pos_foto_url + '?' + Math.random());
             }
         });
     }
@@ -185,12 +201,21 @@ if (isset($_GET['id'])) {
                                     <!-- Cambiar Foto -->
                                     <div class="text-center">
                                         <?php include_once('../vista/PASANTES/02_ADRIAN/POSTULANTES/pos_cambiar_foto.php'); ?>
-                                        <div>
-                                            <a href="#" class="d-flex justify-content-center" data-bs-toggle="modal" data-bs-target="#modal_agregar_cambiar_foto" onclick="modal_agregar_cambiar_foto();">
-                                                <i class='bx bxs-camera bx-sm'></i>
-                                            </a>
+
+                                        <div class="position-relative">
+                                            
+                                            <div class="widget-user-image text-center">
+                                                <img class="rounded-circle p-1 bg-primary" src="../img/sin_imagen.jpg" class="img-fluid" id="img_postulante_inf" alt="Imagen Perfil Postulante" width="110" height="110" />
+                                            </div>
+
+                                            <div>
+                                                <a href="#" class="d-flex justify-content-center" data-bs-toggle="modal" data-bs-target="#modal_agregar_cambiar_foto" onclick="abrir_modal_cambiar_foto('<?= $id ?>');">
+                                                    <i class='bx bxs-camera bx-sm'></i>
+                                                </a>
+                                            </div>
                                         </div>
                                     </div>
+
                                     <!-- Información Personal -->
                                     <div class="mt-3">
                                         <div class="row">
@@ -583,7 +608,7 @@ if (isset($_GET['id'])) {
 </div>
 
 <!-- Modal para la informacion personal -->
-<div class="modal modal_general_provincias" id="modal_informacion_personal" tabindex="-1" aria-modal="true" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
+<div class="modal modal_general" id="modal_informacion_personal" tabindex="-1" aria-modal="true" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
     <div class="modal-dialog modal-dialog-centered modal-xl">
         <div class="modal-content">
 
