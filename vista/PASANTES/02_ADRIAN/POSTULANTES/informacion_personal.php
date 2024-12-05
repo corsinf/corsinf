@@ -185,12 +185,20 @@ if (isset($_GET['id'])) {
                                     <!-- Cambiar Foto -->
                                     <div class="text-center">
                                         <?php include_once('../vista/PASANTES/02_ADRIAN/POSTULANTES/pos_cambiar_foto.php'); ?>
-                                        <div>
-                                            <a href="#" class="d-flex justify-content-center" data-bs-toggle="modal" data-bs-target="#modal_agregar_cambiar_foto" onclick="modal_agregar_cambiar_foto();">
-                                                <i class='bx bxs-camera bx-sm'></i>
-                                            </a>
+
+                                        <div class="position-relative">
+
+                                            <div class="oval-container d-flex justify-content-center align-items-center" style="width: 120px; height: 120px; overflow: hidden; border-radius: 50%; margin: 20px auto; background-color: #f8f9fa;">
+                                                <img src="/corsinf/img/usuarios/1005.jpeg" alt="Imagen" class="img-fluid" style="height: 100%; object-fit: cover;" />
+                                            </div>
+                                            <div>
+                                                <a href="#" class="d-flex justify-content-center" data-bs-toggle="modal" data-bs-target="#modal_agregar_cambiar_foto" onclick="abrir_modal_cambiar_foto();">
+                                                    <i class='bx bxs-camera bx-sm'></i>
+                                                </a>
+                                            </div>
                                         </div>
                                     </div>
+
                                     <!-- Información Personal -->
                                     <div class="mt-3">
                                         <div class="row">

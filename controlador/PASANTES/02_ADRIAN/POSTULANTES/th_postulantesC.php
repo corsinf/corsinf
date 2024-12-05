@@ -13,7 +13,7 @@ if (isset($_GET['listar_todo'])) {
 }
 
 if (isset($_GET['insertar'])) {
-    echo json_encode($controlador->insertar_editar($_POST['parametros']));
+    echo json_encode($controlador->insertar_editar($_FILES, $_POST));
 }
 
 if (isset($_GET['eliminar'])) {
@@ -24,10 +24,9 @@ if (isset($_GET['hoja_de_vida'])) {
     echo $controlador->hoja_de_vida($_GET['id']);
 }
 
- if(isset($_GET['guardar_foto_perfil']))
- {
-    echo json_encode($controlador->guardar_foto_perfil($_FILES,$_POST));
-}
+// if (isset($_GET['guardar_foto_perfil'])){
+//      echo $controlador->guardar_foto_perfil($_GET['id']);
+// }
 
 
 class th_postulantesC
@@ -46,6 +45,27 @@ class th_postulantesC
         } else {
             $datos = $this->modelo->where('th_pos_id', $id)->listar();
         }
+
+        $datos = $this->modelo->where('th_pos_id', $id)->where('th_pos_estado', 1)->listar();
+
+        $texto = '';
+        foreach ($datos as $key => $value) {
+            $texto .=
+                <<<HTML
+                            <div class="row mb-3">
+                                <div class="col-10">
+                                    <a href="#" onclick="definir_ruta_iframe_cambiar_foto('{$value['th_pos_foto_url']}');">Ver foto</a>
+                                </div>
+                                <div class="col-2 d-flex justify-content-end align-items-center">
+                                    <button class="btn icon-hover" style="color: white;" onclick="abrir_modal_cambiar_foto('{$value['_id']}')">
+                                        <i class="text-dark bx bx-pencil bx-sm"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        HTML;
+        }
+
+
         return $datos;
         // $datos = $this->modelo->where('th_pos_id', $id)->listar($id);
         // return $datos;
@@ -57,58 +77,87 @@ class th_postulantesC
         return $lista;
     }
 
-    function insertar_editar($parametros)
+    //Buscando registros por id 
+    function listar_modal($id)
     {
-        //print_r($parametros); exit(); die();
+        if ($id == '') {
+            $datos = $this->modelo->where('th_pos_estado', 1)->listar();
+        } else {
+            $datos = $this->modelo->where('th_pos_id', $id)->listar();
+        }
+        return $datos;
+    }
 
+    function insertar_editar($file, $parametros) {
         $datos = array(
-            array('campo' => 'th_pos_primer_nombre', 'dato' => $parametros['txt_primer_nombre']),
-            array('campo' => 'th_pos_segundo_nombre', 'dato' => $parametros['txt_segundo_nombre']),
-            array('campo' => 'th_pos_primer_apellido', 'dato' => $parametros['txt_primer_apellido']),
-            array('campo' => 'th_pos_segundo_apellido', 'dato' => $parametros['txt_segundo_apellido']),
-            array('campo' => 'th_pos_cedula', 'dato' => $parametros['txt_numero_cedula']),
-            array('campo' => 'th_pos_sexo', 'dato' => $parametros['ddl_sexo']),
-            array('campo' => 'th_prov_id', 'dato' => $parametros['ddl_provincias']),
-            array('campo' => 'th_ciu_id', 'dato' => $parametros['ddl_ciudad']),
-            array('campo' => 'th_parr_id', 'dato' => $parametros['ddl_parroquia']),
-            array('campo' => 'th_pos_direccion', 'dato' => $parametros['txt_direccion']),
-            array('campo' => 'th_pos_postal', 'dato' => $parametros['txt_direccion_postal']),
-            array('campo' => 'th_pos_fecha_nacimiento', 'dato' => $parametros['txt_fecha_nacimiento']),
-            array('campo' => 'th_pos_nacionalidad', 'dato' => $parametros['ddl_nacionalidad']),
-            array('campo' => 'th_pos_estado_civil', 'dato' => $parametros['ddl_estado_civil']),
-            array('campo' => 'th_pos_telefono_1', 'dato' => $parametros['txt_telefono_1']),
-            array('campo' => 'th_pos_telefono_2', 'dato' => $parametros['txt_telefono_2']),
-            array('campo' => 'th_pos_correo', 'dato' => $parametros['txt_correo']),
-            
+            array('campo' => 'th_pos_primer_nombre', 'dato' => isset($parametros['txt_primer_nombre']) ? $parametros['txt_primer_nombre'] : ''),
+            array('campo' => 'th_pos_segundo_nombre', 'dato' => isset($parametros['txt_segundo_nombre']) ? $parametros['txt_segundo_nombre'] : ''),
+            array('campo' => 'th_pos_primer_apellido', 'dato' => isset($parametros['txt_primer_apellido']) ? $parametros['txt_primer_apellido'] : ''),
+            array('campo' => 'th_pos_segundo_apellido', 'dato' => isset($parametros['txt_segundo_apellido']) ? $parametros['txt_segundo_apellido'] : ''),
+            array('campo' => 'th_pos_cedula', 'dato' => isset($parametros['txt_numero_cedula']) ? $parametros['txt_numero_cedula'] : ''),
+            array('campo' => 'th_pos_sexo', 'dato' => isset($parametros['ddl_sexo']) ? $parametros['ddl_sexo'] : ''),
+            array('campo' => 'th_prov_id', 'dato' => isset($parametros['ddl_provincias']) ? $parametros['ddl_provincias'] : ''),
+            array('campo' => 'th_ciu_id', 'dato' => isset($parametros['ddl_ciudad']) ? $parametros['ddl_ciudad'] : ''),
+            array('campo' => 'th_parr_id', 'dato' => isset($parametros['ddl_parroquia']) ? $parametros['ddl_parroquia'] : ''),
+            array('campo' => 'th_pos_direccion', 'dato' => isset($parametros['txt_direccion']) ? $parametros['txt_direccion'] : ''),
+            array('campo' => 'th_pos_postal', 'dato' => isset($parametros['txt_direccion_postal']) ? $parametros['txt_direccion_postal'] : ''),
+            array('campo' => 'th_pos_fecha_nacimiento', 'dato' => isset($parametros['txt_fecha_nacimiento']) ? $parametros['txt_fecha_nacimiento'] : ''),
+            array('campo' => 'th_pos_nacionalidad', 'dato' => isset($parametros['ddl_nacionalidad']) ? $parametros['ddl_nacionalidad'] : ''),
+            array('campo' => 'th_pos_estado_civil', 'dato' => isset($parametros['ddl_estado_civil']) ? $parametros['ddl_estado_civil'] : ''),
+            array('campo' => 'th_pos_telefono_1', 'dato' => isset($parametros['txt_telefono_1']) ? $parametros['txt_telefono_1'] : ''),
+            array('campo' => 'th_pos_telefono_2', 'dato' => isset($parametros['txt_telefono_2']) ? $parametros['txt_telefono_2'] : ''),
+            array('campo' => 'th_pos_correo', 'dato' => isset($parametros['txt_correo']) ? $parametros['txt_correo'] : ''),
         );
 
-        if ($parametros['_id'] == '') {
-            if (count($this->modelo->where('th_pos_cedula', $parametros['txt_numero_cedula'])->listar()) == 0) {
-                $datos = $this->modelo->insertar($datos);
-            } else {
-                return -2;
-            }
+        $id_cambiar_foto = $parametros['txt_cambiar_foto_id'];
+
+        if ($id_cambiar_foto == '') {
+            $datos = $this->modelo->insertar_id($datos);
+            $this->guardar_archivo($file, $parametros, $datos);
+            return 1;
         } else {
-            $where[0]['campo'] = 'th_pos_id';
-            $where[0]['dato'] = $parametros['_id'];
+
+            $where = array(
+                array('campo' => 'th_refl_id', 'dato' => $id_cambiar_foto),
+            );
+
             $datos = $this->modelo->editar($datos, $where);
+
+            if ($file['txt_copia_cambiar_foto']['tmp_name'] != '' && $file['txt_copia_cambiar_foto']['tmp_name'] != null) {
+                $datos = $this->guardar_archivo($file, $parametros, $id_cambiar_foto);
+            }
         }
 
         return $datos;
     }
 
+
     function eliminar($id)
     {
+        $datos_archivo = $this->modelo->where('th_pos_id', $id)->where('th_pos_estado', 1)->listar();
+
+        if ($datos_archivo && isset($datos_archivo[0]['th_pos_foto_url'])) {
+            $ruta_relativa = ltrim($datos_archivo[0]['th_pos_foto_url'], './');
+            $ruta_archivo = dirname(__DIR__, 4) . '/' . $ruta_relativa;
+
+            if (file_exists($ruta_archivo)) {
+                unlink($ruta_archivo);
+            }
+        }
+
         $datos = array(
             array('campo' => 'th_pos_estado', 'dato' => 0),
         );
 
-        $where[0]['campo'] = 'th_pos_id';
-        $where[0]['dato'] = $id;
+        $where = array(
+            array('campo' => 'th_pos_id', 'dato' => strval($id)),
+        );
+
 
         $datos = $this->modelo->editar($datos, $where);
         return $datos;
     }
+
 
     function hoja_de_vida($id)
     {
@@ -284,60 +333,84 @@ class th_postulantesC
         $pdf->Output();
     }
 
-    
-//Sirve para fuardar imagenes 
-function guardar_foto_perfil($file, $post)
-{
-    $ruta = '../img/usuarios/';
-    
-    if (!file_exists($ruta)) {
-        mkdir($ruta, 0777, true);
-    }
-    
-    if ($this->validar_formato_($file) == 1) {
-        $uploadfile_temporal = $file['txt_copia_cambiar_foto']['tmp_name'];
-        $tipo = explode('/', $file['txt_copia_cambiar_foto']['type']);
-        $nombre = $post['txt_cambiar_foto_id'] . '.' . $tipo[1]; // Asegúrate de que 'id' está correcto
-        $nuevo_nom = $ruta . $nombre;
-        
-        if (is_uploaded_file($uploadfile_temporal)) {
-            move_uploaded_file($uploadfile_temporal, $nuevo_nom);
-            
-            $datosI[0]['campo'] = 'th_pos_foto_url';
-            $datosI[0]['dato'] = $nuevo_nom; // Asegúrate que el campo en la base de datos es correcto
-            $where[0]['campo'] = 'th_pos_id'; // Asegúrate de que este es el campo correcto
-            $where[0]['dato'] = $post['txt_cambiar_foto_id']; // Asegúrate de que el ID está correcto
-            
-            $base = $this->modelo->editar($datosI, $where);
-            return ($base == 1) ? 1 : -1;
-        } else {
-            return -1; // error al mover el archivo
+
+    private function guardar_archivo($file, $post, $id_insertar_editar)
+    {
+        // Obtener el ID de la empresa desde la sesión
+        $id_empresa = $_SESSION['INICIO']['ID_EMPRESA'];
+
+        // Definir la ruta donde se guardarán las imágenes
+        $ruta = dirname(__DIR__, 4) . '/REPOSITORIO/TALENTO_HUMANO/' . $id_empresa . '/'; // Ruta base
+        $ruta .= $post['txt_postulante_cedula'] . '/' . 'FOTO_PERFIL/'; // Ruta completa del postulante
+
+        // Verificar si la carpeta existe, si no, crearla
+        if (!file_exists($ruta)) {
+            mkdir($ruta, 0777, true);
         }
-    } else {
-        return -2; // formato no permitido
+
+        // Validar si el archivo tiene el formato correcto (usando la función que debes tener implementada)
+        if ($this->validar_formato_imagen($file) === 1) {
+            // Obtener la ubicación temporal del archivo cargado
+            $uploadfile_temporal = $file['txt_copia_cambiar_foto']['tmp_name'];
+            // Obtener la extensión del archivo de la imagen
+            $extension = pathinfo($file['txt_copia_cambiar_foto']['name'], PATHINFO_EXTENSION);
+
+            // Crear un nuevo nombre para la imagen
+            $nombre = 'foto_perfil_' . $id_insertar_editar . '.' . $extension;
+            $nuevo_nom = $ruta . $nombre; // Nombre completo con la ruta donde se guardará la imagen
+
+            // Ruta final que se almacenará en la base de datos
+            $nombre_ruta = '../REPOSITORIO/TALENTO_HUMANO/' . $id_empresa . '/' . $post['txt_postulante_cedula'] . '/' . 'FOTO_PERFIL/';
+            $nombre_ruta .= $nombre; // Ruta completa en el repositorio
+
+            // Verificar si el archivo ha sido cargado correctamente
+            if (is_uploaded_file($uploadfile_temporal)) {
+                // Mover el archivo de su ubicación temporal al destino final
+                if (move_uploaded_file($uploadfile_temporal, $nuevo_nom)) {
+
+                    // Datos para actualizar la URL de la foto en la base de datos
+                    $datos = array(
+                        array('campo' => 'th_pos_foto_url', 'dato' => $nombre_ruta),
+                    );
+
+                    // Condición para identificar el postulante que se debe actualizar
+                    $where = array(
+                        array('campo' => 'th_pos_id', 'dato' => $id_insertar_editar),
+                    );
+
+                    // Ejecutar la actualización en la base de datos
+                    $base = $this->modelo->editar($datos, $where);
+
+                    // Si la actualización fue exitosa, retornar 1
+                    return $base == 1 ? 1 : -1;
+                } else {
+                    // Si ocurre un error al mover el archivo, retornar -1
+                    return -1;
+                }
+            } else {
+                // Si el archivo no ha sido cargado correctamente, retornar -1
+                return -1;
+            }
+        } else {
+            // Si el formato de la imagen es inválido, retornar -2
+            return -2;
+        }
+    }
+
+    //Sirve para validar imagenes 
+    function validar_formato_imagen($file)
+    {
+        switch ($file['txt_copia_cambiar_foto']['type']) {
+            case 'image/jpeg':
+            case 'image/pjpeg':
+            case 'image/gif':
+            case 'image/png':
+            case 'image/jpg':
+                return 1;
+                break;
+            default:
+                return -1;
+                break;
+        }
     }
 }
-
-
-          //Sirve para validar imagenes 
- function validar_formato_($file)
-  {
-    switch ($file['file_']['type']) {
-      case 'image/jpeg':
-      case 'image/pjpeg':
-      case 'image/gif':
-      case 'image/png':
-         return 1;
-        break;      
-      default:
-        return -1;
-        break;
-    }
-  }
-}
-
-   
-
-
-
- 
