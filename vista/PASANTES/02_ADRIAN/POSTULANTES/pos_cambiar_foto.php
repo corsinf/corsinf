@@ -19,12 +19,31 @@
         });
     }
 
+    function cargar_datos_modal_cambiar_foto(id) {
+        $.ajax({
+            url: '../controlador/PASANTES/02_ADRIAN/POSTULANTES/th_postulantesC.php?listar_modal=true',
+            type: 'post',
+            data: {
+                id: id
+            },
+            dataType: 'json',
+            success: function(response) {
+                $('#txt_cambiar_foto_id').val(response[0]._id);
+                $('#txt_copia_cambiar_foto').val(response[0].th_pos_foto_url);
+
+            }
+        });
+    }
+
+
     function insertar_editar_cambiar_foto() {
         var form_data = new FormData(document.getElementById("form_cambiar_foto"));
+
         // console.log([...form_data]);
         // console.log([...form_data.keys()]);
         // console.log([...form_data.values()]);
         // return;
+
 
         if ($("#form_cambiar_foto").valid()) {
             $.ajax({
@@ -33,8 +52,8 @@
                 data: form_data,
                 contentType: false,
                 processData: false,
-
                 dataType: 'json',
+
                 success: function(response) {
                     //console.log(response);
                     if (response == -1) {
@@ -116,6 +135,7 @@
             }
         });
     }
+
 
     function limpiar_parametros_cambiar_foto() {
         //cambiar foto
@@ -205,7 +225,6 @@
     $(document).ready(function() {
 
         agregar_asterisco_campo_obligatorio('txt_copia_cambiar_foto');
-
 
         //Validación Referencias Laborales
         $("#form_cambiar_foto").validate({

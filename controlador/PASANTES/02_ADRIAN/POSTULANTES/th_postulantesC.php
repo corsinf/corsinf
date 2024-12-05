@@ -81,17 +81,6 @@ class th_postulantesC
         return $lista;
     }
 
-    //Buscando registros por id 
-    function listar_modal($id)
-    {
-        if ($id == '') {
-            $datos = $this->modelo->where('th_pos_estado', 1)->listar();
-        } else {
-            $datos = $this->modelo->where('th_pos_id', $id)->listar();
-        }
-        return $datos;
-    }
-
     function insertar_editar($parametros)
     {
         //print_r($parametros); exit(); die();
@@ -113,21 +102,15 @@ class th_postulantesC
             array('campo' => 'th_pos_telefono_1', 'dato' => $parametros['txt_telefono_1']),
             array('campo' => 'th_pos_telefono_2', 'dato' => $parametros['txt_telefono_2']),
             array('campo' => 'th_pos_correo', 'dato' => $parametros['txt_correo']),
-
         );
 
-        if ($parametros['_id'] == '') {
-            if (count($this->modelo->where('th_pos_cedula', $parametros['txt_numero_cedula'])->listar()) == 0) {
-                $datos = $this->modelo->insertar($datos);
-            } else {
-                return -2;
-            }
-        } else {
-            $where[0]['campo'] = 'th_pos_id';
-            $where[0]['dato'] = $parametros['_id'];
-            $datos = $this->modelo->editar($datos, $where);
-        }
+        $id = $parametros['txt_postulante_id'];
 
+        if ($id == '') {
+            $datos = $this->modelo->where('th_pos_estado', 1)->listar();
+        } else {
+            $datos = $this->modelo->where('th_pos_id', $id)->listar();
+        }
         return $datos;
     }
 
@@ -375,7 +358,9 @@ class th_postulantesC
         }
 
         // Validar si el archivo tiene el formato correcto (usando la función que debes tener implementada)
+
         if ($this->validar_formato($file) === 1) {
+
             // Obtener la ubicación temporal del archivo cargado
             $uploadfile_temporal = $file['txt_copia_cambiar_foto']['tmp_name'];
             // Obtener la extensión del archivo de la imagen
