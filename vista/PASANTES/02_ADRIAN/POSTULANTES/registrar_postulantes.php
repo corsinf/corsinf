@@ -208,7 +208,7 @@ if (isset($_GET['id'])) {
                         </div>
 
                         <hr>
-                        <form id="registrar_postulantes">
+                        <form id="registrar_postulantes" class="modal_general_provincias">
                             <div class="row mb-col pt-3">
                                 <div class="col-md-3">
                                     <label for="txt_primer_apellido" class="form-label form-label-sm">Primer Apellido </label>
