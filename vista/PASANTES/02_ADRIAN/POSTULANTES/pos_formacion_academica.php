@@ -120,7 +120,8 @@
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
             cancelButtonColor: '#d33',
-            confirmButtonText: 'Si'
+            confirmButtonText: 'Si',
+            cancelButtonText: 'Cancelar'
         }).then((result) => {
             if (result.value) {
                 eliminar_form_acad(id);
