@@ -1,11 +1,8 @@
 {
   "profiles": {
-    "libreriasHik": {
+    "CorsinfSDKHik": {
       "commandName": "Project",
-      "commandLineArgs": "2"
-    },
-    "Container (Dockerfile)": {
-      "commandName": "Docker"
+      "commandLineArgs": "6\r\n192.168.100.111\r\nadmin\r\n8000\r\nData12/*"
     }
   }
 }

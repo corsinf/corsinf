@@ -18,7 +18,9 @@
 					<img src="<?php echo $_SESSION['INICIO']['LOGO']; ?>" style="width: 35%;" alt="logo icon">
 				<?php } ?>ESPERE...
 	         </div>
-
+	         <div class="text-center">
+	         	<label id="lbl_msj_espera"></label>
+	         </div>
 	         <div class="text-center">
 					<div class="spinner-grow text-primary spinner-grow-sm" role="status"> <span class="visually-hidden">Loading...</span>
 					</div>
