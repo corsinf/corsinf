@@ -44,7 +44,7 @@ class th_pos_referencias_laboralesC
                         <div class="col-10">
                             <h6 class="fw-bold my-0 d-flex align-items-center">{$value['th_refl_nombre_referencia']}</h6>
                             <p class="my-0 d-flex align-items-center">{$value['th_refl_telefono_referencia']}</p>
-                            <a href="#" onclick="definir_ruta_iframe_referencias_laborales('{$value['th_refl_carta_recomendacion']}');">Ver Carta de Recomendación</a>
+                            <a href="#" onclick="definir_ruta_iframe_referencias_laborales('{$value['th_refl_carta_recomendacion']}');">Ver Referencia Laboral</a>
                         </div>
                         <div class="col-2 d-flex justify-content-end align-items-center">
                             <button class="btn icon-hover" style="color: white;" onclick="abrir_modal_referencias_laborales('{$value['_id']}')">
