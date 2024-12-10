@@ -94,26 +94,7 @@
     //     $('#btn_guardar_idioma').html('<i class="bx bx-save"></i>Editar');
     // }
 
-//     function abrir_modal_idiomas(id) {
-//     console.log('ID:', id);
-//     cargar_datos_modal_idiomas(id);
-//     $('#modal_agregar_idioma').modal('show');
-
-//     if (id === '') {
-//         console.log('agregar nuevo idioma');
-//         $('#lbl_nombre_idioma').html('Agregar Idioma');
-//         $('#btn_guardar_idioma').html('<i class="bx bx-save"></i>Guardar');
-//         $('#btn_eliminar_formacion').addClass('d-none');
-//         console.log('botón oculto');
-//     } else {
-//         $('#lbl_nombre_idioma').html('Editar Idioma');
-//         $('#btn_guardar_idioma').html('<i class="bx bx-save"></i>Editar');
-//         $('#btn_eliminar_formacion').removeClass('d-none');
-//         console.log('botón visible');
-//     }
-// }
-
-function abrir_modal_idiomas(id) {
+    function abrir_modal_idiomas(id) {
     console.log('ID:', id);
     cargar_datos_modal_idiomas(id);
     $('#modal_agregar_idioma').modal('show');
@@ -122,15 +103,35 @@ function abrir_modal_idiomas(id) {
         console.log('agregar nuevo idioma');
         $('#lbl_nombre_idioma').html('Agregar Idioma');
         $('#btn_guardar_idioma').html('<i class="bx bx-save"></i>Guardar');
-        $('#btn_eliminar_formacion').hide();
+        $('#btn_eliminar_formacion').addClass('d-none');
         console.log('botón oculto');
     } else {
         $('#lbl_nombre_idioma').html('Editar Idioma');
         $('#btn_guardar_idioma').html('<i class="bx bx-save"></i>Editar');
-        $('#btn_eliminar_formacion').show();
+        $('#btn_eliminar_formacion').removeClass('d-none');
         console.log('botón visible');
     }
 }
+
+    // function abrir_modal_idiomas(id) {
+    //     console.log('ID:', id);
+    //     cargar_datos_modal_idiomas(id);
+    //     $('#modal_agregar_idioma').modal('show');
+
+    //     if (id === '') {
+    //         console.log('agregar nuevo idioma');
+    //         $('#lbl_nombre_idioma').html('Agregar Idioma');
+    //         $('#btn_guardar_idioma').html('<i class="bx bx-save"></i>Guardar');
+    //         $('#btn_eliminar_formacion').hide();
+    //         console.log('botón oculto');
+    //     } else {
+    //         $('#lbl_nombre_idioma').html('Editar Idioma');
+    //         $('#btn_guardar_idioma').html('<i class="bx bx-save"></i>Editar');
+    //         $('#btn_eliminar_formacion').show();
+    //         console.log('botón visible');
+    //     }
+    // }
+    
     function borrar_datos_idioma() {
         id = $('#txt_idiomas_id').val();
         Swal.fire({
