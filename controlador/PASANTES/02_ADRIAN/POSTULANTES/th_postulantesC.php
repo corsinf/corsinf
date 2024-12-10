@@ -13,7 +13,7 @@ if (isset($_GET['listar_todo'])) {
 }
 
 if (isset($_GET['insertar'])) {
-    echo json_encode($controlador->insertar_editar($_FILES, $_POST));
+    echo json_encode($controlador->insertar_editar($_POST['parametros']));
 }
 
 if (isset($_GET['insertar_imagen'])) {
@@ -49,30 +49,7 @@ class th_postulantesC
         } else {
             $datos = $this->modelo->where('th_pos_id', $id)->listar();
         }
-
-        $datos = $this->modelo->where('th_pos_id', $id)->where('th_pos_estado', 1)->listar();
-
-        $texto = '';
-        foreach ($datos as $key => $value) {
-            $texto .=
-                <<<HTML
-                            <div class="row mb-3">
-                                <div class="col-10">
-                                    <a href="#" onclick="definir_ruta_iframe_cambiar_foto('{$value['th_pos_foto_url']}');">Ver foto</a>
-                                </div>
-                                <div class="col-2 d-flex justify-content-end align-items-center">
-                                    <button class="btn icon-hover" style="color: white;" onclick="abrir_modal_cambiar_foto('{$value['_id']}')">
-                                        <i class="text-dark bx bx-pencil bx-sm"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        HTML;
-        }
-
-
         return $datos;
-        // $datos = $this->modelo->where('th_pos_id', $id)->listar($id);
-        // return $datos;
     }
 
     function listar_todo()
@@ -83,13 +60,15 @@ class th_postulantesC
 
     function insertar_editar($parametros)
     {
-        //print_r($parametros); exit(); die();
+        //  print_r($parametros);
+        //  exit();
+        //  die();
         $datos = array(
             array('campo' => 'th_pos_primer_nombre', 'dato' => $parametros['txt_primer_nombre']),
             array('campo' => 'th_pos_segundo_nombre', 'dato' => $parametros['txt_segundo_nombre']),
             array('campo' => 'th_pos_primer_apellido', 'dato' => $parametros['txt_primer_apellido']),
             array('campo' => 'th_pos_segundo_apellido', 'dato' => $parametros['txt_segundo_apellido']),
-            array('campo' => 'th_pos_cedula', 'dato' => $parametros['txt_numero_cedula']),
+            array('campo' => 'th_pos_cedula', 'dato' => $parametros['txt_cedula']),
             array('campo' => 'th_pos_sexo', 'dato' => $parametros['ddl_sexo']),
             array('campo' => 'th_prov_id', 'dato' => $parametros['ddl_provincias']),
             array('campo' => 'th_ciu_id', 'dato' => $parametros['ddl_ciudad']),
@@ -104,29 +83,27 @@ class th_postulantesC
             array('campo' => 'th_pos_correo', 'dato' => $parametros['txt_correo']),
         );
 
-        $id = $parametros['txt_postulante_id'];
-
-        if ($id == '') {
-            $datos = $this->modelo->where('th_pos_estado', 1)->listar();
+        if ($parametros['_id'] == '') {
+            if (count($this->modelo->where('th_pos_cedula', $parametros['txt_cedula'])->listar()) == 0) {
+                $datos = $this->modelo->insertar($datos);
+            } else {
+                return -2;
+            }
         } else {
-            $datos = $this->modelo->where('th_pos_id', $id)->listar();
+            if (count($this->modelo->where('th_pos_cedula', $parametros['txt_cedula'])->where('th_pos_id !', $parametros['_id'])->listar()) == 0) {
+                $where[0]['campo'] = 'th_pos_id';
+                $where[0]['dato'] = $parametros['_id'];
+                $datos = $this->modelo->editar($datos, $where);
+            } else {
+                return -2;
+            }
         }
+
         return $datos;
     }
 
     function eliminar($id)
     {
-        $datos_archivo = $this->modelo->where('th_pos_id', $id)->where('th_pos_estado', 1)->listar();
-
-        if ($datos_archivo && isset($datos_archivo[0]['th_pos_foto_url'])) {
-            $ruta_relativa = ltrim($datos_archivo[0]['th_pos_foto_url'], './');
-            $ruta_archivo = dirname(__DIR__, 4) . '/' . $ruta_relativa;
-
-            if (file_exists($ruta_archivo)) {
-                unlink($ruta_archivo);
-            }
-        }
-
         $datos = array(
             array('campo' => 'th_pos_estado', 'dato' => 0),
         );
@@ -134,7 +111,6 @@ class th_postulantesC
         $where = array(
             array('campo' => 'th_pos_id', 'dato' => strval($id)),
         );
-
 
         $datos = $this->modelo->editar($datos, $where);
         return $datos;
