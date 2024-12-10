@@ -220,7 +220,7 @@
 
             <!-- Modal Header -->
             <div class="modal-header">
-                <h5><small class="text-body-secondary fw-bold">Agregue Aptitudes</small></h5>                
+                <h5><small class="text-body-secondary fw-bold">Agregar Aptitudes</small></h5>                
                 <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="limpiar_campos_aptitudes_modal();"></button>
             </div>
             <!-- Modal body -->

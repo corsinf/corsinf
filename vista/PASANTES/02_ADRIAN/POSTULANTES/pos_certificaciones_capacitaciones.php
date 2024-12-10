@@ -100,8 +100,8 @@
 
         $('#modal_agregar_certificaciones').modal('show');
 
-        $('#lbl_titulo_certificaciones_capacitaciones').html('Editar  Capacitacion o Certificacion');
-        $('#btn_guardar_certificaciones_capacitaciones').html('Guardar');
+        $('#lbl_titulo_certificaciones_capacitaciones').html('Editar Capacitación y/o Certificación');
+        $('#btn_guardar_certificaciones_capacitaciones').html('<i class="bx bx-save"></i>Editar');
 
     }
 
@@ -114,7 +114,8 @@
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
             cancelButtonColor: '#d33',
-            confirmButtonText: 'Si'
+            confirmButtonText: 'Si',
+            cancelButtonText: 'Cancelar'
         }).then((result) => {
             if (result.value) {
                 eliminar_certificaciones_capacitaciones(id);
@@ -153,8 +154,8 @@
         $("#form_certificaciones_capacitaciones").validate().resetForm();
         $('.form-control').removeClass('is-valid is-invalid');
         //Cambiar texto
-        $('#lbl_titulo_certificaciones_capacitaciones').html('Agregue un certificado o capacitacion');
-        $('#btn_guardar_certificaciones_capacitaciones').html('Agregar');
+        $('#lbl_titulo_certificaciones_capacitaciones').html('Agregar Certificado y/o Capacitación');
+        $('#btn_guardar_certificaciones_capacitaciones').html('<i class="bx bx-save"></i>Guardar');
     }
 
     function definir_ruta_iframe_certificaciones(url) {
@@ -176,7 +177,7 @@
 
             <!-- Modal Header -->
             <div class="modal-header">
-                <h5><small class="text-body-secondary fw-bold" id="lbl_titulo_certificaciones_capacitaciones">Agregue una Certificación o Capacitación</small></h5>
+                <h5><small class="text-body-secondary fw-bold" id="lbl_titulo_certificaciones_capacitaciones">Agregar Certificado y/o Capacitación</small></h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="limpiar_parametros_certificaciones_capacitaciones()"></button>
             </div>
 
@@ -190,14 +191,14 @@
 
                     <div class="row mb-col">
                         <div class="col-md-12">
-                            <label for="txt_nombre_curso" class="form-label form-label-sm">Nombre del curso o capacitación </label>
+                            <label for="txt_nombre_curso" class="form-label form-label-sm">Nombre Curso y/o Capacitación </label>
                             <input type="text" class="form-control form-control-sm no_caracteres" name="txt_nombre_curso" id="txt_nombre_curso" value="" maxlength="100">
                         </div>
                     </div>
 
                     <div class="row mb-col">
                         <div class="col-md-12">
-                            <label for="txt_ruta_archivo" class="form-label form-label-sm">1. PDF del Certificado obtenido </label>
+                            <label for="txt_ruta_archivo" class="form-label form-label-sm">1. PDF del Certificado Obtenido </label>
                             <input type="file" class="form-control form-control-sm" name="txt_ruta_archivo" id="txt_ruta_archivo" accept=".pdf" value="">
                             <input type="hidden" class="form-control form-control-sm" name="txt_ruta_guardada_certificaciones_capacitaciones" id="txt_ruta_guardada_certificaciones_capacitaciones">
                         </div>
@@ -205,8 +206,8 @@
                 </div>
 
                 <div class="modal-footer d-flex justify-content-center">
-                    <button type="button" class="btn btn-success btn-sm px-4 m-1" id="btn_guardar_certificaciones_capacitaciones" onclick="insertar_editar_certificaciones_capacitaciones();">Guardar Certificación o Capacitación</button>
-                    <button type="button" class="btn btn-danger btn-sm px-4 m-1" id="btn_eliminar_certificaciones" onclick="delete_datos_certificaciones_capacitaciones();">Eliminar</button>
+                    <button type="button" class="btn btn-success btn-sm px-4 m-1" id="btn_guardar_certificaciones_capacitaciones" onclick="insertar_editar_certificaciones_capacitaciones();"><i class="bx bx-save"></i>Guardar</button>
+                    <button type="button" class="btn btn-danger btn-sm px-4 m-1" id="btn_eliminar_certificaciones" onclick="delete_datos_certificaciones_capacitaciones();"><i class="bx bx-trash"></i>Eliminar</button>
                 </div>
             </form>
         </div>
@@ -219,7 +220,7 @@
 
             <!-- Modal Header -->
             <div class="modal-header">
-                <h5><small class="text-body-secondary fw-bold" id="lbl_titulo_certificaciones_capacitaciones">Visualizacion Documento</small></h5>
+                <h5><small class="text-body-secondary fw-bold" id="lbl_titulo_certificaciones_capacitaciones">Visualización Documento</small></h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="limpiar_parametros_iframe();"></button>
             </div>
             <!-- Modal body -->

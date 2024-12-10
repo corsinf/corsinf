@@ -107,7 +107,7 @@
         cargar_datos_modal_referencias_laborales(id);
         $('#modal_agregar_referencia_laboral').modal('show');
         $('#lbl_titulo_referencia_laboral').html('Editar Referencia Laboral');
-        $('#btn_guardar_referencia_laboral').html('Guardar');
+        $('#btn_guardar_referencia_laboral').html('<i class="bx bx-save"></i>Editar');
     }
 
     function delete_datos_referencias_laborales() {
@@ -163,7 +163,7 @@
         $('.form-control').removeClass('is-valid is-invalid');
         //Cambiar texto
         $('#lbl_titulo_referencia_laboral').html('Agregar Referencia Laboral');
-        $('#btn_guardar_referencia_laboral').html('Agregar');
+        $('#btn_guardar_referencia_laboral').html('<i class="bx bx-save"></i>Guardar');
     }
 
     function definir_ruta_iframe_referencias_laborales(url) {
@@ -200,21 +200,21 @@
 
                     <div class="row mb-col">
                         <div class="col-md-12">
-                            <label for="txt_nombre_referencia" class="form-label form-label-sm">Nombre del empleador</label>
+                            <label for="txt_nombre_referencia" class="form-label form-label-sm">Nombre Empleador</label>
                             <input type="text" class="form-control form-control-sm no_caracteres" name="txt_nombre_referencia" id="txt_nombre_referencia" maxlength="50">
                         </div>
                     </div>
 
                     <div class="row mb-col">
                         <div class="col-md-12">
-                            <label for="txt_telefono_referencia" class="form-label form-label-sm">Teléfono del empleador </label>
+                            <label for="txt_telefono_referencia" class="form-label form-label-sm">Teléfono Empleador </label>
                             <input type="text" class="form-control form-control-sm solo_numeros_int" name="txt_telefono_referencia" id="txt_telefono_referencia" maxlength="15">
                         </div>
                     </div>
 
                     <div class="row mb-col">
                         <div class="col-md-12">
-                            <label for="txt_referencia_correo" class="form-label form-label-sm">Correo del empleador</label>
+                            <label for="txt_referencia_correo" class="form-label form-label-sm">Correo Empleador</label>
                             <input type="email" class="form-control form-control-sm" name="txt_referencia_correo" id="txt_referencia_correo" maxlength="100">
                         </div>
                     </div>
@@ -228,7 +228,7 @@
 
                     <div class="row mb-col">
                         <div class="col-md-12">
-                            <label for="txt_copia_carta_recomendacion" class="form-label form-label-sm">Copia de la carta de recomendación </label>
+                            <label for="txt_copia_carta_recomendacion" class="form-label form-label-sm">Pdf Carta Recomendación </label>
                             <input type="file" class="form-control form-control-sm" name="txt_copia_carta_recomendacion" id="txt_copia_carta_recomendacion" accept=".pdf">
                             <!-- <div class="pt-2"></div> -->
                             <input type="text" class="form-control form-control-sm" name="txt_ruta_guardada_carta_recomendacion" id="txt_ruta_guardada_carta_recomendacion" hidden>
@@ -236,19 +236,19 @@
                     </div>
                 </div>
 
-                <!-- <div class="modal-footer d-flex justify-content-center">
-                    <button type="button" class="btn btn-success btn-sm px-4 m-1" id="btn_guardar_referencia_laboral" onclick="insertar_editar_referencias_laborales();">Agregar</button>
-                    <button type="button" class="btn btn-danger btn-sm px-4 m-1" id="btn_eliminar_formacion" onclick="delete_datos_referencias_laborales();">Eliminar</button>
-                </div> -->
-
                 <div class="modal-footer d-flex justify-content-center">
+                    <button type="button" class="btn btn-success btn-sm px-4 m-1" id="btn_guardar_referencia_laboral" onclick="insertar_editar_referencias_laborales();"><i class="bx bx-save"></i>Guardar</button>
+                    <button type="button" class="btn btn-danger btn-sm px-4 m-1" id="btn_eliminar_formacion" onclick="delete_datos_referencias_laborales();"><i class="bx bx-trash"></i>Eliminar</button>
+                </div>
+
+                <!-- <div class="modal-footer d-flex justify-content-center">
                     <?php if ($id == '') { ?>
                         <button class="btn btn-primary btn-sm px-4 m-0 d-flex align-items-center" onclick="insertar_editar_referencias_laborales()" type="button"><i class="bx bx-save"></i> Guardar</button>
                     <?php } else { ?>
                         <button class="btn btn-primary btn-sm px-4 m-1 d-flex align-items-center" onclick="insertar_editar_referencias_laborales();" type="button"><i class="bx bx-save"></i> Guardar</button>
                         <button class="btn btn-danger btn-sm px-4 m-1 d-flex align-items-center" onclick="delete_datos_referencias_laborales()" type="button"><i class="bx bx-trash"></i> Eliminar</button>
                     <?php } ?>
-                </div>
+                </div> -->
             </form>
         </div>
     </div>

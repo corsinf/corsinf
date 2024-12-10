@@ -100,8 +100,8 @@
     function abrir_modal_certificados_medicos(id) {
         cargar_datos_modal_certificados_medicos(id);
         $('#modal_agregar_certificados_medicos').modal('show');
-        $('#lbl_titulo_certificados_medicos').html('Editar el certificado médico');
-        $('#btn_guardar_certificados_medicos').html('Guardar');
+        $('#lbl_titulo_certificados_medicos').html('Editar Certificado Médico');
+        $('#btn_guardar_certificados_medicos').html('<i class="bx bx-save"></i>Editar');
     }
 
     function delete_datos_certificados_medicos() {
@@ -113,7 +113,8 @@
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
             cancelButtonColor: '#d33',
-            confirmButtonText: 'Si'
+            confirmButtonText: 'Si',
+            cancelButtonText: 'Cancelar'
         }).then((result) => {
             if (result.value) {
                 eliminar_certificados_medicos(id);
@@ -156,8 +157,8 @@
         $("#form_certificados_medicos").validate().resetForm();
         $('.form-control, .form-select').removeClass('is-valid is-invalid');
         //Cambiar texto
-        $('#lbl_titulo_certificados_medicos').html('Agregue un certificado médico');
-        $('#btn_guardar_certificados_medicos').html('Agregar');
+        $('#lbl_titulo_certificados_medicos').html('Agregar Certificado Médico');
+        $('#btn_guardar_certificados_medicos').html('<i class="bx bx-save"></i>Guardar');
     }
 
     function ruta_iframe_certificados_medicos(url) {
@@ -220,7 +221,7 @@
         <div class="modal-content">
             <!-- Modal Header -->
             <div class="modal-header">
-                <h5><small class="text-body-secondary fw-bold" id="lbl_titulo_certificados_medicos">Agregue un Certificado Médico</small></h5>
+                <h5><small class="text-body-secondary fw-bold" id="lbl_titulo_certificados_medicos">Agregar Certificado Médico</small></h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="limpiar_parametros_certificados_medicos()"></button>
             </div>
             <!-- Modal body -->
@@ -232,45 +233,45 @@
 
                     <div class="row mb-col">
                         <div class="col-md-12">
-                            <label for="txt_med_motivo_certificado" class="form-label form-label-sm">Motivo del certificado </label>
+                            <label for="txt_med_motivo_certificado" class="form-label form-label-sm">Motivo Certificado Médico </label>
                             <input type="text" class="form-control form-control-sm no_caracteres" name="txt_med_motivo_certificado" id="txt_med_motivo_certificado" maxlength="50">
                         </div>
                     </div>
                     <div class="row mb-col">
                         <div class="col-md-12">
-                            <label for="txt_med_nom_medico" class="form-label form-label-sm">Nombre del Médico Tratante </label>
+                            <label for="txt_med_nom_medico" class="form-label form-label-sm">Nombre Médico Tratante </label>
                             <input type="text" class="form-control form-control-sm no_caracteres" name="txt_med_nom_medico" id="txt_med_nom_medico" maxlength="50">
                         </div>
                     </div>
                     <div class="row mb-col">
                         <div class="col-md-12">
-                            <label for="txt_med_ins_medico" class="form-label form-label-sm">Nombre de la Institución Médica </label>
+                            <label for="txt_med_ins_medico" class="form-label form-label-sm">Nombre Institución Médica </label>
                             <input type="text" class="form-control form-control-sm no_caracteres" name="txt_med_ins_medico" id="txt_med_ins_medico" maxlength="50">
                         </div>
                     </div>
                     <div class="row mb-col">
                         <div class="col-md-12">
-                            <label for="txt_med_fecha_inicio_certificado" class="form-label form-label-sm">Fecha de Inicio del Certificado</label>
+                            <label for="txt_med_fecha_inicio_certificado" class="form-label form-label-sm">Fecha Inicio Certificado</label>
                             <input type="date" class="form-control form-control-sm " name="txt_med_fecha_inicio_certificado" id="txt_med_fecha_inicio_certificado" onchange="txt_fecha_fin_certificado_1();">
                         </div>
                     </div>
                     <div class="row mb-col">
                         <div class="col-md-12">
-                            <label for="txt_med_fecha_fin_certificado" class="form-label form-label-sm">Fecha de fin del Certificado</label>
+                            <label for="txt_med_fecha_fin_certificado" class="form-label form-label-sm">Fecha Fin Certificado</label>
                             <input type="date" class="form-control form-control-sm " name="txt_med_fecha_fin_certificado" id="txt_med_fecha_fin_certificado" onchange="txt_fecha_fin_certificado_1();">
                         </div>
                     </div>
                     <div class="row mb-col">
                         <div class="col-md-12">
-                            <label for="txt_ruta_certificados_medicos" class="form-label form-label-sm">Copia del Certificado Médico </label>
+                            <label for="txt_ruta_certificados_medicos" class="form-label form-label-sm">Pdf Certificado Médico </label>
                             <input type="file" class="form-control form-control-sm" name="txt_ruta_certificados_medicos" id="txt_ruta_certificados_medicos" accept=".pdf">
                             <input type="text" class="form-control form-control-sm" name="txt_ruta_guardada_certificados_medicos" id="txt_ruta_guardada_certificados_medicos" hidden>
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer d-flex justify-content-center">
-                    <button type="button" class="btn btn-success btn-sm" id="btn_guardar_certificados_medicos" onclick="insertar_editar_certificados_medicos(); validar_fechas_certificados_medicos()">Agregar Certificado Médico</button>
-                    <button type="button" class="btn btn-danger btn-sm px-4 m-1" id="btn_eliminar_formacion" onclick="delete_datos_certificados_medicos();">Eliminar</button>
+                    <button type="button" class="btn btn-success btn-sm px-4 m-1" id="btn_guardar_certificados_medicos" onclick="insertar_editar_certificados_medicos(); validar_fechas_certificados_medicos()"><i class="bx bx-save"></i>Guardar</button>
+                    <button type="button" class="btn btn-danger btn-sm px-4 m-1" id="btn_eliminar_formacion" onclick="delete_datos_certificados_medicos();"><i class="bx bx-trash"></i>Eliminar</button>
                 </div>
             </form>
         </div>

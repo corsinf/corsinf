@@ -103,8 +103,8 @@
     function abrir_modal_contratos_trabajos(id) {
         cargar_datos_modal_contratos_trabajos(id);
         $('#modal_agregar_contratos').modal('show');
-        $('#lbl_titulo_contratos_trabajos').html('Editar Contrato');
-        $('#btn_guardar_contratos_trabajos').html('Guardar');
+        $('#lbl_titulo_contratos_trabajos').html('Editar Contrato Trabajo');
+        $('#btn_guardar_contratos_trabajos').html('<i class="bx bx-save"></i>Editar');
     }
 
     function delete_datos_contratos_trabajos() {
@@ -116,7 +116,8 @@
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
             cancelButtonColor: '#d33',
-            confirmButtonText: 'Si'
+            confirmButtonText: 'Si',
+            cancelButtonText: 'Cancelar'
         }).then((result) => {
             if (result.value) {
                 eliminar_contratos_trabajos(id);
@@ -160,8 +161,8 @@
         $("#form_contratos_trabajos").validate().resetForm();
         $('.form-control').removeClass('is-valid is-invalid');
         //Cambiar texto
-        $('#lbl_titulo_contratos_trabajos').html('Agregue un Contrato');
-        $('#btn_guardar_contratos_trabajos').html('Agregar');
+        $('#lbl_titulo_contratos_trabajos').html('Agregar Contrato Trabajo');
+        $('#btn_guardar_contratos_trabajos').html('<i class="bx bx-save"></i>Guardar');
     }
 
     function validar_fechas_contratos_trabajos() {
@@ -215,7 +216,7 @@
 
             <!-- Modal Header -->
             <div class="modal-header">
-                <h5><small class="text-body-secondary fw-bold" id="lbl_titulo_contratos_trabajos">Agregue un Contrato de Trabajo</small></h5>
+                <h5><small class="text-body-secondary fw-bold" id="lbl_titulo_contratos_trabajos">Agregar Contrato Trabajo</small></h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="limpiar_parametros_contratos_trabajos()"></button>
             </div>
             <!-- Modal body -->
@@ -229,27 +230,27 @@
 
                     <div class="row mb-col">
                         <div class="col-md-12">
-                            <label for="txt_nombre_empresa_contrato" class="form-label form-label-sm">Nombre de la empresa </label>
+                            <label for="txt_nombre_empresa_contrato" class="form-label form-label-sm">Nombre Empresa </label>
                             <input type="text" class="form-control form-control-sm no_caracteres" name="txt_nombre_empresa_contrato" id="txt_nombre_empresa_contrato" maxlength="100">
                         </div>
                     </div>
 
                     <div class="row mb-col">
                         <div class="col-md-12">
-                            <label for="txt_tipo_contrato" class="form-label form-label-sm">Tipo de Contrato </label>
+                            <label for="txt_tipo_contrato" class="form-label form-label-sm">Tipo Contrato </label>
                             <input type="text" class="form-control form-control-sm no_caracteres" name="txt_tipo_contrato" id="txt_tipo_contrato" maxlength="100">
                         </div>
                     </div>
 
                     <div class="row mb-col">
                         <div class="col-md-12">
-                            <label for="txt_fecha_inicio_contrato" class="form-label form-label-sm">Fecha de Inicio Contrato </label>
+                            <label for="txt_fecha_inicio_contrato" class="form-label form-label-sm">Fecha Inicio Contrato </label>
                             <input type="date" class="form-control form-control-sm no_caracteres" name="txt_fecha_inicio_contrato" id="txt_fecha_inicio_contrato" onchange="checkbox_actualidad_contratos_trabajos();">
                         </div>
                     </div>
                     <div class="row mb-col">
                         <div class="col-md-12">
-                            <label for="txt_fecha_fin_contrato" class="form-label form-label-sm">Fecha de Fin Contrato </label>
+                            <label for="txt_fecha_fin_contrato" class="form-label form-label-sm">Fecha Finalización Contrato </label>
                             <input type="date" class="form-control form-control-sm no_caracteres" name="txt_fecha_fin_contrato" id="txt_fecha_fin_contrato" onchange="checkbox_actualidad_contratos_trabajos();">
                         </div>
                     </div>
@@ -262,7 +263,7 @@
 
                     <div class="row mb-col">
                         <div class="col-md-12">
-                            <label for="txt_ruta_archivo_contrato" class="form-label form-label-sm">Copia del contrato firmado </label>
+                            <label for="txt_ruta_archivo_contrato" class="form-label form-label-sm">Pdf Contrato Firmado </label>
                             <input type="file" class="form-control form-control-sm" name="txt_ruta_archivo_contrato" id="txt_ruta_archivo_contrato" accept=".pdf" value="">
                         </div>
                     </div>
@@ -271,8 +272,8 @@
                 </div>
 
                 <div class="modal-footer d-flex justify-content-center">
-                    <button type="button" class="btn btn-success btn-sm px-4 m-1" id="btn_guardar_contratos_trabajos" onclick="validar_fechas_contratos_trabajos();insertar_editar_contratos_trabajos();">Guardar</button>
-                    <button type="button" class="btn btn-danger btn-sm px-4 m-1" id="btn_eliminar_contratos_trabajos" onclick="delete_datos_contratos_trabajos();">Eliminar</button>
+                    <button type="button" class="btn btn-success btn-sm px-4 m-1" id="btn_guardar_contratos_trabajos" onclick="validar_fechas_contratos_trabajos();insertar_editar_contratos_trabajos();"><i class="bx bx-save"></i>Guardar</button>
+                    <button type="button" class="btn btn-danger btn-sm px-4 m-1" id="btn_eliminar_contratos_trabajos" onclick="delete_datos_contratos_trabajos();"><i class="bx bx-trash"></i>Eliminar</button>
                 </div>
             </form>
         </div>

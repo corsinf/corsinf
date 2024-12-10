@@ -112,8 +112,8 @@
     function abrir_modal_documentos_identidad(id) {
         cargar_datos_modal_documentos_identidad(id);
         $('#modal_agregar_documentos_identidad').modal('show');
-        $('#lbl_titulo_documentos_identidad').html('Editar su documento de identidad');
-        $('#btn_guardar_documentos_identidad').html('Guardar');
+        $('#lbl_titulo_documentos_identidad').html('Editar Documento Identidad');
+        $('#btn_guardar_documentos_identidad').html('<i class="bx bx-save"></i>Editar');
 
     }
 
@@ -126,7 +126,8 @@
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
             cancelButtonColor: '#d33',
-            confirmButtonText: 'Si'
+            confirmButtonText: 'Si',
+            cancelButtonText: 'Cancelar'
         }).then((result) => {
             if (result.value) {
                 eliminar_documentos_identidad(id);
@@ -166,8 +167,8 @@
         $("#form_documento_identidad").validate().resetForm();
         $('.form-control, .form-select').removeClass('is-valid is-invalid');
         //Cambiar texto
-        $('#lbl_titulo_documentos_identidad').html('Agregue un documento de identidad');
-        $('#btn_guardar_documentos_identidad').html('Agregar');
+        $('#lbl_titulo_documentos_identidad').html('Agregar Documento Identidad');
+        $('#btn_guardar_documentos_identidad').html('<i class="bx bx-save"></i>Guardar');
     }
 
     function ruta_iframe_documento_identificacion(url) {
@@ -190,7 +191,7 @@
 
             <!-- Modal Header -->
             <div class="modal-header">
-                <h5><small class="text-body-secondary fw-bold" id="lbl_titulo_documentos_identidad">Agregue un Documento de Identidad</small></h5>
+                <h5><small class="text-body-secondary fw-bold" id="lbl_titulo_documentos_identidad">Agregar Documento Identidad</small></h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="limpiar_parametros_documentos_identidad()"></button>
             </div>
 
@@ -219,7 +220,7 @@
                     </div>
                     <div class="row mb-col">
                         <div class="col-md-12">
-                            <label for="txt_ruta_documentos_identidad" class="form-label form-label-sm">Copia de la carta de recomendación </label>
+                            <label for="txt_ruta_documentos_identidad" class="form-label form-label-sm">Pdf Documento Identidad</label>
                             <input type="file" class="form-control form-control-sm" name="txt_ruta_documentos_identidad" id="txt_ruta_documentos_identidad" accept=".pdf">
                             <!-- <div class="pt-2"></div> -->
                             <input type="hidden" class="form-control form-control-sm" name="txt_ruta_guardada_documentos_identidad" id="txt_ruta_guardada_documentos_identidad">
@@ -228,8 +229,8 @@
 
                 </div>
                 <div class="modal-footer d-flex justify-content-center">
-                    <button type="button" class="btn btn-success btn-sm px-4 m-1" id="btn_guardar_documentos_identidad" onclick="insertar_editar_documentos_identidad();">Agregar</button>
-                    <button type="button" class="btn btn-danger btn-sm px-4 m-1" id="btn_eliminar_formacion" onclick="delete_datos_documentos_identidad();">Eliminar</button>
+                    <button type="button" class="btn btn-success btn-sm px-4 m-1" id="btn_guardar_documentos_identidad" onclick="insertar_editar_documentos_identidad();"><i class="bx bx-save"></i>Guardar</button>
+                    <button type="button" class="btn btn-danger btn-sm px-4 m-1" id="btn_eliminar_formacion" onclick="delete_datos_documentos_identidad();"><i class="bx bx-trash"></i>Eliminar</button>
                 </div>
             </form>
         </div>
