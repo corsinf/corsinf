@@ -108,6 +108,7 @@
         $('#modal_agregar_formacion').modal('show');
         $('#lbl_titulo_formacion_acedemica').html('Editar Formación Académica');
         $('#btn_guardar_formacion').html('<i class="bx bx-save"></i>Editar');
+        $('#btn_eliminar_formacion_academica').show();
     }
 
     function delete_datos_form_acad() {
@@ -163,7 +164,8 @@
         $('.form-control').removeClass('is-valid is-invalid');
         //Cambiar texto
         $('#lbl_titulo_formacion_acedemica').html('Agregar Formación Académica');
-        $('#btn_guardar_formacion').html('<i class="bx bx-save"></i>Guardar');
+        $('#btn_guardar_formacion').html('<i class="bx bx-save"></i>Agregar');
+        $('#btn_eliminar_formacion_academica').hide();
     }
 
     function validar_fechas_form_acad() {
@@ -273,8 +275,8 @@
                 </div>
 
                 <div class="modal-footer d-flex justify-content-center">
-                    <button type="button" class="btn btn-success btn-sm px-4 m-1" id="btn_guardar_formacion" onclick="validar_fechas_form_acad();insertar_editar_formacion_academica();"><i class="bx bx-save"></i>Guardar</button>
-                    <button type="button" class="btn btn-danger btn-sm px-4 m-1" id="btn_eliminar_formacion" onclick="delete_datos_form_acad();"><i class="bx bx-trash"></i>Eliminar</button>
+                    <button type="button" class="btn btn-success btn-sm px-4 m-1" id="btn_guardar_formacion" onclick="validar_fechas_form_acad();insertar_editar_formacion_academica();"><i class="bx bx-save"></i>Agregar</button>
+                    <button type="button" style="display: none;" class="btn btn-danger btn-sm px-4 m-1" id="btn_eliminar_formacion_academica" onclick="delete_datos_form_acad();"><i class="bx bx-trash"></i>Eliminar</button>
                 </div>
             </form>
         </div>

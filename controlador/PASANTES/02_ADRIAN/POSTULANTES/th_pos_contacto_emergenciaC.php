@@ -45,7 +45,7 @@ class th_pos_contacto_emergenciaC
                             <input type="text" class="form-control form-control-sm" id="txt_telefono_contacto_emergencia_{$value['_id']}" value="{$value['th_coem_telefono_emergencia']}" style="display:none;" required maxlength="15">
                         </td>
                         <td>
-                            <button type="button" id="btn_editar_{$value['_id']}" class="btn btn-xs btn-primary" onclick="mostrar_contacto_emergencia({$value['_id']});">
+                            <button type="button" id="btn_editar_{$value['_id']}" class="btn btn-xs btn-success" onclick="mostrar_contacto_emergencia({$value['_id']});">
                                 <i class="text-white bx bx-pencil bx-xs me-0"></i>
                             </button>
                             <button type="button" id="btn_guardar_{$value['_id']}" class="btn btn-xs btn-success" onclick="guardar_cambios_contacto_emergencia({$value['_id']});" style="display:none;">

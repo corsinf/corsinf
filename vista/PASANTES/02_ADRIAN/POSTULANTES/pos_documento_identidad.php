@@ -114,6 +114,7 @@
         $('#modal_agregar_documentos_identidad').modal('show');
         $('#lbl_titulo_documentos_identidad').html('Editar Documento Identidad');
         $('#btn_guardar_documentos_identidad').html('<i class="bx bx-save"></i>Editar');
+        $('#btn_eliminar_documento_identidad').show();
 
     }
 
@@ -168,7 +169,8 @@
         $('.form-control, .form-select').removeClass('is-valid is-invalid');
         //Cambiar texto
         $('#lbl_titulo_documentos_identidad').html('Agregar Documento Identidad');
-        $('#btn_guardar_documentos_identidad').html('<i class="bx bx-save"></i>Guardar');
+        $('#btn_guardar_documentos_identidad').html('<i class="bx bx-save"></i>Agregar');
+        $('#btn_eliminar_documento_identidad').hide();
     }
 
     function ruta_iframe_documento_identificacion(url) {
@@ -229,8 +231,8 @@
 
                 </div>
                 <div class="modal-footer d-flex justify-content-center">
-                    <button type="button" class="btn btn-success btn-sm px-4 m-1" id="btn_guardar_documentos_identidad" onclick="insertar_editar_documentos_identidad();"><i class="bx bx-save"></i>Guardar</button>
-                    <button type="button" class="btn btn-danger btn-sm px-4 m-1" id="btn_eliminar_formacion" onclick="delete_datos_documentos_identidad();"><i class="bx bx-trash"></i>Eliminar</button>
+                    <button type="button" class="btn btn-success btn-sm px-4 m-1" id="btn_guardar_documentos_identidad" onclick="insertar_editar_documentos_identidad();"><i class="bx bx-save"></i>Agregar</button>
+                    <button type="button" style="display: none;" class="btn btn-danger btn-sm px-4 m-1" id="btn_eliminar_documento_identidad" onclick="delete_datos_documentos_identidad();"><i class="bx bx-trash"></i>Eliminar</button>
                 </div>
             </form>
         </div>

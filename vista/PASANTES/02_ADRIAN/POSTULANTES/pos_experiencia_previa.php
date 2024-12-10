@@ -123,6 +123,7 @@
         $('#modal_agregar_experiencia').modal('show');
         $('#lbl_titulo_experiencia_laboral').html('Editar Experiencia Laboral');
         $('#btn_guardar_experiencia').html('<i class="bx bx-save"></i>Editar');
+        $('#btn_eliminar_experiencia').show();
 
     }
 
@@ -180,7 +181,8 @@
         $('#txt_experiencia_id').val('')
         //Cambiar texto
         $('#lbl_titulo_experiencia_laboral').html('Agregar Experiencia Laboral');
-        $('#btn_guardar_experiencia').html('<i class="bx bx-save"></i>Guardar');
+        $('#btn_guardar_experiencia').html('<i class="bx bx-save"></i>Agregar');
+        $('#btn_eliminar_experiencia').hide();
 
     }
 
@@ -301,8 +303,8 @@
                 </div>
 
                 <div class="modal-footer d-flex justify-content-center">
-                    <button type="button" class="btn btn-success btn-sm px-4 m-1" id="btn_guardar_experiencia" onclick="validar_fechas_exp_prev(); insertar_editar_experiencia_laboral();"><i class="bx bx-save"></i>Guardar</button>
-                    <button type="button" class="btn btn-danger btn-sm px-4 m-1" id="btn_eliminar_experiencia" onclick="delete_datos_experiencia_laboral();"><i class="bx bx-trash"></i>Eliminar</button>
+                    <button type="button" class="btn btn-success btn-sm px-4 m-1" id="btn_guardar_experiencia" onclick="validar_fechas_exp_prev(); insertar_editar_experiencia_laboral();"><i class="bx bx-save"></i>Agregar</button>
+                    <button type="button" style="display: none;" class="btn btn-danger btn-sm px-4 m-1" id="btn_eliminar_experiencia" onclick="delete_datos_experiencia_laboral();"><i class="bx bx-trash"></i>Eliminar</button>
                 </div>
             </form>
         </div>

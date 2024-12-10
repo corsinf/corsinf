@@ -92,9 +92,9 @@
         cargar_datos_modal_cambiar_foto(id);
 
         $('#modal_agregar_cambiar_foto').modal('show');
-
-        $('#lbl_titulo_cambiar_foto').html('Editar su foto de perfil');
-        $('#btn_guardar_cambiar_foto').html('Guardar');
+        $('#lbl_titulo_cambiar_foto').html('Editar Foto');
+        $('#btn_guardar_cambiar_foto').html('<i class="bx bx-save"></i>Editar');
+        $('#btn_eliminar_cambiar_foto').show();
 
     }
 
@@ -148,8 +148,9 @@
         $("#form_cambiar_foto").validate().resetForm();
         $('.form-control').removeClass('is-valid is-invalid');
         //Cambiar texto
-        $('#lbl_titulo_cambiar_foto').html('Agregue una foto');
-        $('#btn_guardar_cambiar_foto').html('Agregar');
+        $('#lbl_titulo_cambiar_foto').html('Agregar Foto');
+        $('#btn_guardar_cambiar_foto').html('<i class="bx bx-save"></i>Agregar');
+        $('#btn_eliminar_cambiar_foto').hide();
     }
 
     function definir_ruta_iframe_cambiar_foto(url) {
@@ -173,7 +174,7 @@
         <div class="modal-content">
             <!-- Modal Header -->
             <div class="modal-header">
-                <h6><small class="text-body-secondary fw-bold" id="lbl_titulo_cambiar_foto">Foto de Perfil</small></h5>
+                <h6><small class="text-body-secondary fw-bold" id="lbl_titulo_cambiar_foto">Foto Perfil</small></h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <!-- Modal body -->
@@ -186,7 +187,7 @@
 
                     <div class="row mb-col">
                         <div class="col-md-12">
-                            <label for="txt_copia_cambiar_foto" class="form-label form-label-sm">Foto de Perfil </label>
+                            <label for="txt_copia_cambiar_foto" class="form-label form-label-sm">Foto Perfil </label>
                             <input type="file" class="form-control form-control-sm" name="txt_copia_cambiar_foto" id="txt_copia_cambiar_foto" accept=".">
                             <!-- <div class="pt-2"></div> -->
                             <input type="text" class="form-control form-control-sm" name="txt_ruta_guardada_cambiar_foto" id="txt_ruta_guardada_cambiar_foto" hidden>
@@ -196,7 +197,7 @@
 
                 <div class="modal-footer d-flex justify-content-center">
                     <button type="button" class="btn btn-success btn-sm px-4 m-1" id="btn_guardar_cambiar_foto" onclick="insertar_editar_cambiar_foto();">Agregar</button>
-                    <button type="button" class="btn btn-danger btn-sm px-4 m-1" id="btn_eliminar_cambiar_foto" onclick="delete_datos_cambiar_foto();">Eliminar</button>
+                    <button type="button" style="display: none;" class="btn btn-danger btn-sm px-4 m-1" id="btn_eliminar_cambiar_foto" onclick="delete_datos_cambiar_foto();"><i class="bx bx-trash"></i>Eliminar</button>
                 </div>
             </form>
         </div>

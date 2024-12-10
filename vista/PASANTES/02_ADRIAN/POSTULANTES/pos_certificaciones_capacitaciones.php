@@ -97,11 +97,10 @@
     //Funcion para editar el registro de certificaciones y capacitaciones
     function abrir_modal_certificaciones_capacitaciones(id) {
         cargar_datos_modal_certificaciones_capacitaciones(id);
-
         $('#modal_agregar_certificaciones').modal('show');
-
         $('#lbl_titulo_certificaciones_capacitaciones').html('Editar Capacitación y/o Certificación');
         $('#btn_guardar_certificaciones_capacitaciones').html('<i class="bx bx-save"></i>Editar');
+        $('#btn_eliminar_certificaciones').show();
 
     }
 
@@ -155,7 +154,8 @@
         $('.form-control').removeClass('is-valid is-invalid');
         //Cambiar texto
         $('#lbl_titulo_certificaciones_capacitaciones').html('Agregar Certificado y/o Capacitación');
-        $('#btn_guardar_certificaciones_capacitaciones').html('<i class="bx bx-save"></i>Guardar');
+        $('#btn_guardar_certificaciones_capacitaciones').html('<i class="bx bx-save"></i>Agregar');
+        $('#btn_eliminar_certificaciones').hide();
     }
 
     function definir_ruta_iframe_certificaciones(url) {
@@ -206,8 +206,8 @@
                 </div>
 
                 <div class="modal-footer d-flex justify-content-center">
-                    <button type="button" class="btn btn-success btn-sm px-4 m-1" id="btn_guardar_certificaciones_capacitaciones" onclick="insertar_editar_certificaciones_capacitaciones();"><i class="bx bx-save"></i>Guardar</button>
-                    <button type="button" class="btn btn-danger btn-sm px-4 m-1" id="btn_eliminar_certificaciones" onclick="delete_datos_certificaciones_capacitaciones();"><i class="bx bx-trash"></i>Eliminar</button>
+                    <button type="button" class="btn btn-success btn-sm px-4 m-1" id="btn_guardar_certificaciones_capacitaciones" onclick="insertar_editar_certificaciones_capacitaciones();"><i class="bx bx-save"></i>Agregar</button>
+                    <button type="button" style="display: none;" class="btn btn-danger btn-sm px-4 m-1" id="btn_eliminar_certificaciones" onclick="delete_datos_certificaciones_capacitaciones();"><i class="bx bx-trash"></i>Eliminar</button>
                 </div>
             </form>
         </div>

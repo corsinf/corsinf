@@ -420,7 +420,7 @@ if (isset($_GET['id'])) {
                                                 <div class="mb-2">
                                                     <div class="row">
                                                         <div class="col-9 d-flex align-items-center">
-                                                            <h6 class="mb-0 fw-bold text-primary">Certificaciones y Capacitación:</h6>
+                                                            <h6 class="mb-0 fw-bold text-primary">Certificaciones y Capacitaciones :</h6>
                                                         </div>
                                                         <div class="col-3 d-flex justify-content-end">
                                                             <a href="#" class="text-success icon-hover d-flex align-items-center" data-bs-toggle="modal" data-bs-target="#modal_agregar_certificaciones">

@@ -102,6 +102,7 @@
         $('#modal_agregar_certificados_medicos').modal('show');
         $('#lbl_titulo_certificados_medicos').html('Editar Certificado Médico');
         $('#btn_guardar_certificados_medicos').html('<i class="bx bx-save"></i>Editar');
+        $('#btn_eliminar_certificado_medico').show();
     }
 
     function delete_datos_certificados_medicos() {
@@ -158,7 +159,8 @@
         $('.form-control, .form-select').removeClass('is-valid is-invalid');
         //Cambiar texto
         $('#lbl_titulo_certificados_medicos').html('Agregar Certificado Médico');
-        $('#btn_guardar_certificados_medicos').html('<i class="bx bx-save"></i>Guardar');
+        $('#btn_guardar_certificados_medicos').html('<i class="bx bx-save"></i>Agregar');
+        $('#btn_eliminar_certificado_medico').hide();
     }
 
     function ruta_iframe_certificados_medicos(url) {
@@ -270,8 +272,8 @@
                     </div>
                 </div>
                 <div class="modal-footer d-flex justify-content-center">
-                    <button type="button" class="btn btn-success btn-sm px-4 m-1" id="btn_guardar_certificados_medicos" onclick="insertar_editar_certificados_medicos(); validar_fechas_certificados_medicos()"><i class="bx bx-save"></i>Guardar</button>
-                    <button type="button" class="btn btn-danger btn-sm px-4 m-1" id="btn_eliminar_formacion" onclick="delete_datos_certificados_medicos();"><i class="bx bx-trash"></i>Eliminar</button>
+                    <button type="button" class="btn btn-success btn-sm px-4 m-1" id="btn_guardar_certificados_medicos" onclick="insertar_editar_certificados_medicos(); validar_fechas_certificados_medicos()"><i class="bx bx-save"></i>Agregar</button>
+                    <button type="button" style="display: none;" class="btn btn-danger btn-sm px-4 m-1" id="btn_eliminar_certificado_medico" onclick="delete_datos_certificados_medicos();"><i class="bx bx-trash"></i>Eliminar</button>
                 </div>
             </form>
         </div>

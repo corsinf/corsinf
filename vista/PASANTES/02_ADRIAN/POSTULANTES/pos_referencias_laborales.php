@@ -108,6 +108,7 @@
         $('#modal_agregar_referencia_laboral').modal('show');
         $('#lbl_titulo_referencia_laboral').html('Editar Referencia Laboral');
         $('#btn_guardar_referencia_laboral').html('<i class="bx bx-save"></i>Editar');
+        $('#btn_eliminar_referencia_laboral').show();
     }
 
     function delete_datos_referencias_laborales() {
@@ -163,7 +164,8 @@
         $('.form-control').removeClass('is-valid is-invalid');
         //Cambiar texto
         $('#lbl_titulo_referencia_laboral').html('Agregar Referencia Laboral');
-        $('#btn_guardar_referencia_laboral').html('<i class="bx bx-save"></i>Guardar');
+        $('#btn_guardar_referencia_laboral').html('<i class="bx bx-save"></i>Agregar');
+        $('#btn_eliminar_referencia_laboral').hide();
     }
 
     function definir_ruta_iframe_referencias_laborales(url) {
@@ -237,18 +239,9 @@
                 </div>
 
                 <div class="modal-footer d-flex justify-content-center">
-                    <button type="button" class="btn btn-success btn-sm px-4 m-1" id="btn_guardar_referencia_laboral" onclick="insertar_editar_referencias_laborales();"><i class="bx bx-save"></i>Guardar</button>
-                    <button type="button" class="btn btn-danger btn-sm px-4 m-1" id="btn_eliminar_formacion" onclick="delete_datos_referencias_laborales();"><i class="bx bx-trash"></i>Eliminar</button>
+                    <button type="button" class="btn btn-success btn-sm px-4 m-1" id="btn_guardar_referencia_laboral" onclick="insertar_editar_referencias_laborales();"><i class="bx bx-save"></i>Agregar</button>
+                    <button type="button" style="display: none;" class="btn btn-danger btn-sm px-4 m-1" id="btn_eliminar_referencia_laboral" onclick="delete_datos_referencias_laborales();"><i class="bx bx-trash"></i>Eliminar</button>
                 </div>
-
-                <!-- <div class="modal-footer d-flex justify-content-center">
-                    <?php if ($id == '') { ?>
-                        <button class="btn btn-primary btn-sm px-4 m-0 d-flex align-items-center" onclick="insertar_editar_referencias_laborales()" type="button"><i class="bx bx-save"></i> Guardar</button>
-                    <?php } else { ?>
-                        <button class="btn btn-primary btn-sm px-4 m-1 d-flex align-items-center" onclick="insertar_editar_referencias_laborales();" type="button"><i class="bx bx-save"></i> Guardar</button>
-                        <button class="btn btn-danger btn-sm px-4 m-1 d-flex align-items-center" onclick="delete_datos_referencias_laborales()" type="button"><i class="bx bx-trash"></i> Eliminar</button>
-                    <?php } ?>
-                </div> -->
             </form>
         </div>
     </div>

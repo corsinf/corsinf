@@ -198,7 +198,7 @@
                     </div>
 
                     <div id="btn_agregar_editar_contacto_emergencia" class="d-flex justify-content-end align-items-end mt-1">
-                        <button type="button" class="btn btn-sm btn-success btn-sm px-4 m-1" id="btn_agregar_contacto_emergencia" onclick="insertar_editar_contacto_emergencia();"><i class="bx bx-plus me-0"></i> Guardar</button>
+                        <button type="button" class="btn btn-sm btn-success btn-sm px-4 m-1" id="btn_agregar_contacto_emergencia" onclick="insertar_editar_contacto_emergencia();"><i class="bx bx-plus me-0"></i> Agregar</button>
                     </div>
                 </form>
 

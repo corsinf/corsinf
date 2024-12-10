@@ -105,6 +105,7 @@
         $('#modal_agregar_contratos').modal('show');
         $('#lbl_titulo_contratos_trabajos').html('Editar Contrato Trabajo');
         $('#btn_guardar_contratos_trabajos').html('<i class="bx bx-save"></i>Editar');
+        $('#btn_eliminar_contratos_trabajos').show();
     }
 
     function delete_datos_contratos_trabajos() {
@@ -162,7 +163,8 @@
         $('.form-control').removeClass('is-valid is-invalid');
         //Cambiar texto
         $('#lbl_titulo_contratos_trabajos').html('Agregar Contrato Trabajo');
-        $('#btn_guardar_contratos_trabajos').html('<i class="bx bx-save"></i>Guardar');
+        $('#btn_guardar_contratos_trabajos').html('<i class="bx bx-save"></i>Agregar');
+        $('#btn_eliminar_contratos_trabajos').hide();
     }
 
     function validar_fechas_contratos_trabajos() {
@@ -272,8 +274,8 @@
                 </div>
 
                 <div class="modal-footer d-flex justify-content-center">
-                    <button type="button" class="btn btn-success btn-sm px-4 m-1" id="btn_guardar_contratos_trabajos" onclick="validar_fechas_contratos_trabajos();insertar_editar_contratos_trabajos();"><i class="bx bx-save"></i>Guardar</button>
-                    <button type="button" class="btn btn-danger btn-sm px-4 m-1" id="btn_eliminar_contratos_trabajos" onclick="delete_datos_contratos_trabajos();"><i class="bx bx-trash"></i>Eliminar</button>
+                    <button type="button" class="btn btn-success btn-sm px-4 m-1" id="btn_guardar_contratos_trabajos" onclick="validar_fechas_contratos_trabajos();insertar_editar_contratos_trabajos();"><i class="bx bx-save"></i>Agregar</button>
+                    <button type="button" style="display: none;" class="btn btn-danger btn-sm px-4 m-1" id="btn_eliminar_contratos_trabajos" onclick="delete_datos_contratos_trabajos();"><i class="bx bx-trash"></i>Eliminar</button>
                 </div>
             </form>
         </div>
