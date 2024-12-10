@@ -86,6 +86,7 @@
         });
     }
 
+<<<<<<< HEAD
     //* Función para editar el registro de idiomas
     // function abrir_modal_idiomas(id) {
     //     cargar_datos_modal_idiomas(id);
@@ -132,6 +133,16 @@
     //     }
     // }
     
+=======
+    function abrir_modal_idiomas(id) {
+        cargar_datos_modal_idiomas(id);
+        $('#modal_agregar_idioma').modal('show');
+        $('#lbl_nombre_idioma').html('Editar Idioma');
+        $('#btn_guardar_idioma').html('<i class="bx bx-save"></i>Editar');
+        $('#btn_eliminar_idiomas').show();
+    }
+
+>>>>>>> 5becd33b5982b3d4f37f3c1589cf1def35303f49
     function borrar_datos_idioma() {
         id = $('#txt_idiomas_id').val();
         Swal.fire({
@@ -183,6 +194,8 @@
         //Cambiar texto
         $('#lbl_nombre_idioma').html('Agregar Idioma');
         $('#btn_guardar_idioma').html('<i class="bx bx-save"></i>Guardar');
+
+        $('#btn_eliminar_idiomas').hide();
     }
 
     //Funcion para validar las fechas de ingreso
@@ -305,9 +318,9 @@
                 <!-- Modal footer -->
                 <div class="modal-footer d-flex justify-content-center">
                     <button type="button" class="btn btn-success btn-sm px-4 m-1" id="btn_guardar_idioma" onclick="insertar_editar_idiomas(); validar_fechas_idioma();"><i class="bx bx-save"></i>Guardar</button>
-                    <button type="button" class="btn btn-danger btn-sm px-4 m-1" id="btn_eliminar_formacion" onclick="borrar_datos_idioma();"><i class="bx bx-trash"></i>Eliminar</button>
+                    <button type="button" style="display: none;" class="btn btn-danger btn-sm px-4 m-1" id="btn_eliminar_idiomas" onclick="borrar_datos_idioma();"><i class="bx bx-trash"></i>Eliminar</button>
                 </div>
-             
+
             </form>
         </div>
     </div>
