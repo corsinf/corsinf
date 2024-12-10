@@ -86,51 +86,14 @@
         });
     }
 
-    //* Función para editar el registro de idiomas
-    // function abrir_modal_idiomas(id) {
-    //     cargar_datos_modal_idiomas(id);
-    //     $('#modal_agregar_idioma').modal('show');
-    //     $('#lbl_nombre_idioma').html('Editar Idioma');
-    //     $('#btn_guardar_idioma').html('<i class="bx bx-save"></i>Editar');
-    // }
-
-//     function abrir_modal_idiomas(id) {
-//     console.log('ID:', id);
-//     cargar_datos_modal_idiomas(id);
-//     $('#modal_agregar_idioma').modal('show');
-
-//     if (id === '') {
-//         console.log('agregar nuevo idioma');
-//         $('#lbl_nombre_idioma').html('Agregar Idioma');
-//         $('#btn_guardar_idioma').html('<i class="bx bx-save"></i>Guardar');
-//         $('#btn_eliminar_formacion').addClass('d-none');
-//         console.log('botón oculto');
-//     } else {
-//         $('#lbl_nombre_idioma').html('Editar Idioma');
-//         $('#btn_guardar_idioma').html('<i class="bx bx-save"></i>Editar');
-//         $('#btn_eliminar_formacion').removeClass('d-none');
-//         console.log('botón visible');
-//     }
-// }
-
-function abrir_modal_idiomas(id) {
-    console.log('ID:', id);
-    cargar_datos_modal_idiomas(id);
-    $('#modal_agregar_idioma').modal('show');
-
-    if (id === '') {
-        console.log('agregar nuevo idioma');
-        $('#lbl_nombre_idioma').html('Agregar Idioma');
-        $('#btn_guardar_idioma').html('<i class="bx bx-save"></i>Guardar');
-        $('#btn_eliminar_formacion').hide();
-        console.log('botón oculto');
-    } else {
+    function abrir_modal_idiomas(id) {
+        cargar_datos_modal_idiomas(id);
+        $('#modal_agregar_idioma').modal('show');
         $('#lbl_nombre_idioma').html('Editar Idioma');
         $('#btn_guardar_idioma').html('<i class="bx bx-save"></i>Editar');
-        $('#btn_eliminar_formacion').show();
-        console.log('botón visible');
+        $('#btn_eliminar_idiomas').show();
     }
-}
+
     function borrar_datos_idioma() {
         id = $('#txt_idiomas_id').val();
         Swal.fire({
@@ -182,6 +145,8 @@ function abrir_modal_idiomas(id) {
         //Cambiar texto
         $('#lbl_nombre_idioma').html('Agregar Idioma');
         $('#btn_guardar_idioma').html('<i class="bx bx-save"></i>Guardar');
+
+        $('#btn_eliminar_idiomas').hide();
     }
 
     //Funcion para validar las fechas de ingreso
@@ -304,9 +269,9 @@ function abrir_modal_idiomas(id) {
                 <!-- Modal footer -->
                 <div class="modal-footer d-flex justify-content-center">
                     <button type="button" class="btn btn-success btn-sm px-4 m-1" id="btn_guardar_idioma" onclick="insertar_editar_idiomas(); validar_fechas_idioma();"><i class="bx bx-save"></i>Guardar</button>
-                    <button type="button" class="btn btn-danger btn-sm px-4 m-1" id="btn_eliminar_formacion" onclick="borrar_datos_idioma();"><i class="bx bx-trash"></i>Eliminar</button>
+                    <button type="button" style="display: none;" class="btn btn-danger btn-sm px-4 m-1" id="btn_eliminar_idiomas" onclick="borrar_datos_idioma();"><i class="bx bx-trash"></i>Eliminar</button>
                 </div>
-             
+
             </form>
         </div>
     </div>
