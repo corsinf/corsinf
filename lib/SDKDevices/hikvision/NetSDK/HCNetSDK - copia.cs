@@ -1,15 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace libreriasHik
+namespace CorsinfSDKHik.NetSDK
 {
-    public class CHCNetSDK
+    public class CHCNetSDK_copia
     {
-
         #region HCNetSDK.dll macro definition
         //macro definition
         #region common use
@@ -95,7 +90,7 @@ namespace libreriasHik
 
         public const int MAX_ANALOG_CHANNUM = 32;      //32 analog channels in total
         public const int MAX_IP_CHANNEL = 32;      //9000 DVR can connect 32 IP channels
-        public const int MAX_CHANNUM_V30 = (MAX_ANALOG_CHANNUM + MAX_IP_CHANNEL);   //64
+        public const int MAX_CHANNUM_V30 = MAX_ANALOG_CHANNUM + MAX_IP_CHANNEL;   //64
         public const int MAX_CHANNUM_V40 = 512;
         public const int MAX_IP_DEVICE_V40 = 64;      //Maximum number of IP devices that can be added, the value is 64, including IVMS-2000
         public const int DEV_ID_LEN = 32;
@@ -641,7 +636,7 @@ namespace libreriasHik
 
         #region common use
 
-        [StructLayoutAttribute(LayoutKind.Sequential)]
+        [StructLayout(LayoutKind.Sequential)]
         public struct NET_DVR_DATE
         {
             public ushort wYear;        //year
@@ -650,7 +645,7 @@ namespace libreriasHik
         }
 
 
-        [StructLayoutAttribute(LayoutKind.Sequential)]
+        [StructLayout(LayoutKind.Sequential)]
         public struct NET_DVR_SIMPLE_DAYTIME
         {
             public byte byHour; //hour
@@ -660,7 +655,7 @@ namespace libreriasHik
         }
 
         // Time correction structure
-        [StructLayoutAttribute(LayoutKind.Sequential)]
+        [StructLayout(LayoutKind.Sequential)]
         public struct NET_DVR_TIME
         {
             public int dwYear;
@@ -671,7 +666,7 @@ namespace libreriasHik
             public int dwSecond;
         }
 
-        [StructLayoutAttribute(LayoutKind.Sequential)]
+        [StructLayout(LayoutKind.Sequential)]
         public struct NET_DVR_TIME_EX
         {
             public ushort wYear;
@@ -902,39 +897,39 @@ namespace libreriasHik
             EVENT_ACS_HUMAN_DETECT_FAIL
         }
 
-        [StructLayoutAttribute(LayoutKind.Sequential)]
+        [StructLayout(LayoutKind.Sequential)]
         public struct NET_DVR_XML_CONFIG_INPUT
         {
             public uint dwSize;                    //size of NET_DVR_XML_CONFIG_INPUT
-            public IntPtr lpRequestUrl;                //command string
+            public nint lpRequestUrl;                //command string
             public uint dwRequestUrlLen;            //command string length
-            public IntPtr lpInBuffer;                //input buffer ，XML format
+            public nint lpInBuffer;                //input buffer ，XML format
             public uint dwInBufferSize;            //input buffer length
             public uint dwRecvTimeOut;                //receive timeout，unit：ms，0 represent 5s
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 32)]
             public byte[] byRes;  //reserve
         }
 
-        [StructLayoutAttribute(LayoutKind.Sequential)]
+        [StructLayout(LayoutKind.Sequential)]
         public struct NET_DVR_XML_CONFIG_OUTPUT
         {
             public uint dwSize;                    //size of NET_DVR_XML_CONFIG_OUTPUT
-            public IntPtr lpOutBuffer;                //output buffer，XMLformat
+            public nint lpOutBuffer;                //output buffer，XMLformat
             public uint dwOutBufferSize;            //input buffer length
             public uint dwReturnedXMLSize;            //the real receive Xml size
-            public IntPtr lpStatusBuffer;            //return status(XML format),no assignment with success, If you don't care about it ,just set it NULL
+            public nint lpStatusBuffer;            //return status(XML format),no assignment with success, If you don't care about it ,just set it NULL
             public uint dwStatusSize;                //status length(unit byte)
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 32)]
             public byte[] byRes;  //reserve
         }
 
-        [StructLayoutAttribute(LayoutKind.Sequential)]
+        [StructLayout(LayoutKind.Sequential)]
         public struct NET_DVR_JSON_DATA_CFG
         {
             public uint dwSize;                    //size of NET_DVR_JSON_DATA_CFG
-            public IntPtr lpJsonData;                //Json data
+            public nint lpJsonData;                //Json data
             public uint dwJsonDataSize;            //Json data size
-            public IntPtr lpPicData;                //picture data
+            public nint lpPicData;                //picture data
             public uint dwPicDataSize;            //picture data size
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 256)]
             public byte[] byRes;  //reserve
@@ -944,15 +939,15 @@ namespace libreriasHik
 
         #region acs event upload
 
-        [StructLayoutAttribute(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
+        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
         public struct NET_DVR_LOG_V30
         {
             public NET_DVR_TIME strLogTime;
             public uint dwMajorType;//Main type 1- alarm;  2- abnormal;  3- operation;  0xff- all 
             public uint dwMinorType; //Hypo- Type 0- all; 
-            [MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = MAX_NAMELEN, ArraySubType = UnmanagedType.I1)]
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = MAX_NAMELEN, ArraySubType = UnmanagedType.I1)]
             public byte[] sPanelUser;//user ID for local panel operation
-            [MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = MAX_NAMELEN, ArraySubType = UnmanagedType.I1)]
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = MAX_NAMELEN, ArraySubType = UnmanagedType.I1)]
             public byte[] sNetUser;//user ID for network operation
             public NET_DVR_IPADDR struRemoteHostAddr;//remote host IP
             public uint dwParaType;//parameter type,  for 9000 series MINOR_START_VT/MINOR_STOP_VT,  channel of the voice talking
@@ -961,7 +956,7 @@ namespace libreriasHik
             public uint dwAlarmInPort;//alarm input port
             public uint dwAlarmOutPort;//alarm output port
             public uint dwInfoLen;
-            [MarshalAsAttribute(UnmanagedType.ByValTStr, SizeConst = LOG_INFO_LEN)]
+            [MarshalAs(UnmanagedType.ByValTStr, SizeConst = LOG_INFO_LEN)]
             public string sInfo;
         }
 
@@ -969,10 +964,10 @@ namespace libreriasHik
         public struct NET_DVR_ACS_EVENT_INFO
         {
             public uint dwSize;
-            [MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = ACS_CARD_NO_LEN, ArraySubType = UnmanagedType.I1)]
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = ACS_CARD_NO_LEN, ArraySubType = UnmanagedType.I1)]
             public byte[] byCardNo; // card No, 0 means invalid 
             public byte byCardType;
-            public byte byWhiteListNo;  // white list No, 1-8, 0 means invalid
+            public byte byAllowListNo;
             public byte byReportChannel; // report channel, 1-alarmin updata, 2-center group 1, 3-center group 2, 0 means invalid
             public byte byCardReaderKind; // card reader type: 0-invalid, 1-IC card reader, 2-Id card reader, 3-Qr code reader, 4-Fingerprint head
             public uint dwCardReaderNo;  // card reader No, 0 means invalid
@@ -991,10 +986,10 @@ namespace libreriasHik
             public byte byInternetAccess;  // Internet access ID (1-uplink network port 1, 2-uplink network port 2,3- downstream network interface 1
             public byte byType; // protection zone type, 0-real time, 1-24 hours, 2-delay, 3-internal, 4-the key, 5-fire, 6-perimeter, 7-24 hours of silent
             // 8-24 hours auxiliary, 9-24 hours vibration, 10-door emergency open, 11-door emergency shutdown, 0xff-null
-            [MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = MACADDR_LEN, ArraySubType = UnmanagedType.I1)]
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = MACADDR_LEN, ArraySubType = UnmanagedType.I1)]
             public byte[] byMACAddr; // mac addr 0 means invalid
             public byte bySwipeCardType;// swipe card type, 0-invalid,1-Qr code
-            [MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = 13, ArraySubType = UnmanagedType.I1)]
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 13, ArraySubType = UnmanagedType.I1)]
             public byte[] byRes;
         }
 
@@ -1005,19 +1000,19 @@ namespace libreriasHik
             public uint dwMajor;  // alarm major, reference to macro
             public uint dwMinor;  // alarm minor, reference to macro
             public NET_DVR_TIME struTime;
-            [MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = MAX_NAMELEN, ArraySubType = UnmanagedType.I1)]
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = MAX_NAMELEN, ArraySubType = UnmanagedType.I1)]
             public byte[] sNetUser;  // net operator user
             public NET_DVR_IPADDR struRemoteHostAddr; // remote host address
             public NET_DVR_ACS_EVENT_INFO struAcsEventInfo;
             public uint dwPicDataLen; // picture length, when 0 ,means has no picture
-            public IntPtr pPicData;  // picture data
-            [MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = 24, ArraySubType = UnmanagedType.I1)]
+            public nint pPicData;  // picture data
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 24, ArraySubType = UnmanagedType.I1)]
             public byte[] byRes;
         }
 
 
         //Alarm Device Infor
-        [StructLayoutAttribute(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
+        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
         public struct NET_DVR_ALARMER
         {
             public byte byUserIDValid; /* Whether userID is valid,  0- invalid 1- valid. */
@@ -1029,26 +1024,26 @@ namespace libreriasHik
             public byte byDeviceIPValid; /* Whether device IP is valid,  0- invalid 1- valid.*/
             public byte bySocketIPValid; /* Whether socket IP is valid,  0- invalid 1- valid. */
             public int lUserID; /* NET_DVR_Login () effective when establishing alarm upload channel*/
-            [MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = SERIALNO_LEN, ArraySubType = UnmanagedType.I1)]
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = SERIALNO_LEN, ArraySubType = UnmanagedType.I1)]
             public byte[] sSerialNumber; /* Serial number. */
             public uint dwDeviceVersion; /* Version number,  2 high byte means the major version,  2 low byte means the minor version*/
-            [MarshalAsAttribute(UnmanagedType.ByValTStr, SizeConst = NAME_LEN)]
+            [MarshalAs(UnmanagedType.ByValTStr, SizeConst = NAME_LEN)]
             public string sDeviceName; /* Device name. */
-            [MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = MACADDR_LEN, ArraySubType = UnmanagedType.I1)]
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = MACADDR_LEN, ArraySubType = UnmanagedType.I1)]
             public byte[] byMacAddr; /* MAC address */
             public ushort wLinkPort; /* link port */
-            [MarshalAsAttribute(UnmanagedType.ByValTStr, SizeConst = 128)]
+            [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 128)]
             public string sDeviceIP; /* IP address */
-            [MarshalAsAttribute(UnmanagedType.ByValTStr, SizeConst = 128)]
+            [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 128)]
             public string sSocketIP; /* alarm push- mode socket IP address. */
             public byte byIpProtocol;  /* IP protocol:  0- IPV4;  1- IPV6. */
-            [MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = 11, ArraySubType = UnmanagedType.I1)]
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 11, ArraySubType = UnmanagedType.I1)]
             public byte[] byRes2;
         }
 
 
         //Alarm protection structure parameters
-        [StructLayoutAttribute(LayoutKind.Sequential)]
+        [StructLayout(LayoutKind.Sequential)]
         public struct NET_DVR_SETUPALARM_PARAM
         {
             public uint dwSize;
@@ -1069,7 +1064,7 @@ namespace libreriasHik
             public byte byBrokenNetHttp;
             public ushort wTaskNo;//Tasking number and the (field dwTaskNo corresponding data upload NET_DVR_VEHICLE_RECOG_RESULT the same time issued a task structure NET_DVR_VEHICLE_RECOG_COND corresponding fields in dwTaskNo
             public byte byDeployType;//deploy type:0-client deploy,1-real time deploy
-            [MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = 3, ArraySubType = UnmanagedType.I1)]
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 3, ArraySubType = UnmanagedType.I1)]
             public byte[] byRes1;
             public byte byAlarmTypeURL;//bit0-(NET_DVR_FACESNAP_RESULT),0-binary,1-URL
             public byte byCustomCtrl;//Bit0- Support the copilot face picture upload: 0-Upload,1-Do not upload
@@ -1078,19 +1073,19 @@ namespace libreriasHik
         #endregion
 
         #region card parameters configuration
-        [StructLayoutAttribute(LayoutKind.Sequential)]
+        [StructLayout(LayoutKind.Sequential)]
         public struct NET_DVR_VALID_PERIOD_CFG
         {
             public byte byEnable; //whether to enable , 0-disable 1-enable
-            [MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = 3, ArraySubType = UnmanagedType.I1)]
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 3, ArraySubType = UnmanagedType.I1)]
             public byte[] byRes1;
             public NET_DVR_TIME_EX struBeginTime; //valid begin time
             public NET_DVR_TIME_EX struEndTime; //valid end time 
-            [MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = 32, ArraySubType = UnmanagedType.I1)]
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 32, ArraySubType = UnmanagedType.I1)]
             public byte[] byRes2;
         }
 
-        [StructLayoutAttribute(LayoutKind.Sequential)]
+        [StructLayout(LayoutKind.Sequential)]
         public struct NET_DVR_CARD_CFG_V50
         {
             public uint dwSize;
@@ -1111,37 +1106,37 @@ namespace libreriasHik
             // #define CARD_PARAM_DEPARTMENT_NO    0x00001000  //department no
             // #define CARD_SCHEDULE_PLAN_NO       0x00002000  //schedule plan no
             // #define CARD_SCHEDULE_PLAN_TYPE     0x00004000  //schedule plan type
-            [MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = ACS_CARD_NO_LEN, ArraySubType = UnmanagedType.I1)]
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = ACS_CARD_NO_LEN, ArraySubType = UnmanagedType.I1)]
             public byte[] byCardNo; //card No
             public byte byCardValid; //whether is a valid card,0-invalid,1-valid(use to delete card, 0 means delete card when setting, it will be 1 when getting)
             public byte byCardType;
             public byte byLeaderCard; //whether is leader card, 0-no, 1-yes
             public byte byRes1;
-            [MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = MAX_DOOR_NUM_256, ArraySubType = UnmanagedType.I1)]
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = MAX_DOOR_NUM_256, ArraySubType = UnmanagedType.I1)]
             public byte[] byDoorRight; //door right (floor right), accord to bit, 1-has right 0-no right, from low bit to high bit means door 1-N have right
             public NET_DVR_VALID_PERIOD_CFG struValid; //valid period parameter
-            [MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = MAX_GROUP_NUM_128, ArraySubType = UnmanagedType.I1)]
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = MAX_GROUP_NUM_128, ArraySubType = UnmanagedType.I1)]
             public byte[] byBelongGroup; //Subordinate to the group, in public bytes, 1 - belongs to, 0 - does not belong to 
-            [MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = CARD_PASSWORD_LEN, ArraySubType = UnmanagedType.I1)]
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = CARD_PASSWORD_LEN, ArraySubType = UnmanagedType.I1)]
             public byte[] byCardPassword; //card password 
-            [MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = MAX_DOOR_NUM_256 * MAX_CARD_RIGHT_PLAN_NUM, ArraySubType = UnmanagedType.I1)]
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = MAX_DOOR_NUM_256 * MAX_CARD_RIGHT_PLAN_NUM, ArraySubType = UnmanagedType.I1)]
             public ushort[] wCardRightPlan; //card right plan, value is from plan template No. use or method when same door has different plan template
             public uint dwMaxSwipeTime; //max card time, 0 means infinite time
             public uint dwSwipeTime; //has swiped card
             public ushort wRoomNumber;  //room number
             public short wFloorNumber;   //floor number
             public uint dwEmployeeNo;   //employee no
-            [MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = NAME_LEN, ArraySubType = UnmanagedType.I1)]
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = NAME_LEN, ArraySubType = UnmanagedType.I1)]
             public byte[] byName;   //name
             public ushort wDepartmentNo;   //department no
             public ushort wSchedulePlanNo;   //schedule plan no
             public byte bySchedulePlanType;  //schedule plan type:0-no mean,1-personal,2-department
-            [MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = 3, ArraySubType = UnmanagedType.I1)]
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 3, ArraySubType = UnmanagedType.I1)]
             public byte[] byRes2;
             public uint dwLockID;
-            [MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = MAX_LOCK_CODE_LEN, ArraySubType = UnmanagedType.I1)]
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = MAX_LOCK_CODE_LEN, ArraySubType = UnmanagedType.I1)]
             public byte[] byLockCode;
-            [MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = MAX_DOOR_CODE_LEN, ArraySubType = UnmanagedType.I1)]
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = MAX_DOOR_CODE_LEN, ArraySubType = UnmanagedType.I1)]
             public byte[] byRoomCode;
 
             //bit，0-no，1-yes
@@ -1155,62 +1150,62 @@ namespace libreriasHik
             public uint dwPlanTemplate;
             public uint dwCardUserId;
             public byte byCardModelType;// 0-NULL,1-MIFARE,2-S50MIFARE,3-S70FM1208,4-CPUFM1216,5-CPUGMB Algorithm CPU,6-ID Card,7-NFC
-            [MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = 83, ArraySubType = UnmanagedType.I1)]
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 83, ArraySubType = UnmanagedType.I1)]
             public byte[] byRes3;
 
             public void Init()
             {
-                byDoorRight = new byte[CHCNetSDK.MAX_DOOR_NUM_256];
-                byBelongGroup = new byte[CHCNetSDK.MAX_GROUP_NUM_128];
-                wCardRightPlan = new ushort[CHCNetSDK.MAX_DOOR_NUM_256 * CHCNetSDK.MAX_CARD_RIGHT_PLAN_NUM];
-                byCardNo = new byte[CHCNetSDK.ACS_CARD_NO_LEN];
-                byCardPassword = new byte[CHCNetSDK.CARD_PASSWORD_LEN];
-                byName = new byte[CHCNetSDK.NAME_LEN];
+                byDoorRight = new byte[MAX_DOOR_NUM_256];
+                byBelongGroup = new byte[MAX_GROUP_NUM_128];
+                wCardRightPlan = new ushort[MAX_DOOR_NUM_256 * MAX_CARD_RIGHT_PLAN_NUM];
+                byCardNo = new byte[ACS_CARD_NO_LEN];
+                byCardPassword = new byte[CARD_PASSWORD_LEN];
+                byName = new byte[NAME_LEN];
                 byRes2 = new byte[3];
-                byLockCode = new byte[CHCNetSDK.MAX_LOCK_CODE_LEN];
-                byRoomCode = new byte[CHCNetSDK.MAX_DOOR_CODE_LEN];
+                byLockCode = new byte[MAX_LOCK_CODE_LEN];
+                byRoomCode = new byte[MAX_DOOR_CODE_LEN];
                 byRes3 = new byte[83];
             }
         }
 
-        [StructLayoutAttribute(LayoutKind.Sequential)]
+        [StructLayout(LayoutKind.Sequential)]
         public struct NET_DVR_CARD_CFG_COND
         {
             public uint dwSize;
             public uint dwCardNum; //card number, 0xffffffff means to get all card information when getting
             public byte byCheckCardNo; //whether to verify card No. 0-not to verify, 1-verify
-            [MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = 3, ArraySubType = UnmanagedType.I1)]
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 3, ArraySubType = UnmanagedType.I1)]
             public byte[] byRes1;
             public ushort wLocalControllerID; //On-site controller serial number, said to the local controller issued offline card parameters, 0 is access control host 
-            [MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = 2, ArraySubType = UnmanagedType.I1)]
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 2, ArraySubType = UnmanagedType.I1)]
             public byte[] byRes2;
             public uint dwLockID;  //lock ID
-            [MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = 20, ArraySubType = UnmanagedType.I1)]
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 20, ArraySubType = UnmanagedType.I1)]
             public byte[] byRes3;
         }
 
-        [StructLayoutAttribute(LayoutKind.Sequential)]
+        [StructLayout(LayoutKind.Sequential)]
         public struct NET_DVR_CARD_CFG_SEND_DATA
         {
             public uint dwSize;
-            [MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = ACS_CARD_NO_LEN, ArraySubType = UnmanagedType.I1)]
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = ACS_CARD_NO_LEN, ArraySubType = UnmanagedType.I1)]
             public byte[] byCardNo; //card No 
             public uint dwCardUserId;
-            [MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = 12, ArraySubType = UnmanagedType.I1)]
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 12, ArraySubType = UnmanagedType.I1)]
             public byte[] byRes;
         }
 
-        [StructLayoutAttribute(LayoutKind.Sequential)]
+        [StructLayout(LayoutKind.Sequential)]
         public struct NET_DVR_FACE_PARAM_COND
         {
             public uint dwSize;
-            [MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = ACS_CARD_NO_LEN, ArraySubType = UnmanagedType.I1)]
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = ACS_CARD_NO_LEN, ArraySubType = UnmanagedType.I1)]
             public byte[] byCardNo; //card No
-            [MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = MAX_CARD_READER_NUM_512, ArraySubType = UnmanagedType.I1)]
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = MAX_CARD_READER_NUM_512, ArraySubType = UnmanagedType.I1)]
             public byte[] byEnableCardReader; //enable card reader:0-invalid,1-valid
             public uint dwFaceNum; //face number
             public byte byFaceID; //face id:1-2,0xff present this card all face
-            [MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = 127, ArraySubType = UnmanagedType.I1)]
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 127, ArraySubType = UnmanagedType.I1)]
             public byte[] byRes;
 
             public void Init()
@@ -1221,19 +1216,19 @@ namespace libreriasHik
             }
         }
 
-        [StructLayoutAttribute(LayoutKind.Sequential)]
+        [StructLayout(LayoutKind.Sequential)]
         public struct NET_DVR_FACE_PARAM_CFG
         {
             public uint dwSize;
-            [MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = ACS_CARD_NO_LEN, ArraySubType = UnmanagedType.I1)]
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = ACS_CARD_NO_LEN, ArraySubType = UnmanagedType.I1)]
             public byte[] byCardNo; //card No
             public uint dwFaceLen; //face length
-            public IntPtr pFaceBuffer; //face buffer
-            [MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = MAX_CARD_READER_NUM_512, ArraySubType = UnmanagedType.I1)]
+            public nint pFaceBuffer; //face buffer
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = MAX_CARD_READER_NUM_512, ArraySubType = UnmanagedType.I1)]
             public byte[] byEnableCardReader; //enable card reader:0-invalid,1-valid
             public byte byFaceID; //face id:1-2,0xff present this card all face
             public byte byFaceDataType; //face data type:0-module(default),1-picture
-            [MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = 126, ArraySubType = UnmanagedType.I1)]
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 126, ArraySubType = UnmanagedType.I1)]
             public byte[] byRes;
 
             public void Init()
@@ -1244,49 +1239,49 @@ namespace libreriasHik
             }
         }
 
-        [StructLayoutAttribute(LayoutKind.Sequential)]
+        [StructLayout(LayoutKind.Sequential)]
         public struct NET_DVR_FACE_PARAM_STATUS
         {
             public uint dwSize;
-            [MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = ACS_CARD_NO_LEN, ArraySubType = UnmanagedType.I1)]
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = ACS_CARD_NO_LEN, ArraySubType = UnmanagedType.I1)]
             public byte[] byCardNo; //card No
-            [MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = MAX_CARD_READER_NUM_512, ArraySubType = UnmanagedType.I1)]
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = MAX_CARD_READER_NUM_512, ArraySubType = UnmanagedType.I1)]
             public byte[] byCardReaderRecvStatus; //card reader receive status:0-fail,1-success,2-face of poor quality,3-memory full,4-face already exist,5-illegal face ID
-            [MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = ERROR_MSG_LEN, ArraySubType = UnmanagedType.I1)]
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = ERROR_MSG_LEN, ArraySubType = UnmanagedType.I1)]
             public byte[] byErrorMsg; //error message:when byCardReaderRecvStatus is 4,present face already exist correspond card number
             public uint dwCardReaderNo; //card reader No
             public byte byTotalStatus; //total status:0-not set all card readers face,1-set all card readers face
             public byte byFaceID; //face id:1-2
-            [MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = 130, ArraySubType = UnmanagedType.I1)]
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 130, ArraySubType = UnmanagedType.I1)]
             public byte[] byRes;
         }
 
-        [StructLayoutAttribute(LayoutKind.Sequential)]
+        [StructLayout(LayoutKind.Sequential)]
         public struct NET_DVR_CAPTURE_FACE_COND
         {
             public uint dwSize;
-            [MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = 128, ArraySubType = UnmanagedType.I1)]
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 128, ArraySubType = UnmanagedType.I1)]
             public byte[] byRes;
         }
 
-        [StructLayoutAttribute(LayoutKind.Sequential)]
+        [StructLayout(LayoutKind.Sequential)]
         public struct NET_DVR_CAPTURE_FACE_CFG
         {
             public uint dwSize;
             public uint dwFaceTemplate1Size;
-            public IntPtr pFaceTemplate1Buffer;
+            public nint pFaceTemplate1Buffer;
             public uint dwFaceTemplate2Size;
-            public IntPtr pFaceTemplate2Buffer;
+            public nint pFaceTemplate2Buffer;
             public uint dwFacePicSize;
-            public IntPtr pFacePicBuffer;
+            public nint pFacePicBuffer;
             public byte byFaceQuality1;
             public byte byFaceQuality2;
             public byte byCaptureProgress;
-            [MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = 125, ArraySubType = UnmanagedType.I1)]
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 125, ArraySubType = UnmanagedType.I1)]
             public byte[] byRes;
         }
 
-        [StructLayoutAttribute(LayoutKind.Sequential)]
+        [StructLayout(LayoutKind.Sequential)]
         public struct NET_DVR_ACS_PARAM_TYPE
         {
             public uint dwSize;
@@ -1318,7 +1313,7 @@ namespace libreriasHik
 
         #region door parameters configuration
 
-        [StructLayoutAttribute(LayoutKind.Sequential)]
+        [StructLayout(LayoutKind.Sequential)]
         public struct NET_DVR_DOOR_CFG
         {
             public uint dwSize;
@@ -1365,7 +1360,7 @@ namespace libreriasHik
 
         #region group parameters configuration
 
-        [StructLayoutAttribute(LayoutKind.Sequential)]
+        [StructLayout(LayoutKind.Sequential)]
         public struct NET_DVR_GROUP_CFG
         {
             public uint dwSize;
@@ -1384,7 +1379,7 @@ namespace libreriasHik
 
         #region user parameters configuration
 
-        [StructLayoutAttribute(LayoutKind.Sequential)]
+        [StructLayout(LayoutKind.Sequential)]
         public struct NET_DVR_ALARM_DEVICE_USER
         {
             public uint dwSize; //Structure size
@@ -1430,7 +1425,7 @@ namespace libreriasHik
 
         #region cardreader configuration
 
-        [StructLayoutAttribute(LayoutKind.Sequential)]
+        [StructLayout(LayoutKind.Sequential)]
         public struct NET_DVR_CARD_READER_CFG_V50
         {
             public uint dwSize;
@@ -1485,7 +1480,7 @@ namespace libreriasHik
         #endregion
 
         #region fingerprint configuration
-        [StructLayoutAttribute(LayoutKind.Sequential)]
+        [StructLayout(LayoutKind.Sequential)]
         public struct NET_DVR_FINGER_PRINT_CFG
         {
             public uint dwSize;
@@ -1513,7 +1508,7 @@ namespace libreriasHik
             }
         }
 
-        [StructLayoutAttribute(LayoutKind.Sequential)]
+        [StructLayout(LayoutKind.Sequential)]
         public struct NET_DVR_FINGER_PRINT_STATUS
         {
             public uint dwSize;
@@ -1540,7 +1535,7 @@ namespace libreriasHik
             }
         }
 
-        [StructLayoutAttribute(LayoutKind.Sequential)]
+        [StructLayout(LayoutKind.Sequential)]
         public struct NET_DVR_FINGER_PRINT_INFO_COND
         {
             public uint dwSize;
@@ -1562,7 +1557,7 @@ namespace libreriasHik
             }
         }
 
-        [StructLayoutAttribute(LayoutKind.Sequential)]
+        [StructLayout(LayoutKind.Sequential)]
         public struct NET_DVR_FINGER_PRINT_CFG_V50
         {
             public uint dwSize;
@@ -1596,7 +1591,7 @@ namespace libreriasHik
             }
         }
 
-        [StructLayoutAttribute(LayoutKind.Sequential)]
+        [StructLayout(LayoutKind.Sequential)]
         public struct NET_DVR_FINGER_PRINT_STATUS_V50
         {
             public uint dwSize;
@@ -1629,7 +1624,7 @@ namespace libreriasHik
             }
         }
 
-        [StructLayoutAttribute(LayoutKind.Sequential)]
+        [StructLayout(LayoutKind.Sequential)]
         public struct NET_DVR_FINGER_PRINT_INFO_COND_V50
         {
             public uint dwSize;
@@ -1657,7 +1652,7 @@ namespace libreriasHik
             }
         }
 
-        [StructLayoutAttribute(LayoutKind.Sequential)]
+        [StructLayout(LayoutKind.Sequential)]
         public struct NET_DVR_FINGER_PRINT_BYCARD
         {
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = ACS_CARD_NO_LEN, ArraySubType = UnmanagedType.I1)]
@@ -1670,7 +1665,7 @@ namespace libreriasHik
             public byte[] byRes1;
         }
 
-        [StructLayoutAttribute(LayoutKind.Sequential)]
+        [StructLayout(LayoutKind.Sequential)]
         public struct NET_DVR_FINGER_PRINT_BYREADER
         {
             public uint dwCardReaderNo;
@@ -1683,7 +1678,7 @@ namespace libreriasHik
             public byte[] byRes;
         }
 
-        [StructLayoutAttribute(LayoutKind.Sequential)]
+        [StructLayout(LayoutKind.Sequential)]
         public struct NET_DVR_FINGER_PRINT_INFO_CTRL_BYCARD
         {
             public uint dwSize;
@@ -1697,7 +1692,7 @@ namespace libreriasHik
 
         }
 
-        [StructLayoutAttribute(LayoutKind.Sequential)]
+        [StructLayout(LayoutKind.Sequential)]
         public struct NET_DVR_FINGER_PRINT_INFO_CTRL_BYREADER
         {
             public uint dwSize;
@@ -1711,7 +1706,7 @@ namespace libreriasHik
 
         }
 
-        [StructLayoutAttribute(LayoutKind.Sequential)]
+        [StructLayout(LayoutKind.Sequential)]
         public struct NET_DVR_FINGER_PRINT_BYCARD_V50
         {
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = ACS_CARD_NO_LEN, ArraySubType = UnmanagedType.I1)]
@@ -1726,7 +1721,7 @@ namespace libreriasHik
             public byte[] byEmployeeNo;
         }
 
-        [StructLayoutAttribute(LayoutKind.Sequential)]
+        [StructLayout(LayoutKind.Sequential)]
         public struct NET_DVR_FINGER_PRINT_BYREADER_V50
         {
             public uint dwCardReaderNo;
@@ -1741,7 +1736,7 @@ namespace libreriasHik
             public byte[] byRes;
         }
 
-        [StructLayoutAttribute(LayoutKind.Sequential)]
+        [StructLayout(LayoutKind.Sequential)]
         public struct NET_DVR_FINGER_PRINT_INFO_CTRL_BYCARD_V50
         {
             public uint dwSize;
@@ -1753,7 +1748,7 @@ namespace libreriasHik
             public byte[] byRes;
         }
 
-        [StructLayoutAttribute(LayoutKind.Sequential)]
+        [StructLayout(LayoutKind.Sequential)]
         public struct NET_DVR_FINGER_PRINT_INFO_CTRL_BYREADER_V50
         {
             public uint dwSize;
@@ -1765,7 +1760,7 @@ namespace libreriasHik
             public byte[] byRes;
         }
 
-        [StructLayoutAttribute(LayoutKind.Sequential)]
+        [StructLayout(LayoutKind.Sequential)]
         public struct NET_DVR_FINGER_PRINT_INFO_STATUS_V50
         {
             public uint dwSize;
@@ -1800,7 +1795,7 @@ namespace libreriasHik
         #endregion
 
         #region Acs_Face_Param
-        [StructLayoutAttribute(LayoutKind.Sequential)]
+        [StructLayout(LayoutKind.Sequential)]
         public struct NET_DVR_FAILED_FACE_INFO
         {
             public int dwSize;
@@ -1812,7 +1807,7 @@ namespace libreriasHik
         }
 
 
-        [StructLayoutAttribute(LayoutKind.Sequential)]
+        [StructLayout(LayoutKind.Sequential)]
         public struct NET_DVR_FACE_PARAM_CTRL_ByCard
         {
             public int dwSize;
@@ -1832,7 +1827,7 @@ namespace libreriasHik
             }
         }
 
-        [StructLayoutAttribute(LayoutKind.Sequential)]
+        [StructLayout(LayoutKind.Sequential)]
         public struct NET_DVR_FACE_PARAM_CTRL_ByReader
         {
             public int dwSize;
@@ -1852,35 +1847,35 @@ namespace libreriasHik
             }
         }
 
-        [StructLayoutAttribute(LayoutKind.Sequential)]
+        [StructLayout(LayoutKind.Sequential)]
         public struct NET_DVR_FACE_PARAM_BYCARD
         {
-            [MarshalAs(UnmanagedType.ByValArray, SizeConst = CHCNetSDK.ACS_CARD_NO_LEN, ArraySubType = UnmanagedType.I1)]
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = ACS_CARD_NO_LEN, ArraySubType = UnmanagedType.I1)]
             public byte[] byCardNo;
-            [MarshalAs(UnmanagedType.ByValArray, SizeConst = CHCNetSDK.MAX_CARD_READER_NUM_512, ArraySubType = UnmanagedType.I1)]
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = MAX_CARD_READER_NUM_512, ArraySubType = UnmanagedType.I1)]
             public byte[] byEnableCardReader;
-            [MarshalAs(UnmanagedType.ByValArray, SizeConst = CHCNetSDK.MAX_FACE_NUM, ArraySubType = UnmanagedType.I1)]
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = MAX_FACE_NUM, ArraySubType = UnmanagedType.I1)]
             public byte[] byFaceID;
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 42, ArraySubType = UnmanagedType.I1)]
             public byte[] byRes1;
 
             public void Init()
             {
-                byCardNo = new byte[CHCNetSDK.ACS_CARD_NO_LEN];
-                byEnableCardReader = new byte[CHCNetSDK.MAX_CARD_READER_NUM_512];
-                byFaceID = new byte[CHCNetSDK.MAX_FACE_NUM];
+                byCardNo = new byte[ACS_CARD_NO_LEN];
+                byEnableCardReader = new byte[MAX_CARD_READER_NUM_512];
+                byFaceID = new byte[MAX_FACE_NUM];
                 byRes1 = new byte[42];
             }
         }
 
-        [StructLayoutAttribute(LayoutKind.Sequential)]
+        [StructLayout(LayoutKind.Sequential)]
         public struct NET_DVR_FACE_PARAM_BYREADER
         {
             public int dwCardReaderNo;
             public byte byClearAllCard;
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 3, ArraySubType = UnmanagedType.I1)]
             public byte[] byRes1;
-            [MarshalAs(UnmanagedType.ByValArray, SizeConst = CHCNetSDK.ACS_CARD_NO_LEN, ArraySubType = UnmanagedType.I1)]
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = ACS_CARD_NO_LEN, ArraySubType = UnmanagedType.I1)]
             public byte[] byCardNo;
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 548, ArraySubType = UnmanagedType.I1)]
             public byte[] byRes;
@@ -1888,7 +1883,7 @@ namespace libreriasHik
             public void Init()
             {
                 byRes1 = new byte[3];
-                byCardNo = new byte[CHCNetSDK.ACS_CARD_NO_LEN];
+                byCardNo = new byte[ACS_CARD_NO_LEN];
                 byRes = new byte[548];
             }
         }
@@ -1896,14 +1891,14 @@ namespace libreriasHik
 
         #region plan configuration
 
-        [StructLayoutAttribute(LayoutKind.Sequential)]
+        [StructLayout(LayoutKind.Sequential)]
         public struct NET_DVR_TIME_SEGMENT
         {
             public NET_DVR_SIMPLE_DAYTIME struBeginTime;  //begin time
             public NET_DVR_SIMPLE_DAYTIME struEndTime;    //end time
         }
 
-        [StructLayoutAttribute(LayoutKind.Sequential)]
+        [StructLayout(LayoutKind.Sequential)]
         public struct NET_DVR_SINGLE_PLAN_SEGMENT
         {
             public byte byEnable; //whether to enable, 1-enable, 0-disable
@@ -1923,7 +1918,7 @@ namespace libreriasHik
             }
         }
 
-        [StructLayoutAttribute(LayoutKind.Sequential)]
+        [StructLayout(LayoutKind.Sequential)]
         public struct NET_DVR_WEEK_PLAN_CFG
         {
             public uint dwSize;
@@ -1947,7 +1942,7 @@ namespace libreriasHik
             }
         }
 
-        [StructLayoutAttribute(LayoutKind.Sequential)]
+        [StructLayout(LayoutKind.Sequential)]
         public struct NET_DVR_HOLIDAY_PLAN_CFG
         {
             public uint dwSize;
@@ -1973,7 +1968,7 @@ namespace libreriasHik
             }
         }
 
-        [StructLayoutAttribute(LayoutKind.Sequential)]
+        [StructLayout(LayoutKind.Sequential)]
         public struct NET_DVR_HOLIDAY_GROUP_CFG
         {
             public uint dwSize;
@@ -1996,7 +1991,7 @@ namespace libreriasHik
             }
         }
 
-        [StructLayoutAttribute(LayoutKind.Sequential)]
+        [StructLayout(LayoutKind.Sequential)]
         public struct NET_DVR_PLAN_TEMPLATE
         {
             public uint dwSize;
@@ -2020,7 +2015,7 @@ namespace libreriasHik
             }
         }
 
-        [StructLayoutAttribute(LayoutKind.Sequential)]
+        [StructLayout(LayoutKind.Sequential)]
         public struct NET_DVR_HOLIDAY_PLAN_COND
         {
             public uint dwSize;
@@ -2034,7 +2029,7 @@ namespace libreriasHik
             }
         }
 
-        [StructLayoutAttribute(LayoutKind.Sequential)]
+        [StructLayout(LayoutKind.Sequential)]
         public struct NET_DVR_WEEK_PLAN_COND
         {
             public uint dwSize;
@@ -2049,7 +2044,7 @@ namespace libreriasHik
             }
         }
 
-        [StructLayoutAttribute(LayoutKind.Sequential)]
+        [StructLayout(LayoutKind.Sequential)]
         public struct NET_DVR_HOLIDAY_GROUP_COND
         {
             public uint dwSize;
@@ -2064,7 +2059,7 @@ namespace libreriasHik
             }
         }
 
-        [StructLayoutAttribute(LayoutKind.Sequential)]
+        [StructLayout(LayoutKind.Sequential)]
         public struct NET_DVR_PLAN_TEMPLATE_COND
         {
             public uint dwSize;
@@ -2115,7 +2110,7 @@ namespace libreriasHik
 
         #region card number associated with the user information parameter configuration
 
-        [StructLayoutAttribute(LayoutKind.Sequential)]
+        [StructLayout(LayoutKind.Sequential)]
         public struct NET_DVR_CARD_USER_INFO_CFG
         {
             public uint dwSize;
@@ -2128,10 +2123,10 @@ namespace libreriasHik
         #endregion
 
         #region user login managed
-        [StructLayoutAttribute(LayoutKind.Sequential)]
+        [StructLayout(LayoutKind.Sequential)]
         public struct NET_DVR_DEVICEINFO_V30
         {
-            [MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = SERIALNO_LEN, ArraySubType = UnmanagedType.I1)]
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = SERIALNO_LEN, ArraySubType = UnmanagedType.I1)]
             public byte[] sSerialNumber;    //serial number
             public byte byAlarmInPortNum;   //Number of Alarm input
             public byte byAlarmOutPortNum;  //Number of Alarm Output
@@ -2302,49 +2297,49 @@ namespace libreriasHik
          * [out] NET_DVR_DEVICEINFO_V30 - device informations
          * [out] pUser - user input data
          */
-        public delegate void LoginResultCallBack(int lUserID, uint dwResult, ref NET_DVR_DEVICEINFO_V30 lpDeviceInfo, IntPtr pUser);
+        public delegate void LoginResultCallBack(int lUserID, uint dwResult, ref NET_DVR_DEVICEINFO_V30 lpDeviceInfo, nint pUser);
 
-        [StructLayoutAttribute(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
+        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
         public struct NET_DVR_USER_LOGIN_INFO
         {
-            [MarshalAsAttribute(UnmanagedType.ByValTStr, SizeConst = NET_DVR_DEV_ADDRESS_MAX_LEN)]
+            [MarshalAs(UnmanagedType.ByValTStr, SizeConst = NET_DVR_DEV_ADDRESS_MAX_LEN)]
             public string sDeviceAddress;
             public byte byUseTransport;
             public ushort wPort;
-            [MarshalAsAttribute(UnmanagedType.ByValTStr, SizeConst = NET_DVR_LOGIN_USERNAME_MAX_LEN)]
+            [MarshalAs(UnmanagedType.ByValTStr, SizeConst = NET_DVR_LOGIN_USERNAME_MAX_LEN)]
             public string sUserName;
-            [MarshalAsAttribute(UnmanagedType.ByValTStr, SizeConst = NET_DVR_LOGIN_PASSWD_MAX_LEN)]
+            [MarshalAs(UnmanagedType.ByValTStr, SizeConst = NET_DVR_LOGIN_PASSWD_MAX_LEN)]
             public string sPassword;
             public LoginResultCallBack cbLoginResult;
-            public IntPtr pUser;
+            public nint pUser;
             public bool bUseAsynLogin;
             public byte byProxyType;
             public byte byUseUTCTime;
             public byte byLoginMode; //登录模式 0-Private 1-ISAPI 2-自适应（默认不采用自适应是因为自适应登录时，会对性能有较大影响，自适应时要同时发起ISAPI和Private登录）
             public byte byHttps;    //ISAPI登录时，是否使用HTTPS，0-不使用HTTPS，1-使用HTTPS 2-自适应（默认不采用自适应是因为自适应登录时，会对性能有较大影响，自适应时要同时发起HTTP和HTTPS）
             public int iProxyID;
-            [MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = 120, ArraySubType = UnmanagedType.I1)]
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 120, ArraySubType = UnmanagedType.I1)]
             public byte[] byRes3;
         }
 
-        [StructLayoutAttribute(LayoutKind.Sequential)]
+        [StructLayout(LayoutKind.Sequential)]
         public struct NET_DVR_PREVIEWINFO
         {
             public int lChannel;    //Channel no.
             public uint dwStreamType;   //Stream type 0-main stream,1-sub stream,2-third stream,3-forth stream, and so on
             public uint dwLinkMode; //Protocol type: 0-TCP, 1-UDP, 2-Muticast, 3-RTP,4-RTP/RTSP, 5-RSTP/HTTP
-            public IntPtr hPlayWnd; //Play window's handle;  set NULL to disable preview
+            public nint hPlayWnd; //Play window's handle;  set NULL to disable preview
             public uint bBlocked;   //If data stream requesting process is blocked or not: 0-no, 1-yes
             //if true, the SDK Connect failure return until 5s timeout  , not suitable for polling to preview.
             public uint bPassbackRecord;    //0- not enable  ,1 enable
             public byte byPreviewMode;  //Preview mode 0-normal preview,2-delay preview
-            [MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = STREAM_ID_LEN, ArraySubType = UnmanagedType.I1)]
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = STREAM_ID_LEN, ArraySubType = UnmanagedType.I1)]
             public byte[] byStreamID;   //Stream ID
             public byte byProtoType;    //0-private,1-RTSP
             public byte byRes1;
             public byte byVideoCodingType;
             public uint dwDisplayBufNum;    //soft player display buffer size(number of frames), range:1-50, default:1
-            [MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = 216, ArraySubType = UnmanagedType.I1)]
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 216, ArraySubType = UnmanagedType.I1)]
             public byte[] byRes;
         }
 
@@ -2352,16 +2347,16 @@ namespace libreriasHik
 
         #region network configuration
         /*IP address*/
-        [StructLayoutAttribute(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
+        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
         public struct NET_DVR_IPADDR
         {
 
             /// char[16]
-            [MarshalAsAttribute(UnmanagedType.ByValTStr, SizeConst = 16)]
+            [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 16)]
             public string sIpV4;
 
             /// BYTE[128]
-            [MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = 128, ArraySubType = UnmanagedType.I1)]
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 128, ArraySubType = UnmanagedType.I1)]
             public byte[] byIPv6;
 
             public void Init()
@@ -2371,7 +2366,7 @@ namespace libreriasHik
         }
 
         /* Network structure(sub struct)(9000 extension)*/
-        [StructLayoutAttribute(LayoutKind.Sequential)]
+        [StructLayout(LayoutKind.Sequential)]
         public struct NET_DVR_ETHERNET_V30
         {
             public NET_DVR_IPADDR struDVRIP;//DVR IP address
@@ -2379,41 +2374,41 @@ namespace libreriasHik
             public uint dwNetInterface;//net card: 1-10MBase-T 2-10MBase-T Full duplex 3-100MBase-TX 4-100M Full duplex 5-10M/100M adaptive
             public ushort wDVRPort;//port
             public ushort wMTU;//MTU default:1500。
-            [MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = MACADDR_LEN, ArraySubType = UnmanagedType.I1)]
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = MACADDR_LEN, ArraySubType = UnmanagedType.I1)]
             public byte[] byMACAddr;// mac address
-            [MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = 2, ArraySubType = UnmanagedType.I1)]
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 2, ArraySubType = UnmanagedType.I1)]
             public byte[] byRes;// reserve
         }
 
-        [StructLayoutAttribute(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
+        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
         public struct NET_DVR_PPPOECFG
         {
             public uint dwPPPOE;//0-disable,1-enable
-            [MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = NAME_LEN, ArraySubType = UnmanagedType.I1)]
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = NAME_LEN, ArraySubType = UnmanagedType.I1)]
             public byte[] sPPPoEUser;//PPPoE user name
-            [MarshalAsAttribute(UnmanagedType.ByValTStr, SizeConst = PASSWD_LEN)]
+            [MarshalAs(UnmanagedType.ByValTStr, SizeConst = PASSWD_LEN)]
             public string sPPPoEPassword;// PPPoE password
             public NET_DVR_IPADDR struPPPoEIP;//PPPoE IP address
         }
 
         //network configuration struct(9000 extension)
-        [StructLayoutAttribute(LayoutKind.Sequential)]
+        [StructLayout(LayoutKind.Sequential)]
         public struct NET_DVR_NETCFG_V30
         {
             public uint dwSize;
-            [MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = MAX_ETHERNET, ArraySubType = UnmanagedType.Struct)]
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = MAX_ETHERNET, ArraySubType = UnmanagedType.Struct)]
             public NET_DVR_ETHERNET_V30[] struEtherNet;//Ethernet 
-            [MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = 2, ArraySubType = UnmanagedType.Struct)]
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 2, ArraySubType = UnmanagedType.Struct)]
             public NET_DVR_IPADDR[] struRes1;//reserve
             public NET_DVR_IPADDR struAlarmHostIpAddr;// alarm host IP address
-            [MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = 2, ArraySubType = UnmanagedType.U2)]
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 2, ArraySubType = UnmanagedType.U2)]
             public ushort[] wRes2;
             public ushort wAlarmHostIpPort;
             public byte byUseDhcp;
             public byte byIPv6Mode;//IPv6 distribute methods，0-Routing announcement，1-manually，2-Enable the DHCP allocation
             public NET_DVR_IPADDR struDnsServer1IpAddr; // primary dns server
             public NET_DVR_IPADDR struDnsServer2IpAddr; // secondary dns server
-            [MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = MAX_DOMAIN_NAME, ArraySubType = UnmanagedType.I1)]
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = MAX_DOMAIN_NAME, ArraySubType = UnmanagedType.I1)]
             public byte[] byIpResolver;
             public ushort wIpResolverPort;
             public ushort wHttpPortNo;
@@ -2423,7 +2418,7 @@ namespace libreriasHik
             public byte byEnablePrivateMulticastDiscovery;  //Private multicast search，0~default，1~enable ，2-disable
             public byte byEnableOnvifMulticastDiscovery;  //Onvif multicast search，0~default，1~enable，2-disable
             public byte byEnableDNS; //DNS Atuo enable, 0-Res,1-open, 2-close
-            [MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = 61, ArraySubType = UnmanagedType.I1)]
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 61, ArraySubType = UnmanagedType.I1)]
             public byte[] byRes;
 
             public void Init()
@@ -2441,23 +2436,23 @@ namespace libreriasHik
 
 
         //Network Configure Structure(V50)
-        [StructLayoutAttribute(LayoutKind.Sequential)]
+        [StructLayout(LayoutKind.Sequential)]
         public struct NET_DVR_NETCFG_V50
         {
             public uint dwSize;
-            [MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = MAX_ETHERNET, ArraySubType = UnmanagedType.Struct)]
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = MAX_ETHERNET, ArraySubType = UnmanagedType.Struct)]
             public NET_DVR_ETHERNET_V30[] struEtherNet;        //Network Port
-            [MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = 2, ArraySubType = UnmanagedType.Struct)]
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 2, ArraySubType = UnmanagedType.Struct)]
             public NET_DVR_IPADDR[] struRes1;                            /*reserve*/
             public NET_DVR_IPADDR struAlarmHostIpAddr;                    /* IP address of remote management host */
-            [MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = 4, ArraySubType = UnmanagedType.I1)]
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4, ArraySubType = UnmanagedType.I1)]
             public byte[] byRes2;                                        /* reserve */
             public ushort wAlarmHostIpPort;                                /* Port of remote management Host */
             public byte byUseDhcp;                                      /* Whether to enable the DHCP 0xff- invalid 0- enabled 1- not enabled */
             public byte byIPv6Mode;                                        //IPv6 allocation, 0- routing announcement, 1- manually, 2- enable DHCP allocation 
             public NET_DVR_IPADDR struDnsServer1IpAddr;                    /* IP address of the domain name server 1  */
             public NET_DVR_IPADDR struDnsServer2IpAddr;                    /* IP address of the domain name server 2  */
-            [MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = MAX_DOMAIN_NAME, ArraySubType = UnmanagedType.I1)]
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = MAX_DOMAIN_NAME, ArraySubType = UnmanagedType.I1)]
             public byte[] byIpResolver;                    /* IP parse server domain name or IP address */
             public ushort wIpResolverPort;                                /* Parsing IP server port number */
             public ushort wHttpPortNo;                                    /* HTTP port number  */
@@ -2469,7 +2464,7 @@ namespace libreriasHik
             public ushort wAlarmHost2IpPort;                                /* Alarm host 2 port */
             public NET_DVR_IPADDR struAlarmHost2IpAddr;                    /* Alarm host 2 IP addresses */
             public byte byEnableDNS; //DNS Enabled, 0-close,1-open 
-            [MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = 599, ArraySubType = UnmanagedType.I1)]
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 599, ArraySubType = UnmanagedType.I1)]
             public byte[] byRes;
             public void Init()
             {
@@ -2487,7 +2482,7 @@ namespace libreriasHik
             }
         }
 
-        [StructLayoutAttribute(LayoutKind.Sequential)]
+        [StructLayout(LayoutKind.Sequential)]
         public struct NET_DVR_IPDEVINFO_V31
         {
             public byte byEnable;//Valid status for IP device
@@ -2496,17 +2491,17 @@ namespace libreriasHik
             //Quick add of device IP and protocol,  fill in the other parameters as system default 
             public byte byRes1;                     //reserved as 0
 
-            [MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = NAME_LEN, ArraySubType = UnmanagedType.I1)]
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = NAME_LEN, ArraySubType = UnmanagedType.I1)]
             public byte[] sUserName;//user name
-            [MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = PASSWD_LEN, ArraySubType = UnmanagedType.I1)]
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = PASSWD_LEN, ArraySubType = UnmanagedType.I1)]
             public byte[] sPassword;//Password
-            [MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = MAX_DOMAIN_NAME, ArraySubType = UnmanagedType.I1)]
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = MAX_DOMAIN_NAME, ArraySubType = UnmanagedType.I1)]
             public byte[] byDomain;//Domain name of the device
             public NET_DVR_IPADDR struIP;//IP
             public ushort wDVRPort;// Port number
-            [MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = DEV_ID_LEN, ArraySubType = UnmanagedType.I1)]
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = DEV_ID_LEN, ArraySubType = UnmanagedType.I1)]
             public byte[] szDeviceID;  //Device ID 
-            [MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = 2, ArraySubType = UnmanagedType.I1)]
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 2, ArraySubType = UnmanagedType.I1)]
             public byte[] byRes2;                 //Reserved as 0
 
             public void Init()
@@ -2523,78 +2518,78 @@ namespace libreriasHik
 
         #region event card linkage
 
-        [StructLayoutAttribute(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
+        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
         public struct NET_DVR_EVENT_CARD_LINKAGE_COND
         {
             public uint dwSize;
             public uint dwEventID; //Event ID 
             public ushort wLocalControllerID; //On the controller serial number [1, 64]
-            [MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = 106, ArraySubType = UnmanagedType.I1)]
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 106, ArraySubType = UnmanagedType.I1)]
             public byte[] byRes;
         }
 
-        [StructLayoutAttribute(LayoutKind.Sequential)]
+        [StructLayout(LayoutKind.Sequential)]
         public struct NET_DVR_EVENT_LINKAGE_INFO
         {
             public ushort wMainEventType;                     //main event type,0-device,1-alarmin,2-door,3-card reader
             public ushort wSubEventType;                      //sub event type
-            [MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = 28, ArraySubType = UnmanagedType.I1)]
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 28, ArraySubType = UnmanagedType.I1)]
             public byte[] byRes;
         }
 
 
-        [StructLayoutAttribute(LayoutKind.Explicit)]
+        [StructLayout(LayoutKind.Explicit)]
         public struct NET_DVR_EVETN_CARD_LINKAGE_UNION
         {
-            [MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = ACS_CARD_NO_LEN, ArraySubType = UnmanagedType.I1)]
-            [FieldOffsetAttribute(0)]
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = ACS_CARD_NO_LEN, ArraySubType = UnmanagedType.I1)]
+            [FieldOffset(0)]
             public byte[] byCardNo;
-            [FieldOffsetAttribute(0)]
+            [FieldOffset(0)]
             public NET_DVR_EVENT_LINKAGE_INFO struEventLinkage;
-            [MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = MACADDR_LEN, ArraySubType = UnmanagedType.I1)]
-            [FieldOffsetAttribute(0)]
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = MACADDR_LEN, ArraySubType = UnmanagedType.I1)]
+            [FieldOffset(0)]
             public byte[] byMACAddr;
-            [MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = NET_SDK_EMPLOYEE_NO_LEN, ArraySubType = UnmanagedType.I1)]
-            [FieldOffsetAttribute(0)]
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = NET_SDK_EMPLOYEE_NO_LEN, ArraySubType = UnmanagedType.I1)]
+            [FieldOffset(0)]
             public byte[] byEmployeeNo;
         }
 
 
-        [StructLayoutAttribute(LayoutKind.Sequential)]
+        [StructLayout(LayoutKind.Sequential)]
         public struct NET_DVR_EVENT_CARD_LINKAGE_CFG_V50
         {
             public uint dwSize;
             public byte byProMode;                          //linkage type,0-by event,1-by card, 2-by mac
-            [MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = 3, ArraySubType = UnmanagedType.I1)]
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 3, ArraySubType = UnmanagedType.I1)]
             public byte[] byRes1;
             public uint dwEventSourceID;                    //event source ID,when the main event is device ,it not use; when the main event is door ,it is the door No; when the main event is card reader ,it is the card reader No; when the main event is alarmin,it is the alarmin ID; 0xffffffff means all
             public NET_DVR_EVETN_CARD_LINKAGE_UNION uLinkageInfo;  //Linkage mode parameters 
-            [MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = MAX_ALARMHOST_ALARMOUT_NUM, ArraySubType = UnmanagedType.I1)]
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = MAX_ALARMHOST_ALARMOUT_NUM, ArraySubType = UnmanagedType.I1)]
             public byte[] byAlarmout;            //linkage alarmout NO,according to the values,0-not linkage,1-linkage
-            [MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = 32, ArraySubType = UnmanagedType.I1)]
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 32, ArraySubType = UnmanagedType.I1)]
             public byte[] byRes2;
-            [MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = MAX_DOOR_NUM_256, ArraySubType = UnmanagedType.I1)]
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = MAX_DOOR_NUM_256, ArraySubType = UnmanagedType.I1)]
             public byte[] byOpenDoor;     //whether linkage open door,according to the values,0-not linkage,1-linkage
-            [MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = MAX_DOOR_NUM_256, ArraySubType = UnmanagedType.I1)]
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = MAX_DOOR_NUM_256, ArraySubType = UnmanagedType.I1)]
             public byte[] byCloseDoor;    //whether linkage close door,according to the values,0-not linkage,1-linkage
-            [MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = MAX_DOOR_NUM_256, ArraySubType = UnmanagedType.I1)]
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = MAX_DOOR_NUM_256, ArraySubType = UnmanagedType.I1)]
             public byte[] byNormalOpen;   //whether linkage normal open door,according to the values,0-not linkage,1-linkage
-            [MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = MAX_DOOR_NUM_256, ArraySubType = UnmanagedType.I1)]
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = MAX_DOOR_NUM_256, ArraySubType = UnmanagedType.I1)]
             public byte[] byNormalClose;  //whether linkage normal close door,according to the values,0-not linkage,1-linkage
             public byte byMainDevBuzzer;                    //whether linkage main device buzzer, 0-not linkage,1-linkage
             public byte byCapturePic;                    //whether linkage capture picture, 0-no, 1-yes
             public byte byRecordVideo;                   //whether linkage record video, 0-no, 1-yes
-            [MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = 29, ArraySubType = UnmanagedType.I1)]
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 29, ArraySubType = UnmanagedType.I1)]
             public byte[] byRes3;
-            [MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = MAX_CARD_READER_NUM_512, ArraySubType = UnmanagedType.I1)]
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = MAX_CARD_READER_NUM_512, ArraySubType = UnmanagedType.I1)]
             public byte[] byReaderBuzzer; //linkage reader buzzer,according to the values,0-not linkage,1-linkage
-            [MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = MAX_ALARMHOST_ALARMOUT_NUM, ArraySubType = UnmanagedType.I1)]
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = MAX_ALARMHOST_ALARMOUT_NUM, ArraySubType = UnmanagedType.I1)]
             public byte[] byAlarmOutClose;            //Associated alarm output shut down, in bytes, 0-not linkage,1-linkage 
-            [MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = MAX_ALARMHOST_ALARMIN_NUM, ArraySubType = UnmanagedType.I1)]
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = MAX_ALARMHOST_ALARMIN_NUM, ArraySubType = UnmanagedType.I1)]
             public byte[] byAlarmInSetup;  //Associated slip protection, in bytes, 0-not linkage,1-linkage
-            [MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = MAX_ALARMHOST_ALARMIN_NUM, ArraySubType = UnmanagedType.I1)]
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = MAX_ALARMHOST_ALARMIN_NUM, ArraySubType = UnmanagedType.I1)]
             public byte[] byAlarmInClose;  //Removal associated protection zones, in bytes, 0-not linkage,1-linkage
-            [MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = 500, ArraySubType = UnmanagedType.I1)]
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 500, ArraySubType = UnmanagedType.I1)]
             public byte[] byRes;
 
             public void Init()
@@ -2614,26 +2609,26 @@ namespace libreriasHik
             }
         }
 
-        [StructLayoutAttribute(LayoutKind.Sequential)]
+        [StructLayout(LayoutKind.Sequential)]
         public struct NET_DVR_EVENT_CARD_LINKAGE_CFG_V51
         {
             public uint dwSize;
             public byte byProMode;                          //linkage type,0-by event,1-by card, 2-by mac, 3-by employee No
-            [MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = 3, ArraySubType = UnmanagedType.I1)]
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 3, ArraySubType = UnmanagedType.I1)]
             public byte[] byRes1;
             public uint dwEventSourceID;                    //event source ID,when the main event is device ,it not use; when the main event is door ,it is the door No; when the main event is card reader ,it is the card reader No; when the main event is alarmin,it is the alarmin ID; 0xffffffff means all
             public NET_DVR_EVETN_CARD_LINKAGE_UNION uLinkageInfo;  //Linkage mode parameters 
-            [MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = MAX_ALARMHOST_ALARMOUT_NUM, ArraySubType = UnmanagedType.I1)]
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = MAX_ALARMHOST_ALARMOUT_NUM, ArraySubType = UnmanagedType.I1)]
             public byte[] byAlarmout;            //linkage alarmout NO,according to the values,0-not linkage,1-linkage
-            [MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = 32, ArraySubType = UnmanagedType.I1)]
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 32, ArraySubType = UnmanagedType.I1)]
             public byte[] byRes2;
-            [MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = MAX_DOOR_NUM_256, ArraySubType = UnmanagedType.I1)]
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = MAX_DOOR_NUM_256, ArraySubType = UnmanagedType.I1)]
             public byte[] byOpenDoor;     //whether linkage open door,according to the values,0-not linkage,1-linkage
-            [MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = MAX_DOOR_NUM_256, ArraySubType = UnmanagedType.I1)]
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = MAX_DOOR_NUM_256, ArraySubType = UnmanagedType.I1)]
             public byte[] byCloseDoor;    //whether linkage close door,according to the values,0-not linkage,1-linkage
-            [MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = MAX_DOOR_NUM_256, ArraySubType = UnmanagedType.I1)]
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = MAX_DOOR_NUM_256, ArraySubType = UnmanagedType.I1)]
             public byte[] byNormalOpen;   //whether linkage normal open door,according to the values,0-not linkage,1-linkage
-            [MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = MAX_DOOR_NUM_256, ArraySubType = UnmanagedType.I1)]
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = MAX_DOOR_NUM_256, ArraySubType = UnmanagedType.I1)]
             public byte[] byNormalClose;  //whether linkage normal close door,according to the values,0-not linkage,1-linkage
             public byte byMainDevBuzzer;                    //whether linkage main device buzzer, 0-not linkage,1-linkage
             public byte byCapturePic;                    //whether linkage capture picture, 0-no, 1-yes
@@ -2641,19 +2636,19 @@ namespace libreriasHik
             public byte byMainDevStopBuzzer;                   //whether linkage record video, 0-no, 1-yes
             public ushort wAudioDisplayID;
             public byte byAudioDisplayMode;
-            [MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = 25, ArraySubType = UnmanagedType.I1)]
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 25, ArraySubType = UnmanagedType.I1)]
             public byte[] byRes3;
-            [MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = MAX_CARD_READER_NUM_512, ArraySubType = UnmanagedType.I1)]
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = MAX_CARD_READER_NUM_512, ArraySubType = UnmanagedType.I1)]
             public byte[] byReaderBuzzer; //linkage reader buzzer,according to the values,0-not linkage,1-linkage
-            [MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = MAX_ALARMHOST_ALARMOUT_NUM, ArraySubType = UnmanagedType.I1)]
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = MAX_ALARMHOST_ALARMOUT_NUM, ArraySubType = UnmanagedType.I1)]
             public byte[] byAlarmOutClose;            //Associated alarm output shut down, in bytes, 0-not linkage,1-linkage 
-            [MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = MAX_ALARMHOST_ALARMIN_NUM, ArraySubType = UnmanagedType.I1)]
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = MAX_ALARMHOST_ALARMIN_NUM, ArraySubType = UnmanagedType.I1)]
             public byte[] byAlarmInSetup;  //Associated slip protection, in bytes, 0-not linkage,1-linkage
-            [MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = MAX_ALARMHOST_ALARMIN_NUM, ArraySubType = UnmanagedType.I1)]
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = MAX_ALARMHOST_ALARMIN_NUM, ArraySubType = UnmanagedType.I1)]
             public byte[] byAlarmInClose;  //Removal associated protection zones, in bytes, 0-not linkage,1-linkage
-            [MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = MAX_CARD_READER_NUM_512, ArraySubType = UnmanagedType.I1)]
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = MAX_CARD_READER_NUM_512, ArraySubType = UnmanagedType.I1)]
             public byte[] byReaderStopBuzzer;  //Removal associated protection zones, in bytes, 0-not linkage,1-linkage
-            [MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = 512, ArraySubType = UnmanagedType.I1)]
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 512, ArraySubType = UnmanagedType.I1)]
             public byte[] byRes;
 
             public void Init()
@@ -2681,7 +2676,7 @@ namespace libreriasHik
         /* Alarm output parameters */
         /* Alarm output channel */
 
-        [StructLayoutAttribute(LayoutKind.Sequential)]
+        [StructLayout(LayoutKind.Sequential)]
         public struct NET_DVR_IPALARMOUTINFO
         {
             public byte byIPID;                     /* ID of IP device,  the range:  1 to MAX_IP_DEVICE */
@@ -2691,14 +2686,14 @@ namespace libreriasHik
         }
 
         /* IP Alarm output configuration */
-        [StructLayoutAttribute(LayoutKind.Sequential)]
+        [StructLayout(LayoutKind.Sequential)]
         public struct NET_DVR_IPALARMOUTCFG
         {
             public uint dwSize;                                                 /*struct size */
-            [MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = MAX_IP_ALARMOUT, ArraySubType = UnmanagedType.Struct)]
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = MAX_IP_ALARMOUT, ArraySubType = UnmanagedType.Struct)]
             public NET_DVR_IPALARMOUTINFO[] struIPAlarmOutInfo; /* IP alarm output */
         }
-        [StructLayoutAttribute(LayoutKind.Sequential)]
+        [StructLayout(LayoutKind.Sequential)]
         public struct NET_DVR_IPALARMOUTINFO_V40
         {
             public uint dwIPID;                    /* ID of IP device,  the range:  1 to MAX_IP_DEVICE*/
@@ -2707,19 +2702,19 @@ namespace libreriasHik
             public byte[] byRes;                 /* Reserved */
         }
 
-        [StructLayoutAttribute(LayoutKind.Sequential)]
+        [StructLayout(LayoutKind.Sequential)]
         public struct NET_DVR_IPALARMOUTCFG_V40
         {
             public uint dwSize;
             public uint dwCurIPAlarmOutNum;
-            [MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = MAX_IP_ALARMIN_V40, ArraySubType = UnmanagedType.Struct)]
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = MAX_IP_ALARMIN_V40, ArraySubType = UnmanagedType.Struct)]
             public NET_DVR_IPALARMOUTINFO_V40[] struIPAlarmOutInfo;
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 256, ArraySubType = UnmanagedType.I1)]
             public byte[] byRes;
         }
 
         /* IP Alarm input configuration */
-        [StructLayoutAttribute(LayoutKind.Sequential)]
+        [StructLayout(LayoutKind.Sequential)]
         public struct NET_DVR_IPALARMININFO
         {
             public byte byIPID;                     /* ID of IP device,  the range:  1 to MAX_IP_DEVICE */
@@ -2727,14 +2722,14 @@ namespace libreriasHik
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 18, ArraySubType = UnmanagedType.I1)]
             public byte[] byRes;                 /* Reserved */
         }
-        [StructLayoutAttribute(LayoutKind.Sequential)]
+        [StructLayout(LayoutKind.Sequential)]
         public struct NET_DVR_IPALARMINCFG
         {
             public uint dwSize;                                              /*struct size */
-            [MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = MAX_IP_ALARMIN, ArraySubType = UnmanagedType.Struct)]
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = MAX_IP_ALARMIN, ArraySubType = UnmanagedType.Struct)]
             public NET_DVR_IPALARMININFO[] struIPAlarmInInfo;  /* IP alarm input */
         }
-        [StructLayoutAttribute(LayoutKind.Sequential)]
+        [StructLayout(LayoutKind.Sequential)]
         public struct NET_DVR_IPALARMININFO_V40
         {
             public uint dwIPID;                    /* ID of IP device,  the range:  1 to MAX_IP_DEVICE */
@@ -2743,11 +2738,11 @@ namespace libreriasHik
             public byte[] byRes;
         }
 
-        [StructLayoutAttribute(LayoutKind.Sequential)]
+        [StructLayout(LayoutKind.Sequential)]
         public struct NET_DVR_IPALARMINCFG_V40
         {
             public uint dwSize;
-            [MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = MAX_IP_ALARMIN_V40, ArraySubType = UnmanagedType.Struct)]
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = MAX_IP_ALARMIN_V40, ArraySubType = UnmanagedType.Struct)]
             public NET_DVR_IPALARMININFO_V40[] struIPAlarmInInfo;/* IP alarmin */
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 256, ArraySubType = UnmanagedType.I1)]
             public byte[] byRes;
@@ -2778,7 +2773,7 @@ namespace libreriasHik
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = NAME_LEN, ArraySubType = UnmanagedType.I1)]
             public byte[] byDVRName;    //DVR Name
             public ushort wDVRSerialLen;           //Serial Length
-            [MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = 2, ArraySubType = UnmanagedType.U2)]
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 2, ArraySubType = UnmanagedType.U2)]
             public ushort[] byRes1;               //reserved
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = SERIALNO_LEN, ArraySubType = UnmanagedType.I1)]
             public byte[] byDVRSerialNumber;    //DVR Serial
@@ -3019,7 +3014,7 @@ namespace libreriasHik
         #endregion
 
         #region Remote Control
-        [StructLayoutAttribute(LayoutKind.Sequential)]
+        [StructLayout(LayoutKind.Sequential)]
         public struct NET_DVR_JPEGPARA
         {
             /*Note:  If encoding resolution is VGA, it supports grabbing 0=CIF,  1=QCIF,  2=D1 image.
@@ -3045,17 +3040,17 @@ namespace libreriasHik
         }
         #endregion
 
-        [StructLayoutAttribute(LayoutKind.Sequential)]
+        [StructLayout(LayoutKind.Sequential)]
         public struct NET_DVR_ACS_WORK_STATUS_V50
         {
             public uint dwSize;
-            [MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = MAX_DOOR_NUM_256, ArraySubType = UnmanagedType.I1)]
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = MAX_DOOR_NUM_256, ArraySubType = UnmanagedType.I1)]
             public byte[] byDoorLockStatus;//door lock status(relay status), 0 normally closed,1 normally open, 2 damage short - circuit alarm, 3 damage breaking alarm, 4 abnormal alarm
-            [MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = MAX_DOOR_NUM_256, ArraySubType = UnmanagedType.I1)]
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = MAX_DOOR_NUM_256, ArraySubType = UnmanagedType.I1)]
             public byte[] byDoorStatus; //Door status(floor status), 1 - dormancy, 2 - normally open state, 3 - normally closed state, 4 - ordinary state 
-            [MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = MAX_DOOR_NUM_256, ArraySubType = UnmanagedType.I1)]
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = MAX_DOOR_NUM_256, ArraySubType = UnmanagedType.I1)]
             public byte[] byMagneticStatus; //magnetic status 0 normally closed,1 normally open, 2 damage short - circuit alarm, 3 damage breaking alarm, 4 abnormal alarm
-            [MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = MAX_CASE_SENSOR_NUM, ArraySubType = UnmanagedType.I1)]
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = MAX_CASE_SENSOR_NUM, ArraySubType = UnmanagedType.I1)]
             public byte[] byCaseStatus; //case status, 0-no input, 1-input    
             public ushort wBatteryVoltage; //vattery voltage , multiply 10, unit: V
             public byte byBatteryLowVoltage; //Is battery in low voltage, 0-no 1-yes
@@ -3064,21 +3059,21 @@ namespace libreriasHik
             public byte byAntiSneakStatus; //anti sneak status, 0-close 1-open
             public byte byHostAntiDismantleStatus; //host anti dismantle status, 0-close, 1-open
             public byte byIndicatorLightStatus; //Indicator Light Status 0-offLine,1-Online
-            [MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = MAX_CARD_READER_NUM_512, ArraySubType = UnmanagedType.I1)]
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = MAX_CARD_READER_NUM_512, ArraySubType = UnmanagedType.I1)]
             public byte[] byCardReaderOnlineStatus; //card reader online status, 0-offline 1-online
-            [MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = MAX_CARD_READER_NUM_512, ArraySubType = UnmanagedType.I1)]
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = MAX_CARD_READER_NUM_512, ArraySubType = UnmanagedType.I1)]
             public byte[] byCardReaderAntiDismantleStatus; //card reader anti dismantle status, 0-close 1-open
-            [MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = MAX_CARD_READER_NUM_512, ArraySubType = UnmanagedType.I1)]
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = MAX_CARD_READER_NUM_512, ArraySubType = UnmanagedType.I1)]
             public byte[] byCardReaderVerifyMode; //card reader verify mode, 1-swipe 2-swipe+password 3-swipe card 4-swipe card or password
-            [MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = MAX_ALARMHOST_ALARMIN_NUM, ArraySubType = UnmanagedType.I1)]
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = MAX_ALARMHOST_ALARMIN_NUM, ArraySubType = UnmanagedType.I1)]
             public byte[] bySetupAlarmStatus;//alarm in setup alarm status,0- alarm in disarm status, 1 - alarm in arm status
-            [MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = MAX_ALARMHOST_ALARMIN_NUM, ArraySubType = UnmanagedType.I1)]
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = MAX_ALARMHOST_ALARMIN_NUM, ArraySubType = UnmanagedType.I1)]
             public byte[] byAlarmInStatus; //alarm in status, 0-alarm in no alarm, 1-alarm in has alarm 
-            [MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = MAX_ALARMHOST_ALARMOUT_NUM, ArraySubType = UnmanagedType.I1)]
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = MAX_ALARMHOST_ALARMOUT_NUM, ArraySubType = UnmanagedType.I1)]
             public byte[] byAlarmOutStatus; //alarm out status, 0-alarm out no alarm, 1-alarm out has alarm 
             public uint dwCardNum; //add card number
             public byte byFireAlarmStatus; //Fire alarm status is displayed: 0 - normal, short-circuit alarm 1 -, 2 - disconnect the alarm 
-            [MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = 123, ArraySubType = UnmanagedType.I1)]
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 123, ArraySubType = UnmanagedType.I1)]
             public byte[] byRes2;
 
             public void Init()
@@ -3103,11 +3098,11 @@ namespace libreriasHik
             public uint dwSize;
             public uint dwMajor;
             public uint dwMinor;
-            public CHCNetSDK.NET_DVR_TIME struStartTime;
-            public CHCNetSDK.NET_DVR_TIME struEndTime;
-            [MarshalAs(UnmanagedType.ByValArray, SizeConst = CHCNetSDK.ACS_CARD_NO_LEN, ArraySubType = UnmanagedType.I1)]
+            public NET_DVR_TIME struStartTime;
+            public NET_DVR_TIME struEndTime;
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = ACS_CARD_NO_LEN, ArraySubType = UnmanagedType.I1)]
             public byte[] byCardNo;
-            [MarshalAs(UnmanagedType.ByValArray, SizeConst = CHCNetSDK.NAME_LEN, ArraySubType = UnmanagedType.I1)]
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = NAME_LEN, ArraySubType = UnmanagedType.I1)]
             public byte[] byName;
             public uint dwBeginSerialNo;
             public byte byPicEnable;
@@ -3119,19 +3114,19 @@ namespace libreriasHik
             public ushort wInductiveEventType;
             public byte bySearchType;
             public byte byRes1;
-            [MarshalAs(UnmanagedType.ByValTStr, SizeConst = CHCNetSDK.NET_SDK_MONITOR_ID_LEN)]
+            [MarshalAs(UnmanagedType.ByValTStr, SizeConst = NET_SDK_MONITOR_ID_LEN)]
             public string szMonitorID;
-            [MarshalAs(UnmanagedType.ByValArray, SizeConst = CHCNetSDK.NET_SDK_EMPLOYEE_NO_LEN, ArraySubType = UnmanagedType.I1)]
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = NET_SDK_EMPLOYEE_NO_LEN, ArraySubType = UnmanagedType.I1)]
             public byte[] byEmployeeNo;
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 140, ArraySubType = UnmanagedType.I1)]
             public byte[] byRes;
 
             public void Init()
             {
-                byCardNo = new byte[CHCNetSDK.ACS_CARD_NO_LEN];
-                byName = new byte[CHCNetSDK.NAME_LEN];
+                byCardNo = new byte[ACS_CARD_NO_LEN];
+                byName = new byte[NAME_LEN];
                 byRes2 = new byte[2];
-                byEmployeeNo = new byte[CHCNetSDK.NET_SDK_EMPLOYEE_NO_LEN];
+                byEmployeeNo = new byte[NET_SDK_EMPLOYEE_NO_LEN];
                 byRes = new byte[140];
             }
         }
@@ -3144,13 +3139,13 @@ namespace libreriasHik
             public uint dwSize;
             public uint dwMajor;
             public uint dwMinor;
-            public CHCNetSDK.NET_DVR_TIME struTime;
-            [MarshalAs(UnmanagedType.ByValArray, SizeConst = CHCNetSDK.MAX_NAMELEN)]
+            public NET_DVR_TIME struTime;
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = MAX_NAMELEN)]
             public byte[] sNetUser;
-            public CHCNetSDK.NET_DVR_IPADDR struRemoteHostAddr;
-            public CHCNetSDK.NET_DVR_ACS_EVENT_DETAIL struAcsEventInfo;
+            public NET_DVR_IPADDR struRemoteHostAddr;
+            public NET_DVR_ACS_EVENT_DETAIL struAcsEventInfo;
             public uint dwPicDataLen;
-            public IntPtr pPicData;  // picture data
+            public nint pPicData;  // picture data
             public ushort wInductiveEventType;
             public byte byTimeType;
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 61)]
@@ -3160,10 +3155,10 @@ namespace libreriasHik
         public struct NET_DVR_ACS_EVENT_DETAIL
         {
             public uint dwSize;
-            [MarshalAs(UnmanagedType.ByValArray, SizeConst = CHCNetSDK.ACS_CARD_NO_LEN)]
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = ACS_CARD_NO_LEN)]
             public byte[] byCardNo;
             public byte byCardType;
-            public byte byWhiteListNo;
+            public byte byAllowListNo;
             public byte byReportChannel;
             public byte byCardReaderKind;
             public uint dwCardReaderNo;
@@ -3181,7 +3176,7 @@ namespace libreriasHik
             public ushort wLocalControllerID;//word
             public byte byInternetAccess;
             public byte byType;
-            [MarshalAs(UnmanagedType.ByValArray, SizeConst = CHCNetSDK.MACADDR_LEN)]
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = MACADDR_LEN)]
             public byte[] byMACAddr;
             public byte bySwipeCardType;
             public byte byRes2;
@@ -3196,7 +3191,7 @@ namespace libreriasHik
             public byte byCurrentVerifyMode;
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 2)]
             public byte[] byRe2;
-            [MarshalAs(UnmanagedType.ByValArray, SizeConst = CHCNetSDK.NET_SDK_EMPLOYEE_NO_LEN)]
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = NET_SDK_EMPLOYEE_NO_LEN)]
             public byte[] byEmployeeNo;
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 64)]
             public byte[] byRes;
@@ -3204,7 +3199,7 @@ namespace libreriasHik
 
         #region video call struct
 
-        [StructLayoutAttribute(LayoutKind.Sequential)]
+        [StructLayout(LayoutKind.Sequential)]
         public struct NET_DVR_VIDEO_CALL_COND
         {
             public uint dwSize;
@@ -3217,7 +3212,7 @@ namespace libreriasHik
             }
         }
 
-        [StructLayoutAttribute(LayoutKind.Sequential)]
+        [StructLayout(LayoutKind.Sequential)]
         public struct NET_DVR_VIDEO_CALL_PARAM
         {
             public uint dwSize;
@@ -3238,9 +3233,9 @@ namespace libreriasHik
 
         public struct NET_DVR_CLIENTINFO
         {
-            public Int32 lChannel;
+            public int lChannel;
             public uint lLinkMode;
-            public IntPtr hPlayWnd;
+            public nint hPlayWnd;
             public string sMultiCastIP;
         }
 
@@ -3282,7 +3277,7 @@ namespace libreriasHik
 
         /* Returns the last error code information of the operation */
         [DllImport(@"..\..\..\HCNetSDK\HCNetSDK.dll")]
-        public static extern IntPtr NET_DVR_GetErrorMsg(ref int pErrorNo);
+        public static extern nint NET_DVR_GetErrorMsg(ref int pErrorNo);
 
         /* Alarm host device user configuration function(following two:get and set)
          * [in] lUserID - NET_DVR_Login_V40 return value
@@ -3303,7 +3298,7 @@ namespace libreriasHik
          * [out] lpBytesReturned - pointer to the length of the data received, e.g. a int type pointer, can't be NULL
          */
         [DllImport(@"..\..\..\HCNetSDK\HCNetSDK.dll")]
-        public static extern bool NET_DVR_GetDVRConfig(int lUserID, uint dwCommand, int lChannel, IntPtr lpOutBuffer, uint dwOutBufferSize, ref uint lpBytesReturned);
+        public static extern bool NET_DVR_GetDVRConfig(int lUserID, uint dwCommand, int lChannel, nint lpOutBuffer, uint dwOutBufferSize, ref uint lpBytesReturned);
 
         /* Set device configuration information function
          * [in] lUserID - NET_DVR_Login_V40 return value
@@ -3313,7 +3308,7 @@ namespace libreriasHik
          * [in] dwInBufferSize- the send data buffer size, unit:byte
          */
         [DllImport(@"..\..\..\HCNetSDK\HCNetSDK.dll")]
-        public static extern bool NET_DVR_SetDVRConfig(int lUserID, uint dwCommand, int lChannel, IntPtr lpInBuffer, uint dwInBufferSize);
+        public static extern bool NET_DVR_SetDVRConfig(int lUserID, uint dwCommand, int lChannel, nint lpInBuffer, uint dwInBufferSize);
 
         /* Long connection call back function
          * [out] dwType - refer enum NET_SDK_CALLBACK_TYPE
@@ -3321,7 +3316,7 @@ namespace libreriasHik
          * [out] dwBufLen - the buffer size
          * [out] pUserData - pointer to user input data
          */
-        public delegate void RemoteConfigCallback(uint dwType, IntPtr lpBuffer, uint dwBufLen, IntPtr pUserData);
+        public delegate void RemoteConfigCallback(uint dwType, nint lpBuffer, uint dwBufLen, nint pUserData);
 
         // Long connection configuration function
         /* Start the remote configuration
@@ -3332,8 +3327,8 @@ namespace libreriasHik
          * [in] cbStateCallback - the callback function
          * [in] pUserData - pointer to user input data
          */
-        [DllImportAttribute(@"..\..\..\HCNetSDK\HCNetSDK.dll")]
-        public static extern int NET_DVR_StartRemoteConfig(int lUserID, uint dwCommand, IntPtr lpInBuffer, Int32 dwInBufferLen, RemoteConfigCallback cbStateCallback, IntPtr pUserData);
+        [DllImport(@"..\..\..\HCNetSDK\HCNetSDK.dll")]
+        public static extern int NET_DVR_StartRemoteConfig(int lUserID, uint dwCommand, nint lpInBuffer, int dwInBufferLen, RemoteConfigCallback cbStateCallback, nint pUserData);
 
         /* Send a long connection data
          * [in] lHandle - handle ,NET_DVR_StartRemoteConfig return value
@@ -3342,37 +3337,37 @@ namespace libreriasHik
          * [in] pSendBuf - a pointer to a buffer of send data, associated with dwDataType
          * [in] dwBufSize - the send data buffer size, unit:byte
          */
-        [DllImportAttribute(@"..\..\..\HCNetSDK\HCNetSDK.dll")]
-        public static extern bool NET_DVR_SendRemoteConfig(int lHandle, uint dwDataType, IntPtr pSendBuf, uint dwBufSize);
+        [DllImport(@"..\..\..\HCNetSDK\HCNetSDK.dll")]
+        public static extern bool NET_DVR_SendRemoteConfig(int lHandle, uint dwDataType, nint pSendBuf, uint dwBufSize);
 
         // stop a long connection
         // [in] lHandle - handle ,NET_DVR_StartRemoteConfig return value
-        [DllImportAttribute(@"..\..\..\HCNetSDK\HCNetSDK.dll")]
+        [DllImport(@"..\..\..\HCNetSDK\HCNetSDK.dll")]
         public static extern bool NET_DVR_StopRemoteConfig(int lHandle);
 
-        [DllImportAttribute(@"..\..\..\HCNetSDK\HCNetSDK.dll")]
-        public static extern int NET_DVR_Upgrade_V40(int lUserID, uint dwUpgradeType, string sFileName, IntPtr pInbuffer, Int32 dwInBufferLen);
+        [DllImport(@"..\..\..\HCNetSDK\HCNetSDK.dll")]
+        public static extern int NET_DVR_Upgrade_V40(int lUserID, uint dwUpgradeType, string sFileName, nint pInbuffer, int dwInBufferLen);
 
-        [DllImportAttribute(@"..\..\..\HCNetSDK\HCNetSDK.dll")]
+        [DllImport(@"..\..\..\HCNetSDK\HCNetSDK.dll")]
         public static extern int NET_DVR_GetUpgradeProgress(int lUpgradeHandle);
 
-        [DllImportAttribute(@"..\..\..\HCNetSDK\HCNetSDK.dll")]
+        [DllImport(@"..\..\..\HCNetSDK\HCNetSDK.dll")]
         public static extern int NET_DVR_CloseUpgradeHandle(int lUpgradeHandle);
 
         /* get long connection configuration status
          * [in] lHandle - handle ,NET_DVR_StartRemoteConfig return value
          * [out] pState - the return status pointer
          */
-        [DllImportAttribute(@"..\..\..\HCNetSDK\HCNetSDK.dll")]
-        public static extern bool NET_DVR_GetRemoteConfigState(int lHandle, IntPtr pState);
+        [DllImport(@"..\..\..\HCNetSDK\HCNetSDK.dll")]
+        public static extern bool NET_DVR_GetRemoteConfigState(int lHandle, nint pState);
 
         /* obtain the result of the information one by one
          * [in] lHandle - handle ,NET_DVR_StartRemoteConfig return value
          * [out] lpOutBuff - a pointer to a buffer to receive data(user manual for more details)
          * [in] dwOutBuffSize- the receive data buffer size, unit:byte
          */
-        [DllImportAttribute(@"..\..\..\HCNetSDK\HCNetSDK.dll")]
-        public static extern int NET_DVR_GetNextRemoteConfig(int lHandle, IntPtr lpOutBuff, uint dwOutBuffSize);
+        [DllImport(@"..\..\..\HCNetSDK\HCNetSDK.dll")]
+        public static extern int NET_DVR_GetNextRemoteConfig(int lHandle, nint lpOutBuff, uint dwOutBuffSize);
 
         /* Batch for device configuration information (with sending data)
          * [in] lUserID - NET_DVR_Login_V40 return value
@@ -3385,7 +3380,7 @@ namespace libreriasHik
          * [in] dwOutBufferSize- the receive data buffer size, unit:byte
          */
         [DllImport(@"..\..\..\HCNetSDK\HCNetSDK.dll")]
-        public static extern bool NET_DVR_GetDeviceConfig(int lUserID, uint dwCommand, uint dwCount, IntPtr lpInBuffer, uint dwInBufferSize, IntPtr lpStatusList, IntPtr lpOutBuffer, uint dwOutBufferSize);
+        public static extern bool NET_DVR_GetDeviceConfig(int lUserID, uint dwCommand, uint dwCount, nint lpInBuffer, uint dwInBufferSize, nint lpStatusList, nint lpOutBuffer, uint dwOutBufferSize);
 
         /* Batch for device configuration information (with sending data)
          * [in] lUserID - NET_DVR_Login_V40 return value
@@ -3398,7 +3393,7 @@ namespace libreriasHik
          * [in] dwInParamBufferSize- the correspond data buffer size, unit:byte
          */
         [DllImport(@"..\..\..\HCNetSDK\HCNetSDK.dll")]
-        public static extern bool NET_DVR_SetDeviceConfig(int lUserID, uint dwCommand, uint dwCount, IntPtr lpInBuffer, uint dwInBufferSize, IntPtr lpStatusList, IntPtr lpInParamBuffer, uint dwInParamBufferSize);
+        public static extern bool NET_DVR_SetDeviceConfig(int lUserID, uint dwCommand, uint dwCount, nint lpInBuffer, uint dwInBufferSize, nint lpStatusList, nint lpInParamBuffer, uint dwInParamBufferSize);
 
 
         /* The remote control function
@@ -3409,7 +3404,7 @@ namespace libreriasHik
          * [in] dwInBufferSize- the correspond buffer size, unit:byte
          */
         [DllImport(@"..\..\..\HCNetSDK\HCNetSDK.dll")]
-        public static extern bool NET_DVR_RemoteControl(int lUserID, uint dwCommand, IntPtr lpInBuffer, uint dwInBufferSize);
+        public static extern bool NET_DVR_RemoteControl(int lUserID, uint dwCommand, nint lpInBuffer, uint dwInBufferSize);
 
         /* login
          * [in] pLoginInfo - login parameters
@@ -3419,12 +3414,12 @@ namespace libreriasHik
         public static extern int NET_DVR_Login_V40(ref NET_DVR_USER_LOGIN_INFO pLoginInfo, ref NET_DVR_DEVICEINFO_V40 lpDeviceInfo);
 
         [DllImport(@"..\..\..\HCNetSDK\HCNetSDK.dll")]
-        public static extern bool NET_DVR_Logout_V30(Int32 lUserID);
+        public static extern bool NET_DVR_Logout_V30(int lUserID);
 
-        public delegate void RealDataCallBack(int lPlayHandle, uint dwDataType, IntPtr pBuffer, uint dwBufSize, IntPtr pUser);
+        public delegate void RealDataCallBack(int lPlayHandle, uint dwDataType, nint pBuffer, uint dwBufSize, nint pUser);
 
         [DllImport(@"..\..\..\HCNetSDK\HCNetSDK.dll")]
-        public static extern int NET_DVR_RealPlay_V40(int lUserID, ref NET_DVR_PREVIEWINFO lpPreviewInfo, RealDataCallBack fRealDataCallBack_V30, IntPtr pUser);
+        public static extern int NET_DVR_RealPlay_V40(int lUserID, ref NET_DVR_PREVIEWINFO lpPreviewInfo, RealDataCallBack fRealDataCallBack_V30, nint pUser);
 
         // alarm
 
@@ -3450,9 +3445,9 @@ namespace libreriasHik
          * [out] dwBufLen - size of pAlarmInfo
          * [out] pUser - user data
          */
-        public delegate void MSGCallBack(int lCommand, ref NET_DVR_ALARMER pAlarmer, IntPtr pAlarmInfo, uint dwBufLen, IntPtr pUser);
+        public delegate void MSGCallBack(int lCommand, ref NET_DVR_ALARMER pAlarmer, nint pAlarmInfo, uint dwBufLen, nint pUser);
 
-        public delegate bool MSGCallBack_V31(int lCommand, ref NET_DVR_ALARMER pAlarmer, IntPtr pAlarmInfo, uint dwBufLen, IntPtr pUser);
+        public delegate bool MSGCallBack_V31(int lCommand, ref NET_DVR_ALARMER pAlarmer, nint pAlarmInfo, uint dwBufLen, nint pUser);
 
         /* Alarm information registered callback function
          * [in] iIndex - iIndex, scope:[0,15] 
@@ -3460,10 +3455,10 @@ namespace libreriasHik
          * [in] pUser - user data
          */
         [DllImport(@"..\..\..\HCNetSDK\HCNetSDK.dll")]
-        public static extern bool NET_DVR_SetDVRMessageCallBack_V50(int iIndex, MSGCallBack fMessageCallBack, IntPtr pUser);
+        public static extern bool NET_DVR_SetDVRMessageCallBack_V50(int iIndex, MSGCallBack fMessageCallBack, nint pUser);
 
         [DllImport(@"..\..\..\HCNetSDK\HCNetSDK.dll")]
-        public static extern bool NET_DVR_SetDVRMessageCallBack_V31(MSGCallBack_V31 fMessageCallBack, IntPtr pUser);
+        public static extern bool NET_DVR_SetDVRMessageCallBack_V31(MSGCallBack_V31 fMessageCallBack, nint pUser);
 
         /* NET_DVR_GetDeviceAbility get device ability
          * [in] lUserID - NET_DVR_Login_V40 return value
@@ -3474,7 +3469,7 @@ namespace libreriasHik
          * [in] dwOutLength - the correspond buffer size, unit:byte
          */
         [DllImport(@"..\..\..\HCNetSDK\HCNetSDK.dll")]
-        public static extern bool NET_DVR_GetDeviceAbility(int lUserID, uint dwAbilityType, IntPtr pInBuf, uint dwInLength, IntPtr pOutBuf, uint dwOutLength);
+        public static extern bool NET_DVR_GetDeviceAbility(int lUserID, uint dwAbilityType, nint pInBuf, uint dwInLength, nint pOutBuf, uint dwOutLength);
 
         /* Get to the SDK version information*/
         [DllImport(@"..\..\..\HCNetSDK\HCNetSDK.dll")]
@@ -3494,18 +3489,18 @@ namespace libreriasHik
 
 
         [DllImport(@"..\..\..\HCNetSDK\HCNetSDK.dll")]
-        public static extern bool NET_DVR_STDXMLConfig(int lUserID, IntPtr lpInputParam, IntPtr lpOutputParam);
+        public static extern bool NET_DVR_STDXMLConfig(int lUserID, nint lpInputParam, nint lpOutputParam);
 
-        public delegate void REALDATACALLBACK(Int32 lRealHandle, UInt32 dwDataType, ref byte pBuffer, UInt32 dwBufSize, IntPtr pUser);
+        public delegate void REALDATACALLBACK(int lRealHandle, uint dwDataType, ref byte pBuffer, uint dwBufSize, nint pUser);
         [DllImport(@"..\..\..\HCNetSDK\HCNetSDK.dll")]
-        public static extern int NET_DVR_RealPlay_V30(int iUserID, ref NET_DVR_CLIENTINFO lpClientInfo, REALDATACALLBACK fRealDataCallBack_V30, IntPtr pUser, UInt32 bBlocked);
+        public static extern int NET_DVR_RealPlay_V30(int iUserID, ref NET_DVR_CLIENTINFO lpClientInfo, REALDATACALLBACK fRealDataCallBack_V30, nint pUser, uint bBlocked);
 
         [DllImport(@"..\..\..\HCNetSDK\HCNetSDK.dll")]
         public static extern bool NET_DVR_StopRealPlay(int iRealHandle);
 
-        public delegate void VOICEDATACALLBACKV30(int lVoiceComHandle, string pRecvDataBuffer, uint dwBufSize, byte byAudioFlag, System.IntPtr pUser);
+        public delegate void VOICEDATACALLBACKV30(int lVoiceComHandle, string pRecvDataBuffer, uint dwBufSize, byte byAudioFlag, nint pUser);
         [DllImport(@"..\..\..\HCNetSDK\HCNetSDK.dll")]
-        public static extern int NET_DVR_StartVoiceCom_V30(int lUserID, uint dwVoiceChan, bool bNeedCBNoEncData, VOICEDATACALLBACKV30 fVoiceDataCallBack, IntPtr pUser);
+        public static extern int NET_DVR_StartVoiceCom_V30(int lUserID, uint dwVoiceChan, bool bNeedCBNoEncData, VOICEDATACALLBACKV30 fVoiceDataCallBack, nint pUser);
 
         [DllImport(@"..\..\..\HCNetSDK\HCNetSDK.dll")]
         public static extern bool NET_DVR_SetVoiceComClientVolume(int lVoiceComHandle, ushort wVolume);
@@ -3514,10 +3509,10 @@ namespace libreriasHik
         public static extern bool NET_DVR_StopVoiceCom(int lVoiceComHandle);
 
         [DllImport("User32.dll", EntryPoint = "PostMessage")]
-        public static extern int PostMessage(IntPtr hWnd, int Msg, int wParam, int lParam);
+        public static extern int PostMessage(nint hWnd, int Msg, int wParam, int lParam);
 
         [DllImport(@"..\..\..\HCNetSDK\HCNetSDK.dll")]
-        public static extern bool NET_DVR_CaptureJPEGPicture(int lUserID, int lChannel, ref CHCNetSDK.NET_DVR_JPEGPARA lpJpegPara, IntPtr sPicFileName);
+        public static extern bool NET_DVR_CaptureJPEGPicture(int lUserID, int lChannel, ref NET_DVR_JPEGPARA lpJpegPara, nint sPicFileName);
         #endregion
 
         #region 门禁卡，指纹，人脸接口优化新增命令码及结构体
@@ -3530,12 +3525,12 @@ namespace libreriasHik
         public const int NET_DVR_GET_FACE = 2566;
         public const int NET_DVR_SET_FACE = 2567;
 
-        [StructLayoutAttribute(LayoutKind.Sequential)]
+        [StructLayout(LayoutKind.Sequential)]
         public struct NET_DVR_CARD_COND
         {
             public uint dwSize;
             public uint dwCardNum; //card number, 0xffffffff means to get all card information when getting
-            [MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = 64, ArraySubType = UnmanagedType.I1)]
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 64, ArraySubType = UnmanagedType.I1)]
             public byte[] byRes;
 
             public void Init()
@@ -3544,29 +3539,29 @@ namespace libreriasHik
             }
         }
 
-        [StructLayoutAttribute(LayoutKind.Sequential)]
+        [StructLayout(LayoutKind.Sequential)]
         public struct NET_DVR_CARD_RECORD
         {
             public uint dwSize;
-            [MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = ACS_CARD_NO_LEN, ArraySubType = UnmanagedType.I1)]
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = ACS_CARD_NO_LEN, ArraySubType = UnmanagedType.I1)]
             public byte[] byCardNo; //card No
             public byte byCardType;
             public byte byLeaderCard;
             public byte byUserType;
             public byte byRes1;
-            [MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = MAX_DOOR_NUM_256, ArraySubType = UnmanagedType.I1)]
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = MAX_DOOR_NUM_256, ArraySubType = UnmanagedType.I1)]
             public byte[] byDoorRight;
             public NET_DVR_VALID_PERIOD_CFG struValid;
-            [MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = MAX_GROUP_NUM_128, ArraySubType = UnmanagedType.I1)]
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = MAX_GROUP_NUM_128, ArraySubType = UnmanagedType.I1)]
             public byte[] byBelongGroup;
-            [MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = CARD_PASSWORD_LEN, ArraySubType = UnmanagedType.I1)]
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = CARD_PASSWORD_LEN, ArraySubType = UnmanagedType.I1)]
             public byte[] byCardPassword;
-            [MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = MAX_DOOR_NUM_256, ArraySubType = UnmanagedType.I1)]
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = MAX_DOOR_NUM_256, ArraySubType = UnmanagedType.I1)]
             public ushort[] wCardRightPlan;
             public uint dwMaxSwipeTimes;
             public uint dwSwipeTimes;
             public uint dwEmployeeNo;
-            [MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = NAME_LEN, ArraySubType = UnmanagedType.I1)]
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = NAME_LEN, ArraySubType = UnmanagedType.I1)]
             public byte[] byName;
             //按位表示，0-无权限，1-有权限
             //第0位表示：弱电报警
@@ -3576,7 +3571,7 @@ namespace libreriasHik
             //第4位表示：反锁开门
             //第5位表示：巡更功能
             public uint dwCardRight;
-            [MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = 256, ArraySubType = UnmanagedType.I1)]
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 256, ArraySubType = UnmanagedType.I1)]
             public byte[] byRes;
 
             public void Init()
@@ -3591,7 +3586,7 @@ namespace libreriasHik
             }
         }
 
-        [StructLayoutAttribute(LayoutKind.Sequential)]
+        [StructLayout(LayoutKind.Sequential)]
         public struct NET_DVR_FINGERPRINT_COND
         {
             public uint dwSize;
@@ -3610,15 +3605,15 @@ namespace libreriasHik
             }
         }
 
-        [StructLayoutAttribute(LayoutKind.Sequential)]
+        [StructLayout(LayoutKind.Sequential)]
         public struct NET_DVR_FACE_COND
         {
             public uint dwSize;
-            [MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = ACS_CARD_NO_LEN, ArraySubType = UnmanagedType.I1)]
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = ACS_CARD_NO_LEN, ArraySubType = UnmanagedType.I1)]
             public byte[] byCardNo; //card No
             public uint dwFaceNum; //the number send or get. if get,0xffffffff means all
             public uint dwEnableReaderNo;
-            [MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = 124, ArraySubType = UnmanagedType.I1)]
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 124, ArraySubType = UnmanagedType.I1)]
             public byte[] byRes;
 
             public void Init()
@@ -3628,13 +3623,13 @@ namespace libreriasHik
             }
         }
 
-        [StructLayoutAttribute(LayoutKind.Sequential)]
+        [StructLayout(LayoutKind.Sequential)]
         public struct NET_DVR_CARD_SEND_DATA
         {
             public uint dwSize;
-            [MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = ACS_CARD_NO_LEN, ArraySubType = UnmanagedType.I1)]
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = ACS_CARD_NO_LEN, ArraySubType = UnmanagedType.I1)]
             public byte[] byCardNo; //card No
-            [MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = 16, ArraySubType = UnmanagedType.I1)]
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 16, ArraySubType = UnmanagedType.I1)]
             public byte[] byRes;
 
             public void Init()
@@ -3644,15 +3639,15 @@ namespace libreriasHik
             }
         }
 
-        [StructLayoutAttribute(LayoutKind.Sequential)]
+        [StructLayout(LayoutKind.Sequential)]
         public struct NET_DVR_FACE_RECORD
         {
             public uint dwSize;
-            [MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = ACS_CARD_NO_LEN, ArraySubType = UnmanagedType.I1)]
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = ACS_CARD_NO_LEN, ArraySubType = UnmanagedType.I1)]
             public byte[] byCardNo; //card No
             public uint dwFaceLen;
-            public IntPtr pFaceBuffer;
-            [MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = 128, ArraySubType = UnmanagedType.I1)]
+            public nint pFaceBuffer;
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 128, ArraySubType = UnmanagedType.I1)]
             public byte[] byRes;
 
             public void Init()
@@ -3662,15 +3657,15 @@ namespace libreriasHik
             }
         }
 
-        [StructLayoutAttribute(LayoutKind.Sequential)]
+        [StructLayout(LayoutKind.Sequential)]
         public struct NET_DVR_CARD_STATUS
         {
             public uint dwSize;
-            [MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = ACS_CARD_NO_LEN, ArraySubType = UnmanagedType.I1)]
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = ACS_CARD_NO_LEN, ArraySubType = UnmanagedType.I1)]
             public byte[] byCardNo; //card No
             public uint dwErrorCode;
             public byte byStatus; //0-fail, 1-success
-            [MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = 23, ArraySubType = UnmanagedType.I1)]
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 23, ArraySubType = UnmanagedType.I1)]
             public byte[] byRes;
 
             public void Init()
@@ -3680,18 +3675,18 @@ namespace libreriasHik
             }
         }
 
-        [StructLayoutAttribute(LayoutKind.Sequential)]
+        [StructLayout(LayoutKind.Sequential)]
         public struct NET_DVR_FACE_STATUS
         {
             public uint dwSize;
-            [MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = ACS_CARD_NO_LEN, ArraySubType = UnmanagedType.I1)]
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = ACS_CARD_NO_LEN, ArraySubType = UnmanagedType.I1)]
             public byte[] byCardNo; //card No
-            [MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = ERROR_MSG_LEN, ArraySubType = UnmanagedType.I1)]
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = ERROR_MSG_LEN, ArraySubType = UnmanagedType.I1)]
             public byte[] byErrorMsg; //下发错误信息，当byCardReaderRecvStatus为4时，表示已存在人脸对应的卡号
             public uint dwReaderNo; //人脸读卡器编号，可用于下发错误返回
             public byte byRecvStatus; //人脸读卡器状态，按字节表示，0-失败，1-成功，2-重试或人脸质量差，3-内存已满(人脸数据满)，4-已存在该人脸，5-非法人脸ID
             //,6-算法建模失败，7-未下发卡权限，8-未定义（保留），9-人眼间距小距小，10-图片数据长度小于1KB，11-图片格式不符（png/jpg/bmp）,12-图片像素数量超过上限，13-图片像素数量低于下限，14-图片信息校验失败，15-图片解码失败，16-人脸检测失败，17-人脸评分失败
-            [MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = 131, ArraySubType = UnmanagedType.I1)]
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 131, ArraySubType = UnmanagedType.I1)]
             public byte[] byRes;
 
             public void Init()
@@ -3702,21 +3697,21 @@ namespace libreriasHik
             }
         }
 
-        [StructLayoutAttribute(LayoutKind.Sequential)]
+        [StructLayout(LayoutKind.Sequential)]
         public struct NET_DVR_FINGERPRINT_RECORD
         {
             public uint dwSize;
-            [MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = ACS_CARD_NO_LEN, ArraySubType = UnmanagedType.I1)]
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = ACS_CARD_NO_LEN, ArraySubType = UnmanagedType.I1)]
             public byte[] byCardNo; //card No
             public uint dwFingerPrintLen; //指纹数据长度
             public uint dwEnableReaderNo; //需要下发指纹的读卡器编号
             public byte byFingerPrintID; //手指编号，有效值范围为1-10
             public byte byFingerType; //指纹类型  0-普通指纹，1-胁迫指纹
-            [MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = 30, ArraySubType = UnmanagedType.I1)]
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 30, ArraySubType = UnmanagedType.I1)]
             public byte[] byRes1;
-            [MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = MAX_FINGER_PRINT_LEN, ArraySubType = UnmanagedType.I1)]
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = MAX_FINGER_PRINT_LEN, ArraySubType = UnmanagedType.I1)]
             public byte[] byFingerData; //指纹数据内容
-            [MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = 96, ArraySubType = UnmanagedType.I1)]
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 96, ArraySubType = UnmanagedType.I1)]
             public byte[] byRes;
 
             public void Init()
@@ -3728,20 +3723,20 @@ namespace libreriasHik
             }
         }
 
-        [StructLayoutAttribute(LayoutKind.Sequential)]
+        [StructLayout(LayoutKind.Sequential)]
         public struct NET_DVR_FINGERPRINT_STATUS
         {
             public uint dwSize;
-            [MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = ACS_CARD_NO_LEN, ArraySubType = UnmanagedType.I1)]
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = ACS_CARD_NO_LEN, ArraySubType = UnmanagedType.I1)]
             public byte[] byCardNo; //指纹关联的卡号
             public byte byCardReaderRecvStatus; //指纹读卡器状态，按字节表示，0-失败，1-成功，2-该指纹模组不在线，3-重试或指纹质量差，4-内存已满，5-已存在该指纹，6-已存在该指纹ID，7-非法指纹ID，8-该指纹模组无需配置
             public byte byFingerPrintID; //手指编号，有效值范围为1-10
             public byte byFingerType; //指纹类型  0-普通指纹，1-胁迫指纹
             public byte byRecvStatus; //主机错误状态：0-成功，1-手指编号错误，2-指纹类型错误，3-卡号错误（卡号规格不符合设备要求），4-指纹未关联工号或卡号（工号或卡号字段为空），5-工号不存在，6-指纹数据长度为0，7-读卡器编号错误，8-工号错误
-            [MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = ERROR_MSG_LEN, ArraySubType = UnmanagedType.I1)]
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = ERROR_MSG_LEN, ArraySubType = UnmanagedType.I1)]
             public byte[] byErrorMsg; //下发错误信息，当byCardReaderRecvStatus为5时，表示已存在指纹对应的卡号
             public uint dwCardReaderNo; //当byCardReaderRecvStatus为5时，表示已存在指纹对应的指纹读卡器编号，可用于下发错误返回。0时表示无错误信息
-            [MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = 20, ArraySubType = UnmanagedType.I1)]
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 20, ArraySubType = UnmanagedType.I1)]
             public byte[] byRes;
 
             public void Init()
@@ -3753,8 +3748,8 @@ namespace libreriasHik
         }
 
         // 新增接口一个
-        [DllImportAttribute(@"..\..\..\HCNetSDK\HCNetSDK.dll")]
-        public static extern int NET_DVR_SendWithRecvRemoteConfig(int lHandle, IntPtr lpInBuff, uint dwInBuffSize, IntPtr lpOutBuff, uint dwOutBuffSize, ref uint dwOutDataLen);
+        [DllImport(@"..\..\..\HCNetSDK\HCNetSDK.dll")]
+        public static extern int NET_DVR_SendWithRecvRemoteConfig(int lHandle, nint lpInBuff, uint dwInBuffSize, nint lpOutBuff, uint dwOutBuffSize, ref uint dwOutDataLen);
 
         // 用户调用SendwithRecv接口时，接口返回的状态
         public enum NET_SDK_SENDWITHRECV_STATUS

@@ -1,0 +1,17 @@
+C:\Users\lenovo\source\repos\CorsinfSDKHik\CorsinfSDKHik\bin\Debug\net8.0\CorsinfSDKHik.exe
+C:\Users\lenovo\source\repos\CorsinfSDKHik\CorsinfSDKHik\bin\Debug\net8.0\CorsinfSDKHik.deps.json
+C:\Users\lenovo\source\repos\CorsinfSDKHik\CorsinfSDKHik\bin\Debug\net8.0\CorsinfSDKHik.runtimeconfig.json
+C:\Users\lenovo\source\repos\CorsinfSDKHik\CorsinfSDKHik\bin\Debug\net8.0\CorsinfSDKHik.dll
+C:\Users\lenovo\source\repos\CorsinfSDKHik\CorsinfSDKHik\bin\Debug\net8.0\CorsinfSDKHik.pdb
+C:\Users\lenovo\source\repos\CorsinfSDKHik\CorsinfSDKHik\bin\Debug\net8.0\Newtonsoft.Json.dll
+C:\Users\lenovo\source\repos\CorsinfSDKHik\CorsinfSDKHik\obj\Debug\net8.0\CorsinfSDKHik.csproj.AssemblyReference.cache
+C:\Users\lenovo\source\repos\CorsinfSDKHik\CorsinfSDKHik\obj\Debug\net8.0\CorsinfSDKHik.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\lenovo\source\repos\CorsinfSDKHik\CorsinfSDKHik\obj\Debug\net8.0\CorsinfSDKHik.AssemblyInfoInputs.cache
+C:\Users\lenovo\source\repos\CorsinfSDKHik\CorsinfSDKHik\obj\Debug\net8.0\CorsinfSDKHik.AssemblyInfo.cs
+C:\Users\lenovo\source\repos\CorsinfSDKHik\CorsinfSDKHik\obj\Debug\net8.0\CorsinfSDKHik.csproj.CoreCompileInputs.cache
+C:\Users\lenovo\source\repos\CorsinfSDKHik\CorsinfSDKHik\obj\Debug\net8.0\CorsinfS.607068FB.Up2Date
+C:\Users\lenovo\source\repos\CorsinfSDKHik\CorsinfSDKHik\obj\Debug\net8.0\CorsinfSDKHik.dll
+C:\Users\lenovo\source\repos\CorsinfSDKHik\CorsinfSDKHik\obj\Debug\net8.0\refint\CorsinfSDKHik.dll
+C:\Users\lenovo\source\repos\CorsinfSDKHik\CorsinfSDKHik\obj\Debug\net8.0\CorsinfSDKHik.pdb
+C:\Users\lenovo\source\repos\CorsinfSDKHik\CorsinfSDKHik\obj\Debug\net8.0\CorsinfSDKHik.genruntimeconfig.cache
+C:\Users\lenovo\source\repos\CorsinfSDKHik\CorsinfSDKHik\obj\Debug\net8.0\ref\CorsinfSDKHik.dll
