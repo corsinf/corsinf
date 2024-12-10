@@ -332,4 +332,56 @@ if (isset($_GET['_id'])) {
             }
         });
     });
+
+    function probar_conexion()
+    {
+        var txt_host = $('#txt_host').val();
+        var txt_puerto = $('#txt_puerto').val();
+        var txt_usuario = $('#txt_usuario').val();
+        var txt_pass = $('#txt_pass').val();
+        if(txt_pass=='' || txt_usuario=='' || txt_host=='')
+        {
+            Swal.fire("Ingrese todos los datos","","info")
+            return false;
+        }
+
+        var parametros = {
+            'txt_host': txt_host,
+            'txt_puerto': txt_puerto,
+            'txt_usuario': txt_usuario,
+            'txt_pass': txt_pass,
+        };
+
+        $('#myModal_espera').modal('show');
+        $('#lbl_msj_espera').text("Probando conexion");
+         $.ajax({
+            data: {
+                parametros: parametros
+            },
+            url: '../controlador/TALENTO_HUMANO/th_detectar_dispositivosC.php?ProbarConexion=true',
+            type: 'post',
+            dataType: 'json',
+
+            success: function(response) {
+                $('#myModal_espera').modal('hide');
+                if (response.resp == 1) {
+                    Swal.fire('', 'Operacion realizada con exito.', 'success');
+                } else{
+                    Swal.fire('No se pudo conectar', response.msj, 'error')
+                }
+            },
+            
+            error: function(xhr, status, error) {
+                console.log('Status: ' + status); 
+                console.log('Error: ' + error); 
+                console.log('XHR Response: ' + xhr.responseText); 
+
+                Swal.fire('', 'Error: ' + xhr.responseText, 'error');
+                $('#myModal_espera').modal('hide');
+            }
+        });
+
+
+    }
+
 </script>

@@ -1,0 +1,45 @@
+=============== evento de escuchat ======================
+6
+192.168.100.111
+admin
+8000
+Data12/*
+
+============== para traer datos de biometrico ==============
+5
+192.168.100.111
+admin
+8000
+Data12/*
+
+============= para ingresar nuevos datos a biometrico ============
+4
+192.168.100.111
+admin
+8000
+Data12/*
+"Carlo Ambato" => entre comillas por que el espacion en blanco se coloca como otro argumento
+22
+1994
+C:\\huella\\capFingerPrint.dat
+
+==============para tomar huellas digital ========================
+3
+192.168.100.111
+admin
+8000
+Data12/*
+javierFarinangoCapfin2
+C:\\huella
+
+================== login dispositivo ================
+2
+192.168.100.111
+admin
+8000
+Data12/*
+
+================= detectar dispositivo =================
+1
+
+
