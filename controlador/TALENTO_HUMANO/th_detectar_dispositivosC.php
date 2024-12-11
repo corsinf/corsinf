@@ -1,8 +1,9 @@
 <?php
 date_default_timezone_set('America/Guayaquil');
 
-require_once(dirname(__DIR__, 2) . '/modelo/TALENTO_HUMANO/th_detectar_dispositivosM.php');
+require_once(dirname(__DIR__, 2) . '/modelo/TALENTO_HUMANO/th_personasM.php');
 require_once(dirname(__DIR__, 2) . '/modelo/TALENTO_HUMANO/th_dispositivosM.php');
+require_once(dirname(__DIR__, 2) . '/modelo/TALENTO_HUMANO/th_biometriaM.php');
 
 $controlador = new th_detectar_dispositivosC();
 
@@ -20,6 +21,10 @@ if (isset($_GET['insertar'])) {
     echo json_encode($controlador->insertar($_POST['parametros']));
 }
 
+if (isset($_GET['CapturarFinger'])) {
+    echo json_encode($controlador->CapturarFinger($_POST['parametros']));
+}
+
 
 /**
  * 
@@ -31,9 +36,11 @@ class th_detectar_dispositivosC
 
     function __construct()
     {
-        $this->modelo = new th_detectar_dispositivosM();
+        // $this->modelo = new th_detectar_dispositivosM();
         $this->sdk_patch = dirname(__DIR__,2).'/lib/SDKDevices/hikvision/bin/Debug/net8.0/CorsinfSDKHik.dll ';
         $this->modelo_dispositivos = new th_dispositivosM();
+        $this->modelo_personas = new th_personasM();
+        $this->modelo_biometria = new th_biometriaM();
     }
 
     function BuscarDevice()
@@ -168,6 +175,59 @@ class th_detectar_dispositivosC
 
         return $datos;
     }
+
+
+    function CapturarFinger($parametros)
+    {
+    	// print_r($parametros);die();
+    	$patch = "C:\\huella";
+    	if(!file_exists($patch))
+    	{
+    		mkdir($patch, 0777, true);
+    	}
+    	$nombre = str_replace(' ','', $parametros['usuario']);
+    	$dispositivo = $this->modelo_dispositivos->where('th_dis_id', $parametros['iddispostivos'])->listar();
+    	$dispositivo = $dispositivo[0];
+    	$usuarios = $this->modelo_personas->where('th_per_id', $parametros['Idusuario'])->listar();
+
+
+    	$dllPath = $this->sdk_patch.'3 '.$dispositivo['host'].' '.$dispositivo['usuario'].' '.$dispositivo['port'].' '.$dispositivo['pass'].' '.$nombre.'CapFinger'.$parametros['dedo'].' '.$patch;
+		$command = "dotnet $dllPath";
+
+		// print_r($command);die();
+		$output = shell_exec($command);
+		$msj = json_decode($output,true);
+		if(file_exists($patch.'\\'.$nombre.'CapFinger'.$parametros['dedo'].'.dat'))
+		{
+			$resp = 1;
+		 	$reg = $this->modelo_biometria->where('th_per_id',$parametros['Idusuario'])->listar();
+		 	$biom = array(
+	            	array('campo' => 'th_per_id', 'dato' =>$parametros['Idusuario']),
+	            	array('campo' => 'th_bio_patch', 'dato' => $patch.'\\'.$nombre.'CapFinger'.$parametros['dedo'].'.dat'),
+	            	array('campo' => 'th_bio_nombre', 'dato' => "Huella dactilar ".$parametros['dedo']),
+	            	array('campo' => 'th_bio_card', 'dato' => $parametros['CardNo'])
+	        	);
+		 	if(count($reg)==0)
+		 	{				
+	        	$this->modelo_biometria->insertar($biom);
+	    	}else
+	    	{
+	    		$where = array(
+	            	array('campo' => 'th_bio_id', 'dato' =>$reg[0]['_id'])
+	        	);
+	        	$this->modelo_biometria->editar($biom, $where);
+	    	}
+
+		}else
+		{
+			$resp = -1;
+		}
+
+		return array('resp'=>$resp,'msj'=>$msj['msj'],'patch'=>$patch.'\\'.$nombre.'CapFinger'.$parametros['dedo'].'.dat');
+    	// print_r($resp);die();
+    }
+
+    
 }
 
 ?> 

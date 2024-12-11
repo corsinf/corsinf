@@ -261,7 +261,7 @@ namespace CorsinfSDKHik.Funciones
         private String ProcessCapFingerData(ref CHCNetSDK.NET_DVR_CAPTURE_FINGERPRINT_CFG struCFG, ref bool flag, string userName, string strpath = null)
         {
             DateTime dt = DateTime.Now;
-            strpath = strpath + "\\" + userName + "capFinger.dat";
+            strpath = strpath + "\\" + userName + ".dat";
             try
             {
                 using (FileStream fs = new FileStream(strpath, FileMode.OpenOrCreate))

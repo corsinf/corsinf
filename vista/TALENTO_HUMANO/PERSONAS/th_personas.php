@@ -43,6 +43,116 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
             ],
         }));
     });
+
+    function dispositivos() {
+        $.ajax({
+            // data: {
+            //     id: id
+            // },
+            url: '../controlador/TALENTO_HUMANO/th_dispositivosC.php?listar=true',
+            type: 'post',
+            dataType: 'json',
+            success: function(response) {
+                console.log(response);
+                op = '';
+                response.forEach(function(item,i){
+                    op+='<option value="'+item._id+'">'+item.nombre+'</option>';
+                })
+                $('#ddl_dispositivos').html(op);
+               
+            },  error: function(xhr, status, error) {
+                console.log('Status: ' + status); 
+                console.log('Error: ' + error); 
+                console.log('XHR Response: ' + xhr.responseText); 
+
+                Swal.fire('', 'Error: ' + xhr.responseText, 'error');
+            }
+        });
+    }
+
+    function import_bio()
+    {
+        dispositivos();
+        $('#importar_device').modal('show');
+    }
+
+    function conectar_buscar()
+    {       
+        var parametros = {
+            'id': $('#ddl_dispositivos').val(),
+        };
+
+        $('#myModal_espera').modal('show');
+        $('#lbl_msj_espera').text("Conectando y Sincronizando");
+         $.ajax({
+            data: {
+                parametros: parametros
+            },
+            url: '../controlador/TALENTO_HUMANO/th_personasC.php?conectar_buscar=true',
+            type: 'post',
+            dataType: 'json',
+
+            success: function(response) {
+
+                $('#myModal_espera').modal('hide');
+                tr = '';
+                $('#txt_recuperado').val(JSON.stringify(response));
+                response.forEach(function(item,i){
+                    tr+="<tr><td>"+item.CardNo+"</td><td>"+item.nombre+"</td></tr>";
+                });
+
+                $('#tbl_import').html(tr);
+            },            
+            error: function(xhr, status, error) {
+                console.log('Status: ' + status); 
+                console.log('Error: ' + error); 
+                console.log('XHR Response: ' + xhr.responseText); 
+
+                Swal.fire('', 'Error: ' + xhr.responseText, 'error');
+                $('#myModal_espera').modal('hide');
+            }
+        });
+    }
+
+    function importar()
+    {
+         var parametros = {
+            'datos': $('#txt_recuperado').val(),
+        };
+
+        // $('#myModal_espera').modal('show');
+        // $('#lbl_msj_espera').text("Conectando y Sincronizando");
+         $.ajax({
+            data: {
+                parametros: parametros
+            },
+            url: '../controlador/TALENTO_HUMANO/th_personasC.php?guardarImport=true',
+            type: 'post',
+            dataType: 'json',
+
+            success: function(response) {                
+                if(response.msj=='')
+                {
+                    Swal.fire('Registros Importados', '', 'success');
+                }else
+                {
+                    Swal.fire('Registros Importados',response.msj, 'info');                    
+                }
+               
+                tbl_personas.ajax.reload(null, false);
+                $('#importar_device').modal('hide');
+            },            
+            error: function(xhr, status, error) {
+                console.log('Status: ' + status); 
+                console.log('Error: ' + error); 
+                console.log('XHR Response: ' + xhr.responseText); 
+
+                Swal.fire('', 'Error: ' + xhr.responseText, 'error');
+                $('#myModal_espera').modal('hide');
+            }
+        });
+
+    }
 </script>
 
 <div class="page-wrapper">
@@ -85,6 +195,9 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                                         </a>
 
                                     </div>
+                                    <button type="button" class="btn btn-primary btn-sm" onclick="import_bio()">
+                                            <i class="bx bx-import me-0 pb-1"></i> Importar desde biometrico
+                                    </button>
 
                                 </div>
                             </div>
@@ -120,5 +233,46 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
             </div>
         </div>
         <!--end row-->
+    </div>
+</div>
+
+<div class="modal fade" id="importar_device" tabindex="-1" aria-modal="true" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Importar desde Dispositivo</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+               <div class="row">
+                <input type="hidden" name="txt_recuperado" id="txt_recuperado">
+                   <div class="col-sm-12 mb-2">
+                         <select class="form-select" id="ddl_dispositivos" name="ddl_dispositivos">
+                            <option value="" >Seleccione Dispositivo</option>
+                        </select>                            
+                   </div>
+                   <div class="col-sm-12 text-end">
+                       <button class="btn btn-primary btn-sm" onclick="conectar_buscar()"><i class="bx bx-sync"></i>Conectar y buscar</button>
+                   </div>
+                   <div class="col-sm-12">
+                        <table class="table table-striped" id="">
+                            <thead>
+                                <tr>
+                                    <th>Numero de tarjeta</th>
+                                    <th>Nombre</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tbl_import">
+
+                            </tbody>
+                        </table>                       
+                   </div>
+               </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                 <button class="btn btn-primary btn-sm" onclick="importar()"><i class="bx bx-sync"></i>Importar</button>
+            </div>
+        </div>
     </div>
 </div>
