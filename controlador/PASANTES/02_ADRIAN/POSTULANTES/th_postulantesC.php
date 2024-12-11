@@ -13,7 +13,7 @@ if (isset($_GET['listar_todo'])) {
 }
 
 if (isset($_GET['insertar'])) {
-    echo json_encode($controlador->insertar_editar($_FILES, $_POST));
+    echo json_encode($controlador->insertar_editar($_POST));
 }
 
 if (isset($_GET['insertar_imagen'])) {

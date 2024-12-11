@@ -126,7 +126,8 @@
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
             cancelButtonColor: '#d33',
-            confirmButtonText: 'Si'
+            confirmButtonText: 'Si',
+            cancelButtonText: 'Cancelar'
         }).then((result) => {
             if (result.value) {
                 eliminar_contacto_emergencia(id);
@@ -183,21 +184,21 @@
 
                         <div class="row mb-col">
                             <div class="col-md-12">
-                                <label for="txt_nombre_contacto_emergencia" class="form-label form-label-sm">Nombre del contacto de Emergencia </label>
+                                <label for="txt_nombre_contacto_emergencia" class="form-label form-label-sm">Nombre Contacto de Emergencia </label>
                                 <input type="text" class="form-control form-control-sm txt_nombre_contacto_emergencia no_caracteres" name="txt_nombre_contacto_emergencia" id="txt_nombre_contacto_emergencia" value="" maxlength="100">
                             </div>
                         </div>
 
                         <div class="row mb-col">
                             <div class="col-md-12">
-                                <label for="txt_telefono_contacto_emergencia" class="form-label form-label-sm">Teléfono del contacto de Emergencia </label>
+                                <label for="txt_telefono_contacto_emergencia" class="form-label form-label-sm">Teléfono Contacto de Emergencia </label>
                                 <input type="text" class="form-control form-control-sm txt_telefono_contacto_emergencia solo_numeros_int" name="txt_telefono_contacto_emergencia" id="txt_telefono_contacto_emergencia" value="" maxlength="15">
                             </div>
                         </div>
                     </div>
 
                     <div id="btn_agregar_editar_contacto_emergencia" class="d-flex justify-content-end align-items-end mt-1">
-                        <button type="button" class="btn btn-sm btn-success" id="btn_agregar_contacto_emergencia" onclick="insertar_editar_contacto_emergencia();"><i class="bx bx-plus me-0"></i> Agregar</button>
+                        <button type="button" class="btn btn-sm btn-success btn-sm px-4 m-1" id="btn_agregar_contacto_emergencia" onclick="insertar_editar_contacto_emergencia();"><i class="bx bx-plus me-0"></i> Agregar</button>
                     </div>
                 </form>
 
@@ -208,8 +209,8 @@
                         <table class="table table-striped table-hover align-middle">
                             <thead>
                                 <tr>
-                                    <th>Nombre del Contacto</th>
-                                    <th>Teléfono del Contacto</th>
+                                    <th>Nombre Contacto Emergencia</th>
+                                    <th>Teléfono Contacto Emergencia</th>
                                     <th>Acción</th>
                                 </tr>
                             </thead>

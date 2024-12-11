@@ -1,7 +1,19 @@
 <script>
     $(document).ready(function() {
-
-
+        // Manejar el cambio en el input de tipo file
+        $('#txt_copia_cambiar_foto').on('change', function(event) {
+            const file = event.target.files[0]; // Obtener el primer archivo seleccionado
+            if (file) {
+                const reader = new FileReader(); // Crear un nuevo FileReader
+                reader.onload = function(e) {
+                    // Actualizar la imagen en el modal
+                    $('#img_postulante_inf_modal').attr('src', e.target.result);
+                    // También puedes actualizar la imagen en la sección de perfil si es necesario
+                    // $('#img_postulante_inf').attr('src', e.target.result);
+                };
+                reader.readAsDataURL(file); // Leer el archivo como URL de datos
+            }
+        });
     });
 
     //para el nombre de la foto
@@ -14,26 +26,11 @@
             },
             dataType: 'json',
             success: function(response) {
-                $('#txt_copia_cambiar_foto').val(response[0].th_pos_foto_url);
+                $('#img_postulante_inf_modal').attr('src', response[0].th_pos_foto_url || '../img/sin_imagen.jpg');
             }
         });
     }
 
-    function cargar_datos_modal_cambiar_foto(id) {
-        $.ajax({
-            url: '../controlador/PASANTES/02_ADRIAN/POSTULANTES/th_postulantesC.php?listar_modal=true',
-            type: 'post',
-            data: {
-                id: id
-            },
-            dataType: 'json',
-            success: function(response) {
-                $('#txt_cambiar_foto_id').val(response[0]._id);
-                $('#txt_copia_cambiar_foto').val(response[0].th_pos_foto_url);
-
-            }
-        });
-    }
 
 
     function insertar_editar_cambiar_foto() {
@@ -172,49 +169,29 @@
         <div class="modal-content">
             <!-- Modal Header -->
             <div class="modal-header">
-                <h6><small class="text-body-secondary fw-bold" id="lbl_titulo_cambiar_foto">Foto de Perfil</small></h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                <h6><small class="text-body-secondary fw-bold" id="lbl_titulo_cambiar_foto">Foto de Perfil</small></h6>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <!-- Modal body -->
             <form id="form_cambiar_foto" enctype="multipart/form-data" method="post" style="width: inherit;">
-
                 <div class="modal-body">
-
                     <input type="hidden" name="txt_postulante_cedula" id="txt_postulante_cedula">
                     <input type="hidden" name="txt_postulante_id" id="txt_postulante_id">
 
                     <div class="row mb-col">
                         <div class="col-md-12">
                             <label for="txt_copia_cambiar_foto" class="form-label form-label-sm">Foto de Perfil </label>
-                            <input type="file" class="form-control form-control-sm" name="txt_copia_cambiar_foto" id="txt_copia_cambiar_foto" accept=".">
-                            <!-- <div class="pt-2"></div> -->
-                            <input type="text" class="form-control form-control-sm" name="txt_ruta_guardada_cambiar_foto" id="txt_ruta_guardada_cambiar_foto" hidden>
+                            <div class="widget-user-image text-center">
+                                <img class="rounded-circle p-1 bg-primary" src="../img/sin_imagen.jpg" class="img-fluid" id="img_postulante_inf_modal" alt="Imagen Perfil Postulante" width="110" height="110" />
+                            </div>
+                            <hr />
+                            <input type="file" class="form-control form-control-sm" name="txt_copia_cambiar_foto" id="txt_copia_cambiar_foto" accept=".jpg, .jpeg, .png">
                         </div>
                     </div>
                 </div>
 
                 <div class="modal-footer d-flex justify-content-center">
                     <button type="button" class="btn btn-success btn-sm px-4 m-1" id="btn_guardar_cambiar_foto" onclick="insertar_editar_cambiar_foto();">Agregar</button>
-                    <button type="button" class="btn btn-danger btn-sm px-4 m-1" id="btn_eliminar_cambiar_foto" onclick="delete_datos_cambiar_foto();">Eliminar</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-
-<div class="modal" id="modal_ver_imagen_cambiar_foto" tabindex="-1" aria-modal="true" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
-    <div class="modal-dialog modal-dialog-centered modal-xl">
-        <div class="modal-content">
-
-            <!-- Modal Header -->
-            <div class="modal-header">
-                <h5><small class="text-body-secondary fw-bold" id="lbl_titulo_cambiar_foto">Foto de Perfil</small></h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="limpiar_parametros_iframe();"></button>
-            </div>
-            <!-- Modal body -->
-            <form id="form_cambiar_foto">
-                <div class="modal-body d-flex justify-content-center">
-                    <iframe src='' id="iframe_cambiar_foto_imagen" frameborder="0" width="900px" height="700px"></iframe>
                 </div>
             </form>
         </div>

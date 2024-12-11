@@ -36,7 +36,7 @@ if (isset($_GET['id'])) {
                 $('#txt_segundo_apellido').val(response[0].th_pos_segundo_apellido);
                 $('#txt_fecha_nacimiento').val(response[0].th_pos_fecha_nacimiento);
                 $('#ddl_nacionalidad').val(response[0].th_pos_nacionalidad);
-                $('#txt_numero_cedula').val(response[0].th_pos_cedula);
+                $('#txt_cedula').val(response[0].th_pos_cedula);
                 $('#ddl_estado_civil').val(response[0].th_pos_estado_civil);
                 $('#ddl_sexo').val(response[0].th_pos_sexo);
                 $('#txt_telefono_1').val(response[0].th_pos_telefono_1);
@@ -68,7 +68,7 @@ if (isset($_GET['id'])) {
         var txt_segundo_apellido = $('#txt_segundo_apellido').val();
         var txt_fecha_nacimiento = $('#txt_fecha_nacimiento').val();
         var ddl_nacionalidad = $('#ddl_nacionalidad').val();
-        var txt_numero_cedula = $('#txt_numero_cedula').val();
+        var txt_cedula = $('#txt_cedula').val();
         var ddl_estado_civil = $('#ddl_estado_civil').val();
         var ddl_sexo = $('#ddl_sexo').val();
         var txt_telefono_1 = $('#txt_telefono_1').val();
@@ -88,7 +88,7 @@ if (isset($_GET['id'])) {
             'txt_segundo_apellido': txt_segundo_apellido,
             'txt_fecha_nacimiento': txt_fecha_nacimiento,
             'ddl_nacionalidad': ddl_nacionalidad,
-            'txt_numero_cedula': txt_numero_cedula,
+            'txt_cedula': txt_cedula,
             'ddl_estado_civil': ddl_estado_civil,
             'ddl_sexo': ddl_sexo,
             'txt_telefono_1': txt_telefono_1,
@@ -141,7 +141,8 @@ if (isset($_GET['id'])) {
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
             cancelButtonColor: '#d33',
-            confirmButtonText: 'Si'
+            confirmButtonText: 'Si',
+            cancelButtonText: 'Cancelar'
         }).then((result) => {
             if (result.value) {
                 eliminar(id);
@@ -230,8 +231,8 @@ if (isset($_GET['id'])) {
 
                             <div class="row mb-col">
                                 <div class="col-md-3">
-                                    <label for="txt_numero_cedula" class="form-label form-label-sm">Cédula de Identidad </label>
-                                    <input type="text" class="form-control form-control-sm solo_numeros_int" name="txt_numero_cedula" id="txt_numero_cedula" placeholder="Digite su número de cédula" maxlength="10" required>
+                                    <label for="txt_cedula" class="form-label form-label-sm">Cédula de Identidad </label>
+                                    <input type="text" class="form-control form-control-sm solo_numeros_int" name="txt_cedula" id="txt_cedula" placeholder="Digite su número de cédula" maxlength="10" required>
                                 </div>
                                 <div class="col-md-3">
                                     <label for="ddl_sexo" class="form-label form-label-sm">Sexo </label>
@@ -324,7 +325,7 @@ if (isset($_GET['id'])) {
         agregar_asterisco_campo_obligatorio('txt_segundo_apellido');
         agregar_asterisco_campo_obligatorio('txt_primer_nombre');
         agregar_asterisco_campo_obligatorio('txt_segundo_nombre');
-        agregar_asterisco_campo_obligatorio('txt_numero_cedula');
+        agregar_asterisco_campo_obligatorio('txt_cedula');
         agregar_asterisco_campo_obligatorio('ddl_sexo');
         agregar_asterisco_campo_obligatorio('txt_fecha_nacimiento');
         agregar_asterisco_campo_obligatorio('txt_edad');
@@ -352,7 +353,7 @@ if (isset($_GET['id'])) {
                 txt_segundo_nombre: {
                     required: true,
                 },
-                txt_numero_cedula: {
+                txt_cedula: {
                     required: true,
                 },
                 ddl_sexo: {
@@ -408,7 +409,7 @@ if (isset($_GET['id'])) {
                 txt_segundo_nombre: {
                     required: "Por favor ingrese el segundo nombre",
                 },
-                txt_numero_cedula: {
+                txt_cedula: {
                     required: "Por favor ingresa un número de cédula",
                 },
                 ddl_sexo: {

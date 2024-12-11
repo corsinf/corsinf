@@ -33,23 +33,16 @@ class th_pos_certificados_medicosC
     //Funcion para listar los certidicados médicos del postulante
     function listar($id)
     {
-        $datos = $this->modelo->where('th_pos_id', $id)->where('th_cer_estado', 1)->listar();
         
+        $datos = $this->modelo->where('th_pos_id', $id)->where('th_cer_estado', 1)->orderBy('th_cer_fecha_fin_certificado','DESC')->listar();
         
-
         $texto = '';
-        usort($datos, function($txt_fecha_fin_1, $txt_fecha_fin_2) {
-            $txt_fecha_fin_1= strtotime($txt_fecha_fin_1['th_cer_fecha_fin_certificado']);
-            $txt_fecha_fin_2 = strtotime($txt_fecha_fin_2['th_cer_fecha_fin_certificado']);
-            return $txt_fecha_fin_2 <=> $txt_fecha_fin_1; 
-        });
-
+     
         foreach ($datos as $key => $value) {
-
-            $fecha_fin = $value['th_cer_fecha_fin_certificado'] == '' ? 'Actualidad' : $value['th_cer_fecha_fin_certificado'];
-
-            
-            
+            //Formato de fechas de certificados médicos
+            $fecha_inicio_certificado = date('d/m/Y', strtotime($value['th_cer_fecha_inicio_certificado']));
+            $fecha_fin_certificado = date('d/m/Y', strtotime($value['th_cer_fecha_fin_certificado']));
+                        
             $texto .=
                 <<<HTML
                     <div class="row mb-col">
@@ -57,11 +50,9 @@ class th_pos_certificados_medicosC
                             <h6 class="fw-bold my-0 d-flex align-items-center">{$value['th_cer_motivo_certificado']}</h6>
                             <p class="m-0">{$value['th_cer_nom_medico']}</p>
                             <p class="m-0">{$value['th_cer_ins_medico']}</p>
-                            <p class="m-0">{$value['th_cer_fecha_inicio_certificado']} - {$fecha_fin} </p>
+                            <p class="m-0">{$fecha_inicio_certificado} - {$fecha_fin_certificado} </p>
                             <a href="#" onclick="ruta_iframe_certificados_medicos('{$value['th_cer_ruta_certficado']}');">Ver Certificado Médico</a>
-                          
                         </div>
-
                         
                         <div class="col-2 d-flex justify-content-end align-items-start">
                             <button class="btn icon-hover" style="color: white;" onclick="abrir_modal_certificados_medicos('{$value['_id']}');">

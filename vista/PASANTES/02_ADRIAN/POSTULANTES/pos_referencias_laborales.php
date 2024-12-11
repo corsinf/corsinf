@@ -106,8 +106,9 @@
     function abrir_modal_referencias_laborales(id) {
         cargar_datos_modal_referencias_laborales(id);
         $('#modal_agregar_referencia_laboral').modal('show');
-        $('#lbl_titulo_referencia_laboral').html('Editar su referencia');
-        $('#btn_guardar_referencia_laboral').html('Guardar');
+        $('#lbl_titulo_referencia_laboral').html('Editar Referencia Laboral');
+        $('#btn_guardar_referencia_laboral').html('<i class="bx bx-save"></i>Editar');
+        $('#btn_eliminar_referencia_laboral').show();
     }
 
     function delete_datos_referencias_laborales() {
@@ -119,7 +120,8 @@
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
             cancelButtonColor: '#d33',
-            confirmButtonText: 'Si'
+            confirmButtonText: 'Si',
+            cancelButtonText: 'Cancelar'
         }).then((result) => {
             if (result.value) {
                 eliminar_referencias_laborales(id);
@@ -161,8 +163,9 @@
         $("#form_referencias_laborales").validate().resetForm();
         $('.form-control').removeClass('is-valid is-invalid');
         //Cambiar texto
-        $('#lbl_titulo_referencia_laboral').html('Agregue una referencia');
-        $('#btn_guardar_referencia_laboral').html('Agregar');
+        $('#lbl_titulo_referencia_laboral').html('Agregar Referencia Laboral');
+        $('#btn_guardar_referencia_laboral').html('<i class="bx bx-save"></i>Agregar');
+        $('#btn_eliminar_referencia_laboral').hide();
     }
 
     function definir_ruta_iframe_referencias_laborales(url) {
@@ -185,7 +188,7 @@
 
             <!-- Modal Header -->
             <div class="modal-header">
-                <h5><small class="text-body-secondary fw-bold" id="lbl_titulo_referencia_laboral">Agregue una referencia</small></h5>
+                <h5><small class="text-body-secondary fw-bold" id="lbl_titulo_referencia_laboral">Agregar Referencia Laboral</small></h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="limpiar_parametros_referencias_laborales()"></button>
             </div>
 
@@ -199,21 +202,21 @@
 
                     <div class="row mb-col">
                         <div class="col-md-12">
-                            <label for="txt_nombre_referencia" class="form-label form-label-sm">Nombre del empleador</label>
+                            <label for="txt_nombre_referencia" class="form-label form-label-sm">Nombre Empleador</label>
                             <input type="text" class="form-control form-control-sm no_caracteres" name="txt_nombre_referencia" id="txt_nombre_referencia" maxlength="50">
                         </div>
                     </div>
 
                     <div class="row mb-col">
                         <div class="col-md-12">
-                            <label for="txt_telefono_referencia" class="form-label form-label-sm">Teléfono del empleador </label>
+                            <label for="txt_telefono_referencia" class="form-label form-label-sm">Teléfono Empleador </label>
                             <input type="text" class="form-control form-control-sm solo_numeros_int" name="txt_telefono_referencia" id="txt_telefono_referencia" maxlength="15">
                         </div>
                     </div>
 
                     <div class="row mb-col">
                         <div class="col-md-12">
-                            <label for="txt_referencia_correo" class="form-label form-label-sm">Correo del empleador</label>
+                            <label for="txt_referencia_correo" class="form-label form-label-sm">Correo Empleador</label>
                             <input type="email" class="form-control form-control-sm" name="txt_referencia_correo" id="txt_referencia_correo" maxlength="100">
                         </div>
                     </div>
@@ -227,7 +230,7 @@
 
                     <div class="row mb-col">
                         <div class="col-md-12">
-                            <label for="txt_copia_carta_recomendacion" class="form-label form-label-sm">Copia de la carta de recomendación </label>
+                            <label for="txt_copia_carta_recomendacion" class="form-label form-label-sm">Pdf Carta Recomendación </label>
                             <input type="file" class="form-control form-control-sm" name="txt_copia_carta_recomendacion" id="txt_copia_carta_recomendacion" accept=".pdf">
                             <!-- <div class="pt-2"></div> -->
                             <input type="text" class="form-control form-control-sm" name="txt_ruta_guardada_carta_recomendacion" id="txt_ruta_guardada_carta_recomendacion" hidden>
@@ -236,8 +239,8 @@
                 </div>
 
                 <div class="modal-footer d-flex justify-content-center">
-                    <button type="button" class="btn btn-success btn-sm px-4 m-1" id="btn_guardar_referencia_laboral" onclick="insertar_editar_referencias_laborales();">Agregar</button>
-                    <button type="button" class="btn btn-danger btn-sm px-4 m-1" id="btn_eliminar_formacion" onclick="delete_datos_referencias_laborales();">Eliminar</button>
+                    <button type="button" class="btn btn-success btn-sm px-4 m-1" id="btn_guardar_referencia_laboral" onclick="insertar_editar_referencias_laborales();"><i class="bx bx-save"></i>Agregar</button>
+                    <button type="button" style="display: none;" class="btn btn-danger btn-sm px-4 m-1" id="btn_eliminar_referencia_laboral" onclick="delete_datos_referencias_laborales();"><i class="bx bx-trash"></i>Eliminar</button>
                 </div>
             </form>
         </div>
@@ -250,7 +253,7 @@
 
             <!-- Modal Header -->
             <div class="modal-header">
-                <h5><small class="text-body-secondary fw-bold" id="lbl_titulo_referencia_laboral">Referencias laborales</small></h5>
+                <h5><small class="text-body-secondary fw-bold" id="lbl_titulo_referencia_laboral">Referencia Laboral</small></h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="limpiar_parametros_iframe();"></button>
             </div>
             <!-- Modal body -->

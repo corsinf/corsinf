@@ -106,8 +106,9 @@
     function abrir_modal_formacion_academica(id) {
         cargar_datos_modal_formacion_academica(id);
         $('#modal_agregar_formacion').modal('show');
-        $('#lbl_titulo_formacion_acedemica').html('Editar su Formación Académica');
-        $('#btn_guardar_formacion').html('Editar');
+        $('#lbl_titulo_formacion_acedemica').html('Editar Formación Académica');
+        $('#btn_guardar_formacion').html('<i class="bx bx-save"></i>Editar');
+        $('#btn_eliminar_formacion_academica').show();
     }
 
     function delete_datos_form_acad() {
@@ -120,7 +121,8 @@
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
             cancelButtonColor: '#d33',
-            confirmButtonText: 'Si'
+            confirmButtonText: 'Si',
+            cancelButtonText: 'Cancelar'
         }).then((result) => {
             if (result.value) {
                 eliminar_form_acad(id);
@@ -161,8 +163,9 @@
         $("#form_formacion_academica").validate().resetForm();
         $('.form-control').removeClass('is-valid is-invalid');
         //Cambiar texto
-        $('#lbl_titulo_formacion_acedemica').html('Agregue una Formación Académica');
-        $('#btn_guardar_formacion').html('Agregar');
+        $('#lbl_titulo_formacion_acedemica').html('Agregar Formación Académica');
+        $('#btn_guardar_formacion').html('<i class="bx bx-save"></i>Agregar');
+        $('#btn_eliminar_formacion_academica').hide();
     }
 
     function validar_fechas_form_acad() {
@@ -231,7 +234,7 @@
 
             <!-- Modal Header -->
             <div class="modal-header">
-                <h5><small class="text-body-secondary fw-bold" id="lbl_titulo_formacion_acedemica">Agregue una formación académica</small></h5>
+                <h5><small class="text-body-secondary fw-bold" id="lbl_titulo_formacion_acedemica">Agregar Formación Académica</small></h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="limpiar_campos_formacion_academica_modal();"></button>
             </div>
             <!-- Modal body -->
@@ -240,7 +243,7 @@
                 <div class="modal-body">
                     <div class="row mb-col">
                         <div class="col-md-12">
-                            <label for="txt_titulo_obtenido" class="form-label form-label-sm">Título obtenido </label>
+                            <label for="txt_titulo_obtenido" class="form-label form-label-sm">Título Obtenido </label>
                             <input type="text" class="form-control form-control-sm no_caracteres" name="txt_titulo_obtenido" id="txt_titulo_obtenido" maxlength="100">
                         </div>
                     </div>
@@ -254,14 +257,14 @@
 
                     <div class="row mb-col">
                         <div class="col-md-12">
-                            <label for="txt_fecha_inicio_academico" class="form-label form-label-sm">Fecha de inicio </label>
+                            <label for="txt_fecha_inicio_academico" class="form-label form-label-sm">Fecha Inicio Estudios </label>
                             <input type="date" class="form-control form-control-sm no_caracteres" name="txt_fecha_inicio_academico" id="txt_fecha_inicio_academico" onchange="checkbox_actualidad_form_acad();">
                         </div>
                     </div>
 
                     <div class="row mb-col">
                         <div class="col-md-12">
-                            <label for="txt_fecha_final_academico" class="form-label form-label-sm">Fecha de finalización </label>
+                            <label for="txt_fecha_final_academico" class="form-label form-label-sm">Fecha Finalización Estudios </label>
                             <input type="date" class="form-control form-control-sm mb-2 no_caracteres" name="txt_fecha_final_academico" id="txt_fecha_final_academico" onchange="checkbox_actualidad_form_acad();">
 
                             <input type="checkbox" class="form-check-input" name="cbx_fecha_final_academico" id="cbx_fecha_final_academico" onchange="checkbox_actualidad_form_acad();">
@@ -272,8 +275,8 @@
                 </div>
 
                 <div class="modal-footer d-flex justify-content-center">
-                    <button type="button" class="btn btn-success btn-sm px-4 m-1" id="btn_guardar_formacion" onclick="validar_fechas_form_acad();insertar_editar_formacion_academica();">Agregar</button>
-                    <button type="button" class="btn btn-danger btn-sm px-4 m-1" id="btn_eliminar_formacion" onclick="delete_datos_form_acad();">Eliminar</button>
+                    <button type="button" class="btn btn-success btn-sm px-4 m-1" id="btn_guardar_formacion" onclick="validar_fechas_form_acad();insertar_editar_formacion_academica();"><i class="bx bx-save"></i>Agregar</button>
+                    <button type="button" style="display: none;" class="btn btn-danger btn-sm px-4 m-1" id="btn_eliminar_formacion_academica" onclick="delete_datos_form_acad();"><i class="bx bx-trash"></i>Eliminar</button>
                 </div>
             </form>
         </div>

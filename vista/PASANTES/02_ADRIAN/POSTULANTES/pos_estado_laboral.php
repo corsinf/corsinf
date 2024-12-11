@@ -98,7 +98,8 @@
         cargar_datos_modal_estado_laboral(id);
         $('#modal_estado_laboral').modal('show');
         $('#lbl_titulo_estado_laboral').html('Editar Estado Laboral');
-        $('#btn_guardar_estado_laboral').html('Editar');
+        $('#btn_guardar_estado_laboral').html('<i class="bx bx-save"></i>Editar');
+        $('#btn_eliminar_estado_laboral').show();
 
     }
 
@@ -112,7 +113,8 @@
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
             cancelButtonColor: '#d33',
-            confirmButtonText: 'Si'
+            confirmButtonText: 'Si',
+            cancelButtonText: 'Cancelar'
         }).then((result) => {
             if (result.value) {
                 eliminar_estado_laboral(id);
@@ -149,8 +151,9 @@
         $('#txt_fecha_salida_estado').val('');
         $('#txt_experiencia_estado_id').val('');
         //Cambiar texto
-        $('#lbl_titulo_estado_laboral').html('Agregue su Estado Laboral');
-        $('#btn_guardar_estado_laboral').html('Agregar');
+        $('#lbl_titulo_estado_laboral').html('Agregar Estado Laboral');
+        $('#btn_guardar_estado_laboral').html('<i class="bx bx-save"></i>Agregar');
+        $('#btn_eliminar_estado_laboral').hide();
     }
 
     function validar_fechas_est_lab() {
@@ -196,7 +199,7 @@
 
             <!-- Modal Header -->
             <div class="modal-header">
-                <h5><small class="text-body-secondary fw-bold" id="lbl_titulo_estado_laboral">Agregue su estado laboral</small></h5>
+                <h5><small class="text-body-secondary fw-bold" id="lbl_titulo_estado_laboral">Agregar Estado Laboral</small></h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="limpiar_campos_estado_laboral_modal()"></button>
             </div>
             <!-- Modal body -->
@@ -231,9 +234,10 @@
                     </div>
                 </div>
                 <div class="modal-footer d-flex justify-content-center">
-                    <button type="button" class="btn btn-success btn-sm" id="btn_guardar_estado_laboral" onclick="validar_fechas_est_lab(); insertar_editar_estado_laboral();">Agregar</button>
-                    <button type="button" class="btn btn-danger btn-sm px-4 m-1" id="btn_eliminar_estado" onclick="delete_datos_estado_laboral();">Eliminar</button>
+                    <button type="button" class="btn btn-success btn-sm px-4 m-1" id="btn_guardar_estado_laboral" onclick="validar_fechas_est_lab(); insertar_editar_estado_laboral();"><i class="bx bx-save"></i>Agregar</button>
+                    <button type="button" style="display: none;" class="btn btn-danger btn-sm px-4 m-1" id="btn_eliminar_estado_laboral" onclick="delete_datos_estado_laboral();"><i class="bx bx-trash"></i>Eliminar</button>
                 </div>
+                
             </form>
         </div>
     </div>

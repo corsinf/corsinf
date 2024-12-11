@@ -35,22 +35,16 @@ class th_pos_idiomasC
         // $datos = $this->modelo->where('th_pos_id', $id)->listar();
         // return $datos;
 
-       $datos = $this->modelo->where('th_pos_id', $id)->where('th_idi_estado', 1)->listar();
-
+        //Formato de ordenamiento de idiomas por fechas
+        $datos = $this->modelo->where('th_pos_id', $id)->where('th_idi_estado', 1)->orderBy('th_idi_fecha_fin_idioma', 'DESC')->listar();
+     
         $texto = '';
-
-        usort($datos, function($txt_fecha_fin_1, $txt_fecha_fin_2) {
-            $txt_fecha_fin_1= strtotime($txt_fecha_fin_1['th_idi_fecha_fin_idioma']);
-            $txt_fecha_fin_2 = strtotime($txt_fecha_fin_2['th_idi_fecha_fin_idioma']);
-            return $txt_fecha_fin_2 <=> $txt_fecha_fin_1; 
-        });
-
+        
         foreach ($datos as $key => $value) {
-
-            $fecha_fin = $value['th_idi_fecha_fin_idioma'] == '' ? 'Actualidad' : $value['th_idi_fecha_fin_idioma'];
-
-
-
+            //Formato de fechas de idiomas
+            $fecha_inicio_idioma = date('d/m/Y', strtotime($value['th_idi_fecha_inicio_idioma']));
+            $fecha_fin_idioma = date('d/m/Y', strtotime($value['th_idi_fecha_fin_idioma']));
+            
             $texto .= 
                 <<<HTML
                     <div class="row mb-col">
@@ -58,7 +52,7 @@ class th_pos_idiomasC
                             <h6 class="fw-bold mt-3 mb-2">{$value['th_idi_nombre_idioma']}</h6>
                             <p class="m-0">{$value['th_idi_nivel']}</p>
                             <p class="m-0">{$value['th_idi_institucion']} </p>
-                            <p class="m-0">{$value['th_idi_fecha_inicio_idioma']} - {$fecha_fin}</p>
+                            <p class="m-0">{$fecha_inicio_idioma} - {$fecha_fin_idioma}</p>
                         </div>
                         <div class="col-2 d-flex justify-content-end align-items-center">
                             <button class="btn icon-hover" style="color: white;" onclick="abrir_modal_idiomas({$value['_id']});">
@@ -71,6 +65,7 @@ class th_pos_idiomasC
 
         return $texto;
     }
+
 
     function listar_modal($id)
     {

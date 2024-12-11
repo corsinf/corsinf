@@ -86,13 +86,12 @@
         });
     }
 
-    //* Función para editar el registro de idiomas
     function abrir_modal_idiomas(id) {
         cargar_datos_modal_idiomas(id);
         $('#modal_agregar_idioma').modal('show');
         $('#lbl_nombre_idioma').html('Editar Idioma');
-        $('#btn_guardar_idioma').html('<i class="bx bx-save"></i>Guardar');
- 
+        $('#btn_guardar_idioma').html('<i class="bx bx-save"></i>Editar');
+        $('#btn_eliminar_idiomas').show();
     }
 
     function borrar_datos_idioma() {
@@ -144,8 +143,9 @@
         $('#txt_fecha_fin_idioma').val('');
         $('#txt_idiomas_id').val('');
         //Cambiar texto
-        $('#lbl_nombre_idioma').html('Agregue un Idioma');
-        $('#btn_guardar_idioma').html('<i class="bx bx-save"></i>Guardar');
+        $('#lbl_nombre_idioma').html('Agregar Idioma');
+        $('#btn_guardar_idioma').html('<i class="bx bx-save"></i>Agregar');
+        $('#btn_eliminar_idiomas').hide();
     }
 
     //Funcion para validar las fechas de ingreso
@@ -220,7 +220,7 @@
                         <div class="col-md-12">
                             <label for="ddl_seleccionar_idioma" class="form-label form-label-sm">Idioma </label>
                             <select class="form-select form-select-sm" id="ddl_seleccionar_idioma" name="ddl_seleccionar_idioma">
-                                <option selected disabled value="">-- Selecciona un Idioma --</option>
+                                <option selected disabled value="">-- Seleccionar Idioma --</option>
                                 <option value="Español">Español</option>
                                 <option value="Inglés">Inglés</option>
                                 <option value="Francés">Francés</option>
@@ -233,53 +233,44 @@
 
                     <div class="row mb-col">
                         <div class="col-md-12">
-                            <label for="ddl_dominio_idioma" class="form-label form-label-sm">Dominio del Idioma </label>
+                            <label for="ddl_dominio_idioma" class="form-label form-label-sm">Dominio Idioma </label>
                             <select class="form-select form-select-sm" id="ddl_dominio_idioma" name="ddl_dominio_idioma" required>
-                                <option selected disabled value="">-- Selecciona su nivel de dominio del idioma --</option>
+                                <option selected disabled value="">-- Selecciona su Nivel de Dominio del idioma --</option>
                                 <option value="Nativo">Nativo</option>
                                 <option value="A1: Principiante">A1: Principiante</option>
                                 <option value="A2: Básico">A2: Básico</option>
                                 <option value="B1: Pre-intermedio">B1: Pre-intermedio</option>
                                 <option value="B2: Intermedio">B2: Intermedio</option>
-                                <option value="c1: Intermedio-Alto">c1: Intermedio-Alto</option>
+                                <option value="C1: Intermedio-Alto">C1: Intermedio-Alto</option>
                                 <option value="C2: Avanzado">C2: Avanzado</option>
                             </select>
                         </div>
                     </div>
                     <div class="row mb-col">
                         <div class="col-md-12">
-                            <label for="txt_institucion" class="form-label form-label-sm">Instución </label>
+                            <label for="txt_institucion" class="form-label form-label-sm">Institución </label>
                             <input type="text" class="form-control form-control-sm no_caracteres" name="txt_institucion_1" id="txt_institucion_1" maxlength="100">
                         </div>
                     </div>
                     <div class="row mb-col">
                         <div class="col-md-12">
-                            <label for="txt_fecha_inicio_idioma" class="form-label form-label-sm">Fecha de Inicio </label>
+                            <label for="txt_fecha_inicio_idioma" class="form-label form-label-sm">Fecha Inicio Curso Idioma </label>
                             <input type="date" class="form-control form-control-sm" name="txt_fecha_inicio_idioma" id="txt_fecha_inicio_idioma" onchange="txt_fecha_fin_idioma_1();">
                         </div>
                     </div>
                     <div class="row mb-col">
                         <div class="col-md-12">
-                            <label for="txt_fecha_fin_idioma" class="form-label form-label-sm">Fecha de fin del curso </label>
+                            <label for="txt_fecha_fin_idioma" class="form-label form-label-sm">Fecha Final Curso Idioma </label>
                             <input type="date" class="form-control form-control-sm" name="txt_fecha_fin_idioma" id="txt_fecha_fin_idioma" onchange="txt_fecha_fin_idioma_1();">
                         </div>
                     </div>
                 </div>
-               
-
-                <!-- <div class="modal-footer d-flex justify-content-center">
-                    <button class="btn btn-primary btn-sm px-4 m-1" id="btn_guardar_idioma" onclick="insertar_editar_idiomas(); validar_fechas_idioma();" type="button">Guardar</button>
-                    <button class="btn btn-danger btn-sm px-4 m-1" id="btn_eliminar_formacion" onclick="borrar_datos_idioma();" type="button"> Eliminar</button>
-                </div> -->
-
+                <!-- Modal footer -->
                 <div class="modal-footer d-flex justify-content-center">
-                    <?php if ($id == '') { ?>
-                        <button class="btn btn-primary btn-sm px-4 m-0 d-flex align-items-center" onclick="insertar_editar_idiomas(); validar_fechas_idioma();" type="button"><i class="bx bx-save"></i> Guardar</button>
-                    <?php } else { ?>
-                        <button class="btn btn-primary btn-sm px-4 m-1 d-flex align-items-center" onclick="insertar_editar_idiomas();" type="button"><i class="bx bx-save"></i> Guardar</button>
-                        <button class="btn btn-danger btn-sm px-4 m-1 d-flex align-items-center" onclick="borrar_datos_idioma()" type="button"><i class="bx bx-trash"></i> Eliminar</button>
-                    <?php } ?>
+                    <button type="button" class="btn btn-success btn-sm px-4 m-1" id="btn_guardar_idioma" onclick="insertar_editar_idiomas(); validar_fechas_idioma();"><i class="bx bx-save"></i>Agregar</button>
+                    <button type="button" style="display: none;" class="btn btn-danger btn-sm px-4 m-1" id="btn_eliminar_idiomas" onclick="borrar_datos_idioma();"><i class="bx bx-trash"></i>Eliminar</button>
                 </div>
+
             </form>
         </div>
     </div>
