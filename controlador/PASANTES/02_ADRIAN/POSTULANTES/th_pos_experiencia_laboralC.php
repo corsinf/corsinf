@@ -32,20 +32,22 @@ class th_pos_experiencia_laboralC
     //Funcion para listar la experiencia previa del postulante
     function listar($id)
     {
-        $datos = $this->modelo->where('th_pos_id', $id)->where('th_expl_estado', 1)->listar();
-
+        $datos = $this->modelo->where('th_pos_id', $id)->where('th_expl_estado', 1)->orderBy('th_expl_cbx_fecha_fin_experiencia','DESC')->orderBy('th_expl_fecha_fin_experiencia', 'DESC')->listar();
+        //$datos = $this->modelo->where('th_pos_id', $id)->where('th_expl_estado', 1)->orderBy('th_expl_fecha_fin_experiencia', 'DESC')->listar();
         $texto = '';
+        
         foreach ($datos as $key => $value) {
-
-            $fecha_fin = $value['th_expl_fecha_fin_experiencia'] == '' ? 'Actualidad' : $value['th_expl_fecha_fin_experiencia'];
-
+            //Formato de fechas de experiencia laboral
+            $fecha_inicio_experiencia = date('d/m/Y', strtotime($value['th_expl_fecha_inicio_experiencia']));
+            //$fecha_fin_experiencia = $value['th_expl_fecha_fin_experiencia'] == '' ? 'Actualidad' : date('d/m/Y', strtotime($value['th_expl_fecha_fin_experiencia']));
+            $fecha_fin_experiencia = $value['th_expl_cbx_fecha_fin_experiencia'] == 1 ? 'Actualidad' : date('d/m/Y', strtotime($value['th_expl_fecha_fin_experiencia']));
             $texto .=
                 <<<HTML
                     <div class="row mb-col">
                         <div class="col-10">
                             <h6 class="fw-bold">{$value['th_expl_nombre_empresa']}</h6>
                             <p class="m-0">{$value['th_expl_cargos_ocupados']}</p>
-                            <p class="m-0">{$value['th_expl_fecha_inicio_experiencia']} - {$fecha_fin}</p>
+                            <p class="m-0">{$fecha_inicio_experiencia} - {$fecha_fin_experiencia}</p>
                             <p class="m-0">{$value['th_expl_responsabilidades_logros']}</p>
                         </div>
                         <div class="col-2 d-flex justify-content-end align-items-start">

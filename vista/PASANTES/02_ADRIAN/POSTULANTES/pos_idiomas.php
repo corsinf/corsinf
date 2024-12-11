@@ -241,7 +241,7 @@
                                 <option value="A2: Básico">A2: Básico</option>
                                 <option value="B1: Pre-intermedio">B1: Pre-intermedio</option>
                                 <option value="B2: Intermedio">B2: Intermedio</option>
-                                <option value="c1: Intermedio-Alto">c1: Intermedio-Alto</option>
+                                <option value="c1: Intermedio-Alto">C1: Intermedio-Alto</option>
                                 <option value="C2: Avanzado">C2: Avanzado</option>
                             </select>
                         </div>

@@ -32,12 +32,13 @@ class th_pos_formacion_academicaC
     //Funcion para listar la formacion academica del postulante
     function listar($id)
     {
-        $datos = $this->modelo->where('th_pos_id', $id)->where('th_fora_estado', 1)->listar();
+        $datos = $this->modelo->where('th_pos_id', $id)->where('th_fora_estado', 1)->orderBy('th_fora_titulo_obtenido','ASC')->listar();
 
         $texto = '';
         foreach ($datos as $key => $value) {
-
-            $fechaFin = $value['th_fora_fecha_fin_formacion'] == '' ? 'Actualidad' : $value['th_fora_fecha_fin_formacion'];
+            //Formato de fechas de formacion academica
+            $fecha_inicio_estudio = date('d/m/Y', strtotime($value['th_fora_fecha_inicio_formacion']));
+            $fecha_fin_estudio = $value['th_fora_fecha_fin_formacion'] == '' ? 'Actualidad' : date('d/m/Y', strtotime($value['th_fora_fecha_fin_formacion']));
 
             $texto .=
                 <<<HTML
@@ -45,7 +46,7 @@ class th_pos_formacion_academicaC
                         <div class="col-10">
                             <h6 class="fw-bold">{$value['th_fora_titulo_obtenido']}</h6>
                             <p class="m-0">{$value['th_fora_institución']}</p>
-                            <p class="m-0">{$value['th_fora_fecha_inicio_formacion']} - {$fechaFin}</p>
+                            <p class="m-0">{$fecha_inicio_estudio} - {$fecha_fin_estudio}</p>
                         </div>
                         <div class="col-2 d-flex justify-content-end align-items-start">
                             <button class="btn icon-hover" style="color: white;" onclick="abrir_modal_formacion_academica({$value['_id']});">

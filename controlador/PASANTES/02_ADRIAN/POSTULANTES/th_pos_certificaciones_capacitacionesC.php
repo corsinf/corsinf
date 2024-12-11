@@ -32,7 +32,7 @@ class th_pos_certificaciones_capacitacionesC
     //Funcion para listar la formacion academica del postulante
     function listar($id)
     {
-        $datos = $this->modelo->where('th_pos_id', $id)->where('th_cert_estado', 1)->listar();
+        $datos = $this->modelo->where('th_pos_id', $id)->where('th_cert_estado', 1)->orderBy('th_cert_nombre_curso')->listar();
 
         $texto = '';
         foreach ($datos as $key => $value) {
