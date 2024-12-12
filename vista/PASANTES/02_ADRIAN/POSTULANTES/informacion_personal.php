@@ -203,7 +203,7 @@ if (isset($_GET['id'])) {
                                         <?php include_once('../vista/PASANTES/02_ADRIAN/POSTULANTES/pos_cambiar_foto.php'); ?>
 
                                         <div class="position-relative">
-                                            
+
                                             <div class="widget-user-image text-center">
                                                 <img class="rounded-circle p-1 bg-primary" src="../img/sin_imagen.jpg" class="img-fluid" id="img_postulante_inf" alt="Imagen Perfil Postulante" width="110" height="110" />
                                             </div>
@@ -723,126 +723,127 @@ if (isset($_GET['id'])) {
             </form>
         </div>
     </div>
+</div>
 
 
-    <script>
-        //Validacion de formulario
-        $(document).ready(function() {
-            agregar_asterisco_campo_obligatorio('txt_primer_apellido');
-            agregar_asterisco_campo_obligatorio('txt_segundo_apellido');
-            agregar_asterisco_campo_obligatorio('txt_primer_nombre');
-            agregar_asterisco_campo_obligatorio('txt_segundo_nombre');
-            agregar_asterisco_campo_obligatorio('txt_numero_cedula');
-            agregar_asterisco_campo_obligatorio('ddl_sexo');
-            agregar_asterisco_campo_obligatorio('txt_fecha_nacimiento');
-            agregar_asterisco_campo_obligatorio('txt_edad');
-            agregar_asterisco_campo_obligatorio('txt_telefono_1');
-            agregar_asterisco_campo_obligatorio('txt_telefono_2');
-            agregar_asterisco_campo_obligatorio('txt_correo');
-            agregar_asterisco_campo_obligatorio('ddl_nacionalidad');
-            agregar_asterisco_campo_obligatorio('ddl_estado_civil');
-            agregar_asterisco_campo_obligatorio('ddl_provincias');
-            agregar_asterisco_campo_obligatorio('ddl_ciudad');
-            agregar_asterisco_campo_obligatorio('ddl_parroquia');
-            agregar_asterisco_campo_obligatorio('txt_codigo_postal');
-            agregar_asterisco_campo_obligatorio('txt_direccion');
-            //Validación Información Personal
-            $("#form_informacion_personal").validate({
-                rules: {
-                    txt_primer_apellido: {
-                        required: true,
-                    },
-                    txt_segundo_apellido: {
-                        required: true,
-                    },
-                    txt_primer_nombre: {
-                        required: true,
-                    },
-                    txt_segundo_nombre: {
-                        required: true,
-                    },
-                    txt_numero_cedula: {
-                        required: true,
-                    },
-                    ddl_sexo: {
-                        required: true,
-                    },
-                    txt_fecha_nacimiento: {
-                        required: true,
-                    },
-                    txt_edad: {
-                        required: true,
-                    },
-                    txt_telefono_1: {
-                        required: true,
-                    },
-                    txt_telefono_2: {
-                        required: true,
-                    },
-                    txt_correo: {
-                        required: true,
-                    },
-                    ddl_nacionalidad: {
-                        required: true,
-                    },
-                    ddl_estado_civil: {
-                        required: true,
-                    },
+<script>
+    //Validacion de formulario
+    $(document).ready(function() {
+        agregar_asterisco_campo_obligatorio('txt_primer_apellido');
+        agregar_asterisco_campo_obligatorio('txt_segundo_apellido');
+        agregar_asterisco_campo_obligatorio('txt_primer_nombre');
+        agregar_asterisco_campo_obligatorio('txt_segundo_nombre');
+        agregar_asterisco_campo_obligatorio('txt_numero_cedula');
+        agregar_asterisco_campo_obligatorio('ddl_sexo');
+        agregar_asterisco_campo_obligatorio('txt_fecha_nacimiento');
+        agregar_asterisco_campo_obligatorio('txt_edad');
+        agregar_asterisco_campo_obligatorio('txt_telefono_1');
+        agregar_asterisco_campo_obligatorio('txt_telefono_2');
+        agregar_asterisco_campo_obligatorio('txt_correo');
+        agregar_asterisco_campo_obligatorio('ddl_nacionalidad');
+        agregar_asterisco_campo_obligatorio('ddl_estado_civil');
+        agregar_asterisco_campo_obligatorio('ddl_provincias');
+        agregar_asterisco_campo_obligatorio('ddl_ciudad');
+        agregar_asterisco_campo_obligatorio('ddl_parroquia');
+        agregar_asterisco_campo_obligatorio('txt_codigo_postal');
+        agregar_asterisco_campo_obligatorio('txt_direccion');
+        //Validación Información Personal
+        $("#form_informacion_personal").validate({
+            rules: {
+                txt_primer_apellido: {
+                    required: true,
                 },
-                messages: {
-                    txt_primer_apellido: {
-                        required: "Por favor ingrese el primer apellido",
-                    },
-                    txt_segundo_apellido: {
-                        required: "Por favor ingrese el segundo apellido",
-                    },
-                    txt_primer_nombre: {
-                        required: "Por favor ingrese el primer nombre",
-                    },
-                    txt_segundo_nombre: {
-                        required: "Por favor ingrese el segundo nombre",
-                    },
-                    txt_numero_cedula: {
-                        required: "Por favor ingresa un número de cédula",
-                    },
-                    ddl_sexo: {
-                        required: "Por favor seleccione el sexo",
-                    },
-                    txt_fecha_nacimiento: {
-                        required: "Por favor ingrese la fecha de nacimiento",
-                    },
-                    txt_edad: {
-                        required: "Por favor ingrese la edad (fecha de nacimiento)",
-                    },
-                    txt_telefono_1: {
-                        required: "Por favor ingrese el primero teléfono",
-                    },
-                    txt_telefono_2: {
-                        required: "Por favor ingrese el segundo teléfono",
-                    },
-                    txt_correo: {
-                        required: "Por favor ingrese un correo",
-                    },
-                    ddl_nacionalidad: {
-                        required: "Por favor seleccione su nacionalidad",
-                    },
-                    ddl_estado_civil: {
-                        required: "Por favor seleccione su estado civil",
-                    },
+                txt_segundo_apellido: {
+                    required: true,
                 },
-
-                highlight: function(element) {
-                    // Agrega la clase 'is-invalid' al input que falla la validación
-                    $(element).addClass('is-invalid');
-                    $(element).removeClass('is-valid');
+                txt_primer_nombre: {
+                    required: true,
                 },
-                unhighlight: function(element) {
-                    // Elimina la clase 'is-invalid' si la validación pasa
-                    $(element).removeClass('is-invalid');
-                    $(element).addClass('is-valid');
+                txt_segundo_nombre: {
+                    required: true,
+                },
+                txt_numero_cedula: {
+                    required: true,
+                },
+                ddl_sexo: {
+                    required: true,
+                },
+                txt_fecha_nacimiento: {
+                    required: true,
+                },
+                txt_edad: {
+                    required: true,
+                },
+                txt_telefono_1: {
+                    required: true,
+                },
+                txt_telefono_2: {
+                    required: true,
+                },
+                txt_correo: {
+                    required: true,
+                },
+                ddl_nacionalidad: {
+                    required: true,
+                },
+                ddl_estado_civil: {
+                    required: true,
+                },
+            },
+            messages: {
+                txt_primer_apellido: {
+                    required: "Por favor ingrese el primer apellido",
+                },
+                txt_segundo_apellido: {
+                    required: "Por favor ingrese el segundo apellido",
+                },
+                txt_primer_nombre: {
+                    required: "Por favor ingrese el primer nombre",
+                },
+                txt_segundo_nombre: {
+                    required: "Por favor ingrese el segundo nombre",
+                },
+                txt_numero_cedula: {
+                    required: "Por favor ingresa un número de cédula",
+                },
+                ddl_sexo: {
+                    required: "Por favor seleccione el sexo",
+                },
+                txt_fecha_nacimiento: {
+                    required: "Por favor ingrese la fecha de nacimiento",
+                },
+                txt_edad: {
+                    required: "Por favor ingrese la edad (fecha de nacimiento)",
+                },
+                txt_telefono_1: {
+                    required: "Por favor ingrese el primero teléfono",
+                },
+                txt_telefono_2: {
+                    required: "Por favor ingrese el segundo teléfono",
+                },
+                txt_correo: {
+                    required: "Por favor ingrese un correo",
+                },
+                ddl_nacionalidad: {
+                    required: "Por favor seleccione su nacionalidad",
+                },
+                ddl_estado_civil: {
+                    required: "Por favor seleccione su estado civil",
+                },
+            },
 
-                }
-            });
+            highlight: function(element) {
+                // Agrega la clase 'is-invalid' al input que falla la validación
+                $(element).addClass('is-invalid');
+                $(element).removeClass('is-valid');
+            },
+            unhighlight: function(element) {
+                // Elimina la clase 'is-invalid' si la validación pasa
+                $(element).removeClass('is-invalid');
+                $(element).addClass('is-valid');
 
+            }
         });
-    </script>
+
+    });
+</script>
