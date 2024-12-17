@@ -1,47 +1,34 @@
 <?php
+$command = 'dotnet C:\\xampp\\htdocs\\corsinf\\lib\\SDKDevices\\hikvision\\bin\\Debug\\net8.0\\CorsinfSDKHik.dll 6 192.168.100.111 admin 8000 Data12/*';
 
-// habilitar en apache php.inuit extension=socket
-// Puerto SADP utilizado por Hikvision
-$port = 37020;
+$descriptorspec = array(
+    1 => array("pipe", "w"), // stdout
+    2 => array("pipe", "w")  // stderr
+);
 
-// Dirección de broadcast
-$broadcastAddress = '239.255.255.250';
+$process = proc_open($command, $descriptorspec, $pipes);
 
-// Tu mensaje XML
-$xmlMessage =  '<?xml version="1.0" encoding="utf-8"?><Probe><Uuid>13A888A9-F1B1-4020-AE9F-05607682D23B</Uuid><Types>inquiry</Types></Probe>';
-            
+if (is_resource($process)) {
+    stream_set_blocking($pipes[1], 0); // No bloquear la lectura del stdout
+    while (true) {
+        $output = fgets($pipes[1]);
+        if ($output !== false) {
+            echo $output; // Mostrar la salida en tiempo real
+            ob_flush();   // Limpiar el buffer de PHP
+            flush();      // Enviar la salida al navegador
+        }
 
-// Crear un socket UDP
-$socket = socket_create(AF_INET, SOCK_DGRAM, SOL_UDP);
+        // Si el proceso ha terminado, salir del bucle
+        if (feof($pipes[1])) {
+            break;
+        }
 
-// Verificar si se creó correctamente el socket
-if (!$socket) {
-    die("Error al crear el socket: " . socket_strerror(socket_last_error()) . "\n");
+        // Agregar un pequeño delay para evitar uso excesivo de CPU
+        usleep(100000); // 100ms
+    }
+
+    fclose($pipes[1]);
+    fclose($pipes[2]);
+    proc_close($process);
 }
-
-// Configurar el socket para que permita el uso de broadcast
-socket_set_option($socket, SOL_SOCKET, SO_BROADCAST, 1);
-
-// Convertir el mensaje XML a bytes
-$discoveryMessage = $xmlMessage;
-
-// Enviar el mensaje de descubrimiento por broadcast
-socket_sendto($socket, $discoveryMessage, strlen($discoveryMessage), 0, $broadcastAddress, $port);
-echo "Mensaje de descubrimiento enviado.\n";
-
-// Buffer para recibir las respuestas
-$buffer = '';
-$from = '';
-$port = 0;
-
-// Esperar y recibir las respuestas
-while (socket_recvfrom($socket, $buffer, 1024, 0, $from, $port)) {
-    echo "Respuesta recibida desde: $from\n";
-    echo "Datos: $buffer\n";
-
-    // Procesar la respuesta recibida
-}
-
-// Cerrar el socket
-socket_close($socket);
 ?>

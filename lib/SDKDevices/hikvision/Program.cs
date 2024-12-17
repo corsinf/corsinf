@@ -174,9 +174,9 @@ class Program
                         Task.Run(() => FingerMan.Escuchando(m_UserId));
                         // Mantener la consola ejecutándose para que el proceso de escucha no se detenga
                         // Console.WriteLine("Presiona 'q' para salir...");
-                        while (Console.ReadKey().Key != ConsoleKey.Q)
+                        while (true)
                         {
-                            //    // Aquí puedes agregar otra lógica si lo necesitas
+                            Thread.Sleep(1000); // Mantener el programa vivo
                         }
                     }
 

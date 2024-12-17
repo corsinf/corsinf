@@ -8,13 +8,14 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
 <script src="../js/GENERAL/operaciones_generales.js"></script>
 <script type="text/javascript">
     $(document).ready(function() {
-        tbl_dispositivos = $('#tbl_dispositivos').DataTable($.extend({}, configuracion_datatable('Dispostivos', 'dispostivos'), {
+        dispositivos();
+        tbl_dispositivos = $('#tbl_dispositivos').DataTable($.extend({}, {
             reponsive: true,
             language: {
                 url: 'https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
             },
             ajax: {
-                url: '../controlador/TALENTO_HUMANO/th_detectar_dispositivosC.php?BuscarDevice=true',
+                url: '../controlador/TALENTO_HUMANO/th_detectar_dispositivosC.php?DeviceLog=true',
                 dataSrc: ''
             },
             columns: [
@@ -80,108 +81,23 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
 
     });
 
-    function detectar()
-    {  
-        setInterval(function() {
-            $.ajax({
-                 // data:  {parametros:parametros},
-                 url:   '../controlador/TALENTO_HUMANO/th_detectar_dispositivosC.php?DetectarEventos=true',
-                 type:  'post',
-                 dataType: 'json',
-                 success:  function (response) { 
-                }          
-            });
-        }, 3000);  // Intervalo de 3 segundos
-    }
-    function cambiar_clave(ip,port)
-    {
-        $('#txt_ipv4').val(ip);
-        $('#txt_ipv4_port').val(port);
-        $('#cambio_clave').modal('show');
-    }
-
-    function registrar_device(ip,port,serial)
-    {
-        $('#txt_host').val(ip);
-        $('#txt_puerto').val(port);
-        $('#txt_serial').val(serial);
-        $('#registrar_dispositivo').modal('show');
-    }
-
-    function cambiar_pass()
-    {
-        if($('#txt_ipv4_pass').val()=='')
-        {
-            Swal.fire("","Contraseña asignada no valida","error");
-            return false;
-        }
-        var parametros = 
-        {
-            'ip':$('#txt_ipv4').val(),
-            'pass':$('#txt_ipv4_pass').val(),
-        }
+    function dispositivos() {
         $.ajax({
-            data:  {parametros:parametros},
-            url:   '../controlador/TALENTO_HUMANO/th_detectar_dispositivosC.php?CambiarPass=true',
-            type:  'post',
-            dataType: 'json',
-            success:  function (response) { 
-            }          
-        });
-    }
-
-      function editar_insertar() {
-        var ddl_modelo = 1; //$('#ddl_modelo').val();
-        var txt_nombre = $('#txt_nombre').val();
-        var txt_host = $('#txt_host').val();
-        var txt_puerto = $('#txt_puerto').val();
-        var txt_serial = $('#txt_serial').val();
-        var txt_usuario = $('#txt_usuario').val();
-        var txt_pass = $('#txt_pass').val();
-        var cbx_ssl = $('#cbx_ssl').prop('checked') ? 1 : 0;
-
-        var parametros = {
-            '_id': '',
-            'ddl_modelo': ddl_modelo,
-            'txt_nombre': txt_nombre,
-            'txt_host': txt_host,
-            'txt_puerto': txt_puerto,
-            'txt_serial': txt_serial,
-            'txt_usuario': txt_usuario,
-            'txt_pass': txt_pass,
-            'cbx_ssl': cbx_ssl,
-        };
-
-        if ($("#form_dispositivo").valid()) {
-            // Si es válido, puedes proceder a enviar los datos por AJAX
-            insertar(parametros);
-        }
-        //console.log(parametros);
-
-    }
-
-    function insertar(parametros) {
-        $.ajax({
-            data: {
-                parametros: parametros
-            },
-            url: '../controlador/TALENTO_HUMANO/th_dispositivosC.php?insertar=true',
+            // data: {
+            //     id: id
+            // },
+            url: '../controlador/TALENTO_HUMANO/th_dispositivosC.php?listar=true',
             type: 'post',
             dataType: 'json',
-
             success: function(response) {
-                if (response == 1) {
-                    Swal.fire('', 'Operacion realizada con exito.', 'success').then(function() {
-                        location.href = '../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_dispositivos';
-                    });
-                } else if (response == -2) {
-                    //Swal.fire('', 'El nombre del dispositivo ya está en uso', 'warning');
-                    $(txt_nombre).addClass('is-invalid');
-                    $('#error_txt_nombre').text('El nombre del dispositivo ya está en uso.');
-                }
-            },
-            
-            error: function(xhr, status, error) {
+                console.log(response);
+                op = '';
+                response.forEach(function(item,i){
+                    op+='<option value="'+item._id+'">'+item.nombre+'</option>';
+                })
+                $('#ddl_dispositivos').html(op);
+               
+            },  error: function(xhr, status, error) {
                 console.log('Status: ' + status); 
                 console.log('Error: ' + error); 
                 console.log('XHR Response: ' + xhr.responseText); 
@@ -189,11 +105,8 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                 Swal.fire('', 'Error: ' + xhr.responseText, 'error');
             }
         });
-
-        $('#txt_nombre').on('input', function() {
-            $('#error_txt_nombre').text('');
-        });
     }
+
     function probar_conexion()
     {
         var txt_host = $('#txt_host').val();
@@ -237,9 +150,74 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                 Swal.fire('', 'Error: ' + xhr.responseText, 'error');
             }
         });
+    }
 
+    function detectar()
+    {
+        // setInterval(
+            DeviceLog()
+            // , 5000);
+      
+    }
+    function DeviceLog()
+    {
+        var parametros = {
+            'dispostivos': $('#ddl_dispositivos').val(),
+        };
+
+         $.ajax({
+            data: {
+                parametros: parametros
+            },
+            url: '../controlador/TALENTO_HUMANO/th_detectar_dispositivosC.php?DetectarEventos=true',
+            type: 'post',
+            dataType: 'json',
+
+            success: function(response) {
+                Swal.fire("Activado deteccion","","success")
+            },
+            
+            error: function(xhr, status, error) {
+                console.log('Status: ' + status); 
+                console.log('Error: ' + error); 
+                console.log('XHR Response: ' + xhr.responseText); 
+
+                Swal.fire('', 'Error: ' + xhr.responseText, 'error');
+            }
+        });
 
     }
+
+    function Detenerdeteccion()
+    {
+        var parametros = {
+            'dispostivos': $('#ddl_dispositivos').val(),
+        };
+
+         $.ajax({
+            data: {
+                parametros: parametros
+            },
+            url: '../controlador/TALENTO_HUMANO/th_detectar_dispositivosC.php?DetenerEventos=true',
+            type: 'post',
+            dataType: 'json',
+
+            success: function(response) {
+                Swal.fire("Activado deteccion","","success")
+            },
+            
+            error: function(xhr, status, error) {
+                console.log('Status: ' + status); 
+                console.log('Error: ' + error); 
+                console.log('XHR Response: ' + xhr.responseText); 
+
+                Swal.fire('', 'Error: ' + xhr.responseText, 'error');
+            }
+        });
+
+    }
+
+
 
 </script>
 
@@ -273,15 +251,22 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
 
                         <div class="row">
                             <div class="col-12 col-md-6">
+                                <select class="form-select form-select-sm" id="ddl_dispositivos" name="ddl_dispositivos">
+                                    <option>Seleccione dispositivo</option>
+                                </select>
+                            </div>
+                            <div class="col-12 col-md-6">
                                 <div class="card-title d-flex align-items-center">
 
                                     <div class="" id="btn_nuevo">
-                                        <a href="../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_registrar_dispositivos"
-                                            type="button" class="btn btn-success btn-sm">
-                                            <i class="bx bx-plus me-0 pb-1"></i> Nuevo
-                                        </a>
                                         <button type="button" class="btn btn-success btn-sm" onclick="detectar()">
-                                            <i class="bx bx-plus me-0 pb-1"></i> detectar
+                                            <i class="bx bx-play me-0 pb-1"></i> Comenzar deteccion
+                                        </button> 
+                                        <button type="button" class="btn btn-danger btn-sm" onclick="Detenerdeteccion()">
+                                            <i class="bx bx-stop me-0 pb-1"></i> Deteccion deteccion
+                                        </button>
+                                        <button type="button" class="btn btn-success btn-sm" onclick="DeviceLog()">
+                                            <i class="bx bx-search me-0 pb-1"></i> Buscar log
                                         </button>
                                     </div>
                                     

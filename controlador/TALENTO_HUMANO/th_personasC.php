@@ -45,7 +45,9 @@ if (isset($_GET['registros_biometria'])) {
 if (isset($_GET['eliminarFing'])) {
     echo json_encode($controlador->eliminarFing($_POST['id']));
 }
-
+if (isset($_GET['syncronizarPersona'])) {
+    echo json_encode($controlador->syncronizarPersona($_POST['parametros']));
+}
 
 
 class th_personasC
@@ -291,6 +293,44 @@ class th_personasC
         $where[0]['campo'] = 'th_bio_id';
         $where[0]['dato'] = $id;
         return $this->biometria->eliminar($where);
+
+    }
+
+    function syncronizarPersona($parametros)
+    {
+        // print_r($parametros);die();
+
+        $datos = $this->listar($parametros['id']);
+
+        $datosBio = array(
+            array('campo'=>'th_bio_card','dato'=>$parametros['card']),
+            array('campo'=>'th_per_id','dato'=>$parametros['id']),
+        );
+
+
+
+        if(count($datos[0]['biometria'])==0 && $parametros['card']!='')
+        {
+            $datos = $this->biometria->insertar($datosBio);
+        }else if(count($datos[0]['biometria'])>0 && $parametros['card']!='')
+        {
+
+            $where[0]['campo'] = 'th_per_id';
+            $where[0]['dato'] = $parametros['id'];
+            $datos = $this->biometria->editar($datosBio, $where);
+        }
+        $dispositivo = $this->dispositivos->where('th_dis_id',$parametros['device'])->listar();
+        $datos = $this->listar($parametros['id']);
+
+
+        $dllPath = $this->sdk_patch.'4 '.$dispositivo[0]['host'].' '.$dispositivo[0]['usuario'].' '.$dispositivo[0]['port'].' '.$dispositivo[0]['pass'].' "'.$datos[0]['primer_apellido'].' '.$datos[0]['segundo_apellido'].' '.$datos[0]['primer_nombre'].' '.$datos[0]['segundo_nombre'].'" '.$parametros['id'].' '.$parametros['card'].' '.$datos[0]['biometria']['th_bio_patch'];
+        // Comando para ejecutar la DLL
+        $command = "dotnet $dllPath";
+
+        // print_r($command);die();
+        $output = shell_exec($command);
+        $resp = json_decode($output,true);
+        return $resp;       
 
     }
 

@@ -15,6 +15,7 @@ if (isset($_GET['_id'])) {
 <script type="text/javascript">
     $(document).ready(function() {
         dispositivos();
+        dispositivosSync();
         cargar_tabla()
         <?php if (isset($_GET['_id'])) { ?>
          datos_col(<?= $_id ?>);
@@ -265,6 +266,32 @@ if (isset($_GET['_id'])) {
         });
     }
 
+    function dispositivosSync() {
+        $.ajax({
+            // data: {
+            //     id: id
+            // },
+            url: '../controlador/TALENTO_HUMANO/th_dispositivosC.php?listar=true',
+            type: 'post',
+            dataType: 'json',
+            success: function(response) {
+                console.log(response);
+                op = '';
+                response.forEach(function(item,i){
+                    op+='<option value="'+item._id+'">'+item.nombre+'</option>';
+                })
+                $('#ddl_dispositivosSync').html(op);
+               
+            },  error: function(xhr, status, error) {
+                console.log('Status: ' + status); 
+                console.log('Error: ' + error); 
+                console.log('XHR Response: ' + xhr.responseText); 
+
+                Swal.fire('', 'Error: ' + xhr.responseText, 'error');
+            }
+        });
+    }
+
     function eliminarfinger(id) {
         Swal.fire({
             title: 'Eliminar Registro?',
@@ -338,6 +365,39 @@ if (isset($_GET['_id'])) {
         }));
     }
 
+    function syncronizarPersona()
+    {
+        $('#sync_biometrico').modal('show');
+
+    }
+
+    function syncronizarPersonaBio()
+    {
+        if($('#txt_CardNumero').val()=='')
+        {
+            Swal.fire("Debe tener numero de tarjea en biometria","","info");
+            return false;
+        }
+        id = '<?= $_id ?>';
+        parametros = 
+        {
+            'id':id,
+            'device':$('#ddl_dispositivosSync').val(),
+            'card':$('#txt_CardNumero').val(),
+        }
+          $.ajax({
+            data: {
+                parametros: parametros
+            },
+            url: '../controlador/TALENTO_HUMANO/th_personasC.php?syncronizarPersona=true',
+            type: 'post',
+            dataType: 'json',
+            success: function(response) {
+                Swal.fire('', response.msj, 'success')            
+            }
+        });
+
+    }
   
 </script>
 
@@ -385,6 +445,7 @@ if (isset($_GET['_id'])) {
                             <div class="row m-2">
                                 <div class="col-sm-12">
                                     <a href="../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_personas" class="btn btn-outline-dark btn-sm"><i class="bx bx-arrow-back"></i> Regresar</a>
+                                     <button class="btn btn-primary btn-sm" onclick="syncronizarPersona()"><i class="bx bx-sync"></i>Syncronizar persona en biometrico</button>
                                 </div>
                             </div>
                         </div>
@@ -620,6 +681,7 @@ if (isset($_GET['_id'])) {
                                 </div>
 
                                 <div class="tab-pane fade" id="tarjetas" role="tabpanel">
+                                    
                                     <div class="row">
                                         <div class="col-md-3">
                                             <b>Numero de tarjeta</b>
@@ -733,6 +795,38 @@ if (isset($_GET['_id'])) {
     </div>
 </div>
 
+
+<div class="modal" id="sync_biometrico" abindex="-1" aria-modal="true" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h3>Syncronizar a biometrico</h3>
+            </div>
+
+            <!-- Modal body -->
+            <div class="modal-body">
+
+                <div class="row">
+                    <div class="col-sm-12">
+                        <b>Biometrico a syncronizar</b>
+                        <select class="form-select" id="ddl_dispositivosSync"></select>
+                    </div>
+                </div>
+                   
+                
+                <div class="row pt-3">
+                    <div class="col-12 text-end">
+                        <button type="button" class="btn btn-success btn-sm" onclick="syncronizarPersonaBio()"><i class="bx bx-sync"></i> Enviar a biometrico</button>
+                        <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
 <script>
     //Validacion de formulario
     $(document).ready(function() {

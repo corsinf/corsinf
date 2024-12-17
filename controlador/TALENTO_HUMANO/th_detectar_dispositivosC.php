@@ -4,15 +4,14 @@ date_default_timezone_set('America/Guayaquil');
 require_once(dirname(__DIR__, 2) . '/modelo/TALENTO_HUMANO/th_personasM.php');
 require_once(dirname(__DIR__, 2) . '/modelo/TALENTO_HUMANO/th_dispositivosM.php');
 require_once(dirname(__DIR__, 2) . '/modelo/TALENTO_HUMANO/th_biometriaM.php');
+require_once(dirname(__DIR__, 2) . '/modelo/TALENTO_HUMANO/th_control_accesoM.php');
 
 $controlador = new th_detectar_dispositivosC();
 
 if (isset($_GET['BuscarDevice'])) {
     echo json_encode($controlador->BuscarDevice());
 }
-if (isset($_GET['DetectarEventos'])) {
-    echo json_encode($controlador->DetectarEventos());
-}
+
 if (isset($_GET['ProbarConexion'])) {
 	$parametros = $_POST['parametros'];
     echo json_encode($controlador->ProbarConexion($parametros));
@@ -25,6 +24,12 @@ if (isset($_GET['CapturarFinger'])) {
     echo json_encode($controlador->CapturarFinger($_POST['parametros']));
 }
 
+if (isset($_GET['DetectarEventos'])) {
+    echo json_encode($controlador->DetectarEventos($_POST['parametros']));
+}
+if (isset($_GET['DetenerEventos'])) {
+    echo json_encode($controlador->DetenerEventos($_POST['parametros']));
+}
 
 /**
  * 
@@ -41,6 +46,7 @@ class th_detectar_dispositivosC
         $this->modelo_dispositivos = new th_dispositivosM();
         $this->modelo_personas = new th_personasM();
         $this->modelo_biometria = new th_biometriaM();
+        $this->control_acceso = new th_control_accesoM();
     }
 
     function BuscarDevice()
@@ -85,12 +91,17 @@ class th_detectar_dispositivosC
     	return $tr;
     }
 
-    function DetectarEventos()
+   
+
+    function DetectarEventos($parametros)
     {
-    	$dllPath = dirname(__DIR__,2).'/lib/SDKDevices/hikvision/bin/Debug/net8.0/libreriasHik.dll 2';
+    	set_time_limit(0);
+    	$dispositivo = $this->modelo_dispositivos->where('th_dis_id',$parametros['dispostivos'])->listar();
+    	$dllPath = $this->sdk_patch.'6 '.$dispositivo[0]['host'].' '.$dispositivo[0]['usuario'].' '.$dispositivo[0]['port'].' '.$dispositivo[0]['pass'].' ';
 		// Comando para ejecutar la DLL
 		$command = "dotnet $dllPath";
 
+		// print_r($command);die();
     	$descriptors = [
 		    0 => ["pipe", "r"],
 		    1 => ["pipe", "w"],
@@ -98,6 +109,8 @@ class th_detectar_dispositivosC
 		];
 
 		$process = proc_open($command, $descriptors, $pipes);
+ 		$status = proc_get_status($process);
+    	$pid = $status['pid'];
 
 		if (is_resource($process)) {
 		    // Mantener un bucle continuo para leer la salida del proceso en tiempo real
@@ -107,9 +120,52 @@ class th_detectar_dispositivosC
 		        
 		        if ($output !== false) {
 		            // Enviar la salida al cliente (por ejemplo, a un frontend en JavaScript)
-		            echo " " . $output . "<br>";
+		            // return  $output ;
+
+		            $resp = json_decode($output,true);
+		            if($resp!='')
+		            {
+		            	foreach ($resp as $key => $value) 
+		            	{		            	
+				            $idDis = '';
+				            $idPer = '';
+				            $dispo = $this->modelo_dispositivos->where('th_dis_host',$value['ip'])->listar();
+				            if(count($dispo)>0) { $idDis = $dispo[0]['_id']; }
+				            	if(isset($value['Card Number']))
+					            {
+					            	$entrada = 1;
+					            	// print_r($value);die();
+					            	$per = $this->modelo_biometria->where('th_bio_card',$value['Card Number'])->listar();
+					            	if(count($per)>0)
+					            	{
+					            		$idPer = $per[0]['th_per_id'];
+					            	}
+
+					            	$control_acceso = $this->control_acceso->where('th_per_id',$idPer,'CONVERT(date, th_acc_fecha_hora)',date('Y-m-d'))->listar();
+					            	if(count($control_acceso)>0 && (count($control_acceso)+1)%2==0)
+					            	{
+					            		$entrada = 0;
+					            	}
+					            	$Hora = explode(" ", $value['fecha']);
+						            $datos = array(
+						            	array('campo'=>'th_dis_id','dato'=>$idDis),
+						            	array('campo'=>'th_per_id','dato'=>$idPer),
+						            	array('campo'=>'th_acc_tipo_registro','dato'=>$entrada),
+						            	array('campo'=>'th_acc_fecha_hora','dato'=>$value['fecha']),
+						            	array('campo'=>'th_acc_hora','dato'=>$Hora[1]),
+						            );
+						            $this->control_acceso->insertar($datos);
+
+					            }
+				           
+			        	}
+		             }
+
 		            ob_flush();  // Envía el contenido al navegador inmediatamente
 		            flush();     // Descarga el buffer de salida
+		        }else
+		        {
+		        	break;
 		        }
 		    }
 
@@ -227,7 +283,24 @@ class th_detectar_dispositivosC
     	// print_r($resp);die();
     }
 
-    
+
+    function DetenerEventos()
+    {
+		// Comando para eliminar el proceso por PID
+
+		print_r(PID);die();
+		$command = "taskkill /IM dotnet.exe /F";
+
+		// Ejecutar el comando
+		exec($command, $output, $return_var);
+
+		// Verificar si el comando fue exitoso
+		if ($return_var === 0) {
+		    echo "Proceso con PID $pid eliminado correctamente.";
+		} else {
+		    echo "Hubo un error al intentar eliminar el proceso con PID $pid.";
+		}
+    }    
 }
 
 ?> 

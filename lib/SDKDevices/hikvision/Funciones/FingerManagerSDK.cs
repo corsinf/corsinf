@@ -401,7 +401,7 @@ namespace CorsinfSDKHik.Funciones
             /**************************************************/
 
 
-            msj = "[{ip:" + pAlarmer.sDeviceIP + ",";
+            msj = "[{\"ip\":\"" + pAlarmer.sDeviceIP + "\",";
 
             szInfoBuf = string.Format("{0} time:{1,4}-{2:D2}-{3} {4:D2}:{5:D2}:{6:D2}, [{7}]({8})", szInfo, struAcsAlarmInfo.struTime.dwYear, struAcsAlarmInfo.struTime.dwMonth,
                 struAcsAlarmInfo.struTime.dwDay, struAcsAlarmInfo.struTime.dwHour, struAcsAlarmInfo.struTime.dwMinute, struAcsAlarmInfo.struTime.dwSecond,
@@ -409,7 +409,7 @@ namespace CorsinfSDKHik.Funciones
 
             if (struAcsAlarmInfo.struAcsEventInfo.byCardNo[0] != 0)
             {
-                msj += "Card Number:" + System.Text.Encoding.UTF8.GetString(struAcsAlarmInfo.struAcsEventInfo.byCardNo).TrimEnd('\0')+",";
+                msj += "\"Card Number\":\"" + System.Text.Encoding.UTF8.GetString(struAcsAlarmInfo.struAcsEventInfo.byCardNo).TrimEnd('\0')+ "\",";
             }
             String[] szCardType = { "normal card", "disabled card", "blocklist card", "night watch card", "stress card", "super card", "guest card" };
             byte byCardType = struAcsAlarmInfo.struAcsEventInfo.byCardType;
@@ -417,18 +417,18 @@ namespace CorsinfSDKHik.Funciones
             if (byCardType != 0 && byCardType <= szCardType.Length)
             {
                 // szInfoBuf = szInfoBuf + "+Card Type:" + szCardType[byCardType - 1];
-                msj += "cardType:" + szCardType[byCardType - 1] + ",";
+                msj += "\"cardType\":\"" + szCardType[byCardType - 1] + "\",";
             }
 
             if (struAcsAlarmInfo.struAcsEventInfo.dwCardReaderNo != 0)
             {
                 szInfoBuf = szInfoBuf + "+Card Reader Number:" + struAcsAlarmInfo.struAcsEventInfo.dwCardReaderNo;
-                msj += "cardReaderNumber:" + struAcsAlarmInfo.struAcsEventInfo.dwCardReaderNo + ",";
+                msj += "\"cardReaderNumber\":\"" + struAcsAlarmInfo.struAcsEventInfo.dwCardReaderNo + "\",";
             }
             if (struAcsAlarmInfo.struAcsEventInfo.dwDoorNo != 0)
             {
                 // szInfoBuf = szInfoBuf + "+Door Number:" + struAcsAlarmInfo.struAcsEventInfo.dwDoorNo;
-                msj += "doorNumber:" + struAcsAlarmInfo.struAcsEventInfo.dwDoorNo + ",";
+                msj += "\"doorNumber\":\"" + struAcsAlarmInfo.struAcsEventInfo.dwDoorNo + "\",";
             }
             if (struAcsAlarmInfo.struAcsEventInfo.dwVerifyNo != 0)
             {
@@ -437,7 +437,7 @@ namespace CorsinfSDKHik.Funciones
             if (struAcsAlarmInfo.struAcsEventInfo.dwAlarmInNo != 0)
             {
                 // szInfoBuf = szInfoBuf + "+Alarm Input Number:" + struAcsAlarmInfo.struAcsEventInfo.dwAlarmInNo;
-                msj += "alarmNumber:" + szCardType[byCardType - 1] + ",";
+                msj += "\"alarmNumber\":\"" + szCardType[byCardType - 1] + "\",";
 
             }
             if (struAcsAlarmInfo.struAcsEventInfo.dwAlarmOutNo != 0)
@@ -463,7 +463,7 @@ namespace CorsinfSDKHik.Funciones
             if (struAcsAlarmInfo.struAcsEventInfo.wAccessChannel >= 0)
             {
                 //szInfoBuf = szInfoBuf + "+wAccessChannel:" + struAcsAlarmInfo.struAcsEventInfo.wAccessChannel;
-                msj += "accessChannel:" + struAcsAlarmInfo.struAcsEventInfo.wAccessChannel + ",";
+                msj += "\"accessChannel\":\"" + struAcsAlarmInfo.struAcsEventInfo.wAccessChannel + "\",";
             }
             if (struAcsAlarmInfo.struAcsEventInfo.dwEmployeeNo != 0)
             {
@@ -476,18 +476,18 @@ namespace CorsinfSDKHik.Funciones
             if (struAcsAlarmInfo.struAcsEventInfo.wLocalControllerID >= 0)
             {
                 //szInfoBuf = szInfoBuf + "+wLocalControllerID:" + struAcsAlarmInfo.struAcsEventInfo.wLocalControllerID;
-                msj += "localControllerID," + struAcsAlarmInfo.struAcsEventInfo.wLocalControllerID + ",";
+                msj += "\"localControllerID\":\"" + struAcsAlarmInfo.struAcsEventInfo.wLocalControllerID + "\",";
             }
             if (struAcsAlarmInfo.struAcsEventInfo.byInternetAccess >= 0)
             {
                 //szInfoBuf = szInfoBuf + "+byInternetAccess:" + struAcsAlarmInfo.struAcsEventInfo.byInternetAccess.ToString();
-                msj += "byInternetAccess:" + struAcsAlarmInfo.struAcsEventInfo.byInternetAccess.ToString() + ",";
+                msj += "\"byInternetAccess\":\"" + struAcsAlarmInfo.struAcsEventInfo.byInternetAccess.ToString() + "\",";
 
             }
             if (struAcsAlarmInfo.struAcsEventInfo.byType >= 0)
             {
                 // szInfoBuf = szInfoBuf + "+byType:" + struAcsAlarmInfo.struAcsEventInfo.byType.ToString();
-                msj += "byType:" + struAcsAlarmInfo.struAcsEventInfo.byType.ToString() + ",";
+                msj += "\"byType\":\"" + struAcsAlarmInfo.struAcsEventInfo.byType.ToString() + "\",";
             }
             if (struAcsAlarmInfo.struAcsEventInfo.bySwipeCardType != 0)
             {
@@ -511,7 +511,7 @@ namespace CorsinfSDKHik.Funciones
                 szInfoBuf = szInfoBuf + "SavePath:" + path;
             }
 
-            msj += "fecha:" + DateTime.Now.ToString() + "}]";
+            msj += "\"fecha\":\"" + DateTime.Now.ToString() + "\"}]";
             //xmlDoc.LoadXml(receivedXml); // Cargar el XML en XmlDocument
             //string jsonText = JsonConvert.SerializeXmlNode(xmlDoc); // Convertir a JSON             
             //Console.WriteLine(jsonText);
