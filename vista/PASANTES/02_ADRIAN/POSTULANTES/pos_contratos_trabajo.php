@@ -22,82 +22,128 @@
     }
 
     function cargar_datos_modal_contratos_trabajos(id) {
-        $.ajax({
-            url: '../controlador/PASANTES/02_ADRIAN/POSTULANTES/th_pos_contratos_trabajoC.php?listar_modal=true',
-            type: 'post',
-            data: {
-                id: id
-            },
-            dataType: 'json',
-            success: function(response) {
-                $('#txt_contratos_trabajos_id').val(response[0]._id);
-                $('#txt_nombre_empresa_contrato').val(response[0].th_ctr_nombre_empresa);
-                $('#txt_tipo_contrato').val(response[0].th_ctr_tipo_contrato);
-                $('#txt_ruta_guardada_contratos_trabajos').val(response[0].th_ctr_contratos_trabajos);
-                $('#txt_fecha_inicio_contrato').val(response[0].th_ctr_fecha_inicio_contrato);
-                $cbx_fecha_fin_experiencia.val(response[0].th_ctr_cbx_fecha_fin_experiencia);
+    $.ajax({
+        url: '../controlador/PASANTES/02_ADRIAN/POSTULANTES/th_pos_contratos_trabajoC.php?listar_modal=true',
+        type: 'post',
+        data: { id: id },
+        dataType: 'json',
+        success: function(response) {
+            // Asignamos los valores de la respuesta a los campos correspondientes
+            $('#txt_nombre_empresa_contrato').val(response[0].th_ctr_nombre_empresa);
+            $('#txt_tipo_contrato').val(response[0].th_ctr_tipo_contrato);
+            $('#txt_fecha_inicio_contrato').val(response[0].th_ctr_fecha_inicio_contrato);
+           
+            var fecha_fin_contrato = response[0].th_ctr_fecha_fin_contrato;
+            
+            if (fecha_fin_contrato === '') {
+                // Si no hay fecha de fin, la configuramos a la fecha actual y deshabilitamos el campo
+                var hoy = new Date();
+                var dia = String(hoy.getDate()).padStart(2, '0');
+                var mes = String(hoy.getMonth() + 1).padStart(2, '0');
+                var year = hoy.getFullYear();
+                var fecha_actual_contrato = year + '-' + mes + '-' + dia;
+                $('#txt_fecha_fin_contrato').val(fecha_actual_contrato);
+                $('#txt_fecha_fin_contrato').prop('disabled', true);  // Deshabilitar el campo de fecha
+                $('#cbx_fecha_fin_experiencia').prop('checked', true);  // Marcar la casilla
+            } else {
+                // Si hay fecha de fin, la mostramos y habilitamos el campo
+                $('#cbx_fecha_fin_experiencia').prop('checked', false);
+                $('#txt_fecha_fin_contrato').prop('disabled', false);
+                $('#txt_fecha_fin_contrato').val(fecha_fin_contrato);
             }
+                      
+            // Cargar la ruta guardada del archivo
+            $('#txt_ruta_guardada_contratos_trabajos').val(response[0].th_ctr_ruta_archivo);
+            $('#txt_contratos_trabajos_id').val(response[0]._id);
+        }
+    });
+}
+
+function insertar_editar_contratos_trabajos() {
+    // Captura todos los campos y archivos
+    var form_data = new FormData(document.getElementById("form_contratos_trabajos"));
+   
+    var cbx_fecha_fin_experiencia = $('#cbx_fecha_fin_experiencia').prop('checked') ? 1 : 0;
+    var txt_fecha_fin_contrato = ''; // Inicializar la fecha de fin
+
+    // Determinar si la fecha de fin del contrato es obligatoria
+    if (!$('#cbx_fecha_fin_experiencia').is(':checked')) {
+        txt_fecha_fin_contrato = $('#txt_fecha_fin_contrato').val();
+        
+        // Convertir la fecha al formato adecuado si no está vacía
+        if (txt_fecha_fin_contrato) {
+            var fecha = new Date(txt_fecha_fin_contrato);
+            // Asegurarse de que la fecha esté en formato yyyy-mm-dd
+            txt_fecha_fin_contrato = fecha.toISOString().split('T')[0]; // yyyy-mm-dd
+        }
+    }
+
+    // Obtener el id del contrato de trabajo
+    var txt_id_contratos_trabajos = $('#txt_contratos_trabajos_id').val();
+
+    // Verificar si el archivo se ha subido o si se usa un archivo guardado
+    var txt_ruta_archivo_contrato = '';
+    if ($('#txt_ruta_archivo_contrato').val() === '' && txt_id_contratos_trabajos != '') {
+        // Si no se seleccionó un nuevo archivo, se usa el archivo guardado
+        txt_ruta_archivo_contrato = $('#txt_ruta_guardada_contratos_trabajos').val();
+        $('#txt_ruta_archivo_contrato').rules("remove", "required"); // Elimina la validación de archivo si no se va a subir uno nuevo
+    } else {
+        // Si se seleccionó un archivo, se asegura que el campo sea requerido
+        txt_ruta_archivo_contrato = $('#txt_ruta_archivo_contrato').val();
+        $('#txt_ruta_archivo_contrato').rules("add", {
+            required: true
         });
     }
 
-    function insertar_editar_contratos_trabajos() {
-        var form_data = new FormData(document.getElementById("form_contratos_trabajos")); // Captura todos los campos y archivos
-        var in_cbx_fecha_fin_experiencia = $('#cbx_fecha_fin_experiencia').is(':checked') ? 1 : 0;
-        form_data.append('cbx_fecha_fin_experiencia', in_cbx_fecha_fin_experiencia);
+    // Añadir la ruta del archivo y la fecha de fin al FormData
+    form_data.append('txt_fecha_fin_contrato', txt_fecha_fin_contrato);
+    form_data.append('txt_ruta_archivo_contrato', txt_ruta_archivo_contrato);
 
-        var txt_id_contratos_trabajos = $('#txt_contratos_trabajos_id').val();
-
-        if ($('#txt_ruta_archivo_contrato').val() === '' && txt_id_contratos_trabajos != '') {
-            var txt_ruta_archivo_contrato = $('#txt_ruta_guardada_contratos_trabajos').val()
-            $('#txt_ruta_archivo_contrato').rules("remove", "required");
-        } else {
-            var txt_ruta_archivo_contrato = $('#txt_ruta_archivo_contrato').val();
-            $('#txt_ruta_archivo_contrato').rules("add", {
-                required: true
-            });
-        }
-
-        if ($("#form_contratos_trabajos").valid()) {
-
-            $.ajax({
-                url: '../controlador/PASANTES/02_ADRIAN/POSTULANTES/th_pos_contratos_trabajoC.php?insertar=true',
-                type: 'post',
-                data: form_data,
-                contentType: false,
-                processData: false,
-
-                dataType: 'json',
-                success: function(response) {
-                    if (response == -1) {
-                        Swal.fire({
-                            title: '',
-                            text: 'Algo extraño ha ocurrido, intente más tarde.',
-                            icon: 'error',
-                            allowOutsideClick: false,
-                            showConfirmButton: true,
-                            confirmButtonText: 'Cerrar'
-                        });
-                    } else if (response == -2) {
-                        Swal.fire({
-                            title: '',
-                            text: 'Asegúrese de que el archivo subido sea un PDF.',
-                            icon: 'error',
-                            allowOutsideClick: false,
-                            showConfirmButton: true,
-                            confirmButtonText: 'Cerrar'
-                        });
-                    } else if (response == 1) {
-                        Swal.fire('', 'Operación realizada con éxito.', 'success');
-                        <?php if (isset($_GET['id'])) { ?>
-                            cargar_datos_contratos_trabajos(<?= $id ?>);
-                        <?php } ?>
-                        limpiar_parametros_contratos_trabajos();
-                        $('#modal_agregar_contratos').modal('hide');
-                    }
+    // Validar el formulario antes de enviar los datos
+    if ($("#form_contratos_trabajos").valid()) {
+        // Enviar los datos con AJAX
+        $.ajax({
+            url: '../controlador/PASANTES/02_ADRIAN/POSTULANTES/th_pos_contratos_trabajoC.php?insertar=true',
+            type: 'POST',
+            data: form_data,
+            contentType: false,
+            processData: false,
+            dataType: 'json',
+            success: function(response) {
+                // Manejo de la respuesta del servidor
+                if (response == -1) {
+                    Swal.fire({
+                        title: '',
+                        text: 'Algo extraño ha ocurrido, intente más tarde.',
+                        icon: 'error',
+                        allowOutsideClick: false,
+                        showConfirmButton: true,
+                        confirmButtonText: 'Cerrar'
+                    });
+                } else if (response == -2) {
+                    Swal.fire({
+                        title: '',
+                        text: 'Asegúrese de que el archivo subido sea un PDF.',
+                        icon: 'error',
+                        allowOutsideClick: false,
+                        showConfirmButton: true,
+                        confirmButtonText: 'Cerrar'
+                    });
+                } else if (response == 1) {
+                    Swal.fire('', 'Operación realizada con éxito.', 'success');
+                    
+                    // Si el ID está presente, recargar los datos
+                    <?php if (isset($_GET['id'])) { ?>
+                        cargar_datos_contratos_trabajos(<?= $id ?>);
+                    <?php } ?>
+                    
+                    limpiar_parametros_contratos_trabajos(); // Limpiar campos
+                    $('#modal_agregar_contratos').modal('hide'); // Cerrar modal
                 }
-            });
-        }
+            }
+        });
     }
+}
 
     //Funcion para editar el registro de contratos y capacitaciones
     function abrir_modal_contratos_trabajos(id) {
@@ -154,8 +200,8 @@
         $('#txt_tipo_contrato').val('');
         $('#txt_contratos_trabajos_id').val('');
         $('#txt_ruta_guardada_contratos_trabajos').val('');
-        $('#txt_fecha_inicio_contrato').val('')
-        $('#txt_fecha_fin_contrato').val('')
+        $('#txt_fecha_inicio_contrato').val('');
+        $('#txt_fecha_fin_contrato').val('');
         $('#txt_fecha_fin_contrato').prop('disabled', false);
         $('#cbx_fecha_fin_experiencia').prop('checked', false);
         //Limpiar validaciones
@@ -165,6 +211,15 @@
         $('#lbl_titulo_contratos_trabajos').html('Agregar Contrato Trabajo');
         $('#btn_guardar_contratos_trabajos').html('<i class="bx bx-save"></i>Agregar');
         $('#btn_eliminar_contratos_trabajos').hide();
+    }
+
+    function definir_ruta_iframe_contratos(url) {
+        $('#modal_ver_pdf_contratos').modal('show');
+        var cambiar_ruta = $('#iframe_contratos_trabajos_pdf').attr('src', url);
+    }
+
+    function limpiar_parametros_iframe() {
+        $('#iframe_contratos_trabajos_pdf').attr('src', '');
     }
 
     function validar_fechas_contratos_trabajos() {
@@ -180,32 +235,20 @@
                     title: "Oops...",
                     text: "La fecha final no puede ser menor a la fecha de inicio.",
                 });
-                $('.form-control').removeClass('is-valid is-invalid');
-                $('#txt_fecha_fin_contrato').val('');
-                $('#cbx_fecha_fin_experiencia').prop('checked', false);
-                $('#txt_fecha_fin_contrato').prop('disabled', false);
+                reiniciar_campos_fecha_contratos('#txt_fecha_fin_contrato');
+                return;
             }
-            if (Date.parse(fecha_inicio) > Date.parse(fecha_final)) {
-                Swal.fire({
-                    icon: "error",
-                    title: "Oops...",
-                    text: "La fecha de inicio no puede ser mayor a la fecha final.",
-                });
-                $('.form-control').removeClass('is-valid is-invalid');
-                $('#txt_fecha_inicio_contrato').val('');
-                $('#cbx_fecha_fin_experiencia').prop('checked', false);
-                $('#txt_fecha_fin_contrato').prop('disabled', false);
-            }
+        }
+
+       //* Función para reiniciar campos
+       function reiniciar_campos_fecha_contratos(campo) {
+            $(campo).val('');
+            $(campo).removeClass('is-valid is-invalid');
+            $('.form-control').removeClass('is-valid is-invalid');
         }
     }
 
-    function definir_ruta_iframe_contratos(url) {
-        var cambiar_ruta = $('#iframe_contratos_trabajos_pdf').attr('src', url);
-    }
 
-    function limpiar_parametros_iframe() {
-        $('#iframe_contratos_trabajos_pdf').attr('src', '');
-    }
 </script>
 
 <div id="pnl_contratos_trabajos">
@@ -366,21 +409,22 @@
             var dia = String(hoy.getDate()).padStart(2, '0');
             var mes = String(hoy.getMonth() + 1).padStart(2, '0');
             var year = hoy.getFullYear();
-            var fecha_actual = year + '-' + mes + '-' + dia;
 
+            var fecha_actual = year + '-' + mes + '-' + dia;
             $('#txt_fecha_fin_contrato').val(fecha_actual); // Coloca la fecha de hoy en la fecha final
-            $('#txt_fecha_fin_contrato').prop('readonly', true); // Hace solo lectura el campo
+
+            $('#txt_fecha_fin_contrato').prop('disabled', true); // Hace solo lectura el campo
             $('#txt_fecha_fin_contrato').rules("remove", "required"); // Elimina la validación de "required"
 
             // Agrega clase válida
             $('#txt_fecha_fin_contrato').addClass('is-valid');
             $('#txt_fecha_fin_contrato').removeClass('is-invalid');
         } else {
-            if ($('#txt_fecha_fin_contrato').prop('readonly')) {
+            if ($('#txt_fecha_fin_contrato').prop('disabled')) {
                 $('#txt_fecha_fin_contrato').val('');
             }
 
-            $('#txt_fecha_fin_contrato').prop('readonly', false); // Habilita para edición
+            $('#txt_fecha_fin_contrato').prop('disabled', false); // Habilita para edición
             $('#txt_fecha_fin_contrato').rules("add", {
                 required: true
             });

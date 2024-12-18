@@ -38,11 +38,13 @@ class th_pos_contratos_trabajoC
 
     function listar($id)
     {
-        $datos = $this->modelo->where('th_pos_id', $id)->where('th_ctr_estado', 1)->listar();
-
+        $datos = $this->modelo->where('th_pos_id', $id)->where('th_ctr_estado', 1)->orderBy('th_ctr_cbx_fecha_fin_experiencia','DESC')->orderBy('th_ctr_fecha_fin_contrato', 'DESC')->listar();
+        // $datos = $this->modelo->where('th_pos_id', $id)->where('th_ctr_estado', 1)->listar();
         $texto = '';
         foreach ($datos as $key => $value) {
             $url_pdf = '../REPOSITORIO/TALENTO_HUMANO.pdf';
+             $fecha_inicio_contrato = date('d/m/Y', strtotime($value['th_ctr_fecha_inicio_contrato']));
+             $fecha_fin_contrato = $value['th_ctr_cbx_fecha_fin_experiencia'] == 1 ? 'Actualidad' : date('d/m/Y', strtotime($value['th_ctr_fecha_fin_contrato']));
 
             $texto .=
                 <<<HTML
@@ -50,6 +52,7 @@ class th_pos_contratos_trabajoC
                         <div class="col-10">
                             <h6 class="fw-bold my-0 d-flex align-items-center">{$value['th_ctr_nombre_empresa']}</h6>
                             <p class="my-0 d-flex align-items-center">{$value['th_ctr_tipo_contrato']}</p>
+                            <p class="m-0">{$fecha_inicio_contrato} - {$fecha_fin_contrato}</p>
                             <a href="#" data-bs-toggle="modal" data-bs-target="#modal_ver_pdf_contratos" onclick="definir_ruta_iframe_contratos('{$value['th_ctr_ruta_archivo']}');">Ver Contrato Trabajo</a>
                         </div>
                         <div class="col-2 d-flex justify-content-end align-items-center">
@@ -75,50 +78,46 @@ class th_pos_contratos_trabajoC
         return $datos;
     }
 
-    function insertar_editar($file, $parametros)
-    {
-        // print_r($file);
-        // exit();
-        // die();
-      
-        $in_cbx_fecha_fin_experiencia = (isset($parametros['cbx_fecha_fin_experiencia']) && $parametros['cbx_fecha_fin_experiencia'] == 'true') ? 1 : 0;
-
+    function insertar_editar($file, $parametros) {
+        // Convertir el valor del checkbox a un valor numérico
+        $cbx_fecha_fin_experiencia = isset($parametros['cbx_fecha_fin_experiencia']) && $parametros['cbx_fecha_fin_experiencia'] == 'on' ? 1 : 0;
+    
+        // Construir los datos a insertar o editar
         $datos = array(
             array('campo' => 'th_ctr_nombre_empresa', 'dato' => $parametros['txt_nombre_empresa_contrato']),
             array('campo' => 'th_ctr_tipo_contrato', 'dato' => $parametros['txt_tipo_contrato']),
-            //array('campo' => 'th_ctr_ruta_archivo', 'dato' => $parametros['txt_ruta_archivo']),
             array('campo' => 'th_ctr_fecha_inicio_contrato', 'dato' => $parametros['txt_fecha_inicio_contrato']),
-            array('campo' => 'th_ctr_cbx_fecha_fin_experiencia', 'dato' => $in_cbx_fecha_fin_experiencia),
+            array('campo' => 'th_ctr_fecha_fin_contrato', 'dato' => $parametros['txt_fecha_fin_contrato']),
+            array('campo' => 'th_ctr_cbx_fecha_fin_experiencia', 'dato' => $cbx_fecha_fin_experiencia), // Asignar el valor correcto al campo de checkbox
             array('campo' => 'th_pos_id', 'dato' => $parametros['txt_postulante_id']),
-
-
         );
-
-        if (!isset($parametros['cbx_fecha_fin_experiencia']) || !in_array($in_cbx_fecha_fin_experiencia, [0, 1])) {
-            return "El campo de fecha fin de experiencia es inválido o no se ha proporcionado correctamente.";
-        }
-
+    
         $id_contratos_trabajos = $parametros['txt_contratos_trabajos_id'];
-
+    
         if ($id_contratos_trabajos == '') {
+            // Si el ID está vacío, insertar un nuevo registro
             $datos = $this->modelo->insertar_id($datos);
             $this->guardar_archivo($file, $parametros, $datos);
             return 1;
         } else {
-
+            // Si el ID no está vacío, actualizar el registro
             $where = array(
                 array('campo' => 'th_ctr_id', 'dato' => $id_contratos_trabajos),
             );
-
+    
+            // Ejecutar la actualización en la base de datos
             $datos = $this->modelo->editar($datos, $where);
-
+    
+            // Si se sube un archivo nuevo, guardar el archivo
             if ($file['txt_ruta_archivo_contrato']['tmp_name'] != '' && $file['txt_ruta_archivo_contrato']['tmp_name'] != null) {
                 $datos = $this->guardar_archivo($file, $parametros, $id_contratos_trabajos);
             }
         }
-
+    
         return $datos;
     }
+    
+
 
 
 
