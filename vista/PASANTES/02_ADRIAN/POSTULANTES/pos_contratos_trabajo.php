@@ -58,44 +58,39 @@
         }
     });
 }
-
 function insertar_editar_contratos_trabajos() {
     // Captura todos los campos y archivos
     var form_data = new FormData(document.getElementById("form_contratos_trabajos"));
-   
+    
+    var txt_fecha_inicio_contrato = $('#txt_fecha_inicio_contrato').val();
     var cbx_fecha_fin_experiencia = $('#cbx_fecha_fin_experiencia').prop('checked') ? 1 : 0;
-    var txt_fecha_fin_contrato = ''; // Inicializar la fecha de fin
+    var txt_fecha_fin_contrato = ''; // Inicializar la variable para la fecha de fin
 
-    // Determinar si la fecha de fin del contrato es obligatoria
-    if (!$('#cbx_fecha_fin_experiencia').is(':checked')) {
+    // Verificar si el checkbox 'cbx_fecha_fin_experiencia' no está marcado
+    if (!cbx_fecha_fin_experiencia) {        
+        // Si no está marcado, tomar la fecha de fin del contrato proporcionada
         txt_fecha_fin_contrato = $('#txt_fecha_fin_contrato').val();
-        
-        // Convertir la fecha al formato adecuado si no está vacía
-        if (txt_fecha_fin_contrato) {
-            var fecha = new Date(txt_fecha_fin_contrato);
-            // Asegurarse de que la fecha esté en formato yyyy-mm-dd
-            txt_fecha_fin_contrato = fecha.toISOString().split('T')[0]; // yyyy-mm-dd
-        }
     }
 
-    // Obtener el id del contrato de trabajo
+    // Obtener el ID del contrato de trabajo
     var txt_id_contratos_trabajos = $('#txt_contratos_trabajos_id').val();
 
-    // Verificar si el archivo se ha subido o si se usa un archivo guardado
+    // Verificar si se ha seleccionado un archivo nuevo o usar el archivo guardado
     var txt_ruta_archivo_contrato = '';
-    if ($('#txt_ruta_archivo_contrato').val() === '' && txt_id_contratos_trabajos != '') {
+    if ($('#txt_ruta_archivo_contrato').val() === '' && txt_id_contratos_trabajos !== '') {
         // Si no se seleccionó un nuevo archivo, se usa el archivo guardado
         txt_ruta_archivo_contrato = $('#txt_ruta_guardada_contratos_trabajos').val();
-        $('#txt_ruta_archivo_contrato').rules("remove", "required"); // Elimina la validación de archivo si no se va a subir uno nuevo
+        // Eliminar la validación de archivo si no se va a subir uno nuevo
+        $('#txt_ruta_archivo_contrato').rules("remove", "required");
     } else {
-        // Si se seleccionó un archivo, se asegura que el campo sea requerido
+        // Si se seleccionó un archivo, aseguramos que el campo sea requerido
         txt_ruta_archivo_contrato = $('#txt_ruta_archivo_contrato').val();
         $('#txt_ruta_archivo_contrato').rules("add", {
             required: true
         });
     }
 
-    // Añadir la ruta del archivo y la fecha de fin al FormData
+    // Añadir la fecha de fin y la ruta del archivo al FormData
     form_data.append('txt_fecha_fin_contrato', txt_fecha_fin_contrato);
     form_data.append('txt_ruta_archivo_contrato', txt_ruta_archivo_contrato);
 
@@ -144,6 +139,7 @@ function insertar_editar_contratos_trabajos() {
         });
     }
 }
+
 
     //Funcion para editar el registro de contratos y capacitaciones
     function abrir_modal_contratos_trabajos(id) {

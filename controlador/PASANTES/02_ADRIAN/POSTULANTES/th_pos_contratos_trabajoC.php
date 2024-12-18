@@ -82,13 +82,32 @@ class th_pos_contratos_trabajoC
         // Convertir el valor del checkbox a un valor numérico
         $cbx_fecha_fin_experiencia = isset($parametros['cbx_fecha_fin_experiencia']) && $parametros['cbx_fecha_fin_experiencia'] == 'on' ? 1 : 0;
     
+        // Validar las fechas antes de insertarlas
+        $txt_fecha_inicio_contrato = isset($parametros['txt_fecha_inicio_contrato']) ? $parametros['txt_fecha_inicio_contrato'] : '';
+        $txt_fecha_fin_contrato = isset($parametros['txt_fecha_fin_contrato']) ? $parametros['txt_fecha_fin_contrato'] : '';
+    
+        // Convertir las fechas a formato adecuado (aquí usaremos el formato Y-m-d)
+        if (!empty($txt_fecha_inicio_contrato)) {
+            $fecha_inicio = DateTime::createFromFormat('Y-m-d', $txt_fecha_inicio_contrato);
+            if ($fecha_inicio) {
+                $txt_fecha_inicio_contrato = $fecha_inicio->format('Y-m-d');
+            }
+        }
+    
+        if (!empty($txt_fecha_fin_contrato)) {
+            $fecha_fin = DateTime::createFromFormat('Y-m-d', $txt_fecha_fin_contrato);
+            if ($fecha_fin) {
+                $txt_fecha_fin_contrato = $fecha_fin->format('Y-m-d');
+            }
+        }
+    
         // Construir los datos a insertar o editar
         $datos = array(
             array('campo' => 'th_ctr_nombre_empresa', 'dato' => $parametros['txt_nombre_empresa_contrato']),
             array('campo' => 'th_ctr_tipo_contrato', 'dato' => $parametros['txt_tipo_contrato']),
-            array('campo' => 'th_ctr_fecha_inicio_contrato', 'dato' => $parametros['txt_fecha_inicio_contrato']),
-            array('campo' => 'th_ctr_fecha_fin_contrato', 'dato' => $parametros['txt_fecha_fin_contrato']),
-            array('campo' => 'th_ctr_cbx_fecha_fin_experiencia', 'dato' => $cbx_fecha_fin_experiencia), // Asignar el valor correcto al campo de checkbox
+            array('campo' => 'th_ctr_fecha_inicio_contrato', 'dato' => $txt_fecha_inicio_contrato),
+            array('campo' => 'th_ctr_fecha_fin_contrato', 'dato' => $txt_fecha_fin_contrato),
+            array('campo' => 'th_ctr_cbx_fecha_fin_experiencia', 'dato' => $cbx_fecha_fin_experiencia),
             array('campo' => 'th_pos_id', 'dato' => $parametros['txt_postulante_id']),
         );
     
