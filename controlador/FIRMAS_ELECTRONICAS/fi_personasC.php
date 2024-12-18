@@ -307,7 +307,7 @@ class fi_personasC
         date_default_timezone_set('America/Guayaquil');
         $fecha_actual = date('Y-m-d H:i:s');
         $url_plataforma = 'https://corsinf.com:447/corsinf/login.php';
-        $url_imagen = 'https://corsinf.com:447/corsinf/img/Firmas/ejemplo.jpg';
+        $url_imagen = 'https://corsinf.com:447/corsinf/img/Firmas/banner_2.jpg';
 
         $mensaje = '';
         $mensaje .= 'Le informamos que hemos recibido su solicitud para una firma electrónica.<br><br>';
