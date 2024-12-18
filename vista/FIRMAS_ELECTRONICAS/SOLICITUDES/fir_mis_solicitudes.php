@@ -13,7 +13,7 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                 url: 'https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
             },
             ajax: {
-                url: '../controlador/INNOVERS/in_personasC.php?listar=true',
+                url: '../controlador/FIRMAS_ELECTRONICAS/fi_personas_solicitudesC.php?listar=true',
                 dataSrc: ''
             },
             columns: [{
@@ -21,8 +21,7 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                     render: function(data, type, item) {
                         botones = '';
                         botones += '<div class="d-flex justify-content-center">';
-                        botones += `<a href="../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=in_registrar_student_consent&_id=${item._id}" class="btn btn-primary btn-xs me-1" onclick=""><i class="bx bx-file fs-5 me-0"></i></a>`;
-                        botones += `<a href="../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=in_pdf_stundent_consent&_id=${item._id}" class="btn btn-danger btn-xs me-1" onclick=""><i class="bx bxs-file-pdf fs-5 me-0"></i></a>`;
+                        botones += `<a class="btn btn-primary btn-xs me-1" onclick="abrirl_modal_consentieminto('${item._id}');"><i class="bx bx-file fs-5 me-0"></i></a>`;
                         botones += '</div>';
 
                         return botones;
@@ -37,11 +36,7 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                     }
                 },
                 {
-                    data: null,
-                    render: function(data, type, item) {
-                        href = `../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=in_registrar_personas&_id=${item._id}`;
-                        return `<a href="${href}"><u>${item.primer_apellido} ${item.segundo_apellido} ${item.primer_nombre} ${item.segundo_nombre}</u></a>`;
-                    }
+                    data: 'nombres_completos'
                 },
                 {
                     data: 'cedula'
@@ -57,12 +52,21 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                 {
                     data: 'telefono_1'
                 },
+                {
+                    data: 'nombre_solicitud'
+                },
             ],
             order: [
                 [1, 'asc']
             ],
         }));
     });
+
+    function abrirl_modal_consentieminto(_id) {
+        $('#modal_ver_pdf_consentieminto').modal('show');
+        url = `../controlador/FIRMAS_ELECTRONICAS/fi_personas_solicitudesC.php?pdf_persona_consentimiento=true&id=${_id}`;
+        $('#ifr_consentimiento').attr('src', url);
+    }
 </script>
 
 <div class="page-wrapper">
@@ -97,15 +101,6 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                             <div class="col-12 col-md-6">
                                 <div class="card-title d-flex align-items-center">
 
-                                    <div class="" id="btn_nuevo">
-
-                                        <a href="../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=in_registrar_personas"
-                                            type="button" class="btn btn-success btn-sm">
-                                            <i class="bx bx-plus me-0 pb-1"></i> Nuevo
-                                        </a>
-
-                                    </div>
-
                                 </div>
                             </div>
 
@@ -128,6 +123,7 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                                                 <th>Cédula</th>
                                                 <th>Correo</th>
                                                 <th>Teléfono</th>
+                                                <th>Solicitud</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -142,5 +138,22 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
             </div>
         </div>
         <!--end row-->
+    </div>
+</div>
+
+<div class="modal" id="modal_ver_pdf_consentieminto" tabindex="-1" aria-modal="true" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog modal-dialog-centered modal-xl">
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h5><small class="text-body-secondary fw-bold" id="lbl_titulo_referencia_laboral">Acta de Consentimiento</small></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" onclick=""></button>
+            </div>
+            <!-- Modal body -->
+            <div class="modal-body d-flex justify-content-center">
+                <iframe src='' id="ifr_consentimiento" frameborder="0" width="900px" height="700px"></iframe>
+            </div>
+        </div>
     </div>
 </div>

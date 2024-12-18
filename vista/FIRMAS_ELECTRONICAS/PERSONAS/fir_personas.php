@@ -13,22 +13,10 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                 url: 'https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
             },
             ajax: {
-                url: '../controlador/INNOVERS/in_personasC.php?listar=true',
+                url: '../controlador/GENERAL/th_personasC.php?listar=true',
                 dataSrc: ''
             },
-            columns: [{
-                    data: null,
-                    render: function(data, type, item) {
-                        botones = '';
-                        botones += '<div class="d-flex justify-content-center">';
-                        botones += `<a href="../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=in_registrar_student_consent&_id=${item._id}" class="btn btn-primary btn-xs me-1" onclick=""><i class="bx bx-file fs-5 me-0"></i></a>`;
-                        botones += `<a href="../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=in_pdf_stundent_consent&_id=${item._id}" class="btn btn-danger btn-xs me-1" onclick=""><i class="bx bxs-file-pdf fs-5 me-0"></i></a>`;
-                        botones += '</div>';
-
-                        return botones;
-
-                    }
-                },
+            columns: [
                 {
                     data: null,
                     render: function(data, type, item) {
@@ -39,7 +27,7 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                 {
                     data: null,
                     render: function(data, type, item) {
-                        href = `../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=in_registrar_personas&_id=${item._id}`;
+                        href = `../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=fi_registrar_personas&_id=${item._id}`;
                         return `<a href="${href}"><u>${item.primer_apellido} ${item.segundo_apellido} ${item.primer_nombre} ${item.segundo_nombre}</u></a>`;
                     }
                 },
@@ -99,7 +87,7 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
 
                                     <div class="" id="btn_nuevo">
 
-                                        <a href="../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=in_registrar_personas"
+                                        <a href="../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=fi_registrar_personas"
                                             type="button" class="btn btn-success btn-sm">
                                             <i class="bx bx-plus me-0 pb-1"></i> Nuevo
                                         </a>
@@ -122,7 +110,6 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                                     <table class="table table-striped responsive " id="tbl_personas" style="width:100%">
                                         <thead>
                                             <tr>
-                                                <th width="5%">Acción</th>
                                                 <th>Fecha</th>
                                                 <th>Nombres</th>
                                                 <th>Cédula</th>

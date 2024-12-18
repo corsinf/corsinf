@@ -30,7 +30,7 @@ class BaseModel
         $this->db = new db();
     }
 
-    function listar()
+    function listar($limite = null)
     {
         // Obtener cláusulas WHERE y JOIN
         $whereClause = $this->retornaValoresWhere();
@@ -43,6 +43,11 @@ class BaseModel
             $camposSelect = $this->primaryKey . ', ' . $camposSeleccionados;
         } else {
             $camposSelect = '*';
+        }
+
+        // Si se define un límite, agregar TOP en la consulta
+        if ($limite !== null) {
+            $camposSelect = "TOP($limite) " . $camposSelect;
         }
 
         // Construir consulta SQL
@@ -89,6 +94,27 @@ class BaseModel
         return $rest;
     }
 
+    function contar()
+    {
+        // Obtener cláusulas WHERE y JOIN
+        $whereClause = $this->retornaValoresWhere();
+        $joinClause = $this->retornaValoresJoin();
+
+        // Construir consulta SQL para contar los registros
+        $sql = sprintf(
+            "SELECT COUNT(*) AS total_registros FROM %s %s %s;",
+            $this->tabla,  // Nombre de la tabla
+            $joinClause,   // Cláusula JOIN
+            $whereClause   // Cláusula WHERE
+        );
+
+        // Ejecutar consulta y devolver el resultado
+        $datos = $this->db->datos($sql);
+
+        // Devolver el total de registros
+        return $datos[0]['total_registros'];
+    }
+
     // Listar registros basado en condiciones LIKE
     function like($campos, $valor)
     {
@@ -125,6 +151,7 @@ class BaseModel
     {
         $this->condicionesWhere = [];
         $this->relaciones = [];
+        $this->ordenamientos = [];
     }
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
