@@ -450,8 +450,8 @@ $_id = isset($_SESSION['INICIO']['NO_CONCURENTE']) ? $_SESSION['INICIO']['NO_CON
                                             <label for="ddl_tiempo_vigencia" class="form-label form-label-sm">Vigencia del Certificado </label>
                                             <select id="ddl_tiempo_vigencia" class="form-select form-select-sm" aria-label="Seleccionar Vigencia">
                                                 <option value="1">1 año</option>
-                                                <option value="3">2 años</option>
-                                                <option value="2">3 años</option>
+                                                <option value="2">2 años</option>
+                                                <option value="3">3 años</option>
                                                 <option value="4">4 años</option>
                                                 <option value="5">5 años</option>
                                                 <option value="0">Corta Vigencia</option>

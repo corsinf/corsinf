@@ -1,3 +1,23 @@
+<style>
+    /* Ajustes para dropdown en pantallas pequeñas */
+    .select2-container {
+        width: 100% !important;
+    }
+
+    .select2-dropdown {
+        /* position: fixed !important; */
+        z-index: 1056 !important;
+        /* width: auto !important;  */
+        /* Para mantenerlo sobre el modal */
+    }
+
+    .modal-body {
+        max-height: 80vh;
+        /* Permite desplazarse si el contenido es largo */
+        overflow-y: auto;
+    }
+</style>
+
 <script type="text/javascript">
     //corregir para cargar los id
     $(document).ready(function() {
