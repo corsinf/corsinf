@@ -173,8 +173,19 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
             type: 'post',
             dataType: 'json',
 
-            success: function(response) {
-                Swal.fire("Activado deteccion","","success")
+            success: function(response, status, xhr) {
+            // Verificar si el estatus HTTP es 200
+          
+                if(response==-1)
+                {
+                    Swal.fire("dispositivo no encontrado","","info");
+                }else
+                {
+                    if (xhr.status === 200) {
+                        Swal.fire("Detección activada", "", "success");
+                        // console.log("Respuesta del servidor: ", response); // Opcional para depuración
+                    }           
+                }
             },
             
             error: function(xhr, status, error) {

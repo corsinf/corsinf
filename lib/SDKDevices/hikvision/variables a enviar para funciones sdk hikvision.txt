@@ -1,10 +1,14 @@
-=============== evento de escuchat ======================
+=============== evento de escuchat y crea logs ======================
 6
 192.168.100.111
 admin
 8000
 Data12/*
-
+186.4.219.172
+1487
+DB_TALENTO_HUMANO_DESARROLLO
+sa
+Tango456
 ============== para traer datos de biometrico ==============
 5
 192.168.100.111
@@ -41,5 +45,11 @@ Data12/*
 
 ================= detectar dispositivo =================
 1
+
+==================================listar donet activos ===================================
+tasklist | findstr dotnet
+====================================eliminar procesos donet
+taskkill /IM dotnet.exe /F
+
 
 

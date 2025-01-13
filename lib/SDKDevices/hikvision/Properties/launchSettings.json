@@ -2,7 +2,7 @@
   "profiles": {
     "CorsinfSDKHik": {
       "commandName": "Project",
-      "commandLineArgs": "6\r\n192.168.100.111\r\nadmin\r\n8000\r\nData12/*"
+      "commandLineArgs": "6\r\n192.168.100.111\r\nadmin\r\n8000\r\nData12/*\r\n186.4.219.172\r\n1487\r\nDB_TALENTO_HUMANO_DESARROLLO\r\nsa\r\nTango456"
     }
   }
 }

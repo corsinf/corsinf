@@ -1,4 +1,6 @@
-﻿using CorsinfSDKHik.NetSDK;
+﻿using CorsinfSDKHik.ConfigDB;
+using CorsinfSDKHik.NetSDK;
+using Microsoft.Data.SqlClient;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -25,6 +27,8 @@ namespace CorsinfSDKHik.Funciones
 
         public static CHCNetSDK.MSGCallBack m_falarmData = null;
         public static string path = null;
+
+        public static SqlConnection conn_ = null;
 
         public String SetearFinger(int m_UserID,String FingerID,String CardReaderNo,String CardNo,String ruta)
         {
@@ -283,8 +287,9 @@ namespace CorsinfSDKHik.Funciones
         }
 
         // eveto de escuicha de huellas digitales 
-        public String Escuchando(int m_UserID)
+        public String Escuchando(int m_UserID,SqlConnection conn)
         {
+            conn_ = conn;
             String msj = "";
             CHCNetSDK.NET_DVR_SETUPALARM_PARAM struSetupAlarmParam = new CHCNetSDK.NET_DVR_SETUPALARM_PARAM();
             struSetupAlarmParam.dwSize = (uint)Marshal.SizeOf(struSetupAlarmParam);
@@ -327,11 +332,13 @@ namespace CorsinfSDKHik.Funciones
         public void MsgCallback(int lCommand, ref CHCNetSDK.NET_DVR_ALARMER pAlarmer, IntPtr pAlarmInfo, uint dwBufLen, IntPtr pUser)
         {
             String msj;
+            Modelo dbModelo = new Modelo();
             switch (lCommand)
             {
                 case CHCNetSDK.COMM_ALARM_ACS:
                     msj = ProcessCommAlarmACS(ref pAlarmer, pAlarmInfo, dwBufLen, pUser);
-                    Console.WriteLine(msj);
+                    dbModelo.InsertData(conn_,msj);
+                  //  Console.WriteLine(msj);
                     break;
                 default:
                     break;

@@ -91,9 +91,27 @@ class th_detectar_dispositivosC
     	return $tr;
     }
 
-   
 
     function DetectarEventos($parametros)
+    {
+    	// print_r($_SESSION['INICIO']);die();
+    	set_time_limit(0);
+		$dispositivo = $this->modelo_dispositivos->where('th_dis_id',$parametros['dispostivos'])->listar();	
+		$dllPath = $this->sdk_patch . '6 ' . $dispositivo[0]['host'] . ' ' . $dispositivo[0]['usuario'] . ' ' . $dispositivo[0]['port'] . ' ' . $dispositivo[0]['pass'] . ' '.$_SESSION['INICIO']['IP_HOST']. ' '.$_SESSION['INICIO']['PUERTO_DB']. ' '.$_SESSION['INICIO']['BASEDATO']. ' '.$_SESSION['INICIO']['USUARIO_DB']. ' '.$_SESSION['INICIO']['PASSWORD_DB'];
+		$command = "dotnet $dllPath"; // Comando básico para dotnet
+
+		// print_r($command);die();
+		// Crear archivo de salida
+		$outputFile = dirname(__DIR__,2).'/Cron/output_file.log';
+		$outputFile2 = dirname(__DIR__,2).'/Cron/output_file_error.log';
+		pclose(popen("start /B $command ", "r"));
+		
+
+    }
+
+   
+
+    function DetectarEventos3($parametros)
     {
     	set_time_limit(0);
     	$dispositivo = $this->modelo_dispositivos->where('th_dis_id',$parametros['dispostivos'])->listar();
@@ -117,7 +135,12 @@ class th_detectar_dispositivosC
 		    while (!feof($pipes[1])) {
 		        // Leer una línea de salida del proceso C#
 		        $output = fgets($pipes[1]);
-		        
+		        if($output=='')
+		        {
+		        	// print_r($output);
+		        	return -1;
+		        }
+		        // print_r($output);die();
 		        if ($output !== false) {
 		            // Enviar la salida al cliente (por ejemplo, a un frontend en JavaScript)
 		            // return  $output ;
