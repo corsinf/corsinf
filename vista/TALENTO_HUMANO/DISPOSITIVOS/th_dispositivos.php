@@ -117,7 +117,7 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                 { data: 'N' },                   
                 { data: 'DeviceDescription' }, // Tipo dispositivo
                 // { data: 'Tipo' }, // Estado
-                { data: 'IP' }, // IPV4
+                { data: 'IPv4Gateway' }, // IPV4
                 { data: 'CommandPort' }, // Puerto
                 // { data: 'CommandPort' }, // Serial
                 { data: 'MAC' }, // MAC Address
