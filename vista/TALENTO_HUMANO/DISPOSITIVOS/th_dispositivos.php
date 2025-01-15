@@ -107,19 +107,19 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                 { 
                     data: null,
                     render: function(data, type, item) {
-                        butons = `<button type="button" class="btn btn-primary btn-xs" title="Guardar Dispositivo" onclick="registrar_device('${item.ipv4}','${item.puerto}','${item.serie}')">
+                        butons = `<button type="button" class="btn btn-primary btn-xs" title="Guardar Dispositivo" onclick="registrar_device('${item.IPv4Gateway}','${item.CommandPort}','${item.MAC}')">
                                     <i class="bx bx-save fs-7 me-0 fw-bold"></i>
                             </button>`;
 
                         return butons;
                     }
                 },
-                { data: 'item' },                   
-                { data: 'tipo' }, // Tipo dispositivo
-                { data: 'Estado' }, // Estado
-                { data: 'ipv4' }, // IPV4
-                { data: 'puerto' }, // Puerto
-                { data: 'serie' }, // Serial
+                { data: 'N' },                   
+                { data: 'DeviceDescription' }, // Tipo dispositivo
+                // { data: 'Tipo' }, // Estado
+                { data: 'IPv4Gateway' }, // IPV4
+                { data: 'CommandPort' }, // Puerto
+                // { data: 'CommandPort' }, // Serial
                 { data: 'MAC' }, // MAC Address
                 
             ],
@@ -431,10 +431,10 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                                         <th width="10px">Acción</th>
                                         <th>No.</th>
                                         <th>Tipo dispositivo</th>
-                                        <th>Estado</th>
+                                        <!-- <th>Estado</th> -->
                                         <th>IPV4</th>
                                         <th>Puerto</th>
-                                        <th>Serie</th>
+                                        <!-- <th>Serie</th> -->
                                         <th>MAC</th>
                                     </tr>
                                 </thead>

@@ -51,11 +51,14 @@ class th_detectar_dispositivosC
 
     function BuscarDevice()
     {
-    	// $datos = array(array('nombre'=>'hola','host'=>'192.168.100.1','_id'=>1));
 
-    	$dllPath = $this->sdk_patch.'1';
+    	// $datos = array(array('nombre'=>'hola','host'=>'192.168.100.1','_id'=>1));
+    	$this->sdk_patch = dirname(__DIR__,2).'/lib/SDKDevices/hikvision/DetectarDevice/HikvisionFinder.jar';
+
+
+    	$dllPath = $this->sdk_patch;
 		// Comando para ejecutar la DLL
-		$command = "dotnet $dllPath";
+		$command = "java -jar $dllPath";
 
 		// print_r($command);die();
 		$output = shell_exec($command);
@@ -63,32 +66,44 @@ class th_detectar_dispositivosC
 
 		// print_r($resp);die();
 
-		$tr = array();
-		foreach ($resp as $key => $value) {
-			$device =  json_decode($value,true);
 
-			if(!isset($device['Error']))
-			{
-				if(isset($device['ProbeMatch']))
-				{
-					$detalle_device =$device['ProbeMatch'];
 
-					$tr[]=array('item'=>($key+1),'tipo'=>$detalle_device['DeviceDescription'],'Estado'=>$detalle_device['Activated'],'ipv4'=>$detalle_device['IPv4Address'],'puerto'=>$detalle_device['CommandPort'],'serie'=>$detalle_device['DeviceSN'],'MAC'=>$detalle_device['MAC'],'_id'=>$key);
-				}
-			}else
-			{
-				break;
-			}
+    	// $dllPath = $this->sdk_patch.'1';
+		// // Comando para ejecutar la DLL
+		// $command = "dotnet $dllPath";
 
-			// print_r($detalle_device);die();
-		}
+		// // print_r($command);die();
+		// $output = shell_exec($command);
+		// $resp = json_decode($output,true);
+
+		// // print_r($resp);die();
+
+		// $tr = array();
+		// foreach ($resp as $key => $value) {
+		// 	$device =  json_decode($value,true);
+
+		// 	if(!isset($device['Error']))
+		// 	{
+		// 		if(isset($device['ProbeMatch']))
+		// 		{
+		// 			$detalle_device =$device['ProbeMatch'];
+
+		// 			$tr[]=array('item'=>($key+1),'tipo'=>$detalle_device['DeviceDescription'],'Estado'=>$detalle_device['Activated'],'ipv4'=>$detalle_device['IPv4Address'],'puerto'=>$detalle_device['CommandPort'],'serie'=>$detalle_device['DeviceSN'],'MAC'=>$detalle_device['MAC'],'_id'=>$key);
+		// 		}
+		// 	}else
+		// 	{
+		// 		break;
+		// 	}
+
+		// 	// print_r($detalle_device);die();
+		// }
 
 		// Muestra la salida
 		// print_r($resp);die();
 
 
 
-    	return $tr;
+    	return $resp;
     }
 
 
