@@ -443,8 +443,12 @@ if ($_GET['acc'] == 'informe_ATS') {
 	include('SRI/informe_ATS.php');
 }
 
-if ($_GET['acc'] == 'heramienta_gpa') {
+if ($_GET['acc'] == 'herramienta_gpa') {
 	include('EDUCATIVO/herramientas/herramienta_gpa.php');
+}
+
+if ($_GET['acc'] == 'herramienta_gpa_conversion') {
+	include('EDUCATIVO/herramientas/herramienta_gpa_conversion.php');
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

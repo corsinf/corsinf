@@ -15,17 +15,17 @@ if (!isset($_SESSION['INICIO']) || !isset($_SESSION['INICIO']['NO_CONCURENTE']))
 $titulo_pestania = 'apudata';
 
 if (($_SESSION['INICIO']['TITULO_PESTANIA']) == '.' || $_SESSION['INICIO']['TITULO_PESTANIA'] == '' || $_SESSION['INICIO']['TITULO_PESTANIA'] == null) {
-    $titulo_pestania;
+	$titulo_pestania;
 } else {
-    $titulo_pestania = $_SESSION['INICIO']['TITULO_PESTANIA'];
+	$titulo_pestania = $_SESSION['INICIO']['TITULO_PESTANIA'];
 }
 
 $logo = '../assets/images/favicon-32x32.png';
 
 if (($_SESSION['INICIO']['LOGO']) == '.' || $_SESSION['INICIO']['LOGO'] == '' || $_SESSION['INICIO']['LOGO'] == null) {
-    $logo;
+	$logo;
 } else {
-    $logo = $_SESSION['INICIO']['LOGO'];
+	$logo = $_SESSION['INICIO']['LOGO'];
 }
 
 ?>
@@ -144,9 +144,8 @@ if (($_SESSION['INICIO']['LOGO']) == '.' || $_SESSION['INICIO']['LOGO'] == '' ||
 		});
 
 		function formatoDate(date) {
-			if(date.length>10)
-			{
-				Fecha = date.substr(0,10);
+			if (date.length > 10) {
+				Fecha = date.substr(0, 10);
 			}
 			// var formattedDate = new Date(date);
 			// var d = formattedDate.getDate();
@@ -313,25 +312,23 @@ if (($_SESSION['INICIO']['LOGO']) == '.' || $_SESSION['INICIO']['LOGO'] == '' ||
 				success: function(response) {
 					console.log(response);
 
-					if(response!=-1)
-					{
-					if (response.lista != '') {
-						$('#lista_empresas').html(response.lista);
-						$('#myModal_empresas').modal('show');
+					if (response != -1) {
+						if (response.lista != '') {
+							$('#lista_empresas').html(response.lista);
+							$('#myModal_empresas').modal('show');
+						} else {
+							Swal.fire('', 'Usuario No registrado.', 'error');
+						}
 					} else {
-						Swal.fire('', 'Usuario No registrado.', 'error');
-					}
-					}else
-					{
-						$('#lista_empresas').html('<li class="list-group-item d-flex align-items-center radius-10 mb-2 shadow-sm">'+
-								'<div class="d-flex align-items-center">'+
-									'<div class="font-20"><i class="bx bx-info-circle"></i>'+
-									'</div>'+
-									'<div class="flex-grow-1 ms-2">'+
-										'<h6 class="mb-0">No tiene otras empresas asociada a este usuario</h6>'+
-									'</div>'+
-								'</div>'+
-								'<div class="ms-auto"></div>'+
+						$('#lista_empresas').html('<li class="list-group-item d-flex align-items-center radius-10 mb-2 shadow-sm">' +
+							'<div class="d-flex align-items-center">' +
+							'<div class="font-20"><i class="bx bx-info-circle"></i>' +
+							'</div>' +
+							'<div class="flex-grow-1 ms-2">' +
+							'<h6 class="mb-0">No tiene otras empresas asociada a este usuario</h6>' +
+							'</div>' +
+							'</div>' +
+							'<div class="ms-auto"></div>' +
 							'</li>');
 					}
 				}
@@ -364,7 +361,7 @@ if (($_SESSION['INICIO']['LOGO']) == '.' || $_SESSION['INICIO']['LOGO'] == '' ||
 				type: 'post',
 				dataType: 'json',
 				success: function(response) {
-					
+
 
 					if (response.respuesta == 2) {
 						$('#lista_modulos_empresas').html(response.modulos);
@@ -384,7 +381,7 @@ if (($_SESSION['INICIO']['LOGO']) == '.' || $_SESSION['INICIO']['LOGO'] == '' ||
 							iniciar_sesion();
 						}
 					}
-					
+
 					$('#myModal_espera').modal('hide');
 				},
 				error: function(xhr, status, error) {
@@ -428,7 +425,7 @@ if (($_SESSION['INICIO']['LOGO']) == '.' || $_SESSION['INICIO']['LOGO'] == '' ||
 		// 	});
 		// }
 
-			function iniciar_sesion() {
+		function iniciar_sesion() {
 			// $('#myModal_espera').modal('show');
 			var parametros = {
 				'tipo': $('#txt_tipo_rol').val(),
@@ -473,12 +470,12 @@ if (($_SESSION['INICIO']['LOGO']) == '.' || $_SESSION['INICIO']['LOGO'] == '' ||
 				}
 			});
 		}
+
 		function seleccionar_perfil(rol, usu_normal) {
 			$('#txt_tipo_rol').val(rol);
 			$('#txt_normal').val(usu_normal);
 			iniciar_sesion();
 		}
-
 	</script>
 </head>
 
@@ -495,7 +492,8 @@ if (($_SESSION['INICIO']['LOGO']) == '.' || $_SESSION['INICIO']['LOGO'] == '' ||
 			<div class="sidebar-header">
 				<?php if (file_exists($_SESSION['INICIO']['LOGO'])) { ?>
 					<div>
-						<img src="<?php echo $_SESSION['INICIO']['LOGO']; ?>" class="logo-icon" alt="logo icon">
+						<!-- <img src="<?php echo $_SESSION['INICIO']['LOGO']; ?>" class="logo-icon" alt="logo icon"> -->
+						<?= $_SESSION['INICIO']['MODULO_SISTEMA_IMG_ICO'] ?>
 					</div>
 				<?php } ?>
 				<div>
@@ -901,13 +899,14 @@ if (($_SESSION['INICIO']['LOGO']) == '.' || $_SESSION['INICIO']['LOGO'] == '' ||
 									</div>
 								</div>
 							</li>
-							<?php if($_SESSION['INICIO']['NUM_MODULOS']>1) { ?>
-							<li>
-								<a class="nav-link dropdown-toggle dropdown-toggle-nocaret position-relative" href="modulos_sistema.php" role="button" aria-expanded="false" title="Salir del modulo">
-									<i class='bx bx-log-out'></i>
-								</a>
-							</li>
-							<?php }  if ($_SESSION['INICIO']['NO_CONCURENTE'] == '' && $_SESSION['INICIO']['NUM_EMPRESAS']>1) { ?>
+							<?php if ($_SESSION['INICIO']['NUM_MODULOS'] > 1) { ?>
+								<li>
+									<a class="nav-link dropdown-toggle dropdown-toggle-nocaret position-relative" href="modulos_sistema.php" role="button" aria-expanded="false" title="Salir del modulo">
+										<i class='bx bx-log-out'></i>
+									</a>
+								</li>
+							<?php }
+							if ($_SESSION['INICIO']['NO_CONCURENTE'] == '' && $_SESSION['INICIO']['NUM_EMPRESAS'] > 1) { ?>
 								<li>
 									<a class="nav-link dropdown-toggle dropdown-toggle-nocaret position-relative" onclick="cargar_empresas()" role="button" aria-expanded="false" title="Cambiar empresa">
 										<i class='bx bx-building-house'></i>
@@ -950,7 +949,7 @@ if (($_SESSION['INICIO']['LOGO']) == '.' || $_SESSION['INICIO']['LOGO'] == '' ||
 							<?php } ?>
 							<li><a class="dropdown-item" href="javascript:;"><i class='bx bx-home-circle'></i><span>Dashboard</span></a>
 							</li>
-							
+
 							<li><a class="dropdown-item" href="inicio.php?mod=<?php echo $_SESSION['INICIO']['MODULO_SISTEMA']; ?>&acc=descargas"><i class='bx bx-download'></i><span>Descargas</span></a>
 							</li>
 							<li onclick="$('#myModal_acerca_de').modal('show')"><a class="dropdown-item" href="#"><i class='bx bx-info-circle'></i><span>Acerca de</span></a>
@@ -996,23 +995,22 @@ if (($_SESSION['INICIO']['LOGO']) == '.' || $_SESSION['INICIO']['LOGO'] == '' ||
 				</div>
 			</div>
 		</div>
-<div class="modal fade" id="myModal_rol" tabindex="-1" role="dialog" data-bs-backdrop="static" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-	<div class="modal-dialog modal-dialog-centered" role="document">
-		<div class="modal-content">
-			<div class="modal-header">
-				<h3 class="modal-title" id="titulo">Perfil de usuario</h3>
-			</div>
-			<div class="modal-body" style=" overflow-y: scroll;  height: 300px;">
-				<input type="hidden" name="txt_tipo_rol" id="txt_tipo_rol">
-				<div class="product-list mb-3 ps ps--active-y" id="lista_roles" style="height: auto;">
-				</div>
-			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-secondary" onclick="
+		<div class="modal fade" id="myModal_rol" tabindex="-1" role="dialog" data-bs-backdrop="static" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+			<div class="modal-dialog modal-dialog-centered" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h3 class="modal-title" id="titulo">Perfil de usuario</h3>
+					</div>
+					<div class="modal-body" style=" overflow-y: scroll;  height: 300px;">
+						<input type="hidden" name="txt_tipo_rol" id="txt_tipo_rol">
+						<div class="product-list mb-3 ps ps--active-y" id="lista_roles" style="height: auto;">
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary" onclick="
        			$('#myModal_empresas').modal('show');
        			$('#myModal_rol').modal('hide');">Cerrar</button>
+					</div>
+				</div>
 			</div>
 		</div>
-	</div>
-</div>
-		

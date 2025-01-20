@@ -74,6 +74,8 @@ if(isset($_GET['modulos_sistema_selected']))
 {
 	$_SESSION['INICIO']['MODULO_SISTEMA'] = $_POST['modulo_sistema'];
 	$_SESSION['INICIO']['MODULO_SISTEMA_NOMBRE'] = $controlador->nombre_modulo();
+	$_SESSION['INICIO']['MODULO_SISTEMA_IMG_ICO'] = $controlador->imagen_icono_modulo();
+
 	$controlador->menu_lateral();
 	echo json_encode(1);
 }
@@ -1449,6 +1451,12 @@ class loginC
 	{
 		$datos = $this->login-> modulos_empresa_search($_SESSION['INICIO']['MODULO_SISTEMA']);
 		return $datos[0]['nombre_modulo'];
+	}
+
+	function imagen_icono_modulo()
+	{
+		$datos = $this->login-> modulos_empresa_search($_SESSION['INICIO']['MODULO_SISTEMA']);
+		return $datos[0]['icono'];
 	}
 
 	function acceso_en_terceros($parametros)
