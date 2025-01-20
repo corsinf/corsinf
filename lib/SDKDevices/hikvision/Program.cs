@@ -5,11 +5,13 @@ using System.Net;
 using System.Text;
 
 using CorsinfSDKHik.Funciones;
+using CorsinfSDKHik.ConfigDB;
 using CorsinfSDKHik.NetSDK;
 using CorsinfSDKHik.SDKs;
 using System.Xml.Linq;
 using System.Text.Json;
 using System.Runtime;
+using Microsoft.Data.SqlClient;
 
 class Program
 {
@@ -20,8 +22,13 @@ class Program
     static String user;
     static String port;
     static String pass;
+    static String ipHost;
+    static String portHost;
+    static String dbName;
+    static String userHost;
+    static String passHost;
 
-    
+
     static void Main(string[] args)
     {
         var json = "";
@@ -29,6 +36,7 @@ class Program
         if (args.Length > 0)
         {
             loginSDK login = new loginSDK();
+            dbConfig db = new dbConfig();
             if (CHCNetSDK.NET_DVR_Init() == false)
             {
                 Console.WriteLine("error al inicializar");
@@ -95,10 +103,10 @@ class Program
                     String patch = args[6];
                     r = login.loginSDKDevice(ip, port, user, pass);
                     m_UserId = login.m_UserID;
-                    if (m_UserId >= 0) 
+                    if (m_UserId >= 0)
                     {
                         FingerManagerSDK FingerMan = new FingerManagerSDK();
-                       r = FingerMan.capturarDedo(m_UserId, userName,patch);
+                        r = FingerMan.capturarDedo(m_UserId, userName, patch);
                     }
                     json = JsonSerializer.Serialize(new { msj = r });
                     break;
@@ -121,7 +129,7 @@ class Program
                         r = CardMan.SetearCard(m_UserId, CardNo, CardRightPlan, EmployeeNo, Nombre);
 
                         m_SetSuccess = CardMan.m_SetSuccess;
-                        
+
                         String ruta = args[8];
                         String FingerID = "1"; //enviar el numero de huellas, si ya tiene uno enviar 2 3 4 como corresponda
                         String CardReaderNo = "1";  // esta variable solo se coloca entre 1 y 2 
@@ -157,7 +165,7 @@ class Program
                         r = r.Substring(0, r.Length - 1);
                     }
 
-                    json = JsonSerializer.Serialize(new { msj = r });                   
+                    json = JsonSerializer.Serialize(new { msj = r });
                     break;
                 case "6":
                     //CAPTURAR EVENTO DE DETECCION DE DEDO
@@ -166,12 +174,17 @@ class Program
                     port = args[3];
                     pass = args[4];
                     r = login.LoginFing(ip, port, user, pass);
+                    ipHost = args[5];
+                    portHost = args[6];
+                    dbName = args[7];
+                    userHost = args[8];
+                    passHost = args[9];
                     m_UserId = login.m_UserID;
                     if (m_UserId >= 0)
                     {
-
+                        SqlConnection conn_ = db.conexion(ipHost, portHost, dbName, userHost, passHost);
                         FingerManagerSDK FingerMan = new FingerManagerSDK();
-                        Task.Run(() => FingerMan.Escuchando(m_UserId));
+                        Task.Run(() => FingerMan.Escuchando(m_UserId,conn_));
                         // Mantener la consola ejecutándose para que el proceso de escucha no se detenga
                         // Console.WriteLine("Presiona 'q' para salir...");
                         while (true)
@@ -179,6 +192,31 @@ class Program
                             Thread.Sleep(1000); // Mantener el programa vivo
                         }
                     }
+
+                    break;
+                case "7":
+                    //GENERAR TABLA DE LOG PARA EJEMPLO
+                    ipHost = args[5];
+                    portHost = args[6];
+                    dbName = args[7];
+                    userHost = args[8];
+                    passHost = args[9];
+                    Modelo dbModelo = new Modelo();
+                    String data = "hola desde dispositivo";
+                    SqlConnection conn = db.conexion(ipHost, portHost, dbName, userHost, passHost);
+                    r = "connexion a base incorrecta";
+                    if (conn == null)
+                    {
+                        json = JsonSerializer.Serialize(new { msj = r });
+                    }
+                    else
+                    {
+                        dbModelo.InsertData(conn, data);
+                    }
+
+                   
+
+
 
                     break;
             }
