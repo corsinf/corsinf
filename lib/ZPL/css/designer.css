@@ -1,13 +1,16 @@
 .designerUtilityWindow {
-	position: absolute !important;
-	width: 220px;
+/*	position: absolute !important;*/
+/*	width: 220px;*/
+	width: 100%;
 	border: 2px solid #169DD9;
 	border-radius: 4px;
+	padding: 0px;
 }
 
 .designerUtilityToolbar {
-	position: absolute !important;
-	width: 80px;
+/*	position: absolute !important;*/
+/*	width: 80px;*/
+	width: 100%;
 	border: 2px solid #169DD9;
 	border-radius: 4px;
 }
@@ -34,7 +37,8 @@
 }
 
 .designerToolbarContent {
-	height: 220px;
+/*	height: 220px;*/
+	padding: 2px;
 	overflow-y: hidden;
 	overflow-x: hidden;
 	background: #FFFFFF;

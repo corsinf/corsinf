@@ -23,18 +23,74 @@
 
 <script>
     var canvasDesigner = null;
+    var zplCode;
     $(document).ready(function() {
         canvasDesigner = new com.logicpartners.labelDesigner('labelDesigner', 1.75, 0.75);
-        canvasDesigner.labelInspector.addTool(new com.logicpartners.labelControl.size(canvasDesigner));
+         canvasDesigner.labelInspector.addTool(new com.logicpartners.labelControl.size(canvasDesigner));
         canvasDesigner.labelInspector.addTool(new com.logicpartners.labelControl.generatezpl(canvasDesigner));
+
+       
         canvasDesigner.toolbar.addTool(new com.logicpartners.designerTools.text());
         canvasDesigner.toolbar.addTool(new com.logicpartners.designerTools.rectangle());
         canvasDesigner.toolbar.addTool(new com.logicpartners.designerTools.barcode());
         canvasDesigner.toolbar.addTool(new com.logicpartners.designerTools.image());
-        //canvasDesigner.addRectangle(50, 50, 300, 50);
-        //canvasDesigner.addRectangle(100, 100, 50, 50);
+
+        // canvasDesigner.addRectangle(50, 50, 300, 50);
+        // canvasDesigner.addRectangle(100, 100, 50, 50);
+        size = $('#pnl_size')
+        detalle = $('#pnl_detalles')
+        tools = $('#pnl_tools')
+
+         $('#pnl_new_size').append(size)
+         $('#pnl_new_detalles').append(detalle)
+         $('#pnl_new_tools').append(tools)
+
+        // $('#pnl_size').empty()
+
+
+
     });
 </script>
+
+
+<script>
+
+    function imprimir()
+    {
+        rbl = $('#rbl_rfid').prop('checked')
+        if(rbl==true && $('#txt_rfid').val()=='')
+        {
+            Swal.fire("","El texto del rfid vacio","info")
+            return false;
+        }
+        $('#btn_zpl').click();
+
+        var parametros = 
+        {
+            'code':zplCode,
+            'RFID': $('#txt_rfid').val(),
+            'RFIDOp':rbl,
+        }
+
+         $.ajax({
+          data:  {parametros:parametros},
+          url:  '../controlador/DISENIADOR_ZPL/di_diseniadorC.php?imprimirTag=true',
+          type:  'post',
+          dataType: 'json',
+          /*beforeSend: function () {   
+               var spiner = '<div class="text-center"><img src="../img/gif/proce.gif" width="100" height="100"></div>'     
+             $('#tabla_').html(spiner);
+          },*/
+            success:  function (response) {
+             
+               $('#ddl_informes').html(response); 
+          }
+        });
+
+    }
+
+</script>
+
 
 <div class="page-wrapper">
     <div class="page-content">
@@ -59,43 +115,57 @@
         </div>
         <!--end breadcrumb-->
 
-
+        <div class="row p-2">
+            <div class="col-sm-12">
+                <button class="btn-sm btn-success btn" onclick="imprimir()"><i class="bx bx-print"></i> Imprimir</button>
+            </div>    
+        </div>
 
         <div class="row">
-            <div class="col-xl-12 mx-auto">
-                <div class="card border-top border-0 border-4 border-primary">
-
-                    <div class="card-body p-5">
-                        <div class="card-title d-flex align-items-center">
-
-                            <h5 class="mb-0 text-primary"></h5>
-
-                            <div class="row mx-0">
-                                <div class="col-sm-12" id="btn_nuevo">
-
-                                    <!-- <button type="button" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#modal_blank"><i class="bx bx-plus"></i> Nuevo</button> -->
-
-                                </div>
-                            </div>
-                        </div>
-
-                        <section class="content pt-2">
-                            <div class="container-fluid">
-
-                                <canvas id="labelDesigner" tabindex="1" width="800" height="900"
-                                    style="margin-left: 100px; margin-top: 50px; border: 1px solid #000000;">
-                                </canvas>
-
+            <div class="col-sm-9">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-6" id="pnl_new_tools">
                                 
-                            </div><!-- /.container-fluid -->
-                        </section>
-
-                        <br><br><br><br><br><br><br><br><br><br><br><br>
-
+                            </div> 
+                            <div class="col-6">
+                                <label><input type="checkbox" name="rbl_rfid" id="rbl_rfid"> RFID</label>
+                                <br>
+                                <b>Texto para RFID</b>
+                                <input type="" name="txt_rfid" id="txt_rfid" class="form-control form-control-sm">
+                            </div>                          
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <canvas id="labelDesigner" tabindex="1" width="800" height="900"
+                                style="border: 1px solid #000000;">
+                                </canvas>                                
+                            </div>
+                             <div class="col-12" id="pnl_new_size">
+                                
+                            </div>
+                            
+                        </div>
                     </div>
-                </div>
+                </div>    
             </div>
+            <div class="col-sm-3" > 
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row" id="pnl_new_detalles">
+
+                        </div>
+                        <div class="row" id="pnl_boton">
+
+                        </div>
+                    </div>
+                </div>    
+            </div>            
         </div>
+
+      
+        
         <!--end row-->
     </div>
 </div>
