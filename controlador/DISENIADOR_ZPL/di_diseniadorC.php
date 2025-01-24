@@ -36,7 +36,7 @@ class di_diseniadorC
 // Configuración RFID
 ^RS,,,1,2                       // Configurar el RFID
 ^RB                            // Comando RFID para preparar el tag
-^RFW,D,                         // Escribir datos en el tag RFID
+^RFW,H,                         // Escribir datos en el tag RFID
 ^FD^FD'.$parametros['RFID'].'^FS // EPC (Código RFID) - reemplaza con el EPC real
 ^PQ1';
 		$data = str_replace('^PQ1', $RFID,$data);

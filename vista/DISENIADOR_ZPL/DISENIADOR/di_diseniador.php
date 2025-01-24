@@ -82,9 +82,15 @@
              $('#tabla_').html(spiner);
           },*/
             success:  function (response) {
-             
+               $('#modal_print').modal('hide');             
                $('#ddl_informes').html(response); 
-          }
+          },
+            error: function (error) {
+                
+               $('#modal_print').modal('hide');
+              console.error('Error en numero_comprobante:', error);
+              // Puedes manejar el error aquí si es necesario
+            },
         });
 
     }
