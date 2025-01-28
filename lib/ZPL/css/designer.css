@@ -106,7 +106,7 @@
 }
 
 .designerToolbarButtonActive div {
-	background: rgba(255, 255, 0, 0.15);
+	background: rgba(255, 255, 0, 0.35);
 	background-size: 36px 36px;
 	width: 100%;
 	height: 100%;
@@ -114,17 +114,20 @@
 }
 
 .designerToolbarBarcode {
-	background-image: url(../toolbar_barcode.gif);
+	background-image: url(../toolbar_barcode.png);
 }
 
 .designerToolbarRectangle {
-	background-image: url(../toolbar_rectangle.gif);
+	background-image: url(../toolbar_rectangle.png);
 }
 
 .designerToolbarText {
-	background-image: url(../toolbar_text.gif);
+	background-image: url(../toolbar_text.png);
 }
 
 .designerToolbarImage {
-	background-image: url(../toolbar_image.gif);
+	background-image: url(../toolbar_image.png);
+}
+.designerToolbarQRcode {
+	background-image: url(../toolbar_qr.png);
 }
