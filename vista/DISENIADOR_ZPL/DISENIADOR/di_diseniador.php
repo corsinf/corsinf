@@ -105,10 +105,12 @@
        {
             texto = $('#text').val()
             $('#txt_rfid').val(texto);
+            $('#txt_rfid').prop('readonly',true);
 
        }else
        {
          $('#txt_rfid').val("Texto 1");
+            $('#txt_rfid').prop('readonly',false);
        }
 
     }
