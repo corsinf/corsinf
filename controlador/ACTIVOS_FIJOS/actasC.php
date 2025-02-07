@@ -1,30 +1,32 @@
 
 <?php
-include('../modelo/actasM.php');
-include('../modelo/custodioM.php');
-include('../modelo/localizacionM.php');
-include('../db/codigos_globales.php');
 
-/**
- * 
- */
+require_once(dirname(__DIR__, 2) . '/modelo/actasM.php');
+require_once(dirname(__DIR__, 2) . '/modelo/custodioM.php');
+require_once(dirname(__DIR__, 2) . '/modelo/localizacionM.php');
+require_once(dirname(__DIR__, 2) . '/db/codigos_globales.php');
+
 $controlador = new actasC();
 
 if (isset($_GET['lista'])) {
 	$parametros = $_POST['parametros'];
 	echo json_encode($controlador->lista_articulos($parametros));
 }
+
 if (isset($_GET['addacta'])) {
 	$parametros = $_POST['parametros'];
 	echo json_encode($controlador->addarticulos($parametros));
 }
+
 if (isset($_GET['lista_actas'])) {
 	echo json_encode($controlador->lista_actas());
 }
+
 if (isset($_GET['eliminar_lista'])) {
 	$parametros = $_POST['parametros'];
 	echo json_encode($controlador->eliminar_lista($parametros));
 }
+
 if (isset($_GET['add_masivo'])) {
 	$parametros = $_POST['parametros'];
 	echo json_encode($controlador->add_masivo($parametros));
@@ -57,13 +59,13 @@ if (isset($_GET['cambiar_E_S'])) {
 
 
 
-
-
 class actasC
 {
-
 	private $modelo;
 	private $cod_global;
+	private $custodio;
+	private $localizacion;
+
 	function __construct()
 	{
 		$this->modelo = new actasM();
