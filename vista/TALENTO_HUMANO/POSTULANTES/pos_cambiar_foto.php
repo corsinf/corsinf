@@ -19,7 +19,7 @@
     //para el nombre de la foto
     function cargar_datos_modal_cambiar_foto(id) {
         $.ajax({
-            url: '../controlador/PASANTES/02_ADRIAN/POSTULANTES/th_postulantesC.php?listar=true',
+            url: '../controlador/TALENTO_HUMANO/POSTULANTES/th_postulantesC.php?listar=true',
             type: 'post',
             data: {
                 id: id
@@ -44,7 +44,7 @@
 
         if ($("#form_cambiar_foto").valid()) {
             $.ajax({
-                url: '../controlador/PASANTES/02_ADRIAN/POSTULANTES/th_postulantesC.php?insertar_imagen=true',
+                url: '../controlador/TALENTO_HUMANO/POSTULANTES/th_postulantesC.php?insertar_imagen=true',
                 type: 'post',
                 data: form_data,
                 contentType: false,
@@ -117,7 +117,7 @@
             data: {
                 id: id
             },
-            url: '../controlador/PASANTES/02_ADRIAN/POSTULANTES/th_postulantesC.php?eliminar=true',
+            url: '../controlador/TALENTO_HUMANO/POSTULANTES/th_postulantesC.php?eliminar=true',
             type: 'post',
             dataType: 'json',
             success: function(response) {

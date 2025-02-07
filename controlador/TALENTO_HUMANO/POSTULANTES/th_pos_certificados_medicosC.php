@@ -1,5 +1,5 @@
 <?php
-require_once(dirname(__DIR__, 4) . '/modelo/PASANTES/02_ADRIAN/POSTULANTES/th_pos_certificados_medicosM.php');
+require_once(dirname(__DIR__, 3)  . '/modelo/TALENTO_HUMANO/POSTULANTES/th_pos_certificados_medicosM.php');
 
 $controlador = new th_pos_certificados_medicosC();
 
@@ -117,7 +117,7 @@ class th_pos_certificados_medicosC
 
         if ($datos_archivo && isset($datos_archivo[0]['th_cer_ruta_certficado'])) {
             $ruta_relativa = ltrim($datos_archivo[0]['th_cer_ruta_certficado'], './');
-            $ruta_archivo = dirname(__DIR__, 4) . '/' . $ruta_relativa;
+            $ruta_archivo = dirname(__DIR__, 3) . '/' . $ruta_relativa;
 
             if (file_exists($ruta_archivo)) {
                 unlink($ruta_archivo);
@@ -140,7 +140,7 @@ class th_pos_certificados_medicosC
     private function guardar_archivo($file, $post, $id_insertar_editar)
     {
         $id_empresa = $_SESSION['INICIO']['ID_EMPRESA'];
-        $ruta = dirname(__DIR__, 4) . '/REPOSITORIO/TALENTO_HUMANO/' . $id_empresa . '/'; //ruta carpeta donde queremos copiar los archivos
+        $ruta = dirname(__DIR__, 3) . '/REPOSITORIO/TALENTO_HUMANO/' . $id_empresa . '/'; //ruta carpeta donde queremos copiar los archivos
         $ruta .= $post['txt_postulante_cedula'] . '/' . 'CERTIFICADOS_MEDICOS/';
 
 

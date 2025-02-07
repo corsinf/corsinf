@@ -1,6 +1,6 @@
 <?php
-require_once(dirname(__DIR__, 4) . '/lib/pdf/fpdf.php');
-require_once(dirname(__DIR__, 4) . '/modelo/PASANTES/02_ADRIAN/POSTULANTES/th_postulantesM.php');
+require_once(dirname(__DIR__, 3) . '/lib/pdf/fpdf.php');
+require_once(dirname(__DIR__, 3) . '/modelo/TALENTO_HUMANO/POSTULANTES/th_postulantesM.php');
 
 $controlador = new th_postulantesC();
 
@@ -13,7 +13,7 @@ if (isset($_GET['listar_todo'])) {
 }
 
 if (isset($_GET['insertar'])) {
-    echo json_encode($controlador->insertar_editar($_POST));
+    echo json_encode($controlador->insertar_editar($_POST['parametros']));
 }
 
 if (isset($_GET['insertar_imagen'])) {
@@ -28,9 +28,9 @@ if (isset($_GET['hoja_de_vida'])) {
     echo $controlador->hoja_de_vida($_GET['id']);
 }
 
-// if (isset($_GET['guardar_foto_perfil'])){
-//      echo $controlador->guardar_foto_perfil($_GET['id']);
-// }
+if (isset($_GET['agregar_postulante_persona'])) {
+    echo json_encode($controlador->agregar_postulante_persona($_POST['pos_cedula']));
+}
 
 
 class th_postulantesC
@@ -89,13 +89,13 @@ class th_postulantesC
             array('campo' => 'th_pos_segundo_nombre', 'dato' => $parametros['txt_segundo_nombre']),
             array('campo' => 'th_pos_primer_apellido', 'dato' => $parametros['txt_primer_apellido']),
             array('campo' => 'th_pos_segundo_apellido', 'dato' => $parametros['txt_segundo_apellido']),
-            array('campo' => 'th_pos_cedula', 'dato' => $parametros['txt_numero_cedula']),
+            array('campo' => 'th_pos_cedula', 'dato' => $parametros['txt_cedula']),
             array('campo' => 'th_pos_sexo', 'dato' => $parametros['ddl_sexo']),
             array('campo' => 'th_prov_id', 'dato' => $parametros['ddl_provincias']),
             array('campo' => 'th_ciu_id', 'dato' => $parametros['ddl_ciudad']),
             array('campo' => 'th_parr_id', 'dato' => $parametros['ddl_parroquia']),
             array('campo' => 'th_pos_direccion', 'dato' => $parametros['txt_direccion']),
-            array('campo' => 'th_pos_postal', 'dato' => $parametros['txt_direccion_postal']),
+            array('campo' => 'th_pos_postal', 'dato' => $parametros['txt_codigo_postal']),
             array('campo' => 'th_pos_fecha_nacimiento', 'dato' => $parametros['txt_fecha_nacimiento']),
             array('campo' => 'th_pos_nacionalidad', 'dato' => $parametros['ddl_nacionalidad']),
             array('campo' => 'th_pos_estado_civil', 'dato' => $parametros['ddl_estado_civil']),
@@ -104,13 +104,22 @@ class th_postulantesC
             array('campo' => 'th_pos_correo', 'dato' => $parametros['txt_correo']),
         );
 
-        $id = $parametros['txt_postulante_id'];
-
-        if ($id == '') {
-            $datos = $this->modelo->where('th_pos_estado', 1)->listar();
+        if ($parametros['_id'] == '') {
+            if (count($this->modelo->where('th_pos_cedula', $parametros['txt_cedula'])->listar()) == 0) {
+                $datos = $this->modelo->insertar($datos);
+            } else {
+                return -2;
+            }
         } else {
-            $datos = $this->modelo->where('th_pos_id', $id)->listar();
+            if (count($this->modelo->where('th_pos_cedula', $parametros['txt_cedula'])->where('th_pos_id !', $parametros['_id'])->listar()) == 0) {
+                $where[0]['campo'] = 'th_pos_id';
+                $where[0]['dato'] = $parametros['_id'];
+                $datos = $this->modelo->editar($datos, $where);
+            } else {
+                return -2;
+            }
         }
+
         return $datos;
     }
 
@@ -120,7 +129,7 @@ class th_postulantesC
 
         if ($datos_archivo && isset($datos_archivo[0]['th_pos_foto_url'])) {
             $ruta_relativa = ltrim($datos_archivo[0]['th_pos_foto_url'], './');
-            $ruta_archivo = dirname(__DIR__, 4) . '/' . $ruta_relativa;
+            $ruta_archivo = dirname(__DIR__, 3) . '/' . $ruta_relativa;
 
             if (file_exists($ruta_archivo)) {
                 unlink($ruta_archivo);
@@ -140,6 +149,35 @@ class th_postulantesC
         return $datos;
     }
 
+    function agregar_postulante_persona($cedula)
+    {
+        try {
+
+            $this->modelo->agregar_postulante_personaM($cedula);
+
+            $datos = array(
+                array('campo' => 'th_pos_contratado', 'dato' => 1),
+            );
+            $where = array(
+                array('campo' => 'th_pos_cedula', 'dato' => $cedula),
+            );
+
+            $datos = $this->modelo->editar($datos, $where);
+
+            if ($datos == 1) {
+                return [
+                    'success' => 'Postulante agregado correctamente.',
+                    'redirect' => '../vista/inicio.php?mod=modulo_sistema&acc=th_postulantes'
+                ];
+            } else {
+                return [
+                    'error' => 'Postulante no se agrego.',
+                ];
+            }
+        } catch (Exception $e) {
+            return array('error' => 'Error al agregar el postulante: ' . $e->getMessage());
+        }
+    }
 
     function hoja_de_vida($id)
     {
@@ -349,7 +387,7 @@ class th_postulantesC
         $id_empresa = $_SESSION['INICIO']['ID_EMPRESA'];
 
         // Definir la ruta donde se guardarán las imágenes
-        $ruta = dirname(__DIR__, 4) . '/REPOSITORIO/TALENTO_HUMANO/' . $id_empresa . '/'; // Ruta base
+        $ruta = dirname(__DIR__, 3) . '/REPOSITORIO/TALENTO_HUMANO/' . $id_empresa . '/'; // Ruta base
         $ruta .= $post['txt_postulante_cedula'] . '/' . 'FOTO_PERFIL/'; // Ruta completa del postulante
 
         // Verificar si la carpeta existe, si no, crearla

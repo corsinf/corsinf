@@ -54,7 +54,7 @@
     //Aptitudes 
     function cargar_datos_aptitudes_tecnicas(id) {
         $.ajax({
-            url: '../controlador/PASANTES/02_ADRIAN/POSTULANTES/th_pos_habilidadesC.php?cargar_datos_aptitudes_tecnicas=true',
+            url: '../controlador/TALENTO_HUMANO/POSTULANTES/th_pos_habilidadesC.php?cargar_datos_aptitudes_tecnicas=true',
             type: 'post',
             data: {
                 id: id
@@ -69,7 +69,7 @@
 
     function cargar_datos_aptitudes_blandas(id) {
         $.ajax({
-            url: '../controlador/PASANTES/02_ADRIAN/POSTULANTES/th_pos_habilidadesC.php?cargar_datos_aptitudes_blandas=true',
+            url: '../controlador/TALENTO_HUMANO/POSTULANTES/th_pos_habilidadesC.php?cargar_datos_aptitudes_blandas=true',
             type: 'post',
             data: {
                 id: id
@@ -84,7 +84,7 @@
 
     function lista_aptitudes_blandas_postulante(id) {
         $.ajax({
-            url: '../controlador/PASANTES/02_ADRIAN/POSTULANTES/th_pos_habilidadesC.php?listar_aptitudes_blandas_postulante=true',
+            url: '../controlador/TALENTO_HUMANO/POSTULANTES/th_pos_habilidadesC.php?listar_aptitudes_blandas_postulante=true',
             data: {
                 id_postulante: id
             },
@@ -98,7 +98,7 @@
 
     function lista_aptitudes_tecnicas_postulante(id) {
         $.ajax({
-            url: '../controlador/PASANTES/02_ADRIAN/POSTULANTES/th_pos_habilidadesC.php?listar_aptitudes_tecnicas_postulante=true',
+            url: '../controlador/TALENTO_HUMANO/POSTULANTES/th_pos_habilidadesC.php?listar_aptitudes_tecnicas_postulante=true',
             data: {
                 id_postulante: id
             },
@@ -138,7 +138,7 @@
             data: {
                 parametros: parametros
             },
-            url: '../controlador/PASANTES/02_ADRIAN/POSTULANTES/th_pos_habilidadesC.php?insertar=true',
+            url: '../controlador/TALENTO_HUMANO/POSTULANTES/th_pos_habilidadesC.php?insertar=true',
             type: 'post',
             dataType: 'json',
 
@@ -180,7 +180,7 @@
             data: {
                 id: id
             },
-            url: '../controlador/PASANTES/02_ADRIAN/POSTULANTES/th_pos_habilidadesC.php?eliminar=true',
+            url: '../controlador/TALENTO_HUMANO/POSTULANTES/th_pos_habilidadesC.php?eliminar=true',
             type: 'post',
             dataType: 'json',
             success: function(response) {

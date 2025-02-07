@@ -8,7 +8,7 @@
     //Documentos de Identidad
     function cargar_datos_documentos_identidad(id) {
         $.ajax({
-            url: '../controlador/PASANTES/02_ADRIAN/POSTULANTES/th_pos_documentosC.php?listar=true',
+            url: '../controlador/TALENTO_HUMANO/POSTULANTES/th_pos_documentosC.php?listar=true',
             type: 'post',
             data: {
                 id: id
@@ -38,7 +38,7 @@
 
     function cargar_datos_modal_documentos_identidad(id) {
         $.ajax({
-            url: '../controlador/PASANTES/02_ADRIAN/POSTULANTES/th_pos_documentosC.php?listar_modal=true',
+            url: '../controlador/TALENTO_HUMANO/POSTULANTES/th_pos_documentosC.php?listar_modal=true',
             type: 'post',
             data: {
                 id: id
@@ -69,7 +69,7 @@
 
         if ($("#form_documento_identidad").valid()) {
             $.ajax({
-                url: '../controlador/PASANTES/02_ADRIAN/POSTULANTES/th_pos_documentosC.php?insertar=true',
+                url: '../controlador/TALENTO_HUMANO/POSTULANTES/th_pos_documentosC.php?insertar=true',
                 type: 'post',
                 data: form_data,
                 contentType: false,
@@ -141,7 +141,7 @@
             data: {
                 id: id
             },
-            url: '../controlador/PASANTES/02_ADRIAN/POSTULANTES/th_pos_documentosC.php?eliminar=true',
+            url: '../controlador/TALENTO_HUMANO/POSTULANTES/th_pos_documentosC.php?eliminar=true',
             type: 'post',
             dataType: 'json',
             success: function(response) {

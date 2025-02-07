@@ -77,14 +77,14 @@ if ($_GET['acc'] == 'th_tomar_datos_biometricos') {
  */
 
 
-if ($_GET['acc'] == 'postulantes') {
+if ($_GET['acc'] == 'th_postulantes') {
 	include('TALENTO_HUMANO/POSTULANTES/postulantes.php');
 }
 
-if ($_GET['acc'] == 'registrar_postulantes') {
+if ($_GET['acc'] == 'th_registrar_postulantes') {
 	include('TALENTO_HUMANO/POSTULANTES/registrar_postulantes.php');
 }
 
-if ($_GET['acc'] == 'informacion_personal') {
+if ($_GET['acc'] == 'th_informacion_personal') {
 	include('TALENTO_HUMANO/POSTULANTES/informacion_personal.php');
 }

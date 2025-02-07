@@ -8,7 +8,7 @@
     //Información Adicional
     function cargarDatos_informacion_adicional(id) {
         $.ajax({
-            url: '../controlador/PASANTES/02_ADRIAN/POSTULANTES/th_postulante_inf_adicionalC.php?listar=true',
+            url: '../controlador/TALENTO_HUMANO/POSTULANTES/th_postulante_inf_adicionalC.php?listar=true',
             type: 'post',
             data: {
                 id: id
@@ -64,7 +64,7 @@
             data: {
                 parametros: parametros
             },
-            url: '../controlador/PASANTES/02_ADRIAN/POSTULANTES/th_postulante_inf_adicionalC.php?insertar=true',
+            url: '../controlador/TALENTO_HUMANO/POSTULANTES/th_postulante_inf_adicionalC.php?insertar=true',
             type: 'post',
             dataType: 'json',
 

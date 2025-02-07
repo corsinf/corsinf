@@ -1,10 +1,10 @@
 <?php
 
-require_once(dirname(__DIR__, 2) . '/BaseModel.php');
+require_once(dirname(__DIR__, 2) . '/GENERAL/BaseModel.php');
 
 class th_pos_experiencia_laboralM extends BaseModel
 {
-    protected $tabla = 'th_experiencia_laboral';
+    protected $tabla = 'th_pos_experiencia_laboral';
     protected $primaryKey = 'th_expl_id AS _id';
 
     protected $camposPermitidos = [

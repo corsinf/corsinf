@@ -9,7 +9,7 @@
     //Experiencia Laboral
     function cargar_datos_experiencia_laboral(id) {
         $.ajax({
-            url: '../controlador/PASANTES/02_ADRIAN/POSTULANTES/th_pos_experiencia_laboralC.php?listar=true',
+            url: '../controlador/TALENTO_HUMANO/POSTULANTES/th_pos_experiencia_laboralC.php?listar=true',
             type: 'post',
             data: {
                 id: id
@@ -23,7 +23,7 @@
 
     function cargar_datos_modal_experiencia_laboral(id) {
         $.ajax({
-            url: '../controlador/PASANTES/02_ADRIAN/POSTULANTES/th_pos_experiencia_laboralC.php?listar_modal=true',
+            url: '../controlador/TALENTO_HUMANO/POSTULANTES/th_pos_experiencia_laboralC.php?listar_modal=true',
             type: 'post',
             data: {
                 id: id
@@ -98,7 +98,7 @@
             data: {
                 parametros: parametros
             },
-            url: '../controlador/PASANTES/02_ADRIAN/POSTULANTES/th_pos_experiencia_laboralC.php?insertar=true',
+            url: '../controlador/TALENTO_HUMANO/POSTULANTES/th_pos_experiencia_laboralC.php?insertar=true',
             type: 'post',
             dataType: 'json',
 
@@ -152,7 +152,7 @@
             data: {
                 id: id
             },
-            url: '../controlador/PASANTES/02_ADRIAN/POSTULANTES/th_pos_experiencia_laboralC.php?eliminar=true',
+            url: '../controlador/TALENTO_HUMANO/POSTULANTES/th_pos_experiencia_laboralC.php?eliminar=true',
             type: 'post',
             dataType: 'json',
             success: function(response) {

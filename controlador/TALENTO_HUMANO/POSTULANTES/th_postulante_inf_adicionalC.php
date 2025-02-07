@@ -1,5 +1,5 @@
 <?php
-require_once(dirname(__DIR__, 4) . '/modelo/PASANTES/02_ADRIAN/POSTULANTES/th_postulante_inf_adicionalM.php');
+require_once(dirname(__DIR__, 3)  . '/modelo/TALENTO_HUMANO/POSTULANTES/th_postulante_inf_adicionalM.php');
 
 $controlador = new th_postulante_inf_adicionalC();
 

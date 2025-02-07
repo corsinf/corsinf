@@ -1,5 +1,5 @@
 <?php
-require_once(dirname(__DIR__, 4) . '/modelo/PASANTES/02_ADRIAN/POSTULANTES/th_pos_formacion_academicaM.php');
+require_once(dirname(__DIR__, 3)  . '/modelo/TALENTO_HUMANO/POSTULANTES/th_pos_formacion_academicaM.php');
 
 $controlador = new th_pos_formacion_academicaC();
 

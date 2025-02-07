@@ -1,5 +1,5 @@
 <?php
-require_once(dirname(__DIR__, 4) . '/modelo/PASANTES/02_ADRIAN/POSTULANTES/th_pos_experiencia_laboralM.php');
+require_once(dirname(__DIR__, 3)  . '/modelo/TALENTO_HUMANO/POSTULANTES/th_pos_experiencia_laboralM.php');
 
 $controlador = new th_pos_experiencia_laboralC();
 
@@ -74,6 +74,8 @@ class th_pos_experiencia_laboralC
 
     function insertar_editar($parametros)
     {
+        //print_r($parametros); exit(); die();
+
         $datos = array(
             array('campo' => 'th_expl_nombre_empresa', 'dato' => $parametros['txt_nombre_empresa']),
             array('campo' => 'th_expl_cargos_ocupados', 'dato' => $parametros['txt_cargos_ocupados']),

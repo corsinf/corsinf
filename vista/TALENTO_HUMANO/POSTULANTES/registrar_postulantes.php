@@ -23,7 +23,7 @@ if (isset($_GET['id'])) {
 
     function cargarDatos(id) {
         $.ajax({
-            url: '../controlador/PASANTES/02_ADRIAN/POSTULANTES/th_postulantesC.php?listar=true',
+            url: '../controlador/TALENTO_HUMANO/POSTULANTES/th_postulantesC.php?listar=true',
             type: 'post',
             data: {
                 id: id
@@ -48,15 +48,23 @@ if (isset($_GET['id'])) {
                 calcular_edad('txt_edad', response[0].th_pos_fecha_nacimiento);
 
                 //Cargar Selects de provincia-ciudad-parroquia
-                url_provinciaC = '../controlador/PASANTES/02_ADRIAN/POSTULANTES/th_provinciasC.php?listar=true';
+                url_provinciaC = '../controlador/GENERAL/th_provinciasC.php?listar=true';
                 cargar_select2_con_id('ddl_provincias', url_provinciaC, response[0].th_prov_id, 'th_prov_nombre');
 
-                url_ciudadC = '../controlador/PASANTES/02_ADRIAN/POSTULANTES/th_ciudadC.php?listar=true';
+                url_ciudadC = '../controlador/GENERAL/th_ciudadC.php?listar=true';
                 cargar_select2_con_id('ddl_ciudad', url_ciudadC, response[0].th_ciu_id, 'th_ciu_nombre');
 
-                url_parroquiaC = '../controlador/PASANTES/02_ADRIAN/POSTULANTES/th_parroquiasC.php?listar=true';
+                url_parroquiaC = '../controlador/GENERAL/th_parroquiasC.php?listar=true';
                 cargar_select2_con_id('ddl_parroquia', url_parroquiaC, response[0].th_parr_id, 'th_parr_nombre');
             },
+
+            error: function(xhr, status, error) {
+                console.log('Status: ' + status);
+                console.log('Error: ' + error);
+                console.log('XHR Response: ' + xhr.responseText);
+
+                Swal.fire('', 'Error: ' + xhr.responseText, 'error');
+            }
         });
     }
 
@@ -77,7 +85,7 @@ if (isset($_GET['id'])) {
         var ddl_provincias = $('#ddl_provincias').val();
         var ddl_ciudad = $('#ddl_ciudad').val();
         var ddl_parroquia = $('#ddl_parroquia').val();
-        var txt_direccion_postal = $('#txt_direccion_postal').val();
+        var txt_codigo_postal = $('#txt_codigo_postal').val();
         var txt_direccion = $('#txt_direccion').val();
 
         var parametros = {
@@ -97,12 +105,12 @@ if (isset($_GET['id'])) {
             'ddl_provincias': ddl_provincias,
             'ddl_ciudad': ddl_ciudad,
             'ddl_parroquia': ddl_parroquia,
-            'txt_direccion_postal': txt_direccion_postal,
+            'txt_codigo_postal': txt_codigo_postal,
             'txt_direccion': txt_direccion,
 
         };
 
-        if ($("#registrar_postulantes").valid()) {
+        if ($("#th_registrar_postulantes").valid()) {
             // Si es válido, puedes proceder a enviar los datos por AJAX
             //.log(parametros);
             insertar(parametros);
@@ -114,21 +122,32 @@ if (isset($_GET['id'])) {
             data: {
                 parametros: parametros
             },
-            url: '../controlador/PASANTES/02_ADRIAN/POSTULANTES/th_postulantesC.php?insertar=true',
+            url: '../controlador/TALENTO_HUMANO/POSTULANTES/th_postulantesC.php?insertar=true',
             type: 'post',
             dataType: 'json',
 
             success: function(response) {
                 if (response == 1) {
                     Swal.fire('', 'Operacion realizada con exito.', 'success').then(function() {
-                        location.href = '../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=postulantes';
-
-
+                        location.href = '../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_postulantes';
                     });
                 } else if (response == -2) {
-                    Swal.fire('', 'Operación fallida', 'warning');
+                    $(txt_cedula).addClass('is-invalid');
+                    $('#error_txt_cedula').text('La cédula ya está en uso.');
                 }
+            },
+
+            error: function(xhr, status, error) {
+                console.log('Status: ' + status);
+                console.log('Error: ' + error);
+                console.log('XHR Response: ' + xhr.responseText);
+
+                Swal.fire('', 'Error: ' + xhr.responseText, 'error');
             }
+        });
+
+        $('#txt_cedula').on('input', function() {
+            $('#error_txt_cedula').text('');
         });
     }
 
@@ -155,15 +174,23 @@ if (isset($_GET['id'])) {
             data: {
                 id: id
             },
-            url: '../controlador/PASANTES/02_ADRIAN/POSTULANTES/th_postulantesC.php?eliminar=true',
+            url: '../controlador/TALENTO_HUMANO/POSTULANTES/th_postulantesC.php?eliminar=true',
             type: 'post',
             dataType: 'json',
             success: function(response) {
                 if (response == 1) {
                     Swal.fire('Eliminado!', 'Registro Eliminado.', 'success').then(function() {
-                        location.href = '../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=postulantes';
+                        location.href = '../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_postulantes';
                     });
                 }
+            },
+
+            error: function(xhr, status, error) {
+                console.log('Status: ' + status);
+                console.log('Error: ' + error);
+                console.log('XHR Response: ' + xhr.responseText);
+
+                Swal.fire('', 'Error: ' + xhr.responseText, 'error');
             }
         });
     }
@@ -203,13 +230,13 @@ if (isset($_GET['id'])) {
                             </h5>
                             <div class="row m-2">
                                 <div class="col-sm-12">
-                                    <a href="../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=postulantes" class="btn btn-outline-dark btn-sm d-flex align-items-center"><i class="bx bx-arrow-back"></i> Regresar</a>
+                                    <a href="../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_postulantes" class="btn btn-outline-dark btn-sm d-flex align-items-center"><i class="bx bx-arrow-back"></i> Regresar</a>
                                 </div>
                             </div>
                         </div>
 
                         <hr>
-                        <form id="registrar_postulantes" class="modal_general_provincias">
+                        <form id="th_registrar_postulantes" class="modal_general_provincias">
                             <div class="row mb-col pt-3">
                                 <div class="col-md-3">
                                     <label for="txt_primer_apellido" class="form-label form-label-sm">Primer Apellido </label>
@@ -233,6 +260,7 @@ if (isset($_GET['id'])) {
                                 <div class="col-md-3">
                                     <label for="txt_cedula" class="form-label form-label-sm">Cédula de Identidad </label>
                                     <input type="text" class="form-control form-control-sm solo_numeros_int" name="txt_cedula" id="txt_cedula" placeholder="Digite su número de cédula" maxlength="10" required>
+                                    <span id="error_txt_cedula" class="text-danger"></span>
                                 </div>
                                 <div class="col-md-3">
                                     <label for="ddl_sexo" class="form-label form-label-sm">Sexo </label>
@@ -293,7 +321,8 @@ if (isset($_GET['id'])) {
 
                             </div>
 
-                            <?php include_once('../vista/PASANTES/02_ADRIAN/POSTULANTES/provincias_ciudades_parroquias.php'); ?>
+                            <!-- Vista de provincias reutilizada -->
+                            <?php include_once('../vista/GENERAL/provincias_ciudades_parroquias.php'); ?>
 
                             <div class="row mb-col">
                                 <div class="col-md-12">
@@ -339,7 +368,7 @@ if (isset($_GET['id'])) {
         agregar_asterisco_campo_obligatorio('txt_direccion');
 
         //* Validacion de formulario
-        $("#registrar_postulantes").validate({
+        $("#th_registrar_postulantes").validate({
             rules: {
                 txt_primer_apellido: {
                     required: true,

@@ -24,7 +24,7 @@ if (isset($_GET['id'])) {
     //Información Personal
     function cargarDatos_informacion_personal(id) {
         $.ajax({
-            url: '../controlador/PASANTES/02_ADRIAN/POSTULANTES/th_postulantesC.php?listar=true',
+            url: '../controlador/TALENTO_HUMANO/POSTULANTES/th_postulantesC.php?listar=true',
             type: 'post',
             data: {
                 id: id
@@ -50,13 +50,13 @@ if (isset($_GET['id'])) {
                 $('#img_postulante_inf').attr('src', response[0].th_pos_foto_url + '?' + Math.random());
 
                 //Cargar Selects de provincia-ciudad-parroquia
-                url_provinciaC = '../controlador/PASANTES/02_ADRIAN/POSTULANTES/th_provinciasC.php?listar=true';
+                url_provinciaC = '../controlador/GENERAL/th_provinciasC.php?listar=true';
                 cargar_select2_con_id('ddl_provincias', url_provinciaC, response[0].th_prov_id, 'th_prov_nombre');
 
-                url_ciudadC = '../controlador/PASANTES/02_ADRIAN/POSTULANTES/th_ciudadC.php?listar=true';
+                url_ciudadC = '../controlador/GENERAL/th_ciudadC.php?listar=true';
                 cargar_select2_con_id('ddl_ciudad', url_ciudadC, response[0].th_ciu_id, 'th_ciu_nombre');
 
-                url_parroquiaC = '../controlador/PASANTES/02_ADRIAN/POSTULANTES/th_parroquiasC.php?listar=true';
+                url_parroquiaC = '../controlador/GENERAL/th_parroquiasC.php?listar=true';
                 cargar_select2_con_id('ddl_parroquia', url_parroquiaC, response[0].th_parr_id, 'th_parr_nombre');
 
 
@@ -81,7 +81,7 @@ if (isset($_GET['id'])) {
 
     function recargar_imagen(id) {
         $.ajax({
-            url: '../controlador/PASANTES/02_ADRIAN/POSTULANTES/th_postulantesC.php?listar=true',
+            url: '../controlador/TALENTO_HUMANO/POSTULANTES/th_postulantesC.php?listar=true',
             type: 'post',
             data: {
                 id: id
@@ -147,7 +147,7 @@ if (isset($_GET['id'])) {
             data: {
                 parametros: parametros
             },
-            url: '../controlador/PASANTES/02_ADRIAN/POSTULANTES/th_postulantesC.php?insertar=true',
+            url: '../controlador/TALENTO_HUMANO/POSTULANTES/th_postulantesC.php?insertar=true',
             type: 'post',
             dataType: 'json',
 
@@ -185,7 +185,7 @@ if (isset($_GET['id'])) {
             </div>
             <div class="row m-2">
                 <div class="col-sm-12">
-                    <a href="../vista/inicio.php?mod=1010&acc=postulantes" class="btn btn-outline-dark btn-sm d-flex align-items-center"><i class="bx bx-arrow-back"></i> Postulantes</a>
+                    <a href="../vista/inicio.php?mod=1010&acc=th_postulantes" class="btn btn-outline-dark btn-sm d-flex align-items-center"><i class="bx bx-arrow-back"></i> Postulantes</a>
                 </div>
             </div>
         </div>
@@ -200,7 +200,7 @@ if (isset($_GET['id'])) {
                                 <div class="align-items-center">
                                     <!-- Cambiar Foto -->
                                     <div class="text-center">
-                                        <?php include_once('../vista/PASANTES/02_ADRIAN/POSTULANTES/pos_cambiar_foto.php'); ?>
+                                        <?php include_once('../vista/TALENTO_HUMANO/POSTULANTES/pos_cambiar_foto.php'); ?>
 
                                         <div class="position-relative">
 
@@ -306,7 +306,7 @@ if (isset($_GET['id'])) {
                                         <hr /> -->
 
                                         <!-- Queda en espera este parte del modulo -->
-                                        <?php //include_once('../vista/PASANTES/02_ADRIAN/POSTULANTES/pos_informacion_adicional.php'); 
+                                        <?php //include_once('../vista/TALENTO_HUMANO/POSTULANTES/pos_informacion_adicional.php'); 
                                         ?>
 
                                         <div class="row">
@@ -319,7 +319,7 @@ if (isset($_GET['id'])) {
                                             </div>
                                         </div>
 
-                                        <?php include_once('../vista/PASANTES/02_ADRIAN/POSTULANTES/pos_contacto_emergencia.php'); ?>
+                                        <?php include_once('../vista/TALENTO_HUMANO/POSTULANTES/pos_contacto_emergencia.php'); ?>
 
                                     </div>
                                 </div>
@@ -392,7 +392,7 @@ if (isset($_GET['id'])) {
                                                 </div>
                                                 <hr>
 
-                                                <?php include_once('../vista/PASANTES/02_ADRIAN/POSTULANTES/pos_experiencia_previa.php'); ?>
+                                                <?php include_once('../vista/TALENTO_HUMANO/POSTULANTES/pos_experiencia_previa.php'); ?>
 
                                             </div>
                                             <!-- Formación Académica -->
@@ -412,7 +412,7 @@ if (isset($_GET['id'])) {
                                                 </div>
                                                 <hr>
 
-                                                <?php include_once('../vista/PASANTES/02_ADRIAN/POSTULANTES/pos_formacion_academica.php'); ?>
+                                                <?php include_once('../vista/TALENTO_HUMANO/POSTULANTES/pos_formacion_academica.php'); ?>
 
                                             </div>
                                             <!-- Certificaciones y capacitación -->
@@ -432,7 +432,7 @@ if (isset($_GET['id'])) {
                                                 </div>
                                                 <hr>
 
-                                                <?php include_once('../vista/PASANTES/02_ADRIAN/POSTULANTES/pos_certificaciones_capacitaciones.php'); ?>
+                                                <?php include_once('../vista/TALENTO_HUMANO/POSTULANTES/pos_certificaciones_capacitaciones.php'); ?>
 
                                             </div>
                                         </div>
@@ -459,7 +459,7 @@ if (isset($_GET['id'])) {
                                                 </div>
                                                 <hr class="my-0 mb-3">
 
-                                                <?php include_once('../vista/PASANTES/02_ADRIAN/POSTULANTES/pos_documento_identidad.php'); ?>
+                                                <?php include_once('../vista/TALENTO_HUMANO/POSTULANTES/pos_documento_identidad.php'); ?>
 
                                             </div>
                                             <!-- Contratos de Trabajo -->
@@ -479,7 +479,7 @@ if (isset($_GET['id'])) {
                                                 </div>
                                                 <hr class="my-0 mb-3">
 
-                                                <?php include_once('../vista/PASANTES/02_ADRIAN/POSTULANTES/pos_contratos_trabajo.php'); ?>
+                                                <?php include_once('../vista/TALENTO_HUMANO/POSTULANTES/pos_contratos_trabajo.php'); ?>
 
                                             </div>
                                             <!-- Certificado Médicos -->
@@ -499,7 +499,7 @@ if (isset($_GET['id'])) {
                                                 </div>
                                                 <hr class="my-0 mb-3">
 
-                                                <?php include_once('../vista/PASANTES/02_ADRIAN/POSTULANTES/pos_certificado_medico.php'); ?>
+                                                <?php include_once('../vista/TALENTO_HUMANO/POSTULANTES/pos_certificado_medico.php'); ?>
 
                                             </div>
                                             <!-- Referencias Laborales -->
@@ -519,7 +519,7 @@ if (isset($_GET['id'])) {
                                                 </div>
                                                 <hr class="my-0 mb-3">
 
-                                                <?php include_once('../vista/PASANTES/02_ADRIAN/POSTULANTES/pos_referencias_laborales.php'); ?>
+                                                <?php include_once('../vista/TALENTO_HUMANO/POSTULANTES/pos_referencias_laborales.php'); ?>
 
                                             </div>
                                         </div>
@@ -546,7 +546,7 @@ if (isset($_GET['id'])) {
                                                 </div>
                                                 <hr class="my-0">
 
-                                                <?php include_once('../vista/PASANTES/02_ADRIAN/POSTULANTES/pos_idiomas.php'); ?>
+                                                <?php include_once('../vista/TALENTO_HUMANO/POSTULANTES/pos_idiomas.php'); ?>
 
                                             </div>
                                             <!-- Aptitudes -->
@@ -566,7 +566,7 @@ if (isset($_GET['id'])) {
                                                 </div>
                                                 <hr class="my-0">
 
-                                                <?php include_once('../vista/PASANTES/02_ADRIAN/POSTULANTES/pos_aptitudes.php'); ?>
+                                                <?php include_once('../vista/TALENTO_HUMANO/POSTULANTES/pos_aptitudes.php'); ?>
 
                                             </div>
                                         </div>
@@ -592,7 +592,7 @@ if (isset($_GET['id'])) {
                                                 </div>
                                                 <hr>
 
-                                                <?php include_once('../vista/PASANTES/02_ADRIAN/POSTULANTES/pos_estado_laboral.php'); ?>
+                                                <?php include_once('../vista/TALENTO_HUMANO/POSTULANTES/pos_estado_laboral.php'); ?>
 
                                             </div>
                                         </div>
@@ -705,7 +705,7 @@ if (isset($_GET['id'])) {
                     </div>
 
 
-                    <?php include_once('../vista/PASANTES/02_ADRIAN/POSTULANTES/provincias_ciudades_parroquias.php'); ?>
+                    <?php include_once('../vista/GENERAL/provincias_ciudades_parroquias.php'); ?>
 
                     <div class="row mb-col">
                         <div class="col-md-12">

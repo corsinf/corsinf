@@ -1,6 +1,6 @@
 <?php
 
-require_once(dirname(__DIR__, 2) . '/BaseModel.php');
+require_once(dirname(__DIR__, 2) . '/GENERAL/BaseModel.php');
 
 class th_cat_tip_habilidadesM extends BaseModel
 {

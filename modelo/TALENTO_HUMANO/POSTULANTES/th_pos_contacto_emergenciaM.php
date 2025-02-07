@@ -1,10 +1,10 @@
 <?php
 
-require_once(dirname(__DIR__, 2) . '/BaseModel.php');
+require_once(dirname(__DIR__, 2) . '/GENERAL/BaseModel.php');
 
 class th_pos_contacto_emergenciaM extends BaseModel
 {
-    protected $tabla = 'th_contacto_emergencia';
+    protected $tabla = 'th_pos_contacto_emergencia';
     protected $primaryKey = 'th_coem_id AS _id';
 
     protected $camposPermitidos = [

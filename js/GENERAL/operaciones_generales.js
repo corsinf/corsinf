@@ -373,4 +373,51 @@ function cargar_select2_con_id(ddl, url_controlador, id_seleccionado, texto) {
     });
 }
 
+//Sweet alert, para generar las alertas de manera mejorada
+
+function handle_ajax_response(response) {
+    try {
+        // console.log('Error al parsear JSON:', response);
+        // return
+        let json_response = (response);
+
+
+        let title = 'Mensaje';
+        let text = 'No se pudo interpretar la respuesta.';
+        let icon = 'info';
+
+        if (json_response.success) {
+            title = 'Éxito';
+            text = json_response.success;
+            icon = 'success';
+        } else if (json_response.warning) {
+            title = 'Advertencia';
+            text = json_response.warning;
+            icon = 'warning';
+        } else if (json_response.error) {
+            title = 'Error';
+            text = json_response.error;
+            icon = 'error';
+        }
+
+        Swal.fire({
+            title: title,
+            text: text,
+            icon: icon
+        }).then(function () {
+            if (json_response.redirect) {
+                window.location.href = json_response.redirect; // Redirigir si existe un link en la respuesta
+            }
+        });
+
+    } catch (e) {
+        Swal.fire({
+            title: 'Error',
+            text: 'Respuesta inválida del servidor.',
+            icon: 'error'
+        });
+        console.error('Error al parsear JSON:', e);
+    }
+}
+
 
