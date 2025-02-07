@@ -1,9 +1,9 @@
 
 <?php
 
-require_once(dirname(__DIR__, 2) . '/modelo/actasM.php');
-require_once(dirname(__DIR__, 2) . '/modelo/custodioM.php');
-require_once(dirname(__DIR__, 2) . '/modelo/localizacionM.php');
+require_once(dirname(__DIR__, 2) . '/modelo/ACTIVOS_FIJOS/actasM.php');
+require_once(dirname(__DIR__, 2) . '/modelo/ACTIVOS_FIJOS/custodioM.php');
+require_once(dirname(__DIR__, 2) . '/modelo/ACTIVOS_FIJOS/localizacionM.php');
 require_once(dirname(__DIR__, 2) . '/db/codigos_globales.php');
 
 $controlador = new actasC();
