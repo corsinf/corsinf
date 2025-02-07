@@ -197,9 +197,15 @@ class db
 			return 1;
 			
 		} catch (Exception $e) {
-			echo "Error: " . $sql . "<br>" . $e;			
+			echo "Error:<br>";
+			echo "SQL: <pre>" . htmlspecialchars($sql) . "</pre><br>";
+			echo "Detalles del error:<br>";
+			echo "<pre>";
+			echo($e);
+			echo "</pre>";
 			$conn = null;
-			return -1;			
+
+			return -1;
 		}
 		
 	}
@@ -240,7 +246,13 @@ class db
 
 			return $ultimoID;
 		} catch (PDOException $e) {
-			echo "Error: " . $e->getMessage();
+			echo "Error:<br>";
+			echo "SQL: <pre>" . htmlspecialchars($sql) . "</pre><br>";
+			echo "Detalles del error:<br>";
+			echo "<pre>";
+			echo($e);
+			echo "</pre>";
+			
 			return -1;
 		}
 	}
@@ -285,9 +297,16 @@ class db
     		return 1;
 			
 		} catch (Exception $e) {
-			echo "Error: " . $sql . "<br>".$e;
+			echo "Error:<br>";
+			echo "SQL: <pre>" . htmlspecialchars($sql) . "</pre><br>";
+			echo "Detalles del error:<br>";
+			echo "<pre>";
+			echo($e);
+			echo "</pre>";
+			
 			return -1;
-		}		
+		}
+			
 	}
 
 
