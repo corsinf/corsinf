@@ -253,7 +253,8 @@ class estudiantesC
     {
         // print_r($file);print_r($post);die();
         $id = $post['txt_idEst'];
-        $ruta = '../img/estudiantes/SAINT/'; //ruta carpeta donde queremos copiar las imágenes
+        $id_empresa = $_SESSION['INICIO']['ID_EMPRESA'];
+        $ruta = '../../img/estudiantes/' . $id_empresa . '/'; //ruta carpeta donde queremos copiar las imágenes
         if (!file_exists($ruta)) {
             mkdir($ruta, 0777, true);
         }
@@ -262,11 +263,12 @@ class estudiantesC
             $tipo = explode('/', $file['file_estudiante_img_' . $id]['type']);
             $nombre = $post['name_img'] . '.' . $tipo[1];
             $nuevo_nom = $ruta . $nombre;
+            $nombre_ruta = '../img/estudiantes/' . $id_empresa . '/' . $nombre;
             if (is_uploaded_file($uploadfile_temporal)) {
                 move_uploaded_file($uploadfile_temporal, $nuevo_nom);
 
                 $datosI[0]['campo'] = 'sa_est_foto_url';
-                $datosI[0]['dato'] = $nuevo_nom;
+                $datosI[0]['dato'] = $nombre_ruta;
                 $where[0]['campo'] = 'sa_est_id';
                 $where[0]['dato'] =  $id;
 
@@ -302,6 +304,4 @@ class estudiantesC
                 break;
         }
     }
-
-
 }

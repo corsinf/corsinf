@@ -138,7 +138,7 @@
 
             var formData = new FormData(document.getElementById("form_img"));
             $.ajax({
-                url: '../controlador/SALUD_INTEGRAL/usuariosC.php?cargar_imagen_no_concurente=true',
+                url: '../controlador/usuariosC.php?cargar_imagen_no_concurente=true',
                 type: 'post',
                 data: formData,
                 contentType: false,
@@ -180,7 +180,7 @@
             data: {
                 parametros: parametros
             },
-            url: '../controlador/SALUD_INTEGRAL/usuariosC.php?datos_usuarios=true',
+            url: '../controlador/usuariosC.php?datos_usuarios=true',
             type: 'post',
             dataType: 'json',
 
@@ -525,7 +525,7 @@
             data: {
                 parametros: parametros
             },
-            url: '../controlador/SALUD_INTEGRAL/usuariosC.php?editar_datos=true',
+            url: '../controlador/usuariosC.php?editar_datos=true',
             type: 'post',
             dataType: 'json',
             success: function(response) {
@@ -554,7 +554,7 @@
             data: {
                 parametros: parametros
             },
-            url: '../controlador/SALUD_INTEGRAL/usuariosC.php?guardar_credencial=true',
+            url: '../controlador/usuariosC.php?guardar_credencial=true',
             type: 'post',
             dataType: 'json',
             success: function(response) {

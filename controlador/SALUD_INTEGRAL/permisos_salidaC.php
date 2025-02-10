@@ -1,8 +1,7 @@
 <?php
-include('../modelo/permisos_salidaM.php');
-
-include('../lib/HIKVISION/Notificaciones.php');
-include('../lib/HIKVISION/HIK_TCP.php');
+require_once(dirname(__DIR__, 2) . '/modelo/SALUD_INTEGRAL/permisos_salidaM.php');
+require_once(dirname(__DIR__, 2) . '/lib/HIKVISION/Notificaciones.php');
+require_once(dirname(__DIR__, 2) . '/lib/HIKVISION/HIK_TCP.php');
 
 
 $controlador = new permisos_salidaC();
@@ -93,16 +92,16 @@ class permisos_salidaC
 
         //Permiso del inspector
         $mensaje_HV = 'per_ins_' . $id;
-        
+
         $datos_edit = array(
             //array('campo' => 'ac_ps_hora_entrada', 'dato' => $parametros['ac_ps_hora_entrada']),
             array('campo' => 'ac_ps_codigo_TCP_HIK', 'dato' => $mensaje_HV),
         );
-        
+
         $where[0]['campo'] = 'ac_ps_id';
         $where[0]['dato'] = $id;
         $datos = $this->modelo->editar($datos_edit, $where);
-        
+
         if ($this->user_api_hikvision != '.' && $this->key_api_hikvision != '.' && $this->ip_api_hikvision != '.' && $this->puerto_api_hikvision != '.') {
             /*HIKVISION*/
             $mensaje_alerta = '';
