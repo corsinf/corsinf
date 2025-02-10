@@ -95,7 +95,7 @@ if (isset($_GET['paralelo'])) {
             //         if (result.isConfirmed) {
             //             // Ejecuta la solicitud AJAX
             //             $.ajax({
-            //                 url: '../controlador/horario_clasesC.php?eliminar=true',
+            //                 url: '../controlador/SALUD_INTEGRAL/horario_clasesC.php?eliminar=true',
             //                 type: 'POST',
             //                 data: {
             //                     id: id_horario_clases
@@ -145,7 +145,7 @@ if (isset($_GET['paralelo'])) {
         var paralelo = '<?php echo $paralelo; ?>';
 
         $.ajax({
-            url: '../controlador/index_saludC.php?horario_clases=true',
+            url: '../controlador/SALUD_INTEGRAL/index_saludC.php?horario_clases=true',
             type: 'get',
             data: {
                 id_paralelo: paralelo
@@ -199,7 +199,7 @@ if (isset($_GET['paralelo'])) {
                 sa_pac_id_comunidad: id_estudiante,
                 sa_pac_tabla: 'estudiantes',
             },
-            url: '../controlador/pacientesC.php?existe_paciente=true',
+            url: '../controlador/SALUD_INTEGRAL/pacientesC.php?existe_paciente=true',
             type: 'post',
             dataType: 'json',
             success: function(response) {
@@ -230,7 +230,7 @@ if (isset($_GET['paralelo'])) {
             data: {
                 sa_pac_id: sa_pac_id
             },
-            url: '../controlador/pacientesC.php?obtener_info_paciente=true',
+            url: '../controlador/SALUD_INTEGRAL/pacientesC.php?obtener_info_paciente=true',
             type: 'post',
             dataType: 'json',
             success: function(response) {
@@ -271,7 +271,7 @@ if (isset($_GET['paralelo'])) {
             data: {
                 sa_pac_id: sa_pac_id
             },
-            url: '../controlador/ficha_MedicaC.php?listar_paciente_ficha=true',
+            url: '../controlador/SALUD_INTEGRAL/ficha_MedicaC.php?listar_paciente_ficha=true',
             type: 'post',
             dataType: 'json',
             success: function(response) {
@@ -296,7 +296,7 @@ if (isset($_GET['paralelo'])) {
             data: {
                 id_paciente: id_paciente
             },
-            url: '../controlador/pacientesC.php?obtener_idFicha_paciente=true',
+            url: '../controlador/SALUD_INTEGRAL/pacientesC.php?obtener_idFicha_paciente=true',
             type: 'post',
             dataType: 'json',
             success: function(response) {
@@ -309,7 +309,7 @@ if (isset($_GET['paralelo'])) {
                     data: {
                         id_ficha: response.sa_fice_id
                     },
-                    url: '../controlador/consultasC.php?listar_consulta_ficha=true',
+                    url: '../controlador/SALUD_INTEGRAL/consultasC.php?listar_consulta_ficha=true',
                     type: 'post',
                     dataType: 'json',
                     success: function(responseConsultas) {
@@ -403,7 +403,7 @@ if (isset($_GET['paralelo'])) {
             data: {
                 id: id_estudiante
             },
-            url: '../controlador/estudiantesC.php?listar=true',
+            url: '../controlador/SALUD_INTEGRAL/estudiantesC.php?listar=true',
             type: 'post',
             dataType: 'json',
             success: function(response) {

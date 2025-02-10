@@ -24,7 +24,7 @@ if ($id != null && $id != '') {
             },
             responsive: true,
             ajax: {
-                url: '../controlador/reunionesC.php',
+                url: '../controlador/SALUD_INTEGRAL/reunionesC.php',
                 data: function(d) {
                     d.listar_todo_docentes = true; // Otros parámetros que puedas necesitar
                     // Agrega el parámetro ac_reunion_id
@@ -105,7 +105,7 @@ if ($id != null && $id != '') {
 
         if (ac_reunion_id) {
             $.ajax({
-                url: '../controlador/reunionesC.php?listar=true',
+                url: '../controlador/SALUD_INTEGRAL/reunionesC.php?listar=true',
                 data: {
                     id_reunion: ac_reunion_id
                 },
@@ -149,7 +149,7 @@ if ($id != null && $id != '') {
 
         if (ac_reunion_id != '' && ac_reunion_observacion != '' && ac_reunion_estado != '') {
             $.ajax({
-                url: '../controlador/reunionesC.php?insertar=true',
+                url: '../controlador/SALUD_INTEGRAL/reunionesC.php?insertar=true',
                 data: {
                     parametros: parametros
                 },

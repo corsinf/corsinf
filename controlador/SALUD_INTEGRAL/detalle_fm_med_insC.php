@@ -1,5 +1,5 @@
 <?php
-include('../modelo/detalle_fm_med_insM.php');
+require_once(dirname(__DIR__, 2) . '/modelo/SALUD_INTEGRAL/detalle_fm_med_insM.php');
 
 $controlador = new detalle_fm_med_insC();
 

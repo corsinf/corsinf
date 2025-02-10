@@ -1,6 +1,6 @@
 <?php
 if (!class_exists('db')) {
-    include('../db/db.php');
+    include(dirname(__DIR__, 2) . '/db/db.php');
 }
 /**
  * 
@@ -16,8 +16,8 @@ class cat_cie10M
 
     function lista_cie10()
     {
-            $sql =
-                "SELECT 
+        $sql =
+            "SELECT 
                     sa_cie10_id,
                     sa_cie10_codigo,
                     sa_cie10_descripcion,
@@ -27,14 +27,14 @@ class cat_cie10M
                 FROM cat_cie10
                 WHERE sa_cie10_estado = '1';";
 
-            $datos = $this->db->datos($sql);
-            return $datos;
+        $datos = $this->db->datos($sql);
+        return $datos;
     }
 
     function buscar_cie10($buscar)
-	{
-		$sql = "SELECT * FROM cat_cie10 WHERE sa_cie10_estado = 1 and CONCAT(sa_cie10_codigo, ' ', sa_cie10_descripcion) LIKE '%" . $buscar . "%'";
-		$datos = $this->db->datos($sql);
-		return $datos;
-	}
+    {
+        $sql = "SELECT * FROM cat_cie10 WHERE sa_cie10_estado = 1 and CONCAT(sa_cie10_codigo, ' ', sa_cie10_descripcion) LIKE '%" . $buscar . "%'";
+        $datos = $this->db->datos($sql);
+        return $datos;
+    }
 }

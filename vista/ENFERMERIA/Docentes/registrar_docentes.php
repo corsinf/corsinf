@@ -25,7 +25,7 @@ if (isset($_POST['sa_doc_id'])) {
             data: {
                 id: id
             },
-            url: '../controlador/docentesC.php?listar=true',
+            url: '../controlador/SALUD_INTEGRAL/docentesC.php?listar=true',
             type: 'post',
             dataType: 'json',
             success: function(response) {
@@ -129,7 +129,7 @@ if (isset($_POST['sa_doc_id'])) {
             data: {
                 parametros: parametros
             },
-            url: '../controlador/docentesC.php?insertar=true',
+            url: '../controlador/SALUD_INTEGRAL/docentesC.php?insertar=true',
             type: 'post',
             dataType: 'json',
 
@@ -167,7 +167,7 @@ if (isset($_POST['sa_doc_id'])) {
             data: {
                 id: id
             },
-            url: '../controlador/docentesC.php?eliminar=true',
+            url: '../controlador/SALUD_INTEGRAL/docentesC.php?eliminar=true',
             type: 'post',
             dataType: 'json',
             success: function(response) {

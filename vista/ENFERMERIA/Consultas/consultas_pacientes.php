@@ -45,7 +45,7 @@ if (isset($_GET['pac_id'])) {
         sa_pac_id: sa_pac_id
 
       },
-      url: '../controlador/pacientesC.php?obtener_info_paciente=true',
+      url: '../controlador/SALUD_INTEGRAL/pacientesC.php?obtener_info_paciente=true',
       type: 'post',
       dataType: 'json',
       success: function(response) {
@@ -81,7 +81,7 @@ if (isset($_GET['pac_id'])) {
       data: {
         id_paciente: id_paciente
       },
-      url: '../controlador/pacientesC.php?obtener_idFicha_paciente=true',
+      url: '../controlador/SALUD_INTEGRAL/pacientesC.php?obtener_idFicha_paciente=true',
       type: 'post',
       dataType: 'json',
       success: function(response) {
@@ -94,7 +94,7 @@ if (isset($_GET['pac_id'])) {
           data: {
             id_ficha: response.sa_fice_id
           },
-          url: '../controlador/consultasC.php?listar_consulta_ficha=true',
+          url: '../controlador/SALUD_INTEGRAL/consultasC.php?listar_consulta_ficha=true',
           type: 'post',
           dataType: 'json',
           success: function(responseConsultas) {
@@ -207,7 +207,7 @@ if (isset($_GET['pac_id'])) {
   function cargar_datos_seguimiento(id_paciente) {
     // Hacer una llamada AJAX para obtener los datos de seguimiento
     $.ajax({
-      url: '../controlador/seguimiento_personalC.php?listar_seguimiento=true',
+      url: '../controlador/SALUD_INTEGRAL/seguimiento_personalC.php?listar_seguimiento=true',
       type: 'post',
       data: {
         id: id_paciente

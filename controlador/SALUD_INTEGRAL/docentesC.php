@@ -1,5 +1,5 @@
 <?php
-include('../modelo/docentesM.php');
+require_once(dirname(__DIR__, 2) . '/modelo/SALUD_INTEGRAL/docentesM.php');
 
 $controlador = new docentesC();
 

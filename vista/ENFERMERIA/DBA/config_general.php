@@ -12,7 +12,7 @@
 
     function cargar_datos_v_config() {
         $.ajax({
-            url: '../controlador/cat_configuracionGC.php?listar_config_general=true',
+            url: '../controlador/SALUD_INTEGRAL/cat_configuracionGC.php?listar_config_general=true',
             type: 'post',
             // data: {
             //     accion: 'correos'
@@ -55,7 +55,7 @@
 
     function cargar_datos_v_config_idukay() {
         $.ajax({
-            url: '../controlador/cat_configuracionGC.php?listar_config_idukay=true',
+            url: '../controlador/SALUD_INTEGRAL/cat_configuracionGC.php?listar_config_idukay=true',
             type: 'post',
             // data: {
             //     accion: 'correos'
@@ -109,7 +109,7 @@
             data: {
                 parametros: parametros
             },
-            url: '../controlador/cat_configuracionGC.php?vista_mod=true',
+            url: '../controlador/SALUD_INTEGRAL/cat_configuracionGC.php?vista_mod=true',
             type: 'post',
             dataType: 'json',
             success: function(response) {
@@ -141,7 +141,7 @@
 
 
         $.ajax({
-            url: '../controlador/cat_configuracionGC_IDUKAY.php?listar_idukay_estudiantes=true',
+            url: '../controlador/SALUD_INTEGRAL/cat_configuracionGC_IDUKAY.php?listar_idukay_estudiantes=true',
             type: 'post',
             dataType: 'json',
             success: function(data) {
@@ -245,7 +245,7 @@
 
     function cargar_estudiantes2() {
         $.ajax({
-            url: '../controlador/cat_configuracionGC_IDUKAY.php?idukay_estudiantes=true',
+            url: '../controlador/SALUD_INTEGRAL/cat_configuracionGC_IDUKAY.php?idukay_estudiantes=true',
             type: 'post',
             dataType: 'json',
             success: function(data) {
@@ -303,7 +303,7 @@
 
     function cargar_estudiantes_JSON() {
         $.ajax({
-            url: '../controlador/cat_configuracionGC_IDUKAY.php?listar_idukay_estudiantes=true',
+            url: '../controlador/SALUD_INTEGRAL/cat_configuracionGC_IDUKAY.php?listar_idukay_estudiantes=true',
             type: 'post',
             dataType: 'json',
             success: function(response) {
@@ -344,7 +344,7 @@
         });
 
         $.ajax({
-            url: '../controlador/cat_configuracionGC_IDUKAY.php?idukay_estudiantes=true',
+            url: '../controlador/SALUD_INTEGRAL/cat_configuracionGC_IDUKAY.php?idukay_estudiantes=true',
             type: 'post',
             dataType: 'json',
             success: function(response) {
@@ -382,7 +382,7 @@
         });
 
         $.ajax({
-            url: '../controlador/cat_configuracionGC_IDUKAY.php?idukay_representantes=true',
+            url: '../controlador/SALUD_INTEGRAL/cat_configuracionGC_IDUKAY.php?idukay_representantes=true',
             type: 'post',
             dataType: 'json',
             success: function(response) {
@@ -420,7 +420,7 @@
         });
 
         $.ajax({
-            url: '../controlador/cat_configuracionGC_IDUKAY.php?idukay_sincronizar=true',
+            url: '../controlador/SALUD_INTEGRAL/cat_configuracionGC_IDUKAY.php?idukay_sincronizar=true',
             type: 'post',
             dataType: 'json',
             success: function(response) {
@@ -458,7 +458,7 @@
         });
 
         $.ajax({
-            url: '../controlador/cat_configuracionGC_IDUKAY.php?idukay_docentes=true',
+            url: '../controlador/SALUD_INTEGRAL/cat_configuracionGC_IDUKAY.php?idukay_docentes=true',
             type: 'post',
             dataType: 'json',
             success: function(response) {
@@ -496,7 +496,7 @@
         });
 
         $.ajax({
-            url: '../controlador/cat_configuracionGC_IDUKAY.php?idukay_horario_docentes=true',
+            url: '../controlador/SALUD_INTEGRAL/cat_configuracionGC_IDUKAY.php?idukay_horario_docentes=true',
             type: 'post',
             dataType: 'json',
             success: function(response) {

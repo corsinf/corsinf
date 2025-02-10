@@ -170,7 +170,7 @@ if ($estado_vista == 1) {
             }).then((result) => {
                 if (result.isConfirmed) {
                     $.ajax({
-                        url: '../controlador/horario_disponibleC.php?eliminar=true',
+                        url: '../controlador/SALUD_INTEGRAL/horario_disponibleC.php?eliminar=true',
                         type: 'POST',
                         data: {
                             id: id_horarioD
@@ -193,7 +193,7 @@ if ($estado_vista == 1) {
             fecha_dia_estatico = '';
 
             $.ajax({
-                url: '../controlador/horario_disponibleC.php?listar=true',
+                url: '../controlador/SALUD_INTEGRAL/horario_disponibleC.php?listar=true',
                 type: 'get',
                 data: {
                     id_docente: id_docente
@@ -253,7 +253,7 @@ if ($estado_vista == 1) {
 
             if (ac_horarioD_inicio != '' && ac_horarioD_fin != '' && ac_horarioD_fecha_disponible != '' && ac_horarioD_materia != null && ac_horarioD_ubicacion != null) {
                 $.ajax({
-                    url: '../controlador/horario_disponibleC.php?insertar=true',
+                    url: '../controlador/SALUD_INTEGRAL/horario_disponibleC.php?insertar=true',
                     data: {
                         parametros: parametros
                     },
@@ -336,7 +336,7 @@ if ($estado_vista == 1) {
             //console.log(parametros);
 
             $.ajax({
-                url: '../controlador/horario_disponibleC.php?insertar=true',
+                url: '../controlador/SALUD_INTEGRAL/horario_disponibleC.php?insertar=true',
                 data: {
                     parametros: parametros
                 },
@@ -391,7 +391,7 @@ if ($estado_vista == 1) {
             //console.log(parametros);
 
             $.ajax({
-                url: '../controlador/horario_disponibleC.php?insertar=true',
+                url: '../controlador/SALUD_INTEGRAL/horario_disponibleC.php?insertar=true',
                 data: {
                     parametros: parametros
                 },

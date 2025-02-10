@@ -1,7 +1,7 @@
 <?php
-include('../modelo/agendamientoM.php');
-include('../modelo/pacientesM.php');
-include('../modelo/ficha_MedicaM.php');
+require_once(dirname(__DIR__, 2) . '/modelo/SALUD_INTEGRAL/agendamientoM.php');
+require_once(dirname(__DIR__, 2) . '/modelo/SALUD_INTEGRAL/pacientesM.php');
+require_once(dirname(__DIR__, 2) . '/modelo/SALUD_INTEGRAL/ficha_MedicaM.php');
 
 $controlador = new agendamientoC();
 

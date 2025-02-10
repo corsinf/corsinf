@@ -1,5 +1,5 @@
 <?php
-include('../modelo/det_consultaM.php');
+require_once(dirname(__DIR__, 2) . '/modelo/SALUD_INTEGRAL/det_consultaM.php');
 
 $controlador = new det_consultaC();
 

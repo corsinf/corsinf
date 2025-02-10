@@ -11,7 +11,7 @@
             },
             responsive: true,
             ajax: {
-                url: '../controlador/salida_stockC.php?lista_kardex_all=true',
+                url: '../controlador/SALUD_INTEGRAL/salida_stockC.php?lista_kardex_all=true',
                 dataSrc: ''
             },
             columns: [{
@@ -108,13 +108,13 @@
         tablaAll.clear().draw();
         switch (valor) {
             case 's':
-                url = '../controlador/salida_stockC.php?lista_kardex=true';
+                url = '../controlador/SALUD_INTEGRAL/salida_stockC.php?lista_kardex=true';
                 break;
             case 'e':
-                url = '../controlador/salida_stockC.php?lista_kardex_entrada=true';
+                url = '../controlador/SALUD_INTEGRAL/salida_stockC.php?lista_kardex_entrada=true';
                 break;
             default:
-                url = '../controlador/salida_stockC.php?lista_kardex_all=true';
+                url = '../controlador/SALUD_INTEGRAL/salida_stockC.php?lista_kardex_all=true';
                 break;
         }
         // Llenar la tabla con nuevos datos
@@ -129,7 +129,7 @@
             placeholder: 'Seleccione producto',
             width: '87%',
             ajax: {
-                url: '../controlador/salida_stockC.php?lista_articulos=true&tipo=' + tipo,
+                url: '../controlador/SALUD_INTEGRAL/salida_stockC.php?lista_articulos=true&tipo=' + tipo,
                 dataType: 'json',
                 delay: 250,
                 processResults: function(data) {

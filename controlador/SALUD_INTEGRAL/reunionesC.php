@@ -1,6 +1,6 @@
 <?php
-include('../modelo/reunionesM.php');
-include('../modelo/horario_disponibleM.php');
+require_once(dirname(__DIR__, 2) . '/modelo/SALUD_INTEGRAL/reunionesM.php');
+require_once(dirname(__DIR__, 2) . '/modelo/SALUD_INTEGRAL/horario_disponibleM.php');
 
 $controlador = new reunionesC();
 

@@ -11,7 +11,7 @@
 			},
 			responsive: true,
 			ajax: {
-				url: '../controlador/ingreso_stockC.php?lista_kardex=true',
+				url: '../controlador/SALUD_INTEGRAL/ingreso_stockC.php?lista_kardex=true',
 				dataSrc: ''
 			},
 			columns: [{
@@ -94,7 +94,7 @@
 			},
 			responsive: true,
 			ajax: {
-				url: '../controlador/insumosC.php?listar_todo=true',
+				url: '../controlador/SALUD_INTEGRAL/insumosC.php?listar_todo=true',
 				dataSrc: ''
 			},
 			columns: [{
@@ -129,7 +129,7 @@
 			},
 			responsive: true,
 			ajax: {
-				url: '../controlador/medicamentosC.php?listar_todo=true',
+				url: '../controlador/SALUD_INTEGRAL/medicamentosC.php?listar_todo=true',
 				dataSrc: ''
 			},
 			columns: [{
@@ -183,7 +183,7 @@
 			dropdownParent: $('#exampleModal'),
 			width: '87%',
 			ajax: {
-				url: '../controlador/contratoC.php?lista_proveedores=true',
+				url: '../controlador/SALUD_INTEGRAL/contratoC.php?lista_proveedores=true',
 				dataType: 'json',
 				delay: 250,
 				processResults: function(data) {
@@ -203,7 +203,7 @@
 			dropdownParent: $('#exampleModal'),
 			width: '87%',
 			ajax: {
-				url: '../controlador/ingreso_stockC.php?lista_articulos=true&tipo=' + tipo,
+				url: '../controlador/SALUD_INTEGRAL/ingreso_stockC.php?lista_articulos=true&tipo=' + tipo,
 				dataType: 'json',
 				delay: 250,
 				processResults: function(data) {
@@ -274,7 +274,7 @@
 
 		$.ajax({
 			data: datos,
-			url: '../controlador/ingreso_stockC.php?producto_nuevo=true',
+			url: '../controlador/SALUD_INTEGRAL/ingreso_stockC.php?producto_nuevo=true',
 			type: 'post',
 			dataType: 'json',
 			success: function(response) {
@@ -311,7 +311,7 @@
 
 	function inicializarInputs() {
 		$.ajax({
-			url: '../controlador/v_med_insC.php?listar_v_ingresoStock=true',
+			url: '../controlador/SALUD_INTEGRAL/v_med_insC.php?listar_v_ingresoStock=true',
 			type: 'post',
 			dataType: 'json',
 			success: function(response) {

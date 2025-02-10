@@ -1,5 +1,5 @@
 <?php
-include('../modelo/Comunidad_TablasM.php');
+require_once(dirname(__DIR__, 2) . '/modelo/SALUD_INTEGRAL/Comunidad_TablasM.php');
 
 $controlador = new Comunidad_TablasC();
 

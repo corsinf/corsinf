@@ -24,7 +24,7 @@ if ($id != null && $id != '') {
             },
             responsive: true,
             ajax: {
-                url: '../controlador/reunionesC.php',
+                url: '../controlador/SALUD_INTEGRAL/reunionesC.php',
                 data: function(d) {
                     d.listar_todo_docentes = true; // Otros parámetros que puedas necesitar
                     // Agrega el parámetro ac_reunion_id

@@ -1,6 +1,6 @@
 <?php
 if (!class_exists('db')) {
-	include_once('../db/db.php');
+	include(dirname(__DIR__, 2) . '/db/db.php');
 }
 /**
  * 
@@ -70,13 +70,15 @@ class salida_stockM
 
 		if ($entrada) {
 			$sql .= " AND K.sa_kar_entrada > 0 ";
+			//$sql .= " AND TRY_CONVERT(DECIMAL(18,2), K.sa_kar_entrada) > 0 ";
 		}
 		if ($salida) {
-			$sql .= " AND K.sa_kar_salida > 0 ";
+			//$sql .= " AND K.sa_kar_salida > 0 ";
+			$sql .= " AND TRY_CONVERT(DECIMAL(18,2), K.sa_kar_salida) > 0 ";
 		}
 		$sql .= " ORDER BY K.sa_kar_id DESC;";
 
-		// print_r($sql);die();
+		//print_r($sql);die();
 
 		return  $this->db->datos($sql);
 	}

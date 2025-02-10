@@ -1,12 +1,14 @@
 <?php
 @session_start();
-include('../modelo/salida_stockM.php');
-include('../modelo/insumosM.php');
-include('../modelo/medicamentosM.php');
-include('../db/codigos_globales.php');
+require_once(dirname(__DIR__, 2) . '/modelo/SALUD_INTEGRAL/salida_stockM.php');
+require_once(dirname(__DIR__, 2) . '/modelo/SALUD_INTEGRAL/insumosM.php');
+require_once(dirname(__DIR__, 2) . '/modelo/SALUD_INTEGRAL/medicamentosM.php');
+require_once(dirname(__DIR__, 2) . '/db/codigos_globales.php');
+
 /**
  * 
  */
+
 $controlador  = new salida_stockC();
 
 if (isset($_GET['lista_articulos'])) {

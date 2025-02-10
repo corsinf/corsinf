@@ -31,7 +31,7 @@ if (isset($_GET['id'])) {
       data: {
         id: id
       },
-      url: '../controlador/medicamentosC.php?listar=true',
+      url: '../controlador/SALUD_INTEGRAL/medicamentosC.php?listar=true',
       type: 'post',
       dataType: 'json',
       success: function(response) {
@@ -141,7 +141,7 @@ if (isset($_GET['id'])) {
       data: {
         parametros: parametros
       },
-      url: '../controlador/medicamentosC.php?insertar=true',
+      url: '../controlador/SALUD_INTEGRAL/medicamentosC.php?insertar=true',
       type: 'post',
       dataType: 'json',
 
@@ -182,7 +182,7 @@ if (isset($_GET['id'])) {
       data: {
         id: id
       },
-      url: '../controlador/medicamentosC.php?eliminar=true',
+      url: '../controlador/SALUD_INTEGRAL/medicamentosC.php?eliminar=true',
       type: 'post',
       dataType: 'json',
       beforeSend: function() {
@@ -201,7 +201,7 @@ if (isset($_GET['id'])) {
 
   function inicializarInputs() {
     $.ajax({
-      url: '../controlador/v_med_insC.php?listar_v_medicamentos=true',
+      url: '../controlador/SALUD_INTEGRAL/v_med_insC.php?listar_v_medicamentos=true',
       type: 'post',
       dataType: 'json',
       success: function(response) {

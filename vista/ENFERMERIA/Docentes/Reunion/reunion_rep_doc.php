@@ -136,7 +136,7 @@ if ($id != null && $id != '') {
         if (id_docente != '') {
 
             $.ajax({
-                url: '../controlador/horario_disponibleC.php?listar=true',
+                url: '../controlador/SALUD_INTEGRAL/horario_disponibleC.php?listar=true',
                 type: 'get',
                 data: {
                     id_docente: id_docente
@@ -201,7 +201,7 @@ if ($id != null && $id != '') {
             data: {
                 id_paralelo: id_paralelo
             },
-            url: '../controlador/docente_paraleloC.php?listar_estudiante_docente_paralelo=true',
+            url: '../controlador/SALUD_INTEGRAL/docente_paraleloC.php?listar_estudiante_docente_paralelo=true',
             type: 'post',
             dataType: 'json',
 
@@ -224,7 +224,7 @@ if ($id != null && $id != '') {
             data: {
                 id_representante: id_representante,
             },
-            url: '../controlador/estudiantesC.php?listar_estudiante_representante=true',
+            url: '../controlador/SALUD_INTEGRAL/estudiantesC.php?listar_estudiante_representante=true',
             type: 'post',
             dataType: 'json',
             success: function(response) {
@@ -263,7 +263,7 @@ if ($id != null && $id != '') {
                 }
             },
             ajax: {
-                url: '../controlador/estudiantesC.php?listar_estudiante_representante_get=true',
+                url: '../controlador/SALUD_INTEGRAL/estudiantesC.php?listar_estudiante_representante_get=true',
                 dataType: 'json',
                 delay: 250,
                 data: function(params) {
@@ -306,7 +306,7 @@ if ($id != null && $id != '') {
             data: {
                 id: id_docente,
             },
-            url: '../controlador/docentesC.php?listar=true',
+            url: '../controlador/SALUD_INTEGRAL/docentesC.php?listar=true',
             type: 'post',
             dataType: 'json',
             success: function(response) {
@@ -348,7 +348,7 @@ if ($id != null && $id != '') {
 
         if (ac_horarioD_id != '' && ac_representante_id != '' && ac_reunion_motivo != null) {
             $.ajax({
-                url: '../controlador/reunionesC.php?insertar=true',
+                url: '../controlador/SALUD_INTEGRAL/reunionesC.php?insertar=true',
                 data: {
                     parametros: parametros
                 },

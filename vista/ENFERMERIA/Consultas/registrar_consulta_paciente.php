@@ -128,7 +128,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             data: {
                 id_consulta: id_consulta
             },
-            url: '../controlador/consultasC.php?datos_consulta=true',
+            url: '../controlador/SALUD_INTEGRAL/consultasC.php?datos_consulta=true',
             type: 'post',
             dataType: 'json',
             //Para el id representante tomar los datos con los de session
@@ -157,7 +157,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 sa_pac_id: sa_pac_id
 
             },
-            url: '../controlador/pacientesC.php?obtener_info_paciente=true',
+            url: '../controlador/SALUD_INTEGRAL/pacientesC.php?obtener_info_paciente=true',
             type: 'post',
             dataType: 'json',
             success: function(response) {
@@ -237,7 +237,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             data: {
                 parametros: parametros
             },
-            url: '../controlador/ficha_medicaC.php?lista_seguros=true',
+            url: '../controlador/SALUD_INTEGRAL/ficha_medicaC.php?lista_seguros=true',
             type: 'post',
             dataType: 'json',
 
@@ -268,7 +268,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             data: {
                 sa_pac_id: sa_pac_id
             },
-            url: '../controlador/ficha_MedicaC.php?listar_paciente_ficha=true',
+            url: '../controlador/SALUD_INTEGRAL/ficha_MedicaC.php?listar_paciente_ficha=true',
             type: 'post',
             dataType: 'json',
             success: function(response) {
@@ -305,7 +305,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 sa_pac_id: sa_pac_id
 
             },
-            url: '../controlador/pacientesC.php?obtener_info_paciente=true',
+            url: '../controlador/SALUD_INTEGRAL/pacientesC.php?obtener_info_paciente=true',
             type: 'post',
             dataType: 'json',
             success: function(response) {
@@ -377,7 +377,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             data: {
                 id: id_consulta
             },
-            url: '../controlador/consultasC.php?listar_solo_consulta=true',
+            url: '../controlador/SALUD_INTEGRAL/consultasC.php?listar_solo_consulta=true',
             type: 'post',
             dataType: 'json',
             success: function(response) {
@@ -758,7 +758,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             data: {
                 parametros: parametros
             },
-            url: '../controlador/consultasC.php?insertar=true',
+            url: '../controlador/SALUD_INTEGRAL/consultasC.php?insertar=true',
             type: 'post',
             dataType: 'json',
             success: function(response) {
@@ -805,7 +805,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             data: {
 
             },
-            url: '../controlador/cat_cie10C.php?listar_cie10=true',
+            url: '../controlador/SALUD_INTEGRAL/cat_cie10C.php?listar_cie10=true',
             type: 'post',
             dataType: 'json',
             success: function(response) {
@@ -833,7 +833,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 placeholder: '-- Seleccione --',
                 width: '100%',
                 ajax: {
-                    url: '../controlador/cat_cie10C.php?buscar_cie10=true',
+                    url: '../controlador/SALUD_INTEGRAL/cat_cie10C.php?buscar_cie10=true',
                     dataType: 'json',
                     delay: 250,
                     processResults: function(data) {

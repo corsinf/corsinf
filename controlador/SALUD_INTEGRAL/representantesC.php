@@ -1,7 +1,7 @@
 <?php
-require_once(dirname(__DIR__, 1) .  '/modelo/representantesM.php');
+require_once(dirname(__DIR__, 2) . '/modelo/SALUD_INTEGRAL/representantesM.php');
 
-require_once(dirname(__DIR__, 1) . '/db/codigos_globales.php');
+require_once(dirname(__DIR__, 2) . '/db/codigos_globales.php');
 
 
 $controlador = new representantesC();

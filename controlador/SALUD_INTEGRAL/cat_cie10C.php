@@ -1,5 +1,5 @@
 <?php
-include('../modelo/cat_cie10M.php');
+require_once(dirname(__DIR__, 2) . '/modelo/SALUD_INTEGRAL/cat_cie10M.php');
 
 $controlador = new cat_cie10C();
 

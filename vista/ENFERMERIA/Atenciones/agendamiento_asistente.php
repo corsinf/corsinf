@@ -121,7 +121,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 };
 
                 $.ajax({
-                    url: '../controlador/agendamientoC.php?add_agenda=true',
+                    url: '../controlador/SALUD_INTEGRAL/agendamientoC.php?add_agenda=true',
                     data: {
                         parametros: parametros
                     },
@@ -150,7 +150,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 };
 
                 $.ajax({
-                    url: '../controlador/agendamientoC.php?add_agenda=true',
+                    url: '../controlador/SALUD_INTEGRAL/agendamientoC.php?add_agenda=true',
                     data: {
                         parametros: parametros
                     },
@@ -197,7 +197,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             },
             minimumInputLength: 1,
             ajax: {
-                url: '../controlador/' + sa_tbl_pac_tabla + 'C.php?listar_todo=true',
+                url: '../controlador/SALUD_INTEGRAL/' + sa_tbl_pac_tabla + 'C.php?listar_todo=true',
                 dataType: 'json',
                 delay: 250,
                 data: function(params) {
@@ -236,7 +236,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         var salida = '<option value="">Seleccione el Tipo de Paciente</option>';
 
         $.ajax({
-            url: '../controlador/Comunidad_TablasC.php?listar=true',
+            url: '../controlador/SALUD_INTEGRAL/Comunidad_TablasC.php?listar=true',
             type: 'post',
             dataType: 'json',
             success: function(response) {

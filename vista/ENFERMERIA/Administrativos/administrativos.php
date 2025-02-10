@@ -8,7 +8,7 @@
             },
             responsive: true,
             ajax: {
-                url: '../controlador/administrativosC.php?listar_todo=true',
+                url: '../controlador/SALUD_INTEGRAL/administrativosC.php?listar_todo=true',
                 dataSrc: ''
             },
             columns: [{

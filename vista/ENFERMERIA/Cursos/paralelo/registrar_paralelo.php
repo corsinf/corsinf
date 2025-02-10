@@ -42,7 +42,7 @@ if (isset($_GET['id_grado'])) {
       data: {
         id: id
       },
-      url: '../controlador/seccionC.php?listar=true',
+      url: '../controlador/SALUD_INTEGRAL/seccionC.php?listar=true',
       type: 'post',
       dataType: 'json',
 
@@ -89,7 +89,7 @@ if (isset($_GET['id_grado'])) {
       data: {
         "id_seccion": id_seccion
       },
-      url: '../controlador/paraleloC.php?listar_seccion_grado=true',
+      url: '../controlador/SALUD_INTEGRAL/paraleloC.php?listar_seccion_grado=true',
       type: 'post',
       dataType: 'json',
 
@@ -119,7 +119,7 @@ if (isset($_GET['id_grado'])) {
       data: {
         id: id
       },
-      url: '../controlador/paraleloC.php?listar=true',
+      url: '../controlador/SALUD_INTEGRAL/paraleloC.php?listar=true',
       type: 'post',
       dataType: 'json',
       success: function(response) {
@@ -179,7 +179,7 @@ if (isset($_GET['id_grado'])) {
       data: {
         parametros: parametros
       },
-      url: '../controlador/paraleloC.php?insertar=true',
+      url: '../controlador/SALUD_INTEGRAL/paraleloC.php?insertar=true',
       type: 'post',
       dataType: 'json',
       /*beforeSend: function () {   
@@ -224,7 +224,7 @@ if (isset($_GET['id_grado'])) {
       data: {
         id: id
       },
-      url: '../controlador/paraleloC.php?eliminar=true',
+      url: '../controlador/SALUD_INTEGRAL/paraleloC.php?eliminar=true',
       type: 'post',
       dataType: 'json',
       beforeSend: function() {

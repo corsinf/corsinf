@@ -1,12 +1,12 @@
 <?php
-include_once('../modelo/ficha_MedicaM.php');
-include_once('../modelo/contratosM.php');
-include_once('../db/codigos_globales.php');
+require_once(dirname(__DIR__, 2) . '/modelo/SALUD_INTEGRAL/ficha_MedicaM.php');
+require_once(dirname(__DIR__, 2) . '/modelo/contratosM.php');
+include_once(dirname(__DIR__, 2) . '/db/codigos_globales.php');
 
-include_once('../lib/pdf/fpdf.php');
-include_once('../modelo/pacientesM.php');
+include_once(dirname(__DIR__, 2) . '/lib/pdf/fpdf.php');
+require_once(dirname(__DIR__, 2) . '/modelo/SALUD_INTEGRAL/pacientesM.php');
 
-include_once('../modelo/detalle_fm_med_insM.php');
+require_once(dirname(__DIR__, 2) . '/modelo/SALUD_INTEGRAL/detalle_fm_med_insM.php');
 
 $controlador = new ficha_MedicaC();
 
@@ -346,12 +346,12 @@ class ficha_MedicaC
         //Detalle Ficha medica 
         $detalles_FM = $this->detalleFM->lista_det_fm($ficha_medica[0]['sa_fice_id']);
 
-        $logo = '../assets/images/favicon-32x32.png';
+        $logo = '../../assets/images/favicon-32x32.png';
 
         if (($_SESSION['INICIO']['LOGO']) == '.' || $_SESSION['INICIO']['LOGO'] == '' || $_SESSION['INICIO']['LOGO'] == null) {
             $logo;
         } else {
-            $logo = $_SESSION['INICIO']['LOGO'];
+            $logo = '../' . $_SESSION['INICIO']['LOGO'];
         }
 
 

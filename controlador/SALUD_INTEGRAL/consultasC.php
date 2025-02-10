@@ -2,31 +2,31 @@
 
 use function Complex\ln;
 
-include_once('../modelo/consultasM.php');
-include_once('../modelo/ficha_MedicaM.php');
-include_once('../modelo/pacientesM.php');
-include_once('../lib/phpmailer/enviar_emails.php');
-include_once('../lib/pdf/fpdf.php');
-include_once('../modelo/det_consultaM.php');
+require_once(dirname(__DIR__, 2) . '/modelo/SALUD_INTEGRAL/consultasM.php');
+require_once(dirname(__DIR__, 2) . '/modelo/SALUD_INTEGRAL/ficha_MedicaM.php');
+require_once(dirname(__DIR__, 2) . '/modelo/SALUD_INTEGRAL/pacientesM.php');
+include_once(dirname(__DIR__, 2) . '/lib/phpmailer/enviar_emails.php');
+include_once(dirname(__DIR__, 2) . '/lib/pdf/fpdf.php');
+require_once(dirname(__DIR__, 2) . '/modelo/SALUD_INTEGRAL/det_consultaM.php');
 
 //Seguros
-include_once('../modelo/contratosM.php');
+require_once(dirname(__DIR__, 2) . '/modelo/contratosM.php');
 
 
-include_once('ingreso_stockC.php');
-include_once('../modelo/notificacionesM.php');
+include_once(dirname(__DIR__, 1) . '/SALUD_INTEGRAL/ingreso_stockC.php');
+require_once(dirname(__DIR__, 2) . '/modelo/notificacionesM.php');
 
 //HIKVISION
-include_once('../lib/HIKVISION/Notificaciones.php');
-include_once('../lib/HIKVISION/HIK_TCP.php');
+include_once(dirname(__DIR__, 2) . '/lib/HIKVISION/Notificaciones.php');
+include_once(dirname(__DIR__, 2) . '/lib/HIKVISION/HIK_TCP.php');
 
-include_once('../modelo/representantesM.php');
+require_once(dirname(__DIR__, 2) . '/modelo/SALUD_INTEGRAL/representantesM.php');
 
 //Usuarios
-include_once('../modelo/usuariosM.php');
+require_once(dirname(__DIR__, 2) . '/modelo/usuariosM.php');
 
 //Configuracion General
-include_once('../modelo/cat_configuracionGM.php');
+require_once(dirname(__DIR__, 2) . '/modelo/SALUD_INTEGRAL/cat_configuracionGM.php');
 
 $controlador = new consultasC();
 
@@ -1200,11 +1200,11 @@ class consultasC
 
         //exit();
 
-        $logo = '../assets/images/favicon-32x32.png';
+        $logo = '../../assets/images/favicon-32x32.png';
         if (($_SESSION['INICIO']['LOGO']) == '.' || $_SESSION['INICIO']['LOGO'] == '' || $_SESSION['INICIO']['LOGO'] == null) {
             $logo;
         } else {
-            $logo = $_SESSION['INICIO']['LOGO'];
+            $logo = '../' . $_SESSION['INICIO']['LOGO'];
         }
 
 
@@ -1921,11 +1921,11 @@ class consultasC
 
         $nombre_completo = $sa_pac_temp_primer_apellido . ' ' .  $sa_pac_temp_segundo_apellido . ' ' .  $sa_pac_temp_primer_nombre . ' ' . $sa_pac_temp_segundo_nombre;
 
-        $logo = '../assets/images/favicon-32x32.png';
+        $logo = '../../assets/images/favicon-32x32.png';
         if (($_SESSION['INICIO']['LOGO']) == '.' || $_SESSION['INICIO']['LOGO'] == '' || $_SESSION['INICIO']['LOGO'] == null) {
             $logo;
         } else {
-            $logo = $_SESSION['INICIO']['LOGO'];
+            $logo = '../' . $_SESSION['INICIO']['LOGO'];
         }
 
         $pdf = new FPDF('L', 'mm', 'A4');
@@ -2203,11 +2203,11 @@ class consultasC
 
         $nombre_medico = empty($usuario) ? 'Vacio' : $usuario;
 
-        $logo = '../assets/images/favicon-32x32.png';
+        $logo = '../../assets/images/favicon-32x32.png';
         if (($_SESSION['INICIO']['LOGO']) == '.' || $_SESSION['INICIO']['LOGO'] == '' || $_SESSION['INICIO']['LOGO'] == null) {
             $logo;
         } else {
-            $logo = $_SESSION['INICIO']['LOGO'];
+            $logo = '../' . $_SESSION['INICIO']['LOGO'];
         }
 
 

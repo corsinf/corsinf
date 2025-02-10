@@ -78,7 +78,7 @@ if ($id != null && $id != '') {
                 },
                 responsive: true,
                 ajax: {
-                    url: '../controlador/consultasC.php',
+                    url: '../controlador/SALUD_INTEGRAL/consultasC.php',
                     data: function(d) {
                         if (id_paralelo === '' || id_paralelo === 'todos') {
                             d.lista_con_est_doc = true;
@@ -179,7 +179,7 @@ if ($id != null && $id != '') {
         var select = '';
 
         $.ajax({
-            url: '../controlador/docente_paraleloC.php?listar=true',
+            url: '../controlador/SALUD_INTEGRAL/docente_paraleloC.php?listar=true',
             data: {
                 id_docente: ac_docente_id
             },

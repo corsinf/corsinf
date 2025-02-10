@@ -1,10 +1,14 @@
 <?php
 if (!class_exists('db')) {
-    include('../db/db.php');
+    include(dirname(__DIR__, 2) . '/db/db.php');
 }
+
 /**
  * 
  */
+
+
+
 class cat_configuracionGM
 {
     private $db;
@@ -73,7 +77,7 @@ class cat_configuracionGM
         $datos = $this->db->datos($sql);
         return $datos;
     }
-    
+
     function sql_string($sql)
     {
         //echo $sql;

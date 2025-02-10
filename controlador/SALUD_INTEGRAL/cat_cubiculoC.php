@@ -1,5 +1,5 @@
 <?php
-include('../modelo/cat_cubiculoM.php');
+require_once(dirname(__DIR__, 2) . '/modelo/SALUD_INTEGRAL/cat_cubiculoM.php');
 
 $controlador = new cat_cubiculoC();
 

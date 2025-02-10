@@ -1,5 +1,5 @@
 <?php
-require_once('../modelo/cat_configuracionGM.php');
+require_once(dirname(__DIR__, 2) . '/modelo/SALUD_INTEGRAL/cat_configuracionGM.php');
 
 $controlador = new cat_configuracionGC();
 

@@ -7,17 +7,17 @@ IDUKAY
 
 ----------------------------------------------------------------*/
 
-require_once(dirname(__DIR__, 1) . '/modelo/cat_configuracionGM.php');
+require_once(dirname(__DIR__, 2) . '/modelo/SALUD_INTEGRAL/cat_configuracionGM.php');
 
 //Idukay
 //Sirve para hacer la llamada a la API
-require_once(dirname(__DIR__, 1) . '/lib/IDUKAY/Querys.php');
+require_once(dirname(__DIR__, 2) . '/lib/IDUKAY/Querys.php');
 //Sirve para llamar a las funciones predefinidas 
-require_once(dirname(__DIR__, 1) . '/lib/IDUKAY/main.php');
+require_once(dirname(__DIR__, 2) . '/lib/IDUKAY/main.php');
 //Para llamar a la libreria donde se va a ejecutar los comandos de CRON
-require_once(dirname(__DIR__, 1) . '/lib/IDUKAY/idukay_actualizacion_datos.php');
+require_once(dirname(__DIR__, 2) . '/lib/IDUKAY/idukay_actualizacion_datos.php');
 //Para buscar el id de IDUKAY de un estudiante
-require_once(dirname(__DIR__, 1) . '/modelo/estudiantesM.php');
+require_once(dirname(__DIR__, 2) . '/modelo/SALUD_INTEGRAL/estudiantesM.php');
 
 
 

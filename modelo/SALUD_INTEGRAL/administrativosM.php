@@ -1,6 +1,6 @@
 <?php
 if (!class_exists('db')) {
-    include('../db/db.php');
+    include(dirname(__DIR__, 2) . '/db/db.php');
 }
 /**
  * 
@@ -126,6 +126,4 @@ class administrativosM
         $datos = $this->db->sql_string($sql);
         return $datos;
     }
-
-
 }

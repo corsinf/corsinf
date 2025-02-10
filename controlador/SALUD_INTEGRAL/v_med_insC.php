@@ -1,5 +1,5 @@
 <?php
-include('../modelo/v_med_insM.php');
+require_once(dirname(__DIR__, 2) . '/modelo/SALUD_INTEGRAL/v_med_insM.php');
 
 $controlador = new v_med_insC();
 

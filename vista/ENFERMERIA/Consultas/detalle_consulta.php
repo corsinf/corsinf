@@ -55,9 +55,9 @@ if (isset($_GET['btn_regresar'])) {
     });
 
     function ver_pdf_consulta(id_consulta) {
-        $('#ifr_pdf_consulta').prop('src', '../controlador/consultasC.php?pdf_consulta=true&id_consulta=' + id_consulta);
-        $('#ifr_pdf_receta').prop('src', '../controlador/consultasC.php?pdf_recetario=true&id_consulta=' + id_consulta);
-        $('#ifr_pdf_notificacion').prop('src', '../controlador/consultasC.php?pdf_notificacion=true&id_consulta=' + id_consulta);
+        $('#ifr_pdf_consulta').prop('src', '../controlador/SALUD_INTEGRAL/consultasC.php?pdf_consulta=true&id_consulta=' + id_consulta);
+        $('#ifr_pdf_receta').prop('src', '../controlador/SALUD_INTEGRAL/consultasC.php?pdf_recetario=true&id_consulta=' + id_consulta);
+        $('#ifr_pdf_notificacion').prop('src', '../controlador/SALUD_INTEGRAL/consultasC.php?pdf_notificacion=true&id_consulta=' + id_consulta);
     }
 
     <?php if ($btn_regresar_temp == 'admin' || $btn_regresar_temp == 'consultas_m') { ?>
@@ -67,7 +67,7 @@ if (isset($_GET['btn_regresar'])) {
                 data: {
                     id: id_consulta
                 },
-                url: '../controlador/consultasC.php?listar_solo_consulta=true',
+                url: '../controlador/SALUD_INTEGRAL/consultasC.php?listar_solo_consulta=true',
                 type: 'post',
                 dataType: 'json',
                 success: function(response) {
@@ -95,7 +95,7 @@ if (isset($_GET['btn_regresar'])) {
                 data: {
                     parametros: parametros
                 },
-                url: '../controlador/consultasC.php?observacion=true',
+                url: '../controlador/SALUD_INTEGRAL/consultasC.php?observacion=true',
                 type: 'post',
                 dataType: 'json',
 
@@ -230,7 +230,7 @@ if (isset($_GET['btn_regresar'])) {
                                         <section class="content">
                                             <div class="container-fluid">
 
-                                                <p>Abrir solo <a href="../controlador/consultasC.php?pdf_notificacion=true&id_consulta=<?= $id_consulta; ?>" TARGET="_BLANK">PDF</a></p>
+                                                <p>Abrir solo <a href="../controlador/SALUD_INTEGRAL/consultasC.php?pdf_notificacion=true&id_consulta=<?= $id_consulta; ?>" TARGET="_BLANK">PDF</a></p>
 
                                                 <div class="col-xs-12 col-sm-12 col-md-12">
                                                     <div class="panel">
@@ -251,7 +251,7 @@ if (isset($_GET['btn_regresar'])) {
                                         <section class="content">
                                             <div class="container-fluid">
 
-                                                <p>Abrir solo <a href="../controlador/consultasC.php?pdf_consulta=true&id_consulta=<?= $id_consulta; ?>" TARGET="_BLANK">PDF</a></p>
+                                                <p>Abrir solo <a href="../controlador/SALUD_INTEGRAL/consultasC.php?pdf_consulta=true&id_consulta=<?= $id_consulta; ?>" TARGET="_BLANK">PDF</a></p>
 
                                                 <div class="col-xs-12 col-sm-12 col-md-12">
                                                     <div class="panel">
@@ -273,7 +273,7 @@ if (isset($_GET['btn_regresar'])) {
                                             <section class="content">
                                                 <div class="container-fluid">
 
-                                                    <p>Abrir solo <a href="../controlador/consultasC.php?pdf_recetario=true&id_consulta=<?= $id_consulta; ?>" TARGET="_BLANK">PDF</a></p>
+                                                    <p>Abrir solo <a href="../controlador/SALUD_INTEGRAL/consultasC.php?pdf_recetario=true&id_consulta=<?= $id_consulta; ?>" TARGET="_BLANK">PDF</a></p>
 
                                                     <div class="col-xs-12 col-sm-12 col-md-12">
                                                         <div class="panel">

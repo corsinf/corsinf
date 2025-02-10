@@ -3,7 +3,7 @@ function gestion_paciente_comunidad(sa_pac_id_comunidad, sa_pac_tabla, btn_regre
     //Actualizacion de idukay
     if (sa_pac_tabla == 'estudiantes') {
         $.ajax({
-            url: '../controlador/cat_configuracionGC_IDUKAY.php?idukay_actualizar_estudiante=true',
+            url: '../controlador/SALUD_INTEGRAL/cat_configuracionGC_IDUKAY.php?idukay_actualizar_estudiante=true',
             data: {
                 id_estudiante: sa_pac_id_comunidad
             },
@@ -62,7 +62,7 @@ function ejecutar_gestion_paciente_comunidad(sa_pac_id_comunidad, sa_pac_tabla, 
             sa_pac_id_comunidad: sa_pac_id_comunidad,
             sa_pac_tabla: sa_pac_tabla
         },
-        url: '../controlador/ficha_MedicaC.php?administrar_comunidad_ficha_medica=true',
+        url: '../controlador/SALUD_INTEGRAL/ficha_MedicaC.php?administrar_comunidad_ficha_medica=true',
         type: 'post',
         dataType: 'json',
         success: function (response) {
@@ -108,7 +108,7 @@ function gestion_paciente_comunidad_pacientes(sa_pac_id_comunidad, sa_pac_tabla)
             sa_pac_id_comunidad: sa_pac_id_comunidad,
             sa_pac_tabla: sa_pac_tabla
         },
-        url: '../controlador/ficha_MedicaC.php?administrar_comunidad_ficha_medica=true',
+        url: '../controlador/SALUD_INTEGRAL/ficha_MedicaC.php?administrar_comunidad_ficha_medica=true',
         type: 'post',
         dataType: 'json',
 

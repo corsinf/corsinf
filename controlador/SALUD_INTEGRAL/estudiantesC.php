@@ -1,6 +1,6 @@
 <?php
-include('../modelo/estudiantesM.php');
-include('../modelo/contratosM.php');
+require_once(dirname(__DIR__, 2) . '/modelo/SALUD_INTEGRAL/estudiantesM.php');
+require_once(dirname(__DIR__, 2) . '/modelo/contratosM.php');
 
 $controlador = new estudiantesC();
 
@@ -253,7 +253,7 @@ class estudiantesC
     {
         // print_r($file);print_r($post);die();
         $id = $post['txt_idEst'];
-        $ruta = '../img/estudiantes/'; //ruta carpeta donde queremos copiar las imágenes
+        $ruta = '../img/estudiantes/SAINT/'; //ruta carpeta donde queremos copiar las imágenes
         if (!file_exists($ruta)) {
             mkdir($ruta, 0777, true);
         }

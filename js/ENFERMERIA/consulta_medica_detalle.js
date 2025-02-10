@@ -21,7 +21,7 @@ function insertarMedicamentos(valor) {
         data: {
             id: valor
         },
-        url: '../controlador/' + tabla + 'C.php?listar=true',
+        url: '../controlador/SALUD_INTEGRAL/' + tabla + 'C.php?listar=true',
         type: 'post',
         dataType: 'json',
         success: function (response) {
@@ -186,7 +186,7 @@ function eliminar_det_consulta_item(id_item) {
         data: {
             id: id_item
         },
-        url: '../controlador/det_consultaC.php?eliminar=true',
+        url: '../controlador/SALUD_INTEGRAL/det_consultaC.php?eliminar=true',
         type: 'post',
         dataType: 'json',
         success: function (response) {
@@ -225,7 +225,7 @@ function consultar_medicinas_insumos(entrada) {
             },
             minimumInputLength: 1,
             ajax: {
-                url: '../controlador/medicamentosC.php?listar_todo=true',
+                url: '../controlador/SALUD_INTEGRAL/medicamentosC.php?listar_todo=true',
                 dataType: 'json',
                 delay: 250,
                 data: function (params) {
@@ -323,7 +323,7 @@ function consultar_medicinas_insumos(entrada) {
             },
             minimumInputLength: 1,
             ajax: {
-                url: '../controlador/insumosC.php?listar_todo=true',
+                url: '../controlador/SALUD_INTEGRAL/insumosC.php?listar_todo=true',
                 dataType: 'json',
                 delay: 250,
                 data: function (params) {
@@ -379,7 +379,7 @@ function cargar_farmacologia(id_consulta) {
         data: {
             id_consulta: id_consulta
         },
-        url: '../controlador/det_consultaC.php?listar_consulta=true',
+        url: '../controlador/SALUD_INTEGRAL/det_consultaC.php?listar_consulta=true',
         type: 'post',
         dataType: 'json',
         success: function (response) {
@@ -526,7 +526,7 @@ function listar_farmacos_alergia() {
         data: {
             parametros: parametros
         },
-        url: '../controlador/detalle_fm_med_insC.php?fm_farmaco_a=true',
+        url: '../controlador/SALUD_INTEGRAL/detalle_fm_med_insC.php?fm_farmaco_a=true',
         type: 'post',
         dataType: 'json',
         success: function (response) {

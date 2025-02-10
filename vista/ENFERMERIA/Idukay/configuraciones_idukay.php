@@ -6,7 +6,7 @@
 
     function cargar_datos_v_config() {
         $.ajax({
-            url: '../controlador/cat_configuracionGC.php?listar_config_idukay_cron=true',
+            url: '../controlador/SALUD_INTEGRAL/cat_configuracionGC.php?listar_config_idukay_cron=true',
             type: 'post',
             dataType: 'json',
             success: function(response) {
@@ -72,7 +72,7 @@
             data: {
                 parametros: parametros
             },
-            url: '../controlador/cat_configuracionGC.php?editar_config_idukay_cron=true',
+            url: '../controlador/SALUD_INTEGRAL/cat_configuracionGC.php?editar_config_idukay_cron=true',
             type: 'post',
             dataType: 'json',
 
@@ -98,7 +98,7 @@
             // data: {
             //     parametros: parametros
             // },
-            url: '../controlador/cat_configuracionGC_IDUKAY.php?crear_documentos_CRON=true',
+            url: '../controlador/SALUD_INTEGRAL/cat_configuracionGC_IDUKAY.php?crear_documentos_CRON=true',
             type: 'post',
             dataType: 'json',
 
@@ -118,7 +118,7 @@
             // data: {
             //     parametros: parametros
             // },
-            url: '../controlador/cat_configuracionGC_IDUKAY.php?ejecutar_PW_programador_tareas=true',
+            url: '../controlador/SALUD_INTEGRAL/cat_configuracionGC_IDUKAY.php?ejecutar_PW_programador_tareas=true',
             type: 'post',
             dataType: 'text',
 
@@ -138,7 +138,7 @@
             // data: {
             //     parametros: parametros
             // },
-            url: '../controlador/cat_configuracionGC_IDUKAY.php?leer_archivo_log=true',
+            url: '../controlador/SALUD_INTEGRAL/cat_configuracionGC_IDUKAY.php?leer_archivo_log=true',
             type: 'post',
             dataType: 'text',
 

@@ -15,7 +15,7 @@
             },
             responsive: true,
             ajax: {
-                url: '../controlador/permisos_salidaC.php?listar_todo=true',
+                url: '../controlador/SALUD_INTEGRAL/permisos_salidaC.php?listar_todo=true',
                 dataSrc: ''
             },
 
@@ -144,7 +144,7 @@
             data: {
                 parametros: parametros
             },
-            url: '../controlador/permisos_salidaC.php?insertar=true',
+            url: '../controlador/SALUD_INTEGRAL/permisos_salidaC.php?insertar=true',
             type: 'post',
             dataType: 'json',
 
@@ -199,7 +199,7 @@
             },
             minimumInputLength: 1,
             ajax: {
-                url: '../controlador/' + 'estudiantes' + 'C.php?listar_todo=true',
+                url: '../controlador/SALUD_INTEGRAL/' + 'estudiantes' + 'C.php?listar_todo=true',
                 dataType: 'json',
                 delay: 250,
                 data: function(params) {
@@ -252,7 +252,7 @@
             if (result.isConfirmed) {
                 // Ejecuta la solicitud AJAX
                 $.ajax({
-                    url: '../controlador/permisos_salidaC.php?llegada=true',
+                    url: '../controlador/SALUD_INTEGRAL/permisos_salidaC.php?llegada=true',
                     type: 'POST',
                     data: {
                         id: id
@@ -286,7 +286,7 @@
                 id: id
 
             },
-            url: '../controlador/estudiantesC.php?listar=true',
+            url: '../controlador/SALUD_INTEGRAL/estudiantesC.php?listar=true',
             type: 'post',
             dataType: 'json',
             success: function(response) {

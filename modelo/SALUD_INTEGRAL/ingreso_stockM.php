@@ -1,6 +1,6 @@
 <?php
 if (!class_exists('db')) {
-	include('../db/db.php');
+	include(dirname(__DIR__, 2) . '/db/db.php');
 }
 
 /**

@@ -1,5 +1,5 @@
 <?php
-include('../modelo/tutores_paraleloM.php');
+require_once(dirname(__DIR__, 2) . '/modelo/SALUD_INTEGRAL/tutores_paraleloM.php');
 
 $controlador = new tutores_paraleloC();
 

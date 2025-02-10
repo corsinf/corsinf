@@ -108,7 +108,7 @@
 
   function cargar_citas() {
     $.ajax({
-      url: '../controlador/agendamientoC.php?listar=true',
+      url: '../controlador/SALUD_INTEGRAL/agendamientoC.php?listar=true',
       type: 'post',
       dataType: 'json',
       success: function(response) {

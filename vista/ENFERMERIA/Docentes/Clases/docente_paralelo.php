@@ -29,7 +29,7 @@ if ($id != null && $id != '') {
             },
             responsive: true,
             ajax: {
-                url: '../controlador/docente_paraleloC.php',
+                url: '../controlador/SALUD_INTEGRAL/docente_paraleloC.php',
                 data: function(d) {
                     d.listar = true;
                     d.id_docente = id_docente;
@@ -64,7 +64,7 @@ if ($id != null && $id != '') {
             language: 'es',
             minimumInputLength: 3,
             ajax: {
-                url: '../controlador/paraleloC.php?listar_todo=true',
+                url: '../controlador/SALUD_INTEGRAL/paraleloC.php?listar_todo=true',
                 dataType: 'json',
                 delay: 250,
                 data: function(params) {
@@ -108,7 +108,7 @@ if ($id != null && $id != '') {
             data: {
                 id: id
             },
-            url: '../controlador/seccionC.php?listar=true',
+            url: '../controlador/SALUD_INTEGRAL/seccionC.php?listar=true',
             type: 'post',
             dataType: 'json',
 
@@ -146,7 +146,7 @@ if ($id != null && $id != '') {
             data: {
                 "id_seccion": id_seccion
             },
-            url: '../controlador/paraleloC.php?listar_seccion_grado=true',
+            url: '../controlador/SALUD_INTEGRAL/paraleloC.php?listar_seccion_grado=true',
             type: 'post',
             dataType: 'json',
 
@@ -191,7 +191,7 @@ if ($id != null && $id != '') {
             data: {
                 "id_grado": id_grado
             },
-            url: '../controlador/paraleloC.php?listar_grado_paralelo=true',
+            url: '../controlador/SALUD_INTEGRAL/paraleloC.php?listar_grado_paralelo=true',
             type: 'post',
             dataType: 'json',
 
@@ -201,7 +201,7 @@ if ($id != null && $id != '') {
                     data: {
                         "id_docente": id_docente
                     },
-                    url: '../controlador/docente_paraleloC.php?listar=true',
+                    url: '../controlador/SALUD_INTEGRAL/docente_paraleloC.php?listar=true',
                     type: 'get',
                     dataType: 'json',
 
@@ -236,7 +236,7 @@ if ($id != null && $id != '') {
             data: {
                 "id_docente": id_docente
             },
-            url: '../controlador/docente_paraleloC.php?listar=true',
+            url: '../controlador/SALUD_INTEGRAL/docente_paraleloC.php?listar=true',
             type: 'get',
             dataType: 'json',
 
@@ -265,7 +265,7 @@ if ($id != null && $id != '') {
         }
 
         $.ajax({
-            url: '../controlador/docente_paraleloC.php?insertar=true',
+            url: '../controlador/SALUD_INTEGRAL/docente_paraleloC.php?insertar=true',
             data: {
                 parametros: parametros
             },

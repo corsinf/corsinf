@@ -25,7 +25,7 @@ if (isset($_POST['sa_com_id'])) {
             data: {
                 id: id
             },
-            url: '../controlador/comunidadC.php?listar=true',
+            url: '../controlador/SALUD_INTEGRAL/comunidadC.php?listar=true',
             type: 'post',
             dataType: 'json',
             success: function(response) {
@@ -129,7 +129,7 @@ if (isset($_POST['sa_com_id'])) {
             data: {
                 parametros: parametros
             },
-            url: '../controlador/comunidadC.php?insertar=true',
+            url: '../controlador/SALUD_INTEGRAL/comunidadC.php?insertar=true',
             type: 'post',
             dataType: 'json',
 
@@ -167,7 +167,7 @@ if (isset($_POST['sa_com_id'])) {
             data: {
                 id: id
             },
-            url: '../controlador/comunidadC.php?eliminar=true',
+            url: '../controlador/SALUD_INTEGRAL/comunidadC.php?eliminar=true',
             type: 'post',
             dataType: 'json',
             success: function(response) {

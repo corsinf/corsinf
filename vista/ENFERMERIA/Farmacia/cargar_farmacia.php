@@ -13,7 +13,7 @@
 
                 var formData = new FormData(document.getElementById("form_img"));
                 $.ajax({
-                    url: '../controlador/cargar_datos_saludC.php?subir_archivo_server=true',
+                    url: '../controlador/SALUD_INTEGRAL/cargar_datos_saludC.php?subir_archivo_server=true',
                     type: 'post',
                     data: formData,
                     contentType: false,
@@ -50,7 +50,7 @@
             data: {
                 parametros: parametros
             },
-            url: '../controlador/cargar_datos_saludC.php?ejecutar_sp=true',
+            url: '../controlador/SALUD_INTEGRAL/cargar_datos_saludC.php?ejecutar_sp=true',
             type: 'post',
             dataType: 'json',
             success: function(response) {
@@ -92,7 +92,7 @@
             data: {
                 parametros: parametros
             },
-            url: '../controlador/cargar_datos_saludC.php?log_activos=true',
+            url: '../controlador/SALUD_INTEGRAL/cargar_datos_saludC.php?log_activos=true',
             type: 'post',
             dataType: 'json',
             beforeSend: function() {
@@ -111,7 +111,7 @@
     function leer_datos() {
         $.ajax({
             // data:  {parametros:parametros},
-            url: '../controlador/carga_datos/cargar_controlador.php?leer=true',
+            url: '../controlador/SALUD_INTEGRAL/carga_datos/cargar_controlador.php?leer=true',
             type: 'post',
             dataType: 'json',
             // beforeSend: function () {

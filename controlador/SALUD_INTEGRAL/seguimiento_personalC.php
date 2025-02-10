@@ -1,5 +1,5 @@
 <?php
-include('../modelo/seguimiento_personalM.php');
+require_once(dirname(__DIR__, 2) . '/modelo/SALUD_INTEGRAL/seguimiento_personalM.php');
 
 $controlador = new seguimiento_personalC();
 

@@ -11,7 +11,7 @@
             },
             responsive: true,
             ajax: {
-                url: '../controlador/medicamentosC.php?listar_todo=true',
+                url: '../controlador/SALUD_INTEGRAL/medicamentosC.php?listar_todo=true',
                 dataSrc: ''
             },
             columns: [{
