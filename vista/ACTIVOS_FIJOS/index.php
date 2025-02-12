@@ -77,7 +77,7 @@
 
     $.ajax({
       // data:  {parametros:parametros},
-      url: '../controlador/custodioC.php?numero_custodios=true',
+      url: '../controlador/ACTIVOS_FIJOS/custodioC.php?numero_custodios=true',
       type: 'post',
       dataType: 'json',
       success: function(response) {
@@ -92,7 +92,7 @@
 
     $.ajax({
       // data:  {parametros:parametros},
-      url: '../controlador/localizacionC.php?numero_localizaciones=true',
+      url: '../controlador/ACTIVOS_FIJOS/localizacionC.php?numero_localizaciones=true',
       type: 'post',
       dataType: 'json',
       success: function(response) {
@@ -153,7 +153,7 @@
   //   }
   //     $.ajax({
   //      data:  {parametros:parametros},
-  //      url:   '../controlador/articulosC.php?articulos_especiales=true',
+  //      url:   '../controlador/ACTIVOS_FIJOS/articulosC.php?articulos_especiales=true',
   //      type:  'post',
   //      dataType: 'json',
   //      /*beforeSend: function () {   
@@ -181,7 +181,7 @@
   //   }
   //     $.ajax({
   //      data:  {parametros:parametros},
-  //      url:   '../controlador/articulosC.php?articulos_especiales=true',
+  //      url:   '../controlador/ACTIVOS_FIJOS/articulosC.php?articulos_especiales=true',
   //      type:  'post',
   //      dataType: 'json',
   //      /*beforeSend: function () {   
@@ -209,7 +209,7 @@
   //   }
   //     $.ajax({
   //      data:  {parametros:parametros},
-  //      url:   '../controlador/articulosC.php?articulos_especiales=true',
+  //      url:   '../controlador/ACTIVOS_FIJOS/articulosC.php?articulos_especiales=true',
   //      type:  'post',
   //      dataType: 'json',
   //      /*beforeSend: function () {   
@@ -236,7 +236,7 @@
     // }
     $.ajax({
       // data:  {parametros:parametros},
-      url: '../controlador/articulosC.php?articulos_especiales=true',
+      url: '../controlador/ACTIVOS_FIJOS/articulosC.php?articulos_especiales=true',
       type: 'post',
       dataType: 'json',
       /*beforeSend: function () {   
@@ -278,7 +278,7 @@
 
     $.ajax({
       // data:  {parametros:parametros},
-      url: '../controlador/contratoC.php?datos_seguros=true',
+      url: '../controlador/ACTIVOS_FIJOS/contratoC.php?datos_seguros=true',
       type: 'post',
       dataType: 'json',
       success: function(response) {

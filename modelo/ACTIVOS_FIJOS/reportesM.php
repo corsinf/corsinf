@@ -1,4 +1,5 @@
-<?php 
+<?php
+
 if (!class_exists('db')) {
 	include(dirname(__DIR__, 2) . '/db/db.php');
 }
@@ -26,7 +27,6 @@ class reportesM
 		return $this->db->update($tabla, $datos, $Where);
 	}
 
-
 	function buscar_reporte($tipo = false, $nombre = false)
 	{
 		$sql = "SELECT * FROM REPORTE WHERE 1=1 ";
@@ -44,6 +44,7 @@ class reportesM
 		$sql = "SELECT ID_TIPO_REPORTE as 'ID',DESCRIPCION as 'NOMBRE' FROM TIPO_REPORTE";
 		return $this->db->datos($sql);
 	}
+
 	function datos_reporte($id = false)
 	{
 		$sql = "SELECT R.ID_REPORTE,TR.TABLAS_ASOCIADAS,TABLA_PRINCIPAL,NOMBRE_REPORTE,CAMPOS,SQL,FILTROS_HTML,DETALLE FROM REPORTE R
@@ -56,6 +57,7 @@ class reportesM
 		// print_r($sql);die();
 		return $this->db->datos($sql);
 	}
+
 	function campos_tabla($tabla, $columna = false)
 	{
 		$sql = "SELECT COLUMN_NAME as 'campo', DATA_TYPE as 'tipo'

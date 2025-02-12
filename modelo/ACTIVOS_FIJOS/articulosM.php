@@ -366,7 +366,6 @@ class articulosM
 		return $datos;
 	}
 
-
 	function cantidad_registros_new($query = false, $loc = false, $cus = false, $pag = false, $desde = false, $hasta = false, $coincidencia = false, $multiple = false, $buscar_por = false)
 	{
 
@@ -583,8 +582,6 @@ class articulosM
 		return $datos;
 	}
 
-
-
 	function lista_kit($id_activo)
 	{
 		$sql = "SELECT * FROM PLANTILLA_MASIVA WHERE KIT = '" . $id_activo . "'";
@@ -592,6 +589,7 @@ class articulosM
 		$datos = $this->db->datos($sql);
 		return $datos;
 	}
+
 	function cantidad_registros($query = false, $loc = false, $cus = false, $pag = false, $whereid = false, $desde = false, $hasta = false)
 	{
 		$sql = "SELECT COUNT(id_plantilla) as 'numreg' FROM PLANTILLA_MASIVA P
@@ -629,7 +627,6 @@ class articulosM
 		return $datos;
 	}
 
-
 	function cantidad_etiquetas()
 	{
 		$sql = "SELECT count(*) as 'eti' FROM ASSET WHERE TAG_UNIQUE <>''";
@@ -643,6 +640,7 @@ class articulosM
 		$datos = $this->db->datos($sql);
 		return $datos;
 	}
+
 	function total_bajas()
 	{
 		$sql = "SELECT COUNT(id_plantilla) as 'cantidad' FROM PLANTILLA_MASIVA WHERE BAJAS=1 AND TERCEROS = 0 and PATRIMONIALES = 0";
@@ -656,6 +654,7 @@ class articulosM
 		$datos = $this->db->datos($sql);
 		return $datos;
 	}
+
 	function total_terceros()
 	{
 		$sql = "SELECT COUNT(id_plantilla) as 'cantidad' FROM PLANTILLA_MASIVA WHERE BAJAS=0 AND TERCEROS = 1 and PATRIMONIALES = 0";
@@ -808,7 +807,6 @@ class articulosM
 		return $datos;
 	}
 
-
 	function total_activos($query = false, $loc = false, $cus = false, $pag = false, $whereid = false, $desde = false, $hasta = false, $bajas = false, $terceros = false, $patrimoniales = false)
 	{
 		$sql = "SELECT COUNT(*) as 'total' FROM PLANTILLA_MASIVA P
@@ -913,6 +911,7 @@ class articulosM
 		$datos = $this->db->datos($sql);
 		return $datos;
 	}
+
 	function buscar_acticulos_existente($asset)
 	{
 		$sql = "SELECT id_plantilla,COMPANYCODE,TAG_SERIE,A.ID_ASSET,SUBNUMBER,DESCRIPT,DESCRIPT2,MODELO,SERIE,A.TAG_UNIQUE,FECHA_INV_DATE,QUANTITY,BASE_UOM,LOCATION,PERSON_NO,EVALGROUP1,EVALGROUP2,EVALGROUP3,EVALGROUP4,EVALGROUP5,ASSETSUPNO,ORIG_ASSET,ORIG_ACQ_YR,ORIG_VALUE,OBSERVACION,BAJAS,CARACTERISTICA,IMAGEN,ACTU_POR FROM ASSET A
@@ -920,7 +919,6 @@ class articulosM
 		WHERE A.TAG_SERIE = '" . $asset . "'";
 		return $this->db->datos($sql);
 	}
-
 
 	function meses_modificado()
 	{
@@ -954,34 +952,40 @@ class articulosM
 		$rest = $this->db->inserts($tabla, $datos);
 		return $rest;
 	}
+
 	function editar($datos, $where)
 	{
 
 		$rest = $this->db->update('articulos', $datos, $where);
 		return $rest;
 	}
+
 	function update($tabla, $datos, $where)
 	{
 		$rest = $this->db->update($tabla, $datos, $where);
 		return $rest;
 	}
+
 	function editar_asser($datos, $where)
 	{
 		// print_r($datos);die();
 		$rest = $this->db->update('ASSET', $datos, $where);
 		return $rest;
 	}
+
 	function eliminar($datos, $tabla = 'articulos')
 	{
 		$rest = $this->db->delete($tabla, $datos);
 		return $rest;
 	}
+
 	function existe($datos)
 	{
 		$sql = "SELECT COUNT(ID_ASSET) from ASSET WHERE TAG_UNIQUE ='" . $datos . "'";
 		$rest = $this->db->existente($sql);
 		return $rest;
 	}
+
 	function existe_datos()
 	{
 		$sql = "SELECT * FROM IMPRIMIR_TAGS";
@@ -1012,6 +1016,7 @@ class articulosM
 			return $this->db->sql_string($sql);
 		}
 	}
+
 	function log_activo($fecha)
 	{
 		$sql = "SELECT * FROM log_activos WHERE estado = 0 AND fecha = '" . $fecha . "' ORDER by id_log desc ";
@@ -1035,8 +1040,6 @@ class articulosM
 		return $re;
 	}
 
-
-
 	function set_get_sql()
 	{
 		// print_r($this->sql_busqueda);die();
@@ -1053,12 +1056,14 @@ class articulosM
 		// print_r($sql);die();
 		return $this->db->datos($sql);
 	}
+
 	function existe_RFID_impreso($datos)
 	{
 		$sql = "SELECT Codigo from RFID_IMPRESOS WHERE Codigo ='" . $datos . "'";
 		$rest = $this->db->existente($sql);
 		return $rest;
 	}
+
 	function existe_RFID($datos)
 	{
 		$sql = "SELECT TAG_UNIQUE from ASSET WHERE TAG_UNIQUE ='" . $datos . "' 

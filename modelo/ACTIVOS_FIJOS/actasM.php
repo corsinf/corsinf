@@ -45,7 +45,6 @@ class actasM
 		return $this->db->sql_string($sql);
 	}
 
-
 	function secuencial_acta($query)
 	{
 		$sql = "SELECT * FROM SECUENCIALES WHERE DETALLE = '" . $query . "'";
@@ -81,6 +80,7 @@ class actasM
 		// print_r($sql);die();
 		return $this->db->datos($sql);
 	}
+
 	function cantidad_registros($query = false, $loc = false, $cus = false, $pag = false, $whereid = false, $bajas = false, $patrimoniales = false, $terceros = false, $asset = false, $exacto = false, $masivo = false, $masivo_cus = false, $masivo_loc = false)
 	{
 		$sql = "SELECT COUNT(id_plantilla) as 'numreg' FROM PLANTILLA_MASIVA P
@@ -163,8 +163,6 @@ class actasM
 		$datos = $this->db->datos($sql);
 		return $datos;
 	}
-
-
 
 	function articulo($asset)
 	{
@@ -269,6 +267,7 @@ class actasM
 		$datos = $this->db->datos($sql);
 		return $datos;
 	}
+
 	function lineas_solicitud($id)
 	{
 		$sql = "SELECT LS.id_linea_salida as idls,P.id_plantilla as id,A.TAG_SERIE as codigo,A.TAG_ANT AS ori ,A.TAG_UNIQUE as 'rfid',M.DESCRIPCION as marca,P.DESCRIPT as item,P.SERIE as serie,P.MODELO as modelo,observacion_salida as 'salida',observacion_entrada as 'entrada' FROM LINEAS_SOLICITUD LS 
@@ -278,6 +277,7 @@ class actasM
 		WHERE id_solicitud = '" . $id . "'";
 		return $this->db->datos($sql);
 	}
+	
 	function solicitud($id)
 	{
 		$sql = "SELECT * FROM SOLICITUD_SALIDA SS 

@@ -80,7 +80,7 @@ class custodioM
 		$rest = $this->db->update('PERSON_NO', $datos, $where);
 		return $rest;
 	}
-	
+
 	function eliminar($datos)
 	{
 		$sql = "UPDATE PERSON_NO SET ESTADO='I' WHERE " . $datos[0]['campo'] . "='" . $datos[0]['dato'] . "';";

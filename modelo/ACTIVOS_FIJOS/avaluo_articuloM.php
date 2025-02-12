@@ -55,5 +55,4 @@ class avaluo_articuloM
 		$datos = $this->db->sql_string($sql);
 		return $datos;
 	}
-
 }

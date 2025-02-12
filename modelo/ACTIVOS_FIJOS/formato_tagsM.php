@@ -1,4 +1,4 @@
-<?php 
+<?php
 if (!class_exists('db')) {
 	include(dirname(__DIR__, 2) . '/db/db.php');
 }
@@ -10,21 +10,19 @@ if (!class_exists('db')) {
 class formato_tagsM
 {
 	private $db;
-	
+
 	function __construct()
 	{
 		$this->db = new db();
-
 	}
 
-	function lista_formato_tags($id='')
+	function lista_formato_tags($id = '')
 	{
 		$sql = "SELECT * FROM formato_tags ";
-		if($id!='')
-		{
-			$sql.= ' WHERE id_formato_eti='.$id;
+		if ($id != '') {
+			$sql .= ' WHERE id_formato_eti=' . $id;
 		}
-		$sql.=" ORDER BY id_formato_eti DESC";
+		$sql .= " ORDER BY id_formato_eti DESC";
 		$datos = $this->db->datos($sql);
 		return $datos;
 	}
@@ -37,20 +35,20 @@ class formato_tagsM
 
 	function insertar($datos)
 	{
-		$rest = $this->db->inserts('formato_tags',$datos);	   
+		$rest = $this->db->inserts('formato_tags', $datos);
 		return $rest;
 	}
-	function editar($datos,$where)
+
+	function editar($datos, $where)
 	{
-		
-	    $rest = $this->db->update('formato_tags',$datos,$where);
+
+		$rest = $this->db->update('formato_tags', $datos, $where);
 		return $rest;
 	}
+	
 	function eliminar($datos)
 	{
-	    $rest = $this->db->delete('formato_tags',$datos);
+		$rest = $this->db->delete('formato_tags', $datos);
 		return $rest;
 	}
 }
-
-?>

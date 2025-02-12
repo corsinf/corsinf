@@ -1,4 +1,4 @@
-<?php 
+<?php
 if (!class_exists('db')) {
 	include(dirname(__DIR__, 2) . '/db/db.php');
 }
@@ -10,11 +10,10 @@ if (!class_exists('db')) {
 class impresion_tagM
 {
 	private $db;
-	
+
 	function __construct()
 	{
 		$this->db = new db();
-
 	}
 
 	// function lista_impresion_tag($id='')
@@ -37,20 +36,20 @@ class impresion_tagM
 
 	function insertar($datos)
 	{
-		$rest = $this->db->inserts('formato_tags',$datos);	   
+		$rest = $this->db->inserts('formato_tags', $datos);
 		return $rest;
 	}
-	function editar($datos,$where)
+
+	function editar($datos, $where)
 	{
-		
-	    $rest = $this->db->update('impresion_tag',$datos,$where);
+
+		$rest = $this->db->update('impresion_tag', $datos, $where);
 		return $rest;
 	}
+
 	function eliminar($datos)
 	{
-	    $rest = $this->db->delete('formato_tags',$datos);
+		$rest = $this->db->delete('formato_tags', $datos);
 		return $rest;
 	}
 }
-
-?>
