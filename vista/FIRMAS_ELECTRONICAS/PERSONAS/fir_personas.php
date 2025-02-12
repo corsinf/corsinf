@@ -45,9 +45,16 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                 {
                     data: 'telefono_1'
                 },
+                {
+                    data: null,
+                    render: function(data, type, item) {
+                        href = `../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=fi_registrar_personas&_id=${item._id}`;
+                        return `<a href="${href}"><u>${item.primer_apellido} ${item.segundo_apellido} ${item.primer_nombre} ${item.segundo_nombre}</u></a>`;
+                    }
+                },
             ],
             order: [
-                [1, 'asc']
+                [0, 'desc']
             ],
         }));
     });
@@ -115,6 +122,7 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                                                 <th>Cédula</th>
                                                 <th>Correo</th>
                                                 <th>Teléfono</th>
+                                                <th>Estado</th>
                                             </tr>
                                         </thead>
                                         <tbody>

@@ -208,7 +208,7 @@ if ($_GET['acc'] == 'index') {
 			include('EMPRESA/index.php');
 			break;
 		case '2':
-			include('ACTIVOS/index.php');
+			include('ACTIVOS_FIJOS/index.php');
 			break;
 		case '3':
 			include('SRI/index.php');
