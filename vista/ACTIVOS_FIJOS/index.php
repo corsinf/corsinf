@@ -1,9 +1,10 @@
 <?php //include('../cabeceras/header.php'); 
-//print_r($_SESSION['INICIO']); die(); ?>
-  <!-- Content Wrapper. Contains page content -->
+//print_r($_SESSION['INICIO']); die(); 
+?>
+<!-- Content Wrapper. Contains page content -->
 
-  <script type="text/javascript">
-  $( document ).ready(function() {
+<script type="text/javascript">
+  $(document).ready(function() {
     usuarios();
     // patrimoniales();
     // bajas();
@@ -20,296 +21,287 @@
   });
 
 
-    function pie(sin,con) {
-       var donutData        = {
+  function pie(sin, con) {
+    var donutData = {
       labels: [
-          'Asegurados', 
-          'Sin seguro',
-          
+        'Asegurados',
+        'Sin seguro',
+
       ],
-      datasets: [
-        {
-          data: [con,sin],
-          backgroundColor : ['#00a65a','#f56954'],
-        }
-      ]
+      datasets: [{
+        data: [con, sin],
+        backgroundColor: ['#00a65a', '#f56954'],
+      }]
     }
-   
+
     //-------------
     //- PIE CHART -
     //-------------
     // Get context with jQuery - using jQuery's .get() method.
     var pieChartCanvas = $('#pieChart').get(0).getContext('2d')
-    var pieData        = donutData;
-    var pieOptions     = {
-      maintainAspectRatio : false,
-      responsive : true,
+    var pieData = donutData;
+    var pieOptions = {
+      maintainAspectRatio: false,
+      responsive: true,
     }
     //Create pie or douhnut chart
     // You can switch between pie and douhnut using the method below.
     var pieChart = new Chart(pieChartCanvas, {
       type: 'pie',
       data: pieData,
-      options: pieOptions      
+      options: pieOptions
     })
 
   }
 
+  function usuarios() {
 
-    function usuarios()
-    {
+    $.ajax({
+      // data:  {parametros:parametros},
+      url: '../controlador/usuariosC.php?usuarios=true',
+      type: 'post',
+      dataType: 'json',
+      /*beforeSend: function () {   
+           var spiner = '<div class="text-center"><img src="../img/gif/proce.gif" width="100" height="100"></div>'     
+         $('#tabla_').html(spiner);
+      },*/
+      success: function(response) {
+        var res = response.length;
+        $('#lbl_usuarios').text(res);
 
-       $.ajax({
-         // data:  {parametros:parametros},
-         url:   '../controlador/usuariosC.php?usuarios=true',
-         type:  'post',
-         dataType: 'json',
-         /*beforeSend: function () {   
-              var spiner = '<div class="text-center"><img src="../img/gif/proce.gif" width="100" height="100"></div>'     
-            $('#tabla_').html(spiner);
-         },*/
-           success:  function (response) {  
-            var res = response.length;
-            $('#lbl_usuarios').text(res);
-          
-          }
-       });
-    }
+      }
+    });
+  }
 
-    function custodio()
-    {
+  function custodio() {
 
-       $.ajax({
-         // data:  {parametros:parametros},
-         url:   '../controlador/custodioC.php?numero_custodios=true',
-         type:  'post',
-         dataType: 'json',
-           success:  function (response) {  
-            console.log(response);
-            $('#lbl_custodios').text(response[0]['cant']);
-          
-          }
-       });
-    }
+    $.ajax({
+      // data:  {parametros:parametros},
+      url: '../controlador/custodioC.php?numero_custodios=true',
+      type: 'post',
+      dataType: 'json',
+      success: function(response) {
+        console.log(response);
+        $('#lbl_custodios').text(response[0]['cant']);
 
-    function localizacion()
-    {
+      }
+    });
+  }
 
-       $.ajax({
-         // data:  {parametros:parametros},
-         url:   '../controlador/localizacionC.php?numero_localizaciones=true',
-         type:  'post',
-         dataType: 'json',
-           success:  function (response) {  
-            console.log(response);
-            $('#lbl_localizaciones').text(response[0]['cant']);
-          
-          }
-       });
-    }
+  function localizacion() {
+
+    $.ajax({
+      // data:  {parametros:parametros},
+      url: '../controlador/localizacionC.php?numero_localizaciones=true',
+      type: 'post',
+      dataType: 'json',
+      success: function(response) {
+        console.log(response);
+        $('#lbl_localizaciones').text(response[0]['cant']);
+
+      }
+    });
+  }
 
 
 
-    // function custodio_des()
+  // function custodio_des()
+  // {
+
+  //    $.ajax({
+  //      // data:  {parametros:parametros},
+  //      url:   '../controlador/vinculacionC.php?numero_custodios=true',
+  //      type:  'post',
+  //      dataType: 'json',
+  //        success:  function (response) {  
+  //         console.log(response);
+  //         if(response.length>0)
+  //         {
+  //           $('#lbl_custodios').text(response[0]['cant']);
+  //         }
+  //       }
+  //    });
+  // }
+
+  // function localizacion_des()
+  // {
+
+  //    $.ajax({
+  //      // data:  {parametros:parametros},
+  //      url:   '../controlador/vinculacionC.php?numero_localizaciones=true',
+  //      type:  'post',
+  //      dataType: 'json',
+  //        success:  function (response) {  
+  //         console.log(response);
+  //         if(response.length>0)
+  //         {
+  //           $('#lbl_localizaciones').text(response[0]['cant']);
+  //         }
+
+  //       }
+  //    });
+  // }
+
+  // function patrimoniales()
+  // { 
+  //   var parametros = 
+  //   {
+  //     'bajas':0,
+  //     'terceros':0,
+  //     'patrimoniales':1,
+  //     'articulos':0,
+  //   }
+  //     $.ajax({
+  //      data:  {parametros:parametros},
+  //      url:   '../controlador/articulosC.php?articulos_especiales=true',
+  //      type:  'post',
+  //      dataType: 'json',
+  //      /*beforeSend: function () {   
+  //           var spiner = '<div class="text-center"><img src="../img/gif/proce.gif" width="100" height="100"></div>'     
+  //         $('#tabla_').html(spiner);
+  //      },*/
+  //        success:  function (response) {  
+  //         var res = response.length;
+  //         $('#lbl_patrimoniales').text(res);
+  //         // console.log(res)
+
+  //       } 
+
+  //    });
+
+  // }
+
+  // function bajas()
+  // { var parametros = 
+  //   {
+  //     'bajas':1,
+  //     'terceros':0,
+  //     'patrimoniales':0,
+  //     'articulos':0,
+  //   }
+  //     $.ajax({
+  //      data:  {parametros:parametros},
+  //      url:   '../controlador/articulosC.php?articulos_especiales=true',
+  //      type:  'post',
+  //      dataType: 'json',
+  //      /*beforeSend: function () {   
+  //           var spiner = '<div class="text-center"><img src="../img/gif/proce.gif" width="100" height="100"></div>'     
+  //         $('#tabla_').html(spiner);
+  //      },*/
+  //        success:  function (response) {  
+  //         var res = response.length;
+  //         $('#lbl_bajas').text(res);
+  //         // console.log(res)
+
+  //       } 
+
+  //    });
+
+  // }
+
+  // function terceros()
+  // { var parametros = 
+  //   {
+  //     'bajas':0,
+  //     'terceros':1,
+  //     'patrimoniales':0,
+  //     'articulos':0,
+  //   }
+  //     $.ajax({
+  //      data:  {parametros:parametros},
+  //      url:   '../controlador/articulosC.php?articulos_especiales=true',
+  //      type:  'post',
+  //      dataType: 'json',
+  //      /*beforeSend: function () {   
+  //           var spiner = '<div class="text-center"><img src="../img/gif/proce.gif" width="100" height="100"></div>'     
+  //         $('#tabla_').html(spiner);
+  //      },*/
+  //        success:  function (response) {  
+  //         var res = response.length;
+  //         $('#lbl_terceros').text(res);
+  //         // console.log(res)
+
+  //       } 
+
+  //    });      
+  // }
+
+  function info_articulos() {
+    // var parametros = 
     // {
-
-    //    $.ajax({
-    //      // data:  {parametros:parametros},
-    //      url:   '../controlador/vinculacionC.php?numero_custodios=true',
-    //      type:  'post',
-    //      dataType: 'json',
-    //        success:  function (response) {  
-    //         console.log(response);
-    //         if(response.length>0)
-    //         {
-    //           $('#lbl_custodios').text(response[0]['cant']);
-    //         }
-    //       }
-    //    });
+    //   'bajas':0,
+    //   'terceros':0,
+    //   'patrimoniales':0,
+    //   'articulos':1,
     // }
-
-    // function localizacion_des()
-    // {
-
-    //    $.ajax({
-    //      // data:  {parametros:parametros},
-    //      url:   '../controlador/vinculacionC.php?numero_localizaciones=true',
-    //      type:  'post',
-    //      dataType: 'json',
-    //        success:  function (response) {  
-    //         console.log(response);
-    //         if(response.length>0)
-    //         {
-    //           $('#lbl_localizaciones').text(response[0]['cant']);
-    //         }
-          
-    //       }
-    //    });
-    // }
-
-    // function patrimoniales()
-    // { 
-    //   var parametros = 
-    //   {
-    //     'bajas':0,
-    //     'terceros':0,
-    //     'patrimoniales':1,
-    //     'articulos':0,
-    //   }
-    //     $.ajax({
-    //      data:  {parametros:parametros},
-    //      url:   '../controlador/articulosC.php?articulos_especiales=true',
-    //      type:  'post',
-    //      dataType: 'json',
-    //      /*beforeSend: function () {   
-    //           var spiner = '<div class="text-center"><img src="../img/gif/proce.gif" width="100" height="100"></div>'     
-    //         $('#tabla_').html(spiner);
-    //      },*/
-    //        success:  function (response) {  
-    //         var res = response.length;
-    //         $('#lbl_patrimoniales').text(res);
-    //         // console.log(res)
-          
-    //       } 
-          
-    //    });
-
-    // }
-
-    // function bajas()
-    // { var parametros = 
-    //   {
-    //     'bajas':1,
-    //     'terceros':0,
-    //     'patrimoniales':0,
-    //     'articulos':0,
-    //   }
-    //     $.ajax({
-    //      data:  {parametros:parametros},
-    //      url:   '../controlador/articulosC.php?articulos_especiales=true',
-    //      type:  'post',
-    //      dataType: 'json',
-    //      /*beforeSend: function () {   
-    //           var spiner = '<div class="text-center"><img src="../img/gif/proce.gif" width="100" height="100"></div>'     
-    //         $('#tabla_').html(spiner);
-    //      },*/
-    //        success:  function (response) {  
-    //         var res = response.length;
-    //         $('#lbl_bajas').text(res);
-    //         // console.log(res)
-          
-    //       } 
-          
-    //    });
-
-    // }
-
-    // function terceros()
-    // { var parametros = 
-    //   {
-    //     'bajas':0,
-    //     'terceros':1,
-    //     'patrimoniales':0,
-    //     'articulos':0,
-    //   }
-    //     $.ajax({
-    //      data:  {parametros:parametros},
-    //      url:   '../controlador/articulosC.php?articulos_especiales=true',
-    //      type:  'post',
-    //      dataType: 'json',
-    //      /*beforeSend: function () {   
-    //           var spiner = '<div class="text-center"><img src="../img/gif/proce.gif" width="100" height="100"></div>'     
-    //         $('#tabla_').html(spiner);
-    //      },*/
-    //        success:  function (response) {  
-    //         var res = response.length;
-    //         $('#lbl_terceros').text(res);
-    //         // console.log(res)
-          
-    //       } 
-          
-    //    });      
-    // }
-
-    function info_articulos()
-    {
-      // var parametros = 
-      // {
-      //   'bajas':0,
-      //   'terceros':0,
-      //   'patrimoniales':0,
-      //   'articulos':1,
-      // }
-        $.ajax({
-         // data:  {parametros:parametros},
-         url:   '../controlador/articulosC.php?articulos_especiales=true',
-         type:  'post',
-         dataType: 'json',
-         /*beforeSend: function () {   
-              var spiner = '<div class="text-center"><img src="../img/gif/proce.gif" width="100" height="100"></div>'     
-            $('#tabla_').html(spiner);
-         },*/
-           success:  function (response) {  
+    $.ajax({
+      // data:  {parametros:parametros},
+      url: '../controlador/articulosC.php?articulos_especiales=true',
+      type: 'post',
+      dataType: 'json',
+      /*beforeSend: function () {   
+           var spiner = '<div class="text-center"><img src="../img/gif/proce.gif" width="100" height="100"></div>'     
+         $('#tabla_').html(spiner);
+      },*/
+      success: function(response) {
 
 
-            console.log(response);
-           
+        console.log(response);
 
 
-            // var res = response[0]['numreg'];
-            // var res1 = response[1]['eti'];
-            // console.log(response);
-            $('#lbl_articulos').text(response.activos);
-            $('#lbl_articulos1').text(response.activos);
-            $('#lbl_etiqueta').text(response.etiquetados);
 
-            $('#lbl_terceros').text(response.terceros);
-            $('#lbl_patrimoniales').text(response.patrimoniales);
-            $('#lbl_bajas').text(response.bajas);
+        // var res = response[0]['numreg'];
+        // var res1 = response[1]['eti'];
+        // console.log(response);
+        $('#lbl_articulos').text(response.activos);
+        $('#lbl_articulos1').text(response.activos);
+        $('#lbl_etiqueta').text(response.etiquetados);
 
-            var b = parseInt(response.etiquetados*100/response.activos);
-            $('#lbl_porcen').html('<b>'+b+'</b>/100');
-            $('#progres').css('width',b+'%');
-            $('#lbl_porce').html('<i class="bx bxs-up-arrow align-middle"></i> '+b+'%');
+        $('#lbl_terceros').text(response.terceros);
+        $('#lbl_patrimoniales').text(response.patrimoniales);
+        $('#lbl_bajas').text(response.bajas);
 
-
-            // console.log(b)
-          
-          } 
-          
-       });  
-  }    
+        var b = parseInt(response.etiquetados * 100 / response.activos);
+        $('#lbl_porcen').html('<b>' + b + '</b>/100');
+        $('#progres').css('width', b + '%');
+        $('#lbl_porce').html('<i class="bx bxs-up-arrow align-middle"></i> ' + b + '%');
 
 
-    function datos_seguros()
-    {
-     
-        $.ajax({
-         // data:  {parametros:parametros},
-         url:   '../controlador/contratoC.php?datos_seguros=true',
-         type:  'post',
-         dataType: 'json',        
-           success:  function (response) {  
-            console.log(response);
-            pie(response.sinseguro,response.asegurados);   
+        // console.log(b)
 
-            var sin = ((response.sinseguro*100)/response.total);
-            var con = ((response.asegurados*100)/response.total);
-            console.log(sin);console.log(con);
-            $('#lbl_porce_sin_seguro').html('<i class="fas fa-caret-up">'+sin.toFixed(3)+'%');
-            $('#lbl_porce_asegurados').html('<i class="fas fa-caret-up">'+con.toFixed(3)+'%');
+      }
 
-            $('#lbl_sin_seguro').text(response.sinseguro);
-            $('#lbl_asgurados').text(response.asegurados);
-            $('#lbl_articulos2').text(response.total);   
-            $('#lbl_num_seguros').text(response.seguros);
-          
-          } 
-          
-       });      
-    }
+    });
+  }
 
-  </script>
+  function datos_seguros() {
+
+    $.ajax({
+      // data:  {parametros:parametros},
+      url: '../controlador/contratoC.php?datos_seguros=true',
+      type: 'post',
+      dataType: 'json',
+      success: function(response) {
+        console.log(response);
+        pie(response.sinseguro, response.asegurados);
+
+        var sin = ((response.sinseguro * 100) / response.total);
+        var con = ((response.asegurados * 100) / response.total);
+        console.log(sin);
+        console.log(con);
+        $('#lbl_porce_sin_seguro').html('<i class="fas fa-caret-up">' + sin.toFixed(3) + '%');
+        $('#lbl_porce_asegurados').html('<i class="fas fa-caret-up">' + con.toFixed(3) + '%');
+
+        $('#lbl_sin_seguro').text(response.sinseguro);
+        $('#lbl_asgurados').text(response.asegurados);
+        $('#lbl_articulos2').text(response.total);
+        $('#lbl_num_seguros').text(response.seguros);
+
+      }
+
+    });
+  }
+</script>
 
 <div class="page-wrapper">
   <div class="page-content">
@@ -324,14 +316,14 @@
             <li class="breadcrumb-item active" aria-current="page"></li>
           </ol>
         </nav>
-      </div>     
+      </div>
     </div>
     <!--end breadcrumb-->
     <div class="row">
       <div class="col-xl-12 mx-auto">
         <h6 class="mb-0 text-uppercase">Activos</h6>
         <hr>
-            
+
         <div class="row">
           <!-- <div class="col-12 col-sm-6 col-md-3">
             <div class="info-box">
@@ -406,25 +398,25 @@
                 </div>
               </div>
             </div>
-          </div> 
-        <h6 class="mb-0 text-uppercase">Seguros</h6>
-        <hr>
+          </div>
+          <h6 class="mb-0 text-uppercase">Seguros</h6>
+          <hr>
 
           <div class="row">
-          <div class="col-md-12">         
+            <div class="col-md-12">
               <div class="card-body">
                 <div class="row">
 
                   <div class="col-md-5">
-                     <p class="text-center">
+                    <p class="text-center">
                       <strong>Porcentaje de articulos asegurados</strong>
                     </p>
-                     <div class="card card-danger">              
+                    <div class="card card-danger">
                       <div class="card-body">
                         <canvas id="pieChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
                       </div>
-                    </div>                  
-                   
+                    </div>
+
                   </div>
 
                   <div class="col-md-7">
@@ -459,10 +451,10 @@
                             </div>
                           </div>
                         </div>
-                      </div>        
+                      </div>
                     </div>
 
-                     <div class="row">
+                    <div class="row">
                       <div class="col-6">
                         <div class="card radius-10">
                           <div class="card-body">
@@ -494,66 +486,50 @@
                         </div>
                       </div>
 
-                      
-
-                      
-                      
-                    
                     </div>
-
-
                   </div>
-
-
                 </div>
+              </div>
             </div>
-          </div>
-        </div>
-
-
-
-
-
-           
           </div>
         </div>
       </div>
     </div>
-    <!--end row-->
   </div>
+  <!--end row-->
+</div>
 </div>
 
 
-  <div class="content-wrapper">
-    <!-- Content Header (Page header) -->
-    <div class="content-header">
-      <div class="container-fluid">
-        <div class="row mb-2">
-          <div class="col-sm-6">
-            <h1 class="m-0 text-dark">HOME</h1>
-          </div><!-- /.col -->
-         
-        </div><!-- /.row -->
-      </div><!-- /.container-fluid -->
-    </div>
-    <!-- /.content-header -->
+<div class="content-wrapper">
+  <!-- Content Header (Page header) -->
+  <div class="content-header">
+    <div class="container-fluid">
+      <div class="row mb-2">
+        <div class="col-sm-6">
+          <h1 class="m-0 text-dark">HOME</h1>
+        </div><!-- /.col -->
 
-    <!-- Main content -->
-    <section class="content">
-      <div class="container-fluid">
-
-
-
-        <div class="row">
-          <!-- <img src="../img/de_sistema/modulo_inventario1.gif" style="width: 100%"> -->
-        </div>
-        <!-- /.row (main row) -->
-      </div><!-- /.container-fluid -->
-    </section>
-    <!-- /.content -->
+      </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
   </div>
+  <!-- /.content-header -->
 
- 
-<?php //include('../cabeceras/footer.php'); ?>
+  <!-- Main content -->
+  <section class="content">
+    <div class="container-fluid">
 
 
+
+      <div class="row">
+        <!-- <img src="../img/de_sistema/modulo_inventario1.gif" style="width: 100%"> -->
+      </div>
+      <!-- /.row (main row) -->
+    </div><!-- /.container-fluid -->
+  </section>
+  <!-- /.content -->
+</div>
+
+
+<?php //include('../cabeceras/footer.php'); 
+?>

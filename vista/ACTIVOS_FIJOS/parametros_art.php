@@ -71,27 +71,27 @@
             <div class="tab-content py-3">
               <div class="tab-pane fade show active" id="dangerhome" role="tabpanel">
                 <div class="container-iframe">
-                  <iframe class="responsive-iframe" style="width:100%;border: 0px; height: 500px;" src="ACTIVOS/marcas.php"></iframe>
+                  <iframe class="responsive-iframe" style="width:100%;border: 0px; height: 500px;" src="ACTIVOS_FIJOS/marcas.php"></iframe>
                 </div>
               </div>
               <div class="tab-pane fade" id="dangerprofile" role="tabpanel">
                 <div class="container-iframe">
-                  <iframe class="responsive-iframe" style="width:100%;border: 0px; height: 500px;" src="ACTIVOS/estado.php"></iframe>
+                  <iframe class="responsive-iframe" style="width:100%;border: 0px; height: 500px;" src="ACTIVOS_FIJOS/estado.php"></iframe>
                 </div>
               </div>
               <div class="tab-pane fade" id="dangercontact" role="tabpanel">
                 <div class="container-iframe">
-                  <iframe class="responsive-iframe" style="width:100%;border: 0px; height: 500px;" src="ACTIVOS/genero.php"></iframe>
+                  <iframe class="responsive-iframe" style="width:100%;border: 0px; height: 500px;" src="ACTIVOS_FIJOS/genero.php"></iframe>
                 </div>
               </div>
               <div class="tab-pane fade" id="dangercolor" role="tabpanel">
                 <div class="container-iframe">
-                  <iframe class="responsive-iframe" style="width:100%;border: 0px; height: 500px;" src="ACTIVOS/colores.php"></iframe>
+                  <iframe class="responsive-iframe" style="width:100%;border: 0px; height: 500px;" src="ACTIVOS_FIJOS/colores.php"></iframe>
                 </div>
               </div>
               <div class="tab-pane fade" id="dangerfamily" role="tabpanel">
                 <div class="container-iframe">
-                  <iframe class="responsive-iframe" style="width:100%;border: 0px; height: 500px;" src="ACTIVOS/familias.php"></iframe>
+                  <iframe class="responsive-iframe" style="width:100%;border: 0px; height: 500px;" src="ACTIVOS_FIJOS/familias.php"></iframe>
                 </div>
               </div>
             </div>

@@ -1,4 +1,5 @@
 <?php
+
 require_once(dirname(__DIR__, 2) . '/modelo/ACTIVOS_FIJOS/custodioM.php');
 require_once(dirname(__DIR__, 2) . '/db/codigos_globales.php');
 

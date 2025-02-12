@@ -1,5 +1,10 @@
 <?php
-include('../modelo/avaluo_articuloM.php');
+
+require_once(dirname(__DIR__, 2) . '/modelo/ACTIVOS_FIJOS/avaluo_articuloM.php');
+
+/**
+ * 
+ **/
 
 $controlador = new avaluo_articuloC();
 
@@ -18,6 +23,8 @@ if (isset($_GET['eliminar'])) {
 if (isset($_GET['insertar'])) {
     echo json_encode($controlador->insertar_editar($_POST['parametros']));
 }
+
+
 
 class avaluo_articuloC
 {
@@ -53,7 +60,6 @@ class avaluo_articuloC
         $datos = $this->modelo->eliminar($id);
         return $datos;
     }
-
 
     public function listarTabla($id)
     {

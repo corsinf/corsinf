@@ -11,7 +11,7 @@
       $('#ddl_articulos').select2({
         placeholder: 'Seleccione una custodio',
         ajax: {
-          url: '../controlador/articulosC.php?articulos_ddl=true',
+          url: '../controlador/ACTIVOS_FIJOS/articulosC.php?articulos_ddl=true',
           dataType: 'json',
           delay: 250,
           processResults: function (data) {
@@ -27,12 +27,12 @@
   {
   	var parametros = 
   	{
-  		'id':'<?php if(isset($_GET["proyect"])){ echo $_GET['proyect'];}?>',
+  		'id':  '<?php if(isset($_GET["proyect"])){ echo $_GET['proyect'];}?>',
   		'pro': $('#ddl_articulos').val(),
   	}
      $.ajax({
       data:  {parametros:parametros},
-      url:   '../controlador/proyectosC.php?insertar_conte=true',
+      url:   '../controlador/ACTIVOS_FIJOS/proyectosC.php?insertar_conte=true',
       type:  'post',
       dataType: 'json',
       /*beforeSend: function () {   
@@ -60,14 +60,14 @@
   {
   	var parametros = 
   	{
-  		'id':'<?php if(isset($_GET["proyect"])){ echo $_GET['proyect'];}?>',
+  		'id':  '<?php if(isset($_GET["proyect"])){ echo $_GET['proyect'];}?>',
   		'pro': $('#txt_nom').val(),
   		'fec': $('#txt_fecha').val(),
   		'enc': $('#txt_encargado').val(),
   	}
      $.ajax({
       data:  {parametros:parametros},
-      url:   '../controlador/proyectosC.php?insertar=true',
+      url:   '../controlador/ACTIVOS_FIJOS/proyectosC.php?insertar=true',
       type:  'post',
       dataType: 'json',
       /*beforeSend: function () {   
@@ -102,7 +102,7 @@
 
     $.ajax({
       data:  {buscar:buscar},
-      url:   '../controlador/proyectosC.php?buscar=true',
+      url:   '../controlador/ACTIVOS_FIJOS/proyectosC.php?buscar=true',
       type:  'post',
       dataType: 'json',
       /*beforeSend: function () {   
@@ -127,7 +127,7 @@
 
     $.ajax({
       data:  {id:id},
-      url:   '../controlador/proyectosC.php?buscar_contenido=true',
+      url:   '../controlador/ACTIVOS_FIJOS/proyectosC.php?buscar_contenido=true',
       type:  'post',
       dataType: 'json',
       /*beforeSend: function () {   
@@ -165,7 +165,7 @@
   {
      $.ajax({
       data:  {id:id},
-      url:   '../controlador/proyectosC.php?eliminar_conte=true',
+      url:   '../controlador/ACTIVOS_FIJOS/proyectosC.php?eliminar_conte=true',
       type:  'post',
       dataType: 'json',
       /*beforeSend: function () {   

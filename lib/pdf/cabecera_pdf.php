@@ -1,5 +1,6 @@
 <?php
 
+
 if(!class_exists('PDF_MC_Table'))
 {
 	require('PDF_MC_Table.php');

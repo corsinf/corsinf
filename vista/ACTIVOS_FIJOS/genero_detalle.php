@@ -17,7 +17,7 @@ $( document ).ready(function() {
 
     $.ajax({
       data:  {id:id},
-      url:   '../../controlador/generoC.php?lista=true',
+      url:   '../../controlador/ACTIVOS_FIJOS/generoC.php?lista=true',
       type:  'post',
       dataType: 'json',
       /*beforeSend: function () {   
@@ -78,7 +78,7 @@ $( document ).ready(function() {
   {
      $.ajax({
       data:  {parametros:parametros},
-      url:   '../../controlador/generoC.php?insertar=true',
+      url:   '../../controlador/ACTIVOS_FIJOS/generoC.php?insertar=true',
       type:  'post',
       dataType: 'json',
       /*beforeSend: function () {   
@@ -125,7 +125,7 @@ $( document ).ready(function() {
   {
      $.ajax({
       data:  {id:id},
-      url:   '../../controlador/generoC.php?eliminar=true',
+      url:   '../../controlador/ACTIVOS_FIJOS/generoC.php?eliminar=true',
       type:  'post',
       dataType: 'json',
       /*beforeSend: function () {   
