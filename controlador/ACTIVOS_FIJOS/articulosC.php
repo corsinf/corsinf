@@ -225,7 +225,7 @@ class articulosC
 		$datos[0]['campo'] = 'id_plantilla';
 		$datos[0]['dato'] = $parametros['id'];
 
-		return $this->modelo->eliminar($datos, 'PLANTILLA_MASIVA');
+		return $this->modelo->eliminar($datos, 'ac_articulos');
 	}
 
 	function guardar_kit($parametros)
@@ -244,7 +244,7 @@ class articulosC
 		/*$datos[5]['campo'] = 'KIT';
 		$datos[5]['dato'] = '1';*/
 
-		return $this->modelo->insertar($datos, $tabla = 'PLANTILLA_MASIVA');
+		return $this->modelo->insertar($datos, $tabla = 'ac_articulos');
 	}
 
 	function guardar_it($parametros)
@@ -269,7 +269,7 @@ class articulosC
 		$where[0]['campo'] = 'id_plantilla';
 		$where[0]['dato'] = $parametros['id'];
 
-		return $this->modelo->update($tabla = 'PLANTILLA_MASIVA', $datos, $where);
+		return $this->modelo->update($tabla = 'ac_articulos', $datos, $where);
 	}
 
 	function lista_articulos_patrimoniales($parametros)
@@ -345,7 +345,7 @@ class articulosC
 						$datoss2[0]['dato'] = $rand;
 						$datoss2[1]['campo'] = 'SERIE';
 						$datoss2[1]['dato'] = $value['tag'];
-						$this->modelo->insertar($datoss2, 'IMPRIMIR_TAGS');
+						$this->modelo->insertar($datoss2, 'ac_imprimir_tags');
 					} else {
 						$rand = $this->generarCodigo(8);
 						$rand = "5002000100070028" . $rand;
@@ -358,14 +358,14 @@ class articulosC
 						$datoss2[0]['dato'] = $rand;
 						$datoss2[1]['campo'] = 'SERIE';
 						$datoss2[1]['dato'] = $value['tag'];
-						$this->modelo->insertar($datoss2, 'IMPRIMIR_TAGS');
+						$this->modelo->insertar($datoss2, 'ac_imprimir_tags');
 					}
 				} else {
 					$datoss2[0]['campo'] = 'RFID';
 					$datoss2[0]['dato'] = $value['RFID'];
 					$datoss2[1]['campo'] = 'SERIE';
 					$datoss2[1]['dato'] = $value['tag'];
-					$this->modelo->insertar($datoss2, 'IMPRIMIR_TAGS');
+					$this->modelo->insertar($datoss2, 'ac_imprimir_tags');
 				}
 			}
 
@@ -398,7 +398,7 @@ class articulosC
 					$datoss2[0]['dato'] = $rand;
 				}
 
-				$this->modelo->insertar($datoss2, 'IMPRIMIR_TAGS');
+				$this->modelo->insertar($datoss2, 'ac_imprimir_tags');
 			}
 			//print_r($datoss2);die();
 
@@ -462,7 +462,7 @@ class articulosC
 	function vaciar_tag()
 	{
 		$delete = array();
-		$datos = $this->modelo->eliminar($delete, 'IMPRIMIR_TAGS');
+		$datos = $this->modelo->eliminar($delete, 'ac_imprimir_tags');
 		return $datos;
 	}
 
@@ -769,17 +769,17 @@ class articulosC
 				$datoss2[1]['dato'] = $value['SERIE'];
 				$datoss2[2]['campo'] = 'DATO_QR';
 				$datoss2[2]['dato'] = $link . "detalle_activo.php?id=" . $value['SERIE'];
-				$this->modelo->insertar($datoss2, 'IMPRIMIR_TAGS');
+				$this->modelo->insertar($datoss2, 'ac_imprimir_tags');
 
 				$datoss3[0]['campo'] = 'Codigo';
 				$datoss3[0]['dato'] = $value['RFID'];
-				$this->modelo->insertar($datoss3, 'RFID_IMPRESOS');
+				$this->modelo->insertar($datoss3, 'ac_rfid_impresos');
 
 				$datoss4[0]['campo'] = 'TAG_UNIQUE';
 				$datoss4[0]['dato'] = $value['RFID'];
 				$datoss4[1]['campo'] = 'TAG_SERIE';
 				$datoss4[1]['dato'] = $value['SERIE'];
-				$this->modelo->insertar($datoss4, 'ASSET');
+				$this->modelo->insertar($datoss4, 'ac_asset');
 			}
 			$d = 1;
 			return $d;

@@ -100,7 +100,7 @@ class reportes
 			$datos[2]['campo'] = 'DETALLE';
 			$datos[2]['dato'] = $parametros['detalle'];
 
-			$ing = $this->modelo->add('REPORTE', $datos);
+			$ing = $this->modelo->add('ac_reporte', $datos);
 			// print_r($ing);die();
 			$reg = $this->modelo->buscar_reporte($parametros['tipo'], $parametros['nombre']);
 			return array('respuesta' => $ing, 'id' => $reg[0]['ID_REPORTE']);
@@ -317,7 +317,7 @@ class reportes
 			$where[0]['campo'] = 'ID_REPORTE';
 			$where[0]['dato'] = $parametros['id'];
 
-			return $this->modelo->update('REPORTE', $datosR, $where);
+			return $this->modelo->update('ac_reporte', $datosR, $where);
 		}
 	}
 

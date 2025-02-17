@@ -42,7 +42,7 @@ class cargar_datos_saludC
 	{
 		if ($file['file']['type'] == 'text/csv') {
 			$uploadfile_temporal = $file['file']['tmp_name'];
-			$ruta = '../TEMP/';
+			$ruta = '../../TEMP/';
 			//$tipo = explode('/', $file['file']['type']);
 			$nombre = '';
 			if ($op == 1) {

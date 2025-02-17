@@ -18,11 +18,11 @@ class prestamos_bienesM
 
 	function buscar_bien($query=false)
 	{
-		$sql = "select top 25 id_plantilla as 'id',A.TAG_SERIE,DESCRIPT,MODELO,SERIE FROM PLANTILLA_MASIVA PM LEFT JOIN ASSET A ON PM.ID_ASSET = A.ID_ASSET";
+		$sql = "select top 25 id_plantilla as 'id',A.TAG_SERIE,DESCRIPT,MODELO,SERIE FROM ac_articulos PM LEFT JOIN ac_asset A ON PM.ID_ASSET = A.ID_ASSET";
 		if($query)
 		{
-			$sql = "SELECT TOP 25 id_plantilla as 'id',A.TAG_SERIE,DESCRIPT,MODELO,SERIE FROM PLANTILLA_MASIVA PM 
-			LEFT JOIN ASSET A ON PM.ID_ASSET = A.ID_ASSET
+			$sql = "SELECT TOP 25 id_plantilla as 'id',A.TAG_SERIE,DESCRIPT,MODELO,SERIE FROM ac_articulos PM 
+			LEFT JOIN ac_asset A ON PM.ID_ASSET = A.ID_ASSET
 			WHERE DESCRIPT+''+MODELO+''+SERIE+''+A.TAG_SERIE like '%".$query."%'";
 		}
 		return $this->db->datos($sql);
@@ -30,7 +30,7 @@ class prestamos_bienesM
 
 	function datos_solicitud($id=false,$solicitante=false,$fecha=false,$fecha_salida=false,$fecha_regreso=false,$observacion=false,$estado=false)
 	{
-		$sql = "SELECT * FROM SOLICITUD_SALIDA WHERE 1=1 ";
+		$sql = "SELECT * FROM ac_solicitud_salida WHERE 1=1 ";
 		if($solicitante)
 		{
 			$sql.=" AND solicitante = '".$solicitante."' ";
@@ -70,8 +70,8 @@ class prestamos_bienesM
 
 	function datos_solicitud_all($id=false,$solicitante=false,$fecha=false,$fecha_salida=false,$fecha_regreso=false,$observacion=false,$estado=false,$paso=false)
 	{
-		$sql = "SELECT id_solicitud,PN.PERSON_NOM,fecha,fecha_salida,fecha_regreso,observacion,paso,fecha_update,SS.estado FROM SOLICITUD_SALIDA SS 
-		INNER JOIN PERSON_NO PN ON SS.solicitante = PN.PERSON_NO 
+		$sql = "SELECT id_solicitud,PN.PERSON_NOM,fecha,fecha_salida,fecha_regreso,observacion,paso,fecha_update,SS.estado FROM ac_solicitud_salida SS 
+		INNER JOIN th_personas PN ON SS.solicitante = PN.PERSON_NO 
 		WHERE 1=1 ";
 		if($solicitante)
 		{
@@ -111,8 +111,8 @@ class prestamos_bienesM
 
 	function lista_notificaciones($fecha)
 	{
-		$sql = "SELECT * FROM SOLICITUD_SALIDA SS 
-		INNER JOIN PERSON_NO PE ON SS.solicitante = PE.PERSON_NO 
+		$sql = "SELECT * FROM ac_solicitud_salida SS 
+		INNER JOIN th_personas PE ON SS.solicitante = PE.PERSON_NO 
 		WHERE fecha_regreso <= '".$fecha."' AND paso = 4 AND SS.estado = 0";
 		return $this->db->datos($sql);
 
@@ -122,10 +122,10 @@ class prestamos_bienesM
 	function lineas_solicitud($id)
 	{
 		$sql ="	SELECT * 
-				FROM SOLICITUD_SALIDA SS 
-				INNER JOIN LINEAS_SOLICITUD L ON SS.id_solicitud=L.id_solicitud 
-				INNER JOIN PLANTILLA_MASIVA PM ON L.id_activo = PM.id_plantilla 
-				INNER JOIN ASSET A ON PM.ID_ASSET = A.ID_ASSET 
+				FROM ac_solicitud_salida SS 
+				INNER JOIN ac_lineas_solicitud L ON SS.id_solicitud=L.id_solicitud 
+				INNER JOIN ac_articulos PM ON L.id_activo = PM.id_plantilla 
+				INNER JOIN ac_asset A ON PM.ID_ASSET = A.ID_ASSET 
 				WHERE SS.id_solicitud = '".$id."' ";
 
 	
@@ -143,14 +143,14 @@ class prestamos_bienesM
 
 	function lista_solicitudes_null()
 	{
-		$sql = "SELECT * FROM SOLICITUD_SALIDA WHERE estado is NULL";
+		$sql = "SELECT * FROM ac_solicitud_salida WHERE estado is NULL";
 		return $this->db->datos($sql);
 
 	}
 	function eliminar_solicitud($id)
 	{
-		$sql="DELETE FROM SOLICITUD_SALIDA WHERE id_solicitud = '".$id."' AND estado is null;";
-		$sql2="DELETE FROM LINEAS_SOLICITUD WHERE id_solicitud = '".$id."';";
+		$sql="DELETE FROM ac_solicitud_salida WHERE id_solicitud = '".$id."' AND estado is null;";
+		$sql2="DELETE FROM ac_lineas_solicitud WHERE id_solicitud = '".$id."';";
 
 		// print_r($sql);die();
 		$this->db->sql_string($sql);
@@ -159,15 +159,15 @@ class prestamos_bienesM
 
 	function delete_lineas($id)
 	{
-		$sql2="DELETE FROM LINEAS_SOLICITUD WHERE id_linea_salida = '".$id."';";
+		$sql2="DELETE FROM ac_lineas_solicitud WHERE id_linea_salida = '".$id."';";
 		// print_r($sql);die();
 		return $this->db->sql_string($sql2);
 	}
 
 	function lineas_salidas()
 	{
-		$sql="SELECT LS.* FROM LINEAS_SOLICITUD LS
-		INNER JOIN SOLICITUD_SALIDA SS ON LS.id_solicitud = SS.id_solicitud
+		$sql="SELECT LS.* FROM ac_lineas_solicitud LS
+		INNER JOIN ac_solicitud_salida SS ON LS.id_solicitud = SS.id_solicitud
 		WHERE salida_verificada = 1 AND entrada_verificada = 0";
 		return $this->db->datos($sql);
 		

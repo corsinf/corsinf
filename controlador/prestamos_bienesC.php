@@ -103,7 +103,7 @@ class prestamos_bienesC
 
 	function generar_solicitud($parametros)
 	{
-		$tabla = "SOLICITUD_SALIDA";
+		$tabla = "ac_solicitud_salida";
 		$datos[0]["campo"]= "estado";
 		$datos[0]["dato"]= "0";
 
@@ -162,7 +162,7 @@ class prestamos_bienesC
 			$datos[5]['dato'] = $parametros['destino'];
 			$datos[6]['campo'] = 'duracion';
 			$datos[6]['dato'] = $parametros['duracion'];
-			$this->modelo->add('SOLICITUD_SALIDA',$datos);
+			$this->modelo->add('ac_solicitud_salida',$datos);
 			$soli = $this->modelo->datos_solicitud($id=false,$parametros['solicitante'],$parametros['fecha'],$fecha_salida=false,$fecha_regreso=false,$observacion=false,$estado ='null');
 			$id = $soli[0]['id_solicitud']; 
 		}
@@ -171,7 +171,7 @@ class prestamos_bienesC
 			$datos2[0]['dato'] = $id;
 			$datos2[1]['campo'] = 'id_activo';
 			$datos2[1]['dato'] = $parametros['bien'];
-			$this->modelo->add('LINEAS_SOLICITUD',$datos2);
+			$this->modelo->add('ac_lineas_solicitud',$datos2);
 			return $id;
 	}
 

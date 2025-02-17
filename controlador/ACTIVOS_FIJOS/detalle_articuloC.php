@@ -204,11 +204,11 @@ class detalle_articuloC
 		$datos[1]['campo'] = 'HTML_INFO';
 		$datos[1]['dato'] = $parametros['tarjeta'];
 		if ($parametros['id_tarjeta'] == '') {
-			return $this->modelo->guardar($tabla = 'TARJETA_INFO', $datos);
+			return $this->modelo->guardar($tabla = 'ac_tarjeta_info', $datos);
 		} else {
 			$where[0]['campo'] = 'ID_PATRIMONIAL';
 			$where[0]['dato'] = $parametros['id_tarjeta'];
-			return $this->modelo->update_data('DATOS_PATRIMONIAL', $datos, $where);
+			return $this->modelo->update_data('ac_datos_patrimonial', $datos, $where);
 		}
 	}
 
@@ -248,7 +248,7 @@ class detalle_articuloC
 		$datos[2]['dato'] = $parametros['tagA'];
 		$where[0]['campo'] = 'ID_ASSET';
 		$where[0]['dato'] = $parametros['idAs'];
-		$respuesta = $this->modelo->update_data('ASSET', $datos, $where);
+		$respuesta = $this->modelo->update_data('ac_asset', $datos, $where);
 
 		$datos1[1]['campo'] = 'DESCRIPT';
 		$datos1[1]['dato'] = $parametros['desc'];
@@ -324,9 +324,38 @@ class detalle_articuloC
 		$where1[0]['campo'] = 'id_plantilla';
 		$where1[0]['dato'] = $parametros['idAr'];
 		$movimientos = $this->comparacion_movimiento($parametros['idAr'], $parametros);
-		$respuesta1 = $this->modelo->update_data('PLANTILLA_MASIVA', $datos1, $where1);
+		$respuesta1 = $this->modelo->update_data('ac_articulos', $datos1, $where1);
 		if ($respuesta == 1 and $respuesta1 == 1) {
-			$texto = $parametros['company'] . ';' . $parametros['asse'] . ';0;' . $parametros['desc'] . ';' . $parametros['des2'] . ';' . $parametros['mode'] . ';' . $parametros['seri'] . ';' . $parametros['rfid'] . ';' . $parametros['fech'] . ';' . $parametros['cant'] . ';' . $parametros['uni'] . ';' . $loc[0]['EMPLAZAMIENTO'] . ';' . $loc[0]['DENOMINACION'] . ';' . $cus[0]['PERSON_NO'] . ';' . $cus[0]['PERSON_NOM'] . ';' . $marca[0]['CODIGO'] . ';' . $est[0]['CODIGO'] . ';' . $genero[0]['CODIGO'] . ';' . $color[0]['CODIGO'] . ';' . $pro[0]['pro'] . ';' . $parametros['assetno'] . ';' . $parametros['act'] . ';' . $parametros['compra'] . ';' . $parametros['valor'] . ';' . $parametros['obse'] . ';' . $parametros['cara'] . ';fecha_descapitalizacion;' . $parametros['bajas'] . ';';
+			$texto =
+				(isset($parametros['company']) ? $parametros['company'] : '') . ';' .
+				(isset($parametros['asse']) ? $parametros['asse'] : '') . ';0;' .
+				(isset($parametros['desc']) ? $parametros['desc'] : '') . ';' .
+				(isset($parametros['des2']) ? $parametros['des2'] : '') . ';' .
+				(isset($parametros['mode']) ? $parametros['mode'] : '') . ';' .
+				(isset($parametros['seri']) ? $parametros['seri'] : '') . ';' .
+				(isset($parametros['rfid']) ? $parametros['rfid'] : '') . ';' .
+				(isset($parametros['fech']) ? $parametros['fech'] : '') . ';' .
+				(isset($parametros['cant']) ? $parametros['cant'] : '') . ';' .
+				(isset($parametros['uni']) ? $parametros['uni'] : '') . ';' .
+				(isset($loc[0]['EMPLAZAMIENTO']) ? $loc[0]['EMPLAZAMIENTO'] : '') . ';' .
+				(isset($loc[0]['DENOMINACION']) ? $loc[0]['DENOMINACION'] : '') . ';' .
+				(isset($cus[0]['PERSON_NO']) ? $cus[0]['PERSON_NO'] : '') . ';' .
+				(isset($cus[0]['PERSON_NOM']) ? $cus[0]['PERSON_NOM'] : '') . ';' .
+				(isset($marca[0]['CODIGO']) ? $marca[0]['CODIGO'] : '') . ';' .
+				(isset($est[0]['CODIGO']) ? $est[0]['CODIGO'] : '') . ';' .
+				(isset($genero[0]['CODIGO']) ? $genero[0]['CODIGO'] : '') . ';' .
+				(isset($color[0]['CODIGO']) ? $color[0]['CODIGO'] : '') . ';' .
+				(isset($pro[0]['pro']) ? $pro[0]['pro'] : '') . ';' .
+				(isset($parametros['assetno']) ? $parametros['assetno'] : '') . ';' .
+				(isset($parametros['act']) ? $parametros['act'] : '') . ';' .
+				(isset($parametros['compra']) ? $parametros['compra'] : '') . ';' .
+				(isset($parametros['valor']) ? $parametros['valor'] : '') . ';' .
+				(isset($parametros['obse']) ? $parametros['obse'] : '') . ';' .
+				(isset($parametros['cara']) ? $parametros['cara'] : '') . ';' .
+				'fecha_descapitalizacion;' .
+				(isset($parametros['bajas']) ? $parametros['bajas'] : '') . ';';
+
+			//print_r($texto);
 
 			if ($movimientos != '') {
 				$this->cod_globales->para_ftp('plantilla_masiva', $texto);
@@ -366,7 +395,7 @@ class detalle_articuloC
 			$datos[0]['ID_ASSET'] = $parametros['idAs'];
 			$where[0]['campo'] = 'ID_ASSET';
 			$where[0]['dato'] = $parametros['idAs'];
-			$respuesta = $this->modelo->update_data('ASSET', $datos, $where);
+			$respuesta = $this->modelo->update_data('ac_asset', $datos, $where);
 		} else {
 			$exis = $this->modelo->buscar_asset($tag = $parametros['asse'], $ant = false, $rfid = false);
 			if (count($exis)) {
@@ -377,7 +406,7 @@ class detalle_articuloC
 				return -3;
 			}
 
-			$respuesta = $this->modelo->guardar('ASSET', $datos);
+			$respuesta = $this->modelo->guardar('ac_asset', $datos);
 			$datos = $this->modelo->buscar_asset($tag = $parametros['asse'], $ant = $parametros['tagA'], $rfid = false);
 			// print_r($datos);die();
 		}
@@ -455,9 +484,9 @@ class detalle_articuloC
 			$this->comparacion_movimiento($parametros['idAr'], $parametros);
 			$where1[0]['campo'] = 'id_plantilla';
 			$where1[0]['dato'] = $parametros['idAr'];
-			$respuesta1 = $this->modelo->update_data('PLANTILLA_MASIVA', $datos1, $where1);
+			$respuesta1 = $this->modelo->update_data('ac_articulos', $datos1, $where1);
 		} else {
-			$respuesta1 = $this->modelo->guardar('PLANTILLA_MASIVA', $datos1);
+			$respuesta1 = $this->modelo->guardar('ac_articulos', $datos1);
 			$movimientos = 'nuevo ingreso';
 		}
 		if ($respuesta == 1 and $respuesta1 == 1) {
@@ -779,11 +808,11 @@ class detalle_articuloC
 		$datos[27]['campo'] = 'ARTICULO';
 		$datos[27]['dato'] = $parametros['txt_id'];  // => ASDASDAS
 		if ($parametros['txt_id_info'] == '') {
-			return $this->modelo->guardar($tabla = 'DATOS_PATRIMONIAL', $datos);
+			return $this->modelo->guardar($tabla = 'ac_datos_patrimonial', $datos);
 		} else {
 			$where[0]['campo'] = 'ID_PATRIMONIAL';
 			$where[0]['dato'] = $parametros['txt_id_info'];
-			return $this->modelo->update($tabla = 'DATOS_PATRIMONIAL', $datos, $where);
+			return $this->modelo->update($tabla = 'ac_datos_patrimonial', $datos, $where);
 		}
 	}
 }

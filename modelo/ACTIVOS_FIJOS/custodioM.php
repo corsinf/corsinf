@@ -19,7 +19,7 @@ class custodioM
 
 	function lista_custodio($query = false, $ini = 0, $fin = 25)
 	{
-		$sql = "SELECT ID_PERSON,PERSON_NO,PERSON_NOM,PERSON_CI,PERSON_CORREO,PUESTO,UNIDAD_ORG,DIRECCION,TELEFONO,FOTO FROM PERSON_NO WHERE ESTADO='A' ";
+		$sql = "SELECT ID_PERSON,PERSON_NO,PERSON_NOM,PERSON_CI,PERSON_CORREO,PUESTO,UNIDAD_ORG,DIRECCION,TELEFONO,FOTO FROM th_personas WHERE ESTADO='A' ";
 		if ($query) {
 			$sql .= " AND PERSON_NOM+''+PERSON_NO LIKE '%" . $query . "%' ";
 		}
@@ -31,7 +31,7 @@ class custodioM
 
 	function lista_custodio_count($query = false)
 	{
-		$sql = "SELECT count (ID_PERSON) as 'cant' FROM PERSON_NO WHERE 1=1";
+		$sql = "SELECT count (ID_PERSON) as 'cant' FROM th_personas WHERE 1=1";
 		if ($query) {
 			$sql .= " AND PERSON_NOM LIKE '%" . $query . "%';";
 		}
@@ -41,7 +41,7 @@ class custodioM
 
 	function buscar_custodio($buscar)
 	{
-		$sql = "SELECT ID_PERSON,PERSON_NO,PERSON_NOM,PERSON_CI,PERSON_CORREO,PUESTO,UNIDAD_ORG,DIRECCION,TELEFONO,FOTO FROM PERSON_NO WHERE ESTADO='A' and ID_PERSON ='" . $buscar . "'";
+		$sql = "SELECT ID_PERSON,PERSON_NO,PERSON_NOM,PERSON_CI,PERSON_CORREO,PUESTO,UNIDAD_ORG,DIRECCION,TELEFONO,FOTO FROM th_personas WHERE ESTADO='A' and ID_PERSON ='" . $buscar . "'";
 		// print_r($sql);die();		
 		$datos = $this->db->datos($sql);
 		return $datos;
@@ -49,7 +49,7 @@ class custodioM
 
 	function buscar_custodio_todo($id = false, $person_no = false, $person_nom = false)
 	{
-		$sql = "SELECT ID_PERSON,PERSON_NO,PERSON_NOM,PERSON_CI,PERSON_CORREO,PUESTO,UNIDAD_ORG,ESTADO FROM PERSON_NO WHERE 1=1 ";
+		$sql = "SELECT ID_PERSON,PERSON_NO,PERSON_NOM,PERSON_CI,PERSON_CORREO,PUESTO,UNIDAD_ORG,ESTADO FROM th_personas WHERE 1=1 ";
 		if ($id) {
 			$sql .= " and ID_PERSON = '" . $id . "'";
 		}
@@ -63,7 +63,7 @@ class custodioM
 
 	function buscar_custodio_($buscar)
 	{
-		$sql = "SELECT ID_PERSON,PERSON_NOM,PERSON_CI,PERSON_CORREO,PUESTO,UNIDAD_ORG FROM PERSON_NO WHERE PERSON_NO LIKE '" . $buscar . "'";
+		$sql = "SELECT ID_PERSON,PERSON_NOM,PERSON_CI,PERSON_CORREO,PUESTO,UNIDAD_ORG FROM th_personas WHERE PERSON_NO LIKE '" . $buscar . "'";
 		// print_r($sql);die();		
 		$datos = $this->db->datos($sql);
 		return $datos;
@@ -71,23 +71,23 @@ class custodioM
 
 	function insertar($datos)
 	{
-		$rest = $this->db->inserts('PERSON_NO', $datos);
+		$rest = $this->db->inserts('th_personas', $datos);
 		return $rest;
 	}
 
 	function editar($datos, $where)
 	{
-		$rest = $this->db->update('PERSON_NO', $datos, $where);
+		$rest = $this->db->update('th_personas', $datos, $where);
 		return $rest;
 	}
 
 	function eliminar($datos)
 	{
-		$sql = "UPDATE PERSON_NO SET ESTADO='I' WHERE " . $datos[0]['campo'] . "='" . $datos[0]['dato'] . "';";
+		$sql = "UPDATE th_personas SET ESTADO='I' WHERE " . $datos[0]['campo'] . "='" . $datos[0]['dato'] . "';";
 		$datos = $this->db->sql_string($sql);
 		return $datos;
 
-		//$rest = $this->db->delete('PERSON_NO',$datos);
+		//$rest = $this->db->delete('th_personas',$datos);
 		//return $rest;	   
 	}
 }

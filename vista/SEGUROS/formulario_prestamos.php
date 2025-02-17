@@ -34,7 +34,7 @@ function autocompletar_custodio(){
         placeholder: 'Seleccione una solicitante',
         width:'100%',
         ajax: {
-          url: '../controlador/custodioC.php?lista_acta=true',
+          url: '../controlador/ACTIVOS_FIJOS/custodioC.php?lista_acta=true',
           dataType: 'json',
           delay: 250,
           processResults: function (data) {

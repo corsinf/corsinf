@@ -137,7 +137,8 @@
       success: function(response) {
         console.log(response.datos);
         $.each(response.datos, function(i, item) {
-          lineas += '<tr><td>' + item.id + '</td><td><a href="detalle_articulo.php?id=' + item.id + '">' + item.tag + '</a></td><td>' + item.nom + '</td><td>' + item.modelo + '</td><td>' + item.serie + '</td><td>' + item.localizacion + '</td><td>' + item.custodio + '</td><td>' + item.fecha_in + '</td><td><button class="btn-outline-secondary" onclick="tag_im(\'' + item.tag + '\')"><li class="bx bx-purchase-tag"></li></button></td></tr>';
+          //lineas += '<tr><td>' + item.id + '</td><td><a href="ACTIVOS_FIJOS/detalle_articulo.php?id=' + item.id + '">' + item.tag + '</a></td><td>' + item.nom + '</td><td>' + item.modelo + '</td><td>' + item.serie + '</td><td>' + item.localizacion + '</td><td>' + item.custodio + '</td><td>' + item.fecha_in + '</td><td><button class="btn-outline-secondary" onclick="tag_im(\'' + item.tag + '\')"><li class="bx bx-purchase-tag"></li></button></td></tr>';
+          lineas += '<tr><td>' + item.id + '</td><td><a href="../vista/inicio.php?acc=detalle_articulo&id=' + item.id + '">' + item.tag + '</a></td><td>' + item.nom + '</td><td>' + item.modelo + '</td><td>' + item.serie + '</td><td>' + item.localizacion + '</td><td>' + item.custodio + '</td><td>' + item.fecha_in + '</td><td><button class="btn-outline-secondary" onclick="tag_im(\'' + item.tag + '\')"><li class="bx bx-purchase-tag"></li></button></td></tr>';
           // console.log(item);
 
         });

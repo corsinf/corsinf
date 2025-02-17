@@ -137,7 +137,7 @@ class custodioC
 
 	function insertar_editar($parametros)
 	{
-
+		$movimiento = '';
 		$datos[0]['campo'] = 'PERSON_NOM';
 		$datos[0]['dato'] = $parametros['nombre'];
 		$datos[1]['campo'] = 'PERSON_CI';
@@ -154,6 +154,10 @@ class custodioC
 		$datos[6]['dato'] = $parametros['tel'];
 		$datos[7]['campo'] = 'DIRECCION';
 		$datos[7]['dato'] = $parametros['dir'];
+		
+		//print_r($this->modelo->buscar_custodio_todo('', 'PERSON_NO')); die;
+		//print_r($parametros); die;
+
 		if ($parametros['id'] == '') {
 			if (count($this->modelo->buscar_custodio_($datos[5]['dato'])) == 0) {
 				$datos = $this->modelo->insertar($datos);
@@ -167,6 +171,7 @@ class custodioC
 			$movimiento = $this->compara_datos($parametros);
 			$datos = $this->modelo->editar($datos, $where);
 		}
+		
 		if ($movimiento != '' && $datos == 1) {
 			$texto = $parametros['per'] . ';' . $parametros['ci'] . ';' . $parametros['nombre'] . ';' . $parametros['puesto'] . ';' . $parametros['unidad'] . ';' . $parametros['email'];
 			$this->cod_global->para_ftp('custodio', $texto);

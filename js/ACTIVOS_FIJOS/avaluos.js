@@ -23,7 +23,7 @@ function insertarDetalleAvaluo(parametros) {
         data: {
             parametros: parametros
         },
-        url: '../controlador/avaluo_articuloC.php?insertar=true',
+        url: '../controlador/ACTIVOS_FIJOS/avaluo_articuloC.php?insertar=true',
         type: 'post',
         dataType: 'json',
 
@@ -65,7 +65,7 @@ function eliminarAvaluo(id_item) {
         data: {
             id: id_item
         },
-        url: '../controlador/avaluo_articuloC.php?eliminar=true',
+        url: '../controlador/ACTIVOS_FIJOS/avaluo_articuloC.php?eliminar=true',
         type: 'post',
         dataType: 'json',
         success: function (response) {
@@ -76,12 +76,12 @@ function eliminarAvaluo(id_item) {
 }
 
 function cargarAvaluo(id) {
-    console.log('aqui estoy');
+    //console.log('aqui estoy');
     $.ajax({
         data: {
             id: id
         },
-        url: '../controlador/avaluo_articuloC.php?listarTabla=true',
+        url: '../controlador/ACTIVOS_FIJOS/avaluo_articuloC.php?listarTabla=true',
         type: 'post',
         dataType: 'json',
         success: function (response) {

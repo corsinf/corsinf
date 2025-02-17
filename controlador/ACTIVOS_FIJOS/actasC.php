@@ -199,7 +199,7 @@ class actasC
 				$datos[2]['dato']  = 0;
 				$datos[3]['campo'] = 'usuario';
 				$datos[3]['dato']  = $usuario;
-				$res = $this->modelo->add('ARTICULOS_ACTAS', $datos);
+				$res = $this->modelo->add('ac_articulos_actas', $datos);
 			} else {
 				$respuesta =  -2;
 			}
@@ -222,7 +222,7 @@ class actasC
 			$datos[2]['dato']  = 0;
 			$datos[3]['campo'] = 'usuario';
 			$datos[3]['dato']  = $usuario;
-			$res = $this->modelo->add('ARTICULOS_ACTAS', $datos);
+			$res = $this->modelo->add('ac_articulos_actas', $datos);
 			return $res;
 		} else {
 			return -2;
@@ -246,7 +246,7 @@ class actasC
 			$whereup[0]['campo'] = 'id_plantilla';
 			$whereup[0]['dato'] = $art[0]['id_plantilla'];
 
-			$r = $this->modelo->update('PLANTILLA_MASIVA', $datosUP, $whereup);
+			$r = $this->modelo->update('ac_articulos', $datosUP, $whereup);
 			if ($r != 1) {
 				$resp = -1;
 			} else {
@@ -264,7 +264,7 @@ class actasC
 				$datosM[5]['dato'] = $art[0]['id_plantilla'];
 				$datosM[6]['campo'] = 'seccion';
 				$datosM[6]['dato'] = 'ACTAS';
-				$this->modelo->add('MOVIMIENTO', $datosM);
+				$this->modelo->add('ac_movimiento', $datosM);
 			}
 		}
 
@@ -295,7 +295,7 @@ class actasC
 			$whereup[0]['campo'] = 'id_plantilla';
 			$whereup[0]['dato'] = $art[0]['id_plantilla'];
 
-			$r = $this->modelo->update('PLANTILLA_MASIVA', $datosUP, $whereup);
+			$r = $this->modelo->update('ac_articulos', $datosUP, $whereup);
 			if ($r != 1) {
 				$resp = -1;
 			} else {
@@ -317,7 +317,7 @@ class actasC
 				$datosM[7]['dato'] = $art[0]['id_plantilla'];
 				$datosM[8]['campo'] = 'seccion';
 				$datosM[8]['dato'] = 'ACTAS';
-				$this->modelo->add('MOVIMIENTO', $datosM);
+				$this->modelo->add('ac_movimiento', $datosM);
 
 				$datosM[0]['campo'] = 'obs_movimiento';
 				$datosM[0]['dato'] = 'Cambio de emplazamiento ' . $des;
@@ -337,7 +337,7 @@ class actasC
 				$datosM[7]['dato'] = $art[0]['id_plantilla'];
 				$datosM[8]['campo'] = 'seccion';
 				$datosM[8]['dato'] = 'ACTAS';
-				$this->modelo->add('MOVIMIENTO', $datosM);
+				$this->modelo->add('ac_movimiento', $datosM);
 			}
 		}
 
@@ -366,7 +366,7 @@ class actasC
 			$whereup[0]['campo'] = 'id_plantilla';
 			$whereup[0]['dato'] = $art[0]['id_plantilla'];
 
-			$r = $this->modelo->update('PLANTILLA_MASIVA', $datosUP, $whereup);
+			$r = $this->modelo->update('ac_articulos', $datosUP, $whereup);
 			if ($r != 1) {
 				$resp = -1;
 			} else {
@@ -388,7 +388,7 @@ class actasC
 				$datosM[7]['dato'] = $art[0]['id_plantilla'];
 				$datosM[8]['campo'] = 'seccion';
 				$datosM[8]['dato'] = 'ACTAS';
-				$this->modelo->add('MOVIMIENTO', $datosM);
+				$this->modelo->add('ac_movimiento', $datosM);
 
 				$datosM[0]['campo'] = 'obs_movimiento';
 				$datosM[0]['dato'] = 'Cambio de emplazamiento entrada/salida';
@@ -408,7 +408,7 @@ class actasC
 				$datosM[7]['dato'] = $art[0]['id_plantilla'];
 				$datosM[8]['campo'] = 'seccion';
 				$datosM[8]['dato'] = 'ACTAS';
-				$this->modelo->add('MOVIMIENTO', $datosM);
+				$this->modelo->add('ac_movimiento', $datosM);
 			}
 		}
 
@@ -477,7 +477,7 @@ class actasC
 				$datos[2]['dato']  = 0;
 				$datos[3]['campo'] = 'usuario';
 				$datos[3]['dato']  = $usuario;
-				$res = $this->modelo->add('ARTICULOS_ACTAS', $datos);
+				$res = $this->modelo->add('ac_articulos_actas', $datos);
 			} else {
 				$respuesta = -2;
 				// return -2;

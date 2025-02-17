@@ -30,11 +30,11 @@ class salida_stockM
 
 	function eliminar($table, $datos)
 	{
-		$sql = "UPDATE MARCAS SET ESTADO='I' WHERE " . $datos[0]['campo'] . "='" . $datos[0]['dato'] . "';";
+		$sql = "UPDATE ac_marcas SET ESTADO='I' WHERE " . $datos[0]['campo'] . "='" . $datos[0]['dato'] . "';";
 		$datos = $this->db->sql_string($sql);
 		return $datos;
 
-		//$rest = $this->db->delete('MARCAS',$datos);
+		//$rest = $this->db->delete('ac_marcas',$datos);
 		//return $rest;
 	}
 

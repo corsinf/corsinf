@@ -21,7 +21,7 @@ class herramientas_gpaM
 					observacion,
 					usu_id,
 					fecha_creacion
-				FROM AVALUOS_PLANILLA_MASIVA
+				FROM ac_avaluos_articulos
 				WHERE 1 = 1 ";
 
 		if ($id) {
@@ -35,19 +35,19 @@ class herramientas_gpaM
 
 	function insertar($datos)
 	{
-		$rest = $this->db->inserts('AVALUOS_PLANILLA_MASIVA', $datos);
+		$rest = $this->db->inserts('ac_avaluos_articulos', $datos);
 		return $rest;
 	}
 
 	function editar($datos, $where)
 	{
-		$rest = $this->db->update('AVALUOS_PLANILLA_MASIVA', $datos, $where);
+		$rest = $this->db->update('ac_avaluos_articulos', $datos, $where);
 		return $rest;
 	}
 
 	function eliminar($id)
 	{
-		$sql = "DELETE FROM AVALUOS_PLANILLA_MASIVA WHERE id_avaluo = $id";
+		$sql = "DELETE FROM ac_avaluos_articulos WHERE id_avaluo = $id";
 		$datos = $this->db->sql_string($sql);
 		return $datos;
 	}

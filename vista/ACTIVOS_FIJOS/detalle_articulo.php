@@ -726,7 +726,7 @@
       success: function(response) {
         $.each(response, function(i, item) {
           console.log(item);
-          table += "<tr><td>" + item.ob + "</td><td style='white-space: nowrap;'>" + formatoDate(item.fe) + "</td><td>" + item.codigo_ant + "</td><td>" + item.dante + "</td><td>" + item.codigo_nue + "</td><td>" + item.dnuevo + "</td><td>" + item.responsable + "</td></tr>"
+          table += "<tr><td>" + item.ob + "</td><td style='white-space: nowrap;'>" + (item.fe) + "</td><td>" + item.codigo_ant + "</td><td>" + item.dante + "</td><td>" + item.codigo_nue + "</td><td>" + item.dnuevo + "</td><td>" + item.responsable + "</td></tr>"
         });
         $('#table_contenido').html(table);
 

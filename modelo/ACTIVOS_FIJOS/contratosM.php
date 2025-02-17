@@ -30,7 +30,7 @@ class contratosM
 	function lista_cobertura($cobertura = false, $siniestros = false, $query = false, $id = false, $idSini = false)
 	{
 		$sql = "SELECT id_riesgos as 'id',nombre_riesgo as 'nombre',cobertura as 'detalle',subriesgo as 'cobertura'  
-				FROM RIESGOS 
+				FROM ac_riesgos 
 				WHERE 1=1";
 		if ($cobertura) {
 			$sql .= " AND subriesgo is NULL";
@@ -100,15 +100,15 @@ class contratosM
 
 	function lista_articulos($query = false)
 	{
-		$sql = "SELECT top(100) id_plantilla,COMPANYCODE,A.TAG_SERIE,P.DESCRIPT,DESCRIPT2,MODELO,SERIE,EMPLAZAMIENTO,L.DENOMINACION,PE.PERSON_NO,PE.PERSON_NOM,M.DESCRIPCION as 'marca',E.DESCRIPCION as 'estado',G.DESCRIPCION as 'genero',C.DESCRIPCION as 'color',FECHA_INV_DATE,ASSETSUPNO,ASSETSUPNO,TAG_ANT,QUANTITY,BASE_UOM,ORIG_ASSET,ORIG_ACQ_YR,ORIG_VALUE,CARACTERISTICA,PROYECTO.programa_financiacion as 'criterio',TAG_UNIQUE,SUBNUMBER,OBSERVACION,IMAGEN  FROM PLANTILLA_MASIVA P
-			LEFT JOIN ASSET A ON P.ID_ASSET = A.ID_ASSET
-			LEFT JOIN LOCATION L ON P.LOCATION = L.ID_LOCATION
-			LEFT JOIN PERSON_NO PE ON P.PERSON_NO = PE.ID_PERSON
-			LEFT JOIN MARCAS M ON P.EVALGROUP1 = M.ID_MARCA
-			LEFT JOIN ESTADO E ON P.EVALGROUP2 = E.ID_ESTADO
-			LEFT JOIN GENERO G ON P.EVALGROUP3 = G.ID_GENERO
-			LEFT JOIN COLORES C ON P.EVALGROUP4 = C.ID_COLORES
-			LEFT JOIN PROYECTO ON P.EVALGROUP5 = PROYECTO.ID_PROYECTO 
+		$sql = "SELECT top(100) id_plantilla,COMPANYCODE,A.TAG_SERIE,P.DESCRIPT,DESCRIPT2,MODELO,SERIE,EMPLAZAMIENTO,L.DENOMINACION,PE.PERSON_NO,PE.PERSON_NOM,M.DESCRIPCION as 'marca',E.DESCRIPCION as 'estado',G.DESCRIPCION as 'genero',C.DESCRIPCION as 'color',FECHA_INV_DATE,ASSETSUPNO,ASSETSUPNO,TAG_ANT,QUANTITY,BASE_UOM,ORIG_ASSET,ORIG_ACQ_YR,ORIG_VALUE,CARACTERISTICA,ac_proyecto.programa_financiacion as 'criterio',TAG_UNIQUE,SUBNUMBER,OBSERVACION,IMAGEN  FROM ac_articulos P
+			LEFT JOIN ac_asset A ON P.ID_ASSET = A.ID_ASSET
+			LEFT JOIN ac_localizacion L ON P.LOCATION = L.ID_LOCATION
+			LEFT JOIN th_personas PE ON P.PERSON_NO = PE.ID_PERSON
+			LEFT JOIN ac_marcas M ON P.EVALGROUP1 = M.ID_MARCA
+			LEFT JOIN ac_estado E ON P.EVALGROUP2 = E.ID_ESTADO
+			LEFT JOIN ac_genero G ON P.EVALGROUP3 = G.ID_GENERO
+			LEFT JOIN ac_colores C ON P.EVALGROUP4 = C.ID_COLORES
+			LEFT JOIN ac_proyecto ON P.EVALGROUP5 = ac_proyecto.ID_PROYECTO 
 			WHERE 1 = 1 ";
 		if ($query) {
 			$sql .= "  AND A.TAG_SERIE +' '+DESCRIPT LIKE '%" . $query . "%'";
@@ -135,17 +135,17 @@ class contratosM
 
 	function lista_articulos_seguro($contrato = false, $query = false, $id_art = false)
 	{
-		$sql = "SELECT id_arti_asegurados as 'id',id_plantilla,COMPANYCODE,A.TAG_SERIE,P.DESCRIPT,DESCRIPT2,MODELO,SERIE,EMPLAZAMIENTO,L.DENOMINACION,PE.PERSON_NO,PE.PERSON_NOM,M.DESCRIPCION as 'marca',E.DESCRIPCION as 'estado',G.DESCRIPCION as 'genero',C.DESCRIPCION as 'color',FECHA_INV_DATE,ASSETSUPNO,ASSETSUPNO,TAG_ANT,QUANTITY,BASE_UOM,ORIG_ASSET,ORIG_ACQ_YR,ORIG_VALUE,CARACTERISTICA,PROYECTO.programa_financiacion as 'criterio',TAG_UNIQUE,SUBNUMBER,OBSERVACION,IMAGEN  
+		$sql = "SELECT id_arti_asegurados as 'id',id_plantilla,COMPANYCODE,A.TAG_SERIE,P.DESCRIPT,DESCRIPT2,MODELO,SERIE,EMPLAZAMIENTO,L.DENOMINACION,PE.PERSON_NO,PE.PERSON_NOM,M.DESCRIPCION as 'marca',E.DESCRIPCION as 'estado',G.DESCRIPCION as 'genero',C.DESCRIPCION as 'color',FECHA_INV_DATE,ASSETSUPNO,ASSETSUPNO,TAG_ANT,QUANTITY,BASE_UOM,ORIG_ASSET,ORIG_ACQ_YR,ORIG_VALUE,CARACTERISTICA,ac_proyecto.programa_financiacion as 'criterio',TAG_UNIQUE,SUBNUMBER,OBSERVACION,IMAGEN  
 			FROM ARTICULOS_ASEGURADOS ASE
-			LEFT JOIN PLANTILLA_MASIVA P ON ASE.id_articulos = P.id_plantilla
-			LEFT JOIN ASSET A ON P.ID_ASSET = A.ID_ASSET
-			LEFT JOIN LOCATION L ON P.LOCATION = L.ID_LOCATION
-			LEFT JOIN PERSON_NO PE ON P.PERSON_NO = PE.ID_PERSON
-			LEFT JOIN MARCAS M ON P.EVALGROUP1 = M.ID_MARCA
-			LEFT JOIN ESTADO E ON P.EVALGROUP2 = E.ID_ESTADO
-			LEFT JOIN GENERO G ON P.EVALGROUP3 = G.ID_GENERO
-			LEFT JOIN COLORES C ON P.EVALGROUP4 = C.ID_COLORES
-			LEFT JOIN PROYECTO ON P.EVALGROUP5 = PROYECTO.ID_PROYECTO 
+			LEFT JOIN ac_articulos P ON ASE.id_articulos = P.id_plantilla
+			LEFT JOIN ac_asset A ON P.ID_ASSET = A.ID_ASSET
+			LEFT JOIN ac_localizacion L ON P.LOCATION = L.ID_LOCATION
+			LEFT JOIN th_personas PE ON P.PERSON_NO = PE.ID_PERSON
+			LEFT JOIN ac_marcas M ON P.EVALGROUP1 = M.ID_MARCA
+			LEFT JOIN ac_estado E ON P.EVALGROUP2 = E.ID_ESTADO
+			LEFT JOIN ac_genero G ON P.EVALGROUP3 = G.ID_GENERO
+			LEFT JOIN ac_colores C ON P.EVALGROUP4 = C.ID_COLORES
+			LEFT JOIN ac_proyecto ON P.EVALGROUP5 = ac_proyecto.ID_PROYECTO 
 			WHERE 1 = 1 ";
 		if ($contrato) {
 			$sql .= " AND id_seguro=" . $contrato;
@@ -210,7 +210,7 @@ class contratosM
 		$sql = "SELECT id_contratos as 'id',proveedor,nombre,desde,hasta,prima,suma_asegurada,nombre_riesgo,siniestro,estado 
 		FROM SEGUROS S
 		INNER JOIN PROVEEDOR P ON S.proveedor = P.id_proveedor
-		INNER JOIN  RIESGOS C ON S.cobertura = C.id_riesgos
+		INNER JOIN  ac_riesgos C ON S.cobertura = C.id_riesgos
 		WHERE 1=1 ";
 		if ($provedor) {
 			$sql .= " AND P.nombre like '%" . $provedor . "%'";
@@ -238,7 +238,7 @@ class contratosM
 		$sql = "SELECT * 
 			FROM ARTICULOS_ASEGURADOS ASE
 			INNER JOIN  SEGUROS S ON ASE.id_seguro = S.id_contratos
-			INNER JOIN RIESGOS R ON S.cobertura = R.id_riesgos
+			INNER JOIN ac_riesgos R ON S.cobertura = R.id_riesgos
 			INNER JOIN PROVEEDOR P ON S.proveedor = P.id_proveedor
 			WHERE 1=1 ";
 		if ($id) {
@@ -262,8 +262,8 @@ class contratosM
 	function historial_siniestro($articulo = false, $id = false)
 	{
 		$sql = "SELECT id_deterioro,articulo,detalle,fecha,D.estado,E.DESCRIPCION,encargado,fecha_siniestro,fecha_alertado,respuesta,estado_proceso,evaluacion
-		FROM DETERIORO D
-		INNER JOIN ESTADO E ON D.estado = E.ID_ESTADO 
+		FROM ac_deterioro D
+		INNER JOIN ac_estado E ON D.estado = E.ID_ESTADO 
 		WHERE 1=1 ";
 		if ($articulo) {
 			$sql .= " AND articulo = '" . $articulo . "' ";

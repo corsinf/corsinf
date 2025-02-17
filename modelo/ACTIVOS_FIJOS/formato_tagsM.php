@@ -18,7 +18,7 @@ class formato_tagsM
 
 	function lista_formato_tags($id = '')
 	{
-		$sql = "SELECT * FROM formato_tags ";
+		$sql = "SELECT * FROM ac_formato_tags ";
 		if ($id != '') {
 			$sql .= ' WHERE id_formato_eti=' . $id;
 		}
@@ -35,20 +35,20 @@ class formato_tagsM
 
 	function insertar($datos)
 	{
-		$rest = $this->db->inserts('formato_tags', $datos);
+		$rest = $this->db->inserts('ac_formato_tags', $datos);
 		return $rest;
 	}
 
 	function editar($datos, $where)
 	{
 
-		$rest = $this->db->update('formato_tags', $datos, $where);
+		$rest = $this->db->update('ac_formato_tags', $datos, $where);
 		return $rest;
 	}
 	
 	function eliminar($datos)
 	{
-		$rest = $this->db->delete('formato_tags', $datos);
+		$rest = $this->db->delete('ac_formato_tags', $datos);
 		return $rest;
 	}
 }
