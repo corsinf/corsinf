@@ -13,6 +13,10 @@ if (isset($_GET['listar'])) {
     echo json_encode($controlador->listar());
 }
 
+if (isset($_GET['listar_estado'])) {
+    echo json_encode($controlador->listar_estado());
+}
+
 if (isset($_GET['insertar_administrador'])) {
     echo json_encode($controlador->insertar_administrador($_POST['parametros']));
 }
@@ -58,6 +62,12 @@ class fi_personasC
             $datos = $this->modelo->where('th_per_id', $_id)->listar();
         }
 
+        return $datos;
+    }
+
+    function listar_estado()
+    {
+        $datos = $this->modelo->listar();
         return $datos;
     }
 
@@ -216,7 +226,9 @@ class fi_personasC
 
     function guardar_aceptacion()
     {
-        $ultimo_id = $this->validar_paso_2()['_id'];
+        $th_persona_id = $this->validar_paso_2();
+        $ultimo_id = $th_persona_id['_id'];
+        $th_per_id = $th_persona_id['persona_id'];
 
         $datos = array(
             array('campo' => 'fi_sol_estado', 'dato' => 1),
@@ -227,6 +239,17 @@ class fi_personasC
         );
 
         $datos = $this->fi_personas_solicitudes->editar($datos, $where);
+
+        $datos = array(
+            array('campo' => 'th_per_estado', 'dato' => 2),
+        );
+
+        $where = array(
+            array('campo' => 'th_per_id', 'dato' => $th_per_id),
+        );
+
+        $datos = $this->modelo->editar($datos, $where);
+
 
         return $datos;
     }
