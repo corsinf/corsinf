@@ -17,6 +17,10 @@ if (isset($_GET['listar_estado'])) {
     echo json_encode($controlador->listar_estado());
 }
 
+if (isset($_GET['listar_solicitud_persona'])) {
+    echo json_encode($controlador->listar_solicitud_persona($_POST['_id']));
+}
+
 if (isset($_GET['insertar_administrador'])) {
     echo json_encode($controlador->insertar_administrador($_POST['parametros']));
 }
@@ -53,6 +57,7 @@ class fi_personasC
         $this->fi_personas_solicitudes = new fi_personas_solicitudesM();
     }
 
+    //Rol usuario
     function listar()
     {
         $_id = isset($_SESSION['INICIO']['NO_CONCURENTE']) ? $_SESSION['INICIO']['NO_CONCURENTE'] : null;
@@ -65,9 +70,25 @@ class fi_personasC
         return $datos;
     }
 
+    //Rol db
     function listar_estado()
     {
         $datos = $this->modelo->listar();
+        return $datos;
+    }
+
+    function listar_solicitud_persona($_id = '')
+    {
+        if (!empty($_id)) {
+            $datos = $this->fi_personas_solicitudes->where('th_per_id', $_id)->orderBy('fi_sol_id', 'DESC')->listar(1);
+        }
+
+        //print_r($datos); exit;
+
+        if (!empty($datos) && isset($datos[0])) {
+            return $datos[0];
+        }
+
         return $datos;
     }
 

@@ -17,6 +17,7 @@ if (isset($_GET['_id'])) {
     $(document).ready(function() {
         <?php if (isset($_GET['_id'])) { ?>
             cargar_datos_persona(<?= $_id ?>);
+            listar_solicitud_persona(<?= $_id ?>);
         <?php } ?>
     })
 
@@ -61,6 +62,43 @@ if (isset($_GET['_id'])) {
 
         $('#txt_cedula').on('input', function() {
             $('#error_txt_cedula').text('');
+        });
+    }
+
+    function listar_solicitud_persona(_id) {
+        $.ajax({
+            data: {
+                _id: _id
+            },
+            url: '../controlador/FIRMAS_ELECTRONICAS/fi_personasC.php?listar_solicitud_persona=true',
+            type: 'post',
+            dataType: 'json',
+
+            success: function(response) {
+                let archivos = {
+                    '#img_foto_personal': response['archivo_foto'],
+                    '#ifr_copia_cedula': response['archivo_cedula'],
+                    '#ifr_cert_ruc': response['archivo_ruc'],
+                    '#ifr_cert_juridico': response['archivo_juridico']
+                };
+
+                $.each(archivos, function(selector, archivo) {
+                    let panelId = $(selector).closest('.col-md-3').attr('id'); // Obtiene el ID del panel contenedor
+
+                    if (archivo && archivo.trim() !== "") {
+                        $(selector).attr('src', archivo);
+                        $("#" + panelId).show();
+                    } 
+                });
+            },
+
+            error: function(xhr, status, error) {
+                console.log('Status: ' + status);
+                console.log('Error: ' + error);
+                console.log('XHR Response: ' + xhr.responseText);
+
+                Swal.fire('', 'Error: ' + xhr.responseText, 'error');
+            }
         });
     }
 </script>
@@ -108,6 +146,34 @@ if (isset($_GET['_id'])) {
                         <form id="registrar_personas" class="modal_general_provincias">
 
                             <?php include_once('../vista/GENERAL/registrar_personas.php'); ?>
+
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="row mb-col">
+                                        <div class="col-md-3" id="pnl_foto_personal_paso_3" style="display: none;">
+                                            <p class="form-label form-labeli-sm">1. Foto personal con la cédula colocada debajo del mentón.</p>
+                                            <img src="" class="img-fluid w-100 border rounded shadow-sm" id="img_foto_personal" alt="Ejemplo Foto Personal" />
+                                        </div>
+
+                                        <div class="col-md-3" id="pnl_copia_cedula_paso_3" style="display: none;">
+                                            <p class="form-label form-label-sm">2. Copia legible de la cédula. </p>
+                                            <iframe src="" class="border rounded shadow-sm" id="ifr_copia_cedula" frameborder="0" width="100%" height="200px"></iframe>
+                                        </div>
+
+                                        <div class="col-md-3" id="pnl_cert_ruc_paso_3" style="display: none;">
+                                            <p class="form-label form-label-sm">3. Certificado actualizado del RUC. </p>
+                                            <iframe src="" class="border rounded shadow-sm" id="ifr_cert_ruc" frameborder="0" width="100%" height="200px"></iframe>
+                                        </div>
+
+                                        <div class="col-md-3" id="pnl_cert_juridico_paso_3" style="display: none;">
+                                            <p class="form-label form-label-sm">4. Certificado Jurídico. </p>
+                                            <iframe src="" class="border rounded shadow-sm" id="ifr_cert_juridico" frameborder="0" width="100%" height="200px"></iframe>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                            </div>
 
                             <div class="d-flex justify-content-end pt-2">
                                 <?php if ($_id == '') { ?>
