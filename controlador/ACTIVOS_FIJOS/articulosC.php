@@ -18,6 +18,11 @@ if (isset($_GET['lista'])) {
 	echo json_encode($controlador->lista_articulos($parametros));
 }
 
+if (isset($_GET['lista_cr'])) {
+
+	echo json_encode($controlador->lista_articulos_cr());
+}
+
 if (isset($_GET['lista_kit'])) {
 	$parametros = $_POST['parametros'];
 	echo json_encode($controlador->lista_kit($parametros));
@@ -36,11 +41,6 @@ if (isset($_GET['guardar_it'])) {
 if (isset($_GET['delete_kit'])) {
 	$parametros = $_POST['parametros'];
 	echo json_encode($controlador->delete_kit($parametros));
-}
-
-if (isset($_GET['lista_patrimoniales'])) {
-	$parametros = $_POST['parametros'];
-	echo json_encode($controlador->lista_articulos_patrimoniales($parametros));
 }
 
 if (isset($_GET['meses'])) {
@@ -213,6 +213,12 @@ class articulosC
 		return $datos2;
 	}
 
+	//CR = Carga Rapida
+	function lista_articulos_cr()
+	{
+		return $this->modelo->lista_articulos_cr();
+	}
+
 	function lista_kit($parametros)
 	{
 		$datos2 = $this->modelo->lista_kit($parametros['activo']);
@@ -270,52 +276,6 @@ class articulosC
 		$where[0]['dato'] = $parametros['id'];
 
 		return $this->modelo->update($tabla = 'ac_articulos', $datos, $where);
-	}
-
-	function lista_articulos_patrimoniales($parametros)
-	{
-		// print_r($parametros);die();
-		$query = $parametros['query'];
-		$loc = $parametros['localizacion'];
-		$cus = $parametros['custodio'];
-		$pag = $parametros['pag'];
-		$exacto = false;
-		if (isset($parametros['exacto'])) {
-			$exacto = $parametros['exacto'];
-		}
-		$asset = '';
-		if (isset($parametros['asset'])) {
-			$asset = $parametros['asset'];
-		}
-		$asset_org = '';
-		if (isset($parametros['asset_org'])) {
-			$asset_org = $parametros['asset_org'];
-		}
-
-		if ($exacto == 'true') {
-			$exacto  = true;
-		} else {
-			$exacto = false;
-		}
-		if ($asset == 'true') {
-			$asset  = true;
-		} else {
-			$asset = false;
-		}
-
-		$datos = $this->modelo->cantidad_registros_patrimoniales($query, $loc, $cus);
-		$total_reg = $datos[0]['numreg'];
-		if ($total_reg > 25) {
-			$datos = $this->modelo->lista_articulos($query, $loc, $cus, $pag, false, $exacto, $asset, false, false, 1);
-		} else {
-			$datos = $this->modelo->lista_articulos($query, $loc, $cus, false, false, $exacto, $asset, false, false, 1);
-		}
-
-		//$datos = array_map(array($this->cod_global, 'transformar_array_encode'), $datos);
-		$datos2 = array('datos' => $datos, 'cant' => $total_reg);
-
-		// print_r($datos2);die();
-		return $datos2;
 	}
 
 	function lista_articulos_impri($parametros)

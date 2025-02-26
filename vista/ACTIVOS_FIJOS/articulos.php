@@ -115,7 +115,7 @@ if (isset($_SESSION['INICIO']['LISTA_ART'])) {
       'lista': '1',
       'desde': $('#txt_desde').val(),
       'hasta': $('#txt_hasta').val(),
-    }
+    };
 
     var lineas = '';
     $.ajax({
@@ -126,86 +126,101 @@ if (isset($_SESSION['INICIO']['LISTA_ART'])) {
       type: 'post',
       dataType: 'json',
       beforeSend: function() {
-        // var spiner = '<div class="text-center"><img src="../img/gif/proce.gif" width="100" height="100"></div>'     
         $('#pag').html('');
       },
       success: function(response) {
         console.log(response);
-        var pag = $('#txt_pag1').val().split('-');
-        var pag2 = $('#txt_pag').val().split('-');
+        console.log("Total registros:", response.cant);
 
-        var pagi = '<li class="paginate_button page-item" onclick="guias_pag(\'-\')"><a class="page-link" href="#"> << </a></li>';
+        var pag = $('#txt_pag1').val() ? $('#txt_pag1').val().split('-') : [0, 25];
+        var pag2 = $('#txt_pag').val() ? $('#txt_pag').val().split('-') : [0, 25];
+
+        var pagi = `<li class="paginate_button page-item" onclick="guias_pag('-')">
+                <a class="page-link" href="#"> << </a>
+            </li>`;
+
         if ($('#txt_numpag').val() == '') {
-          $('#txt_numpag').val(response.cant / pag[1]);
+          $('#txt_numpag').val(Math.ceil(response.cant / pag[1]));
         }
-        if (response.cant > pag[1]) {
-          var num = response.cant / pag[1];
+
+
+        let totalRegistros = Number(response.cant);
+        let tamanoPagina = Number(pag[1]);
+
+        if (totalRegistros > tamanoPagina) {
+          var num = Math.ceil(response.cant / pag[1]);
+
           if (num > 10) {
             if (pag2[0] / pag[1] < 9) {
-              // console.log(10);
-              for (var i = 1; i < 11; i++) {
-                var pos = pag[1]; //pag[1]*i;
+              for (var i = 1; i <= 10; i++) {
                 var ini = pag[0] + (pag[1] * i) - pag[1];
-                var pa = ini + '-' + pos;
-                if ($('#txt_pag').val() == pa) {
-                  pagi += '<li class="paginate_button page-item active" onclick="paginacion(\'' + pa + '\')"><a class="page-link" href="#">' + i + '</a></li>';
-                } else {
-                  pagi += '<li class="paginate_button page-item" onclick="paginacion(\'' + pa + '\')"><a class="page-link" href="#">' + i + '</a></li>';
-                }
+                var pa = `${ini}-${pag[1]}`;
+                pagi += `<li class="paginate_button page-item ${$('#txt_pag').val() == pa ? 'active' : ''}" onclick="paginacion('${pa}')">
+                            <a class="page-link" href="#">${i}</a>
+                         </li>`;
               }
             } else {
-              pagi += '<li class="paginate_button page-item" onclick="paginacion(\'0-25\')"><a class="page-link" href="#">1</a></li>';
+              pagi += `<li class="paginate_button page-item" onclick="paginacion('0-25')">
+                        <a class="page-link" href="#">1</a>
+                     </li>`;
               for (var i = pag2[0] / 25 + 1; i < (pag2[0] / 25) + 10; i++) {
-                var pos = pag[1]; //pag[1]*i;
                 var ini = pag[0] + (pag[1] * i) - pag[1];
-                var pa = ini + '-' + pos;
-                if ($('#txt_pag').val() == pa) {
-                  pagi += '<li class="paginate_button page-item active" onclick="paginacion(\'' + pa + '\')"><a class="page-link" href="#">' + i + '</a></li>';
-                } else {
-                  pagi += '<li class="paginate_button page-item" onclick="paginacion(\'' + pa + '\')"><a class="page-link" href="#">' + i + '</a></li>';
-                }
+                var pa = `${ini}-${pag[1]}`;
+                pagi += `<li class="paginate_button page-item ${$('#txt_pag').val() == pa ? 'active' : ''}" onclick="paginacion('${pa}')">
+                            <a class="page-link" href="#">${i}</a>
+                         </li>`;
               }
             }
-            pagi += '<li class="paginate_button page-item" onclick="guias_pag(\'+\')"><a class="page-link" href="#"> >> </a></li>'
+            pagi += `<li class="paginate_button page-item" onclick="guias_pag('+')">
+                    <a class="page-link" href="#"> >> </a>
+                 </li>`;
           } else {
-
-            for (var i = 1; i < num + 1; i++) {
-              var pos = pag[1]; //pag[1]*i;
+            for (var i = 1; i <= num; i++) {
               var ini = pag[0] + (pag[1] * i) - pag[1];
-              var pa = ini + '-' + pos;
-              if ($('#txt_pag').val() == pa) {
-                pagi += '<li class="paginate_button page-item active"  onclick="paginacion(\'' + pa + '\')"><a class="page-link" href="#">' + i + '</a></li>';
-              } else {
-                pagi += '<li class="paginate_button page-item"  onclick="paginacion(\'' + pa + '\')"><a class="page-link" href="#">' + i + '</a></li>';
-              }
+              var pa = `${ini}-${pag[1]}`;
+              pagi += `<li class="paginate_button page-item ${$('#txt_pag').val() == pa ? 'active' : ''}" onclick="paginacion('${pa}')">
+                        <a class="page-link" href="#">${i}</a>
+                     </li>`;
             }
           }
 
-          // <li class="paginate_button page-item "><a href="#" aria-controls="example2" data-dt-idx="5" tabindex="0" class="page-link">5</a>
-          // </li>
-
-
+          console.log("HTML Paginación:", pagi);
           $('#pag').html(pagi);
-
         }
+
+
         $.each(response.datos, function(i, item) {
-          baja = '';
-          if (item.BAJAS == 1) {
-            baja = 'background-color: coral;/*bg-danger*/'
+          let activo = '';
+          if (item.tipo_articulo == 'BAJAS') {
+            activo = 'background-color: coral;';
+          } else if (item.tipo_articulo == 'PATRIMONIALES') {
+            activo = 'background-color: #ffc108a6;';
+          } else if (item.tipo_articulo == 'TERCEROS') {
+            activo = 'background-color: #007bffa8;';
           }
-          if (item.PATRIMONIALES == 1) {
-            baja = 'background-color: #ffc108a6; /*bg-warning*/';
-          }
-          if (item.TERCEROS == 1) {
-            baja = 'background-color: #007bffa8;; /*bg-blue*/'
-          }
+
           if (item.RFID == null) {
             item.RFID = '';
           }
-          lineas += '<tr style="' + baja + '"><td style="color: #1467e2; cursor: pointer;"  onclick="redireccionar(\'' + item.id + '\')"><u>' + item.tag + '</u></td><td>' + item.nom + '</td><td>' + item.modelo + '</td><td>' + item.serie + '</td><td>' + item.RFID + '</td><td>' + item.localizacion + '</td><td>' + item.custodio + '</td><td>' + item.marca + '</td><td>' + item.estado + '</td><td>' + item.genero + '</td><td>' + item.color + '</td><td>' + formato_fecha(item.fecha_in) + '</td><td>' + item.OBSERVACION + '</td></tr>';
-          // console.log(item);
 
+          lineas += `
+                    <tr style="${activo}">
+                        <td style="color: #1467e2; cursor: pointer;" onclick="redireccionar('${item.id}')"><u>${item.tag}</u></td>
+                        <td>${item.nom}</td>
+                        <td>${item.modelo}</td>
+                        <td>${item.serie}</td>
+                        <td>${item.RFID}</td>
+                        <td>${item.localizacion}</td>
+                        <td>${item.custodio}</td>
+                        <td>${item.marca}</td>
+                        <td>${item.estado}</td>
+                        <td>${item.genero}</td>
+                        <td>${item.color}</td>
+                        <td>${formato_fecha(item.fecha_in)}</td>
+                        <td>${item.observacion}</td>
+                    </tr>`;
         });
+
         $('#tbl_datos').html(lineas);
       },
       error: function(error) {
@@ -213,6 +228,8 @@ if (isset($_SESSION['INICIO']['LISTA_ART'])) {
       }
     });
   }
+
+
 
   function lista_articulos_grid() {
     var parametros = {
@@ -423,6 +440,7 @@ if (isset($_SESSION['INICIO']['LISTA_ART'])) {
     var tipo_lista = '<?php echo $tipo_lista; ?>';
     if (tipo_lista == 1) {
       lista_articulos();
+      $('#tbl_datos').html('');
     } else {
       lista_articulos_grid();
     }
@@ -546,7 +564,6 @@ if (isset($_SESSION['INICIO']['LISTA_ART'])) {
 
     $('#btn_lista').css('display', 'none');
     $('#btn_grid').css('display', 'block');
-    lista_articulos();
   }
 
   function ver_informe_pdf(id) {
@@ -719,12 +736,14 @@ if (isset($_SESSION['INICIO']['LISTA_ART'])) {
               <div class="col-sm-6 col-md-8">
 
               </div>
-              <div class="col-sm-6 col-md-4">
+              <div class="col-sm-6 col-md-4 mb-4">
                 <div class="dataTables_paginate paging_simple_numbers" id="example2_paginate">
                   <ul class="pagination pagination-sm justify-content-end mb-1" id="pag">
                   </ul>
                 </div>
               </div>
+
+
             </div>
 
             <div class="row">

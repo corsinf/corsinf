@@ -5,6 +5,10 @@ if ($_GET['acc'] == 'articulos') {
     include('ACTIVOS_FIJOS/articulos.php');
 }
 
+if ($_GET['acc'] == 'articulos_cr') {
+    include('ACTIVOS_FIJOS/articulos_cr.php');
+}
+
 if ($_GET['acc'] == 'cambios_custodio_localizacion') {
     include('ACTIVOS_FIJOS/cambios_custodio_localizacion.php');
 }
