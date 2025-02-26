@@ -31,18 +31,18 @@ class detalle_articuloM
 
 	function cargar_datos($id)
 	{
-		$sql = "SELECT P.id_plantilla as 'id_A',A.ID_ASSET as 'id_AS',SUBNUMBER,DESCRIPT as 'nom',DESCRIPT2 as 'des',TAG_SERIE as 'tag_s',TAG_UNIQUE as 'rfid',TAG_ANT as 'ant',COMPANYCODE,MODELO,SERIE,FECHA_INV_DATE as 'fecha',P.LOCATION as 'id_loc',L.DENOMINACION as 'DENOMINACION',L.EMPLAZAMIENTO as 'Cloc',P.PERSON_NO as 'id_cus',PERSON_NOM,P.PERSON_NO as 'Ccus',MARCAS.ID_MARCA as 'mar',MARCAS.DESCRIPCION as 'marca',MARCAS.CODIGO as 'Cmar',ESTADO.ID_ESTADO as 'est',ESTADO.CODIGO as 'Cest',ESTADO.DESCRIPCION as 'estado',GENERO.ID_GENERO as 'gen',GENERO.DESCRIPCION as 'genero',GENERO.CODIGO as 'Cgen',COLORES.ID_COLORES as 'col',COLORES.DESCRIPCION as 'color',COLORES.CODIGO as 'Ccol',PROYECTO.ID_PROYECTO as 'idpro',PROYECTO.denominacion as 'proyecto',PROYECTO.programa_financiacion as 'Cpro',OBSERVACION ,IMAGEN,QUANTITY,BASE_UOM,ORIG_ASSET,ORIG_ACQ_YR,ORIG_VALUE,CARACTERISTICA,EVALGROUP5,BAJAS,PATRIMONIALES,TERCEROS,ASSETSUPNO,COMPANYCODE,P.FAMILIA as 'IDF',F.detalle_familia as 'FAMILIA',P.SUBFAMILIA as 'IDSUBF',SUB.detalle_familia as 'SUBFAMILIA',P.CLASE_MOVIMIENTO,CM.DESCRIPCION AS 'MOVIMIENTO',SISTEMA_OP,KERNEL,ARQUITECTURA,PRODUCTO_ID,VERSION,SERVICE_PACK,EDICION FROM PLANTILLA_MASIVA P 
-		LEFT JOIN ASSET A ON P.ID_ASSET = A.ID_ASSET 
-		LEFT JOIN LOCATION L ON P.LOCATION = L.ID_LOCATION
-		LEFT JOIN PERSON_NO PE ON P.PERSON_NO = PE.ID_PERSON 
-		LEFT JOIN MARCAS ON P.EVALGROUP1 = MARCAS.ID_MARCA 
-		LEFT JOIN ESTADO ON P.EVALGROUP2 = ESTADO.ID_ESTADO 
-		LEFT JOIN GENERO ON P.EVALGROUP3 = GENERO.ID_GENERO 
-		LEFT JOIN COLORES ON P.EVALGROUP4 = COLORES.ID_COLORES
-		LEFT JOIN PROYECTO ON P.EVALGROUP5 = PROYECTO.ID_PROYECTO
-		LEFT JOIN FAMILIAS F ON P.FAMILIA = F.id_familia
-		LEFT JOIN FAMILIAS SUB ON P.SUBFAMILIA = SUB.id_familia
-		LEFT JOIN CLASE_MOVIMIENTO CM ON P.CLASE_MOVIMIENTO = CM.CODIGO 
+		$sql = "SELECT P.id_plantilla as 'id_A',A.ID_ASSET as 'id_AS',SUBNUMBER,DESCRIPT as 'nom',DESCRIPT2 as 'des',TAG_SERIE as 'tag_s',TAG_UNIQUE as 'rfid',TAG_ANT as 'ant',COMPANYCODE,MODELO,SERIE,FECHA_INV_DATE as 'fecha',P.LOCATION as 'id_loc',L.DENOMINACION as 'DENOMINACION',L.EMPLAZAMIENTO as 'Cloc',P.PERSON_NO as 'id_cus',PERSON_NOM,P.PERSON_NO as 'Ccus',ac_marcas.ID_MARCA as 'mar',ac_marcas.DESCRIPCION as 'marca',ac_marcas.CODIGO as 'Cmar',ac_estado.ID_ESTADO as 'est',ac_estado.CODIGO as 'Cest',ac_estado.DESCRIPCION as 'estado',ac_genero.ID_GENERO as 'gen',ac_genero.DESCRIPCION as 'genero',ac_genero.CODIGO as 'Cgen',ac_colores.ID_COLORES as 'col',ac_colores.DESCRIPCION as 'color',ac_colores.CODIGO as 'Ccol',ac_proyecto.ID_PROYECTO as 'idpro',ac_proyecto.denominacion as 'proyecto',ac_proyecto.programa_financiacion as 'Cpro',OBSERVACION ,IMAGEN,QUANTITY,BASE_UOM,ORIG_ASSET,ORIG_ACQ_YR,ORIG_VALUE,CARACTERISTICA,EVALGROUP5,BAJAS,PATRIMONIALES,TERCEROS,ASSETSUPNO,COMPANYCODE,P.FAMILIA as 'IDF',F.detalle_familia as 'FAMILIA',P.SUBFAMILIA as 'IDSUBF',SUB.detalle_familia as 'SUBFAMILIA',P.CLASE_MOVIMIENTO,CM.DESCRIPCION AS 'MOVIMIENTO',SISTEMA_OP,KERNEL,ARQUITECTURA,PRODUCTO_ID,VERSION,SERVICE_PACK,EDICION FROM ac_articulos P 
+		LEFT JOIN ac_asset A ON P.ID_ASSET = A.ID_ASSET 
+		LEFT JOIN ac_localizacion L ON P.LOCATION = L.ID_LOCATION
+		LEFT JOIN th_personas PE ON P.PERSON_NO = PE.ID_PERSON 
+		LEFT JOIN ac_marcas ON P.EVALGROUP1 = ac_marcas.ID_MARCA 
+		LEFT JOIN ac_estado ON P.EVALGROUP2 = ac_estado.ID_ESTADO 
+		LEFT JOIN ac_genero ON P.EVALGROUP3 = ac_genero.ID_GENERO 
+		LEFT JOIN ac_colores ON P.EVALGROUP4 = ac_colores.ID_COLORES
+		LEFT JOIN ac_proyecto ON P.EVALGROUP5 = ac_proyecto.ID_PROYECTO
+		LEFT JOIN ac_familias F ON P.FAMILIA = F.id_familia
+		LEFT JOIN ac_familias SUB ON P.SUBFAMILIA = SUB.id_familia
+		LEFT JOIN ac_clase_movimiento CM ON P.CLASE_MOVIMIENTO = CM.CODIGO 
 		WHERE p.id_plantilla = '" . $id . "'";
 		// print_r($sql);die();
 		$datos = $this->db->datos($sql);
@@ -51,7 +51,7 @@ class detalle_articuloM
 
 	function buscar_plantilla_masiva($idAsset = false)
 	{
-		$sql = "SELECT * FROM PLANTILLA_MASIVA WHERE 1 = 1 ";
+		$sql = "SELECT * FROM ac_articulos WHERE 1 = 1 ";
 		if ($idAsset) {
 			$sql .= " AND ID_ASSET = '" . $idAsset . " '";
 		}
@@ -61,7 +61,7 @@ class detalle_articuloM
 
 	function buscar_asset($tag = false, $ant = false, $rfid = false)
 	{
-		$sql = "SELECT * FROM ASSET WHERE 1=1 ";
+		$sql = "SELECT * FROM ac_asset WHERE 1=1 ";
 		if ($tag) {
 			$sql .= " AND TAG_SERIE ='" . $tag . "' ";
 		}
@@ -78,18 +78,18 @@ class detalle_articuloM
 
 	function cargar_tarjeta($id)
 	{
-		// $sql="SELECT * FROM TARJETA_INFO WHERE id_articulo = '".$id."'";
+		// $sql="SELECT * FROM ac_tarjeta_info WHERE id_articulo = '".$id."'";
 		// $datos = $this->db->datos($sql);
 		// return $datos;
 
-		$sql = "SELECT * FROM DATOS_PATRIMONIAL WHERE ARTICULO = '" . $id . "'";
+		$sql = "SELECT * FROM ac_datos_patrimonial WHERE ARTICULO = '" . $id . "'";
 		$datos = $this->db->datos($sql);
 		return $datos;
 	}
 
 	function movimientos($id, $desde = false, $hasta = false)
 	{
-		$sql = "SELECT obs_movimiento as 'ob',fecha_movimiento as 'fe',dato_anterior as 'dante',dato_nuevo as 'dnuevo',responsable,codigo_ant,codigo_nue  FROM MOVIMIENTO WHERE id_plantilla = '" . $id . "' ";
+		$sql = "SELECT obs_movimiento as 'ob',fecha_movimiento as 'fe',dato_anterior as 'dante',dato_nuevo as 'dnuevo',responsable,codigo_ant,codigo_nue  FROM ac_movimiento WHERE id_plantilla = '" . $id . "' ";
 		if ($desde != false && $hasta != false) {
 			$sql .= " AND fecha_movimiento BETWEEN '" . $desde . "' AND '" . $hasta . "'";
 		}
@@ -107,7 +107,7 @@ class detalle_articuloM
 
 	function img_guardar($name, $codigo)
 	{
-		$tabla = 'PLANTILLA_MASIVA';
+		$tabla = 'ac_articulos';
 		$datos[0]['campo'] = 'IMAGEN';
 		$datos[0]['dato'] = $name;
 
@@ -123,14 +123,14 @@ class detalle_articuloM
 
 	function navegacion($query, $loc, $cus, $pag = false, $whereid = false, $exacto = false, $asset = false)
 	{
-		$sql = "SELECT id_plantilla as 'id',A.TAG_SERIE as 'tag',A.ID_ASSET,DESCRIPT as 'nom',MODELO as 'modelo',SERIE as 'serie',L.DENOMINACION as 'localizacion',PE.PERSON_NOM as 'custodio',M.DESCRIPCION as 'marca',E.DESCRIPCION as 'estado',G.DESCRIPCION as 'genero',C.DESCRIPCION as 'color',IMAGEN,OBSERVACION,FECHA_INV_DATE as 'fecha_in' FROM PLANTILLA_MASIVA P
-			LEFT JOIN ASSET A ON P.ID_ASSET = A.ID_ASSET
-			LEFT JOIN LOCATION L ON P.LOCATION = L.ID_LOCATION
-			LEFT JOIN PERSON_NO PE ON P.PERSON_NO = PE.ID_PERSON
-			LEFT JOIN MARCAS M ON P.EVALGROUP1 = M.ID_MARCA
-			LEFT JOIN ESTADO E ON P.EVALGROUP2 = E.ID_ESTADO
-			LEFT JOIN GENERO G ON P.EVALGROUP3 = G.ID_GENERO
-			LEFT JOIN COLORES C ON P.EVALGROUP4 = C.ID_COLORES
+		$sql = "SELECT id_plantilla as 'id',A.TAG_SERIE as 'tag',A.ID_ASSET,DESCRIPT as 'nom',MODELO as 'modelo',SERIE as 'serie',L.DENOMINACION as 'localizacion',PE.PERSON_NOM as 'custodio',M.DESCRIPCION as 'marca',E.DESCRIPCION as 'estado',G.DESCRIPCION as 'genero',C.DESCRIPCION as 'color',IMAGEN,OBSERVACION,FECHA_INV_DATE as 'fecha_in' FROM ac_articulos P
+			LEFT JOIN ac_asset A ON P.ID_ASSET = A.ID_ASSET
+			LEFT JOIN ac_localizacion L ON P.LOCATION = L.ID_LOCATION
+			LEFT JOIN th_personas PE ON P.PERSON_NO = PE.ID_PERSON
+			LEFT JOIN ac_marcas M ON P.EVALGROUP1 = M.ID_MARCA
+			LEFT JOIN ac_estado E ON P.EVALGROUP2 = E.ID_ESTADO
+			LEFT JOIN ac_genero G ON P.EVALGROUP3 = G.ID_GENERO
+			LEFT JOIN ac_colores C ON P.EVALGROUP4 = C.ID_COLORES
 			WHERE ";
 		if ($exacto) {
 			if ($asset) {

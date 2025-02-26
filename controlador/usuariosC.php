@@ -338,7 +338,7 @@ class usuariosC
 
 		  $where[0]['campo']='PERSON_NO';
 		  $where[0]['dato'] = $parametros['id'];
-		  return $this->modelo->update('PERSON_NO',$datos,$where);
+		  return $this->modelo->update('th_personas',$datos,$where);
 
 		}
 

@@ -51,8 +51,8 @@ class cargar_datosM
 			$ASSETS = substr($ASSETS, 0, -1);
 			$sql = "UPDATE P
 				SET datos = 1
-				FROM PLANTILLA_MASIVA P
-				INNER JOIN ASSET A
+				FROM ac_articulos P
+				INNER JOIN ac_asset A
 				ON A.ID_ASSET = P.ID_ASSET
 				WHERE A.TAG_SERIE 
 				IN (" . $ASSETS . ")";
@@ -82,8 +82,8 @@ class cargar_datosM
 					$ASSETS = substr($ASSETS, 0, -1);
 					$sql = "UPDATE P
 						SET datos = 1
-						FROM PLANTILLA_MASIVA P
-						INNER JOIN ASSET A
+						FROM ac_articulos P
+						INNER JOIN ac_asset A
 						ON A.ID_ASSET = P.ID_ASSET
 						WHERE A.TAG_SERIE 
 						IN (" . $ASSETS . ")";
@@ -106,10 +106,10 @@ class cargar_datosM
 		return  array('parte_actual' => 2, 'partes' => $partes, 'TotalReg' => $numRows, 'fin' => 0);
 	}
 
-	function BUSCAR_ID_PLANTILLA($ASSET)
+	function BUSCAR_ID_PLANTILLA($ac_asset)
 	{
-		$sql = "SELECT id_plantilla as 'ID' FROM PLANTILLA_MASIVA P
-				INNER JOIN ASSET A ON P.ID_ASSET =  A.ID_ASSET
+		$sql = "SELECT id_plantilla as 'ID' FROM ac_articulos P
+				INNER JOIN ac_asset A ON P.ID_ASSET =  A.ID_ASSET
 				WHERE A.TAG_SERIE = '" . $ASSETS . "'";
 		$datos = $this->db->datos($sql);
 		if (count($datos) > 0) {
@@ -286,7 +286,7 @@ class cargar_datosM
 	function log_activo($fecha = false, $intento = false, $accion = False, $estado = false)
 	{
 
-		$sql = "SELECT * FROM log_activos WHERE 1=1 ";
+		$sql = "SELECT * FROM ac_log_activos WHERE 1=1 ";
 		if ($fecha) {
 			$sql .= " AND fecha = '" . $fecha . "'";
 		}

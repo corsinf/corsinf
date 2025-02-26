@@ -663,10 +663,10 @@ function para_ftp($nombre,$texto)
 	function ingresar_movimientos($id=false,$movimiento,$seccion='ARTICULOS',$dato_ant=false,$dato_act=false,$cod_ant=false,$cod_nue=false)
 	{
 		$fecha = date('Y-m-d');
-			$sql = "INSERT INTO MOVIMIENTO (obs_movimiento,fecha_movimiento,responsable,seccion)VALUES('".$movimiento."','".$fecha."','".$_SESSION['INICIO']['USUARIO']."','".$seccion."')";
+			$sql = "INSERT INTO ac_movimiento (obs_movimiento,fecha_movimiento,responsable,seccion)VALUES('".$movimiento."','".$fecha."','".$_SESSION['INICIO']['USUARIO']."','".$seccion."')";
 		if($id)
 		{
-			$sql = "INSERT INTO MOVIMIENTO (id_plantilla,obs_movimiento,fecha_movimiento,responsable,seccion,dato_anterior,dato_nuevo,codigo_ant,codigo_nue)VALUES(".$id.",'".$movimiento."','".$fecha."','".$_SESSION['INICIO']['USUARIO']."','".$seccion."','".$dato_ant."','".$dato_act."','".$cod_ant."','".$cod_nue."')";
+			$sql = "INSERT INTO ac_movimiento (id_plantilla,obs_movimiento,fecha_movimiento,responsable,seccion,dato_anterior,dato_nuevo,codigo_ant,codigo_nue)VALUES(".$id.",'".$movimiento."','".$fecha."','".$_SESSION['INICIO']['USUARIO']."','".$seccion."','".$dato_ant."','".$dato_act."','".$cod_ant."','".$cod_nue."')";
 		}
 		// print_r($sql);die();
 		$this->db->sql_string($sql);

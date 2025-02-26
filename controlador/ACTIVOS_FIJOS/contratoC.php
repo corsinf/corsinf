@@ -157,14 +157,14 @@ class contratoC
 		$datos[1]['dato'] = $parametros['detalle'];
 		$datos[2]['campo'] = 'subriesgo';
 		$datos[2]['dato'] = utf8_decode($parametros['cobertura']);
-		return $this->modelo->guardar($tabla = 'RIESGOS', $datos);
+		return $this->modelo->guardar($tabla = 'ac_riesgos', $datos);
 	}
 	function guardar_cobertura($parametros)
 	{
 		// print_r($parametros);die();
 		$datos[0]['campo'] = 'nombre_riesgo';
 		$datos[0]['dato'] = utf8_decode($parametros['nombre']);
-		return $this->modelo->guardar($tabla = 'RIESGOS', $datos);
+		return $this->modelo->guardar($tabla = 'ac_riesgos', $datos);
 	}
 
 	function tipo_pago_save($parametros)
@@ -566,11 +566,11 @@ class contratoC
 
 		// print_r($parametros);die();
 		if ($parametros['id'] == '') {
-			return $this->modelo->guardar($tabla = 'DETERIORO', $datos);
+			return $this->modelo->guardar($tabla = 'ac_deterioro', $datos);
 		} else {
 			$where[0]['campo'] = 'id_deterioro';
 			$where[0]['dato']  = $parametros['id'];
-			return $this->modelo->update($tabla = 'DETERIORO', $datos, $where);
+			return $this->modelo->update($tabla = 'ac_deterioro', $datos, $where);
 		}
 	}
 

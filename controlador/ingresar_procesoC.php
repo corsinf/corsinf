@@ -96,7 +96,7 @@ class ingresar_procesoC
 
 		$where[0]['campo'] = 'id_linea_salida';
 		$where[0]['dato'] = $parametros['id'];
-		return $this->modelo->editar("LINEAS_SOLICITUD",$datos,$where);
+		return $this->modelo->editar("ac_lineas_solicitud",$datos,$where);
 	}
 
 	function observacion_entrada($parametros)
@@ -108,7 +108,7 @@ class ingresar_procesoC
 
 		$where[0]['campo'] = 'id_linea_salida';
 		$where[0]['dato'] = $parametros['id'];
-		return $this->modelo->editar("LINEAS_SOLICITUD",$datos,$where);
+		return $this->modelo->editar("ac_lineas_solicitud",$datos,$where);
 	}
 
 
@@ -126,7 +126,7 @@ class ingresar_procesoC
 
 			$where[0]['campo'] = 'id_solicitud';
 			$where[0]['dato'] = $parametros['id'];
-			return $this->modelo->editar("SOLICITUD_SALIDA",$datos,$where);
+			return $this->modelo->editar("ac_solicitud_salida",$datos,$where);
 		}
 	}
 	function update_step($parametros)
@@ -143,7 +143,7 @@ class ingresar_procesoC
 
 			$where[0]['campo'] = 'id_solicitud';
 			$where[0]['dato'] = $parametros['id'];
-			return $this->modelo->editar("SOLICITUD_SALIDA",$datos,$where);
+			return $this->modelo->editar("ac_solicitud_salida",$datos,$where);
 		}
 	}
 
@@ -156,7 +156,7 @@ class ingresar_procesoC
 
 		$where[0]['campo'] = 'id_solicitud';
 		$where[0]['dato'] = $parametros['id'];
-		return $this->modelo->editar("SOLICITUD_SALIDA",$datos,$where);
+		return $this->modelo->editar("ac_solicitud_salida",$datos,$where);
 	}
 	function enviar_correo($parametros)
 	{
@@ -177,7 +177,7 @@ class ingresar_procesoC
 
 		$where[0]['campo'] = 'id_solicitud';
 		$where[0]['dato'] = $parametros['id'];
-		return $this->modelo->editar("SOLICITUD_SALIDA",$datos,$where);
+		return $this->modelo->editar("ac_solicitud_salida",$datos,$where);
 
 	}
 	function veri_entrada($parametros)
@@ -192,7 +192,7 @@ class ingresar_procesoC
 
 		$where[0]['campo'] = 'id_solicitud';
 		$where[0]['dato'] = $parametros['id'];
-		return $this->modelo->editar("SOLICITUD_SALIDA",$datos,$where);
+		return $this->modelo->editar("ac_solicitud_salida",$datos,$where);
 
 	}
 	

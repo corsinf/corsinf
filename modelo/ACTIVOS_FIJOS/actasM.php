@@ -29,14 +29,14 @@ class actasM
 
 	function existe_en_lista($id, $usuario)
 	{
-		$sql = "SELECT * FROM ARTICULOS_ACTAS WHERE id_articulo = '" . $id . "' AND usuario = '" . $usuario . "';";
+		$sql = "SELECT * FROM ac_articulos_actas WHERE id_articulo = '" . $id . "' AND usuario = '" . $usuario . "';";
 		// print_r($sql);die();
 		return $this->db->datos($sql);
 	}
 
 	function eliminar_lista($id = false)
 	{
-		$sql = "DELETE FROM ARTICULOS_ACTAS WHERE usuario='" . $_SESSION['INICIO']['ID_USUARIO'] . "'";
+		$sql = "DELETE FROM ac_articulos_actas WHERE usuario='" . $_SESSION['INICIO']['ID_USUARIO'] . "'";
 		if ($id) {
 			$sql .= " AND id_acta_art = '" . $id . "'";
 		}
@@ -47,10 +47,10 @@ class actasM
 
 	function secuencial_acta($query)
 	{
-		$sql = "SELECT * FROM SECUENCIALES WHERE DETALLE = '" . $query . "'";
+		$sql = "SELECT * FROM ac_secuenciales WHERE DETALLE = '" . $query . "'";
 		$datos =  $this->db->datos($sql);
 		if (count($datos) == 0) {
-			$sql2 = "INSERT INTO SECUENCIALES (DETALLE,NUMERO)VALUES('" . $query . "',1,1)";
+			$sql2 = "INSERT INTO ac_secuenciales (DETALLE,NUMERO)VALUES('" . $query . "',1,1)";
 			$this->db->sql_string($sql2);
 			$datos =  $this->db->datos($sql);
 		}
@@ -61,21 +61,21 @@ class actasM
 
 	function secuencial_acta_update($query)
 	{
-		$sql = "SELECT * FROM SECUENCIALES WHERE DETALLE = '" . $query . "'";
+		$sql = "SELECT * FROM ac_secuenciales WHERE DETALLE = '" . $query . "'";
 		$datos =  $this->db->datos($sql);
 		if (count($datos) > 0) {
-			$sql2 = "UPDATE SECUENCIALES SET NUMERO = " . ($datos[0]['NUMERO'] + 1) . "WHERE DETALLE = '" . $query . "'";
+			$sql2 = "UPDATE ac_secuenciales SET NUMERO = " . ($datos[0]['NUMERO'] + 1) . "WHERE DETALLE = '" . $query . "'";
 			$this->db->sql_string($sql2);
 		}
 	}
 
 	function lista_actas($usuario = '')
 	{
-		$sql = "SELECT AC.id_acta_art as 'id',TAG_SERIE as 'asset',TAG_ANT AS 'origin_asset',DESCRIPT as 'articulo',ORIG_VALUE as 'valor',SERIE,MODELO,TAG_UNIQUE,PERSON_NOM,DENOMINACION,FECHA_CONTA,ORIG_ACQ_YR AS 'FECHA_COMPRA' FROM Articulos_actas AC
-				INNER JOIN PLANTILLA_MASIVA P ON AC.id_articulo = P.id_plantilla
-				INNER JOIN ASSET A ON A.ID_ASSET = P.ID_ASSET
-				LEFT JOIN PERSON_NO C ON C.ID_PERSON = P.PERSON_NO
-				LEFT JOIN LOCATION L ON L.ID_LOCATION = P.LOCATION
+		$sql = "SELECT AC.id_acta_art as 'id',TAG_SERIE as 'asset',TAG_ANT AS 'origin_asset',DESCRIPT as 'articulo',ORIG_VALUE as 'valor',SERIE,MODELO,TAG_UNIQUE,PERSON_NOM,DENOMINACION,FECHA_CONTA,ORIG_ACQ_YR AS 'FECHA_COMPRA' FROM ac_articulos_actas AC
+				INNER JOIN ac_articulos P ON AC.id_articulo = P.id_plantilla
+				INNER JOIN ac_asset A ON A.ID_ASSET = P.ID_ASSET
+				LEFT JOIN th_personas C ON C.ID_PERSON = P.PERSON_NO
+				LEFT JOIN ac_localizacion L ON L.ID_LOCATION = P.LOCATION
 				WHERE usuario = '" . $usuario . "';";
 		// print_r($sql);die();
 		return $this->db->datos($sql);
@@ -83,14 +83,14 @@ class actasM
 
 	function cantidad_registros($query = false, $loc = false, $cus = false, $pag = false, $whereid = false, $bajas = false, $patrimoniales = false, $terceros = false, $asset = false, $exacto = false, $masivo = false, $masivo_cus = false, $masivo_loc = false)
 	{
-		$sql = "SELECT COUNT(id_plantilla) as 'numreg' FROM PLANTILLA_MASIVA P
-			LEFT JOIN ASSET A ON P.ID_ASSET = A.ID_ASSET
-			LEFT JOIN LOCATION L ON P.LOCATION = L.ID_LOCATION
-			LEFT JOIN PERSON_NO PE ON P.PERSON_NO = PE.ID_PERSON
-			LEFT JOIN MARCAS M ON P.EVALGROUP1 = M.ID_MARCA
-			LEFT JOIN ESTADO E ON P.EVALGROUP2 = E.ID_ESTADO
-			LEFT JOIN GENERO G ON P.EVALGROUP3 = G.ID_GENERO
-			LEFT JOIN COLORES C ON P.EVALGROUP4 = C.ID_COLORES
+		$sql = "SELECT COUNT(id_plantilla) as 'numreg' FROM ac_articulos P
+			LEFT JOIN ac_asset A ON P.ID_ASSET = A.ID_ASSET
+			LEFT JOIN ac_localizacion L ON P.LOCATION = L.ID_LOCATION
+			LEFT JOIN th_personas PE ON P.PERSON_NO = PE.ID_PERSON
+			LEFT JOIN ac_marcas M ON P.EVALGROUP1 = M.ID_MARCA
+			LEFT JOIN ac_estado E ON P.EVALGROUP2 = E.ID_ESTADO
+			LEFT JOIN ac_genero G ON P.EVALGROUP3 = G.ID_GENERO
+			LEFT JOIN ac_colores C ON P.EVALGROUP4 = C.ID_COLORES
 			WHERE 1=1";
 		if ($exacto) {
 			if ($query != '') {
@@ -166,10 +166,10 @@ class actasM
 
 	function articulo($asset)
 	{
-		$sql = "SELECT P.id_plantilla,PE.PERSON_NO,PERSON_NOM,EMPLAZAMIENTO,DENOMINACION, * FROM PLANTILLA_MASIVA P
-		INNER JOIN ASSET ON P.ID_ASSET = ASSET.ID_ASSET
-		LEFT JOIN LOCATION L ON P.LOCATION = L.ID_LOCATION
-		LEFT JOIN PERSON_NO PE ON P.PERSON_NO = PE.ID_PERSON
+		$sql = "SELECT P.id_plantilla,PE.PERSON_NO,PERSON_NOM,EMPLAZAMIENTO,DENOMINACION, * FROM ac_articulos P
+		INNER JOIN ac_asset ON P.ID_ASSET = ac_asset.ID_ASSET
+		LEFT JOIN ac_localizacion L ON P.LOCATION = L.ID_LOCATION
+		LEFT JOIN th_personas PE ON P.PERSON_NO = PE.ID_PERSON
 		WHERE TAG_SERIE = '" . $asset . "'";
 		$datos = $this->db->datos($sql);
 		return $datos;
@@ -177,14 +177,14 @@ class actasM
 
 	function lista_articulos($query = false, $loc = false, $cus = false, $pag = false, $whereid = false, $exacto = false, $asset = false, $bajas = false, $terceros = false, $patrimoniales = false, $desde = false, $hasta = false, $masivo = false, $masivo_cus = false, $masivo_loc = false)
 	{
-		$sql = "SELECT id_plantilla as 'id',A.TAG_SERIE as 'tag',A.ID_ASSET,DESCRIPT as 'nom',MODELO as 'modelo',A.TAG_UNIQUE AS 'RFID',SERIE as 'serie',L.ID_LOCATION AS 'IDL',L.DENOMINACION as 'localizacion',PE.ID_PERSON AS 'IDC',PE.PERSON_NOM as 'custodio',M.DESCRIPCION as 'marca',E.DESCRIPCION as 'estado',G.DESCRIPCION as 'genero',C.DESCRIPCION as 'color',IMAGEN,OBSERVACION,FECHA_INV_DATE as 'fecha_in',BAJAS,TERCEROS,PATRIMONIALES,ORIG_VALUE as 'valor' FROM PLANTILLA_MASIVA P
-			LEFT JOIN ASSET A ON P.ID_ASSET = A.ID_ASSET
-			LEFT JOIN LOCATION L ON P.LOCATION = L.ID_LOCATION
-			LEFT JOIN PERSON_NO PE ON P.PERSON_NO = PE.ID_PERSON
-			LEFT JOIN MARCAS M ON P.EVALGROUP1 = M.ID_MARCA
-			LEFT JOIN ESTADO E ON P.EVALGROUP2 = E.ID_ESTADO
-			LEFT JOIN GENERO G ON P.EVALGROUP3 = G.ID_GENERO
-			LEFT JOIN COLORES C ON P.EVALGROUP4 = C.ID_COLORES
+		$sql = "SELECT id_plantilla as 'id',A.TAG_SERIE as 'tag',A.ID_ASSET,DESCRIPT as 'nom',MODELO as 'modelo',A.TAG_UNIQUE AS 'RFID',SERIE as 'serie',L.ID_LOCATION AS 'IDL',L.DENOMINACION as 'localizacion',PE.ID_PERSON AS 'IDC',PE.PERSON_NOM as 'custodio',M.DESCRIPCION as 'marca',E.DESCRIPCION as 'estado',G.DESCRIPCION as 'genero',C.DESCRIPCION as 'color',IMAGEN,OBSERVACION,FECHA_INV_DATE as 'fecha_in',BAJAS,TERCEROS,PATRIMONIALES,ORIG_VALUE as 'valor' FROM ac_articulos P
+			LEFT JOIN ac_asset A ON P.ID_ASSET = A.ID_ASSET
+			LEFT JOIN ac_localizacion L ON P.LOCATION = L.ID_LOCATION
+			LEFT JOIN th_personas PE ON P.PERSON_NO = PE.ID_PERSON
+			LEFT JOIN ac_marcas M ON P.EVALGROUP1 = M.ID_MARCA
+			LEFT JOIN ac_estado E ON P.EVALGROUP2 = E.ID_ESTADO
+			LEFT JOIN ac_genero G ON P.EVALGROUP3 = G.ID_GENERO
+			LEFT JOIN ac_colores C ON P.EVALGROUP4 = C.ID_COLORES
 			WHERE 1 = 1 ";
 		if ($exacto) {
 			if ($asset) {
@@ -270,18 +270,18 @@ class actasM
 
 	function lineas_solicitud($id)
 	{
-		$sql = "SELECT LS.id_linea_salida as idls,P.id_plantilla as id,A.TAG_SERIE as codigo,A.TAG_ANT AS ori ,A.TAG_UNIQUE as 'rfid',M.DESCRIPCION as marca,P.DESCRIPT as item,P.SERIE as serie,P.MODELO as modelo,observacion_salida as 'salida',observacion_entrada as 'entrada' FROM LINEAS_SOLICITUD LS 
-		INNER JOIN PLANTILLA_MASIVA P ON LS.id_activo = P.id_plantilla
-		INNER JOIN ASSET A ON P.ID_ASSET = A.ID_ASSET 
-		INNER JOIN MARCAS M ON P.EVALGROUP1 = M.ID_MARCA
+		$sql = "SELECT LS.id_linea_salida as idls,P.id_plantilla as id,A.TAG_SERIE as codigo,A.TAG_ANT AS ori ,A.TAG_UNIQUE as 'rfid',M.DESCRIPCION as marca,P.DESCRIPT as item,P.SERIE as serie,P.MODELO as modelo,observacion_salida as 'salida',observacion_entrada as 'entrada' FROM ac_lineas_solicitud LS 
+		INNER JOIN ac_articulos P ON LS.id_activo = P.id_plantilla
+		INNER JOIN ac_asset A ON P.ID_ASSET = A.ID_ASSET 
+		INNER JOIN ac_marcas M ON P.EVALGROUP1 = M.ID_MARCA
 		WHERE id_solicitud = '" . $id . "'";
 		return $this->db->datos($sql);
 	}
 	
 	function solicitud($id)
 	{
-		$sql = "SELECT * FROM SOLICITUD_SALIDA SS 
-		INNER JOIN PERSON_NO P ON SS.solicitante = P.PERSON_NO
+		$sql = "SELECT * FROM ac_solicitud_salida SS 
+		INNER JOIN th_personas P ON SS.solicitante = P.PERSON_NO
 		WHERE id_solicitud = '" . $id . "'";
 		return $this->db->datos($sql);
 	}

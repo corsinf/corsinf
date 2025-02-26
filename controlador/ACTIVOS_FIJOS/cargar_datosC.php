@@ -44,7 +44,7 @@ class cargar_datosC
 	{
 		if ($file['file']['type'] == 'text/csv') {
 			$uploadfile_temporal = $file['file']['tmp_name'];
-			$ruta = '../TEMP/';
+			$ruta = '../../TEMP/';
 			//$tipo = explode('/', $file['file']['type']);
 			$nombre = '';
 			if ($op == 1) {
@@ -69,6 +69,8 @@ class cargar_datosC
 				$nombre = 'UPDATE_ACTIVOS.csv';
 			}
 			$nuevo_nom = $ruta . $nombre;
+			//print_r($nuevo_nom); exit;
+
 			if (is_uploaded_file($uploadfile_temporal)) {
 				move_uploaded_file($uploadfile_temporal, $nuevo_nom);
 				return 1;

@@ -104,3 +104,7 @@ if ($_GET['acc'] == 'terceros') {
 if ($_GET['acc'] == 'patrimoniales') {
     include('ACTIVOS_FIJOS/patrimoniales.php');
 }
+
+if ($_GET['acc'] == 'lista_formatos') {
+    include('ACTIVOS_FIJOS/lista_formatos.php');
+}

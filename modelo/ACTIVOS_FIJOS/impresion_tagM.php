@@ -36,7 +36,7 @@ class impresion_tagM
 
 	function insertar($datos)
 	{
-		$rest = $this->db->inserts('formato_tags', $datos);
+		$rest = $this->db->inserts('ac_formato_tags', $datos);
 		return $rest;
 	}
 
@@ -49,7 +49,7 @@ class impresion_tagM
 
 	function eliminar($datos)
 	{
-		$rest = $this->db->delete('formato_tags', $datos);
+		$rest = $this->db->delete('ac_formato_tags', $datos);
 		return $rest;
 	}
 }

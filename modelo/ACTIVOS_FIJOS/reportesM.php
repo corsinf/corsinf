@@ -29,7 +29,7 @@ class reportesM
 
 	function buscar_reporte($tipo = false, $nombre = false)
 	{
-		$sql = "SELECT * FROM REPORTE WHERE 1=1 ";
+		$sql = "SELECT * FROM ac_reporte WHERE 1=1 ";
 		if ($tipo) {
 			$sql .= " AND TIPO_REPORTE = '" . $tipo . "' ";
 		}
@@ -41,14 +41,14 @@ class reportesM
 
 	function tipo_reporte()
 	{
-		$sql = "SELECT ID_TIPO_REPORTE as 'ID',DESCRIPCION as 'NOMBRE' FROM TIPO_REPORTE";
+		$sql = "SELECT ID_TIPO_REPORTE as 'ID',DESCRIPCION as 'NOMBRE' FROM ac_tipo_reporte";
 		return $this->db->datos($sql);
 	}
 
 	function datos_reporte($id = false)
 	{
-		$sql = "SELECT R.ID_REPORTE,TR.TABLAS_ASOCIADAS,TABLA_PRINCIPAL,NOMBRE_REPORTE,CAMPOS,SQL,FILTROS_HTML,DETALLE FROM REPORTE R
-		INNER JOIN TIPO_REPORTE TR ON R.TIPO_REPORTE = TR.ID_TIPO_REPORTE 
+		$sql = "SELECT R.ID_REPORTE,TR.TABLAS_ASOCIADAS,TABLA_PRINCIPAL,NOMBRE_REPORTE,CAMPOS,SQL,FILTROS_HTML,DETALLE FROM ac_reporte R
+		INNER JOIN ac_tipo_reporte TR ON R.TIPO_REPORTE = TR.ID_TIPO_REPORTE 
 		WHERE 1=1 ";
 		if ($id) {
 			$sql .= " AND R.ID_REPORTE = '" . $id . "'";
@@ -94,7 +94,7 @@ class reportesM
 
 	function eliminar_reportes($id)
 	{
-		$sql = "DELETE FROM REPORTE WHERE ID_REPORTE = '" . $id . "'";
+		$sql = "DELETE FROM ac_reporte WHERE ID_REPORTE = '" . $id . "'";
 		return $this->db->sql_string($sql);
 	}
 }

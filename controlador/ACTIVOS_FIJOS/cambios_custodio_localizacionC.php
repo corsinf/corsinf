@@ -150,7 +150,7 @@ class cambios_custodio_localizacionC
 					$datoss2[0]['dato'] = $rand;
 					$datoss2[1]['campo'] = 'SERIE';
 					$datoss2[1]['dato'] = $value['tag'];
-					$this->modelo->insertar($datoss2, 'IMPRIMIR_TAGS');
+					$this->modelo->insertar($datoss2, 'ac_imprimir_tags');
 				} else {
 					$rand = $this->generarCodigo(8);
 					$rand = "5002000100070028" . $rand;
@@ -163,7 +163,7 @@ class cambios_custodio_localizacionC
 					$datoss2[0]['dato'] = $rand;
 					$datoss2[1]['campo'] = 'SERIE';
 					$datoss2[1]['dato'] = $value['tag'];
-					$this->modelo->insertar($datoss2, 'IMPRIMIR_TAGS');
+					$this->modelo->insertar($datoss2, 'ac_imprimir_tags');
 				}
 			}
 
@@ -196,7 +196,7 @@ class cambios_custodio_localizacionC
 					$datoss2[0]['dato'] = $rand;
 				}
 
-				$this->modelo->insertar($datoss2, 'IMPRIMIR_TAGS');
+				$this->modelo->insertar($datoss2, 'ac_imprimir_tags');
 			}
 			//print_r($datoss2);die();
 
@@ -236,7 +236,7 @@ class cambios_custodio_localizacionC
 	function vaciar_tag()
 	{
 		$delete = array();
-		$datos = $this->modelo->eliminar($delete, 'IMPRIMIR_TAGS');
+		$datos = $this->modelo->eliminar($delete, 'ac_imprimir_tags');
 		return $datos;
 	}
 

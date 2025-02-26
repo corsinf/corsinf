@@ -24,7 +24,7 @@ if (isset($_GET["guardar"])) {
 }
 
 if (isset($_GET["formato"])) {
-	$parametros = $_POST['id'];
+	$parametros = $_POST['id'] ?? '';
 	echo json_encode($controlador->buscar_formato($parametros));
 }
 

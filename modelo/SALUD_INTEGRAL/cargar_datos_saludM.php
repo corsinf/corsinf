@@ -45,7 +45,7 @@ class cargar_datos_saludM
 	function log_activo($fecha = false, $intento = false, $accion = False, $estado = false)
 	{
 
-		$sql = "SELECT * FROM log_activos WHERE 1=1 ";
+		$sql = "SELECT * FROM ac_log_activos WHERE 1=1 ";
 		if ($fecha) {
 			$sql .= " AND fecha = '" . $fecha . "'";
 		}

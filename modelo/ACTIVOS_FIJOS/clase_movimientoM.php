@@ -18,7 +18,7 @@ class clase_movimientoM
 
 	function lista_clase_movimiento($id = '')
 	{
-		$sql = "SELECT ID_MOVIMIENTO,CODIGO,DESCRIPCION FROM CLASE_MOVIMIENTO WHERE 1=1";
+		$sql = "SELECT ID_MOVIMIENTO,CODIGO,DESCRIPCION FROM ac_clase_movimiento WHERE 1=1";
 		if ($id) {
 			$sql .= ' AND ID_MOVIMIENTO= ' . $id;
 		}
@@ -29,7 +29,7 @@ class clase_movimientoM
 
 	function lista_clase_movimiento_todo($id = false)
 	{
-		$sql = "SELECT ID_MOVIMIENTO,CODIGO,DESCRIPCION FROM CLASE_MOVIMIENTO WHERE 1=1";
+		$sql = "SELECT ID_MOVIMIENTO,CODIGO,DESCRIPCION FROM ac_clase_movimiento WHERE 1=1";
 		if ($id) {
 			$sql .= ' AND ID_MOVIMIENTO= ' . $id;
 		}
@@ -40,21 +40,21 @@ class clase_movimientoM
 
 	function buscar_clase_movimiento($buscar)
 	{
-		$sql = "SELECT ID_MOVIMIENTO,CODIGO,DESCRIPCION FROM CLASE_MOVIMIENTO WHERE DESCRIPCION +' '+CODIGO LIKE '%" . $buscar . "%'";
+		$sql = "SELECT ID_MOVIMIENTO,CODIGO,DESCRIPCION FROM ac_clase_movimiento WHERE DESCRIPCION +' '+CODIGO LIKE '%" . $buscar . "%'";
 		$datos = $this->db->datos($sql);
 		return $datos;
 	}
 
 	function buscar_clase_movimiento_CODIGO($buscar)
 	{
-		$sql = "SELECT ID_MOVIMIENTO,CODIGO,DESCRIPCION FROM CLASE_MOVIMIENTO WHERE CODIGO = '" . $buscar . "'";
+		$sql = "SELECT ID_MOVIMIENTO,CODIGO,DESCRIPCION FROM ac_clase_movimiento WHERE CODIGO = '" . $buscar . "'";
 		$datos = $this->db->datos($sql);
 		return $datos;
 	}
 
 	function insertar($datos)
 	{
-		$rest = $this->db->inserts('CLASE_MOVIMIENTO', $datos);
+		$rest = $this->db->inserts('ac_clase_movimiento', $datos);
 
 		return $rest;
 	}
@@ -62,13 +62,13 @@ class clase_movimientoM
 	function editar($datos, $where)
 	{
 
-		$rest = $this->db->update('CLASE_MOVIMIENTO', $datos, $where);
+		$rest = $this->db->update('ac_clase_movimiento', $datos, $where);
 		return $rest;
 	}
 	
 	function eliminar($id)
 	{
-		$sql = "DELETE FROM CLASE_MOVIMIENTO WHERE ID_MOVIMIENTO = '" . $id . "'";
+		$sql = "DELETE FROM ac_clase_movimiento WHERE ID_MOVIMIENTO = '" . $id . "'";
 		return $this->db->sql_string($sql);
 		// $sql = "UPDATE clase_movimiento SET clase_movimiento='I' WHERE ".$datos[0]['campo']."='".$datos[0]['dato']."';";
 		// $datos = $this->db->sql_string($sql);

@@ -105,7 +105,7 @@ class marcasC
 		if ($movimiento != '' && $datos == 1) {
 			$texto = $parametros['cod'] . ';' . $parametros['des'];
 			$this->cod_global->para_ftp('marcas', $texto);
-			$this->cod_global->ingresar_movimientos(false, $movimiento, 'MARCAS');
+			$this->cod_global->ingresar_movimientos(false, $movimiento, 'ac_marcas');
 		}
 		return $datos;
 	}

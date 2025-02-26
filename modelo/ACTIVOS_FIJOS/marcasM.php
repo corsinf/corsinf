@@ -18,11 +18,11 @@ class marcasM
 
 	function lista_marcas($id = '', $pag = false)
 	{
-		// $sql = "SELECT ID_MARCA,CODIGO,DESCRIPCION FROM MARCAS ";
+		// $sql = "SELECT ID_MARCA,CODIGO,DESCRIPCION FROM ac_marcas ";
 
 		// print_r($pag);die();
 
-		$sql = "SELECT ID_MARCA,CODIGO,DESCRIPCION FROM MARCAS WHERE ESTADO='A' ";
+		$sql = "SELECT ID_MARCA,CODIGO,DESCRIPCION FROM ac_marcas WHERE ESTADO='A' ";
 		if ($id) {
 			$sql .= ' AND ID_MARCA= ' . $id;
 		}
@@ -40,11 +40,11 @@ class marcasM
 	}
 	function lista_marcas_todo($id = '', $pag = false)
 	{
-		// $sql = "SELECT ID_MARCA,CODIGO,DESCRIPCION FROM MARCAS ";
+		// $sql = "SELECT ID_MARCA,CODIGO,DESCRIPCION FROM ac_marcas ";
 
 		// print_r($pag);die();
 
-		$sql = "SELECT ID_MARCA,CODIGO,DESCRIPCION,ESTADO FROM MARCAS WHERE 1=1 ";
+		$sql = "SELECT ID_MARCA,CODIGO,DESCRIPCION,ESTADO FROM ac_marcas WHERE 1=1 ";
 		if ($id) {
 			$sql .= ' AND ID_MARCA= ' . $id;
 		}
@@ -63,8 +63,8 @@ class marcasM
 
 	function lista_marcas_pag()
 	{
-		$sql = "SELECT ID_MARCA,CODIGO,DESCRIPCION FROM MARCAS WHERE ESTADO='A'";
-		// $sql = "SELECT TOP() ID_MARCA,CODIGO,DESCRIPCION FROM MARCAS ";
+		$sql = "SELECT ID_MARCA,CODIGO,DESCRIPCION FROM ac_marcas WHERE ESTADO='A'";
+		// $sql = "SELECT TOP() ID_MARCA,CODIGO,DESCRIPCION FROM ac_marcas ";
 		// if($id)
 		// {
 		// 	$sql.= ' WHERE ID_MARCA= '.$id;
@@ -76,28 +76,28 @@ class marcasM
 
 	function buscar_marcas($buscar)
 	{
-		$sql = "SELECT ID_MARCA,CODIGO,DESCRIPCION FROM MARCAS WHERE ESTADO='A' AND DESCRIPCION +' '+CODIGO LIKE '%" . $buscar . "%'  ORDER BY ID_MARCA  OFFSET 0 ROWS FETCH NEXT 25 ROWS ONLY;";
+		$sql = "SELECT ID_MARCA,CODIGO,DESCRIPCION FROM ac_marcas WHERE ESTADO='A' AND DESCRIPCION +' '+CODIGO LIKE '%" . $buscar . "%'  ORDER BY ID_MARCA  OFFSET 0 ROWS FETCH NEXT 25 ROWS ONLY;";
 		$datos = $this->db->datos($sql);
 		return $datos;
 	}
 
 	function buscar_marcas_excel($buscar)
 	{
-		$sql = "SELECT ID_MARCA,CODIGO,DESCRIPCION FROM MARCAS WHERE UPPER(DESCRIPCION) = UPPER('" . $buscar . "');";
+		$sql = "SELECT ID_MARCA,CODIGO,DESCRIPCION FROM ac_marcas WHERE UPPER(DESCRIPCION) = UPPER('" . $buscar . "');";
 		$datos = $this->db->datos($sql);
 		return $datos;
 	}
 
 	function buscar_marcas_codigo($buscar)
 	{
-		$sql = "SELECT ID_MARCA,CODIGO,DESCRIPCION FROM MARCAS WHERE CODIGO ='" . $buscar . "';";
+		$sql = "SELECT ID_MARCA,CODIGO,DESCRIPCION FROM ac_marcas WHERE CODIGO ='" . $buscar . "';";
 		$datos = $this->db->datos($sql);
 		return $datos;
 	}
 
 	function buscar_marcas_all($buscar = false, $ID = false)
 	{
-		$sql = "SELECT ID_MARCA,CODIGO,DESCRIPCION FROM MARCAS WHERE 1=1";
+		$sql = "SELECT ID_MARCA,CODIGO,DESCRIPCION FROM ac_marcas WHERE 1=1";
 		if ($buscar) {
 			$sql .= " AND CODIGO ='" . $buscar . "';";
 		}
@@ -110,7 +110,7 @@ class marcasM
 
 	function insertar($datos)
 	{
-		$rest = $this->db->inserts('MARCAS', $datos);
+		$rest = $this->db->inserts('ac_marcas', $datos);
 
 		return $rest;
 	}
@@ -118,17 +118,17 @@ class marcasM
 	function editar($datos, $where)
 	{
 
-		$rest = $this->db->update('MARCAS', $datos, $where);
+		$rest = $this->db->update('ac_marcas', $datos, $where);
 		return $rest;
 	}
 	
 	function eliminar($datos)
 	{
-		$sql = "UPDATE MARCAS SET ESTADO='I' WHERE " . $datos[0]['campo'] . "='" . $datos[0]['dato'] . "';";
+		$sql = "UPDATE ac_marcas SET ESTADO='I' WHERE " . $datos[0]['campo'] . "='" . $datos[0]['dato'] . "';";
 		$datos = $this->db->sql_string($sql);
 		return $datos;
 
-		//$rest = $this->db->delete('MARCAS',$datos);
+		//$rest = $this->db->delete('ac_marcas',$datos);
 		//return $rest;
 	}
 }

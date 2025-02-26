@@ -19,14 +19,14 @@ class bajasM
 
 	// function lista_articulos($query=false,$loc=false,$cus=false,$pag=false,$whereid=false,$exacto=false,$asset=false,$desde=false,$hasta=false,$multiple=false)
 	// {
-	// 	$sql = "SELECT id_plantilla as 'id',A.TAG_SERIE as 'tag',A.ID_ASSET,DESCRIPT as 'nom',MODELO as 'modelo',A.TAG_UNIQUE AS 'RFID',SERIE as 'serie',L.ID_LOCATION AS 'IDL',L.DENOMINACION as 'localizacion',PE.ID_PERSON AS 'IDC',PE.PERSON_NOM as 'custodio',M.DESCRIPCION as 'marca',E.DESCRIPCION as 'estado',G.DESCRIPCION as 'genero',C.DESCRIPCION as 'color',IMAGEN,OBSERVACION,FECHA_INV_DATE as 'fecha_in',BAJAS,TERCEROS,PATRIMONIALES,* FROM PLANTILLA_MASIVA P
-	// 		LEFT JOIN ASSET A ON P.ID_ASSET = A.ID_ASSET
-	// 		LEFT JOIN LOCATION L ON P.LOCATION = L.ID_LOCATION
-	// 		LEFT JOIN PERSON_NO PE ON P.PERSON_NO = PE.ID_PERSON
-	// 		LEFT JOIN MARCAS M ON P.EVALGROUP1 = M.ID_MARCA
-	// 		LEFT JOIN ESTADO E ON P.EVALGROUP2 = E.ID_ESTADO
-	// 		LEFT JOIN GENERO G ON P.EVALGROUP3 = G.ID_GENERO
-	// 		LEFT JOIN COLORES C ON P.EVALGROUP4 = C.ID_COLORES
+	// 	$sql = "SELECT id_plantilla as 'id',A.TAG_SERIE as 'tag',A.ID_ASSET,DESCRIPT as 'nom',MODELO as 'modelo',A.TAG_UNIQUE AS 'RFID',SERIE as 'serie',L.ID_LOCATION AS 'IDL',L.DENOMINACION as 'localizacion',PE.ID_PERSON AS 'IDC',PE.PERSON_NOM as 'custodio',M.DESCRIPCION as 'marca',E.DESCRIPCION as 'estado',G.DESCRIPCION as 'genero',C.DESCRIPCION as 'color',IMAGEN,OBSERVACION,FECHA_INV_DATE as 'fecha_in',BAJAS,TERCEROS,PATRIMONIALES,* FROM ac_articulos P
+	// 		LEFT JOIN ac_asset A ON P.ID_ASSET = A.ID_ASSET
+	// 		LEFT JOIN ac_localizacion L ON P.LOCATION = L.ID_LOCATION
+	// 		LEFT JOIN th_personas PE ON P.PERSON_NO = PE.ID_PERSON
+	// 		LEFT JOIN ac_marcas M ON P.EVALGROUP1 = M.ID_MARCA
+	// 		LEFT JOIN ac_estado E ON P.EVALGROUP2 = E.ID_ESTADO
+	// 		LEFT JOIN ac_genero G ON P.EVALGROUP3 = G.ID_GENERO
+	// 		LEFT JOIN ac_colores C ON P.EVALGROUP4 = C.ID_COLORES
 	// 		WHERE BAJAS = 1 ";
 
 	// 				// print_r('dd'.$multiple);die();
@@ -114,16 +114,16 @@ class bajasM
 		$this->sql_busqueda = '';
 
 		// print_r($exacto);die();
-		$sql = "SELECT id_plantilla as 'id',A.TAG_SERIE as 'tag',A.ID_ASSET,DESCRIPT as 'nom',MODELO as 'modelo',A.TAG_UNIQUE AS 'RFID',SERIE as 'serie',L.ID_LOCATION AS 'IDL',L.DENOMINACION as 'localizacion',PE.ID_PERSON AS 'IDC',PE.PERSON_NOM as 'custodio',M.DESCRIPCION as 'marca',E.DESCRIPCION as 'estado',G.DESCRIPCION as 'genero',C.DESCRIPCION as 'color',IMAGEN,OBSERVACION,FECHA_INV_DATE as 'fecha_in',BAJAS,TERCEROS,PATRIMONIALES,* FROM PLANTILLA_MASIVA P
-			LEFT JOIN ASSET A ON P.ID_ASSET = A.ID_ASSET
-			LEFT JOIN LOCATION L ON P.LOCATION = L.ID_LOCATION
-			LEFT JOIN PERSON_NO PE ON P.PERSON_NO = PE.ID_PERSON
-			LEFT JOIN MARCAS M ON P.EVALGROUP1 = M.ID_MARCA
-			LEFT JOIN ESTADO E ON P.EVALGROUP2 = E.ID_ESTADO
-			LEFT JOIN GENERO G ON P.EVALGROUP3 = G.ID_GENERO
-			LEFT JOIN COLORES C ON P.EVALGROUP4 = C.ID_COLORES
-			LEFT JOIN PROYECTO PR ON P.EVALGROUP5 = PR.ID_PROYECTO
-			LEFT JOIN CLASE_MOVIMIENTO CL ON P.CLASE_MOVIMIENTO = CL.CODIGO
+		$sql = "SELECT id_plantilla as 'id',A.TAG_SERIE as 'tag',A.ID_ASSET,DESCRIPT as 'nom',MODELO as 'modelo',A.TAG_UNIQUE AS 'RFID',SERIE as 'serie',L.ID_LOCATION AS 'IDL',L.DENOMINACION as 'localizacion',PE.ID_PERSON AS 'IDC',PE.PERSON_NOM as 'custodio',M.DESCRIPCION as 'marca',E.DESCRIPCION as 'estado',G.DESCRIPCION as 'genero',C.DESCRIPCION as 'color',IMAGEN,OBSERVACION,FECHA_INV_DATE as 'fecha_in',BAJAS,TERCEROS,PATRIMONIALES,* FROM ac_articulos P
+			LEFT JOIN ac_asset A ON P.ID_ASSET = A.ID_ASSET
+			LEFT JOIN ac_localizacion L ON P.LOCATION = L.ID_LOCATION
+			LEFT JOIN th_personas PE ON P.PERSON_NO = PE.ID_PERSON
+			LEFT JOIN ac_marcas M ON P.EVALGROUP1 = M.ID_MARCA
+			LEFT JOIN ac_estado E ON P.EVALGROUP2 = E.ID_ESTADO
+			LEFT JOIN ac_genero G ON P.EVALGROUP3 = G.ID_GENERO
+			LEFT JOIN ac_colores C ON P.EVALGROUP4 = C.ID_COLORES
+			LEFT JOIN ac_proyecto PR ON P.EVALGROUP5 = PR.ID_PROYECTO
+			LEFT JOIN ac_clase_movimiento CL ON P.CLASE_MOVIMIENTO = CL.CODIGO
 			WHERE BAJAS = 1 AND TERCEROS = 0 AND PATRIMONIALES = 0  ";
 
 		if ($loc) {
@@ -346,16 +346,16 @@ class bajasM
 	{
 
 		// print_r($exacto);die();
-		$sql = "SELECT count(id_plantilla) as numreg FROM PLANTILLA_MASIVA P
-			LEFT JOIN ASSET A ON P.ID_ASSET = A.ID_ASSET
-			LEFT JOIN LOCATION L ON P.LOCATION = L.ID_LOCATION
-			LEFT JOIN PERSON_NO PE ON P.PERSON_NO = PE.ID_PERSON
-			LEFT JOIN MARCAS M ON P.EVALGROUP1 = M.ID_MARCA
-			LEFT JOIN ESTADO E ON P.EVALGROUP2 = E.ID_ESTADO
-			LEFT JOIN GENERO G ON P.EVALGROUP3 = G.ID_GENERO
-			LEFT JOIN COLORES C ON P.EVALGROUP4 = C.ID_COLORES
-			LEFT JOIN PROYECTO PR ON P.EVALGROUP5 = PR.ID_PROYECTO
-			LEFT JOIN CLASE_MOVIMIENTO CL ON P.CLASE_MOVIMIENTO = CL.CODIGO
+		$sql = "SELECT count(id_plantilla) as numreg FROM ac_articulos P
+			LEFT JOIN ac_asset A ON P.ID_ASSET = A.ID_ASSET
+			LEFT JOIN ac_localizacion L ON P.LOCATION = L.ID_LOCATION
+			LEFT JOIN th_personas PE ON P.PERSON_NO = PE.ID_PERSON
+			LEFT JOIN ac_marcas M ON P.EVALGROUP1 = M.ID_MARCA
+			LEFT JOIN ac_estado E ON P.EVALGROUP2 = E.ID_ESTADO
+			LEFT JOIN ac_genero G ON P.EVALGROUP3 = G.ID_GENERO
+			LEFT JOIN ac_colores C ON P.EVALGROUP4 = C.ID_COLORES
+			LEFT JOIN ac_proyecto PR ON P.EVALGROUP5 = PR.ID_PROYECTO
+			LEFT JOIN ac_clase_movimiento CL ON P.CLASE_MOVIMIENTO = CL.CODIGO
 			WHERE BAJAS = 1 AND TERCEROS = 0 AND PATRIMONIALES = 0  ";
 
 		if ($loc) {
@@ -560,21 +560,21 @@ class bajasM
 
 	function lista_kit($id_activo)
 	{
-		$sql = "SELECT * FROM PLANTILLA_MASIVA WHERE KIT = '" . $id_activo . "'";
+		$sql = "SELECT * FROM ac_articulos WHERE KIT = '" . $id_activo . "'";
 		// print_r($sql);die();
 		$datos = $this->db->datos($sql);
 		return $datos;
 	}
 	function cantidad_registros($query = false, $loc = false, $cus = false, $pag = false, $whereid = false, $desde = false, $hasta = false)
 	{
-		$sql = "SELECT COUNT(id_plantilla) as 'numreg' FROM PLANTILLA_MASIVA P
-			LEFT JOIN ASSET A ON P.ID_ASSET = A.ID_ASSET
-			LEFT JOIN LOCATION L ON P.LOCATION = L.ID_LOCATION
-			LEFT JOIN PERSON_NO PE ON P.PERSON_NO = PE.ID_PERSON
-			LEFT JOIN MARCAS M ON P.EVALGROUP1 = M.ID_MARCA
-			LEFT JOIN ESTADO E ON P.EVALGROUP2 = E.ID_ESTADO
-			LEFT JOIN GENERO G ON P.EVALGROUP3 = G.ID_GENERO
-			LEFT JOIN COLORES C ON P.EVALGROUP4 = C.ID_COLORES
+		$sql = "SELECT COUNT(id_plantilla) as 'numreg' FROM ac_articulos P
+			LEFT JOIN ac_asset A ON P.ID_ASSET = A.ID_ASSET
+			LEFT JOIN ac_localizacion L ON P.LOCATION = L.ID_LOCATION
+			LEFT JOIN th_personas PE ON P.PERSON_NO = PE.ID_PERSON
+			LEFT JOIN ac_marcas M ON P.EVALGROUP1 = M.ID_MARCA
+			LEFT JOIN ac_estado E ON P.EVALGROUP2 = E.ID_ESTADO
+			LEFT JOIN ac_genero G ON P.EVALGROUP3 = G.ID_GENERO
+			LEFT JOIN ac_colores C ON P.EVALGROUP4 = C.ID_COLORES
 			WHERE BAJAS = 1";
 
 		if ($desde != '' && $hasta != '' && $desde != false && $hasta != false) {
@@ -605,21 +605,21 @@ class bajasM
 
 	function cantidad_etiquetas()
 	{
-		$sql = "SELECT count(*) as 'eti' FROM ASSET WHERE TAG_UNIQUE <>''";
+		$sql = "SELECT count(*) as 'eti' FROM ac_asset WHERE TAG_UNIQUE <>''";
 		$datos = $this->db->datos($sql);
 		return $datos;
 	}
 
 	function cantidad_registros_patrimoniales($query, $loc, $cus, $pag = false, $whereid = false)
 	{
-		$sql = "SELECT COUNT(id_plantilla) as 'numreg' FROM PLANTILLA_MASIVA P
-			LEFT JOIN ASSET A ON P.ID_ASSET = A.ID_ASSET
-			LEFT JOIN LOCATION L ON P.LOCATION = L.ID_LOCATION
-			LEFT JOIN PERSON_NO PE ON P.PERSON_NO = PE.ID_PERSON
-			LEFT JOIN MARCAS M ON P.EVALGROUP1 = M.ID_MARCA
-			LEFT JOIN ESTADO E ON P.EVALGROUP2 = E.ID_ESTADO
-			LEFT JOIN GENERO G ON P.EVALGROUP3 = G.ID_GENERO
-			LEFT JOIN COLORES C ON P.EVALGROUP4 = C.ID_COLORES
+		$sql = "SELECT COUNT(id_plantilla) as 'numreg' FROM ac_articulos P
+			LEFT JOIN ac_asset A ON P.ID_ASSET = A.ID_ASSET
+			LEFT JOIN ac_localizacion L ON P.LOCATION = L.ID_LOCATION
+			LEFT JOIN th_personas PE ON P.PERSON_NO = PE.ID_PERSON
+			LEFT JOIN ac_marcas M ON P.EVALGROUP1 = M.ID_MARCA
+			LEFT JOIN ac_estado E ON P.EVALGROUP2 = E.ID_ESTADO
+			LEFT JOIN ac_genero G ON P.EVALGROUP3 = G.ID_GENERO
+			LEFT JOIN ac_colores C ON P.EVALGROUP4 = C.ID_COLORES
 			WHERE 1=1  AND PATRIMONIALES = 1";
 		if ($query) {
 			$sql .= " AND A.TAG_SERIE +' '+P.DESCRIPT+' '+P.ORIG_ASSET LIKE '%" . $query . "%'";
@@ -646,15 +646,15 @@ class bajasM
 
 	function lista_articulos_sap($query, $loc, $cus, $pag = false, $whereid = false, $mes = false, $desde = false, $hasta = false)
 	{
-		$sql = "SELECT id_plantilla,COMPANYCODE,A.TAG_SERIE,DESCRIPT,DESCRIPT2,MODELO,SERIE,EMPLAZAMIENTO,L.DENOMINACION,PE.PERSON_NO,PE.PERSON_NOM,M.DESCRIPCION as 'marca',E.DESCRIPCION as 'estado',G.DESCRIPCION as 'genero',C.DESCRIPCION as 'color',FECHA_INV_DATE,ASSETSUPNO,ASSETSUPNO,TAG_ANT,QUANTITY,BASE_UOM,ORIG_ASSET,ORIG_ACQ_YR,ORIG_VALUE,CARACTERISTICA,PROYECTO.programa_financiacion as 'criterio',TAG_UNIQUE,SUBNUMBER,OBSERVACION,IMAGEN  FROM PLANTILLA_MASIVA P
-			LEFT JOIN ASSET A ON P.ID_ASSET = A.ID_ASSET
-			LEFT JOIN LOCATION L ON P.LOCATION = L.ID_LOCATION
-			LEFT JOIN PERSON_NO PE ON P.PERSON_NO = PE.ID_PERSON
-			LEFT JOIN MARCAS M ON P.EVALGROUP1 = M.ID_MARCA
-			LEFT JOIN ESTADO E ON P.EVALGROUP2 = E.ID_ESTADO
-			LEFT JOIN GENERO G ON P.EVALGROUP3 = G.ID_GENERO
-			LEFT JOIN COLORES C ON P.EVALGROUP4 = C.ID_COLORES
-			LEFT JOIN PROYECTO ON P.EVALGROUP5 = PROYECTO.ID_PROYECTO 
+		$sql = "SELECT id_plantilla,COMPANYCODE,A.TAG_SERIE,DESCRIPT,DESCRIPT2,MODELO,SERIE,EMPLAZAMIENTO,L.DENOMINACION,PE.PERSON_NO,PE.PERSON_NOM,M.DESCRIPCION as 'marca',E.DESCRIPCION as 'estado',G.DESCRIPCION as 'genero',C.DESCRIPCION as 'color',FECHA_INV_DATE,ASSETSUPNO,ASSETSUPNO,TAG_ANT,QUANTITY,BASE_UOM,ORIG_ASSET,ORIG_ACQ_YR,ORIG_VALUE,CARACTERISTICA,ac_proyecto.programa_financiacion as 'criterio',TAG_UNIQUE,SUBNUMBER,OBSERVACION,IMAGEN  FROM ac_articulos P
+			LEFT JOIN ac_asset A ON P.ID_ASSET = A.ID_ASSET
+			LEFT JOIN ac_localizacion L ON P.LOCATION = L.ID_LOCATION
+			LEFT JOIN th_personas PE ON P.PERSON_NO = PE.ID_PERSON
+			LEFT JOIN ac_marcas M ON P.EVALGROUP1 = M.ID_MARCA
+			LEFT JOIN ac_estado E ON P.EVALGROUP2 = E.ID_ESTADO
+			LEFT JOIN ac_genero G ON P.EVALGROUP3 = G.ID_GENERO
+			LEFT JOIN ac_colores C ON P.EVALGROUP4 = C.ID_COLORES
+			LEFT JOIN ac_proyecto ON P.EVALGROUP5 = ac_proyecto.ID_PROYECTO 
 			WHERE A.TAG_SERIE +' '+P.DESCRIPT LIKE '%" . $query . "%'";
 		if ($loc != '') {
 			$sql .= " AND L.ID_LOCATION = '" . $loc . "' ";
@@ -683,16 +683,16 @@ class bajasM
 
 	function lista_articulos_sap_multiples($query = false, $loc = false, $cus = false, $pag = false, $whereid = false, $exacto = false, $asset = false, $bajas = false, $terceros = false, $patrimoniales = false, $desde = false, $hasta = false, $multiple = false)
 	{
-		$sql = "SELECT id_plantilla,COMPANYCODE,A.TAG_SERIE,DESCRIPT,DESCRIPT2,MODELO,SERIE,EMPLAZAMIENTO,L.DENOMINACION,PE.PERSON_NO,PE.PERSON_NOM,M.CODIGO as 'marca',E.CODIGO as 'estado',G.CODIGO as 'genero',C.CODIGO as 'color',FECHA_INV_DATE,ASSETSUPNO,ASSETSUPNO,TAG_ANT,QUANTITY,BASE_UOM,ORIG_ASSET,ORIG_ACQ_YR,ORIG_VALUE,CARACTERISTICA,PROYECTO.programa_financiacion as 'criterio',TAG_UNIQUE,SUBNUMBER,OBSERVACION,IMAGEN,ACTU_POR,BAJAS,FECHA_BAJA,FECHA_CONTA,FECHA_REFERENCIA,PERIODO,P.CLASE_MOVIMIENTO,CM.DESCRIPCION AS 'MOVIMIENTO'  FROM PLANTILLA_MASIVA P
-			LEFT JOIN ASSET A ON P.ID_ASSET = A.ID_ASSET
-			LEFT JOIN LOCATION L ON P.LOCATION = L.ID_LOCATION
-			LEFT JOIN PERSON_NO PE ON P.PERSON_NO = PE.ID_PERSON
-			LEFT JOIN MARCAS M ON P.EVALGROUP1 = M.ID_MARCA
-			LEFT JOIN ESTADO E ON P.EVALGROUP2 = E.ID_ESTADO
-			LEFT JOIN GENERO G ON P.EVALGROUP3 = G.ID_GENERO
-			LEFT JOIN COLORES C ON P.EVALGROUP4 = C.ID_COLORES
-			LEFT JOIN PROYECTO ON P.EVALGROUP5 = PROYECTO.ID_PROYECTO
-			LEFT JOIN CLASE_MOVIMIENTO CM ON P.CLASE_MOVIMIENTO = CM.CODIGO 
+		$sql = "SELECT id_plantilla,COMPANYCODE,A.TAG_SERIE,DESCRIPT,DESCRIPT2,MODELO,SERIE,EMPLAZAMIENTO,L.DENOMINACION,PE.PERSON_NO,PE.PERSON_NOM,M.CODIGO as 'marca',E.CODIGO as 'estado',G.CODIGO as 'genero',C.CODIGO as 'color',FECHA_INV_DATE,ASSETSUPNO,ASSETSUPNO,TAG_ANT,QUANTITY,BASE_UOM,ORIG_ASSET,ORIG_ACQ_YR,ORIG_VALUE,CARACTERISTICA,ac_proyecto.programa_financiacion as 'criterio',TAG_UNIQUE,SUBNUMBER,OBSERVACION,IMAGEN,ACTU_POR,BAJAS,FECHA_BAJA,FECHA_CONTA,FECHA_REFERENCIA,PERIODO,P.CLASE_MOVIMIENTO,CM.DESCRIPCION AS 'MOVIMIENTO'  FROM ac_articulos P
+			LEFT JOIN ac_asset A ON P.ID_ASSET = A.ID_ASSET
+			LEFT JOIN ac_localizacion L ON P.LOCATION = L.ID_LOCATION
+			LEFT JOIN th_personas PE ON P.PERSON_NO = PE.ID_PERSON
+			LEFT JOIN ac_marcas M ON P.EVALGROUP1 = M.ID_MARCA
+			LEFT JOIN ac_estado E ON P.EVALGROUP2 = E.ID_ESTADO
+			LEFT JOIN ac_genero G ON P.EVALGROUP3 = G.ID_GENERO
+			LEFT JOIN ac_colores C ON P.EVALGROUP4 = C.ID_COLORES
+			LEFT JOIN ac_proyecto ON P.EVALGROUP5 = ac_proyecto.ID_PROYECTO
+			LEFT JOIN ac_clase_movimiento CM ON P.CLASE_MOVIMIENTO = CM.CODIGO 
 			WHERE 1=1";
 
 		// print_r('dd'.$multiple);die();
@@ -757,16 +757,16 @@ class bajasM
 
 	function total_activos($query = false, $loc = false, $cus = false, $pag = false, $whereid = false, $desde = false, $hasta = false, $bajas = false, $terceros = false, $patrimoniales = false)
 	{
-		$sql = "SELECT COUNT(*) as 'total' FROM PLANTILLA_MASIVA P
-			LEFT JOIN ASSET A ON P.ID_ASSET = A.ID_ASSET
-			LEFT JOIN LOCATION L ON P.LOCATION = L.ID_LOCATION
-			LEFT JOIN PERSON_NO PE ON P.PERSON_NO = PE.ID_PERSON
-			LEFT JOIN MARCAS M ON P.EVALGROUP1 = M.ID_MARCA
-			LEFT JOIN ESTADO E ON P.EVALGROUP2 = E.ID_ESTADO
-			LEFT JOIN GENERO G ON P.EVALGROUP3 = G.ID_GENERO
-			LEFT JOIN COLORES C ON P.EVALGROUP4 = C.ID_COLORES
-			LEFT JOIN PROYECTO ON P.EVALGROUP5 = PROYECTO.ID_PROYECTO
-			LEFT JOIN CLASE_MOVIMIENTO CM ON P.CLASE_MOVIMIENTO = CM.CODIGO
+		$sql = "SELECT COUNT(*) as 'total' FROM ac_articulos P
+			LEFT JOIN ac_asset A ON P.ID_ASSET = A.ID_ASSET
+			LEFT JOIN ac_localizacion L ON P.LOCATION = L.ID_LOCATION
+			LEFT JOIN th_personas PE ON P.PERSON_NO = PE.ID_PERSON
+			LEFT JOIN ac_marcas M ON P.EVALGROUP1 = M.ID_MARCA
+			LEFT JOIN ac_estado E ON P.EVALGROUP2 = E.ID_ESTADO
+			LEFT JOIN ac_genero G ON P.EVALGROUP3 = G.ID_GENERO
+			LEFT JOIN ac_colores C ON P.EVALGROUP4 = C.ID_COLORES
+			LEFT JOIN ac_proyecto ON P.EVALGROUP5 = ac_proyecto.ID_PROYECTO
+			LEFT JOIN ac_clase_movimiento CM ON P.CLASE_MOVIMIENTO = CM.CODIGO
 			WHERE 1=1 ";
 
 		if ($query) {
@@ -804,16 +804,16 @@ class bajasM
 
 	function lista_articulos_sap_codigos($query = false, $loc = false, $cus = false, $pag = false, $whereid = false, $mes = false, $desde = false, $hasta = false, $bajas = false, $terceros = false, $patrimoniales = false)
 	{
-		$sql = "SELECT id_plantilla,COMPANYCODE,A.TAG_SERIE,DESCRIPT,DESCRIPT2,MODELO,SERIE,EMPLAZAMIENTO,L.DENOMINACION,PE.PERSON_NO,PE.PERSON_NOM,M.CODIGO as 'marca',E.CODIGO as 'estado',G.CODIGO as 'genero',C.CODIGO as 'color',FECHA_INV_DATE,ASSETSUPNO,ASSETSUPNO,TAG_ANT,QUANTITY,BASE_UOM,ORIG_ASSET,ORIG_ACQ_YR,ORIG_VALUE,CARACTERISTICA,PROYECTO.programa_financiacion as 'criterio',TAG_UNIQUE,SUBNUMBER,OBSERVACION,IMAGEN,ACTU_POR,BAJAS,FECHA_BAJA,FECHA_CONTA,FECHA_REFERENCIA,PERIODO,P.CLASE_MOVIMIENTO,CM.DESCRIPCION AS 'MOVIMIENTO',FECHA_INV_DATE  FROM PLANTILLA_MASIVA P
-			LEFT JOIN ASSET A ON P.ID_ASSET = A.ID_ASSET
-			LEFT JOIN LOCATION L ON P.LOCATION = L.ID_LOCATION
-			LEFT JOIN PERSON_NO PE ON P.PERSON_NO = PE.ID_PERSON
-			LEFT JOIN MARCAS M ON P.EVALGROUP1 = M.ID_MARCA
-			LEFT JOIN ESTADO E ON P.EVALGROUP2 = E.ID_ESTADO
-			LEFT JOIN GENERO G ON P.EVALGROUP3 = G.ID_GENERO
-			LEFT JOIN COLORES C ON P.EVALGROUP4 = C.ID_COLORES
-			LEFT JOIN PROYECTO ON P.EVALGROUP5 = PROYECTO.ID_PROYECTO
-			LEFT JOIN CLASE_MOVIMIENTO CM ON P.CLASE_MOVIMIENTO = CM.CODIGO 
+		$sql = "SELECT id_plantilla,COMPANYCODE,A.TAG_SERIE,DESCRIPT,DESCRIPT2,MODELO,SERIE,EMPLAZAMIENTO,L.DENOMINACION,PE.PERSON_NO,PE.PERSON_NOM,M.CODIGO as 'marca',E.CODIGO as 'estado',G.CODIGO as 'genero',C.CODIGO as 'color',FECHA_INV_DATE,ASSETSUPNO,ASSETSUPNO,TAG_ANT,QUANTITY,BASE_UOM,ORIG_ASSET,ORIG_ACQ_YR,ORIG_VALUE,CARACTERISTICA,ac_proyecto.programa_financiacion as 'criterio',TAG_UNIQUE,SUBNUMBER,OBSERVACION,IMAGEN,ACTU_POR,BAJAS,FECHA_BAJA,FECHA_CONTA,FECHA_REFERENCIA,PERIODO,P.CLASE_MOVIMIENTO,CM.DESCRIPCION AS 'MOVIMIENTO',FECHA_INV_DATE  FROM ac_articulos P
+			LEFT JOIN ac_asset A ON P.ID_ASSET = A.ID_ASSET
+			LEFT JOIN ac_localizacion L ON P.LOCATION = L.ID_LOCATION
+			LEFT JOIN th_personas PE ON P.PERSON_NO = PE.ID_PERSON
+			LEFT JOIN ac_marcas M ON P.EVALGROUP1 = M.ID_MARCA
+			LEFT JOIN ac_estado E ON P.EVALGROUP2 = E.ID_ESTADO
+			LEFT JOIN ac_genero G ON P.EVALGROUP3 = G.ID_GENERO
+			LEFT JOIN ac_colores C ON P.EVALGROUP4 = C.ID_COLORES
+			LEFT JOIN ac_proyecto ON P.EVALGROUP5 = ac_proyecto.ID_PROYECTO
+			LEFT JOIN ac_clase_movimiento CM ON P.CLASE_MOVIMIENTO = CM.CODIGO 
 			WHERE 1=1 ";
 
 		if ($query) {
@@ -861,15 +861,15 @@ class bajasM
 	}
 	function buscar_acticulos_existente($asset)
 	{
-		$sql = "SELECT id_plantilla,COMPANYCODE,TAG_SERIE,A.ID_ASSET,SUBNUMBER,DESCRIPT,DESCRIPT2,MODELO,SERIE,A.TAG_UNIQUE,FECHA_INV_DATE,QUANTITY,BASE_UOM,LOCATION,PERSON_NO,EVALGROUP1,EVALGROUP2,EVALGROUP3,EVALGROUP4,EVALGROUP5,ASSETSUPNO,ORIG_ASSET,ORIG_ACQ_YR,ORIG_VALUE,OBSERVACION,BAJAS,CARACTERISTICA,IMAGEN,ACTU_POR FROM ASSET A
-		INNER JOIN PLANTILLA_MASIVA PM ON A.ID_ASSET = PM.ID_ASSET
+		$sql = "SELECT id_plantilla,COMPANYCODE,TAG_SERIE,A.ID_ASSET,SUBNUMBER,DESCRIPT,DESCRIPT2,MODELO,SERIE,A.TAG_UNIQUE,FECHA_INV_DATE,QUANTITY,BASE_UOM,LOCATION,PERSON_NO,EVALGROUP1,EVALGROUP2,EVALGROUP3,EVALGROUP4,EVALGROUP5,ASSETSUPNO,ORIG_ASSET,ORIG_ACQ_YR,ORIG_VALUE,OBSERVACION,BAJAS,CARACTERISTICA,IMAGEN,ACTU_POR FROM ac_asset A
+		INNER JOIN ac_articulos PM ON A.ID_ASSET = PM.ID_ASSET
 		WHERE A.TAG_SERIE = '" . $asset . "'";
 		return $this->db->datos($sql);
 	}
 
 	function meses_modificado()
 	{
-		$sql = "Select DISTINCT DateName(month,FECHA_INV_DATE) as 'mes',MONTH(FECHA_INV_DATE) as 'num' FROM PLANTILLA_MASIVA WHERE FECHA_INV_DATE IS NOT NULL ORDER BY num";
+		$sql = "Select DISTINCT DateName(month,FECHA_INV_DATE) as 'mes',MONTH(FECHA_INV_DATE) as 'num' FROM ac_articulos WHERE FECHA_INV_DATE IS NOT NULL ORDER BY num";
 		$datos = $this->db->datos($sql);
 		return $datos;
 	}
@@ -916,7 +916,7 @@ class bajasM
 	function editar_asser($datos, $where)
 	{
 		// print_r($datos);die();
-		$rest = $this->db->update('ASSET', $datos, $where);
+		$rest = $this->db->update('ac_asset', $datos, $where);
 		return $rest;
 	}
 
@@ -928,14 +928,14 @@ class bajasM
 
 	function existe($datos)
 	{
-		$sql = "SELECT COUNT(ID_ASSET) from ASSET WHERE TAG_UNIQUE ='" . $datos . "'";
+		$sql = "SELECT COUNT(ID_ASSET) from ac_asset WHERE TAG_UNIQUE ='" . $datos . "'";
 		$rest = $this->db->existente($sql);
 		return $rest;
 	}
 
 	function existe_datos()
 	{
-		$sql = "SELECT * FROM IMPRIMIR_TAGS";
+		$sql = "SELECT * FROM ac_imprimir_tags";
 		$rest = $this->db->existente($sql);
 		//print_r($rest);die();
 		return $rest;
@@ -943,7 +943,7 @@ class bajasM
 
 	function asset($datos)
 	{
-		$sql = "SELECT ID_ASSET,TAG_SERIE,TAG_ANT,TAG_UNIQUE from ASSET WHERE TAG_SERIE ='" . $datos . "'";
+		$sql = "SELECT ID_ASSET,TAG_SERIE,TAG_ANT,TAG_UNIQUE from ac_asset WHERE TAG_SERIE ='" . $datos . "'";
 		$rest = -1;
 		if ($this->db->existente($sql) == 1) {
 			$rest = $this->db->datos($sql);
@@ -954,11 +954,11 @@ class bajasM
 	function cambiar_masivo($tipo, $ids, $despues)
 	{
 		if ($tipo == 'C') {
-			$sql = 'UPDATE PLANTILLA_MASIVA SET PERSON_NO = ' . $despues . ' WHERE id_plantilla IN (' . $ids . ')';
+			$sql = 'UPDATE ac_articulos SET PERSON_NO = ' . $despues . ' WHERE id_plantilla IN (' . $ids . ')';
 			// print_r($sql);die();
 			return $this->db->sql_string($sql);
 		} else {
-			$sql = 'UPDATE PLANTILLA_MASIVA SET LOCATION = ' . $despues . ' WHERE id_plantilla IN (' . $ids . ')';
+			$sql = 'UPDATE ac_articulos SET LOCATION = ' . $despues . ' WHERE id_plantilla IN (' . $ids . ')';
 			// print_r($sql);die();
 			return $this->db->sql_string($sql);
 		}
@@ -966,7 +966,7 @@ class bajasM
 
 	function log_activo($fecha)
 	{
-		$sql = "SELECT * FROM log_activos WHERE estado = 0 AND fecha = '" . $fecha . "' ORDER by id_log desc ";
+		$sql = "SELECT * FROM ac_log_activos WHERE estado = 0 AND fecha = '" . $fecha . "' ORDER by id_log desc ";
 		// print_r($sql);die();
 		$re = $this->db->datos($sql);
 		return $re;
@@ -974,9 +974,9 @@ class bajasM
 
 	function cambios($desde = false, $hasta = false)
 	{
-		$sql = "SELECT M.id_plantilla,A.TAG_SERIE,P.DESCRIPT,fecha_movimiento,dato_anterior,codigo_ant,dato_nuevo,codigo_nue,responsable,obs_movimiento FROM MOVIMIENTO M
-			INNER JOIN PLANTILLA_MASIVA P ON M.id_plantilla = P.id_plantilla 
-       LEFT JOIN ASSET A ON P.ID_ASSET = A.ID_ASSET
+		$sql = "SELECT M.id_plantilla,A.TAG_SERIE,P.DESCRIPT,fecha_movimiento,dato_anterior,codigo_ant,dato_nuevo,codigo_nue,responsable,obs_movimiento FROM ac_movimiento M
+			INNER JOIN ac_articulos P ON M.id_plantilla = P.id_plantilla 
+       LEFT JOIN ac_asset A ON P.ID_ASSET = A.ID_ASSET
 			WHERE 1=1";
 		if ($desde != false && $hasta != false) {
 			$sql .= " AND fecha_movimiento BETWEEN '" . $desde . "' AND '" . $hasta . "' ";

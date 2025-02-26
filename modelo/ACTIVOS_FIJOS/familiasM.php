@@ -18,7 +18,7 @@ class familiasM
 
 	function lista_familias($id = false, $query = false)
 	{
-		$sql = "SELECT id_familia,detalle_familia FROM FAMILIAS  WHERE familia='.' ";
+		$sql = "SELECT id_familia,detalle_familia FROM ac_familias  WHERE familia='.' ";
 		if ($query) {
 			$sql .= " and detalle_familia= '" . $query . "'";
 		}
@@ -33,8 +33,8 @@ class familiasM
 
 	function lista_subfamilias($id = false, $query = false)
 	{
-		$sql = "SELECT F.id_familia,F.detalle_familia,F2.id_familia as 'idF',F2.detalle_familia as 'familia'  FROM FAMILIAS  F
-			INNER JOIN FAMILIAS F2 ON F.familia = F2.id_familia
+		$sql = "SELECT F.id_familia,F.detalle_familia,F2.id_familia as 'idF',F2.detalle_familia as 'familia'  FROM ac_familias  F
+			INNER JOIN ac_familias F2 ON F.familia = F2.id_familia
 			WHERE F.familia<>'.' AND F.familia<>''";
 		if ($query) {
 			$sql .= " and F.detalle_familia like '%" . $query . "%'";
