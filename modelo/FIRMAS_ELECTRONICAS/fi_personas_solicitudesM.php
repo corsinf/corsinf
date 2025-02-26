@@ -115,11 +115,11 @@ class fi_personas_solicitudesM extends BaseModel
             LEFT JOIN 
                 th_ciudad ciu ON per.th_ciu_id = ciu.th_ciu_id
             LEFT JOIN 
-                th_parroquias parr ON per.th_parr_id = parr.th_parr_id";
+                th_parroquias parr ON per.th_parr_id = parr.th_parr_id
+            WHERE 1 = 1";
 
         if ($id_persona != '') {
-            $sql .= " WHERE 
-                fps.th_per_id = '$id_persona'";
+            $sql .= " AND fps.th_per_id = '$id_persona'";
         }
 
         if ($id_solicitud != '') {
