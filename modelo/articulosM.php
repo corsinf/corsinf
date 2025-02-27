@@ -1,8 +1,7 @@
 <?php 
-if(!class_exists('db'))
-{
- include('../db/db.php');
-}
+
+ require_once(dirname(__dir__,1).'/db/db.php');
+
 /**
  * 
  */
