@@ -643,9 +643,9 @@
     function prueba()
     {
         $.ajax({
-            url: 'http://localhost:3000', // Dirección del servidor en Java
-            type: 'POST', // Método HTTP
-            contentType: 'application/json', // Tipo de contenido enviado
+            url: 'http://localhost:3000',
+            type: 'POST',
+            contentType: 'application/json',
             data: JSON.stringify({
                 comando: 'imprimir',
                 datos: '^XA^FO50,50^A0N,50,50^FDHello, World!^FS^XZ'
