@@ -642,16 +642,21 @@
 
     function prueba()
     {
-        fetch('http://localhost:3000', {
-          method: 'POST',
-          body: JSON.stringify({ comando: 'imprimir', datos: '^XA^FO50,50^A0N,50,50^FDHello, World!^FS^XZ' }),
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        })
-          .then(response => response.text())
-          .then(data => console.log('Respuesta del servidor:', data))
-          .catch(error => console.error('Error:', error));
+        $.ajax({
+            url: 'http://localhost:3000', // Dirección del servidor en Java
+            type: 'POST', // Método HTTP
+            contentType: 'application/json', // Tipo de contenido enviado
+            data: JSON.stringify({
+                comando: 'imprimir',
+                datos: '^XA^FO50,50^A0N,50,50^FDHello, World!^FS^XZ'
+            }),
+            success: function(response) {
+                console.log('Respuesta del servidor:', response);
+            },
+            error: function(xhr, status, error) {
+                console.error('Error en la solicitud:', status, error);
+            }
+        });
     }
 
 
