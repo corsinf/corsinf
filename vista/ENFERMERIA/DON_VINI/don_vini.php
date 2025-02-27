@@ -22,7 +22,7 @@
 
 
         $.ajax({
-            url: '../controlador/cat_configuracionGC_IDUKAY.php?listar_idukay_estudiantes=true',
+            url: '../controlador/SALUD_INTEGRAL/cat_configuracionGC_IDUKAY.php?listar_idukay_estudiantes=true',
             type: 'post',
             dataType: 'json',
             success: function(data) {
@@ -130,7 +130,7 @@
         });
 
         $.ajax({
-            url: '../controlador/cat_configuracionGC_IDUKAY.php?idukay_estudiantes=true',
+            url: '../controlador/SALUD_INTEGRAL/cat_configuracionGC_IDUKAY.php?idukay_estudiantes=true',
             type: 'post',
             dataType: 'json',
             success: function(response) {
@@ -168,7 +168,7 @@
         });
 
         $.ajax({
-            url: '../controlador/cat_configuracionGC_IDUKAY.php?idukay_representantes=true',
+            url: '../controlador/SALUD_INTEGRAL/cat_configuracionGC_IDUKAY.php?idukay_representantes=true',
             type: 'post',
             dataType: 'json',
             success: function(response) {

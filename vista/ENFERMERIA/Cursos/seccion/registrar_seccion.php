@@ -24,7 +24,7 @@ if (isset($_GET['id'])) {
       data: {
         id: id
       },
-      url: '../controlador/seccionC.php?listar=true',
+      url: '../controlador/SALUD_INTEGRAL/seccionC.php?listar=true',
       type: 'post',
       dataType: 'json',
       success: function(response) {
@@ -78,7 +78,7 @@ if (isset($_GET['id'])) {
       data: {
         parametros: parametros
       },
-      url: '../controlador/seccionC.php?insertar=true',
+      url: '../controlador/SALUD_INTEGRAL/seccionC.php?insertar=true',
       type: 'post',
       dataType: 'json',
       /*beforeSend: function () {   
@@ -123,7 +123,7 @@ if (isset($_GET['id'])) {
       data: {
         id: id
       },
-      url: '../controlador/seccionC.php?eliminar=true',
+      url: '../controlador/SALUD_INTEGRAL/seccionC.php?eliminar=true',
       type: 'post',
       dataType: 'json',
       beforeSend: function () {   

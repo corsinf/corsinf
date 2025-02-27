@@ -36,7 +36,7 @@ if (isset($_GET['id_seccion'])) {
       data: {
         id: id
       },
-      url: '../controlador/seccionC.php?listar=true',
+      url: '../controlador/SALUD_INTEGRAL/seccionC.php?listar=true',
       type: 'post',
       dataType: 'json',
 
@@ -70,7 +70,7 @@ if (isset($_GET['id_seccion'])) {
       data: {
         id: id
       },
-      url: '../controlador/gradoC.php?listar=true',
+      url: '../controlador/SALUD_INTEGRAL/gradoC.php?listar=true',
       type: 'post',
       dataType: 'json',
       success: function(response) {
@@ -126,7 +126,7 @@ if (isset($_GET['id_seccion'])) {
       data: {
         parametros: parametros
       },
-      url: '../controlador/gradoC.php?insertar=true',
+      url: '../controlador/SALUD_INTEGRAL/gradoC.php?insertar=true',
       type: 'post',
       dataType: 'json',
       /*beforeSend: function () {   
@@ -171,7 +171,7 @@ if (isset($_GET['id_seccion'])) {
       data: {
         id: id
       },
-      url: '../controlador/gradoC.php?eliminar=true',
+      url: '../controlador/SALUD_INTEGRAL/gradoC.php?eliminar=true',
       type: 'post',
       dataType: 'json',
       beforeSend: function() {

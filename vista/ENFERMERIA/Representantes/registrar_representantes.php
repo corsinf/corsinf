@@ -25,7 +25,7 @@ if (isset($_POST['sa_rep_id'])) {
             data: {
                 id: id
             },
-            url: '../controlador/representantesC.php?listar=true',
+            url: '../controlador/SALUD_INTEGRAL/representantesC.php?listar=true',
             type: 'post',
             dataType: 'json',
             success: function(response) {
@@ -129,7 +129,7 @@ if (isset($_POST['sa_rep_id'])) {
             data: {
                 parametros: parametros
             },
-            url: '../controlador/representantesC.php?insertar=true',
+            url: '../controlador/SALUD_INTEGRAL/representantesC.php?insertar=true',
             type: 'post',
             dataType: 'json',
 
@@ -167,7 +167,7 @@ if (isset($_POST['sa_rep_id'])) {
             data: {
                 id: id
             },
-            url: '../controlador/representantesC.php?eliminar=true',
+            url: '../controlador/SALUD_INTEGRAL/representantesC.php?eliminar=true',
             type: 'post',
             dataType: 'json',
             success: function(response) {

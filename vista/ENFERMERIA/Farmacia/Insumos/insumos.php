@@ -11,7 +11,7 @@
             },
             responsive: true,
             ajax: {
-                url: '../controlador/insumosC.php?listar_todo=true',
+                url: '../controlador/SALUD_INTEGRAL/insumosC.php?listar_todo=true',
                 dataSrc: ''
             },
             columns: [{

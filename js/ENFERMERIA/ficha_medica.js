@@ -199,7 +199,7 @@ function insertarMedicamentos(valor) {
         data: {
             id: valor
         },
-        url: '../controlador/' + tabla + 'C.php?listar=true',
+        url: '../controlador/SALUD_INTEGRAL/' + tabla + 'C.php?listar=true',
         type: 'post',
         dataType: 'json',
         success: function (response) {
@@ -228,7 +228,7 @@ function insertar_detalle_fm(parametros) {
         data: {
             parametros: parametros
         },
-        url: '../controlador/detalle_fm_med_insC.php?insertar=true',
+        url: '../controlador/SALUD_INTEGRAL/detalle_fm_med_insC.php?insertar=true',
         type: 'post',
         dataType: 'json',
 
@@ -324,7 +324,7 @@ function eliminar_det_fm_item(id_item) {
         data: {
             id: id_item
         },
-        url: '../controlador/detalle_fm_med_insC.php?eliminar=true',
+        url: '../controlador/SALUD_INTEGRAL/detalle_fm_med_insC.php?eliminar=true',
         type: 'post',
         dataType: 'json',
         success: function (response) {
@@ -363,7 +363,7 @@ function consultar_medicinas_insumos(entrada) {
             },
             //minimumInputLength: 1,
             ajax: {
-                url: '../controlador/medicamentosC.php?listar_todo=true',
+                url: '../controlador/SALUD_INTEGRAL/medicamentosC.php?listar_todo=true',
                 dataType: 'json',
                 delay: 250,
                 data: function (params) {
@@ -424,7 +424,7 @@ function consultar_medicinas_insumos(entrada) {
             },
             minimumInputLength: 1,
             ajax: {
-                url: '../controlador/insumosC.php?listar_todo=true',
+                url: '../controlador/SALUD_INTEGRAL/insumosC.php?listar_todo=true',
                 dataType: 'json',
                 delay: 250,
                 data: function (params) {
@@ -496,7 +496,7 @@ function cargar_farmacologia_fm(id) {
         data: {
             id: id
         },
-        url: '../controlador/detalle_fm_med_insC.php?listar=true',
+        url: '../controlador/SALUD_INTEGRAL/detalle_fm_med_insC.php?listar=true',
         type: 'post',
         dataType: 'json',
         success: function (response) {

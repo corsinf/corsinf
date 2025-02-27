@@ -10,7 +10,7 @@
             data: {
                 id: id
             },
-            url: '../controlador/gradoC.php?listar=true',
+            url: '../controlador/SALUD_INTEGRAL/gradoC.php?listar=true',
             type: 'post',
             dataType: 'json',
 
@@ -39,7 +39,7 @@
             data: {
                 buscar: buscar
             },
-            url: '../controlador/gradoC.php?buscar=true',
+            url: '../controlador/SALUD_INTEGRAL/gradoC.php?buscar=true',
             type: 'post',
             dataType: 'json',
 

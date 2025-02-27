@@ -65,7 +65,7 @@
  		var opcion = '<option value="">seleccione tipo de reporte</option>';
     $.ajax({
       // data:  {id:id},
-      url:  '../controlador/reportesC.php?tipo_reporte=true',
+      url:  '../controlador/ACTIVOS_FIJOS/reportesC.php?tipo_reporte=true',
       type:  'post',
       dataType: 'json',
       /*beforeSend: function () {   
@@ -101,7 +101,7 @@
 	}
 	$.ajax({
 	  data:  {parametros:parametros},
-	  url:  '../controlador/reportesC.php?crear_reporte=true',
+	  url:  '../controlador/ACTIVOS_FIJOS/reportesC.php?crear_reporte=true',
 	  type:  'post',
 	  dataType: 'json',
 	  /*beforeSend: function () {   
@@ -130,7 +130,7 @@
 			}
 			$.ajax({
 			  data:  {parametros:parametros},
-			  url:  '../controlador/reportesC.php?datos_reporte=true',
+			  url:  '../controlador/ACTIVOS_FIJOS/reportesC.php?datos_reporte=true',
 			  type:  'post',
 			  dataType: 'json',
 			  /*beforeSend: function () {   
@@ -161,7 +161,7 @@
 		campos+= '&id='+id;
 		$.ajax({
 			  data:  campos,
-			  url:  '../controlador/reportesC.php?guardar_campos=true',
+			  url:  '../controlador/ACTIVOS_FIJOS/reportesC.php?guardar_campos=true',
 			  type:  'post',
 			  dataType: 'json',
 			  /*beforeSend: function () {   
@@ -190,7 +190,7 @@
 		filtros+='&id='+id+'&pag='+pag+'&pag2='+pag2;
 		$.ajax({
 			  data:  filtros,
-			  url:  '../controlador/reportesC.php?detalle_reporte=true',
+			  url:  '../controlador/ACTIVOS_FIJOS/reportesC.php?detalle_reporte=true',
 			  type:  'post',
 			  dataType: 'json',
 			  /*beforeSend: function () {   
@@ -234,7 +234,7 @@
 		filtros+='&id='+id;
 		$.ajax({
 			  data:  filtros,
-			  url:  '../controlador/reportesC.php?filtro_reporte=true',
+			  url:  '../controlador/ACTIVOS_FIJOS/reportesC.php?filtro_reporte=true',
 			  type:  'post',
 			  dataType: 'json',
 			  /*beforeSend: function () {   
@@ -256,7 +256,7 @@
 	{
 		$.ajax({
 		  // data:  filtros,
-		  url:  '../controlador/reportesC.php?lista_reportes=true',
+		  url:  '../controlador/ACTIVOS_FIJOS/reportesC.php?lista_reportes=true',
 		  type:  'post',
 		  dataType: 'json',
 		  /*beforeSend: function () {   
@@ -301,7 +301,7 @@ function eliminar_repo(id)
 {
 		$.ajax({
 		  data:  {id,id},
-		  url:  '../controlador/reportesC.php?eliminar_reporte=true',
+		  url:  '../controlador/ACTIVOS_FIJOS/reportesC.php?eliminar_reporte=true',
 		  type:  'post',
 		  dataType: 'json',
 		  /*beforeSend: function () {   

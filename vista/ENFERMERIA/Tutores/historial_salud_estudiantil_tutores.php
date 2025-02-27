@@ -42,7 +42,7 @@ if ($id != null && $id != '') {
             },
             responsive: true,
             ajax: {
-                url: '../controlador/tutores_paraleloC.php?listar_todo=true',
+                url: '../controlador/SALUD_INTEGRAL/tutores_paraleloC.php?listar_todo=true',
                 data: function(d) {
                     d.listar_todo = true;
                     d.paralelo = paralelo;
@@ -141,7 +141,7 @@ if ($id != null && $id != '') {
         var salida = '<option disable selected>-- Elija un curso --</option>';
 
         $.ajax({
-            url: '../controlador/tutores_paraleloC.php?listar=true',
+            url: '../controlador/SALUD_INTEGRAL/tutores_paraleloC.php?listar=true',
             type: 'get',
             data: {
                 id_tutor: '<?= $id_tutor; ?>'

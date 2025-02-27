@@ -24,7 +24,7 @@
             },
             responsive: true,
             ajax: {
-                url: '../controlador/pacientesC.php?listar_todo=true',
+                url: '../controlador/SALUD_INTEGRAL/pacientesC.php?listar_todo=true',
                 dataSrc: '',
                 complete: function() {
                     Swal.close();
@@ -76,7 +76,7 @@
 
     function ver_pdf(id_fm) {
         //console.log(id_consulta);
-        window.open('../controlador/ficha_MedicaC.php?pdf_ficha_medica=true&id=' + id_fm, '_blank');
+        window.open('../controlador/SALUD_INTEGRAL/ficha_MedicaC.php?pdf_ficha_medica=true&id=' + id_fm, '_blank');
     }
 
     function consultar_tablas_datos(valor_seleccionar) {
@@ -106,7 +106,7 @@
             },
             minimumInputLength: 1,
             ajax: {
-                url: '../controlador/' + sa_tbl_pac_tabla + 'C.php?listar_todo=true',
+                url: '../controlador/SALUD_INTEGRAL/' + sa_tbl_pac_tabla + 'C.php?listar_todo=true',
                 dataType: 'json',
                 delay: 250,
                 data: function(params) {
@@ -144,7 +144,7 @@
         var salida = '<option value="">Seleccione el Tipo de Paciente</option>';
 
         $.ajax({
-            url: '../controlador/Comunidad_TablasC.php?listar=true',
+            url: '../controlador/SALUD_INTEGRAL/Comunidad_TablasC.php?listar=true',
             type: 'post',
             dataType: 'json',
             success: function(response) {

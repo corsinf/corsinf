@@ -33,7 +33,7 @@ if (isset($_GET['btn_regresar'])) {
                 sa_pac_id: sa_pac_id
 
             },
-            url: '../controlador/pacientesC.php?obtener_info_paciente=true',
+            url: '../controlador/SALUD_INTEGRAL/pacientesC.php?obtener_info_paciente=true',
             type: 'post',
             dataType: 'json',
             success: function(response) {
@@ -62,7 +62,7 @@ if (isset($_GET['btn_regresar'])) {
                 data: {
                     parametros: parametros
                 },
-                url: '../controlador/seguimiento_personalC.php?insertar=true',
+                url: '../controlador/SALUD_INTEGRAL/seguimiento_personalC.php?insertar=true',
                 type: 'post',
                 dataType: 'json',
 

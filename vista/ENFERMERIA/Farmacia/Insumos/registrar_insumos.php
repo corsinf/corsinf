@@ -31,7 +31,7 @@ if (isset($_GET['id'])) {
       data: {
         id: id
       },
-      url: '../controlador/insumosC.php?listar=true',
+      url: '../controlador/SALUD_INTEGRAL/insumosC.php?listar=true',
       type: 'post',
       dataType: 'json',
       success: function(response) {
@@ -114,7 +114,7 @@ if (isset($_GET['id'])) {
       data: {
         parametros: parametros
       },
-      url: '../controlador/insumosC.php?insertar=true',
+      url: '../controlador/SALUD_INTEGRAL/insumosC.php?insertar=true',
       type: 'post',
       dataType: 'json',
 
@@ -155,7 +155,7 @@ if (isset($_GET['id'])) {
       data: {
         id: id
       },
-      url: '../controlador/insumosC.php?eliminar=true',
+      url: '../controlador/SALUD_INTEGRAL/insumosC.php?eliminar=true',
       type: 'post',
       dataType: 'json',
       beforeSend: function() {
@@ -174,7 +174,7 @@ if (isset($_GET['id'])) {
 
   function inicializarInputs() {
     $.ajax({
-      url: '../controlador/v_med_insC.php?listar_v_insumos=true',
+      url: '../controlador/SALUD_INTEGRAL/v_med_insC.php?listar_v_insumos=true',
       type: 'post',
       dataType: 'json',
       success: function(response) {

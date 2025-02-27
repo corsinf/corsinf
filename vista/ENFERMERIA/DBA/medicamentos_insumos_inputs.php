@@ -12,7 +12,7 @@
 
     function cargar_datos_v_medicamentos() {
         $.ajax({
-            url: '../controlador/v_med_insC.php?listar_v_medicamentos=true',
+            url: '../controlador/SALUD_INTEGRAL/v_med_insC.php?listar_v_medicamentos=true',
             type: 'post',
             dataType: 'json',
             success: function(response) {
@@ -52,7 +52,7 @@
 
     function cargar_datos_v_insumos() {
         $.ajax({
-            url: '../controlador/v_med_insC.php?listar_v_insumos=true',
+            url: '../controlador/SALUD_INTEGRAL/v_med_insC.php?listar_v_insumos=true',
             type: 'post',
             dataType: 'json',
             success: function(response) {
@@ -92,7 +92,7 @@
 
     function cargar_datos_v_ingresoStock() {
         $.ajax({
-            url: '../controlador/v_med_insC.php?listar_v_ingresoStock=true',
+            url: '../controlador/SALUD_INTEGRAL/v_med_insC.php?listar_v_ingresoStock=true',
             type: 'post',
             dataType: 'json',
             success: function(response) {
@@ -143,7 +143,7 @@
             data: {
                 parametros: parametros
             },
-            url: '../controlador/v_med_insC.php?vista_mod=true',
+            url: '../controlador/SALUD_INTEGRAL/v_med_insC.php?vista_mod=true',
             type: 'post',
             dataType: 'json',
             success: function(response) {

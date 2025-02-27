@@ -68,3 +68,23 @@ if ($_GET['acc'] == 'th_detectar_dispositivos') {
 if ($_GET['acc'] == 'th_tomar_datos_biometricos') {
 	include('TALENTO_HUMANO/DISPOSITIVOS/th_tomar_datos_biometricos.php');
 }
+
+
+/**
+ * 
+ * POSTULANTES
+ * 
+ */
+
+
+if ($_GET['acc'] == 'th_postulantes') {
+	include('TALENTO_HUMANO/POSTULANTES/postulantes.php');
+}
+
+if ($_GET['acc'] == 'th_registrar_postulantes') {
+	include('TALENTO_HUMANO/POSTULANTES/registrar_postulantes.php');
+}
+
+if ($_GET['acc'] == 'th_informacion_personal') {
+	include('TALENTO_HUMANO/POSTULANTES/informacion_personal.php');
+}

@@ -8,7 +8,7 @@
             },
             responsive: true,
             ajax: {
-                url: '../controlador/representantesC.php?listar_todo=true',
+                url: '../controlador/SALUD_INTEGRAL/representantesC.php?listar_todo=true',
                 dataSrc: ''
             },
             columns: [{

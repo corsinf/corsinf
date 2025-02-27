@@ -11,36 +11,32 @@ use Box\Spout\Writer\Common\Creator\Style\StyleBuilder;
 use Box\Spout\Common\Entity\Style\CellAlignment;
 use Box\Spout\Common\Entity\Style\Color;
 
-
 if (!class_exists('reportesM')) {
-	include('../modelo/reportesM.php');
+	include('../../modelo/reportesM.php');
 }
 if (!class_exists('ArticulosM')) {
-	include('../modelo/ArticulosM.php');
+	include('../../modelo/ACTIVOS_FIJOS/ArticulosM.php');
 }
 
-
-include('../funciones/funciones.php');
-include('../modelo/localizacionM.php');
-include('../modelo/marcasM.php');
-include('../modelo/custodioM.php');
-include('../modelo/proyectosM.php');
-include('../modelo/estadoM.php');
-include('../modelo/generoM.php');
-include('../modelo/coloresM.php');
-include('../modelo/clase_movimientoM.php');
-include('../modelo/detalle_articuloM.php');
-include('../modelo/cargar_datosM.php');
-
-include('../modelo/COWORKING/crear_mienbrosM.php');
-
-include('../modelo/COWORKING/crear_oficinaM.php');
-
+require_once(dirname(__DIR__, 1) . '/funciones/funciones.php');
+require_once(dirname(__DIR__, 1) . '/modelo/ACTIVOS_FIJOS/localizacionM.php');
+require_once(dirname(__DIR__, 1) . '/modelo/ACTIVOS_FIJOS/marcasM.php');
+require_once(dirname(__DIR__, 1) . '/modelo/ACTIVOS_FIJOS/custodioM.php');
+require_once(dirname(__DIR__, 1) . '/modelo/ACTIVOS_FIJOS/proyectosM.php');
+require_once(dirname(__DIR__, 1) . '/modelo/ACTIVOS_FIJOS/estadoM.php');
+require_once(dirname(__DIR__, 1) . '/modelo/ACTIVOS_FIJOS/generoM.php');
+require_once(dirname(__DIR__, 1) . '/modelo/ACTIVOS_FIJOS/coloresM.php');
+require_once(dirname(__DIR__, 1) . '/modelo/ACTIVOS_FIJOS/clase_movimientoM.php');
+require_once(dirname(__DIR__, 1) . '/modelo/ACTIVOS_FIJOS/detalle_articuloM.php');
+require_once(dirname(__DIR__, 1) . '/modelo/ACTIVOS_FIJOS/cargar_datosM.php');
+require_once(dirname(__DIR__, 1) . '/modelo/COWORKING/crear_mienbrosM.php');
+require_once(dirname(__DIR__, 1) . '/modelo/COWORKING/crear_oficinaM.php');
 
 
 /**
  * 
- */
+ **/
+
 $reporte = new excel_spout();
 if (isset($_GET['reporte_dinamico'])) {
 	$datos = $_GET;
@@ -92,7 +88,7 @@ class excel_spout
 	private $detalle_art;
 	private $crear_miembro;
 	private $carga_datos;
-	private $crear_oficinas ;
+	private $crear_oficinas;
 
 	function __construct()
 	{

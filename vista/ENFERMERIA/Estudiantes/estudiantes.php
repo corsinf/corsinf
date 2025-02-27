@@ -8,7 +8,7 @@
             },
             responsive: true,
             ajax: {
-                url: '../controlador/estudiantesC.php?listar_todo=true',
+                url: '../controlador/SALUD_INTEGRAL/estudiantesC.php?listar_todo=true',
                 dataSrc: ''
             },
             dom: '<"top"Bfr>t<"bottom"lip>',
@@ -93,7 +93,7 @@
         });
 
         $.ajax({
-            url: '../controlador/cat_configuracionGC_IDUKAY.php?idukay_actualizar_estudiante=true',
+            url: '../controlador/SALUD_INTEGRAL/cat_configuracionGC_IDUKAY.php?idukay_actualizar_estudiante=true',
             data: {
                 id_estudiante: id_estudiante
             },
@@ -130,7 +130,7 @@
         alert(id_estudiante_idukay);
 
         $.ajax({
-            url: '../controlador/cat_configuracionGC_IDUKAY.php?idukay_actualizar_estudiante=true',
+            url: '../controlador/SALUD_INTEGRAL/cat_configuracionGC_IDUKAY.php?idukay_actualizar_estudiante=true',
             data: {
                 id_estudiante_idukay: id_estudiante_idukay
             },

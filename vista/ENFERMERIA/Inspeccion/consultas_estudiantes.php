@@ -31,7 +31,7 @@
             },
             responsive: true,
             ajax: {
-                url: '../controlador/consultasC.php?listar_todo=true',
+                url: '../controlador/SALUD_INTEGRAL/consultasC.php?listar_todo=true',
                 data: function(d) {
                     d.listar_todo = true;
                     d.tabla = tabla;

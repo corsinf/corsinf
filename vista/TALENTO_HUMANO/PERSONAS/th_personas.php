@@ -55,36 +55,35 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
             success: function(response) {
                 console.log(response);
                 op = '';
-                response.forEach(function(item,i){
-                    op+='<option value="'+item._id+'">'+item.nombre+'</option>';
+                response.forEach(function(item, i) {
+                    op += '<option value="' + item._id + '">' + item.nombre + '</option>';
                 })
                 $('#ddl_dispositivos').html(op);
-               
-            },  error: function(xhr, status, error) {
-                console.log('Status: ' + status); 
-                console.log('Error: ' + error); 
-                console.log('XHR Response: ' + xhr.responseText); 
+
+            },
+            error: function(xhr, status, error) {
+                console.log('Status: ' + status);
+                console.log('Error: ' + error);
+                console.log('XHR Response: ' + xhr.responseText);
 
                 Swal.fire('', 'Error: ' + xhr.responseText, 'error');
             }
         });
     }
 
-    function import_bio()
-    {
+    function import_bio() {
         dispositivos();
         $('#importar_device').modal('show');
     }
 
-    function conectar_buscar()
-    {       
+    function conectar_buscar() {
         var parametros = {
             'id': $('#ddl_dispositivos').val(),
         };
 
         $('#myModal_espera').modal('show');
         $('#lbl_msj_espera').text("Conectando y Sincronizando");
-         $.ajax({
+        $.ajax({
             data: {
                 parametros: parametros
             },
@@ -97,16 +96,16 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                 $('#myModal_espera').modal('hide');
                 tr = '';
                 $('#txt_recuperado').val(JSON.stringify(response));
-                response.forEach(function(item,i){
-                    tr+="<tr><td>"+item.CardNo+"</td><td>"+item.nombre+"</td></tr>";
+                response.forEach(function(item, i) {
+                    tr += "<tr><td>" + item.CardNo + "</td><td>" + item.nombre + "</td></tr>";
                 });
 
                 $('#tbl_import').html(tr);
-            },            
+            },
             error: function(xhr, status, error) {
-                console.log('Status: ' + status); 
-                console.log('Error: ' + error); 
-                console.log('XHR Response: ' + xhr.responseText); 
+                console.log('Status: ' + status);
+                console.log('Error: ' + error);
+                console.log('XHR Response: ' + xhr.responseText);
 
                 Swal.fire('', 'Error: ' + xhr.responseText, 'error');
                 $('#myModal_espera').modal('hide');
@@ -114,15 +113,14 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
         });
     }
 
-    function importar()
-    {
-         var parametros = {
+    function importar() {
+        var parametros = {
             'datos': $('#txt_recuperado').val(),
         };
 
         // $('#myModal_espera').modal('show');
         // $('#lbl_msj_espera').text("Conectando y Sincronizando");
-         $.ajax({
+        $.ajax({
             data: {
                 parametros: parametros
             },
@@ -130,22 +128,20 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
             type: 'post',
             dataType: 'json',
 
-            success: function(response) {                
-                if(response.msj=='')
-                {
+            success: function(response) {
+                if (response.msj == '') {
                     Swal.fire('Registros Importados', '', 'success');
-                }else
-                {
-                    Swal.fire('Registros Importados',response.msj, 'info');                    
+                } else {
+                    Swal.fire('Registros Importados', response.msj, 'info');
                 }
-               
+
                 tbl_personas.ajax.reload(null, false);
                 $('#importar_device').modal('hide');
-            },            
+            },
             error: function(xhr, status, error) {
-                console.log('Status: ' + status); 
-                console.log('Error: ' + error); 
-                console.log('XHR Response: ' + xhr.responseText); 
+                console.log('Status: ' + status);
+                console.log('Error: ' + error);
+                console.log('XHR Response: ' + xhr.responseText);
 
                 Swal.fire('', 'Error: ' + xhr.responseText, 'error');
                 $('#myModal_espera').modal('hide');
@@ -195,7 +191,8 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                                         </a>
 
                                     </div>
-                                    <button type="button" class="btn btn-primary btn-sm" onclick="import_bio()">
+
+                                    <button type="button" class="btn btn-primary btn-sm ms-1" onclick="import_bio()">
                                             <i class="bx bx-import me-0 pb-1"></i> Importar desde biometrico
                                     </button>
 
@@ -244,17 +241,17 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-               <div class="row">
-                <input type="hidden" name="txt_recuperado" id="txt_recuperado">
-                   <div class="col-sm-12 mb-2">
-                         <select class="form-select" id="ddl_dispositivos" name="ddl_dispositivos">
-                            <option value="" >Seleccione Dispositivo</option>
-                        </select>                            
-                   </div>
-                   <div class="col-sm-12 text-end">
-                       <button class="btn btn-primary btn-sm" onclick="conectar_buscar()"><i class="bx bx-sync"></i>Conectar y buscar</button>
-                   </div>
-                   <div class="col-sm-12">
+                <div class="row">
+                    <input type="hidden" name="txt_recuperado" id="txt_recuperado">
+                    <div class="col-sm-12 mb-2">
+                        <select class="form-select" id="ddl_dispositivos" name="ddl_dispositivos">
+                            <option value="">Seleccione Dispositivo</option>
+                        </select>
+                    </div>
+                    <div class="col-sm-12 text-end">
+                        <button class="btn btn-primary btn-sm" onclick="conectar_buscar()"><i class="bx bx-sync"></i>Conectar y buscar</button>
+                    </div>
+                    <div class="col-sm-12">
                         <table class="table table-striped" id="">
                             <thead>
                                 <tr>
@@ -265,13 +262,13 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                             <tbody id="tbl_import">
 
                             </tbody>
-                        </table>                       
-                   </div>
-               </div>
+                        </table>
+                    </div>
+                </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                 <button class="btn btn-primary btn-sm" onclick="importar()"><i class="bx bx-sync"></i>Importar</button>
+                <button class="btn btn-primary btn-sm" onclick="importar()"><i class="bx bx-sync"></i>Importar</button>
             </div>
         </div>
     </div>

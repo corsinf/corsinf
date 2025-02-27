@@ -7,6 +7,11 @@ class th_personasM extends BaseModel
     protected $tabla = 'th_personas';
     protected $primaryKey = 'th_per_id AS _id';
 
+
+    /*
+        Modulo Firmas cuando el estado en 2 es porque finalizo de llenar la solicitud
+    */
+
     protected $camposPermitidos = [
         'th_per_primer_nombre AS primer_nombre',
         'th_per_segundo_nombre AS segundo_nombre',
@@ -30,7 +35,7 @@ class th_personasM extends BaseModel
         //'th_per_tabla AS tabla',
         //'th_per_id_comunidad AS id_comunidad',
         //'th_per_tabla_union AS tabla_union',
-        //'th_per_estado AS estado',
+        'th_per_estado AS estado',
         'th_per_fecha_creacion AS fecha_creacion',
         //'th_per_fecha_modificacion AS fecha_modificacion',
         'PERFIL',

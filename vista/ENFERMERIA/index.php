@@ -58,7 +58,7 @@
   function tcp() {
     $.ajax({
       // data:  {parametros:parametros},
-      url: '../controlador/index_saludC.php?tcp=true',
+      url: '../controlador/SALUD_INTEGRAL/index_saludC.php?tcp=true',
       type: 'post',
       dataType: 'json',
       /*beforeSend: function () {   
@@ -78,7 +78,7 @@
   function total_pacientes() {
     $.ajax({
       // data:  {parametros:parametros},
-      url: '../controlador/index_saludC.php?total_pacientes=true',
+      url: '../controlador/SALUD_INTEGRAL/index_saludC.php?total_pacientes=true',
       type: 'post',
       dataType: 'json',
       /*beforeSend: function () {   
@@ -98,7 +98,7 @@
   function total_docentes() {
     $.ajax({
       // data:  {parametros:parametros},
-      url: '../controlador/index_saludC.php?total_docentes=true',
+      url: '../controlador/SALUD_INTEGRAL/index_saludC.php?total_docentes=true',
       type: 'post',
       dataType: 'json',
       /*beforeSend: function () {   
@@ -118,7 +118,7 @@
   function total_estudiantes() {
     $.ajax({
       // data:  {parametros:parametros},
-      url: '../controlador/index_saludC.php?total_estudiantes=true',
+      url: '../controlador/SALUD_INTEGRAL/index_saludC.php?total_estudiantes=true',
       type: 'post',
       dataType: 'json',
       /*beforeSend: function () {   
@@ -138,7 +138,7 @@
   function total_comunidad() {
     $.ajax({
       // data:  {parametros:parametros},
-      url: '../controlador/index_saludC.php?total_comunidad=true',
+      url: '../controlador/SALUD_INTEGRAL/index_saludC.php?total_comunidad=true',
       type: 'post',
       dataType: 'json',
       /*beforeSend: function () {   
@@ -158,7 +158,7 @@
   function total_Agendas() {
     $.ajax({
       // data:  {parametros:parametros},
-      url: '../controlador/index_saludC.php?total_Agendas=true',
+      url: '../controlador/SALUD_INTEGRAL/index_saludC.php?total_Agendas=true',
       type: 'post',
       dataType: 'json',
       /*beforeSend: function () {   
@@ -179,7 +179,7 @@
   function total_consultas() {
     $.ajax({
       // data:  {parametros:parametros},
-      url: '../controlador/index_saludC.php?total_consultas=true',
+      url: '../controlador/SALUD_INTEGRAL/index_saludC.php?total_consultas=true',
       type: 'post',
       dataType: 'json',
       /*beforeSend: function () {   
@@ -200,7 +200,7 @@
   function total_medicamentos() {
     $.ajax({
       // data:  {parametros:parametros},
-      url: '../controlador/index_saludC.php?total_medicamentos=true',
+      url: '../controlador/SALUD_INTEGRAL/index_saludC.php?total_medicamentos=true',
       type: 'post',
       dataType: 'json',
       /*beforeSend: function () {   
@@ -220,7 +220,7 @@
   function total_insumos() {
     $.ajax({
       // data:  {parametros:parametros},
-      url: '../controlador/index_saludC.php?total_insumos=true',
+      url: '../controlador/SALUD_INTEGRAL/index_saludC.php?total_insumos=true',
       type: 'post',
       dataType: 'json',
       /*beforeSend: function () {   
@@ -240,7 +240,7 @@
   function lista_medicamentos() {
     $.ajax({
       // data:  {parametros:parametros},
-      url: '../controlador/index_saludC.php?lista_medicamentos=true',
+      url: '../controlador/SALUD_INTEGRAL/index_saludC.php?lista_medicamentos=true',
       type: 'post',
       dataType: 'json',
       /*beforeSend: function () {   
@@ -260,7 +260,7 @@
   function lista_insumos() {
     $.ajax({
       // data:  {parametros:parametros},
-      url: '../controlador/index_saludC.php?lista_insumos=true',
+      url: '../controlador/SALUD_INTEGRAL/index_saludC.php?lista_insumos=true',
       type: 'post',
       dataType: 'json',
       /*beforeSend: function () {   
@@ -280,7 +280,7 @@
   function pacientes_atendidos() {
     $.ajax({
       // data:  {parametros:parametros},
-      url: '../controlador/index_saludC.php?pacientes_atendidos=true',
+      url: '../controlador/SALUD_INTEGRAL/index_saludC.php?pacientes_atendidos=true',
       type: 'post',
       dataType: 'json',
       /*beforeSend: function () {   
@@ -671,7 +671,7 @@
                 data: {
                   id_representante: id_representante,
                 },
-                url: '../controlador/estudiantesC.php?listar_estudiante_representante=true',
+                url: '../controlador/SALUD_INTEGRAL/estudiantesC.php?listar_estudiante_representante=true',
                 type: 'post',
                 dataType: 'json',
                 success: function(response) {
@@ -720,7 +720,7 @@
                 data: {
                   id_representante: id_representante
                 },
-                url: '../controlador/index_saludC.php?estudiantes_atendidos=true',
+                url: '../controlador/SALUD_INTEGRAL/index_saludC.php?estudiantes_atendidos=true',
                 type: 'post',
                 dataType: 'json',
                 success: function(response) {
@@ -827,7 +827,7 @@
               id_docente = <?= $_SESSION['INICIO']['NO_CONCURENTE']; ?>;
               $.ajax({
                 // data:  {parametros:parametros},
-                url: '../controlador/index_saludC.php?total_horario_disponible=true',
+                url: '../controlador/SALUD_INTEGRAL/index_saludC.php?total_horario_disponible=true',
                 type: 'post',
                 dataType: 'json',
                 data: {
@@ -848,7 +848,7 @@
               id_docente = <?= $_SESSION['INICIO']['NO_CONCURENTE']; ?>;
               $.ajax({
                 // data:  {parametros:parametros},
-                url: '../controlador/index_saludC.php?total_horario_disponible=true',
+                url: '../controlador/SALUD_INTEGRAL/index_saludC.php?total_horario_disponible=true',
                 type: 'post',
                 dataType: 'json',
                 data: {
@@ -869,7 +869,7 @@
               id_docente = <?= $_SESSION['INICIO']['NO_CONCURENTE']; ?>;
               $.ajax({
                 // data:  {parametros:parametros},
-                url: '../controlador/index_saludC.php?total_horario_disponible=true',
+                url: '../controlador/SALUD_INTEGRAL/index_saludC.php?total_horario_disponible=true',
                 type: 'post',
                 dataType: 'json',
                 data: {
@@ -890,7 +890,7 @@
               id_docente = <?= $_SESSION['INICIO']['NO_CONCURENTE']; ?>;
               $.ajax({
                 // data:  {parametros:parametros},
-                url: '../controlador/index_saludC.php?total_horario_clases=true',
+                url: '../controlador/SALUD_INTEGRAL/index_saludC.php?total_horario_clases=true',
                 type: 'post',
                 dataType: 'json',
                 data: {
@@ -910,7 +910,7 @@
               id_docente = <?= $_SESSION['INICIO']['NO_CONCURENTE']; ?>;
               $.ajax({
                 // data:  {parametros:parametros},
-                url: '../controlador/index_saludC.php?total_clases=true',
+                url: '../controlador/SALUD_INTEGRAL/index_saludC.php?total_clases=true',
                 type: 'post',
                 dataType: 'json',
                 data: {
@@ -930,7 +930,7 @@
               id_docente = <?= $_SESSION['INICIO']['NO_CONCURENTE']; ?>;
               $.ajax({
                 // data:  {parametros:parametros},
-                url: '../controlador/index_saludC.php?total_historial_estudiantil_docente=true',
+                url: '../controlador/SALUD_INTEGRAL/index_saludC.php?total_historial_estudiantil_docente=true',
                 type: 'post',
                 dataType: 'json',
                 data: {
@@ -1118,7 +1118,7 @@
                   tipo: tipo,
                   id_busqueda: id_busqueda,
                 },
-                url: '../controlador/index_saludC.php?lista_reuniones=true',
+                url: '../controlador/SALUD_INTEGRAL/index_saludC.php?lista_reuniones=true',
                 type: 'post',
                 dataType: 'json',
                 success: function(response) {
@@ -1139,7 +1139,7 @@
                   tipo: tipo,
                   id_busqueda: id_busqueda,
                 },
-                url: '../controlador/index_saludC.php?lista_estado_reuniones=true',
+                url: '../controlador/SALUD_INTEGRAL/index_saludC.php?lista_estado_reuniones=true',
                 type: 'post',
                 dataType: 'json',
                 success: function(response) {

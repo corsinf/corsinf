@@ -27,7 +27,7 @@ if ($id != null && $id != '') {
             },
             responsive: true,
             ajax: {
-                url: '../controlador/tutores_paraleloC.php',
+                url: '../controlador/SALUD_INTEGRAL/tutores_paraleloC.php',
                 data: function(d) {
                     d.listar = true;
                     d.id_tutor = id_tutor;
@@ -58,7 +58,7 @@ if ($id != null && $id != '') {
             data: {
                 id: id
             },
-            url: '../controlador/seccionC.php?listar=true',
+            url: '../controlador/SALUD_INTEGRAL/seccionC.php?listar=true',
             type: 'post',
             dataType: 'json',
 
@@ -96,7 +96,7 @@ if ($id != null && $id != '') {
             data: {
                 "id_seccion": id_seccion
             },
-            url: '../controlador/paraleloC.php?listar_seccion_grado=true',
+            url: '../controlador/SALUD_INTEGRAL/paraleloC.php?listar_seccion_grado=true',
             type: 'post',
             dataType: 'json',
 
@@ -141,7 +141,7 @@ if ($id != null && $id != '') {
             data: {
                 "id_grado": id_grado
             },
-            url: '../controlador/tutores_paraleloC.php?listar_paralelos=true',
+            url: '../controlador/SALUD_INTEGRAL/tutores_paraleloC.php?listar_paralelos=true',
             type: 'post',
             dataType: 'json',
 
@@ -170,7 +170,7 @@ if ($id != null && $id != '') {
         }
 
         $.ajax({
-            url: '../controlador/tutores_paraleloC.php?insertar=true',
+            url: '../controlador/SALUD_INTEGRAL/tutores_paraleloC.php?insertar=true',
             data: {
                 parametros: parametros
             },

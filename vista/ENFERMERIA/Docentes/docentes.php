@@ -8,7 +8,7 @@
             },
             responsive: true,
             ajax: {
-                url: '../controlador/docentesC.php?listar_todo=true',
+                url: '../controlador/SALUD_INTEGRAL/docentesC.php?listar_todo=true',
                 dataSrc: ''
             },
             columns: [{

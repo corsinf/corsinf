@@ -25,7 +25,7 @@ if (isset($_POST['sa_adm_id'])) {
             data: {
                 id: id
             },
-            url: '../controlador/administrativosC.php?listar=true',
+            url: '../controlador/SALUD_INTEGRAL/administrativosC.php?listar=true',
             type: 'post',
             dataType: 'json',
             success: function(response) {
@@ -129,7 +129,7 @@ if (isset($_POST['sa_adm_id'])) {
             data: {
                 parametros: parametros
             },
-            url: '../controlador/administrativosC.php?insertar=true',
+            url: '../controlador/SALUD_INTEGRAL/administrativosC.php?insertar=true',
             type: 'post',
             dataType: 'json',
 
@@ -167,7 +167,7 @@ if (isset($_POST['sa_adm_id'])) {
             data: {
                 id: id
             },
-            url: '../controlador/administrativosC.php?eliminar=true',
+            url: '../controlador/SALUD_INTEGRAL/administrativosC.php?eliminar=true',
             type: 'post',
             dataType: 'json',
             success: function(response) {

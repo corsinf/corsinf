@@ -10,7 +10,7 @@
             data: {
                 id: id
             },
-            url: '../controlador/paraleloC.php?listar=true',
+            url: '../controlador/SALUD_INTEGRAL/paraleloC.php?listar=true',
             type: 'post',
             dataType: 'json',
 
@@ -40,7 +40,7 @@
             data: {
                 buscar: buscar
             },
-            url: '../controlador/paraleloC.php?buscar=true',
+            url: '../controlador/SALUD_INTEGRAL/paraleloC.php?buscar=true',
             type: 'post',
             dataType: 'json',
 

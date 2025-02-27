@@ -78,7 +78,7 @@
 
         var formData = new FormData(document.getElementById("form_estudiantes_" + id));
         $.ajax({
-            url: '../controlador/estudiantesC.php?cargar_imagen_estudiantes=true',
+            url: '../controlador/SALUD_INTEGRAL/estudiantesC.php?cargar_imagen_estudiantes=true',
             type: 'post',
             data: formData,
             contentType: false,
@@ -245,7 +245,7 @@
             data: {
                 id_representante: id_representante,
             },
-            url: '../controlador/estudiantesC.php?listar_estudiante_representante=true',
+            url: '../controlador/SALUD_INTEGRAL/estudiantesC.php?listar_estudiante_representante=true',
             type: 'post',
             dataType: 'json',
             success: function(response) {
@@ -269,7 +269,7 @@
                             sa_pac_id_comunidad: item.sa_est_id,
                             sa_pac_tabla: item.sa_est_tabla,
                         },
-                        url: '../controlador/ficha_MedicaC.php?id_paciente_id_comunidad_tabla=true',
+                        url: '../controlador/SALUD_INTEGRAL/ficha_MedicaC.php?id_paciente_id_comunidad_tabla=true',
                         type: 'post',
                         dataType: 'json',
                         success: function(response) {
@@ -376,7 +376,7 @@
             data: {
                 sa_pac_id: sa_pac_id
             },
-            url: '../controlador/ficha_MedicaC.php?listar_paciente_ficha=true',
+            url: '../controlador/SALUD_INTEGRAL/ficha_MedicaC.php?listar_paciente_ficha=true',
             type: 'post',
             dataType: 'json',
             success: function(response_2) {
@@ -439,7 +439,7 @@
             data: {
                 parametros: parametros
             },
-            url: '../controlador/estudiantesC.php?SaveSeguros=true',
+            url: '../controlador/SALUD_INTEGRAL/estudiantesC.php?SaveSeguros=true',
             type: 'post',
             dataType: 'json',
 
@@ -465,7 +465,7 @@
             data: {
                 parametros: parametros
             },
-            url: '../controlador/estudiantesC.php?ListaSeguros=true',
+            url: '../controlador/SALUD_INTEGRAL/estudiantesC.php?ListaSeguros=true',
             type: 'post',
             dataType: 'json',
 
@@ -493,7 +493,7 @@
                     data: {
                         id: id
                     },
-                    url: '../controlador/estudiantesC.php?EliminarSeguros=true',
+                    url: '../controlador/SALUD_INTEGRAL/estudiantesC.php?EliminarSeguros=true',
                     type: 'post',
                     dataType: 'json',
 
@@ -583,7 +583,7 @@
 
     function ver_pdf(id_fm) {
         //console.log(id_consulta);
-        window.open('../controlador/ficha_MedicaC.php?pdf_ficha_medica=true&id=' + id_fm);
+        window.open('../controlador/SALUD_INTEGRAL/ficha_MedicaC.php?pdf_ficha_medica=true&id=' + id_fm);
     }
 </script>
 

@@ -106,7 +106,7 @@ if ($id != null && $id != '') {
                     if (result.isConfirmed) {
                         // Ejecuta la solicitud AJAX
                         $.ajax({
-                            url: '../controlador/horario_clasesC.php?eliminar=true',
+                            url: '../controlador/SALUD_INTEGRAL/horario_clasesC.php?eliminar=true',
                             type: 'POST',
                             data: {
                                 id: id_horario_clases
@@ -161,7 +161,7 @@ if ($id != null && $id != '') {
         id_paralelo = $('#ac_paralelo_id_busqueda').val();
 
         $.ajax({
-            url: '../controlador/horario_clasesC.php?listar=true',
+            url: '../controlador/SALUD_INTEGRAL/horario_clasesC.php?listar=true',
             type: 'get',
             data: {
                 id_docente: id_docente,
@@ -293,7 +293,7 @@ if ($id != null && $id != '') {
                 } else {
 
                     $.ajax({
-                        url: '../controlador/horario_clasesC.php?insertar=true',
+                        url: '../controlador/SALUD_INTEGRAL/horario_clasesC.php?insertar=true',
                         data: {
                             parametros: parametros
                         },
@@ -355,7 +355,7 @@ if ($id != null && $id != '') {
             data: {
                 id_docente: ac_docente_id
             },
-            url: '../controlador/docente_paraleloC.php?listar=true',
+            url: '../controlador/SALUD_INTEGRAL/docente_paraleloC.php?listar=true',
             type: 'get',
             dataType: 'json',
 
@@ -377,7 +377,7 @@ if ($id != null && $id != '') {
         var select = '<option value="">Todos</option>';
 
         $.ajax({
-            url: '../controlador/docente_paraleloC.php?listar=true',
+            url: '../controlador/SALUD_INTEGRAL/docente_paraleloC.php?listar=true',
             data: {
                 id_docente: ac_docente_id
             },

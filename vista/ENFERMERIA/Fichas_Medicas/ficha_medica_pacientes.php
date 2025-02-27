@@ -75,7 +75,7 @@ if ($btn_regresar == '') {
                     sa_pac_id: sa_pac_id
 
                 },
-                url: '../controlador/pacientesC.php?obtener_info_paciente=true',
+                url: '../controlador/SALUD_INTEGRAL/pacientesC.php?obtener_info_paciente=true',
                 type: 'post',
                 dataType: 'json',
                 success: function(response) {
@@ -129,7 +129,7 @@ if ($btn_regresar == '') {
                 data: {
                     sa_pac_id: sa_pac_id
                 },
-                url: '../controlador/ficha_MedicaC.php?listar_paciente_ficha=true',
+                url: '../controlador/SALUD_INTEGRAL/ficha_MedicaC.php?listar_paciente_ficha=true',
                 type: 'post',
                 dataType: 'json',
                 success: function(response) {
@@ -367,7 +367,7 @@ if ($btn_regresar == '') {
                 data: {
                     parametros: parametros
                 },
-                url: '../controlador/ficha_medicaC.php?insertar=true',
+                url: '../controlador/SALUD_INTEGRAL/ficha_medicaC.php?insertar=true',
                 type: 'post',
                 dataType: 'json',
                 /*beforeSend: function () {   
@@ -400,7 +400,7 @@ if ($btn_regresar == '') {
                 data: {
                     parametros: parametros
                 },
-                url: '../controlador/ficha_medicaC.php?lista_seguros=true',
+                url: '../controlador/SALUD_INTEGRAL/ficha_medicaC.php?lista_seguros=true',
                 type: 'post',
                 dataType: 'json',
 
@@ -439,7 +439,7 @@ if ($btn_regresar == '') {
             data: {
                 parametros: parametros
             },
-            url: '../controlador/estudiantesC.php?SaveSeguros=true',
+            url: '../controlador/SALUD_INTEGRAL/estudiantesC.php?SaveSeguros=true',
             type: 'post',
             dataType: 'json',
 

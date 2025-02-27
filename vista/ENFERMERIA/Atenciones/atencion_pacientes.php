@@ -11,7 +11,7 @@
             // data: {
             //     id: id
             // },
-            url: '../controlador/agendamientoC.php?cita_actual=true',
+            url: '../controlador/SALUD_INTEGRAL/agendamientoC.php?cita_actual=true',
             type: 'post',
             dataType: 'json',
             //Para el id representante tomar los datos con los de session

@@ -79,7 +79,7 @@ $('#sa_conp_peso, #sa_conp_altura').on('input', calcularIMC);
 
 function abrir_ventana_emergente(sa_conp_id) {
     // URL de la página que quieres cargar en la ventana emergente
-    var url = '../controlador/consultasC.php?pdf_consulta=true&id_consulta=' + sa_conp_id;
+    var url = '../controlador/SALUD_INTEGRAL/consultasC.php?pdf_consulta=true&id_consulta=' + sa_conp_id;
 
     // Configuración de la ventana emergente
     var ventana_emergente = window.open(url, '_blank', 'width=1000,height=1000');
@@ -101,7 +101,7 @@ function consultar_datos_h(id_paciente = '', nombres = '') {
         data: {
             id_ficha: id_paciente
         },
-        url: '../controlador/consultasC.php?listar_consulta_ficha=true',
+        url: '../controlador/SALUD_INTEGRAL/consultasC.php?listar_consulta_ficha=true',
         type: 'post',
         dataType: 'json',
         success: function (response) {
@@ -156,7 +156,7 @@ function consultar_datos_h(id_paciente = '', nombres = '') {
                     {
                         data: null,
                         render: function (data, type, item) {
-                            //return '<a class="btn btn-primary btn-sm" target="_blank"  title="Enviar Mensaje" href="../controlador/consultasC.php?pdf_consulta=true&id_consulta=' + item.sa_conp_id + '">' + '<i class="bx bx-show-alt me-0"></i>' + '</a>';
+                            //return '<a class="btn btn-primary btn-sm" target="_blank"  title="Enviar Mensaje" href="../controlador/SALUD_INTEGRAL/consultasC.php?pdf_consulta=true&id_consulta=' + item.sa_conp_id + '">' + '<i class="bx bx-show-alt me-0"></i>' + '</a>';
                             return '<a class="btn btn-primary btn-sm" target="_blank"  title="Enviar Mensaje" href="#" onclick="abrir_ventana_emergente(' + item.sa_conp_id + ');">' + '<i class="bx bx-show-alt me-0"></i>' + '</a>';
                         }
                     },

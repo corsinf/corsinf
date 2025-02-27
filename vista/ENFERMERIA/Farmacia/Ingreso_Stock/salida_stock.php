@@ -13,7 +13,7 @@
             },
             responsive: true,
             ajax: {
-                url: '../controlador/salida_stockC.php?lista_kardex=true',
+                url: '../controlador/SALUD_INTEGRAL/salida_stockC.php?lista_kardex=true',
                 dataSrc: ''
             },
             columns: [{
@@ -95,7 +95,7 @@
                 placeholder: 'Seleccione producto',
                 width: '87%',
                 ajax: {
-                    url: '../controlador/salida_stockC.php?lista_articulos=true&tipo=' + tipo,
+                    url: '../controlador/SALUD_INTEGRAL/salida_stockC.php?lista_articulos=true&tipo=' + tipo,
                     dataType: 'json',
                     delay: 250,
                     processResults: function(data) {
@@ -196,7 +196,7 @@
         var salida = '<option value="">Seleccione el Tipo de Paciente</option>';
 
         $.ajax({
-            url: '../controlador/Comunidad_TablasC.php?listar=true',
+            url: '../controlador/SALUD_INTEGRAL/Comunidad_TablasC.php?listar=true',
             type: 'post',
             dataType: 'json',
             success: function(response) {
@@ -236,7 +236,7 @@
             },
             minimumInputLength: 1,
             ajax: {
-                url: '../controlador/' + sa_tbl_pac_tabla + 'C.php?listar_todo=true',
+                url: '../controlador/SALUD_INTEGRAL/' + sa_tbl_pac_tabla + 'C.php?listar_todo=true',
                 dataType: 'json',
                 delay: 250,
                 data: function(params) {
@@ -342,7 +342,7 @@
             data: {
                 parametros: parametros
             },
-            url: '../controlador/ingreso_stockC.php?enviar_correo=true',
+            url: '../controlador/SALUD_INTEGRAL/ingreso_stockC.php?enviar_correo=true',
             type: 'post',
             dataType: 'json',
             success: function(response) {
@@ -354,7 +354,7 @@
     function salida_registro(parametros) {
         $.ajax({
             data: parametros,
-            url: '../controlador/ingreso_stockC.php?producto_nuevo_salida=true',
+            url: '../controlador/SALUD_INTEGRAL/ingreso_stockC.php?producto_nuevo_salida=true',
             type: 'post',
             dataType: 'json',
             success: function(response) {
@@ -399,7 +399,7 @@
             data: {
                 parametros: parametros
             },
-            url: '../controlador/detalle_fm_med_insC.php?fm_farmaco_a=true',
+            url: '../controlador/SALUD_INTEGRAL/detalle_fm_med_insC.php?fm_farmaco_a=true',
             type: 'post',
             dataType: 'json',
             success: function(response) {
@@ -422,7 +422,7 @@
                 sa_pac_id_comunidad: id,
                 sa_pac_tabla: tabla
             },
-            url: '../controlador/ficha_MedicaC.php?id_paciente_id_comunidad_tabla=true',
+            url: '../controlador/SALUD_INTEGRAL/ficha_MedicaC.php?id_paciente_id_comunidad_tabla=true',
             type: 'post',
             dataType: 'json',
             success: function(response) {
@@ -433,7 +433,7 @@
                         data: {
                             id_paciente: response.sa_pac_id
                         },
-                        url: '../controlador/pacientesC.php?obtener_idFicha_paciente=true',
+                        url: '../controlador/SALUD_INTEGRAL/pacientesC.php?obtener_idFicha_paciente=true',
                         type: 'post',
                         dataType: 'json',
                         success: function(response) {
@@ -464,7 +464,7 @@
                 id: id_estudiante
 
             },
-            url: '../controlador/estudiantesC.php?listarEstconRepresentante=true',
+            url: '../controlador/SALUD_INTEGRAL/estudiantesC.php?listarEstconRepresentante=true',
             type: 'post',
             dataType: 'json',
             success: function(response) {

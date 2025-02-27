@@ -71,7 +71,7 @@ if (isset($_POST['id_representante_2'])) {
       data: {
         id: id
       },
-      url: '../controlador/seccionC.php?listar=true',
+      url: '../controlador/SALUD_INTEGRAL/seccionC.php?listar=true',
       type: 'post',
       dataType: 'json',
 
@@ -120,7 +120,7 @@ if (isset($_POST['id_representante_2'])) {
       data: {
         "id_seccion": id_seccion
       },
-      url: '../controlador/paraleloC.php?listar_seccion_grado=true',
+      url: '../controlador/SALUD_INTEGRAL/paraleloC.php?listar_seccion_grado=true',
       type: 'post',
       dataType: 'json',
 
@@ -169,7 +169,7 @@ if (isset($_POST['id_representante_2'])) {
       data: {
         "id_grado": id_grado
       },
-      url: '../controlador/paraleloC.php?listar_grado_paralelo=true',
+      url: '../controlador/SALUD_INTEGRAL/paraleloC.php?listar_grado_paralelo=true',
       type: 'post',
       dataType: 'json',
 
@@ -202,7 +202,7 @@ if (isset($_POST['id_representante_2'])) {
           "id": id
         },
 
-        url: '../controlador/representantesC.php?listar=true',
+        url: '../controlador/SALUD_INTEGRAL/representantesC.php?listar=true',
 
         type: 'post', //método de envio
         dataType: 'json',
@@ -236,7 +236,7 @@ if (isset($_POST['id_representante_2'])) {
       },
       minimumInputLength: 1,
       ajax: {
-        url: '../controlador/representantesC.php?listar_todo=true',
+        url: '../controlador/SALUD_INTEGRAL/representantesC.php?listar_todo=true',
         dataType: 'json',
         delay: 250,
         data: function(params) {
@@ -279,7 +279,7 @@ if (isset($_POST['id_representante_2'])) {
           "id": id
         },
 
-        url: '../controlador/representantesC.php?listar=true',
+        url: '../controlador/SALUD_INTEGRAL/representantesC.php?listar=true',
 
         type: 'post', //método de envio
         dataType: 'json',
@@ -313,7 +313,7 @@ if (isset($_POST['id_representante_2'])) {
       },
       minimumInputLength: 1,
       ajax: {
-        url: '../controlador/representantesC.php?listar_todo=true',
+        url: '../controlador/SALUD_INTEGRAL/representantesC.php?listar_todo=true',
         dataType: 'json',
         delay: 250,
         data: function(params) {
@@ -352,7 +352,7 @@ if (isset($_POST['id_representante_2'])) {
       data: {
         id: id
       },
-      url: '../controlador/estudiantesC.php?listar=true',
+      url: '../controlador/SALUD_INTEGRAL/estudiantesC.php?listar=true',
       type: 'post',
       dataType: 'json',
       success: function(response) {
@@ -499,7 +499,7 @@ if (isset($_POST['id_representante_2'])) {
       data: {
         parametros: parametros
       },
-      url: '../controlador/estudiantesC.php?insertar=true',
+      url: '../controlador/SALUD_INTEGRAL/estudiantesC.php?insertar=true',
       type: 'post',
       dataType: 'json',
 
@@ -537,7 +537,7 @@ if (isset($_POST['id_representante_2'])) {
       data: {
         id: id
       },
-      url: '../controlador/estudiantesC.php?eliminar=true',
+      url: '../controlador/SALUD_INTEGRAL/estudiantesC.php?eliminar=true',
       type: 'post',
       dataType: 'json',
 

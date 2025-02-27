@@ -10,7 +10,7 @@
             data: {
                 id: id
             },
-            url: '../controlador/seccionC.php?listar=true',
+            url: '../controlador/SALUD_INTEGRAL/seccionC.php?listar=true',
             type: 'post',
             dataType: 'json',
 
@@ -38,7 +38,7 @@
             data: {
                 buscar: buscar
             },
-            url: '../controlador/seccionC.php?buscar=true',
+            url: '../controlador/SALUD_INTEGRAL/seccionC.php?buscar=true',
             type: 'post',
             dataType: 'json',
 

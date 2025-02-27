@@ -1,5 +1,5 @@
 <?php
-require_once(dirname(__DIR__, 2) . '/db/db.php');
+include(dirname(__DIR__, 2) . '/db/db.php');
 
 class paciente_datos_adicionalesM
 {

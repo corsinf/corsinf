@@ -241,7 +241,7 @@ if ($id != null && $id != '') {
         }).then((result) => {
             if (result.isConfirmed) {
                 $.ajax({
-                    url: '../controlador/horario_disponibleC.php?eliminar=true',
+                    url: '../controlador/SALUD_INTEGRAL/horario_disponibleC.php?eliminar=true',
                     type: 'POST',
                     data: {
                         id: id_horarioD
@@ -269,7 +269,7 @@ if ($id != null && $id != '') {
         // Promesa para la solicitud de horarios de clases
         var promesaHorariosClases = new Promise(function(resolve, reject) {
             $.ajax({
-                url: '../controlador/horario_clasesC.php?listar=true',
+                url: '../controlador/SALUD_INTEGRAL/horario_clasesC.php?listar=true',
                 type: 'get',
                 data: {
                     id_docente: id_docente,
@@ -321,7 +321,7 @@ if ($id != null && $id != '') {
         // Promesa para la solicitud de horarios disponibles
         var promesaHorariosDisponibles = new Promise(function(resolve, reject) {
             $.ajax({
-                url: '../controlador/horario_disponibleC.php?listar=true',
+                url: '../controlador/SALUD_INTEGRAL/horario_disponibleC.php?listar=true',
                 type: 'get',
                 data: {
                     id_docente: id_docente
@@ -470,7 +470,7 @@ if ($id != null && $id != '') {
                             parametros.parametros_turno_rep = parametros_turno_rep;
 
                             $.ajax({
-                                url: '../controlador/horario_disponibleC.php?insertar=true',
+                                url: '../controlador/SALUD_INTEGRAL/horario_disponibleC.php?insertar=true',
                                 data: {
                                     parametros: parametros
                                 },
@@ -500,7 +500,7 @@ if ($id != null && $id != '') {
 
                     } else {
                         $.ajax({
-                            url: '../controlador/horario_disponibleC.php?insertar=true',
+                            url: '../controlador/SALUD_INTEGRAL/horario_disponibleC.php?insertar=true',
                             data: {
                                 parametros: parametros
                             },
@@ -567,7 +567,7 @@ if ($id != null && $id != '') {
 
         select = '<option selected disabled>-- Seleccione un Cubículo --</option>';
         $.ajax({
-            url: '../controlador/cat_cubiculoC.php?listar=true',
+            url: '../controlador/SALUD_INTEGRAL/cat_cubiculoC.php?listar=true',
             type: 'POST',
             data: {
                 hora_inicio: ac_horarioD_inicio,
@@ -620,7 +620,7 @@ if ($id != null && $id != '') {
             },
             minimumInputLength: 1,
             ajax: {
-                url: '../controlador/docente_paraleloC.php?lista_est_rep_doc_par=true',
+                url: '../controlador/SALUD_INTEGRAL/docente_paraleloC.php?lista_est_rep_doc_par=true',
                 dataType: 'json',
                 delay: 250,
                 type: 'POST',

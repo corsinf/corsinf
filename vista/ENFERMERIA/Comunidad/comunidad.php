@@ -8,7 +8,7 @@
             },
             responsive: true,
             ajax: {
-                url: '../controlador/comunidadC.php?listar_todo=true',
+                url: '../controlador/SALUD_INTEGRAL/comunidadC.php?listar_todo=true',
                 dataSrc: ''
             },
             columns: [{
