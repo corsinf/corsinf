@@ -37,7 +37,7 @@ function buscar_impresora()
         contentType: 'application/json',
         data: JSON.stringify({                
             tipo: '1',
-            tipoBusqueda:$('#txt_ip_address').val(),
+            tipoBusqueda:$('#ddl_metodo_busqueda').val(),
             IpAddress:$('#txt_ip_address').val(),
             datos: '^XA^FO50,50^A0N,50,50^FDHello, World!^FS^XZ'
         }),
