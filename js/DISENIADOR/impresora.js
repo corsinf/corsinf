@@ -52,7 +52,7 @@ function buscar_impresora()
                 op+='<option value="'+item+'">'+item+'</option>'
             })
 
-            $('#ddl_impresora').html(op);
+            $('#ddl_lista_empresas').html(op);
         },
         error: function(xhr, status, error) {
             console.error('Error en la solicitud:', status, error);
