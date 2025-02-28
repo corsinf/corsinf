@@ -66,7 +66,7 @@ class di_diseniadorM
 
 	function lista_impresora()
 	{
-		$sql="SELECT id_impresoras as id,nombre_impresora as nombre
+		$sql="SELECT id_impresora as id,nombre_impresora as nombre
 			  FROM ac_impresoras";
 		return $this->db->datos($sql);
 	}
