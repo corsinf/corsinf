@@ -1026,6 +1026,7 @@
                                     <option value="" disabled >Seleccione Metodo de busqueda</option>
                                     <option value="USB_DIRECT_SEARCH">Find USB Printers</option>
                                     <option value="USB_DRIVER_SEARCH">Zebra USB Drivers</option>
+                                    <option value="LOCAL_BROADCAST">Red local</option>
                                     <option value="MULTICAST_BROADCAST">Directed Broadcast</option>
                                 </select>           
                             </div>                           
