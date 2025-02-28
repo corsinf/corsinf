@@ -35,6 +35,7 @@ function buscar_impresora()
         url: 'http://localhost:3000',
         type: 'POST',
         contentType: 'application/json',
+        dataType: 'json',
         data: JSON.stringify({                
             tipo: '1',
             tipoBusqueda:$('#ddl_metodo_busqueda').val(),
@@ -43,11 +44,12 @@ function buscar_impresora()
         }),
         success: function(response) {
             console.log(response)
-            let data = Object.values(JSON.parse(response));
-            console.log(data);
-            data.forEach(function(item,i){
+            let dataObj = JSON.parse(response);
+            let dataArray = Object.values(dataObj);
+            var op = "";
+            dataArray.forEach(function(item,i){
                 console.log(item)
-                op+='<option value="'+item.id+'">'+item.nombre+'</option>'
+                op+='<option value="'+item+'">'+item+'</option>'
             })
 
             $('#ddl_impresora').html(op);
