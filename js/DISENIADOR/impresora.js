@@ -42,7 +42,9 @@ function buscar_impresora()
             datos: '^XA^FO50,50^A0N,50,50^FDHello, World!^FS^XZ'
         }),
         success: function(response) {
+            console.log(response)
             let data = JSON.parse(response);
+            console.log(data);
             data.forEach(function(item,i){
                 console.log(item)
                 op+='<option value="'+item.id+'">'+item.nombre+'</option>'
