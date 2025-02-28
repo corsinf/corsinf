@@ -43,7 +43,7 @@ function buscar_impresora()
         }),
         success: function(response) {
             console.log(response)
-            let data = JSON.parse(response);
+            let data = Object.values(JSON.parse(response));
             console.log(data);
             data.forEach(function(item,i){
                 console.log(item)
