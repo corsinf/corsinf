@@ -318,11 +318,11 @@ function reajustarDataTable() {
 
 //Funcion para cargar datos en un select2, es una funcion simple cuando se quiere cargar los datos
 
-function cargar_select2_url(ddl, url_controlador) {
-    $('#' + ddl).select2({
+function cargar_select2_url(ddl, url_controlador, placeholder = '-- Seleccione --', dropdownParent = null, minimumInputLength = 0) {
+    let configuracion = {
         language: {
             inputTooShort: function () {
-                return "Por favor ingresa 3 o más caracteres";
+                return `Por favor ingresa ${minimumInputLength} o más caracteres`;
             },
             noResults: function () {
                 return "No se encontraron resultados";
@@ -334,21 +334,36 @@ function cargar_select2_url(ddl, url_controlador) {
                 return "No se encontraron resultados";
             }
         },
-        placeholder: '-- Seleccione --',
+        minimumInputLength: minimumInputLength,
+        placeholder: placeholder,
         width: '100%',
         ajax: {
             url: url_controlador,
             dataType: 'json',
             delay: 250,
-
             processResults: function (data) {
-                return {
-                    results: data
-                };
+                console.log(data.length);
+                return { results: data };
             },
             cache: true
         }
-    });
+    };
+
+    if (dropdownParent) {
+        configuracion.dropdownParent = $(dropdownParent);
+    }
+
+    $('#' + ddl).select2(configuracion)
+        .on('select2:open', function () {
+            let input = $('.select2-search__field');
+
+            input.on('input', function () {
+                if ($(this).val().trim() === '') {
+                    $('#' + ddl).select2('close');
+                    $('#' + ddl).select2('open');
+                }
+            });
+        });
 }
 
 function cargar_select2_con_id(ddl, url_controlador, id_seleccionado, texto) {
