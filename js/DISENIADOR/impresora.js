@@ -31,37 +31,55 @@ function lista_impresora()
 
 function buscar_impresora()
 {
-	var parametros = {
-        'tipoBusqueda':$('#ddl_metodo_busqueda').val(),
-    }
+	 $.ajax({
+        url: 'http://localhost:3000',
+        type: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify({                
+            tipo: '1',
+            tipoBusqueda:$('#txt_ip_address').val(),
+            IpAddress:$('#txt_ip_address').val(),
+            datos: '^XA^FO50,50^A0N,50,50^FDHello, World!^FS^XZ'
+        }),
+        success: function(response) {
+            console.log('Respuesta del servidor:', response);
+        },
+        error: function(xhr, status, error) {
+            console.error('Error en la solicitud:', status, error);
+        }
+    });
 
-         $.ajax({
-          data:  {parametros:parametros},
-          url:  '../controlador/DISENIADOR_ZPL/di_diseniadorC.php?buscar_impresora=true',
-          type:  'post',
-          dataType: 'json',
-          /*beforeSend: function () {   
-               var spiner = '<div class="text-center"><img src="../img/gif/proce.gif" width="100" height="100"></div>'     
-             $('#tabla_').html(spiner);
-          },*/
-            success:  function (response) {
-            	console.log(response)
-            	const lista = Object.values(response);
-            	op = '';
-            	lista.forEach(function(item,i){
-            		console.log(item)
-            		op+='<option value="'+item+'">'+item+'</option>'
-            	})
-            	$('#ddl_lista_empresas').html(op);
-               // console.log(response)
-          },
-            error: function (error) {
-                 setTimeout(() => {                    
-                   $('#modal_print').modal('hide');
-                }, 2000);
+	// var parametros = {
+    //     'tipoBusqueda':$('#ddl_metodo_busqueda').val(),
+    // }
+
+    //      $.ajax({
+    //       data:  {parametros:parametros},
+    //       url:  '../controlador/DISENIADOR_ZPL/di_diseniadorC.php?buscar_impresora=true',
+    //       type:  'post',
+    //       dataType: 'json',
+    //       /*beforeSend: function () {   
+    //            var spiner = '<div class="text-center"><img src="../img/gif/proce.gif" width="100" height="100"></div>'     
+    //          $('#tabla_').html(spiner);
+    //       },*/
+    //         success:  function (response) {
+    //         	console.log(response)
+    //         	const lista = Object.values(response);
+    //         	op = '';
+    //         	lista.forEach(function(item,i){
+    //         		console.log(item)
+    //         		op+='<option value="'+item+'">'+item+'</option>'
+    //         	})
+    //         	$('#ddl_lista_empresas').html(op);
+    //            // console.log(response)
+    //       },
+    //         error: function (error) {
+    //              setTimeout(() => {                    
+    //                $('#modal_print').modal('hide');
+    //             }, 2000);
                 
-            },
-        });
+    //         },
+    //     });
 }
 
 function guardar_impresora()

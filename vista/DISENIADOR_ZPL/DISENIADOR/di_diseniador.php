@@ -646,8 +646,9 @@
             url: 'http://localhost:3000',
             type: 'POST',
             contentType: 'application/json',
-            data: JSON.stringify({
-                comando: 'imprimir',
+            data: JSON.stringify({                
+                tipo: '1',
+                tipoBusqueda: 'imprimir',
                 datos: '^XA^FO50,50^A0N,50,50^FDHello, World!^FS^XZ'
             }),
             success: function(response) {
