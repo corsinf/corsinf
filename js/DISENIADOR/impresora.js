@@ -42,7 +42,13 @@ function buscar_impresora()
             datos: '^XA^FO50,50^A0N,50,50^FDHello, World!^FS^XZ'
         }),
         success: function(response) {
-            console.log('Respuesta del servidor:', response);
+            let data = JSON.parse(jsonString);
+            data.forEach(function(item,i){
+                console.log(item)
+                op+='<option value="'+item.id+'">'+item.nombre+'</option>'
+            })
+
+            $('#ddl_impresora').html(op);
         },
         error: function(xhr, status, error) {
             console.error('Error en la solicitud:', status, error);
