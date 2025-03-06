@@ -17,6 +17,8 @@ if ($_GET['acc'] == 'persona_juridica_ca') {
     include('FIRMADOR/CARTA_AUTORIZACION/persona_juridica_ca.php');
 }
 
+/*
+
 if ($_GET['acc'] == 'firmas') {
     include('FIRMADOR/Firmas/firmas.php');
 }
@@ -43,6 +45,7 @@ if ($_GET['acc'] == 'sala_firmado') {
 if ($_GET['acc'] == 'firmar_pdf') {
     include('FIRMADOR/INICIO_PRUEBA/firmar_pdf.php');
 }
+    */
 
 if ($_GET['acc'] == 'student_consent') {
     include('FIRMADOR/INICIO_PRUEBA/student_consent.php');

@@ -254,7 +254,7 @@
             <li class="breadcrumb-item"><a href="javascript:;"><i class="bx bx-home-alt"></i></a>
             </li>
             <li class="breadcrumb-item active" aria-current="page">
-              Editar Bodega
+              Bodega
             </li>
           </ol>
         </nav>

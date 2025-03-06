@@ -11,6 +11,10 @@ if (isset($_GET['listar'])) {
     echo json_encode($controlador->listar($_POST['id'] ?? ''));
 }
 
+if (isset($_GET['listar_personas_rol'])) {
+    echo json_encode($controlador->listar_personas_rol());
+}
+
 if (isset($_GET['insertar'])) {
     echo json_encode($controlador->insertar_editar($_POST['parametros']));
 }
@@ -59,8 +63,7 @@ class th_personasC
         $this->modelo = new th_personasM();
         $this->dispositivos = new th_dispositivosM();
         $this->biometria = new th_biometriaM();
-        $this->sdk_patch = dirname(__DIR__,2).'/lib/SDKDevices/hikvision/bin/Debug/net8.0/CorsinfSDKHik.dll ';
-    
+        $this->sdk_patch = dirname(__DIR__, 2) . '/lib/SDKDevices/hikvision/bin/Debug/net8.0/CorsinfSDKHik.dll ';
     }
 
     function listar($id = '')
@@ -70,12 +73,23 @@ class th_personasC
         } else {
             $datos = $this->modelo->where('th_per_id', $id)->listar();
             $datosB = $this->biometria->where('th_per_id', $id)->listar();
-            $datos[0]['biometria']= array();
-            if(count($datosB)>0)
-            {
+            $datos[0]['biometria'] = array();
+            if (count($datosB) > 0) {
                 $datos[0]['biometria'] = $datosB[0];
             }
         }
+        return $datos;
+    }
+
+    function listar_personas_rol()
+    {
+        $id = $_SESSION['INICIO']['NO_CONCURENTE'];
+        if($id != null){
+            $datos = $this->modelo->where('th_per_id', $id)->listar();
+        }else{
+            return null;
+        }
+
         return $datos;
     }
 
@@ -167,30 +181,27 @@ class th_personasC
 
     function conectar_buscar($parametros)
     {
-        $datos = $this->dispositivos->where('th_dis_id',$parametros['id'])->listar();
+        $datos = $this->dispositivos->where('th_dis_id', $parametros['id'])->listar();
 
-        if(count($datos)>0)
-        {
-            $dllPath = $this->sdk_patch.'5 '.$datos[0]['host'].' '.$datos[0]['usuario'].' '.$datos[0]['port'].' '.$datos[0]['pass'].' ';
+        if (count($datos) > 0) {
+            $dllPath = $this->sdk_patch . '5 ' . $datos[0]['host'] . ' ' . $datos[0]['usuario'] . ' ' . $datos[0]['port'] . ' ' . $datos[0]['pass'] . ' ';
             // Comando para ejecutar la DLL
             $command = "dotnet $dllPath";
 
             // print_r($command);die();
             $output = shell_exec($command);
-            $resp = json_decode($output,true);
+            $resp = json_decode($output, true);
             $cadena = $resp['msj'];
             $cadena = preg_replace('/[^\w:{}\s,]/u', '', $cadena);
             $cadena = str_replace(["CardNo", "nombre", "{"], ['"CardNo"', '"nombre"', '{'], $cadena);
-            $cadena = '[' . str_replace(['":', '}',',"'],['":"','"}','","'], $cadena) . ']';
+            $cadena = '[' . str_replace(['":', '}', ',"'], ['":"', '"}', '","'], $cadena) . ']';
             // print_r($cadena);die();
             $datos = json_decode($cadena, true);
 
             return $datos;
-        }else
-        {
+        } else {
             return -1;
         }
-
     }
 
     function guardarImport($parametros)
@@ -200,58 +211,49 @@ class th_personasC
         $datos = json_decode($datos, true);
 
         foreach ($datos as $key => $value) {
-            $per = explode(' ',$value['nombre']);
+            $per = explode(' ', $value['nombre']);
             $where = '';
-            if(isset($per[0]))
-            {                   
-                $where.="th_per_primer_nombre";
+            if (isset($per[0])) {
+                $where .= "th_per_primer_nombre";
             }
-            if(isset($per[2]))
-            {                
-                $where.="+' '+th_per_segundo_nombre";
+            if (isset($per[2])) {
+                $where .= "+' '+th_per_segundo_nombre";
             }
-            if(isset($per[1]))
-            {
-               $where.="+' '+th_per_primer_apellido";
+            if (isset($per[1])) {
+                $where .= "+' '+th_per_primer_apellido";
             }
-            if(isset($per[3]))
-            {
-                $where.="+' '+th_per_segundo_apellido";
+            if (isset($per[3])) {
+                $where .= "+' '+th_per_segundo_apellido";
             }
             $this->modelo->reset();
-            $datos = $this->modelo->where($where,$value['nombre'])->listar();
+            $datos = $this->modelo->where($where, $value['nombre'])->listar();
 
             // print_r($datos);die();
-            if(count($datos)==0)
-            {
-                 $valor = array(
-                        array('campo' =>  'th_per_fecha_modificacion', 'dato' => date('Y-m-d H:i:s')),
+            if (count($datos) == 0) {
+                $valor = array(
+                    array('campo' =>  'th_per_fecha_modificacion', 'dato' => date('Y-m-d H:i:s')),
                 );
 
-                if(isset($per[0]))
-                {                   
-                    $campo = array('campo' =>  'th_per_primer_nombre', 'dato' => $per[0]);               
+                if (isset($per[0])) {
+                    $campo = array('campo' =>  'th_per_primer_nombre', 'dato' => $per[0]);
                     array_push($valor, $campo);
                 }
-                if(isset($per[2]))
-                {
-                    $campo = array('campo' => 'th_per_segundo_nombre', 'dato' => $per[2]);               
+                if (isset($per[2])) {
+                    $campo = array('campo' => 'th_per_segundo_nombre', 'dato' => $per[2]);
                     array_push($valor, $campo);
                 }
-                if(isset($per[1]))
-                {
-                     $campo = array('campo' => 'th_per_primer_apellido', 'dato' => $per[1]);               
+                if (isset($per[1])) {
+                    $campo = array('campo' => 'th_per_primer_apellido', 'dato' => $per[1]);
                     array_push($valor, $campo);
                 }
-                if(isset($per[3]))
-                {
-                     $campo = array('campo' => 'th_per_segundo_apellido', 'dato' => $per[3]);       
+                if (isset($per[3])) {
+                    $campo = array('campo' => 'th_per_segundo_apellido', 'dato' => $per[3]);
                     array_push($valor, $campo);
                 }
                 // print_r($valor);die();               
                 $datos = $this->modelo->insertar($valor);
 
-                $reg = $this->modelo->where($where,$value['nombre'])->listar();
+                $reg = $this->modelo->where($where, $value['nombre'])->listar();
 
                 // print_r($reg);die();
                 $biom = array(
@@ -261,27 +263,24 @@ class th_personasC
                 );
 
                 $datos = $this->biometria->insertar($biom);
-
-            }else
-            {
-                $msj.='El registro '.$value['nombre'].' ya esta registrado<br>';
+            } else {
+                $msj .= 'El registro ' . $value['nombre'] . ' ya esta registrado<br>';
             }
         }
 
-        if($msj!='')
-        {
-            $msj = '<div style="text-align: left;">'.$msj.'</div>';
+        if ($msj != '') {
+            $msj = '<div style="text-align: left;">' . $msj . '</div>';
         }
 
-        return array('resp'=>1,'msj'=>$msj);
+        return array('resp' => 1, 'msj' => $msj);
     }
 
     function registros_biometria($parametros)
     {
-        $datos = $this->biometria->where('th_per_id',$parametros['id'])->listar();
+        $datos = $this->biometria->where('th_per_id', $parametros['id'])->listar();
         $detalle = array();
         foreach ($datos as $key => $value) {
-            $detalle[] = array('id'=>$value['_id'],'detalle'=>$value['th_bio_nombre']);
+            $detalle[] = array('id' => $value['_id'], 'detalle' => $value['th_bio_nombre']);
         }
 
         return $detalle;
@@ -293,7 +292,6 @@ class th_personasC
         $where[0]['campo'] = 'th_bio_id';
         $where[0]['dato'] = $id;
         return $this->biometria->eliminar($where);
-
     }
 
     function syncronizarPersona($parametros)
@@ -303,36 +301,31 @@ class th_personasC
         $datos = $this->listar($parametros['id']);
 
         $datosBio = array(
-            array('campo'=>'th_bio_card','dato'=>$parametros['card']),
-            array('campo'=>'th_per_id','dato'=>$parametros['id']),
+            array('campo' => 'th_bio_card', 'dato' => $parametros['card']),
+            array('campo' => 'th_per_id', 'dato' => $parametros['id']),
         );
 
 
 
-        if(count($datos[0]['biometria'])==0 && $parametros['card']!='')
-        {
+        if (count($datos[0]['biometria']) == 0 && $parametros['card'] != '') {
             $datos = $this->biometria->insertar($datosBio);
-        }else if(count($datos[0]['biometria'])>0 && $parametros['card']!='')
-        {
+        } else if (count($datos[0]['biometria']) > 0 && $parametros['card'] != '') {
 
             $where[0]['campo'] = 'th_per_id';
             $where[0]['dato'] = $parametros['id'];
             $datos = $this->biometria->editar($datosBio, $where);
         }
-        $dispositivo = $this->dispositivos->where('th_dis_id',$parametros['device'])->listar();
+        $dispositivo = $this->dispositivos->where('th_dis_id', $parametros['device'])->listar();
         $datos = $this->listar($parametros['id']);
 
 
-        $dllPath = $this->sdk_patch.'4 '.$dispositivo[0]['host'].' '.$dispositivo[0]['usuario'].' '.$dispositivo[0]['port'].' '.$dispositivo[0]['pass'].' "'.$datos[0]['primer_apellido'].' '.$datos[0]['segundo_apellido'].' '.$datos[0]['primer_nombre'].' '.$datos[0]['segundo_nombre'].'" '.$parametros['id'].' '.$parametros['card'].' '.$datos[0]['biometria']['th_bio_patch'];
+        $dllPath = $this->sdk_patch . '4 ' . $dispositivo[0]['host'] . ' ' . $dispositivo[0]['usuario'] . ' ' . $dispositivo[0]['port'] . ' ' . $dispositivo[0]['pass'] . ' "' . $datos[0]['primer_apellido'] . ' ' . $datos[0]['segundo_apellido'] . ' ' . $datos[0]['primer_nombre'] . ' ' . $datos[0]['segundo_nombre'] . '" ' . $parametros['id'] . ' ' . $parametros['card'] . ' ' . $datos[0]['biometria']['th_bio_patch'];
         // Comando para ejecutar la DLL
         $command = "dotnet $dllPath";
 
         // print_r($command);die();
         $output = shell_exec($command);
-        $resp = json_decode($output,true);
-        return $resp;       
-
+        $resp = json_decode($output, true);
+        return $resp;
     }
-
-
 }

@@ -1,17 +1,18 @@
+
 <script type="text/javascript">
     $(document).ready(function() {
-        materiales();
-        materiales_inactivos();
+        categorias();
+        categorias_inactivos();
         //  // restriccion();
         // Lista_clientes();
         // Lista_procesos();
 
     });
 
-    function materiales() {
+    function categorias() {
         $.ajax({
             // data:  {id,id},
-            url: '../controlador/materialesC.php?lista=true',
+            url: '../controlador/categoriasC.php?lista=true',
             type: 'post',
             dataType: 'json',
             success: function(response) {
@@ -22,12 +23,12 @@
         });
     }
 
-    function materiales_inactivos(query = '') {
+    function categorias_inactivos(query = '') {
         $.ajax({
             data: {
                 query: query
             },
-            url: '../controlador/materialesC.php?inactivo=true',
+            url: '../controlador/categoriasC.php?inactivo=true',
             type: 'post',
             dataType: 'json',
             /*beforeSend: function () {   
@@ -36,7 +37,7 @@
             },*/
             success: function(response) {
                 if (response != "") {
-                    $('#materiales_ina').html(response);
+                    $('#categorias_ina').html(response);
                 }
             }
 
@@ -54,14 +55,14 @@
                 parametros,
                 parametros
             },
-            url: '../controlador/materialesC.php?editar=true',
+            url: '../controlador/categoriasC.php?editar=true',
             type: 'post',
             dataType: 'json',
             success: function(response) {
                 if (response == 1) {
                     Swal.fire('', 'Registro editado.', 'success');
-                    materiales();
-                    materiales_inactivos();
+                    categorias();
+                    categorias_inactivos();
                 } else {
                     Swal.fire('', 'UPs Algo salio mal.', 'error');
                 }
@@ -77,13 +78,13 @@
                 eliminar,
                 eliminar
             },
-            url: '../controlador/materialesC.php?eliminar=true',
+            url: '../controlador/categoriasC.php?eliminar=true',
             type: 'post',
             dataType: 'json',
             success: function(response) {
                 if (response == 1) {
-                    materiales();
-                    materiales_inactivos();
+                    categorias();
+                    categorias_inactivos();
                 }
             }
 
@@ -108,18 +109,18 @@
                         id,
                         id
                     },
-                    url: '../controlador/materialesC.php?eliminar=true',
+                    url: '../controlador/categoriasC.php?eliminar=true',
                     type: 'post',
                     dataType: 'json',
                     success: function(response) {
                         if (response == 1) {
-                            Swal.fire('', 'Material eliminado', 'success');
-                            materiales();
-                            materiales_inactivos();
+                            Swal.fire('', 'Registro eliminado', 'success');
+                            categorias();
+                            categorias_inactivos();
                         } else if (response == -2) {
                             Swal.fire({
-                                title: 'Este material esta asignada aun producto y no se podra eliminar',
-                                text: "Desea inhabilitado a esta categoria?",
+                                title: 'Este registro esta asignada aun producto y no se podra eliminar',
+                                text: "Desea inhabilitar a esta registro?",
                                 showDenyButton: true,
                                 showCancelButton: true,
                                 confirmButtonText: 'Si!',
@@ -130,7 +131,7 @@
                             })
                             // Swal.fire('','El Usuario esta ligado a uno o varios registros y no se podra eliminar.','error')
                         } else {
-                            Swal.fire('', 'No se pudo eliminar', 'info');
+                            Swal.fire('', 'Eno se pudo eliminar', 'info');
                         }
                     }
 
@@ -145,7 +146,7 @@
             data: {
                 id: id
             },
-            url: '../controlador/materialesC.php?estado=true',
+            url: '../controlador/categoriasC.php?estado=true',
             type: 'post',
             dataType: 'json',
             /*beforeSend: function () {   
@@ -154,9 +155,9 @@
             },*/
             success: function(response) {
                 if (response == 1) {
-                    materiales();
-                    materiales_inactivos();
-                    Swal.fire('El material se a inhabilitado!', 'El material no podra ser usado en futuras asignaciones', 'success');
+                    categorias();
+                    categorias_inactivos();
+                    Swal.fire('El registro se a inhabilitado!', 'El cliente no podra ser seleccionado en futuras compras o ventas', 'success');
 
                 } else {
                     Swal.fire('', 'UPs aparecio un problema', 'success');
@@ -173,7 +174,7 @@
             data: {
                 id: id
             },
-            url: '../controlador/materialesC.php?activar=true',
+            url: '../controlador/categoriasC.php?activar=true',
             type: 'post',
             dataType: 'json',
             /*beforeSend: function () {   
@@ -182,9 +183,9 @@
             },*/
             success: function(response) {
                 if (response == 1) {
-                    materiales();
-                    materiales_inactivos();
-                    Swal.fire('El material  se a habilitado!', '', 'success');
+                    categorias();
+                    categorias_inactivos();
+                    Swal.fire('El registro  se a habilitado!', '', 'success');
 
                 } else {
                     Swal.fire('', 'UPs aparecio un problema', 'success');
@@ -196,7 +197,7 @@
 
     }
 
-    function add_materiales() {
+    function add_categoria() {
         var nombre = $('#txt_nombre').val();
         if (nombre == '') {
             Swal.fire('', 'Llene el campo de nombre', 'info');
@@ -206,7 +207,7 @@
             data: {
                 nombre: nombre
             },
-            url: '../controlador/materialesC.php?add=true',
+            url: '../controlador/categoriasC.php?add=true',
             type: 'post',
             dataType: 'json',
             /*beforeSend: function () {   
@@ -215,19 +216,18 @@
             },*/
             success: function(response) {
                 if (response == 1) {
-                    materiales();
+                    categorias();
                     $('#txt_nombre').val('');
-                    materiales_inactivos();
-                    Swal.fire('Material  Registrado!', '', 'success');
+                    categorias_inactivos();
+                    Swal.fire('Item  Registrado!', '', 'success');
 
                 } else if (response == -2) {
-                    Swal.fire('', 'El nombre del material ya esta registrado', 'error');
+                    Swal.fire('', 'El nombre del item ya esta registrada', 'error');
                 }
 
             }
 
         });
-
     }
 </script>
 
@@ -235,7 +235,7 @@
     <div class="page-content">
         <!--breadcrumb-->
         <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
-            <div class="breadcrumb-title pe-3">Materiales</div>
+            <div class="breadcrumb-title pe-3">Ropa</div>
             <?php
             // print_r($_SESSION['INICIO']);die();
 
@@ -246,7 +246,7 @@
                         <li class="breadcrumb-item"><a href="javascript:;"><i class="bx bx-home-alt"></i></a>
                         </li>
                         <li class="breadcrumb-item active" aria-current="page">
-                            Blank
+                            Ropa
                         </li>
                     </ol>
                 </nav>
@@ -256,33 +256,36 @@
 
         <div class="row">
             <div class="col-xl-12 mx-auto">
+
                 <div class="card border-top border-0 border-4 border-primary">
                     <div class="card-body p-5">
                         <div class="card-title d-flex align-items-center">
 
                             <h5 class="mb-0 text-primary"></h5>
+                            
                         </div>
-
-
                         <div class="card">
                             <div class="card-header p-2">
                                 <ul class="nav nav-pills">
                                     <li class="nav-item">
-                                        <a class="nav-link active" id="materiales-tab" data-bs-toggle="pill" href="#materiales" role="tab" aria-controls="materiales" aria-selected="true">MATERIALES</a>
+                                        <a class="nav-link active" id="categorias-tab" data-bs-toggle="pill" href="#categorias" role="tab" aria-controls="categorias" aria-selected="true">Lavado</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link" id="materiales_ina-tab" data-bs-toggle="pill" href="#materiales_ina" role="tab" aria-controls="materiales_ina" aria-selected="false">MATERIALES INACTIVAS</a>
+                                        <a class="nav-link" id="categorias_ina-tab" data-bs-toggle="pill" href="#categorias_ina" role="tab" aria-controls="categorias_ina" aria-selected="false">Planchado</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" id="categorias_ina-tab" data-bs-toggle="pill" href="#categorias_ina" role="tab" aria-controls="categorias_ina" aria-selected="false">Arreglos</a>
                                     </li>
                                 </ul>
                             </div><!-- /.card-header -->
 
                             <div class="card-body">
                                 <div class="tab-content">
-                                    <div class="tab-pane active" id="materiales" role="tabpanel" aria-labelledby="materiales-tab">
+                                    <div class="tab-pane active" id="categorias" role="tabpanel" aria-labelledby="categorias-tab">
                                         <table class="table">
                                             <thead>
                                                 <tr>
-                                                    <th>Nombre de materiales</th>
+                                                    <th>Descripción</th>
                                                     <th></th>
                                                 </tr>
                                             </thead>
@@ -292,7 +295,7 @@
                                                         <input type="text" name="txt_nombre" id="txt_nombre" class="form-control-sm form-control">
                                                     </td>
                                                     <td>
-                                                        <button class="btn btn-primary btn-sm" type="button" onclick="add_materiales()"><i class="fa fa-save"></i> Nuevo</button>
+                                                        <button class="btn btn-primary btn-sm" type="button" onclick="add_categoria()"><i class="fa fa-save"></i> Nuevo</button>
                                                     </td>
                                                 </tr>
                                             </tbody>
@@ -302,14 +305,13 @@
                                         </table>
                                     </div><!-- /.tab-pane -->
 
-                                    <div class="tab-pane" id="materiales_ina" role="tabpanel" aria-labelledby="materiales_ina-tab">
-                                        <!-- Inactive materiales content goes here -->
+                                    <div class="tab-pane" id="categorias_ina" role="tabpanel" aria-labelledby="categorias_ina-tab">
+                                        <!-- Inactive categories content goes here -->
                                     </div><!-- /.tab-pane -->
 
                                 </div><!-- /.tab-content -->
                             </div><!-- /.card-body -->
                         </div><!-- /.card -->
-
                     </div>
                 </div>
             </div>

@@ -22,19 +22,24 @@ if ($_GET['acc'] == 'cotizacion') {
 }
 
 //Articulos
-//editar tipo joya
-if ($_GET['acc'] == 'editar_tipo_joya') {
-	include('SMARTTAG/ARTICULOS/editar_tipo_joya.php');
+//joya
+if ($_GET['acc'] == 'ropa') {
+	include('SMARTTAG/ARTICULOS/ropa.php');
 }
 
-//editar bodegas
-if ($_GET['acc'] == 'editar_bodegas') {
-	include('SMARTTAG/ARTICULOS/editar_bodegas.php');
+//bodegas
+if ($_GET['acc'] == 'bodegas') {
+	include('SMARTTAG/ARTICULOS/bodegas.php');
 }
-//Editar materiales
-if ($_GET['acc'] == 'editar_materiales') {
-	include('SMARTTAG/ARTICULOS/editar_materiales.php');
+//materiales
+if ($_GET['acc'] == 'materiales') {
+	include('SMARTTAG/ARTICULOS/materiales.php');
 }
+//portales
+if ($_GET['acc'] == 'portales') {
+	include('SMARTTAG/ARTICULOS/portales.php');
+}
+
 //kardex
 if ($_GET['acc'] == 'kardex') {
 	include('SMARTTAG/ARTICULOS/kardex.php');
