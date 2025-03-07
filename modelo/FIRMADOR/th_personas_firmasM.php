@@ -22,7 +22,7 @@ class th_personas_firmasM extends BaseModel
     ];
 
 
-    function lista_genero($id = '') 
+    function lista_personas_firma($id = '') 
     {
         // Inicializar la consulta SQL
         $sql = "SELECT th_personas_firmas.th_perfir_id, 
@@ -34,6 +34,7 @@ class th_personas_firmasM extends BaseModel
                        th_cat_tipo_firma.th_tipfir_id, 
                        th_personas_firmas.th_perfir_fecha_creacion, 
                        th_personas_firmas.th_perfir_fecha_expiracion, 
+                       th_personas_firmas.th_perfir_documento_url, 
                        th_personas_firmas.th_perfir_contrasenia,  
                        th_personas_firmas.th_perfir_politica_de_datos
                 FROM th_personas_firmas

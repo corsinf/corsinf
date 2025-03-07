@@ -72,8 +72,11 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
       ]
     }));
 
+    // $("#datos_extras").hide();
+
+
     url_personasC = '../controlador/FIRMADOR/th_cat_tipo_firmaC.php?buscar=true';
-    cargar_select2_url('ddl_tipo_persona', url_personasC, 'persona', '#modal_firma');
+    cargar_select2_url('ddl_tipo_firma', url_personasC, 'persona', '#modal_firma');
   });
 
   // Configuración de validación del formulario
@@ -89,39 +92,12 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
     }
   });
 
-  //cargar_persona_firma
-
-   function leer_datos_firma(){
-    $.ajax({
-      url: '../controlador/FIRMADOR/th_personas_firmasC.php?leer_archivo=true',
-      dataType: 'json',
-      success: function(response) {
-
-        if (response.length > 0) {
-
-          console.log(response)
-        
-        } else {
-          Swal.fire({
-            icon: "warning",
-            title: "Registro no encontrado",
-            text: "No se encontraron datos para este ID."
-          });
-        }
-      },
-      error: function(xhr, status, error) {
-        //console.error("Error al obtener los datos:", error);
-        Swal.fire({
-          icon: "error",
-          title: "Error",
-          text: "No se pudo obtener los datos de la persona."
-        });
-      }
-    });
-   }
+  //crear_firma_firma
 
 
-  function cargar_persona() {
+
+  function crear_firma() {
+    // $("#datos_extras").hide();
     $.ajax({
       url: '../controlador/TALENTO_HUMANO/th_personasC.php?listar_personas_rol=true',
       dataType: 'json',
@@ -131,7 +107,6 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
           //data en vez de data
           var data = response[0]; // Obtener el primer objeto
 
-          $("#txt_nombrePersona").val(data.primer_nombre + " " + data.primer_apellido);
           $("#cedula").val(data.cedula);
 
           // Mostrar el modal
@@ -165,7 +140,7 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
 
     // Limpiar campos específicos
     let campos = [
-      "#_id", "#txt_nombrePersona", "#txt_nombreFirma",
+      "#_id", "#txt_nombreFirma",
       "#txt_identidad", "#ddl_tipoPersona", "#txt_fecha_creacion",
       "#txt_fecha_expiracion", "#txt_clave", "#txt_validarClave"
     ];
@@ -245,12 +220,15 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
   // Función para editar (cargar datos en el formulario y mostrar el modal)
   function editar_firma(id) {
 
+
+    //$('#datos_extras').show();
+
     let form = $("#registrar_firma");
     form.validate().resetForm();
     form.find(".is-invalid, .is-valid").removeClass("is-invalid is-valid");
     $.ajax({
-      url: '../controlador/FIRMADOR/th_personas_firmasC.php?listar=true',
-      type: 'GET',
+      url: '../controlador/FIRMADOR/th_personas_firmasC.php?listar_persona=true',
+      type: 'POST',
       data: {
         id: id // Enviar el ID correctamente
       },
@@ -261,19 +239,18 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
           var data = response[0]; // Tomar el primer objeto si hay varios
           // Asignar valores a los campos del formulario
 
-          $("#_id").val(data.th_perfir_id);
-          $("#th_per_id").val(data.th_per_id);
-          $("#txt_nombrePersona").val(data.th_per_primer_nombre + " " + data.th_per_primer_apellido);
-          $("#txt_identidad").val(data.th_perfir_identificacion);
-          $("#txt_nombreFirma").val(data.th_perfir_nombre_firma);
-          $("#ddl_tipoPersona").val(data.th_tipper_id);
-          $("#txt_fecha_creacion").val(fecha_formateada(data.th_perfir_fecha_creacion));
-          $("#txt_fecha_expiracion").val(fecha_formateada(data.th_perfir_fecha_expiracion));
+          $("#_id").val(data._id);
+          $("#th_per_id").val(data.id_persona);
+          $("#txt_identidad").val(data.identificacion);
+          $("#txt_nombreFirma").val(data.nombre_firma);
+          $("#ddl_tipoPersona").val(data.id_tipfir);
+          $("#txt_fecha_expiracion").val(fecha_formateada(data.fecha_expiracion));
 
           // Limpiar campos de clave por seguridad
           $("#txt_clave").val('');
           $("#txt_validarClave").val('');
           $("#cbx_politicaDeDatos").prop("checked", data.th_perfir_politica_de_datos == "1");
+          $("#ddl_tipo_firma").val(data.th_tipfir_id);
           $("#registrar_firma").data("id", id);
           $("#btn_enviar").text("Actualizar la firma");
           $("#modal_firma").modal("show");
@@ -344,6 +321,56 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
       }
     });
   }
+
+  function verificar_firma() {
+
+    var formData = new FormData(document.getElementById("registrar_firma"));
+    $.ajax({
+      url: '../controlador/FIRMADOR/validar_firmaC.php?validar_firma_funcional=true',
+      type: 'post',
+      data: formData,
+      contentType: false,
+      processData: false,
+      dataType: 'json',
+      // beforeSend: function () {
+      //        $("#foto_alumno").attr('src',"../img/gif/proce.gif");
+      //     },
+      success: function(response) {
+        if (response.resp == 1) {
+          Swal.fire(response.msj, "", "success")
+        } else {
+          Swal.fire(response.msj, "", "error")
+        }
+      }
+    });
+
+  }
+
+  $(document).on('click', '#togglePassword', function() {
+    const passwordInput = $('#txt_clave');
+    const icon = $(this);
+
+    if (passwordInput.attr('type') === 'password') {
+      passwordInput.attr('type', 'text');
+      icon.removeClass('bx-show').addClass('bx-hide');
+    } else {
+      passwordInput.attr('type', 'password');
+      icon.removeClass('bx-hide').addClass('bx-show');
+    }
+  });
+
+  $(document).on('click', '#togglePasswordConfirm', function() {
+    const passwordInput = $('#txt_validarClave');
+    const icon = $(this);
+
+    if (passwordInput.attr('type') === 'password') {
+      passwordInput.attr('type', 'text');
+      icon.removeClass('bx-show').addClass('bx-hide');
+    } else {
+      passwordInput.attr('type', 'password');
+      icon.removeClass('bx-hide').addClass('bx-show');
+    }
+  });
 </script>
 <!-- HTML para la tabla de firmas con estilos mejorados -->
 <div class="page-wrapper">
@@ -369,11 +396,8 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
               <div class="col-12 col-md-6">
                 <div class="card-title d-flex align-items-center">
                   <div id="btn_nuevo">
-                    <button type="button" class="btn btn-success btn-sm" onclick="cargar_persona()">
+                    <button type="button" class="btn btn-success btn-sm" onclick="crear_firma()">
                       <i class="bx bx-plus me-0 pb-1"></i> Agregar Firma
-                    </button>
-                    <button type="button" class="btn btn-success btn-sm" onclick="leer_datos_firma()">
-                      <i class="bx bx-plus me-0 pb-1"></i> Leer Firma
                     </button>
                   </div>
                 </div>
@@ -433,60 +457,71 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
             <input type="file" class="form-control form-control-sm" name="txt_ruta_archivo" id="txt_ruta_archivo" accept=".p12">
           </div>
           <div class="mb-3">
-            <label for="txt_nombrePersona" class="form-label form-label-sm">Nombre <span style="color: red;">*</span></label>
-            <input type="text" class="form-control form-control-sm" name="txt_nombrePersona" id="txt_nombrePersona" placeholder="Escriba su nombre completo" disabled>
-          </div>
-          <!-- Si deseas incluir apellido, agrega este campo -->
-          <div class="mb-3">
-            <label for="txt_nombreFirma" class="form-label form-label-sm">Nombre de la firma <span style="color: red;">*</span></label>
-            <input type="text" class="form-control form-control-sm" name="txt_nombreFirma" id="txt_nombreFirma" placeholder="Escriba el nombre de la firma">
-          </div>
-          <div class="mb-3">
-            <label for="txt_identidad" class="form-label form-label-sm">
-              Identidad <span style="color: red;">*</span>
-            </label>
-            <input type="text" class="form-control form-control-sm" name="txt_identidad" id="txt_identidad" placeholder="Escriba su RUC">
-          </div>
-
-          <div class="mb-3">
-            <label for="ddl_tipo_persona" class="form-label form-label-sm">Tipo de firma</label>
-            <select class="form-control form-control-sm" name="ddl_tipo_persona" id="ddl_tipo_persona">
-              <option>-- Seleccione el tipo de firma --</option>
-            </select>
-          </div>
-
-          <div class="mb-3">
-            <div class="row">
-              <div class="col">
-                <label for="txt_fecha_creacion" class="form-label form-label-sm">Fecha Creación</label>
-                <input type="text" class="form-control form-control-sm" name="txt_fecha_creacion" id="txt_fecha_creacion" placeholder="Fecha Creación" disabled>
-              </div>
-              <div class="col">
-                <label for="txt_fecha_expiracion" class="form-label form-label-sm">Fecha Expiración</label>
-                <input type="text" class="form-control form-control-sm" name="txt_fecha_expiracion" id="txt_fecha_expiracion" placeholder="Fecha Expiración" disabled>
-              </div>
-            </div>
-          </div>
-
-          <div class="mb-3">
             <label for="cbx_guardarClave" class="form-check-label">¿Quiere guardar su contraseña?</label>
             <input type="checkbox" class="form-check-input form-check-input-sm" name="cbx_guardarClave" id="cbx_guardarClave">
           </div>
           <div class="mb-3" id="seccionClave">
-            <label for="txt_clave" class="form-label form-label-sm">Contraseña <span style="color: red;">*</span></label>
-            <input type="password" class="form-control form-control-sm" name="txt_clave" id="txt_clave" placeholder="Ingrese una contraseña">
+            <label for="txt_clave" class="form-label form-label-sm">
+              Contraseña <span style="color: red;">*</span>
+            </label>
+            <div style="position: relative;">
+              <input type="password" class="form-control form-control-sm" name="txt_clave" id="txt_clave" placeholder="Ingrese una contraseña">
+              <!-- Ícono para toggle usando Boxicons -->
+              <i class="bx bx-show" id="togglePassword" style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); cursor: pointer;"></i>
+            </div>
           </div>
+
           <div class="mb-3" id="seccionValidar">
-            <label for="txt_validarClave" class="form-label form-label-sm">Verificar Contraseña <span style="color: red;">*</span></label>
-            <input type="password" class="form-control form-control-sm" name="txt_validarClave" id="txt_validarClave" placeholder="Ingrese nuevamente su contraseña">
+            <label for="txt_validarClave" class="form-label form-label-sm">
+              Verificar Contraseña <span style="color: red;">*</span>
+            </label>
+            <div style="position: relative;">
+              <input type="password" class="form-control form-control-sm" name="txt_validarClave" id="txt_validarClave" placeholder="Ingrese nuevamente su contraseña">
+              <!-- Ícono para toggle usando Boxicons -->
+              <i class="bx bx-show" id="togglePasswordConfirm" style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); cursor: pointer;"></i>
+            </div>
           </div>
-          <div class="mb-3">
-            <input class="form-check-input" type="checkbox" id="cbx_politicaDeDatos" name="cbx_politicaDeDatos">
-            <label class="form-label" for="cbx_politicaDeDatos">Política de datos</label>
-            <label class="error" style="display: none;" for="cbx_politicaDeDatos"></label>
-          </div>
+
           <div class="mb-3 text-end">
-            <button type="button" class="btn btn-success btn-sm" id="btn_enviar" onclick="insertar_editar();">Guardar la firma</button>
+            <button type="button" class="btn btn-success btn-sm" id="btn_verificar" onclick="verificar_firma();">Verificar</button>
+          </div>
+          <div id="datos_extras">
+            <!-- Si deseas incluir apellido, agrega este campo -->
+            <div class="mb-3">
+              <label for="txt_nombreFirma" class="form-label form-label-sm">Nombre de la firma <span style="color: red;">*</span></label>
+              <input type="text" class="form-control form-control-sm" name="txt_nombreFirma" id="txt_nombreFirma" placeholder="Escriba el nombre de la firma">
+            </div>
+            <div class="mb-3">
+              <label for="txt_identidad" class="form-label form-label-sm">
+                Identidad <span style="color: red;">*</span>
+              </label>
+              <input type="text" class="form-control form-control-sm" name="txt_identidad" id="txt_identidad" placeholder="Escriba su RUC">
+            </div>
+
+            <div class="mb-3">
+              <label for="ddl_tipo_firma" class="form-label form-label-sm">Tipo de firma</label>
+              <select class="form-control form-control-sm" name="ddl_tipo_firma" id="ddl_tipo_firma">
+                <option>-- Seleccione el tipo de firma --</option>
+                <option value="1">Natural</option>
+                <option value="2">Juridica</option>
+                <option value="3">RUC</option>
+                <option value="4">Generica</option>
+              </select>
+            </div>
+            <div class="mb-3">
+              <label for="txt_fecha_expiracion" class="form-label form-label-sm">Fecha Expiración</label>
+              <input type="text" class="form-control form-control-sm" name="txt_fecha_expiracion" id="txt_fecha_expiracion" placeholder="Fecha Expiración" disabled>
+            </div>
+
+            <div class="mb-3">
+              <input class="form-check-input" type="checkbox" id="cbx_politicaDeDatos" name="cbx_politicaDeDatos">
+              <label class="form-label" for="cbx_politicaDeDatos">Política de datos</label>
+              <label class="error" style="display: none;" for="cbx_politicaDeDatos"></label>
+            </div>
+
+            <div class="mb-3 text-end">
+              <button type="button" class="btn btn-success btn-sm" id="btn_enviar" onclick="insertar_editar();">Guardar la firma</button>
+            </div>
           </div>
         </form>
       </div>
@@ -498,9 +533,6 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
   $(document).ready(function() {
     $("#registrar_firma").validate({
       rules: {
-        txt_nombrePersona: {
-          required: true
-        },
         txt_nombreFirma: {
           required: true
         },
@@ -522,12 +554,13 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
         },
         txt_identidad: {
           required: true
+        },
+        ddl_tipo_firma: {
+          required: true
+
         }
       },
       messages: {
-        txt_nombrePersona: {
-          required: "Por favor ingresa tu nombre"
-        },
         txt_nombreFirma: {
           required: "Por favor ingresa el nombre de la firma"
         },
@@ -549,6 +582,9 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
         },
         txt_identidad: {
           required: "Por favor ingresa tu RUC"
+        },
+        ddl_tipo_firma: {
+          required: "Por favor selecciona el tipo de firma"
         }
 
       },
