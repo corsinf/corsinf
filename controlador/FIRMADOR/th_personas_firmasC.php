@@ -9,16 +9,31 @@ if (isset($_GET['listar'])) {
     echo json_encode($controlador->listar());
 }
 
+if (isset($_GET['listar_persona'])) {
+    echo json_encode($controlador->listar_persona($_POST['id']));
+}
+
+
 if (isset($_GET['insertar'])) {
     echo json_encode($controlador->insertar_editar($_FILES, $_POST));
 }
 
-if (isset($_GET['leer_archivo'])) {
-    echo json_encode($controlador->leer_archivo());
-}
-
 if (isset($_GET['eliminar'])) {
     echo json_encode($controlador->eliminar($_POST['id']));
+}
+
+if (isset($_GET['buscar'])) {
+    $query = '';
+
+    if (isset($_GET['q'])) {
+        $query = $_GET['q'];
+    }
+
+    $parametros = array(
+        'query' => $query,
+    );
+
+    echo json_encode($controlador->buscar($parametros));
 }
 
 class th_personas_firmasC
@@ -30,6 +45,15 @@ class th_personas_firmasC
         $this->modelo = new th_personas_firmasM();
     }
 
+
+    function listar_persona($id)
+    {
+        if ($id) {
+            $datos = $this->modelo->where('th_perfir_id', $id)->listar();
+        }
+        return $datos;
+    }
+
     // Método para listar registros; si se pasa un id, lista ese registro, de lo contrario solo los activos (estado = 1)
     function listar()
     {
@@ -37,14 +61,53 @@ class th_personas_firmasC
 
 
         if ($id == '') {
-            $datos = $this->modelo->lista_genero();
+            $datos = $this->modelo->lista_personas_firma();
         } else {
             // Especificar la tabla en el WHERE para evitar ambigüedad
-            $datos = $this->modelo->lista_genero($id);
+            $datos = $this->modelo->lista_personas_firma($id);
         }
 
         return $datos;
     }
+
+    public function buscar($parametros)
+    {
+        $lista = [];
+
+        // Obtener el ID de la sesión
+        $id = $_SESSION['INICIO']['NO_CONCURENTE'] ?? null;
+
+        $camposBusqueda = [
+            'th_perfir_id',
+            'th_perfir_identificacion'
+        ];
+
+        // Construimos la consulta
+        $query = $this->modelo->where('th_perfir_estado', 1);
+
+        // Solo filtrar por th_per_id si el ID no es null
+        if ($id > 0) {
+            $query = $query->where('th_per_id', $id);
+        }
+
+        // Filtramos los datos con LIKE en los campos especificados
+        $datos = $query->like(implode(',', $camposBusqueda), $parametros['query']);
+
+        // Formatear los resultados
+        foreach ($datos as $value) {
+            $text = "{$value['th_perfir_identificacion']}";
+            $lista[] = [
+                'id' => $value['th_perfir_id'],
+                'text' => $text,
+                'data' => $value
+            ];
+        }
+
+        return $lista;
+    }
+
+
+
 
 
     function insertar_editar($file, $parametros)
@@ -166,31 +229,5 @@ class th_personas_firmasC
         //cambiar datos por datos
         $datos = $this->modelo->eliminar($where);
         return $datos;
-    }
-
-
-    function leer_archivo()
-    {
-        // Definir la ruta real en el servidor
-        $ruta_p12 = $_SERVER['DOCUMENT_ROOT'] . "/corsinf/REPOSITORIO/TALENTO_HUMANO/3044/128263/FIRMAS/firmas_electronicas_8.p12";
-        $clave_p12 = "milton123*"; // Ingresa la contraseña correcta del .p12
-        
-        // Verificar si el archivo existe
-        if (!file_exists($ruta_p12)) {
-            die("Error: El archivo .p12 no existe en la ruta: $ruta_p12");
-        }
-        
-        // Leer el contenido del archivo
-        $contenido_p12 = file_get_contents($ruta_p12);
-        
-        $certificados = [];
-        if (openssl_pkcs12_read($contenido_p12, $certificados, $clave_p12)) {
-            echo "<pre>";
-            print_r($certificados); // Muestra la información del archivo .p12
-            echo "</pre>";
-        } else {
-            echo "Error al leer el archivo .p12. Puede que la contraseña sea incorrecta.";
-        }
-        
     }
 }
