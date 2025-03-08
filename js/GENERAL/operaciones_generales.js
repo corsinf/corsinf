@@ -342,7 +342,7 @@ function cargar_select2_url(ddl, url_controlador, placeholder = '-- Seleccione -
             dataType: 'json',
             delay: 250,
             processResults: function (data) {
-                console.log(data.length);
+                //console.log(data.length);
                 return { results: data };
             },
             cache: true
@@ -387,6 +387,35 @@ function cargar_select2_con_id(ddl, url_controlador, id_seleccionado, texto) {
         }
     });
 }
+
+//Funcion que complementa a la libreria de jquery Validation en especifico para los select2
+function unhighlight_select(element) {
+    let $element = $(element);
+
+    // Verificar si es un select2
+    if ($element.hasClass("select2-hidden-accessible")) {
+        let select_value = $element.val();
+        let $select2_container = $element.next(".select2-container");
+
+        // Obtener el ID del select
+        let selectId = $element.attr('id');
+
+        // Buscar todos los labels con la clase 'error' asociados a este select
+        let $error_labels = $('label.error[for="' + selectId + '"]');
+
+        // Verificar si hay un valor seleccionado en el select2
+        if (select_value) {
+            // Si hay valor, aplicar 'is-valid' y ocultar el segundo label de error
+            $select2_container.find(".select2-selection").removeClass("is-invalid").addClass("is-valid");
+            $error_labels.hide(); // Ocultar el segundo label de error
+        } else {
+            // Si no hay valor, aplicar 'is-invalid' y mostrar el segundo label de error
+            $select2_container.find(".select2-selection").removeClass("is-valid").addClass("is-invalid");
+            $error_labels.show(); // Mostrar el segundo label de error
+        }
+    }
+}
+
 
 //Sweet alert, para generar las alertas de manera mejorada
 

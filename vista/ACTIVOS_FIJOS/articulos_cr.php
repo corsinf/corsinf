@@ -19,7 +19,7 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
             // "ordering": true,
             // "info": true,
             // "autoWidth": false,
-            "responsive": true,
+            // "responsive": true,
 
             processing: true,
             serverSide: true,
@@ -69,7 +69,7 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
         if ($('#ddl_custodio').val() != null) {
             cus = $('#ddl_custodio').select2('data')[0].text;
         }
-        window.location.href = "inicio.php?acc=detalle_articulo&id=" + id + '&fil1=' + $('#ddl_localizacion').val() + '--' + loc + '&fil2=' + $('#ddl_custodio').val() + '--' + cus;
+        window.location.href = "inicio.php?acc=detalle_articulo&_id=" + id + '&fil1=' + $('#ddl_localizacion').val() + '--' + loc + '&fil2=' + $('#ddl_custodio').val() + '--' + cus;
     }
 </script>
 

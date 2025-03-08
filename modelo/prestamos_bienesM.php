@@ -16,17 +16,24 @@ class prestamos_bienesM
 
 	}
 
-	function buscar_bien($query=false)
+	function buscar_bien($query = false)
 	{
-		$sql = "select top 25 id_plantilla as 'id',A.TAG_SERIE,DESCRIPT,MODELO,SERIE FROM ac_articulos PM LEFT JOIN ac_asset A ON PM.ID_ASSET = A.ID_ASSET";
-		if($query)
-		{
-			$sql = "SELECT TOP 25 id_plantilla as 'id',A.TAG_SERIE,DESCRIPT,MODELO,SERIE FROM ac_articulos PM 
-			LEFT JOIN ac_asset A ON PM.ID_ASSET = A.ID_ASSET
-			WHERE DESCRIPT+''+MODELO+''+SERIE+''+A.TAG_SERIE like '%".$query."%'";
+		$sql = "SELECT TOP 25 
+					id_articulo AS 'id',
+					tag_serie AS 'TAG_SERIE',
+					descripcion AS 'DESCRIPT',
+					modelo AS 'MODELO',
+					serie AS 'SERIE' 
+				FROM ac_articulos";
+		
+		if ($query) {
+			$sql .= " WHERE descripcion + '' + modelo + '' + serie + '' + tag_serie LIKE '%" . $query . "%'";
 		}
+	
 		return $this->db->datos($sql);
 	}
+	
+	
 
 	function datos_solicitud($id=false,$solicitante=false,$fecha=false,$fecha_salida=false,$fecha_regreso=false,$observacion=false,$estado=false)
 	{
@@ -70,9 +77,20 @@ class prestamos_bienesM
 
 	function datos_solicitud_all($id=false,$solicitante=false,$fecha=false,$fecha_salida=false,$fecha_regreso=false,$observacion=false,$estado=false,$paso=false)
 	{
-		$sql = "SELECT id_solicitud,PN.PERSON_NOM,fecha,fecha_salida,fecha_regreso,observacion,paso,fecha_update,SS.estado FROM ac_solicitud_salida SS 
-		INNER JOIN th_personas PN ON SS.solicitante = PN.PERSON_NO 
-		WHERE 1=1 ";
+		$sql = "SELECT 
+					id_solicitud,
+					CONCAT(PN.th_per_primer_apellido, ' ', PN.th_per_segundo_apellido, ' ', PN.th_per_primer_nombre, ' ', PN.th_per_segundo_nombre) AS PERSON_NOM,
+					fecha,
+					fecha_salida,
+					fecha_regreso,
+					observacion,
+					paso,
+					fecha_update,
+					SS.estado 
+				FROM ac_solicitud_salida SS 
+				INNER JOIN th_personas PN ON SS.solicitante = PN.th_per_codigo_sap 
+				WHERE 1=1 ";
+
 		if($solicitante)
 		{
 			$sql.=" AND solicitante = '".$solicitante."' ";
@@ -111,23 +129,36 @@ class prestamos_bienesM
 
 	function lista_notificaciones($fecha)
 	{
-		$sql = "SELECT * FROM ac_solicitud_salida SS 
-		INNER JOIN th_personas PE ON SS.solicitante = PE.PERSON_NO 
-		WHERE fecha_regreso <= '".$fecha."' AND paso = 4 AND SS.estado = 0";
+		$sql = "SELECT 
+					SS.*,
+					PE.th_per_codigo_sap AS PERSON_NO,
+					CONCAT(PE.th_per_primer_apellido, ' ', PE.th_per_segundo_apellido, ' ', PE.th_per_primer_nombre, ' ', PE.th_per_segundo_nombre) AS PERSON_NOM,
+					PE.th_per_cedula AS PERSON_CI,
+					PE.th_per_correo AS PERSON_CORREO,
+					PE.th_per_unidad_org AS UNIDAD_ORG
+				FROM ac_solicitud_salida SS 
+				INNER JOIN th_personas PE ON SS.solicitante = PE.th_per_codigo_sap 
+				WHERE SS.fecha_regreso <= '" . $fecha . "' 
+				AND SS.paso = 4 
+				AND SS.estado = 0";
+	
 		return $this->db->datos($sql);
-
 	}
-
 
 	function lineas_solicitud($id)
 	{
-		$sql ="	SELECT * 
+		$sql = "SELECT 
+					SS.*, 
+					L.*, 
+					PM.id_articulo AS 'id',
+					PM.tag_serie AS 'TAG_SERIE',
+					PM.descripcion AS 'DESCRIPT',
+					PM.modelo AS 'MODELO',
+					PM.serie AS 'SERIE'
 				FROM ac_solicitud_salida SS 
-				INNER JOIN ac_lineas_solicitud L ON SS.id_solicitud=L.id_solicitud 
-				INNER JOIN ac_articulos PM ON L.id_activo = PM.id_plantilla 
-				INNER JOIN ac_asset A ON PM.ID_ASSET = A.ID_ASSET 
-				WHERE SS.id_solicitud = '".$id."' ";
-
+				INNER JOIN ac_lineas_solicitud L ON SS.id_solicitud = L.id_solicitud 
+				INNER JOIN ac_articulos PM ON L.id_activo = PM.id_articulo 
+				WHERE SS.id_solicitud = '" . $id . "'";
 	
 		return $this->db->datos($sql);
 	}

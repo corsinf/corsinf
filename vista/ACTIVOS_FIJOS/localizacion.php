@@ -83,13 +83,13 @@
 
         $.each(response.datos, function(i, item) {
           // console.log(item);
-          localizacion += '<tr><td>' + item.ID_LOCATION + '</td><td>' + item.CENTRO + '</td><td><a href="inicio.php?acc=localizacion_detalle&id=' + item.ID_LOCATION + '">' + item.EMPLAZAMIENTO + '</a></td><td>' + item.DENOMINACION + '</td><td>';
+          localizacion += '<tr><td>' + item.ID_LOCALIZACION + '</td><td>' + item.CENTRO + '</td><td><a href="inicio.php?acc=localizacion_detalle&id=' + item.ID_LOCALIZACION + '">' + item.EMPLAZAMIENTO + '</a></td><td>' + item.DENOMINACION + '</td><td>';
           //    if($('#elimina').val()==1 || $('#dba').val()==1)
           //   {
-          //   localizacion+='<button class="btn btn-danger" tittle="Eliminar" onclick="delete_datos(\''+item.ID_LOCATION+'\')"><i class="fa fa-trash"></i></button>';
+          //   localizacion+='<button class="btn btn-danger" tittle="Eliminar" onclick="delete_datos(\''+item.ID_LOCALIZACION+'\')"><i class="fa fa-trash"></i></button>';
           // }if($('#editar').val()==1 || $('#dba').val()==1)
           //   {
-          //     localizacion+='<button class="btn btn-primary" tittle="Editar" onclick="datos_col(\''+item.ID_LOCATION+'\')" data-toggle="modal" data-target="#myModal"><i class="fa fa-paint-brush"></i></button>';
+          //     localizacion+='<button class="btn btn-primary" tittle="Editar" onclick="datos_col(\''+item.ID_LOCALIZACION+'\')" data-toggle="modal" data-target="#myModal"><i class="fa fa-paint-brush"></i></button>';
           //   }
           localizacion += '</td></tr>';
         });
@@ -119,7 +119,7 @@
         $('#txt_centro').val(response[0].CENTRO);
         $('#txt_empla').val(response[0].EMPLAZAMIENTO);
         $('#txt_deno').val(response[0].DENOMINACION);
-        $('#id').val(response[0].ID_LOCATION);
+        $('#id').val(response[0].ID_LOCALIZACION);
       }
     });
   }
@@ -159,13 +159,13 @@
         success: function(response) {
           // console.log(response);   
           $.each(response.datos, function(i, item) {
-            localizacion += '<tr><td>' + item.ID_LOCATION + '</td><td>' + item.CENTRO + '</td><td><a href="inicio.php?acc=localizacion_detalle&id=' + item.ID_LOCATION + '">' + item.EMPLAZAMIENTO + '</a></td><td>' + item.DENOMINACION + '</td><td>';
+            localizacion += '<tr><td>' + item.ID_LOCALIZACION + '</td><td>' + item.CENTRO + '</td><td><a href="inicio.php?acc=localizacion_detalle&id=' + item.ID_LOCALIZACION + '">' + item.EMPLAZAMIENTO + '</a></td><td>' + item.DENOMINACION + '</td><td>';
             //    if($('#elimina').val()==1 || $('#dba').val()==1)
             //   {
-            //   localizacion+='<button class="btn btn-danger" tittle="Eliminar" onclick="delete_datos(\''+item.ID_LOCATION+'\')"><i class="fa fa-trash"></i></button>';
+            //   localizacion+='<button class="btn btn-danger" tittle="Eliminar" onclick="delete_datos(\''+item.ID_LOCALIZACION+'\')"><i class="fa fa-trash"></i></button>';
             // }if($('#editar').val()==1 || $('#dba').val()==1)
             //   {
-            //     localizacion+='<button class="btn btn-primary" tittle="Editar" onclick="datos_col(\''+item.ID_LOCATION+'\')" data-toggle="modal" data-target="#myModal"><i class="fa fa-paint-brush"></i></button>';
+            //     localizacion+='<button class="btn btn-primary" tittle="Editar" onclick="datos_col(\''+item.ID_LOCALIZACION+'\')" data-toggle="modal" data-target="#myModal"><i class="fa fa-paint-brush"></i></button>';
             //   }
             localizacion += '</td></tr>';
           });

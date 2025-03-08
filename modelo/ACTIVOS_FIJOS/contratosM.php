@@ -100,25 +100,46 @@ class contratosM
 
 	function lista_articulos($query = false)
 	{
-		$sql = "SELECT top(100) id_plantilla,COMPANYCODE,A.TAG_SERIE,P.DESCRIPT,DESCRIPT2,MODELO,SERIE,EMPLAZAMIENTO,L.DENOMINACION,PE.PERSON_NO,PE.PERSON_NOM,M.DESCRIPCION as 'marca',E.DESCRIPCION as 'estado',G.DESCRIPCION as 'genero',C.DESCRIPCION as 'color',FECHA_INV_DATE,ASSETSUPNO,ASSETSUPNO,TAG_ANT,QUANTITY,BASE_UOM,ORIG_ASSET,ORIG_ACQ_YR,ORIG_VALUE,CARACTERISTICA,ac_proyecto.programa_financiacion as 'criterio',TAG_UNIQUE,SUBNUMBER,OBSERVACION,IMAGEN  FROM ac_articulos P
-			LEFT JOIN ac_asset A ON P.ID_ASSET = A.ID_ASSET
-			LEFT JOIN ac_localizacion L ON P.LOCATION = L.ID_LOCATION
-			LEFT JOIN th_personas PE ON P.PERSON_NO = PE.ID_PERSON
-			LEFT JOIN ac_marcas M ON P.EVALGROUP1 = M.ID_MARCA
-			LEFT JOIN ac_estado E ON P.EVALGROUP2 = E.ID_ESTADO
-			LEFT JOIN ac_genero G ON P.EVALGROUP3 = G.ID_GENERO
-			LEFT JOIN ac_colores C ON P.EVALGROUP4 = C.ID_COLORES
-			LEFT JOIN ac_proyecto ON P.EVALGROUP5 = ac_proyecto.ID_PROYECTO 
-			WHERE 1 = 1 ";
-		if ($query) {
-			$sql .= "  AND A.TAG_SERIE +' '+DESCRIPT LIKE '%" . $query . "%'";
-		}
-		//$sql.=" ORDER BY id_plantilla	OFFSET 0 ROWS FETCH NEXT 25 ROWS ONLY;";
+		$sql = "SELECT TOP(100) 
+					id_articulo AS 'id_plantilla',
+					tag_serie AS 'TAG_SERIE',
+					descripcion AS 'DESCRIPT',
+					descripcion_2 AS 'DESCRIPT2',
+					modelo AS 'MODELO',
+					serie AS 'SERIE',
+					th_per_id AS 'PERSON_NO',
+					caracteristica AS 'CARACTERISTICA',
+					observaciones AS 'OBSERVACION',
+					tag_antiguo AS 'TAG_ANT',
+					tag_unique AS 'TAG_UNIQUE',
+					subnumero AS 'SUBNUMBER',
+					cantidad AS 'QUANTITY',
+					precio AS 'ORIG_VALUE',
+					NULL AS 'COMPANYCODE',
+					NULL AS 'EMPLAZAMIENTO',
+					NULL AS 'DENOMINACION',
+					NULL AS 'PERSON_NOM',
+					NULL AS 'marca',
+					NULL AS 'estado',
+					NULL AS 'genero',
+					NULL AS 'color',
+					NULL AS 'FECHA_INV_DATE',
+					NULL AS 'ASSETSUPNO',
+					NULL AS 'BASE_UOM',
+					NULL AS 'ORIG_ASSET',
+					NULL AS 'ORIG_ACQ_YR',
+					NULL AS 'criterio',
+					NULL AS 'IMAGEN'
+				FROM ac_articulos 
+				WHERE 1 = 1";
 
-		// print_r($sql);die();
-		$datos = $this->db->datos($sql);
-		return $datos;
+		if ($query) {
+			$sql .= " AND tag_serie + ' ' + descripcion LIKE '%" . $query . "%'";
+		}
+
+		return $this->db->datos($sql);
 	}
+
 
 	function asignar_a_seguro($tabla, $campo, $query = false)
 	{
@@ -135,30 +156,54 @@ class contratosM
 
 	function lista_articulos_seguro($contrato = false, $query = false, $id_art = false)
 	{
-		$sql = "SELECT id_arti_asegurados as 'id',id_plantilla,COMPANYCODE,A.TAG_SERIE,P.DESCRIPT,DESCRIPT2,MODELO,SERIE,EMPLAZAMIENTO,L.DENOMINACION,PE.PERSON_NO,PE.PERSON_NOM,M.DESCRIPCION as 'marca',E.DESCRIPCION as 'estado',G.DESCRIPCION as 'genero',C.DESCRIPCION as 'color',FECHA_INV_DATE,ASSETSUPNO,ASSETSUPNO,TAG_ANT,QUANTITY,BASE_UOM,ORIG_ASSET,ORIG_ACQ_YR,ORIG_VALUE,CARACTERISTICA,ac_proyecto.programa_financiacion as 'criterio',TAG_UNIQUE,SUBNUMBER,OBSERVACION,IMAGEN  
-			FROM ARTICULOS_ASEGURADOS ASE
-			LEFT JOIN ac_articulos P ON ASE.id_articulos = P.id_plantilla
-			LEFT JOIN ac_asset A ON P.ID_ASSET = A.ID_ASSET
-			LEFT JOIN ac_localizacion L ON P.LOCATION = L.ID_LOCATION
-			LEFT JOIN th_personas PE ON P.PERSON_NO = PE.ID_PERSON
-			LEFT JOIN ac_marcas M ON P.EVALGROUP1 = M.ID_MARCA
-			LEFT JOIN ac_estado E ON P.EVALGROUP2 = E.ID_ESTADO
-			LEFT JOIN ac_genero G ON P.EVALGROUP3 = G.ID_GENERO
-			LEFT JOIN ac_colores C ON P.EVALGROUP4 = C.ID_COLORES
-			LEFT JOIN ac_proyecto ON P.EVALGROUP5 = ac_proyecto.ID_PROYECTO 
-			WHERE 1 = 1 ";
+		$sql = "SELECT 
+					ASE.id_arti_asegurados AS 'id',
+					P.id_articulo AS 'id_plantilla',
+					P.tag_serie AS 'TAG_SERIE',
+					P.descripcion AS 'DESCRIPT',
+					P.descripcion_2 AS 'DESCRIPT2',
+					P.modelo AS 'MODELO',
+					P.serie AS 'SERIE',
+					P.th_per_id AS 'PERSON_NO',
+					P.caracteristica AS 'CARACTERISTICA',
+					P.observaciones AS 'OBSERVACION',
+					P.tag_antiguo AS 'TAG_ANT',
+					P.tag_unique AS 'TAG_UNIQUE',
+					P.subnumero AS 'SUBNUMBER',
+					P.cantidad AS 'QUANTITY',
+					P.precio AS 'ORIG_VALUE',
+					NULL AS 'COMPANYCODE',
+					NULL AS 'EMPLAZAMIENTO',
+					NULL AS 'DENOMINACION',
+					NULL AS 'PERSON_NOM',
+					NULL AS 'marca',
+					NULL AS 'estado',
+					NULL AS 'genero',
+					NULL AS 'color',
+					NULL AS 'FECHA_INV_DATE',
+					NULL AS 'ASSETSUPNO',
+					NULL AS 'BASE_UOM',
+					NULL AS 'ORIG_ASSET',
+					NULL AS 'ORIG_ACQ_YR',
+					NULL AS 'criterio',
+					NULL AS 'IMAGEN'
+				FROM ARTICULOS_ASEGURADOS ASE
+				LEFT JOIN ac_articulos P ON ASE.id_articulos = P.id_articulo
+				WHERE 1 = 1";
+
 		if ($contrato) {
-			$sql .= " AND id_seguro=" . $contrato;
+			$sql .= " AND ASE.id_seguro = " . intval($contrato);
 		}
 		if ($query) {
-			$sql .= "  AND A.TAG_SERIE +' '+DESCRIPT LIKE '%" . $query . "%'";
+			$sql .= " AND P.tag_serie + ' ' + P.descripcion LIKE '%" . $query . "%'";
 		}
 		if ($id_art) {
-			$sql .= ' AND id_articulos = ' . $id_art;
+			$sql .= " AND ASE.id_articulos = " . intval($id_art);
 		}
-		$sql .= " ORDER BY id_plantilla DESC";
-		$datos = $this->db->datos($sql);
-		return $datos;
+
+		$sql .= " ORDER BY P.id_articulo DESC";
+
+		return $this->db->datos($sql);
 	}
 
 	function lista_articulos_seguro2($tabla, $id, $modulo, $seguro = false)

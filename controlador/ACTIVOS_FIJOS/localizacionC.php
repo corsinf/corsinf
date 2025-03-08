@@ -66,7 +66,7 @@ class localizacionC
 		$cambio = array();
 		$lista = $this->modelo->lista_localizacion($query);
 		foreach ($lista as $key => $value) {
-			$cambio[] = array('id' => $value['ID_LOCATION'], 'text' => $value['DENOMINACION'], 'data' => $value);
+			$cambio[] = array('id' => $value['ID_LOCALIZACION'], 'text' => $value['DENOMINACION'], 'data' => $value);
 		}
 		return $cambio;
 	}
@@ -117,7 +117,7 @@ class localizacionC
 				$datos = -2;
 			}
 		} else {
-			$where[0]['campo'] = 'ID_LOCATION';
+			$where[0]['campo'] = 'ID_LOCALIZACION';
 			$where[0]['dato'] = $parametros['id'];
 			$movimiento = $this->compara_datos($parametros);
 			$datos = $this->modelo->editar($datos, $where);
@@ -152,7 +152,7 @@ class localizacionC
 	function eliminar($id)
 	{
 
-		$datos[0]['campo'] = 'ID_LOCATION';
+		$datos[0]['campo'] = 'ID_LOCALIZACION';
 		$datos[0]['dato'] = $id;
 		$datos = $this->modelo->eliminar($datos);
 		return $datos;
@@ -184,7 +184,7 @@ class localizacionC
 		foreach ($query as $key => $value) {
 			$cus = $this->modelo->buscar_localizacion_codigo($value);
 			if (count($cus) > 0) {
-				$lista[] = array('id' => $cus[0]['ID_LOCATION'], 'text' => $cus[0]['DENOMINACION']);
+				$lista[] = array('id' => $cus[0]['ID_LOCALIZACION'], 'text' => $cus[0]['DENOMINACION']);
 			} else {
 				$sms .= 'Emplazamiento: ' . $value . ' No Encontrado ';
 			}

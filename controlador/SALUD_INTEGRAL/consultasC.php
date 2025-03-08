@@ -10,7 +10,7 @@ include_once(dirname(__DIR__, 2) . '/lib/pdf/fpdf.php');
 require_once(dirname(__DIR__, 2) . '/modelo/SALUD_INTEGRAL/det_consultaM.php');
 
 //Seguros
-require_once(dirname(__DIR__, 2) . '/modelo/contratosM.php');
+require_once(dirname(__DIR__, 2) . '/modelo/ACTIVOS_FIJOS/contratosM.php');
 
 
 include_once(dirname(__DIR__, 1) . '/SALUD_INTEGRAL/ingreso_stockC.php');

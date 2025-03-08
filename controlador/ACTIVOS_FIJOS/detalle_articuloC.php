@@ -177,11 +177,11 @@ class detalle_articuloC
 	{
 		$datos = $this->modelo->cargar_datos($id);
 		if (count($datos) > 0) {
-			if (!file_exists('../img/' . $datos[0]['IMAGEN'])) {
-				$datos[0]['IMAGEN'] = 'sin_imagen.jpg';
+			if (!file_exists('../img/' . $datos[0]['imagen'])) {
+				$datos[0]['imagen'] = 'sin_imagen.jpg';
 			}
 		} else {
-			$datos[0]['IMAGEN'] = 'sin_imagen.jpg';
+			$datos[0]['imagen'] = 'sin_imagen.jpg';
 		}
 		// $datos = array_map(array($this->cod_globales, 'transformar_array_encode'), $datos);
 		return $datos;
@@ -227,144 +227,114 @@ class detalle_articuloC
 
 		// print_r($parametros);die();		
 
-		$loc = $this->localizacion->buscar_localizacion($parametros['loca']);
-		$cus = $this->custodio->buscar_custodio_todo($parametros['cust']);
-		$marca = $this->marca->buscar_marcas_all($buscar = false, $parametros['marc']);
-		$est = $this->estado->lista_estado_todo($parametros['esta']);
-		$genero = $this->genero->lista_genero_todo($parametros['gene']);
-		$color = $this->colores->lista_colores_todo($parametros['colo']);
-		$pro = $this->proyectos->lista_proyectos($parametros['crit']);
+		// $loc = $this->localizacion->buscar_localizacion($parametros['loca']);
+		// $cus = $this->custodio->buscar_custodio_todo($parametros['cust']);
+		// $marca = $this->marca->buscar_marcas_all($buscar = false, $parametros['marc']);
+		// $est = $this->estado->lista_estado_todo($parametros['esta']);
+		// $genero = $this->genero->lista_genero_todo($parametros['gene']);
+		// $color = $this->colores->lista_colores_todo($parametros['colo']);
+		// $pro = $this->proyectos->lista_proyectos($parametros['crit']);
+
+		// array('campo' => 'id_articulo', 'dato' => $parametros['']),
+		$datos = array(
+			// rbl_asset
+			array('campo' => 'tag_unique', 'dato' => $parametros['txt_asset']),
+			array('campo' => 'tag_serie', 'dato' => $parametros['txt_tag_serie']),
+			array('campo' => 'tag_antiguo', 'dato' => $parametros['txt_tag_anti']),
+			array('campo' => 'subnumero', 'dato' => $parametros['txt_subno']),
+			array('campo' => 'th_per_id', 'dato' => $parametros['ddl_custodio']),
+			array('campo' => 'descripcion', 'dato' => $parametros['txt_descripcion']),
+			array('campo' => 'descripcion_2', 'dato' => $parametros['txt_descripcion_2']),
+			array('campo' => 'caracteristica', 'dato' => $parametros['txt_carac']),
+			array('campo' => 'observaciones', 'dato' => $parametros['txt_observacion']),
+			array('campo' => 'modelo', 'dato' => $parametros['txt_modelo']),
+			array('campo' => 'serie', 'dato' => $parametros['txt_serie']),
+			array('campo' => 'cantidad', 'dato' => $parametros['txt_cant']),
+			array('campo' => 'precio', 'dato' => $parametros['txt_valor']),
+			// array('campo' => 'imagen', 'dato' => $parametros['']),
+			array('campo' => 'kit', 'dato' => $parametros['cbx_kit']),
+			array('campo' => 'maximo', 'dato' => $parametros['txt_maximo']),
+			array('campo' => 'minimo', 'dato' => $parametros['txt_minimo']),
+			array('campo' => 'id_unidad_medida', 'dato' => $parametros['ddl_unidad']),
+			array('campo' => 'id_tipo_articulo', 'dato' => $parametros['rbl_tip_articulo']),
+			array('campo' => 'id_familia', 'dato' => $parametros['ddl_familia']),
+			array('campo' => 'id_subfamilia', 'dato' => $parametros['ddl_subfamilia']),
+			array('campo' => 'id_localizacion', 'dato' => $parametros['ddl_localizacion']),
+			array('campo' => 'id_marca', 'dato' => $parametros['ddl_marca']),
+			array('campo' => 'id_estado', 'dato' => $parametros['ddl_estado']),
+			array('campo' => 'id_genero', 'dato' => $parametros['ddl_genero']),
+			array('campo' => 'id_color', 'dato' => $parametros['ddl_color']),
+			array('campo' => 'id_proyecto', 'dato' => $parametros['ddl_proyecto']),
+			array('campo' => 'id_clase_movimiento', 'dato' => $parametros['ddl_clase_mov']),
+			array('campo' => 'centro_costos', 'dato' => $parametros['txt_centro_costos']),
+			array('campo' => 'resp_cctr', 'dato' => $parametros['txt_resp_cctr']),
+			array('campo' => 'companycode', 'dato' => $parametros['txt_company']),
+			array('campo' => 'funds_ctr_apc', 'dato' => $parametros['txt_funds_ctr_apc']),
+			array('campo' => 'profit_ctr', 'dato' => $parametros['txt_profit_ctr']),
+			// array('campo' => 'id_usuario_actualizar', 'dato' => $parametros['']),
+			// array('campo' => 'fecha_creacion', 'dato' => $parametros['']),
+			array('campo' => 'fecha_modificacion', 'dato' => date('Y-m-d H:i:s')),
+			// array('campo' => 'fecha_baja', 'dato' => $parametros['']),
+			array('campo' => 'fecha_referencia', 'dato' => $parametros['txt_compra']),
+			array('campo' => 'fecha_contabilizacion', 'dato' => $parametros['txt_fecha']),
+			// array('campo' => 'id_rubro', 'dato' => $parametros['']),
+		);
+
+		$where = array(
+			array('campo' => 'id_articulo', 'dato' => $parametros['idAr']),
+		);
+
+		$datos = $this->modelo->editar($datos, $where);
 
 
-		$bajas = 0;
-		$tercero = 0;
-		$patrimoniales = 0;
-		// print_r($parametros);die();
-		$datos[0]['campo'] = 'TAG_UNIQUE';
-		$datos[0]['dato'] = $parametros['rfid'];
-		$datos[1]['campo'] = 'TAG_SERIE';
-		$datos[1]['dato'] = $parametros['asse'];
-		$datos[2]['campo'] = 'TAG_ANT';
-		$datos[2]['dato'] = $parametros['tagA'];
-		$where[0]['campo'] = 'ID_ASSET';
-		$where[0]['dato'] = $parametros['idAs'];
-		$respuesta = $this->modelo->update_data('ac_asset', $datos, $where);
-
-		$datos1[1]['campo'] = 'DESCRIPT';
-		$datos1[1]['dato'] = $parametros['desc'];
-		$datos1[2]['campo'] = 'DESCRIPT2';
-		$datos1[2]['dato'] = $parametros['clase_mov']; //$parametros['des2'];
-		$datos1[3]['campo'] = 'SERIE';
-		$datos1[3]['dato'] = $parametros['seri'];
-		$datos1[4]['campo'] = 'FECHA_INV_DATE';
-		$datos1[4]['dato'] = date('Ymd');
-		$datos1[5]['campo'] = 'LOCATION';
-		$datos1[5]['dato'] = $parametros['loca'];
-		$datos1[6]['campo'] = 'PERSON_NO';
-		$datos1[6]['dato'] = $parametros['cust'];
-		$datos1[7]['campo'] = 'OBSERVACION';
-		$datos1[7]['dato'] = $parametros['obse'];
-		$datos1[8]['campo'] = 'EVALGROUP1';
-		$datos1[8]['dato'] = $parametros['marc'];
-		$datos1[9]['campo'] = 'EVALGROUP2';
-		$datos1[9]['dato'] = $parametros['esta'];
-		$datos1[10]['campo'] = 'EVALGROUP3';
-		$datos1[10]['dato'] = $parametros['gene'];
-		$datos1[11]['campo'] = 'EVALGROUP4';
-		$datos1[11]['dato'] = $parametros['colo'];
-		$datos1[12]['campo'] = 'BASE_UOM';
-		$datos1[12]['dato'] = $parametros['uni'];
-		$datos1[13]['campo'] = 'CARACTERISTICA';
-		$datos1[13]['dato'] = $parametros['cara'];
-		$datos1[14]['campo'] = 'ORIG_ACQ_YR';
-		$datos1[14]['dato'] = date('Ymd', strtotime($parametros['compra']));
-		// $datos1[15]['campo']='ORIG_ASSET';
-		// $datos1[15]['dato']=$parametros['act'];
-		$datos1[15]['campo'] = 'ORIG_VALUE';
-		$datos1[15]['dato'] = $parametros['valor'];
-		$datos1[16]['campo'] = 'QUANTITY';
-		$datos1[16]['dato'] = $parametros['cant'];
-		$datos1[17]['campo'] = 'EVALGROUP5';
-		$datos1[17]['dato'] = $parametros['crit'];
-		$datos1[18]['campo'] = 'ORIG_ASSET';
-		$datos1[18]['dato'] = $parametros['tagA'];
-		$datos1[19]['campo'] = 'MODELO';
-		$datos1[19]['dato'] = $parametros['mode'];
+		return $datos;
 
 
-		if ($parametros['bajas'] == 'true') {
-			$bajas = 1;
-		}
-		$datos1[20]['campo'] = 'BAJAS';
-		$datos1[20]['dato'] = $bajas;
 
-		if ($parametros['terceros'] == 'true') {
-			$tercero = 1;
-		}
-		$datos1[21]['campo'] = 'TERCEROS';
-		$datos1[21]['dato'] = $tercero;
+		// $where1[0]['campo'] = 'id_plantilla';
+		// $where1[0]['dato'] = $parametros['idAr'];
+		// $movimientos = $this->comparacion_movimiento($parametros['idAr'], $parametros);
+		// $respuesta1 = $this->modelo->update_data('ac_articulos', $datos1, $where1);
+		// if ($respuesta == 1 and $respuesta1 == 1) {
+		// 	$texto =
+		// 		(isset($parametros['company']) ? $parametros['company'] : '') . ';' .
+		// 		(isset($parametros['asse']) ? $parametros['asse'] : '') . ';0;' .
+		// 		(isset($parametros['desc']) ? $parametros['desc'] : '') . ';' .
+		// 		(isset($parametros['des2']) ? $parametros['des2'] : '') . ';' .
+		// 		(isset($parametros['mode']) ? $parametros['mode'] : '') . ';' .
+		// 		(isset($parametros['seri']) ? $parametros['seri'] : '') . ';' .
+		// 		(isset($parametros['rfid']) ? $parametros['rfid'] : '') . ';' .
+		// 		(isset($parametros['fech']) ? $parametros['fech'] : '') . ';' .
+		// 		(isset($parametros['cant']) ? $parametros['cant'] : '') . ';' .
+		// 		(isset($parametros['uni']) ? $parametros['uni'] : '') . ';' .
+		// 		(isset($loc[0]['EMPLAZAMIENTO']) ? $loc[0]['EMPLAZAMIENTO'] : '') . ';' .
+		// 		(isset($loc[0]['DENOMINACION']) ? $loc[0]['DENOMINACION'] : '') . ';' .
+		// 		(isset($cus[0]['PERSON_NO']) ? $cus[0]['PERSON_NO'] : '') . ';' .
+		// 		(isset($cus[0]['PERSON_NOM']) ? $cus[0]['PERSON_NOM'] : '') . ';' .
+		// 		(isset($marca[0]['CODIGO']) ? $marca[0]['CODIGO'] : '') . ';' .
+		// 		(isset($est[0]['CODIGO']) ? $est[0]['CODIGO'] : '') . ';' .
+		// 		(isset($genero[0]['CODIGO']) ? $genero[0]['CODIGO'] : '') . ';' .
+		// 		(isset($color[0]['CODIGO']) ? $color[0]['CODIGO'] : '') . ';' .
+		// 		(isset($pro[0]['pro']) ? $pro[0]['pro'] : '') . ';' .
+		// 		(isset($parametros['assetno']) ? $parametros['assetno'] : '') . ';' .
+		// 		(isset($parametros['act']) ? $parametros['act'] : '') . ';' .
+		// 		(isset($parametros['compra']) ? $parametros['compra'] : '') . ';' .
+		// 		(isset($parametros['valor']) ? $parametros['valor'] : '') . ';' .
+		// 		(isset($parametros['obse']) ? $parametros['obse'] : '') . ';' .
+		// 		(isset($parametros['cara']) ? $parametros['cara'] : '') . ';' .
+		// 		'fecha_descapitalizacion;' .
+		// 		(isset($parametros['bajas']) ? $parametros['bajas'] : '') . ';';
 
-		if ($parametros['patrimoniales'] == 'true') {
-			$patrimoniales = 1;
-		}
-		$datos1[22]['campo'] = 'PATRIMONIALES';
-		$datos1[22]['dato'] = $patrimoniales;
+		// 	//print_r($texto);
 
-		$datos1[23]['campo'] = 'FAMILIA';
-		$datos1[23]['dato'] = $parametros['familia'];
-		$datos1[24]['campo'] = 'SUBFAMILIA';
-		$datos1[24]['dato'] = $parametros['subfamilia'];
-		$datos1[25]['campo'] = 'CLASE_MOVIMIENTO';
-		$datos1[25]['dato'] = $parametros['clase_mov'];
-
-
-		// print_r($datos1);die();
-
-
-		$where1[0]['campo'] = 'id_plantilla';
-		$where1[0]['dato'] = $parametros['idAr'];
-		$movimientos = $this->comparacion_movimiento($parametros['idAr'], $parametros);
-		$respuesta1 = $this->modelo->update_data('ac_articulos', $datos1, $where1);
-		if ($respuesta == 1 and $respuesta1 == 1) {
-			$texto =
-				(isset($parametros['company']) ? $parametros['company'] : '') . ';' .
-				(isset($parametros['asse']) ? $parametros['asse'] : '') . ';0;' .
-				(isset($parametros['desc']) ? $parametros['desc'] : '') . ';' .
-				(isset($parametros['des2']) ? $parametros['des2'] : '') . ';' .
-				(isset($parametros['mode']) ? $parametros['mode'] : '') . ';' .
-				(isset($parametros['seri']) ? $parametros['seri'] : '') . ';' .
-				(isset($parametros['rfid']) ? $parametros['rfid'] : '') . ';' .
-				(isset($parametros['fech']) ? $parametros['fech'] : '') . ';' .
-				(isset($parametros['cant']) ? $parametros['cant'] : '') . ';' .
-				(isset($parametros['uni']) ? $parametros['uni'] : '') . ';' .
-				(isset($loc[0]['EMPLAZAMIENTO']) ? $loc[0]['EMPLAZAMIENTO'] : '') . ';' .
-				(isset($loc[0]['DENOMINACION']) ? $loc[0]['DENOMINACION'] : '') . ';' .
-				(isset($cus[0]['PERSON_NO']) ? $cus[0]['PERSON_NO'] : '') . ';' .
-				(isset($cus[0]['PERSON_NOM']) ? $cus[0]['PERSON_NOM'] : '') . ';' .
-				(isset($marca[0]['CODIGO']) ? $marca[0]['CODIGO'] : '') . ';' .
-				(isset($est[0]['CODIGO']) ? $est[0]['CODIGO'] : '') . ';' .
-				(isset($genero[0]['CODIGO']) ? $genero[0]['CODIGO'] : '') . ';' .
-				(isset($color[0]['CODIGO']) ? $color[0]['CODIGO'] : '') . ';' .
-				(isset($pro[0]['pro']) ? $pro[0]['pro'] : '') . ';' .
-				(isset($parametros['assetno']) ? $parametros['assetno'] : '') . ';' .
-				(isset($parametros['act']) ? $parametros['act'] : '') . ';' .
-				(isset($parametros['compra']) ? $parametros['compra'] : '') . ';' .
-				(isset($parametros['valor']) ? $parametros['valor'] : '') . ';' .
-				(isset($parametros['obse']) ? $parametros['obse'] : '') . ';' .
-				(isset($parametros['cara']) ? $parametros['cara'] : '') . ';' .
-				'fecha_descapitalizacion;' .
-				(isset($parametros['bajas']) ? $parametros['bajas'] : '') . ';';
-
-			//print_r($texto);
-
-			if ($movimientos != '') {
-				$this->cod_globales->para_ftp('plantilla_masiva', $texto);
-				$this->cod_globales->ingresar_movimientos($parametros['idAr'], $movimientos);
-			}
-			return 1;
-		} else {
-			return -1;
-		}
+		// 	if ($movimientos != '') {
+		// 		$this->cod_globales->para_ftp('plantilla_masiva', $texto);
+		// 		$this->cod_globales->ingresar_movimientos($parametros['idAr'], $movimientos);
+		// 	}
+		// 	return 1;
+		// } else {
+		// 	return -1;
+		// }
 	}
 
 	function guardar_datos_patrimoniales($parametros)

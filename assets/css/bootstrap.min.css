@@ -3648,6 +3648,14 @@ fieldset:disabled .btn {
     --bs-btn-border-radius: 0.2rem;
 }
 
+.btn-group-xss>.btn,
+.btn-xss {
+    --bs-btn-padding-y: 0.1rem;
+    --bs-btn-padding-x: 0.1rem;
+    --bs-btn-font-size: 0.55rem;
+    --bs-btn-border-radius: 0.2rem;
+}
+
 .fade {
     transition: opacity .15s linear
 }
@@ -4134,6 +4142,14 @@ fieldset:disabled .btn {
     padding-left: 0.25rem;  
     font-size: 0.75rem;     
     border-radius: 0.2rem; 
+}
+
+.btn-group-xss > .btn + .dropdown-toggle-split,
+.btn-xss + .dropdown-toggle-split {
+    padding-right: 0.15rem; 
+    padding-left: 0.15rem;  
+    font-size: 0.65rem;     
+    border-radius: 0.1rem; 
 }
 
 .btn-group-lg>.btn+.dropdown-toggle-split,

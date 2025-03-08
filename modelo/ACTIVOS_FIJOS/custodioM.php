@@ -19,52 +19,102 @@ class custodioM
 
 	function lista_custodio($query = false, $ini = 0, $fin = 25)
 	{
-		$sql = "SELECT ID_PERSON,PERSON_NO,PERSON_NOM,PERSON_CI,PERSON_CORREO,PUESTO,UNIDAD_ORG,DIRECCION,TELEFONO,FOTO FROM th_personas WHERE ESTADO='A' ";
+		$sql = "SELECT 
+					th_per_id AS ID_PERSON,
+					CONCAT(th_per_primer_apellido, ' ', th_per_segundo_apellido, ' ', th_per_primer_nombre, ' ', th_per_segundo_nombre) AS PERSON_NOM,
+					th_per_cedula AS PERSON_CI,
+					th_per_correo AS PERSON_CORREO,
+					th_per_telefono_1 AS TELEFONO,
+					th_per_direccion AS DIRECCION,
+					th_per_foto_url AS FOTO,
+					th_per_codigo_sap AS PERSON_NO,
+					th_per_unidad_org_sap AS UNIDAD_ORG
+				FROM th_personas 
+				WHERE th_per_estado = 1";
+
 		if ($query) {
-			$sql .= " AND PERSON_NOM+''+PERSON_NO LIKE '%" . $query . "%' ";
+			$sql .= " AND (th_per_primer_nombre + ' ' + th_per_primer_apellido LIKE '%" . $query . "%')";
 		}
-		$sql .= " ORDER BY ID_PERSON DESC OFFSET " . $ini . " ROWS FETCH NEXT 25 ROWS ONLY;";
-		// print_r($sql);die();
+
+		$sql .= " ORDER BY th_per_id DESC 
+	  OFFSET " . $ini . " ROWS FETCH NEXT " . $fin . " ROWS ONLY;";
+
+
 		$datos = $this->db->datos($sql);
 		return $datos;
 	}
 
+
 	function lista_custodio_count($query = false)
 	{
-		$sql = "SELECT count (ID_PERSON) as 'cant' FROM th_personas WHERE 1=1";
+		$sql = "SELECT COUNT(th_per_id) AS cant FROM th_personas WHERE th_per_estado = 1";
+
 		if ($query) {
-			$sql .= " AND PERSON_NOM LIKE '%" . $query . "%';";
+			$sql .= " AND (CONCAT(th_per_primer_apellido, ' ', th_per_segundo_apellido, ' ', th_per_primer_nombre, ' ', th_per_segundo_nombre) LIKE '%" . $query . "%')";
 		}
+
 		$datos = $this->db->datos($sql);
 		return $datos;
 	}
 
 	function buscar_custodio($buscar)
 	{
-		$sql = "SELECT ID_PERSON,PERSON_NO,PERSON_NOM,PERSON_CI,PERSON_CORREO,PUESTO,UNIDAD_ORG,DIRECCION,TELEFONO,FOTO FROM th_personas WHERE ESTADO='A' and ID_PERSON ='" . $buscar . "'";
-		// print_r($sql);die();		
+		$sql = "SELECT 
+                th_per_id AS ID_PERSON,
+                th_per_cedula AS PERSON_CI,
+                CONCAT(th_per_primer_apellido, ' ', th_per_segundo_apellido, ' ', th_per_primer_nombre, ' ', th_per_segundo_nombre) AS PERSON_NOM,
+                th_per_correo AS PERSON_CORREO,
+                th_per_telefono_1 AS TELEFONO,
+                th_per_direccion AS DIRECCION,
+                th_per_foto_url AS FOTO,
+				th_per_codigo_sap AS PERSON_NO,
+				th_per_unidad_org_sap AS UNIDAD_ORG
+            FROM th_personas 
+            WHERE th_per_estado = 1 
+            AND th_per_id = '" . $buscar . "'";
+
 		$datos = $this->db->datos($sql);
 		return $datos;
 	}
 
 	function buscar_custodio_todo($id = false, $person_no = false, $person_nom = false)
 	{
-		$sql = "SELECT ID_PERSON,PERSON_NO,PERSON_NOM,PERSON_CI,PERSON_CORREO,PUESTO,UNIDAD_ORG,ESTADO FROM th_personas WHERE 1=1 ";
+		$sql = "SELECT 
+					th_per_id AS ID_PERSON,
+					th_per_codigo_sap AS PERSON_NO,
+					CONCAT(th_per_primer_apellido, ' ', th_per_segundo_apellido, ' ', th_per_primer_nombre, ' ', th_per_segundo_nombre) AS PERSON_NOM,
+					th_per_cedula AS PERSON_CI,
+					th_per_correo AS PERSON_CORREO,
+					th_per_unidad_org_sap AS UNIDAD_ORG,
+					th_per_estado AS ESTADO
+				FROM th_personas 
+				WHERE th_per_estado = 1";
+
 		if ($id) {
-			$sql .= " and ID_PERSON = '" . $id . "'";
+			$sql .= " AND th_per_id = '" . $id . "'";
 		}
 		if ($person_no) {
-			$sql .= " and PERSON_NO = '" . $person_no . "'";
+			$sql .= " AND th_per_codigo_sap = '" . $person_no . "'";
 		}
-		// print_r($sql);die();		
+		if ($person_nom) {
+			$sql .= " AND (CONCAT(th_per_primer_apellido, ' ', th_per_segundo_apellido, ' ', th_per_primer_nombre, ' ', th_per_segundo_nombre) LIKE '%" . $person_nom . "%')";
+		}
+
 		$datos = $this->db->datos($sql);
 		return $datos;
 	}
 
 	function buscar_custodio_($buscar)
 	{
-		$sql = "SELECT ID_PERSON,PERSON_NOM,PERSON_CI,PERSON_CORREO,PUESTO,UNIDAD_ORG FROM th_personas WHERE PERSON_NO LIKE '" . $buscar . "'";
-		// print_r($sql);die();		
+		$sql = "SELECT 
+					th_per_id AS ID_PERSON,
+					CONCAT(th_per_primer_apellido, ' ', th_per_segundo_apellido, ' ', th_per_primer_nombre, ' ', th_per_segundo_nombre) AS PERSON_NOM,
+					th_per_cedula AS PERSON_CI,
+					th_per_correo AS PERSON_CORREO,
+					th_per_unidad_org_sap AS UNIDAD_ORG
+				FROM th_personas 
+				WHERE th_per_codigo_sap LIKE '" . $buscar . "'";
+
 		$datos = $this->db->datos($sql);
 		return $datos;
 	}
@@ -83,11 +133,11 @@ class custodioM
 
 	function eliminar($datos)
 	{
-		$sql = "UPDATE th_personas SET ESTADO='I' WHERE " . $datos[0]['campo'] . "='" . $datos[0]['dato'] . "';";
-		$datos = $this->db->sql_string($sql);
-		return $datos;
-
-		//$rest = $this->db->delete('th_personas',$datos);
-		//return $rest;	   
-	}
+		$sql = "UPDATE th_personas 
+				SET th_per_estado = 0 
+				WHERE " . $datos[0]['campo'] . " = '" . $datos[0]['dato'] . "';";
+	
+		$resultado = $this->db->sql_string($sql);
+		return $resultado;
+	}	
 }

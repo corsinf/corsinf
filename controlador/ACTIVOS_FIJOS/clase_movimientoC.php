@@ -63,7 +63,7 @@ class clase_movimientoC
 		$datos = $this->modelo->buscar_clase_movimiento($buscar);
 		$lis = array();
 		foreach ($datos as $key => $value) {
-			$lis[] = array('id' => $value['CODIGO'], 'text' => $value['DESCRIPCION']);
+			$lis[] = array('id' => $value['ID_MOVIMIENTO'], 'text' => $value['DESCRIPCION']);
 		}
 		return $lis;
 	}

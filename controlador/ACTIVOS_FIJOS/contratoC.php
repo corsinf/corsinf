@@ -612,7 +612,7 @@ class contratoC
 	{
 		$seguros = count($this->modelo->buscar_seguro($id = false, $prove = false, $desde = false, $hasta = false, $prima = false, $suma_asegurada = False));
 		$asegurados = count($this->modelo->lista_articulos_seguro($contrato = false, $query = false, $id_art = false));
-		$totalArt = $this->arti->cantidad_registros($query = false, $loc = false, $cus = false, $pag = false, $whereid = false);
+		$totalArt = $this->arti->cantidad_registros_new($query = false, $loc = false, $cus = false, $pag = false, $whereid = false);
 
 		$sinseguro = $totalArt[0]['numreg'] - $asegurados;
 

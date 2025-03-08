@@ -33,17 +33,27 @@ class familiasM
 
 	function lista_subfamilias($id = false, $query = false)
 	{
-		$sql = "SELECT F.id_familia,F.detalle_familia,F2.id_familia as 'idF',F2.detalle_familia as 'familia'  FROM ac_familias  F
-			INNER JOIN ac_familias F2 ON F.familia = F2.id_familia
-			WHERE F.familia<>'.' AND F.familia<>''";
+		$sql = "SELECT
+					F.id_familia,
+					F.detalle_familia,
+					F2.id_familia AS 'idF',
+					F2.detalle_familia AS 'detalle_familia_sub' 
+				FROM
+					ac_familias F
+				INNER JOIN ac_familias F2 ON F.id_familia = F2.familia 
+				WHERE 1 = 1 ";
+
 		if ($query) {
-			$sql .= " and F.detalle_familia like '%" . $query . "%'";
+			$sql .= " AND F.detalle_familia LIKE '%" . $query . "%'";
 		}
+
 		if ($id) {
-			$sql .= ' and F.id_familia= ' . $id;
+			$sql .= " AND F.id_familia = " . $id;
 		}
-		$sql .= " ORDER BY id_familia ";
-		// print_r($sql);die();
+
+		$sql .= " ORDER BY F.id_familia";
+		//print_r($sql);
+		//die();
 		$datos = $this->db->datos($sql);
 		return $datos;
 	}

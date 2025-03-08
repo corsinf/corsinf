@@ -22,9 +22,15 @@ if (isset($_GET['lista_drop'])) {
 	echo json_encode($controlador->lista_familias_drop($q));
 }
 
-if (isset($_GET['subfamilia'])) {
-	$parametros = $_POST['parametros'];
-	echo json_encode($controlador->lista_subfamilias($parametros));
+if (isset($_GET['lista_subfamilias'])) {
+	$parametros = $_GET['fam'];
+
+	$q = '';
+	if (isset($_GET['q'])) {
+		$q = $_GET['q'];
+	}
+
+	echo json_encode($controlador->lista_subfamilias($parametros, $q));
 }
 
 if (isset($_GET['buscar'])) {
@@ -78,10 +84,14 @@ class familiasC
 		return $datos;
 	}
 
-	function lista_subfamilias($parametros)
+	function lista_subfamilias($parametros, $q)
 	{
-		$datos = $this->modelo->lista_subfamilias($parametros['id'], $parametros['query']);
-		return $datos;
+		$datos = $this->modelo->lista_subfamilias($parametros, $q);
+		$datos2 = array();
+		foreach ($datos as $key => $value) {
+			$datos2[] = array('id' => $value['idF'], 'text' => $value['detalle_familia_sub']);
+		}
+		return $datos2;
 	}
 
 	function buscar_familias($buscar)

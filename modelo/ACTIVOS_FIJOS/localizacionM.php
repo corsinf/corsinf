@@ -19,7 +19,7 @@ class localizacionM
 	function lista_localizacion($query, $ini = 0, $fin = 25)
 	{
 		// $sql = "SELECT ID_MARCA,CODIGO,DESCRIPCION FROM localizacion ";
-		$sql = "SELECT ID_LOCATION,CENTRO,EMPLAZAMIENTO,DENOMINACION FROM ac_localizacion WHERE ESTADO='A' and DENOMINACION+''+EMPLAZAMIENTO LIKE '%" . $query . "%' ORDER BY ID_LOCATION DESC OFFSET " . $ini . " ROWS FETCH NEXT " . $fin . " ROWS ONLY;";
+		$sql = "SELECT ID_LOCALIZACION,CENTRO,EMPLAZAMIENTO,DENOMINACION FROM ac_localizacion WHERE ESTADO='A' and DENOMINACION+''+EMPLAZAMIENTO LIKE '%" . $query . "%' ORDER BY ID_LOCALIZACION DESC OFFSET " . $ini . " ROWS FETCH NEXT " . $fin . " ROWS ONLY;";
 		// print_r($sql);die();
 		$datos = $this->db->datos($sql);
 		return $datos;
@@ -28,7 +28,7 @@ class localizacionM
 	function lista_localizacion_todo()
 	{
 		// $sql = "SELECT ID_MARCA,CODIGO,DESCRIPCION FROM localizacion ";
-		$sql = "SELECT ID_LOCATION,CENTRO,EMPLAZAMIENTO,DENOMINACION,ESTADO FROM ac_localizacion";
+		$sql = "SELECT ID_LOCALIZACION,CENTRO,EMPLAZAMIENTO,DENOMINACION,ESTADO FROM ac_localizacion";
 		// print_r($sql);die();
 		$datos = $this->db->datos($sql);
 		return $datos;
@@ -37,7 +37,7 @@ class localizacionM
 	function lista_localizacion_count($query)
 	{
 		// $sql = "SELECT ID_MARCA,CODIGO,DESCRIPCION FROM localizacion ";
-		$sql = "SELECT COUNT(ID_LOCATION) as 'cant' FROM ac_localizacion WHERE DENOMINACION LIKE '%" . $query . "%'";
+		$sql = "SELECT COUNT(ID_LOCALIZACION) as 'cant' FROM ac_localizacion WHERE DENOMINACION LIKE '%" . $query . "%'";
 		// print_r($sql);die();
 		$datos = $this->db->datos($sql);
 		return $datos;
@@ -45,7 +45,7 @@ class localizacionM
 
 	function buscar_localizacion($buscar)
 	{
-		$sql = "SELECT ID_LOCATION,CENTRO,EMPLAZAMIENTO,DENOMINACION FROM ac_localizacion WHERE ESTADO='A' and ID_LOCATION ='" . $buscar . "'";
+		$sql = "SELECT ID_LOCALIZACION,CENTRO,EMPLAZAMIENTO,DENOMINACION FROM ac_localizacion WHERE ESTADO='A' and ID_LOCALIZACION ='" . $buscar . "'";
 		// print_r($sql);die();
 		$datos = $this->db->datos($sql);
 		return $datos;
@@ -53,7 +53,7 @@ class localizacionM
 
 	function buscar_localizacion_($buscar)
 	{
-		$sql = "SELECT ID_LOCATION,CENTRO,EMPLAZAMIENTO,DENOMINACION FROM ac_localizacion WHERE  EMPLAZAMIENTO LIKE '" . $buscar . "'";
+		$sql = "SELECT ID_LOCALIZACION,CENTRO,EMPLAZAMIENTO,DENOMINACION FROM ac_localizacion WHERE  EMPLAZAMIENTO LIKE '" . $buscar . "'";
 		// print_r($sql);die();
 		$datos = $this->db->datos($sql);
 		return $datos;
@@ -61,7 +61,7 @@ class localizacionM
 
 	function buscar_localizacion_cant()
 	{
-		$sql = "SELECT count(ID_LOCATION) as 'cant' FROM ac_localizacion WHERE 1=1 ";
+		$sql = "SELECT count(ID_LOCALIZACION) as 'cant' FROM ac_localizacion WHERE 1=1 ";
 		// print_r($sql);die();
 		$datos = $this->db->datos($sql);
 		return $datos;
@@ -69,7 +69,7 @@ class localizacionM
 
 	function buscar_localizacion_codigo($buscar)
 	{
-		$sql = "SELECT ID_LOCATION,CENTRO,EMPLAZAMIENTO,DENOMINACION FROM ac_localizacion WHERE  EMPLAZAMIENTO='" . $buscar . "'";
+		$sql = "SELECT ID_LOCALIZACION,CENTRO,EMPLAZAMIENTO,DENOMINACION FROM ac_localizacion WHERE  EMPLAZAMIENTO='" . $buscar . "'";
 		// print_r($sql);die();
 		$datos = $this->db->datos($sql);
 		return $datos;
