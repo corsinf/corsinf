@@ -140,7 +140,8 @@ class validar_firmaC
 		}
 
 		// Retornar el resultado exitoso
-		return ['resp' => 1, 'msj' => $resp[1]];
+		// print_r($resp);die();
+		return ['resp' => 1, 'msj' => $resp[1],'data'=>$resp[3]];
 	}
 
 	function validar_documento($file, $parametros)

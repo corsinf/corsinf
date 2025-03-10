@@ -258,7 +258,8 @@
             })
             data1 =  canvasDesigner.generateZPL();            
             $('#rbl_rfid_simple').prop('checked',false)
-             impresion_simple(i,data1)
+            imprimirAgente(data1)
+             // impresion_simple(i,data1)
         })
     }
 
@@ -283,8 +284,9 @@
 
            // console.log(data);
            // return false;
-           impresion_simple(1,data);
-           $('#modal_impresion').modal('hide')
+           imprimirAgente(data);
+           //impresion_simple(1,data);
+           //$('#modal_impresion').modal('hide')
         }
 
     }

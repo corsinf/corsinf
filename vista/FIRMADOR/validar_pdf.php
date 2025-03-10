@@ -47,7 +47,11 @@
 <script type="text/javascript">
     $(document).ready(function() {
         $("#btn_validar").click(function(event) {
-
+            if($('#txt_cargar_imagen').val()=='')
+            {
+                Swal.fire("Seleccione un documento PDF","","error")
+                 return false;                
+            }
             $('#myModal_espera').modal('show');
             var formData = new FormData(document.getElementById("form_doc"));
             $.ajax({
