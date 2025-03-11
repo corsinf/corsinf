@@ -1350,7 +1350,8 @@ class loginC
 		$pagina = '';
 		// print_r($datos);die();
 		foreach ($datos as $key => $value) {
-			$num = rand(1,3);
+			// $num = rand(1,3);
+			$num = 2;
 			$pagina = str_replace('.php','', $value['link']);
 		switch ($num) {
 				case '1':		

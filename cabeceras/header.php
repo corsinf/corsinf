@@ -826,7 +826,7 @@ if (($_SESSION['INICIO']['LOGO']) == '.' || $_SESSION['INICIO']['LOGO'] == '' ||
 								</a>
 							</li> -->
 							<li class="nav-item dropdown dropdown-large">
-								<a class="nav-link dropdown-toggle dropdown-toggle-nocaret" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"> <i class='bx bx-category'></i>
+								<a class="nav-link dropdown-toggle dropdown-toggle-nocaret" href="#" onclick="consultar_modulos();" role="button" data-bs-toggle="dropdown" aria-expanded="false"> <i class='bx bx-category'></i>
 								</a>
 								<div class="dropdown-menu dropdown-menu-end">
 									<div class="row row-cols-3 g-3 p-3" id="pnl_acceso_rapido_modulo">
