@@ -51,22 +51,21 @@ class th_personas_firmasC
         if ($id) {
             $datos = $this->modelo->where('th_perfir_id', $id)->listar();
         }
+
         return $datos;
     }
 
     // Método para listar registros; si se pasa un id, lista ese registro, de lo contrario solo los activos (estado = 1)
     function listar()
     {
-        $id = $_SESSION['INICIO']['NO_CONCURENTE'];
 
-
-        if ($id == '') {
-            $datos = $this->modelo->lista_personas_firma();
-        } else {
-            // Especificar la tabla en el WHERE para evitar ambigüedad
+        if ($_SESSION['INICIO']['NO_CONCURENTE'] > 1) {
+            $id = $_SESSION['INICIO']['NO_CONCURENTE'];
             $datos = $this->modelo->lista_personas_firma($id);
+        } else {
+            $id = $_SESSION['INICIO']['ID_USUARIO'];
+            $datos = $this->modelo->lista_usuario_firma($id);
         }
-
         return $datos;
     }
 
@@ -74,60 +73,63 @@ class th_personas_firmasC
     {
         $lista = [];
 
-        // Obtener el ID de la sesión
-        $id = $_SESSION['INICIO']['NO_CONCURENTE'] ?? null;
-
-        $camposBusqueda = [
-            'th_perfir_id',
-            'th_perfir_identificacion'
-        ];
-
-        // Construimos la consulta
-        $query = $this->modelo->where('th_perfir_estado', 1);
-
-        // Solo filtrar por th_per_id si el ID no es null
-        if ($id > 0) {
-            $query = $query->where('th_per_id', $id);
+        if ($_SESSION['INICIO']['NO_CONCURENTE'] > 1) {
+            $id = $_SESSION['INICIO']['NO_CONCURENTE'];
+            $datos = $this->modelo->lista_personas_firma($id);
+        } else {
+            $id = $_SESSION['INICIO']['ID_USUARIO'];
+            $datos = $this->modelo->lista_usuario_firma($id);
         }
 
-        // Filtramos los datos con LIKE en los campos especificados
-        $datos = $query->like(implode(',', $camposBusqueda), $parametros['query']);
+        
+
+        // Filtrar los datos con LIKE en los campos especificados
+        $query = array_filter($datos, function ($value) use ($parametros) {
+            return stripos($value['th_perfir_identificacion'], $parametros['query']) !== false ||
+                stripos($value['th_perfir_id'], $parametros['query']) !== false;
+        });
 
         // Formatear los resultados
-        foreach ($datos as $value) {
-            $text = "{$value['th_perfir_identificacion']}";
+        foreach ($query as $value) {
+            $identificacion = $value['th_perfir_identificacion'] ?? '';
+            $nombreFirma = $value['th_perfir_nombre_firma'] ?? '';
+            $descripcionFirma = $value['th_tipfir_descripcion'] ?? ''; // Descripción de la firma
+
+            $text = trim("{$identificacion}  -  {$nombreFirma}  -  {$descripcionFirma}"); // Formato de salida
+
             $lista[] = [
-                'id' => $value['th_perfir_id'],
+                'id' => $value['th_perfir_id'] ?? null,
                 'text' => $text,
                 'data' => $value
             ];
         }
 
+
         return $lista;
     }
 
-
-
-
-
     function insertar_editar($file, $parametros)
     {
-        //print_r($file); exit();
+      
         // Construcción del arreglo con los datos a insertar/editar
+
+
         $datos = array(
-            array('campo' => 'th_per_id', 'dato' => $parametros['th_per_id']),
+            array('campo' => 'th_per_id', 'dato' => (!empty($parametros['th_per_id'])) ? $parametros['th_per_id'] : NULL),
+            array('campo' => 'th_usuarios_id', 'dato' => isset($parametros['th_usuario_id']) ? $parametros['th_usuario_id'] : 2),
             array('campo' => 'th_tipfir_id', 'dato' => isset($parametros['ddl_tipoPersona']) ? $parametros['ddl_tipoPersona'] : 1),
             array('campo' => 'th_perfir_nombre_firma', 'dato' => $parametros['txt_nombreFirma']),
             array('campo' => 'th_perfir_identificacion', 'dato' => $parametros['txt_identidad']),
-            array('campo' => 'th_perfir_contrasenia', 'dato' => $parametros['txt_clave']),
+            array('campo' => 'th_perfir_contrasenia', 'dato' => $parametros['cbx_guardarClave_hidden'] == 1 ?  $parametros['txt_ingresarClave'] : ""),
             array('campo' => 'th_perfir_fecha_creacion', 'dato' => date('Y-m-d H:i:s')),
-            array('campo' => 'th_perfir_fecha_archivo', 'dato' => date('Y-m-d H:i:s')),
-            array('campo' => 'th_perfir_fecha_expiracion', 'dato' => date('Y-m-d H:i:s')),
-            array('campo' => 'th_perfir_documento_url', 'dato' => isset($parametros['doc_subirDocumento']) ? $parametros['doc_subirDocumento'] : "documento.pdf"),
+            array('campo' => 'th_perfir_fecha_inicio', 'dato' => date('Y-m-d H:i:s'), strtotime($parametros['txt_fecha_inicio'])),
+            array('campo' => 'th_perfir_fecha_expiracion', 'dato' => date("Y-m-d H:i:s", strtotime($parametros['txt_fecha_expiracion']))),
+            array('campo' => 'th_perfir_documento_url', 'dato' => isset($parametros['txt_url_firma']) ? $parametros['txt_url_firma'] : $parametros['doc_subirDocumento']),
             array('campo' => 'th_perfir_politica_de_datos', 'dato' => isset($parametros['cbx_politicaDeDatos']) ? 1 : 0),
             array('campo' => 'th_perfir_estado', 'dato' => 1)
         );
 
+       
         // Si no se envía un _id, se entiende que es un registro nuevo
         if (empty($parametros['_id'])) {
 
@@ -142,13 +144,22 @@ class th_personas_firmasC
 
 
             if (!empty($parametros['_id'])) {
-                $where = array(array('campo' => 'th_perfir_id', 'dato' => $parametros['_id']));
-                //$this->guardar_archivo($file, $parametros, $parametros['_id']);
-                $datos = $this->modelo->editar($datos, $where);
-                $_id = $parametros['_id'];
 
-                if ($file['txt_ruta_archivo']['tmp_name'] != '' && $file['txt_ruta_archivo']['tmp_name'] != null) {
-                    $datos = $this->guardar_archivo($file, $parametros, $_id);
+                if (strlen($parametros['txt_url_firma']) > 0) {
+                    $where = array(array('campo' => 'th_perfir_id', 'dato' => $parametros['_id']));
+                    //$this->guardar_archivo($file, $parametros, $parametros['_id']);
+                    $datos = $this->modelo->editar($datos, $where);
+                } else {
+                    $where = array(array('campo' => 'th_perfir_id', 'dato' => $parametros['_id']));
+                    //$this->guardar_archivo($file, $parametros, $parametros['_id']);
+                    $datos = $this->modelo->editar($datos, $where);
+
+
+                    $_id = $parametros['_id'];
+
+                    if ($file['txt_cargar_imagen']['tmp_name'] != '' && $file['txt_cargar_imagen']['tmp_name'] != null) {
+                        $datos = $this->guardar_archivo($file, $parametros, $_id);
+                    }
                 }
             } else {
                 return -1; // Código de error: ID no válido
@@ -169,8 +180,8 @@ class th_personas_firmasC
         }
 
         if ($this->validar_formato_archivo($file) === 1) {
-            $uploadfile_temporal = $file['txt_ruta_archivo']['tmp_name'];
-            $extension = pathinfo($file['txt_ruta_archivo']['name'], PATHINFO_EXTENSION);
+            $uploadfile_temporal = $file['txt_cargar_imagen']['tmp_name'];
+            $extension = pathinfo($file['txt_cargar_imagen']['name'], PATHINFO_EXTENSION);
             //Para CERTIFICACIONES y CAPACITACIONES
             $nombre = 'firmas_electronicas_' . $id_insertar_editar . '.' . $extension;
             $nuevo_nom = $ruta . $nombre;
@@ -207,7 +218,7 @@ class th_personas_firmasC
 
     private function validar_formato_archivo($file)
     {
-        switch ($file['txt_ruta_archivo']['type']) {
+        switch ($file['txt_cargar_imagen']['type']) {
             case 'application/x-pkcs12': // Tipo MIME para archivos .p12
                 return 1;
                 break;
