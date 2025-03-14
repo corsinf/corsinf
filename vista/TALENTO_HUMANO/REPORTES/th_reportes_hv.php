@@ -62,7 +62,7 @@
                             <div class="row mx-0">
                                 <div class="col-sm-12" id="btn_nuevo">
 
-                                    <a href="../controlador/TALENTO_HUMANO/th_reportes_hvC.php?descargarExcel=true" class="btn btn-success btn-sm"><i class="bx bx-plus"></i> Reporte Excel</a>
+                                    <a hidden href="../controlador/TALENTO_HUMANO/th_reportes_hvC.php?descargarExcel=true" class="btn btn-success btn-sm"><i class="bx bx-plus"></i> Reporte Excel</a>
                                     <a href="../controlador/TALENTO_HUMANO/th_reportesC.php?descargarExcel=true" class="btn btn-success btn-sm"><i class="bx bx-plus"></i> Reporte Excel 2</a>
 
                                 </div>
