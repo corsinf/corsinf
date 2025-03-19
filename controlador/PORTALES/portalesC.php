@@ -35,7 +35,7 @@ if (isset($_GET['comenzar_lectura'])) {
 	 		switch ($portal[0]['comunicacion']) {
 	 			case 'TCPIP':
 	 			// $command = "C:\\Users\\lenovo\\Downloads\\SESProLElibEPCcmd\\bin\\Debug\\net8.0\\SESProLElibEPCcmd.dll 2 186.4.219.172 10001";
-	 			$command = "C:\\xampp\\htdocs\\corsinf\\lib\\Antenas\\net8.0\\SESProLElibEPCcmd.exe 2 ".$portal[0]['ip']." ".$portal[0]['puerto']."";
+	 			$command =  dirname(__DIR__,2). "\\lib\\Antenas\\net8.0\\SESProLElibEPCcmd.exe 2 ".$portal[0]['ip']." ".$portal[0]['puerto']."";
 	 			// print_r($command);die();
 	 			$respuesta = shell_exec($command);
 				$resp = json_decode($respuesta,true);
