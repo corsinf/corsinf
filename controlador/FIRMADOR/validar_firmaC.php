@@ -44,38 +44,61 @@ class validar_firmaC
 	}
 
 
-	function validar_firma_funcional($file, $parametros) {
+	function validar_firma_funcional($file, $parametros)
+	{
 
-	//$p12File = $file["txt_ruta_archivo"]['tmp_name'];
-        $p12File = "C:/xampp/htdocs/corsinf/REPOSITORIO/TALENTO_HUMANO/3044/124251/FIRMAS/firmas_electronicas_7.p12";
-	    $p12Password = "milton123*";
+		//$p12File = $file["txt_ruta_archivo"]['tmp_name'];
+		$p12File = "C:/xampp/htdocs/corsinf/REPOSITORIO/TALENTO_HUMANO/3044/124251/FIRMAS/firmas_electronicas_7.p12";
+		$p12Password = "milton123*";
 		$p12Content = file_get_contents($p12File);
 		$certs = array();
-		print_r(openssl_pkcs12_read($p12Content, $certs, $p12Password)); die();
-	
+		print_r(openssl_pkcs12_read($p12Content, $certs, $p12Password));
+		die();
+
 		if (openssl_pkcs12_read($p12Content, $certs, $p12Password)) {
 			$privateKey = $certs['pkey'];
 			$publicKeyCert = $certs['cert'];
 		} else {
 			die('Error leyendo el archivo .p12');
 		}
-	
+
 		$caCertificates = isset($certs['extracerts']) ? $certs['extracerts'] : null;
 		if (is_array($caCertificates)) {
 			$caCertificates = implode("\n", $caCertificates);
 		}
-	
-	
+
+
 		$certdata = openssl_x509_parse($certs['cert'], 0);
-	
+
 		echo json_encode($certdata);
 		die();
 	}
-	
+
 
 	function validar_firma($file, $parametros)
 	{
 		$ruta_p12 = '';
+
+		// Primero verificamos si hay una URL de firma en el repositorio
+		if (!empty($parametros['txt_url_firma'])) {
+			// Convertir la ruta relativa a absoluta
+			$ruta_p12_repo = str_replace("..", dirname(__DIR__, 2), $parametros['txt_url_firma']);
+
+			if (file_exists($ruta_p12_repo) && is_file($ruta_p12_repo)) {
+				// Usar la firma del repositorio
+				$ruta_p12 = $ruta_p12_repo;
+
+				// Crear datos para validación cuando se usa firma del repositorio
+				$file = [
+					'txt_cargar_imagen' => [
+						'tmp_name' => $ruta_p12,
+						'name' => basename($ruta_p12)
+					]
+				];
+			} else {
+				return ['resp' => -2, 'msj' => 'El archivo de firma en el repositorio no existe o no es válido.'];
+			}
+		}
 
 		// Verificar si el archivo fue subido o si ya existe en una ruta
 		if (isset($file['txt_cargar_imagen']['tmp_name']) && isset($file['txt_cargar_imagen']['name'])) {
@@ -139,9 +162,42 @@ class validar_firmaC
 			@unlink($ruta_p12);
 		}
 
-		// Retornar el resultado exitoso
-		// print_r($resp);die();
-		return ['resp' => 1, 'msj' => $resp[1],'data'=>$resp[3]];
+		// Verificar que $resp[3] es un string JSON
+		if (is_string($resp[3])) {
+			$resp[3] = json_decode($resp[3], true); // Convertir a array asociativo
+		}
+
+		$valor = 0;
+		$descripcion = "";
+		if ($resp[3]["EMC_OU"] == "Certificado Persona Natural EC") {
+			$valor = 1;
+			$descripcion = "Natural";
+		} else if ($resp[3]["EMC_OU"] == "Certificado Persona Natural RUC EC") {
+			$valor = 3;
+			$descripcion = "RUC";
+		} else {
+			$valor = 4;
+			$descripcion = "Generica";
+		}
+
+		if (is_array($resp[3])) {
+			$nuevo_obj = [
+				"EMC_OU" => $resp[3]["EMC_OU"] ?? "",
+				"EMC_CN" => $resp[3]["EMC_CN"] ?? "",
+				"FechaInicio" => $resp[3]["FechaInicio"] ?? "",
+				"FechaFin" => $resp[3]["FechaFin"] ?? "",
+				"SERIALNUMBER" => $resp[3][" SERIALNUMBER"] ?? "",  // Agregar SERIALNUMBER
+				"valor" => $valor,  // Agregar el valor calculado al objeto
+				"descripcion" => $descripcion  // Agregar el valor calculado al objeto
+			];
+
+			// Convertir el objeto en una cadena JSON
+			$response = json_encode($nuevo_obj);
+		} else {
+			$response = json_encode(["error" => "Datos no válidos", "valor" => $valor]);
+		}
+
+		return ['resp' => 1, 'msj' => $resp[1], 'data' => $response];
 	}
 
 	function validar_documento($file, $parametros)

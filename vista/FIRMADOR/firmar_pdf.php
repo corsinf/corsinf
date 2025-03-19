@@ -183,27 +183,27 @@
                     <div class="card">
                         <div class="card-body">
                             <div class="row">
-                                <div class="col-8">
+                                <div class="col-8 pb-2">
                                     <label for="ddl_persona_firma" class="form-label form-label-sm">
                                         <h6><strong>1) Seleccione la firma:</strong></h6>
-                                        <select class="form-select form-select-sm" id="ddl_persona_firma" name="ddl_persona_firma" maxlenght="5000">
-                                            <option value="">Seleccione</option>
-                                        </select>
-                                        <input id="txt_url_firma" type="hidden" name="txt_url_firma" value="">
                                     </label>
+                                    <select class="form-control form-control-sm" id="ddl_persona_firma" name="ddl_persona_firma" maxlength="5000">
+                                        <option value="">Seleccione</option>
+                                    </select>
+                                    <input id="txt_url_firma" type="hidden" name="txt_url_firma" value="">
                                 </div>
 
-                                <div class="col-8">
+                                <div class="col-8 pb-2">
                                     <label for="txt_nombreSala" class="form-label form-label-sm">
                                         <h6><strong>2) Seleccione Firma (.p12):</strong></h6>
                                     </label>
                                     <input id="uploadFirma" name="uploadFirma" accept=".p12,.pfx" class="form-control" type="file">
                                 </div>
-                                <div class="col-4">
+                                <div class="col-4 pb-2">
                                     <label for="txt_passFirma" class="form-label form-label-sm">
                                         <h6><strong>3) Clave de la Firma:</strong></h6>
                                     </label>
-                                    <input type="text" class="form-control" name="txt_passFirma" id="txt_passFirma" value="" placeholder="" required>
+                                    <input type="password" class="form-control" name="txt_passFirma" id="txt_passFirma" value="" placeholder="" required>
                                 </div>
                                 <div class="col-lg-12">
                                     <h6><strong>4) Documentos a firmar: </strong></h6>
