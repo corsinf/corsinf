@@ -30,13 +30,12 @@ if (isset($_GET['comenzar_lectura'])) {
  	function comenzar_lectura($parametros)
  	{
  		$portal = $this->modelo->listar($parametros['id']);
- 		// print_r($portal);die();
  		if(count($portal)>0)
  		{
 	 		switch ($portal[0]['comunicacion']) {
 	 			case 'TCPIP':
 	 			// $command = "C:\\Users\\lenovo\\Downloads\\SESProLElibEPCcmd\\bin\\Debug\\net8.0\\SESProLElibEPCcmd.dll 2 186.4.219.172 10001";
-	 			$command = "C:\\xampp\\htdocs\\corsinf\\lib\\Antenas\\net8.0\\SESProLElibEPCcmd.exe 2 186.4.219.172 10001";
+	 			$command = "C:\\xampp\\htdocs\\corsinf\\lib\\Antenas\\net8.0\\SESProLElibEPCcmd.exe 2 ".$portal[0]['ip']." ".$portal[0]['puerto']."";
 	 			// print_r($command);die();
 	 			$respuesta = shell_exec($command);
 				$resp = json_decode($respuesta,true);
