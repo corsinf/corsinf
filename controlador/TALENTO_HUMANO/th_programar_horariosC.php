@@ -38,7 +38,9 @@ class th_programar_horariosC
     function listar($id)
     {
         if ($id != '') {
-            $datos = $this->modelo->where('th_pro_id', $id)->listar();
+            // $datos = $this->modelo->where('th_pro_id', $id)->listar();
+            $datos = $this->modelo->listar_programacion_horarios($id);
+
             return $datos;
         }
         return null;

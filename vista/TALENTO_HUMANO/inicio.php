@@ -69,6 +69,31 @@ if ($_GET['acc'] == 'th_tomar_datos_biometricos') {
 	include('TALENTO_HUMANO/DISPOSITIVOS/th_tomar_datos_biometricos.php');
 }
 
+//Justificaciones
+if ($_GET['acc'] == 'th_justificaciones_tipo') {
+	include('TALENTO_HUMANO/JUSTIFICACIONES/th_justificaciones_tipo.php');
+}
+
+if ($_GET['acc'] == 'th_registrar_tipo_justificacion') {
+	include('TALENTO_HUMANO/JUSTIFICACIONES/th_registrar_tipo_justificacion.php');
+}
+
+if ($_GET['acc'] == 'th_justificaciones') {
+	include('TALENTO_HUMANO/JUSTIFICACIONES/th_justificaciones.php');
+}
+
+if ($_GET['acc'] == 'th_registrar_justificaciones') {
+	include('TALENTO_HUMANO/JUSTIFICACIONES/th_registrar_justificaciones.php');
+}
+
+//Feriados
+if ($_GET['acc'] == 'th_feriados') {
+	include('TALENTO_HUMANO/FERIADOS/th_feriados.php');
+}
+
+if ($_GET['acc'] == 'th_registrar_feriados') {
+	include('TALENTO_HUMANO/FERIADOS/th_registrar_feriados.php');
+}
 
 /**
  * 

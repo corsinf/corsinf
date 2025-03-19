@@ -74,4 +74,35 @@ class th_programar_horariosM extends BaseModel
         $datos = $this->db->datos($sql);
         return $datos;
     }
+
+    function listar_programacion_horarios($id_programacion = '')
+    {
+        $sql = "SELECT
+                pro_hor.th_pro_id AS _id,
+                pro_hor.th_hor_id AS id_horario,
+                pro_hor.th_dep_id AS id_departamento,
+                pro_hor.th_per_id AS id_persona,
+                pro_hor.th_pro_fecha_inicio AS fecha_inicio,
+                pro_hor.th_pro_fecha_fin AS fecha_fin,
+                pro_hor.th_pro_no_ciclo AS no_ciclo,
+                pro_hor.th_pro_tipo_ciclo AS tipo_ciclo,
+                pro_hor.th_pro_si_ciclo AS si_ciclo,
+                
+                hor.th_hor_nombre AS nombre_horario,
+                dep.th_dep_nombre AS nombre_departamento,
+                CONCAT(per.th_per_primer_apellido, ' ', per.th_per_segundo_apellido, ' ', per.th_per_primer_nombre, ' ', per.th_per_segundo_nombre) AS nombre_persona
+            FROM
+                th_programar_horarios pro_hor
+            LEFT JOIN th_horarios hor ON pro_hor.th_hor_id = hor.th_hor_id
+            LEFT JOIN th_departamentos dep ON pro_hor.th_dep_id = dep.th_dep_id
+            LEFT JOIN th_personas per ON pro_hor.th_per_id = per.th_per_id
+            WHERE pro_hor.th_pro_id <> 0";
+
+        if ($id_programacion != '') {
+            $sql .= " AND pro_hor.th_pro_id = $id_programacion";
+        }
+
+        $datos = $this->db->datos($sql);
+        return $datos;
+    }
 }

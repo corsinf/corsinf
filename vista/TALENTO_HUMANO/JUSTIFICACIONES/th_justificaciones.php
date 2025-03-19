@@ -7,36 +7,36 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
 <script type="text/javascript">
     $(document).ready(function() {
 
-        tbl_departmento_horario = $('#tbl_departmento_horario').DataTable($.extend({}, configuracion_datatable('Turnos', 'turnos', 'contenedor_botones_departamento'), {
+        tbl_departmento_justifacion = $('#tbl_departmento_justifacion').DataTable($.extend({}, configuracion_datatable('Justificaciones', 'turnos', 'contenedor_botones_departamento'), {
             reponsive: true,
             language: {
                 url: 'https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
             },
             ajax: {
-                url: '../controlador/TALENTO_HUMANO/th_programar_horariosC.php?listar_departamentos_horarios=true',
+                url: '../controlador/TALENTO_HUMANO/th_justificacionesC.php?listar_departamentos_justificaciones=true',
                 dataSrc: ''
             },
             columns: [{
                     data: null,
                     render: function(data, type, item) {
-                        href = `../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_registrar_programar_horarios&_id=${item._id}`;
+                        href = `../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_registrar_justificaciones&_id=${item._id}`;
                         return `<a href="${href}"><u>${item.nombre_departamento}</u></a>`;
                     }
                 },
                 {
-                    data: 'nombre_horario'
+                    data: 'tipo_motivo'
                 },
                 {
                     data: null,
                     render: function(data, type, item) {
-                        salida = fecha_formateada(item.fecha_inicio);
+                        salida = fecha_formateada_hora(item.fecha_inicio);
                         return salida;
                     }
                 },
                 {
                     data: null,
                     render: function(data, type, item) {
-                        salida = fecha_formateada(item.fecha_fin);
+                        salida = fecha_formateada_hora(item.fecha_fin);
                         return salida;
                     }
                 },
@@ -46,36 +46,36 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
             ]
         }));
 
-        tbl_persona_horario = $('#tbl_persona_horario').DataTable($.extend({}, configuracion_datatable('Turnos', 'turnos', 'contenedor_botones_persona'), {
+        tbl_persona_justifacion = $('#tbl_persona_justifacion').DataTable($.extend({}, configuracion_datatable('Justificaciones', 'turnos', 'contenedor_botones_persona'), {
             reponsive: true,
             language: {
                 url: 'https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
             },
             ajax: {
-                url: '../controlador/TALENTO_HUMANO/th_programar_horariosC.php?listar_personas_horarios=true',
+                url: '../controlador/TALENTO_HUMANO/th_justificacionesC.php?listar_personas_justificaciones=true',
                 dataSrc: ''
             },
             columns: [{
                     data: null,
                     render: function(data, type, item) {
-                        href = `../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_registrar_programar_horarios&_id=${item._id}`;
+                        href = `../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_registrar_justificaciones&_id=${item._id}`;
                         return `<a href="${href}"><u>${item.nombre_persona}</u></a>`;
                     }
                 },
                 {
-                    data: 'nombre_horario'
+                    data: 'tipo_motivo'
                 },
                 {
                     data: null,
                     render: function(data, type, item) {
-                        salida = fecha_formateada(item.fecha_inicio);
+                        salida = fecha_formateada_hora(item.fecha_inicio);
                         return salida;
                     }
                 },
                 {
                     data: null,
                     render: function(data, type, item) {
-                        salida = fecha_formateada(item.fecha_fin);
+                        salida = fecha_formateada_hora(item.fecha_fin);
                         return salida;
                     }
                 },
@@ -92,7 +92,7 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
     <div class="page-content">
         <!--breadcrumb-->
         <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
-            <div class="breadcrumb-title pe-3">Turnos</div>
+            <div class="breadcrumb-title pe-3">Justificaciones</div>
             <?php
             // print_r($_SESSION['INICIO']);die();
 
@@ -103,7 +103,7 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                         <li class="breadcrumb-item"><a href="javascript:;"><i class="bx bx-home-alt"></i></a>
                         </li>
                         <li class="breadcrumb-item active" aria-current="page">
-                            Lista de Turnos
+                            Lista de Justificaciones
                         </li>
                     </ol>
                 </nav>
@@ -122,7 +122,7 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                                 <div class="card-title d-flex align-items-center">
 
                                     <div class="" id="btn_nuevo">
-                                        <a href="../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_registrar_programar_horarios"
+                                        <a href="../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_registrar_justificaciones"
                                             type="button" class="btn btn-success btn-sm ">
                                             <i class="bx bx-plus me-0 pb-1"></i> Nuevo
                                         </a>
@@ -165,11 +165,11 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                                              
 
                                                 <div class="table-responsive">
-                                                    <table class="table table-striped responsive " id="tbl_departmento_horario" style="width:100%">
+                                                    <table class="table table-striped responsive " id="tbl_departmento_justifacion" style="width:100%">
                                                         <thead>
                                                             <tr>
                                                                 <th>Departamento</th>
-                                                                <th>Horario</th>
+                                                                <th>Motivo</th>
                                                                 <th>Fecha Inicial</th>
                                                                 <th>Fecha Final</th>
                                                             </tr>
@@ -189,11 +189,11 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
 
                                                
                                                 <div class="table-responsive">
-                                                    <table class="table table-striped responsive " id="tbl_persona_horario" style="width:100%">
+                                                    <table class="table table-striped responsive " id="tbl_persona_justifacion" style="width:100%">
                                                         <thead>
                                                             <tr>
                                                                 <th>Persona</th>
-                                                                <th>Horario</th>
+                                                                <th>Motivo</th>
                                                                 <th>Fecha Inicial</th>
                                                                 <th>Fecha Final</th>
                                                             </tr>

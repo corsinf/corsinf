@@ -27,13 +27,14 @@ if (isset($_GET['_id'])) {
             data: {
                 id: id
             },
-            url: '../controlador/TALENTO_HUMANO/th_programar_horariosC.php?listar=true',
+            url: '../controlador/TALENTO_HUMANO/th_justificacionesC.php?listar=true',
             type: 'post',
             dataType: 'json',
             success: function(response) {
                 console.log(response);
-                $('#txt_fecha_inicio').val(fecha_formateada(response[0].fecha_inicio));
-                $('#txt_fecha_fin').val(fecha_formateada(response[0].fecha_fin));
+                $('#txt_fecha_inicio').val(fecha_input_datelocal(response[0].fecha_inicio));
+                $('#txt_fecha_fin').val(fecha_input_datelocal(response[0].fecha_fin));
+                $('#txt_motivo').val(response[0].motivo);
 
                 if (response[0].id_persona == 0) {
                     $('#pnl_departamentos').show();
@@ -46,20 +47,6 @@ if (isset($_GET['_id'])) {
                 }
 
                 //Tipo de horario - Con horario o sin horario
-                if (response[0].tipo_ciclo == 1) {
-                    $('#cbx_horario_con').prop('checked', true);
-                    $('#pnl_horarios').show();
-
-                } else if (response[0].tipo_ciclo == 2) {
-                    $('#cbx_horario_sin').prop('checked', true);
-                }
-
-                //Detalle del tipo de horario en este caso con horario
-                if (response[0].si_ciclo == 1) {
-                    $('#cbx_horario_detalle_1').prop('checked', true);
-                } else if (response[0].si_ciclo == 2) {
-                    $('#cbx_horario_detalle_2').prop('checked', true);
-                }
 
                 //Selects
                 $('#ddl_departamentos').append($('<option>', {
@@ -74,24 +61,24 @@ if (isset($_GET['_id'])) {
                     selected: true
                 }));
 
-                $('#ddl_horarios').append($('<option>', {
-                    value: response[0].id_horario,
-                    text: response[0].nombre_horario,
+                $('#ddl_tipo_justificacion').append($('<option>', {
+                    value: response[0].id_tipo_justificacion,
+                    text: response[0].tipo_motivo,
                     selected: true
                 }));
+
             }
         });
     }
 
     function editar_insertar() {
 
-        var txt_fecha_inicio = $('#txt_fecha_inicio').val();
-        var txt_fecha_fin = $('#txt_fecha_fin').val();
+        var txt_fecha_inicio = fecha_formato_datetime2($('#txt_fecha_inicio').val());
+        var txt_fecha_fin = fecha_formato_datetime2($('#txt_fecha_fin').val());
         var ddl_personas = $('#ddl_personas').val() ?? 0;
         var ddl_departamentos = $('#ddl_departamentos').val() ?? 0;
-        var ddl_horarios = $('#ddl_horarios').val() ?? 0;
-        var cbx_horario = $('input[name="cbx_horario"]:checked').val() ?? 0;
-        var cbx_horario_detalle = $('input[name="cbx_horario_detalle"]:checked').val() ?? 0;
+        var ddl_tipo_justificacion = $('#ddl_tipo_justificacion').val() ?? 0;
+        var txt_motivo = $('#txt_motivo').val() ?? 0;
 
         var parametros = {
             '_id': '<?= $_id ?>',
@@ -99,12 +86,11 @@ if (isset($_GET['_id'])) {
             'txt_fecha_fin': txt_fecha_fin,
             'ddl_personas': ddl_personas,
             'ddl_departamentos': ddl_departamentos,
-            'ddl_horarios': ddl_horarios,
-            'cbx_horario': cbx_horario,
-            'cbx_horario_detalle': cbx_horario_detalle,
+            'ddl_tipo_justificacion': ddl_tipo_justificacion,
+            'txt_motivo': txt_motivo,
         };
 
-        if ($("#form_programar_horarios").valid()) {
+        if ($("#form_justificaciones").valid()) {
             // Si es válido, puedes proceder a enviar los datos por AJAX
             insertar(parametros);
         }
@@ -118,19 +104,17 @@ if (isset($_GET['_id'])) {
             data: {
                 parametros: parametros
             },
-            url: '../controlador/TALENTO_HUMANO/th_programar_horariosC.php?insertar=true',
+            url: '../controlador/TALENTO_HUMANO/th_justificacionesC.php?insertar=true',
             type: 'post',
             dataType: 'json',
 
             success: function(response) {
                 if (response == 1) {
                     Swal.fire('', 'Operacion realizada con exito.', 'success').then(function() {
-                        location.href = '../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_programar_horarios';
+                        location.href = '../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_justificaciones';
                     });
                 } else if (response == -2) {
-                    //Swal.fire('', 'El nombre del dispositivo ya está en uso', 'warning');
-                    $(txt_nombre).addClass('is-invalid');
-                    $('#error_txt_nombre').text('El nombre del dispositivo ya está en uso.');
+                    Swal.fire('', 'Error al guardar la información.', 'warning');
                 }
             },
 
@@ -141,10 +125,6 @@ if (isset($_GET['_id'])) {
 
                 Swal.fire('', 'Error: ' + xhr.responseText, 'error');
             }
-        });
-
-        $('#txt_nombre').on('input', function() {
-            $('#error_txt_nombre').text('');
         });
     }
 
@@ -170,13 +150,13 @@ if (isset($_GET['_id'])) {
             data: {
                 id: id
             },
-            url: '../controlador/TALENTO_HUMANO/th_programar_horariosC.php?eliminar=true',
+            url: '../controlador/TALENTO_HUMANO/th_justificacionesC.php?eliminar=true',
             type: 'post',
             dataType: 'json',
             success: function(response) {
                 if (response == 1) {
                     Swal.fire('Eliminado!', 'Registro Eliminado.', 'success').then(function() {
-                        location.href = '../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_programar_horarios';
+                        location.href = '../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_justificaciones';
                     });
                 }
             }
@@ -188,8 +168,8 @@ if (isset($_GET['_id'])) {
         cargar_select2_url('ddl_personas', url_personasC);
         url_departamentosC = '../controlador/TALENTO_HUMANO/th_departamentosC.php?buscar=true';
         cargar_select2_url('ddl_departamentos', url_departamentosC);
-        url_horariosC = '../controlador/TALENTO_HUMANO/th_horariosC.php?buscar=true';
-        cargar_select2_url('ddl_horarios', url_horariosC);
+        url_tipo_justificacionC = '../controlador/TALENTO_HUMANO/th_cat_tipo_justificacionC.php?buscar=true';
+        cargar_select2_url('ddl_tipo_justificacion', url_tipo_justificacionC);
     }
 </script>
 
@@ -198,6 +178,7 @@ if (isset($_GET['_id'])) {
 <script>
     //Funciones adicionales 
     $(document).ready(function() {
+
         $('input[name="cbx_programar"]').on('change', function() {
             $('#pnl_personas, #pnl_departamentos').hide();
 
@@ -215,19 +196,6 @@ if (isset($_GET['_id'])) {
 
             limpiar_parametros_validate();
 
-        });
-
-        $('input[name="cbx_horario"]').on('change', function() {
-            $('#pnl_horarios').hide();
-
-            $('#ddl_horarios').val(null).trigger('change');
-            $('input[name="cbx_horario_detalle"]').prop('checked', false);
-
-            if ($(this).attr('id') === 'cbx_horario_con') {
-                $('#pnl_horarios').show();
-            } else if ($(this).attr('id') === 'cbx_horario_sin') {
-                //$('#pnl_horarios').show();
-            }
         });
 
         //Validacion para las fechas
@@ -251,7 +219,7 @@ if (isset($_GET['_id'])) {
     <div class="page-content">
         <!--breadcrumb-->
         <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
-            <div class="breadcrumb-title pe-3">Programar Horarios</div>
+            <div class="breadcrumb-title pe-3">Justificaciones</div>
             <?php
             //print_r($_SESSION['INICIO']);die(); 
 
@@ -281,32 +249,31 @@ if (isset($_GET['_id'])) {
                             <h5 class="mb-0 text-primary">
                                 <?php
                                 if ($_id == '') {
-                                    echo 'Registrar Programación de Horarios';
+                                    echo 'Registrar Justificaciones';
                                 } else {
-                                    echo 'Modificar Programación de Horarios';
+                                    echo 'Modificar Justificaciones';
                                 }
                                 ?>
                             </h5>
 
                             <div class="row m-2">
                                 <div class="col-sm-12">
-                                    <a href="../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_programar_horarios" class="btn btn-outline-dark btn-sm"><i class="bx bx-arrow-back"></i> Regresar</a>
+                                    <a href="../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_justificaciones" class="btn btn-outline-dark btn-sm"><i class="bx bx-arrow-back"></i> Regresar</a>
                                 </div>
                             </div>
                         </div>
                         <hr>
 
-                        <form id="form_programar_horarios">
+                        <form id="form_justificaciones">
 
                             <div class="row pt-3 mb-col">
                                 <div class="col-md-3">
                                     <label for="txt_fecha_inicio" class="form-label">Fecha Inicial </label>
-                                    <input type="date" class="form-control form-control-sm" id="txt_fecha_inicio" name="txt_fecha_inicio" maxlength="50">
+                                    <input type="datetime-local" class="form-control form-control-sm" id="txt_fecha_inicio" name="txt_fecha_inicio" maxlength="50">
                                 </div>
-
                                 <div class="col-md-3">
                                     <label for="txt_fecha_fin" class="form-label">Fecha Final </label>
-                                    <input type="date" class="form-control form-control-sm" id="txt_fecha_fin" name="txt_fecha_fin" maxlength="50">
+                                    <input type="datetime-local" class="form-control form-control-sm" id="txt_fecha_fin" name="txt_fecha_fin" maxlength="50">
                                 </div>
                             </div>
 
@@ -343,43 +310,25 @@ if (isset($_GET['_id'])) {
                                 </div>
                             </div>
 
+                            <hr class="w-50">
 
-                            <div class="mb-col pt-3">
-                                <label class="form-label" for="lbl_asignar_horario">Asignar Horario </label>
-
-                                <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="cbx_horario" id="cbx_horario_con" value="1">
-                                    <label class="form-check-label" for="cbx_horario_con">Con Horario </label>
+                            <div class="row mb-col">
+                                <div class="col-sm-6">
+                                    <label for="ddl_tipo_justificacion" class="form-label">Tipo de Horario </label>
+                                    <select class="form-control form-control-sm select2-validation" name="ddl_tipo_justificacion" id="ddl_tipo_justificacion">
+                                        <option value="">Seleccione</option>
+                                    </select>
+                                    <label class="error" style="display: none;" for="ddl_tipo_justificacion"></label>
                                 </div>
-
-                                <div id="pnl_horarios" style="display: none;">
-                                    <div class="row mb-col">
-                                        <div class="col-md-6">
-                                            <label for="ddl_horarios" class="form-label">Horarios </label>
-                                            <select class="form-select form-select-sm select2-validation" id="ddl_horarios" name="ddl_horarios">
-                                                <option selected disabled>-- Seleccione --</option>
-                                            </select>
-                                            <label class="error" style="display: none;" for="ddl_horarios"></label>
-                                        </div>
-                                    </div>
-
-                                    <div class="form-check ms-4">
-                                        <input class="form-check-input" type="radio" name="cbx_horario_detalle" id="cbx_horario_detalle_1" value="1">
-                                        <label class="form-check-label" for="cbx_horario_detalle_1">Tomar en cuenta los intervalos </label>
-                                    </div>
-                                    <div class="form-check ms-4">
-                                        <input class="form-check-input" type="radio" name="cbx_horario_detalle" id="cbx_horario_detalle_2" value="2">
-                                        <label class="form-check-label" for="cbx_horario_detalle_2">Sin tomar en cuenta los intervalos </label>
-                                    </div>
-                                </div>
-
-                                <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="cbx_horario" id="cbx_horario_sin" value="2">
-                                    <label class="form-check-label" for="cbx_horario_sin">Sin Horario</label>
-                                </div>
-                                <label class="error" style="display: none;" for="cbx_horario"></label>
-
                             </div>
+
+                            <div class="row mb-col">
+                                <div class="col-md-6">
+                                    <label for="txt_motivo" class="form-label">Motivo </label>
+                                    <textarea class="form-control form-control-sm no_caracteres" name="txt_motivo" id="txt_motivo" rows="3" maxlength="200"></textarea>
+                                </div>
+                            </div>
+
 
                             <div class="d-flex justify-content-end pt-2">
 
@@ -410,10 +359,7 @@ if (isset($_GET['_id'])) {
         agregar_asterisco_campo_obligatorio('txt_fecha_fin');
         agregar_asterisco_campo_obligatorio('ddl_personas');
         agregar_asterisco_campo_obligatorio('ddl_departamentos');
-        agregar_asterisco_campo_obligatorio('ddl_horarios');
-        agregar_asterisco_campo_obligatorio('cbx_horario');
-        agregar_asterisco_campo_obligatorio('cbx_horario_detalle');
-        agregar_asterisco_campo_obligatorio('lbl_asignar_horario');
+        agregar_asterisco_campo_obligatorio('ddl_tipo_justificacion');
         agregar_asterisco_campo_obligatorio('lbl_programar');
 
         //Para validar los select2
@@ -421,7 +367,7 @@ if (isset($_GET['_id'])) {
             unhighlight_select(this);
         });
 
-        $("#form_programar_horarios").validate({
+        $("#form_justificaciones").validate({
             rules: {
                 txt_fecha_inicio: {
                     required: true,
@@ -429,22 +375,19 @@ if (isset($_GET['_id'])) {
                 txt_fecha_fin: {
                     required: true,
                 },
-                ddl_horarios: {
+                ddl_tipo_justificacion: {
                     required: true,
-                },
-                cbx_horario: {
-                    required: true,
-                },
-                cbx_horario_detalle: {
-                    //required: true,
                 },
                 cbx_programar: {
+                    required: true,
+                },
+                txt_motivo: {
                     required: true,
                 }
             },
             messages: {
                 ddl_personas: {
-                    required: "El campo 'Personas' es obligatorio",
+                    required: "El campo 'Persona' es obligatorio",
                 },
                 ddl_departamentos: {
                     required: "El campo 'Departamento' es obligatorio",
@@ -465,7 +408,7 @@ if (isset($_GET['_id'])) {
                     $element.removeClass("is-valid").addClass("is-invalid");
                 }
             },
-            
+
             unhighlight: function(element) {
                 let $element = $(element);
 

@@ -76,6 +76,35 @@ function fecha_formateada_hora(fecha) {
     return fechaFormateada;
 }
 
+function fecha_formato_datetime2(fecha) {
+    // if (!fecha) {
+    //     alert("Por favor, selecciona una fecha y hora.");
+    //     return null;
+    // }
+
+    let date = new Date(fecha);
+
+    // Extraer valores asegurando formato correcto
+    let year = date.getFullYear();
+    let month = String(date.getMonth() + 1).padStart(2, '0');
+    let day = String(date.getDate()).padStart(2, '0');
+    let hours = String(date.getHours()).padStart(2, '0');
+    let minutes = String(date.getMinutes()).padStart(2, '0');
+    let seconds = String(date.getSeconds()).padStart(2, '0');
+    let milliseconds = "0000000";
+
+    let fecha_formateada = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}.${milliseconds}`;
+
+    // console.log(fecha_formateada); // "2025-03-14 08:00:00.0000000"
+
+    return fecha_formateada;
+}
+
+function fecha_input_datelocal(fecha) {
+    // Formatear la fecha para datetime-local (YYYY-MM-DDTHH:MM)
+    return fecha.split(" ")[0] + "T" + fecha.split(" ")[1].substring(0, 5);
+
+}
 
 //Valida si tiene el formato de email
 function validar_email(sa_rep_correo) {
@@ -248,6 +277,21 @@ function verificar_fecha_actual(input_name, fecha_actual, input_adicional) {
         $('#' + input_name).val('');
         $('#' + input_adicional).val('');
     }
+}
+
+function verificar_fecha_inicio_fecha_fin(input_name_fi, input_name_ff) {
+    let fechaInicio = new Date($(`input[name='${input_name_fi}']`).val());
+    let fechaFin = new Date($(`input[name='${input_name_ff}']`).val());
+
+    if (fechaFin < fechaInicio) {
+        Swal.fire('', 'La fecha de fin no puede ser menor que la fecha de inicio.', 'error');
+
+        $(`input[name='${input_name_ff}']`).val(''); // Borra la fecha incorrecta
+        $(`input[name='${input_name_ff}']`).removeClass("is-valid").addClass("is-invalid");
+
+        return false;
+    }
+    return true;
 }
 
 /**
