@@ -1,3 +1,110 @@
+<script type="text/javascript">
+ $( document ).ready(function() {
+  cargar_datos();  
+  cargar_datos_controladora();
+ })
+
+let intervalo;
+let intervalo2;
+function cargar_datos_controladora() {
+   
+    $.ajax({
+      // data: {parametros: parametros},
+      url: '../controlador/PORTALES/portalesC.php?lista=true',
+      type: 'post',
+      dataType: 'json',
+      success: function(response) {
+        console.log(response);
+        tr = '';
+        response.forEach(function(item,i){
+          tr+=`<option value="`+item.id+`">`+item.nombre+`</option>`
+        })
+        $('#dll_conroladoras').html(tr);       
+      }
+
+    });
+ }
+
+
+ function comenzar_lectura()
+ {
+    controladora =  $('#dll_conroladoras').val();  
+    parametros = 
+    {
+      'id':controladora,
+    }
+    $.ajax({
+        data: {parametros: parametros},
+        url: '../controlador/PORTALES/portalesC.php?comenzar_lectura_log=true',
+        type: 'post',
+        dataType: 'json',
+        success: function(response) {
+          if(response.resp=='-1')
+          {
+            Swal.fire("No se pudo conectar",response.msj,'error').then(function(){
+              $('#modal_respuesta').modal('hide');    
+            })
+
+          }
+        }
+    });
+ }
+
+ function iniciar()
+ {
+    $('#dll_conroladoras').prop('disabled',true);
+    $('#btn_iniciar').addClass('d-none');
+    $('#btn_detener').removeClass('d-none'); 
+
+
+    intervalo = setInterval(comenzar_lectura, 2000);
+    intervalo2 = setInterval(cargar_datos, 2500);
+    console.log("Ejecución iniciada.");
+ }
+
+ function detener()
+ {
+   clearInterval(intervalo);
+   if (intervalo) { // Verificar si el intervalo está activo
+        clearInterval(intervalo);
+        intervalo = null; // Limpiar la variable
+        Swal.fire("Deteccion Detenida","","info")
+
+        $('#dll_conroladoras').prop('disabled',false);
+        $('#btn_iniciar').removeClass('d-none');
+        $('#btn_detener').addClass('d-none'); 
+    }
+ }
+
+ function cargar_datos() {
+   
+    $.ajax({
+      // data: {parametros: parametros},
+      url: '../controlador/PORTALES/portalesC.php?lista_log=true',
+      type: 'post',
+      dataType: 'json',
+      success: function(response) {
+        console.log(response);
+        console.log(response)
+        tr = '';
+        response.forEach(function(item,i){
+          tr+=`<tr>
+              <td>`+(i+1)+`</td>
+              <td>`+item.rfid+`</td>
+              <td>`+item.fecha+`</td>
+              <td>`+item.antena+`</td>
+              <td>`+item.controladora+`</td>
+              <td>`+item.descripcion+`</td>
+            </tr>`
+        })
+        $('#tbl_body').html(tr);       
+      }
+
+    });
+ }
+
+
+</script>
 <div class="page-wrapper">
   <div class="page-content">
     <!--breadcrumb-->
@@ -20,44 +127,36 @@
       </div>
     </div>
     <div class="row">
-      <div class="col-xl-12 mx-auto">
-        <div class="card border-top border-0 border-4 border-primary">
-          <div class="card-body p-5">
-            <div class="card-title d-flex align-items-center">
-              <h5 class="mb-0 text-primary"></h5>
+      <div class="card">
+        <div class="card-body">
+           <div class="row">
+             <div class="col-12">
+              <div class="input input-group">
+                <select class="form-select" id="dll_conroladoras" onchange="detener()"></select>
+                <button class="btn btn-primary"  onclick="iniciar()" id="btn_iniciar"><i class="bx bx-play"></i></button>
+                <button class="btn btn-danger d-none" onclick="detener()" id="btn_detener" ><i class="bx bx-stop"></i></button>
+              </div>     
             </div>
-            <div class="card">
-              <div class="card-header p-2">
-                <ul class="nav nav-pills">
-                  <li class="nav-item">
-                    <a class="nav-link active" id="bodegas-tab" data-bs-toggle="pill" href="#bodegas" role="tab" aria-controls="bodegas" aria-selected="true">Portales</a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="nav-link" id="bodegas_ina-tab" data-bs-toggle="pill" href="#bodegas_ina" role="tab" aria-controls="bodegas_ina" aria-selected="false">Portales Inactivas</a>
-                  </li>
-                </ul>
-              </div><!-- /.card-header -->
-
-              <div class="card-body">
-                <div class="tab-content">
-                  <div class="tab-pane active" id="bodegas" role="tabpanel" aria-labelledby="bodegas-tab">
-                    
-                  </div><!-- /.tab-pane -->
-
-                  <div class="tab-pane" id="bodegas_ina" role="tabpanel" aria-labelledby="bodegas_ina-tab">
-                    <!-- Inactive bodegas content goes here -->
-                  </div><!-- /.tab-pane -->
-
-                </div><!-- /.tab-content -->
-              </div><!-- /.card-body -->
-            </div><!-- /.card -->
-
+            <div class="col-12">              
+              <b>Lista de Etiquetas detectadas</b>
+              <table class="table table-hover">
+                <thead>
+                  <th>#</th>
+                  <th>RFID</th>
+                  <th>Fecha</th>
+                  <th>Antena</th>
+                  <th>Controladora</th>
+                  <th>Articulos</th>
+                </thead>
+                <tbody id="tbl_body">
+                  
+                </tbody>                
+              </table>
+            </div>
           </div>
+          
         </div>
-      </div>
+      </div> 
     </div>
-
-
-    <!--end row-->
   </div>
 </div>
