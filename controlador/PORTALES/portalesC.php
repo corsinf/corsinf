@@ -11,6 +11,16 @@ if (isset($_GET['comenzar_lectura'])) {
     echo json_encode($controlador->comenzar_lectura($parametros));
 }
 
+if (isset($_GET['guardar_antena'])) {
+	$parametros = $_POST['parametros'];
+    echo json_encode($controlador->guardar_antena($parametros));
+}
+if (isset($_GET['eliminar_portal_antena'])) {
+	$parametros = $_POST['parametros'];
+    echo json_encode($controlador->eliminar_portal_antena($parametros));
+}
+
+
 /**
   * 
   */
@@ -53,5 +63,33 @@ if (isset($_GET['comenzar_lectura'])) {
 	 		return array('resp' => '-1',"msj"=>"portal no encontrado");
 	 	}
  	}
+
+ 	function guardar_antena($parametros)
+ 	{
+ 		if($parametros['tipo']=='TCPIP')
+ 		{
+ 			$parametros['comm'] = '.';
+			$parametros['comm2'] = '.';
+			$parametros['adr'] = '.';
+ 		}
+ 		$datos = array(
+ 				array('campo'=>'nombre_portal','dato'=>$parametros['nombre']),
+ 				array('campo'=>'com_portal','dato'=>$parametros['comm']),
+ 				array('campo'=>'com2_portal','dato'=>$parametros['comm2']),
+ 				array('campo'=>'adr','dato'=>$parametros['adr']),
+ 				array('campo'=>'ip_portal','dato'=>$parametros['ip']),
+ 				array('campo'=>'puerto_portal','dato'=>$parametros['puerto']),
+ 				array('campo'=>'comunicacion_portal','dato'=>$parametros['tipo'])
+ 			);
+ 		return $this->modelo->guardar_antena('ac_portales',$datos);
+ 		print_r($parametros);die();
+ 	}
+ 	
+ 	function eliminar_portal_antena($parametros)
+ 	{
+ 		return $this->modelo->eliminar_portal_antena($parametros['id']);
+ 	}
+
+
  } 
 ?>
