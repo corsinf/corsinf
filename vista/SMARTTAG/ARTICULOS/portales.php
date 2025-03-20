@@ -67,8 +67,10 @@ function cargar_datos_controladora() {
    clearInterval(intervalo);
    if (intervalo) { // Verificar si el intervalo está activo
         clearInterval(intervalo);
+        clearInterval(intervalo2);
         intervalo = null; // Limpiar la variable
-        Swal.fire("Deteccion Detenida","","info")
+        intervalo2 = null;
+        Swal.fire("Deteccion Detenida","Podria existir un tiempo de latencia","info")
 
         $('#dll_conroladoras').prop('disabled',false);
         $('#btn_iniciar').removeClass('d-none');
@@ -88,7 +90,12 @@ function cargar_datos_controladora() {
         console.log(response)
         tr = '';
         response.forEach(function(item,i){
-          tr+=`<tr>
+          color = '';
+          if(item.descripcion!='' && item.descripcion!=null)
+          {
+            color = 'style="background: chartreuse;"';
+          }
+          tr+=`<tr `+color+`>
               <td>`+(i+1)+`</td>
               <td>`+item.rfid+`</td>
               <td>`+item.fecha+`</td>
