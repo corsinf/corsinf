@@ -14,7 +14,7 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']) ?? '';
       },
       responsive: false,
       ajax: {
-        url: '../controlador/ACTIVOS_FIJOS/ac_controladoraC.php?listar=true',
+        url: '../controlador/ACTIVOS_FIJOS/ac_portales_logsC.php?listar=true',
         dataSrc: ''
       },
       ordering: false,
