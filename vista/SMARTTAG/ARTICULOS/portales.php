@@ -42,7 +42,8 @@ function cargar_datos_controladora() {
           if(response.resp=='-1')
           {
             Swal.fire("No se pudo conectar",response.msj,'error').then(function(){
-              $('#modal_respuesta').modal('hide');    
+              $('#modal_respuesta').modal('hide');  
+              detener();  
             })
 
           }

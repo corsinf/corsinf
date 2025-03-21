@@ -70,18 +70,23 @@ if (isset($_GET['eliminar_portal_antena'])) {
 	 				break;
 	 		}
 
-	 		foreach ($resp as $key => $value) {
-	 			$linea =  json_decode($value,true);
-	 			// print_r($linea);die();
+	 		// print_r($resp);die();
 
-		 			$datos = array(
-		 				array('campo'=>'ac_plog_controladora','dato'=>$parametros['id']),
-		 				array('campo'=>'ac_plog_rfid','dato'=>$linea['epc']),
-		 				array('campo'=>'ac_plog_antena','dato'=>$linea['No']),
-		 				array('campo'=>'ac_plog_fecha_creacion','dato'=>date('Y-m-d H:i:s')),
-	 			);
-				 $this->modelo->guardar_antena('ac_portales_logs',$datos);
-	 			// code...
+	 		if($resp['resp']!='-1')
+	 		{
+		 		foreach ($resp as $key => $value) {
+		 			$linea =  json_decode($value,true);
+		 			// print_r($linea);die();
+
+			 			$datos = array(
+			 				array('campo'=>'ac_plog_controladora','dato'=>$parametros['id']),
+			 				array('campo'=>'ac_plog_rfid','dato'=>$linea['epc']),
+			 				array('campo'=>'ac_plog_antena','dato'=>$linea['No']),
+			 				array('campo'=>'ac_plog_fecha_creacion','dato'=>date('Y-m-d H:i:s')),
+		 			);
+					 $this->modelo->guardar_antena('ac_portales_logs',$datos);
+		 			// code...
+		 		}
 	 		}
 
 
