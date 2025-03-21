@@ -2,7 +2,7 @@
 
 require_once(dirname(__DIR__, 1) . '/GENERAL/BaseModel.php');
 
-class ac_controladoraM extends BaseModel
+class ac_portales_logsM extends BaseModel
 {
     protected $tabla = 'ac_portales_logs';
     protected $primaryKey = 'ac_plog_id AS _id';
