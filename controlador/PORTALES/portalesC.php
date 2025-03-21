@@ -1,5 +1,6 @@
 <?php
 require_once(dirname(__DIR__, 2) . '/modelo/PORTALES/portalesM.php');
+date_default_timezone_set('America/Guayaquil');
 
 $controlador = new portalesC();
 
