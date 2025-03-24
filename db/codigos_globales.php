@@ -134,7 +134,7 @@ class codigos_globales
 		 $datos -> son los datos traidos de una consulta sql;
 	*/
 
-	function tabla_generica($datos=false,$cabecera,$opciones=false,$checks=false,$ocultar = false,$foto=false,$posicion=false,$enlace=false)
+	function tabla_generica($datos=false,$cabecera=false,$opciones=false,$checks=false,$ocultar = false,$foto=false,$posicion=false,$enlace=false)
 	{
 		$num_campos = 0;
 		$td='';
@@ -660,7 +660,7 @@ function para_ftp($nombre,$texto)
 	fclose($fh);
 }
 
-	function ingresar_movimientos($id=false,$movimiento,$seccion='ARTICULOS',$dato_ant=false,$dato_act=false,$cod_ant=false,$cod_nue=false)
+	function ingresar_movimientos($id=false,$movimiento=false,$seccion='ARTICULOS',$dato_ant=false,$dato_act=false,$cod_ant=false,$cod_nue=false)
 	{
 		$fecha = date('Y-m-d');
 			$sql = "INSERT INTO ac_movimiento (obs_movimiento,fecha_movimiento,responsable,seccion)VALUES('".$movimiento."','".$fecha."','".$_SESSION['INICIO']['USUARIO']."','".$seccion."')";
