@@ -64,7 +64,7 @@ function imprimirPDF()
 
         // Valor sin fondo
         $pdf->SetFont('helvetica', '', 8);
-        $pdf->SetXY($x + 22, $y);  // Reducimos un poco el padding-right (ajustando la posición X)
+        $pdf->SetXY($x + 20, $y);  // Reducimos un poco el padding-right (ajustando la posición X)
         $pdf->MultiCell($col_width, $row_height, $valor, 1, 0, 'L', false); // Sin fondo
 
         // Ajuste de la posición Y para el siguiente campo (espacio añadido para padding-bottom)
@@ -72,7 +72,79 @@ function imprimirPDF()
     }
 
 
-    $datos = [];
+    $datos = [
+        [
+            'clase' => 'Clase A',
+            'nombres' => 'Juan Carlos',
+            'apellidos' => 'Pérez Gómez',
+            'cedula' => '1712345678',
+            'codigo_dactilar' => 'ABCD12345',
+            'fecha_nacimiento' => '1990-05-15',
+            'estado_civil' => 'Soltero',
+            'nacionalidad' => 'Ecuatoriano',
+            'tipo_visa' => 'Turista',
+            'numero_visa' => 'VT123456',
+            'fecha_vencimiento_visa' => '2024-12-31',
+            'provincia' => 'Pichincha',
+            'canton' => 'Quito',
+            'parroquia' => 'Centro Histórico',
+            'origen_indigena' => 'No',
+            'sexo' => 'Masculino',
+            'identidad_genero' => 'Hombre',
+            'orientacion' => 'Heterosexual',
+            'tipo_discapacidad' => 'Ninguna',
+            'etnia' => 'Mestizo',
+            'calle_principal' => 'Av. Amazonas',
+            'calle_secundaria' => 'Calle Juan León Mera',
+            'numero_vivienda' => 'N45-12',
+            'tipo_vivienda' => 'Departamento',
+            'ocupacion_hogar' => 'Propietario',
+            'zona_sector_barrio' => 'La Mariscal',
+            'referencia' => 'Cerca del Parque El Ejido',
+            'telefono_domicilio' => '02-2501234',
+            'numero_piso_vivienda' => '5',
+            'telefono_celular' => '0991234567',
+            'correo_electronico' => 'juan.perez@example.com',
+            'nombres_apellidos_1' => 'María López',
+            'parentesco_1' => 'Madre',
+            'telefono_domicilio_1' => '02-2405678',
+            'telefono_celular_1' => '0987654321',
+            'nombres_apellidos_2' => 'Pedro Ramírez',
+            'parentesco_2' => 'Amigo',
+            'telefono_domicilio_2' => '02-2609876',
+            'telefono_celular_2' => '0978901234',
+            'vehiculo' => 'Sí',
+            'propietario' => 'Juan Carlos Pérez Gómez',
+            'telefono' => '0991234567',
+            'clase' => 'Automóvil',
+            'tipo' => 'Sedán',
+            'placa' => 'ABC-1234',
+            'marca' => 'Toyota',
+            'modelo' => 'Corolla',
+            'ano' => '2020',
+            'color1' => 'Gris',
+            'color2' => 'No aplica',
+            'licencia' => 'Tipo B',
+            'deportes_que_practica' => 'Fútbol, natación',
+            'pasatiempos_favoritos' => 'Lectura, cine',
+            'consumos_nocivos' => 'No',
+            'seguro_vida_privado' => 'Sí',
+            'asistencia_psicologica' => 'No',
+            'grupo_sanguineo' => 'O+',
+            'enfermedades' => 'Ninguna',
+            'religion' => 'Católico',
+            'conocimiento_oferta' => 'Redes sociales',
+            'integra_agrupaciones' => 'No',
+            'trabajo_conyugue' => 'Sí',
+            'detalle_agrupacion' => 'No aplica',
+            'valor_ingresos_mensuales' => '1200',
+            'cargo_cp' => 'Analista',
+            'integro_grupos_laborales' => 'Sí',
+            'remuneracion_cp' => '1500',
+            'parientes_en_institucion' => 'No',
+            'total_ingresos' => '2700',
+        ]
+    ];
 
     $clase = $datos[0]['clase'] ?? '';
     $nombres = $datos[0]['nombres'] ?? '';
@@ -343,60 +415,72 @@ function imprimirPDF()
         $pdf->setPrintHeader(false);
         $pdf->setPrintFooter(false);
 
-        // Set margins
-        $pdf->SetMargins(10, 20, 10);
+
 
         // Add a page
         $pdf->AddPage();
-
-        // Primero crear el encabezado del formulario (título)
+        // Definir fuentes y colores
         $pdf->SetFont('helvetica', 'B', 12);
+        $pdf->SetTextColor(0, 0, 0); // Negro
 
-        $pdf->SetFillColor(242, 246, 250); // #f2f6fa
+        // Dibujar la tabla
+        $pdf->SetFillColor(255, 255, 255); // Fondo blanco
+        $pdf->SetDrawColor(0, 0, 0); // Bordes negros
 
-        // Create header row
-        $pdf->Cell(0, 15, '', 0, 1, 'L', true);
-        $pdf->setY($pdf->getY() - 15); // Move back to start of header
+        // Definir la ruta del logo
+        $ruta_logo = dirname(__DIR__, 2) . '\img\empresa\179263446600111.jpeg';
+        // Coordenadas y tamaño del logo en el PDF
+        $x_logo = 10;
+        $y_logo = 10;
+        $ancho_logo = 30;
+        $alto_logo = 20;
+        // Coordenadas del título del formulario (alineado al lado del logo)
+        $x_titulo = $x_logo + $ancho_logo; // Se mueve 5px a la derecha del logo
+        $y_titulo = $y_logo; // Mantiene la misma altura del logo
 
-        // Add logo placeholder
-        $pdf->Cell(40, 15, '', 0, 0, 'L', false);
-        // Or use Image: $pdf->Image('ruta/al/logo.png', $pdf->GetX() - 38, $pdf->GetY() + 1, 20);
+        if (file_exists($ruta_logo)) {
+            // Si el logo existe, agregarlo al PDF
+            $pdf->Image($ruta_logo, $x_logo, $y_logo, $ancho_logo, $alto_logo, 'JPEG');
+        } else {
+            // Si no existe el logo, dibujamos un cuadro con "LOGO"
+            $pdf->SetXY($x_logo, $y_logo);
+            $pdf->Cell($ancho_logo, $alto_logo, 'LOGO', 1, 0, 'C', true);
+        }
 
-        // Add title (centered)
-        $pdf->SetFont('helvetica', 'B', 14);
-        $pdf->SetTextColor(0, 51, 102); // #003366
-        $pdf->Cell(120, 7, 'FORMULARIO DE DATOS', 0, 0, 'C', false);
-        $pdf->SetXY($pdf->GetX() - 120, $pdf->GetY() + 7);
-        $pdf->Cell(120, 8, 'PERSONALES Y PROFESIONALES', 0, 0, 'C', false);
+        $pdf->SetXY($x_titulo, $y_titulo);
 
-        // Add metadata (right aligned)
-        $pdf->SetFont('helvetica', '', 8);
-        $pdf->SetTextColor(51, 51, 51); // #333333
-        $pdf->SetXY(170, $pdf->GetY() - 7);
-        $pdf->Cell(20, 5, 'Código: GD-GTH-PR-001', 0, 0, 'R', false);
-        $pdf->SetXY(170, $pdf->GetY() + 5);
-        $pdf->Cell(20, 5, 'Versión: 1.0', 0, 0, 'R', false);
-        $pdf->SetXY(170, $pdf->GetY() + 5);
-        $pdf->Cell(20, 5, 'Página: 1 de 4', 0, 0, 'R', false);
+        $pdf->Cell(104, 10, 'Formulario de datos', 'LTR', 2, 'C', true); // Solo borde arriba y lados
+        $pdf->Cell(104, 10, 'Personales y Profesionales', 'LRB', 0, 'C', true); // Solo lados y borde inferior
 
-        // Reset position for next content
-        $pdf->SetY($pdf->GetY() + 5);
+        // Agregar los datos a la derecha (alineados con el título)
+        $pdf->SetFont('helvetica', '', 9); // Reducir tamaño y quitar negrilla en la tabla derecha
+        $pdf->SetXY(143, $pdf->GetY() - 10); // Mueve la posición arriba para que inicie con el título
+        $pdf->Cell(20, 7, 'Código', 1, 0, 'L', true);
+        $pdf->Cell(35, 7, 'GD-GTH-PR-001', 1, 1, 'L', true);
 
-        // Add horizontal line
-        $pdf->SetDrawColor(0, 51, 102); // #003366
-        $pdf->SetLineWidth(0.5);
-        $pdf->Line(10, $pdf->GetY(), 200, $pdf->GetY());
-        $pdf->Ln(10);
+        $pdf->SetXY(143, $pdf->GetY()); // Mantiene alineación con el título
+        $pdf->Cell(20, 7, 'Versión', 1, 0, 'L', true);
+        $pdf->Cell(35, 7, '1.0', 1, 1, 'L', true);
+
+        $pdf->SetXY(143, $pdf->GetY()); // Mantiene alineación con el título
+        $pdf->Cell(20, 6, 'Página', 1, 0, 'L', true); // Borde en la parte inferior para alinear
+        $pdf->Cell(35, 6, '1 de 4', 1, 1, 'L', true); // Se asegura de que termine alineado
+
 
         // Reset colors and font for rest of document
         $pdf->SetTextColor(0, 0, 0);
         $pdf->SetFillColor(255, 255, 255);
         $pdf->SetFont('helvetica', '', 10);
+
+        $pdf->Ln(5);
+        $pdf->SetLineWidth(0.3); // Ancho del borde (opcional, ajusta el grosor)
+        $pdf->SetDrawColor(0, 0, 0); // Establece el color del borde a negro
+
         // --- SECCIÓN 1: INFORMACIÓN PERSONAL ---
-        $y = 45; // Posición inicial
+        $y = 30; // Posición inicial
 
         // === SECCIÓN 1: INFORMACIÓN PERSONAL ===
-        $seccionAltura = 95;
+        $seccionAltura = 97;
         $pdf->SetFont('helvetica', 'B', 10);
         $pdf->SetCellMargins(0, 0, 0);
         $pdf->MultiCell(190, 7, '1. INFORMACIÓN PERSONAL', 0, 1, 'L', true);
@@ -417,20 +501,37 @@ function imprimirPDF()
 
         // Ajustar la posición Y para el siguiente campo
         $y_start += 6; // Ajuste para pasar al siguiente campo
-        $pdf->SetFont('helvetica', '', 8);
-        $pdf->SetXY(147, $y_start + 2);
-        $pdf->MultiCell(50, 54, '', 1, 'C');  // Campo de fotografía con borde de 1, tamaño 50x28 y centrado
-        $pdf->SetFillColor(255, 255, 255);
-        // Agregar texto centrado dentro del campo de la fotografía
-        $pdf->SetXY(150, $y_start + 9);  // Ajustar la posición Y para los textos (centrado dentro del campo)
-        $pdf->MultiCell(40, 5, 'Fotografía:', 0, 0, 'C');  // Texto centrado dentro del campo de fotografía
 
-        $pdf->SetXY(150, $y_start + 15);  // Ajustar la posición Y para el siguiente texto
-        $pdf->MultiCell(40, 5, 'Tamaño Carné', 0, 0, 'C');  // Texto centrado dentro del campo de fotografía
+        // Definir la ruta de la imagen
+        $ruta_imagen = dirname(__DIR__, 2) . '\img\custodios\1401.jpeg';
 
-        $pdf->SetXY(150, $y_start + 20);  // Ajustar la posición Y para el siguiente texto
-        $pdf->MultiCell(40, 5, '(Física o Digital)', 0, 0, 'C');  // Texto centrado dentro del campo de fotografía
+        // Coordenadas y tamaño de la imagen
+        $x_imagen = 147;
+        $y_imagen = $y_start + 2;
+        $ancho_imagen = 50;
+        $alto_imagen = 54;
 
+        if (file_exists($ruta_imagen)) {
+            // Si la imagen existe, se muestra en el PDF
+            $pdf->Image($ruta_imagen, $x_imagen, $y_imagen, $ancho_imagen, $alto_imagen, 'JPG');
+        } else {
+            // Si la imagen no existe, mostrar el recuadro con el texto de referencia
+            $pdf->SetXY(147, $y_start + 2);
+            $pdf->MultiCell(50, 54, '', 1, 'C');  // Campo de fotografía con borde
+
+            $pdf->SetFillColor(255, 255, 255); // Fondo blanco
+            $pdf->SetFont('helvetica', '', 8);
+
+            // Agregar texto de referencia dentro del recuadro
+            $pdf->SetXY(150, $y_start + 9);
+            $pdf->MultiCell(40, 5, 'Fotografía:', 0, 'C');
+
+            $pdf->SetXY(150, $y_start + 15);
+            $pdf->MultiCell(40, 5, 'Tamaño Carné', 0, 'C');
+
+            $pdf->SetXY(150, $y_start + 20);
+            $pdf->MultiCell(40, 5, '(Física o Digital)', 0, 'C');
+        }
 
 
         // Primera columna (izquierda)
@@ -461,7 +562,7 @@ function imprimirPDF()
         $y = $y_start + $seccionAltura + 5; // Se suma 5 para dejar un pequeño margen
 
         // === SECCIÓN 2: DATOS DOMICILIARIOS ===
-        $seccionAltura = 55;
+        $seccionAltura = 50;
         $pdf->SetFont('helvetica', 'B', 10);
         $pdf->SetCellMargins(0, 0, 0);
         $pdf->SetXY(10, $y); // Asegura que el título inicie en la nueva línea
@@ -473,56 +574,211 @@ function imprimirPDF()
         crearCampo($pdf, 'Calle Principal', 12, $y_start + 2, $calle_principal);
         crearCampo($pdf, 'Calle Secundaria', 12, $y_start + 9, $calle_secundaria);
         crearCampo($pdf, 'Número de Vivienda', 12, $y_start + 16, $numero_vivienda);
-        crearCampo($pdf, 'Tipo de Vivienda', 12, $y_start + 24, $tipo_vivienda);
-        crearCampo($pdf, 'Ocupación del Hogar', 12, $y_start + 32, $ocupacion_hogar);
-        crearCampo($pdf, 'Número Piso de Vivienda', 12, $y_start + 40, $numero_piso_vivienda);
-        crearCampo($pdf, 'Número del Hogar', 12, $y_start + 48, $clase);
+        crearCampo($pdf, 'Tipo de Vivienda', 12, $y_start + 23, $tipo_vivienda);
+        crearCampo($pdf, 'Ocupación del Hogar', 12, $y_start + 30, $ocupacion_hogar);
+        crearCampo($pdf, 'Número Piso de Vivienda', 12, $y_start + 37, $numero_piso_vivienda);
+        crearCampo($pdf, 'Número del Hogar', 12, $y_start + 44, $clase);
 
         // Segunda columna (derecha)
         crearCampo($pdf, 'Cantón', 105, $y_start + 2, $canton);
         crearCampo($pdf, 'Parroquia', 105, $y_start + 9, $parroquia);
         crearCampo($pdf, 'Zona/Sector/Barrio', 105, $y_start + 16, $zona_sector_barrio);
-        crearCampo($pdf, 'Referencia', 105, $y_start + 24, $referencia);
-        crearCampo($pdf, 'Teléfono Domicilio', 105, $y_start + 32, $telefono_domicilio);
-        crearCampo($pdf, 'Teléfono Celular', 105, $y_start + 40, $telefono_celular);
-        crearCampo($pdf, 'Correo Electrónico', 105, $y_start + 48, $correo_electronico);
+        crearCampo($pdf, 'Referencia', 105, $y_start + 23, $referencia);
+
+        $pdf->SetFont('helvetica', 'B', 8);
+        $pdf->SetXY(105, $y_start + 30);
+        $pdf->SetFillColor(173, 216, 230);
+        $pdf->MultiCell(40, 5, 'Teléfono Domicilio:', 0, 0, 'L', true);
+
+        // División del valor en dos columnas para telefono_celular_1
+        $telefono_domicilio_1_1 = substr($telefono_domicilio_1, 0, strlen($telefono_domicilio_1) / 2); // Primera mitad
+        $telefono_domicilio_1_2 = substr($telefono_domicilio_1, strlen($telefono_domicilio_1) / 2); // Segunda mitad
+
+        // Primera columna (primera mitad del teléfono celular) con 24 de ancho
+        $pdf->SetFont('helvetica', '', 8);
+        $pdf->SetFillColor(255, 255, 255); // Fondo blanco
+        $pdf->SetXY(147, $y_start + 30); // Ajusta la posición según sea necesario
+        $pdf->MultiCell(24, 5, $telefono_domicilio_1_1, 1, 0, 'L', false); // 24 para la primera columna
+
+        // Segunda columna (segunda mitad del teléfono celular) con un pequeño espacio entre ellas
+        $pdf->SetXY(173, $y_start + 30); // Ajusta la posición para la segunda columna (agregando un pequeño espacio)
+        $pdf->MultiCell(24, 5, $telefono_domicilio_1_2, 1, 0, 'L', false); // 24 para la segunda columna
+
+
+        $pdf->SetFont('helvetica', 'B', 8);
+        $pdf->SetXY(105, $y_start + 37);
+        $pdf->SetFillColor(173, 216, 230);
+        $pdf->MultiCell(40, 5, 'Teléfono Celular:', 0, 0, 'L', true);
+
+        // División del valor en dos columnas para telefono_celular_1
+        $telefono_celular_1_1 = substr($telefono_celular_1, 0, strlen($telefono_celular_1) / 2); // Primera mitad
+        $telefono_celular_1_2 = substr($telefono_celular_1, strlen($telefono_celular_1) / 2); // Segunda mitad
+
+        // Primera columna (primera mitad del teléfono celular) con 24 de ancho
+        $pdf->SetFont('helvetica', '', 8);
+        $pdf->SetFillColor(255, 255, 255); // Fondo blanco
+        $pdf->SetXY(147, $y_start + 37); // Ajusta la posición según sea necesario
+        $pdf->MultiCell(24, 5, $telefono_celular_1_1, 1, 0, 'L', false); // 24 para la primera columna
+
+        // Segunda columna (segunda mitad del teléfono celular) con un pequeño espacio entre ellas
+        $pdf->SetXY(173, $y_start + 37); // Ajusta la posición para la segunda columna (agregando un pequeño espacio)
+        $pdf->MultiCell(24, 5, $telefono_celular_1_2, 1, 0, 'L', false); // 24 para la segunda columna
+
+
+        crearCampo($pdf, 'Correo Electrónico', 105, $y_start + 44, $correo_electronico);
 
         // Ajuste de posición para la siguiente sección
         $y = $y_start + $seccionAltura + 5;
 
 
         // === SECCIÓN 3: CONTACTOS DE EMERGENCIA ===
+
         $seccionAltura = 50;
+
         $pdf->SetFont('helvetica', 'B', 10);
+
         $pdf->SetCellMargins(0, 0, 0);
+
         $pdf->SetXY(10, $y); // Asegura que el título inicie en la nueva línea
+
         $pdf->MultiCell(190, 7, '3. CONTACTOS DE EMERGENCIA', 0, 1, 'L', true);
 
         $y_start = $y + 7; // Inicia justo debajo del título
 
         // Primera fila de contactos
-        // Primera fila de contactos
-        crearCampo($pdf, 'Nombres y Apellidos', 12, $y_start + 2, $nombres_apellidos_1);
-        crearCampo($pdf, 'Parentesco', 105, $y_start + 2, $parentesco_1);
-        crearCampo($pdf, 'Teléfono Domicilio', 12, $y_start + 9, $telefono_domicilio_1); // Aumento del espacio
-        crearCampo($pdf, 'Teléfono Celular', 105, $y_start + 9, $telefono_celular_1); // Aumento del espacio
+
+        $pdf->SetFont('helvetica', 'B', 8);
+        $pdf->SetFillColor(173, 216, 230); // Color azul cielo para los títulos secundarios
+        $pdf->SetXY(12, $y_start + 2);
+        $pdf->MultiCell(40, 5, 'Nombres y Apellidos:', 0, 0, 'L', true);
+
+        $pdf->SetFont('helvetica', '', 8);
+        $pdf->SetXY(54, $y_start + 2);
+        $pdf->SetFillColor(255, 255, 255);
+        $pdf->MultiCell(50, 5, $nombres_apellidos_1, 1, 0, 'L', false);
+
+        $pdf->SetFont('helvetica', 'B', 8);
+        $pdf->SetXY(105, $y_start + 2);
+        $pdf->SetFillColor(173, 216, 230);
+        $pdf->MultiCell(40, 5, 'Parentesco:', 0, 0, 'L', true);
+
+        $pdf->SetFont('helvetica', '', 8);
+        $pdf->SetXY(147, $y_start + 2);
+        $pdf->SetFillColor(255, 255, 255);
+        $pdf->MultiCell(50, 5, $parentesco_1, 1, 0, 'L', false);
+
+        $pdf->SetFont('helvetica', 'B', 8);
+        $pdf->SetXY(12, $y_start + 9);
+        $pdf->SetFillColor(173, 216, 230);
+        $pdf->MultiCell(40, 5, 'Teléfono Domicilio:', 0, 0, 'L', true);
+
+        // División del valor en dos columnas
+        $telefono_domicilio_1_1 = substr($telefono_domicilio_1, 0, strlen($telefono_domicilio_1) / 2); // Primer mitad
+        $telefono_domicilio_1_2 = substr($telefono_domicilio_1, strlen($telefono_domicilio_1) / 2); // Segunda mitad
+
+        // Primera columna (primera mitad del teléfono) con 24 de ancho
+        $pdf->SetFont('helvetica', '', 8);
+        $pdf->SetFillColor(255, 255, 255); // Fondo blanco
+        $pdf->SetXY(54, $y_start + 9); // Ajusta la posición según sea necesario
+        $pdf->MultiCell(24, 5, $telefono_domicilio_1_1, 1, 0, 'L', false); // 24 para la primera columna
+
+        // Segunda columna (segunda mitad del teléfono) con un pequeño espacio entre ellas
+        $pdf->SetXY(80, $y_start + 9); // Ajusta la posición para la segunda columna (agregando un pequeño espacio)
+        $pdf->MultiCell(24, 5, $telefono_domicilio_1_2, 1, 0, 'L', false); // 24 para la segunda columna
+
+
+        $pdf->SetFont('helvetica', 'B', 8);
+        $pdf->SetXY(105, $y_start + 9);
+        $pdf->SetFillColor(173, 216, 230);
+        $pdf->MultiCell(40, 5, 'Teléfono Celular:', 0, 0, 'L', true);
+
+        // División del valor en dos columnas para telefono_celular_1
+        $telefono_celular_1_1 = substr($telefono_celular_1, 0, strlen($telefono_celular_1) / 2); // Primera mitad
+        $telefono_celular_1_2 = substr($telefono_celular_1, strlen($telefono_celular_1) / 2); // Segunda mitad
+
+        // Primera columna (primera mitad del teléfono celular) con 24 de ancho
+        $pdf->SetFont('helvetica', '', 8);
+        $pdf->SetFillColor(255, 255, 255); // Fondo blanco
+        $pdf->SetXY(147, $y_start + 9); // Ajusta la posición según sea necesario
+        $pdf->MultiCell(24, 5, $telefono_celular_1_1, 1, 0, 'L', false); // 24 para la primera columna
+
+        // Segunda columna (segunda mitad del teléfono celular) con un pequeño espacio entre ellas
+        $pdf->SetXY(173, $y_start + 9); // Ajusta la posición para la segunda columna (agregando un pequeño espacio)
+        $pdf->MultiCell(24, 5, $telefono_celular_1_2, 1, 0, 'L', false); // 24 para la segunda columna
+
 
         // Segunda fila de contactos
-        crearCampo($pdf, 'Nombres y Apellidos', 12, $y_start + 16, $nombres_apellidos_2); // Aumento del espacio
-        crearCampo($pdf, 'Parentesco', 105, $y_start + 16, $parentesco_2); // Aumento del espacio
-        crearCampo($pdf, 'Teléfono Domicilio', 12, $y_start + 23, $telefono_domicilio_2); // Aumento del espacio
-        crearCampo($pdf, 'Teléfono Celular', 105, $y_start + 23, $telefono_celular_2); // Aumento del espacio
+
+        $pdf->SetFont('helvetica', 'B', 8);
+        $pdf->SetXY(12, $y_start + 16);
+        $pdf->SetFillColor(173, 216, 230);
+        $pdf->MultiCell(40, 5, 'Nombres y Apellidos:', 0, 0, 'L', true);
+
+        $pdf->SetFont('helvetica', '', 8);
+        $pdf->SetXY(54, $y_start + 16);
+        $pdf->SetFillColor(255, 255, 255);
+        $pdf->MultiCell(50, 5, $nombres_apellidos_2, 1, 0, 'L', false);
+
+        $pdf->SetFont('helvetica', 'B', 8);
+        $pdf->SetXY(105, $y_start + 16);
+        $pdf->SetFillColor(173, 216, 230);
+        $pdf->MultiCell(40, 5, 'Parentesco:', 0, 0, 'L', true);
+
+        $pdf->SetFont('helvetica', '', 8);
+        $pdf->SetXY(147, $y_start + 16);
+        $pdf->SetFillColor(255, 255, 255);
+        $pdf->MultiCell(50, 5, $parentesco_2, 1, 0, 'L', false);
+
+        $pdf->SetFont('helvetica', 'B', 8);
+        $pdf->SetXY(12, $y_start + 23);
+        $pdf->SetFillColor(173, 216, 230);
+        $pdf->MultiCell(40, 5, 'Teléfono Domicilio:', 0, 0, 'L', true);
+        // División del valor en dos columnas para telefono_domicilio_2
+        $telefono_domicilio_2_1 = substr($telefono_domicilio_2, 0, strlen($telefono_domicilio_2) / 2); // Primera mitad
+        $telefono_domicilio_2_2 = substr($telefono_domicilio_2, strlen($telefono_domicilio_2) / 2); // Segunda mitad
+
+        // Primera columna (primera mitad del teléfono domicilio 2) con 24 de ancho
+        $pdf->SetFont('helvetica', '', 8);
+        $pdf->SetFillColor(255, 255, 255); // Fondo blanco
+        $pdf->SetXY(54, $y_start + 23); // Ajusta la posición según sea necesario
+        $pdf->MultiCell(24, 5, $telefono_domicilio_2_1, 1, 0, 'L', false); // 24 para la primera columna
+
+        // Segunda columna (segunda mitad del teléfono domicilio 2) con un pequeño espacio entre ellas
+        $pdf->SetXY(80, $y_start + 23); // Ajusta la posición para la segunda columna (agregando un pequeño espacio)
+        $pdf->MultiCell(24, 5, $telefono_domicilio_2_2, 1, 0, 'L', false); // 24 para la segunda columna
+
+
+        $pdf->SetFont('helvetica', 'B', 8);
+        $pdf->SetXY(105, $y_start + 23);
+        $pdf->SetFillColor(173, 216, 230);
+        $pdf->MultiCell(40, 5, 'Teléfono Celular:', 0, 0, 'L', true);
+
+        // División del valor en dos columnas para telefono_celular_2
+        $telefono_celular_2_1 = substr($telefono_celular_2, 0, strlen($telefono_celular_2) / 2); // Primera mitad
+        $telefono_celular_2_2 = substr($telefono_celular_2, strlen($telefono_celular_2) / 2); // Segunda mitad
+
+        // Primera columna (primera mitad del teléfono celular 2) con 24 de ancho
+        $pdf->SetFont('helvetica', '', 8);
+        $pdf->SetFillColor(255, 255, 255); // Fondo blanco
+        $pdf->SetXY(147, $y_start + 23); // Ajusta la posición según sea necesario
+        $pdf->MultiCell(24, 5, $telefono_celular_2_1, 1, 0, 'L', false); // 24 para la primera columna
+
+        // Segunda columna (segunda mitad del teléfono celular 2) con un pequeño espacio entre ellas
+        $pdf->SetXY(173, $y_start + 23); // Ajusta la posición para la segunda columna (agregando un pequeño espacio)
+        $pdf->MultiCell(24, 5, $telefono_celular_2_2, 1, 0, 'L', false); // 24 para la segunda columna
 
 
         // Ajuste de posición para la siguiente sección
         $y = $y_start + $seccionAltura + 5;
+
         if ($y + $seccionAltura > 270) { // Si está cerca del final de la página
             $pdf->AddPage(); // Agregar nueva página
             $y = 20; // Resetear posición Y
         }
 
+
         // === SECCIÓN 4: INFORMACIÓN FAMILIAR (Convivientes Actuales) ===
-        $seccionAltura = 30;
+        $seccionAltura = 23;
         $pdf->SetFont('helvetica', 'B', 10);
         $pdf->SetCellMargins(0, 0, 0);
         $pdf->SetXY(10, $y); // Asegura que el título inicie en la nueva línea
@@ -536,8 +792,8 @@ function imprimirPDF()
         $pdf->SetXY(12, $y_start + 2);
         $pdf->Cell(50, 5, 'Nombres y Apellidos', 1, 0, 'C', true);
         $pdf->Cell(20, 5, 'Parentesco', 1, 0, 'C', true);
-        $pdf->Cell(25, 5, 'Fecha Nacimiento', 1, 0, 'C', true);
-        $pdf->Cell(30, 5, 'No. Cédula/Pasaporte', 1, 0, 'C', true);
+        $pdf->Cell(30, 5, 'Fecha Nacimiento', 1, 0, 'C', true);
+        $pdf->Cell(35, 5, 'No. Cédula/Pasaporte', 1, 0, 'C', true);
         $pdf->Cell(25, 5, 'Ocupación', 1, 0, 'C', true);
         $pdf->Cell(25, 5, 'Teléfono', 1, 1, 'C', true);
 
@@ -546,12 +802,12 @@ function imprimirPDF()
 
         foreach ($datos_familiares as $fila) {
             $pdf->SetX(12);
-            $pdf->Cell(50, 5, $fila[0], 1, 0, 'L');
-            $pdf->Cell(20, 5, $fila[1], 1, 0, 'L');
-            $pdf->Cell(25, 5, $fila[2], 1, 0, 'L');
-            $pdf->Cell(30, 5, $fila[3], 1, 0, 'L');
-            $pdf->Cell(25, 5, $fila[4], 1, 0, 'L');
-            $pdf->Cell(25, 5, $fila[5], 1, 1, 'L');
+            $pdf->Cell(50, 5, $fila[0], 1, 0, 'C');
+            $pdf->Cell(20, 5, $fila[1], 1, 0, 'C');
+            $pdf->Cell(30, 5, $fila[2], 1, 0, 'C');
+            $pdf->Cell(35, 5, $fila[3], 1, 0, 'C');
+            $pdf->Cell(25, 5, $fila[4], 1, 0, 'C');
+            $pdf->Cell(25, 5, $fila[5], 1, 1, 'C');
         }
 
         // Ajuste de posición para la siguiente sección
@@ -565,7 +821,7 @@ function imprimirPDF()
         }
 
         // === SECCIÓN 5: INFORMACIÓN DE CARGAS FAMILIARES ===
-        $seccionAltura = 25;
+        $seccionAltura = 20;
 
         $pdf->SetFont('helvetica', 'B', 10);
         $pdf->SetCellMargins(0, 0, 0);
@@ -591,13 +847,13 @@ function imprimirPDF()
         $pdf->SetFont('helvetica', '', 7);
         foreach ($datos_cargas as $fila) {
             $pdf->SetX(12);
-            $pdf->Cell(40, 5, $fila[0], 1, 0, 'L');
-            $pdf->Cell(15, 5, $fila[1], 1, 0, 'L');
-            $pdf->Cell(25, 5, $fila[2], 1, 0, 'L');
-            $pdf->Cell(40, 5, $fila[3], 1, 0, 'L');
-            $pdf->Cell(25, 5, $fila[4], 1, 0, 'L');
-            $pdf->Cell(15, 5, $fila[5], 1, 0, 'L');
-            $pdf->Cell(25, 5, $fila[6], 1, 1, 'L');
+            $pdf->Cell(40, 5, $fila[0], 1, 0, 'C');
+            $pdf->Cell(15, 5, $fila[1], 1, 0, 'C');
+            $pdf->Cell(25, 5, $fila[2], 1, 0, 'C');
+            $pdf->Cell(40, 5, $fila[3], 1, 0, 'C');
+            $pdf->Cell(25, 5, $fila[4], 1, 0, 'C');
+            $pdf->Cell(15, 5, $fila[5], 1, 0, 'C');
+            $pdf->Cell(25, 5, $fila[6], 1, 1, 'C');
         }
 
         // Ajuste de posición para la siguiente sección
@@ -628,12 +884,12 @@ function imprimirPDF()
         $pdf->SetFont('helvetica', '', 7);
         foreach ($datos_referencias as $fila) {
             $pdf->SetX(12);
-            $pdf->Cell(50, 5, $fila[0], 1, 0, 'L');
-            $pdf->Cell(20, 5, $fila[1], 1, 0, 'L');
-            $pdf->Cell(10, 5, $fila[2], 1, 0, 'L');
-            $pdf->Cell(35, 5, $fila[3], 1, 0, 'L');
-            $pdf->Cell(40, 5, $fila[4], 1, 0, 'L');
-            $pdf->Cell(30, 5, $fila[5], 1, 1, 'L');
+            $pdf->Cell(50, 5, $fila[0], 1, 0, 'C');
+            $pdf->Cell(20, 5, $fila[1], 1, 0, 'C');
+            $pdf->Cell(10, 5, $fila[2], 1, 0, 'C');
+            $pdf->Cell(35, 5, $fila[3], 1, 0, 'C');
+            $pdf->Cell(40, 5, $fila[4], 1, 0, 'C');
+            $pdf->Cell(30, 5, $fila[5], 1, 1, 'C');
         }
 
         // Ajuste de posición para la siguiente sección
@@ -665,7 +921,7 @@ function imprimirPDF()
                 crearCampo($pdf, 'Fecha Fin', 12, $y_start + 32, $formacion['fecha_fin']); // Espacio incrementado
 
                 // Ajustar la posición Y para la siguiente formación académica
-                $y_start += 39; // Incremento más grande para evitar sobreposición
+                $y_start += 37; // Incremento más grande para evitar sobreposición
             }
         }
 
@@ -679,7 +935,7 @@ function imprimirPDF()
         }
 
         // === SECCIÓN 8: CONOCIMIENTOS LENGUA EXTRANJERA ===
-        $seccionAltura = 30;
+        $seccionAltura = 27;
         $pdf->SetFont('helvetica', 'B', 10);
         $pdf->SetCellMargins(0, 0, 0);
         $pdf->SetXY(10, $y);
@@ -692,18 +948,18 @@ function imprimirPDF()
         $pdf->SetFillColor(240, 240, 240);
         $pdf->SetXY(12, $y_start + 2);
         $pdf->Cell(30, 6, 'Idioma', 1, 0, 'C', true);
-        $pdf->Cell(50, 6, 'Certificación Internacional', 1, 0, 'C', true);
+        $pdf->Cell(60, 6, 'Certificación Internacional', 1, 0, 'C', true);
         $pdf->Cell(60, 6, 'Institución', 1, 0, 'C', true);
-        $pdf->Cell(30, 6, 'Nivel', 1, 1, 'C', true);
+        $pdf->Cell(35, 6, 'Nivel', 1, 1, 'C', true);
 
         // Datos de los idiomas
         $pdf->SetFont('helvetica', '', 8);
         foreach ($idiomas as $fila) {
             $pdf->SetX(12);
             $pdf->Cell(30, 6, $fila[0], 1, 0, 'C'); // Idioma
-            $pdf->Cell(50, 6, $fila[1], 1, 0, 'C'); // Certificación
+            $pdf->Cell(60, 6, $fila[1], 1, 0, 'C'); // Certificación
             $pdf->Cell(60, 6, $fila[2], 1, 0, 'C'); // Institución
-            $pdf->Cell(30, 6, $fila[3], 1, 1, 'C'); // Nivel
+            $pdf->Cell(35, 6, $fila[3], 1, 1, 'C'); // Nivel
         }
 
         // Ajuste de posición
@@ -733,11 +989,9 @@ function imprimirPDF()
             crearCampo($pdf, 'Número o Código', 105, $y_start + 16, $item['numero_o_codigo_1']);
             crearCampo($pdf, 'Registro Profesional 2', 12, $y_start + 23, $item['registro_profesional_2']);
             crearCampo($pdf, 'Número o Código', 105, $y_start + 23, $item['numero_o_codigo_2']);
-            crearCampo($pdf, 'Idiomas', 12, $y_start + 30, $item['idiomas']);
-            crearCampo($pdf, 'Habilidades Técnicas', 105, $y_start + 30, $item['habilidades_tecnicas']);
 
             // Ajuste de la posición para el siguiente bloque de datos
-            $y_start += 36;
+            $y_start += 32;
         }
 
         // Ajuste final de la posición
@@ -760,23 +1014,50 @@ function imprimirPDF()
                 $y_start = 20; // Reiniciar la posición Y en la nueva página
             }
             crearCampoAncho($pdf, 'Institución/Empresa', $y_start + 2, $experiencia['institucion_empresa']);
-            crearCampo($pdf, 'Cargo/Puesto', 12, $y_start + 9, $experiencia['cargo_puesto']);
-            crearCampo($pdf, 'Motivo Salida', 105, $y_start + 9, $experiencia['motivo_salida']);
-            crearCampo($pdf, 'Fecha Ingreso', 12, $y_start + 16, $experiencia['fecha_ingreso']);
-            crearCampo($pdf, 'Tiempo Laborado', 105, $y_start + 16, $experiencia['tiempo_laborado']);
-            crearCampo($pdf, 'Sector Empresarial', 12, $y_start + 23, $experiencia['sector_empresarial']);
-            crearCampo($pdf, 'Última Remuneración', 105, $y_start + 23, $experiencia['ultima_remuneracion']);
-            crearCampo($pdf, 'Fecha Salida', 12, $y_start + 30, $experiencia['fecha_salida']);
-            crearCampo($pdf, 'Figura Legal', 105, $y_start + 30, $experiencia['figura_legal']);
-            crearCampo($pdf, 'Teléfono Empresa', 12, $y_start + 37, $experiencia['telefono_empresa']);
-            crearCampo($pdf, 'Nombre Jefe Inmediato', 105, $y_start + 37, $experiencia['nombre_jefe_inmediato']);
+            crearCampoAncho($pdf, 'Cargo/Puesto', $y_start + 9, $experiencia['cargo_puesto']);
+            crearCampoAncho($pdf, 'Motivo Salida', $y_start + 16, $experiencia['motivo_salida']);
+            crearCampo($pdf, 'Fecha Ingreso', 12, $y_start + 23, $experiencia['fecha_ingreso']);
+            crearCampo($pdf, 'Tiempo Laborado', 105, $y_start + 23, $experiencia['tiempo_laborado']);
+            crearCampo($pdf, 'Sector Empresarial', 12, $y_start + 30, $experiencia['sector_empresarial']);
+            crearCampo($pdf, 'Última Remuneración', 105, $y_start + 30, $experiencia['ultima_remuneracion']);
+            crearCampo($pdf, 'Fecha Salida', 12, $y_start + 37, $experiencia['fecha_salida']);
+            crearCampo($pdf, 'Figura Legal', 105, $y_start + 37, $experiencia['figura_legal']);
+            $pdf->SetFont('helvetica', 'B', 8);
+            $pdf->SetXY(12, $y_start + 44);
+            $pdf->SetFillColor(173, 216, 230);
+            $pdf->MultiCell(40, 5, 'Teléfono Empresa:', 0, 0, 'L', true);
+            // División del valor en dos columnas para telefono_domicilio_2
+            $telefono_domicilio_2_1 = substr($telefono_domicilio_2, 0, strlen($telefono_domicilio_2) / 2); // Primera mitad
+            $telefono_domicilio_2_2 = substr($telefono_domicilio_2, strlen($telefono_domicilio_2) / 2); // Segunda mitad
+
+            // Primera columna (primera mitad del teléfono domicilio 2) con 24 de ancho
+            $pdf->SetFont('helvetica', '', 8);
+            $pdf->SetFillColor(255, 255, 255); // Fondo blanco
+            $pdf->SetXY(54, $y_start + 44); // Ajusta la posición según sea necesario
+            $pdf->MultiCell(24, 5, $telefono_domicilio_2_1, 1, 0, 'L', false); // 24 para la primera columna
+
+            // Segunda columna (segunda mitad del teléfono domicilio 2) con un pequeño espacio entre ellas
+            $pdf->SetXY(80, $y_start + 44); // Ajusta la posición para la segunda columna (agregando un pequeño espacio)
+            $pdf->MultiCell(24, 5, $telefono_domicilio_2_2, 1, 0, 'L', false); // 24 para la segunda columna
+
+            crearCampo($pdf, 'Nombre Jefe Inmediato', 105, $y_start + 44, $experiencia['nombre_jefe_inmediato']);
 
             // Ajuste de la posición para el siguiente bloque de experiencia laboral
-            $y_start += 44; // Incrementa la posición Y para el siguiente bloque
+            $y_start += 51; // Incrementa la posición Y para el siguiente bloque
         }
 
-        $y = $y_start + 5; // Espacio adicional después de la sección
+        $y = $y_start + 7; // Espacio adicional después de la sección
+        if ($y > 240) { // Si está muy cerca del final de la página
+            $pdf->AddPage(); // Agregar nueva página
+            $y = 20; // Resetear posición Y
+        }
 
+        // --- SECCIÓN 13: INFORMACIÓN MOVILIZACIÓN (Matrícula del Vehículo) ---
+        $seccionAltura = 30;
+        if ($y + $seccionAltura > 270) { // Si está cerca del final de la página
+            $pdf->AddPage(); // Agregar nueva página
+            $y = 20; // Resetear posición Y
+        }
         // --- SECCIÓN 11: INFORMACIÓN EVENTOS DE CAPACITACIÓN ---
         $pdf->SetFont('helvetica', 'B', 10);
         $pdf->SetCellMargins(0, 0, 0);
@@ -808,29 +1089,57 @@ function imprimirPDF()
         $y = $y_start + 5; // Espacio adicional después de la sección
 
         // --- SECCIÓN 12: INFORMACIÓN BANCARIA ---
-        $seccionAltura = 20;
+        $seccionAltura = 3;
         if ($y + $seccionAltura > 270) { // Verificar si se está cerca del final de la página
             $pdf->AddPage(); // Agregar nueva página
             $y = 20; // Resetear la posición Y
         }
+
+
         $pdf->SetFont('helvetica', 'B', 10);
         $pdf->SetCellMargins(0, 0, 0);
         $pdf->SetXY(10, $y);
         $pdf->MultiCell(190, 7, '12. INFORMACIÓN BANCARIA', 0, 1, 'L', true);
-        $y_start = $y + 7; // Inicia después del título
+        $y_start = $y + 9;
 
-        $col1_x = 12;  // Primera columna
-        $col2_x = 65;  // Segunda columna (antes era 75)
-        $col3_x = 140; // Tercera columna (antes era 140)
-        $row_height = 5; // Altura de fila más compacta
+        // Definimos el ancho de las columnas para que se acomoden
+        $col_width = 30;  // Ancho de cada columna
+        $row_height = 5;  // Altura de fila
 
-        // Campos de información bancaria
-        // Mostrar los campos con el mismo formato que `crearCampoMovilizacion`
-        crearCampoMovilizacion($pdf, 'Institución Financiera', $col1_x, $y_start, $institucion_financiera, 20, $row_height);
-        crearCampoMovilizacion($pdf, 'Tipo Cuenta', $col2_x, $y_start, $tipo_cuenta, 20, $row_height);
-        crearCampoMovilizacion($pdf, 'Número Cuenta', $col3_x, $y_start, $numero_cuenta, 20, $row_height);
+        // Color azul para los títulos
+        $pdf->SetFillColor(173, 216, 230);  // Azul cielo
 
-        $y = $y_start + $seccionAltura + 5; // Ajuste de altura para la siguiente sección
+        // Títulos de los campos en color azul
+        $pdf->SetFont('helvetica', 'B', 8);
+
+        // Columna 1: Institución Financiera
+        $pdf->SetXY(12, $y_start);
+        $pdf->MultiCell($col_width + 5, $row_height, 'Institución Financiera:', 0, 'L', true);
+
+        // Columna 2: Institución Financiera (Descripción)
+        $pdf->SetXY(49, $y_start);
+        $pdf->MultiCell($col_width, $row_height, $institucion_financiera, 1, 'L', false);
+
+        // Columna 3: Tipo Cuenta
+        $pdf->SetXY(85, $y_start);
+        $pdf->MultiCell($col_width - 9, $row_height, 'Tipo Cuenta:', 0, 'L', true);
+
+        // Columna 4: Tipo Cuenta (Descripción)
+        $pdf->SetXY(108, $y_start);
+        $pdf->MultiCell($col_width - 2, $row_height, $tipo_cuenta, 1, 'L', false);
+
+        // Columna 5: Número Cuenta
+        $pdf->SetXY(141, $y_start);
+        $pdf->MultiCell($col_width - 4, $row_height, 'Número Cuenta:', 0, 'L', true);
+
+        // Columna 6: Número Cuenta (Descripción)
+        $pdf->SetXY(169, $y_start);
+        $pdf->MultiCell($col_width - 2, $row_height, $numero_cuenta, 1, 'L', false);
+
+        // Ajuste de la posición Y para la siguiente sección
+        $y_start += $row_height + 2;  // Aumentamos la altura para que haya espacio entre las filas
+
+        $y = $y_start + 5; // Ajuste de altura para la siguiente sección
 
         if ($y > 240) { // Si está muy cerca del final de la página
             $pdf->AddPage(); // Agregar nueva página
@@ -846,12 +1155,16 @@ function imprimirPDF()
         $pdf->SetFont('helvetica', 'B', 10);
         $pdf->SetCellMargins(0, 0, 0);
         $pdf->SetXY(10, $y);
+        $pdf->SetFillColor(255, 255, 255);
         $pdf->MultiCell(190, 7, '13. INFORMACIÓN MOVILIZACIÓN (Matrícula del Vehículo)', 0, 1, 'L', true);
-        $y_start = $y + 7; // Inicia después del título
+        $y_start = $y + 11;
 
         // Definir coordenadas y ancho de cada columna (reducidos para mayor compactación)
 
-
+        $col1_x = 12;  // Primera columna
+        $col2_x = 68;  // Segunda columna (antes era 75)
+        $col3_x = 148; // Tercera columna (antes era 140)
+        $row_height = 5; // Altura de fila más compacta
         // Primera fila de información
         crearCampoMovilizacion($pdf, 'Vehículo', $col1_x, $y_start, $vehiculo, 20, $row_height);
         crearCampoMovilizacion($pdf, 'Propietario', $col2_x, $y_start, $propietario, 50, $row_height);
@@ -919,15 +1232,91 @@ function imprimirPDF()
         $y_start = $y + 7; // Inicia después del título
 
         // Columna 1: Datos
-        crearCampo($pdf, 'Deportes que Práctica', 12, $y_start + 2, $deportes_que_practica);
-        crearCampo($pdf, 'Pasatiempos Favoritos', 12, $y_start + 9, $pasatiempos_favoritos);
-        crearCampo($pdf, 'Consumos Nocivos', 12, $y_start + 16, $consumos_nocivos);
+
+        $pdf->SetFont('helvetica', 'B', 8);
+        $pdf->SetXY(12, $y_start + 2);
+        $pdf->SetFillColor(173, 216, 230);
+        $pdf->MultiCell(40, 5, 'Deportes que Práctica:', 0, 0, 'L', true);
+
+        // Dividir el valor en dos partes para deportes_que_practica
+        $deportes_que_practica_1 = substr($deportes_que_practica, 0, strlen($deportes_que_practica) / 2); // Primera mitad
+        $deportes_que_practica_2 = substr($deportes_que_practica, strlen($deportes_que_practica) / 2); // Segunda mitad
+
+        // Primera columna (primera mitad del deporte que practica)
+        $pdf->SetFont('helvetica', '', 8);
+        $pdf->SetFillColor(255, 255, 255); // Fondo blanco
+        $pdf->SetXY(54, $y_start + 2);
+        $pdf->MultiCell(24, 5, $deportes_que_practica_1, 1, 0, 'L', false); // 24 para la primera columna
+
+        // Segunda columna (segunda mitad del deporte que practica) con un pequeño espacio
+        $pdf->SetXY(80, $y_start + 2); // Ajusta la posición para la segunda columna
+        $pdf->MultiCell(24, 5, $deportes_que_practica_2, 1, 0, 'L', false); // 24 para la segunda columna
+
+        // Pasatiempos Favoritos
+        $pdf->SetFont('helvetica', 'B', 8);
+        $pdf->SetXY(12, $y_start + 9);
+        $pdf->SetFillColor(173, 216, 230); // Fondo azul para el título
+        $pdf->MultiCell(40, 5, 'Pasatiempos Favoritos:', 0, 0, 'L', true);
+
+        // Dividir el valor en dos partes para pasatiempos_favoritos
+        $pasatiempos_favoritos_1 = substr($pasatiempos_favoritos, 0, strlen($pasatiempos_favoritos) / 2); // Primera mitad
+        $pasatiempos_favoritos_2 = substr($pasatiempos_favoritos, strlen($pasatiempos_favoritos) / 2); // Segunda mitad
+
+        // Primera columna (primera mitad de los pasatiempos favoritos)
+        $pdf->SetFont('helvetica', '', 8);
+        $pdf->SetFillColor(255, 255, 255); // Fondo blanco
+        $pdf->SetXY(54, $y_start + 9);
+        $pdf->MultiCell(24, 5, $pasatiempos_favoritos_1, 1, 0, 'L', false); // 24 para la primera columna
+
+        // Segunda columna (segunda mitad de los pasatiempos favoritos)
+        $pdf->SetXY(80, $y_start + 9); // Ajusta la posición para la segunda columna
+        $pdf->MultiCell(24, 5, $pasatiempos_favoritos_2, 1, 0, 'L', false); // 24 para la segunda columna
+
+        // Consumos Nocivos
+        $pdf->SetFont('helvetica', 'B', 8);
+        $pdf->SetXY(12, $y_start + 16);
+        $pdf->SetFillColor(173, 216, 230); // Fondo azul para el título
+        $pdf->MultiCell(40, 5, 'Consumos Nocivos:', 0, 0, 'L', true);
+
+        // Dividir el valor en dos partes para consumos_nocivos
+        $consumos_nocivos_1 = substr($consumos_nocivos, 0, strlen($consumos_nocivos) / 2); // Primera mitad
+        $consumos_nocivos_2 = substr($consumos_nocivos, strlen($consumos_nocivos) / 2); // Segunda mitad
+
+        // Primera columna (primera mitad de los consumos nocivos)
+        $pdf->SetFont('helvetica', '', 8);
+        $pdf->SetFillColor(255, 255, 255); // Fondo blanco
+        $pdf->SetXY(54, $y_start + 16);
+        $pdf->MultiCell(24, 5, $consumos_nocivos_1, 1, 0, 'L', false); // 24 para la primera columna
+
+        // Segunda columna (segunda mitad de los consumos nocivos)
+        $pdf->SetXY(80, $y_start + 16); // Ajusta la posición para la segunda columna
+        $pdf->MultiCell(24, 5, $consumos_nocivos_2, 1, 0, 'L', false); // 24 para la segunda columna
+
         crearCampo($pdf, 'Seguro de Vida Privado', 12, $y_start + 24, $seguro_vida_privado);
 
         // Columna 2: Datos
         crearCampo($pdf, 'Asistencia Psicológica', 105, $y_start + 2, $asistencia_psicologica);
         crearCampo($pdf, 'Grupo Sanguíneo', 105, $y_start + 9, $grupo_sanguineo);
-        crearCampo($pdf, 'Enfermedades', 105, $y_start + 16, $enfermedades);
+        // Enfermedades
+        $pdf->SetFont('helvetica', 'B', 8);
+        $pdf->SetXY(105, $y_start + 16);
+        $pdf->SetFillColor(173, 216, 230); // Fondo azul para el título
+        $pdf->MultiCell(40, 5, 'Enfermedades:', 0, 0, 'L', true);
+
+        // Dividir el valor en dos partes para enfermedades
+        $enfermedades_1 = substr($enfermedades, 0, strlen($enfermedades) / 2); // Primera mitad
+        $enfermedades_2 = substr($enfermedades, strlen($enfermedades) / 2); // Segunda mitad
+
+        // Primera columna (primera mitad de las enfermedades)
+        $pdf->SetFont('helvetica', '', 8);
+        $pdf->SetFillColor(255, 255, 255); // Fondo blanco
+        $pdf->SetXY(147, $y_start + 16);
+        $pdf->MultiCell(24, 5, $enfermedades_1, 1, 0, 'L', false); // 24 para la primera columna
+
+        // Segunda columna (segunda mitad de las enfermedades)
+        $pdf->SetXY(173, $y_start + 16); // Ajusta la posición para la segunda columna
+        $pdf->MultiCell(24, 5, $enfermedades_2, 1, 0, 'L', false); // 24 para la segunda columna
+
         crearCampo($pdf, 'Religión', 105, $y_start + 24, $religion);
 
         // Actualizar la posición para la siguiente sección
@@ -977,7 +1366,7 @@ function imprimirPDF()
         }
 
         // === SECCIÓN 17: DECLARATORIA DE RESPONSABILIDAD ===
-        $seccionAltura = 60;
+        $seccionAltura = 90;
         if ($y + $seccionAltura > 270) { // Verificar si está cerca del final de la página
             $pdf->AddPage(); // Agregar nueva página
             $y = 20; // Resetear la posición Y
@@ -990,26 +1379,72 @@ function imprimirPDF()
 
         // Texto de la declaratoria dentro de la sección
         $pdf->SetFont('Helvetica', '', 10);
-        $pdf->SetXY(12, $y_start + 10);
+        $pdf->SetXY(12, $y_start + 3);
         $pdf->MultiCell(0, 10, 'Declaro que la información proporcionada en el presente formulario es veraz y autorizo a la Institución que realice las verificaciones pertinentes que requiera', 0, 'L');
 
-        // Espacio para la firma (misma fila)
-        $pdf->SetXY(12, $y_start + 30);
-        $pdf->Line(12, $y_start + 30, 100, $y_start + 30); // Línea para firma
+
+        $pdf->SetXY(12, $y_start + 40);
+        $pdf->Line(12, $y_start + 38, 100, $y_start + 38); // Línea para firma (arriba del texto)
         $pdf->SetFont('Helvetica', 'B', 10);
-        $pdf->MultiCell(95, 10, 'ALEJANDRA VALERIA SANTILLAN BERMEO', 0, 'L');
-        $pdf->SetFont('Helvetica', '', 10);
+        $pdf->Cell(95, 10, 'ALEJANDRA VALERIA SANTILLAN BERMEO', 0, 0, 'L'); // Nombre
 
-        $pdf->SetXY(120, $y_start + 30);
-        $pdf->Line(120, $y_start + 30, 200, $y_start + 30); // Línea para firma de coordinación
+        $pdf->SetXY(120, $y_start + 40);
+        $pdf->Line(120, $y_start + 38, 200, $y_start + 38); // Línea para firma de coordinación (arriba del texto)
         $pdf->SetFont('Helvetica', 'B', 10);
-        $pdf->Cell(95, 10, 'COORDINACIÓN DE TALENTO HUMANO', 0, 1, 'L');
+        $pdf->Cell(95, 10, 'COORDINACIÓN DE TALENTO HUMANO', 0, 1, 'L'); // Coordinación
 
-        // Establecer localización para fechas en español y formatear fecha
-        setlocale(LC_TIME, 'es_ES.UTF-8');
-        $fecha = strftime('%A, %d de %B de %Y');
 
-        $pdf->SetXY(12, $y_start + 45);
+        // Obtener la fecha en inglés
+        $fecha = date('l, d \d\e F \d\e Y');
+
+        // Traducir los nombres de los días y meses
+        $buscar = [
+            'Monday',
+            'Tuesday',
+            'Wednesday',
+            'Thursday',
+            'Friday',
+            'Saturday',
+            'Sunday',
+            'January',
+            'February',
+            'March',
+            'April',
+            'May',
+            'June',
+            'July',
+            'August',
+            'September',
+            'October',
+            'November',
+            'December'
+        ];
+
+        $reemplazar = [
+            'Lunes',
+            'Martes',
+            'Miércoles',
+            'Jueves',
+            'Viernes',
+            'Sábado',
+            'Domingo',
+            'Enero',
+            'Febrero',
+            'Marzo',
+            'Abril',
+            'Mayo',
+            'Junio',
+            'Julio',
+            'Agosto',
+            'Septiembre',
+            'Octubre',
+            'Noviembre',
+            'Diciembre'
+        ];
+
+        $fecha = str_replace($buscar, $reemplazar, $fecha);
+
+        $pdf->SetXY(12, $y_start + 60);
         $pdf->SetFont('Helvetica', '', 10);
         $pdf->MultiCell(0, 10, 'Fecha última actualización: ' . $fecha, 0, 1, 'L');
 
