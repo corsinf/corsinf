@@ -27,6 +27,11 @@ if (isset($_GET['eliminar_portal_antena'])) {
 	$parametros = $_POST['parametros'];
     echo json_encode($controlador->eliminar_portal_antena($parametros));
 }
+if (isset($_GET['iniciarControladora'])) {
+	$params = array();
+	parse_str($_POST['parametros'], $params);
+    echo json_encode($controlador->iniciarControladora($params));
+}
 
 
 /**
@@ -149,6 +154,28 @@ if (isset($_GET['eliminar_portal_antena'])) {
  	function eliminar_portal_antena($parametros)
  	{
  		return $this->modelo->eliminar_portal_antena($parametros['id']);
+ 	}
+
+ 	function iniciarControladora($parametros)
+ 	{
+ 		// print_r($parametros);die(); 		
+ 		switch ($parametros['ddl_tipo_antena']) {
+ 			case 'TCPIP':
+ 			// $command = "C:\\Users\\lenovo\\Downloads\\SESProLElibEPCcmd\\bin\\Debug\\net8.0\\SESProLElibEPCcmd.dll 2 186.4.219.172 10001";
+ 			$command =  dirname(__DIR__,2). "\\lib\\Antenas\\net8.0\\SESProLElibEPCcmd.exe 2 1 ".$parametros['txt_ip']." ".$parametros['txt_puerto']."";
+ 			// print_r($command);die();
+ 			$respuesta = shell_exec($command);
+			$resp = json_decode($respuesta,true);
+				// print_r($resp);die();
+ 				break;
+ 			
+ 			default:
+ 				// code...
+ 				break;
+ 		}
+
+ 		return $resp;
+	 	
  	}
 
 
