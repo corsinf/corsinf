@@ -199,6 +199,34 @@ function eliminar_portal_antena(id)
     habilitar_campos()
 
   }
+
+  function validar_conexion()
+  {
+
+    $('#modal_respuesta').modal('show');
+    $('#lbl_msj_espera').text('');  
+    $('#img_espera_logo').css('display','block');
+
+    var parametros = $('#form_data').serialize();
+  
+    $.ajax({
+      data: {parametros: parametros},
+      url: '../controlador/PORTALES/portalesC.php?iniciarControladora=true',
+      type: 'post',
+      dataType: 'json',
+      success: function(response) {
+        if(response.resp=='-1')
+        {
+          $('#img_espera_logo').css('display','none');
+          $('#lbl_msj_espera').text('No se pudo Conectar:'+response.msj);  
+        }else if(response.resp=='1')
+        {
+           $('#img_espera_logo').css('display','none');
+           $('#lbl_msj_espera').text('Conectado a :'+response.msj);  
+        }
+      }
+    });
+  }
   
 </script>
 <div class="page-wrapper">
@@ -272,63 +300,70 @@ function eliminar_portal_antena(id)
     <div class="modal-content">
       <div class="modal-header"><h2>Nueva Antena<h2></div>
         <div class="modal-body">
-          <div class="row">  
-            <div class="col-12">
-                <b>Nombre Antena</b>
-                <input type="" class="form-control" name="txt_nombre_antena" id="txt_nombre_antena">
-             </div>    
-             <div class="col-12">
-                <b>Tipo de copnexion</b>
-               <select class="form-select" onchange="habilitar_campos()" id="ddl_tipo_antena">
-                 <option value="RS232USB">RS232 / USB</option>
-                 <option value="RS485">RS485</option>
-                 <option value="TCPIP">TCP/IP</option>
-               </select>
-             </div>           
-           </div>
-           <div class="row mt-2" id="pnl_rs_usb">
-              <div class="col-6">
-                 <select class="form-select" id="ddl_com">
-                   <option value="COM1">COM1</option>
-                   <option value="COM2">COM2</option>
-                   <option value="COM3">COM3</option>
-                   <option value="COM4">COM4</option>
-                   <option value="COM5">COM5</option>
-                   <option value="COM6">COM6</option>
-                   <option value="COM7">COM7</option>
-                   <option value="COM8">COM8</option>
-                   <option value="COM9">COM9</option>
-                   <option value="COM10">COM10</option>
-                   <option value="COM18">COM18</option>
-                   <option value="COM34">COM34</option>
-                 </select>                
-              </div>   
-              <div class="col-6">
-                 <select class="form-select" id="ddl_com_2">
-                   <option value="9600">9600</option>
-                   <option value="19200">19200</option>
-                   <option value="38400">38400</option>
-                   <option value="57600">57600</option>
-                   <option value="115200">115200</option>
-                 </select>                
-              </div>
-              <div class="row d-none" id="pnl_rs_485">
-                <div class="col-3">
-                  <b>Adr485</b>
-                  <input type="number" name="txt_adr" id="txt_adr" class="form-control" value="0">
+          <form id="form_data"> 
+            <div class="row">  
+              <div class="col-12">
+                  <b>Nombre Antena</b>
+                  <input type="" class="form-control" name="txt_nombre_antena" id="txt_nombre_antena">
+               </div>    
+               <div class="col-12">
+                  <b>Tipo de copnexion</b>
+                 <select class="form-select" onchange="habilitar_campos()" id="ddl_tipo_antena"  name="ddl_tipo_antena">
+                   <option value="RS232USB">RS232 / USB</option>
+                   <option value="RS485">RS485</option>
+                   <option value="TCPIP">TCP/IP</option>
+                 </select>
+               </div>           
+             </div>
+             <div class="row mt-2" id="pnl_rs_usb">
+                <div class="col-6">
+                   <select class="form-select" id="ddl_com" name="ddl_com">
+                     <option value="COM1">COM1</option>
+                     <option value="COM2">COM2</option>
+                     <option value="COM3">COM3</option>
+                     <option value="COM4">COM4</option>
+                     <option value="COM5">COM5</option>
+                     <option value="COM6">COM6</option>
+                     <option value="COM7">COM7</option>
+                     <option value="COM8">COM8</option>
+                     <option value="COM9">COM9</option>
+                     <option value="COM10">COM10</option>
+                     <option value="COM18">COM18</option>
+                     <option value="COM34">COM34</option>
+                   </select>                
+                </div>   
+                <div class="col-6">
+                   <select class="form-select" id="ddl_com_2" name="ddl_com_2">
+                     <option value="9600">9600</option>
+                     <option value="19200">19200</option>
+                     <option value="38400">38400</option>
+                     <option value="57600">57600</option>
+                     <option value="115200">115200</option>
+                   </select>                
                 </div>
+                <div class="row d-none" id="pnl_rs_485">
+                  <div class="col-3">
+                    <b>Adr485</b>
+                    <input type="number" name="txt_adr" id="txt_adr" class="form-control" value="0">
+                  </div>
+                </div>             
+             </div>
+             <div class="row mt-2 d-none" id="pnl_tcp_ip">
+              <div class="col-9">
+                <b>IP</b>
+                <input type="" name="txt_ip" id="txt_ip" class="form-control" placeholder="192.168.1.50">
+              </div>
+               <div class="col-3">
+                <b>Puerto</b>
+                <input type="" name="txt_puerto" id="txt_puerto" class="form-control" placeholder="2101">
               </div>             
-           </div>
-           <div class="row mt-2 d-none" id="pnl_tcp_ip">
-            <div class="col-9">
-              <b>IP</b>
-              <input type="" name="txt_ip" id="txt_ip" class="form-control" placeholder="192.168.1.50">
-            </div>
-             <div class="col-3">
-              <b>Puerto</b>
-              <input type="" name="txt_puerto" id="txt_puerto" class="form-control" placeholder="2101">
-            </div>             
-           </div>          
+             </div>
+             <div class="row mt-2">
+              <div class="col-12 text-end">
+                 <button type="button" class="btn btn-success btn-sm" onclick="validar_conexion()"><i class="bx bx-play"></i>Validar</button>
+              </div>
+             </div>   
+          </form>       
         </div>
         <div class="modal-footer">   
             <button type="button" class="btn btn-primary" onclick="guardar_antena()">Guardar</button>
@@ -344,18 +379,19 @@ function eliminar_portal_antena(id)
 	      <div class="modal-header">
 	      </div>
 	      <div class="modal-body">
-	         <div class="text-center">	         	
+          <div class="row">
+            <div class="col-12 text-center">            
               <div id="img_espera_logo">
-                <?php if (file_exists($_SESSION['INICIO']['LOGO'])) { ?>      
-                  <img src="<?php echo $_SESSION['INICIO']['LOGO']; ?>" style="width: 35%;" alt="logo icon">
-                <?php } ?>
-                  ESPERE...
-              </div>		
-	         </div>
-	         <div class="text-center">
-	         	<div id="lbl_msj_espera"></div>
-	         </div>
-	        
+                  <?php if (file_exists($_SESSION['INICIO']['LOGO'])) { ?>      
+                    <img src="<?php echo $_SESSION['INICIO']['LOGO']; ?>" style="width: 35%;" alt="logo icon">
+                  <?php } ?>
+                    ESPERE...
+              </div>    
+            </div>
+            <div class="col-12 text-center">
+               <label id="lbl_msj_espera"></label>               
+            </div>          
+          </div>
 	      </div>
 	      <div class="modal-footer">   
 	      		<button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cerrar</button>
