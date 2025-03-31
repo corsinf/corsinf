@@ -14,6 +14,22 @@ if ($_GET['acc'] == 'th_reportes_hv') {
 	include('TALENTO_HUMANO/REPORTES/th_reportes_hv.php');
 }
 
+if ($_GET['acc'] == 'th_reportes') {
+	include('TALENTO_HUMANO/REPORTES/th_reportes.php');
+}
+
+if ($_GET['acc'] == 'th_registrar_reportes') {
+	include('TALENTO_HUMANO/REPORTES/th_registrar_reportes.php');
+}
+
+if ($_GET['acc'] == 'th_reporte_atributos') {
+	include('TALENTO_HUMANO/REPORTES/th_reporte_atributos.php');
+}
+
+if ($_GET['acc'] == 'th_reporte_tabla') {
+	include('TALENTO_HUMANO/REPORTES/th_reporte_tabla.php');
+}
+
 //Departamentos
 if ($_GET['acc'] == 'th_departamentos') {
 	include('TALENTO_HUMANO/DEPARTAMENTOS/th_departamentos.php');
