@@ -1,4 +1,12 @@
-<?php /*include ('../cabeceras/header4.php');  print_r($_SESSION['INICIO']);die(); */?>
+<?php /*include ('../cabeceras/header4.php');  print_r($_SESSION['INICIO']);die(); */
+
+/**
+ * @deprecated Archivo dado de baja el 02/04/2025.
+ * @note Este archivo se mantiene como respaldo, pero ya no se utilizará en producción.
+ * @warning No modificar este archivo. Para cambios, referirse a la nueva implementación.
+ */
+
+?>
 <script type="text/javascript">
 	noconcurente = '<?php echo $_SESSION['INICIO']['NO_CONCURENTE']; ?>';
 	noconcurente_nom = '<?php echo $_SESSION['INICIO']['NO_CONCURENTE_NOM']; ?>';

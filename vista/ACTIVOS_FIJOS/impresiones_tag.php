@@ -1,4 +1,11 @@
 <?php //include('../cabeceras/header.php'); 
+
+/**
+ * @todo Revisar este archivo
+ * @note Actualmente se mantiene como respaldo
+ * @warning No modificar este archivo sin autorización.
+ */
+
 ?>
 
 <!-- <link rel="stylesheet" type="text/css" href="../css/estilos.css"> -->

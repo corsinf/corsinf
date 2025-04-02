@@ -1,4 +1,11 @@
 <?php /*include('../cabeceras/header.php'); */ $id = '';
+
+/**
+ * @deprecated Archivo dado de baja el 02/04/2025.
+ * @note Este archivo se mantiene como respaldo, pero ya no se utilizará en producción.
+ * @warning No modificar este archivo. Para cambios, referirse a la nueva implementación.
+ */
+
 if (isset($_GET['id'])) {
   $id = $_GET['id'];
 } ?>
