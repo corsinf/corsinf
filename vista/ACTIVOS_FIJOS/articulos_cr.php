@@ -7,6 +7,7 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
 <script src="../js/GENERAL/operaciones_generales.js"></script>
 <script type="text/javascript">
     $(document).ready(function() {
+        cargar_tipo_articulo();
 
         tbl_articulos = $('#tbl_articulos').DataTable($.extend({}, configuracion_datatable('Artículos', 'articulos'), {
             language: {
@@ -26,12 +27,11 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
             stateSave: false,
             ajax: {
                 url: '../controlador/ACTIVOS_FIJOS/articulosC.php?lista_cr=true',
-                // type: 'POST', // Asegura que se envíen los datos correctamente
-                // data: function(d) {
-                //     //d.search_value = $('#transacciones_select').DataTable().search();
-                //     d.search_value = $('#buscar_input').val();
-
-                // }
+                type: 'POST', // Asegura que se envíen los datos correctamente
+                data: function(d) {
+                    //d.search_value = $('#transacciones_select').DataTable().search();
+                    d.search_value = $('input[name="rbl_tip_articulo"]:checked').val();
+                }
             },
             search: {
                 smart: true
@@ -71,6 +71,54 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
         }
         window.location.href = "inicio.php?acc=detalle_articulo&_id=" + id + '&fil1=' + $('#ddl_localizacion').val() + '--' + loc + '&fil2=' + $('#ddl_custodio').val() + '--' + cus;
     }
+
+    function cargar_tipo_articulo() {
+        $.ajax({
+            data: {
+                _id: ''
+            },
+            url: '../controlador/ACTIVOS_FIJOS/CATALOGOS/ac_cat_tipo_articuloC.php?listar=true',
+            type: 'post',
+            dataType: 'json',
+            success: function(response) {
+                let radioButtons = '';
+                radioButtons =
+                    `<div class="col-sm-auto m-0">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" id="rbl_tip_articulo_" name="rbl_tip_articulo" value="" checked>
+                                <label class="form-check-label" for="rbl_tip_articulo_">Todo</label>
+                            </div>
+                        </div>`;
+
+                $.each(response, function(i, item) {
+                    radioButtons +=
+                        `<div class="col-sm-auto m-0">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" id="rbl_tip_articulo_${item._id}" name="rbl_tip_articulo" value="${item._id}">
+                                <label class="form-check-label" for="rbl_tip_articulo_${item._id}">${item.descripcion}</label>
+                            </div>
+                        </div>`;
+                });
+
+                mensaje_error = `<label class="error mb-2" style="display: none;" for="rbl_tip_articulo"></label>`
+
+                $('#pnl_tipo_articulo').html(radioButtons + mensaje_error);
+
+                $('input[name="rbl_tip_articulo"]').on('change', function() {
+                    // alert($(this).val()); 
+                    $('#tbl_articulos').DataTable().ajax.reload();
+                });
+
+            },
+            error: function(xhr, status, error) {
+                console.log('Status: ' + status);
+                console.log('Error: ' + error);
+                console.log('XHR Response: ' + xhr.responseText);
+
+                Swal.fire('', 'Error: ' + xhr.responseText, 'error');
+            }
+        });
+    }
 </script>
 
 <div class="page-wrapper">
@@ -100,6 +148,17 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
             <div class="col-xl-12 mx-auto">
                 <div class="card border-top border-0 border-4 border-primary">
                     <div class="card-body p-5">
+
+                        <div class="row mb-col" id="pnl_tipo_articulo">
+                            <!-- <div class="col-sm-3">
+                                <div class="form-check">
+                                  <input class="form-check-input" type="radio" id="txt_bajas" name="rbl_op">
+                                  <label class="form-check-label" for="txt_bajas">Bajas</label>
+                                </div>
+                              </div> -->
+                        </div>
+
+                        <hr>
 
                         <div class="row">
                             <div class="col-12 col-md-6">
