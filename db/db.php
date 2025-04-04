@@ -72,7 +72,7 @@ class db
 
 			$this->usuario = "sa";
 			$this->password = "Tango456";  // en mi caso tengo contraseña pero en casa caso introducidla aquí.
-			$this->servidor = "186.4.219.172, 1487";
+			$this->servidor = "186.4.219.172,1487";
 			$this->database = "LISTA_EMPRESAS";
 		}
 	}
@@ -80,7 +80,10 @@ class db
 	function conexion()
 	{		
 		try{
-		     $conn = new PDO("sqlsrv:Server=".$this->servidor .''. $this->puerto.";Database=".$this->database, $this->usuario, $this->password);
+		     $conn = new PDO("sqlsrv:Server=".$this->servidor .''. $this->puerto.";Database=".$this->database.";TrustServerCertificate=1", $this->usuario, $this->password);
+
+		     // print_r("sqlsrv:Server=".$this->servidor .''. $this->puerto.";Database=".$this->database.";TrustServerCertificate=0");
+		     // print_r($this->usuario.'-'.$this->password);die();
 		     $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 		      return $conn;
 		    }	 

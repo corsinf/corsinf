@@ -133,7 +133,7 @@ class cabecera_pdf
 	}
 
 
-	function cedula_reporte_lista($titulo,$tablaHTML,$contenido=false,$image=false,$fechaini,$fechafin,$sizetable,$mostrar=false,$sal_hea_body=30,$orientacion='P')
+	function cedula_reporte_lista($titulo,$tablaHTML,$contenido=false,$image=false,$fechaini=false,$fechafin=false,$sizetable='6',$mostrar=false,$sal_hea_body=30,$orientacion='P')
 	{	
 
 	    $this->pdftable->fechaini = $fechaini; 
@@ -245,7 +245,7 @@ class cabecera_pdf
 
 	}
 
-	function solicitud_acta($img_header=false,$img_foot=false,$titulo,$cuerpo=false,$fechaini=false,$fechafin=false,$sizetable,$mostrar=false,$sal_hea_body=30,$orientacion='P',$descargar=0)
+	function solicitud_acta($img_header=false,$img_foot=false,$titulo,$cuerpo=false,$fechaini=false,$fechafin=false,$sizetable='6',$mostrar=false,$sal_hea_body=30,$orientacion='P',$descargar=0)
 	{	
 
 	    $this->pdftable->fechaini = $fechaini; 
@@ -358,7 +358,7 @@ class cabecera_pdf
 
 	}
 
-	function cabecera_reporte($titulo,$tablaHTML,$contenido=false,$image=false,$fechaini,$fechafin,$sizetable,$mostrar=false,$sal_hea_body=30,$orientacion='P')
+	function cabecera_reporte($titulo,$tablaHTML,$contenido=false,$image=false,$fechaini=false,$fechafin=false,$sizetable='6',$mostrar=false,$sal_hea_body=30,$orientacion='P')
 	{	
 
 	    $this->pdf->fechaini = $fechaini; 
@@ -428,7 +428,7 @@ class cabecera_pdf
 
 	}
  
- function cabecera_reporte_MC($titulo,$tablaHTML,$contenido=false,$image=false,$fechaini,$fechafin,$sizetable,$mostrar=false,$sal_hea_body=30,$orientacion='P')
+ function cabecera_reporte_MC($titulo,$tablaHTML,$contenido=false,$image=false,$fechaini=false,$fechafin=false,$sizetable='6',$mostrar=false,$sal_hea_body=30,$orientacion='P')
 	{	
 
 	    $this->pdftable->fechaini = $fechaini; 

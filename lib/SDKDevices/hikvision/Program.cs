@@ -80,8 +80,10 @@ class Program
                     break;
                 case "1":
                     //DETECTAR DISPOSITIVOS CONECTADOS EN LA RED
-                    r = login.DetectarDevice();
-                    json = r;
+                    String Brodcast = args.Length > 1 ? args[1] : string.Empty;
+                    String puerto = args.Length > 1 ? args[2] : string.Empty;
+                    r = login.DetectarDeviceAsync(Brodcast,puerto);
+                    json = JsonSerializer.Serialize(new { msj = r });
                     break;
                 case "2":
                     //COMPROBAR CONEXION

@@ -100,7 +100,7 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                 url: 'https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
             },
             ajax: {
-                url: '../controlador/TALENTO_HUMANO/th_detectar_dispositivosC.php?BuscarDevice=true',
+                url: '../controlador/TALENTO_HUMANO/th_detectar_dispositivosC.php?BuscarDevice=true&brodcast='+$('#txt_brodcast').val()+'&brodcast_port='+$('#txt_brodcast_port').val(),
                 dataSrc: ''
             },
             columns: [
@@ -143,7 +143,6 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
     function abrir_modal()
     {
         $('#lbl_msj_espera').text("Buscando Dispositivos en red");
-        inicializarTablaDispositivos()
         $('#detectar_device').modal('show'); 
     }
 
@@ -423,6 +422,19 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-9">
+                        <b>Brodcast</b>
+                        <input type="text" class="form-control form-control-sm" name="txt_brodcast" id="txt_brodcast">
+                    </div>
+                     <div class="col-md-9">
+                        <b>Puerto</b>
+                        <input type="text" class="form-control form-control-sm" name="txt_brodcast_port" id="txt_brodcast_port">
+                    </div>
+                    <div class="col-3">
+                        <button class="btn btn-primary btn-sm" type="button" onclick="inicializarTablaDispositivos()"><i class="bx bx-search"></i>Buscar</button>                        
+                    </div>
+                </div>
                <div class="row" style="overflow-x: scroll;">
                    <div class="col-sm-12">
                             <table class="table table-striped" id="tbl_dispositivos_red">

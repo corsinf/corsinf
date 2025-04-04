@@ -3499,6 +3499,9 @@ namespace CorsinfSDKHik.NetSDK
 
         public delegate bool MSGCallBack_V31(int lCommand, ref NET_DVR_ALARMER pAlarmer, nint pAlarmInfo, uint dwBufLen, nint pUser);
 
+        public delegate bool MSGCallBack_V30(int lCommand, ref NET_DVR_ALARMER pAlarmer, IntPtr pAlarmInfo, uint dwBufLen, IntPtr pUser);
+
+
         /* Alarm information registered callback function
          * [in] iIndex - iIndex, scope:[0,15] 
          * [in] fMessageCallBack - callback function
@@ -3563,6 +3566,13 @@ namespace CorsinfSDKHik.NetSDK
 
         [DllImport(@"..\..\..\HCNetSDK\HCNetSDK.dll")]
         public static extern bool NET_DVR_CaptureJPEGPicture(int lUserID, int lChannel, ref NET_DVR_JPEGPARA lpJpegPara, nint sPicFileName);
+
+        [DllImport(@"..\..\..\HCNetSDK\HCNetSDK.dll")]
+        public static extern bool NET_DVR_StartListen_V30(byte[] sLocalIP, ushort wLocalPort, MSGCallBack_V30 fMessageCallBack, IntPtr pUser);
+
+
+
+
         #endregion
 
         #region 门禁卡，指纹，人脸接口优化新增命令码及结构体

@@ -9,6 +9,8 @@ using CorsinfSDKHik.NetSDK;
 using System.Net.Sockets;
 using System.Net;
 using Newtonsoft.Json;
+using static CorsinfSDKHik.NetSDK.CHCNetSDK;
+using CorsinfSDKHik.Funciones;
 //using FingerPrintManagement;
 
 namespace CorsinfSDKHik.SDKs
@@ -17,7 +19,6 @@ namespace CorsinfSDKHik.SDKs
     {
         public int m_UserID = -1;
         XmlDocument xmlDoc = new XmlDocument();
-
 
         public String loginSDKDevice(String ip, String puerto, String user, String pass)
         {
@@ -156,7 +157,23 @@ namespace CorsinfSDKHik.SDKs
             return msj;
         }
 
-        public String DetectarDevice()
+    
+
+        public  String DetectarDeviceAsync(String Brodcast,String puerto)
+        {
+            var discoverer = new HikvisionDeviceDiscovery();
+            if (Brodcast.Length > 1 && puerto.Length > 1)
+            {
+               return discoverer.ScanNetworkForHikvisionDevices(Brodcast, puerto);
+            }
+            else 
+            {
+                return discoverer.ScanNetworkForHikvisionDevices();
+            }
+        }
+
+       
+        public String DetectarDevice2()
         {
             String msj = "";
             String xmlMessage = "<?xml version=\"1.0\" encoding=\"utf-8\"?><Probe><Uuid>13A888A9-F1B1-4020-AE9F-05607682D23B</Uuid><Types>inquiry</Types></Probe>";
