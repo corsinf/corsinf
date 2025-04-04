@@ -1351,7 +1351,7 @@ class loginC
 		// print_r($datos);die();
 		foreach ($datos as $key => $value) {
 			// $num = rand(1,3);
-			$num = 2;
+			$num = 4;
 			$pagina = str_replace('.php','', $value['link']);
 		switch ($num) {
 				case '1':		
@@ -1363,6 +1363,9 @@ class loginC
 				case '3':
 				  $estilo = 'bg-gradient-kyoto text-dark';
 					break;							
+				case '4':
+					$estilo = 'text-white';
+					  break;							
 				}
 				// print_r($value);die();
 				$mod.='

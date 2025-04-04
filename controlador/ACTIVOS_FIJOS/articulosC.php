@@ -19,8 +19,7 @@ if (isset($_GET['lista'])) {
 }
 
 if (isset($_GET['lista_cr'])) {
-
-	echo json_encode($controlador->lista_articulos_cr());
+	echo json_encode($controlador->lista_articulos_cr($_POST['search_value'] ?? ''));
 }
 
 if (isset($_GET['lista_kit'])) {
@@ -214,9 +213,9 @@ class articulosC
 	}
 
 	//CR = Carga Rapida
-	function lista_articulos_cr()
+	function lista_articulos_cr($id_articulo)
 	{
-		return $this->modelo->lista_articulos_cr();
+		return $this->modelo->lista_articulos_cr($id_articulo);
 	}
 
 	function lista_kit($parametros)

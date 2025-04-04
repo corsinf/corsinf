@@ -16,13 +16,23 @@ use Box\Spout\Common\Entity\Style\Color;
 
 $controlador = new th_reportesC();
 
+if (isset($_GET['listar'])) {
+    echo json_encode($controlador->listar($_POST['id'] ?? ''));
+}
+
+if (isset($_GET['insertar'])) {
+    echo json_encode($controlador->insertar_editar($_POST['parametros']));
+}
+
 if (isset($_GET['descargarExcel'])) {
     echo ($controlador->descargarExcel());
 }
 
-if (isset($_GET['con'])) {
-    echo json_encode($controlador->pruebas());
+if (isset($_GET['pruebas'])) {
+    // echo json_encode($controlador->pruebas());
+    echo json_encode($controlador->control_acceso_reporte());
 }
+
 
 
 class th_reportesC
@@ -34,35 +44,92 @@ class th_reportesC
         $this->modelo = new th_reportesM();
     }
 
+    function listar($id)
+    {
+        if ($id == '') {
+            $datos = $this->modelo->listar_reporte();
+        } else {
+            $datos = $this->modelo->listar_reporte($id);
+        }
+
+        return $datos;
+    }
+
+    function insertar_editar($parametros)
+    {
+        $datos = array(
+            array('campo' => 'th_rep_nombre', 'dato' => $parametros['txt_nombre']),
+            array('campo' => 'th_rep_descripcion', 'dato' => $parametros['txt_descripcion']),
+            array('campo' => 'th_tip_rep_id', 'dato' => $parametros['ddl_tipo_reporte']),
+        );
+
+        if ($parametros['_id'] == '') {
+            $datos = $this->modelo->insertar($datos);
+        } else {
+            $where[0]['campo'] = 'th_rep_id';
+            $where[0]['dato'] = $parametros['_id'];
+            $datos = $this->modelo->editar($datos, $where);
+        }
+
+        return $datos;
+    }
+
     function pruebas()
     {
         $datos = $this->modelo->control_acceso_departamento('2024-11-28', '2024-11-29', 5);
         return $datos;
     }
 
-    function generarExcel($nombreArchivo = 'example.xlsx', $datos = '')
+    function control_acceso_reporte($datos = '')
     {
+        $datos = $this->modelo->control_acceso_departamento('2024-11-28', '2024-11-29', 5);
 
-        $datos = [
-            ['Juan', 'Pérez', '28'],
-            ['María', 'Gómez', '32'],
-            ['Carlos', 'Rodríguez', '45']
-        ];
+        $filas_datos = []; // Array para almacenar todas las filas de datos
 
-        // Crear el writer para el archivo Excel
-        $writer = WriterEntityFactory::createXLSXWriter();
-        $writer->openToFile($nombreArchivo);
-
-        // Agregar los datos
         foreach ($datos as $dato) {
-            $row = WriterEntityFactory::createRowFromArray($dato);
-            $writer->addRow($row);
+            $salida = $this->calcular_jornada(
+                $dato['hora_entrada'],
+                $dato['hora_salida'],
+                $dato['hora_entrada_acc'],
+                $dato['hora_salida_acc']
+            );
+
+            $extra_100 = ($dato['dia_nombre'] == 'Sábado' || $dato['dia_nombre'] == 'Domingo')
+                ? $salida['duracion_programada']
+                : '';
+
+            // Crear un array asociativo con clave-valor
+            $fila_datos = [
+                'APELLIDOS' => $dato['primer_apellido'] . ' ' . $dato['segundo_apellido'],
+                'NOMBRES' => $dato['primer_nombre'] . ' ' . $dato['segundo_nombre'],
+                'Empleado' => $dato['primer_apellido'] . ' ' . $dato['segundo_apellido'] . ' ' . $dato['primer_nombre'] . ' ' . $dato['segundo_nombre'],
+                'Cedula' => $dato['cedula'],
+                'Correo Institucional' => $dato['correo'],
+                'Departamento' => $dato['nombre_departamento'],
+                'Dia' => $dato['dia_nombre'],
+                'Fecha' => $dato['fecha'],
+                'Dias Trabajados' => '1',
+                'Horario Contrato' => $this->minutos_a_horas($dato['hora_entrada']) . ' - ' . $this->minutos_a_horas($dato['hora_salida']),
+                'Hora Entrada' => $this->minutos_a_horas($dato['hora_entrada']),
+                'Hora Salida' => $this->minutos_a_horas($dato['hora_salida']),
+                'RegEntrada' => $this->minutos_a_horas($dato['hora_entrada_acc']),
+                'RegSalida' => $this->minutos_a_horas($dato['hora_salida_acc']),
+                'Cumplimiento de jornada (8 horas)' => $salida['cumplimiento_jornada'],
+                'Horas faltantes por cumplir jornada' => $salida['horas_faltantes_format'],
+                'Horas excedentes' => $salida['horas_excedentes'],
+                'SalidasTemprano' => $salida['salida_temprano'],
+                'Atrasos' => $salida['atrasos'],
+                'Ausente' => 'Ausente',
+                'Suplem 25%' => $salida['sumplementaria'],
+                'Extra 100%' => $extra_100,
+            ];
+
+            $filas_datos[] = $fila_datos; // Agregar fila al array principal
         }
 
-        // Cerrar el writer
-        $writer->close();
-        echo "Archivo Excel generado: $nombreArchivo";
+        return $filas_datos; // Retornar el array con todas las filas
     }
+
 
     function descargarExcel($nombreArchivo = 'example.xlsx', $datos = '')
     {
@@ -103,9 +170,9 @@ class th_reportesC
             'Hora Salida',
             'RegEntrada',
             'RegSalida',
-            'cumplimiento de jornada (8 horas)',
-            'horas faltantes por cumplir jornada',
-            'horas excedentes',
+            'Cumplimiento de jornada (8 horas)',
+            'Horas faltantes por cumplir jornada',
+            'Horas excedentes',
             'SalidasTemprano',
             'Atrasos',
             'Ausente',
@@ -267,5 +334,29 @@ class th_reportesC
             case 'Sunday':
                 return "Domingo";
         }
+    }
+
+    function generarExcel($nombreArchivo = 'example.xlsx', $datos = '')
+    {
+
+        $datos = [
+            ['Juan', 'Pérez', '28'],
+            ['María', 'Gómez', '32'],
+            ['Carlos', 'Rodríguez', '45']
+        ];
+
+        // Crear el writer para el archivo Excel
+        $writer = WriterEntityFactory::createXLSXWriter();
+        $writer->openToFile($nombreArchivo);
+
+        // Agregar los datos
+        foreach ($datos as $dato) {
+            $row = WriterEntityFactory::createRowFromArray($dato);
+            $writer->addRow($row);
+        }
+
+        // Cerrar el writer
+        $writer->close();
+        echo "Archivo Excel generado: $nombreArchivo";
     }
 }

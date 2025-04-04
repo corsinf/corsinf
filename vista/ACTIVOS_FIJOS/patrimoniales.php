@@ -1,4 +1,12 @@
 <?php /*include('../../cabeceras/header.php');*/ include dirname(__DIR__, 2) . "/lib/phpqrcode/qrlib.php";
+
+/**
+ * @todo Revisar este archivo
+ * @note Actualmente se mantiene como respaldo
+ * @warning No modificar este archivo sin autorización.
+ */
+
+
 $id = '';
 if (isset($_GET['id'])) {
   $id = $_GET['id'];
