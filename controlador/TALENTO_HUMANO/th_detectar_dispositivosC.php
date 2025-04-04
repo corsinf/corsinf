@@ -84,12 +84,12 @@ class th_detectar_dispositivosC
 		// print_r($command);die();
 		$output = shell_exec($command);
 		$resp = json_decode($output,true);		
-		// $resp = json_decode($output['msj'],true);
-		$phpArray = array_map(function($json) {
-    return json_decode($json, true);
-}, $resp);
+		$resp = json_decode($output['msj'],true);
+// 		$phpArray = array_map(function($json) {
+//     return json_decode($json, true);
+// }, $resp);
 
-print_r($phpArray);
+// print_r($phpArray);
 
 		print_r($resp['msj']);die();
 
