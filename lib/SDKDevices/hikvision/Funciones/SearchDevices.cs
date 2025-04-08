@@ -96,7 +96,13 @@ namespace CorsinfSDKHik.Funciones
                         {
                             var xmlDoc = new XmlDocument();
                             xmlDoc.LoadXml(Encoding.UTF8.GetString(result.Buffer));
-                            responses.Add(JsonConvert.SerializeXmlNode(xmlDoc));
+                            XmlNode probeMatchNode = xmlDoc.SelectSingleNode("//ProbeMatch");
+
+                            if (probeMatchNode != null)
+                            {
+                                string probeMatchXml = JsonConvert.SerializeXmlNode(probeMatchNode);
+                                responses.Add(probeMatchXml); 
+                            }                           
                         }
                         catch (XmlException) { /* Respuesta no XML válida */ }
                     }

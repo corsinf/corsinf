@@ -107,18 +107,18 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                 { 
                     data: null,
                     render: function(data, type, item) {
-                        butons = `<button type="button" class="btn btn-primary btn-xs" title="Guardar Dispositivo" onclick="registrar_device('${item.IPv4Gateway}','${item.CommandPort}','${item.MAC}')">
+                        butons = `<button type="button" class="btn btn-primary btn-xs" title="Guardar Dispositivo" onclick="registrar_device('${item.ipv4}','${item.puerto}','${item.MAC}')">
                                     <i class="bx bx-save fs-7 me-0 fw-bold"></i>
                             </button>`;
 
                         return butons;
                     }
                 },
-                { data: 'N' },                   
-                { data: 'DeviceDescription' }, // Tipo dispositivo
+                { data: 'item' },                   
+                { data: 'tipo' }, // Tipo dispositivo
                 // { data: 'Tipo' }, // Estado
-                { data: 'IPv4Gateway' }, // IPV4
-                { data: 'CommandPort' }, // Puerto
+                { data: 'ipv4' }, // IPV4
+                { data: 'puerto' }, // Puerto
                 // { data: 'CommandPort' }, // Serial
                 { data: 'MAC' }, // MAC Address
                 
