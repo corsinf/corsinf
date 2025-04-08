@@ -52,7 +52,8 @@ class th_detectar_dispositivosC
     function __construct()
     {
         // $this->modelo = new th_detectar_dispositivosM();
-        $this->sdk_patch = dirname(__DIR__,2).'/lib/SDKDevices/hikvision/bin/Debug/net8.0/CorsinfSDKHik.dll ';
+        $this->sdk_patch = dirname(__DIR__,2).'\\lib\\SDKDevices\\hikvision\\bin\\Debug\\net8.0\\CorsinfSDKHik.dll ';
+        // $this->sdk_patch = "C:\\Users\\lenovo\\source\\repos\\CorsinfSDKHik\\CorsinfSDKHik\\bin\\Debug\\net8.0\\CorsinfSDKHik.dll";
         $this->modelo_dispositivos = new th_dispositivosM();
         $this->modelo_personas = new th_personasM();
         $this->modelo_biometria = new th_biometriaM();
@@ -77,7 +78,7 @@ class th_detectar_dispositivosC
 		// print_r($resp);die();
 
 
-    	$dllPath = $this->sdk_patch.'1 '.$brodcast.' '.$brodcast_port;
+    	$dllPath = $this->sdk_patch.'1';
 		// Comando para ejecutar la DLL
 		$command = "dotnet $dllPath";
 

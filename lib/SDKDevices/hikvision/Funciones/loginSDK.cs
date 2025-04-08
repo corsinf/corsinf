@@ -159,17 +159,24 @@ namespace CorsinfSDKHik.SDKs
 
     
 
-        public  String DetectarDeviceAsync(String Brodcast,String puerto)
+        public  async Task<String> DetectarDeviceAsync(String Brodcast,String puerto)
         {
-            var discoverer = new HikvisionDeviceDiscovery();
-            if (Brodcast.Length > 1 && puerto.Length > 1)
-            {
-               return discoverer.ScanNetworkForHikvisionDevices(Brodcast, puerto);
-            }
-            else 
-            {
-                return discoverer.ScanNetworkForHikvisionDevices();
-            }
+            //var discoverer = new HikvisionDeviceDiscovery();
+            var discoverer = new SearchDevices();
+
+           String  Resultado = await discoverer.SearchDevicesNet();
+            //if (Brodcast.Length > 1 && puerto.Length > 1)
+            //{
+            //    return discoverer.ScanNetworkForHikvisionDevices(Brodcast,puerto);
+            //   return discoverer.ScanNetworkForHikvisionDevices(Brodcast, puerto);
+            //}
+            //else 
+            //{
+            //    string resultados = discoverer.ScanNetworkForHikvisionDevices(puerto);
+            //    return resultados;
+            //    //return discoverer.ScanNetworkForHikvisionDevices();
+            //}
+            return Resultado;
         }
 
        

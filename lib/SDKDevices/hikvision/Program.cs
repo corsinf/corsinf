@@ -12,6 +12,7 @@ using System.Xml.Linq;
 using System.Text.Json;
 using System.Runtime;
 using Microsoft.Data.SqlClient;
+using Microsoft.IdentityModel.Tokens;
 
 class Program
 {
@@ -29,7 +30,7 @@ class Program
     static String passHost;
 
 
-    static void Main(string[] args)
+    public static async Task Main(string[] args)
     {
         var json = "";
         String r;
@@ -80,10 +81,12 @@ class Program
                     break;
                 case "1":
                     //DETECTAR DISPOSITIVOS CONECTADOS EN LA RED
-                    String Brodcast = args.Length > 1 ? args[1] : string.Empty;
-                    String puerto = args.Length > 1 ? args[2] : string.Empty;
-                    r = login.DetectarDeviceAsync(Brodcast,puerto);
-                    json = JsonSerializer.Serialize(new { msj = r });
+                    String tipo = args.Length > 1 ? args[1] : string.Empty;
+                    String Brodcast = "239.255.255.250";
+                    String puerto = "37020";
+                    if (!tipo.IsNullOrEmpty()) { Brodcast = string.Empty; }
+                    r = await login.DetectarDeviceAsync(Brodcast,puerto);
+                    json = JsonSerializer.Serialize(new { msj = r.ToString()});
                     break;
                 case "2":
                     //COMPROBAR CONEXION

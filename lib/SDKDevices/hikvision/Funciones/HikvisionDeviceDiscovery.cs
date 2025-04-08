@@ -7,11 +7,49 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
 using Newtonsoft.Json;
+using System.Net.NetworkInformation;
 
 namespace CorsinfSDKHik.Funciones
 {
     public class HikvisionDeviceDiscovery
     {
+        public async Task<String> BrodacastSearch(String port)
+        {
+            string onvifProbe = "<?xml version=\"1.0\" encoding=\"utf-8\"?><Probe><Uuid>13A888A9-F1B1-4020-AE9F-05607682D23B</Uuid><Types>inquiry</Types></Probe>";
+
+            byte[] probeBytes = Encoding.UTF8.GetBytes(onvifProbe);
+            var discoveredDevices = new List<string>();
+
+            using (var udpClient = new UdpClient())
+            {
+                udpClient.EnableBroadcast = true;
+                var broadcastEndPoint = new IPEndPoint(IPAddress.Broadcast, 3702);
+                await udpClient.SendAsync(probeBytes, probeBytes.Length, broadcastEndPoint);
+
+                var cancellationToken = new CancellationTokenSource(3000).Token;
+
+                try
+                {
+                    while (!cancellationToken.IsCancellationRequested)
+                    {
+                        var result = await udpClient.ReceiveAsync();
+                        string response = Encoding.UTF8.GetString(result.Buffer);
+                        Console.WriteLine($"Dispositivo ONVIF encontrado: {result.RemoteEndPoint.Address}");
+                        Console.WriteLine($"Respuesta XML: {response}");
+                        discoveredDevices.Add(response);
+                    }
+                    string jsonText2 = JsonConvert.SerializeObject(discoveredDevices);
+                    return jsonText2;
+                }
+                catch (OperationCanceledException)
+                {
+                    //Console.WriteLine("Escaneo ONVIF completado.");
+                    return "Escaneo ONVIF completado.";
+                }
+            }
+        }
+
+
         public String ScanNetworkForHikvisionDevices(String brodcast = "239.255.255.250",String puerto = "37020")
         {
 
@@ -25,7 +63,9 @@ namespace CorsinfSDKHik.Funciones
                 try
                 {
                     // Configurar la dirección de difusión
-                    IPEndPoint broadcastEndPoint = new IPEndPoint(IPAddress.Parse(brodcast), port);
+                    //IPEndPoint broadcastEndPoint = new IPEndPoint(IPAddress.Parse(brodcast), port);
+
+                    IPEndPoint broadcastEndPoint = new IPEndPoint(IPAddress.Broadcast, port);
 
                     // Mensaje XML a enviar
                     string xmlMessage = "<?xml version=\"1.0\" encoding=\"utf-8\"?><Probe><Uuid>13A888A9-F1B1-4020-AE9F-05607682D23B</Uuid><Types>inquiry</Types></Probe>";
