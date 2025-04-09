@@ -89,6 +89,13 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
 
     function inicializarTablaDispositivos() 
     {
+         var tipo = $('input[name="rbl_tipoBusqueda"]:checked').val();
+         if(tipo == 1 && $('#txt_vlans').val()=='')
+         {
+            Swal.fire("Ingrese todos los datos","","info");
+            return false;
+         }
+
         $('#myModal_espera').modal('show');
         // Verificar si ya existe una instancia de DataTable para destruirla antes de crear una nueva
         if ($.fn.DataTable.isDataTable('#tbl_dispositivos_red')) {
@@ -100,7 +107,7 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                 url: 'https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
             },
             ajax: {
-                url: '../controlador/TALENTO_HUMANO/th_detectar_dispositivosC.php?BuscarDevice=true&brodcast='+$('#txt_brodcast').val()+'&brodcast_port='+$('#txt_brodcast_port').val(),
+                url: '../controlador/TALENTO_HUMANO/th_detectar_dispositivosC.php?BuscarDevice=true&vlans='+$('#txt_vlans').val()+'&tipoBusqueda='+$('input[name="rbl_tipoBusqueda"]:checked').val(),
                 dataSrc: ''
             },
             columns: [
@@ -331,6 +338,21 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
         });
     }
 
+    function vlas_search()
+    {
+        var tipo = $('input[name="rbl_tipoBusqueda"]:checked').val();
+        console.log(tipo);
+        if(tipo==1)
+        {
+            $('#pnl_vlan_especifico').removeClass('d-none');
+
+        }else
+        {
+            $('#pnl_vlan_especifico').addClass('d-none');
+        }
+    }
+
+
 
 </script>
 
@@ -423,17 +445,18 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
             </div>
             <div class="modal-body">
                 <div class="row">
-                    <div class="col-md-9">
-                        <b>Brodcast</b>
-                        <input type="text" class="form-control form-control-sm" name="txt_brodcast" id="txt_brodcast">
-                    </div>
-                     <div class="col-md-9">
-                        <b>Puerto</b>
-                        <input type="text" class="form-control form-control-sm" name="txt_brodcast_port" id="txt_brodcast_port">
-                    </div>
-                    <div class="col-3">
+                    <div class="col-md-6">
+                        <label class="me-2" onclick="vlas_search()"><input type="radio" name="rbl_tipoBusqueda" id="rbl_default" checked value="0"> Por default</label>
+                        <label class="me-2" onclick="vlas_search()"><input type="radio" name="rbl_tipoBusqueda" id="rbl_vlan" value="1"> Vlan Especifica</label>
+                    </div>            
+                    <div class="col-md-6 text-end">
                         <button class="btn btn-primary btn-sm" type="button" onclick="inicializarTablaDispositivos()"><i class="bx bx-search"></i>Buscar</button>                        
                     </div>
+                     <div class="col-md-6 d-none" id="pnl_vlan_especifico">
+                        <b>vlan Especifica</b>
+                        <input type="text" class="form-control form-control-sm" name="txt_vlans" id="txt_vlans" placeholder="192.168.1">
+                        <span style="color:red;font-size:10px">* Si es mas de una vlan separar con coma (,)</span>
+                    </div>  
                 </div>
                <div class="row" style="overflow-x: scroll;">
                    <div class="col-sm-12">

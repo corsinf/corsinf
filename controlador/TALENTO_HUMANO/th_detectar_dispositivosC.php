@@ -9,17 +9,15 @@ require_once(dirname(__DIR__, 2) . '/modelo/TALENTO_HUMANO/th_control_accesoM.ph
 $controlador = new th_detectar_dispositivosC();
 
 if (isset($_GET['BuscarDevice'])) {
-	$brodcast ='239.255.255.250';
-	$brodcast_port = 37020;
-	if(isset($_GET['brodcast']))
+	if(isset($_GET['vlans']))
 	{
-		$brodcast = $_GET['brodcast'];
+		$vlans = $_GET['vlans'];
 	}
-	if(isset($_GET['brodcast_port']))
+	if(isset($_GET['tipoBusqueda']))
 	{
-		$brodcast_port = $_GET['brodcast_port'];
+		$tipoBusqueda = $_GET['tipoBusqueda'];
 	}
-    echo json_encode($controlador->BuscarDevice($brodcast,$brodcast_port));
+    echo json_encode($controlador->BuscarDevice($vlans,$tipoBusqueda));
 }
 
 if (isset($_GET['ProbarConexion'])) {
@@ -60,9 +58,14 @@ class th_detectar_dispositivosC
         $this->control_acceso = new th_control_accesoM();
     }
 
-    function BuscarDevice($brodcast,$brodcast_port)
+    function BuscarDevice($vlans,$tipoBusqueda)
     {
-    	$dllPath = $this->sdk_patch.'1';
+    	$vlans = ' '.$vlans;
+    	if($tipoBusqueda==0)
+    	{
+    		$vlans = '';
+    	}
+    	$dllPath = $this->sdk_patch.'1'.$vlans;
 		// Comando para ejecutar la DLL
 		$command = "dotnet $dllPath";
 

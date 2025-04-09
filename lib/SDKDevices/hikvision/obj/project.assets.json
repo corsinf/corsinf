@@ -47,6 +47,19 @@
           }
         }
       },
+      "Lextm.SharpSnmpLib/12.5.5": {
+        "type": "package",
+        "compile": {
+          "lib/net6.0/SharpSnmpLib.dll": {
+            "related": ".pdb;.xml"
+          }
+        },
+        "runtime": {
+          "lib/net6.0/SharpSnmpLib.dll": {
+            "related": ".pdb;.xml"
+          }
+        }
+      },
       "Microsoft.Bcl.AsyncInterfaces/1.1.1": {
         "type": "package",
         "compile": {
@@ -638,6 +651,23 @@
         "azureicon.png",
         "lib/netstandard2.0/Azure.Identity.dll",
         "lib/netstandard2.0/Azure.Identity.xml"
+      ]
+    },
+    "Lextm.SharpSnmpLib/12.5.5": {
+      "sha512": "Bq4p+KIeqwT0ALm4W8+ifCVG5quo9CdbHlM2m/Ig/SfpyMoynLhFAMVHEZlxt1N3MHm6sJvNIpk2+D8Q9gnZ1Q==",
+      "type": "package",
+      "path": "lextm.sharpsnmplib/12.5.5",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lextm.sharpsnmplib.12.5.5.nupkg.sha512",
+        "lextm.sharpsnmplib.nuspec",
+        "lib/net471/SharpSnmpLib.dll",
+        "lib/net471/SharpSnmpLib.pdb",
+        "lib/net471/SharpSnmpLib.xml",
+        "lib/net6.0/SharpSnmpLib.dll",
+        "lib/net6.0/SharpSnmpLib.pdb",
+        "lib/net6.0/SharpSnmpLib.xml"
       ]
     },
     "Microsoft.Bcl.AsyncInterfaces/1.1.1": {
@@ -1726,6 +1756,7 @@
   },
   "projectFileDependencyGroups": {
     "net8.0": [
+      "Lextm.SharpSnmpLib >= 12.5.5",
       "Microsoft.Data.SqlClient >= 5.2.2",
       "Newtonsoft.Json >= 13.0.3"
     ]
@@ -1775,6 +1806,10 @@
       "net8.0": {
         "targetAlias": "net8.0",
         "dependencies": {
+          "Lextm.SharpSnmpLib": {
+            "target": "Package",
+            "version": "[12.5.5, )"
+          },
           "Microsoft.Data.SqlClient": {
             "target": "Package",
             "version": "[5.2.2, )"
