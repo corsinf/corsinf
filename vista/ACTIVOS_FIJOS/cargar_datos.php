@@ -10,7 +10,7 @@
       var fi = $('#file').val();
       if (id != '' && fi != '') {
 
-        var formData = new FormData(document.getElementById("form_img"));
+        var formData = new FormData(document.getElementById("form_carga_datos"));
         $.ajax({
           url: '../controlador/ACTIVOS_FIJOS/cargar_datosC.php?subir_archivo_server=true',
           type: 'post',
@@ -23,7 +23,7 @@
           //     },
           success: function(response) {
             if (response == 1) {
-              cargar_datos();
+              // cargar_datos();
             } else {
               Swal.fire('Formato del archivo incorrecto', 'asegurese que el archivo sea (.cvs)', 'error');
 
@@ -220,8 +220,9 @@
                 <a href="#" style="display: none;" id="link_plantilla" class="font-13" download><i class="bx bx-file me-0"></i> Descargar plantilla</a><br>
                 <a href="#" style="display: none;" id="link_ficha" class="font-13" download><i class="bx bx-file me-0"></i> Descargar ficha tecnica</a>
               </div>
+
               <div class="col-sm-6">
-                <form enctype="multipart/form-data" id="form_img" method="post">
+                <form enctype="multipart/form-data" id="form_carga_datos" method="post">
                   <input type="hidden" id="txt_opcion" name="txt_opcion">
                   <input type="file" name="file" id="file" class="form-control">
                   <p><b>Nota:</b> El archivo debera tener un maximo de 10000 items</p>
@@ -236,6 +237,7 @@
             </div>
           </div>
         </div>
+        
         <div class="card">
           <div class="card-body">
             <div class="row">
