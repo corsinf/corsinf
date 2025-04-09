@@ -45,7 +45,8 @@ class cargar_datosC
 		if ($file['file']['type'] == 'text/csv') {
 			$uploadfile_temporal = $file['file']['tmp_name'];
 			// $ruta = 'C:/Users/Irlanda/Downloads/TEMP/';
-			$ruta = '\\\\CORS001\\Share\\htdocs\\TEMP\\';
+			$ruta = 'C:/Apache24/htdocs/php81/corsinf/TEMP/';
+			// $ruta = '//CORS001/Share/htdocs/TEMP/';
 
 			if (!file_exists($ruta)) {
 				mkdir($ruta, 0777, true);
