@@ -159,12 +159,12 @@ namespace CorsinfSDKHik.SDKs
 
     
 
-        public  async Task<String> DetectarDeviceAsync(String Brodcast,String puerto)
+        public  async Task<String> DetectarDeviceAsync(String vlans)
         {
             //var discoverer = new HikvisionDeviceDiscovery();
             var discoverer = new SearchDevices();
+           String  Resultado = await discoverer.SearchDevicesNet(vlans);
 
-           String  Resultado = await discoverer.SearchDevicesNet();
             //if (Brodcast.Length > 1 && puerto.Length > 1)
             //{
             //    return discoverer.ScanNetworkForHikvisionDevices(Brodcast,puerto);

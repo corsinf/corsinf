@@ -45,11 +45,15 @@ Data12/*
 
 ================= detectar dispositivo =================
 1
+192.168.1 -> vlan a buscar / por defaout dejar en blanco
 
 ==================================listar donet activos ===================================
 tasklist | findstr dotnet
 ====================================eliminar procesos donet
 taskkill /IM dotnet.exe /F
 
+
+instalar al libreria
+Install-Package SharpSnmpLib
 
 

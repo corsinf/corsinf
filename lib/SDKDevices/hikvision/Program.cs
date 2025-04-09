@@ -81,11 +81,8 @@ class Program
                     break;
                 case "1":
                     //DETECTAR DISPOSITIVOS CONECTADOS EN LA RED
-                    String tipo = args.Length > 1 ? args[1] : string.Empty;
-                    String Brodcast = "239.255.255.250";
-                    String puerto = "37020";
-                    if (!tipo.IsNullOrEmpty()) { Brodcast = string.Empty; }
-                    r = await login.DetectarDeviceAsync(Brodcast,puerto);
+                    String vlans = args.Length > 1 ? args[1] : string.Empty;
+                    r = await login.DetectarDeviceAsync(vlans);
                     json = JsonSerializer.Serialize(new { msj = r.ToString()});
                     break;
                 case "2":

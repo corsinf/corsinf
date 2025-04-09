@@ -9,17 +9,15 @@ require_once(dirname(__DIR__, 2) . '/modelo/TALENTO_HUMANO/th_control_accesoM.ph
 $controlador = new th_detectar_dispositivosC();
 
 if (isset($_GET['BuscarDevice'])) {
-	$brodcast ='239.255.255.250';
-	$brodcast_port = 37020;
-	if(isset($_GET['brodcast']))
+	if(isset($_GET['vlans']))
 	{
-		$brodcast = $_GET['brodcast'];
+		$vlans = $_GET['vlans'];
 	}
-	if(isset($_GET['brodcast_port']))
+	if(isset($_GET['tipoBusqueda']))
 	{
-		$brodcast_port = $_GET['brodcast_port'];
+		$tipoBusqueda = $_GET['tipoBusqueda'];
 	}
-    echo json_encode($controlador->BuscarDevice($brodcast,$brodcast_port));
+    echo json_encode($controlador->BuscarDevice($vlans,$tipoBusqueda));
 }
 
 if (isset($_GET['ProbarConexion'])) {
@@ -60,44 +58,36 @@ class th_detectar_dispositivosC
         $this->control_acceso = new th_control_accesoM();
     }
 
-    function BuscarDevice($brodcast,$brodcast_port)
+    function BuscarDevice($vlans,$tipoBusqueda)
     {
-
-    	// // $datos = array(array('nombre'=>'hola','host'=>'192.168.100.1','_id'=>1));
-    	// $this->sdk_patch = dirname(__DIR__,2).'/lib/SDKDevices/hikvision/DetectarDevice/HikvisionFinder.jar';
-
-
-    	// $dllPath = $this->sdk_patch;
-		// // Comando para ejecutar la DLL
-		// $command = "java -jar $dllPath";
-
-		// // print_r($command);die();
-		// $output = shell_exec($command);
-		// $resp = json_decode($output,true);
-
-		// print_r($resp);die();
-
-
-    	$dllPath = $this->sdk_patch.'1';
+    	$vlans = ' '.$vlans;
+    	if($tipoBusqueda==0)
+    	{
+    		$vlans = '';
+    	}
+    	$dllPath = $this->sdk_patch.'1'.$vlans;
 		// Comando para ejecutar la DLL
 		$command = "dotnet $dllPath";
 
 		// print_r($command);die();
 		$output = shell_exec($command);
-		$resp = json_decode($output,true);		
-		// $resp = json_decode($output['msj'],true);
-		$phpArray = array_map(function($json) {
-    return json_decode($json, true);
-}, $resp);
+		$resp = json_decode($output,true);
+		$resp = json_decode($resp['msj'],true);
 
-print_r($phpArray);
+		// $phpArray = array_map(function($json) {
+		//     return json_decode($json, true);
+		// }, $resp);
+
+		// print_r($phpArray);
 
 		// print_r($resp);
-		die();
+		// die();
 
 		$tr = array();
 		foreach ($resp as $key => $value) {
 			$device =  json_decode($value,true);
+
+			// print_r($device);die();
 
 			if(!isset($device['Error']))
 			{
@@ -116,11 +106,11 @@ print_r($phpArray);
 		}
 
 		// Muestra la salida
-		print_r($resp);die();
+		// print_r($tr);die();
 
 
 
-    	return $resp;
+    	return $tr;
     }
 
 
