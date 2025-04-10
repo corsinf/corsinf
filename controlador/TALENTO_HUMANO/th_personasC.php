@@ -197,8 +197,27 @@ class th_personasC
             $cadena = '[' . str_replace(['":', '}', ',"'], ['":"', '"}', '","'], $cadena) . ']';
             // print_r($cadena);die();
             $datos = json_decode($cadena, true);
+            $lista = array();
+            // print_r($datos);
+            if(count($datos)>0)
+            {
+                foreach ($datos as $key => $value) {
+                    $nombres = explode(" ",$value['nombre']);
+                    if(count($nombres)<4)
+                    {
+                        for ($i=count($nombres); $i <4; $i++) { 
+                            $nombres[$i] = '';
+                        }
+                    }
+                    $lista[] = array("CardNo"=>$value['CardNo'],"nombre"=>$nombres);
+                }
+            }
 
-            return $datos;
+            // print_r($lista);die();
+
+            // print_r($datos[0]['nombre']);die();
+
+            return $lista;
         } else {
             return -1;
         }
