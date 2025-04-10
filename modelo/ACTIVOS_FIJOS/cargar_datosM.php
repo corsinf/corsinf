@@ -110,7 +110,7 @@ class cargar_datosM
 	{
 		$sql = "SELECT id_plantilla as 'ID' FROM ac_articulos P
 				INNER JOIN ac_asset A ON P.ID_ASSET =  A.ID_ASSET
-				WHERE A.TAG_SERIE = '" . $ASSETS . "'";
+				WHERE A.TAG_SERIE = '" . $ac_asset . "'";
 		$datos = $this->db->datos($sql);
 		if (count($datos) > 0) {
 			return $datos[0]['ID'];
