@@ -197,7 +197,7 @@ class cargar_datosM
 			array(&$USUARIO, SQLSRV_PARAM_IN)
 		);
 		$sql = "EXEC SP_ACTUALIZAR_GENERO @OPCION=?,@USUARIO=?";
-		$re = $this->db->ejecutar_procesos_almacenados($sql, $parametros);
+		$re = $this->db->ejecutar_procedimiento_con_retorno_1($sql, $parametros);
 		return $re;
 	}
 
@@ -283,7 +283,43 @@ class cargar_datosM
 		return $re;
 	}
 
-	function log_activo($fecha = false, $intento = false, $accion = False, $estado = false)
+	function log_activo($identificador = '')
+	{
+		if ($identificador != '') {
+			$sql = "SELECT * FROM ac_log_activos WHERE identificador = '$identificador'; ";
+
+			// print_r($sql);die();
+			$datos = $this->db->datos($sql);
+			return $datos;
+		} else {
+			return [];
+		}
+	}
+
+	function log_activo_contador()
+	{
+		$sql = "SELECT COUNT(ac_cont_id) AS 'contador' FROM ac_log_activos_contador;";
+
+		// print_r($sql);die();
+		$datos = $this->db->datos($sql);
+		return $datos[0]['contador'];
+	}
+
+	function log_activo_contador_insert($identificador)
+	{
+		$sql = "INSERT INTO ac_log_activos_contador (ac_cont_nombre) VALUES ('$identificador');";
+		// print_r($sql);die();
+		$this->db->datos($sql);
+	}
+
+
+	/**
+	 * @deprecated Funciones dadas de baja el 10/04/2025.
+	 * @note Este archivo se mantiene como respaldo, pero ya no se utilizará en producción.
+	 * @warning No modificar este archivo. Para cambios, referirse a la nueva implementación.
+	 */
+
+	function log_activo_anterior($fecha = false, $intento = false, $accion = False, $estado = false)
 	{
 
 		$sql = "SELECT * FROM ac_log_activos WHERE 1=1 ";
@@ -308,4 +344,8 @@ class cargar_datosM
 		$re = $this->db->datos($sql);
 		return $re;
 	}
+
+	/**
+	 * Fin @deprecated
+	 */
 }

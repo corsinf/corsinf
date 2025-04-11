@@ -22,8 +22,8 @@ if (isset($_GET['ejecutar_sp'])) {
 }
 
 if (isset($_GET['log_activos'])) {
-	$parametros = $_POST['parametros'];
-	echo json_encode($controlador->log_activos($parametros));
+	$identificador = $_GET['identificador'];
+	echo json_encode($controlador->log_activos($identificador));
 	//echo json_encode($controlador->ejecutar_sp($parametros));
 }
 
@@ -44,9 +44,14 @@ class cargar_datosC
 	{
 		if ($file['file']['type'] == 'text/csv') {
 			$uploadfile_temporal = $file['file']['tmp_name'];
-			// $ruta = 'C:/Users/Irlanda/Downloads/TEMP/';
-			$ruta = 'C:/Apache24/htdocs/php81/corsinf/TEMP/';
-			// $ruta = '//CORS001/Share/htdocs/TEMP/';
+			$ruta = 'C:/Apache24/htdocs/php81/corsinf/TEMPs/';
+			$ruta = 'Z:/htdocs/TEMP/'; //192.168.1.40
+			//$ruta = '//192.168.1.5/Share/htdocs/TEMP/'; 
+			//print_r($ruta);exit();
+
+			//if (!file_exists($ruta)) {
+			//	mkdir($ruta, 0777, true);
+			//}
 
 			if (!file_exists($ruta)) {
 				mkdir($ruta, 0777, true);
@@ -135,7 +140,20 @@ class cargar_datosC
 		}
 	}
 
-	function log_activos($parametros)
+	function log_activos($identificador)
+	{
+		// print_r($parametros);die();
+		$datos = $this->modelo->log_activo($identificador);
+		return $datos;
+	}
+
+	/**
+	 * @deprecated Funciones dadas de baja el 10/04/2025.
+	 * @note Este archivo se mantiene como respaldo, pero ya no se utilizará en producción.
+	 * @warning No modificar este archivo. Para cambios, referirse a la nueva implementación.
+	 */
+
+	function log_activos_anterior($parametros)
 	{
 		// print_r($parametros);die();
 		$datos = $this->modelo->log_activo($parametros['fecha'], $parametros['intento'], $parametros['accion'], $parametros['estado']);
@@ -153,4 +171,8 @@ class cargar_datosC
 
 		return $informe;
 	}
+
+	/**
+	 * Fin @deprecated
+	 */
 }
