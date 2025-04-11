@@ -119,6 +119,8 @@ class cargar_datosM
 		}
 	}
 
+	/************************************************************************************/
+
 	function ejecutar_activos()
 	{
 		set_time_limit(0);
@@ -127,7 +129,7 @@ class cargar_datosM
 			$USUARIO
 		);
 		$sql = "EXEC SP_CARGA_MASIVA_NEW @USUARIO=?";
-		$re = $this->db->ejecutar_procesos_almacenados($sql, $parametros);
+		$re = $this->db->ejecutar_procedimiento_con_retorno_1($sql, $parametros);
 		return $re;
 	}
 
@@ -136,12 +138,9 @@ class cargar_datosM
 		set_time_limit(0);
 		$OPCION = $tip;
 		$USUARIO = $_SESSION['INICIO']['USUARIO'];
-		$parametros = array(
-			array(&$OPCION, SQLSRV_PARAM_IN),
-			array(&$USUARIO, SQLSRV_PARAM_IN)
-		);
+		$parametros = array($OPCION, $USUARIO);
 		$sql = "EXEC SP_ACTUALIZAR_CUSTODIOS @OPCION=?,@USUARIO=?";
-		$re = $this->db->ejecutar_procesos_almacenados($sql, $parametros);
+		$re = $this->db->ejecutar_procedimiento_con_retorno_1($sql, $parametros);
 		return $re;
 	}
 
@@ -152,7 +151,7 @@ class cargar_datosM
 		$USUARIO = $_SESSION['INICIO']['USUARIO'];
 		$parametros = array($OPCION, $USUARIO);
 		$sql = "EXEC SP_ACTUALIZAR_LOCALIZACION @OPCION=?,@USUARIO=?";
-		$re = $this->db->ejecutar_procesos_almacenados($sql, $parametros);
+		$re = $this->db->ejecutar_procedimiento_con_retorno_1($sql, $parametros);
 		return $re;
 	}
 
@@ -161,12 +160,9 @@ class cargar_datosM
 		set_time_limit(0);
 		$OPCION = $tip;
 		$USUARIO = $_SESSION['INICIO']['USUARIO'];
-		$parametros = array(
-			array(&$OPCION, SQLSRV_PARAM_IN),
-			array(&$USUARIO, SQLSRV_PARAM_IN)
-		);
+		$parametros = array($OPCION, $USUARIO);
 		$sql = "EXEC SP_ACTUALIZAR_MARCAS @OPCION=?,@USUARIO=?";
-		$re = $this->db->ejecutar_procesos_almacenados($sql, $parametros);
+		$re = $this->db->ejecutar_procedimiento_con_retorno_1($sql, $parametros);
 		return $re;
 	}
 
@@ -175,12 +171,9 @@ class cargar_datosM
 		set_time_limit(0);
 		$OPCION = $tip;
 		$USUARIO = $_SESSION['INICIO']['USUARIO'];
-		$parametros = array(
-			array(&$OPCION, SQLSRV_PARAM_IN),
-			array(&$USUARIO, SQLSRV_PARAM_IN)
-		);
+		$parametros = array($OPCION, $USUARIO);
 		$sql = "EXEC SP_ACTUALIZAR_ESTADO @OPCION=?,@USUARIO=?";
-		$re = $this->db->ejecutar_procesos_almacenados($sql, $parametros);
+		$re = $this->db->ejecutar_procedimiento_con_retorno_1($sql, $parametros);
 		return $re;
 	}
 
@@ -200,12 +193,9 @@ class cargar_datosM
 		set_time_limit(0);
 		$OPCION = $tip;
 		$USUARIO = $_SESSION['INICIO']['USUARIO'];
-		$parametros = array(
-			array(&$OPCION, SQLSRV_PARAM_IN),
-			array(&$USUARIO, SQLSRV_PARAM_IN)
-		);
+		$parametros = array($OPCION, $USUARIO);
 		$sql = "EXEC SP_ACTUALIZAR_COLORES @OPCION=?,@USUARIO=?";
-		$re = $this->db->ejecutar_procesos_almacenados($sql, $parametros);
+		$re = $this->db->ejecutar_procedimiento_con_retorno_1($sql, $parametros);
 		return $re;
 	}
 
@@ -216,19 +206,18 @@ class cargar_datosM
 		set_time_limit(0);
 		$OPCION = $tip;
 		$USUARIO = $_SESSION['INICIO']['USUARIO'];
-		$parametros = array(
-			array(&$OPCION, SQLSRV_PARAM_IN),
-			array(&$USUARIO, SQLSRV_PARAM_IN)
-		);
+		$parametros = array($OPCION, $USUARIO);
 		$sql = "EXEC SP_ACTUALIZAR_PROYECTOS @OPCION=?,@USUARIO=?";
-		$re = $this->db->ejecutar_procesos_almacenados($sql, $parametros);
+		$re = $this->db->ejecutar_procedimiento_con_retorno_1($sql, $parametros);
 		return $re;
 	}
+
+	/************************************************************************************/
 
 	function validar_datos()
 	{
 		$sql = "EXEC SP_CARGAR_PLANTILLA";
-		$re = $this->db->ejecutar_procesos_almacenados($sql);
+		$re = $this->db->ejecutar_procedimiento_con_retorno_1($sql);
 		return $re;
 	}
 
@@ -259,7 +248,7 @@ class cargar_datosM
 			array(&$USUARIO, SQLSRV_PARAM_IN)
 		);
 		$sql = "EXEC SP_ACTUALIZAR_CLASES_MOVIMIENTO @OPCION=?,@USUARIO=?";
-		$re = $this->db->ejecutar_procesos_almacenados($sql, $parametros);
+		$re = $this->db->ejecutar_procedimiento_con_retorno_1($sql, $parametros);
 		return $re;
 	}
 
@@ -273,7 +262,7 @@ class cargar_datosM
 			array(&$USUARIO, SQLSRV_PARAM_IN)
 		);
 		$sql = "EXEC SP_ACTUALIZACION_ACTIVOS @USUARIO=?";
-		$re = $this->db->ejecutar_procesos_almacenados($sql, $parametros);
+		$re = $this->db->ejecutar_procedimiento_con_retorno_1($sql, $parametros);
 		return $re;
 	}
 
