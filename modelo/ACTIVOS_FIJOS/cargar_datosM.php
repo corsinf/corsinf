@@ -151,7 +151,7 @@ class cargar_datosM
 		$OPCION = $tip;
 		$USUARIO = $_SESSION['INICIO']['USUARIO'];
 		$parametros = array($OPCION, $USUARIO);
-		$sql = "EXEC SP_ACTUALIZAR_EMPLAZAMIENTO @OPCION=?,@USUARIO=?";
+		$sql = "EXEC SP_ACTUALIZAR_LOCALIZACION @OPCION=?,@USUARIO=?";
 		$re = $this->db->ejecutar_procesos_almacenados($sql, $parametros);
 		return $re;
 	}
