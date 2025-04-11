@@ -44,18 +44,16 @@ class cargar_datosC
 	{
 		if ($file['file']['type'] == 'text/csv') {
 			$uploadfile_temporal = $file['file']['tmp_name'];
-			$ruta = 'C:/Apache24/htdocs/php81/corsinf/TEMPs/';
-			$ruta = 'Z:/htdocs/TEMP/'; //192.168.1.40
+			// $ruta = 'C:/Apache24/htdocs/php81/corsinf/TEMPs/';
+			// $ruta = 'Z:/htdocs/TEMP/'; //192.168.1.40
 			//$ruta = '//192.168.1.5/Share/htdocs/TEMP/'; 
+			$ruta = '//CORS001/Share/htdocs/TEMP/'; //192.168.1.40
+
 			//print_r($ruta);exit();
 
 			//if (!file_exists($ruta)) {
 			//	mkdir($ruta, 0777, true);
 			//}
-
-			if (!file_exists($ruta)) {
-				mkdir($ruta, 0777, true);
-			}
 
 			//$tipo = explode('/', $file['file']['type']);
 			$nombre = '';

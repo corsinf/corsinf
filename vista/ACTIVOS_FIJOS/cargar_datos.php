@@ -7,6 +7,8 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
 
 <script type="text/javascript">
   $(document).ready(function() {
+    let identificador_global = '';
+
     tbl_logs_carga = $('#tbl_logs_carga').DataTable($.extend({}, configuracion_datatable('Logs de carga', 'logs de carga'), {
       reponsive: true,
       language: {
@@ -15,7 +17,7 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
       ajax: {
         url: '../controlador/ACTIVOS_FIJOS/cargar_datosC.php?log_activos=true',
         data: function(d) {
-          d.identificador = '';
+          d.identificador = identificador_global;
         },
         dataSrc: ''
       },
@@ -104,21 +106,32 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
       dataType: 'json',
       success: function(response) {
         console.log(response);
-        if (response == 1) {
-          Swal.fire('Carga completa', '', 'success').then(function() {
-            $('#modal_proceso').modal('hide');
-            // console.log(id);                  
-            // log_activos()
-          });
-        } else {
-          Swal.fire('No se pudo completar', 'Asegurese que los datos esten en los formatos correctos y sin (;) punto y comas ó revise la cantidad de items en el archivo', 'error').then(function() {
+        // Validar si la respuesta es un array con al menos un elemento
+        if (Array.isArray(response) && response.length > 0) {
+          let id = response[0].nuevo_id;
+          let identificador = response[0].nombre_generado;
 
+          Swal.fire('Carga completa', 'ID generado: ' + id + '<br>Identificador: ' + identificador, 'success').then(function() {
+            $('#modal_proceso').modal('hide');
+            recargar_logs_identificador(nombre);
+          });
+
+        } else {
+          Swal.fire(
+            'No se pudo completar',
+            'Asegúrese que los datos estén en los formatos correctos y sin (;) punto y comas ó revise la cantidad de items en el archivo',
+            'error'
+          ).then(function() {
             $('#modal_proceso').modal('hide');
           });
         }
       }
-
     });
+  }
+
+  function recargar_logs_identificador(identificador) {
+    identificador_global = identificador;
+    tbl_logs_carga.ajax.reload();
   }
 
   function opcion_carga() {
