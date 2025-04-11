@@ -62,7 +62,7 @@ class cargar_datosC
 			} elseif ($op == 2) {
 				$nombre = 'CUSTODIOS.csv';
 			} elseif ($op == 3) {
-				$nombre = 'EMPLAZAMIENTOS.csv';
+				$nombre = 'LOCALIZACIONES.csv';
 			} elseif ($op == 4) {
 				$nombre = 'MARCAS.csv';
 			} elseif ($op == 5) {
