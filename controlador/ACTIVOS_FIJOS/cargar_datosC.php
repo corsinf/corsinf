@@ -22,7 +22,7 @@ if (isset($_GET['ejecutar_sp'])) {
 }
 
 if (isset($_GET['log_activos'])) {
-	$identificador = $_GET['identificador'];
+	$identificador = $_POST['identificador'];
 	echo json_encode($controlador->log_activos($identificador));
 	//echo json_encode($controlador->ejecutar_sp($parametros));
 }

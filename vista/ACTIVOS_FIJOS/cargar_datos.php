@@ -7,47 +7,58 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
 
 <script type="text/javascript">
   $(document).ready(function() {
-    let identificador_global = '';
-
-    tbl_logs_carga = $('#tbl_logs_carga').DataTable($.extend({}, configuracion_datatable('Logs de carga', 'logs de carga'), {
-      reponsive: true,
-      language: {
-        url: 'https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
-      },
-      ajax: {
-        url: '../controlador/ACTIVOS_FIJOS/cargar_datosC.php?log_activos=true',
-        data: function(d) {
-          d.identificador = identificador_global;
-        },
-        dataSrc: ''
-      },
-
-      // 'id_log'
-      // 'contador'
-      columns: [{
-          data: 'detalle'
-        },
-        {
-          data: 'estado'
-        },
-        {
-          data: 'fecha'
-        },
-        {
-          data: 'intento'
-        },
-        {
-          data: 'accion'
-        },
-        {
-          data: 'usuario'
-        },
-      ],
-      order: [
-        [0, 'desc']
-      ]
-    }));
+    //cargar_datos();
   });
+
+  function cargar_tabla_logs(identificador) {
+    // Referencia a la tabla
+    let $tabla = $('#tbl_logs_carga');
+
+    if ($.fn.DataTable.isDataTable($tabla)) {
+      let tbl_logs_carga = $tabla.DataTable();
+      tbl_logs_carga.ajax.url('../controlador/ACTIVOS_FIJOS/cargar_datosC.php?log_activos=true').load();
+      tbl_logs_carga.ajax.reload(function(json) {
+        console.log('Tabla recargada con identificador:', identificador);
+      });
+    } else {
+      let tbl_logs_carga = $tabla.DataTable($.extend({}, configuracion_datatable('Logs de carga', 'logs de carga'), {
+        responsive: true,
+        language: {
+          url: 'https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
+        },
+        ajax: {
+          url: '../controlador/ACTIVOS_FIJOS/cargar_datosC.php?log_activos=true',
+          type: 'POST', // Usar POST para mayor seguridad
+          data: function(d) {
+            d.identificador = identificador; // Enviar el identificador
+          },
+          dataSrc: ''
+        },
+        columns: [{
+            data: 'detalle'
+          },
+          {
+            data: 'fecha'
+          },
+          {
+            data: 'accion'
+          },
+          {
+            data: 'intento'
+          },
+          {
+            data: 'estado'
+          },
+          {
+            data: 'usuario'
+          }
+        ],
+        order: [
+          [0, 'desc']
+        ]
+      }));
+    }
+  }
 </script>
 
 <script type="text/javascript">
@@ -113,7 +124,7 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
 
           Swal.fire('Carga completa', 'ID generado: ' + id + '<br>Identificador: ' + identificador, 'success').then(function() {
             $('#modal_proceso').modal('hide');
-            recargar_logs_identificador(nombre);
+            cargar_tabla_logs(identificador);
           });
 
         } else {
@@ -127,11 +138,6 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
         }
       }
     });
-  }
-
-  function recargar_logs_identificador(identificador) {
-    identificador_global = identificador;
-    tbl_logs_carga.ajax.reload();
   }
 
   function opcion_carga() {
