@@ -278,7 +278,7 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                   <option disabled selected>Elige los datos que deseas cargar</option>
                   <option value="1">Cargar Activos</option>
                   <option value="2">Cargar Custodios</option>
-                  <option value="3">Cargar Emplazamientos</option>
+                  <option value="3">Cargar Localización</option>
                   <option value="4">Cargar Marcas</option>
                   <option value="5">Cargar Estado</option>
                   <option value="6">Cargar Género</option>

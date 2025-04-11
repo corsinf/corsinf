@@ -145,15 +145,12 @@ class cargar_datosM
 		return $re;
 	}
 
-	function ejecutar_emplazamiento($tip)
+	function ejecutar_localizacion($tip)
 	{
 		set_time_limit(0);
 		$OPCION = $tip;
 		$USUARIO = $_SESSION['INICIO']['USUARIO'];
-		$parametros = array(
-			array(&$OPCION, SQLSRV_PARAM_IN),
-			array(&$USUARIO, SQLSRV_PARAM_IN)
-		);
+		$parametros = array($OPCION, $USUARIO);
 		$sql = "EXEC SP_ACTUALIZAR_EMPLAZAMIENTO @OPCION=?,@USUARIO=?";
 		$re = $this->db->ejecutar_procesos_almacenados($sql, $parametros);
 		return $re;

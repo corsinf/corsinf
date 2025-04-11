@@ -105,7 +105,7 @@ class cargar_datosC
 			return $resp;
 		} else if ($parametros['id'] == 3) {
 			$op =  $parametros['tip'] == 'false' ? 0 : 1;
-			$resp = $this->modelo->ejecutar_emplazamiento($op);
+			$resp = $this->modelo->ejecutar_localizacion($op);
 			return $resp;
 		} else if ($parametros['id'] == 4) {
 			$op =  $parametros['tip'] == 'false' ? 0 : 1;
