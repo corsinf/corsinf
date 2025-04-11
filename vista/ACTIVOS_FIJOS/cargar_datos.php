@@ -122,7 +122,8 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
           let id = response[0].nuevo_id;
           let identificador = response[0].nombre_generado;
 
-          Swal.fire('Carga completa', 'ID generado: ' + id + '<br>Identificador: ' + identificador, 'success').then(function() {
+          // 'ID generado: ' + id +
+          Swal.fire('Carga completa', 'Identificador: ' + identificador, 'success').then(function() {
             $('#modal_proceso').modal('hide');
             cargar_tabla_logs(identificador);
           });
