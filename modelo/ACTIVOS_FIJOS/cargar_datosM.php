@@ -121,14 +121,13 @@ class cargar_datosM
 
 	/************************************************************************************/
 
-	function ejecutar_activos()
+	function ejecutar_articulos($tip)
 	{
 		set_time_limit(0);
+		$OPCION = $tip;
 		$USUARIO = $_SESSION['INICIO']['USUARIO'];
-		$parametros = array(
-			$USUARIO
-		);
-		$sql = "EXEC SP_CARGA_MASIVA_NEW @USUARIO=?";
+		$parametros = array($OPCION, $USUARIO);
+		$sql = "EXEC SP_ACTUALIZACION_ARTICULOS @OPCION=?, @USUARIO=?";
 		$re = $this->db->ejecutar_procedimiento_con_retorno_1($sql, $parametros);
 		return $re;
 	}

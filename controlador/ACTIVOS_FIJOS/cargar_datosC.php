@@ -58,7 +58,7 @@ class cargar_datosC
 			//$tipo = explode('/', $file['file']['type']);
 			$nombre = '';
 			if ($op == 1) {
-				$nombre = 'datos.csv';
+				$nombre = 'ARTICULOS.csv';
 			} elseif ($op == 2) {
 				$nombre = 'CUSTODIOS.csv';
 			} elseif ($op == 3) {
@@ -97,7 +97,8 @@ class cargar_datosC
 
 		set_time_limit(0);
 		if ($parametros['id'] == 1) {
-			$resp = $this->modelo->ejecutar_activos();
+			$op =  $parametros['tip'] == 'false' ? 0 : 1;
+			$resp = $this->modelo->ejecutar_articulos($op);
 			return $resp;
 		} else if ($parametros['id'] == 2) {
 			$op =  $parametros['tip'] == 'false' ? 0 : 1;
