@@ -276,7 +276,7 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
               <div class="col-sm-4">
                 <select class="form-control form-select" id="ddl_opcion" onchange="opcion_carga()">
                   <option disabled selected>Elige los datos que deseas cargar</option>
-                  <option value="1">Cargar Activos</option>
+                  <option value="1">Cargar Artículos</option>
                   <option value="2">Cargar Custodios</option>
                   <option value="3">Cargar Localización</option>
                   <option value="4">Cargar Marcas</option>
@@ -285,7 +285,7 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                   <option value="7">Cargar Color</option>
                   <option value="8">Cargar Proyectos</option>
                   <option value="9">Cargar Clase de Movimiento</option>
-                  <option value="10">Actualizar Activos</option>
+                  <!-- <option value="10">Actualizar Activos</option> -->
                 </select>
 
                 <div class="mt-2">
