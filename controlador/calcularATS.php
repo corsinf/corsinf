@@ -348,8 +348,12 @@ class calcular
 
 		// reindexado
 
+
 		$this->all_iva = array_values($this->all_iva);
-		$this->all_retencion = array_values($this->all_retencion);
+		if($this->all_retencion!='')
+		{
+			$this->all_retencion = array_values($this->all_retencion);
+		}
 
 		return array('tr'=>$tr,'tipo'=>'','datos_iva'=>$this->all_iva,'Retencion'=>$this->all_retencion);
 

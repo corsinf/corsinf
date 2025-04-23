@@ -225,13 +225,34 @@ function recuperar_xml_a_factura($documento)
 		
 		$lineas = array();
 		foreach ($detalle as $key => $value) {
-			// print_r($value);die();
+			// if($documento=='Factura_(15).xml')
+			// {
+			// 	print_r($detalle);die();
+			// }
 			if(isset($value['impuestos']['impuesto']))
 			{
+				if(isset($value['impuestos']['impuesto']['tarifa']))
+				{
+					$iva = $value['impuestos']['impuesto']['tarifa'];
+					$valoriva = $value['impuestos']['impuesto']['valor']; 
+					$lineas[] = array('Tipo'=>'F','Autorizacion'=>$tributaria['claveAcceso'],'detalle'=>$value['descripcion'],'cantidad'=>$value['cantidad'],'pvp'=>$value['precioUnitario'],'descuento'=>$value['descuento'],'subtotal'=>$value['precioTotalSinImpuesto'],'iva'=>$iva,'iva_v'=>$valoriva,'Total'=>$value['precioTotalSinImpuesto']+$valoriva);
 
-				$iva = $value['impuestos']['impuesto']['tarifa'];
-				$valoriva = $value['impuestos']['impuesto']['valor']; 
-				$lineas[] = array('Tipo'=>'F','Autorizacion'=>$tributaria['claveAcceso'],'detalle'=>$value['descripcion'],'cantidad'=>$value['cantidad'],'pvp'=>$value['precioUnitario'],'descuento'=>$value['descuento'],'subtotal'=>$value['precioTotalSinImpuesto'],'iva'=>$iva,'iva_v'=>$valoriva,'Total'=>$value['precioTotalSinImpuesto']+$valoriva);
+				}else
+				{
+					$impues = $value['impuestos']['impuesto'];
+					foreach ($impues as $key3 => $value3) {
+						// print_r($value3);die();
+						$iva = $value3['tarifa'];
+						$valoriva = $value3['valor']; 
+
+						$lineas[] = array('Tipo'=>'F','Autorizacion'=>$tributaria['claveAcceso'],'detalle'=>$value['descripcion'],'cantidad'=>$value['cantidad'],'pvp'=>$value['precioUnitario'],'descuento'=>$value['descuento'],'subtotal'=>$value['precioTotalSinImpuesto'],'iva'=>$iva,'iva_v'=>$valoriva,'Total'=>$value['precioTotalSinImpuesto']+$valoriva);
+					}
+				}
+
+				// print_r($tributaria);
+				// print_r($documento);
+
+				
 			}
 		}
 		
