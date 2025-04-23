@@ -119,15 +119,16 @@ class cargar_datosM
 		}
 	}
 
-	function ejecutar_activos()
+	/************************************************************************************/
+
+	function ejecutar_articulos($tip)
 	{
 		set_time_limit(0);
+		$OPCION = $tip;
 		$USUARIO = $_SESSION['INICIO']['USUARIO'];
-		$parametros = array(
-			$USUARIO
-		);
-		$sql = "EXEC SP_CARGA_MASIVA_NEW @USUARIO=?";
-		$re = $this->db->ejecutar_procesos_almacenados($sql, $parametros);
+		$parametros = array($OPCION, $USUARIO);
+		$sql = "EXEC SP_ACTUALIZACION_ARTICULOS @OPCION=?, @USUARIO=?";
+		$re = $this->db->ejecutar_procedimiento_con_retorno_1($sql, $parametros);
 		return $re;
 	}
 
@@ -136,26 +137,20 @@ class cargar_datosM
 		set_time_limit(0);
 		$OPCION = $tip;
 		$USUARIO = $_SESSION['INICIO']['USUARIO'];
-		$parametros = array(
-			array(&$OPCION, SQLSRV_PARAM_IN),
-			array(&$USUARIO, SQLSRV_PARAM_IN)
-		);
+		$parametros = array($OPCION, $USUARIO);
 		$sql = "EXEC SP_ACTUALIZAR_CUSTODIOS @OPCION=?,@USUARIO=?";
-		$re = $this->db->ejecutar_procesos_almacenados($sql, $parametros);
+		$re = $this->db->ejecutar_procedimiento_con_retorno_1($sql, $parametros);
 		return $re;
 	}
 
-	function ejecutar_emplazamiento($tip)
+	function ejecutar_localizacion($tip)
 	{
 		set_time_limit(0);
 		$OPCION = $tip;
 		$USUARIO = $_SESSION['INICIO']['USUARIO'];
-		$parametros = array(
-			array(&$OPCION, SQLSRV_PARAM_IN),
-			array(&$USUARIO, SQLSRV_PARAM_IN)
-		);
-		$sql = "EXEC SP_ACTUALIZAR_EMPLAZAMIENTO @OPCION=?,@USUARIO=?";
-		$re = $this->db->ejecutar_procesos_almacenados($sql, $parametros);
+		$parametros = array($OPCION, $USUARIO);
+		$sql = "EXEC SP_ACTUALIZAR_LOCALIZACION @OPCION=?,@USUARIO=?";
+		$re = $this->db->ejecutar_procedimiento_con_retorno_1($sql, $parametros);
 		return $re;
 	}
 
@@ -164,12 +159,9 @@ class cargar_datosM
 		set_time_limit(0);
 		$OPCION = $tip;
 		$USUARIO = $_SESSION['INICIO']['USUARIO'];
-		$parametros = array(
-			array(&$OPCION, SQLSRV_PARAM_IN),
-			array(&$USUARIO, SQLSRV_PARAM_IN)
-		);
+		$parametros = array($OPCION, $USUARIO);
 		$sql = "EXEC SP_ACTUALIZAR_MARCAS @OPCION=?,@USUARIO=?";
-		$re = $this->db->ejecutar_procesos_almacenados($sql, $parametros);
+		$re = $this->db->ejecutar_procedimiento_con_retorno_1($sql, $parametros);
 		return $re;
 	}
 
@@ -178,12 +170,9 @@ class cargar_datosM
 		set_time_limit(0);
 		$OPCION = $tip;
 		$USUARIO = $_SESSION['INICIO']['USUARIO'];
-		$parametros = array(
-			array(&$OPCION, SQLSRV_PARAM_IN),
-			array(&$USUARIO, SQLSRV_PARAM_IN)
-		);
+		$parametros = array($OPCION, $USUARIO);
 		$sql = "EXEC SP_ACTUALIZAR_ESTADO @OPCION=?,@USUARIO=?";
-		$re = $this->db->ejecutar_procesos_almacenados($sql, $parametros);
+		$re = $this->db->ejecutar_procedimiento_con_retorno_1($sql, $parametros);
 		return $re;
 	}
 
@@ -192,12 +181,9 @@ class cargar_datosM
 		set_time_limit(0);
 		$OPCION = $tip;
 		$USUARIO = $_SESSION['INICIO']['USUARIO'];
-		$parametros = array(
-			array(&$OPCION, SQLSRV_PARAM_IN),
-			array(&$USUARIO, SQLSRV_PARAM_IN)
-		);
+		$parametros = array($OPCION, $USUARIO);
 		$sql = "EXEC SP_ACTUALIZAR_GENERO @OPCION=?,@USUARIO=?";
-		$re = $this->db->ejecutar_procesos_almacenados($sql, $parametros);
+		$re = $this->db->ejecutar_procedimiento_con_retorno_1($sql, $parametros);
 		return $re;
 	}
 
@@ -206,12 +192,9 @@ class cargar_datosM
 		set_time_limit(0);
 		$OPCION = $tip;
 		$USUARIO = $_SESSION['INICIO']['USUARIO'];
-		$parametros = array(
-			array(&$OPCION, SQLSRV_PARAM_IN),
-			array(&$USUARIO, SQLSRV_PARAM_IN)
-		);
+		$parametros = array($OPCION, $USUARIO);
 		$sql = "EXEC SP_ACTUALIZAR_COLORES @OPCION=?,@USUARIO=?";
-		$re = $this->db->ejecutar_procesos_almacenados($sql, $parametros);
+		$re = $this->db->ejecutar_procedimiento_con_retorno_1($sql, $parametros);
 		return $re;
 	}
 
@@ -222,19 +205,18 @@ class cargar_datosM
 		set_time_limit(0);
 		$OPCION = $tip;
 		$USUARIO = $_SESSION['INICIO']['USUARIO'];
-		$parametros = array(
-			array(&$OPCION, SQLSRV_PARAM_IN),
-			array(&$USUARIO, SQLSRV_PARAM_IN)
-		);
+		$parametros = array($OPCION, $USUARIO);
 		$sql = "EXEC SP_ACTUALIZAR_PROYECTOS @OPCION=?,@USUARIO=?";
-		$re = $this->db->ejecutar_procesos_almacenados($sql, $parametros);
+		$re = $this->db->ejecutar_procedimiento_con_retorno_1($sql, $parametros);
 		return $re;
 	}
+
+	/************************************************************************************/
 
 	function validar_datos()
 	{
 		$sql = "EXEC SP_CARGAR_PLANTILLA";
-		$re = $this->db->ejecutar_procesos_almacenados($sql);
+		$re = $this->db->ejecutar_procedimiento_con_retorno_1($sql);
 		return $re;
 	}
 
@@ -265,7 +247,7 @@ class cargar_datosM
 			array(&$USUARIO, SQLSRV_PARAM_IN)
 		);
 		$sql = "EXEC SP_ACTUALIZAR_CLASES_MOVIMIENTO @OPCION=?,@USUARIO=?";
-		$re = $this->db->ejecutar_procesos_almacenados($sql, $parametros);
+		$re = $this->db->ejecutar_procedimiento_con_retorno_1($sql, $parametros);
 		return $re;
 	}
 
@@ -279,11 +261,47 @@ class cargar_datosM
 			array(&$USUARIO, SQLSRV_PARAM_IN)
 		);
 		$sql = "EXEC SP_ACTUALIZACION_ACTIVOS @USUARIO=?";
-		$re = $this->db->ejecutar_procesos_almacenados($sql, $parametros);
+		$re = $this->db->ejecutar_procedimiento_con_retorno_1($sql, $parametros);
 		return $re;
 	}
 
-	function log_activo($fecha = false, $intento = false, $accion = False, $estado = false)
+	function log_activo($identificador = '')
+	{
+		if ($identificador != '') {
+			$sql = "SELECT * FROM ac_log_activos WHERE identificador = '$identificador'; ";
+
+			// print_r($sql);die();
+			$datos = $this->db->datos($sql);
+			return $datos;
+		} else {
+			return [];
+		}
+	}
+
+	function log_activo_contador()
+	{
+		$sql = "SELECT COUNT(ac_cont_id) AS 'contador' FROM ac_log_activos_contador;";
+
+		// print_r($sql);die();
+		$datos = $this->db->datos($sql);
+		return $datos[0]['contador'];
+	}
+
+	function log_activo_contador_insert($identificador)
+	{
+		$sql = "INSERT INTO ac_log_activos_contador (ac_cont_nombre) VALUES ('$identificador');";
+		// print_r($sql);die();
+		$this->db->datos($sql);
+	}
+
+
+	/**
+	 * @deprecated Funciones dadas de baja el 10/04/2025.
+	 * @note Este archivo se mantiene como respaldo, pero ya no se utilizará en producción.
+	 * @warning No modificar este archivo. Para cambios, referirse a la nueva implementación.
+	 */
+
+	function log_activo_anterior($fecha = false, $intento = false, $accion = False, $estado = false)
 	{
 
 		$sql = "SELECT * FROM ac_log_activos WHERE 1=1 ";
@@ -308,4 +326,8 @@ class cargar_datosM
 		$re = $this->db->datos($sql);
 		return $re;
 	}
+
+	/**
+	 * Fin @deprecated
+	 */
 }

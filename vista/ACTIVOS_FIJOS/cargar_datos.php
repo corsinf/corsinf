@@ -1,16 +1,77 @@
-<?php //include('../cabeceras/header.php'); 
+<?php
+$modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
+
 ?>
+
+<script src="../js/GENERAL/operaciones_generales.js"></script>
+
 <script type="text/javascript">
   $(document).ready(function() {
-    //log_activos();
+    //cargar_datos();
+  });
 
+  function cargar_tabla_logs(identificador) {
+    // Referencia a la tabla
+    let $tabla = $('#tbl_logs_carga');
+
+    if ($.fn.DataTable.isDataTable($tabla)) {
+      let tbl_logs_carga = $tabla.DataTable();
+      tbl_logs_carga.ajax.url('../controlador/ACTIVOS_FIJOS/cargar_datosC.php?log_activos=true').load();
+      tbl_logs_carga.ajax.reload(function(json) {
+        console.log('Tabla recargada con identificador:', identificador);
+      });
+    } else {
+      let tbl_logs_carga = $tabla.DataTable($.extend({}, configuracion_datatable('Logs de carga', 'logs de carga'), {
+        responsive: true,
+        language: {
+          url: 'https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
+        },
+        ajax: {
+          url: '../controlador/ACTIVOS_FIJOS/cargar_datosC.php?log_activos=true',
+          type: 'POST', // Usar POST para mayor seguridad
+          data: function(d) {
+            d.identificador = identificador; // Enviar el identificador
+          },
+          dataSrc: ''
+        },
+        columns: [{
+            data: 'detalle'
+          },
+          {
+            data: 'fecha'
+          },
+          {
+            data: 'accion'
+          },
+          {
+            data: 'intento'
+          },
+          {
+            data: 'estado'
+          },
+          {
+            data: 'usuario'
+          }
+        ],
+        order: [
+          [0, 'desc']
+        ]
+      }));
+    }
+  }
+</script>
+
+<script type="text/javascript">
+  $(document).ready(function() {
     $("#btn_carga").on('click', function() {
       var id = $('#ddl_opcion').val();
       $('#txt_opcion').val(id);
       var fi = $('#file').val();
+
       if (id != '' && fi != '') {
 
         var formData = new FormData(document.getElementById("form_carga_datos"));
+
         $.ajax({
           url: '../controlador/ACTIVOS_FIJOS/cargar_datosC.php?subir_archivo_server=true',
           type: 'post',
@@ -23,7 +84,7 @@
           //     },
           success: function(response) {
             if (response == 1) {
-              // cargar_datos();
+              cargar_datos();
             } else {
               Swal.fire('Formato del archivo incorrecto', 'asegurese que el archivo sea (.cvs)', 'error');
 
@@ -39,12 +100,14 @@
 
 <script type="text/javascript">
   function cargar_datos() {
-    var id = $('#ddl_opcion').val();
+    var ddl_opcion = $('#ddl_opcion').val();
     var parametros = {
-      'id': id,
+      'id': ddl_opcion,
       'tip': $('#rbl_primera').prop('checked'),
     };
-    $('#myModal').modal('show');
+
+    $('#modal_proceso').modal('show');
+
     $.ajax({
       data: {
         parametros: parametros
@@ -54,20 +117,27 @@
       dataType: 'json',
       success: function(response) {
         console.log(response);
-        if (response == 1) {
-          Swal.fire('carga completada', '', 'success').then(function() {
-            $('#myModal').modal('hide');
-            // console.log(id);                  
-            log_activos()
-          });
-        } else {
-          Swal.fire('No se pudo completar', 'Asegurese que los datos esten en los formatos correctos y sin (;) punto y comas ó revise la cantidad de items en el archivo', 'error').then(function() {
+        // Validar si la respuesta es un array con al menos un elemento
+        if (Array.isArray(response) && response.length > 0) {
+          let id = response[0].nuevo_id;
+          let identificador = response[0].nombre_generado;
 
-            $('#myModal').modal('hide');
+          // 'ID generado: ' + id +
+          Swal.fire('Carga completa', 'Identificador: ' + identificador, 'success').then(function() {
+            $('#modal_proceso').modal('hide');
+            cargar_tabla_logs(identificador);
+          });
+
+        } else {
+          Swal.fire(
+            'No se pudo completar',
+            'Asegúrese que los datos estén en los formatos correctos y sin (;) punto y comas ó revise la cantidad de items en el archivo',
+            'error'
+          ).then(function() {
+            $('#modal_proceso').modal('hide');
           });
         }
       }
-
     });
   }
 
@@ -205,98 +275,95 @@
             <div class="row">
               <div class="col-sm-4">
                 <select class="form-control form-select" id="ddl_opcion" onchange="opcion_carga()">
-                  <option value="">Seleccione destino de datos</option>
-                  <option value="1">Cargar Activos</option>
+                  <option disabled selected>Elige los datos que deseas cargar</option>
+                  <option value="1">Cargar Artículos</option>
                   <option value="2">Cargar Custodios</option>
-                  <option value="3">Cargar Emplazamientos</option>
+                  <option value="3">Cargar Localización</option>
                   <option value="4">Cargar Marcas</option>
                   <option value="5">Cargar Estado</option>
-                  <option value="6">Cargar Genero</option>
+                  <option value="6">Cargar Género</option>
                   <option value="7">Cargar Color</option>
                   <option value="8">Cargar Proyectos</option>
-                  <option value="9">Clases de Movimiento</option>
-                  <option value="10">Actualizar Activos</option>
+                  <option value="9">Cargar Clase de Movimiento</option>
+                  <!-- <option value="10">Actualizar Activos</option> -->
                 </select>
-                <a href="#" style="display: none;" id="link_plantilla" class="font-13" download><i class="bx bx-file me-0"></i> Descargar plantilla</a><br>
-                <a href="#" style="display: none;" id="link_ficha" class="font-13" download><i class="bx bx-file me-0"></i> Descargar ficha tecnica</a>
+
+                <div class="mt-2">
+                  <a href="#" style="display: none;" id="link_plantilla" class="font-13" download><i class="bx bx-file me-0"></i> Descargar plantilla</a><br>
+                  <a href="#" style="display: none;" id="link_ficha" class="font-13" download><i class="bx bx-file me-0"></i> Descargar ficha técnica</a>
+                </div>
               </div>
 
               <div class="col-sm-6">
                 <form enctype="multipart/form-data" id="form_carga_datos" method="post">
                   <input type="hidden" id="txt_opcion" name="txt_opcion">
                   <input type="file" name="file" id="file" class="form-control">
-                  <p><b>Nota:</b> El archivo debera tener un maximo de 10000 items</p>
+                  <p class="small mt-2 text-muted"><strong>Nota:</strong> El archivo debe tener un máximo de 10,000 ítems.</p>
                 </form>
               </div>
 
               <div class="col-sm-2">
-                <button class="btn btn-sm btn-primary" id="btn_carga">Actualizar archivos</button>
-                <label id="lbl_check"><input type="checkbox" name="rbl_primera" id="rbl_primera"> Como primera vez</label>
+                <button class="btn btn-sm btn-primary w-100 mb-2" id="btn_carga">Actualizar archivos</button>
+
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" name="rbl_primera" id="rbl_primera">
+                  <label class="form-check-label" for="rbl_primera">Cómo primera vez</label>
+                </div>
                 <!-- <button class="btn btn-sm btn-primary" onclick="leer_datos()">Leer datos</button> -->
               </div>
             </div>
           </div>
         </div>
-        
-        <div class="card">
-          <div class="card-body">
-            <div class="row">
-              <h5> Log de carga</h5>
-              <div class="col-sm-12">
-                <form id="form_filtros">
-                  <div class="row">
-                    <div class="col-sm-4">
-                      <b>Accion</b>
-                      <input type="type" class="form-control form-control-sm" placeholder="Accion realizada" name="txt_accion" id="txt_accion">
-                    </div>
-                    <div class="col-sm-2">
-                      <b>Fecha</b>
-                      <input type="date" class="form-control form-control-sm" id="txt_fecha" name="txt_fecha">
-                    </div>
-                    <div class="col-sm-1">
-                      <b>Intento</b>
-                      <input type="number" class="form-control form-control-sm" value="" id="txt_intento" name="txt_intento">
-                    </div>
-                    <div class="col-sm-3">
-                      <b>Estado</b><br>
-                      <label><input type="radio" name="rbl_estado" checked value="" onclick="log_activos()"> Todos</label>
-                      <label><input type="radio" name="rbl_estado" value="1" onclick="log_activos()"> Subidos</label>
-                      <label><input type="radio" name="rbl_estado" value="-1" onclick="log_activos()"> Errores</label>
-                    </div>
-                    <div class="col-sm-2">
-                      <button type="button" class="btn btn-primary btn-sm" onclick="log_activos()">Buscar</button>
-                      <button type="button" class="btn btn-outline-secondary btn-sm" id="excel_log">Informe</button>
+
+        <div class="row">
+          <div class="col-xl-12 mx-auto">
+            <div class="card border-top border-0 border-4 border-primary">
+              <div class="card-body p-5">
+                <div class="row">
+
+                  <div class="col-12 col-md-6">
+                    <div class="card-title d-flex align-items-center">
+
+                      <h4 class="card-title">Logs de Carga</h4>
+
                     </div>
                   </div>
-                </form>
-              </div>
-              <div class="col-sm-12">
-                <table class="table table-sm">
-                  <thead>
-                    <th>Detalle log</th>
-                    <th>Fecha</th>
-                    <th>intento</th>
-                    <th>Accion</th>
-                    <th>Estado</th>
-                    <th>Encargado</th>
-                  </thead>
-                  <tbody id="tbl_datos">
-                    <tr>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                    </tr>
-                  </tbody>
-                </table>
+
+                  <div class="col-12 col-md-6 text-md-end text-start">
+                    <div id="contenedor_botones"></div>
+                  </div>
+
+                </div>
+
+                <hr>
+
+                <section class="content pt-2">
+                  <div class="container-fluid">
+                    <div class="table-responsive">
+                      <table class="table table-striped responsive " id="tbl_logs_carga" style="width:100%">
+                        <thead>
+                          <tr>
+                            <th>Detalle log</th>
+                            <th>Fecha</th>
+                            <th>Intento</th>
+                            <th>Acción</th>
+                            <th>Estado</th>
+                            <th>Usuario</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </section>
 
               </div>
-
             </div>
           </div>
         </div>
+
       </div>
     </div>
     <!--end row-->
@@ -304,7 +371,7 @@
 </div>
 
 <!-- Modal -->
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+<div class="modal fade" id="modal_proceso" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" data-backdrop="static" data-keyboard="false">
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
       <div class="modal-body">

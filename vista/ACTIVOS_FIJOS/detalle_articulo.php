@@ -1075,7 +1075,7 @@ if (isset($_GET['_id'])) {
                       <!-- Detalles TAG -->
                       <div class="row mb-col">
                         <div class="col-sm-6">
-                          <label for="txt_asset" class="form-label">TAG Unique </label>
+                          <label for="txt_asset" class="form-label">RFID </label>
                           <input type="text" class="form-control form-control-sm" name="txt_asset" id="txt_asset" onkeyup="validar_campo()">
 
                           <div class="text-start text-start-1 mt-0">
@@ -1095,13 +1095,13 @@ if (isset($_GET['_id'])) {
                         </div>
 
                         <div class="col-sm-6">
-                          <label for="txt_tag_anti" class="form-label">Tag Antiguo </label>
+                          <label for="txt_tag_anti" class="form-label">Referencia de almacén (SKU) </label>
                           <input type="text" class="form-control form-control-sm" name="txt_tag_anti" id="txt_tag_anti">
                         </div>
                       </div>
 
                       <div class="row mb-col">
-                        <div class="col-sm-6">
+                        <div class="col-sm-6" hidden>
                           <label for="txt_tag_serie" class="form-label">Tag Serie </label>
                           <input type="text" class="form-control form-control-sm" name="txt_tag_serie" id="txt_tag_serie">
                         </div>
