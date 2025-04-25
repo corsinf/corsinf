@@ -26,7 +26,9 @@ class marcasM
 		if ($id) {
 			$sql .= ' AND ID_MARCA= ' . $id;
 		}
+		
 		$sql .= " ORDER BY ID_MARCA ";
+
 		if ($pag) {
 			$pagi = explode('-', $pag);
 			$ini = $pagi[0];
@@ -121,7 +123,7 @@ class marcasM
 		$rest = $this->db->update('ac_marcas', $datos, $where);
 		return $rest;
 	}
-	
+
 	function eliminar($datos)
 	{
 		$sql = "UPDATE ac_marcas SET ESTADO='I' WHERE " . $datos[0]['campo'] . "='" . $datos[0]['dato'] . "';";

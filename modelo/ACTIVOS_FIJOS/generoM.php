@@ -26,6 +26,7 @@ class generoM
 		$datos = $this->db->datos($sql);
 		return $datos;
 	}
+	
 	function lista_genero_todo($id = '')
 	{
 		$sql = "SELECT ID_GENERO,CODIGO,DESCRIPCION,ESTADO FROM ac_genero WHERE 1=1 ";

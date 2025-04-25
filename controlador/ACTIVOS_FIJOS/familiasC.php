@@ -10,7 +10,7 @@ require_once(dirname(__DIR__, 2) . '/db/codigos_globales.php');
 $controlador = new familiasC();
 
 if (isset($_GET['lista'])) {
-	$parametros = $_POST['parametros'];
+	$parametros = $_POST['parametros'] ?? '';
 	echo json_encode($controlador->lista_familias($parametros));
 }
 
@@ -23,6 +23,11 @@ if (isset($_GET['lista_drop'])) {
 }
 
 if (isset($_GET['lista_subfamilias'])) {
+	$parametros = $_POST['parametros'] ?? '';
+	echo json_encode($controlador->lista_subfamilias($parametros));
+}
+
+if (isset($_GET['lista_subfamilias_drop'])) {
 	$parametros = $_GET['fam'];
 
 	$q = '';
@@ -30,7 +35,7 @@ if (isset($_GET['lista_subfamilias'])) {
 		$q = $_GET['q'];
 	}
 
-	echo json_encode($controlador->lista_subfamilias($parametros, $q));
+	echo json_encode($controlador->lista_subfamilias_drop($parametros, $q));
 }
 
 if (isset($_GET['buscar'])) {
@@ -64,7 +69,7 @@ class familiasC
 
 	function lista_familias($parametros)
 	{
-		$datos = $this->modelo->lista_familias(false, $parametros['query']);
+		$datos = $this->modelo->lista_familias(false, false);
 		return $datos;
 	}
 
@@ -84,7 +89,14 @@ class familiasC
 		return $datos;
 	}
 
-	function lista_subfamilias($parametros, $q)
+	function lista_subfamilias($parametros)
+	{
+		$id = isset($parametros['id']) ? $parametros['id'] : '';
+
+		return $this->modelo->lista_subfamilias($id, false);
+	}
+
+	function lista_subfamilias_drop($parametros, $q)
 	{
 		$datos = $this->modelo->lista_subfamilias($parametros, $q);
 		$datos2 = array();
@@ -107,7 +119,7 @@ class familiasC
 		// $datos[1]['campo'] = 'DESCRIPCION';
 		// $datos[1]['dato']= $parametros['des'];
 		if ($parametros['id'] == '') {
-			if (count($this->modelo->buscar_familias_codigo($datos[0]['dato'])) == 0) {
+			if (count($this->modelo->buscar_familias_detalle($datos[0]['dato'])) == 0) {
 				$datos = $this->modelo->insertar($datos);
 				$movimiento = 'Insertado nuevo registro en familias (' . $parametros['des'] . ')';
 			} else {
@@ -119,11 +131,14 @@ class familiasC
 			$movimiento = $this->compara_datos($parametros);
 			$datos = $this->modelo->editar($datos, $where);
 		}
+
 		if ($movimiento != '' && $datos == 1) {
-			$texto = $parametros['id'] . ';' . $parametros['des'];
-			$this->cod_global->para_ftp('familias', $texto);
+			// Funcion para FTP relacioado con SAP para futura version
+			// $texto = $parametros['id'] . ';' . $parametros['des'];
+			// $this->cod_global->para_ftp('familias', $texto);
 			$this->cod_global->ingresar_movimientos(false, $movimiento, 'familias');
 		}
+
 		return $datos;
 	}
 
@@ -149,8 +164,9 @@ class familiasC
 			$datos = $this->modelo->editar($datos, $where);
 		}
 		if ($movimiento != '' && $datos == 1) {
-			$texto = $parametros['des'];
-			$this->cod_global->para_ftp('familias', $texto);
+			// Funcion para FTP relacioado con SAP para futura version
+			// $texto = $parametros['des'];
+			// $this->cod_global->para_ftp('familias', $texto);
 			$this->cod_global->ingresar_movimientos(false, $movimiento, 'familias');
 		}
 		return $datos;

@@ -19,11 +19,20 @@
     <div class="row">
       <div class="col-xl-12 mx-auto">
         <hr>
-        <div class="card">
+        <div class="card border-top border-0 border-4 border-primary">
           <div class="card-body">
             <ul class="nav nav-tabs nav-danger" role="tablist">
               <li class="nav-item" role="presentation">
-                <a class="nav-link active" data-bs-toggle="tab" href="#dangerhome" role="tab" aria-selected="true">
+                <a class="nav-link active" data-bs-toggle="tab" href="#dangercontact" role="tab" aria-selected="true">
+                  <div class="d-flex align-items-center">
+                    <div class="tab-icon"><i class="bx bx-receipt font-18 me-1"></i>
+                    </div>
+                    <div class="tab-title">Genero</div>
+                  </div>
+                </a>
+              </li>
+              <li class="nav-item" role="presentation">
+                <a class="nav-link" data-bs-toggle="tab" href="#dangerhome" role="tab" aria-selected="false" tabindex="-1">
                   <div class="d-flex align-items-center">
                     <div class="tab-icon"><i class="bx bx-detail font-18 me-1"></i>
                     </div>
@@ -37,15 +46,6 @@
                     <div class="tab-icon"><i class="bx bx-adjust font-18 me-1"></i>
                     </div>
                     <div class="tab-title">Estado</div>
-                  </div>
-                </a>
-              </li>
-              <li class="nav-item" role="presentation">
-                <a class="nav-link" data-bs-toggle="tab" href="#dangercontact" role="tab" aria-selected="false" tabindex="-1">
-                  <div class="d-flex align-items-center">
-                    <div class="tab-icon"><i class="bx bx-receipt font-18 me-1"></i>
-                    </div>
-                    <div class="tab-title">Genero</div>
                   </div>
                 </a>
               </li>
@@ -69,29 +69,29 @@
               </li>
             </ul>
             <div class="tab-content py-3">
-              <div class="tab-pane fade show active" id="dangerhome" role="tabpanel">
+              <div class="tab-pane fade show active" id="dangercontact" role="tabpanel">
                 <div class="container-iframe">
-                  <iframe class="responsive-iframe" style="width:100%;border: 0px; height: 500px;" src="ACTIVOS_FIJOS/marcas.php"></iframe>
+                  <iframe class="responsive-iframe" style="width:100%;border: 0px; height: 650px;" src="ACTIVOS_FIJOS/GENERO/ac_genero.php"></iframe>
+                </div>
+              </div>
+              <div class="tab-pane fade" id="dangerhome" role="tabpanel">
+                <div class="container-iframe">
+                  <iframe class="responsive-iframe" style="width:100%;border: 0px; height: 650px;" src="ACTIVOS_FIJOS/MARCAS/ac_marcas.php"></iframe>
                 </div>
               </div>
               <div class="tab-pane fade" id="dangerprofile" role="tabpanel">
                 <div class="container-iframe">
-                  <iframe class="responsive-iframe" style="width:100%;border: 0px; height: 500px;" src="ACTIVOS_FIJOS/estado.php"></iframe>
-                </div>
-              </div>
-              <div class="tab-pane fade" id="dangercontact" role="tabpanel">
-                <div class="container-iframe">
-                  <iframe class="responsive-iframe" style="width:100%;border: 0px; height: 500px;" src="ACTIVOS_FIJOS/genero.php"></iframe>
+                  <iframe class="responsive-iframe" style="width:100%;border: 0px; height: 650px;" src="ACTIVOS_FIJOS/ESTADO/ac_estado.php"></iframe>
                 </div>
               </div>
               <div class="tab-pane fade" id="dangercolor" role="tabpanel">
                 <div class="container-iframe">
-                  <iframe class="responsive-iframe" style="width:100%;border: 0px; height: 500px;" src="ACTIVOS_FIJOS/colores.php"></iframe>
+                  <iframe class="responsive-iframe" style="width:100%;border: 0px; height: 650px;" src="ACTIVOS_FIJOS/COLORES/ac_colores.php"></iframe>
                 </div>
               </div>
               <div class="tab-pane fade" id="dangerfamily" role="tabpanel">
                 <div class="container-iframe">
-                  <iframe class="responsive-iframe" style="width:100%;border: 0px; height: 500px;" src="ACTIVOS_FIJOS/familias.php"></iframe>
+                  <iframe class="responsive-iframe" style="width:100%;border: 0px; height: 650px;" src="ACTIVOS_FIJOS/FAMILIAS/ac_familias.php"></iframe>
                 </div>
               </div>
             </div>

@@ -1,10 +1,11 @@
-<?php include('../../cabeceras/header2.php');
+<?php 
+include(dirname(__DIR__, 3) . '/cabeceras/header2.php');
 
 $id = '';
 
 if (isset($_GET['id'])) {
   $id = $_GET['id'];
-} 
+}
 
 ?>
 
@@ -26,11 +27,11 @@ if (isset($_GET['id'])) {
       data: {
         id: id
       },
-      url: '../../controlador/ACTIVOS_FIJOS/estadoC.php?lista=true',
+      url: 'controlador/ACTIVOS_FIJOS/estadoC.php?lista=true',
       type: 'post',
       dataType: 'json',
       /*beforeSend: function () {   
-           var spiner = '<div class="text-center"><img src="../../img/gif/proce.gif" width="100" height="100"></div>'     
+           var spiner = '<div class="text-center"><img src="img/gif/proce.gif" width="100" height="100"></div>'     
          $('#tabla_').html(spiner);
       },*/
       success: function(response) {
@@ -51,26 +52,10 @@ if (isset($_GET['id'])) {
       'des': descri,
       'id': id,
     }
-    if (id == '') {
-      if (codigo == '' || descri == '') {
-        Swal.fire({
-          icon: 'error',
-          title: 'Oops...',
-          text: 'Asegurese de llenar todo los campos',
-        })
-      } else {
-        insertar(parametros)
-      }
-    } else {
-      if (codigo == '' || descri == '') {
-        Swal.fire({
-          icon: 'error',
-          title: 'Oops...',
-          text: 'Asegurese de llenar todo los campos',
-        })
-      } else {
-        insertar(parametros);
-      }
+
+    if ($("#form_estado").valid()) {
+      // Si es válido, puedes proceder a enviar los datos por AJAX
+      insertar(parametros);
     }
   }
 
@@ -79,20 +64,20 @@ if (isset($_GET['id'])) {
       data: {
         parametros: parametros
       },
-      url: '../../controlador/ACTIVOS_FIJOS/estadoC.php?insertar=true',
+      url: 'controlador/ACTIVOS_FIJOS/estadoC.php?insertar=true',
       type: 'post',
       dataType: 'json',
       /*beforeSend: function () {   
-           var spiner = '<div class="text-center"><img src="../../img/gif/proce.gif" width="100" height="100"></div>'     
+           var spiner = '<div class="text-center"><img src="img/gif/proce.gif" width="100" height="100"></div>'     
          $('#tabla_').html(spiner);
       },*/
       success: function(response) {
         if (response == 1) {
           Swal.fire('', 'Operacion realizada con exito.', 'success').then(function() {
-            location.href = 'estado.php';
+            location.href = 'vista/ACTIVOS_FIJOS/ESTADO/ac_estado.php';
           });
         } else if (response == -2) {
-          Swal.fire('', 'codigo ya regitrado', 'info');
+          Swal.fire('', 'Código ya registrado.', 'warning');
         }
 
       }
@@ -123,13 +108,13 @@ if (isset($_GET['id'])) {
       data: {
         id: id
       },
-      url: '../../controlador/ACTIVOS_FIJOS/estadoC.php?eliminar=true',
+      url: 'controlador/ACTIVOS_FIJOS/estadoC.php?eliminar=true',
       type: 'post',
       dataType: 'json',
       success: function(response) {
         if (response == 1) {
           Swal.fire('Eliminado!', 'Registro Eliminado.', 'success').then(function() {
-            location.href = 'estado.php';
+            location.href = 'vista/ACTIVOS_FIJOS/ESTADO/ac_estado.php';
           });
         }
 
@@ -143,32 +128,78 @@ if (isset($_GET['id'])) {
     <div class="card">
       <div class="card-body">
         <div class="container-fluid">
+
           <div class="row">
             <div class="col-sm-12">
-              <a href="estado.php" class="btn btn-outline-secondary btn-sm"><i class="bx bx-arrow-back"></i>Regresar</a>
+              <a href="vista/ACTIVOS_FIJOS/ESTADO/ac_estado.php" class="btn btn-outline-dark btn-sm"><i class="bx bx-arrow-back"></i> Regresar</a>
             </div>
           </div>
-          <div class="row">
-            <div class="col-sm-6">
-              <input type="hidden" name="id" id="id" class="form-control form-control-sm" hidden="">
-              Codigo estado<br>
-              <input type="input" name="codigo" id="codigo" class="form-control form-control-sm">
-              Descripcion estado<br>
-              <input type="input" name="descripcion" id="descripcion" class="form-control form-control-sm">
 
+          <form id="form_estado">
+
+            <input type="hidden" name="id" id="id" class="form-control" hidden="">
+
+            <div class="row pt-3 mb-col">
+              <div class="col-md-6">
+                <label for="codigo" class="form-label">Código </label>
+                <input type="text" class="form-control form-control-sm no_caracteres" id="codigo" name="codigo" maxlength="50">
+                <span id="error_txt_nombre" class="text-danger"></span>
+              </div>
             </div>
-            <div class="col-sm-6">
 
-
+            <div class="row mb-col">
+              <div class="col-md-6">
+                <label for="descripcion" class="form-label">Descripción </label>
+                <input type="text" class="form-control form-control-sm no_caracteres" id="descripcion" name="descripcion" maxlength="50">
+              </div>
             </div>
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button class="btn btn-primary btn-sm" onclick="editar_insertar()" type="button" id="btn_editar"><i class="bx bx-save"></i> Guardar</button>
-          <button class="btn btn-danger btn-sm" onclick="delete_datos()" type="button" id="btn_eliminar"><i class="bx bx-trash"></i> Eliminar</button>
-        </div>
 
+            <div class="row mb-col">
+              <div class="col-md-6 text-end">
+                <?php if ($id == '') { ?>
+                  <button class="btn btn-success btn-sm px-4 m-0" onclick="editar_insertar()" type="button"><i class="bx bx-save"></i> Guardar</button>
+                <?php } else { ?>
+                  <button class="btn btn-success btn-sm px-4 m-1" onclick="editar_insertar()" type="button"><i class="bx bx-save"></i> Editar</button>
+                  <button class="btn btn-danger btn-sm px-4 m-1" onclick="delete_datos()" type="button"><i class="bx bx-trash"></i> Eliminar</button>
+                <?php } ?>
+              </div>
+            </div>
+
+          </form>
+
+        </div>
       </div>
     </div>
   </div>
 </div>
+
+<script>
+  //Validacion de formulario
+  $(document).ready(function() {
+    agregar_asterisco_campo_obligatorio('codigo');
+    agregar_asterisco_campo_obligatorio('descripcion');
+
+    $("#form_estado").validate({
+      rules: {
+        codigo: {
+          required: true,
+        },
+        descripcion: {
+          required: true,
+        },
+      },
+
+      highlight: function(element) {
+        // Agrega la clase 'is-invalid' al input que falla la validación
+        $(element).addClass('is-invalid');
+        $(element).removeClass('is-valid');
+      },
+      unhighlight: function(element) {
+        // Elimina la clase 'is-invalid' si la validación pasa
+        $(element).removeClass('is-invalid');
+        $(element).addClass('is-valid');
+
+      }
+    });
+  });
+</script>
