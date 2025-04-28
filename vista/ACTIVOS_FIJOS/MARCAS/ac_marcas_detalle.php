@@ -1,13 +1,14 @@
-<?php include(dirname(__DIR__, 3) . '/cabeceras/header2.php');
+<?php 
+include(dirname(__DIR__, 3) . '/cabeceras/header2.php');
 
 $id = '';
+
 if (isset($_GET['id'])) {
   $id = $_GET['id'];
-}
+} 
 
 ?>
-
-<script>
+<script type="text/javascript">
   $(document).ready(function() {
     var id = '<?php echo $id; ?>';
     if (id != '') {
@@ -17,29 +18,29 @@ if (isset($_GET['id'])) {
   });
 
   function datos_col(id) {
-    $('#titulo').text('Editar color');
+    $('#titulo').text('Editar marca');
     $('#op').text('Editar');
-    var colores = '';
+    var marcas = '';
 
     $.ajax({
       data: {
         id: id
       },
-      url: 'controlador/ACTIVOS_FIJOS/coloresC.php?lista=true',
+      url: 'controlador/ACTIVOS_FIJOS/marcasC.php?lista=true',
       type: 'post',
       dataType: 'json',
       /*beforeSend: function () {   
-           var spiner = '<div class="text-center"><img src="../../img/gif/proce.gif" width="100" height="100"></div>'     
+           var spiner = '<div class="text-center"><img src="img/gif/proce.gif" width="100" height="100"></div>'     
          $('#tabla_').html(spiner);
       },*/
       success: function(response) {
+        // console.log(response.datos);
         $('#codigo').val(response[0].CODIGO);
         $('#descripcion').val(response[0].DESCRIPCION);
-        $('#id').val(response[0].ID_COLORES);
+        $('#id').val(response[0].ID_MARCA);
       }
     });
   }
-
 
   function editar_insertar() {
     var codigo = $('#codigo').val();
@@ -51,8 +52,8 @@ if (isset($_GET['id'])) {
       'des': descri,
       'id': id,
     }
-
-    if ($("#form_colores").valid()) {
+    
+    if ($("#form_marca").valid()) {
       // Si es válido, puedes proceder a enviar los datos por AJAX
       insertar(parametros);
     }
@@ -63,17 +64,17 @@ if (isset($_GET['id'])) {
       data: {
         parametros: parametros
       },
-      url: 'controlador/ACTIVOS_FIJOS/coloresC.php?insertar=true',
+      url: 'controlador/ACTIVOS_FIJOS/marcasC.php?insertar=true',
       type: 'post',
       dataType: 'json',
       /*beforeSend: function () {   
-           var spiner = '<div class="text-center"><img src="../../img/gif/proce.gif" width="100" height="100"></div>'     
+           var spiner = '<div class="text-center"><img src="img/gif/proce.gif" width="100" height="100"></div>'     
          $('#tabla_').html(spiner);
       },*/
       success: function(response) {
         if (response == 1) {
-          Swal.fire('', 'Operacion realizada con exito.', 'success').then(function() {
-            location.href = 'vista/ACTIVOS_FIJOS/COLORES/ac_colores.php';
+          Swal.fire('', 'Operaciopn realizada con exito.', 'success').then(function() {
+            location.href = 'vista/ACTIVOS_FIJOS/MARCAS/ac_marcas.php';
           });
         } else if (response == -2) {
           Swal.fire('', 'Código ya registrado.', 'warning');
@@ -81,6 +82,7 @@ if (isset($_GET['id'])) {
 
       }
     });
+
   }
 
   function delete_datos() {
@@ -98,6 +100,7 @@ if (isset($_GET['id'])) {
         eliminar(id);
       }
     })
+
   }
 
   function eliminar(id) {
@@ -105,22 +108,19 @@ if (isset($_GET['id'])) {
       data: {
         id: id
       },
-      url: 'controlador/ACTIVOS_FIJOS/coloresC.php?eliminar=true',
+      url: 'controlador/ACTIVOS_FIJOS/marcasC.php?eliminar=true',
       type: 'post',
       dataType: 'json',
-      /*beforeSend: function () {   
-           var spiner = '<div class="text-center"><img src="../../img/gif/proce.gif" width="100" height="100"></div>'     
-         $('#tabla_').html(spiner);
-      },*/
       success: function(response) {
         if (response == 1) {
           Swal.fire('Eliminado!', 'Registro Eliminado.', 'success').then(function() {
-            location.href = 'vista/ACTIVOS_FIJOS/COLORES/ac_colores.php';
+            location.href = 'vista/ACTIVOS_FIJOS/MARCAS/ac_marcas.php';
           });
         }
 
       }
     });
+
   }
 </script>
 
@@ -132,11 +132,11 @@ if (isset($_GET['id'])) {
 
           <div class="row">
             <div class="col-sm-12">
-              <a href="vista/ACTIVOS_FIJOS/COLORES/ac_colores.php" class="btn btn-outline-dark btn-sm"><i class="bx bx-arrow-back"></i> Regresar</a>
+              <a href="vista/ACTIVOS_FIJOS/MARCAS/ac_marcas.php" class="btn btn-outline-dark btn-sm"><i class="bx bx-arrow-back"></i> Regresar</a>
             </div>
           </div>
 
-          <form id="form_colores">
+          <form id="form_marca">
 
             <input type="hidden" name="id" id="id" class="form-control" hidden="">
 
@@ -180,7 +180,7 @@ if (isset($_GET['id'])) {
     agregar_asterisco_campo_obligatorio('codigo');
     agregar_asterisco_campo_obligatorio('descripcion');
 
-    $("#form_colores").validate({
+    $("#form_marca").validate({
       rules: {
         codigo: {
           required: true,

@@ -10,15 +10,15 @@ require_once(dirname(__DIR__, 2) . '/db/codigos_globales.php');
 $controlador = new marcasC();
 
 if (isset($_GET['lista'])) {
-	//$id='';
+
 	if (isset($_POST['id'])) {
 		$parametro['id'] = $_POST['id'];
 		$parametro['pag'] = false;
 	} else {
-		$parametro = $_POST['parametros'];
+		$parametro = $_POST['parametros'] ?? [];
 	}
 	// print_r($parametro);die();
-	echo json_encode($controlador->lista_marcas($parametro['id'], $parametro['pag']));
+	echo json_encode($controlador->lista_marcas($parametro['id'] ?? '', $parametro['pag'] ?? ''));
 }
 
 if (isset($_GET['buscar'])) {
@@ -52,8 +52,7 @@ class marcasC
 
 	function lista_marcas($id, $pag)
 	{
-
-		$reg = count($this->modelo->lista_marcas_pag());
+		/* $reg = count($this->modelo->lista_marcas_pag());
 		if ($reg > 25) {
 
 			// print_r($id.'-'.$pag);die();
@@ -64,7 +63,10 @@ class marcasC
 
 		// print_r($datos);die();
 		$resultado =  array('datos' => $datos, 'cant' => $reg);
-		return $resultado;
+		return $resultado; */
+
+		$datos = $this->modelo->lista_marcas($id);
+		return $datos;
 	}
 
 	function lista_marcas_pag()
@@ -87,6 +89,7 @@ class marcasC
 		$datos[0]['dato'] = $parametros['cod'];
 		$datos[1]['campo'] = 'DESCRIPCION';
 		$datos[1]['dato'] = $parametros['des'];
+
 		if ($parametros['id'] == '') {
 			if (count($this->modelo->buscar_marcas_codigo($datos[0]['dato'])) == 0) {
 				$datos = $this->modelo->insertar($datos);
@@ -97,16 +100,17 @@ class marcasC
 		} else {
 			$where[0]['campo'] = 'ID_MARCA';
 			$where[0]['dato'] = $parametros['id'];
-
 			$movimiento = $this->compara_datos($parametros);
-
 			$datos = $this->modelo->editar($datos, $where);
 		}
+
 		if ($movimiento != '' && $datos == 1) {
-			$texto = $parametros['cod'] . ';' . $parametros['des'];
-			$this->cod_global->para_ftp('marcas', $texto);
+			// Funcion para FTP relacioado con SAP para futura version
+			// $texto = $parametros['cod'] . ';' . $parametros['des'];
+			// $this->cod_global->para_ftp('marcas', $texto);
 			$this->cod_global->ingresar_movimientos(false, $movimiento, 'ac_marcas');
 		}
+
 		return $datos;
 	}
 

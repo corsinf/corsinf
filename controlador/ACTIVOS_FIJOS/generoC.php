@@ -10,7 +10,7 @@ require_once(dirname(__DIR__, 2) . '/db/codigos_globales.php');
 $controlador = new generoC();
 
 if (isset($_GET['lista'])) {
-	echo json_encode($controlador->lista_genero($_POST['id']));
+	echo json_encode($controlador->lista_genero($_POST['id'] ?? ''));
 }
 
 if (isset($_GET['buscar'])) {
@@ -69,12 +69,13 @@ class generoC
 			$where[0]['dato'] = $parametros['id'];
 			$datos = $this->modelo->editar($datos, $where);
 		}
+
 		if ($movimiento != '' && $datos == 1) {
-			$texto = $parametros['cod'] . ';' . $parametros['des'];
-			$this->cod_global->para_ftp('genero', $texto);
+			// Funcion para FTP relacioado con SAP para futura version
+			// $texto = $parametros['cod'] . ';' . $parametros['des'];
+			// $this->cod_global->para_ftp('genero', $texto);
 			$this->cod_global->ingresar_movimientos(false, $movimiento, 'GENERO');
 		}
-
 
 		return $datos;
 	}
@@ -86,6 +87,7 @@ class generoC
 		if ($marca[0]['CODIGO'] != $parametros['cod']) {
 			$text .= ' Se modifico CODIGO en GENERO de ' . $marca[0]['CODIGO'] . ' a ' . $parametros['cod'];
 		}
+
 		if ($marca[0]['DESCRIPCION'] != $parametros['des']) {
 			$text .= ' Se modifico DESCRIPCION en GENERO DE ' . $marca[0]['DESCRIPCION'] . ' a ' . $parametros['des'];
 		}
@@ -98,6 +100,7 @@ class generoC
 		$datos[0]['campo'] = 'ID_GENERO';
 		$datos[0]['dato'] = $id;
 		$datos = $this->modelo->eliminar($datos);
+
 		return $datos;
 	}
 }
