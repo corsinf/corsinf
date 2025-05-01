@@ -806,7 +806,7 @@ function para_ftp($nombre,$texto)
 			$puerto = $empresa[0]['Puerto_db'];
 
 			// print_r($sql);die();
-			// print_r($database);
+			// print_r($empresa);die();
 			$datos = $this->db->sql_string_db_terceros($database, $usuario, $password, $servidor, $puerto,$sql);
 
 			// print_r('expression');die();
@@ -814,6 +814,7 @@ function para_ftp($nombre,$texto)
 
 		  	// $this->db->update('USUARIOS',$datos, $where);
 		  }
+		  // print_r('holi');die();
 
 		  return $res;
 	}
@@ -975,8 +976,8 @@ function para_ftp($nombre,$texto)
 				break;
 		}
 		 $parametros = array(
-		    $db_origen,
-		    $db_destino,
+		    str_replace(" ","",$db_origen),
+		    str_replace(" ","",$db_destino),
 		  );
 		 if($db_origen!='')
 		 {
@@ -998,7 +999,7 @@ function para_ftp($nombre,$texto)
 				$res = $this->db->ejecutar_sp_db_terceros($database, $usuario, $password, $servidor, $puerto,$sql2, $parametrosSp);
 		  		return $this->db->ejecutar_sp_db_terceros($database, $usuario, $password, $servidor, $puerto,$sql, $parametros);
 		 	}else{
-		  		$sql = "EXEC EstructuraBase @origen_bd = ?, @destino_bd = ?";
+		  		$sql = "EXEC EstructuraBase @origen_bd = ?,@destino_bd = ?";
 		  		return $this->db->ejecutar_procesos_almacenados($sql,$parametros,false,1);
 		  	}
 		 }else{ return -2;}

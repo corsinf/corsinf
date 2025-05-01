@@ -456,7 +456,8 @@ class loginC
 		 		if($tablas_iguales==-1)
 		 		foreach ($licencias as $key => $value) {
 		 		// print_r($licencias);die();
-		 				$this->cod_global->Copiar_estructura($value['Id_Modulo'],$empresa[0]['Base_datos']);
+		 				$r = $this->cod_global->Copiar_estructura($value['Id_Modulo'],$empresa[0]['Base_datos']);
+		 				// print_r($r);die();
 		 		}
 		 	}else{
 

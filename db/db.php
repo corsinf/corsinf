@@ -413,18 +413,28 @@ class db
 		$this->parametros_conexion($master);
 		$conn = $this->conexion();
 		$stmt = $conn->prepare($sql);
-		
+		// print_r($sql);print_r($parametros);
 		try {
-			if ($parametros) {
+			if (count($parametros)>0) {
 				$stmt->execute($parametros);
+
+
+				// print_r('dd');die();
+				// sleep(10);
+				$conn=null;
+				return 1;
 			} else {
 				$stmt->execute();
+				$conn=null;
+				return 1;
 			}
 
-			$conn=null;
-			return 1;
+			// $conn=null;
+			// return 1;
 		} catch (Exception $e) {
 			$conn=null;
+
+		// print_r($sql);print_r($parametros); print_r($master);die();
 			print_r($e);die();
 			return -1;			
 		}
@@ -557,10 +567,12 @@ class db
 
 		$conn = $this->conexion_db_terceros($database, $usuario, $password, $servidor, $puerto);
 		// print_r($sql);
-
+		// print_r($conn);die();
 		try {
-			$stmt = $conn->prepare($sql);
-    		$stmt->execute();    		
+			$conn->exec($sql);
+			// $stmt = $conn->prepare($sql);
+			// $stmt->execute($valores);
+    		// $stmt->execute();    		
 		    $conn=null;
 			return 1;
 			
@@ -588,8 +600,12 @@ class db
 	function ejecutar_sp_db_terceros($database, $usuario, $password, $servidor, $puerto,$sql, $parametros = false, $retorna = false)
 	{
 		$conn = $this->conexion_db_terceros($database, $usuario, $password, $servidor, $puerto);
+
+		print_r($sql);print_r($parametros);die();
 		$stmt = $conn->prepare($sql);
 		$resultados = array();
+
+		print_r($sql);print_r($parametros);die();
 		
 		try {
 			if ($parametros) {
