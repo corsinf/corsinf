@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <autorizacion>
 <estado>AUTORIZADO</estado>
+<<<<<<< Updated upstream
 <numeroAutorizacion>0803202501179208678700120470020007005241792086715</numeroAutorizacion>
 <fechaAutorizacion>2025-03-08T17:01:07-05:00</fechaAutorizacion>
 <ambiente>PRODUCCIÓN</ambiente>
@@ -89,9 +90,29 @@
 <ds:DigestValue>lCZFWA2lPuSxep7G6tPcOW4yl2Y=</ds:DigestValue>
 </ds:Reference>
 <ds:Reference Id="Reference-ID-385227" URI="#comprobante">
+=======
+<numeroAutorizacion>1802202501179001691900120181050005345910138017418</numeroAutorizacion>
+<fechaAutorizacion>2025-02-19T12:46:16-05:00</fechaAutorizacion>
+<ambiente>PRODUCCIÓN</ambiente>
+<comprobante><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+<factura id="comprobante" version="1.1.0"><infoTributaria><ambiente>2</ambiente><tipoEmision>1</tipoEmision><razonSocial>CORPORACION FAVORITA C.A.</razonSocial><nombreComercial>CORPORACION FAVORITA C.A.</nombreComercial><ruc>1790016919001</ruc><claveAcceso>1802202501179001691900120181050005345910138017418</claveAcceso><codDoc>01</codDoc><estab>018</estab><ptoEmi>105</ptoEmi><secuencial>000534591</secuencial><dirMatriz>AV. GENERAL ENRIQUEZ VIA COTOGCHOA</dirMatriz></infoTributaria><infoFactura><fechaEmision>18/02/2025</fechaEmision><dirEstablecimiento>AV. GENERAL ENRIQUEZ S/N Y VIA AL TINGO</dirEstablecimiento><contribuyenteEspecial>5368</contribuyenteEspecial><obligadoContabilidad>SI</obligadoContabilidad><tipoIdentificacionComprador>05</tipoIdentificacionComprador><razonSocialComprador>RUBIO PUETATE MILTON ANDRES</razonSocialComprador><identificacionComprador>1712605284</identificacionComprador><totalSinImpuestos>66.47</totalSinImpuestos><totalDescuento>3.59</totalDescuento><totalConImpuestos><totalImpuesto><codigo>2</codigo><codigoPorcentaje>4</codigoPorcentaje><descuentoAdicional>0.00</descuentoAdicional><baseImponible>40.59</baseImponible><valor>6.09</valor><valorDevolucionIva>0.00</valorDevolucionIva></totalImpuesto><totalImpuesto><codigo>2</codigo><codigoPorcentaje>0</codigoPorcentaje><descuentoAdicional>0.00</descuentoAdicional><baseImponible>25.88</baseImponible><valor>0.00</valor></totalImpuesto></totalConImpuestos><propina>0</propina><importeTotal>72.56</importeTotal><moneda>DOLAR</moneda><pagos><pago><formaPago>20</formaPago><total>70.0</total><plazo>0</plazo><unidadTiempo>dias</unidadTiempo></pago><pago><formaPago>01</formaPago><total>2.56</total><plazo>0</plazo><unidadTiempo>dias</unidadTiempo></pago></pagos></infoFactura><detalles><detalle><codigoPrincipal>786113861367</codigoPrincipal><codigoAuxiliar>786113861367</codigoAuxiliar><descripcion>REYQUESO CREMA REDU/GRASA</descripcion><cantidad>1.0000</cantidad><precioUnitario>2.1000</precioUnitario><descuento>0.00</descuento><precioTotalSinImpuesto>2.10</precioTotalSinImpuesto><impuestos><impuesto><codigo>2</codigo><codigoPorcentaje>0</codigoPorcentaje><tarifa>0.00</tarifa><baseImponible>2.10</baseImponible><valor>0.00</valor></impuesto></impuestos></detalle><detalle><codigoPrincipal>786104256700</codigoPrincipal><codigoAuxiliar>786104256700</codigoAuxiliar><descripcion>AK.CIRUELA</descripcion><cantidad>1.0000</cantidad><precioUnitario>1.5900</precioUnitario><descuento>0.00</descuento><precioTotalSinImpuesto>1.59</precioTotalSinImpuesto><impuestos><impuesto><codigo>2</codigo><codigoPorcentaje>0</codigoPorcentaje><tarifa>0.00</tarifa><baseImponible>1.59</baseImponible><valor>0.00</valor></impuesto></impuestos></detalle><detalle><codigoPrincipal>786103001056</codigoPrincipal><codigoAuxiliar>786103001056</codigoAuxiliar><descripcion>PACK COLGATE DNT.TRIPLE ACCION.</descripcion><cantidad>1.0000</cantidad><precioUnitario>2.7130</precioUnitario><descuento>0.00</descuento><precioTotalSinImpuesto>2.71</precioTotalSinImpuesto><impuestos><impuesto><codigo>2</codigo><codigoPorcentaje>4</codigoPorcentaje><tarifa>15</tarifa><baseImponible>2.71</baseImponible><valor>0.41</valor></impuesto></impuestos></detalle><detalle><codigoPrincipal>762220151280</codigoPrincipal><codigoAuxiliar>762220151280</codigoAuxiliar><descripcion>KONITOS GALLETAS CHOCOLATE</descripcion><cantidad>1.0000</cantidad><precioUnitario>2.3391</precioUnitario><descuento>0.00</descuento><precioTotalSinImpuesto>2.34</precioTotalSinImpuesto><impuestos><impuesto><codigo>2</codigo><codigoPorcentaje>4</codigoPorcentaje><tarifa>15</tarifa><baseImponible>2.34</baseImponible><valor>0.35</valor></impuesto></impuestos></detalle><detalle><codigoPrincipal>786109215523</codigoPrincipal><codigoAuxiliar>786109215523</codigoAuxiliar><descripcion>ALPINA BONYURT BLACK</descripcion><cantidad>3.0000</cantidad><precioUnitario>0.9300</precioUnitario><descuento>0.28</descuento><precioTotalSinImpuesto>2.51</precioTotalSinImpuesto><impuestos><impuesto><codigo>2</codigo><codigoPorcentaje>0</codigoPorcentaje><tarifa>0.00</tarifa><baseImponible>2.51</baseImponible><valor>0.00</valor></impuesto></impuestos></detalle><detalle><codigoPrincipal>786104255428</codigoPrincipal><codigoAuxiliar>786104255428</codigoAuxiliar><descripcion>LO.AZUCAR</descripcion><cantidad>1.0000</cantidad><precioUnitario>1.9500</precioUnitario><descuento>0.00</descuento><precioTotalSinImpuesto>1.95</precioTotalSinImpuesto><impuestos><impuesto><codigo>2</codigo><codigoPorcentaje>0</codigoPorcentaje><tarifa>0.00</tarifa><baseImponible>1.95</baseImponible><valor>0.00</valor></impuesto></impuestos></detalle><detalle><codigoPrincipal>786100130319</codigoPrincipal><codigoAuxiliar>786100130319</codigoAuxiliar><descripcion>SURF DETERGENTE POLVO ROSAS</descripcion><cantidad>2.0000</cantidad><precioUnitario>1.1739</precioUnitario><descuento>0.00</descuento><precioTotalSinImpuesto>2.35</precioTotalSinImpuesto><impuestos><impuesto><codigo>2</codigo><codigoPorcentaje>4</codigoPorcentaje><tarifa>15</tarifa><baseImponible>2.35</baseImponible><valor>0.35</valor></impuesto></impuestos></detalle><detalle><codigoPrincipal>770724267019</codigoPrincipal><codigoAuxiliar>770724267019</codigoAuxiliar><descripcion>CEPIMAX CEP.ADULTO 390 MED/ESTUCHE</descripcion><cantidad>2.0000</cantidad><precioUnitario>0.9304</precioUnitario><descuento>0.00</descuento><precioTotalSinImpuesto>1.86</precioTotalSinImpuesto><impuestos><impuesto><codigo>2</codigo><codigoPorcentaje>4</codigoPorcentaje><tarifa>15</tarifa><baseImponible>1.86</baseImponible><valor>0.28</valor></impuesto></impuestos></detalle><detalle><codigoPrincipal>786102940634</codigoPrincipal><codigoAuxiliar>786102940634</codigoAuxiliar><descripcion>6PACK  VITA LECHE ENTERA LARGA VIDA</descripcion><cantidad>2.0000</cantidad><precioUnitario>5.5800</precioUnitario><descuento>0.67</descuento><precioTotalSinImpuesto>10.49</precioTotalSinImpuesto><impuestos><impuesto><codigo>2</codigo><codigoPorcentaje>0</codigoPorcentaje><tarifa>0.00</tarifa><baseImponible>10.49</baseImponible><valor>0.00</valor></impuesto></impuestos></detalle><detalle><codigoPrincipal>786100129385</codigoPrincipal><codigoAuxiliar>786100129385</codigoAuxiliar><descripcion>NESCAFE DOY PACK</descripcion><cantidad>2.0000</cantidad><precioUnitario>1.1739</precioUnitario><descuento>0.00</descuento><precioTotalSinImpuesto>2.35</precioTotalSinImpuesto><impuestos><impuesto><codigo>2</codigo><codigoPorcentaje>4</codigoPorcentaje><tarifa>15</tarifa><baseImponible>2.35</baseImponible><valor>0.35</valor></impuesto></impuestos></detalle><detalle><codigoPrincipal>786100124411</codigoPrincipal><codigoAuxiliar>786100124411</codigoAuxiliar><descripcion>NESTLE CEREAVENA CON LECHE</descripcion><cantidad>1.0000</cantidad><precioUnitario>2.0000</precioUnitario><descuento>0.00</descuento><precioTotalSinImpuesto>2.00</precioTotalSinImpuesto><impuestos><impuesto><codigo>2</codigo><codigoPorcentaje>4</codigoPorcentaje><tarifa>15</tarifa><baseImponible>2.00</baseImponible><valor>0.30</valor></impuesto></impuestos></detalle><detalle><codigoPrincipal>786104257244</codigoPrincipal><codigoAuxiliar>786104257244</codigoAuxiliar><descripcion>LO.ACEITE DE GIRASOL</descripcion><cantidad>1.0000</cantidad><precioUnitario>2.6900</precioUnitario><descuento>0.71</descuento><precioTotalSinImpuesto>1.98</precioTotalSinImpuesto><impuestos><impuesto><codigo>2</codigo><codigoPorcentaje>0</codigoPorcentaje><tarifa>0.00</tarifa><baseImponible>1.98</baseImponible><valor>0.00</valor></impuesto></impuestos></detalle><detalle><codigoPrincipal>786104256058</codigoPrincipal><codigoAuxiliar>786104256058</codigoAuxiliar><descripcion>AK.PH PREMIUM TRIPLE HOJA 33M</descripcion><cantidad>1.0000</cantidad><precioUnitario>3.0522</precioUnitario><descuento>0.00</descuento><precioTotalSinImpuesto>3.05</precioTotalSinImpuesto><impuestos><impuesto><codigo>2</codigo><codigoPorcentaje>4</codigoPorcentaje><tarifa>15</tarifa><baseImponible>3.05</baseImponible><valor>0.46</valor></impuesto></impuestos></detalle><detalle><codigoPrincipal>786119040016</codigoPrincipal><codigoAuxiliar>786119040016</codigoAuxiliar><descripcion>4PACK LONCHYS FIDEO CARNE</descripcion><cantidad>1.0000</cantidad><precioUnitario>3.3500</precioUnitario><descuento>0.00</descuento><precioTotalSinImpuesto>3.35</precioTotalSinImpuesto><impuestos><impuesto><codigo>2</codigo><codigoPorcentaje>0</codigoPorcentaje><tarifa>0.00</tarifa><baseImponible>3.35</baseImponible><valor>0.00</valor></impuesto></impuestos></detalle><detalle><codigoPrincipal>786212270149</codigoPrincipal><codigoAuxiliar>786212270149</codigoAuxiliar><descripcion>LA UNIVERSAL COCOA VITAMINAS DOYPACK.</descripcion><cantidad>1.0000</cantidad><precioUnitario>2.7391</precioUnitario><descuento>0.41</descuento><precioTotalSinImpuesto>2.33</precioTotalSinImpuesto><impuestos><impuesto><codigo>2</codigo><codigoPorcentaje>4</codigoPorcentaje><tarifa>15</tarifa><baseImponible>2.33</baseImponible><valor>0.35</valor></impuesto></impuestos></detalle><detalle><codigoPrincipal>786210153193</codigoPrincipal><codigoAuxiliar>786210153193</codigoAuxiliar><descripcion>ISABELLA JB.LQ.FRESAS Y GRANADAS</descripcion><cantidad>1.0000</cantidad><precioUnitario>1.9913</precioUnitario><descuento>0.00</descuento><precioTotalSinImpuesto>1.99</precioTotalSinImpuesto><impuestos><impuesto><codigo>2</codigo><codigoPorcentaje>4</codigoPorcentaje><tarifa>15</tarifa><baseImponible>1.99</baseImponible><valor>0.30</valor></impuesto></impuestos></detalle><detalle><codigoPrincipal>786104860844</codigoPrincipal><codigoAuxiliar>786104860844</codigoAuxiliar><descripcion>DUET JAB. BARRA HUMECTANTE X3</descripcion><cantidad>1.0000</cantidad><precioUnitario>2.5739</precioUnitario><descuento>0.26</descuento><precioTotalSinImpuesto>2.31</precioTotalSinImpuesto><impuestos><impuesto><codigo>2</codigo><codigoPorcentaje>4</codigoPorcentaje><tarifa>15</tarifa><baseImponible>2.31</baseImponible><valor>0.35</valor></impuesto></impuestos></detalle><detalle><codigoPrincipal>871920025713</codigoPrincipal><codigoAuxiliar>871920025713</codigoAuxiliar><descripcion>BONELLA MARGARINA VITAL</descripcion><cantidad>1.0000</cantidad><precioUnitario>2.5500</precioUnitario><descuento>0.64</descuento><precioTotalSinImpuesto>1.91</precioTotalSinImpuesto><impuestos><impuesto><codigo>2</codigo><codigoPorcentaje>0</codigoPorcentaje><tarifa>0.00</tarifa><baseImponible>1.91</baseImponible><valor>0.00</valor></impuesto></impuestos></detalle><detalle><codigoPrincipal>786107625674</codigoPrincipal><codigoAuxiliar>786107625674</codigoAuxiliar><descripcion>KINOE SH.ARGAN HIDRATA/NUTRI.550  ML</descripcion><cantidad>1.0000</cantidad><precioUnitario>4.2870</precioUnitario><descuento>0.00</descuento><precioTotalSinImpuesto>4.29</precioTotalSinImpuesto><impuestos><impuesto><codigo>2</codigo><codigoPorcentaje>4</codigoPorcentaje><tarifa>15</tarifa><baseImponible>4.29</baseImponible><valor>0.64</valor></impuesto></impuestos></detalle><detalle><codigoPrincipal>762220109967</codigoPrincipal><codigoAuxiliar>762220109967</codigoAuxiliar><descripcion>ROYAL TORTA CHOCOLATE</descripcion><cantidad>1.0000</cantidad><precioUnitario>3.0000</precioUnitario><descuento>0.00</descuento><precioTotalSinImpuesto>3.00</precioTotalSinImpuesto><impuestos><impuesto><codigo>2</codigo><codigoPorcentaje>4</codigoPorcentaje><tarifa>15</tarifa><baseImponible>3.00</baseImponible><valor>0.45</valor></impuesto></impuestos></detalle><detalle><codigoPrincipal>786104255606</codigoPrincipal><codigoAuxiliar>786104255606</codigoAuxiliar><descripcion>AK.PROTECTORES DIARIOS</descripcion><cantidad>1.0000</cantidad><precioUnitario>0.7913</precioUnitario><descuento>0.35</descuento><precioTotalSinImpuesto>0.44</precioTotalSinImpuesto><impuestos><impuesto><codigo>2</codigo><codigoPorcentaje>4</codigoPorcentaje><tarifa>15</tarifa><baseImponible>0.44</baseImponible><valor>0.07</valor></impuesto></impuestos></detalle><detalle><codigoPrincipal>786105760377</codigoPrincipal><codigoAuxiliar>786105760377</codigoAuxiliar><descripcion>AK. FUNDA BASURA BANO</descripcion><cantidad>1.0000</cantidad><precioUnitario>0.3565</precioUnitario><descuento>0.00</descuento><precioTotalSinImpuesto>0.36</precioTotalSinImpuesto><impuestos><impuesto><codigo>2</codigo><codigoPorcentaje>4</codigoPorcentaje><tarifa>15</tarifa><baseImponible>0.36</baseImponible><valor>0.05</valor></impuesto></impuestos></detalle><detalle><codigoPrincipal>786104256219</codigoPrincipal><codigoAuxiliar>786104256219</codigoAuxiliar><descripcion>LO.SERVILLETA (24X24) REF</descripcion><cantidad>1.0000</cantidad><precioUnitario>1.3304</precioUnitario><descuento>0.00</descuento><precioTotalSinImpuesto>1.33</precioTotalSinImpuesto><impuestos><impuesto><codigo>2</codigo><codigoPorcentaje>4</codigoPorcentaje><tarifa>15</tarifa><baseImponible>1.33</baseImponible><valor>0.20</valor></impuesto></impuestos></detalle><detalle><codigoPrincipal>786104252568</codigoPrincipal><codigoAuxiliar>786104252568</codigoAuxiliar><descripcion>LO.PAPEL ALUMINIO.</descripcion><cantidad>1.0000</cantidad><precioUnitario>0.8087</precioUnitario><descuento>0.00</descuento><precioTotalSinImpuesto>0.81</precioTotalSinImpuesto><impuestos><impuesto><codigo>2</codigo><codigoPorcentaje>4</codigoPorcentaje><tarifa>15</tarifa><baseImponible>0.81</baseImponible><valor>0.12</valor></impuesto></impuestos></detalle><detalle><codigoPrincipal>70542400011</codigoPrincipal><codigoAuxiliar>70542400011</codigoAuxiliar><descripcion>OLE HOTN FRUITY MARACUYA</descripcion><cantidad>1.0000</cantidad><precioUnitario>1.7913</precioUnitario><descuento>0.27</descuento><precioTotalSinImpuesto>1.52</precioTotalSinImpuesto><impuestos><impuesto><codigo>2</codigo><codigoPorcentaje>4</codigoPorcentaje><tarifa>15</tarifa><baseImponible>1.52</baseImponible><valor>0.23</valor></impuesto></impuestos></detalle><detalle><codigoPrincipal>786103671313</codigoPrincipal><codigoAuxiliar>786103671313</codigoAuxiliar><descripcion>LAVA CREMA LAVAVAJILLAS LIMON</descripcion><cantidad>1.0000</cantidad><precioUnitario>1.4783</precioUnitario><descuento>0.00</descuento><precioTotalSinImpuesto>1.48</precioTotalSinImpuesto><impuestos><impuesto><codigo>2</codigo><codigoPorcentaje>4</codigoPorcentaje><tarifa>15</tarifa><baseImponible>1.48</baseImponible><valor>0.22</valor></impuesto></impuestos></detalle><detalle><codigoPrincipal>761328752150</codigoPrincipal><codigoAuxiliar>761328752150</codigoAuxiliar><descripcion>CHOCAPIC CEREAL</descripcion><cantidad>1.0000</cantidad><precioUnitario>4.0696</precioUnitario><descuento>0.00</descuento><precioTotalSinImpuesto>4.07</precioTotalSinImpuesto><impuestos><impuesto><codigo>2</codigo><codigoPorcentaje>4</codigoPorcentaje><tarifa>15</tarifa><baseImponible>4.07</baseImponible><valor>0.61</valor></impuesto></impuestos></detalle></detalles><infoAdicional><campoAdicional nombre="DEDUCIBLE ALIMENTACION">41.39</campoAdicional><campoAdicional nombre="AHORRO TOTAL">3.78</campoAdicional><campoAdicional nombre="GRAN CONTRIBUYENTE">NAC-GCFOIOC21-00868-E</campoAdicional></infoAdicional><ds:Signature xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xmlns:etsi="http://uri.etsi.org/01903/v1.3.2#" Id="Signature194739">
+<ds:SignedInfo Id="Signature-SignedInfo542404">
+<ds:CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"></ds:CanonicalizationMethod>
+<ds:SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"></ds:SignatureMethod>
+<ds:Reference Id="SignedPropertiesID654569" Type="http://uri.etsi.org/01903#SignedProperties" URI="#Signature194739-SignedProperties976010">
+<ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"></ds:DigestMethod>
+<ds:DigestValue>zQIziocwjODNhzjr5NvPJXOzpKk=</ds:DigestValue>
+</ds:Reference>
+<ds:Reference URI="#Certificate1256888">
+<ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"></ds:DigestMethod>
+<ds:DigestValue>nna6QDb7jPVKPtFzGpDIPpfV16k=</ds:DigestValue>
+</ds:Reference>
+<ds:Reference Id="Reference-ID-297337" URI="#comprobante">
+>>>>>>> Stashed changes
 <ds:Transforms>
 <ds:Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/>
 </ds:Transforms>
+<<<<<<< Updated upstream
 <ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/>
 <ds:DigestValue>0U2/piHs8GQaajqdN6lO3PsJjcg=</ds:DigestValue>
 </ds:Reference>
@@ -119,11 +140,41 @@ xArXi5SDFbHVCCPp+Epv2uvq9CrgdGcQ+Lf5hmLYKkVzbL/IehgAgR8r7Wm2aN5eTzZQxKKEwwAm
 DVl/47CApXtM2Fxp6CWD2wdjHuwWe5df3RyVn6b7Ipurv3GFg2DBFfbieg8uXRJctoSjMKaLZaoD
 XiO4kgM5X/ZrZANJFU5HX3Q8pnwAHVoG4vVct6CKukWU/j52FT63rQmakU3BuACJ8PYDAgMBAAGj
 ggdgMIIHXDAMBgNVHRMBAf8EAjAAMB8GA1UdIwQYMBaAFIy6yhFXeCWAHWsKS1W/ja5i3b2PMFkG
+=======
+<ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"></ds:DigestMethod>
+<ds:DigestValue>oQFsQTqzkCo7u1dwsuUcnAbD8rM=</ds:DigestValue>
+</ds:Reference>
+</ds:SignedInfo>
+<ds:SignatureValue Id="SignatureValue878787">
+PQvi9C2r6OIMHTjozkxhMFv93XTTecvPXN8Mxgu1FWi8FggpaXmWnsVfttVdxdPCDHFlwqBBZcY/
++dbOmSiqdd9L4kjB9TjpdEcF2SR5IwaJO+Ziq6PPeCXH0hSWtiLVMVph7L56bBDoJXwH5So2adHD
+o7Snc+bPmP51H6dQ/9Avxa6hgTg/lfLhqxAR/DKsGYcyBLgYOK0syQ9kQlzm9mpFjHSEEX+wnFb/
+8cYx2aUFaYIFkOK8aA0HHCIF4AQvX274/+MV7mNS04vZPK5QSkAi/2rF3JubnpgSP15/YY/Odmjc
+5mrtsjgy71D+58iBa3nZiAR6MvRvrJgdhfRcLg==
+</ds:SignatureValue>
+<ds:KeyInfo Id="Certificate1256888">
+<ds:X509Data>
+<ds:X509Certificate>
+MIIMBDCCCeygAwIBAgIEP+xTnzANBgkqhkiG9w0BAQsFADCBmTELMAkGA1UEBhMCRUMxHTAbBgNV
+BAoMFFNFQ1VSSVRZIERBVEEgUy5BLiAyMTAwLgYDVQQLDCdFTlRJREFEIERFIENFUlRJRklDQUNJ
+T04gREUgSU5GT1JNQUNJT04xOTA3BgNVBAMMMEFVVE9SSURBRCBERSBDRVJUSUZJQ0FDSU9OIFNV
+QkNBLTIgU0VDVVJJVFkgREFUQTAeFw0yNDAzMzExNTQ1NDVaFw0yNjAzMzExNTQ1NDVaMIGkMSIw
+IAYDVQQDDBlKT1JHRSBMVUlTIEJSQVZPIEFSRUxMQU5PMSAwHgYDVQQFExcxNzA4MDMzMjUxLTMx
+MDMyNDEwNTUzNDEwMC4GA1UECwwnRU5USURBRCBERSBDRVJUSUZJQ0FDSU9OIERFIElORk9STUFD
+SU9OMR0wGwYDVQQKDBRTRUNVUklUWSBEQVRBIFMuQS4gMjELMAkGA1UEBhMCRUMwggEiMA0GCSqG
+SIb3DQEBAQUAA4IBDwAwggEKAoIBAQCssdj17+Ur422ucUv8rwLyiiPTNNxm4NKszimBZ6F7b3+4
+iMWkepBc3CeJ+YdsEXVuzqNYcc+0xJfeKRdY1YT6wtq0kW2R6afi843NKf2XFV6oRgANXje4qJ/0
+DNHHqcmCaVeivJnVpW0G6c6wGjyyDlQ8u1IEsDdzlzZMAFOahbopt2LBos1g0MTNS27aT/q0LmRc
+vSUupWGDvAFeYPSJv6uKRTeE0ZvzxK48ymOfPqG9/3l7xa/vojD8D4kAtj3B5hCjEJHcwC6bPnhG
+OqDZcpuhS7W7a//DQ+Jqq78jOyQGAcoqjdo3KA0KywiQ+Z62CDtMNOE2GPYQhkG+TZtFAgMBAAGj
+ggdFMIIHQTAMBgNVHRMBAf8EAjAAMB8GA1UdIwQYMBaAFIy6yhFXeCWAHWsKS1W/ja5i3b2PMFkG
+>>>>>>> Stashed changes
 CCsGAQUFBwEBBE0wSzBJBggrBgEFBQcwAYY9aHR0cDovL29jc3Bndy5zZWN1cml0eWRhdGEubmV0
 LmVjL2VqYmNhL3B1YmxpY3dlYi9zdGF0dXMvb2NzcDCBzwYDVR0uBIHHMIHEMIHBoIG+oIG7hoG4
 bGRhcDovL2xkYXBzZGNhMi5zZWN1cml0eWRhdGEubmV0LmVjL0NOPUFVVE9SSURBRCBERSBDRVJU
 SUZJQ0FDSU9OIFNVQkNBLTIgU0VDVVJJVFkgREFUQSxPVT1FTlRJREFEIERFIENFUlRJRklDQUNJ
 T04gREUgSU5GT1JNQUNJT04sTz1TRUNVUklUWSBEQVRBIFMuQS4gMixDPUVDP2RlbHRhUmV2b2Nh
+<<<<<<< Updated upstream
 dGlvbkxpc3Q/YmFzZTAcBgNVHREEFTATgRFwYmxAdXJiYS1wYXJrLmNvbTCCARUGA1UdIASCAQww
 ggEIMGIGCisGAQQBgqZyAgkwVDBSBggrBgEFBQcCAjBGHkQAQwBlAHIAdABpAGYAaQBjAGEAZABv
 ACAAZABlACAAUgBlAHAAcgBlAHMAZQBuAHQAYQBuAHQAZQAgAEwAZQBnAGEAbDCBoQYKKwYBBAGC
@@ -161,22 +212,73 @@ mfB/gHAoI2Jkcg6aIBoDNF4jaI9u3vwapca+FI+pS1jbsJ3V6eg9IcZ4Z5cX9l2xuBmMfhnKIyWY
 GU/VB5fxeORzjGhXupY9CjRQ3oUF89f2MkvTcVYEGUsy2JBI+jlwS/UQhwbAFUasD8FzNuHnQqsS
 LEnBBUSodGzx/9ZGIQB2TtYJH99KmgLT6e+XoMfKD7ElunMMGKMMV55k2ITGfq9KmqIk9F8wQOHg
 dfDDbFcmH2Dh64wf93eX2+eAna6+9GwF4kVe8rg=
+=======
+dGlvbkxpc3Q/YmFzZTAeBgNVHREEFzAVgRNqYnJhdm9AZmF2b3JpdGEuY29tMIIBEgYDVR0gBIIB
+CTCCAQUwYAYKKwYBBAGCpnICCjBSMFAGCCsGAQUFBwICMEQeQgBDAGUAcgB0AGkAZgBpAGMAYQBk
+AG8AIABkAGUAIABNAGkAZQBtAGIAcgBvACAAZABlACAARQBtAHAAcgBlAHMAYTCBoAYKKwYBBAGC
+pnICBDCBkTCBjgYIKwYBBQUHAgEWgYFodHRwczovL3d3dy5zZWN1cml0eWRhdGEubmV0LmVjL3dw
+LWNvbnRlbnQvZG93bmxvYWRzL05vcm1hdGl2YXMvUF9kZV9DZXJ0aWZpY2Fkb3MvUG9saXRpY2Fz
+IGRlIENlcnRpZmljYWRvIE1pZW1icm8gZGUgRW1wcmVzYS5wZGYwggKiBgNVHR8EggKZMIIClTCB
+5aBBoD+GPWh0dHA6Ly9vY3NwZ3cuc2VjdXJpdHlkYXRhLm5ldC5lYy9lamJjYS9wdWJsaWN3ZWIv
+c3RhdHVzL29jc3CigZ+kgZwwgZkxOTA3BgNVBAMMMEFVVE9SSURBRCBERSBDRVJUSUZJQ0FDSU9O
+IFNVQkNBLTIgU0VDVVJJVFkgREFUQTEwMC4GA1UECwwnRU5USURBRCBERSBDRVJUSUZJQ0FDSU9O
+IERFIElORk9STUFDSU9OMR0wGwYDVQQKDBRTRUNVUklUWSBEQVRBIFMuQS4gMjELMAkGA1UEBhMC
+RUMwgceggcSggcGGgb5sZGFwOi8vbGRhcHNkY2EyLnNlY3VyaXR5ZGF0YS5uZXQuZWMvQ049QVVU
+T1JJREFEIERFIENFUlRJRklDQUNJT04gU1VCQ0EtMiBTRUNVUklUWSBEQVRBLE9VPUVOVElEQUQg
+REUgQ0VSVElGSUNBQ0lPTiBERSBJTkZPUk1BQ0lPTixPPVNFQ1VSSVRZIERBVEEgUy5BLiAyLEM9
+RUM/Y2VydGlmaWNhdGVSZXZvY2F0aW9uTGlzdD9iYXNlMIHgoIHdoIHahoHXaHR0cHM6Ly9wb3J0
+YWwtb3BlcmFkb3IyLnNlY3VyaXR5ZGF0YS5uZXQuZWMvZWpiY2EvcHVibGljd2ViL3dlYmRpc3Qv
+Y2VydGRpc3Q/Y21kPWNybCZpc3N1ZXI9Q049QVVUT1JJREFEIERFIENFUlRJRklDQUNJT04gU1VC
+Q0EtMiBTRUNVUklUWSBEQVRBLE9VPUVOVElEQUQgREUgQ0VSVElGSUNBQ0lPTiBERSBJTkZPUk1B
+Q0lPTixPPVNFQ1VSSVRZIERBVEEgUy5BLiAyLEM9RUMwHQYDVR0OBBYEFIQDvaaBQT2pW7yLU6Xx
+i25Q+/22MCsGA1UdEAQkMCKADzIwMjQwMzMxMTU0NTQ1WoEPMjAyNjAzMzExNTQ1NDVaMAsGA1Ud
+DwQEAwIF4DAnBgorBgEEAYKmcgMFBBkMF0dFUkVOVEUgREUgQ09OVEFCSUxJREFEMBoGCisGAQQB
+gqZyAwEEDAwKMTcwODAzMzI1MTAZBgorBgEEAYKmcgMJBAsMCUNPVE9HQ0hPQTARBgorBgEEAYKm
+cgMiBAMMAS4wJwYKKwYBBAGCpnIDBwQZDBdBViBHRU5FUkFMIEVOUklRVUVaIFMgTjAaBgorBgEE
+AYKmcgMCBAwMCkpPUkdFIExVSVMwHwYKKwYBBAGCpnIDIAQRDA8wMDIwMDEwMDA3OTQyMzYwEwYK
+KwYBBAGCpnIDIQQFDANQRlgwFwYKKwYBBAGCpnIDDAQJDAdFQ1VBRE9SMBUGCisGAQQBgqZyAwME
+BwwFQlJBVk8wKAYKKwYBBAGCpnIDCgQaDBhDT1JQT1JBQ0lPTiBGQVZPUklUQSBDIEEwHQYKKwYB
+BAGCpnIDCwQPDA0xNzkwMDE2OTE5MDAxMBEGCisGAQQBgqZyAx0EAwwBLjAYBgorBgEEAYKmcgME
+BAoMCEFSRUxMQU5PMBoGCisGAQQBgqZyAwgEDAwKMDIyMjk5NjUwMDANBgkqhkiG9w0BAQsFAAOC
+AgEAsJWQep1bF5roj+70kFeXw+10E/43w8j7ZrjDlQaUl4YN3SUrb0VbgPo2fBaMSY7dqcLqpxrc
+wGPIdUhKiZ7pWRlPGi+WBjJHCL8iCwWqttIIWWAoINxiN8ogMwn4sC35hWHEEzGqDLPA7wAP8lwG
+WPVdCoBnamR1PG45lzFJoCwVhYYMq/yRzbDB2jfdlP6V/i2pFYijmsdcoFdXFi5eodgN/iQOXQfe
+7Rz0Axm96JVlcMeKM8PuY8eW4FX2+3bOlyt70O9oFZ6VizYGlEj9KQ8cMMaoHYeJBHl1rvAc6N3F
+I9tIFEAotX4tKl1DDhKFNCyh7SW/yNcDHuk5WFVMuRJ6wmX1TtEVgPndM6rvH+o6vOuVEe9AMztl
+AHyPgkD4bpBaHfBeCnDsPRKw3AqmYVRD6HjO5vbQZJA2o7DpYOxWusN/uJOVihrClVjZlMpZ3nZ9
+9zj9ZxsQv1j6HCk5w5JAFf67silgZYIqilwXeMNzflysDa86dAm5CwL037d3X2P0jSGftGqe7QCf
+BzuVkfvUSudb8KUnxpua4HbdnJ08feh/hXv8dCHC/jKEBjoCkQNNbjYYC3Jaf81DXJ7qkup7tWhS
+DEiqpqiy1y0JkNw25fecKDNn0VvC91pBVGmtlEJTKxe4JocGHK0d+5wAtGOPJFIO7s/HH2wKg3rq
+ZhI=
+>>>>>>> Stashed changes
 </ds:X509Certificate>
 </ds:X509Data>
 <ds:KeyValue>
 <ds:RSAKeyValue>
 <ds:Modulus>
+<<<<<<< Updated upstream
 2Jh1Dt6Y2oCT0C4LJ/X3wygZrVhHKB8XIQLQ0EDlmJLALc9FVQoXlplKMOZP9X8CtKYab707QyiE
 xGH1snwiMF2eysg8ePeguadVL2mhtiz2/S8j0igqNJx6CcQK14uUgxWx1Qgj6fhKb9rr6vQq4HRn
 EPi3+YZi2CpFc2y/yHoYAIEfK+1ptmjeXk82UMSihMMAJg1Zf+OwgKV7TNhcaeglg9sHYx7sFnuX
 X90clZ+m+yKbq79xhYNgwRX24noPLl0SXLaEozCmi2WqA14juJIDOV/2a2QDSRVOR190PKZ8AB1a
 BuL1XLegirpFlP4+dhU+t60JmpFNwbgAifD2Aw==
+=======
+rLHY9e/lK+NtrnFL/K8C8ooj0zTcZuDSrM4pgWehe29/uIjFpHqQXNwnifmHbBF1bs6jWHHPtMSX
+3ikXWNWE+sLatJFtkemn4vONzSn9lxVeqEYADV43uKif9AzRx6nJgmlXoryZ1aVtBunOsBo8sg5U
+PLtSBLA3c5c2TABTmoW6KbdiwaLNYNDEzUtu2k/6tC5kXL0lLqVhg7wBXmD0ib+rikU3hNGb88Su
+PMpjnz6hvf95e8Wv76Iw/A+JALY9weYQoxCR3MAumz54Rjqg2XKboUu1u2v/w0Piaqu/IzskBgHK
+Ko3aNygNCssIkPmetgg7TDThNhj2EIZBvk2bRQ==
+>>>>>>> Stashed changes
 </ds:Modulus>
 <ds:Exponent>AQAB</ds:Exponent>
 </ds:RSAKeyValue>
 </ds:KeyValue>
 </ds:KeyInfo>
+<<<<<<< Updated upstream
 <ds:Object Id="Signature169560-Object242958"><etsi:QualifyingProperties Target="#Signature169560"><etsi:SignedProperties Id="Signature169560-SignedProperties362687"><etsi:SignedSignatureProperties><etsi:SigningTime>2025-03-08T19:06:38.468+01:00</etsi:SigningTime><etsi:SigningCertificate><etsi:Cert><etsi:CertDigest><ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/><ds:DigestValue>mq6w7fbCBCWCn4wthWq0vk8YzlM=</ds:DigestValue></etsi:CertDigest><etsi:IssuerSerial><ds:X509IssuerName>CN=AUTORIDAD DE CERTIFICACION SUBCA-2 SECURITY DATA,OU=ENTIDAD DE CERTIFICACION DE INFORMACION,O=SECURITY DATA S.A. 2,C=EC</ds:X509IssuerName><ds:X509SerialNumber>858471072</ds:X509SerialNumber></etsi:IssuerSerial></etsi:Cert></etsi:SigningCertificate><etsi:SignerRole><etsi:ClaimedRoles><etsi:ClaimedRole>emisor</etsi:ClaimedRole></etsi:ClaimedRoles></etsi:SignerRole></etsi:SignedSignatureProperties><etsi:SignedDataObjectProperties><etsi:DataObjectFormat ObjectReference="#Reference-ID-385227"><etsi:Description>Factura firmada</etsi:Description><etsi:MimeType>text/xml</etsi:MimeType></etsi:DataObjectFormat></etsi:SignedDataObjectProperties></etsi:SignedProperties></etsi:QualifyingProperties></ds:Object></ds:Signature></factura>]]></comprobante>
+=======
+<ds:Object Id="Signature194739-Object817781"><etsi:QualifyingProperties Target="#Signature194739"><etsi:SignedProperties Id="Signature194739-SignedProperties976010"><etsi:SignedSignatureProperties><etsi:SigningTime>2025-02-19T12:46:16-05:00</etsi:SigningTime><etsi:SigningCertificate><etsi:Cert><etsi:CertDigest><ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"></ds:DigestMethod><ds:DigestValue>7pKZTkbYoe1Jex3m1M19Ghiuvr4=</ds:DigestValue></etsi:CertDigest><etsi:IssuerSerial><ds:X509IssuerName>CN=AUTORIDAD DE CERTIFICACION SUBCA-2 SECURITY DATA,OU=ENTIDAD DE CERTIFICACION DE INFORMACION,O=SECURITY DATA S.A. 2,C=EC</ds:X509IssuerName><ds:X509SerialNumber>1072452511</ds:X509SerialNumber></etsi:IssuerSerial></etsi:Cert></etsi:SigningCertificate></etsi:SignedSignatureProperties><etsi:SignedDataObjectProperties><etsi:DataObjectFormat ObjectReference="#Reference-ID-297337"><etsi:Description>comprobante</etsi:Description><etsi:MimeType>text/xml</etsi:MimeType></etsi:DataObjectFormat></etsi:SignedDataObjectProperties></etsi:SignedProperties></etsi:QualifyingProperties></ds:Object></ds:Signature></factura>]]></comprobante>
+>>>>>>> Stashed changes
 <mensajes/>
 </autorizacion>
 
