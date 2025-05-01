@@ -129,3 +129,7 @@ if ($_GET['acc'] == 'th_registrar_postulantes') {
 if ($_GET['acc'] == 'th_informacion_personal') {
 	include('TALENTO_HUMANO/POSTULANTES/informacion_personal.php');
 }
+
+if ($_GET['acc'] == 'th_addRegistroBio') {
+	include('TALENTO_HUMANO/DISPOSITIVOS/th_addRegistroBio.php');
+}

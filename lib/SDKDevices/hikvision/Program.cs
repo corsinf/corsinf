@@ -109,8 +109,10 @@ class Program
                     {
                         FingerManagerSDK FingerMan = new FingerManagerSDK();
                         r = FingerMan.capturarDedo(m_UserId, userName, patch);
+
+                        m_SetSuccess = FingerMan.m_SaveSuccessFing;
                     }
-                    json = JsonSerializer.Serialize(new { msj = r });
+                    json = JsonSerializer.Serialize(new { msj = r,resp= m_SetSuccess});
                     break;
                 case "4":
                     //AGREGAR USUARIO A BIOMETRICO
@@ -118,38 +120,22 @@ class Program
                     user = args[2];
                     port = args[3];
                     pass = args[4];
-                    String Nombre = args[5];
-                    string CardRightPlan = "1"; // por defecto
-                    String EmployeeNo = args[6];// este es el id del empleado
-                    String CardNo = args[7]; // numero de tarjeta
+                    String CardNo = args[5]; // numero de tarjeta
 
                     r = login.loginSDKDevice(ip, port, user, pass);
                     m_UserId = login.m_UserID;
                     if (m_UserId >= 0)
-                    {
-                        CardManagerSDK CardMan = new CardManagerSDK();
-                        r = CardMan.SetearCard(m_UserId, CardNo, CardRightPlan, EmployeeNo, Nombre);
-
-                        m_SetSuccess = CardMan.m_SetSuccess;
-
-                        String ruta = args[8];
-                        String FingerID = "1"; //enviar el numero de huellas, si ya tiene uno enviar 2 3 4 como corresponda
+                    {                       
+                        String ruta = args[6];
+                        String FingerID = args[7]; //enviar el numero de huellas, si ya tiene uno enviar 2 3 4 como corresponda
                         String CardReaderNo = "1";  // esta variable solo se coloca entre 1 y 2 
 
                         FingerManagerSDK FingerMan = new FingerManagerSDK();
                         r = FingerMan.SetearFinger(m_UserId, FingerID, CardReaderNo, CardNo, ruta);
                         m_SetSuccessFing = FingerMan.m_SetSuccessFing;
-                        if (m_SetSuccess == 1)
-                        {
-                            r = "Persona Registrada";
-                        }
-                        if (m_SetSuccessFing == -1)
-                        {
-                            r += " sin huella digital,asegurese que la huella digital no se haya registrado antes.";
-                        }
-
+                       
                     }
-                    json = JsonSerializer.Serialize(new { msj = r });
+                    json = JsonSerializer.Serialize(new { msj = r,resp = m_SetSuccessFing });
                     break;
 
                 case "5":
@@ -197,6 +183,72 @@ class Program
 
                     break;
                 case "7":
+                    //INGRESAR TARJETA PERSONA Y TARJETA
+                    ip = args[1];
+                    user = args[2];
+                    port = args[3];
+                    pass = args[4];
+                    String NombreT = args[5];
+                    string CardRightPlanT = "1"; // por defecto
+                    String EmployeeNoT = args[6];// este es el id del empleado
+                    String CardNoT = args[7]; // numero de tarjeta
+
+                    r = login.loginSDKDevice(ip, port, user, pass);
+                    m_UserId = login.m_UserID;
+                    if (m_UserId >= 0)
+                    {
+                        CardManagerSDK CardMan = new CardManagerSDK();
+                        r = CardMan.SetearCard(m_UserId, CardNoT, CardRightPlanT, EmployeeNoT, NombreT);
+                        m_SetSuccess = CardMan.m_SetSuccess;
+                        if (m_SetSuccess == 1)
+                        {
+                            r = "Persona Registrada";
+                        }
+                    }
+                    json = JsonSerializer.Serialize(new { msj = r,resp = m_SetSuccess });
+                    break;
+                case "8":
+                    //eliminar TARJETA PERSONA Y TARJETA
+                    ip = args[1];
+                    user = args[2];
+                    port = args[3];
+                    pass = args[4];
+                    String CardNoDEL = args[5]; // numero de tarjeta
+
+                    r = login.loginSDKDevice(ip, port, user, pass);
+                    m_UserId = login.m_UserID;
+                    if (m_UserId >= 0)
+                    {
+                        CardManagerSDK CardMan = new CardManagerSDK();
+                        r = CardMan.EliminarCardNo(m_UserId, CardNoDEL);
+                        m_SetSuccess = CardMan.m_SetSuccess;
+
+                    }
+                    json = JsonSerializer.Serialize(new { msj = r,resp = m_SetSuccess});
+
+                    break;
+                case "9":
+                    //eliminar FINGER DE  PERSONA
+                    ip = args[1];
+                    user = args[2];
+                    port = args[3];
+                    pass = args[4];
+                    String CardNof = args[5]; // numero de tarjeta
+                    String IDdevice = args[6]; // numero de tarjeta
+
+                    r = login.loginSDKDevice(ip, port, user, pass);
+                    m_UserId = login.m_UserID;
+                    if (m_UserId >= 0)
+                    {
+                        FingerManagerSDK FingerMan = new FingerManagerSDK();
+                        r = FingerMan.GetRegisteredFingerprintIDs(m_UserId,CardNof,IDdevice);
+                        m_SetSuccessFing = FingerMan.m_SetSuccessFing;
+
+                    }
+                    json = JsonSerializer.Serialize(new { msj = r, resp = m_SetSuccessFing });
+                   
+                    break;
+                case "10":
                     //GENERAR TABLA DE LOG PARA EJEMPLO
                     ipHost = args[5];
                     portHost = args[6];

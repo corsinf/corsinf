@@ -56,6 +56,8 @@ function buscar_impresora()
             $('#ddl_lista_empresas').html(op);
         },
         error: function(xhr, status, error) {
+
+            Swal.fire("Plugin de impresora No encontrado","Descargue el plugin de la impresora","error");
             console.error('Error en la solicitud:', status, error);
         }
     });
@@ -85,14 +87,21 @@ function imprimirAgente(data)
             let dataObj = JSON.parse(response);
             let dataArray = Object.values(dataObj);
             var op = "";
-            dataArray.forEach(function(item,i){
-                console.log(item)
-                op+='<option value="'+item+'">'+item+'</option>'
-            })
 
-            $('#ddl_lista_empresas').html(op);
+            console.log(dataArray)
+            if(dataArray[1]=='-1')
+            {
+                Swal.fire(dataArray[2],dataArray[0],"error");
+            }
+            // dataArray.forEach(function(item,i){
+            //     console.log(item)
+            //     op+='<option value="'+item+'">'+item+'</option>'
+            // })
+
+            // $('#ddl_lista_empresas').html(op);
         },
         error: function(xhr, status, error) {
+            Swal.fire("Plugin de impresora No encontrado","Descargue el plugin de la impresora","error");
             console.error('Error en la solicitud:', status, error);
         }
     });
@@ -139,4 +148,27 @@ function guardar_impresora()
             
         },
     });
+}
+
+// function descargarLib() {
+//   const link = document.createElement('a');
+//   link.href = '../lib/IMPRESORA/printerlib.rar';
+//   link.download = 'Printerlib.rar';
+//   document.body.appendChild(link);
+//   link.click();
+
+//   setTimeout(() => document.body.removeChild(iframe), 10000);
+// }
+
+
+// function descargarLib() {
+//   const iframe = document.createElement('iframe');
+//   iframe.style.display = 'none';
+//   iframe.src = '../lib/IMPRESORA/CorsinfPrinter/printerlib.rar';
+//   document.body.appendChild(iframe);
+//   setTimeout(() => document.body.removeChild(iframe), 10000);
+// }
+
+function descargarLib() {
+  window.location.href = '../controlador/DISENIADOR_ZPL/di_diseniadorC.php?DescargarLibPrinter=true';
 }

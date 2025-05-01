@@ -3373,6 +3373,11 @@ namespace CorsinfSDKHik.NetSDK
          * [in] cbStateCallback - the callback function
          * [in] pUserData - pointer to user input data
          */
+
+        [DllImport(@"..\..\..\HCNetSDK\HCNetSDK.dll")]
+        public static extern int NET_DVR_StartRemoteConfig(int lUserID, int dwCommand, IntPtr lpInBuffer, int dwInBufferLen, RemoteConfigCallback cbStateCallback, IntPtr pUserData);
+
+
         [DllImport(@"..\..\..\HCNetSDK\HCNetSDK.dll")]
         public static extern int NET_DVR_StartRemoteConfig(int lUserID, uint dwCommand, nint lpInBuffer, int dwInBufferLen, RemoteConfigCallback cbStateCallback, nint pUserData);
 
@@ -3881,7 +3886,8 @@ namespace CorsinfSDKHik.NetSDK
 
         [DllImport(@"..\..\..\HCNetSDK\HCNetSDK.dll")]
         public static extern int NET_DVR_SendWithRecvRemoteConfig(int lHandle, ref CHCNetSDK.NET_DVR_FINGERPRINT_RECORDF lpInBuff, int dwInBuffSize, ref CHCNetSDK.NET_DVR_FINGERPRINT_STATUSF lpOutBuff, int dwOutBuffSize, IntPtr dwOutDataLen);
-
+        [DllImport(@"..\..\..\HCNetSDK\HCNetSDK.dll")]
+        public static extern int NET_DVR_GetNextRemoteConfig(int lHandle, ref CHCNetSDK.NET_DVR_FINGERPRINT_RECORDF lpOutBuff, int dwOutBuffSize);
         // 用户调用SendwithRecv接口时，接口返回的状态
         public enum NET_SDK_SENDWITHRECV_STATUS
         {

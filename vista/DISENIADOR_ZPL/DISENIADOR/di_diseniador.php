@@ -245,6 +245,7 @@ const id = '<?php echo $id; ?>'
         div.appendChild(img);
 
         data =  canvasDesigner.getElementos();
+        data = data.filter(elemento => elemento !== null);
         console.log(data)
         if(yaTieneOrigendatos==0)
         {
@@ -846,6 +847,7 @@ const id = '<?php echo $id; ?>'
 
     function cambiar_metodo()
     {
+        $('#ddl_lista_empresas').empty();
         metodo = $('#ddl_metodo_busqueda').val()
         if(metodo=='MULTICAST_BROADCAST')
         {
@@ -1022,6 +1024,16 @@ const id = '<?php echo $id; ?>'
                     </ol>
                 </nav>
             </div>
+            <div class="ms-auto">
+            <div class="btn-group">
+              <button type="button" class="btn btn-primary btn-compact">Descargas</button>
+              <button type="button" class="btn btn-primary split-bg-primary dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown"> <span class="visually-hidden">Toggle Dropdown</span>
+              </button>
+              <div class="dropdown-menu dropdown-menu-right dropdown-menu-lg-end">
+                <button type="button" class="dropdown-item" id="btn_editar" onclick="descargarLib()"><i class="bx bx-printer"></i> Plugin Impresora</button>
+              </div>
+            </div>
+          </div>
         </div>
         <!--end breadcrumb-->
 
@@ -1230,7 +1242,7 @@ const id = '<?php echo $id; ?>'
                                 </div>
                                
                             </div>
-                            <div class="col-12" style="height: 300px;overflow-y: scroll;
+                            <div class="col-12" style="height: 150px;overflow-y: scroll;
 ">
                                 <b>Datos a imprimir</b>
                                 <input type="hidden" name="" id="txt_origen_datos" value="0">

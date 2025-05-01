@@ -1,5 +1,6 @@
 ﻿using CorsinfSDKHik.ConfigDB;
 using CorsinfSDKHik.NetSDK;
+using Lextm.SharpSnmpLib.Security;
 using Microsoft.Data.SqlClient;
 using Newtonsoft.Json;
 using System;
@@ -526,6 +527,123 @@ namespace CorsinfSDKHik.Funciones
             return msj;
 
         }
+
+        // Función para obtener huellas de un usuario
+        public string GetRegisteredFingerprintIDs(int m_UserID, string cardNo,string dispositivo = "1")
+        {
+
+            String ListaItemHuella = "[";
+            for (int item = 0; item < 20; item++) // puedes ajustar el límite según tu entorno
+            {
+                if (m_lGetFingerPrintCfgHandle != -1)
+                {
+                    CHCNetSDK.NET_DVR_StopRemoteConfig((int)m_lGetFingerPrintCfgHandle);
+                    m_lGetFingerPrintCfgHandle = -1;
+                }
+
+                CHCNetSDK.NET_DVR_FINGERPRINT_CONDF struCond = new CHCNetSDK.NET_DVR_FINGERPRINT_CONDF();
+                struCond.init();
+                struCond.dwSize = Marshal.SizeOf(struCond);
+                struCond.dwFingerprintNum = 1;
+                byte.TryParse(item.ToString(), out struCond.byFingerPrintID);
+                byte[] byTemp = System.Text.Encoding.UTF8.GetBytes(cardNo);
+                for (int i = 0; i < byTemp.Length; i++)
+                {
+                    struCond.byCardNo[i] = byTemp[i];
+                }
+                int.TryParse(dispositivo, out struCond.dwEnableReaderNo);
+                int dwSize = Marshal.SizeOf(struCond);
+                IntPtr ptrStruCond = Marshal.AllocHGlobal(dwSize);
+                Marshal.StructureToPtr(struCond, ptrStruCond, false);
+                m_lGetFingerPrintCfgHandle = CHCNetSDK.NET_DVR_StartRemoteConfig(m_UserID, CHCNetSDK.NET_DVR_GET_FINGERPRINT, ptrStruCond, dwSize, null, IntPtr.Zero);
+                if (-1 == m_lGetFingerPrintCfgHandle)
+                {
+                    Marshal.FreeHGlobal(ptrStruCond);
+                    //Console.WriteLine("NET_DVR_GET_FINGERPRINT_CFG_V50 FAIL, ERROR CODE" + CHCNetSDK.NET_DVR_GetLastError().ToString());
+                    continue;
+                }
+                else
+                {
+
+                    Boolean Flag = true;
+                    CHCNetSDK.NET_DVR_FINGERPRINT_RECORDF struOutBuff = new CHCNetSDK.NET_DVR_FINGERPRINT_RECORDF();
+                    struOutBuff.init();
+                    int dWsize = Marshal.SizeOf(struOutBuff);
+                    int dwStatus = 0;
+
+                    while (Flag)
+                    {
+                        dwStatus = CHCNetSDK.NET_DVR_GetNextRemoteConfig(m_lGetFingerPrintCfgHandle, ref struOutBuff, dWsize);
+                        switch (dwStatus)
+                        {
+                            case CHCNetSDK.NET_SDK_GET_NEXT_STATUS_SUCCESS:
+                                //成功读取到数据，处理完本次数据后需调用next
+                                //ProcessFingerData(ref struOutBuff, ref Flag);
+                                ListaItemHuella += "{\"item\":\"" + item.ToString() + "\"},";
+                                m_SetSuccessFing = 1;
+                                //Console.WriteLine("Huella encontrada en item:" + item);
+                                break;
+                            case CHCNetSDK.NET_SDK_GET_NEXT_STATUS_NEED_WAIT:
+                                break;
+                            case CHCNetSDK.NET_SDK_GET_NEXT_STATUS_FAILED:
+                                CHCNetSDK.NET_DVR_StopRemoteConfig(m_lGetFingerPrintCfgHandle);
+                                //Console.WriteLine("NET_SDK_GET_NEXT_STATUS_FAILED" + CHCNetSDK.NET_DVR_GetLastError().ToString());
+                                Flag = false;
+                                break;
+                            case CHCNetSDK.NET_SDK_GET_NEXT_STATUS_FINISH:
+                                //Console.WriteLine("NET_SDK_GET_NEXT_STATUS_FINISH");
+                                CHCNetSDK.NET_DVR_StopRemoteConfig(m_lGetFingerPrintCfgHandle);
+                                Flag = false;
+                                break;
+                            default:
+                                //Console.WriteLine("NET_SDK_GET_NEXT_STATUS_UNKOWN" + CHCNetSDK.NET_DVR_GetLastError().ToString());
+                                CHCNetSDK.NET_DVR_StopRemoteConfig(m_lGetFingerPrintCfgHandle);
+                                Flag = false;
+                                break;
+                        }
+                    }
+                }
+                Marshal.FreeHGlobal(ptrStruCond);
+            }
+
+            if (ListaItemHuella != "[")
+            {
+
+                ListaItemHuella = ListaItemHuella.Substring(0, ListaItemHuella.Length - 1);
+                ListaItemHuella = ListaItemHuella + "]";
+            }
+            else { ListaItemHuella = ""; }
+
+            return ListaItemHuella;
+        }
+       
+        private void ProcessFingerData(ref CHCNetSDK.NET_DVR_FINGERPRINT_RECORDF struOutBuff, ref bool flag)
+        {
+            string strpath = null;
+            DateTime dt = DateTime.Now;
+            strpath = string.Format("{0}\\fingerprint.dat", Environment.CurrentDirectory);
+            try
+            {
+                using (FileStream fs = new FileStream(strpath, FileMode.OpenOrCreate))
+                {
+                    if (!File.Exists(strpath))
+                    {
+                        Console.WriteLine("Fingerprint storage file creat failed！");
+                    }
+                    BinaryWriter objBinaryWrite = new BinaryWriter(fs);
+                    fs.Write(struOutBuff.byFingerData, 0, struOutBuff.dwFingerPrintLen);
+                    fs.Close();
+                }
+                //textBoxFingerData.Text = strpath;
+                Console.WriteLine("Fingerprint GET SUCCEED");
+            }
+            catch
+            {
+                Console.WriteLine("Fingerprint process failed");
+                flag = false;
+            }
+        }
+
 
     }
 }

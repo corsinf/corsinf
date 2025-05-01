@@ -1184,5 +1184,35 @@ function para_ftp($nombre,$texto)
 		
 	}
 
+	function secuenciale_globales($query,$empresa,$incrementar=false)
+	{
+		$sql = "SELECT *
+		 			FROM SECUENCIALES
+		 			WHERE  id_empresa = '".$empresa."'
+		 			AND DETALLE = '".$query."'";
+		$datos = $this->db->datos($sql);
+		// print_r($sql);die();
+
+		if(count($datos)==0)
+		{
+			$sql2 = "INSERT INTO SECUENCIALES (DETALLE,NUMERO,id_empresa) VALUES('".$query."',1,'".$empresa."')";
+			$this->db->sql_string($sql2);
+			return $this->db->datos($sql);
+		}else{
+			if($incrementar)
+			{
+				$NUM = 1+$datos[0]['NUMERO'];
+				$sql3 = "UPDATE SECUENCIALES SET NUMERO = '".$NUM."' WHERE ID_SECUENCIALES = '".$datos[0]['ID_SECUENCIALES']."'";
+				$this->db->sql_string($sql3);
+				return $this->db->datos($sql);
+			}else
+			{
+				return $this->db->datos($sql);
+			}
+		}
+
+
+	}
+
 }
 ?>
