@@ -2,7 +2,7 @@
 $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
 
 ?>
-
+<!--  -->
 <script src="../js/GENERAL/operaciones_generales.js"></script>
 
 <script type="text/javascript">
