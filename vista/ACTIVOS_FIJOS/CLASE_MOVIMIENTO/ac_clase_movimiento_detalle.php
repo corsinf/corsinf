@@ -1,33 +1,35 @@
-<?php /*include('../cabeceras/header.php');*/ $id = '';
-if (isset($_GET['id'])) {
-  $id = $_GET['id'];
-} ?>
+<?php
+$modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
+
+$_id = '';
+
+if (isset($_GET['_id'])) {
+  $_id = $_GET['_id'];
+}
+
+?>
+
+<script src="../lib/jquery_validation/jquery.validate.js"></script>
+<script src="../js/GENERAL/operaciones_generales.js"></script>
+
 <script type="text/javascript">
   $(document).ready(function() {
-    var id = '<?php echo $id; ?>';
-    if (id != '') {
-      datos_col(id);
-    }
+    <?php if (isset($_GET['_id'])) { ?>
+      datos_col(<?= $_id ?>);
+    <?php } ?>
 
   });
 
   function datos_col(id) {
-    $('#titulo').text('Editar clase_movimiento');
-    $('#op').text('Editar');
-    var clase_movimiento = '';
-
     $.ajax({
       data: {
         id: id
       },
-      url: '../controlador/ACTIVOS_FIJOS/clase_movimientoC.php?lista=true',
+      url: '../controlador/ACTIVOS_FIJOS/clase_movimientoC.php?listar=true',
       type: 'post',
       dataType: 'json',
-      /*beforeSend: function () {   
-           var spiner = '<div class="text-center"><img src="../img/gif/proce.gif" width="100" height="100"></div>'     
-         $('#tabla_').html(spiner);
-      },*/
       success: function(response) {
+        // console.log(response);
         $('#codigo').val(response[0].CODIGO);
         $('#descripcion').val(response[0].DESCRIPCION);
         $('#id').val(response[0].ID_MOVIMIENTO);
@@ -45,27 +47,13 @@ if (isset($_GET['id'])) {
       'des': descri,
       'id': id,
     }
-    if (id == '') {
-      if (codigo == '' || descri == '') {
-        Swal.fire({
-          icon: 'error',
-          title: 'Oops...',
-          text: 'Asegurese de llenar todo los campos',
-        })
-      } else {
-        insertar(parametros)
-      }
-    } else {
-      if (codigo == '' || descri == '') {
-        Swal.fire({
-          icon: 'error',
-          title: 'Oops...',
-          text: 'Asegurese de llenar todo los campos',
-        })
-      } else {
-        insertar(parametros);
-      }
+
+    if ($("#form_clase_movimiento").valid()) {
+      // Si es válido, puedes proceder a enviar los datos por AJAX
+      insertar(parametros);
     }
+    //console.log(parametros);
+
   }
 
   function insertar(parametros) {
@@ -76,26 +64,35 @@ if (isset($_GET['id'])) {
       url: '../controlador/ACTIVOS_FIJOS/clase_movimientoC.php?insertar=true',
       type: 'post',
       dataType: 'json',
-      /*beforeSend: function () {   
-           var spiner = '<div class="text-center"><img src="../img/gif/proce.gif" width="100" height="100"></div>'     
-         $('#tabla_').html(spiner);
-      },*/
+
       success: function(response) {
         if (response == 1) {
           Swal.fire('', 'Operacion realizada con exito.', 'success').then(function() {
-            location.href = 'inicio.php?mod=<?php echo $_SESSION['INICIO']['MODULO_SISTEMA']; ?>&acc=clase_movimiento';
+            location.href = '../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=clase_movimiento';
           });
         } else if (response == -2) {
-          Swal.fire('', 'codigo ya regitrado', 'info');
+          //Swal.fire('', 'El nombre del dispositivo ya está en uso', 'warning');
+          $(txt_deno).addClass('is-invalid');
+          $('#error_codigo').text('El nombre ya está en uso.');
         }
+      },
 
+      error: function(xhr, status, error) {
+        console.log('Status: ' + status);
+        console.log('Error: ' + error);
+        console.log('XHR Response: ' + xhr.responseText);
+
+        Swal.fire('', 'Error: ' + xhr.responseText, 'error');
       }
     });
 
+    $('#codigo').on('input', function() {
+      $('#error_codigo').text('');
+    });
   }
 
   function delete_datos() {
-    var id = '<?php echo $id; ?>';
+    var id = '<?= $_id ?>';
     Swal.fire({
       title: 'Eliminar Registro?',
       text: "Esta seguro de eliminar este registro?",
@@ -109,7 +106,6 @@ if (isset($_GET['id'])) {
         eliminar(id);
       }
     })
-
   }
 
   function eliminar(id) {
@@ -123,10 +119,9 @@ if (isset($_GET['id'])) {
       success: function(response) {
         if (response == 1) {
           Swal.fire('Eliminado!', 'Registro Eliminado.', 'success').then(function() {
-            location.href = 'inicio.php?mod=<?php echo $_SESSION['INICIO']['MODULO_SISTEMA']; ?>&acc=clase_movimiento';
+            location.href = '../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=clase_movimiento';
           });
         }
-
       }
     });
   }
@@ -136,50 +131,82 @@ if (isset($_GET['id'])) {
   <div class="page-content">
     <!--breadcrumb-->
     <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
-      <div class="breadcrumb-title pe-3">Clase de movimiento</div>
+      <div class="breadcrumb-title pe-3">Clase de Movimiento</div>
+      <?php
+      //print_r($_SESSION['INICIO']);die(); 
+
+      ?>
       <div class="ps-3">
         <nav aria-label="breadcrumb">
           <ol class="breadcrumb mb-0 p-0">
             <li class="breadcrumb-item"><a href="javascript:;"><i class="bx bx-home-alt"></i></a>
             </li>
-            <li class="breadcrumb-item active" aria-current="page">detalle Clase de movimeinto</li>
+            <li class="breadcrumb-item active" aria-current="page">
+              Agregar Clase de Movimiento
+            </li>
           </ol>
         </nav>
       </div>
     </div>
     <!--end breadcrumb-->
+
     <div class="row">
       <div class="col-xl-12 mx-auto">
-        <hr>
-        <div class="card">
-          <div class="card-body">
-            <div class="container-fluid">
-              <div class="row">
+        <div class="card border-top border-0 border-4 border-primary">
+          <div class="card-body p-5">
+            <div class="card-title d-flex align-items-center">
+
+              <div><i class="bx bxs-user me-1 font-22 text-primary"></i>
+              </div>
+              <h5 class="mb-0 text-primary">
+                <?php
+                if ($_id == '') {
+                  echo 'Registrar Clase de Movimiento';
+                } else {
+                  echo 'Modificar Clase de Movimiento';
+                }
+                ?>
+              </h5>
+
+              <div class="row m-2">
                 <div class="col-sm-12">
-                  <a href="inicio.php?mod=<?php echo $_SESSION['INICIO']['MODULO_SISTEMA']; ?>&acc=clase_movimiento" class="btn btn-outline-secondary btn-sm"><i class="bx bx-arrow-back"></i> Regresar</a>
+                  <a href="../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=clase_movimiento" class="btn btn-outline-dark btn-sm"><i class="bx bx-arrow-back"></i> Regresar</a>
                 </div>
               </div>
-              <div class="row">
-                <div class="col-sm-6">
-                  <input type="hidden" name="id" id="id" class="form-control" hidden="">
-                  Codigo clase_movimiento<br>
-                  <input type="input" name="codigo" id="codigo" class="form-control form-control-sm">
-                  Descripcion clase_movimiento<br>
-                  <input type="input" name="descripcion" id="descripcion" class="form-control form-control-sm">
+            </div>
+            <hr>
 
-                </div>
-                <div class="col-sm-6">
+            <form id="form_clase_movimiento">
 
+              <input type="hidden" name="id" id="id">
 
+              <div class="row pt-3 mb-col">
+                <div class="col-md-12">
+                  <label for="codigo" class="form-label">Código </label>
+                  <input type="text" class="form-control form-control-sm" id="codigo" name="codigo" maxlength="50">
+                  <span id="error_codigo" class="text-danger"></span>
                 </div>
               </div>
-              <br>
-            </div>
-            <div class="modal-footer">
-              <button class="btn btn-primary btn-sm" onclick="editar_insertar()" type="button" id="btn_editar"><i class="bx bx-save"></i> Guardar</button>
-              <button class="btn btn-danger btn-sm" onclick="delete_datos()" type="button" id="btn_eliminar"><i class="bx bx-trash"></i> Eliminar</button>
-            </div>
 
+              <div class="row mb-col">
+                <div class="col-md-12">
+                  <label for="descripcion" class="form-label">Descripción </label>
+                  <input type="text" class="form-control form-control-sm no_caracteres" id="descripcion" name="descripcion" maxlength="50">
+                </div>
+              </div>
+
+              <div class="d-flex justify-content-end pt-2">
+
+                <?php if ($_id == '') { ?>
+                  <button class="btn btn-success btn-sm px-4 m-0" onclick="editar_insertar()" type="button"><i class="bx bx-save"></i> Guardar</button>
+                <?php } else { ?>
+                  <button class="btn btn-success btn-sm px-4 m-1" onclick="editar_insertar()" type="button"><i class="bx bx-save"></i> Editar</button>
+                  <button class="btn btn-danger btn-sm px-4 m-1" onclick="delete_datos()" type="button"><i class="bx bx-trash"></i> Eliminar</button>
+                <?php } ?>
+              </div>
+
+
+            </form>
 
           </div>
         </div>
@@ -189,5 +216,35 @@ if (isset($_GET['id'])) {
   </div>
 </div>
 
-<?php //include('../cabeceras/footer.php'); 
-?>
+<script>
+  //Validacion de formulario
+  $(document).ready(function() {
+    // Selecciona el label existente y añade el nuevo label
+
+    agregar_asterisco_campo_obligatorio('codigo');
+    agregar_asterisco_campo_obligatorio('descripcion');
+
+    $("#form_clase_movimiento").validate({
+      rules: {
+        codigo: {
+          required: true,
+        },
+        descripcion: {
+          required: true,
+        },
+      },
+
+      highlight: function(element) {
+        // Agrega la clase 'is-invalid' al input que falla la validación
+        $(element).addClass('is-invalid');
+        $(element).removeClass('is-valid');
+      },
+      unhighlight: function(element) {
+        // Elimina la clase 'is-invalid' si la validación pasa
+        $(element).removeClass('is-invalid');
+        $(element).addClass('is-valid');
+
+      }
+    });
+  });
+</script>

@@ -1014,3 +1014,26 @@ if (($_SESSION['INICIO']['LOGO']) == '.' || $_SESSION['INICIO']['LOGO'] == '' ||
 				</div>
 			</div>
 		</div>
+
+		<script>
+			$(document).ready(function() {
+				let parametros = new URLSearchParams(window.location.search);
+				let acc_actual = parametros.get('acc');
+				let textoActivo = '';
+
+				if (acc_actual) {
+					// Buscar el <a> que tiene el href correspondiente al 'acc' actual
+					$('#menu a').each(function() {
+						let href = $(this).attr('href');
+						if (href && href.includes('acc=' + acc_actual)) {
+							textoActivo = $(this).text().trim(); // Obtener el texto del ítem
+						}
+					});
+				}
+
+				// Si se encontró el texto del ítem, lo agregamos al título de la página
+				if (textoActivo) {
+					document.title = '<?= $titulo_pestania; ?>| ' + textoActivo;
+				}
+			});
+		</script>

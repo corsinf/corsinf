@@ -1,4 +1,11 @@
 <?php /*include('../cabeceras/header.php');*/ $id = '';
+
+/**
+ * @todo Revisar este archivo
+ * @note Actualmente se mantiene como respaldo
+ * @warning No modificar este archivo sin autorización.
+ */
+
 if (isset($_GET['id'])) {
   $id = $_GET['id'];
 } ?>

@@ -8,6 +8,15 @@ require_once(dirname(__DIR__, 2) . '/db/codigos_globales.php');
 
 $controlador = new localizacionC();
 
+if (isset($_GET['listar'])) {
+	echo json_encode($controlador->listar($_POST['id'] ?? ''));
+}
+
+// if (isset($_GET['listar'])) {
+// 	$query = $_POST['id'];
+// 	echo json_encode($controlador->buscar_localizacion_id($query));
+// }
+
 if (isset($_GET['lista'])) {
 	$query = '';
 	if (isset($_GET['q'])) {
@@ -34,11 +43,6 @@ if (isset($_GET['eliminar'])) {
 	echo json_encode($controlador->eliminar($_POST['id']));
 }
 
-if (isset($_GET['listar'])) {
-	$query = $_POST['id'];
-	echo json_encode($controlador->buscar_localizacion_id($query));
-}
-
 if (isset($_GET['numero_localizaciones'])) {
 	echo json_encode($controlador->buscar_localizacion_cant());
 }
@@ -59,6 +63,17 @@ class localizacionC
 	{
 		$this->modelo = new localizacionM();
 		$this->cod_global = new codigos_globales();
+	}
+
+	function listar($id)
+	{
+		if ($id == '') {
+			$datos = $this->modelo->where('ESTADO', 'A')->listar();
+		} else {
+			$datos = $this->modelo->where('ID_LOCALIZACION', $id)->listar();
+		}
+
+		return $datos;
 	}
 
 	function lista_localizacion($query)
@@ -109,6 +124,7 @@ class localizacionC
 		$datos[1]['dato'] = $parametros['empla'];
 		$datos[2]['campo'] = 'DENOMINACION';
 		$datos[2]['dato'] = $parametros['deno'];
+
 		if ($parametros['id'] == '') {
 			if (count($this->modelo->buscar_localizacion_($datos[1]['dato'])) == 0) {
 				$datos = $this->modelo->insertar($datos);
@@ -122,9 +138,12 @@ class localizacionC
 			$movimiento = $this->compara_datos($parametros);
 			$datos = $this->modelo->editar($datos, $where);
 		}
+
 		if ($movimiento != '' && $datos == 1) {
-			$texto = $parametros['centro'] . ';' . $parametros['empla'] . ';' . $parametros['deno'];
-			$this->cod_global->para_ftp('localizacion', $texto);
+			// Funcion para FTP relacioado con SAP para futura version
+			// $texto = $parametros['centro'] . ';' . $parametros['empla'] . ';' . $parametros['deno'];
+			// $this->cod_global->para_ftp('localizacion', $texto);
+
 			$this->cod_global->ingresar_movimientos(false, $movimiento, 'EMPLAZAMIENTO');
 		}
 
@@ -157,9 +176,10 @@ class localizacionC
 		$datos = $this->modelo->eliminar($datos);
 		return $datos;
 	}
-	function buscar_localizacion_id($buscar)
+
+	function buscar_localizacion_id($id)
 	{
-		$lista = $this->modelo->buscar_localizacion($buscar);
+		$lista = $this->modelo->buscar_localizacion($id);
 		//$lista = array_map(array($this->cod_global, 'transformar_array_encode'), $lista);		
 		return $lista;
 	}

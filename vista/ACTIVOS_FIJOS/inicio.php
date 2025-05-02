@@ -23,35 +23,23 @@ if ($_GET['acc'] == 'parametros_art') {
 }
 
 if ($_GET['acc'] == 'localizacion') {
-    include('ACTIVOS_FIJOS/localizacion.php');
-}
-
-if ($_GET['acc'] == 'localizacion_detalle') {
-    include('ACTIVOS_FIJOS/localizacion_detalle.php');
-}
-
-if ($_GET['acc'] == 'custodio') {
-    include('ACTIVOS_FIJOS/custodio.php');
-}
-
-if ($_GET['acc'] == 'custodio_detalle') {
-    include('ACTIVOS_FIJOS/custodio_detalle.php');
+    include('ACTIVOS_FIJOS/LOCALIZACION/ac_localizacion.php');
 }
 
 if ($_GET['acc'] == 'proyectos') {
-    include('ACTIVOS_FIJOS/proyectos.php');
+    include('ACTIVOS_FIJOS/PROYECTOS/ac_proyectos.php');
 }
 
 if ($_GET['acc'] == 'detalle_proyectos') {
-    include('ACTIVOS_FIJOS/detalle_proyectos.php');
+    include('ACTIVOS_FIJOS/PROYECTOS/ac_proyectos_detalle.php');
 }
 
 if ($_GET['acc'] == 'clase_movimiento') {
-    include('ACTIVOS_FIJOS/clase_movimiento.php');
+    include('ACTIVOS_FIJOS/CLASE_MOVIMIENTO/ac_clase_movimiento.php');
 }
 
 if ($_GET['acc'] == 'detalle_clase_movimiento') {
-    include('ACTIVOS_FIJOS/detalle_clase_movimiento.php');
+    include('ACTIVOS_FIJOS/CLASE_MOVIMIENTO/ac_clase_movimiento_detalle.php');
 }
 
 if ($_GET['acc'] == 'actas') {
@@ -94,7 +82,17 @@ if ($_GET['acc'] == 'cargar_bajas') {
     include('ACTIVOS_FIJOS/cargar_bajas.php');
 }
 
+if ($_GET['acc'] == 'localizacion_detalle') {
+    include('ACTIVOS_FIJOS/LOCALIZACION/ac_localizacion_detalle.php');
+}
 
+if ($_GET['acc'] == 'custodio') {
+    include('ACTIVOS_FIJOS/PERSONAS/ac_custodio.php');
+}
+
+if ($_GET['acc'] == 'custodio_detalle') {
+    include('ACTIVOS_FIJOS/PERSONAS/ac_custodio_detalle.php');
+}
 
 /**
  * @deprecated Archivo dado de baja el 02/04/2025.
