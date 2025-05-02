@@ -89,6 +89,13 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
 
     function inicializarTablaDispositivos() 
     {
+         var tipo = $('input[name="rbl_tipoBusqueda"]:checked').val();
+         if(tipo == 1 && $('#txt_vlans').val()=='')
+         {
+            Swal.fire("Ingrese todos los datos","","info");
+            return false;
+         }
+
         $('#myModal_espera').modal('show');
         // Verificar si ya existe una instancia de DataTable para destruirla antes de crear una nueva
         if ($.fn.DataTable.isDataTable('#tbl_dispositivos_red')) {
@@ -100,25 +107,25 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                 url: 'https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
             },
             ajax: {
-                url: '../controlador/TALENTO_HUMANO/th_detectar_dispositivosC.php?BuscarDevice=true',
+                url: '../controlador/TALENTO_HUMANO/th_detectar_dispositivosC.php?BuscarDevice=true&vlans='+$('#txt_vlans').val()+'&tipoBusqueda='+$('input[name="rbl_tipoBusqueda"]:checked').val(),
                 dataSrc: ''
             },
             columns: [
                 { 
                     data: null,
                     render: function(data, type, item) {
-                        butons = `<button type="button" class="btn btn-primary btn-xs" title="Guardar Dispositivo" onclick="registrar_device('${item.IPv4Gateway}','${item.CommandPort}','${item.MAC}')">
+                        butons = `<button type="button" class="btn btn-primary btn-xs" title="Guardar Dispositivo" onclick="registrar_device('${item.ipv4}','${item.puerto}','${item.MAC}')">
                                     <i class="bx bx-save fs-7 me-0 fw-bold"></i>
                             </button>`;
 
                         return butons;
                     }
                 },
-                { data: 'N' },                   
-                { data: 'DeviceDescription' }, // Tipo dispositivo
+                { data: 'item' },                   
+                { data: 'tipo' }, // Tipo dispositivo
                 // { data: 'Tipo' }, // Estado
-                { data: 'IPv4Gateway' }, // IPV4
-                { data: 'CommandPort' }, // Puerto
+                { data: 'ipv4' }, // IPV4
+                { data: 'puerto' }, // Puerto
                 // { data: 'CommandPort' }, // Serial
                 { data: 'MAC' }, // MAC Address
                 
@@ -143,7 +150,6 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
     function abrir_modal()
     {
         $('#lbl_msj_espera').text("Buscando Dispositivos en red");
-        inicializarTablaDispositivos()
         $('#detectar_device').modal('show'); 
     }
 
@@ -332,6 +338,21 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
         });
     }
 
+    function vlas_search()
+    {
+        var tipo = $('input[name="rbl_tipoBusqueda"]:checked').val();
+        console.log(tipo);
+        if(tipo==1)
+        {
+            $('#pnl_vlan_especifico').removeClass('d-none');
+
+        }else
+        {
+            $('#pnl_vlan_especifico').addClass('d-none');
+        }
+    }
+
+
 
 </script>
 
@@ -423,6 +444,20 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <label class="me-2" onclick="vlas_search()"><input type="radio" name="rbl_tipoBusqueda" id="rbl_default" checked value="0"> Por default</label>
+                        <label class="me-2" onclick="vlas_search()"><input type="radio" name="rbl_tipoBusqueda" id="rbl_vlan" value="1"> Vlan Especifica</label>
+                    </div>            
+                    <div class="col-md-6 text-end">
+                        <button class="btn btn-primary btn-sm" type="button" onclick="inicializarTablaDispositivos()"><i class="bx bx-search"></i>Buscar</button>                        
+                    </div>
+                     <div class="col-md-6 d-none" id="pnl_vlan_especifico">
+                        <b>vlan Especifica</b>
+                        <input type="text" class="form-control form-control-sm" name="txt_vlans" id="txt_vlans" placeholder="192.168.1">
+                        <span style="color:red;font-size:10px">* Si es mas de una vlan separar con coma (,)</span>
+                    </div>  
+                </div>
                <div class="row" style="overflow-x: scroll;">
                    <div class="col-sm-12">
                             <table class="table table-striped" id="tbl_dispositivos_red">

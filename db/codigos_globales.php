@@ -806,7 +806,7 @@ function para_ftp($nombre,$texto)
 			$puerto = $empresa[0]['Puerto_db'];
 
 			// print_r($sql);die();
-			// print_r($database);
+			// print_r($empresa);die();
 			$datos = $this->db->sql_string_db_terceros($database, $usuario, $password, $servidor, $puerto,$sql);
 
 			// print_r('expression');die();
@@ -814,6 +814,7 @@ function para_ftp($nombre,$texto)
 
 		  	// $this->db->update('USUARIOS',$datos, $where);
 		  }
+		  // print_r('holi');die();
 
 		  return $res;
 	}
@@ -975,8 +976,8 @@ function para_ftp($nombre,$texto)
 				break;
 		}
 		 $parametros = array(
-		    $db_origen,
-		    $db_destino,
+		    str_replace(" ","",$db_origen),
+		    str_replace(" ","",$db_destino),
 		  );
 		 if($db_origen!='')
 		 {
@@ -998,7 +999,7 @@ function para_ftp($nombre,$texto)
 				$res = $this->db->ejecutar_sp_db_terceros($database, $usuario, $password, $servidor, $puerto,$sql2, $parametrosSp);
 		  		return $this->db->ejecutar_sp_db_terceros($database, $usuario, $password, $servidor, $puerto,$sql, $parametros);
 		 	}else{
-		  		$sql = "EXEC EstructuraBase @origen_bd = ?, @destino_bd = ?";
+		  		$sql = "EXEC EstructuraBase @origen_bd = ?,@destino_bd = ?";
 		  		return $this->db->ejecutar_procesos_almacenados($sql,$parametros,false,1);
 		  	}
 		 }else{ return -2;}
@@ -1182,6 +1183,36 @@ function para_ftp($nombre,$texto)
 
 		return $res;
 		
+	}
+
+	function secuenciale_globales($query,$empresa,$incrementar=false)
+	{
+		$sql = "SELECT *
+		 			FROM SECUENCIALES
+		 			WHERE  id_empresa = '".$empresa."'
+		 			AND DETALLE = '".$query."'";
+		$datos = $this->db->datos($sql);
+		// print_r($sql);die();
+
+		if(count($datos)==0)
+		{
+			$sql2 = "INSERT INTO SECUENCIALES (DETALLE,NUMERO,id_empresa) VALUES('".$query."',1,'".$empresa."')";
+			$this->db->sql_string($sql2);
+			return $this->db->datos($sql);
+		}else{
+			if($incrementar)
+			{
+				$NUM = 1+$datos[0]['NUMERO'];
+				$sql3 = "UPDATE SECUENCIALES SET NUMERO = '".$NUM."' WHERE ID_SECUENCIALES = '".$datos[0]['ID_SECUENCIALES']."'";
+				$this->db->sql_string($sql3);
+				return $this->db->datos($sql);
+			}else
+			{
+				return $this->db->datos($sql);
+			}
+		}
+
+
 	}
 
 }

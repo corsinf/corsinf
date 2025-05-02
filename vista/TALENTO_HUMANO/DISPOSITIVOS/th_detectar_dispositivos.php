@@ -19,7 +19,7 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                 dataSrc: ''
             },
             columns: [
-                    {data: 'item' },                   
+                    { data: 'item' },                   
                     { data: 'tipo' }, // Tipo dispositivo
                     { data: 'Estado' }, // Estado
                     { data: 'ipv4' }, // IPV4

@@ -16,7 +16,7 @@
 }
 
 .designerUtilityLabelInspector {
-	height: 40px;
+/*	height: 40px;*/
 	line-height: 36px;
 	padding: 5px 0px 45px;
 }
@@ -84,6 +84,19 @@
 	border: 1px solid #DDDDDD;
 	height: 38px;
 	width: 160px; 
+
+}
+
+.designerLabelControlContainerName {
+	float: left;
+	padding: 0px 4px 2px 4px;
+	margin: 0px 1px 0px 4px;
+	font-size: 12px;
+	border-radius: 5px;
+	background: #EEEEEE;
+	border: 1px solid #DDDDDD;
+/*	height: 38px;*/
+/*	width: 160px; */
 
 }
 

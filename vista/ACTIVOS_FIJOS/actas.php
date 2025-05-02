@@ -4,6 +4,8 @@
   $(document).ready(function() {
 
     // lista_articulos();
+    cargar_tipo_articulo();
+
     autocmpletar();
     autocmpletar_l();
     lista_actas();
@@ -117,6 +119,7 @@
 
   function lista_articulos() {
     var query = $('#txt_buscar').val();
+
     if ($('#txt_buscar').val() == '' && $('#txt_query2').val() == '' && $('#ddl_custodio').val() == '' && $('#ddl_localizacion').val() == '' && $('#ddl_custodio_masivo').val() == '' && $('#ddl_localizacion_masivo').val() == '') {
       $('#tbl_datos').html('<tr><td colspan="6">Filtre activos</td></tr>');
       return false;
@@ -128,21 +131,22 @@
       'custodio': $('#ddl_custodio').val(),
       'pag': $('#txt_pag').val(),
       'exacto': $('#rbl_exacto').prop('checked'),
-      'asset': $('#rbl_aset').prop('checked'),
-      'asset_org': $('#rbl_aset_ori').prop('checked'),
+
+      'serie': $('#rbl_serie').prop('checked'),
       'rfid': $('#rbl_rfid').prop('checked'),
-      'bajas': $('#cbx_bajas').prop('checked'),
-      'patri': $('#cbx_patri').prop('checked'),
-      'terce': $('#cbx_terce').prop('checked'),
+
       'masivo': $('#txt_masivo').val(),
       'query2': $('#txt_query2').val(),
       'masivo_cu': $('#txt_masivo_cus').val(),
       'masivo_lo': $('#txt_masivo_loc').val(),
       'custodio_masivo': $('#ddl_custodio_masivo').val(),
       'empla_masivo': $('#ddl_localizacion_masivo').val(),
+
+      'tipo_articulo': $('input[name="rbl_tip_articulo"]:checked').val(),
     }
 
     var lineas = '';
+
     $.ajax({
       data: {
         parametros: parametros
@@ -212,21 +216,39 @@
         }
         var tot = 0;
         $.each(response.datos, function(i, item) {
-          baja = '';
-          if (item.BAJAS == 1) {
-            baja = 'background-color: coral;/*bg-danger*/'
+          tipo_articulo = '';
+          if (item.tipo_articulo === 'BAJAS') {
+            tipo_articulo = "background-color: #FFD1C1";
+          } else if (item.tipo_articulo === 'PATRIMONIALES') {
+            tipo_articulo = "background-color: #FFF6BD";
+          } else if (item.tipo_articulo === 'TERCEROS') {
+            tipo_articulo = "background-color: #C7E9FF";
           }
-          if (item.PATRIMONIALES == 1) {
-            baja = 'background-color: #ffc108a6; /*bg-warning*/';
-          }
-          if (item.TERCEROS == 1) {
-            baja = 'background-color: #007bffa8;; /*bg-blue*/'
-          }
-          lineas += '<tr style="' + baja + '"><td>' + (i + 1) + '</td><td><input type="checkbox" id="rbl_' + item.id + '" name="rbl_' + item.id + '" value="' + item.id + '"><!--<button type="button" class="btn btn-sm btn-primary" onclick="pasar_lista(\'' + item.id + '\')" tittle="Pasar lista"><i class="bx bx-arrow-to-right"></i></button>--></td><td style="color: #1467e2;"><u>' + item.tag + '</u></td><td>' + item.nom + '</td><td>' + item.RFID + '</td><td>' + item.localizacion + '</td><td>' + item.custodio + '</td><td>' + item.valor + '</td></tr>';
+
+          lineas += `
+                      <tr style="${tipo_articulo}">
+                        <td>${i + 1}</td>
+                        <td>
+                          <input type="checkbox" id="rbl_${item.id}" name="rbl_${item.id}" value="${item.id}">
+                          <!-- <button type="button" class="btn btn-sm btn-primary" onclick="pasar_lista('${item.id}')" title="Pasar lista">
+                              <i class="bx bx-arrow-to-right"></i>
+                            </button> -->
+                        </td>
+                        <td style="color: #1467e2;">
+                          <u>${item.tag}</u>
+                        </td>
+                        <td>${item.nom}</td>
+                        <td>${item.RFID}</td>
+                        <td>${item.localizacion}</td>
+                        <td>${item.custodio}</td>
+                        <td>${item.valor}</td>
+                      </tr>
+                    `;
+
           tot += 1;
           // console.log(item);
-
         });
+
         $('#tbl_datos').html(lineas);
         $('#lbl_total_l').text(tot);
         if ($('#txt_masivo').val() == 1) {
@@ -501,7 +523,17 @@
       success: function(response) {
         console.log(response);
         $.each(response, function(i, item) {
-          lineas += "<tr><td><button class='btn-danger btn-sm btn' onclick='eliminar_lista(\"" + item.id + "\")'><i class='bx bx-trash'></i></button></td><td>" + item.asset + "</td><td>" + item.articulo + "</td><td>" + item.valor + "</td></tr>"
+          lineas += `
+                      <tr>
+                        <td>
+                          <button class="btn btn-danger btn-sm" onclick="eliminar_lista('${item.id}')">
+                            <i class="bx bx-trash"></i>
+                          </button>
+                        </td>
+                        <td>${item.tag || ''}</td>
+                        <td>${item.articulo || ''}</td>
+                        <td>${item.valor || ''}</td>
+                      </tr>`;
         });
 
         $('#lista_actas').html(lineas);
@@ -567,8 +599,7 @@
       'custodio': $('#ddl_custodio').val(),
       'pag': $('#txt_pag').val(),
       'exacto': $('#rbl_exacto').prop('checked'),
-      'asset': $('#rbl_aset').prop('checked'),
-      'asset_org': $('#rbl_aset_ori').prop('checked'),
+      'serie': $('#rbl_serie').prop('checked'),
       'rfid': $('#rbl_rfid').prop('checked'),
       'masivo': $('#txt_masivo').val(),
       'query2': $('#txt_query2').val(),
@@ -729,6 +760,54 @@
     $('#busqueda_masiva_localizacion').modal('show');
 
   }
+
+  function cargar_tipo_articulo() {
+    $.ajax({
+      data: {
+        _id: ''
+      },
+      url: '../controlador/ACTIVOS_FIJOS/CATALOGOS/ac_cat_tipo_articuloC.php?listar=true',
+      type: 'post',
+      dataType: 'json',
+      success: function(response) {
+        let radioButtons = '';
+        radioButtons =
+          `<div class="col-sm-auto m-0">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" id="rbl_tip_articulo_" name="rbl_tip_articulo" value="" checked onclick="lista_articulos()">
+                                <label class="form-check-label" for="rbl_tip_articulo_">Todo</label>
+                            </div>
+                        </div>`;
+
+        $.each(response, function(i, item) {
+          radioButtons +=
+            `<div class="col-sm-auto m-0">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" id="rbl_tip_articulo_${item._id}" name="rbl_tip_articulo" value="${item._id}" onclick="lista_articulos()">
+                                <label class="form-check-label" for="rbl_tip_articulo_${item._id}">${item.descripcion}</label>
+                            </div>
+                        </div>`;
+        });
+
+        mensaje_error = `<label class="error mb-2" style="display: none;" for="rbl_tip_articulo"></label>`
+
+        $('#pnl_tipo_articulo').html(radioButtons + mensaje_error);
+
+        $('input[name="rbl_tip_articulo"]').on('change', function() {
+          // alert($(this).val()); 
+          $('#tbl_articulos').DataTable().ajax.reload();
+        });
+
+      },
+      error: function(xhr, status, error) {
+        console.log('Status: ' + status);
+        console.log('Error: ' + error);
+        console.log('XHR Response: ' + xhr.responseText);
+
+        Swal.fire('', 'Error: ' + xhr.responseText, 'error');
+      }
+    });
+  }
 </script>
 
 <div class="page-wrapper">
@@ -765,53 +844,80 @@
               </div>
             </div>
             <hr>
-            <div class="row">
-              <div class="col-sm-5">
+            <div class="row g-3">
+              <!-- Filtros de búsqueda -->
+              <div class="col-sm-4">
                 <div class="row">
                   <div class="col-sm-5">
-                    <label class="checkbox-inline" style="margin: 0px;"><input type="checkbox" name="" id="rbl_exacto" onclick="activar()" checked=""> Busqueda exacta</label>
+                    <div class="form-check">
+                      <input class="form-check-input" type="checkbox" id="rbl_exacto" onclick="placeholder_buscar();" checked>
+                      <label class="form-check-label" for="rbl_exacto">Búsqueda exacta</label>
+                    </div>
                   </div>
-                  <div class="col-sm-7">
-                    <label class="checkbox-inline" style="margin: 0px;"><input type="radio" name="rbl_aset" id="rbl_aset" onclick="lista_articulos()" checked=""> Asset</label>
-                    <label class="checkbox-inline" style="margin: 0px;"><input type="radio" name="rbl_aset" id="rbl_aset_ori" onclick="lista_articulos()"> Orig Asset</label>
-                    <label class="checkbox-inline" style="margin: 0px;"><input type="radio" name="rbl_aset" id="rbl_rfid" onclick="lista_articulos()"> RFID</label>
+
+                  <div class="col-sm-7 d-flex justify-content-end" id="pnl_radio_articulos">
+                    <div class="form-check me-2">
+                      <input class="form-check-input form-check-sm" type="radio" name="rbl_serie" id="rbl_serie" onclick="lista_articulos()" checked>
+                      <label class="form-check-label" for="rbl_serie">SERIE </label>
+                    </div>
+                    <div class="form-check me-2">
+                      <input class="form-check-input" type="radio" name="rbl_serie" id="rbl_rfid" onclick="lista_articulos()">
+                      <label class="form-check-label" for="rbl_rfid">RFID </label>
+                    </div>
                   </div>
                 </div>
+
                 <div class="input-group input-group-sm">
-                  <input type="type" name="" id="txt_buscar" onkeyup="lista_articulos()" class="form-control form-control-sm" placeholder="Buscar Descripcion o tag">
-                  <button type="button" class="btn btn-outline-secondary btn-sm" onclick="reiniciar_filtros();$('#busqueda_masiva').modal('show');$('#txt_masivo').val(1)" title="Pegar codigos de busqueda"><i class="bx bx-list-ul"></i></button>
-                  <button type="button" class="btn btn-outline-secondary btn-sm" onclick="$('#txt_masivo').val(1);$('#txt_buscar').val('');lista_articulos()" title="Pegar codigos de busqueda"><i class="bx bx-x"></i></button>
+                  <input type="text" class="form-control" id="txt_buscar" onkeyup="lista_articulos()" placeholder="Buscar solo Serie">
+                  <button class="btn btn-outline-secondary" type="button" title="Pegar códigos de búsqueda" onclick="reiniciar_filtros(); $('#busqueda_masiva').modal('show'); $('#txt_masivo').val(1)">
+                    <i class="bx bx-list-ul"></i>
+                  </button>
+                  <button class="btn btn-outline-secondary" type="button" title="Limpiar búsqueda" onclick="$('#txt_masivo').val(1); $('#txt_buscar').val(''); lista_articulos()">
+                    <i class="bx bx-x"></i>
+                  </button>
+                </div>
+
+                <!-- Filtros adicionales -->
+                <div class="row mb-col" id="pnl_tipo_articulo">
+
                 </div>
               </div>
 
+              <!-- Custodio -->
               <div class="col-sm-4">
-                <b> Busqueda por custodio</b>
+                <label class="form-label fw-bold">Búsqueda por Custodio</label>
                 <div class="input-group input-group-sm">
-                  <select class="form-control form-control-sm" id="ddl_custodio" onchange="$('#txt_pag').val('0-25');lista_articulos()">
+                  <select class="form-select" id="ddl_custodio" onchange="$('#txt_pag').val('0-25'); lista_articulos()">
                     <option value=""></option>
                   </select>
-                  <button type="button" class="btn btn-outline-secondary btn-sm" onclick="abrir_masivo_custodio()" title="Busqueda masiva por custodi"><i class="bx bx-list-ul" id="icono_cus"></i></button>
-                  <button type="button" class="btn btn-outline-secondary btn-sm" onclick="$('#txt_masivo_cus').val(0);$('#ddl_custodio_masivo').empty();$('#ddl_custodio_masivo').val('').trigger('change');limpiar('ddl_custodio');cerrar_custodio(); autocmpletar_l()" title="Limpiar custodio"><i class="bx bx-x"></i></button>
+                  <button class="btn btn-outline-secondary" type="button" title="Búsqueda masiva por custodio" onclick="abrir_masivo_custodio()">
+                    <i class="bx bx-list-ul" id="icono_cus"></i>
+                  </button>
+                  <button class="btn btn-outline-secondary" type="button" title="Limpiar custodio" onclick="$('#txt_masivo_cus').val(0); $('#ddl_custodio_masivo').empty(); $('#ddl_custodio_masivo').val('').trigger('change'); limpiar('ddl_custodio'); cerrar_custodio(); autocmpletar_l()">
+                    <i class="bx bx-x"></i>
+                  </button>
                 </div>
               </div>
 
-              <div class="col-sm-3">
-                <b> Busqueda por Localizacion</b>
+              <!-- Localización -->
+              <div class="col-sm-4">
+                <label class="form-label fw-bold">Búsqueda por Localización</label>
                 <div class="input-group input-group-sm">
-                  <select class="form-control form-control-sm" id="ddl_localizacion" onchange="$('#txt_pag').val('0-25');lista_articulos()">
+                  <select class="form-select" id="ddl_localizacion" onchange="$('#txt_pag').val('0-25'); lista_articulos()">
                     <option value=""></option>
                   </select>
-                  <button type="button" class="btn btn-outline-secondary btn-sm" onclick="abrir_masivo_localizacion()" title="Busqueda masiva por localizacion"><i class="bx bx-list-ul" id="icono_loc"></i></button>
-                  <button type="button" class="btn btn-outline-secondary btn-sm" onclick="$('#txt_masivo_loc').val(0);autocmpletar_l();$('#ddl_localizacion_masivo').empty();limpiar('ddl_localizacion');cerrar_loc()" title="Limpiar localizacion"><i class="bx bx-x"></i></button>
+                  <button class="btn btn-outline-secondary" type="button" title="Búsqueda masiva por localización" onclick="abrir_masivo_localizacion()">
+                    <i class="bx bx-list-ul" id="icono_loc"></i>
+                  </button>
+                  <button class="btn btn-outline-secondary" type="button" title="Limpiar localización" onclick="$('#txt_masivo_loc').val(0); autocmpletar_l(); $('#ddl_localizacion_masivo').empty(); limpiar('ddl_localizacion'); cerrar_loc()">
+                    <i class="bx bx-x"></i>
+                  </button>
                 </div>
-              </div>
-              <div class="col-sm-6">
-                <label><input type="checkbox" id="cbx_bajas" name="" onclick="lista_articulos()">Bajas</label>
-                <label><input type="checkbox" id="cbx_patri" name="" onclick="lista_articulos()">Patrimoniales</label>
-                <label><input type="checkbox" id="cbx_terce" name="" onclick="lista_articulos()">Terceros</label>
               </div>
             </div>
+
             <hr>
+
             <div class="row">
               <div class="col-sm-6" style="overflow-x: scroll;height: 400px; overflow-y: scroll;">
                 <div class="row">
@@ -823,13 +929,14 @@
                   </div>
                 </div>
                 <form id="form_selected">
-                  <table class="table table-striped table-bordered dataTable" style="white-space:nowrap;">
+                  <table class="table table-bordered dataTable" style="white-space:nowrap;">
                     <thead class="table table-hover table-sm">
-                      <th></th>
-                      <th>Asset</th>
-                      <th>Descripcion</th>
+                      <th>#</th>
+                      <th>Check</th>
+                      <th>Serie</th>
+                      <th>Descripción</th>
                       <th>RFID</th>
-                      <th>Emplazamiento</th>
+                      <th>Localización</th>
                       <th>Custodio</th>
                       <th>Valor</th>
                     </thead>
@@ -839,6 +946,7 @@
                   </table>
                 </form>
               </div>
+
               <div class="col-sm-1">
                 <br><br><br>
                 <div class="col">
@@ -877,9 +985,6 @@
                 </table>
               </div>
             </div>
-
-
-
 
           </div>
         </div>
@@ -968,7 +1073,6 @@
 </div>
 
 
-
 <div class="modal fade" id="modal_actas2" tabindex="-1" data-bs-backdrop="static" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
@@ -1009,7 +1113,6 @@
   </div>
 
 </div><!-- /.container-fluid -->
-
 
 
 <div class="modal fade" id="modal_actas4" tabindex="-1" data-bs-backdrop="static" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
@@ -1061,6 +1164,7 @@
     </div>
   </div>
 </div><!-- /.container-fluid -->
+
 
 <div class="modal fade" id="modal_tipo_baja" tabindex="-1" data-bs-backdrop="static" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-sm">
@@ -1152,6 +1256,47 @@
     </div>
   </div>
 </div>
+
+
+<div class="modal fade" id="busqueda_masiva_localizacion" tabindex="-1" data-bs-backdrop="static" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel"></h5>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-sm-12">
+            <label><input type="checkbox" name="cbx_localizacion_masi" id="cbx_localizacion_masi" onclick="mostrar_masivo_localizacion()"> Busqueda masiva</label>
+            <div class="row" id="pnl_masivo_localizacion" style="display: none;">
+              <div class="col-sm-10">
+                <textarea class="form-control-sm form-control" id="txt_localizacion_masi" name="txt_localizacion_masi" rows="4" style="resize:none;"></textarea>
+              </div>
+              <div class="col-sm-2">
+                <button class="btn btn-primary btn-sm" onclick=" validar_codigos_localizacion()">Validar</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-sm-12">
+            <b>Emplazamiento / localizacion</b><br>
+            <select class="form-control form-control-sm" id="ddl_localizacion_masivo" multiple="multiple" onchange="$('#txt_pag').val('0-25');">
+              <option value="">Selecione</option>
+            </select>
+            <input type="hidden" name="txt_masivo_loc" id="txt_masivo_loc" value="0">
+          </div>
+
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary btn-sm" onclick="lista_articulos()">Consultar</button>
+        <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal" onclick="cerrar_loc();">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
 <script type="text/javascript">
   function mostrar_masivo() {
     cbx = $('#cbx_custodio_masi').prop('checked');
@@ -1278,43 +1423,26 @@
   }
 </script>
 
-<div class="modal fade" id="busqueda_masiva_localizacion" tabindex="-1" data-bs-backdrop="static" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel"></h5>
-      </div>
-      <div class="modal-body">
-        <div class="row">
-          <div class="col-sm-12">
-            <label><input type="checkbox" name="cbx_localizacion_masi" id="cbx_localizacion_masi" onclick="mostrar_masivo_localizacion()"> Busqueda masiva</label>
-            <div class="row" id="pnl_masivo_localizacion" style="display: none;">
-              <div class="col-sm-10">
-                <textarea class="form-control-sm form-control" id="txt_localizacion_masi" name="txt_localizacion_masi" rows="4" style="resize:none;"></textarea>
-              </div>
-              <div class="col-sm-2">
-                <button class="btn btn-primary btn-sm" onclick=" validar_codigos_localizacion()">Validar</button>
-              </div>
-            </div>
-          </div>
 
-          <div class="col-sm-12">
-            <b>Emplazamiento / localizacion</b><br>
-            <select class="form-control form-control-sm" id="ddl_localizacion_masivo" multiple="multiple" onchange="$('#txt_pag').val('0-25');">
-              <option value="">Selecione</option>
-            </select>
-            <input type="hidden" name="txt_masivo_loc" id="txt_masivo_loc" value="0">
-          </div>
+<!-- Funcionalidades -->
+<script>
+  function placeholder_buscar() {
+    if ($('#rbl_exacto').is(':checked')) {
+      $('#pnl_radio_articulos').removeClass('d-none');
 
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-primary btn-sm" onclick="lista_articulos()">Consultar</button>
-        <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal" onclick="cerrar_loc();">Cerrar</button>
-      </div>
-    </div>
-  </div>
-</div>
+      if ($('#rbl_serie').is(':checked')) {
+        $('#txt_buscar').attr('placeholder', 'Buscar por Serie');
+      } else if ($('#rbl_rfid').is(':checked')) {
+        $('#txt_buscar').attr('placeholder', 'Buscar por RFID');
+      }
+    } else {
+      $('#pnl_radio_articulos').addClass('d-none');
+      $('#txt_buscar').attr('placeholder', 'Buscar Descripción o Serie o RFID');
+    }
+  }
 
-<?php //include ('../cabeceras/footer.php');
-?>
+  // También actualiza el placeholder al cambiar de radio
+  $('#rbl_serie, #rbl_rfid').on('change', function() {
+    placeholder_buscar();
+  });
+</script>

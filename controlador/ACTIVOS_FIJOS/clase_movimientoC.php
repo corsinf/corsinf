@@ -9,8 +9,8 @@ require_once(dirname(__DIR__, 2) . '/db/codigos_globales.php');
 
 $controlador = new clase_movimientoC();
 
-if (isset($_GET['lista'])) {
-	echo json_encode($controlador->lista_clase_movimiento($_POST['id']));
+if (isset($_GET['listar'])) {
+	echo json_encode($controlador->lista_clase_movimiento($_POST['id'] ?? ''));
 }
 
 if (isset($_GET['buscar'])) {
@@ -88,8 +88,9 @@ class clase_movimientoC
 			$datos = $this->modelo->editar($datos, $where);
 		}
 		if ($movimiento != '' && $datos == 1) {
-			$texto = $parametros['cod'] . ';' . $parametros['des'];
-			$this->cod_global->para_ftp('clase_movimientos', $texto);
+			// Funcion para FTP relacioado con SAP para futura version
+			// $texto = $parametros['cod'] . ';' . $parametros['des'];
+			// $this->cod_global->para_ftp('clase_movimientos', $texto);
 			$this->cod_global->ingresar_movimientos(false, $movimiento, 'clase_movimientoS');
 		}
 		return $datos;

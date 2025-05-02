@@ -79,3 +79,24 @@ label.error {
     border-color: #17a00e;
     /* Color de borde verde más oscuro */
 }
+
+/*Para el header*/
+.app-box {
+    background-color: #F5F5DC;
+    transition: background-color 0.3s ease-in-out;
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+.app-box:hover {
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+    background-color: rgba(22, 157, 217, 0.3);
+}
+
+.app-title {
+    margin-top: 10px;
+    font-size: 13px;
+}

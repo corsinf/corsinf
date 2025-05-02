@@ -456,7 +456,8 @@ class loginC
 		 		if($tablas_iguales==-1)
 		 		foreach ($licencias as $key => $value) {
 		 		// print_r($licencias);die();
-		 				$this->cod_global->Copiar_estructura($value['Id_Modulo'],$empresa[0]['Base_datos']);
+		 				$r = $this->cod_global->Copiar_estructura($value['Id_Modulo'],$empresa[0]['Base_datos']);
+		 				// print_r($r);die();
 		 		}
 		 	}else{
 
@@ -1351,7 +1352,7 @@ class loginC
 		// print_r($datos);die();
 		foreach ($datos as $key => $value) {
 			// $num = rand(1,3);
-			$num = 2;
+			$num = 4;
 			$pagina = str_replace('.php','', $value['link']);
 		switch ($num) {
 				case '1':		
@@ -1363,6 +1364,9 @@ class loginC
 				case '3':
 				  $estilo = 'bg-gradient-kyoto text-dark';
 					break;							
+				case '4':
+					$estilo = 'text-white';
+					  break;							
 				}
 				// print_r($value);die();
 				$mod.='

@@ -3,6 +3,9 @@ if (!class_exists('db')) {
 	include(dirname(__DIR__, 2) . '/db/db.php');
 }
 
+require_once(dirname(__DIR__, 2) . '/assets/plugins/datatable/ssp.class.php');
+
+
 /**
  * 
  **/
@@ -17,10 +20,8 @@ class articulosM
 		$this->db = new db();
 	}
 
-	function lista_articulos_cr()
+	function lista_articulos_cr($id_articulo)
 	{
-		require_once(dirname(__DIR__, 2) . '/assets/plugins/datatable/ssp.class.php');
-
 		$USUARIO_DB = $_SESSION['INICIO']['USUARIO_DB'];
 		$PASSWORD_DB = $_SESSION['INICIO']['PASSWORD_DB'];
 		$BASEDATO = $_SESSION['INICIO']['BASEDATO'];
@@ -35,39 +36,7 @@ class articulosM
 			'host' => $IP_HOST,
 		);
 
-		$table = <<<EOT
-				(
-					SELECT 
-						A.id_articulo AS id,
-						A.tag_serie AS tag,
-						A.tag_unique AS RFID,
-						A.serie,
-						A.descripcion AS nom,
-						A.modelo,
-						A.imagen,
-						A.observaciones AS observacion,
-						A.fecha_referencia AS fecha_in,
-						A.fecha_baja,
-						L.id_localizacion AS IDL,
-						L.denominacion AS localizacion,
-						P.th_per_id AS IDC,
-						CONCAT(P.th_per_primer_apellido, ' ', P.th_per_segundo_apellido, ' ', 
-							P.th_per_primer_nombre, ' ', P.th_per_segundo_nombre) AS custodio,
-						M.descripcion AS marca,
-						E.descripcion AS estado,
-						G.descripcion AS genero,
-						C.descripcion AS color,
-						TA.descripcion AS tipo_articulo
-					FROM ac_articulos A
-					LEFT JOIN ac_localizacion L ON A.id_localizacion = L.id_localizacion
-					LEFT JOIN th_personas P ON A.th_per_id = P.th_per_id
-					LEFT JOIN ac_marcas M ON A.id_marca = M.id_marca
-					LEFT JOIN ac_estado E ON A.id_estado = E.id_estado
-					LEFT JOIN ac_genero G ON A.id_genero = G.id_genero
-					LEFT JOIN ac_colores C ON A.id_color = C.id_colores
-					LEFT JOIN ac_cat_tipo_articulo TA ON A.id_tipo_articulo = TA.id_tipo_articulo ) temp
-			EOT;
-
+		$table = 'v_articulos_detalle';
 
 		$primaryKey = 'id';
 
@@ -92,13 +61,23 @@ class articulosM
 			array('db' => 'color', 'dt' => 10),         // Color
 			array('db' => 'fecha_in', 'dt' => 11),      // Fecha Inv.
 			array('db' => 'observacion', 'dt' => 12),   // Observación
-			array('db' => 'id', 'dt' => 13),
-			array('db' => 'tipo_articulo', 'dt' => 14),
+			array('db' => 'id', 'dt' => 13),			//id del articulo
+			array('db' => 'tipo_articulo', 'dt' => 14),	//Tipo de articulo
 		);
+
+		$whereResult = "";//"nom LIKE '%computadora%'"; //"nom LIKE '%computadora%'"; // Condición dinámica
+
+		$whereAll = "";
+		if ($id_articulo != '') {
+			$whereAll = "id_tipo_articulo = '$id_articulo'";
+		}
+
+		//Sirve para buscar las columnas que se necesitan buscar para no sobrecargar la db
+		$columnSearch = [0, 1, 4];
 
 		//echo $table;
 		return (
-			SSP::simple($_GET, $sql_details, $table, $primaryKey, $columns)
+			SSP::complex($_POST, $sql_details, $table, $primaryKey, $columns, $whereResult, $whereAll, $columnSearch, true)
 		);
 		//exit;
 	}

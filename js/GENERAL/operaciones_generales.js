@@ -344,7 +344,13 @@ function configuracion_datatable(title, filename, buttons = 'contenedor_botones'
             // Añadir clase btn-sm a los botones de paginación
             $('.dataTables_paginate').find('a').addClass('btn btn-sm');
             // Mover los botones al contenedor personalizado
-            $('#' + buttons).append($('.dt-buttons'));
+            // $('#' + buttons).append($('.dt-buttons'));
+
+            let tableApi = this.api();
+            let contenedor = $('#' + buttons);
+            let botones = tableApi.buttons().container();
+
+            contenedor.append(botones);
         }
     };
 }

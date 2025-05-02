@@ -9,7 +9,15 @@ require_once(dirname(__DIR__, 2) . '/modelo/TALENTO_HUMANO/th_control_accesoM.ph
 $controlador = new th_detectar_dispositivosC();
 
 if (isset($_GET['BuscarDevice'])) {
-    echo json_encode($controlador->BuscarDevice());
+	if(isset($_GET['vlans']))
+	{
+		$vlans = $_GET['vlans'];
+	}
+	if(isset($_GET['tipoBusqueda']))
+	{
+		$tipoBusqueda = $_GET['tipoBusqueda'];
+	}
+    echo json_encode($controlador->BuscarDevice($vlans,$tipoBusqueda));
 }
 
 if (isset($_GET['ProbarConexion'])) {
@@ -42,68 +50,67 @@ class th_detectar_dispositivosC
     function __construct()
     {
         // $this->modelo = new th_detectar_dispositivosM();
-        $this->sdk_patch = dirname(__DIR__,2).'/lib/SDKDevices/hikvision/bin/Debug/net8.0/CorsinfSDKHik.dll ';
+        $this->sdk_patch = dirname(__DIR__,2).'\\lib\\SDKDevices\\hikvision\\bin\\Debug\\net8.0\\CorsinfSDKHik.dll ';
+        // $this->sdk_patch = "C:\\Users\\lenovo\\source\\repos\\CorsinfSDKHik\\CorsinfSDKHik\\bin\\Debug\\net8.0\\CorsinfSDKHik.dll";
         $this->modelo_dispositivos = new th_dispositivosM();
         $this->modelo_personas = new th_personasM();
         $this->modelo_biometria = new th_biometriaM();
         $this->control_acceso = new th_control_accesoM();
     }
 
-    function BuscarDevice()
+    function BuscarDevice($vlans,$tipoBusqueda)
     {
-
-    	// $datos = array(array('nombre'=>'hola','host'=>'192.168.100.1','_id'=>1));
-    	$this->sdk_patch = dirname(__DIR__,2).'/lib/SDKDevices/hikvision/DetectarDevice/HikvisionFinder.jar';
-
-
-    	$dllPath = $this->sdk_patch;
+    	$vlans = ' '.$vlans;
+    	if($tipoBusqueda==0)
+    	{
+    		$vlans = '';
+    	}
+    	$dllPath = $this->sdk_patch.'1'.$vlans;
 		// Comando para ejecutar la DLL
-		$command = "java -jar $dllPath";
+		$command = "dotnet $dllPath";
 
 		// print_r($command);die();
 		$output = shell_exec($command);
 		$resp = json_decode($output,true);
+		$resp = json_decode($resp['msj'],true);
 
-		// print_r($resp);die();
+		// $phpArray = array_map(function($json) {
+		//     return json_decode($json, true);
+		// }, $resp);
 
+		// print_r($phpArray);
 
+		// print_r($resp);
+		// die();
 
-    	// $dllPath = $this->sdk_patch.'1';
-		// // Comando para ejecutar la DLL
-		// $command = "dotnet $dllPath";
+		$tr = array();
+		foreach ($resp as $key => $value) {
+			$device =  json_decode($value,true);
 
-		// // print_r($command);die();
-		// $output = shell_exec($command);
-		// $resp = json_decode($output,true);
+			// print_r($device);die();
 
-		// // print_r($resp);die();
+			if(!isset($device['Error']))
+			{
+				if(isset($device['ProbeMatch']))
+				{
+					$detalle_device =$device['ProbeMatch'];
 
-		// $tr = array();
-		// foreach ($resp as $key => $value) {
-		// 	$device =  json_decode($value,true);
+					$tr[]=array('item'=>($key+1),'tipo'=>$detalle_device['DeviceDescription'],'Estado'=>$detalle_device['Activated'],'ipv4'=>$detalle_device['IPv4Address'],'puerto'=>$detalle_device['CommandPort'],'serie'=>$detalle_device['DeviceSN'],'MAC'=>$detalle_device['MAC'],'_id'=>$key);
+				}
+			}else
+			{
+				break;
+			}
 
-		// 	if(!isset($device['Error']))
-		// 	{
-		// 		if(isset($device['ProbeMatch']))
-		// 		{
-		// 			$detalle_device =$device['ProbeMatch'];
-
-		// 			$tr[]=array('item'=>($key+1),'tipo'=>$detalle_device['DeviceDescription'],'Estado'=>$detalle_device['Activated'],'ipv4'=>$detalle_device['IPv4Address'],'puerto'=>$detalle_device['CommandPort'],'serie'=>$detalle_device['DeviceSN'],'MAC'=>$detalle_device['MAC'],'_id'=>$key);
-		// 		}
-		// 	}else
-		// 	{
-		// 		break;
-		// 	}
-
-		// 	// print_r($detalle_device);die();
-		// }
+			// print_r($detalle_device);die();
+		}
 
 		// Muestra la salida
-		// print_r($resp);die();
+		// print_r($tr);die();
 
 
 
-    	return $resp;
+    	return $tr;
     }
 
 

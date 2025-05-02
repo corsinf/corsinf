@@ -32,7 +32,14 @@ if (isset($_GET['iniciarControladora'])) {
 	parse_str($_POST['parametros'], $params);
     echo json_encode($controlador->iniciarControladora($params));
 }
-
+if (isset($_GET['configuracion_antenas'])) {
+	$parametros = $_POST['parametros'];
+    echo json_encode($controlador->configuracion_antenas($parametros));
+}
+if (isset($_GET['guardar_config'])) {
+	$parametros = $_POST['parametros'];
+    echo json_encode($controlador->guardar_config($parametros));
+}
 
 /**
   * 
@@ -40,9 +47,12 @@ if (isset($_GET['iniciarControladora'])) {
  class portalesC 
  {
  	private $modelo;
+ 	private $patch_ddl;
  	function __construct()
  	{
  		$this->modelo = new portalesM();
+ 		// $this->patch_ddl = dirname(__DIR__,2). "\\lib\\Antenas\\net8.0\\SESProLElibEPCcmd.exe";
+ 		$this->patch_ddl =  dirname(__DIR__,5)."Users\\lenovo\\Downloads\\SESProLElibEPCcmd\\bin\\Debug\\net8.0\\SESProLElibEPCcmd.exe";
  	}
 
  	function listar()
@@ -63,7 +73,7 @@ if (isset($_GET['iniciarControladora'])) {
 	 		switch ($portal[0]['comunicacion']) {
 	 			case 'TCPIP':
 	 			// $command = "C:\\Users\\lenovo\\Downloads\\SESProLElibEPCcmd\\bin\\Debug\\net8.0\\SESProLElibEPCcmd.dll 2 186.4.219.172 10001";
-	 			$command =  dirname(__DIR__,2). "\\lib\\Antenas\\net8.0\\SESProLElibEPCcmd.exe 2 ".$portal[0]['ip']." ".$portal[0]['puerto']."";
+	 			$command = $this->patch_ddl." 2 ".$portal[0]['ip']." ".$portal[0]['puerto']."";
 	 			// print_r($command);die();
 	 			$respuesta = shell_exec($command);
 				$resp = json_decode($respuesta,true);
@@ -111,7 +121,34 @@ if (isset($_GET['iniciarControladora'])) {
 	 		switch ($portal[0]['comunicacion']) {
 	 			case 'TCPIP':
 	 			// $command = "C:\\Users\\lenovo\\Downloads\\SESProLElibEPCcmd\\bin\\Debug\\net8.0\\SESProLElibEPCcmd.dll 2 186.4.219.172 10001";
-	 			$command =  dirname(__DIR__,2). "\\lib\\Antenas\\net8.0\\SESProLElibEPCcmd.exe 2 ".$portal[0]['ip']." ".$portal[0]['puerto']."";
+	 			$command =  $this->patch_ddl." 2 ".$portal[0]['ip']." ".$portal[0]['puerto']."";
+	 			// print_r($command);die();
+	 			$respuesta = shell_exec($command);
+				$resp = json_decode($respuesta,true);
+ 				// print_r($resp);die();
+	 				break;
+	 			
+	 			default:
+	 				// code...
+	 				break;
+	 		}
+
+	 		return $resp;
+	 	}else
+	 	{
+	 		return array('resp' => '-1',"msj"=>"portal no encontrado");
+	 	}
+ 	}
+
+ 	function configuracion_antenas($parametros)
+ 	{
+ 		$portal = $this->modelo->listar($parametros['id']);
+ 		if(count($portal)>0)
+ 		{
+	 		switch ($portal[0]['comunicacion']) {
+	 			case 'TCPIP':
+	 			// $command = "C:\\Users\\lenovo\\Downloads\\SESProLElibEPCcmd\\bin\\Debug\\net8.0\\SESProLElibEPCcmd.dll 2 186.4.219.172 10001";
+	 			$command =  $this->patch_ddl." 2 ".$portal[0]['ip']." ".$portal[0]['puerto']."";
 	 			// print_r($command);die();
 	 			$respuesta = shell_exec($command);
 				$resp = json_decode($respuesta,true);
@@ -162,7 +199,7 @@ if (isset($_GET['iniciarControladora'])) {
  		switch ($parametros['ddl_tipo_antena']) {
  			case 'TCPIP':
  			// $command = "C:\\Users\\lenovo\\Downloads\\SESProLElibEPCcmd\\bin\\Debug\\net8.0\\SESProLElibEPCcmd.dll 2 186.4.219.172 10001";
- 			$command =  dirname(__DIR__,2). "\\lib\\Antenas\\net8.0\\SESProLElibEPCcmd.exe 2 1 ".$parametros['txt_ip']." ".$parametros['txt_puerto']."";
+ 			$command =  $this->patch_ddl." 1 ".$parametros['txt_ip']." ".$parametros['txt_puerto']."";
  			// print_r($command);die();
  			$respuesta = shell_exec($command);
 			$resp = json_decode($respuesta,true);
@@ -176,6 +213,34 @@ if (isset($_GET['iniciarControladora'])) {
 
  		return $resp;
 	 	
+ 	}
+
+ 	function guardar_config($parametros)
+ 	{		
+ 		$portal = $this->modelo->listar($parametros['controladora']);
+ 		// print_r($parametros);die();
+ 		if(count($portal)>0)
+ 		{
+	 		switch ($portal[0]['comunicacion']) {
+	 			case 'TCPIP':
+	 			// $command = "C:\\Users\\lenovo\\Downloads\\SESProLElibEPCcmd\\bin\\Debug\\net8.0\\SESProLElibEPCcmd.dll 2 186.4.219.172 10001";
+	 			$command =  $this->patch_ddl." 3 ".$portal[0]['ip']." ".$portal[0]['puerto']." ".$parametros['lista']." ".$parametros['cbx']." ".$parametros['value']." ".$parametros['adr'];
+	 			// print_r($command);die();
+	 			$respuesta = shell_exec($command);
+				$resp = json_decode($respuesta,true);
+ 				// print_r($resp);die();
+	 				break;
+	 			
+	 			default:
+	 				// code...
+	 				break;
+	 		}
+
+	 		return $resp;
+	 	}else
+	 	{
+	 		return array('resp' => '-1',"msj"=>"portal no encontrado");
+	 	}
  	}
 
 

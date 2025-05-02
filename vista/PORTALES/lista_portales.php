@@ -1,4 +1,5 @@
 <script type="text/javascript">
+  var validarConexion = null
  $( document ).ready(function() {
  	cargar_datos();  
  })
@@ -25,7 +26,7 @@ function cargar_datos() {
               <td>`+item.adr485+`</td>
       				<td>
       					<button class="btn btn-sm btn-danger"  onclick="eliminar_portal('`+item.id+`')"><i class="bx bx-trash m-0"></i></butto>
-      					<button class="btn btn-sm btn-primary" onclick="comenzar_lectura('`+item.id+`')"><i class="bx bx-play m-0"></i></butto>
+      					<button class="btn btn-sm btn-primary" onclick="configuracion_antenas('`+item.id+`')"><i class="bx bx-cog m-0"></i></butto>
       				</td>
       			</tr>`
       	})
@@ -209,7 +210,7 @@ function eliminar_portal_antena(id)
 
     var parametros = $('#form_data').serialize();
   
-    $.ajax({
+    validarConexion = $.ajax({
       data: {parametros: parametros},
       url: '../controlador/PORTALES/portalesC.php?iniciarControladora=true',
       type: 'post',
@@ -224,8 +225,127 @@ function eliminar_portal_antena(id)
            $('#img_espera_logo').css('display','none');
            $('#lbl_msj_espera').text('Conectado a :'+response.msj);  
         }
+        validarConexion = null;
+      },
+      error: function(xhr, status, error) {
+        if(status !== 'abort') {
+          console.error("Error en la solicitud:", error);
+        }
+        solicitudPortalActual = null; // Limpiar la referencia si hay error
       }
     });
+  }
+
+  function configuracion_antenas(portal)
+  {
+    $('#modal_configuraciones').modal('show');
+    $('#lbl_msj_espera').text('');  
+    $('#img_espera_logo_config').css('display','block');
+    $('#txt_controladora_id').val(portal);
+    parametros = 
+    {
+      'id':portal,
+    }
+    $.ajax({
+        data: {parametros: parametros},
+        url: '../controlador/PORTALES/portalesC.php?configuracion_antenas=true',
+        type: 'post',
+        dataType: 'json',
+        success: function(response) {
+          if(response.resp==1)
+          {
+            $('#img_espera_logo_config').css('display','none');
+            $('#pnl_antenas').css('display','block');
+            AntenasHtml = '';
+            var total_ante = 0;
+            listaAntenas ="["+response.data.slice(0, -1)+"]";
+            const antenas = JSON.parse(listaAntenas);
+            antenas.forEach(function(item,i){
+              color = '';
+              if(item.duracion!='0'){color = 'style="background: bisque;"'; total_ante= total_ante+1}
+
+              AntenasHtml+='<tr '+color+' >'+
+                              '<td>'+i+'</td>'+
+                              '<td><input id="txt_duracion_'+i+'" class="form-control form-control-sm" value="'+item.duracion+'"></td>'+
+                              '<td><input id="txt_poder_'+i+'" class="form-control form-control-sm" value="'+item.poder+'"></td>'+
+                              '<td><input id="txt_antena_'+i+'" class="form-control form-control-sm" value="'+item.antena+'"></td>'+
+                              '<td><button class="btn btn-sm btn-danger" onclick="eliminar_antena(\''+i+'\')"><i class="bx bx-trash"></i></button></td>'+
+                            '</tr>'
+            })
+            $('#lbl_total_antenas').text(total_ante);
+            $('#tbl_lista_antenas').html(AntenasHtml);
+          }else
+          {
+               $('#lbl_msj_espera_config').html('<li>'+response.msj+'</li>');
+          }
+        
+        }
+
+      });
+
+  }
+
+  function guardar_config()
+  {
+    
+
+    listado = '[';
+    for (var i = 0; i < 16; i++) {
+      var duracion = $('#txt_duracion_'+i).val();
+      var poder = $('#txt_poder_'+i).val();
+      var antena = $('#txt_antena_'+i).val();
+      var controladora = $('#txt_controladora_id').val();
+      if(duracion !=0 || poder !=0 || antena!=0)
+      {
+        listado+='{"item":"'+i+'","duracion":"'+duracion+'","poder":"'+poder+'","antena":"'+antena+'"},'        
+      }
+    }
+
+    listado = listado.slice(0,-1);
+    listado = listado+']';
+
+
+    var parametros = 
+    {
+      'lista':listado,
+      'controladora':controladora,
+      'value':$('#txt_values').val(),
+      'cbx':$('#cbx_save_pama').val(),
+      'adr':$('#txt_adr_antena').val(),
+
+    }
+     $.ajax({
+        data: {parametros: parametros},
+        url: '../controlador/PORTALES/portalesC.php?guardar_config=true',
+        type: 'post',
+        dataType: 'json',
+        success: function(response) {
+          if(response.resp==1)
+          {
+            configuracion_antenas(controladora);
+            Swal.fire("Antena guardada","","success")            
+          }else
+          {
+            Swal.fire("Paso algo inesperado","","erro")   
+          }
+        
+        }
+
+      });
+
+  }
+
+  function eliminar_antena(i)
+  {
+    $('#txt_duracion_'+i).val(0);
+    $('#txt_poder_'+i).val(0);
+    $('#txt_antena_'+i).val(0);
+    guardar_config();
+  }
+
+  function eliminarSolicitudes()
+  {
+    validarConexion.abort();
   }
   
 </script>
@@ -394,9 +514,68 @@ function eliminar_portal_antena(id)
           </div>
 	      </div>
 	      <div class="modal-footer">   
-	      		<button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cerrar</button>
+	      		<button type="button" class="btn btn-danger" data-bs-dismiss="modal" onclick="eliminarSolicitudes()">Cerrar</button>
 	      </div>
 	    </div>
 	  </div>
 	</div>
+<div class="modal fade" id="modal_configuraciones" tabindex="-1" aria-modal="true" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+        </div>
+        <div class="modal-body">
+          <div class="row" id="img_espera_logo_config">
+            <div class="col-12 text-center">            
+              <div>
+                  <?php if (file_exists($_SESSION['INICIO']['LOGO'])) { ?>      
+                    <img src="<?php echo $_SESSION['INICIO']['LOGO']; ?>" style="width: 35%;" alt="logo icon">
+                  <?php } ?>
+                    ESPERE...
+                    <br>                    
+               <label id="lbl_msj_espera_config"></label> 
+              </div>    
+            </div>
+          </div>
+          <div class="row" id="pnl_antenas" style="display: none;">
+            <div class="col-sm-9">
+              <h2>Lista antenas configuradas</h2>
+            </div>
+            <div class="col-sm-3">
+              <label>Total Antenas: <span id="lbl_total_antenas"></span></label>
+              <input type="hidden" name="txt_controladora_id" id="txt_controladora_id" value="0">
+            </div>
+            <div class="col-12">
+              <div class="table-responsive" style="overflow-y: scroll;height: 350px;">
+                <table class="table table-hover">
+                  <thead>
+                    <th>Item</th>
+                    <th>Duracion</th>
+                    <th>Poder</th>
+                    <th>Antena</th>
+                  </thead>
+                  <tbody id="tbl_lista_antenas">
+                    
+                  </tbody>                  
+                </table>                
+              </div>            
+            </div>
+            <div class="col-sm-4">
+              <input type="" class="form-control form-control-sm" name="txt_values" id="txt_values" value="00000000">
+            </div>            
+            <div class="col-sm-4">
+              <input type="checkbox" name="cbx_save_pama" id="cbx_save_pama" checked>
+            </div>            
+            <div class="col-sm-4">
+              <input type="number" class="form-control form-control-sm" name="txt_adr_antena" id="txt_adr_antena" value="1">
+            </div>          
+          </div>
+        </div>
+        <div class="modal-footer">   
+            <button type="button" class="btn btn-primary" onclick="guardar_config()">Guardar</button>
+            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cerrar</button>
+        </div>
+      </div>
+    </div>
+  </div>
 

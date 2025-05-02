@@ -10,7 +10,7 @@ require_once(dirname(__DIR__, 2) . '/db/codigos_globales.php');
 $controlador = new estadoC();
 
 if (isset($_GET['lista'])) {
-	echo json_encode($controlador->lista_estado($_POST['id']));
+	echo json_encode($controlador->lista_estado($_POST['id'] ?? ''));
 }
 
 if (isset($_GET['buscar'])) {
@@ -74,6 +74,7 @@ class estadoC
 		$datos[0]['dato'] = $parametros['cod'];
 		$datos[1]['campo'] = 'DESCRIPCION';
 		$datos[1]['dato'] = $parametros['des'];
+
 		if ($parametros['id'] == '') {
 			if (count($this->modelo->buscar_estado_CODIGO($datos[0]['dato'])) == 0) {
 				$datos = $this->modelo->insertar($datos);
@@ -87,11 +88,14 @@ class estadoC
 			$movimiento = $this->compara_datos($parametros);
 			$datos = $this->modelo->editar($datos, $where);
 		}
+
 		if ($movimiento != '' && $datos == 1) {
-			$texto = $parametros['cod'] . ';' . $parametros['des'];
-			$this->cod_global->para_ftp('estados', $texto);
+			// Funcion para FTP relacioado con SAP para futura version
+			// $texto = $parametros['cod'] . ';' . $parametros['des'];
+			// $this->cod_global->para_ftp('estados', $texto);
 			$this->cod_global->ingresar_movimientos(false, $movimiento, 'ESTADOS');
 		}
+
 		return $datos;
 	}
 

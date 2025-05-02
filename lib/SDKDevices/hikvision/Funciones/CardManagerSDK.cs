@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 
@@ -141,7 +142,7 @@ namespace CorsinfSDKHik.Funciones
                 else if (dwState == (int)CHCNetSDK.NET_SDK_SENDWITHRECV_STATUS.NET_SDK_CONFIG_STATUS_FINISH)
                 {
                     //Console.WriteLine("NET_DVR_SET_CARD finish");
-                    msj = "NET_DVR_SET_CARD finish";
+                    //msj = "NET_DVR_SET_CARD finish";
                     break;
                 }
                 else if (dwState == (int)CHCNetSDK.NET_SDK_SENDWITHRECV_STATUS.NET_SDK_CONFIG_STATUS_EXCEPTION)
@@ -164,8 +165,9 @@ namespace CorsinfSDKHik.Funciones
             return msj;
         }
 
-        public String BuscarPersonas(int m_UserID)
+        public String BuscarPersonas(int deviceUserId)
         {
+            
             if (m_lGetCardCfgHandle != -1)
             {
                 CHCNetSDK.NET_DVR_StopRemoteConfig(m_lGetCardCfgHandle);
@@ -217,11 +219,18 @@ namespace CorsinfSDKHik.Funciones
                 else if (dwState == (int)CHCNetSDK.NET_SDK_GET_NEXT_STATUS.NET_SDK_GET_NEXT_STATUS_SUCCESS)
                 {
                     struData = (CHCNetSDK.NET_DVR_CARD_RECORD)Marshal.PtrToStructure(ptrStruData, typeof(CHCNetSDK.NET_DVR_CARD_RECORD));
+                    //string cardNo = System.Text.Encoding.Default.GetString(struData.byCardNo).TrimEnd('\0');
+                    //string name = System.Text.Encoding.Default.GetString(struData.byName).TrimEnd('\0');
+
                     string cardNo = System.Text.Encoding.Default.GetString(struData.byCardNo).TrimEnd('\0');
                     string name = System.Text.Encoding.Default.GetString(struData.byName).TrimEnd('\0');
+                    string employeeNo = struData.dwEmployeeNo.ToString();
+
+                    string extraData = System.Text.Encoding.Default.GetString(struData.byRes).TrimEnd('\0');
+                    string extraData1 = struData.byRes1.ToString();
 
                     //Console.WriteLine($"Tarjeta: {cardNo}, Nombre: {name}, empleado: {EmployedNo}");
-                    msj += "{CardNo:" + cardNo + ",nombre:" + name.TrimEnd('\u0000', '\u0001', '\u0002') + "},";
+                    msj += "{EmployedId:"+employeeNo+",CardNo:" + cardNo + ",nombre:" + name.TrimEnd('\u0000', '\u0001', '\u0002') + "},";
 
                 }
                 else if (dwState == (int)CHCNetSDK.NET_SDK_GET_NEXT_STATUS.NET_SDK_GET_NEXT_STATUS_FINISH)
@@ -245,20 +254,19 @@ namespace CorsinfSDKHik.Funciones
 
             CHCNetSDK.NET_DVR_StopRemoteConfig(m_lGetCardCfgHandle);
             m_lGetCardCfgHandle = -1;
-
             Marshal.FreeHGlobal(ptrStruCond);
             Marshal.FreeHGlobal(ptrStruData);
-
             return msj;
-
         }
-       /* public void BuscarPersonasOrg(int m_UserID)
+
+        public String EliminarCardNo(int m_UserID,String cardNo)
         {
-            if (m_lGetCardCfgHandle != -1)
+            String msj = "";
+            if (m_lDelCardCfgHandle != -1)
             {
-                if (CHCNetSDK.NET_DVR_StopRemoteConfig(m_lGetCardCfgHandle))
+                if (CHCNetSDK.NET_DVR_StopRemoteConfig(m_lDelCardCfgHandle))
                 {
-                    m_lGetCardCfgHandle = -1;
+                    m_lDelCardCfgHandle = -1;
                 }
             }
             CHCNetSDK.NET_DVR_CARD_COND struCond = new CHCNetSDK.NET_DVR_CARD_COND();
@@ -268,33 +276,31 @@ namespace CorsinfSDKHik.Funciones
             IntPtr ptrStruCond = Marshal.AllocHGlobal((int)struCond.dwSize);
             Marshal.StructureToPtr(struCond, ptrStruCond, false);
 
-            CHCNetSDK.NET_DVR_CARD_RECORD struData = new CHCNetSDK.NET_DVR_CARD_RECORD();
-            struData.Init();
-            struData.dwSize = (uint)Marshal.SizeOf(struData);
-            byte[] byTempCardNo = new byte[CHCNetSDK.ACS_CARD_NO_LEN];
-            byTempCardNo = System.Text.Encoding.UTF8.GetBytes("1992");
-            for (int i = 0; i < byTempCardNo.Length; i++)
-            {
-                struData.byCardNo[i] = byTempCardNo[i];
-            }
-            IntPtr ptrStruData = Marshal.AllocHGlobal((int)struData.dwSize);
-            Marshal.StructureToPtr(struData, ptrStruData, false);
-
             CHCNetSDK.NET_DVR_CARD_SEND_DATA struSendData = new CHCNetSDK.NET_DVR_CARD_SEND_DATA();
             struSendData.Init();
             struSendData.dwSize = (uint)Marshal.SizeOf(struSendData);
+            byte[] byTempCardNo = new byte[CHCNetSDK.ACS_CARD_NO_LEN];
+            byTempCardNo = System.Text.Encoding.UTF8.GetBytes(cardNo);
             for (int i = 0; i < byTempCardNo.Length; i++)
             {
                 struSendData.byCardNo[i] = byTempCardNo[i];
             }
             IntPtr ptrStruSendData = Marshal.AllocHGlobal((int)struSendData.dwSize);
             Marshal.StructureToPtr(struSendData, ptrStruSendData, false);
-            m_lGetCardCfgHandle = CHCNetSDK.NET_DVR_StartRemoteConfig(m_UserID, CHCNetSDK.NET_DVR_GET_CARD, ptrStruCond, (int)struCond.dwSize, null, IntPtr.Zero);
+
+            CHCNetSDK.NET_DVR_CARD_STATUS struStatus = new CHCNetSDK.NET_DVR_CARD_STATUS();
+            struStatus.Init();
+            struStatus.dwSize = (uint)Marshal.SizeOf(struStatus);
+            IntPtr ptrdwState = Marshal.AllocHGlobal((int)struStatus.dwSize);
+            Marshal.StructureToPtr(struStatus, ptrdwState, false);
+
+            m_lGetCardCfgHandle = CHCNetSDK.NET_DVR_StartRemoteConfig(m_UserID, CHCNetSDK.NET_DVR_DEL_CARD, ptrStruCond, (int)struCond.dwSize, null, IntPtr.Zero);
             if (m_lGetCardCfgHandle < 0)
             {
-                Console.WriteLine("NET_DVR_GET_CARD error: " + CHCNetSDK.NET_DVR_GetLastError());
+                //MessageBox.Show("NET_DVR_DEL_CARD error:" + CHCNetSDK.NET_DVR_GetLastError());
+                msj = "NET_DVR_DEL_CARD error:" + CHCNetSDK.NET_DVR_GetLastError();
                 Marshal.FreeHGlobal(ptrStruCond);
-                return;
+                return msj;
             }
             else
             {
@@ -302,8 +308,7 @@ namespace CorsinfSDKHik.Funciones
                 uint dwReturned = 0;
                 while (true)
                 {
-                    dwState = CHCNetSDK.NET_DVR_SendWithRecvRemoteConfig(m_lGetCardCfgHandle, ptrStruSendData, struSendData.dwSize, ptrStruData, struData.dwSize, ref dwReturned);
-                    struData = (CHCNetSDK.NET_DVR_CARD_RECORD)Marshal.PtrToStructure(ptrStruData, typeof(CHCNetSDK.NET_DVR_CARD_RECORD));
+                    dwState = CHCNetSDK.NET_DVR_SendWithRecvRemoteConfig(m_lGetCardCfgHandle, ptrStruSendData, struSendData.dwSize, ptrdwState, struStatus.dwSize, ref dwReturned);
                     if (dwState == (int)CHCNetSDK.NET_SDK_SENDWITHRECV_STATUS.NET_SDK_CONFIG_STATUS_NEEDWAIT)
                     {
                         Thread.Sleep(10);
@@ -311,41 +316,45 @@ namespace CorsinfSDKHik.Funciones
                     }
                     else if (dwState == (int)CHCNetSDK.NET_SDK_SENDWITHRECV_STATUS.NET_SDK_CONFIG_STATUS_FAILED)
                     {
-                        Console.WriteLine("NET_DVR_GET_CARD fail error: " + CHCNetSDK.NET_DVR_GetLastError());
+                        //MessageBox.Show("NET_DVR_DEL_CARD fail error: " + CHCNetSDK.NET_DVR_GetLastError());
+                        msj = "NET_DVR_DEL_CARD fail error: " + CHCNetSDK.NET_DVR_GetLastError();
                     }
                     else if (dwState == (int)CHCNetSDK.NET_SDK_SENDWITHRECV_STATUS.NET_SDK_CONFIG_STATUS_SUCCESS)
                     {
-                        //textBoxCardNo.Text = System.Text.Encoding.Default.GetString(struData.byCardNo);
-                        //textBoxCardRightPlan.Text = struData.wCardRightPlan[0].ToString();
-                        //textBoxEmployeeNo.Text = struData.dwEmployeeNo.ToString();
-                        //textBoxName.Text = System.Text.Encoding.Default.GetString(struData.byName);
-                        Console.WriteLine("usuraio:" + System.Text.Encoding.Default.GetString(struData.byName));
-
-                        Console.WriteLine("NET_DVR_GET_CARD success");
+                        //MessageBox.Show("NET_DVR_DEL_CARD success");
+                        msj = "Tarjeta eliminada";
+                        m_SetSuccess = 1;
                     }
                     else if (dwState == (int)CHCNetSDK.NET_SDK_SENDWITHRECV_STATUS.NET_SDK_CONFIG_STATUS_FINISH)
                     {
-                        Console.WriteLine("NET_DVR_GET_CARD finish");
+                        //MessageBox.Show("NET_DVR_DEL_CARD finish");
+                        //msj = "NET_DVR_DEL_CARD finish";
+                        //msj = "Tarjeta eliminada y finalizada";
+                        //m_SetSuccess = 1;
                         break;
                     }
                     else if (dwState == (int)CHCNetSDK.NET_SDK_SENDWITHRECV_STATUS.NET_SDK_CONFIG_STATUS_EXCEPTION)
                     {
-                        Console.WriteLine("NET_DVR_GET_CARD exception error: " + CHCNetSDK.NET_DVR_GetLastError());
+                        //MessageBox.Show("NET_DVR_DEL_CARD exception error: " + CHCNetSDK.NET_DVR_GetLastError());
+                        msj = "NET_DVR_DEL_CARD exception error: " + CHCNetSDK.NET_DVR_GetLastError();
                         break;
                     }
                     else
                     {
-                        Console.WriteLine("unknown status error: " + CHCNetSDK.NET_DVR_GetLastError());
+                        //MessageBox.Show("unknown status error: " + CHCNetSDK.NET_DVR_GetLastError());
+                        msj = "unknown status error: " + CHCNetSDK.NET_DVR_GetLastError();
+                        m_SetSuccess = -1;
                         break;
                     }
                 }
             }
-            CHCNetSDK.NET_DVR_StopRemoteConfig(m_lGetCardCfgHandle);
-            m_lGetCardCfgHandle = -1;
+            CHCNetSDK.NET_DVR_StopRemoteConfig(m_lDelCardCfgHandle);
+            m_lDelCardCfgHandle = -1;
             Marshal.FreeHGlobal(ptrStruSendData);
-            Marshal.FreeHGlobal(ptrStruData);
-            return;
+            Marshal.FreeHGlobal(ptrdwState);
+
+            return msj;
         }
-       */
+
     }
 }

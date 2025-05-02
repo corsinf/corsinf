@@ -1,4 +1,12 @@
 <?php
+
+/**
+ * @deprecated Archivo dado de baja el 02/04/2025.
+ * @note Este archivo se mantiene como respaldo, pero ya no se utilizará en producción.
+ * @warning No modificar este archivo. Para cambios, referirse a la nueva implementación.
+ */
+
+
 //include('../cabeceras/header.php');
 $tipo_lista = 1;
 if (isset($_SESSION['INICIO']['LISTA_ART'])) {

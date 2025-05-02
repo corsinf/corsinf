@@ -12,10 +12,10 @@ use Box\Spout\Common\Entity\Style\CellAlignment;
 use Box\Spout\Common\Entity\Style\Color;
 
 if (!class_exists('reportesM')) {
-	include('../../modelo/reportesM.php');
+	include('../modelo/ACTIVOS_FIJOS/reportesM.php');
 }
 if (!class_exists('ArticulosM')) {
-	include('../../modelo/ACTIVOS_FIJOS/ArticulosM.php');
+	include('../modelo/ACTIVOS_FIJOS/ArticulosM.php');
 }
 
 require_once(dirname(__DIR__, 1) . '/funciones/funciones.php');

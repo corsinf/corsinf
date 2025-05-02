@@ -3373,6 +3373,11 @@ namespace CorsinfSDKHik.NetSDK
          * [in] cbStateCallback - the callback function
          * [in] pUserData - pointer to user input data
          */
+
+        [DllImport(@"..\..\..\HCNetSDK\HCNetSDK.dll")]
+        public static extern int NET_DVR_StartRemoteConfig(int lUserID, int dwCommand, IntPtr lpInBuffer, int dwInBufferLen, RemoteConfigCallback cbStateCallback, IntPtr pUserData);
+
+
         [DllImport(@"..\..\..\HCNetSDK\HCNetSDK.dll")]
         public static extern int NET_DVR_StartRemoteConfig(int lUserID, uint dwCommand, nint lpInBuffer, int dwInBufferLen, RemoteConfigCallback cbStateCallback, nint pUserData);
 
@@ -3499,6 +3504,9 @@ namespace CorsinfSDKHik.NetSDK
 
         public delegate bool MSGCallBack_V31(int lCommand, ref NET_DVR_ALARMER pAlarmer, nint pAlarmInfo, uint dwBufLen, nint pUser);
 
+        public delegate bool MSGCallBack_V30(int lCommand, ref NET_DVR_ALARMER pAlarmer, IntPtr pAlarmInfo, uint dwBufLen, IntPtr pUser);
+
+
         /* Alarm information registered callback function
          * [in] iIndex - iIndex, scope:[0,15] 
          * [in] fMessageCallBack - callback function
@@ -3563,6 +3571,13 @@ namespace CorsinfSDKHik.NetSDK
 
         [DllImport(@"..\..\..\HCNetSDK\HCNetSDK.dll")]
         public static extern bool NET_DVR_CaptureJPEGPicture(int lUserID, int lChannel, ref NET_DVR_JPEGPARA lpJpegPara, nint sPicFileName);
+
+        [DllImport(@"..\..\..\HCNetSDK\HCNetSDK.dll")]
+        public static extern bool NET_DVR_StartListen_V30(byte[] sLocalIP, ushort wLocalPort, MSGCallBack_V30 fMessageCallBack, IntPtr pUser);
+
+
+
+
         #endregion
 
         #region 门禁卡，指纹，人脸接口优化新增命令码及结构体
@@ -3871,7 +3886,8 @@ namespace CorsinfSDKHik.NetSDK
 
         [DllImport(@"..\..\..\HCNetSDK\HCNetSDK.dll")]
         public static extern int NET_DVR_SendWithRecvRemoteConfig(int lHandle, ref CHCNetSDK.NET_DVR_FINGERPRINT_RECORDF lpInBuff, int dwInBuffSize, ref CHCNetSDK.NET_DVR_FINGERPRINT_STATUSF lpOutBuff, int dwOutBuffSize, IntPtr dwOutDataLen);
-
+        [DllImport(@"..\..\..\HCNetSDK\HCNetSDK.dll")]
+        public static extern int NET_DVR_GetNextRemoteConfig(int lHandle, ref CHCNetSDK.NET_DVR_FINGERPRINT_RECORDF lpOutBuff, int dwOutBuffSize);
         // 用户调用SendwithRecv接口时，接口返回的状态
         public enum NET_SDK_SENDWITHRECV_STATUS
         {

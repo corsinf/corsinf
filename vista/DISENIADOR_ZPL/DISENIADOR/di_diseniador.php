@@ -1,7 +1,18 @@
+<?php
+$id = '';  
+if(isset($_GET['id']))
+{
+    $id = $_GET['id'];
+}
+
+?>
 <script type="text/javascript">
+const id = '<?php echo $id; ?>'
     $(document).ready(function() {
 
-        $('#modal_buscar_impresoras').modal('show')
+
+
+        // $('#modal_buscar_impresoras').modal('show')
 
         dataExcel = [];
         document.getElementById('archivoExcel').addEventListener('change', function (e) {
@@ -33,7 +44,8 @@
                 });
 
                 // Mostrar los datos filtrados en la consola
-                console.log(dataExcel);
+                // console.log(dataExcel);
+                llenar_ddls(dataExcel)
             };
 
             // Leer el archivo como un array binario
@@ -41,6 +53,35 @@
         });
 
     });
+
+    function llenar_ddls(data)
+    {
+        var elem = canvasDesigner.getElementos();
+        var elem = elem.filter(elemento => elemento !== null);
+        var head = data[0];
+
+        elem.forEach(function(item,i){
+            let name = item.name
+            var id = name.replaceAll(' ','_');
+            op = '';
+            head.forEach(function(item2,i2){
+                op+='<option value="'+i2+'">'+item2+'</option>'
+            })
+            $('#ddl_'+id).html(op);
+        })
+
+        if($('#rbl_rfid_simple').prop('checked'))
+        {
+             op = '';
+            head.forEach(function(item2,i2){
+                op+='<option value="'+i2+'">'+item2+'</option>'
+            })
+            $('#ddl_cod_rfid').html(op);
+
+        }
+    }
+
+
 </script>
 
 
@@ -64,6 +105,7 @@
 <script language="javascript" type="text/javascript" src="../lib/ZPL/js/tools/image.js"></script>
 <script language="javascript" type="text/javascript" src="../lib/ZPL/js/tools/QRcode.js"></script>
 <script language="javascript" type="text/javascript" src="../lib/ZPL/js/tools/DBdata.js"></script>
+<script language="javascript" type="text/javascript" src="../lib/ZPL/js/tools/drawElementsdb.js"></script>
 
 <script>
     var canvasDesigner = null;
@@ -116,6 +158,55 @@
 
     });
 
+
+
+
+    function cargar_datos_etiqueta()
+    {
+        parametros = 
+        {
+            'id':id,
+        }
+        $.ajax({
+            url:  '../controlador/DISENIADOR_ZPL/di_diseniadorC.php?ListaEtiquetasDetalle=true',
+            type:  'post',
+            dataType: 'json',  
+             data:{parametros:parametros},        
+            success:  function (response) {
+               console.log(response);
+               response = response[0];
+               $('#txt_ancho').val(response.ac_disenio_tag_ancho);
+               $('#txt_alto').val(response.ac_disenio_tag_alto);
+               $('#txt_dpi').val(response.ac_disenio_tag_dpi);
+               $('#txt_dpi').val(response.ac_disenio_tag_dpi);
+               $('#ddl_unidad').val(response.ac_disenio_tag_unidad);
+
+               if(response.ac_disenio_tag_rfid==1)
+               {
+                   $('#rbl_rfid_simple').prop('checked',true);
+               }else
+               {
+                   $('#rbl_rfid_simple').prop('checked',false);                
+               }
+
+               $('#txt_ancho').focus();
+               $('#txt_alto').focus();
+
+               $('#txt_nom_etiqueta').val(response.ac_disenio_tag_nombre)
+
+
+               elementos =  JSON.parse(response.ac_disenio_tag_elementos);
+               drawElments(elementos)
+          
+            },
+            error: function (error) {
+                
+               $('#modal_print').modal('hide');
+              console.error('Error en numero_comprobante:', error);
+              // Puedes manejar el error aquí si es necesario
+            },
+        });
+    }
   
 </script>
 
@@ -154,6 +245,7 @@
         div.appendChild(img);
 
         data =  canvasDesigner.getElementos();
+        data = data.filter(elemento => elemento !== null);
         console.log(data)
         if(yaTieneOrigendatos==0)
         {
@@ -191,50 +283,9 @@
 
         }else
         {
-           console.log(datos);
-           var origen = [];
-          if(data.length !== 0 && data !== null)
-            {
-                 data.forEach(function(item,i){
-                        head+='<th>'+item.name+'</th>'
-                })
-                if(datos.rfid.length>0)
-                {
-                    head+='<th>RFID</th>'
-                }
-                datos.principal.forEach(function(item,i){
-                    linea = {};
-                    body+='<tr>'
-                    data.forEach(function(item2,j){
-                        elemento = item2.name.replaceAll(' ','_');
-                        valor = item[elemento];
-                        body+='<td>'+valor+'</td>'
-                        linea[elemento] = valor;
 
-                    })
-                    if(datos.rfid.length>0)
-                    {
-                        body+='<td>'+datos.rfid[i]['rfid']+'</td>'
-                        linea['rfid'] = datos.rfid[i]['rfid'];
-                    }
-
-                    origen.push(linea);
-                    body+='</tr>'
-                })
-
-                // console.log(origen);
-
-                DatosOrigen = origen;
-               
-                // head+='</thead>'
-                // body+= '</tr></tbody>'
-                $('#tbl_datos').html('<thead>'+head+'</thead><tbody>'+body+'</body>');
-                $('#modal_impresion').modal('show');
-            }else
-            {
-                $('#tbl_datos').html('<tr><td>Sin datos a imprimir</td></tr>')
-            }
-
+            procesar_datos_excel(datos)
+            
         }
 
 
@@ -242,22 +293,84 @@
 
     }
 
+
+    function procesar_datos_excel(datos)
+    {
+
+        data =  canvasDesigner.getElementos();
+        var origen = [];
+        var rfid = 0;
+        var head='<thead>';
+        var body = '<tbody><tr>'
+        var datoRfid = '';
+        if(data.length !== 0 && data !== null)
+        {
+            
+                var elem = canvasDesigner.getElementos();
+                var elem = elem.filter(elemento => elemento !== null);
+                var head = data[0];
+
+
+                elem.forEach(function(item,i){
+                        head+='<th>'+item.name+'</th>'
+                })
+                if($('#rbl_rfid_simple').prop('checked'))
+                {
+                    head+='<th>RFID</th>'
+                }
+                datos.forEach(function(item,i){
+                    linea = {};
+                    body+='<tr>'
+                    console.log(item);
+                    Object.keys(item).forEach(function(item2,j){
+                        console.log(item2);
+                        elemento = item2;
+                        valor = item[elemento];
+                        body+='<td>'+valor+'</td>'
+                        linea[elemento] = valor;
+
+                    })
+                    body+='</tr>'
+                })
+
+                // console.log(origen);
+
+                DatosOrigen = datos;
+               
+                // head+='</thead>'
+                // body+= '</tr></tbody>'
+                $('#tbl_datos').html('<thead>'+head+'</thead><tbody>'+body+'</body>');
+                $('#modal_impresion').modal('show');
+        }else
+        {
+            $('#tbl_datos').html('<tr><td>Sin datos a imprimir</td></tr>')
+        }
+
+    }
+
+
     function cargarOrigendatos()
     {
         console.log(DatosOrigen);        
         data =  canvasDesigner.getElementos();
+        if($('#rbl_rfid_simple').prop('checked'))
+        {
+            data.push({'name':'cod_rfid'});
+        }
+
         DatosOrigen.forEach(function(item,i){
             data.forEach(function(item2,j){
-                elemento = item2.name.replaceAll(' ','_');
+                elemento = item2.name;
                 item2.text = item[elemento];
                 // console.log(item);
-                if ('rfid' in item) {
+                if ('cod_rfid' in item) {
                    $('#rbl_rfid_simple').prop('checked',true)
-                   $('#txt_rfid_simple').val(item['rfid'])
+                   $('#txt_rfid_simple').val(item['cod_rfid'])
                 } 
             })
             data1 =  canvasDesigner.generateZPL();            
             $('#rbl_rfid_simple').prop('checked',false)
+            console.log(data1);
             imprimirAgente(data1)
              // impresion_simple(i,data1)
         })
@@ -345,9 +458,84 @@
 
     function addData()
     {
+        yaTieneOrigendatos = 1;
+        var tipo = $('input[name="rbl_origen_datos"]:checked').val();
+        if(tipo=='0')
+        {
+            datosOrigenExcel()
+        }else
+        {
+            datosOrigenDB();
+        }
+    }
 
-        data = $('#form_origenes_data').serialize();
-        data = data+'&ddl_tabla2='+$('#ddl_tabla2').val();
+    function  datosOrigenExcel()
+    {
+        var elem = canvasDesigner.getElementos();
+        var elem = elem.filter(elemento => elemento !== null);
+        var elementos = [];
+
+        elem.forEach(function(item2,i2){
+            elementos.push(item2.name);
+        })
+
+        if($('#rbl_rfid_simple').prop('checked'))
+        {
+            elementos.push("cod_rfid");
+        }
+
+
+        var dataFinal = [];
+
+        dataExcel.forEach(function(item,i){
+            dataElementos = {};
+            elementos.forEach(function(item2,i2){
+                console.log(item2);
+                var valor = $('#ddl_'+item2.replaceAll(" ","_")).val();
+                // console.log(valor);
+                dataElementos[item2] = item[valor];
+            })
+
+            dataFinal.push(dataElementos);
+           
+        })
+
+        vista_previa(dataFinal)
+
+        console.log(dataFinal);
+
+    }
+
+    function datosOrigenDB(){
+       elementos = canvasDesigner.getElementos();
+
+       var campos = {};
+       elementos.forEach(function(item,i){
+            elem = item.name.replaceAll(" ","_");
+            var valor = $('#ddl_'+elem).val();
+            campos[item.name] = valor;
+       });
+       if($('#rbl_rfid_simple').prop('checked'))
+       {
+            var valor = $('#ddl_cod_rfid').val();
+            campos['cod_rfid'] = valor;
+       }    
+        
+        terceros = $('#txt_db_terceros').val();
+
+       var data =
+       {
+            'tabla':$('#ddl_tabla').val(),
+            'campos':campos,
+            'automatico':$('#rbx_rfid_automatico').prop('checked'),
+            'host':$('#txt_host_cn').val(),
+            'port':$('#txt_port_cn').val(),
+            'user':$('#txt_user_cn').val(),
+            'pass':$('#txt_pass_cn').val(),
+            'db':$('#txt_base_cn').val(),
+            'terceros':terceros,
+       }
+
         $.ajax({
         data:  {data:data},
         url:  '../controlador/DISENIADOR_ZPL/di_diseniadorC.php?addDatos=true',
@@ -442,10 +630,19 @@
 
     function buscar_camposdb()
     {
+         yaTieneOrigendatos = 1;
          elem = canvasDesigner.getElementos();
+         terceros = $('#txt_db_terceros').val();
          parametros = 
          {
             'tabla':$('#ddl_tabla').val(),
+            'host':$('#txt_host_cn').val(),
+            'port':$('#txt_port_cn').val(),
+            'user':$('#txt_user_cn').val(),
+            'pass':$('#txt_pass_cn').val(),
+            'db':$('#txt_base_cn').val(),
+            'terceros':terceros,
+
          }
          $.ajax({
             url:  '../controlador/DISENIADOR_ZPL/di_diseniadorC.php?getDBcampos=true',
@@ -463,7 +660,7 @@
                     $('#ddl_'+item.name.replaceAll(' ','_')).html(op)
                 })
 
-                $('#ddl_rfid_code').html(op)
+                $('#ddl_cod_rfid').html(op)
               
             },
             error: function (error) {
@@ -480,6 +677,12 @@
          parametros = 
          {
             'tabla':$('#ddl_tabla').val(),
+            'host':$('#txt_host_cn').val(),
+            'port':$('#txt_port_cn').val(),
+            'user':$('#txt_user_cn').val(),
+            'pass':$('#txt_pass_cn').val(),
+            'db':$('#txt_base_cn').val(),
+            'terceros':terceros,
          }
          $.ajax({
             url:  '../controlador/DISENIADOR_ZPL/di_diseniadorC.php?getDBcampos=true',
@@ -535,6 +738,7 @@
 
     function opciondb()
     {
+        $('#tbl_db_data').html('');
         elem = canvasDesigner.getElementos();
         elem = elem.filter(elemento => elemento !== null);
          console.log(elem)
@@ -547,28 +751,40 @@
                 if ($('#tr_'+item.name.replaceAll(' ','_')).length == 0) {                   
                     tr ='<tr id="tr_'+item.name.replaceAll(' ','_')+'"><td>'+item.name+'</td><td><select class="form-select form-select-sm" id="ddl_'+item.name.replaceAll(' ','_')+'" name="ddl_'+item.name.replaceAll(' ','_')+'"><option>Seleccione campo<option></select></td><td></td></tr>'
                     $('#tbl_db_data').append(tr);
-                    if($('#ddl_tabla').val()!='')
-                    {
-                        llenar_ddl_camposdb('ddl_'+item.name.replaceAll(' ','_'));
-                    }
+                    // if($('#ddl_tabla').val()!='')
+                    // {
+                    //     llenar_ddl_camposdb('ddl_'+item.name.replaceAll(' ','_'));
+                    // }
                 }
         })
+
+        console.log($('#rbl_rfid_simple').prop('checked'))
+
+        if($('#rbl_rfid_simple').prop('checked'))
+        {
+
+            console.log($('#rbl_rfid_simple').prop('checked'))
+            tr = `<tr><td>Codigo RFID</td><td><select class="form-select form-select-sm" id="ddl_cod_rfid" name="ddl_cod_rfid"><option>Seleccione campo<option></select>
+                <label><input type="checkbox" class="" id="rbx_rfid_automatico" name="rbx_rfid_automatico" onclick="rfid_automatico()">  RFID Automatico</label>
+            </td></tr>`
+            $('#tbl_db_data').append(tr);
+        }
     }
 
     function rfid_automatico()
     {
         if($('#rbx_rfid_automatico').prop('checked'))
         {
-            $('#ddl_rfid_code').prop('disabled',true)
+            $('#ddl_cod_rfid').prop('disabled',true)
             $('#ddl_rfid_code').val('')
-            $('#btn_cambiar_tabla').prop('disabled',true)
+            // $('#btn_cambiar_tabla').prop('disabled',true)
             console.log('si')
         }else
         {
 
-            $('#ddl_rfid_code').prop('disabled',false)
+            $('#ddl_cod_rfid').prop('disabled',false)
             $('#ddl_rfid_code').val('')
-            $('#btn_cambiar_tabla').prop('disabled',false)
+            // $('#btn_cambiar_tabla').prop('disabled',false)
             console.log('no')
         }
 
@@ -576,10 +792,21 @@
 
     function getDBtable()
     {
+        terceros = $('#txt_db_terceros').val();
+        var parametros = 
+        {
+            'host':$('#txt_host_cn').val(),
+            'port':$('#txt_port_cn').val(),
+            'user':$('#txt_user_cn').val(),
+            'pass':$('#txt_pass_cn').val(),
+            'db':$('#txt_base_cn').val(),
+            'terceros':terceros,
+        }
         $.ajax({
         url:  '../controlador/DISENIADOR_ZPL/di_diseniadorC.php?getDBtable=true',
         type:  'post',
-        dataType: 'json',          
+        dataType: 'json',  
+        data:{parametros:parametros},        
         success:  function (response) {
            var op = '<option value="">Seleccione una tabla</option>';
            response.forEach(function(item,i){
@@ -587,6 +814,8 @@
            })
            $('#ddl_tabla').html(op)
            $('#ddl_tabla2').html(op)
+
+           $('#modal_conexion_db').modal('hide');
         },
         error: function (error) {
             
@@ -616,21 +845,9 @@
 
     }
 
-    function show_rfid()
-    {
-        if($('#rbl_rfid').prop('checked'))
-        {
-            console.log('si')
-            $('#tbl_rfid').removeClass('d-none')
-        }else
-        {
-            console.log('no')
-            $('#tbl_rfid').addClass('d-none')
-        }
-    }
-
     function cambiar_metodo()
     {
+        $('#ddl_lista_empresas').empty();
         metodo = $('#ddl_metodo_busqueda').val()
         if(metodo=='MULTICAST_BROADCAST')
         {
@@ -662,6 +879,127 @@
         });
     }
 
+    function GuardarDiseño()
+    {
+        elem =  JSON.stringify(canvasDesigner.elements);
+       var parametros = 
+        {
+
+            'id':id,
+            'elementos':elem,
+            'nombre':$('#txt_nom_etiqueta').val(),
+            'ancho':$('#txt_ancho').val(),
+            'alto':$('#txt_alto').val(),
+            'dpi':$('#txt_dpi').val(),
+            'unidad':$('#ddl_unidad').val(),
+            'rfid':$('#rbl_rfid_simple').prop('checked'),
+        }
+        $.ajax({
+            url:  '../controlador/DISENIADOR_ZPL/di_diseniadorC.php?GuardarDisenio=true',
+            type:  'post',
+            dataType: 'json',  
+             data:{parametros:parametros},        
+            success:  function (response) {
+                if(response==1)
+                {
+                    Swal.fire("Diseño guardado","","success");
+                    location.reload();
+                }
+            },
+            error: function (error) {
+                
+               $('#modal_print').modal('hide');
+              console.error('Error en numero_comprobante:', error);
+              // Puedes manejar el error aquí si es necesario
+            },
+        });
+
+    }
+
+
+    function validarOrigen(){
+
+        if($('input[name="rbl_origen_datos"]:checked').val()==0)
+        {
+            $('#pnl_base').addClass('d-none');
+            $('#pnl_excel').removeClass('d-none');
+            $('#ddl_tabla').val('');
+            $('#txt_db_terceros').val(0);
+        }else
+        {
+
+            $('#pnl_excel').addClass('d-none');
+            $('#pnl_base').removeClass('d-none');
+            $('#archivoExcel').val("");
+           
+        }
+        opciondb();        
+    }
+
+    function probar_conexion(){
+         var parametros = 
+        {
+            'host':$('#txt_host_cn').val(),
+            'port':$('#txt_port_cn').val(),
+            'user':$('#txt_user_cn').val(),
+            'pass':$('#txt_pass_cn').val(),
+            'db':$('#txt_base_cn').val(),
+        }
+        $.ajax({
+            url:  '../controlador/DISENIADOR_ZPL/di_diseniadorC.php?probar_conexion=true',
+            type:  'post',
+            dataType: 'json',  
+             data:{parametros:parametros},        
+            success:  function (response) {
+                if(response==1)
+                {
+                    Swal.fire("Conexion existosa","","success");
+                }else
+                {
+                    Swal.fire("No se pudo establecer conexion","","error");
+                }
+            },
+            error: function (error) {
+                
+               $('#modal_print').modal('hide');
+              console.error('Error en numero_comprobante:', error);
+              // Puedes manejar el error aquí si es necesario
+            },
+        });
+
+    }
+    // function llenarTablas(){
+    //     var parametros = 
+    //     {
+    //         'host':$('#txt_host_cn').val(),
+    //         'port':$('#txt_port_cn').val(),
+    //         'user':$('#txt_user_cn').val(),
+    //         'pass':$('#txt_pass_cn').val(),
+    //         'db':$('#txt_base_cn').val(),
+    //         'terceros':1,
+    //     }
+    //     $.ajax({
+    //         url:  '../controlador/DISENIADOR_ZPL/di_diseniadorC.php?llenarTablas=true',
+    //         type:  'post',
+    //         dataType: 'json',  
+    //          data:{parametros:parametros},        
+    //         success:  function (response) {
+    //             if(response==1)
+    //             {
+    //                 Swal.fire("Diseño guardado","","success");
+    //                 location.reload();
+    //             }
+    //         },
+    //         error: function (error) {
+                
+    //            $('#modal_print').modal('hide');
+    //           console.error('Error en numero_comprobante:', error);
+    //           // Puedes manejar el error aquí si es necesario
+    //         },
+    //     });
+    // }
+
+
 
 </script>
 
@@ -686,14 +1024,25 @@
                     </ol>
                 </nav>
             </div>
+            <div class="ms-auto">
+            <div class="btn-group">
+              <button type="button" class="btn btn-primary btn-compact">Descargas</button>
+              <button type="button" class="btn btn-primary split-bg-primary dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown"> <span class="visually-hidden">Toggle Dropdown</span>
+              </button>
+              <div class="dropdown-menu dropdown-menu-right dropdown-menu-lg-end">
+                <button type="button" class="dropdown-item" id="btn_editar" onclick="descargarLib()"><i class="bx bx-printer"></i> Plugin Impresora</button>
+              </div>
+            </div>
+          </div>
         </div>
         <!--end breadcrumb-->
 
         <div class="row p-2">
             <div class="col-sm-12">
-                <button class="btn-sm btn-success btn" onclick="vista_previa()"><i class="bx bx-print"></i> Imprimir</button>
-                 <button class="btn-sm btn-success btn" onclick="cargarExcel()"><i class="bx bx-print"></i> excel</button>
-                 <button class="btn-sm btn-success btn" onclick="prueba()"><i class="bx bx-print"></i> excel</button>
+                <a href="../vista/inicio.php?mod=2013&acc=lista_etiquetas" class="btn btn-outline-secondary btn-sm"><i class="bx bx-left-arrow-alt"></i> Regresar</a>
+                <button class="btn-sm btn-info btn" onclick="vista_previa()"><i class="bx bx-print"></i> Imprimir</button>
+                <button type="button" class="btn-sm btn-primary btn" onclick="GuardarDiseño()"><i class="bx bx-print"></i> Guardar Diseño</button>
+                <button class="btn-sm btn-success btn" onclick="prueba()"><i class="bx bx-print"></i> excel</button>
             </div>    
         </div>
         <div class="row">
@@ -781,107 +1130,57 @@
 
             <!-- Modal body -->
             <div class="modal-body">
-
-                <div class="row">
-                    <div class="col-sm-12">
-                        <ul class="nav nav-tabs">
-                          <li class="nav-item">
-                            <a class="nav-link active" data-bs-toggle="tab" href="#home">Desde Lista</a>
-                          </li>
-                          <li class="nav-item">
-                            <a class="nav-link" data-bs-toggle="tab" href="#menu1" onclick="opciondb()">Desde Base de datos</a>
-                          </li>                         
-                        </ul>
-                        <div class="tab-content">
-                          <div class="tab-pane container active" id="home">
-                              <input type="hidden" name="txt_elemento" id="txt_elemento" value="">
-                              <div class="row">
-                                <input type="file" id="archivoExcel" accept=".xlsx, .xls" />
-                              </div>
-                              <div class="row">
-                                 <div class="col-sm-12 text-end">
-                                    <button type="button" class="btn-sm btn btn-success" onclick="addData()">Imprimir</button>
-                                    <button type="button" class="btn-sm btn btn-secondary" onclick="cerrarDatos()">Minimizar</button> 
-                                    <button type="button" class="btn-sm btn btn-default" onclick="saliDatos()">Salir</button> 
-                                </div>                                   
-                              </div>
-                          </div>
-                          <div class="tab-pane container fade" id="menu1">
-                            <form id="form_origenes_data">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <label class=""><input type="radio" name="rbl_origen_datos" value="0" id="rbl_excel" checked onclick="validarOrigen()"><b>Desde excel</b></label>    
+                    </div>
+                    <div class="col-sm-6">
+                        <label class=""><input type="radio" name="rbl_origen_datos" value="1" id="rbl_base_data" onclick="validarOrigen()"><b>Desde Base de datos</b></label>                        
+                    </div>                    
+                </div>
+                <div class="row mb-2">
+                    <div class="col-sm-12" id="pnl_excel">
+                        <input type="hidden" name="txt_elemento" id="txt_elemento" value="">
+                      <div class="row">
+                        <input type="file" id="archivoExcel" accept=".xlsx, .xls" />
+                      </div>                        
+                    </div>     
+                     <div class="col-sm-12 d-none" id="pnl_base">
+                         <form id="form_origenes_data">
                                 
                                 <div class="row mt-1">
                                     <div class="col-sm-10">
-                                        <div class="d-flex align-items-center text-danger"> <i class="bx bx-radio-circle-marked bx-burst bx-rotate-90 align-middle font-18 me-1"></i>
-                                            <span>Sin conexion a base de datos</span>
-                                        </div>                                    
-                                    </div>
-                                    <div class="col-sm-2">
-                                        <button class="btn-sm btn-secondary btn" onclick="$('#modal_conexion_db').modal('show')" ><i class="bx bx-plug m-0"></i></button>
-                                        
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-sm-12">
-                                        <select class="form-select form-select-sm" id="ddl_tabla" name="ddl_tabla" onchange="buscar_camposdb()">
+                                       <select class="form-select form-select-sm" id="ddl_tabla" name="ddl_tabla" onchange="buscar_camposdb()">
                                             <option value="">Seleccione tabla</option>
                                         </select>                                    
-                                    </div>                                
-                                </div>
-                                <div class="row">
-                                    <div class="col-sm-12">
-                                       <table class="table table-sm">
-                                            <thead>
-                                                <th>Elemento</th>
-                                                <th>Tomar texto de</th>
-                                                <th></th>
-                                            </thead>  
-                                            <tbody id="tbl_db_data">
-                                                
-                                            </tbody>                                     
-                                       </table>
                                     </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-sm-12">
-                                        <label><input type="checkbox" id="rbl_rfid" name="rbl_rfid" onclick="show_rfid()"> Codificacion RFID ?</label>                                    
+                                    <div class="col-sm-2">
+                                        <button type="button" class="btn-sm btn-secondary btn" onclick="$('#modal_conexion_db').modal('show')" ><i class="bx bx-plug m-0"></i></button>
+                                        
                                     </div>
-                                    <div class="col-sm-12">
-                                       <table class="table table-sm d-none" id="tbl_rfid">
-                                            <thead>
-                                                <th></th>
-                                                <th></th>
-                                                <th></th>
-                                            </thead>  
-                                            <tbody>
-                                                <tr>
-                                                    <td>RFID Code</td>
-                                                    <td>
-                                                        <div class="input input-group">
-                                                            <select id="ddl_rfid_code" name="ddl_rfid_code" class="form-select form-select-sm" readonly>
-                                                                <option value="">Seleccione campo<option>
-                                                            </select>
-                                                            <button type="button" class="btn btn-primary btn-sm" title="Cambiar de tabla" id="btn_cambiar_tabla" onclick="$('#modal_cambiar_tabla').modal('show')"><i class="bx bx-table me-0"></i></button>
-                                                        </div>
-                                                    </td>
-                                                    <td class="p-2">
-                                                        <label><input type="checkbox" class="" id="rbx_rfid_automatico" name="rbx_rfid_automatico" onclick="rfid_automatico()">  RFID Automatico</label>
-                                                    </td>
-                                                </tr>                                            
-                                            </tbody>                                     
-                                       </table>
-                                    </div>                                     
-                                </div>
-                                <div class="row">
-                                    <div class="col-12 text-end">                                    
-                                        <button type="button" class="btn-sm btn btn-success" onclick="addData()">Imprimir</button>
-                                        <button type="button" class="btn-sm btn btn-secondary" onclick="cerrarDatos()">Minimizar</button> 
-                                        <button type="button" class="btn-sm btn btn-default" onclick="saliDatos()">Salir</button> 
-                                    </div>
-                                </div>
-
+                                </div>                               
                             </form>
-                          </div>
-                        </div>
+                    </div>                    
+                </div>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <table class="table table-sm">
+                            <thead>
+                                <th>Elemento</th>
+                                <th>Tomar texto de</th>
+                                <th></th>
+                            </thead>  
+                            <tbody id="tbl_db_data">
+                                
+                            </tbody>                                     
+                       </table>
+                    </div>
+                </div>
+                 <div class="row">
+                    <div class="col-12 text-end">                                    
+                        <button type="button" class="btn-sm btn btn-success" onclick="addData()">Imprimir</button>
+                        <button type="button" class="btn-sm btn btn-secondary" onclick="cerrarDatos()">Minimizar</button> 
+                        <button type="button" class="btn-sm btn btn-default" onclick="saliDatos()">Salir</button> 
                     </div>
                 </div>
             </div>
@@ -943,7 +1242,8 @@
                                 </div>
                                
                             </div>
-                            <div class="col-12">
+                            <div class="col-12" style="height: 150px;overflow-y: scroll;
+">
                                 <b>Datos a imprimir</b>
                                 <input type="hidden" name="" id="txt_origen_datos" value="0">
                                <table class="table table-sm" id="tbl_datos">
@@ -979,35 +1279,36 @@
             </div>
             <div class="modal-body">
                 <div class="row">
+                    <input type="hidden" name="txt_db_terceros" id="txt_db_terceros" value="0">
                     <div class="col-sm-8">
                         <b>Host</b>
-                        <input type="" name="" id="" class="form-control form-control-sm" value="<?php echo $_SESSION['INICIO']['IP_HOST']; ?>" >                  
+                        <input type="" name="txt_host_cn" id="txt_host_cn" class="form-control form-control-sm" value="<?php echo $_SESSION['INICIO']['IP_HOST']; ?>" >                  
                     </div>
                     <div class="col-sm-4">
                         <b>Port</b>
-                        <input type="" name="" id="" class="form-control form-control-sm" value="<?php echo $_SESSION['INICIO']['PUERTO_DB']; ?>" >                  
+                        <input type="" name="txt_port_cn" id="txt_port_cn" class="form-control form-control-sm" value="<?php echo $_SESSION['INICIO']['PUERTO_DB']; ?>" >                  
                     </div>
                     <div class="col-sm-6">
                         <b>Usuario</b>
-                        <input type="" name="" id="" class="form-control form-control-sm" value="<?php echo $_SESSION['INICIO']['USUARIO_DB']; ?>" >                  
+                        <input type="" name="txt_user_cn" id="txt_user_cn" class="form-control form-control-sm" value="<?php echo $_SESSION['INICIO']['USUARIO_DB']; ?>" >                  
                     </div>
                     <div class="col-sm-6">
                         <b>Password</b>
-                        <input type="" name="" id="" class="form-control form-control-sm"  value="<?php echo $_SESSION['INICIO']['PASSWORD_DB']; ?>" >                 
+                        <input type="" name="txt_pass_cn" id="txt_pass_cn" class="form-control form-control-sm"  value="<?php echo $_SESSION['INICIO']['PASSWORD_DB']; ?>" >                 
                     </div>
                     <div class="col-sm-4">
                         <br>
-                        <button class="btn-sm btn-primary btn">Probar conectar</button>                 
+                        <button type="button" class="btn-sm btn-primary btn" onclick="probar_conexion()">Probar conectar</button>                 
                     </div>
                     <div class="col-sm-8">
                          <b>Base</b>
-                        <input type="" name="" id="" class="form-control form-control-sm"  value="<?php echo $_SESSION['INICIO']['BASEDATO']; ?>" >                  
+                        <input type="" name="txt_base_cn" id="txt_base_cn" class="form-control form-control-sm"  value="<?php echo $_SESSION['INICIO']['BASEDATO']; ?>" >                  
                     </div>
                 </div>
             </div>
             <div class="modal-footer">
-                <button class="btn-sm btn-primary btn">Cerrar</button>
-                <button class="btn-sm btn-primary btn">Guardar</button>                
+                <button class="btn-sm btn-primary btn" onclick="$('#modal_conexion_db').modal('hide')">Cerrar</button>
+                <button class="btn-sm btn-primary btn" onclick="$('#txt_db_terceros').val(1);getDBtable()" >Traer Tablas</button>                
             </div>
         </div>
     </div>
@@ -1067,6 +1368,17 @@
         </div>
     </div>
 </div>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+
+         if(id!='')
+        {
+            // alert("cargando datos");
+            cargar_datos_etiqueta();
+        }
+    })
+</script>
 <?php 
 
 // print_r($_SESSION['INICIO']);

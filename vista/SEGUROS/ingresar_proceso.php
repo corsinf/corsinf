@@ -1,4 +1,12 @@
-<?php //include('../../cabeceras/header.php'); ?> 
+<?php //include('../../cabeceras/header.php'); 
+
+/**
+ * @deprecated Archivo dado de baja el 02/04/2025.
+ * @note Este archivo se mantiene como respaldo, pero ya no se utilizará en producción.
+ * @warning No modificar este archivo. Para cambios, referirse a la nueva implementación.
+ */
+
+?> 
 <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/html2clipboard/2.1.2/html2clipboard.min.js"></script> -->
 <script type="text/javascript" src="../js/ingresar_proceso.js"></script>
 <script type="text/javascript">

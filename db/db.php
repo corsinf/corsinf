@@ -72,7 +72,7 @@ class db
 
 			$this->usuario = "sa";
 			$this->password = "Tango456";  // en mi caso tengo contraseña pero en casa caso introducidla aquí.
-			$this->servidor = "186.4.219.172, 1487";
+			$this->servidor = "186.4.219.172,1487";
 			$this->database = "LISTA_EMPRESAS";
 		}
 	}
@@ -80,7 +80,10 @@ class db
 	function conexion()
 	{		
 		try{
-		     $conn = new PDO("sqlsrv:Server=".$this->servidor .''. $this->puerto.";Database=".$this->database, $this->usuario, $this->password);
+		     $conn = new PDO("sqlsrv:Server=".$this->servidor .''. $this->puerto.";Database=".$this->database.";TrustServerCertificate=1", $this->usuario, $this->password);
+
+		     // print_r("sqlsrv:Server=".$this->servidor .''. $this->puerto.";Database=".$this->database.";TrustServerCertificate=0");
+		     // print_r($this->usuario.'-'.$this->password);die();
 		     $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 		      return $conn;
 		    }	 
@@ -155,13 +158,15 @@ class db
 			$campos .= $value['campo'] . ',';
 			if (is_numeric($value['dato'])) {
 				if (isset($value['tipo']) && strtoupper($value['tipo']) == 'STRING') {
-					$valores .= "'" . $value['dato'] . "',";
+					$valores .= "'" . $value['dato'] . "'^";
 				} else {
-					$valores .= str_replace(',','',$value['dato']). ',';
+					$valores .= str_replace(',','',$value['dato']). '^';
 				}
 			} else {			
 				// $valores .= "'" . $value['dato'] . "',";
-				$valores .= str_replace(',','',$value['dato']). ',';
+				// print_r($value);
+				$valores.= $value['dato']."^";
+				// $valores .= str_replace(',','',$value['dato']). '_';
 			}
 		}
 		$campos = substr($campos, 0, -1);
@@ -169,12 +174,12 @@ class db
 		// print_r($datos);
 		// print_r($valores);
 		// die();
-		$valores = explode(',',$valores);
+		$valores = explode('^',$valores);
 		$incognitas = '';
 		// print_r($valores);die();
 		foreach ($valores as $value) {
 			// print_r($value.'-');
-			if (is_object($value)) 
+			if ($this->validarFecha($value)==1) 
 				{
 					// print_r($value);die();
     			    $incognitas.='CAST(? AS DATE),';
@@ -209,6 +214,23 @@ class db
 		}
 		
 	}
+
+	function validarFecha($fecha) 
+	{
+	    $datetime = DateTime::createFromFormat('Y-m-d H:i:s', $fecha);
+	    if ($datetime !== false) {
+	       return 1;
+	    }
+	    
+	    // Si falla, intenta con solo fecha
+	    $date = DateTime::createFromFormat('Y-m-d', $fecha);
+	    if ($date !== false) {
+	       return 1;
+	    }
+	    
+	    return -1;
+	}
+
 
 	function inserts_id($tabla, $datos, $master = false)
 	{
@@ -268,8 +290,15 @@ class db
 
 		$datos_update = array();
 		foreach ($datos as $key => $value) {
+			if ($this->validarFecha($value['dato'])==1) 
+			{
+			    $sql .= $value['campo'] . "= CAST(? AS DATE)";
+			}else
+			{
+				$sql .= $value['campo'] . "= ?";		
+			}
 			
-			$sql .= $value['campo'] . "= ?";		
+			// $sql .= $value['campo'] . "= ?";		
 			$sql .= ',';
 			array_push($datos_update, $value['dato']);
 		}
@@ -289,6 +318,9 @@ class db
 			$sql .= " AND ";
 		}
 		$sql = substr($sql, 0, -5);		
+
+		// print_r($datos_update);die();
+		// print_r($sql);die();
 
 		try {
 			$stmt = $conn->prepare($sql);
@@ -381,18 +413,28 @@ class db
 		$this->parametros_conexion($master);
 		$conn = $this->conexion();
 		$stmt = $conn->prepare($sql);
-		
+		// print_r($sql);print_r($parametros);
 		try {
-			if ($parametros) {
+			if (count($parametros)>0) {
 				$stmt->execute($parametros);
+
+
+				// print_r('dd');die();
+				// sleep(10);
+				$conn=null;
+				return 1;
 			} else {
 				$stmt->execute();
+				$conn=null;
+				return 1;
 			}
 
-			$conn=null;
-			return 1;
+			// $conn=null;
+			// return 1;
 		} catch (Exception $e) {
 			$conn=null;
+
+		// print_r($sql);print_r($parametros); print_r($master);die();
 			print_r($e);die();
 			return -1;			
 		}
@@ -425,6 +467,40 @@ class db
 
 		// Retornar los resultados
 		return $resultados;
+	}
+
+	function comprobar_conexcion_terceros($database, $usuario, $password, $servidor, $puerto)
+	{
+		if ($usuario == '') {
+			$usuario = '';
+		}
+		if ($password == '') {
+			$password = '';
+		}
+		if($puerto !='')
+		{
+			$puerto = ', '.$puerto;
+		}else
+		{
+			$puerto = '';
+		}
+
+		 // print_r("sqlsrv:Server=".$servidor .''. $puerto.";Database=".$database.','.$usuario.','.$password);die();
+
+		try{
+		     $conn = new PDO("sqlsrv:Server=".$servidor .''. $puerto.";Database=".$database, $usuario, $password);
+		     $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+		     // $conn->setAttribute(PDO::SQLSRV_ATTR_ENCODING, PDO::SQLSRV_ENCODING_UTF8);
+		     // print_r("conectado");die();
+		      return 1;
+		    }	 
+		  catch(PDOException $e)
+		    {
+		    	return -1;
+		    }
+		 
+		  $conn = null;
+
 	}
 
 
@@ -491,10 +567,12 @@ class db
 
 		$conn = $this->conexion_db_terceros($database, $usuario, $password, $servidor, $puerto);
 		// print_r($sql);
-
+		// print_r($conn);die();
 		try {
-			$stmt = $conn->prepare($sql);
-    		$stmt->execute();    		
+			$conn->exec($sql);
+			// $stmt = $conn->prepare($sql);
+			// $stmt->execute($valores);
+    		// $stmt->execute();    		
 		    $conn=null;
 			return 1;
 			
@@ -522,8 +600,12 @@ class db
 	function ejecutar_sp_db_terceros($database, $usuario, $password, $servidor, $puerto,$sql, $parametros = false, $retorna = false)
 	{
 		$conn = $this->conexion_db_terceros($database, $usuario, $password, $servidor, $puerto);
+
+		print_r($sql);print_r($parametros);die();
 		$stmt = $conn->prepare($sql);
 		$resultados = array();
+
+		print_r($sql);print_r($parametros);die();
 		
 		try {
 			if ($parametros) {

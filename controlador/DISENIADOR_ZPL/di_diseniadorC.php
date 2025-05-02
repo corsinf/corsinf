@@ -30,8 +30,8 @@ if(isset($_GET['addDatos']))
 }
 if(isset($_GET['getDBtable']))
 {	
-	// $parametros = $_POST['parametros'];
-	echo json_encode($controlador->getDBtable());
+	$parametros = $_POST['parametros'];
+	echo json_encode($controlador->getDBtable($parametros));
 }
 if(isset($_GET['getDBcampos']))
 {	
@@ -59,6 +59,37 @@ if(isset($_GET['lista_impresora']))
 	// $parametros = $_POST['parametros'];
 	echo json_encode($controlador->lista_impresora());
 }
+if(isset($_GET['GuardarDisenio']))
+{	
+	$parametros = $_POST['parametros'];
+	echo json_encode($controlador->GuardarDisenio($parametros));
+}
+if(isset($_GET['ListaEtiquetas']))
+{	
+	// $parametros = $_POST['parametros'];
+	echo json_encode($controlador->ListaEtiquetas());
+}
+if(isset($_GET['ListaEtiquetasDetalle']))
+{	
+	$parametros = $_POST['parametros'];
+	echo json_encode($controlador->ListaEtiquetasDetalle($parametros));
+}
+if(isset($_GET['deleteEtiquetas']))
+{	
+	$parametros = $_POST['parametros'];
+	echo json_encode($controlador->deleteEtiquetas($parametros));
+}
+if(isset($_GET['probar_conexion']))
+{	
+	$parametros = $_POST['parametros'];
+	echo json_encode($controlador->probar_conexion($parametros));
+}
+if(isset($_GET['DescargarLibPrinter']))
+{	
+	// $parametros = $_POST['parametros'];
+	echo json_encode($controlador->descargar_printLib());
+}
+
 
 class di_diseniadorC
 {
@@ -77,83 +108,26 @@ class di_diseniadorC
 
 	function cargarOrigendatos($parametros)
 	{
-		$resultArray = [];
-		parse_str($parametros, $data);
-		$tabla = '';
-		$tabla2 = '';
-		$select = '';
-		$rfid = 0;
-		$automatico = 0;
-		$campo_select = '';
-		$campo_rfid = '';
-		foreach ($data as $key => $value) {
-			$campo = str_replace('ddl_','', $key);
-			$campo = str_replace('rbl_','', $campo);
-			switch ($campo) {
-				case 'tabla':
-					$tabla = $value;
-					$tabla2 = $value;
-					break;
-				case 'tabla2':
-					if($value!=''){	$tabla2 = $value;}
-					break;
-				case 'rfid_code':
-					$campo_rfid = $value.' as rfid';
-					break;
-				case 'rfid':
-					if($value=='on')
-					{
-						$rfid = 1;
-					}
-					break;
-				case 'rfid_automatico':
-					$automatico = 1;
-					break;
-				
-				default:
-					$campo_select.= $value.' as '.$campo.',';
-					break;
-			}
+		// print_r($parametros);die();
+		$selec_armado = '';
+		$tabla = $parametros['tabla'];
+		foreach ($parametros['campos'] as $key => $value) {
+			$selec_armado.=''.$value." as '".$key."',";
+		}
+		$selec_armado = substr($selec_armado, 0,-1);
+
+		if($parametros['terceros']==0)
+		{
+			$datos = $this->modelo->datosdb($selec_armado,$tabla);
+		}
+		if($parametros['terceros']==1)
+		{
+			$datos = $this->modelo->datosdbTerceros($selec_armado,$tabla,$parametros['db'], $parametros['user'], $parametros['pass'], $parametros['host'], $parametros['port']);
 		}
 
-		if(!isset($data['rbl_rfid']))
-		{
-			$campo_rfid = '';
-			$tabla2 = '';
-		}
-
-		$campo_select = substr($campo_select, 0,-1);
-		$datos = $this->modelo->datosdb($campo_select,$tabla,$campo_rfid,$tabla2);
-
-		$principal = count($datos['principal']);
-		$RFID = count($datos['rfid']);
-		if($principal!=$RFID && $rfid==1)
-		{
-			return -2;
-		}else
-		{
-			return $datos;
-		}
+		return $datos['principal'];
 		
-		// 	$lista = $this->modelo->buscar_etiquetas_anteriores($_SESSION['INICIO']['ID_USUARIO']);
-		// 	foreach ($lista as $key => $value) {
-		// 		if($parametros['igual']=='true' && $parametros['codificar']=='true')
-		// 		{
-		// 			$datos[0]['campo']='RFID';
-		// 			$datos[0]['dato'] = $value['SERIE'];
-		// 		}else
-		// 		{
-		// 			$datos[0]['campo']='RFID';
-		// 			$datos[0]['dato'] = null;					
-		// 		}
-
-		// 		$where[0]['campo'] = 'ID';
-		// 		$where[0]['dato'] = $value['ID'];
-		// 		$this->articulos->update('IMPRIMIR_TAGS',$datos,$where);
-		// 	}
-
-		// $data_ant = $this->modelo->buscar_etiquetas_anteriores($_SESSION['INICIO']['ID_USUARIO']);
-		// return $data_ant;
+		
 	}
 	function ingresar_datos($datos)
 	{
@@ -248,14 +222,31 @@ class di_diseniadorC
 
 	}
 
-	function getDBtable()
+	function getDBtable($parametros)
 	{
-		$tablas = $this->modelo->tablasDb();
+		// print_r($parametros);die();
+		if($parametros['terceros']==0)
+		{
+			$tablas = $this->modelo->tablasDb();
+		}
+		if($parametros['terceros']=='1')
+		{
+			$tablas = $this->modelo->tablasDbTerceros($parametros['db'], $parametros['user'], $parametros['pass'], $parametros['host'], $parametros['port']);
+		}
 		return $tablas;
 	}
 	function getDBcampos($parametros)
 	{
-		$tablas = $this->modelo->CamposDb($parametros['tabla']);
+
+		// print_r($parametros);die();
+		if($parametros['terceros']==0)
+		{
+			$tablas = $this->modelo->CamposDb($parametros['tabla']);
+		}
+		if($parametros['terceros']=='1')
+		{
+			$tablas = $this->modelo->CamposDbTerceros($parametros['tabla'],$parametros['db'], $parametros['user'], $parametros['pass'], $parametros['host'], $parametros['port']);
+		}
 		return $tablas;
 	}
 
@@ -323,6 +314,85 @@ class di_diseniadorC
 
 		return $this->modelo->inserts("ac_impresoras",$data);
 		print_r($parametros);die();
+	}
+
+	function GuardarDisenio($parametros)
+	{
+		// print_r($parametros);die();
+		$fechaString = date("Y-m-d H:i:s");
+		$fechaObjeto = DateTime::createFromFormat('Y-m-d H:i:s', $fechaString);
+		$rfid = 0;
+		if($parametros['rfid']!='false') {$rfid = 1;}
+
+		$tabla = 'ac_disenio_tag';
+		$datos = array(
+			array("campo"=>"ac_disenio_tag_nombre","dato"=>$parametros['nombre']),
+			array("campo"=>"ac_disenio_tag_elementos","dato"=>$parametros['elementos'],'tipo'=>'STRING'),
+			array("campo"=>"ac_disenio_tag_creacion","dato"=>$fechaString),
+			array("campo"=>"ac_disenio_tag_ancho","dato"=>$parametros['ancho']),
+			array("campo"=>"ac_disenio_tag_alto","dato"=>$parametros['alto']),
+			array("campo"=>"ac_disenio_tag_dpi","dato"=>$parametros['dpi']),
+			array("campo"=>"ac_disenio_tag_unidad","dato"=>$parametros['unidad']),
+			array("campo"=>"ac_disenio_tag_rfid","dato"=>$rfid),
+		);
+
+		if($parametros['id']=='')
+		{
+			// print_r($datos);die();
+			return $this->modelo->inserts($tabla,$datos);
+		}else
+		{
+			$where = array(
+			array("campo"=>"ac_disenio_tag_id","dato"=>$parametros['id'])
+		);
+			return $this->modelo->update($tabla,$datos,$where);
+		}
+	}
+
+	function ListaEtiquetas()
+	{
+		$data = $this->modelo->ListaEtiquetas();
+		return $data;
+	}
+
+	function ListaEtiquetasDetalle($parametros)
+	{
+		$data = $this->modelo->ListaEtiquetas($parametros['id']);
+		return $data;
+	}
+
+	function deleteEtiquetas($parametros)
+	{
+		return $this->modelo->deleteEtiquetas($parametros['id']);
+	}
+
+	function probar_conexion($parametros)
+	{
+		$con = $this->modelo->comprobar_conexcion_terceros($parametros['db'], $parametros['user'], $parametros['pass'], $parametros['host'], $parametros['port']);
+		return $con;
+		// print_r($con);die();
+	}
+
+	function descargar_printLib()
+	{
+		$filepath = dirname(__DIR__,2). '/lib/IMPRESORA/CorsinfPrinter/printerlib.rar';
+		// print_r($filepath);die();
+
+		if (file_exists($filepath)) {
+		    header('Content-Description: File Transfer');
+		    header('Content-Type: application/octet-stream');
+		    header('Content-Disposition: attachment; filename="Printerlib.rar"');
+		    header('Expires: 0');
+		    header('Cache-Control: must-revalidate');
+		    header('Pragma: public');
+		    header('Content-Length: ' . filesize($filepath));
+		    flush(); // Limpia el búfer del sistema
+		    readfile($filepath);
+		    exit;
+		} else {
+		    http_response_code(404);
+		    echo "Archivo no encontrado.";
+		}
 	}
 }
 

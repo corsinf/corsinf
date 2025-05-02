@@ -81,7 +81,7 @@ class Reporte_pdf
 		$sizetable = 8;
 		$titulo="Reporte inventario";
 
-		$activos = $this->articulo->lista_articulos_new_new($query=false,$loc=false,$cus=false,$pag=false,$parametros['id'],$exacto=false,$asset=false,$bajas=false,$terceros=false,$patrimoniales=false,$desde=false,$hasta=false,$multiple=false);
+		$activos = $this->articulo->lista_articulos_new($query=false,$loc=false,$cus=false,$pag=false,$parametros['id'],$exacto=false,$asset=false,$bajas=false,$terceros=false,$patrimoniales=false,$desde=false,$hasta=false,$multiple=false);
 
 		// print_r($activos);die();
 

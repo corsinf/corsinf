@@ -269,10 +269,10 @@ class SSP
 		// 	 $where
 		// 	 $order
 		// 	 $limit";
-		
+
 		// print_r($data);
 		// exit;
-		
+
 		// Consulta principal para obtener los datos
 		$data = self::sql_exec(
 			$db,
@@ -288,7 +288,7 @@ class SSP
 		$resFilterLength = self::sql_exec(
 			$db,
 			$bindings,
-			"SELECT COUNT([$primaryKey])
+			"SELECT COUNT($primaryKey)
 			 FROM $table
 			 $where"
 		);
@@ -297,7 +297,7 @@ class SSP
 		// Longitud total del conjunto de datos
 		$resTotalLength = self::sql_exec(
 			$db,
-			"SELECT COUNT([$primaryKey])
+			"SELECT COUNT($primaryKey)
 			 FROM $table"
 		);
 		$recordsTotal = $resTotalLength[0][0];
@@ -338,74 +338,91 @@ class SSP
 	 *  @param  string $whereAll WHERE condition to apply to all queries
 	 *  @return array          Server-side processing response array
 	 */
-	static function complex($request, $conn, $table, $primaryKey, $columns, $whereResult = null, $whereAll = null)
+	static function complex($request, $conn, $table, $primaryKey, $columns, $whereResult = null, $whereAll = null, $columnSearch, $columnsDefault = false)
 	{
 		$bindings = array();
 		$db = self::db($conn);
-		$localWhereResult = array();
-		$localWhereAll = array();
-		$whereAllSql = '';
 
-		// Build the SQL query string from the request
+		// Evitar valores NULL en $whereResult y $whereAll
+		$whereResult = !empty($whereResult) ? self::_flatten($whereResult) : '';
+		$whereAll = !empty($whereAll) ? self::_flatten($whereAll) : '';
+
+		// Construcción de SQL
 		$limit = self::limit($request, $columns);
 		$order = self::order($request, $columns);
-		$where = self::filter($request, $columns, $bindings);
 
-		$whereResult = self::_flatten($whereResult);
-		$whereAll = self::_flatten($whereAll);
+		if (!$columnsDefault) {
+			$where = self::filter($request, $columns, $bindings);
+		} else {
+
+			// Array con los índices de las columnas que deben ser buscables
+			// $columnSearch = [0, 1, 4];
+
+			foreach ($request['columns'] as $index => &$column) {
+				if (in_array($index, $columnSearch)) {
+					$column['searchable'] = 'true';
+				} else {
+					$column['searchable'] = 'false';
+				}
+			}
+
+			$where = self::filter($request, $columns, $bindings);
+		}
 
 		if ($whereResult) {
-			$where = $where ?
-				$where . ' AND ' . $whereResult :
-				'WHERE ' . $whereResult;
+			$where = $where ? "$where AND $whereResult" : "WHERE $whereResult";
 		}
 
 		if ($whereAll) {
-			$where = $where ?
-				$where . ' AND ' . $whereAll :
-				'WHERE ' . $whereAll;
-
-			$whereAllSql = 'WHERE ' . $whereAll;
+			$where = $where ? "$where AND $whereAll" : "WHERE $whereAll";
 		}
 
-		// Main query to actually get the data
+		$whereAllSql = !empty($whereAll) ? "WHERE $whereAll" : '';
+
+		// // Depuración: Mostrar consulta SQL generada antes de ejecutarla
+		// echo "Consulta de datos: SELECT [" . implode("], [", self::pluck($columns, 'db')) . "] FROM $table $where $order $limit";
+		// echo "<br><br><br><br><br>";
+		// echo "Consulta COUNT filtrada: SELECT COUNT(*) FROM $table $where";
+		// echo "<br><br><br><br>";
+		// echo "Consulta COUNT total: SELECT COUNT(*) FROM $table $whereAllSql";
+		// exit;
+
+		// Consulta principal para obtener los datos
 		$data = self::sql_exec(
 			$db,
 			$bindings,
-			"SELECT [" . implode("], [", self::pluck($columns, 'db')) . "]
+			"SELECT " . implode(", ", self::pluck($columns, 'db')) . "
 			 FROM $table
 			 $where
 			 $order
 			 $limit"
 		);
 
-		// Data set length after filtering
+		// Longitud del conjunto de datos después del filtrado
 		$resFilterLength = self::sql_exec(
 			$db,
 			$bindings,
-			"SELECT COUNT([{$primaryKey}])
-			 FROM   $table
+			"SELECT COUNT({$primaryKey})
+			 FROM $table
 			 $where"
 		);
 		$recordsFiltered = $resFilterLength[0][0];
 
-		// Total data set length
+		// Longitud total del conjunto de datos
 		$resTotalLength = self::sql_exec(
 			$db,
-			$bindings,
-			"SELECT COUNT([{$primaryKey}])
+			// $bindings,
+			"SELECT COUNT({$primaryKey})
 			 FROM   $table " .
 				$whereAllSql
 		);
 		$recordsTotal = $resTotalLength[0][0];
 
 		/*
-		 * Output
-		 */
+    * Salida de datos
+    */
 		return array(
-			"draw"            => isset($request['draw']) ?
-				intval($request['draw']) :
-				0,
+			"draw"            => isset($request['draw']) ? intval($request['draw']) : 0,
 			"recordsTotal"    => intval($recordsTotal),
 			"recordsFiltered" => intval($recordsFiltered),
 			"data"            => self::data_output($columns, $data)

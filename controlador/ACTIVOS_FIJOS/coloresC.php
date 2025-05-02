@@ -9,7 +9,7 @@ require_once(dirname(__DIR__, 2) . '/db/codigos_globales.php');
 
 $controlador = new coloresC();
 if (isset($_GET['lista'])) {
-	echo json_encode($controlador->lista_colores($_POST['id']));
+	echo json_encode($controlador->lista_colores($_POST['id'] ?? ''));
 }
 
 if (isset($_GET['buscar'])) {
@@ -68,11 +68,14 @@ class coloresC
 			$movimiento = $this->compara_datos($parametros);
 			$datos = $this->modelo->editar($datos, $where);
 		}
+
 		if ($movimiento != '' && $datos == 1) {
-			$texto = $parametros['cod'] . ';' . $parametros['des'];
-			$this->cod_global->para_ftp('colores', $texto);
+			// Funcion para FTP relacioado con SAP para futura version
+			// $texto = $parametros['cod'] . ';' . $parametros['des'];
+			// $this->cod_global->para_ftp('colores', $texto);
 			$this->cod_global->ingresar_movimientos(false, $movimiento, 'COLORES');
 		}
+
 		return $datos;
 	}
 
@@ -81,10 +84,11 @@ class coloresC
 		$text = '';
 		$marca = $this->modelo->lista_colores($parametros['id']);
 		if ($marca[0]['CODIGO'] != $parametros['cod']) {
-			$text .= ' Se modifico CODIGO en GENERO de ' . $marca[0]['CODIGO'] . ' a ' . $parametros['cod'];
+			$text .= ' Se modifico CODIGO en COLORES de ' . $marca[0]['CODIGO'] . ' a ' . $parametros['cod'];
 		}
+
 		if ($marca[0]['DESCRIPCION'] != $parametros['des']) {
-			$text .= ' Se modifico DESCRIPCION en GENERO DE ' . $marca[0]['DESCRIPCION'] . ' a ' . $parametros['des'];
+			$text .= ' Se modifico DESCRIPCION en COLORES DE ' . $marca[0]['DESCRIPCION'] . ' a ' . $parametros['des'];
 		}
 
 		return $text;
