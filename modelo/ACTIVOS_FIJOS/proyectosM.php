@@ -22,7 +22,7 @@ class proyectosM
 		if ($id) {
 			$sql .= ' and ID_PROYECTO = ' . $id;
 		}
-		$sql .= " ORDER BY ID_PROYECTO DESC OFFSET 0 ROWS FETCH NEXT 70 ROWS ONLY;";
+		// $sql .= " ORDER BY ID_PROYECTO DESC OFFSET 0 ROWS FETCH NEXT 70 ROWS ONLY;";
 		$datos = $this->db->datos($sql);
 		return $datos;
 	}
@@ -86,7 +86,7 @@ class proyectosM
 		//$rest = $this->db->delete('ac_proyecto',$datos);
 		//return $rest;
 	}
-	
+
 	function eliminar_conte($datos)
 	{
 		//$sql = "UPDATE ac_proyecto SET ESTADO='I' WHERE ".$datos[0]['campo']."='".$datos[0]['dato']."';";

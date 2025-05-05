@@ -1,26 +1,36 @@
 <?php
-if (!class_exists('db')) {
-	include(dirname(__DIR__, 2) . '/db/db.php');
-}
+
+require_once(dirname(__DIR__) . '/GENERAL/BaseModel.php');
 
 /**
  * 
  **/
 
-class localizacionM
+class localizacionM extends BaseModel
 {
-	private $db;
 
-	function __construct()
-	{
-		$this->db = new db();
-	}
+	protected $tabla = 'ac_localizacion';
+	protected $primaryKey = 'ID_LOCALIZACION AS _id';
+
+	protected $camposPermitidos = [
+		'CENTRO',
+		'EMPLAZAMIENTO',
+		'DENOMINACION',
+		'FAMILIA',
+		'SUBFAMILIA',
+		'ESTADO',
+	];
+
+	/**
+	 * @todo Revisar este archivo
+	 * @note Actualmente se mantiene como respaldo
+	 * @warning No modificar este archivo sin autorización.
+	 */
 
 	function lista_localizacion($query, $ini = 0, $fin = 25)
 	{
 		// $sql = "SELECT ID_MARCA,CODIGO,DESCRIPCION FROM localizacion ";
-		$sql = "SELECT ID_LOCALIZACION,CENTRO,EMPLAZAMIENTO,DENOMINACION FROM ac_localizacion WHERE ESTADO='A' and DENOMINACION+''+EMPLAZAMIENTO LIKE '%" . $query . "%' ORDER BY ID_LOCALIZACION DESC OFFSET " . $ini . " ROWS FETCH NEXT " . $fin . " ROWS ONLY;";
-		// print_r($sql);die();
+		$sql = "SELECT ID_LOCALIZACION,CENTRO,EMPLAZAMIENTO,DENOMINACION FROM ac_localizacion WHERE ESTADO='A' and DENOMINACION+''+EMPLAZAMIENTO LIKE '%" . $query . "%' ORDER BY ID_LOCALIZACION ASC OFFSET " . $ini . " ROWS FETCH NEXT " . $fin . " ROWS ONLY;";
 		$datos = $this->db->datos($sql);
 		return $datos;
 	}

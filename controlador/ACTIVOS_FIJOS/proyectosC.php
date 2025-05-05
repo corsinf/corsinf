@@ -10,8 +10,8 @@ require_once(dirname(__DIR__, 2) . '/db/codigos_globales.php');
 
 $controlador = new proyectosC();
 
-if (isset($_GET['lista'])) {
-	echo json_encode($controlador->lista_proyectos($_POST['id']));
+if (isset($_GET['listar'])) {
+	echo json_encode($controlador->lista_proyectos($_POST['id'] ?? ''));
 }
 
 if (isset($_GET['buscar'])) {
@@ -87,6 +87,7 @@ class proyectosC
 		$datos[5]['dato'] = $parametros['vla'];
 		$datos[6]['campo'] = 'expiracion';
 		$datos[6]['dato'] = $parametros['exp'];
+
 		if ($parametros['id'] == "") {
 			if (count($this->modelo->buscar_proyecto_programa($datos[0]['dato'])) == 0) {
 				$res = $this->modelo->insertar($datos);
@@ -101,8 +102,10 @@ class proyectosC
 			$res = $this->modelo->editar($datos, $where);
 		}
 		if ($movimiento != '' && $res == 1) {
-			$texto = $parametros['fin'] . ';' . $parametros['ent'] . ';' . $parametros['den'] . ';' . $parametros['des'] . ';' . $parametros['val'] . ';' . $parametros['vla'] . ';' . $parametros['exp'];
-			$this->cod_global->para_ftp('proyecto', $texto);
+			// Funcion para FTP relacioado con SAP para futura version
+			// $texto = $parametros['fin'] . ';' . $parametros['ent'] . ';' . $parametros['den'] . ';' . $parametros['des'] . ';' . $parametros['val'] . ';' . $parametros['vla'] . ';' . $parametros['exp'];
+			// $this->cod_global->para_ftp('proyecto', $texto);
+
 			$this->cod_global->ingresar_movimientos(false, $movimiento, 'PROYECTO');
 		}
 		return $res;
@@ -112,6 +115,11 @@ class proyectosC
 	{
 		$text = '';
 		$marca = $this->modelo->lista_proyectos($parametros['id']);
+
+		$valde = new DateTime($marca[0]['valde']);
+		$vala = new DateTime($marca[0]['vala']);
+		$exp = new DateTime($marca[0]['exp']);
+
 		if ($marca[0]['pro'] != $parametros['fin']) {
 			$text .= ' Se modifico PROGRAMA FINANCIACION en PROYECTO de ' . $marca[0]['pro'] . ' a ' . $parametros['fin'];
 		}
@@ -124,14 +132,14 @@ class proyectosC
 		if ($marca[0]['desc'] != $parametros['des']) {
 			$text .= ' Se modifico DESCRIPCION en PROYECTO DE ' . $marca[0]['desc'] . ' a ' . $parametros['des'];
 		}
-		if ($marca[0]['valde']->format('Y-m-d') != $parametros['val']) {
-			$text .= ' Se modifico FECHA VALIDEZ DE en PROYECTO DE ' . $marca[0]['valde']->format('Y-m-d') . ' a ' . $parametros['val'];
+		if ($valde->format('Y-m-d') != $parametros['val']) {
+			$text .= ' Se modifico FECHA VALIDEZ DE en PROYECTO DE ' . $valde . ' a ' . $parametros['val'];
 		}
-		if ($marca[0]['vala']->format('Y-m-d') != $parametros['vla']) {
-			$text .= ' Se modifico FECHA VALIDEZ A en PROYECTO DE ' . $marca[0]['vala']->format('Y-m-d') . ' a ' . $parametros['vla'];
+		if ($vala->format('Y-m-d') != $parametros['vla']) {
+			$text .= ' Se modifico FECHA VALIDEZ A en PROYECTO DE ' .$vala . ' a ' . $parametros['vla'];
 		}
-		if ($marca[0]['exp']->format('Y-m-d') != $parametros['exp']) {
-			$text .= ' Se modifico FECHA EXPIRACION en PROYECTO DE ' . $marca[0]['exp']->format('Y-m-d') . ' a ' . $parametros['exp'];
+		if ($exp->format('Y-m-d') != $parametros['exp']) {
+			$text .= ' Se modifico FECHA EXPIRACION en PROYECTO DE ' .$exp . ' a ' . $parametros['exp'];
 		}
 
 		return $text;

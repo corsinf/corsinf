@@ -71,27 +71,67 @@ class actasM
 
 	function lista_actas($usuario = '')
 	{
-		$sql = "SELECT AC.id_acta_art as 'id',TAG_SERIE as 'asset',TAG_ANT AS 'origin_asset',DESCRIPT as 'articulo',ORIG_VALUE as 'valor',SERIE,MODELO,TAG_UNIQUE,PERSON_NOM,DENOMINACION,FECHA_CONTA,ORIG_ACQ_YR AS 'FECHA_COMPRA' FROM ac_articulos_actas AC
-				INNER JOIN ac_articulos P ON AC.id_articulo = P.id_plantilla
-				INNER JOIN ac_asset A ON A.ID_ASSET = P.ID_ASSET
-				LEFT JOIN th_personas C ON C.ID_PERSON = P.PERSON_NO
-				LEFT JOIN ac_localizacion L ON L.ID_LOCATION = P.LOCATION
-				WHERE usuario = '" . $usuario . "';";
+		$sql = "SELECT 
+					AC.id_acta_art AS id,
+					A.tag_serie AS tag,
+					A.tag_unique AS RFID,
+
+					A.tag_antiguo,
+					A.descripcion AS articulo,
+					A.precio AS valor,
+
+					A.SERIE,
+					A.MODELO,
+					A.fecha_contabilizacion AS FECHA_CONTA,
+					A.fecha_referencia AS FECHA_COMPRA,
+
+					CONCAT(P.th_per_primer_apellido, ' ',P.th_per_segundo_apellido, ' ',P.th_per_primer_nombre, ' ',P.th_per_segundo_nombre) AS 'PERSON_NOM',
+					L.DENOMINACION
+				FROM 
+					ac_articulos_actas AC
+				INNER JOIN 
+					ac_articulos A ON AC.id_articulo = A.id_articulo
+				LEFT JOIN 
+					th_personas P ON A.th_per_id = P.th_per_id
+				LEFT JOIN 
+					ac_localizacion L ON A.id_localizacion = L.id_localizacion
+				WHERE 
+					AC.usuario = '" . $usuario . "';";
 		// print_r($sql);die();
 		return $this->db->datos($sql);
 	}
 
-	function cantidad_registros($query = false, $loc = false, $cus = false, $pag = false, $whereid = false, $bajas = false, $patrimoniales = false, $terceros = false, $asset = false, $exacto = false, $masivo = false, $masivo_cus = false, $masivo_loc = false)
+	function articulo($asset)
 	{
-		$sql = "SELECT COUNT(id_plantilla) as 'numreg' FROM ac_articulos P
-			LEFT JOIN ac_asset A ON P.ID_ASSET = A.ID_ASSET
-			LEFT JOIN ac_localizacion L ON P.LOCATION = L.ID_LOCATION
-			LEFT JOIN th_personas PE ON P.PERSON_NO = PE.ID_PERSON
-			LEFT JOIN ac_marcas M ON P.EVALGROUP1 = M.ID_MARCA
-			LEFT JOIN ac_estado E ON P.EVALGROUP2 = E.ID_ESTADO
-			LEFT JOIN ac_genero G ON P.EVALGROUP3 = G.ID_GENERO
-			LEFT JOIN ac_colores C ON P.EVALGROUP4 = C.ID_COLORES
-			WHERE 1=1";
+		$sql = "SELECT 
+					P.id_articulo,
+					PE.th_per_codigo_sap AS PERSON_NO,
+					CONCAT(PE.th_per_primer_apellido, ' ',PE.th_per_segundo_apellido, ' ',PE.th_per_primer_nombre, ' ',PE.th_per_segundo_nombre) AS 'PERSON_NOM',
+					L.EMPLAZAMIENTO,
+					L.DENOMINACION,
+					*
+				FROM ac_articulos P
+				LEFT JOIN ac_localizacion L ON P.id_localizacion = L.id_localizacion
+				LEFT JOIN th_personas PE ON P.th_per_id = PE.th_per_id
+				WHERE TAG_SERIE = '" . $asset . "';";
+
+		$datos = $this->db->datos($sql);
+		return $datos;
+	}
+
+	function cantidad_registros($query = false, $loc = false, $cus = false, $pag = false, $whereid = false, $asset = false, $exacto = false, $masivo = false, $masivo_cus = false, $masivo_loc = false, $tipo_articulo = false)
+	{
+		$sql = "SELECT COUNT(id_articulo) as 'numreg' FROM ac_articulos A
+				LEFT JOIN ac_localizacion L ON A.id_localizacion = L.id_localizacion
+				LEFT JOIN th_personas P ON A.th_per_id = P.th_per_id
+				LEFT JOIN ac_marcas M ON A.id_marca = M.id_marca
+				LEFT JOIN ac_estado E ON A.id_estado = E.id_estado
+				LEFT JOIN ac_genero G ON A.id_genero = G.id_genero
+				LEFT JOIN ac_colores C ON A.id_color = C.id_colores
+				LEFT JOIN ac_proyecto PR ON A.id_proyecto = PR.id_proyecto
+				LEFT JOIN ac_clase_movimiento CL ON A.id_clase_movimiento = CL.id_movimiento
+				LEFT JOIN ac_cat_tipo_articulo TA ON A.id_tipo_articulo = TA.id_tipo_articulo
+				WHERE 1 = 1";  // Solo listar artículos activos.
 		if ($exacto) {
 			if ($query != '') {
 				if ($asset) {
@@ -99,12 +139,6 @@ class actasM
 						$sql .= " AND A.TAG_SERIE LIKE '" . $query . "%'";
 					} else {
 						$sql .= " AND A.TAG_SERIE in (" . $query . ")";
-					}
-				} else if ($asset == 2) {
-					if ($query && $masivo == false || $masivo == 0) {
-						$sql .= " AND P.ORIG_ASSET LIKE '" . $query . "%'";
-					} else {
-						$sql .= " AND P.ORIG_ASSET in (" . $query . ")";
 					}
 				} else {
 					if ($query && $masivo == false || $masivo == 0) {
@@ -116,43 +150,34 @@ class actasM
 			}
 		} else {
 			if ($query) {
-				$sql .= " AND A.TAG_SERIE +' '+P.DESCRIPT+' '+P.ORIG_ASSET +' '+A.TAG_UNIQUE LIKE '%" . $query . "%'";
+				$sql .= " AND A.descripcion + ' ' + A.tag_serie + ' ' + A.tag_unique LIKE '%" . $query . "%'";
 			}
 		}
-		if ($loc != '') {
+
+		if ($loc) {
 			if ($masivo_loc) {
-				$sql .= " AND P.LOCATION IN (" . $loc . ")";
+				$sql .= " AND L.id_localizacion IN (" . $loc . ") ";
 			} else {
-				$sql .= " AND P.LOCATION = '" . $loc . "' ";
+				$sql .= " AND L.id_localizacion = '" . $loc . "' ";
 			}
 		}
-		if ($cus != '') {
-			if ($masivo_cus == 1) {
-				$sql .= " AND PE.ID_PERSON IN (" . $cus . ")";
+
+		if ($cus) {
+			if ($masivo_cus) {
+				$sql .= " AND P.th_per_id IN (" . $cus . ") ";
 			} else {
-				$sql .= " AND PE.ID_PERSON = '" . $cus . "' ";
+				$sql .= " AND P.th_per_id = '" . $cus . "' ";
 			}
 		}
+
 		if ($whereid) {
-			$sql .= '  AND id_plantilla = ' . $whereid . ' ';
+			$sql .= '  AND id_articulo = ' . $whereid . ' ';
 		}
-		if ($bajas) {
-			$sql .= ' AND  BAJAS = 1';
+
+		if ($tipo_articulo) {
+			$sql .= ' AND  A.id_tipo_articulo = ' . $tipo_articulo . ' ';
 		}
-		if ($terceros) {
-			if ($bajas) {
-				$sql .= ' OR  TERCEROS = 1';
-			} else {
-				$sql .= ' AND  TERCEROS= 1';
-			}
-		}
-		if ($patrimoniales) {
-			if ($terceros || $bajas) {
-				$sql .= ' OR PATRIMONIALES = 1';
-			} else {
-				$sql .= ' AND PATRIMONIALES = 1';
-			}
-		}
+
 		if ($pag) {
 			$pagi = explode('-', $pag);
 			$ini = $pagi[0];
@@ -164,99 +189,99 @@ class actasM
 		return $datos;
 	}
 
-	function articulo($asset)
+	function lista_articulos($query = false, $loc = false, $cus = false, $pag = false, $whereid = false, $exacto = false, $asset = false, $desde = false, $hasta = false, $masivo = false, $masivo_cus = false, $masivo_loc = false, $tipo_articulo = false)
 	{
-		$sql = "SELECT P.id_plantilla,PE.PERSON_NO,PERSON_NOM,EMPLAZAMIENTO,DENOMINACION, * FROM ac_articulos P
-		INNER JOIN ac_asset ON P.ID_ASSET = ac_asset.ID_ASSET
-		LEFT JOIN ac_localizacion L ON P.LOCATION = L.ID_LOCATION
-		LEFT JOIN th_personas PE ON P.PERSON_NO = PE.ID_PERSON
-		WHERE TAG_SERIE = '" . $asset . "'";
-		$datos = $this->db->datos($sql);
-		return $datos;
-	}
+		// print_r($asset); exit(); die();
 
-	function lista_articulos($query = false, $loc = false, $cus = false, $pag = false, $whereid = false, $exacto = false, $asset = false, $bajas = false, $terceros = false, $patrimoniales = false, $desde = false, $hasta = false, $masivo = false, $masivo_cus = false, $masivo_loc = false)
-	{
-		$sql = "SELECT id_plantilla as 'id',A.TAG_SERIE as 'tag',A.ID_ASSET,DESCRIPT as 'nom',MODELO as 'modelo',A.TAG_UNIQUE AS 'RFID',SERIE as 'serie',L.ID_LOCATION AS 'IDL',L.DENOMINACION as 'localizacion',PE.ID_PERSON AS 'IDC',PE.PERSON_NOM as 'custodio',M.DESCRIPCION as 'marca',E.DESCRIPCION as 'estado',G.DESCRIPCION as 'genero',C.DESCRIPCION as 'color',IMAGEN,OBSERVACION,FECHA_INV_DATE as 'fecha_in',BAJAS,TERCEROS,PATRIMONIALES,ORIG_VALUE as 'valor' FROM ac_articulos P
-			LEFT JOIN ac_asset A ON P.ID_ASSET = A.ID_ASSET
-			LEFT JOIN ac_localizacion L ON P.LOCATION = L.ID_LOCATION
-			LEFT JOIN th_personas PE ON P.PERSON_NO = PE.ID_PERSON
-			LEFT JOIN ac_marcas M ON P.EVALGROUP1 = M.ID_MARCA
-			LEFT JOIN ac_estado E ON P.EVALGROUP2 = E.ID_ESTADO
-			LEFT JOIN ac_genero G ON P.EVALGROUP3 = G.ID_GENERO
-			LEFT JOIN ac_colores C ON P.EVALGROUP4 = C.ID_COLORES
-			WHERE 1 = 1 ";
+		$sql = "SELECT 
+					A.id_articulo AS 'id',
+					A.tag_serie AS 'tag',
+					A.tag_unique AS 'RFID',
+					A.serie,
+					A.descripcion AS 'nom',
+					A.modelo,
+					A.imagen,
+					A.observaciones AS 'observacion',
+					A.fecha_referencia AS 'fecha_in',
+					A.fecha_baja,
+					A.id_proyecto,
+					A.id_clase_movimiento,
+					A.precio AS 'valor',
+	
+					L.id_localizacion AS 'IDL',
+					L.denominacion AS 'localizacion',
+	
+					P.th_per_id AS 'IDC',
+					CONCAT(P.th_per_primer_apellido, ' ',P.th_per_segundo_apellido, ' ',P.th_per_primer_nombre, ' ',P.th_per_segundo_nombre) AS 'custodio',
+	
+					M.descripcion AS 'marca',
+					E.descripcion AS 'estado',
+					G.descripcion AS 'genero',
+					C.descripcion AS 'color',
+					TA.descripcion AS 'tipo_articulo'
+				FROM ac_articulos A
+				LEFT JOIN ac_localizacion L ON A.id_localizacion = L.id_localizacion
+				LEFT JOIN th_personas P ON A.th_per_id = P.th_per_id
+				LEFT JOIN ac_marcas M ON A.id_marca = M.id_marca
+				LEFT JOIN ac_estado E ON A.id_estado = E.id_estado
+				LEFT JOIN ac_genero G ON A.id_genero = G.id_genero
+				LEFT JOIN ac_colores C ON A.id_color = C.id_colores
+				LEFT JOIN ac_proyecto PR ON A.id_proyecto = PR.id_proyecto
+				LEFT JOIN ac_clase_movimiento CL ON A.id_clase_movimiento = CL.id_movimiento
+				LEFT JOIN ac_cat_tipo_articulo TA ON A.id_tipo_articulo = TA.id_tipo_articulo
+				WHERE 1 = 1";  // Solo listar artículos activos.
 		if ($exacto) {
-			if ($asset) {
+			if ($asset == 1) {
 				if ($query) {
 					if ($masivo) {
-						$sql .= " AND A.TAG_SERIE IN (" . $query . ")";
+						$sql .= " AND A.tag_serie IN (" . $query . ")";
 					} else {
-						$sql .= " AND A.TAG_SERIE LIKE '" . $query . "%'";
+						$sql .= " AND A.tag_serie LIKE '" . $query . "%'";
 					}
 				}
 			} else if ($asset == 2) {
 				if ($query) {
 					if ($masivo) {
-						$sql .= " AND P.ORIG_ASSET IN (" . $query . ")";
+						$sql .= " AND A.tag_unique IN (" . $query . ")";
 					} else {
-						$sql .= " AND P.ORIG_ASSET LIKE '" . $query . "%'";
-					}
-				}
-			} else {
-				if ($query) {
-					if ($masivo) {
-						$sql .= " AND A.TAG_UNIQUE in (" . $query . ")";
-					} else {
-						$sql .= " AND A.TAG_UNIQUE LIKE '%" . $query . "%'";
+						$sql .= " AND A.tag_unique LIKE '" . $query . "%'";
 					}
 				}
 			}
 		} else {
 			if ($query) {
-				$sql .= " AND A.TAG_SERIE +' '+P.DESCRIPT+' '+P.ORIG_ASSET +' '+A.TAG_UNIQUE LIKE '%" . $query . "%'";
+				$sql .= " AND A.descripcion + ' ' + A.tag_serie + ' ' + A.tag_unique LIKE '%" . $query . "%'";
 			}
 		}
 
 		if ($loc) {
 			if ($masivo_loc) {
-				$sql .= " AND P.LOCATION IN (" . $loc . ") ";
+				$sql .= " AND L.id_localizacion IN (" . $loc . ") ";
 			} else {
-				$sql .= " AND P.LOCATION = '" . $loc . "' ";
+				$sql .= " AND L.id_localizacion = '" . $loc . "' ";
 			}
-		}
-		if ($cus) {
-			if ($masivo_cus) {
-				$sql .= " AND PE.ID_PERSON IN (" . $cus . ") ";
-			} else {
-				$sql .= " AND PE.ID_PERSON = '" . $cus . "' ";
-			}
-		}
-		if ($whereid) {
-			$sql .= '  AND id_plantilla = ' . $whereid . ' ';
 		}
 
-		if ($bajas) {
-			$sql .= ' AND  BAJAS = 1';
-		}
-		if ($terceros) {
-			if ($bajas) {
-				$sql .= ' OR  TERCEROS = 1';
+		if ($cus) {
+			if ($masivo_cus) {
+				$sql .= " AND P.th_per_id IN (" . $cus . ") ";
 			} else {
-				$sql .= ' AND  TERCEROS= 1';
+				$sql .= " AND P.th_per_id = '" . $cus . "' ";
 			}
 		}
-		if ($patrimoniales) {
-			if ($terceros || $bajas) {
-				$sql .= ' OR PATRIMONIALES = 1';
-			} else {
-				$sql .= ' AND PATRIMONIALES = 1';
-			}
+
+		if ($whereid) {
+			$sql .= '  AND id_articulo = ' . $whereid . ' ';
 		}
+
+		if ($tipo_articulo) {
+			$sql .= ' AND  A.id_tipo_articulo = ' . $tipo_articulo . ' ';
+		}
+
 		if ($desde  && $hasta) {
-			$sql .= ' AND FECHA_INV_DATE BETWEEN ' . $desde . ' AND ' . $hasta;
+			$sql .= ' AND fecha_referencia BETWEEN ' . $desde . ' AND ' . $hasta;
 		}
-		$sql .= " ORDER BY id_plantilla ";
+		$sql .= " ORDER BY id_articulo ";
 		if ($pag) {
 			$pagi = explode('-', $pag);
 			$ini = $pagi[0];
@@ -270,14 +295,14 @@ class actasM
 
 	function lineas_solicitud($id)
 	{
-		$sql = "SELECT LS.id_linea_salida as idls,P.id_plantilla as id,A.TAG_SERIE as codigo,A.TAG_ANT AS ori ,A.TAG_UNIQUE as 'rfid',M.DESCRIPCION as marca,P.DESCRIPT as item,P.SERIE as serie,P.MODELO as modelo,observacion_salida as 'salida',observacion_entrada as 'entrada' FROM ac_lineas_solicitud LS 
-		INNER JOIN ac_articulos P ON LS.id_activo = P.id_plantilla
+		$sql = "SELECT LS.id_linea_salida as idls,P.id_articulo as id,A.TAG_SERIE as codigo,A.TAG_ANT AS ori ,A.TAG_UNIQUE as 'rfid',M.DESCRIPCION as marca,P.DESCRIPT as item,P.SERIE as serie,P.MODELO as modelo,observacion_salida as 'salida',observacion_entrada as 'entrada' FROM ac_lineas_solicitud LS 
+		INNER JOIN ac_articulos P ON LS.id_activo = P.id_articulo
 		INNER JOIN ac_asset A ON P.ID_ASSET = A.ID_ASSET 
 		INNER JOIN ac_marcas M ON P.EVALGROUP1 = M.ID_MARCA
 		WHERE id_solicitud = '" . $id . "'";
 		return $this->db->datos($sql);
 	}
-	
+
 	function solicitud($id)
 	{
 		$sql = "SELECT * FROM ac_solicitud_salida SS 

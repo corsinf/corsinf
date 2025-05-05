@@ -44,11 +44,11 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
             rowCallback: function(row, data, index) {
                 tipo_articulo = (data[14])
                 if (tipo_articulo === 'BAJAS') {
-                    $(row).css("background-color", "coral");
+                    $(row).css("background-color", "#FFD1C1");
                 } else if (tipo_articulo === 'PATRIMONIALES') {
-                    $(row).css("background-color", "#ffc108a6");
+                    $(row).css("background-color", "#FFF6BD");
                 } else if (tipo_articulo === 'TERCEROS') {
-                    $(row).css("background-color", "#007bffa8");
+                    $(row).css("background-color", "#C7E9FF");
                 }
             },
 
@@ -186,7 +186,7 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                         <section class="content pt-2">
                             <div class="container-fluid">
                                 <div class="table-responsive">
-                                    <table class="table table-striped table-responsive " id="tbl_articulos" style="width:100%">
+                                    <table class="table table-responsive " id="tbl_articulos" style="width:100%">
                                         <thead>
                                             <tr>
                                                 <th>Tag Serie</th>
