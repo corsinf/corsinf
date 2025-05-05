@@ -15,10 +15,10 @@ if (isset($_GET['_token'])) {
 
 function isMobileDevice()
 {
-	return (
-	    isset($_SERVER['HTTP_USER_AGENT']) &&
-	    preg_match('/(android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini)/i', $_SERVER['HTTP_USER_AGENT'])
-	);
+	// return (
+	//     isset($_SERVER['HTTP_USER_AGENT']) &&
+	//     preg_match('/(android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini)/i', $_SERVER['HTTP_USER_AGENT'])
+	// );
 
 	return true;
 }
