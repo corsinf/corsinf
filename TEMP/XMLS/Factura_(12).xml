@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <autorizacion>
 <estado>AUTORIZADO</estado>
+<<<<<<< Updated upstream
 <numeroAutorizacion>0803202501179275827000120010610000072994839907511</numeroAutorizacion>
 <fechaAutorizacion>2025-03-08T19:12:21-05:00</fechaAutorizacion>
 <ambiente>PRODUCCIÓN</ambiente>
@@ -17,10 +18,103 @@
 <ds:DigestValue>8ulhFOH4lguwOtJUP6fLfR/kOWw=</ds:DigestValue>
 </ds:Reference>
 <ds:Reference Id="Reference-ID-926575" URI="#comprobante">
+=======
+<numeroAutorizacion>1402202501179275827000120010670000079599044231116</numeroAutorizacion>
+<fechaAutorizacion>2025-02-14T14:50:49-05:00</fechaAutorizacion>
+<ambiente>PRODUCCIÓN</ambiente>
+<comprobante><![CDATA[<?xml version="1.0" encoding="UTF-8" standalone="no"?><factura id="comprobante" version="1.1.0">
+  <infoTributaria>
+    <ambiente>2</ambiente>
+    <tipoEmision>1</tipoEmision>
+    <razonSocial>CORPORACION HVQ S.A.</razonSocial>
+    <nombreComercial>CORPORACION HVQ S.A.</nombreComercial>
+    <ruc>1792758270001</ruc>
+    <claveAcceso>1402202501179275827000120010670000079599044231116</claveAcceso>
+    <codDoc>01</codDoc>
+    <estab>001</estab>
+    <ptoEmi>067</ptoEmi>
+    <secuencial>000007959</secuencial>
+    <dirMatriz>Villalengua OE2-52</dirMatriz>
+    <agenteRetencion>1</agenteRetencion>
+  </infoTributaria>
+  <infoFactura>
+    <fechaEmision>14/02/2025</fechaEmision>
+    <dirEstablecimiento>Villalengua Oe2-37 y Av. 10 de Agosto</dirEstablecimiento>
+    <contribuyenteEspecial>00347</contribuyenteEspecial>
+    <obligadoContabilidad>SI</obligadoContabilidad>
+    <tipoIdentificacionComprador>05</tipoIdentificacionComprador>
+    <razonSocialComprador>Milton Andres Rubio Puetate</razonSocialComprador>
+    <identificacionComprador>1712605284</identificacionComprador>
+    <direccionComprador>De los Motilones N40-345</direccionComprador>
+    <totalSinImpuestos>39.0</totalSinImpuestos>
+    <totalDescuento>0</totalDescuento>
+    <totalConImpuestos>
+      <totalImpuesto>
+        <codigo>2</codigo>
+        <codigoPorcentaje>0</codigoPorcentaje>
+        <baseImponible>39.0</baseImponible>
+        <valor>0.00</valor>
+      </totalImpuesto>
+    </totalConImpuestos>
+    <importeTotal>39.0</importeTotal>
+    <moneda>DOLAR</moneda>
+    <pagos>
+      <pago>
+        <formaPago>20</formaPago>
+        <total>39.0</total>
+        <plazo>30</plazo>
+        <unidadTiempo>Días</unidadTiempo>
+      </pago>
+    </pagos>
+  </infoFactura>
+  <detalles>
+    <detalle>
+      <codigoPrincipal>5</codigoPrincipal>
+      <descripcion>AMBULATORIO-CONSULTA ESPECIALIDAD</descripcion>
+      <cantidad>1.0</cantidad>
+      <precioUnitario>39.0</precioUnitario>
+      <descuento>0.0</descuento>
+      <precioTotalSinImpuesto>39.0</precioTotalSinImpuesto>
+      <impuestos>
+        <impuesto>
+          <codigo>2</codigo>
+          <codigoPorcentaje>0</codigoPorcentaje>
+          <tarifa>0.0</tarifa>
+          <baseImponible>39.0</baseImponible>
+          <valor>0.00</valor>
+        </impuesto>
+      </impuestos>
+    </detalle>
+  </detalles>
+  <infoAdicional>
+    <campoAdicional nombre="Id. Paciente">1712779345</campoAdicional>
+    <campoAdicional nombre="Nombre Paciente">NELLY MAGDALENA MORALES VICUÑA</campoAdicional>
+    <campoAdicional nombre="Atención">0000033635</campoAdicional>
+    <campoAdicional nombre="Cuenta">0000033635</campoAdicional>
+    <campoAdicional nombre="Nro. Trámite">placetopay</campoAdicional>
+    <campoAdicional nombre="Historia Clínica">1167920-MALES MALDONADO DAVID ALEJANDRO-CONSULTA ENDOCRINOLOGIA</campoAdicional>
+    <campoAdicional nombre="Dirección">MOTILONES N40-345</campoAdicional>
+    <campoAdicional nombre="Email">miltonrubio@hotmail.com</campoAdicional>
+  </infoAdicional>
+<ds:Signature xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xmlns:etsi="http://uri.etsi.org/01903/v1.3.2#" Id="Signature608646">
+<ds:SignedInfo Id="Signature-SignedInfo253497">
+<ds:CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/>
+<ds:SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/>
+<ds:Reference Id="SignedPropertiesID655789" Type="http://uri.etsi.org/01903#SignedProperties" URI="#Signature608646-SignedProperties755949">
+<ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/>
+<ds:DigestValue>7mZmlL5dznFunqtPdV4JnfWUct8=</ds:DigestValue>
+</ds:Reference>
+<ds:Reference URI="#Certificate1864596">
+<ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/>
+<ds:DigestValue>E6QtXA5FHQUETSvmR4ii9y2tuP8=</ds:DigestValue>
+</ds:Reference>
+<ds:Reference Id="Reference-ID-463307" URI="#comprobante">
+>>>>>>> Stashed changes
 <ds:Transforms>
 <ds:Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/>
 </ds:Transforms>
 <ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/>
+<<<<<<< Updated upstream
 <ds:DigestValue>syYqKjn5zgiqcoxPJnsymLyjhYg=</ds:DigestValue>
 </ds:Reference>
 </ds:SignedInfo>
@@ -32,6 +126,19 @@ PXvcfUxzaxTVFt6i5lRLc4bUUjuDiMNOFX1nlkm6GJdWNZla0gedVrfYLk97+ti2MWSer8R0WTOb
 h1UMnD7gqtc2DdVFz47l+uqO4BlrBid6OXHuhw==
 </ds:SignatureValue>
 <ds:KeyInfo Id="Certificate199436">
+=======
+<ds:DigestValue>qIyXuRMJnnXSRjhcgtFtMKbgOaY=</ds:DigestValue>
+</ds:Reference>
+</ds:SignedInfo>
+<ds:SignatureValue Id="SignatureValue876391">
+lqr9NiSmplnU+hb1OQs/BvJbSPMFQhH96BYoHN3NuxjC4bDuPCVoMp+M5E6WDlrl9Z6PHi2I2Oar
+ng3ANmhg7NL+1YT9vdiGkoYa2serLDbNqLePtH+azW6q6hiDbe2iM9LXxMsHTZTOfkuvGA1vlLjd
+Bo9aRpU+eQPNJUrgGmm3mzYLnFYoAOlK8qCEvKeo4B9jCKXcCV9asAAAI6xAhYaky7JGShCmxdcg
+qkOU91L0j2kKqZF/+9je4vQ4JOqTHbIoEki4anmWX/Ch0T02o1c2YHAJiAAPPXYtf70BrqaEFV7a
+RzeU/A5APKv7/nLM3BTX+yap96VyyFJ9MsebAw==
+</ds:SignatureValue>
+<ds:KeyInfo Id="Certificate1864596">
+>>>>>>> Stashed changes
 <ds:X509Data>
 <ds:X509Certificate>
 MIIMBjCCCe6gAwIBAgIEYBpOaTANBgkqhkiG9w0BAQsFADCBmTELMAkGA1UEBhMCRUMxHTAbBgNV
@@ -104,7 +211,11 @@ fTU7eD047vkveHyI35SWWYhM0FDNAXyWb//n6w==
 </ds:RSAKeyValue>
 </ds:KeyValue>
 </ds:KeyInfo>
+<<<<<<< Updated upstream
 <ds:Object Id="Signature1023846-Object38795"><etsi:QualifyingProperties Target="#Signature1023846"><etsi:SignedProperties Id="Signature1023846-SignedProperties453795"><etsi:SignedSignatureProperties><etsi:SigningTime>2025-03-09T00:02:43+00:00</etsi:SigningTime><etsi:SigningCertificate><etsi:Cert><etsi:CertDigest><ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/><ds:DigestValue>McLkfu4ICJbZM/bY1984vYRrVug=</ds:DigestValue></etsi:CertDigest><etsi:IssuerSerial><ds:X509IssuerName>CN=AUTORIDAD DE CERTIFICACION SUBCA-2 SECURITY DATA,OU=ENTIDAD DE CERTIFICACION DE INFORMACION,O=SECURITY DATA S.A. 2,C=EC</ds:X509IssuerName><ds:X509SerialNumber>1612336745</ds:X509SerialNumber></etsi:IssuerSerial></etsi:Cert></etsi:SigningCertificate></etsi:SignedSignatureProperties><etsi:SignedDataObjectProperties><etsi:DataObjectFormat ObjectReference="#Reference-ID-926575"><etsi:Description>contenido comprobante</etsi:Description><etsi:MimeType>text/xml</etsi:MimeType></etsi:DataObjectFormat></etsi:SignedDataObjectProperties></etsi:SignedProperties></etsi:QualifyingProperties></ds:Object></ds:Signature></factura>]]></comprobante>
+=======
+<ds:Object Id="Signature608646-Object703545"><etsi:QualifyingProperties Target="#Signature608646"><etsi:SignedProperties Id="Signature608646-SignedProperties755949"><etsi:SignedSignatureProperties><etsi:SigningTime>2025-02-14T19:50:39+00:00</etsi:SigningTime><etsi:SigningCertificate><etsi:Cert><etsi:CertDigest><ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/><ds:DigestValue>McLkfu4ICJbZM/bY1984vYRrVug=</ds:DigestValue></etsi:CertDigest><etsi:IssuerSerial><ds:X509IssuerName>CN=AUTORIDAD DE CERTIFICACION SUBCA-2 SECURITY DATA,OU=ENTIDAD DE CERTIFICACION DE INFORMACION,O=SECURITY DATA S.A. 2,C=EC</ds:X509IssuerName><ds:X509SerialNumber>1612336745</ds:X509SerialNumber></etsi:IssuerSerial></etsi:Cert></etsi:SigningCertificate></etsi:SignedSignatureProperties><etsi:SignedDataObjectProperties><etsi:DataObjectFormat ObjectReference="#Reference-ID-463307"><etsi:Description>contenido comprobante</etsi:Description><etsi:MimeType>text/xml</etsi:MimeType></etsi:DataObjectFormat></etsi:SignedDataObjectProperties></etsi:SignedProperties></etsi:QualifyingProperties></ds:Object></ds:Signature></factura>]]></comprobante>
+>>>>>>> Stashed changes
 <mensajes/>
 </autorizacion>
 

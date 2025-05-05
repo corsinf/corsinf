@@ -90,7 +90,7 @@ class custodioC
 		$cambio = [];
 		$lista = $this->modelo->lista_custodio($query);
 		foreach ($lista as $key => $value) {
-			$cambio[] = ['id' => $value['PERSON_NO'], 'text' => $value['PERSON_NOM']];
+			$cambio[] = ['id' => $value['ID_PERSON'], 'text' => $value['PERSON_NOM']];
 		}
 		return $cambio;
 	}

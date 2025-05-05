@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <autorizacion>
 <estado>AUTORIZADO</estado>
+<<<<<<< Updated upstream
 <numeroAutorizacion>1803202501175764200200120011020001237510012375112</numeroAutorizacion>
 <fechaAutorizacion>2025-03-18T06:49:31-05:00</fechaAutorizacion>
 <ambiente>PRODUCCIÓN</ambiente>
@@ -205,6 +206,206 @@ b990bvzaRZNdeTEWx6dN11u4FMRshroYhgMtjL2PkJKxNOCvFGmjSqsiPqBl52+AQSCHNDlkzRqa
 </ds:KeyValue>
 </ds:KeyInfo>
 <ds:Object Id="Signature126030-Object118782"><etsi:QualifyingProperties Target="#Signature126030"><etsi:SignedProperties Id="Signature126030-SignedProperties595822"><etsi:SignedSignatureProperties><etsi:SigningTime>2025-03-18T06:49:30-05:00</etsi:SigningTime><etsi:SigningCertificate><etsi:Cert><etsi:CertDigest><ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/><ds:DigestValue>8kZnJOa3hU7lpS1bVp9gLQ7UnDU=</ds:DigestValue></etsi:CertDigest><etsi:IssuerSerial><ds:X509IssuerName>CN=AUTORIDAD DE CERTIFICACION SUBCA-2 SECURITY DATA,OU=ENTIDAD DE CERTIFICACION DE INFORMACION,O=SECURITY DATA S.A. 2,C=EC</ds:X509IssuerName><ds:X509SerialNumber>1620062298</ds:X509SerialNumber></etsi:IssuerSerial></etsi:Cert></etsi:SigningCertificate></etsi:SignedSignatureProperties><etsi:SignedDataObjectProperties><etsi:DataObjectFormat ObjectReference="#Reference-ID-718130"><etsi:Description>contenido comprobante</etsi:Description><etsi:MimeType>text/xml</etsi:MimeType></etsi:DataObjectFormat></etsi:SignedDataObjectProperties></etsi:SignedProperties></etsi:QualifyingProperties></ds:Object></ds:Signature></factura>]]></comprobante>
+=======
+<numeroAutorizacion>2802202501179001093700120011710189360541790010913</numeroAutorizacion>
+<fechaAutorizacion>2025-03-01T19:17:49-05:00</fechaAutorizacion>
+<ambiente>PRODUCCIÓN</ambiente>
+<comprobante><![CDATA[<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<factura id="comprobante" version="1.1.0">
+  <infoTributaria>
+    <ambiente>2</ambiente>
+    <tipoEmision>1</tipoEmision>
+    <razonSocial>BANCO PICHINCHA CA</razonSocial>
+    <nombreComercial>BANCO PICHINCHA CA</nombreComercial>
+    <ruc>1790010937001</ruc>
+    <claveAcceso>2802202501179001093700120011710189360541790010913</claveAcceso>
+    <codDoc>01</codDoc>
+    <estab>001</estab>
+    <ptoEmi>171</ptoEmi>
+    <secuencial>018936054</secuencial>
+    <dirMatriz>AMAZONAS N45-60 E IGNACIO PEREIRA</dirMatriz>
+  </infoTributaria>
+  <infoFactura>
+    <fechaEmision>28/02/2025</fechaEmision>
+    <dirEstablecimiento>DOMINICOS Y TULCAN</dirEstablecimiento>
+    <contribuyenteEspecial>5368</contribuyenteEspecial>
+    <obligadoContabilidad>SI</obligadoContabilidad>
+    <tipoIdentificacionComprador>05</tipoIdentificacionComprador>
+    <razonSocialComprador>RUBIO PUETATE MILTON ANDRES</razonSocialComprador>
+    <identificacionComprador>1712605284</identificacionComprador>
+    <totalSinImpuestos>6.59</totalSinImpuestos>
+    <totalDescuento>0.00</totalDescuento>
+    <totalConImpuestos>
+      <totalImpuesto>
+        <codigo>2</codigo>
+        <codigoPorcentaje>4</codigoPorcentaje>
+        <baseImponible>6.59</baseImponible>
+        <valor>0.99</valor>
+      </totalImpuesto>
+    </totalConImpuestos>
+    <propina>0.00</propina>
+    <importeTotal>7.58</importeTotal>
+    <moneda>DOLAR</moneda>
+    <pagos>
+      <pago>
+        <formaPago>20</formaPago>
+        <total>7.58</total>
+      </pago>
+    </pagos>
+  </infoFactura>
+  <detalles>
+    <detalle>
+      <codigoPrincipal>1</codigoPrincipal>
+      <codigoAuxiliar>1</codigoAuxiliar>
+      <descripcion>COSTO POR SERVICIO FINANCIERO</descripcion>
+      <cantidad>1</cantidad>
+      <precioUnitario>6.59</precioUnitario>
+      <descuento>0.00</descuento>
+      <precioTotalSinImpuesto>6.59</precioTotalSinImpuesto>
+      <impuestos>
+        <impuesto>
+          <codigo>2</codigo>
+          <codigoPorcentaje>4</codigoPorcentaje>
+          <tarifa>15</tarifa>
+          <baseImponible>6.59</baseImponible>
+          <valor>0.99</valor>
+        </impuesto>
+      </impuestos>
+    </detalle>
+  </detalles>
+  <infoAdicional>
+    <campoAdicional nombre="CLAVE DE ACCESO">2802202501179001093700120011710189360541790010913</campoAdicional>
+    <campoAdicional nombre="CORREO ELECTRONICO">miltonrubio@hotmail.com</campoAdicional>
+    <campoAdicional nombre="CICLO DE CUENTA">05</campoAdicional>
+    <campoAdicional nombre="FECHA DESDE HASTA">03/02/2025 HASTA 28/02/2025</campoAdicional>
+    <campoAdicional nombre="DOCUMENTO">2100054447</campoAdicional>
+    <campoAdicional nombre="Gran Contribuyente">Resolución NAC-GCFOIOC21-00000879-E</campoAdicional>
+  </infoAdicional><ds:Signature xmlns:ds="http://www.w3.org/2000/09/xmldsig#" Id="Signature-670746053">
+	<ds:SignedInfo>
+		<ds:CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/>
+		<ds:SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/>
+		<ds:Reference URI="#comprobante">
+			<ds:Transforms>
+				<ds:Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/>
+			</ds:Transforms>
+			<ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/>
+			<ds:DigestValue>j2w1wcP6JtlLaJR3gKiY/8rcLz8=</ds:DigestValue>
+		</ds:Reference>
+		<ds:Reference Type="http://uri.etsi.org/01903#SignedProperties" URI="#SignedProperties-300584957">
+			<ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/>
+			<ds:DigestValue>8CjYG4U65lDHtffRmMyxu20A64Y=</ds:DigestValue>
+		</ds:Reference>
+	</ds:SignedInfo>
+	<ds:SignatureValue>
+Pro9+n0/IAxLsxKZts4JcqhEFRHWsLLwL537J1dFQmOyT7E0KiTsF0iHRHloLKFi
+iCK7+NG4iF+PMQniqUcaTZiRACdlfqTvQNCTihrNXKoUq8c1A2JYyLi03TU39FtN
+hzIuUq0tUclrtMr+v4c5jNXe8LjAa71O4qTEubt080IkWHaW87BV8S8za08kTKN9
+AFMJqyeNBxMkK4R5WKKt2CRsmCgrviLwo1K9py42/lf8/lOXG76HAq1XZRfO8QyN
+3slbtprlAZ/NBz1ukNts0GBIDCVbfiwBxwOx2Wpop5txLAFouH+TFyqtBzk4AHCo
+mMuGurB0Dh1Y/32xYGo9Pg==
+	</ds:SignatureValue>
+	<ds:KeyInfo>
+		<ds:KeyValue>
+			<ds:RSAKeyValue>
+				<ds:Modulus>
+gK3UK7QsSmbUE3KhK9Sg0f8KljOajmHMVrCe8LvrmLaqwZvzAd+8oIjXM3IYHqHm
+egj0SrJNO+NdcLSHGE3xIn2KQ3sxmxWVZffeY5Ks7xjR4mEsdSM93GMeflV0S06u
+wjxfi+AQSu9L9pVQ7ymg7/CrsPCBQ0WS1XT20NdL1mqFtbiFKb1VekRKW5+XRO7C
+84ZsWiV4aGy3ebtbcdV2Q6i/yhXYa/fRVfW0MfL8i+ovhsfwVU5QpZSZbnCejPZp
+CsugfrsRf2pO5t7xsj5M9sLWDUCbxWHckhz6l/KeHNsgFVy2EfjlbVBRPJGtSthQ
+Bq3EecIaF82RbSM5kqfvbQ==
+				</ds:Modulus>
+				<ds:Exponent>AQAB</ds:Exponent>
+			</ds:RSAKeyValue>
+		</ds:KeyValue>
+		<ds:X509Data>
+			<ds:X509IssuerSerial>
+				<ds:X509IssuerName>2.5.4.97=VATES-A66721499, CN=UANATACA CA2 2016, OU=TSP-UANATACA, O=UANATACA S.A., L=Barcelona (see current address at www.uanataca.com/address), C=ES</ds:X509IssuerName>
+				<ds:X509SerialNumber>8142127038235292264</ds:X509SerialNumber>
+			</ds:X509IssuerSerial>
+			<ds:X509SubjectName>2.5.4.97=VATEC-1790010937001, CN=MARIA ANTONIETA RAMIREZ CHACON, 2.5.4.5=IDCEC-1715619878, 2.5.4.42=MARIA ANTONIETA, 2.5.4.4=RAMIREZ CHACON, 2.5.4.12=GERENTE DE GESTION TRIBUTARIA, O=BANCO PICHINCHA CA, C=EC</ds:X509SubjectName>
+			<ds:X509Certificate>
+MIIJ7zCCB9egAwIBAgIIcP6lZwYeMmgwDQYJKoZIhvcNAQELBQAwgbgxCzAJBgNV
+BAYTAkVTMUQwQgYDVQQHDDtCYXJjZWxvbmEgKHNlZSBjdXJyZW50IGFkZHJlc3Mg
+YXQgd3d3LnVhbmF0YWNhLmNvbS9hZGRyZXNzKTEWMBQGA1UECgwNVUFOQVRBQ0Eg
+Uy5BLjEVMBMGA1UECwwMVFNQLVVBTkFUQUNBMRowGAYDVQQDDBFVQU5BVEFDQSBD
+QTIgMjAxNjEYMBYGA1UEYQwPVkFURVMtQTY2NzIxNDk5MB4XDTI0MDkwMjE4MTIw
+MFoXDTI4MDkwMTE4MTIwMFowgecxCzAJBgNVBAYTAkVDMRswGQYDVQQKDBJCQU5D
+TyBQSUNISU5DSEEgQ0ExJjAkBgNVBAwMHUdFUkVOVEUgREUgR0VTVElPTiBUUklC
+VVRBUklBMRcwFQYDVQQEDA5SQU1JUkVaIENIQUNPTjEYMBYGA1UEKgwPTUFSSUEg
+QU5UT05JRVRBMRkwFwYDVQQFExBJRENFQy0xNzE1NjE5ODc4MScwJQYDVQQDDB5N
+QVJJQSBBTlRPTklFVEEgUkFNSVJFWiBDSEFDT04xHDAaBgNVBGEME1ZBVEVDLTE3
+OTAwMTA5MzcwMDEwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCArdQr
+tCxKZtQTcqEr1KDR/wqWM5qOYcxWsJ7wu+uYtqrBm/MB37ygiNczchgeoeZ6CPRK
+sk07411wtIcYTfEifYpDezGbFZVl995jkqzvGNHiYSx1Iz3cYx5+VXRLTq7CPF+L
+4BBK70v2lVDvKaDv8Kuw8IFDRZLVdPbQ10vWaoW1uIUpvVV6REpbn5dE7sLzhmxa
+JXhobLd5u1tx1XZDqL/KFdhr99FV9bQx8vyL6i+Gx/BVTlCllJlucJ6M9mkKy6B+
+uxF/ak7m3vGyPkz2wtYNQJvFYdySHPqX8p4c2yAVXLYR+OVtUFE8ka1K2FAGrcR5
+whoXzZFtIzmSp+9tAgMBAAGjggTKMIIExjAbBgsrBgEEAYLxNmYDAQQMDAoxNzE1
+NjE5ODc4MB4GCysGAQQBgvE2ZgMLBA8MDTE3OTAwMTA5MzcwMDEwgdcGCCsGAQUF
+BwEBBIHKMIHHMFUGCCsGAQUFBzAChklodHRwOi8vd3d3LnVhbmF0YWNhLmNvbS9w
+dWJsaWMvZG93bmxvYWQvdHNwX2NlcnRpZmljYXRlcy9zdWJvcmRpbmF0ZTEuY3J0
+MDYGCCsGAQUFBzABhipodHRwOi8vb2NzcDEudWFuYXRhY2EuY29tL3B1YmxpYy9w
+a2kvb2NzcC8wNgYIKwYBBQUHMAGGKmh0dHA6Ly9vY3NwMi51YW5hdGFjYS5jb20v
+cHVibGljL3BraS9vY3NwLzAdBgNVHQ4EFgQUO/SzubsCTBMwhoFKUJ71L2RcoF8w
+DAYDVR0TAQH/BAIwADAfBgNVHSMEGDAWgBR9V+dgc84HRqnio2jw4RGydJJz/TCB
+sQYDVR0gBIGpMIGmMIGjBgwrBgEEAYLxNmYCAgEwgZIwNwYIKwYBBQUHAgEWK2h0
+dHBzOi8vd3d3LnVhbmF0YWNhLmNvbS9wdWJsaWMvcGtpL2RwYy1lYy8wVwYIKwYB
+BQUHAgIwSwxJQ0VSVElGSUNBRE8gREUgTUlFTUJSTyBERSBFTVBSRVNBIE8gRU4g
+UkVMQUNJT04gREUgREVQRU5ERU5DSUEgRU4gQVJDSElWTzCBjwYDVR0fBIGHMIGE
+MECgPqA8hjpodHRwOi8vY3JsMS51YW5hdGFjYS5jb20vcHVibGljL3BraS9jcmwv
+Q0Eyc3Vib3JkaW5hZGEuY3JsMECgPqA8hjpodHRwOi8vY3JsMi51YW5hdGFjYS5j
+b20vcHVibGljL3BraS9jcmwvQ0Eyc3Vib3JkaW5hZGEuY3JsMA4GA1UdDwEB/wQE
+AwIF4DAdBgNVHSUEFjAUBggrBgEFBQcDAgYIKwYBBQUHAwQwggHoBgNVHREEggHf
+MIIB24EWbWFhcmFtaXJAcGljaGluY2hhLmNvbaAbBgsrBgEEAYLxNmYDAaAMDAox
+NzE1NjE5ODc4oCAGCysGAQQBgvE2ZgMCoBEMD01BUklBIEFOVE9OSUVUQaAYBgsr
+BgEEAYLxNmYDA6AJDAdSQU1JUkVaoBcGCysGAQQBgvE2ZgMEoAgMBkNIQUNPTqAu
+BgsrBgEEAYLxNmYDBaAfDB1HRVJFTlRFIERFIEdFU1RJT04gVFJJQlVUQVJJQaAw
+BgsrBgEEAYLxNmYDB6AhDB9BTUFaT05BUyA0NTYwIFkgQUxGT05TTyBQRVJFSVJB
+oB8GCysGAQQBgvE2ZgMIoBAMDjAwNTkzOTk5MDE0MzI5oBYGCysGAQQBgvE2ZgMJ
+oAcMBVFVSVRPoCMGCysGAQQBgvE2ZgMKoBQMEkJBTkNPIFBJQ0hJTkNIQSBDQaAe
+BgsrBgEEAYLxNmYDC6APDA0xNzkwMDEwOTM3MDAxoBMGCysGAQQBgvE2ZgMMoAQM
+AkVDoEAGCysGAQQBgvE2ZgMyoDEML01JRU1CUk8gREUgRU1QUkVTQSBPIEVOIFJF
+TEFDSU9OIERFIERFUEVOREVOQ0lBoBgGCysGAQQBgvE2ZgMzoAkMB0FSQ0hJVk8w
+DQYJKoZIhvcNAQELBQADggIBAJGBMl/VP1lImcyirl8RKliHbLQE9jr+/kcIHCcd
+dNYxafac1p5WlC+PanKI4MEdu+4eLPKiyQOeNiuEW+jS7vGh2MM7Ygj/ahl+LEAq
+IFiKIiD0+cN2B0kI9flxQLtiNMbKHloe2rU0f7fTucXrHmPcE9LfVtAzA8i8UwDG
+NqvzNgdZZuM0CZ2av2XmXaCVuLp34E2MmyAFLJ1zV4XWGGJ/gLQG+4xv2qkeL6yD
+cl18AB+pPdTtdoYbIIPRPYImHcbeWtvb/f3J1ajnYQ7cnZH9WvLMCEGMp9I6qSpW
+bMGcf82VbNYo3bl96PxaVfYtuumVWYGff5x5bRuylKvolNW9VKMshx6+xwcIidU/
+6k1ZtOsHl27PCtvqFEWPE3D+y+bms2nx7tLyQPUyd+2QSD+h6JXIwO9FGxzPV4Jx
+YWAFfZ9w4Wu8DcQ4N/AszPnxz+eWC2bebbkQYqAT/H/9/qGPk6Oqlc2Ql+7vEanp
+oeXjlcPhhPHGk+AVjCb1KK8oQaSDL0/iIMJaWYkGfSLQXxkLhjYLX3qr3WuKuSse
+GiEQMR8YftBu1s68jbZM2PzUkniZzhaqV4JSnM4nGnk9jOuABxb88YzXkvFjJO5M
+MUROlis3vjBDBBndxSjohus7NUTWSWZ5TEghvqZP71hnK2UXvR3McBJMvbw18BpB
+OXlL
+			</ds:X509Certificate>
+		</ds:X509Data>
+	</ds:KeyInfo>
+	<ds:Object>
+		<etsi:QualifyingProperties xmlns:etsi="http://uri.etsi.org/01903/v1.3.2#" Target="#Signature-670746053">
+			<etsi:SignedProperties Id="SignedProperties-300584957">
+				<etsi:SignedSignatureProperties>
+					<etsi:SigningTime>2025-03-01T19:13:15.174Z</etsi:SigningTime>
+					<etsi:SigningCertificate>
+						<etsi:Cert>
+							<etsi:CertDigest>
+								<ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/>
+								<ds:DigestValue>R2Hn1OqW8Oc6YN1i7nwLgy3kYnY=</ds:DigestValue>
+							</etsi:CertDigest>
+							<etsi:IssuerSerial>
+								<ds:X509IssuerName>2.5.4.97=VATES-A66721499, CN=UANATACA CA2 2016, OU=TSP-UANATACA, O=UANATACA S.A., L=Barcelona (see current address at www.uanataca.com/address), C=ES</ds:X509IssuerName>
+								<ds:X509SerialNumber>8142127038235292264</ds:X509SerialNumber>
+							</etsi:IssuerSerial>
+						</etsi:Cert>
+					</etsi:SigningCertificate>
+				</etsi:SignedSignatureProperties>
+			</etsi:SignedProperties>
+		</etsi:QualifyingProperties>
+	</ds:Object>
+</ds:Signature>
+</factura>]]></comprobante>
+>>>>>>> Stashed changes
 <mensajes/>
 </autorizacion>
 

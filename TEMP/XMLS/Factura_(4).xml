@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <autorizacion>
 <estado>AUTORIZADO</estado>
+<<<<<<< Updated upstream
 <numeroAutorizacion>0203202501099315216100126220010000109060001090617</numeroAutorizacion>
 <fechaAutorizacion>2025-03-02T12:41:27-05:00</fechaAutorizacion>
 <ambiente>PRODUCCIÓN</ambiente>
@@ -17,9 +18,107 @@
 <ds:DigestValue>ayE81HtumKeWatkV1HlxoNV5MlM=</ds:DigestValue>
 </ds:Reference>
 <ds:Reference Id="Reference-ID-64918" URI="#comprobante">
+=======
+<numeroAutorizacion>0102202501099133185900120090510000948741357246815</numeroAutorizacion>
+<fechaAutorizacion>2025-02-01T21:35:13-05:00</fechaAutorizacion>
+<ambiente>PRODUCCIÓN</ambiente>
+<comprobante><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+<factura id="comprobante" version="2.1.0">
+  <infoTributaria>
+    <ambiente>2</ambiente>
+    <tipoEmision>1</tipoEmision>
+    <razonSocial>ATIMASA S.A.</razonSocial>
+    <nombreComercial>ATIMASA S.A.</nombreComercial>
+    <ruc>0991331859001</ruc>
+    <claveAcceso>0102202501099133185900120090510000948741357246815</claveAcceso>
+    <codDoc>01</codDoc>
+    <estab>009</estab>
+    <ptoEmi>051</ptoEmi>
+    <secuencial>000094874</secuencial>
+    <dirMatriz>AV. DE LAS AMERICAS 406-GUAYAQUIL</dirMatriz>
+  </infoTributaria>
+  <infoFactura>
+    <fechaEmision>01/02/2025</fechaEmision>
+    <dirEstablecimiento>AV. MALDONADO No. 528-102 Y BORBON</dirEstablecimiento>
+    <contribuyenteEspecial>01477</contribuyenteEspecial>
+    <obligadoContabilidad>SI</obligadoContabilidad>
+    <tipoIdentificacionComprador>05</tipoIdentificacionComprador>
+    <razonSocialComprador>RUBIO PUETATE MILTON ANDRES</razonSocialComprador>
+    <identificacionComprador>1712605284</identificacionComprador>
+    <direccionComprador>SECTOR LA JIPIJAPA</direccionComprador>
+    <totalSinImpuestos>8.70</totalSinImpuestos>
+    <totalSubsidio>0.29</totalSubsidio>
+    <totalDescuento>0.00</totalDescuento>
+    <totalConImpuestos>
+      <totalImpuesto>
+        <codigo>2</codigo>
+        <codigoPorcentaje>0</codigoPorcentaje>
+        <baseImponible>0.00</baseImponible>
+        <valor>0.00</valor>
+      </totalImpuesto>
+      <totalImpuesto>
+        <codigo>2</codigo>
+        <codigoPorcentaje>4</codigoPorcentaje>
+        <baseImponible>8.70</baseImponible>
+        <valor>1.30</valor>
+      </totalImpuesto>
+    </totalConImpuestos>
+    <propina>0.00</propina>
+    <importeTotal>10.00</importeTotal>
+    <moneda>DOLAR</moneda>
+    <placa>PCW3954</placa>
+    <pagos>
+      <pago>
+        <formaPago>01</formaPago>
+        <total>10.00</total>
+        <plazo>0</plazo>
+        <unidadTiempo>DIAS</unidadTiempo>
+      </pago>
+    </pagos>
+  </infoFactura>
+  <detalles>
+    <detalle>
+      <codigoPrincipal>000000000040002204</codigoPrincipal>
+      <codigoAuxiliar>000000000040002204</codigoAuxiliar>
+      <descripcion>EXTRA</descripcion>
+      <cantidad>3.686</cantidad>
+      <precioUnitario>2.35900</precioUnitario>
+      <precioSinSubsidio>2.43900</precioSinSubsidio>
+      <descuento>0.00</descuento>
+      <precioTotalSinImpuesto>8.70</precioTotalSinImpuesto>
+      <impuestos>
+        <impuesto>
+          <codigo>2</codigo>
+          <codigoPorcentaje>4</codigoPorcentaje>
+          <tarifa>15</tarifa>
+          <baseImponible>8.70</baseImponible>
+          <valor>1.30</valor>
+        </impuesto>
+      </impuestos>
+    </detalle>
+  </detalles>
+  <infoAdicional>
+    <campoAdicional nombre="Gran Contribuyente">NAC-GCFOIOC21-00001241-E</campoAdicional>
+    <campoAdicional nombre="Mail Cliente">mrubio@corsinf.com</campoAdicional>
+  </infoAdicional>
+<ds:Signature xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xmlns:etsi="http://uri.etsi.org/01903/v1.3.2#" Id="Signature878697">
+<ds:SignedInfo Id="Signature-SignedInfo909177">
+<ds:CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"></ds:CanonicalizationMethod>
+<ds:SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"></ds:SignatureMethod>
+<ds:Reference Id="SignedPropertiesID809015" Type="http://uri.etsi.org/01903#SignedProperties" URI="#Signature878697-SignedProperties910965">
+<ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"></ds:DigestMethod>
+<ds:DigestValue>JihPx6HddPkreGeqUNFRq2slk18=</ds:DigestValue>
+</ds:Reference>
+<ds:Reference URI="#Certificate11006104">
+<ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"></ds:DigestMethod>
+<ds:DigestValue>PIbIeuokT2TxlyyIfmG8NxNN63s=</ds:DigestValue>
+</ds:Reference>
+<ds:Reference Id="Reference-ID-750839" URI="#comprobante">
+>>>>>>> Stashed changes
 <ds:Transforms>
 <ds:Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/>
 </ds:Transforms>
+<<<<<<< Updated upstream
 <ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/>
 <ds:DigestValue>sRBJatG+h4mhDrEJbkh3PBHApoU=</ds:DigestValue>
 </ds:Reference>
@@ -86,22 +185,101 @@ TMx1lJq0bgbxAFYkLqSbcoCKx9ya+YN2bCHeBDnIcpH/yAiaOsnkcGpCvJwZ9X7xcXRBAyOrto3i
 9UohtULs3Ujw1PHn0q8pOK96jQq2MqIv4y3pMyRoq4SY8xp9prJndv9+QNH/MtaCOz0KB/T4AswR
 s2vu9VChWlsaFxRgadCvH5BId3BZc614NjC8476Ep66+k0RgPUbagmVcJykgWCbPlyLVEtXyBvYH
 2Sem
+=======
+<ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"></ds:DigestMethod>
+<ds:DigestValue>fAtd4AuU0VfcpYTcQvgOv2i/OXA=</ds:DigestValue>
+</ds:Reference>
+</ds:SignedInfo>
+<ds:SignatureValue Id="SignatureValue168825">
+dAfi9g33kENntjpEh49m6XAMWkSZfqobab0IhdDhPX1GAJI9HWsrQwRd8MSU1SY2LOcL+kzm+Uo2
+9vXd079m800YIWa5Y6Z6o3Du8f7sFl/gXoPDFrdyy64loO4gLfMe9JBkyafRjdQxuIjDEXGm3l9P
+5hp6b4NEY4Wr5jK8iobA5hRTtR9ggmw4W5UvXIUPd7bnmDA6W3UHxXJKr5KZzWkCH9ZNLmC8phsk
+TmPIBEWdxiCFCGUPkaPFAnxPvhcFIpHsPmvavJC5CVPSIQHvV2pl/OUS4RjTqA1Tldx9AbDT2ukB
+CiGgYsY0sii21f7LPoeFGCyhTnyFbeM5UgTsqw==
+</ds:SignatureValue>
+<ds:KeyInfo Id="Certificate11006104">
+<ds:X509Data>
+<ds:X509Certificate>
+MIILPTCCCSWgAwIBAgIEPX14gzANBgkqhkiG9w0BAQsFADCBmTELMAkGA1UEBhMCRUMxHTAbBgNV
+BAoMFFNFQ1VSSVRZIERBVEEgUy5BLiAxMTAwLgYDVQQLDCdFTlRJREFEIERFIENFUlRJRklDQUNJ
+T04gREUgSU5GT1JNQUNJT04xOTA3BgNVBAMMMEFVVE9SSURBRCBERSBDRVJUSUZJQ0FDSU9OIFNV
+QkNBLTEgU0VDVVJJVFkgREFUQTAeFw0yMDA1MTIyMDQ3MTRaFw0yNTA1MTIyMDQ3MTRaMIGZMQsw
+CQYDVQQGEwJFQzEdMBsGA1UECgwUU0VDVVJJVFkgREFUQSBTLkEuIDExMDAuBgNVBAsMJ0VOVElE
+QUQgREUgQ0VSVElGSUNBQ0lPTiBERSBJTkZPUk1BQ0lPTjEVMBMGA1UEBRMMMTIwNTIwMTU1NzE1
+MSIwIAYDVQQDDBlQRURSTyBESU1BUyBWSVpVRVRBIFBSQURPMIIBIjANBgkqhkiG9w0BAQEFAAOC
+AQ8AMIIBCgKCAQEAlRrG1sRr+Wz7/keOyJR1bctbhN9Ltn0zZ+YU/x3Qp2h9VZhPO4zMSMjMDQVc
+cCNWZdre+7w395V60EDayfNyDNtmBzRCTnsRyhXQlzqg8XgJfc7P/+1XdXqV+8jJZFcdTnOsjJGp
+38MSsYNl51C7MR1a7A8HJl4sYoI4FCqQ1lUAOW0/jKk7R+4yxqszBfjv0LZlyvyMyp8bmuMOWTAZ
+BkXvBV71+6W93Q5kJNavAdNdL4YkbU61s7PV28WfmzRQIJadGEtwAIsH/olQiQecExUz2UOK/Ds5
+uL+FjnTsqBMtEBrhl5vdJeUUFpHIGr1rdzz9gcLnIA0DwcAIAD6fawIDAQABo4IGiTCCBoUwWQYI
+KwYBBQUHAQEETTBLMEkGCCsGAQUFBzABhj1odHRwOi8vb2NzcGd3LnNlY3VyaXR5ZGF0YS5uZXQu
+ZWMvZWpiY2EvcHVibGljd2ViL3N0YXR1cy9vY3NwMB0GA1UdDgQWBBTgipuwbyhnr7gy3YSasab3
+9B3wMDAMBgNVHRMBAf8EAjAAMB8GA1UdIwQYMBaAFFwPhaR0EPytASwaAD2TFwn6OQHWMCsGA1Ud
+EAQkMCKADzIwMjAwNTEyMjA0NzE0WoEPMjAyNTA1MTIyMDQ3MTRaMIHMBgNVHS4EgcQwgcEwgb6g
+gbuggbiGgbVsZGFwOi8vbGRhcHNkLnNlY3VyaXR5ZGF0YS5uZXQuZWMvQ049QVVUT1JJREFEIERF
+IENFUlRJRklDQUNJT04gU1VCQ0EtMSBTRUNVUklUWSBEQVRBLE9VPUVOVElEQUQgREUgQ0VSVElG
+SUNBQ0lPTiBERSBJTkZPUk1BQ0lPTixPPVNFQ1VSSVRZIERBVEEgUy5BLiAxLEM9RUM/ZGVsdGFS
+ZXZvY2F0aW9uTGlzdD9iYXNlMG0GA1UdIARmMGQwYgYKKwYBBAGCpnICCTBUMFIGCCsGAQUFBwIC
+MEYeRABDAGUAcgB0AGkAZgBpAGMAYQBkAG8AIABkAGUAIABSAGUAcAByAGUAcwBlAG4AdABhAG4A
+dABlACAATABlAGcAYQBsMIICngYDVR0fBIIClTCCApEwgeWgQaA/hj1odHRwOi8vb2NzcGd3LnNl
+Y3VyaXR5ZGF0YS5uZXQuZWMvZWpiY2EvcHVibGljd2ViL3N0YXR1cy9vY3NwooGfpIGcMIGZMTkw
+NwYDVQQDDDBBVVRPUklEQUQgREUgQ0VSVElGSUNBQ0lPTiBTVUJDQS0xIFNFQ1VSSVRZIERBVEEx
+MDAuBgNVBAsMJ0VOVElEQUQgREUgQ0VSVElGSUNBQ0lPTiBERSBJTkZPUk1BQ0lPTjEdMBsGA1UE
+CgwUU0VDVVJJVFkgREFUQSBTLkEuIDExCzAJBgNVBAYTAkVDMIHEoIHBoIG+hoG7bGRhcDovL2xk
+YXBzZC5zZWN1cml0eWRhdGEubmV0LmVjL0NOPUFVVE9SSURBRCBERSBDRVJUSUZJQ0FDSU9OIFNV
+QkNBLTEgU0VDVVJJVFkgREFUQSxPVT1FTlRJREFEIERFIENFUlRJRklDQUNJT04gREUgSU5GT1JN
+QUNJT04sTz1TRUNVUklUWSBEQVRBIFMuQS4gMSxDPUVDP2NlcnRpZmljYXRlUmV2b2NhdGlvbkxp
+c3Q/YmFzZTCB36CB3KCB2YaB1mh0dHBzOi8vcG9ydGFsLW9wZXJhZG9yLnNlY3VyaXR5ZGF0YS5u
+ZXQuZWMvZWpiY2EvcHVibGljd2ViL3dlYmRpc3QvY2VydGRpc3Q/Y21kPWNybCZpc3N1ZXI9Q049
+QVVUT1JJREFEIERFIENFUlRJRklDQUNJT04gU1VCQ0EtMSBTRUNVUklUWSBEQVRBLE9VPUVOVElE
+QUQgREUgQ0VSVElGSUNBQ0lPTiBERSBJTkZPUk1BQ0lPTixPPVNFQ1VSSVRZIERBVEEgUy5BLiAx
+LEM9RUMwCwYDVR0PBAQDAgXgMCIGA1UdEQQbMBmBF2dxdWluZGVyQGF0aW1hc2EuY29tLmVjMBoG
+CisGAQQBgqZyAwEEDAwKMDkwNzQwMjQ2NTAbBgorBgEEAYKmcgMCBA0MC1BFRFJPIERJTUFTMBcG
+CisGAQQBgqZyAwMECQwHVklaVUVUQTAVBgorBgEEAYKmcgMEBAcMBVBSQURPMB8GCisGAQQBgqZy
+AwUEEQwPR0VSRU5URSBHRU5FUkFMMCYGCisGAQQBgqZyAwcEGAwWQVYgREUgTEFTIEFNRVJJQ0FT
+IDQwNjAcBgorBgEEAYKmcgMIBA4MDDU5Mzk4NDY1NTM4MzAZBgorBgEEAYKmcgMJBAsMCUdVQVlB
+UVVJTDAcBgorBgEEAYKmcgMKBA4MDEFUSU1BU0EgUy5BLjAdBgorBgEEAYKmcgMLBA8MDTA5OTEz
+MzE4NTkwMDEwFwYKKwYBBAGCpnIDDAQJDAdFQ1VBRE9SMBIGCisGAQQBgqZyAx0EBAwCTm8wHwYK
+KwYBBAGCpnIDIAQRDA8wMDEwMDIwMDAwMzg0OTMwEwYKKwYBBAGCpnIDIQQFDANQRlgwEQYKKwYB
+BAGCpnIDIgQDDAEuMA0GCSqGSIb3DQEBCwUAA4ICAQAy/FAK6IrNOXE70rqSKFteEY6d6Q2ot2js
+tmmv3I2OqcCEYfNq5phNluGXlwjP0YuogIlxxdgPhQT4wqzGkLYldqzOckxMS5JgceOOsWKk4UTX
+Cecw6UIExLAecs7YC9nfZOK5HPX2HUVF+ByktZYpSsoMZyiqI0JJbTaZ0IX4oFxDHsPsLnuhq0OW
+IhORlOQ4a5P/3aAWbZmAaiwZHKy4hqw1HQeKWnjaXX0CGJG3jhMEEKfDgkdYQ4+hYOMybP6uHo3+
+mZ2BkmXWNKA4QMGZZBkgmDRdEhIOQRbYNqIMhSN57LQVIOG3T4zoNbxzdrkmLT2cMxnY2doUILCI
+GudRKrZE/qWb5yLzE2QzuLIuaoKAkbx9T6bMHurIKfC/R1qto0o32WwH3zDsrZtVJ8/TADRBgacb
+DQF9oIlKRGl4ebcHeUmaxNV7Xt/X6JF/BzbMYxS3CndJk5OAWnpAHu7RRHgUXpIS03aG+pITvjvT
+w3N1qiAqR+dIyDXIpCK5ygXY2j3BF9Cbax6DHJEdNda8GQFPlwQTaWlfIPjxBmVniVtTEIDhl5sq
+MV0/VwZ3d1aURLFdsJDq1cNJgpfwyvVB0OaqGhMwdsRhKtJg5lfrka7SVMNz59k3L/UT77NonLFN
+4KgeBZ/aifuxsy411SdHE5fWWreAm2r3MXLYN1y/IQ==
+>>>>>>> Stashed changes
 </ds:X509Certificate>
 </ds:X509Data>
 <ds:KeyValue>
 <ds:RSAKeyValue>
 <ds:Modulus>
+<<<<<<< Updated upstream
 gfNGhXK9wssZ7HKtgOvhfRTWSpoe8ifEeSNfjyun5iZiCL7WaFrf4jR8Gm/1zj9662w/USupdyt6
 X53hAdBt24x8xSlaulXlrFFNtqt/5NMgL47KeYyJb+yOcDDd7CFVP2MRfOEYaS7OsWp6zQwiEh77
 mzWTejDWHQryYBfjDZRQxl3dFu8ph4CGspco73Oi+plNKPEvj9SneF6zfmjBaDhccUzaGWo7cz4c
 34SKAR9/vYOBcIHZWuz4acs7MtyMVAKt7CdQUrmoMV75pLQS2XTNCQ8+L9aDyr7lJqd3phYk5o3o
 tJobAOl1phYnxkHOwexBdVNuniDzL4LRwBeupw==
+=======
+lRrG1sRr+Wz7/keOyJR1bctbhN9Ltn0zZ+YU/x3Qp2h9VZhPO4zMSMjMDQVccCNWZdre+7w395V6
+0EDayfNyDNtmBzRCTnsRyhXQlzqg8XgJfc7P/+1XdXqV+8jJZFcdTnOsjJGp38MSsYNl51C7MR1a
+7A8HJl4sYoI4FCqQ1lUAOW0/jKk7R+4yxqszBfjv0LZlyvyMyp8bmuMOWTAZBkXvBV71+6W93Q5k
+JNavAdNdL4YkbU61s7PV28WfmzRQIJadGEtwAIsH/olQiQecExUz2UOK/Ds5uL+FjnTsqBMtEBrh
+l5vdJeUUFpHIGr1rdzz9gcLnIA0DwcAIAD6faw==
+>>>>>>> Stashed changes
 </ds:Modulus>
 <ds:Exponent>AQAB</ds:Exponent>
 </ds:RSAKeyValue>
 </ds:KeyValue>
 </ds:KeyInfo>
+<<<<<<< Updated upstream
 <ds:Object Id="Signature369444-Object583285"><etsi:QualifyingProperties Target="#Signature369444"><etsi:SignedProperties Id="Signature369444-SignedProperties363826"><etsi:SignedSignatureProperties><etsi:SigningTime>2025-03-02T12:41:21-05:00</etsi:SigningTime><etsi:SigningCertificate><etsi:Cert><etsi:CertDigest><ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/><ds:DigestValue>SPykXDN+fEtiu3jft7tL41pB09k=</ds:DigestValue></etsi:CertDigest><etsi:IssuerSerial><ds:X509IssuerName>CN=AUTORIDAD DE CERTIFICACION SUBCA-1 SECURITY DATA,OU=ENTIDAD DE CERTIFICACION DE INFORMACION,O=SECURITY DATA S.A. 1,C=EC</ds:X509IssuerName><ds:X509SerialNumber>316453832</ds:X509SerialNumber></etsi:IssuerSerial></etsi:Cert></etsi:SigningCertificate></etsi:SignedSignatureProperties><etsi:SignedDataObjectProperties><etsi:DataObjectFormat ObjectReference="#Reference-ID-64918"><etsi:Description>comprobateFirma</etsi:Description><etsi:MimeType>text/xml</etsi:MimeType></etsi:DataObjectFormat></etsi:SignedDataObjectProperties></etsi:SignedProperties></etsi:QualifyingProperties></ds:Object></ds:Signature></factura>]]></comprobante>
+=======
+<ds:Object Id="Signature878697-Object1031724"><etsi:QualifyingProperties Target="#Signature878697"><etsi:SignedProperties Id="Signature878697-SignedProperties910965"><etsi:SignedSignatureProperties><etsi:SigningTime>2025-02-01T21:35:12-05:00</etsi:SigningTime><etsi:SigningCertificate><etsi:Cert><etsi:CertDigest><ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"></ds:DigestMethod><ds:DigestValue>a0I0miMbf9JJ5nW9PqSunXlhYSE=</ds:DigestValue></etsi:CertDigest><etsi:IssuerSerial><ds:X509IssuerName>CN=AUTORIDAD DE CERTIFICACION SUBCA-1 SECURITY DATA,OU=ENTIDAD DE CERTIFICACION DE INFORMACION,O=SECURITY DATA S.A. 1,C=EC</ds:X509IssuerName><ds:X509SerialNumber>1031633027</ds:X509SerialNumber></etsi:IssuerSerial></etsi:Cert></etsi:SigningCertificate></etsi:SignedSignatureProperties><etsi:SignedDataObjectProperties><etsi:DataObjectFormat ObjectReference="#Reference-ID-750839"><etsi:Description>Comprobante</etsi:Description><etsi:MimeType>text/xml</etsi:MimeType></etsi:DataObjectFormat></etsi:SignedDataObjectProperties></etsi:SignedProperties></etsi:QualifyingProperties></ds:Object></ds:Signature></factura>]]></comprobante>
+>>>>>>> Stashed changes
 <mensajes/>
 </autorizacion>
 

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <autorizacion>
 <estado>AUTORIZADO</estado>
+<<<<<<< Updated upstream
 <numeroAutorizacion>2003202501179004122000120059040005167041790041211</numeroAutorizacion>
 <fechaAutorizacion>2025-03-20T14:27:24-05:00</fechaAutorizacion>
 <ambiente>PRODUCCIÓN</ambiente>
@@ -17,10 +18,29 @@
 <ds:DigestValue>fhYi+c1aFunLgaBivSvUyNSaVlc=</ds:DigestValue>
 </ds:Reference>
 <ds:Reference Id="Reference-ID-560002" URI="#comprobante">
+=======
+<numeroAutorizacion>2802202501099000573700120270030398698975592120018</numeroAutorizacion>
+<fechaAutorizacion>2025-03-10T01:58:26-05:00</fechaAutorizacion>
+<ambiente>PRODUCCIÓN</ambiente>
+<comprobante><![CDATA[<?xml version="1.0" encoding="UTF-8" standalone="no"?><factura id="comprobante" version="1.0.0"><infoTributaria><ambiente>2</ambiente><tipoEmision>1</tipoEmision><razonSocial>BANCO DEL PACIFICO S.A.</razonSocial><nombreComercial>BANCO DEL PACIFICO S.A.</nombreComercial><ruc>0990005737001</ruc><claveAcceso>2802202501099000573700120270030398698975592120018</claveAcceso><codDoc>01</codDoc><estab>027</estab><ptoEmi>003</ptoEmi><secuencial>039869897</secuencial><dirMatriz>FRANCISCO DE PAULA ICAZA #200 Y PICHINCHA</dirMatriz></infoTributaria><infoFactura><fechaEmision>28/02/2025</fechaEmision><dirEstablecimiento>FCO DE PAULA ICAZA 200 Y PEDRO CARBO</dirEstablecimiento><contribuyenteEspecial>06925</contribuyenteEspecial><obligadoContabilidad>SI</obligadoContabilidad><tipoIdentificacionComprador>05</tipoIdentificacionComprador><razonSocialComprador>MILTON RUBIO PUETATE</razonSocialComprador><identificacionComprador>1712605284</identificacionComprador><totalSinImpuestos>59.09</totalSinImpuestos><totalDescuento>0.00</totalDescuento><totalConImpuestos><totalImpuesto><codigo>2</codigo><codigoPorcentaje>4</codigoPorcentaje><baseImponible>0.00</baseImponible><valor>0.00</valor></totalImpuesto><totalImpuesto><codigo>2</codigo><codigoPorcentaje>6</codigoPorcentaje><baseImponible>59.09</baseImponible><valor>0.00</valor></totalImpuesto></totalConImpuestos><propina>0.00</propina><importeTotal>59.09</importeTotal><moneda>DOLAR</moneda><pagos><pago><formaPago>20</formaPago><total>59.09</total><plazo>15</plazo><unidadTiempo>DIAS</unidadTiempo></pago></pagos></infoFactura><detalles><detalle><codigoPrincipal>10</codigoPrincipal><descripcion>Spotify P343DBD749</descripcion><cantidad>1</cantidad><precioUnitario>0.00</precioUnitario><descuento>0.00</descuento><precioTotalSinImpuesto>0.00</precioTotalSinImpuesto><detallesAdicionales><detAdicional nombre="CIUDAD" valor="Stockhol"/></detallesAdicionales><impuestos><impuesto><codigo>2</codigo><codigoPorcentaje>6</codigoPorcentaje><tarifa>0</tarifa><baseImponible>0.00</baseImponible><valor>0.00</valor></impuesto></impuestos></detalle><detalle><codigoPrincipal>41</codigoPrincipal><descripcion>SRI QUITO AGENCIA SUR</descripcion><cantidad>1</cantidad><precioUnitario>56.04</precioUnitario><descuento>0.00</descuento><precioTotalSinImpuesto>56.04</precioTotalSinImpuesto><detallesAdicionales><detAdicional nombre="CIUDAD" valor="07/12"/></detallesAdicionales><impuestos><impuesto><codigo>2</codigo><codigoPorcentaje>6</codigoPorcentaje><tarifa>0</tarifa><baseImponible>56.04</baseImponible><valor>0.00</valor></impuesto></impuestos></detalle><detalle><codigoPrincipal>41</codigoPrincipal><descripcion>GO TRAVEL CLUB</descripcion><cantidad>1</cantidad><precioUnitario>3.05</precioUnitario><descuento>0.00</descuento><precioTotalSinImpuesto>3.05</precioTotalSinImpuesto><detallesAdicionales><detAdicional nombre="CIUDAD" valor="20/24"/></detallesAdicionales><impuestos><impuesto><codigo>2</codigo><codigoPorcentaje>6</codigoPorcentaje><tarifa>0</tarifa><baseImponible>3.05</baseImponible><valor>0.00</valor></impuesto></impuestos></detalle><detalle><codigoPrincipal>10</codigoPrincipal><descripcion>SMART FIT PLATAFORMA</descripcion><cantidad>1</cantidad><precioUnitario>0.00</precioUnitario><descuento>0.00</descuento><precioTotalSinImpuesto>0.00</precioTotalSinImpuesto><detallesAdicionales><detAdicional nombre="CIUDAD" valor="QUITO"/></detallesAdicionales><impuestos><impuesto><codigo>2</codigo><codigoPorcentaje>6</codigoPorcentaje><tarifa>0</tarifa><baseImponible>0.00</baseImponible><valor>0.00</valor></impuesto></impuestos></detalle></detalles><infoAdicional><campoAdicional nombre="Ciudad">QUITO</campoAdicional><campoAdicional nombre="Cifcod">M59212</campoAdicional><campoAdicional nombre="Direccion">CLL DE LOS MOTILONES N40 345 Y CAMILO GA LLEGO CASA 3 PISOS LADRILLO</campoAdicional><campoAdicional nombre="Telefono1">3920507</campoAdicional><campoAdicional nombre="Telefono2">3920507</campoAdicional><campoAdicional nombre="Email">miltonrubio@hotmail.com</campoAdicional><campoAdicional nombre="GRAN CONTRIBUYENTE">GRAN CONTRIBUYENTE SEGÚN RESOLUCIÓN NRO. NAC-GCFOIOC21-00000875-E</campoAdicional></infoAdicional><ds:Signature xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xmlns:etsi="http://uri.etsi.org/01903/v1.3.2#" Id="Signature1013978">
+<ds:SignedInfo Id="Signature-SignedInfo393720">
+<ds:CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/>
+<ds:SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/>
+<ds:Reference Id="SignedPropertiesID154293" Type="http://uri.etsi.org/01903#SignedProperties" URI="#Signature1013978-SignedProperties549430">
+<ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/>
+<ds:DigestValue>pIZO/9Y90pE4Yq0r46fwoMlM8DQ=</ds:DigestValue>
+</ds:Reference>
+<ds:Reference URI="#Certificate1896050">
+<ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/>
+<ds:DigestValue>GKbfg6FkysQWI1k6SK9oneluNsI=</ds:DigestValue>
+</ds:Reference>
+<ds:Reference Id="Reference-ID-474598" URI="#comprobante">
+>>>>>>> Stashed changes
 <ds:Transforms>
 <ds:Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/>
 </ds:Transforms>
 <ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/>
+<<<<<<< Updated upstream
 <ds:DigestValue>coHufCSrO1VudGhNkuUnnWnZhJ0=</ds:DigestValue>
 </ds:Reference>
 </ds:SignedInfo>
@@ -89,22 +109,105 @@ rDwfPGMf+4UGlmz4TfXcfbqiPGl0YhqGz9MKoo8wBQG5D+56meNBFgX+YrGjVvsXNuha9nkUEzHL
 PmIXd3mi7t+YMgCBQFTQJjIIEBVSQxEmQPgzF1oMb72OlcHhQtuwIeL6gd/itjjMOfUwHGh4oPLm
 sP9mznacbQ28WN1SDuoekrN+YwlllNFLv9ir8Tn7s7vrwm6A7nvR2kOO56TF5bhPWQbrsTwHZSeG
 DM6ddH2B9a03E4IxkAdlvvgTn0E=
+=======
+<ds:DigestValue>PZ8oDvov8QX2cCYnKJa3jPUi1hQ=</ds:DigestValue>
+</ds:Reference>
+</ds:SignedInfo>
+<ds:SignatureValue Id="SignatureValue220363">
+uUGG8CtYjpG03D/MIK4+57sUqsKyB9xAJtcDHfYxyGnK/7BzshVx9pYqVw9RdraR3xQsTVJBISdm
+Ry6+CZbtNkoSjk2GAC0r4sY7JqQlu8I6YIkMWdQiHdlYVbowLgf18Rqm/WrXNACO1dwWyaBbVSvE
+ojOzAszNTfkmIPckRPdIBy8IwaSirKGtX5O1oyVujdHf2LjsaKKm2ajSjUAKzTzeadazUKqFTjG/
+ClkXp2NVB1Q5R2MSuw+AV6dMmOa4726lfT+m1k0mY8MfHqH1JiVPedZ4jrcW17V5KUTN4UR9AoMC
+byO2SvRqGDeSNigprCJmzXD3ZSBR390ARWMzWw==
+</ds:SignatureValue>
+<ds:KeyInfo Id="Certificate1896050">
+<ds:X509Data>
+<ds:X509Certificate>
+MIIMZTCCCk2gAwIBAgIEbrcKpTANBgkqhkiG9w0BAQsFADCBmTELMAkGA1UEBhMCRUMxHTAbBgNV
+BAoMFFNFQ1VSSVRZIERBVEEgUy5BLiAyMTAwLgYDVQQLDCdFTlRJREFEIERFIENFUlRJRklDQUNJ
+T04gREUgSU5GT1JNQUNJT04xOTA3BgNVBAMMMEFVVE9SSURBRCBERSBDRVJUSUZJQ0FDSU9OIFNV
+QkNBLTIgU0VDVVJJVFkgREFUQTAeFw0yNTAxMjAxNzU4NDRaFw0yNjAxMjAxNzU4NDRaMIGoMSYw
+JAYDVQQDDB1XQUxURVIgRkVSTkFORE8gQkFOQ0hPTiBNVU5PWjEgMB4GA1UEBRMXMDkwNzg4NzU3
+NC0yMDAxMjUxMzA4MzkxMDAuBgNVBAsMJ0VOVElEQUQgREUgQ0VSVElGSUNBQ0lPTiBERSBJTkZP
+Uk1BQ0lPTjEdMBsGA1UECgwUU0VDVVJJVFkgREFUQSBTLkEuIDIxCzAJBgNVBAYTAkVDMIIBIjAN
+BgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAvhbbrcRDC5tg4GUwIFg6uWxvoga3vDTQcuInQYZT
+c96WvJtkfKdZ0ErDiFukoe9YGjh7+vxLnurtpygn67RpaeFQxMYWWgvH0LsYbA3MIubNaqYfKfRG
+xGifpXsuuNuvpCirENuUhdWt7t9TIXMZVHn1gkIvHpau/k4jqb/mSj1ueKOesNGiySlqO019ZSHc
+bUIrOXhcqjoECoShQUyviGy532ArgeLEKybvZmerRjd5sw4MFiVYO8mDSXomm88zzsAFTMA7Wy+l
+/5dt206KLIAiL3Ve8CoOmxoMMPbvzBWWWBOIRIwb6i2PMGe6eehEP8KnHnq+Lj3qIhiqr3RjdQID
+AQABo4IHojCCB54wDAYDVR0TAQH/BAIwADAfBgNVHSMEGDAWgBSMusoRV3glgB1rCktVv42uYt29
+jzBZBggrBgEFBQcBAQRNMEswSQYIKwYBBQUHMAGGPWh0dHA6Ly9vY3NwZ3cuc2VjdXJpdHlkYXRh
+Lm5ldC5lYy9lamJjYS9wdWJsaWN3ZWIvc3RhdHVzL29jc3Awgc8GA1UdLgSBxzCBxDCBwaCBvqCB
+u4aBuGxkYXA6Ly9sZGFwc2RjYTIuc2VjdXJpdHlkYXRhLm5ldC5lYy9DTj1BVVRPUklEQUQgREUg
+Q0VSVElGSUNBQ0lPTiBTVUJDQS0yIFNFQ1VSSVRZIERBVEEsT1U9RU5USURBRCBERSBDRVJUSUZJ
+Q0FDSU9OIERFIElORk9STUFDSU9OLE89U0VDVVJJVFkgREFUQSBTLkEuIDIsQz1FQz9kZWx0YVJl
+dm9jYXRpb25MaXN0P2Jhc2UwIwYDVR0RBBwwGoEYd2JhbmNob25AcGFjaWZpY28uZmluLmVjMIIB
+EgYDVR0gBIIBCTCCAQUwYAYKKwYBBAGCpnICCjBSMFAGCCsGAQUFBwICMEQeQgBDAGUAcgB0AGkA
+ZgBpAGMAYQBkAG8AIABkAGUAIABNAGkAZQBtAGIAcgBvACAAZABlACAARQBtAHAAcgBlAHMAYTCB
+oAYKKwYBBAGCpnICBDCBkTCBjgYIKwYBBQUHAgEWgYFodHRwczovL3d3dy5zZWN1cml0eWRhdGEu
+bmV0LmVjL3dwLWNvbnRlbnQvZG93bmxvYWRzL05vcm1hdGl2YXMvUF9kZV9DZXJ0aWZpY2Fkb3Mv
+UG9saXRpY2FzIGRlIENlcnRpZmljYWRvIE1pZW1icm8gZGUgRW1wcmVzYS5wZGYwHQYDVR0lBBYw
+FAYIKwYBBQUHAwIGCCsGAQUFBwMEMIICogYDVR0fBIICmTCCApUwgeWgQaA/hj1odHRwOi8vb2Nz
+cGd3LnNlY3VyaXR5ZGF0YS5uZXQuZWMvZWpiY2EvcHVibGljd2ViL3N0YXR1cy9vY3NwooGfpIGc
+MIGZMTkwNwYDVQQDDDBBVVRPUklEQUQgREUgQ0VSVElGSUNBQ0lPTiBTVUJDQS0yIFNFQ1VSSVRZ
+IERBVEExMDAuBgNVBAsMJ0VOVElEQUQgREUgQ0VSVElGSUNBQ0lPTiBERSBJTkZPUk1BQ0lPTjEd
+MBsGA1UECgwUU0VDVVJJVFkgREFUQSBTLkEuIDIxCzAJBgNVBAYTAkVDMIHHoIHEoIHBhoG+bGRh
+cDovL2xkYXBzZGNhMi5zZWN1cml0eWRhdGEubmV0LmVjL0NOPUFVVE9SSURBRCBERSBDRVJUSUZJ
+Q0FDSU9OIFNVQkNBLTIgU0VDVVJJVFkgREFUQSxPVT1FTlRJREFEIERFIENFUlRJRklDQUNJT04g
+REUgSU5GT1JNQUNJT04sTz1TRUNVUklUWSBEQVRBIFMuQS4gMixDPUVDP2NlcnRpZmljYXRlUmV2
+b2NhdGlvbkxpc3Q/YmFzZTCB4KCB3aCB2oaB12h0dHBzOi8vcG9ydGFsLW9wZXJhZG9yMi5zZWN1
+cml0eWRhdGEubmV0LmVjL2VqYmNhL3B1YmxpY3dlYi93ZWJkaXN0L2NlcnRkaXN0P2NtZD1jcmwm
+aXNzdWVyPUNOPUFVVE9SSURBRCBERSBDRVJUSUZJQ0FDSU9OIFNVQkNBLTIgU0VDVVJJVFkgREFU
+QSxPVT1FTlRJREFEIERFIENFUlRJRklDQUNJT04gREUgSU5GT1JNQUNJT04sTz1TRUNVUklUWSBE
+QVRBIFMuQS4gMixDPUVDMB0GA1UdDgQWBBTXZ9Au0v7LtLwTUdhXZG0t7dZAoDArBgNVHRAEJDAi
+gA8yMDI1MDEyMDE3NTg0NFqBDzIwMjYwMTIwMTc1ODQ0WjALBgNVHQ8EBAMCBeAwFwYKKwYBBAGC
+pnIDBQQJDAdKRUZFIElJMBoGCisGAQQBgqZyAwEEDAwKMDkwNzg4NzU3NDBABgorBgEEAYKmcgMJ
+BDIMMEdVQVlBUVVJTCBDQUJFQ0VSQSBDQU5UT05BTCBZIENBUElUQUwgUFJPVklOQ0lBTDARBgor
+BgEEAYKmcgMiBAMMAS4wPgYKKwYBBAGCpnIDBwQwDC5GUkFOQ0lTQ08gREUgUEFVTEEgSUNBWkEg
+MjAwIFkgQ0FMTEUgUElDSElOQ0hBMB8GCisGAQQBgqZyAwIEEQwPV0FMVEVSIEZFUk5BTkRPMB8G
+CisGAQQBgqZyAyAEEQwPNjY2NjY2NjY2NjY2NjY2MBMGCisGAQQBgqZyAyEEBQwDUEZYMBcGCisG
+AQQBgqZyAwwECQwHRUNVQURPUjAXBgorBgEEAYKmcgMDBAkMB0JBTkNIT04wEQYKKwYBBAGCpnID
+HgQDDAEuMCYGCisGAQQBgqZyAwoEGAwWQkFOQ08gREVMIFBBQ0lGSUNPIFMgQTAdBgorBgEEAYKm
+cgMLBA8MDTA5OTAwMDU3MzcwMDEwEQYKKwYBBAGCpnIDHQQDDAEuMBUGCisGAQQBgqZyAwQEBwwF
+TVVOT1owEAYKKwYBBAGCpnIDCAQCDAAwDQYJKoZIhvcNAQELBQADggIBAMGfIEeLDI8quKM7RwB2
+QfbaN6staYU+aq324x+Bm4S9JRfrxQ4GPcDNL/zBGi/FIiXO6YX4lKrnNxS9cPs8hrJHZLgFrrcO
+9j1B6sP1dPZBcDVjybTZ4z0+NyXzAj28TWX2uEscawfiPTn/qGMwN7ktxM3J4bUxHk4SdLKciUui
+Ste7J7Vgj6Iuc46gmysSziDO28e4bUDucGvMWE044D5reqYQ6MCBb6tfpOT/xFg4CDhENVPzojJm
+3co3y7IFZtHVJkNs3JwCfW5T435I1i4T71+GVlzyi7S9quc/8dgW6KW87N2S3oTf2z64KqMEj0/G
+m02UTau+LNkOxm/SbKUx0NYTFTa/UCQ/gk92+uv6buDWn5q1l+oOV42CPy5mMAFKqseqzEHBuW+e
+K5VSre/lONWogKlxx861gCDIPo7j/pQWAZL/7mPw3aPBps8lk9c4Fl8UVvDZpp/I+tUrAAFSvSzr
+bOOjee9ikrzMyPUtJHNM5DGeWs5DObQmu8YsFiUhlaSq0tw65CYBq/2nKdM6xywYCDaJDbkKqVv4
+A4YPiAwys9WeDuQxmqTYX695N6/CUZycRmgIY830DXruAZBrLoMmph5Uor2tvvf9YqdLMNe9VFhn
+9XnKcooIZxyo3tT/P20Q/DozUdBPSVOs8vyWZkQcPNJSwkzHwcBGQkr9
+>>>>>>> Stashed changes
 </ds:X509Certificate>
 </ds:X509Data>
 <ds:KeyValue>
 <ds:RSAKeyValue>
 <ds:Modulus>
+<<<<<<< Updated upstream
 6tfjGuXfST9T8TBZpR7XCbsEMtsZPYTxZjPO7ANcGfIk8Us9oTC7TMfgsT40cRLpB+k2sFB4Fd0L
 TGqYXLXBkdb3fjp/krKsHFCq19B2qdOefHagmZBErEBSjJU2y1J9QDswwEL0f1TBTrbVjFqMdD/L
 SEXDyIpZNmx3YAfBcx33sqV4t5a6wVz0oLYIzhwPaQMrmWBTNKJVw7j2pxVrDeAzz4a+ykOlH1BP
 2NWM1BQjgApFN+GAmv2EpGpbz5XfQp3AZGd8pR4kVKJ+V1kULgsI8TbUtLlaj3NJrEQ6XabC4nrH
 tfMSWjtaC/tZ5EM0aJR0BGHbGrViSe3ZIhJHnQ==
+=======
+vhbbrcRDC5tg4GUwIFg6uWxvoga3vDTQcuInQYZTc96WvJtkfKdZ0ErDiFukoe9YGjh7+vxLnurt
+pygn67RpaeFQxMYWWgvH0LsYbA3MIubNaqYfKfRGxGifpXsuuNuvpCirENuUhdWt7t9TIXMZVHn1
+gkIvHpau/k4jqb/mSj1ueKOesNGiySlqO019ZSHcbUIrOXhcqjoECoShQUyviGy532ArgeLEKybv
+ZmerRjd5sw4MFiVYO8mDSXomm88zzsAFTMA7Wy+l/5dt206KLIAiL3Ve8CoOmxoMMPbvzBWWWBOI
+RIwb6i2PMGe6eehEP8KnHnq+Lj3qIhiqr3RjdQ==
+>>>>>>> Stashed changes
 </ds:Modulus>
 <ds:Exponent>AQAB</ds:Exponent>
 </ds:RSAKeyValue>
 </ds:KeyValue>
 </ds:KeyInfo>
+<<<<<<< Updated upstream
 <ds:Object Id="Signature662126-Object288445"><etsi:QualifyingProperties Target="#Signature662126"><etsi:SignedProperties Id="Signature662126-SignedProperties824892"><etsi:SignedSignatureProperties><etsi:SigningTime>2025-03-20T14:27:13-05:00</etsi:SigningTime><etsi:SigningCertificate><etsi:Cert><etsi:CertDigest><ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/><ds:DigestValue>Ikmm/FPLCcn+WDbcMQtbfyMeExQ=</ds:DigestValue></etsi:CertDigest><etsi:IssuerSerial><ds:X509IssuerName>CN=AUTORIDAD DE CERTIFICACION SUBCA-2 SECURITY DATA,OU=ENTIDAD DE CERTIFICACION DE INFORMACION,O=SECURITY DATA S.A. 2,C=EC</ds:X509IssuerName><ds:X509SerialNumber>439784806</ds:X509SerialNumber></etsi:IssuerSerial></etsi:Cert></etsi:SigningCertificate></etsi:SignedSignatureProperties><etsi:SignedDataObjectProperties><etsi:DataObjectFormat ObjectReference="#Reference-ID-560002"><etsi:Description>comprobateFirma</etsi:Description><etsi:MimeType>text/xml</etsi:MimeType></etsi:DataObjectFormat></etsi:SignedDataObjectProperties></etsi:SignedProperties></etsi:QualifyingProperties></ds:Object></ds:Signature></factura>]]></comprobante>
+=======
+<ds:Object Id="Signature1013978-Object114731"><etsi:QualifyingProperties Target="#Signature1013978"><etsi:SignedProperties Id="Signature1013978-SignedProperties549430"><etsi:SignedSignatureProperties><etsi:SigningTime>2025-03-07T17:09:27-05:00</etsi:SigningTime><etsi:SigningCertificate><etsi:Cert><etsi:CertDigest><ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/><ds:DigestValue>0GImeGOCNDLEnkC0BcsEOu/GaZE=</ds:DigestValue></etsi:CertDigest><etsi:IssuerSerial><ds:X509IssuerName>CN=AUTORIDAD DE CERTIFICACION SUBCA-2 SECURITY DATA,OU=ENTIDAD DE CERTIFICACION DE INFORMACION,O=SECURITY DATA S.A. 2,C=EC</ds:X509IssuerName><ds:X509SerialNumber>1857489573</ds:X509SerialNumber></etsi:IssuerSerial></etsi:Cert></etsi:SigningCertificate></etsi:SignedSignatureProperties><etsi:SignedDataObjectProperties><etsi:DataObjectFormat ObjectReference="#Reference-ID-474598"><etsi:Description>Descripcion del documento</etsi:Description><etsi:MimeType>text/xml</etsi:MimeType></etsi:DataObjectFormat></etsi:SignedDataObjectProperties></etsi:SignedProperties></etsi:QualifyingProperties></ds:Object></ds:Signature></factura>]]></comprobante>
+>>>>>>> Stashed changes
 <mensajes/>
 </autorizacion>
 
