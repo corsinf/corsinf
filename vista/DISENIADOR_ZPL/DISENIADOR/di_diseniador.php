@@ -1042,7 +1042,7 @@ const id = '<?php echo $id; ?>'
                 <a href="../vista/inicio.php?mod=2013&acc=lista_etiquetas" class="btn btn-outline-secondary btn-sm"><i class="bx bx-left-arrow-alt"></i> Regresar</a>
                 <button class="btn-sm btn-info btn" onclick="vista_previa()"><i class="bx bx-print"></i> Imprimir</button>
                 <button type="button" class="btn-sm btn-primary btn" onclick="GuardarDiseño()"><i class="bx bx-print"></i> Guardar Diseño</button>
-                <button class="btn-sm btn-success btn" onclick="prueba()"><i class="bx bx-print"></i> excel</button>
+                <!-- <button class="btn-sm btn-success btn" onclick="prueba()"><i class="bx bx-print"></i> excel</button> -->
             </div>    
         </div>
         <div class="row">
