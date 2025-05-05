@@ -9,11 +9,11 @@ require_once(dirname(__DIR__, 1) . '/GENERAL/BaseModel.php');
 class detalle_articuloM extends BaseModel
 {
 	protected $tabla = 'ac_articulos';
-    protected $primaryKey = 'id_articulos AS _id';
+	protected $primaryKey = 'id_articulos AS _id';
 
-    protected $camposPermitidos = [
-        'tag_unique AS tag_unique',
-    ];
+	protected $camposPermitidos = [
+		'tag_unique AS tag_unique',
+	];
 
 	function guardar($tabla, $datos)
 	{
@@ -129,6 +129,154 @@ class detalle_articuloM extends BaseModel
 					P.id_articulo = $id;";
 
 		return $this->db->datos($sql);
+	}
+
+	function cargar_datos_vista_sin_logueo($id, $id_empresa)
+	{
+		$id = intval($id);
+
+		$sql = "SELECT
+					-- Identificación del artículo
+					P.id_articulo AS 'id_A',
+					P.tag_unique AS 'rfid',
+					P.tag_serie AS 'tag_s',
+					P.tag_antiguo AS 'ant',
+					P.subnumero AS 'subnum',
+					-- Descripción y características
+					P.descripcion AS 'nom',
+					P.descripcion_2 AS 'des',
+					P.caracteristica AS 'carac',
+					P.observaciones AS 'obs',
+					P.modelo AS 'mod',
+					P.serie AS 'ser',
+					-- Cantidad, precio y estado del artículo
+					P.cantidad AS 'cant',
+					P.precio AS 'prec',
+					P.imagen AS 'imagen',
+					P.kit AS 'es_kit',
+					P.maximo AS 'max',
+					P.minimo AS 'min',
+					-- Unidades de medida y tipo de artículo
+					-- P.id_unidad_medida AS 'id_unidad_medida',
+					-- CONCAT(UM.ac_nombre, ' - ', UM.ac_simbolo) AS 'unidad_medida',
+					-- P.id_tipo_articulo AS 'id_tipo_articulo',
+					-- Localización
+					P.id_localizacion AS 'id_loc',
+					L.DENOMINACION AS 'loc_nom',
+					L.EMPLAZAMIENTO AS 'c_loc',
+					-- Custodio (Persona)
+					-- PE.th_per_id AS 'id_person',
+					-- PE.th_per_cedula AS 'person_ci',
+					-- CONCAT(PE.th_per_primer_apellido, ' ', PE.th_per_segundo_apellido, ' ', PE.th_per_primer_nombre, ' ', PE.th_per_segundo_nombre) AS 'person_nom',
+					-- PE.th_per_correo AS 'person_correo',
+					-- PE.th_per_telefono_1 AS 'telefono',
+					-- PE.th_per_direccion AS 'direccion',
+					-- PE.th_per_foto_url AS 'foto',
+					-- PE.th_per_codigo_sap AS 'person_no',
+					-- PE.th_per_unidad_org_sap AS 'unidad_org',
+					-- Marca, Estado, Género, Color
+					P.id_marca AS 'id_mar',
+					M.DESCRIPCION AS 'marca',
+					M.CODIGO AS 'c_mar',
+					P.id_estado AS 'id_est',
+					E.CODIGO AS 'c_est',
+					E.DESCRIPCION AS 'estado',
+					P.id_genero AS 'id_gen',
+					G.DESCRIPCION AS 'genero',
+					G.CODIGO AS 'c_gen',
+					P.id_color AS 'id_col',
+					C.DESCRIPCION AS 'color',
+					C.CODIGO AS 'c_col',
+					-- Proyecto
+					-- P.id_proyecto AS 'id_pro',
+					-- PR.denominacion AS 'proyecto',
+					-- PR.programa_financiacion AS 'c_pro',
+					-- Clase de Movimiento
+					-- P.id_clase_movimiento AS 'id_clase_movimiento',
+					-- CM.DESCRIPCION AS 'movimiento',
+					-- Familia y Subfamilia
+					-- P.id_familia AS 'id_fam',
+					-- F.detalle_familia AS 'familia',
+					-- P.id_subfamilia AS 'id_subfam',
+					-- SF.detalle_familia AS 'subfamilia',
+					-- Información financiera
+					-- P.companycode AS 'companycode',
+					-- P.centro_costos AS 'centro_costos',
+					-- P.resp_cctr AS 'resp_cctr',
+					-- P.funds_ctr_apc AS 'funds_ctr_apc',
+					-- P.profit_ctr AS 'profit_ctr',
+					-- Auditoría y fechas
+					-- P.id_usuario_actualizar AS 'id_usuario_actualizar',
+					-- P.fecha_creacion AS 'fecha_creacion',
+					-- P.fecha_modificacion AS 'fecha_modificacion',
+					-- P.fecha_baja AS 'fecha_baja',
+					-- P.fecha_referencia AS 'fecha_referencia',
+					-- P.fecha_contabilizacion AS 'fecha_contabilizacion',
+					-- TA.ID_TIPO_ARTICULO AS id_tipo_articulo,
+					TA.descripcion AS tipo_articulo
+					
+				FROM
+					ac_articulos P
+					LEFT JOIN ac_localizacion L ON P.id_localizacion = L.ID_LOCALIZACION
+					LEFT JOIN th_personas PE ON P.th_per_id = PE.th_per_id
+					LEFT JOIN ac_marcas M ON P.id_marca = M.ID_MARCA
+					LEFT JOIN ac_estado E ON P.id_estado = E.ID_ESTADO
+					LEFT JOIN ac_genero G ON P.id_genero = G.ID_GENERO
+					LEFT JOIN ac_colores C ON P.id_color = C.ID_COLORES
+					LEFT JOIN ac_proyecto PR ON P.id_proyecto = PR.ID_PROYECTO
+					LEFT JOIN ac_familias F ON P.id_familia = F.id_familia
+					LEFT JOIN ac_familias SF ON P.id_subfamilia = SF.id_familia
+					LEFT JOIN ac_clase_movimiento CM ON P.id_clase_movimiento = CM.ID_MOVIMIENTO
+					LEFT JOIN ac_cat_tipo_articulo TA ON P.id_tipo_articulo = TA.id_tipo_articulo
+					LEFT JOIN ac_cat_unidad_medida UM ON P.id_unidad_medida = UM.ac_id_unidad
+				WHERE 
+					P.id_articulo = $id;";
+
+
+		$id_ofuscado_base64 = $id_empresa;
+		$clave = 'corsinf';
+		$id_empresa = '';
+
+		$sql_sp = "DECLARE @id_empresa INT;
+					EXEC SP_EMPRESA_DESCIFRAR_ID_EMPRESA 
+						@id_ofuscado_base64 = '$id_ofuscado_base64',
+						@clave = '$clave',
+						@id_empresa = @id_empresa OUTPUT;
+					SELECT @id_empresa AS id_empresa;";
+		
+		$id_empresa_valido = $this->db->datos($sql_sp, true)[0]['id_empresa'];
+
+		$sql_2 = "SELECT
+					Id_empresa,
+					Base_datos,
+					Usuario_db,
+					Password_db,
+					Ip_host,
+					Puerto_db,
+					Logo 
+				FROM
+					EMPRESAS 
+				WHERE
+					Id_empresa = '$id_empresa_valido'";
+
+		$datos = $this->db->datos($sql_2, true)[0];
+
+
+		$usuario = $datos['Usuario_db'];
+		$password = $datos['Password_db'];  // en mi caso tengo contraseña pero en casa caso introducidla aquí.
+		$servidor = $datos['Ip_host'] . ', ' . $datos['Puerto_db'];
+		$database = $datos['Base_datos'];
+
+		// print_r($datos);
+		// exit();
+		// die();
+
+		return $this->db->datos_db_terceros($database, $usuario, $password, $servidor, $puerto = false, $sql);
+
+		exit;
+
+
+		//return $this->db->datos($sql);
 	}
 
 

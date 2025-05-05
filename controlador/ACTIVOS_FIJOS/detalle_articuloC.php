@@ -94,6 +94,9 @@ if (isset($_GET['add_info'])) {
 	echo json_encode($controlador->add_info($parametros));
 }
 
+if (isset($_GET['cargar_detalle_activo'])) {
+	echo json_encode($controlador->cargar_detalle_activo($_POST['id'] ?? '', $_POST['token'] ?? ''));
+}
 
 
 class detalle_articuloC
@@ -336,6 +339,19 @@ class detalle_articuloC
 		// 	return -1;
 		// }
 	}
+
+	function cargar_detalle_activo($id, $id_empresa)
+	{
+		$datos = $this->modelo->cargar_datos_vista_sin_logueo($id, $id_empresa);
+		if (count($datos) > 0) {
+			return $datos;
+		}
+		return '';
+	}
+
+	/**
+	 * 
+	 */
 
 	function guardar_datos_patrimoniales($parametros)
 	{
