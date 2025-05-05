@@ -24,7 +24,7 @@ function isMobileDevice()
 }
 
 ?>
-<script src="../js/detalle_activo.js"></script>
+<script src="../js/detalle_activo.js?v=<?= rand() ?>"></script>
 <script type="text/javascript">
 	$(document).ready(function() {
 		var art = '<?php echo $id; ?>';
