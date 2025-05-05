@@ -19,7 +19,8 @@ function cargar_detalle_activo(id, token) {
 				$('#lbl_localizacion').text(response[0].loc_nom)
 				$('#lbl_color').text(response[0].color);
 				if (response[0].imagen != '' && response[0].imagen != null) {
-					$('#img_producto').prop('src', '../img/' + response[0].imagen);
+					// $('#img_producto').prop('src', '../img/' + response[0].imagen);
+					$('#img_producto').prop('src', response[0].imagen);
 				}
 				console.log(response);
 
