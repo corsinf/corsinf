@@ -11,7 +11,10 @@ if (isset($_GET['id'])) {
 
 if (isset($_GET['_token'])) {
 	$_token = $_GET['_token'];
+	$_token = str_replace(' ', '+', $_GET['_token']);
 }
+
+// print_r($_token); exit(); die();
 
 function isMobileDevice()
 {
@@ -43,7 +46,7 @@ function isMobileDevice()
 			<div class="card-body">
 				<div class="row">
 					<div class="col-12 col-sm-6">
-						<h3 class="d-inline-block d-sm-none" id="lbl_nombre"></h3>
+						<h3 class="d-inline-block" id="lbl_nombre"></h3>
 						<div class="col-12">
 							<img id="img_producto" src="../img/sin_imagen.gif" width="50%" class="product-image" alt="Product Image">
 						</div>

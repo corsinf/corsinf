@@ -54,42 +54,42 @@ if (isset($_GET['_id'])) {
     $('#ddl_marca').on('select2:select', function(e) {
       var data = e.params.data.data;
 
-      $('#lbl_sap_mar').text('SAP:' + data.CODIGO)
+      $('#lbl_sap_mar').text('Código:' + data.CODIGO)
       // console.log(data);
     });
 
     //---------------------------------
     $('#ddl_genero').on('select2:select', function(e) {
       var data = e.params.data.data;
-      $('#lbl_sap_gen').text('SAP:' + data.CODIGO)
+      $('#lbl_sap_gen').text('Código:' + data.CODIGO)
       // console.log(data);
     });
 
     //---------------------------------
     $('#ddl_color').on('select2:select', function(e) {
       var data = e.params.data.data;
-      $('#lbl_sap_col').text('SAP:' + data.CODIGO)
+      $('#lbl_sap_col').text('Código:' + data.CODIGO)
       console.log(data);
     });
 
     //---------------------------------
     $('#ddl_estado').on('select2:select', function(e) {
       var data = e.params.data.data;
-      $('#lbl_sap_est').text('SAP:' + data.CODIGO)
+      $('#lbl_sap_est').text('Código:' + data.CODIGO)
       console.log(data);
     });
 
     //---------------------------------
     $('#ddl_proyecto').on('select2:select', function(e) {
       var data = e.params.data.data;
-      $('#lbl_sap_pro').text('SAP:' + data.pro)
+      $('#lbl_sap_pro').text('Código:' + data.pro)
       console.log(data);
     });
 
     //---------------------------------
     $('#ddl_localizacion').on('select2:select', function(e) {
       var data = e.params.data.data;
-      $('#lbl_sap_loc').text('SAP:' + data.EMPLAZAMIENTO)
+      $('#lbl_sap_loc').text('Código:' + data.EMPLAZAMIENTO)
       console.log(data);
     });
     //---------------------------------
@@ -256,19 +256,19 @@ if (isset($_GET['_id'])) {
   function cargar_articulo_vista_pnl(data) {
     $('#lbl_descripcion').text(data.nom);
     $('#lbl_descripcion2').text(data.des ?? '');
-    $('#lbl_localizacion1').html(`<b>Emplazamiento / Localización</b> | <label style="font-size:65%"> SAP: ${data.cloc}</label>`);
+    $('#lbl_localizacion1').html(`<b>Emplazamiento / Localización</b> | <label style="font-size:65%"> Código: ${data.cloc}</label>`);
     $('#lbl_localizacion').text(data.loc_nom);
 
-    $('#lbl_custodio1').html(`<b>Custodio:</b> | <label style="font-size:65%"> SAP: ${data.person_no}</label>`);
+    $('#lbl_custodio1').html(`<b>Custodio:</b> | <label style="font-size:65%"> Código: ${data.person_no}</label>`);
     $('#lbl_custodio').text(data.person_nom);
 
-    $('#lbl_marca').html(`${data.marca} | <label style="font-size:65%"> SAP: ${data.c_mar}</label>`);
-    $('#lbl_color').html(`${data.color} | <label style="font-size:65%"> SAP: ${data.c_col}</label>`);
-    $('#lbl_genero').html(`${data.genero} | <label style="font-size:65%"> SAP: ${data.c_gen}</label>`);
-    $('#lbl_proyecto').html(`${data.proyecto} | <label style="font-size:65%"> SAP: ${data.c_pro}</label>`);
-    $('#lbl_estado').html(`${data.estado} | <label style="font-size:65%"> SAP: ${data.c_est}</label>`);
+    $('#lbl_marca').html(`${data.marca} | <label style="font-size:65%"> Código: ${data.c_mar}</label>`);
+    $('#lbl_color').html(`${data.color} | <label style="font-size:65%"> Código: ${data.c_col}</label>`);
+    $('#lbl_genero').html(`${data.genero} | <label style="font-size:65%"> Código: ${data.c_gen}</label>`);
+    $('#lbl_proyecto').html(`${data.proyecto} | <label style="font-size:65%"> Código: ${data.c_pro}</label>`);
+    $('#lbl_estado').html(`${data.estado} | <label style="font-size:65%"> Código: ${data.c_est}</label>`);
 
-    $('#lbl_asset').html(`<b>Asset:</b> ${data.tag_s}`);
+    $('#lbl_sku').html(`<b>SKU:</b> ${data.tag_s}`);
     $('#lbl_sub_num').html(`<b>SubNum:</b> ${data.subnum}`);
     $('#lbl_rfid').html(data.rfid);
     $('#lbl_tag_ant').html(`<b>Tag Antiguo:</b> ${data.ant}`);
@@ -284,7 +284,7 @@ if (isset($_GET['_id'])) {
       $("#img_articulo").attr("src", "../img/" + data.imagen);
     }
 
-    $('#lbl_unidad').text('/' + data.id_unidad_medida);
+    // $('#lbl_unidad').text('/' + data.id_unidad_medida);
     $('#lbl_fecha_compra').text(formatoDate(data.fecha_contabilizacion));
 
     if (data.carac) {
@@ -409,13 +409,13 @@ if (isset($_GET['_id'])) {
     $('#txt_fecha').val(fecha_formateada(data.fecha_contabilizacion));
 
     // SAP
-    $('#lbl_sap_col').text('SAP:' + data.c_col);
-    $('#lbl_sap_est').text('SAP:' + data.c_est);
-    $('#lbl_sap_mar').text('SAP:' + data.c_mar);
-    $('#lbl_sap_pro').text('SAP:' + data.c_pro);
-    $('#lbl_sap_gen').text('SAP:' + data.c_gen);
-    $('#lbl_sap_loc').text('SAP:' + data.c_loc);
-    $('#lbl_sap_custodio').text('SAP:' + data.person_no);
+    $('#lbl_sap_col').text('Código:' + data.c_col);
+    $('#lbl_sap_est').text('Código:' + data.c_est);
+    $('#lbl_sap_mar').text('Código:' + data.c_mar);
+    $('#lbl_sap_pro').text('Código:' + data.c_pro);
+    $('#lbl_sap_gen').text('Código:' + data.c_gen);
+    $('#lbl_sap_loc').text('Código:' + data.c_loc);
+    $('#lbl_sap_custodio').text('Código:' + data.person_no);
   }
 
   function guardar_articulo() {
@@ -665,7 +665,7 @@ if (isset($_GET['_id'])) {
   function imprimir_tags_masivo() {
     var query = $('#txt_buscar').val();
     var parametros = {
-      'query': $('#lbl_asset').text(),
+      'query': $('#lbl_sku').text(),
       'localizacion': '',
       'custodio': '',
       'pag': '',
@@ -853,7 +853,7 @@ if (isset($_GET['_id'])) {
 
               <div class="d-flex flex-wrap gap-3 py-2">
                 <span class="badge bg-secondary" id="lbl_sub_num"></span>
-                <span class="badge bg-primary" id="lbl_asset"></span>
+                <span class="badge bg-primary" id="lbl_sku"></span>
                 <span class="badge bg-warning" id="lbl_tag_ant"></span>
               </div>
 
@@ -873,7 +873,7 @@ if (isset($_GET['_id'])) {
                   <div class="bg-light p-2 rounded mb-2">
                     <span class="fw-bold">Cantidad: </span>
                     <span class="h4" id="lbl_canti">0</span>
-                    <span class="text-muted" id="lbl_unidad">/</span>
+                    <!-- <span class="text-muted" id="lbl_unidad">/</span> -->
                   </div>
                 </div>
               </div>
@@ -1048,7 +1048,7 @@ if (isset($_GET['_id'])) {
                         <div class="col-sm-6">
                           <div class="d-flex justify-content-between align-items-center">
                             <label for="ddl_custodio" class="form-label">Custodio </label>
-                            <small id="lbl_sap_custodio" class="text-muted"><u>SAP:</u></small>
+                            <small id="lbl_sap_custodio" class="text-muted"><u>Código:</u></small>
                           </div>
 
                           <select class="form-control form-control-sm select2-validation" name="ddl_custodio" id="ddl_custodio">
@@ -1060,7 +1060,7 @@ if (isset($_GET['_id'])) {
                         <div class="col-sm-6">
                           <div class="d-flex justify-content-between align-items-center">
                             <label for="ddl_localizacion" class="form-label">Emplazamiento / Localización </label>
-                            <small id="lbl_sap_loc" class="text-muted"><u>SAP:</u></small>
+                            <small id="lbl_sap_loc" class="text-muted"><u>Código:</u></small>
                           </div>
 
                           <select class="form-control form-control-sm select2-validation" name="ddl_localizacion" id="ddl_localizacion">
@@ -1193,7 +1193,7 @@ if (isset($_GET['_id'])) {
                         <div class="col-sm-3">
                           <div class="d-flex justify-content-between align-items-center">
                             <label for="ddl_marca" class="form-label">Marca </label>
-                            <small id="lbl_sap_mar"><u>SAP: </u></small>
+                            <small id="lbl_sap_mar"><u>Código: </u></small>
                           </div>
 
                           <select class="form-control form-control-sm select2-validation" name="ddl_marca" id="ddl_marca">
@@ -1205,7 +1205,7 @@ if (isset($_GET['_id'])) {
                         <div class="col-sm-3">
                           <div class="d-flex justify-content-between align-items-center">
                             <label for="ddl_estado" class="form-label">Estado </label>
-                            <small id="lbl_sap_est"><u>SAP: </u></small>
+                            <small id="lbl_sap_est"><u>Código: </u></small>
                           </div>
                           <select class="form-control form-control-sm select2-validation" name="ddl_estado" id="ddl_estado">
                             <option value="">Seleccione</option>
@@ -1216,7 +1216,7 @@ if (isset($_GET['_id'])) {
                         <div class="col-sm-3">
                           <div class="d-flex justify-content-between align-items-center">
                             <label for="ddl_genero" class="form-label">Género </label>
-                            <small id="lbl_sap_gen"><u>SAP: </u></small>
+                            <small id="lbl_sap_gen"><u>Código: </u></small>
                           </div>
                           <select class="form-control form-control-sm select2-validation" name="ddl_genero" id="ddl_genero">
                             <option value="">Seleccione</option>
@@ -1227,7 +1227,7 @@ if (isset($_GET['_id'])) {
                         <div class="col-sm-3">
                           <div class="d-flex justify-content-between align-items-center">
                             <label for="ddl_color" class="form-label">Color </label>
-                            <small id="lbl_sap_col"><u>SAP: </u></small>
+                            <small id="lbl_sap_col"><u>Código: </u></small>
                           </div>
                           <select class="form-control form-control-sm select2-validation" name="ddl_color" id="ddl_color">
                             <option value="">Seleccione</option>
@@ -1248,7 +1248,7 @@ if (isset($_GET['_id'])) {
                         <div class="col-sm-6">
                           <div class="d-flex justify-content-between align-items-center">
                             <label for="ddl_proyecto" class="form-label">Proyecto </label>
-                            <small id="lbl_sap_pro"><u>SAP: </u></small>
+                            <small id="lbl_sap_pro"><u>Código: </u></small>
                           </div>
                           <select class="form-control form-control-sm select2-validation" name="ddl_proyecto" id="ddl_proyecto">
                             <option value="">Seleccione</option>
