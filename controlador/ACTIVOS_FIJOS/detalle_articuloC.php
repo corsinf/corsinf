@@ -179,6 +179,7 @@ class detalle_articuloC
 	function cargar_datos($id)
 	{
 		$datos = $this->modelo->cargar_datos($id);
+		
 		if (count($datos) > 0) {
 			if (!file_exists('../img/' . $datos[0]['imagen'])) {
 				$datos[0]['imagen'] = 'sin_imagen.jpg';
@@ -278,8 +279,8 @@ class detalle_articuloC
 			// array('campo' => 'fecha_creacion', 'dato' => $parametros['']),
 			array('campo' => 'fecha_modificacion', 'dato' => date('Y-m-d H:i:s')),
 			// array('campo' => 'fecha_baja', 'dato' => $parametros['']),
-			array('campo' => 'fecha_referencia', 'dato' => $parametros['txt_compra']),
-			array('campo' => 'fecha_contabilizacion', 'dato' => $parametros['txt_fecha']),
+			array('campo' => 'fecha_referencia', 'dato' => $parametros['txt_fecha']), 
+			array('campo' => 'fecha_contabilizacion', 'dato' => $parametros['txt_compra']),
 			// array('campo' => 'id_rubro', 'dato' => $parametros['']),
 		);
 

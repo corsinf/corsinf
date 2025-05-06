@@ -34,9 +34,22 @@
         });
     }
 
+    //Cargar datos de custodio en inputs
+    function datos_col_custodio(response) {
+        $('#txt_nombre').val(response.person_nom);
+        $('#txt_ci').val(response.person_ci);
+        $('#txt_email').val(response.person_correo);
+        $('#txt_puesto').val(response.PUESTO);
+        $('#txt_unidad_p').val(response.unidad_org);
+        $('#txt_id_custodio').val(response.id_person);
+
+        $('#titulo').text('Editar custodio');
+        $('#op').text('Editar');
+    }
+
     function editar_custodio() {
-        idc = $('#id').val();
-        location.href = '../vista/custodio_detalle.php?id=' + idc;
+        idc = $('#txt_id_custodio').val();
+        location.href = '../vista/inicio.php?mod=2&acc=ge_registrar_personas&_id=' + idc;
     }
 </script>
 
@@ -77,6 +90,7 @@
 
         <!-- TAB Custodio -->
         <div class="tab-pane fade show active" id="tab_custodio" role="tabpanel">
+            <input type="hidden" name="txt_id_custodio" id="txt_id_custodio">
             <div class="row mb-col">
                 <div class="col-sm-6">
                     <label for="txt_nombre">Nombre</label>

@@ -26,15 +26,19 @@
 
                 calcular_edad('txt_edad', response[0].fecha_nacimiento);
 
-                //Cargar Selects de provincia-ciudad-parroquia
-                url_provinciaC = '../controlador/GENERAL/th_provinciasC.php?listar=true';
-                cargar_select2_con_id('ddl_provincias', url_provinciaC, response[0].id_provincia, 'th_prov_nombre');
+                if (response[0].id_provincia != null) {
+                    //Cargar Selects de provincia-ciudad-parroquia
+                    url_provinciaC = '../controlador/GENERAL/th_provinciasC.php?listar=true';
+                    cargar_select2_con_id('ddl_provincias', url_provinciaC, response[0].id_provincia, 'th_prov_nombre');
 
-                url_ciudadC = '../controlador/GENERAL/th_ciudadC.php?listar=true';
-                cargar_select2_con_id('ddl_ciudad', url_ciudadC, response[0].id_ciudad, 'th_ciu_nombre');
+                    url_ciudadC = '../controlador/GENERAL/th_ciudadC.php?listar=true';
+                    cargar_select2_con_id('ddl_ciudad', url_ciudadC, response[0].id_ciudad, 'th_ciu_nombre');
 
-                url_parroquiaC = '../controlador/GENERAL/th_parroquiasC.php?listar=true';
-                cargar_select2_con_id('ddl_parroquia', url_parroquiaC, response[0].id_parroquia, 'th_parr_nombre');
+                    url_parroquiaC = '../controlador/GENERAL/th_parroquiasC.php?listar=true';
+                    cargar_select2_con_id('ddl_parroquia', url_parroquiaC, response[0].id_parroquia, 'th_parr_nombre');
+                }
+
+
             },
         });
     }

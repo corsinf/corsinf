@@ -256,7 +256,7 @@ if (isset($_GET['_id'])) {
   function cargar_articulo_vista_pnl(data) {
     $('#lbl_descripcion').text(data.nom);
     $('#lbl_descripcion2').text(data.des ?? '');
-    $('#lbl_localizacion1').html(`<b>Emplazamiento / Localización</b> | <label style="font-size:65%"> Código: ${data.cloc}</label>`);
+    $('#lbl_localizacion1').html(`<b>Emplazamiento / Localización</b> | <label style="font-size:65%"> Código: ${data.c_loc}</label>`);
     $('#lbl_localizacion').text(data.loc_nom);
 
     $('#lbl_custodio1').html(`<b>Custodio:</b> | <label style="font-size:65%"> Código: ${data.person_no}</label>`);
@@ -291,7 +291,8 @@ if (isset($_GET['_id'])) {
       $('#lbl_caracteristicas').css('display', 'block').html(`<b>Características:</b> ${data.carac}`);
     }
 
-    $('#lbl_precio').text(`$${data.prec}`);
+    let precioRedondeado = Math.ceil(data.prec * 100) / 100;
+    $('#lbl_precio').text(`$${precioRedondeado.toFixed(2)}`);
     $('#lbl_canti').text(data.cant);
 
     if (data.tipo_articulo === 'PATRIMONIALES') {
@@ -405,8 +406,8 @@ if (isset($_GET['_id'])) {
     $('#txt_funds_ctr_apc').val(data.funds_ctr_apc);
     $('#txt_profit_ctr').val(data.profit_ctr);
 
-    $('#txt_compra').val(fecha_formateada(data.fecha_referencia));
-    $('#txt_fecha').val(fecha_formateada(data.fecha_contabilizacion));
+    $('#txt_compra').val(fecha_formateada(data.fecha_contabilizacion)); 
+    $('#txt_fecha').val(fecha_formateada(data.fecha_referencia));
 
     // SAP
     $('#lbl_sap_col').text('Código:' + data.c_col);
@@ -521,19 +522,6 @@ if (isset($_GET['_id'])) {
         Swal.fire('', 'Error: ' + xhr.responseText, 'error');
       }
     });
-  }
-
-  //Cargar datos de custodio en inputs
-  function datos_col_custodio(response) {
-    $('#txt_nombre').val(response.person_nom);
-    $('#txt_ci').val(response.person_ci);
-    $('#txt_email').val(response.person_correo);
-    $('#txt_puesto').val(response.PUESTO);
-    $('#txt_unidad_p').val(response.unidad_org);
-    $('#id').val(response.id_person);
-
-    $('#titulo').text('Editar custodio');
-    $('#op').text('Editar');
   }
 
   function add_familia() {
@@ -1164,9 +1152,9 @@ if (isset($_GET['_id'])) {
                         <div class="col-sm-6">
                           <label for="ddl_familia" class="form-label">
                             Familia
-                            <button type="button" class="btn btn-success btn-xss mb-1" onclick="add_familia()" title="Nueva familia">
+                            <!-- <button type="button" class="btn btn-success btn-xss mb-1" onclick="add_familia()" title="Nueva familia">
                               <i class="bx bx-plus fs-7 me-0 fw-bold"></i>
-                            </button>
+                            </button> -->
                           </label>
 
                           <select class="form-select form-select-sm select2-validation" name="ddl_familia" id="ddl_familia" onchange="autocmpletar_subfam()">
@@ -1178,9 +1166,9 @@ if (isset($_GET['_id'])) {
                         <div class="col-sm-6">
                           <label for="ddl_subfamilia" class="form-label">
                             Subfamilia
-                            <button type="button" class="btn btn-success btn-xss mb-1" onclick="add_subfamilia()" title="Nueva sub familia">
+                            <!-- <button type="button" class="btn btn-success btn-xss mb-1" onclick="add_subfamilia()" title="Nueva sub familia">
                               <i class="bx bx-plus fs-7 me-0 fw-bold"></i>
-                            </button>
+                            </button> -->
                           </label>
                           <select class="form-select form-select-sm select2-validation" name="ddl_subfamilia" id="ddl_subfamilia">
                             <option value="">Seleccione una familia</option>
