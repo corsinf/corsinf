@@ -1028,7 +1028,8 @@ const id = '<?php echo $id; ?>'
             <div class="btn-group">
               <button type="button" class="btn btn-primary btn-compact">Descargas</button>
               <button type="button" class="btn btn-primary split-bg-primary dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown"> <span class="visually-hidden">Toggle Dropdown</span>
-              </button>
+              </button>                         
+              <button type="button" title="Asegurese que el navegador permita Descargar de manera automatica, y siga las instrucciones dentro del archivo descargado" class="btn-sm btn-outline-secondary btn dropdown-item"><i class='bx bx-info-circle me-0'></i></button>   
               <div class="dropdown-menu dropdown-menu-right dropdown-menu-lg-end">
                 <button type="button" class="dropdown-item" id="btn_editar" onclick="descargarLib()"><i class="bx bx-printer"></i> Plugin Impresora</button>
               </div>
