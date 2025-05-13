@@ -39,6 +39,13 @@ if (isset($_GET['_id'])) {
     font-size: 12px;
     margin-left: 3px;
   }
+
+  #img_articulo {
+    height: 300px;
+    object-fit: contain;
+    width: 100%;
+    background-color: #f8f9fa;
+  }
 </style>
 
 <script type="text/javascript">
@@ -280,9 +287,10 @@ if (isset($_GET['_id'])) {
       $('#lbl_observaciones').css('display', 'block').html(`<b>Observaciones:</b> ${data.obs}`);
     }
 
-    if (data.imagen && data.imagen !== 'sin_imagen.jpg') {
-      $("#img_articulo").attr("src", "../img/" + data.imagen);
+    if (data.ruta_imagen && data.ruta_imagen !== null) {
+      $("#img_articulo").attr("src", data.ruta_imagen);
     }
+
 
     // $('#lbl_unidad').text('/' + data.id_unidad_medida);
     $('#lbl_fecha_compra').text(formatoDate(data.fecha_contabilizacion));
@@ -308,7 +316,7 @@ if (isset($_GET['_id'])) {
     $('#cbx_kit').prop('checked', data.es_kit === "1");
     $('input[name="rbl_tip_articulo"][value="' + data.id_tipo_articulo + '"]').prop('checked', true);
     console.log(data.id_tipo_articulo);
-    
+
     $('input[name="rbl_asset"][value="' + data.longitud_rfid + '"]').prop('checked', true);
 
     // Asignar valores a los campos de texto
@@ -801,7 +809,7 @@ if (isset($_GET['_id'])) {
           <div class="col-md-3 border-end">
 
             <div class="image-zoom-section pe-3">
-              <div class="product-gallery owl-carousel owl-theme border mb-3 p-3" data-slider-id="1">
+              <div class="border mb-3 p-3 img-container" data-slider-id="1">
                 <div class="item">
                   <img src="../img/sin_imagen.jpg" class="img-fluid" id="img_articulo" alt="">
                 </div>

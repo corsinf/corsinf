@@ -192,14 +192,11 @@ class detalle_articuloC
 	{
 		$datos = $this->modelo->cargar_datos($id);
 
-		if (count($datos) > 0) {
-			if (!file_exists('../img/' . $datos[0]['imagen'])) {
-				$datos[0]['imagen'] = 'sin_imagen.jpg';
-			}
-		} else {
-			$datos[0]['imagen'] = 'sin_imagen.jpg';
-		}
-		// $datos = array_map(array($this->cod_globales, 'transformar_array_encode'), $datos);
+		$sql = 'SELECT ruta_img_relativa FROM EMPRESAS;';
+		$datos_2 = $this->modelo->datos($sql);
+
+		$datos[0]['ruta_imagen'] = $datos_2[0]['ruta_img_relativa'] . $datos[0]['imagen'];
+
 		return $datos;
 	}
 
@@ -346,6 +343,11 @@ class detalle_articuloC
 	function cargar_detalle_activo($id, $id_empresa)
 	{
 		$datos = $this->modelo->cargar_datos_vista_sin_logueo($id, $id_empresa);
+		$sql = 'SELECT ruta_img_relativa FROM EMPRESAS;';
+		$datos_2 = $this->modelo->datos($sql);
+
+		$datos[0]['ruta_imagen'] = $datos_2[0]['ruta_img_relativa'] . $datos[0]['imagen'];
+		
 		if (count($datos) > 0) {
 			return $datos;
 		}

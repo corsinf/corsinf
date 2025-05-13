@@ -18,9 +18,8 @@ function cargar_detalle_activo(id, token) {
 				$('#lbl_marca').text(response[0].marca)
 				$('#lbl_localizacion').text(response[0].loc_nom)
 				$('#lbl_color').text(response[0].color);
-				if (response[0].imagen != '' && response[0].imagen != null) {
-					// $('#img_producto').prop('src', '../img/' + response[0].imagen);
-					$('#img_producto').prop('src', response[0].imagen);
+				if (response[0].ruta_imagen != '' && response[0].ruta_imagen != null) {
+					$('#img_producto').prop('src', response[0].ruta_imagen);
 				}
 				console.log(response);
 
