@@ -14,6 +14,15 @@ class db
 	private $database;
 	private $tipo_base;
 	private $puerto;
+
+	private $api_usuario;
+	private $api_password;  // en mi caso tengo contraseña pero en casa caso introducidla aquí.
+	private $api_servidor;
+	private $api_database;
+	private $api_tipo_base;
+	private $api_puerto;
+	private $api_existe = 0;
+
 	function __construct()
 	{
 		
@@ -22,33 +31,79 @@ class db
 		$this->puerto = '';
 	}
 
+	function modificar_parametros_db($codigo_empresa_api)
+	{
+		$sql = "SELECT
+					Ip_host,
+					Base_datos,
+					Usuario_db,
+					Password_db,
+					Tipo_base,
+					Puerto_db
+				FROM EMPRESAS
+				WHERE codigo_empresa_api = '$codigo_empresa_api'";
+
+		$empresa = $this->datos($sql, true, 0)[0] ?? [];
+		
+		// Asignar los valores
+		$this->api_servidor   = $empresa['Ip_host']     ?? '';
+		$this->api_database   = $empresa['Base_datos']  ?? '';
+		$this->api_usuario    = $empresa['Usuario_db']  ?? '';
+		$this->api_password   = $empresa['Password_db'] ?? '';
+		$this->api_tipo_base  = $empresa['Tipo_base']   ?? '';
+		$this->api_puerto     = $empresa['Puerto_db']	?? '';
+		
+		$this->api_existe = 1;
+	}
+
 	function parametros_conexion($master = false)
 	{
 
 		$this->usuario =  '';
 		$this->password = '';
 		$this->puerto = '';
-		if (!$master) {
-			if (isset($_SESSION['INICIO']['ID_EMPRESA'])) {
 
-				$_SESSION['INICIO']['ULTIMO_ACCESO'] = time();
-				$this->servidor = $_SESSION['INICIO']['IP_HOST'];
-				$this->database = $_SESSION['INICIO']['BASEDATO'];
-				if ($_SESSION['INICIO']['USUARIO_DB'] != '' && $_SESSION['INICIO']['USUARIO_DB']!=null) {
+		if ($this->api_existe == 1) {
+			$this->usuario = $this->api_usuario ;
+			$this->password = $this->api_password;  // en mi caso tengo contraseña pero en casa caso introducidla aquí.
+			$this->servidor = 	$this->api_servidor . ', ' . $this->api_puerto;
+			$this->database = $this->api_database;
+		}else {
 
-					// print_r($_SESSION['INICIO']['USUARIO_DB']);die();
-					$this->usuario =  $_SESSION['INICIO']['USUARIO_DB'];
-				}
-				if ($_SESSION['INICIO']['PASSWORD_DB'] != '' && $_SESSION['INICIO']['PASSWORD_DB']!=null) {
-					$this->password = $_SESSION['INICIO']['PASSWORD_DB'];
-				}
-				$this->tipo_base = $_SESSION['INICIO']['TIPO_BASE'];
-				if($_SESSION['INICIO']['PUERTO_DB']!='' && $_SESSION['INICIO']['PUERTO_DB']!=null)
-				{
-					$this->puerto =   ', '.$_SESSION['INICIO']['PUERTO_DB'];
-				}
+			if (!$master) {
+				if (isset($_SESSION['INICIO']['ID_EMPRESA'])) {
 
-				// print_r($_SESSION['INICIO']);die();
+					$_SESSION['INICIO']['ULTIMO_ACCESO'] = time();
+					$this->servidor = $_SESSION['INICIO']['IP_HOST'];
+					$this->database = $_SESSION['INICIO']['BASEDATO'];
+					if ($_SESSION['INICIO']['USUARIO_DB'] != '' && $_SESSION['INICIO']['USUARIO_DB']!=null) {
+
+						// print_r($_SESSION['INICIO']['USUARIO_DB']);die();
+						$this->usuario =  $_SESSION['INICIO']['USUARIO_DB'];
+					}
+					if ($_SESSION['INICIO']['PASSWORD_DB'] != '' && $_SESSION['INICIO']['PASSWORD_DB']!=null) {
+						$this->password = $_SESSION['INICIO']['PASSWORD_DB'];
+					}
+					$this->tipo_base = $_SESSION['INICIO']['TIPO_BASE'];
+					if($_SESSION['INICIO']['PUERTO_DB']!='' && $_SESSION['INICIO']['PUERTO_DB']!=null)
+					{
+						$this->puerto =   ', '.$_SESSION['INICIO']['PUERTO_DB'];
+					}
+
+					// print_r($_SESSION['INICIO']);die();
+				} else {
+					// $this->usuario = "";
+					// $this->password = "";  // en mi caso tengo contraseña pero en casa caso introducidla aquí.
+					// $this->servidor = "DESKTOP-RSN9E39\SQLEXPRESS";
+					// $this->database = "LISTA_EMPRESAS";
+					// $this->tipo_base = '';
+					// $this->puerto = '';
+
+					$this->usuario = "sa";
+					$this->password = "Tango456";  // en mi caso tengo contraseña pero en casa caso introducidla aquí.
+					$this->servidor = "186.4.219.172, 1487";
+					$this->database = "LISTA_EMPRESAS";
+				}
 			} else {
 				// $this->usuario = "";
 				// $this->password = "";  // en mi caso tengo contraseña pero en casa caso introducidla aquí.
@@ -59,21 +114,9 @@ class db
 
 				$this->usuario = "sa";
 				$this->password = "Tango456";  // en mi caso tengo contraseña pero en casa caso introducidla aquí.
-				$this->servidor = "186.4.219.172, 1487";
+				$this->servidor = "186.4.219.172,1487";
 				$this->database = "LISTA_EMPRESAS";
 			}
-		} else {
-			// $this->usuario = "";
-			// $this->password = "";  // en mi caso tengo contraseña pero en casa caso introducidla aquí.
-			// $this->servidor = "DESKTOP-RSN9E39\SQLEXPRESS";
-			// $this->database = "LISTA_EMPRESAS";
-			// $this->tipo_base = '';
-			// $this->puerto = '';
-
-			$this->usuario = "sa";
-			$this->password = "Tango456";  // en mi caso tengo contraseña pero en casa caso introducidla aquí.
-			$this->servidor = "186.4.219.172,1487";
-			$this->database = "LISTA_EMPRESAS";
 		}
 	}
 

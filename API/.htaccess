@@ -1,0 +1,7 @@
+RewriteEngine On
+RewriteBase /corsinf/API/
+
+# Redirigir todo a index.php excepto si es un archivo o directorio real
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ index.php/$1 [QSA,L]

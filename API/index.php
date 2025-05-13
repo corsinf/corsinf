@@ -1,0 +1,50 @@
+<?php
+header('Content-Type: application/json');
+
+$requestUri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+$method = $_SERVER['REQUEST_METHOD'];
+
+// Define tu base path
+$basePath = '/corsinf/API';
+
+// Elimina el base path
+$endpoint = substr($requestUri, strlen($basePath));
+$endpoint = rtrim($endpoint, '/');
+
+// Divide en partes (por ejemplo: ['usuario', '3'])
+$parts = explode('/', $endpoint);
+
+// Identifica la ruta principal y opcionalmente el ID
+$route = isset($parts[1]) ? '/' . $parts[1] : '/';
+$id = isset($parts[2]) ? intval($parts[2]) : null;
+
+switch ($route) {
+    case '/login':
+        if ($method === 'POST') {
+            require __DIR__ . '/auth/login.php';
+        } else {
+            http_response_code(405);
+            echo json_encode(["error" => "Método no permitido"]);
+        }
+        break;
+
+    case '/usuario':
+        if ($method === 'GET') {
+            // Lo pasamos como variable global para que usuarioE.php lo use si existe
+            if ($id !== null) {
+                $_GET['id'] = $id;
+                $_GET['nombre'] ?? '';
+                $accion = 'usuarios';
+            }
+            require __DIR__ . '/endpoints/usuarioE.php';
+        } else {
+            http_response_code(405);
+            echo json_encode(["error" => "Método no permitido"]);
+        }
+        break;
+
+    default:
+        http_response_code(404);
+        echo json_encode(["error" => "Ruta no encontrada"]);
+        break;
+}
