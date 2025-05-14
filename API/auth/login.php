@@ -62,6 +62,10 @@ class Auth
     }
 }
 
+header("Content-Type: application/json");
+header("Access-Control-Allow-Origin: *"); // para pruebas
+header("Access-Control-Allow-Headers: Content-Type");
+
 // Lógica para recibir el input de la solicitud
 $data = json_decode(file_get_contents("php://input"));
 
