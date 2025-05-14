@@ -45,16 +45,18 @@ class db
 							WHERE codigo_empresa_api = '$codigo_empresa_api'";
 
 			$empresa = $this->datos($sql, true, 0)[0] ?? [];
-			
-			// Asignar los valores
-			$this->api_servidor   = $empresa['Ip_host']     ?? '';
-			$this->api_database   = $empresa['Base_datos']  ?? '';
-			$this->api_usuario    = $empresa['Usuario_db']  ?? '';
-			$this->api_password   = $empresa['Password_db'] ?? '';
-			$this->api_tipo_base  = $empresa['Tipo_base']   ?? '';
-			$this->api_puerto     = $empresa['Puerto_db']	?? '';
-			
-			$this->api_existe = 1;
+
+			if($empresa){
+				// Asignar los valores
+				$this->api_servidor   = $empresa['Ip_host']     ?? '';
+				$this->api_database   = $empresa['Base_datos']  ?? '';
+				$this->api_usuario    = $empresa['Usuario_db']  ?? '';
+				$this->api_password   = $empresa['Password_db'] ?? '';
+				$this->api_tipo_base  = $empresa['Tipo_base']   ?? '';
+				$this->api_puerto     = $empresa['Puerto_db']	?? '';
+				
+				$this->api_existe = 1;
+			}
 		}
 	}
 
@@ -167,7 +169,7 @@ class db
 	    return $rsp;
 	}
 
-	function datos($sql, $master = false)
+	function datos($sql, $master = false, $error = false)
 	{
 
 		$this->parametros_conexion($master);
@@ -185,7 +187,11 @@ class db
 			return $result;
 			
 		} catch (Exception $e) {
-			 die("Error: " . $e->getMessage());
+			if($error){
+				die("Error: " . $e->getMessage());
+			}else{
+				die(json_encode(["error" => "Error Consulte con: soporte@corsinf.com"]));
+			}
 		}
 		
 	}
