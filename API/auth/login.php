@@ -40,9 +40,15 @@ class Auth
 
 
 
-        if ($user && ($data->clave == $this->cod_global->desenciptar_clave($user[0]['password']))) { 
+        if ($user && ($data->clave == $this->cod_global->desenciptar_clave($user[0]['password']))) {
             // Generar el token JWT
-            $token = $this->jwtHandler->generateToken(['id' => $user[0]['id_usuarios'], 'usuario' => $user[0]['nombres']]);
+            $token = $this->jwtHandler->generateToken(
+                [
+                    'id' => $user[0]['id_usuarios'],
+                    'usuario' => $user[0]['nombres'],
+                    'empresa' => $data->empresa,
+                ]
+            );
             echo json_encode(["token" => $token]);
         } else {
             // Si las credenciales son incorrectas

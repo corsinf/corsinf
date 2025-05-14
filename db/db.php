@@ -16,7 +16,7 @@ class db
 	private $puerto;
 
 	private $api_usuario;
-	private $api_password;  // en mi caso tengo contraseña pero en casa caso introducidla aquí.
+	private $api_password;
 	private $api_servidor;
 	private $api_database;
 	private $api_tipo_base;
@@ -31,29 +31,31 @@ class db
 		$this->puerto = '';
 	}
 
-	function modificar_parametros_db($codigo_empresa_api)
+	function modificar_parametros_db($codigo_empresa_api = false)
 	{
-		$sql = "SELECT
-					Ip_host,
-					Base_datos,
-					Usuario_db,
-					Password_db,
-					Tipo_base,
-					Puerto_db
-				FROM EMPRESAS
-				WHERE codigo_empresa_api = '$codigo_empresa_api'";
+		if($codigo_empresa_api){
+			$sql = "SELECT
+								Ip_host,
+								Base_datos,
+								Usuario_db,
+								Password_db,
+								Tipo_base,
+								Puerto_db
+							FROM EMPRESAS
+							WHERE codigo_empresa_api = '$codigo_empresa_api'";
 
-		$empresa = $this->datos($sql, true, 0)[0] ?? [];
-		
-		// Asignar los valores
-		$this->api_servidor   = $empresa['Ip_host']     ?? '';
-		$this->api_database   = $empresa['Base_datos']  ?? '';
-		$this->api_usuario    = $empresa['Usuario_db']  ?? '';
-		$this->api_password   = $empresa['Password_db'] ?? '';
-		$this->api_tipo_base  = $empresa['Tipo_base']   ?? '';
-		$this->api_puerto     = $empresa['Puerto_db']	?? '';
-		
-		$this->api_existe = 1;
+			$empresa = $this->datos($sql, true, 0)[0] ?? [];
+			
+			// Asignar los valores
+			$this->api_servidor   = $empresa['Ip_host']     ?? '';
+			$this->api_database   = $empresa['Base_datos']  ?? '';
+			$this->api_usuario    = $empresa['Usuario_db']  ?? '';
+			$this->api_password   = $empresa['Password_db'] ?? '';
+			$this->api_tipo_base  = $empresa['Tipo_base']   ?? '';
+			$this->api_puerto     = $empresa['Puerto_db']	?? '';
+			
+			$this->api_existe = 1;
+		}
 	}
 
 	function parametros_conexion($master = false)
