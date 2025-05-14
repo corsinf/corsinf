@@ -2,15 +2,15 @@
 header('Content-Type: application/json');
 
 // CORS headers globales
-header("Access-Control-Allow-Origin: *");
-header("Access-Control-Allow-Headers: Content-Type");
-header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
+// header("Access-Control-Allow-Origin: *");
+// header("Access-Control-Allow-Headers: Content-Type");
+// header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
 
 // Responder a preflight
-if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
-    http_response_code(200);
-    exit();
-}
+// if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+//     http_response_code(200);
+//     exit();
+// }
 
 $requestUri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 $method = $_SERVER['REQUEST_METHOD'];
@@ -30,7 +30,7 @@ $route = isset($parts[1]) ? '/' . $parts[1] : '/';
 $id = isset($parts[2]) ? intval($parts[2]) : null;
 
 if ($route === '/login') {
-    if ($method === 'GET') {
+    if ($method === 'POST') {
         require __DIR__ . '/auth/login.php';
     } else {
         http_response_code(405);
