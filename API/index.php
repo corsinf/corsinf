@@ -33,8 +33,7 @@ if ($route === '/usuario') {
         // Lo pasamos como variable global para que usuarioE.php lo use si existe
         if ($id !== null) {
             $_GET['id'] = $id;
-            $_GET['nombre'] ?? '';
-            $accion = 'usuarios';
+            $accion = 'usuario';
         }
         require __DIR__ . '/endpoints/usuarioE.php';
     } else {
