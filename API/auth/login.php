@@ -22,11 +22,11 @@ class Auth
     public function login($data)
     {
         // Validar que los campos estén presentes
-        if (!isset($data->usuario) || !isset($data->clave) || !isset($data->empresa)) {
-            http_response_code(400);
-            echo json_encode(["error" => "Faltan campos"]);
-            exit;
-        }
+        // if (!isset($data->usuario) || !isset($data->clave) || !isset($data->empresa)) {
+        //     http_response_code(400);
+        //     echo json_encode(["error" => "Faltan campos"]);
+        //     exit;
+        // }
 
         // $data = new stdClass();
         // $data->usuario = 'paco@pepe.com';
@@ -52,7 +52,7 @@ class Auth
             echo json_encode( [[
                     'id' => $user[0]['id_usuarios'] ?? 'hola',
                     'usuario' => $user[0]['nombres'] ?? 'hola',
-                    'empresa' => $data->empresa,
+                    'empresa' => $data->empresa ?? 'empresa',
                 ]], true);
         // } else {
         //     // Si las credenciales son incorrectas
@@ -63,8 +63,8 @@ class Auth
 }
 
 // Lógica para recibir el input de la solicitud
-$data = json_decode(file_get_contents("php://input"));
+// $data = json_decode(file_get_contents("php://input"));
 
 // Crear la instancia de la clase Auth y llamar al método login
 $auth = new Auth();
-$auth->login($data);
+$auth->login('hola');

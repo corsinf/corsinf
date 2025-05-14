@@ -30,7 +30,7 @@ $route = isset($parts[1]) ? '/' . $parts[1] : '/';
 $id = isset($parts[2]) ? intval($parts[2]) : null;
 
 if ($route === '/login') {
-    if ($method === 'POST') {
+    if ($method === 'GET') {
         require __DIR__ . '/auth/login.php';
     } else {
         http_response_code(405);
