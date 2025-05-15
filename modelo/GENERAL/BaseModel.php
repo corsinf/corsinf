@@ -66,6 +66,7 @@ class BaseModel
 
         // Ejecutar consulta y devolver resultados
         $datos = $this->db->datos($sql);
+        $this->reset();
         return $datos;
     }
 

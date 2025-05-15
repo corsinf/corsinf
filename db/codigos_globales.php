@@ -663,7 +663,8 @@ function para_ftp($nombre,$texto)
 
 	function ingresar_movimientos($id=false,$movimiento=false,$seccion='ARTICULOS',$dato_ant=false,$dato_act=false,$cod_ant=false,$cod_nue=false)
 	{
-		$fecha = date('Y-m-d');
+		date_default_timezone_set('America/Guayaquil');
+		$fecha = date('Y-m-d H:i:s');
 			$sql = "INSERT INTO ac_movimiento (obs_movimiento,fecha_movimiento,responsable,seccion)VALUES('".$movimiento."','".$fecha."','".$_SESSION['INICIO']['USUARIO']."','".$seccion."')";
 		if($id)
 		{

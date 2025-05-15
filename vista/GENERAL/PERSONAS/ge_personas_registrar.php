@@ -57,6 +57,14 @@ if (isset($_GET['_id'])) {
                     $(txt_cedula).addClass('is-invalid');
                     $('#error_txt_cedula').text('La cédula ya está en uso.');
                 }
+            },
+
+            error: function(xhr, status, error) {
+                console.log('Status: ' + status);
+                console.log('Error: ' + error);
+                console.log('XHR Response: ' + xhr.responseText);
+
+                Swal.fire('', 'Error: ' + xhr.responseText, 'error');
             }
         });
 
@@ -129,6 +137,11 @@ if (isset($_GET['_id'])) {
 
 <script>
     $(document).ready(function() {
+
+        //Para validar los select2
+        $(".select2-validation").on("select2:select", function(e) {
+            unhighlight_select(this);
+        });
 
         //* Validacion de formulario
         $("#registrar_personas").validate({
@@ -245,14 +258,33 @@ if (isset($_GET['_id'])) {
                 },
             },
             highlight: function(element) {
-                // Agrega la clase 'is-invalid' al input que falla la validación
-                $(element).addClass('is-invalid');
-                $(element).removeClass('is-valid');
+                let $element = $(element);
+
+                if ($element.hasClass("select2-hidden-accessible")) {
+                    // Elimina la clase 'is-invalid' y agrega 'is-valid' al contenedor correcto de select2
+                    $element.next(".select2-container").find(".select2-selection").removeClass("is-valid").addClass("is-invalid");
+                } else if ($element.is(':radio')) {
+                    // Si es un radio button, aplicar la clase al grupo de radios (al contenedor padre si existe)
+                    $('input[name="' + $element.attr("name") + '"]').addClass("is-invalid").removeClass("is-valid");
+                } else {
+                    // Elimina la clase 'is-invalid' y agrega 'is-valid' al input normal
+                    $element.removeClass("is-valid").addClass("is-invalid");
+                }
             },
+
             unhighlight: function(element) {
-                // Elimina la clase 'is-invalid' si la validación pasa
-                $(element).removeClass('is-invalid');
-                $(element).addClass('is-valid');
+                let $element = $(element);
+
+                if ($element.hasClass("select2-hidden-accessible")) {
+                    // Para Select2, elimina 'is-invalid' y agrega 'is-valid' en el contenedor adecuado
+                    $element.next(".select2-container").find(".select2-selection").removeClass("is-invalid").addClass("is-valid");
+                } else if ($element.is(':radio')) {
+                    // Si es un radio button, marcar todo el grupo como válido
+                    $('input[name="' + $element.attr("name") + '"]').removeClass("is-invalid").addClass("is-valid");
+                } else {
+                    // Para otros elementos normales
+                    $element.removeClass("is-invalid").addClass("is-valid");
+                }
             }
         });
     });

@@ -194,19 +194,22 @@
 <div class="row mb-col ">
     <div class="col-md-3">
         <label for="ddl_provincias" class="form-label form-label-sm">Provincia </label>
-        <select class="form-select form-select-sm" id="ddl_provincias" name="ddl_provincias" maxlenght="5000">
+        <select class="form-select form-select-sm select2-validation" id="ddl_provincias" name="ddl_provincias" maxlenght="5000">
             <option value="">Seleccione</option>
         </select>
+        <label class="error" style="display: none;" for="ddl_provincias"></label>
     </div>
     <div class="col-md-3">
         <label for="ddl_ciudad" class="form-label form-label-sm">Ciudad </label>
-        <select class="form-select form-select-sm" id="ddl_ciudad" name="ddl_ciudad" maxlenght="5000">
+        <select class="form-select form-select-sm select2-validation" id="ddl_ciudad" name="ddl_ciudad" maxlenght="5000">
         </select>
+        <label class="error" style="display: none;" for="ddl_ciudad"></label>
     </div>
     <div class="col-md-3">
         <label for="ddl_parroquia" class="form-label form-label-sm">Parroquia </label>
-        <select class="form-select form-select-sm" id="ddl_parroquia" name="ddl_parroquia" maxlenght="5000">
+        <select class="form-select form-select-sm select2-validation" id="ddl_parroquia" name="ddl_parroquia" maxlenght="5000">
         </select>
+        <label class="error" style="display: none;" for="ddl_parroquia"></label>
     </div>
     <div class="col-md-3">
         <label for="txt_codigo_postal" class="form-label form-label-sm">Código Postal </label>

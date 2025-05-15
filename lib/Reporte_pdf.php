@@ -1,6 +1,7 @@
 <?php 
 include('pdf/cabecera_pdf.php');
-include('../modelo/ArticulosM.php');
+
+require_once(dirname(__DIR__, 1) . '/modelo/ACTIVOS_FIJOS/articulosM.php');
 /**
  * 
  */
@@ -70,10 +71,11 @@ if(isset($_GET['gpa_pdf']))
 class Reporte_pdf
 {
 	private $pdf;
+	private $articulo;
 	function __construct()
 	{
 		$this->pdf = new cabecera_pdf();
-		$this->articulo = new ArticulosM();
+		$this->articulo = new articulosM();
 	}
 
 	function reporte_cedula($parametros)
@@ -85,8 +87,8 @@ class Reporte_pdf
 
 		// print_r($activos);die();
 
-		$image[0]['url'] = '../img/de_sistema/puce_logo.png';
-		$image[0]['x'] = 10;
+		$image[0]['url'] = '../img/de_sistema/corsinf_letras.png';
+		$image[0]['x'] = 20;
 		$image[0]['y'] = 5;
 		$image[0]['width'] = 30;
 		$image[0]['height'] = 30;		
@@ -95,7 +97,7 @@ class Reporte_pdf
 		$pos = 0;
 		$tablaHTML[$pos]['medidas']=array(190);
 		$tablaHTML[$pos]['alineado']=array('C');
-		$tablaHTML[$pos]['datos']=array('PONTIFICIA UNIVERSIDAD CATOLICA DEL ECUADOR');
+		$tablaHTML[$pos]['datos']=array('CORSINF');
 		$tablaHTML[$pos]['estilo']='BI';
 		$pos+=1;
 
@@ -140,7 +142,7 @@ class Reporte_pdf
 
 		$tablaHTML[$pos]['medidas']=array(30,15,90,30,25);
 		$tablaHTML[$pos]['alineado']=array('L','L','L','L','L');
-		$tablaHTML[$pos]['datos']=array('<b>Categoria:','','','<b>Fecha Compra:',substr($activos[0]['ORIG_ACQ_YR'],0,10));
+		$tablaHTML[$pos]['datos']=array('<b>Categoria:','','','<b>Fecha Compra:',substr($activos[0]['fecha_compra'],0,10));
 		$tablaHTML[$pos]['estilo']='';		
 		// $tablaHTML[$pos]['borde']='1';
 		$pos+=1;
@@ -160,14 +162,14 @@ class Reporte_pdf
 		$pos+=1;
 
 		$propi = 'PROPIO';
-		if($activos[0]['TERCEROS']==1)
-		{
-			$propi = 'TERCEROS';
-		}
-		if($activos[0]['PATRIMONIALES']==1)
-		{
-			$propi = 'PATRIMONIALES';
-		}
+		// if($activos[0]['TERCEROS']==1)
+		// {
+		// 	$propi = 'TERCEROS';
+		// }
+		// if($activos[0]['PATRIMONIALES']==1)
+		// {
+		// 	$propi = 'PATRIMONIALES';
+		// }
 
 
 		$tablaHTML[$pos]['medidas']=array(30,105,25,30);
@@ -187,7 +189,7 @@ class Reporte_pdf
 
 		$tablaHTML[$pos]['medidas']=array(30,30,25,30,20,55);
 		$tablaHTML[$pos]['alineado']=array('L','L','L','L','L','L');
-		$tablaHTML[$pos]['datos']=array('<b>Marca:',$activos[0]['marca'],'<b>Modelo',$activos[0]['MODELO'],'<b>Serie',$activos[0]['serie']);
+		$tablaHTML[$pos]['datos']=array('<b>Marca:',$activos[0]['marca'],'<b>Modelo',$activos[0]['modelo'],'<b>Serie',$activos[0]['serie']);
 		$tablaHTML[$pos]['estilo']='';
 		// $tablaHTML[$pos]['borde']='1';
 		$pos+=1;
@@ -208,7 +210,7 @@ class Reporte_pdf
 
 		$tablaHTML[$pos]['medidas']=array(30,30,25,30,20,55);
 		$tablaHTML[$pos]['alineado']=array('L','L','L','L','L','L');
-		$tablaHTML[$pos]['datos']=array('<b>Costo Original:','$'.$activos[0]['ORIG_VALUE'],'','','<b>Custodio',$activos[0]['custodio']);
+		$tablaHTML[$pos]['datos']=array('<b>Costo Original:','$'.$activos[0]['precio'],'','','<b>Custodio',$activos[0]['custodio']);
 		$tablaHTML[$pos]['estilo']='';
 		// $tablaHTML[$pos]['borde']='1';
 		$pos+=1;
@@ -240,7 +242,7 @@ class Reporte_pdf
 		$pos+=1;
 		$tablaHTML[$pos]['medidas']=array(190);
 		$tablaHTML[$pos]['alineado']=array('L');
-		$tablaHTML[$pos]['datos']=array($activos[0]['CARACTERISTICA']);
+		$tablaHTML[$pos]['datos']=array($activos[0]['caracteristica']);
 		$pos+=1;
 
 		$tablaHTML[$pos]['medidas']=array(190);
@@ -260,10 +262,10 @@ class Reporte_pdf
 		$pos+=1;
 
 		$contabilidad = '';
-		if($activos[0]['FECHA_CONTA']!='' && $activos[0]['FECHA_CONTA']!=null){$contabilidad = $activos[0]['FECHA_CONTA'];}
+		if($activos[0]['fecha_compra']!='' && $activos[0]['fecha_compra']!=null){$contabilidad = $activos[0]['fecha_compra'];}
 		$tablaHTML[$pos]['medidas']=array(40,40,35,40,35);
 		$tablaHTML[$pos]['alineado']=array('C','C','C','C','C');
-		$tablaHTML[$pos]['datos']=array($contabilidad,'$'.$activos[0]['ORIG_VALUE'],'','','');
+		$tablaHTML[$pos]['datos']=array($contabilidad,'$'.$activos[0]['precio'],'','','');
 		$tablaHTML[$pos]['estilo']='';
 		$tablaHTML[$pos]['borde']='1';
 		$pos+=1;
@@ -435,7 +437,7 @@ class Reporte_pdf
 
 				$tablaHTML[$pos]['medidas']=array(30,30,25,30,20,55);
 				$tablaHTML[$pos]['alineado']=array('L','L','L','L','L','L');
-				$tablaHTML[$pos]['datos']=array('<b>Costo Original:','$'.$activos['ORIG_VALUE'],'','','<b>Custodio',$activos['custodio']);
+				$tablaHTML[$pos]['datos']=array('<b>Costo Original:','$'.$activos['precio'],'','','<b>Custodio',$activos['custodio']);
 				$tablaHTML[$pos]['estilo']='';
 				// $tablaHTML[$pos]['borde']='1';
 				$pos+=1;
@@ -467,7 +469,7 @@ class Reporte_pdf
 				$pos+=1;
 				$tablaHTML[$pos]['medidas']=array(190);
 				$tablaHTML[$pos]['alineado']=array('L');
-				$tablaHTML[$pos]['datos']=array($activos['CARACTERISTICA']);
+				$tablaHTML[$pos]['datos']=array($activos['caracteristica']);
 				$pos+=1;
 
 				$tablaHTML[$pos]['medidas']=array(190);
@@ -490,7 +492,7 @@ class Reporte_pdf
 				if($activos['FECHA_CONTA']!='' && $activos['FECHA_CONTA']!=null){$contabilidad = $activos['FECHA_CONTA'];}
 				$tablaHTML[$pos]['medidas']=array(40,40,35,40,35);
 				$tablaHTML[$pos]['alineado']=array('C','C','C','C','C');
-				$tablaHTML[$pos]['datos']=array($contabilidad,'$'.$activos['ORIG_VALUE'],'','','');
+				$tablaHTML[$pos]['datos']=array($contabilidad,'$'.$activos['precio'],'','','');
 				$tablaHTML[$pos]['estilo']='';
 				$tablaHTML[$pos]['borde']='1';
 				$pos+=1;
@@ -676,7 +678,7 @@ class Reporte_pdf
 
 				$tablaHTML[$pos]['medidas']=array(30,30,25,30,20,55);
 				$tablaHTML[$pos]['alineado']=array('L','L','L','L','L','L');
-				$tablaHTML[$pos]['datos']=array('<b>Costo Original:','$'.$activos['ORIG_VALUE'],'','','<b>Custodio',$activos['custodio']);
+				$tablaHTML[$pos]['datos']=array('<b>Costo Original:','$'.$activos['precio'],'','','<b>Custodio',$activos['custodio']);
 				$tablaHTML[$pos]['estilo']='';
 
 				$tablaHTML[$pos]['size'] = 8;
@@ -715,7 +717,7 @@ class Reporte_pdf
 				$pos+=1;
 				$tablaHTML[$pos]['medidas']=array(190);
 				$tablaHTML[$pos]['alineado']=array('L');
-				$tablaHTML[$pos]['datos']=array($activos['CARACTERISTICA']);
+				$tablaHTML[$pos]['datos']=array($activos['caracteristica']);
 				$tablaHTML[$pos]['size'] = 8;
 				$pos+=1;
 
@@ -742,7 +744,7 @@ class Reporte_pdf
 				if($activos['FECHA_CONTA']!='' && $activos['FECHA_CONTA']!=null){$contabilidad = $activos['FECHA_CONTA'];}
 				$tablaHTML[$pos]['medidas']=array(40,40,35,40,35);
 				$tablaHTML[$pos]['alineado']=array('C','C','C','C','C');
-				$tablaHTML[$pos]['datos']=array($contabilidad,'$'.$activos['ORIG_VALUE'],'','','');
+				$tablaHTML[$pos]['datos']=array($contabilidad,'$'.$activos['precio'],'','','');
 				$tablaHTML[$pos]['estilo']='';
 				$tablaHTML[$pos]['borde']='1';
 				$tablaHTML[$pos]['size'] = 8;
@@ -915,7 +917,7 @@ class Reporte_pdf
 
 			$tablaHTML[$pos]['medidas']=$tablaHTML[1]['medidas'];
 		    $tablaHTML[$pos]['alineado']=$tablaHTML[1]['alineado'];
-		    $tablaHTML[$pos]['datos']=array($value['COMPANYCODE'],$value['TAG_SERIE'],$value['SUBNUMBER'],$value['DESCRIPT'],$value['DESCRIPT2'],$value['MODELO'],$value['SERIE'],$value['TAG_UNIQUE'],$fecha,$value['QUANTITY'],$value['BASE_UOM'],$value['EMPLAZAMIENTO'],$value['DENOMINACION'],$value['PERSON_NO'],$value['PERSON_NOM'],$value['marca'],$value['estado'],$value['genero'],$value['color'],$value['criterio'],$value['ASSETSUPNO'],$value['TAG_ANT'],$fecha_compra,$value['ORIG_VALUE'],$value['OBSERVACION'],$value['BAJAS'],$value['ACTU_POR'],$fecha_baja,$fecha_conta,$fecha_ref,$value['PERIODO'],$value['CLASE_MOVIMIENTO'],$value['MOVIMIENTO']);
+		    $tablaHTML[$pos]['datos']=array($value['COMPANYCODE'],$value['TAG_SERIE'],$value['SUBNUMBER'],$value['DESCRIPT'],$value['DESCRIPT2'],$value['MODELO'],$value['SERIE'],$value['TAG_UNIQUE'],$fecha,$value['QUANTITY'],$value['BASE_UOM'],$value['EMPLAZAMIENTO'],$value['DENOMINACION'],$value['PERSON_NO'],$value['PERSON_NOM'],$value['marca'],$value['estado'],$value['genero'],$value['color'],$value['criterio'],$value['ASSETSUPNO'],$value['TAG_ANT'],$fecha_compra,$value['precio'],$value['OBSERVACION'],$value['BAJAS'],$value['ACTU_POR'],$fecha_baja,$fecha_conta,$fecha_ref,$value['PERIODO'],$value['CLASE_MOVIMIENTO'],$value['MOVIMIENTO']);
 		    $tablaHTML[$pos]['estilo']='I';
 		    $tablaHTML[$pos]['borde'] = '1';  
 		    $pos+=1;  

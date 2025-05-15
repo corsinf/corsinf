@@ -38,7 +38,7 @@ class familiasM
 		return $datos;
 	}
 
-	function lista_subfamilias($id = '', $query = false)
+	function lista_subfamilias($id = '', $query = false, $id_familia = '')
 	{
 		$sql = "SELECT
 					F.id_familia,
@@ -57,6 +57,10 @@ class familiasM
 
 		if ($id != '') {
 			$sql .= " AND F2.id_familia = " . $id;
+		}
+
+		if ($id_familia != '') {
+			$sql .= " AND F.id_familia = " . $id_familia;
 		}
 
 		$sql .= " ORDER BY F.id_familia";

@@ -98,7 +98,7 @@ class familiasC
 
 	function lista_subfamilias_drop($parametros, $q)
 	{
-		$datos = $this->modelo->lista_subfamilias($parametros, $q);
+		$datos = $this->modelo->lista_subfamilias('', $q, $parametros);
 		$datos2 = array();
 		foreach ($datos as $key => $value) {
 			$datos2[] = array('id' => $value['idF'], 'text' => $value['detalle_familia_sub']);
