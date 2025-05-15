@@ -240,7 +240,10 @@ class loginM
 	{
 		if($_SESSION['INICIO']['TIPO']=="DBA")
 		{
-			$sql = "SELECT id_modulos as 'id',nombre_modulo,link,icono FROM MODULOS_SISTEMA WHERE estado ='A'";
+			$sql = "SELECT id_modulos as 'id',nombre_modulo,link,icono,L.Fecha_ini,L.Fecha_exp   
+			FROM MODULOS_SISTEMA MS
+			INNER JOIN LICENCIAS L ON MS.id_modulos = L.Id_Modulo
+			WHERE estado ='A'";
 		}else
 		{
 			$sql = "SELECT DISTINCT(MS.id_modulos) as 'id', MS.nombre_modulo,MS.icono,MS.link,L.Fecha_ini,L.Fecha_exp  
