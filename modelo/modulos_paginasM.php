@@ -144,6 +144,16 @@ class modulos_paginasM
 		$datos = $this->db->datos($sql,1);
 		return $datos;
 	}
+	function modulos_sis_all($produccion=false)
+	{
+		$sql = "SELECT  * FROM MODULOS_SISTEMA WHERE 1=1";
+		if($produccion)
+		{
+			$sql.=" AND produccion = '".$produccion."'";
+		}
+		$datos = $this->db->datos($sql,1);
+		return $datos;
+	}
 }
 
 ?>

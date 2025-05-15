@@ -22,6 +22,7 @@ class codigos_globales
 
 		//AES-128
 		$this->CodAES = 'corsinf-encrypted-Data/*';
+		$this->CodLicencias = 'corsinf-encrypted-Data/*';
 		$this->iv = 'Data/*cors¡nf47';
 	}
 
@@ -732,11 +733,11 @@ function para_ftp($nombre,$texto)
 
 				if(count($tipo)==0)
 				{
-					 $datos[0]['campo'] = 'id_empresa';
-					 $datos[0]['dato']  = $id_empresa;
-					 $datos[1]['campo'] = 'id_tipo_usuario';
-					 $datos[1]['dato']  = $value['id'];
-					 $this->db->inserts('TIPO_USUARIO_EMPRESA',$datos,1);		
+					 $datos2[0]['campo'] = 'id_empresa';
+					 $datos2[0]['dato']  = $id_empresa;
+					 $datos2[1]['campo'] = 'id_tipo_usuario';
+					 $datos2[1]['dato']  = $value['id'];
+					 $this->db->inserts('TIPO_USUARIO_EMPRESA',$datos2,1);		
 				} 	
 
 				//insertar en acceso un registro de dba
@@ -1214,6 +1215,59 @@ function para_ftp($nombre,$texto)
 
 
 	}
+
+	function generar_licencia($id_empresa,$modulo,$inicio,$fin)
+	{
+		   // Crear un hash basado en dato + clave secreta
+		$datoCliente = $id_empresa.'-'.$modulo.'-'.$inicio.'-'.$fin;
+    	$hash = hash_hmac('sha256', $datoCliente, $this->CodLicencias);
+
+    	// Convertir a letras mayúsculas y eliminar números para licencia
+    	$soloLetras = strtoupper(preg_replace('/[^A-Z]/', '', strtoupper($hash)));
+
+	    // Tomar los primeros 20 caracteres en bloques de 5
+	    $bloques = str_split(substr($soloLetras, 0, 20), 5);
+	    $licencia = '';
+	    foreach ($bloques as $key => $value) {
+	    	$licencia.=$value.'-';
+	    }
+
+	    $licencia = substr($licencia,0,-1);
+
+	    // print_r($licencia);die();
+	    return  $licencia;
+	}
+
+
+	function buscar_empresa($ruc=false,$id=false)
+	{
+		$sql = "SELECT * FROM EMPRESAS WHERE 1=1 ";
+		if($ruc)
+		{
+			$sql.=" AND Ruc = '".$ruc."'";
+		}
+		if($id)
+		{
+			$sql.=" AND Id_empresa = '".$id."'"; 
+		}
+		return $this->db->datos($sql,1);
+	} 
+
+	function buscar_licencias($id=false)
+	{
+		$sql = "SELECT Id_licencias as '_id',Codigo_licencia,Fecha_ini,Fecha_exp,Numero_maquinas,numero_pda,registrado,M.nombre_modulo 
+		FROM LICENCIAS L 
+		INNER JOIN MODULOS_SISTEMA M ON L.Id_Modulo = M.id_modulos 
+		WHERE 1=1 ";
+		if($id)
+		{
+			$sql.=" AND Id_empresa = '".$id."' ";
+		}
+		
+		return $this->db->datos($sql,1);
+	}
+
+
 
 }
 ?>

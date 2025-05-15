@@ -41,6 +41,28 @@
 	    </div>
 	  </div>
 	</div>
+
+	<div class="modal fade" id="myModal_detalles" tabindex="-1" aria-modal="true" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+        </div>
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-sm-12">
+              <table class="table table-sm table-hover" id="tbl_detalles">
+          
+              </table>
+            </div>            
+          </div>
+        </div>
+        <div class="modal-footer"> 
+
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>       
+        </div>
+      </div>
+    </div>
+  </div>
 	<?php include_once('../cabeceras/acercaDe.php'); ?>
 
 	

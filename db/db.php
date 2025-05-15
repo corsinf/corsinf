@@ -561,6 +561,40 @@ class db
 	}
 
 
+	function conexion_terceros($usuario, $password, $servidor, $puerto)
+	{
+		if ($usuario == '') {
+			$usuario = '';
+		}
+		if ($password == '') {
+			$password = '';
+		}
+		if($puerto !='')
+		{
+			$puerto = ', '.$puerto;
+		}else
+		{
+			$puerto = '';
+		}
+
+		 // print_r("sqlsrv:Server=".$servidor .''. $puerto.";Database=".$database.','.$usuario.','.$password);die();
+
+		try{
+		     $conn = new PDO("sqlsrv:Server=".$servidor .''. $puerto, $usuario, $password);
+		     $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+		     // $conn->setAttribute(PDO::SQLSRV_ATTR_ENCODING, PDO::SQLSRV_ENCODING_UTF8);
+		     // print_r("conectado");die();
+		      return $conn;
+		    }	 
+		  catch(PDOException $e)
+		    {
+		      echo "La conexión ha fallado: " . $e->getMessage();
+		    }
+		 
+		  $conn = null;
+	}
+
+
 
 	function sql_string_db_terceros($database, $usuario, $password, $servidor, $puerto, $sql)
 	{
@@ -577,6 +611,70 @@ class db
 			return 1;
 			
 		} catch (Exception $e) {
+			return -1;
+			die(print_r(sqlsrv_errors(), true));
+		}
+	}
+
+	function sql_string_sin_base_terceros($usuario, $password, $servidor, $puerto, $sql)
+	{
+
+		$conn = $this->conexion_terceros($usuario, $password, $servidor, $puerto);
+		// print_r($sql);
+		// print_r($conn);die();
+		try {
+			$conn->exec($sql);
+			// $stmt = $conn->prepare($sql);
+			// $stmt->execute($valores);
+    		// $stmt->execute();    		
+		    $conn=null;
+			return 1;
+			
+		} catch (Exception $e) {
+			print_r($e);
+			return -1;
+			die(print_r(sqlsrv_errors(), true));
+		}
+	}
+	function sql_string_sin_base($sql,$master)
+	{
+		$this->parametros_conexion($master);
+		$conn = $this->conexion_terceros($this->usuario,$this->password,$this->servidor,$this->puerto);
+		// print_r($sql);
+		// print_r($conn);die();
+		try {
+			$conn->exec($sql);
+			// $stmt = $conn->prepare($sql);
+			// $stmt->execute($valores);
+    		// $stmt->execute();    		
+		    $conn=null;
+			return 1;
+			
+		} catch (Exception $e) {
+			print_r($e);
+			return -1;
+			die(print_r(sqlsrv_errors(), true));
+		}
+	}
+
+	function datos_sin_base_system($sql,$master)
+	{
+
+		$this->parametros_conexion($master);
+		$conn = $this->conexion_terceros($this->usuario,$this->password,$this->servidor,$this->puerto);
+		// print_r($sql);
+		// print_r($conn);die();
+		try {
+			 $stmt = $conn->prepare($sql);
+    		$stmt->execute();
+    		while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+		        $result[] = $row;
+		    }
+		    $conn=null;
+			return $result;
+
+		} catch (Exception $e) {
+			print_r($e);
 			return -1;
 			die(print_r(sqlsrv_errors(), true));
 		}

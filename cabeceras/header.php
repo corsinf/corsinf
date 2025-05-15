@@ -204,6 +204,51 @@ if (($_SESSION['INICIO']['LOGO']) == '.' || $_SESSION['INICIO']['LOGO'] == '' ||
 			});
 		}
 
+		function mi_licencias(id)
+		  {
+		    var parametros = {
+		      'id':id
+		    }
+		    $.ajax({
+		          data:  {parametros,parametros},
+		          url:   '../controlador/nueva_empresaC.php?detalle_licencias=true',
+		          type: 'POST',         
+		            dataType:'json',
+		          success: function(response) {
+		            console.log(response)
+		            var tbl = '<thead><th>Licencia</th><th>Fecha Inicio</th><th>Fecha Fin</th><th>Modulo</th><th>Num Usuarios</th><th>Estado</th></thead>';
+		            response.forEach(function(item,i){
+		                tbl+=`<tr><td>`+item.Codigo_licencia+`</td>
+		                          <td>`+item.Fecha_ini+`</td>
+		                          <td>`+item.Fecha_exp+`</td>
+		                          <td>`+item.nombre_modulo+`</td>
+		                          <td>`+item.Numero_maquinas+`</td>
+		                          <td>`
+		                          if(item.registrado=='0')
+		                          {
+		                              tbl+=`<div class="d-flex align-items-center text-danger"> <i class="bx bx-radio-circle-marked bx-burst bx-rotate-90 align-middle font-18 me-1"></i>
+		                                    <span>Pendiente de activacion</span>`;
+		                          }else
+		                          {
+		                               tbl+=`<div class="d-flex align-items-center text-success"> <i class="bx bx-radio-circle-marked bx-burst bx-rotate-90 align-middle font-18 me-1"></i>
+		                                    <span>Activo</span>`;
+		                          }
+
+		                        tbl+=`</td>
+		                      </div>
+		                </tr>`
+		            })
+
+		            $('#tbl_detalles').html(tbl);  
+		            $('#myModal_detalles').modal('show');        
+		          },
+		          error: function(error) {
+		              console.error('Error al enviar datos:', error);
+		              // Puedes manejar los errores aquí
+		          }
+		      });
+		  }
+
 		function menu_lateral() {
 			$.ajax({
 				url: '../controlador/loginC.php?menu_lateral=true',
@@ -947,12 +992,14 @@ if (($_SESSION['INICIO']['LOGO']) == '.' || $_SESSION['INICIO']['LOGO'] == '' ||
 								</li>
 
 							<?php } ?>
-							<li><a class="dropdown-item" href="javascript:;"><i class='bx bx-home-circle'></i><span>Dashboard</span></a>
-							</li>
+							<!-- <li><a class="dropdown-item" href="javascript:;"><i class='bx bx-home-circle'></i><span>Dashboard</span></a>
+							</li> -->
 
 							<li><a class="dropdown-item" href="inicio.php?mod=<?php echo $_SESSION['INICIO']['MODULO_SISTEMA']; ?>&acc=descargas"><i class='bx bx-download'></i><span>Descargas</span></a>
 							</li>
 							<li onclick="$('#myModal_acerca_de').modal('show')"><a class="dropdown-item" href="#"><i class='bx bx-info-circle'></i><span>Acerca de</span></a>
+							</li>
+							<li onclick="mi_licencias('<?php echo $_SESSION['INICIO']['ID_EMPRESA'];?>')"><a class="dropdown-item" href="#"><i class='bx bxs-key'></i><span>Mi Licencia</span></a>
 							</li>
 							<li>
 								<div class="dropdown-divider mb-0"></div>

@@ -72,12 +72,8 @@ if(isset($_GET['modulos_sistema_acceso_rapido']))
 }
 if(isset($_GET['modulos_sistema_selected']))
 {
-	$_SESSION['INICIO']['MODULO_SISTEMA'] = $_POST['modulo_sistema'];
-	$_SESSION['INICIO']['MODULO_SISTEMA_NOMBRE'] = $controlador->nombre_modulo();
-	$_SESSION['INICIO']['MODULO_SISTEMA_IMG_ICO'] = $controlador->imagen_icono_modulo();
-
-	$controlador->menu_lateral();
-	echo json_encode(1);
+	$parametros = $_POST['modulo_sistema'];
+  echo json_encode($controlador->modulos_sistema_selected($parametros));
 }
 if(isset($_GET['reseteo']))
 {
@@ -395,6 +391,7 @@ class loginC
 	function empresa_seleccionada($parametros)
 	{
 		$licencias = $this->login->empresa_licencias($parametros['empresa']);
+		// print_r($licencias);die();
 		if(count($licencias)==0)
 		{
 			// onclick="empresa_selecconada('.$value['Id_Empresa'].')
@@ -423,7 +420,7 @@ class loginC
 
 			// buscamos los roles
 				$roles =  $this->login->roles_x_empresa($parametros['empresa'],$parametros['email']);
-
+				// print_r($roles);die();
 				$no_concurentes = $this->login->empresa_tabla_noconcurente($parametros['empresa'],false,1);
 			 	 foreach ($no_concurentes as $key => $value) {
 			 	 		$primera_vez = 0;
@@ -1295,7 +1292,9 @@ class loginC
 		$id = '';
 		$link = '';
 		$pagina = '';
+		// print_r($datosEmp);
 		// print_r($datos);die();
+
 		foreach ($datos as $key => $value) {
 			$num = rand(1, 5);
 			$pagina = str_replace('.php','', $value['link']);
@@ -1316,15 +1315,40 @@ class loginC
 					$estilo = 'bg-light-primary text-primary';
 					break;
 				}
+
+				$fecha1 = new DateTime(date('Y-m-d'));
+				$fecha2 = new DateTime($value['Fecha_exp']);
+
+				$diferencia = $fecha1->diff($fecha2);
+				$dif =  $diferencia->days;
+
 				$mod.='
 					<div class="col">
-							<div class="card radius-10">
-								<div class="card-body" onclick="modulo_seleccionado(\''.$value['id'].'\',\''.$pagina.'\')">
-									<div class="text-center">
+							<div class="card radius-10">';
+							  if($dif>0)
+							  {
+									$mod.='<div class="card-body" onclick="modulo_seleccionado(\''.$value['id'].'\',\''.$pagina.'\')">';
+								}else
+								{
+										$mod.='<div class="card-body" onclick="swal.fire(\'Licencia Vencida\',\'Cominiquese con su proveedor\',\'error\')" >';
+								}
+								$mod.='<div class="text-center">
 										<div class="widgets-icons rounded-circle mx-auto '.$estilo.' mb-3">'.$value['icono'].'
-										</div>
-										<h4 class="my-1">'.$value['nombre_modulo'].'</h4>
-										<p class="mb-0 text-secondary">INGRESAR</p>
+											</div>
+											<h4 class="my-1">'.$value['nombre_modulo'].'</h4>';
+
+									// print_r($dif.'-');
+									if($dif<=0){
+											$mod.='<div class="badge rounded-pill text-danger bg-light-danger p-2 text-uppercase px-3"><i class="bx bxs-circle align-middle me-1"></i>LICENCIA VENCIDA</div>';
+									}else if($dif<=10 && $dif>0)
+									{
+										$mod.='<div class="badge rounded-pill text-warning bg-light-warning p-2 text-uppercase px-3"><i class="bx bxs-circle align-middle me-1"></i>LICENCIA POR VEENCER</div>';
+									}else
+									{
+										$mod.='<p class="mb-0 text-secondary">INGRESAR</p>';
+									}
+
+								$mod.='
 									</div>
 								</div>
 							</div>
@@ -1369,9 +1393,30 @@ class loginC
 					  break;							
 				}
 				// print_r($value);die();
-				$mod.='
-					<div class="col text-center" onclick="modulo_seleccionado('.$value['id'].',\'index\')">								
-									<div class="app-box mx-auto '.$estilo.'">'.$value['icono'].'
+
+
+				$fecha1 = new DateTime(date('Y-m-d'));
+				$fecha2 = new DateTime($value['Fecha_exp']);
+
+				$diferencia = $fecha1->diff($fecha2);
+				$dif =  $diferencia->days;
+
+
+					if($dif>0)
+					{
+						$mod.='<div class="col text-center" onclick="modulo_seleccionado('.$value['id'].',\'index\')">';
+					}else
+					{
+						$mod.='<div  class="col text-center" onclick="swal.fire(\'Licencia Vencida\',\'Cominiquese con su proveedor\',\'error\')" >';
+					}
+
+					if($dif<=0){
+								$mod.='<div class="badge rounded-pill bg-danger w-100">Licencia Venc. </div>';
+					}else if($dif<=10 && $dif>0)
+					{
+						$mod.='<div class="badge rounded-pill bg-warning w-100">Licencia por Venc. </div>';
+					}			
+					$mod.='<div class="app-box mx-auto '.$estilo.'">'.$value['icono'].'
 									</div>
 									<div class="app-title">'.$value['nombre_modulo'].'</div>								
 					</div>';
@@ -1644,6 +1689,31 @@ class loginC
 		 $datosW[0]['dato']= $user[0]['Id_usuario'];
 
 		 return $this->login->update('USUARIOS',$datos,$datosW);
+	}
+
+	function modulos_sistema_selected($parametros)
+	{
+		$licencias = $this->login-> empresa_licencias($_SESSION['INICIO']['ID_EMPRESA'],$parametros);
+
+		$fecha1 = new DateTime(date('Y-m-d'));
+		$fecha2 = new DateTime($licencias[0]['Fecha_exp']);
+
+		$diferencia = $fecha1->diff($fecha2);
+		$dif =  $diferencia->days;
+		// print_r($dif);die();
+		if($dif>0)
+		{
+				$_SESSION['INICIO']['MODULO_SISTEMA'] = $_POST['modulo_sistema'];
+				$_SESSION['INICIO']['MODULO_SISTEMA_NOMBRE'] = $this->nombre_modulo();
+				$_SESSION['INICIO']['MODULO_SISTEMA_IMG_ICO'] = $this->imagen_icono_modulo();
+
+				$this->menu_lateral();
+				return 1;
+		}else
+		{
+			return -2;
+		}
+
 	}
 
 }

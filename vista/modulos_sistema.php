@@ -41,8 +41,15 @@ function consultar_datos()
 	     type:  'post',
 	     dataType: 'json',
 	       success:  function (response) { 
-	       	   
-	      	location.href = 'inicio.php?mod='+modulo+'&acc='+link;         
+	       	console.log(response);
+	       	if(response==-2)
+	       	{	
+	       		Swal.fire("Su Licencia esta vencida","","error").then(function(){
+	       			cerrar_session();
+	       		})       	   
+	      	}else{
+	      		location.href = 'inicio.php?mod='+modulo+'&acc='+link;         
+	       	}
 	     }
 	   });
   }

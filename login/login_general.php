@@ -234,6 +234,8 @@
                         Swal.fire('La licencian es erronea', '', 'error');
                     } else if (response == 1) {
                         Swal.fire('La licencian registrada', '', 'success');
+                        $('#myModal_modulos').modal('hide');
+                        $('#myModal_espera').modal('hide');
                     }
                 },
                 error: function(xhr, status, error) {
@@ -264,6 +266,8 @@
                 success: function(response) {
                     if (response == -1) {
                         Swal.fire('La licencian es erronea', '', 'error');
+                         $('#myModal_empresas').modal('hide');
+                            $('#myModal_modulos').modal('hide');
                     } else if (response == 1) {
                         Swal.fire('Se a enviado a su correo registrado las credenciales de ingreso', '', 'success').then(function() {
                             $('#myModal_empresas').modal('hide');
