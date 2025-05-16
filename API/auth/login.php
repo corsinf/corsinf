@@ -59,7 +59,13 @@ class Auth
 }
 
 // Lógica para recibir el input de la solicitud
-$data = json_decode(file_get_contents("php://input"));
+$data = file_get_contents("php://input");
+$data = json_decode($data,true);
+$data = json_decode(json_encode($data));
+
+// $data = $_POST;
+
+// print_r($data);die();
 
 // Crear la instancia de la clase Auth y llamar al método login
 $auth = new Auth();

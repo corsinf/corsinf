@@ -29,6 +29,9 @@ $parts = explode('/', $endpoint);
 $route = isset($parts[1]) ? '/' . $parts[1] : '/';
 $id = isset($parts[2]) ? intval($parts[2]) : null;
 
+
+// print_r($requestUri.'-'.$method.'-'.$route);die();
+
 if ($route === '/login') {
     if ($method === 'POST') {
         require __DIR__ . '/auth/login.php';
