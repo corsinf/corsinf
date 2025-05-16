@@ -59,9 +59,11 @@ class Auth
 }
 
 // Lógica para recibir el input de la solicitud
-$data = file_get_contents("php://input");
-$data = json_decode($data,true);
-$data = json_decode(json_encode($data));
+// $data = file_get_contents("php://input");
+// $data = json_decode($data,true);
+// $data = json_decode(json_encode($data));
+$data = json_decode(file_get_contents("php://input"));
+
 
 // $data = $_POST;
 
