@@ -332,6 +332,7 @@ class db
 
 	function update($tabla, $datos, $where, $master = false)
 	{
+		// print_r($master);die();
 		$this->parametros_conexion($master);
 		$conn = $this->conexion();
 

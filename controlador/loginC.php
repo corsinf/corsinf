@@ -19,6 +19,11 @@ if(isset($_GET['empresa_seleccionada']))
 {
 echo json_encode($controlador->empresa_seleccionada($_POST['parametros']));
 }
+if(isset($_GET['empresa_seleccionada_x_modulo']))
+{
+echo json_encode($controlador->empresa_seleccionada($_POST['parametros']));
+}
+
 
 if(isset($_GET['empresa_seleccionada_head']))
 {
@@ -388,10 +393,17 @@ class loginC
 	}
 
 
+
+
 	function empresa_seleccionada($parametros)
 	{
 		$licencias = $this->login->empresa_licencias($parametros['empresa']);
-		// print_r($licencias);die();
+		if(isset($parametros['modulo_sistema']) && $parametros['modulo_sistema']==1)
+		{
+			$licencias = $this->login->empresa_licencias_activas($parametros['empresa']);
+		}
+		// print_r($parametros);
+		// print_r($_SESSION['INICIO']);die();
 		if(count($licencias)==0)
 		{
 			// onclick="empresa_selecconada('.$value['Id_Empresa'].')
@@ -553,101 +565,21 @@ class loginC
 				// print_r($datos);die();
 				return $datos;
 			}	
-
-		// print_r($datos);die();
-		// // $licencias = $this->login->empresa_licencias($parametros['empresa']);
-		// // if(count($licencias)==0)
-		// // {
-		// // 	// onclick="empresa_selecconada('.$value['Id_Empresa'].')
-		// // 	$modulos = $this->login->modulos_empresa();
-		// // 	$empresas = '';
-		// // 	foreach ($modulos as $key => $value) {
-
-		// // 		$empresas.= '<li class="list-group-item d-flex align-items-center radius-10 mb-2 shadow-sm">
-		// // 									<div class="d-flex align-items-center">
-		// // 										<div class="font-20">'.$value['icono'].'
-		// // 										</div>
-		// // 										<div class="flex-grow-1 ms-2">
-		// // 											<h6 class="mb-0">'.$value['nombre_modulo'].'</h6>
-		// // 											<input type="text" name="licencia_'.$value['id_modulos'].'" id="licencia_'.$value['id_modulos'].'" class="form-control" />
-		// // 										</div>
-		// // 									</div>
-		// // 									<div class="ms-auto">
-		// // 									<button class="btn btn-sm btn-primary" onclick="registrar_licencia(\''.$parametros['empresa'].'\',\''.$value['id_modulos'].'\')">Registrar</button>
-		// // 									</div>
-		// // 								</li>';
-		// // 	}			
-		// // 	return array('respuesta'=>2,'modulos'=>$empresas);
-		// // }else
-		// // {
-
-		// // 	//actualizamos
-		// // 	$empresa = $this->login->lista_empresa($parametros['empresa']);
-		// //  	$res = $this->cod_global->generar_primera_vez($empresa[0]['Base_datos'],$parametros['empresa']);
-		// //  	// print_r("holii");die();
-		// // 	return array('respuesta'=>$res);
-		// // }
-
-		// $licencias = $this->login->empresa_licencias($parametros['empresa']);
-		// if(count($licencias)==0)
-		// {
-		// 	// onclick="empresa_selecconada('.$value['Id_Empresa'].')
-		// 	$modulos = $this->login->modulos_empresa();
-		// 	$empresas = '';
-		// 	foreach ($modulos as $key => $value) {
-
-		// 		$empresas.= '<li class="list-group-item d-flex align-items-center radius-10 mb-2 shadow-sm">
-		// 									<div class="d-flex align-items-center">
-		// 										<div class="font-20">'.$value['icono'].'
-		// 										</div>
-		// 										<div class="flex-grow-1 ms-2">
-		// 											<h6 class="mb-0">'.$value['nombre_modulo'].'</h6>
-		// 											<input type="text" name="licencia_'.$value['id_modulos'].'" id="licencia_'.$value['id_modulos'].'" class="form-control" />
-		// 										</div>
-		// 									</div>
-		// 									<div class="ms-auto">
-		// 									<button class="btn btn-sm btn-primary" onclick="registrar_licencia(\''.$parametros['empresa'].'\',\''.$value['id_modulos'].'\')">Registrar</button>
-		// 									</div>
-		// 								</li>';
-		// 	}
-			
-		// 	return array('respuesta'=>2,'modulos'=>$empresas);
-		// }else
-		// {
-		// 	//actualizamos
-		// 	$empresa = $this->login->lista_empresa($parametros['empresa']);
-		// 	// print_r($empresa);die();
-		// 	if($empresa[0]['Ip_host']==IP_MASTER)
-		// 	{
-		// 		$tablas_iguales = $this->cod_global->tablas_por_licencias($licencias,$empresa);				
-		//  		$res = $this->cod_global->generar_primera_vez($empresa[0]['Base_datos'],$parametros['empresa']);
-		//  		if($tablas_iguales==-1)
-		//  		foreach ($licencias as $key => $value) {
-		//  		// print_r($licencias);die();
-		//  				$this->cod_global->Copiar_estructura($value['Id_Modulo'],$empresa[0]['Base_datos']);
-		//  		}
-		//  	}else{
-
-		// 		$tablas_iguales = $this->cod_global->tablas_por_licencias($licencias,$empresa,1);
-		//  		$res = $this->cod_global->generar_primera_vez_terceros($empresa,$parametros['empresa']);
-		//  		if($tablas_iguales==-1){
-		// 	 		foreach ($licencias as $key => $value) {
-		// 	 				$this->cod_global->Copiar_estructura($value['Id_Modulo'],$empresa[0]['Base_datos'],1,$empresa);
-		// 	 		}
-		// 	 	}
-		//  		// print_r($empresa);die();
-		//  	}
-		// 	return array('respuesta'=>$res);
-		// }
 	}
 
 
 	function registrar_licencia($parametros)
 	{
-		$registrado = $this->login->empresa_licencias_regitrado($parametros['empresa'],$parametros['licencia'],$parametros['modulo']);
+		// print_r($parametros);die();
+		$registrado = $this->login->empresa_licencias_regitrado_x_master($parametros['empresa'],$parametros['licencia'],$parametros['modulo']);
 		$empresa = $this->login->lista_empresa($parametros['empresa'],1);
+		$master = false;
+		if(isset($parametros['modulos_sistema']) && $parametros['modulos_sistema']==1)
+		{
+			$master = true;
+		}
 
-		// print_r("ddd");die();
+		// print_r($registrado);die();
 		if(count($registrado)>0)
 		{
 			$datos[0]['campo'] = 'registrado';
@@ -656,7 +588,10 @@ class loginC
 			$where[0]['campo'] = 'Id_licencias';			
 			$where[0]['dato'] = $registrado[0]['Id_licencias'];
 
-			 $this->login->update('LICENCIAS',$datos,$where);
+			// print_r($where);
+			// print_r($datos);die();
+
+			 $this->login->update('LICENCIAS',$datos,$where,$master);
 
 			$base_des = $empresa[0]['Base_datos'];
 			if(IP_MASTER==$empresa[0]['Ip_host'])
@@ -1321,7 +1256,12 @@ class loginC
 
 				$diferencia = $fecha1->diff($fecha2);
 				$dif =  $diferencia->days;
-
+				if ($diferencia->invert) {
+				    $dif = -$dif;
+				}
+				// print_r($fecha1);
+				// print_r($fecha2);
+				// print_r($dif);die();
 				$mod.='
 					<div class="col">
 							<div class="card radius-10">';
@@ -1400,6 +1340,9 @@ class loginC
 
 				$diferencia = $fecha1->diff($fecha2);
 				$dif =  $diferencia->days;
+				if ($diferencia->invert) {
+				    $dif = -$dif;
+				}
 
 
 					if($dif>0)
@@ -1693,21 +1636,27 @@ class loginC
 
 	function modulos_sistema_selected($parametros)
 	{
-		$licencias = $this->login-> empresa_licencias($_SESSION['INICIO']['ID_EMPRESA'],$parametros);
+		// print_r($parametros);
+		// print_r($_SESSION['INICIO']);die();
+
+		$licencias = $this->login->empresa_licencias($_SESSION['INICIO']['ID_EMPRESA'],$parametros);
 
 		$fecha1 = new DateTime(date('Y-m-d'));
 		$fecha2 = new DateTime($licencias[0]['Fecha_exp']);
 
 		$diferencia = $fecha1->diff($fecha2);
 		$dif =  $diferencia->days;
-		// print_r($dif);die();
+		if ($diferencia->invert) {
+		    $dif = -$dif;
+		}
 		if($dif>0)
 		{
-				$_SESSION['INICIO']['MODULO_SISTEMA'] = $_POST['modulo_sistema'];
+				$_SESSION['INICIO']['MODULO_SISTEMA'] = $parametros;
 				$_SESSION['INICIO']['MODULO_SISTEMA_NOMBRE'] = $this->nombre_modulo();
 				$_SESSION['INICIO']['MODULO_SISTEMA_IMG_ICO'] = $this->imagen_icono_modulo();
 
 				$this->menu_lateral();
+				// print_r($_SESSION['INICIO']);die();
 				return 1;
 		}else
 		{

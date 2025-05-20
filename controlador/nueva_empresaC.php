@@ -173,23 +173,25 @@ class nueva_empresaC
 
 			//licencias
 			$id_empresa = $empresa[0]['Id_empresa'];
-			foreach ($parametros['cbx_modulo_select'] as $key => $value) {
+			$licencia = json_decode($parametros['licencias'],true);
+			
+			foreach ($licencia as $key => $value) {
 				$inicio = date('Y-m-d');
 				$fecha = new DateTime($inicio);
-				$fecha->modify('+'.$parametros['rbl_periodo'].' months');
+				$fecha->modify('+'.$value['periodo'].' months');
 				$fin = $fecha->format('Y-m-d');
 
-				$licencia_cod = $this->cod_global->generar_licencia($id_empresa,$value,$inicio,$fin);
+				$licencia_cod = $this->cod_global->generar_licencia($id_empresa,$value['modulo'],$inicio,$fin);
 
 				$datos = array(
 					array('campo'=>'Codigo_licencia','dato'=>$licencia_cod),
 					array('campo'=>'Id_empresa','dato'=>$id_empresa),
 					array('campo'=>'Fecha_ini','dato'=>$inicio),
 					array('campo'=>'Fecha_exp','dato'=>$fin),
-					array('campo'=>'Numero_maquinas','dato'=>$parametros['txt_maquinas']),
-					array('campo'=>'Id_Modulo','dato'=>$value),
+					array('campo'=>'Numero_maquinas','dato'=>$value['maquinas']),
+					array('campo'=>'Id_Modulo','dato'=>$value['modulo']),
 					array('campo'=>'registrado','dato'=>0),
-					array('campo'=>'numero_pda','dato'=>$parametros['txt_pda']),
+					array('campo'=>'numero_pda','dato'=>$value['pda']),
 				);
 
 				$this->modelo->add('LICENCIAS',$datos);

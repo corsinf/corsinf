@@ -410,7 +410,7 @@ class tipo_usuarioC
 		if($parametros['edi']=='true'){ $edi = 1;} 
 		if($parametros['eli']=='true'){ $eli = 1;}
 
-		$dato = $this->modelo->existe_acceso($parametros['pag'],$parametros['perfil']);
+		$dato = $this->modelo->existe_acceso($parametros['pag'],$parametros['perfil'],$_SESSION['INICIO']['ID_EMPRESA']);
 		// print_r($dato);die();
 		if(count($dato)>0)
 		{
@@ -423,7 +423,10 @@ class tipo_usuarioC
 			$datos[1]['dato'] = $edi;
 			$datos[2]['campo'] = 'eliminar';
 			$datos[2]['dato'] = $eli;
+			$datos[3]['campo'] = 'id_empresa';
+			$datos[3]['dato'] = $_SESSION['INICIO']['ID_EMPRESA'];
 			$this->modelo->update('ACCESOS',$datos,$where);
+			// $this->modelo->updateLocal('ACCESOS',$datos,$where);
 		}else
 		{
 			$datos[0]['campo'] = 'Ver';
@@ -436,8 +439,11 @@ class tipo_usuarioC
 			$datos[3]['dato'] = $parametros['pag'];
 			$datos[4]['campo'] = 'id_tipo_usu';
 			$datos[4]['dato'] = $parametros['perfil'];
+			$datos[5]['campo'] = 'id_empresa';
+			$datos[5]['dato'] = $_SESSION['INICIO']['ID_EMPRESA'];
 
 			$this->modelo->guardar($datos,'ACCESOS');	
+			// $this->modelo->guardarLocal($datos,'ACCESOS');	
 		}
 
 		if($empresa[0]['Ip_host']==IP_MASTER)

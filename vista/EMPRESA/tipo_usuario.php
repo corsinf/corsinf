@@ -290,6 +290,9 @@
     {
       'perfil':perfil,
       'usuario':usuario_perfil,
+      'modulo_sis':$('#ddl_modulos').val(),
+      'modulo':$('#ddl_menu').val(),
+      'query':$('#txt_pagina').val(),
     }   
     $.ajax({
          data:  {parametros:parametros},
@@ -301,10 +304,16 @@
            {
              console.log(response);
              response.forEach(function(item,i){
+              var estado = true;
+              var estado2 = true;
+              var estado3 = true;
+              if(item.Ver==0){ estado = false}
+              if(item.editar==0){ estado2 = false}
+              if(item.eliminar==0){ estado3 = false}
 
-              $('#ver_'+item.pag).prop('checked',item.Ver);
-              $('#edi_'+item.pag).prop('checked',item.editar);
-              $('#eli_'+item.pag).prop('checked',item.eliminar);
+              $('#ver_'+item.pag).prop('checked',estado);
+              $('#edi_'+item.pag).prop('checked',estado2);
+              $('#eli_'+item.pag).prop('checked',estado3);
              })
            } 
           } 
@@ -323,6 +332,7 @@
     }
     parametros= 
     {
+      'modulo':$('#ddl_modulos').val(),
       'pag':id,
       'perfil':$('#ddl_perfil').val(),
       'ver':$('#ver_'+id).prop('checked'),

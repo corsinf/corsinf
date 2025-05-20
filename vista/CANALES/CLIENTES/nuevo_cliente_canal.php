@@ -1,6 +1,7 @@
    <link rel="stylesheet" href="../css/multi_step.css">
   
 	<script type="text/javascript">	
+		var licencias = [];
 
 	 $( document ).ready(function() {
 	 	modulos_sistema();	  
@@ -46,7 +47,9 @@
 		}
 
 	    var formData = new FormData($('#msform')[0]);
-	    console.log(formData);
+	    formData.append("licencias",JSON.stringify(licencias));
+	    // console.log(licencias);
+	    // console.log(formData);
 	    $.ajax({
 	        data:  formData,
 	        url:   '../controlador/nueva_empresaC.php?Guardar_empresa=true',
@@ -81,12 +84,38 @@
             dataType:'json',
 	        success: function(response) {
 	        	modulos = '';
+	        	tbl = '';
 	        	response.forEach(function(item,i){
-	        		console.log(item);
-	        		modulos+='<li class="list-group-item"><label><input type="checkbox" name="cbx_modulo_select[]" id="cbx_modulo_'+item.id_modulos+'" class="cbx_modulo" value="'+item.id_modulos+'"> '+item.nombre_modulo+'</label></li>'
+	        		tbl+= `<tr>
+	        							<td>
+	        								<br>
+	        									<input type="checkbox" name="cbx_modulo_select" id="cbx_modulo_`+item.id_modulos+`" class="cbx_modulo" value="`+item.id_modulos+`"> `+item.nombre_modulo+`
+	        							</td>
+	        							<td>
+	        								<b>N° usuarios</b>
+	        								<input type="number" name="txt_maquinas" id="txt_maquinas_`+item.id_modulos+`" class="form-control form-control-sm" value="1">
+	        							</td>
+	        							<td>
+	        								<b>N° Activos</b>
+	        								<input type="number" name="txt_num_activos" id="txt_num_activos_`+item.id_modulos+`" class="form-control form-control-sm" value="1">
+	        							</td>
+	        							<td>
+	        								<b>N° de PDA</b>
+	        								<input type="number" name="txt_pda" id="txt_pda_`+item.id_modulos+`" class="form-control form-control-sm" value="0">
+												</td>
+	        							<td>
+	        								<label><input type="radio" name="rbl_periodo_`+item.id_modulos+`" value="12" checked>Anual</label>
+													<br>
+													<label><input type="radio" name="rbl_periodo_`+item.id_modulos+`" value="6">Semestral</label>
+													<br>
+													<label><input type="radio" name="rbl_periodo_`+item.id_modulos+`" value="3">trimestral</label>
+													<br>
+													<label><input type="radio" name="rbl_periodo_`+item.id_modulos+`" value="1">Mesual</label>
+												</td>
+	        						</tr>`;
 	        	})
 	           console.log(response)
-	           $('#pnl_modulos').html(modulos);
+	           $('#tbl_modulos').html(tbl);
 	        },
 	        error: function(error) {
 	            console.error('Error al enviar datos:', error);
@@ -203,50 +232,27 @@
 			                    </fieldset>
 			                     <fieldset class="text-end">
 			                        <div class="form-card"> 
-			                        	<div class="row">
-			                        		<div class="col-sm-4">
-			                        			<b>Modulos</b>
-			                        			<div class="row">
-			                        				<div class="col-sm-12" style="overflow-y:scroll;height: 250px;">
-			                        					<ul class="list-group list-group-flush" id="pnl_modulos">
-														</ul>
-			                        				</div>
-			                        			</div>
-											</div> 
-											<div class="col-sm-8">
-												<div class="row">
-													<div class="col-sm-4">
-														<b>Numero de maquinas (usuarios)</b>
-														<input type="number" name="txt_maquinas" id="txt_maquinas" class="form-control form-control-sm" value="1">
-													</div>
-													<div class="col-sm-4">
-														<b>Numero de activos</b>
-														<input type="number" name="txt_num_activos" id="txt_num_activos" class="form-control form-control-sm" value="1">
-														<b>Numero de PDA</b>
-														<input type="number" name="txt_pda" id="txt_pda" class="form-control form-control-sm" value="0">
-													</div>
-													<div class="col-sm-4">
-														<b>Periodo de licencia</b>
-														<div class="row">
-															<div class="col-sm-12">
-																<label><input type="radio" name="rbl_periodo" value="12" checked>Anual</label>
-																<br>
-																<label><input type="radio" name="rbl_periodo" value="6">Semestral</label>
-																<br>
-																<label><input type="radio" name="rbl_periodo" value="3">trimestral</label>
-																<br>
-																<label><input type="radio" name="rbl_periodo" value="1">Mesual</label>
-															</div>
-														</div>
-													</div>													
-												</div>
-												
-											</div>
-			                        	</div>
+			                        			<!-- <b>Modulos</b> -->
+		                        			<div class="row">
+		                        				<div class="col-sm-12" style="overflow-y:scroll;height: 250px;">
+		                        						<table class="table mb-0" >
+		                        							<thead>
+		                        								<th style="width:20%"></th>
+		                        								<th style="width:20%"></th>
+		                        								<th style="width:20%"></th>
+		                        								<th style="width:20%"></th>
+		                        								<th style="width:20%"></th>
+		                        							</thead>
+		                        							<tbody id="tbl_modulos">
+		                        								
+		                        							</tbody>
+		                        							
+		                        						</table>			                        					
+		                        				</div>			                        				
+		                        			</div>
 			                        </div>
 			                        <br>
-
-					            	<button  type="button" id="btn_atras" class="btn btn-secondary previous">Atras</button>
+					            				<button  type="button" id="btn_atras" class="btn btn-secondary previous">Atras</button>
 			                        <button  type="button" id="btn_siguiente" class="btn btn-primary next2">Siguiente</button>
 			                    </fieldset>
 			                    <fieldset class="text-end">

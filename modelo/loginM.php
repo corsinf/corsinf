@@ -243,7 +243,8 @@ class loginM
 			$sql = "SELECT id_modulos as 'id',nombre_modulo,link,icono,L.Fecha_ini,L.Fecha_exp   
 			FROM MODULOS_SISTEMA MS
 			INNER JOIN LICENCIAS L ON MS.id_modulos = L.Id_Modulo
-			WHERE estado ='A'";
+			WHERE estado ='A'
+			AND DATEDIFF(DAY, GETDATE(), Fecha_exp) >= 0";
 		}else
 		{
 			$sql = "SELECT DISTINCT(MS.id_modulos) as 'id', MS.nombre_modulo,MS.icono,MS.link,L.Fecha_ini,L.Fecha_exp  
@@ -253,6 +254,7 @@ class loginM
 			INNER JOIN MODULOS_SISTEMA MS ON M.modulos_sistema = MS.id_modulos
 			INNER JOIN LICENCIAS L ON MS.id_modulos = L.Id_Modulo
 			WHERE id_tipo_usu ='".$_SESSION['INICIO']['PERFIL']."' 
+			AND DATEDIFF(DAY, GETDATE(), Fecha_exp) >= 0
 			AND L.Id_empresa = '".$_SESSION['INICIO']['ID_EMPRESA']."'
 			AND subpagina<> 1 
 			AND Ver <> 0 
@@ -291,9 +293,9 @@ class loginM
 		return $this->db->inserts($tabla,$datos,$master);
 	}
 
-	function update($tabla,$datos,$where)
+	function update($tabla,$datos,$where,$master=false)
 	{
-		return $this->db->update($tabla,$datos,$where);
+		return $this->db->update($tabla,$datos,$where,$master);
 	}
 	function paginas($pagina)
 	{
@@ -304,11 +306,26 @@ class loginM
 
 	function empresa_licencias($id,$modulo=false)
 	{
-		$sql = "SELECT * FROM LICENCIAS WHERE Id_empresa = '".$id."' AND registrado = 1";
+		$sql = "SELECT * FROM LICENCIAS WHERE Id_empresa = '".$id."' AND registrado = 1 ";
 		if($modulo)
 		{
 			$sql.=" AND Id_Modulo = '".$modulo."'";
 		}
+		$sql.=" ORDER by Id_Licencias DESC";
+
+		// print_r($sql);die();
+		return $this->db->datos($sql,1);
+	}
+
+	function empresa_licencias_activas($id,$modulo=false)
+	{
+		$sql = "SELECT * FROM LICENCIAS WHERE Id_empresa = '".$id."' AND registrado = 1 AND DATEDIFF(DAY, GETDATE(), Fecha_exp) >= 0";
+		if($modulo)
+		{
+			$sql.=" AND Id_Modulo = '".$modulo."'";
+		}
+
+		// print_r($sql);die();
 		return $this->db->datos($sql,1);
 	}
 
@@ -322,6 +339,18 @@ class loginM
 		AND Id_Modulo = '".$modulo."'";
 		// print_r($sql);die();
 		return $this->db->datos($sql);
+	}
+
+	function empresa_licencias_regitrado_x_master($id,$licencia,$modulo)
+	{
+		$sql = "SELECT * 
+		FROM LICENCIAS 
+		WHERE Id_empresa = '".$id."' 
+		AND registrado = 0
+		AND Codigo_licencia = '".$licencia."'
+		AND Id_Modulo = '".$modulo."'";
+		// print_r($sql);die();
+		return $this->db->datos($sql,1);
 	}
 
 	function lista_empresa($id,$master=false)

@@ -54,30 +54,35 @@ $(".next").click(function(){
 
 
 $(".next2").click(function(){
-
+	licencias = [];
 	modulo_select = 0;
 	$('.cbx_modulo').each(function() {
 	   	const checkbox = $(this);
 	    const isChecked = checkbox.prop('checked'); 
 	    if (isChecked) {
 	    	modulo_select = 1;
+	    	var modulo = checkbox[0].value;
+
+	    	var mod = $('#cbx_modulo_'+modulo).val();
+			var maq = $('#txt_maquinas_'+modulo).val();
+			var act = $('#txt_num_activos_'+modulo).val();
+			var pda = $('#txt_pda_'+modulo).val();
+			var per = $('input[name="rbl_periodo_'+modulo+'"]:checked').val();
+
+			lineas = {'modulo':mod,'maquinas':maq,'activos':act,'pda':pda,'periodo':per}
+			licencias.push(lineas);
 	    }
 	});
-	if(modulo_select=='0')
+
+	console.log(licencias);
+
+	if(licencias.length==0)
 	{
 		Swal.fire("Seleccione un modulo","","info");
 		return false;
 	}
 
-	var maq = $('#txt_maquinas').val();
-	var act = $('#txt_num_activos').val();
-	var pda = $('#txt_pda').val();
-
-	if(maq=='' ||  act=='' ||  pda=='' ||  maq==0 ||  act==0)
-	{
-		Swal.fire('Numero de maquinas, numero de activos ó numero de PAD invalido','','info')
-		return false;
-	}
+	
 	var razon =  $('#txt_razon').val()
 	var nombredb = 'DB_'+razon.toUpperCase().replaceAll(' ','_');
 	$('#txt_base').val(nombredb);
@@ -155,43 +160,7 @@ $(".next3").click(function(){
 	setProgressBar(++current);
 });
 
-// $(".next4").click(function(){
 
-// 	var host = $('#txt_host').val();
-// 	var smtp_puerto = $('#txt_puerto_smtp').val();
-// 	var smtp_secure = $('#txt_secure').val();
-// 	var smtp_usu = $('#txt_usuario_smtp').val();
-// 	var smtp_pass = $('#txt_pass_smtp').val();
-// 	if(host =='' || smtp_puerto =='' || smtp_secure  =='' || smtp_usu =='' || smtp_pass =='')
-// 	{
-// 		Swal.fire('Llene todo los datos','','info')
-// 		return false;
-// 	}
-
-// 	current_fs = $(this).parent();
-// 	next_fs = $(this).parent().next();
-
-// 	//Add Class Active
-// 	$("#progressbar li").eq($("fieldset").index(next_fs)).addClass("active");
-
-// 	//show the next fieldset
-// 	next_fs.show();
-// 	//hide the current fieldset with style
-// 	current_fs.animate({opacity: 0}, {
-// 	step: function(now) {
-// 	// for making fielset appear animation
-// 	opacity = 1 - now;
-
-// 	current_fs.css({
-// 	'display': 'none',
-// 	'position': 'relative'
-// 	});
-// 	next_fs.css({'opacity': opacity});
-// 	},
-// 	duration: 500
-// 	});
-// 	setProgressBar(++current);
-// });
 
 $(".previous").click(function(){
 
