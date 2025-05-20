@@ -298,7 +298,7 @@ class loginM
 		}
 		// print_r($sql);
 		// die();
-		$datos = $this->db->datos($sql);
+		$datos = $this->db->datos($sql,1);
 		return $datos;
 	}
 
