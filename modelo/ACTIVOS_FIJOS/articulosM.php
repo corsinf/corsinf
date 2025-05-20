@@ -63,6 +63,7 @@ class articulosM
 			array('db' => 'observacion', 'dt' => 12),   // Observación
 			array('db' => 'id', 'dt' => 13),			//id del articulo
 			array('db' => 'tipo_articulo', 'dt' => 14),	//Tipo de articulo
+			array('db' => 'tipo_articulo_COLOR', 'dt' => 15),	//Tipo de articulo COLOR
 		);
 
 		$whereResult = "";//"nom LIKE '%computadora%'"; //"nom LIKE '%computadora%'"; // Condición dinámica
