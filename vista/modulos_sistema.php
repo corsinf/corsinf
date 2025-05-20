@@ -140,7 +140,7 @@ function validar_licencias()
                 html+=item.draw;
             })
               $('#modulos_sis').html(html);
-            consultar_datos()
+            // consultar_datos()
        }else
        {
         Swal.fire( '','Su perfil no esta asignado a ningun modulo o no tiene una licencia activa.','error').then(function(){
@@ -173,33 +173,33 @@ function licencia_vencidas_all()
     })
 }
 
-  function consultar_datos()
-  {           
-   $.ajax({
-     // data:  {parametros:parametros},
-     url:   '../controlador/loginC.php?modulos_sistema=true',
-     type:  'post',
-     dataType: 'json',
-       success:  function (response) {
-       console.log(response);    
-       if (response.num==0) 
-       {
-          Swal.fire( '','Su perfil no esta asignado a ningun modulo o no tiene una licencia activa.','error').then(function(){
-            window.location.href = "../login.php";
-          });
-       }else
-       {
-            if(response.num==1)
-            {
-                modulo_seleccionado(response.id,response.link)
-            }else
-            {
-                $('#modulos_sis').html(response.html);
-            }
-       } 
-     }
-   });
-  }
+  // function consultar_datos()
+  // {           
+  //  $.ajax({
+  //    // data:  {parametros:parametros},
+  //    url:   '../controlador/loginC.php?modulos_sistema=true',
+  //    type:  'post',
+  //    dataType: 'json',
+  //      success:  function (response) {
+  //      console.log(response);    
+  //      if (response.num==0) 
+  //      {
+  //         Swal.fire( '','Su perfil no esta asignado a ningun modulo o no tiene una licencia activa.','error').then(function(){
+  //           window.location.href = "../login.php";
+  //         });
+  //      }else
+  //      {
+  //           if(response.num==1)
+  //           {
+  //               modulo_seleccionado(response.id,response.link)
+  //           }else
+  //           {
+  //               $('#modulos_sis').html(response.html);
+  //           }
+  //      } 
+  //    }
+  //  });
+  // }
 
   function modulo_seleccionado(modulo,link)
   {
