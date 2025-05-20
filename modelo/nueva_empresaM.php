@@ -21,11 +21,40 @@ class nueva_empresaM
 		return $this->db->inserts($tabla,$datos,1);
 	}
 
-	function buscar_empresa($ruc)
+	function addActual($tabla,$datos)
 	{
-		$sql = "SELECT * FROM EMPRESAS WHERE Ruc = '".$ruc."'";
+		return $this->db->inserts($tabla,$datos);
+	}
+
+	function editar($tabla,$datos,$where,$master)
+	{
+		return $this->db->update($tabla, $datos, $where, $master);
+	}
+
+	function buscar_empresa($ruc=false,$id=false)
+	{
+		$sql = "SELECT * FROM EMPRESAS WHERE 1=1 ";
+		if($ruc)
+		{
+			$sql.=" AND Ruc = '".$ruc."'";
+		}
+		if($id)
+		{
+			$sql.=" AND Id_empresa = '".$id."'"; 
+		}
 		return $this->db->datos($sql,1);
 	} 
+
+	function listaClienteEmpresas($usuario=false)
+	{
+		$sql = "SELECT * FROM ca_clientes_canal WHERE 1=1";
+		if($usuario)
+		{
+			$sql.=" AND ca_id_usuario = '".$usuario."'";
+		}
+		// print_r($sql);die();
+		return $this->db->datos($sql);
+	}
 
 
 	function generar_tablas_modulos($basedatos,$modulo)
@@ -106,6 +135,37 @@ class nueva_empresaM
 			$this->db-> sql_string_terceros($basedatos,$value);
 		}
 	}
+
+	function crear_database($usuario, $password, $servidor, $puerto, $query)
+	{
+		$sql = "IF NOT EXISTS (
+				    SELECT name FROM sys.databases WHERE name = '".$query."'
+				)
+				BEGIN
+				    CREATE DATABASE ".$query." COLLATE Modern_Spanish_CI_AS;
+				END";
+		return $this->db->sql_string_sin_base_terceros($usuario, $password, $servidor, $puerto, $sql);
+	}
+
+	function crear_usuario_db($usuario, $password, $servidor, $puerto, $database,$pass)
+	{
+
+		$sql = "
+		    USE ".$database.";
+		    CREATE LOGIN USER_".$database." WITH PASSWORD = '".$pass."';
+		    CREATE USER USER_".$database." FOR LOGIN USER_".$database.";
+		    ALTER ROLE db_datareader ADD MEMBER USER_".$database.";
+		    ALTER ROLE db_datawriter ADD MEMBER USER_".$database."; 
+		    ";
+		 $this->db->sql_string_sin_base_terceros($usuario, $password, $servidor, $puerto, $sql);
+	}
+
+	function accesos()
+	{
+		$sql = "SELECT * FROM ACCESOS WHERE id_tipo_usu = '3' and id_paginas='93' "; 
+		return $this->db->datos($sql,1);	
+	}
+
 
 	
 

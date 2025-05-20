@@ -112,7 +112,7 @@
            	 Swal.fire("La empresa ya esta registrada","","Error");
            }else if(response==1)
            {
-           	 Swal.fire("Empresa guardada Revise correo para ingresar","","info").then(function(){
+           	 Swal.fire("Empresa guardada Revise correo para ingresar","","success").then(function(){
            	 	location.href = "./login.php";
            	 });           	
            }
@@ -167,9 +167,9 @@
 			<div class="container">
 				<div class="row row-cols-1 row-cols-lg-2 row-cols-xl-2">
 					<div class="col mx-auto">
-						<div class="card mt-5">
+						<div class="card mt-3">
 							<div class="card-body">
-								<div class="border p-4 rounded">
+								<div class="border p-3 rounded">
 									<div class="text-center">
 										<h3 class="">Nueva empresa</h3>										
 									</div>
@@ -216,6 +216,7 @@
                             </div>
                         </div><br><br> 
                         <button  type="button" class="btn btn-primary next">Siguiente</button>
+                        <input type="button" name="previous" class="previous action-button-previous" value="Previous">
                     </fieldset>
                     <fieldset>
                         <div class="form-card">

@@ -144,6 +144,11 @@ p {
     content: "\ea8a";
 }
 
+#progressbar #licencias:before {
+    font-family: boxicons!important;
+    content: "\ea8a";
+}
+
 #progressbar li:before {
     width: 50px;
     height: 50px;

@@ -3,7 +3,7 @@
   function descargar_app()
   {
     var link = document.createElement("a");
-    link.download = 'PUCE.apk';
+    link.download = 'APUDATA.apk';
     link.href = '../descargas';
     link.click();
   }
@@ -41,9 +41,9 @@
                 <div class="text-center">
                   <div class="widgets-icons rounded-circle mx-auto bg-light-primary text-primary mb-3"><i class="bx bx-cloud-download"></i>
                   </div>                  
-                  <h4 class="my-1">Aplicacion PUCE para android</h4>
+                  <h4 class="my-1">Aplicacion APUDATA para android</h4>
                   <h5 class="my-1">Version 1.0</h5>
-                  <p class="mb-0 text-secondary"><a href="../descargas/PUCE.apk" download="PUCE.apk">Click aqui para descargar</a></p>
+                  <p class="mb-0 text-secondary"><a href="../descargas/APUDATA.apk" download="APUDATA.apk">Click aqui para descargar</a></p>
                 </div>
               </div>
             </div>

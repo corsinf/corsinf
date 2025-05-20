@@ -39,6 +39,13 @@ if (isset($_GET['_id'])) {
     font-size: 12px;
     margin-left: 3px;
   }
+
+  #img_articulo {
+    height: 300px;
+    object-fit: contain;
+    width: 100%;
+    background-color: #f8f9fa;
+  }
 </style>
 
 <script type="text/javascript">
@@ -54,42 +61,42 @@ if (isset($_GET['_id'])) {
     $('#ddl_marca').on('select2:select', function(e) {
       var data = e.params.data.data;
 
-      $('#lbl_sap_mar').text('SAP:' + data.CODIGO)
+      $('#lbl_sap_mar').text('Código:' + data.CODIGO)
       // console.log(data);
     });
 
     //---------------------------------
     $('#ddl_genero').on('select2:select', function(e) {
       var data = e.params.data.data;
-      $('#lbl_sap_gen').text('SAP:' + data.CODIGO)
+      $('#lbl_sap_gen').text('Código:' + data.CODIGO)
       // console.log(data);
     });
 
     //---------------------------------
     $('#ddl_color').on('select2:select', function(e) {
       var data = e.params.data.data;
-      $('#lbl_sap_col').text('SAP:' + data.CODIGO)
+      $('#lbl_sap_col').text('Código:' + data.CODIGO)
       console.log(data);
     });
 
     //---------------------------------
     $('#ddl_estado').on('select2:select', function(e) {
       var data = e.params.data.data;
-      $('#lbl_sap_est').text('SAP:' + data.CODIGO)
+      $('#lbl_sap_est').text('Código:' + data.CODIGO)
       console.log(data);
     });
 
     //---------------------------------
     $('#ddl_proyecto').on('select2:select', function(e) {
       var data = e.params.data.data;
-      $('#lbl_sap_pro').text('SAP:' + data.pro)
+      $('#lbl_sap_pro').text('Código:' + data.pro)
       console.log(data);
     });
 
     //---------------------------------
     $('#ddl_localizacion').on('select2:select', function(e) {
       var data = e.params.data.data;
-      $('#lbl_sap_loc').text('SAP:' + data.EMPLAZAMIENTO)
+      $('#lbl_sap_loc').text('Código:' + data.EMPLAZAMIENTO)
       console.log(data);
     });
     //---------------------------------
@@ -194,7 +201,7 @@ if (isset($_GET['_id'])) {
     $('#ddl_subfamilia').select2({
       placeholder: 'Seleccione una Subfamilia',
       ajax: {
-        url: '../controlador/ACTIVOS_FIJOS/familiasC.php?lista_subfamilias=true&fam=' + fa,
+        url: '../controlador/ACTIVOS_FIJOS/familiasC.php?lista_subfamilias_drop=true&fam=' + fa,
         dataType: 'json',
         delay: 250,
         processResults: function(data) {
@@ -256,19 +263,19 @@ if (isset($_GET['_id'])) {
   function cargar_articulo_vista_pnl(data) {
     $('#lbl_descripcion').text(data.nom);
     $('#lbl_descripcion2').text(data.des ?? '');
-    $('#lbl_localizacion1').html(`<b>Emplazamiento / Localización</b> | <label style="font-size:65%"> SAP: ${data.cloc}</label>`);
+    $('#lbl_localizacion1').html(`<b>Emplazamiento / Localización</b> | <label style="font-size:65%"> Código: ${data.c_loc}</label>`);
     $('#lbl_localizacion').text(data.loc_nom);
 
-    $('#lbl_custodio1').html(`<b>Custodio:</b> | <label style="font-size:65%"> SAP: ${data.person_no}</label>`);
+    $('#lbl_custodio1').html(`<b>Custodio:</b> | <label style="font-size:65%"> Código: ${data.person_no}</label>`);
     $('#lbl_custodio').text(data.person_nom);
 
-    $('#lbl_marca').html(`${data.marca} | <label style="font-size:65%"> SAP: ${data.c_mar}</label>`);
-    $('#lbl_color').html(`${data.color} | <label style="font-size:65%"> SAP: ${data.c_col}</label>`);
-    $('#lbl_genero').html(`${data.genero} | <label style="font-size:65%"> SAP: ${data.c_gen}</label>`);
-    $('#lbl_proyecto').html(`${data.proyecto} | <label style="font-size:65%"> SAP: ${data.c_pro}</label>`);
-    $('#lbl_estado').html(`${data.estado} | <label style="font-size:65%"> SAP: ${data.c_est}</label>`);
+    $('#lbl_marca').html(`${data.marca} | <label style="font-size:65%"> Código: ${data.c_mar}</label>`);
+    $('#lbl_color').html(`${data.color} | <label style="font-size:65%"> Código: ${data.c_col}</label>`);
+    $('#lbl_genero').html(`${data.genero} | <label style="font-size:65%"> Código: ${data.c_gen}</label>`);
+    $('#lbl_proyecto').html(`${data.proyecto} | <label style="font-size:65%"> Código: ${data.c_pro}</label>`);
+    $('#lbl_estado').html(`${data.estado} | <label style="font-size:65%"> Código: ${data.c_est}</label>`);
 
-    $('#lbl_asset').html(`<b>Asset:</b> ${data.tag_s}`);
+    $('#lbl_sku').html(`<b>SKU:</b> ${data.tag_s}`);
     $('#lbl_sub_num').html(`<b>SubNum:</b> ${data.subnum}`);
     $('#lbl_rfid').html(data.rfid);
     $('#lbl_tag_ant').html(`<b>Tag Antiguo:</b> ${data.ant}`);
@@ -280,18 +287,20 @@ if (isset($_GET['_id'])) {
       $('#lbl_observaciones').css('display', 'block').html(`<b>Observaciones:</b> ${data.obs}`);
     }
 
-    if (data.imagen && data.imagen !== 'sin_imagen.jpg') {
-      $("#img_articulo").attr("src", "../img/" + data.imagen);
+    if (data.ruta_imagen && data.ruta_imagen !== null) {
+      $("#img_articulo").attr("src", data.ruta_imagen);
     }
 
-    $('#lbl_unidad').text('/' + data.id_unidad_medida);
+
+    // $('#lbl_unidad').text('/' + data.id_unidad_medida);
     $('#lbl_fecha_compra').text(formatoDate(data.fecha_contabilizacion));
 
     if (data.carac) {
       $('#lbl_caracteristicas').css('display', 'block').html(`<b>Características:</b> ${data.carac}`);
     }
 
-    $('#lbl_precio').text(`$${data.prec}`);
+    let precioRedondeado = Math.ceil(data.prec * 100) / 100;
+    $('#lbl_precio').text(`$${precioRedondeado.toFixed(2)}`);
     $('#lbl_canti').text(data.cant);
 
     if (data.tipo_articulo === 'PATRIMONIALES') {
@@ -308,12 +317,13 @@ if (isset($_GET['_id'])) {
     $('input[name="rbl_tip_articulo"][value="' + data.id_tipo_articulo + '"]').prop('checked', true);
     console.log(data.id_tipo_articulo);
 
+    $('input[name="rbl_asset"][value="' + data.longitud_rfid + '"]').prop('checked', true);
 
     // Asignar valores a los campos de texto
     $('#txt_descripcion').val(data.nom);
     $('#txt_descripcion_2').val(data.des);
 
-    $('#txt_asset').val(data.rfid);
+    $('#txt_rfid').val(data.rfid);
     $('#txt_tag_serie').val(data.tag_s);
     $('#txt_tag_anti').val(data.ant);
 
@@ -405,17 +415,17 @@ if (isset($_GET['_id'])) {
     $('#txt_funds_ctr_apc').val(data.funds_ctr_apc);
     $('#txt_profit_ctr').val(data.profit_ctr);
 
-    $('#txt_compra').val(fecha_formateada(data.fecha_referencia));
-    $('#txt_fecha').val(fecha_formateada(data.fecha_contabilizacion));
+    $('#txt_compra').val(fecha_formateada(data.fecha_contabilizacion));
+    $('#txt_fecha').val(fecha_formateada(data.fecha_referencia));
 
     // SAP
-    $('#lbl_sap_col').text('SAP:' + data.c_col);
-    $('#lbl_sap_est').text('SAP:' + data.c_est);
-    $('#lbl_sap_mar').text('SAP:' + data.c_mar);
-    $('#lbl_sap_pro').text('SAP:' + data.c_pro);
-    $('#lbl_sap_gen').text('SAP:' + data.c_gen);
-    $('#lbl_sap_loc').text('SAP:' + data.c_loc);
-    $('#lbl_sap_custodio').text('SAP:' + data.person_no);
+    $('#lbl_sap_col').text('Código:' + data.c_col);
+    $('#lbl_sap_est').text('Código:' + data.c_est);
+    $('#lbl_sap_mar').text('Código:' + data.c_mar);
+    $('#lbl_sap_pro').text('Código:' + data.c_pro);
+    $('#lbl_sap_gen').text('Código:' + data.c_gen);
+    $('#lbl_sap_loc').text('Código:' + data.c_loc);
+    $('#lbl_sap_custodio').text('Código:' + data.person_no);
   }
 
   function guardar_articulo() {
@@ -430,8 +440,8 @@ if (isset($_GET['_id'])) {
       'txt_descripcion_2': $('#txt_descripcion_2').val(),
       'ddl_custodio': $('#ddl_custodio').val(),
       'ddl_localizacion': $('#ddl_localizacion').val(),
-      'txt_asset': $('#txt_asset').val(),
-      'rbl_asset': $('#rbl_asset').val(),
+      'txt_rfid': $('#txt_rfid').val(),
+      'rbl_asset': $('input[name="rbl_asset"]:checked').val(),
       'txt_tag_serie': $('#txt_tag_serie').val(),
       'txt_tag_anti': $('#txt_tag_anti').val(),
       'txt_subno': $('#txt_subno').val(),
@@ -523,19 +533,6 @@ if (isset($_GET['_id'])) {
     });
   }
 
-  //Cargar datos de custodio en inputs
-  function datos_col_custodio(response) {
-    $('#txt_nombre').val(response.person_nom);
-    $('#txt_ci').val(response.person_ci);
-    $('#txt_email').val(response.person_correo);
-    $('#txt_puesto').val(response.PUESTO);
-    $('#txt_unidad_p').val(response.unidad_org);
-    $('#id').val(response.id_person);
-
-    $('#titulo').text('Editar custodio');
-    $('#op').text('Editar');
-  }
-
   function add_familia() {
     $('#modal_familia').modal('show');
   }
@@ -614,10 +611,10 @@ if (isset($_GET['_id'])) {
   }
 
   function validar_campo() {
-    var asset = $('#txt_asset').val();
+    var asset = $('#txt_rfid').val();
     var cant = $('input[type=radio][name="rbl_asset"]:checked').val();
     if (cant != 0) {
-      num_caracteres('txt_asset', cant);
+      num_caracteres('txt_rfid', cant);
     }
 
     console.log(asset);
@@ -665,7 +662,7 @@ if (isset($_GET['_id'])) {
   function imprimir_tags_masivo() {
     var query = $('#txt_buscar').val();
     var parametros = {
-      'query': $('#lbl_asset').text(),
+      'query': $('#lbl_sku').text(),
       'localizacion': '',
       'custodio': '',
       'pag': '',
@@ -812,7 +809,7 @@ if (isset($_GET['_id'])) {
           <div class="col-md-3 border-end">
 
             <div class="image-zoom-section pe-3">
-              <div class="product-gallery owl-carousel owl-theme border mb-3 p-3" data-slider-id="1">
+              <div class="border mb-3 p-3 img-container" data-slider-id="1">
                 <div class="item">
                   <img src="../img/sin_imagen.jpg" class="img-fluid" id="img_articulo" alt="">
                 </div>
@@ -853,7 +850,7 @@ if (isset($_GET['_id'])) {
 
               <div class="d-flex flex-wrap gap-3 py-2">
                 <span class="badge bg-secondary" id="lbl_sub_num"></span>
-                <span class="badge bg-primary" id="lbl_asset"></span>
+                <span class="badge bg-primary" id="lbl_sku"></span>
                 <span class="badge bg-warning" id="lbl_tag_ant"></span>
               </div>
 
@@ -873,7 +870,7 @@ if (isset($_GET['_id'])) {
                   <div class="bg-light p-2 rounded mb-2">
                     <span class="fw-bold">Cantidad: </span>
                     <span class="h4" id="lbl_canti">0</span>
-                    <span class="text-muted" id="lbl_unidad">/</span>
+                    <!-- <span class="text-muted" id="lbl_unidad">/</span> -->
                   </div>
                 </div>
               </div>
@@ -1035,12 +1032,12 @@ if (isset($_GET['_id'])) {
                       <div class="row mb-col">
                         <div class="col-sm-6">
                           <label for="txt_descripcion" class="form-label">Descripción </label>
-                          <input type="text" class="form-control form-control-sm" name="txt_descripcion" id="txt_descripcion">
+                          <input type="text" class="form-control form-control-sm" name="txt_descripcion" id="txt_descripcion" maxlength="200">
                         </div>
 
                         <div class="col-sm-6">
                           <label for="txt_descripcion_2" class="form-label">Descripción 2 </label>
-                          <input type="text" class="form-control form-control-sm" name="txt_descripcion_2" id="txt_descripcion_2">
+                          <input type="text" class="form-control form-control-sm" name="txt_descripcion_2" id="txt_descripcion_2" maxlength="200">
                         </div>
                       </div>
 
@@ -1048,7 +1045,7 @@ if (isset($_GET['_id'])) {
                         <div class="col-sm-6">
                           <div class="d-flex justify-content-between align-items-center">
                             <label for="ddl_custodio" class="form-label">Custodio </label>
-                            <small id="lbl_sap_custodio" class="text-muted"><u>SAP:</u></small>
+                            <small id="lbl_sap_custodio" class="text-muted"><u>Código:</u></small>
                           </div>
 
                           <select class="form-control form-control-sm select2-validation" name="ddl_custodio" id="ddl_custodio">
@@ -1060,7 +1057,7 @@ if (isset($_GET['_id'])) {
                         <div class="col-sm-6">
                           <div class="d-flex justify-content-between align-items-center">
                             <label for="ddl_localizacion" class="form-label">Emplazamiento / Localización </label>
-                            <small id="lbl_sap_loc" class="text-muted"><u>SAP:</u></small>
+                            <small id="lbl_sap_loc" class="text-muted"><u>Código:</u></small>
                           </div>
 
                           <select class="form-control form-control-sm select2-validation" name="ddl_localizacion" id="ddl_localizacion">
@@ -1075,8 +1072,8 @@ if (isset($_GET['_id'])) {
                       <!-- Detalles TAG -->
                       <div class="row mb-col">
                         <div class="col-sm-6">
-                          <label for="txt_asset" class="form-label">RFID </label>
-                          <input type="text" class="form-control form-control-sm" name="txt_asset" id="txt_asset" onkeyup="validar_campo()">
+                          <label for="txt_rfid" class="form-label">RFID </label>
+                          <input type="text" class="form-control form-control-sm" name="txt_rfid" id="txt_rfid" onkeyup="validar_campo()" maxlength="50">
 
                           <div class="text-start text-start-1 mt-0">
                             <div class="form-check form-check-1 form-check-inline">
@@ -1095,20 +1092,22 @@ if (isset($_GET['_id'])) {
                         </div>
 
                         <div class="col-sm-6">
-                          <label for="txt_tag_anti" class="form-label">Referencia de almacén (SKU) </label>
-                          <input type="text" class="form-control form-control-sm" name="txt_tag_anti" id="txt_tag_anti">
+                          <label for="txt_tag_serie" class="form-label">Referencia de almacén (SKU) </label>
+                          <input type="text" class="form-control form-control-sm solo_numeros_int" name="txt_tag_serie" id="txt_tag_serie" maxlength="15">
                         </div>
                       </div>
 
                       <div class="row mb-col">
-                        <div class="col-sm-6" hidden>
-                          <label for="txt_tag_serie" class="form-label">Tag Serie </label>
-                          <input type="text" class="form-control form-control-sm" name="txt_tag_serie" id="txt_tag_serie">
+                        <div class="col-sm-6">
+                          <label for="txt_tag_anti" class="form-label">Tag Antiguo </label>
+                          <input type="text" class="form-control form-control-sm solo_numeros_int" name="txt_tag_anti" id="txt_tag_anti" maxlength="15">
                         </div>
+
+
 
                         <div class="col-sm-6">
                           <label for="txt_subno" class="form-label">Subnúmero </label>
-                          <input type="text" class="form-control form-control-sm" name="txt_subno" id="txt_subno">
+                          <input type="text" class="form-control form-control-sm solo_numeros_int" name="txt_subno" id="txt_subno" maxlength="15">
                         </div>
                       </div>
 
@@ -1118,22 +1117,22 @@ if (isset($_GET['_id'])) {
                       <div class="row mb-col">
                         <div class="col-sm-3">
                           <label for="txt_cant" class="form-label">Cantidad </label>
-                          <input type="text" class="form-control form-control-sm" name="txt_cant" id="txt_cant">
+                          <input type="text" class="form-control form-control-sm solo_numeros_int" name="txt_cant" id="txt_cant" value="1" maxlength="1" readonly>
                         </div>
 
                         <div class="col-sm-3">
                           <label for="txt_valor" class="form-label">Precio </label>
-                          <input type="text" class="form-control form-control-sm" name="txt_valor" id="txt_valor">
+                          <input type="number" class="form-control form-control-sm" name="txt_valor" id="txt_valor" maxlength="16">
                         </div>
 
                         <div class="col-sm-3">
                           <label for="txt_maximo" class="form-label">Máximo </label>
-                          <input type="text" class="form-control form-control-sm" name="txt_maximo" id="txt_maximo">
+                          <input type="text" class="form-control form-control-sm solo_numeros_int" name="txt_maximo" id="txt_maximo" maxlength="8">
                         </div>
 
                         <div class="col-sm-3">
                           <label for="txt_minimo" class="form-label">Mínimo </label>
-                          <input type="text" class="form-control form-control-sm" name="txt_minimo" id="txt_minimo">
+                          <input type="text" class="form-control form-control-sm solo_numeros_int" name="txt_minimo" id="txt_minimo" maxlength="8">
                         </div>
                       </div>
 
@@ -1148,12 +1147,12 @@ if (isset($_GET['_id'])) {
 
                         <div class="col-sm-4">
                           <label for="txt_modelo" class="form-label">Modelo </label>
-                          <input type="text" class="form-control form-control-sm" name="txt_modelo" id="txt_modelo">
+                          <input type="text" class="form-control form-control-sm" name="txt_modelo" id="txt_modelo" maxlength="255">
                         </div>
 
                         <div class="col-sm-4">
                           <label for="txt_serie" class="form-label">Serie </label>
-                          <input type="text" class="form-control form-control-sm" name="txt_serie" id="txt_serie">
+                          <input type="text" class="form-control form-control-sm" name="txt_serie" id="txt_serie" maxlength="255">
                         </div>
                       </div>
 
@@ -1164,9 +1163,9 @@ if (isset($_GET['_id'])) {
                         <div class="col-sm-6">
                           <label for="ddl_familia" class="form-label">
                             Familia
-                            <button type="button" class="btn btn-success btn-xss mb-1" onclick="add_familia()" title="Nueva familia">
+                            <!-- <button type="button" class="btn btn-success btn-xss mb-1" onclick="add_familia()" title="Nueva familia">
                               <i class="bx bx-plus fs-7 me-0 fw-bold"></i>
-                            </button>
+                            </button> -->
                           </label>
 
                           <select class="form-select form-select-sm select2-validation" name="ddl_familia" id="ddl_familia" onchange="autocmpletar_subfam()">
@@ -1178,9 +1177,9 @@ if (isset($_GET['_id'])) {
                         <div class="col-sm-6">
                           <label for="ddl_subfamilia" class="form-label">
                             Subfamilia
-                            <button type="button" class="btn btn-success btn-xss mb-1" onclick="add_subfamilia()" title="Nueva sub familia">
+                            <!-- <button type="button" class="btn btn-success btn-xss mb-1" onclick="add_subfamilia()" title="Nueva sub familia">
                               <i class="bx bx-plus fs-7 me-0 fw-bold"></i>
-                            </button>
+                            </button> -->
                           </label>
                           <select class="form-select form-select-sm select2-validation" name="ddl_subfamilia" id="ddl_subfamilia">
                             <option value="">Seleccione una familia</option>
@@ -1193,7 +1192,7 @@ if (isset($_GET['_id'])) {
                         <div class="col-sm-3">
                           <div class="d-flex justify-content-between align-items-center">
                             <label for="ddl_marca" class="form-label">Marca </label>
-                            <small id="lbl_sap_mar"><u>SAP: </u></small>
+                            <small id="lbl_sap_mar"><u>Código: </u></small>
                           </div>
 
                           <select class="form-control form-control-sm select2-validation" name="ddl_marca" id="ddl_marca">
@@ -1205,7 +1204,7 @@ if (isset($_GET['_id'])) {
                         <div class="col-sm-3">
                           <div class="d-flex justify-content-between align-items-center">
                             <label for="ddl_estado" class="form-label">Estado </label>
-                            <small id="lbl_sap_est"><u>SAP: </u></small>
+                            <small id="lbl_sap_est"><u>Código: </u></small>
                           </div>
                           <select class="form-control form-control-sm select2-validation" name="ddl_estado" id="ddl_estado">
                             <option value="">Seleccione</option>
@@ -1216,7 +1215,7 @@ if (isset($_GET['_id'])) {
                         <div class="col-sm-3">
                           <div class="d-flex justify-content-between align-items-center">
                             <label for="ddl_genero" class="form-label">Género </label>
-                            <small id="lbl_sap_gen"><u>SAP: </u></small>
+                            <small id="lbl_sap_gen"><u>Código: </u></small>
                           </div>
                           <select class="form-control form-control-sm select2-validation" name="ddl_genero" id="ddl_genero">
                             <option value="">Seleccione</option>
@@ -1227,7 +1226,7 @@ if (isset($_GET['_id'])) {
                         <div class="col-sm-3">
                           <div class="d-flex justify-content-between align-items-center">
                             <label for="ddl_color" class="form-label">Color </label>
-                            <small id="lbl_sap_col"><u>SAP: </u></small>
+                            <small id="lbl_sap_col"><u>Código: </u></small>
                           </div>
                           <select class="form-control form-control-sm select2-validation" name="ddl_color" id="ddl_color">
                             <option value="">Seleccione</option>
@@ -1248,7 +1247,7 @@ if (isset($_GET['_id'])) {
                         <div class="col-sm-6">
                           <div class="d-flex justify-content-between align-items-center">
                             <label for="ddl_proyecto" class="form-label">Proyecto </label>
-                            <small id="lbl_sap_pro"><u>SAP: </u></small>
+                            <small id="lbl_sap_pro"><u>Código: </u></small>
                           </div>
                           <select class="form-control form-control-sm select2-validation" name="ddl_proyecto" id="ddl_proyecto">
                             <option value="">Seleccione</option>
@@ -1260,29 +1259,29 @@ if (isset($_GET['_id'])) {
                       <div class="row mb-col">
                         <div class="col-sm-6">
                           <label for="txt_company" class="form-label form-label-sm">Company Code </label>
-                          <input type="text" class="form-control form-control-sm" name="txt_company" id="txt_company">
+                          <input type="text" class="form-control form-control-sm" name="txt_company" id="txt_company" maxlength="100">
                         </div>
 
                         <div class="col-sm-6">
                           <label for="txt_resp_cctr" class="form-label form-label-sm">Responsable del Centro de Costos </label>
-                          <input type="text" class="form-control form-control-sm" name="txt_resp_cctr" id="txt_resp_cctr">
+                          <input type="text" class="form-control form-control-sm" name="txt_resp_cctr" id="txt_resp_cctr" maxlength="100">
                         </div>
                       </div>
 
                       <div class="row mb-col">
                         <div class="col-sm-4">
                           <label for="txt_centro_costos" class="form-label form-label-sm">Centro de Costos </label>
-                          <input type="text" class="form-control form-control-sm" name="txt_centro_costos" id="txt_centro_costos">
+                          <input type="text" class="form-control form-control-sm" name="txt_centro_costos" id="txt_centro_costos" maxlength="100">
                         </div>
 
                         <div class="col-sm-4">
                           <label for="txt_funds_ctr_apc" class="form-label form-label-sm">Control de Fondos APC </label>
-                          <input type="text" class="form-control form-control-sm" name="txt_funds_ctr_apc" id="txt_funds_ctr_apc">
+                          <input type="text" class="form-control form-control-sm" name="txt_funds_ctr_apc" id="txt_funds_ctr_apc" maxlength="100">
                         </div>
 
                         <div class="col-sm-4">
                           <label for="txt_profit_ctr" class="form-label form-label-sm">Centro de Beneficio </label>
-                          <input type="text" class="form-control form-control-sm" name="txt_profit_ctr" id="txt_profit_ctr">
+                          <input type="text" class="form-control form-control-sm" name="txt_profit_ctr" id="txt_profit_ctr" maxlength="100">
                         </div>
                       </div>
 
@@ -1304,14 +1303,14 @@ if (isset($_GET['_id'])) {
                       <div class="row mb-col">
                         <div class="col-sm-12">
                           <label for="txt_carac" class="form-label">Características </label>
-                          <textarea class="form-control form-control-sm" name="txt_carac" id="txt_carac" placeholder="Características" rows="1"></textarea>
+                          <textarea class="form-control form-control-sm" name="txt_carac" id="txt_carac" placeholder="Características" rows="1" maxlength="255"></textarea>
                         </div>
                       </div>
 
                       <div class="row mb-col">
                         <div class="col-sm-12">
                           <label for="txt_observacion" class="form-label">Observaciones </label>
-                          <textarea class="form-control form-control-sm" name="txt_observacion" id="txt_observacion" placeholder="Observaciones" rows="1"></textarea>
+                          <textarea class="form-control form-control-sm" name="txt_observacion" id="txt_observacion" placeholder="Observaciones" rows="1" maxlength="255"></textarea>
                         </div>
                       </div>
 
@@ -1401,7 +1400,7 @@ if (isset($_GET['_id'])) {
     $("#form_articulo").validate({
       rules: {
         cbx_kit: {
-          required: true,
+          // required: true,
         },
         rbl_tip_articulo: {
           required: true,
@@ -1418,7 +1417,7 @@ if (isset($_GET['_id'])) {
         ddl_localizacion: {
           required: true,
         },
-        txt_asset: {
+        txt_rfid: {
           required: true,
         },
         rbl_asset: {
@@ -1535,12 +1534,12 @@ if (isset($_GET['_id'])) {
   });
 
   function agregar_asterisco_inputs() {
-    agregar_asterisco_campo_obligatorio('cbx_kit');
+    // agregar_asterisco_campo_obligatorio('cbx_kit');
     agregar_asterisco_campo_obligatorio('txt_descripcion');
     agregar_asterisco_campo_obligatorio('txt_descripcion_2');
     agregar_asterisco_campo_obligatorio('ddl_custodio');
     agregar_asterisco_campo_obligatorio('ddl_localizacion');
-    agregar_asterisco_campo_obligatorio('txt_asset');
+    agregar_asterisco_campo_obligatorio('txt_rfid');
     agregar_asterisco_campo_obligatorio('rbl_asset');
     agregar_asterisco_campo_obligatorio('txt_tag_serie');
     agregar_asterisco_campo_obligatorio('txt_tag_anti');

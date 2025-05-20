@@ -72,6 +72,10 @@ class proyectosC
 
 	function insertar_editar($parametros)
 	{
+        $txt_validez_de = !empty($parametros['val']) ? $parametros['val'] : null;
+        $txt_validez_a = !empty($parametros['vla']) ? $parametros['vla'] : null;
+        $txt_expiracion = !empty($parametros['exp']) ? $parametros['exp'] : null;
+
 
 		$datos[0]['campo'] = 'programa_financiacion';
 		$datos[0]['dato'] = $parametros['fin'];
@@ -82,11 +86,11 @@ class proyectosC
 		$datos[3]['campo'] = 'descripcion';
 		$datos[3]['dato'] = $parametros['des'];
 		$datos[4]['campo'] = 'validez_de';
-		$datos[4]['dato'] = $parametros['val'];
+		$datos[4]['dato'] = $txt_validez_de;
 		$datos[5]['campo'] = 'validez_a';
-		$datos[5]['dato'] = $parametros['vla'];
+		$datos[5]['dato'] = $txt_validez_a;
 		$datos[6]['campo'] = 'expiracion';
-		$datos[6]['dato'] = $parametros['exp'];
+		$datos[6]['dato'] = $txt_expiracion;
 
 		if ($parametros['id'] == "") {
 			if (count($this->modelo->buscar_proyecto_programa($datos[0]['dato'])) == 0) {
@@ -113,12 +117,19 @@ class proyectosC
 
 	function compara_datos($parametros)
 	{
+
 		$text = '';
 		$marca = $this->modelo->lista_proyectos($parametros['id']);
-
+		
 		$valde = new DateTime($marca[0]['valde']);
 		$vala = new DateTime($marca[0]['vala']);
 		$exp = new DateTime($marca[0]['exp']);
+
+		$valde = $valde->format('Y-m-d');
+		$vala = $vala->format('Y-m-d');
+		$exp = $exp->format('Y-m-d');
+
+		// print_r($valde->format('Y-m-d').' '.$parametros['val']); exit(); die();
 
 		if ($marca[0]['pro'] != $parametros['fin']) {
 			$text .= ' Se modifico PROGRAMA FINANCIACION en PROYECTO de ' . $marca[0]['pro'] . ' a ' . $parametros['fin'];
@@ -132,13 +143,13 @@ class proyectosC
 		if ($marca[0]['desc'] != $parametros['des']) {
 			$text .= ' Se modifico DESCRIPCION en PROYECTO DE ' . $marca[0]['desc'] . ' a ' . $parametros['des'];
 		}
-		if ($valde->format('Y-m-d') != $parametros['val']) {
+		if ($valde != $parametros['val']) {
 			$text .= ' Se modifico FECHA VALIDEZ DE en PROYECTO DE ' . $valde . ' a ' . $parametros['val'];
 		}
-		if ($vala->format('Y-m-d') != $parametros['vla']) {
+		if ($vala != $parametros['vla']) {
 			$text .= ' Se modifico FECHA VALIDEZ A en PROYECTO DE ' .$vala . ' a ' . $parametros['vla'];
 		}
-		if ($exp->format('Y-m-d') != $parametros['exp']) {
+		if ($exp != $parametros['exp']) {
 			$text .= ' Se modifico FECHA EXPIRACION en PROYECTO DE ' .$exp . ' a ' . $parametros['exp'];
 		}
 

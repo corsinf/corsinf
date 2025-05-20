@@ -34,9 +34,34 @@ class tipo_usuarioM
 		}
 
 	}
+
+	function guardarLocal($datos,$tabla)
+	{
+		$datos = $this->db->inserts($tabla,$datos);
+		if($datos==1)
+		{
+			return 1;
+		}else
+		{
+			return -1;
+		}
+
+	}
 	function update($tabla,$datos,$where)
 	{
 		$datos = $this->db->update($tabla,$datos,$where,1);
+		if($datos==1)
+		{
+			return 1;
+		}else
+		{
+			return -1;
+		}
+
+	}
+	function updateLocal($tabla,$datos,$where)
+	{
+		$datos = $this->db->update($tabla,$datos,$where);
 		if($datos==1)
 		{
 			return 1;
@@ -124,7 +149,7 @@ class tipo_usuarioM
 			   $sql ="SELECT MS.*
 						FROM LICENCIAS L
 						INNER JOIN MODULOS_SISTEMA MS ON L.Id_Modulo = MS.id_modulos
-						WHERE Id_empresa = '".$_SESSION['INICIO']['ID_EMPRESA']."' AND L.registrado = 1";
+						WHERE Id_empresa = '".$_SESSION['INICIO']['ID_EMPRESA']."' AND L.registrado = 1 AND DATEDIFF(DAY, GETDATE(), Fecha_exp) >= 0 ";
 				$datos = $this->db->datos($sql,1);
 				break;			
 
@@ -305,21 +330,29 @@ class tipo_usuarioM
 
 	}
 
-	function existe_acceso($pag,$per)
+	function existe_acceso($pag,$per,$empresa)
 	{
 		$sql = "SELECT * 
-		FROM ACCESOS
-		WHERE id_paginas = '".$pag."' 
-		AND id_tipo_usu = '".$per."'"; 
+		FROM ACCESOS A
+		WHERE A. id_paginas = '".$pag."' 
+		AND id_tipo_usu = '".$per."'
+		AND id_empresa = '".$empresa."'"; 
 
 		// print_r($sql);die();
 		$datos = $this->db->datos($sql,1);
 		return $datos;
 	}
 
-	function lista_accesos_asignados($perfil)
+	function lista_accesos_asignados($perfil,$modulo_sis=false,$modulo=false,$query=false)
 	{
-		$sql = "SELECT Ver,editar,eliminar,id_paginas as 'pag' FROM ACCESOS WHERE id_tipo_usu = '".$perfil."'";
+		$sql = "SELECT Ver,editar,eliminar,A.id_paginas as 'pag' 
+				FROM ACCESOS A
+				INNER JOIN PAGINAS P ON A.id_paginas = P.id_paginas 
+				WHERE id_empresa = '".$_SESSION['INICIO']['ID_EMPRESA']."' AND id_tipo_usu = '".$perfil."'";
+				if($modulo_sis)
+				{
+					$sql.=" AND P.id_modulo = '".$modulo_sis."'";
+				}
 		// print_r($sql);die();
 		$datos = $this->db->datos($sql);
 		return $datos;

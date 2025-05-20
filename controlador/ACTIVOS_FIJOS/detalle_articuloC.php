@@ -8,6 +8,10 @@ require_once(dirname(__DIR__, 2) . '/modelo/ACTIVOS_FIJOS/estadoM.php');
 require_once(dirname(__DIR__, 2) . '/modelo/ACTIVOS_FIJOS/proyectosM.php');
 require_once(dirname(__DIR__, 2) . '/modelo/ACTIVOS_FIJOS/custodioM.php');
 require_once(dirname(__DIR__, 2) . '/modelo/ACTIVOS_FIJOS/localizacionM.php');
+require_once(dirname(__DIR__, 2) . '/modelo/ACTIVOS_FIJOS/CATALOGOS/ac_cat_tipo_articuloM.php');
+require_once(dirname(__DIR__, 2) . '/modelo/ACTIVOS_FIJOS/CATALOGOS/ac_cat_unidad_medidaM.php');
+require_once(dirname(__DIR__, 2) . '/modelo/ACTIVOS_FIJOS/clase_movimientoM.php');
+require_once(dirname(__DIR__, 2) . '/modelo/ACTIVOS_FIJOS/familiasM.php');
 require_once(dirname(__DIR__, 2) . '/db/codigos_globales.php');
 
 // require_once('../modelo/coloresM.php');
@@ -24,7 +28,7 @@ if (isset($_GET['detalle'])) {
 
 if (isset($_GET['movimientos'])) {
 	$parametros = $_POST['parametros'];
-	// print_r($id);die();
+	// print_r($parametros);die();
 	echo json_encode($controlador->movimientos($parametros));
 }
 
@@ -94,6 +98,9 @@ if (isset($_GET['add_info'])) {
 	echo json_encode($controlador->add_info($parametros));
 }
 
+if (isset($_GET['cargar_detalle_activo'])) {
+	echo json_encode($controlador->cargar_detalle_activo($_POST['id'] ?? '', $_POST['token'] ?? ''));
+}
 
 
 class detalle_articuloC
@@ -107,6 +114,10 @@ class detalle_articuloC
 	private $localizacion;
 	private $custodio;
 	private $estado;
+	private $tipo_articulo;
+	private $unidad_medida;
+	private $clase_movimiento;
+	private $familias;
 
 	function __construct()
 	{
@@ -119,6 +130,10 @@ class detalle_articuloC
 		$this->custodio = new custodioM();
 		$this->cod_globales = new codigos_globales();
 		$this->proyectos = new proyectosM();
+		$this->tipo_articulo = new ac_cat_tipo_articuloM();
+		$this->unidad_medida = new ac_cat_unidad_medidaM();
+		$this->clase_movimiento = new clase_movimientoM();
+		$this->familias = new familiasM();
 	}
 
 	function lista_detalle_articulo($id, $pag)
@@ -176,14 +191,12 @@ class detalle_articuloC
 	function cargar_datos($id)
 	{
 		$datos = $this->modelo->cargar_datos($id);
-		if (count($datos) > 0) {
-			if (!file_exists('../img/' . $datos[0]['imagen'])) {
-				$datos[0]['imagen'] = 'sin_imagen.jpg';
-			}
-		} else {
-			$datos[0]['imagen'] = 'sin_imagen.jpg';
-		}
-		// $datos = array_map(array($this->cod_globales, 'transformar_array_encode'), $datos);
+
+		$sql = 'SELECT ruta_img_relativa FROM EMPRESAS;';
+		$datos_2 = $this->modelo->datos($sql);
+
+		$datos[0]['ruta_imagen'] = $datos_2[0]['ruta_img_relativa'] . $datos[0]['imagen'];
+
 		return $datos;
 	}
 
@@ -224,21 +237,10 @@ class detalle_articuloC
 
 	function guardar_datos($parametros)
 	{
-
 		// print_r($parametros);die();		
-
-		// $loc = $this->localizacion->buscar_localizacion($parametros['loca']);
-		// $cus = $this->custodio->buscar_custodio_todo($parametros['cust']);
-		// $marca = $this->marca->buscar_marcas_all($buscar = false, $parametros['marc']);
-		// $est = $this->estado->lista_estado_todo($parametros['esta']);
-		// $genero = $this->genero->lista_genero_todo($parametros['gene']);
-		// $color = $this->colores->lista_colores_todo($parametros['colo']);
-		// $pro = $this->proyectos->lista_proyectos($parametros['crit']);
-
-		// array('campo' => 'id_articulo', 'dato' => $parametros['']),
 		$datos = array(
-			// rbl_asset
-			array('campo' => 'tag_unique', 'dato' => $parametros['txt_asset']),
+			array('campo' => 'tag_unique', 'dato' => $parametros['txt_rfid']),
+			array('campo' => 'longitud_rfid', 'dato' => $parametros['rbl_asset']),
 			array('campo' => 'tag_serie', 'dato' => $parametros['txt_tag_serie']),
 			array('campo' => 'tag_antiguo', 'dato' => $parametros['txt_tag_anti']),
 			array('campo' => 'subnumero', 'dato' => $parametros['txt_subno']),
@@ -271,30 +273,31 @@ class detalle_articuloC
 			array('campo' => 'companycode', 'dato' => $parametros['txt_company']),
 			array('campo' => 'funds_ctr_apc', 'dato' => $parametros['txt_funds_ctr_apc']),
 			array('campo' => 'profit_ctr', 'dato' => $parametros['txt_profit_ctr']),
-			// array('campo' => 'id_usuario_actualizar', 'dato' => $parametros['']),
+			array('campo' => 'id_usuario_actualizar', 'dato' => $_SESSION['INICIO']['ID_USUARIO']),
 			// array('campo' => 'fecha_creacion', 'dato' => $parametros['']),
 			array('campo' => 'fecha_modificacion', 'dato' => date('Y-m-d H:i:s')),
 			// array('campo' => 'fecha_baja', 'dato' => $parametros['']),
-			array('campo' => 'fecha_referencia', 'dato' => $parametros['txt_compra']),
-			array('campo' => 'fecha_contabilizacion', 'dato' => $parametros['txt_fecha']),
+			array('campo' => 'fecha_referencia', 'dato' => $parametros['txt_fecha']),
+			array('campo' => 'fecha_contabilizacion', 'dato' => $parametros['txt_compra']),
 			// array('campo' => 'id_rubro', 'dato' => $parametros['']),
 		);
+
+		// print_r($datos); exit(); die();
 
 		$where = array(
 			array('campo' => 'id_articulo', 'dato' => $parametros['idAr']),
 		);
 
+		//Registra todos los registros de los articulos
+		$movimiento = $this->comparacion_movimiento($parametros['idAr'], $parametros);
+
+		// print_r($movimiento);
+		// exit();
+		// die();
+
 		$datos = $this->modelo->editar($datos, $where);
-
-
 		return $datos;
 
-
-
-		// $where1[0]['campo'] = 'id_plantilla';
-		// $where1[0]['dato'] = $parametros['idAr'];
-		// $movimientos = $this->comparacion_movimiento($parametros['idAr'], $parametros);
-		// $respuesta1 = $this->modelo->update_data('ac_articulos', $datos1, $where1);
 		// if ($respuesta == 1 and $respuesta1 == 1) {
 		// 	$texto =
 		// 		(isset($parametros['company']) ? $parametros['company'] : '') . ';' .
@@ -336,6 +339,24 @@ class detalle_articuloC
 		// 	return -1;
 		// }
 	}
+
+	function cargar_detalle_activo($id, $id_empresa)
+	{
+		$datos = $this->modelo->cargar_datos_vista_sin_logueo($id, $id_empresa);
+		$sql = 'SELECT ruta_img_relativa FROM EMPRESAS;';
+		$datos_2 = $this->modelo->datos($sql);
+
+		$datos[0]['ruta_imagen'] = $datos_2[0]['ruta_img_relativa'] . $datos[0]['imagen'];
+		
+		if (count($datos) > 0) {
+			return $datos;
+		}
+		return '';
+	}
+
+	/**
+	 * 
+	 */
 
 	function guardar_datos_patrimoniales($parametros)
 	{
@@ -474,194 +495,386 @@ class detalle_articuloC
 		}
 	}
 
-	function comparacion_movimiento($id, $parametros)
+	function comparacion_movimiento($id_articulo, $parametros)
+	{
+		$datos_1 = $this->modelo->cargar_datos($id_articulo);
+
+		$campos = array(
+			array('campo' => 'rfid', 'dato' => $parametros['txt_rfid'], 'label' => 'RFID', 'tipo' => 'texto'),
+			array('campo' => 'longitud_rfid', 'dato' => $parametros['rbl_asset'], 'label' => 'LONGITUD RFID', 'tipo' => 'texto'),
+			array('campo' => 'tag_s', 'dato' => $parametros['txt_tag_serie'], 'label' => 'SERIE', 'tipo' => 'texto'),
+			array('campo' => 'ant', 'dato' => $parametros['txt_tag_anti'], 'label' => 'TAG ANTIGUO', 'tipo' => 'texto'),
+			array('campo' => 'subnum', 'dato' => $parametros['txt_subno'], 'label' => 'SUBNÚMERO', 'tipo' => 'texto'),
+
+			array('campo' => 'nom', 'dato' => $parametros['txt_descripcion'], 'label' => 'DESCRIPCIÓN', 'tipo' => 'texto'),
+			array('campo' => 'des', 'dato' => $parametros['txt_descripcion_2'], 'label' => 'DESCRIPCIÓN 2', 'tipo' => 'texto'),
+			array('campo' => 'carac', 'dato' => $parametros['txt_carac'], 'label' => 'CARACTERÍSTICAS', 'tipo' => 'texto'),
+			array('campo' => 'obs', 'dato' => $parametros['txt_observacion'], 'label' => 'OBSERVACIONES', 'tipo' => 'texto'),
+			array('campo' => 'mod', 'dato' => $parametros['txt_modelo'], 'label' => 'MODELO', 'tipo' => 'texto'),
+			array('campo' => 'ser', 'dato' => $parametros['txt_serie'], 'label' => 'SERIE ADICIONAL', 'tipo' => 'texto'),
+			array('campo' => 'cant', 'dato' => $parametros['txt_cant'], 'label' => 'CANTIDAD', 'tipo' => 'texto'),
+			array('campo' => 'prec', 'dato' => $parametros['txt_valor'], 'label' => 'VALOR', 'tipo' => 'texto'),
+			// array('campo' => 'imagen', 'dato' => '', 'label' => 'IMAGEN', 'tipo' => 'texto'),
+			array('campo' => 'es_kit', 'dato' => $parametros['cbx_kit'], 'label' => 'KIT', 'tipo' => 'texto'),
+			array('campo' => 'max', 'dato' => $parametros['txt_maximo'], 'label' => 'MÁXIMO', 'tipo' => 'texto'),
+			array('campo' => 'min', 'dato' => $parametros['txt_minimo'], 'label' => 'MÍNIMO', 'tipo' => 'texto'),
+
+			array('campo' => 'id_person', 'dato' => $parametros['ddl_custodio'], 'label' => 'CUSTODIO', 'tipo' => 'caso_especial_ddl_custodio'), // listo
+			array('campo' => 'id_unidad_medida', 'dato' => $parametros['ddl_unidad'], 'label' => 'UNIDAD DE MEDIDA', 'tipo' => 'caso_especial_ddl_unidad'), // listo
+			array('campo' => 'id_tipo_articulo', 'dato' => $parametros['rbl_tip_articulo'], 'label' => 'TIPO DE ARTÍCULO', 'tipo' => 'caso_especial_rbl_tip_articulo'), // listo
+			array('campo' => 'id_fam', 'dato' => $parametros['ddl_familia'], 'label' => 'FAMILIA', 'tipo' => 'caso_especial_ddl_familia'), // listo
+			array('campo' => 'id_subfam', 'dato' => $parametros['ddl_subfamilia'], 'label' => 'SUBFAMILIA', 'tipo' => 'caso_especial_ddl_subfamilia'), // listo
+			array('campo' => 'id_loc', 'dato' => $parametros['ddl_localizacion'], 'label' => 'LOCALIZACIÓN', 'tipo' => 'caso_especial_ddl_localizacion'), // listo
+			array('campo' => 'id_mar', 'dato' => $parametros['ddl_marca'], 'label' => 'MARCA', 'tipo' => 'caso_especial_ddl_marca'), // listo
+			array('campo' => 'id_est', 'dato' => $parametros['ddl_estado'], 'label' => 'ESTADO', 'tipo' => 'caso_especial_ddl_estado'), // listo
+			array('campo' => 'id_gen', 'dato' => $parametros['ddl_genero'], 'label' => 'GÉNERO', 'tipo' => 'caso_especial_ddl_genero'), // listo
+			array('campo' => 'id_col', 'dato' => $parametros['ddl_color'], 'label' => 'COLOR', 'tipo' => 'caso_especial_ddl_color'), // listo
+			array('campo' => 'id_pro', 'dato' => $parametros['ddl_proyecto'], 'label' => 'PROYECTO', 'tipo' => 'caso_especial_ddl_proyecto'), // listo
+			array('campo' => 'id_clase_movimiento', 'dato' => $parametros['ddl_clase_mov'], 'label' => 'CLASE DE MOVIMIENTO', 'tipo' => 'caso_especial_ddl_clase_mov'), // listo
+
+			array('campo' => 'centro_costos', 'dato' => $parametros['txt_centro_costos'], 'label' => 'CENTRO DE COSTOS', 'tipo' => 'texto'),
+			array('campo' => 'resp_cctr', 'dato' => $parametros['txt_resp_cctr'], 'label' => 'RESPONSABLE DEL CENTRO DE COSTOS', 'tipo' => 'texto'),
+			array('campo' => 'companycode', 'dato' => $parametros['txt_company'], 'label' => 'CÓDIGO DE COMPAÑÍA', 'tipo' => 'texto'),
+			array('campo' => 'funds_ctr_apc', 'dato' => $parametros['txt_funds_ctr_apc'], 'label' => 'FUNDS CTR APC', 'tipo' => 'texto'),
+			array('campo' => 'profit_ctr', 'dato' => $parametros['txt_profit_ctr'], 'label' => 'PROFIT CTR', 'tipo' => 'texto'),
+
+			array('campo' => 'fecha_referencia', 'dato' => $parametros['txt_fecha'], 'label' => 'FECHA DE REFERENCIA', 'tipo' => 'fecha'),
+			array('campo' => 'fecha_contabilizacion', 'dato' => $parametros['txt_compra'], 'label' => 'FECHA DE COMPRA', 'tipo' => 'fecha'),
+		);
+
+
+
+		foreach ($campos as $c) {
+			$campo = $c['campo'];
+			$nuevoValor = $c['dato'];
+			$label = $c['label'];
+			$valorAnterior = $datos_1[0][$campo] ?? '';
+
+			// Solo realizar cambios si el valor es diferente
+			if ($nuevoValor != $valorAnterior) {
+				$movimiento = "Se cambió $label de $valorAnterior a $nuevoValor";
+
+				// Procesar caso especial según el tipo
+				switch ($c['tipo']) {
+					case 'caso_especial_ddl_custodio':
+						$cus = $this->custodio->buscar_custodio_todo($nuevoValor);
+						$cusAnt = $this->custodio->buscar_custodio_todo($valorAnterior);
+						$movimiento = "Se cambio $label de " . $datos_1[0]['person_nom'] . ' a ' . $cus[0]['PERSON_NOM'];
+						$this->cod_globales->ingresar_movimientos($id_articulo, $movimiento, 'ARTICULOS', $datos_1[0]['person_nom'], $cus[0]['PERSON_NOM'], $cusAnt[0]['PERSON_CI'] ?? '', $cus[0]['PERSON_CI'] ?? '', $_SESSION['INICIO']['USUARIO'] ?? '');
+						break;
+
+					case 'caso_especial_ddl_unidad':
+						$dato = $this->unidad_medida->where('ac_id_unidad', $nuevoValor)->listar();
+						$dato_Ant = $this->unidad_medida->where('ac_id_unidad', $valorAnterior)->listar();
+						$movimiento = "Se cambio $label de " . $datos_1[0]['unidad_medida'] . ' a ' . $dato[0]['nombre'];
+						$this->cod_globales->ingresar_movimientos($id_articulo, $movimiento, 'ARTICULOS', $datos_1[0]['unidad_medida'], $dato[0]['nombre'], $dato_Ant[0]['simbolo'] ?? '', $dato[0]['simbolo'] ?? '', $_SESSION['INICIO']['USUARIO'] ?? '');
+						break;
+
+					case 'caso_especial_rbl_tip_articulo':
+						$dato = $this->tipo_articulo->where('ID_TIPO_ARTICULO', $nuevoValor)->listar();
+						$dato_Ant = $this->tipo_articulo->where('ID_TIPO_ARTICULO', $valorAnterior)->listar();
+						$movimiento = "Se cambio $label de " . $datos_1[0]['tipo_articulo'] . ' a ' . $dato[0]['descripcion'];
+						$this->cod_globales->ingresar_movimientos($id_articulo, $movimiento, 'ARTICULOS', $datos_1[0]['tipo_articulo'], $dato[0]['descripcion'], $dato_Ant[0]['codigo'] ?? '', $dato[0]['codigo'] ?? '', $_SESSION['INICIO']['USUARIO'] ?? '');
+						break;
+
+					case 'caso_especial_ddl_familia':
+						$dato = $this->familias->lista_familias($nuevoValor);
+						$dato_Ant = $this->familias->lista_familias($valorAnterior);
+						$movimiento = "Se cambio $label de " . $datos_1[0]['familia'] . ' a ' . $dato[0]['detalle_familia'];
+						$this->cod_globales->ingresar_movimientos($id_articulo, $movimiento, 'ARTICULOS', $datos_1[0]['familia'], $dato[0]['detalle_familia'], $dato_Ant[0]['id_familia'] ?? '', $dato[0]['id_familia'] ?? '', $_SESSION['INICIO']['USUARIO'] ?? '');
+						break;
+
+					case 'caso_especial_ddl_subfamilia':
+						$dato = $this->familias->lista_subfamilias($nuevoValor);
+						$dato_Ant = $this->familias->lista_subfamilias($valorAnterior);
+						$movimiento = "Se cambio $label de " . $datos_1[0]['subfamilia'] . ' a ' . $dato[0]['detalle_familia_sub'];
+						$this->cod_globales->ingresar_movimientos($id_articulo, $movimiento, 'ARTICULOS', $datos_1[0]['subfamilia'], $dato[0]['detalle_familia_sub'], $dato_Ant[0]['idF'] ?? '', $dato[0]['idF'] ?? '', $_SESSION['INICIO']['USUARIO'] ?? '');
+						break;
+
+					case 'caso_especial_ddl_localizacion':
+						$loc = $this->localizacion->buscar_localizacion($nuevoValor);
+						$locAnt = $this->localizacion->buscar_localizacion($valorAnterior);
+						$movimiento = "Se cambio $label de " . $datos_1[0]['loc_nom'] . ' a ' . $loc[0]['DENOMINACION'];
+						$this->cod_globales->ingresar_movimientos($id_articulo, $movimiento, 'ARTICULOS', $datos_1[0]['loc_nom'] ?? '', $loc[0]['DENOMINACION'] ?? '', $locAnt[0]['EMPLAZAMIENTO'] ?? '', $loc[0]['EMPLAZAMIENTO'] ?? '', $_SESSION['INICIO']['USUARIO'] ?? '');
+						break;
+
+					case 'caso_especial_ddl_marca':
+						$dato = $this->marca->buscar_marcas_all(false, $nuevoValor);
+						$dato_Ant = $this->marca->buscar_marcas_all(false, $valorAnterior);
+						$movimiento = "Se cambio $label de " . $datos_1[0]['marca'] . ' a ' . $dato[0]['DESCRIPCION'];
+						$this->cod_globales->ingresar_movimientos($id_articulo, $movimiento, 'ARTICULOS', $datos_1[0]['marca'] ?? '', $dato[0]['DESCRIPCION'] ?? '', $dato_Ant[0]['CODIGO'] ?? '', $dato[0]['CODIGO'] ?? '', $_SESSION['INICIO']['USUARIO'] ?? '');
+						break;
+
+					case 'caso_especial_ddl_estado':
+						$dato = $this->estado->lista_estado_todo($nuevoValor);
+						$dato_Ant = $this->estado->lista_estado_todo($valorAnterior);
+						$movimiento = "Se cambio $label de " . $datos_1[0]['estado'] . ' a ' . $dato[0]['DESCRIPCION'];
+						$this->cod_globales->ingresar_movimientos($id_articulo, $movimiento, 'ARTICULOS', $datos_1[0]['estado'] ?? '', $dato[0]['DESCRIPCION'] ?? '', $dato_Ant[0]['CODIGO'] ?? '', $dato[0]['CODIGO'] ?? '', $_SESSION['INICIO']['USUARIO'] ?? '');
+						break;
+
+					case 'caso_especial_ddl_genero':
+						$dato = $this->genero->lista_genero_todo($nuevoValor);
+						$dato_Ant = $this->genero->lista_genero_todo($valorAnterior);
+						$movimiento = "Se cambio $label de " . $datos_1[0]['genero'] . ' a ' . $dato[0]['DESCRIPCION'];
+						$this->cod_globales->ingresar_movimientos($id_articulo, $movimiento, 'ARTICULOS', $datos_1[0]['genero'] ?? '', $dato[0]['DESCRIPCION'] ?? '', $dato_Ant[0]['CODIGO'] ?? '', $dato[0]['CODIGO'] ?? '', $_SESSION['INICIO']['USUARIO'] ?? '');
+						break;
+
+					case 'caso_especial_ddl_color':
+						$dato = $this->colores->lista_colores_todo($nuevoValor);
+						$dato_Ant = $this->colores->lista_colores_todo($valorAnterior);
+						$movimiento = "Se cambio $label de " . $datos_1[0]['color'] . ' a ' . $dato[0]['DESCRIPCION'];
+						$this->cod_globales->ingresar_movimientos($id_articulo, $movimiento, 'ARTICULOS', $datos_1[0]['color'] ?? '', $dato[0]['DESCRIPCION'] ?? '', $dato_Ant[0]['CODIGO'] ?? '', $dato[0]['CODIGO'] ?? '', $_SESSION['INICIO']['USUARIO'] ?? '');
+						break;
+
+					case 'caso_especial_ddl_proyecto':
+						$dato = $this->proyectos->lista_proyectos($nuevoValor);
+						$dato_Ant = $this->proyectos->lista_proyectos($valorAnterior);
+						$movimiento = "Se cambio $label de " . $datos_1[0]['proyecto'] . ' a ' . $dato[0]['desc'];
+						$this->cod_globales->ingresar_movimientos($id_articulo, $movimiento, 'ARTICULOS', $datos_1[0]['proyecto'] ?? '', $dato[0]['desc'] ?? '', $dato_Ant[0]['pro'] ?? '', $dato[0]['pro'] ?? '', $_SESSION['INICIO']['USUARIO'] ?? '');
+						break;
+
+					case 'caso_especial_ddl_clase_mov':
+						$dato = $this->clase_movimiento->lista_clase_movimiento($nuevoValor);
+						$dato_Ant = $this->clase_movimiento->lista_clase_movimiento($valorAnterior);
+						$movimiento = "Se cambio $label de " . $datos_1[0]['movimiento'] . ' a ' . $dato[0]['DESCRIPCION'];
+						$this->cod_globales->ingresar_movimientos($id_articulo, $movimiento, 'ARTICULOS', $datos_1[0]['movimiento'] ?? '', $dato[0]['DESCRIPCION'] ?? '', $dato_Ant[0]['CODIGO'] ?? '', $dato[0]['CODIGO'] ?? '', $_SESSION['INICIO']['USUARIO'] ?? '');
+						break;
+
+					case 'fecha':
+						$fecha_anterior = $datos_1[0][$campo] ?? '';
+						$fecha_nueva = $nuevoValor;
+
+						$fecha_anterior_formateada = date('Y-m-d', strtotime($fecha_anterior));
+						$fecha_nueva_formateada = date('Y-m-d', strtotime($fecha_nueva));
+
+						if ($fecha_anterior_formateada != $fecha_nueva_formateada) {
+							$movimiento = "Se cambió $label de $fecha_anterior_formateada a $fecha_nueva_formateada";
+							$this->cod_globales->ingresar_movimientos($id_articulo,	$movimiento, 'ARTICULOS', $fecha_anterior_formateada, $fecha_nueva_formateada,	'',	'',	$_SESSION['INICIO']['USUARIO'] ?? '');
+						}
+						break;
+
+					default:
+						// Si no se encuentra un tipo específico, solo se registra el cambio de valor
+						$this->cod_globales->ingresar_movimientos($id_articulo, $movimiento, 'ARTICULOS', $valorAnterior, $nuevoValor, '', '', $_SESSION['INICIO']['USUARIO'] ?? '');
+						break;
+				}
+			}
+		}
+	}
+
+	function comparacion_movimiento_2($id, $parametros)
 	{
 		$datos = $this->modelo->cargar_datos($id);
-		$texto = '';
-		if ($parametros['desc'] != $datos[0]['nom']) {
-			$movimiento = ' Se cambio DESCRIPCION de ' . $datos[0]['nom'] . ' a ' . $parametros['desc'];
-			$this->cod_globales->ingresar_movimientos($id, $movimiento, $seccion = 'ARTICULOS', $datos[0]['nom'], $parametros['desc'], '', '');
+		// print_r($parametros);
+		// exit();
+		// die();
+
+		if ($parametros['txt_rfid'] != $datos[0]['rfid']) {
+			$movimiento = ' Se cambio RFID de ' . $datos[0]['rfid'] . ' a ' . $parametros['txt_rfid'];
+			$this->cod_globales->ingresar_movimientos($id, $movimiento, 'ARTICULOS', $datos[0]['rfid'], $parametros['txt_rfid'], '', '', $_SESSION['INICIO']['USUARIO'] ?? '');
 		}
-		if ($parametros['des2'] != $datos[0]['des']) {
-			$movimiento = ' Se cambio DESCRIPCION 2 de ' . $datos[0]['des'] . ' a ' . $parametros['des2'];
-			$this->cod_globales->ingresar_movimientos($id, $movimiento, $seccion = 'ARTICULOS', $datos[0]['des'], $parametros['des2'], '', '');
+
+		if ($parametros['txt_tag_serie'] != $datos[0]['tag_s']) {
+			$movimiento = ' Se cambio SERIE de ' . $datos[0]['tag_s'] . ' a ' . $parametros['txt_tag_serie'];
+			$this->cod_globales->ingresar_movimientos($id, $movimiento, 'ARTICULOS', $datos[0]['tag_s'], $parametros['txt_tag_serie'], '', '', $_SESSION['INICIO']['USUARIO'] ?? '');
 		}
-		if ($parametros['loca'] != $datos[0]['id_loc']) {
-			$loc = $this->localizacion->buscar_localizacion($parametros['loca']);
+
+		if ($parametros['txt_tag_anti'] != $datos[0]['ant']) {
+			$movimiento = 'Se cambio TAG ANTIGUO de ' . $datos[0]['ant'] . ' a ' . $parametros['txt_tag_anti'];
+			$this->cod_globales->ingresar_movimientos($id, $movimiento, 'ARTICULOS', $datos[0]['ant'], $parametros['txt_tag_anti'], '', '', $_SESSION['INICIO']['USUARIO'] ?? '');
+		}
+
+		if ($parametros['txt_subno'] != $datos[0]['subnum']) {
+			$movimiento = 'Se cambio SUBNÚMERO de ' . $datos[0]['ant'] . ' a ' . $parametros['txt_subno'];
+			$this->cod_globales->ingresar_movimientos($id, $movimiento, 'ARTICULOS', $datos[0]['subnum'], $parametros['txt_subno'], '', '', $_SESSION['INICIO']['USUARIO'] ?? '');
+		}
+
+		if ($parametros['ddl_custodio'] != $datos[0]['id_person']) {
+			$cus = $this->custodio->buscar_custodio_todo($parametros['ddl_custodio']);
+			$cusAnt = $this->custodio->buscar_custodio_todo($datos[0]['id_person']);
+			$movimiento = ' Se cambio CUSTODIO de ' . $datos[0]['person_nom'] . ' a ' . $cus[0]['PERSON_NOM'];
+			$this->cod_globales->ingresar_movimientos($id, $movimiento, 'ARTICULOS', $datos[0]['person_nom'], $cus[0]['PERSON_NOM'], $cusAnt[0]['PERSON_CI'] ?? '', $cus[0]['PERSON_CI'] ?? '', $_SESSION['INICIO']['USUARIO'] ?? '');
+		}
+
+		if ($parametros['txt_descripcion'] != $datos[0]['nom']) {
+			$movimiento = ' Se cambio DESCRIPCIÓN de ' . $datos[0]['nom'] . ' a ' . $parametros['txt_descripcion'];
+			$this->cod_globales->ingresar_movimientos($id, $movimiento, 'ARTICULOS', $datos[0]['nom'], $parametros['txt_descripcion'], '', '', $_SESSION['INICIO']['USUARIO'] ?? '');
+		}
+
+		if ($parametros['txt_descripcion_2'] != $datos[0]['des']) {
+			$movimiento = ' Se cambio DESCRIPCION 2 de ' . $datos[0]['des'] . ' a ' . $parametros['txt_descripcion_2'];
+			$this->cod_globales->ingresar_movimientos($id, $movimiento, 'ARTICULOS', $datos[0]['des'], $parametros['txt_descripcion_2'], '', '', $_SESSION['INICIO']['USUARIO'] ?? '');
+		}
+
+		if ($parametros['txt_carac'] != $datos[0]['carac']) {
+			$movimiento = ' Se cambio CARACTERISTICAS de ' . $datos[0]['carac'] . ' a ' . $parametros['txt_carac'];
+			$this->cod_globales->ingresar_movimientos($id, $movimiento, $seccion = 'ARTICULOS', $datos[0]['carac'], $parametros['txt_carac'], '', '', $_SESSION['INICIO']['USUARIO'] ?? '');
+		}
+
+		if ($parametros['txt_observacion'] != $datos[0]['obs']) {
+			$movimiento = ' Se cambio OBSERVACIONES de ' . $datos[0]['obs'] . ' a ' . $parametros['txt_observacion'];
+			$this->cod_globales->ingresar_movimientos($id, $movimiento, $seccion = 'ARTICULOS', $datos[0]['obs'], $parametros['txt_observacion'], '', '', $_SESSION['INICIO']['USUARIO'] ?? '');
+		}
+
+
+		if ($parametros['txt_modelo'] != $datos[0]['mod']) {
+			$movimiento = ' Se cambio MODELO de ' . $datos[0]['mod'] . ' a ' . $parametros['txt_modelo'];
+			$this->cod_globales->ingresar_movimientos($id, $movimiento, 'ARTICULOS', $datos[0]['mod'], $parametros['txt_modelo'], '', '', $_SESSION['INICIO']['USUARIO'] ?? '');
+		}
+
+		if ($parametros['ddl_localizacion'] != $datos[0]['id_loc']) {
+			$loc = $this->localizacion->buscar_localizacion($parametros['ddl_localizacion']);
 			$locAnt = $this->localizacion->buscar_localizacion($datos[0]['id_loc']);
-			$movimiento = ' Se cambio LOCALIZACION de ' . $datos[0]['DENOMINACION'] . ' a ' . $loc[0]['EMPLAZAMIENTO'];
-			$this->cod_globales->ingresar_movimientos($id, $movimiento, $seccion = 'ARTICULOS', $datos[0]['DENOMINACION'], $loc[0]['EMPLAZAMIENTO'], $locAnt[0]['EMPLAZAMIENTO'], $loc[0]['EMPLAZAMIENTO']);
-		}
-		if ($parametros['cust'] != $datos[0]['id_cus']) {
-			$cus = $this->custodio->buscar_custodio_todo($parametros['cust']);
-			$cusAnt = $this->custodio->buscar_custodio_todo($datos[0]['id_cus']);
-			$movimiento = ' Se cambio CUSTODIO de ' . $datos[0]['PERSON_NOM'] . ' a ' . $cus[0]['PERSON_NOM'];
-			$this->cod_globales->ingresar_movimientos($id, $movimiento, $seccion = 'ARTICULOS', $datos[0]['PERSON_NOM'], $cus[0]['PERSON_NOM'], $cusAnt[0]['PERSON_NO'], $cus[0]['PERSON_NO']);
-		}
-		if ($parametros['marc'] != $datos[0]['mar']) {
-			$marca = $this->marca->buscar_marcas_all($buscar = false, $parametros['marc']);
-			$marcaAnt = $this->marca->buscar_marcas_all($buscar = false, $datos[0]['mar']);
-			$movimiento = ' Se cambio MARCA de ' . $datos[0]['marca'] . ' a ' . $marca[0]['DESCRIPCION'];
-			$this->cod_globales->ingresar_movimientos($id, $movimiento, $seccion = 'ARTICULOS', $datos[0]['marca'], $marca[0]['DESCRIPCION'], $marcaAnt[0]['CODIGO'], $marca[0]['CODIGO']);
-		}
-		if ($parametros['colo'] != $datos[0]['col']) {
-			$color = $this->colores->lista_colores_todo($parametros['colo']);
-			$colorAnt = $this->colores->lista_colores_todo($datos[0]['col']);
-			$movimiento = ' Se cambio COLOR de ' . $datos[0]['color'] . ' a ' . $color[0]['DESCRIPCION'];
-			$this->cod_globales->ingresar_movimientos($id, $movimiento, $seccion = 'ARTICULOS', $datos[0]['color'], $color[0]['DESCRIPCION'], $colorAnt[0]['CODIGO'], $color[0]['CODIGO']);
-		}
-		if ($parametros['gene'] != $datos[0]['gen']) {
-			$genero = $this->genero->lista_genero_todo($parametros['gene']);
-			$generoAnt = $this->genero->lista_genero_todo($datos[0]['gen']);
-			$movimiento = ' Se cambio GENERO de ' . $datos[0]['genero'] . ' a ' . $genero[0]['DESCRIPCION'];
-			$this->cod_globales->ingresar_movimientos($id, $movimiento, $seccion = 'ARTICULOS', $datos[0]['genero'], $genero[0]['DESCRIPCION'], $generoAnt[0]['CODIGO'], $genero[0]['CODIGO']);
-		}
-		if ($parametros['asse'] != $datos[0]['tag_s']) {
-			$movimiento = ' Se cambio ASSET de ' . $datos[0]['tag_s'] . ' a ' . $parametros['asse'];
-			$this->cod_globales->ingresar_movimientos($id, $movimiento, $seccion = 'ARTICULOS', $datos[0]['tag_s'], $parametros['asse'], '', '');
-		}
-		if ($parametros['esta'] != $datos[0]['est']) {
-			$est = $this->estado->lista_estado_todo($parametros['esta']);
-			$estAnt = $this->estado->lista_estado_todo($datos[0]['est']);
-			$movimiento = ' Se cambio ESTADO de ' . $estAnt[0]['DESCRIPCION'] . ' a ' . $est[0]['DESCRIPCION'];
-			$this->cod_globales->ingresar_movimientos($id, $movimiento, $seccion = 'ARTICULOS', $estAnt[0]['DESCRIPCION'], $est[0]['DESCRIPCION'], $estAnt[0]['CODIGO'], $est[0]['CODIGO']);
-		}
-		if ($parametros['rfid'] != $datos[0]['rfid']) {
-			$movimiento = ' Se cambio RFID escripcion de ' . $datos[0]['rfid'] . ' a ' . $parametros['rfid'];
-			$this->cod_globales->ingresar_movimientos($id, $movimiento, $seccion = 'ARTICULOS', $datos[0]['rfid'], $parametros['rfid'], '', '');
-		}
-		if ($parametros['tagA'] != $datos[0]['ant']) {
-			$movimiento = 'Se cambio TAG ANTERIOR de ' . $datos[0]['ant'] . ' a ' . $parametros['tagA'];
-			$this->cod_globales->ingresar_movimientos($id, $movimiento, $seccion = 'ARTICULOS', $datos[0]['ant'], $parametros['tagA'], '', '');
-		}
-		if ($parametros['seri'] != $datos[0]['SERIE']) {
-			$movimiento = ' Se cambio SERIE de ' . $datos[0]['SERIE'] . ' a ' . $parametros['seri'];
-			$this->cod_globales->ingresar_movimientos($id, $movimiento, $seccion = 'ARTICULOS', $datos[0]['SERIE'], $parametros['seri'], '', '');
-		}
-		if ($datos[0]['fecha'] != '') {
-			// print_r($datos[0]['fecha']);die();
-			if (is_object($datos[0]['fecha'])) {
-				$datos[0]['fecha'] = $datos[0]['fecha']->format('Y-m-d');
-			}
-			if ($parametros['fech'] != substr($datos[0]['fecha'], 0, 10)) {
-				$movimiento = ' Se cambio FECHA INGRESO de ' . $datos[0]['fecha'] . ' a ' . $parametros['fech'];
-				$this->cod_globales->ingresar_movimientos($id, $movimiento, $seccion = 'ARTICULOS', $datos[0]['fecha'], $parametros['fech'], '', '');
-			}
-		}
-		if ($parametros['mode'] != $datos[0]['MODELO']) {
-			$movimiento = ' Se cambio MODELO de ' . $datos[0]['MODELO'] . ' a ' . $parametros['mode'];
-			$this->cod_globales->ingresar_movimientos($id, $movimiento, $seccion = 'ARTICULOS', $datos[0]['MODELO'], $parametros['mode'], '', '');
-		}
-		if ($parametros['obse'] != $datos[0]['OBSERVACION']) {
-			$movimiento = ' Se cambio OBSERVACION de ' . $datos[0]['OBSERVACION'] . ' a ' . $parametros['obse'];
-			$this->cod_globales->ingresar_movimientos($id, $movimiento, $seccion = 'ARTICULOS', $datos[0]['OBSERVACION'], $parametros['obse'], '', '');
-		}
-		if ($parametros['cant'] != $datos[0]['QUANTITY']) {
-			$movimiento = ' Se cambio CANTIDAD de ' . $datos[0]['QUANTITY'] . ' a ' . $parametros['cant'];
-			$this->cod_globales->ingresar_movimientos($id, $movimiento, $seccion = 'ARTICULOS', $datos[0]['QUANTITY'], $parametros['cant'], '', '');
-		}
-		if ($parametros['uni'] != $datos[0]['BASE_UOM']) {
-			$movimiento = ' Se cambio UNIDAD MEDIDA de ' . $datos[0]['BASE_UOM'] . ' a ' . $parametros['uni'];
-			$this->cod_globales->ingresar_movimientos($id, $movimiento, $seccion = 'ARTICULOS', $datos[0]['BASE_UOM'], $parametros['uni'], '', '');
-		}
-		if ($datos[0]['ORIG_ACQ_YR'] != '') {
-			if (is_object($datos[0]['ORIG_ACQ_YR'])) {
-				$datos[0]['ORIG_ACQ_YR'] = $datos[0]['ORIG_ACQ_YR']->format('Y-m-d');
-			}
-			if ($parametros['compra'] != $datos[0]['ORIG_ACQ_YR']) {
-				$movimiento = ' Se cambio FECHA DE INVENTARIO de ' . $datos[0]['ORIG_ACQ_YR'] . ' a ' . $parametros['compra'];
-				$this->cod_globales->ingresar_movimientos($id, $movimiento, $seccion = 'ARTICULOS', $datos[0]['ORIG_ACQ_YR'], $parametros['uni'], '', '');
-			}
-		}
-		if ($parametros['cara'] != $datos[0]['CARACTERISTICA']) {
-			$movimiento = ' Se cambio CARACTERISTICAS de ' . $datos[0]['CARACTERISTICA'] . ' a ' . $parametros['cara'];
-			$this->cod_globales->ingresar_movimientos($id, $movimiento, $seccion = 'ARTICULOS', $datos[0]['CARACTERISTICA'], $parametros['cara'], '', '');
-		}
-		if ($parametros['valor'] != $datos[0]['ORIG_VALUE']) {
-			$movimiento = ' Se cambio VALOR de ' . $datos[0]['ORIG_VALUE'] . ' a ' . $parametros['valor'];
-			$this->cod_globales->ingresar_movimientos($id, $movimiento, $seccion = 'ARTICULOS', $datos[0]['ORIG_VALUE'], $parametros['valor'], '', '');
-		}
-
-		if ($parametros['act'] != $datos[0]['ORIG_ASSET']) {
-			$movimiento = ' Se cambio ASSET ORIGINAL de ' . $datos[0]['ORIG_ASSET'] . ' a ' . $parametros['act'];
-			$this->cod_globales->ingresar_movimientos($id, $movimiento, $seccion = 'ARTICULOS', $datos[0]['ORIG_ASSET'], $parametros['act'], '', '');
-		}
-
-		$bajas = 0;
-		if ($parametros['bajas'] == 'true') {
-			$bajas = 1;
-		}
-		if ($bajas != $datos[0]['BAJAS']) {
-			if ($datos[0]['BAJAS'] == 0) {
-				$movimiento = ' Se dio de BAJAS';
-				$datos_ac = 1;
-				$dato_ant = 0;
-			} else {
-				$movimiento = ' Se recupero de BAJAS';
-				$dato_ac = 0;
-				$dato_ant = 1;
-			}
-			$this->cod_globales->ingresar_movimientos($id, $movimiento, $seccion = 'ARTICULOS', $dato_ant, $dato_ac, '', '');
-		}
-
-		$tercero = 0;
-		if ($parametros['terceros'] == 'true') {
-			$tercero = 1;
-		}
-		if ($tercero != $datos[0]['TERCEROS']) {
-			if ($datos[0]['TERCEROS'] == 0) {
-				$movimiento = ' Se MARCO como TERCEROS';
-				$datos_ac = 1;
-				$dato_ant = 0;
-			} else {
-				$movimiento = ' Se DESMARCO como TERCERO';
-				$datos_ac = 0;
-				$dato_ant = 1;
-			}
-
-			$this->cod_globales->ingresar_movimientos($id, $movimiento, $seccion = 'ARTICULOS', $dato_ant, $dato_act, '', '');
-		}
-
-		$patrimonial = 0;
-		if ($parametros['patrimoniales'] == 'true') {
-			$patrimonial = 1;
-		}
-		if ($patrimonial != $datos[0]['PATRIMONIALES']) {
-			if ($datos[0]['PATRIMONIALES'] == 0) {
-				$actual = ' Se MARCO como PATRIMONIAL';
-				$datos_ac = 1;
-				$dato_ant = 0;
-			} else {
-				$actual = ' Se DESMARCO como PATRIMONIAL';
-				$datos_ac = 0;
-				$dato_ant = 1;
-			}
-			$this->cod_globales->ingresar_movimientos($id, $movimiento, $seccion = 'ARTICULOS', $dato_ant, $dato_act, '', '');
-		}
-
-		if ($bajas == 0 && $tercero == 0 && $patrimonial == 0) {
-			$op = '';
-			if ($datos[0]['TERCEROS'] == '1') {
-				$op = 'TERCEROS';
-			}
-			if ($datos[0]['BAJAS'] == '1') {
-				$op = 'BAJAS';
-			}
-			if ($datos[0]['PATRIMONIALES'] == '1') {
-				$op = 'PATRIMONIALES';
-			}
-			$movimiento = ' Se CAMBIO de ' . $op . ' A NINGUNO';
-			//$this->cod_globales->ingresar_movimientos($id,$movimiento,$seccion='ARTICULOS',$op,'NINGUNO');
+			$movimiento = ' Se cambio LOCALIZACIÓN de ' . $datos[0]['loc_nom'] . ' a ' . $loc[0]['DENOMINACION'];
+			$this->cod_globales->ingresar_movimientos($id, $movimiento, $seccion = 'ARTICULOS', $datos[0]['loc_nom'], $loc[0]['EMPLAZAMIENTO'], $locAnt[0]['EMPLAZAMIENTO'], $loc[0]['EMPLAZAMIENTO'], $_SESSION['INICIO']['USUARIO'] ?? '');
 		}
 
 
+		// if ($parametros['cant'] != $datos[0]['QUANTITY']) {
+		// 	$movimiento = ' Se cambio CANTIDAD de ' . $datos[0]['QUANTITY'] . ' a ' . $parametros['cant'];
+		// 	$this->cod_globales->ingresar_movimientos($id, $movimiento, $seccion = 'ARTICULOS', $datos[0]['QUANTITY'], $parametros['cant'], '', '');
+		// }
 
-		if ($parametros['crit'] != $datos[0]['idpro']) {
-			$pro = $this->proyectos->lista_proyectos($parametros['crit']);
-			$proAnt = $this->proyectos->lista_proyectos($datos[0]['idpro']);
-			$movimiento = ' Se cambio PROYECTO de ' . $datos[0]['proyecto'] . ' a ' . $pro[0]['desc'];
-			$this->cod_globales->ingresar_movimientos($id, $movimiento, $seccion = 'ARTICULOS', $datos[0]['proyecto'], $pro[0]['desc'], $proAnt[0]['pro'], $pro[0]['pro']);
-		}
+		// if ($parametros['valor'] != $datos[0]['ORIG_VALUE']) {
+		// 	$movimiento = ' Se cambio VALOR de ' . $datos[0]['ORIG_VALUE'] . ' a ' . $parametros['valor'];
+		// 	$this->cod_globales->ingresar_movimientos($id, $movimiento, $seccion = 'ARTICULOS', $datos[0]['ORIG_VALUE'], $parametros['valor'], '', '');
+		// }
+
+		// if ($parametros['uni'] != $datos[0]['BASE_UOM']) {
+		// 	$movimiento = ' Se cambio UNIDAD MEDIDA de ' . $datos[0]['BASE_UOM'] . ' a ' . $parametros['uni'];
+		// 	$this->cod_globales->ingresar_movimientos($id, $movimiento, $seccion = 'ARTICULOS', $datos[0]['BASE_UOM'], $parametros['uni'], '', '');
+		// }
+
+		// if ($parametros['marc'] != $datos[0]['mar']) {
+		// 	$marca = $this->marca->buscar_marcas_all($buscar = false, $parametros['marc']);
+		// 	$marcaAnt = $this->marca->buscar_marcas_all($buscar = false, $datos[0]['mar']);
+		// 	$movimiento = ' Se cambio MARCA de ' . $datos[0]['marca'] . ' a ' . $marca[0]['DESCRIPCION'];
+		// 	$this->cod_globales->ingresar_movimientos($id, $movimiento, $seccion = 'ARTICULOS', $datos[0]['marca'], $marca[0]['DESCRIPCION'], $marcaAnt[0]['CODIGO'], $marca[0]['CODIGO']);
+		// }
+
+		// if ($parametros['colo'] != $datos[0]['col']) {
+		// 	$color = $this->colores->lista_colores_todo($parametros['colo']);
+		// 	$colorAnt = $this->colores->lista_colores_todo($datos[0]['col']);
+		// 	$movimiento = ' Se cambio COLOR de ' . $datos[0]['color'] . ' a ' . $color[0]['DESCRIPCION'];
+		// 	$this->cod_globales->ingresar_movimientos($id, $movimiento, $seccion = 'ARTICULOS', $datos[0]['color'], $color[0]['DESCRIPCION'], $colorAnt[0]['CODIGO'], $color[0]['CODIGO']);
+		// }
+
+		// if ($parametros['gene'] != $datos[0]['gen']) {
+		// 	$genero = $this->genero->lista_genero_todo($parametros['gene']);
+		// 	$generoAnt = $this->genero->lista_genero_todo($datos[0]['gen']);
+		// 	$movimiento = ' Se cambio GENERO de ' . $datos[0]['genero'] . ' a ' . $genero[0]['DESCRIPCION'];
+		// 	$this->cod_globales->ingresar_movimientos($id, $movimiento, $seccion = 'ARTICULOS', $datos[0]['genero'], $genero[0]['DESCRIPCION'], $generoAnt[0]['CODIGO'], $genero[0]['CODIGO']);
+		// }
+
+		// if ($parametros['esta'] != $datos[0]['est']) {
+		// 	$est = $this->estado->lista_estado_todo($parametros['esta']);
+		// 	$estAnt = $this->estado->lista_estado_todo($datos[0]['est']);
+		// 	$movimiento = ' Se cambio ESTADO de ' . $estAnt[0]['DESCRIPCION'] . ' a ' . $est[0]['DESCRIPCION'];
+		// 	$this->cod_globales->ingresar_movimientos($id, $movimiento, $seccion = 'ARTICULOS', $estAnt[0]['DESCRIPCION'], $est[0]['DESCRIPCION'], $estAnt[0]['CODIGO'], $est[0]['CODIGO']);
+		// }
+
+		// if ($datos[0]['fecha'] != '') {
+		// 	// print_r($datos[0]['fecha']);die();
+		// 	if (is_object($datos[0]['fecha'])) {
+		// 		$datos[0]['fecha'] = $datos[0]['fecha']->format('Y-m-d');
+		// 	}
+		// 	if ($parametros['fech'] != substr($datos[0]['fecha'], 0, 10)) {
+		// 		$movimiento = ' Se cambio FECHA INGRESO de ' . $datos[0]['fecha'] . ' a ' . $parametros['fech'];
+		// 		$this->cod_globales->ingresar_movimientos($id, $movimiento, $seccion = 'ARTICULOS', $datos[0]['fecha'], $parametros['fech'], '', '');
+		// 	}
+		// }
+
+		// if ($datos[0]['ORIG_ACQ_YR'] != '') {
+		// 	if (is_object($datos[0]['ORIG_ACQ_YR'])) {
+		// 		$datos[0]['ORIG_ACQ_YR'] = $datos[0]['ORIG_ACQ_YR']->format('Y-m-d');
+		// 	}
+
+		// 	if ($parametros['compra'] != $datos[0]['ORIG_ACQ_YR']) {
+		// 		$movimiento = ' Se cambio FECHA DE INVENTARIO de ' . $datos[0]['ORIG_ACQ_YR'] . ' a ' . $parametros['compra'];
+		// 		$this->cod_globales->ingresar_movimientos($id, $movimiento, $seccion = 'ARTICULOS', $datos[0]['ORIG_ACQ_YR'], $parametros['uni'], '', '');
+		// 	}
+		// }
+
+		// if ($parametros['act'] != $datos[0]['ORIG_ASSET']) {
+		// 	$movimiento = ' Se cambio ASSET ORIGINAL de ' . $datos[0]['ORIG_ASSET'] . ' a ' . $parametros['act'];
+		// 	$this->cod_globales->ingresar_movimientos($id, $movimiento, $seccion = 'ARTICULOS', $datos[0]['ORIG_ASSET'], $parametros['act'], '', '');
+		// }
+
+		// $bajas = 0;
+		// if ($parametros['bajas'] == 'true') {
+		// 	$bajas = 1;
+		// }
+		// if ($bajas != $datos[0]['BAJAS']) {
+		// 	if ($datos[0]['BAJAS'] == 0) {
+		// 		$movimiento = ' Se dio de BAJAS';
+		// 		$datos_ac = 1;
+		// 		$dato_ant = 0;
+		// 	} else {
+		// 		$movimiento = ' Se recupero de BAJAS';
+		// 		$dato_ac = 0;
+		// 		$dato_ant = 1;
+		// 	}
+		// 	$this->cod_globales->ingresar_movimientos($id, $movimiento, $seccion = 'ARTICULOS', $dato_ant, $dato_ac, '', '');
+		// }
+
+		// $tercero = 0;
+		// if ($parametros['terceros'] == 'true') {
+		// 	$tercero = 1;
+		// }
+		// if ($tercero != $datos[0]['TERCEROS']) {
+		// 	if ($datos[0]['TERCEROS'] == 0) {
+		// 		$movimiento = ' Se MARCO como TERCEROS';
+		// 		$datos_ac = 1;
+		// 		$dato_ant = 0;
+		// 	} else {
+		// 		$movimiento = ' Se DESMARCO como TERCERO';
+		// 		$datos_ac = 0;
+		// 		$dato_ant = 1;
+		// 	}
+
+		// 	$this->cod_globales->ingresar_movimientos($id, $movimiento, $seccion = 'ARTICULOS', $dato_ant, $dato_act, '', '');
+		// }
+
+		// $patrimonial = 0;
+		// if ($parametros['patrimoniales'] == 'true') {
+		// 	$patrimonial = 1;
+		// }
+		// if ($patrimonial != $datos[0]['PATRIMONIALES']) {
+		// 	if ($datos[0]['PATRIMONIALES'] == 0) {
+		// 		$actual = ' Se MARCO como PATRIMONIAL';
+		// 		$datos_ac = 1;
+		// 		$dato_ant = 0;
+		// 	} else {
+		// 		$actual = ' Se DESMARCO como PATRIMONIAL';
+		// 		$datos_ac = 0;
+		// 		$dato_ant = 1;
+		// 	}
+		// 	$this->cod_globales->ingresar_movimientos($id, $movimiento, $seccion = 'ARTICULOS', $dato_ant, $dato_act, '', '');
+		// }
+
+		// if ($bajas == 0 && $tercero == 0 && $patrimonial == 0) {
+		// 	$op = '';
+		// 	if ($datos[0]['TERCEROS'] == '1') {
+		// 		$op = 'TERCEROS';
+		// 	}
+		// 	if ($datos[0]['BAJAS'] == '1') {
+		// 		$op = 'BAJAS';
+		// 	}
+		// 	if ($datos[0]['PATRIMONIALES'] == '1') {
+		// 		$op = 'PATRIMONIALES';
+		// 	}
+		// 	$movimiento = ' Se CAMBIO de ' . $op . ' A NINGUNO';
+		// 	//$this->cod_globales->ingresar_movimientos($id,$movimiento,$seccion='ARTICULOS',$op,'NINGUNO');
+		// }
+
+
+
+		// if ($parametros['crit'] != $datos[0]['idpro']) {
+		// 	$pro = $this->proyectos->lista_proyectos($parametros['crit']);
+		// 	$proAnt = $this->proyectos->lista_proyectos($datos[0]['idpro']);
+		// 	$movimiento = ' Se cambio PROYECTO de ' . $datos[0]['proyecto'] . ' a ' . $pro[0]['desc'];
+		// 	$this->cod_globales->ingresar_movimientos($id, $movimiento, $seccion = 'ARTICULOS', $datos[0]['proyecto'], $pro[0]['desc'], $proAnt[0]['pro'], $pro[0]['pro']);
+		// }
 
 		// return 1;
 

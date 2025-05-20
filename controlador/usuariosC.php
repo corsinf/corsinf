@@ -208,30 +208,36 @@ class usuariosC
 	{
 
 		$tabla='';
-		$datos_db = $this->modelo->lista_usuarios($parametros['id'],$parametros['query'],1);
-		foreach ($datos_db as $key => $value) {
-					$tabla.='
-						<div class="col">
-            <div class="card radius-15">
-              <div class="card-body text-center">
-                <div class="p-4 border radius-15">
-                  <img src="../'.$value['foto'].'" width="110" height="110" class="rounded-circle shadow" alt="">
-                  <h5 class="mb-0 mt-5">'.$value['nombre'].' '.$value['apellido'].'</h5>
-                  <div class="list-inline contacts-social mt-3 mb-3"> <a href="javascript:;" class="list-inline-item bg-facebook text-white border-0"><i class="bx bxl-facebook"></i></a>
-                    <a href="javascript:;" class="list-inline-item bg-twitter text-white border-0"><i class="bx bxl-twitter"></i></a>
-                   <!-- <a href="javascript:;" class="list-inline-item bg-google text-white border-0"><i class="bx bxl-google"></i></a> -->
-                    <a href="javascript:;" class="list-inline-item bg-linkedin text-white border-0"><i class="bx bxl-linkedin"></i></a>
-                  </div>
-                  <div class="d-grid"> <a href="#" class="btn btn-outline-primary radius-15">Contact Me</a>
-                  </div>
-                  <div class="d-grid"><a href="inicio.php?acc=detalle_usuario&usuario='.$value['id'].'" class="btn btn-outline-primary radius-15"> Ver Perfil </a>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>'; 
-						
+		$datos_db  = array();
+		if($_SESSION['INICIO']['TIPO']=='DBA')
+		{
+			$datos_db = $this->modelo->lista_usuarios($parametros['id'],$parametros['query'],1);
+			foreach ($datos_db as $key => $value) {
+						$tabla.='
+							<div class="col">
+	            <div class="card radius-15">
+	              <div class="card-body text-center">
+	                <div class="p-4 border radius-15">
+	                  <img src="../'.$value['foto'].'" width="110" height="110" class="rounded-circle shadow" alt="">
+	                  <h5 class="mb-0 mt-5">'.$value['nombre'].' '.$value['apellido'].'</h5>
+	                  <div class="list-inline contacts-social mt-3 mb-3"> <a href="javascript:;" class="list-inline-item bg-facebook text-white border-0"><i class="bx bxl-facebook"></i></a>
+	                    <a href="javascript:;" class="list-inline-item bg-twitter text-white border-0"><i class="bx bxl-twitter"></i></a>
+	                   <!-- <a href="javascript:;" class="list-inline-item bg-google text-white border-0"><i class="bx bxl-google"></i></a> -->
+	                    <a href="javascript:;" class="list-inline-item bg-linkedin text-white border-0"><i class="bx bxl-linkedin"></i></a>
+	                  </div>
+	                  <div class="d-grid"> <a href="#" class="btn btn-outline-primary radius-15">Contact Me</a>
+	                  </div>
+	                  <div class="d-grid"><a href="inicio.php?acc=detalle_usuario&usuario='.$value['id'].'" class="btn btn-outline-primary radius-15"> Ver Perfil </a>
+	                  </div>
+	                </div>
+	              </div>
+	            </div>
+	          </div>'; 
+							
+			}
 		}
+
+		// print_r($tabla);die();
 
 		$datos_usu = $this->modelo->lista_usuarios_sin_dba($parametros['id'],$parametros['query']);
 		foreach ($datos_usu as $key => $value) {
@@ -349,7 +355,16 @@ class usuariosC
 		if($parametros['txt_usuario_update']=='')
 		{
 
-		// print_r($parametros);die();
+			// print_r($_SESSION['INICIO']);die();
+
+			$licencia = $this->modelo->empresa_licencias($_SESSION['INICIO']['ID_EMPRESA'],$_SESSION['INICIO']['MODULO_SISTEMA_ANT']);
+			$lista_usu_x_modulo = $this->modelo->usuario_x_modulo_empresa($_SESSION['INICIO']['ID_EMPRESA'],$_SESSION['INICIO']['MODULO_SISTEMA_ANT']);
+			$registrados = count($lista_usu_x_modulo)+1;
+
+			// print_r($licencia);die();
+			if($registrados<=$licencia[0]['Numero_maquinas'])
+			{
+
 				$datos[0]['campo']='password';
 		    $datos[0]['dato']= $this->pagina->enciptar_clave($parametros['txt_pass']);
 		    $datos[1]['campo']='nombres';
@@ -392,13 +407,21 @@ class usuariosC
 				    	$this->modelo->guardar($datosA,'ACCESOS_EMPRESA');
 		    }
 
-		    // $datosAE[0]['campo']='Id_usuario';
-		    // $datosAE[0]['dato']=$usuario[0]['id'];
-		    // $datosAE[1]['campo']='Id_Empresa';
-		    // $datosAE[1]['dato']=$_SESSION['INICIO']['ID_EMPRESA'];	
-		    // $datosAE[2]['campo']='Id_Tipo_usuario';
-		    // $datosAE[2]['dato']=$parametros['ddl_tipo_usuario'];	
-		    // $this->modelo->guardar($datosAE,'ACCESOS_EMPRESA'); 
+		    foreach ($parametros['ddl_tipo_usuario'] as $key2 => $value2) {
+			    $datosAE[0]['campo']='id_usuario';
+			    $datosAE[0]['dato']=$usuario[0]['id'];
+			    $datosAE[1]['campo']='id_empresa';
+			    $datosAE[1]['dato']=$_SESSION['INICIO']['ID_EMPRESA'];	
+			    $datosAE[2]['campo']='id_tipo_usuario';
+			    $datosAE[2]['dato']=$value2;	
+			    $datosAE[3]['campo']='id_modulo_siste';
+			    $datosAE[3]['dato']=$_SESSION['INICIO']['MODULO_SISTEMA_ANT'];	
+			    $datosAE[4]['campo']='fecha_creacion';
+			    $datosAE[4]['dato']=date('Y-m-d h:i:s');	
+			    $datosAE[5]['campo']='fecha_modificacion';
+			    $datosAE[5]['dato']=date('Y-m-d h:i:s');	
+			    $this->modelo->guardar($datosAE,'USUARIO_X_MODULO'); 
+			  }
 
 		    
 		     // $datosT[0]['campo']='ID_USUARIO';
@@ -426,7 +449,11 @@ class usuariosC
 				//$resp = $this->modelo->generar_primera_vez($_SESSION['INICIO']['BASEDATO'],$_SESSION['INICIO']['ID_EMPRESA']);
 
 
-		     return $usuario[0]['id'];
+		     return array('response'=>1,'msj'=>$usuario[0]['id']);
+		   }else
+		   {
+		   		return array('response'=>-2,'msj'=>"El modulo ".$_SESSION['INICIO']['MODULO_SISTEMA_NOMBRE']." solo admite ".$licencia[0]['Numero_maquinas']." usuarios");
+		   }
 
 		   
 		    
@@ -507,13 +534,15 @@ class usuariosC
 			$empresa = $this->pagina->lista_empresa($_SESSION['INICIO']['ID_EMPRESA']);		
 			if($empresa[0]['Ip_host']==IP_MASTER)
 					{
-							return $this->pagina->generar_primera_vez($_SESSION['INICIO']['BASEDATO'],$_SESSION['INICIO']['ID_EMPRESA']);
+							$resp =  $this->pagina->generar_primera_vez($_SESSION['INICIO']['BASEDATO'],$_SESSION['INICIO']['ID_EMPRESA']);
 					}else
 					{
 						// print_r('tercero');die();
-							return $this->pagina->generar_primera_vez_terceros($empresa,$_SESSION['INICIO']['ID_EMPRESA']);
+							$resp =  $this->pagina->generar_primera_vez_terceros($empresa,$_SESSION['INICIO']['ID_EMPRESA']);
 						 // printf('tercero');die();
 					}
+
+					 return array('response'=>$resp,'msj'=>'');
 
 
 		    // return  $this->modelo->generar_primera_vez($_SESSION['INICIO']['BASEDATO'],$_SESSION['INICIO']['ID_EMPRESA']);

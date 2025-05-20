@@ -9,11 +9,11 @@ require_once(dirname(__DIR__, 1) . '/GENERAL/BaseModel.php');
 class detalle_articuloM extends BaseModel
 {
 	protected $tabla = 'ac_articulos';
-    protected $primaryKey = 'id_articulos AS _id';
+	protected $primaryKey = 'id_articulos AS _id';
 
-    protected $camposPermitidos = [
-        'tag_unique AS tag_unique',
-    ];
+	protected $camposPermitidos = [
+		'tag_unique AS tag_unique',
+	];
 
 	function guardar($tabla, $datos)
 	{
@@ -38,6 +38,7 @@ class detalle_articuloM extends BaseModel
 					P.tag_serie AS 'tag_s',
 					P.tag_antiguo AS 'ant',
 					P.subnumero AS 'subnum',
+					P.longitud_rfid AS 'longitud_rfid',
 					-- Descripción y características
 					P.descripcion AS 'nom',
 					P.descripcion_2 AS 'des',
@@ -131,6 +132,124 @@ class detalle_articuloM extends BaseModel
 		return $this->db->datos($sql);
 	}
 
+	function cargar_datos_vista_sin_logueo($id, $id_empresa)
+	{
+		$id = intval($id);
+
+		$sql = "SELECT
+					P.id_articulo AS 'id_A',
+					P.tag_unique AS 'rfid',
+					P.tag_serie AS 'tag_s',
+					P.tag_antiguo AS 'ant',
+					P.subnumero AS 'subnum',
+					
+					P.descripcion AS 'nom',
+					P.descripcion_2 AS 'des',
+					P.caracteristica AS 'carac',
+					P.observaciones AS 'obs',
+					P.modelo AS 'mod',
+					P.serie AS 'ser',
+					
+					P.cantidad AS 'cant',
+					P.precio AS 'prec',
+					P.imagen AS 'imagen',
+					P.kit AS 'es_kit',
+					P.maximo AS 'max',
+					P.minimo AS 'min',
+					
+					P.id_localizacion AS 'id_loc',
+					L.DENOMINACION AS 'loc_nom',
+					L.EMPLAZAMIENTO AS 'c_loc',
+					
+					P.id_marca AS 'id_mar',
+					M.DESCRIPCION AS 'marca',
+					M.CODIGO AS 'c_mar',
+					P.id_estado AS 'id_est',
+					E.CODIGO AS 'c_est',
+					E.DESCRIPCION AS 'estado',
+					P.id_genero AS 'id_gen',
+					G.DESCRIPCION AS 'genero',
+					G.CODIGO AS 'c_gen',
+					P.id_color AS 'id_col',
+					C.DESCRIPCION AS 'color',
+					C.CODIGO AS 'c_col',
+					
+					TA.DESCRIPCION AS 'tipo_articulo'
+					
+				FROM
+					ac_articulos P
+					LEFT JOIN ac_localizacion L ON P.id_localizacion = L.ID_LOCALIZACION
+					LEFT JOIN th_personas PE ON P.th_per_id = PE.th_per_id
+					LEFT JOIN ac_marcas M ON P.id_marca = M.ID_MARCA
+					LEFT JOIN ac_estado E ON P.id_estado = E.ID_ESTADO
+					LEFT JOIN ac_genero G ON P.id_genero = G.ID_GENERO
+					LEFT JOIN ac_colores C ON P.id_color = C.ID_COLORES
+					LEFT JOIN ac_proyecto PR ON P.id_proyecto = PR.ID_PROYECTO
+					LEFT JOIN ac_familias F ON P.id_familia = F.id_familia
+					LEFT JOIN ac_familias SF ON P.id_subfamilia = SF.id_familia
+					LEFT JOIN ac_clase_movimiento CM ON P.id_clase_movimiento = CM.ID_MOVIMIENTO
+					LEFT JOIN ac_cat_tipo_articulo TA ON P.id_tipo_articulo = TA.ID_TIPO_ARTICULO
+					LEFT JOIN ac_cat_unidad_medida UM ON P.id_unidad_medida = UM.ac_id_unidad
+				WHERE 
+					P.id_articulo = $id;";
+
+
+		$id_ofuscado_base64 = $id_empresa;
+		$clave = 'corsinf';
+		$parametros = array($id_ofuscado_base64, $clave);
+		$sql_sp = "EXEC SP_EMPRESA_DESCIFRAR_ID_EMPRESA @id_ofuscado_base64=?, @clave=?;";
+		$id_empresa_valido = $this->db->ejecutar_procedimiento_con_retorno_1($sql_sp, $parametros)[0]['id_empresa'];
+
+		// $sql_sp = "EXEC SP_EMPRESA_DESCIFRAR_ID_EMPRESA @id_ofuscado_base64='$id_ofuscado_base64', @clave='$clave';";
+		// $id_empresa_valido = $this->db->datos($sql_sp, true);
+
+		// print_r($id_empresa_valido);
+		// exit();
+		// die();
+
+		// $sql_sp = "DECLARE @id_empresa INT;
+		// 			EXEC SP_EMPRESA_DESCIFRAR_ID_EMPRESA 
+		// 				@id_ofuscado_base64 = '$id_ofuscado_base64',
+		// 				@clave = '$clave',
+		// 				@id_empresa = @id_empresa OUTPUT;
+		// 			SELECT @id_empresa AS id_empresa;";
+
+		// $id_empresa_valido = $this->db->datos($sql_sp, true)[0]['id_empresa'];
+
+
+		$sql_2 = "SELECT
+					Id_empresa,
+					Base_datos,
+					Usuario_db,
+					Password_db,
+					Ip_host,
+					Puerto_db,
+					Logo 
+				FROM
+					EMPRESAS 
+				WHERE
+					Id_empresa = '$id_empresa_valido'";
+
+		$datos = $this->db->datos($sql_2, true)[0];
+
+		// print_r($datos);
+
+
+		$usuario = $datos['Usuario_db'];
+		$password = $datos['Password_db'];  // en mi caso tengo contraseña pero en casa caso introducidla aquí.
+		$servidor = $datos['Ip_host'] . ', ' . $datos['Puerto_db'];
+		$database = $datos['Base_datos'];
+
+
+		$data = $this->db->datos_db_terceros($database, $usuario, $password, $servidor, $puerto = false, $sql);
+
+		return $data;
+	}
+
+	function datos($sql)
+	{
+		return $this->db->datos($sql);
+	}
 
 	function buscar_plantilla_masiva($idAsset = false)
 	{
@@ -174,7 +293,7 @@ class detalle_articuloM extends BaseModel
 	{
 		$sql = "SELECT obs_movimiento as 'ob',fecha_movimiento as 'fe',dato_anterior as 'dante',dato_nuevo as 'dnuevo',responsable,codigo_ant,codigo_nue  FROM ac_movimiento WHERE id_plantilla = '" . $id . "' ";
 		if ($desde != false && $hasta != false) {
-			$sql .= " AND fecha_movimiento BETWEEN '" . $desde . "' AND '" . $hasta . "'";
+			$sql .= " AND CONVERT(DATE, fecha_movimiento) BETWEEN '" . $desde . "' AND '" . $hasta . "'";
 		}
 		$sql .= " ORDER BY id_movimiento desc";
 		// print_r($sql);die();

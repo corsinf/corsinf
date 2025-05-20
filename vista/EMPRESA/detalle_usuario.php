@@ -379,42 +379,28 @@ if(isset($_GET["usuario"]))
             $('#tabla_').html(spiner);
          },*/
            success:  function (response) {  
-           // if (response==1) 
-           // {
-            // $('#nuevo_tipo_usuario').modal('hide');
-            // lista_usuario();
-            // lista_usuario_ina();
 
-            if(id!='')
+            if(response.response=='-2')
             {
-              Swal.fire(
-                  '',
-                  'Registro Editado.',
-                  'success');
-            // limpiar();
-            }else{
-            Swal.fire(
-                  '',
-                  'Registro agregado.',
-                  'success').then(function(){
-                    location.href='./inicio.php?acc=detalle_usuario&usuario='+response;
+               Swal.fire(response.msj,"","error");
+            }else
+            {
+              if(response.response==1)
+              {
+                if(id!='')
+                {
+                  Swal.fire('','Registro Editado.','success');
+                // limpiar();
+                }else{
+                  Swal.fire('','Registro agregado.','success').then(function(){
+                        location.href='./inicio.php?acc=detalle_usuario&usuario='+response.msj;
                   });
-          }
-            // limpiar();
-            // $('#btn_opcion').text('Guardar');
-            // $('#exampleModalLongTitle').text('Nuevo tipo de usuario');
-           // }else
-           // {
-
-           //  // $('#nuevo_tipo_usuario').modal('hide');
-           //  Swal.fire(
-           //        '',
-           //        'No se pudo guardar intente mas tarde.',
-           //        'info');
-
-           //  // limpiar();
-           //  // $('#btn_opcion').text('Guardar');
-           // } 
+                }
+              }else
+              {
+                  Swal.fire('Algo salio mal','Registro Editado.','info');
+              }
+            }
           } 
           
        });

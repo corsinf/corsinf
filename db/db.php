@@ -14,6 +14,15 @@ class db
 	private $database;
 	private $tipo_base;
 	private $puerto;
+
+	private $api_usuario;
+	private $api_password;
+	private $api_servidor;
+	private $api_database;
+	private $api_tipo_base;
+	private $api_puerto;
+	private $api_existe = 0;
+
 	function __construct()
 	{
 		
@@ -22,33 +31,83 @@ class db
 		$this->puerto = '';
 	}
 
+	function modificar_parametros_db($codigo_empresa_api = false)
+	{
+		if($codigo_empresa_api){
+			$sql = "SELECT
+								Ip_host,
+								Base_datos,
+								Usuario_db,
+								Password_db,
+								Tipo_base,
+								Puerto_db
+							FROM EMPRESAS
+							WHERE codigo_empresa_api = '$codigo_empresa_api'";
+
+			$empresa = $this->datos($sql, true, 0)[0] ?? [];
+
+			if($empresa){
+				// Asignar los valores
+				$this->api_servidor   = $empresa['Ip_host']     ?? '';
+				$this->api_database   = $empresa['Base_datos']  ?? '';
+				$this->api_usuario    = $empresa['Usuario_db']  ?? '';
+				$this->api_password   = $empresa['Password_db'] ?? '';
+				$this->api_tipo_base  = $empresa['Tipo_base']   ?? '';
+				$this->api_puerto     = $empresa['Puerto_db']	?? '';
+				
+				$this->api_existe = 1;
+			}
+		}
+	}
+
 	function parametros_conexion($master = false)
 	{
 
 		$this->usuario =  '';
 		$this->password = '';
 		$this->puerto = '';
-		if (!$master) {
-			if (isset($_SESSION['INICIO']['ID_EMPRESA'])) {
 
-				$_SESSION['INICIO']['ULTIMO_ACCESO'] = time();
-				$this->servidor = $_SESSION['INICIO']['IP_HOST'];
-				$this->database = $_SESSION['INICIO']['BASEDATO'];
-				if ($_SESSION['INICIO']['USUARIO_DB'] != '' && $_SESSION['INICIO']['USUARIO_DB']!=null) {
+		if ($this->api_existe == 1) {
+			$this->usuario = $this->api_usuario ;
+			$this->password = $this->api_password;  // en mi caso tengo contraseña pero en casa caso introducidla aquí.
+			$this->servidor = 	$this->api_servidor . ', ' . $this->api_puerto;
+			$this->database = $this->api_database;
+		}else {
 
-					// print_r($_SESSION['INICIO']['USUARIO_DB']);die();
-					$this->usuario =  $_SESSION['INICIO']['USUARIO_DB'];
-				}
-				if ($_SESSION['INICIO']['PASSWORD_DB'] != '' && $_SESSION['INICIO']['PASSWORD_DB']!=null) {
-					$this->password = $_SESSION['INICIO']['PASSWORD_DB'];
-				}
-				$this->tipo_base = $_SESSION['INICIO']['TIPO_BASE'];
-				if($_SESSION['INICIO']['PUERTO_DB']!='' && $_SESSION['INICIO']['PUERTO_DB']!=null)
-				{
-					$this->puerto =   ', '.$_SESSION['INICIO']['PUERTO_DB'];
-				}
+			if (!$master) {
+				if (isset($_SESSION['INICIO']['ID_EMPRESA'])) {
 
-				// print_r($_SESSION['INICIO']);die();
+					$_SESSION['INICIO']['ULTIMO_ACCESO'] = time();
+					$this->servidor = $_SESSION['INICIO']['IP_HOST'];
+					$this->database = $_SESSION['INICIO']['BASEDATO'];
+					if ($_SESSION['INICIO']['USUARIO_DB'] != '' && $_SESSION['INICIO']['USUARIO_DB']!=null) {
+
+						// print_r($_SESSION['INICIO']['USUARIO_DB']);die();
+						$this->usuario =  $_SESSION['INICIO']['USUARIO_DB'];
+					}
+					if ($_SESSION['INICIO']['PASSWORD_DB'] != '' && $_SESSION['INICIO']['PASSWORD_DB']!=null) {
+						$this->password = $_SESSION['INICIO']['PASSWORD_DB'];
+					}
+					$this->tipo_base = $_SESSION['INICIO']['TIPO_BASE'];
+					if($_SESSION['INICIO']['PUERTO_DB']!='' && $_SESSION['INICIO']['PUERTO_DB']!=null)
+					{
+						$this->puerto =   ', '.$_SESSION['INICIO']['PUERTO_DB'];
+					}
+
+					// print_r($_SESSION['INICIO']);die();
+				} else {
+					// $this->usuario = "";
+					// $this->password = "";  // en mi caso tengo contraseña pero en casa caso introducidla aquí.
+					// $this->servidor = "DESKTOP-RSN9E39\SQLEXPRESS";
+					// $this->database = "LISTA_EMPRESAS";
+					// $this->tipo_base = '';
+					// $this->puerto = '';
+
+					$this->usuario = "sa";
+					$this->password = "Tango456";  // en mi caso tengo contraseña pero en casa caso introducidla aquí.
+					$this->servidor = "186.4.219.172, 1487";
+					$this->database = "LISTA_EMPRESAS";
+				}
 			} else {
 				// $this->usuario = "";
 				// $this->password = "";  // en mi caso tengo contraseña pero en casa caso introducidla aquí.
@@ -59,21 +118,9 @@ class db
 
 				$this->usuario = "sa";
 				$this->password = "Tango456";  // en mi caso tengo contraseña pero en casa caso introducidla aquí.
-				$this->servidor = "186.4.219.172, 1487";
+				$this->servidor = "186.4.219.172,1487";
 				$this->database = "LISTA_EMPRESAS";
 			}
-		} else {
-			// $this->usuario = "";
-			// $this->password = "";  // en mi caso tengo contraseña pero en casa caso introducidla aquí.
-			// $this->servidor = "DESKTOP-RSN9E39\SQLEXPRESS";
-			// $this->database = "LISTA_EMPRESAS";
-			// $this->tipo_base = '';
-			// $this->puerto = '';
-
-			$this->usuario = "sa";
-			$this->password = "Tango456";  // en mi caso tengo contraseña pero en casa caso introducidla aquí.
-			$this->servidor = "186.4.219.172,1487";
-			$this->database = "LISTA_EMPRESAS";
 		}
 	}
 
@@ -122,7 +169,7 @@ class db
 	    return $rsp;
 	}
 
-	function datos($sql, $master = false)
+	function datos($sql, $master = false, $error = false)
 	{
 
 		$this->parametros_conexion($master);
@@ -140,7 +187,11 @@ class db
 			return $result;
 			
 		} catch (Exception $e) {
-			 die("Error: " . $e->getMessage());
+			if($error){
+				die("Error: " . $e->getMessage());
+			}else{
+				die(json_encode(["error" => "Error Consulte con: soporte@corsinf.com"]));
+			}
 		}
 		
 	}
@@ -281,6 +332,7 @@ class db
 
 	function update($tabla, $datos, $where, $master = false)
 	{
+		// print_r($master);die();
 		$this->parametros_conexion($master);
 		$conn = $this->conexion();
 
@@ -561,6 +613,40 @@ class db
 	}
 
 
+	function conexion_terceros($usuario, $password, $servidor, $puerto)
+	{
+		if ($usuario == '') {
+			$usuario = '';
+		}
+		if ($password == '') {
+			$password = '';
+		}
+		if($puerto !='')
+		{
+			$puerto = ', '.$puerto;
+		}else
+		{
+			$puerto = '';
+		}
+
+		 // print_r("sqlsrv:Server=".$servidor .''. $puerto.";Database=".$database.','.$usuario.','.$password);die();
+
+		try{
+		     $conn = new PDO("sqlsrv:Server=".$servidor .''. $puerto, $usuario, $password);
+		     $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+		     // $conn->setAttribute(PDO::SQLSRV_ATTR_ENCODING, PDO::SQLSRV_ENCODING_UTF8);
+		     // print_r("conectado");die();
+		      return $conn;
+		    }	 
+		  catch(PDOException $e)
+		    {
+		      echo "La conexión ha fallado: " . $e->getMessage();
+		    }
+		 
+		  $conn = null;
+	}
+
+
 
 	function sql_string_db_terceros($database, $usuario, $password, $servidor, $puerto, $sql)
 	{
@@ -577,6 +663,70 @@ class db
 			return 1;
 			
 		} catch (Exception $e) {
+			return -1;
+			die(print_r(sqlsrv_errors(), true));
+		}
+	}
+
+	function sql_string_sin_base_terceros($usuario, $password, $servidor, $puerto, $sql)
+	{
+
+		$conn = $this->conexion_terceros($usuario, $password, $servidor, $puerto);
+		// print_r($sql);
+		// print_r($conn);die();
+		try {
+			$conn->exec($sql);
+			// $stmt = $conn->prepare($sql);
+			// $stmt->execute($valores);
+    		// $stmt->execute();    		
+		    $conn=null;
+			return 1;
+			
+		} catch (Exception $e) {
+			print_r($e);
+			return -1;
+			die(print_r(sqlsrv_errors(), true));
+		}
+	}
+	function sql_string_sin_base($sql,$master)
+	{
+		$this->parametros_conexion($master);
+		$conn = $this->conexion_terceros($this->usuario,$this->password,$this->servidor,$this->puerto);
+		// print_r($sql);
+		// print_r($conn);die();
+		try {
+			$conn->exec($sql);
+			// $stmt = $conn->prepare($sql);
+			// $stmt->execute($valores);
+    		// $stmt->execute();    		
+		    $conn=null;
+			return 1;
+			
+		} catch (Exception $e) {
+			print_r($e);
+			return -1;
+			die(print_r(sqlsrv_errors(), true));
+		}
+	}
+
+	function datos_sin_base_system($sql,$master)
+	{
+
+		$this->parametros_conexion($master);
+		$conn = $this->conexion_terceros($this->usuario,$this->password,$this->servidor,$this->puerto);
+		// print_r($sql);
+		// print_r($conn);die();
+		try {
+			 $stmt = $conn->prepare($sql);
+    		$stmt->execute();
+    		while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+		        $result[] = $row;
+		    }
+		    $conn=null;
+			return $result;
+
+		} catch (Exception $e) {
+			print_r($e);
 			return -1;
 			die(print_r(sqlsrv_errors(), true));
 		}

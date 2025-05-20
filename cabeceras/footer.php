@@ -41,6 +41,28 @@
 	    </div>
 	  </div>
 	</div>
+
+	<div class="modal fade" id="myModal_detalles" tabindex="-1" aria-modal="true" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+        </div>
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-sm-12">
+              <table class="table table-sm table-hover" id="tbl_detalles">
+          
+              </table>
+            </div>            
+          </div>
+        </div>
+        <div class="modal-footer"> 
+
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>       
+        </div>
+      </div>
+    </div>
+  </div>
 	<?php include_once('../cabeceras/acercaDe.php'); ?>
 
 	
@@ -58,8 +80,7 @@
 	<script src="../assets/plugins/select2/js/select2.min.js"></script>
 	<script src="../assets/js/form-select2.js"></script>	
 
-	<script src='https://cdn.tiny.cloud/1/vdqx2klew412up5bcbpwivg1th6nrh3murc6maz8bukgos4v/tinymce/5/tinymce.min.js' referrerpolicy="origin">
-	</script>
+	<!-- <script src='https://cdn.tiny.cloud/1/vdqx2klew412up5bcbpwivg1th6nrh3murc6maz8bukgos4v/tinymce/5/tinymce.min.js' referrerpolicy="origin"></script> -->
 	<!-- <script src="../../assets/js/form-text-editor.js"></script> -->
 	<script src="../assets/plugins/summernote/summernote-bs4.min.js"></script>
 

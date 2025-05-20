@@ -490,6 +490,25 @@ foto,link_fb,link_gmail,link_ins,link_tw,link_web";
 		return $this->db->datos($sql,1);
 	}
 
+	function empresa_licencias($id,$modulo=false)
+	{
+		$sql = "SELECT * FROM LICENCIAS WHERE Id_empresa = '".$id."' AND registrado = 1";
+		if($modulo)
+		{
+			$sql.=" AND Id_Modulo = '".$modulo."'";
+		}
+		return $this->db->datos($sql,1);
+	}
+
+	function usuario_x_modulo_empresa($empresa,$modulo,$usuario=false)
+	{
+		$sql = "SELECT * FROM USUARIO_X_MODULO WHERE Id_empresa = '".$empresa."' AND id_modulo_siste = '".$modulo."'";
+		if($usuario)
+		{
+			$sql.=" AND id_usuarios = '".$usuario."'";
+		}
+		return $this->db->datos($sql,1);
+	}
 
 }
 ?>

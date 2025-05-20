@@ -1,42 +1,101 @@
 <script>
     $(document).ready(function() {
-        movimientos();
+        cargar_tabla();
     });
 
-    function movimientos() {
-        var table = '';
-        var desde = $('#txt_desde').val();
-        var hasta = $('#txt_hasta').val();
-        if (desde != '' && hasta == '' || desde == '' && hasta != '') {
-            Swal.fire('Rango de fecha no valido', 'Seleccione fechas correctas', 'info');
+    function cargar_tabla() {
+        txt_fecha_inicio_temp = $('#txt_fecha_inicio').val();
+        txt_fecha_fin_temp = $('#txt_fecha_fin').val();
+
+        var fecha_Hoy = new Date();
+        var formato_Fecha = fecha_Hoy.getFullYear() + '-' + (fecha_Hoy.getMonth() + 1) + '-' + fecha_Hoy.getDate();
+
+
+        txt_fecha_inicio = '';
+        txt_fecha_fin = '';
+        if (txt_fecha_inicio_temp == '' && txt_fecha_fin_temp == '') {
+            txt_fecha_inicio = formato_Fecha;
+            txt_fecha_fin = formato_Fecha;
+        } else {
+            txt_fecha_inicio = txt_fecha_inicio_temp;
+            txt_fecha_fin = txt_fecha_fin_temp;
         }
+
         var parametros = {
             'id': <?= $_id ?>,
-            'desde': desde,
-            'hasta': hasta,
+            'desde': txt_fecha_inicio,
+            'hasta': txt_fecha_fin,
         }
-        $.ajax({
-            data: {
-                parametros: parametros
+
+        tabla_movimientos = $('#tabla_movimientos').DataTable($.extend({}, configuracion_datatable('Movimientos', 'movimientos'), {
+            reponsive: false,
+
+            language: {
+                url: 'https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
             },
-            url: '../controlador/ACTIVOS_FIJOS/detalle_articuloC.php?movimientos=true',
-            type: 'post',
-            dataType: 'json',
-            success: function(response) {
-                $.each(response, function(i, item) {
-                    //console.log(item);
-                    table += "<tr><td>" + item.ob + "</td><td style='white-space: nowrap;'>" + (item.fe) + "</td><td>" + item.codigo_ant + "</td><td>" + item.dante + "</td><td>" + item.codigo_nue + "</td><td>" + item.dnuevo + "</td><td>" + item.responsable + "</td></tr>"
-                });
-                $('#table_contenido').html(table);
+            ajax: {
+                url: '../controlador/ACTIVOS_FIJOS/detalle_articuloC.php?movimientos=true',
+                type: 'POST',
+                data: function(d) {
+                    d.movimientos = true;
+                    d.parametros = parametros
+                },
+                dataSrc: ''
+            },
+            columns: [{
+                    data: 'ob'
+                },
+                {
+                    data: null,
+                    render: function(data, type, item) {
+                        return fecha_nacimiento_formateada(item.fe) + ' / ' + obtener_hora_formateada_arr(item.fe);
+                    }
+                },
+                {
+                    data: 'codigo_ant'
+                },
+                {
+                    data: 'dante'
+                },
+                {
+                    data: 'codigo_nue'
+                },
+                {
+                    data: 'dnuevo'
+                },
+                {
+                    data: 'responsable'
+                },
+            ],
+            order: [
+                [1, 'desc']
+            ]
+        }));
+    }
 
+    function buscar_fechas() {
+        if (tabla_movimientos) {
+            tabla_movimientos.destroy(); // Destruir la instancia existente del DataTable
+        }
+        cargar_tabla();
+    }
 
-            }
-        });
+    //Cargar datos de custodio en inputs
+    function datos_col_custodio(response) {
+        $('#txt_nombre').val(response.person_nom);
+        $('#txt_ci').val(response.person_ci);
+        $('#txt_email').val(response.person_correo);
+        $('#txt_puesto').val(response.PUESTO);
+        $('#txt_unidad_p').val(response.unidad_org);
+        $('#txt_id_custodio').val(response.id_person);
+
+        $('#titulo').text('Editar custodio');
+        $('#op').text('Editar');
     }
 
     function editar_custodio() {
-        idc = $('#id').val();
-        location.href = '../vista/custodio_detalle.php?id=' + idc;
+        idc = $('#txt_id_custodio').val();
+        location.href = '../vista/inicio.php?mod=2&acc=ge_registrar_personas&_id=' + idc;
     }
 </script>
 
@@ -45,16 +104,7 @@
 <div class="card-body">
     <ul class="nav nav-tabs nav-primary mb-0" role="tablist">
         <li class="nav-item" role="presentation">
-            <a class="nav-link active" data-bs-toggle="tab" href="#tab_custodio" role="tab" aria-selected="true">
-                <div class="d-flex align-items-center">
-                    <div class="tab-icon"><i class='bx bx-user font-18 me-1'></i>
-                    </div>
-                    <div class="tab-title"> Custodio </div>
-                </div>
-            </a>
-        </li>
-        <li class="nav-item" role="presentation">
-            <a class="nav-link" data-bs-toggle="tab" href="#tab_movimientos" role="tab" aria-selected="false">
+            <a class="nav-link active" data-bs-toggle="tab" href="#tab_movimientos" role="tab" aria-selected="false">
                 <div class="d-flex align-items-center">
                     <div class="tab-icon"><i class='bx bx-bookmark-alt font-18 me-1'></i>
                     </div>
@@ -62,6 +112,17 @@
                 </div>
             </a>
         </li>
+
+        <li class="nav-item" role="presentation">
+            <a class="nav-link" data-bs-toggle="tab" href="#tab_custodio" role="tab" aria-selected="true">
+                <div class="d-flex align-items-center">
+                    <div class="tab-icon"><i class='bx bx-user font-18 me-1'></i>
+                    </div>
+                    <div class="tab-title"> Custodio </div>
+                </div>
+            </a>
+        </li>
+
         <li class="nav-item" role="presentation">
             <a class="nav-link" data-bs-toggle="tab" href="#tab_avaluos" role="tab" aria-selected="false">
                 <div class="d-flex align-items-center">
@@ -75,8 +136,84 @@
 
     <div class="tab-content pt-3">
 
+        <!-- TAB movimientos -->
+        <div class="tab-pane fade show active" id="tab_movimientos" role="tabpanel">
+            <h3>Movimiento por articulo</h3>
+            <div class="">
+                <div class="row">
+                    <div class="col-12">
+
+                        <div class="row">
+
+                            <div class="col-6">
+                                <div class="card-title d-flex align-items-center">
+
+                                    <!-- <h5 class="card-title fw-bold">Filtros</h5> -->
+                                </div>
+                            </div>
+
+                            <!-- <div class="col-6 text-end">
+                                <div id="contenedor_botones"></div>
+                            </div> -->
+
+                        </div>
+
+
+                        <div class="row d-flex align-items-end">
+                            <div class="col-md-2">
+                                <label for="txt_fecha_inicio" class="form-label fw-bold">Desde</label>
+                                <input type="date" class="form-control form-control-sm" id="txt_fecha_inicio" name="txt_fecha_inicio">
+                            </div>
+
+                            <div class="col-md-2">
+                                <label for="txt_fecha_fin" class="form-label fw-bold">Hasta</label>
+                                <input type="date" class="form-control form-control-sm" id="txt_fecha_fin" name="txt_fecha_fin">
+                            </div>
+
+                            <div class="col-md-8">
+                                <!-- Etiqueta vacía para ocupar espacio y alinear el botón -->
+                                <label class="form-label fw-bold d-block">&nbsp;</label>
+                                <button class="btn btn-primary btn-sm px-3" onclick="buscar_fechas();" type="button">
+                                    <i class='bx bx-search'></i> Buscar
+                                </button>
+                            </div>
+                        </div>
+
+
+                        <div class="row">
+
+                        </div>
+                    </div>
+                </div>
+
+                <section class="content pt-4">
+                    <div class="container-fluid">
+                        <div class="table-responsive">
+                            <table class="table table-striped table-responsive" id="tabla_movimientos" style="width:100%">
+                                <thead>
+                                    <tr>
+                                        <th width="30%">Proceso realizado</th>
+                                        <th width="10%">Fecha Mov</th>
+                                        <th width="10%">Cod Ant</th>
+                                        <th width="15%">Dato Ant</th>
+                                        <th width="10%">Cod Nuevo</th>
+                                        <th width="15%">Dato Nuevo</th>
+                                        <th width="10%">Responsable</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div><!-- /.container-fluid -->
+                </section>
+            </div>
+        </div>
+
         <!-- TAB Custodio -->
-        <div class="tab-pane fade show active" id="tab_custodio" role="tabpanel">
+        <div class="tab-pane fade" id="tab_custodio" role="tabpanel">
+            <input type="hidden" name="txt_id_custodio" id="txt_id_custodio">
             <div class="row mb-col">
                 <div class="col-sm-6">
                     <label for="txt_nombre">Nombre</label>
@@ -110,45 +247,6 @@
                 <button type="button" class="btn btn-primary btn-sm px-4 m-0" onclick="editar_custodio()"><i class="bx bx-pencil"></i> Editar custodio</button>
             </div>
 
-        </div>
-
-        <!-- TAB movimientos -->
-        <div class="tab-pane fade" id="tab_movimientos" role="tabpanel">
-            <h3>Movimiento por articulo</h3>
-            <div class="row">
-                <br>
-                <div class="col-sm-2">
-                    <b>Desde</b>
-                    <input type="date" name="txt_desde" id="txt_desde" class="form-control form-control-sm">
-                </div>
-                <div class="col-sm-2">
-                    <b>Hasta</b>
-                    <input type="date" name="txt_hasta" id="txt_hasta" class="form-control form-control-sm">
-                </div>
-                <div class="col-sm-8"><br>
-                    <button class="btn btn-primary btn-sm" onclick="movimientos()"><i class="bx bx-search"></i> Buscar</button>
-                    <button class="btn btn-default btn-sm" id="excel_movimientos_art"><i class="bx bx-file"></i> Informe</button>
-                </div>
-                <div class="table-responsive">
-                    <table class="table table-striped table-sm">
-                        <thead>
-                            <th>Proceso realizado</th>
-                            <th style="white-space: nowrap;">Fecha Mov</th>
-                            <th style="white-space: nowrap;">Cod ante.</th>
-                            <th style="white-space: nowrap;">Dato anter.</th>
-                            <th style="white-space: nowrap;">Cod nuevo</th>
-                            <th style="white-space: nowrap;">Dato nuevo</th>
-                            <th>Responsable</th>
-                        </thead>
-                        <tbody id="table_contenido">
-                            <tr>
-                                <td colspan="3">NO se a encontado movimientos de este articulo</td>
-                            </tr>
-                        </tbody>
-                    </table>
-
-                </div>
-            </div>
         </div>
 
         <!-- TAB avalúos -->
@@ -212,8 +310,6 @@
 
                                     </tbody>
                                 </table>
-
-
                             </div>
                         </div>
                     </div>

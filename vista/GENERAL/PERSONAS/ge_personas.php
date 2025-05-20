@@ -86,7 +86,7 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
 
                                     <div class="" id="btn_nuevo">
 
-                                        <a href="../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=fi_registrar_personas"
+                                        <a href="../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=ge_registrar_personas"
                                             type="button" class="btn btn-success btn-sm">
                                             <i class="bx bx-plus me-0 pb-1"></i> Nuevo
                                         </a>

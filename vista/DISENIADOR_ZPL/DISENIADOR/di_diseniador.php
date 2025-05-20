@@ -1028,7 +1028,8 @@ const id = '<?php echo $id; ?>'
             <div class="btn-group">
               <button type="button" class="btn btn-primary btn-compact">Descargas</button>
               <button type="button" class="btn btn-primary split-bg-primary dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown"> <span class="visually-hidden">Toggle Dropdown</span>
-              </button>
+              </button>                         
+              <button type="button" title="Asegurese que el navegador permita Descargar de manera automatica, y siga las instrucciones dentro del archivo descargado" class="btn-sm btn-outline-secondary btn dropdown-item"><i class='bx bx-info-circle me-0'></i></button>   
               <div class="dropdown-menu dropdown-menu-right dropdown-menu-lg-end">
                 <button type="button" class="dropdown-item" id="btn_editar" onclick="descargarLib()"><i class="bx bx-printer"></i> Plugin Impresora</button>
               </div>
@@ -1042,7 +1043,7 @@ const id = '<?php echo $id; ?>'
                 <a href="../vista/inicio.php?mod=2013&acc=lista_etiquetas" class="btn btn-outline-secondary btn-sm"><i class="bx bx-left-arrow-alt"></i> Regresar</a>
                 <button class="btn-sm btn-info btn" onclick="vista_previa()"><i class="bx bx-print"></i> Imprimir</button>
                 <button type="button" class="btn-sm btn-primary btn" onclick="GuardarDiseño()"><i class="bx bx-print"></i> Guardar Diseño</button>
-                <button class="btn-sm btn-success btn" onclick="prueba()"><i class="bx bx-print"></i> excel</button>
+                <!-- <button class="btn-sm btn-success btn" onclick="prueba()"><i class="bx bx-print"></i> excel</button> -->
             </div>    
         </div>
         <div class="row">
