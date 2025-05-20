@@ -71,6 +71,10 @@ if(isset($_GET['modulos_sistema']))
 {
   echo json_encode($controlador->modulos_sistema());
 }
+if(isset($_GET['validar_licencias']))
+{
+  echo json_encode($controlador->validar_licencias());
+}
 if(isset($_GET['modulos_sistema_acceso_rapido']))
 {
   echo json_encode($controlador->modulos_sistema_acceso_rapido());
@@ -1215,6 +1219,120 @@ class loginC
 		return $opciones;
 	}
 
+	function validar_licencias()
+	{		
+		// print_r($_SESSION['INICIO']);die();
+		$mod = '';
+		$datos = $this->login->modulos_sistema();
+		$num_mod = count($datos);
+		$_SESSION['INICIO']['NUM_MODULOS'] = $num_mod;
+		$datosEmp =  $this->mis_empresas();
+		$_SESSION['INICIO']['NUM_EMPRESAS'] = $datosEmp['numEmpresas'];
+		$id = '';
+		$link = '';
+		$pagina = '';
+		// print_r($datosEmp);
+		// print_r($datos);die();
+		$modulos_draw = array();
+		foreach ($datos as $key => $value) {
+			$licencia = 1;
+			$draw = '';			
+			$id = $value['id'];
+			$link = $value['link'];
+			$lic_activa = $this->login->modulos_sistema_licencia_activa($value['id']);
+			$num = rand(1, 5);
+			$pagina = str_replace('.php','', $value['link']);
+			if(count($lic_activa)==0)
+			{
+				$licencia = 0;
+			}
+
+			if(count($datos)>1)
+			{
+				$draw = $this->dibujar_modulo($licencia,$lic_activa,$id,$link,$value['icono'],$value['nombre_modulo']);
+			}
+				
+			$mod = array('num'=>$num_mod,'licencia'=>$licencia,'id'=>$id,'link'=>$link,'draw'=>$draw);
+			array_push($modulos_draw, $mod);
+			}
+		 // print_r($mod);die();
+		return $modulos_draw;
+	}
+
+
+	function dibujar_modulo($licencia,$lic_activa,$id,$link,$icono,$nombre_modulo)
+	{
+		// print_r($lic_activa);die();
+		$num = rand(1, 5);
+		$pagina = str_replace('.php','', $link);
+		switch ($num) 
+		{
+				case '1':		
+					$estilo = 'bg-light-danger text-danger';
+					break;
+				case '2':
+					$estilo = 'bg-light-info text-info';
+					break;
+				case '3':
+				  $estilo = 'bg-light-success text-success';
+					break;
+				case '4':
+					$estilo = 'bg-light-warning text-warning';
+					break;
+				case '5':
+					$estilo = 'bg-light-primary text-primary';
+					break;
+		}
+
+		$dif = 0;
+		if(count($lic_activa)>0)
+		{
+			$fecha1 = new DateTime(date('Y-m-d'));
+			$fecha2 = new DateTime($lic_activa[0]['Fecha_exp']);
+
+			$diferencia = $fecha1->diff($fecha2);
+			$dif =  $diferencia->days;
+			if ($diferencia->invert) {
+			    $dif = -$dif;
+			}
+		}
+
+		$mod ='
+					<div class="col">
+							<div class="card radius-10">';
+							  if($licencia==1)
+							  {
+									$mod.='<div class="card-body" onclick="modulo_seleccionado(\''.$id.'\',\''.$pagina.'\')">';
+								}else
+								{
+										$mod.='<div class="card-body" onclick="licencia_vencidas_all()" >';
+								}
+								$mod.='<div class="text-center">
+										<div class="widgets-icons rounded-circle mx-auto '.$estilo.' mb-3">'.$icono.'
+											</div>
+											<h4 class="my-1">'.$nombre_modulo.'</h4>';
+
+									// print_r($dif.'-');
+									if($dif<=0){
+											$mod.='<div class="badge rounded-pill text-danger bg-light-danger p-2 text-uppercase px-3"><i class="bx bxs-circle align-middle me-1"></i>LICENCIA VENCIDA</div>';
+									}else if($dif<=10 && $dif>0)
+									{
+										$mod.='<div class="badge rounded-pill text-warning bg-light-warning p-2 text-uppercase px-3"><i class="bx bxs-circle align-middle me-1"></i>LICENCIA POR VEENCER</div>';
+									}else
+									{
+										$mod.='<p class="mb-0 text-secondary">INGRESAR</p>';
+									}
+
+								$mod.='
+									</div>
+								</div>
+							</div>
+						</div>';
+
+					return $mod;
+	}
+
+
 	function modulos_sistema()
 	{		
 		// print_r($_SESSION['INICIO']);die();
@@ -1231,6 +1349,7 @@ class loginC
 		// print_r($datos);die();
 
 		foreach ($datos as $key => $value) {
+			$lic_activa = 
 			$num = rand(1, 5);
 			$pagina = str_replace('.php','', $value['link']);
 		switch ($num) {

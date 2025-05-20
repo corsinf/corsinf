@@ -1,8 +1,9 @@
 <?php include ('../cabeceras/header3.php'); //print_r($_SESSION['INICIO']);die(); ?>
 <script type="text/javascript">
  $( document ).ready(function() {
-  // restriccion();    
-	consultar_datos()
+  // restriccion();   
+    validar_licencias(); 
+	// consultar_datos()
 });
 
   function empresa_selecconada(empresa, activeDir, primera_vez) {
@@ -95,7 +96,84 @@ function registrar_licencia(empresa, modulo) {
       });
   }
 
-function consultar_datos()
+function validar_licencias()
+{           
+   $.ajax({
+     // data:  {parametros:parametros},
+     url:   '../controlador/loginC.php?validar_licencias=true',
+     type:  'post',
+     dataType: 'json',
+       success:  function (response) {
+       console.log(response);   
+
+       if(response.length==1)
+       {
+            if(response[0].licencia == 0)
+            {
+                // activar licencia
+                Swal.fire({
+                  title: 'Su Licencia esta vencida',
+                  text: "Cominiquese con su canal de servicios",
+                  icon: 'warning',
+                  showCancelButton: true,
+                  confirmButtonColor: '#3085d6',
+                  cancelButtonColor: '#d33',
+                  confirmButtonText: 'Agregar licencia',
+                  allowOutsideClick: false,
+                }).then((result) => {
+                    if (result.value) {
+                        empresa_selecconada('<?php echo $_SESSION['INICIO']['ID_EMPRESA']; ?>',0,0)
+                        $('#myModal_modulos').modal('show');
+                    }else
+                    {
+                        cerrar_session();
+                    }
+                })
+            }else
+            {
+                 modulo_seleccionado(response[0].id,response[0].link);
+            }
+       }else if(response.length>1)
+       {
+            var html = '';
+            response.forEach(function(item,i){
+                html+=item.draw;
+            })
+              $('#modulos_sis').html(html);
+            consultar_datos()
+       }else
+       {
+        Swal.fire( '','Su perfil no esta asignado a ningun modulo o no tiene una licencia activa.','error').then(function(){
+            window.location.href = "../login.php";
+          });
+       } 
+     }
+   });
+}
+
+function licencia_vencidas_all()
+{
+     Swal.fire({
+      title: 'Su Licencia esta vencida',
+      text: "Cominiquese con su canal de servicios",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Agregar licencia',
+      allowOutsideClick: false,
+    }).then((result) => {
+        if (result.value) {
+            empresa_selecconada('<?php echo $_SESSION['INICIO']['ID_EMPRESA']; ?>',0,0)
+            $('#myModal_modulos').modal('show');
+        }else
+        {
+            cerrar_session();
+        }
+    })
+}
+
+  function consultar_datos()
   {           
    $.ajax({
      // data:  {parametros:parametros},
@@ -106,18 +184,18 @@ function consultar_datos()
        console.log(response);    
        if (response.num==0) 
        {
-          Swal.fire( '','Su perfil no esta asignado a ningun modulo.','error').then(function(){
-          	window.location.href = "../login.php";
+          Swal.fire( '','Su perfil no esta asignado a ningun modulo o no tiene una licencia activa.','error').then(function(){
+            window.location.href = "../login.php";
           });
        }else
        {
-       		if(response.num==1)
-       		{
-       			modulo_seleccionado(response.id,response.link)
-       		}else
-       		{
-       			$('#modulos_sis').html(response.html);
-       		}
+            if(response.num==1)
+            {
+                modulo_seleccionado(response.id,response.link)
+            }else
+            {
+                $('#modulos_sis').html(response.html);
+            }
        } 
      }
    });
