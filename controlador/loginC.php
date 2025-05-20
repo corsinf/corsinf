@@ -1317,7 +1317,7 @@ class loginC
 											$mod.='<div class="badge rounded-pill text-danger bg-light-danger p-2 text-uppercase px-3"><i class="bx bxs-circle align-middle me-1"></i>LICENCIA VENCIDA</div>';
 									}else if($dif<=10 && $dif>0)
 									{
-										$mod.='<div class="badge rounded-pill text-warning bg-light-warning p-2 text-uppercase px-3"><i class="bx bxs-circle align-middle me-1"></i>LICENCIA POR VEENCER</div>';
+										$mod.='<div class="badge rounded-pill text-warning bg-light-warning p-2 text-uppercase px-3"><i class="bx bxs-circle align-middle me-1"></i>LICENCIA POR VENCER</div>';
 									}else
 									{
 										$mod.='<p class="mb-0 text-secondary">INGRESAR</p>';

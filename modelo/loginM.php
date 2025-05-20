@@ -248,7 +248,7 @@ class loginM
 			// AND DATEDIFF(DAY, GETDATE(), Fecha_exp) >= 0
 		}else
 		{
-			$sql = "SELECT DISTINCT(MS.id_modulos) as 'id', MS.nombre_modulo,MS.icono,MS.link,L.Fecha_ini,L.Fecha_exp  
+			$sql = "SELECT DISTINCT(MS.id_modulos) as 'id', MS.nombre_modulo,MS.icono,MS.link
 			FROM ACCESOS A 
 			INNER JOIN PAGINAS P ON A.id_paginas = P.id_paginas
 			INNER JOIN MODULOS M ON P.id_modulo = M.id_modulo
