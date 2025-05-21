@@ -14,50 +14,44 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
     // Referencia a la tabla
     let $tabla = $('#tbl_logs_carga');
 
-    if ($.fn.DataTable.isDataTable($tabla)) {
-      let tbl_logs_carga = $tabla.DataTable();
-      tbl_logs_carga.ajax.url('../controlador/ACTIVOS_FIJOS/cargar_datosC.php?log_activos=true').load();
-      tbl_logs_carga.ajax.reload(function(json) {
-        console.log('Tabla recargada con identificador:', identificador);
-      });
-    } else {
-      let tbl_logs_carga = $tabla.DataTable($.extend({}, configuracion_datatable('Logs de carga', 'logs de carga'), {
-        responsive: true,
-        language: {
-          url: 'https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
+    let tbl_logs_carga = $tabla.DataTable($.extend({}, configuracion_datatable('Logs de carga', 'logs de carga'), {
+      destroy: true,
+      responsive: true,
+      language: {
+        url: 'https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
+      },
+      ajax: {
+        url: '../controlador/ACTIVOS_FIJOS/cargar_datosC.php?log_activos=true',
+        type: 'POST', // Usar POST para mayor seguridad
+        data: function(d) {
+          d.identificador = identificador; // Enviar el identificador
         },
-        ajax: {
-          url: '../controlador/ACTIVOS_FIJOS/cargar_datosC.php?log_activos=true',
-          type: 'POST', // Usar POST para mayor seguridad
-          data: function(d) {
-            d.identificador = identificador; // Enviar el identificador
-          },
-          dataSrc: ''
+        dataSrc: ''
+      },
+      columns: [{
+          data: 'detalle'
         },
-        columns: [{
-            data: 'detalle'
-          },
-          {
-            data: 'fecha'
-          },
-          {
-            data: 'accion'
-          },
-          {
-            data: 'intento'
-          },
-          {
-            data: 'estado'
-          },
-          {
-            data: 'usuario'
-          }
-        ],
-        order: [
-          [0, 'desc']
-        ]
-      }));
-    }
+        {
+          data: 'fecha'
+        },
+        {
+          data: 'accion'
+        },
+        {
+          data: 'intento'
+        },
+        {
+          data: 'estado'
+        },
+        {
+          data: 'usuario'
+        }
+      ],
+      order: [
+        [0, 'desc']
+      ]
+    }));
+
   }
 </script>
 
@@ -209,52 +203,6 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
       });
 
 
-  }
-
-  function log_activos() {
-    parametros = {
-      'fecha': $('#txt_fecha').val(),
-      'accion': $('#txt_accion').val(),
-      'intento': $('#txt_intento').val(),
-      'estado': $('input[name="rbl_estado"]:checked').val(),
-    }
-    $.ajax({
-      data: {
-        parametros: parametros
-      },
-      url: '../controlador/ACTIVOS_FIJOS/cargar_datosC.php?log_activos=true',
-      type: 'post',
-      dataType: 'json',
-      beforeSend: function() {
-        // $("#foto_alumno").attr('src',"../img/gif/proce.gif");
-        $('#tbl_datos').html('<tr class="text-center"><td colspan="6"><img src="../img/de_sistema/loader_puce.gif" style="width:10%"></td></tr>');
-      },
-      success: function(response) {
-
-        $('#tbl_datos').html(response);
-        console.log(response);
-      }
-
-    });
-  }
-
-  function leer_datos() {
-    $.ajax({
-      // data:  {parametros:parametros},
-      url: '../controlador/ACTIVOS_FIJOS/carga_datos/cargar_controlador.php?leer=true',
-      type: 'post',
-      dataType: 'json',
-      // beforeSend: function () {
-      //        // $("#foto_alumno").attr('src',"../img/gif/proce.gif");
-      //   $('#tbl_datos').html('<tr class="text-center"><td colspan="6"><img src="../img/de_sistema/loader_puce.gif" style="width:10%"></td></tr>');
-      // },
-      success: function(response) {
-
-        $('#tbl_datos').html(response);
-        console.log(response);
-      }
-
-    });
   }
 </script>
 
