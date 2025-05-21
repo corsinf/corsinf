@@ -16,13 +16,14 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                 url: '../controlador/GENERAL/th_personasC.php?listar=true',
                 dataSrc: ''
             },
-            columns: [{
-                    data: null,
-                    render: function(data, type, item) {
+            columns: [
+            // {
+            //         data: null,
+            //         render: function(data, type, item) {
 
-                        return fecha_formateada_hora(item.fecha_creacion);
-                    }
-                },
+            //             return fecha_formateada_hora(item.fecha_creacion);
+            //         }
+            //     },
                 {
                     data: null,
                     render: function(data, type, item) {
@@ -109,7 +110,7 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                                     <table class="table table-striped responsive " id="tbl_personas" style="width:100%">
                                         <thead>
                                             <tr>
-                                                <th>Fecha</th>
+                                                <!-- <th>Fecha</th> -->
                                                 <th>Nombres</th>
                                                 <th>Cédula</th>
                                                 <th>Correo</th>

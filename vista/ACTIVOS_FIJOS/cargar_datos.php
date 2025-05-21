@@ -219,7 +219,7 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
           <ol class="breadcrumb mb-0 p-0">
             <li class="breadcrumb-item"><a href="javascript:;"><i class="bx bx-home-alt"></i></a>
             </li>
-            <li class="breadcrumb-item active" aria-current="page">carga de datos</li>
+            <li class="breadcrumb-item active" aria-current="page">Carga de datos</li>
           </ol>
         </nav>
       </div>
@@ -333,7 +333,7 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
     <div class="modal-content">
       <div class="modal-body">
         <div id="cargar">
-          <div class="text-center"><img src="../img/de_sistema/loader_puce.gif" width="100" height="100">SUBIENDO DATOS</div>
+          <div class="text-center"><img src="../img/de_sistema/loader_sistema.gif" width="100" height="100">SUBIENDO DATOS</div>
         </div>
         <div>
           <div class="progress-group" id="loader">
