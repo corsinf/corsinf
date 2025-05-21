@@ -151,48 +151,46 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
 
 
     $('#link_plantilla').css('display', 'none');
-    $('#link_ficha').css('display', 'none');
     if (op != '') {
       $('#link_plantilla').css('display', 'initial');
-      $('#link_ficha').css('display', 'initial');
     }
 
     switch (op) {
       case '1':
-        url = '../descargas/FORMATOS/ACTIVOS_PRUEBAS.csv';
-        url2 = '../descargas/FORMATOS/FICHA TECNICA/ACTIVOS.xlsx';
+        url = '../descargas/FORMATOS/DEMO.xlsm';
+        salida = 'ACTIVOS MACRO'
         break;
       case '2':
-        url = '../descargas/FORMATOS/CUSTODIO_PRUEBA.csv';
-        url2 = '../descargas/FORMATOS/FICHA TECNICA/CUSTODIOS.xlsx';
+        url = '../descargas/FORMATOS/DEMO.xlsm';
+        salida = 'CUSTODIO MACRO'
         break;
       case '3':
-        url = '../descargas/FORMATOS/EMPLAZAMIENTO_PRUEBA.csv';
-        url2 = '../descargas/FORMATOS/FICHA TECNICA/EMPLAZAMIENTOS.xlsx';
+        url = '../descargas/FORMATOS/LOCALIZACION_MACRO.xlsm';
+        salida = 'EMPLAZAMIENTO MACRO'
         break;
       case '4':
-        url = '../descargas/FORMATOS/MARCAS_PRUEBAS.csv';
-        url2 = '../descargas/FORMATOS/FICHA TECNICA/MARCA.xlsx';
+        url = '../descargas/FORMATOS/MARCA_MACRO.xlsm';
+        salida = 'MARCAS MACRO'
         break;
       case '5':
-        url = '../descargas/FORMATOS/ESTADO_PRUEBA.csv';
-        url2 = '../descargas/FORMATOS/FICHA TECNICA/ESTADO.xlsx';
+        url = '../descargas/FORMATOS/ESTADO_MACRO.xlsm';
+        salida = 'ESTADO MACRO'
         break;
       case '6':
-        url = '../descargas/FORMATOS/GENEROS_PRUEBA.csv';
-        url2 = '../descargas/FORMATOS/FICHA TECNICA/GENERO.xlsx';
+        url = '../descargas/FORMATOS/GENERO_MACRO.xlsm';
+        salida = 'GENEROS MACRO'
         break;
       case '7':
-        url = '../descargas/FORMATOS/COLORES_PRUEBA.csv';
-        url2 = '../descargas/FORMATOS/FICHA TECNICA/COLORES.xlsx';
+        url = '../descargas/FORMATOS/COLOR_MACRO.xlsm';
+        salida = 'COLORES MACRO'
         break;
       case '8':
-        url = '../descargas/FORMATOS/PROYECTOS_PRUEBA.csv';
-        url2 = '../descargas/FORMATOS/FICHA TECNICA/PROYECTO.xlsx';
+        // url = '../descargas/FORMATOS/PROYECTOS_PRUEBA.xlsm';
+        // salida = 'PROYECTOS MACRO'
         break;
       case '9':
-        url = '../descargas/FORMATOS/CLASE_MOVIMIENTO.csv';
-        $('#link_ficha').css('display', 'none');
+        url = '../descargas/FORMATOS/MOVIMIENTO_MACRO.xlsm';
+        salida = 'CLASE MOVIMIENTO MACRO'
         break;
       default:
         url = '#';
@@ -201,7 +199,16 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
     }
 
     $('#link_plantilla').attr('href', url);
-    $('#link_ficha').attr('href', url2);
+
+    $('#link_plantilla')
+      .html('<i class="bx bxs-download"></i>PLANTILLA ' + salida)
+      .css({
+        display: 'inline-flex',
+        alignItems: 'center',
+        gap: '6px'
+      });
+
+
   }
 
   function log_activos() {
@@ -251,6 +258,9 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
   }
 </script>
 
+<style>
+
+</style>
 <div class="page-wrapper">
   <div class="page-content">
     <!--breadcrumb-->
@@ -283,14 +293,13 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                   <option value="5">Cargar Estado</option>
                   <option value="6">Cargar Género</option>
                   <option value="7">Cargar Color</option>
-                  <option value="8">Cargar Proyectos</option>
+                  <!-- <option value="8">Cargar Proyectos</option> -->
                   <option value="9">Cargar Clase de Movimiento</option>
                   <!-- <option value="10">Actualizar Activos</option> -->
                 </select>
 
                 <div class="mt-2">
-                  <a href="#" style="display: none;" id="link_plantilla" class="font-13" download><i class="bx bx-file me-0"></i> Descargar plantilla</a><br>
-                  <a href="#" style="display: none;" id="link_ficha" class="font-13" download><i class="bx bx-file me-0"></i> Descargar ficha técnica</a>
+                  <a href="#" style="display: none;" id="link_plantilla" class="font-13" download><i class="bx bx-file me-0"></i> Descargar plantilla</a>
                 </div>
               </div>
 
