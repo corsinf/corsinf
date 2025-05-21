@@ -199,7 +199,7 @@ if (isset($_GET['_id'])) {
 
                 <div class="col-md-6">
                   <label for="txt_centro" class="form-label">Centro </label>
-                  <input type="text" class="form-control form-control-sm no_caracteres" id="txt_centro" name="txt_centro" maxlength="4">
+                  <input type="text" class="form-control form-control-sm no_caracteres" id="txt_centro" name="txt_centro" maxlength="50">
                 </div>
               </div>
 
