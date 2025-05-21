@@ -1,11 +1,12 @@
 <?php include ('../cabeceras/header3.php'); //print_r($_SESSION['INICIO']);die(); ?>
 <script type="text/javascript">
  $( document ).ready(function() {
-  // restriccion();    
-	consultar_datos()
+  // restriccion();   
+    validar_licencias(); 
+	// consultar_datos()
 });
 
-  function empresa_selecconada(empresa, activeDir, primera_vez) {
+  function empresa_selecconada(empresa, activeDir, primera_vez,modulos=false) {
 
             // $('#myModal_espera').modal('show');
             pass = $('#pass').val();
@@ -18,9 +19,10 @@
                 'empresa': empresa,
                 'activeDir': activeDir,
                 'primera_vez': primera_vez,
-                'pass': "12345",
+                // 'pass': "12345",
                 'email': '<?php echo $_SESSION['INICIO']['EMAIL']; ?>',
                 'modulo_sistema':1,
+                'id_modulo':modulos,
             }
             // titulos_cargados();
 
@@ -95,33 +97,110 @@ function registrar_licencia(empresa, modulo) {
       });
   }
 
-function consultar_datos()
-  {           
+function validar_licencias()
+{           
    $.ajax({
      // data:  {parametros:parametros},
-     url:   '../controlador/loginC.php?modulos_sistema=true',
+     url:   '../controlador/loginC.php?validar_licencias=true',
      type:  'post',
      dataType: 'json',
        success:  function (response) {
-       console.log(response);    
-       if (response.num==0) 
+       console.log(response);   
+
+       if(response.length==1)
        {
-          Swal.fire( '','Su perfil no esta asignado a ningun modulo.','error').then(function(){
-          	window.location.href = "../login.php";
-          });
+            if(response[0].licencia == 0)
+            {
+                // activar licencia
+                Swal.fire({
+                  title: 'Su Licencia esta vencida',
+                  text: "Cominiquese con su canal de servicios",
+                  icon: 'warning',
+                  showCancelButton: true,
+                  confirmButtonColor: '#3085d6',
+                  cancelButtonColor: '#d33',
+                  confirmButtonText: 'Agregar licencia',
+                  allowOutsideClick: false,
+                }).then((result) => {
+                    if (result.value) {
+                        empresa_selecconada('<?php echo $_SESSION['INICIO']['ID_EMPRESA']; ?>',0,0)
+                        $('#myModal_modulos').modal('show');
+                    }else
+                    {
+                        cerrar_session();
+                    }
+                })
+            }else
+            {
+                 modulo_seleccionado(response[0].id,response[0].link);
+            }
+       }else if(response.length>1)
+       {
+            var html = '';
+            response.forEach(function(item,i){
+                html+=item.draw;
+            })
+              $('#modulos_sis').html(html);
+            // consultar_datos()
        }else
        {
-       		if(response.num==1)
-       		{
-       			modulo_seleccionado(response.id,response.link)
-       		}else
-       		{
-       			$('#modulos_sis').html(response.html);
-       		}
+        Swal.fire( '','Su perfil no esta asignado a ningun modulo o no tiene una licencia activa.','error').then(function(){
+            window.location.href = "../login.php";
+          });
        } 
      }
    });
-  }
+}
+
+function licencia_vencidas_all(modulo)
+{
+     Swal.fire({
+      title: 'Su Licencia esta vencida',
+      text: "Cominiquese con su canal de servicios",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Agregar licencia',
+      allowOutsideClick: false,
+    }).then((result) => {
+        if (result.value) {
+            empresa_selecconada('<?php echo $_SESSION['INICIO']['ID_EMPRESA']; ?>',0,0,modulo)
+            $('#myModal_modulos').modal('show');
+        }else
+        {
+            cerrar_session();
+        }
+    })
+}
+
+  // function consultar_datos()
+  // {           
+  //  $.ajax({
+  //    // data:  {parametros:parametros},
+  //    url:   '../controlador/loginC.php?modulos_sistema=true',
+  //    type:  'post',
+  //    dataType: 'json',
+  //      success:  function (response) {
+  //      console.log(response);    
+  //      if (response.num==0) 
+  //      {
+  //         Swal.fire( '','Su perfil no esta asignado a ningun modulo o no tiene una licencia activa.','error').then(function(){
+  //           window.location.href = "../login.php";
+  //         });
+  //      }else
+  //      {
+  //           if(response.num==1)
+  //           {
+  //               modulo_seleccionado(response.id,response.link)
+  //           }else
+  //           {
+  //               $('#modulos_sis').html(response.html);
+  //           }
+  //      } 
+  //    }
+  //  });
+  // }
 
   function modulo_seleccionado(modulo,link)
   {
@@ -223,9 +302,9 @@ function consultar_datos()
             </div>
             <div class="modal-body">
                 <input type="hidden" name="txt_id" id="txt_id">
-                <ul class="list-group list-group-flush radius-10" id="lista_modulos_empresas">
+                <ul class="list-group list-group-flush radius-10" id="lista_modulos_empresas" style="height:300px; overflow-y: scroll;">
 
-                    <li class="list-group-item d-flex align-items-center radius-10 mb-2 shadow-sm">
+                    <!-- <li class="list-group-item d-flex align-items-center radius-10 mb-2 shadow-sm">
                         <div class="d-flex align-items-center">
                             <div class="font-20"><i class="flag-icon flag-icon-us"></i>
                             </div>
@@ -234,7 +313,7 @@ function consultar_datos()
                             </div>
                         </div>
                         <div class="ms-auto">435</div>
-                    </li>
+                    </li> -->
 
             </div>
             <div class="modal-footer">

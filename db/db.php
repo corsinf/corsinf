@@ -268,18 +268,17 @@ class db
 
 	function validarFecha($fecha) 
 	{
-	    $datetime = DateTime::createFromFormat('Y-m-d H:i:s', $fecha);
-	    if ($datetime !== false) {
-	       return 1;
-	    }
-	    
-	    // Si falla, intenta con solo fecha
-	    $date = DateTime::createFromFormat('Y-m-d', $fecha);
-	    if ($date !== false) {
-	       return 1;
-	    }
-	    
-	    return -1;
+		// Fecha con hora
+		if (DateTime::createFromFormat('Y-m-d H:i:s', $fecha) !== false) {
+			return 'datetime';
+		}
+
+		// Solo fecha
+		if (DateTime::createFromFormat('Y-m-d', $fecha) !== false) {
+			return 'date';
+		}
+
+		return false;
 	}
 
 
@@ -342,15 +341,14 @@ class db
 
 		$datos_update = array();
 		foreach ($datos as $key => $value) {
-			if ($this->validarFecha($value['dato'])==1) 
-			{
-			    $sql .= $value['campo'] . "= CAST(? AS DATE)";
-			}else
-			{
-				$sql .= $value['campo'] . "= ?";		
+			$tipo_fecha = $this->validarFecha($value['dato']);
+
+			if ($tipo_fecha === 'date') {
+				$sql .= $value['campo'] . " = CAST(? AS DATE)";
+			} else {
+				$sql .= $value['campo'] . " = ?";
 			}
-			
-			// $sql .= $value['campo'] . "= ?";		
+			// $sql .= $value['campo'] . "= ?";	
 			$sql .= ',';
 			array_push($datos_update, $value['dato']);
 		}

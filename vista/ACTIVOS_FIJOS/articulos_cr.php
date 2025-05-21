@@ -42,13 +42,11 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
             ],
 
             rowCallback: function(row, data, index) {
-                tipo_articulo = (data[14])
-                if (tipo_articulo === 'BAJAS') {
-                    $(row).css("background-color", "#FFD1C1");
-                } else if (tipo_articulo === 'PATRIMONIALES') {
-                    $(row).css("background-color", "#FFF6BD");
-                } else if (tipo_articulo === 'TERCEROS') {
-                    $(row).css("background-color", "#C7E9FF");
+                let tipo_articulo = data[14];
+                let tipo_color = data[15];
+
+                if (tipo_articulo && tipo_color) {
+                    $(row).css("background-color", tipo_color);
                 }
             },
 

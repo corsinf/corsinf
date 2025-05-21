@@ -1,307 +1,182 @@
-<?php //include('../cabeceras/header.php'); 
-//print_r($_SESSION['INICIO']); die(); 
+<?php
+$modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
+$redireccionar_vista = 'index';
+
+//Para obtener el id de la persona que solicita la firma (No concurrente)
+// $_id = isset($_SESSION['INICIO']['NO_CONCURENTE']) ? $_SESSION['INICIO']['NO_CONCURENTE'] : null;
+
+// if (empty($_id)) {
+//     $_id = '';
+// }
+
 ?>
-<!-- Content Wrapper. Contains page content -->
 
-<script type="text/javascript">
-  $(document).ready(function() {
-    usuarios();
-    // patrimoniales();
-    // bajas();
-    // terceros();
-    info_articulos();
-    custodio();
-    localizacion();
-    datos_seguros();
+<script src="../lib/jquery_validation/jquery.validate.js"></script>
+<script src="../js/GENERAL/operaciones_generales.js"></script>
 
-
-    // custodio_des();
-    // localizacion_des();
-
-  });
-
-
-  function pie(sin, con) {
-    var donutData = {
-      labels: [
-        'Asegurados',
-        'Sin seguro',
-
-      ],
-      datasets: [{
-        data: [con, sin],
-        backgroundColor: ['#00a65a', '#f56954'],
-      }]
-    }
-
-    //-------------
-    //- PIE CHART -
-    //-------------
-    // Get context with jQuery - using jQuery's .get() method.
-    var pieChartCanvas = $('#pieChart').get(0).getContext('2d')
-    var pieData = donutData;
-    var pieOptions = {
-      maintainAspectRatio: false,
-      responsive: true,
-    }
-    //Create pie or douhnut chart
-    // You can switch between pie and douhnut using the method below.
-    var pieChart = new Chart(pieChartCanvas, {
-      type: 'pie',
-      data: pieData,
-      options: pieOptions
-    })
-
-  }
-
-  function usuarios() {
-
-    $.ajax({
-      // data:  {parametros:parametros},
-      url: '../controlador/usuariosC.php?usuarios=true',
-      type: 'post',
-      dataType: 'json',
-      /*beforeSend: function () {   
-           var spiner = '<div class="text-center"><img src="../img/gif/proce.gif" width="100" height="100"></div>'     
-         $('#tabla_').html(spiner);
-      },*/
-      success: function(response) {
-        var res = response.length;
-        $('#lbl_usuarios').text(res);
-
-      }
-    });
-  }
-
-  function custodio() {
-
-    $.ajax({
-      // data:  {parametros:parametros},
-      url: '../controlador/ACTIVOS_FIJOS/custodioC.php?numero_custodios=true',
-      type: 'post',
-      dataType: 'json',
-      success: function(response) {
-        console.log(response);
-        $('#lbl_custodios').text(response[0]['cant']);
-
-      }
-    });
-  }
-
-  function localizacion() {
-
-    $.ajax({
-      // data:  {parametros:parametros},
-      url: '../controlador/ACTIVOS_FIJOS/localizacionC.php?numero_localizaciones=true',
-      type: 'post',
-      dataType: 'json',
-      success: function(response) {
-        console.log(response);
-        $('#lbl_localizaciones').text(response[0]['cant']);
-
-      }
-    });
-  }
-
-
-
-  // function custodio_des()
-  // {
-
-  //    $.ajax({
-  //      // data:  {parametros:parametros},
-  //      url:   '../controlador/vinculacionC.php?numero_custodios=true',
-  //      type:  'post',
-  //      dataType: 'json',
-  //        success:  function (response) {  
-  //         console.log(response);
-  //         if(response.length>0)
-  //         {
-  //           $('#lbl_custodios').text(response[0]['cant']);
-  //         }
-  //       }
-  //    });
-  // }
-
-  // function localizacion_des()
-  // {
-
-  //    $.ajax({
-  //      // data:  {parametros:parametros},
-  //      url:   '../controlador/vinculacionC.php?numero_localizaciones=true',
-  //      type:  'post',
-  //      dataType: 'json',
-  //        success:  function (response) {  
-  //         console.log(response);
-  //         if(response.length>0)
-  //         {
-  //           $('#lbl_localizaciones').text(response[0]['cant']);
-  //         }
-
-  //       }
-  //    });
-  // }
-
-  // function patrimoniales()
-  // { 
-  //   var parametros = 
-  //   {
-  //     'bajas':0,
-  //     'terceros':0,
-  //     'patrimoniales':1,
-  //     'articulos':0,
-  //   }
-  //     $.ajax({
-  //      data:  {parametros:parametros},
-  //      url:   '../controlador/ACTIVOS_FIJOS/articulosC.php?articulos_especiales=true',
-  //      type:  'post',
-  //      dataType: 'json',
-  //      /*beforeSend: function () {   
-  //           var spiner = '<div class="text-center"><img src="../img/gif/proce.gif" width="100" height="100"></div>'     
-  //         $('#tabla_').html(spiner);
-  //      },*/
-  //        success:  function (response) {  
-  //         var res = response.length;
-  //         $('#lbl_patrimoniales').text(res);
-  //         // console.log(res)
-
-  //       } 
-
-  //    });
-
-  // }
-
-  // function bajas()
-  // { var parametros = 
-  //   {
-  //     'bajas':1,
-  //     'terceros':0,
-  //     'patrimoniales':0,
-  //     'articulos':0,
-  //   }
-  //     $.ajax({
-  //      data:  {parametros:parametros},
-  //      url:   '../controlador/ACTIVOS_FIJOS/articulosC.php?articulos_especiales=true',
-  //      type:  'post',
-  //      dataType: 'json',
-  //      /*beforeSend: function () {   
-  //           var spiner = '<div class="text-center"><img src="../img/gif/proce.gif" width="100" height="100"></div>'     
-  //         $('#tabla_').html(spiner);
-  //      },*/
-  //        success:  function (response) {  
-  //         var res = response.length;
-  //         $('#lbl_bajas').text(res);
-  //         // console.log(res)
-
-  //       } 
-
-  //    });
-
-  // }
-
-  // function terceros()
-  // { var parametros = 
-  //   {
-  //     'bajas':0,
-  //     'terceros':1,
-  //     'patrimoniales':0,
-  //     'articulos':0,
-  //   }
-  //     $.ajax({
-  //      data:  {parametros:parametros},
-  //      url:   '../controlador/ACTIVOS_FIJOS/articulosC.php?articulos_especiales=true',
-  //      type:  'post',
-  //      dataType: 'json',
-  //      /*beforeSend: function () {   
-  //           var spiner = '<div class="text-center"><img src="../img/gif/proce.gif" width="100" height="100"></div>'     
-  //         $('#tabla_').html(spiner);
-  //      },*/
-  //        success:  function (response) {  
-  //         var res = response.length;
-  //         $('#lbl_terceros').text(res);
-  //         // console.log(res)
-
-  //       } 
-
-  //    });      
-  // }
-
-  function info_articulos() {
-    // var parametros = 
-    // {
-    //   'bajas':0,
-    //   'terceros':0,
-    //   'patrimoniales':0,
-    //   'articulos':1,
-    // }
-    $.ajax({
-      // data:  {parametros:parametros},
-      url: '../controlador/ACTIVOS_FIJOS/articulosC.php?articulos_especiales=true',
-      type: 'post',
-      dataType: 'json',
-      /*beforeSend: function () {   
-           var spiner = '<div class="text-center"><img src="../img/gif/proce.gif" width="100" height="100"></div>'     
-         $('#tabla_').html(spiner);
-      },*/
-      success: function(response) {
-
-
-        console.log(response);
-
-
-
-        // var res = response[0]['numreg'];
-        // var res1 = response[1]['eti'];
-        // console.log(response);
-        $('#lbl_articulos').text(response.activos);
-        $('#lbl_articulos1').text(response.activos);
-        $('#lbl_etiqueta').text(response.etiquetados);
-
-        $('#lbl_terceros').text(response.terceros);
-        $('#lbl_patrimoniales').text(response.patrimoniales);
-        $('#lbl_bajas').text(response.bajas);
-
-        var b = parseInt(response.etiquetados * 100 / response.activos);
-        $('#lbl_porcen').html('<b>' + b + '</b>/100');
-        $('#progres').css('width', b + '%');
-        $('#lbl_porce').html('<i class="bx bxs-up-arrow align-middle"></i> ' + b + '%');
-
-
-        // console.log(b)
-
-      }
-
-    });
-  }
-
-  function datos_seguros() {
-
-    $.ajax({
-      // data:  {parametros:parametros},
-      url: '../controlador/ACTIVOS_FIJOS/contratoC.php?datos_seguros=true',
-      type: 'post',
-      dataType: 'json',
-      success: function(response) {
-        console.log(response);
-        pie(response.sinseguro, response.asegurados);
-
-        var sin = ((response.sinseguro * 100) / response.total);
-        var con = ((response.asegurados * 100) / response.total);
-        console.log(sin);
-        console.log(con);
-        $('#lbl_porce_sin_seguro').html('<i class="fas fa-caret-up">' + sin.toFixed(3) + '%');
-        $('#lbl_porce_asegurados').html('<i class="fas fa-caret-up">' + con.toFixed(3) + '%');
-
-        $('#lbl_sin_seguro').text(response.sinseguro);
-        $('#lbl_asgurados').text(response.asegurados);
-        $('#lbl_articulos2').text(response.total);
-        $('#lbl_num_seguros').text(response.seguros);
-
-      }
-
-    });
+<script>
+  function redireccionar(url_redireccion) {
+    url_click = "inicio.php?mod=<?= $modulo_sistema ?>&acc=" + url_redireccion;
+    window.location.href = url_click;
   }
 </script>
+
+<?php if (
+  $_SESSION['INICIO']['TIPO'] == 'DBA' ||
+  $_SESSION['INICIO']['TIPO'] == 'ADMINISTRADOR'
+) { ?>
+
+  <script>
+    $(document).ready(function() {
+      listar_articulos_tipo();
+      contar_custodios();
+      contar_localizacion();
+    });
+
+
+    function listar_articulos_tipo() {
+      $.ajax({
+        url: '../controlador/ACTIVOS_FIJOS/indexC.php?lista_articulos_tipo=true',
+        type: 'post',
+        dataType: 'json',
+        success: function(response) {
+          pie_articulos(response);
+
+          let total_articulos = 0;
+
+          response.forEach(function(item) {
+            let total = parseInt(item.TOTAL_ARTICULOS) || 0;
+            total_articulos += total;
+          });
+
+          let html = `
+                      <div class="col-6 col-sm-6 col-md-4" id="pnl_solicitudes" onclick="redireccionar('articulos_cr');">
+                        <div class="card radius-10 shadow-card">
+                          <div class="card-body">
+                            <div class="d-flex align-items-center">
+                              <div>
+                                <p class="mb-0 text-secondary">TOTAL</p>
+                                <h4 class="my-1" id="lbl_pacientes">${total_articulos}</h4>
+                              </div>
+                              <div class="widgets-icons text-white ms-auto" style="background: #204697;">
+                                <i class='bx bx-purchase-tag'></i>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    `;
+
+          $('#pnl_articulos_tipo').empty();
+
+
+          // Recorrer los elementos de la respuesta
+          response.forEach(function(item) {
+            html += `
+                    <div class="col-6 col-sm-6 col-md-4" id="pnl_solicitudes" onclick="redireccionar('articulos_cr');">
+                      <div class="card radius-10 shadow-card">
+                        <div class="card-body">
+                          <div class="d-flex align-items-center">
+                            <div>
+                              <p class="mb-0 text-secondary">${item.DESCRIPCION}</p>
+                              <h4 class="my-1" id="lbl_pacientes">${item.TOTAL_ARTICULOS}</h4>
+                            </div>
+                            <div class="widgets-icons text-primary ms-auto" style="background: ${item.COLOR};">
+                              <i class='bx bx-purchase-tag'></i>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  `;
+          });
+          $('#pnl_articulos_tipo').append(html);
+        },
+        error: function(xhr, status, error) {
+          console.log('Status: ' + status);
+          console.log('Error: ' + error);
+          console.log('XHR Response: ' + xhr.responseText);
+          Swal.fire('', 'Error: ' + xhr.responseText, 'error');
+        }
+      });
+
+    }
+
+    function contar_custodios() {
+      $.ajax({
+        url: '../controlador/ACTIVOS_FIJOS/indexC.php?contar_custodios=true',
+        type: 'post',
+        dataType: 'json',
+        success: function(response) {
+          $('#lbl_count_custodios').html(response[0].TOTAL_CUSTODIOS);
+        },
+
+        error: function(xhr, status, error) {
+          console.log('Status: ' + status);
+          console.log('Error: ' + error);
+          console.log('XHR Response: ' + xhr.responseText);
+          Swal.fire('', 'Error: ' + xhr.responseText, 'error');
+        }
+      });
+    }
+
+    function contar_localizacion() {
+      $.ajax({
+        url: '../controlador/ACTIVOS_FIJOS/indexC.php?contar_localizacion=true',
+        type: 'post',
+        dataType: 'json',
+        success: function(response) {
+          $('#lbl_count_localizacion').html(response[0].TOTAL_LOCALIZACION);
+        },
+
+        error: function(xhr, status, error) {
+          console.log('Status: ' + status);
+          console.log('Error: ' + error);
+          console.log('XHR Response: ' + xhr.responseText);
+          Swal.fire('', 'Error: ' + xhr.responseText, 'error');
+        }
+      });
+
+    }
+
+    function pie_articulos(response) {
+      let labels = [];
+      let data = [];
+      let backgroundColor = [];
+
+      response.forEach(function(item) {
+        if (item.DESCRIPCION !== 'TOTAL') {
+          labels.push(item.DESCRIPCION);
+          data.push(parseInt(item.TOTAL_ARTICULOS) || 0);
+          backgroundColor.push(item.COLOR || '#cccccc'); // Color por defecto si falta
+        }
+      });
+
+      let donutData = {
+        labels: labels,
+        datasets: [{
+          data: data,
+          backgroundColor: backgroundColor,
+        }]
+      };
+
+      let pieChartCanvas = $('#pieChart').get(0).getContext('2d');
+      let pieOptions = {
+        maintainAspectRatio: false,
+        responsive: true,
+      };
+
+      new Chart(pieChartCanvas, {
+        type: 'pie',
+        data: donutData,
+        options: pieOptions
+      });
+    }
+  </script>
+
+<?php } ?>
+
+</style>
 
 <div class="page-wrapper">
   <div class="page-content">
@@ -321,215 +196,129 @@
     <!--end breadcrumb-->
     <div class="row">
       <div class="col-xl-12 mx-auto">
-        <h6 class="mb-0 text-uppercase">Activos</h6>
-        <hr>
 
-        <div class="row">
-          <!-- <div class="col-12 col-sm-6 col-md-3">
-            <div class="info-box">
-              <span class="info-box-icon bg-info elevation-1"><i class="fas fa-cog"></i></span>
-              <div class="info-box-content">
-                <span class="info-box-text" title="Ultima actualizacion con SAP">Ultima actu. con SAP</span>
-                <span class="info-box-number">
-                   <?php echo date('Y-m-d H:i:s'); ?>
-                </span>
-              </div>
-            </div>
-          </div> -->
-          <div class="col-3" onclick="location.href='articulos.php'">
-            <div class="card radius-10">
-              <div class="card-body">
-                <div class="d-flex align-items-center">
-                  <div>
-                    <p class="mb-0 text-secondary">Activos</p>
-                    <h4 class="my-1" id="lbl_articulos">0</h4>
-                    <!-- <p class="mb-0 font-13 text-success"><i class="bx bxs-up-arrow align-middle"></i>$34 from last week</p> -->
-                  </div>
-                  <div class="widgets-icons bg-light-success text-success ms-auto"><i class="bx bx-package"></i>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+        <?php if (
+          $_SESSION['INICIO']['TIPO'] == 'DBA' ||
+          $_SESSION['INICIO']['TIPO'] == 'NO CONCURRENTE'
+        ) { ?>
 
-          <div class="col-3" onclick="location.href='articulos.php'">
-            <div class="card radius-10">
-              <div class="card-body">
-                <div class="d-flex align-items-center">
-                  <div>
-                    <p class="mb-0 text-secondary">Bajas</p>
-                    <h4 class="my-1" id="lbl_bajas">0</h4>
-                    <!-- <p class="mb-0 font-13 text-success"><i class="bx bxs-up-arrow align-middle"></i>$34 from last week</p> -->
-                  </div>
-                  <div class="widgets-icons bg-light-success text-danger ms-auto"><i class="bx bx-package"></i>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="col-3" onclick="location.href='articulos.php'">
-            <div class="card radius-10">
-              <div class="card-body">
-                <div class="d-flex align-items-center">
-                  <div>
-                    <p class="mb-0 text-secondary">Patrimoniales</p>
-                    <h4 class="my-1" id="lbl_patrimoniales">0</h4>
-                    <!-- <p class="mb-0 font-13 text-success"><i class="bx bxs-up-arrow align-middle"></i>$34 from last week</p> -->
-                  </div>
-                  <div class="widgets-icons bg-light-success text-warning ms-auto"><i class="bx bx-package"></i>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="col-3" onclick="location.href='articulos.php'">
-            <div class="card radius-10">
-              <div class="card-body">
-                <div class="d-flex align-items-center">
-                  <div>
-                    <p class="mb-0 text-secondary">Terceros</p>
-                    <h4 class="my-1" id="lbl_terceros">0</h4>
-                    <!-- <p class="mb-0 font-13 text-success"><i class="bx bxs-up-arrow align-middle"></i>$34 from last week</p> -->
-                  </div>
-                  <div class="widgets-icons bg-light-success text-primary ms-auto"><i class="bx bx-package"></i>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <h6 class="mb-0 text-uppercase">Seguros</h6>
+          <h6 class="mb-0 text-uppercase">DASHBOARD</h6>
           <hr>
 
           <div class="row">
-            <div class="col-md-12">
-              <div class="card-body">
-                <div class="row">
+            <div class="col-4">
+              <div class="card card-danger">
+                <div class="card-body">
+                  <canvas id="pieChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+                </div>
+              </div>
+            </div>
+            <div class="col-8">
+              <div class="row" id="pnl_articulos_tipo">
 
-                  <div class="col-md-5">
-                    <p class="text-center">
-                      <strong>Porcentaje de articulos asegurados</strong>
-                    </p>
-                    <div class="card card-danger">
-                      <div class="card-body">
-                        <canvas id="pieChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
-                      </div>
+              </div>
+            </div>
+          </div>
+
+          <h6 class="mb-0 text-uppercase">ADICIONAL</h6>
+          <hr>
+
+          <div class="row">
+            <div class="col-6 col-sm-6 col-md-4" id="pnl_solicitudes" onclick="redireccionar('ge_personas');">
+              <div class="card radius-10 shadow-card">
+                <div class="card-body">
+                  <div class="d-flex align-items-center">
+                    <div>
+                      <p class="mb-0 text-secondary">CUSTODIOS</p>
+                      <h4 class="my-1" id="lbl_count_custodios">0</h4>
                     </div>
-
+                    <div class="widgets-icons bg-light-success text-success ms-auto"><i class='bx bx-user'></i>
+                    </div>
                   </div>
+                </div>
+              </div>
+            </div>
 
-                  <div class="col-md-7">
-                    <div class="row">
-
-                      <div class="col-6">
-                        <div class="card radius-10">
-                          <div class="card-body">
-                            <div class="d-flex align-items-center">
-                              <div>
-                                <p class="mb-0 text-secondary">Seguros registrados</p>
-                                <h4 class="my-1" id="lbl_num_seguros">0</h4>
-                                <!-- <p class="mb-0 font-13 text-warning" id="lbl_porce"><i class="bx bxs-up-arrow align-middle"></i>0% </p> -->
-                              </div>
-                              <div class="widgets-icons bg-light-warning text-warning ms-auto"><i class="bx bx-lock"></i>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="col-6">
-                        <div class="card radius-10">
-                          <div class="card-body">
-                            <div class="d-flex align-items-center">
-                              <div>
-                                <p class="mb-0 text-secondary">Total de Activos</p>
-                                <h4 class="my-1" id="lbl_articulos2">0</h4>
-                                <!-- <p class="mb-0 font-13 text-primary" id="lbl_porce_asegurados"><i class="bx bx-circle align-middle"></i>100% </p> -->
-                              </div>
-                              <div class="widgets-icons bg-light-primary text-primary ms-auto"><i class="bx bx-package"></i>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
+            <div class="col-6 col-sm-6 col-md-4" id="pnl_solicitudes" onclick="redireccionar('localizacion');">
+              <div class="card radius-10 shadow-card">
+                <div class="card-body">
+                  <div class="d-flex align-items-center">
+                    <div>
+                      <p class="mb-0 text-secondary">LOCALIZACIÓN</p>
+                      <h4 class="my-1" id="lbl_count_localizacion">0</h4>
                     </div>
+                    <div class="widgets-icons bg-light-success text-success ms-auto"><i class='bx bx-current-location'></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
 
-                    <div class="row">
-                      <div class="col-6">
-                        <div class="card radius-10">
-                          <div class="card-body">
-                            <div class="d-flex align-items-center">
-                              <div>
-                                <p class="mb-0 text-secondary">Articulos Asegurados</p>
-                                <h4 class="my-1" id="lbl_asgurados">0</h4>
-                                <p class="mb-0 font-13 text-success" id="lbl_porce_asegurados"><i class="bx bxs-up-arrow align-middle"></i>0% </p>
-                              </div>
-                              <div class="widgets-icons bg-light-success text-success ms-auto"><i class="bx bx-lock"></i>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="col-6">
-                        <div class="card radius-10">
-                          <div class="card-body">
-                            <div class="d-flex align-items-center">
-                              <div>
-                                <p class="mb-0 text-secondary">Articulos sin seguro</p>
-                                <h4 class="my-1" id="lbl_sin_seguro">0</h4>
-                                <p class="mb-0 font-13 text-danger" id="lbl_porce_sin_seguro"><i class="bx bxs-up-arrow align-middle"></i>0% </p>
-                              </div>
-                              <div class="widgets-icons bg-light-danger text-danger ms-auto"><i class="bx bx-lock-open"></i>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-
+            <div class="col-6 col-sm-6 col-md-4" id="pnl_solicitudes" onclick="redireccionar('parametros_art');">
+              <div class="card radius-10 shadow-card">
+                <div class="card-body">
+                  <div class="d-flex align-items-center">
+                    <div>
+                      <p class="mb-0 text-secondary">PARÁMETROS</p>
+                      <h4 class="my-1" id="">-</h4>
+                    </div>
+                    <div class="widgets-icons bg-light-success text-success ms-auto"><i class='bx bx-spreadsheet'></i>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
+
+
+
+        <?php } ?>
+
       </div>
     </div>
   </div>
-  <!--end row-->
-</div>
 </div>
 
 
-<div class="content-wrapper">
-  <!-- Content Header (Page header) -->
-  <div class="content-header">
-    <div class="container-fluid">
-      <div class="row mb-2">
-        <div class="col-sm-6">
-          <h1 class="m-0 text-dark">HOME</h1>
-        </div><!-- /.col -->
 
-      </div><!-- /.row -->
-    </div><!-- /.container-fluid -->
-  </div>
-  <!-- /.content-header -->
+<!-- Estilos para redireccionar -->
+<script>
+  $(document).ready(function() {
+    $('.shadow-card').on('mouseover', function() {
+      $(this).addClass('hoverEffect');
+    });
 
-  <!-- Main content -->
-  <section class="content">
-    <div class="container-fluid">
+    $('.shadow-card').on('mouseout', function() {
+      $(this).removeClass('hoverEffect');
+    });
 
+    $('.shadow-card').on('click', function() {
+      $(this).toggleClass('clickedEffect');
+    });
 
+    $(document).on('mouseout', '.shadow-card', function() {
+      $(this).removeClass('clickedEffect');
+    });
 
-      <div class="row">
-        <!-- <img src="../img/de_sistema/modulo_inventario1.gif" style="width: 100%"> -->
-      </div>
-      <!-- /.row (main row) -->
-    </div><!-- /.container-fluid -->
-  </section>
-  <!-- /.content -->
-</div>
+  });
+</script>
 
+<style>
+  .card {
+    cursor: pointer;
+    transition: background-color 0.3s, box-shadow 0.3s;
+  }
 
-<?php //include('../cabeceras/footer.php'); 
-?>
+  .card.hoverEffect {
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+    background-color: rgba(45, 216, 34, 0.1);
+  }
+
+  .card.clickedEffect {
+    background-color: rgba(128, 224, 122, 0.5);
+  }
+</style>
+
+<script>
+
+</script>

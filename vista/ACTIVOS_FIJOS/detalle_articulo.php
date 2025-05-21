@@ -488,7 +488,7 @@ if (isset($_GET['_id'])) {
             Swal.fire('', 'Operacion realizada con éxito.', 'success');
 
             cargar_datos_articulo(id);
-            movimientos();
+            cargar_tabla_movimientos();
             vista_pnl();
             limpiar_parametros_articulo();
           } else {
