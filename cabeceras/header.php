@@ -315,15 +315,22 @@ if (($_SESSION['INICIO']['LOGO']) == '.' || $_SESSION['INICIO']['LOGO'] == '' ||
 				dataType: 'json',
 				success: function(response) {
 					console.log(response);
-					if (response.num == 0) {
+					if(response.length>0)
+					{
+						html = '';
+						response.forEach(function(item,i){
+							html+=item.draw;
+						})
+
+						$('#pnl_acceso_rapido_modulo').html(html);
+
+					}else
+					{
 						Swal.fire('', 'Su perfil no esta asignado a ningun modulo.', 'error').then(function() {
 							window.location.href = "../login.php";
 						});
-					} else {
-
-						$('#pnl_acceso_rapido_modulo').html(response.html);
-
 					}
+					
 				}
 			});
 		}

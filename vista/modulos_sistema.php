@@ -19,7 +19,7 @@
                 'empresa': empresa,
                 'activeDir': activeDir,
                 'primera_vez': primera_vez,
-                'pass': "12345",
+                // 'pass': "12345",
                 'email': '<?php echo $_SESSION['INICIO']['EMAIL']; ?>',
                 'modulo_sistema':1,
                 'id_modulo':modulos,

@@ -465,13 +465,16 @@ class loginC
 			if($empresa[0]['Ip_host']==IP_MASTER)
 			{
 				// print_r($licencias);print_r($empresa);die();
-				$tablas_iguales = $this->cod_global->tablas_por_licencias($licencias,$empresa);				
+				$tablas_iguales = $this->cod_global->tablas_por_licencias($licencias,$empresa);			
+				// print_r($tablas_iguales);die();	
 		 		$res = $this->cod_global->generar_primera_vez($empresa[0]['Base_datos'],$parametros['empresa']);
-		 		if($tablas_iguales==-1)
-		 		foreach ($licencias as $key => $value) {
-		 		// print_r($licencias);die();
-		 				$r = $this->cod_global->Copiar_estructura($value['Id_Modulo'],$empresa[0]['Base_datos']);
-		 				// print_r($r);die();
+		 		// print_r($res);die();
+		 		if($tablas_iguales==-1){
+			 		foreach ($licencias as $key => $value) {
+			 		// print_r($licencias);die();
+			 				$r = $this->cod_global->Copiar_estructura($value['Id_Modulo'],$empresa[0]['Base_datos']);
+			 				// print_r($r);die();
+			 		}
 		 		}
 		 	}else{
 
@@ -1591,65 +1594,91 @@ class loginC
 		$link = '';
 		$pagina = '';
 		// print_r($datos);die();
+		$modulos_draw = array();
 		foreach ($datos as $key => $value) {
-			// $num = rand(1,3);
-			$num = 4;
+		
+			$lic_activa = $this->login->modulos_sistema_licencia_activa($value['id']);
+			$num = rand(1, 5);
 			$pagina = str_replace('.php','', $value['link']);
-		switch ($num) {
+			if(count($lic_activa)==0)
+			{
+				$licencia = 0;
+			}
+
+			if(count($datos)>1)
+			{
+				$draw = $this->dibujar_modulo_acceso_rapido($licencia,$lic_activa,$id,$link,$value['icono'],$value['nombre_modulo']);
+			}
+				
+			$mod = array('num'=>$num_mod,'licencia'=>$licencia,'id'=>$id,'link'=>$link,'draw'=>$draw);
+			array_push($modulos_draw, $mod);
+			}
+		 // print_r($mod);die();
+			// print_r($modulos_draw);die();
+			return $modulos_draw;
+	}
+
+	function dibujar_modulo_acceso_rapido($licencia,$lic_activa,$id,$link,$icono,$nombre_modulo)
+	{
+		// print_r($lic_activa);die();
+		$num = rand(1, 5);
+		$pagina = str_replace('.php','', $link);
+		switch ($num) 
+		{
 				case '1':		
-					$estilo = 'bg-gradient-burning text-white';
+					$estilo = 'bg-light-danger text-danger';
 					break;
 				case '2':
-					$estilo = 'bg-gradient-lush text-white"';
+					$estilo = 'bg-light-info text-info';
 					break;
 				case '3':
-				  $estilo = 'bg-gradient-kyoto text-dark';
-					break;							
+				  $estilo = 'bg-light-success text-success';
+					break;
 				case '4':
-					$estilo = 'text-white';
-					  break;							
-				}
-				// print_r($value);die();
+					$estilo = 'bg-light-warning text-warning';
+					break;
+				case '5':
+					$estilo = 'bg-light-primary text-primary';
+					break;
+		}
+		$dif = 0;
+		if(count($lic_activa)>0)
+		{
+			$fecha1 = new DateTime(date('Y-m-d'));
+			$fecha2 = new DateTime($lic_activa[0]['Fecha_exp']);
 
+			$diferencia = $fecha1->diff($fecha2);
+			$dif =  $diferencia->days;
+			if ($diferencia->invert) {
+			    $dif = -$dif;
+			}
+		}
 
-				$fecha1 = new DateTime(date('Y-m-d'));
-				$fecha2 = new DateTime($value['Fecha_exp']);
-
-				$diferencia = $fecha1->diff($fecha2);
-				$dif =  $diferencia->days;
-				if ($diferencia->invert) {
-				    $dif = -$dif;
-				}
-
-
-					if($dif>0)
+			if($licencia==1)
 					{
-						$mod.='<div class="col text-center" onclick="modulo_seleccionado('.$value['id'].',\'index\')">';
+						$mod='<div class="col text-center" onclick="modulo_seleccionado('.$id.',\'index\')">';
 					}else
 					{
-						$mod.='<div  class="col text-center" onclick="swal.fire(\'Licencia Vencida\',\'Cominiquese con su proveedor\',\'error\')" >';
+						$mod='<div  class="col text-center" onclick="swal.fire(\'Licencia Vencida\',\'Cominiquese con su proveedor\',\'error\')" >';
 					}
 
 					if($dif<=0){
-								$mod.='<div class="badge rounded-pill bg-danger w-100">Licencia Venc. </div>';
+								$mod.='<div class="badge rounded-pill bg-danger w-100">Licencia <br> Vencida. </div>';
 					}else if($dif<=10 && $dif>0)
 					{
-						$mod.='<div class="badge rounded-pill bg-warning w-100">Licencia por Venc. </div>';
+						$mod.='<div class="badge rounded-pill bg-warning w-100">Licencia por <br>Vencer. </div>';
 					}			
-					$mod.='<div class="app-box mx-auto '.$estilo.'">'.$value['icono'].'
+					$mod.='<div class="app-box mx-auto '.$estilo.'">'.$icono.'
 									</div>
-									<div class="app-title">'.$value['nombre_modulo'].'</div>								
+									<div class="app-title">'.$nombre_modulo.'</div>								
 					</div>';
-						if($key==0)
-							{
-								$id = $value['id'];
-								$link = $value['link'];
-							}
-		}
 
-		 // print_r($mod);die();
-		return array('num'=>$num_mod,'html'=>$mod,'id'=>$id,'link'=>$pagina);
+				return $mod;
+
 	}
+
+
+
 
 	function resetear($parametros)
 	{
