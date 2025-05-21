@@ -21,6 +21,7 @@ echo json_encode($controlador->empresa_seleccionada($_POST['parametros']));
 }
 if(isset($_GET['empresa_seleccionada_x_modulo']))
 {
+	// print_r($_POST['parametros']);die();
 echo json_encode($controlador->empresa_seleccionada($_POST['parametros']));
 }
 
@@ -406,7 +407,7 @@ class loginC
 		{
 			$licencias = $this->login->empresa_licencias_activas($parametros['empresa']);
 		}
-		// print_r($parametros);
+		// print_r($licencias);die();
 		// print_r($_SESSION['INICIO']);die();
 		if(count($licencias)==0)
 		{
