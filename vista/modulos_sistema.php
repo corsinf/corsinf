@@ -6,7 +6,7 @@
 	// consultar_datos()
 });
 
-  function empresa_selecconada(empresa, activeDir, primera_vez) {
+  function empresa_selecconada(empresa, activeDir, primera_vez,modulos=false) {
 
             // $('#myModal_espera').modal('show');
             pass = $('#pass').val();
@@ -22,6 +22,7 @@
                 'pass': "12345",
                 'email': '<?php echo $_SESSION['INICIO']['EMAIL']; ?>',
                 'modulo_sistema':1,
+                'id_modulo':modulos,
             }
             // titulos_cargados();
 
@@ -151,7 +152,7 @@ function validar_licencias()
    });
 }
 
-function licencia_vencidas_all()
+function licencia_vencidas_all(modulo)
 {
      Swal.fire({
       title: 'Su Licencia esta vencida',
@@ -164,7 +165,7 @@ function licencia_vencidas_all()
       allowOutsideClick: false,
     }).then((result) => {
         if (result.value) {
-            empresa_selecconada('<?php echo $_SESSION['INICIO']['ID_EMPRESA']; ?>',0,0)
+            empresa_selecconada('<?php echo $_SESSION['INICIO']['ID_EMPRESA']; ?>',0,0,modulo)
             $('#myModal_modulos').modal('show');
         }else
         {
@@ -301,9 +302,9 @@ function licencia_vencidas_all()
             </div>
             <div class="modal-body">
                 <input type="hidden" name="txt_id" id="txt_id">
-                <ul class="list-group list-group-flush radius-10" id="lista_modulos_empresas">
+                <ul class="list-group list-group-flush radius-10" id="lista_modulos_empresas" style="height:300px; overflow-y: scroll;">
 
-                    <li class="list-group-item d-flex align-items-center radius-10 mb-2 shadow-sm">
+                    <!-- <li class="list-group-item d-flex align-items-center radius-10 mb-2 shadow-sm">
                         <div class="d-flex align-items-center">
                             <div class="font-20"><i class="flag-icon flag-icon-us"></i>
                             </div>
@@ -312,7 +313,7 @@ function licencia_vencidas_all()
                             </div>
                         </div>
                         <div class="ms-auto">435</div>
-                    </li>
+                    </li> -->
 
             </div>
             <div class="modal-footer">

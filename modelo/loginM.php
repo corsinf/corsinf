@@ -275,7 +275,9 @@ class loginM
 			FROM MODULOS_SISTEMA MS
 			INNER JOIN LICENCIAS L ON MS.id_modulos = L.Id_Modulo
 			WHERE estado ='A' 
+			AND L.Id_empresa = '".$_SESSION['INICIO']['ID_EMPRESA']."'
 			AND MS.id_modulos = '".$modulo."'
+			AND L.registrado = 1
 			AND DATEDIFF(DAY, GETDATE(), Fecha_exp) >= 0";
 			
 		}else
@@ -288,6 +290,7 @@ class loginM
 			INNER JOIN LICENCIAS L ON MS.id_modulos = L.Id_Modulo
 			WHERE id_tipo_usu ='".$_SESSION['INICIO']['PERFIL']."' 
 			AND MS.id_modulos = '".$modulo."'
+			AND L.registrado = 1
 			AND DATEDIFF(DAY, GETDATE(), Fecha_exp) >= 0
 			AND L.Id_empresa = '".$_SESSION['INICIO']['ID_EMPRESA']."'
 			AND subpagina<> 1 
@@ -354,7 +357,10 @@ class loginM
 
 	function empresa_licencias_activas($id,$modulo=false)
 	{
-		$sql = "SELECT * FROM LICENCIAS WHERE Id_empresa = '".$id."' AND registrado = 1 AND DATEDIFF(DAY, GETDATE(), Fecha_exp) >= 0";
+		$sql = "SELECT * 
+		FROM LICENCIAS 
+		WHERE Id_empresa = '".$id."' 
+		AND registrado = 1 AND DATEDIFF(DAY, GETDATE(), Fecha_exp) >= 0";
 		if($modulo)
 		{
 			$sql.=" AND Id_Modulo = '".$modulo."'";
