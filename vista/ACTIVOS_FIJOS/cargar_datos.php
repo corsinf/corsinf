@@ -186,7 +186,7 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
         break;
       case '8':
         // url = '../descargas/FORMATOS/PROYECTOS_PRUEBA.xlsm';
-        // salida = 'PROYECTOS MACRO'
+        // salida = 'PROYECTOS MACRO' 
         break;
       case '9':
         url = '../descargas/FORMATOS/MOVIMIENTO_MACRO.xlsm';
