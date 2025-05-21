@@ -1600,6 +1600,7 @@ class loginC
 			$lic_activa = $this->login->modulos_sistema_licencia_activa($value['id']);
 			$num = rand(1, 5);
 			$pagina = str_replace('.php','', $value['link']);
+				$licencia = 1;
 			if(count($lic_activa)==0)
 			{
 				$licencia = 0;
@@ -1654,26 +1655,26 @@ class loginC
 			}
 		}
 
-			if($licencia==1)
-					{
-						$mod='<div class="col text-center" onclick="modulo_seleccionado('.$id.',\'index\')">';
-					}else
-					{
-						$mod='<div  class="col text-center" onclick="swal.fire(\'Licencia Vencida\',\'Cominiquese con su proveedor\',\'error\')" >';
-					}
+		if($licencia==1)
+			{
+				$mod='<div class="col text-center" onclick="modulo_seleccionado('.$id.',\'index\')">';
+			}else
+			{
+				$mod='<div  class="col text-center" onclick="swal.fire(\'Licencia Vencida\',\'Cominiquese con su proveedor\',\'error\')" >';
+			}
+			$mod.='<div class="app-box mx-auto '.$estilo.'" title ="'.$nombre_modulo.'" >'.$icono.'</div>';
+			
+			if($dif<=0)
+			{
+					$mod.='<div class="badge rounded-pill bg-danger w-100">Licencia <br> Vencida. </div>';
+			}else if($dif<=10 && $dif>0)
+			{
+				$mod.='<div class="badge rounded-pill bg-warning w-100">Licencia por <br>Vencer. </div>';
+			}			
 
-					if($dif<=0){
-								$mod.='<div class="badge rounded-pill bg-danger w-100">Licencia <br> Vencida. </div>';
-					}else if($dif<=10 && $dif>0)
-					{
-						$mod.='<div class="badge rounded-pill bg-warning w-100">Licencia por <br>Vencer. </div>';
-					}			
-					$mod.='<div class="app-box mx-auto '.$estilo.'">'.$icono.'
-									</div>
-									<div class="app-title">'.$nombre_modulo.'</div>								
-					</div>';
+		$mod.='</div>';
 
-				return $mod;
+	return $mod;
 
 	}
 
