@@ -155,7 +155,7 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
         salida = 'ACTIVOS MACRO'
         break;
       case '2':
-        url = '../descargas/FORMATOS/DEMO.xlsm';
+        url = '../descargas/FORMATOS/CUSTODIO_MACRO.xlsm';
         salida = 'CUSTODIO MACRO'
         break;
       case '3':
