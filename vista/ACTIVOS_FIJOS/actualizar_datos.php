@@ -145,7 +145,7 @@
     <div class="modal-content">
       <div class="modal-body">
         <div id="cargar">
-          <div class="text-center"><img src="../img/de_sistema/loader_puce.gif" width="100" height="100">SUBIENDO DATOS</div>
+          <div class="text-center"><img src="../img/de_sistema/loader_sistema.gif" width="100" height="100">SUBIENDO DATOS</div>
         </div>
         <div>
           <div class="progress-group" id="loader">

@@ -38,8 +38,8 @@
          type:  'post',
          dataType: 'json',
          beforeSend: function () {   
-              // var spiner = '<div class="text-center"><img src="img/de_sistema/loader_puce.gif" width="20px" height="20px"></div>'     
-            $('#img_logo').attr('src','img/de_sistema/loader_puce.gif');
+              // var spiner = '<div class="text-center"><img src="img/de_sistema/loader_sistema.gif" width="20px" height="20px"></div>'     
+            $('#img_logo').attr('src','img/de_sistema/loader_sistema.gif');
          },
            success:  function (response) {    
            if(response.respuesta==1)

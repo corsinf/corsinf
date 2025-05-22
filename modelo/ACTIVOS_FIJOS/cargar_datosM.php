@@ -138,7 +138,7 @@ class cargar_datosM
 		$OPCION = $tip;
 		$USUARIO = $_SESSION['INICIO']['USUARIO'];
 		$parametros = array($OPCION, $USUARIO);
-		$sql = "EXEC SP_ACTUALIZAR_CUSTODIOS @OPCION=?,@USUARIO=?";
+		$sql = "EXEC SP_ACTUALIZAR_PERSONAS @OPCION=?,@USUARIO=?";
 		$re = $this->db->ejecutar_procedimiento_con_retorno_1($sql, $parametros);
 		return $re;
 	}

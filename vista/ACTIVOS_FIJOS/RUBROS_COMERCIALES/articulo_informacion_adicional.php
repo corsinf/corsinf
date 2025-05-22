@@ -1,9 +1,9 @@
 <script>
     $(document).ready(function() {
-        cargar_tabla();
+        cargar_tabla_movimientos();
     });
 
-    function cargar_tabla() {
+    function cargar_tabla_movimientos() {
         txt_fecha_inicio_temp = $('#txt_fecha_inicio').val();
         txt_fecha_fin_temp = $('#txt_fecha_fin').val();
 
@@ -28,6 +28,7 @@
         }
 
         tabla_movimientos = $('#tabla_movimientos').DataTable($.extend({}, configuracion_datatable('Movimientos', 'movimientos'), {
+            destroy: true,
             reponsive: false,
 
             language: {
