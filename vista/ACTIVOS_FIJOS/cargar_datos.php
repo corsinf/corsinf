@@ -226,6 +226,21 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
     </div>
     <!--end breadcrumb-->
     <div class="row">
+      <div class="col-xl-12">
+        <div class="alert alert-primary border-0 bg-primary alert-dismissible fade show py-2" onclick="mostrar_modal_carga_datos();">
+          <div class="d-flex align-items-center">
+            <div class="font-35 text-white">
+              <i class='bx bx-file-find'></i>
+            </div>
+            <div class="ms-3">
+              <h6 class="mb-0 text-white">TUTORIAL DISPONIBLE</h6>
+              <div class="text-white">Aprende paso a paso cómo realizar la carga detallada de datos.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
       <div class="col-xl-12 mx-auto">
         <hr>
         <div class="card">
@@ -348,5 +363,175 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
   </div>
 </div>
 
-<?php //include('../cabeceras/footer.php'); 
-?>
+<!-- Modal Bootstrap -->
+<div class="modal fade" id="modal_carga_datos" tabindex="-1" aria-labelledby="tituloModal" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content p-3">
+      <div class="modal-header border-0">
+        <h5 class="modal-title fw-bold text-primary" id="tituloModal">
+          Convertir a .csv
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+      </div>
+
+      <div class="modal-body">
+        <div class="alert alert-info">
+          Nota: Se debe cumplir el
+          <strong>orden de los pasos</strong> para completar con éxito el
+          procedimiento
+        </div>
+
+        <h4 class="text-warning mb-4">Pasos para conversión</h4>
+
+        <!-- Sección 1 -->
+        <div class="mb-4 border-start border-secondary ps-3">
+          <h5 class="fw-semibold">
+            <i class="fa-regular fa-hand-pointer"></i> 1. Seleccionar el
+            archivo
+          </h5>
+          <ul class="list-unstyled mt-2">
+            <li>Clic en "Elige los datos que deseas cargar"</li>
+            <li>Selecciona la opción correspondiente</li>
+          </ul>
+        </div>
+
+        <!-- Sección 2 -->
+        <div class="mb-4 border-start border-secondary ps-3">
+          <h5 class="fw-semibold">
+            <i class="fa-solid fa-download"></i> 2. Descargar archivo .xlsm
+          </h5>
+          <ul class="list-unstyled mt-2">
+            <li>Clic sobre el enlace de la plantilla</li>
+            <li>La descarga iniciará automaticamente</li>
+          </ul>
+        </div>
+
+        <!-- Sección 3 -->
+        <div class="mb-4 border-start border-secondary ps-3">
+          <h5 class="fw-semibold">
+            <i class="fa-solid fa-file-pen"></i> 3. Abrir archivo .xlsm
+          </h5>
+          <ul class="list-unstyled mt-2">
+            <li>Clic en descargas</li>
+            <li>Clic en "Mostrar en carpeta"</li>
+            <li>Doble clic sobre el archivo .xlsm</li>
+          </ul>
+        </div>
+
+        <!-- Sección 4 -->
+        <div class="accordion" id="accordionCSV">
+          <div class="accordion-item border-0">
+            <!-- Botón personalizado del acordeón -->
+            <div
+              class="mb-2 border-start border-secondary ps-3 accordion-button collapsed d-block text-start"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#collapseCSV"
+              aria-expanded="false"
+              aria-controls="collapseCSV"
+              style="cursor: pointer; background-color: #fafafa">
+              <div
+                class="d-flex justify-content-between align-items-center">
+                <h5 class="fw-semibold mb-0">
+                  <i class="fa-solid fa-floppy-disk me-2"></i> 4. Guardar en
+                  formato .csv
+                </h5>
+                <i
+                  class="fa-solid fa-chevron-down rotate-icon transition"></i>
+              </div>
+
+              <ul class="list-unstyled mt-2 mb-2">
+                <li>Habilitar contenido de macros</li>
+                <li>Clic en "Archivo"</li>
+                <li>Clic en "Guargar como..."</li>
+                <li>Clic en "Examinar"</li>
+                <li>Selecciona la ubicación</li>
+                <li>Ingresa el nombre del archivo</li>
+                <li>
+                  Selecciona el tipo: "CSV (delimitado por comas)(.csv)"
+                </li>
+                <li>Clic en "Guargar"</li>
+              </ul>
+            </div>
+
+            <!-- Contenido oculto del acordeón (imagen) -->
+            <div
+              id="collapseCSV"
+              class="accordion-collapse collapse"
+              data-bs-parent="#accordionCSV">
+              <div class="accordion-body ps-4 pt-0">
+                <img src="../img/modulo_activos/carga_datos_guardar.png" alt="Ejemplo de guardado CSV" class="img-fluid rounded border" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="alert alert-info">
+          Nota: Si obtienes "RIESGO DE SEGURIDAD" al habilitar el contenido
+          sigue los siguientes pasos:
+        </div>
+
+        <!-- Sección 4 -->
+        <div class="accordion" id="accordionSeguridad">
+          <div class="accordion-item border-0">
+            <!-- Botón personalizado del acordeón -->
+            <div
+              class="mb-2 border-start border-warning ps-3 accordion-button collapsed d-block text-start"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#collapseSeguridad"
+              aria-expanded="false"
+              aria-controls="collapseSeguridad"
+              style="cursor: pointer; background-color: #fafafa">
+              <div
+                class="d-flex justify-content-between align-items-center">
+                <h5 class="fw-semibold mb-0">
+                  <i class="fa-solid fa-unlock me-2"></i> 4.1 Desbloquear
+                  seguridad
+                </h5>
+                <i
+                  class="fa-solid fa-chevron-down rotate-icon transition"></i>
+              </div>
+
+              <ul class="list-unstyled mt-2 mb-2">
+                <li>Ve a la ubicación del archivo .xlsm</li>
+                <li>Clic derecho sobre el archivo .xlsm</li>
+                <li>Clic en "Propiedades"</li>
+                <li>En General, marca la casilla "Desbloquear"</li>
+                <li>Clic en "Aplicar"</li>
+                <li>Clic en "Aceptar"</li>
+                <li>Doble clic sobre el archivo .xlsm</li>
+                <li>Volver al paso 4</li>
+              </ul>
+            </div>
+
+            <!-- Contenido oculto del acordeón (imagen) -->
+            <div
+              id="collapseSeguridad"
+              class="accordion-collapse collapse"
+              data-bs-parent="#accordionSeguridad">
+              <div class="accordion-body ps-4 pt-0">
+                <img src="../img/modulo_activos/carga_datos_desbloquear.jpg" alt="Ejemplo de desbloqueo" class="img-fluid rounded border" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer border-0">
+        <button
+          type="button"
+          class="btn btn-secondary"
+          data-bs-dismiss="modal">
+          Cerrar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  function mostrar_modal_carga_datos() {
+    $('#modal_carga_datos').modal('show');
+  }
+</script>
