@@ -152,7 +152,7 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
     switch (op) {
       case '1':
         url = '../descargas/FORMATOS/DEMO.xlsm';
-        salida = 'ARTÍCULOS MACRO'
+        salida = 'ACTIVO MACRO'
         break;
       case '2':
         url = '../descargas/FORMATOS/CUSTODIO_MACRO.xlsm';
@@ -160,11 +160,11 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
         break;
       case '3':
         url = '../descargas/FORMATOS/LOCALIZACION_MACRO.xlsm';
-        salida = 'EMPLAZAMIENTO MACRO'
+        salida = 'LOCALIZACIÓN MACRO'
         break;
       case '4':
         url = '../descargas/FORMATOS/MARCA_MACRO.xlsm';
-        salida = 'MARCAS MACRO'
+        salida = 'MARCA MACRO'
         break;
       case '5':
         url = '../descargas/FORMATOS/ESTADO_MACRO.xlsm';
@@ -172,11 +172,11 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
         break;
       case '6':
         url = '../descargas/FORMATOS/GENERO_MACRO.xlsm';
-        salida = 'GENEROS MACRO'
+        salida = 'GÉNERO MACRO'
         break;
       case '7':
         url = '../descargas/FORMATOS/COLOR_MACRO.xlsm';
-        salida = 'COLORES MACRO'
+        salida = 'COLOR MACRO'
         break;
       case '8':
         // url = '../descargas/FORMATOS/PROYECTOS_PRUEBA.xlsm';
@@ -251,11 +251,11 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                   <option disabled selected>Elige los datos que deseas cargar</option>
                   <option value="1">Cargar Artículos</option>
                   <option value="2">Cargar Custodios</option>
-                  <option value="3">Cargar Localización</option>
+                  <option value="3">Cargar Localizaciones</option>
                   <option value="4">Cargar Marcas</option>
-                  <option value="5">Cargar Estado</option>
-                  <option value="6">Cargar Género</option>
-                  <option value="7">Cargar Color</option>
+                  <option value="5">Cargar Estados</option>
+                  <option value="6">Cargar Géneros</option>
+                  <option value="7">Cargar Colores</option>
                   <!-- <option value="8">Cargar Proyectos</option> -->
                   <option value="9">Cargar Clase de Movimiento</option>
                   <!-- <option value="10">Actualizar Activos</option> -->
