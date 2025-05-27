@@ -51,11 +51,18 @@ if (isset($_GET['_id'])) {
 <script type="text/javascript">
   $(document).ready(function() {
     // navegacion();
+    validar_datos();
 
     $('#imprimir_cedula').click(function() {
       var url = '../lib/Reporte_pdf.php?reporte_cedula=true&id=' + $('#txt_id').val();
       window.open(url, '_blank');
     });
+
+
+    /**
+     * 
+     * Sirve para Marca los label con los codigos seleccionados
+     */
 
     //--------------------------------
     $('#ddl_marca').on('select2:select', function(e) {
@@ -76,29 +83,30 @@ if (isset($_GET['_id'])) {
     $('#ddl_color').on('select2:select', function(e) {
       var data = e.params.data.data;
       $('#lbl_sap_col').text('Código:' + data.CODIGO)
-      console.log(data);
+      // console.log(data);
     });
 
     //---------------------------------
     $('#ddl_estado').on('select2:select', function(e) {
       var data = e.params.data.data;
       $('#lbl_sap_est').text('Código:' + data.CODIGO)
-      console.log(data);
+      // console.log(data);
     });
 
     //---------------------------------
     $('#ddl_proyecto').on('select2:select', function(e) {
       var data = e.params.data.data;
       $('#lbl_sap_pro').text('Código:' + data.pro)
-      console.log(data);
+      // console.log(data);
     });
 
     //---------------------------------
     $('#ddl_localizacion').on('select2:select', function(e) {
       var data = e.params.data.data;
       $('#lbl_sap_loc').text('Código:' + data.EMPLAZAMIENTO)
-      console.log(data);
+      // console.log(data);
     });
+
     //---------------------------------
   });
 </script>
@@ -106,13 +114,6 @@ if (isset($_GET['_id'])) {
 <script type="text/javascript">
   $(document).ready(function() {
     $('#txt_id').val('<?= $_id ?>');
-
-    cargar_tipo_articulo();
-    cargar_selects2();
-
-    validar_datos();
-
-    cargarAvaluo('<?= $_id ?>');
 
     $("#subir_imagen").on('click', function() {
       var formData = new FormData(document.getElementById("form_img"));
@@ -149,6 +150,22 @@ if (isset($_GET['_id'])) {
     });
 
   });
+
+  //Función principal para cargar todos los datos con base al id_articulo
+  function validar_datos() {
+    var id = '<?= $_id ?>';
+
+    // console.log(id);
+    if (id == '') {
+      alert('No ha seleccionado ningún artículo');
+    } else {
+      cargar_tipo_articulo();
+
+      cargar_datos_articulo(id);
+      cargar_selects2();
+      cargarAvaluo('<?= $_id ?>');
+    }
+  }
 
 
 
@@ -217,18 +234,6 @@ if (isset($_GET['_id'])) {
   /**
    * Select2 carga
    */
-
-  function validar_datos() {
-    var id = '<?= $_id ?>';
-
-    // console.log(id);
-    if (id == '') {
-      alert('No ha seleccionado ningún artículo');
-    } else {
-      //movimientos(id); descomentar
-      cargar_datos_articulo(id);
-    }
-  }
 
   //Carga los datos en la vista principal para modificar y en la vista solo para visualizar
   function cargar_datos_articulo(id) {
@@ -435,7 +440,7 @@ if (isset($_GET['_id'])) {
     $('#lbl_sap_pro').text('Código:' + data.c_pro);
     $('#lbl_sap_gen').text('Código:' + data.c_gen);
     $('#lbl_sap_loc').text('Código:' + data.c_loc);
-    $('#lbl_sap_custodio').text('Código:' + data.person_no);
+    $('#lbl_sap_custodio').text('Código:' + data.person_ci);
   }
 
   function guardar_articulo() {
@@ -1135,12 +1140,12 @@ if (isset($_GET['_id'])) {
                           <input type="number" class="form-control form-control-sm" name="txt_valor" id="txt_valor" maxlength="16">
                         </div>
 
-                        <div class="col-sm-3">
+                        <div class="col-sm-3" hidden>
                           <label for="txt_maximo" class="form-label">Máximo </label>
                           <input type="text" class="form-control form-control-sm solo_numeros_int" name="txt_maximo" id="txt_maximo" maxlength="8" readonly>
                         </div>
 
-                        <div class="col-sm-3">
+                        <div class="col-sm-3" hidden>
                           <label for="txt_minimo" class="form-label">Mínimo </label>
                           <input type="text" class="form-control form-control-sm solo_numeros_int" name="txt_minimo" id="txt_minimo" maxlength="8" readonly>
                         </div>
@@ -1265,6 +1270,8 @@ if (isset($_GET['_id'])) {
                           <label class="error" style="display: none;" for="ddl_proyecto"></label>
                         </div>
                       </div>
+
+                      <hr class="text-primary mb-2 mt-1" style="border-top: 3px solid;">
 
                       <div class="row mb-col">
                         <div class="col-sm-6">
@@ -1449,10 +1456,10 @@ if (isset($_GET['_id'])) {
           // required: true,
         },
         txt_maximo: {
-          required: true,
+          // required: true,
         },
         txt_minimo: {
-          required: true,
+          // required: true,
         },
         ddl_unidad: {
           required: true,

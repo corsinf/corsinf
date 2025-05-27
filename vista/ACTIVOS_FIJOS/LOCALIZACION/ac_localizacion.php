@@ -23,14 +23,14 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
           data: null,
           render: function(data, type, item) {
             href = `../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=localizacion_detalle&_id=${item._id}`;
-            return `<a href="${href}"><u>${item.DENOMINACION}</u></a>`;
+            return `<a href="${href}"><u>${item.EMPLAZAMIENTO}</u></a>`;
           }
         },
         {
-          data: 'CENTRO'
+          data: 'DENOMINACION'
         },
         {
-          data: 'EMPLAZAMIENTO'
+          data: 'CENTRO'
         },
       ],
       order: [
@@ -97,9 +97,9 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                     <thead>
                       <tr>
                         <th width='5%'>ID</th>
+                        <th>Localización</th>
                         <th>Denominación</th>
                         <th>Centro</th>
-                        <th>Emplazamiento</th>
                       </tr>
                     </thead>
                     <tbody>

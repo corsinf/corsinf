@@ -1098,7 +1098,7 @@
             <b>Emplazamiento</b>
             <br>
             <select class="form-select form-select-sm" id="ddl_emplazamiento_modal2">
-              <option value="">Seleccione emplazamiento</option>
+              <option value="">Seleccione localización</option>
             </select>
           </div>
         </div>
@@ -1139,7 +1139,7 @@
             <b>Emplazamiento saliente</b>
             <br>
             <select class="form-control" id="ddl_emplazamiento_modal4">
-              <option value="">Seleccione emplazamiento</option>
+              <option value="">Seleccione localización</option>
             </select>
             <hr>
             <b>Custodio entrante</b>
@@ -1150,7 +1150,7 @@
             <b>Emplazamiento entrante</b>
             <br>
             <select class="form-control" id="ddl_emplazamiento_modal_4">
-              <option value="">Seleccione emplazamiento</option>
+              <option value="">Seleccione localización</option>
             </select>
 
           </div>

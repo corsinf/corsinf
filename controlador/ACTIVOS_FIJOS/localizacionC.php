@@ -125,6 +125,7 @@ class localizacionC
 		$datos[2]['campo'] = 'DENOMINACION';
 		$datos[2]['dato'] = $parametros['deno'];
 
+		$movimiento = '';
 		if ($parametros['id'] == '') {
 			if (count($this->modelo->buscar_localizacion_($datos[1]['dato'])) == 0) {
 				$datos = $this->modelo->insertar($datos);
