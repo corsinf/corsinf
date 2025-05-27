@@ -187,19 +187,19 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                                     <table class="table table-responsive " id="tbl_articulos" style="width:100%">
                                         <thead>
                                             <tr>
-                                                <th>Tag Serie</th>
-                                                <th>Descripcion</th>
+                                                <th>SKU</th>
+                                                <th>Descripción</th>
                                                 <th>Modelo</th>
                                                 <th>Serie</th>
                                                 <th>RFID</th>
-                                                <th>Localizacion</th>
+                                                <th>Localización</th>
                                                 <th>Custodio</th>
                                                 <th>Marca</th>
                                                 <th>Estado</th>
-                                                <th>Genero</th>
+                                                <th>Género</th>
                                                 <th>Color</th>
-                                                <th>Fecha Inv.</th>
-                                                <th>Observacion</th>
+                                                <th>Fecha Referencia</th>
+                                                <th>Observación</th>
                                                 <th>ID</th>
                                                 <th>Tipo Articulo</th>
                                             </tr>
