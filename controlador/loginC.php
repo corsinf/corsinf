@@ -1608,7 +1608,7 @@ class loginC
 
 			if(count($datos)>1)
 			{
-				$draw = $this->dibujar_modulo_acceso_rapido($licencia,$lic_activa,$id,$link,$value['icono'],$value['nombre_modulo']);
+				$draw = $this->dibujar_modulo_acceso_rapido($licencia,$lic_activa,$value['id'],$link,$value['icono'],$value['nombre_modulo']);
 			}
 				
 			$mod = array('num'=>$num_mod,'licencia'=>$licencia,'id'=>$id,'link'=>$link,'draw'=>$draw);

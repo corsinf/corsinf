@@ -41,6 +41,10 @@ function fecha_nacimiento_formateada(fecha) {
 
 //Fecha con formato de los input
 function fecha_formateada(fecha) {
+    if (fecha == '' || fecha == null) {
+        return "dd/mm/aaaa";
+    }
+
     fechaYHora = fecha;
     fecha = new Date(fechaYHora);
     anio = fecha.getFullYear();

@@ -14,50 +14,44 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
     // Referencia a la tabla
     let $tabla = $('#tbl_logs_carga');
 
-    if ($.fn.DataTable.isDataTable($tabla)) {
-      let tbl_logs_carga = $tabla.DataTable();
-      tbl_logs_carga.ajax.url('../controlador/ACTIVOS_FIJOS/cargar_datosC.php?log_activos=true').load();
-      tbl_logs_carga.ajax.reload(function(json) {
-        console.log('Tabla recargada con identificador:', identificador);
-      });
-    } else {
-      let tbl_logs_carga = $tabla.DataTable($.extend({}, configuracion_datatable('Logs de carga', 'logs de carga'), {
-        responsive: true,
-        language: {
-          url: 'https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
+    let tbl_logs_carga = $tabla.DataTable($.extend({}, configuracion_datatable('Logs de carga', 'logs de carga'), {
+      destroy: true,
+      responsive: true,
+      language: {
+        url: 'https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
+      },
+      ajax: {
+        url: '../controlador/ACTIVOS_FIJOS/cargar_datosC.php?log_activos=true',
+        type: 'POST', // Usar POST para mayor seguridad
+        data: function(d) {
+          d.identificador = identificador; // Enviar el identificador
         },
-        ajax: {
-          url: '../controlador/ACTIVOS_FIJOS/cargar_datosC.php?log_activos=true',
-          type: 'POST', // Usar POST para mayor seguridad
-          data: function(d) {
-            d.identificador = identificador; // Enviar el identificador
-          },
-          dataSrc: ''
+        dataSrc: ''
+      },
+      columns: [{
+          data: 'detalle'
         },
-        columns: [{
-            data: 'detalle'
-          },
-          {
-            data: 'fecha'
-          },
-          {
-            data: 'accion'
-          },
-          {
-            data: 'intento'
-          },
-          {
-            data: 'estado'
-          },
-          {
-            data: 'usuario'
-          }
-        ],
-        order: [
-          [0, 'desc']
-        ]
-      }));
-    }
+        {
+          data: 'fecha'
+        },
+        {
+          data: 'accion'
+        },
+        {
+          data: 'intento'
+        },
+        {
+          data: 'estado'
+        },
+        {
+          data: 'usuario'
+        }
+      ],
+      order: [
+        [0, 'desc']
+      ]
+    }));
+
   }
 </script>
 
@@ -157,20 +151,20 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
 
     switch (op) {
       case '1':
-        url = '../descargas/FORMATOS/DEMO.xlsm';
-        salida = 'ACTIVOS MACRO'
+        url = '../descargas/FORMATOS/ACTIVO_MACRO_V1.xlsm';
+        salida = 'ACTIVO MACRO'
         break;
       case '2':
-        url = '../descargas/FORMATOS/DEMO.xlsm';
+        url = '../descargas/FORMATOS/CUSTODIO_MACRO.xlsm';
         salida = 'CUSTODIO MACRO'
         break;
       case '3':
         url = '../descargas/FORMATOS/LOCALIZACION_MACRO.xlsm';
-        salida = 'EMPLAZAMIENTO MACRO'
+        salida = 'LOCALIZACIÓN MACRO'
         break;
       case '4':
         url = '../descargas/FORMATOS/MARCA_MACRO.xlsm';
-        salida = 'MARCAS MACRO'
+        salida = 'MARCA MACRO'
         break;
       case '5':
         url = '../descargas/FORMATOS/ESTADO_MACRO.xlsm';
@@ -178,11 +172,11 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
         break;
       case '6':
         url = '../descargas/FORMATOS/GENERO_MACRO.xlsm';
-        salida = 'GENEROS MACRO'
+        salida = 'GÉNERO MACRO'
         break;
       case '7':
         url = '../descargas/FORMATOS/COLOR_MACRO.xlsm';
-        salida = 'COLORES MACRO'
+        salida = 'COLOR MACRO'
         break;
       case '8':
         // url = '../descargas/FORMATOS/PROYECTOS_PRUEBA.xlsm';
@@ -210,52 +204,6 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
 
 
   }
-
-  function log_activos() {
-    parametros = {
-      'fecha': $('#txt_fecha').val(),
-      'accion': $('#txt_accion').val(),
-      'intento': $('#txt_intento').val(),
-      'estado': $('input[name="rbl_estado"]:checked').val(),
-    }
-    $.ajax({
-      data: {
-        parametros: parametros
-      },
-      url: '../controlador/ACTIVOS_FIJOS/cargar_datosC.php?log_activos=true',
-      type: 'post',
-      dataType: 'json',
-      beforeSend: function() {
-        // $("#foto_alumno").attr('src',"../img/gif/proce.gif");
-        $('#tbl_datos').html('<tr class="text-center"><td colspan="6"><img src="../img/de_sistema/loader_puce.gif" style="width:10%"></td></tr>');
-      },
-      success: function(response) {
-
-        $('#tbl_datos').html(response);
-        console.log(response);
-      }
-
-    });
-  }
-
-  function leer_datos() {
-    $.ajax({
-      // data:  {parametros:parametros},
-      url: '../controlador/ACTIVOS_FIJOS/carga_datos/cargar_controlador.php?leer=true',
-      type: 'post',
-      dataType: 'json',
-      // beforeSend: function () {
-      //        // $("#foto_alumno").attr('src',"../img/gif/proce.gif");
-      //   $('#tbl_datos').html('<tr class="text-center"><td colspan="6"><img src="../img/de_sistema/loader_puce.gif" style="width:10%"></td></tr>');
-      // },
-      success: function(response) {
-
-        $('#tbl_datos').html(response);
-        console.log(response);
-      }
-
-    });
-  }
 </script>
 
 <style>
@@ -271,13 +219,28 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
           <ol class="breadcrumb mb-0 p-0">
             <li class="breadcrumb-item"><a href="javascript:;"><i class="bx bx-home-alt"></i></a>
             </li>
-            <li class="breadcrumb-item active" aria-current="page">carga de datos</li>
+            <li class="breadcrumb-item active" aria-current="page">Carga de datos</li>
           </ol>
         </nav>
       </div>
     </div>
     <!--end breadcrumb-->
     <div class="row">
+      <div class="col-xl-12">
+        <div class="alert alert-primary border-0 bg-primary alert-dismissible fade show py-2" onclick="mostrar_modal_carga_datos();">
+          <div class="d-flex align-items-center">
+            <div class="font-35 text-white">
+              <i class='bx bx-file-find'></i>
+            </div>
+            <div class="ms-3">
+              <h6 class="mb-0 text-white">TUTORIAL DISPONIBLE</h6>
+              <div class="text-white">Aprende paso a paso cómo realizar la carga detallada de datos.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
       <div class="col-xl-12 mx-auto">
         <hr>
         <div class="card">
@@ -288,11 +251,11 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                   <option disabled selected>Elige los datos que deseas cargar</option>
                   <option value="1">Cargar Artículos</option>
                   <option value="2">Cargar Custodios</option>
-                  <option value="3">Cargar Localización</option>
+                  <option value="3">Cargar Localizaciones</option>
                   <option value="4">Cargar Marcas</option>
-                  <option value="5">Cargar Estado</option>
-                  <option value="6">Cargar Género</option>
-                  <option value="7">Cargar Color</option>
+                  <option value="5">Cargar Estados</option>
+                  <option value="6">Cargar Géneros</option>
+                  <option value="7">Cargar Colores</option>
                   <!-- <option value="8">Cargar Proyectos</option> -->
                   <option value="9">Cargar Clase de Movimiento</option>
                   <!-- <option value="10">Actualizar Activos</option> -->
@@ -385,7 +348,7 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
     <div class="modal-content">
       <div class="modal-body">
         <div id="cargar">
-          <div class="text-center"><img src="../img/de_sistema/loader_puce.gif" width="100" height="100">SUBIENDO DATOS</div>
+          <div class="text-center"><img src="../img/de_sistema/loader_sistema.gif" width="100" height="100">SUBIENDO DATOS</div>
         </div>
         <div>
           <div class="progress-group" id="loader">
@@ -400,5 +363,175 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
   </div>
 </div>
 
-<?php //include('../cabeceras/footer.php'); 
-?>
+<!-- Modal Bootstrap -->
+<div class="modal fade" id="modal_carga_datos" tabindex="-1" aria-labelledby="tituloModal" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content p-3">
+      <div class="modal-header border-0">
+        <h5 class="modal-title fw-bold text-primary" id="tituloModal">
+          Convertir a .csv
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+      </div>
+
+      <div class="modal-body">
+        <div class="alert alert-info">
+          Nota: Se debe cumplir el
+          <strong>orden de los pasos</strong> para completar con éxito el
+          procedimiento
+        </div>
+
+        <h4 class="text-warning mb-4">Pasos para conversión</h4>
+
+        <!-- Sección 1 -->
+        <div class="mb-4 border-start border-secondary ps-3">
+          <h5 class="fw-semibold">
+            <i class="fa-regular fa-hand-pointer"></i> 1. Seleccionar el
+            archivo
+          </h5>
+          <ul class="list-unstyled mt-2">
+            <li>Clic en "Elige los datos que deseas cargar"</li>
+            <li>Selecciona la opción correspondiente</li>
+          </ul>
+        </div>
+
+        <!-- Sección 2 -->
+        <div class="mb-4 border-start border-secondary ps-3">
+          <h5 class="fw-semibold">
+            <i class="fa-solid fa-download"></i> 2. Descargar archivo .xlsm
+          </h5>
+          <ul class="list-unstyled mt-2">
+            <li>Clic sobre el enlace de la plantilla</li>
+            <li>La descarga iniciará automaticamente</li>
+          </ul>
+        </div>
+
+        <!-- Sección 3 -->
+        <div class="mb-4 border-start border-secondary ps-3">
+          <h5 class="fw-semibold">
+            <i class="fa-solid fa-file-pen"></i> 3. Abrir archivo .xlsm
+          </h5>
+          <ul class="list-unstyled mt-2">
+            <li>Clic en descargas</li>
+            <li>Clic en "Mostrar en carpeta"</li>
+            <li>Doble clic sobre el archivo .xlsm</li>
+          </ul>
+        </div>
+
+        <!-- Sección 4 -->
+        <div class="accordion" id="accordionCSV">
+          <div class="accordion-item border-0">
+            <!-- Botón personalizado del acordeón -->
+            <div
+              class="mb-2 border-start border-secondary ps-3 accordion-button collapsed d-block text-start"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#collapseCSV"
+              aria-expanded="false"
+              aria-controls="collapseCSV"
+              style="cursor: pointer; background-color: #fafafa">
+              <div
+                class="d-flex justify-content-between align-items-center">
+                <h5 class="fw-semibold mb-0">
+                  <i class="fa-solid fa-floppy-disk me-2"></i> 4. Guardar en
+                  formato .csv
+                </h5>
+                <i
+                  class="fa-solid fa-chevron-down rotate-icon transition"></i>
+              </div>
+
+              <ul class="list-unstyled mt-2 mb-2">
+                <li>Habilitar contenido de macros</li>
+                <li>Clic en "Archivo"</li>
+                <li>Clic en "Guargar como..."</li>
+                <li>Clic en "Examinar"</li>
+                <li>Selecciona la ubicación</li>
+                <li>Ingresa el nombre del archivo</li>
+                <li>
+                  Selecciona el tipo: "CSV (delimitado por comas)(.csv)"
+                </li>
+                <li>Clic en "Guargar"</li>
+              </ul>
+            </div>
+
+            <!-- Contenido oculto del acordeón (imagen) -->
+            <div
+              id="collapseCSV"
+              class="accordion-collapse collapse"
+              data-bs-parent="#accordionCSV">
+              <div class="accordion-body ps-4 pt-0">
+                <img src="../img/modulo_activos/carga_datos_guardar.png" alt="Ejemplo de guardado CSV" class="img-fluid rounded border" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="alert alert-info">
+          Nota: Si obtienes "RIESGO DE SEGURIDAD" al habilitar el contenido
+          sigue los siguientes pasos:
+        </div>
+
+        <!-- Sección 4 -->
+        <div class="accordion" id="accordionSeguridad">
+          <div class="accordion-item border-0">
+            <!-- Botón personalizado del acordeón -->
+            <div
+              class="mb-2 border-start border-warning ps-3 accordion-button collapsed d-block text-start"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#collapseSeguridad"
+              aria-expanded="false"
+              aria-controls="collapseSeguridad"
+              style="cursor: pointer; background-color: #fafafa">
+              <div
+                class="d-flex justify-content-between align-items-center">
+                <h5 class="fw-semibold mb-0">
+                  <i class="fa-solid fa-unlock me-2"></i> 4.1 Desbloquear
+                  seguridad
+                </h5>
+                <i
+                  class="fa-solid fa-chevron-down rotate-icon transition"></i>
+              </div>
+
+              <ul class="list-unstyled mt-2 mb-2">
+                <li>Ve a la ubicación del archivo .xlsm</li>
+                <li>Clic derecho sobre el archivo .xlsm</li>
+                <li>Clic en "Propiedades"</li>
+                <li>En General, marca la casilla "Desbloquear"</li>
+                <li>Clic en "Aplicar"</li>
+                <li>Clic en "Aceptar"</li>
+                <li>Doble clic sobre el archivo .xlsm</li>
+                <li>Volver al paso 4</li>
+              </ul>
+            </div>
+
+            <!-- Contenido oculto del acordeón (imagen) -->
+            <div
+              id="collapseSeguridad"
+              class="accordion-collapse collapse"
+              data-bs-parent="#accordionSeguridad">
+              <div class="accordion-body ps-4 pt-0">
+                <img src="../img/modulo_activos/carga_datos_desbloquear.jpg" alt="Ejemplo de desbloqueo" class="img-fluid rounded border" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer border-0">
+        <button
+          type="button"
+          class="btn btn-secondary"
+          data-bs-dismiss="modal">
+          Cerrar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  function mostrar_modal_carga_datos() {
+    $('#modal_carga_datos').modal('show');
+  }
+</script>

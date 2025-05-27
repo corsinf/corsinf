@@ -97,7 +97,7 @@
             dataType: 'json',
             beforeSend: function() {
                 // $("#foto_alumno").attr('src',"../img/gif/proce.gif");
-                $('#tbl_datos').html('<tr class="text-center"><td colspan="6"><img src="../img/de_sistema/loader_puce.gif" style="width:10%"></td></tr>');
+                $('#tbl_datos').html('<tr class="text-center"><td colspan="6"><img src="../img/de_sistema/loader_sistema.gif" style="width:10%"></td></tr>');
             },
             success: function(response) {
 
@@ -116,7 +116,7 @@
             dataType: 'json',
             // beforeSend: function () {
             //        // $("#foto_alumno").attr('src',"../img/gif/proce.gif");
-            //   $('#tbl_datos').html('<tr class="text-center"><td colspan="6"><img src="../img/de_sistema/loader_puce.gif" style="width:10%"></td></tr>');
+            //   $('#tbl_datos').html('<tr class="text-center"><td colspan="6"><img src="../img/de_sistema/loader_sistema.gif" style="width:10%"></td></tr>');
             // },
             success: function(response) {
 
@@ -242,7 +242,7 @@
         <div class="modal-content">
             <div class="modal-body">
                 <div id="cargar">
-                    <div class="text-center"><img src="../img/de_sistema/loader_puce.gif" width="100" height="100">SUBIENDO DATOS</div>
+                    <div class="text-center"><img src="../img/de_sistema/loader_sistema.gif" width="100" height="100">SUBIENDO DATOS</div>
                 </div>
                 <div>
                     <div class="progress-group" id="loader">

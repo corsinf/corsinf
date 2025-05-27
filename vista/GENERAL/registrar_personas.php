@@ -179,11 +179,11 @@
         <label for="ddl_estado_civil" class="form-label form-label-sm">Estado civil</label>
         <select class="form-select form-select-sm" id="ddl_estado_civil" name="ddl_estado_civil">
             <option selected disabled value="">-- Selecciona un Estado Civil --</option>
-            <option value="Soltero">Soltero/a</option>
-            <option value="Casado">Casado/a</option>
-            <option value="Divorciado">Divorciado/a</option>
-            <option value="Viudo">Viudo/a</option>
-            <option value="Union">Unión de hecho</option>
+            <option value="Soltero/a">Soltero/a</option>
+            <option value="Casado/a">Casado/a</option>
+            <option value="Divorciado/a">Divorciado/a</option>
+            <option value="Viudo/a">Viudo/a</option>
+            <option value="Unión de hecho">Unión de hecho</option>
         </select>
     </div>
 

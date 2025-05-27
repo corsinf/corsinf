@@ -155,7 +155,7 @@
       type: 'post',
       dataType: 'json',
       beforeSend: function() {
-        $('#tbl_datos').html('<tr><td colspan="6"><img src="../img/de_sistema/loader_puce.gif" width="100" height="100"></td></tr>');
+        $('#tbl_datos').html('<tr><td colspan="6"><img src="../img/de_sistema/loader_sistema.gif" width="100" height="100"></td></tr>');
         // var spiner = '<div class="text-center"></div>'     
         $('#pag').html('');
       },

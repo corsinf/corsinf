@@ -138,7 +138,7 @@ class cargar_datosM
 		$OPCION = $tip;
 		$USUARIO = $_SESSION['INICIO']['USUARIO'];
 		$parametros = array($OPCION, $USUARIO);
-		$sql = "EXEC SP_ACTUALIZAR_CUSTODIOS @OPCION=?,@USUARIO=?";
+		$sql = "EXEC SP_ACTUALIZAR_PERSONAS @OPCION=?,@USUARIO=?";
 		$re = $this->db->ejecutar_procedimiento_con_retorno_1($sql, $parametros);
 		return $re;
 	}
@@ -211,6 +211,18 @@ class cargar_datosM
 		return $re;
 	}
 
+	function ejecutar_clase_movimiento($tip)
+	{
+		// print_r($tip);die();
+		set_time_limit(0);
+		$OPCION = $tip;
+		$USUARIO = $_SESSION['INICIO']['USUARIO'];
+		$parametros = array($OPCION, $USUARIO);
+		$sql = "EXEC SP_ACTUALIZAR_CLASES_MOVIMIENTO @OPCION=?,@USUARIO=?";
+		$re = $this->db->ejecutar_procedimiento_con_retorno_1($sql, $parametros);
+		return $re;
+	}
+
 	/************************************************************************************/
 
 	function validar_datos()
@@ -233,22 +245,6 @@ class cargar_datosM
 		} else {
 			sqlsrv_close($conn);
 		}
-	}
-
-	function ejecutar_clase_movimiento($tip)
-	{
-
-		// print_r($tip);die();
-		set_time_limit(0);
-		$OPCION = $tip;
-		$USUARIO = $_SESSION['INICIO']['USUARIO'];
-		$parametros = array(
-			array(&$OPCION, SQLSRV_PARAM_IN),
-			array(&$USUARIO, SQLSRV_PARAM_IN)
-		);
-		$sql = "EXEC SP_ACTUALIZAR_CLASES_MOVIMIENTO @OPCION=?,@USUARIO=?";
-		$re = $this->db->ejecutar_procedimiento_con_retorno_1($sql, $parametros);
-		return $re;
 	}
 
 	function ejecutar_update_activos($tip)

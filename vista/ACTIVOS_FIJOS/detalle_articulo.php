@@ -280,7 +280,13 @@ if (isset($_GET['_id'])) {
     $('#lbl_rfid').html(data.rfid);
     $('#lbl_tag_ant').html(`<b>Tag Antiguo:</b> ${data.ant}`);
     $('#lbl_serie').text(data.ser);
-    $('#lbl_fecha_inve').text(formatoDate(data.fecha_referencia));
+
+    if (data.fecha_referencia != null) {
+      $('#lbl_fecha_inve').text(formatoDate(data.fecha_referencia));
+    } else {
+      $('#lbl_fecha_inve').text(('dd/mm/aaaa'));
+    }
+
     $('#lbl_modelo').text(data.mod);
 
     if (data.obs) {
@@ -293,7 +299,11 @@ if (isset($_GET['_id'])) {
 
 
     // $('#lbl_unidad').text('/' + data.id_unidad_medida);
-    $('#lbl_fecha_compra').text(formatoDate(data.fecha_contabilizacion));
+    if (data.fecha_contabilizacion != null) {
+      $('#lbl_fecha_compra').text(formatoDate(data.fecha_contabilizacion));
+    } else {
+      $('#lbl_fecha_compra').text(('dd/mm/aaaa'));
+    }
 
     if (data.carac) {
       $('#lbl_caracteristicas').css('display', 'block').html(`<b>Características:</b> ${data.carac}`);
@@ -948,7 +958,7 @@ if (isset($_GET['_id'])) {
                   <div id="lbl_fecha_compra"></div>
                 </div>
                 <div class="col">
-                  <label class="form-label"><b>Fecha de Inventario</b></label>
+                  <label class="form-label"><b>Fecha de Referencia</b></label>
                   <div id="lbl_fecha_inve"></div>
                 </div>
               </div>
@@ -1127,12 +1137,12 @@ if (isset($_GET['_id'])) {
 
                         <div class="col-sm-3">
                           <label for="txt_maximo" class="form-label">Máximo </label>
-                          <input type="text" class="form-control form-control-sm solo_numeros_int" name="txt_maximo" id="txt_maximo" maxlength="8">
+                          <input type="text" class="form-control form-control-sm solo_numeros_int" name="txt_maximo" id="txt_maximo" maxlength="8" readonly>
                         </div>
 
                         <div class="col-sm-3">
                           <label for="txt_minimo" class="form-label">Mínimo </label>
-                          <input type="text" class="form-control form-control-sm solo_numeros_int" name="txt_minimo" id="txt_minimo" maxlength="8">
+                          <input type="text" class="form-control form-control-sm solo_numeros_int" name="txt_minimo" id="txt_minimo" maxlength="8" readonly>
                         </div>
                       </div>
 
@@ -1295,8 +1305,8 @@ if (isset($_GET['_id'])) {
                         </div>
 
                         <div class="col-sm-4">
-                          <label for="txt_fecha" class="form-label">Fecha de Inventario </label>
-                          <input type="date" class="form-control form-control-sm" name="txt_fecha" id="txt_fecha" readonly>
+                          <label for="txt_fecha" class="form-label">Fecha de Referencia </label>
+                          <input type="date" class="form-control form-control-sm" name="txt_fecha" id="txt_fecha">
                         </div>
                       </div>
 
@@ -1409,7 +1419,7 @@ if (isset($_GET['_id'])) {
           required: true,
         },
         txt_descripcion_2: {
-          required: true,
+          // required: true,
         },
         ddl_custodio: {
           required: true,
@@ -1418,25 +1428,25 @@ if (isset($_GET['_id'])) {
           required: true,
         },
         txt_rfid: {
-          required: true,
+          // required: true,
         },
         rbl_asset: {
-          required: true,
+          // required: true,
         },
         txt_tag_serie: {
           required: true,
         },
         txt_tag_anti: {
-          required: true,
+          // required: true,
         },
         txt_subno: {
-          required: true,
+          // required: true,
         },
         txt_cant: {
           required: true,
         },
         txt_valor: {
-          required: true,
+          // required: true,
         },
         txt_maximo: {
           required: true,
@@ -1448,16 +1458,16 @@ if (isset($_GET['_id'])) {
           required: true,
         },
         txt_modelo: {
-          required: true,
+          // required: true,
         },
         txt_serie: {
-          required: true,
+          // required: true,
         },
         ddl_familia: {
-          required: true,
+          // required: true,
         },
         ddl_subfamilia: {
-          required: true,
+          // required: true,
         },
         ddl_marca: {
           required: true,
@@ -1472,37 +1482,37 @@ if (isset($_GET['_id'])) {
           required: true,
         },
         ddl_clase_mov: {
-          required: true,
+          // required: true,
         },
         ddl_proyecto: {
-          required: true,
+          // required: true,
         },
         txt_company: {
-          required: true,
+          // required: true,
         },
         txt_resp_cctr: {
-          required: true,
+          // required: true,
         },
         txt_centro_costos: {
-          required: true,
+          // required: true,
         },
         txt_funds_ctr_apc: {
-          required: true,
+          // required: true,
         },
         txt_profit_ctr: {
-          required: true,
+          // required: true,
         },
         txt_compra: {
-          required: true,
+          // required: true,
         },
         txt_fecha: {
           required: true,
         },
         txt_carac: {
-          required: true,
+          // required: true,
         },
         txt_observacion: {
-          required: true,
+          // required: true,
         },
 
       },
@@ -1536,37 +1546,37 @@ if (isset($_GET['_id'])) {
   function agregar_asterisco_inputs() {
     // agregar_asterisco_campo_obligatorio('cbx_kit');
     agregar_asterisco_campo_obligatorio('txt_descripcion');
-    agregar_asterisco_campo_obligatorio('txt_descripcion_2');
+    // agregar_asterisco_campo_obligatorio('txt_descripcion_2');
     agregar_asterisco_campo_obligatorio('ddl_custodio');
     agregar_asterisco_campo_obligatorio('ddl_localizacion');
-    agregar_asterisco_campo_obligatorio('txt_rfid');
-    agregar_asterisco_campo_obligatorio('rbl_asset');
+    // agregar_asterisco_campo_obligatorio('txt_rfid');
+    // agregar_asterisco_campo_obligatorio('rbl_asset');
     agregar_asterisco_campo_obligatorio('txt_tag_serie');
-    agregar_asterisco_campo_obligatorio('txt_tag_anti');
-    agregar_asterisco_campo_obligatorio('txt_subno');
+    // agregar_asterisco_campo_obligatorio('txt_tag_anti');
+    // agregar_asterisco_campo_obligatorio('txt_subno');
     agregar_asterisco_campo_obligatorio('txt_cant');
-    agregar_asterisco_campo_obligatorio('txt_valor');
+    // agregar_asterisco_campo_obligatorio('txt_valor');
     agregar_asterisco_campo_obligatorio('txt_maximo');
     agregar_asterisco_campo_obligatorio('txt_minimo');
     agregar_asterisco_campo_obligatorio('ddl_unidad');
-    agregar_asterisco_campo_obligatorio('txt_modelo');
-    agregar_asterisco_campo_obligatorio('txt_serie');
-    agregar_asterisco_campo_obligatorio('ddl_familia');
-    agregar_asterisco_campo_obligatorio('ddl_subfamilia');
+    // agregar_asterisco_campo_obligatorio('txt_modelo');
+    // agregar_asterisco_campo_obligatorio('txt_serie');
+    // agregar_asterisco_campo_obligatorio('ddl_familia');
+    // agregar_asterisco_campo_obligatorio('ddl_subfamilia');
     agregar_asterisco_campo_obligatorio('ddl_marca');
     agregar_asterisco_campo_obligatorio('ddl_estado');
     agregar_asterisco_campo_obligatorio('ddl_genero');
     agregar_asterisco_campo_obligatorio('ddl_color');
-    agregar_asterisco_campo_obligatorio('ddl_clase_mov');
-    agregar_asterisco_campo_obligatorio('ddl_proyecto');
-    agregar_asterisco_campo_obligatorio('txt_company');
-    agregar_asterisco_campo_obligatorio('txt_resp_cctr');
-    agregar_asterisco_campo_obligatorio('txt_centro_costos');
-    agregar_asterisco_campo_obligatorio('txt_funds_ctr_apc');
-    agregar_asterisco_campo_obligatorio('txt_profit_ctr');
-    agregar_asterisco_campo_obligatorio('txt_compra');
+    // agregar_asterisco_campo_obligatorio('ddl_clase_mov');
+    // agregar_asterisco_campo_obligatorio('ddl_proyecto');
+    // agregar_asterisco_campo_obligatorio('txt_company');
+    // agregar_asterisco_campo_obligatorio('txt_resp_cctr');
+    // agregar_asterisco_campo_obligatorio('txt_centro_costos');
+    // agregar_asterisco_campo_obligatorio('txt_funds_ctr_apc');
+    // agregar_asterisco_campo_obligatorio('txt_profit_ctr');
+    // agregar_asterisco_campo_obligatorio('txt_compra');
     agregar_asterisco_campo_obligatorio('txt_fecha');
-    agregar_asterisco_campo_obligatorio('txt_carac');
-    agregar_asterisco_campo_obligatorio('txt_observacion');
+    // agregar_asterisco_campo_obligatorio('txt_carac');
+    // agregar_asterisco_campo_obligatorio('txt_observacion');
   }
 </script>
