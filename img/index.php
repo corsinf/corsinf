@@ -4,7 +4,6 @@
 $empresa = $_GET['emp'] ?? '';
 $dir = $_GET['dir'] ?? '';
 $nombre_imagen = $_GET['nombre'] ?? '';
-$sin_cache = $_GET['v'] ?? '';
 
 // print_r($empresa); exit(); die();
 

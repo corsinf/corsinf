@@ -312,7 +312,7 @@ if (isset($_GET['_id'])) {
     }
 
     if (data.ruta_imagen && data.ruta_imagen !== null) {
-      let url_sin_cache = data.ruta_imagen + '?v=' + new Date().getTime();
+      let url_sin_cache = data.ruta_imagen + '&v=' + new Date().getTime();
       $("#img_articulo").attr("src", url_sin_cache);
     }
 
