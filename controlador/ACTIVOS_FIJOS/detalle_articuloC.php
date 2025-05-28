@@ -343,13 +343,7 @@ class detalle_articuloC
 	function cargar_detalle_activo($id, $id_empresa)
 	{
 		$datos = $this->modelo->cargar_datos_vista_sin_logueo($id, $id_empresa);
-		$sql = 'SELECT ruta_img_relativa, Base_datos FROM EMPRESAS;';
-		$datos_2 = $this->modelo->datos($sql, true);
-
-		$ruta = $datos_2[0]['ruta_img_relativa'];
-		$empresa = $datos_2[0]['Base_datos'];
-
-		$datos[0]['ruta_imagen'] = $ruta . "emp=$empresa&dir=activos&nombre=" .  $datos[0]['imagen'];
+		// print_r($datos); exit(); die();
 
 		if (count($datos) > 0) {
 			return $datos;

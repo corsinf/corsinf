@@ -136,7 +136,7 @@ class detalle_articuloM extends BaseModel
 	{
 		$id = intval($id);
 
-		$sql = "SELECT
+		$sql_articulo = "SELECT
 					P.id_articulo AS 'id_A',
 					P.tag_unique AS 'rfid',
 					P.tag_serie AS 'tag_s',
@@ -217,20 +217,21 @@ class detalle_articuloM extends BaseModel
 		// $id_empresa_valido = $this->db->datos($sql_sp, true)[0]['id_empresa'];
 
 
-		$sql_2 = "SELECT
+		$sql_empresa = "SELECT
 					Id_empresa,
 					Base_datos,
 					Usuario_db,
 					Password_db,
 					Ip_host,
 					Puerto_db,
-					Logo 
+					Logo,
+					ruta_img_relativa
 				FROM
 					EMPRESAS 
 				WHERE
 					Id_empresa = '$id_empresa_valido'";
 
-		$datos = $this->db->datos($sql_2, true)[0];
+		$datos = $this->db->datos($sql_empresa, true)[0];
 
 		// print_r($datos);
 
@@ -241,7 +242,8 @@ class detalle_articuloM extends BaseModel
 		$database = $datos['Base_datos'];
 
 
-		$data = $this->db->datos_db_terceros($database, $usuario, $password, $servidor, $puerto = false, $sql);
+		$data = $this->db->datos_db_terceros($database, $usuario, $password, $servidor, $puerto = false, $sql_articulo);
+		$data[0]['ruta_imagen'] = $datos['ruta_img_relativa'] . "emp=$database&dir=activos&nombre=" .  $data[0]['imagen'];
 
 		return $data;
 	}
