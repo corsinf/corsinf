@@ -13,8 +13,8 @@ $url = '//CORS001/Share/ImagenesProyectos';
 
 // Definir la ruta base según el directorio
 $ruta_base = match ($dir) {
-   'activos'    => "$url/$empresa",
-   'custodios'  => "$url/$empresa/custodios",
+   'activos'    => "$url/$empresa/ACTIVOS",
+   'personas'  => "$url/$empresa/PERSONAS",
    // 'ejemplo'  => "$url/$empresa/ejemplo",
    default      => null,
 };
