@@ -26,7 +26,8 @@ if(isset($_GET['lista_empresas']))
 }
 if(isset($_GET['lista_licencias_all']))
 {
-	echo json_encode($controlador->lista_licencias_all());
+	$parametros = $_POST['parametros'];
+	echo json_encode($controlador->lista_licencias_all($parametros));
 }
 if(isset($_GET['guardar_licencia']))
 {
@@ -108,14 +109,19 @@ class licenciasC
 		return $tr;
 	}
 
-	function lista_licencias_all()
+	function lista_licencias_all($parametros)
 	{
-		$datos = $this->modelo->lista_licencias_all();
+		// print_r($parametros);die();
+		$datos = $this->modelo->lista_licencias_all(false,0,false,false,$parametros['empresa']);
 		$tr = '';
 		foreach ($datos as $key => $value) {
 			// print_r($value);die();
 			$estado =  $value['registrado'] == '0' ? 'Inactivo' : 'Activo';
 			$tr.='<tr>
+			<td>
+					<!-- <button class="btn btn-primary btn-sm"><i class="bx bx-trash me-0"></i></button> -->
+					<button class="btn btn-danger btn-sm" onclick="eliminar_licencia('.$value['Id_licencias'].')"><i class="bx bx-trash me-0"></i></button>
+			</td>
 			<td>'.$value['Razon_Social'].'</td>
 			<td>'.$value['Codigo_licencia'].'</td>
 			<td>'.$value['nombre_modulo'].'</td>
@@ -123,10 +129,7 @@ class licenciasC
 			<td>'.$value['Fecha_exp'].'</td>
 			<td>'.$value['Numero_maquinas'].'</td>			
 			<td>'.$estado.'</td>
-			<td>
-					<!-- <button class="btn btn-primary btn-sm me-0"><i class="bx bx-trash"></i></button> -->
-					<button class="btn btn-danger btn-sm me-0" onclick="eliminar_licencia('.$value['Id_licencias'].')"><i class="bx bx-trash"></i></button>
-			</td>
+			
 			</tr>';
 			// print_r($value);die();
 		}

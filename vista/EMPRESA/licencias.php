@@ -27,19 +27,52 @@ function autocompletar_empresa(){
   
 function cargar_licencias()
 {
-  	 
+
+  if ($.fn.DataTable.isDataTable('#tbl_licencias_all')) {
+      $('#tbl_licencias_all').DataTable().destroy();
+  }
+
+  var parametros = 
+  {
+    'empresa':$('#ddl_empresa').val(),
+  }  	 
    $.ajax({
-     // data:  {parametros:parametros},
+     data:  {parametros:parametros},
      url:   '../controlador/licenciasC.php?lista_licencias_all=true',
      type:  'post',
      dataType: 'json',
-     /*beforeSend: function () {   
-          var spiner = '<div class="text-center"><img src="../../img/gif/proce.gif" width="100" height="100"></div>'     
-        $('#tabla_').html(spiner);
-     },*/
-       success:  function (response) {  
-
+     success:  function (response) {  
       $('#tbl_licencias').html(response);
+
+      $('#tbl_licencias_all').DataTable({
+              dom: "<'row'<'col text-end'B>>" + // Botones alineados a la derecha
+       "<'row'<'col-sm-12'tr>>" +
+       "<'row'<'col-sm-6'i><'col-sm-6'p>>",
+              buttons: [
+                {
+                  extend: 'excelHtml5',
+                  text: '<i class="bi bi-file-earmark-excel"></i> Excel',
+                  className: 'btn btn-success btn-sm'
+                },
+                {
+                  extend: 'pdfHtml5',
+                  text: '<i class="bi bi-file-earmark-pdf"></i> PDF',
+                  className: 'btn btn-danger btn-sm'
+                }
+              ],
+              scrollX: true,
+              searching: false,
+              responsive: false,
+          // paging: false,   
+              info: false,   
+              autoWidth: false,  
+          order: [[1, 'asc']], // Ordenar por la segunda columna
+              /*autoWidth: false,
+              responsive: true,*/
+              language: {
+              url: 'https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
+            },
+        });
      }
    });
 }
@@ -264,6 +297,13 @@ function generar_key()
 
 }
 
+function borrar_seleccion()
+{
+   // $('#ddl_empresa').val('');
+  $('#ddl_empresa').val(null).trigger('change');
+}
+
+
 </script>
 <div class="page-wrapper">
       <div class="page-content">
@@ -290,9 +330,13 @@ function generar_key()
                 <div class="row">
                     <div class="col-sm-4">
                       <b>Empresa</b>
-                      <select class="form-select form-select-sm" id="ddl_empresa" name="ddl_empresa">
-                        <option>Seleccine empresa</option>
-                      </select>
+                      <div class="d-flex align-items-center">
+                        <select class="form-select form-select-sm" id="ddl_empresa" name="ddl_empresa" onchange=" cargar_licencias();">
+                          <option value="">Seleccine empresa</option>
+                        </select>
+                        <button class="btn btn-sm btn-danger" onclick="borrar_seleccion()"><i class="bx bx-x me-0"></i></button>                        
+                      </div>
+                     
                     </div>  
                     <div class="col-sm-3">
                       <b>Modulo</b>
@@ -357,16 +401,16 @@ function generar_key()
                 <hr>
                 <div class="row">
                 	<div class="table-responsive">
-                		<table class="table table-hover">
+                		<table class="table table-hover" id="tbl_licencias_all">
 	                		<thead>
+                        <th></th>       
                         <th>Empresa</th>
                         <th>Licencia</th>
 	                			<th>Modulo</th>
 		                		<th>Desde</th>
                         <th>Hasta</th>
                         <th>Maquinas</th>
-                        <th>Estado</th>
-		                		<th></th>                			
+                        <th>Estado</th>         			
 	                		</thead>
 	                		<tbody id="tbl_licencias">
 	                			
