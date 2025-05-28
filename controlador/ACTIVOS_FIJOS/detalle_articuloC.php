@@ -882,41 +882,59 @@ class detalle_articuloC
 
 	function guardar_foto($file, $post)
 	{
-		// $ruta = 'C:/Users/Jaime/Pictures/fotos/ACTIVOS_DEMO/ACTIVOS/123/';
-
-		// BASEDATO
-
+		// $ruta = 'C:/Users/Jaime/Pictures/fotos/ACTIVOS_DEMO/ACTIVOS/';
 		$ruta = $_SESSION['INICIO']['RUTA_IMG_COMPARTIDA'] ?? '';
 
 		if (!empty($ruta) && is_dir($ruta) && is_readable($ruta)) {
-			// Aquí continúa tu lógica normalmente
-
-			if (!file_exists($ruta)) {
-				mkdir($ruta, 0777, true);
-			}
-
 			if (!isset($file['file']['type'], $file['file']['tmp_name'], $post['txt_nom_img'], $post['txt_idA_img'])) {
 				return -3; // Datos incompletos
 			}
 
 			$mime = $file['file']['type'];
+			$uploadfile_temporal = $file['file']['tmp_name'];
 
-			if (in_array($mime, ['image/jpeg', 'image/pjpeg', 'image/gif', 'image/png'])) {
-				$uploadfile_temporal = $file['file']['tmp_name'];
-				$tipo = explode('/', $mime);
-				$nombre = $post['txt_nom_img'] . '.' . $tipo[1];
-				$nuevo_nom = rtrim($ruta, '/\\') . DIRECTORY_SEPARATOR . "/ACTIVOS/" . $nombre;
-				// print_r($nuevo_nom); exit(); die();
+			// Verifica si es una imagen válida
+			if (in_array($mime, ['image/jpeg', 'image/pjpeg', 'image/png', 'image/gif'])) {
 
-				if (is_uploaded_file($uploadfile_temporal)) {
-					if (move_uploaded_file($uploadfile_temporal, $nuevo_nom)) {
-						$base = $this->modelo->img_guardar($nombre, $post['txt_idA_img']);
-						return ($base == 1) ? 1 : -1;
-					} else {
-						return -4; // No se pudo mover
-					}
+				// Crear imagen desde el archivo temporal
+				switch ($mime) {
+					case 'image/jpeg':
+					case 'image/pjpeg':
+						$origen = imagecreatefromjpeg($uploadfile_temporal);
+						break;
+					case 'image/png':
+						$origen = imagecreatefrompng($uploadfile_temporal);
+						break;
+					case 'image/gif':
+						$origen = imagecreatefromgif($uploadfile_temporal);
+						break;
+					default:
+						return -2;
+				}
+
+				if (!$origen) {
+					return -6; // No se pudo procesar imagen
+				}
+
+				// Ruta final donde se guarda como .gif
+				$nombre = $post['txt_nom_img'] . '.gif';
+				$ruta_activos = rtrim($ruta, '/\\') . DIRECTORY_SEPARATOR . 'ACTIVOS';
+
+				if (!file_exists($ruta_activos)) {
+					mkdir($ruta_activos, 0777, true);
+				}
+
+				$nuevo_nom = $ruta_activos . DIRECTORY_SEPARATOR . $nombre;
+
+				// Guardar como GIF
+				if (imagegif($origen, $nuevo_nom)) {
+					imagedestroy($origen); // Liberar memoria
+					$base = $this->modelo->img_guardar($nombre, $post['txt_idA_img']);
+					$movimiento = "Se cambió de imagen no se puede recuperar la anterior.";
+					$this->cod_globales->ingresar_movimientos($post['txt_idA_img'], $movimiento, 'ARTICULOS', '', '', '', '', $_SESSION['INICIO']['USUARIO'] ?? '');
+					return ($base == 1) ? 1 : -1;
 				} else {
-					return -1; // No es archivo subido
+					return -4; // No se pudo guardar como GIF
 				}
 			} else {
 				return -2; // Tipo no permitido
