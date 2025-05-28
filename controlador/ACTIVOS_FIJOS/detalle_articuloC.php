@@ -905,7 +905,7 @@ class detalle_articuloC
 				$uploadfile_temporal = $file['file']['tmp_name'];
 				$tipo = explode('/', $mime);
 				$nombre = $post['txt_nom_img'] . '.' . $tipo[1];
-				$nuevo_nom = rtrim($ruta, '/\\') . DIRECTORY_SEPARATOR . $nombre;
+				$nuevo_nom = rtrim($ruta, '/\\') . DIRECTORY_SEPARATOR . "/ACTIVOS/" . $nombre;
 				// print_r($nuevo_nom); exit(); die();
 
 				if (is_uploaded_file($uploadfile_temporal)) {
