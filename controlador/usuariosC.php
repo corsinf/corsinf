@@ -352,6 +352,8 @@ class usuariosC
 
 	function add_usuario($parametros)
 	{
+		date_default_timezone_set('America/Bogota');
+
 		if($parametros['txt_usuario_update']=='')
 		{
 
@@ -417,9 +419,11 @@ class usuariosC
 			    $datosAE[3]['campo']='id_modulo_siste';
 			    $datosAE[3]['dato']=$_SESSION['INICIO']['MODULO_SISTEMA_ANT'];	
 			    $datosAE[4]['campo']='fecha_creacion';
-			    $datosAE[4]['dato']=date('Y-m-d h:i:s');	
+				$hora_del_sistema = new DateTime();
+				$hora_del_sistema = $hora_del_sistema->format('Y-d-m H:i:s');
+			    $datosAE[4]['dato']=$hora_del_sistema;	
 			    $datosAE[5]['campo']='fecha_modificacion';
-			    $datosAE[5]['dato']=date('Y-m-d h:i:s');	
+			    $datosAE[5]['dato']=$hora_del_sistema;	
 			    $this->modelo->guardar($datosAE,'USUARIO_X_MODULO'); 
 			  }
 
