@@ -313,7 +313,7 @@ class detalle_articuloM extends BaseModel
 		$datos[0]['campo'] = 'IMAGEN';
 		$datos[0]['dato'] = $name;
 
-		$where[0]['campo'] = 'id_plantilla';
+		$where[0]['campo'] = 'id_articulo';
 		$where[0]['dato'] = $codigo;
 		$datos = $this->db->update($tabla, $datos, $where);
 		if ($datos == 1) {
@@ -325,7 +325,7 @@ class detalle_articuloM extends BaseModel
 
 	function navegacion($query, $loc, $cus, $pag = false, $whereid = false, $exacto = false, $asset = false)
 	{
-		$sql = "SELECT id_plantilla as 'id',A.TAG_SERIE as 'tag',A.ID_ASSET,DESCRIPT as 'nom',MODELO as 'modelo',SERIE as 'serie',L.DENOMINACION as 'localizacion',PE.PERSON_NOM as 'custodio',M.DESCRIPCION as 'marca',E.DESCRIPCION as 'estado',G.DESCRIPCION as 'genero',C.DESCRIPCION as 'color',IMAGEN,OBSERVACION,FECHA_INV_DATE as 'fecha_in' FROM ac_articulos P
+		$sql = "SELECT id_articulo as 'id',A.TAG_SERIE as 'tag',A.ID_ASSET,DESCRIPT as 'nom',MODELO as 'modelo',SERIE as 'serie',L.DENOMINACION as 'localizacion',PE.PERSON_NOM as 'custodio',M.DESCRIPCION as 'marca',E.DESCRIPCION as 'estado',G.DESCRIPCION as 'genero',C.DESCRIPCION as 'color',IMAGEN,OBSERVACION,FECHA_INV_DATE as 'fecha_in' FROM ac_articulos P
 			LEFT JOIN ac_asset A ON P.ID_ASSET = A.ID_ASSET
 			LEFT JOIN ac_localizacion L ON P.LOCATION = L.ID_LOCATION
 			LEFT JOIN th_personas PE ON P.PERSON_NO = PE.ID_PERSON
@@ -351,9 +351,9 @@ class detalle_articuloM extends BaseModel
 			$sql .= " AND PE.ID_PERSON = '" . $cus . "' ";
 		}
 		if ($whereid) {
-			$sql .= '  AND id_plantilla = ' . $whereid . ' ';
+			$sql .= '  AND id_articulo = ' . $whereid . ' ';
 		}
-		$sql .= " ORDER BY id_plantilla ";
+		$sql .= " ORDER BY id_articulo ";
 		if ($pag) {
 			$pagi = explode('-', $pag);
 			$ini = $pagi[0];

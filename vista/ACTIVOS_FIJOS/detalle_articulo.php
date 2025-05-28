@@ -134,16 +134,29 @@ if (isset($_GET['_id'])) {
           if (response == -1) {
             Swal.fire(
               '',
-              'Algo extraño a pasado intente mas tarde.',
+              'La foto no se subió.',
               'error')
 
           } else if (response == -2) {
             Swal.fire(
               '',
-              'Asegurese que el archivo subido sea una imagen.',
+              'Tipo no permitido.',
+              'error')
+          } else if (response == -3) {
+            Swal.fire(
+              '',
+              'Datos incompletos.',
+              'error')
+          } else if (response == -4) {
+            Swal.fire(
+              '',
+              'No se pudo mover.',
               'error')
           } else {
-            cargar_datos_articulo($('#txt_id').val());
+            cargar_datos_articulo('<?= $_id ?>');
+            cargar_tabla_movimientos();
+            vista_pnl();
+            limpiar_parametros_articulo();
           }
         }
       });
@@ -301,6 +314,11 @@ if (isset($_GET['_id'])) {
     if (data.ruta_imagen && data.ruta_imagen !== null) {
       $("#img_articulo").attr("src", data.ruta_imagen);
     }
+
+    $('#txt_nom_img').val(data.tag_s);
+    $('#txt_idA_img').val('<?= $_id ?>');
+
+
 
 
     // $('#lbl_unidad').text('/' + data.id_unidad_medida);
