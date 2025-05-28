@@ -57,6 +57,12 @@ if(isset($_GET['add_licencias']))
 	$parametros = $_POST['parametros'];
 	echo json_encode($controlador->add_licencias($parametros));
 }
+if(isset($_GET['generar_key']))
+{
+	$parametros = $_POST['parametros'];
+	echo json_encode($controlador->generar_key($parametros));
+}
+
 
 class licenciasC
 {
@@ -211,12 +217,19 @@ class licenciasC
 						array('campo'=>'Fecha_exp','dato'=>$parametros['hasta']),
 						array('campo'=>'Numero_maquinas','dato'=>$parametros['maquinas']),
 						array('campo'=>'Id_Modulo','dato'=>$parametros['modulo']),
+						array('campo'=>'numero_pda','dato'=>$parametros['pda']),
 						array('campo'=>'registrado','dato'=>0)
 		);
 		$this->modelo->add('LICENCIAS',$datos,1);		
 	  return $this->cod_global->generar_primera_vez($_SESSION['INICIO']['BASEDATO'],$_SESSION['INICIO']['ID_EMPRESA']);
 
 		// print_r($parametros);die();
+	}
+
+	function generar_key($parametros)
+	{
+				$licencia_cod = $this->cod_global->generar_licencia($parametros['empresa'],$parametros['modulo'],$parametros['desde'],$parametros['hasta']);
+				return $licencia_cod;
 	}
 }
 ?>

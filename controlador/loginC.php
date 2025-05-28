@@ -1316,6 +1316,7 @@ class loginC
 
 		$opciones = '<li><a href="inicio.php?acc=index"><div class="parent-icon"><i class="bx bx-home"></i></div><div class="menu-title">Inicio</div></a></li>';
 		$sin_modulo = $this->tipo->lista_modulos('sin modulo',false,$_SESSION['INICIO']['MODULO_SISTEMA']);
+		// print_r($sin_modulo);die();
 		if(count($sin_modulo)>0)
 		{
 		  $paginas = $this->modulos->paginas($query=false,$sin_modulo[0]['id']);

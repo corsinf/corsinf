@@ -241,8 +241,8 @@ class nueva_empresaC
 			 $datos = array(
 					array('campo'=>'ca_id_empresa','dato'=>$id_empresa),
 					array('campo'=>'ca_id_usuario','dato'=>$_SESSION['INICIO']['ID_USUARIO']),
-					array('campo'=>'ca_fecha_registro','dato'=>date('Y-m-d')),
-					array('campo'=>'ca_fecha_modificacion','dato'=>date('Y-m-d')),
+					array('campo'=>'ca_fecha_registro','dato'=>date('Y-m-d h:i:s')),
+					array('campo'=>'ca_fecha_modificacion','dato'=>date('Y-m-d h:i:s')),
 				);
 
 			$this->modelo->addActual('ca_clientes_canal',$datos);
