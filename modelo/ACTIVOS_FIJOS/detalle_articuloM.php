@@ -248,11 +248,6 @@ class detalle_articuloM extends BaseModel
 		return $data;
 	}
 
-	function datos($sql)
-	{
-		return $this->db->datos($sql);
-	}
-
 	function buscar_plantilla_masiva($idAsset = false)
 	{
 		$sql = "SELECT * FROM ac_articulos WHERE 1 = 1 ";
