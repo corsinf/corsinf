@@ -28,6 +28,7 @@ if (!$ruta_base || empty($nombre_imagen)) {
 
 // Ruta completa al archivo
 $archivo = "$ruta_base/$nombre_imagen";
+print_r($archivo); exit(); die();
 
 // Validar si existe el archivo
 if (file_exists($archivo)) {
