@@ -344,7 +344,7 @@ class detalle_articuloC
 	{
 		$datos = $this->modelo->cargar_datos_vista_sin_logueo($id, $id_empresa);
 		$sql = 'SELECT ruta_img_relativa, Base_datos FROM EMPRESAS;';
-		$datos_2 = $this->modelo->datos($sql);
+		$datos_2 = $this->modelo->datos($sql, true);
 
 		$ruta = $datos_2[0]['ruta_img_relativa'];
 		$empresa = $datos_2[0]['Base_datos'];
