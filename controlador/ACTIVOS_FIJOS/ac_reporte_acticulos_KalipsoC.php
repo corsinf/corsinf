@@ -1,0 +1,459 @@
+<?PHP
+
+
+require_once(dirname(__DIR__, 2) . '/modelo/ACTIVOS_FIJOS/articulosM.php');
+require_once(dirname(__DIR__, 2) . '/modelo/ACTIVOS_FIJOS/custodioM.php');
+require_once(dirname(__DIR__, 2) . '/modelo/ACTIVOS_FIJOS/localizacionM.php');
+require_once(dirname(__DIR__, 2) . '/modelo/ACTIVOS_FIJOS/auditoriaM.php');
+require_once(dirname(__DIR__, 2) . '/lib/TCPDF/tcpdf.php');
+require_once(dirname(__DIR__, 2) . '/db/codigos_globales.php');
+
+$controlador = new ac_reporte_acticulos_KalipsoC();
+
+if (isset($_GET['imprimirPDF'])) {
+    $th_per_id = isset($_GET['th_per_id']) ? $_GET['th_per_id'] : null;
+    $id_localizacion = isset($_GET['id_localizacion']) ? $_GET['id_localizacion'] : null;
+
+    // Llamar al método imprimirPDF con el ID de persona
+    echo json_encode($controlador->imprimirPDFMovimiento($th_per_id, $id_localizacion));
+    exit; // Importante: terminar la ejecución después de enviar la respuesta JSON
+}
+
+if (isset($_GET['imprimirAuditoria'])) {
+    $th_per_id = isset($_GET['th_per_id']) ? $_GET['th_per_id'] : null;
+    $id_localizacion = isset($_GET['id_localizacion']) ? $_GET['id_localizacion'] : null;
+    // Llamar al método imprimirPDF con el ID de persona
+    echo json_encode($controlador->imprimirPDFAuditoria($th_per_id, $id_localizacion));
+    exit; // Importante: terminar la ejecución después de enviar la respuesta JSON
+}
+
+
+class ac_reporte_acticulos_KalipsoC
+{
+    private $articulos;
+    private $custodio;
+    private $localizacion;
+    private $articulosAuditoria;
+
+    function __construct()
+    {
+        $this->custodio = new custodioM();
+        $this->articulos = new articulosM();
+        $this->localizacion = new localizacionM();
+        $this->articulosAuditoria = new auditoriaM();
+    }
+
+
+
+
+
+    function imprimirPDFMovimiento($th_per_id, $id_localizacion)
+    {
+        function soloFecha($fechaCompleta)
+        {
+            return substr($fechaCompleta, 0, 10);
+        }
+        try {
+            // Obtener los datos de los artículos
+            $articulos = $this->articulos->listar_articulos($th_per_id, $id_localizacion);
+            $custodio = $this->custodio->buscar_custodio($th_per_id);
+            $localizacion = $this->localizacion->buscar_localizacion($id_localizacion);
+
+            if (empty($articulos)) {
+                return ['estado' => 'error', 'mensaje' => 'No se encontraron artículos para este usuario.'];
+            }
+
+            // Crear instancia de TCPDF
+            $pdf = new TCPDF('P', 'mm', 'A4', true, 'UTF-8', false);
+
+            // Configurar documento
+            $pdf->SetCreator('TCPDF');
+            $pdf->SetAuthor('Sistema de Activos Fijos');
+            $pdf->SetTitle('Reporte de Artículos por Persona');
+            $pdf->SetSubject('Listado de Artículos');
+
+            // Eliminar cabecera/pie de página por defecto
+            $pdf->setPrintHeader(false);
+            $pdf->setPrintFooter(false);
+
+            // Añadir página
+            $pdf->AddPage();
+
+            // Configurar fuentes y colores
+            $pdf->SetFont('helvetica', 'B', 12);
+            $pdf->SetTextColor(0, 0, 0); // Negro
+            $pdf->SetFillColor(255, 255, 255); // Fondo blanco
+            $pdf->SetDrawColor(0, 0, 0); // Bordes negros
+
+            // Definir la ruta del logo
+            $ruta_logo = dirname(__DIR__, 2) . '/img/empresa/179263446600111.jpeg';
+
+            // Coordenadas y tamaño del logo
+            $x_logo = 10;
+            $y_logo = 10;
+            $ancho_logo = 30;
+            $alto_logo = 20;
+
+            // Coordenadas del título
+            $x_titulo = $x_logo + $ancho_logo + 5;
+            $y_titulo = $y_logo;
+
+            // Añadir logo si existe
+            if (file_exists($ruta_logo)) {
+                $pdf->Image($ruta_logo, $x_logo, $y_logo, $ancho_logo, $alto_logo, 'JPEG');
+            } else {
+                $pdf->SetXY($x_logo, $y_logo);
+                $pdf->Cell($ancho_logo, $alto_logo, 'LOGO', 1, 0, 'C', true);
+            }
+
+            // Guardar posición inicial
+            $y_inicial = $pdf->GetY();
+
+            // Configurar dimensiones de la celda del título
+            $ancho_celda = 105;
+            $alto_celda = 20;
+
+            // Crear celda para el título
+            $pdf->Cell($ancho_celda, $alto_celda, '', 1, 0, 'C', true);
+
+            $titulo = "";
+
+            if (!empty($custodio) && !empty($localizacion)) {
+                $titulo = "Custodio y Localizacion";
+            } elseif (!empty($custodio)) {
+                $titulo = "Custodio";
+            } elseif (!empty($localizacion)) {
+                $titulo = "Localización";
+            }
+
+            // Posicionar el título en el centro de la celda
+            $pdf->SetXY($x_logo + $ancho_logo, $y_inicial + ($alto_celda - ($pdf->GetStringHeight($ancho_celda, "Inventario de Artículos \npor " . $titulo))) / 2);
+            $pdf->MultiCell($ancho_celda, 6, "Inventario de Artículos \npor " . $titulo, 0, 'C', false);
+
+            // Restaurar posición Y para la tabla derecha
+            $pdf->SetY($y_inicial);
+
+            // Agregar los datos a la derecha
+            $pdf->SetFont('helvetica', '', 9);
+            $pdf->SetXY(145, $y_inicial);
+            $pdf->Cell(20, 7, 'Código', 1, 0, 'L', true);
+            $pdf->Cell(35, 7, 'GD-GTH-PR-001', 1, 1, 'L', true);
+
+            $pdf->SetXY(145, $pdf->GetY());
+            $pdf->Cell(20, 7, 'Versión', 1, 0, 'L', true);
+            $pdf->Cell(35, 7, '1.0', 1, 1, 'L', true);
+
+            $pdf->SetXY(145, $pdf->GetY());
+            $pdf->Cell(20, 6, 'Página', 1, 0, 'L', true);
+            $pdf->Cell(35, 6, '1 de ' . $pdf->getAliasNbPages(), 1, 1, 'L', true);
+
+            $pdf->Ln(5);
+
+            // Agregar información de la persona
+            if (isset($articulos[0]['persona'])) {
+                $pdf->SetFont('helvetica', 'B', 10);
+                $pdf->Cell(190, 7, 'INFORMACIÓN DE LA PERSONA', 0, 1, 'L');
+                $pdf->SetFont('helvetica', '', 10);
+                $pdf->Cell(40, 6, 'Código:', 0, 0, 'L');
+                $pdf->Cell(150, 6, $th_per_id, 0, 1, 'L');
+                $pdf->Cell(40, 6, 'Nombre:', 0, 0, 'L');
+                $pdf->Cell(150, 6, $articulos[0]['persona'] ?? 'No disponible', 0, 1, 'L');
+            }
+
+
+            // Cabecera de la tabla de artículos
+            $pdf->SetFont('helvetica', 'B', 10);
+
+            if (!empty($custodio) && !empty($localizacion)) {
+                $pdf->Cell(190, 7, 'Listado de Artículos Asignados a: ' . $custodio[0]['PERSON_NOM'] . ' — Ubicación: ' . $localizacion[0]['EMPLAZAMIENTO'], 0, 1, 'L');
+            } elseif (!empty($custodio)) {
+                $pdf->Cell(190, 7, 'Listado de Artículos Asignados a: ' . $custodio[0]['PERSON_NOM'], 0, 1, 'L');
+            } elseif (!empty($localizacion)) {
+                $pdf->Cell(190, 7, 'Inventario de Artículos Asignados a la Ubicación: ' . $localizacion[0]['EMPLAZAMIENTO'], 0, 1, 'L');
+            }
+            $pdf->Ln(5);
+
+            $pdf->SetFillColor(220, 220, 220); // Gris claro para la cabecera
+
+            // Cabecera de la tabla
+            $pdf->SetFont('helvetica', 'B', 8);
+
+            $pdf->Cell(45, 7, 'RFID', 1, 0, 'C', true);
+            $pdf->Cell(45, 7, 'Descripción', 1, 0, 'C', true);
+            $pdf->Cell(40, 7, 'Modelo', 1, 0, 'C', true);
+            $pdf->Cell(35, 7, 'Serie', 1, 0, 'C', true);
+            $pdf->Cell(25, 7, 'Fecha', 1, 1, 'C', true);
+
+            // Datos de la tabla
+            $pdf->SetFont('helvetica', '', 8);
+            $pdf->SetFillColor(255, 255, 255); // Blanco para los datos
+
+            foreach ($articulos as $articulo) {
+
+                $pdf->Cell(45, 6, $articulo['tag_unique'], 1, 0, 'L', true);
+
+                // Usar MultiCell para descripción (preserva el ancho fijo)
+                $x = $pdf->GetX();
+                $y = $pdf->GetY();
+                $pdf->MultiCell(45, 6, $articulo['descripcion'], 1, 'L', true);
+                $pdf->SetXY($x + 45, $y);
+
+                $pdf->Cell(40, 6, $articulo['modelo'], 1, 0, 'L', true);
+                $pdf->Cell(35, 6, $articulo['serie'], 1, 0, 'L', true);
+                $pdf->Cell(25, 6, soloFecha($articulo['fecha_creacion']), 1, 1, 'R', true);
+            }
+
+            // Agregar información adicional al final
+            $pdf->Ln(10);
+            $pdf->SetFont('helvetica', '', 10);
+            $pdf->Cell(190, 6, 'Fecha de generación: ' . date('d/m/Y H:i:s'), 0, 1, 'L');
+            $pdf->Cell(190, 6, 'Generado por: ' . ($_SESSION['usuario'] ?? 'Sistema'), 0, 1, 'L');
+
+
+            $tempDir = dirname(__DIR__, 2) . '/temp/';
+            if (!file_exists($tempDir)) {
+                mkdir($tempDir, 0777, true);
+            }
+            $fileName = 'formulario_' . time() . '.pdf';
+            $filePath = $tempDir . $fileName;
+
+            // Guardar el PDF en el servidor
+            $pdf->Output('formulario_' . time() . '.pdf', 'I');
+            $relativePath = str_replace($_SERVER['DOCUMENT_ROOT'], '', $filePath);
+
+            return [
+                'success' => true,
+                'ruta' => $relativePath,
+                'message' => 'PDF generado correctamente'
+            ];
+        } catch (Exception $e) {
+            return [
+                'success' => false,
+                'message' => 'Error al generar el PDF: ' . $e->getMessage()
+            ];
+        }
+    }
+
+
+    function imprimirPDFAuditoria($th_per_id, $id_localizacion)
+    {
+        try {
+            // Obtener los datos de auditoría
+            $auditoria = $this->articulosAuditoria->lista_articulos_auditorio(); // Método para obtener los datos
+            $custodio = $this->custodio->buscar_custodio($th_per_id);
+            $localizacion = $this->localizacion->buscar_localizacion($id_localizacion);
+
+            if (empty($auditoria)) {
+                return ['estado' => 'error', 'mensaje' => 'No se encontraron artículos de auditoría.'];
+            }
+
+            $pdf = new TCPDF('P', 'mm', 'A4', true, 'UTF-8', false);
+
+            // Configurar documento
+            $pdf->SetCreator('TCPDF');
+            $pdf->SetAuthor('Sistema de Activos Fijos');
+            $pdf->SetTitle('Reporte de Artículos por Persona');
+            $pdf->SetSubject('Listado de Artículos');
+
+            // Eliminar cabecera/pie de página por defecto
+            $pdf->setPrintHeader(false);
+            $pdf->setPrintFooter(false);
+
+            // Añadir página
+            $pdf->AddPage();
+
+            // Configurar fuentes y colores
+            $pdf->SetFont('helvetica', 'B', 12);
+            $pdf->SetTextColor(0, 0, 0); // Negro
+            $pdf->SetFillColor(255, 255, 255); // Fondo blanco
+            $pdf->SetDrawColor(0, 0, 0); // Bordes negros
+
+            // Definir la ruta del logo
+            $ruta_logo = dirname(__DIR__, 2) . '/img/empresa/179263446600111.jpeg';
+
+            // Coordenadas y tamaño del logo
+            $x_logo = 10;
+            $y_logo = 10;
+            $ancho_logo = 30;
+            $alto_logo = 20;
+
+            // Coordenadas del título
+            $x_titulo = $x_logo + $ancho_logo + 5;
+            $y_titulo = $y_logo;
+
+            // Añadir logo si existe
+            if (file_exists($ruta_logo)) {
+                $pdf->Image($ruta_logo, $x_logo, $y_logo, $ancho_logo, $alto_logo, 'JPEG');
+            } else {
+                $pdf->SetXY($x_logo, $y_logo);
+                $pdf->Cell($ancho_logo, $alto_logo, 'LOGO', 1, 0, 'C', true);
+            }
+
+            // Guardar posición inicial
+            $y_inicial = $pdf->GetY();
+
+            // Configurar dimensiones de la celda del título
+            $ancho_celda = 105;
+            $alto_celda = 20;
+
+            // Crear celda para el título
+            $pdf->Cell($ancho_celda, $alto_celda, '', 1, 0, 'C', true);
+            $titulo = "";
+
+            if (!empty($custodio) && !empty($localizacion)) {
+                $titulo = "Custodio y Localizacion";
+            } elseif (!empty($custodio)) {
+                $titulo = "Custodio";
+            } elseif (!empty($localizacion)) {
+                $titulo = "Localización";
+            }
+
+            // Posicionar el título en el centro de la celda
+            $pdf->SetXY($x_logo + $ancho_logo, $y_inicial + ($alto_celda - ($pdf->GetStringHeight($ancho_celda, "Auditoría de Artículos \npor " . $titulo))) / 2);
+            $pdf->MultiCell($ancho_celda, 6, "Auditoría de Artículos \npor " . $titulo, 0, 'C', false);
+
+            // Restaurar posición Y para la tabla derecha
+            $pdf->SetY($y_inicial);
+
+            // Agregar los datos a la derecha
+            $pdf->SetFont('helvetica', '', 9);
+            $pdf->SetXY(145, $y_inicial);
+            $pdf->Cell(20, 7, 'Código', 1, 0, 'L', true);
+            $pdf->Cell(35, 7, 'GD-GTH-PR-001', 1, 1, 'L', true);
+
+            $pdf->SetXY(145, $pdf->GetY());
+            $pdf->Cell(20, 7, 'Versión', 1, 0, 'L', true);
+            $pdf->Cell(35, 7, '1.0', 1, 1, 'L', true);
+
+            $pdf->SetXY(145, $pdf->GetY());
+            $pdf->Cell(20, 6, 'Página', 1, 0, 'L', true);
+            $pdf->Cell(35, 6, '1 de ' . $pdf->getAliasNbPages(), 1, 1, 'L', true);
+
+            $pdf->Ln(10);
+
+            $pdf->SetFont('helvetica', 'B', 12);
+            if (!empty($custodio) && !empty($localizacion)) {
+                $pdf->MultiCell(190, 7, 'Listado de Artículos Asignados a: ' . $custodio[0]['PERSON_NOM'] . " \nUbicación: " . $localizacion[0]['EMPLAZAMIENTO'], 0, 1, 'L');
+            } elseif (!empty($custodio)) {
+                $pdf->MultiCell(190, 7, 'Listado de Artículos Asignados a: ' . $custodio[0]['PERSON_NOM'], 0, 1, 'L');
+            } elseif (!empty($localizacion)) {
+                $pdf->MultiCell(190, 7, 'Inventario de Artículos Asignados a la Ubicación: ' . $localizacion[0]['EMPLAZAMIENTO'], 0, 1, 'L');
+            }
+
+            $pdf->SetFont('helvetica', 'B', 9);
+
+            $estados = [
+                1 => 'Artículos que Coinciden',
+                2 => 'Artículos Faltantes',
+                3 => 'Artículos que No Coinciden'
+            ];
+
+            foreach ($estados as $estado => $tituloTabla) {
+                // Título de sección
+                $pdf->Ln(5);
+                $pdf->SetFont('helvetica', 'B', 9);
+                $pdf->Cell(0, 6, $tituloTabla, 0, 1, 'L');
+
+                // Establecer color de fondo para la cabecera
+                switch ($estado) {
+                    case 1:
+                        $pdf->SetFillColor(173, 216, 230); // Azul claro
+                        break;
+                    case 2:
+                        $pdf->SetFillColor(255, 182, 193); // Rojo claro
+                        break;
+                    case 3:
+                        $pdf->SetFillColor(255, 255, 204); // Amarillo claro
+                        break;
+                    default:
+                        $pdf->SetFillColor(220, 220, 220); // Gris claro
+                        break;
+                }
+
+                // Cabecera
+                $pdf->SetFont('helvetica', 'B', 8);
+                $pdf->Cell(45, 6, 'RFID', 1, 0, 'C', true);
+                $pdf->Cell(40, 6, 'Descripción', 1, 0, 'C', true);
+                $pdf->Cell(50, 6, 'Características', 1, 0, 'C', true);
+                $pdf->Cell(25, 6, 'Pertenece', 1, 0, 'C', true);
+                $pdf->Cell(30, 6, 'Localización', 1, 1, 'C', true);
+
+                // Contenido
+                $pdf->SetFont('helvetica', '', 8);
+
+                foreach ($auditoria as $item) {
+                    if ($item['id_estado_articulo'] != $estado) continue;
+
+                    $descripcion = !empty($item['descripcion']) ? $item['descripcion'] : 'S/N';
+                    $caracteristica = !empty($item['caracteristica']) ? $item['caracteristica'] : 'S/N';
+
+                    // Custodio y localización
+                    if (!empty($item['th_per_id'])) {
+                        if ($item['th_per_id'] == $th_per_id) {
+                            $pertenece = "Custodio Actual";
+                            $ubicacion = "Localización Actual";
+                        } else {
+                            $custodioEncontrado = $this->custodio->buscar_custodio($item['th_per_id']);
+                            $localizacionEncontrada = $this->localizacion->buscar_localizacion($item['id_localizacion']);
+
+                            $nombreCompleto = $custodioEncontrado[0]['PERSON_NOM'] ?? 'S/N';
+                            $partesNombre = explode(' ', $nombreCompleto);
+                            $pertenece = isset($partesNombre[1]) ? $partesNombre[0] . ' ' . $partesNombre[1] : $nombreCompleto;
+
+                            $ubicacion = $localizacionEncontrada[0]['EMPLAZAMIENTO'] ?? 'S/N';
+                        }
+                    } else {
+                        $pertenece = 'S/N';
+                        $ubicacion = 'S/N';
+                    }
+
+                    // Obtener altura necesaria para cada campo (dependiendo del contenido)
+                    $startX = $pdf->GetX();
+                    $startY = $pdf->GetY();
+
+                    $h1 = $pdf->getStringHeight(45, $item['tag_unique']);
+                    $h2 = $pdf->getStringHeight(40, $descripcion);
+                    $h3 = $pdf->getStringHeight(50, $caracteristica);
+                    $h4 = $pdf->getStringHeight(25, $pertenece);
+                    $h5 = $pdf->getStringHeight(30, $ubicacion);
+
+                    $maxHeight = max($h1, $h2, $h3, $h4, $h5);
+
+                    // Imprimir cada celda sin que se monten
+                    $pdf->MultiCell(45, $maxHeight, $item['tag_unique'], 1, 'L', false, 0);
+                    $pdf->MultiCell(40, $maxHeight, $descripcion, 1, 'L', false, 0);
+                    $pdf->MultiCell(50, $maxHeight, $caracteristica, 1, 'L', false, 0);
+                    $pdf->MultiCell(25, $maxHeight, $pertenece, 1, 'L', false, 0);
+                    $pdf->MultiCell(30, $maxHeight, $ubicacion, 1, 'L', false, 1);
+                }
+            }
+
+            $pdf->Ln(5);
+            $pdf->SetFont('helvetica', '', 10);
+            $pdf->SetFillColor(255, 255, 255);
+            $pdf->MultiCell(190, 6, 'Fecha de generación: ' . date('d/m/Y'), 0, 1, 'L');
+            $pdf->MultiCell(190, 6, 'Generado por: ' . ($_SESSION['usuario'] ?? 'Sistema'), 0, 1, 'L');
+
+            $tempDir = dirname(__DIR__, 2) . '/temp/';
+            if (!file_exists($tempDir)) {
+                mkdir($tempDir, 0777, true);
+            }
+            $fileName = 'auditoria_' . time() . '.pdf';
+            $filePath = $tempDir . $fileName;
+
+            $pdf->Output($fileName, 'I');
+            $relativePath = str_replace($_SERVER['DOCUMENT_ROOT'], '', $filePath);
+
+            return [
+                'success' => true,
+                'ruta' => $relativePath,
+                'message' => 'PDF generado correctamente'
+            ];
+        } catch (Exception $e) {
+            return [
+                'success' => false,
+                'message' => 'Error al generar el PDF: ' . $e->getMessage()
+            ];
+        }
+    }
+}

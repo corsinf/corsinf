@@ -66,7 +66,7 @@ class articulosM
 			array('db' => 'tipo_articulo_COLOR', 'dt' => 15),	//Tipo de articulo COLOR
 		);
 
-		$whereResult = "";//"nom LIKE '%computadora%'"; //"nom LIKE '%computadora%'"; // Condición dinámica
+		$whereResult = ""; //"nom LIKE '%computadora%'"; //"nom LIKE '%computadora%'"; // Condición dinámica
 
 		$whereAll = "";
 		if ($id_articulo != '') {
@@ -764,5 +764,22 @@ class articulosM
 		$rest = $this->db->existente($sql);
 		// print_r($rest);die();
 		return $rest;
+	}
+
+	function listar_articulos($th_per_id = null, $id_localizacion = null)
+	{
+		$sql = "SELECT * FROM ac_articulos WHERE 1=1";
+
+		if (!empty($th_per_id)) {
+			$sql .= " AND th_per_id = '" . $th_per_id . "'";
+		}
+
+		if (!empty($id_localizacion)) {
+			$sql .= " AND id_localizacion = '" . $id_localizacion . "'";
+		}
+
+		// print_r($sql); die();
+		$datos = $this->db->datos($sql);
+		return $datos;
 	}
 }
