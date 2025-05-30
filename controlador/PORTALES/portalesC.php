@@ -51,8 +51,8 @@ if (isset($_GET['guardar_config'])) {
  	function __construct()
  	{
  		$this->modelo = new portalesM();
- 		// $this->patch_ddl = dirname(__DIR__,2). "\\lib\\Antenas\\net8.0\\SESProLElibEPCcmd.exe";
- 		$this->patch_ddl =  dirname(__DIR__,5)."Users\\lenovo\\Downloads\\SESProLElibEPCcmd\\bin\\Debug\\net8.0\\SESProLElibEPCcmd.exe";
+ 		$this->patch_ddl = dirname(__DIR__,2). "\\lib\\Antenas\\net8.0\\SESProLElibEPCcmd.exe";
+ 		// $this->patch_ddl =  dirname(__DIR__,5)."Users\\lenovo\\Downloads\\SESProLElibEPCcmd\\bin\\Debug\\net8.0\\SESProLElibEPCcmd.exe";
  	}
 
  	function listar()
