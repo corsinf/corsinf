@@ -1,5 +1,5 @@
 <?php
-//Elvis
+
 include(dirname(__DIR__, 1) . '/cabeceras/header3.php');
 
 $id = '';
