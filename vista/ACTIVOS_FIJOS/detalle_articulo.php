@@ -152,6 +152,11 @@ if (isset($_GET['_id'])) {
               '',
               'No se pudo mover.',
               'error')
+          } else if (response == -5) {
+            Swal.fire(
+              '',
+              'Ruta inválida o no accesible.',
+              'error')
           } else {
             cargar_datos_articulo('<?= $_id ?>');
             cargar_tabla_movimientos();
