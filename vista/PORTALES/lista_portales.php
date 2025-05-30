@@ -216,6 +216,7 @@ function eliminar_portal_antena(id)
       type: 'post',
       dataType: 'json',
       success: function(response) {
+        console.log(response);
         if(response.resp=='-1')
         {
           $('#img_espera_logo').css('display','none');
@@ -346,6 +347,7 @@ function eliminar_portal_antena(id)
   function eliminarSolicitudes()
   {
     validarConexion.abort();
+
   }
   
 </script>
