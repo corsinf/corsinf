@@ -1,4 +1,4 @@
-<?php //include('../cabeceras/header.php'); 
+<?php //include('../cabeceras/header.php');
 
 $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
 
