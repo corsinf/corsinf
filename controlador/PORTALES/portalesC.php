@@ -87,8 +87,8 @@ if (isset($_GET['guardar_config'])) {
 
 	 		// print_r($resp);die();
 
-	 		if($resp['resp']!='-1')
-	 		{
+	 		// if($resp['resp']!='-1')
+	 		// {
 		 		foreach ($resp as $key => $value) {
 		 			$linea =  json_decode($value,true);
 		 			// print_r($linea);die();
@@ -102,7 +102,7 @@ if (isset($_GET['guardar_config'])) {
 					 $this->modelo->guardar_antena('ac_portales_logs',$datos);
 		 			// code...
 		 		}
-	 		}
+	 		// }
 
 
 
