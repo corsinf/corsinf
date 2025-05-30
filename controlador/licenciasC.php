@@ -165,8 +165,13 @@ class licenciasC
 			{
 				 		// print_r($parametros['modulo']);die();
 					$destino =  $_SESSION['INICIO']['BASEDATO'];
-					$this->cod_global->Copiar_estructura($parametros['modulo'],$destino);
-					return $this->cod_global->generar_primera_vez($_SESSION['INICIO']['BASEDATO'],$_SESSION['INICIO']['ID_EMPRESA']);
+					$res = $this->cod_global->Copiar_estructura($parametros['modulo'],$destino);
+					if($res!=-3)
+					{
+						return $this->cod_global->generar_primera_vez($_SESSION['INICIO']['BASEDATO'],$_SESSION['INICIO']['ID_EMPRESA']);
+					}else{
+						return $res;
+					}
 
 		 	}else{
 		 		$base_des = $_SESSION['INICIO']['BASEDATO'];

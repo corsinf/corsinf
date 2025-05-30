@@ -464,6 +464,8 @@ class db
 		$conn = $this->conexion();
 		$stmt = $conn->prepare($sql);
 		// print_r($sql);print_r($parametros);
+		// print_r($sql);
+		// print_r($this->database);
 		try {
 			if (count($parametros)>0) {
 				$stmt->execute($parametros);
@@ -749,11 +751,11 @@ class db
 	{
 		$conn = $this->conexion_db_terceros($database, $usuario, $password, $servidor, $puerto);
 
-		print_r($sql);print_r($parametros);die();
+		// print_r($sql);print_r($parametros);die();
 		$stmt = $conn->prepare($sql);
 		$resultados = array();
 
-		print_r($sql);print_r($parametros);die();
+		// print_r($sql);print_r($parametros);die();
 		
 		try {
 			if ($parametros) {
