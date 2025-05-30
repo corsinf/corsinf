@@ -192,10 +192,10 @@ class detalle_articuloC
 	{
 		$datos = $this->modelo->cargar_datos($id);
 
-		$sql = 'SELECT ruta_img_relativa FROM EMPRESAS;';
-		$datos_2 = $this->modelo->datos($sql);
+		$ruta = $_SESSION['INICIO']['RUTA_IMG_RELATIVA'];
+		$empresa = $_SESSION['INICIO']['BASEDATO'];
 
-		$datos[0]['ruta_imagen'] = $datos_2[0]['ruta_img_relativa'] . $datos[0]['imagen'];
+		$datos[0]['ruta_imagen'] = $ruta . "emp=$empresa&dir=activos&nombre=" .  $datos[0]['imagen'];
 
 		return $datos;
 	}
@@ -343,11 +343,8 @@ class detalle_articuloC
 	function cargar_detalle_activo($id, $id_empresa)
 	{
 		$datos = $this->modelo->cargar_datos_vista_sin_logueo($id, $id_empresa);
-		$sql = 'SELECT ruta_img_relativa FROM EMPRESAS;';
-		$datos_2 = $this->modelo->datos($sql);
+		// print_r($datos); exit(); die();
 
-		$datos[0]['ruta_imagen'] = $datos_2[0]['ruta_img_relativa'] . $datos[0]['imagen'];
-		
 		if (count($datos) > 0) {
 			return $datos;
 		}
@@ -882,29 +879,65 @@ class detalle_articuloC
 
 	function guardar_foto($file, $post)
 	{
-		$ruta = '../img/'; //ruta carpeta donde queremos copiar las imágenes
-		if (!file_exists($ruta)) {
-			mkdir($ruta, 0777, true);
-		}
-		if ($file['file']['type'] == "image/jpeg" || $file['file']['type'] == "image/pjpeg" || $file['file']['type'] == "image/gif" || $file['file']['type'] == "image/png") {
-			$uploadfile_temporal = $file['file']['tmp_name'];
-			$tipo = explode('/', $file['file']['type']);
-			$nombre = $post['txt_nom_img'] . '.' . $tipo[1];
+		// $ruta = 'C:/Users/Jaime/Pictures/fotos/ACTIVOS_DEMO/ACTIVOS/';
+		$ruta = $_SESSION['INICIO']['RUTA_IMG_COMPARTIDA'] ?? '';
 
-			$nuevo_nom = $ruta . $nombre;
-			if (is_uploaded_file($uploadfile_temporal)) {
-				move_uploaded_file($uploadfile_temporal, $nuevo_nom);
-				$base = $this->modelo->img_guardar($nombre, $post['txt_idA_img']);
-				if ($base == 1) {
-					return 1;
+		if (!empty($ruta) && is_dir($ruta) && is_readable($ruta)) {
+			if (!isset($file['file']['type'], $file['file']['tmp_name'], $post['txt_nom_img'], $post['txt_idA_img'])) {
+				return -3; // Datos incompletos
+			}
+
+			$mime = $file['file']['type'];
+			$uploadfile_temporal = $file['file']['tmp_name'];
+
+			// Verifica si es una imagen válida
+			if (in_array($mime, ['image/jpeg', 'image/pjpeg', 'image/png', 'image/gif'])) {
+
+				// Crear imagen desde el archivo temporal
+				switch ($mime) {
+					case 'image/jpeg':
+					case 'image/pjpeg':
+						$origen = imagecreatefromjpeg($uploadfile_temporal);
+						break;
+					case 'image/png':
+						$origen = imagecreatefrompng($uploadfile_temporal);
+						break;
+					case 'image/gif':
+						$origen = imagecreatefromgif($uploadfile_temporal);
+						break;
+					default:
+						return -2;
+				}
+
+				if (!$origen) {
+					return -6; // No se pudo procesar imagen
+				}
+
+				// Ruta final donde se guarda como .gif
+				$nombre = $post['txt_nom_img'] . '.gif';
+				$ruta_activos = rtrim($ruta, '/\\') . DIRECTORY_SEPARATOR . 'ACTIVOS';
+
+				if (!file_exists($ruta_activos)) {
+					mkdir($ruta_activos, 0777, true);
+				}
+
+				$nuevo_nom = $ruta_activos . DIRECTORY_SEPARATOR . $nombre;
+
+				// Guardar como GIF
+				if (imagegif($origen, $nuevo_nom)) {
+					imagedestroy($origen); // Liberar memoria
+					$base = $this->modelo->img_guardar($nombre, $post['txt_idA_img']);
+					$movimiento = "Se cambió de imagen no se puede recuperar la anterior.";
+					$this->cod_globales->ingresar_movimientos($post['txt_idA_img'], $movimiento, 'ARTICULOS', '', '', '', '', $_SESSION['INICIO']['USUARIO'] ?? '');
+					return ($base == 1) ? 1 : -1;
 				} else {
-					return -1;
+					return -4; // No se pudo guardar como GIF
 				}
 			} else {
-				return -1;
+				return -2; // Tipo no permitido
 			}
 		} else {
-			return -2;
+			return -5; // Ruta inválida o no accesible
 		}
 	}
 

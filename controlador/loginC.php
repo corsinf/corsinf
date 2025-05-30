@@ -1008,6 +1008,9 @@ class loginC
 				$_SESSION["INICIO"]['IDUKAY_URL'] = $empresa[0]['url_api_idukay'];
 				$_SESSION["INICIO"]['IDUKAY_TOKEN'] = $empresa[0]['token_idukay'];
 				$_SESSION["INICIO"]['IDUKAY_ANIO_LEC'] = $empresa[0]['anio_lectivo_idukay'];
+				$_SESSION["INICIO"]['RUTA_IMG_ABSOLUTA'] = $empresa[0]['ruta_img_absoluta'];
+				$_SESSION["INICIO"]['RUTA_IMG_RELATIVA'] = $empresa[0]['ruta_img_relativa'];
+				$_SESSION["INICIO"]['RUTA_IMG_COMPARTIDA'] = $empresa[0]['ruta_img_compartida'];
 				return 1;
 		}
 
@@ -1095,6 +1098,9 @@ class loginC
 					$_SESSION["INICIO"]['IDUKAY_URL'] = $empresa[0]['url_api_idukay'];
 					$_SESSION["INICIO"]['IDUKAY_TOKEN'] = $empresa[0]['token_idukay'];
 					$_SESSION["INICIO"]['IDUKAY_ANIO_LEC'] = $empresa[0]['anio_lectivo_idukay'];
+					$_SESSION["INICIO"]['RUTA_IMG_ABSOLUTA'] = $empresa[0]['ruta_img_absoluta'];
+					$_SESSION["INICIO"]['RUTA_IMG_RELATIVA'] = $empresa[0]['ruta_img_relativa'];
+					$_SESSION["INICIO"]['RUTA_IMG_COMPARTIDA'] = $empresa[0]['ruta_img_compartida'];
 			}
 
 	 	// print_r($parametros);die();

@@ -151,7 +151,7 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
 
     switch (op) {
       case '1':
-        url = '../descargas/FORMATOS/ACTIVO_MACRO_V2.xlsm';
+        url = '../descargas/FORMATOS/ACTIVO_MACRO.xlsm';
         salida = 'ACTIVO MACRO'
         break;
       case '2':
