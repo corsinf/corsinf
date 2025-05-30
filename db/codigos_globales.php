@@ -979,7 +979,7 @@ function para_ftp($nombre,$texto)
 		}
 		 $parametros = array(
 		    str_replace(" ","",$db_origen),
-		    str_replace(" ","",$db_destino),
+		    str_replace(" ","",$db_destino)
 		  );
 		 if($db_origen!='')
 		 {
@@ -1001,8 +1001,13 @@ function para_ftp($nombre,$texto)
 				$res = $this->db->ejecutar_sp_db_terceros($database, $usuario, $password, $servidor, $puerto,$sql2, $parametrosSp);
 		  		return $this->db->ejecutar_sp_db_terceros($database, $usuario, $password, $servidor, $puerto,$sql, $parametros);
 		 	}else{
+		 		$parametrosSp = array($db_origen,
+		    								$db_destino,
+		    								'0');
 		  		$sql = "EXEC EstructuraBase @origen_bd = ?,@destino_bd = ?";
-		  		return $this->db->ejecutar_procesos_almacenados($sql,$parametros,false,1);
+		  		$this->db->ejecutar_procesos_almacenados($sql,$parametros,false,1);
+		  		$sql2 = "EXEC GenerarSPBase @origen_bd = ?,@destino_bd = ?,@db_tercero = ?";
+				return $this->db->ejecutar_procesos_almacenados($sql2, $parametrosSp);
 		  	}
 		 }else{ return -2;}
 	}

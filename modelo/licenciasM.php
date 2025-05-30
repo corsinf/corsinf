@@ -66,7 +66,7 @@ class licenciasM
 		}
 		if($empresa)
 		{
-			$sql.=" AND Id_empresa='".$empresa."'";
+			$sql.=" AND l.Id_empresa='".$empresa."'";
 		}
 		if($registrado)
 		{

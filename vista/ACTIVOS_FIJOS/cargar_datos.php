@@ -151,7 +151,7 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
 
     switch (op) {
       case '1':
-        url = '../descargas/FORMATOS/ACTIVO_MACRO_V1.xlsm';
+        url = '../descargas/FORMATOS/ACTIVO_MACRO.xlsm';
         salida = 'ACTIVO MACRO'
         break;
       case '2':
@@ -277,7 +277,7 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
               <div class="col-sm-2">
                 <button class="btn btn-sm btn-primary w-100 mb-2" id="btn_carga">Actualizar archivos</button>
 
-                <div class="form-check">
+                <div class="form-check" hidden>
                   <input class="form-check-input" type="checkbox" name="rbl_primera" id="rbl_primera">
                   <label class="form-check-label" for="rbl_primera">Cómo primera vez</label>
                 </div>

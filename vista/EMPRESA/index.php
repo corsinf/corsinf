@@ -1,18 +1,18 @@
 <?php //include('../cabeceras/header.php'); ?> 
  <script type="text/javascript">
   $( document ).ready(function() {
-    usuarios();
-    patrimoniales();
-    bajas();
-    terceros();
-    articulos();
-    custodio();
-    localizacion();
-    datos_seguros();
+    // usuarios();
+    // patrimoniales();
+    // bajas();
+    // terceros();
+    // articulos();
+    // custodio();
+    // localizacion();
+    // datos_seguros();
 
 
-    custodio_des();
-    localizacion_des();
+    // custodio_des();
+    // localizacion_des();
 
   });
 

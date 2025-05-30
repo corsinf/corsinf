@@ -686,7 +686,7 @@
       dataType: 'json',
       success: function(response) {
         if (response == 1) {
-          Swal.fire('Custodio y Emplazamiento Actualizados', '', 'success').then(function() {
+          Swal.fire('Custodio y Localización Actualizados', '', 'success').then(function() {
             $('#modal_actas1').modal('hide');
             $('#modal_tipo_baja').modal('hide');
           })
@@ -716,7 +716,7 @@
       dataType: 'json',
       success: function(response) {
         if (response == 1) {
-          Swal.fire('Custodio y Emplazamiento Actualizados', '', 'success').then(function() {
+          Swal.fire('Custodio y Localización Actualizados', '', 'success').then(function() {
             $('#modal_actas1').modal('hide');
             $('#modal_tipo_baja').modal('hide');
           })
@@ -1095,10 +1095,10 @@
               <option value="">Seleccione custodio</option>
             </select>
             <br>
-            <b>Emplazamiento</b>
+            <b>Localización</b>
             <br>
             <select class="form-select form-select-sm" id="ddl_emplazamiento_modal2">
-              <option value="">Seleccione emplazamiento</option>
+              <option value="">Seleccione localización</option>
             </select>
           </div>
         </div>
@@ -1136,10 +1136,10 @@
               <option value="">Seleccione custodio</option>
             </select>
             <br>
-            <b>Emplazamiento saliente</b>
+            <b>Localización saliente</b>
             <br>
             <select class="form-control" id="ddl_emplazamiento_modal4">
-              <option value="">Seleccione emplazamiento</option>
+              <option value="">Seleccione localización</option>
             </select>
             <hr>
             <b>Custodio entrante</b>
@@ -1147,10 +1147,10 @@
               <option value="">Seleccione custodio</option>
             </select>
             <br>
-            <b>Emplazamiento entrante</b>
+            <b>Localización entrante</b>
             <br>
             <select class="form-control" id="ddl_emplazamiento_modal_4">
-              <option value="">Seleccione emplazamiento</option>
+              <option value="">Seleccione localización</option>
             </select>
 
           </div>
@@ -1279,7 +1279,7 @@
           </div>
 
           <div class="col-sm-12">
-            <b>Emplazamiento / localizacion</b><br>
+            <b>Localizacion</b><br>
             <select class="form-control form-control-sm" id="ddl_localizacion_masivo" multiple="multiple" onchange="$('#txt_pag').val('0-25');">
               <option value="">Selecione</option>
             </select>

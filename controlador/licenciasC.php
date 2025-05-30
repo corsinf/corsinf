@@ -26,7 +26,8 @@ if(isset($_GET['lista_empresas']))
 }
 if(isset($_GET['lista_licencias_all']))
 {
-	echo json_encode($controlador->lista_licencias_all());
+	$parametros = $_POST['parametros'];
+	echo json_encode($controlador->lista_licencias_all($parametros));
 }
 if(isset($_GET['guardar_licencia']))
 {
@@ -57,6 +58,12 @@ if(isset($_GET['add_licencias']))
 	$parametros = $_POST['parametros'];
 	echo json_encode($controlador->add_licencias($parametros));
 }
+if(isset($_GET['generar_key']))
+{
+	$parametros = $_POST['parametros'];
+	echo json_encode($controlador->generar_key($parametros));
+}
+
 
 class licenciasC
 {
@@ -102,14 +109,19 @@ class licenciasC
 		return $tr;
 	}
 
-	function lista_licencias_all()
+	function lista_licencias_all($parametros)
 	{
-		$datos = $this->modelo->lista_licencias_all();
+		// print_r($parametros);die();
+		$datos = $this->modelo->lista_licencias_all(false,0,false,false,$parametros['empresa']);
 		$tr = '';
 		foreach ($datos as $key => $value) {
 			// print_r($value);die();
 			$estado =  $value['registrado'] == '0' ? 'Inactivo' : 'Activo';
 			$tr.='<tr>
+			<td>
+					<!-- <button class="btn btn-primary btn-sm"><i class="bx bx-trash me-0"></i></button> -->
+					<button class="btn btn-danger btn-sm" onclick="eliminar_licencia('.$value['Id_licencias'].')"><i class="bx bx-trash me-0"></i></button>
+			</td>
 			<td>'.$value['Razon_Social'].'</td>
 			<td>'.$value['Codigo_licencia'].'</td>
 			<td>'.$value['nombre_modulo'].'</td>
@@ -117,10 +129,7 @@ class licenciasC
 			<td>'.$value['Fecha_exp'].'</td>
 			<td>'.$value['Numero_maquinas'].'</td>			
 			<td>'.$estado.'</td>
-			<td>
-					<!-- <button class="btn btn-primary btn-sm me-0"><i class="bx bx-trash"></i></button> -->
-					<button class="btn btn-danger btn-sm me-0" onclick="eliminar_licencia('.$value['Id_licencias'].')"><i class="bx bx-trash"></i></button>
-			</td>
+			
 			</tr>';
 			// print_r($value);die();
 		}
@@ -211,12 +220,19 @@ class licenciasC
 						array('campo'=>'Fecha_exp','dato'=>$parametros['hasta']),
 						array('campo'=>'Numero_maquinas','dato'=>$parametros['maquinas']),
 						array('campo'=>'Id_Modulo','dato'=>$parametros['modulo']),
+						array('campo'=>'numero_pda','dato'=>$parametros['pda']),
 						array('campo'=>'registrado','dato'=>0)
 		);
 		$this->modelo->add('LICENCIAS',$datos,1);		
 	  return $this->cod_global->generar_primera_vez($_SESSION['INICIO']['BASEDATO'],$_SESSION['INICIO']['ID_EMPRESA']);
 
 		// print_r($parametros);die();
+	}
+
+	function generar_key($parametros)
+	{
+				$licencia_cod = $this->cod_global->generar_licencia($parametros['empresa'],$parametros['modulo'],$parametros['desde'],$parametros['hasta']);
+				return $licencia_cod;
 	}
 }
 ?>

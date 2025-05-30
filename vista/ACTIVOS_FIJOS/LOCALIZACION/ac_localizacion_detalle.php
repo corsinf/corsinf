@@ -75,8 +75,8 @@ if (isset($_GET['_id'])) {
           });
         } else if (response == -2) {
           //Swal.fire('', 'El nombre del dispositivo ya está en uso', 'warning');
-          $(txt_deno).addClass('is-invalid');
-          $('#error_txt_deno').text('El nombre ya está en uso.');
+          $(txt_empla).addClass('is-invalid');
+          $('#error_txt_empla').text('El nombre ya está en uso.');
         }
       },
 
@@ -89,8 +89,8 @@ if (isset($_GET['_id'])) {
       }
     });
 
-    $('#txt_deno').on('input', function() {
-      $('#error_txt_deno').text('');
+    $('#txt_empla').on('input', function() {
+      $('#error_txt_empla').text('');
     });
   }
 
@@ -185,16 +185,19 @@ if (isset($_GET['_id'])) {
 
               <div class="row pt-3 mb-col">
                 <div class="col-md-12">
-                  <label for="txt_deno" class="form-label">Denominación </label>
-                  <input type="text" class="form-control form-control-sm" id="txt_deno" name="txt_deno" maxlength="50">
-                  <span id="error_txt_deno" class="text-danger"></span>
+                  <label for="txt_empla" class="form-label">Localización </label>
+                  <input type="text" class="form-control form-control-sm no_caracteres" id="txt_empla" name="txt_empla" maxlength="50">
+                  <span id="error_txt_empla" class="text-danger"></span>
+
                 </div>
+
+
               </div>
 
               <div class="row mb-col">
                 <div class="col-md-6">
-                  <label for="txt_empla" class="form-label">Emplazamiento </label>
-                  <input type="text" class="form-control form-control-sm no_caracteres" id="txt_empla" name="txt_empla" maxlength="50">
+                  <label for="txt_deno" class="form-label">Denominación </label>
+                  <input type="text" class="form-control form-control-sm" id="txt_deno" name="txt_deno" maxlength="50">
                 </div>
 
                 <div class="col-md-6">

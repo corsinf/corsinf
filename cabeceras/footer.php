@@ -57,7 +57,7 @@
           </div>
         </div>
         <div class="modal-footer"> 
-
+        <a href="https://corsinf.com/" target="_blank" class="btn btn-primary"><i class="bx bx-store me-0"></i>Comprar una licencia</a>
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>       
         </div>
       </div>

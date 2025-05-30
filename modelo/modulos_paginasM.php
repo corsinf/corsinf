@@ -49,7 +49,11 @@ class modulos_paginasM
 			$sql = "SELECT P.id_paginas,nombre_pagina,detalle_pagina,estado_pagina,link_pagina,icono_paginas,P.id_modulo,M.nombre_modulo,P.default_pag,subpagina 
 			FROM PAGINAS P
 			INNER JOIN ACCESOS AC ON P.id_paginas = AC.id_paginas
-			LEFT JOIN MODULOS M ON P.id_modulo = M.id_modulo WHERE estado_pagina = 'A'  AND subpagina = 0 AND AC.id_tipo_usu = '".$_SESSION['INICIO']['PERFIL']."' ";
+			LEFT JOIN MODULOS M ON P.id_modulo = M.id_modulo 
+			WHERE estado_pagina = 'A'  
+			AND subpagina = 0 
+			AND AC.id_tipo_usu = '".$_SESSION['INICIO']['PERFIL']."'
+			AND AC.id_empresa = '".$_SESSION['INICIO']['ID_EMPRESA']."' ";
 			if($query)
 			{
 				$sql.=" AND nombre_pagina like '%".$query."%'";

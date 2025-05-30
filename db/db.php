@@ -230,7 +230,7 @@ class db
 		// print_r($valores);die();
 		foreach ($valores as $value) {
 			// print_r($value.'-');
-			if ($this->validarFecha($value)==1) 
+			if ($this->validarFecha($value) === 'date') 
 				{
 					// print_r($value);die();
     			    $incognitas.='CAST(? AS DATE),';
