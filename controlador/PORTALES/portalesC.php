@@ -51,8 +51,8 @@ if (isset($_GET['guardar_config'])) {
  	function __construct()
  	{
  		$this->modelo = new portalesM();
- 		$this->patch_ddl = dirname(__DIR__,2). "\\lib\\Antenas\\net8.0\\SESProLElibEPCcmd.exe";
- 		// $this->patch_ddl =  dirname(__DIR__,5)."Users\\lenovo\\Downloads\\SESProLElibEPCcmd\\bin\\Debug\\net8.0\\SESProLElibEPCcmd.exe";
+ 		// $this->patch_ddl = dirname(__DIR__,2). "\\lib\\Antenas\\net8.0\\SESProLElibEPCcmd.exe";
+ 		$this->patch_ddl =  dirname(__DIR__,5)."Users\\lenovo\\Downloads\\SESProLElibEPCcmd\\bin\\Debug\\net8.0\\SESProLElibEPCcmd.exe";
  	}
 
  	function listar()
@@ -73,7 +73,7 @@ if (isset($_GET['guardar_config'])) {
 	 		switch ($portal[0]['comunicacion']) {
 	 			case 'TCPIP':
 	 			// $command = "C:\\Users\\lenovo\\Downloads\\SESProLElibEPCcmd\\bin\\Debug\\net8.0\\SESProLElibEPCcmd.dll 2 186.4.219.172 10001";
-	 			$command = $this->patch_ddl." 2 ".$portal[0]['ip']." ".$portal[0]['puerto']."";
+	 			$command = $this->patch_ddl." 4 ".$portal[0]['ip']." ".$portal[0]['puerto']."";
 	 			// print_r($command);die();
 	 			$respuesta = shell_exec($command);
 				$resp = json_decode($respuesta,true);
