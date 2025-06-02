@@ -83,6 +83,13 @@ class articulosM
 		//exit;
 	}
 
+	function listar_articulos_id($id)
+	{
+		$sql = "SELECT * FROM v_articulos_detalle WHERE id = $id";
+		$datos = $this->db->datos($sql);
+		return $datos;
+	}
+
 	function lista_articulos_new($query = false, $loc = false, $cus = false, $pag = false, $desde = false, $hasta = false, $coincidencia = false, $multiple = false, $buscar_por = false)
 	{
 		$sql = "SELECT 

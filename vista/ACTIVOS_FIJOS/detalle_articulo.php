@@ -54,7 +54,8 @@ if (isset($_GET['_id'])) {
     validar_datos();
 
     $('#imprimir_cedula').click(function() {
-      var url = '../lib/Reporte_pdf.php?reporte_cedula=true&id=' + $('#txt_id').val();
+      // var url = '../lib/Reporte_pdf.php?reporte_cedula=true&id=' + $('#txt_id').val();
+      var url = '../controlador/ACTIVOS_FIJOS/REPORTES/?ac_reporte_cedula_activo=true&id_activo=' + $('#txt_id').val();
       window.open(url, '_blank');
     });
 
