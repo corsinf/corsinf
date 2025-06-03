@@ -211,7 +211,7 @@
 
 
         // Nombre del archivo
-        $fileName = 'cedula_activo_' . 'SKU_' . time() . '.pdf';
+        $fileName = 'cedula_activo_' . $articulos[0]['tag'] . '_' ?? 'SKU' . time() . '.pdf';
         ob_end_clean();
 
 
