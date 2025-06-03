@@ -290,7 +290,7 @@ if (isset($_GET['_id'])) {
     $('#lbl_localizacion1').html(`<b>Emplazamiento / Localización</b> | <label style="font-size:65%"> Código: ${data.c_loc}</label>`);
     $('#lbl_localizacion').text(data.loc_nom);
 
-    $('#lbl_custodio1').html(`<b>Custodio:</b> | <label style="font-size:65%"> Código: ${data.person_no}</label>`);
+    $('#lbl_custodio1').html(`<b>Custodio:</b> | <label style="font-size:65%"> Código: ${data.person_ci}</label>`);
     $('#lbl_custodio').text(data.person_nom);
 
     $('#lbl_marca').html(`${data.marca} | <label style="font-size:65%"> Código: ${data.c_mar}</label>`);
