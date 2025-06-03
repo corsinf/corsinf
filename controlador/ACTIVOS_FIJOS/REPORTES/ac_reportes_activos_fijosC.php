@@ -30,7 +30,6 @@ class ac_reportes_activos_fijosC
         return pdf_cedula_activo($articulos, $mostrar);
     }
 
-
     public function reporte_auditoria_articulos($id_persona, $id_localizacion,  $mostrar = false)
     {
         require_once('DOCUMENTOS/reporte_auditoria_articulos.php');
@@ -38,21 +37,18 @@ class ac_reportes_activos_fijosC
         $auditoria =  $this->auditoria->lista_articulos_auditorio(); // Método para obtener los datos
         $custodio =  $this->custodio->buscar_custodio($id_persona);
         $localizacion =  $this->localizacion->buscar_localizacion($id_localizacion);
-        
 
         return pdf_reporte_auditoria_articulos($auditoria, $custodio, $localizacion, $this->custodio, $this->localizacion, $id_persona, $mostrar);
     }
-
-
 
     public function reporte_articulos_custodio_localizacion($id_persona, $id_localizacion,  $mostrar = false)
     {
         require_once('DOCUMENTOS/reporte_articulos_custodio_localizacion.php');
 
         // Obtener los datos de los artículos
-            $articulos = $this->articulos->listar_articulos($id_persona, $id_localizacion);
-            $custodio = $this->custodio->buscar_custodio($id_persona);
-            $localizacion = $this->localizacion->buscar_localizacion($id_localizacion);
+        $articulos = $this->articulos->listar_articulos($id_persona, $id_localizacion);
+        $custodio = $this->custodio->buscar_custodio($id_persona);
+        $localizacion = $this->localizacion->buscar_localizacion($id_localizacion);
 
         return pdf_reporte_articulos_custodio_localizacion($articulos, $custodio, $localizacion, $mostrar);
     }

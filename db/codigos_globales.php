@@ -1152,6 +1152,84 @@ function para_ftp($nombre,$texto)
 		// Mostrar el texto desencriptado
 		return $decrypted;
 	}
+
+    function encriptar_alfanumerico($valor)
+    {
+		$key = $this->CodAES;
+        $iv = $this->iv;//openssl_random_pseudo_bytes(openssl_cipher_iv_length('AES-256-CBC'));
+        // Cifrado
+        $cifrado = openssl_encrypt($valor, 'AES-256-CBC', $key, OPENSSL_RAW_DATA, $iv);
+
+        // Convertimos a hexadecimal para que sea solo alfanumérico
+        $cifrado_con_iv = bin2hex($iv . $cifrado);
+
+        return $cifrado_con_iv;
+    }
+
+	function desencriptar_alfanumerico($valor)
+	{
+		// Validar que el valor es hexadecimal y de longitud par
+		if (!ctype_xdigit($valor) || strlen($valor) % 2 !== 0) {
+			return false; // o puedes lanzar una excepción
+		}
+
+		$datos = hex2bin($valor);
+		if ($datos === false) {
+			return false; // Fallback por seguridad
+		}
+
+		$iv_length = openssl_cipher_iv_length('AES-256-CBC');
+		$iv_extraido = substr($datos, 0, $iv_length);
+		$cifrado_extraido = substr($datos, $iv_length);
+
+		$descifrado = openssl_decrypt(
+			$cifrado_extraido,
+			'AES-256-CBC',
+			$this->CodAES,
+			OPENSSL_RAW_DATA,
+			$iv_extraido
+		);
+
+		return $descifrado !== false ? $descifrado : false;
+	}
+
+	function datos_empresa_publica($id_empresa, $datos_sql_terceros = ''){
+		$sql_empresa = "SELECT
+			Id_empresa,
+			Base_datos,
+			Usuario_db,
+			Password_db,
+			Ip_host,
+			Puerto_db,
+			Logo,
+			ruta_img_relativa
+		FROM
+			EMPRESAS 
+		WHERE
+			Id_empresa = '$id_empresa'";
+
+		$datos = $this->db->datos($sql_empresa, true)[0];
+
+		// print_r($datos);
+
+		$usuario = $datos['Usuario_db'];
+		$password = $datos['Password_db'];  // en mi caso tengo contraseña pero en casa caso introducidla aquí.
+		$servidor = $datos['Ip_host'] . ', ' . $datos['Puerto_db'];
+		$database = $datos['Base_datos'];
+
+		$datos_sql = '';
+		if($datos_sql_terceros){
+			$datos_sql = $this->db->datos_db_terceros($database, $usuario, $password, $servidor, $puerto = false, $datos_sql_terceros);
+		}
+
+		$salida = [
+			'empresa' => $datos,
+			'datos' => $datos_sql,
+		];
+
+		return $salida;
+	}
+
 	function lista_empresa($id,$master=false)
 	{
 		$sql = "SELECT E.*,Id_empresa as 'Id_Empresa' FROM EMPRESAS E WHERE Id_empresa = '".$id."'";

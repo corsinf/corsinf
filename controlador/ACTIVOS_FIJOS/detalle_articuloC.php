@@ -342,8 +342,15 @@ class detalle_articuloC
 
 	function cargar_detalle_activo($id, $id_empresa)
 	{
-		$datos = $this->modelo->cargar_datos_vista_sin_logueo($id, $id_empresa);
-		// print_r($datos); exit(); die();
+		$id = $this->cod_globales->desencriptar_alfanumerico($id);
+		$id_empresa = $this->cod_globales->desencriptar_alfanumerico($id_empresa);
+
+		if (!$id || !$id_empresa) {
+			return 'Error';
+			exit;
+		}
+
+		$datos = $this->modelo->cargar_datos_vista_publica($id, $id_empresa);
 
 		if (count($datos) > 0) {
 			return $datos;

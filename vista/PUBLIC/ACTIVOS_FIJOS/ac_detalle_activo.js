@@ -2,7 +2,7 @@
 function cargar_detalle_activo(id, token) {
 	$.ajax({
 		data: { id: id, token: token },
-		url: '../controlador/ACTIVOS_FIJOS/detalle_articuloC.php?cargar_detalle_activo=true',
+		url: 'controlador/ACTIVOS_FIJOS/detalle_articuloC.php?cargar_detalle_activo=true',
 		type: 'post',
 		dataType: 'json',
 		success: function (response) {
@@ -18,6 +18,8 @@ function cargar_detalle_activo(id, token) {
 				$('#lbl_marca').text(response[0].marca)
 				$('#lbl_localizacion').text(response[0].loc_nom)
 				$('#lbl_color').text(response[0].color);
+				$('#lbl_estado').text(response[0].estado);
+				$('#lbl_genero').text(response[0].genero);
 
 				if (response[0].ruta_imagen != '' && response[0].ruta_imagen !== null) {
 					let url_sin_cache = response[0].ruta_imagen + '&v=' + new Date().getTime();

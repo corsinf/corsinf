@@ -1,16 +1,8 @@
  <?php
     require_once(dirname(__DIR__, 4) . '/lib/TCPDF/tcpdf.php');
-   
-
 
     function pdf_reporte_articulos_custodio_localizacion($articulos, $custodio, $localizacion, $mostrar)
     {
-
-       
-        function soloFecha($fechaCompleta)
-        {
-            return substr($fechaCompleta, 0, 10);
-        }
 
         if (empty($articulos)) {
             return ['estado' => 'error', 'mensaje' => 'No hay artículos.'];
@@ -29,7 +21,7 @@
 
         // Configurar documento
         $pdf->SetCreator('TCPDF');
-        $pdf->SetAuthor('Sistema de Activos Fijos');
+        $pdf->SetAuthor('CORSINF');
         $pdf->SetTitle('Reporte de Artículos por Persona');
         $pdf->SetSubject('Listado de Artículos');
 
@@ -178,4 +170,9 @@
         } else {
             $pdf->Output($fileName, 'I');
         }
+    }
+
+    function soloFecha($fechaCompleta)
+    {
+        return substr($fechaCompleta, 0, 10);
     }

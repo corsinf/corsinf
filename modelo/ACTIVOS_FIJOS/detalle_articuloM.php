@@ -1,5 +1,6 @@
 <?php
 require_once(dirname(__DIR__, 1) . '/GENERAL/BaseModel.php');
+require_once(dirname(__DIR__, 2) . '/db/codigos_globales.php');
 
 
 /**
@@ -10,6 +11,7 @@ class detalle_articuloM extends BaseModel
 {
 	protected $tabla = 'ac_articulos';
 	protected $primaryKey = 'id_articulos AS _id';
+	private $codigos_globales;
 
 	protected $camposPermitidos = [
 		'tag_unique AS tag_unique',
@@ -132,11 +134,11 @@ class detalle_articuloM extends BaseModel
 		return $this->db->datos($sql);
 	}
 
-	function cargar_datos_vista_sin_logueo($id, $id_empresa)
+	function cargar_datos_vista_publica($id, $id_empresa)
 	{
 		$id = intval($id);
 
-		$sql_articulo = "SELECT
+		$datos_sql_terceros = "SELECT
 					P.id_articulo AS 'id_A',
 					P.tag_unique AS 'rfid',
 					P.tag_serie AS 'tag_s',
@@ -193,57 +195,15 @@ class detalle_articuloM extends BaseModel
 				WHERE 
 					P.id_articulo = $id;";
 
+		$this->codigos_globales = new codigos_globales();
 
-		$id_ofuscado_base64 = $id_empresa;
-		$clave = 'corsinf';
-		$parametros = array($id_ofuscado_base64, $clave);
-		$sql_sp = "EXEC SP_EMPRESA_DESCIFRAR_ID_EMPRESA @id_ofuscado_base64=?, @clave=?;";
-		$id_empresa_valido = $this->db->ejecutar_procedimiento_con_retorno_1($sql_sp, $parametros)[0]['id_empresa'];
+		$sql_publica = $this->codigos_globales->datos_empresa_publica($id_empresa, $datos_sql_terceros);
 
-		// $sql_sp = "EXEC SP_EMPRESA_DESCIFRAR_ID_EMPRESA @id_ofuscado_base64='$id_ofuscado_base64', @clave='$clave';";
-		// $id_empresa_valido = $this->db->datos($sql_sp, true);
+		$database = $sql_publica['empresa']['Base_datos'];
+		$ruta_img_relativa = $sql_publica['empresa']['ruta_img_relativa'];
 
-		// print_r($id_empresa_valido);
-		// exit();
-		// die();
-
-		// $sql_sp = "DECLARE @id_empresa INT;
-		// 			EXEC SP_EMPRESA_DESCIFRAR_ID_EMPRESA 
-		// 				@id_ofuscado_base64 = '$id_ofuscado_base64',
-		// 				@clave = '$clave',
-		// 				@id_empresa = @id_empresa OUTPUT;
-		// 			SELECT @id_empresa AS id_empresa;";
-
-		// $id_empresa_valido = $this->db->datos($sql_sp, true)[0]['id_empresa'];
-
-
-		$sql_empresa = "SELECT
-					Id_empresa,
-					Base_datos,
-					Usuario_db,
-					Password_db,
-					Ip_host,
-					Puerto_db,
-					Logo,
-					ruta_img_relativa
-				FROM
-					EMPRESAS 
-				WHERE
-					Id_empresa = '$id_empresa_valido'";
-
-		$datos = $this->db->datos($sql_empresa, true)[0];
-
-		// print_r($datos);
-
-
-		$usuario = $datos['Usuario_db'];
-		$password = $datos['Password_db'];  // en mi caso tengo contraseña pero en casa caso introducidla aquí.
-		$servidor = $datos['Ip_host'] . ', ' . $datos['Puerto_db'];
-		$database = $datos['Base_datos'];
-
-
-		$data = $this->db->datos_db_terceros($database, $usuario, $password, $servidor, $puerto = false, $sql_articulo);
-		$data[0]['ruta_imagen'] = $datos['ruta_img_relativa'] . "emp=$database&dir=activos&nombre=" .  $data[0]['imagen'];
+		$data = $sql_publica['datos'];
+		$data[0]['ruta_imagen'] = $ruta_img_relativa . "emp=$database&dir=activos&nombre=" .  $data[0]['imagen'];
 
 		return $data;
 	}

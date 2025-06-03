@@ -785,8 +785,9 @@ class articulosM
 			$sql .= " AND id_localizacion = '" . $id_localizacion . "'";
 		}
 
+		$sql .= ";";
 		// print_r($sql); die();
-		$datos = $this->db->datos($sql);
+		$datos = $this->db->datos($sql, false, true);
 		return $datos;
 	}
 }

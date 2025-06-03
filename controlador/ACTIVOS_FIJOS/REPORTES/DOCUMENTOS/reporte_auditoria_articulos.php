@@ -6,17 +6,15 @@
     {
         try {
 
-
             if (empty($auditoria)) {
                 return ['estado' => 'error', 'mensaje' => 'No se encontraron artículos de auditoría.'];
             }
-
 
             $pdf = new TCPDF('P', 'mm', 'A4', true, 'UTF-8', false);
 
             // Configurar documento
             $pdf->SetCreator('TCPDF');
-            $pdf->SetAuthor('Sistema de Activos Fijos');
+            $pdf->SetAuthor('CORSINF');
             $pdf->SetTitle('Reporte de Artículos por Persona');
             $pdf->SetSubject('Listado de Artículos');
 
