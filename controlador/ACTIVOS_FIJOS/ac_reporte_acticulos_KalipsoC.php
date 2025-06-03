@@ -4,26 +4,26 @@
 require_once(dirname(__DIR__, 2) . '/modelo/ACTIVOS_FIJOS/articulosM.php');
 require_once(dirname(__DIR__, 2) . '/modelo/ACTIVOS_FIJOS/custodioM.php');
 require_once(dirname(__DIR__, 2) . '/modelo/ACTIVOS_FIJOS/localizacionM.php');
-require_once(dirname(__DIR__, 2) . '/modelo/ACTIVOS_FIJOS/auditoriaM.php');
+require_once(dirname(__DIR__, 2) . '/modelo/ACTIVOS_FIJOS/ac_auditoriaM.php');
 require_once(dirname(__DIR__, 2) . '/lib/TCPDF/tcpdf.php');
 require_once(dirname(__DIR__, 2) . '/db/codigos_globales.php');
 
 $controlador = new ac_reporte_acticulos_KalipsoC();
 
 if (isset($_GET['imprimirPDF'])) {
-    $th_per_id = isset($_GET['th_per_id']) ? $_GET['th_per_id'] : null;
+    $id_persona = isset($_GET['id_persona']) ? $_GET['id_persona'] : null;
     $id_localizacion = isset($_GET['id_localizacion']) ? $_GET['id_localizacion'] : null;
 
     // Llamar al método imprimirPDF con el ID de persona
-    echo json_encode($controlador->imprimirPDFMovimiento($th_per_id, $id_localizacion));
+    echo json_encode($controlador->imprimirPDFMovimiento($id_persona, $id_localizacion));
     exit; // Importante: terminar la ejecución después de enviar la respuesta JSON
 }
 
 if (isset($_GET['imprimirAuditoria'])) {
-    $th_per_id = isset($_GET['th_per_id']) ? $_GET['th_per_id'] : null;
+    $id_persona = isset($_GET['id_persona']) ? $_GET['id_persona'] : null;
     $id_localizacion = isset($_GET['id_localizacion']) ? $_GET['id_localizacion'] : null;
     // Llamar al método imprimirPDF con el ID de persona
-    echo json_encode($controlador->imprimirPDFAuditoria($th_per_id, $id_localizacion));
+    echo json_encode($controlador->imprimirPDFAuditoria($id_persona, $id_localizacion));
     exit; // Importante: terminar la ejecución después de enviar la respuesta JSON
 }
 
@@ -40,14 +40,14 @@ class ac_reporte_acticulos_KalipsoC
         $this->custodio = new custodioM();
         $this->articulos = new articulosM();
         $this->localizacion = new localizacionM();
-        $this->articulosAuditoria = new auditoriaM();
+        $this->articulosAuditoria = new ac_auditoriaM();
     }
 
 
 
 
 
-    function imprimirPDFMovimiento($th_per_id, $id_localizacion)
+    function imprimirPDFMovimiento($id_persona, $id_localizacion)
     {
         function soloFecha($fechaCompleta)
         {
@@ -55,8 +55,8 @@ class ac_reporte_acticulos_KalipsoC
         }
         try {
             // Obtener los datos de los artículos
-            $articulos = $this->articulos->listar_articulos($th_per_id, $id_localizacion);
-            $custodio = $this->custodio->buscar_custodio($th_per_id);
+            $articulos = $this->articulos->listar_articulos($id_persona, $id_localizacion);
+            $custodio = $this->custodio->buscar_custodio($id_persona);
             $localizacion = $this->localizacion->buscar_localizacion($id_localizacion);
 
             if (empty($articulos)) {
@@ -155,7 +155,7 @@ class ac_reporte_acticulos_KalipsoC
                 $pdf->Cell(190, 7, 'INFORMACIÓN DE LA PERSONA', 0, 1, 'L');
                 $pdf->SetFont('helvetica', '', 10);
                 $pdf->Cell(40, 6, 'Código:', 0, 0, 'L');
-                $pdf->Cell(150, 6, $th_per_id, 0, 1, 'L');
+                $pdf->Cell(150, 6, $id_persona, 0, 1, 'L');
                 $pdf->Cell(40, 6, 'Nombre:', 0, 0, 'L');
                 $pdf->Cell(150, 6, $articulos[0]['persona'] ?? 'No disponible', 0, 1, 'L');
             }
@@ -235,12 +235,12 @@ class ac_reporte_acticulos_KalipsoC
     }
 
 
-    function imprimirPDFAuditoria($th_per_id, $id_localizacion)
+    function imprimirPDFAuditoria($id_persona, $id_localizacion)
     {
         try {
             // Obtener los datos de auditoría
             $auditoria = $this->articulosAuditoria->lista_articulos_auditorio(); // Método para obtener los datos
-            $custodio = $this->custodio->buscar_custodio($th_per_id);
+            $custodio = $this->custodio->buscar_custodio($id_persona);
             $localizacion = $this->localizacion->buscar_localizacion($id_localizacion);
 
             if (empty($auditoria)) {
@@ -388,12 +388,12 @@ class ac_reporte_acticulos_KalipsoC
                     $caracteristica = !empty($item['caracteristica']) ? $item['caracteristica'] : 'S/N';
 
                     // Custodio y localización
-                    if (!empty($item['th_per_id'])) {
-                        if ($item['th_per_id'] == $th_per_id) {
+                    if (!empty($item['id_persona'])) {
+                        if ($item['id_persona'] == $id_persona) {
                             $pertenece = "Custodio Actual";
                             $ubicacion = "Localización Actual";
                         } else {
-                            $custodioEncontrado = $this->custodio->buscar_custodio($item['th_per_id']);
+                            $custodioEncontrado = $this->custodio->buscar_custodio($item['id_persona']);
                             $localizacionEncontrada = $this->localizacion->buscar_localizacion($item['id_localizacion']);
 
                             $nombreCompleto = $custodioEncontrado[0]['PERSON_NOM'] ?? 'S/N';

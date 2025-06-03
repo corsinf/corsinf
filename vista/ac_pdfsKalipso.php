@@ -4,7 +4,7 @@ include(dirname(__DIR__, 1) . '/cabeceras/header3.php');
 // Configuración y validación de parámetros
 $config = [
     'tipo' => 'articulos_cliente_bodega', // 'auditoria' o 'articulos_cliente_bodega'
-    'th_per_id' => 1,
+    'id_persona' => 1,
     'id_localizacion' => ''
 ];
 
@@ -13,8 +13,8 @@ if (isset($_GET['tipo'])) {
     $config['tipo'] = in_array($_GET['tipo'], ['auditoria', 'articulos_cliente_bodega']) ? $_GET['tipo'] : 'articulos_cliente_bodega';
 }
 
-if (isset($_GET['th_per_id'])) {
-    $config['th_per_id'] = filter_var($_GET['th_per_id'], FILTER_VALIDATE_INT) ?: 1;
+if (isset($_GET['id_persona'])) {
+    $config['id_persona'] = filter_var($_GET['id_persona'], FILTER_VALIDATE_INT) ?: 1;
 }
 
 if (isset($_GET['id_localizacion'])) {
@@ -26,16 +26,16 @@ if (isset($_GET['id_localizacion'])) {
  * @param array $config
  * @return array
  */
-function generatePdfConfig(array $config): array {
+function generate_Pdf_Config(array $config): array {
     $baseUrl = 'https://localhost/corsinf/controlador/ACTIVOS_FIJOS/ac_reporte_acticulos_KalipsoC.php';
 
     $params = [
-        'th_per_id' => $config['th_per_id'] ?? null,
+        'id_persona' => $config['id_persona'] ?? null,
         'id_localizacion' => $config['id_localizacion'] ?? null,
     ];
 
     // Construir la descripción dinámica
-    $hasCustodio = !empty($params['th_per_id']);
+    $hasCustodio = !empty($params['id_persona']);
     $hasLocalizacion = !empty($params['id_localizacion']);
 
     if ($hasCustodio && $hasLocalizacion) {
@@ -68,7 +68,9 @@ function generatePdfConfig(array $config): array {
 }
 
 
-$pdfConfig = generatePdfConfig($config);
+
+
+$pdfConfig = generate_Pdf_Config($config);
 ?>
 
 <!-- Estilos CSS Empresariales -->
@@ -455,7 +457,7 @@ body {
                     </span>
                     <span>
                         <i class="fas fa-user"></i>
-                        Usuario: <?= $config['th_per_id'] ?>
+                        Usuario: <?= $config['id_persona'] ?>
                     </span>
                     <?php if ($config['tipo'] === 'articulos_cliente_bodega' && !empty($config['id_localizacion'])): ?>
                     <span>
@@ -465,7 +467,7 @@ body {
                     <?php endif; ?>
                 </div>
                 
-                <button onclick="refreshPdf()" class="refresh-btn" title="Actualizar documento">
+                <button onclick="refresh_Pdf()" class="refresh-btn" title="Actualizar documento">
                     <i class="fas fa-sync-alt"></i>
                     Actualizar
                 </button>
@@ -474,152 +476,144 @@ body {
         </div>
         
     </div>
+	
 </section>
 
 <script type="text/javascript">
 $(document).ready(function() {
-    initializePdfViewer();
-});
 
-/**
- * Inicializa el visualizador de PDF
- */
-function initializePdfViewer() {
-    const pdfIframe = document.getElementById('pdf-iframe');
-    const pdfLoading = document.getElementById('pdf-loading');
-    
-    // Manejar carga exitosa del PDF
-    pdfIframe.onload = function() {
-        setTimeout(() => {
-            pdfLoading.style.display = 'none';
-            pdfIframe.style.display = 'block';
-        }, 500); // Pequeño delay para mejor UX
-    };
-    
-    // Manejar error de carga
-    pdfIframe.onerror = function() {
-        showPdfError();
-    };
-    
-    // Timeout para detectar problemas de carga
-    setTimeout(() => {
-        if (pdfLoading.style.display !== 'none') {
-            checkPdfLoad();
-        }
-    }, 10000); // 10 segundos timeout
-}
+    initialize_Pdf_Viewer();
 
-/**
- * Verifica si el PDF se cargó correctamente
- */
-function checkPdfLoad() {
-    const pdfIframe = document.getElementById('pdf-iframe');
-    const pdfLoading = document.getElementById('pdf-loading');
-    
-    try {
-        // Intentar acceder al contenido del iframe
-        if (pdfIframe.contentDocument || pdfIframe.contentWindow) {
-            pdfLoading.style.display = 'none';
-            pdfIframe.style.display = 'block';
-        } else {
-            showPdfError();
-        }
-    } catch (e) {
-        // Si hay error de acceso, asumir que el PDF se cargó (cross-origin)
-        pdfLoading.style.display = 'none';
-        pdfIframe.style.display = 'block';
+    // Ajustar altura en móviles al cargar
+    if ($(window).width() <= 768 && $(window).height() < 600) {
+        $('.pdf-viewer-container').css('height', ($(window).height() - 200) + 'px');
     }
-}
 
-/**
- * Muestra mensaje de error al cargar PDF
- */
-function showPdfError() {
-    const pdfLoading = document.getElementById('pdf-loading');
-    pdfLoading.innerHTML = `
-        <div class="pdf-error">
-            <i class="fas fa-exclamation-triangle"></i>
-            <h4>Error al cargar el documento</h4>
-            <p>No se pudo cargar el archivo PDF. Por favor:</p>
-            <ul style="text-align: left; display: inline-block;">
-                <li>Verifique su conexión a internet</li>
-                <li>Compruebe que el servidor esté disponible</li>
-                <li>Intente actualizar la página</li>
-            </ul>
-            <button onclick="refreshPdf()" class="btn-corporate" style="margin-top: 15px;">
-                <i class="fas fa-sync-alt"></i>
-                Reintentar
-            </button>
-        </div>
-    `;
-}
-
-/**
- * Refresca el PDF
- */
-function refreshPdf() {
-    const pdfIframe = document.getElementById('pdf-iframe');
-    const pdfLoading = document.getElementById('pdf-loading');
-    
-    // Mostrar loading
-    pdfLoading.style.display = 'flex';
-    pdfLoading.innerHTML = `
-        <div class="loading-spinner"></div>
-        <p class="loading-text">Actualizando documento</p>
-        <p class="loading-subtext">Por favor espere...</p>
-    `;
-    
-    pdfIframe.style.display = 'none';
-    
-    // Recargar iframe
-    const currentSrc = pdfIframe.src;
-    pdfIframe.src = '';
-    setTimeout(() => {
-        pdfIframe.src = currentSrc + '&refresh=' + Date.now();
-    }, 100);
-}
-
-/**
- * Descargar PDF
- */
-function downloadPdf() {
-    const pdfUrl = '<?= $pdfConfig['url'] ?>';
-    const link = document.createElement('a');
-    link.href = pdfUrl;
-    link.download = '<?= $pdfConfig['description'] ?>_<?= date('Y-m-d') ?>.pdf';
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-}
-
-/**
- * Cambiar tipo de reporte (si se necesita en el futuro)
- */
-function changeReportType(tipo) {
-    const currentUrl = new URL(window.location.href);
-    currentUrl.searchParams.set('tipo', tipo);
-    window.location.href = currentUrl.toString();
-}
-
-// Optimizaciones para dispositivos móviles
-if (window.innerWidth <= 768) {
-    document.addEventListener('DOMContentLoaded', function() {
-        // Ajustar altura en móviles
-        const pdfContainer = document.querySelector('.pdf-viewer-container');
-        if (pdfContainer && window.innerHeight < 600) {
-            pdfContainer.style.height = (window.innerHeight - 200) + 'px';
+    // Ajustar altura en móviles al redimensionar
+    $(window).on('resize', function() {
+        if ($(window).width() <= 768 && $(window).height() < 600) {
+            $('.pdf-viewer-container').css('height', ($(window).height() - 200) + 'px');
         }
     });
-}
 
-// Manejo de redimensionado de ventana
-window.addEventListener('resize', function() {
-    if (window.innerWidth <= 768) {
-        const pdfContainer = document.querySelector('.pdf-viewer-container');
-        if (pdfContainer && window.innerHeight < 600) {
-            pdfContainer.style.height = (window.innerHeight - 200) + 'px';
+    /**
+     * Inicializa el visualizador de PDF
+     */
+    function initialize_Pdf_Viewer() {
+        const $pdfIframe = $('#pdf-iframe');
+        const $pdfLoading = $('#pdf-loading');
+
+        // Manejar carga exitosa del PDF
+        $pdfIframe.on('load', function() {
+            setTimeout(() => {
+                $pdfLoading.hide();
+                $pdfIframe.show();
+            }, 500);
+        });
+
+        // Manejar error de carga
+        $pdfIframe.on('error', function() {
+            show_Pdf_Error();
+        });
+
+        // Timeout para detectar problemas de carga
+        setTimeout(() => {
+            if ($pdfLoading.css('display') !== 'none') {
+                check_Pdf_Load();
+            }
+        }, 10000);
+    }
+
+    /**
+     * Verifica si el PDF se cargó correctamente
+     */
+    function check_Pdf_Load() {
+        const $pdfIframe = $('#pdf-iframe');
+        const $pdfLoading = $('#pdf-loading');
+
+        try {
+            const iframeDoc = $pdfIframe[0].contentDocument || $pdfIframe[0].contentWindow;
+            if (iframeDoc) {
+                $pdfLoading.hide();
+                $pdfIframe.show();
+            } else {
+                show_Pdf_Error();
+            }
+        } catch (e) {
+            $pdfLoading.hide();
+            $pdfIframe.show();
         }
     }
+
+    /**
+     * Muestra mensaje de error al cargar PDF
+     */
+    function show_Pdf_Error() {
+        $('#pdf-loading').html(`
+            <div class="pdf-error">
+                <i class="fas fa-exclamation-triangle"></i>
+                <h4>Error al cargar el documento</h4>
+                <p>No se pudo cargar el archivo PDF. Por favor:</p>
+                <ul style="text-align: left; display: inline-block;">
+                    <li>Verifique su conexión a internet</li>
+                    <li>Compruebe que el servidor esté disponible</li>
+                    <li>Intente actualizar la página</li>
+                </ul>
+                <button id="btn-retry" class="btn-corporate" style="margin-top: 15px;">
+                    <i class="fas fa-sync-alt"></i>
+                    Reintentar
+                </button>
+            </div>
+        `).show();
+
+        $('#btn-retry').on('click', refresh_Pdf);
+    }
+
+    /**
+     * Refresca el PDF
+     */
+    function refresh_Pdf() {
+        const $pdfIframe = $('#pdf-iframe');
+        const $pdfLoading = $('#pdf-loading');
+
+        $pdfLoading.html(`
+            <div class="loading-spinner"></div>
+            <p class="loading-text">Actualizando documento</p>
+            <p class="loading-subtext">Por favor espere...</p>
+        `).css('display', 'flex');
+
+        $pdfIframe.hide();
+
+        const currentSrc = $pdfIframe.attr('src');
+        $pdfIframe.attr('src', '');
+        setTimeout(() => {
+            $pdfIframe.attr('src', currentSrc + '&refresh=' + Date.now());
+        }, 100);
+    }
+
+    /**
+     * Descargar PDF
+     */
+    window.downloadPdf = function() {
+        const pdfUrl = '<?= $pdfConfig['url'] ?>';
+        const link = $('<a>')
+            .attr('href', pdfUrl)
+            .attr('download', '<?= $pdfConfig['description'] ?>_<?= date('Y-m-d') ?>.pdf')
+            .appendTo('body');
+
+        link[0].click();
+        link.remove();
+    };
+
+    /**
+     * Cambiar tipo de reporte
+     */
+    window.changeReportType = function(tipo) {
+        const currentUrl = new URL(window.location.href);
+        currentUrl.searchParams.set('tipo', tipo);
+        window.location.href = currentUrl.toString();
+    };
+
 });
 </script>
 

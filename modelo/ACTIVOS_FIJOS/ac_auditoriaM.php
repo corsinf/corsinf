@@ -4,7 +4,7 @@ if (!class_exists('db')) {
     include(dirname(__DIR__, 2) . '/db/db.php');
 }
 
-class auditoriaM
+class ac_auditoriaM
 {
     private $db;
 
