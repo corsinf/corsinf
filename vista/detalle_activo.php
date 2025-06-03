@@ -437,10 +437,6 @@ body {
 					<div class="identifier-value" id="lbl_sku">-</div>
 					<div class="identifier-label">SKU</div>
 				</div>
-				<div class="identifier-card">
-					<div class="identifier-value" id="lbl_antiguo">-</div>
-					<div class="identifier-label">Tag Antiguo</div>
-				</div>
 			</div>
 		</div>
 

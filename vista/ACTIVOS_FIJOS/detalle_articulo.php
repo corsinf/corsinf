@@ -302,7 +302,7 @@ if (isset($_GET['_id'])) {
     $('#lbl_sku').html(`<b>SKU:</b> ${data.tag_s}`);
     $('#lbl_sub_num').html(`<b>SubNum:</b> ${data.subnum}`);
     $('#lbl_rfid').html(data.rfid);
-    $('#lbl_tag_ant').html(`<b>Tag Antiguo:</b> ${data.ant}`);
+    $('#lbl_tag_ant').html(`<b>RFID Antiguo:</b> ${data.ant}`);
     $('#lbl_serie').text(data.ser);
 
     if (data.fecha_referencia != null) {
@@ -1139,7 +1139,7 @@ if (isset($_GET['_id'])) {
 
                       <div class="row mb-col">
                         <div class="col-sm-6">
-                          <label for="txt_tag_anti" class="form-label">Tag Antiguo </label>
+                          <label for="txt_tag_anti" class="form-label">RFID Antiguo </label>
                           <input type="text" class="form-control form-control-sm solo_numeros_int" name="txt_tag_anti" id="txt_tag_anti" maxlength="15">
                         </div>
 
