@@ -773,7 +773,7 @@ class articulosM
 		return $rest;
 	}
 
-	function listar_articulos($th_per_id = null, $id_localizacion = null)
+	function listar_articulos_vista_publica($th_per_id = null, $id_localizacion = null)
 	{
 		$sql = "SELECT * FROM ac_articulos WHERE 1=1";
 

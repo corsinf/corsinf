@@ -46,8 +46,8 @@ class ac_reportes_activos_fijosC
         require_once('DOCUMENTOS/reporte_articulos_custodio_localizacion.php');
 
         // Obtener los datos de los artículos
-        $articulos = $this->articulos->listar_articulos($id_persona, $id_localizacion);
-        $custodio = $this->custodio->buscar_custodio($id_persona);
+        $articulos = $this->articulos->listar_articulos_vista_publica($id_persona, $id_localizacion);
+        $custodio = $this->custodio->buscar_custodio_vista_publica($id_persona);
         $localizacion = $this->localizacion->buscar_localizacion_vista_publica($id_localizacion);
 
         return pdf_reporte_articulos_custodio_localizacion($articulos, $custodio, $localizacion, $mostrar);
