@@ -4,6 +4,8 @@ if (!class_exists('db')) {
 }
 
 require_once(dirname(__DIR__, 2) . '/assets/plugins/datatable/ssp.class.php');
+require_once(dirname(__DIR__, 2) . '/db/codigos_globales.php');
+
 
 
 /**
@@ -14,6 +16,7 @@ class articulosM
 {
 	private $db;
 	private $sql_busqueda;
+	private $codigos_globales;
 
 	function __construct()
 	{
@@ -773,21 +776,24 @@ class articulosM
 		return $rest;
 	}
 
-	function listar_articulos_vista_publica($th_per_id = null, $id_localizacion = null)
+	function listar_articulos_vista_publica($th_per_id = null, $id_localizacion = null, $id_empresa = null)
 	{
 		$sql = "SELECT * FROM ac_articulos WHERE 1=1";
 
 		if (!empty($th_per_id)) {
-			$sql .= " AND th_per_id = '" . $th_per_id . "'";
+			$sql .= " AND th_per_id = '" . addslashes($th_per_id) . "'";
 		}
 
 		if (!empty($id_localizacion)) {
-			$sql .= " AND id_localizacion = '" . $id_localizacion . "'";
+			$sql .= " AND id_localizacion = '" . addslashes($id_localizacion) . "'";
 		}
 
-		$sql .= ";";
-		// print_r($sql); die();
-		$datos = $this->db->datos($sql, false, true);
-		return $datos;
+		if ($id_empresa) {
+			$this->codigos_globales = new codigos_globales();
+			$sql_publica = $this->codigos_globales->datos_empresa_publica($id_empresa, $sql);
+			return isset($sql_publica['datos']) ? $sql_publica['datos'] : [];
+		}
+
+		return $this->db->datos($sql);
 	}
 }

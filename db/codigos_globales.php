@@ -1208,7 +1208,14 @@ function para_ftp($nombre,$texto)
 		WHERE
 			Id_empresa = '$id_empresa'";
 
-		$datos = $this->db->datos($sql_empresa, true)[0];
+		$datos = $this->db->datos($sql_empresa, true);
+
+		if (empty($datos)) {
+			return '';
+			exit;
+		} else {
+			$datos = $datos[0];
+		}
 
 		// print_r($datos);
 

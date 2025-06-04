@@ -1,6 +1,7 @@
 <?php
 
 require_once(dirname(__DIR__) . '/GENERAL/BaseModel.php');
+require_once(dirname(__DIR__, 2) . '/db/codigos_globales.php');
 
 /**
  * 
@@ -8,7 +9,7 @@ require_once(dirname(__DIR__) . '/GENERAL/BaseModel.php');
 
 class localizacionM extends BaseModel
 {
-
+	private $codigos_globales;
 	protected $tabla = 'ac_localizacion';
 	protected $primaryKey = 'ID_LOCALIZACION AS _id';
 
@@ -60,10 +61,18 @@ class localizacionM extends BaseModel
 		$datos = $this->db->datos($sql);
 		return $datos;
 	}
-	function buscar_localizacion_vista_publica($buscar)
+
+	function buscar_localizacion_vista_publica($buscar, $id_empresa = null)
 	{
 		$sql = "SELECT ID_LOCALIZACION,CENTRO,EMPLAZAMIENTO,DENOMINACION FROM ac_localizacion WHERE ESTADO='A' and ID_LOCALIZACION ='" . $buscar . "'";
 		// print_r($sql);die();
+
+		if ($id_empresa) {
+			$this->codigos_globales = new codigos_globales();
+			$sql_publica = $this->codigos_globales->datos_empresa_publica($id_empresa, $sql);
+			return isset($sql_publica['datos']) ? $sql_publica['datos'] : [];
+		}
+
 		$datos = $this->db->datos($sql);
 		return $datos;
 	}

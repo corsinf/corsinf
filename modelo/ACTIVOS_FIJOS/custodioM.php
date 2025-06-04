@@ -4,6 +4,8 @@ if (!class_exists('db')) {
 	include(dirname(__DIR__, 2) . '/db/db.php');
 }
 
+require_once(dirname(__DIR__, 2) . '/db/codigos_globales.php');
+
 /**
  * 
  */
@@ -11,6 +13,7 @@ if (!class_exists('db')) {
 class custodioM
 {
 	private $db;
+	private $codigos_globales;
 
 	function __construct()
 	{
@@ -76,7 +79,8 @@ class custodioM
 		$datos = $this->db->datos($sql);
 		return $datos;
 	}
-	function buscar_custodio_vista_publica($buscar)
+
+	function buscar_custodio_vista_publica($buscar, $id_empresa = null)
 	{
 		$sql = "SELECT 
                 th_per_id AS ID_PERSON,
@@ -91,6 +95,12 @@ class custodioM
             FROM th_personas 
             WHERE th_per_estado = 1 
             AND th_per_id = '" . $buscar . "'";
+
+		if ($id_empresa) {
+			$this->codigos_globales = new codigos_globales();
+			$sql_publica = $this->codigos_globales->datos_empresa_publica($id_empresa, $sql);
+			return isset($sql_publica['datos']) ? $sql_publica['datos'] : [];
+		}
 
 		$datos = $this->db->datos($sql);
 		return $datos;
@@ -155,8 +165,8 @@ class custodioM
 		$sql = "UPDATE th_personas 
 				SET th_per_estado = 0 
 				WHERE " . $datos[0]['campo'] . " = '" . $datos[0]['dato'] . "';";
-	
+
 		$resultado = $this->db->sql_string($sql);
 		return $resultado;
-	}	
+	}
 }
