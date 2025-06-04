@@ -76,6 +76,25 @@ class custodioM
 		$datos = $this->db->datos($sql);
 		return $datos;
 	}
+	function buscar_custodio_vista_publica($buscar)
+	{
+		$sql = "SELECT 
+                th_per_id AS ID_PERSON,
+                th_per_cedula AS PERSON_CI,
+                CONCAT(th_per_primer_apellido, ' ', th_per_segundo_apellido, ' ', th_per_primer_nombre, ' ', th_per_segundo_nombre) AS PERSON_NOM,
+                th_per_correo AS PERSON_CORREO,
+                th_per_telefono_1 AS TELEFONO,
+                th_per_direccion AS DIRECCION,
+                th_per_foto_url AS FOTO,
+				th_per_codigo_sap AS PERSON_NO,
+				th_per_unidad_org_sap AS UNIDAD_ORG
+            FROM th_personas 
+            WHERE th_per_estado = 1 
+            AND th_per_id = '" . $buscar . "'";
+
+		$datos = $this->db->datos($sql);
+		return $datos;
+	}
 
 	function buscar_custodio_todo($id = false, $person_no = false, $person_nom = false)
 	{

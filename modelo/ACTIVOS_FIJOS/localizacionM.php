@@ -60,6 +60,13 @@ class localizacionM extends BaseModel
 		$datos = $this->db->datos($sql);
 		return $datos;
 	}
+	function buscar_localizacion_vista_publica($buscar)
+	{
+		$sql = "SELECT ID_LOCALIZACION,CENTRO,EMPLAZAMIENTO,DENOMINACION FROM ac_localizacion WHERE ESTADO='A' and ID_LOCALIZACION ='" . $buscar . "'";
+		// print_r($sql);die();
+		$datos = $this->db->datos($sql);
+		return $datos;
+	}
 
 	function buscar_localizacion_($buscar)
 	{

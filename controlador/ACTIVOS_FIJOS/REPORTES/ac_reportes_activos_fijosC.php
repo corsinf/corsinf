@@ -30,25 +30,25 @@ class ac_reportes_activos_fijosC
         return pdf_cedula_activo($articulos, $mostrar);
     }
 
-    public function reporte_auditoria_articulos($id_persona, $id_localizacion,  $mostrar = false)
+    public function reporte_auditoria_articulos($id_persona, $id_localizacion,$id_empresa,  $mostrar = false)
     {
         require_once('DOCUMENTOS/reporte_auditoria_articulos.php');
 
-        $auditoria =  $this->auditoria->lista_articulos_auditorio(); // Método para obtener los datos
-        $custodio =  $this->custodio->buscar_custodio($id_persona);
-        $localizacion =  $this->localizacion->buscar_localizacion($id_localizacion);
+        $auditoria =  $this->auditoria->lista_articulos_auditorio_vista_publica(); // Método para obtener los datos
+        $custodio =  $this->custodio->buscar_custodio_vista_publica($id_persona);
+        $localizacion =  $this->localizacion->buscar_localizacion_vista_publica($id_localizacion);
 
-        return pdf_reporte_auditoria_articulos($auditoria, $custodio, $localizacion, $this->custodio, $this->localizacion, $id_persona, $mostrar);
+        return pdf_reporte_auditoria_articulos($auditoria, $custodio, $localizacion, $this->custodio, $this->localizacion, $id_persona,$id_localizacion, $mostrar);
     }
 
-    public function reporte_articulos_custodio_localizacion($id_persona, $id_localizacion,  $mostrar = false)
+    public function reporte_articulos_custodio_localizacion($id_persona, $id_localizacion,$id_empresa,  $mostrar = false)
     {
         require_once('DOCUMENTOS/reporte_articulos_custodio_localizacion.php');
 
         // Obtener los datos de los artículos
         $articulos = $this->articulos->listar_articulos($id_persona, $id_localizacion);
         $custodio = $this->custodio->buscar_custodio($id_persona);
-        $localizacion = $this->localizacion->buscar_localizacion($id_localizacion);
+        $localizacion = $this->localizacion->buscar_localizacion_vista_publica($id_localizacion);
 
         return pdf_reporte_articulos_custodio_localizacion($articulos, $custodio, $localizacion, $mostrar);
     }

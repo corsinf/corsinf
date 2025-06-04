@@ -2,7 +2,7 @@
     require_once(dirname(__DIR__, 4) . '/lib/TCPDF/tcpdf.php');
 
 
-    function pdf_reporte_auditoria_articulos($auditoria, $custodio, $localizacion, $custodioDato, $localizacionDato, $id_persona, $mostrar)
+    function pdf_reporte_auditoria_articulos($auditoria, $custodio, $localizacion, $custodioDato, $localizacionDato, $id_persona,$id_localizacion, $mostrar)
     {
         try {
 
@@ -150,26 +150,25 @@
                     $descripcion = !empty($item['descripcion']) ? $item['descripcion'] : 'S/N';
                     $caracteristica = !empty($item['caracteristica']) ? $item['caracteristica'] : 'S/N';
 
-                    // Custodio y localización
-                    if (!empty($item['id_persona'])) {
-                        if ($item['id_persona'] == $id_persona) {
-                            $pertenece = "Custodio Actual";
-                            $ubicacion = "Localización Actual";
+                     if (!empty($item['th_per_id'])) {
+                        if ($item['th_per_id'] == $id_persona) {
+                            $perteneecCusodio = "Custodio Actual";
                         } else {
-
-                            $custodioEncontrado = $custodioDato->buscar_custodio($item['id_persona']);
-                            $localizacionEncontrada = $localizacionDato->buscar_localizacion($item['id_localizacion']);
-
-
-                            $nombreCompleto = $custodioEncontrado[0]['PERSON_NOM'] ?? 'S/N';
-                            $partesNombre = explode(' ', $nombreCompleto);
-                            $pertenece = isset($partesNombre[1]) ? $partesNombre[0] . ' ' . $partesNombre[1] : $nombreCompleto;
-
-                            $ubicacion = $localizacionEncontrada[0]['EMPLAZAMIENTO'] ?? 'S/N';
+                            $perteneecCusodio = !empty($item['Nombrepersona'])? $item['Nombrepersona']: 'S/N';
                         }
                     } else {
-                        $pertenece = 'S/N';
-                        $ubicacion = 'S/N';
+                        $perteneecCusodio = 'S/N';
+                    }
+
+                    if (!empty($item['id_localizacion'])) {
+                        if ($item['id_localizacion'] == $id_localizacion) {
+                            $perteneceLocalizacion = "Localización Actual";
+                        } else {
+                            $perteneceLocalizacion = !empty($item['EMPLAZAMIENTO'])? $item['EMPLAZAMIENTO']: 'S/N';
+                            
+                        }
+                    } else {
+                        $perteneceLocalizacion = 'S/N';
                     }
 
                     // Obtener altura necesaria para cada campo (dependiendo del contenido)
@@ -179,8 +178,8 @@
                     $h1 = $pdf->getStringHeight(45, $item['tag_unique']);
                     $h2 = $pdf->getStringHeight(40, $descripcion);
                     $h3 = $pdf->getStringHeight(50, $caracteristica);
-                    $h4 = $pdf->getStringHeight(25, $pertenece);
-                    $h5 = $pdf->getStringHeight(30, $ubicacion);
+                    $h4 = $pdf->getStringHeight(25, $perteneecCusodio);
+                    $h5 = $pdf->getStringHeight(30, $perteneceLocalizacion);
 
                     $maxHeight = max($h1, $h2, $h3, $h4, $h5);
 
@@ -188,8 +187,8 @@
                     $pdf->MultiCell(45, $maxHeight, $item['tag_unique'], 1, 'L', false, 0);
                     $pdf->MultiCell(40, $maxHeight, $descripcion, 1, 'L', false, 0);
                     $pdf->MultiCell(50, $maxHeight, $caracteristica, 1, 'L', false, 0);
-                    $pdf->MultiCell(25, $maxHeight, $pertenece, 1, 'L', false, 0);
-                    $pdf->MultiCell(30, $maxHeight, $ubicacion, 1, 'L', false, 1);
+                    $pdf->MultiCell(25, $maxHeight, $perteneecCusodio, 1, 'L', false, 0);
+                    $pdf->MultiCell(30, $maxHeight, $perteneceLocalizacion, 1, 'L', false, 1);
                 }
             }
 
