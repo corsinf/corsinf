@@ -469,6 +469,7 @@ class loginC
 				// print_r($tablas_iguales);die();	
 		 		$res = $this->cod_global->generar_primera_vez($empresa[0]['Base_datos'],$parametros['empresa']);
 		 		// print_r($res);die();
+		 		// print_r($tablas_iguales);die();
 		 		if($tablas_iguales==-1){
 			 		foreach ($licencias as $key => $value) {
 			 		// print_r($licencias);die();

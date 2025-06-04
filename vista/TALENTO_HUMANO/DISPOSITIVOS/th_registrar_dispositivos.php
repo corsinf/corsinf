@@ -372,12 +372,14 @@ if (isset($_GET['_id'])) {
             },
             
             error: function(xhr, status, error) {
+
+                $('#myModal_espera').modal('hide');
+                
                 console.log('Status: ' + status); 
                 console.log('Error: ' + error); 
                 console.log('XHR Response: ' + xhr.responseText); 
 
                 Swal.fire('', 'Error: ' + xhr.responseText, 'error');
-                $('#myModal_espera').modal('hide');
             }
         });
 

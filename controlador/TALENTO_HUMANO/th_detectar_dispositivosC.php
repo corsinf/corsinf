@@ -3,7 +3,7 @@ date_default_timezone_set('America/Guayaquil');
 
 require_once(dirname(__DIR__, 2) . '/modelo/TALENTO_HUMANO/th_personasM.php');
 require_once(dirname(__DIR__, 2) . '/modelo/TALENTO_HUMANO/th_dispositivosM.php');
-require_once(dirname(__DIR__, 2) . '/modelo/TALENTO_HUMANO/th_biometriaM.php');
+// require_once(dirname(__DIR__, 2) . '/modelo/TALENTO_HUMANO/th_biometriaM.php');
 require_once(dirname(__DIR__, 2) . '/modelo/TALENTO_HUMANO/th_control_accesoM.php');
 
 $controlador = new th_detectar_dispositivosC();
@@ -54,7 +54,7 @@ class th_detectar_dispositivosC
         // $this->sdk_patch = "C:\\Users\\lenovo\\source\\repos\\CorsinfSDKHik\\CorsinfSDKHik\\bin\\Debug\\net8.0\\CorsinfSDKHik.dll";
         $this->modelo_dispositivos = new th_dispositivosM();
         $this->modelo_personas = new th_personasM();
-        $this->modelo_biometria = new th_biometriaM();
+        // $this->modelo_biometria = new th_biometriaM();
         $this->control_acceso = new th_control_accesoM();
     }
 
@@ -116,6 +116,8 @@ class th_detectar_dispositivosC
 
     function DetectarEventos($parametros)
     {
+
+		// estye proceso envia todos los datos del biometrico a la base de datos dorecto y es a la tabla de th_log-dispositivos
     	// print_r($_SESSION['INICIO']);die();
     	set_time_limit(0);
 		$dispositivo = $this->modelo_dispositivos->where('th_dis_id',$parametros['dispostivos'])->listar();	

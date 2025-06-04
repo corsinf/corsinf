@@ -9,6 +9,10 @@ if (isset($_GET['listar'])) {
     echo json_encode($controlador->listar($_POST['id'] ?? ''));
 }
 
+if (isset($_GET['listarAll'])) {
+    echo json_encode($controlador->listarAll());
+}
+
 if (isset($_GET['insertar'])) {
     echo json_encode($controlador->insertar_editar($_POST['parametros']));
 }
@@ -42,6 +46,12 @@ class th_dispositivosC
         return $datos;
     }
 
+    function listarAll()
+    {
+       $datos = $this->modelo->listar();
+        return $datos;
+    }
+
     function insertar_editar($parametros)
     {
         $datos = array(
@@ -54,7 +64,8 @@ class th_dispositivosC
             array('campo' => 'th_dis_modelo', 'dato' => $parametros['ddl_modelo']),
 
             array('campo' => 'th_dis_serial', 'dato' => $parametros['txt_serial']),
-            array('campo' => 'th_dis_fecha_modificacion', 'dato' => date('Y-m-d H:i:s'))
+            array('campo' => 'th_dis_fecha_modificacion', 'dato' => date('Y-m-d H:i:s')),
+            array('campo' => 'th_dis_estado', 'dato' => 1)
         );
 
         if ($parametros['_id'] == '') {
