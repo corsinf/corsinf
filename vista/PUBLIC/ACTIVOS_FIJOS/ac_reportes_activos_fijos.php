@@ -2,11 +2,11 @@
 include(dirname(__DIR__, 3) . '/cabeceras/header4.php');
 
 // Configuración y validación de parámetros
-$config = [
-    'tipo' => 'articulos_cliente_bodega', // 'auditoria' o 'articulos_cliente_bodega'
-    'id_persona' => '1',
-    'id_localizacion' => '1'
-];
+// $config = [
+//     'tipo' => 'articulos_cliente_bodega', // 'auditoria' o 'articulos_cliente_bodega'
+//     'id_persona' => '1',
+//     'id_localizacion' => '1'
+// ];
 
 // Sanitización de entrada
 if (isset($_GET['tipo'])) {
@@ -14,11 +14,15 @@ if (isset($_GET['tipo'])) {
 }
 
 if (isset($_GET['id_persona'])) {
-    $config['id_persona'] = filter_var($_GET['id_persona'], FILTER_VALIDATE_INT) ?: 1;
+    $config['id_persona'] = ($_GET['id_persona']) ?: '';
 }
 
 if (isset($_GET['id_localizacion'])) {
-    $config['id_localizacion'] = filter_var($_GET['id_localizacion'], FILTER_VALIDATE_INT);
+    $config['id_localizacion'] = ($_GET['id_localizacion']) ?? '';
+}
+
+if (isset($_GET['id_empresa'])) {
+    $config['id_empresa'] = ($_GET['id_empresa']) ?? '';
 }
 
 /**
@@ -34,6 +38,7 @@ function generate_Pdf_Config(array $config): array
     $params = [
         'id_persona' => $config['id_persona'] ?? null,
         'id_localizacion' => $config['id_localizacion'] ?? null,
+        'id_empresa' => $config['id_empresa'] ?? null,
     ];
 
     // Construir la descripción dinámica

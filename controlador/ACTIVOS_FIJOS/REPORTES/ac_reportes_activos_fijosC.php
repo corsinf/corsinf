@@ -50,6 +50,7 @@ class ac_reportes_activos_fijosC
     public function reporte_articulos_custodio_localizacion($id_persona, $id_localizacion, $id_empresa,  $mostrar = false)
     {
         require_once('DOCUMENTOS/reporte_articulos_custodio_localizacion.php');
+        $this->codigos_globales = new codigos_globales();
 
         $id_persona = $this->codigos_globales->desencriptar_alfanumerico($id_persona);
         $id_localizacion = $this->codigos_globales->desencriptar_alfanumerico($id_localizacion);
