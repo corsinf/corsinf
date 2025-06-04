@@ -8,14 +8,7 @@
             return ['estado' => 'error', 'mensaje' => 'No hay artículos.'];
         }
 
-        if (empty($custodio)) {
-            return ['estado' => 'error', 'mensaje' => 'No se encontró custodio.'];
-        }
-
-        if (empty($localizacion)) {
-            return ['estado' => 'error', 'mensaje' => 'No se encontró localización.'];
-        }
-
+       
         // Crear instancia de TCPDF
         $pdf = new TCPDF('P', 'mm', 'A4', true, 'UTF-8', false);
 
