@@ -23,6 +23,7 @@
                 $('#txt_codigo_postal').val(response[0].postal);
                 $('#txt_direccion').val(response[0].direccion);
                 $('#txt_observaciones').val(response[0].observaciones);
+                $('#ddl_tipo_sangre').val(response[0].tipo_sangre);
 
                 calcular_edad('txt_edad', response[0].fecha_nacimiento);
 
@@ -63,6 +64,7 @@
             'txt_codigo_postal': $('#txt_codigo_postal').val(),
             'txt_direccion': $('#txt_direccion').val(),
             'txt_observaciones': $('#txt_observaciones').val(),
+            'ddl_tipo_sangre': $('#ddl_tipo_sangre').val(),
         };
     }
 
@@ -164,7 +166,7 @@
 </div>
 
 <div class="row mb-col">
-    <div class="col-md-6">
+    <div class="col-md-5">
         <label for="ddl_nacionalidad" class="form-label form-label-sm">Nacionalidad </label>
         <select class="form-select form-select-sm" id="ddl_nacionalidad" name="ddl_nacionalidad">
             <option selected disabled value="">-- Selecciona una Nacionalidad --</option>
@@ -175,7 +177,7 @@
             <option value="Paraguayo">Paraguayo</option>
         </select>
     </div>
-    <div class="col-md-6">
+    <div class="col-md-4">
         <label for="ddl_estado_civil" class="form-label form-label-sm">Estado civil</label>
         <select class="form-select form-select-sm" id="ddl_estado_civil" name="ddl_estado_civil">
             <option selected disabled value="">-- Selecciona un Estado Civil --</option>
@@ -186,7 +188,20 @@
             <option value="Unión de hecho">Unión de hecho</option>
         </select>
     </div>
-
+    <div class="col-md-3">
+        <label for="ddl_tipo_sangre" class="form-label form-label-sm">Tipo Sangre </label>
+        <select class="form-select form-select-sm" id="ddl_tipo_sangre" name="ddl_tipo_sangre" required>
+            <option selected disabled value="">-- Selecciona una opción --</option>
+            <option value="A+">A+</option>
+            <option value="A-">A-</option>
+            <option value="B+">B+</option>
+            <option value="B-">B-</option>
+            <option value="O+">O+</option>
+            <option value="O-">O-</option>
+            <option value="AB+">AB+</option>
+            <option value="AB-">AB-</option>
+        </select>
+    </div>
 </div>
 
 <!-- Vista de provincias reutilizada -->

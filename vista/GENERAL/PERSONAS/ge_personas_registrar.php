@@ -17,11 +17,10 @@ if (isset($_GET['_id'])) {
     $(document).ready(function() {
         <?php if (isset($_GET['_id'])) { ?>
             cargar_datos_persona(<?= $_id ?>);
-            listar_solicitud_persona(<?= $_id ?>);
         <?php } ?>
     })
 
-    function insertar_editar() {
+    function insertar_editar_persona() {
         let parametros = {
             '_id': '<?= $_id ?>',
         };
@@ -120,9 +119,9 @@ if (isset($_GET['_id'])) {
 
                             <div class="d-flex justify-content-end pt-2">
                                 <?php if ($_id == '') { ?>
-                                    <button class="btn btn-primary btn-sm px-4 m-0 d-flex align-items-center" onclick="insertar_editar();" type="button"><i class="bx bx-save"></i> Guardar</button>
+                                    <button class="btn btn-primary btn-sm px-4 m-0 d-flex align-items-center" onclick="insertar_editar_persona();" type="button"><i class="bx bx-save"></i> Guardar</button>
                                 <?php } else { ?>
-                                    <button class="btn btn-primary btn-sm px-4 m-1 d-flex align-items-center" onclick="insertar_editar();" type="button"><i class="bx bx-save"></i> Guardar</button>
+                                    <button class="btn btn-primary btn-sm px-4 m-1 d-flex align-items-center" onclick="insertar_editar_persona();" type="button"><i class="bx bx-save"></i> Guardar</button>
                                     <button class="btn btn-danger btn-sm px-4 m-1 d-flex align-items-center" onclick="delete_datos_persona()" type="button"><i class="bx bx-trash"></i> Eliminar</button>
                                 <?php } ?>
                             </div>

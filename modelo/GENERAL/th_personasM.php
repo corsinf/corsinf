@@ -40,5 +40,6 @@ class th_personasM extends BaseModel
         //'th_per_fecha_modificacion AS fecha_modificacion',
         'PERFIL',
         //'PASS',
+        'th_per_tipo_sangre AS tipo_sangre',
     ];
 }
