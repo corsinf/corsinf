@@ -202,6 +202,9 @@ if (isset($_GET['_id'])) {
         $("input[name='txt_fecha_fin']").on("blur", function() {
             if (!verificar_fecha_inicio_fecha_fin('txt_fecha_inicio', 'txt_fecha_fin')) return;
         });
+        $("input[name='txt_fecha_inicio']").on("blur", function() {
+            if (!verificar_fecha_inicio_fecha_fin('txt_fecha_inicio', 'txt_fecha_fin')) return;
+        });
 
     });
 

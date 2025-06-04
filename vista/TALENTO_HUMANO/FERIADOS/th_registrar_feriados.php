@@ -31,7 +31,9 @@ if (isset($_GET['_id'])) {
             success: function(response) {
                 // console.log(response);
                 $('#txt_nombre').val(response[0].nombre);
-                $('#txt_fecha_inicio_feriado').val(response[0].fecha_inicio_feriado);
+                let fechaOriginal = response[0].fecha_inicio_feriado; // "2025-06-20 10:05:00.0000000"
+                let fechaFormateada = fechaOriginal.replace(' ', 'T').substring(0, 16); // "2025-06-20T10:05"
+                $('#txt_fecha_inicio_feriado').val(fechaFormateada);
                 $('#txt_dias').val(response[0].dias);
             }
         });
@@ -126,8 +128,6 @@ if (isset($_GET['_id'])) {
             }
         });
     }
-
-    
 </script>
 
 <div class="page-wrapper">

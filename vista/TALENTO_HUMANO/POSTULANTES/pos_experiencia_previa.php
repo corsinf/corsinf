@@ -402,7 +402,13 @@
             $('.form-control').removeClass('is-valid is-invalid');
         }
 
-        // Validar fechas
-        validar_fechas_exp_prev();
+         $("input[name='txt_fecha_contratacion_estado']").on("blur", function() {
+            if (!verificar_fecha_inicio_fecha_fin('txt_fecha_inicio_laboral', 'txt_fecha_final_laboral')) return;
+        });
+        $("input[name='txt_fecha_inicio_laboral']").on("blur", function() {
+            if (!verificar_fecha_inicio_fecha_fin('txt_fecha_inicio_laboral', 'txt_fecha_final_laboral')) return;
+        });
+
+        
     }
 </script>

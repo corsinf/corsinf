@@ -122,6 +122,19 @@
         })
     }
 
+    function verificar_fechas_contratacion() {
+
+        console.log("desde la funcion");
+
+        $("input[name='txt_fecha_contratacion_estado']").on("blur", function() {
+            if (!verificar_fecha_inicio_fecha_fin('txt_fecha_contratacion_estado', 'txt_fecha_salida_estado')) return;
+        });
+        $("input[name='txt_fecha_salida_estado']").on("blur", function() {
+            if (!verificar_fecha_inicio_fecha_fin('txt_fecha_contratacion_estado', 'txt_fecha_salida_estado')) return;
+        });
+
+    }
+
     function eliminar_estado_laboral(id) {
         $.ajax({
             data: {
@@ -223,13 +236,13 @@
                     <div class="row mb-col">
                         <div class="col-md-12">
                             <label for="txt_fecha_contratacion_estado" class="form-label form-label-sm">Fecha de contratación</label>
-                            <input type="date" class="form-control form-control-sm" name="txt_fecha_contratacion_estado" id="txt_fecha_contratacion_estado">
+                            <input type="date" class="form-control form-control-sm" name="txt_fecha_contratacion_estado" id="txt_fecha_contratacion_estado" onchange="verificar_fechas_contratacion();">
                         </div>
                     </div>
                     <div class="row mb-col">
                         <div class="col-md-12">
-                            <label for="txt_fecha_salida_estado" class="form-label form-label-sm">Fecha de salida </label>
-                            <input type="date" class="form-control form-control-sm" name="txt_fecha_salida_estado" id="txt_fecha_salida_estado">
+                            <label for="txt_fecha_salida_estado" class="form-label form-label-sm">Fecha de salida aaaaa </label>
+                            <input type="date" class="form-control form-control-sm" name="txt_fecha_salida_estado" id="txt_fecha_salida_estado" onchange="verificar_fechas_contratacion();">
                         </div>
                     </div>
                 </div>
@@ -237,7 +250,7 @@
                     <button type="button" class="btn btn-success btn-sm px-4 m-1" id="btn_guardar_estado_laboral" onclick="validar_fechas_est_lab(); insertar_editar_estado_laboral();"><i class="bx bx-save"></i>Agregar</button>
                     <button type="button" style="display: none;" class="btn btn-danger btn-sm px-4 m-1" id="btn_eliminar_estado_laboral" onclick="delete_datos_estado_laboral();"><i class="bx bx-trash"></i>Eliminar</button>
                 </div>
-                
+
             </form>
         </div>
     </div>
