@@ -135,18 +135,35 @@
         $pdf->SetFillColor(255, 255, 255); // Blanco para los datos
 
         foreach ($articulos as $articulo) {
+            // Medir altura necesaria para cada celda de la fila
+            $lineHeight = 6;
+            $rfidHeight = $pdf->getStringHeight(45, $articulo['tag_unique']);
+            $descHeight = $pdf->getStringHeight(45, $articulo['descripcion']);
+            $modeloHeight = $pdf->getStringHeight(40, $articulo['modelo']);
+            $serieHeight = $pdf->getStringHeight(35, $articulo['serie']);
+            $fechaHeight = $pdf->getStringHeight(25, soloFecha($articulo['fecha_creacion']));
 
-            $pdf->Cell(45, 6, $articulo['tag_unique'], 1, 0, 'L', true);
+            // Altura máxima usada en esta fila
+            $maxHeight = max($rfidHeight, $descHeight, $modeloHeight, $serieHeight, $fechaHeight);
 
-            // Usar MultiCell para descripción (preserva el ancho fijo)
+            // Posición inicial de la fila
             $x = $pdf->GetX();
             $y = $pdf->GetY();
-            $pdf->MultiCell(45, 6, $articulo['descripcion'], 1, 'L', true);
-            $pdf->SetXY($x + 45, $y);
 
-            $pdf->Cell(40, 6, $articulo['modelo'], 1, 0, 'L', true);
-            $pdf->Cell(35, 6, $articulo['serie'], 1, 0, 'L', true);
-            $pdf->Cell(25, 6, soloFecha($articulo['fecha_creacion']), 1, 1, 'R', true);
+            // RFID
+            $pdf->MultiCell(45, $maxHeight, $articulo['tag_unique'], 1, 'L', true, 0);
+
+            // Descripción
+            $pdf->MultiCell(45, $maxHeight, $articulo['descripcion'], 1, 'L', true, 0);
+
+            // Modelo
+            $pdf->MultiCell(40, $maxHeight, $articulo['modelo'], 1, 'L', true, 0);
+
+            // Serie
+            $pdf->MultiCell(35, $maxHeight, $articulo['serie'], 1, 'L', true, 0);
+
+            // Fecha
+            $pdf->MultiCell(25, $maxHeight, soloFecha($articulo['fecha_creacion']), 1, 'R', true, 1);
         }
 
         // Agregar información adicional al final
