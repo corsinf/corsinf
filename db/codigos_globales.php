@@ -1007,7 +1007,11 @@ function para_ftp($nombre,$texto)
 		  		$sql = "EXEC EstructuraBase @origen_bd = ?,@destino_bd = ?";
 		  		$this->db->ejecutar_procesos_almacenados($sql,$parametros,false,1);
 		  		$sql2 = "EXEC GenerarSPBase @origen_bd = ?,@destino_bd = ?,@db_tercero = ?";
-				return $this->db->ejecutar_procesos_almacenados($sql2, $parametrosSp,false,1);
+				$this->db->ejecutar_procesos_almacenados($sql2, $parametrosSp,false,1);
+				$sql3 = "EXEC GenerarVistasBase @origen_bd = ?,@destino_bd = ?,@db_tercero = ?";
+				$this->db->ejecutar_procesos_almacenados($sql3, $parametrosSp,false,1);
+				$sql4 = "EXEC GenerarTriggersBase @origen_bd = ?,@destino_bd = ?,@db_tercero = ?";
+				return $this->db->ejecutar_procesos_almacenados($sql4, $parametrosSp,false,1);
 		  	}
 		 }else{ return -2;}
 	}
@@ -1016,17 +1020,18 @@ function para_ftp($nombre,$texto)
 	{
 		$totalTablas = 0;
 		$db_origen  = '';
+
+		// print_r($licencias);die();
 		foreach ($licencias as $key => $value) {
 
-				switch ($value['Id_Modulo']) {
-						case '7':
-							$db_origen = BASE_SALUD;
-							break;
-						case '2':
-							$db_origen = BASE_ACTIVOS;
-
-							break;
+				$sql = "SELECT db_referencia FROM MODULOS_SISTEMA WHERE id_modulos = '".$value['Id_Modulo']."'";
+				$dbref = $this->db->datos($sql,1);
+				if(count($dbref)==0)
+				{
+					return -3;
 				}
+				$db_origen = $dbref[0]['db_referencia'];
+
 
 				$sql = "SELECT COUNT(*) AS CantidadDeTablas 
 							FROM ".$db_origen.".INFORMATION_SCHEMA.TABLES 
