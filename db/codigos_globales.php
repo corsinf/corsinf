@@ -1032,6 +1032,10 @@ function para_ftp($nombre,$texto)
 				}
 				$db_origen = $dbref[0]['db_referencia'];
 
+				if($db_origen == 'POR CREAR' || $db_origen == '' || $db_origen == ' ')
+				{
+					continue;
+				}
 
 				$sql = "SELECT COUNT(*) AS CantidadDeTablas 
 							FROM ".$db_origen.".INFORMATION_SCHEMA.TABLES 
