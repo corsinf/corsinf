@@ -38,7 +38,9 @@ if (isset($_GET['DetectarEventos'])) {
 if (isset($_GET['DetenerEventos'])) {
     echo json_encode($controlador->DetenerEventos($_POST['parametros']));
 }
-
+if (isset($_GET['DeviceLog'])) {
+    echo json_encode($controlador->DeviceLog());
+}
 /**
  * 
  */
@@ -347,6 +349,13 @@ class th_detectar_dispositivosC
 		} else {
 		    echo "Hubo un error al intentar eliminar el proceso con PID $pid.";
 		}
+    }
+
+    function DeviceLog()
+    {
+    	$datos = $this->control_acceso->listarJoin();
+    	return $datos;
+    	print_r($datos);die();
     }    
 }
 

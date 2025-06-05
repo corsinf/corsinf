@@ -1006,12 +1006,13 @@ function para_ftp($nombre,$texto)
 		    								'0');
 		  		$sql = "EXEC EstructuraBase @origen_bd = ?,@destino_bd = ?";
 		  		$this->db->ejecutar_procesos_almacenados($sql,$parametros,false,1);
-		  		$sql2 = "EXEC GenerarSPBase @origen_bd = ?,@destino_bd = ?,@db_tercero = ?";
-				$this->db->ejecutar_procesos_almacenados($sql2, $parametrosSp,false,1);
-				$sql3 = "EXEC GenerarVistasBase @origen_bd = ?,@destino_bd = ?,@db_tercero = ?";
+		  		$sql3 = "EXEC GenerarVistasBase @origen_bd = ?,@destino_bd = ?,@db_tercero = ?";
 				$this->db->ejecutar_procesos_almacenados($sql3, $parametrosSp,false,1);
 				$sql4 = "EXEC GenerarTriggersBase @origen_bd = ?,@destino_bd = ?,@db_tercero = ?";
-				return $this->db->ejecutar_procesos_almacenados($sql4, $parametrosSp,false,1);
+				$this->db->ejecutar_procesos_almacenados($sql4, $parametrosSp,false,1);
+				$sql2 = "EXEC GenerarSPBase @origen_bd = ?,@destino_bd = ?,@db_tercero = ?";
+				return $this->db->ejecutar_procesos_almacenados($sql2, $parametrosSp,false,1);
+				
 		  	}
 		 }else{ return -2;}
 	}

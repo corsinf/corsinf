@@ -21,9 +21,7 @@ class interm_examen_featExamenM extends BaseModel
 		// Construir la parte JOIN de la consulta
 		$this->join('cat_feat_examenes', 'interm_examen_featExamen.fex_id = cat_feat_examenes.fex_id');
 		$this->join('cat_examenes', 'interm_examen_featExamen.ex_id = cat_examenes.ex_id');
-
         $datos = $this->where('itee_estado', '1')->listar();
-		
 		return $datos;
 	}
 }

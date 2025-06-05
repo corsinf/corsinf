@@ -18,19 +18,28 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                 url: '../controlador/TALENTO_HUMANO/th_detectar_dispositivosC.php?DeviceLog=true',
                 dataSrc: ''
             },
-            columns: [
-                    { data: 'item' },                   
-                    { data: 'tipo' }, // Tipo dispositivo
-                    { data: 'Estado' }, // Estado
-                    { data: 'ipv4' }, // IPV4
-                    { data: 'puerto' }, // Puerto
-                    { data: 'serie' }, // Serial
-                    { data: 'MAC' }, // MAC Address
+            columns: [                   
+                    { data: 'th_acc_id' }, // Tipo dispositivo
+                    { data: null,
+                        render: function(data, type, item) {
+                        var nombre = '';
+                        if(item.th_per_primer_apellido!='' && item.th_per_primer_apellido!=null){nombre+= item.th_per_primer_apellido+' ';}
+                        if(item.th_per_segundo_apellido!='' && item.th_per_segundo_apellido!=null){nombre+= item.th_per_segundo_apellido+' ';}
+                        if(item.th_per_primer_nombre!='' && item.th_per_primer_nombre!=null){nombre+= item.th_per_primer_nombre+' ';}
+                        if(item.th_per_segundo_nombre!='' && item.th_per_segundo_nombre!=null){nombre+= item.th_per_segundo_nombre+' ';}
+
+                        return nombre;
+                        }
+                    }, // Estado
+                    { data: 'th_per_cedula' }, // IPV4
+                    { data: 'th_cardNo' }, // IPV4
+                    { data: 'th_acc_fecha_hora'}, // Puerto
+                    { data: 'th_acc_hora' }, // Serial
+                    { data: 'th_dis_id' }, // MAC Address
                     { data: null,
                         render: function(data, type, item) {
                         data1 = String(item);
-                        return `<button type="button" class="btn btn-primary btn-xs" onclick="registrar_device('${item.ipv4}','${item.puerto}','${item.serie}')"><i class="bx bx-save fs-7 me-0 fw-bold"></i></button>
-                                <button type="button" class="btn btn-primary btn-xs" onclick="cambiar_clave('${item.ipv4}','${item.puerto}')"><i class="bx bx-key fs-7 me-0 fw-bold"></i></button>`;
+                        return `<button type="button" class="btn btn-primary btn-xs" onclick="registrar_device('${item.ipv4}','${item.puerto}','${item.serie}')"><i class="bx bx-save fs-7 me-0 fw-bold"></i></button>`;
                     }
                 },
                
@@ -298,12 +307,12 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                                         <thead>
                                             <tr>
                                                 <th>No.</th>
-                                                <th>Tipo dispositivo</th>
-                                                <th>Estado</th>
-                                                <th>IPV4</th>
-                                                <th>Puerto</th>
-                                                <th>Serial</th>
-                                                <th>MAC Address</th>
+                                                <th>Nombre</th>
+                                                <th>Cedula</th>                                                
+                                                <th>Tarjeta</th>
+                                                <th>Fecha</th>
+                                                <th>Hora</th>
+                                                <th>dispositivo</th>
                                                 <th width="10px">Acción</th>
                                             </tr>
                                         </thead>
