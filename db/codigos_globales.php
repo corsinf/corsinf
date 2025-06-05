@@ -1032,8 +1032,11 @@ function para_ftp($nombre,$texto)
 				}
 				$db_origen = $dbref[0]['db_referencia'];
 
-				if($db_origen == 'POR CREAR' || $db_origen == '' || $db_origen == ' ')
-				{
+				$validar_sql = "SELECT 1 AS existe FROM sys.databases WHERE name = '$db_origen';";
+				$validar = $this->db->datos($validar_sql);
+
+				if (!isset($validar[0]['existe']) || $validar[0]['existe'] != 1) {
+					// La base de datos no existe
 					continue;
 				}
 
