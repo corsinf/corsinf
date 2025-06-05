@@ -2,13 +2,6 @@
 include(dirname(__DIR__, 3) . '/cabeceras/header4.php');
 
 // Configuración y validación de parámetros
-// $config = [
-//     'tipo' => 'articulos_cliente_bodega', // 'auditoria' o 'articulos_cliente_bodega'
-//     'id_persona' => '1',
-//     'id_localizacion' => '1'
-// ];
-
-// Sanitización de entrada
 if (isset($_GET['tipo'])) {
     $config['tipo'] = in_array($_GET['tipo'], ['auditoria', 'articulos_cliente_bodega']) ? $_GET['tipo'] : 'articulos_cliente_bodega';
 }
@@ -27,12 +20,9 @@ if (isset($_GET['id_empresa'])) {
 
 /**
  * Genera la URL del PDF según el tipo
- * @param array $config
- * @return array
  */
 function generate_Pdf_Config(array $config): array
 {
-    // $baseUrl = 'controlador/ACTIVOS_FIJOS/ac_reporte_acticulos_KalipsoC.php';
     $baseUrl = 'controlador/ACTIVOS_FIJOS/REPORTES/';
 
     $params = [
@@ -55,7 +45,7 @@ function generate_Pdf_Config(array $config): array
         $description = 'Listado General de Artículos';
     }
 
-    $queryParams = http_build_query(array_filter($params)); // Limpia valores nulos
+    $queryParams = http_build_query(array_filter($params));
 
     if ($config['tipo'] === 'auditoria') {
         return [
@@ -73,9 +63,6 @@ function generate_Pdf_Config(array $config): array
         'icon' => 'fas fa-boxes'
     ];
 }
-
-
-
 
 $pdfConfig = generate_Pdf_Config($config);
 ?>
@@ -225,6 +212,38 @@ $pdfConfig = generate_Pdf_Config($config);
         display: block;
     }
 
+    /* Mejoras para móviles */
+    .mobile-pdf-notice {
+        display: none;
+        background: #fff3cd;
+        border: 1px solid #ffeaa7;
+        color: #856404;
+        padding: 20px;
+        text-align: center;
+        border-radius: 5px;
+        margin: 20px;
+    }
+
+    .mobile-pdf-notice i {
+        font-size: 48px;
+        margin-bottom: 15px;
+        display: block;
+        color: #f39c12;
+    }
+
+    .mobile-pdf-notice h4 {
+        margin: 0 0 10px 0;
+        color: #856404;
+    }
+
+    .mobile-pdf-actions {
+        display: flex;
+        gap: 10px;
+        justify-content: center;
+        margin-top: 20px;
+        flex-wrap: wrap;
+    }
+
     .pdf-loading {
         position: absolute;
         top: 0;
@@ -250,13 +269,8 @@ $pdfConfig = generate_Pdf_Config($config);
     }
 
     @keyframes spin {
-        0% {
-            transform: rotate(0deg);
-        }
-
-        100% {
-            transform: rotate(360deg);
-        }
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
     }
 
     .loading-text {
@@ -355,7 +369,8 @@ $pdfConfig = generate_Pdf_Config($config);
         }
 
         .pdf-viewer-container {
-            height: 600px;
+            height: 70vh;
+            min-height: 400px;
         }
 
         .pdf-actions {
@@ -378,11 +393,33 @@ $pdfConfig = generate_Pdf_Config($config);
             flex-direction: column;
             gap: 10px;
         }
+
+        /* Mostrar aviso móvil en dispositivos pequeños */
+        .mobile-pdf-notice {
+            display: block;
+        }
+
+        .pdf-iframe {
+            display: none;
+        }
+    }
+
+    /* Detectar dispositivos iOS específicamente */
+    @supports (-webkit-touch-callout: none) {
+        @media (max-width: 768px) {
+            .mobile-pdf-notice {
+                display: block;
+            }
+            .pdf-iframe {
+                display: none;
+            }
+        }
     }
 
     @media (max-width: 480px) {
         .pdf-viewer-container {
-            height: 500px;
+            height: 60vh;
+            min-height: 300px;
         }
 
         .pdf-title {
@@ -394,14 +431,24 @@ $pdfConfig = generate_Pdf_Config($config);
         .pdf-description {
             margin-left: 0;
         }
+
+        .mobile-pdf-actions {
+            flex-direction: column;
+            align-items: stretch;
+        }
+
+        .mobile-pdf-actions .btn-corporate {
+            width: 100%;
+            margin-bottom: 10px;
+        }
     }
 
     /* Print Styles */
     @media print {
-
         .pdf-header,
         .pdf-info-bar,
-        .pdf-actions {
+        .pdf-actions,
+        .mobile-pdf-notice {
             display: none;
         }
 
@@ -448,14 +495,37 @@ $pdfConfig = generate_Pdf_Config($config);
 
             <!-- Visualizador del PDF -->
             <div class="pdf-viewer-container">
-                <div class="pdf-loading" id="pdf-loading">
+                
+                <!-- Aviso para dispositivos móviles -->
+                <div class="mobile-pdf-notice" id="mobile-notice">
+                    <i class="fas fa-mobile-alt"></i>
+                    <h4>Visualización en dispositivo móvil</h4>
+                    <p>Los navegadores móviles tienen limitaciones para mostrar PDFs integrados. Utiliza una de estas opciones:</p>
+                    <div class="mobile-pdf-actions">
+                        <a href="<?= $pdfConfig['url'] ?>" target="_blank" class="btn-corporate">
+                            <i class="fas fa-external-link-alt"></i>
+                            Abrir en nueva pestaña
+                        </a>
+                        <button onclick="downloadPdf()" class="btn-corporate btn-outline">
+                            <i class="fas fa-download"></i>
+                            Descargar PDF
+                        </button>
+                        <button onclick="tryEmbedView()" class="btn-corporate" style="background: #27ae60;">
+                            <i class="fas fa-eye"></i>
+                            Intentar visualizar aquí
+                        </button>
+                    </div>
+                </div>
+
+                <div class="pdf-loading" id="pdf-loading" style="display: none;">
                     <div class="loading-spinner"></div>
                     <p class="loading-text">Cargando documento</p>
                     <p class="loading-subtext">Por favor espere...</p>
                 </div>
+                
                 <iframe id="pdf-iframe"
                     class="pdf-iframe"
-                    src="<?= $pdfConfig['url'] ?>"
+                    src=""
                     style="display: none;"
                     title="<?= $pdfConfig['description'] ?>">
                 </iframe>
@@ -494,27 +564,53 @@ $pdfConfig = generate_Pdf_Config($config);
 
 <script type="text/javascript">
     $(document).ready(function() {
-
-        initialize_Pdf_Viewer();
-
-        // Ajustar altura en móviles al cargar
-        if ($(window).width() <= 768 && $(window).height() < 600) {
-            $('.pdf-viewer-container').css('height', ($(window).height() - 200) + 'px');
+        
+        // Detectar si es dispositivo móvil
+        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || 
+                         window.innerWidth <= 768;
+        
+        // Detectar específicamente iOS
+        const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+        
+        // En desktop, inicializar normalmente
+        if (!isMobile) {
+            $('#mobile-notice').hide();
+            initializePdfViewer();
+        } else {
+            // En móvil, mostrar opciones
+            $('#mobile-notice').show();
+            $('#pdf-iframe').hide();
         }
 
-        // Ajustar altura en móviles al redimensionar
-        $(window).on('resize', function() {
-            if ($(window).width() <= 768 && $(window).height() < 600) {
-                $('.pdf-viewer-container').css('height', ($(window).height() - 200) + 'px');
+        // Ajustar altura en móviles
+        if (isMobile) {
+            adjustMobileHeight();
+            $(window).on('resize orientationchange', adjustMobileHeight);
+        }
+
+        /**
+         * Ajusta la altura en dispositivos móviles
+         */
+        function adjustMobileHeight() {
+            const windowHeight = $(window).height();
+            const headerHeight = $('.pdf-header').outerHeight() || 0;
+            const infoBarHeight = $('.pdf-info-bar').outerHeight() || 0;
+            const availableHeight = windowHeight - headerHeight - infoBarHeight - 100; // 100px para márgenes
+            
+            if (availableHeight > 300) {
+                $('.pdf-viewer-container').css('height', availableHeight + 'px');
             }
-        });
+        }
 
         /**
          * Inicializa el visualizador de PDF
          */
-        function initialize_Pdf_Viewer() {
+        function initializePdfViewer() {
             const $pdfIframe = $('#pdf-iframe');
             const $pdfLoading = $('#pdf-loading');
+
+            $pdfLoading.show();
+            $pdfIframe.attr('src', '<?= $pdfConfig['url'] ?>');
 
             // Manejar carga exitosa del PDF
             $pdfIframe.on('load', function() {
@@ -526,21 +622,80 @@ $pdfConfig = generate_Pdf_Config($config);
 
             // Manejar error de carga
             $pdfIframe.on('error', function() {
-                show_Pdf_Error();
+                showPdfError();
             });
 
             // Timeout para detectar problemas de carga
             setTimeout(() => {
-                if ($pdfLoading.css('display') !== 'none') {
-                    check_Pdf_Load();
+                if ($pdfLoading.is(':visible')) {
+                    checkPdfLoad();
                 }
             }, 10000);
         }
 
         /**
+         * Intenta mostrar el PDF en móvil (función para el botón)
+         */
+        window.tryEmbedView = function() {
+            $('#mobile-notice').hide();
+            $('#pdf-loading').show();
+            
+            // Intentar diferentes métodos para móviles
+            const pdfUrl = '<?= $pdfConfig['url'] ?>';
+            const $iframe = $('#pdf-iframe');
+            
+            // Método 1: URL directa
+            $iframe.attr('src', pdfUrl).show();
+            
+            // Si no funciona, probar con Google Docs Viewer
+            setTimeout(() => {
+                if ($('#pdf-loading').is(':visible')) {
+                    const googleViewerUrl = `https://docs.google.com/viewer?url=${encodeURIComponent(pdfUrl)}&embedded=true`;
+                    $iframe.attr('src', googleViewerUrl);
+                }
+            }, 3000);
+            
+            // Si tampoco funciona, mostrar error personalizado
+            setTimeout(() => {
+                if ($('#pdf-loading').is(':visible')) {
+                    showMobileError();
+                }
+            }, 8000);
+            
+            // Manejar carga exitosa
+            $iframe.off('load').on('load', function() {
+                $('#pdf-loading').hide();
+                $(this).show();
+            });
+        };
+
+        /**
+         * Muestra error específico para móviles
+         */
+        function showMobileError() {
+            $('#pdf-loading').html(`
+                <div class="pdf-error">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <h4>No se puede visualizar en este dispositivo</h4>
+                    <p>Tu navegador móvil no soporta la visualización de PDFs integrados.</p>
+                    <div style="margin-top: 20px;">
+                        <a href="<?= $pdfConfig['url'] ?>" target="_blank" class="btn-corporate">
+                            <i class="fas fa-external-link-alt"></i>
+                            Abrir en nueva pestaña
+                        </a>
+                        <button onclick="downloadPdf()" class="btn-corporate btn-outline" style="margin-left: 10px;">
+                            <i class="fas fa-download"></i>
+                            Descargar
+                        </button>
+                    </div>
+                </div>
+            `);
+        }
+
+        /**
          * Verifica si el PDF se cargó correctamente
          */
-        function check_Pdf_Load() {
+        function checkPdfLoad() {
             const $pdfIframe = $('#pdf-iframe');
             const $pdfLoading = $('#pdf-loading');
 
@@ -550,7 +705,7 @@ $pdfConfig = generate_Pdf_Config($config);
                     $pdfLoading.hide();
                     $pdfIframe.show();
                 } else {
-                    show_Pdf_Error();
+                    showPdfError();
                 }
             } catch (e) {
                 $pdfLoading.hide();
@@ -561,54 +716,60 @@ $pdfConfig = generate_Pdf_Config($config);
         /**
          * Muestra mensaje de error al cargar PDF
          */
-        function show_Pdf_Error() {
+        function showPdfError() {
             $('#pdf-loading').html(`
-            <div class="pdf-error">
-                <i class="fas fa-exclamation-triangle"></i>
-                <h4>Error al cargar el documento</h4>
-                <p>No se pudo cargar el archivo PDF. Por favor:</p>
-                <ul style="text-align: left; display: inline-block;">
-                    <li>Verifique su conexión a internet</li>
-                    <li>Compruebe que el servidor esté disponible</li>
-                    <li>Intente actualizar la página</li>
-                </ul>
-                <button id="btn-retry" class="btn-corporate" style="margin-top: 15px;">
-                    <i class="fas fa-sync-alt"></i>
-                    Reintentar
-                </button>
-            </div>
-        `).show();
-
-            $('#btn-retry').on('click', refresh_Pdf);
+                <div class="pdf-error">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <h4>Error al cargar el documento</h4>
+                    <p>No se pudo cargar el archivo PDF. Por favor:</p>
+                    <ul style="text-align: left; display: inline-block;">
+                        <li>Verifique su conexión a internet</li>
+                        <li>Compruebe que el servidor esté disponible</li>
+                        <li>Intente actualizar la página</li>
+                    </ul>
+                    <button onclick="refresh_Pdf()" class="btn-corporate" style="margin-top: 15px;">
+                        <i class="fas fa-sync-alt"></i>
+                        Reintentar
+                    </button>
+                </div>
+            `).show();
         }
 
         /**
          * Refresca el PDF
          */
-        function refresh_Pdf() {
+        window.refresh_Pdf = function() {
             const $pdfIframe = $('#pdf-iframe');
             const $pdfLoading = $('#pdf-loading');
 
             $pdfLoading.html(`
-            <div class="loading-spinner"></div>
-            <p class="loading-text">Actualizando documento</p>
-            <p class="loading-subtext">Por favor espere...</p>
-        `).css('display', 'flex');
+                <div class="loading-spinner"></div>
+                <p class="loading-text">Actualizando documento</p>
+                <p class="loading-subtext">Por favor espere...</p>
+            `).css('display', 'flex').show();
 
             $pdfIframe.hide();
 
-            const currentSrc = $pdfIframe.attr('src');
+            const currentSrc = '<?= $pdfConfig['url'] ?>';
             $pdfIframe.attr('src', '');
             setTimeout(() => {
                 $pdfIframe.attr('src', currentSrc + '&refresh=' + Date.now());
             }, 100);
-        }
+        };
 
         /**
          * Descargar PDF
          */
         window.downloadPdf = function() {
             const pdfUrl = '<?= $pdfConfig['url'] ?>';
+            
+            // Para móviles, abrir en nueva pestaña (más compatible)
+            if (isMobile) {
+                window.open(pdfUrl, '_blank');
+                return;
+            }
+            
+            // Para desktop, intentar descarga directa
             const link = $('<a>')
                 .attr('href', pdfUrl)
                 .attr('download', '<?= $pdfConfig['description'] ?>_<?= date('Y-m-d') ?>.pdf')
@@ -616,15 +777,6 @@ $pdfConfig = generate_Pdf_Config($config);
 
             link[0].click();
             link.remove();
-        };
-
-        /**
-         * Cambiar tipo de reporte
-         */
-        window.changeReportType = function(tipo) {
-            const currentUrl = new URL(window.location.href);
-            currentUrl.searchParams.set('tipo', tipo);
-            window.location.href = currentUrl.toString();
         };
 
     });

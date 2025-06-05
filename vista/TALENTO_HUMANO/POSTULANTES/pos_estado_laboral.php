@@ -241,7 +241,7 @@
                     </div>
                     <div class="row mb-col">
                         <div class="col-md-12">
-                            <label for="txt_fecha_salida_estado" class="form-label form-label-sm">Fecha de salida aaaaa </label>
+                            <label for="txt_fecha_salida_estado" class="form-label form-label-sm">Fecha de salida</label>
                             <input type="date" class="form-control form-control-sm" name="txt_fecha_salida_estado" id="txt_fecha_salida_estado" onchange="verificar_fechas_contratacion();">
                         </div>
                     </div>
