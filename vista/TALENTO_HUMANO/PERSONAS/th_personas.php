@@ -108,12 +108,15 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                 $('#tbl_import').html(tr);
             },
             error: function(xhr, status, error) {
+                
+                $('#myModal_espera').modal('hide');
                 console.log('Status: ' + status);
                 console.log('Error: ' + error);
                 console.log('XHR Response: ' + xhr.responseText);
 
-                Swal.fire('', 'Error: ' + xhr.responseText, 'error');
-                $('#myModal_espera').modal('hide');
+                Swal.fire('', 'Error: ' + xhr.responseText, 'error').then(function(){
+                    $('#myModal_espera').modal('hide');
+                });
             }
         });
     }
@@ -257,20 +260,22 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                         <button class="btn btn-primary btn-sm" onclick="conectar_buscar()"><i class="bx bx-sync"></i>Conectar y buscar</button>
                     </div>
                     <div class="col-sm-12">
-                        <table class="table table-striped" id="">
-                            <thead>
-                                <tr>
-                                    <th>Numero de tarjeta</th>
-                                    <th>Nombre</th>
-                                    <th>Nombre</th>
-                                    <th>Nombre</th>
-                                    <th>Nombre</th>
-                                </tr>
-                            </thead>
-                            <tbody id="tbl_import">
+                        <div class="table-responsive" style="height: 250px;">
+                            <table class="table table-striped" id="">
+                                <thead>
+                                    <tr>
+                                        <th>Numero de tarjeta</th>
+                                        <th>Nombre</th>
+                                        <th>Nombre</th>
+                                        <th>Nombre</th>
+                                        <th>Nombre</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tbl_import">
 
-                            </tbody>
-                        </table>
+                                </tbody>
+                            </table>                            
+                        </div>
                     </div>
                 </div>
             </div>

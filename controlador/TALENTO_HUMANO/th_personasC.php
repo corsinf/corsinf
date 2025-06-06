@@ -110,7 +110,8 @@ class th_personasC
         $this->face = new th_faceM();
 
         $this->cod_globales = new codigos_globales();
-        $this->sdk_patch = dirname(__DIR__, 2) . '/lib/SDKDevices/hikvision/bin/Debug/net8.0/CorsinfSDKHik.dll ';
+        $this->sdk_patch = dirname(__DIR__,2).'\\lib\\SDKDevices\\hikvision\\bin\\Debug\\net8.0\\CorsinfSDKHik.dll ';
+        // $this->sdk_patch = "C:\\Users\\lenovo\\source\\repos\\CorsinfSDKHik\\CorsinfSDKHik\\bin\\Debug\\net8.0\\CorsinfSDKHik.dll";
         $this->empresa = new empresaM();
     }
 
@@ -171,13 +172,15 @@ class th_personasC
             $output = shell_exec($command);
             $resp = json_decode($output, true);
             $cadena = $resp['msj'];
+            // print_r($cadena);die();
             $cadena = preg_replace('/[^\w:{}\s,]/u', '', $cadena);
-            $cadena = str_replace(["CardNo", "nombre", "{"], ['"CardNo"', '"nombre"', '{'], $cadena);
+            $cadena = str_replace(["EmployedId","CardNo", "nombre", "{"], ['"EmployedId"','"CardNo"', '"nombre"', '{'], $cadena);
             $cadena = '[' . str_replace(['":', '}', ',"'], ['":"', '"}', '","'], $cadena) . ']';
             // print_r($cadena);die();
             $datos = json_decode($cadena, true);
             $lista = array();
             // print_r($datos);
+            
             if(count($datos)>0)
             {
                 foreach ($datos as $key => $value) {

@@ -165,97 +165,177 @@ namespace CorsinfSDKHik.Funciones
             return msj;
         }
 
-        public String BuscarPersonas(int deviceUserId)
-        {
+        //public String BuscarPersonas2(int deviceUserId)
+        //{
             
+        //    if (m_lGetCardCfgHandle != -1)
+        //    {
+        //        CHCNetSDK.NET_DVR_StopRemoteConfig(m_lGetCardCfgHandle);
+        //        m_lGetCardCfgHandle = -1;
+        //    }
+        //    String msj = "";
+        //    // Crear la condición para obtener todas las tarjetas
+        //    CHCNetSDK.NET_DVR_CARD_COND struCond = new CHCNetSDK.NET_DVR_CARD_COND();
+        //    struCond.Init();
+        //    struCond.dwSize = (uint)Marshal.SizeOf(struCond);
+        //    struCond.dwCardNum = 0xffffffff;  // 0 para obtener todas las tarjetas
+
+        //    IntPtr ptrStruCond = Marshal.AllocHGlobal((int)struCond.dwSize);
+        //    Marshal.StructureToPtr(struCond, ptrStruCond, false);
+
+        //    // Iniciar la consulta remota
+        //    m_lGetCardCfgHandle = CHCNetSDK.NET_DVR_StartRemoteConfig(
+        //        m_UserID,
+        //        CHCNetSDK.NET_DVR_GET_CARD,
+        //        ptrStruCond,
+        //        (int)struCond.dwSize,
+        //        null,
+        //        IntPtr.Zero
+        //    );
+
+        //    if (m_lGetCardCfgHandle < 0)
+        //    {
+        //        //Console.WriteLine("NET_DVR_GET_CARD error: " + CHCNetSDK.NET_DVR_GetLastError());
+        //        msj = "NET_DVR_GET_CARD error: " + CHCNetSDK.NET_DVR_GetLastError();
+        //        Marshal.FreeHGlobal(ptrStruCond);
+        //        return msj;
+        //    }
+
+        //    CHCNetSDK.NET_DVR_CARD_RECORD struData = new CHCNetSDK.NET_DVR_CARD_RECORD();
+        //    struData.Init();
+        //    struData.dwSize = (uint)Marshal.SizeOf(struData);
+
+        //    IntPtr ptrStruData = Marshal.AllocHGlobal((int)struData.dwSize);
+
+        //    while (true)
+        //    {
+        //        int dwState = CHCNetSDK.NET_DVR_GetNextRemoteConfig(m_lGetCardCfgHandle, ptrStruData, struData.dwSize);
+
+        //        if (dwState == (int)CHCNetSDK.NET_SDK_SENDWITHRECV_STATUS.NET_SDK_CONFIG_STATUS_NEEDWAIT)
+        //        {
+        //            Thread.Sleep(10);
+        //            continue;
+        //        }
+        //        else if (dwState == (int)CHCNetSDK.NET_SDK_GET_NEXT_STATUS.NET_SDK_GET_NEXT_STATUS_SUCCESS)
+        //        {
+        //            struData = (CHCNetSDK.NET_DVR_CARD_RECORD)Marshal.PtrToStructure(ptrStruData, typeof(CHCNetSDK.NET_DVR_CARD_RECORD));
+        //            //string cardNo = System.Text.Encoding.Default.GetString(struData.byCardNo).TrimEnd('\0');
+        //            //string name = System.Text.Encoding.Default.GetString(struData.byName).TrimEnd('\0');
+
+        //            string cardNo = System.Text.Encoding.Default.GetString(struData.byCardNo).TrimEnd('\0');
+        //            string name = System.Text.Encoding.Default.GetString(struData.byName).TrimEnd('\0');
+        //            string employeeNo = struData.dwEmployeeNo.ToString();
+
+        //            string extraData = System.Text.Encoding.Default.GetString(struData.byRes).TrimEnd('\0');
+        //            string extraData1 = struData.byRes1.ToString();
+
+        //            //Console.WriteLine($"Tarjeta: {cardNo}, Nombre: {name}, empleado: {EmployedNo}");
+        //            msj += "{EmployedId:"+employeeNo+",CardNo:" + cardNo + ",nombre:" + name.TrimEnd('\u0000', '\u0001', '\u0002') + "},";
+
+        //        }
+        //        else if (dwState == (int)CHCNetSDK.NET_SDK_GET_NEXT_STATUS.NET_SDK_GET_NEXT_STATUS_FINISH)
+        //        {
+        //            //Console.WriteLine("Se han recuperado todos los registros."); 
+        //            break;
+        //        }
+        //        else if (dwState == (int)CHCNetSDK.NET_SDK_GET_NEXT_STATUS.NET_SDK_GET_NEXT_STATUS_FAILED)
+        //        {
+        //            //Console.WriteLine("Error al recuperar los registros: " + CHCNetSDK.NET_DVR_GetLastError());
+        //            msj = "Error al recuperar los registros: " + CHCNetSDK.NET_DVR_GetLastError();
+        //            break;
+        //        }
+        //        else
+        //        {
+        //            //Console.WriteLine("Excepción durante la consulta: " + CHCNetSDK.NET_DVR_GetLastError());
+        //            msj = "Excepción durante la consulta: " + CHCNetSDK.NET_DVR_GetLastError();
+        //            break;
+        //        }
+        //    }
+
+        //    CHCNetSDK.NET_DVR_StopRemoteConfig(m_lGetCardCfgHandle);
+        //    m_lGetCardCfgHandle = -1;
+        //    Marshal.FreeHGlobal(ptrStruCond);
+        //    Marshal.FreeHGlobal(ptrStruData);
+        //    return msj;
+        //}
+
+
+        public string BuscarPersonas(int deviceUserId)
+        {
             if (m_lGetCardCfgHandle != -1)
             {
-                CHCNetSDK.NET_DVR_StopRemoteConfig(m_lGetCardCfgHandle);
-                m_lGetCardCfgHandle = -1;
+                if (CHCNetSDK.NET_DVR_StopRemoteConfig(m_lGetCardCfgHandle))
+                {
+                    m_lGetCardCfgHandle = -1;
+                }
             }
+
             String msj = "";
-            // Crear la condición para obtener todas las tarjetas
-            CHCNetSDK.NET_DVR_CARD_COND struCond = new CHCNetSDK.NET_DVR_CARD_COND();
-            struCond.Init();
-            struCond.dwSize = (uint)Marshal.SizeOf(struCond);
-            struCond.dwCardNum = 0xffffffff;  // 0 para obtener todas las tarjetas
+            // Condición para obtener TODAS las tarjetas
+            CHCNetSDK.NET_DVR_CARD_COND cardCond = new CHCNetSDK.NET_DVR_CARD_COND();
+            cardCond.dwSize = (uint)Marshal.SizeOf(cardCond);
+            cardCond.dwCardNum = 0xFFFFFFFF; // Todas las tarjetas
 
-            IntPtr ptrStruCond = Marshal.AllocHGlobal((int)struCond.dwSize);
-            Marshal.StructureToPtr(struCond, ptrStruCond, false);
+            IntPtr ptrCond = Marshal.AllocHGlobal(Marshal.SizeOf(cardCond));
+            Marshal.StructureToPtr(cardCond, ptrCond, false);
 
-            // Iniciar la consulta remota
-            m_lGetCardCfgHandle = CHCNetSDK.NET_DVR_StartRemoteConfig(
-                m_UserID,
+            int handle = CHCNetSDK.NET_DVR_StartRemoteConfig(
+                deviceUserId,
                 CHCNetSDK.NET_DVR_GET_CARD,
-                ptrStruCond,
-                (int)struCond.dwSize,
+                ptrCond,
+                Marshal.SizeOf(cardCond),
                 null,
                 IntPtr.Zero
             );
 
-            if (m_lGetCardCfgHandle < 0)
+            if (handle < 0)
             {
-                //Console.WriteLine("NET_DVR_GET_CARD error: " + CHCNetSDK.NET_DVR_GetLastError());
-                msj = "NET_DVR_GET_CARD error: " + CHCNetSDK.NET_DVR_GetLastError();
-                Marshal.FreeHGlobal(ptrStruCond);
+                Marshal.FreeHGlobal(ptrCond);
+                msj = $"Error al iniciar la configuración remota: {CHCNetSDK.NET_DVR_GetLastError()}";
                 return msj;
             }
 
-            CHCNetSDK.NET_DVR_CARD_RECORD struData = new CHCNetSDK.NET_DVR_CARD_RECORD();
-            struData.Init();
-            struData.dwSize = (uint)Marshal.SizeOf(struData);
+            CHCNetSDK.NET_DVR_CARD_RECORD cardData = new CHCNetSDK.NET_DVR_CARD_RECORD();
+            cardData.dwSize = (uint)Marshal.SizeOf(cardData);
 
-            IntPtr ptrStruData = Marshal.AllocHGlobal((int)struData.dwSize);
+            IntPtr ptrCardData = Marshal.AllocHGlobal(Marshal.SizeOf(cardData));
 
             while (true)
             {
-                int dwState = CHCNetSDK.NET_DVR_GetNextRemoteConfig(m_lGetCardCfgHandle, ptrStruData, struData.dwSize);
+                int status = CHCNetSDK.NET_DVR_GetNextRemoteConfig(handle, ptrCardData, (uint)Marshal.SizeOf(cardData));
 
-                if (dwState == (int)CHCNetSDK.NET_SDK_SENDWITHRECV_STATUS.NET_SDK_CONFIG_STATUS_NEEDWAIT)
+                if (status == (int)CHCNetSDK.NET_SDK_SENDWITHRECV_STATUS.NET_SDK_CONFIG_STATUS_NEEDWAIT)
                 {
-                    Thread.Sleep(10);
+                    Thread.Sleep(50);
                     continue;
                 }
-                else if (dwState == (int)CHCNetSDK.NET_SDK_GET_NEXT_STATUS.NET_SDK_GET_NEXT_STATUS_SUCCESS)
+                else if (status == (int)CHCNetSDK.NET_SDK_SENDWITHRECV_STATUS.NET_SDK_CONFIG_STATUS_SUCCESS)
                 {
-                    struData = (CHCNetSDK.NET_DVR_CARD_RECORD)Marshal.PtrToStructure(ptrStruData, typeof(CHCNetSDK.NET_DVR_CARD_RECORD));
-                    //string cardNo = System.Text.Encoding.Default.GetString(struData.byCardNo).TrimEnd('\0');
-                    //string name = System.Text.Encoding.Default.GetString(struData.byName).TrimEnd('\0');
+                    cardData = (CHCNetSDK.NET_DVR_CARD_RECORD)Marshal.PtrToStructure(ptrCardData, typeof(CHCNetSDK.NET_DVR_CARD_RECORD));
 
-                    string cardNo = System.Text.Encoding.Default.GetString(struData.byCardNo).TrimEnd('\0');
-                    string name = System.Text.Encoding.Default.GetString(struData.byName).TrimEnd('\0');
-                    string employeeNo = struData.dwEmployeeNo.ToString();
+                    string cardNo = Encoding.Default.GetString(cardData.byCardNo).TrimEnd('\0');
+                    string name = Encoding.Default.GetString(cardData.byName).TrimEnd('\0');
+                    string empleado = cardData.dwEmployeeNo.ToString();
 
-                    string extraData = System.Text.Encoding.Default.GetString(struData.byRes).TrimEnd('\0');
-                    string extraData1 = struData.byRes1.ToString();
-
-                    //Console.WriteLine($"Tarjeta: {cardNo}, Nombre: {name}, empleado: {EmployedNo}");
-                    msj += "{EmployedId:"+employeeNo+",CardNo:" + cardNo + ",nombre:" + name.TrimEnd('\u0000', '\u0001', '\u0002') + "},";
-
+                    msj += "{EmployedId:" + empleado + ",CardNo:" + cardNo + ",nombre:" + name.TrimEnd('\u0000', '\u0001', '\u0002') + "},";
                 }
-                else if (dwState == (int)CHCNetSDK.NET_SDK_GET_NEXT_STATUS.NET_SDK_GET_NEXT_STATUS_FINISH)
+                else if (status == (int)CHCNetSDK.NET_SDK_SENDWITHRECV_STATUS.NET_SDK_CONFIG_STATUS_FINISH)
                 {
-                    //Console.WriteLine("Se han recuperado todos los registros."); 
-                    break;
-                }
-                else if (dwState == (int)CHCNetSDK.NET_SDK_GET_NEXT_STATUS.NET_SDK_GET_NEXT_STATUS_FAILED)
-                {
-                    //Console.WriteLine("Error al recuperar los registros: " + CHCNetSDK.NET_DVR_GetLastError());
-                    msj = "Error al recuperar los registros: " + CHCNetSDK.NET_DVR_GetLastError();
                     break;
                 }
                 else
                 {
-                    //Console.WriteLine("Excepción durante la consulta: " + CHCNetSDK.NET_DVR_GetLastError());
-                    msj = "Excepción durante la consulta: " + CHCNetSDK.NET_DVR_GetLastError();
+                    msj += $"Error al obtener datos: {CHCNetSDK.NET_DVR_GetLastError()}\n";
                     break;
                 }
             }
 
-            CHCNetSDK.NET_DVR_StopRemoteConfig(m_lGetCardCfgHandle);
-            m_lGetCardCfgHandle = -1;
-            Marshal.FreeHGlobal(ptrStruCond);
-            Marshal.FreeHGlobal(ptrStruData);
+            CHCNetSDK.NET_DVR_StopRemoteConfig(handle);
+            Marshal.FreeHGlobal(ptrCond);
+            Marshal.FreeHGlobal(ptrCardData);
+            CHCNetSDK.NET_DVR_Logout_V30(deviceUserId);
+            CHCNetSDK.NET_DVR_Cleanup();
+
             return msj;
         }
 

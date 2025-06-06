@@ -47,7 +47,7 @@ namespace CorsinfSDKHik.Funciones
             strupond.dwSize = dwSize;
             byte.TryParse(FingerID, out strupond.byFingerPrintID);
             int.TryParse(CardReaderNo, out strupond.dwEnableReaderNo);
-            strupond.dwFingerprintNum = 1;//指纹数量写死的
+            strupond.dwFingerprintNum = 5;//指纹数量写死的
             byte[] byTempptrRec = System.Text.Encoding.UTF8.GetBytes(CardNo);
             for (int i = 0; i < byTempptrRec.Length; i++)
             {
@@ -544,7 +544,7 @@ namespace CorsinfSDKHik.Funciones
                 CHCNetSDK.NET_DVR_FINGERPRINT_CONDF struCond = new CHCNetSDK.NET_DVR_FINGERPRINT_CONDF();
                 struCond.init();
                 struCond.dwSize = Marshal.SizeOf(struCond);
-                struCond.dwFingerprintNum = 1;
+                struCond.dwFingerprintNum = 5;
                 byte.TryParse(item.ToString(), out struCond.byFingerPrintID);
                 byte[] byTemp = System.Text.Encoding.UTF8.GetBytes(cardNo);
                 for (int i = 0; i < byTemp.Length; i++)
