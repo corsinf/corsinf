@@ -92,6 +92,7 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
             dataType: 'json',
 
             success: function(response) {
+                console.log(response);
 
                 $('#myModal_espera').modal('hide');
                 tr = '';

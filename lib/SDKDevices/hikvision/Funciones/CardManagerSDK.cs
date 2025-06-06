@@ -336,6 +336,7 @@ namespace CorsinfSDKHik.Funciones
             CHCNetSDK.NET_DVR_Logout_V30(deviceUserId);
             CHCNetSDK.NET_DVR_Cleanup();
 
+            
             return msj;
         }
 
