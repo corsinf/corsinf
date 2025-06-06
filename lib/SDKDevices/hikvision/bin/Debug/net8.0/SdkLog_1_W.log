@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 [2025-06-06 12:14:29.948][INF] The COM:HCCoreBase ver is 1.0.0.1, 2018_06_01. Async:1.
 [2025-06-06 12:14:29.992][INF] The COM:Core ver is 6.1.3.5, 2019_09_26. Async:1.
 [2025-06-06 12:14:30.017][INF] This HCNetSDK ver is 6.1.3.5 Ver 2019_09_26.
@@ -37,3 +38,44 @@
 [2025-06-06 12:14:54.192][DBG] CUserMgr::UnRegisterHeartProxy[0]
 [2025-06-06 12:15:24.526][INF] COM_Logout[0][1]
 [2025-06-06 12:15:24.632][INF] CTransUnitMgr::UnloadTransUnitLib
+=======
+[2025-06-06 12:51:14.223][INF] The COM:HCCoreBase ver is 1.0.0.1, 2018_06_01. Async:1.
+[2025-06-06 12:51:14.229][INF] The COM:Core ver is 6.1.3.5, 2019_09_26. Async:1.
+[2025-06-06 12:51:14.229][INF] This HCNetSDK ver is 6.1.3.5 Ver 2019_09_26.
+[2025-06-06 12:51:20.978][DBG] load full path[C:\Users\lenovo\source\repos\CorsinfSDKHik\CorsinfSDKHik\HCNetSDK\HCNetSDKCom/HCVoiceTalk.dll] succ
+[2025-06-06 12:51:21.087][INF] AbilityAnalyze---Init-- start
+[2025-06-06 12:51:21.088][ERR] AbilityAnalyze---open zip package error, package path C:/Users/lenovo/source/repos/CorsinfSDKHik/CorsinfSDKHik/HCNetSDK/LocalXml.zip
+[2025-06-06 12:51:21.089][INF] The COM:VoiceTalk ver is 6.1.3.5, 2019_09_26.
+[2025-06-06 12:51:21.482][DBG] load full path[C:\Users\lenovo\source\repos\CorsinfSDKHik\CorsinfSDKHik\HCNetSDK\HCNetSDKCom/HCGeneralCfgMgr.dll] succ
+[2025-06-06 12:51:21.487][INF] The COM:HCGeneralCfgMgr ver is 6.1.3.5, 2019_09_26.
+[2025-06-06 12:51:21.777][DBG] load full path[C:\Users\lenovo\source\repos\CorsinfSDKHik\CorsinfSDKHik\HCNetSDK\HCNetSDKCom/HCPlayBack.dll] succ
+[2025-06-06 12:51:21.808][INF] The COM:HCPlayback ver is 6.1.3.5, 2019_09_26.
+[2025-06-06 12:51:21.956][DBG] load full path[C:\Users\lenovo\source\repos\CorsinfSDKHik\CorsinfSDKHik\HCNetSDK\HCNetSDKCom/HCIndustry.dll] succ
+[2025-06-06 12:51:21.961][INF] The COM:HCIndustry ver is 6.1.3.5, 2019_09_26.
+[2025-06-06 12:51:22.053][DBG] load full path[C:\Users\lenovo\source\repos\CorsinfSDKHik\CorsinfSDKHik\HCNetSDK\HCNetSDKCom/HCDisplay.dll] succ
+[2025-06-06 12:51:22.055][INF] The COM:HCDisplay ver is 6.1.3.5, 2019_09_26.
+[2025-06-06 12:51:22.142][DBG] load full path[C:\Users\lenovo\source\repos\CorsinfSDKHik\CorsinfSDKHik\HCNetSDK\HCNetSDKCom/HCPreview.dll] succ
+[2025-06-06 12:51:22.155][INF] The COM:Preview ver is 6.1.3.5, 2019_09_26.
+[2025-06-06 12:51:22.188][DBG] load full path[C:\Users\lenovo\source\repos\CorsinfSDKHik\CorsinfSDKHik\HCNetSDK\HCNetSDKCom/HCAlarm.dll] succ
+[2025-06-06 12:51:22.190][INF] The COM:HCAlarm ver is 6.1.3.5, 2019_09_26.
+[2025-06-06 12:51:22.220][DBG] CLongConfigSessionEx::start succ [userid:0][command:2560]
+[2025-06-06 12:51:22.341][DBG] callback [2]data len[1300].
+[2025-06-06 12:51:22.405][DBG] callback [2]data len[1300].
+[2025-06-06 12:51:22.533][DBG] callback [2]data len[1300].
+[2025-06-06 12:51:22.653][DBG] callback [2]data len[1300].
+[2025-06-06 12:51:22.773][DBG] callback [2]data len[1300].
+[2025-06-06 12:51:22.893][DBG] callback [2]data len[1300].
+[2025-06-06 12:51:23.012][DBG] callback [2]data len[1300].
+[2025-06-06 12:51:23.133][DBG] callback [2]data len[1300].
+[2025-06-06 12:51:23.252][DBG] callback [2]data len[1300].
+[2025-06-06 12:51:23.372][DBG] callback [2]data len[1300].
+[2025-06-06 12:51:23.493][DBG] callback [2]data len[1300].
+[2025-06-06 12:51:23.612][DBG] callback [0]data len[4].
+[2025-06-06 12:51:23.612][DBG] callback status[1000].
+[2025-06-06 12:51:23.627][INF] [CLongLinkCtrlPrivate::RecvThreadFunc] RecvThreadFunc EXIT, this=0x121fb448, linkid=115f6f44
+[2025-06-06 12:51:23.644][INF] [0]CLongConfigSession::Stop in
+[2025-06-06 12:51:23.645][INF] COM_Logout[0][1]
+[2025-06-06 12:51:23.645][DBG] CUserMgr::UnRegisterHeartProxy[0]
+[2025-06-06 12:56:12.955][INF] COM_Logout[0][1]
+[2025-06-06 12:56:13.199][INF] CTransUnitMgr::UnloadTransUnitLib
+>>>>>>> 165a17311bfa5186421538cec5397217fd8f9580
