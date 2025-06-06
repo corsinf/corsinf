@@ -272,7 +272,7 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                                         <th>Nombre</th>
                                     </tr>
                                 </thead>
-                                <tbody id="tbl_import">
+                                <tbody id="tbl_import" >
 
                                 </tbody>
                             </table>                            
