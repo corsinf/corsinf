@@ -760,16 +760,8 @@ $pdfConfig = generate_Pdf_Config($config);
         /**
          * Descargar PDF
          */
-        window.downloadPdf = function() {
+         window.downloadPdf = function() {
             const pdfUrl = '<?= $pdfConfig['url'] ?>';
-            
-            // Para móviles, abrir en nueva pestaña (más compatible)
-            if (isMobile) {
-                window.open(pdfUrl, '_blank');
-                return;
-            }
-            
-            // Para desktop, intentar descarga directa
             const link = $('<a>')
                 .attr('href', pdfUrl)
                 .attr('download', '<?= $pdfConfig['description'] ?>_<?= date('Y-m-d') ?>.pdf')

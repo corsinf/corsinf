@@ -144,7 +144,7 @@ class Program
                     user = args[2];
                     port = args[3];
                     pass = args[4];
-                    r = login.LoginFing(ip, port, user, pass);
+                    r = login.loginSDKDevice(ip, port, user, pass);
                     m_UserId = login.m_UserID;
                     if (m_UserId >= 0)
                     {
