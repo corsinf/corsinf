@@ -33,6 +33,10 @@ if (isset($_GET['pruebas'])) {
     echo json_encode($controlador->control_acceso_reporte());
 }
 
+if (isset($_GET['eliminar'])) {
+    echo json_encode($controlador->eliminar($_POST['id'] ?? ''));
+}
+
 
 
 class th_reportesC
@@ -71,6 +75,20 @@ class th_reportesC
             $datos = $this->modelo->editar($datos, $where);
         }
 
+        return $datos;
+    }
+
+    function eliminar($id)
+    {
+        $datos = array(
+            array('campo' => 'th_rep_estado', 'dato' => 0),
+        );
+
+        $where = array(
+            array('campo' => 'th_rep_id', 'dato' => $id),
+        );
+
+        $datos = $this->modelo->editar($datos, $where);
         return $datos;
     }
 
