@@ -149,13 +149,13 @@ if (isset($_GET['_id'])) {
                     required: true,
                 },
                 txt_segundo_apellido: {
-                    required: true,
+                    // required: true,
                 },
                 txt_primer_nombre: {
                     required: true,
                 },
                 txt_segundo_nombre: {
-                    required: true,
+                    // required: true,
                 },
                 txt_cedula: {
                     required: true,

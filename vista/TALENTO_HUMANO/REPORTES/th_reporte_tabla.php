@@ -13,14 +13,20 @@ if (isset($_GET['_id'])) {
 
 <script type="text/javascript">
     $(document).ready(function() {
-        cargar_reporte_atributos('<?= $_id ?>');
-        // control_acceso_reporte();
+        cargar_selects2();
+
+        //Validacion para las fechas
+        $("input[name='txt_fecha_fin']").on("blur", function() {
+            if (!verificar_fecha_inicio_fecha_fin('txt_fecha_inicio', 'txt_fecha_fin')) return;
+        });
     });
 
-    function cargar_reporte_atributos(id) {
+    function cargar_reporte_atributos(id, parametros) {
+        console.log('cargar_reporte_atributos: ', parametros);
+
         $.ajax({
             data: {
-                id: id
+                id: id,
             },
             url: '../controlador/TALENTO_HUMANO/th_reporte_camposC.php?listar=true',
             type: 'post',
@@ -53,12 +59,16 @@ if (isset($_GET['_id'])) {
                     // Inicializar DataTable con los datos
                     tbl_reporte = $('#tbl_reporte').DataTable($.extend({}, configuracion_datatable('Reporte', 'reporte'), {
                         destroy: true,
-                        reponsive: true,
+                        responsive: true,
                         language: {
                             url: 'https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
                         },
                         ajax: {
-                            url: '../controlador/TALENTO_HUMANO/th_reportesC.php?pruebas=true',
+                            url: '../controlador/TALENTO_HUMANO/th_reportesC.php?reporte=true',
+                            type: 'POST',
+                            data: function(d) {
+                                d.parametros = parametros;
+                            },
                             dataSrc: ''
                         },
                         columns: columns,
@@ -72,6 +82,25 @@ if (isset($_GET['_id'])) {
                 console.error("Error al cargar los datos:", error);
             }
         });
+    }
+
+    function buscar_fechas() {
+        let txt_fecha_inicio = $('#txt_fecha_inicio').val();
+        let txt_fecha_fin = $('#txt_fecha_fin').val();
+        let ddl_departamentos = $('#ddl_departamentos').val();
+
+        if (txt_fecha_inicio && txt_fecha_fin && ddl_departamentos) {
+            parametros = {
+                'txt_fecha_inicio': txt_fecha_inicio,
+                'txt_fecha_fin': txt_fecha_fin,
+                'ddl_departamentos': ddl_departamentos,
+            };
+            
+            cargar_reporte_atributos('<?= $_id ?>', parametros);
+
+        } else {
+            alert("Por favor, complete todos los campos obligatorios.");
+        }
     }
 
     function control_acceso_reporte() {
@@ -89,6 +118,11 @@ if (isset($_GET['_id'])) {
                 console.error("Error al cargar los datos:", error);
             }
         });
+    }
+
+    function cargar_selects2() {
+        url_departamentosC = '../controlador/TALENTO_HUMANO/th_departamentosC.php?buscar=true';
+        cargar_select2_url('ddl_departamentos', url_departamentosC);
     }
 </script>
 
@@ -133,10 +167,19 @@ if (isset($_GET['_id'])) {
                                         <label for="txt_fecha_fin" class="form-label fw-bold">Fecha Fin <label style="color: red;">*</label> </label>
                                         <input type="date" class="form-control form-control-sm" id="txt_fecha_fin" name="txt_fecha_fin">
                                     </div>
+
+                                    <div class="col-md-6">
+                                        <label for="ddl_departamentos" class="form-label">Departamentos </label>
+                                        <select class="form-select form-select-sm select2-validation" id="ddl_departamentos" name="ddl_departamentos">
+                                            <option selected disabled>-- Seleccione --</option>
+                                        </select>
+                                        <label class="error" style="display: none;" for="ddl_departamentos"></label>
+                                    </div>
+
                                 </div>
 
                                 <div class="row">
-                                    <div class="col-md-6">
+                                    <div class="col-md-12">
                                         <div class="modal-footer pt-2" id="seccion_boton_consulta">
                                             <button class="btn btn-primary btn-sm px-3" onclick="buscar_fechas();" type="button"><i class='bx bx-search'></i> Buscar</button>
                                         </div>
