@@ -100,7 +100,7 @@ class th_reportesC
 
     function control_acceso_reporte($datos = '')
     {
-        $datos = $this->modelo->control_acceso_departamento('2024-11-28', '2025-11-29', 3);
+        $datos = $this->modelo->control_acceso_departamento('2025-06-09', '2025-06-09', 3);
 
         $filas_datos = []; // Array para almacenar todas las filas de datos
 
