@@ -140,7 +140,8 @@ if (($_SESSION['INICIO']['LOGO']) == '.' || $_SESSION['INICIO']['LOGO'] == '' ||
 				//notificaciones_1(parametros_noti);
 			}, 6000);
 
-			solicitudes();
+			// Revisar esta funcion, no se si es necesaria comentada -> 06/06/2025
+			// solicitudes();
 		});
 
 		function formatoDate(date) {

@@ -33,6 +33,10 @@ if (isset($_GET['pruebas'])) {
     echo json_encode($controlador->control_acceso_reporte());
 }
 
+if (isset($_GET['eliminar'])) {
+    echo json_encode($controlador->eliminar($_POST['id'] ?? ''));
+}
+
 
 
 class th_reportesC
@@ -74,6 +78,20 @@ class th_reportesC
         return $datos;
     }
 
+    function eliminar($id)
+    {
+        $datos = array(
+            array('campo' => 'th_rep_estado', 'dato' => 0),
+        );
+
+        $where = array(
+            array('campo' => 'th_rep_id', 'dato' => $id),
+        );
+
+        $datos = $this->modelo->editar($datos, $where);
+        return $datos;
+    }
+
     function pruebas()
     {
         $datos = $this->modelo->control_acceso_departamento('2024-11-28', '2024-11-29', 5);
@@ -82,7 +100,7 @@ class th_reportesC
 
     function control_acceso_reporte($datos = '')
     {
-        $datos = $this->modelo->control_acceso_departamento('2024-11-28', '2024-11-29', 5);
+        $datos = $this->modelo->control_acceso_departamento('2024-11-28', '2025-11-29', 3);
 
         $filas_datos = []; // Array para almacenar todas las filas de datos
 
