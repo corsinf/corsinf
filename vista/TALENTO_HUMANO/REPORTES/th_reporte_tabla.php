@@ -14,7 +14,7 @@ if (isset($_GET['_id'])) {
 <script type="text/javascript">
     $(document).ready(function() {
         cargar_reporte_atributos('<?= $_id ?>');
-        control_acceso_reporte();
+        // control_acceso_reporte();
     });
 
     function cargar_reporte_atributos(id) {
