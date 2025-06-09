@@ -294,8 +294,10 @@ function verificar_fecha_inicio_fecha_fin(input_name_fi, input_name_ff) {
         $(`input[name='${input_name_ff}']`).removeClass("is-valid").addClass("is-invalid");
 
         return false;
+    } else {
+        $(`input[name='${input_name_ff}']`).removeClass("is-invalid").addClass("is-valid");
+        return true;
     }
-    return true;
 }
 
 /**

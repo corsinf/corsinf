@@ -28,9 +28,9 @@ if (isset($_GET['descargarExcel'])) {
     echo ($controlador->descargarExcel());
 }
 
-if (isset($_GET['pruebas'])) {
+if (isset($_GET['reporte'])) {
     // echo json_encode($controlador->pruebas());
-    echo json_encode($controlador->control_acceso_reporte());
+    echo json_encode($controlador->control_acceso_reporte($_POST['parametros'] ?? ''));
 }
 
 if (isset($_GET['eliminar'])) {
@@ -98,9 +98,13 @@ class th_reportesC
         return $datos;
     }
 
-    function control_acceso_reporte($datos = '')
+    function control_acceso_reporte($parametros)
     {
-        $datos = $this->modelo->control_acceso_departamento('2025-06-09', '2025-06-09', 3);
+        $txt_fecha_inicio = $parametros['txt_fecha_inicio'] ?? '';
+        $txt_fecha_fin = $parametros['txt_fecha_fin'] ?? '';
+        $ddl_departamentos = $parametros['ddl_departamentos'] ?? '';
+
+        $datos = $this->modelo->control_acceso_departamento($txt_fecha_inicio, $txt_fecha_fin, $ddl_departamentos);
 
         $filas_datos = []; // Array para almacenar todas las filas de datos
 
