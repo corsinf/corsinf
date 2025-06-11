@@ -28,3 +28,16 @@ if ($route === '/activos_get') {
     }
     exit;
 }
+
+if ($route === '/activos_koha_actualizar_856') {
+    if ($method === 'POST') {
+        $parametros = json_decode(file_get_contents("php://input"), true);
+        $accion = 'activos_koha_actualizar_856';
+        require_once(dirname(__DIR__, 1) . '/endpoints/activosE.php');
+    } else {
+        http_response_code(405);
+        echo json_encode(["error" => "Método no permitido"]);
+    }
+
+    exit;
+}
