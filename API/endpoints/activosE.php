@@ -89,7 +89,7 @@ class activosE
             $stmt = $conn->prepare("CALL SP_KOHA_ACTUALIZAR_CODIGO_856_SUB_Y(?, ?)");
             $stmt->execute([$p_id, $p_nuevo_valor]);
 
-            echo "Procedimiento ejecutado correctamente.";
+            // echo "Procedimiento ejecutado correctamente.";
         } catch (PDOException $e) {
             echo "Error de conexión o ejecución: " . $e->getMessage();
         }
