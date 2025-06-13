@@ -360,7 +360,7 @@ if (isset($_GET['_id'])) {
                                         </div>
                                     </a>
                                 </li>
-                                <li class="nav-item" role="presentation">
+                                <!-- <li class="nav-item" role="presentation">
                                     <a class="nav-link" data-bs-toggle="tab" href="#departamentos" role="tab" aria-selected="false">
                                         <div class="d-flex align-items-center">
                                             <div class="tab-icon"><i class='bx bxs-school font-18 me-1'></i>
@@ -368,7 +368,7 @@ if (isset($_GET['_id'])) {
                                             <div class="tab-title">Departamentos</div>
                                         </div>
                                     </a>
-                                </li>
+                                </li> -->
 
                             </ul>
 
@@ -554,13 +554,13 @@ if (isset($_GET['_id'])) {
                         required: true,
                     },
                     txt_segundo_apellido: {
-                        required: true,
+                        // required: true,
                     },
                     txt_primer_nombre: {
                         required: true,
                     },
                     txt_segundo_nombre: {
-                        required: true,
+                        // required: true,
                     },
                     txt_cedula: {
                         required: true,

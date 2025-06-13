@@ -114,7 +114,7 @@
     </div>
     <div class="col-md-3">
         <label for="txt_segundo_apellido" class="form-label form-label-sm">Segundo Apellido </label>
-        <input type="text" class="form-control form-control-sm no_caracteres" name="txt_segundo_apellido" id="txt_segundo_apellido" placeholder="Escriba su apellido materno" maxlength="50" required>
+        <input type="text" class="form-control form-control-sm no_caracteres" name="txt_segundo_apellido" id="txt_segundo_apellido" placeholder="Escriba su apellido materno" maxlength="50">
     </div>
     <div class="col-md-3">
         <label for="txt_primer_nombre" class="form-label form-label-sm">Primer Nombre </label>
@@ -122,7 +122,7 @@
     </div>
     <div class="col-md-3">
         <label for="txt_segundo_nombre" class="form-label form-label-sm">Segundo Nombre </label>
-        <input type="text" class="form-control form-control-sm no_caracteres" name="txt_segundo_nombre" id="txt_segundo_nombre" placeholder="Escriba su primer nombre" maxlength="50" required>
+        <input type="text" class="form-control form-control-sm no_caracteres" name="txt_segundo_nombre" id="txt_segundo_nombre" placeholder="Escriba su primer nombre" maxlength="50">
     </div>
 </div>
 
@@ -226,9 +226,9 @@
 <script>
     $(document).ready(function() {
         agregar_asterisco_campo_obligatorio('txt_primer_apellido');
-        agregar_asterisco_campo_obligatorio('txt_segundo_apellido');
+        // agregar_asterisco_campo_obligatorio('txt_segundo_apellido');
         agregar_asterisco_campo_obligatorio('txt_primer_nombre');
-        agregar_asterisco_campo_obligatorio('txt_segundo_nombre');
+        // agregar_asterisco_campo_obligatorio('txt_segundo_nombre');
         agregar_asterisco_campo_obligatorio('txt_cedula');
         agregar_asterisco_campo_obligatorio('ddl_sexo');
         agregar_asterisco_campo_obligatorio('txt_fecha_nacimiento');

@@ -25,9 +25,11 @@ class BaseModel
     protected $relaciones = [];
     protected $ordenamientos = [];
 
-    function __construct()
+    function __construct($codigo_empresa_api = false)
     {
         $this->db = new db();
+		$this->db->modificar_parametros_db($codigo_empresa_api);
+
     }
 
     function listar($limite = null)
