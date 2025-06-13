@@ -3196,6 +3196,40 @@ namespace CorsinfSDKHik.NetSDK
             public byte byTimeType;
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 61)]
             public byte[] byRes;
+            public void init()
+            {
+                sNetUser = new byte[CHCNetSDK.MAX_NAMELEN];
+                struRemoteHostAddr.Init();
+                struAcsEventInfo.init();
+                byRes = new byte[61];
+            }
+
+        }
+
+        public struct NET_DVR_ACS_EVENT_CFGG
+        {
+            public uint dwSize;
+            public uint dwMajor;
+            public uint dwMinor;
+            public CHCNetSDK.NET_DVR_TIME struTime;
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = CHCNetSDK.MAX_NAMELEN)]
+            public byte[] sNetUser;
+            public CHCNetSDK.NET_DVR_IPADDR struRemoteHostAddr;
+            public CHCNetSDK.NET_DVR_ACS_EVENT_DETAIL struAcsEventInfo;
+            public uint dwPicDataLen;
+            public IntPtr pPicData;  // picture data
+            public ushort wInductiveEventType;
+            public byte byTimeType;
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 61)]
+            public byte[] byRes;
+
+            public void init()
+            {
+                sNetUser = new byte[CHCNetSDK.MAX_NAMELEN];
+                struRemoteHostAddr.Init();
+                struAcsEventInfo.init();
+                byRes = new byte[61];
+            }
         }
 
         public struct NET_DVR_ACS_EVENT_DETAIL
@@ -3241,6 +3275,14 @@ namespace CorsinfSDKHik.NetSDK
             public byte[] byEmployeeNo;
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 64)]
             public byte[] byRes;
+            public void init()
+            {
+                byCardNo = new byte[CHCNetSDK.ACS_CARD_NO_LEN];
+                byMACAddr = new byte[CHCNetSDK.MACADDR_LEN];
+                byRe2 = new byte[2];
+                byEmployeeNo = new byte[CHCNetSDK.NET_SDK_EMPLOYEE_NO_LEN];
+                byRes = new byte[64];
+            }
         }
 
         #region video call struct
@@ -3419,6 +3461,10 @@ namespace CorsinfSDKHik.NetSDK
          */
         [DllImport(@"..\..\..\HCNetSDK\HCNetSDK.dll")]
         public static extern int NET_DVR_GetNextRemoteConfig(int lHandle, ref CHCNetSDK.NET_DVR_CAPTURE_FINGERPRINT_CFG lpOutBuff, int dwOutBuffSize);
+
+        [DllImport(@"..\..\..\HCNetSDK\HCNetSDK.dll")]
+        public static extern int NET_DVR_GetNextRemoteConfig(int lHandle, ref CHCNetSDK.NET_DVR_ACS_EVENT_CFG lpOutBuff, int dwOutBuffSize);
+
 
 
         [DllImport(@"..\..\..\HCNetSDK\HCNetSDK.dll")]

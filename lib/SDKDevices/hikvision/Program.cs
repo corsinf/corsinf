@@ -172,7 +172,7 @@ class Program
                     {
                         SqlConnection conn_ = db.conexion(ipHost, portHost, dbName, userHost, passHost);
                         FingerManagerSDK FingerMan = new FingerManagerSDK();
-                        Task.Run(() => FingerMan.Escuchando(m_UserId,conn_));
+                        Task.Run(() => FingerMan.Escuchando(m_UserId,conn_,port));
                         // Mantener la consola ejecutándose para que el proceso de escucha no se detenga
                         // Console.WriteLine("Presiona 'q' para salir...");
                         while (true)
@@ -249,6 +249,22 @@ class Program
                    
                     break;
                 case "10":
+                    //TRAER A LOS USUARIOS DEL BIOMETRICO
+                    ip = args[1];
+                    user = args[2];
+                    port = args[3];
+                    pass = args[4];
+                    r = login.loginSDKDevice(ip, port, user, pass);
+                    m_UserId = login.m_UserID;
+                    if (m_UserId >= 0)
+                    {
+                        CardManagerSDK CardMan = new CardManagerSDK();
+                        r = CardMan.buscarLogs(m_UserId);
+                    }
+
+                    json = JsonSerializer.Serialize(new { msj = r });
+                    break;
+                case "11":
                     //GENERAR TABLA DE LOG PARA EJEMPLO
                     ipHost = args[5];
                     portHost = args[6];
