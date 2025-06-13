@@ -288,7 +288,7 @@ namespace CorsinfSDKHik.Funciones
         }
 
         // eveto de escuicha de huellas digitales 
-        public String Escuchando(int m_UserID,SqlConnection conn)
+        public String Escuchando(int m_UserID,SqlConnection conn,string port)
         {
             conn_ = conn;
             String msj = "";
@@ -337,6 +337,14 @@ namespace CorsinfSDKHik.Funciones
             switch (lCommand)
             {
                 case CHCNetSDK.COMM_ALARM_ACS:
+
+                    string deviceIp = "";
+                    //System.Text.Encoding.ASCII.GetString(pAlarmer.sDeviceIP).TrimEnd('\0');
+                    //ushort devicePort = pAlarmer.wLinkPort;  // <--- Aquí obtienes el puerto
+                    //int userID = pAlarmer.lUserID;
+
+                    //Console.WriteLine($"Alarma desde IP: {deviceIp}, Puerto: {devicePort}, userID: {userID}");
+
                     msj = ProcessCommAlarmACS(ref pAlarmer, pAlarmInfo, dwBufLen, pUser);
                     dbModelo.InsertData(conn_,msj);
                   //  Console.WriteLine(msj);
@@ -374,8 +382,6 @@ namespace CorsinfSDKHik.Funciones
             struCFG.dwSize = Marshal.SizeOf(struCFG);
             int dwOutBuffSize = struCFG.dwSize;
 
-
-
             if (CHCNetSDK.MAJOR_ALARM == struFileInfo.dwMajorType)
             {
                 TypeMap.AlarmMinorTypeMap(struFileInfo, csTmp);
@@ -408,8 +414,7 @@ namespace CorsinfSDKHik.Funciones
             }
             /**************************************************/
 
-
-            msj = "[{\"ip\":\"" + pAlarmer.sDeviceIP + "\",";
+           msj = "[{\"ip\":\"" + pAlarmer.sDeviceIP + "\", \"Puerto\":\"" + pAlarmer.wLinkPort + "\",";
 
             szInfoBuf = string.Format("{0} time:{1,4}-{2:D2}-{3} {4:D2}:{5:D2}:{6:D2}, [{7}]({8})", szInfo, struAcsAlarmInfo.struTime.dwYear, struAcsAlarmInfo.struTime.dwMonth,
                 struAcsAlarmInfo.struTime.dwDay, struAcsAlarmInfo.struTime.dwHour, struAcsAlarmInfo.struTime.dwMinute, struAcsAlarmInfo.struTime.dwSecond,

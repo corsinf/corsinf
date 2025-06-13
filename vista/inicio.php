@@ -272,9 +272,10 @@ if ($_GET['acc'] == 'index') {
 		case '2016':
 			include('PORTALES/index.php');
 			break;
-			
+		case '1011':
+			include('TALENTO_HUMANO/index.php');
+			break;
 		case 'variable':
-
 			break;
 	}
 }

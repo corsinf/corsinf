@@ -19,6 +19,13 @@ namespace CorsinfSDKHik.Funciones
         public Int32 m_lSetCardCfgHandle = -1;
         public Int32 m_lDelCardCfgHandle = -1;
 
+        //variables para evento control
+        private int m_lLogNum = 0;
+        private string MinorType = null;
+        private string MajorType = null;
+        public int m_lGetAcsEventHandle = -1;
+        Thread m_pDisplayListThread = null;
+
         public CardManagerSDK()
         {
             if (CHCNetSDK.NET_DVR_Init() == false)
@@ -438,6 +445,119 @@ namespace CorsinfSDKHik.Funciones
             Marshal.FreeHGlobal(ptrdwState);
 
             return msj;
+        }
+
+        public string buscarLogs(int m_UserID)
+        {
+            m_lLogNum = 0;
+            CHCNetSDK.NET_DVR_ACS_EVENT_COND struCond = new CHCNetSDK.NET_DVR_ACS_EVENT_COND();
+            struCond.Init();
+            struCond.dwSize = (uint)Marshal.SizeOf(struCond);
+
+            struCond.dwMajor = 0xFFFFFFFF;
+
+            struCond.dwMinor = 0xFFFFFFFF;
+
+
+            struCond.struStartTime.dwYear = 2025;
+            struCond.struStartTime.dwMonth = 01;
+            struCond.struStartTime.dwDay = 01;
+            struCond.struStartTime.dwHour = 10;
+            struCond.struStartTime.dwMinute = 00;
+            struCond.struStartTime.dwSecond = 01;
+
+            struCond.struEndTime.dwYear =2025;
+            struCond.struEndTime.dwMonth = 06;
+            struCond.struEndTime.dwDay = 09;
+            struCond.struEndTime.dwHour = 23;
+            struCond.struEndTime.dwMinute = 00;
+            struCond.struEndTime.dwSecond = 00;
+
+            struCond.byPicEnable = 0;
+            struCond.szMonitorID = "";
+            struCond.wInductiveEventType = 65535;
+
+            //if (!StrToByteArray(ref struCond.byCardNo, textBoxCardNo.Text))
+            //{
+            //    return;
+            //}
+
+            //if (!StrToByteArray(ref struCond.byName, textBoxName.Text))
+            //{
+            //    return;
+            //}
+            //struCond.dwBeginSerialNo = 0;
+            //struCond.dwEndSerialNo = 0;
+
+            uint dwSize = struCond.dwSize;
+            IntPtr ptrCond = Marshal.AllocHGlobal((int)dwSize);
+            Marshal.StructureToPtr(struCond, ptrCond, false);
+            m_lGetAcsEventHandle = CHCNetSDK.NET_DVR_StartRemoteConfig(m_UserID, CHCNetSDK.NET_DVR_GET_ACS_EVENT, ptrCond, (int)dwSize, null, IntPtr.Zero);
+            if (-1 == m_lGetAcsEventHandle)
+            {
+                Marshal.FreeHGlobal(ptrCond);
+                return "NET_DVR_StartRemoteConfig FAIL, ERROR CODE" + CHCNetSDK.NET_DVR_GetLastError().ToString();
+               
+            }
+
+            m_pDisplayListThread = new Thread(ProcessEvent);
+            m_pDisplayListThread.Start();
+            Marshal.FreeHGlobal(ptrCond);
+            return "";
+        }
+
+        public void ProcessEvent()
+        {
+            int dwStatus = 0;
+            Boolean Flag = true;
+            CHCNetSDK.NET_DVR_ACS_EVENT_CFG struCFG = new CHCNetSDK.NET_DVR_ACS_EVENT_CFG();
+            struCFG.dwSize = (uint)Marshal.SizeOf(struCFG);
+            int dwOutBuffSize = (int)struCFG.dwSize;
+            struCFG.init();
+            while (Flag)
+            {
+                dwStatus = CHCNetSDK.NET_DVR_GetNextRemoteConfig(m_lGetAcsEventHandle, ref struCFG, dwOutBuffSize);
+                switch (dwStatus)
+                {
+                    case CHCNetSDK.NET_SDK_GET_NEXT_STATUS_SUCCESS://成功读取到数据，处理完本次数据后需调用next
+                        ProcessAcsEvent(ref struCFG, ref Flag);
+                        break;
+                    case CHCNetSDK.NET_SDK_GET_NEXT_STATUS_NEED_WAIT:
+                        Thread.Sleep(200);
+                        break;
+                    case CHCNetSDK.NET_SDK_GET_NEXT_STATUS_FAILED:
+                        CHCNetSDK.NET_DVR_StopRemoteConfig(m_lGetAcsEventHandle);
+                        string msj = "NET_SDK_GET_NEXT_STATUS_FAILED" + CHCNetSDK.NET_DVR_GetLastError().ToString();
+                        Flag = false;
+                        break;
+                    case CHCNetSDK.NET_SDK_GET_NEXT_STATUS_FINISH:
+                        CHCNetSDK.NET_DVR_StopRemoteConfig(m_lGetAcsEventHandle);
+                        Flag = false;
+                        break;
+                    default:
+                        string msj1 = "NET_SDK_GET_NEXT_STATUS_UNKOWN" + CHCNetSDK.NET_DVR_GetLastError().ToString();
+                        Flag = false;
+                        CHCNetSDK.NET_DVR_StopRemoteConfig(m_lGetAcsEventHandle);
+                        break;
+                }
+            }
+        }
+        private void ProcessAcsEvent(ref CHCNetSDK.NET_DVR_ACS_EVENT_CFG struCFG, ref bool flag)
+        {
+            try
+            {
+                ShowCardList(struCFG);
+            }
+            catch
+            {
+                String msj = "AddAcsEventToList Failed";
+                flag = false;
+            }
+        }
+
+        public void ShowCardList(CHCNetSDK.NET_DVR_ACS_EVENT_CFG struCFG)
+        {
+            string msj = ""+struCFG;
         }
 
     }
