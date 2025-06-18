@@ -269,17 +269,6 @@ if (isset($_GET['_id'])) {
 
                         <form id="form_justificaciones">
 
-                            <div class="row pt-3 mb-col">
-                                <div class="col-md-3">
-                                    <label for="txt_fecha_inicio" class="form-label">Fecha Inicial </label>
-                                    <input type="datetime-local" class="form-control form-control-sm" id="txt_fecha_inicio" name="txt_fecha_inicio" maxlength="50">
-                                </div>
-                                <div class="col-md-3">
-                                    <label for="txt_fecha_fin" class="form-label">Fecha Final </label>
-                                    <input type="datetime-local" class="form-control form-control-sm" id="txt_fecha_fin" name="txt_fecha_fin" maxlength="50">
-                                </div>
-                            </div>
-
                             <div class="mb-col">
                                 <label class="form-label" for="lbl_programar">Programar Horario </label>
                                 <div class="form-check">
@@ -329,6 +318,17 @@ if (isset($_GET['_id'])) {
                                 <div class="col-md-6">
                                     <label for="txt_motivo" class="form-label">Motivo </label>
                                     <textarea class="form-control form-control-sm no_caracteres" name="txt_motivo" id="txt_motivo" rows="3" maxlength="200"></textarea>
+                                </div>
+                            </div>
+
+                             <div class="row pt-3 mb-col">
+                                <div class="col-md-3">
+                                    <label for="txt_fecha_inicio" class="form-label">Fecha Inicial </label>
+                                    <input type="datetime-local" class="form-control form-control-sm" id="txt_fecha_inicio" name="txt_fecha_inicio" maxlength="50">
+                                </div>
+                                <div class="col-md-3">
+                                    <label for="txt_fecha_fin" class="form-label">Fecha Final </label>
+                                    <input type="datetime-local" class="form-control form-control-sm" id="txt_fecha_fin" name="txt_fecha_fin" maxlength="50">
                                 </div>
                             </div>
 
