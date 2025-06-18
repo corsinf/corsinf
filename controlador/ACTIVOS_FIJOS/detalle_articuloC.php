@@ -102,6 +102,11 @@ if (isset($_GET['cargar_detalle_activo'])) {
 	echo json_encode($controlador->cargar_detalle_activo($_POST['id'] ?? '', $_POST['token'] ?? ''));
 }
 
+if (isset($_GET['actualizarDatosArticulo'])) {
+	echo json_encode($controlador->insertar_editar($_POST));
+	return;
+}
+
 
 class detalle_articuloC
 {
@@ -1036,6 +1041,28 @@ class detalle_articuloC
 			$where[0]['campo'] = 'ID_PATRIMONIAL';
 			$where[0]['dato'] = $parametros['txt_id_info'];
 			return $this->modelo->update($tabla = 'ac_datos_patrimonial', $datos, $where);
+		}
+	}
+
+	function insertar_editar($parametros)
+	{
+		if ($parametros['id_articulo_update'] != '') {
+
+			// Datos para actualizar (con la estructura que tu método editar espera)
+			$datos = array(
+				array('campo' => 'valor_residual', 'dato' => floatval($parametros['valor_residual'])),
+				array('campo' => 'vida_util', 'dato' => intval($parametros['vida_util']))
+			);
+
+			// Condición WHERE para actualizar el registro correcto
+			$where = array(
+				array('campo' => 'id_articulo', 'dato' => intval($parametros['id_articulo_update']))
+			);
+
+			// Ejecutar el update usando el método editar de tu modelo
+			$resultado = $this->modelo->editar($datos, $where);
+
+			return $resultado;
 		}
 	}
 }
