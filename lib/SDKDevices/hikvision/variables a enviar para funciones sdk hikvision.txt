@@ -3,10 +3,13 @@ Para este sdk no almacena EmployedID lo cual hace que el nombre se asocien por m
 para registar cualquier otro dato biometrico se usa CardNo para asociarlo al la atjeta y a la persona 
 =========================== en desarrollo sacar marcaciones =================
 10
-192.168.100.111
+45.162.74.226
 admin
-8000
-Data12/*
+8501
+SASd52dasd
+2025-05-01
+2025-05-31
+tener en cuenta que no soporta en todos los biometricos o dispositivos
 ===========================Buscar item de huella digital =================
 9
 192.168.100.111

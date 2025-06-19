@@ -249,17 +249,21 @@ class Program
                    
                     break;
                 case "10":
-                    //TRAER A LOS USUARIOS DEL BIOMETRICO
+                    //TRAER A LOS logs USUARIOS DEL BIOMETRICO
+
+                    DateTime fechaHoy = DateTime.Today;
                     ip = args[1];
                     user = args[2];
                     port = args[3];
                     pass = args[4];
+                    String fechaIni = args.Length > 5 ? args[5] : fechaHoy.ToString("yyyy-MM-dd");
+                    String fechaFin = args.Length > 6 ? args[6] : fechaHoy.ToString("yyyy-MM-dd");
                     r = login.loginSDKDevice(ip, port, user, pass);
                     m_UserId = login.m_UserID;
                     if (m_UserId >= 0)
                     {
-                        CardManagerSDK CardMan = new CardManagerSDK();
-                        r = CardMan.buscarLogs(m_UserId);
+                        hikvisionSDKLog logs = new hikvisionSDKLog();
+                        r =  logs.buscarLogs(m_UserId,fechaIni,fechaFin,ip,port).ToString();
                     }
 
                     json = JsonSerializer.Serialize(new { msj = r });

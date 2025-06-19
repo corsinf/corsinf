@@ -1,0 +1,91 @@
+Para este sdk no almacena EmployedID lo cual hace que el nombre se asocien por medio de la CardNo.
+
+para registar cualquier otro dato biometrico se usa CardNo para asociarlo al la atjeta y a la persona 
+=========================== en desarrollo sacar marcaciones =================
+10
+45.162.74.226
+admin
+8501
+SASd52dasd
+===========================Buscar item de huella digital =================
+9
+192.168.100.111
+admin
+8000
+Data12/*
+1991  => Numero de tarjeta
+1 => identificador del biometrico
+===========================elimina una persona con tarjeta =================
+8
+192.168.100.111
+admin
+8000
+Data12/*
+1991  => Numero de tarjeta
+=============== añade una persona con tarjeta ======================
+7
+192.168.100.111
+admin
+8000
+Data12/*
+"Carlo Ambato" => entre comillas por que el espacion en blanco se coloca como otro argumento
+22 => employedID => sdk hikvision version 6 no se utiliza pero enviamos
+1994
+=============== evento de escuchat y crea logs ======================
+6
+192.168.100.111
+admin
+8000
+Data12/*
+186.4.219.172
+1487
+DB_TALENTO_HUMANO_DESARROLLO
+sa
+Tango456
+============== para traer datos de biometrico ==============
+5
+192.168.100.111
+admin
+8000
+Data12/*
+
+============= para ingresar nueva huella a biometrico ============
+4
+192.168.100.111
+admin
+8000
+Data12/*
+1993 ===>numero de tarjeta
+C:\\huella\\javierFarinangoCapfin2.dat
+2  ==>numero de huella digital
+
+==============para tomar huellas digital ========================
+3
+192.168.100.111
+admin
+8000
+Data12/*
+javierFarinangoCapfin2
+C:\\huella
+
+================== login dispositivo ================
+2
+192.168.100.111
+admin
+8000
+Data12/*
+
+================= detectar dispositivo =================
+1
+192.168.1 -> vlan a buscar / por defaout dejar en blanco
+
+==================================listar donet activos ===================================
+tasklist | findstr dotnet
+====================================eliminar procesos donet
+taskkill /IM dotnet.exe /F
+
+
+instalar al libreria
+Install-Package SharpSnmpLib
+
+

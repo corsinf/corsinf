@@ -133,3 +133,7 @@ if ($_GET['acc'] == 'th_informacion_personal') {
 if ($_GET['acc'] == 'th_addRegistroBio') {
 	include('TALENTO_HUMANO/DISPOSITIVOS/th_addRegistroBio.php');
 }
+
+if ($_GET['acc'] == 'log_dispositivos') {
+	include('TALENTO_HUMANO/DISPOSITIVOS/th_log_dispositivos.php');
+}

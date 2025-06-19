@@ -27,6 +27,12 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                 {
                     data: 'host'
                 },
+                {
+                    data: 'port'
+                },
+                {
+                    data: 'usuario'
+                },
 
                 {
                     data: 'modelo'
@@ -417,6 +423,8 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                                             <tr>
                                                 <th>Nombre</th>
                                                 <th>Host</th>
+                                                <th>Puerto</th>
+                                                <th>Usuario</th>
                                                 <th>Modelo</th>
                                                 <th width="10px">Acción</th>
                                             </tr>

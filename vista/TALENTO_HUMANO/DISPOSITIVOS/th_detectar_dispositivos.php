@@ -285,9 +285,9 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                                         <button type="button" class="btn btn-danger btn-sm" onclick="Detenerdeteccion()">
                                             <i class="bx bx-stop me-0 pb-1"></i> Deteccion deteccion
                                         </button>
-                                        <button type="button" class="btn btn-success btn-sm" onclick="DeviceLog()">
+                                       <!--  <button type="button" class="btn btn-success btn-sm" onclick="DeviceLog()">
                                             <i class="bx bx-search me-0 pb-1"></i> Buscar log
-                                        </button>
+                                        </button> -->
                                     </div>
                                     
                                 </div>

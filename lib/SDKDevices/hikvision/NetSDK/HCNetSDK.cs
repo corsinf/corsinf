@@ -3215,7 +3215,7 @@ namespace CorsinfSDKHik.NetSDK
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = CHCNetSDK.MAX_NAMELEN)]
             public byte[] sNetUser;
             public CHCNetSDK.NET_DVR_IPADDR struRemoteHostAddr;
-            public CHCNetSDK.NET_DVR_ACS_EVENT_DETAIL struAcsEventInfo;
+            public CHCNetSDK.NET_DVR_ACS_EVENT_DETAILL struAcsEventInfo;
             public uint dwPicDataLen;
             public IntPtr pPicData;  // picture data
             public ushort wInductiveEventType;
@@ -3272,6 +3272,60 @@ namespace CorsinfSDKHik.NetSDK
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 2)]
             public byte[] byRe2;
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = NET_SDK_EMPLOYEE_NO_LEN)]
+            public byte[] byEmployeeNo;
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 64)]
+            public byte[] byRes;
+            public void init()
+            {
+                byCardNo = new byte[CHCNetSDK.ACS_CARD_NO_LEN];
+                byMACAddr = new byte[CHCNetSDK.MACADDR_LEN];
+                byRe2 = new byte[2];
+                byEmployeeNo = new byte[CHCNetSDK.NET_SDK_EMPLOYEE_NO_LEN];
+                byRes = new byte[64];
+            }
+        }
+
+        [StructLayoutAttribute(LayoutKind.Sequential)]
+        public struct NET_DVR_ACS_EVENT_DETAILL
+        {
+            public uint dwSize;
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = CHCNetSDK.ACS_CARD_NO_LEN)]
+            public byte[] byCardNo;
+            public byte byCardType;
+            public byte byWhiteListNo;
+            public byte byReportChannel;
+            public byte byCardReaderKind;
+            public uint dwCardReaderNo;
+            public uint dwDoorNo;
+            public uint dwVerifyNo;
+            public uint dwAlarmInNo;
+            public uint dwAlarmOutNo;
+            public uint dwCaseSensorNo;
+            public uint dwRs485No;
+            public uint dwMultiCardGroupNo;
+            public ushort wAccessChannel;//word
+            public byte byDeviceNo;
+            public byte byDistractControlNo;
+            public uint dwEmployeeNo;
+            public ushort wLocalControllerID;//word
+            public byte byInternetAccess;
+            public byte byType;
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = CHCNetSDK.MACADDR_LEN)]
+            public byte[] byMACAddr;
+            public byte bySwipeCardType;
+            public byte byRes2;
+            public uint dwSerialNo;
+            public byte byChannelControllerID;
+            public byte byChannelControllerLampID;
+            public byte byChannelControllerIRAdaptorID;
+            public byte byChannelControllerIREmitterID;
+            public uint dwRecordChannelNum;
+            public IntPtr pRecordChannelData;
+            public byte byUserType;
+            public byte byCurrentVerifyMode;
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 2)]
+            public byte[] byRe2;
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = CHCNetSDK.NET_SDK_EMPLOYEE_NO_LEN)]
             public byte[] byEmployeeNo;
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 64)]
             public byte[] byRes;
@@ -3465,6 +3519,8 @@ namespace CorsinfSDKHik.NetSDK
         [DllImport(@"..\..\..\HCNetSDK\HCNetSDK.dll")]
         public static extern int NET_DVR_GetNextRemoteConfig(int lHandle, ref CHCNetSDK.NET_DVR_ACS_EVENT_CFG lpOutBuff, int dwOutBuffSize);
 
+        [DllImport(@"..\..\..\HCNetSDK\HCNetSDK.dll")]
+        public static extern int NET_DVR_GetNextRemoteConfig(int lHandle, ref CHCNetSDK.NET_DVR_ACS_EVENT_CFGG lpOutBuff, int dwOutBuffSize);
 
 
         [DllImport(@"..\..\..\HCNetSDK\HCNetSDK.dll")]
