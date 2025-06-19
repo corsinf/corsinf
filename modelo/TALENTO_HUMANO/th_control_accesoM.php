@@ -22,7 +22,7 @@ class th_control_accesoM extends BaseModel
     {
         // Construir la parte JOIN de la consulta
         $this->join('th_card_data', 'th_card_data.th_cardNo = th_control_acceso.th_cardNo');
-        $this->join('th_personas', 'th_personas.th_per_id = th_card_data.th_per_id');      
+        $this->join('th_personas', 'th_personas.th_per_id = th_control_acceso.th_per_id');      
         $datos = $this->listar();  
         return $datos;
     }

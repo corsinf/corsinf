@@ -374,7 +374,7 @@ $hora_salida = isset($_GET['hora_salida']) ? $_GET['hora_salida'] : 930;
                                     <div class="row mb-col" id="pnl_tiempo_descanso" style="display: none;">
                                         <div class="col-md-6">
                                             <label for="txt_nombre" class="form-label">Tiempo de descanso </label>
-                                            <input type="time" class="form-control form-control-sm" name="txt_tiempo_descanso" id="txt_tiempo_descanso" value="00:00">
+                                            <input type="time" class="form-control form-control-sm" name="txt_tiempo_descanso" id="txt_tiempo_descanso" value="01:00">
                                         </div>
                                     </div>
 
@@ -433,6 +433,14 @@ $hora_salida = isset($_GET['hora_salida']) ? $_GET['hora_salida'] : 930;
                                         </div> -->
                                     </div>
 
+                                     <div class="row mb-col">
+                                        <label for="txt_limite_tardanza_in" class="col-sm-4 col-form-label text-end fw-bold">Tolerancia de llegada tarde (min) </label>
+                                        <div class="col-sm-6">
+                                            <input type="number" class="form-control form-control-sm" name="txt_limite_tardanza_in" id="txt_limite_tardanza_in" value="5">
+                                        </div>
+                                    </div>
+
+
                                     <div class="row mb-col">
                                         <label for="txt_checkout_salida_inicio" class="col-sm-4 col-form-label text-end fw-bold">Rango de tiempo válido para el registro de salida </label>
 
@@ -452,13 +460,7 @@ $hora_salida = isset($_GET['hora_salida']) ? $_GET['hora_salida'] : 930;
                                         </div> -->
                                     </div>
 
-                                    <div class="row mb-col">
-                                        <label for="txt_limite_tardanza_in" class="col-sm-4 col-form-label text-end fw-bold">Tolerancia de llegada tarde (min) </label>
-                                        <div class="col-sm-6">
-                                            <input type="number" class="form-control form-control-sm" name="txt_limite_tardanza_in" id="txt_limite_tardanza_in" value="5">
-                                        </div>
-                                    </div>
-
+                                   
                                     <div class="row mb-col">
                                         <label for="txt_limite_tardanza_out" class="col-sm-4 col-form-label text-end fw-bold">Tolerancia de salida anticipada (min) </label>
                                         <div class="col-sm-6">

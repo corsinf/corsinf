@@ -298,17 +298,7 @@ if (isset($_GET['_id'])) {
 
                         <form id="form_programar_horarios">
 
-                            <div class="row pt-3 mb-col">
-                                <div class="col-md-3">
-                                    <label for="txt_fecha_inicio" class="form-label">Fecha Inicial </label>
-                                    <input type="date" class="form-control form-control-sm" id="txt_fecha_inicio" name="txt_fecha_inicio" maxlength="50">
-                                </div>
-
-                                <div class="col-md-3">
-                                    <label for="txt_fecha_fin" class="form-label">Fecha Final </label>
-                                    <input type="date" class="form-control form-control-sm" id="txt_fecha_fin" name="txt_fecha_fin" maxlength="50">
-                                </div>
-                            </div>
+                            
 
                             <div class="mb-col">
                                 <label class="form-label" for="lbl_programar">Programar Horario </label>
@@ -379,6 +369,18 @@ if (isset($_GET['_id'])) {
                                 </div>
                                 <label class="error" style="display: none;" for="cbx_horario"></label>
 
+                            </div>
+                            <div class="row pt-3 mb-col">
+                                <label class="form-label" for="lbl_programar">Fechas del periodo</label>
+                                <div class="col-md-3">
+                                    <label for="txt_fecha_inicio" class="form-label">Fecha Inicial </label>
+                                    <input type="date" class="form-control form-control-sm" id="txt_fecha_inicio" name="txt_fecha_inicio" maxlength="50">
+                                </div>
+
+                                <div class="col-md-3">
+                                    <label for="txt_fecha_fin" class="form-label">Fecha Final </label>
+                                    <input type="date" class="form-control form-control-sm" id="txt_fecha_fin" name="txt_fecha_fin" maxlength="50">
+                                </div>
                             </div>
 
                             <div class="d-flex justify-content-end pt-2">

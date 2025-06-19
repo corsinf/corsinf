@@ -112,7 +112,9 @@ class detalle_articuloM extends BaseModel
 					P.fecha_referencia AS 'fecha_referencia',
 					P.fecha_contabilizacion AS 'fecha_contabilizacion',
 					TA.ID_TIPO_ARTICULO AS id_tipo_articulo,
-					TA.descripcion AS tipo_articulo
+					TA.descripcion AS tipo_articulo,
+					P.valor_residual AS 'valor_residual',
+					P.vida_util AS 'vida_util'
 					
 				FROM
 					ac_articulos P

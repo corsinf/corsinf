@@ -186,6 +186,77 @@ if (isset($_GET['_id'])) {
     }
   }
 
+  function calcula_depreciacion() {
+    // Obtener el texto dentro de los elementos y convertirlo
+    let valor_activo = parseFloat($('#lbl_valor_activo').text()) || 0;
+    let valor_residual = parseFloat($('#lbl_valor_residual').text()) || 0;
+    let vida_util = parseInt($('#lbl_vida_util').text()) || 0;
+
+
+    // Ejemplo: calcular depreciación lineal anual
+    if (vida_util > 0) {
+      let depreciacion_anual = (valor_activo - valor_residual) / vida_util;
+      $('#lbl_total_depreciacion').text(depreciacion_anual.toFixed(2));
+    } else {
+      $('#lbl_total_depreciacion').text("La vida útil debe ser mayor que cero.")
+    }
+  }
+
+  function depreciacion_activo() {
+    calcula_depreciacion();
+
+    const seccion = document.getElementById("seccion_depreciacion");
+    if (seccion) {
+      const offsetTop = seccion.getBoundingClientRect().top + window.pageYOffset - 80; // 80 píxeles arriba por ejemplo
+      window.scrollTo({
+        top: offsetTop,
+        behavior: 'smooth'
+      });
+    }
+  }
+
+  function abrirModalDepreciacion() {
+    let valor_activo = parseFloat($('#lbl_valor_activo').text()) || 0;
+    let valor_residual = parseFloat($('#lbl_valor_residual').text()) || 0;
+    let vida_util = parseInt($('#lbl_vida_util').text()) || 0;
+    let id_articulo = $('#id_articulo').val(); // este debe estar bien cargado antes
+
+    $('#edit_valor_activo').val(valor_activo);
+    $('#edit_valor_residual').val(valor_residual);
+    $('#edit_vida_util').val(vida_util);
+    $('#edit_id_articulo').val(id_articulo); // este es el que va al modal
+
+    $('#modalDepreciacion').modal('show');
+  }
+
+
+  function guardarDepreciacion() {
+
+    const form = document.getElementById('form_depreciacion');
+    const formData = new FormData(form);
+
+    $.ajax({
+      url: '../controlador/ACTIVOS_FIJOS/detalle_articuloC.php?actualizarDatosArticulo=true',
+      type: 'POST',
+      data: formData,
+      contentType: false,
+      processData: false,
+      dataType: 'json',
+      success: function(response) {
+        if (response == 1) {
+          Swal.fire('', 'Operacion realizada con exito.', 'success').then(function() {
+            location.reload();
+          });
+        } else {
+          Swal.fire('Error', 'No se pudo guardar.', 'error');
+        }
+      },
+      error: function() {
+        Swal.fire('Error', 'Fallo en la comunicación con el servidor.', 'error');
+      }
+    });
+  }
+
 
 
   /**
@@ -274,6 +345,7 @@ if (isset($_GET['_id'])) {
 
         cargar_articulo_vista_pnl(data);
         cargar_articulo_editar_pnl(data);
+        calcula_depreciacion();
 
         datos_col_custodio(data);
       },
@@ -286,6 +358,7 @@ if (isset($_GET['_id'])) {
 
   function cargar_articulo_vista_pnl(data) {
     $('#lbl_descripcion').text(data.nom);
+    $('#id_articulo').val(data.id_A);
     $('#lbl_descripcion2').text(data.des ?? '');
     $('#lbl_localizacion1').html(`<b>Emplazamiento / Localización</b> | <label style="font-size:65%"> Código: ${data.c_loc}</label>`);
     $('#lbl_localizacion').text(data.loc_nom);
@@ -350,6 +423,10 @@ if (isset($_GET['_id'])) {
     } else if (data.tipo_articulo === 'BAJAS') {
       $('#lbl_tipo').html('<div class="text-danger">ACTIVO DE BAJA</div>');
     }
+
+    $('#lbl_valor_activo').text(data.prec);
+    $('#lbl_valor_residual').text(data.valor_residual);
+    $('#lbl_vida_util').text(data.vida_util + " años");
   }
 
   function cargar_articulo_editar_pnl(data) {
@@ -841,6 +918,9 @@ if (isset($_GET['_id'])) {
           <div class="col">
             <button class="btn btn-outline-secondary btn-sm" type="button" id="imprimir_cedula"><i class="bx bx-file"></i> Cedula activo</button>
             <button class="btn btn-outline-secondary btn-sm" type="button" onclick="imprimir_tags_masivo()"><i class="bx bx-purchase-tag"></i> Reimprimir Tag RFID</button>
+            <button class="btn btn-outline-secondary btn-sm" type="button" onclick="depreciacion_activo()">
+              <i class="bx bx-trending-down"></i> Depreciación
+            </button>
           </div>
         </div>
 
@@ -887,6 +967,7 @@ if (isset($_GET['_id'])) {
               </div>
 
               <div class="text-muted" id="lbl_descripcion2"></div>
+              <input type="hidden" name="id_articulo" id="id_articulo" value="">
 
               <div class="d-flex flex-wrap gap-3 py-2">
                 <span class="badge bg-secondary" id="lbl_sub_num"></span>
@@ -997,6 +1078,32 @@ if (isset($_GET['_id'])) {
 
               <p class="" id="lbl_caracteristicas">.</p>
               <p class="" id="lbl_observaciones">.</p>
+              <hr>
+              <div id="seccion_depreciacion">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                  <h5 class="fw-bold mb-0">Depreciación</h5>
+                  <button class="btn btn-sm btn-outline-primary" onclick="abrirModalDepreciacion()" title="Editar datos">
+                    <i class="bx bx-pencil"></i>
+                  </button>
+                </div>
+                <div class="row">
+                  <dt class="col-sm-3">Valor activo: &nbsp;</dt>
+                  <dd class="col-sm-8" id="lbl_valor_activo"></dd>
+                </div>
+                <div class="row">
+                  <dt class="col-sm-3">Valor residual: &nbsp;</dt>
+                  <dd class="col-sm-8" id="lbl_valor_residual"></dd>
+                </div>
+                <div class="row">
+                  <dt class="col-sm-3">Vida útil: &nbsp;</dt>
+                  <dd class="col-sm-8" id="lbl_vida_util"></dd>
+                </div>
+                <div class="row">
+                  <dt class="col-sm-3">Total depreciación: &nbsp;</dt>
+                  <dd class="col-sm-8" id="lbl_total_depreciacion"></dd>
+                </div>
+              </div>
+
             </div>
 
 
@@ -1428,6 +1535,47 @@ if (isset($_GET['_id'])) {
     </div>
   </div>
 </div>
+
+<div class="modal fade" id="modalDepreciacion" tabindex="-1" aria-labelledby="modalDepreciacionLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+
+      <form id="form_depreciacion">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalDepreciacionLabel">Editar Depreciación</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+        </div>
+
+        <div class="modal-body">
+          <!-- ID oculto -->
+          <input type="hidden" name="id_articulo_update" id="edit_id_articulo" value="">
+
+          <div class="mb-3">
+            <label for="edit_valor_activo" class="form-label">Valor activo</label>
+            <input type="number" step="0.01" class="form-control" name="valor_activo" id="edit_valor_activo" readonly>
+          </div>
+
+          <div class="mb-3">
+            <label for="edit_valor_residual" class="form-label">Valor residual</label>
+            <input type="number" step="0.01" class="form-control"  name="valor_residual" id="edit_valor_residual" required>
+          </div>
+
+          <div class="mb-3">
+            <label for="edit_vida_util" class="form-label">Vida útil (años)</label>
+            <input type="number" step="1" class="form-control"  name="vida_util" id="edit_vida_util"required>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+          <button type="button" class="btn btn-primary" onclick="guardarDepreciacion()">Guardar</button>
+        </div>
+      </form>
+
+    </div>
+  </div>
+</div>
+
 
 
 <script>

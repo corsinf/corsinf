@@ -105,4 +105,38 @@ class th_programar_horariosM extends BaseModel
         $datos = $this->db->datos($sql);
         return $datos;
     }
+
+
+    function listar_persona_departamentos($id = '', $tipo = 'dep') {
+    // $tipo puede ser 'dep' para departamento o 'per' para persona
+    $filtro = "";
+
+    if (!empty($id)) {
+        if ($tipo === 'dep') {
+            $filtro = "WHERE pro_hor.th_dep_id = $id";
+        } elseif ($tipo === 'per') {
+            $filtro = "WHERE pro_hor.th_per_id = $id";
+        }
+    }
+
+    $sql = "
+        SELECT
+            pro_hor.th_pro_id AS _id,
+            pro_hor.th_hor_id AS id_horario,
+            pro_hor.th_dep_id AS id_departamento,
+            pro_hor.th_per_id AS id_persona,
+            pro_hor.th_pro_fecha_inicio AS fecha_inicio,
+            pro_hor.th_pro_fecha_fin AS fecha_fin,
+            ISNULL(hor.th_hor_nombre, 'SIN HORARIO') AS nombre_horario,
+            ISNULL(dep.th_dep_nombre, 'SIN DEPARTAMENTO') AS nombre_departamento
+        FROM
+            th_programar_horarios pro_hor
+        LEFT JOIN th_horarios hor ON pro_hor.th_hor_id = hor.th_hor_id
+        LEFT JOIN th_departamentos dep ON pro_hor.th_dep_id = dep.th_dep_id
+        $filtro;";
+
+    $datos = $this->db->datos($sql);
+
+    return $datos;
+}
 }
