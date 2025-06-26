@@ -18,6 +18,7 @@ if (isset($_GET['_id'])) {
         dispositivos();
         dispositivosSync();
         listaHuella()
+        listaFace();
         <?php if (isset($_GET['_id'])) { ?>
          datos_col(<?= $_id ?>);
         <?php } ?>
@@ -240,6 +241,46 @@ if (isset($_GET['_id'])) {
         });
     }
 
+    function leerFace()
+    {
+        // $('#myModal_espera').modal('show');
+        var parametros = 
+        {
+            'iddispostivos':$('#ddl_dispositivos').val(),
+            'idPerson': $('#txt_id').val(), //usuario id
+        }
+        $.ajax({
+            data:  {parametros:parametros},
+            url:   '../controlador/TALENTO_HUMANO/th_personasC.php?capturarFace=true',
+            type:  'post',
+            dataType: 'json',
+            success:  function (response) { 
+                console.log(response);
+                $('#myModal_espera').modal('hide');
+                if(response.resp==1)
+                {
+                    Swal.fire("Facial Guardada",response.patch,"success");
+                    $('#file_name_bio_face').text(response.patch);
+                }else
+                {
+                    Swal.fire("Facial",response.msj,"info");
+                }
+
+               
+                     tbl_dispositivos.ajax.reload(null, false);
+
+            } ,
+              error: function(xhr, status, error) {
+                console.log('Status: ' + status); 
+                console.log('Error: ' + error); 
+                console.log('XHR Response: ' + xhr.responseText); 
+
+                Swal.fire('', 'Error: ' + xhr.responseText, 'error');
+                $('#myModal_espera').modal('hide');
+            }         
+        });
+    }
+
      function dispositivos() {
         $.ajax({
             // data: {
@@ -423,6 +464,60 @@ if (isset($_GET['_id'])) {
 
     }
 
+    function listaFace()
+    {
+        if ($.fn.DataTable.isDataTable('#tbl_bio_face')) {
+            $('#tbl_bio_face').DataTable().destroy();
+        }
+        tbl_dispositivos = $('#tbl_bio_face').DataTable($.extend({},{
+            reponsive: true,
+            searching: false,  // Desactiva el buscador
+            paging: false,     // Desactiva la paginación
+            info: false,       // Opcional: Desactiva la información (ej. "Mostrando 1 a 10 de 100 registros")
+
+            language: {
+                url: 'https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
+            },
+            ajax: {
+                type:'POST',
+                url: '../controlador/TALENTO_HUMANO/th_personasC.php?listaFace=true',
+                data: function (d) {
+                   
+                     var parametros = {
+                      id:$('#txt_id').val(), // Parámetro personalizado
+                  };
+                  return { parametros: parametros };
+                },
+                dataSrc: ''
+            },
+            columns: [
+                 { data: null,
+                        render: function(data, type, item) {
+                        return `<div class="d-flex align-items-center">
+                                    <div class="">
+                                        <img src="../img/de_sistema/finger_huella.png" width="46" height="46" alt="">
+                                    </div>
+                                </div>`;
+                        }
+                    },   
+                     { data: 'th_cardNo'},                
+                    { data: null,
+                        render: function(data, type, item) {
+                         return ` <div class="list-inline d-flex customers-contacts ms-auto"> 
+                                    <a href="javascript:;" class="list-inline-item bg-danger" onclick="deteleFace('${item.th_cardNo}','${item._id}')"><i class="bx bxs-trash"></i></a>
+                                </div>`;
+                        }
+                    },        
+
+               
+            ],
+            order: [
+                [1, 'asc']
+            ],
+        }));
+
+    }
+
     function addTarjetaBio()
     {
         var id = $('#txt_id').val(); 
@@ -580,6 +675,7 @@ if (isset($_GET['_id'])) {
             data: formData,
             contentType: false,
             processData: false,
+            dataType: 'json',
             success: function (response) {
                 console.log(response)
                 if(response.resp==1)
@@ -588,6 +684,52 @@ if (isset($_GET['_id'])) {
                 }else
                 {
                     Swal.fire("","","info")
+                }
+            },
+            error: function () {
+                console.error('Error al subir el archivo');
+            }
+        });
+    }
+
+    function addFaceBio()
+    {
+        var formData = new FormData();
+        var archivo = $('#file_face')[0].files[0]; // obtener el archivo
+        var device = $('#ddl_dispositivos').val();
+        var idPerson =  $('#txt_id').val(); 
+        var detectado = $('#file_name_bio_face').text();
+
+        // console.log(archivo)
+
+        if(detectado=='' && archivo==undefined)
+        {
+            Swal.fire("No sea encontrado huella valida","","info")
+            return false;
+        }
+
+        formData.append('huella', archivo); // adjuntar al formData
+        formData.append('iddispostivos', device);
+        formData.append('idPerson', idPerson);
+        formData.append('detectado', detectado);
+
+        $.ajax({
+           url: '../controlador/TALENTO_HUMANO/th_personasC.php?addFaceBio=true',
+            type: 'POST',
+            data: formData,
+            contentType: false,
+            processData: false,
+            dataType: 'json',
+            success: function (response) {
+                console.log(response)
+                if(response.resp==1)
+                {
+                    Swal.fire("Imagen facial agregada","","success");
+                    $('#nuevofacial').modal('hide');
+                    listaFace();
+                }else
+                {
+                    Swal.fire(response.msj,"","info")
                 }
             },
             error: function () {
@@ -659,6 +801,46 @@ if (isset($_GET['_id'])) {
             }
         });
     }
+
+    function deteleFace(CardNo,idFace)
+    {
+
+        var id = $('#txt_id').val(); 
+        Swal.fire({
+          title: 'Quiere eliminar este registro?',
+          text: "Esta seguro de eliminar este registro!",
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Si'
+        }).then((result) => {
+            if (result.value) {
+
+                 var parametros = 
+                {
+                    'device':$('#ddl_dispositivos').val(),
+                    'idPerson':id,
+                    '_idFace':idFace,
+                    'CardNo':CardNo,
+                }
+                $.ajax({
+                    data: { parametros: parametros },
+                    url: '../controlador/TALENTO_HUMANO/th_personasC.php?DeleteFaceBio=true',
+                    type: 'post',
+                    dataType: 'json',
+                    success: function(response) {
+                        if(response['resp']==1)
+                        {
+                            Swal.fire("Eliminado","","success").then(function(){
+                                listaFace();
+                            })
+                        }
+                    }
+                });
+            }
+        })
+    }
   
 </script>
 
@@ -707,11 +889,11 @@ if (isset($_GET['_id'])) {
                                             <option value="" >Seleccione Dispositivo</option>
                                         </select>                                                                    
                                     </div>
-                                    <input type="" name="txt_id" id="txt_id" class="form-control form-control-sm" readonly value="11">							
+                                    <input type="" name="txt_id" id="txt_id" class="form-control form-control-sm" readonly value="<?php echo  $_id; ?>">							
 								</div>
 							</div>
 							<div class="customers-list p-3 mb-3 ps ps--active-y">
-                                <div class="d-none customers-list-item d-flex align-items-center border-top border-bottom border-1 p-3 cursor-pointer">
+                                <div class="customers-list-item d-flex align-items-center border-top border-bottom border-1 p-3 cursor-pointer">
                                     <div class="row">
                                         <div class="col-12">
                                             <!-- <div class="card radius-10"> -->
@@ -771,19 +953,7 @@ if (isset($_GET['_id'])) {
 								    </div>
                                 </div>
 								
-								<div class="customers-list-item d-flex align-items-center border-top border-bottom border-1 p-3 cursor-pointer">
-									<div class="ms-2">
-										<h4 class="mb-1"><b>Datos Facial</b></h4>
-										<p class="mb-0 font-13 text-secondary">laura_01@xyz.com</p>
-										<img src="assets/images/avatars/avatar-23.png" class="rounded-circle" width="46" height="46" alt="">
-									</div>
-									<div class="list-inline d-flex customers-contacts ms-auto">	
-										<a href="javascript:;" class="list-inline-item bg-danger"><i class="bx bxs-trash"></i></a>
-										<a href="javascript:;" class="list-inline-item" onclick="nuevofacial()"><i class="bx bx-plus"></i></a>
-										<a href="javascript:;" class="list-inline-item bg-primary"><i class="bx bx-save"></i></a>
-									</div>
-
-									</div>
+								
 								</div>
 								
 							
@@ -800,6 +970,37 @@ if (isset($_GET['_id'])) {
                     </div>
                 </div>
             </div>
+        </div>
+        <div class="row">
+            <div class="customers-list-item d-flex align-items-center border-top border-bottom border-1 p-3 cursor-pointer">
+                                    <div class="ms-2">
+                                        <h4 class="mb-1"><b>Datos Facial</b></h4>
+                                        <p class="mb-0 font-13 text-secondary">laura_01@xyz.com</p>
+                                        <img src="assets/images/avatars/avatar-23.png" class="rounded-circle" width="46" height="46" alt="">
+                                    </div>
+                                    <div class="list-inline d-flex customers-contacts ms-auto"> 
+                                        <a href="javascript:;" class="list-inline-item bg-danger"><i class="bx bxs-trash"></i></a>
+                                        <a href="javascript:;" class="list-inline-item" onclick="nuevofacial()"><i class="bx bx-plus"></i></a>
+                                        <a href="javascript:;" class="list-inline-item bg-primary"><i class="bx bx-save"></i></a>
+                                    </div>
+
+                                    </div>
+                                     <div class="col-sm-12">
+                                            <table class="table table-hover" id="tbl_bio_face" style="width:100%">
+                                                <thead>
+                                                    <th>Imagen</th>
+                                                    <th>Tarjeta Asociada</th>
+                                                    <th>Acción</th>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td></td>
+                                                        <td></td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                       </div>
+            
         </div>
         <!--end row-->
     </div>
@@ -896,24 +1097,26 @@ if (isset($_GET['_id'])) {
             <div class="modal-body">
                 <div class="row text-center">
                     <div class="col-sm-4">                                                   
-                        <img id="img_palma" src="../img/de_sistema/palma1.gif" style="width:50%">
+                        <img id="img_palma" src="../img/de_sistema/facial.png" style="width:50%">
+                        <span id="file_name_bio_face"></span>   
                     </div>
                      <div class="col-sm-8">
                      	<div class="row">
-                     		<div class="col-12">
-                     			<button type="button" class="btn btn-sm btn-primary">Capturar</button> 
-                     			<button type="button" class="btn btn-sm btn-primary">Buscar</button>
+                     		<div class="col-6">
+                     			<button type="button" class="btn btn-sm btn-primary" onclick="leerFace()">Capturar</button> 
                      		</div> 
-                     		<div class="">
-                     			
-                     		</div>                    		
-                     	</div>
-                                                                       
+                     		 <div class="col-6  text-start">
+                                <label for="file_face" class="btn btn-outline-dark btn-sm">Seleccionar foto</label>
+                                <input id="file_face" type="file"/><br>
+                                <span id="file-name-face"></span>     
+                            </div>                                           		
+                     	</div>         
                     </div>
+                    <p style="color:red">Recuerde,la imagen del facial debe ser menor a 200k</p>  
                 </div>
                 <div class="row pt-3">
                     <div class="col-12 text-end">
-                        <button type="button" class="btn btn-sm btn-primary" onclick="leerDedo()">Enviar al biometrico</button>  
+                        <button type="button" class="btn btn-sm btn-primary" onclick="addFaceBio()">Enviar al biometrico</button>  
                         <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Cerrar</button>
                     </div>
                 </div>
@@ -958,6 +1161,12 @@ if (isset($_GET['_id'])) {
 <script>
   document.getElementById("file_huella").addEventListener("change", function () {
     const fileNameSpan = document.getElementById("file-name");
+    const file = this.files[0];
+    fileNameSpan.textContent = file ? file.name : "Ningún archivo seleccionado";
+  });
+
+document.getElementById("file_face").addEventListener("change", function () {
+    const fileNameSpan = document.getElementById("file-name-face");
     const file = this.files[0];
     fileNameSpan.textContent = file ? file.name : "Ningún archivo seleccionado";
   });

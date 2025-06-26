@@ -266,6 +266,12 @@ namespace CorsinfSDKHik.Funciones
         private String ProcessCapFingerData(ref CHCNetSDK.NET_DVR_CAPTURE_FINGERPRINT_CFG struCFG, ref bool flag, string userName, string strpath = null)
         {
             DateTime dt = DateTime.Now;
+            string rutaCarpeta = @"" + strpath + "";
+
+            if (!Directory.Exists(rutaCarpeta))
+            {
+                Directory.CreateDirectory(rutaCarpeta);
+            }
             strpath = strpath + "\\" + userName + ".dat";
             try
             {

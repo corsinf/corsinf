@@ -29,6 +29,9 @@ class Program
     static String userHost;
     static String passHost;
 
+    String userName;
+    String patch;
+    String CardNo;
 
     public static async Task Main(string[] args)
     {
@@ -269,6 +272,72 @@ class Program
                     json = JsonSerializer.Serialize(new { msj = r });
                     break;
                 case "11":
+                    //TRAER A LOS logs USUARIOS DEL BIOMETRICO
+
+                    ip = args[1];
+                    user = args[2];
+                    port = args[3];
+                    pass = args[4];
+                    userName = args[5];
+                    patch = args[6];
+                    r = login.loginSDKDevice(ip, port, user, pass);
+                    m_UserId = login.m_UserID;
+                    if (m_UserId >= 0)
+                    {
+                        FaceManagerSDK FaceMan = new FaceManagerSDK();
+                        r = FaceMan.Facecapture(m_UserId, userName, patch);
+
+                        m_SetSuccess = FaceMan.m_SetSuccessFace;
+                    }
+
+                    json = JsonSerializer.Serialize(new { msj = r, resp = m_SetSuccess });
+                    break;
+                case "12":
+                    //AGREGAR USUARIO A BIOMETRICO
+                    ip = args[1];
+                    user = args[2];
+                    port = args[3];
+                    pass = args[4];
+                    CardNo = args[5]; // numero de tarjeta
+
+                    r = login.loginSDKDevice(ip, port, user, pass);
+                    m_UserId = login.m_UserID;
+                    if (m_UserId >= 0)
+                    {
+                        String ruta = args[6];
+                        String CardReaderNo = "1";  // esta variable solo se coloca entre 1 y 2 
+
+                        FaceManagerSDK FaceMan = new FaceManagerSDK();
+                        r = FaceMan.SetFace(m_UserId, CardReaderNo, CardNo, ruta);
+                        m_SetSuccessFing = FaceMan.m_SetSuccessFace;
+
+                    }
+                    json = JsonSerializer.Serialize(new { msj = r, resp = m_SetSuccessFing });
+                    break;
+
+                case "13":
+                    //AGREGAR USUARIO A BIOMETRICO
+                    ip = args[1];
+                    user = args[2];
+                    port = args[3];
+                    pass = args[4];
+                    CardNo = args[5]; // numero de tarjeta
+
+                    r = login.loginSDKDevice(ip, port, user, pass);
+                    m_UserId = login.m_UserID;
+                    if (m_UserId >= 0)
+                    {
+                        String CardReaderNo = "1";  // esta variable solo se coloca entre 1 y 2 
+
+                        FaceManagerSDK FaceMan = new FaceManagerSDK();
+                        r = FaceMan.DeleteFace(m_UserId, CardReaderNo, CardNo);
+                        m_SetSuccessFing = FaceMan.m_SetSuccessFace;
+
+                    }
+                    json = JsonSerializer.Serialize(new { msj = r, resp = m_SetSuccessFing });
+                    break;
+
+                case "99":
                     //GENERAR TABLA DE LOG PARA EJEMPLO
                     ipHost = args[5];
                     portHost = args[6];
@@ -288,11 +357,8 @@ class Program
                         dbModelo.InsertData(conn, data);
                     }
 
-                   
+                break;
 
-
-
-                    break;
             }
             CHCNetSDK.NET_DVR_Logout_V30(m_UserId);
             CHCNetSDK.NET_DVR_Cleanup();

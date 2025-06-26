@@ -11,6 +11,7 @@ class th_faceM  extends BaseModel
     protected $camposPermitidos = [
         'th_id_face',
         'th_per_id',
+        'th_cardNo',
         'th_face_nombre',
         'th_face_patch',
         'th_face_creacion',

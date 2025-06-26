@@ -10,13 +10,46 @@ if (isset($_GET['_id'])) {
 
 ?>
 
+
+<style>
+  .custom-file-upload {
+    display: inline-block;
+    padding: 8px 15px;
+    cursor: pointer;
+    background-color: #007bff;
+    color: white;
+    border-radius: 5px;
+    font-size: 14px;
+    border: none;
+    transition: background-color 0.3s ease;
+  }
+
+  .custom-file-upload:hover {
+    background-color: #0056b3;
+  }
+
+  input[type="file"] {
+    display: none;
+  }
+
+  #file-name {
+    margin-left: 10px;
+    font-style: italic;
+  }
+</style>
+
+<script>
+
+var PersonaId = '<?php echo $_id; ?>'
+    
+</script>
 <script src="../lib/jquery_validation/jquery.validate.js"></script>
 <script src="../js/GENERAL/operaciones_generales.js"></script>
+<script src="../js/RECURSOS_HUMANOS/biometria.js"></script>
 
 <script type="text/javascript">
     $(document).ready(function() {
         dispositivos();
-        dispositivosSync();
         // cargar_tabla();
         <?php if (isset($_GET['_id'])) { ?>
             cargar_datos_persona(<?= $_id ?>);
@@ -90,44 +123,6 @@ if (isset($_GET['_id'])) {
         $('#txt_dedo_num').val(finger);
     }
 
-    function leerDedo() {
-        $('#myModal_espera').modal('show');
-        var parametros = {
-            'iddispostivos': $('#ddl_dispositivos').val(),
-            'Idusuario': <?php echo $_id; ?>,
-            'dedo': $('#txt_dedo_num').val(),
-            'usuario': $('#txt_primer_apellido').val() + ' ' + $('#txt_segundo_apellido').val() + ' ' + $('#txt_primer_nombre').val() + ' ' + $('#txt_segundo_nombre').val(),
-            'CardNo': $('#txt_CardNumero').val(),
-        }
-        $.ajax({
-            data: {
-                parametros: parametros
-            },
-            url: '../controlador/TALENTO_HUMANO/th_detectar_dispositivosC.php?CapturarFinger=true',
-            type: 'post',
-            dataType: 'json',
-            success: function(response) {
-                $('#myModal_espera').modal('hide');
-                if (response.resp == 1) {
-                    Swal.fire("Huella dactilar Guardada", response.patch, "success");
-                } else {
-                    Swal.fire("Huella dactilar", response.msj, "info");
-                }
-
-
-                tbl_dispositivos.ajax.reload(null, false);
-
-            },
-            error: function(xhr, status, error) {
-                console.log('Status: ' + status);
-                console.log('Error: ' + error);
-                console.log('XHR Response: ' + xhr.responseText);
-
-                Swal.fire('', 'Error: ' + xhr.responseText, 'error');
-                $('#myModal_espera').modal('hide');
-            }
-        });
-    }
 
     function dispositivos() {
         $.ajax({
@@ -156,32 +151,6 @@ if (isset($_GET['_id'])) {
         });
     }
 
-    function dispositivosSync() {
-        $.ajax({
-            // data: {
-            //     id: id
-            // },
-            url: '../controlador/TALENTO_HUMANO/th_dispositivosC.php?listar=true',
-            type: 'post',
-            dataType: 'json',
-            success: function(response) {
-                console.log(response);
-                op = '';
-                response.forEach(function(item, i) {
-                    op += '<option value="' + item._id + '">' + item.nombre + '</option>';
-                })
-                $('#ddl_dispositivosSync').html(op);
-
-            },
-            error: function(xhr, status, error) {
-                console.log('Status: ' + status);
-                console.log('Error: ' + error);
-                console.log('XHR Response: ' + xhr.responseText);
-
-                Swal.fire('', 'Error: ' + xhr.responseText, 'error');
-            }
-        });
-    }
 
     function eliminarfinger(id) {
         Swal.fire({
@@ -259,9 +228,9 @@ if (isset($_GET['_id'])) {
         }));
     }
 
-    function syncronizarPersona() {
-        $('#sync_biometrico').modal('show');
-
+    function modalBiometria()
+    {
+        $('#modalBiometria').modal('show');        
     }
 
     function syncronizarPersonaBio() {
@@ -317,28 +286,29 @@ if (isset($_GET['_id'])) {
             <div class="col-xl-12 mx-auto">
                 <div class="card border-top border-0 border-4 border-primary">
                     <div class="card-body p-5">
-                        <div class="card-title d-flex align-items-center">
-
-                            <div><i class="bx bxs-user me-1 font-22 text-primary"></i>
-                            </div>
-                            <h5 class="mb-0 text-primary">
-                                <?php
-                                if ($_id == '') {
-                                    echo 'Registrar Persona';
-                                } else {
-                                    echo 'Modificar Persona';
-                                }
-                                ?>
-                            </h5>
-
-                            <div class="row m-2">
-                                <div class="col-sm-12">
-                                    <a href="../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_personas" class="btn btn-outline-dark btn-sm"><i class="bx bx-arrow-back"></i> Regresar</a>
-                                    <button class="btn btn-primary btn-sm" onclick="syncronizarPersona()"><i class="bx bx-sync"></i>Syncronizar persona en biometrico</button>
-                                </div>
+                        <div class="card-title align-items-center">
+                            <div class="row">
+                                <div class="col-12">
+                                    
+                                    <h5 class="mb-0 text-primary">
+                                        <i class="bx bxs-user me-1 font-22 text-primary"></i>
+                                        <?php
+                                        if ($_id == '') {
+                                            echo 'Registrar Persona';
+                                        } else {
+                                            echo 'Modificar Persona';
+                                        }
+                                        ?>
+                                    </h5>                                    
+                                </div>  
+                                <hr>
+                                <div class="col-12">
+                                     <a href="../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_personas" class="btn btn-outline-dark btn-sm"><i class="bx bx-arrow-back"></i> Regresar</a>
+                                    <button class="btn btn-primary btn-sm" onclick="modalBiometria()"><i class="bx bx-sync"></i>Biometria</button>    
+                                    <!-- <button class="btn btn-primary btn-sm" onclick="syncronizarPersona()"><i class="bx bx-sync"></i>Syncronizar persona en biometrico</button>                                     -->
+                                </div>                              
                             </div>
                         </div>
-                        <hr>
 
                         <div class="pt-2">
                             <ul class="nav nav-tabs nav-primary" role="tablist">
@@ -351,15 +321,7 @@ if (isset($_GET['_id'])) {
                                         </div>
                                     </a>
                                 </li>
-                                <li class="nav-item" role="presentation">
-                                    <a class="nav-link" data-bs-toggle="tab" href="#tarjetas" role="tab" aria-selected="false">
-                                        <div class="d-flex align-items-center">
-                                            <div class="tab-icon"><i class='bx bx-credit-card font-18 me-1'></i>
-                                            </div>
-                                            <div class="tab-title">Biometría</div>
-                                        </div>
-                                    </a>
-                                </li>
+                               
                                 <!-- <li class="nav-item" role="presentation">
                                     <a class="nav-link" data-bs-toggle="tab" href="#departamentos" role="tab" aria-selected="false">
                                         <div class="d-flex align-items-center">
@@ -390,112 +352,6 @@ if (isset($_GET['_id'])) {
                                     </form>
 
                                 </div>
-
-                                <div class="tab-pane fade" id="tarjetas" role="tabpanel">
-
-                                    <div class="row">
-                                        <div class="col-md-3">
-                                            <b>Numero de tarjeta</b>
-                                            <input type="text" name="txt_CardNumero" id="txt_CardNumero" class="form-control form-control-sm">
-                                            <b>Registro de facial</b>
-                                            <input type="text" name="" id="" class="form-control form-control-sm">
-                                        </div>
-                                        <div class="col-sm-9">
-                                            <div class="row">
-                                                <div class="col-sm-6">
-                                                    <div class="col">
-                                                        <div class="btn-group" role="group" aria-label="First group">
-                                                            <button type="button" id="btn_finger_1" class="btn btn-sm btn-outline-primary active" onclick="cambiar(1)">Dedo 1</button>
-                                                            <button type="button" id="btn_finger_2" class="btn btn-sm btn-outline-primary " onclick="cambiar(2)">Dedo 2</button>
-                                                            <button type="button" id="btn_finger_3" class="btn btn-sm btn-outline-primary " onclick="cambiar(3)">Dedo 3</button>
-                                                            <button type="button" id="btn_finger_4" class="btn btn-sm btn-outline-primary " onclick="cambiar(4)">Dedo 4</button>
-                                                            <button type="button" id="btn_finger_5" class="btn btn-sm btn-outline-primary " onclick="cambiar(5)">Dedo 5</button>
-                                                            <input type="hidden" name="txt_dedo_num" value="1" id="txt_dedo_num">
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-sm-4">
-                                                    <select class="form-select" id="ddl_dispositivos" name="ddl_dispositivos">
-                                                        <option value="">Seleccione Dispositivo</option>
-                                                    </select>
-                                                </div>
-                                                <div class="col-2 text-end">
-                                                    <button type="button" class="btn btn-sm btn-primary" onclick="leerDedo()">Iniciar Lectura</button>
-                                                </div>
-
-                                                <div class="row text-center">
-                                                    <div class="col-sm-6">
-                                                        <img id="img_palma" src="../img/de_sistema/palma1.gif" style="width:100%">
-                                                    </div>
-                                                    <div class="col-sm-6">
-                                                        <table class="table table-hover" id="tbl_bio_finger" style="width:100%">
-                                                            <thead>
-                                                                <th>Numero de Dedo</th>
-                                                                <th>Acción</th>
-                                                            </thead>
-                                                            <tbody>
-                                                                <tr>
-                                                                    <td></td>
-                                                                    <td></td>
-                                                                </tr>
-                                                            </tbody>
-                                                        </table>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                        </div>
-
-                                        <!-- 
-                                    <div class="row pt-4">
-                                        <div class="table-responsive">
-                                            <table class="table table-striped responsive" id="tbl_departamento_personas" style="width:100%">
-                                                <thead>
-                                                    <tr>
-                                                        <th>Cédula</th>
-                                                        <th>Nombre</th>
-                                                        <th>Correo</th>
-                                                        <th>Teléfono</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div> -->
-
-                                    </div>
-
-                                    <div class="tab-pane fade" id="departamentos" role="tabpanel">
-
-                                        <div class="row pt-3">
-                                            <div class="col-sm-12" id="btn_nuevo">
-                                                <button type="button" class="btn btn-success btn-sm" onclick="abrir_modal_personas();"><i class="bx bx-plus"></i> Agregar Departamentos</button>
-                                            </div>
-                                        </div>
-
-                                        <div class="row pt-4">
-                                            <div class="table-responsive">
-                                                <table class="table table-striped responsive" id="tbl_departamento_personas" style="width:100%">
-                                                    <thead>
-                                                        <tr>
-                                                            <th>Cédula</th>
-                                                            <th>Nombre</th>
-                                                            <th>Correo</th>
-                                                            <th>Teléfono</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        </div>
-
-                                    </div>
-
-                                </div>
                             </div>
 
                         </div>
@@ -507,32 +363,131 @@ if (isset($_GET['_id'])) {
     </div>
 
 
-    <div class="modal" id="sync_biometrico" abindex="-1" aria-modal="true" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
-        <div class="modal-dialog modal-dialog-centered">
+   
+
+
+    <div class="modal" id="modalBiometria" abindex="-1" aria-modal="true" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
             <div class="modal-content">
 
                 <!-- Modal Header -->
                 <div class="modal-header">
-                    <h3>Syncronizar a biometrico</h3>
+                    <h3>Datos de biometria</h3>
                 </div>
 
                 <!-- Modal body -->
                 <div class="modal-body">
 
                     <div class="row">
-                        <div class="col-sm-12">
-                            <b>Biometrico a syncronizar</b>
-                            <select class="form-select" id="ddl_dispositivosSync"></select>
+                       <div class="d-flex align-items-start">
+                          <div class="nav flex-column nav-pills me-3" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                            <button class="nav-link active" id="v-pills-home-tab" data-bs-toggle="pill" data-bs-target="#v-pills-home" type="button" role="tab" aria-controls="v-pills-home" aria-selected="true">Tarjeta / card</button>
+                            <button class="nav-link disabled" id="v-pills-profile-tab" data-bs-toggle="pill" data-bs-target="#v-pills-profile" type="button" role="tab" aria-controls="v-pills-profile" aria-selected="false">Huella digital / Finger</button>
+                            <button class="nav-link disabled" id="v-pills-messages-tab" data-bs-toggle="pill" data-bs-target="#v-pills-messages" type="button" role="tab" aria-controls="v-pills-messages" aria-selected="false">Facial / Face</button>
+                          </div>
+                          <div class="tab-content w-100" id="v-pills-tabContent">
+                            <div class="tab-pane fade show active" id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-home-tab">
+                                <div class="row">
+                                    <div class="col-12 text-end">
+                                        <button  type="button" class="btn btn-primary btn-sm"  onclick="nuevaTarjeta()"><i class="bx bx-plus"></i>Nueva Tarjeta</button>                                        
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="table-responsive">
+                                            <table class="table table-hover" id="tbl_cards" style="width:100%">
+                                            <thead>
+                                                <th>Numero Tarjeta</th>
+                                                <th>Acción</th>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td></td>
+                                                    <td></td>
+                                                </tr>
+                                            </tbody>
+                                        </table> 
+                                            
+                                        </div>
+                                    </div> 
+                                </div>
+                                 <div class="row pt-3">
+                                    <div class="col-12 text-end">
+                                        <button type="button" class="btn btn-success btn-sm" onclick="syncronizarPersona(1)"><i class="bx bx-sync"></i> Enviar a biometrico</button>
+                                        <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="tab-pane fade" id="v-pills-profile" role="tabpanel" aria-labelledby="v-pills-profile-tab">
+                                <div class="row">
+                                    <div class="col-12 text-end">
+                                        <button type="button" class="btn btn-sm btn-primary" onclick="nuevahuellaBio()"><i class="bx bx-plus"></i>Nueva Huella digital
+                                            </button>
+                                    </div>
+                                    <div class="col-sm-12">
+                                        <table class="table table-hover" id="tbl_bio_finger" style="width:100%">
+                                            <thead>
+                                                <th>Numero de Dedo</th>
+                                                <th>Tarjeta Asociada</th>
+                                                <th>Acción</th>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td></td>
+                                                    <td></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                   </div>
+                                </div> 
+                                <div class="row pt-3">
+                                    <div class="col-12 text-end">
+                                        <!-- <button type="button" class="btn btn-success btn-sm" onclick="syncronizarPersona(2)"><i class="bx bx-sync"></i> Enviar a biometrico</button> -->
+                                        <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                                    </div>
+                                </div>                               
+                            </div>
+
+                            <div class="tab-pane fade" id="v-pills-messages" role="tabpanel" aria-labelledby="v-pills-messages-tab">
+                                <div class="row">
+                                    <div class="col-sm-12 text-end">
+                                         <button class="btn btn-primary btn-sm" onclick="nuevofacial()"><i class="bx bx-plus"></i>Nuevo facial</button>
+                                        
+                                    </div>               
+                                     <div class="col-sm-12">
+                                            <table class="table table-hover" id="tbl_bio_face" style="width:100%">
+                                                <thead>
+                                                    <th>Imagen</th>
+                                                    <th>Tarjeta Asociada</th>
+                                                    <th>Acción</th>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td></td>
+                                                        <td></td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                       </div>                     
+                                </div>
+                                <div class="row pt-3">
+                                    <div class="col-12 text-end">
+                                        <!-- <button type="button" class="btn btn-success btn-sm" onclick="syncronizarPersona(7)"><i class="bx bx-sync"></i> Enviar a biometrico</button> -->
+                                        <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                                    </div>
+                                </div>
+                                
+                            </div>
+                          </div>
                         </div>
                     </div>
 
 
-                    <div class="row pt-3">
+                   <!--  <div class="row pt-3">
                         <div class="col-12 text-end">
                             <button type="button" class="btn btn-success btn-sm" onclick="syncronizarPersonaBio()"><i class="bx bx-sync"></i> Enviar a biometrico</button>
                             <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Cerrar</button>
                         </div>
-                    </div>
+                    </div> -->
 
                 </div>
             </div>
@@ -693,3 +648,191 @@ if (isset($_GET['_id'])) {
             });
         });
     </script>
+
+    <div class="modal" id="nuevaTarjeta" abindex="-1" aria-modal="true" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Nueva tarjeta</h3>
+            </div>
+            <!-- Modal body -->
+            <div class="modal-body">
+                <div class="row text-center">
+                    <div class="col-md-12">
+                        <b>Numero de tarjeta</b>
+                        <input type="text" name="txt_CardNumero" id="txt_CardNumero" class="form-control form-control-sm">
+                    </div>
+                </div>
+                <div class="row pt-3">
+                    <div class="col-12 text-end">
+                        <button type="button" class="btn btn-success btn-sm" onclick="addTarjetaBase()"><i class="bx bx-sync"></i>Guardar</button>
+                        <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="nuevahuella" abindex="-1" aria-modal="true" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Nueva Huella</h3>
+            </div>
+            <!-- Modal body -->
+            <div class="modal-body">
+                <div class="row text-center">
+                    <div class="col-sm-12">
+                        <div class="input-group input-group-sm"> <span class="input-group-text"><b>Tarjeta Asociada</b></span>
+                            <select class="form-select form-select-sm" id="ddl_tarjetas">
+                                <option value="">Seleccione Tarjeta</option>
+                            </select>
+                        </div>                        
+                    </div>
+                    <div class="col-sm-12">
+                        <div class="col">
+                            <div class="btn-group" role="group" aria-label="First group">
+                                <button type="button" id="btn_finger_1" class="btn btn-sm btn-outline-primary active" onclick="cambiar(1)">Dedo 1</button>
+                                <button type="button" id="btn_finger_2" class="btn btn-sm btn-outline-primary " onclick="cambiar(2)">Dedo 2</button>
+                                <button type="button" id="btn_finger_3" class="btn btn-sm btn-outline-primary " onclick="cambiar(3)">Dedo 3</button>
+                                <button type="button" id="btn_finger_4" class="btn btn-sm btn-outline-primary " onclick="cambiar(4)">Dedo 4</button>
+                                <button type="button" id="btn_finger_5" class="btn btn-sm btn-outline-primary " onclick="cambiar(5)">Dedo 5</button>
+                                <input type="hidden" name="txt_dedo_num" value="1" id="txt_dedo_num">
+                            </div>
+                        </div>                                                   
+                    </div>
+                   
+                    <div class="col-sm-12">                                                   
+                        <img id="img_palma" src="../img/de_sistema/palma1.gif" style="width:50%">
+                    </div>
+                     <div class="col-sm-12">
+                        <div class="row">
+                            <div class="col-12">
+                                <button type="button" class="btn btn-primary btn-sm" onclick="syncronizarPersona(99)">Lectura desde Biometrico</button>
+                                <span id="file-name_bio"></span>   
+                            </div>
+                            <div class="col-12">
+                                <label for="file_huella" class="btn btn-outline-dark btn-sm" >Seleccionar Huella</label>
+                                <input id="file_huella" type="file" accept=".dat"/><br>
+                                <span id="file-name"></span>     
+                            </div>
+                            
+                        </div>      
+                    </div>
+                </div>
+                   
+                
+                <div class="row pt-3">
+                    <div class="col-12 text-end">
+                        <button type="button" class="btn btn-primary btn-sm" onclick="addHuellaBase()"><i class="bx bx-save"></i> Guardar Huella</button> 
+                        <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal" id="nuevofacial" abindex="-1" aria-modal="true" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Nueva facial</h3>
+            </div>
+            <!-- Modal body -->
+            <div class="modal-body">
+                <div class="row text-center">
+                    <div class="col-sm-12">
+                        <div class="input-group input-group-sm"> <span class="input-group-text"><b>Tarjeta Asociada</b></span>
+                            <select class="form-select form-select-sm" id="ddl_tarjetas_facial">
+                                <option value="">Seleccione Tarjeta</option>
+                            </select>
+                        </div>                        
+                    </div>
+                    <div class="col-sm-12">                                                   
+                        <img id="img_face" src="../img/de_sistema/facial.png">
+                        <span id="file_name_bio_face"></span>   
+                    </div>
+                     <div class="col-sm-12">
+                        <div class="row">
+                            <div class="col-12">
+                                <button type="button" class="btn btn-sm btn-primary" onclick="syncronizarPersona(98)">Capturar de Biometrico</button> 
+                            </div> 
+                             <div class="col-12">
+                                <label for="file_face" class="btn btn-outline-dark btn-sm">Seleccionar foto</label>
+                                <input id="file_face" type="file"/><br>
+                                <span id="file-name-face"></span>     
+                            </div>                                                  
+                        </div>         
+                    </div>
+                    <p style="color:red">Recuerde,la imagen del facial debe ser menor a 200k</p>  
+                </div>
+                <div class="row pt-3">
+                    <div class="col-12 text-end"><!-- 
+                        <button type="button" class="btn btn-sm btn-primary" onclick="addFaceBio()">Enviar al biometrico</button>  --> 
+
+                        <button type="button" class="btn btn-sm btn-primary" onclick="addFaceBase()">Guardar</button> 
+                        <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+ <div class="modal" id="sync_biometrico" abindex="-1" aria-modal="true" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h3>Syncronizar a biometrico</h3>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body">
+
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <b>Biometrico a syncronizar</b>
+                            <select class="form-select" id="ddl_dispositivos"></select>
+                            <input type="hidden" name="txt_cardNo" id="txt_cardNo">
+                            <input type="hidden" name="txt_id_reg" id="txt_id_reg">
+                        </div>
+                    </div>
+
+
+                    <div class="row pt-3">
+                        <div class="col-12 text-end">
+                            <button type="button" id="btn_tarjeta_all" class="btn btn-success btn-sm d-none" onclick="addTarjetaBioAll()"><i class="bx bx-sync"></i>Sincronizar todas las Tarjeta</button>
+                            <button type="button" id="btn_tarjeta" class="btn btn-success btn-sm d-none" onclick="addTarjetaBio()"><i class="bx bx-sync"></i>Sincronizar Tarjeta</button>
+                            <button type="button" id="btn_delete_tarjeta" class="btn btn-danger btn-sm d-none" onclick=" deteleTarjetaBio()"><i class="bx bx-sync"></i>Eliminar Tarjeta</button>
+
+                            <button type="button" id="btn_huella_all" class="btn btn-success btn-sm d-none" onclick="()"><i class="bx bx-sync"></i> Sincronizar todas las Huella</button>
+                            <button type="button" id="btn_huella" class="btn btn-success btn-sm d-none" onclick="addHuellaBio()"><i class="bx bx-sync"></i> Sincronizar Huella</button>
+                            <button type="button" id="btn_delete_huella" class="btn btn-danger btn-sm d-none" onclick="deteleHuella()"><i class="bx bx-sync"></i>Eliminar Huella</button>
+
+
+                            <button type="button" id="btn_facial" class="btn btn-success btn-sm d-none" onclick="addFaceBio()"><i class="bx bx-sync"></i> Sincronizar Facial</button>
+                            <button type="button" id="btn_delete_facial" class="btn btn-danger btn-sm d-none" onclick="deteleFace()"><i class="bx bx-sync"></i>Eliminar facial</button>
+
+
+                            <button type="button" id="btn_huella_lectura" class="btn btn-primary btn-sm d-none" onclick="leerDedo()"><i class="bx bx-sync"></i> Iniciar lectura de huella</button>
+                            <button type="button" id="btn_face_lectura" class="btn btn-primary btn-sm d-none" onclick="leerFace()"><i class="bx bx-sync"></i> Iniciar lectura facial</button>
+                             
+
+                            <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                           
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>

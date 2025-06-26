@@ -1266,15 +1266,27 @@ namespace CorsinfSDKHik.NetSDK
         }
 
         [StructLayout(LayoutKind.Sequential)]
+        /*
         public struct NET_DVR_CAPTURE_FACE_COND
         {
             public uint dwSize;
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 128, ArraySubType = UnmanagedType.I1)]
             public byte[] byRes;
         }
+        */
 
+        public struct NET_DVR_CAPTURE_FACE_COND
+        {
+            public int dwSize;
+            [MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = 128, ArraySubType = UnmanagedType.I1)]
+            public byte[] byRes;
+            public void init()
+            {
+                byRes = new byte[128];
+            }
+        }
         [StructLayout(LayoutKind.Sequential)]
-        public struct NET_DVR_CAPTURE_FACE_CFG
+       /* public struct NET_DVR_CAPTURE_FACE_CFG
         {
             public uint dwSize;
             public uint dwFaceTemplate1Size;
@@ -1288,6 +1300,29 @@ namespace CorsinfSDKHik.NetSDK
             public byte byCaptureProgress;
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 125, ArraySubType = UnmanagedType.I1)]
             public byte[] byRes;
+        }*/
+
+        public struct NET_DVR_CAPTURE_FACE_CFG
+        {
+            public int dwSize;
+            public int dwFaceTemplate1Size;//人脸模板1数据大小，等于0时，代表无人脸模板1数据
+            public IntPtr pFaceTemplate1Buffer;//人脸模板1数据缓存（不大于2.5k）
+            public int dwFaceTemplate2Size;//人脸模板2数据大小，等于0时，代表无人脸模板2数据
+            public IntPtr pFaceTemplate2Buffer; //人脸模板2数据缓存（不大于2.5K）
+            public int dwFacePicSize;//人脸图片数据大小，等于0时，代表无人脸图片数据;
+            public IntPtr pFacePicBuffer;//人脸图片数据缓存;
+            public byte byFaceQuality1;//人脸质量，范围1-100
+            public byte byFaceQuality2;//人脸质量，范围1-100
+            public byte byCaptureProgress;    //采集进度，目前只有两种进度值：0-未采集到人脸，100-采集到人脸（只有在进度为100时，才解析人脸信息）
+            public byte byRes1;
+            public int dwInfraredFacePicSize;   //红外人脸图片数据大小，等于0时，代表无人脸图片数据
+            public IntPtr pInfraredFacePicBuffer;      //红外人脸图片数据缓存
+            [MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = 116, ArraySubType = UnmanagedType.I1)]
+            public byte[] byRes;
+            public void init()
+            {
+                byRes = new byte[116];
+            }
         }
 
         [StructLayoutAttribute(LayoutKind.Sequential)]
@@ -1869,7 +1904,7 @@ namespace CorsinfSDKHik.NetSDK
                 byRes1 = new byte[3];
                 byRes = new byte[64];
                 struProcessMode = new NET_DVR_FACE_PARAM_BYCARD();
-                struProcessMode.Init();
+                struProcessMode.init();
             }
         }
 
@@ -1894,6 +1929,7 @@ namespace CorsinfSDKHik.NetSDK
         }
 
         [StructLayout(LayoutKind.Sequential)]
+        /*
         public struct NET_DVR_FACE_PARAM_BYCARD
         {
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = ACS_CARD_NO_LEN, ArraySubType = UnmanagedType.I1)]
@@ -1912,7 +1948,27 @@ namespace CorsinfSDKHik.NetSDK
                 byFaceID = new byte[MAX_FACE_NUM];
                 byRes1 = new byte[42];
             }
+        }*/
+        public struct NET_DVR_FACE_PARAM_BYCARD
+        {
+            [MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = CHCNetSDK.ACS_CARD_NO_LEN, ArraySubType = UnmanagedType.I1)]
+            public byte[] byCardNo; //人脸关联的卡号
+            [MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = CHCNetSDK.MAX_CARD_READER_NUM_512, ArraySubType = UnmanagedType.I1)]
+            public byte[] byEnableCardReader;//人脸的读卡器信息，按数组表示
+            [MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = CHCNetSDK.MAX_FACE_NUM, ArraySubType = UnmanagedType.I1)]
+            public byte[] byFaceID; //需要删除的人脸编号，按数组下标，值表示0-不删除，1-删除该人脸
+            [MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = 42, ArraySubType = UnmanagedType.I1)]
+            public byte[] byRes1;
+
+            public void init()
+            {
+                byCardNo = new byte[CHCNetSDK.ACS_CARD_NO_LEN];
+                byEnableCardReader = new byte[CHCNetSDK.MAX_CARD_READER_NUM_512];
+                byFaceID = new byte[CHCNetSDK.MAX_FACE_NUM];
+                byRes1 = new byte[42];
+            }
         }
+
 
         [StructLayout(LayoutKind.Sequential)]
         public struct NET_DVR_FACE_PARAM_BYREADER
@@ -3520,6 +3576,9 @@ namespace CorsinfSDKHik.NetSDK
         public static extern int NET_DVR_GetNextRemoteConfig(int lHandle, ref CHCNetSDK.NET_DVR_ACS_EVENT_CFG lpOutBuff, int dwOutBuffSize);
 
         [DllImport(@"..\..\..\HCNetSDK\HCNetSDK.dll")]
+        public static extern int NET_DVR_GetNextRemoteConfig(int lHandle, ref CHCNetSDK.NET_DVR_CAPTURE_FACE_CFG lpOutBuff, int dwOutBuffSize);
+
+        [DllImport(@"..\..\..\HCNetSDK\HCNetSDK.dll")]
         public static extern int NET_DVR_GetNextRemoteConfig(int lHandle, ref CHCNetSDK.NET_DVR_ACS_EVENT_CFGG lpOutBuff, int dwOutBuffSize);
 
 
@@ -3562,6 +3621,10 @@ namespace CorsinfSDKHik.NetSDK
          */
         [DllImport(@"..\..\..\HCNetSDK\HCNetSDK.dll")]
         public static extern bool NET_DVR_RemoteControl(int lUserID, uint dwCommand, nint lpInBuffer, uint dwInBufferSize);
+
+        [DllImport(@"..\..\..\HCNetSDK\HCNetSDK.dll")]
+        public static extern bool NET_DVR_RemoteControl(int lUserID, int dwCommand, ref CHCNetSDK.NET_DVR_FACE_PARAM_CTRL_CARDNO lpInBuffer, int dwInBufferSize);
+
 
         /* login
          * [in] pLoginInfo - login parameters
@@ -3791,7 +3854,27 @@ namespace CorsinfSDKHik.NetSDK
             }
         }
 
+        [StructLayoutAttribute(LayoutKind.Sequential)]
+        public struct NET_DVR_FACE_PARAM_CTRL_CARDNO
+        {
+            public int dwSize;
+            public byte byMode;//删除方式，0-按卡号方式删除，1-按读卡器删除
+            [MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = 3, ArraySubType = UnmanagedType.I1)]
+            public byte[] byRes1;
+            public CHCNetSDK.NET_DVR_FACE_PARAM_BYCARD struByCard;//按卡号的方式删除,读卡器暂时不写
+            [MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = 64, ArraySubType = UnmanagedType.I1)]
+            public byte[] byRes;
+            public void init()
+            {
+                byRes1 = new byte[3];
+                byRes = new byte[64];
+                struByCard.init();
+            }
+        }
+
+
         [StructLayout(LayoutKind.Sequential)]
+        /*
         public struct NET_DVR_FACE_COND
         {
             public uint dwSize;
@@ -3807,7 +3890,23 @@ namespace CorsinfSDKHik.NetSDK
                 byCardNo = new byte[ACS_CARD_NO_LEN];
                 byRes = new byte[124];
             }
+        }*/
+        public struct NET_DVR_FACE_COND
+        {
+            public int dwSize;
+            [MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = CHCNetSDK.ACS_CARD_NO_LEN)]
+            public byte[] byCardNo;//人脸关联的卡号（设置时该参数可不设置）
+            public int dwFaceNum;// 设置或获取人脸数量，获取时置为0xffffffff表示获取所有人脸信息
+            public int dwEnableReaderNo;// 人脸读卡器编号
+            [MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = 124)]
+            public byte[] byRes;
+            public void init()
+            {
+                byCardNo = new byte[CHCNetSDK.ACS_CARD_NO_LEN];
+                byRes = new byte[124];
+            }
         }
+
 
         [StructLayout(LayoutKind.Sequential)]
         public struct NET_DVR_CARD_SEND_DATA
@@ -3826,6 +3925,7 @@ namespace CorsinfSDKHik.NetSDK
         }
 
         [StructLayout(LayoutKind.Sequential)]
+        /*
         public struct NET_DVR_FACE_RECORD
         {
             public uint dwSize;
@@ -3839,6 +3939,23 @@ namespace CorsinfSDKHik.NetSDK
             public void Init()
             {
                 byCardNo = new byte[ACS_CARD_NO_LEN];
+                byRes = new byte[128];
+            }
+        }
+        */
+        public struct NET_DVR_FACE_RECORD
+        {
+            public int dwSize;
+            [MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = CHCNetSDK.ACS_CARD_NO_LEN)]
+            public byte[] byCardNo;
+            public int dwFaceLen;
+            public IntPtr pFaceBuffer;
+            [MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = 128)]
+            public byte[] byRes;
+
+            public void init()
+            {
+                byCardNo = new byte[CHCNetSDK.ACS_CARD_NO_LEN];
                 byRes = new byte[128];
             }
         }
@@ -3862,6 +3979,8 @@ namespace CorsinfSDKHik.NetSDK
         }
 
         [StructLayout(LayoutKind.Sequential)]
+
+        /*
         public struct NET_DVR_FACE_STATUS
         {
             public uint dwSize;
@@ -3879,6 +3998,25 @@ namespace CorsinfSDKHik.NetSDK
             {
                 byCardNo = new byte[ACS_CARD_NO_LEN];
                 byErrorMsg = new byte[ERROR_MSG_LEN];
+                byRes = new byte[131];
+            }
+        }
+        */
+        public struct NET_DVR_FACE_STATUS
+        {
+            public int dwSize;
+            [MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = CHCNetSDK.ACS_CARD_NO_LEN, ArraySubType = UnmanagedType.I1)]
+            public byte[] byCardNo;
+            [MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = CHCNetSDK.ERROR_MSG_LEN, ArraySubType = UnmanagedType.I1)]
+            public byte[] byErrorMsg;//下发错误信息，当byCardReaderRecvStatus为4时，表示已存在人脸对应的卡号
+            public int dwReaderNo; //人脸读卡器编号，可用于下发错误返回
+            public byte byRecvStatus;  //人脸读卡器状态，按字节表示，0-失败，1-成功，2-重试或人脸质量差，3-内存已满(人脸数据满)，4-已存在该人脸，5-非法人脸ID
+            [MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = 131, ArraySubType = UnmanagedType.I1)]
+            public byte[] byRes;
+            public void init()
+            {
+                byCardNo = new byte[CHCNetSDK.ACS_CARD_NO_LEN];
+                byErrorMsg = new byte[CHCNetSDK.ERROR_MSG_LEN];
                 byRes = new byte[131];
             }
         }
@@ -3991,6 +4129,10 @@ namespace CorsinfSDKHik.NetSDK
         [DllImport(@"..\..\..\HCNetSDK\HCNetSDK.dll")]
         public static extern int NET_DVR_GetNextRemoteConfig(int lHandle, ref CHCNetSDK.NET_DVR_FINGERPRINT_RECORDF lpOutBuff, int dwOutBuffSize);
         // 用户调用SendwithRecv接口时，接口返回的状态
+
+        [DllImport(@"..\..\..\HCNetSDK\HCNetSDK.dll")]
+        public static extern int NET_DVR_SendWithRecvRemoteConfig(int lHandle, ref CHCNetSDK.NET_DVR_FACE_RECORD lpInBuff, int dwInBuffSize, ref CHCNetSDK.NET_DVR_FACE_STATUS lpOutBuff, int dwOutBuffSize, IntPtr dwOutDataLen);
+
         public enum NET_SDK_SENDWITHRECV_STATUS
         {
             NET_SDK_CONFIG_STATUS_SUCCESS = 1000,    // 成功读取到数据，客户端处理完本次数据后需要再次调用NET_DVR_SendWithRecvRemoteConfig获取下一条数据

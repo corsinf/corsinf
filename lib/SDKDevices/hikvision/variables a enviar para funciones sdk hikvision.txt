@@ -1,7 +1,30 @@
 Para este sdk no almacena EmployedID lo cual hace que el nombre se asocien por medio de la CardNo.
 
 para registar cualquier otro dato biometrico se usa CardNo para asociarlo al la atjeta y a la persona 
-=========================== en desarrollo sacar marcaciones =================
+=========================== agregar a usuario facial ====================
+13
+192.168.100.31
+admin
+8000
+data12/*
+1993 ===>numero de tarjeta
+=========================== agregar a usuario facial ====================
+12
+192.168.100.31
+admin
+8000
+data12/*
+1993 ===>numero de tarjeta
+C:\\facial\\javier_farinangoface.jpg ====> ruta de imagen
+=========================== capturar facial ====================
+11
+192.168.100.31
+admin
+8000
+data12/*
+javier_farinangoface
+C:\\facial
+=========================== sacar marcaciones =================
 10
 45.162.74.226
 admin
