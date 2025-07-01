@@ -188,14 +188,14 @@ if (isset($_GET['_id'])) {
 
   function calcula_depreciacion() {
     // Obtener el texto dentro de los elementos y convertirlo
-    let valor_activo = parseFloat($('#lbl_valor_activo').text()) || 0;
-    let valor_residual = parseFloat($('#lbl_valor_residual').text()) || 0;
-    let vida_util = parseInt($('#lbl_vida_util').text()) || 0;
+    let text_valor_activo = parseFloat($('#lbl_valor_activo').text()) || 0;
+    let text_valor_residual = parseFloat($('#lbl_valor_residual').text()) || 0;
+    let text_vida_utill = parseInt($('#lbl_vida_util').text()) || 0;
 
 
     // Ejemplo: calcular depreciación lineal anual
-    if (vida_util > 0) {
-      let depreciacion_anual = (valor_activo - valor_residual) / vida_util;
+    if (text_vida_utill > 0) {
+      let depreciacion_anual = (text_valor_activo - text_valor_residual) / text_vida_utill;
       $('#lbl_total_depreciacion').text(depreciacion_anual.toFixed(2));
     } else {
       $('#lbl_total_depreciacion').text("La vida útil debe ser mayor que cero.")
@@ -205,25 +205,24 @@ if (isset($_GET['_id'])) {
   function depreciacion_activo() {
     calcula_depreciacion();
 
-    const seccion = document.getElementById("seccion_depreciacion");
-    if (seccion) {
-      const offsetTop = seccion.getBoundingClientRect().top + window.pageYOffset - 80; // 80 píxeles arriba por ejemplo
-      window.scrollTo({
-        top: offsetTop,
-        behavior: 'smooth'
-      });
+    const $seccion = $('#seccion_depreciacion');
+    if ($seccion.length) {
+      $('html, body').animate({
+        scrollTop: $seccion.offset().top - 80
+      }, 600); // 600 ms de animación (puedes ajustar)
     }
   }
 
+
   function abrirModalDepreciacion() {
-    let valor_activo = parseFloat($('#lbl_valor_activo').text()) || 0;
-    let valor_residual = parseFloat($('#lbl_valor_residual').text()) || 0;
-    let vida_util = parseInt($('#lbl_vida_util').text()) || 0;
+    let text_valor_activo = parseFloat($('#lbl_valor_activo').text()) || 0;
+    let text_valor_residual = parseFloat($('#lbl_valor_residual').text()) || 0;
+    let text_vida_utill = parseInt($('#lbl_vida_util').text()) || 0;
     let id_articulo = $('#id_articulo').val(); // este debe estar bien cargado antes
 
-    $('#edit_valor_activo').val(valor_activo);
-    $('#edit_valor_residual').val(valor_residual);
-    $('#edit_vida_util').val(vida_util);
+    $('#edit_valor_activo').val(text_valor_activo);
+    $('#edit_valor_residual').val(text_valor_residual);
+    $('#edit_vida_util').val(text_vida_utill);
     $('#edit_id_articulo').val(id_articulo); // este es el que va al modal
 
     $('#modalDepreciacion').modal('show');
@@ -236,7 +235,7 @@ if (isset($_GET['_id'])) {
     const formData = new FormData(form);
 
     $.ajax({
-      url: '../controlador/ACTIVOS_FIJOS/detalle_articuloC.php?actualizarDatosArticulo=true',
+      url: '../controlador/ACTIVOS_FIJOS/detalle_articuloC.php?actualizarDatosArticuloDepreciacion=true',
       type: 'POST',
       data: formData,
       contentType: false,
@@ -425,8 +424,8 @@ if (isset($_GET['_id'])) {
     }
 
     $('#lbl_valor_activo').text(data.prec);
-    $('#lbl_valor_residual').text(data.valor_residual);
-    $('#lbl_vida_util').text(data.vida_util + " años");
+    $('#lbl_valor_residual').text(data.text_valor_residual);
+    $('#lbl_vida_util').text(data.text_vida_utill + " años");
   }
 
   function cargar_articulo_editar_pnl(data) {
@@ -1552,17 +1551,17 @@ if (isset($_GET['_id'])) {
 
           <div class="mb-3">
             <label for="edit_valor_activo" class="form-label">Valor activo</label>
-            <input type="number" step="0.01" class="form-control" name="valor_activo" id="edit_valor_activo" readonly>
+            <input type="number" name="text_valor_activo" id="edit_valor_activo" step="0.01" class="form-control"  readonly>
           </div>
 
           <div class="mb-3">
             <label for="edit_valor_residual" class="form-label">Valor residual</label>
-            <input type="number" step="0.01" class="form-control"  name="valor_residual" id="edit_valor_residual" required>
+            <input type="number" name="text_valor_residual" id="edit_valor_residual" step="0.01" class="form-control"  required>
           </div>
 
           <div class="mb-3">
             <label for="edit_vida_util" class="form-label">Vida útil (años)</label>
-            <input type="number" step="1" class="form-control"  name="vida_util" id="edit_vida_util"required>
+            <input type="number" name="text_vida_utill" id="edit_vida_util" step="1" class="form-control"  required>
           </div>
         </div>
 

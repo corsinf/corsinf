@@ -102,8 +102,8 @@ if (isset($_GET['cargar_detalle_activo'])) {
 	echo json_encode($controlador->cargar_detalle_activo($_POST['id'] ?? '', $_POST['token'] ?? ''));
 }
 
-if (isset($_GET['actualizarDatosArticulo'])) {
-	echo json_encode($controlador->insertar_editar($_POST));
+if (isset($_GET['actualizarDatosArticuloDepreciacion'])) {
+	echo json_encode($controlador->insertar_editar_depreciacion($_POST));
 	return;
 }
 
@@ -1044,14 +1044,14 @@ class detalle_articuloC
 		}
 	}
 
-	function insertar_editar($parametros)
+	function insertar_editar_depreciacion($parametros)
 	{
 		if ($parametros['id_articulo_update'] != '') {
 
 			// Datos para actualizar (con la estructura que tu método editar espera)
 			$datos = array(
-				array('campo' => 'valor_residual', 'dato' => floatval($parametros['valor_residual'])),
-				array('campo' => 'vida_util', 'dato' => intval($parametros['vida_util']))
+				array('campo' => 'valor_residual', 'dato' => floatval($parametros['txt_valor_residual'])),
+				array('campo' => 'vida_util', 'dato' => intval($parametros['txt_vida_util']))
 			);
 
 			// Condición WHERE para actualizar el registro correcto
