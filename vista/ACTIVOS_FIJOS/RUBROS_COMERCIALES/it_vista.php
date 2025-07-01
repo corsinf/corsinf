@@ -1,11 +1,6 @@
 <script>
     $(document).ready(function() {
-        // Obtiene todos los parámetros de la query string
-        let params = new URLSearchParams(window.location.search);
-        // Lee el valor de "_id"
-        let id = params.get('_id');
-        cargar_articulo_detalles_it_vista(id);
-
+        cargar_articulo_detalles_it_vista(<?= $_id ?>);
     });
 
     function cargar_articulo_detalles_it_vista(id) {
@@ -18,34 +13,33 @@
             type: 'POST',
             dataType: 'json',
             success: function(response) {
-               cargar_articulo_detalle_it(response)
+                if (response.length != 0) {
+                    $('#lbl_sistema_op').text(response[0].sistema_op);
+                    $('#lbl_arquitectura').text(response[0].arquitectura);
+                    $('#lbl_kernel').text(response[0].kernel);
+                    $('#lbl_producto_id').text(response[0].producto_id);
+                    $('#lbl_mac_address').text(response[0].mac_address);
+                    $('#lbl_version').text(response[0].version);
+                    $('#lbl_service_pack').text(response[0].service_pack);
+                    $('#lbl_edicion').text(response[0].edicion);
+                    $('#lbl_serie_numbre').text(response[0].serie_numero);
+                    $('#lbl_ip_address').text(response[0].ip_address);
+                }
             },
-            error: function() {
-                Swal.fire('Error', 'Fallo en la comunicación con el servidor.', 'error');
+            error: function(xhr, status, error) {
+                console.log('Status: ' + status);
+                console.log('Error: ' + error);
+                console.log('XHR Response: ' + xhr.responseText);
+
+                Swal.fire('', 'Error: ' + xhr.responseText, 'error');
             }
         });
-    } 
-
-    function cargar_articulo_detalle_it(data){
-        if (data.length != 0) {
-            $('#lbl_sistema_op').text(data[0].sistema_op);
-            $('#lbl_arquitectura').text(data[0].arquitectura);
-            $('#lbl_kernel').text(data[0].kernel);
-            $('#lbl_producto_id').text(data[0].producto_id);
-            $('#lbl_mac_address').text(data[0].mac_address);
-            $('#lbl_version').text(data[0].version);
-            $('#lbl_service_pack').text(data[0].service_pack);
-            $('#lbl_edicion').text(data[0].edicion);
-            $('#lbl_serie_numbre').text(data[0].serie_numero);
-            $('#lbl_ip_address').text(data[0].ip_address);
-        } 
-
     }
 </script>
 
 <div id="detalle_it" style="display:block">
     <hr>
-    <h5 class="fw-bold">Detalles IT - Completar!</h5>
+    <h5 class="fw-bold">Detalles IT</h5>
     <dl class="row">
         <dt class="col-sm-3">Sistema Operativo</dt>
         <dd class="col-sm-9" id="lbl_sistema_op"></dd>

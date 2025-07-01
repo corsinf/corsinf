@@ -21,7 +21,8 @@
             success: function(response) {
                 if (response == 1) {
                     Swal.fire('', 'Operacion realizada con exito.', 'success').then(function() {
-                        location.reload();
+                        vista_pnl();
+                        limpiar_parametros_articulo();
                     });
                 } else {
                     Swal.fire('Error', 'No se pudo guardar.', 'error');

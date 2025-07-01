@@ -214,7 +214,7 @@ if (isset($_GET['_id'])) {
   }
 
 
-  function abrirModalDepreciacion() {
+  function abrir_modal_depreciacion() {
     let text_valor_activo = parseFloat($('#lbl_valor_activo').text()) || 0;
     let text_valor_residual = parseFloat($('#lbl_valor_residual').text()) || 0;
     let text_vida_utill = parseInt($('#lbl_vida_util').text()) || 0;
@@ -229,7 +229,7 @@ if (isset($_GET['_id'])) {
   }
 
 
-  function guardarDepreciacion() {
+  function guardar_depreciacion() {
 
     const form = document.getElementById('form_depreciacion');
     const formData = new FormData(form);
@@ -431,19 +431,19 @@ if (isset($_GET['_id'])) {
 
     if (data.es_it == 1) {
       $('#is_it_estado').show();
-      $('#nav_detalle_it').show(); 
+      $('#nav_detalle_it').show();
       $('#cbx_detalle_it').prop('checked', true); // Marcar el checkbox
     } else {
       // $('#is_it_estado').hide();
       $('#cbx_detalle_it').prop('checked', false); // Desmarcar el checkbox
     }
-    
+
 
   }
 
   function cargar_articulo_editar_pnl(data) {
     $('#cbx_kit').prop('checked', data.es_kit === "1");
-     $('#nav_kit_interno').show(); 
+    $('#nav_kit_interno').show();
     $('input[name="rbl_tip_articulo"][value="' + data.id_tipo_articulo + '"]').prop('checked', true);
     console.log(data.id_tipo_articulo);
 
@@ -620,9 +620,9 @@ if (isset($_GET['_id'])) {
             cargar_tabla_movimientos();
             vista_pnl();
             limpiar_parametros_articulo();
-            Swal.fire('', 'Operacion realizada con éxito.', 'success').then(function() {
-            location.reload();
-          });
+            // cargar_articulo_detalles_it(id);
+
+            Swal.fire('', 'Operacion realizada con éxito.', 'success');
           } else {
             Swal.fire('', 'Algo extraño ha pasado.', 'error');
           }
@@ -1035,7 +1035,7 @@ if (isset($_GET['_id'])) {
                 <dt class="col-sm-2">Estado: &nbsp;</dt>
                 <dd class="col-sm-8" id="lbl_estado"></dd>
               </div>
-              <div class="row">
+              <div class="row" hidden>
                 <dt class="col-sm-2">Proyecto: &nbsp;</dt>
                 <dd class="col-sm-8" id="lbl_proyecto"></dd>
               </div>
@@ -1067,31 +1067,31 @@ if (isset($_GET['_id'])) {
 
               <hr>
 
-              <p class="" id="lbl_caracteristicas">.</p>
-              <p class="" id="lbl_observaciones">.</p>
+              <p class="" id="lbl_caracteristicas"></p>
+              <p class="" id="lbl_observaciones"></p>
               <hr>
               <div id="seccion_depreciacion">
                 <div class="d-flex justify-content-between align-items-center mb-2">
                   <h5 class="fw-bold mb-0">Depreciación</h5>
-                  <button class="btn btn-sm btn-outline-primary" onclick="abrirModalDepreciacion()" title="Editar datos">
+                  <button class="btn btn-sm btn-outline-primary" onclick="abrir_modal_depreciacion()" title="Editar datos">
                     <i class="bx bx-pencil"></i>
                   </button>
                 </div>
                 <div class="row">
                   <dt class="col-sm-3">Valor activo: &nbsp;</dt>
-                  <dd class="col-sm-8" id="lbl_valor_activo"></dd>
+                  <dd class="col-sm-8" id="lbl_valor_activo">0</dd>
                 </div>
                 <div class="row">
                   <dt class="col-sm-3">Valor residual: &nbsp;</dt>
-                  <dd class="col-sm-8" id="lbl_valor_residual"></dd>
+                  <dd class="col-sm-8" id="lbl_valor_residual">0</dd>
                 </div>
                 <div class="row">
                   <dt class="col-sm-3">Vida útil: &nbsp;</dt>
-                  <dd class="col-sm-8" id="lbl_vida_util"></dd>
+                  <dd class="col-sm-8" id="lbl_vida_util">0</dd>
                 </div>
                 <div class="row">
                   <dt class="col-sm-3">Total depreciación: &nbsp;</dt>
-                  <dd class="col-sm-8" id="lbl_total_depreciacion"></dd>
+                  <dd class="col-sm-8" id="lbl_total_depreciacion">0</dd>
                 </div>
               </div>
 
@@ -1197,7 +1197,7 @@ if (isset($_GET['_id'])) {
                             <small id="lbl_sap_custodio" class="text-muted"><u>Código:</u></small>
                           </div>
 
-                          <select class="form-control form-control-sm select2-validation" name="ddl_custodio" id="ddl_custodio">
+                          <select class="form-control form-control-sm select2-validation" name="ddl_custodio" id="ddl_custodio" disabled>
                             <option value="">Seleccione</option>
                           </select>
                           <label class="error" style="display: none;" for="ddl_custodio"></label>
@@ -1209,7 +1209,7 @@ if (isset($_GET['_id'])) {
                             <small id="lbl_sap_loc" class="text-muted"><u>Código:</u></small>
                           </div>
 
-                          <select class="form-control form-control-sm select2-validation" name="ddl_localizacion" id="ddl_localizacion">
+                          <select class="form-control form-control-sm select2-validation" name="ddl_localizacion" id="ddl_localizacion" disabled>
                             <option value="">Seleccione</option>
                           </select>
                           <label class="error" style="display: none;" for="ddl_localizacion"></label>
@@ -1384,8 +1384,8 @@ if (isset($_GET['_id'])) {
                         </div>
                       </div>
 
-                      <div class="row mb-col">
-                        <div class="col-sm-6">
+                      <div class="row mb-col" hidden>
+                        <div class="col-sm-6" hidden>
                           <label for="ddl_clase_mov" class="form-label">Clase de movimiento </label>
                           <select class="form-select form-select-sm select2-validation" name="ddl_clase_mov" id="ddl_clase_mov">
                             <option value="">Seleccione</option>
@@ -1393,7 +1393,7 @@ if (isset($_GET['_id'])) {
                           <label class="error" style="display: none;" for="ddl_clase_mov"></label>
                         </div>
 
-                        <div class="col-sm-6">
+                        <div class="col-sm-6" hidden>
                           <div class="d-flex justify-content-between align-items-center">
                             <label for="ddl_proyecto" class="form-label">Proyecto </label>
                             <small id="lbl_sap_pro"><u>Código: </u></small>
@@ -1570,7 +1570,7 @@ if (isset($_GET['_id'])) {
 
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-          <button type="button" class="btn btn-primary" onclick="guardarDepreciacion()">Guardar</button>
+          <button type="button" class="btn btn-primary" onclick="guardar_depreciacion()">Guardar</button>
         </div>
       </form>
 
