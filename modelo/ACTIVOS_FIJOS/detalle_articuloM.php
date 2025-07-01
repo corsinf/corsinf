@@ -114,7 +114,8 @@ class detalle_articuloM extends BaseModel
 					TA.ID_TIPO_ARTICULO AS id_tipo_articulo,
 					TA.descripcion AS tipo_articulo,
 					P.valor_residual AS 'valor_residual',
-					P.vida_util AS 'vida_util'
+					P.vida_util AS 'vida_util',
+					P.es_it AS 'es_it'
 					
 				FROM
 					ac_articulos P

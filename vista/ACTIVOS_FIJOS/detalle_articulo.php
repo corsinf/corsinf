@@ -104,7 +104,7 @@ if (isset($_GET['_id'])) {
     //---------------------------------
     $('#ddl_localizacion').on('select2:select', function(e) {
       var data = e.params.data.data;
-      $('#lbl_sap_loc').text('Código:' + data.DENOMINACION)
+      $('#lbl_sap_loc').text('Código:' + data.EMPLAZAMIENTO)
       // console.log(data);
     });
 
@@ -214,7 +214,7 @@ if (isset($_GET['_id'])) {
   }
 
 
-  function abrir_modal_depreciacion() {
+  function abrirModalDepreciacion() {
     let text_valor_activo = parseFloat($('#lbl_valor_activo').text()) || 0;
     let text_valor_residual = parseFloat($('#lbl_valor_residual').text()) || 0;
     let text_vida_utill = parseInt($('#lbl_vida_util').text()) || 0;
@@ -229,7 +229,7 @@ if (isset($_GET['_id'])) {
   }
 
 
-  function guardar_depreciacion() {
+  function guardarDepreciacion() {
 
     const form = document.getElementById('form_depreciacion');
     const formData = new FormData(form);
@@ -358,9 +358,10 @@ if (isset($_GET['_id'])) {
   function cargar_articulo_vista_pnl(data) {
     $('#lbl_descripcion').text(data.nom);
     $('#id_articulo').val(data.id_A);
+    $('#txt_id_articulo').val(data.id_A);
     $('#lbl_descripcion2').text(data.des ?? '');
-    $('#lbl_localizacion1').html(`<b>Emplazamiento / Localización</b> | <label style="font-size:65%"> Código: ${data.loc_nom}</label>`);
-    $('#lbl_localizacion').text(data.c_loc);
+    $('#lbl_localizacion1').html(`<b>Emplazamiento / Localización</b> | <label style="font-size:65%"> Código: ${data.c_loc}</label>`);
+    $('#lbl_localizacion').text(data.loc_nom);
 
     $('#lbl_custodio1').html(`<b>Custodio:</b> | <label style="font-size:65%"> Código: ${data.person_ci}</label>`);
     $('#lbl_custodio').text(data.person_nom);
@@ -425,11 +426,24 @@ if (isset($_GET['_id'])) {
 
     $('#lbl_valor_activo').text(data.prec);
     $('#lbl_valor_residual').text(data.text_valor_residual);
-    $('#lbl_vida_util').text((data.text_vida_utill || 0) + " años");
+    $('#lbl_vida_util').text(data.text_vida_utill + " años");
+
+
+    if (data.es_it == 1) {
+      $('#is_it_estado').show();
+      $('#nav_detalle_it').show(); 
+      $('#cbx_detalle_it').prop('checked', true); // Marcar el checkbox
+    } else {
+      // $('#is_it_estado').hide();
+      $('#cbx_detalle_it').prop('checked', false); // Desmarcar el checkbox
+    }
+    
+
   }
 
   function cargar_articulo_editar_pnl(data) {
     $('#cbx_kit').prop('checked', data.es_kit === "1");
+     $('#nav_kit_interno').show(); 
     $('input[name="rbl_tip_articulo"][value="' + data.id_tipo_articulo + '"]').prop('checked', true);
     console.log(data.id_tipo_articulo);
 
@@ -446,8 +460,7 @@ if (isset($_GET['_id'])) {
 
     $('#txt_subno').val(data.subnum);
     $('#txt_cant').val(data.cant);
-
-    $('#txt_valor').val(data.prec || 0);
+    $('#txt_valor').val(data.prec);
     $('#txt_maximo').val(data.max);
     $('#txt_minimo').val(data.min);
     $('#txt_modelo').val(data.mod);
@@ -466,7 +479,7 @@ if (isset($_GET['_id'])) {
 
     $('#ddl_localizacion').append($('<option>', {
       value: data.id_loc,
-      text: data.c_loc,
+      text: data.loc_nom,
       selected: true
     }));
 
@@ -586,6 +599,7 @@ if (isset($_GET['_id'])) {
       'txt_fecha': $('#txt_fecha').val(),
       'txt_carac': $('#txt_carac').val(),
       'txt_observacion': $('#txt_observacion').val(),
+      'cbx_detalle_it': $('#cbx_detalle_it').is(':checked') ? 1 : 0,
     };
 
     // console.log(parametros);
@@ -602,12 +616,13 @@ if (isset($_GET['_id'])) {
         dataType: 'json',
         success: function(response) {
           if (response == 1) {
-            Swal.fire('', 'Operacion realizada con éxito.', 'success');
-
             cargar_datos_articulo(id);
             cargar_tabla_movimientos();
             vista_pnl();
             limpiar_parametros_articulo();
+            Swal.fire('', 'Operacion realizada con éxito.', 'success').then(function() {
+            location.reload();
+          });
           } else {
             Swal.fire('', 'Algo extraño ha pasado.', 'error');
           }
@@ -1020,7 +1035,7 @@ if (isset($_GET['_id'])) {
                 <dt class="col-sm-2">Estado: &nbsp;</dt>
                 <dd class="col-sm-8" id="lbl_estado"></dd>
               </div>
-              <div class="row" hidden>
+              <div class="row">
                 <dt class="col-sm-2">Proyecto: &nbsp;</dt>
                 <dd class="col-sm-8" id="lbl_proyecto"></dd>
               </div>
@@ -1033,36 +1048,12 @@ if (isset($_GET['_id'])) {
                 <dd class="col-sm-8" id="lbl_serie"></dd>
               </div>
 
+              <div id="is_it_estado" style="display: none;">
 
+                <?php include('../vista/ACTIVOS_FIJOS/RUBROS_COMERCIALES/it_vista.php'); ?>
 
-              <div id="detalle_it" style="display:block">
                 <hr>
-                <h5 class="fw-bold">Detalles IT - Completar!</h5>
-                <dl class="row">
-                  <dt class="col-sm-3">Sistema Operativo</dt>
-                  <dd class="col-sm-9" id="lbl_sistema_op"></dd>
-
-                  <dt class="col-sm-3">Arquitectura</dt>
-                  <dd class="col-sm-9" id="lbl_arquitectura"></dd>
-
-                  <dt class="col-sm-3">Kernel</dt>
-                  <dd class="col-sm-9" id="lbl_kernel"></dd>
-
-                  <dt class="col-sm-3">Producto ID</dt>
-                  <dd class="col-sm-9" id="lbl_producto_id"></dd>
-
-                  <dt class="col-sm-3">Versión</dt>
-                  <dd class="col-sm-9" id="lbl_version"></dd>
-
-                  <dt class="col-sm-3">Service Pack</dt>
-                  <dd class="col-sm-9" id="lbl_service_pack"></dd>
-
-                  <dt class="col-sm-3">Edición</dt>
-                  <dd class="col-sm-9" id="lbl_edicion"></dd>
-                </dl>
               </div>
-
-              <hr>
               <div class="row row-cols-auto align-items-center mt-3">
                 <div class="col">
                   <label class="form-label"><b>Fecha de compra</b></label>
@@ -1076,13 +1067,13 @@ if (isset($_GET['_id'])) {
 
               <hr>
 
-              <p class="" id="lbl_caracteristicas"></p>
-              <p class="" id="lbl_observaciones"></p>
+              <p class="" id="lbl_caracteristicas">.</p>
+              <p class="" id="lbl_observaciones">.</p>
               <hr>
               <div id="seccion_depreciacion">
                 <div class="d-flex justify-content-between align-items-center mb-2">
                   <h5 class="fw-bold mb-0">Depreciación</h5>
-                  <button class="btn btn-sm btn-outline-primary" onclick="abrir_modal_depreciacion()" title="Editar datos">
+                  <button class="btn btn-sm btn-outline-primary" onclick="abrirModalDepreciacion()" title="Editar datos">
                     <i class="bx bx-pencil"></i>
                   </button>
                 </div>
@@ -1092,7 +1083,7 @@ if (isset($_GET['_id'])) {
                 </div>
                 <div class="row">
                   <dt class="col-sm-3">Valor residual: &nbsp;</dt>
-                  <dd class="col-sm-8" id="lbl_valor_residual">0</dd>
+                  <dd class="col-sm-8" id="lbl_valor_residual"></dd>
                 </div>
                 <div class="row">
                   <dt class="col-sm-3">Vida útil: &nbsp;</dt>
@@ -1124,26 +1115,30 @@ if (isset($_GET['_id'])) {
                   </li>
 
                   <!-- Kit interno -->
-                  <li class="nav-item" role="presentation">
-                    <a class="nav-link" data-bs-toggle="tab" href="#tab_detalle_kit_interno" role="tab" aria-selected="false" tabindex="-1">
-                      <div class="d-flex align-items-center">
-                        <div class="tab-icon"><i class="bx bx-list-ul font-18 me-1"></i>
+                  <div id="nav_kit_interno" style="display: none;">
+                    <li class="nav-item" role="presentation">
+                      <a class="nav-link" data-bs-toggle="tab" href="#tab_detalle_kit_interno" role="tab" aria-selected="false" tabindex="-1">
+                        <div class="d-flex align-items-center">
+                          <div class="tab-icon"><i class="bx bx-list-ul font-18 me-1"></i>
+                          </div>
+                          <div class="tab-title">Kit interno</div>
                         </div>
-                        <div class="tab-title">Kit interno</div>
-                      </div>
-                    </a>
-                  </li>
+                      </a>
+                    </li>
+                  </div>
 
                   <!-- Detalle IT -->
-                  <li class="nav-item" role="presentation">
-                    <a class="nav-link" data-bs-toggle="tab" href="#tab_detalle_it" role="tab" aria-selected="false" tabindex="-1">
-                      <div class="d-flex align-items-center">
-                        <div class="tab-icon"><i class="bx bx-cog font-18 me-1"></i>
+                  <div id="nav_detalle_it" style="display: none;">
+                    <li class="nav-item" role="presentation">
+                      <a class="nav-link" data-bs-toggle="tab" href="#tab_detalle_it" role="tab" aria-selected="false" tabindex="-1">
+                        <div class="d-flex align-items-center">
+                          <div class="tab-icon"><i class="bx bx-cog font-18 me-1"></i>
+                          </div>
+                          <div class="tab-title">Detalle IT</div>
                         </div>
-                        <div class="tab-title">Detalle IT</div>
-                      </div>
-                    </a>
-                  </li>
+                      </a>
+                    </li>
+                  </div>
 
                 </ul>
 
@@ -1160,6 +1155,13 @@ if (isset($_GET['_id'])) {
                             <label class="form-label" for="cbx_kit">KIT </label>
                           </div>
                           <label class="error" style="display: none;" for="cbx_kit"></label>
+                        </div>
+                        <div class="col-auto">
+                          <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="cbx_detalle_it" id="cbx_detalle_it">
+                            <label class="form-label" for="cbx_detalle_it">IT </label>
+                          </div>
+                          <label class="error" style="display: none;" for="cbx_detalle_it"></label>
                         </div>
                       </div>
 
@@ -1195,7 +1197,7 @@ if (isset($_GET['_id'])) {
                             <small id="lbl_sap_custodio" class="text-muted"><u>Código:</u></small>
                           </div>
 
-                          <select class="form-control form-control-sm select2-validation" name="ddl_custodio" id="ddl_custodio" disabled>
+                          <select class="form-control form-control-sm select2-validation" name="ddl_custodio" id="ddl_custodio">
                             <option value="">Seleccione</option>
                           </select>
                           <label class="error" style="display: none;" for="ddl_custodio"></label>
@@ -1207,7 +1209,7 @@ if (isset($_GET['_id'])) {
                             <small id="lbl_sap_loc" class="text-muted"><u>Código:</u></small>
                           </div>
 
-                          <select class="form-control form-control-sm select2-validation" name="ddl_localizacion" id="ddl_localizacion" disabled>
+                          <select class="form-control form-control-sm select2-validation" name="ddl_localizacion" id="ddl_localizacion">
                             <option value="">Seleccione</option>
                           </select>
                           <label class="error" style="display: none;" for="ddl_localizacion"></label>
@@ -1382,8 +1384,8 @@ if (isset($_GET['_id'])) {
                         </div>
                       </div>
 
-                      <div class="row mb-col" hidden>
-                        <div class="col-sm-6" hidden>
+                      <div class="row mb-col">
+                        <div class="col-sm-6">
                           <label for="ddl_clase_mov" class="form-label">Clase de movimiento </label>
                           <select class="form-select form-select-sm select2-validation" name="ddl_clase_mov" id="ddl_clase_mov">
                             <option value="">Seleccione</option>
@@ -1391,7 +1393,7 @@ if (isset($_GET['_id'])) {
                           <label class="error" style="display: none;" for="ddl_clase_mov"></label>
                         </div>
 
-                        <div class="col-sm-6" hidden>
+                        <div class="col-sm-6">
                           <div class="d-flex justify-content-between align-items-center">
                             <label for="ddl_proyecto" class="form-label">Proyecto </label>
                             <small id="lbl_sap_pro"><u>Código: </u></small>
@@ -1476,7 +1478,7 @@ if (isset($_GET['_id'])) {
                   <?php include('../vista/ACTIVOS_FIJOS/RUBROS_COMERCIALES/kit.php'); ?>
 
                   <!-- Detalle IT -->
-                  <?php include('../vista/ACTIVOS_FIJOS/RUBROS_COMERCIALES/it.php'); ?>
+                  <?php include('../vista/ACTIVOS_FIJOS/RUBROS_COMERCIALES/it_pnl.php'); ?>
 
                 </div>
               </div>
@@ -1568,7 +1570,7 @@ if (isset($_GET['_id'])) {
 
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-          <button type="button" class="btn btn-primary" onclick="guardar_depreciacion()">Guardar</button>
+          <button type="button" class="btn btn-primary" onclick="guardarDepreciacion()">Guardar</button>
         </div>
       </form>
 
