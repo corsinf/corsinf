@@ -821,13 +821,15 @@ class th_personasC
     {
         // print_r($parametros);die();
         // die();
-        $resp = 1;
+        $resp = -1;
         $datos = $this->modelo->where('th_per_id', $parametros['idPerson'])->listar();
         $CardNom = $parametros['CardNo'];
         $dispositivo = $this->dispositivos->where('th_dis_id', $parametros['device'])->listar();
+        $fingerData = $this->finger->where('th_id_finger',$parametros['idHuella'])->listar();
         
+        // print_r($fingerData);die();
 
-        $dllPath = $this->sdk_patch . '9 ' . $dispositivo[0]['host'] . ' ' . $dispositivo[0]['usuario'] . ' ' . $dispositivo[0]['port'] . ' ' . $dispositivo[0]['pass'] ." ". $CardNom." 1";
+        $dllPath = $this->sdk_patch . '14 ' . $dispositivo[0]['host'] . ' ' . $dispositivo[0]['usuario'] . ' ' . $dispositivo[0]['port'] . ' ' . $dispositivo[0]['pass'] ." ". $CardNom." ".$fingerData[0]['th_finger_numero'];
         // // Comando para ejecutar la DLL
         $command = "dotnet $dllPath";
 
@@ -835,19 +837,12 @@ class th_personasC
 
         $output = shell_exec($command);
         $resp = json_decode($output, true);
-        
-            print_r($resp);die();
-        if($resp['resp']==1)
-        {
-            $itemHuellas = json_decode($resp['msj'],true);
-            foreach ($itemHuellas as $key => $value) {
-                if($value==$parametros['NumFinger'])
-                {
-                    // envia al biometrico a eliminar
-                }
-            }
-        }
-        if($resp['msj']=='')
+       // print_r($resp);
+        $respHuellas = json_decode($resp['msj'],true);
+
+        // print_r($respHuellas);die();
+       
+        if($respHuellas[0]['resp']=='1')
         {
             $resp = 1;
         }

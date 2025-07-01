@@ -3,6 +3,7 @@ using CorsinfSDKHik.NetSDK;
 using Lextm.SharpSnmpLib.Security;
 using Microsoft.Data.SqlClient;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -31,7 +32,7 @@ namespace CorsinfSDKHik.Funciones
 
         public static SqlConnection conn_ = null;
 
-        public String SetearFinger(int m_UserID,String FingerID,String CardReaderNo,String CardNo,String ruta)
+        public String SetearFinger(int m_UserID, String FingerID, String CardReaderNo, String CardNo, String ruta)
         {
             String msj = "";
             FingerData = ruta;
@@ -233,7 +234,7 @@ namespace CorsinfSDKHik.Funciones
                 {
                     case CHCNetSDK.NET_SDK_GET_NEXT_STATUS_SUCCESS://成功读取到数据，处理完本次数据后需调用next
                         msj = ProcessCapFingerData(ref struCFG, ref flag, userName, patch);
-                        if(m_SaveSuccessFing==-1)
+                        if (m_SaveSuccessFing == -1)
                         {
                             return msj;
                         }
@@ -289,12 +290,12 @@ namespace CorsinfSDKHik.Funciones
             {
                 //Console.WriteLine("CapFingerprint process failed");
                 flag = false;
-                return "No se pudo guardar en la ruta:"+ strpath;
+                return "No se pudo guardar en la ruta:" + strpath;
             }
         }
 
         // eveto de escuicha de huellas digitales 
-        public String Escuchando(int m_UserID,SqlConnection conn,string port)
+        public String Escuchando(int m_UserID, SqlConnection conn, string port)
         {
             conn_ = conn;
             String msj = "";
@@ -318,7 +319,7 @@ namespace CorsinfSDKHik.Funciones
             m_falarmData = new CHCNetSDK.MSGCallBack(MsgCallback);
             if (CHCNetSDK.NET_DVR_SetDVRMessageCallBack_V50(0, m_falarmData, IntPtr.Zero))
             {
-               // Console.WriteLine("Callback registrado exitosamente.");
+                // Console.WriteLine("Callback registrado exitosamente.");
             }
             else
             {
@@ -352,14 +353,14 @@ namespace CorsinfSDKHik.Funciones
                     //Console.WriteLine($"Alarma desde IP: {deviceIp}, Puerto: {devicePort}, userID: {userID}");
 
                     msj = ProcessCommAlarmACS(ref pAlarmer, pAlarmInfo, dwBufLen, pUser);
-                    dbModelo.InsertData(conn_,msj);
-                  //  Console.WriteLine(msj);
+                    dbModelo.InsertData(conn_, msj);
+                    //  Console.WriteLine(msj);
                     break;
                 default:
                     break;
             }
 
-           
+
         }
 
         public String ProcessCommAlarmACS(ref CHCNetSDK.NET_DVR_ALARMER pAlarmer, IntPtr pAlarmInfo, uint dwBufLen, IntPtr pUser)
@@ -420,7 +421,7 @@ namespace CorsinfSDKHik.Funciones
             }
             /**************************************************/
 
-           msj = "[{\"ip\":\"" + pAlarmer.sDeviceIP + "\", \"Puerto\":\"" + pAlarmer.wLinkPort + "\",";
+            msj = "[{\"ip\":\"" + pAlarmer.sDeviceIP + "\", \"Puerto\":\"" + pAlarmer.wLinkPort + "\",";
 
             szInfoBuf = string.Format("{0} time:{1,4}-{2:D2}-{3} {4:D2}:{5:D2}:{6:D2}, [{7}]({8})", szInfo, struAcsAlarmInfo.struTime.dwYear, struAcsAlarmInfo.struTime.dwMonth,
                 struAcsAlarmInfo.struTime.dwDay, struAcsAlarmInfo.struTime.dwHour, struAcsAlarmInfo.struTime.dwMinute, struAcsAlarmInfo.struTime.dwSecond,
@@ -428,7 +429,7 @@ namespace CorsinfSDKHik.Funciones
 
             if (struAcsAlarmInfo.struAcsEventInfo.byCardNo[0] != 0)
             {
-                msj += "\"Card Number\":\"" + System.Text.Encoding.UTF8.GetString(struAcsAlarmInfo.struAcsEventInfo.byCardNo).TrimEnd('\0')+ "\",";
+                msj += "\"Card Number\":\"" + System.Text.Encoding.UTF8.GetString(struAcsAlarmInfo.struAcsEventInfo.byCardNo).TrimEnd('\0') + "\",";
             }
             String[] szCardType = { "normal card", "disabled card", "blocklist card", "night watch card", "stress card", "super card", "guest card" };
             byte byCardType = struAcsAlarmInfo.struAcsEventInfo.byCardType;
@@ -487,7 +488,7 @@ namespace CorsinfSDKHik.Funciones
             if (struAcsAlarmInfo.struAcsEventInfo.dwEmployeeNo != 0)
             {
                 szInfoBuf = szInfoBuf + "+EmployeeNo:" + struAcsAlarmInfo.struAcsEventInfo.dwEmployeeNo;
-            }     
+            }
             if (struAcsAlarmInfo.struAcsEventInfo.byDeviceNo != 0)
             {
                 szInfoBuf = szInfoBuf + "+byDeviceNo:" + struAcsAlarmInfo.struAcsEventInfo.byDeviceNo.ToString();
@@ -540,7 +541,117 @@ namespace CorsinfSDKHik.Funciones
         }
 
         // Función para obtener huellas de un usuario
-        public string GetRegisteredFingerprintIDs(int m_UserID, string cardNo,string dispositivo = "1")
+
+        public string ObtenerIndicesHuellasRegistradas(string cardNo, int userID, int enableReaderNo)
+        {
+            var listaHuellas = new List<Dictionary<string, object>>();
+            int m_lGetFingerPrintCfgHandle = -1;
+            String ListaItemHuella = "[";
+
+            try
+            {
+                // Configurar condición de búsqueda
+                CHCNetSDK.NET_DVR_FINGERPRINT_CONDF struCond = new CHCNetSDK.NET_DVR_FINGERPRINT_CONDF();
+                struCond.init();
+                struCond.dwSize = Marshal.SizeOf(struCond);
+
+                // Configurar el número de tarjeta (asegurar longitud correcta)
+                byte[] cardNoBytes = Encoding.ASCII.GetBytes(cardNo.PadRight(CHCNetSDK.CARD_NO_LEN, '\0'));
+                Array.Copy(cardNoBytes, struCond.byCardNo, Math.Min(cardNoBytes.Length, struCond.byCardNo.Length));
+
+                struCond.dwEnableReaderNo = enableReaderNo;
+                struCond.byFingerPrintID = 0xFF; // Valor especial para obtener todas las huellas
+
+                // Preparar estructura para enviar al SDK
+                int dwSize = Marshal.SizeOf(struCond);
+                IntPtr ptrStruCond = Marshal.AllocHGlobal(dwSize);
+                Marshal.StructureToPtr(struCond, ptrStruCond, false);
+
+                // Iniciar la consulta
+                m_lGetFingerPrintCfgHandle = CHCNetSDK.NET_DVR_StartRemoteConfig(
+                    userID,
+                    CHCNetSDK.NET_DVR_GET_FINGERPRINT,
+                    ptrStruCond,
+                    dwSize,
+                    null,
+                    IntPtr.Zero);
+
+                if (m_lGetFingerPrintCfgHandle == -1)
+                {
+                    uint errorCode = CHCNetSDK.NET_DVR_GetLastError();
+                    throw new Exception($"Error al iniciar consulta de huellas. Código: {errorCode}");
+                }
+
+                // Procesar resultados
+                CHCNetSDK.NET_DVR_FINGERPRINT_RECORDF struOutBuff = new CHCNetSDK.NET_DVR_FINGERPRINT_RECORDF();
+                struOutBuff.init();
+                int dWsize = Marshal.SizeOf(struOutBuff);
+                int dwStatus = 0;
+                bool continuar = true;
+
+                while (continuar)
+                {
+                    dwStatus = CHCNetSDK.NET_DVR_GetNextRemoteConfig(m_lGetFingerPrintCfgHandle, ref struOutBuff, dWsize);
+
+                    switch (dwStatus)
+                    {
+                        case CHCNetSDK.NET_SDK_GET_NEXT_STATUS_SUCCESS:
+                            // Huella encontrada - agregar a la lista
+                            //var huellaInfo = new Dictionary<string, object>
+                            //{
+
+                            ListaItemHuella += "{\"item\":\"" + struOutBuff.byFingerPrintID + "\",\"CardNo\":\"" + Encoding.ASCII.GetString(struOutBuff.byCardNo).TrimEnd('\0') + "\"},";
+
+                            //{"Item", struOutBuff.byFingerPrintID},
+                            //{"Tamaño", struOutBuff.dwFingerPrintLen},
+                            //{"CardNo", Encoding.ASCII.GetString(struOutBuff.byCardNo).TrimEnd('\0')}
+                            //};
+                            //listaHuellas.Add(huellaInfo);
+                            break;
+
+                        case CHCNetSDK.NET_SDK_GET_NEXT_STATUS_NEED_WAIT:
+                            Thread.Sleep(100); // Pequeña pausa
+                            break;
+
+                        case CHCNetSDK.NET_SDK_GET_NEXT_STATUS_FAILED:
+                            continuar = false;
+                            break;
+
+                        case CHCNetSDK.NET_SDK_GET_NEXT_STATUS_FINISH:
+                            continuar = false;
+                            break;
+
+                        default:
+                            continuar = false;
+                            break;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error al listar huellas: {ex.Message}");
+            }
+            finally
+            {
+                // Limpieza de recursos
+                if (m_lGetFingerPrintCfgHandle != -1)
+                {
+                    CHCNetSDK.NET_DVR_StopRemoteConfig(m_lGetFingerPrintCfgHandle);
+                }
+            }
+
+            if (ListaItemHuella != "[")
+            {
+
+                ListaItemHuella = ListaItemHuella.Substring(0, ListaItemHuella.Length - 1);
+                ListaItemHuella = ListaItemHuella + "]";
+                m_SetSuccessFing = 1;
+            }
+            else { ListaItemHuella = ""; }
+
+            return ListaItemHuella;
+        }
+        public string GetRegisteredFingerprintIDs(int m_UserID, string cardNo, string dispositivo = "1")
         {
 
             String ListaItemHuella = "[";
@@ -627,7 +738,7 @@ namespace CorsinfSDKHik.Funciones
 
             return ListaItemHuella;
         }
-       
+
         private void ProcessFingerData(ref CHCNetSDK.NET_DVR_FINGERPRINT_RECORDF struOutBuff, ref bool flag)
         {
             string strpath = null;
@@ -655,6 +766,175 @@ namespace CorsinfSDKHik.Funciones
             }
         }
 
+        public String EliminarHuellaPorItem(string cardNo, string itemStr, int userID, int enableReaderNo)
+        {
+            String msj = "";
+            String datafinger = ObtenerIndicesHuellasRegistradas(cardNo,userID,enableReaderNo);
+            JArray dedo = JArray.Parse(datafinger);
+            foreach (var item in dedo)
+            {
+                string index = (string)item["item"];
+                if (index == itemStr)
+                {
+                    String data = btnDeleteBiometrico(userID, cardNo, itemStr, enableReaderNo);
+                }
+               // string CardNo = (string)item["CardNo"];
+                //Console.WriteLine(item);
+            }
 
+            datafinger = ObtenerIndicesHuellasRegistradas(cardNo, userID, enableReaderNo);
+            JArray dedo2 = JArray.Parse(datafinger);
+            Boolean eliminado = true;
+            foreach (var item in dedo2)
+            {
+                string index = (string)item["item"];
+                if (index == itemStr)
+                {
+                    eliminado = false;
+                }
+            }
+
+            if(eliminado)
+            {
+                msj = "[{\"resp\":\"1\",\"msj\":\"Huella eliminada\"}]";
+            }
+
+
+            return msj;
+
+        }
+
+        public string btnDeleteBiometrico(int m_UserID, String CardNo,String FingerID,int enableReaderNo)
+        {
+            String msj = "";
+            String CardReaderNo = enableReaderNo.ToString();
+            if (-1 != m_lDelFingerPrintCfHandle)
+            {
+                CHCNetSDK.NET_DVR_StopRemoteConfig(m_lDelFingerPrintCfHandle);
+                m_lDelFingerPrintCfHandle = -1;
+            }
+
+            //这边是联合体，暂收默认卡号人员ID方式删除
+            CHCNetSDK.NET_DVR_FINGER_PRINT_INFO_CTRL_V50_ByCardNo struCardNo = new CHCNetSDK.NET_DVR_FINGER_PRINT_INFO_CTRL_V50_ByCardNo();
+            struCardNo.init();
+            struCardNo.byMode = 0;
+
+            byte[] byTempCardNo = System.Text.Encoding.UTF8.GetBytes(CardNo);
+            ByteCopy(ref byTempCardNo, ref struCardNo.struProcessMode.byCardNo);
+
+            int dwFingerID = 0;
+            int.TryParse(FingerID, out dwFingerID);
+            if (dwFingerID > 0 && dwFingerID <= 10)
+            {
+                struCardNo.struProcessMode.byFingerPrintID[dwFingerID - 1] = 1;
+            }
+
+            struCardNo.dwSize = Marshal.SizeOf(struCardNo);
+            int dwSize = struCardNo.dwSize;
+
+            int dwEnableReaderNo = 1;
+            int.TryParse(CardReaderNo, out dwEnableReaderNo);
+            if (dwEnableReaderNo <= 0) dwEnableReaderNo = 1;
+
+            // 使能读卡器参数byEnableCardReader[下发的读卡器编号-1] = 1，保证和下发的是同一个读卡器
+            struCardNo.struProcessMode.byEnableCardReader[dwEnableReaderNo - 1] = 1;
+            IntPtr ptrStruCardNo = Marshal.AllocHGlobal(dwSize);
+            Marshal.StructureToPtr(struCardNo, ptrStruCardNo, false);
+            m_lDelFingerPrintCfHandle = CHCNetSDK.NET_DVR_StartRemoteConfig(m_UserID, CHCNetSDK.NET_DVR_DEL_FINGERPRINT, ptrStruCardNo, dwSize, null, IntPtr.Zero);
+
+            if (-1 == m_lDelFingerPrintCfHandle)
+            {
+                Marshal.FreeHGlobal(ptrStruCardNo);
+                //MessageBox.Show("NET_DVR_DEL_FINGERPRINT FAIL, ERROR CODE" + CHCNetSDK.NET_DVR_GetLastError().ToString(), "Error", MessageBoxButtons.OK);
+                msj = "NET_DVR_DEL_FINGERPRINT FAIL, ERROR CODE" + CHCNetSDK.NET_DVR_GetLastError().ToString();
+                return msj;
+            }
+
+
+            Boolean Flag = true;
+            int dwStatus = 0;
+            CHCNetSDK.NET_DVR_FINGER_PRINT_INFO_STATUS_V50 struStatus = new CHCNetSDK.NET_DVR_FINGER_PRINT_INFO_STATUS_V50();
+            struStatus.init();
+            struStatus.dwSize = Marshal.SizeOf(struStatus);
+            int struSize = struStatus.dwSize;
+            while (Flag)
+            {
+                dwStatus = CHCNetSDK.NET_DVR_GetNextRemoteConfig(m_lDelFingerPrintCfHandle, ref struStatus, struSize);
+                switch (dwStatus)
+                {
+                    case CHCNetSDK.NET_SDK_GET_NEXT_STATUS_SUCCESS://成功读取到数据，处理完本次数据后需调用next
+                        msj = ProcessDelDataRes(ref struStatus, ref Flag);
+                        return msj;
+                        break;
+                    case CHCNetSDK.NET_SDK_GET_NEXT_STATUS_NEED_WAIT:
+                        break;
+                    case CHCNetSDK.NET_SDK_GET_NEXT_STATUS_FAILED:
+                        CHCNetSDK.NET_DVR_StopRemoteConfig(m_lDelFingerPrintCfHandle);
+                        m_lDelFingerPrintCfHandle = -1;
+                        //MessageBox.Show("NET_SDK_GET_NEXT_STATUS_FAILED" + CHCNetSDK.NET_DVR_GetLastError().ToString(), "Error", MessageBoxButtons.OK);
+                        msj = "NET_SDK_GET_NEXT_STATUS_FAILED" + CHCNetSDK.NET_DVR_GetLastError().ToString();
+                       Flag = false;
+                        break;
+                    case CHCNetSDK.NET_SDK_GET_NEXT_STATUS_FINISH:
+                        CHCNetSDK.NET_DVR_StopRemoteConfig(m_lDelFingerPrintCfHandle);
+                        m_lDelFingerPrintCfHandle = -1;
+                        //MessageBox.Show("NET_SDK_GET_NEXT_STATUS_FINISH");
+                        msj = "NET_SDK_GET_NEXT_STATUS_FINISH";
+                       Flag = false;
+                        break;
+                    default:
+                        //MessageBox.Show("NET_SDK_GET_NEXT_STATUS_UNKOWN" + CHCNetSDK.NET_DVR_GetLastError().ToString(), "Error", MessageBoxButtons.OK);
+                        msj = "NET_SDK_GET_NEXT_STATUS_UNKOWN" + CHCNetSDK.NET_DVR_GetLastError().ToString();
+                       Flag = false;
+                        break;
+                }
+            }
+
+            Marshal.FreeHGlobal(ptrStruCardNo);
+            return msj;
+        }
+
+        private String ProcessDelDataRes(ref CHCNetSDK.NET_DVR_FINGER_PRINT_INFO_STATUS_V50 struStatus, ref bool flag)
+        {
+            switch (struStatus.byStatus)
+            {
+                case 0:
+                    //MessageBox.Show("DelFp Invalid");
+                    m_SetSuccessFing = -1;
+                    return "DelFp Invalid";
+                    break;
+                case 1:
+                    //MessageBox.Show("DelFp is Processing");
+                    m_SetSuccessFing = -1;
+                    return "DelFp is Processing";
+                    break;
+                case 2:
+                    //MessageBox.Show("DelFp failed");
+                    m_SetSuccessFing = -1;
+                    return "DelFp failed";
+                    break;
+                case 3:
+                    //MessageBox.Show("DelFp succeed");
+                    m_SetSuccessFing = 1;
+                    return "DelFp succeed";
+                    break;
+                default:
+                    flag = false;
+                    m_SetSuccessFing = -1;
+                    return "Indefinido";
+                    break;
+            }
+        }
+        private void ByteCopy(ref byte[] source, ref byte[] Target)
+        {
+            for (int i = 0; i < source.Length; ++i)
+            {
+                if (i > Target.Length)
+                {
+                    break;
+                }
+                Target[i] = source[i];
+            }
+        }
     }
 }

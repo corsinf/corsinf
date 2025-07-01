@@ -976,6 +976,8 @@ function para_ftp($nombre,$texto)
 			return -3;
 		}
 
+		// print_r($dbref);
+
 		$db_origen = $dbref[0]['db_referencia'];
 		 $parametros = array(
 		    str_replace(" ","",$db_origen),

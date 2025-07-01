@@ -231,20 +231,20 @@ class Program
 
                     break;
                 case "9":
-                    //eliminar FINGER DE  PERSONA
+                    //Buscar item de huella digital
                     ip = args[1];
                     user = args[2];
                     port = args[3];
                     pass = args[4];
                     String CardNof = args[5]; // numero de tarjeta
-                    String IDdevice = args[6]; // numero de tarjeta
 
                     r = login.loginSDKDevice(ip, port, user, pass);
                     m_UserId = login.m_UserID;
                     if (m_UserId >= 0)
                     {
                         FingerManagerSDK FingerMan = new FingerManagerSDK();
-                        r = FingerMan.GetRegisteredFingerprintIDs(m_UserId,CardNof,IDdevice);
+                        //r = FingerMan.GetRegisteredFingerprintIDs(m_UserId,CardNof,IDdevice);
+                        r = FingerMan.ObtenerIndicesHuellasRegistradas(CardNof, m_UserId, 1);
                         m_SetSuccessFing = FingerMan.m_SetSuccessFing;
 
                     }
@@ -335,6 +335,28 @@ class Program
 
                     }
                     json = JsonSerializer.Serialize(new { msj = r, resp = m_SetSuccessFing });
+                    break;
+                case "14":
+                    //Buscar item de huella digital
+                    ip = args[1];
+                    user = args[2];
+                    port = args[3];
+                    pass = args[4];
+                    CardNo = args[5]; // numero de tarjeta
+                    String indexfinger = args[6]; // numero de tarjeta
+
+                    r = login.loginSDKDevice(ip, port, user, pass);
+                    m_UserId = login.m_UserID;
+                    if (m_UserId >= 0)
+                    {
+                        FingerManagerSDK FingerMan = new FingerManagerSDK();
+                        r = FingerMan.EliminarHuellaPorItem(CardNo, indexfinger, m_UserId, 1);
+                        //r = FingerMan.ObtenerIndicesHuellasRegistradas(CardNo, m_UserId, 1);
+                        m_SetSuccessFing = FingerMan.m_SetSuccessFing;
+
+                    }
+                    json = JsonSerializer.Serialize(new { msj = r });
+
                     break;
 
                 case "99":
