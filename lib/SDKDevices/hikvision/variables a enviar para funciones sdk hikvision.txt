@@ -1,6 +1,14 @@
 Para este sdk no almacena EmployedID lo cual hace que el nombre se asocien por medio de la CardNo.
 
 para registar cualquier otro dato biometrico se usa CardNo para asociarlo al la atjeta y a la persona 
+=========================== eliminar huella digital por card e item ====================
+14
+192.168.100.31
+admin
+8000
+data12/*
+1993 ===>numero de tarjeta
+2 ===>numero de index
 =========================== agregar a usuario facial ====================
 13
 192.168.100.31

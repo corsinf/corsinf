@@ -12,6 +12,11 @@ namespace CorsinfSDKHik.NetSDK
         public const int NET_SDK_GET_NEXT_STATUS_FINISH = 1002;
         public const int NET_SDK_GET_NEXT_STATUS_FAILED = 1003;
 
+        // Constantes del SDK
+        public const int CARD_NO_LEN = 32;
+        public const int FINGER_PRINT_LEN = 768;
+
+
         //macro definition
         #region common use
 
@@ -1788,19 +1793,42 @@ namespace CorsinfSDKHik.NetSDK
         }
 
         [StructLayout(LayoutKind.Sequential)]
+        //public struct NET_DVR_FINGER_PRINT_BYCARD_V50
+        //{
+        //    [MarshalAs(UnmanagedType.ByValArray, SizeConst = ACS_CARD_NO_LEN, ArraySubType = UnmanagedType.I1)]
+        //    public byte[] byCardNo;
+        //    [MarshalAs(UnmanagedType.ByValArray, SizeConst = MAX_CARD_READER_NUM_512, ArraySubType = UnmanagedType.I1)]
+        //    public byte[] byEnableCardReader;  //be enable card reader,according to the values
+        //    [MarshalAs(UnmanagedType.ByValArray, SizeConst = MAX_FINGER_PRINT_NUM, ArraySubType = UnmanagedType.I1)]
+        //    public byte[] byFingerPrintID;        //finger print ID,according to the values,0-not delete,1-delete
+        //    [MarshalAs(UnmanagedType.ByValArray, SizeConst = 2, ArraySubType = UnmanagedType.I1)]
+        //    public byte[] byRes1;
+        //    [MarshalAs(UnmanagedType.ByValArray, SizeConst = NET_SDK_EMPLOYEE_NO_LEN, ArraySubType = UnmanagedType.I1)]
+        //    public byte[] byEmployeeNo;
+        //}
+
         public struct NET_DVR_FINGER_PRINT_BYCARD_V50
         {
-            [MarshalAs(UnmanagedType.ByValArray, SizeConst = ACS_CARD_NO_LEN, ArraySubType = UnmanagedType.I1)]
+            [MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = CHCNetSDK.ACS_CARD_NO_LEN)]
             public byte[] byCardNo;
-            [MarshalAs(UnmanagedType.ByValArray, SizeConst = MAX_CARD_READER_NUM_512, ArraySubType = UnmanagedType.I1)]
-            public byte[] byEnableCardReader;  //be enable card reader,according to the values
-            [MarshalAs(UnmanagedType.ByValArray, SizeConst = MAX_FINGER_PRINT_NUM, ArraySubType = UnmanagedType.I1)]
-            public byte[] byFingerPrintID;        //finger print ID,according to the values,0-not delete,1-delete
-            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 2, ArraySubType = UnmanagedType.I1)]
+            [MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = CHCNetSDK.MAX_CARD_READER_NUM_512)]
+            public byte[] byEnableCardReader;
+            [MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = CHCNetSDK.MAX_FINGER_PRINT_NUM)]
+            public byte[] byFingerPrintID;
+            [MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = 2)]
             public byte[] byRes1;
-            [MarshalAs(UnmanagedType.ByValArray, SizeConst = NET_SDK_EMPLOYEE_NO_LEN, ArraySubType = UnmanagedType.I1)]
+            [MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = CHCNetSDK.NET_SDK_EMPLOYEE_NO_LEN)]
             public byte[] byEmployeeNo;
+            public void init()
+            {
+                byCardNo = new byte[CHCNetSDK.ACS_CARD_NO_LEN];
+                byEnableCardReader = new byte[CHCNetSDK.MAX_CARD_READER_NUM_512];
+                byFingerPrintID = new byte[CHCNetSDK.MAX_FINGER_PRINT_NUM];
+                byRes1 = new byte[2];
+                byEmployeeNo = new byte[CHCNetSDK.NET_SDK_EMPLOYEE_NO_LEN];
+            }
         }
+
 
         [StructLayout(LayoutKind.Sequential)]
         public struct NET_DVR_FINGER_PRINT_BYREADER_V50
@@ -1842,13 +1870,44 @@ namespace CorsinfSDKHik.NetSDK
         }
 
         [StructLayout(LayoutKind.Sequential)]
+        //public struct NET_DVR_FINGER_PRINT_INFO_STATUS_V50
+        //{
+        //    public uint dwSize;
+        //    public uint dwCardReaderNo; //card reader no
+        //    public byte byStatus;   //status:0-invalid,1-processing,2-failed,3-success
+        //    [MarshalAs(UnmanagedType.ByValArray, SizeConst = 63)]
+        //    public byte[] byRes;
+        //}
+
         public struct NET_DVR_FINGER_PRINT_INFO_STATUS_V50
         {
-            public uint dwSize;
-            public uint dwCardReaderNo; //card reader no
-            public byte byStatus;   //status:0-invalid,1-processing,2-failed,3-success
-            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 63)]
+            public int dwSize;
+            public int dwCardReaderNo;
+            public byte byStatus;
+            [MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = 63)]
             public byte[] byRes;
+            public void init()
+            {
+                byRes = new byte[63];
+            }
+        }
+
+        [StructLayoutAttribute(LayoutKind.Sequential)]
+        public struct NET_DVR_FINGER_PRINT_INFO_CTRL_V50_ByCardNo
+        {
+            public int dwSize;
+            public byte byMode;  //删除方式，0-按卡号（人员ID）方式删除，1-按读卡器删除
+            [MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = 3)]
+            public byte[] byRes1;
+            public CHCNetSDK.NET_DVR_FINGER_PRINT_BYCARD_V50 struProcessMode;//处理方式
+            [MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = 64)]
+            public byte[] byRes;
+            public void init()
+            {
+                byRes1 = new byte[3];
+                byRes = new byte[64];
+                struProcessMode.init();
+            }
         }
 
         //[StructLayoutAttribute(LayoutKind.Sequential)]
@@ -3581,6 +3640,10 @@ namespace CorsinfSDKHik.NetSDK
         [DllImport(@"..\..\..\HCNetSDK\HCNetSDK.dll")]
         public static extern int NET_DVR_GetNextRemoteConfig(int lHandle, ref CHCNetSDK.NET_DVR_ACS_EVENT_CFGG lpOutBuff, int dwOutBuffSize);
 
+        [DllImport(@"..\..\..\HCNetSDK\HCNetSDK.dll")]
+        public static extern int NET_DVR_GetNextRemoteConfig(int lHandle, ref CHCNetSDK.NET_DVR_FINGER_PRINT_INFO_STATUS_V50 lpOutBuff, int dwOutBuffSize);
+
+
 
         [DllImport(@"..\..\..\HCNetSDK\HCNetSDK.dll")]
         public static extern int NET_DVR_GetNextRemoteConfig(int lHandle, nint lpOutBuff, uint dwOutBuffSize);
@@ -3853,6 +3916,7 @@ namespace CorsinfSDKHik.NetSDK
                 byRes = new byte[131];
             }
         }
+
 
         [StructLayoutAttribute(LayoutKind.Sequential)]
         public struct NET_DVR_FACE_PARAM_CTRL_CARDNO
@@ -4143,5 +4207,26 @@ namespace CorsinfSDKHik.NetSDK
         }
 
         #endregion
+
+
+
+        // Estructuras del SDK
+        [StructLayout(LayoutKind.Sequential)]
+        public struct NET_DVR_FINGERPRINT_CFG
+        {
+            public uint dwSize;
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = CARD_NO_LEN)]
+            public byte[] byCardNo;
+            public uint dwFingerPrintNum;
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = MAX_FINGER_PRINT_NUM)]
+            public NET_DVR_FINGER_PRINT_ONE[] struFingerPrint;
+        }
+
+        [StructLayout(LayoutKind.Sequential)]
+        public struct NET_DVR_FINGER_PRINT_ONE
+        {
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = FINGER_PRINT_LEN)]
+            public byte[] byFingerData;
+        }
     }
 }
