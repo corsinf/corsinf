@@ -81,7 +81,7 @@ class localizacionC
 		$cambio = array();
 		$lista = $this->modelo->lista_localizacion($query);
 		foreach ($lista as $key => $value) {
-			$cambio[] = array('id' => $value['ID_LOCALIZACION'], 'text' => $value['DENOMINACION'], 'data' => $value);
+			$cambio[] = array('id' => $value['ID_LOCALIZACION'], 'text' => $value['EMPLAZAMIENTO'], 'data' => $value);
 		}
 		return $cambio;
 	}
