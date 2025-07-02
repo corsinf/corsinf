@@ -446,14 +446,13 @@ if (isset($_GET['_id'])) {
     $('#lbl_valor_activo').text(data.prec);
     $('#lbl_valor_residual').text(data.text_valor_residual);
     $('#lbl_vida_util').text(data.text_vida_utill + " años");
-    
 
   }
 
   function cargar_articulo_editar_pnl(data) {
     $('#cbx_kit').prop('checked', data.es_kit === "1");
-    $('input[name="rbl_tip_articulo"][value="' + data.id_tipo_articulo + '"]').prop('checked', true);
-    console.log(data.id_tipo_articulo);
+    cargar_tipo_articulo(data.id_tipo_articulo);
+    // console.log(data.id_tipo_articulo);
 
     $('input[name="rbl_asset"][value="' + data.longitud_rfid + '"]').prop('checked', true);
 
@@ -566,7 +565,7 @@ if (isset($_GET['_id'])) {
     $('#lbl_sap_custodio').text('Código:' + data.person_ci);
 
 
-    if( data.es_kit == 1){
+    if (data.es_kit == 1) {
       $('#cbx_kit_cointainer').hide();
     }
 
@@ -646,7 +645,7 @@ if (isset($_GET['_id'])) {
     }
   }
 
-  function cargar_tipo_articulo() {
+  function cargar_tipo_articulo(id_tipo_articulo = '') {
     $.ajax({
       data: {
         _id: ''
@@ -657,16 +656,17 @@ if (isset($_GET['_id'])) {
       success: function(response) {
         let radioButtons = '';
         $.each(response, function(i, item) {
+          const checked = (item._id === id_tipo_articulo) ? 'checked' : '';
           radioButtons +=
             `<div class="col-sm-auto m-0">
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" id="rbl_tip_articulo_${item._id}" name="rbl_tip_articulo" value="${item._id}">
-                    <label class="form-check-label" for="rbl_tip_articulo_${item._id}">${item.descripcion}</label>
-                </div>
-            </div>`;
+              <div class="form-check">
+                  <input class="form-check-input" type="radio" id="rbl_tip_articulo_${item._id}" name="rbl_tip_articulo" value="${item._id}" ${checked}>
+                  <label class="form-check-label" for="rbl_tip_articulo_${item._id}">${item.descripcion}</label>
+              </div>
+          </div>`;
         });
 
-        mensaje_error = `<label class="error mb-2" style="display: none;" for="rbl_tip_articulo"></label>`
+        let mensaje_error = `<label class="error mb-2" style="display: none;" for="rbl_tip_articulo"></label>`;
 
         $('#pnl_tipo_articulo').html(radioButtons + mensaje_error);
       },
@@ -906,11 +906,6 @@ if (isset($_GET['_id'])) {
       }
     });
   }
-</script>
-
-
-<script>
-  //Depre
 </script>
 
 <div class="page-wrapper">
