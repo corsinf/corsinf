@@ -65,9 +65,8 @@
             $('#txt_edicion').val(art[0].edicion);
             $('#txt_serie_numbre').val(art[0].serie_numero);
             $('#txt_ip_address').val(art[0].ip_address);
-
             $('#txt_id_articulo_IT').val(art[0].id);
-        } else {}
+        } 
     }
 </script>
 
