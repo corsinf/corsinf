@@ -50,6 +50,25 @@ if (isset($_GET['_id'])) {
 
 <script type="text/javascript">
   $(document).ready(function() {
+
+    //$('#cbx_detalle_it').prop('disabled', true);
+
+    $('#cbx_detalle_it').change(function() {
+      if ($(this).is(':checked')) {
+        $('#nav_detalle_it').show(); // Mostrar el div si está checkeado
+
+      } else {
+        $('#nav_detalle_it').hide(); // Ocultar el div si está desmarcado
+      }
+
+    });
+    $('#cbx_kit').change(function() {
+      if ($(this).is(':checked')) {
+        $('#nav_kit_interno').show(); // Mostrar el div si está checkeado
+      } else {
+        $('#nav_kit_interno').hide(); // Ocultar el div si está desmarcado
+      }
+    });
     // navegacion();
     validar_datos();
 
@@ -427,23 +446,12 @@ if (isset($_GET['_id'])) {
     $('#lbl_valor_activo').text(data.prec);
     $('#lbl_valor_residual').text(data.text_valor_residual);
     $('#lbl_vida_util').text(data.text_vida_utill + " años");
-
-
-    if (data.es_it == 1) {
-      $('#is_it_estado').show();
-      $('#nav_detalle_it').show();
-      $('#cbx_detalle_it').prop('checked', true); // Marcar el checkbox
-    } else {
-      // $('#is_it_estado').hide();
-      $('#cbx_detalle_it').prop('checked', false); // Desmarcar el checkbox
-    }
-
+    
 
   }
 
   function cargar_articulo_editar_pnl(data) {
     $('#cbx_kit').prop('checked', data.es_kit === "1");
-    $('#nav_kit_interno').show();
     $('input[name="rbl_tip_articulo"][value="' + data.id_tipo_articulo + '"]').prop('checked', true);
     console.log(data.id_tipo_articulo);
 
@@ -556,6 +564,13 @@ if (isset($_GET['_id'])) {
     $('#lbl_sap_gen').text('Código:' + data.c_gen);
     $('#lbl_sap_loc').text('Código:' + data.loc_nom);
     $('#lbl_sap_custodio').text('Código:' + data.person_ci);
+
+
+    if( data.es_kit == 1){
+      $('#cbx_kit_cointainer').hide();
+    }
+
+
   }
 
   function guardar_articulo() {
@@ -893,6 +908,11 @@ if (isset($_GET['_id'])) {
   }
 </script>
 
+
+<script>
+  //Depre
+</script>
+
 <div class="page-wrapper">
   <div class="page-content">
 
@@ -1150,19 +1170,24 @@ if (isset($_GET['_id'])) {
                     <form id="form_articulo">
                       <div class="row">
                         <div class="col-auto">
-                          <div class="form-check">
-                            <input class="form-check-input" type="checkbox" name="cbx_kit" id="cbx_kit">
-                            <label class="form-label" for="cbx_kit">KIT </label>
+                          <div id="cbx_kit_cointainer">
+                            <div class="form-check">
+                              <input class="form-check-input" type="checkbox" name="cbx_kit" id="cbx_kit">
+                              <label class="form-label" for="cbx_kit">KIT </label>
+                            </div>
+                            <label class="error" style="display: none;" for="cbx_kit"></label>
                           </div>
-                          <label class="error" style="display: none;" for="cbx_kit"></label>
                         </div>
                         <div class="col-auto">
-                          <div class="form-check">
-                            <input class="form-check-input" type="checkbox" name="cbx_detalle_it" id="cbx_detalle_it">
-                            <label class="form-label" for="cbx_detalle_it">IT </label>
+                          <div id="cbx_detalle_it_cointainer">
+                            <div class="form-check">
+                              <input class="form-check-input" type="checkbox" name="cbx_detalle_it" id="cbx_detalle_it">
+                              <label class="form-label" for="cbx_detalle_it">IT </label>
+                            </div>
+                            <label class="error" style="display: none;" for="cbx_detalle_it"></label>
                           </div>
-                          <label class="error" style="display: none;" for="cbx_detalle_it"></label>
                         </div>
+
                       </div>
 
                       <hr class="text-primary mb-2 mt-1">

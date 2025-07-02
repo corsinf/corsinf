@@ -1,12 +1,5 @@
 <script>
-    $(document).ready(function() {
-        // Obtiene todos los parámetros de la query string
-        let params = new URLSearchParams(window.location.search);
-        // Lee el valor de "_id"
-        let id = params.get('_id');
-        cargar_articulo_detalles_it(id);
-
-    });
+    $(document).ready(function() {});
 
     function guarda_detalles_it() {
         // Recojo los valores uno a uno
@@ -34,39 +27,24 @@
         });
     }
 
+    function mostrar_datos_articulo_detaller_it(response) {
+        if (response.length != 0) {
+            $('#txt_sistema_op').val(response[0].sistema_op);
+            $('#txt_arquitectura').val(response[0].arquitectura);
+            $('#txt_kernel').val(response[0].kernel);
+            $('#txt_producto_id').val(response[0].producto_id);
+            $('#txt_mac_address').val(response[0].mac_address);
+            $('#txt_version').val(response[0].version);
+            $('#txt_service_pack').val(response[0].service_pack);
+            $('#txt_edicion').val(response[0].edicion);
+            $('#txt_serie_numbre').val(response[0].serie_numero);
+            $('#txt_ip_address').val(response[0].ip_address);
+            $('#txt_id_articulo_IT').val(response[0].id);
+            $('#cbx_detalle_it_cointainer').hide();
+            $('#nav_detalle_it').show();
+        } else {
 
-    function cargar_articulo_detalles_it(id) {
-        // Recojo los valores uno a uno
-        $.ajax({
-            data: {
-                id: id
-            },
-            url: '../controlador/ACTIVOS_FIJOS/ac_articulo_itC.php?listar=true',
-            type: 'POST',
-            dataType: 'json',
-            success: function(response) {
-                mostrar_datos_articulo_detaller_it(response)
-            },
-            error: function() {
-                Swal.fire('Error', 'Fallo en la comunicación con el servidor.', 'error');
-            }
-        });
-    }
-
-    function mostrar_datos_articulo_detaller_it(art) {
-        if (art.length != 0) {
-            $('#txt_sistema_op').val(art[0].sistema_op);
-            $('#txt_arquitectura').val(art[0].arquitectura);
-            $('#txt_kernel').val(art[0].kernel);
-            $('#txt_producto_id').val(art[0].producto_id);
-            $('#txt_mac_address').val(art[0].mac_address);
-            $('#txt_version').val(art[0].version);
-            $('#txt_service_pack').val(art[0].service_pack);
-            $('#txt_edicion').val(art[0].edicion);
-            $('#txt_serie_numbre').val(art[0].serie_numero);
-            $('#txt_ip_address').val(art[0].ip_address);
-            $('#txt_id_articulo_IT').val(art[0].id);
-        } 
+        }
     }
 </script>
 

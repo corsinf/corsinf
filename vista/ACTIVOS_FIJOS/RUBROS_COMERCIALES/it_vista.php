@@ -13,18 +13,9 @@
             type: 'POST',
             dataType: 'json',
             success: function(response) {
-                if (response.length != 0) {
-                    $('#lbl_sistema_op').text(response[0].sistema_op);
-                    $('#lbl_arquitectura').text(response[0].arquitectura);
-                    $('#lbl_kernel').text(response[0].kernel);
-                    $('#lbl_producto_id').text(response[0].producto_id);
-                    $('#lbl_mac_address').text(response[0].mac_address);
-                    $('#lbl_version').text(response[0].version);
-                    $('#lbl_service_pack').text(response[0].service_pack);
-                    $('#lbl_edicion').text(response[0].edicion);
-                    $('#lbl_serie_numbre').text(response[0].serie_numero);
-                    $('#lbl_ip_address').text(response[0].ip_address);
-                }
+                mostrar_datos_articulo_it(response);
+                mostrar_datos_articulo_detaller_it(response);
+
             },
             error: function(xhr, status, error) {
                 console.log('Status: ' + status);
@@ -34,6 +25,21 @@
                 Swal.fire('', 'Error: ' + xhr.responseText, 'error');
             }
         });
+    }
+
+    function mostrar_datos_articulo_it(response) {
+        if (response.length != 0) {
+            $('#lbl_sistema_op').text(response[0].sistema_op);
+            $('#lbl_arquitectura').text(response[0].arquitectura);
+            $('#lbl_kernel').text(response[0].kernel);
+            $('#lbl_producto_id').text(response[0].producto_id);
+            $('#lbl_mac_address').text(response[0].mac_address);
+            $('#lbl_version').text(response[0].version);
+            $('#lbl_service_pack').text(response[0].service_pack);
+            $('#lbl_edicion').text(response[0].edicion);
+            $('#lbl_serie_numbre').text(response[0].serie_numero);
+            $('#lbl_ip_address').text(response[0].ip_address);
+        }
     }
 </script>
 

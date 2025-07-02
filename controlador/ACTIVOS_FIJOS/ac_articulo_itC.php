@@ -10,13 +10,9 @@ if (isset($_GET['listar'])) {
     echo json_encode($controlador->lista_articulos($_POST['id'] ?? ''));
 }
 
-
-
 if (isset($_GET['guardar'])) {
     echo json_encode($controlador->insertar_editar($_POST));
 }
-
-
 
 
 class articulosItC
@@ -26,13 +22,15 @@ class articulosItC
 
     public function __construct()
     {
-        $this->modelo    = new articulositM();
+        $this->modelo    = new ac_articulos_itM();
         $this->codGlobal = new codigos_globales();
     }
 
     public function lista_articulos($id)
     {
-        return $this->modelo->cargar_datos_it($id);
+        //print_r($id); exit;
+        $datos = $this->modelo->where('ac_ait_id_articulo', $id)->listar();
+        return $datos;
     }
 
 
