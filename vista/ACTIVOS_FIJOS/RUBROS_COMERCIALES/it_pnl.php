@@ -3,6 +3,7 @@
 
     function guarda_detalles_it() {
         // Recojo los valores uno a uno
+        $('#cbx_detalle_it').prop('checked', true).prop('disabled', true);
         let formData = new FormData($('#form_detalle_it')[0]);
         $.ajax({
             url: '../controlador/ACTIVOS_FIJOS/ac_articulo_itC.php?guardar=true',

@@ -47,7 +47,7 @@ class th_turnosC
         $txt_hora_salida = $this->hora_a_minutos($parametros['txt_hora_salida']);
         $txt_checkout_salida_fin = $this->hora_a_minutos($parametros['txt_checkout_salida_fin']);
 
-        $txt_tiempo_descanso = $this->hora_a_minutos($parametros['txt_tiempo_descanso']);
+        $txt_tiempo_descanso = $parametros['txt_tiempo_descanso'];
 
         $datos = array(
             array('campo' => 'th_tur_nombre', 'dato' => $parametros['txt_nombre']),

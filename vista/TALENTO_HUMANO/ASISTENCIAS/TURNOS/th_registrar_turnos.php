@@ -552,14 +552,13 @@ $hora_salida = isset($_GET['hora_salida']) ? $_GET['hora_salida'] : 930;
                                     </div>
                                     <div id="pnl_tiempo_descanso" style="display: none;">
                                         <div class="row mb-col">
-                                            <label for="txt_hora_descanso" class="col-sm-4 col-form-label text-end fw-bold">Hora de descanso (min) </label>
+                                            <label for="txt_tiempo_descanso" class="col-sm-4 col-form-label text-end fw-bold">Hora de descanso (min) </label>
                                             <div class="col-sm-6">
-                                                <input type="number" class="form-control form-control-sm" name="txt_hora_descanso" id="txt_hora_descanso" value="5">
+                                                <input type="number" class="form-control form-control-sm" name="txt_tiempo_descanso" id="txt_tiempo_descanso" value="5">
                                             </div>
                                         </div>
                                         <div class="row mb-col">
                                             <label for="txt_hora_descanso" class="col-sm-4 col-form-label text-end fw-bold">Horario de descanso asignado</label>
-
                                             <div class="col-sm-3">
                                                 <input type="time" class="form-control form-control-sm" name="txt_hora_descanso_inicio" id="txt_hora_descanso_inicio" value="10:00">
                                             </div>
