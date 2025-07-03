@@ -5,7 +5,7 @@ require_once(dirname(__DIR__) . '/GENERAL/BaseModel.php');
 class ac_articulos_itM extends BaseModel
 {
     protected $tabla = 'ac_articulos_it';
-    protected $primaryKey = 'ac_ait_id AS id'; //poner _
+    protected $primaryKey = 'ac_ait_id AS _id';
 
     protected $camposPermitidos = [
         'ac_ait_id_articulo       AS id_articulo',
@@ -21,7 +21,8 @@ class ac_articulos_itM extends BaseModel
         'ac_ait_ip_address        AS ip_address',
         'ac_ait_fecha_mantenimiento AS fecha_mantenimiento',
         'ac_ait_fecha_creacion    AS fecha_creacion',
-        'ac_ait_fecha_modificacion AS fecha_modificacion'
+        'ac_ait_fecha_modificacion AS fecha_modificacion',
+        'ac_ait_sku               AS ait_sku'
     ];
 
   

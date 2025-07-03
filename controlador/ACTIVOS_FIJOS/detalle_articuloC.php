@@ -284,7 +284,7 @@ class detalle_articuloC
 			// array('campo' => 'fecha_baja', 'dato' => $parametros['']),
 			array('campo' => 'fecha_referencia', 'dato' => $parametros['txt_fecha']),
 			array('campo' => 'fecha_contabilizacion', 'dato' => $parametros['txt_compra']),
-			array('campo' => 'es_it', 'dato' => $parametros['cbx_detalle_it']) ,
+			array('campo' => 'es_it', 'dato' => $parametros['cbx_detalle_it']),
 			// array('campo' => 'id_rubro', 'dato' => $parametros['']),
 		);
 
@@ -550,6 +550,8 @@ class detalle_articuloC
 
 			array('campo' => 'fecha_referencia', 'dato' => $parametros['txt_fecha'], 'label' => 'FECHA DE REFERENCIA', 'tipo' => 'fecha'),
 			array('campo' => 'fecha_contabilizacion', 'dato' => $parametros['txt_compra'], 'label' => 'FECHA DE COMPRA', 'tipo' => 'fecha'),
+
+			array('campo' => 'es_it', 'dato' => $parametros['cbx_detalle_it'], 'label' => 'IT', 'tipo' => 'texto'),
 		);
 
 

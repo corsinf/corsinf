@@ -15,7 +15,11 @@
                 if (response == 1) {
                     Swal.fire('', 'Operacion realizada con exito.', 'success').then(function() {
                         vista_pnl();
+                        cargar_datos_articulo(id);
+                        cargar_tabla_movimientos();
+
                         limpiar_parametros_articulo();
+                        cargar_articulo_detalles_it_vista(<?= $_id ?>);
                     });
                 } else {
                     Swal.fire('Error', 'No se pudo guardar.', 'error');
@@ -39,11 +43,7 @@
             $('#txt_edicion').val(response[0].edicion);
             $('#txt_serie_numbre').val(response[0].serie_numero);
             $('#txt_ip_address').val(response[0].ip_address);
-            $('#txt_id_articulo_IT').val(response[0].id);
-            $('#cbx_detalle_it_cointainer').hide();
-            $('#nav_detalle_it').show();
-        } else {
-
+            $('#txt_id_articulo_IT').val(response[0]._id);
         }
     }
 </script>
@@ -53,6 +53,7 @@
     <form id="form_detalle_it">
         <input type="hidden" id="txt_id_articulo_IT" name="txt_id_articulo_IT" value="" />
         <input type="hidden" id="txt_id_articulo" name="txt_id_articulo" value="" />
+        <input type="hidden" id="txt_ac_ait_sku" name="txt_ac_ait_sku" value="" />
 
         <div class="row">
             <!-- Columna izquierda -->

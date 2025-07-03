@@ -56,9 +56,12 @@ if (isset($_GET['_id'])) {
     $('#cbx_detalle_it').change(function() {
       if ($(this).is(':checked')) {
         $('#nav_detalle_it').show(); // Mostrar el div si está checkeado
+        $('#is_it_estado').show(); // Mostrar el div si está checkeado
 
       } else {
         $('#nav_detalle_it').hide(); // Ocultar el div si está desmarcado
+        $('#is_it_estado').hide(); // Mostrar el div si está checkeado
+
       }
 
     });
@@ -568,6 +571,7 @@ if (isset($_GET['_id'])) {
     $('#lbl_sap_gen').text('Código:' + data.c_gen);
     $('#lbl_sap_loc').text('Código:' + data.loc_nom);
     $('#lbl_sap_custodio').text('Código:' + data.person_ci);
+    $('#txt_ac_ait_sku').val(data.tag_s);
 
     if (data.es_kit == 1) {
       $('#cbx_kit_cointainer').hide();
@@ -577,6 +581,13 @@ if (isset($_GET['_id'])) {
       $('#nav_kit_interno').hide();
     }
 
+    if (data.es_it == 1) {
+      $('#nav_detalle_it').show();
+      $('#cbx_detalle_it_cointainer').hide();
+    } else {
+      $('#nav_detalle_it').hide();
+      $('#cbx_detalle_it_cointainer').show();
+    }
 
   }
 
