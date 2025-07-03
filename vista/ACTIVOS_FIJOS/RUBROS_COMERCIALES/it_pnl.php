@@ -15,7 +15,7 @@
                 if (response == 1) {
                     Swal.fire('', 'Operacion realizada con exito.', 'success').then(function() {
                         vista_pnl();
-                        cargar_datos_articulo(id);
+                        cargar_datos_articulo(<?= $_id ?>);
                         cargar_tabla_movimientos();
 
                         limpiar_parametros_articulo();
