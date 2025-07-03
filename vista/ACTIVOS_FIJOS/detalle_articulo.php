@@ -568,6 +568,7 @@ if (isset($_GET['_id'])) {
     $('#lbl_sap_gen').text('Código:' + data.c_gen);
     $('#lbl_sap_loc').text('Código:' + data.loc_nom);
     $('#lbl_sap_custodio').text('Código:' + data.person_ci);
+    $('#txt_ac_ait_sku').val(data.tag_s);
 
     if (data.es_kit == 1) {
       $('#cbx_kit_cointainer').hide();

@@ -48,6 +48,7 @@ class articulosItC
             array('campo' => 'ac_ait_edicion', 'dato' => $parametros['txt_edicion']),
             array('campo' => 'ac_ait_serie_numero', 'dato' => $parametros['txt_serie_numbre']),
             array('campo' => 'ac_ait_ip_address', 'dato' => $parametros['txt_ip_address']),
+            array('campo' => 'ac_ait_sku', 'dato' => $parametros['txt_ac_ait_sku']),
         );
 
         if ($parametros['txt_id_articulo_IT'] == '') {

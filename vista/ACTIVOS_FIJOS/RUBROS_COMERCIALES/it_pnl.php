@@ -53,6 +53,7 @@
     <form id="form_detalle_it">
         <input type="hidden" id="txt_id_articulo_IT" name="txt_id_articulo_IT" value="" />
         <input type="hidden" id="txt_id_articulo" name="txt_id_articulo" value="" />
+        <input type="hidden" id="txt_ac_ait_sku" name="txt_ac_ait_sku" value="" />
 
         <div class="row">
             <!-- Columna izquierda -->
