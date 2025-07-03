@@ -39,6 +39,8 @@
             $('#lbl_edicion').text(response[0].edicion);
             $('#lbl_serie_numbre').text(response[0].serie_numero);
             $('#lbl_ip_address').text(response[0].ip_address);
+            $('#is_it_estado').show(); // Mostrar el div si está checkeado
+
         }
     }
 </script>

@@ -56,9 +56,12 @@ if (isset($_GET['_id'])) {
     $('#cbx_detalle_it').change(function() {
       if ($(this).is(':checked')) {
         $('#nav_detalle_it').show(); // Mostrar el div si está checkeado
+        $('#is_it_estado').show(); // Mostrar el div si está checkeado
 
       } else {
         $('#nav_detalle_it').hide(); // Ocultar el div si está desmarcado
+        $('#is_it_estado').hide(); // Mostrar el div si está checkeado
+
       }
 
     });
