@@ -242,7 +242,7 @@ class detalle_articuloC
 
 	function guardar_datos($parametros)
 	{
-		// print_r($parametros);die();		
+
 		$datos = array(
 			array('campo' => 'tag_unique', 'dato' => $parametros['txt_rfid']),
 			array('campo' => 'longitud_rfid', 'dato' => $parametros['rbl_asset']),
@@ -284,6 +284,7 @@ class detalle_articuloC
 			// array('campo' => 'fecha_baja', 'dato' => $parametros['']),
 			array('campo' => 'fecha_referencia', 'dato' => $parametros['txt_fecha']),
 			array('campo' => 'fecha_contabilizacion', 'dato' => $parametros['txt_compra']),
+			array('campo' => 'es_it', 'dato' => $parametros['cbx_detalle_it']) ,
 			// array('campo' => 'id_rubro', 'dato' => $parametros['']),
 		);
 

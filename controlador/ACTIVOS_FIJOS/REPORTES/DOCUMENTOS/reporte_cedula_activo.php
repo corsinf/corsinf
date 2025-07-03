@@ -6,6 +6,13 @@
     {
         $pdf = new TCPDF('P', 'mm', 'A4', true, 'UTF-8', false);
 
+        $ruta = $_SESSION['INICIO']['RUTA_IMG_RELATIVA'];
+        $empresa = $_SESSION['INICIO']['BASEDATO'];
+
+        $ruta_img = $ruta . "emp=$empresa&dir=activos&nombre=" .  $articulos[0]['imagen'];
+
+
+
         // Configurar documento
         $pdf->SetCreator('TCPDF');
         $pdf->SetAuthor('CORSINF');
@@ -208,6 +215,32 @@
         letra_estilo_negrita($pdf);
         $pdf->Cell(190, 5, 'Anexos:', 0, 1, 'L');
         $pdf->Ln(2);
+
+        $img_url = $ruta_img;
+
+        // Establecer altura deseada en milímetros (por ejemplo, 30 mm)
+        $fixed_height = 50;
+
+        // Obtener tamaño real de la imagen en píxeles
+        $img_info = getimagesize($img_url);
+        $img_px_width = $img_info[0];
+        $img_px_height = $img_info[1];
+
+        // Calcular proporción ancho/alto
+        $aspect_ratio = $img_px_width / $img_px_height;
+
+        // Calcular ancho proporcional en milímetros
+        $img_mm_width = $fixed_height * $aspect_ratio;
+
+        // Obtener ancho total de la página
+        $page_width = $pdf->getPageWidth();
+
+        // Calcular X para centrar horizontalmente
+        $x = ($page_width - $img_mm_width) / 2;
+        $y = $pdf->GetY(); // Mantener la altura actual
+
+        // Insertar imagen con altura fija y ancho proporcional, centrada horizontalmente
+        $pdf->Image($img_url, $x, $y, $img_mm_width, $fixed_height, 'GIF');
 
 
         // Nombre del archivo
