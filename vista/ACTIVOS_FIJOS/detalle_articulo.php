@@ -447,6 +447,11 @@ if (isset($_GET['_id'])) {
     $('#lbl_valor_residual').text(data.text_valor_residual);
     $('#lbl_vida_util').text(data.text_vida_utill + " años");
 
+    if (data.es_kit == 1) {
+      $('#cbx_kit_cointainer').show();
+      $('#cbx_kit').show();
+    }
+
   }
 
   function cargar_articulo_editar_pnl(data) {
@@ -564,9 +569,12 @@ if (isset($_GET['_id'])) {
     $('#lbl_sap_loc').text('Código:' + data.loc_nom);
     $('#lbl_sap_custodio').text('Código:' + data.person_ci);
 
-
     if (data.es_kit == 1) {
       $('#cbx_kit_cointainer').hide();
+      $('#nav_kit_interno').show();
+    } else {
+      $('#cbx_kit_cointainer').show();
+      $('#nav_kit_interno').hide();
     }
 
 
