@@ -581,6 +581,14 @@ if (isset($_GET['_id'])) {
       $('#nav_kit_interno').hide();
     }
 
+    if (data.es_it == 1) {
+      $('#nav_detalle_it').show();
+      $('#cbx_detalle_it_cointainer').hide();
+    } else {
+      $('#nav_detalle_it').hide();
+      $('#cbx_detalle_it_cointainer').show();
+    }
+
 
   }
 
