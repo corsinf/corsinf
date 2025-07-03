@@ -589,7 +589,6 @@ if (isset($_GET['_id'])) {
       $('#cbx_detalle_it_cointainer').show();
     }
 
-
   }
 
   function guardar_articulo() {

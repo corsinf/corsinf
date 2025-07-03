@@ -20,13 +20,13 @@ class articulosItC
 {
     private $modelo;
     private $detalle_articuloM;
-    private $codGlobal;
+    private $cod_globales;
 
     public function __construct()
     {
         $this->detalle_articuloM    = new detalle_articuloM();
         $this->modelo    = new ac_articulos_itM();
-        $this->codGlobal = new codigos_globales();
+        $this->cod_globales = new codigos_globales();
     }
 
     public function lista_articulos($id)
@@ -54,20 +54,27 @@ class articulosItC
             array('campo' => 'ac_ait_sku', 'dato' => $parametros['txt_ac_ait_sku']),
         );
 
-        if ($parametros['txt_id_articulo']) {
+        if (empty($parametros['txt_id_articulo_IT'])) {
+            $existe = $this->modelo->where('ac_ait_id_articulo', $parametros['txt_id_articulo'])->listar();
+
+            if (count($existe) == 0) {
+                $datos = $this->modelo->insertar($datos);
+                $this->editar_is_it($parametros['txt_id_articulo']);
+                $movimiento = "Se cambio IT de 0 a 1";
+                $this->cod_globales->ingresar_movimientos($parametros['txt_id_articulo'], $movimiento, 'ARTICULOS', 0, 1, '', '', $_SESSION['INICIO']['USUARIO'] ?? '');
+            } else {
+                return -2;
+            }
+        } else {
+            $where = [
+                ['campo' => 'ac_ait_id', 'dato' => $parametros['txt_id_articulo_IT']]
+            ];
+
+            $datos = $this->modelo->editar($datos, $where);
             $this->editar_is_it($parametros['txt_id_articulo']);
         }
 
-        if ($parametros['txt_id_articulo_IT'] == '') {
-            $result = $this->modelo->insertar($datos);
-        } else {
-            $where = array(
-                array('campo' => 'ac_ait_id', 'dato' => intval($parametros['txt_id_articulo_IT']))
-            );
-            $result = $this->modelo->editar($datos, $where);
-        }
-
-        return $result;
+        return $datos;
     }
 
 
