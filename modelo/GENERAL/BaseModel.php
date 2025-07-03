@@ -32,7 +32,7 @@ class BaseModel
 
     }
 
-    function listar($limite = null)
+    function listar($limite = null, $error = false, $db_base = false)
     {
         // Obtener cláusulas WHERE y JOIN
         $whereClause = $this->retornaValoresWhere();
@@ -67,7 +67,7 @@ class BaseModel
         // return $sql;
 
         // Ejecutar consulta y devolver resultados
-        $datos = $this->db->datos($sql);
+        $datos = $this->db->datos($sql, $db_base, $error);
         $this->reset();
         return $datos;
     }
