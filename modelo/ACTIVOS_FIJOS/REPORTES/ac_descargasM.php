@@ -1,6 +1,6 @@
 <?php
 if (!class_exists('db')) {
-    include(dirname(__DIR__, 2) . '/db/db.php');
+    include(dirname(__DIR__, 3) . '/db/db.php');
 }
 /**
  * 
@@ -23,6 +23,29 @@ class ac_descargasM
                     WHERE id_articulo = 1";
 
         $sql .= ";";
+        $datos = $this->db->datos($sql);
+        return $datos;
+    }
+
+    function listar_datos_lote($lote, $query = false)
+    {
+        $sql = "
+        SELECT 
+            {$lote} AS numero_lote,
+            COUNT(*) AS cantidad
+        FROM ACTIVOS_DESARROLLO.dbo.ac_articulos
+        WHERE {$lote} IS NOT NULL";
+
+        if ($query) {
+            $query_escaped = addslashes($query);
+            $sql .= " AND {$lote} = '{$query_escaped}'";
+        }
+
+        $sql .= "
+        GROUP BY {$lote}
+        ORDER BY cantidad ASC;
+    ";
+
         $datos = $this->db->datos($sql);
         return $datos;
     }
