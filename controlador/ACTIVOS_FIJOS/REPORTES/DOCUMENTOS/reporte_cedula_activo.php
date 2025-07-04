@@ -2,7 +2,7 @@
     require_once(dirname(__DIR__, 4) . '/lib/TCPDF/tcpdf.php');
 
 
-    function pdf_cedula_activo($articulos, $datosArticulo_it, $mostrar = false)
+    function pdf_cedula_activo($articulos, $datos_articulo_it, $mostrar = false)
     {
 
         $pdf = new TCPDF('P', 'mm', 'A4', true, 'UTF-8', false);
@@ -213,7 +213,7 @@
         $pdf->Cell(40, 5, '', 1, 0, 'C');
         $pdf->Cell(35, 5, '', 1, 1, 'C');
 
-        if ($datosArticulo_it) {
+        if ($datos_articulo_it) {
             $pdf->Ln(5);
             letra_estilo_negrita($pdf);
             $pdf->Cell(190, 5, 'Detalles TI:', 0, 1, 'L');
@@ -221,14 +221,15 @@
             letra_estilo_negrita($pdf);
             $pdf->Cell(30, 5, 'Ip Address', 1, 0, 'C');
             letra_estilo_normal($pdf);
-            $pdf->Cell(65, 5,  $datosArticulo_it[0]['ip_address'], 1, 0, 'C');
+            $pdf->Cell(65, 5,  $datos_articulo_it[0]['ip_address'], 1, 0, 'C');
             letra_estilo_negrita($pdf);
             $pdf->Cell(30, 5, 'Mac Address', 1, 0, 'C');
             letra_estilo_normal($pdf);
-            $pdf->Cell(65, 5, $datosArticulo_it[0]['mac_address'], 1, 1, 'C');
+            $pdf->Cell(65, 5, $datos_articulo_it[0]['mac_address'], 1, 1, 'C');
             // Anexos
 
         }
+
         $pdf->Ln(5);
         letra_estilo_negrita($pdf);
         $pdf->Cell(190, 5, 'Anexos:', 0, 1, 'L');

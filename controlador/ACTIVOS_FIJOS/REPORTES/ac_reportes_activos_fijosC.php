@@ -31,9 +31,9 @@ class ac_reportes_activos_fijosC
 
         $articulos = $this->articulos->listar_articulos_id($id_articulo);
 
-        $datosArticulo_it = $this->ac_articulos_itM->where('ac_ait_id_articulo', $id_articulo)->listar();
+        $datos_articulo_it = $this->ac_articulos_itM->where('ac_ait_id_articulo', $id_articulo)->listar();
 
-        return pdf_cedula_activo($articulos, $datosArticulo_it, $mostrar);
+        return pdf_cedula_activo($articulos, $datos_articulo_it, $mostrar);
     }
 
     public function reporte_auditoria_articulos($id_persona, $id_localizacion, $id_empresa,  $mostrar = false)
