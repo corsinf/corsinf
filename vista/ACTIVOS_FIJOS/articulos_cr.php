@@ -24,7 +24,7 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
 
             processing: true,
             serverSide: true,
-            stateSave: false,
+            stateSave: true,
             ajax: {
                 url: '../controlador/ACTIVOS_FIJOS/articulosC.php?lista_cr=true',
                 type: 'POST', // Asegura que se envíen los datos correctamente
@@ -117,6 +117,11 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
             }
         });
     }
+
+    function modal_ver_imagen(ruta, id) {
+        $('#imagen_modal_contenido').attr('src', ruta);
+        $('#modal_imagen').modal('show');
+    }
 </script>
 
 <div class="page-wrapper">
@@ -187,6 +192,7 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                                     <table class="table table-responsive " id="tbl_articulos" style="width:100%">
                                         <thead>
                                             <tr>
+                                                <th>Imagen</th>
                                                 <th>SKU</th>
                                                 <th>Descripción</th>
                                                 <th>Modelo</th>
@@ -256,6 +262,29 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
                 <button class="btn btn-primary btn-sm" onclick="importar()"><i class="bx bx-sync"></i>Importar</button>
             </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="modal_imagen" tabindex="-1" aria-labelledby="modal_imagen_label" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title" id="modal_imagen_label">Vista de Imagen</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+
+            <div class="modal-body text-center">
+                <img id="imagen_modal_contenido" src="" alt="Imagen" class="img-fluid rounded" style="max-width:300px;">
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+
         </div>
     </div>
 </div>

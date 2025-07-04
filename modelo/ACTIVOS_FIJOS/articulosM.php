@@ -43,31 +43,51 @@ class articulosM
 
 		$primaryKey = 'id';
 
+		$ruta = $_SESSION['INICIO']['RUTA_IMG_RELATIVA'];
+		$empresa = $_SESSION['INICIO']['BASEDATO'];
+
+		$ruta_img = $ruta . "emp=$empresa&dir=activos&nombre=";
+
 		$columns = array(
-			array('db' => 'tag', 'dt' => 0),            // Tag Serie
+			// Aquí pones la imagen en la columna 0
+			array(
+				'db' => 'imagen',
+				'dt' => 0,
+				'formatter' => function ($d, $row) use ($ruta_img) {
+					$ruta_completa = $ruta_img . $row['imagen'];
+					$id = $row['id'];
+					return '<img src="' . $ruta_completa . '" 
+                 alt="'. $row['nom'] .'" 
+                 style="width:50px;height:auto;cursor:pointer;" 
+				 class="rounded" 
+                 onclick="modal_ver_imagen(\'' . $ruta_completa . '\', \'' . $id . '\')">';
+				}
+
+			),
+			array('db' => 'tag', 'dt' => 1),               // Tag Serie
 			array(
 				'db' => 'nom',
-				'dt' => 1,
+				'dt' => 2,
 				'formatter' => function ($d, $row) {
-					// Redirigir con el ID
 					return '<a type="button" href="#" onclick="redireccionar(' . "'" . $row['id'] . "'" . ')"><u>' . $row['nom'] . '</u></a>';
 				}
 			),
-			array('db' => 'modelo', 'dt' => 2),         // Modelo
-			array('db' => 'serie', 'dt' => 3),          // Serie
-			array('db' => 'RFID', 'dt' => 4),           // RFID
-			array('db' => 'localizacion', 'dt' => 5),   // Localización
-			array('db' => 'custodio', 'dt' => 6),       // Custodio
-			array('db' => 'marca', 'dt' => 7),          // Marca
-			array('db' => 'estado', 'dt' => 8),         // Estado
-			array('db' => 'genero', 'dt' => 9),         // Género
-			array('db' => 'color', 'dt' => 10),         // Color
-			array('db' => 'fecha_in', 'dt' => 11),      // Fecha Inv.
-			array('db' => 'observacion', 'dt' => 12),   // Observación
-			array('db' => 'id', 'dt' => 13),			//id del articulo
-			array('db' => 'tipo_articulo', 'dt' => 14),	//Tipo de articulo
-			array('db' => 'tipo_articulo_COLOR', 'dt' => 15),	//Tipo de articulo COLOR
+			array('db' => 'modelo', 'dt' => 3),            // Modelo
+			array('db' => 'serie', 'dt' => 4),             // Serie
+			array('db' => 'RFID', 'dt' => 5),              // RFID
+			array('db' => 'localizacion', 'dt' => 6),      // Localización
+			array('db' => 'custodio', 'dt' => 7),          // Custodio
+			array('db' => 'marca', 'dt' => 8),             // Marca
+			array('db' => 'estado', 'dt' => 9),            // Estado
+			array('db' => 'genero', 'dt' => 10),           // Género
+			array('db' => 'color', 'dt' => 11),            // Color
+			array('db' => 'fecha_in', 'dt' => 12),         // Fecha Inv.
+			array('db' => 'observacion', 'dt' => 13),      // Observación
+			array('db' => 'id', 'dt' => 14),               // id del artículo
+			array('db' => 'tipo_articulo', 'dt' => 15),    // Tipo de artículo
+			array('db' => 'tipo_articulo_COLOR', 'dt' => 16) // Tipo de artículo COLOR
 		);
+
 
 		$whereResult = ""; //"nom LIKE '%computadora%'"; //"nom LIKE '%computadora%'"; // Condición dinámica
 
