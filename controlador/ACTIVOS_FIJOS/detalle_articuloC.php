@@ -285,6 +285,9 @@ class detalle_articuloC
 			array('campo' => 'fecha_referencia', 'dato' => $parametros['txt_fecha']),
 			array('campo' => 'fecha_contabilizacion', 'dato' => $parametros['txt_compra']),
 			array('campo' => 'es_it', 'dato' => $parametros['cbx_detalle_it']),
+			array('campo' => 'lote_1', 'dato' => $parametros['txt_valor_lote_1']),
+			array('campo' => 'lote_2', 'dato' => $parametros['txt_valor_lote_2']),
+			array('campo' => 'lote_3', 'dato' => $parametros['txt_valor_lote_3']),
 			// array('campo' => 'id_rubro', 'dato' => $parametros['']),
 		);
 

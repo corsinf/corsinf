@@ -450,7 +450,7 @@ if (isset($_GET['_id'])) {
     $('#lbl_valor_residual').text(data.text_valor_residual);
     $('#lbl_vida_util').text(data.text_vida_utill + " años");
 
-   
+
 
   }
 
@@ -587,9 +587,16 @@ if (isset($_GET['_id'])) {
 
     }
 
+     $('#txt_valor_lote_1').val(data.lote_1);
+     $('#txt_valor_lote_2').val(data.lote_2);
+     $('#txt_valor_lote_3').val(data.lote_3);
+
   }
 
   function guardar_articulo() {
+
+    let valor = $('input[name="rbx_lote_tipo"]:checked').val();
+
     var parametros = {
       'idAr': $('#txt_id').val(),
       'movimiento': $('#ddl_clase_mov option:selected').text(),
@@ -630,6 +637,9 @@ if (isset($_GET['_id'])) {
       'txt_carac': $('#txt_carac').val(),
       'txt_observacion': $('#txt_observacion').val(),
       'cbx_detalle_it': $('#cbx_detalle_it').is(':checked') ? 1 : 0,
+      'txt_valor_lote_1': $('#txt_valor_lote_1').val(),
+      'txt_valor_lote_2': $('#txt_valor_lote_2').val(),
+      'txt_valor_lote_3': $('#txt_valor_lote_3').val(),
     };
 
     // console.log(parametros);
@@ -1502,9 +1512,24 @@ if (isset($_GET['_id'])) {
                       </div>
 
                       <hr>
+                      <div class="row mb-col">
 
-                      <div class="d-flex justify-content-end pt-2">
-                        <button class="btn btn-success btn-sm px-4 m-0" onclick="guardar_articulo();" type="button"><i class="bx bx-save"></i> Guardar</button>
+                        <div class="col-sm-4">
+                          <label for="txt_valor_lote_1" class="form-label">Lote 1</label>
+                          <input type="text" class="form-control form-control-sm" name="txt_valor_lote_1" id="txt_valor_lote_1" maxlength="255">
+                        </div>
+                        <div class="col-sm-4">
+                          <label for="txt_valor_lote_2" class="form-label">Lote 2</label>
+                          <input type="text" class="form-control form-control-sm" name="txt_valor_lote_2" id="txt_valor_lote_2" maxlength="255">
+                        </div>
+                        <div class="col-sm-4">
+                          <label for="txt_valor_lote_3" class="form-label">Lote 3</label>
+                          <input type="text" class="form-control form-control-sm" name="txt_valor_lote_3" id="txt_valor_lote_3" maxlength="255">
+                        </div>
+
+                        <div class="d-flex justify-content-end pt-2">
+                          <button class="btn btn-success btn-sm px-4 m-0" onclick="guardar_articulo();" type="button"><i class="bx bx-save"></i> Guardar</button>
+                        </div>
                       </div>
 
                     </form>
