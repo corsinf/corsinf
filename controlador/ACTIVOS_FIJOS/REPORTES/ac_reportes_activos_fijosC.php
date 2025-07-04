@@ -4,6 +4,7 @@ require_once(dirname(__DIR__, 3) . '/modelo/ACTIVOS_FIJOS/articulosM.php');
 require_once(dirname(__DIR__, 3) . '/modelo/ACTIVOS_FIJOS/custodioM.php');
 require_once(dirname(__DIR__, 3) . '/modelo/ACTIVOS_FIJOS/localizacionM.php');
 require_once(dirname(__DIR__, 3) . '/modelo/ACTIVOS_FIJOS/ac_auditoriaM.php');
+require_once(dirname(__DIR__, 3) . '/modelo/ACTIVOS_FIJOS/ac_articulos_itM.php');
 require_once(dirname(__DIR__, 3) . '/db/codigos_globales.php');
 
 class ac_reportes_activos_fijosC
@@ -12,6 +13,7 @@ class ac_reportes_activos_fijosC
     private $custodio;
     private $localizacion;
     private $auditoria;
+    private $ac_articulos_itM;
     private $codigos_globales;
 
     public function __construct()
@@ -20,6 +22,7 @@ class ac_reportes_activos_fijosC
         $this->articulos = new articulosM();
         $this->localizacion = new localizacionM();
         $this->auditoria = new ac_auditoriaM();
+        $this->ac_articulos_itM = new ac_articulos_itM();
     }
 
     public function reporte_cedula_activo($id_articulo, $mostrar = false)
@@ -28,7 +31,9 @@ class ac_reportes_activos_fijosC
 
         $articulos = $this->articulos->listar_articulos_id($id_articulo);
 
-        return pdf_cedula_activo($articulos, $mostrar);
+        $datosArticulo_it = $this->ac_articulos_itM->where('ac_ait_id_articulo', $id_articulo)->listar();
+
+        return pdf_cedula_activo($articulos, $datosArticulo_it, $mostrar);
     }
 
     public function reporte_auditoria_articulos($id_persona, $id_localizacion, $id_empresa,  $mostrar = false)
