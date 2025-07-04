@@ -3,6 +3,7 @@
 
     function guarda_detalles_it() {
         // Recojo los valores uno a uno
+        $('#cbx_detalle_it').prop('checked', true).prop('disabled', true);
         let formData = new FormData($('#form_detalle_it')[0]);
         $.ajax({
             url: '../controlador/ACTIVOS_FIJOS/ac_articulo_itC.php?guardar=true',
@@ -126,7 +127,7 @@
 
             <!-- Botón -->
             <div class="col-sm-12 text-end mt-2">
-                <button class="btn btn-primary btn-sm" type="button" onclick="guarda_detalles_it()">Guardar</button>
+               <button class="btn btn-primary btn-sm" type="submit">Guardar</button>
             </div>
         </div>
     </form>
@@ -134,73 +135,86 @@
 </div>
 <script>
     $(document).ready(function() {
+        // Agrega método personalizado para validar dirección IP
+        $.validator.addMethod("ipv4", function(value) {
+            return /^(25[0-5]|2[0-4]\d|1\d{2}|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d{2}|[1-9]?\d)){3}$/.test(value);
+        }, "Ingrese una dirección IP válida.");
+
+        // Agrega método personalizado para validar dirección MAC
+        $.validator.addMethod("mac", function(value) {
+            return /^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$/.test(value);
+        }, "Ingrese una dirección MAC válida (ej: 00:11:22:33:44:55)");
+
+        // Validación del formulario
         $("#form_detalle_it").validate({
             rules: {
                 txt_sistema_op: {
-                    required: true,
+                    required: true
                 },
                 txt_arquitectura: {
-                    required: true,
+                    required: true
                 },
                 txt_kernel: {
-                    required: true,
+                    required: true
                 },
                 txt_producto_id: {
-                    required: true,
+                    required: true
                 },
                 txt_mac_address: {
                     required: true,
+                    mac: true
                 },
                 txt_version: {
-                    required: true,
+                    required: true
                 },
                 txt_service_pack: {
-                    required: true,
+                    required: true
                 },
                 txt_edicion: {
-                    required: true,
+                    required: true
                 },
                 txt_serie_numbre: {
-                    required: true,
+                    required: true
                 },
                 txt_ip_address: {
                     required: true,
+                    ipv4: true
                 }
             },
-
             messages: {
                 txt_sistema_op: {
-                    required: "Ingrese el Sistema Operativo.",
+                    required: "Ingrese el Sistema Operativo."
                 },
                 txt_arquitectura: {
-                    required: "Ingrese la arquitectura.",
+                    required: "Ingrese la arquitectura."
                 },
                 txt_kernel: {
-                    required: "Ingrese la versión del kernel.",
+                    required: "Ingrese la versión del kernel."
                 },
                 txt_producto_id: {
-                    required: "Ingrese el ID del producto.",
+                    required: "Ingrese el ID del producto."
                 },
                 txt_mac_address: {
                     required: "Ingrese la dirección MAC.",
+                    mac: "Formato de MAC inválido (ej: 00:11:22:33:44:55)"
                 },
                 txt_version: {
-                    required: "Ingrese la versión.",
+                    required: "Ingrese la versión."
                 },
                 txt_service_pack: {
-                    required: "Ingrese el service pack.",
+                    required: "Ingrese el service pack."
                 },
                 txt_edicion: {
-                    required: "Ingrese la edición.",
+                    required: "Ingrese la edición."
                 },
                 txt_serie_numbre: {
-                    required: "Ingrese el número de serie.",
+                    required: "Ingrese el número de serie."
                 },
                 txt_ip_address: {
                     required: "Ingrese la dirección IP.",
+                    ipv4: "Formato de IP inválido (ej: 192.168.1.1)"
                 }
             },
-
             highlight: function(element) {
                 $(element).addClass('is-invalid').removeClass('is-valid');
             },
@@ -208,9 +222,8 @@
                 $(element).removeClass('is-invalid').addClass('is-valid');
             },
             submitHandler: function(form) {
-                guarda_detalles_it(); // llama a tu función si es válida
+                guarda_detalles_it(); // solo se llama si es válido
             }
         });
-
     });
 </script>

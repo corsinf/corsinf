@@ -450,10 +450,7 @@ if (isset($_GET['_id'])) {
     $('#lbl_valor_residual').text(data.text_valor_residual);
     $('#lbl_vida_util').text(data.text_vida_utill + " años");
 
-    if (data.es_kit == 1) {
-      $('#cbx_kit_cointainer').show();
-      $('#cbx_kit').show();
-    }
+   
 
   }
 
@@ -574,7 +571,7 @@ if (isset($_GET['_id'])) {
     $('#txt_ac_ait_sku').val(data.tag_s);
 
     if (data.es_kit == 1) {
-      $('#cbx_kit_cointainer').hide();
+      $('#cbx_kit').prop('checked', true).prop('disabled', true);
       $('#nav_kit_interno').show();
     } else {
       $('#cbx_kit_cointainer').show();
@@ -583,16 +580,16 @@ if (isset($_GET['_id'])) {
 
     if (data.es_it == 1) {
       $('#nav_detalle_it').show();
-      $('#cbx_detalle_it_cointainer').hide();
+      $('#cbx_detalle_it').prop('checked', true).prop('disabled', true);
     } else {
       $('#nav_detalle_it').hide();
       $('#cbx_detalle_it_cointainer').show();
+
     }
 
   }
 
   function guardar_articulo() {
-
     var parametros = {
       'idAr': $('#txt_id').val(),
       'movimiento': $('#ddl_clase_mov option:selected').text(),
