@@ -62,6 +62,10 @@ if ($_GET['acc'] == 'lista_formatos') {
     include('ACTIVOS_FIJOS/lista_formatos.php');
 }
 
+if ($_GET['acc'] == 'ac_descarga_lotes') {
+    include('ACTIVOS_FIJOS/REPORTES/ac_descarga_lotes.php');
+}
+
 
 
 /**
@@ -92,11 +96,6 @@ if ($_GET['acc'] == 'custodio') {
 
 if ($_GET['acc'] == 'custodio_detalle') {
     include('ACTIVOS_FIJOS/PERSONAS/ac_custodio_detalle.php');
-}
-
-
-if ($_GET['acc'] == 'cargar_lotes') {
-    include('ACTIVOS_FIJOS/REPORTES/cargar_lotes.php');
 }
 
 /**

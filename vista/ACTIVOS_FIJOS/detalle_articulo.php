@@ -126,7 +126,7 @@ if (isset($_GET['_id'])) {
     //---------------------------------
     $('#ddl_localizacion').on('select2:select', function(e) {
       var data = e.params.data.data;
-      $('#lbl_sap_loc').text('Código:' + data.EMPLAZAMIENTO)
+      $('#lbl_sap_loc').text('Código:' + data.DENOMINACION)
       // console.log(data);
     });
 
@@ -382,8 +382,8 @@ if (isset($_GET['_id'])) {
     $('#id_articulo').val(data.id_A);
     $('#txt_id_articulo').val(data.id_A);
     $('#lbl_descripcion2').text(data.des ?? '');
-    $('#lbl_localizacion1').html(`<b>Emplazamiento / Localización</b> | <label style="font-size:65%"> Código: ${data.c_loc}</label>`);
-    $('#lbl_localizacion').text(data.loc_nom);
+    $('#lbl_localizacion1').html(`<b>Emplazamiento / Localización</b> | <label style="font-size:65%"> Código: ${data.loc_nom}</label>`);
+    $('#lbl_localizacion').text(data.c_loc);
 
     $('#lbl_custodio1').html(`<b>Custodio:</b> | <label style="font-size:65%"> Código: ${data.person_ci}</label>`);
     $('#lbl_custodio').text(data.person_nom);
@@ -448,7 +448,7 @@ if (isset($_GET['_id'])) {
 
     $('#lbl_valor_activo').text(data.prec);
     $('#lbl_valor_residual').text(data.text_valor_residual);
-    $('#lbl_vida_util').text(data.text_vida_utill + " años");
+    $('#lbl_vida_util').text((data.text_vida_utill || 0) + " años");
 
 
 
@@ -472,7 +472,7 @@ if (isset($_GET['_id'])) {
 
     $('#txt_subno').val(data.subnum);
     $('#txt_cant').val(data.cant);
-    $('#txt_valor').val(data.prec);
+    $('#txt_valor').val(data.prec || 0);
     $('#txt_maximo').val(data.max);
     $('#txt_minimo').val(data.min);
     $('#txt_modelo').val(data.mod);
@@ -491,7 +491,7 @@ if (isset($_GET['_id'])) {
 
     $('#ddl_localizacion').append($('<option>', {
       value: data.id_loc,
-      text: data.loc_nom,
+      text: data.c_loc,
       selected: true
     }));
 
@@ -587,9 +587,9 @@ if (isset($_GET['_id'])) {
 
     }
 
-     $('#txt_valor_lote_1').val(data.lote_1);
-     $('#txt_valor_lote_2').val(data.lote_2);
-     $('#txt_valor_lote_3').val(data.lote_3);
+    $('#txt_valor_lote_1').val(data.lote_1);
+    $('#txt_valor_lote_2').val(data.lote_2);
+    $('#txt_valor_lote_3').val(data.lote_3);
 
   }
 

@@ -18,9 +18,3 @@ if (isset($_GET['reporte_auditoria_articulos'])) {
 if (isset($_GET['reporte_articulos_custodio_localizacion'])) {
     ($reporte->reporte_articulos_custodio_localizacion($_GET['id_persona'] ?? '', $_GET['id_localizacion'] ?? '', $_GET['id_empresa'] ?? ''));
 }
-
-//Para la descarga 
-
-if (isset($_GET['cargar_lotes'])) {
-    echo json_encode($descargas->cargar_lotes());
-}

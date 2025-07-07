@@ -143,10 +143,10 @@ class detalle_articuloC
 
 	function lista_detalle_articulo($id, $pag)
 	{
-		$datos = $this->modelo->lista_detalle_articulo($id, $pag);
+		// $datos = $this->modelo->lista_detalle_articulo($id, $pag);
 		// print_r(count($datos));
 		// $resultado =  array('datos' => $datos,'num'=>count($datos));
-		return $datos;
+		// return $datos;
 	}
 
 	function buscar_colores($query)
@@ -555,6 +555,10 @@ class detalle_articuloC
 			array('campo' => 'fecha_contabilizacion', 'dato' => $parametros['txt_compra'], 'label' => 'FECHA DE COMPRA', 'tipo' => 'fecha'),
 
 			array('campo' => 'es_it', 'dato' => $parametros['cbx_detalle_it'], 'label' => 'IT', 'tipo' => 'texto'),
+
+			array('campo' => 'lote_1', 'dato' => $parametros['txt_valor_lote_1'], 'label' => 'Lote 1', 'tipo' => 'texto'),
+			array('campo' => 'lote_2', 'dato' => $parametros['txt_valor_lote_2'], 'label' => 'Lote 2', 'tipo' => 'texto'),
+			array('campo' => 'lote_3', 'dato' => $parametros['txt_valor_lote_3'], 'label' => 'Lote 3', 'tipo' => 'texto'),
 		);
 
 

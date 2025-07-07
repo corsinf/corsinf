@@ -32,33 +32,27 @@
             url_descargaLoteC = '../controlador/ACTIVOS_FIJOS/REPORTES/ac_descargasC.php?lista_drop=true&lote=' + loteSeleccionado;
             cargar_select2_url('ddl_lote', url_descargaLoteC, '-- Seleccione --');
         });
+        $('#btn_descargar_lote').on('click', descargar_lote);
     });
 
-    function guardar_descarga_lote() {
-        // Recolectar valores del formulario
-        var parametros = {
-            'tipo_lote': $('input[name="rbx_lote_tipo"]:checked').val(),
-            'lote_seleccionado': $('#ddl_lote').val(),
-            'tipo_carga': $('input[name="rbx_tipo_carga"]:checked').val()
-        };
-
-        // Validar el formulario antes de enviar
+    function descargar_lote() {
         if ($("#form_descarga_lote").valid()) {
-            $.ajax({
-                url: '../controlador/ACTIVOS_FIJOS/REPORTES/ac_descargasC.php?parametros_lote=true',
-                type: 'POST',
-                dataType: 'json',
-                data: {
-                    parametros: parametros
-                },
-                success: function(response) {
-                    if (response) {
-                        Swal.fire('Éxito Descarga iniciada correctamente.', 'success');
-                    } 
-                },
-                error: function() {
-                    Swal.fire('Error', 'Ocurrió un error al procesar la descarga.', 'error');
-                }
+            var params = {
+                'rbx_lote_tipo': $('input[name="rbx_lote_tipo"]:checked').val(),
+                'ddl_lote': $('#ddl_lote').val(),
+                'rbx_tipo_carga': $('input[name="rbx_tipo_carga"]:checked').val()
+            };
+
+            var query = $.param(params);
+            var url = '../controlador/ACTIVOS_FIJOS/REPORTES/ac_descargasC.php?descargar_pdf=true&' + query;
+
+            $('#btn_descargar_lote').attr('href', url);
+
+            Swal.fire({
+                icon: 'info',
+                title: 'Descarga lista',
+                text: 'Haz clic de nuevo en el botón para descargar.',
+                confirmButtonText: 'OK'
             });
         }
     }
@@ -79,7 +73,7 @@
                         <li class="breadcrumb-item"><a href="javascript:;"><i class="bx bx-home-alt"></i></a>
                         </li>
                         <li class="breadcrumb-item active" aria-current="page">
-                            Descargar Lote
+                            Descargas por Lote
                         </li>
                     </ol>
                 </nav>
@@ -91,23 +85,11 @@
             <div class="col-xl-12 mx-auto">
                 <div class="card border-top border-0 border-4 border-primary">
                     <div class="card-body p-5">
-                        <div class="card-title d-flex align-items-center">
 
-                            <h5 class="mb-0 text-primary"></h5>
-
-                            <div class="row mx-0">
-                            </div>
-                        </div>
-
-
-                        <div class="card-title d-flex align-items-center">
-                            <div><i class="bx bx-package me-1 font-22 text-info"></i></div>
-                            <h5 class="mb-0 text-info">Selección de Lote</h5>
-                        </div>
                         <form id="form_descarga_lote">
                             <section class="content pt-2">
                                 <!-- Radio buttons para seleccionar tipo de lote -->
-                                <div class="row mb-3">
+                                <div class="row mb-col">
                                     <div class="col-12">
                                         <div class="d-flex gap-4">
                                             <div class="form-check">
@@ -127,7 +109,7 @@
                                 </div>
 
                                 <!-- Selector de lote + botón de descarga en la misma fila -->
-                                <div class="row align-items-end mb-3">
+                                <div class="row align-items-end mb-col">
                                     <div class="col-lg-6 col-md-8 col-sm-12">
                                         <label for="ddl_lote" class="form-label">Seleccionar Lote <span class="text-danger">*</span></label>
                                         <select class="form-select form-select-sm" name="ddl_lote" id="ddl_lote">
@@ -135,14 +117,15 @@
                                         </select>
                                     </div>
                                     <div class="col-lg-6 col-md-4 col-sm-12 ">
-                                        <button class="btn btn-primary btn-sm" type="submit">
+                                        <a class="btn btn-primary btn-sm" id="btn_descargar_lote" target="_blank">
                                             <i class="bx bx-download"></i> Descargas
-                                        </button>
+                                        </a>
+
                                     </div>
                                 </div>
 
                                 <!-- Radio para tipo de carga: Individual o Masiva -->
-                                <div class="row mt-3">
+                                <div class="row mb-col">
                                     <div class="col-12">
                                         <div class="d-flex gap-4">
                                             <div class="form-check">
@@ -205,10 +188,6 @@
             unhighlight: function(element) {
                 $(element).removeClass("is-invalid").addClass("is-valid");
             },
-            submitHandler: function(form) {
-                guardar_descarga_lote();
-                return false;
-            }
         });
     });
 </script>
