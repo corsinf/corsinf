@@ -118,7 +118,7 @@
                                     </div>
                                     <div class="col-lg-6 col-md-4 col-sm-12 ">
                                         <a class="btn btn-primary btn-sm" id="btn_descargar_lote" target="_blank">
-                                            <i class="bx bx-download"></i> Descargas
+                                            <i class="bx bx-download"></i> Descargar
                                         </a>
 
                                     </div>
