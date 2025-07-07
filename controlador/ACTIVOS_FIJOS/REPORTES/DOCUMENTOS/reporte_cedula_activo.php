@@ -1,37 +1,38 @@
  <?php
     require_once(dirname(__DIR__, 4) . '/lib/TCPDF/tcpdf.php');
 
-
-    function pdf_cedula_activo($articulos, $datos_articulo_it, $mostrar = false)
+    function pdf_cedula_activo($articulos, $datos_articulo_it, $mostrar = false, $local = false, $pdf = null)
     {
 
-        $pdf = new TCPDF('P', 'mm', 'A4', true, 'UTF-8', false);
-
+        $nuevo_pdf = false;
         $ruta = $_SESSION['INICIO']['RUTA_IMG_RELATIVA'];
         $empresa = $_SESSION['INICIO']['BASEDATO'];
 
         $ruta_img = $ruta . "emp=$empresa&dir=activos&nombre=" .  $articulos[0]['imagen'];
 
+        if (!$pdf) {
+            $pdf = new TCPDF('P', 'mm', 'A4', true, 'UTF-8', false);
 
 
-        // Configurar documento
-        $pdf->SetCreator('TCPDF');
-        $pdf->SetAuthor('CORSINF');
-        $pdf->SetTitle('Cédula de Activo Fijo');
-        $pdf->SetSubject('Cédula de Activo Fijo');
-        $pdf->SetMargins(10, 15, 10);
-        $pdf->SetAutoPageBreak(true, 15);
-        $pdf->setFillColor(249, 254, 247);
+            // Configurar documento
+            $pdf->SetCreator('TCPDF');
+            $pdf->SetAuthor('CORSINF');
+            $pdf->SetTitle('Cédula de Activo Fijo');
+            $pdf->SetSubject('Cédula de Activo Fijo');
+            $pdf->SetMargins(10, 15, 10);
+            $pdf->SetAutoPageBreak(true, 15);
+            $pdf->setFillColor(249, 254, 247);
 
-        // Eliminar cabecera/pie de página por defecto
-        $pdf->setPrintHeader(false);
-        $pdf->setPrintFooter(false);
+            // Eliminar cabecera/pie de página por defecto
+            $pdf->setPrintHeader(false);
+            $pdf->setPrintFooter(false);
+
+            $nuevo_pdf = true;
+        }
+
 
         // Añadir página
         $pdf->AddPage();
-
-        // Configurar fuentes y colores
-
 
         // Ruta del logo
         $ruta_logo = dirname(__DIR__, 4) . '/img/de_sistema/corsinf_letras_1.png';
@@ -85,9 +86,6 @@
         $pdf->Cell(30, 5, 'Custodio', 1, 0, 'C');
         letra_estilo_normal($pdf);
         $pdf->Cell(160, 5, $articulos[0]['custodio'], 1, 1, 'C');
-
-
-
 
         $pdf->Ln(5);
 
@@ -238,42 +236,84 @@
 
         $img_url = $ruta_img;
 
-        // Establecer altura deseada en milímetros (por ejemplo, 30 mm)
         $fixed_height = 50;
 
-        // Obtener tamaño real de la imagen en píxeles
-        $img_info = getimagesize($img_url);
-        $img_px_width = $img_info[0];
-        $img_px_height = $img_info[1];
+        $img_info = @getimagesize($img_url);
 
-        // Calcular proporción ancho/alto
-        $aspect_ratio = $img_px_width / $img_px_height;
+        if ($img_info !== false) {
+            // Tamaño real en píxeles
+            $img_px_width = $img_info[0];
+            $img_px_height = $img_info[1];
 
-        // Calcular ancho proporcional en milímetros
-        $img_mm_width = $fixed_height * $aspect_ratio;
+            $aspect_ratio = $img_px_width / $img_px_height;
 
-        // Obtener ancho total de la página
-        $page_width = $pdf->getPageWidth();
+            $img_mm_width = $fixed_height * $aspect_ratio;
 
-        // Calcular X para centrar horizontalmente
-        $x = ($page_width - $img_mm_width) / 2;
-        $y = $pdf->GetY(); // Mantener la altura actual
+            $page_width = $pdf->getPageWidth();
 
-        // Insertar imagen con altura fija y ancho proporcional, centrada horizontalmente
-        $pdf->Image($img_url, $x, $y, $img_mm_width, $fixed_height, 'GIF');
+            $x = ($page_width - $img_mm_width) / 2;
+            $y = $pdf->GetY(); // Altura actual
 
-
-        // Nombre del archivo
-        $fileName = 'cedula_activo_' . 'SKU_' . time() . '.pdf';
-        ob_end_clean();
-
-
-        if ($mostrar == true) {
-            $pdf->Output($fileName, 'D');
+            // Insertar imagen
+            $pdf->Image($img_url, $x, $y, $img_mm_width, $fixed_height, 'GIF');
         } else {
-            $pdf->Output($fileName, 'I');
+            $pdf->Cell(0, 10, 'Imagen no disponible', 0, 1, 'C');
+        }
+
+
+        // Si este método creó el PDF, hacer la salida
+        if ($nuevo_pdf) {
+            // Limpiar buffer si hay contenido previo
+            if (ob_get_length()) {
+                ob_end_clean();
+            }
+
+            // Nombre del archivo
+            $fileName = 'cedula_activo_' . 'SKU_' . $articulos[0]['tag'] . '.pdf';
+
+            if ($local) {
+                $pdf->Output($local, 'F');
+            } elseif ($mostrar == true) {
+                $pdf->Output($fileName, 'D');
+            } else {
+                $pdf->Output($fileName, 'I');
+            }
         }
     }
+
+    function crear_pdf_todo_en_uno($ids_articulos, $articulos_array, $datos_it_array)
+    {
+        // Crear instancia global de TCPDF
+        $pdf = new TCPDF('P', 'mm', 'A4', true, 'UTF-8', false);
+        $pdf->SetCreator('TCPDF');
+        $pdf->SetAuthor('CORSINF');
+        $pdf->SetTitle('Cédulas de Activos Masivo');
+        $pdf->SetMargins(10, 15, 10);
+        $pdf->SetAutoPageBreak(true, 15);
+        $pdf->setFillColor(249, 254, 247);
+        $pdf->setPrintHeader(false);
+        $pdf->setPrintFooter(false);
+
+        // Recorre cada ID y su información
+        foreach ($ids_articulos as $idx => $id) {
+            // Obtener los datos correspondientes
+            $articulos = $articulos_array[$idx];
+            $datos_it = $datos_it_array[$idx];
+
+            // Agregar la página al PDF
+            pdf_cedula_activo($articulos, $datos_it, false, false, $pdf);
+        }
+
+        // Descargar el PDF único
+        if (ob_get_length()) {
+            ob_end_clean();
+        }
+
+        $nombreArchivo = 'cedulas_activos_masivo_' . date('Ymd_His') . '.pdf';
+        $pdf->Output($nombreArchivo, 'D');
+        exit;
+    }
+
 
 
     function letra_estilo_negrita($pdf)

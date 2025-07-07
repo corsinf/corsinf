@@ -62,6 +62,10 @@ if ($_GET['acc'] == 'lista_formatos') {
     include('ACTIVOS_FIJOS/lista_formatos.php');
 }
 
+if ($_GET['acc'] == 'ac_descarga_lotes') {
+    include('ACTIVOS_FIJOS/REPORTES/ac_descarga_lotes.php');
+}
+
 
 
 /**
