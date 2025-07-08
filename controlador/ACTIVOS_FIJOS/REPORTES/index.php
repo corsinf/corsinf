@@ -1,9 +1,10 @@
 <?php
 
 require_once 'ac_reportes_activos_fijosC.php';
+require_once 'ac_descargasC.php';
 
 $reporte = new ac_reportes_activos_fijosC();
-
+$descargas = new ac_descargasC();
 
 
 if (isset($_GET['ac_reporte_cedula_activo'])) {

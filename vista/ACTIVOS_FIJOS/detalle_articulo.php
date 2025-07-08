@@ -50,6 +50,28 @@ if (isset($_GET['_id'])) {
 
 <script type="text/javascript">
   $(document).ready(function() {
+
+    //$('#cbx_detalle_it').prop('disabled', true);
+
+    $('#cbx_detalle_it').change(function() {
+      if ($(this).is(':checked')) {
+        $('#nav_detalle_it').show(); // Mostrar el div si está checkeado
+        $('#is_it_estado').show(); // Mostrar el div si está checkeado
+
+      } else {
+        $('#nav_detalle_it').hide(); // Ocultar el div si está desmarcado
+        $('#is_it_estado').hide(); // Mostrar el div si está checkeado
+
+      }
+
+    });
+    $('#cbx_kit').change(function() {
+      if ($(this).is(':checked')) {
+        $('#nav_kit_interno').show(); // Mostrar el div si está checkeado
+      } else {
+        $('#nav_kit_interno').hide(); // Ocultar el div si está desmarcado
+      }
+    });
     // navegacion();
     validar_datos();
 
@@ -104,7 +126,7 @@ if (isset($_GET['_id'])) {
     //---------------------------------
     $('#ddl_localizacion').on('select2:select', function(e) {
       var data = e.params.data.data;
-      $('#lbl_sap_loc').text('Código:' + data.EMPLAZAMIENTO)
+      $('#lbl_sap_loc').text('Código:' + data.DENOMINACION)
       // console.log(data);
     });
 
@@ -188,14 +210,14 @@ if (isset($_GET['_id'])) {
 
   function calcula_depreciacion() {
     // Obtener el texto dentro de los elementos y convertirlo
-    let valor_activo = parseFloat($('#lbl_valor_activo').text()) || 0;
-    let valor_residual = parseFloat($('#lbl_valor_residual').text()) || 0;
-    let vida_util = parseInt($('#lbl_vida_util').text()) || 0;
+    let text_valor_activo = parseFloat($('#lbl_valor_activo').text()) || 0;
+    let text_valor_residual = parseFloat($('#lbl_valor_residual').text()) || 0;
+    let text_vida_utill = parseInt($('#lbl_vida_util').text()) || 0;
 
 
     // Ejemplo: calcular depreciación lineal anual
-    if (vida_util > 0) {
-      let depreciacion_anual = (valor_activo - valor_residual) / vida_util;
+    if (text_vida_utill > 0) {
+      let depreciacion_anual = (text_valor_activo - text_valor_residual) / text_vida_utill;
       $('#lbl_total_depreciacion').text(depreciacion_anual.toFixed(2));
     } else {
       $('#lbl_total_depreciacion').text("La vida útil debe ser mayor que cero.")
@@ -205,38 +227,37 @@ if (isset($_GET['_id'])) {
   function depreciacion_activo() {
     calcula_depreciacion();
 
-    const seccion = document.getElementById("seccion_depreciacion");
-    if (seccion) {
-      const offsetTop = seccion.getBoundingClientRect().top + window.pageYOffset - 80; // 80 píxeles arriba por ejemplo
-      window.scrollTo({
-        top: offsetTop,
-        behavior: 'smooth'
-      });
+    const $seccion = $('#seccion_depreciacion');
+    if ($seccion.length) {
+      $('html, body').animate({
+        scrollTop: $seccion.offset().top - 80
+      }, 600); // 600 ms de animación (puedes ajustar)
     }
   }
 
-  function abrirModalDepreciacion() {
-    let valor_activo = parseFloat($('#lbl_valor_activo').text()) || 0;
-    let valor_residual = parseFloat($('#lbl_valor_residual').text()) || 0;
-    let vida_util = parseInt($('#lbl_vida_util').text()) || 0;
+
+  function abrir_modal_depreciacion() {
+    let text_valor_activo = parseFloat($('#lbl_valor_activo').text()) || 0;
+    let text_valor_residual = parseFloat($('#lbl_valor_residual').text()) || 0;
+    let text_vida_utill = parseInt($('#lbl_vida_util').text()) || 0;
     let id_articulo = $('#id_articulo').val(); // este debe estar bien cargado antes
 
-    $('#edit_valor_activo').val(valor_activo);
-    $('#edit_valor_residual').val(valor_residual);
-    $('#edit_vida_util').val(vida_util);
+    $('#edit_valor_activo').val(text_valor_activo);
+    $('#edit_valor_residual').val(text_valor_residual);
+    $('#edit_vida_util').val(text_vida_utill);
     $('#edit_id_articulo').val(id_articulo); // este es el que va al modal
 
     $('#modalDepreciacion').modal('show');
   }
 
 
-  function guardarDepreciacion() {
+  function guardar_depreciacion() {
 
     const form = document.getElementById('form_depreciacion');
     const formData = new FormData(form);
 
     $.ajax({
-      url: '../controlador/ACTIVOS_FIJOS/detalle_articuloC.php?actualizarDatosArticulo=true',
+      url: '../controlador/ACTIVOS_FIJOS/detalle_articuloC.php?actualizarDatosArticuloDepreciacion=true',
       type: 'POST',
       data: formData,
       contentType: false,
@@ -359,9 +380,10 @@ if (isset($_GET['_id'])) {
   function cargar_articulo_vista_pnl(data) {
     $('#lbl_descripcion').text(data.nom);
     $('#id_articulo').val(data.id_A);
+    $('#txt_id_articulo').val(data.id_A);
     $('#lbl_descripcion2').text(data.des ?? '');
-    $('#lbl_localizacion1').html(`<b>Emplazamiento / Localización</b> | <label style="font-size:65%"> Código: ${data.c_loc}</label>`);
-    $('#lbl_localizacion').text(data.loc_nom);
+    $('#lbl_localizacion1').html(`<b>Emplazamiento / Localización</b> | <label style="font-size:65%"> Código: ${data.loc_nom}</label>`);
+    $('#lbl_localizacion').text(data.c_loc);
 
     $('#lbl_custodio1').html(`<b>Custodio:</b> | <label style="font-size:65%"> Código: ${data.person_ci}</label>`);
     $('#lbl_custodio').text(data.person_nom);
@@ -425,14 +447,17 @@ if (isset($_GET['_id'])) {
     }
 
     $('#lbl_valor_activo').text(data.prec);
-    $('#lbl_valor_residual').text(data.valor_residual);
-    $('#lbl_vida_util').text(data.vida_util + " años");
+    $('#lbl_valor_residual').text(data.text_valor_residual);
+    $('#lbl_vida_util').text((data.text_vida_utill || 0) + " años");
+
+
+
   }
 
   function cargar_articulo_editar_pnl(data) {
     $('#cbx_kit').prop('checked', data.es_kit === "1");
-    $('input[name="rbl_tip_articulo"][value="' + data.id_tipo_articulo + '"]').prop('checked', true);
-    console.log(data.id_tipo_articulo);
+    cargar_tipo_articulo(data.id_tipo_articulo);
+    // console.log(data.id_tipo_articulo);
 
     $('input[name="rbl_asset"][value="' + data.longitud_rfid + '"]').prop('checked', true);
 
@@ -447,7 +472,7 @@ if (isset($_GET['_id'])) {
 
     $('#txt_subno').val(data.subnum);
     $('#txt_cant').val(data.cant);
-    $('#txt_valor').val(data.prec);
+    $('#txt_valor').val(data.prec || 0);
     $('#txt_maximo').val(data.max);
     $('#txt_minimo').val(data.min);
     $('#txt_modelo').val(data.mod);
@@ -466,7 +491,7 @@ if (isset($_GET['_id'])) {
 
     $('#ddl_localizacion').append($('<option>', {
       value: data.id_loc,
-      text: data.loc_nom,
+      text: data.c_loc,
       selected: true
     }));
 
@@ -541,11 +566,36 @@ if (isset($_GET['_id'])) {
     $('#lbl_sap_mar').text('Código:' + data.c_mar);
     $('#lbl_sap_pro').text('Código:' + data.c_pro);
     $('#lbl_sap_gen').text('Código:' + data.c_gen);
-    $('#lbl_sap_loc').text('Código:' + data.c_loc);
+    $('#lbl_sap_loc').text('Código:' + data.loc_nom);
     $('#lbl_sap_custodio').text('Código:' + data.person_ci);
+    $('#txt_ac_ait_sku').val(data.tag_s);
+
+    if (data.es_kit == 1) {
+      $('#cbx_kit').prop('checked', true).prop('disabled', true);
+      $('#nav_kit_interno').show();
+    } else {
+      $('#cbx_kit_cointainer').show();
+      $('#nav_kit_interno').hide();
+    }
+
+    if (data.es_it == 1) {
+      $('#nav_detalle_it').show();
+      $('#cbx_detalle_it').prop('checked', true).prop('disabled', true);
+    } else {
+      $('#nav_detalle_it').hide();
+      $('#cbx_detalle_it_cointainer').show();
+
+    }
+
+    $('#txt_valor_lote_1').val(data.lote_1);
+    $('#txt_valor_lote_2').val(data.lote_2);
+    $('#txt_valor_lote_3').val(data.lote_3);
+
   }
 
   function guardar_articulo() {
+
+    let valor = $('input[name="rbx_lote_tipo"]:checked').val();
 
     var parametros = {
       'idAr': $('#txt_id').val(),
@@ -586,6 +636,10 @@ if (isset($_GET['_id'])) {
       'txt_fecha': $('#txt_fecha').val(),
       'txt_carac': $('#txt_carac').val(),
       'txt_observacion': $('#txt_observacion').val(),
+      'cbx_detalle_it': $('#cbx_detalle_it').is(':checked') ? 1 : 0,
+      'txt_valor_lote_1': $('#txt_valor_lote_1').val(),
+      'txt_valor_lote_2': $('#txt_valor_lote_2').val(),
+      'txt_valor_lote_3': $('#txt_valor_lote_3').val(),
     };
 
     // console.log(parametros);
@@ -602,12 +656,13 @@ if (isset($_GET['_id'])) {
         dataType: 'json',
         success: function(response) {
           if (response == 1) {
-            Swal.fire('', 'Operacion realizada con éxito.', 'success');
-
             cargar_datos_articulo(id);
             cargar_tabla_movimientos();
             vista_pnl();
             limpiar_parametros_articulo();
+            // cargar_articulo_detalles_it(id);
+
+            Swal.fire('', 'Operacion realizada con éxito.', 'success');
           } else {
             Swal.fire('', 'Algo extraño ha pasado.', 'error');
           }
@@ -616,7 +671,7 @@ if (isset($_GET['_id'])) {
     }
   }
 
-  function cargar_tipo_articulo() {
+  function cargar_tipo_articulo(id_tipo_articulo = '') {
     $.ajax({
       data: {
         _id: ''
@@ -627,16 +682,17 @@ if (isset($_GET['_id'])) {
       success: function(response) {
         let radioButtons = '';
         $.each(response, function(i, item) {
+          const checked = (item._id === id_tipo_articulo) ? 'checked' : '';
           radioButtons +=
             `<div class="col-sm-auto m-0">
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" id="rbl_tip_articulo_${item._id}" name="rbl_tip_articulo" value="${item._id}">
-                    <label class="form-check-label" for="rbl_tip_articulo_${item._id}">${item.descripcion}</label>
-                </div>
-            </div>`;
+              <div class="form-check">
+                  <input class="form-check-input" type="radio" id="rbl_tip_articulo_${item._id}" name="rbl_tip_articulo" value="${item._id}" ${checked}>
+                  <label class="form-check-label" for="rbl_tip_articulo_${item._id}">${item.descripcion}</label>
+              </div>
+          </div>`;
         });
 
-        mensaje_error = `<label class="error mb-2" style="display: none;" for="rbl_tip_articulo"></label>`
+        let mensaje_error = `<label class="error mb-2" style="display: none;" for="rbl_tip_articulo"></label>`;
 
         $('#pnl_tipo_articulo').html(radioButtons + mensaje_error);
       },
@@ -1020,7 +1076,7 @@ if (isset($_GET['_id'])) {
                 <dt class="col-sm-2">Estado: &nbsp;</dt>
                 <dd class="col-sm-8" id="lbl_estado"></dd>
               </div>
-              <div class="row">
+              <div class="row" hidden>
                 <dt class="col-sm-2">Proyecto: &nbsp;</dt>
                 <dd class="col-sm-8" id="lbl_proyecto"></dd>
               </div>
@@ -1033,36 +1089,12 @@ if (isset($_GET['_id'])) {
                 <dd class="col-sm-8" id="lbl_serie"></dd>
               </div>
 
+              <div id="is_it_estado" style="display: none;">
 
+                <?php include('../vista/ACTIVOS_FIJOS/RUBROS_COMERCIALES/it_vista.php'); ?>
 
-              <div id="detalle_it" style="display:block">
                 <hr>
-                <h5 class="fw-bold">Detalles IT - Completar!</h5>
-                <dl class="row">
-                  <dt class="col-sm-3">Sistema Operativo</dt>
-                  <dd class="col-sm-9" id="lbl_sistema_op"></dd>
-
-                  <dt class="col-sm-3">Arquitectura</dt>
-                  <dd class="col-sm-9" id="lbl_arquitectura"></dd>
-
-                  <dt class="col-sm-3">Kernel</dt>
-                  <dd class="col-sm-9" id="lbl_kernel"></dd>
-
-                  <dt class="col-sm-3">Producto ID</dt>
-                  <dd class="col-sm-9" id="lbl_producto_id"></dd>
-
-                  <dt class="col-sm-3">Versión</dt>
-                  <dd class="col-sm-9" id="lbl_version"></dd>
-
-                  <dt class="col-sm-3">Service Pack</dt>
-                  <dd class="col-sm-9" id="lbl_service_pack"></dd>
-
-                  <dt class="col-sm-3">Edición</dt>
-                  <dd class="col-sm-9" id="lbl_edicion"></dd>
-                </dl>
               </div>
-
-              <hr>
               <div class="row row-cols-auto align-items-center mt-3">
                 <div class="col">
                   <label class="form-label"><b>Fecha de compra</b></label>
@@ -1076,31 +1108,31 @@ if (isset($_GET['_id'])) {
 
               <hr>
 
-              <p class="" id="lbl_caracteristicas">.</p>
-              <p class="" id="lbl_observaciones">.</p>
+              <p class="" id="lbl_caracteristicas"></p>
+              <p class="" id="lbl_observaciones"></p>
               <hr>
               <div id="seccion_depreciacion">
                 <div class="d-flex justify-content-between align-items-center mb-2">
                   <h5 class="fw-bold mb-0">Depreciación</h5>
-                  <button class="btn btn-sm btn-outline-primary" onclick="abrirModalDepreciacion()" title="Editar datos">
+                  <button class="btn btn-sm btn-outline-primary" onclick="abrir_modal_depreciacion()" title="Editar datos">
                     <i class="bx bx-pencil"></i>
                   </button>
                 </div>
                 <div class="row">
                   <dt class="col-sm-3">Valor activo: &nbsp;</dt>
-                  <dd class="col-sm-8" id="lbl_valor_activo"></dd>
+                  <dd class="col-sm-8" id="lbl_valor_activo">0</dd>
                 </div>
                 <div class="row">
                   <dt class="col-sm-3">Valor residual: &nbsp;</dt>
-                  <dd class="col-sm-8" id="lbl_valor_residual"></dd>
+                  <dd class="col-sm-8" id="lbl_valor_residual">0</dd>
                 </div>
                 <div class="row">
                   <dt class="col-sm-3">Vida útil: &nbsp;</dt>
-                  <dd class="col-sm-8" id="lbl_vida_util"></dd>
+                  <dd class="col-sm-8" id="lbl_vida_util">0</dd>
                 </div>
                 <div class="row">
                   <dt class="col-sm-3">Total depreciación: &nbsp;</dt>
-                  <dd class="col-sm-8" id="lbl_total_depreciacion"></dd>
+                  <dd class="col-sm-8" id="lbl_total_depreciacion">0</dd>
                 </div>
               </div>
 
@@ -1124,26 +1156,30 @@ if (isset($_GET['_id'])) {
                   </li>
 
                   <!-- Kit interno -->
-                  <li class="nav-item" role="presentation">
-                    <a class="nav-link" data-bs-toggle="tab" href="#tab_detalle_kit_interno" role="tab" aria-selected="false" tabindex="-1">
-                      <div class="d-flex align-items-center">
-                        <div class="tab-icon"><i class="bx bx-list-ul font-18 me-1"></i>
+                  <div id="nav_kit_interno" style="display: none;">
+                    <li class="nav-item" role="presentation">
+                      <a class="nav-link" data-bs-toggle="tab" href="#tab_detalle_kit_interno" role="tab" aria-selected="false" tabindex="-1">
+                        <div class="d-flex align-items-center">
+                          <div class="tab-icon"><i class="bx bx-list-ul font-18 me-1"></i>
+                          </div>
+                          <div class="tab-title">Kit interno</div>
                         </div>
-                        <div class="tab-title">Kit interno</div>
-                      </div>
-                    </a>
-                  </li>
+                      </a>
+                    </li>
+                  </div>
 
                   <!-- Detalle IT -->
-                  <li class="nav-item" role="presentation">
-                    <a class="nav-link" data-bs-toggle="tab" href="#tab_detalle_it" role="tab" aria-selected="false" tabindex="-1">
-                      <div class="d-flex align-items-center">
-                        <div class="tab-icon"><i class="bx bx-cog font-18 me-1"></i>
+                  <div id="nav_detalle_it" style="display: none;">
+                    <li class="nav-item" role="presentation">
+                      <a class="nav-link" data-bs-toggle="tab" href="#tab_detalle_it" role="tab" aria-selected="false" tabindex="-1">
+                        <div class="d-flex align-items-center">
+                          <div class="tab-icon"><i class="bx bx-cog font-18 me-1"></i>
+                          </div>
+                          <div class="tab-title">Detalle IT</div>
                         </div>
-                        <div class="tab-title">Detalle IT</div>
-                      </div>
-                    </a>
-                  </li>
+                      </a>
+                    </li>
+                  </div>
 
                 </ul>
 
@@ -1155,12 +1191,24 @@ if (isset($_GET['_id'])) {
                     <form id="form_articulo">
                       <div class="row">
                         <div class="col-auto">
-                          <div class="form-check">
-                            <input class="form-check-input" type="checkbox" name="cbx_kit" id="cbx_kit">
-                            <label class="form-label" for="cbx_kit">KIT </label>
+                          <div id="cbx_kit_cointainer">
+                            <div class="form-check">
+                              <input class="form-check-input" type="checkbox" name="cbx_kit" id="cbx_kit">
+                              <label class="form-label" for="cbx_kit">KIT </label>
+                            </div>
+                            <label class="error" style="display: none;" for="cbx_kit"></label>
                           </div>
-                          <label class="error" style="display: none;" for="cbx_kit"></label>
                         </div>
+                        <div class="col-auto">
+                          <div id="cbx_detalle_it_cointainer">
+                            <div class="form-check">
+                              <input class="form-check-input" type="checkbox" name="cbx_detalle_it" id="cbx_detalle_it">
+                              <label class="form-label" for="cbx_detalle_it">IT </label>
+                            </div>
+                            <label class="error" style="display: none;" for="cbx_detalle_it"></label>
+                          </div>
+                        </div>
+
                       </div>
 
                       <hr class="text-primary mb-2 mt-1">
@@ -1195,7 +1243,7 @@ if (isset($_GET['_id'])) {
                             <small id="lbl_sap_custodio" class="text-muted"><u>Código:</u></small>
                           </div>
 
-                          <select class="form-control form-control-sm select2-validation" name="ddl_custodio" id="ddl_custodio">
+                          <select class="form-control form-control-sm select2-validation" name="ddl_custodio" id="ddl_custodio" disabled>
                             <option value="">Seleccione</option>
                           </select>
                           <label class="error" style="display: none;" for="ddl_custodio"></label>
@@ -1207,7 +1255,7 @@ if (isset($_GET['_id'])) {
                             <small id="lbl_sap_loc" class="text-muted"><u>Código:</u></small>
                           </div>
 
-                          <select class="form-control form-control-sm select2-validation" name="ddl_localizacion" id="ddl_localizacion">
+                          <select class="form-control form-control-sm select2-validation" name="ddl_localizacion" id="ddl_localizacion" disabled>
                             <option value="">Seleccione</option>
                           </select>
                           <label class="error" style="display: none;" for="ddl_localizacion"></label>
@@ -1382,8 +1430,8 @@ if (isset($_GET['_id'])) {
                         </div>
                       </div>
 
-                      <div class="row mb-col">
-                        <div class="col-sm-6">
+                      <div class="row mb-col" hidden>
+                        <div class="col-sm-6" hidden>
                           <label for="ddl_clase_mov" class="form-label">Clase de movimiento </label>
                           <select class="form-select form-select-sm select2-validation" name="ddl_clase_mov" id="ddl_clase_mov">
                             <option value="">Seleccione</option>
@@ -1391,7 +1439,7 @@ if (isset($_GET['_id'])) {
                           <label class="error" style="display: none;" for="ddl_clase_mov"></label>
                         </div>
 
-                        <div class="col-sm-6">
+                        <div class="col-sm-6" hidden>
                           <div class="d-flex justify-content-between align-items-center">
                             <label for="ddl_proyecto" class="form-label">Proyecto </label>
                             <small id="lbl_sap_pro"><u>Código: </u></small>
@@ -1464,9 +1512,24 @@ if (isset($_GET['_id'])) {
                       </div>
 
                       <hr>
+                      <div class="row mb-col">
 
-                      <div class="d-flex justify-content-end pt-2">
-                        <button class="btn btn-success btn-sm px-4 m-0" onclick="guardar_articulo();" type="button"><i class="bx bx-save"></i> Guardar</button>
+                        <div class="col-sm-4">
+                          <label for="txt_valor_lote_1" class="form-label">Lote 1</label>
+                          <input type="text" class="form-control form-control-sm" name="txt_valor_lote_1" id="txt_valor_lote_1" maxlength="255">
+                        </div>
+                        <div class="col-sm-4">
+                          <label for="txt_valor_lote_2" class="form-label">Lote 2</label>
+                          <input type="text" class="form-control form-control-sm" name="txt_valor_lote_2" id="txt_valor_lote_2" maxlength="255">
+                        </div>
+                        <div class="col-sm-4">
+                          <label for="txt_valor_lote_3" class="form-label">Lote 3</label>
+                          <input type="text" class="form-control form-control-sm" name="txt_valor_lote_3" id="txt_valor_lote_3" maxlength="255">
+                        </div>
+
+                        <div class="d-flex justify-content-end pt-2">
+                          <button class="btn btn-success btn-sm px-4 m-0" onclick="guardar_articulo();" type="button"><i class="bx bx-save"></i> Guardar</button>
+                        </div>
                       </div>
 
                     </form>
@@ -1476,7 +1539,7 @@ if (isset($_GET['_id'])) {
                   <?php include('../vista/ACTIVOS_FIJOS/RUBROS_COMERCIALES/kit.php'); ?>
 
                   <!-- Detalle IT -->
-                  <?php include('../vista/ACTIVOS_FIJOS/RUBROS_COMERCIALES/it.php'); ?>
+                  <?php include('../vista/ACTIVOS_FIJOS/RUBROS_COMERCIALES/it_pnl.php'); ?>
 
                 </div>
               </div>
@@ -1552,23 +1615,23 @@ if (isset($_GET['_id'])) {
 
           <div class="mb-3">
             <label for="edit_valor_activo" class="form-label">Valor activo</label>
-            <input type="number" step="0.01" class="form-control" name="valor_activo" id="edit_valor_activo" readonly>
+            <input type="number" name="text_valor_activo" id="edit_valor_activo" step="0.01" class="form-control" readonly>
           </div>
 
           <div class="mb-3">
             <label for="edit_valor_residual" class="form-label">Valor residual</label>
-            <input type="number" step="0.01" class="form-control"  name="valor_residual" id="edit_valor_residual" required>
+            <input type="number" name="text_valor_residual" id="edit_valor_residual" step="0.01" class="form-control" required>
           </div>
 
           <div class="mb-3">
             <label for="edit_vida_util" class="form-label">Vida útil (años)</label>
-            <input type="number" step="1" class="form-control"  name="vida_util" id="edit_vida_util"required>
+            <input type="number" name="text_vida_utill" id="edit_vida_util" step="1" class="form-control" required>
           </div>
         </div>
 
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-          <button type="button" class="btn btn-primary" onclick="guardarDepreciacion()">Guardar</button>
+          <button type="button" class="btn btn-primary" onclick="guardar_depreciacion()">Guardar</button>
         </div>
       </form>
 

@@ -102,8 +102,8 @@ if (isset($_GET['cargar_detalle_activo'])) {
 	echo json_encode($controlador->cargar_detalle_activo($_POST['id'] ?? '', $_POST['token'] ?? ''));
 }
 
-if (isset($_GET['actualizarDatosArticulo'])) {
-	echo json_encode($controlador->insertar_editar($_POST));
+if (isset($_GET['actualizarDatosArticuloDepreciacion'])) {
+	echo json_encode($controlador->insertar_editar_depreciacion($_POST));
 	return;
 }
 
@@ -143,10 +143,10 @@ class detalle_articuloC
 
 	function lista_detalle_articulo($id, $pag)
 	{
-		$datos = $this->modelo->lista_detalle_articulo($id, $pag);
+		// $datos = $this->modelo->lista_detalle_articulo($id, $pag);
 		// print_r(count($datos));
 		// $resultado =  array('datos' => $datos,'num'=>count($datos));
-		return $datos;
+		// return $datos;
 	}
 
 	function buscar_colores($query)
@@ -242,7 +242,7 @@ class detalle_articuloC
 
 	function guardar_datos($parametros)
 	{
-		// print_r($parametros);die();		
+
 		$datos = array(
 			array('campo' => 'tag_unique', 'dato' => $parametros['txt_rfid']),
 			array('campo' => 'longitud_rfid', 'dato' => $parametros['rbl_asset']),
@@ -284,6 +284,10 @@ class detalle_articuloC
 			// array('campo' => 'fecha_baja', 'dato' => $parametros['']),
 			array('campo' => 'fecha_referencia', 'dato' => $parametros['txt_fecha']),
 			array('campo' => 'fecha_contabilizacion', 'dato' => $parametros['txt_compra']),
+			array('campo' => 'es_it', 'dato' => $parametros['cbx_detalle_it']),
+			array('campo' => 'lote_1', 'dato' => $parametros['txt_valor_lote_1']),
+			array('campo' => 'lote_2', 'dato' => $parametros['txt_valor_lote_2']),
+			array('campo' => 'lote_3', 'dato' => $parametros['txt_valor_lote_3']),
 			// array('campo' => 'id_rubro', 'dato' => $parametros['']),
 		);
 
@@ -549,6 +553,12 @@ class detalle_articuloC
 
 			array('campo' => 'fecha_referencia', 'dato' => $parametros['txt_fecha'], 'label' => 'FECHA DE REFERENCIA', 'tipo' => 'fecha'),
 			array('campo' => 'fecha_contabilizacion', 'dato' => $parametros['txt_compra'], 'label' => 'FECHA DE COMPRA', 'tipo' => 'fecha'),
+
+			array('campo' => 'es_it', 'dato' => $parametros['cbx_detalle_it'], 'label' => 'IT', 'tipo' => 'texto'),
+
+			array('campo' => 'lote_1', 'dato' => $parametros['txt_valor_lote_1'], 'label' => 'Lote 1', 'tipo' => 'texto'),
+			array('campo' => 'lote_2', 'dato' => $parametros['txt_valor_lote_2'], 'label' => 'Lote 2', 'tipo' => 'texto'),
+			array('campo' => 'lote_3', 'dato' => $parametros['txt_valor_lote_3'], 'label' => 'Lote 3', 'tipo' => 'texto'),
 		);
 
 
@@ -1044,14 +1054,14 @@ class detalle_articuloC
 		}
 	}
 
-	function insertar_editar($parametros)
+	function insertar_editar_depreciacion($parametros)
 	{
 		if ($parametros['id_articulo_update'] != '') {
 
 			// Datos para actualizar (con la estructura que tu método editar espera)
 			$datos = array(
-				array('campo' => 'valor_residual', 'dato' => floatval($parametros['valor_residual'])),
-				array('campo' => 'vida_util', 'dato' => intval($parametros['vida_util']))
+				array('campo' => 'valor_residual', 'dato' => floatval($parametros['txt_valor_residual'])),
+				array('campo' => 'vida_util', 'dato' => intval($parametros['txt_vida_util']))
 			);
 
 			// Condición WHERE para actualizar el registro correcto

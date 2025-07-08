@@ -183,6 +183,76 @@ $hora_salida = isset($_GET['hora_salida']) ? $_GET['hora_salida'] : 930;
             }
         });
     }
+    $(document).ready(function() {
+        // Evento para hora de inicio
+        $('#txt_hora_descanso_inicio').on('change', function() {
+            verificarDescanso();
+        });
+
+        // Evento para hora final
+        $('#txt_hora_descanso_final').on('change', function() {
+            verificarDescanso();
+        });
+    });
+
+    function verificarDescanso() {
+        // Lectura de valores
+        let horaEntrada = $('#txt_hora_entrada').val();
+        let horaSalida = $('#txt_hora_salida').val();
+        let descansoInicio = $('#txt_hora_descanso_inicio').val();
+        let descansoFinal = $('#txt_hora_descanso_final').val();
+        let descansoPermitido = parseInt($('#txt_hora_descanso').val(), 10);
+
+        function toMinutes(hhmm) {
+            let [h, m] = hhmm.split(':').map(x => parseInt(x, 10));
+            return h * 60 + m;
+        }
+
+        let entradaMin = toMinutes(horaEntrada);
+        let salidaMin = toMinutes(horaSalida);
+        let inicioMin = toMinutes(descansoInicio);
+        let finMin = toMinutes(descansoFinal);
+        let duracionMin = finMin - inicioMin;
+
+        let errores = [];
+
+        if (inicioMin < entradaMin || inicioMin > salidaMin) {
+            errores.push(`El inicio del descanso (${descansoInicio}) debe estar entre ${horaEntrada} y ${horaSalida}.`);
+        }
+        if (finMin < entradaMin || finMin > salidaMin) {
+            errores.push(`El fin del descanso (${descansoFinal}) debe estar entre ${horaEntrada} y ${horaSalida}.`);
+        }
+        if (finMin <= inicioMin) {
+            errores.push(`La hora de fin de descanso (${descansoFinal}) debe ser posterior a la de inicio (${descansoInicio}).`);
+        }
+        if (duracionMin > descansoPermitido) {
+            errores.push(`La duración del descanso (${duracionMin} min) excede el máximo permitido (${descansoPermitido} min).`);
+        }
+
+        if (errores.length) {
+            mostrarAlerta(
+                'error',
+                'Error en configuración de descanso',
+                errores.map(e => `❌ ${e}`).join('<br>')
+            );
+        } else {
+            mostrarAlerta(
+                'success',
+                'Descanso válido',
+                `✅ La configuración de descanso es correcta.<br>Duración: ${duracionMin} minutos.`
+            );
+        }
+    }
+
+
+    function mostrarAlerta(tipo, titulo, htmlMensaje) {
+        Swal.fire({
+            icon: tipo, // 'success' o 'error'
+            title: titulo,
+            html: htmlMensaje,
+            confirmButtonText: 'Entendido'
+        });
+    }
 </script>
 
 <!-- Slider -->
@@ -362,21 +432,7 @@ $hora_salida = isset($_GET['hora_salida']) ? $_GET['hora_salida'] : 930;
 
                                     </div>
 
-                                    <div class="row mb-col">
-                                        <div class="col-md-6">
-                                            <div class="form-check ">
-                                                <input type="checkbox" class="form-check-input" name="cbx_descanso" id="cbx_descanso">
-                                                <label class="form-check-label" for="cbx_descanso">Descanso</label>
-                                            </div>
-                                        </div>
-                                    </div>
 
-                                    <div class="row mb-col" id="pnl_tiempo_descanso" style="display: none;">
-                                        <div class="col-md-6">
-                                            <label for="txt_nombre" class="form-label">Tiempo de descanso </label>
-                                            <input type="time" class="form-control form-control-sm" name="txt_tiempo_descanso" id="txt_tiempo_descanso" value="01:00">
-                                        </div>
-                                    </div>
 
                                 </div>
                             </div>
@@ -433,7 +489,7 @@ $hora_salida = isset($_GET['hora_salida']) ? $_GET['hora_salida'] : 930;
                                         </div> -->
                                     </div>
 
-                                     <div class="row mb-col">
+                                    <div class="row mb-col">
                                         <label for="txt_limite_tardanza_in" class="col-sm-4 col-form-label text-end fw-bold">Tolerancia de llegada tarde (min) </label>
                                         <div class="col-sm-6">
                                             <input type="number" class="form-control form-control-sm" name="txt_limite_tardanza_in" id="txt_limite_tardanza_in" value="5">
@@ -460,11 +516,67 @@ $hora_salida = isset($_GET['hora_salida']) ? $_GET['hora_salida'] : 930;
                                         </div> -->
                                     </div>
 
-                                   
+
                                     <div class="row mb-col">
                                         <label for="txt_limite_tardanza_out" class="col-sm-4 col-form-label text-end fw-bold">Tolerancia de salida anticipada (min) </label>
                                         <div class="col-sm-6">
                                             <input type="number" class="form-control form-control-sm" name="txt_limite_tardanza_out" id="txt_limite_tardanza_out" value="5">
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+
+                            <div class="row pt-4">
+                                <h5>Datos del descanzo</h5>
+                                <hr>
+                                <div class="col-md-11">
+                                    <div class="row mb-col">
+                                        <label class="col-sm-4 col-form-label text-end fw-bold" for="cbx_descanso">
+                                            ¿Usar descanso?
+                                        </label>
+                                        <div class="col-sm-6 d-flex align-items-center">
+                                            <div class="form-check">
+                                                <input
+                                                    class="form-check-input"
+                                                    type="checkbox"
+                                                    id="cbx_descanso"
+                                                    name="cbx_descanso"
+                                                    value="1">
+                                                <label class="form-check-label" for="cbx_descanso">
+                                                    Sí, aplicar descanso
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div id="pnl_tiempo_descanso" style="display: none;">
+                                        <div class="row mb-col">
+                                            <label for="txt_tiempo_descanso" class="col-sm-4 col-form-label text-end fw-bold">Hora de descanso (min) </label>
+                                            <div class="col-sm-6">
+                                                <input type="number" class="form-control form-control-sm" name="txt_tiempo_descanso" id="txt_tiempo_descanso" value="5">
+                                            </div>
+                                        </div>
+                                        <div class="row mb-col">
+                                            <label for="txt_hora_descanso" class="col-sm-4 col-form-label text-end fw-bold">Horario de descanso asignado</label>
+                                            <div class="col-sm-3">
+                                                <input type="time" class="form-control form-control-sm" name="txt_hora_descanso_inicio" id="txt_hora_descanso_inicio" value="10:00">
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <input type="time" class="form-control form-control-sm" name="txt_hora_descanso_final" id="txt_hora_descanso_final" value="11:00">
+                                            </div>
+                                        </div>
+                                        <div class="row mb-col">
+                                            <label for="txt_limite_tardanza_descanso_in" class="col-sm-4 col-form-label text-end fw-bold">Tolerancia de llegada temprana del descanso (min) </label>
+                                            <div class="col-sm-6">
+                                                <input type="number" class="form-control form-control-sm" name="txt_limite_tardanza_descanso_in" id="txt_limite_tardanza_descanso_in" value="5">
+                                            </div>
+                                        </div>
+                                        <div class="row mb-col">
+                                            <label for="txt_limite_tardanza_descanso_out" class="col-sm-4 col-form-label text-end fw-bold">Tolerancia de llegada tarde del descanso (min) </label>
+                                            <div class="col-sm-6">
+                                                <input type="number" class="form-control form-control-sm" name="txt_limite_tardanza_descanso_out" id="txt_limite_tardanza_descanso_out" value="5">
+                                            </div>
                                         </div>
                                     </div>
 
