@@ -479,12 +479,15 @@ class loginC
 		 		}
 		 	}else{
 
+		 		// print_r('s');die();
 
 				$tablas_iguales = $this->cod_global->tablas_por_licencias($licencias,$empresa,1);
+				// print_r($tablas_iguales);die();
 		 		$res = $this->cod_global->generar_primera_vez_terceros($empresa,$parametros['empresa']);
 		 		if($tablas_iguales==-1){
 			 		foreach ($licencias as $key => $value) {
 			 				$this->cod_global->Copiar_estructura($value['Id_Modulo'],$empresa[0]['Base_datos'],1,$empresa);
+			 				sleep(10);
 			 		}
 			 	}
 		 		// print_r($empresa);die();
@@ -1012,6 +1015,9 @@ class loginC
 				$_SESSION["INICIO"]['RUTA_IMG_ABSOLUTA'] = $empresa[0]['ruta_img_absoluta'];
 				$_SESSION["INICIO"]['RUTA_IMG_RELATIVA'] = $empresa[0]['ruta_img_relativa'];
 				$_SESSION["INICIO"]['RUTA_IMG_COMPARTIDA'] = $empresa[0]['ruta_img_compartida'];
+
+				// $this->login->ejecutarAuditoria($empresa[0]['Base_datos'], $empresa[0]['Usuario_db'], $empresa[0]['Password_db'],$empresa[0]['Ip_host'],$empresa[0]['Puerto_db']);
+
 				return 1;
 		}
 

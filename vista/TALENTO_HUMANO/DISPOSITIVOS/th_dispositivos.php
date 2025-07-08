@@ -44,7 +44,7 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                         return `<button type="button" class="btn btn-danger btn-xs" onclick="eliminar_device(${item._id})">
                                     <i class="bx bx-trash fs-7 me-0 fw-bold"></i>
                                 </button>
-                            <button type="button" class="btn btn-primary btn-xs" onclick=""><i class="lni lni-spinner-arrow fs-7 me-0 fw-bold"></i></button>`;
+                            <button type="button" class="btn btn-primary btn-xs" onclick="modal_data(${item._id})"><i class="lni lni-database fs-7 me-0 fw-bold"></i></button>`;
                     }
                 },
             ],
@@ -358,6 +358,57 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
         }
     }
 
+    function modal_data(id)
+    {
+        $('#txt_id_dispositivo').val(id)
+        $('#modal_data_biometrico').modal('show');
+    }
+
+    function importar_data()
+    {
+        var card = 0 ,face = 0,finger = 0;
+        if($('#cbx_nom_card').prop('checked')){ card = 1}
+        if($('#cbx_finger').prop('checked')){ finger = 1}
+        if($('#cbx_face').prop('checked')){ face = 1}
+
+        var parametros = 
+        {
+            'dispositivos': $('#txt_id_dispositivo').val(),
+            'nombreCard': card,
+            'huellas':finger,
+            'facial':face,
+        }
+        $.ajax({
+            data: {parametros:parametros },
+            url: '../controlador/TALENTO_HUMANO/th_dispositivosC.php?importar_datos=true',
+            type: 'post',
+            dataType: 'json',
+
+            success: function(response) {
+                if (response == 1) {
+                    Swal.fire('', 'Operacion realizada con exito.', 'success').then(function() {
+                        location.reload()
+                    });
+                } else {
+                    Swal.fire('', 'Biometrico no tiene datos', 'warning');
+                }
+            },
+            
+            error: function(xhr, status, error) {
+                console.log('Status: ' + status); 
+                console.log('Error: ' + error); 
+                console.log('XHR Response: ' + xhr.responseText); 
+
+                Swal.fire('', 'Error: ' + xhr.responseText, 'error');
+            }
+        });
+
+        $('#txt_nombre').on('input', function() {
+            $('#error_txt_nombre').text('');
+        });
+
+    }
+
 
 
 </script>
@@ -573,6 +624,38 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
 
                     </form>
 
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal" id="modal_data_biometrico" abindex="-1" aria-modal="true" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h2>Importar Informacion</h2>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <!-- Modal body -->
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <input type="hidden" name="txt_id_dispositivo" id="txt_id_dispositivo">
+                        <label><input type="checkbox" name="cbx_nom_card" id="cbx_nom_card" checked>Nombre y No Tarjeta</label><br>
+                        <label><input type="checkbox" name="cbx_finger" id="cbx_finger">Huellas Digitales</label><br>
+                        <label><input type="checkbox" name="cbx_face" id="cbx_face">Imagen Facial</label><br>
+                    </div>
+                </div>  
+            </div>
+            <div class="modal-footer">
+
+                <button class="btn btn-primary btn-sm px-4 m-0" onclick="importar_data()" type="button"><i class="bx bx-save"></i> Guardar</button>
+                 <button type="button" class="btn btn-secondary btn-sm">Cerrar</button>
+                
             </div>
         </div>
     </div>

@@ -99,11 +99,7 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                 $('#txt_recuperado').val(JSON.stringify(response));
                 response.forEach(function(item, i) {
                     nombre = item.nombre;
-                    nom = '';
-                    nombre.forEach(function(item2,j){
-                        nom+="<td>" + item2 + "</td>";
-                    })
-                    tr += "<tr><td>" + item.CardNo + "</td>"+nom+"</tr>";
+                    tr += "<tr><td>" + item.CardNo + "</td><td>"+nombre+"</td></tr>";
                 });
 
                 $('#tbl_import').html(tr);
@@ -266,9 +262,6 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                                 <thead>
                                     <tr>
                                         <th>Numero de tarjeta</th>
-                                        <th>Nombre</th>
-                                        <th>Nombre</th>
-                                        <th>Nombre</th>
                                         <th>Nombre</th>
                                     </tr>
                                 </thead>
