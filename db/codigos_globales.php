@@ -971,6 +971,7 @@ function para_ftp($nombre,$texto)
 
 		$sql = "SELECT db_referencia FROM MODULOS_SISTEMA WHERE id_modulos = '".$modulo."'";
 		$dbref = $this->db->datos($sql,1);
+		// print_r($dbref);die();
 		if(count($dbref)==0)
 		{
 			return -3;
@@ -1007,6 +1008,7 @@ function para_ftp($nombre,$texto)
 		    								$db_destino,
 		    								'0');
 		  		$sql = "EXEC EstructuraBase @origen_bd = ?,@destino_bd = ?";
+		  		// print_r($parametros);
 		  		$this->db->ejecutar_procesos_almacenados($sql,$parametros,false,1);
 		  		$sql3 = "EXEC GenerarVistasBase @origen_bd = ?,@destino_bd = ?,@db_tercero = ?";
 				$this->db->ejecutar_procesos_almacenados($sql3, $parametrosSp,false,1);
@@ -1023,6 +1025,8 @@ function para_ftp($nombre,$texto)
 	{
 		$totalTablas = 0;
 		$db_origen  = '';
+
+		$all_tablas = array();
 
 		// print_r($licencias);die();
 		foreach ($licencias as $key => $value) {
@@ -1043,11 +1047,7 @@ function para_ftp($nombre,$texto)
 					continue;
 				}
 
-				$sql = "SELECT COUNT(*) AS CantidadDeTablas 
-							FROM ".$db_origen.".INFORMATION_SCHEMA.TABLES 
-							WHERE TABLE_TYPE = 'BASE TABLE' 
-							AND TABLE_CATALOG = '".$db_origen."';";
-
+				
 			if($terceros)
 			{
 				$sql2 = "SELECT * FROM EMPRESAS WHERE Base_datos = '".$db_origen."' AND Estado = 'A'";
@@ -1068,17 +1068,31 @@ function para_ftp($nombre,$texto)
 			}else
 			{
 				// print_r($sql);die();
-				$cant =  $this->db->datos($sql);
-				$totalTablas = $totalTablas+$cant[0]['CantidadDeTablas'];
+				$sql = "SELECT TABLE_NAME
+							FROM ".$db_origen.".INFORMATION_SCHEMA.TABLES 
+							WHERE TABLE_TYPE = 'BASE TABLE' 
+							AND TABLE_CATALOG = '".$db_origen."';";
+
+				$tablas =  $this->db->datos($sql);
+
+				// valido si existen tablas repetidas
+				foreach ($tablas as $key => $value) {
+					if(!in_array($value, $all_tablas))
+					{
+						$all_tablas[] = $value;
+					}
+				}
+
+				$totalTablas = count($all_tablas);
 			}
 
 		}
-// print_r('expression');die();
 
-		if(count($licencias)>1)
-		{
-			$totalTablas = $totalTablas - (NUM_TABLA_ACCESOS*count($licencias));
-		}
+
+		// if(count($licencias)>1)
+		// {
+		// 	$totalTablas = $totalTablas - (NUM_TABLA_ACCESOS*count($licencias));
+		// }
 
 		// print_r($totalTablas);die();
 
@@ -1105,6 +1119,7 @@ function para_ftp($nombre,$texto)
 		}else
 		{
 			// print_r('E');die();
+			// print_r($sql);die();
 			$cant =  $this->db->datos($sql,1);
 			$totalActual = $cant[0]['CantidadDeTablas'];
 		}
@@ -1373,7 +1388,84 @@ function para_ftp($nombre,$texto)
 		return $this->db->datos($sql,1);
 	}
 
+	function separarNombreCompleto($nombreCompleto) 
+	{
+	    $partes = explode(' ', preg_replace('/\s+/', ' ', trim($nombreCompleto)));
+	    $nombres = [];
+	    $apellidos = [];
+	    
+	    // Prefijos comunes en apellidos compuestos
+	    $prefijos = ['de', 'la', 'del', 'los', 'las', 'san', 'santa'];
+	    
+	    // Asumimos que siempre son 2 nombres y 2 apellidos
+	    // Los apellidos compuestos se unen como un solo apellido
+	    
+	    // Caso 1: Formato simple "Nombre1 Nombre2 Apellido1 Apellido2" (4 palabras)
+	    if (count($partes) == 4) {
+	        $nombres = [$partes[0], $partes[1]];
+	        $apellidos = [$partes[2], $partes[3]];
+	    }
+	    // Caso 2: Con apellidos compuestos (más de 4 palabras)
+	    elseif (count($partes) > 4) {
 
+	    	$contador = 0;
+	    	$compuesto = '';
+	    	$nombre_compuesto = array();
+	    	foreach ($partes as $key => $value) {
+
+	    		if(in_array($value,$prefijos))
+	    		{
+	    			$compuesto = $compuesto.' '.$value;
+	    			$contador++;
+	    		}else
+	    		{
+	    			
+    				if($contador==0)
+    				{
+    					array_push($nombre_compuesto, $value);
+    				}else
+    				{
+    					$compuesto = $compuesto.' '.$value;
+    					array_push($nombre_compuesto, $compuesto);
+    					$contador=0;
+    				}
+	    		}
+	    		
+	    	}
+	    	// if(count($nombre_compuesto)==4)
+	    	// {
+	    		 $nombres = [
+	            $nombre_compuesto[0] ?? '',
+	            $nombre_compuesto[1] ?? ''
+	        ];
+	        $apellidos = [
+	            $nombre_compuesto[2] ?? '',
+	            $nombre_compuesto[3] ?? ''
+	        ];
+
+	    	// }
+       
+	    }
+	    // Caso 3: Menos de 4 palabras (adaptación)
+	    else {
+	        // Rellenamos con cadenas vacías si faltan componentes
+	        $nombres = [
+	            $partes[0] ?? '',
+	            $partes[1] ?? ''
+	        ];
+	        $apellidos = [
+	            $partes[2] ?? '',
+	            $partes[3] ?? ''
+	        ];
+	    }
+	    
+	    return [
+	        '0' => trim($nombres[0]),
+	        '1' => trim($nombres[1]),
+	        '2' => trim($apellidos[0]),
+	        '3' => trim($apellidos[1])
+	    ];
+	}
 
 }
 ?>

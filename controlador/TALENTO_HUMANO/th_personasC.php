@@ -238,19 +238,21 @@ class th_personasC
             // print_r($cadena);die();
             $datos = json_decode($cadena, true);
             $lista = array();
+            
             // print_r($datos);
+
             
             if(count($datos)>0)
             {
                 foreach ($datos as $key => $value) {
-                    $nombres = explode(" ",$value['nombre']);
-                    if(count($nombres)<4)
-                    {
-                        for ($i=count($nombres); $i <4; $i++) { 
-                            $nombres[$i] = '';
-                        }
-                    }
-                    $lista[] = array("CardNo"=>$value['CardNo'],"nombre"=>$nombres);
+                    // $nombres = explode(" ",$value['nombre']);
+                    // if(count($nombres)<4)
+                    // {
+                    //     for ($i=count($nombres); $i <4; $i++) { 
+                    //         $nombres[$i] = '';
+                    //     }
+                    // }
+                    $lista[] = array("CardNo"=>$value['CardNo'],"nombre"=>$value['nombre']);
                 }
             }
 
@@ -270,59 +272,75 @@ class th_personasC
         $datos = $parametros['datos'];
         $datos = json_decode($datos, true);
 
+        // print_r($datos);die();
+
         foreach ($datos as $key => $value) {
             $per = explode(' ', $value['nombre']);
+            $data = count($per);
             $where = '';
             if (isset($per[0])) {
-                $where .= "th_per_primer_nombre";
-            }
-            if (isset($per[2])) {
-                $where .= "+' '+th_per_segundo_nombre";
+                $where .= "th_per_primer_apellido";
             }
             if (isset($per[1])) {
-                $where .= "+' '+th_per_primer_apellido";
-            }
-            if (isset($per[3])) {
                 $where .= "+' '+th_per_segundo_apellido";
             }
+            if (isset($per[2])) {
+                $where .= "+' '+th_per_primer_nombre";
+            }
+            if (isset($per[3])) {
+                $where .= "+' '+th_per_segundo_nombre";
+            }
+           
             $this->modelo->reset();
-            $datos = $this->modelo->where($where, $value['nombre'])->listar();
+            $data = $this->modelo->where($where, $value['nombre'])->listar();
 
-            // print_r($datos);die();
-            if (count($datos) == 0) {
+            // print_r($where);
+
+            // print_r($value['nombre']);
+            // print_r($data);die();
+
+            if (count($data) == 0) {
                 $valor = array(
                     array('campo' =>  'th_per_fecha_modificacion', 'dato' => date('Y-m-d H:i:s')),
                 );
 
-                if (isset($per[0])) {
-                    $campo = array('campo' =>  'th_per_primer_nombre', 'dato' => $per[0]);
+                $nombre = $this->cod_globales->separarNombreCompleto($value['nombre']);
+
+                // print_r($nombre);die();
+
+                if (isset($nombre[2])) {
+                    $campo = array('campo' =>  'th_per_primer_nombre', 'dato' => $nombre[2]);
                     array_push($valor, $campo);
                 }
-                if (isset($per[2])) {
-                    $campo = array('campo' => 'th_per_segundo_nombre', 'dato' => $per[2]);
+                if (isset($nombre[3])) {
+                    $campo = array('campo' => 'th_per_segundo_nombre', 'dato' => $nombre[3]);
                     array_push($valor, $campo);
                 }
-                if (isset($per[1])) {
-                    $campo = array('campo' => 'th_per_primer_apellido', 'dato' => $per[1]);
+                if (isset($nombre[0])) {
+                    $campo = array('campo' => 'th_per_primer_apellido', 'dato' => $nombre[0]);
                     array_push($valor, $campo);
                 }
-                if (isset($per[3])) {
-                    $campo = array('campo' => 'th_per_segundo_apellido', 'dato' => $per[3]);
+                if (isset($nombre[1])) {
+                    $campo = array('campo' => 'th_per_segundo_apellido', 'dato' => $nombre[1]);
                     array_push($valor, $campo);
                 }
                 // print_r($valor);die();               
                 $datos = $this->modelo->insertar($valor);
 
+                // print_r($where);
+                // print_r($value['nombre']);die();
                 $reg = $this->modelo->where($where, $value['nombre'])->listar();
 
-                // print_r($reg);die();
+                // print_r($data);die();
                 $biom = array(
                     array('campo' => 'th_per_id', 'dato' => $reg[0]['_id']),
-                    array('campo' => 'th_bio_card', 'dato' => $value['CardNo']),
-                    array('campo' => 'th_bio_nombre', 'dato' => "tarjeta"),
+                    array('campo' => 'th_cardNo', 'dato' => $value['CardNo']),
+                    array('campo' => 'th_card_nombre', 'dato' => $value['nombre']),
+                    array('campo' => 'th_card_creacion', 'dato' => date('Y-m-d')),
                 );
 
-                $datos = $this->biometria->insertar($biom);
+                // print_r($biom);die();
+                $datos = $this->card->insertar($biom);
             } else {
                 $msj .= 'El registro ' . $value['nombre'] . ' ya esta registrado<br>';
             }

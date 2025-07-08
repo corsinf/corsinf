@@ -511,7 +511,13 @@ class loginM
 				WHERE Id_Empresa = '".$id."' AND U.email = '".$usuario."' ";
 				// print_r($sql);die();
 		return  $this->db->datos($sql,1);
-	}		
+	}	
+
+	function ejecutarAuditoria($Base_datos,$Usuario_db,$Password_db,$Ip_host,$Puerto_db)
+	{
+		$sql5 = "EXEC CrearTriggerAuditoria;";
+		$this->db->ejecutar_sp_db_terceros($Base_datos,'sa','Tango456',$Ip_host,$Puerto_db,$sql5,false,false);
+	}	
 
 }
 ?>

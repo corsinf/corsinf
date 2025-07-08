@@ -26,6 +26,11 @@ if (isset($_GET['eliminar2'])) {
 }
 
 
+if (isset($_GET['importar_datos'])) {
+    echo json_encode($controlador->importar_datos($_POST['parametros']));
+}
+
+
 
 class th_dispositivosC
 {
@@ -34,6 +39,9 @@ class th_dispositivosC
     function __construct()
     {
         $this->modelo = new th_dispositivosM();
+        $this->sdk_patch = dirname(__DIR__,2).'\\lib\\SDKDevices\\hikvision\\bin\\Debug\\net8.0\\CorsinfSDKHik.dll ';
+        // $this->sdk_patch = "C:\\Users\\lenovo\\source\\repos\\CorsinfSDKHik\\CorsinfSDKHik\\bin\\Debug\\net8.0\\CorsinfSDKHik.dll ";
+        
     }
 
     function listar($id = '')
@@ -107,5 +115,91 @@ class th_dispositivosC
 
         $datos = $this->modelo->eliminar($where);
         return $datos;
+    }
+
+    function importar_datos($parametros)
+    {
+        $dispositivo = $this->modelo->where('th_dis_id', $parametros['dispositivos'])->listar();
+        // print_r($dispositivo);die()
+         $carpeta = dirname(__DIR__,2).'/TEMP/data/data_importada_'.str_replace(" ",'_',$dispositivo[0]['nombre']);
+         if(!file_exists($carpeta))
+         {
+
+            $carpeta1 = dirname(__DIR__,2).'/TEMP/data';
+            mkdir($carpeta1,0777);
+            mkdir($carpeta,0777);
+         }
+        $cliente = $this->conectar_buscar($parametros);
+        if(count($cliente)>0)
+        {
+            $contenido = "";
+            foreach ($cliente as $key => $value) {
+
+                $contenido .= "Nombre: {$value['nombre']}, Numero de Tarjeta: {$value['CardNo']}\n";
+
+                if($parametros['huellas']==1)
+                {
+
+                }
+                if($parametros['facial']==1)
+                {
+
+                }
+            }
+
+            file_put_contents($carpeta."/usuarios.txt", $contenido);
+        }else
+        {
+            return -1;
+        }
+
+    }
+
+    function conectar_buscar($parametros)
+    {
+        $datos = $this->modelo->where('th_dis_id', $parametros['dispositivos'])->listar();
+
+        if (count($datos) > 0) {
+            $dllPath = $this->sdk_patch . '5 ' . $datos[0]['host'] . ' ' . $datos[0]['usuario'] . ' ' . $datos[0]['port'] . ' ' . $datos[0]['pass'] . ' ';
+            // Comando para ejecutar la DLL
+            $command = "dotnet $dllPath";
+
+            // print_r($command);die();
+            $output = shell_exec($command);
+            $resp = json_decode($output, true);
+            $cadena = $resp['msj'];
+            // print_r($cadena);die();
+            $cadena = preg_replace('/[^\w:{}\s,]/u', '', $cadena);
+            $cadena = str_replace(["EmployedId","CardNo", "nombre", "{"], ['"EmployedId"','"CardNo"', '"nombre"', '{'], $cadena);
+            $cadena = '[' . str_replace(['":', '}', ',"'], ['":"', '"}', '","'], $cadena) . ']';
+            // print_r($cadena);die();
+            $datos = json_decode($cadena, true);
+            $lista = array();
+            
+            // print_r($datos);
+
+            
+            if(count($datos)>0)
+            {
+                foreach ($datos as $key => $value) {
+                    // $nombres = explode(" ",$value['nombre']);
+                    // if(count($nombres)<4)
+                    // {
+                    //     for ($i=count($nombres); $i <4; $i++) { 
+                    //         $nombres[$i] = '';
+                    //     }
+                    // }
+                    $lista[] = array("CardNo"=>$value['CardNo'],"nombre"=>$value['nombre']);
+                }
+            }
+
+            // print_r($lista);die();
+
+            // print_r($datos[0]['nombre']);die();
+
+            return $lista;
+        } else {
+            return -1;
+        }
     }
 }
