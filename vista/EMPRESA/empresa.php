@@ -48,6 +48,7 @@
 									<li class="nav-item">
 										<a class="nav-link active" data-bs-toggle="pill" href="#home">Datos de empresa</a>
 									</li>
+									<?php if($_SESSION['INICIO']['TIPO']=='DBA'){ ?>
 									<li class="nav-item" style="display: none;">
 										<a class="nav-link" data-bs-toggle="pill" href="#menu1">Certificados</a>
 									</li>
@@ -66,6 +67,7 @@
 									<li class="nav-item">
 										<a class="nav-link" data-bs-toggle="pill" href="#menu6">Idukay</a>
 									</li>
+								<?php } ?>
 								</ul>
 
 								<!-- Tab panes -->
