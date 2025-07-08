@@ -479,3 +479,49 @@ Swal.fire({
 
 
     }
+
+    function actualizar_empresa()
+    {
+         Swal.fire({
+          title: 'Esta seguro de actualizar',
+          text: "Esta apunto de realizar una actualizacion esto podria tomar varios minutos",
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Continuar'
+        }).then((result) => {
+          if (result.value) {
+           actualizar_empresa_base()
+          }
+        })
+
+    }
+
+    function actualizar_empresa_base()
+    {
+        $('#myModal_espera').modal('show');
+        $.ajax({
+            // data:  {parametros:parametros},
+            url:   '../controlador/empresaC.php?actualizar_empresa=true',
+            type:  'post',
+            dataType: 'json',
+            success:  function (response) { 
+                $('#myModal_espera').modal('hide');
+                if(response)
+                {
+                    Swal.fire("Empresa actualizada","Cerrando session para aplicar cambios","success").then(function(){
+                        cerrar_session();
+                    })
+                }else
+                {
+                    Swal.fire("Existio algun error","","error")
+                }
+                console.log(response);
+            }, error: function(xhr, status, error){
+                $('#myModal_espera').modal('hide');
+                console.error("Error en la solicitud: ", xhr, status, error);
+              }
+        });
+
+    }

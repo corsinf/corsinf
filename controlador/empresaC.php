@@ -1,6 +1,7 @@
 <?php
 require_once('../modelo/empresaM.php');
 require_once('../modelo/licenciasM.php');
+require_once('../modelo/loginM.php');
 require_once('../lib/phpmailer/enviar_emails.php');
 require_once('../db/codigos_globales.php');
 if(isset($_SESSION['INICIO']))
@@ -53,16 +54,23 @@ if(isset($_GET['probar_conexion_email']))
 	echo json_encode($controlador->probar_conexion_email($_POST['parametros']));
 }
 
+if(isset($_GET['actualizar_empresa']))
+{
+	echo json_encode($controlador->actualizar_empresa());
+}
+
 class empresaC
 {
 	private $modelo;
 	private $email;
 	private $cod_global;
+	private $login;
 	function __construct()
 	{
 			$this->modelo = new empresaM();
 			$this->cod_global = new codigos_globales();
 			$this->email = new enviar_emails();
+			$this->login = new loginM();
 	}
 
 	function empresa_dato()
@@ -335,6 +343,37 @@ class empresaC
 
   	return $res;
   	// print_r($parametros);die();
+  }
+
+  function actualizar_empresa()
+  {
+
+		$licencias = $this->login->empresa_licencias_activas($_SESSION['INICIO']['ID_EMPRESA']);
+  	$empresa = $this->modelo->datos_empresa($_SESSION['INICIO']['ID_EMPRESA']);
+			// print_r($empresa);die();
+
+			if($empresa[0]['Ip_host']==IP_MASTER)
+			{
+					$res = $this->cod_global->generar_primera_vez($empresa[0]['Base_datos'],$_SESSION['INICIO']['ID_EMPRESA']);
+			 		// print_r($res);die();
+		 	 		foreach ($licencias as $key => $value) {
+			 		// print_r($licencias);die();
+			 				$r = $this->cod_global->Copiar_estructura($value['Id_Modulo'],$empresa[0]['Base_datos']);
+			 				sleep(10);
+			 				// print_r($r);die();
+			 		}
+		 	}else{
+
+		 			$res = $this->cod_global->generar_primera_vez_terceros($empresa,$_SESSION['INICIO']['ID_EMPRESA']);
+		 	 		foreach ($licencias as $key => $value) {
+			 				$this->cod_global->Copiar_estructura($value['Id_Modulo'],$empresa[0]['Base_datos'],1,$empresa);
+			 				sleep(10);
+			 		}
+		 		// print_r($empresa);die();
+		 	}
+
+		 	return 1;
+
   }
 
 }
