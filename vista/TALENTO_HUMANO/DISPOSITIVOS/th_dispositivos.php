@@ -411,13 +411,15 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
             },
             
             error: function(xhr, status, error) {
-                
-                $('#myModal_espera').modal('hide');
-                console.log('Status: ' + status); 
-                console.log('Error: ' + error); 
-                console.log('XHR Response: ' + xhr.responseText); 
 
-                Swal.fire('', 'Error: ' + xhr.responseText, 'error');
+                $('#myModal_espera').modal('hide');
+
+                Swal.fire('', 'Error existio un error', 'error');
+                // console.log('Status: ' + status); 
+                // console.log('Error: ' + error); 
+                // console.log('XHR Response: ' + xhr.responseText); 
+
+                // Swal.fire('', 'Error: ' + xhr.responseText, 'error');
             }
         });
 
@@ -672,7 +674,7 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
             <div class="modal-footer">
 
                 <button class="btn btn-primary btn-sm px-4 m-0" onclick="importar_data()" type="button"><i class="bx bx-save"></i> Guardar</button>
-                 <button type="button" class="btn btn-secondary btn-sm">Cerrar</button>
+                <button type="button" class="btn btn-default" data-bs-dismiss="modal">Cerrar</button>
                 
             </div>
         </div>
