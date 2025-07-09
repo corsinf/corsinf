@@ -739,11 +739,11 @@ namespace CorsinfSDKHik.Funciones
             return ListaItemHuella;
         }
 
-        private void ProcessFingerData(ref CHCNetSDK.NET_DVR_FINGERPRINT_RECORDF struOutBuff, ref bool flag)
+        private void ProcessFingerData(ref CHCNetSDK.NET_DVR_FINGERPRINT_RECORDF struOutBuff, ref bool flag,String CardNo,String FingerID,String rutaFinger)
         {
             string strpath = null;
             DateTime dt = DateTime.Now;
-            strpath = string.Format("{0}\\fingerprint.dat", Environment.CurrentDirectory);
+            strpath = string.Format("{0}\\cardNo_"+ CardNo + "_fingerprint"+FingerID+".dat", rutaFinger);
             try
             {
                 using (FileStream fs = new FileStream(strpath, FileMode.OpenOrCreate))
@@ -756,12 +756,13 @@ namespace CorsinfSDKHik.Funciones
                     fs.Write(struOutBuff.byFingerData, 0, struOutBuff.dwFingerPrintLen);
                     fs.Close();
                 }
+                m_SetSuccessFing = 1;
                 //textBoxFingerData.Text = strpath;
-                Console.WriteLine("Fingerprint GET SUCCEED");
+                //Console.WriteLine("Fingerprint GET SUCCEED");
             }
             catch
             {
-                Console.WriteLine("Fingerprint process failed");
+                //Console.WriteLine("Fingerprint process failed");
                 flag = false;
             }
         }
@@ -769,7 +770,7 @@ namespace CorsinfSDKHik.Funciones
         public String EliminarHuellaPorItem(string cardNo, string itemStr, int userID, int enableReaderNo)
         {
             String msj = "";
-            String datafinger = ObtenerIndicesHuellasRegistradas(cardNo,userID,enableReaderNo);
+            String datafinger = ObtenerIndicesHuellasRegistradas(cardNo, userID, enableReaderNo);
             JArray dedo = JArray.Parse(datafinger);
             foreach (var item in dedo)
             {
@@ -778,7 +779,7 @@ namespace CorsinfSDKHik.Funciones
                 {
                     String data = btnDeleteBiometrico(userID, cardNo, itemStr, enableReaderNo);
                 }
-               // string CardNo = (string)item["CardNo"];
+                // string CardNo = (string)item["CardNo"];
                 //Console.WriteLine(item);
             }
 
@@ -794,7 +795,7 @@ namespace CorsinfSDKHik.Funciones
                 }
             }
 
-            if(eliminado)
+            if (eliminado)
             {
                 msj = "[{\"resp\":\"1\",\"msj\":\"Huella eliminada\"}]";
             }
@@ -804,7 +805,7 @@ namespace CorsinfSDKHik.Funciones
 
         }
 
-        public string btnDeleteBiometrico(int m_UserID, String CardNo,String FingerID,int enableReaderNo)
+        public string btnDeleteBiometrico(int m_UserID, String CardNo, String FingerID, int enableReaderNo)
         {
             String msj = "";
             String CardReaderNo = enableReaderNo.ToString();
@@ -873,19 +874,19 @@ namespace CorsinfSDKHik.Funciones
                         m_lDelFingerPrintCfHandle = -1;
                         //MessageBox.Show("NET_SDK_GET_NEXT_STATUS_FAILED" + CHCNetSDK.NET_DVR_GetLastError().ToString(), "Error", MessageBoxButtons.OK);
                         msj = "NET_SDK_GET_NEXT_STATUS_FAILED" + CHCNetSDK.NET_DVR_GetLastError().ToString();
-                       Flag = false;
+                        Flag = false;
                         break;
                     case CHCNetSDK.NET_SDK_GET_NEXT_STATUS_FINISH:
                         CHCNetSDK.NET_DVR_StopRemoteConfig(m_lDelFingerPrintCfHandle);
                         m_lDelFingerPrintCfHandle = -1;
                         //MessageBox.Show("NET_SDK_GET_NEXT_STATUS_FINISH");
                         msj = "NET_SDK_GET_NEXT_STATUS_FINISH";
-                       Flag = false;
+                        Flag = false;
                         break;
                     default:
                         //MessageBox.Show("NET_SDK_GET_NEXT_STATUS_UNKOWN" + CHCNetSDK.NET_DVR_GetLastError().ToString(), "Error", MessageBoxButtons.OK);
                         msj = "NET_SDK_GET_NEXT_STATUS_UNKOWN" + CHCNetSDK.NET_DVR_GetLastError().ToString();
-                       Flag = false;
+                        Flag = false;
                         break;
                 }
             }
@@ -935,6 +936,94 @@ namespace CorsinfSDKHik.Funciones
                 }
                 Target[i] = source[i];
             }
+        }
+
+        //get finger all
+        public String GetAllFinger(string cardNo, int userID, int enableReaderNo,String RutaDescargo)
+        {
+            String msj = "";
+            String datafinger = ObtenerIndicesHuellasRegistradas(cardNo, userID, enableReaderNo);
+            JArray dedo = JArray.Parse(datafinger);
+            foreach (var item in dedo)
+            {
+                string index = (string)item["item"];
+               msj = btnGet_Click(userID,cardNo,index, "1",RutaDescargo);
+            }
+            return "";
+        }
+
+        public string btnGet_Click(int m_UserID,String CardNo,String FingerID,String CardReaderNo,String rutaFinger)
+        {
+            String msj = "";
+            if (m_lGetFingerPrintCfgHandle != -1)
+            {
+                CHCNetSDK.NET_DVR_StopRemoteConfig((int)m_lGetFingerPrintCfgHandle);
+                m_lGetFingerPrintCfgHandle = -1;
+            }
+            FingerData = rutaFinger;
+
+            CHCNetSDK.NET_DVR_FINGERPRINT_CONDF struCond = new CHCNetSDK.NET_DVR_FINGERPRINT_CONDF();
+            struCond.init();
+            struCond.dwSize = Marshal.SizeOf(struCond);
+            struCond.dwFingerprintNum = 1;
+            byte.TryParse(FingerID, out struCond.byFingerPrintID);
+            byte[] byTemp = System.Text.Encoding.UTF8.GetBytes(CardNo);
+            for (int i = 0; i < byTemp.Length; i++)
+            {
+                struCond.byCardNo[i] = byTemp[i];
+            }
+            int.TryParse(CardReaderNo, out struCond.dwEnableReaderNo);
+            int dwSize = Marshal.SizeOf(struCond);
+            IntPtr ptrStruCond = Marshal.AllocHGlobal(dwSize);
+            Marshal.StructureToPtr(struCond, ptrStruCond, false);
+            m_lGetFingerPrintCfgHandle = CHCNetSDK.NET_DVR_StartRemoteConfig(m_UserID, CHCNetSDK.NET_DVR_GET_FINGERPRINT, ptrStruCond, dwSize, null, IntPtr.Zero);
+            if (-1 == m_lGetFingerPrintCfgHandle)
+            {
+                Marshal.FreeHGlobal(ptrStruCond);
+                //MessageBox.Show("NET_DVR_GET_FINGERPRINT_CFG_V50 FAIL, ERROR CODE" + CHCNetSDK.NET_DVR_GetLastError().ToString(), "Error", MessageBoxButtons.OK);
+                msj = "NET_DVR_GET_FINGERPRINT_CFG_V50 FAIL, ERROR CODE" + CHCNetSDK.NET_DVR_GetLastError().ToString();
+                return msj;
+            }
+
+            Boolean Flag = true;
+            CHCNetSDK.NET_DVR_FINGERPRINT_RECORDF struOutBuff = new CHCNetSDK.NET_DVR_FINGERPRINT_RECORDF();
+            struOutBuff.init();
+            int dWsize = Marshal.SizeOf(struOutBuff);
+            int dwStatus = 0;
+
+            while (Flag)
+            {
+                dwStatus = CHCNetSDK.NET_DVR_GetNextRemoteConfig(m_lGetFingerPrintCfgHandle, ref struOutBuff, dWsize);
+                switch (dwStatus)
+                {
+                    case CHCNetSDK.NET_SDK_GET_NEXT_STATUS_SUCCESS://成功读取到数据，处理完本次数据后需调用next
+                        ProcessFingerData(ref struOutBuff, ref Flag, CardNo, FingerID, rutaFinger);
+                        msj = "Fingerprint GET SUCCEED";
+                        break;
+                    case CHCNetSDK.NET_SDK_GET_NEXT_STATUS_NEED_WAIT:
+                        break;
+                    case CHCNetSDK.NET_SDK_GET_NEXT_STATUS_FAILED:
+                        CHCNetSDK.NET_DVR_StopRemoteConfig(m_lGetFingerPrintCfgHandle);
+                        //MessageBox.Show("NET_SDK_GET_NEXT_STATUS_FAILED" + CHCNetSDK.NET_DVR_GetLastError().ToString(), "Error", MessageBoxButtons.OK);
+                        msj = "NET_SDK_GET_NEXT_STATUS_FAILED" + CHCNetSDK.NET_DVR_GetLastError().ToString();
+                        Flag = false;
+                        break;
+                    case CHCNetSDK.NET_SDK_GET_NEXT_STATUS_FINISH:
+                        //MessageBox.Show("NET_SDK_GET_NEXT_STATUS_FINISH", "Tips", MessageBoxButtons.OK);
+                        msj = "NET_SDK_GET_NEXT_STATUS_FINISH";
+                        CHCNetSDK.NET_DVR_StopRemoteConfig(m_lGetFingerPrintCfgHandle);
+                        Flag = false;
+                        break;
+                    default:
+                        //MessageBox.Show("NET_SDK_GET_NEXT_STATUS_UNKOWN" + CHCNetSDK.NET_DVR_GetLastError().ToString(), "Error", MessageBoxButtons.OK);
+                        msj = "NET_SDK_GET_NEXT_STATUS_UNKOWN" + CHCNetSDK.NET_DVR_GetLastError().ToString();
+                        CHCNetSDK.NET_DVR_StopRemoteConfig(m_lGetFingerPrintCfgHandle);
+                        Flag = false;
+                        break;
+                }
+            }
+            Marshal.FreeHGlobal(ptrStruCond);
+            return msj;
         }
     }
 }

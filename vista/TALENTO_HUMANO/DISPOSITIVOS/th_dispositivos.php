@@ -378,6 +378,7 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
             'huellas':finger,
             'facial':face,
         }
+        $('#myModal_espera').modal('show');
         $.ajax({
             data: {parametros:parametros },
             url: '../controlador/TALENTO_HUMANO/th_dispositivosC.php?importar_datos=true',
@@ -385,16 +386,33 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
             dataType: 'json',
 
             success: function(response) {
-                if (response == 1) {
-                    Swal.fire('', 'Operacion realizada con exito.', 'success').then(function() {
-                        location.reload()
+                $('#myModal_espera').modal('hide');
+                
+                var mensaje_finger = "";
+                var mensaje_face = "";
+                if($('#cbx_finger').prop('checked') && response.finger=="2"){ mensaje_finger = "Algunas Huellas no entontradas" }
+                if($('#cbx_face').prop('checked') && response.face=="2"){ mensaje_face = "Algunas imagenes faciales no entontradas"; }
+
+                if(response.userbio==1)
+                {
+                     Swal.fire('Datos Importados', mensaje_face+'\n'+mensaje_finger, 'success').then(function() {
+                        const link = document.createElement("a");
+                        link.href = response.link; // Ruta al archivo .zip
+                        link.download = response.nombre;       // Nombre sugerido para guardar
+                        document.body.appendChild(link);
+                        link.click();
+                        document.body.removeChild(link);
+
                     });
-                } else {
-                    Swal.fire('', 'Biometrico no tiene datos', 'warning');
+                }else
+                {
+                    Swal.fire('No hay datos que importar de biometrico','', 'warning');
                 }
             },
             
             error: function(xhr, status, error) {
+                
+                $('#myModal_espera').modal('hide');
                 console.log('Status: ' + status); 
                 console.log('Error: ' + error); 
                 console.log('XHR Response: ' + xhr.responseText); 
@@ -645,7 +663,7 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                 <div class="row">
                     <div class="col-lg-12">
                         <input type="hidden" name="txt_id_dispositivo" id="txt_id_dispositivo">
-                        <label><input type="checkbox" name="cbx_nom_card" id="cbx_nom_card" checked>Nombre y No Tarjeta</label><br>
+                        <label><input type="checkbox" name="cbx_nom_card" id="cbx_nom_card" checked disabled>Nombre y No Tarjeta</label><br>
                         <label><input type="checkbox" name="cbx_finger" id="cbx_finger">Huellas Digitales</label><br>
                         <label><input type="checkbox" name="cbx_face" id="cbx_face">Imagen Facial</label><br>
                     </div>

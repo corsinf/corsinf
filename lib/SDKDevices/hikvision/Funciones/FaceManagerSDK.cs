@@ -6,6 +6,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace CorsinfSDKHik.Funciones
 {
@@ -310,6 +311,124 @@ namespace CorsinfSDKHik.Funciones
                 //MessageBox.Show("NET_SDK_DEL_FACE_SUCCEED", "succeed", MessageBoxButtons.OK);
                 m_SetSuccessFace = 1;
                 return "NET_SDK_DEL_FACE_SUCCEED";
+            }
+        }
+
+        public String GetFaceAll(int m_UserID, String CardNo,String CardReaderNo,String rutaFace)
+        {
+            string msj = "";
+            if (m_lGetFaceCfgHandle != -1)
+            {
+                CHCNetSDK.NET_DVR_StopRemoteConfig(m_lGetFaceCfgHandle);
+                m_lGetFaceCfgHandle = -1;
+            }
+
+            CHCNetSDK.NET_DVR_FACE_COND struCond = new CHCNetSDK.NET_DVR_FACE_COND();
+            struCond.init();
+            struCond.dwSize = Marshal.SizeOf(struCond);
+            int dwSize = struCond.dwSize;
+            if (CardReaderNo == "")
+            {
+                struCond.dwEnableReaderNo = 0;
+            }
+            else
+            {
+                int.TryParse(CardReaderNo, out struCond.dwEnableReaderNo);
+            }
+            struCond.dwFaceNum = 1;//人脸数量是1
+            byte[] byTemp = System.Text.Encoding.UTF8.GetBytes(CardNo);
+            for (int i = 0; i < byTemp.Length; i++)
+            {
+                struCond.byCardNo[i] = byTemp[i];
+            }
+
+            IntPtr ptrStruCond = Marshal.AllocHGlobal(dwSize);
+            Marshal.StructureToPtr(struCond, ptrStruCond, false);
+
+            m_lGetFaceCfgHandle = CHCNetSDK.NET_DVR_StartRemoteConfig(m_UserID, CHCNetSDK.NET_DVR_GET_FACE, ptrStruCond, dwSize, null, IntPtr.Zero);
+            if (m_lGetFaceCfgHandle == -1)
+            {
+                Marshal.FreeHGlobal(ptrStruCond);
+                //MessageBox.Show("NET_DVR_GET_FACE_FAIL, ERROR CODE" + CHCNetSDK.NET_DVR_GetLastError().ToString(), "Error", MessageBoxButtons.OK);
+                msj = "NET_DVR_GET_FACE_FAIL, ERROR CODE" + CHCNetSDK.NET_DVR_GetLastError().ToString();
+                return msj;
+            }
+
+            bool Flag = true;
+            int dwStatus = 0;
+
+            CHCNetSDK.NET_DVR_FACE_RECORD struRecord = new CHCNetSDK.NET_DVR_FACE_RECORD();
+            struRecord.init();
+            struRecord.dwSize = Marshal.SizeOf(struRecord);
+            int dwOutBuffSize = struRecord.dwSize;
+            while (Flag)
+            {
+                dwStatus = CHCNetSDK.NET_DVR_GetNextRemoteConfig(m_lGetFaceCfgHandle, ref struRecord, dwOutBuffSize);
+                switch (dwStatus)
+                {
+                    case CHCNetSDK.NET_SDK_GET_NEXT_STATUS_SUCCESS://成功读取到数据，处理完本次数据后需调用next
+                        ProcessFaceData(ref struRecord, ref Flag,CardNo,rutaFace);
+                        msj = "Faceprint GET SUCCEED";
+                        break;
+                    case CHCNetSDK.NET_SDK_GET_NEXT_STATUS_NEED_WAIT:
+                        break;
+                    case CHCNetSDK.NET_SDK_GET_NEXT_STATUS_FAILED:
+                        CHCNetSDK.NET_DVR_StopRemoteConfig(m_lGetFaceCfgHandle);
+                        //MessageBox.Show("NET_SDK_GET_NEXT_STATUS_FAILED" + CHCNetSDK.NET_DVR_GetLastError().ToString(), "Error", MessageBoxButtons.OK);
+                        msj = "NET_SDK_GET_NEXT_STATUS_FAILED" + CHCNetSDK.NET_DVR_GetLastError().ToString();
+
+                        Flag = false;
+                        break;
+                    case CHCNetSDK.NET_SDK_GET_NEXT_STATUS_FINISH:
+                        //MessageBox.Show("NET_SDK_GET_NEXT_STATUS_FINISH", "Tips", MessageBoxButtons.OK);
+                        msj = "NET_SDK_GET_NEXT_STATUS_FINISH";
+
+                        CHCNetSDK.NET_DVR_StopRemoteConfig(m_lGetFaceCfgHandle);
+                        Flag = false;
+                        break;
+                    default:
+                        //MessageBox.Show("NET_SDK_GET_STATUS_UNKOWN" + CHCNetSDK.NET_DVR_GetLastError().ToString(), "Error", MessageBoxButtons.OK);
+                        msj = "NET_SDK_GET_STATUS_UNKOWN" + CHCNetSDK.NET_DVR_GetLastError().ToString();
+                        Flag = false;
+                        CHCNetSDK.NET_DVR_StopRemoteConfig(m_lGetFaceCfgHandle);
+                        break;
+                }
+            }
+
+            Marshal.FreeHGlobal(ptrStruCond);
+            return msj;
+        }
+
+        private void ProcessFaceData(ref CHCNetSDK.NET_DVR_FACE_RECORD struRecord, ref Boolean Flag,String cardNo,String rutaFace)
+        {
+            string strpath = null;
+            DateTime dt = DateTime.Now;
+            strpath = string.Format(rutaFace+"\\cardNo_" +cardNo+"_FacePicture.jpg");
+
+            if (0 == struRecord.dwFaceLen)
+            {
+                return;
+            }
+
+            try
+            {
+                using (FileStream fs = new FileStream(strpath, FileMode.OpenOrCreate))
+                {
+                    int FaceLen = struRecord.dwFaceLen;
+                    byte[] by = new byte[FaceLen];
+                    Marshal.Copy(struRecord.pFaceBuffer, by, 0, FaceLen);
+                    fs.Write(by, 0, FaceLen);
+                    fs.Close();
+                }
+                m_SetSuccessFace = 1; 
+                //string textBoxFilePath = string.Format("{0}\\{1}", Environment.CurrentDirectory, strpath);
+            }
+            catch
+            {
+                Flag = false;
+                CHCNetSDK.NET_DVR_StopRemoteConfig(m_lGetFaceCfgHandle);
+                //MessageBox.Show("ProcessFingerData failed", "Error", MessageBoxButtons.OK);
+                Console.WriteLine("ProcessFingerData failed", "Error");
             }
         }
 

@@ -2,6 +2,7 @@
 date_default_timezone_set('America/Guayaquil');
 
 require_once(dirname(__DIR__, 2) . '/modelo/TALENTO_HUMANO/th_dispositivosM.php');
+require_once(dirname(__DIR__, 2) . '/db/codigos_globales.php');
 
 $controlador = new th_dispositivosC();
 
@@ -35,10 +36,12 @@ if (isset($_GET['importar_datos'])) {
 class th_dispositivosC
 {
     private $modelo;
+    private $cod_globales;
 
     function __construct()
     {
         $this->modelo = new th_dispositivosM();
+        $this->cod_globales = new codigos_globales();
         $this->sdk_patch = dirname(__DIR__,2).'\\lib\\SDKDevices\\hikvision\\bin\\Debug\\net8.0\\CorsinfSDKHik.dll ';
         // $this->sdk_patch = "C:\\Users\\lenovo\\source\\repos\\CorsinfSDKHik\\CorsinfSDKHik\\bin\\Debug\\net8.0\\CorsinfSDKHik.dll ";
         
@@ -119,9 +122,16 @@ class th_dispositivosC
 
     function importar_datos($parametros)
     {
+        $finger = ""; $resp_finger = array();
+        $face = ""; $resp_face = array();
+        $userbio = "1";
         $dispositivo = $this->modelo->where('th_dis_id', $parametros['dispositivos'])->listar();
         // print_r($dispositivo);die()
-         $carpeta = dirname(__DIR__,2).'/TEMP/data/data_importada_'.str_replace(" ",'_',$dispositivo[0]['nombre']);
+
+         $nombre_descarga = 'data_importada_'.str_replace(" ",'_',$dispositivo[0]['nombre']);
+         $carpeta = dirname(__DIR__,2).'/TEMP/data/'.$nombre_descarga;
+         $link_descarga = '../TEMP/data/'.$nombre_descarga.'.zip';
+
          if(!file_exists($carpeta))
          {
 
@@ -130,24 +140,101 @@ class th_dispositivosC
             mkdir($carpeta,0777);
          }
         $cliente = $this->conectar_buscar($parametros);
+        // print_r($cliente);die();
         if(count($cliente)>0)
         {
+            $userbio  = 1;
             $contenido = "";
             foreach ($cliente as $key => $value) {
+
+                $carpeta1 = $carpeta.'/data_cardNo_'.$value['CardNo'];
+                if(!file_exists($carpeta1))
+                {
+                    mkdir($carpeta1,0777);
+                }
+
 
                 $contenido .= "Nombre: {$value['nombre']}, Numero de Tarjeta: {$value['CardNo']}\n";
 
                 if($parametros['huellas']==1)
                 {
+                    $finger  = 0;
+                    $dllPath = $this->sdk_patch . '15 ' . $dispositivo[0]['host'] . ' ' . $dispositivo[0]['usuario'] . ' ' . $dispositivo[0]['port'] . ' ' . $dispositivo[0]['pass'] . ' '.$value['CardNo'].' '.$carpeta1;
+                    // Comando para ejecutar la DLL
+                    $command = "dotnet $dllPath";
 
+                    $output = shell_exec($command);
+                    $resp = json_decode($output, true);
+                    if(isset($resp['resp']))
+                    {
+                        $cadena = $resp['resp'];
+                        if($cadena==1)
+                        {
+                            array_push($resp_finger, 1);
+                        }else
+                        {
+                            array_push($resp_finger, 0);
+                        }
+                    }else
+                    {
+                        array_push($resp_finger, 0);
+                    }
                 }
+
+
                 if($parametros['facial']==1)
                 {
 
+                    $face  = 0;
+                    $dllPath = $this->sdk_patch . '16 ' . $dispositivo[0]['host'] . ' ' . $dispositivo[0]['usuario'] . ' ' . $dispositivo[0]['port'] . ' ' . $dispositivo[0]['pass'] . ' '.$value['CardNo'].' '.$carpeta1;
+                    // Comando para ejecutar la DLL
+                    $command = "dotnet $dllPath";
+
+                    $output = shell_exec($command);
+                    $resp = json_decode($output, true);
+                    $cadena = $resp['resp'];
+                    if(isset($resp['resp']))
+                    {
+                        $cadena = $resp['resp'];
+                        if($cadena==1)
+                        {
+                            array_push($resp_face, 1);
+                        }else
+                        {
+                            array_push($resp_face, 0);
+                        }
+                    }else
+                    {
+                        array_push($resp_face, 0);
+                    }
+
                 }
             }
-
             file_put_contents($carpeta."/usuarios.txt", $contenido);
+
+            if (array_sum($resp_finger)==0) {
+                $finger = 0;
+            }else if(array_sum($resp_finger)>1 && array_sum($resp_finger) == count($resp_finger))
+            {
+                $finger = 1;
+            }else {
+                $finger = 2;
+            }
+
+             if (array_sum($resp_face)==0) {
+                $face = 0;
+            }else if(array_sum($resp_face)>1 && array_sum($resp_face) == count($resp_face))
+            {
+                $face = 1;
+            }else {
+                $face = 2;
+            }
+
+            $this->cod_globales->CrearzipCarpeta($carpeta,$carpeta.'.zip');
+            // print_r($resp_face);
+            // print_r($resp_finger);
+            // die();
+            return array("userbio"=>$userbio,"face"=>$face,"finger"=>$finger,'link'=>$link_descarga,'nombre'=>$nombre_descarga);
         }else
         {
             return -1;

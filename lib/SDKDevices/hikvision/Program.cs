@@ -293,7 +293,7 @@ class Program
                     json = JsonSerializer.Serialize(new { msj = r, resp = m_SetSuccess });
                     break;
                 case "12":
-                    //AGREGAR USUARIO A BIOMETRICO
+                    //AGREGAR USUARIO FACE A BIOMETRICO
                     ip = args[1];
                     user = args[2];
                     port = args[3];
@@ -316,7 +316,7 @@ class Program
                     break;
 
                 case "13":
-                    //AGREGAR USUARIO A BIOMETRICO
+                    //DELETE USUARIO FACE A BIOMETRICO
                     ip = args[1];
                     user = args[2];
                     port = args[3];
@@ -356,8 +356,48 @@ class Program
 
                     }
                     json = JsonSerializer.Serialize(new { msj = r });
-
                     break;
+                case "15":
+                    //Buscar item de huella digital
+                    ip = args[1];
+                    user = args[2];
+                    port = args[3];
+                    pass = args[4];
+                    CardNo = args[5]; // numero de tarjeta
+                    String RutaDescargo = args[6]; // numero de tarjeta
+
+                    r = login.loginSDKDevice(ip, port, user, pass);
+                    m_UserId = login.m_UserID;
+                    if (m_UserId >= 0)
+                    {
+                        FingerManagerSDK FingerMan = new FingerManagerSDK();
+                        r = FingerMan.GetAllFinger(CardNo, m_UserId,1, RutaDescargo);
+                        m_SetSuccessFing = FingerMan.m_SetSuccessFing;
+
+                    }
+                    json = JsonSerializer.Serialize(new { msj = r, resp = m_SetSuccessFing });
+                    break;
+                case "16":
+                    //Buscar item de huella digital
+                    ip = args[1];
+                    user = args[2];
+                    port = args[3];
+                    pass = args[4];
+                    CardNo = args[5]; // numero de tarjeta
+                    String RutaDescargoFace = args[6]; // numero de tarjeta
+
+                    r = login.loginSDKDevice(ip, port, user, pass);
+                    m_UserId = login.m_UserID;
+                    if (m_UserId >= 0)
+                    {
+                        FaceManagerSDK FaceMan = new FaceManagerSDK();
+                        r = FaceMan.GetFaceAll(m_UserId, CardNo, "1", RutaDescargoFace);
+                        m_SetSuccessFing = FaceMan.m_SetSuccessFace;
+
+                    }
+                    json = JsonSerializer.Serialize(new { msj = r, resp = m_SetSuccessFing });
+                    break;
+
 
                 case "99":
                     //GENERAR TABLA DE LOG PARA EJEMPLO

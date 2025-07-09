@@ -1467,5 +1467,29 @@ function para_ftp($nombre,$texto)
 	    ];
 	}
 
+	function CrearzipCarpeta($rutaCarpeta, $rutaZipSalida) {
+    $zip = new ZipArchive();
+    if ($zip->open($rutaZipSalida, ZipArchive::CREATE | ZipArchive::OVERWRITE) === TRUE) {
+        $rutaCarpeta = realpath($rutaCarpeta);
+        $files = new RecursiveIteratorIterator(
+            new RecursiveDirectoryIterator($rutaCarpeta),
+            RecursiveIteratorIterator::LEAVES_ONLY
+        );
+
+        foreach ($files as $name => $file) {
+            if (!$file->isDir()) {
+                $filePath = $file->getRealPath();
+                $relativePath = substr($filePath, strlen($rutaCarpeta) + 1);
+                $zip->addFile($filePath, $relativePath);
+            }
+        }
+
+        $zip->close();
+        return true;
+    } else {
+        return false;
+    }
+}
+
 }
 ?>
