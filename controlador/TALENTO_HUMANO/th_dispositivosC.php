@@ -122,6 +122,7 @@ class th_dispositivosC
 
     function importar_datos($parametros)
     {
+        set_time_limit(0);  //---> para el lado der server
         $finger = ""; $resp_finger = array();
         $face = ""; $resp_face = array();
         $userbio = "1";
