@@ -474,6 +474,15 @@ if (isset($_GET['_id'])) {
                                         </div>
                                     </a>
                                 </li>
+                                <li class="nav-item" role="presentation">
+                                    <a class="nav-link" data-bs-toggle="tab" href="#successPostulacion" role="tab" aria-selected="false">
+                                        <div class="d-flex align-items-center">
+                                            <div class="tab-icon"><i class='bx bx-home font-18 me-1'></i>
+                                            </div>
+                                            <div class="tab-title">Postulación de Trabajo</div>
+                                        </div>
+                                    </a>
+                                </li>
                             </ul>
 
                             <div class="tab-content py-3">
@@ -534,7 +543,7 @@ if (isset($_GET['_id'])) {
 
                                 <div class="tab-pane fade" id="successDepartament" role="tabpanel">
 
-                                    <<div class="container-fluid py-4">
+                                    <div class="container-fluid py-4">
                                         <div class="row">
                                             <div class="col-12">
                                                 <h1 class="text-center mb-4 text-primary">
@@ -552,21 +561,27 @@ if (isset($_GET['_id'])) {
                                                 <div id="organigramaContent"></div>
                                             </div>
                                         </div>
+                                    </div>
+
                                 </div>
+                                <div class="tab-pane fade" id="successPostulacion" role="tabpanel">
+                                    <h1 class="text-center mb-4 text-primary">
+                                        Postular un puesto de trabajo
+                                    </h1>
+                                </div>
+
                             </div>
 
                         </div>
-
                     </div>
+
+
+
                 </div>
-
-
-
             </div>
         </div>
     </div>
-</div>
-<!--end row-->
+    <!--end row-->
 </div>
 </div>
 
@@ -620,175 +635,165 @@ if (isset($_GET['_id'])) {
         </div>
     </div>
 </div>
- <script>
-        // Array estático jerárquico
-        const organigramaData = {
-            id: 'jefe',
-            nombre: "María González",
-            cargo: "Jefe de Departamento",
-            foto: "https://images.unsplash.com/photo-1494790108755-2616b612b3e5?w=150&h=150&fit=crop&crop=face",
-            esJefe: true,
-            subordinados: [
-                {
-                    id: 'ing_redes',
-                    nombre: "Carlos Rodríguez",
-                    cargo: "Ingeniero en Redes",
-                    foto: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face",
-                    subordinados: [
-                        {
-                            id: 'tec_redes_1',
-                            nombre: "Luis Herrera",
-                            cargo: "Técnico en Redes Sr.",
-                            foto: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&h=150&fit=crop&crop=face",
-                            subordinados: [
-                                {
-                                    id: 'asist_redes_1',
-                                    nombre: "Miguel Santos",
-                                    cargo: "Asistente de Redes",
-                                    foto: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=150&h=150&fit=crop&crop=face"
-                                }
-                            ]
-                        },
-                        {
-                            id: 'tec_redes_2',
-                            nombre: "Patricia Silva",
-                            cargo: "Técnica en Seguridad",
-                            foto: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&h=150&fit=crop&crop=face"
-                        }
-                    ]
-                },
-                {
-                    id: 'ing_software',
-                    nombre: "Ana López",
-                    cargo: "Ingeniera en Software",
-                    foto: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop&crop=face",
-                    subordinados: [
-                        {
-                            id: 'dev_frontend',
-                            nombre: "Roberto Vega",
-                            cargo: "Desarrollador Frontend",
-                            foto: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=150&h=150&fit=crop&crop=face",
-                            subordinados: [
-                                {
-                                    id: 'junior_frontend',
-                                    nombre: "Carmen Jiménez",
-                                    cargo: "Desarrolladora Junior",
-                                    foto: "https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=150&h=150&fit=crop&crop=face"
-                                }
-                            ]
-                        },
-                        {
-                            id: 'dev_backend',
-                            nombre: "Diego Morales",
-                            cargo: "Desarrollador Backend",
-                            foto: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face"
-                        }
-                    ]
-                },
-                {
-                    id: 'ing_devops',
-                    nombre: "Andrea Torres",
-                    cargo: "Ingeniera DevOps",
-                    foto: "https://images.unsplash.com/photo-1494790108755-2616b612b3e5?w=150&h=150&fit=crop&crop=face",
-                    subordinados: [
-                        {
-                            id: 'tec_sistemas',
-                            nombre: "Fernando Castro",
-                            cargo: "Técnico de Sistemas",
-                            foto: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face"
-                        }
-                    ]
-                }
-            ]
-        };
+<script>
+    // Array estático jerárquico
+    const organigramaData = {
+        id: 'jefe',
+        nombre: "María González",
+        cargo: "Jefe de Departamento",
+        foto: "https://images.unsplash.com/photo-1494790108755-2616b612b3e5?w=150&h=150&fit=crop&crop=face",
+        esJefe: true,
+        subordinados: [{
+                id: 'ing_redes',
+                nombre: "Carlos Rodríguez",
+                cargo: "Ingeniero en Redes",
+                foto: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face",
+                subordinados: [{
+                        id: 'tec_redes_1',
+                        nombre: "Luis Herrera",
+                        cargo: "Técnico en Redes Sr.",
+                        foto: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&h=150&fit=crop&crop=face",
+                        subordinados: [{
+                            id: 'asist_redes_1',
+                            nombre: "Miguel Santos",
+                            cargo: "Asistente de Redes",
+                            foto: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=150&h=150&fit=crop&crop=face"
+                        }]
+                    },
+                    {
+                        id: 'tec_redes_2',
+                        nombre: "Patricia Silva",
+                        cargo: "Técnica en Seguridad",
+                        foto: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&h=150&fit=crop&crop=face"
+                    }
+                ]
+            },
+            {
+                id: 'ing_software',
+                nombre: "Ana López",
+                cargo: "Ingeniera en Software",
+                foto: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop&crop=face",
+                subordinados: [{
+                        id: 'dev_frontend',
+                        nombre: "Roberto Vega",
+                        cargo: "Desarrollador Frontend",
+                        foto: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=150&h=150&fit=crop&crop=face",
+                        subordinados: [{
+                            id: 'junior_frontend',
+                            nombre: "Carmen Jiménez",
+                            cargo: "Desarrolladora Junior",
+                            foto: "https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=150&h=150&fit=crop&crop=face"
+                        }]
+                    },
+                    {
+                        id: 'dev_backend',
+                        nombre: "Diego Morales",
+                        cargo: "Desarrollador Backend",
+                        foto: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face"
+                    }
+                ]
+            },
+            {
+                id: 'ing_devops',
+                nombre: "Andrea Torres",
+                cargo: "Ingeniera DevOps",
+                foto: "https://images.unsplash.com/photo-1494790108755-2616b612b3e5?w=150&h=150&fit=crop&crop=face",
+                subordinados: [{
+                    id: 'tec_sistemas',
+                    nombre: "Fernando Castro",
+                    cargo: "Técnico de Sistemas",
+                    foto: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face"
+                }]
+            }
+        ]
+    };
 
-        // Función para obtener colores por departamento (índice del departamento)
-        function obtenerColoresDepartamento(indiceDepartamento) {
-            const colores = [
-                {
-                    cardClass: 'border-success bg-light text-dark',
-                    textClass: 'text-success',
-                    textSecondaryClass: 'text-muted',
-                    iconClass: 'text-success',
-                    borderColor: 'border-success'
-                },
-                {
-                    cardClass: 'border-info bg-light text-dark',
-                    textClass: 'text-info',
-                    textSecondaryClass: 'text-muted',
-                    iconClass: 'text-info',
-                    borderColor: 'border-info'
-                },
-                {
-                    cardClass: 'border-warning bg-light text-dark',
-                    textClass: 'text-warning',
-                    textSecondaryClass: 'text-muted',
-                    iconClass: 'text-warning',
-                    borderColor: 'border-warning'
-                },
-                {
-                    cardClass: 'border-danger bg-light text-dark',
-                    textClass: 'text-danger',
-                    textSecondaryClass: 'text-muted',
-                    iconClass: 'text-danger',
-                    borderColor: 'border-danger'
-                },
-                {
-                    cardClass: 'border-purple bg-light text-dark',
-                    textClass: 'text-purple',
-                    textSecondaryClass: 'text-muted',
-                    iconClass: 'text-purple',
-                    borderColor: 'border-purple'
-                }
-            ];
-            
-            return colores[indiceDepartamento % colores.length];
-        }
+    // Función para obtener colores por departamento (índice del departamento)
+    function obtenerColoresDepartamento(indiceDepartamento) {
+        const colores = [{
+                cardClass: 'border-success bg-light text-dark',
+                textClass: 'text-success',
+                textSecondaryClass: 'text-muted',
+                iconClass: 'text-success',
+                borderColor: 'border-success'
+            },
+            {
+                cardClass: 'border-info bg-light text-dark',
+                textClass: 'text-info',
+                textSecondaryClass: 'text-muted',
+                iconClass: 'text-info',
+                borderColor: 'border-info'
+            },
+            {
+                cardClass: 'border-warning bg-light text-dark',
+                textClass: 'text-warning',
+                textSecondaryClass: 'text-muted',
+                iconClass: 'text-warning',
+                borderColor: 'border-warning'
+            },
+            {
+                cardClass: 'border-danger bg-light text-dark',
+                textClass: 'text-danger',
+                textSecondaryClass: 'text-muted',
+                iconClass: 'text-danger',
+                borderColor: 'border-danger'
+            },
+            {
+                cardClass: 'border-purple bg-light text-dark',
+                textClass: 'text-purple',
+                textSecondaryClass: 'text-muted',
+                iconClass: 'text-purple',
+                borderColor: 'border-purple'
+            }
+        ];
 
-        // Función para crear tarjeta de empleado con Bootstrap
-        function crearTarjetaEmpleado(empleado, nivel = 0, indiceDepartamento = 0) {
-            const tieneSubordinados = empleado.subordinados && empleado.subordinados.length > 0;
-            const esJefe = empleado.esJefe;
-            
-            // Determinar el tamaño de la card según el nivel
-            const cardSize = esJefe ? 'col-12 col-md-6 col-lg-4' : 'col-12 col-sm-6 col-md-4 col-lg-3';
-            
-            const equipoInfo = tieneSubordinados ? `
+        return colores[indiceDepartamento % colores.length];
+    }
+
+    // Función para crear tarjeta de empleado con Bootstrap
+    function crearTarjetaEmpleado(empleado, nivel = 0, indiceDepartamento = 0) {
+        const tieneSubordinados = empleado.subordinados && empleado.subordinados.length > 0;
+        const esJefe = empleado.esJefe;
+
+        // Determinar el tamaño de la card según el nivel
+        const cardSize = esJefe ? 'col-12 col-md-6 col-lg-4' : 'col-12 col-sm-6 col-md-4 col-lg-3';
+
+        const equipoInfo = tieneSubordinados ? `
                 <small class="text-muted">
                     <i class="fas fa-users me-1"></i>
                     Equipo: ${contarSubordinados(empleado)} personas
                 </small>
             ` : '';
-            
-            const clickable = tieneSubordinados ? `data-bs-toggle="collapse" data-bs-target="#collapse-${empleado.id}" aria-expanded="false" aria-controls="collapse-${empleado.id}" role="button"` : '';
-            
-            // Determinar colores según nivel
-            let cardClass, textClass, textSecondaryClass, iconClass;
-            
-            if (esJefe) {
-                // Jefe principal
-                cardClass = 'border-primary bg-primary text-white';
-                textClass = 'text-white';
-                textSecondaryClass = 'text-white-50';
-                iconClass = 'text-white';
-            } else if (nivel >= 2) {
-                // A partir de la tercera capa (nivel 2), aplicar colores por departamento
-                const colores = obtenerColoresDepartamento(indiceDepartamento);
-                cardClass = colores.cardClass;
-                textClass = colores.textClass;
-                textSecondaryClass = colores.textSecondaryClass;
-                iconClass = colores.iconClass;
-            } else {
-                // Primeros dos niveles (jefes de departamento)
-                cardClass = 'border-secondary bg-light';
-                textClass = 'text-primary';
-                textSecondaryClass = 'text-muted';
-                iconClass = 'text-primary';
-            }
-            
-            const shadowClass = esJefe ? 'shadow-lg' : 'shadow-sm';
-            
-            return `
+
+        const clickable = tieneSubordinados ? `data-bs-toggle="collapse" data-bs-target="#collapse-${empleado.id}" aria-expanded="false" aria-controls="collapse-${empleado.id}" role="button"` : '';
+
+        // Determinar colores según nivel
+        let cardClass, textClass, textSecondaryClass, iconClass;
+
+        if (esJefe) {
+            // Jefe principal
+            cardClass = 'border-primary bg-primary text-white';
+            textClass = 'text-white';
+            textSecondaryClass = 'text-white-50';
+            iconClass = 'text-white';
+        } else if (nivel >= 2) {
+            // A partir de la tercera capa (nivel 2), aplicar colores por departamento
+            const colores = obtenerColoresDepartamento(indiceDepartamento);
+            cardClass = colores.cardClass;
+            textClass = colores.textClass;
+            textSecondaryClass = colores.textSecondaryClass;
+            iconClass = colores.iconClass;
+        } else {
+            // Primeros dos niveles (jefes de departamento)
+            cardClass = 'border-secondary bg-light';
+            textClass = 'text-primary';
+            textSecondaryClass = 'text-muted';
+            iconClass = 'text-primary';
+        }
+
+        const shadowClass = esJefe ? 'shadow-lg' : 'shadow-sm';
+
+        return `
                 <div class="${cardSize} mb-3">
                     <div class="card ${cardClass} ${shadowClass} h-100 ${tieneSubordinados ? 'card-clickable' : ''}" 
                          ${clickable} 
@@ -807,42 +812,42 @@ if (isset($_GET['_id'])) {
                     </div>
                 </div>
             `;
-        }
+    }
 
-        // Función para contar subordinados
-        function contarSubordinados(empleado) {
-            if (!empleado.subordinados) return 0;
-            let count = empleado.subordinados.length;
-            empleado.subordinados.forEach(sub => {
-                count += contarSubordinados(sub);
-            });
-            return count;
-        }
+    // Función para contar subordinados
+    function contarSubordinados(empleado) {
+        if (!empleado.subordinados) return 0;
+        let count = empleado.subordinados.length;
+        empleado.subordinados.forEach(sub => {
+            count += contarSubordinados(sub);
+        });
+        return count;
+    }
 
-        // Función para generar nivel
-        function generarNivel(empleados, nivel = 0) {
-            if (!empleados || empleados.length === 0) return '';
-            
-            let html = '';
-            
-            // Crear nivel actual
-            html += `<div class="row justify-content-center mb-3">`;
-            empleados.forEach((empleado, index) => {
-                html += crearTarjetaEmpleado(empleado, nivel, index);
-            });
-            html += `</div>`;
-            
-            // Crear subniveles colapsables
-            empleados.forEach((empleado, index) => {
-                if (empleado.subordinados && empleado.subordinados.length > 0) {
-                    // Determinar color del borde según el índice del departamento
-                    let borderColor = 'border-primary';
-                    if (nivel >= 1) {
-                        const colores = obtenerColoresDepartamento(index);
-                        borderColor = colores.borderColor;
-                    }
-                    
-                    html += `
+    // Función para generar nivel
+    function generarNivel(empleados, nivel = 0) {
+        if (!empleados || empleados.length === 0) return '';
+
+        let html = '';
+
+        // Crear nivel actual
+        html += `<div class="row justify-content-center mb-3">`;
+        empleados.forEach((empleado, index) => {
+            html += crearTarjetaEmpleado(empleado, nivel, index);
+        });
+        html += `</div>`;
+
+        // Crear subniveles colapsables
+        empleados.forEach((empleado, index) => {
+            if (empleado.subordinados && empleado.subordinados.length > 0) {
+                // Determinar color del borde según el índice del departamento
+                let borderColor = 'border-primary';
+                if (nivel >= 1) {
+                    const colores = obtenerColoresDepartamento(index);
+                    borderColor = colores.borderColor;
+                }
+
+                html += `
                         <div class="collapse mt-3" id="collapse-${empleado.id}">
                             <div class="container-fluid">
                                 <div class="border-start border-3 ${borderColor} ps-4 ms-3">
@@ -851,65 +856,69 @@ if (isset($_GET['_id'])) {
                             </div>
                         </div>
                     `;
-                }
-            });
-            
-            return html;
-        }
-
-        // Función principal
-        function generarOrganigrama() {
-            return generarNivel([organigramaData], 0);
-        }
-
-        // Variables globales
-        let todoExpandido = false;
-
-        // Expandir/Colapsar todo
-        function toggleExpandirTodo() {
-            const btn = document.querySelector('.btn-primary');
-            const icon = btn.querySelector('i');
-            const text = document.getElementById('btnText');
-            
-            if (todoExpandido) {
-                // Colapsar todo
-                document.querySelectorAll('.collapse').forEach(collapse => {
-                    const bsCollapse = new bootstrap.Collapse(collapse, {toggle: false});
-                    bsCollapse.hide();
-                });
-                
-                icon.className = 'fas fa-expand-arrows-alt me-2';
-                text.textContent = 'Expandir Todo';
-                todoExpandido = false;
-            } else {
-                // Expandir todo
-                document.querySelectorAll('.collapse').forEach(collapse => {
-                    const bsCollapse = new bootstrap.Collapse(collapse, {toggle: false});
-                    bsCollapse.show();
-                });
-                
-                icon.className = 'fas fa-compress-arrows-alt me-2';
-                text.textContent = 'Colapsar Todo';
-                todoExpandido = true;
             }
-        }
+        });
 
-        // Inicialización
-        document.addEventListener('DOMContentLoaded', function() {
-            document.getElementById('organigramaContent').innerHTML = generarOrganigrama();
-            
-            // Añadir efectos hover para las cards clickeables
-            document.querySelectorAll('.card-clickable').forEach(card => {
-                card.addEventListener('mouseenter', function() {
-                    this.style.transform = 'translateY(-2px)';
-                    this.style.transition = 'transform 0.2s ease';
+        return html;
+    }
+
+    // Función principal
+    function generarOrganigrama() {
+        return generarNivel([organigramaData], 0);
+    }
+
+    // Variables globales
+    let todoExpandido = false;
+
+    // Expandir/Colapsar todo
+    function toggleExpandirTodo() {
+        const btn = document.querySelector('.btn-primary');
+        const icon = btn.querySelector('i');
+        const text = document.getElementById('btnText');
+
+        if (todoExpandido) {
+            // Colapsar todo
+            document.querySelectorAll('.collapse').forEach(collapse => {
+                const bsCollapse = new bootstrap.Collapse(collapse, {
+                    toggle: false
                 });
-                
-                card.addEventListener('mouseleave', function() {
-                    this.style.transform = 'translateY(0)';
+                bsCollapse.hide();
+            });
+
+            icon.className = 'fas fa-expand-arrows-alt me-2';
+            text.textContent = 'Expandir Todo';
+            todoExpandido = false;
+        } else {
+            // Expandir todo
+            document.querySelectorAll('.collapse').forEach(collapse => {
+                const bsCollapse = new bootstrap.Collapse(collapse, {
+                    toggle: false
                 });
+                bsCollapse.show();
+            });
+
+            icon.className = 'fas fa-compress-arrows-alt me-2';
+            text.textContent = 'Colapsar Todo';
+            todoExpandido = true;
+        }
+    }
+
+    // Inicialización
+    document.addEventListener('DOMContentLoaded', function() {
+        document.getElementById('organigramaContent').innerHTML = generarOrganigrama();
+
+        // Añadir efectos hover para las cards clickeables
+        document.querySelectorAll('.card-clickable').forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-2px)';
+                this.style.transition = 'transform 0.2s ease';
+            });
+
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0)';
             });
         });
+    });
     $(document).ready(function() {
         // Selecciona el label existente y añade el nuevo label
         agregar_asterisco_campo_obligatorio('txt_nombre');

@@ -58,13 +58,44 @@ $hora_salida = isset($_GET['hora_salida']) ? $_GET['hora_salida'] : 930;
                 $('#txt_limite_tardanza_out').val(response[0].limite_tardanza_out);
                 $('#txt_color').val(response[0].color);
                 color_input(response[0].color);
-                $('#cbx_descanso').prop('checked', (response[0].descanso == 1));
                 $('#txt_tiempo_descanso').val(minutos_formato_hora(response[0].hora_descanso));
+                // Marcar checkbox de descanso
+                $('#rbx_descanso').prop('checked', response[0].descanso == 1);
+                $('#rbx_aplicar_descanso').prop('checked', response[0].usar_descanso == 1);
+                $('#cbx_hora_suple_extra').prop('checked', response[0].calcular_horas_extra == 1);
 
+                // Mostrar/ocultar panel según el estado
                 if (response[0].descanso == 1) {
                     $('#pnl_tiempo_descanso').show();
+                    $('#txt_tiempo_descanso').val(response[0].hora_descanso || '');
+                } else {
+                    $('#pnl_tiempo_descanso').hide();
                 }
 
+                if (response[0].usar_descanso == 1) {
+                    $('#pnl_aplicar_tiempo_descanso').show();
+                    // Cargar valores si existen, convirtiendo de minutos a HH:mm
+                    $('#txt_tiempo_descanso_rango').val(response[0].hora_descanso || '');
+                    $('#txt_hora_descanso_inicio').val(minutos_formato_hora(response[0].descanso_inicio || ''));
+                    $('#txt_hora_descanso_final').val(minutos_formato_hora(response[0].descanso_fin || ''));
+                    $('#txt_limite_tardanza_descanso_in').val(response[0].tol_ini_descanso || '');
+                    $('#txt_limite_tardanza_descanso_out').val(response[0].tol_fin_descanso || '');
+
+                } else {
+                    $('#pnl_aplicar_tiempo_descanso').hide();
+                }
+
+                if (response[0].calcular_horas_extra == 1) {
+
+                    $('#pnl_tiempo_suple_extra').show();
+                    $('#txt_hora_extra_inicio').val(minutos_formato_hora(response[0].extra_ini || ''));
+                    $('#txt_hora_extra_final').val(minutos_formato_hora(response[0].extra_fin || ''));
+                    $('#txt_hora_suple_inicio').val(minutos_formato_hora(response[0].supl_ini || ''));
+                    $('#txt_hora_suple_final').val(minutos_formato_hora(response[0].supl_fin || ''));
+                } else {
+                    $('#pnl_tiempo_suple_extra').hide();
+                }
+                actualizarOverlaySlider();
             }
         });
     }
@@ -83,8 +114,22 @@ $hora_salida = isset($_GET['hora_salida']) ? $_GET['hora_salida'] : 930;
         var txt_checkout_salida_fin = $('#txt_checkout_salida_fin').val();
         var txt_limite_tardanza_out = $('#txt_limite_tardanza_out').val();
         var txt_color = $('#txt_color').val();
-        var cbx_descanso = $('#cbx_descanso').prop('checked') ? 1 : 0;
+        // para los descansos
+        var rbx_descanso = $('#rbx_descanso').prop('checked') ? 1 : 0;
         var txt_tiempo_descanso = $('#txt_tiempo_descanso').val();
+        var txt_tiempo_descanso_rango = $('#txt_tiempo_descanso_rango').val();
+        var txt_hora_descanso_inicio = $('#txt_hora_descanso_inicio').val();
+        var txt_hora_descanso_final = $('#txt_hora_descanso_final').val();
+        var rbx_aplicar_descanso = $('#rbx_aplicar_descanso').prop('checked') ? 1 : 0;
+        var txt_limite_tardanza_descanso_in = $('#txt_limite_tardanza_descanso_in').val();
+        var txt_limite_tardanza_descanso_out = $('#txt_limite_tardanza_descanso_out').val();
+        // para las horas extra
+        var cbx_hora_suple_extra = $('#cbx_hora_suple_extra').prop('checked') ? 1 : 0;
+        var txt_hora_extra_inicio = $('#txt_hora_extra_inicio').val();
+        var txt_hora_extra_final = $('#txt_hora_extra_final').val();
+        var txt_hora_suple_inicio = $('#txt_hora_suple_inicio').val();
+        var txt_hora_suple_final = $('#txt_hora_suple_final').val();
+
 
         var parametros = {
             '_id': '<?= $_id ?>',
@@ -101,8 +146,19 @@ $hora_salida = isset($_GET['hora_salida']) ? $_GET['hora_salida'] : 930;
             'txt_checkout_salida_fin': txt_checkout_salida_fin,
             'txt_limite_tardanza_out': txt_limite_tardanza_out,
             'txt_color': txt_color,
-            'cbx_descanso': cbx_descanso,
+            'rbx_descanso': rbx_descanso,
             'txt_tiempo_descanso': txt_tiempo_descanso,
+            'txt_tiempo_descanso_rango': txt_tiempo_descanso_rango,
+            'txt_hora_descanso_inicio': txt_hora_descanso_inicio,
+            'txt_hora_descanso_final': txt_hora_descanso_final,
+            'txt_limite_tardanza_descanso_in': txt_limite_tardanza_descanso_in,
+            'txt_limite_tardanza_descanso_out': txt_limite_tardanza_descanso_out,
+            'rbx_aplicar_descanso': rbx_aplicar_descanso,
+            'cbx_hora_suple_extra': cbx_hora_suple_extra,
+            'txt_hora_extra_inicio': txt_hora_extra_inicio,
+            'txt_hora_extra_final': txt_hora_extra_final,
+            'txt_hora_suple_inicio': txt_hora_suple_inicio,
+            'txt_hora_suple_final': txt_hora_suple_final,
 
         };
 
@@ -184,31 +240,94 @@ $hora_salida = isset($_GET['hora_salida']) ? $_GET['hora_salida'] : 930;
         });
     }
     $(document).ready(function() {
-        // Evento para hora de inicio
         $('#txt_hora_descanso_inicio').on('change', function() {
             verificarDescanso();
         });
 
-        // Evento para hora final
-        $('#txt_hora_descanso_final').on('change', function() {
+
+        $('#txt_tiempo_descanso_rango, #txt_hora_descanso_inicio').on('blur', function() {
             verificarDescanso();
         });
+
+        $('#txt_hora_descanso_inicio, #txt_hora_descanso_final, #txt_hora_suple_inicio, #txt_hora_suple_final, #txt_hora_extra_inicio, #txt_hora_extra_final').on('change', function() {
+            actualizarOverlaySlider();
+        });
+
+        $('#cbx_hora_suple_extra').change(function() {
+            if ($(this).is(':checked')) {
+
+                $('#txt_hora_suple_inicio').val("15:00");
+                $('#txt_hora_suple_final').val("19:00");
+                $('#txt_hora_extra_inicio').val("19:00");
+                $('#txt_hora_extra_final').val("23:59");
+
+            } else {
+                // Limpiar los campos si se desactiva
+                $('#txt_hora_suple_inicio').val('');
+                $('#txt_hora_suple_final').val('');
+                $('#btn_crear_editar_turno').prop('disabled', false);
+            }
+
+        });
+
+        $('#txt_hora_suple_inicio').on('blur', validarHoraSupleFueraDeHorario);
+
     });
+    function toHHMM(minutes) {
+        let h = Math.floor(minutes / 60);
+        let m = minutes % 60;
+        return `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}`;
+    }
+
+    function validarHoraSupleFueraDeHorario() {
+        let horaEntrada = $('#txt_hora_entrada').val();
+        let horaSalida = $('#txt_checkout_salida_fin').val();
+        let horaSupleInicio = $('#txt_hora_suple_inicio').val();
+
+        if (!horaEntrada || !horaSalida || !horaSupleInicio) {
+            return; // Si falta alguno, no validar aún
+        }
+        const entradaMin = toMinutes(horaEntrada);
+        const salidaMin = toMinutes(horaSalida);
+        const supleMin = toMinutes(horaSupleInicio);
+
+        if (supleMin >= entradaMin && supleMin <= salidaMin) {
+            mostrarAlerta(
+                'error',
+                'Hora suple inválida',
+                `❌ La hora suplementaria de inicio (${horaSupleInicio}) no puede estar dentro del horario laboral (${horaEntrada} - ${horaSalida}).`
+            );
+            $('#txt_hora_suple_inicio').val('');
+            $('#btn_crear_editar_turno').prop('disabled', true);
+        } else {
+            $('#btn_crear_editar_turno').prop('disabled', false);
+        }
+    }
+
+    function toMinutes(hhmm) {
+        const [h, m] = hhmm.split(':').map(Number);
+        return h * 60 + m;
+    }
 
     function verificarDescanso() {
-        // Lectura de valores
-        let horaEntrada = $('#txt_hora_entrada').val();
+        let horaEntrada = $('#txt_checkin_registro_fin').val();
         let horaSalida = $('#txt_hora_salida').val();
         let descansoInicio = $('#txt_hora_descanso_inicio').val();
-        let descansoFinal = $('#txt_hora_descanso_final').val();
-        let descansoPermitido = parseInt($('#txt_hora_descanso').val(), 10);
+        let descansoPermitido = parseInt($('#txt_tiempo_descanso_rango').val(), 10);
+        let tolerancia_ingreso = parseInt($('#txt_limite_tardanza_in').val(), 10) || 0;
 
-        function toMinutes(hhmm) {
-            let [h, m] = hhmm.split(':').map(x => parseInt(x, 10));
-            return h * 60 + m;
+
+        if (!horaEntrada || !horaSalida || !descansoInicio || isNaN(descansoPermitido)) {
+            $('#btn_crear_editar_turno').prop('disabled', true);
+            return;
         }
 
-        let entradaMin = toMinutes(horaEntrada);
+        // Calcular hora de descanso final automáticamente
+        let descansoFinal = sumarMinutos(descansoInicio, descansoPermitido);
+        $('#txt_hora_descanso_final').val(descansoFinal);
+
+
+        let entradaMin = toMinutes(horaEntrada) + tolerancia_ingreso;
         let salidaMin = toMinutes(horaSalida);
         let inicioMin = toMinutes(descansoInicio);
         let finMin = toMinutes(descansoFinal);
@@ -230,21 +349,22 @@ $hora_salida = isset($_GET['hora_salida']) ? $_GET['hora_salida'] : 930;
         }
 
         if (errores.length) {
-            mostrarAlerta(
-                'error',
-                'Error en configuración de descanso',
-                errores.map(e => `❌ ${e}`).join('<br>')
-            );
+            mostrarAlerta('error', 'Error en configuración de descanso', errores.map(e => `❌ ${e}`).join('<br>'));
+            $('#btn_crear_editar_turno').prop('disabled', true);
+            $('#txt_hora_descanso_inicio').val('');
+            $('#txt_hora_descanso_final').val('');
         } else {
-            mostrarAlerta(
-                'success',
-                'Descanso válido',
-                `✅ La configuración de descanso es correcta.<br>Duración: ${duracionMin} minutos.`
-            );
+            $('#btn_crear_editar_turno').prop('disabled', false);
         }
     }
 
-
+    function sumarMinutos(hora, minutos) {
+        let [h, m] = hora.split(':').map(Number);
+        let total = h * 60 + m + minutos;
+        let nuevaH = Math.floor(total / 60) % 24;
+        let nuevaM = total % 60;
+        return nuevaH.toString().padStart(2, '0') + ':' + nuevaM.toString().padStart(2, '0');
+    }
     function mostrarAlerta(tipo, titulo, htmlMensaje) {
         Swal.fire({
             icon: tipo, // 'success' o 'error'
@@ -253,6 +373,7 @@ $hora_salida = isset($_GET['hora_salida']) ? $_GET['hora_salida'] : 930;
             confirmButtonText: 'Entendido'
         });
     }
+
 </script>
 
 <!-- Slider -->
@@ -529,32 +650,44 @@ $hora_salida = isset($_GET['hora_salida']) ? $_GET['hora_salida'] : 930;
 
 
                             <div class="row pt-4">
-                                <h5>Datos del descanzo</h5>
+                                <h5>Descanso</h5>
                                 <hr>
                                 <div class="col-md-11">
                                     <div class="row mb-col">
-                                        <label class="col-sm-4 col-form-label text-end fw-bold" for="cbx_descanso">
+                                        <label class="col-sm-4 col-form-label text-end fw-bold" for="rbx_descanso">
                                             ¿Usar descanso?
                                         </label>
                                         <div class="col-sm-6 d-flex align-items-center">
-                                            <div class="form-check">
-                                                <input
-                                                    class="form-check-input"
-                                                    type="checkbox"
-                                                    id="cbx_descanso"
-                                                    name="cbx_descanso"
-                                                    value="1">
-                                                <label class="form-check-label" for="cbx_descanso">
+                                            <div class="form-check me-3">
+                                                <input class="form-check-input" type="radio" name="descanso_opcion" id="rbx_descanso" value="1">
+                                                <label class="form-check-label" for="rbx_descanso">
                                                     Sí, aplicar descanso
+                                                </label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" name="descanso_opcion" id="rbx_aplicar_descanso" value="2">
+                                                <label class="form-check-label" for="rbx_aplicar_descanso">
+                                                    Sí, aplicar descanso con rangos
                                                 </label>
                                             </div>
                                         </div>
                                     </div>
+
+
                                     <div id="pnl_tiempo_descanso" style="display: none;">
                                         <div class="row mb-col">
                                             <label for="txt_tiempo_descanso" class="col-sm-4 col-form-label text-end fw-bold">Hora de descanso (min) </label>
                                             <div class="col-sm-6">
-                                                <input type="number" class="form-control form-control-sm" name="txt_tiempo_descanso" id="txt_tiempo_descanso" value="5">
+                                                <input type="number" class="form-control form-control-sm" name="txt_tiempo_descanso" id="txt_tiempo_descanso">
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <div id="pnl_aplicar_tiempo_descanso" style="display: none;">
+                                        <div class="row mb-col">
+                                            <label for="txt_tiempo_descanso_rango" class="col-sm-4 col-form-label text-end fw-bold">Hora de descanso (min) </label>
+                                            <div class="col-sm-6">
+                                                <input type="number" class="form-control form-control-sm" name="txt_tiempo_descanso_rango" id="txt_tiempo_descanso_rango">
                                             </div>
                                         </div>
                                         <div class="row mb-col">
@@ -563,7 +696,7 @@ $hora_salida = isset($_GET['hora_salida']) ? $_GET['hora_salida'] : 930;
                                                 <input type="time" class="form-control form-control-sm" name="txt_hora_descanso_inicio" id="txt_hora_descanso_inicio" value="10:00">
                                             </div>
                                             <div class="col-sm-3">
-                                                <input type="time" class="form-control form-control-sm" name="txt_hora_descanso_final" id="txt_hora_descanso_final" value="11:00">
+                                                <input type="time" class="form-control form-control-sm" name="txt_hora_descanso_final" id="txt_hora_descanso_final" disabled>
                                             </div>
                                         </div>
                                         <div class="row mb-col">
@@ -583,13 +716,59 @@ $hora_salida = isset($_GET['hora_salida']) ? $_GET['hora_salida'] : 930;
                                 </div>
                             </div>
 
+                            <div class="row pt-4">
+                                <h5>Tiempo extra</h5>
+                                <hr>
+                                <div class="col-md-11">
+                                    <div class="row mb-col">
+                                        <label class="col-sm-4 col-form-label text-end fw-bold" for="cbx_hora_suple_extra">
+                                            ¿Usar tiempo suplementario y extraordinario?
+                                        </label>
+                                        <div class="col-sm-6 d-flex align-items-center">
+                                            <div class="form-check">
+                                                <input
+                                                    class="form-check-input"
+                                                    type="checkbox"
+                                                    id="cbx_hora_suple_extra"
+                                                    name="cbx_hora_suple_extra"
+                                                    value="1">
+                                                <label class="form-check-label" for="cbx_hora_suple_extra">
+                                                    Sí, aplicar tiempo extra
+                                                </label>
+                                            </div>
+                                        </div>
+
+                                        <div id="pnl_tiempo_suple_extra" style="display: none;">
+                                            <div class="row mb-col">
+                                                <label for="txt_horas_suple" class="col-sm-4 col-form-label text-end fw-bold">Horario de horas suplementarias</label>
+                                                <div class="col-sm-3">
+                                                    <input type="time" class="form-control form-control-sm" name="txt_hora_suple_inicio" id="txt_hora_suple_inicio">
+                                                </div>
+                                                <div class="col-sm-3">
+                                                    <input type="time" class="form-control form-control-sm" name="txt_hora_suple_final" id="txt_hora_suple_final" disabled>
+                                                </div>
+                                            </div>
+                                            <div class="row mb-col">
+                                                <label for="txt_horas_extra" class="col-sm-4 col-form-label text-end fw-bold">Horario de horas extraordinarias</label>
+                                                <div class="col-sm-3">
+                                                    <input type="time" class="form-control form-control-sm" name="txt_hora_extra_inicio" id="txt_hora_extra_inicio" disabled>
+                                                </div>
+                                                <div class="col-sm-3">
+                                                    <input type="time" class="form-control form-control-sm" name="txt_hora_extra_final" id="txt_hora_extra_final" disabled>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
 
                             <div class="d-flex justify-content-end pt-2">
 
                                 <?php if ($_id == '') { ?>
-                                    <button class="btn btn-success btn-sm px-4 m-0" onclick="editar_insertar();" type="button"><i class="bx bx-save"></i> Guardar</button>
+                                    <button id="btn_crear_editar_turno" class="btn btn-success btn-sm px-4 m-0" onclick="editar_insertar();" type="button"><i class="bx bx-save"></i> Guardar</button>
                                 <?php } else { ?>
-                                    <button class="btn btn-success btn-sm px-4 m-1" onclick="editar_insertar();" type="button"><i class="bx bx-save"></i> Editar</button>
+                                    <button id="btn_crear_editar_turno" class="btn btn-success btn-sm px-4 m-1" onclick="editar_insertar();" type="button"><i class="bx bx-save"></i> Editar</button>
                                     <button class="btn btn-danger btn-sm px-4 m-1" onclick="delete_datos();" type="button"><i class="bx bx-trash"></i> Eliminar</button>
                                 <?php } ?>
                             </div>
@@ -738,6 +917,72 @@ $hora_salida = isset($_GET['hora_salida']) ? $_GET['hora_salida'] : 930;
 
     });
 
+    function actualizarOverlaySlider() {
+        const descansoIni = $('#txt_hora_descanso_inicio').val();
+        const descansoFin = $('#txt_hora_descanso_final').val();
+        const supleIni = $('#txt_hora_suple_inicio').val();
+        const supleFin = $('#txt_hora_suple_final').val();
+        const extraIni = $('#txt_hora_extra_inicio').val();
+        const extraFin = $('#txt_hora_extra_final').val();
+
+        // Convertir a minutos
+        const toMinutes = (h) => {
+            if (!h) return null;
+            let [hh, mm] = h.split(':').map(Number);
+            return hh * 60 + mm;
+        }
+
+        const overlayRanges = [{
+                id: 'descanso',
+                from: toMinutes(descansoIni),
+                to: toMinutes(descansoFin),
+                color: '#FFA726'
+            }, // naranja
+            {
+                id: 'suple',
+                from: toMinutes(supleIni),
+                to: toMinutes(supleFin),
+                color: '#42A5F5'
+            }, // azul
+            {
+                id: 'extra',
+                from: toMinutes(extraIni),
+                to: toMinutes(extraFin),
+                color: '#AB47BC'
+            }, // morado
+        ];
+
+        // Limpiar previos
+        $('.irs-overlay-range').remove();
+
+        // Obtener el slider real
+        const sliderBar = $('.irs-bar');
+
+        overlayRanges.forEach(r => {
+            if (r.from != null && r.to != null && r.to > r.from) {
+                let percentFrom = (r.from / 1440) * 100;
+                let percentTo = (r.to / 1440) * 100;
+                let width = percentTo - percentFrom;
+
+                let overlay = $('<div>', {
+                    class: 'irs-overlay-range',
+                    css: {
+                        left: `${percentFrom}%`,
+                        width: `${width}%`,
+                        background: r.color,
+                        position: 'absolute',
+                        height: '100%',
+                        top: 0,
+                        zIndex: 1,
+                        opacity: 0.4,
+                        borderRadius: '2px'
+                    }
+                });
+                sliderBar.parent().append(overlay);
+            }
+        });
+    }
+
     //Para acualizar el slider cuando se cambia en los inputs
     function actualizar_slider() {
         let hora_entrada_min = hora_a_minutos($('#txt_hora_entrada').val());
@@ -854,17 +1099,39 @@ $hora_salida = isset($_GET['hora_salida']) ? $_GET['hora_salida'] : 930;
 <script>
     $(document).ready(function() {
         //Para la hora de descanso
-        $('#cbx_descanso').on('change', function() {
+        $('#rbx_descanso').on('change', function() {
             if ($(this).is(':checked')) {
                 $('#pnl_tiempo_descanso').show();
+                $('#pnl_aplicar_tiempo_descanso').hide();
+                $('#txt_tiempo_descanso').val(30);
             } else {
                 $('#pnl_tiempo_descanso').hide();
-                $('#txt_tiempo_descanso').val(`00:00`);
-                calcular_horas_trabajadas();
+            }
+        });
+
+        $('#rbx_aplicar_descanso').on('change', function() {
+            if ($(this).is(':checked')) {
+                $('#pnl_aplicar_tiempo_descanso').show();
+                $('#pnl_tiempo_descanso').hide();
+                $('#txt_tiempo_descanso_rango').val(30);
+                $('#txt_limite_tardanza_descanso_in').val(5);
+                $('#txt_limite_tardanza_descanso_out').val(5);
+                $('#txt_hora_descanso_inicio').val('12:00');
+
+            } else {
+                $('#pnl_aplicar_tiempo_descanso').hide();
             }
         });
 
 
+        $('#cbx_hora_suple_extra').on('change', function() {
+            if ($(this).is(':checked')) {
+                $('#pnl_tiempo_suple_extra').show();
+            } else {
+                $('#pnl_tiempo_suple_extra').hide();
+                calcular_horas_trabajadas();
+            }
+        });
 
         //Para activar segundo slider con 48 horas
         $('#pnl_slider_hora_dia_48').hide();
