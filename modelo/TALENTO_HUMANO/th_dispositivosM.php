@@ -37,4 +37,41 @@ class th_dispositivosM extends BaseModel
         'th_dis_fecha_creacion AS fecha_creacion',
         'th_dis_fecha_modificacion AS fecha_modificacion'
     ];
+
+    function lista_dispositivos($empresa,$id)
+    {
+
+        $sql = "SELECT * FROM EMPRESAS WHERE Id_empresa = '".$empresa."'";
+        $empresa = $this->db->datos($sql);
+        $sql = "SELECT th_dis_nombre AS nombre,
+        th_dis_host AS host,
+        th_dis_port AS port,
+        th_dis_ssl AS ssl,
+        th_dis_usuario AS usuario,
+        th_dis_pass AS pass,
+        th_dis_modelo AS modelo,
+        th_dis_beep AS beep,
+        th_dis_gateway_mode AS gateway_mode,
+        th_dis_leds AS leds,
+        th_dis_anti_pass_back AS anti_pass_back,
+        th_dis_diario_reset AS diario_reset,
+        th_dis_vehiculo_control AS vehiculo_control,
+        th_dis_alarma_relay AS alarma_relay,
+        th_dis_urn AS urn,
+        th_dis_serial AS serial,
+        th_dis_version AS version,
+        th_dis_camara AS camara,
+        th_dis_ultima_fecha AS ultima_fecha,
+        th_dis_estado_dis AS estado_dis,
+        th_dis_contador_reset AS contador_reset,
+        th_dis_lenguaje AS lenguaje,
+        th_dis_ultimo_nsr AS ultimo_nsr,
+        th_dis_modo_visitante AS modo_visitante,
+        th_dis_id_modo_indet AS id_modo_indet,
+        th_dis_estado AS estado,
+        th_dis_fecha_creacion AS fecha_creacion,
+        th_dis_fecha_modificacion AS fecha_modificacion 
+        FROM th_dispositivos WHERE th_dis_id = '".$id."'";
+        return $this->db->datos_db_terceros($empresa[0]['Base_datos'],$empresa[0]['Usuario_db'],$empresa[0]['Password_db'],$empresa[0]['Ip_host'],$empresa[0]['Puerto_db'], $sql);
+    }
 }

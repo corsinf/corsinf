@@ -7,6 +7,7 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
 <script src="../lib/jquery_validation/jquery.validate.js"></script>
 <script src="../js/GENERAL/operaciones_generales.js"></script>
 <script type="text/javascript">
+    let intervaloID;
     $(document).ready(function() {
         tbl_dispositivos = $('#tbl_dispositivos').DataTable($.extend({}, configuracion_datatable('Dispostivos', 'dispostivos'), {
             reponsive: true,
@@ -44,7 +45,7 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                         return `<button type="button" class="btn btn-danger btn-xs" onclick="eliminar_device(${item._id})">
                                     <i class="bx bx-trash fs-7 me-0 fw-bold"></i>
                                 </button>
-                            <button type="button" class="btn btn-primary btn-xs" onclick="modal_data(${item._id})"><i class="lni lni-database fs-7 me-0 fw-bold"></i></button>`;
+                            <button type="button" class="btn btn-primary btn-xs" onclick="modal_data('${item._id}','${item.nombre}')"><i class="lni lni-database fs-7 me-0 fw-bold"></i></button>`;
                     }
                 },
             ],
@@ -358,9 +359,10 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
         }
     }
 
-    function modal_data(id)
+    function modal_data(id,nombre)
     {
         $('#txt_id_dispositivo').val(id)
+        $('#txt_nombre_bio').val(nombre)
         $('#modal_data_biometrico').modal('show');
     }
 
@@ -386,28 +388,7 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
             dataType: 'json',
 
             success: function(response) {
-                $('#myModal_espera').modal('hide');
-                
-                var mensaje_finger = "";
-                var mensaje_face = "";
-                if($('#cbx_finger').prop('checked') && response.finger=="2"){ mensaje_finger = "Algunas Huellas no entontradas" }
-                if($('#cbx_face').prop('checked') && response.face=="2"){ mensaje_face = "Algunas imagenes faciales no entontradas"; }
-
-                if(response.userbio==1)
-                {
-                     Swal.fire('Datos Importados', mensaje_face+'\n'+mensaje_finger, 'success').then(function() {
-                        const link = document.createElement("a");
-                        link.href = response.link; // Ruta al archivo .zip
-                        link.download = response.nombre;       // Nombre sugerido para guardar
-                        document.body.appendChild(link);
-                        link.click();
-                        document.body.removeChild(link);
-
-                    });
-                }else
-                {
-                    Swal.fire('No hay datos que importar de biometrico','', 'warning');
-                }
+                descargar_datos();              
             },
             
             error: function(xhr, status, error) {
@@ -425,6 +406,59 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
 
         $('#txt_nombre').on('input', function() {
             $('#error_txt_nombre').text('');
+        });
+
+    }
+
+    function descargar_datos()
+    {
+       intervaloID =  setInterval(() => {
+            descargar_zip()
+          }, 5000); // Cada 3 segundos
+
+    }
+
+    function descargar_zip()
+    {
+  
+        var parametros = 
+        {
+            'nombre':$('#txt_nombre_bio').val(),
+        }
+        $('#myModal_espera').modal('show');
+        $.ajax({
+            data: {parametros:parametros },
+            url: '../controlador/TALENTO_HUMANO/th_dispositivosC.php?descargar_zip=true',
+            type: 'post',
+            dataType: 'json',
+
+            success: function(response) {
+                if(response==1)
+                {
+                    $('#myModal_espera').modal('hide');
+                    if (intervaloID) {
+                      clearInterval(intervaloID);
+                      intervaloID = null;
+                    }
+
+                     Swal.fire('Datos Importados', mensaje_face+'\n'+mensaje_finger, 'success').then(function() {
+                        const link = document.createElement("a");
+                        link.href = link; // Ruta al archivo .zip
+                        link.download = nombre;       // Nombre sugerido para guardar
+                        document.body.appendChild(link);
+                        link.click();
+                        document.body.removeChild(link);
+
+                    });
+                }
+
+            },
+            
+            error: function(xhr, status, error) {
+
+                $('#myModal_espera').modal('hide');
+                Swal.fire('', 'Error existio un error', 'error');
+            }
         });
 
     }
@@ -668,6 +702,7 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                         <label><input type="checkbox" name="cbx_nom_card" id="cbx_nom_card" checked disabled>Nombre y No Tarjeta</label><br>
                         <label><input type="checkbox" name="cbx_finger" id="cbx_finger">Huellas Digitales</label><br>
                         <label><input type="checkbox" name="cbx_face" id="cbx_face">Imagen Facial</label><br>
+                        <input type="hidden" name="txt_nombre_bio" id="txt_nombre_bio">
                     </div>
                 </div>  
             </div>
