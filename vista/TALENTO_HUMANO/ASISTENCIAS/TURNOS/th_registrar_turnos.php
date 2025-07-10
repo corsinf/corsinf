@@ -244,11 +244,13 @@ $hora_salida = isset($_GET['hora_salida']) ? $_GET['hora_salida'] : 930;
     $(document).ready(function() {
         $('#txt_hora_descanso_inicio').on('change', function() {
             verificar_descanso();
+            calcular_horas_trabajadas();
         });
 
 
         $('#txt_tiempo_descanso_rango, #txt_hora_descanso_inicio').on('blur', function() {
             verificar_descanso();
+            calcular_horas_trabajadas();
         });
 
         $('#txt_hora_descanso_inicio, #txt_hora_descanso_final, #txt_hora_suple_inicio, #txt_hora_suple_final, #txt_hora_extra_inicio, #txt_hora_extra_final').on('change', function() {
@@ -281,9 +283,11 @@ $hora_salida = isset($_GET['hora_salida']) ? $_GET['hora_salida'] : 930;
                 $('#pnl_tiempo_descanso').show();
                 $('#pnl_aplicar_tiempo_descanso').hide();
                 $('#txt_tiempo_descanso').val(30);
+                calcular_horas_trabajadas();
             } else {
                 $('#pnl_tiempo_descanso').hide();
             }
+            calcular_horas_trabajadas();
         });
 
         $('#rbx_aplicar_descanso').on('change', function() {
@@ -295,11 +299,24 @@ $hora_salida = isset($_GET['hora_salida']) ? $_GET['hora_salida'] : 930;
                 $('#txt_limite_tardanza_descanso_out').val(5);
                 $('#txt_hora_descanso_inicio').val('12:00');
                 $('#txt_hora_descanso_final').val('12:30');
-
+                calcular_horas_trabajadas();
+                actualizarOverlaySlider();
             } else {
                 $('#pnl_aplicar_tiempo_descanso').hide();
             }
+            calcular_horas_trabajadas();
         });
+
+        var descanso = 0;
+
+        // Si está seleccionado "descanso simple"
+        if ($('#rbx_descanso').is(':checked')) {
+            descanso = hora_a_minutos($('#txt_tiempo_descanso').val());
+        }
+        // Si está seleccionado "descanso con rango"
+        else if ($('#rbx_aplicar_descanso').is(':checked')) {
+            descanso = hora_a_minutos($('#txt_tiempo_descanso_rango').val());
+        }
 
         $('#rbx_ninguno').on('change', function() {
             if ($(this).is(':checked')) {
@@ -314,6 +331,7 @@ $hora_salida = isset($_GET['hora_salida']) ? $_GET['hora_salida'] : 930;
         $('#cbx_hora_suple_extra').on('change', function() {
             if ($(this).is(':checked')) {
                 $('#pnl_tiempo_suple_extra').show();
+                actualizarOverlaySlider();
             } else {
                 $('#pnl_tiempo_suple_extra').hide();
             }
@@ -532,9 +550,9 @@ $hora_salida = isset($_GET['hora_salida']) ? $_GET['hora_salida'] : 930;
         </div>
         <form id="form_turnos">
             <!--end breadcrumb-->
-            <div class="row">
+            <div class="row pb-2">
                 <div class="col-xl-12 mx-auto">
-                    <div class="card border-top border-0 border-4 border-primary">
+                    <div class="card border-top border-0 border-4 border-primary mb-0">
                         <div class="card-body p-5">
                             <div class="card-title d-flex align-items-center">
 
@@ -590,13 +608,13 @@ $hora_salida = isset($_GET['hora_salida']) ? $_GET['hora_salida'] : 930;
                                         <div class="col-md-3">
                                             <div class="">
                                                 <input type="number" class="form-control form-control-sm" name="txt_valor_trabajar_hora" id="txt_valor_trabajar_hora" value="8" readonly>
-                                                <label class="" id="txt_valor_trabajar_hora">hora(s)</label>
+                                                <label class="" for="txt_valor_trabajar_hora">hora(s)</label>
                                             </div>
                                         </div>
                                         <div class="col-md-3">
                                             <div class="">
                                                 <input type="number" class="form-control form-control-sm" name="txt_valor_trabajar_min" id="txt_valor_trabajar_min" value="30" readonly>
-                                                <label class="" id="txt_valor_trabajar_min">min</label>
+                                                <label class="" for="txt_valor_trabajar_min">min</label>
                                             </div>
                                         </div>
 
@@ -639,10 +657,10 @@ $hora_salida = isset($_GET['hora_salida']) ? $_GET['hora_salida'] : 930;
                     </div>
                 </div>
             </div>
-            <div class="row">
+            <div class="row pb-2">
                 <div class="container mt-4">
                     <div class="row">
-                        <!-- Card izquierda: Registro de entrada -->
+                        <!-- Card izquierda: Registro de Entrada -->
                         <div class="col-md-6">
                             <div class="card h-100">
                                 <div class="card-header">
@@ -650,32 +668,32 @@ $hora_salida = isset($_GET['hora_salida']) ? $_GET['hora_salida'] : 930;
                                 </div>
                                 <div class="card-body">
                                     <!-- Rango válido entrada -->
-                                    <div class="mb-3 row">
-                                        <label for="txt_checkin_registro_inicio" class="col-sm-5 col-form-label text-end fw-bold">
-                                            Rango válido entrada
+                                    <div class="mb-3 row align-items-center">
+                                        <label for="txt_checkin_registro_inicio" class="col-sm-5 col-form-label fw-bold text-end">
+                                            Rango válido entrada:
                                         </label>
                                         <div class="col-sm-3">
-                                            <input type="time" class="form-control form-control-sm" name="txt_checkin_registro_inicio" id="txt_checkin_registro_inicio" value="06:30">
+                                            <input type="time" class="form-control form-control-sm" id="txt_checkin_registro_inicio" name="txt_checkin_registro_inicio" value="06:30">
                                         </div>
                                         <div class="col-sm-3">
-                                            <input type="time" class="form-control form-control-sm" name="txt_checkin_registro_fin" id="txt_checkin_registro_fin" value="07:30">
+                                            <input type="time" class="form-control form-control-sm" id="txt_checkin_registro_fin" name="txt_checkin_registro_fin" value="07:30">
                                         </div>
                                     </div>
 
                                     <!-- Tolerancia llegada tarde -->
-                                    <div class="mb-3 row">
-                                        <label for="txt_limite_tardanza_in" class="col-sm-5 col-form-label text-end fw-bold">
-                                            Tolerancia llegada tarde (min)
+                                    <div class="mb-3 row align-items-center">
+                                        <label for="txt_limite_tardanza_in" class="col-sm-5 col-form-label fw-bold text-end">
+                                            Tolerancia llegada tarde (min):
                                         </label>
-                                        <div class="col-sm-7">
-                                            <input type="number" class="form-control form-control-sm" name="txt_limite_tardanza_in" id="txt_limite_tardanza_in" value="5">
+                                        <div class="col-sm-6">
+                                            <input type="number" class="form-control form-control-sm" id="txt_limite_tardanza_in" name="txt_limite_tardanza_in" value="5">
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Card derecha: Registro de salida -->
+                        <!-- Card derecha: Registro de Salida -->
                         <div class="col-md-6">
                             <div class="card h-100">
                                 <div class="card-header">
@@ -683,25 +701,25 @@ $hora_salida = isset($_GET['hora_salida']) ? $_GET['hora_salida'] : 930;
                                 </div>
                                 <div class="card-body">
                                     <!-- Rango válido salida -->
-                                    <div class="mb-3 row">
-                                        <label for="txt_checkout_salida_inicio" class="col-sm-5 col-form-label text-end fw-bold">
-                                            Rango válido salida
+                                    <div class="mb-3 row align-items-center">
+                                        <label for="txt_checkout_salida_inicio" class="col-sm-5 col-form-label fw-bold text-end">
+                                            Rango válido salida:
                                         </label>
                                         <div class="col-sm-3">
-                                            <input type="time" class="form-control form-control-sm" name="txt_checkout_salida_inicio" id="txt_checkout_salida_inicio" value="15:00">
+                                            <input type="time" class="form-control form-control-sm" id="txt_checkout_salida_inicio" name="txt_checkout_salida_inicio" value="15:00">
                                         </div>
                                         <div class="col-sm-3">
-                                            <input type="time" class="form-control form-control-sm" name="txt_checkout_salida_fin" id="txt_checkout_salida_fin" value="16:00">
+                                            <input type="time" class="form-control form-control-sm" id="txt_checkout_salida_fin" name="txt_checkout_salida_fin" value="16:00">
                                         </div>
                                     </div>
 
                                     <!-- Tolerancia salida anticipada -->
-                                    <div class="mb-3 row">
-                                        <label for="txt_limite_tardanza_out" class="col-sm-5 col-form-label text-end fw-bold">
-                                            Tolerancia salida anticipada (min)
+                                    <div class="mb-3 row align-items-center">
+                                        <label for="txt_limite_tardanza_out" class="col-sm-5 col-form-label fw-bold text-end">
+                                            Tolerancia salida anticipada (min):
                                         </label>
-                                        <div class="col-sm-7">
-                                            <input type="number" class="form-control form-control-sm" name="txt_limite_tardanza_out" id="txt_limite_tardanza_out" value="5">
+                                        <div class="col-sm-6">
+                                            <input type="number" class="form-control form-control-sm" id="txt_limite_tardanza_out" name="txt_limite_tardanza_out" value="5">
                                         </div>
                                     </div>
                                 </div>
@@ -709,10 +727,8 @@ $hora_salida = isset($_GET['hora_salida']) ? $_GET['hora_salida'] : 930;
                         </div>
                     </div>
                 </div>
-                <!--end row-->
-
-
             </div>
+
             <div class="row">
                 <div class="container mt-4">
                     <div class="row">
@@ -724,65 +740,67 @@ $hora_salida = isset($_GET['hora_salida']) ? $_GET['hora_salida'] : 930;
                                 </div>
                                 <div class="card-body">
                                     <!-- Opciones de descanso -->
-                                    <div class="mb-3">
-                                        <label class="form-label fw-bold">¿Usar descanso?</label>
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="radio" name="descanso_opcion" id="rbx_ninguno" value="3" checked> 
-                                            <label class="form-check-label" for="rbx_ninguno">
-                                                No aplicar descanso
-                                            </label>
-                                        </div>
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="radio" name="descanso_opcion" id="rbx_descanso" value="1">
-                                            <label class="form-check-label" for="rbx_descanso">
-                                                Sí, aplicar descanso
-                                            </label>
-                                        </div>
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="radio" name="descanso_opcion" id="rbx_aplicar_descanso" value="2">
-                                            <label class="form-check-label" for="rbx_aplicar_descanso">
-                                                Sí, aplicar descanso con rangos
-                                            </label>
+                                    <div class="mb-3 row">
+                                        <label class="col-sm-5 col-form-label fw-bold text-end">¿Usar descanso?</label>
+                                        <div class="col-sm-7">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" name="descanso_opcion" id="rbx_ninguno" value="3" checked>
+                                                <label class="form-check-label" for="rbx_ninguno">No aplicar descanso</label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" name="descanso_opcion" id="rbx_descanso" value="1">
+                                                <label class="form-check-label" for="rbx_descanso">Sí, aplicar descanso</label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" name="descanso_opcion" id="rbx_aplicar_descanso" value="2">
+                                                <label class="form-check-label" for="rbx_aplicar_descanso">Sí, aplicar descanso con rangos</label>
+                                            </div>
                                         </div>
                                     </div>
 
                                     <!-- Panel descanso simple -->
                                     <div id="pnl_tiempo_descanso" style="display: none;">
-                                        <div class="mb-3">
-                                            <label for="txt_tiempo_descanso" class="form-label fw-bold">Hora de descanso (min)</label>
-                                            <input type="number" class="form-control form-control-sm" name="txt_tiempo_descanso" id="txt_tiempo_descanso">
+                                        <div class="mb-3 row">
+                                            <label for="txt_tiempo_descanso" class="col-sm-5 col-form-label fw-bold text-end">Hora de descanso (min)</label>
+                                            <div class="col-sm-7">
+                                                <input type="number" class="form-control form-control-sm" id="txt_tiempo_descanso" name="txt_tiempo_descanso">
+                                            </div>
                                         </div>
                                     </div>
 
                                     <!-- Panel descanso con rangos -->
                                     <div id="pnl_aplicar_tiempo_descanso" style="display: none;">
-                                        <div class="mb-3">
-                                            <label for="txt_tiempo_descanso_rango" class="form-label fw-bold">Hora de descanso (min)</label>
-                                            <input type="number" class="form-control form-control-sm" name="txt_tiempo_descanso_rango" id="txt_tiempo_descanso_rango">
-                                        </div>
-
-                                        <div class="mb-3">
-                                            <label class="form-label fw-bold">Horario de descanso asignado</label>
-                                            <div class="row">
-                                                <div class="col-6">
-                                                    <input type="time" class="form-control form-control-sm" name="txt_hora_descanso_inicio" id="txt_hora_descanso_inicio" value="10:00">
-                                                    <small class="text-muted">Inicio</small>
-                                                </div>
-                                                <div class="col-6">
-                                                    <input type="time" class="form-control form-control-sm" name="txt_hora_descanso_final" id="txt_hora_descanso_final" disabled>
-                                                    <small class="text-muted">Final</small>
-                                                </div>
+                                        <div class="mb-3 row">
+                                            <label for="txt_tiempo_descanso_rango" class="col-sm-5 col-form-label fw-bold text-end">Hora de descanso (min)</label>
+                                            <div class="col-sm-7">
+                                                <input type="number" class="form-control form-control-sm" id="txt_tiempo_descanso_rango" name="txt_tiempo_descanso_rango">
                                             </div>
                                         </div>
 
-                                        <div class="mb-3">
-                                            <label for="txt_limite_tardanza_descanso_in" class="form-label fw-bold">Tolerancia llegada temprana (min)</label>
-                                            <input type="number" class="form-control form-control-sm" name="txt_limite_tardanza_descanso_in" id="txt_limite_tardanza_descanso_in" value="5">
+                                        <div class="mb-3 row">
+                                            <label class="col-sm-5 col-form-label fw-bold text-end">Horario de descanso</label>
+                                            <div class="col-sm-3">
+                                                <input type="time" class="form-control form-control-sm" id="txt_hora_descanso_inicio" name="txt_hora_descanso_inicio" value="10:00">
+                                                <small class="text-muted">Inicio</small>
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <input type="time" class="form-control form-control-sm" id="txt_hora_descanso_final" name="txt_hora_descanso_final" disabled>
+                                                <small class="text-muted">Final</small>
+                                            </div>
                                         </div>
 
-                                        <div class="mb-3">
-                                            <label for="txt_limite_tardanza_descanso_out" class="form-label fw-bold">Tolerancia llegada tarde (min)</label>
-                                            <input type="number" class="form-control form-control-sm" name="txt_limite_tardanza_descanso_out" id="txt_limite_tardanza_descanso_out" value="5">
+                                        <div class="mb-3 row">
+                                            <label for="txt_limite_tardanza_descanso_in" class="col-sm-5 col-form-label fw-bold text-end">Tolerancia llegada temprana (min)</label>
+                                            <div class="col-sm-7">
+                                                <input type="number" class="form-control form-control-sm" id="txt_limite_tardanza_descanso_in" name="txt_limite_tardanza_descanso_in" value="5">
+                                            </div>
+                                        </div>
+
+                                        <div class="mb-3 row">
+                                            <label for="txt_limite_tardanza_descanso_out" class="col-sm-5 col-form-label fw-bold text-end">Tolerancia llegada tarde (min)</label>
+                                            <div class="col-sm-7">
+                                                <input type="number" class="form-control form-control-sm" id="txt_limite_tardanza_descanso_out" name="txt_limite_tardanza_descanso_out" value="5">
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -796,43 +814,39 @@ $hora_salida = isset($_GET['hora_salida']) ? $_GET['hora_salida'] : 930;
                                     <h5 class="mb-0">Tiempo Extra</h5>
                                 </div>
                                 <div class="card-body">
-                                    <!-- Checkbox tiempo extra -->
-                                    <div class="mb-3">
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" id="cbx_hora_suple_extra" name="cbx_hora_suple_extra" value="1">
-                                            <label class="form-check-label fw-bold" for="cbx_hora_suple_extra">
-                                                ¿Usar tiempo suplementario y extraordinario?
-                                            </label>
+                                    <div class="mb-3 row">
+                                        <label class="col-sm-5 col-form-label fw-bold text-end">¿Usar tiempo extra?</label>
+                                        <div class="col-sm-7">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" id="cbx_hora_suple_extra" name="cbx_hora_suple_extra" value="1">
+                                                <label class="form-check-label" for="cbx_hora_suple_extra">Sí, aplicar tiempo suplementario y extraordinario</label>
+                                            </div>
                                         </div>
                                     </div>
 
                                     <!-- Panel tiempo extra -->
                                     <div id="pnl_tiempo_suple_extra" style="display: none;">
-                                        <div class="mb-3">
-                                            <label class="form-label fw-bold">Horario de horas suplementarias</label>
-                                            <div class="row">
-                                                <div class="col-6">
-                                                    <input type="time" class="form-control form-control-sm" name="txt_hora_suple_inicio" id="txt_hora_suple_inicio">
-                                                    <small class="text-muted">Inicio</small>
-                                                </div>
-                                                <div class="col-6">
-                                                    <input type="time" class="form-control form-control-sm" name="txt_hora_suple_final" id="txt_hora_suple_final" disabled>
-                                                    <small class="text-muted">Final</small>
-                                                </div>
+                                        <div class="mb-3 row">
+                                            <label class="col-sm-5 col-form-label fw-bold text-end">Horas suplementarias</label>
+                                            <div class="col-sm-3">
+                                                <input type="time" class="form-control form-control-sm" id="txt_hora_suple_inicio" name="txt_hora_suple_inicio">
+                                                <small class="text-muted">Inicio</small>
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <input type="time" class="form-control form-control-sm" id="txt_hora_suple_final" name="txt_hora_suple_final" disabled>
+                                                <small class="text-muted">Final</small>
                                             </div>
                                         </div>
 
-                                        <div class="mb-3">
-                                            <label class="form-label fw-bold">Horario de horas extraordinarias</label>
-                                            <div class="row">
-                                                <div class="col-6">
-                                                    <input type="time" class="form-control form-control-sm" name="txt_hora_extra_inicio" id="txt_hora_extra_inicio" disabled>
-                                                    <small class="text-muted">Inicio</small>
-                                                </div>
-                                                <div class="col-6">
-                                                    <input type="time" class="form-control form-control-sm" name="txt_hora_extra_final" id="txt_hora_extra_final" disabled>
-                                                    <small class="text-muted">Final</small>
-                                                </div>
+                                        <div class="mb-3 row">
+                                            <label class="col-sm-5 col-form-label fw-bold text-end">Horas extraordinarias</label>
+                                            <div class="col-sm-3">
+                                                <input type="time" class="form-control form-control-sm" id="txt_hora_extra_inicio" name="txt_hora_extra_inicio" disabled>
+                                                <small class="text-muted">Inicio</small>
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <input type="time" class="form-control form-control-sm" id="txt_hora_extra_final" name="txt_hora_extra_final" disabled>
+                                                <small class="text-muted">Final</small>
                                             </div>
                                         </div>
                                     </div>
@@ -842,6 +856,7 @@ $hora_salida = isset($_GET['hora_salida']) ? $_GET['hora_salida'] : 930;
                     </div>
                 </div>
             </div>
+
     </div>
 
     <div class="d-flex justify-content-center pt-2 pb-4">
@@ -1254,28 +1269,33 @@ $hora_salida = isset($_GET['hora_salida']) ? $_GET['hora_salida'] : 930;
         function calcular_horas_trabajadas() {
             var hora_entrada_min = hora_a_minutos($('#txt_hora_entrada').val());
             var hora_salida_min = hora_a_minutos($('#txt_hora_salida').val());
-            var descanso = hora_a_minutos($('#txt_tiempo_descanso').val());
+            var descanso = 0;
+
+            // Detectar tipo de descanso seleccionado
+            if ($('#rbx_descanso').is(':checked')) {
+                descanso = parseInt($('#txt_tiempo_descanso').val()) || 0;
+            } else if ($('#rbx_aplicar_descanso').is(':checked')) {
+                descanso = parseInt($('#txt_tiempo_descanso_rango').val()) || 0;
+            }
+
             var habilitar_48_horas = $('#cbx_turno_nocturno').is(':checked');
 
             if (hora_entrada_min !== null && hora_salida_min !== null) {
                 var diferencia = hora_salida_min - hora_entrada_min;
 
-                // Si la salida es menor que la entrada, agregar 24 horas (1440 minutos)
                 if (diferencia < 0) {
-                    diferencia += 24 * 60; // 24 horas en minutos
+                    diferencia += 24 * 60;
                 }
 
-                // Restar el tiempo de descanso si es necesario
+                // Restar descanso si aplica
                 if (descanso && descanso > 0) {
                     diferencia -= descanso;
                 }
 
-                // Si el checkbox de 48 horas está activado y la salida es menor o igual a la entrada, añadir 24 horas adicionales al cálculo de salida
                 if (habilitar_48_horas && hora_salida_min >= hora_entrada_min) {
-                    diferencia += 24 * 60; // Extender el rango de cálculo al siguiente día
+                    diferencia += 24 * 60;
                 }
 
-                // Ajustar horas y minutos si la resta de descanso hizo que los minutos sean negativos
                 var horas = Math.floor(diferencia / 60);
                 var minutos = diferencia % 60;
 
@@ -1284,7 +1304,6 @@ $hora_salida = isset($_GET['hora_salida']) ? $_GET['hora_salida'] : 930;
                     horas -= 1;
                 }
 
-                // Asegurarse de que los valores de horas y minutos no sean negativos
                 if (horas < 0) horas = 0;
                 if (minutos < 0) minutos = 0;
 
@@ -1297,7 +1316,6 @@ $hora_salida = isset($_GET['hora_salida']) ? $_GET['hora_salida'] : 930;
                 $('#txt_checkin_registro_fin').val(minutos_formato_hora(hora_entrada_min + 30));
                 $('#txt_checkout_salida_inicio').val(minutos_formato_hora(hora_salida_min - 30));
                 $('#txt_checkout_salida_fin').val(minutos_formato_hora(hora_salida_min + 30));
-
             } else {
                 $('#txt_valor_trabajar_hora').val("");
                 $('#txt_valor_trabajar_min').val("");
