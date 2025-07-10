@@ -170,7 +170,7 @@ class th_dispositivosC
     flush();
 
     // Ejecutar proceso en segundo plano (Windows + Apache)
-    $php = 'C:\\xampp\\php\\php.exe'; // Ajusta si tu PHP está en otra ruta
+    $php = PHP_BINARY;
     $script = __FILE__; // ejecuta este mismo archivo
     $cmd = "start /B \"\" \"$php\" \"$script\" ejecutar_segundoPlano $escaped_json";
 
