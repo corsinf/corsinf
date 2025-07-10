@@ -257,7 +257,7 @@ class detalle_articuloC
 			array('campo' => 'modelo', 'dato' => $parametros['txt_modelo']),
 			array('campo' => 'serie', 'dato' => $parametros['txt_serie']),
 			array('campo' => 'cantidad', 'dato' => $parametros['txt_cant']),
-			array('campo' => 'precio', 'dato' => $parametros['txt_valor']),
+			array('campo' => 'precio', 'dato' => $parametros['txt_valor'] ? $parametros['txt_valor'] : 0 ),
 			// array('campo' => 'imagen', 'dato' => $parametros['']),
 			array('campo' => 'kit', 'dato' => $parametros['cbx_kit']),
 			array('campo' => 'maximo', 'dato' => $parametros['txt_maximo']),

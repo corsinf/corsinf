@@ -50,28 +50,41 @@ class th_turnosC
 
         $rbx_descanso = $parametros['rbx_descanso'];
         $rbx_aplicar_descanso =  $parametros['rbx_aplicar_descanso'];
+        $rbx_ninguno =  $parametros['rbx_ninguno'];
 
-        // Inicialización segura
-        $txt_tiempo_descanso = 0;
-        $txt_tiempo_descanso_rango = 0;
-        $txt_hora_descanso_inicio = 0;
-        $txt_hora_descanso_final = 0;
-        $txt_limite_tardanza_descanso_in = 0;
-        $txt_limite_tardanza_descanso_out = 0;
-
-        // Si se activa descanso general
-        if ($rbx_descanso == 1 || $rbx_aplicar_descanso == 1) {
-            // Duración fija del descanso
-            $txt_tiempo_descanso = $parametros['txt_tiempo_descanso'];
-            // Si además se activa "usar rango"
-            if ($rbx_aplicar_descanso == 1) {
-                $txt_tiempo_descanso_rango = $parametros['txt_tiempo_descanso_rango'];
-                $txt_hora_descanso_inicio = $this->hora_a_minutos($parametros['txt_hora_descanso_inicio']);
-                $txt_hora_descanso_final = $this->hora_a_minutos($parametros['txt_hora_descanso_final']);
-                $txt_limite_tardanza_descanso_in = $parametros['txt_limite_tardanza_descanso_in'];
-                $txt_limite_tardanza_descanso_out = $parametros['txt_limite_tardanza_descanso_out'];
+        if ($rbx_ninguno == 1) {
+            // Inicialización segura
+            $txt_tiempo_descanso = 0;
+            $txt_tiempo_descanso_rango = 0;
+            $txt_hora_descanso_inicio = 0;
+            $txt_hora_descanso_final = 0;
+            $txt_limite_tardanza_descanso_in = 0;
+            $txt_limite_tardanza_descanso_out = 0;
+        } else {
+            $txt_tiempo_descanso = 0;
+            $txt_tiempo_descanso_rango = 0;
+            $txt_hora_descanso_inicio = 0;
+            $txt_hora_descanso_final = 0;
+            $txt_limite_tardanza_descanso_in = 0;
+            $txt_limite_tardanza_descanso_out = 0;
+            // Si se activa descanso general
+            if ($rbx_descanso == 1 || $rbx_aplicar_descanso == 1) {
+                // Duración fija del descanso
+                $txt_tiempo_descanso = $parametros['txt_tiempo_descanso'];
+                // Si además se activa "usar rango"
+                if ($rbx_aplicar_descanso == 1) {
+                    $txt_tiempo_descanso_rango = $parametros['txt_tiempo_descanso_rango'];
+                    $txt_hora_descanso_inicio = $this->hora_a_minutos($parametros['txt_hora_descanso_inicio']);
+                    $txt_hora_descanso_final = $this->hora_a_minutos($parametros['txt_hora_descanso_final']);
+                    $txt_limite_tardanza_descanso_in = $parametros['txt_limite_tardanza_descanso_in'];
+                    $txt_limite_tardanza_descanso_out = $parametros['txt_limite_tardanza_descanso_out'];
+                }
             }
         }
+
+
+
+
 
         $cbx_hora_suple_extra = $parametros['cbx_hora_suple_extra'];
 
