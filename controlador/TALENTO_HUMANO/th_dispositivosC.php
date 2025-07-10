@@ -37,7 +37,7 @@ if (isset($_GET['descargar_zip'])) {
 }
 
 
-if ((php_sapi_name() === 'cli' && isset($argv[1]) && $argv[1] === 'ejecutar_segundoPlano') ) {
+if ((isset($argv[0]) && basename($argv[0]) === basename(__FILE__) && isset($argv[1]) && $argv[1] === 'ejecutar_segundoPlano') ) {
     $json = $argv[2] ?? '{}';
     $json = str_replace(array(':',',','}','{'), array('":"','","','"}','{"'),$json);
     $json = str_replace(" ","", $json);
@@ -150,33 +150,47 @@ class th_dispositivosC
 
     function importar_datos($parametros)
     {
-       // Añade dato si usas sesión
-    if (session_status() === PHP_SESSION_ACTIVE) {
         $parametros['ID_EMPRESA'] = $_SESSION['INICIO']['ID_EMPRESA'];
-        session_write_close(); // importante: cierra la sesión para evitar bloqueo
+        $json_arg = json_encode($parametros);
+        $escaped_json = escapeshellarg($json_arg);
+
+        $php_path = $this->encontrar_php_exe();
+        $script =__FILE__;
+
+        $cmd = "start /B \"\" \"$php_path\" \"$script\" ejecutar_segundoPlano  $escaped_json";
+
+        // print_r($cmd);die();
+
+        // OPCIONAL: registrar comando para depuración
+        file_put_contents(__DIR__ . '/log_cmd.txt', $cmd . PHP_EOL, FILE_APPEND);
+
+        // Responder al navegador inmediatamente
+        header('Content-Type: application/json');
+        echo json_encode(['estado' => 'iniciado']);
+
+        // Finaliza respuesta
+        if (session_status() === PHP_SESSION_ACTIVE) {
+            session_write_close();
+        }
+        ignore_user_abort(true);
+        ob_end_flush();
+        flush();
+
+        // Ejecutar proceso en segundo plano
+        pclose(popen("cmd /C $cmd", "r"));
     }
 
-    // JSON y escape
-    $json_arg = json_encode($parametros);
-    $escaped_json = escapeshellarg($json_arg);
-
-    // Respuesta inmediata al navegador
-    header('Content-Type: application/json');
-    echo json_encode(['estado' => 'iniciado']);
-
-    // Cierra conexión con navegador
-    ignore_user_abort(true);
-    ob_end_flush();
-    flush();
-
-    // Ejecutar proceso en segundo plano (Windows + Apache)
-    $php = PHP_BINARY;
-    $script = __FILE__; // ejecuta este mismo archivo
-    $cmd = "start /B \"\" \"$php\" \"$script\" ejecutar_segundoPlano $escaped_json";
-
-    // Ejecutar sin bloquear
-    pclose(popen("cmd /C $cmd", "r"));
+    function encontrar_php_exe() {
+        $paths = explode(PATH_SEPARATOR, getenv('PATH'));
+        foreach ($paths as $path) {
+            $php = $path . DIRECTORY_SEPARATOR . 'php.exe';
+            if (is_file($php) && is_executable($php)) {
+                return $php;
+            }
+        }
+        return null;
     }
+
 
     function importar_datos_proceso($parametros)
     {

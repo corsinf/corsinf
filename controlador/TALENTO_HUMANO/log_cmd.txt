@@ -1,0 +1,5 @@
+start /B "" "C:\xampp\apache\bin\httpd.exe" "C:\xampp\htdocs\corsinf\controlador\TALENTO_HUMANO\generar_zip.php" ""
+start /B "C:\xampp\apache\bin\httpd.exe" "C:\xampp\htdocs\corsinf\controlador\TALENTO_HUMANO\th_dispositivosC.php" "{ dispositivos : 2 , nombreCard : 1 , huellas : 1 , facial : 1 }"
+start /B "C:\xampp\apache\bin\httpd.exe" "C:\xampp\htdocs\corsinf\controlador\TALENTO_HUMANO\th_dispositivosC.php" segundo_plano  "{ dispositivos : 2 , nombreCard : 1 , huellas : 1 , facial : 1 }"
+start /B "" "C:\xampp\php\php.exe" "C:\xampp\htdocs\corsinf\controlador\TALENTO_HUMANO\th_dispositivosC.php" ejecutar_segundoPlano  "{ dispositivos : 2 , nombreCard : 1 , huellas : 1 , facial : 1 , ID_EMPRESA : 3044 }"
+start /B "" "C:\xampp\php\php.exe" "C:\xampp\htdocs\corsinf\controlador\TALENTO_HUMANO\th_dispositivosC.php" ejecutar_segundoPlano  "{ dispositivos : 2 , nombreCard : 1 , huellas : 1 , facial : 1 , ID_EMPRESA : 3044 }"
