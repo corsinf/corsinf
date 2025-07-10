@@ -45,7 +45,7 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                         return `<button type="button" class="btn btn-danger btn-xs" onclick="eliminar_device(${item._id})">
                                     <i class="bx bx-trash fs-7 me-0 fw-bold"></i>
                                 </button>
-                            <button type="button" class="btn btn-primary btn-xs" onclick="modal_data(${item._id})"><i class="lni lni-database fs-7 me-0 fw-bold"></i></button>`;
+                            <button type="button" class="btn btn-primary btn-xs" onclick="modal_data('${item._id}','${item.nombre}')"><i class="lni lni-database fs-7 me-0 fw-bold"></i></button>`;
                     }
                 },
             ],
@@ -359,9 +359,10 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
         }
     }
 
-    function modal_data(id)
+    function modal_data(id,nombre)
     {
         $('#txt_id_dispositivo').val(id)
+        $('#txt_nombre_bio').val(nombre)
         $('#modal_data_biometrico').modal('show');
     }
 
@@ -387,7 +388,7 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
             dataType: 'json',
 
             success: function(response) {
-                descargar_datos(response.link,response.nombre);              
+                descargar_datos();              
             },
             
             error: function(xhr, status, error) {
@@ -409,20 +410,20 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
 
     }
 
-    function descargar_datos(link,nombre)
+    function descargar_datos()
     {
        intervaloID =  setInterval(() => {
-            descargar_zip(link,nombre)
+            descargar_zip()
           }, 5000); // Cada 3 segundos
 
     }
 
-    function descargar_zip(link,nombre)
+    function descargar_zip()
     {
   
         var parametros = 
         {
-            'nombre':nombre,
+            'nombre':$('#txt_nombre_bio').val(),
         }
         $('#myModal_espera').modal('show');
         $.ajax({
@@ -701,6 +702,7 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                         <label><input type="checkbox" name="cbx_nom_card" id="cbx_nom_card" checked disabled>Nombre y No Tarjeta</label><br>
                         <label><input type="checkbox" name="cbx_finger" id="cbx_finger">Huellas Digitales</label><br>
                         <label><input type="checkbox" name="cbx_face" id="cbx_face">Imagen Facial</label><br>
+                        <input type="hidden" name="txt_nombre_bio" id="txt_nombre_bio">
                     </div>
                 </div>  
             </div>

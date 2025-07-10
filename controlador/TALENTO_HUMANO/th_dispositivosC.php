@@ -150,36 +150,32 @@ class th_dispositivosC
 
     function importar_datos($parametros)
     {
+       // Añade dato si usas sesión
+    if (session_status() === PHP_SESSION_ACTIVE) {
+        $parametros['ID_EMPRESA'] = $_SESSION['INICIO']['ID_EMPRESA'];
+        session_write_close(); // importante: cierra la sesión para evitar bloqueo
+    }
 
-        $parametros['ID_EMPRESA']= $_SESSION['INICIO']['ID_EMPRESA'];
+    // JSON y escape
+    $json_arg = json_encode($parametros);
+    $escaped_json = escapeshellarg($json_arg);
 
-        $dispositivo =  $this->modelo->lista_dispositivos($parametros['ID_EMPRESA'],$parametros['dispositivos']);
-        $nombre_descarga = 'data_importada_'.str_replace(" ",'_',$dispositivo[0]['nombre']);
-        $carpeta = dirname(__DIR__,2).'/TEMP/data/'.$nombre_descarga;
-        $link_descarga = '../TEMP/data/'.$nombre_descarga.'.zip';
+    // Respuesta inmediata al navegador
+    header('Content-Type: application/json');
+    echo json_encode(['estado' => 'iniciado']);
 
-      
-        $json_arg = json_encode($parametros);
-        $escaped_json = escapeshellarg($json_arg);
+    // Cierra conexión con navegador
+    ignore_user_abort(true);
+    ob_end_flush();
+    flush();
 
-        // print_r($json_arg);
-        // print_r($escaped_json);die();
-        $cmd = 'start /B php ' . __FILE__ . ' ejecutar_segundoPlano ' . $escaped_json;
-        // print_r($cmd);die();
-        shell_exec($cmd);
+    // Ejecutar proceso en segundo plano (Windows + Apache)
+    $php = 'C:\\xampp\\php\\php.exe'; // Ajusta si tu PHP está en otra ruta
+    $script = __FILE__; // ejecuta este mismo archivo
+    $cmd = "start /B \"\" \"$php\" \"$script\" ejecutar_segundoPlano $escaped_json";
 
-
-        // ⚠️ Enviar respuesta primero y luego liberar proceso (si es FastCGI)
-        if (function_exists('fastcgi_finish_request')) {
-            echo json_encode(['link' => $link_descarga, 'nombre' => $nombre_descarga]);
-            fastcgi_finish_request();
-        } else {
-            ignore_user_abort(true);
-            ob_end_flush();
-            flush();
-            echo json_encode(['link' => $link_descarga, 'nombre' => $nombre_descarga]);
-        }
-
+    // Ejecutar sin bloquear
+    pclose(popen("cmd /C $cmd", "r"));
     }
 
     function importar_datos_proceso($parametros)
@@ -364,8 +360,8 @@ class th_dispositivosC
 
     function descargar_zip($parametros)
     {
-        // print_r($parametros);die();
-        if(file_exists("../../TEMP/data/".$parametros['nombre'].'.zip'))
+        $nombre = str_replace(" ","_", $parametros['nombre']);
+        if(file_exists("../../TEMP/data/data_importada_".$nombre.'.zip'))
         {
             return 1;
         }else
