@@ -273,6 +273,7 @@ $hora_salida = isset($_GET['hora_salida']) ? $_GET['hora_salida'] : 930;
         $('#txt_hora_suple_inicio').on('blur', validarHoraSupleFueraDeHorario);
 
     });
+
     function toHHMM(minutes) {
         let h = Math.floor(minutes / 60);
         let m = minutes % 60;
@@ -336,10 +337,10 @@ $hora_salida = isset($_GET['hora_salida']) ? $_GET['hora_salida'] : 930;
         let errores = [];
 
         if (inicioMin < entradaMin || inicioMin > salidaMin) {
-            errores.push(`El inicio del descanso (${descansoInicio}) debe estar entre ${horaEntrada} y ${horaSalida}.`);
+            errores.push(`El inicio del descanso (${descansoInicio}) debe estar entre ${minutos_formato_hora(entradaMin)} y ${horaSalida}.`);
         }
         if (finMin < entradaMin || finMin > salidaMin) {
-            errores.push(`El fin del descanso (${descansoFinal}) debe estar entre ${horaEntrada} y ${horaSalida}.`);
+            errores.push(`El fin del descanso (${descansoFinal}) debe estar entre ${minutos_formato_hora(entradaMin)} y ${horaSalida}.`);
         }
         if (finMin <= inicioMin) {
             errores.push(`La hora de fin de descanso (${descansoFinal}) debe ser posterior a la de inicio (${descansoInicio}).`);
@@ -358,6 +359,13 @@ $hora_salida = isset($_GET['hora_salida']) ? $_GET['hora_salida'] : 930;
         }
     }
 
+    function minutos_formato_hora(minutos) {
+        let h = Math.floor(minutos / 60);
+        let m = minutos % 60;
+        return (h < 10 ? '0' : '') + h + ':' + (m < 10 ? '0' : '') + m;
+    }
+
+
     function sumarMinutos(hora, minutos) {
         let [h, m] = hora.split(':').map(Number);
         let total = h * 60 + m + minutos;
@@ -365,6 +373,7 @@ $hora_salida = isset($_GET['hora_salida']) ? $_GET['hora_salida'] : 930;
         let nuevaM = total % 60;
         return nuevaH.toString().padStart(2, '0') + ':' + nuevaM.toString().padStart(2, '0');
     }
+
     function mostrarAlerta(tipo, titulo, htmlMensaje) {
         Swal.fire({
             icon: tipo, // 'success' o 'error'
@@ -373,7 +382,6 @@ $hora_salida = isset($_GET['hora_salida']) ? $_GET['hora_salida'] : 930;
             confirmButtonText: 'Entendido'
         });
     }
-
 </script>
 
 <!-- Slider -->
