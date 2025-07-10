@@ -7,6 +7,7 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
 <script src="../lib/jquery_validation/jquery.validate.js"></script>
 <script src="../js/GENERAL/operaciones_generales.js"></script>
 <script type="text/javascript">
+    let intervaloID;
     $(document).ready(function() {
         tbl_dispositivos = $('#tbl_dispositivos').DataTable($.extend({}, configuracion_datatable('Dispostivos', 'dispostivos'), {
             reponsive: true,
@@ -386,28 +387,7 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
             dataType: 'json',
 
             success: function(response) {
-                $('#myModal_espera').modal('hide');
-                
-                var mensaje_finger = "";
-                var mensaje_face = "";
-                if($('#cbx_finger').prop('checked') && response.finger=="2"){ mensaje_finger = "Algunas Huellas no entontradas" }
-                if($('#cbx_face').prop('checked') && response.face=="2"){ mensaje_face = "Algunas imagenes faciales no entontradas"; }
-
-                if(response.userbio==1)
-                {
-                     Swal.fire('Datos Importados', mensaje_face+'\n'+mensaje_finger, 'success').then(function() {
-                        const link = document.createElement("a");
-                        link.href = response.link; // Ruta al archivo .zip
-                        link.download = response.nombre;       // Nombre sugerido para guardar
-                        document.body.appendChild(link);
-                        link.click();
-                        document.body.removeChild(link);
-
-                    });
-                }else
-                {
-                    Swal.fire('No hay datos que importar de biometrico','', 'warning');
-                }
+                descargar_datos(response.link,response.nombre);              
             },
             
             error: function(xhr, status, error) {
@@ -425,6 +405,59 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
 
         $('#txt_nombre').on('input', function() {
             $('#error_txt_nombre').text('');
+        });
+
+    }
+
+    function descargar_datos(link,nombre)
+    {
+       intervaloID =  setInterval(() => {
+            descargar_zip(link,nombre)
+          }, 5000); // Cada 3 segundos
+
+    }
+
+    function descargar_zip(link,nombre)
+    {
+  
+        var parametros = 
+        {
+            'nombre':nombre,
+        }
+        $('#myModal_espera').modal('show');
+        $.ajax({
+            data: {parametros:parametros },
+            url: '../controlador/TALENTO_HUMANO/th_dispositivosC.php?descargar_zip=true',
+            type: 'post',
+            dataType: 'json',
+
+            success: function(response) {
+                if(response==1)
+                {
+                    $('#myModal_espera').modal('hide');
+                    if (intervaloID) {
+                      clearInterval(intervaloID);
+                      intervaloID = null;
+                    }
+
+                     Swal.fire('Datos Importados', mensaje_face+'\n'+mensaje_finger, 'success').then(function() {
+                        const link = document.createElement("a");
+                        link.href = link; // Ruta al archivo .zip
+                        link.download = nombre;       // Nombre sugerido para guardar
+                        document.body.appendChild(link);
+                        link.click();
+                        document.body.removeChild(link);
+
+                    });
+                }
+
+            },
+            
+            error: function(xhr, status, error) {
+
+                $('#myModal_espera').modal('hide');
+                Swal.fire('', 'Error existio un error', 'error');
+            }
         });
 
     }

@@ -31,6 +31,33 @@ if (isset($_GET['importar_datos'])) {
     echo json_encode($controlador->importar_datos($_POST['parametros']));
 }
 
+if (isset($_GET['descargar_zip'])) {
+    echo json_encode($controlador->descargar_zip($_POST['parametros']));
+}
+
+
+if ((php_sapi_name() === 'cli' && isset($argv[1]) && $argv[1] === 'ejecutar_segundoPlano') ) {
+    $json = $argv[2] ?? '{}';
+    $json = str_replace(array(':',',','}','{'), array('":"','","','"}','{"'),$json);
+    $json = str_replace(" ","", $json);
+
+    // print_r($json);die();
+
+    $data = json_decode($json,true);
+    // print_r($data);die();
+    $data = str_replace(" ","", $data);
+
+    if (json_last_error() !== JSON_ERROR_NONE) {
+        file_put_contents('log_zip.txt', "Error JSON: " . $data." ; ".$json, FILE_APPEND);
+        exit(1);
+    }
+
+    // print_r($data);die();
+    $controlador->importar_datos_proceso($data);
+
+    // echo json_encode($controlador->importar_datos($_POST['parametros']));
+}
+
 
 
 class th_dispositivosC
@@ -122,26 +149,66 @@ class th_dispositivosC
 
     function importar_datos($parametros)
     {
+
+        $parametros['ID_EMPRESA']= $_SESSION['INICIO']['ID_EMPRESA'];
+
+        $dispositivo =  $this->modelo->lista_dispositivos($parametros['ID_EMPRESA'],$parametros['dispositivos']);
+        $nombre_descarga = 'data_importada_'.str_replace(" ",'_',$dispositivo[0]['nombre']);
+        $carpeta = dirname(__DIR__,2).'/TEMP/data/'.$nombre_descarga;
+        $link_descarga = '../TEMP/data/'.$nombre_descarga.'.zip';
+
+      
+        $json_arg = json_encode($parametros);
+        $escaped_json = escapeshellarg($json_arg);
+
+        // print_r($json_arg);
+        // print_r($escaped_json);die();
+        $cmd = 'start /B php ' . __FILE__ . ' ejecutar_segundoPlano ' . $escaped_json;
+        // print_r($cmd);die();
+        shell_exec($cmd);
+
+
+            // Cerrar conexión con el cliente (si aplica)
+            if (function_exists('fastcgi_finish_request')) {
+                fastcgi_finish_request();
+            } else {
+                ignore_user_abort(true);
+                ob_end_flush();
+                flush();
+            }
+
+            // Devolver respuesta inmediata al navegador
+            return array('link' => $link_descarga, 'nombre' => $nombre_descarga);
+    
+    }
+
+    function importar_datos_proceso($parametros)
+    {
         set_time_limit(0);  //---> para el lado der server
         $finger = ""; $resp_finger = array();
         $face = ""; $resp_face = array();
         $userbio = "1";
-        $dispositivo = $this->modelo->where('th_dis_id', $parametros['dispositivos'])->listar();
-        // print_r($dispositivo);die()
+
+        $dispositivo =  $this->modelo->lista_dispositivos($parametros['ID_EMPRESA'],$parametros['dispositivos']);
+        // $dispositivo = $this->modelo->where('th_dis_id', $parametros['dispositivos'])->listar();
+        // print_r($_SESSION['INICIO']);die();
+        // print_r($dispositivo);die();
 
          $nombre_descarga = 'data_importada_'.str_replace(" ",'_',$dispositivo[0]['nombre']);
          $carpeta = dirname(__DIR__,2).'/TEMP/data/'.$nombre_descarga;
          $link_descarga = '../TEMP/data/'.$nombre_descarga.'.zip';
 
-         if(!file_exists($carpeta))
-         {
-
-            $carpeta1 = dirname(__DIR__,2).'/TEMP/data';
+        $carpeta1 = dirname(__DIR__,2).'/TEMP/data';
+        if(!file_exists($carpeta1))
+        {
             mkdir($carpeta1,0777);
+        }
+
+        if(!file_exists($carpeta))
+        {            
             mkdir($carpeta,0777);
-         }
+        }
         $cliente = $this->conectar_buscar($parametros);
-        // print_r($cliente);die();
         if(count($cliente)>0)
         {
             $userbio  = 1;
@@ -154,7 +221,6 @@ class th_dispositivosC
                     mkdir($carpeta1,0777);
                 }
 
-
                 $contenido .= "Nombre: {$value['nombre']}, Numero de Tarjeta: {$value['CardNo']}\n";
 
                 if($parametros['huellas']==1)
@@ -165,6 +231,7 @@ class th_dispositivosC
                     $command = "dotnet $dllPath";
 
                     $output = shell_exec($command);
+                    // print_r($output);
                     $resp = json_decode($output, true);
                     if(isset($resp['resp']))
                     {
@@ -192,6 +259,7 @@ class th_dispositivosC
                     $command = "dotnet $dllPath";
 
                     $output = shell_exec($command);
+                     // print_r($output);
                     $resp = json_decode($output, true);
                     $cadena = $resp['resp'];
                     if(isset($resp['resp']))
@@ -245,7 +313,9 @@ class th_dispositivosC
 
     function conectar_buscar($parametros)
     {
-        $datos = $this->modelo->where('th_dis_id', $parametros['dispositivos'])->listar();
+        // $datos = $this->modelo->where('th_dis_id', $parametros['dispositivos'])->listar();
+// print_r($parametros);die();
+        $datos  =  $this->modelo->lista_dispositivos($parametros['ID_EMPRESA'],$parametros['dispositivos']);
 
         if (count($datos) > 0) {
             $dllPath = $this->sdk_patch . '5 ' . $datos[0]['host'] . ' ' . $datos[0]['usuario'] . ' ' . $datos[0]['port'] . ' ' . $datos[0]['pass'] . ' ';
@@ -288,6 +358,19 @@ class th_dispositivosC
             return $lista;
         } else {
             return -1;
+        }
+    }
+
+
+    function descargar_zip($parametros)
+    {
+        // print_r($parametros);die();
+        if(file_exists("../../TEMP/data/".$parametros['nombre'].'.zip'))
+        {
+            return 1;
+        }else
+        {
+            return 0;
         }
     }
 }
