@@ -190,6 +190,7 @@ if (isset($_GET['_id'])) {
                                     <input type="text" class="form-control form-control-sm no_caracteres" id="txt_descripcion" name="txt_descripcion" maxlength="50" oninput="texto_minusculas(this);">
                                 </div>
                             </div>
+                            
 
                             <div class="d-flex justify-content-end pt-2">
 

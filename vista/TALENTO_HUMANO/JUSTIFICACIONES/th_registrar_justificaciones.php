@@ -66,6 +66,21 @@ if (isset($_GET['_id'])) {
                     text: response[0].tipo_motivo,
                     selected: true
                 }));
+                if (response[0].es_rango == 1) {
+                    $('#cbx_justificar_rango').prop('checked', true);
+                    $('#txt_fecha_inicio').attr('type', 'date').val(response[0].fecha_inicio.split(' ')[0]);
+                    $('#txt_fecha_fin').attr('type', 'date').val(response[0].fecha_fin.split(' ')[0]);
+                    $('#pnl_horas_totales').hide();
+                } else {
+                    $('#cbx_justificar_rango').prop('checked', false);
+                    $('#pnl_horas_totales').show();
+
+                    let horaValidaInicio = response[0].fecha_inicio.split(' ')[1].substring(0, 5);
+                    let horaValidaFinal = response[0].fecha_fin.split(' ')[1].substring(0, 5);
+                    $('#txt_fecha_inicio').attr('type', 'time').val(horaValidaInicio);
+                    $('#txt_fecha_fin').attr('type', 'time').val(horaValidaFinal);
+                    calcular_Diferencia_Horas();
+                }
 
             }
         });
@@ -73,12 +88,14 @@ if (isset($_GET['_id'])) {
 
     function editar_insertar() {
 
-        var txt_fecha_inicio = fecha_formato_datetime2($('#txt_fecha_inicio').val());
-        var txt_fecha_fin = fecha_formato_datetime2($('#txt_fecha_fin').val());
+        var txt_fecha_inicio = $('#txt_fecha_inicio').val();
+        var txt_fecha_fin = $('#txt_fecha_fin').val();
         var ddl_personas = $('#ddl_personas').val() ?? 0;
         var ddl_departamentos = $('#ddl_departamentos').val() ?? 0;
         var ddl_tipo_justificacion = $('#ddl_tipo_justificacion').val() ?? 0;
         var txt_motivo = $('#txt_motivo').val() ?? 0;
+        var cbx_justificar_rango = $('#cbx_justificar_rango').prop('checked') ? 1 : 0;
+        var txt_horas_totales = $('#txt_horas_totales').val();
 
         var parametros = {
             '_id': '<?= $_id ?>',
@@ -88,6 +105,8 @@ if (isset($_GET['_id'])) {
             'ddl_departamentos': ddl_departamentos,
             'ddl_tipo_justificacion': ddl_tipo_justificacion,
             'txt_motivo': txt_motivo,
+            'cbx_justificar_rango': cbx_justificar_rango,
+            'txt_horas_totales': txt_horas_totales,
         };
 
         if ($("#form_justificaciones").valid()) {
@@ -179,6 +198,10 @@ if (isset($_GET['_id'])) {
     //Funciones adicionales 
     $(document).ready(function() {
 
+        $('#txt_fecha_inicio').attr('type', 'time');
+        $('#txt_fecha_fin').attr('type', 'time');
+        $('#pnl_horas_totales').show();
+
         $('input[name="cbx_programar"]').on('change', function() {
             $('#pnl_personas, #pnl_departamentos').hide();
 
@@ -206,7 +229,73 @@ if (isset($_GET['_id'])) {
             if (!verificar_fecha_inicio_fecha_fin('txt_fecha_inicio', 'txt_fecha_fin')) return;
         });
 
+
+        $('#cbx_justificar_rango').on('change', function() {
+            if ($(this).is(':checked')) {
+                $('#txt_fecha_inicio').attr('type', 'date');
+                $('#txt_fecha_fin').attr('type', 'date');
+                $('#pnl_horas_totales').hide();
+            } else {
+                $('#txt_fecha_inicio').attr('type', 'time');
+                $('#txt_fecha_fin').attr('type', 'time');
+                $('#pnl_horas_totales').show();
+            }
+            calcular_Diferencia_Horas();
+        });
+
+        $('#txt_fecha_inicio, #txt_fecha_fin').on('change', calcular_Diferencia_Horas);
+
+
     });
+
+    function calcular_Diferencia_Horas() {
+        let tipo = $('#txt_fecha_inicio').attr('type');
+        let inicio = $('#txt_fecha_inicio').val();
+        let fin = $('#txt_fecha_fin').val();
+
+        if (!inicio || !fin) return;
+
+        if (tipo === 'time') {
+            let [h1, m1] = inicio.split(':').map(Number);
+            let [h2, m2] = fin.split(':').map(Number);
+
+            let minInicio = h1 * 60 + m1;
+            let minFin = h2 * 60 + m2;
+
+            if (minFin < minInicio) {
+                Swal.fire({
+                    icon: 'error',
+                    title: '¡Error!',
+                    text: 'La hora final no puede ser menor que la hora inicial',
+                    confirmButtonColor: '#d33',
+                });
+                $('#txt_fecha_fin').val('');
+                $('#txt_horas_totales').val('');
+                return;
+            }
+
+            let diferencia = minFin - minInicio;
+            let horas = Math.floor(diferencia / 60).toString().padStart(2, '0');
+            let minutos = (diferencia % 60).toString().padStart(2, '0');
+
+            $('#txt_horas_totales').val(`${horas}:${minutos}`);
+        } else if (tipo === 'date') {
+            let fechaInicio = new Date(inicio);
+            let fechaFin = new Date(fin);
+
+            if (fechaFin < fechaInicio) {
+                Swal.fire({
+                    icon: 'error',
+                    title: '¡Error!',
+                    text: 'La hora final no puede ser menor que la hora inicial',
+                    confirmButtonColor: '#d33',
+                });
+                $('#txt_fecha_fin').val('');
+            }
+        }
+    }
+
+
 
     function limpiar_parametros_validate() {
         //Limpiar validaciones
@@ -321,7 +410,26 @@ if (isset($_GET['_id'])) {
                                 </div>
                             </div>
 
-                             <div class="row pt-3 mb-col">
+                            <div class="row pt-3 mb-col align-items-center">
+                                <div class="col-md-9">
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="checkbox" id="cbx_justificar_rango" name="cbx_justificar_rango" value="1">
+                                        <label class="form-check-label" for="cbx_justificar_rango">Justificar, por rangos</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="pnl_horas_totales" style="display: none;">
+                                <div class="row pt-3 mb-col">
+                                    <div class="col-md-3">
+                                        <label for="txt_horas_totales" class="form-label">Horas Totales</label>
+                                        <input type="time" class="form-control form-control-sm" id="txt_horas_totales" name="txt_horas_totales" disabled>
+                                    </div>
+                                </div>
+
+                            </div>
+
+
+                            <div class="row pt-3 mb-col">
                                 <div class="col-md-3">
                                     <label for="txt_fecha_inicio" class="form-label">Fecha Inicial </label>
                                     <input type="datetime-local" class="form-control form-control-sm" id="txt_fecha_inicio" name="txt_fecha_inicio" maxlength="50">
@@ -331,6 +439,7 @@ if (isset($_GET['_id'])) {
                                     <input type="datetime-local" class="form-control form-control-sm" id="txt_fecha_fin" name="txt_fecha_fin" maxlength="50">
                                 </div>
                             </div>
+
 
 
                             <div class="d-flex justify-content-end pt-2">

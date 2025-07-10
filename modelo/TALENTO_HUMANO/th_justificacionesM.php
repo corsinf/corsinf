@@ -18,6 +18,9 @@ class th_justificacionesM extends BaseModel
         'th_jus_fecha_modificacion AS fecha_modificacion',
         'th_jus_estado AS estado',
         'id_usuario AS id_usuario',
+        'th_jus_es_rango AS es_rango',
+        'th_jus_minutos_justificados AS minutos_justificados'
+
     ];
 
     function listar_departamentos_justificaciones($id_departamento = '')
@@ -36,7 +39,10 @@ class th_justificacionesM extends BaseModel
                     jus.th_jus_fecha_modificacion AS fecha_modificacion,
                     jus.th_jus_estado AS estado,
                     jus.id_usuario AS id_usuario,
+                    jus.th_jus_es_rango AS es_rango,
+                    jus.th_jus_minutos_justificados AS minutos_justificados,
                     dep.th_dep_nombre AS nombre_departamento
+
                 FROM
                     th_justificaciones jus
                 INNER JOIN th_departamentos dep ON jus.th_dep_id = dep.th_dep_id
@@ -68,6 +74,8 @@ class th_justificacionesM extends BaseModel
                     jus.th_jus_fecha_modificacion AS fecha_modificacion,
                     jus.th_jus_estado AS estado,
                     jus.id_usuario AS id_usuario,
+                    jus.th_jus_es_rango AS es_rango,
+                    jus.th_jus_minutos_justificados AS minutos_justificados,
                     CONCAT(per.th_per_primer_apellido, ' ', per.th_per_segundo_apellido, ' ', 
                         per.th_per_primer_nombre, ' ', per.th_per_segundo_nombre) AS nombre_persona
                 FROM
@@ -101,6 +109,8 @@ class th_justificacionesM extends BaseModel
                 jus.th_jus_estado AS estado,
                 jus.id_usuario AS id_usuario,
                 dep.th_dep_nombre AS nombre_departamento,
+                jus.th_jus_es_rango AS es_rango,
+                jus.th_jus_minutos_justificados AS minutos_justificados,
                 CONCAT(per.th_per_primer_apellido, ' ', per.th_per_segundo_apellido, ' ', 
                     per.th_per_primer_nombre, ' ', per.th_per_segundo_nombre) AS nombre_persona
             FROM th_justificaciones jus
