@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <<<<<<< Updated upstream
 [2025-07-10 11:06:12.771][INF] The COM:HCCoreBase ver is 1.0.0.1, 2018_06_01. Async:1.
 [2025-07-10 11:06:12.771][INF] The COM:Core ver is 6.1.3.5, 2019_09_26. Async:1.
@@ -213,3 +214,37 @@
 [2025-07-09 11:41:14.168][INF] COM_Logout[0][1]
 [2025-07-09 11:41:14.168][INF] CTransUnitMgr::UnloadTransUnitLib
 >>>>>>> Stashed changes
+=======
+[2025-07-10 11:13:18.704][INF] The COM:HCCoreBase ver is 1.0.0.1, 2018_06_01. Async:1.
+[2025-07-10 11:13:18.704][INF] The COM:Core ver is 6.1.3.5, 2019_09_26. Async:1.
+[2025-07-10 11:13:18.704][INF] This HCNetSDK ver is 6.1.3.5 Ver 2019_09_26.
+[2025-07-10 11:13:18.709][DBG] load full path[C:\xampp\htdocs\corsinf\lib\SDKDevices\hikvision\HCNetSDK\HCNetSDKCom/HCVoiceTalk.dll] succ
+[2025-07-10 11:13:18.709][INF] AbilityAnalyze---Init-- start
+[2025-07-10 11:13:18.709][ERR] AbilityAnalyze---open zip package error, package path C:/xampp/htdocs/corsinf/lib/SDKDevices/hikvision/HCNetSDK/LocalXml.zip
+[2025-07-10 11:13:18.709][INF] The COM:VoiceTalk ver is 6.1.3.5, 2019_09_26.
+[2025-07-10 11:13:18.712][DBG] load full path[C:\xampp\htdocs\corsinf\lib\SDKDevices\hikvision\HCNetSDK\HCNetSDKCom/HCGeneralCfgMgr.dll] succ
+[2025-07-10 11:13:18.712][INF] The COM:HCGeneralCfgMgr ver is 6.1.3.5, 2019_09_26.
+[2025-07-10 11:13:18.714][DBG] load full path[C:\xampp\htdocs\corsinf\lib\SDKDevices\hikvision\HCNetSDK\HCNetSDKCom/HCPlayBack.dll] succ
+[2025-07-10 11:13:18.714][INF] The COM:HCPlayback ver is 6.1.3.5, 2019_09_26.
+[2025-07-10 11:13:18.715][DBG] load full path[C:\xampp\htdocs\corsinf\lib\SDKDevices\hikvision\HCNetSDK\HCNetSDKCom/HCIndustry.dll] succ
+[2025-07-10 11:13:18.715][INF] The COM:HCIndustry ver is 6.1.3.5, 2019_09_26.
+[2025-07-10 11:13:18.716][DBG] load full path[C:\xampp\htdocs\corsinf\lib\SDKDevices\hikvision\HCNetSDK\HCNetSDKCom/HCDisplay.dll] succ
+[2025-07-10 11:13:18.717][INF] The COM:HCDisplay ver is 6.1.3.5, 2019_09_26.
+[2025-07-10 11:13:18.718][DBG] load full path[C:\xampp\htdocs\corsinf\lib\SDKDevices\hikvision\HCNetSDK\HCNetSDKCom/HCPreview.dll] succ
+[2025-07-10 11:13:18.719][INF] The COM:Preview ver is 6.1.3.5, 2019_09_26.
+[2025-07-10 11:13:18.720][DBG] load full path[C:\xampp\htdocs\corsinf\lib\SDKDevices\hikvision\HCNetSDK\HCNetSDKCom/HCAlarm.dll] succ
+[2025-07-10 11:13:18.721][INF] The COM:HCAlarm ver is 6.1.3.5, 2019_09_26.
+[2025-07-10 11:13:18.721][DBG] CLongConfigSessionEx::start succ [userid:0][command:2560]
+[2025-07-10 11:13:18.734][DBG] callback [2]data len[1300].
+[2025-07-10 11:13:18.735][DBG] callback [2]data len[1300].
+[2025-07-10 11:13:18.737][DBG] callback [2]data len[1300].
+[2025-07-10 11:13:18.739][DBG] callback [2]data len[1300].
+[2025-07-10 11:13:18.739][DBG] callback [0]data len[4].
+[2025-07-10 11:13:18.739][DBG] callback status[1000].
+[2025-07-10 11:13:18.739][INF] [CLongLinkCtrlPrivate::RecvThreadFunc] RecvThreadFunc EXIT, this=0x62762448, linkid=601caf84
+[2025-07-10 11:13:18.752][INF] [0]CLongConfigSession::Stop in
+[2025-07-10 11:13:18.752][INF] COM_Logout[0][1]
+[2025-07-10 11:13:18.752][DBG] CUserMgr::UnRegisterHeartProxy[0]
+[2025-07-10 11:13:18.832][INF] COM_Logout[0][1]
+[2025-07-10 11:13:18.833][INF] CTransUnitMgr::UnloadTransUnitLib
+>>>>>>> bfab81c722697703fa252bd07f176493c52e383e

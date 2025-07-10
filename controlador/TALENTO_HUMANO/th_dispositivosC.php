@@ -28,7 +28,8 @@ if (isset($_GET['eliminar2'])) {
 
 
 if (isset($_GET['importar_datos'])) {
-    echo json_encode($controlador->importar_datos($_POST['parametros']));
+    $controlador->importar_datos($_POST['parametros']);
+    exit;
 }
 
 if (isset($_GET['descargar_zip'])) {
@@ -168,18 +169,17 @@ class th_dispositivosC
         shell_exec($cmd);
 
 
-            // Cerrar conexión con el cliente (si aplica)
-            if (function_exists('fastcgi_finish_request')) {
-                fastcgi_finish_request();
-            } else {
-                ignore_user_abort(true);
-                ob_end_flush();
-                flush();
-            }
+        // ⚠️ Enviar respuesta primero y luego liberar proceso (si es FastCGI)
+        if (function_exists('fastcgi_finish_request')) {
+            echo json_encode(['link' => $link_descarga, 'nombre' => $nombre_descarga]);
+            fastcgi_finish_request();
+        } else {
+            ignore_user_abort(true);
+            ob_end_flush();
+            flush();
+            echo json_encode(['link' => $link_descarga, 'nombre' => $nombre_descarga]);
+        }
 
-            // Devolver respuesta inmediata al navegador
-            return array('link' => $link_descarga, 'nombre' => $nombre_descarga);
-    
     }
 
     function importar_datos_proceso($parametros)
