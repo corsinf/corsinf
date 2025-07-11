@@ -419,8 +419,7 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
     }
 
     function descargar_zip()
-    {
-  
+    {  
         var parametros = 
         {
             'nombre':$('#txt_nombre_bio').val(),
@@ -433,7 +432,7 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
             dataType: 'json',
 
             success: function(response) {
-                if(response==1)
+                if(response.resp==1)
                 {
                     $('#myModal_espera').modal('hide');
                     if (intervaloID) {
@@ -441,10 +440,10 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                       intervaloID = null;
                     }
 
-                     Swal.fire('Datos Importados', mensaje_face+'\n'+mensaje_finger, 'success').then(function() {
+                     Swal.fire('Datos Importados',"", 'success').then(function() {
                         const link = document.createElement("a");
-                        link.href = link; // Ruta al archivo .zip
-                        link.download = nombre;       // Nombre sugerido para guardar
+                        link.href = response.link; // Ruta al archivo .zip
+                        link.download = response.nombre;       // Nombre sugerido para guardar
                         document.body.appendChild(link);
                         link.click();
                         document.body.removeChild(link);

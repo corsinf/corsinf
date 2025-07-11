@@ -375,12 +375,13 @@ class th_dispositivosC
     function descargar_zip($parametros)
     {
         $nombre = str_replace(" ","_", $parametros['nombre']);
-        if(file_exists("../../TEMP/data/data_importada_".$nombre.'.zip'))
+        $link = "../TEMP/data/data_importada_".$nombre.'.zip';
+        if(file_exists("../".$link))
         {
-            return 1;
+            return array("resp"=>1,'nombre'=>$nombre,'link'=>  $link);
         }else
         {
-            return 0;
+            return array("resp"=>0,'nombre'=>$nombre,'link'=>  $link);
         }
     }
 }
