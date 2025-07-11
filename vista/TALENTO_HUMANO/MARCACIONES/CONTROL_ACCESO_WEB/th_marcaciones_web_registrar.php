@@ -4,6 +4,14 @@
     });
 </script>
 
+<style>
+    /* Ajusta la altura del mapa */
+    #map {
+        width: 100%;
+        height: 400px;
+    }
+</style>
+
 <div class="page-wrapper">
     <div class="page-content">
         <!--breadcrumb-->
@@ -44,28 +52,83 @@
                             </div>
                         </div>
 
-
-                        <section class="content pt-2">
-                            <div class="container-fluid">
-                                <div class="table-responsive">
-                                    <table class="table table-striped responsive " id="tbl_blank" style="width:100%">
-                                        <thead>
-                                            <tr>
-                                                <th>Blank</th>
-                                                <th>Blank</th>
-                                                <th>Blank</th>
-                                                <th>Blank</th>
-                                                <th>Blank</th>
-                                                <th width="10px">Acción</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-
-                                        </tbody>
-                                    </table>
+                        <!-- Contenedor principal -->
+                        <div class="container mt-4">
+                            <div class="row">
+                                <!-- Columna 1: Formulario -->
+                                <div class="col-md-6">
+                                    <div class="card">
+                                        <div class="card-header bg-primary text-white">Ubicación</div>
+                                        <div class="card-body">
+                                            <button id="btn_ubicacion" class="btn btn-success mb-3">Obtener ubicación</button>
+                                            <div class="mb-3">
+                                                <label>Latitud:</label>
+                                                <input type="text" id="txt_lat" class="form-control" disabled>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label>Longitud:</label>
+                                                <input type="text" id="txt_lon" class="form-control" disabled>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div><!-- /.container-fluid -->
-                        </section>
+
+                                <!-- Columna 2: Mapa -->
+                                <div class="col-md-6">
+                                    <div class="card h-100">
+                                        <div class="card-header bg-info text-white">Mapa</div>
+                                        <div class="card-body p-0">
+                                            <div id="map_embed" style="height: 400px; width: 100%;"></div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+
+                        <div class="container mt-5">
+                            <div class="card shadow">
+                                <div class="card-header bg-primary text-white">
+                                    <h5 class="mb-0"><i class="bi bi-camera-video-fill"></i> Cámara en vivo</h5>
+                                </div>
+                                <div class="card-body">
+                                    <!-- Video en vivo -->
+                                    <div class="mb-3 text-center">
+                                        <div class="mx-auto" style="max-width: 320px;">
+                                            <video
+                                                id="video_stream"
+                                                class="w-100 border rounded"
+                                                autoplay
+                                                playsinline>
+                                            </video>
+                                        </div>
+                                    </div>
+
+
+                                    <!-- Botones de control -->
+                                    <div class="mb-3 text-center">
+                                        <button id="btn_start" class="btn btn-success me-2">
+                                            <i class="bi bi-camera-reels"></i> Iniciar cámara
+                                        </button>
+                                        <button id="btn_capture" class="btn btn-primary" disabled>
+                                            <i class="bi bi-camera"></i> Capturar foto
+                                        </button>
+                                    </div>
+
+                                    <!-- Previsualización -->
+                                    <div id="preview_container" class="mb-3 text-center d-none">
+                                        <label class="form-label fw-bold">Previsualización:</label>
+                                        <div class="ratio ratio-4x3">
+                                            <canvas id="canvas_preview" class="w-100 h-100 border rounded"></canvas>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+
                     </div>
                 </div>
             </div>
@@ -74,44 +137,93 @@
     </div>
 </div>
 
+<script>
+    $(function() {
+        $('#btn_ubicacion').click(function() {
+            if (!navigator.geolocation) {
+                return Swal.fire({
+                    icon: 'warning',
+                    title: 'No soportado',
+                    text: 'Tu navegador no soporta geolocalización.'
+                });
+            }
 
-<div class="modal" id="modal_blank" abindex="-1" aria-modal="true" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
+            navigator.geolocation.getCurrentPosition(function(pos) {
+                let lat = pos.coords.latitude;
+                let lon = pos.coords.longitude;
 
-            <!-- Modal Header -->
-            <div class="modal-header">
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
+                $('#txt_lat').val(lat);
+                $('#txt_lon').val(lon);
 
-            <!-- Modal body -->
-            <div class="modal-body">
+                // Mostrar punto exacto (marcador) en el mapa
+                let mapUrl = `https://www.google.com/maps/embed/v1/place?key=AIzaSyBpiGf-qNlzyMrRhEbxO8mZG5QvHYHvd2c&q=${lat},${lon}&center=${lat},${lon}&zoom=18&maptype=roadmap`;
 
-                <div class="row">
-                    <div class="col-12">
-                        <label for="">Tipo de <label class="text-danger">*</label></label>
-                        <select name="" id="" class="form-select form-select-sm" onchange="">
-                            <option value="">Seleccione el </option>
-                        </select>
-                    </div>
-                </div>
+                $('#map_embed').html(`
+          <iframe width="100%" height="100%" frameborder="0" style="border:0"
+            src="${mapUrl}" allowfullscreen></iframe>
+        `);
 
-                <div class="row pt-3">
-                    <div class="col-12">
-                        <label for="">Blank <label class="text-danger">*</label></label>
-                        <select name="" id="" class="form-select form-select-sm">
-                            <option value="">Seleccione el </option>
-                        </select>
-                    </div>
-                </div>
+                Swal.fire({
+                    icon: 'success',
+                    title: '¡Ubicación obtenida!',
+                    html: `Latitud: <strong>${lat}</strong><br>Longitud: <strong>${lon}</strong>`
+                });
+            }, function(err) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error al obtener ubicación',
+                    text: err.message
+                });
+            });
+        });
+    });
+</script>
 
-                <div class="row pt-3">
-                    <div class="col-12 text-end">
-                        <button type="button" class="btn btn-success btn-sm" onclick=""><i class="bx bx-save"></i> Agregar</button>
-                    </div>
-                </div>
 
-            </div>
-        </div>
-    </div>
-</div>
+
+<script>
+    $(function() {
+        let $video = $('#video_stream');
+        let $canvas = $('#canvas_preview');
+        let ctx = $canvas[0].getContext('2d');
+        let stream;
+
+        // Iniciar cámara
+        $('#btn_start').on('click', async function() {
+            try {
+                stream = await navigator.mediaDevices.getUserMedia({
+                    video: {
+                        facingMode: 'environment'
+                    },
+                    audio: false
+                });
+                // Asignar el stream al video
+                $video.prop('srcObject', stream);
+                $('#btn_capture').prop('disabled', false);
+            } catch (err) {
+                console.error(err);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'No se pudo acceder a la cámara: ' + err.message
+                });
+            }
+        });
+
+        // Capturar foto
+        $('#btn_capture').on('click', function() {
+            // Ajusta el tamaño interno real del canvas antes de dibujar
+            let videoEl = $('#video_stream')[0];
+            let canvasEl = $('#canvas_preview')[0];
+            canvasEl.width = videoEl.videoWidth;
+            canvasEl.height = videoEl.videoHeight;
+
+            // Dibuja la imagen
+            canvasEl.getContext('2d').drawImage(videoEl, 0, 0, canvasEl.width, canvasEl.height);
+
+            // Muestra el contenedor
+            $('#preview_container').removeClass('d-none');
+
+        });
+    });
+</script>
