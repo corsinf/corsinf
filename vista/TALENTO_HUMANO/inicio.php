@@ -137,3 +137,22 @@ if ($_GET['acc'] == 'th_addRegistroBio') {
 if ($_GET['acc'] == 'log_dispositivos') {
 	include('TALENTO_HUMANO/DISPOSITIVOS/th_log_dispositivos.php');
 }
+
+
+/**
+ * 
+ * POSTULANTES
+ * 
+ */
+
+if ($_GET['acc'] == 'th_marcaciones_web') {
+	include('TALENTO_HUMANO/MARCACIONES/CONTROL_ACCESO_WEB/th_marcaciones_web.php');
+}
+
+if ($_GET['acc'] == 'th_marcaciones_web_registrar') {
+	include('TALENTO_HUMANO/MARCACIONES/CONTROL_ACCESO_WEB/th_marcaciones_web_registrar.php');
+}
+
+if ($_GET['acc'] == 'th_aprobar_marcacion') {
+	include('TALENTO_HUMANO/MARCACIONES/APROBACION/th_aprobar_marcacion.php');
+}
