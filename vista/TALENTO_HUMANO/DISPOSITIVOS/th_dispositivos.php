@@ -453,9 +453,32 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                         link.click();
                         document.body.removeChild(link);
 
+                        eliminar_carpeta(response.link)
+
                     });
                 }
 
+            },
+            
+            error: function(xhr, status, error) {
+
+                $('#myModal_espera').modal('hide');
+                Swal.fire('', 'Error existio un error', 'error');
+            }
+        });
+
+    }
+
+    function eliminar_carpeta(link)
+    {
+        var parametros = {'carpeta':link}
+        $.ajax({
+            data: {parametros:parametros },
+            url: '../controlador/TALENTO_HUMANO/th_dispositivosC.php?eliminar_carpeta=true',
+            type: 'post',
+            dataType: 'json',
+
+            success: function(response) {
             },
             
             error: function(xhr, status, error) {

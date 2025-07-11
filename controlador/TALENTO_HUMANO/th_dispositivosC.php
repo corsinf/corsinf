@@ -36,6 +36,11 @@ if (isset($_GET['descargar_zip'])) {
     echo json_encode($controlador->descargar_zip($_POST['parametros']));
 }
 
+if (isset($_GET['eliminar_carpeta'])) {
+    echo json_encode($controlador->eliminar_carpeta($_POST['parametros']));
+}
+
+
 
 if ((isset($argv[0]) && basename($argv[0]) === basename(__FILE__) && isset($argv[1]) && $argv[1] === 'ejecutar_segundoPlano') ) {
     $json = $argv[2] ?? '{}';
@@ -389,5 +394,35 @@ class th_dispositivosC
         {
             return array("resp"=>0,'nombre'=>$nombre,'link'=>  $link);
         }
+    }
+
+    function eliminar_carpeta($parametros)
+    {
+        $this->eliminarCarpeta(str_replace('.zip',"","../".$parametros['carpeta']));
+        if(file_exists("../".$parametros['carpeta']))
+        {
+             unlink("../".$parametros['carpeta']);
+             // return 1;
+        }
+    }
+
+    function eliminarCarpeta($ruta) 
+    {
+        if (!is_dir($ruta)) {
+            return false;
+        }
+
+        $archivos = array_diff(scandir($ruta), ['.', '..']);
+        
+        foreach ($archivos as $archivo) {
+            $rutaCompleta = $ruta . DIRECTORY_SEPARATOR . $archivo;
+            if (is_dir($rutaCompleta)) {
+                $this->eliminarCarpeta($rutaCompleta); // recursivo para subdirectorios
+            } else {
+                unlink($rutaCompleta); // elimina archivo
+            }
+        }
+
+        return rmdir($ruta); // elimina carpeta vacía
     }
 }
