@@ -59,9 +59,22 @@ class th_justificacionesC
 
     function insertar_editar($parametros)
     {
+
+
+        if ($parametros['cbx_justificar_rango'] == 1) {
+            $txt_fecha_inicio =  $parametros['txt_fecha_inicio'] . ' 00:00:00';
+            $txt_fecha_fin =  $parametros['txt_fecha_fin'] . ' 00:00:00';
+            $txt_horas_totales =  0;
+        } else {
+            $txt_fecha_inicio = date('Y-m-d H:i:s', strtotime($parametros['txt_fecha_inicio']));
+            $txt_fecha_fin = date('Y-m-d H:i:s', strtotime($parametros['txt_fecha_fin']));
+            $txt_horas_totales =  $this->hora_a_minutos($parametros['txt_horas_totales']);
+        }
+
+
         $datos = array(
-            array('campo' => 'th_jus_fecha_inicio', 'dato' => $parametros['txt_fecha_inicio']),
-            array('campo' => 'th_jus_fecha_fin', 'dato' => $parametros['txt_fecha_fin']),
+            array('campo' => 'th_jus_fecha_inicio', 'dato' =>  $txt_fecha_inicio),
+            array('campo' => 'th_jus_fecha_fin', 'dato' => $txt_fecha_fin),
             array('campo' => 'th_per_id', 'dato' => $parametros['ddl_personas']),
             array('campo' => 'th_dep_id', 'dato' => $parametros['ddl_departamentos']),
 
@@ -70,6 +83,8 @@ class th_justificacionesC
 
             array('campo' => 'th_jus_fecha_modificacion', 'dato' => date('Y-m-d H:i:s')),
             array('campo' => 'id_usuario', 'dato' => $_SESSION['INICIO']['ID_USUARIO']),
+            array('campo' => 'th_jus_es_rango', 'dato' => $parametros['cbx_justificar_rango']),
+            array('campo' => 'th_jus_minutos_justificados', 'dato' =>  $txt_horas_totales),
         );
 
         if ($parametros['_id'] == '') {
@@ -94,5 +109,11 @@ class th_justificacionesC
 
         $datos = $this->modelo->editar($datos, $where);
         return $datos;
+    }
+
+    function hora_a_minutos($time)
+    {
+        list($horas, $minutos) = explode(':', $time);
+        return ($horas * 60) + $minutos;
     }
 }

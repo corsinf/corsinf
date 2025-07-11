@@ -260,7 +260,8 @@ $hora_salida = isset($_GET['hora_salida']) ? $_GET['hora_salida'] : 930;
         $('#cbx_hora_suple_extra').change(function() {
             if ($(this).is(':checked')) {
 
-                $('#txt_hora_suple_inicio').val("");
+                let horaSalida = $('#txt_hora_salida').val();
+                $('#txt_hora_suple_inicio').val(horaSalida);
                 $('#txt_hora_suple_final').val("19:00");
                 $('#txt_hora_extra_inicio').val("19:00");
                 $('#txt_hora_extra_final').val("23:59");
