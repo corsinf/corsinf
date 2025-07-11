@@ -181,11 +181,17 @@ class th_dispositivosC
     }
 
     function encontrar_php_exe() {
-        $paths = explode(PATH_SEPARATOR, getenv('PATH'));
-        foreach ($paths as $path) {
-            $php = $path . DIRECTORY_SEPARATOR . 'php.exe';
-            if (is_file($php) && is_executable($php)) {
-                return $php;
+        if($_SERVER['SERVER_ADDR']=="186.4.219.172")
+        {
+            return "C:\\php-8.1.32\\php.exe";
+
+        }else{
+            $paths = explode(PATH_SEPARATOR, getenv('PATH'));
+            foreach ($paths as $path) {
+                $php = $path . DIRECTORY_SEPARATOR . 'php.exe';
+                if (is_file($php) && is_executable($php)) {
+                    return $php;
+                }
             }
         }
         return null;
