@@ -412,9 +412,14 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
 
     function descargar_datos()
     {
+        var count = 0;
+        var texto = ["Descarga iniciada..",'Obteniendo de biometrico','Descargando Huellas','Descargando Faciales','Empaquetando usuario'];
        intervaloID =  setInterval(() => {
             descargar_zip()
-          }, 5000); // Cada 3 segundos
+            $('#lbl_msj_espera').text(texto[count]);
+            count++;
+            if(count>4){count=0;}
+          }, 10000); // Cada 3 segundos
 
     }
 

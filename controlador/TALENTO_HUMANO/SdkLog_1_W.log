@@ -1,32 +1,180 @@
-[2025-07-11 09:48:16.399][INF] The COM:HCCoreBase ver is 1.0.0.1, 2018_06_01. Async:1.
-[2025-07-11 09:48:16.399][INF] The COM:Core ver is 6.1.3.5, 2019_09_26. Async:1.
-[2025-07-11 09:48:16.399][INF] This HCNetSDK ver is 6.1.3.5 Ver 2019_09_26.
-[2025-07-11 09:48:16.404][DBG] load full path[C:\xampp\htdocs\corsinf\lib\SDKDevices\hikvision\HCNetSDK\HCNetSDKCom/HCVoiceTalk.dll] succ
-[2025-07-11 09:48:16.404][INF] AbilityAnalyze---Init-- start
-[2025-07-11 09:48:16.404][ERR] AbilityAnalyze---open zip package error, package path C:/xampp/htdocs/corsinf/lib/SDKDevices/hikvision/HCNetSDK/LocalXml.zip
-[2025-07-11 09:48:16.405][INF] The COM:VoiceTalk ver is 6.1.3.5, 2019_09_26.
-[2025-07-11 09:48:16.406][DBG] load full path[C:\xampp\htdocs\corsinf\lib\SDKDevices\hikvision\HCNetSDK\HCNetSDKCom/HCGeneralCfgMgr.dll] succ
-[2025-07-11 09:48:16.407][INF] The COM:HCGeneralCfgMgr ver is 6.1.3.5, 2019_09_26.
-[2025-07-11 09:48:16.408][DBG] load full path[C:\xampp\htdocs\corsinf\lib\SDKDevices\hikvision\HCNetSDK\HCNetSDKCom/HCPlayBack.dll] succ
-[2025-07-11 09:48:16.408][INF] The COM:HCPlayback ver is 6.1.3.5, 2019_09_26.
-[2025-07-11 09:48:16.409][DBG] load full path[C:\xampp\htdocs\corsinf\lib\SDKDevices\hikvision\HCNetSDK\HCNetSDKCom/HCIndustry.dll] succ
-[2025-07-11 09:48:16.410][INF] The COM:HCIndustry ver is 6.1.3.5, 2019_09_26.
-[2025-07-11 09:48:16.411][DBG] load full path[C:\xampp\htdocs\corsinf\lib\SDKDevices\hikvision\HCNetSDK\HCNetSDKCom/HCDisplay.dll] succ
-[2025-07-11 09:48:16.411][INF] The COM:HCDisplay ver is 6.1.3.5, 2019_09_26.
-[2025-07-11 09:48:16.413][DBG] load full path[C:\xampp\htdocs\corsinf\lib\SDKDevices\hikvision\HCNetSDK\HCNetSDKCom/HCPreview.dll] succ
-[2025-07-11 09:48:16.413][INF] The COM:Preview ver is 6.1.3.5, 2019_09_26.
-[2025-07-11 09:48:16.414][DBG] load full path[C:\xampp\htdocs\corsinf\lib\SDKDevices\hikvision\HCNetSDK\HCNetSDKCom/HCAlarm.dll] succ
-[2025-07-11 09:48:16.414][INF] The COM:HCAlarm ver is 6.1.3.5, 2019_09_26.
-[2025-07-11 09:48:16.415][DBG] CLongConfigSessionEx::start succ [userid:0][command:2560]
-[2025-07-11 09:48:16.465][DBG] callback [2]data len[1300].
-[2025-07-11 09:48:16.486][DBG] callback [2]data len[1300].
-[2025-07-11 09:48:16.494][DBG] callback [2]data len[1300].
-[2025-07-11 09:48:16.505][DBG] callback [2]data len[1300].
-[2025-07-11 09:48:16.505][DBG] callback [0]data len[4].
-[2025-07-11 09:48:16.505][DBG] callback status[1000].
-[2025-07-11 09:48:16.505][INF] [CLongLinkCtrlPrivate::RecvThreadFunc] RecvThreadFunc EXIT, this=0xdd96d448, linkid=db3d8994
-[2025-07-11 09:48:16.541][INF] [0]CLongConfigSession::Stop in
-[2025-07-11 09:48:16.542][INF] COM_Logout[0][1]
-[2025-07-11 09:48:16.542][DBG] CUserMgr::UnRegisterHeartProxy[0]
-[2025-07-11 09:48:16.618][INF] COM_Logout[0][1]
-[2025-07-11 09:48:16.620][INF] CTransUnitMgr::UnloadTransUnitLib
+[2025-07-11 10:12:29.308][INF] The COM:HCCoreBase ver is 1.0.0.1, 2018_06_01. Async:1.
+[2025-07-11 10:12:29.308][INF] The COM:Core ver is 6.1.3.5, 2019_09_26. Async:1.
+[2025-07-11 10:12:29.308][INF] This HCNetSDK ver is 6.1.3.5 Ver 2019_09_26.
+[2025-07-11 10:12:29.316][DBG] load full path[C:\xampp\htdocs\corsinf\lib\SDKDevices\hikvision\HCNetSDK\HCNetSDKCom/HCVoiceTalk.dll] succ
+[2025-07-11 10:12:29.316][INF] AbilityAnalyze---Init-- start
+[2025-07-11 10:12:29.316][ERR] AbilityAnalyze---open zip package error, package path C:/xampp/htdocs/corsinf/lib/SDKDevices/hikvision/HCNetSDK/LocalXml.zip
+[2025-07-11 10:12:29.316][INF] The COM:VoiceTalk ver is 6.1.3.5, 2019_09_26.
+[2025-07-11 10:12:29.318][DBG] load full path[C:\xampp\htdocs\corsinf\lib\SDKDevices\hikvision\HCNetSDK\HCNetSDKCom/HCGeneralCfgMgr.dll] succ
+[2025-07-11 10:12:29.319][INF] The COM:HCGeneralCfgMgr ver is 6.1.3.5, 2019_09_26.
+[2025-07-11 10:12:29.320][DBG] load full path[C:\xampp\htdocs\corsinf\lib\SDKDevices\hikvision\HCNetSDK\HCNetSDKCom/HCPlayBack.dll] succ
+[2025-07-11 10:12:29.320][INF] The COM:HCPlayback ver is 6.1.3.5, 2019_09_26.
+[2025-07-11 10:12:29.321][DBG] load full path[C:\xampp\htdocs\corsinf\lib\SDKDevices\hikvision\HCNetSDK\HCNetSDKCom/HCIndustry.dll] succ
+[2025-07-11 10:12:29.321][INF] The COM:HCIndustry ver is 6.1.3.5, 2019_09_26.
+[2025-07-11 10:12:29.323][DBG] load full path[C:\xampp\htdocs\corsinf\lib\SDKDevices\hikvision\HCNetSDK\HCNetSDKCom/HCDisplay.dll] succ
+[2025-07-11 10:12:29.323][INF] The COM:HCDisplay ver is 6.1.3.5, 2019_09_26.
+[2025-07-11 10:12:29.326][DBG] load full path[C:\xampp\htdocs\corsinf\lib\SDKDevices\hikvision\HCNetSDK\HCNetSDKCom/HCPreview.dll] succ
+[2025-07-11 10:12:29.326][INF] The COM:Preview ver is 6.1.3.5, 2019_09_26.
+[2025-07-11 10:12:29.327][DBG] load full path[C:\xampp\htdocs\corsinf\lib\SDKDevices\hikvision\HCNetSDK\HCNetSDKCom/HCAlarm.dll] succ
+[2025-07-11 10:12:29.328][INF] The COM:HCAlarm ver is 6.1.3.5, 2019_09_26.
+[2025-07-11 10:12:29.328][DBG] CLongConfigSessionEx::start succ [userid:0][command:2560]
+[2025-07-11 10:12:29.356][DBG] callback [2]data len[1300].
+[2025-07-11 10:12:29.357][DBG] callback [2]data len[1300].
+[2025-07-11 10:12:29.357][DBG] callback [2]data len[1300].
+[2025-07-11 10:12:29.358][DBG] callback [2]data len[1300].
+[2025-07-11 10:12:29.358][DBG] callback [2]data len[1300].
+[2025-07-11 10:12:29.358][DBG] callback [2]data len[1300].
+[2025-07-11 10:12:29.360][DBG] callback [2]data len[1300].
+[2025-07-11 10:12:29.370][DBG] callback [2]data len[1300].
+[2025-07-11 10:12:29.371][DBG] callback [2]data len[1300].
+[2025-07-11 10:12:29.378][DBG] callback [2]data len[1300].
+[2025-07-11 10:12:29.389][DBG] callback [2]data len[1300].
+[2025-07-11 10:12:29.390][DBG] callback [2]data len[1300].
+[2025-07-11 10:12:29.395][DBG] callback [2]data len[1300].
+[2025-07-11 10:12:29.396][DBG] callback [2]data len[1300].
+[2025-07-11 10:12:29.406][DBG] callback [2]data len[1300].
+[2025-07-11 10:12:29.408][DBG] callback [2]data len[1300].
+[2025-07-11 10:12:29.413][DBG] callback [2]data len[1300].
+[2025-07-11 10:12:29.414][DBG] callback [2]data len[1300].
+[2025-07-11 10:12:29.415][DBG] callback [2]data len[1300].
+[2025-07-11 10:12:29.423][DBG] callback [2]data len[1300].
+[2025-07-11 10:12:29.429][DBG] callback [2]data len[1300].
+[2025-07-11 10:12:29.430][DBG] callback [2]data len[1300].
+[2025-07-11 10:12:29.431][DBG] callback [2]data len[1300].
+[2025-07-11 10:12:29.434][DBG] callback [2]data len[1300].
+[2025-07-11 10:12:29.436][DBG] callback [2]data len[1300].
+[2025-07-11 10:12:29.436][DBG] callback [2]data len[1300].
+[2025-07-11 10:12:29.442][DBG] callback [2]data len[1300].
+[2025-07-11 10:12:29.443][DBG] callback [2]data len[1300].
+[2025-07-11 10:12:29.445][DBG] callback [2]data len[1300].
+[2025-07-11 10:12:29.446][DBG] callback [2]data len[1300].
+[2025-07-11 10:12:29.447][DBG] callback [2]data len[1300].
+[2025-07-11 10:12:29.450][DBG] callback [2]data len[1300].
+[2025-07-11 10:12:29.452][DBG] callback [2]data len[1300].
+[2025-07-11 10:12:29.452][DBG] callback [2]data len[1300].
+[2025-07-11 10:12:29.463][DBG] callback [2]data len[1300].
+[2025-07-11 10:12:29.465][DBG] callback [2]data len[1300].
+[2025-07-11 10:12:29.466][DBG] callback [2]data len[1300].
+[2025-07-11 10:12:29.469][DBG] callback [2]data len[1300].
+[2025-07-11 10:12:29.471][DBG] callback [2]data len[1300].
+[2025-07-11 10:12:29.471][DBG] callback [2]data len[1300].
+[2025-07-11 10:12:29.476][DBG] callback [2]data len[1300].
+[2025-07-11 10:12:29.480][DBG] callback [2]data len[1300].
+[2025-07-11 10:12:29.484][DBG] callback [2]data len[1300].
+[2025-07-11 10:12:29.485][DBG] callback [2]data len[1300].
+[2025-07-11 10:12:29.486][DBG] callback [2]data len[1300].
+[2025-07-11 10:12:29.488][DBG] callback [2]data len[1300].
+[2025-07-11 10:12:29.491][DBG] callback [2]data len[1300].
+[2025-07-11 10:12:29.492][DBG] callback [2]data len[1300].
+[2025-07-11 10:12:29.492][DBG] callback [2]data len[1300].
+[2025-07-11 10:12:29.501][DBG] callback [2]data len[1300].
+[2025-07-11 10:12:29.504][DBG] callback [2]data len[1300].
+[2025-07-11 10:12:29.505][DBG] callback [2]data len[1300].
+[2025-07-11 10:12:29.506][DBG] callback [2]data len[1300].
+[2025-07-11 10:12:29.509][DBG] callback [2]data len[1300].
+[2025-07-11 10:12:29.510][DBG] callback [2]data len[1300].
+[2025-07-11 10:12:29.511][DBG] callback [2]data len[1300].
+[2025-07-11 10:12:29.514][DBG] callback [2]data len[1300].
+[2025-07-11 10:12:29.514][DBG] callback [2]data len[1300].
+[2025-07-11 10:12:29.516][DBG] callback [2]data len[1300].
+[2025-07-11 10:12:29.518][DBG] callback [2]data len[1300].
+[2025-07-11 10:12:29.525][DBG] callback [2]data len[1300].
+[2025-07-11 10:12:29.528][DBG] callback [2]data len[1300].
+[2025-07-11 10:12:29.530][DBG] callback [2]data len[1300].
+[2025-07-11 10:12:29.532][DBG] callback [2]data len[1300].
+[2025-07-11 10:12:29.535][DBG] callback [2]data len[1300].
+[2025-07-11 10:12:29.540][DBG] callback [2]data len[1300].
+[2025-07-11 10:12:29.542][DBG] callback [2]data len[1300].
+[2025-07-11 10:12:29.546][DBG] callback [2]data len[1300].
+[2025-07-11 10:12:29.546][DBG] callback [2]data len[1300].
+[2025-07-11 10:12:29.549][DBG] callback [2]data len[1300].
+[2025-07-11 10:12:29.550][DBG] callback [2]data len[1300].
+[2025-07-11 10:12:29.553][DBG] callback [2]data len[1300].
+[2025-07-11 10:12:29.557][DBG] callback [2]data len[1300].
+[2025-07-11 10:12:29.559][DBG] callback [2]data len[1300].
+[2025-07-11 10:12:29.563][DBG] callback [2]data len[1300].
+[2025-07-11 10:12:29.566][DBG] callback [2]data len[1300].
+[2025-07-11 10:12:29.567][DBG] callback [2]data len[1300].
+[2025-07-11 10:12:29.568][DBG] callback [2]data len[1300].
+[2025-07-11 10:12:29.570][DBG] callback [2]data len[1300].
+[2025-07-11 10:12:29.571][DBG] callback [2]data len[1300].
+[2025-07-11 10:12:29.574][DBG] callback [2]data len[1300].
+[2025-07-11 10:12:29.575][DBG] callback [2]data len[1300].
+[2025-07-11 10:12:29.585][DBG] callback [2]data len[1300].
+[2025-07-11 10:12:29.587][DBG] callback [2]data len[1300].
+[2025-07-11 10:12:29.589][DBG] callback [2]data len[1300].
+[2025-07-11 10:12:29.590][DBG] callback [2]data len[1300].
+[2025-07-11 10:12:29.601][DBG] callback [2]data len[1300].
+[2025-07-11 10:12:29.603][DBG] callback [2]data len[1300].
+[2025-07-11 10:12:29.603][DBG] callback [2]data len[1300].
+[2025-07-11 10:12:29.603][DBG] callback [2]data len[1300].
+[2025-07-11 10:12:29.605][DBG] callback [2]data len[1300].
+[2025-07-11 10:12:29.606][DBG] callback [2]data len[1300].
+[2025-07-11 10:12:29.610][DBG] callback [2]data len[1300].
+[2025-07-11 10:12:29.611][DBG] callback [2]data len[1300].
+[2025-07-11 10:12:29.613][DBG] callback [2]data len[1300].
+[2025-07-11 10:12:29.615][DBG] callback [2]data len[1300].
+[2025-07-11 10:12:29.616][DBG] callback [2]data len[1300].
+[2025-07-11 10:12:29.624][DBG] callback [2]data len[1300].
+[2025-07-11 10:12:29.629][DBG] callback [2]data len[1300].
+[2025-07-11 10:12:29.631][DBG] callback [2]data len[1300].
+[2025-07-11 10:12:29.633][DBG] callback [2]data len[1300].
+[2025-07-11 10:12:29.636][DBG] callback [2]data len[1300].
+[2025-07-11 10:12:29.638][DBG] callback [2]data len[1300].
+[2025-07-11 10:12:29.646][DBG] callback [2]data len[1300].
+[2025-07-11 10:12:29.650][DBG] callback [2]data len[1300].
+[2025-07-11 10:12:29.663][DBG] callback [2]data len[1300].
+[2025-07-11 10:12:29.666][DBG] callback [2]data len[1300].
+[2025-07-11 10:12:29.670][DBG] callback [2]data len[1300].
+[2025-07-11 10:12:29.673][DBG] callback [2]data len[1300].
+[2025-07-11 10:12:29.675][DBG] callback [2]data len[1300].
+[2025-07-11 10:12:29.676][DBG] callback [2]data len[1300].
+[2025-07-11 10:12:29.680][DBG] callback [2]data len[1300].
+[2025-07-11 10:12:29.686][DBG] callback [2]data len[1300].
+[2025-07-11 10:12:29.691][DBG] callback [2]data len[1300].
+[2025-07-11 10:12:29.692][DBG] callback [2]data len[1300].
+[2025-07-11 10:12:29.695][DBG] callback [2]data len[1300].
+[2025-07-11 10:12:29.695][DBG] callback [2]data len[1300].
+[2025-07-11 10:12:29.700][DBG] callback [2]data len[1300].
+[2025-07-11 10:12:29.704][DBG] callback [2]data len[1300].
+[2025-07-11 10:12:29.706][DBG] callback [2]data len[1300].
+[2025-07-11 10:12:29.709][DBG] callback [2]data len[1300].
+[2025-07-11 10:12:29.709][DBG] callback [2]data len[1300].
+[2025-07-11 10:12:29.711][DBG] callback [2]data len[1300].
+[2025-07-11 10:12:29.712][DBG] callback [2]data len[1300].
+[2025-07-11 10:12:29.713][DBG] callback [2]data len[1300].
+[2025-07-11 10:12:29.719][DBG] callback [2]data len[1300].
+[2025-07-11 10:12:29.725][DBG] callback [2]data len[1300].
+[2025-07-11 10:12:29.726][DBG] callback [2]data len[1300].
+[2025-07-11 10:12:29.728][DBG] callback [2]data len[1300].
+[2025-07-11 10:12:29.730][DBG] callback [2]data len[1300].
+[2025-07-11 10:12:29.731][DBG] callback [2]data len[1300].
+[2025-07-11 10:12:29.734][DBG] callback [2]data len[1300].
+[2025-07-11 10:12:29.737][DBG] callback [2]data len[1300].
+[2025-07-11 10:12:29.741][DBG] callback [2]data len[1300].
+[2025-07-11 10:12:29.744][DBG] callback [2]data len[1300].
+[2025-07-11 10:12:29.747][DBG] callback [2]data len[1300].
+[2025-07-11 10:12:29.749][DBG] callback [2]data len[1300].
+[2025-07-11 10:12:29.752][DBG] callback [2]data len[1300].
+[2025-07-11 10:12:29.752][DBG] callback [2]data len[1300].
+[2025-07-11 10:12:29.755][DBG] callback [2]data len[1300].
+[2025-07-11 10:12:29.756][DBG] callback [2]data len[1300].
+[2025-07-11 10:12:29.757][DBG] callback [2]data len[1300].
+[2025-07-11 10:12:29.761][DBG] callback [2]data len[1300].
+[2025-07-11 10:12:29.765][DBG] callback [2]data len[1300].
+[2025-07-11 10:12:29.765][DBG] callback [2]data len[1300].
+[2025-07-11 10:12:29.766][DBG] callback [2]data len[1300].
+[2025-07-11 10:12:29.768][DBG] callback [2]data len[1300].
+[2025-07-11 10:12:29.771][DBG] callback [2]data len[1300].
+[2025-07-11 10:12:29.772][DBG] callback [2]data len[1300].
+[2025-07-11 10:12:29.776][DBG] callback [2]data len[1300].
+[2025-07-11 10:12:29.783][DBG] callback [2]data len[1300].
+[2025-07-11 10:12:29.786][DBG] callback [2]data len[1300].
+[2025-07-11 10:12:29.786][DBG] callback [0]data len[4].
+[2025-07-11 10:12:29.786][DBG] callback status[1000].
+[2025-07-11 10:12:29.787][INF] [CLongLinkCtrlPrivate::RecvThreadFunc] RecvThreadFunc EXIT, this=0x17509448, linkid=14f87284
+[2025-07-11 10:12:29.807][INF] [0]CLongConfigSession::Stop in
+[2025-07-11 10:12:29.807][INF] COM_Logout[0][1]
+[2025-07-11 10:12:29.807][DBG] CUserMgr::UnRegisterHeartProxy[0]
+[2025-07-11 10:12:29.900][INF] COM_Logout[0][1]
+[2025-07-11 10:12:29.901][INF] CTransUnitMgr::UnloadTransUnitLib
