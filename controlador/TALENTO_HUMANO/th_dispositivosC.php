@@ -181,7 +181,7 @@ class th_dispositivosC
     }
 
     function encontrar_php_exe() {
-        if($_SERVER['SERVER_ADDR']=="186.4.219.172")
+        if($_SERVER['SERVER_NAME']=="corsinf.com")
         {
             return "C:\\php-8.1.32\\php.exe";
 
