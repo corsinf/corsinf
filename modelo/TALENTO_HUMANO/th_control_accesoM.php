@@ -38,7 +38,21 @@ class th_control_accesoM extends BaseModel
             FROM th_control_acceso ca
             WHERE ca.th_per_id = '$idPersona'
             AND CONVERT(DATE, th_acc_fecha_hora) = '$fecha';";
-     
+
+        $datos = $this->db->datos($sql);
+        return $datos;
+    }
+
+    function actualizar_per_id_no_card()
+    {
+        $sql =
+            "UPDATE ca
+                SET ca.th_per_id = cd.th_per_id
+            FROM th_control_acceso ca
+            JOIN th_card_data cd ON ca.th_cardNo = cd.th_cardNo
+            WHERE ca.th_per_id IS NULL;
+            ";
+
         $datos = $this->db->datos($sql);
         return $datos;
     }
