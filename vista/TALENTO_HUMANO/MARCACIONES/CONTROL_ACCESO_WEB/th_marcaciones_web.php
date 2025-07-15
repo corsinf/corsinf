@@ -21,16 +21,38 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                     data: null,
                     render: function(data, type, item) {
                         href = `../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_marcaciones_web_registrar&_id=${item._id}`;
-                        return `<a href="${href}"><u>${item.hora}</u></a>`;
+                        return `<a href="${href}"><u>${item.nombre_persona}</u></a>`;
                     }
                 },
                 {
                     data: null,
                     render: function(data, type, item) {
-                        return item.estado_aprobacion; // Entrada / Salida
+                        salida = fecha_formateada_hora(item.fecha_hora);
+                        return `${salida}`;
+                    }
+                },
+                {
+                    data: null,
+                    render: function(data, type, item) {
+                        estado = (item.estado_aprobacion || '').toUpperCase();
+
+                        if (estado === 'PENDIENTE') {
+                            return '<div class="badge rounded-pill text-warning bg-light-warning p-2 text-uppercase px-3">PENDIENTE</div>';
+                        } else if (estado === 'APROBADO') {
+                            return '<div class="badge rounded-pill text-success bg-light-success p-2 text-uppercase px-3">APROBADO</div>';
+                        } else if (estado === 'RECHAZADO') {
+                            return '<div class="badge rounded-pill text-danger bg-light-danger p-2 text-uppercase px-3">RECHAZADO</div>';
+                        } else {
+                            return '';
+                        }
+                    }
+                },
+                {
+                    data: null,
+                    render: function(data, type, item) {
+                        return item.observacion_aprobacion; // Entrada / Salida
                     }
                 }
-                
             ],
             order: [
                 [1, 'asc']
@@ -67,17 +89,30 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
             <div class="col-xl-12 mx-auto">
                 <div class="card border-top border-0 border-4 border-primary">
                     <div class="card-body p-5">
-                        <div class="card-title d-flex align-items-center">
-                            <h5 class="mb-0 text-primary"></h5>
-                            <div class="row mx-0">
-                                <div class="col-sm-12" id="btn_marcacion">
-                                    <a href="../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_marcaciones_web_registrar"
-                                        type="button" class="btn btn-success btn-sm ">
-                                        <i class="bx bx-plus me-0 pb-1"></i> Marcación
-                                    </a>
+
+                        <div class="row">
+
+                            <div class="col-12 col-md-6">
+                                <div class="card-title d-flex align-items-center">
+
+                                    <div class="" id="btn_nuevo">
+                                        <a href="../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_marcaciones_web_registrar"
+                                            type="button" class="btn btn-success btn-sm ">
+                                            <i class="bx bx-plus me-0 pb-1"></i> Marcación
+                                        </a>
+                                    </div>
+
                                 </div>
                             </div>
+
+                            <div class="col-12 col-md-6 text-md-end text-start">
+                                <div id="contenedor_botones"></div>
+                            </div>
+
                         </div>
+
+                        <hr>
+
                         <section class="content pt-0">
                             <div class="container-fluid">
 
@@ -85,9 +120,10 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                                     <table class="table table-striped responsive " id="tbl_marcaciones_web" style="width:100%">
                                         <thead>
                                             <tr>
+                                                <th>Persona</th>
                                                 <th>Fecha/Hora</th>
-                                                <th>host cliente</th>
-                                                <!-- <th width="10px">Acción</th> -->
+                                                <th>Estado</th>
+                                                <th>Observación</th>
                                             </tr>
                                         </thead>
                                         <tbody class="">
@@ -102,47 +138,5 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
             </div>
         </div>
         <!--end row-->
-    </div>
-</div>
-
-
-<div class="modal" id="modal_blank" abindex="-1" aria-modal="true" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-
-            <!-- Modal Header -->
-            <div class="modal-header">
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-
-            <!-- Modal body -->
-            <div class="modal-body">
-
-                <div class="row">
-                    <div class="col-12">
-                        <label for="">Tipo de <label class="text-danger">*</label></label>
-                        <select name="" id="" class="form-select form-select-sm" onchange="">
-                            <option value="">Seleccione el </option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="row pt-3">
-                    <div class="col-12">
-                        <label for="">Blank <label class="text-danger">*</label></label>
-                        <select name="" id="" class="form-select form-select-sm">
-                            <option value="">Seleccione el </option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="row pt-3">
-                    <div class="col-12 text-end">
-                        <button type="button" class="btn btn-success btn-sm" onclick=""><i class="bx bx-save"></i> Agregar</button>
-                    </div>
-                </div>
-
-            </div>
-        </div>
     </div>
 </div>

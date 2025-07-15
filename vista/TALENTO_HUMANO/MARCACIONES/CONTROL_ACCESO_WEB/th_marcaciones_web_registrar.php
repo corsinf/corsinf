@@ -40,9 +40,9 @@ if (isset($_GET['_id'])) {
                         src="${mapUrl}" allowfullscreen></iframe>
                 `);
 
-                let fileName = response[0].url_foto;
+                let fileName = response[0].url_foto_completa;
                 if (fileName && fileName !== '') {
-                    let url = `../../REPOSITORIO/TALENTO_HUMANO/4157/${fileName}`;
+                    let url = `${fileName}`;
                     $('#preview_img').attr('src', url).removeClass('d-none');
                     $('#canvas_preview').addClass('d-none');
                     $('#preview_container').removeClass('d-none');
@@ -51,7 +51,6 @@ if (isset($_GET['_id'])) {
         });
     }
 
-
     function editar_insertar() {
         var _id = $('#_id').val();
         var txt_latitud = $('#txt_latitud').val();
@@ -59,8 +58,6 @@ if (isset($_GET['_id'])) {
         var captured_image = $('#captured_image').val();
         var preview_img = $('#preview_img').val();
         var txt_descripcion = $('#txt_descripcion').val();
-
-
 
         var parametros = {
             '_id': _id,
@@ -99,6 +96,8 @@ if (isset($_GET['_id'])) {
                     //Swal.fire('', 'El nombre del turno ya está en uso', 'warning');
                     $(txt_nombre).addClass('is-invalid');
                     $('#error_txt_nombre').text('El nombre del turno ya está en uso.');
+                }else if (response == -1) {
+                    Swal.fire('', 'Debe tomar una foto.', 'error');
                 }
             },
 
@@ -132,7 +131,7 @@ if (isset($_GET['_id'])) {
     <div class="page-content">
         <!--breadcrumb-->
         <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
-            <div class="breadcrumb-title pe-3">Blank</div>
+            <div class="breadcrumb-title pe-3">Marcaciones</div>
             <?php
             // print_r($_SESSION['INICIO']);die();
 
@@ -143,7 +142,7 @@ if (isset($_GET['_id'])) {
                         <li class="breadcrumb-item"><a href="javascript:;"><i class="bx bx-home-alt"></i></a>
                         </li>
                         <li class="breadcrumb-item active" aria-current="page">
-                            Blank
+                            Registrar Marcación
                         </li>
                     </ol>
                 </nav>
@@ -151,103 +150,119 @@ if (isset($_GET['_id'])) {
         </div>
         <!--end breadcrumb-->
 
-        <div class="row">
-            <div class="col-xl-12 mx-auto">
-                <div class="card border-top border-0 border-4 border-primary">
-                    <div class="card-body p-5">
-                        <div class="card-title d-flex align-items-center">
+        <form id="form_maraciones">
 
-                            <h5 class="mb-0 text-primary">
-                                Registrar marcación
-                            </h5>
+            <div class="row">
+                <div class="col-xl-12 mx-auto">
+                    <div class="card border-top border-0 border-4 border-primary">
+                        <div class="card-body pt-3 pe-5 ps-5 pb-0">
+                            <div class="card-title d-flex align-items-center">
 
-                            <div class="row m-2">
-                                <div class="col-sm-12">
-                                    <a href="../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_marcaciones_web" class="btn btn-outline-dark btn-sm"><i class="bx bx-arrow-back"></i> Regresar</a>
+
+                                <div><i class="bx bxs-select-multiple me-1 font-22 text-primary"></i>
                                 </div>
-                            </div>
+                                <h5 class="mb-0 text-primary">
+                                    Registrar marcación
+                                </h5>
 
+                                <div class="row m-2">
+                                    <div class="col-sm-12">
+                                        <a href="../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_marcaciones_web" class="btn btn-outline-dark btn-sm"><i class="bx bx-arrow-back"></i> Regresar</a>
+                                    </div>
+                                </div>
+
+                            </div>
                         </div>
-                        <form id="form_maraciones">
-                            <input type="hidden" class="form-control form-control-sm" id="_id" name="_id">
+                    </div>
+                </div>
+            </div>
+            <!--end row-->
 
+            <div class="row">
 
-                            <div class="container mt-4">
-                                <div class="row justify-content-center">
-                                    <div class="col-md-10">
-                                        <div class="card">
+                <div class="col-sm-6 mx-auto">
+                    <div class="card border-top border-0 border-4 border-primary">
+                        <div class="card-header bg-primary text-white">Ubicación actual</div>
 
-                                            <div class="card-header bg-primary text-white">Ubicación actual</div>
-                                            <div class="card-body p-0">
-                                                <!-- Mapa centrado -->
-                                                <div id="map_embed" style="height: 400px; width: 100%;"></div>
-
-                                                <!-- Botón centrado debajo del mapa -->
-                                                <div class="d-flex justify-content-center py-3">
-                                                    <button type="button" id="btn_ubicacion" class="btn btn-success">
-                                                        <i class="bi bi-geo-alt-fill"></i> Actualizar coordenadas
-                                                    </button>
-                                                </div>
-
-                                                <!-- Inputs ocultos -->
-                                                <input type="hidden" class="form-control form-control-sm" id="txt_latitud" name="txt_latitud">
-                                                <input type="hidden" class="form-control form-control-sm" id="txt_longitud" name="txt_longitud">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                        <div class="card-body">
+                            <div class="card-title d-flex align-items-center">
                             </div>
 
+                            <!-- Mapa centrado -->
+                            <div id="map_embed" style="height: 400px; width: 100%;"></div>
 
+                            <!-- Botón centrado debajo del mapa -->
+                            <div class="d-flex justify-content-center pt-3">
+                                <button type="button" id="btn_ubicacion" class="btn btn-success btn-sm px-4 m-1">
+                                    <i class='bx bx-current-location '></i> Actualizar coordenadas
+                                </button>
+                            </div>
 
-                            <div class="container mt-5">
-                                <div class="card shadow">
-                                    <div class="card-header bg-primary text-white">
-                                        <h5 class="mb-0"><i class="bi bi-camera-video-fill"></i> Cámara en vivo</h5>
-                                    </div>
-                                    <div class="card-body">
-                                        <div class="row">
+                            <!-- Inputs ocultos -->
+                            <input type="hidden" class="form-control form-control-sm" id="txt_latitud" name="txt_latitud">
+                            <input type="hidden" class="form-control form-control-sm" id="txt_longitud" name="txt_longitud">
+                        </div>
+                    </div>
+                </div>
 
-                                            <!-- Columna izquierda: Cámara en vivo -->
-                                            <div class="col-md-6">
-                                                <div class="text-center mb-3">
-                                                    <div class="mx-auto" style="max-width: 320px;">
-                                                        <video
-                                                            id="video_stream"
-                                                            class="w-100 border rounded"
-                                                            autoplay
-                                                            playsinline>
-                                                        </video>
-                                                    </div>
-                                                </div>
+                <div class="col-sm-6 mx-auto">
+                    <div class="card border-top border-0 border-4 border-primary">
+                        <div class="card-header bg-primary text-white">Cámara</div>
 
-                                                <!-- Botones -->
-                                                <div class="text-center">
-                                                    <button id="btn_start" class="btn btn-success me-2" type="button">
-                                                        <i class="bi bi-camera-reels"></i> Iniciar cámara
-                                                    </button>
-                                                    <button id="btn_capture" class="btn btn-primary" type="button" disabled>
-                                                        <i class="bi bi-camera"></i> Capturar foto
-                                                    </button>
-                                                </div>
-                                            </div>
+                        <div class="card-body ">
 
-                                            <!-- Columna derecha: Previsualización (más pequeña) -->
-                                            <div class="col-md-6">
-                                                <div id="preview_container" class="text-center d-none">
-                                                    <label class="form-label fw-bold">Previsualización:</label>
-                                                    <div style="width: 100%; max-width: 320px; margin: 0 auto;">
-                                                        <img id="preview_img" src="" class="w-100 border rounded d-none" style="height: 200px; object-fit: contain;" />
-                                                        <canvas id="canvas_preview" class="w-100 border rounded d-none" style="height: 200px;"></canvas>
-                                                    </div>
-                                                    <input type="hidden" name="captured_image" id="captured_image">
-                                                </div>
-                                            </div>
+                            <div class="row">
 
+                                <!-- Columna izquierda: Cámara en vivo -->
+                                <div class="col-md-6">
+                                    <div class="text-center mb-3">
+                                        <div class="mx-auto" style="max-width: 320px;">
+                                            <video
+                                                id="video_stream"
+                                                class="w-100 border rounded"
+                                                autoplay
+                                                playsinline>
+                                            </video>
                                         </div>
                                     </div>
+
+                                    <!-- Botones -->
+                                    <div class="d-flex flex-wrap justify-content-center align-items-center gap-2 pt-2 pb-4">
+                                        <button id="btn_start" class="btn btn-success btn-sm d-flex align-items-center" type="button">
+                                            <i class="bx bx-play me-2"></i> Iniciar cámara
+                                        </button>
+                                        <button id="btn_capture" class="btn btn-danger btn-sm d-flex align-items-center" type="button" disabled>
+                                            <i class="bx bx-stop me-2"></i> Capturar foto
+                                        </button>
+                                    </div>
+
                                 </div>
+
+                                <!-- Columna derecha: Previsualización (más pequeña) -->
+                                <div class="col-md-6">
+                                    <div id="preview_container" class="text-center d-none">
+                                        <label class="form-label fw-bold">Previsualización:</label>
+                                        <div style="width: 100%; max-width: 320px; margin: 0 auto;">
+                                            <img id="preview_img" src="" class="w-100 border rounded d-none" style="height: 200px; object-fit: contain;" />
+                                            <canvas id="canvas_preview" class="w-100 border rounded d-none" style="height: 200px;"></canvas>
+                                        </div>
+                                        <input type="hidden" name="captured_image" id="captured_image">
+                                    </div>
+                                </div>
+
                             </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+
+            <div class="row">
+                <div class="col-xl-12 mx-auto">
+                    <div class="card border-top border-0 border-4 border-primary">
+                        <div class="card-body pt-5 pe-5 ps-5">
+
                             <div class="row mb-col">
                                 <div class="col-md-12">
                                     <label for="txt_descripcion" class="form-label">Descripción </label>
@@ -255,17 +270,66 @@ if (isset($_GET['_id'])) {
                                 </div>
                             </div>
 
-                            <div class="d-flex justify-content-center pt-2 pb-4">
+                            <div class="d-flex justify-content-end pt-2 pb-2">
+                                <input type="hidden" class="form-control form-control-sm" id="_id" name="_id">
+
                                 <button id="btn_crear_editar_turno" class="btn btn-success btn-sm px-4 m-0" onclick="editar_insertar();" type="button"><i class="bx bx-save"></i> Guardar</button>
                             </div>
-                        </form>
+
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <!--end row-->
+        </form>
     </div>
 </div>
+
+<script>
+    //Validacion de formulario
+    $(document).ready(function() {
+        // Selecciona el label existente y añade el nuevo label
+        agregar_asterisco_campo_obligatorio('txt_descripcion');
+
+
+        $("#form_maraciones").validate({
+            rules: {
+                txt_descripcion: {
+                    required: true,
+                },
+
+                txt_latitud: {
+                    required: true,
+                },
+
+                txt_longitud: {
+                    required: true,
+                },
+                preview_img: {
+                    required: true,
+                },
+                captured_image: {
+                    required: true,
+                },
+            },
+            messages: {
+                txt_descripcion: {
+                    required: "El campo 'Descripción' es obligatorio",
+                },
+            },
+
+            highlight: function(element) {
+                // Agrega la clase 'is-invalid' al input que falla la validación
+                $(element).addClass('is-invalid');
+                $(element).removeClass('is-valid');
+            },
+            unhighlight: function(element) {
+                // Elimina la clase 'is-invalid' si la validación pasa
+                $(element).removeClass('is-invalid');
+                $(element).addClass('is-valid');
+            }
+        });
+    });
+</script>
 
 <script>
     $(function() {

@@ -27,9 +27,20 @@ class th_control_acceso_temporalC
     function listar($id = '')
     {
         if ($id == '') {
-            $datos = $this->modelo->listar();
+            $datos = $this->modelo->listar_accesos_temporales();
         } else {
             $datos = $this->modelo->where('th_act_id', $id)->listar();
+
+            $id_empresa = $_SESSION['INICIO']['ID_EMPRESA'];
+            if (!empty($datos)) {
+                foreach ($datos as &$item) {
+                    $fileName = $item['url_foto'] ?? '';
+                    $per_id = $item['per_id'] ?? '';
+                    $item['url_foto_completa'] = $fileName
+                        ? "../REPOSITORIO/TALENTO_HUMANO/{$id_empresa}/MARCACIONES/{$per_id}/{$fileName}"
+                        : '';
+                }
+            }
         }
         return $datos;
     }
@@ -38,7 +49,6 @@ class th_control_acceso_temporalC
     {
         $id = $_SESSION['INICIO']['NO_CONCURENTE'] > 1 ? $_SESSION['INICIO']['NO_CONCURENTE'] : $_SESSION['INICIO']['ID_USUARIO'];
         $fileName = null;
-
 
 
         if (!empty($parametros['captured_image'])) {
@@ -50,7 +60,9 @@ class th_control_acceso_temporalC
             $fileNameAntigua = $datos[0]['url_foto'] ?? null;
 
             // Ruta donde guardar la nueva imagen
-            $rutaBase = dirname(__DIR__, 3) . '/REPOSITORIO/TALENTO_HUMANO/' . $id;
+            $id_empresa = $_SESSION['INICIO']['ID_EMPRESA'];
+
+            $rutaBase = dirname(__DIR__, 2) . '/REPOSITORIO/TALENTO_HUMANO/' . $id_empresa . '/MARCACIONES/' . $id;
             if (!file_exists($rutaBase)) {
                 mkdir($rutaBase, 0777, true);
             }
@@ -73,6 +85,11 @@ class th_control_acceso_temporalC
             }
         } else {
             $datos = $this->modelo->where('th_act_id', $parametros['_id'])->listar();
+
+            if (empty($datos) || empty($datos[0]['url_foto'])) {
+                return -1;
+            }
+
             $fileName = $datos[0]['url_foto'];
         }
 
