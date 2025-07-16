@@ -6,6 +6,11 @@ if (isset($_GET['_id'])) {
     $_id = $_GET['_id'];
 }
 ?>
+
+<!-- Leaflet CSS & JS -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
 <script src="../lib/jquery_validation/jquery.validate.js"></script>
 <script src="../js/GENERAL/operaciones_generales.js"></script>
 
@@ -15,7 +20,22 @@ if (isset($_GET['_id'])) {
         <?php if (isset($_GET['_id'])) { ?>
             cargar_datos(<?= $_id ?>);
         <?php } ?>
+        get_Ubicacion();
+
+        // Botón de actualización manual
+        $('#btn_ubicacion').click(function() {
+            get_Ubicacion();
+            Swal.fire({
+                icon: 'info',
+                title: 'Ubicación actualizada',
+                text: 'Se han actualizado las coordenadas.'
+            });
+        });
     });
+
+
+    let mapa = null;
+    let marcador = null;
 
     function cargar_datos(id) {
         $.ajax({
@@ -26,24 +46,31 @@ if (isset($_GET['_id'])) {
             type: 'post',
             dataType: 'json',
             success: function(response) {
-                let lat = response[0].latitud;
-                let lon = response[0].longitud;
+                let lat = parseFloat(response[0].latitud);
+                let lon = parseFloat(response[0].longitud);
 
                 $('#txt_latitud').val(lat);
                 $('#txt_longitud').val(lon);
                 $('#txt_descripcion').val(response[0].observacion_aprobacion);
                 $('#_id').val(response[0]._id);
-                let mapUrl = `https://www.google.com/maps/embed/v1/place?key=AIzaSyBpiGf-qNlzyMrRhEbxO8mZG5QvHYHvd2c&q=${lat},${lon}&center=${lat},${lon}&zoom=18&maptype=roadmap`;
 
-                $('#map_embed').html(`
-                    <iframe width="100%" height="100%" frameborder="0" style="border:0"
-                        src="${mapUrl}" allowfullscreen></iframe>
-                `);
+                // Inicializar o actualizar el mapa Leaflet
+                if (!mapa) {
+                    mapa = L.map('map_embed').setView([lat, lon], 18);
+                    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                        attribution: '&copy; OpenStreetMap contributors'
+                    }).addTo(mapa);
 
+                    marcador = L.marker([lat, lon]).addTo(mapa).bindPopup("Ubicación registrada").openPopup();
+                } else {
+                    mapa.setView([lat, lon], 18);
+                    marcador.setLatLng([lat, lon]).openPopup();
+                }
+
+                // Mostrar imagen si existe
                 let fileName = response[0].url_foto_completa;
                 if (fileName && fileName !== '') {
-                    let url = `${fileName}`;
-                    $('#preview_img').attr('src', url).removeClass('d-none');
+                    $('#preview_img').attr('src', fileName).removeClass('d-none');
                     $('#canvas_preview').addClass('d-none');
                     $('#preview_container').removeClass('d-none');
                 }
@@ -93,11 +120,11 @@ if (isset($_GET['_id'])) {
                         location.href = '../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_marcaciones_web';
                     });
                 } else if (response == -2) {
-                    //Swal.fire('', 'El nombre del turno ya está en uso', 'warning');
-                    $(txt_nombre).addClass('is-invalid');
-                    $('#error_txt_nombre').text('El nombre del turno ya está en uso.');
-                }else if (response == -1) {
+                    Swal.fire('', 'Error', 'warning');
+                } else if (response == -1) {
                     Swal.fire('', 'Debe tomar una foto.', 'error');
+                }else if (response == -10) {
+                    Swal.fire('', 'Lo sentimos, esta función está disponible únicamente para personas registradas como tal.', 'error');
                 }
             },
 
@@ -115,9 +142,6 @@ if (isset($_GET['_id'])) {
         });
     }
 </script>
-
-
-
 
 <style>
     /* Ajusta la altura del mapa */
@@ -161,8 +185,15 @@ if (isset($_GET['_id'])) {
 
                                 <div><i class="bx bxs-select-multiple me-1 font-22 text-primary"></i>
                                 </div>
+
                                 <h5 class="mb-0 text-primary">
-                                    Registrar marcación
+                                    <?php
+                                    if ($_id == '') {
+                                        echo 'Registrar Marcación';
+                                    } else {
+                                        echo 'Visualizar Turno';
+                                    }
+                                    ?>
                                 </h5>
 
                                 <div class="row m-2">
@@ -191,12 +222,15 @@ if (isset($_GET['_id'])) {
                             <!-- Mapa centrado -->
                             <div id="map_embed" style="height: 400px; width: 100%;"></div>
 
-                            <!-- Botón centrado debajo del mapa -->
-                            <div class="d-flex justify-content-center pt-3">
-                                <button type="button" id="btn_ubicacion" class="btn btn-success btn-sm px-4 m-1">
-                                    <i class='bx bx-current-location '></i> Actualizar coordenadas
-                                </button>
-                            </div>
+
+                            <?php if (!isset($_GET['_id'])) { ?>
+                                <!-- Botón centrado debajo del mapa -->
+                                <div class="d-flex justify-content-center pt-3">
+                                    <button type="button" id="btn_ubicacion" class="btn btn-success btn-sm px-4 m-1">
+                                        <i class='bx bx-current-location '></i> Actualizar coordenadas
+                                    </button>
+                                </div>
+                            <?php } ?>
 
                             <!-- Inputs ocultos -->
                             <input type="hidden" class="form-control form-control-sm" id="txt_latitud" name="txt_latitud">
@@ -211,35 +245,59 @@ if (isset($_GET['_id'])) {
 
                         <div class="card-body ">
 
+                            <style>
+                                .face-guide-oval {
+                                    width: 140px;
+                                    height: 200px;
+                                    border: 6px solid rgba(34, 100, 145, 0.9);
+                                    border-radius: 50% / 60%;
+                                    /* Ovalado */
+                                    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+                                    pointer-events: none;
+                                    z-index: 10;
+                                }
+                            </style>
+
                             <div class="row">
 
-                                <!-- Columna izquierda: Cámara en vivo -->
-                                <div class="col-md-6">
-                                    <div class="text-center mb-3">
-                                        <div class="mx-auto" style="max-width: 320px;">
+                                <?php if (!isset($_GET['_id'])) { ?>
+                                    <!-- Columna izquierda: Cámara en vivo -->
+                                    <div class="col-12 col-md-12 col-lg-12 col-xl-6">
+                                        <div class="camera-wrapper position-relative mx-auto" style="width: 320px; height: 240px;">
+                                            <!-- Video -->
                                             <video
                                                 id="video_stream"
-                                                class="w-100 border rounded"
+                                                class="w-100 h-100 border rounded"
                                                 autoplay
                                                 playsinline>
                                             </video>
+
+                                            <!-- Óvalo guía -->
+                                            <div id="pnl_ovalo" class="face-guide-oval position-absolute top-50 start-50 translate-middle" style="display: none;"></div>
                                         </div>
-                                    </div>
 
-                                    <!-- Botones -->
-                                    <div class="d-flex flex-wrap justify-content-center align-items-center gap-2 pt-2 pb-4">
-                                        <button id="btn_start" class="btn btn-success btn-sm d-flex align-items-center" type="button">
-                                            <i class="bx bx-play me-2"></i> Iniciar cámara
-                                        </button>
-                                        <button id="btn_capture" class="btn btn-danger btn-sm d-flex align-items-center" type="button" disabled>
-                                            <i class="bx bx-stop me-2"></i> Capturar foto
-                                        </button>
-                                    </div>
+                                        <!-- Botones -->
+                                        <div class="d-flex flex-wrap justify-content-center align-items-center gap-2 pt-2 pb-4">
+                                            <button id="btn_start" class="btn btn-success btn-sm d-flex align-items-center" type="button">
+                                                <i class="bx bx-play me-2"></i> Iniciar cámara
+                                            </button>
+                                            <button id="btn_capture" class="btn btn-danger btn-sm d-flex align-items-center" type="button" disabled>
+                                                <i class="bx bx-stop me-2"></i> Capturar foto
+                                            </button>
+                                            <button id="btn_flip" class="btn btn-warning btn-sm d-flex align-items-center" type="button">
+                                                <i class="bx bx-refresh me-2"></i> Cambiar cámara
+                                            </button>
+                                        </div>
 
-                                </div>
+                                    </div>
+                                <?php } ?>
+
+                                <?php
+                                $col_class = isset($_GET['_id']) ? 'col-md-6 offset-md-3 text-center' : 'col-12 col-md-12 col-lg-12 col-xl-6';
+                                ?>
 
                                 <!-- Columna derecha: Previsualización (más pequeña) -->
-                                <div class="col-md-6">
+                                <div class="<?= $col_class ?>">
                                     <div id="preview_container" class="text-center d-none">
                                         <label class="form-label fw-bold">Previsualización:</label>
                                         <div style="width: 100%; max-width: 320px; margin: 0 auto;">
@@ -254,27 +312,31 @@ if (isset($_GET['_id'])) {
                         </div>
                     </div>
                 </div>
-
             </div>
-
 
             <div class="row">
                 <div class="col-xl-12 mx-auto">
                     <div class="card border-top border-0 border-4 border-primary">
                         <div class="card-body pt-5 pe-5 ps-5">
 
+                            <?php
+                            $is_disabled = isset($_GET['_id']) ? 'disabled' : '';
+                            ?>
+
                             <div class="row mb-col">
                                 <div class="col-md-12">
                                     <label for="txt_descripcion" class="form-label">Descripción </label>
-                                    <textarea class="form-control form-control-sm no_caracteres" name="txt_descripcion" id="txt_descripcion" rows="3" maxlength="200"></textarea>
+                                    <textarea class="form-control form-control-sm no_caracteres" name="txt_descripcion" id="txt_descripcion" rows="3" maxlength="200" <?= $is_disabled ?>></textarea>
                                 </div>
                             </div>
 
-                            <div class="d-flex justify-content-end pt-2 pb-2">
-                                <input type="hidden" class="form-control form-control-sm" id="_id" name="_id">
+                            <?php if (!isset($_GET['_id'])) { ?>
+                                <div class="d-flex justify-content-end pt-2 pb-2">
+                                    <input type="hidden" class="form-control form-control-sm" id="_id" name="_id">
 
-                                <button id="btn_crear_editar_turno" class="btn btn-success btn-sm px-4 m-0" onclick="editar_insertar();" type="button"><i class="bx bx-save"></i> Guardar</button>
-                            </div>
+                                    <button id="btn_crear_editar_turno" class="btn btn-success btn-sm px-4 m-0" onclick="editar_insertar();" type="button"><i class="bx bx-save"></i> Guardar</button>
+                                </div>
+                            <?php } ?>
 
                         </div>
                     </div>
@@ -332,77 +394,93 @@ if (isset($_GET['_id'])) {
 </script>
 
 <script>
-    $(function() {
-        // Función para obtener y mostrar ubicación
-        function get_Ubicacion() {
-            if (!navigator.geolocation) {
-                return Swal.fire({
-                    icon: 'warning',
-                    title: 'No soportado',
-                    text: 'Tu navegador no soporta geolocalización.'
-                });
-            }
-
-            navigator.geolocation.getCurrentPosition(function(pos) {
-                let lat = pos.coords.latitude;
-                let lon = pos.coords.longitude;
-
-                $('#txt_latitud').val(lat);
-                $('#txt_longitud').val(lon);
-
-                // Mostrar punto exacto (marcador) en el mapa
-                let mapUrl = `https://www.google.com/maps/embed/v1/place?key=AIzaSyBpiGf-qNlzyMrRhEbxO8mZG5QvHYHvd2c&q=${lat},${lon}&center=${lat},${lon}&zoom=18&maptype=roadmap`;
-
-                $('#map_embed').html(`
-                    <iframe width="100%" height="100%" frameborder="0" style="border:0"
-                    src="${mapUrl}" allowfullscreen></iframe>
-                `);
-
-            }, function(err) {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error al obtener ubicación',
-                    text: err.message
-                });
+    function get_Ubicacion() {
+        if (!navigator.geolocation) {
+            return Swal.fire({
+                icon: 'warning',
+                title: 'Geolocalización no soportada',
+                text: 'Tu navegador no soporta geolocalización.'
             });
         }
 
-        // Llamar automáticamente al cargar la página
-        get_Ubicacion();
+        navigator.geolocation.getCurrentPosition(function(pos) {
+            
+            let lat = pos.coords.latitude;
+            let lon = pos.coords.longitude;
 
-        // Si deseas seguir permitiendo botón de actualización manual
-        $('#btn_ubicacion').click(function() {
-            get_Ubicacion();
+            console.log(lat + '/' + lon);
+
+            $('#txt_latitud').val(lat);
+            $('#txt_longitud').val(lon);
+
+            if (!mapa) {
+                mapa = L.map('map_embed').setView([lat, lon], 18);
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    attribution: '&copy; OpenStreetMap'
+                }).addTo(mapa);
+                marcador = L.marker([lat, lon]).addTo(mapa).bindPopup("Tu ubicación").openPopup();
+            } else {
+                mapa.setView([lat, lon], 18);
+                marcador.setLatLng([lat, lon]).openPopup();
+            }
+
+        }, function(err) {
+            let msg = '';
+            switch (err.code) {
+                case 1:
+                    msg = 'Permiso denegado por el usuario.';
+                    break;
+                case 2:
+                    msg = 'Ubicación no disponible.';
+                    break;
+                case 3:
+                    msg = 'La solicitud expiró (timeout).';
+                    break;
+                default:
+                    msg = 'Error desconocido.';
+                    break;
+            }
             Swal.fire({
-                icon: 'info',
-                title: 'Ubicación actualizada',
-                text: 'Se han actualizado las coordenadas.'
+                icon: 'error',
+                title: 'Error al obtener ubicación',
+                text: msg
             });
+            console.error('Geolocation error:', err);
+        }, {
+            enableHighAccuracy: true,
+            timeout: 20000, 
+            maximumAge: 0
         });
-    });
+    }
 </script>
-
-
 
 <script>
     $(function() {
         let $video = $('#video_stream');
         let $canvas = $('#canvas_preview');
         let ctx = $canvas[0].getContext('2d');
-        let stream;
+        let currentStream = null;
+        let usingFrontCamera = false; // false = trasera (environment), true = frontal (user)
 
-        // Iniciar cámara
-        $('#btn_start').on('click', async function() {
+        async function startCamera() {
             try {
-                stream = await navigator.mediaDevices.getUserMedia({
+                // Detener cualquier stream anterior
+                if (currentStream) {
+                    currentStream.getTracks().forEach(track => track.stop());
+                }
+
+                let constraints = {
                     video: {
-                        facingMode: 'environment'
+                        facingMode: usingFrontCamera ? 'user' : 'environment'
                     },
                     audio: false
-                });
-                // Asignar el stream al video
-                $video.prop('srcObject', stream);
+                };
+
+                currentStream = await navigator.mediaDevices.getUserMedia(constraints);
+                $video.prop('srcObject', currentStream);
                 $('#btn_capture').prop('disabled', false);
+                $('#pnl_ovalo').show();
+
             } catch (err) {
                 console.error(err);
                 Swal.fire({
@@ -411,32 +489,43 @@ if (isset($_GET['_id'])) {
                     text: 'No se pudo acceder a la cámara: ' + err.message
                 });
             }
+        }
+
+        // Iniciar cámara
+        $('#btn_start').on('click', startCamera);
+
+        // Girar cámara
+        $('#btn_flip').on('click', async function() {
+            usingFrontCamera = !usingFrontCamera;
+            await startCamera();
         });
 
         // Capturar foto
         $('#btn_capture').on('click', function() {
-            let videoEl = $('#video_stream')[0];
-            let canvasEl = $('#canvas_preview')[0];
+            let videoEl = $video[0];
+            let canvasEl = $canvas[0];
 
-            // Ajusta el tamaño del canvas al tamaño del video
             canvasEl.width = videoEl.videoWidth;
             canvasEl.height = videoEl.videoHeight;
 
-            // Dibuja la imagen en el canvas
-            canvasEl.getContext('2d').drawImage(videoEl, 0, 0, canvasEl.width, canvasEl.height);
+            ctx.drawImage(videoEl, 0, 0, canvasEl.width, canvasEl.height);
 
-            // Oculta la imagen anterior y muestra el canvas con la nueva foto
-            $('#preview_img').addClass('d-none'); // Oculta la imagen antigua (si existía)
-            $('#canvas_preview').removeClass('d-none'); // Muestra el canvas con la nueva
-            $('#preview_container').removeClass('d-none'); // Asegura que el contenedor esté visible
+            $('#preview_img').addClass('d-none');
+            $canvas.removeClass('d-none');
+            $('#preview_container').removeClass('d-none');
 
-            // Obtiene el base64 de la imagen
             let imageBase64 = canvasEl.toDataURL('image/jpeg');
-
-            // Asigna el base64 al input oculto
             $('#captured_image').val(imageBase64);
+
+            // Detener la cámara después de capturar
+            if (currentStream) {
+                currentStream.getTracks().forEach(track => track.stop());
+                currentStream = null;
+            }
+
+            $('#btn_capture').prop('disabled', true);
+            $('#pnl_ovalo').hide();
+
         });
-
-
     });
 </script>

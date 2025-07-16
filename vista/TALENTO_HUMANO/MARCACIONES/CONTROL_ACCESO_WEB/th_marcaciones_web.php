@@ -95,12 +95,14 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                             <div class="col-12 col-md-6">
                                 <div class="card-title d-flex align-items-center">
 
-                                    <div class="" id="btn_nuevo">
-                                        <a href="../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_marcaciones_web_registrar"
-                                            type="button" class="btn btn-success btn-sm ">
-                                            <i class="bx bx-plus me-0 pb-1"></i> Marcación
-                                        </a>
-                                    </div>
+                                    <?php if ($_SESSION['INICIO']['NO_CONCURENTE_TABLA'] == 'th_personas') { ?>
+                                        <div class="" id="btn_nuevo">
+                                            <a href="../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_marcaciones_web_registrar"
+                                                type="button" class="btn btn-success btn-sm ">
+                                                <i class="bx bx-plus me-0 pb-1"></i> Marcación
+                                            </a>
+                                        </div>
+                                    <?php } ?>
 
                                 </div>
                             </div>

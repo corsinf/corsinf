@@ -27,7 +27,8 @@ class th_control_acceso_temporalC
     function listar($id = '')
     {
         if ($id == '') {
-            $datos = $this->modelo->listar_accesos_temporales();
+            $id_persona = $_SESSION['INICIO']['NO_CONCURENTE'] ?? '';
+            $datos = $this->modelo->listar_accesos_temporales($id_persona);
         } else {
             $datos = $this->modelo->where('th_act_id', $id)->listar();
 
@@ -47,9 +48,14 @@ class th_control_acceso_temporalC
 
     function insertar_editar($parametros)
     {
-        $id = $_SESSION['INICIO']['NO_CONCURENTE'] > 1 ? $_SESSION['INICIO']['NO_CONCURENTE'] : $_SESSION['INICIO']['ID_USUARIO'];
-        $fileName = null;
+        $id = (isset($_SESSION['INICIO']['NO_CONCURENTE']) && $_SESSION['INICIO']['NO_CONCURENTE']) ? $_SESSION['INICIO']['NO_CONCURENTE'] : -10;
 
+        if ($id == -10) {
+            return $id;
+            exit;
+        }
+
+        $fileName = null;
 
         if (!empty($parametros['captured_image'])) {
             $base64 = preg_replace('#^data:image/\w+;base64,#i', '', $parametros['captured_image']);
