@@ -160,3 +160,10 @@ if ($_GET['acc'] == 'th_control_aprobacion') {
 if ($_GET['acc'] == 'th_triangular_marcacion') {
 	include('TALENTO_HUMANO/MARCACIONES/CONTROL_ACCESO_WEB/th_triangular_marcacion.php');
 }
+
+if ($_GET['acc'] == 'th_triangular') {
+	include('TALENTO_HUMANO/MARCACIONES/TRIANGULAR/th_triangular.php');
+}
+if ($_GET['acc'] == 'th_triangular_registrar') {
+	include('TALENTO_HUMANO/MARCACIONES/TRIANGULAR/th_triangular_registrar.php');
+}
