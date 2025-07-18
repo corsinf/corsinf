@@ -46,7 +46,7 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
     <div class="page-content">
         <!--breadcrumb-->
         <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
-            <div class="breadcrumb-title pe-3">Turnos</div>
+            <div class="breadcrumb-title pe-3">Triangulares</div>
             <?php
             // print_r($_SESSION['INICIO']);die();
 
@@ -57,7 +57,7 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                         <li class="breadcrumb-item"><a href="javascript:;"><i class="bx bx-home-alt"></i></a>
                         </li>
                         <li class="breadcrumb-item active" aria-current="page">
-                            Lista de Turnos
+                            Lista de Triangulares
                         </li>
                     </ol>
                 </nav>

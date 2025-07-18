@@ -99,6 +99,18 @@ if (isset($_GET['_id'])) {
             $('#pnl_radios').show();
             $('#acciones').show();
         <?php } ?>
+        <?php if ($_SESSION['INICIO']['NO_CONCURENTE_TABLA'] == 'th_personas') { ?>
+            $('#pnl_herramientas').hide();
+            $('#pnl_informacion').hide();
+            $('#pnl_configuracion').show();
+            $('#pnl_buscar_actual').show();
+            $('#pnl_radios').hide();
+            toggleEdicion(false);
+            $('#acciones').hide();
+            actualizar_Ubicacion();
+            generar_Area_Automatica();
+            ocultar_botones_Table(); 
+        <?php } ?>
     });
 
 
@@ -219,7 +231,7 @@ if (isset($_GET['_id'])) {
     <div class="page-content">
         <!--breadcrumb-->
         <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
-            <div class="breadcrumb-title pe-3">Tipo de Justificación</div>
+            <div class="breadcrumb-title pe-3">Tipo de triangulación</div>
             <?php
             //print_r($_SESSION['INICIO']);die(); 
 
@@ -230,7 +242,7 @@ if (isset($_GET['_id'])) {
                         <li class="breadcrumb-item"><a href="javascript:;"><i class="bx bx-home-alt"></i></a>
                         </li>
                         <li class="breadcrumb-item active" aria-current="page">
-                            Agregar Tipo de Justificación
+                            Agregar la triangulación
                         </li>
                     </ol>
                 </nav>
@@ -313,10 +325,8 @@ if (isset($_GET['_id'])) {
                             </div>
                             <div id="pnl_configuracion" class="row pt-3" style="display: none;">
                                 <div class="col-md-6">
-
                                     <!-- Buscar por descripción -->
                                     <div id="pnl_buscar_descripcion" class="mb-3" style="display: none;">
-                                        <h5 class="mb-3">Configuración de Ubicación</h5>
                                         <label class="form-label fw-bold">Buscar por descripción</label>
                                         <div class="row g-2 align-items-end">
                                             <div class="col-md-10">
@@ -937,7 +947,7 @@ if (isset($_GET['_id'])) {
         }
     }
 
-    
+
 
     // Función para cargar datos desde la base de datos
     function cargar_Datos_Triangulares(id) {
