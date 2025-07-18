@@ -14,7 +14,6 @@ if (isset($_GET['_id'])) {
 <script src="../lib/jquery_validation/jquery.validate.js"></script>
 <script src="../js/GENERAL/operaciones_generales.js"></script>
 
-<script src="../js/GENERAL/operaciones_generales.js"></script>
 <script type="text/javascript">
     $(document).ready(function() {
         <?php if (isset($_GET['_id'])) { ?>

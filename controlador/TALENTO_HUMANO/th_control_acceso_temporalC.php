@@ -3,6 +3,8 @@
 date_default_timezone_set('America/Guayaquil');
 
 require_once(dirname(__DIR__, 2) . '/modelo/TALENTO_HUMANO/th_control_acceso_temporalM.php');
+require_once(dirname(__DIR__, 2) . '/modelo/TALENTO_HUMANO/th_control_aprobacionM.php');
+
 
 $controlador = new th_control_acceso_temporalC();
 
@@ -14,14 +16,21 @@ if (isset($_GET['insertar'])) {
     echo json_encode($controlador->insertar_editar($_POST['parametros']));
 }
 
+if (isset($_GET['aprobar_marcacion'])) {
+    echo json_encode($controlador->aprobar_marcacion($_POST['parametros']));
+}
+
+
 
 class th_control_acceso_temporalC
 {
     private $modelo;
+    private $th_control_aprobacionM;
 
     function __construct()
     {
         $this->modelo = new th_control_acceso_temporalM();
+        $this->th_control_aprobacionM = new th_control_aprobacionM();
     }
 
     function listar($id = '')
@@ -112,7 +121,6 @@ class th_control_acceso_temporalC
             array('campo' => 'th_act_tipo_registro', 'dato' => $parametros['tipo_registro'] ?? ''),
             array('campo' => 'th_act_hora', 'dato' => date('H:i:s')),
             array('campo' => 'th_act_fecha_hora', 'dato' => date('Y-m-d H:i:s')),
-            array('campo' => 'th_act_fecha_creacion', 'dato' => date('Y-m-d H:i:s')),
             array('campo' => 'th_act_fecha_modificacion', 'dato' => date('Y-m-d H:i:s')),
             array('campo' => 'th_act_puerto', 'dato' => $_SERVER['REMOTE_PORT'] ?? ''),
             array('campo' => 'th_act_tipo_origen', 'dato' => 'WEB'),
@@ -130,8 +138,8 @@ class th_control_acceso_temporalC
             array('campo' => 'th_act_latitud', 'dato' => $parametros['txt_latitud'] ?? null),
             array('campo' => 'th_act_longitud', 'dato' => $parametros['txt_longitud'] ?? null),
             array('campo' => 'th_act_url_foto', 'dato' => $fileName ?? null),
-            array('campo' => 'th_act_aprobado_por', 'dato' => null),
-            array('campo' => 'th_act_fecha_aprobacion', 'dato' => null),
+            // array('campo' => 'th_act_aprobado_por', 'dato' => null),
+            // array('campo' => 'th_act_fecha_aprobacion', 'dato' => null),
             array('campo' => 'th_act_observacion_aprobacion', 'dato' => $parametros['txt_descripcion'] ?? null),
         );
 
@@ -149,6 +157,51 @@ class th_control_acceso_temporalC
         }
 
         return $resultado;
+    }
+
+    function aprobar_marcacion($parametros)
+    {
+        $id_usuario = $_SESSION['INICIO']['ID_USUARIO'] ?? '';
+
+        $usuario_aprobacion = $this->th_control_aprobacionM->where('usu_id', $id_usuario)->listar();
+
+        $estado_marcacion = '';
+        if ($parametros['estado_marcacion'] == 1) {
+            $estado_marcacion = 'APROBADO';
+
+            $marcacion_aprobar = $this->modelo->listar_accesos_temporales('', $parametros['id_marcacion']);
+
+            $datos = array(
+                // array('campo' => 'th_per_id', 'dato' => $parametros['cardNo'] ?? ''),
+                // array('campo' => 'th_act_cardNo', 'dato' => $parametros['cardNo'] ?? ''),
+                // array('campo' => 'th_act_tipo_registro', 'dato' => $parametros['tipo_registro'] ?? ''),
+                // array('campo' => 'th_act_hora', 'dato' => date('H:i:s')),
+                // array('campo' => 'th_act_fecha_hora', 'dato' => date('Y-m-d H:i:s')),
+                // array('campo' => 'th_act_fecha_modificacion', 'dato' => date('Y-m-d H:i:s')),
+                // array('campo' => 'th_act_puerto', 'dato' => $_SERVER['REMOTE_PORT'] ?? ''),
+            );
+
+            print_r($marcacion_aprobar);
+            exit();
+            die();
+        } else if ($parametros['estado_marcacion'] == 2) {
+            $estado_marcacion = 'RECHAZADO';
+        }
+
+        if (count($usuario_aprobacion) == 1) {
+            $datos = array(
+                array('campo' => 'th_act_aprobado_por', 'dato' => $id_usuario),
+                array('campo' => 'th_act_fecha_aprobacion', 'dato' => date('Y-m-d H:i:s')),
+                array('campo' => 'th_act_estado_aprobacion', 'dato' => $estado_marcacion),
+            );
+
+            $where = array(
+                array('campo' => 'th_act_id', 'dato' => $parametros['id_marcacion']),
+            );
+
+            $datos = $this->modelo->editar($datos, $where);
+            return $datos;
+        }
     }
 
     function validar_formato($file)

@@ -37,7 +37,7 @@ class th_control_acceso_temporalM extends BaseModel
         'th_act_observacion_aprobacion AS observacion_aprobacion',
     ];
 
-    function listar_accesos_temporales($id_persona = '')
+    function listar_accesos_temporales($id_persona = '', $id_marcacion = '')
     {
         $sql = "SELECT
                 acc.th_act_id AS _id,
@@ -76,6 +76,10 @@ class th_control_acceso_temporalM extends BaseModel
 
         if ($id_persona != '') {
             $sql .= " AND acc.th_per_id = $id_persona";
+        }
+
+        if ($id_marcacion != '') {
+            $sql .= " AND acc.th_act_id = $id_marcacion";
         }
 
         // print_r($sql); exit(); die();

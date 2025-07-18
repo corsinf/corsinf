@@ -33,6 +33,11 @@ if(isset($_GET['lista_usuarios_ddl']))
 	$parametros = array('id'=>'','query'=>isset($_GET['q']));
 	echo json_encode($controlador->ddl_usuarios($parametros));
 }
+if(isset($_GET['buscar_usuarios']))
+{
+	$parametros = array('id'=>'','query'=>isset($_GET['q']));
+	echo json_encode($controlador->ddl_solo_usuarios($parametros));
+}
 if(isset($_GET['usuarios_all_autocompletado']))
 {
 	$parametros = array('query'=>$_POST['search']);
@@ -295,6 +300,18 @@ class usuariosC
 		}
 		return $rep;
 
+	}
+
+	function ddl_solo_usuarios($parametros)
+	{
+		$datos = $this->modelo->lista_usuarios($parametros['id'], $parametros['query']);
+		$rep = [];
+		foreach ($datos as $key => $value) {
+			if ($value['tipo'] != 'DBA') {
+				$rep[] = array('id' => $value['id'], 'text' => $value['nom']);
+			}
+		}
+		return $rep;
 	}
 
 	function ddl_usuarios($parametros)

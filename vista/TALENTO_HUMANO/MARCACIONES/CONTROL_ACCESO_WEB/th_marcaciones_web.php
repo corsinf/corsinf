@@ -37,7 +37,7 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                         estado = (item.estado_aprobacion || '').toUpperCase();
 
                         if (estado === 'PENDIENTE') {
-                            return '<div class="badge rounded-pill text-warning bg-light-warning p-2 text-uppercase px-3">PENDIENTE</div>';
+                            return `<div class="badge rounded-pill text-warning bg-light-warning p-2 text-uppercase px-3" onclick=abrir_modal_aprobacion('${item._id}');>PENDIENTE</div>`;
                         } else if (estado === 'APROBADO') {
                             return '<div class="badge rounded-pill text-success bg-light-success p-2 text-uppercase px-3">APROBADO</div>';
                         } else if (estado === 'RECHAZADO') {
@@ -60,6 +60,72 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
         }));
 
     });
+
+    function abrir_modal_aprobacion(id) {
+        $.ajax({
+            url: '../controlador/TALENTO_HUMANO/th_control_aprobacionC.php?autorizado=true',
+            type: 'post',
+            dataType: 'json',
+
+            success: function(response) {
+                if (response == 1) {
+                    $('#id_marcacion').val(id);
+                    $('#modal_aprobacion').modal('show');
+                } else {
+                    Swal.fire('', 'Error, no autorizado', 'warning');
+                }
+            },
+
+            error: function(xhr, status, error) {
+                console.log('Status: ' + status);
+                console.log('Error: ' + error);
+                console.log('XHR Response: ' + xhr.responseText);
+
+                Swal.fire('', 'Error: ' + xhr.responseText, 'error');
+            }
+        });
+    }
+
+    function aprobar_marcacion(estado_marcacion) {
+
+        var ddl_usuarios = $('#ddl_usuarios').val();
+        var id_marcacion = $('#id_marcacion').val();
+
+        var parametros = {
+            'estado_marcacion': estado_marcacion,
+            'id_marcacion': id_marcacion,
+        };
+
+        $.ajax({
+            data: {
+                parametros: parametros
+            },
+            url: '../controlador/TALENTO_HUMANO/th_control_acceso_temporalC.php?aprobar_marcacion=true',
+            type: 'post',
+            dataType: 'json',
+
+            success: function(response) {
+                if (response == 1) {
+                    console.log(response);
+
+                    Swal.fire('', 'Operacion realizada con exito.', 'success').then(function() {
+                        tbl_marcaciones_web.ajax.reload();
+                        $('#modal_aprobacion').modal('hide');
+                    });
+                } else if (response == -2) {
+                    Swal.fire('', 'Error', 'warning');
+                }
+            },
+
+            error: function(xhr, status, error) {
+                console.log('Status: ' + status);
+                console.log('Error: ' + error);
+                console.log('XHR Response: ' + xhr.responseText);
+
+                Swal.fire('', 'Error: ' + xhr.responseText, 'error');
+            }
+        });
+    }
 </script>
 
 <div class="page-wrapper">
@@ -140,5 +206,36 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
             </div>
         </div>
         <!--end row-->
+    </div>
+</div>
+
+
+<div class="modal" id="modal_aprobacion" abindex="-1" aria-modal="true" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <!-- Modal body -->
+            <div class="modal-body">
+
+                <input type="hidden" name="id_marcacion" id="id_marcacion">
+
+                <div class="row pt-3">
+                    <div class="col-12 text-center">
+                        <button type="button" class="btn btn-success btn-sm" onclick="aprobar_marcacion(1);"><i class="bx bx-save"></i> Aprobar</button>
+                    </div>
+                </div>
+
+                <div class="row pt-3">
+                    <div class="col-12 text-center">
+                        <button type="button" class="btn btn-danger btn-sm" onclick="aprobar_marcacion(2);"><i class="bx bx-save"></i> Rechazar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>

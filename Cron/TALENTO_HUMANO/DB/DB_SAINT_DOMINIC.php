@@ -16,3 +16,4 @@ $parametros = $proceso->carga_masiva($fecha_actual);
 print_r($parametros);
 exit();
 die();
+ 

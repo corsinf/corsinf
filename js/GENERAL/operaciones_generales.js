@@ -375,6 +375,10 @@ function reajustarDataTable() {
 //Funcion para cargar datos en un select2, es una funcion simple cuando se quiere cargar los datos
 
 function cargar_select2_url(ddl, url_controlador, placeholder = '-- Seleccione --', dropdownParent = null, minimumInputLength = 0) {
+    if (placeholder == '') {
+        placeholder = '-- Seleccione --'
+    }
+
     let configuracion = {
         language: {
             inputTooShort: function () {

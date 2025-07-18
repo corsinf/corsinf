@@ -153,8 +153,8 @@ if ($_GET['acc'] == 'th_marcaciones_web_registrar') {
 	include('TALENTO_HUMANO/MARCACIONES/CONTROL_ACCESO_WEB/th_marcaciones_web_registrar.php');
 }
 
-if ($_GET['acc'] == 'th_aprobar_marcacion') {
-	include('TALENTO_HUMANO/MARCACIONES/APROBACION/th_aprobar_marcacion.php');
+if ($_GET['acc'] == 'th_control_aprobacion') {
+	include('TALENTO_HUMANO/MARCACIONES/APROBACION/th_control_aprobacion.php');
 }
 
 if ($_GET['acc'] == 'th_triangular_marcacion') {
