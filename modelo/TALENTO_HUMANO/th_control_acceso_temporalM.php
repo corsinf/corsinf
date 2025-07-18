@@ -37,7 +37,7 @@ class th_control_acceso_temporalM extends BaseModel
         'th_act_observacion_aprobacion AS observacion_aprobacion',
     ];
 
-    function listar_accesos_temporales($id_persona = '', $id_marcacion = '')
+    function listar_accesos_temporales($id_persona = '', $id_marcacion = '', $estado_aprobacion = '')
     {
         $sql = "SELECT
                 acc.th_act_id AS _id,
@@ -55,7 +55,7 @@ class th_control_acceso_temporalM extends BaseModel
                 -- acc.th_act_server_protocol AS server_protocol,
                 -- acc.th_act_server_port AS server_port,
                 -- acc.th_act_http_host AS http_host,
-                -- acc.th_act_remote_addr AS remote_addr,
+                acc.th_act_remote_addr AS remote_addr,
                 -- acc.th_act_http_user_agent AS http_user_agent,
                 -- acc.th_act_request_method AS request_method,
                 -- acc.th_act_request_uri AS request_uri,
@@ -80,6 +80,10 @@ class th_control_acceso_temporalM extends BaseModel
 
         if ($id_marcacion != '') {
             $sql .= " AND acc.th_act_id = $id_marcacion";
+        }
+
+        if ($estado_aprobacion != '') {
+            $sql .= " AND acc.th_act_estado_aprobacion = '$estado_aprobacion'";
         }
 
         // print_r($sql); exit(); die();

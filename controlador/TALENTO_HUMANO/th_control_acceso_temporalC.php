@@ -4,12 +4,13 @@ date_default_timezone_set('America/Guayaquil');
 
 require_once(dirname(__DIR__, 2) . '/modelo/TALENTO_HUMANO/th_control_acceso_temporalM.php');
 require_once(dirname(__DIR__, 2) . '/modelo/TALENTO_HUMANO/th_control_aprobacionM.php');
+require_once(dirname(__DIR__, 2) . '/modelo/TALENTO_HUMANO/th_control_accesoM.php');
 
 
 $controlador = new th_control_acceso_temporalC();
 
 if (isset($_GET['listar'])) {
-    echo json_encode($controlador->listar($_POST['id'] ?? ''));
+    echo json_encode($controlador->listar($_POST['id'] ?? '', $_GET['rbx_estado_aprobacion'] ?? ''));
 }
 
 if (isset($_GET['insertar'])) {
@@ -26,18 +27,21 @@ class th_control_acceso_temporalC
 {
     private $modelo;
     private $th_control_aprobacionM;
+    private $th_control_accesoM;
 
     function __construct()
     {
         $this->modelo = new th_control_acceso_temporalM();
         $this->th_control_aprobacionM = new th_control_aprobacionM();
+        $this->th_control_accesoM = new th_control_accesoM();
     }
 
-    function listar($id = '')
+    function listar($id = '', $estado_aprobacion = '')
     {
+        // print_r($estado_aprobacion); exit(); die();
         if ($id == '') {
             $id_persona = $_SESSION['INICIO']['NO_CONCURENTE'] ?? '';
-            $datos = $this->modelo->listar_accesos_temporales($id_persona);
+            $datos = $this->modelo->listar_accesos_temporales($id_persona, '', $estado_aprobacion);
         } else {
             $datos = $this->modelo->where('th_act_id', $id)->listar();
 
@@ -165,43 +169,109 @@ class th_control_acceso_temporalC
 
         $usuario_aprobacion = $this->th_control_aprobacionM->where('usu_id', $id_usuario)->listar();
 
+        if (count($usuario_aprobacion) == 0) {
+            return -2;
+        }
+
+
+
         $estado_marcacion = '';
         if ($parametros['estado_marcacion'] == 1) {
             $estado_marcacion = 'APROBADO';
 
-            $marcacion_aprobar = $this->modelo->listar_accesos_temporales('', $parametros['id_marcacion']);
+            if (isset($parametros['id_marcacion'])) {
 
-            $datos = array(
-                // array('campo' => 'th_per_id', 'dato' => $parametros['cardNo'] ?? ''),
-                // array('campo' => 'th_act_cardNo', 'dato' => $parametros['cardNo'] ?? ''),
-                // array('campo' => 'th_act_tipo_registro', 'dato' => $parametros['tipo_registro'] ?? ''),
-                // array('campo' => 'th_act_hora', 'dato' => date('H:i:s')),
-                // array('campo' => 'th_act_fecha_hora', 'dato' => date('Y-m-d H:i:s')),
-                // array('campo' => 'th_act_fecha_modificacion', 'dato' => date('Y-m-d H:i:s')),
-                // array('campo' => 'th_act_puerto', 'dato' => $_SERVER['REMOTE_PORT'] ?? ''),
-            );
+                $marcacion_aprobar = $this->modelo->listar_accesos_temporales('', $parametros['id_marcacion']);
 
-            print_r($marcacion_aprobar);
-            exit();
-            die();
+                $datos = array(
+                    array('campo' => 'th_per_id', 'dato' => $marcacion_aprobar[0]['per_id'] ?? ''),
+                    array('campo' => 'th_acc_tipo_registro', 'dato' => $marcacion_aprobar[0]['tipo_registro'] ?? ''),
+                    array('campo' => 'th_dis_id', 'dato' => $marcacion_aprobar[0]['remote_addr'] ?? ''),
+                    array('campo' => 'th_acc_hora', 'dato' => $marcacion_aprobar[0]['hora'] ?? ''),
+                    array('campo' => 'th_acc_fecha_hora', 'dato' => $marcacion_aprobar[0]['fecha_hora'] ?? ''),
+                    array('campo' => 'th_acc_tipo_origen', 'dato' => 'WEB'),
+                    array('campo' => 'th_act_id', 'dato' => $marcacion_aprobar[0]['_id'] ?? ''),
+                );
+
+                $contar_marcaciones = count($this->th_control_accesoM->where('th_act_id', $parametros['id_marcacion'])->listar());
+                if ($contar_marcaciones == 0) {
+                    // $salida .= $id_marcacion_temporal . ' - ' . $contar_marcaciones . '<br>';
+                    $datos = $this->th_control_accesoM->insertar($datos);
+                    $editar = $this->editar_marcacion_temporal($id_usuario, $estado_marcacion, $this->modelo, $parametros['id_marcacion']);
+                }
+
+                return 1;
+            }
+
+            if (isset($parametros['marcaciones_seleccionadas'])) {
+
+                foreach ($parametros['marcaciones_seleccionadas'] as $id_marcacion_temporal) {
+                    //////////////////////////////////////////////////////////////////////////////////////////
+                    //Para realizar el cambio de estado en la tabla temporal de marcaciones
+                    $editar = $this->editar_marcacion_temporal($id_usuario, $estado_marcacion, $this->modelo, $id_marcacion_temporal);
+                    //////////////////////////////////////////////////////////////////////////////////////////
+                    // Crear el array $datos para cada persona seleccionada
+                    $marcacion_aprobar = $this->modelo->listar_accesos_temporales('', $id_marcacion_temporal);
+
+                    $datos = array(
+                        array('campo' => 'th_per_id', 'dato' => $marcacion_aprobar[0]['per_id'] ?? ''),
+                        array('campo' => 'th_acc_tipo_registro', 'dato' => $marcacion_aprobar[0]['tipo_registro'] ?? ''),
+                        array('campo' => 'th_dis_id', 'dato' => $marcacion_aprobar[0]['remote_addr'] ?? ''),
+                        array('campo' => 'th_acc_hora', 'dato' => $marcacion_aprobar[0]['hora'] ?? ''),
+                        array('campo' => 'th_acc_fecha_hora', 'dato' => $marcacion_aprobar[0]['fecha_hora'] ?? ''),
+                        array('campo' => 'th_acc_tipo_origen', 'dato' => 'WEB'),
+                        array('campo' => 'th_act_id', 'dato' => $marcacion_aprobar[0]['_id'] ?? ''),
+                    );
+
+                    $contar_marcaciones = count($this->th_control_accesoM->where('th_act_id', $id_marcacion_temporal)->listar());
+                    if ($contar_marcaciones == 0) {
+                        // $salida .= $id_marcacion_temporal . ' - ' . $contar_marcaciones . '<br>';
+                        $datos = $this->th_control_accesoM->insertar($datos);
+                    }
+                }
+                return 1;
+            } else {
+                return -4;
+            }
         } else if ($parametros['estado_marcacion'] == 2) {
             $estado_marcacion = 'RECHAZADO';
+
+            if (isset($parametros['id_marcacion'])) {
+                $editar = $this->editar_marcacion_temporal($id_usuario, $estado_marcacion, $this->modelo, $parametros['id_marcacion']);
+                return $editar;
+            }
+
+            if (isset($parametros['marcaciones_seleccionadas'])) {
+                foreach ($parametros['marcaciones_seleccionadas'] as $id_marcacion_temporal) {
+                    //////////////////////////////////////////////////////////////////////////////////////////
+                    //Para realizar el cambio de estado en la tabla temporal de marcaciones
+                    $editar = $this->editar_marcacion_temporal($id_usuario, $estado_marcacion, $this->modelo, $id_marcacion_temporal);
+                    //////////////////////////////////////////////////////////////////////////////////////////
+                }
+                return 1;
+            } else {
+                return -4;
+            }
         }
 
-        if (count($usuario_aprobacion) == 1) {
-            $datos = array(
-                array('campo' => 'th_act_aprobado_por', 'dato' => $id_usuario),
-                array('campo' => 'th_act_fecha_aprobacion', 'dato' => date('Y-m-d H:i:s')),
-                array('campo' => 'th_act_estado_aprobacion', 'dato' => $estado_marcacion),
-            );
+        return 1;
+    }
 
-            $where = array(
-                array('campo' => 'th_act_id', 'dato' => $parametros['id_marcacion']),
-            );
+    //Para cambiar de estado y aprobar por usuario
+    function editar_marcacion_temporal($id_usuario, $estado_marcacion, $modelo, $id_marcacion)
+    {
+        $datos = array(
+            array('campo' => 'th_act_aprobado_por', 'dato' => $id_usuario),
+            array('campo' => 'th_act_fecha_aprobacion', 'dato' => date('Y-m-d H:i:s')),
+            array('campo' => 'th_act_estado_aprobacion', 'dato' => $estado_marcacion),
+        );
 
-            $datos = $this->modelo->editar($datos, $where);
-            return $datos;
-        }
+        $where = array(
+            array('campo' => 'th_act_id', 'dato' => $id_marcacion),
+        );
+
+        $datos = $modelo->editar($datos, $where);
+        return $datos;
     }
 
     function validar_formato($file)
