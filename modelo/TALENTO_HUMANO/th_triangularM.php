@@ -13,7 +13,7 @@ class th_triangularM extends BaseModel
         'th_tri_estado AS estado',
         'usu_id AS usu_id',
         'th_tri_fecha_creacion AS fecha_creacion',
-
+        "'' AS origen",
     ];
 
     public function lista_triangular($id = false, $query = false)

@@ -1,13 +1,12 @@
 <?php
 $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
-
 ?>
 
 <script src="../js/GENERAL/operaciones_generales.js"></script>
 <script type="text/javascript">
     $(document).ready(function() {
 
-        tbl_turnos = $('#tbl_turnos').DataTable($.extend({}, configuracion_datatable('Localización', 'Localización'), {
+        tbl_triangulacion = $('#tbl_triangulacion').DataTable($.extend({}, configuracion_datatable('Localización', 'Localización'), {
             reponsive: true,
             language: {
                 url: 'https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
@@ -41,6 +40,14 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
 
     });
 </script>
+
+<?php if ($_SESSION['INICIO']['NO_CONCURENTE_TABLA'] != 'th_personas') { ?>
+    <script>
+        $(document).ready(function() {
+            tbl_triangulacion.column(1).visible(false, false);
+        });
+    </script>
+<?php } ?>
 
 <div class="page-wrapper">
     <div class="page-content">
@@ -97,7 +104,7 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                             <div class="container-fluid">
 
                                 <div class="table-responsive">
-                                    <table class="table table-striped responsive " id="tbl_turnos" style="width:100%">
+                                    <table class="table table-striped responsive " id="tbl_triangulacion" style="width:100%">
                                         <thead>
                                             <tr>
                                                 <th>Nombre</th>
