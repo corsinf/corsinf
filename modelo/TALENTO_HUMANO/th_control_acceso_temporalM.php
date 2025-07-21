@@ -69,7 +69,9 @@ class th_control_acceso_temporalM extends BaseModel
                 acc.th_act_estado_aprobacion AS estado_aprobacion,
                 acc.th_act_observacion_aprobacion AS observacion_aprobacion,
                 CONCAT(per.th_per_primer_apellido, ' ', per.th_per_segundo_apellido, ' ',
-                       per.th_per_primer_nombre, ' ', per.th_per_segundo_nombre) AS nombre_persona
+                       per.th_per_primer_nombre, ' ', per.th_per_segundo_nombre) AS nombre_persona,
+                acc.th_tri_nombre AS nombre_triangulacion,
+                acc.th_tri_origen AS origen_marc
             FROM th_control_acceso_temporal acc
             INNER JOIN th_personas per ON acc.th_per_id = per.th_per_id
             WHERE 1 = 1";

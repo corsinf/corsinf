@@ -45,34 +45,9 @@ class th_triangularC
     function listar($id = '')
     {
         if ($id == '') {
-            if ($_SESSION['INICIO']['NO_CONCURENTE']) {
-                // 1. Obtener los registros relacionados con el usuario actual
-                $relaciones = $this->th_triangular_departamento_persona
-                    ->where('th_per_id', $_SESSION['INICIO']['NO_CONCURENTE'])
-                    ->where('th_tdp_estado', 1)
-                    ->listar();
-
-                // 2. Extraer los th_tri_id únicos de esas relaciones
-                $ids_tri = array_column($relaciones, 'tri_id');
-
-                // 3. Si hay IDs, buscar los registros completos desde la tabla principal
-                $datos = [];
-                if (!empty($ids_tri)) {
-                    // Opcional: quitar duplicados por si acaso
-                    $ids_tri = array_unique($ids_tri);
-
-                    // 4. Obtener todos los triangulares activos
-                    $triangulares = $this->modelo
-                        ->where('th_tri_estado', 1)
-                        ->listar();
-
-                    // 5. Filtrar solo los que estén en el array de IDs obtenidos
-                    foreach ($triangulares as $tri) {
-                        if (in_array($tri['_id'], $ids_tri)) {
-                            $datos[] = $tri;
-                        }
-                    }
-                }
+            if ($_SESSION['INICIO']['NO_CONCURENTE'] && $_SESSION['INICIO']['NO_CONCURENTE_TABLA'] == 'th_personas') {
+                $datos = $this->th_triangular_departamento_persona->listar_pdt($_SESSION['INICIO']['NO_CONCURENTE']);
+                // print_r($datos); exit(); die();
             } else {
                 $datos = $this->modelo->where('th_tri_estado', 1)->listar();
             }
@@ -80,14 +55,12 @@ class th_triangularC
 
             $datos = $this->modelo->where('th_tri_id', $id)->where('th_tri_estado', 1)->listar();
         }
+
         return $datos;
     }
 
     function insertar_editar($parametros)
     {
-
-
-
         $datos = array(
             array('campo' => 'th_tri_nombre', 'dato' => $parametros['txt_nombre'] ?? ''),
             array('campo' => 'th_tri_descripcion', 'dato' => $parametros['txt_descripcion_ubicacion'] ?? ''),

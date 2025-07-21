@@ -24,13 +24,15 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                     }
                 },
                 {
+                    data: 'origen'
+                },
+                {
                     data: null,
                     render: function(data, type, item) {
                         salida = fecha_formateada_hora(item.fecha_creacion);
                         return `${salida}`;
                     }
                 },
-                
             ],
             order: [
                 [1, 'asc']
@@ -38,15 +40,13 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
         }));
 
     });
-
-     
 </script>
 
 <div class="page-wrapper">
     <div class="page-content">
         <!--breadcrumb-->
         <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
-            <div class="breadcrumb-title pe-3">Triangulares</div>
+            <div class="breadcrumb-title pe-3">Triangulación</div>
             <?php
             // print_r($_SESSION['INICIO']);die();
 
@@ -57,7 +57,7 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                         <li class="breadcrumb-item"><a href="javascript:;"><i class="bx bx-home-alt"></i></a>
                         </li>
                         <li class="breadcrumb-item active" aria-current="page">
-                            Lista de Triangulares
+                            Lista de Triangulaciones
                         </li>
                     </ol>
                 </nav>
@@ -101,6 +101,7 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                                         <thead>
                                             <tr>
                                                 <th>Nombre</th>
+                                                <th>Origen</th>
                                                 <th>Fecha creación</th>
                                                 <!-- <th width="10px">Acción</th> -->
                                             </tr>

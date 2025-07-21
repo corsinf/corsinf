@@ -42,8 +42,7 @@ class th_control_aprobacionC
 
         $usuario_aprobacion = $this->modelo->where('usu_id', $id_usuario)->listar();
 
-        if (count($usuario_aprobacion) == 1) {
-
+        if (count($usuario_aprobacion) == 1 || $id_usuario != 2) {
             return 1;
         }
 

@@ -119,7 +119,13 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                     render: function(data, type, item) {
                         return item.observacion_aprobacion; // Entrada / Salida
                     }
-                }
+                },
+                {
+                    data: 'nombre_triangulacion'
+                },
+                {
+                    data: 'origen_marc'
+                },
             ],
             order: [
                 [2, 'desc']
@@ -148,6 +154,7 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
             dataType: 'json',
 
             success: function(response) {
+                console.log(response);
                 if (response == 1) {
                     if (id) {
                         $('#id_marcacion').val(id);
@@ -158,7 +165,7 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                     }
                 } else {
                     if (id) {
-                        Swal.fire('', 'Error, no autorizado', 'warning');
+                        // Swal.fire('', 'Error, no autorizado', 'warning');
                     }
                 }
             },
@@ -279,8 +286,12 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                         Swal.close();
                     });
 
-                } else if (response == -2 || response == null) {
+                } else if (response == -4 || response == null) {
                     Swal.fire('', 'Seleccione Marcaciones', 'warning');
+                } else if (response == -2 || response == null) {
+                    Swal.fire('', 'No tiene permisos para realizar esta acción.', 'warning');
+                } else if (response == -12 || response == null) {
+                    Swal.fire('', 'No se encuentra dentro de alguna zona permitida.', 'warning');
                 }
             },
 
@@ -356,12 +367,12 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                                                 <i class="bx bx-plus me-0 pb-1"></i> Registrar Marcación
                                             </a>
                                         </div>
+                                    <?php } else { ?>
+                                        <div id="pnl_boton_aprobacion" style="display: none;">
+                                            <button type="button" class="btn btn-success btn-sm me-1 mb-1 btn_aprobacion" onclick="insertar_marcaciones(1);" disabled><i class="bx bx-check me-0 pb-1"></i> Aprobar Marcaciones</button>
+                                            <button type="button" class="btn btn-danger btn-sm me-1 mb-1 btn_aprobacion" onclick="insertar_marcaciones(2);" disabled><i class="bx bx-x-circle me-0 pb-1"></i> Rechazar Marcaciones</button>
+                                        </div>
                                     <?php } ?>
-
-                                    <div id="pnl_boton_aprobacion" style="display: none;">
-                                        <button type="button" class="btn btn-success btn-sm me-1 mb-1 btn_aprobacion" onclick="insertar_marcaciones(1);" disabled><i class="bx bx-check me-0 pb-1"></i> Aprobar Marcaciones</button>
-                                        <button type="button" class="btn btn-danger btn-sm me-1 mb-1 btn_aprobacion" onclick="insertar_marcaciones(2);" disabled><i class="bx bx-x-circle me-0 pb-1"></i> Rechazar Marcaciones</button>
-                                    </div>
 
                                 </div>
                             </div>
@@ -393,6 +404,8 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                                                 <th>Fecha/Hora</th>
                                                 <th>Estado</th>
                                                 <th>Observación</th>
+                                                <th>Triangulación</th>
+                                                <th>Origen</th>
                                             </tr>
                                         </thead>
                                         <tbody class="">
