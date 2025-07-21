@@ -74,6 +74,7 @@ class th_control_acceso_temporalC
         //Validacion para que este en la zona
         $validacion_triangulacion = $this->validar_triangulacion($parametros['txt_latitud'] ?? null, $parametros['txt_longitud'] ?? null);
 
+        // print_r($validacion_triangulacion); exit(); die();
         if ($validacion_triangulacion['dentro'] == 0) {
             return -12;
         }
@@ -160,8 +161,8 @@ class th_control_acceso_temporalC
             // array('campo' => 'th_act_fecha_aprobacion', 'dato' => null),
             array('campo' => 'th_act_observacion_aprobacion', 'dato' => $parametros['txt_descripcion'] ?? null),
 
-            array('campo' => 'th_tri_id', 'dato' => $validacion_triangulacion['zona']['th_tri_id'] ?? null),
-            array('campo' => 'th_tri_nombre', 'dato' => $validacion_triangulacion['zona']['th_tri_nombre'] ?? null),
+            array('campo' => 'th_tri_id', 'dato' => $validacion_triangulacion['zona']['_id'] ?? null),
+            array('campo' => 'th_tri_nombre', 'dato' => $validacion_triangulacion['zona']['nombre'] ?? null),
             array('campo' => 'th_tri_origen', 'dato' => $validacion_triangulacion['zona']['origen'] ?? null),
         );
 
