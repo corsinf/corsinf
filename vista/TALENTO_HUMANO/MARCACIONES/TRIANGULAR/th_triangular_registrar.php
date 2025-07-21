@@ -109,7 +109,7 @@ if (isset($_GET['_id'])) {
             $('#acciones').hide();
             actualizar_Ubicacion();
             generar_Area_Automatica();
-            ocultar_botones_Table(); 
+            ocultar_botones_Table();
         <?php } ?>
     });
 
@@ -1664,19 +1664,17 @@ if (isset($_GET['_id'])) {
     });
 
     $('#btnClearAll').click(function() {
-        $('#rbx_dibujar').on('change', function() {
-            Swal.fire({
-                title: '¿Estás seguro?',
-                text: 'Esta acción limpiará todos los datos ingresados.',
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonText: 'Sí, limpiar',
-                cancelButtonText: 'Cancelar',
-                reverseButtons: true
-            }).then((result) => {
-                limpiar_mapa();
+        Swal.fire({
+            title: '¿Estás seguro?',
+            text: 'Esta acción limpiará todos los datos ingresados.',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Sí, limpiar',
+            cancelButtonText: 'Cancelar',
+            reverseButtons: true
+        }).then((result) => {
+            limpiar_mapa();
 
-            });
         });
     });
 

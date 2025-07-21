@@ -167,3 +167,7 @@ if ($_GET['acc'] == 'th_triangular') {
 if ($_GET['acc'] == 'th_triangular_registrar') {
 	include('TALENTO_HUMANO/MARCACIONES/TRIANGULAR/th_triangular_registrar.php');
 }
+if ($_GET['acc'] == 'th_triangular_departamento') {
+	include('TALENTO_HUMANO/MARCACIONES/TRIANGULAR/th_triangular_departamento.php');
+}
+
