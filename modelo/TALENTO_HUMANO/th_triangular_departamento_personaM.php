@@ -19,11 +19,66 @@ class th_triangular_departamento_personaM extends BaseModel
     function listarJoin()
     {
         $this->join('th_departamentos', 'th_departamentos.th_dep_id = th_triangular_departamento_persona.th_dep_id'); // ← corregido
-
         $this->join('th_triangular', 'th_triangular.th_tri_id = th_triangular_departamento_persona.th_tri_id'); // ← corregido
-
         return $this->listar();
     }
+
+
+    function Listar_Departamento_Triangulacion()
+    {
+        $sql = "
+        SELECT 
+            t.th_tri_id,
+            t.th_tri_nombre,
+            d.th_dep_id,
+            d.th_dep_nombre,
+            tdp.th_tdp_id,
+            tdp.th_per_id,
+            tdp.th_tdp_estado,
+            tdp.th_tdp_fecha_creacion
+        FROM th_triangular_departamento_persona tdp
+        INNER JOIN th_departamentos d ON d.th_dep_id = tdp.th_dep_id
+        INNER JOIN th_triangular t ON t.th_tri_id = tdp.th_tri_id
+        WHERE tdp.th_tdp_estado = 1
+    ";
+
+        $datos = $this->db->datos($sql);
+        return $datos;
+    }
+
+    function buscar($parametros)
+    {
+
+        print_r($parametros['id_departamento']);
+        exit();
+        $lista = array();
+
+        $query = $parametros['query'];
+
+        $sql = "
+        SELECT th_dep_id, th_dep_nombre 
+        FROM th_departamentos 
+        WHERE th_dep_estado = 1 
+        AND th_dep_id NOT IN (
+            SELECT th_dep_id 
+            FROM th_triangular_departamento_persona 
+            WHERE th_tdp_estado = 1
+        )
+        AND (th_dep_nombre LIKE ?)
+    ";
+
+        $busqueda = '%' . $query . '%';
+        $datos = $this->db->datos($sql, [$busqueda]);
+
+        foreach ($datos as $value) {
+            $text = $value['th_dep_nombre'];
+            $lista[] = array('id' => $value['th_dep_id'], 'text' => $text);
+        }
+
+        return $lista;
+    }
+
+
 
     function validar_triangulacion($id_persona = '')
     {
