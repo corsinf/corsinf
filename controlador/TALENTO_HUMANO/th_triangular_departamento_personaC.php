@@ -11,6 +11,22 @@ if (isset($_GET['listar'])) {
 }
 
 
+if (isset($_GET['insertar'])) {
+    echo json_encode($controlador->insertar_editar($_POST['parametros']));
+}
+
+if (isset($_GET['eliminar'])) {
+    echo json_encode($controlador->eliminar($_POST['id']));
+}
+
+if (isset($_GET['buscar'])) {
+    $parametros = $_POST['parametros'] ?? [];
+
+    echo json_encode($controlador->buscar($parametros));
+}
+
+
+
 class th_triangular_departamento_personaC
 {
     private $modelo;
@@ -23,12 +39,46 @@ class th_triangular_departamento_personaC
     function listar($id = '')
     {
         if ($id == '') {
-
-            $datos = $this->modelo->listarJoin();
-
+            $datos = $this->modelo->Listar_Departamento_Triangulacion();
         } else {
-            $datos = $this->modelo->where('th_tri_id', $id)->listar();
+            $datos = $this->modelo->where('th_tri_id', $id)->where('th_tdp_estado', 1)->listar();
         }
+        return $datos;
+    }
+    function insertar_editar($parametros)
+    {
+        $datos = array(
+            array('campo' => 'th_tri_id', 'dato' => $parametros['ddl_triangulacion']),
+            array('campo' => 'th_dep_id', 'dato' => $parametros['ddl_departamentos']),
+            array('campo' => 'th_per_id', 'dato' => 0),
+            array('campo' => 'th_tdp_estado', 'dato' => 1),
+
+            array('campo' => 'th_tdp_fecha_creacion', 'dato' => date('Y-m-d H:i:s') ?? null),
+            array('campo' => 'th_tdp_fecha_modificacion', 'dato' => date('Y-m-d H:i:s') ?? null),
+            // Agrega más campos si es necesario, como ID de zona, usuario, fecha, etc.
+        );
+
+        $datos = $this->modelo->insertar($datos);
+        return $datos;
+    }
+
+    function buscar($parametros)
+    {
+        $datos = $this->modelo->buscar($parametros);
+
+        return $datos;
+    }
+
+    function eliminar($id)
+    {
+        $datos = array(
+            array('campo' => 'th_tdp_estado', 'dato' => 0),
+        );
+
+        $where[0]['campo'] = 'th_tdp_id';
+        $where[0]['dato'] = $id;
+
+        $datos = $this->modelo->editar($datos, $where);
         return $datos;
     }
 }

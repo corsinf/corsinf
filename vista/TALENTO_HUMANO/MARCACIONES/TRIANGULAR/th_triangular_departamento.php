@@ -7,7 +7,7 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
 
 <script type="text/javascript">
     $(document).ready(function() {
-        tbl_Departamentos_aprobados = $('#tbl_Departamentos_aprobados').DataTable($.extend({}, configuracion_datatable('Departamentos', 'Departamentos'), {
+        tbl_triangulacion_departamento = $('#tbl_triangulacion_departamento').DataTable($.extend({}, configuracion_datatable('Departamentos', 'Departamentos'), {
             reponsive: true,
             language: {
                 url: 'https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
@@ -16,8 +16,7 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                 url: '../controlador/TALENTO_HUMANO/th_triangular_departamento_personaC.php?listar=true',
                 dataSrc: ''
             },
-            columns: [
-                {
+            columns: [{
                     data: null,
                     render: function(data, type, item) {
                         salida = `${item.th_dep_nombre}`
@@ -34,7 +33,7 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                 {
                     data: null,
                     render: function(data, type, item) {
-                        return `<button type="button" class="btn btn-danger btn-xs" onclick="delete_datos(${item._id})">
+                        return `<button type="button" class="btn btn-danger btn-xs" onclick="delete_datos(${item.th_tdp_id})">
                                     <i class="bx bx-trash fs-7 me-0 fw-bold"></i>
                                 </button>`;
                     }
@@ -52,29 +51,82 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
         url_departamentosC = '../controlador/TALENTO_HUMANO/th_departamentosC.php?buscar=true';
         cargar_select2_url('ddl_departamentos', url_departamentosC, '', '#modal_agregar');
 
-        url_triangulacion = '../controlador/TALENTO_HUMANO/th_triangularC.php?lista_drop=true';
+
+    }
+
+    $(document).ready(function() {
+        $('#ddl_departamentos').on('change', function() {
+            cargar_triangulacion_departamento();
+        });
+    });
+
+
+
+    function cargar_triangulacion_departamento() {
+        var id_departamento = $('#ddl_departamentos').val();
+
+        if (!id_departamento) {
+            Swal.fire('', 'Seleccione un departamento primero.', 'warning');
+            return;
+        }
+
+        // Paso 1: Enviar el ID del departamento por AJAX
+        $.ajax({
+            url: '../controlador/TALENTO_HUMANO/th_triangular_departamento_personaC.php?buscar=true',
+            type: 'POST',
+            dataType: 'json',
+            data: {
+                parametros: {
+                    id_departamento: id_departamento
+                }
+            },
+            success: function(response) {
+                // Aquí puedes validar respuesta si deseas algo antes de cargar el select2
+                if (response == 1) {
+                    Swal.fire('', 'Operación realizada con éxito.', 'success').then(function() {
+                        tbl_triangulacion_departamento.ajax.reload();
+                        $('#modal_agregar').modal('hide');
+                    });
+                } else if (response == -2) {
+                    Swal.fire('', 'Error', 'warning');
+                }
+            },
+            error: function(xhr, status, error) {
+                console.log('Status: ' + status);
+                console.log('Error: ' + error);
+                console.log('XHR Response: ' + xhr.responseText);
+                Swal.fire('', 'Error: ' + xhr.responseText, 'error');
+            }
+        });
+        //var url_triangulacion = '../controlador/TALENTO_HUMANO/th_triangular_departamento_personaC.php?buscar=true&id_departamento=' + id_departamento;
+
+        // Cargar los datos filtrados en el select2
         cargar_select2_url('ddl_triangulacion', url_triangulacion, '', '#modal_agregar');
     }
 
+
+
+
     function insertar(parametros) {
         var ddl_departamentos = $('#ddl_departamentos').val();
+        var ddl_triangulacion = $('#ddl_triangulacion').val();
 
         var parametros = {
             'ddl_departamentos': ddl_departamentos,
+            'ddl_triangulacion': ddl_triangulacion,
         };
-
         $.ajax({
             data: {
                 parametros: parametros
             },
-            url: '../controlador/TALENTO_HUMANO/th_control_aprobacionC.php?insertar=true',
+            url: '../controlador/TALENTO_HUMANO/th_triangular_departamento_personaC.php?insertar=true',
             type: 'post',
             dataType: 'json',
 
             success: function(response) {
                 if (response == 1) {
                     Swal.fire('', 'Operacion realizada con exito.', 'success').then(function() {
-                        tbl_Departamentos_aprobados.ajax.reload();
+                        tbl_triangulacion_departamento.ajax.reload();
 
                         $('#modal_agregar').modal('hide');
                     });
@@ -114,13 +166,13 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
             data: {
                 id: id
             },
-            url: '../controlador/TALENTO_HUMANO/th_control_aprobacionC.php?eliminar=true',
+            url: '../controlador/TALENTO_HUMANO/th_triangular_departamento_personaC.php?eliminar=true',
             type: 'post',
             dataType: 'json',
             success: function(response) {
                 if (response == 1) {
                     Swal.fire('Eliminado!', 'Registro Eliminado.', 'success').then(function() {
-                        tbl_Departamentos_aprobados.ajax.reload();
+                        tbl_triangulacion_departamento.ajax.reload();
                     });
                 }
             }
@@ -143,7 +195,7 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                         <li class="breadcrumb-item"><a href="javascript:;"><i class="bx bx-home-alt"></i></a>
                         </li>
                         <li class="breadcrumb-item active" aria-current="page">
-                          Asignar Triangulación al departamento
+                            Asignar Triangulación al departamento
                         </li>
                     </ol>
                 </nav>
@@ -172,7 +224,7 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                         <section class="content pt-2">
                             <div class="container-fluid">
                                 <div class="table-responsive">
-                                    <table class="table table-striped responsive " id="tbl_Departamentos_aprobados" style="width:100%">
+                                    <table class="table table-striped responsive " id="tbl_triangulacion_departamento" style="width:100%">
                                         <thead>
                                             <tr>
                                                 <th>Departamento</th>

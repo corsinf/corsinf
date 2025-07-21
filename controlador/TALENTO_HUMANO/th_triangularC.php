@@ -85,9 +85,6 @@ class th_triangularC
 
     function insertar_editar($parametros)
     {
-
-
-
         $datos = array(
             array('campo' => 'th_tri_nombre', 'dato' => $parametros['txt_nombre'] ?? ''),
             array('campo' => 'th_tri_descripcion', 'dato' => $parametros['txt_descripcion_ubicacion'] ?? ''),

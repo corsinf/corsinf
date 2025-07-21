@@ -47,35 +47,32 @@ class th_triangular_departamento_personaM extends BaseModel
 
     function buscar($parametros)
     {
-
-        print_r($parametros['id_departamento']);
-        exit();
         $lista = array();
 
-        $query = $parametros['query'];
+        $query = isset($parametros['query']) ? $parametros['query'] : '';
+        $id_departamento = isset($parametros['id_departamento']) ? $parametros['id_departamento'] : null;
 
-        $sql = "
-        SELECT th_dep_id, th_dep_nombre 
-        FROM th_departamentos 
-        WHERE th_dep_estado = 1 
-        AND th_dep_id NOT IN (
-            SELECT th_dep_id 
-            FROM th_triangular_departamento_persona 
-            WHERE th_tdp_estado = 1
-        )
-        AND (th_dep_nombre LIKE ?)
-    ";
-
-        $busqueda = '%' . $query . '%';
-        $datos = $this->db->datos($sql, [$busqueda]);
-
-        foreach ($datos as $value) {
-            $text = $value['th_dep_nombre'];
-            $lista[] = array('id' => $value['th_dep_id'], 'text' => $text);
+        if (!$id_departamento) {
+            return ['error' => 'ID de departamento no definido'];
         }
 
-        return $lista;
+        $sql = "
+       SELECT tri.th_tri_id, tri.th_tri_nombre
+       FROM th_triangular AS tri
+       WHERE tri.th_tri_estado = 1
+       AND tri.th_tri_id NOT IN (
+       SELECT th_tri_id
+       FROM th_triangular_departamento_persona
+       WHERE th_dep_id = $id_departamento AND th_tdp_estado = 1)
+    ";
+
+        $datos = $this->db->datos($sql);
+
+
+        return $datos;
     }
+
+
 
     function validar_triangulacion($id_persona = '')
     {
