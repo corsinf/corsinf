@@ -23,7 +23,6 @@ class th_triangular_departamento_personaM extends BaseModel
         return $this->listar();
     }
 
-
     function Listar_Departamento_Triangulacion()
     {
         $sql = "
@@ -78,21 +77,23 @@ class th_triangular_departamento_personaM extends BaseModel
         return $lista;
     }
 
-
-
     function validar_triangulacion($id_persona = '')
     {
+        if ($id_persona == '') {
+            return [];
+        }
+
         $sql =
             "SELECT 
-                t.th_tri_id,
-                t.th_tri_nombre,
+                t.th_tri_id AS _id,
+                t.th_tri_nombre AS nombre,
                 -- t.th_tri_descripcion,
                 tdp.th_per_id AS persona_origen,
                 'PERSONAL' AS origen,
-                ti.th_itr_id,
-                ti.th_itr_latitud,
-                ti.th_itr_longitud,
-                ti.th_itr_n_punto
+                ti.th_itr_id AS item_id,
+                ti.th_itr_latitud AS latitud,
+                ti.th_itr_longitud AS longitud,
+                ti.th_itr_n_punto AS n_punto
                 -- ti.th_itr_fecha_creacion
             FROM th_triangular_departamento_persona tdp
             INNER JOIN th_triangular t ON t.th_tri_id = tdp.th_tri_id
@@ -102,21 +103,67 @@ class th_triangular_departamento_personaM extends BaseModel
             UNION
 
             SELECT 
-                t.th_tri_id,
-                t.th_tri_nombre,
+                t.th_tri_id AS _id,
+                t.th_tri_nombre AS nombre,
                 -- t.th_tri_descripcion,
                 pd.th_per_id AS persona_origen,
                 'POR_DEPARTAMENTO' AS origen,
-                ti.th_itr_id,
-                ti.th_itr_latitud,
-                ti.th_itr_longitud,
-                ti.th_itr_n_punto
+                ti.th_itr_id AS item_id,
+                ti.th_itr_latitud AS latitud,
+                ti.th_itr_longitud AS longitud,
+                ti.th_itr_n_punto AS n_punto
                 -- ti.th_itr_fecha_creacion
             FROM th_triangular_departamento_persona tdp
             INNER JOIN th_triangular t ON t.th_tri_id = tdp.th_tri_id
             INNER JOIN th_personas_departamentos pd ON pd.th_dep_id = tdp.th_dep_id
             LEFT JOIN th_triangular_item ti ON ti.th_tri_id = t.th_tri_id
             WHERE pd.th_per_id = $id_persona AND t.th_tri_estado = 1;";
+
+        // print_r($sql); exit(); die();
+
+        $datos = $this->db->datos($sql);
+        return $datos;
+    }
+
+    function listar_pdt($id_persona = '')
+    {
+
+        if ($id_persona == '') {
+            return [];
+        }
+
+        $sql =
+            "SELECT
+                t.th_tri_id AS _id,
+                t.th_tri_nombre AS nombre,
+                tdp.th_per_id AS persona_origen,
+                'PERSONAL' AS origen,
+                t.th_tri_descripcion AS descripcion,
+                t.th_tri_fecha_creacion AS fecha_creacion
+            FROM
+                th_triangular_departamento_persona tdp
+            INNER JOIN th_triangular t ON t.th_tri_id = tdp.th_tri_id
+            WHERE
+            tdp.th_per_id = $id_persona  
+            AND t.th_tri_estado = 1
+            
+            UNION
+
+            SELECT
+                t.th_tri_id AS _id,
+                t.th_tri_nombre AS nombre,
+                pd.th_per_id AS persona_origen,
+                'POR_DEPARTAMENTO' AS origen,
+                t.th_tri_descripcion AS descripcion,
+                t.th_tri_fecha_creacion AS fecha_creacion
+
+            FROM
+                th_triangular_departamento_persona tdp
+            INNER JOIN th_triangular t ON t.th_tri_id = tdp.th_tri_id
+            INNER JOIN th_personas_departamentos pd ON pd.th_dep_id = tdp.th_dep_id
+            WHERE
+            pd.th_per_id = $id_persona 
+            AND t.th_tri_estado = 1;";
 
         // print_r($sql); exit(); die();
 
