@@ -47,9 +47,7 @@ class th_triangular_departamento_personaM extends BaseModel
 
     function buscar($parametros)
     {
-        $lista = array();
 
-        $query = isset($parametros['query']) ? $parametros['query'] : '';
         $id_departamento = isset($parametros['id_departamento']) ? $parametros['id_departamento'] : null;
 
         if (!$id_departamento) {
@@ -57,14 +55,15 @@ class th_triangular_departamento_personaM extends BaseModel
         }
 
         $sql = "
-       SELECT tri.th_tri_id, tri.th_tri_nombre
-       FROM th_triangular AS tri
-       WHERE tri.th_tri_estado = 1
-       AND tri.th_tri_id NOT IN (
-       SELECT th_tri_id
-       FROM th_triangular_departamento_persona
-       WHERE th_dep_id = $id_departamento AND th_tdp_estado = 1)
-    ";
+    SELECT tri.th_tri_id, tri.th_tri_nombre
+    FROM th_triangular AS tri
+    WHERE tri.th_tri_estado = 1 
+    AND tri.th_tri_id NOT IN (
+        SELECT th_tri_id
+        FROM th_triangular_departamento_persona
+        WHERE th_dep_id = $id_departamento AND th_tdp_estado = 1
+    )
+";
 
         $datos = $this->db->datos($sql);
 

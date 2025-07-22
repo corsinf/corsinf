@@ -54,25 +54,34 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
 
     }
 
+    // Event listener para cuando cambie el departamento
     $(document).ready(function() {
         $('#ddl_departamentos').on('change', function() {
             cargar_triangulacion_departamento();
         });
     });
 
-
-
+    // Función para cargar la triangulación filtrada por departamento
     function cargar_triangulacion_departamento() {
         var id_departamento = $('#ddl_departamentos').val();
 
         if (!id_departamento) {
-            Swal.fire('', 'Seleccione un departamento primero.', 'warning');
+            // Limpiar el select2 de triangulación
+            $('#ddl_triangulacion').empty().trigger('change');
             return;
         }
 
-        // Paso 1: Enviar el ID del departamento por AJAX
+        // URL para obtener los datos filtrados
+        let url_triangulacion = "../controlador/TALENTO_HUMANO/th_triangular_departamento_personaC.php?buscar=true&filtrar=true";
+
+        // Cargar el select2 con los datos filtrados
+        cargar_select2_filtrado('ddl_triangulacion', url_triangulacion, id_departamento, '#modal_agregar');
+    }
+
+    // Nueva función para cargar select2 con filtros
+    function cargar_select2_filtrado(id_select, url, id_departamento, modal) {
         $.ajax({
-            url: '../controlador/TALENTO_HUMANO/th_triangular_departamento_personaC.php?buscar=true',
+            url: url,
             type: 'POST',
             dataType: 'json',
             data: {
@@ -81,27 +90,43 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                 }
             },
             success: function(response) {
-                // Aquí puedes validar respuesta si deseas algo antes de cargar el select2
-                if (response == 1) {
-                    Swal.fire('', 'Operación realizada con éxito.', 'success').then(function() {
-                        tbl_triangulacion_departamento.ajax.reload();
-                        $('#modal_agregar').modal('hide');
+                // Limpiar el select primero
+                $('#' + id_select).empty();
+
+                // Agregar opción por defecto
+                $('#' + id_select).append('<option value="">Seleccione una opción</option>');
+
+                // Verificar si hay datos
+                if (response && Array.isArray(response) && response.length > 0) {
+                    // Agregar las opciones al select
+                    $.each(response, function(index, item) {
+                        $('#' + id_select).append('<option value="' + item.th_tri_id + '">' + item.th_tri_nombre + '</option>');
                     });
-                } else if (response == -2) {
-                    Swal.fire('', 'Error', 'warning');
+                } else {
+                    $('#' + id_select).append('<option value="">No hay opciones disponibles</option>');
+                }
+
+                // Refrescar el select2
+                $('#' + id_select).trigger('change');
+
+                // Si estás usando Select2, reiniciarlo
+                if ($.fn.select2) {
+                    $('#' + id_select).select2({
+                        dropdownParent: $(modal),
+                        width: '100%'
+                    });
                 }
             },
             error: function(xhr, status, error) {
                 console.log('Status: ' + status);
                 console.log('Error: ' + error);
                 console.log('XHR Response: ' + xhr.responseText);
-                Swal.fire('', 'Error: ' + xhr.responseText, 'error');
+                Swal.fire('', 'Error al cargar los datos: ' + xhr.responseText, 'error');
+
+                // En caso de error, limpiar el select
+                $('#' + id_select).empty().append('<option value="">Error al cargar</option>');
             }
         });
-        //var url_triangulacion = '../controlador/TALENTO_HUMANO/th_triangular_departamento_personaC.php?buscar=true&id_departamento=' + id_departamento;
-
-        // Cargar los datos filtrados en el select2
-        cargar_select2_url('ddl_triangulacion', url_triangulacion, '', '#modal_agregar');
     }
 
 
@@ -127,7 +152,7 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                 if (response == 1) {
                     Swal.fire('', 'Operacion realizada con exito.', 'success').then(function() {
                         tbl_triangulacion_departamento.ajax.reload();
-
+                        limpiar_selects();
                         $('#modal_agregar').modal('hide');
                     });
                 } else if (response == -2) {
@@ -143,6 +168,20 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                 Swal.fire('', 'Error: ' + xhr.responseText, 'error');
             }
         });
+    }
+
+    function limpiar_selects() {
+        // Limpiar departamentos
+        $('#ddl_departamentos').val('').trigger('change');
+
+        // Limpiar triangulación
+        $('#ddl_triangulacion').empty().trigger('change');
+
+        // Si estás usando Select2, refrescar
+        if ($.fn.select2) {
+            $('#ddl_departamentos').trigger('change.select2');
+            $('#ddl_triangulacion').trigger('change.select2');
+        }
     }
 
     function delete_datos(id) {

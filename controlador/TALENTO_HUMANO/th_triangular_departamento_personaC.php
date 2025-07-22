@@ -22,9 +22,16 @@ if (isset($_GET['eliminar'])) {
 if (isset($_GET['buscar'])) {
     $parametros = $_POST['parametros'] ?? [];
 
-    echo json_encode($controlador->buscar($parametros));
+    // Si es una petición de filtrado, devolver directamente los datos
+    if (isset($_GET['filtrar'])) {
+        $datos = $controlador->buscar($parametros);
+        echo json_encode($datos);
+    } else {
+        // Si es una operación de guardado o actualización
+        $resultado = $controlador->buscar($parametros);
+        echo json_encode($resultado);
+    }
 }
-
 
 
 class th_triangular_departamento_personaC
