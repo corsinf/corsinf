@@ -6,8 +6,12 @@ require_once(dirname(__DIR__, 2) . '/modelo/TALENTO_HUMANO/th_triangular_departa
 
 $controlador = new th_triangular_departamento_personaC();
 
-if (isset($_GET['listar'])) {
-    echo json_encode($controlador->listar($_POST['id'] ?? ''));
+if (isset($_GET['listarDepartamentos'])) {
+    echo json_encode($controlador->listarDepartamentos($_POST['id'] ?? ''));
+}
+
+if (isset($_GET['listarUsuarios'])) {
+    echo json_encode($controlador->listarUsuarios($_POST['id'] ?? ''));
 }
 
 
@@ -43,7 +47,7 @@ class th_triangular_departamento_personaC
         $this->modelo = new th_triangular_departamento_personaM();
     }
 
-    function listar($id = '')
+    function listarDepartamentos($id = '')
     {
         if ($id == '') {
             $datos = $this->modelo->Listar_Departamento_Triangulacion();
@@ -52,12 +56,28 @@ class th_triangular_departamento_personaC
         }
         return $datos;
     }
+    function listarUsuarios($id = '')
+    {
+        if ($id == '') {
+            $datos = $this->modelo->Listar_Personas_Triangulacion();
+        } else {
+            $datos = $this->modelo->where('th_tri_id', $id)->where('th_tdp_estado', 1)->listar();
+        }
+        return $datos;
+    }
     function insertar_editar($parametros)
     {
+        if ($parametros['opcion_busqueda'] == 1) {
+            $th_dep_id =  $parametros['ddl_departamentos'];
+            $th_per_id =  0;
+        } else if ($parametros['opcion_busqueda'] == 2) {
+            $th_per_id =  $parametros['ddl_usuarios'];
+            $th_dep_id =  0;
+        }
         $datos = array(
             array('campo' => 'th_tri_id', 'dato' => $parametros['ddl_triangulacion']),
-            array('campo' => 'th_dep_id', 'dato' => $parametros['ddl_departamentos']),
-            array('campo' => 'th_per_id', 'dato' => 0),
+            array('campo' => 'th_dep_id', 'dato' => $th_dep_id),
+            array('campo' => 'th_per_id', 'dato' => $th_per_id),
             array('campo' => 'th_tdp_estado', 'dato' => 1),
 
             array('campo' => 'th_tdp_fecha_creacion', 'dato' => date('Y-m-d H:i:s') ?? null),
