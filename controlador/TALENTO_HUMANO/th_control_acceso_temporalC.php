@@ -5,6 +5,7 @@ date_default_timezone_set('America/Guayaquil');
 require_once(dirname(__DIR__, 2) . '/modelo/TALENTO_HUMANO/th_control_acceso_temporalM.php');
 require_once(dirname(__DIR__, 2) . '/modelo/TALENTO_HUMANO/th_control_aprobacionM.php');
 require_once(dirname(__DIR__, 2) . '/modelo/TALENTO_HUMANO/th_control_accesoM.php');
+require_once(dirname(__DIR__, 2) . '/modelo/TALENTO_HUMANO/th_triangular_departamento_personaM.php');
 
 
 $controlador = new th_control_acceso_temporalC();
@@ -28,12 +29,14 @@ class th_control_acceso_temporalC
     private $modelo;
     private $th_control_aprobacionM;
     private $th_control_accesoM;
+    private $th_triangular_departamento_personaM;
 
     function __construct()
     {
         $this->modelo = new th_control_acceso_temporalM();
         $this->th_control_aprobacionM = new th_control_aprobacionM();
         $this->th_control_accesoM = new th_control_accesoM();
+        $this->th_triangular_departamento_personaM = new th_triangular_departamento_personaM();
     }
 
     function listar($id = '', $estado_aprobacion = '')
@@ -67,6 +70,18 @@ class th_control_acceso_temporalC
             return $id;
             exit;
         }
+
+        //Validacion para que este en la zona
+        $validacion_triangulacion = $this->validar_triangulacion($parametros['txt_latitud'] ?? null, $parametros['txt_longitud'] ?? null);
+
+        // print_r($validacion_triangulacion); exit(); die();
+        if ($validacion_triangulacion['dentro'] == 0) {
+            return -12;
+        }
+
+        // print_r($validacion_triangulacion['zona']);
+        // exit();
+        // die();
 
         $fileName = null;
 
@@ -145,6 +160,10 @@ class th_control_acceso_temporalC
             // array('campo' => 'th_act_aprobado_por', 'dato' => null),
             // array('campo' => 'th_act_fecha_aprobacion', 'dato' => null),
             array('campo' => 'th_act_observacion_aprobacion', 'dato' => $parametros['txt_descripcion'] ?? null),
+
+            array('campo' => 'th_tri_id', 'dato' => $validacion_triangulacion['zona']['_id'] ?? null),
+            array('campo' => 'th_tri_nombre', 'dato' => $validacion_triangulacion['zona']['nombre'] ?? null),
+            array('campo' => 'th_tri_origen', 'dato' => $validacion_triangulacion['zona']['origen'] ?? null),
         );
 
         // 4. Insertar (o actualizar si ya existe)
@@ -169,7 +188,7 @@ class th_control_acceso_temporalC
 
         $usuario_aprobacion = $this->th_control_aprobacionM->where('usu_id', $id_usuario)->listar();
 
-        if (count($usuario_aprobacion) == 0) {
+        if (count($usuario_aprobacion) == 0 || $id_usuario == 2) {
             return -2;
         }
 
@@ -273,6 +292,76 @@ class th_control_acceso_temporalC
         $datos = $modelo->editar($datos, $where);
         return $datos;
     }
+
+    function validar_triangulacion($longitud = 0, $latitud = 0)
+    {
+        $id_persona = (isset($_SESSION['INICIO']['NO_CONCURENTE']) && $_SESSION['INICIO']['NO_CONCURENTE']) ? $_SESSION['INICIO']['NO_CONCURENTE'] : -10;
+
+        if ($id_persona == -10) {
+            return ['error' => 'Persona no válida', 'tri_id' => null, 'zona' => null, 'dentro' => false];
+        }
+
+        $zonas = $this->th_triangular_departamento_personaM->validar_triangulacion($id_persona);
+
+        // Agrupar los puntos por th_tri_id y guardar zona base
+        $poligonos = [];
+        $datos_zonas = [];
+
+        foreach ($zonas as $zona) {
+            $tri_id = $zona['_id'];
+            $lat = floatval($zona['latitud']);
+            $lng = floatval($zona['longitud']);
+
+            $poligonos[$tri_id][] = [$lat, $lng];
+
+            // Guardamos solo una vez la info general de la zona
+            if (!isset($datos_zonas[$tri_id])) {
+                $datos_zonas[$tri_id] = $zona;
+            }
+        }
+
+        // Validar si el punto está dentro de alguna de las zonas
+        foreach ($poligonos as $tri_id => $puntos) {
+            if ($this->punto_en_poligono($latitud, $longitud, $puntos)) {
+                return [
+                    'tri_id' => $tri_id,
+                    'zona' => $datos_zonas[$tri_id],
+                    'dentro' => 1
+                ];
+            }
+        }
+
+        return [
+            'tri_id' => null,
+            'zona' => null,
+            'dentro' => 0
+        ];
+    }
+
+    // Función auxiliar para verificar si el punto está dentro del polígono
+    function punto_en_poligono($lat, $lng, $puntos)
+    {
+        $intersecciones = 0;
+        $numPuntos = count($puntos);
+
+        for ($i = 0; $i < $numPuntos; $i++) {
+            $j = ($i + 1) % $numPuntos;
+
+            $lat_i = $puntos[$i][0];
+            $lng_i = $puntos[$i][1];
+            $lat_j = $puntos[$j][0];
+            $lng_j = $puntos[$j][1];
+
+            if ((($lng_i > $lng) != ($lng_j > $lng)) &&
+                ($lat < ($lat_j - $lat_i) * ($lng - $lng_i) / ($lng_j - $lng_i + 1e-10) + $lat_i)
+            ) {
+                $intersecciones++;
+            }
+        }
+
+        return ($intersecciones % 2) === 1;
+    }
+
 
     function validar_formato($file)
     {

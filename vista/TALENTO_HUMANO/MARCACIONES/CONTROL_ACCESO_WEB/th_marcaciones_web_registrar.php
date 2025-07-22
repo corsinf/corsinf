@@ -122,8 +122,10 @@ if (isset($_GET['_id'])) {
                     Swal.fire('', 'Error', 'warning');
                 } else if (response == -1) {
                     Swal.fire('', 'Debe tomar una foto.', 'error');
-                }else if (response == -10) {
+                } else if (response == -10) {
                     Swal.fire('', 'Lo sentimos, esta función está disponible únicamente para personas registradas como tal.', 'error');
+                } else if (response == -12) {
+                    Swal.fire('', 'No se encuentra dentro de alguna zona registrada.', 'warning');
                 }
             },
 
@@ -175,10 +177,10 @@ if (isset($_GET['_id'])) {
 
         <form id="form_maraciones">
 
-            <div class="row">
+            <div class="row pb-2">
                 <div class="col-xl-12 mx-auto">
-                    <div class="card border-top border-0 border-4 border-primary">
-                        <div class="card-body pt-3 pe-5 ps-5 pb-0">
+                    <div class="card border-top border-0 border-4 border-primary mb-0">
+                        <div class="card-body p-5">
                             <div class="card-title d-flex align-items-center">
 
 
@@ -202,127 +204,147 @@ if (isset($_GET['_id'])) {
                                 </div>
 
                             </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!--end row-->
 
-            <div class="row">
-
-                <div class="col-sm-6 mx-auto">
-                    <div class="card border-top border-0 border-4 border-primary">
-                        <div class="card-header bg-primary text-white">Ubicación actual</div>
-
-                        <div class="card-body">
-                            <div class="card-title d-flex align-items-center">
-                            </div>
-
-                            <!-- Mapa centrado -->
-                            <div id="map_embed" style="height: 400px; width: 100%;"></div>
+                            <hr>
 
 
-                            <?php if (!isset($_GET['_id'])) { ?>
-                                <!-- Botón centrado debajo del mapa -->
-                                <div class="d-flex justify-content-center pt-3">
-                                    <button type="button" id="btn_ubicacion" class="btn btn-success btn-sm px-4 m-1">
-                                        <i class='bx bx-current-location '></i> Actualizar coordenadas
-                                    </button>
-                                </div>
-                            <?php } ?>
+                            <div class="row pt-1 mb-col">
 
-                            <!-- Inputs ocultos -->
-                            <input type="hidden" class="form-control form-control-sm" id="txt_latitud" name="txt_latitud">
-                            <input type="hidden" class="form-control form-control-sm" id="txt_longitud" name="txt_longitud">
-                        </div>
-                    </div>
-                </div>
+                                <div class="accordion accordion-flush" id="accordion_verificacion">
+                                    <div class="accordion-item">
+                                        <h2 class="accordion-header" id="accordion_item_ubicacion">
+                                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#flush_ubicacion" aria-expanded="true" aria-controls="flush_ubicacion">
+                                                Verificación con Ubicación
+                                            </button>
+                                        </h2>
+                                        <div id="flush_ubicacion" class="accordion-collapse collapse show" aria-labelledby="accordion_item_ubicacion" data-bs-parent="#accordion_verificacion">
+                                            <div class="accordion-body">
 
-                <div class="col-sm-6 mx-auto">
-                    <div class="card border-top border-0 border-4 border-primary">
-                        <div class="card-header bg-primary text-white">Cámara</div>
+                                                <div class="col-sm-12 mx-auto">
+                                                    <div class="card border-top border-0 border-4 border-primary">
+                                                        <div class="card-header bg-primary text-white">Ubicación actual</div>
 
-                        <div class="card-body ">
+                                                        <div class="card-body">
+                                                            <div class="card-title d-flex align-items-center">
+                                                            </div>
 
-                            <style>
-                                .face-guide-oval {
-                                    width: 140px;
-                                    height: 200px;
-                                    border: 6px solid rgba(34, 100, 145, 0.9);
-                                    border-radius: 50% / 60%;
-                                    /* Ovalado */
-                                    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-                                    pointer-events: none;
-                                    z-index: 10;
-                                }
-                            </style>
+                                                            <!-- Mapa centrado -->
+                                                            <div id="map_embed" style="height: 400px; width: 100%;"></div>
 
-                            <div class="row">
 
-                                <?php if (!isset($_GET['_id'])) { ?>
-                                    <!-- Columna izquierda: Cámara en vivo -->
-                                    <div class="col-12 col-md-12 col-lg-12 col-xl-6">
-                                        <div class="camera-wrapper position-relative mx-auto" style="width: 320px; height: 240px;">
-                                            <!-- Video -->
-                                            <video
-                                                id="video_stream"
-                                                class="w-100 h-100 border rounded"
-                                                autoplay
-                                                playsinline>
-                                            </video>
+                                                            <?php if (!isset($_GET['_id'])) { ?>
+                                                                <!-- Botón centrado debajo del mapa -->
+                                                                <div class="d-flex justify-content-center pt-3">
+                                                                    <button type="button" id="btn_ubicacion" class="btn btn-success btn-sm px-4 m-1">
+                                                                        <i class='bx bx-current-location '></i> Actualizar coordenadas
+                                                                    </button>
+                                                                </div>
+                                                            <?php } ?>
 
-                                            <!-- Óvalo guía -->
-                                            <div id="pnl_ovalo" class="face-guide-oval position-absolute top-50 start-50 translate-middle" style="display: none;"></div>
+                                                            <!-- Inputs ocultos -->
+                                                            <input type="hidden" class="form-control form-control-sm" id="txt_latitud" name="txt_latitud">
+                                                            <input type="hidden" class="form-control form-control-sm" id="txt_longitud" name="txt_longitud">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
-
-                                        <!-- Botones -->
-                                        <div class="d-flex flex-wrap justify-content-center align-items-center gap-2 pt-2 pb-4">
-                                            <button id="btn_start" class="btn btn-success btn-sm d-flex align-items-center" type="button">
-                                                <i class="bx bx-play me-2"></i> Iniciar cámara
-                                            </button>
-                                            <button id="btn_capture" class="btn btn-danger btn-sm d-flex align-items-center" type="button" disabled>
-                                                <i class="bx bx-stop me-2"></i> Capturar foto
-                                            </button>
-                                            <button id="btn_flip" class="btn btn-warning btn-sm d-flex align-items-center" type="button">
-                                                <i class="bx bx-refresh me-2"></i> Cambiar cámara
-                                            </button>
-                                        </div>
-
                                     </div>
-                                <?php } ?>
+                                    <div class="accordion-item">
+                                        <h2 class="accordion-header" id="accordion_item_camara">
+                                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush_camara" aria-expanded="false" aria-controls="flush_camara">
+                                                Verificación con Foto
+                                            </button>
+                                        </h2>
+                                        <div id="flush_camara" class="accordion-collapse collapse" aria-labelledby="accordion_item_camara" data-bs-parent="#accordion_verificacion">
+                                            <div class="accordion-body">
 
-                                <?php
-                                $col_class = isset($_GET['_id']) ? 'col-md-6 offset-md-3 text-center' : 'col-12 col-md-12 col-lg-12 col-xl-6';
-                                ?>
+                                                <div class="col-sm-12 mx-auto">
+                                                    <div class="card border-top border-0 border-4 border-primary">
+                                                        <div class="card-header bg-primary text-white">Cámara</div>
 
-                                <!-- Columna derecha: Previsualización (más pequeña) -->
-                                <div class="<?= $col_class ?>">
-                                    <div id="preview_container" class="text-center d-none">
-                                        <label class="form-label fw-bold">Previsualización:</label>
-                                        <div style="width: 100%; max-width: 320px; margin: 0 auto;">
-                                            <img id="preview_img" src="" class="w-100 border rounded d-none" style="height: 200px; object-fit: contain;" />
-                                            <canvas id="canvas_preview" class="w-100 border rounded d-none" style="height: 200px;"></canvas>
+                                                        <div class="card-body ">
+
+                                                            <style>
+                                                                .face-guide-oval {
+                                                                    width: 140px;
+                                                                    height: 200px;
+                                                                    border: 6px solid rgba(34, 100, 145, 0.9);
+                                                                    border-radius: 50% / 60%;
+                                                                    /* Ovalado */
+                                                                    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+                                                                    pointer-events: none;
+                                                                    z-index: 10;
+                                                                }
+                                                            </style>
+
+                                                            <div class="row">
+
+                                                                <?php if (!isset($_GET['_id'])) { ?>
+                                                                    <!-- Columna izquierda: Cámara en vivo -->
+                                                                    <div class="col-12 col-md-12 col-lg-12 col-xl-6">
+                                                                        <div class="camera-wrapper position-relative mx-auto" style="width: 320px; height: 240px;">
+                                                                            <!-- Video -->
+                                                                            <video
+                                                                                id="video_stream"
+                                                                                class="w-100 h-100 border rounded"
+                                                                                autoplay
+                                                                                playsinline>
+                                                                            </video>
+
+                                                                            <!-- Óvalo guía -->
+                                                                            <div id="pnl_ovalo" class="face-guide-oval position-absolute top-50 start-50 translate-middle" style="display: none;"></div>
+                                                                        </div>
+
+                                                                        <!-- Botones -->
+                                                                        <div class="d-flex flex-wrap justify-content-center align-items-center gap-2 pt-2 pb-4">
+                                                                            <button id="btn_start" class="btn btn-success btn-sm d-flex align-items-center" type="button">
+                                                                                <i class="bx bx-play me-2"></i> Iniciar cámara
+                                                                            </button>
+                                                                            <button id="btn_capture" class="btn btn-danger btn-sm d-flex align-items-center" type="button" disabled>
+                                                                                <i class="bx bx-stop me-2"></i> Capturar foto
+                                                                            </button>
+                                                                            <button id="btn_flip" class="btn btn-warning btn-sm d-flex align-items-center" type="button">
+                                                                                <i class="bx bx-refresh me-2"></i> Cambiar cámara
+                                                                            </button>
+                                                                        </div>
+
+                                                                    </div>
+                                                                <?php } ?>
+
+                                                                <?php
+                                                                $col_class = isset($_GET['_id']) ? 'col-md-6 offset-md-3 text-center' : 'col-12 col-md-12 col-lg-12 col-xl-6';
+                                                                ?>
+
+                                                                <!-- Columna derecha: Previsualización (más pequeña) -->
+                                                                <div class="<?= $col_class ?>">
+                                                                    <div id="preview_container" class="text-center d-none">
+                                                                        <label class="form-label fw-bold">Previsualización:</label>
+                                                                        <div style="width: 100%; max-width: 320px; margin: 0 auto;">
+                                                                            <img id="preview_img" src="" class="w-100 border rounded d-none" style="height: 200px; object-fit: contain;" />
+                                                                            <canvas id="canvas_preview" class="w-100 border rounded d-none" style="height: 200px;"></canvas>
+                                                                        </div>
+                                                                        <input type="hidden" name="captured_image" id="captured_image">
+                                                                    </div>
+                                                                </div>
+
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            </div>
                                         </div>
-                                        <input type="hidden" name="captured_image" id="captured_image">
                                     </div>
                                 </div>
 
                             </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-xl-12 mx-auto">
-                    <div class="card border-top border-0 border-4 border-primary">
-                        <div class="card-body pt-5 pe-5 ps-5">
 
                             <?php
                             $is_disabled = isset($_GET['_id']) ? 'disabled' : '';
                             ?>
 
-                            <div class="row mb-col">
+                            <div class="row pt-3 mb-col">
                                 <div class="col-md-12">
                                     <label for="txt_descripcion" class="form-label">Descripción </label>
                                     <textarea class="form-control form-control-sm no_caracteres" name="txt_descripcion" id="txt_descripcion" rows="3" maxlength="200" <?= $is_disabled ?>></textarea>
@@ -341,6 +363,9 @@ if (isset($_GET['_id'])) {
                     </div>
                 </div>
             </div>
+            <!--end row-->
+
+
         </form>
     </div>
 </div>
@@ -403,7 +428,7 @@ if (isset($_GET['_id'])) {
         }
 
         navigator.geolocation.getCurrentPosition(function(pos) {
-            
+
             let lat = pos.coords.latitude;
             let lon = pos.coords.longitude;
 
@@ -447,7 +472,7 @@ if (isset($_GET['_id'])) {
             console.error('Geolocation error:', err);
         }, {
             enableHighAccuracy: true,
-            timeout: 20000, 
+            timeout: 20000,
             maximumAge: 0
         });
     }
