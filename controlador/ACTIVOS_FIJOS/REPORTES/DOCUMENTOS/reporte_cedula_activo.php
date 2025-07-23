@@ -254,7 +254,7 @@
         // $generar_QR = dirname(__DIR__, 4) . '/corsinf/vista/public/ACTIVOS_FIJOS/?detalle_activo=true&id=' . $id_codificado . '&_token=' . $token_empresa;
         $generar_QR = 'https://corsinf.com:447' . '/corsinf/vista/public/ACTIVOS_FIJOS/?detalle_activo=true&id=' . $id_codificado . '&_token=' . $token_empresa;
 
-        $url_modificar = acortar_url_tinyurl($generar_QR);
+        // $url_modificar = acortar_url_tinyurl($generar_QR);
         // $pdf->MultiCell(190, 5, $generar_QR, 0, 1, 'L');
 
         $pdf->Ln(5);
@@ -290,7 +290,7 @@
                 // 'bgcolor' => false,
             ];
 
-            $pdf->write2DBarcode($url_modificar, 'QRCODE,H', $x_qr, $y_qr, 50, 50, $style, 'N');
+            $pdf->write2DBarcode($generar_QR, 'QRCODE,H', $x_qr, $y_qr, 50, 50, $style, 'N');
         } else {
             $pdf->Cell(0, 10, 'Imagen no disponible', 0, 1, 'C');
         }
