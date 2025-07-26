@@ -10,11 +10,12 @@ require_once(dirname(__DIR__, 2) . '/db/codigos_globales.php');
 class detalle_articuloM extends BaseModel
 {
 	protected $tabla = 'ac_articulos';
-	protected $primaryKey = 'id_articulos AS _id';
+	protected $primaryKey = 'id_articulo AS _id';
 	private $codigos_globales;
 
 	protected $camposPermitidos = [
-		'tag_unique AS tag_unique',
+		'tag_unique AS RFID',
+		'tag_serie AS SKU',
 	];
 
 	function guardar($tabla, $datos)
