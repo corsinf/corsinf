@@ -21,6 +21,81 @@ if (isset($_GET['_id'])) {
         });
     });
 
+    function exportarExcel() {
+        tbl_reporte.button('.buttons-excel').trigger();
+    }
+    $(document).ready(function() {
+        let hoy = new Date();
+        let hoyStr = hoy.toISOString().split('T')[0];
+
+        // Limitar que fecha fin no pueda ser mayor a hoy
+        $("#txt_fecha_fin").attr("max", hoyStr);
+
+        // Cuando cambia fecha inicio
+        $("#txt_fecha_inicio").on("change", function() {
+            validarFechas();
+        });
+
+        // Cuando cambia fecha fin
+        $("#txt_fecha_fin").on("change", function() {
+            validarFechas();
+        });
+
+        function validarFechas() {
+            let fechaInicio = $("#txt_fecha_inicio").val();
+            let fechaFin = $("#txt_fecha_fin").val();
+
+            if (fechaInicio) {
+                let inicioDate = new Date(fechaInicio);
+                let limiteInicio = new Date();
+                limiteInicio.setMonth(limiteInicio.getMonth() - 1);
+
+                // Validar que inicio no sea hace más de 1 mes desde hoy
+                if (inicioDate < limiteInicio) {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Fecha inválida',
+                        text: 'La fecha de inicio no puede ser mayor a 1 mes antes de hoy.',
+                    });
+                    $("#txt_fecha_inicio").val("");
+                    return false;
+                }
+            }
+
+            if (fechaFin) {
+                let finDate = new Date(fechaFin);
+                let limiteFin = new Date(fechaInicio);
+                limiteFin.setMonth(limiteFin.getMonth() + 1);
+
+                // Validar que fecha fin no sea mayor a hoy
+                if (finDate > hoy) {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Fecha inválida',
+                        text: 'La fecha de fin no puede ser mayor a la fecha actual.',
+                    });
+                    $("#txt_fecha_fin").val("");
+                    return false;
+                }
+
+                // Validar que fin no esté a más de 1 mes de la fecha inicio
+                if (fechaInicio && finDate > limiteFin) {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Fecha inválida',
+                        text: 'La fecha de fin no puede superar un mes desde la fecha de inicio.',
+                    });
+                    $("#txt_fecha_fin").val("");
+                    return false;
+                }
+            }
+
+            return true;
+        }
+    });
+
+
+
     function cargar_reporte_atributos(id, parametros) {
         console.log('cargar_reporte_atributos: ', parametros);
 
@@ -32,7 +107,7 @@ if (isset($_GET['_id'])) {
             type: 'post',
             dataType: 'json',
             success: function(response) {
-                // console.log("Encabezados recibidos:", response);
+                console.log("Encabezados recibidos:", response);
 
                 if (response.length > 0) {
                     let thead = $("#thead_reporte");
@@ -64,10 +139,11 @@ if (isset($_GET['_id'])) {
                             url: 'https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
                         },
                         ajax: {
-                            url: '../controlador/TALENTO_HUMANO/th_reportesC.php?reporte=true',
+                            url: '../controlador/TALENTO_HUMANO/th_control_acceso_calculosC.php?reporte=true',
                             type: 'POST',
                             data: function(d) {
                                 d.parametros = parametros;
+                                $("#btn_exportar_excel").prop("disabled", true);
                             },
                             dataSrc: ''
                         },
@@ -95,7 +171,7 @@ if (isset($_GET['_id'])) {
                 'txt_fecha_fin': txt_fecha_fin,
                 'ddl_departamentos': ddl_departamentos,
             };
-            
+
             cargar_reporte_atributos('<?= $_id ?>', parametros);
 
         } else {
@@ -180,11 +256,17 @@ if (isset($_GET['_id'])) {
 
                                 <div class="row">
                                     <div class="col-md-12">
-                                        <div class="modal-footer pt-2" id="seccion_boton_consulta">
-                                            <button class="btn btn-primary btn-sm px-3" onclick="buscar_fechas();" type="button"><i class='bx bx-search'></i> Buscar</button>
+                                        <div class="modal-footer pt-2 d-flex gap-2" id="seccion_boton_consulta">
+                                            <button class="btn btn-success btn-sm px-3" onclick="exportarExcel();" type="button">
+                                                <i class='bx bx-file'></i> Exportar Excel
+                                            </button>
+                                            <button class="btn btn-primary btn-sm px-3" onclick="buscar_fechas();" type="button">
+                                                <i class='bx bx-search'></i> Buscar
+                                            </button>
                                         </div>
                                     </div>
                                 </div>
+
                             </div>
                         </div>
 

@@ -632,8 +632,8 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                       <i class="bx bx-plus me-0 pb-1"></i> Agregar Firma
                     </button>
 
-                    <button type="button" class="btn btn-info btn-sm" onclick="generar_pdf()">
-                      <i class="bx bx bxs-pen me-0 pb-1"></i> Comprar Firma
+                    <button type="button" class="btn btn-success btn-sm" onclick="generar_pdf()">
+                      <i class="bx bx-plus me-0 pb-1"></i> Generar PDF
                     </button>
                   </div>
                 </div>
