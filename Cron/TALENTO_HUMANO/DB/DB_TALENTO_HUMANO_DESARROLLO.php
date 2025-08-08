@@ -4,17 +4,17 @@ require_once('../calculo_control_acceso.php');
 require_once(dirname(__DIR__, 3) . '/variables_entorno.php');
 
 // Crear una instancia de la clase y llamar al método
-$proceso = new calculo_persona(ENV_SAINT_USUARIO, ENV_SAINT_PASSWORD, ENV_SAINT_SERVIDOR, ENV_SAINT_DATABASE, ENV_SAINT_PUERTO);
+$proceso = new calculo_persona(ENV_DEV_TH_USUARIO, ENV_DEV_TH_PASSWORD, ENV_DEV_TH_SERVIDOR, ENV_DEV_TH_DATABASE, ENV_DEV_TH_PUERTO);
 
 date_default_timezone_set('America/Mexico_City'); // Ajusta a tu zona horaria
-$fecha_actual = date("Y-m-d");
-// $fecha_actual = '2025-08-07';
+// $fecha_actual = date("Y-m-d");
+$fecha_actual = '2025-08-07';
 
 // $parametros = $proceso->calculo_persona_control_acceso(2000, '2025-06-27');
 
-guardar_log('[INF] Inicio Inserción Masiva ', ENV_SAINT_DATABASE);
+guardar_log('[INF] Inicio Inserción Masiva ', ENV_DEV_TH_DATABASE);
 $parametros = $proceso->carga_masiva($fecha_actual);
-guardar_log($parametros, ENV_SAINT_DATABASE);
+guardar_log($parametros, ENV_DEV_TH_DATABASE);
 
 print_r($parametros);
 exit();
