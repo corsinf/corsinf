@@ -6,6 +6,7 @@ require_once(dirname(__DIR__, 2) . '/modelo/TALENTO_HUMANO/th_reportesM.php');
 require_once(dirname(__DIR__, 2) . '/lib/spout_excel/vendor/box/spout/src/Spout/Autoloader/autoload.php');
 
 
+
 use Box\Spout\Writer\Common\Creator\WriterEntityFactory;
 use Box\Spout\Common\Entity\Row;
 use Box\Spout\Common\Type;
@@ -36,6 +37,11 @@ if (isset($_GET['reporte'])) {
 if (isset($_GET['eliminar'])) {
     echo json_encode($controlador->eliminar($_POST['id'] ?? ''));
 }
+
+if (isset($_GET['sincronizar_calculo_asistencia'])) {
+    echo json_encode($controlador->sincronizar_calculo_asistencia());
+}
+
 
 
 
@@ -269,6 +275,51 @@ class th_reportesC
         // Cerrar el writer
         $writer->close();
     }
+
+    function sincronizar_calculo_asistencia()
+    {
+        require_once(dirname(__DIR__, 2) . '/variables_entorno.php');
+
+        $BASEDATO = $_SESSION['INICIO']['BASEDATO'];
+
+        $ruta = dirname(__DIR__, 2) . '/Cron/TALENTO_HUMANO/DB/' . $BASEDATO . '.php';
+
+        // 1) Usa el PHP CLI explícito (ajusta a tu instalación)
+        $phpCli = ENV_PHP_81;
+
+        $msg = [];
+
+        // Validaciones
+        if (!file_exists($phpCli)) {
+            return ['msj' => "No se encontró PHP CLI en: $phpCli"];
+        }
+        if (!file_exists($ruta)) {
+            return ['msj' => "No existe el script: $ruta"];
+        }
+
+        // 2) Escapar rutas con espacios
+        $phpCliEsc = escapeshellarg($phpCli);
+        $rutaEsc = escapeshellarg($ruta);
+
+        // 3) Ejecutar y capturar salida + código retorno
+        $salida = [];
+        $code = 0;
+        exec("$phpCliEsc $rutaEsc 2>&1", $salida, $code);
+
+        if ($code === 0) {
+            $msg[] = "Script ejecutado correctamente.";
+        } else {
+            $msg[] = "Error al ejecutar el script (código: $code).";
+        }
+
+        if (!empty($salida)) {
+            $msg[] = "Salida:";
+            $msg[] = implode("\n", $salida);
+        }
+
+        return ['msj' => implode("\n", $msg)];
+    }
+
 
     /**
      * 

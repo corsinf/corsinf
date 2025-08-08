@@ -1,7 +1,7 @@
 <?php
 date_default_timezone_set('America/Guayaquil');
 
-require_once('../calculo_control_acceso.php');
+require_once(dirname(__DIR__, 1) . '/calculo_control_acceso.php');
 
 require_once(dirname(__DIR__, 3) . '/variables_entorno.php');
 
