@@ -25,15 +25,37 @@ class ac_reportes_activos_fijosC
         $this->ac_articulos_itM = new ac_articulos_itM();
     }
 
-    public function reporte_cedula_activo($id_articulo, $mostrar = false)
+    public function reporte_cedula_activo($id_articulo, $mostrar = false, $es_web = true)
     {
         require_once('DOCUMENTOS/reporte_cedula_activo.php');
+        $this->codigos_globales = new codigos_globales();
 
         $articulos = $this->articulos->listar_articulos_id($id_articulo);
 
         $datos_articulo_it = $this->ac_articulos_itM->where('ac_ait_id_articulo', $id_articulo)->listar();
 
-        return pdf_cedula_activo($articulos, $datos_articulo_it, $mostrar);
+        //De momento se pone es web en true toca enviar por url en caso de que se necesite publico este archivo
+
+        if ($es_web) {
+            $nombre_empresa = $_SESSION['INICIO']['TITULO_PESTANIA'];
+            $logo = $_SESSION['INICIO']['LOGO'] ?? '';
+            $logo = preg_replace('/^\.\.\//', '', $logo);
+
+            $id_codificado = $this->codigos_globales->encriptar_alfanumerico($articulos[0]['id']);
+            $token_empresa = $this->codigos_globales->encriptar_alfanumerico($_SESSION['INICIO']['ID_EMPRESA']);
+
+            
+            $adicional =
+                [
+                    'nombre_empresa' => $nombre_empresa,
+                    'logo' => $logo,
+                    'id_codificado' => $id_codificado,
+                    'token_empresa' => $token_empresa,
+                ];
+        }
+
+
+        return pdf_cedula_activo($articulos, $datos_articulo_it, $mostrar, false, null, $adicional);
     }
 
     public function reporte_auditoria_articulos($id_persona, $id_localizacion, $id_empresa,  $mostrar = false)

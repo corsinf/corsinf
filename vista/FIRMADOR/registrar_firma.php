@@ -150,39 +150,42 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
 
 
   function generar_pdf() {
-  $.ajax({
-    url: '../controlador/TALENTO_HUMANO/th_reportes_personasC.php?imprimirPDF=true',
-    type: 'POST',
-    dataType: 'json',
-    success: function(response) {
-      console.log(response);
-      
-      if (response.success && response.ruta) {
-        // Abrir el PDF en una nueva ventana o descargar usando la ruta devuelta
-        window.open(response.ruta, '_blank');
-        
-        Swal.fire({
-          icon: "success",
-          title: "PDF generado",
-          text: "El PDF se ha generado correctamente."
-        });
-      } else {
-        Swal.fire({
-          icon: "error",
-          title: "Error",
-          text: response.message || "Ocurrió un error al generar el PDF."
-        });
-      }
-    },
-    error: function(xhr, status, error) {
-      Swal.fire({
-        icon: "error",
-        title: "Error",
-        text: "Ocurrió un error al procesar la solicitud."
-      });
-    }
-  });
-}
+    // $.ajax({
+    //   url: '../controlador/TALENTO_HUMANO/th_reportes_personasC.php?imprimirPDF=true',
+    //   type: 'POST',
+    //   dataType: 'json',
+    //   success: function(response) {
+    //     console.log(response);
+
+    //     if (response.success && response.ruta) {
+    //       // Abrir el PDF en una nueva ventana o descargar usando la ruta devuelta
+    //       window.open(response.ruta, '_blank');
+
+    //       Swal.fire({
+    //         icon: "success",
+    //         title: "PDF generado",
+    //         text: "El PDF se ha generado correctamente."
+    //       });
+    //     } else {
+    //       Swal.fire({
+    //         icon: "error",
+    //         title: "Error",
+    //         text: response.message || "Ocurrió un error al generar el PDF."
+    //       });
+    //     }
+    //   },
+    //   error: function(xhr, status, error) {
+    //     Swal.fire({
+    //       icon: "error",
+    //       title: "Error",
+    //       text: "Ocurrió un error al procesar la solicitud."
+    //     });
+    //   }
+    // });
+
+    window.open('https://corsinf.com/cartsearch/index.html?sortOrderBy=relevance', '_blank');
+
+  }
 
 
   // Función para validar que las contraseñas coincidan (si se requiere)
@@ -627,6 +630,10 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                   <div id="btn_nuevo">
                     <button type="button" class="btn btn-success btn-sm" onclick="crear_firma()">
                       <i class="bx bx-plus me-0 pb-1"></i> Agregar Firma
+                    </button>
+
+                    <button type="button" class="btn btn-success btn-sm" onclick="generar_pdf()">
+                      <i class="bx bx-plus me-0 pb-1"></i> Generar PDF
                     </button>
                   </div>
                 </div>

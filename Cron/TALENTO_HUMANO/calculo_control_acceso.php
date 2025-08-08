@@ -1384,15 +1384,15 @@ class calculo_persona
                 $resultado = $this->sql_string($sql_lote);
 
                 if ($resultado !== 1) {
-                    echo "Error al ejecutar un lote.";
-                    return -1;
+                    return "[ERR] Error al ejecutar un lote.";
+                    // return -1;
                 }
 
                 $total_insertadas += count($datos_lote);
             }
         }
 
-        echo "Inserción masiva finalizada. Total de personas procesadas: $total_insertadas";
+        return "[INF] Inserción masiva finalizada. Total de personas procesadas: $total_insertadas";
     }
 
     function generar_merge_lote($tabla, $datos_lote, $campos_clave)

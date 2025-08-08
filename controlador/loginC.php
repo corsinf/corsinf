@@ -1426,7 +1426,7 @@ class loginC
 				$draw = $this->dibujar_modulo($licencia,$lic_activa,$id,$link,$value['icono'],$value['nombre_modulo']);
 			}
 				
-			$mod = array('num'=>$num_mod,'licencia'=>$licencia,'id'=>$id,'link'=>$link,'draw'=>$draw);
+			$mod = array('num'=>$num_mod,'licencia'=>$licencia,'id'=>$id,'link'=>$pagina,'draw'=>$draw);
 			array_push($modulos_draw, $mod);
 			}
 		 // print_r($mod);die();

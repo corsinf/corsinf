@@ -1,12 +1,27 @@
  <?php
     require_once(dirname(__DIR__, 4) . '/lib/TCPDF/tcpdf.php');
 
-    function pdf_cedula_activo($articulos, $datos_articulo_it, $mostrar = false, $local = false, $pdf = null)
+    function pdf_cedula_activo($articulos, $datos_articulo_it, $mostrar = false, $local = false, $pdf = null, $adicional = null)
     {
 
         $nuevo_pdf = false;
         $ruta = $_SESSION['INICIO']['RUTA_IMG_RELATIVA'];
         $empresa = $_SESSION['INICIO']['BASEDATO'];
+
+        //Informacion adicional para mostar
+        $nombre_empresa = '';
+        $logo = null;
+        $id_codificado = null;
+        $token_empresa = null;
+        if ($adicional != null) {
+            $nombre_empresa = $adicional['nombre_empresa'];
+            $logo = $adicional['logo'];
+            $id_codificado = $adicional['id_codificado'];
+            $token_empresa = $adicional['token_empresa'];
+        }
+
+
+        // print_r($nombre_empresa); exit(); die();
 
         $ruta_img = $ruta . "emp=$empresa&dir=activos&nombre=" .  $articulos[0]['imagen'];
 
@@ -34,16 +49,20 @@
         // Añadir página
         $pdf->AddPage();
 
-        // Ruta del logo
-        $ruta_logo = dirname(__DIR__, 4) . '/img/de_sistema/corsinf_letras_1.png';
-        // print_r($ruta_logo); exit(); die();
-        $x_logo = 30;
-        $y_logo = 10;
-        $ancho_logo = 20;
-        $alto_logo = 0;
-        if (file_exists($ruta_logo)) {
-            $pdf->Image($ruta_logo, $x_logo, $y_logo, $ancho_logo, $alto_logo);
+        // Ruta del logo   
+        $ruta_fisica = dirname(__DIR__, 4) . '/' . $logo;
+
+        // Verificamos si el archivo es una imagen válida y existe
+        if (is_file($ruta_fisica) && getimagesize($ruta_fisica)) {
+            $x_logo = 10;
+            $y_logo = 15;
+            $ancho_logo = 30;
+            $alto_logo = 0;
+
+            // TCPDF acepta ruta absoluta, así que puedes usar $ruta_fisica directamente
+            $pdf->Image($ruta_fisica, $x_logo, $y_logo, $ancho_logo, $alto_logo);
         }
+
 
         ////////////////////
 
@@ -51,11 +70,11 @@
 
         $pdf->SetFont('helvetica', 'B', 11);
         // Encabezados centrados
-        $pdf->Cell(190, 5, ('CORSINF'), 0, 1, 'C');
-        $pdf->Cell(190, 5, ('DIRECCIÓN GENERAL FINANCIERA'), 0, 1, 'C');
-        $pdf->Cell(190, 5, ('DIRECCIÓN DE CONTROL DE ACTIVOS'), 0, 1, 'C');
+        $pdf->Cell(190, 5, ($nombre_empresa), 0, 1, 'C');
+        // $pdf->Cell(190, 5, ('DEPARTAMENTO DE ACTIVOS'), 0, 1, 'C');
+        $pdf->Cell(190, 5, ('GESTIÓN DE ACTIVOS'), 0, 1, 'C');
         $pdf->Cell(190, 5, ('CÉDULA DE ACTIVO'), 0, 1, 'C');
-
+        $pdf->Ln(5);
         letra_estilo_normal($pdf);
         $pdf->Cell(100, 5, '', 0, 0, 'L');
         $pdf->Cell(90, 5, date('d/m/Y'), 0, 1, 'R');
@@ -232,6 +251,12 @@
         letra_estilo_negrita($pdf);
         $pdf->Cell(190, 5, 'Anexos:', 0, 1, 'L');
 
+        // $generar_QR = dirname(__DIR__, 4) . '/corsinf/vista/public/ACTIVOS_FIJOS/?detalle_activo=true&id=' . $id_codificado . '&_token=' . $token_empresa;
+        $generar_QR = 'https://corsinf.com:447' . '/corsinf/vista/public/ACTIVOS_FIJOS/?detalle_activo=true&id=' . $id_codificado . '&_token=' . $token_empresa;
+
+        // $url_modificar = acortar_url_tinyurl($generar_QR);
+        // $pdf->MultiCell(190, 5, $generar_QR, 0, 1, 'L');
+
         $pdf->Ln(5);
 
         $img_url = $ruta_img;
@@ -241,21 +266,31 @@
         $img_info = @getimagesize($img_url);
 
         if ($img_info !== false) {
-            // Tamaño real en píxeles
             $img_px_width = $img_info[0];
             $img_px_height = $img_info[1];
-
             $aspect_ratio = $img_px_width / $img_px_height;
 
             $img_mm_width = $fixed_height * $aspect_ratio;
 
-            $page_width = $pdf->getPageWidth();
-
-            $x = ($page_width - $img_mm_width) / 2;
-            $y = $pdf->GetY(); // Altura actual
+            // Coordenadas base
+            $x_img = 50;
+            $y_img = $pdf->GetY();
 
             // Insertar imagen
-            $pdf->Image($img_url, $x, $y, $img_mm_width, $fixed_height, 'GIF');
+            $pdf->Image($img_url, $x_img, $y_img, $img_mm_width, $fixed_height, 'GIF');
+
+            // Insertar QR al lado derecho
+            $x_qr = $x_img + $img_mm_width + 10; // 10 mm de espacio
+            $y_qr = $y_img;
+
+            $style = [
+                // 'border' => 1,
+                // 'padding' => 2,
+                // 'fgcolor' => [0, 0, 0],
+                // 'bgcolor' => false,
+            ];
+
+            $pdf->write2DBarcode($generar_QR, 'QRCODE,H', $x_qr, $y_qr, 50, 50, $style, 'N');
         } else {
             $pdf->Cell(0, 10, 'Imagen no disponible', 0, 1, 'C');
         }
@@ -324,4 +359,19 @@
     function letra_estilo_normal($pdf)
     {
         $pdf->SetFont('helvetica', '', 8);
+    }
+
+
+    function acortar_url_tinyurl($url_modificar)
+    {
+        $apiUrl = "https://tinyurl.com/api-create.php?url=" . urlencode($url_modificar);
+
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $apiUrl);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        $shortUrl = curl_exec($ch);
+        curl_close($ch);
+
+        return $shortUrl ?: $url_modificar;
     }

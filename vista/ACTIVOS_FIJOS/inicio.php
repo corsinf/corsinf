@@ -3,15 +3,19 @@
 //ACTIVOS
 
 if ($_GET['acc'] == 'articulos_cr') {
-    include('ACTIVOS_FIJOS/articulos_cr.php');
+    include('ACTIVOS_FIJOS/ARTICULOS/articulos_cr.php');
+}
+
+if ($_GET['acc'] == 'detalle_articulo') {
+    include('ACTIVOS_FIJOS/ARTICULOS/detalle_articulo.php');
+}
+
+if ($_GET['acc'] == 'ac_articulos_registrar') {
+    include('ACTIVOS_FIJOS/ARTICULOS/ac_articulos_registrar.php');
 }
 
 if ($_GET['acc'] == 'cambios_custodio_localizacion') {
     include('ACTIVOS_FIJOS/cambios_custodio_localizacion.php');
-}
-
-if ($_GET['acc'] == 'detalle_articulo') {
-    include('ACTIVOS_FIJOS/detalle_articulo.php');
 }
 
 if ($_GET['acc'] == 'cargar_datos') {
