@@ -54,30 +54,26 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
         }));
     });
 
-    function importar() {
-        var parametros = {
-            'datos': $('#txt_recuperado').val(),
-        };
+    function sincronizar_calculo_asistencia() {
 
-        // $('#myModal_espera').modal('show');
-        // $('#lbl_msj_espera').text("Conectando y Sincronizando");
+        Swal.fire({
+            title: 'Por favor, espere',
+            text: 'Procesando la solicitud...',
+            allowOutsideClick: false,
+            onOpen: () => {
+                Swal.showLoading();
+            }
+        });
+
         $.ajax({
-            data: {
-                parametros: parametros
-            },
-            url: '../controlador/TALENTO_HUMANO/th_reportesC.php?guardarImport=true',
+            url: '../controlador/TALENTO_HUMANO/th_reportesC.php?sincronizar_calculo_asistencia=true',
             type: 'post',
             dataType: 'json',
 
             success: function(response) {
-                if (response.msj == '') {
-                    Swal.fire('Registros Importados', '', 'success');
-                } else {
-                    Swal.fire('Registros Importados', response.msj, 'info');
-                }
-
-                tbl_reportes.ajax.reload(null, false);
-                $('#importar_device').modal('hide');
+                console.log(response);
+                Swal.close();
+                Swal.fire('Sincornizado correctamente.', '', 'success');
             },
             error: function(xhr, status, error) {
                 console.log('Status: ' + status);
@@ -85,7 +81,6 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                 console.log('XHR Response: ' + xhr.responseText);
 
                 Swal.fire('', 'Error: ' + xhr.responseText, 'error');
-                $('#myModal_espera').modal('hide');
             }
         });
 
@@ -131,6 +126,10 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                                             <i class="bx bx-plus me-0 pb-1"></i> Nuevo
                                         </a>
 
+                                        <button onclick="sincronizar_calculo_asistencia();"
+                                            type="button" class="btn btn-info btn-sm">
+                                            <i class="bx bx-rotate-right"></i> Sincronizar
+                                        </button>
                                     </div>
 
                                 </div>
