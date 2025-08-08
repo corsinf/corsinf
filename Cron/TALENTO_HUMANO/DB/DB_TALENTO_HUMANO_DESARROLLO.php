@@ -1,4 +1,6 @@
 <?php
+date_default_timezone_set('America/Guayaquil');
+
 require_once('../calculo_control_acceso.php');
 
 require_once(dirname(__DIR__, 3) . '/variables_entorno.php');
@@ -6,7 +8,6 @@ require_once(dirname(__DIR__, 3) . '/variables_entorno.php');
 // Crear una instancia de la clase y llamar al método
 $proceso = new calculo_persona(ENV_DEV_TH_USUARIO, ENV_DEV_TH_PASSWORD, ENV_DEV_TH_SERVIDOR, ENV_DEV_TH_DATABASE, ENV_DEV_TH_PUERTO);
 
-date_default_timezone_set('America/Mexico_City'); // Ajusta a tu zona horaria
 // $fecha_actual = date("Y-m-d");
 $fecha_actual = '2025-08-07';
 
