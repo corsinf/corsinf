@@ -21,9 +21,10 @@ if (isset($_GET['_id'])) {
         });
     });
 
-    function exportarExcel() {
+    function exportar_excel() {
         tbl_reporte.button('.buttons-excel').trigger();
     }
+    
     $(document).ready(function() {
         let hoy = new Date();
         let hoyStr = hoy.toISOString().split('T')[0];
@@ -257,7 +258,7 @@ if (isset($_GET['_id'])) {
                                 <div class="row">
                                     <div class="col-md-12">
                                         <div class="modal-footer pt-2 d-flex gap-2" id="seccion_boton_consulta">
-                                            <button class="btn btn-success btn-sm px-3" onclick="exportarExcel();" type="button">
+                                            <button class="btn btn-success btn-sm px-3" onclick="exportar_excel();" type="button">
                                                 <i class='bx bx-file'></i> Exportar Excel
                                             </button>
                                             <button class="btn btn-primary btn-sm px-3" onclick="buscar_fechas();" type="button">

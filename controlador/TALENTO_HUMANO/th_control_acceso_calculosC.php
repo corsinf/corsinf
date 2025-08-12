@@ -20,8 +20,8 @@ if (isset($_GET['reporte'])) {
     echo json_encode($controlador->control_acceso_reporte($_POST['parametros'] ?? ''));
 }
 
-if (isset($_GET['descargarExcel'])) {
-    echo ($controlador->descargarExcel());
+if (isset($_GET['descargar_excel'])) {
+    echo ($controlador->descargar_excel());
 }
 
 
@@ -34,9 +34,13 @@ class th_control_acceso_calculosC
         $this->modelo = new th_control_acceso_calculosM();
     }
 
-    function descargarExcel($nombreArchivo = 'example.xlsx', $datos = '')
+    //Usa para el boton de descargar Excel
+    function descargar_excel($nombreArchivo = 'example.xlsx', $datos = '')
     {
-        $datos = $this->modelo->control_acceso_departamento('2024-11-28', '2024-11-29', 5);
+        //////////////////////////////////////////////////////////
+        //aqui modificar de acuerdo a  las necesidades
+        ////////////////////////////////////////////////////////////
+        $datos = $this->modelo->listar();
 
         // Crear el writer para el archivo Excel
         $writer = WriterEntityFactory::createXLSXWriter();
@@ -157,7 +161,17 @@ class th_control_acceso_calculosC
         $txt_fecha_fin = $parametros['txt_fecha_fin'] ?? '';
         $ddl_departamentos = $parametros['ddl_departamentos'] ?? '';
 
-        $datos = $this->modelo->control_acceso_departamento($txt_fecha_inicio, $txt_fecha_fin, $ddl_departamentos);
+
+        //////////////////////////////////////////////////////////
+        //aqui modificar de acuerdo a  las necesidades
+        ////////////////////////////////////////////////////////////
+
+        //Antes
+        // $datos = $this->modelo->control_acceso_departamento($txt_fecha_inicio, $txt_fecha_fin, $ddl_departamentos);
+
+        //como deberia estar
+
+        $datos = $this->modelo->listar($txt_fecha_inicio, $txt_fecha_fin, $ddl_departamentos); // y las fechas con where
 
         $filas_datos = []; // Array para almacenar todas las filas de datos
 
@@ -174,7 +188,7 @@ class th_control_acceso_calculosC
                 : '';
 
             // Crear un array asociativo con clave-valor
-           $fila_datos = [
+            $fila_datos = [
                 'APELLIDOS' => $dato['primer_apellido'] . ' ' . $dato['segundo_apellido'],
                 'NOMBRES' => $dato['primer_nombre'] . ' ' . $dato['segundo_nombre'],
                 'Empleado' => $dato['primer_apellido'] . ' ' . $dato['segundo_apellido'] . ' ' . $dato['primer_nombre'] . ' ' . $dato['segundo_nombre'],
@@ -203,75 +217,5 @@ class th_control_acceso_calculosC
         }
 
         return $filas_datos; // Retornar el array con todas las filas
-    }
-
-    function calcular_jornada($hora_entrada, $hora_salida, $hora_entrada_acc, $hora_salida_acc)
-    {
-        // Calcular duración de la jornada laboral programada y trabajada
-        $duracion_programada = $hora_salida - $hora_entrada;
-        $duracion_trabajada = $hora_salida_acc - $hora_entrada_acc;
-
-        // Cálculo de cumplimiento de la jornada
-        $cumplimiento_jornada = ($duracion_trabajada >= $duracion_programada) ? 1 : 0;
-
-        // Calcular horas faltantes o excedentes
-        $horas_faltantes = max(0, $duracion_programada - $duracion_trabajada);
-        $horas_excedentes = max(0, $duracion_trabajada - $duracion_programada);
-
-        // Convertir a formato de horas
-        $horas_faltantes_format = $this->minutos_a_horas($horas_faltantes);
-        $horas_excedentes_format = $this->minutos_a_horas($horas_excedentes);
-
-        // Cálculo de atrasos
-        $atrasos_calc = max(0, $hora_entrada_acc - $hora_entrada);
-        $atrasos_format = $this->minutos_a_horas($atrasos_calc);
-
-        // Validaciones complementarias
-        $sumplementaria = ($horas_excedentes > 0) ? 1 : 0;
-        $salida_temprano = ($hora_salida > $hora_salida_acc) ? 1 : 0;
-
-
-        // Preparar la salida
-        return [
-            "horas_faltantes_format" => $horas_faltantes_format,
-            "horas_excedentes" => $horas_excedentes_format,
-            "cumplimiento_jornada" => $cumplimiento_jornada,
-            "atrasos" => $atrasos_format,
-            "horas_faltantes" => $horas_faltantes,
-            "duracion_programada" => $this->minutos_a_horas($duracion_programada),
-            "duracion_trabajada" => $this->minutos_a_horas($duracion_trabajada),
-            "sumplementaria" => $sumplementaria,
-            "salida_temprano" => $salida_temprano,
-        ];
-    }
-
-    function minutos_a_horas($minutos)
-    {
-        $horas = floor($minutos / 60); // Calcular las horas
-        $minutos_restantes = $minutos % 60; // Calcular los minutos restantes
-        return sprintf('%02d:%02d', $horas, $minutos_restantes); // Formato HH:MM
-    }
-
-    function calcular_dia($fecha)
-    {
-        $ingresar_fecha = strtotime($fecha);
-
-        $dias_ingles = date('l', $ingresar_fecha);
-        switch ($dias_ingles) {
-            case "Monday":
-                return "Lunes";
-            case 'Tuesday':
-                return "Martes";
-            case 'Wednesday':
-                return "Miércoles";
-            case 'Thursday':
-                return "Jueves";
-            case 'Friday':
-                return "Viernes";
-            case 'Saturday':
-                return "Sábado";
-            case 'Sunday':
-                return "Domingo";
-        }
     }
 }
