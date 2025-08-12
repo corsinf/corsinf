@@ -18,6 +18,10 @@ if (isset($_GET['insertar'])) {
     echo json_encode($controlador->insertar_editar($_POST['parametros']));
 }
 
+if (isset($_GET['insertar_manual'])) {
+    echo json_encode($controlador->insertar_editar_manual($_POST['parametros']));
+}
+
 if (isset($_GET['aprobar_marcacion'])) {
     echo json_encode($controlador->aprobar_marcacion($_POST['parametros']));
 }
@@ -290,6 +294,52 @@ class th_control_acceso_temporalC
         );
 
         $datos = $modelo->editar($datos, $where);
+        return $datos;
+    }
+
+    function insertar_editar_manual($parametros)
+    {
+        $ip_cliente_host = $_SERVER['REMOTE_ADDR'] ?? '';
+        if ($ip_cliente_host != '') {
+            $ip_cliente_host = gethostbyaddr($ip_cliente_host);
+        }
+
+        $fecha_hora = $parametros['txt_fecha_hora'];
+        $fecha_hora_format = new DateTime($fecha_hora);
+        $txt_hora = $fecha_hora_format->format('H:i:s'); 
+
+        $txt_fecha_hora = $fecha_hora_format->format('Y-m-d H:i:s'); 
+
+        // print_r($txt_fecha_hora); exit(); die();
+
+        $datos = array(
+            array('campo' => 'th_per_id', 'dato' => $parametros['ddl_personas'] ?? ''),
+
+            array('campo' => 'th_act_hora', 'dato' => $txt_hora ?? ''),
+            array('campo' => 'th_act_fecha_hora', 'dato' => $txt_fecha_hora ?? ''),
+
+            // array('campo' => 'th_act_fecha_modificacion', 'dato' => date('Y-m-d H:i:s')),
+            // array('campo' => 'th_act_puerto', 'dato' => $_SERVER['REMOTE_PORT'] ?? ''),
+            // array('campo' => 'th_act_tipo_origen', 'dato' => 'WEB'),
+            // array('campo' => 'th_act_server_name', 'dato' => $_SERVER['SERVER_NAME'] ?? ''),
+            // array('campo' => 'th_act_server_software', 'dato' => $_SERVER['SERVER_SOFTWARE'] ?? ''),
+            // array('campo' => 'th_act_server_protocol', 'dato' => $_SERVER['SERVER_PROTOCOL'] ?? ''),
+            // array('campo' => 'th_act_server_port', 'dato' => $_SERVER['SERVER_PORT'] ?? ''),
+            // array('campo' => 'th_act_http_host', 'dato' => $_SERVER['HTTP_HOST'] ?? ''),
+            // array('campo' => 'th_act_remote_addr', 'dato' => $_SERVER['REMOTE_ADDR'] ?? ''),
+            // array('campo' => 'th_act_http_user_agent', 'dato' => $_SERVER['HTTP_USER_AGENT'] ?? ''),
+            // array('campo' => 'th_act_request_method', 'dato' => $_SERVER['REQUEST_METHOD'] ?? ''),
+            // array('campo' => 'th_act_request_uri', 'dato' => $_SERVER['REQUEST_URI'] ?? ''),
+            // array('campo' => 'th_act_host_cliente', 'dato' => $ip_cliente_host),
+            // array('campo' => 'th_act_http_x_forwarded_for', 'dato' => $_SERVER['HTTP_X_FORWARDED_FOR'] ?? ''),
+
+            array('campo' => 'th_act_observacion_aprobacion', 'dato' => $parametros['txt_descripcion'] ?? null),
+
+            array('campo' => 'th_tri_origen', 'dato' => 'MANUAL'),
+        );
+
+        $datos = $this->modelo->insertar($datos);
+
         return $datos;
     }
 

@@ -141,10 +141,11 @@ if ($_GET['acc'] == 'log_dispositivos') {
 
 /**
  * 
- * POSTULANTES
+ * MARCACIONES
  * 
  */
 
+//CONTROL_ACCESO_WEB
 if ($_GET['acc'] == 'th_marcaciones_web') {
 	include('TALENTO_HUMANO/MARCACIONES/CONTROL_ACCESO_WEB/th_marcaciones_web.php');
 }
@@ -153,21 +154,28 @@ if ($_GET['acc'] == 'th_marcaciones_web_registrar') {
 	include('TALENTO_HUMANO/MARCACIONES/CONTROL_ACCESO_WEB/th_marcaciones_web_registrar.php');
 }
 
-if ($_GET['acc'] == 'th_control_aprobacion') {
-	include('TALENTO_HUMANO/MARCACIONES/APROBACION/th_control_aprobacion.php');
-}
-
 if ($_GET['acc'] == 'th_triangular_marcacion') {
 	include('TALENTO_HUMANO/MARCACIONES/CONTROL_ACCESO_WEB/th_triangular_marcacion.php');
 }
 
+if ($_GET['acc'] == 'th_marcaciones_web_registrar_manual') {
+	include('TALENTO_HUMANO/MARCACIONES/CONTROL_ACCESO_WEB/th_marcaciones_web_registrar_manual.php');
+}
+
+// APROBACION
+if ($_GET['acc'] == 'th_control_aprobacion') {
+	include('TALENTO_HUMANO/MARCACIONES/APROBACION/th_control_aprobacion.php');
+}
+
+// TRIANGULAR
 if ($_GET['acc'] == 'th_triangular') {
 	include('TALENTO_HUMANO/MARCACIONES/TRIANGULAR/th_triangular.php');
 }
+
 if ($_GET['acc'] == 'th_triangular_registrar') {
 	include('TALENTO_HUMANO/MARCACIONES/TRIANGULAR/th_triangular_registrar.php');
 }
+
 if ($_GET['acc'] == 'th_triangular_departamento') {
 	include('TALENTO_HUMANO/MARCACIONES/TRIANGULAR/th_triangular_departamento.php');
 }
-

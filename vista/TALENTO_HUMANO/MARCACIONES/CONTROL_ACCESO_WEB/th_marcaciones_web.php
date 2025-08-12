@@ -369,6 +369,13 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                                         </div>
                                     <?php } else { ?>
                                         <div id="pnl_boton_aprobacion" style="display: none;">
+                                            <div class="me-1 mb-1" id="btn_nuevo">
+                                                <a href="../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_marcaciones_web_registrar_manual"
+                                                    type="button" class="btn btn-success btn-sm ">
+                                                    <i class="bx bx-plus me-0 pb-1"></i> Registrar Marcación Manual
+                                                </a>
+                                            </div>
+
                                             <button type="button" class="btn btn-success btn-sm me-1 mb-1 btn_aprobacion" onclick="insertar_marcaciones(1);" disabled><i class="bx bx-check me-0 pb-1"></i> Aprobar Marcaciones</button>
                                             <button type="button" class="btn btn-danger btn-sm me-1 mb-1 btn_aprobacion" onclick="insertar_marcaciones(2);" disabled><i class="bx bx-x-circle me-0 pb-1"></i> Rechazar Marcaciones</button>
                                         </div>
