@@ -30,6 +30,19 @@ if (isset($_GET['buscar'])) {
 
     echo json_encode($controlador->buscar($parametros));
 }
+if (isset($_GET['buscar_departamento'])) {
+    $query = '';
+
+    if (isset($_GET['q'])) {
+        $query = $_GET['q'];
+    }
+
+    $parametros = array(
+        'query' => $query,
+    );
+
+    echo json_encode($controlador->buscar_departamento($parametros));
+}
 
 
 class th_departamentosC
@@ -105,6 +118,20 @@ class th_departamentosC
         foreach ($datos as $key => $value) {
             $text = $value['th_dep_nombre'];
             $lista[] = array('id' => ($value['th_dep_id']), 'text' => ($text), /* 'data' => $value */);
+        }
+
+        return $lista;
+    }
+
+     function buscar_departamento($parametros)
+    {
+        $lista = array();
+        $concat = "th_dep_nombre, th_dep_estado";
+        $datos = $this->modelo->where('th_dep_estado', 1)->like($concat, $parametros['query']);
+
+        foreach ($datos as $key => $value) {
+            $text = $value['th_dep_nombre'];
+            $lista[] = array('id' => ($value['th_dep_nombre']), 'text' => ($text), /* 'data' => $value */);
         }
 
         return $lista;

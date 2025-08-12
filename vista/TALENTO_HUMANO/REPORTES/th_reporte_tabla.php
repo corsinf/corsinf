@@ -22,9 +22,25 @@ if (isset($_GET['_id'])) {
     });
 
     function exportar_excel() {
-        tbl_reporte.button('.buttons-excel').trigger();
+        let txt_fecha_inicio = $('#txt_fecha_inicio').val();
+        let txt_fecha_fin = $('#txt_fecha_fin').val();
+        let ddl_departamentos = $('#ddl_departamentos').val();
+
+        if (!txt_fecha_inicio || !txt_fecha_fin || !ddl_departamentos) {
+            alert("Por favor, complete todos los campos obligatorios.");
+            return;
+        }
+
+        const url = '../controlador/TALENTO_HUMANO/th_control_acceso_calculosC.php?descargar_excel=true' +
+            '&txt_fecha_inicio=' + encodeURIComponent(txt_fecha_inicio) +
+            '&txt_fecha_fin=' + encodeURIComponent(txt_fecha_fin) +
+            '&ddl_departamentos=' + encodeURIComponent(ddl_departamentos) +
+            '&_id=' + encodeURIComponent(<?= $_id ?>);
+
+        window.location.href = url; // Esto hace que el navegador descargue el Excel directamente
     }
-    
+
+
     $(document).ready(function() {
         let hoy = new Date();
         let hoyStr = hoy.toISOString().split('T')[0];
@@ -32,68 +48,71 @@ if (isset($_GET['_id'])) {
         // Limitar que fecha fin no pueda ser mayor a hoy
         $("#txt_fecha_fin").attr("max", hoyStr);
 
-        // Cuando cambia fecha inicio
-        $("#txt_fecha_inicio").on("change", function() {
-            validarFechas();
+        // Inicialmente habilitados
+        $("#txt_fecha_fin").prop("disabled", false);
+        $("#btn_buscar").prop("disabled", false);
+        $("#btn_exportar_excel").prop("disabled", false); // siempre habilitado
+
+        // Validar al cambiar fechas
+        $("#txt_fecha_inicio, #txt_fecha_fin").on("change", function() {
+            validarFechasBasicas();
         });
 
-        // Cuando cambia fecha fin
-        $("#txt_fecha_fin").on("change", function() {
-            validarFechas();
+        // Evento click en Buscar
+        $("#btn_buscar").on("click", function(e) {
+            if (!validarRangoUnMes()) {
+                e.preventDefault();
+            }
         });
 
-        function validarFechas() {
+        // Validación básica (solo que inicio <= fin)
+        function validarFechasBasicas() {
             let fechaInicio = $("#txt_fecha_inicio").val();
             let fechaFin = $("#txt_fecha_fin").val();
 
-            if (fechaInicio) {
-                let inicioDate = new Date(fechaInicio);
-                let limiteInicio = new Date();
-                limiteInicio.setMonth(limiteInicio.getMonth() - 1);
-
-                // Validar que inicio no sea hace más de 1 mes desde hoy
-                if (inicioDate < limiteInicio) {
-                    Swal.fire({
-                        icon: 'warning',
-                        title: 'Fecha inválida',
-                        text: 'La fecha de inicio no puede ser mayor a 1 mes antes de hoy.',
-                    });
-                    $("#txt_fecha_inicio").val("");
-                    return false;
-                }
+            if (!fechaInicio || !fechaFin) {
+                $("#btn_buscar").prop("disabled", true);
+                return;
             }
 
-            if (fechaFin) {
-                let finDate = new Date(fechaFin);
-                let limiteFin = new Date(fechaInicio);
-                limiteFin.setMonth(limiteFin.getMonth() + 1);
+            let inicioDate = new Date(fechaInicio);
+            let finDate = new Date(fechaFin);
 
-                // Validar que fecha fin no sea mayor a hoy
-                if (finDate > hoy) {
-                    Swal.fire({
-                        icon: 'warning',
-                        title: 'Fecha inválida',
-                        text: 'La fecha de fin no puede ser mayor a la fecha actual.',
-                    });
-                    $("#txt_fecha_fin").val("");
-                    return false;
-                }
-
-                // Validar que fin no esté a más de 1 mes de la fecha inicio
-                if (fechaInicio && finDate > limiteFin) {
-                    Swal.fire({
-                        icon: 'warning',
-                        title: 'Fecha inválida',
-                        text: 'La fecha de fin no puede superar un mes desde la fecha de inicio.',
-                    });
-                    $("#txt_fecha_fin").val("");
-                    return false;
-                }
+            if (inicioDate > finDate) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Fechas inválidas',
+                    text: 'La fecha de inicio no puede ser mayor que la fecha final.'
+                });
+                $("#btn_buscar").prop("disabled", true);
+            } else {
+                $("#btn_buscar").prop("disabled", false);
             }
+        }
 
+        // Validar que rango sea máximo 1 mes
+        function validarRangoUnMes() {
+            let fechaInicio = $("#txt_fecha_inicio").val();
+            let fechaFin = $("#txt_fecha_fin").val();
+
+            let inicioDate = new Date(fechaInicio);
+            let finDate = new Date(fechaFin);
+
+            const diffTime = Math.abs(finDate - inicioDate);
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+            if (diffDays > 31) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Rango inválido',
+                    text: 'El rango de fechas para buscar no puede ser mayor a 31 días.'
+                });
+                return false;
+            }
             return true;
         }
     });
+
 
 
 
@@ -166,19 +185,37 @@ if (isset($_GET['_id'])) {
         let txt_fecha_fin = $('#txt_fecha_fin').val();
         let ddl_departamentos = $('#ddl_departamentos').val();
 
-        if (txt_fecha_inicio && txt_fecha_fin && ddl_departamentos) {
-            parametros = {
-                'txt_fecha_inicio': txt_fecha_inicio,
-                'txt_fecha_fin': txt_fecha_fin,
-                'ddl_departamentos': ddl_departamentos,
-            };
-
-            cargar_reporte_atributos('<?= $_id ?>', parametros);
-
-        } else {
+        if (!txt_fecha_inicio || !txt_fecha_fin || !ddl_departamentos) {
             alert("Por favor, complete todos los campos obligatorios.");
+            return;
         }
+
+        // Validar rango máximo de 31 días
+        let inicioDate = new Date(txt_fecha_inicio);
+        let finDate = new Date(txt_fecha_fin);
+
+        const diffTime = Math.abs(finDate - inicioDate);
+        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+        if (diffDays > 31) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Rango inválido',
+                text: 'El rango de fechas no puede ser mayor a 31 días.'
+            });
+            return; // Evita ejecutar la búsqueda
+        }
+
+        // Si pasa la validación, ejecuta la búsqueda
+        let parametros = {
+            'txt_fecha_inicio': txt_fecha_inicio,
+            'txt_fecha_fin': txt_fecha_fin,
+            'ddl_departamentos': ddl_departamentos,
+        };
+
+        cargar_reporte_atributos('<?= $_id ?>', parametros);
     }
+
 
     function control_acceso_reporte() {
         $.ajax({
@@ -198,7 +235,7 @@ if (isset($_GET['_id'])) {
     }
 
     function cargar_selects2() {
-        url_departamentosC = '../controlador/TALENTO_HUMANO/th_departamentosC.php?buscar=true';
+        url_departamentosC = '../controlador/TALENTO_HUMANO/th_departamentosC.php?buscar_departamento=true';
         cargar_select2_url('ddl_departamentos', url_departamentosC);
     }
 </script>
@@ -229,9 +266,32 @@ if (isset($_GET['_id'])) {
         <div class="row">
             <div class="col-xl-12 mx-auto">
                 <div class="card border-top border-0 border-4 border-primary">
+
                     <div class="card-body p-4">
+                        <div class="card-title d-flex align-items-center">
+
+                            <div><i class="bx bxs-user me-1 font-22 text-primary"></i>
+                            </div>
+                            <h5 class="mb-0 text-primary">
+                                <?php
+                                if ($_id == '') {
+                                    echo 'Reporte';
+                                } else {
+                                    echo 'Reporte';
+                                }
+                                ?>
+                            </h5>
+
+                            <div class="row m-2">
+                                <div class="col-sm-12">
+                                    <a href="../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_reportes" class="btn btn-outline-dark btn-sm"><i class="bx bx-arrow-back"></i> Regresar</a>
+                                </div>
+                            </div>
+                        </div>
 
                         <div class="card">
+
+
                             <div class="card-body p-2">
 
                                 <div class="row pt-1">
@@ -261,7 +321,7 @@ if (isset($_GET['_id'])) {
                                             <button class="btn btn-success btn-sm px-3" onclick="exportar_excel();" type="button">
                                                 <i class='bx bx-file'></i> Exportar Excel
                                             </button>
-                                            <button class="btn btn-primary btn-sm px-3" onclick="buscar_fechas();" type="button">
+                                            <button id="btn_buscar" class="btn btn-primary btn-sm px-3" onclick="buscar_fechas();" type="button">
                                                 <i class='bx bx-search'></i> Buscar
                                             </button>
                                         </div>

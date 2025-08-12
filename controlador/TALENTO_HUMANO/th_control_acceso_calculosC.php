@@ -3,6 +3,7 @@
 date_default_timezone_set('America/Guayaquil');
 
 require_once(dirname(__DIR__, 2) . '/modelo/TALENTO_HUMANO/th_control_acceso_calculosM.php');
+require_once(dirname(__DIR__, 2) . '/modelo/TALENTO_HUMANO/th_reporte_camposM.php');
 require_once(dirname(__DIR__, 2) . '/lib/spout_excel/vendor/box/spout/src/Spout/Autoloader/autoload.php');
 
 $controlador = new th_control_acceso_calculosC();
@@ -21,38 +22,101 @@ if (isset($_GET['reporte'])) {
 }
 
 if (isset($_GET['descargar_excel'])) {
-    echo ($controlador->descargar_excel());
-}
+    $parametros = [
+        'txt_fecha_inicio' => $_GET['txt_fecha_inicio'] ?? '',
+        'txt_fecha_fin' => $_GET['txt_fecha_fin'] ?? '',
+        'ddl_departamentos' => $_GET['ddl_departamentos'] ?? '',
+        '_id' => $_GET['_id'] ?? '',
 
+    ];
+    $controlador->descargar_excel('reporte.xlsx', $parametros, $encabezado);
+    // El exit está dentro de la función, pero puedes poner otro aquí si quieres
+    exit();
+}
 
 class th_control_acceso_calculosC
 {
     private $modelo;
+    private $encabezados;
 
     function __construct()
     {
         $this->modelo = new th_control_acceso_calculosM();
+        $this->encabezados = new th_reporte_camposM();
     }
 
     //Usa para el boton de descargar Excel
-    function descargar_excel($nombreArchivo = 'example.xlsx', $datos = '')
+    function descargar_excel($nombreArchivo = 'Reporte.xlsx', $parametros = [])
     {
-        //////////////////////////////////////////////////////////
-        //aqui modificar de acuerdo a  las necesidades
-        ////////////////////////////////////////////////////////////
-        $datos = $this->modelo->listar();
+        $txt_fecha_inicio   = $parametros['txt_fecha_inicio'] ?? '';
+        $txt_fecha_fin      = $parametros['txt_fecha_fin'] ?? '';
+        $ddl_departamentos  = $parametros['ddl_departamentos'] ?? '';
+        $id                 = $parametros['_id'] ?? '';
 
-        // Crear el writer para el archivo Excel
-        $writer = WriterEntityFactory::createXLSXWriter();
+        // Obtener lista de encabezados desde la BD (array de objetos o arrays)
+        $listaEncabezados = $this->encabezados->listar_reporte_campos($id);
 
-        // Preparar para la descarga en el navegador
-        header('Content-Disposition: attachment; filename="' . $nombreArchivo . '"');
+        // Crear array plano solo con los títulos (encabezados)
+        $encabezado = [];
+        foreach ($listaEncabezados as $item) {
+            $encabezado[] = is_object($item) ? $item->nombre_encabezado : $item['nombre_encabezado'];
+        }
+
+        // Mapa de encabezados a claves reales en datos
+        $mapaClaveDato = [
+            'APELLIDOS' => 'apellidos',
+            'NOMBRES' => 'nombres',
+            'Empleado' => 'empleado',
+            'Cedula' => 'cedula',
+            'Correo Institucional' => 'correo_institucional',
+            'Departamento' => 'departamento',
+            'Dia' => 'dia',
+            'Fecha' => 'fecha',
+            'Horario Contrato' => 'horario_contrato',
+            'Turno' => 'turno_nombre',
+            'Entrada Inicio Turno' => 'entrada_hora_inicio_turno',
+            'Entrada Fin Turno' => 'entrada_hora_fin_turno',
+            'RegEntrada' => 'regentrada',
+            'Hora Entrada' => 'hora_entrada',
+            'Hora Ajustada' => 'hora_ajustada',
+            'Atrasos' => 'atrasos',
+            'Ausente' => 'ausente',
+            'Salida Inicio Turno' => 'salida_hora_inicio_turno',
+            'Salida Fin Turno' => 'salida_hora_fin_turno',
+            'RegSalida' => 'regsalida',
+            'Hora Salida' => 'hora_salida',
+            'Salidas Temprano' => 'salidas_temprano',
+            'Dias Trabajados' => 'dias_trabajados',
+            'Cumplimiento de jornada (8 horas)' => 'cumple_jornada',
+            'Horas faltantes por cumplir jornada' => 'horas_faltantes',
+            'Horas excedentes' => 'horas_excedentes',
+            'SalidasTemprano' => 'salidas_temprano',
+            'Suplem 25%' => 'horas_suplementarias',
+            'Extra 100%' => 'horas_extraordinarias',
+        ];
+
+        // Obtener datos filtrados de acuerdo a parámetros
+        $datos = $this->modelo->listar_asistencia_por_fecha_departamento(
+            $txt_fecha_inicio,
+            $txt_fecha_fin,
+            $ddl_departamentos
+        );
+
+        // Limpiar buffer para evitar errores al descargar
+        if (ob_get_length()) {
+            ob_end_clean();
+        }
+
+        // Preparar headers para descarga Excel
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment; filename="' . $nombreArchivo . '"');
+        header('Cache-Control: max-age=0');
 
-        // Abre el archivo en modo descarga en el navegador
+        // Crear escritor XLSX (Spout)
+        $writer = WriterEntityFactory::createXLSXWriter();
         $writer->openToBrowser($nombreArchivo);
 
-        // Crear un estilo para la cabecera
+        // Estilo para encabezado
         $estilo = (new StyleBuilder())
             ->setFontBold()
             ->setFontSize(12)
@@ -61,161 +125,80 @@ class th_control_acceso_calculosC
             ->setCellAlignment(CellAlignment::CENTER)
             ->build();
 
-        // Crear y agregar la fila de encabezado
-        $encabezado = [
-            'APELLIDOS',
-            'NOMBRES',
-            'Empleado',
-            'Cedula',
-            'Correo Institucional',
-            'Departamento',
-            'Dia',
-            'Fecha',
-            'Dias Trabajados',
-            'Horario Contrato',
-            'Hora Entrada',
-            'Hora Salida',
-            'RegEntrada',
-            'RegSalida',
-            'Cumplimiento de jornada (8 horas)',
-            'Horas faltantes por cumplir jornada',
-            'Horas excedentes',
-            'SalidasTemprano',
-            'Atrasos',
-            'Ausente',
-            'Suplem 25%',
-            'Extra 100%',
+        // Crear fila encabezado con estilo
+        $cells = [];
+        foreach ($encabezado as $titulo) {
+            $cells[] = WriterEntityFactory::createCell($titulo);
+        }
+        $writer->addRow(WriterEntityFactory::createRow($cells, $estilo));
 
-        ];
-
-        $fila_encabezado = WriterEntityFactory::createRowFromArray($encabezado, $estilo);
-        $writer->addRow($fila_encabezado);
-
-        $horarios = array(
-            array('Departamento' => 'Docentes', 'hora_entrada' => '07:00', 'hora_salida' => '15:30'),
-            array('Departamento' => 'Dece', 'hora_entrada' => '07:00', 'hora_salida' => '15:30'),
-            array('Departamento' => 'Servicios Generales', 'hora_entrada' => '07:00', 'hora_salida' => '15:30'),
-            array('Departamento' => 'Administrativos', 'hora_entrada' => '07:00', 'hora_salida' => '15:30'),
-            array('Departamento' => 'TI', 'hora_entrada' => '07:00', 'hora_salida' => '15:30'),
-            array('Departamento' => 'Salud', 'hora_entrada' => '07:00', 'hora_salida' => '15:30'),
-        );
-
-        $hora_entrada = '0';
-        $hora_salida = '0';
-        $hora_entrada_acc = '0';
-        $hora_salida_acc = '0';
-
-        // Procesar cada fila de datos y agregarla a la hoja de cálculo
+        // Agregar datos filas filtradas según encabezados
         foreach ($datos as $dato) {
+            $fila_array = (array) $dato;
+            $fila_filtrada = [];
 
-            $hora_entrada = $dato['hora_entrada'];
-            $hora_salida = $dato['hora_salida'];
-            $hora_entrada_acc = $dato['hora_entrada_acc'];
-            $hora_salida_acc = $dato['hora_salida_acc'];
-
-            $salida = ($this->calcular_jornada($hora_entrada, $hora_salida, $hora_entrada_acc, $hora_salida_acc));
-
-            $extra_100 = '';
-            if (($dato['dia_nombre']) == 'Sábado' || ($dato['dia_nombre']) == 'Domingo') {
-                $extra_100 = $salida['duracion_programada'];
+            foreach ($encabezado as $tituloEncabezado) {
+                $claveDato = $mapaClaveDato[$tituloEncabezado] ?? null;
+                $fila_filtrada[] = $claveDato ? ($fila_array[$claveDato] ?? '') : '';
             }
 
-            // Crear una fila de datos en el mismo orden que los encabezados
-            $filas_datos = [
-                $dato['primer_apellido'] . ' ' . $dato['segundo_apellido'], // APELLIDOS
-                $dato['primer_nombre'] . ' ' . $dato['segundo_nombre'], // NOMBRES
-                $dato['primer_apellido'] . ' ' . $dato['segundo_apellido'] . ' ' . $dato['primer_nombre'] . ' ' . $dato['segundo_nombre'], // EMPLEADO
-                $dato['cedula'], // Cedula
-                $dato['correo'], // Correo Institucional
-                $dato['nombre_departamento'], // Departamento
-                $dato['dia_nombre'], // Dia
-                $dato['fecha'], // Fecha
-                '1', // Dias Trabajados
-                $this->minutos_a_horas($dato['hora_entrada']) . ' - ' . $this->minutos_a_horas($dato['hora_salida']), // Horario Contrato
-                $this->minutos_a_horas($dato['hora_entrada']), // Hora Entrada
-                $this->minutos_a_horas($dato['hora_salida']), // Hora Salida
-                $this->minutos_a_horas($dato['hora_entrada_acc']), // RegEntrada
-                $this->minutos_a_horas($dato['hora_salida_acc']), // RegSalida
-                $salida['cumplimiento_jornada'], // Cumplimiento de jornada (8 horas)
-                $salida['horas_faltantes_format'], // Horas faltantes por cumplir jornada
-                $salida['horas_excedentes'], // Horas excedentes
-                $salida['salida_temprano'], // Salidas Temprano
-                $salida['atrasos'], // Atrasos
-                'Ausente',
-                $salida['sumplementaria'], // Suplem 25%
-                $extra_100, // Extra 100%
-            ];
-
-            // Crear y agregar la fila de datos
-            $fila_datos = WriterEntityFactory::createRowFromArray($filas_datos);
-            $writer->addRow($fila_datos);
+            $writer->addRow(WriterEntityFactory::createRowFromArray($fila_filtrada));
         }
 
-        // Cerrar el writer
         $writer->close();
+        exit();
     }
 
-    function control_acceso_reporte($parametros)
+
+
+    public function control_acceso_reporte($parametros)
     {
         $txt_fecha_inicio = $parametros['txt_fecha_inicio'] ?? '';
         $txt_fecha_fin = $parametros['txt_fecha_fin'] ?? '';
         $ddl_departamentos = $parametros['ddl_departamentos'] ?? '';
 
+        // Obtener datos del modelo usando BaseModel
+        $datos = $this->modelo->listar_asistencia_por_fecha_departamento($txt_fecha_inicio, $txt_fecha_fin, $ddl_departamentos);
 
-        //////////////////////////////////////////////////////////
-        //aqui modificar de acuerdo a  las necesidades
-        ////////////////////////////////////////////////////////////
-
-        //Antes
-        // $datos = $this->modelo->control_acceso_departamento($txt_fecha_inicio, $txt_fecha_fin, $ddl_departamentos);
-
-        //como deberia estar
-
-        $datos = $this->modelo->listar($txt_fecha_inicio, $txt_fecha_fin, $ddl_departamentos); // y las fechas con where
-
-        $filas_datos = []; // Array para almacenar todas las filas de datos
+        $filas_datos = [];
 
         foreach ($datos as $dato) {
-            $salida = $this->calcular_jornada(
-                $dato['hora_entrada'],
-                $dato['hora_salida'],
-                $dato['hora_entrada_acc'],
-                $dato['hora_salida_acc']
-            );
-
-            $extra_100 = ($dato['dia_nombre'] == 'Sábado' || $dato['dia_nombre'] == 'Domingo')
-                ? $salida['duracion_programada']
-                : '';
-
-            // Crear un array asociativo con clave-valor
             $fila_datos = [
-                'APELLIDOS' => $dato['primer_apellido'] . ' ' . $dato['segundo_apellido'],
-                'NOMBRES' => $dato['primer_nombre'] . ' ' . $dato['segundo_nombre'],
-                'Empleado' => $dato['primer_apellido'] . ' ' . $dato['segundo_apellido'] . ' ' . $dato['primer_nombre'] . ' ' . $dato['segundo_nombre'],
+                'APELLIDOS' => $dato['apellidos'],
+                'NOMBRES' => $dato['nombres'],
+                'Empleado' => $dato['empleado'],
                 'Cedula' => $dato['cedula'],
-                'Correo Institucional' => $dato['correo'],
-                'Departamento' => $dato['nombre_departamento'],
-                'Dia' => $dato['dia_nombre'],
+                'Correo Institucional' => $dato['correo_institucional'],
+                'Departamento' => $dato['departamento'],
+                'Dia' => $dato['dia'],
                 'Fecha' => $dato['fecha'],
-                'Dias Trabajados' => '1',
-                'Horario Contrato' => $this->minutos_a_horas($dato['hora_entrada']) . ' - ' . $this->minutos_a_horas($dato['hora_salida']),
-                'Hora Entrada' => $this->minutos_a_horas($dato['hora_entrada']),
-                'Hora Salida' => $this->minutos_a_horas($dato['hora_salida']),
-                'RegEntrada' => $this->minutos_a_horas($dato['hora_entrada_acc']),
-                'RegSalida' => $this->minutos_a_horas($dato['hora_salida_acc']),
-                'Cumplimiento de jornada (8 horas)' => $salida['cumplimiento_jornada'],
-                'Horas faltantes por cumplir jornada' => $salida['horas_faltantes_format'],
-                'Horas excedentes' => $salida['horas_excedentes'],
-                'SalidasTemprano' => $salida['salida_temprano'],
-                'Atrasos' => $salida['atrasos'],
-                'Ausente' => 'Ausente',
-                'Suplem 25%' => $salida['sumplementaria'],
-                'Extra 100%' => $extra_100,
+                'Horario Contrato' => $dato['horario_contrato'],
+                'Turno' => $dato['turno_nombre'],
+                'Entrada Inicio Turno' => $dato['entrada_hora_inicio_turno'],
+                'Entrada Fin Turno' => $dato['entrada_hora_fin_turno'],
+                'RegEntrada' => $dato['regentrada'],
+                'Hora Entrada' => $dato['hora_entrada'],
+                'Hora Ajustada' => $dato['hora_ajustada'],
+                'Atrasos' => $dato['atrasos'],
+                'Ausente' => $dato['ausente'],
+                'Salida Inicio Turno' => $dato['salida_hora_inicio_turno'],
+                'Salida Fin Turno' => $dato['salida_hora_fin_turno'],
+                'RegSalida' => $dato['regsalida'],
+                'Hora Salida' => $dato['hora_salida'],
+                'Salidas Temprano' => $dato['salidas_temprano'],
+                'Dias Trabajados' => $dato['dias_trabajados'],
+                'Cumplimiento de jornada (8 horas)' => $dato['cumple_jornada'],
+                'Horas faltantes por cumplir jornada' => $dato['horas_faltantes'],
+                'Horas excedentes' => $dato['horas_excedentes'],
+                'SalidasTemprano' => $dato['salidas_temprano'],
+                'Suplem 25%' => $dato['horas_suplementarias'],
+                'Extra 100%' => $dato['horas_extraordinarias'],
+
             ];
 
-            $filas_datos[] = $fila_datos; // Agregar fila al array principal
+            $filas_datos[] = $fila_datos;
         }
 
-        return $filas_datos; // Retornar el array con todas las filas
+        return $filas_datos;
     }
 }
