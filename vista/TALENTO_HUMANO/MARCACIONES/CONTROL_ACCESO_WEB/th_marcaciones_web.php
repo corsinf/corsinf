@@ -87,8 +87,19 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                 {
                     data: null,
                     render: function(data, type, item) {
-                        href = `../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_marcaciones_web_registrar&_id=${item._id}`;
-                        return `<a href="${href}"><u>${item.nombre_persona}</u></a>`;
+                        salida = fecha_formateada(item.fecha_creacion);
+                        return `${salida}`;
+                    }
+                },
+                {
+                    data: null,
+                    render: function(data, type, item) {
+                        if (item.tipo_origen == 'WEB_MANUAL') {
+                            return `${item.nombre_persona}`;
+                        } else {
+                            href = `../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_marcaciones_web_registrar&_id=${item._id}`;
+                            return `<a href="${href}"><u>${item.nombre_persona}</u></a>`;
+                        }
                     }
                 },
                 {
@@ -128,7 +139,7 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                 },
             ],
             order: [
-                [2, 'desc']
+                [1, 'desc']
             ],
             columnDefs: [{
                 targets: 0,
@@ -407,8 +418,9 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                                                         </label>
                                                     </div>
                                                 </th>
+                                                <th>Creado</th>
                                                 <th>Persona</th>
-                                                <th>Fecha/Hora</th>
+                                                <th>Marcación</th>
                                                 <th>Estado</th>
                                                 <th>Observación</th>
                                                 <th>Triangulación</th>

@@ -13,9 +13,15 @@ $fecha_actual = date("Y-m-d");
 
 // $parametros = $proceso->calculo_persona_control_acceso(2000, '2025-06-27');
 
+
+//Funcion para guardar de fora masiva
 guardar_log('[INF] Inicio Inserción Masiva ', ENV_DEV_TH_DATABASE);
 $parametros = $proceso->carga_masiva($fecha_actual);
 guardar_log($parametros, ENV_DEV_TH_DATABASE);
+
+//Para realizar pruebas individuales
+// $parametros = $proceso->calculo_persona_control_acceso(60, $fecha_actual, true);
+
 
 print_r($parametros);
 exit();

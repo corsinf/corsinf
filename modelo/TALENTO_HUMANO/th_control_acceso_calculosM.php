@@ -80,6 +80,7 @@ class th_control_acceso_calculosM extends BaseModel
     {
         $sql = 
         "SELECT 
+            th_asi_id AS _id,
             th_asi_apellidos AS apellidos,
             th_asi_nombres AS nombres,
             th_asi_empleado AS empleado,

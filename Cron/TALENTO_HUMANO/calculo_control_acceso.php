@@ -202,7 +202,7 @@ class calculo_persona
         return $datos;
     }
 
-    function obtener_registro_salida($th_per_id, $fecha = null, $inicio = null, $fin = null)
+    function obtener_registro_salida($th_per_id, $fecha = null, $inicio = null, $fin = null, $fin_hora_entrada)
     {
         //No eliminar, se usa en el futuro
         // $sql =
@@ -219,18 +219,44 @@ class calculo_persona
         // $datos = $this->datos($sql);
         // return $datos;
 
-        $sql =
-            "SELECT TOP 1
-                th_acc_fecha_hora
-            FROM
-                th_control_acceso
-            WHERE
-                th_per_id = $th_per_id
-                AND CAST(th_acc_fecha_hora AS DATE) = '$fecha'
-            ORDER BY
-                th_acc_fecha_hora DESC;";
+        //No eliminar es para uso libre
+        // $sql =
+        //     "SELECT TOP 1
+        //         th_acc_fecha_hora
+        //     FROM
+        //         th_control_acceso
+        //     WHERE
+        //         th_per_id = $th_per_id
+        //         AND CAST(th_acc_fecha_hora AS DATE) = '$fecha'
+        //     ORDER BY
+        //         th_acc_fecha_hora DESC;";
 
-        $datos = $this->datos($sql);
+        // $datos = $this->datos($sql);
+        // return $datos;
+
+
+        $sql =
+            "SELECT
+                th_acc_fecha_hora = MIN(CASE
+                                WHEN CAST(th_acc_fecha_hora AS TIME) > '$fin_hora_entrada'
+                                THEN th_acc_fecha_hora
+                            END)
+            FROM th_control_acceso
+            WHERE th_per_id = $th_per_id
+                AND CAST(th_acc_fecha_hora AS DATE) = '$fecha'
+            HAVING COUNT(*) >= 2;";
+
+        $datos = $this->datos($sql) ?? null;
+
+        if (
+            empty($datos) ||
+            !isset($datos[0]['th_acc_fecha_hora']) ||
+            $datos[0]['th_acc_fecha_hora'] === null ||
+            $datos[0]['th_acc_fecha_hora'] === ''
+        ) {
+            return null;
+        }
+
         return $datos;
     }
 
@@ -314,7 +340,7 @@ class calculo_persona
         return $datos;
     }
 
-    function calculo_persona_control_acceso($th_per_id, $fecha)
+    function calculo_persona_control_acceso($th_per_id, $fecha, $desarrollo = false)
     {
         $turno = $this->obtener_turno_programado($th_per_id, $fecha);
         $turno = $turno[0] ?? null;
@@ -540,7 +566,7 @@ class calculo_persona
         //////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         // Obtener registro real de salida
-        $salida = $this->obtener_registro_salida($th_per_id, $inicio_salida_turno, $fin_salida_turno);
+        $salida = $this->obtener_registro_salida($th_per_id, $inicio_salida_turno, null, null, $fin_hora_turno);
         // print_r($salida);
         // exit();
         // die();
@@ -589,6 +615,7 @@ class calculo_persona
             $tolerancia_fin_descanso,
             $hora_ajustada_str,
             $hora_salida_str,
+            $fin_hora_turno,
         );
 
         // print_r($resultado_descanso); exit(); die();
@@ -646,87 +673,89 @@ class calculo_persona
 
 
         // Resultados
+        if ($desarrollo) {
+            echo "<br>";
+            echo "<strong>Información adicional: </strong><br>";
+            echo "Apellidos: $apellidos<br>";
+            echo "Nombres: $nombres<br>";
+            echo "Empleado: $empleado<br>";
+            echo "Cédula: $cedula<br>";
+            echo "Correo: $correo<br><br>";
 
-        // echo "<br>";
-        // echo "<strong>Información adicional: </strong><br>";
-        // echo "Apellidos: $apellidos<br>";
-        // echo "Nombres: $nombres<br>";
-        // echo "Empleado: $empleado<br>";
-        // echo "Cédula: $cedula<br>";
-        // echo "Correo: $correo<br><br>";
+            echo "Fecha inicio programación: $pro_fecha_inicio<br>";
+            echo "Fecha fin programación: $pro_fecha_fin<br>";
+            echo "Departamento: $departamento_nombre<br>";
+            echo "Prioridad: $prioridad<br>";
+            echo "Horario: $horario_nombre<br>";
+            echo "Turno: $turno_nombre<br>";
 
-        // echo "Fecha inicio programación: $pro_fecha_inicio<br>";
-        // echo "Fecha fin programación: $pro_fecha_fin<br>";
-        // echo "Departamento: $departamento_nombre<br>";
-        // echo "Prioridad: $prioridad<br>";
-        // echo "Horario: $horario_nombre<br>";
-        // echo "Turno: $turno_nombre<br>";
+            echo "<br>";
+            echo "<strong>Datos del turno entrada: </strong><br>";
+            echo "Hora inicio: " . $inicio_hora_turno_salida . "<br>";
+            echo "Hora fin: " . $fin_hora_turno_salida . "<br>";
+            echo "Hora marcacion: " . $hora_original . "<br>";
+            echo "Hora entrada : " . $hora_entrada_dt . "<br>";
+            echo "Hora ajustada: " . $hora_ajustada_str . "<br>"; //La hora con la que se hace el calculo de trabajo de 8 horas
+            echo "Atrasado: " . $atrasado . "<br>";
+            echo "Ausente: " . $ausente . "<br>";
 
-        // echo "<br>";
-        // echo "<strong>Datos del turno entrada: </strong><br>";
-        // echo "Hora inicio: " . $inicio_hora_turno_salida . "<br>";
-        // echo "Hora fin: " . $fin_hora_turno_salida . "<br>";
-        // echo "Hora marcacion: " . $hora_original . "<br>";
-        // echo "Hora entrada : " . $hora_entrada_dt . "<br>";
-        // echo "Hora ajustada: " . $hora_ajustada_str . "<br>"; //La hora con la que se hace el calculo de trabajo de 8 horas
-        // echo "Atrasado: " . $atrasado . "<br>";
-        // echo "Ausente: " . $ausente . "<br>";
+            echo "<br>";
+            echo "<strong>Datos del turno salida: </strong><br>";
+            echo "Hora inicio: " . $inicio_salida_turno_salida . "<br>";
+            echo "Hora fin: " . $fin_salida_turno_salida . "<br>";
+            echo "Hora marcacion salida: " . $hora_salida_original . "<br>";
+            echo "Hora marcacion salida str: " . $hora_salida_str . "<br>";
+            echo "Hora salida: " . $hora_salida_dt_str . "<br>";
+            echo "Salida antes de hora: " . $salida_tarde . "<br>";
+            echo "Ausente salida: " . $salida_ausente . "<br>";
 
-        // echo "<br>";
-        // echo "<strong>Datos del turno salida: </strong><br>";
-        // echo "Hora inicio: " . $inicio_salida_turno_salida . "<br>";
-        // echo "Hora fin: " . $fin_salida_turno_salida . "<br>";
-        // echo "Hora marcacion salida: " . $hora_salida_original . "<br>";
-        // echo "Hora marcacion salida str: " . $hora_salida_str . "<br>";
-        // echo "Hora salida: " . $hora_salida_dt_str . "<br>";
-        // echo "Salida antes de hora: " . $salida_tarde . "<br>";
-        // echo "Ausente salida: " . $salida_ausente . "<br>";
+            echo "<br>";
+            echo "<strong>Datos de descanso: </strong><br>";
+            echo "hora_inicio_descanso: " . $resultado_descanso['hora_inicio_descanso'] . "<br>";
+            echo "hora_fin_descanso: " . $resultado_descanso['hora_fin_descanso'] . "<br>";
+            echo "minutos_descanso: " . $resultado_descanso['minutos_descanso'] . "<br>";
+            echo "modo_descanso: " . $resultado_descanso['modo_descanso'] . "<br>";
 
-        // echo "<br>";
-        // echo "<strong>Datos de descanso: </strong><br>";
-        // echo "hora_inicio_descanso: " . $resultado_descanso['hora_inicio_descanso'] . "<br>";
-        // echo "hora_fin_descanso: " . $resultado_descanso['hora_fin_descanso'] . "<br>";
-        // echo "minutos_descanso: " . $resultado_descanso['minutos_descanso'] . "<br>";
-        // echo "modo_descanso: " . $resultado_descanso['modo_descanso'] . "<br>";
+            echo "<br>";
+            echo "<strong>Resultado de Justificación:</strong><br>";
+            echo "Justificado: " . $justificacion_arr['justificado'] . "<br>";
+            echo "Tipo de Justificación: " . ($justificacion_arr['tipo_justificacion'] ?? 'N/A') . "<br>";
+            echo "Motivo: " . ($justificacion_arr['justificacion'] ?? 'N/A') . "<br>";
+            echo "Fecha Inicio: " . ($justificacion_arr['fecha_inicio'] ?? 'N/A') . "<br>";
+            echo "Fecha Fin: " . ($justificacion_arr['fecha_fin'] ?? 'N/A') . "<br>";
+            echo "Horas Justificadas: " . $justificacion_arr['horas_justificadas'] . "<br>";
+            // echo "Minutos Justificados: " . $justificacion_arr['minutos_justificados'] . "<br>";
+            echo "¿Es Rango?: " . ($justificacion_arr['es_rango'] ? 'Sí' : 'No') . "<br>";
+            echo "Asignado a: " . ($justificacion_arr['tipo_asignacion'] ?? 'N/A') . "<br>";
 
-        // echo "<br>";
-        // echo "<strong>Resultado de Justificación:</strong><br>";
-        // echo "Justificado: " . $justificacion_arr['justificado'] . "<br>";
-        // echo "Tipo de Justificación: " . ($justificacion_arr['tipo_justificacion'] ?? 'N/A') . "<br>";
-        // echo "Motivo: " . ($justificacion_arr['justificacion'] ?? 'N/A') . "<br>";
-        // echo "Fecha Inicio: " . ($justificacion_arr['fecha_inicio'] ?? 'N/A') . "<br>";
-        // echo "Fecha Fin: " . ($justificacion_arr['fecha_fin'] ?? 'N/A') . "<br>";
-        // echo "Horas Justificadas: " . $justificacion_arr['horas_justificadas'] . "<br>";
-        // // echo "Minutos Justificados: " . $justificacion_arr['minutos_justificados'] . "<br>";
-        // echo "¿Es Rango?: " . ($justificacion_arr['es_rango'] ? 'Sí' : 'No') . "<br>";
-        // echo "Asignado a: " . ($justificacion_arr['tipo_asignacion'] ?? 'N/A') . "<br>";
-
-        // echo "<br>";
-        // echo "<strong>Horas de trabajo: </strong><br>";
-        // echo "Tiempo entrada-salida: " . $horas_trabajadas_arr['tiempo_entrada_salida'] . "<br>";
-        // echo "Post descanso: " . $horas_trabajadas_arr['tiempo_post_descanso'] . "<br>";
-        // echo "Post justificación: " . $horas_trabajadas_arr['tiempo_post_justificacion'] . "<br>";
-        // echo "Horas trabajadas finales: " . $horas_trabajadas_arr['horas_trabajadas'] . "<br>";
-        // echo "Horas excedentes: " . $horas_trabajadas_arr['horas_excedentes'] . "<br>";
-        // echo "Horas que debe trabajar: " . $horas_trabajadas_arr['horas_trabajo_hora'] . "<br>";
-        // echo "Horas faltantes: " . $horas_trabajadas_arr['horas_faltantes'] . "<br>";
-        // echo "Cumple jornada mínima: " . $horas_trabajadas_arr['cumple_horas_trabajadas'] . "<br>";
-        // echo "Tipo justificación: " . $horas_trabajadas_arr['tipo_justificacion'] . "<br>";
-        // echo "Minutos descanso: " . $horas_trabajadas_arr['minutos_descanso'] . "<br>";
-        // echo "Minutos justificados: " . $horas_trabajadas_arr['minutos_justificados'] . "<br>";
-        // echo "Es feriado: " . ($horas_trabajadas_arr['es_feriado'] == 1 ? 'SI' : 'NO') . "<br>";
+            echo "<br>";
+            echo "<strong>Horas de trabajo: </strong><br>";
+            echo "Tiempo entrada-salida: " . $horas_trabajadas_arr['tiempo_entrada_salida'] . "<br>";
+            echo "Post descanso: " . $horas_trabajadas_arr['tiempo_post_descanso'] . "<br>";
+            echo "Post justificación: " . $horas_trabajadas_arr['tiempo_post_justificacion'] . "<br>";
+            echo "Horas trabajadas finales: " . $horas_trabajadas_arr['horas_trabajadas'] . "<br>";
+            echo "Horas excedentes: " . $horas_trabajadas_arr['horas_excedentes'] . "<br>";
+            echo "Horas que debe trabajar: " . $horas_trabajadas_arr['horas_trabajo_hora'] . "<br>";
+            echo "Horas faltantes: " . $horas_trabajadas_arr['horas_faltantes'] . "<br>";
+            echo "Cumple jornada mínima: " . $horas_trabajadas_arr['cumple_horas_trabajadas'] . "<br>";
+            echo "Tipo justificación: " . $horas_trabajadas_arr['tipo_justificacion'] . "<br>";
+            echo "Minutos descanso: " . $horas_trabajadas_arr['minutos_descanso'] . "<br>";
+            echo "Minutos justificados: " . $horas_trabajadas_arr['minutos_justificados'] . "<br>";
+            echo "Es feriado: " . ($horas_trabajadas_arr['es_feriado'] == 1 ? 'SI' : 'NO') . "<br>";
 
 
-        // echo "¿Trabajó en feriado?: " . $horas_trabajadas_arr['trabajo_en_feriado'] . "<br>";
-        // echo "¿Trabajó con justificación?: " . $horas_trabajadas_arr['trabajo_con_justificacion'] . "<br>";
+            echo "¿Trabajó en feriado?: " . $horas_trabajadas_arr['trabajo_en_feriado'] . "<br>";
+            echo "¿Trabajó con justificación?: " . $horas_trabajadas_arr['trabajo_con_justificacion'] . "<br>";
 
-        // echo "<br>";
-        // echo "<strong>Horas de extra: </strong><br>";
-        // echo "Suplementarias: {$extras_arr['horas_suplementarias']}<br>";
-        // echo "Extras: {$extras_arr['horas_extras']}<br>";
-        // echo "Rango Suplementarias: {$extras_arr['rango_suplementarias']}<br>";
-        // echo "Rango Extras: {$extras_arr['rango_extras']}<br>";
+            echo "<br>";
+            echo "<strong>Horas de extra: </strong><br>";
+            echo "Suplementarias: {$extras_arr['horas_suplementarias']}<br>";
+            echo "Extras: {$extras_arr['horas_extras']}<br>";
+            echo "Rango Suplementarias: {$extras_arr['rango_suplementarias']}<br>";
+            echo "Rango Extras: {$extras_arr['rango_extras']}<br>";
 
+            exit();
+        }
 
         $parametros = [
             // Datos personales y generales
@@ -737,7 +766,7 @@ class calculo_persona
             'th_asi_cedula' => $cedula ?? '',
             'th_asi_correo_institucional' => $correo ?? '',
             'th_asi_departamento' => $departamento_nombre ?? '',
-            'th_asi_dia' => date('l', strtotime($fecha)),
+            'th_asi_dia' => $this->calcular_dia(strtotime($fecha)),
             'th_asi_fecha' => $fecha ?? '',
 
             // Programación y turno
@@ -968,7 +997,8 @@ class calculo_persona
         $tolerancia_inicio,
         $tolerancia_fin,
         $hora_ajustada_str,
-        $hora_salida_str
+        $hora_salida_str,
+        $fin_hora_turno_entrada
     ) {
         $salida_descanso = null;
         $regreso_descanso = null;
@@ -1005,7 +1035,7 @@ class calculo_persona
 
             // Obtener marcaciones reales dentro del rango
             $marcacion_inicio = $this->obtener_registro_entrada($th_per_id, $inicio_rango_str, $fin_rango_str);
-            $marcacion_fin = $this->obtener_registro_salida($th_per_id, $inicio_rango_str, $fin_rango_str);
+            $marcacion_fin = $this->obtener_registro_salida($th_per_id, $inicio_rango_str, null, null, $fin_hora_turno_entrada);
 
             if (!empty($marcacion_inicio) && !empty($marcacion_fin)) {
                 $salida_descanso = new DateTime($marcacion_inicio[0]['th_acc_fecha_hora']);
@@ -1527,5 +1557,28 @@ class calculo_persona
                 ";
 
         return $sql;
+    }
+
+    function calcular_dia($fecha)
+    {
+        $ingresar_fecha = strtotime($fecha);
+
+        $dias_ingles = date('l', $ingresar_fecha);
+        switch ($dias_ingles) {
+            case "Monday":
+                return "Lunes";
+            case 'Tuesday':
+                return "Martes";
+            case 'Wednesday':
+                return "Miércoles";
+            case 'Thursday':
+                return "Jueves";
+            case 'Friday':
+                return "Viernes";
+            case 'Saturday':
+                return "Sábado";
+            case 'Sunday':
+                return "Domingo";
+        }
     }
 }
