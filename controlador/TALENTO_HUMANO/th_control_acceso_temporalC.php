@@ -320,7 +320,7 @@ class th_control_acceso_temporalC
 
             array('campo' => 'th_act_fecha_modificacion', 'dato' => date('Y-m-d H:i:s')),
             array('campo' => 'th_act_puerto', 'dato' => $_SERVER['REMOTE_PORT'] ?? ''),
-            array('campo' => 'th_act_tipo_origen', 'dato' => 'WEB'),
+            array('campo' => 'th_act_tipo_origen', 'dato' => 'WEB_MANUAL'),
             array('campo' => 'th_act_server_name', 'dato' => $_SERVER['SERVER_NAME'] ?? ''),
             array('campo' => 'th_act_server_software', 'dato' => $_SERVER['SERVER_SOFTWARE'] ?? ''),
             array('campo' => 'th_act_server_protocol', 'dato' => $_SERVER['SERVER_PROTOCOL'] ?? ''),
@@ -334,8 +334,7 @@ class th_control_acceso_temporalC
             array('campo' => 'th_act_http_x_forwarded_for', 'dato' => $_SERVER['HTTP_X_FORWARDED_FOR'] ?? ''),
 
             array('campo' => 'th_act_observacion_aprobacion', 'dato' => $parametros['txt_descripcion'] ?? null),
-
-            array('campo' => 'th_act_tipo_origen', 'dato' => 'WEB_MANUAL'),
+            
             array('campo' => 'th_tri_origen', 'dato' => 'MANUAL'),
         );
 
