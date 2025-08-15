@@ -7,695 +7,679 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']) ?? '';
 <script src="../js/GENERAL/operaciones_generales.js"></script>
 
 
-<script>
-  function redireccionar(url_redireccion) {
-    url_click = "inicio.php?mod=<?= $modulo_sistema ?>&acc=" + url_redireccion;
-    window.location.href = url_click;
-  }
 
-  function notificacionesAsistencia() {
-
-    $.ajax({
-      url: '../controlador/TALENTO_HUMANO/th_indexC.php?notificaciones_asistencia=true',
-      type: 'get',
-      dataType: 'json',
-      success: function(response) {
-        console.log(response);
-      },
-      error: function(xhr, status, error) {
-        console.log('Status: ' + status);
-        console.log('Error: ' + error);
-        console.log('XHR Response: ' + xhr.responseText);
-        Swal.fire('', 'Error: ' + xhr.responseText, 'error');
-      }
-    });
-
-  }
-
-  function mostrarNotificacionAsistencia(mensajes) {
-    const $container = $('#notificationContainer');
-
-    // Limpiar notificaciones anteriores
-    $container.empty();
-
-    if (mensajes.length === 1) {
-      // Sin horario asignado
-      mostrarAlertaSinHorario(mensajes[0]);
-    } else if (mensajes.length >= 2) {
-      // Notificaciones de asistencia
-      mostrarAlertasAsistencia(mensajes);
-    }
-
-    // Actualizar contador
-    $('#alertCount').text(mensajes.length);
-  }
-
-  function mostrarAlertaSinHorario(mensaje) {
-    const alertHtml = `
-                <div class="alert alert-danger alert-compact border-0 shadow-sm" role="alert">
-                    <div class="d-flex align-items-start">
-                        <div class="alert-icon bg-danger bg-opacity-25">
-                            <i class="fas fa-exclamation-triangle text-danger"></i>
-                        </div>
-                        <div class="alert-content">
-                            <div class="alert-title text-danger">Sin Horario Asignado</div>
-                            <div class="alert-message">${mensaje}</div>
-                            <div class="alert-time">Ahora</div>
-                            <div class="alert-actions">
-                                <button class="btn btn-outline-danger btn-compact" onclick="contactarRRHH()">
-                                    <i class="fas fa-phone me-1"></i>RRHH
-                                </button>
-                                <button class="btn btn-outline-secondary btn-compact" onclick="cerrarNotificacion(this)">
-                                    <i class="fas fa-times"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            `;
-
-    $('#notificationContainer').html(alertHtml);
-  }
-
-  function mostrarAlertasAsistencia(mensajes) {
-    const $container = $('#notificationContainer');
-    let alertsHtml = '<div class="row g-3">';
-
-    $.each(mensajes, function(index, mensaje) {
-      const esEntrada = mensaje.toLowerCase().includes('entrada') || mensaje.toLowerCase().includes('desde las');
-      const esSalida = mensaje.toLowerCase().includes('salida') || mensaje.toLowerCase().includes('falta tiempo');
-
-      let borderClass = 'border-warning';
-      let bgClass = 'bg-warning';
-      let textClass = 'text-warning';
-      let iconClass = 'fa-clock';
-      let titulo = 'Notificación de Horario';
-      let timeAgo = '';
-      let badgeClass = 'bg-warning';
-
-      if (esEntrada) {
-        borderClass = 'border-danger';
-        bgClass = 'bg-danger';
-        textClass = 'text-danger';
-        iconClass = 'fa-sign-in-alt';
-        titulo = 'Entrada Tardía';
-        timeAgo = 'Hace 5h 38m';
-        badgeClass = 'bg-danger';
-      } else if (esSalida) {
-        borderClass = 'border-info';
-        bgClass = 'bg-info';
-        textClass = 'text-info';
-        iconClass = 'fa-sign-out-alt';
-        titulo = 'Próxima Salida';
-        timeAgo = 'En 1h 52m';
-        badgeClass = 'bg-info';
-      }
-
-      alertsHtml += `
-            <div class="col-md-6">
-                <div class="card h-400 ${borderClass} border-start border-4 shadow-sm">
-                <div class="card-body p-3">
-                    <!-- Header con icono y título -->
-                    <div class="d-flex align-items-center mb-2">
-                        <div class="me-3">
-                            <div class="rounded-circle ${bgClass} bg-opacity-10 d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
-                                <i class="fas ${iconClass} ${textClass} fs-5"></i>
-                            </div>
-                        </div>
-                        <div class="flex-grow-1">
-                            <h6 class="card-title mb-1 ${textClass} fw-bold">${titulo}</h6>
-                            <span class="badge ${badgeClass} bg-opacity-75 text-white small">${timeAgo}</span>
-                        </div>
-                        <button class="btn btn-sm btn-outline-secondary border-0" onclick="cerrarNotificacion(this)" title="Cerrar">
-                            <i class="fas fa-times"></i>
-                        </button>
-                    </div>
-                    
-                    <!-- Mensaje principal -->
-                    <div class="mb-3">
-                        <p class="card-text text-dark mb-0 fw-medium">${mensaje}</p>
-                    </div>
-                    
-                    <!-- Botones de acción -->
-                    <div class="d-flex gap-2 flex-wrap">
-                        ${esEntrada ? `
-                            <button class="btn btn-danger btn-sm flex-fill" onclick="marcarAsistencia()">
-                                <i class="fas fa-fingerprint me-1"></i>
-                                <span class="d-none d-sm-inline">Marcar</span>
-                            </button>
-                            <button class="btn btn-outline-secondary btn-sm flex-fill" onclick="justificarRetraso()">
-                                <i class="fas fa-edit me-1"></i>
-                                <span class="d-none d-sm-inline">Justificar</span>
-                            </button>
-                        ` : esSalida ? `
-                            <button class="btn btn-info btn-sm flex-fill" onclick="recordarSalida()">
-                                <i class="fas fa-bell me-1"></i>
-                                <span class="d-none d-sm-inline">Recordar</span>
-                            </button>
-                        ` : ''}
-                    </div>
-                </div>
-                </div>
-            </div>
-        `;
-    });
-
-    alertsHtml += '</div>';
-    $container.html(alertsHtml);
-  }
-
-  function mostrarNotificacionExito() {
-    const alertHtml = `
-                <div class="alert alert-success alert-compact border-0 shadow-sm" role="alert">
-                    <div class="d-flex align-items-start">
-                        <div class="alert-icon bg-success bg-opacity-25">
-                            <i class="fas fa-check text-success"></i>
-                        </div>
-                        <div class="alert-content">
-                            <div class="alert-title text-success">¡Todo en Orden!</div>
-                            <div class="alert-message">Tu asistencia está al día.</div>
-                            <div class="alert-time">Actualizado</div>
-                        </div>
-                    </div>
-                </div>
-            `;
-
-    $('#notificationContainer').html(alertHtml);
-    $('#alertCount').text('0');
-  }
-
-  // Funciones de acciones (mantienen la misma funcionalidad)
-  function marcarAsistencia() {
-    Swal.fire({
-      title: 'Marcar Asistencia',
-      text: '¿Deseas marcar tu asistencia ahora?',
-      icon: 'question',
-      showCancelButton: true,
-      confirmButtonColor: '#198754',
-      cancelButtonColor: '#6c757d',
-      confirmButtonText: '<i class="fas fa-fingerprint me-1"></i>Marcar',
-      cancelButtonText: 'Cancelar'
-    }).then((result) => {
-      if (result.isConfirmed) {
-        Swal.fire('¡Marcado!', 'Tu asistencia ha sido registrada.', 'success');
-      }
-    });
-  }
-
-  function justificarRetraso() {
-    Swal.fire({
-      title: 'Justificar Retraso',
-      input: 'textarea',
-      inputLabel: 'Motivo del retraso',
-      inputPlaceholder: 'Describe el motivo de tu retraso...',
-      showCancelButton: true,
-      confirmButtonText: 'Enviar Justificación',
-      cancelButtonText: 'Cancelar'
-    }).then((result) => {
-      if (result.isConfirmed && result.value) {
-        Swal.fire('¡Enviado!', 'Tu justificación ha sido registrada.', 'success');
-      }
-    });
-  }
-
-  function contactarRRHH() {
-    Swal.fire({
-      title: 'Contactar RRHH',
-      html: `
-                    <div class="text-start">
-                        <p><strong>Recursos Humanos</strong></p>
-                        <p><i class="fas fa-phone text-primary me-2"></i>+593 99 123 4567</p>
-                        <p><i class="fas fa-envelope text-primary me-2"></i>rrhh@empresa.com</p>
-                        <p><i class="fas fa-clock text-primary me-2"></i>Horario: 8:00 AM - 5:00 PM</p>
-                    </div>
-                `,
-      icon: 'info',
-      confirmButtonText: 'Entendido'
-    });
-  }
-
-  function recordarSalida() {
-    Swal.fire({
-      title: 'Recordatorio Configurado',
-      text: 'Te notificaremos 10 minutos antes de tu hora de salida.',
-      icon: 'success',
-      timer: 2000,
-      showConfirmButton: false
-    });
-  }
-
-  function cerrarNotificacion(elemento) {
-    const $alert = $(elemento).closest('.alert');
-    $alert.css({
-      'transition': 'opacity 0.3s ease',
-      'opacity': '0'
-    });
-
-    setTimeout(function() {
-      $alert.remove();
-      // Actualizar contador
-      const remainingAlerts = $('#notificationContainer .alert').length;
-      $('#alertCount').text(Math.max(0, remainingAlerts));
-    }, 300);
-  }
-
-  // Función principal que conecta con tu AJAX
-  function notificacionesAsistencia() {
-    $.ajax({
-      url: '../controlador/TALENTO_HUMANO/th_indexC.php?notificaciones_asistencia=true',
-      type: 'get',
-      dataType: 'json',
-      success: function(response) {
-        console.log(response);
-        mostrarNotificacionAsistencia(response);
-      },
-      error: function(xhr, status, error) {
-        console.log('Status: ' + status);
-        console.log('Error: ' + error);
-        console.log('XHR Response: ' + xhr.responseText);
-
-        const alertHtml = `
-                        <div class="alert alert-danger alert-compact border-0 shadow-sm" role="alert">
-                            <div class="d-flex align-items-start">
-                                <div class="alert-icon bg-danger bg-opacity-25">
-                                    <i class="fas fa-exclamation-circle text-danger"></i>
-                                </div>
-                                <div class="alert-content">
-                                    <div class="alert-title text-danger">Error de Conexión</div>
-                                    <div class="alert-message">No se pudo obtener la información de asistencia.</div>
-                                    <div class="alert-time">Ahora</div>
-                                    <div class="alert-actions">
-                                        <button class="btn btn-outline-danger btn-compact" onclick="cerrarNotificacion(this)">
-                                            <i class="fas fa-times"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    `;
-        $('#notificationContainer').html(alertHtml);
-      }
-    });
-  }
-
-  // Cargar notificaciones automáticamente al cargar la página
-  $(document).ready(function() {
-    notificacionesAsistencia();
-
-    // Opcional: Recargar cada 5 minutos
-    setInterval(notificacionesAsistencia, 300000);
-  });
-</script>
 <?php if (
   $_SESSION['INICIO']['TIPO'] == 'DBA' ||
   $_SESSION['INICIO']['TIPO'] == 'ADMINISTRADOR'
 ) { ?>
   <script>
+    function redireccionar(url_redireccion) {
+      url_click = "inicio.php?mod=<?= $modulo_sistema ?>&acc=" + url_redireccion;
+      window.location.href = url_click;
+    }
     $(document).ready(function() {
+      cargar_estadisticas_departamentos();
+      cargar_empleados_sin_turno();
+      //cargar_grafico_asistencias_semanal();
+      cargar_empleados_ausentes_hoy();
+      cargar_justificaciones_pendientes();
+      cargar_horas_extra_mes();
 
-      /*contar_dispositivos();
-      contar_departamentos();
-      contar_feriados();
-      contar_reportes();
-      listar_empleados_departamento();
-      contar_postulantes();
-      mostrar_estadisticas_adicionales();
-      mostrar_alertas_sistema();*/
+
+
+      cargar_resumen_asistencias();
+      cargar_alertas_asistencia();
+
+      control_acceso_datos();
+
+      //cargar
+      cargar_departamentos_selected();
 
     });
 
-    function mostrar_estadisticas_adicionales() {
-      // Datos estáticos para estadísticas adicionales
-      let estadisticas_rrhh = [{
-          titulo: 'Empleados Activos',
-          valor: 156,
-          porcentaje: 92,
-          color: '#28a745',
-          icono: 'bx-user-check'
-        },
-        {
-          titulo: 'Rotación Mensual',
-          valor: '3.2%',
-          porcentaje: 68,
-          color: '#ffc107',
-          icono: 'bx-transfer'
-        },
-        {
-          titulo: 'Satisfacción Laboral',
-          valor: '4.3/5',
-          porcentaje: 86,
-          color: '#17a2b8',
-          icono: 'bx-happy'
-        },
-        {
-          titulo: 'Productividad',
-          valor: '87%',
-          porcentaje: 87,
-          color: '#6f42c1',
-          icono: 'bx-trending-up'
-        }
-      ];
+    function cargar_resumen_asistencias() {
+      $.ajax({
+        url: '../controlador/TALENTO_HUMANO/th_indexC.php?datos_generales=true',
+        type: 'GET',
+        dataType: 'json',
+        success: function(data) {
+          $('#personas').text(data.total_personas);
+          $('#departamentos').text(data.total_departamentos);
+          $('#feriados').text(data.total_feriados);
+          $('#reportes').text(data.total_reportes);
+          $('#horarios').text(data.total_horarios);
+          $('#turnos').text(data.total_turnos);
+          $('#justificaciones').text(data.total_justificaciones);
+          if (data.ListaFeriado && data.ListaFeriado.length > 0) {
+            let fechaStr = data.ListaFeriado[0].fecha_inicio_feriado;
+            let fechaObj = new Date(fechaStr);
 
-      let html_estadisticas = '';
-      estadisticas_rrhh.forEach(function(item) {
-        html_estadisticas += `
-          <div class="col-6 col-md-3">
-            <div class="card radius-10 shadow-card">
-              <div class="card-body">
-                <div class="d-flex align-items-center">
-                  <div class="flex-grow-1">
-                    <p class="mb-0 text-secondary">${item.titulo}</p>
-                    <h5 class="my-1">${item.valor}</h5>
-                    <div class="progress mt-2" style="height: 4px;">
-                      <div class="progress-bar" role="progressbar" style="width: ${item.porcentaje}%; background-color: ${item.color};" aria-valuenow="${item.porcentaje}" aria-valuemin="0" aria-valuemax="100"></div>
+            let opciones = {
+              day: '2-digit',
+              month: 'long',
+              year: 'numeric'
+            };
+            let fechaFormateada = fechaObj.toLocaleDateString('es-ES', opciones);
+
+            $('#titulo_feriado').text(data.ListaFeriado[0].nombre.trim());
+            $('#fecha_feriado').text(fechaFormateada);
+          } else {
+            $('#titulo_feriado').text('No existen feriados');
+            $('#fecha_feriado').text('No existen fechas');
+          }
+          if (data.ListaPersonas && data.ListaPersonas.length > 0) {
+            let cantidad = data.ListaPersonas.length;
+
+            // Obtener primeros nombres y apellidos
+            let nombres = data.ListaPersonas.map(p => `${p.primer_nombre} ${p.primer_apellido}`).join(', ');
+
+            // Texto dinámico
+            let texto = `${cantidad} nuevo${cantidad > 1 ? 's' : ''} ingreso${cantidad > 1 ? 's' : ''} esta semana`;
+
+            // Insertar en HTML
+            $('.nuevos-ingresos h6').text('Nuevos Ingresos');
+            $('.nuevos-ingresos small').text(texto + `: ${nombres}`);
+          } else {
+            $('.nuevos-ingresos h6').text('Nuevos Ingresos');
+            $('.nuevos-ingresos small').text('Sin registros esta semana');
+          }
+
+        }
+      });
+
+    }
+
+    function cargar_datos_marcaciones(callback) {
+      const estados = ['PENDIENTE', 'APROBADO', 'RECHAZADO'];
+      const resultados = {};
+
+      estados.forEach(function(estado) {
+        $.ajax({
+          url: '../controlador/TALENTO_HUMANO/th_control_acceso_temporalC.php?listar=true',
+          type: 'GET',
+          dataType: 'json',
+          data: {
+            rbx_estado_aprobacion: estado
+          },
+          success: function(response) {
+            resultados[estado] = response.length;
+
+            if (Object.keys(resultados).length === estados.length) {
+              callback(resultados); // Devolvemos el objeto con los conteos
+            }
+          },
+          error: function(xhr, status, error) {
+            console.error(`Error al cargar datos para ${estado}:`, error);
+          }
+        });
+      });
+    }
+
+    function cargar_alertas_asistencia() {
+      cargar_datos_marcaciones(function(conteos) {
+        let alertas = [{
+            mensaje: `${conteos.PENDIENTE} marcaciones pendientes`,
+            icono: 'bx-time-five',
+            accion: 'inicio.php?mod=1011&acc=th_marcaciones_web'
+          },
+          {
+            mensaje: `${conteos.APROBADO} marcaciones aprobadas`,
+            icono: 'bx-check-circle',
+            accion: 'inicio.php?mod=1011&acc=th_marcaciones_web'
+          },
+          {
+            mensaje: `${conteos.RECHAZADO} marcaciones rechazadas`,
+            icono: 'bx-x-circle',
+            accion: 'inicio.php?mod=1011&acc=th_marcaciones_web'
+          }
+        ];
+
+        let html = `<div class="row g-3">`; // Contenedor
+        alertas.forEach(function(alerta) {
+          html += `
+        <div class="col-md-4">
+          <div class="card bg-white text-dark shadow-sm h-100 border">
+            <div class="card-body d-flex flex-column">
+              <div class="d-flex align-items-center mb-3">
+                <i class='bx ${alerta.icono} fs-2 me-2 text-dark'></i>
+                <h6 class="card-title mb-0">Alerta</h6>
+              </div>
+              <p class="card-text flex-grow-1">${alerta.mensaje}</p>
+              <button class="btn btn-outline-dark btn-sm mt-auto align-self-start" onclick="redireccionar('${alerta.accion}')">
+                <i class='bx bx-right-arrow-alt me-1'></i> Ver más
+              </button>
+            </div>
+          </div>
+        </div>
+      `;
+        });
+        html += `</div>`; // Cierra row
+
+        $('#alertas_asistencia').html(html);
+      });
+    }
+
+
+
+
+
+    function cargar_estadisticas_departamentos() {
+      $.ajax({
+        url: '../controlador/TALENTO_HUMANO/th_indexC.php?estadisticas_departamentos=true',
+        type: 'get',
+        dataType: 'json',
+        success: function(response) {
+          let datos = response || [{
+              departamento: 'DOCENTES',
+              total: 89,
+              presentes: 85,
+              ausentes: 4,
+              porcentaje_asistencia: 95.5
+            },
+            {
+              departamento: 'ADMINISTRATIVOS',
+              total: 32,
+              presentes: 28,
+              ausentes: 4,
+              porcentaje_asistencia: 87.5
+            },
+            {
+              departamento: 'SERVICIOS',
+              total: 25,
+              presentes: 19,
+              ausentes: 6,
+              porcentaje_asistencia: 76.0
+            }
+          ];
+
+          let html = '';
+          datos.forEach(function(dept) {
+            html += `
+              <div class="col-md-4">
+                <div class="card border-0 shadow-sm">
+                  <div class="card-body">
+                    <h6 class="card-title text-primary">${dept.departamento}</h6>
+                    <div class="row text-center">
+                      <div class="col-4">
+                        <h4 class="text-success">${dept.presentes}</h4>
+                        <small class="text-muted">Presentes</small>
+                      </div>
+                      <div class="col-4">
+                        <h4 class="text-danger">${dept.ausentes}</h4>
+                        <small class="text-muted">Ausentes</small>
+                      </div>
+                      <div class="col-4">
+                        <h4 class="text-info">${dept.porcentaje_asistencia}%</h4>
+                        <small class="text-muted">Asistencia</small>
+                      </div>
+                    </div>
+                    <div class="progress mt-3" style="height: 6px;">
+                      <div class="progress-bar bg-success" style="width: ${dept.porcentaje_asistencia}%"></div>
                     </div>
                   </div>
-                  <div class="widgets-icons text-white ms-auto" style="background: ${item.color};">
-                    <i class='bx ${item.icono}'></i>
+                </div>
+              </div>
+            `;
+          });
+          $('#estadisticas_departamentos').html(html);
+        },
+        error: function() {
+          // HTML de ejemplo en caso de error
+          let html = `
+            <div class="col-md-4">
+              <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                  <h6 class="card-title text-primary">DOCENTES</h6>
+                  <div class="row text-center">
+                    <div class="col-4"><h4 class="text-success">85</h4><small class="text-muted">Presentes</small></div>
+                    <div class="col-4"><h4 class="text-danger">4</h4><small class="text-muted">Ausentes</small></div>
+                    <div class="col-4"><h4 class="text-info">95.5%</h4><small class="text-muted">Asistencia</small></div>
+                  </div>
+                  <div class="progress mt-3" style="height: 6px;">
+                    <div class="progress-bar bg-success" style="width: 95.5%"></div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
-        `;
-      });
-      $('#pnl_estadisticas_rrhh').html(html_estadisticas);
-    }
-
-    function mostrar_alertas_sistema() {
-      // Alertas y notificaciones importantes
-      let alertas = [{
-          tipo: 'warning',
-          mensaje: '8 contratos vencen este mes',
-          icono: 'bx-time-five',
-          accion: 'contratos'
-        },
-        {
-          tipo: 'info',
-          mensaje: '12 evaluaciones pendientes',
-          icono: 'bx-task',
-          accion: 'evaluaciones'
-        },
-        {
-          tipo: 'success',
-          mensaje: '95% asistencia este mes',
-          icono: 'bx-check-circle',
-          accion: 'asistencias'
+          `;
+          $('#estadisticas_departamentos').html(html);
         }
-      ];
-
-      let html_alertas = '';
-      alertas.forEach(function(alerta) {
-        let colorClass = alerta.tipo === 'warning' ? 'alert-warning' :
-          alerta.tipo === 'info' ? 'alert-info' : 'alert-success';
-        html_alertas += `
-          <div class="alert ${colorClass} border-0 alert-dismissible fade show" role="alert">
-            <i class='bx ${alerta.icono} me-2'></i>
-            ${alerta.mensaje}
-            <button type="button" class="btn-sm btn-outline-secondary ms-auto" onclick="redireccionar('${alerta.accion}')">
-              Ver más
-            </button>
-          </div>
-        `;
       });
-      $('#pnl_alertas').html(html_alertas);
     }
 
-    function listar_empleados_departamento() {
+
+
+    function cargar_empleados_sin_turno() {
       $.ajax({
-        url: '../controlador/TALENTO_HUMANO/th_personasC.php?listar=true',
-        type: 'post',
+        url: '../controlador/TALENTO_HUMANO/th_indexC.php?empleados_sin_turno=true',
+        type: 'get',
         dataType: 'json',
         success: function(response) {
-          let total_empleados = response.length;
-
-          // Datos estáticos simulados para asistencias
-          let datos_estaticos = [{
-              DESCRIPCION: 'PUNTUALES',
-              TOTAL: 45,
-              COLOR: '#10b981',
-              ICON: 'bx-check-circle'
+          let empleados = response || [{
+              nombre: 'SORIA MALDONADO JUAN FRANCISCO',
+              departamento: 'DOCENTES',
+              dias_sin_turno: 5
             },
             {
-              DESCRIPCION: 'ATRASADAS',
-              TOTAL: 8,
-              COLOR: '#f59e0b',
-              ICON: 'bx-time'
-            },
-            {
-              DESCRIPCION: 'FALTANTES',
-              TOTAL: 3,
-              COLOR: '#ef4444',
-              ICON: 'bx-x-circle'
-            },
-            {
-              DESCRIPCION: 'JUSTIFICACIÓN',
-              TOTAL: 2,
-              COLOR: '#3b82f6',
-              ICON: 'bx-file-blank'
+              nombre: 'GARCIA LOPEZ MARIA ELENA',
+              departamento: 'ADMINISTRATIVOS',
+              dias_sin_turno: 3
             }
           ];
 
-          pie_empleados(datos_estaticos);
-
-          let html = `
-                      <div class="col-6 col-sm-6 col-md-4" id="pnl_solicitudes" onclick="redireccionar('empleados');">
-                        <div class="card radius-10 shadow-card">
-                          <div class="card-body">
-                            <div class="d-flex align-items-center">
-                              <div>
-                                <p class="mb-0 text-secondary">TOTAL EMPLEADOS</p>
-                                <h4 class="my-1" id="lbl_empleados">${total_empleados}</h4>
-                                <small class="text-success"><i class="bx bx-up-arrow-alt"></i> +2 este mes</small>
-                              </div>
-                              <div class="widgets-icons text-white ms-auto" style="background: #28a745;">
-                                <i class='bx bx-user'></i>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    `;
-
-          $('#pnl_empleados_departamento').empty();
-
-          datos_estaticos.forEach(function(item) {
-            html += `
-                    <div class="col-6 col-sm-6 col-md-4" id="pnl_solicitudes" onclick="redireccionar('asistencias');">
-                      <div class="card radius-10 shadow-card">
-                        <div class="card-body">
-                          <div class="d-flex align-items-center">
-                            <div>
-                              <p class="mb-0 text-secondary">${item.DESCRIPCION}</p>
-                              <h4 class="my-1" id="lbl_asistencias">${item.TOTAL}</h4>
-                              <small class="text-muted">${((item.TOTAL/58)*100).toFixed(1)}% del total</small>
-                            </div>
-                            <div class="widgets-icons text-white ms-auto" style="background: ${item.COLOR};">
-                              <i class='bx ${item.ICON}'></i>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  `;
-          });
-          $('#pnl_empleados_departamento').append(html);
-
-          // Agregar gráfico de tendencia de asistencias
-          mostrar_tendencia_asistencias();
+          let html = '';
+          if (empleados.length > 0) {
+            empleados.forEach(function(emp) {
+              html += `
+                <div class="d-flex justify-content-between align-items-center py-2 border-bottom">
+                  <div>
+                    <h6 class="mb-0">${emp.nombre}</h6>
+                    <small class="text-muted">${emp.departamento}</small>
+                  </div>
+                  <span class="badge bg-danger">${emp.dias_sin_turno} días</span>
+                </div>
+              `;
+            });
+          } else {
+            html = '<div class="text-center py-4"><i class="bx bx-check text-success fs-1"></i><p class="text-muted">Todos los empleados tienen turno asignado</p></div>';
+          }
+          $('#empleados_sin_turno').html(html);
         },
-        error: function(xhr, status, error) {
-          console.log('Status: ' + status);
-          console.log('Error: ' + error);
-          console.log('XHR Response: ' + xhr.responseText);
-          Swal.fire('', 'Error: ' + xhr.responseText, 'error');
+        error: function() {
+          $('#empleados_sin_turno').html('<div class="text-center py-4 text-muted">Error al cargar datos</div>');
         }
       });
     }
 
-    function mostrar_tendencia_asistencias() {
-      // Datos simulados para tendencia semanal
-      let datos_tendencia = {
-        labels: ['Lun', 'Mar', 'Mié', 'Jue', 'Vie'],
-        datasets: [{
-          label: 'Asistencias',
-          data: [54, 56, 53, 55, 52],
-          borderColor: '#28a745',
-          backgroundColor: 'rgba(40, 167, 69, 0.1)',
-          tension: 0.4
-        }]
-      };
 
-      let ctx = $('#trendChart').get(0).getContext('2d');
-      new Chart(ctx, {
-        type: 'line',
-        data: datos_tendencia,
+    function cargar_empleados_ausentes_hoy() {
+      $.ajax({
+        url: '../controlador/TALENTO_HUMANO/th_indexC.php?empleados_ausentes=true',
+        type: 'get',
+        dataType: 'json',
+        success: function(response) {
+          let ausentes = response || [{
+              nombre: 'RODRIGUEZ PEREZ CARLOS',
+              departamento: 'DOCENTES',
+              tipo_ausencia: 'Sin justificar'
+            },
+            {
+              nombre: 'MARTINEZ SILVA ANA',
+              departamento: 'ADMINISTRATIVOS',
+              tipo_ausencia: 'Permiso médico'
+            }
+          ];
+
+          let html = '';
+          ausentes.forEach(function(emp) {
+            let badgeClass = emp.tipo_ausencia === 'Sin justificar' ? 'bg-danger' : 'bg-warning';
+            html += `
+              <div class="d-flex justify-content-between align-items-center py-2 border-bottom">
+                <div>
+                  <h6 class="mb-0">${emp.nombre}</h6>
+                  <small class="text-muted">${emp.departamento}</small>
+                </div>
+                <span class="badge ${badgeClass}">${emp.tipo_ausencia}</span>
+              </div>
+            `;
+          });
+          $('#empleados_ausentes_lista').html(html);
+        },
+        error: function() {
+          $('#empleados_ausentes_lista').html('<div class="text-center py-4 text-muted">No hay ausentes registrados</div>');
+        }
+      });
+    }
+
+    function cargar_justificaciones_pendientes() {
+      $('#justificaciones_pendientes_count').text('4');
+      $('#justificaciones_pendientes_lista').html(`
+        <div class="d-flex justify-content-between align-items-center py-2">
+          <div>
+            <small class="text-muted">Retraso - Cita médica</small>
+            <h6 class="mb-0">LOPEZ GARCIA PEDRO</h6>
+          </div>
+          <span class="badge bg-warning">Pendiente</span>
+        </div>
+      `);
+    }
+
+    function cargar_horas_extra_mes() {
+      $('#horas_extra_mes').text('248');
+      $('#empleados_horas_extra').text('23');
+      $('#promedio_horas_extra').text('10.8');
+    }
+  </script>
+
+  <script>
+    let graficoAsistencias; // 🟢 Guardar instancia del chart
+    let ctx; // 🟢 Variable para el contexto del canvas
+
+    // 🟢 Inicializar cuando el DOM esté listo
+    document.addEventListener('DOMContentLoaded', function() {
+      // Obtener el contexto del canvas
+      ctx = document.getElementById('grafico_asistencias_semanal').getContext('2d');
+      // Event listener para el cambio de tipo de asistencia
+      document.getElementById('tipoAsistencia').addEventListener('change', function() {
+        actualizarGrafico();
+      });
+      // 🟢 Cargar datos iniciales - SIEMPRE datos generales al comenzar
+      control_acceso_datos(); // Forzar carga de datos generales al inicio
+    });
+
+    $(document).ready(function() {
+      // Cuando cambie el select de departamento, ejecuta la función
+      $('#ddl_tipoDepartamento').on('change', function() {
+        let valorSeleccionado = $(this).val();
+        // 🟢 Pequeño delay para asegurar que el valor se haya actualizado
+        setTimeout(function() {
+          actualizarGrafico();
+        }, 100);
+      });
+
+      // 🟢 Configurar el select con una opción por defecto si no existe
+      const selectDepartamento = $('#ddl_tipoDepartamento');
+      if (selectDepartamento.length > 0) {
+        // Si no tiene valor seleccionado, establecer uno por defecto
+        if (!selectDepartamento.val()) {
+          // Buscar opción de "Todos" o similar
+          if (selectDepartamento.find('option[value="TODOS"], option[value="GENERAL"], option[value=""], option[value="all"]').length > 0) {
+            selectDepartamento.val(selectDepartamento.find('option[value="TODOS"], option[value="GENERAL"], option[value=""], option[value="all"]').first().val());
+          }
+        }
+      }
+    });
+
+    // 🟢 Función unificada para decidir qué datos cargar
+    function actualizarGrafico() {
+      let departamento = $('#ddl_tipoDepartamento').val();
+      // Si no hay departamento seleccionado, es "GENERAL", "TODOS" o valor vacío -> cargar datos generales
+      if (!departamento || departamento === 'GENERAL' || departamento === 'TODOS' || departamento === '' || departamento === 'all') {
+        control_acceso_datos(); // Cargar datos generales (todos los departamentos)
+      } else {
+        control_acceso_datos_departamento(); // Cargar datos por departamento específico
+      }
+    }
+
+    // 🟢 Función reutilizable para cargar el gráfico (modificada para aceptar ambos formatos)
+    function cargar_grafico_asistencias_semanal(datosServidor) {
+      let datosProcesados;
+
+      // 🟢 Detectar el formato de los datos y normalizarlos
+      if (Array.isArray(datosServidor) && datosServidor.length > 0) {
+        // Formato de departamento específico: [{departamento: "X", datos_por_fecha: {...}}]
+        datosProcesados = datosServidor[0];
+      } else if (datosServidor.datos_por_fecha) {
+        // Formato general: {departamento: "GENERAL", datos_por_fecha: {...}}
+        datosProcesados = datosServidor;
+      } else {
+        Swal.fire('', 'Error: Formato de datos no válido', 'error');
+        return;
+      }
+
+      let datosPorFecha = datosProcesados.datos_por_fecha;
+      let departamentoActual = datosProcesados.departamento;
+
+      let fechas = Object.keys(datosPorFecha);
+      fechas.sort((a, b) => new Date(a) - new Date(b)); // 🟢 Orden cronológico correcto
+      let ultimasFechas = fechas.slice(-4); // 🟢 Tomar las últimas 4 fechas
+
+      let dataset1 = [];
+      let tipo = document.getElementById('tipoAsistencia').value;
+
+      ultimasFechas.forEach(fecha => {
+        let data = datosPorFecha[fecha];
+        let valor = 0;
+
+        switch (tipo) {
+          case 'asistencias':
+            // Asistencias = Total de personas que NO están ausentes
+            valor = data.ausente.NO;
+            break;
+
+          case 'ausencias':
+            // Ausencias = Personas que SÍ están ausentes
+            valor = data.ausente.SI;
+            break;
+
+          case 'cumple':
+            // Cumple jornada = Personas que SÍ cumplen jornada
+            valor = data.cumple_jornada.SI;
+            break;
+
+          case 'tardanzas':
+            // Tardanzas = Personas que NO cumplen jornada
+            valor = data.cumple_jornada.NO;
+            break;
+
+          case 'atrasos':
+            // Atrasos = Personas con salida ausente
+            valor = data.salida_ausente.SI;
+            break;
+
+          default:
+            valor = 0;
+        }
+
+        dataset1.push(valor);
+      });
+
+      // 🟢 Destruir gráfico anterior si existe
+      if (graficoAsistencias) {
+        graficoAsistencias.destroy();
+      }
+
+      // 🟢 Configurar colores según el tipo
+      let backgroundColor = '#007bff';
+      let borderColor = '#0056b3';
+
+      switch (tipo) {
+        case 'asistencias': // verde suave
+          backgroundColor = '#a8e6a1';
+          borderColor = '#7ac47a';
+          break;
+        case 'ausencias': // rojo suave
+          backgroundColor = '#f8b4b4';
+          borderColor = '#e98989';
+          break;
+        case 'tardanzas': // amarillo pastel
+          backgroundColor = '#ffe8a1';
+          borderColor = '#e6c87a';
+          break;
+        case 'atrasos': // naranja pastel
+          backgroundColor = '#ffcc99';
+          borderColor = '#e6a96b';
+          break;
+        case 'cumple': // celeste pastel
+          backgroundColor = '#a7d8f0';
+          borderColor = '#7ab8d6';
+          break;
+      }
+
+      // 🟢 Formatear las fechas para mejor visualización
+      let fechasFormateadas = ultimasFechas.map(fecha => {
+        let fechaObj = new Date(fecha + 'T00:00:00');
+        return fechaObj.toLocaleDateString('es-ES', {
+          day: '2-digit',
+          month: '2-digit',
+          year: 'numeric'
+        });
+      });
+
+      graficoAsistencias = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: fechasFormateadas,
+          datasets: [{
+            label: `${obtenerLabelTipo(tipo)} - ${departamentoActual === 'GENERAL' ? 'TODOS LOS DEPARTAMENTOS' : departamentoActual}`,
+            data: dataset1,
+            backgroundColor: backgroundColor,
+            borderColor: borderColor,
+            borderWidth: 2,
+            borderRadius: 4,
+            borderSkipped: false,
+          }]
+        },
         options: {
           responsive: true,
           maintainAspectRatio: false,
           plugins: {
+            title: {
+              display: true,
+              text: `${obtenerLabelTipo(tipo)} - ${departamentoActual === 'GENERAL' ? 'TODOS LOS DEPARTAMENTOS' : departamentoActual}`,
+              font: {
+                size: 14,
+                weight: 'bold'
+              }
+            },
             legend: {
-              display: false
+              display: true,
+              position: 'top'
             }
           },
           scales: {
             y: {
               beginAtZero: true,
-              grid: {
-                display: false
+              ticks: {
+                stepSize: 1,
+                callback: function(value) {
+                  if (Number.isInteger(value)) {
+                    return value;
+                  }
+                }
+              },
+              title: {
+                display: true,
+                text: 'Cantidad de Personas'
               }
             },
             x: {
-              grid: {
-                display: false
+              title: {
+                display: true,
+                text: 'Fecha (DD/MM/YYYY)'
               }
             }
+          },
+          animation: {
+            duration: 800,
+            easing: 'easeInOutQuart'
           }
         }
       });
+
+      // 🟢 Actualizar información en la interfaz si existe
+      const departamentoInfo = document.getElementById('departamentoInfo');
+      if (departamentoInfo) {
+        departamentoInfo.textContent = departamentoActual === 'GENERAL' ? 'TODOS LOS DEPARTAMENTOS' : departamentoActual;
+      }
     }
 
-    function contar_postulantes() {
+    // 🟢 Función para obtener labels más descriptivos
+    function obtenerLabelTipo(tipo) {
+      const labels = {
+        'asistencias': 'Asistencias',
+        'ausencias': 'Ausencias',
+        'cumple': 'Cumple Jornada',
+        'tardanzas': 'Tardanzas',
+        'atrasos': 'Atrasos'
+      };
+      return labels[tipo] || tipo;
+    }
+
+    // 🟢 Función para cargar datos generales del servidor
+    function control_acceso_datos() {
       $.ajax({
-        url: '../controlador/TALENTO_HUMANO/POSTULANTES/th_postulantesC.php?listar_todo=true',
-        type: 'post',
+        url: '../controlador/TALENTO_HUMANO/th_indexC.php?control_acceso_datos=true',
+        type: 'GET',
         dataType: 'json',
+        beforeSend: function() {},
         success: function(response) {
-          let total_postulantes = response.length;
-          $('#lbl_count_postulantes').html(total_postulantes);
+
+          if (response && response.datos_por_fecha) {
+            cargar_grafico_asistencias_semanal(response);
+          } else {
+            console.error('Estructura de datos generales incorrecta:', response);
+            Swal.fire('', 'Error: Estructura de datos generales incorrecta', 'error');
+          }
         },
         error: function(xhr, status, error) {
-          console.log('Status: ' + status);
-          console.log('Error: ' + error);
-          console.log('XHR Response: ' + xhr.responseText);
-          Swal.fire('', 'Error: ' + xhr.responseText, 'error');
+          console.log('Error AJAX datos generales:', error);
+          console.log('Estado:', status);
+          console.log('Respuesta:', xhr.responseText);
+          Swal.fire('', 'Error al cargar datos generales: ' + error, 'error');
         }
       });
     }
 
-    function contar_dispositivos() {
+    // 🟢 Función para cargar datos por departamento específico
+    function control_acceso_datos_departamento() {
+      let departamento = $('#ddl_tipoDepartamento').val();
+
       $.ajax({
-        url: '../controlador/TALENTO_HUMANO/th_dispositivosC.php?listarAll=true',
-        type: 'post',
+        url: '../controlador/TALENTO_HUMANO/th_indexC.php?control_acceso_datos_departamento=true',
+        type: 'GET',
         dataType: 'json',
+        data: {
+          departamento: departamento
+        },
+        beforeSend: function() {},
         success: function(response) {
-          let total_dispositivos = response.length;
-          $('#lbl_count_dispositivos').html(total_dispositivos);
+
+          if (response && Array.isArray(response) && response.length > 0 && response[0].datos_por_fecha) {
+            // 🟢 Reutilizar la misma función de gráfico
+            cargar_grafico_asistencias_semanal(response);
+          } else {
+            console.error('Estructura de datos por departamento incorrecta:', response);
+            Swal.fire('', 'Error: No se encontraron datos para el departamento seleccionado', 'error');
+          }
         },
         error: function(xhr, status, error) {
-          console.log('Status: ' + status);
-          console.log('Error: ' + error);
-          console.log('XHR Response: ' + xhr.responseText);
-          Swal.fire('', 'Error: ' + xhr.responseText, 'error');
+          console.log('Error AJAX datos departamento:', error);
+          console.log('Estado:', status);
+          console.log('Respuesta:', xhr.responseText);
+          Swal.fire('', 'Error al cargar datos del departamento: ' + error, 'error');
         }
       });
     }
 
-    function contar_departamentos() {
+
+    function cargar_departamentos_selected() {
       $.ajax({
         url: '../controlador/TALENTO_HUMANO/th_departamentosC.php?listar=true',
-        type: 'post',
+        type: 'GET',
         dataType: 'json',
+        beforeSend: function() {},
         success: function(response) {
-          let total_departamentos = response.length;
-          $('#lbl_count_departamentos').html(total_departamentos);
+
+          // Obtener el select existente
+          let select = $('#ddl_tipoDepartamento');
+          select.empty(); // Limpiar opciones previas
+
+          // Opción "Todos"
+          select.append('<option value="TODOS" selected>TODOS</option>');
+
+          // Agregar departamentos del servidor
+          response.forEach(function(departamento) {
+            // Suponiendo que el JSON tiene: { id: 1, nombre: 'GENERAL' }
+            select.append('<option value="' + departamento.nombre + '">' + departamento.nombre + '</option>');
+          });
         },
         error: function(xhr, status, error) {
-          console.log('Status: ' + status);
-          console.log('Error: ' + error);
-          console.log('XHR Response: ' + xhr.responseText);
-          Swal.fire('', 'Error: ' + xhr.responseText, 'error');
+          console.log('Error AJAX:', error);
+          console.log('Estado:', status);
+          console.log('Respuesta:', xhr.responseText);
+          Swal.fire('', 'Error al cargar datos: ' + error, 'error');
         }
-      });
-    }
-
-    function contar_feriados() {
-      $.ajax({
-        url: '../controlador/TALENTO_HUMANO/th_feriadosC.php?listar=true',
-        type: 'post',
-        dataType: 'json',
-        success: function(response) {
-          let total_feriados = response.length;
-          $('#lbl_count_feriado').html(total_feriados);
-        },
-        error: function(xhr, status, error) {
-          console.log('Status: ' + status);
-          console.log('Error: ' + error);
-          console.log('XHR Response: ' + xhr.responseText);
-          Swal.fire('', 'Error: ' + xhr.responseText, 'error');
-        }
-      });
-    }
-
-    function contar_reportes() {
-      $.ajax({
-        url: '../controlador/TALENTO_HUMANO/th_reportesC.php?listar=true',
-        type: 'post',
-        dataType: 'json',
-        success: function(response) {
-          let total_reportes = response.length;
-          $('#lbl_count_reportes').html(total_reportes);
-        },
-        error: function(xhr, status, error) {
-          console.log('Status: ' + status);
-          console.log('Error: ' + error);
-          console.log('XHR Response: ' + xhr.responseText);
-          Swal.fire('', 'Error: ' + xhr.responseText, 'error');
-        }
-      });
-    }
-
-    function pie_empleados(datos_estaticos) {
-      let labels = [];
-      let data = [];
-      let backgroundColor = [];
-
-      datos_estaticos.forEach(function(item) {
-        labels.push(item.DESCRIPCION);
-        data.push(parseInt(item.TOTAL) || 0);
-        backgroundColor.push(item.COLOR || '#cccccc');
-      });
-
-      let donutData = {
-        labels: labels,
-        datasets: [{
-          data: data,
-          backgroundColor: backgroundColor,
-          borderWidth: 2,
-          borderColor: '#fff'
-        }]
-      };
-
-      let pieChartCanvas = $('#pieChart').get(0).getContext('2d');
-      let pieOptions = {
-        maintainAspectRatio: false,
-        responsive: true,
-        plugins: {
-          legend: {
-            position: 'bottom',
-            labels: {
-              padding: 20,
-              usePointStyle: true
-            }
-          }
-        }
-      };
-
-      new Chart(pieChartCanvas, {
-        type: 'doughnut',
-        data: donutData,
-        options: pieOptions
       });
     }
   </script>
-
 <?php } ?>
 
 <div class="page-wrapper">
   <div class="page-content">
     <!--breadcrumb-->
     <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
-      <div class="breadcrumb-title pe-3">Inicio</div>
+      <div class="breadcrumb-title pe-3">Control de Asistencias</div>
       <div class="ps-3">
         <nav aria-label="breadcrumb">
           <ol class="breadcrumb mb-0 p-0">
@@ -713,285 +697,409 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']) ?? '';
       </div>
     </div>
     <!--end breadcrumb-->
-    <!-- Simulación de Dashboard -->
-    <div class="container-fluid">
 
-      <!-- Panel de Alertas Compacto -->
-      <div class="col-12">
-        <div class="alerts-sidebar">
-          <h6 class="mb-0 text-uppercase">Notificaciones de Asitencia</h6>
-          <hr>
-          <!-- Contenedor de Notificaciones Compacto -->
-          <div class="px-3" id="notificationContainer">
-            <!-- Las alertas aparecerán aquí automáticamente -->
+    <div class="container-fluid">
+      <!-- Panel de Notificaciones de Asistencia -->
+      <?php
+      include('index_personas.php');
+      ?>
+
+      <?php if (
+        $_SESSION['INICIO']['TIPO'] == 'DBA' ||
+        $_SESSION['INICIO']['TIPO'] == 'ADMINISTRADOR'
+      ) { ?>
+
+
+        <!-- Resumen General de Asistencias -->
+        <!-- Accesos Rápidos a Gestión -->
+        <h6 class="mb-0 text-uppercase mt-4">GESTIÓN RÁPIDA</h6>
+        <hr>
+        <div class="row g-3"> <!-- Espacio entre columnas -->
+
+          <div class="col-12 col-sm-6 col-md-4 d-flex">
+            <div class="card radius-10 shadow-card flex-fill" onclick="redireccionar('th_personas');">
+              <div class="card-body d-flex align-items-center justify-content-between">
+                <div>
+                  <p class="mb-0 text-secondary">Personas</p>
+                  <h4 class="my-1" id="personas">0</h4>
+                </div>
+                <div class="widgets-icons text-white ms-auto" style="background: #28a745;">
+                  <i class='bx bx-group'></i>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-12 col-sm-6 col-md-4 d-flex">
+            <div class="card radius-10 shadow-card flex-fill" onclick="redireccionar('th_departamentos');">
+              <div class="card-body d-flex align-items-center justify-content-between">
+                <div>
+                  <p class="mb-0 text-secondary">Departamentos</p>
+                  <h4 class="my-1" id="departamentos">0</h4>
+                </div>
+                <div class="widgets-icons text-white ms-auto" style="background: #28a745;">
+                  <i class='bx bx-buildings'></i>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-12 col-sm-6 col-md-4 d-flex">
+            <div class="card radius-10 shadow-card flex-fill" onclick="redireccionar('th_reportes');">
+              <div class="card-body d-flex align-items-center justify-content-between">
+                <div>
+                  <p class="mb-0 text-secondary">Reportes</p>
+                  <h4 class="my-1" id="reportes">0</h4>
+                </div>
+                <div class="widgets-icons text-white ms-auto" style="background: #28a745;">
+                  <i class='bx bx-line-chart'></i>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-12 col-sm-6 col-md-4 d-flex">
+            <div class="card radius-10 shadow-card flex-fill" onclick="redireccionar('th_turnos');">
+              <div class="card-body d-flex align-items-center justify-content-between">
+                <div>
+                  <p class="mb-0 text-secondary">Turnos</p>
+                  <h4 class="my-1" id="turnos">0</h4>
+                </div>
+                <div class="widgets-icons text-white ms-auto" style="background: #28a745;">
+                  <i class='bx bx-fingerprint'></i>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-12 col-sm-6 col-md-4 d-flex">
+            <div class="card radius-10 shadow-card flex-fill" onclick="redireccionar('th_horarios');">
+              <div class="card-body d-flex align-items-center justify-content-between">
+                <div>
+                  <p class="mb-0 text-secondary">Horarios</p>
+                  <h4 class="my-1" id="horarios">0</h4>
+                </div>
+                <div class="widgets-icons text-white ms-auto" style="background: #28a745;">
+                  <i class='bx bx-time-five'></i>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-12 col-sm-6 col-md-4 d-flex">
+            <div class="card radius-10 shadow-card flex-fill" onclick="redireccionar('th_justificaciones_tipo');">
+              <div class="card-body d-flex align-items-center justify-content-between">
+                <div>
+                  <p class="mb-0 text-secondary">Justificar</p>
+                  <h4 class="my-1" id="justificaciones">0</h4>
+                </div>
+                <div class="widgets-icons text-white ms-auto" style="background: #28a745;">
+                  <i class='bx bx-edit'></i>
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+
+
+
+        </div>
+
+
+
+
+
+        <!-- Alertas del Sistema -->
+        <h6 class="mb-0 text-uppercase">ALERTAS DE MARCACIONES TEMPORALES</h6>
+        <hr>
+        <div class="row mb-3">
+          <div class="col-12" id="alertas_asistencia">
+            <!-- Las alertas aparecerán aquí -->
           </div>
         </div>
-        <div class="notification-container" id="notificationContainer"></div>
-      </div>
 
-      <!-- Contenedor de Notificaciones -->
-
-      <div class="row">
-        <div class="col-xl-12 mx-auto">
-
-          <?php if (
-            $_SESSION['INICIO']['TIPO'] == 'DBA' ||
-            $_SESSION['INICIO']['TIPO'] == 'NO CONCURRENTE'
-          ) { ?>
-
-            <!-- Alertas del Sistema -->
-            <div class="row mb-3">
-              <div class="col-12">
-                <div id="pnl_alertas"></div>
-              </div>
-            </div>
-
-
-
-            <!-- KPIs Principales -->
-            <h6 class="mb-0 text-uppercase">INDICADORES CLAVE</h6>
-            <hr>
-            <div class="row" id="pnl_estadisticas_rrhh"></div>
-
-            <!-- Dashboard Principal -->
-            <h6 class="mb-0 text-uppercase">ASISTENCIAS HOY</h6>
+        <!-- Estadísticas por Departamento y Gráfico -->
+        <div class="row">
+          <div class="col-xl-12">
+            <h6 class="mb-0 text-uppercase">ESTADÍSTICAS</h6>
             <hr>
 
-            <div class="row">
-              <div class="col-xl-4 col-lg-5">
-                <div class="card">
-                  <div class="card-header">
-                    <h6 class="mb-0">Distribución de Asistencias</h6>
-                  </div>
-                  <div class="card-body">
-                    <canvas id="pieChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
-                  </div>
-                </div>
-              </div>
-              <div class="col-xl-8 col-lg-7">
-                <div class="row" id="pnl_empleados_departamento">
-                </div>
-                <div class="row mt-3">
-                  <div class="col-12">
-                    <div class="card">
-                      <div class="card-header">
-                        <h6 class="mb-0">Tendencia Semanal de Asistencias</h6>
-                      </div>
-                      <div class="card-body">
-                        <canvas id="trendChart" style="height: 200px;"></canvas>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
 
-            <!-- Resumen de Próximos Eventos -->
-            <div class="row mt-3">
-              <div class="col-12">
-                <div class="card">
-                  <div class="card-header">
-                    <h6 class="mb-0">Próximos Eventos</h6>
+            <!-- Gráfico de Tendencia Semanal -->
+
+            <div class="card mt-3 shadow-sm">
+              <div class="card-header">
+                <h6 class="mb-0">
+                  <i class="fas fa-chart-bar me-2"></i>
+                 Control de asistencias
+                </h6>
+              </div>
+              <div class="card-body">
+                <!-- Selector de tipo de asistencia -->
+                <div class="row mb-3">
+                  <div class="col-md-6">
+                    <label for="tipoAsistencia" class="form-label fw-bold">
+                      Tipo de Métrica:
+                    </label>
+                    <select id="tipoAsistencia" class="form-select" style="width:250px;">
+                      <option value="asistencias" selected>📊 Asistencias</option>
+                      <option value="ausencias">❌ Ausencias</option>
+                      <option value="cumple">✅ Cumple Jornada</option>
+                      <option value="tardanzas">⏰ Tardanzas</option>
+                      <option value="atrasos">🏃‍♂️ Atrasos (Salida Temprana)</option>
+                    </select>
                   </div>
-                  <div class="card-body">
-                    <div class="row">
-                      <div class="col-md-4">
-                        <div class="d-flex align-items-center border-end">
-                          <i class='bx bx-calendar text-primary me-2'></i>
-                          <div>
-                            <h6 class="mb-0">Próximo Feriado</h6>
-                            <small class="text-muted">15 de Junio - Día del Padre</small>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="col-md-4">
-                        <div class="d-flex align-items-center border-end">
-                          <i class='bx bx-user-plus text-success me-2'></i>
-                          <div>
-                            <h6 class="mb-0">Nuevos Ingresos</h6>
-                            <small class="text-muted">3 empleados esta semana</small>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="col-md-4">
-                        <div class="d-flex align-items-center">
-                          <i class='bx bx-task text-warning me-2'></i>
-                          <div>
-                            <h6 class="mb-0">Evaluaciones</h6>
-                            <small class="text-muted">12 pendientes este mes</small>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
+                  <div class="col-md-6">
+                    <label for="label_ddl_tipoDepartamento" class="form-label fw-bold">
+                      Tipo de Departamento:
+                    </label>
+                    <select id="ddl_tipoDepartamento" class="form-select" style="width:250px;">
+                      <option value="todos" selected>Todos</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-md-6 d-flex align-items-end">
+                  <div class="text-muted small">
+                    <strong>Departamento:</strong> <span id="departamentoInfo">Todos</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Contenedor del gráfico -->
+              <div class="position-relative" style="height:350px;">
+                <canvas id="grafico_asistencias_semanal"></canvas>
+              </div>
+
+              <!-- Información adicional -->
+
+              <div class="row mt-3 px-3 mb-3">
+                <div class="col-12">
+                  <div class="alert alert-info small mb-0">
+                    <strong>💡 Información:</strong>
+                    <ul class="mb-0 mt-1">
+                      <li><strong>Asistencias:</strong> Personas que NO estuvieron ausentes</li>
+                      <li><strong>Ausencias:</strong> Personas que SÍ estuvieron ausentes</li>
+                      <li><strong>Cumple Jornada:</strong> Personas que cumplieron su jornada completa</li>
+                      <li><strong>Tardanzas:</strong> Personas que NO cumplieron jornada (llegadas tarde)</li>
+                      <li><strong>Atrasos:</strong> Personas con salida temprana</li>
+                    </ul>
                   </div>
                 </div>
               </div>
             </div>
-
-            <!-- Gestión Administrativa -->
-            <h6 class="mb-0 text-uppercase">GESTIÓN ADMINISTRATIVA</h6>
-            <hr>
-
-            <div class="row">
-              <div class="col-6 col-sm-6 col-md-4 col-lg-2" onclick="redireccionar('th_postulantes');">
-                <div class="card radius-10 shadow-card">
-                  <div class="card-body text-center">
-                    <div class="widgets-icons bg-light-success text-success mx-auto mb-2">
-                      <i class='bx bx-user'></i>
-                    </div>
-                    <h4 class="my-1" id="lbl_count_postulantes">0</h4>
-                    <p class="mb-0 text-secondary">Postulantes</p>
-                  </div>
-                </div>
-              </div>
-
-              <div class="col-6 col-sm-6 col-md-4 col-lg-2" onclick="redireccionar('th_dispositivos');">
-                <div class="card radius-10 shadow-card">
-                  <div class="card-body text-center">
-                    <div class="widgets-icons bg-light-info text-info mx-auto mb-2">
-                      <i class='bx bx-devices'></i>
-                    </div>
-                    <h4 class="my-1" id="lbl_count_dispositivos">0</h4>
-                    <p class="mb-0 text-secondary">Dispositivos</p>
-                  </div>
-                </div>
-              </div>
-
-              <div class="col-6 col-sm-6 col-md-4 col-lg-2" onclick="redireccionar('th_departamentos');">
-                <div class="card radius-10 shadow-card">
-                  <div class="card-body text-center">
-                    <div class="widgets-icons bg-light-primary text-primary mx-auto mb-2">
-                      <i class='bx bx-buildings'></i>
-                    </div>
-                    <h4 class="my-1" id="lbl_count_departamentos">0</h4>
-                    <p class="mb-0 text-secondary">Departamentos</p>
-                  </div>
-                </div>
-              </div>
-
-              <div class="col-6 col-sm-6 col-md-4 col-lg-2" onclick="redireccionar('th_feriados');">
-                <div class="card radius-10 shadow-card">
-                  <div class="card-body text-center">
-                    <div class="widgets-icons bg-light-warning text-warning mx-auto mb-2">
-                      <i class='bx bx-calendar-event'></i>
-                    </div>
-                    <h4 class="my-1" id="lbl_count_feriado">0</h4>
-                    <p class="mb-0 text-secondary">Feriados</p>
-                  </div>
-                </div>
-              </div>
-
-              <div class="col-6 col-sm-6 col-md-4 col-lg-2" onclick="redireccionar('th_reportes');">
-                <div class="card radius-10 shadow-card">
-                  <div class="card-body text-center">
-                    <div class="widgets-icons bg-light-danger text-danger mx-auto mb-2">
-                      <i class='bx bx-file'></i>
-                    </div>
-                    <h4 class="my-1" id="lbl_count_reportes">0</h4>
-                    <p class="mb-0 text-secondary">Reportes</p>
-                  </div>
-                </div>
-              </div>
-
-              <div class="col-6 col-sm-6 col-md-4 col-lg-2" onclick="redireccionar('justificaciones');">
-                <div class="card radius-10 shadow-card">
-                  <div class="card-body text-center">
-                    <div class="widgets-icons bg-light-secondary text-secondary mx-auto mb-2">
-                      <i class='bx bx-file-blank'></i>
-                    </div>
-                    <h4 class="my-1">24</h4>
-                    <p class="mb-0 text-secondary">Justificaciones</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-          <?php } ?>
-
+          </div>
         </div>
-      </div>
+
+
+        <div class="row mt-3">
+          <div class="col-12">
+            <div class="card">
+              <div class="card-header">
+                <h6 class="mb-0">Próximos Eventos</h6>
+              </div>
+              <div class="card-body">
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="d-flex align-items-center border-end">
+                      <i class='bx bx-calendar text-primary me-2'></i>
+                      <div>
+                        <h6 id="titulo_feriado" class="mb-0">Próximo Feriado</h6>
+                        <small id="fecha_feriado" class="text-muted">15 de Junio - Día del Padre</small>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="d-flex align-items-center border-end nuevos-ingresos">
+                      <i class='bx bx-user-plus text-success me-2 bx-tada'></i>
+                      <div>
+                        <h6 class="mb-0">Nuevos Ingresos</h6>
+                        <small class="text-muted">Cargando...</small>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!--
+          <div class="col-xl-4">
+             Empleados Sin Turno Asignado 
+            <div class="card">
+              <div class="card-header bg-danger text-white">
+                <h6 class="mb-0">
+                  <i class='bx bx-error-circle me-2'></i>
+                  Empleados Sin Turno
+                </h6>
+              </div>
+              <div class="card-body" style="max-height: 300px; overflow-y: auto;">
+                <div id="empleados_sin_turno">
+                  Lista de empleados sin turno 
+                </div>
+              </div>
+            </div>
+
+            Empleados Ausentes Hoy 
+            <div class="card mt-3">
+              <div class="card-header bg-warning text-white">
+                <h6 class="mb-0">
+                  <i class='bx bx-user-x me-2'></i>
+                  Ausentes Hoy
+                </h6>
+              </div>
+              <div class="card-body" style="max-height: 250px; overflow-y: auto;">
+                <div id="empleados_ausentes_lista">
+                  Lista de empleados ausentes 
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        -->
+
+        <!-- Información Adicional 
+        <div class="row mt-4">
+          <div class="col-xl-3 col-lg-6">
+            <div class="card border-left-success">
+              <div class="card-body">
+                <div class="d-flex align-items-center">
+                  <div class="flex-grow-1">
+                    <h6 class="text-success">JUSTIFICADOS HOY</h6>
+                    <h4 id="justificados_hoy">0</h4>
+                  </div>
+                  <i class='bx bx-file-blank text-success fs-1'></i>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-xl-3 col-lg-6">
+            <div class="card border-left-info">
+              <div class="card-body">
+                <div class="d-flex align-items-center">
+                  <div class="flex-grow-1">
+                    <h6 class="text-info">SIN MARCAR SALIDA</h6>
+                    <h4 id="sin_marcar_salida">0</h4>
+                  </div>
+                  <i class='bx bx-log-out text-info fs-1'></i>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-xl-3 col-lg-6">
+            <div class="card border-left-primary">
+              <div class="card-body">
+                <div class="d-flex align-items-center">
+                  <div class="flex-grow-1">
+                    <h6 class="text-primary">HORAS EXTRA HOY</h6>
+                    <h4 id="horas_extra_dia">0</h4>
+                  </div>
+                  <i class='bx bx-time text-primary fs-1'></i>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-xl-3 col-lg-6">
+            <div class="card border-left-secondary">
+              <div class="card-body">
+                <div class="d-flex align-items-center">
+                  <div class="flex-grow-1">
+                    <h6 class="text-secondary">PROMEDIO ASISTENCIA</h6>
+                    <h4 id="promedio_asistencia">0%</h4>
+                  </div>
+                  <i class='bx bx-trending-up text-secondary fs-1'></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+-->
+        <!-- Panel de Justificaciones y Horas Extra 
+         
+        <div class="row mt-4">
+          <div class="col-xl-6">
+            <div class="card">
+              <div class="card-header">
+                <h6 class="mb-0">
+                  <i class='bx bx-file me-2'></i>
+                  Justificaciones Pendientes
+                  <span class="badge bg-warning ms-2" id="justificaciones_pendientes_count">0</span>
+                </h6>
+              </div>
+              <div class="card-body" style="max-height: 300px; overflow-y: auto;">
+                <div id="justificaciones_pendientes_lista">
+                  Lista de justificaciones pendientes 
+                </div>
+                <div class="text-center mt-3">
+                  <button class="btn btn-outline-primary btn-sm" onclick="redireccionar('justificaciones')">
+                    Ver Todas las Justificaciones
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-xl-6">
+            <div class="card">
+              <div class="card-header">
+                <h6 class="mb-0">
+                  <i class='bx bx-time me-2'></i>
+                  Resumen Horas Extra - Este Mes
+                </h6>
+              </div>
+              <div class="card-body">
+                <div class="row text-center">
+                  <div class="col-4">
+                    <h3 class="text-primary" id="horas_extra_mes">0</h3>
+                    <small class="text-muted">Total Horas</small>
+                  </div>
+                  <div class="col-4">
+                    <h3 class="text-success" id="empleados_horas_extra">0</h3>
+                    <small class="text-muted">Empleados</small>
+                  </div>
+                  <div class="col-4">
+                    <h3 class="text-info" id="promedio_horas_extra">0</h3>
+                    <small class="text-muted">Promedio</small>
+                  </div>
+                </div>
+                <div class="text-center mt-3">
+                  <button class="btn btn-outline-success btn-sm" onclick="redireccionar('horas_extra')">
+                    Ver Reporte Completo
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+-->
+
+      <?php } ?>
+
     </div>
   </div>
+</div>
 
-  <!-- Estilos mejorados -->
-  <script>
-    $(document).ready(function() {
-      $('.shadow-card').on('mouseover', function() {
-        $(this).addClass('hoverEffect');
-      });
+<!-- Estilos mejorados -->
 
-      $('.shadow-card').on('mouseout', function() {
-        $(this).removeClass('hoverEffect');
-      });
-
-      $('.shadow-card').on('click', function() {
-        $(this).toggleClass('clickedEffect');
-      });
-
-      $(document).on('mouseout', '.shadow-card', function() {
-        $(this).removeClass('clickedEffect');
-      });
+<script>
+  $(document).ready(function() {
+    $('.shadow-card').on('mouseover', function() {
+      $(this).addClass('hoverEffect');
     });
-  </script>
 
-  <style>
-    .card {
-      cursor: pointer;
-      transition: all 0.3s ease;
-      border: 1px solid rgba(0, 0, 0, 0.1);
-    }
+    $('.shadow-card').on('mouseout', function() {
+      $(this).removeClass('hoverEffect');
+    });
 
-    .card.hoverEffect {
-      transform: translateY(-2px);
-      box-shadow: 0px 8px 25px rgba(0, 0, 0, 0.15);
-      background-color: rgba(45, 216, 34, 0.05);
-    }
+    $('.shadow-card').on('click', function() {
+      $(this).toggleClass('clickedEffect');
+    });
 
-    .card.clickedEffect {
-      background-color: rgba(128, 224, 122, 0.3);
-    }
-
-    .widgets-icons {
-      width: 45px;
-      height: 45px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 10px;
-      font-size: 1.2rem;
-    }
-
-    .progress {
-      height: 4px;
-      background-color: rgba(0, 0, 0, 0.1);
-      border-radius: 10px;
-    }
-
-    .progress-bar {
-      border-radius: 10px;
-    }
-
-    .alert {
-      border-radius: 10px;
-      border: none;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    }
-
-    .alert button {
-      border: none;
-      padding: 2px 8px;
-      border-radius: 5px;
-      font-size: 12px;
-    }
-
-    .card-header {
-      background-color: transparent;
-      border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-      padding: 1rem 1.25rem 0.5rem;
-    }
-
-    .card-header h6 {
-      color: #495057;
-      font-weight: 600;
-    }
-  </style>
+    $(document).on('mouseout', '.shadow-card', function() {
+      $(this).removeClass('clickedEffect');
+    });
+  });
+</script>

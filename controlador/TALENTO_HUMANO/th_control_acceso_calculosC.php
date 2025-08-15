@@ -29,8 +29,8 @@ if (isset($_GET['descargar_excel'])) {
         '_id' => $_GET['_id'] ?? '',
 
     ];
-
-    $controlador->descargar_excel('reporte.xlsx', $parametros, $encabezado);
+    $nombreArchivo = $parametros['txt_fecha_inicio'] ."_". $parametros['txt_fecha_fin'] ."_". $parametros['ddl_departamentos'] . ".xlsx";
+    $controlador->descargar_excel($nombreArchivo, $parametros, $encabezado);
 }
 
 if (isset($_GET['informacion_marcacion'])) {
@@ -51,10 +51,14 @@ class th_control_acceso_calculosC
     //Usa para el boton de descargar Excel
     function descargar_excel($nombreArchivo = 'Reporte.xlsx', $parametros = [])
     {
+
+
         $txt_fecha_inicio   = $parametros['txt_fecha_inicio'] ?? '';
         $txt_fecha_fin      = $parametros['txt_fecha_fin'] ?? '';
         $ddl_departamentos  = $parametros['ddl_departamentos'] ?? '';
         $id                 = $parametros['_id'] ?? '';
+
+        
 
         // Obtener lista de encabezados desde la BD (array de objetos o arrays)
         $listaEncabezados = $this->encabezados->listar_reporte_campos($id);
