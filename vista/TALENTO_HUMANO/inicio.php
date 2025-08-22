@@ -154,10 +154,6 @@ if ($_GET['acc'] == 'th_marcaciones_web_registrar') {
 	include('TALENTO_HUMANO/MARCACIONES/CONTROL_ACCESO_WEB/th_marcaciones_web_registrar.php');
 }
 
-if ($_GET['acc'] == 'th_triangular_marcacion') {
-	include('TALENTO_HUMANO/MARCACIONES/CONTROL_ACCESO_WEB/th_triangular_marcacion.php');
-}
-
 if ($_GET['acc'] == 'th_marcaciones_web_registrar_manual') {
 	include('TALENTO_HUMANO/MARCACIONES/CONTROL_ACCESO_WEB/th_marcaciones_web_registrar_manual.php');
 }
