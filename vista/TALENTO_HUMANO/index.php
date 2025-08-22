@@ -120,17 +120,17 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']) ?? '';
         let alertas = [{
             mensaje: `${conteos.PENDIENTE} marcaciones pendientes`,
             icono: 'bx-time-five',
-            accion: 'inicio.php?mod=1011&acc=th_marcaciones_web'
+            accion: 'th_marcaciones_web'
           },
           {
             mensaje: `${conteos.APROBADO} marcaciones aprobadas`,
             icono: 'bx-check-circle',
-            accion: 'inicio.php?mod=1011&acc=th_marcaciones_web'
+            accion: 'th_marcaciones_web'
           },
           {
             mensaje: `${conteos.RECHAZADO} marcaciones rechazadas`,
             icono: 'bx-x-circle',
-            accion: 'inicio.php?mod=1011&acc=th_marcaciones_web'
+            accion: 'th_marcaciones_web'
           }
         ];
 
