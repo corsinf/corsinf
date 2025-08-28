@@ -106,6 +106,7 @@ class db
 					$this->usuario = "sa";
 					$this->password = "Tango456";  // en mi caso tengo contraseña pero en casa caso introducidla aquí.
 					$this->servidor = "186.4.219.172, 1487";
+					// $this->servidor = "192.168.1.5, 1487";
 					$this->database = "LISTA_EMPRESAS";
 				}
 			} else {
@@ -119,6 +120,7 @@ class db
 				$this->usuario = "sa";
 				$this->password = "Tango456";  // en mi caso tengo contraseña pero en casa caso introducidla aquí.
 				$this->servidor = "186.4.219.172,1487";
+				// $this->servidor = "192.168.1.5,1487";
 				$this->database = "LISTA_EMPRESAS";
 			}
 		}
@@ -575,7 +577,7 @@ class db
 		 // print_r("sqlsrv:Server=".$servidor .''. $puerto.";Database=".$database.','.$usuario.','.$password);die();
 
 		try{
-		     $conn = new PDO("sqlsrv:Server=".$servidor .''. $puerto.";Database=".$database, $usuario, $password);
+		     $conn = new PDO("sqlsrv:Server=".$servidor .''. $puerto.";Database=".$database.";TrustServerCertificate=1", $usuario, $password);
 		     $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 		     // $conn->setAttribute(PDO::SQLSRV_ATTR_ENCODING, PDO::SQLSRV_ENCODING_UTF8);
 		     // print_r("conectado");die();

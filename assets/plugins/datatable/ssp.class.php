@@ -448,7 +448,7 @@ class SSP
 		try {
 			// Conexión con PDO para SQL Server
 			$db = @new PDO(
-				"sqlsrv:Server={$sql_details['host']};Database={$sql_details['db']}",
+				"sqlsrv:Server={$sql_details['host']};Database={$sql_details['db']};TrustServerCertificate=1",
 				$sql_details['user'],
 				$sql_details['pass'],
 				array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION)
