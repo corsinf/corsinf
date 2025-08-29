@@ -175,6 +175,8 @@ $_id = isset($_SESSION['INICIO']['NO_CONCURENTE']) ? $_SESSION['INICIO']['NO_CON
                     $('#txt_codigo_postal').val(response[0].postal);
                     $('#txt_direccion').val(response[0].direccion);
                     $('#txt_observaciones').val(response[0].observaciones);
+                    $('#ddl_tipo_sangre').val(response[0].tipo_sangre);
+
 
                     calcular_edad('txt_edad', response[0].fecha_nacimiento);
 

@@ -159,6 +159,7 @@ class fi_personasC
                 // array('campo' => 'th_per_foto_url', 'dato' => $parametros['txt_foto_url']),
                 //array('campo' => 'PASS', 'dato' => $this->cod_global->enciptar_clave($parametros['txt_cedula'])),
                 array('campo' => 'th_per_fecha_modificacion', 'dato' => date('Y-m-d H:i:s')),
+                array('campo' => 'th_per_tipo_sangre', 'dato' => $parametros['ddl_tipo_sangre']),
             );
 
             if (count($this->modelo->where('th_per_cedula', $parametros['txt_cedula'])->where('th_per_id !', $_id)->listar()) == 0) {
