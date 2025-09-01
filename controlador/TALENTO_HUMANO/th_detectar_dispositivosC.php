@@ -41,6 +41,9 @@ if (isset($_GET['DetenerEventos'])) {
 if (isset($_GET['DeviceLog'])) {
     echo json_encode($controlador->DeviceLog());
 }
+if (isset($_GET['crear_cron_dispositivos'])) {
+    echo json_encode($controlador->crear_cron_dispositivos());
+}
 /**
  * 
  */
@@ -355,8 +358,30 @@ class th_detectar_dispositivosC
     {
     	$datos = $this->control_acceso->listarJoin();
     	return $datos;
-    	print_r($datos);die();
+    	// print_r($datos);die();
     }    
+
+    function crear_cron_dispositivos()
+    {
+
+		$dir_cron = dirname(__DIR__,2).'/Cron/dispositivos_activos.txt';
+        $datos = $this->modelo_dispositivos->where("th_dis_estado_dis","1")->listar();
+        $command = "";
+        foreach ($datos as $key => $value) {
+
+			$dllPath = $this->sdk_patch . '6 ' . $value['host'] . ' ' . $value['usuario'] . ' ' . $value['port'] . ' ' . $value['pass'] . ' '.$_SESSION['INICIO']['IP_HOST']. ' '.$_SESSION['INICIO']['PUERTO_DB']. ' '.$_SESSION['INICIO']['BASEDATO']. ' '.$_SESSION['INICIO']['USUARIO_DB']. ' '.$_SESSION['INICIO']['PASSWORD_DB'];
+			$command.= "dotnet $dllPath\n"; // Comando básico para dotnet
+
+        }
+
+        $archivo = fopen($dir_cron, "w");
+		if(file_exists($dir_cron))
+		{
+			fwrite($archivo, $command."\n");
+			fclose($archivo);
+		}
+
+    }
 }
 
 ?> 

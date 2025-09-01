@@ -37,6 +37,13 @@ if (isset($_GET['_id'])) {
                 $('#txt_serial').val(response[0].serial);
                 $('#txt_usuario').val(response[0].usuario);
                 $('#txt_pass').val(response[0].pass);
+                if(response[0].estado_dis==1)
+                {
+                    $("#rbl_online").prop('checked',true);                    
+                }else
+                {
+                    $("#rbl_offline").prop('checked',true);
+                }
                 $('#cbx_ssl').prop('checked', (response[0].ssl == 1));
 
             }
@@ -52,6 +59,7 @@ if (isset($_GET['_id'])) {
         var txt_usuario = $('#txt_usuario').val();
         var txt_pass = $('#txt_pass').val();
         var cbx_ssl = $('#cbx_ssl').prop('checked') ? 1 : 0;
+        var rbl_estado = $('input[name="rbl_estado"]:checked').val();
 
         var parametros = {
             '_id': '<?= $_id ?>',
@@ -63,6 +71,7 @@ if (isset($_GET['_id'])) {
             'txt_usuario': txt_usuario,
             'txt_pass': txt_pass,
             'cbx_ssl': cbx_ssl,
+            'estado':rbl_estado,
         };
 
         if ($("#form_dispositivo").valid()) {
@@ -85,7 +94,8 @@ if (isset($_GET['_id'])) {
             success: function(response) {
                 if (response == 1) {
                     Swal.fire('', 'Operacion realizada con exito.', 'success').then(function() {
-                        location.href = '../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_dispositivos';
+                        crear_cron_dispositivos();
+                        // location.href = '../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_dispositivos';
                     });
                 } else if (response == -2) {
                     //Swal.fire('', 'El nombre del dispositivo ya está en uso', 'warning');
@@ -243,11 +253,23 @@ if (isset($_GET['_id'])) {
                             </div>
 
                             <div class="row mb-col">
-                                <div class="col-md-12">
+                                <div class="col-md-2">
                                     <div class="form-check">
                                         <input class="form-check-input" type="checkbox" value="" name="cbx_ssl" id="cbx_ssl">
                                         <label class="form-label" for="cbx_ssl">SSL </label>
                                     </div>
+                                </div>
+                                 <div class="col-md-2">
+                                    Estado
+                                    <br>
+                                        <label class="form-label" for="cbx_online">Online</label>
+                                            <input class="form-check-input" type="radio" value="1" disabled name="rbl_estado" id="rbl_online">
+                                            
+                                        
+                                        <label class="form-label" for="rbl_offline">Offline</label>
+                                            <input class="form-check-input" type="radio" value="0" disabled name="rbl_estado" id="rbl_offline" checked>
+                                            
+                                        
                                 </div>
                             </div>
 
@@ -366,8 +388,13 @@ if (isset($_GET['_id'])) {
                 $('#myModal_espera').modal('hide');
                 if (response.resp == 1) {
                     Swal.fire('', 'Operacion realizada con exito.', 'success');
+                    $('#rbl_online').prop('checked',true);
                 } else{
-                    Swal.fire('No se pudo conectar', response.msj, 'error')
+                    Swal.fire('No se pudo conectar', response.msj, 'error').then(function(){
+                        $('#rbl_offline').prop('checked',true);
+                        guardar_estado_conexion()
+                    })
+                   
                 }
             },
             
@@ -383,6 +410,56 @@ if (isset($_GET['_id'])) {
             }
         });
 
+
+    }
+
+    function guardar_estado_conexion()
+    {
+         Swal.fire({
+            title: 'Estado Dispositivo',
+            text: "Desea guardar el estado del dispositivo?",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Si'
+        }).then((result) => {
+            if (result.value) {
+              editar_insertar();
+            }
+        })
+    }
+
+    function crear_cron_dispositivos()
+    {
+
+         $.ajax({
+            // data: {
+            //     parametros: parametros
+            // },
+            url: '../controlador/TALENTO_HUMANO/th_detectar_dispositivosC.php?crear_cron_dispositivos=true',
+            type: 'post',
+            dataType: 'json',
+
+            success: function(response) {
+                console.log(response);
+                // if (response.resp == 1) {
+                //     Swal.fire('', 'Operacion realizada con exito.', 'success');
+                //     $('#rbl_online').prop('checked',true);
+                // } 
+            },
+            
+            error: function(xhr, status, error) {
+
+                $('#myModal_espera').modal('hide');
+                
+                console.log('Status: ' + status); 
+                console.log('Error: ' + error); 
+                console.log('XHR Response: ' + xhr.responseText); 
+
+                Swal.fire('', 'Error: ' + xhr.responseText, 'error');
+            }
+        });
 
     }
 

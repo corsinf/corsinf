@@ -109,7 +109,8 @@ class th_dispositivosC
 
             array('campo' => 'th_dis_serial', 'dato' => $parametros['txt_serial']),
             array('campo' => 'th_dis_fecha_modificacion', 'dato' => date('Y-m-d H:i:s')),
-            array('campo' => 'th_dis_estado', 'dato' => 1)
+            array('campo' => 'th_dis_estado', 'dato' => 1),
+            array('campo' => 'th_dis_estado_dis', 'dato' => $parametros['estado'])
         );
 
         if ($parametros['_id'] == '') {
