@@ -67,7 +67,7 @@
             },
             responsive: true,
             ajax: {
-                url: '../controlador/RED_CONSULTORIOS/interm_t_examen_examenC.php?listar=true',
+                url: '../controlador/RED_CONSULTORIOS/interm_examen_featExamenC.php?listar=true',
                 dataSrc: ''
             },
             columns: [{

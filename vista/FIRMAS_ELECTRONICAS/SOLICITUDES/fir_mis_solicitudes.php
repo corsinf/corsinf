@@ -57,7 +57,7 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                 },
             ],
             order: [
-                [1, 'asc']
+                [1, 'desc']
             ],
         }));
     });
