@@ -106,6 +106,10 @@ if ($_GET['acc'] == 'in_kardex') {
     include('ACTIVOS_FIJOS/INVENTARIOS/KARDEX/in_kardex.php');
 }
 
+if ($_GET['acc'] == 'po_procesos') {
+    include('ACTIVOS_FIJOS/PORTALES/po_procesos.php');
+}
+
 /**
  * @deprecated Archivo dado de baja el 02/04/2025.
  * @note Este archivo se mantiene como respaldo, pero ya no se utilizará en producción.
