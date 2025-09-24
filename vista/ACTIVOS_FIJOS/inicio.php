@@ -102,6 +102,10 @@ if ($_GET['acc'] == 'custodio_detalle') {
     include('ACTIVOS_FIJOS/PERSONAS/ac_custodio_detalle.php');
 }
 
+if ($_GET['acc'] == 'in_kardex') {
+    include('ACTIVOS_FIJOS/INVENTARIOS/KARDEX/in_kardex.php');
+}
+
 /**
  * @deprecated Archivo dado de baja el 02/04/2025.
  * @note Este archivo se mantiene como respaldo, pero ya no se utilizará en producción.
