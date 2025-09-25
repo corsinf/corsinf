@@ -41,6 +41,10 @@ if (isset($_GET['guardar_config'])) {
 	echo json_encode($controlador->guardar_config($parametros));
 }
 
+if (isset($_GET['simulador_portal'])) {
+	echo json_encode($controlador->simulador());
+}
+
 /**
  * 
  */
@@ -232,5 +236,10 @@ class portalesC
 		} else {
 			return array('resp' => '-1', "msj" => "portal no encontrado");
 		}
+	}
+
+	function simulador()
+	{
+		return ($this->modelo->simulador());
 	}
 }
