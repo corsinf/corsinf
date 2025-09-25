@@ -70,15 +70,6 @@ if ($_GET['acc'] == 'ac_descarga_lotes') {
     include('ACTIVOS_FIJOS/REPORTES/ac_descarga_lotes.php');
 }
 
-//PORTALES
-if ($_GET['acc'] == 'po_procesos') {
-    include('ACTIVOS_FIJOS/PORTALES/po_procesos.php');
-}
-
-if ($_GET['acc'] == 'po_procesos_registrar') {
-    include('ACTIVOS_FIJOS/PORTALES/po_procesos_registrar.php');
-}
-
 //INVENTARIO
 if ($_GET['acc'] == 'in_kardex') {
     include('ACTIVOS_FIJOS/INVENTARIOS/KARDEX/in_kardex.php');

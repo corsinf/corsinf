@@ -214,7 +214,7 @@ include_once('SMARTTAG/inicio.php');
 /*
  * Módulo Para portales
  */
-include_once('PORTALES/inicio.php');
+include_once('ACTIVOS_FIJOS/PORTALES/inicio.php');
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -270,7 +270,7 @@ if ($_GET['acc'] == 'index') {
 			include('DISENIADOR_ZPL/index.php');
 			break;
 		case '2016':
-			include('PORTALES/index.php');
+			include('ACTIVOS_FIJOS/PORTALES/index.php');
 			break;
 		case '1011':
 			include('TALENTO_HUMANO/index.php');
