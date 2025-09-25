@@ -1,6 +1,57 @@
+<?php
+$modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
+
+?>
+
+<script src="../js/GENERAL/operaciones_generales.js"></script>
+
 <script type="text/javascript">
     $(document).ready(function() {
-
+        tbl_procesos = $('#tbl_procesos').DataTable($.extend({}, configuracion_datatable('Procesos', 'procesos'), {
+            reponsive: true,
+            language: {
+                url: 'https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
+            },
+            ajax: {
+                url: '../controlador/ACTIVOS_FIJOS/PORTALES/po_procesosC.php?listar=true',
+                dataSrc: ''
+            },
+            columns: [{
+                    data: null,
+                    render: function(data, type, row) {
+                        let ruta_completa = "https://corsinf.com:447/corsinf/img/index.php?emp=ACTIVOS_DESARROLLO&dir=activos&nombre=";
+                        let id = row.id;
+                        return `
+                                    <img src="${ruta_completa}" 
+                                        alt="${row.proceso}" 
+                                        style="width:50px;height:auto;cursor:pointer;" 
+                                        class="rounded"
+                                        onclick="modal_ver_imagen('${ruta_completa}', '${id}')">
+                                `;
+                    }
+                },
+                {
+                    data: null,
+                    render: function(data, type, item) {
+                        href = `../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=po_procesos_registrar&_id=${item._id}`;
+                        return `<a href="${href}"><u>${item.proceso}</u></a>`;
+                    }
+                },
+                {
+                    data: 'TP'
+                },
+                {
+                    data: null,
+                    render: function(data, type, item) {
+                        salida = fecha_nacimiento_formateada(item.fecha_creacion);
+                        return salida;
+                    }
+                },
+            ],
+            order: [
+                [1, 'asc']
+            ]
+        }));
     });
 </script>
 
@@ -8,7 +59,7 @@
     <div class="page-content">
         <!--breadcrumb-->
         <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
-            <div class="breadcrumb-title pe-3">Blank</div>
+            <div class="breadcrumb-title pe-3">Procesos</div>
             <?php
             // print_r($_SESSION['INICIO']);die();
 
@@ -19,7 +70,7 @@
                         <li class="breadcrumb-item"><a href="javascript:;"><i class="bx bx-home-alt"></i></a>
                         </li>
                         <li class="breadcrumb-item active" aria-current="page">
-                            Blank
+                            Procesos
                         </li>
                     </ol>
                 </nav>
@@ -31,32 +82,39 @@
             <div class="col-xl-12 mx-auto">
                 <div class="card border-top border-0 border-4 border-primary">
                     <div class="card-body p-5">
-                        <div class="card-title d-flex align-items-center">
+                        <div class="row">
 
-                            <h5 class="mb-0 text-primary"></h5>
+                            <div class="col-12 col-md-6">
+                                <div class="card-title d-flex align-items-center">
 
-                            <div class="row mx-0">
-                                <div class="col-sm-12" id="btn_nuevo">
-
-                                    <button type="button" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#modal_blank"><i class="bx bx-plus"></i> Nuevo</button>
+                                    <div class="" id="btn_nuevo">
+                                        <a href="../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=po_procesos_registrar"
+                                            type="button" class="btn btn-success btn-sm ">
+                                            <i class="bx bx-plus me-0 pb-1"></i> Nuevo
+                                        </a>
+                                    </div>
 
                                 </div>
                             </div>
+
+                            <div class="col-12 col-md-6 text-md-end text-start">
+                                <div id="contenedor_botones"></div>
+                            </div>
+
                         </div>
 
+                        <hr>
 
                         <section class="content pt-2">
                             <div class="container-fluid">
                                 <div class="table-responsive">
-                                    <table class="table table-striped responsive " id="tbl_blank" style="width:100%">
+                                    <table class="table table-striped responsive " id="tbl_procesos" style="width:100%">
                                         <thead>
                                             <tr>
-                                                <th>Blank</th>
-                                                <th>Blank</th>
-                                                <th>Blank</th>
-                                                <th>Blank</th>
-                                                <th>Blank</th>
-                                                <th width="10px">Acción</th>
+                                                <th>Imagen</th>
+                                                <th>Nombre</th>
+                                                <th>Tipo</th>
+                                                <th width='10%'>Fecha de Creación</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -71,47 +129,5 @@
             </div>
         </div>
         <!--end row-->
-    </div>
-</div>
-
-
-<div class="modal" id="modal_blank" abindex="-1" aria-modal="true" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-
-            <!-- Modal Header -->
-            <div class="modal-header">
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-
-            <!-- Modal body -->
-            <div class="modal-body">
-
-                <div class="row">
-                    <div class="col-12">
-                        <label for="">Tipo de <label class="text-danger">*</label></label>
-                        <select name="" id="" class="form-select form-select-sm" onchange="">
-                            <option value="">Seleccione el </option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="row pt-3">
-                    <div class="col-12">
-                        <label for="">Blank <label class="text-danger">*</label></label>
-                        <select name="" id="" class="form-select form-select-sm">
-                            <option value="">Seleccione el </option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="row pt-3">
-                    <div class="col-12 text-end">
-                        <button type="button" class="btn btn-success btn-sm" onclick=""><i class="bx bx-save"></i> Agregar</button>
-                    </div>
-                </div>
-
-            </div>
-        </div>
     </div>
 </div>
