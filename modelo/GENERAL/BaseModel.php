@@ -24,6 +24,7 @@ class BaseModel
     protected $condicionesWhere = [];
     protected $relaciones = [];
     protected $ordenamientos = [];
+    protected $betweenWhere = [];
 
     function __construct($codigo_empresa_api = false)
     {
@@ -38,6 +39,7 @@ class BaseModel
         $whereClause = $this->retornaValoresWhere();
         $joinClause = $this->retornaValoresJoin();
         $orderByClause = $this->retornaValoresOrderBy();
+        $betweenClause = $this->retornaValoresBetweenBy();
 
         // Validar y construir la selección de campos
         if (empty($joinClause)) {
@@ -46,12 +48,10 @@ class BaseModel
         } else {
             $camposSelect = '*';
         }
-
         // Si se define un límite, agregar TOP en la consulta
         if ($limite !== null) {
             $camposSelect = "TOP($limite) " . $camposSelect;
         }
-
         // Construir consulta SQL
         $sql = sprintf(
             "SELECT %s FROM %s %s %s %s;",
@@ -59,11 +59,12 @@ class BaseModel
             $this->tabla,
             $joinClause,
             $whereClause,
-            $orderByClause
+            $betweenClause,
+            $orderByClause,
         );
 
         // Mostrar la consulta SQL para depuración y salir
-        // print_r($sql); exit();
+        // print_r($sql); die();
         // return $sql;
 
         // Ejecutar consulta y devolver resultados
@@ -182,6 +183,12 @@ class BaseModel
         return $this;
     }
 
+    function between($campo, $desde,$hasta)
+    {
+        $this->betweenWhere[] = "$campo BETWEEN '$desde' and '$hasta'";
+        return $this;
+    }
+
     // Arma la sentencia del where
     protected function retornaValoresWhere()
     {
@@ -211,6 +218,25 @@ class BaseModel
             $orderByClause = " ORDER BY " . implode(', ', $this->ordenamientos);
         }
         return $orderByClause;
+    }
+
+    protected function retornaValoresBetweenBy()
+    {
+        $betweenByClause ="";
+        if(empty($this->condicionesWhere))
+        {
+            $betweenByClause = " WHERE ";
+        }
+
+        if (!empty($this->betweenWhere)) {
+            foreach ($this->betweenWhere as $key => $value) {
+                $betweenByClause.= $value." AND ";
+            }
+        }
+
+        $betweenByClause = substr($betweenByClause, 0,-4);
+
+        return $betweenByClause;
     }
 
 
