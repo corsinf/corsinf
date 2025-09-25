@@ -35,10 +35,6 @@ if ($_GET['acc'] == 'bodegas') {
 if ($_GET['acc'] == 'materiales') {
 	include('SMARTTAG/ARTICULOS/materiales.php');
 }
-//portales
-if ($_GET['acc'] == 'portales') {
-	include('SMARTTAG/ARTICULOS/portales.php');
-}
 
 //kardex
 if ($_GET['acc'] == 'kardex') {
