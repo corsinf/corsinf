@@ -167,7 +167,7 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                                             <i class="bx bx-rotate-right"></i> Sincronizar
                                         </button>
 
-                                        <div>
+                                        <div hidden>
                                             <!-- Para agregar un input y poner las fechas -->
                                             <button onclick="sincronizar_calculo_asistencia_fecha();"
                                                 type="button" class="btn btn-info btn-sm">
