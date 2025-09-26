@@ -38,11 +38,15 @@ if (isset($_GET['eliminar'])) {
     echo json_encode($controlador->eliminar($_POST['id'] ?? ''));
 }
 
+//Con el bat
 if (isset($_GET['sincronizar_calculo_asistencia'])) {
     echo json_encode($controlador->sincronizar_calculo_asistencia());
 }
 
-
+//Por codigo
+if (isset($_GET['sincronizar_calculo_asistencia_fecha'])) {
+    echo json_encode($controlador->sincronizar_calculo_asistencia_fecha($_POST['fecha_calcular'] ?? ''));
+}
 
 
 class th_reportesC
@@ -319,6 +323,61 @@ class th_reportesC
 
         return ['msj' => implode("\n", $msg)];
     }
+
+    function sincronizar_calculo_asistencia_fecha($fecha_calcular = '')
+    {
+        date_default_timezone_set('America/Guayaquil');
+
+        require_once(dirname(__DIR__, 2) . '/Cron/TALENTO_HUMANO/calculo_control_acceso.php');
+
+
+
+        $USUARIO_DB = $_SESSION['INICIO']['USUARIO_DB'];
+        $PASSWORD_DB = $_SESSION['INICIO']['PASSWORD_DB'];
+        $BASEDATO = $_SESSION['INICIO']['BASEDATO'];
+        $PUERTO_DB = $_SESSION['INICIO']['PUERTO_DB'];
+        $IP_HOST = $_SESSION['INICIO']['IP_HOST'];
+
+        // Crear una instancia de la clase y llamar al método
+        $proceso = new calculo_persona($USUARIO_DB, $PASSWORD_DB, $IP_HOST, $BASEDATO, $PUERTO_DB);
+
+        $fecha_in = date("Y-m-d");
+        if($fecha_calcular != ''){
+            $fecha_in = $fecha_calcular;
+        }
+        // $fecha_actual = '2025-08-07';
+
+        // print_r($fecha_calcular); exit(); die();
+
+        // $parametros = $proceso->calculo_persona_control_acceso(2000, '2025-06-27');
+
+
+        //Funcion para guardar de fora masiva
+        // guardar_log('[INF] Inicio Inserción Masiva WEB', $BASEDATO);
+        $parametros = $proceso->carga_masiva($fecha_in);
+        // guardar_log($parametros, $BASEDATO);
+
+        //Para realizar pruebas individuales
+        // $parametros = $proceso->calculo_persona_control_acceso(60, $fecha_actual, true);
+
+
+        // print_r($parametros);
+        exit();
+
+        function guardar_log($mensaje, $db)
+        {
+            $ruta_log = __DIR__ . '/log_carga_masiva_' . $db . '.log';
+            $fecha_log = date("Y-m-d H:i:s");
+
+            $entrada = "[$fecha_log] $mensaje\n";
+
+            file_put_contents($ruta_log, $entrada, FILE_APPEND);
+        }
+    }
+
+
+
+
 
 
     /**
