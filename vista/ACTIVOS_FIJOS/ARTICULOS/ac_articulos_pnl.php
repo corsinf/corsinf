@@ -518,7 +518,7 @@
 
         <div class="col-sm-6">
             <label for="txt_tag_serie" class="form-label">Referencia de almacén (SKU) </label>
-            <input type="text" class="form-control form-control-sm solo_numeros_int" name="txt_tag_serie" id="txt_tag_serie" maxlength="15">
+            <input type="text" class="form-control form-control-sm solo_numeros_int" name="txt_tag_serie" id="txt_tag_serie" maxlength="100">
         </div>
     </div>
 
