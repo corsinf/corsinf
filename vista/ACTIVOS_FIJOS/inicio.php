@@ -70,11 +70,15 @@ if ($_GET['acc'] == 'ac_descarga_lotes') {
     include('ACTIVOS_FIJOS/REPORTES/ac_descarga_lotes.php');
 }
 
+//Buscador tags
+if ($_GET['acc'] == 'si_simulador_facturados') {
+    include('ACTIVOS_FIJOS/SIMULADORES/si_simulador_facturados.php');
+}
+
 //INVENTARIO
 if ($_GET['acc'] == 'in_kardex') {
     include('ACTIVOS_FIJOS/INVENTARIOS/KARDEX/in_kardex.php');
 }
-
 
 
 
