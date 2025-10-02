@@ -76,7 +76,8 @@ class articulosM
 			array('db' => 'serie', 'dt' => 4),             // Serie
 			array('db' => 'RFID', 'dt' => 5),              // RFID
 			array('db' => 'localizacion', 'dt' => 6),      // Localización
-			array('db' => 'custodio', 'dt' => 7),          // Custodio
+			// array('db' => 'custodio', 'dt' => 7),          // Custodio
+			array('db' => 'loc_denominacion', 'dt' => 7),          // Custodio
 			array('db' => 'marca', 'dt' => 8),             // Marca
 			array('db' => 'estado', 'dt' => 9),            // Estado
 			array('db' => 'genero', 'dt' => 10),           // Género

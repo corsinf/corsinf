@@ -199,7 +199,8 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                                                 <th>Serie</th>
                                                 <th>RFID</th>
                                                 <th>Localización</th>
-                                                <th>Custodio</th>
+                                                <!-- <th>Custodio</th> -->
+                                                <th>Percha</th>
                                                 <th>Marca</th>
                                                 <th>Estado</th>
                                                 <th>Género</th>

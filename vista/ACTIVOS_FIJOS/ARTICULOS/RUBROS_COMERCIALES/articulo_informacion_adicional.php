@@ -114,25 +114,30 @@
             </a>
         </li>
 
-        <li class="nav-item" role="presentation">
-            <a class="nav-link" data-bs-toggle="tab" href="#tab_custodio" role="tab" aria-selected="true">
-                <div class="d-flex align-items-center">
-                    <div class="tab-icon"><i class='bx bx-user font-18 me-1'></i>
+        <?php if ($_SESSION['INICIO']['MODULO_SISTEMA'] != 2018) { ?>
+            <li class="nav-item" role="presentation">
+                <a class="nav-link" data-bs-toggle="tab" href="#tab_custodio" role="tab" aria-selected="true">
+                    <div class="d-flex align-items-center">
+                        <div class="tab-icon"><i class='bx bx-user font-18 me-1'></i>
+                        </div>
+                        <div class="tab-title"> Custodio </div>
                     </div>
-                    <div class="tab-title"> Custodio </div>
-                </div>
-            </a>
-        </li>
+                </a>
+            </li>
 
-        <li class="nav-item" role="presentation">
-            <a class="nav-link" data-bs-toggle="tab" href="#tab_avaluos" role="tab" aria-selected="false">
-                <div class="d-flex align-items-center">
-                    <div class="tab-icon"><i class='bx bx-money font-18 me-1'></i>
+            <li class="nav-item" role="presentation">
+                <a class="nav-link" data-bs-toggle="tab" href="#tab_avaluos" role="tab" aria-selected="false">
+                    <div class="d-flex align-items-center">
+                        <div class="tab-icon"><i class='bx bx-money font-18 me-1'></i>
+                        </div>
+                        <div class="tab-title">Avalúos</div>
                     </div>
-                    <div class="tab-title">Avalúos</div>
-                </div>
-            </a>
-        </li>
+                </a>
+            </li>
+        <?php } ?>
+
+
+
     </ul>
 
     <div class="tab-content pt-3">
