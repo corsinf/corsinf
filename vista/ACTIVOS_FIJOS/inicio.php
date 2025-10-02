@@ -81,6 +81,36 @@ if ($_GET['acc'] == 'in_kardex') {
 }
 
 
+//DEMO
+if ($_GET['acc'] == 'vista_demo') {
+    include('ACTIVOS_FIJOS/demo.php');
+}
+
+//DEMO
+if ($_GET['acc'] == 'vista_demo1') {
+    include('ACTIVOS_FIJOS/demo.php');
+}
+
+//DEMO
+if ($_GET['acc'] == 'vista_demo2') {
+    include('ACTIVOS_FIJOS/demo.php');
+}
+
+//DEMO
+if ($_GET['acc'] == 'vista_demo3') {
+    include('ACTIVOS_FIJOS/demo.php');
+}
+
+//DEMO
+if ($_GET['acc'] == 'vista_demo4') {
+    include('ACTIVOS_FIJOS/demo.php');
+}
+
+//DEMO
+if ($_GET['acc'] == 'vista_demo5') {
+    include('ACTIVOS_FIJOS/demo.php');
+}
+
 
 /**
  * @todo Revisar este archivo
