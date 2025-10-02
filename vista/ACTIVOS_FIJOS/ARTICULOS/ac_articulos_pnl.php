@@ -419,6 +419,15 @@
     }
 </script>
 
+<?php
+$modulo_acceso = '';
+if ($_SESSION['INICIO']['MODULO_SISTEMA'] == 2018) {
+    $modulo_acceso = 'hidden';
+}
+?>
+
+
+
 <form id="form_articulo">
     <div class="row">
         <div class="col-auto">
@@ -431,18 +440,16 @@
             </div>
         </div>
 
-        <?php if ($_SESSION['INICIO']['MODULO_SISTEMA'] != 2018) { ?>
-            <div class="col-auto">
-                <div id="cbx_detalle_it_cointainer">
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" name="cbx_detalle_it" id="cbx_detalle_it">
-                        <label class="form-label" for="cbx_detalle_it">IT </label>
-                    </div>
-                    <label class="error" style="display: none;" for="cbx_detalle_it"></label>
+        <div class="col-auto" <?= $modulo_acceso ?>>
+            <div id="cbx_detalle_it_cointainer">
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="cbx_detalle_it" id="cbx_detalle_it">
+                    <label class="form-label" for="cbx_detalle_it">IT </label>
                 </div>
+                <label class="error" style="display: none;" for="cbx_detalle_it"></label>
             </div>
-        <?php } ?>
-        
+        </div>
+
     </div>
 
     <hr class="text-primary mb-2 mt-1">
@@ -470,19 +477,17 @@
     </div>
 
     <div class="row mb-col">
-        <?php if ($_SESSION['INICIO']['MODULO_SISTEMA'] != 2018) { ?>
-            <div class="col-sm-6">
-                <div class="d-flex justify-content-between align-items-center">
-                    <label for="ddl_custodio" class="form-label">Custodio </label>
-                    <small id="lbl_sap_custodio" class="text-muted"><u>Código:</u></small>
-                </div>
-
-                <select class="form-control form-control-sm select2-validation" name="ddl_custodio" id="ddl_custodio" disabled>
-                    <option value="">Seleccione</option>
-                </select>
-                <label class="error" style="display: none;" for="ddl_custodio"></label>
+        <div class="col-sm-6" <?= $modulo_acceso ?>>
+            <div class="d-flex justify-content-between align-items-center">
+                <label for="ddl_custodio" class="form-label">Custodio </label>
+                <small id="lbl_sap_custodio" class="text-muted"><u>Código:</u></small>
             </div>
-        <?php } ?>
+
+            <select class="form-control form-control-sm select2-validation" name="ddl_custodio" id="ddl_custodio" disabled>
+                <option value="">Seleccione</option>
+            </select>
+            <label class="error" style="display: none;" for="ddl_custodio"></label>
+        </div>
 
         <div class="col-sm-6">
             <div class="d-flex justify-content-between align-items-center">
@@ -490,7 +495,7 @@
                 <small id="lbl_sap_loc" class="text-muted"><u>Código:</u></small>
             </div>
 
-            <select class="form-control form-control-sm select2-validation" name="ddl_localizacion" id="ddl_localizacion" disabled>
+            <select class="form-control form-control-sm select2-validation" name="ddl_localizacion" id="ddl_localizacion">
                 <option value="">Seleccione</option>
             </select>
             <label class="error" style="display: none;" for="ddl_localizacion"></label>
@@ -676,8 +681,8 @@
         </div>
     </div>
 
-    <div class="row mb-col" hidden>
-        <div class="col-sm-6" hidden>
+    <div class="row mb-col">
+        <div class="col-sm-6">
             <label for="ddl_clase_mov" class="form-label">Clase de movimiento </label>
             <select class="form-select form-select-sm select2-validation" name="ddl_clase_mov" id="ddl_clase_mov">
                 <option value="">Seleccione</option>
@@ -699,7 +704,7 @@
 
     <hr class="text-primary mb-2 mt-1" style="border-top: 3px solid;">
 
-    <?php if ($_SESSION['INICIO']['MODULO_SISTEMA'] != 2018) { ?>
+    <div <?= $modulo_acceso ?>>
         <div class="row mb-col">
             <div class="col-sm-6">
                 <label for="txt_company" class="form-label form-label-sm">Company Code </label>
@@ -730,8 +735,7 @@
         </div>
 
         <hr class="text-primary mb-2 mt-1">
-
-    <?php } ?>
+    </div>
 
     <!-- Información articulo adicional -->
     <div class="row mb-col">
