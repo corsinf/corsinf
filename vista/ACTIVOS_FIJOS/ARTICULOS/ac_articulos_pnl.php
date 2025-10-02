@@ -430,16 +430,19 @@
                 <label class="error" style="display: none;" for="cbx_kit"></label>
             </div>
         </div>
-        <div class="col-auto">
-            <div id="cbx_detalle_it_cointainer">
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" name="cbx_detalle_it" id="cbx_detalle_it">
-                    <label class="form-label" for="cbx_detalle_it">IT </label>
-                </div>
-                <label class="error" style="display: none;" for="cbx_detalle_it"></label>
-            </div>
-        </div>
 
+        <?php if ($_SESSION['INICIO']['MODULO_SISTEMA'] != 2018) { ?>
+            <div class="col-auto">
+                <div id="cbx_detalle_it_cointainer">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="cbx_detalle_it" id="cbx_detalle_it">
+                        <label class="form-label" for="cbx_detalle_it">IT </label>
+                    </div>
+                    <label class="error" style="display: none;" for="cbx_detalle_it"></label>
+                </div>
+            </div>
+        <?php } ?>
+        
     </div>
 
     <hr class="text-primary mb-2 mt-1">
