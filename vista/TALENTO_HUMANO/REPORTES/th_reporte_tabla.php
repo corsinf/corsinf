@@ -483,33 +483,7 @@ if (isset($_GET['_id'])) {
     }
 </script>
 
-<style>
-    .card-filter {
-        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-        border-left: 4px solid #0d6efd;
-        transition: all 0.3s ease;
-    }
 
-    .card-filter:hover {
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        transform: translateY(-2px);
-    }
-
-    .form-check-custom {
-        padding: 8px 12px;
-        border-radius: 6px;
-        transition: background-color 0.2s ease;
-    }
-
-    .form-check-custom:hover {
-        background-color: rgba(13, 110, 253, 0.05);
-    }
-
-    .form-check-input:checked~.form-check-label {
-        color: #0d6efd;
-        font-weight: 500;
-    }
-</style>
 
 <div class="page-wrapper">
     <div class="page-content">
@@ -546,24 +520,23 @@ if (isset($_GET['_id'])) {
                         <div class="card border-0 shadow-sm mt-3">
                             <div class="card-body p-3">
 
-                                <!-- Todos los Radio Buttons en una fila -->
-                                <div class="row g-3 mb-3">
+                                <div class="row g-2 mb-3">
                                     <!-- Tipo de Búsqueda -->
                                     <div class="col-md-4">
                                         <div class="card card-filter h-100 mb-0">
-                                            <div class="card-body p-3">
+                                            <div class="card-body p-2">
                                                 <h6 class="text-primary mb-2 fw-bold">
                                                     <i class="bx bx-filter-alt me-1"></i> Tipo de Búsqueda
                                                 </h6>
-                                                <div class="d-flex flex-column gap-2">
-                                                    <div class="form-check form-check-custom">
+                                                <div class="d-flex flex-column">
+                                                    <div class="form-check form-check-custom mb-1">
                                                         <input class="form-check-input" type="radio" name="tipo_busqueda_principal"
                                                             id="radio_departamento" value="departamento" checked>
                                                         <label class="form-check-label" for="radio_departamento">
                                                             <i class="bx bx-building me-1"></i> Por Departamento
                                                         </label>
                                                     </div>
-                                                    <div class="form-check form-check-custom">
+                                                    <div class="form-check form-check-custom mb-1">
                                                         <input class="form-check-input" type="radio" name="tipo_busqueda_principal"
                                                             id="radio_persona" value="persona">
                                                         <label class="form-check-label" for="radio_persona">
@@ -578,19 +551,19 @@ if (isset($_GET['_id'])) {
                                     <!-- Filtrar Por -->
                                     <div class="col-md-4" id="pnl_filtro_departamento">
                                         <div class="card card-filter h-100 mb-0">
-                                            <div class="card-body p-3">
+                                            <div class="card-body p-2">
                                                 <h6 class="text-primary mb-2 fw-bold">
                                                     <i class="bx bx-search-alt me-1"></i> Filtrar Por
                                                 </h6>
-                                                <div class="d-flex flex-column gap-2">
-                                                    <div class="form-check form-check-custom">
+                                                <div class="d-flex flex-column">
+                                                    <div class="form-check form-check-custom mb-1">
                                                         <input class="form-check-input" type="radio" name="filtro_departamento"
                                                             id="radio_dept_todos" value="todos" checked>
                                                         <label class="form-check-label" for="radio_dept_todos">
                                                             <i class="bx bx-group me-1"></i> Todas las Personas
                                                         </label>
                                                     </div>
-                                                    <div class="form-check form-check-custom">
+                                                    <div class="form-check form-check-custom mb-1">
                                                         <input class="form-check-input" type="radio" name="filtro_departamento"
                                                             id="radio_dept_persona" value="persona_especifica">
                                                         <label class="form-check-label" for="radio_dept_persona">
@@ -605,23 +578,23 @@ if (isset($_GET['_id'])) {
                                     <!-- Ordenamiento -->
                                     <div class="col-md-4" id="pnl_ordenamiento">
                                         <div class="card card-filter h-100 mb-0">
-                                            <div class="card-body p-3">
+                                            <div class="card-body p-2">
                                                 <h6 class="text-primary mb-2 fw-bold">
                                                     <i class="bx bx-sort me-1"></i> Ordenamiento
                                                 </h6>
-                                                <div class="d-flex flex-column gap-2">
-                                                    <div class="form-check form-check-custom">
+                                                <div class="d-flex flex-column">
+                                                    <div class="form-check form-check-custom mb-1">
                                                         <input class="form-check-input" type="radio" name="tipo_ordenamiento"
                                                             id="radio_sin_ordenar" value="sin_ordenar" checked>
                                                         <label class="form-check-label" for="radio_sin_ordenar">
-                                                            <i class="bx bx-list-ul me-1"></i> Por Fecha
+                                                            <i class="bx bx-list-ul me-1"></i> Sin Organizar
                                                         </label>
                                                     </div>
-                                                    <div class="form-check form-check-custom">
+                                                    <div class="form-check form-check-custom mb-1">
                                                         <input class="form-check-input" type="radio" name="tipo_ordenamiento"
                                                             id="radio_ordenado" value="ordenado">
                                                         <label class="form-check-label" for="radio_ordenado">
-                                                            <i class="bx bx-sort-alt-2 me-1"></i> Por Persona y Fecha
+                                                            <i class="bx bx-sort-alt-2 me-1"></i> Organizado por nombre
                                                         </label>
                                                     </div>
                                                 </div>
@@ -629,6 +602,7 @@ if (isset($_GET['_id'])) {
                                         </div>
                                     </div>
                                 </div>
+
 
                                 <!-- Fechas y Selects Dinámicos -->
                                 <div class="row g-3 mb-3">
@@ -700,7 +674,7 @@ if (isset($_GET['_id'])) {
                                                 onclick="exportar_excel();" type="button" style="display: none;">
                                                 <i class='bx bx-file me-1'></i> Exportar Excel
                                             </button>
-                                            
+
                                             <button id="btn_buscar" class="btn btn-primary btn-sm"
                                                 onclick="buscar_fechas();" type="button">
                                                 <i class='bx bx-search me-1'></i> Buscar
