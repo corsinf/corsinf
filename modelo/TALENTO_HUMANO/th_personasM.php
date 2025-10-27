@@ -41,7 +41,7 @@ class th_personasM extends BaseModel
         //'th_per_fecha_modificacion AS fecha_modificacion',
         'PERFIL',
         //'PASS',
-        
+
         // Campos adicionales que pueden ser necesarios en el futuro
         // 'th_per_es_admin',
         // 'th_per_habiltado',
@@ -51,4 +51,64 @@ class th_personasM extends BaseModel
         // 'th_per_fecha_aut_limite',
         // 'th_per_fecha_aut_inicio'
     ];
+
+    public function listar_por_departamento($id_departamento = '')
+    {
+        // Normalizar entrada (puede ser número, texto o vacío)
+        $valor = ($id_departamento !== '' && $id_departamento !== null) ? trim($id_departamento) : '';
+
+        if ($valor === '') {
+            // Si no se manda nada, devolvemos todas las personas activas que estén asignadas a algún departamento
+            $sql = "
+        SELECT DISTINCT p.th_per_id,
+               p.th_per_cedula,
+               p.th_per_primer_nombre,
+               p.th_per_segundo_nombre,
+               p.th_per_primer_apellido,
+               p.th_per_segundo_apellido
+        FROM th_personas p
+        INNER JOIN th_personas_departamentos pd ON p.th_per_id = pd.th_per_id
+        WHERE p.th_per_estado = 1
+        ORDER BY p.th_per_primer_apellido, p.th_per_primer_nombre
+        ";
+        } else {
+            // Si el valor es numérico lo tratamos como id
+            if (is_numeric($valor)) {
+                $id = (int)$valor;
+                $sql = "
+            SELECT p.th_per_id,
+                   p.th_per_cedula,
+                   p.th_per_primer_nombre,
+                   p.th_per_segundo_nombre,
+                   p.th_per_primer_apellido,
+                   p.th_per_segundo_apellido
+            FROM th_personas p
+            INNER JOIN th_personas_departamentos pd ON p.th_per_id = pd.th_per_id
+            WHERE pd.th_dep_id = {$id}
+              AND p.th_per_estado = 1
+            ORDER BY p.th_per_primer_apellido, p.th_per_primer_nombre
+            ";
+            } else {
+                // Si no es numérico, lo tratamos como nombre (búsqueda parcial usando LIKE)
+                // Escapamos comillas simples para evitar romper la query (mejor usar binding si está disponible)
+                $nombre = addslashes($valor);
+                $sql = "
+            SELECT p.th_per_id,
+                   p.th_per_cedula,
+                   p.th_per_primer_nombre,
+                   p.th_per_segundo_nombre,
+                   p.th_per_primer_apellido,
+                   p.th_per_segundo_apellido
+            FROM th_personas p
+            INNER JOIN th_personas_departamentos pd ON p.th_per_id = pd.th_per_id
+            INNER JOIN th_departamentos d ON pd.th_dep_id = d.th_dep_id
+            WHERE d.th_dep_nombre LIKE '%{$nombre}%'
+              AND p.th_per_estado = 1
+            ORDER BY p.th_per_primer_apellido, p.th_per_primer_nombre
+            ";
+            }
+        }
+
+        return $this->db->datos($sql);
+    }
 }

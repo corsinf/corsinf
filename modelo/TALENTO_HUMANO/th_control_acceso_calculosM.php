@@ -76,17 +76,17 @@ class th_control_acceso_calculosM extends BaseModel
         'th_per_id AS per_id'
     ];
 
-    
-    function listar_asistencia_por_fecha_departamento(
-    $fecha_inicio,
-    $fecha_fin,
-    $tipo_busqueda = 'departamento',
-    $departamento = '',
-    $persona = '',
-    $tipo_ordenamiento = 'sin_ordenar'
-) {
-    // Base de la consulta
-    $sql = "SELECT 
+
+    public function listar_asistencia_por_fecha_departamento(
+        $fecha_inicio,
+        $fecha_fin,
+        $tipo_busqueda = 'departamento',
+        $departamento = '',
+        $persona = '',
+        $tipo_ordenamiento = 'sin_ordenar'
+    ) {
+        // Base de la consulta
+        $sql = "SELECT 
         th_asi_id AS _id,
         th_asi_apellidos AS apellidos,
         th_asi_nombres AS nombres,
@@ -122,37 +122,52 @@ class th_control_acceso_calculosM extends BaseModel
     WHERE 
         th_asi_fecha BETWEEN '$fecha_inicio' AND '$fecha_fin'";
 
-    // Aplicar filtros según el tipo de búsqueda
-    if ($tipo_busqueda === 'departamento') {
-        // Filtrar por departamento si está especificado
-        if (!empty($departamento) && $departamento !== 'todos') {
-            $sql .= " AND th_asi_departamento = '$departamento'";
-        }
-        
-        // Filtrar por persona si está especificada (independiente del departamento)
-        if (!empty($persona)) {
-            $sql .= " AND th_per_id = '$persona'"; // O el campo que identifique a la persona
-        }
-        
-    } elseif ($tipo_busqueda === 'persona') {
-        // Búsqueda directa por persona
-        if (!empty($persona)) {
-            $sql .= " AND th_per_id = '$persona'"; // O el campo que identifique a la persona
-        }
-    }
+        // Aplicar filtros según el tipo de búsqueda
+        if ($tipo_busqueda === 'departamento') {
+            // Filtrar por departamento si está especificado y no es 'todos'
+            if (!empty($departamento) && $departamento !== 'todos') {
+                // Si tu 'departamento' es el nombre
+                $departamento_esc = addslashes($departamento);
+                $sql .= " AND th_asi_departamento = '{$departamento_esc}'";
+            }
 
-    // Agregar ordenamiento según el tipo seleccionado
-    if ($tipo_ordenamiento === 'ordenado') {
-        $sql .= " ORDER BY 
+            // Filtrar por persona si está especificada (independiente del departamento)
+            if (!empty($persona)) {
+                $persona_esc = addslashes($persona);
+                $sql .= " AND th_per_id = '{$persona_esc}'"; // O el campo que identifique a la persona
+            }
+        } elseif ($tipo_busqueda === 'persona') {
+            // Búsqueda directa por persona
+            if (!empty($persona)) {
+                $persona_esc = addslashes($persona);
+                $sql .= " AND th_per_id = '{$persona_esc}'"; // O el campo que identifique a la persona
+            }
+        }
+
+        
+        $isTodosDepartamentos = (empty($departamento) || $departamento === 'todos');
+
+        if ($tipo_ordenamiento === 'ordenado') {
+            // Orden explícito por persona y fecha
+            $sql .= " ORDER BY 
             th_asi_apellidos ASC, 
             th_asi_nombres ASC, 
             th_asi_fecha ASC";
-    } else {
-        $sql .= " ORDER BY 
-            th_asi_fecha ASC";
-    }
+        } else {
+            // sin_ordenar => si es todos los departamentos, ordenar por departamento primero
+            if ($isTodosDepartamentos) {
+                $sql .= " ORDER BY 
+                th_asi_departamento ASC,
+                th_asi_apellidos ASC, 
+                th_asi_nombres ASC, 
+                th_asi_fecha ASC";
+            } else {
+                $sql .= " ORDER BY 
+                th_asi_fecha ASC";
+            }
+        }
 
-    $datos = $this->db->datos($sql);
-    return $datos;
-}
+        $datos = $this->db->datos($sql);
+        return $datos;
+    }
 }
