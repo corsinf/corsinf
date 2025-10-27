@@ -22,62 +22,41 @@
     let tablaKardex;
     $(document).ready(function() {
         tablaKardex = $('#listaKardex').DataTable({
-            ajax: {
-                url: '../controlador/ACTIVOS_FIJOS/INVENTARIOS/in_kardexC.php?Listatabla=true',
-                type: "POST",
-                data: function(d) {
-                    var parametros = {
-                        desde: $('#txt_desde').val(),
-                        hasta: $('#txt_hasta').val()
-                    };
-                    return {
-                        parametros: parametros
-                    };
-                },
-                dataSrc: ''
-            },
-            columns: [{
-                    data: 'in_kar_codigo_referencia'
-                },
-                {
-                    data: 'descripcion'
-                },
-                {
-                    data: 'in_kar_fecha'
-                },
-                {
-                    data: 'in_kar_salida'
-                },
-                {
-                    data: 'in_kar_entrada'
-                },
-                {
-                    data: 'in_kar_valor_unitario'
-                },
-                {
-                    data: 'in_kar_valor_total'
-                },
-                {
-                    data: 'in_kar_orden_no'
-                },
-                {
-                    data: 'apellidos'
-                },
-                {
-                    data: 'id_usuarios'
-                },
-            ],
-            dom: '<"d-flex justify-content-between mb-2"fB>rtip', // Define la posición de los botones
-            buttons: [
-                'excelHtml5',
-                'pdfHtml5',
-                'csvHtml5',
-                'print'
-            ],
-            language: {
-                url: 'https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
-            }
-        });
+        ajax: {
+            url: '../controlador/ACTIVOS_FIJOS/INVENTARIOS/in_kardexC.php?Listatabla=true',
+            type: "POST",
+            data: function(d) {
+                  var parametros = {                    
+                    desde: $('#txt_desde').val(),
+                    hasta: $('#txt_hasta').val()
+                  };
+                  return { parametros: parametros };
+            },      
+            dataSrc: ''
+        },
+        columns: [
+            { data: 'in_kar_codigo_referencia' },
+            { data: 'descripcion' },
+            { data: 'in_kar_fecha' },
+            { data: 'in_kar_salida' },
+            { data: 'in_kar_entrada' },
+            { data: 'in_kar_valor_unitario' },
+            { data: 'in_kar_valor_total' },
+            { data: 'in_kar_orden_no' },
+            { data: 'apellidos' },            
+            { data: 'id_usuarios' },
+        ],
+        dom: '<"d-flex justify-content-between mb-2"fB>rtip', // Define la posición de los botones
+        buttons: [
+            'excelHtml5',
+            'pdfHtml5',
+            // 'csvHtml5',
+            // 'print'
+        ],
+        language: {
+            url: 'https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
+        }
+    });
 
     });
 
@@ -85,6 +64,49 @@
         if ($.fn.DataTable.isDataTable('#listaKardex')) {
             tablaKardex.ajax.reload(); // Si ya existe, recarga los datos
         }
+    }
+
+    function insert()
+    {
+        var parametros = 
+        {
+            'entrada':'1',
+            'referencia':'122333',
+            'fecha':'2025-09-26',
+            'pvp':'4',
+            'total':'5',
+            'existencias':'6',
+            'proveedor':'7',
+            'orden':'8',
+            'iva':'9',
+            'tipo':'0',
+            'factura':'1',
+            'serie':'2',
+            'fecha_expiracion':'2025-09-26',
+            'procedencia':'4',
+            'lote':'5',
+            'fecha_ela':'2025-09-26',
+            'registro_sa':'7',
+            'unidad':'8',
+            'descuento':'9',
+            'subtotal':'0',
+            'articulo':'1',
+            'usuario':'2'
+        }
+         $.ajax({
+            data:  {parametros:parametros},
+            url: '../controlador/ACTIVOS_FIJOS/INVENTARIOS/in_kardexC.php?Insert=true',
+            type: 'post',
+            dataType: 'json',
+            /*beforeSend: function () {   
+                 var spiner = '<div class="text-center"><img src="../img/gif/proce.gif" width="100" height="100"></div>'     
+               $('#tabla_').html(spiner);
+            },*/
+            success: function(response) {
+
+                $('#ddl_informes').html(response);
+            }
+        });
     }
 
 
@@ -135,13 +157,14 @@
                     <div class="card-body p-5">
                         <h5 class="mb-0 text-primary"></h5>
 
-                        <!--  <div class="row mb-3">
+                        <div class="row mb-3">
                             <div class="col-sm-12" id="btn_nuevo">
 
                                 <button type="button" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#modal_Kardex"><i class="bx bx-plus"></i> Nuevo</button>
+                                <button onclick="insert()" type="button">Insert</button>
 
                             </div>
-                        </div> -->
+                        </div>
                         <div class="row">
                             <div class="col-sm-2">
                                 <b>Desde</b>
