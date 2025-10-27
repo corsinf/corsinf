@@ -145,6 +145,10 @@ if ($_GET['acc'] == 'log_dispositivos') {
  * 
  */
 
+if ($_GET['acc'] == 'th_marcaciones') {
+	include('TALENTO_HUMANO/MARCACIONES/th_marcaciones.php');
+}
+
 //CONTROL_ACCESO_WEB
 if ($_GET['acc'] == 'th_marcaciones_web') {
 	include('TALENTO_HUMANO/MARCACIONES/CONTROL_ACCESO_WEB/th_marcaciones_web.php');
@@ -174,4 +178,14 @@ if ($_GET['acc'] == 'th_triangular_registrar') {
 
 if ($_GET['acc'] == 'th_triangular_departamento') {
 	include('TALENTO_HUMANO/MARCACIONES/TRIANGULAR/th_triangular_departamento.php');
+}
+
+/**
+ * 
+ * Recalculo
+ * 
+ */
+
+if ($_GET['acc'] == 'th_recalcular') {
+	include('TALENTO_HUMANO/MARCACIONES/th_recalcular.php');
 }

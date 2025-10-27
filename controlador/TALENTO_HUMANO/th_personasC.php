@@ -41,20 +41,6 @@ if (isset($_GET['buscar'])) {
     echo json_encode($controlador->buscar($parametros));
 }
 
-
-if (isset($_GET['buscar_departamento'])) {
-    $query = isset($_GET['q']) ? $_GET['q'] : '';
-    $id_dep = isset($_GET['id_departamento']) ? $_GET['id_departamento'] : ''; // puede ser nombre o id
-
-    $parametros = [
-        'query' => $query,
-        'id_departamento' => $id_dep
-    ];
-
-    echo json_encode($controlador->buscar_por_departamento($parametros));
-    exit;
-}
-
 if (isset($_GET['conectar_buscar'])) {
     echo json_encode($controlador->conectar_buscar($_POST['parametros']));
 }
@@ -93,9 +79,11 @@ if (isset($_GET['addTarjetaBase'])) {
     $parametros = $_POST['parametros'];
     echo json_encode($controlador->addTarjetaBase($parametros['idPerson'], $parametros['CardNo']));
 }
+
 if (isset($_GET['DeleteTarjetaBio'])) {
     echo json_encode($controlador->DeleteTarjetaBio($_POST['parametros']));
 }
+
 if (isset($_GET['DeleteTarjetaBase'])) {
     $parametros = $_POST['parametros'];
     echo json_encode($controlador->DeleteTarjetaBase($parametros['idPerson'], $parametros['CardNo']));
@@ -106,26 +94,32 @@ if (isset($_GET['listaHuellas'])) {
     $parametros = $_POST['parametros'];
     echo json_encode($controlador->listaHuellas($parametros));
 }
+
 if (isset($_GET['CapturarFinger'])) {
     echo json_encode($controlador->CapturarFinger($_POST['parametros']));
 }
+
 if (isset($_GET['capturarFace'])) {
     echo json_encode($controlador->capturarFace($_POST['parametros']));
 }
+
 if (isset($_GET['addHuellaBio'])) {
     $huella = $_FILES;
     $parametros = $_POST;
     echo json_encode($controlador->addHuellaBio($parametros, $huella));
 }
+
 if (isset($_GET['addHuellaBio2'])) {
     $parametros = $_POST['parametros'];
     echo json_encode($controlador->addHuellaBio2($parametros));
 }
+
 if (isset($_GET['addHuellaBase'])) {
     $huella = $_FILES;
     $parametros = $_POST;
     echo json_encode($controlador->addHuellaBase($parametros['idPerson'], $parametros['CardNo'], $parametros['NumFinger'], $parametros['detectado'], $huella));
 }
+
 if (isset($_GET['deteleHuella'])) {
     echo json_encode($controlador->deteleHuella($_POST['parametros']));
 }
@@ -139,6 +133,7 @@ if (isset($_GET['listaFace'])) {
     $parametros = $_POST['parametros'];
     echo json_encode($controlador->listaFace($parametros));
 }
+
 if (isset($_GET['addFaceBio'])) {
     $huella = $_FILES;
     $parametros = $_POST;
@@ -163,6 +158,7 @@ if (isset($_GET['DeleteFaceBio'])) {
 if (isset($_GET['DeleteFaceBase'])) {
     echo json_encode($controlador->DeleteFaceBase($_POST['parametros']));
 }
+
 class th_personasC
 {
     private $modelo;
@@ -282,21 +278,38 @@ class th_personasC
 
     function guardarImport($parametros)
     {
+        require_once(dirname(__DIR__, 2) . '/modelo/TALENTO_HUMANO/th_control_accesoM.php');
+        $th_control_accesoM = new th_control_accesoM();
+
         $msj = '';
-        $datos = $parametros['datos'];
-        $datos = json_decode($datos, true);
 
-        // print_r($datos);die();
+        $insertadosCard = 0;
+        $actualizadosCard = 0;
+        $personasInsertadas = 0;
+        $perIdActualizados = 0;
 
-        foreach ($datos as $key => $value) {
-            $per = explode(' ', $value['nombre']);
-            $data = count($per);
-            $where = '';
-            if (isset($per[0])) {
-                $where .= "th_per_primer_apellido";
+        // -------- Entrada / Normalización --------
+        $datosRaw = $parametros['datos'] ?? '[]';
+        $filas = is_array($datosRaw) ? $datosRaw : json_decode($datosRaw, true);
+        if (!is_array($filas)) {
+            return ['resp' => 0, 'msj' => 'Formato de datos inválido (no es JSON de arreglo).'];
+        }
+
+        // Procesamos solo filas válidas y, de paso, recolectamos nombres únicos
+        $loteValido = [];
+        $nombresUnicos = [];
+
+        foreach ($filas as $fila) {
+            $nombre = isset($fila['nombre']) ? trim((string)$fila['nombre']) : '';
+            $cardNo = isset($fila['CardNo']) ? trim((string)$fila['CardNo']) : '';
+
+            if ($nombre === '') {
+                $msj .= 'Omitido: nombre vacío.<br>';
+                continue;
             }
-            if (isset($per[1])) {
-                $where .= "+' '+th_per_segundo_apellido";
+            if ($cardNo === '') {
+                $msj .= "Omitido {$nombre}: sin CardNo.<br>";
+                continue;
             }
             if (isset($per[2])) {
                 $where .= "+' '+th_per_primer_nombre";
@@ -306,66 +319,164 @@ class th_personasC
             }
 
             $this->modelo->reset();
-            $data = $this->modelo->where($where, $value['nombre'])->listar();
+            $existe = $this->modelo->where('th_per_observaciones', $nombre)->listar();
 
-            // print_r($where);
-
-            // print_r($value['nombre']);
-            // print_r($data);die();
-
-            if (count($data) == 0) {
-                $valor = array(
-                    array('campo' =>  'th_per_fecha_modificacion', 'dato' => date('Y-m-d H:i:s')),
-                );
-
-                $nombre = $this->cod_globales->separarNombreCompleto($value['nombre']);
-
-                // print_r($nombre);die();
-
-                if (isset($nombre[2])) {
-                    $campo = array('campo' =>  'th_per_primer_nombre', 'dato' => $nombre[2]);
-                    array_push($valor, $campo);
-                }
-                if (isset($nombre[3])) {
-                    $campo = array('campo' => 'th_per_segundo_nombre', 'dato' => $nombre[3]);
-                    array_push($valor, $campo);
-                }
-                if (isset($nombre[0])) {
-                    $campo = array('campo' => 'th_per_primer_apellido', 'dato' => $nombre[0]);
-                    array_push($valor, $campo);
-                }
-                if (isset($nombre[1])) {
-                    $campo = array('campo' => 'th_per_segundo_apellido', 'dato' => $nombre[1]);
-                    array_push($valor, $campo);
-                }
-                // print_r($valor);die();               
-                $datos = $this->modelo->insertar($valor);
-
-                // print_r($where);
-                // print_r($value['nombre']);die();
-                $reg = $this->modelo->where($where, $value['nombre'])->listar();
-
-                // print_r($data);die();
-                $biom = array(
-                    array('campo' => 'th_per_id', 'dato' => $reg[0]['_id']),
-                    array('campo' => 'th_cardNo', 'dato' => $value['CardNo']),
-                    array('campo' => 'th_card_nombre', 'dato' => $value['nombre']),
-                    array('campo' => 'th_card_creacion', 'dato' => date('Y-m-d')),
-                );
-
-                // print_r($biom);die();
-                $datos = $this->card->insertar($biom);
-            } else {
-                $msj .= 'El registro ' . $value['nombre'] . ' ya esta registrado<br>';
+            if (!is_array($existe) || count($existe) === 0) {
+                $this->modelo->reset();
+                $datosPersona = [
+                    ['campo' => 'th_per_primer_nombre',         'dato' => $nombre],
+                    ['campo' => 'th_per_observaciones',         'dato' => $nombre],
+                    ['campo' => 'th_per_fecha_modificacion', 'dato' => date('Y-m-d H:i:s')],
+                ];
+                $okIns = $this->modelo->insertar($datosPersona);
+                if ($okIns) $personasInsertadas++;
+                else $msj .= "No se pudo insertar persona con th_per_observaciones={$nombre}.<br>";
             }
+            // Si existe, no se hace nada (tal como pediste).
         }
 
-        if ($msj != '') {
-            $msj = '<div style="text-align: left;">' . $msj . '</div>';
+        // ============ FASE 3: Poner per_id en th_card_data por igualdad de nombre ============
+        // Para cada registro procesado: si hay persona con th_per_observaciones == th_card_nombre, setear per_id
+        $ok_sync = $this->card->sincronizar_datos_card_persona();
+        $$th_control_accesoM = $th_control_accesoM->actualizar_per_id_no_card();
+
+
+        if ($msj !== '') {
+            $msj = '<div style="text-align:left;">' . $msj . '</div>';
         }
 
-        return array('resp' => 1, 'msj' => $msj);
+        return [
+            'resp' => 1,
+            'msj'  => "Sync {$ok_sync} -> Tarjetas insertadas: {$insertadosCard}. Tarjetas actualizadas: {$actualizadosCard}. " .
+                "Personas insertadas: {$personasInsertadas}. per_id actualizados: {$perIdActualizados}.<br>{$msj}"
+        ];
     }
+
+    /**
+     * Upsert en tabla 'card' por th_cardNo:
+     * - Si existe: ACTUALIZA th_card_nombre (no toca per_id aquí).
+     * - Si no existe: INSERTA (per_id se asigna en la FASE 3).
+     * Retorna: 1=actualizado, 2=insertado, -1/-2=falla, false=excepción.
+     */
+    private function upsertCardPorCardNo(string $cardNo, string $nombre)
+    {
+        try {
+            $this->card->reset();
+            $existe = $this->card->where('th_cardNo', $cardNo)->listar();
+
+            if (is_array($existe) && count($existe) > 0) {
+                $datos = [
+                    ['campo' => 'th_card_nombre', 'dato' => $nombre],
+                ];
+                $where = [
+                    ['campo' => 'th_cardNo', 'dato' => $cardNo],
+                ];
+                $okUpdate = $this->card->editar($datos, $where);
+                return $okUpdate ? 1 : -1;
+            }
+
+            $datos = [
+                ['campo' => 'th_cardNo',        'dato' => $cardNo],
+                ['campo' => 'th_card_nombre',   'dato' => $nombre],
+                ['campo' => 'th_card_creacion', 'dato' => date('Y-m-d')],
+            ];
+            $okInsert = $this->card->insertar($datos);
+            return $okInsert ? 2 : -2;
+        } catch (\Throwable $e) {
+            return false;
+        }
+    }
+
+
+
+    // function guardarImport($parametros)
+    // {
+    //     $msj = '';
+    //     $datos = $parametros['datos'];
+    //     $datos = json_decode($datos, true);
+
+    //     // print_r($datos);die();
+
+    //     foreach ($datos as $key => $value) {
+    //         $per = explode(' ', $value['nombre']);
+    //         $data = count($per);
+    //         $where = '';
+    //         if (isset($per[0])) {
+    //             $where .= "th_per_primer_apellido";
+    //         }
+    //         if (isset($per[1])) {
+    //             $where .= "+' '+th_per_segundo_apellido";
+    //         }
+    //         if (isset($per[2])) {
+    //             $where .= "+' '+th_per_primer_nombre";
+    //         }
+    //         if (isset($per[3])) {
+    //             $where .= "+' '+th_per_segundo_nombre";
+    //         }
+
+    //         $this->modelo->reset();
+    //         $data = $this->modelo->where($where, $value['nombre'])->listar();
+
+    //         // print_r($where);
+
+    //         // print_r($value['nombre']);
+    //         // print_r($data);die();
+
+    //         if (count($data) == 0) {
+    //             $valor = array(
+    //                 array('campo' =>  'th_per_fecha_modificacion', 'dato' => date('Y-m-d H:i:s')),
+    //             );
+
+    //             $nombre = $this->cod_globales->separarNombreCompleto($value['nombre']);
+
+    //             // print_r($nombre);die();
+
+    //             if (isset($nombre[2])) {
+    //                 $campo = array('campo' =>  'th_per_primer_nombre', 'dato' => $nombre[2]);
+    //                 array_push($valor, $campo);
+    //             }
+    //             if (isset($nombre[3])) {
+    //                 $campo = array('campo' => 'th_per_segundo_nombre', 'dato' => $nombre[3]);
+    //                 array_push($valor, $campo);
+    //             }
+    //             if (isset($nombre[0])) {
+    //                 $campo = array('campo' => 'th_per_primer_apellido', 'dato' => $nombre[0]);
+    //                 array_push($valor, $campo);
+    //             }
+    //             if (isset($nombre[1])) {
+    //                 $campo = array('campo' => 'th_per_segundo_apellido', 'dato' => $nombre[1]);
+    //                 array_push($valor, $campo);
+    //             }
+    //             // print_r($valor);die();               
+    //             $datos = $this->modelo->insertar($valor);
+
+    //             // print_r($where);
+    //             // print_r($value['nombre']);die();
+    //             $reg = $this->modelo->where($where, $value['nombre'])->listar();
+
+    //             // print_r($data);die();
+    //             $biom = array(
+    //                 array('campo' => 'th_per_id', 'dato' => $reg[0]['_id']),
+    //                 array('campo' => 'th_cardNo', 'dato' => $value['CardNo']),
+    //                 array('campo' => 'th_card_nombre', 'dato' => $value['nombre']),
+    //                 array('campo' => 'th_card_creacion', 'dato' => date('Y-m-d')),
+    //             );
+
+    //             // print_r($biom);die();
+    //             $datos = $this->card->insertar($biom);
+    //         } else {
+    //             $msj .= 'El registro ' . $value['nombre'] . ' ya esta registrado<br>';
+    //         }
+    //     }
+
+    //     if ($msj != '') {
+    //         $msj = '<div style="text-align: left;">' . $msj . '</div>';
+    //     }
+
+    //     return array('resp' => 1, 'msj' => $msj);
+    // }
+
+
 
     // function registros_biometria($parametros)
     // {
@@ -943,44 +1054,5 @@ class th_personasC
         return $this->face->eliminar($datosBio);
     }
 
-    public function buscar_por_departamento($parametros)
-    {
-        $lista = [];
-
-        // Tomamos el valor tal cual (puede ser id o nombre)
-        $id_departamento = isset($parametros['id_departamento']) ? trim($parametros['id_departamento']) : '';
-
-        // Si no hay id_departamento (vacío) devolvemos lista vacía (igual que antes)
-        if ($id_departamento === '') {
-            return $lista;
-        }
-
-        // Llamar al modelo pasando el valor (numérico o texto)
-        $datos = $this->modelo->listar_por_departamento($id_departamento);
-
-        // Texto de búsqueda (opcional, filtro por query)
-        $query = isset($parametros['query']) ? trim($parametros['query']) : '';
-
-        foreach ($datos as $value) {
-            // Construir nombre completo
-            $nombreCompleto = trim(
-                ($value['th_per_primer_apellido'] ?? '') . ' ' .
-                    ($value['th_per_segundo_apellido'] ?? '') . ' ' .
-                    ($value['th_per_primer_nombre'] ?? '') . ' ' .
-                    ($value['th_per_segundo_nombre'] ?? '')
-            );
-
-            $text = ($value['th_per_cedula'] ?? '') . ' - ' . $nombreCompleto;
-
-            // Si hay filtro, aplicarlo sobre el text o cédula
-            if ($query === '' || stripos($text, $query) !== false) {
-                $lista[] = [
-                    'id'   => $value['th_per_id'],
-                    'text' => $text
-                ];
-            }
-        }
-
-        return $lista;
-    }
+    
 }
