@@ -695,10 +695,12 @@ if (isset($_GET['_id'])) {
                                 <div class="row">
                                     <div class="col-12">
                                         <div class="d-flex justify-content-end gap-2">
+                                            <!--Boton de exportar-->
                                             <button id="btn_exportar_excel" class="btn btn-success btn-sm"
                                                 onclick="exportar_excel();" type="button" style="display: none;">
                                                 <i class='bx bx-file me-1'></i> Exportar Excel
                                             </button>
+                                            
                                             <button id="btn_buscar" class="btn btn-primary btn-sm"
                                                 onclick="buscar_fechas();" type="button">
                                                 <i class='bx bx-search me-1'></i> Buscar
