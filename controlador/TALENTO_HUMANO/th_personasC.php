@@ -41,6 +41,20 @@ if (isset($_GET['buscar'])) {
     echo json_encode($controlador->buscar($parametros));
 }
 
+
+if (isset($_GET['buscar_departamento'])) {
+    $query = isset($_GET['q']) ? $_GET['q'] : '';
+    $id_dep = isset($_GET['id_departamento']) ? $_GET['id_departamento'] : ''; // puede ser nombre o id
+
+    $parametros = [
+        'query' => $query,
+        'id_departamento' => $id_dep
+    ];
+
+    echo json_encode($controlador->buscar_por_departamento($parametros));
+    exit;
+}
+
 if (isset($_GET['conectar_buscar'])) {
     echo json_encode($controlador->conectar_buscar($_POST['parametros']));
 }
@@ -1054,5 +1068,44 @@ class th_personasC
         return $this->face->eliminar($datosBio);
     }
 
-    
+    public function buscar_por_departamento($parametros)
+    {
+        $lista = [];
+
+        // Tomamos el valor tal cual (puede ser id o nombre)
+        $id_departamento = isset($parametros['id_departamento']) ? trim($parametros['id_departamento']) : '';
+
+        // Si no hay id_departamento (vacío) devolvemos lista vacía (igual que antes)
+        if ($id_departamento === '') {
+            return $lista;
+        }
+
+        // Llamar al modelo pasando el valor (numérico o texto)
+        $datos = $this->modelo->listar_por_departamento($id_departamento);
+
+        // Texto de búsqueda (opcional, filtro por query)
+        $query = isset($parametros['query']) ? trim($parametros['query']) : '';
+
+        foreach ($datos as $value) {
+            // Construir nombre completo
+            $nombreCompleto = trim(
+                ($value['th_per_primer_apellido'] ?? '') . ' ' .
+                    ($value['th_per_segundo_apellido'] ?? '') . ' ' .
+                    ($value['th_per_primer_nombre'] ?? '') . ' ' .
+                    ($value['th_per_segundo_nombre'] ?? '')
+            );
+
+            $text = ($value['th_per_cedula'] ?? '') . ' - ' . $nombreCompleto;
+
+            // Si hay filtro, aplicarlo sobre el text o cédula
+            if ($query === '' || stripos($text, $query) !== false) {
+                $lista[] = [
+                    'id'   => $value['th_per_id'],
+                    'text' => $text
+                ];
+            }
+        }
+
+        return $lista;
+    }
 }
