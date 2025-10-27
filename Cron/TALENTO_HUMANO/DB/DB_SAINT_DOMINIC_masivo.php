@@ -13,9 +13,9 @@ require_once(dirname(__DIR__, 3) . '/variables_entorno.php');
 $proceso = new calculo_persona(ENV_SAINT_USUARIO, ENV_SAINT_PASSWORD, ENV_SAINT_SERVIDOR, ENV_SAINT_DATABASE, ENV_SAINT_PUERTO);
 
 
-$parametros = $proceso->calculo_persona_control_acceso(46, '2025-09-15');
+// $parametros = $proceso->calculo_persona_control_acceso(2, '2025-09-29');
 
-// $fecha_actual = '2025-09-18';
+// $fecha_actual = '2025-09-29';
 
 // guardar_log('[INF] Inicio Inserción Masiva ', ENV_SAINT_DATABASE);
 // $parametros = $proceso->carga_masiva($fecha_actual);

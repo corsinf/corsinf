@@ -1396,7 +1396,13 @@ class calculo_persona
     {
         $personas = $this->obtener_personas_programa_horario($fecha);
 
+        //Para personas especificas
+        // $personas = [
+        //     ['th_per_id' => 2]
+        // ];
+
         // print_r($personas); exit(); die();
+
         $grupos = array_chunk($personas, 100);
         $total_insertadas = 0;
 
