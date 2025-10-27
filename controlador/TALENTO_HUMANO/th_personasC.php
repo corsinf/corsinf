@@ -366,43 +366,6 @@ class th_personasC
         ];
     }
 
-    /**
-     * Upsert en tabla 'card' por th_cardNo:
-     * - Si existe: ACTUALIZA th_card_nombre (no toca per_id aquí).
-     * - Si no existe: INSERTA (per_id se asigna en la FASE 3).
-     * Retorna: 1=actualizado, 2=insertado, -1/-2=falla, false=excepción.
-     */
-    private function upsertCardPorCardNo(string $cardNo, string $nombre)
-    {
-        try {
-            $this->card->reset();
-            $existe = $this->card->where('th_cardNo', $cardNo)->listar();
-
-            if (is_array($existe) && count($existe) > 0) {
-                $datos = [
-                    ['campo' => 'th_card_nombre', 'dato' => $nombre],
-                ];
-                $where = [
-                    ['campo' => 'th_cardNo', 'dato' => $cardNo],
-                ];
-                $okUpdate = $this->card->editar($datos, $where);
-                return $okUpdate ? 1 : -1;
-            }
-
-            $datos = [
-                ['campo' => 'th_cardNo',        'dato' => $cardNo],
-                ['campo' => 'th_card_nombre',   'dato' => $nombre],
-                ['campo' => 'th_card_creacion', 'dato' => date('Y-m-d')],
-            ];
-            $okInsert = $this->card->insertar($datos);
-            return $okInsert ? 2 : -2;
-        } catch (\Throwable $e) {
-            return false;
-        }
-    }
-
-
-
     // function guardarImport($parametros)
     // {
     //     $msj = '';

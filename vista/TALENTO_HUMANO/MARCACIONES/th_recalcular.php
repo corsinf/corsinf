@@ -2,13 +2,50 @@
     $(document).ready(function() {
 
     });
+
+    function sincronizar_calculo_asistencia_fecha() {
+
+        Swal.fire({
+            title: 'Por favor, espere',
+            text: 'Procesando la solicitud...',
+            allowOutsideClick: false,
+            onOpen: () => {
+                Swal.showLoading();
+            }
+        });
+
+        fecha_inicio = $('#txt_fecha_inicio').val();
+        fecha_fin = $('#txt_fecha_fin').val();
+
+        $.ajax({
+            url: '../controlador/TALENTO_HUMANO/th_reportesC.php?sincronizar_calculo_asistencia_fecha=true',
+            type: 'post',
+            dataType: 'json',
+            data: {
+                fecha_inicio: fecha_inicio,
+                fecha_fin: fecha_fin,
+            },
+            success: function(response) {
+                console.log(response);
+                Swal.close();
+                Swal.fire('Sincornizado correctamente.', '', 'success');
+            },
+            error: function(xhr, status, error) {
+                console.log('Status: ' + status);
+                console.log('Error: ' + error);
+                console.log('XHR Response: ' + xhr.responseText);
+
+                Swal.fire('', 'Error: ' + xhr.responseText, 'error');
+            }
+        });
+    }
 </script>
 
 <div class="page-wrapper">
     <div class="page-content">
         <!--breadcrumb-->
         <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
-            <div class="breadcrumb-title pe-3">Blank</div>
+            <div class="breadcrumb-title pe-3">Recalcular</div>
             <?php
             // print_r($_SESSION['INICIO']);die();
 
@@ -19,7 +56,7 @@
                         <li class="breadcrumb-item"><a href="javascript:;"><i class="bx bx-home-alt"></i></a>
                         </li>
                         <li class="breadcrumb-item active" aria-current="page">
-                            Blank
+                            Recalcular
                         </li>
                     </ol>
                 </nav>
@@ -35,37 +72,46 @@
 
                             <h5 class="mb-0 text-primary"></h5>
 
-                            <div class="row mx-0">
-                                <div class="col-sm-12" id="btn_nuevo">
+                        </div>
 
-                                    <button type="button" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#modal_blank"><i class="bx bx-plus"></i> Nuevo</button>
+                        <div class="row mb-1">
+                            <div class="col-md-6">
+                                <label for="txt_fecha_inicio" class="form-label fw-bold">
+                                    <i class="bx bx-calendar me-1"></i> Fecha Inicio
+                                    <span class="text-danger">*</span>
+                                </label>
+                                <input type="date" class="form-control form-control-sm"
+                                    id="txt_fecha_inicio" name="txt_fecha_inicio">
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="txt_fecha_fin" class="form-label fw-bold">
+                                    <i class="bx bx-calendar me-1"></i> Fecha Fin
+                                    <span class="text-danger">*</span>
+                                </label>
+                                <input type="date" class="form-control form-control-sm"
+                                    id="txt_fecha_fin" name="txt_fecha_fin">
+                            </div>
+
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="modal-footer pt-2" id="seccion_boton_consulta">
+
+                                    <!-- <button class="btn btn-primary btn-sm px-3" onclick="buscar_fechas();" type="button"><i class='bx bx-search'></i> Buscar</button> -->
+
+                                    <button onclick="sincronizar_calculo_asistencia_fecha();"
+                                        type="button" class="btn btn-primary btn-sm">
+                                        <i class="bx bx-rotate-right"></i> Sincronizar Fecha
+                                    </button>
 
                                 </div>
                             </div>
                         </div>
 
 
-                        <section class="content pt-2">
-                            <div class="container-fluid">
-                                <div class="table-responsive">
-                                    <table class="table table-striped responsive " id="tbl_blank" style="width:100%">
-                                        <thead>
-                                            <tr>
-                                                <th>Blank</th>
-                                                <th>Blank</th>
-                                                <th>Blank</th>
-                                                <th>Blank</th>
-                                                <th>Blank</th>
-                                                <th width="10px">Acción</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
 
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div><!-- /.container-fluid -->
-                        </section>
                     </div>
                 </div>
             </div>
@@ -75,7 +121,7 @@
 </div>
 
 
-<div class="modal" id="modal_blank" abindex="-1" aria-modal="true" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
+<div class="modal" id="modal_Recalcular" abindex="-1" aria-modal="true" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
 
@@ -98,7 +144,7 @@
 
                 <div class="row pt-3">
                     <div class="col-12">
-                        <label for="">Blank <label class="text-danger">*</label></label>
+                        <label for="">Recalcular <label class="text-danger">*</label></label>
                         <select name="" id="" class="form-select form-select-sm">
                             <option value="">Seleccione el </option>
                         </select>

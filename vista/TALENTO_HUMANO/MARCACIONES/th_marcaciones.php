@@ -110,7 +110,7 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                 <div class="card border-top border-0 border-4 border-primary">
                     <div class="card-body p-5">
                         <!-- Fechas -->
-                        <div class="row mb-3">
+                        <div class="row mb-1">
                             <div class="col-md-6">
                                 <label for="txt_fecha_inicio" class="form-label fw-bold">
                                     <i class="bx bx-calendar me-1"></i> Fecha Inicio
@@ -132,7 +132,7 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                         </div>
 
                         <div class="row">
-                            <div class="col-md-6">
+                            <div class="col-md-12">
                                 <div class="modal-footer pt-2" id="seccion_boton_consulta">
 
                                     <button class="btn btn-primary btn-sm px-3" onclick="buscar_fechas();" type="button"><i class='bx bx-search'></i> Buscar</button>
@@ -140,6 +140,8 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                                 </div>
                             </div>
                         </div>
+
+                        <br>
 
                         <div class="row">
 

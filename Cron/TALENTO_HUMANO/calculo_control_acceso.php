@@ -235,16 +235,26 @@ class calculo_persona
         // return $datos;
 
 
+        // $sql =
+        //     "SELECT
+        //         th_acc_fecha_hora = MIN(CASE
+        //                         WHEN CAST(th_acc_fecha_hora AS TIME) > '$fin_hora_entrada'
+        //                         THEN th_acc_fecha_hora
+        //                     END)
+        //     FROM th_control_acceso
+        //     WHERE th_per_id = $th_per_id
+        //         AND CAST(th_acc_fecha_hora AS DATE) = '$fecha'
+        //     HAVING COUNT(*) >= 2;";
+
+
         $sql =
-            "SELECT
-                th_acc_fecha_hora = MIN(CASE
-                                WHEN CAST(th_acc_fecha_hora AS TIME) > '$fin_hora_entrada'
-                                THEN th_acc_fecha_hora
-                            END)
+            "SELECT TOP 1 th_acc_fecha_hora
             FROM th_control_acceso
-            WHERE th_per_id = $th_per_id
+            WHERE
+                th_per_id = $th_per_id
                 AND CAST(th_acc_fecha_hora AS DATE) = '$fecha'
-            HAVING COUNT(*) >= 2;";
+                AND CAST(th_acc_fecha_hora AS TIME) > '$fin_hora_entrada'
+            ORDER BY th_acc_fecha_hora DESC;";
 
         $datos = $this->datos($sql) ?? null;
 
@@ -475,9 +485,10 @@ class calculo_persona
         $hora_entrada_dt = '';
         $hora_ajustada_str = '';
 
+        $fecha_base = new DateTime($fecha . ' 00:00:00');
+
         if ($entrada) {
             // Crear base con tu fecha de jornada, no con la fecha de la marcación
-            $fecha_base = new DateTime($fecha . ' 00:00:00');
             // Generar la hora de entrada
             $hora_entrada_dt = clone $fecha_base;
             $hora_entrada_dt->modify("+$hora_entrada minutes");
@@ -520,9 +531,16 @@ class calculo_persona
             $hora_ajustada_str = $hora_ajustada->format('Y-m-d H:i:s');
         }
 
+
+        $hora_entrada_dt_1 = clone $fecha_base;
+        $hora_entrada_dt_1->modify("+$hora_entrada minutes");
+        $hora_entrada_dt_1 = $hora_entrada_dt_1->format('Y-m-d H:i:s');
+
+
         // Resultados
         // echo "Hora original: " . $hora_original . "<br>";
         // echo "Hora entrada : " . $hora_entrada_dt . "<br>";
+        // echo "Hora entrada 1: " . $hora_entrada_dt_1 . "<br>";
         // echo "Hora ajustada: " . $hora_ajustada_str . "<br>";
         // echo "Atrasado: " . $atrasado . "<br>";
         // echo "Ausente: " . $ausente . "<br>";
@@ -671,10 +689,14 @@ class calculo_persona
         //////////////////////////////////////////////////////////////////////////////////////////////////////////
         //////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+        $dia = $this->calcular_dia(($fecha));
 
         // Resultados
         if ($desarrollo) {
+            echo "Fecha: $fecha<br>";
+            echo "Dia: " . $dia;
             echo "<br>";
+
             echo "<strong>Información adicional: </strong><br>";
             echo "Apellidos: $apellidos<br>";
             echo "Nombres: $nombres<br>";
@@ -694,7 +716,7 @@ class calculo_persona
             echo "Hora inicio: " . $inicio_hora_turno_salida . "<br>";
             echo "Hora fin: " . $fin_hora_turno_salida . "<br>";
             echo "Hora marcacion: " . $hora_original . "<br>";
-            echo "Hora entrada : " . $hora_entrada_dt . "<br>";
+            echo "Hora entrada : " . $hora_entrada_dt_1 . "<br>";
             echo "Hora ajustada: " . $hora_ajustada_str . "<br>"; //La hora con la que se hace el calculo de trabajo de 8 horas
             echo "Atrasado: " . $atrasado . "<br>";
             echo "Ausente: " . $ausente . "<br>";
@@ -766,7 +788,7 @@ class calculo_persona
             'th_asi_cedula' => $cedula ?? '',
             'th_asi_correo_institucional' => $correo ?? '',
             'th_asi_departamento' => $departamento_nombre ?? '',
-            'th_asi_dia' => $this->calcular_dia(strtotime($fecha)),
+            'th_asi_dia' => $dia ?? '',
             'th_asi_fecha' => $fecha ?? '',
 
             // Programación y turno
@@ -780,7 +802,7 @@ class calculo_persona
             'th_asi_entrada_hora_inicio_turno' => $inicio_hora_turno_salida ?? '',
             'th_asi_entrada_hora_fin_turno' => $fin_hora_turno_salida ?? '',
             'th_asi_regentrada' => $hora_original ?? '',
-            'th_asi_hora_entrada' => $hora_entrada_dt ?? '',
+            'th_asi_hora_entrada' => $hora_entrada_dt_1 ?? '',
             'th_asi_hora_ajustada' => $hora_ajustada_str ?? '',
             'th_asi_atrasos' => $atrasado ?? '',
             'th_asi_ausente' => $ausente ?? '',
@@ -1562,8 +1584,8 @@ class calculo_persona
     function calcular_dia($fecha)
     {
         $ingresar_fecha = strtotime($fecha);
-
         $dias_ingles = date('l', $ingresar_fecha);
+
         switch ($dias_ingles) {
             case "Monday":
                 return "Lunes";

@@ -45,7 +45,7 @@ if (isset($_GET['sincronizar_calculo_asistencia'])) {
 
 //Por codigo
 if (isset($_GET['sincronizar_calculo_asistencia_fecha'])) {
-    echo json_encode($controlador->sincronizar_calculo_asistencia_fecha($_POST['fecha_calcular'] ?? ''));
+    echo json_encode($controlador->sincronizar_calculo_asistencia_fecha($_POST['fecha_inicio'] ?? '', $_POST['fecha_fin'] ?? ''));
 }
 
 
@@ -324,13 +324,13 @@ class th_reportesC
         return ['msj' => implode("\n", $msg)];
     }
 
-    function sincronizar_calculo_asistencia_fecha($fecha_calcular = '')
+    function sincronizar_calculo_asistencia_fecha($fecha_inicio = '', $fecha_fin = '')
     {
+        ini_set('max_execution_time', 100000); // 300 segundos = 5 minutos
+
         date_default_timezone_set('America/Guayaquil');
 
         require_once(dirname(__DIR__, 2) . '/Cron/TALENTO_HUMANO/calculo_control_acceso.php');
-
-
 
         $USUARIO_DB = $_SESSION['INICIO']['USUARIO_DB'];
         $PASSWORD_DB = $_SESSION['INICIO']['PASSWORD_DB'];
@@ -341,10 +341,6 @@ class th_reportesC
         // Crear una instancia de la clase y llamar al método
         $proceso = new calculo_persona($USUARIO_DB, $PASSWORD_DB, $IP_HOST, $BASEDATO, $PUERTO_DB);
 
-        $fecha_in = date("Y-m-d");
-        if($fecha_calcular != ''){
-            $fecha_in = $fecha_calcular;
-        }
         // $fecha_actual = '2025-08-07';
 
         // print_r($fecha_calcular); exit(); die();
@@ -354,25 +350,45 @@ class th_reportesC
 
         //Funcion para guardar de fora masiva
         // guardar_log('[INF] Inicio Inserción Masiva WEB', $BASEDATO);
-        $parametros = $proceso->carga_masiva($fecha_in);
+        // $parametros = $proceso->carga_masiva($fecha_in);
         // guardar_log($parametros, $BASEDATO);
 
         //Para realizar pruebas individuales
         // $parametros = $proceso->calculo_persona_control_acceso(60, $fecha_actual, true);
 
+        if ($fecha_inicio == '') {
+            $fecha_inicio = date("Y-m-d");
+            $fecha_fin = date("Y-m-d");
+        }
+
+
+        $fecha_actual = new DateTime($fecha_inicio);
+        $fecha_limite = new DateTime($fecha_fin);
+
+        $this->guardar_log('[INF] Inicio Inserción Masiva ', $BASEDATO);
+        while ($fecha_actual <= $fecha_limite) {
+            $fecha_str = $fecha_actual->format('Y-m-d');
+
+            $parametros = $proceso->carga_masiva($fecha_str);
+
+            // echo "Procesado: $fecha_str\n";
+            $fecha_actual->modify('+1 day');
+        }
+        $this->guardar_log($parametros, $BASEDATO);
+
 
         // print_r($parametros);
         exit();
+    }
 
-        function guardar_log($mensaje, $db)
-        {
-            $ruta_log = __DIR__ . '/log_carga_masiva_' . $db . '.log';
-            $fecha_log = date("Y-m-d H:i:s");
+    function guardar_log($mensaje, $db)
+    {
+        $ruta_log = __DIR__ . '/log_carga_masiva_front_' . $db . '.log';
+        $fecha_log = date("Y-m-d H:i:s");
 
-            $entrada = "[$fecha_log] $mensaje\n";
+        $entrada = "[$fecha_log] $mensaje\n";
 
-            file_put_contents($ruta_log, $entrada, FILE_APPEND);
-        }
+        file_put_contents($ruta_log, $entrada, FILE_APPEND);
     }
 
 

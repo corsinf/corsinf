@@ -85,42 +85,6 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
         });
 
     }
-
-    function sincronizar_calculo_asistencia_fecha() {
-
-        Swal.fire({
-            title: 'Por favor, espere',
-            text: 'Procesando la solicitud...',
-            allowOutsideClick: false,
-            onOpen: () => {
-                Swal.showLoading();
-            }
-        });
-
-        fecha_calcular = "2025-09-20";
-
-        $.ajax({
-            url: '../controlador/TALENTO_HUMANO/th_reportesC.php?sincronizar_calculo_asistencia_fecha=true',
-            type: 'post',
-            dataType: 'json',
-            data: {
-                fecha_calcular: fecha_calcular,
-            },
-            success: function(response) {
-                console.log(response);
-                Swal.close();
-                Swal.fire('Sincornizado correctamente.', '', 'success');
-            },
-            error: function(xhr, status, error) {
-                console.log('Status: ' + status);
-                console.log('Error: ' + error);
-                console.log('XHR Response: ' + xhr.responseText);
-
-                Swal.fire('', 'Error: ' + xhr.responseText, 'error');
-            }
-        });
-
-    }
 </script>
 
 <div class="page-wrapper">
@@ -166,14 +130,6 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                                             type="button" class="btn btn-info btn-sm">
                                             <i class="bx bx-rotate-right"></i> Sincronizar
                                         </button>
-
-                                        <div hidden>
-                                            <!-- Para agregar un input y poner las fechas -->
-                                            <button onclick="sincronizar_calculo_asistencia_fecha();"
-                                                type="button" class="btn btn-info btn-sm">
-                                                <i class="bx bx-rotate-right"></i> Sincronizar Fecha
-                                            </button>
-                                        </div>
                                     </div>
 
                                 </div>
