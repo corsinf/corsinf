@@ -123,15 +123,26 @@ class th_departamentosC
         return $lista;
     }
 
-     function buscar_departamento($parametros)
+    public function buscar_departamento($parametros)
     {
-        $lista = array();
+        $lista = [];
+
         $concat = "th_dep_nombre, th_dep_estado";
         $datos = $this->modelo->where('th_dep_estado', 1)->like($concat, $parametros['query']);
 
+        // 🔹 Agregar al inicio la opción "Todos los departamentos"
+        $lista[] = [
+            'id' => '0',
+            'text' => 'Todos los departamentos'
+        ];
+
+        // 🔹 Recorrer resultados reales
         foreach ($datos as $key => $value) {
             $text = $value['th_dep_nombre'];
-            $lista[] = array('id' => ($value['th_dep_nombre']), 'text' => ($text), /* 'data' => $value */);
+            $lista[] = [
+                'id'   => $value['th_dep_nombre'], // aquí estás usando el nombre como ID, puedes cambiarlo a $value['th_dep_id'] si prefieres
+                'text' => $text
+            ];
         }
 
         return $lista;

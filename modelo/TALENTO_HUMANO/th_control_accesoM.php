@@ -45,15 +45,56 @@ class th_control_accesoM extends BaseModel
 
     function actualizar_per_id_no_card()
     {
+        // Tambien se  puede quitar el where
         $sql =
             "UPDATE ca
                 SET ca.th_per_id = cd.th_per_id
             FROM th_control_acceso ca
-            JOIN th_card_data cd ON ca.th_cardNo = cd.th_cardNo
-            WHERE ca.th_per_id IS NULL;
+            JOIN th_card_data cd ON ca.th_cardNo = cd.th_cardNo;
+            -- WHERE ca.th_per_id IS NULL;
             ";
 
         $datos = $this->db->datos($sql);
+        return $datos;
+    }
+
+    function listar_personalizado($fecha_ini = '', $fecha_final = '')
+    {
+
+        $limit = '';
+        if ($fecha_ini == '') {
+            $limit = "TOP 1000";
+        }
+        
+        $sql =
+        "SELECT $limit
+                -- ca.th_cardNo,
+                ca.th_acc_fecha_hora AS fecha,
+                -- ca.th_per_id,
+                p.th_per_observaciones AS nombre,
+                -- ca.th_dis_id            AS th_dis_host,
+                -- ca.th_acc_puerto,
+                d.th_dis_nombre         AS dispositivo_nombre
+            FROM th_control_acceso AS ca
+            LEFT JOIN th_personas AS p
+                ON p.th_per_id = ca.th_per_id
+            LEFT JOIN th_dispositivos AS d
+                ON d.th_dis_host = ca.th_dis_id
+            AND d.th_dis_port = TRY_CONVERT(int, NULLIF(ca.th_acc_puerto, '.'))
+
+            ";
+
+        if ($fecha_ini) {
+            $sql .= "WHERE 
+                    CONVERT(date, ca.th_acc_fecha_hora) BETWEEN '$fecha_ini' AND '$fecha_final'";
+        }
+
+        $sql .= "ORDER BY ca.th_acc_fecha_hora DESC;";
+
+        // print_r($sql); exit(); die();
+
+
+        $datos = $this->db->datos($sql, false, true);
         return $datos;
     }
 }

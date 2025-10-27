@@ -419,6 +419,15 @@
     }
 </script>
 
+<?php
+$modulo_acceso = '';
+if ($_SESSION['INICIO']['MODULO_SISTEMA'] == 2018) {
+    $modulo_acceso = 'hidden';
+}
+?>
+
+
+
 <form id="form_articulo">
     <div class="row">
         <div class="col-auto">
@@ -430,7 +439,8 @@
                 <label class="error" style="display: none;" for="cbx_kit"></label>
             </div>
         </div>
-        <div class="col-auto">
+
+        <div class="col-auto" <?= $modulo_acceso ?>>
             <div id="cbx_detalle_it_cointainer">
                 <div class="form-check">
                     <input class="form-check-input" type="checkbox" name="cbx_detalle_it" id="cbx_detalle_it">
@@ -467,7 +477,7 @@
     </div>
 
     <div class="row mb-col">
-        <div class="col-sm-6">
+        <div class="col-sm-6" <?= $modulo_acceso ?>>
             <div class="d-flex justify-content-between align-items-center">
                 <label for="ddl_custodio" class="form-label">Custodio </label>
                 <small id="lbl_sap_custodio" class="text-muted"><u>Código:</u></small>
@@ -485,7 +495,7 @@
                 <small id="lbl_sap_loc" class="text-muted"><u>Código:</u></small>
             </div>
 
-            <select class="form-control form-control-sm select2-validation" name="ddl_localizacion" id="ddl_localizacion" disabled>
+            <select class="form-control form-control-sm select2-validation" name="ddl_localizacion" id="ddl_localizacion">
                 <option value="">Seleccione</option>
             </select>
             <label class="error" style="display: none;" for="ddl_localizacion"></label>
@@ -500,25 +510,36 @@
             <label for="txt_rfid" class="form-label">RFID </label>
             <input type="text" class="form-control form-control-sm" name="txt_rfid" id="txt_rfid" onkeyup="validar_campo()" maxlength="50">
 
-            <div class="text-start text-start-1 mt-0">
-                <div class="form-check form-check-1 form-check-inline">
-                    <input class="form-check-input form-check-input-1" type="radio" name="rbl_asset" id="rbl_asset_8" value="8" onclick="validar_campo()" checked>
-                    <label class="form-check-label form-check-label-1" for="rbl_asset_8"><small>Activo (8)</small></label>
+
+            <?php if ($_SESSION['INICIO']['MODULO_SISTEMA'] == 2018) { ?>
+                <div class="text-start text-start-1 mt-0">
+                    <div class="form-check form-check-1 form-check-inline">
+                        <input class="form-check-input form-check-input-1" type="radio" name="rbl_asset" id="rbl_asset_0" value="0" onclick="validar_campo()" checked>
+                        <label class="form-check-label form-check-label-1" for="rbl_asset_0"><small>Ninguno</small></label>
+                    </div>
                 </div>
-                <div class="form-check form-check-1 form-check-inline">
-                    <input class="form-check-input form-check-input-1" type="radio" name="rbl_asset" id="rbl_asset_9" value="9" onclick="validar_campo()">
-                    <label class="form-check-label form-check-label-1" for="rbl_asset_9"><small>Patrimonial (9)</small></label>
+            <?php } else { ?>
+                <div class="text-start text-start-1 mt-0">
+                    <div class="form-check form-check-1 form-check-inline">
+                        <input class="form-check-input form-check-input-1" type="radio" name="rbl_asset" id="rbl_asset_8" value="8" onclick="validar_campo()" checked>
+                        <label class="form-check-label form-check-label-1" for="rbl_asset_8"><small>Activo (8)</small></label>
+                    </div>
+                    <div class="form-check form-check-1 form-check-inline">
+                        <input class="form-check-input form-check-input-1" type="radio" name="rbl_asset" id="rbl_asset_9" value="9" onclick="validar_campo()">
+                        <label class="form-check-label form-check-label-1" for="rbl_asset_9"><small>Patrimonial (9)</small></label>
+                    </div>
+                    <div class="form-check form-check-1 form-check-inline">
+                        <input class="form-check-input form-check-input-1" type="radio" name="rbl_asset" id="rbl_asset_0" value="0" onclick="validar_campo()">
+                        <label class="form-check-label form-check-label-1" for="rbl_asset_0"><small>Ninguno</small></label>
+                    </div>
                 </div>
-                <div class="form-check form-check-1 form-check-inline">
-                    <input class="form-check-input form-check-input-1" type="radio" name="rbl_asset" id="rbl_asset_0" value="0" onclick="validar_campo()">
-                    <label class="form-check-label form-check-label-1" for="rbl_asset_0"><small>Ninguno</small></label>
-                </div>
-            </div>
+            <?php } ?>
+
         </div>
 
         <div class="col-sm-6">
             <label for="txt_tag_serie" class="form-label">Referencia de almacén (SKU) </label>
-            <input type="text" class="form-control form-control-sm solo_numeros_int" name="txt_tag_serie" id="txt_tag_serie" maxlength="15">
+            <input type="text" class="form-control form-control-sm solo_numeros_int" name="txt_tag_serie" id="txt_tag_serie" maxlength="100">
         </div>
     </div>
 
@@ -660,8 +681,8 @@
         </div>
     </div>
 
-    <div class="row mb-col" hidden>
-        <div class="col-sm-6" hidden>
+    <div class="row mb-col">
+        <div class="col-sm-6">
             <label for="ddl_clase_mov" class="form-label">Clase de movimiento </label>
             <select class="form-select form-select-sm select2-validation" name="ddl_clase_mov" id="ddl_clase_mov">
                 <option value="">Seleccione</option>
@@ -683,36 +704,38 @@
 
     <hr class="text-primary mb-2 mt-1" style="border-top: 3px solid;">
 
-    <div class="row mb-col">
-        <div class="col-sm-6">
-            <label for="txt_company" class="form-label form-label-sm">Company Code </label>
-            <input type="text" class="form-control form-control-sm" name="txt_company" id="txt_company" maxlength="100">
+    <div <?= $modulo_acceso ?>>
+        <div class="row mb-col">
+            <div class="col-sm-6">
+                <label for="txt_company" class="form-label form-label-sm">Company Code </label>
+                <input type="text" class="form-control form-control-sm" name="txt_company" id="txt_company" maxlength="100">
+            </div>
+
+            <div class="col-sm-6">
+                <label for="txt_resp_cctr" class="form-label form-label-sm">Responsable del Centro de Costos </label>
+                <input type="text" class="form-control form-control-sm" name="txt_resp_cctr" id="txt_resp_cctr" maxlength="100">
+            </div>
         </div>
 
-        <div class="col-sm-6">
-            <label for="txt_resp_cctr" class="form-label form-label-sm">Responsable del Centro de Costos </label>
-            <input type="text" class="form-control form-control-sm" name="txt_resp_cctr" id="txt_resp_cctr" maxlength="100">
+        <div class="row mb-col">
+            <div class="col-sm-4">
+                <label for="txt_centro_costos" class="form-label form-label-sm">Centro de Costos </label>
+                <input type="text" class="form-control form-control-sm" name="txt_centro_costos" id="txt_centro_costos" maxlength="100">
+            </div>
+
+            <div class="col-sm-4">
+                <label for="txt_funds_ctr_apc" class="form-label form-label-sm">Control de Fondos APC </label>
+                <input type="text" class="form-control form-control-sm" name="txt_funds_ctr_apc" id="txt_funds_ctr_apc" maxlength="100">
+            </div>
+
+            <div class="col-sm-4">
+                <label for="txt_profit_ctr" class="form-label form-label-sm">Centro de Beneficio </label>
+                <input type="text" class="form-control form-control-sm" name="txt_profit_ctr" id="txt_profit_ctr" maxlength="100">
+            </div>
         </div>
+
+        <hr class="text-primary mb-2 mt-1">
     </div>
-
-    <div class="row mb-col">
-        <div class="col-sm-4">
-            <label for="txt_centro_costos" class="form-label form-label-sm">Centro de Costos </label>
-            <input type="text" class="form-control form-control-sm" name="txt_centro_costos" id="txt_centro_costos" maxlength="100">
-        </div>
-
-        <div class="col-sm-4">
-            <label for="txt_funds_ctr_apc" class="form-label form-label-sm">Control de Fondos APC </label>
-            <input type="text" class="form-control form-control-sm" name="txt_funds_ctr_apc" id="txt_funds_ctr_apc" maxlength="100">
-        </div>
-
-        <div class="col-sm-4">
-            <label for="txt_profit_ctr" class="form-label form-label-sm">Centro de Beneficio </label>
-            <input type="text" class="form-control form-control-sm" name="txt_profit_ctr" id="txt_profit_ctr" maxlength="100">
-        </div>
-    </div>
-
-    <hr class="text-primary mb-2 mt-1">
 
     <!-- Información articulo adicional -->
     <div class="row mb-col">

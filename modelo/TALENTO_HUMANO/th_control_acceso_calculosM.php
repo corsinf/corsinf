@@ -76,47 +76,96 @@ class th_control_acceso_calculosM extends BaseModel
         'th_per_id AS per_id'
     ];
 
-    function listar_asistencia_por_fecha_departamento($fecha_inicio, $fecha_fin, $departamento)
-    {
-        $sql = 
-        "SELECT 
-            th_asi_id AS _id,
-            th_asi_apellidos AS apellidos,
-            th_asi_nombres AS nombres,
-            th_asi_empleado AS empleado,
-            th_asi_cedula AS cedula,
-            th_asi_correo_institucional AS correo_institucional,
-            th_asi_departamento AS departamento,
-            th_asi_dia AS dia,
-            th_asi_fecha AS fecha,
-            th_asi_horario_contrato AS horario_contrato,
-            th_asi_turno_nombre AS turno_nombre,
-            th_asi_entrada_hora_inicio_turno AS entrada_hora_inicio_turno,
-            th_asi_entrada_hora_fin_turno AS entrada_hora_fin_turno,
-            th_asi_regentrada AS regentrada,
-            th_asi_hora_entrada AS hora_entrada,
-            th_asi_hora_ajustada AS hora_ajustada,
-            th_asi_atrasos AS atrasos,
-            th_asi_ausente AS ausente,
-            th_asi_salida_hora_inicio_turno AS salida_hora_inicio_turno,
-            th_asi_salida_hora_fin_turno AS salida_hora_fin_turno,
-            th_asi_regsalida AS regsalida,
-            th_asi_hora_salida AS hora_salida,
-            th_asi_salidas_temprano AS salidas_temprano,
-            th_asi_dias_trabajados AS dias_trabajados,
-            th_asi_cumple_jornada AS cumple_jornada,
-            th_asi_horas_faltantes AS horas_faltantes,
-            th_asi_horas_excedentes AS horas_excedentes,
-            th_asi_salidas_temprano AS salidastemprano,
-            th_asi_horas_suplementarias AS horas_suplementarias,
-            th_asi_horas_extraordinarias AS horas_extraordinarias
-        FROM 
-            th_control_acceso_calculos
-        WHERE 
-            th_asi_fecha BETWEEN '$fecha_inicio' AND '$fecha_fin'
-            AND th_asi_departamento = '$departamento'
-        ORDER BY 
-            th_asi_fecha ASC;";
+
+    public function listar_asistencia_por_fecha_departamento(
+        $fecha_inicio,
+        $fecha_fin,
+        $tipo_busqueda = 'departamento',
+        $departamento = '',
+        $persona = '',
+        $tipo_ordenamiento = 'sin_ordenar'
+    ) {
+        // Base de la consulta
+        $sql = "SELECT 
+        th_asi_id AS _id,
+        th_asi_apellidos AS apellidos,
+        th_asi_nombres AS nombres,
+        th_asi_empleado AS empleado,
+        th_asi_cedula AS cedula,
+        th_asi_correo_institucional AS correo_institucional,
+        th_asi_departamento AS departamento,
+        th_asi_dia AS dia,
+        th_asi_fecha AS fecha,
+        th_asi_horario_contrato AS horario_contrato,
+        th_asi_turno_nombre AS turno_nombre,
+        th_asi_entrada_hora_inicio_turno AS entrada_hora_inicio_turno,
+        th_asi_entrada_hora_fin_turno AS entrada_hora_fin_turno,
+        th_asi_regentrada AS regentrada,
+        th_asi_hora_entrada AS hora_entrada,
+        th_asi_hora_ajustada AS hora_ajustada,
+        th_asi_atrasos AS atrasos,
+        th_asi_ausente AS ausente,
+        th_asi_salida_hora_inicio_turno AS salida_hora_inicio_turno,
+        th_asi_salida_hora_fin_turno AS salida_hora_fin_turno,
+        th_asi_regsalida AS regsalida,
+        th_asi_hora_salida AS hora_salida,
+        th_asi_salidas_temprano AS salidas_temprano,
+        th_asi_dias_trabajados AS dias_trabajados,
+        th_asi_cumple_jornada AS cumple_jornada,
+        th_asi_horas_faltantes AS horas_faltantes,
+        th_asi_horas_excedentes AS horas_excedentes,
+        th_asi_salidas_temprano AS salidastemprano,
+        th_asi_horas_suplementarias AS horas_suplementarias,
+        th_asi_horas_extraordinarias AS horas_extraordinarias
+    FROM 
+        th_control_acceso_calculos
+    WHERE 
+        th_asi_fecha BETWEEN '$fecha_inicio' AND '$fecha_fin'";
+
+        // Aplicar filtros según el tipo de búsqueda
+        if ($tipo_busqueda === 'departamento') {
+            // Filtrar por departamento si está especificado y no es 'todos'
+            if (!empty($departamento) && $departamento !== 'todos') {
+                // Si tu 'departamento' es el nombre
+                $departamento_esc = addslashes($departamento);
+                $sql .= " AND th_asi_departamento = '{$departamento_esc}'";
+            }
+
+            // Filtrar por persona si está especificada (independiente del departamento)
+            if (!empty($persona)) {
+                $persona_esc = addslashes($persona);
+                $sql .= " AND th_per_id = '{$persona_esc}'"; // O el campo que identifique a la persona
+            }
+        } elseif ($tipo_busqueda === 'persona') {
+            // Búsqueda directa por persona
+            if (!empty($persona)) {
+                $persona_esc = addslashes($persona);
+                $sql .= " AND th_per_id = '{$persona_esc}'"; // O el campo que identifique a la persona
+            }
+        }
+
+        
+        $isTodosDepartamentos = (empty($departamento) || $departamento === 'todos');
+
+        if ($tipo_ordenamiento === 'ordenado') {
+            // Orden explícito por persona y fecha
+            $sql .= " ORDER BY 
+            th_asi_apellidos ASC, 
+            th_asi_nombres ASC, 
+            th_asi_fecha ASC";
+        } else {
+            // sin_ordenar => si es todos los departamentos, ordenar por departamento primero
+            if ($isTodosDepartamentos) {
+                $sql .= " ORDER BY 
+                th_asi_departamento ASC,
+                th_asi_apellidos ASC, 
+                th_asi_nombres ASC, 
+                th_asi_fecha ASC";
+            } else {
+                $sql .= " ORDER BY 
+                th_asi_fecha ASC";
+            }
+        }
 
         $datos = $this->db->datos($sql);
         return $datos;

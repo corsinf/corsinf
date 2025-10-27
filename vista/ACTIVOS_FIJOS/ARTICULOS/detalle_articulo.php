@@ -557,11 +557,24 @@ if (isset($_GET['_id'])) {
             <a class="btn btn-outline-secondary btn-sm" href="inicio.php?mod=<?= $modulo_sistema ?>&acc=articulos_cr"><i class="bx bx-left-arrow-alt"></i> Regresar</a>
           </div>
           <div class="col">
-            <button class="btn btn-outline-secondary btn-sm" type="button" id="imprimir_cedula"><i class="bx bx-file"></i> Cedula activo</button>
-            <button class="btn btn-outline-secondary btn-sm" type="button" onclick="imprimir_tags_masivo()"><i class="bx bx-purchase-tag"></i> Reimprimir Tag RFID</button>
-            <button class="btn btn-outline-secondary btn-sm" type="button" onclick="depreciacion_activo()">
-              <i class="bx bx-trending-down"></i> Depreciación
-            </button>
+
+            <?php
+            $nombre_imprimir_cedula = "Cédula activo";
+            if ($_SESSION['INICIO']['MODULO_SISTEMA'] == 2018) {
+              $nombre_imprimir_cedula = "Datasheet";
+            }
+            ?>
+
+            <button class="btn btn-outline-secondary btn-sm" type="button" id="imprimir_cedula"><i class="bx bx-file"></i> <?= $nombre_imprimir_cedula ?></button>
+
+            <button disabled class="btn btn-outline-secondary btn-sm" type="button" onclick="imprimir_tags_masivo()"><i class="bx bx-purchase-tag"></i> Reimprimir Tag RFID</button>
+
+            <?php if ($_SESSION['INICIO']['MODULO_SISTEMA'] != 2018) { ?>
+              <button class="btn btn-outline-secondary btn-sm" type="button" onclick="depreciacion_activo()">
+                <i class="bx bx-trending-down"></i> Depreciación
+              </button>
+            <?php } ?>
+
           </div>
         </div>
 
@@ -603,7 +616,7 @@ if (isset($_GET['_id'])) {
               <h4 class="card-title fw-bold" id="lbl_descripcion"></h4>
               <div class="row">
                 <dd class="col-sm-4" id="lbl_tipo">
-                  <div class="text-default">ACTIVO PROPIO</div>
+                  <div class="text-default">ARTICULO</div>
                 </dd>
               </div>
 
@@ -637,8 +650,11 @@ if (isset($_GET['_id'])) {
                 </div>
               </div>
 
-              <p class="text-muted mb-0" id="lbl_custodio1">.</p>
-              <p class="text-muted mb-3" id="lbl_custodio">.</p>
+              <?php if ($_SESSION['INICIO']['MODULO_SISTEMA'] != 2018) { ?>
+                <p class="text-muted mb-0" id="lbl_custodio1">.</p>
+                <p class="text-muted mb-3" id="lbl_custodio">.</p>
+              <?php } ?>
+
               <p class="text-muted mb-0" id="lbl_localizacion1">.</p>
               <p class="text-muted mb-0" id="lbl_localizacion">.</p>
 
@@ -695,31 +711,35 @@ if (isset($_GET['_id'])) {
 
               <p class="" id="lbl_caracteristicas"></p>
               <p class="" id="lbl_observaciones"></p>
+
               <hr>
-              <div id="seccion_depreciacion">
-                <div class="d-flex justify-content-between align-items-center mb-2">
-                  <h5 class="fw-bold mb-0">Depreciación</h5>
-                  <button class="btn btn-sm btn-outline-primary" onclick="abrir_modal_depreciacion()" title="Editar datos">
-                    <i class="bx bx-pencil"></i>
-                  </button>
+
+              <?php if ($_SESSION['INICIO']['MODULO_SISTEMA'] != 2018) { ?>
+                <div id="seccion_depreciacion">
+                  <div class="d-flex justify-content-between align-items-center mb-2">
+                    <h5 class="fw-bold mb-0">Depreciación</h5>
+                    <button class="btn btn-sm btn-outline-primary" onclick="abrir_modal_depreciacion()" title="Editar datos">
+                      <i class="bx bx-pencil"></i>
+                    </button>
+                  </div>
+                  <div class="row">
+                    <dt class="col-sm-3">Valor activo: &nbsp;</dt>
+                    <dd class="col-sm-8" id="lbl_valor_activo">0</dd>
+                  </div>
+                  <div class="row">
+                    <dt class="col-sm-3">Valor residual: &nbsp;</dt>
+                    <dd class="col-sm-8" id="lbl_valor_residual">0</dd>
+                  </div>
+                  <div class="row">
+                    <dt class="col-sm-3">Vida útil: &nbsp;</dt>
+                    <dd class="col-sm-8" id="lbl_vida_util">0</dd>
+                  </div>
+                  <div class="row">
+                    <dt class="col-sm-3">Total depreciación: &nbsp;</dt>
+                    <dd class="col-sm-8" id="lbl_total_depreciacion">0</dd>
+                  </div>
                 </div>
-                <div class="row">
-                  <dt class="col-sm-3">Valor activo: &nbsp;</dt>
-                  <dd class="col-sm-8" id="lbl_valor_activo">0</dd>
-                </div>
-                <div class="row">
-                  <dt class="col-sm-3">Valor residual: &nbsp;</dt>
-                  <dd class="col-sm-8" id="lbl_valor_residual">0</dd>
-                </div>
-                <div class="row">
-                  <dt class="col-sm-3">Vida útil: &nbsp;</dt>
-                  <dd class="col-sm-8" id="lbl_vida_util">0</dd>
-                </div>
-                <div class="row">
-                  <dt class="col-sm-3">Total depreciación: &nbsp;</dt>
-                  <dd class="col-sm-8" id="lbl_total_depreciacion">0</dd>
-                </div>
-              </div>
+              <?php } ?>
 
             </div>
 
@@ -735,7 +755,7 @@ if (isset($_GET['_id'])) {
                       <div class="d-flex align-items-center">
                         <div class="tab-icon"><i class="bx bx-package font-18 me-1"></i>
                         </div>
-                        <div class="tab-title">Detalle Activo</div>
+                        <div class="tab-title">Detalle</div>
                       </div>
                     </a>
                   </li>

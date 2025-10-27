@@ -29,7 +29,7 @@ if (isset($_GET['descargar_excel'])) {
         '_id' => $_GET['_id'] ?? '',
 
     ];
-    $nombreArchivo = $parametros['txt_fecha_inicio'] ."_". $parametros['txt_fecha_fin'] ."_". $parametros['ddl_departamentos'] . ".xlsx";
+    $nombreArchivo = $parametros['txt_fecha_inicio'] . "_" . $parametros['txt_fecha_fin'] . "_" . $parametros['ddl_departamentos'] . ".xlsx";
     $controlador->descargar_excel($nombreArchivo, $parametros, $encabezado);
 }
 
@@ -58,7 +58,7 @@ class th_control_acceso_calculosC
         $ddl_departamentos  = $parametros['ddl_departamentos'] ?? '';
         $id                 = $parametros['_id'] ?? '';
 
-        
+
 
         // Obtener lista de encabezados desde la BD (array de objetos o arrays)
         $listaEncabezados = $this->encabezados->listar_reporte_campos($id);
@@ -160,10 +160,31 @@ class th_control_acceso_calculosC
     {
         $txt_fecha_inicio = $parametros['txt_fecha_inicio'] ?? '';
         $txt_fecha_fin = $parametros['txt_fecha_fin'] ?? '';
+        $tipo_busqueda = $parametros['tipo_busqueda'] ?? 'departamento';
         $ddl_departamentos = $parametros['ddl_departamentos'] ?? '';
+        $ddl_personas = $parametros['ddl_personas'] ?? '';
+        $tipo_ordenamiento = $parametros['tipo_ordenamiento'] ?? 'sin_ordenar';
 
-        // Obtener datos del modelo usando BaseModel
-        $datos = $this->modelo->listar_asistencia_por_fecha_departamento($txt_fecha_inicio, $txt_fecha_fin, $ddl_departamentos);
+        // DEBUG: Registrar los parámetros recibidos
+        error_log("=== DEBUG REPORTE ===");
+        error_log("Fecha inicio: " . $txt_fecha_inicio);
+        error_log("Fecha fin: " . $txt_fecha_fin);
+        error_log("Tipo búsqueda: " . $tipo_busqueda);
+        error_log("Departamento: " . $ddl_departamentos);
+        error_log("Persona: " . $ddl_personas);
+        error_log("Tipo ordenamiento: " . $tipo_ordenamiento);
+
+        // Obtener datos del modelo
+        $datos = $this->modelo->listar_asistencia_por_fecha_departamento(
+            $txt_fecha_inicio,
+            $txt_fecha_fin,
+            $tipo_busqueda,
+            $ddl_departamentos,
+            $ddl_personas,
+            $tipo_ordenamiento
+        );
+
+        error_log("Registros encontrados: " . count($datos));
 
         $filas_datos = [];
 

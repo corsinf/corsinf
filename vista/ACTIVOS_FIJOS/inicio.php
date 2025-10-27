@@ -70,12 +70,46 @@ if ($_GET['acc'] == 'ac_descarga_lotes') {
     include('ACTIVOS_FIJOS/REPORTES/ac_descarga_lotes.php');
 }
 
+//Buscador tags
+if ($_GET['acc'] == 'si_simulador_facturados') {
+    include('ACTIVOS_FIJOS/SIMULADORES/si_simulador_facturados.php');
+}
+
 //INVENTARIO
 if ($_GET['acc'] == 'in_kardex') {
     include('ACTIVOS_FIJOS/INVENTARIOS/KARDEX/in_kardex.php');
 }
 
 
+//DEMO
+if ($_GET['acc'] == 'vista_demo') {
+    include('ACTIVOS_FIJOS/demo.php');
+}
+
+//DEMO
+if ($_GET['acc'] == 'vista_demo1') {
+    include('ACTIVOS_FIJOS/demo.php');
+}
+
+//DEMO
+if ($_GET['acc'] == 'vista_demo2') {
+    include('ACTIVOS_FIJOS/demo.php');
+}
+
+//DEMO
+if ($_GET['acc'] == 'vista_demo3') {
+    include('ACTIVOS_FIJOS/demo.php');
+}
+
+//DEMO
+if ($_GET['acc'] == 'vista_demo4') {
+    include('ACTIVOS_FIJOS/demo.php');
+}
+
+//DEMO
+if ($_GET['acc'] == 'vista_demo5') {
+    include('ACTIVOS_FIJOS/demo.php');
+}
 
 
 /**

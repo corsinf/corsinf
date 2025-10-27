@@ -32,8 +32,15 @@
             // Configurar documento
             $pdf->SetCreator('TCPDF');
             $pdf->SetAuthor('CORSINF');
-            $pdf->SetTitle('Cédula de Activo Fijo');
-            $pdf->SetSubject('Cédula de Activo Fijo');
+
+            if ($_SESSION['INICIO']['MODULO_SISTEMA'] != 2018) {
+                $pdf->SetTitle('Cédula de Activo Fijo');
+                $pdf->SetSubject('Cédula de Activo Fijo');
+            } else {
+                $pdf->SetTitle('GESTIÓN');
+                $pdf->SetSubject('Datasheet');
+            }
+            
             $pdf->SetMargins(10, 15, 10);
             $pdf->SetAutoPageBreak(true, 15);
             $pdf->setFillColor(249, 254, 247);
@@ -72,8 +79,15 @@
         // Encabezados centrados
         $pdf->Cell(190, 5, ($nombre_empresa), 0, 1, 'C');
         // $pdf->Cell(190, 5, ('DEPARTAMENTO DE ACTIVOS'), 0, 1, 'C');
-        $pdf->Cell(190, 5, ('GESTIÓN DE ACTIVOS'), 0, 1, 'C');
-        $pdf->Cell(190, 5, ('CÉDULA DE ACTIVO'), 0, 1, 'C');
+
+        if ($_SESSION['INICIO']['MODULO_SISTEMA'] != 2018) {
+            $pdf->Cell(190, 5, ('GESTIÓN DE ACTIVOS'), 0, 1, 'C');
+            $pdf->Cell(190, 5, ('CÉDULA DE ACTIVO'), 0, 1, 'C');
+        } else {
+            $pdf->Cell(190, 5, ('GESTIÓN'), 0, 1, 'C');
+            $pdf->Cell(190, 5, ('Datasheet'), 0, 1, 'C');
+        }
+
         $pdf->Ln(5);
         letra_estilo_normal($pdf);
         $pdf->Cell(100, 5, '', 0, 0, 'L');
