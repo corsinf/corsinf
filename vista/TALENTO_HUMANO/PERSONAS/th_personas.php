@@ -19,7 +19,7 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
             columns: [{
                     data: null,
                     render: function(data, type, item) {
-                        href = `../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_registrar_personas&_id=${item._id}`;
+                        href = `../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_registrar_personas&_id=${item.th_per_id}`;
                         return `<a href="${href}"><u>${item.primer_apellido} ${item.segundo_apellido} ${item.primer_nombre} ${item.segundo_nombre}</u></a>`;
                     }
                 },
@@ -36,6 +36,9 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                 },
                 {
                     data: 'telefono_1'
+                },
+                {
+                    data: 'th_dep_nombre'
                 },
             ],
             order: [
@@ -221,6 +224,7 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                                                 <th>Cédula</th>
                                                 <th>Correo</th>
                                                 <th>Teléfono</th>
+                                                <th>Departamento</th>
                                             </tr>
                                         </thead>
                                         <tbody>

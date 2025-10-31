@@ -111,4 +111,39 @@ class th_personasM extends BaseModel
 
         return $this->db->datos($sql);
     }
+
+
+    public function listar_personas_con_departamento($id_departamento = '')
+    {
+        // Normalizar entrada (puede ser número, texto o vacío)
+        $valor = ($id_departamento !== '' && $id_departamento !== null) ? trim($id_departamento) : '';
+
+        if ($valor === '') {
+            // Si no se manda nada, devolvemos todas las personas activas con o sin departamento
+            $sql = "
+        SELECT DISTINCT p.th_per_id,
+              p.th_per_cedula AS cedula,
+                   p.th_per_correo AS correo,
+                   p.th_per_telefono_1 AS telefono_1,
+             p.th_per_primer_nombre AS primer_nombre,
+                   p.th_per_segundo_nombre AS segundo_nombre,
+                   p.th_per_primer_apellido AS primer_apellido,
+                   p.th_per_segundo_apellido AS segundo_apellido,
+               d.th_dep_id,
+               d.th_dep_nombre,
+               CASE 
+                   WHEN d.th_dep_nombre IS NULL THEN 'Sin departamento'
+                   ELSE d.th_dep_nombre 
+               END AS departamento_display
+        FROM th_personas p
+        LEFT JOIN th_personas_departamentos pd ON p.th_per_id = pd.th_per_id
+        LEFT JOIN th_departamentos d ON pd.th_dep_id = d.th_dep_id
+        WHERE p.th_per_estado = 1
+        ORDER BY p.th_per_primer_apellido, p.th_per_primer_nombre
+        ";
+        }
+
+
+        return $this->db->datos($sql);
+    }
 }

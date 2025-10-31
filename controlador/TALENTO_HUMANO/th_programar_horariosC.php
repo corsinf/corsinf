@@ -9,6 +9,11 @@ if (isset($_GET['listar'])) {
     echo json_encode($controlador->listar($_POST['id'] ?? ''));
 }
 
+if (isset($_GET['listar_persona_horario'])) {
+    echo json_encode($controlador->listar_persona_horario($_POST['id'] ?? ''));
+}
+
+
 if (isset($_GET['listar_departamentos_horarios'])) {
     echo json_encode($controlador->listar_departamentos_horarios($_POST['id'] ?? ''));
 }
@@ -44,6 +49,13 @@ class th_programar_horariosC
             return $datos;
         }
         return null;
+    }
+    function listar_persona_horario($id)
+    {
+        // $datos = $this->modelo->where('th_pro_id', $id)->listar();
+        $datos = $this->modelo->listar_horarios_persona_completo($id);
+
+        return $datos;
     }
 
     function listar_departamentos_horarios($id = '')

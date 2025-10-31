@@ -19,7 +19,7 @@ if (isset($_GET['_id'])) {
             datos_col(<?= $_id ?>);
             cargar_personas_departamentos();
         <?php } ?>
-
+        cargar_selects2();
 
         /**
          * 
@@ -56,6 +56,12 @@ if (isset($_GET['_id'])) {
      * Departamentos
      * 
      */
+    function cargar_selects2(enModal = false) {
+        url_departamentosC = '../controlador/TALENTO_HUMANO/th_departamentosC.php?buscar=true';
+        cargar_select2_url('ddl_departamentos', url_departamentosC, '-- Seleccione --', '#modal_blank');
+        url_departamentosTodosC = '../controlador/TALENTO_HUMANO/th_departamentosC.php?buscar=true';
+        cargar_select2_url('ddl_departamento_destino', url_departamentosTodosC, '-- Seleccione --', '#modalMoverPersonas');
+    }
 
     function datos_col(id) {
         $.ajax({
@@ -68,6 +74,20 @@ if (isset($_GET['_id'])) {
             success: function(response) {
                 console.log(response);
                 $('#txt_nombre').val(response[0].nombre);
+            }
+        });
+    }
+
+    function verificar_contrasenia(password) {
+        $.ajax({
+            data: {
+                id: password
+            },
+            url: '../controlador/TALENTO_HUMANO/th_departamentosC.php?verificar=true',
+            type: 'post',
+            dataType: 'json',
+            success: function(response) {
+                console.log(response);
             }
         });
     }
@@ -118,10 +138,86 @@ if (isset($_GET['_id'])) {
             }
         });
 
-        $('#txt_nombre').on('input', function() {
-            $('#error_txt_nombre').text('');
+    }
+
+    function insertar_persona_departamento() {
+        var deptId = $('#ddl_departamentos').val();
+        var perdepId = $('#id_perdep').val();
+        var id_per = $('#id_per').val();
+
+        if (!deptId) {
+            Swal.fire('', 'Seleccione un departamento', 'warning');
+            return;
+        }
+
+        var parametros = {
+            '_id': perdepId || '', // th_perdep_id para edición
+            'id_persona': id_per, // th_per_id
+            'id_departamento': deptId, // th_dep_id
+            'txt_visitor': $('#txt_visitor').val() || ''
+        };
+
+        $.ajax({
+            url: '../controlador/TALENTO_HUMANO/th_personas_departamentosC.php?insertar_editar_persona=true',
+            type: 'post',
+            dataType: 'json',
+            data: {
+                parametros: parametros
+            },
+            success: function(response) {
+                if (response == 1) {
+                    Swal.fire('', 'Operación realizada con éxito.', 'success').then(() => {
+                        location.reload(); // O redirigir según necesites
+                    });
+                } else if (response == -2) {
+                    Swal.fire('', 'Esta persona ya está asignada a este departamento', 'warning');
+                } else {
+                    Swal.fire('', 'Error en la operación', 'error');
+                }
+            },
+            error: function(xhr, status, error) {
+                Swal.fire('', 'Error: ' + xhr.responseText, 'error');
+            }
         });
     }
+
+
+    function editar_datos_personas_departamentos(id_dep_per, id_persona) {
+
+        var modalEl = document.getElementById('modal_blank');
+        var modal = new bootstrap.Modal(modalEl);
+        modal.show();
+
+        $.ajax({
+            data: {
+                id: id_persona
+            },
+            url: '../controlador/TALENTO_HUMANO/th_personasC.php?listar_persona_departamento=true',
+            type: 'post',
+            dataType: 'json',
+            success: function(response) {
+                if (response && response.length > 0) {
+                    // Cargar el _id_perdep en el campo oculto para edición
+                    $('#id_perdep').val(id_dep_per);
+                    $('#id_per').val(id_persona);
+
+                    // Cargar el departamento seleccionado
+                    $('#ddl_departamentos').append($('<option>', {
+                        value: response[0].id_departamento,
+                        text: response[0].nombre_departamento,
+                        selected: true
+                    }));
+
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error('Error al cargar departamento:', error);
+            }
+        });
+
+
+    }
+
 
     function delete_datos() {
         var id = '<?= $_id ?>';
@@ -164,7 +260,15 @@ if (isset($_GET['_id'])) {
      * 
      */
 
+    let tbl_departamento_personas;
+
     function cargar_personas_departamentos() {
+        // Si ya existe, destruir para recrear
+        if ($.fn.DataTable.isDataTable('#tbl_departamento_personas')) {
+            $('#tbl_departamento_personas').DataTable().destroy();
+            $('#tbl_departamento_personas tbody').empty();
+        }
+
         tbl_departamento_personas = $('#tbl_departamento_personas').DataTable({
             language: {
                 url: 'https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
@@ -175,18 +279,32 @@ if (isset($_GET['_id'])) {
                 type: 'POST',
                 data: function(d) {
                     return {
-                        id: '<?= $_id ?>',
-                    };
+                        id: '<?= $_id ?>'
+                    }; // ya lo tenías
                 },
                 dataSrc: ''
             },
             columns: [{
+                    data: null,
+                    orderable: false,
+                    className: 'text-center',
+                    render: function(data, type, item) {
+                        // item._id -> th_perdep_id (relación)
+                        // item.id_persona -> th_per_id (persona)
+                        const perdep = item._id || '';
+                        const person = item.id_persona || item.th_per_id || '';
+                        return `<input type="checkbox" class="select-person"
+                    data-perdep="${perdep}"
+                    data-person="${person}" />`;
+                    }
+                },
+                {
                     data: 'cedula'
                 },
                 {
                     data: null,
                     render: function(data, type, item) {
-                        nombres_completos = item.primer_apellido + ' ' + item.segundo_apellido + ' ' + item.primer_nombre + ' ' + item.segundo_nombre;
+                        let nombres_completos = `${item.primer_apellido} ${item.segundo_apellido} ${item.primer_nombre} ${item.segundo_nombre}`;
                         return `<a href="#"><u>${nombres_completos}</u></a>`;
                     }
                 },
@@ -198,32 +316,263 @@ if (isset($_GET['_id'])) {
                 },
                 {
                     data: null,
+                    orderable: false,
+                    className: 'text-center',
                     render: function(data, type, item) {
-                        return `<button type="button" class="btn btn-danger btn-xs" onclick="delete_datos_personas_departamentos('${item._id}')"><i class="bx bx-trash fs-7 me-0 fw-bold"></i></button>`;
+                        return `
+                        <div class="d-flex justify-content-center gap-1">
+                            <button type="button" class="btn btn-warning btn-xs" onclick="editar_datos_personas_departamentos('${item._id}','${item.id_persona}')">
+                                <i class="bx bx-edit fs-7 fw-bold"></i>
+                            </button>
+                            <button type="button" class="btn btn-danger btn-xs" onclick="delete_datos_personas_departamentos('${item._id}')">
+                                <i class="bx bx-trash fs-7 fw-bold"></i>
+                            </button>
+                        </div>
+                    `;
                     }
                 }
             ],
             order: [
-                [1, 'asc']
-            ],
+                [2, 'asc']
+            ], // ordenar por nombre completo (col index 2 después del checkbox)
+            drawCallback: function() {
+                // Después de dibujar, asegura eventos de checkboxes
+                setupCheckboxHandlers();
+            }
         });
     }
 
+    // Variable global para saber si es una o varias personas
+    let ids_a_mover = [];
+
+    // Maneja select-all y clicks en checkboxes
+    function setupCheckboxHandlers() {
+        $('#select_all_personas').off('change').on('change', function() {
+            const checked = $(this).is(':checked');
+            $('#tbl_departamento_personas').find('tbody input.select-person').prop('checked', checked);
+        });
+
+        $('#tbl_departamento_personas').on('change', 'tbody input.select-person', function() {
+            const total = $('#tbl_departamento_personas').find('tbody input.select-person').length;
+            const marcados = $('#tbl_departamento_personas').find('tbody input.select-person:checked').length;
+            $('#select_all_personas').prop('checked', total === marcados && total > 0);
+        });
+    }
+
+    function obtener_ids_personas_seleccionadas() {
+        const items = [];
+        $('#tbl_departamento_personas').find('tbody input.select-person:checked').each(function() {
+            const perdep = $(this).data('perdep') === undefined ? '' : String($(this).data('perdep'));
+            const person = $(this).data('person') === undefined ? '' : String($(this).data('person'));
+            items.push({
+                perdep: perdep,
+                person: person
+            });
+        });
+        return items;
+    }
+
+    // Abre modal para mover UNA persona (desde botón de fila)
+    function abrir_modal_mover_una_persona(id_persona) {
+        ids_a_mover = [id_persona];
+
+        $('#titulo_modal_mover').text('Mover persona a departamento');
+        $('#texto_personas_seleccionadas').text('Se moverá 1 persona');
+
+        cargar_departamentos_en_select();
+
+        const modalEl = document.getElementById('modalMoverPersonas');
+        const modal = new bootstrap.Modal(modalEl);
+        modal.show();
+    }
+
+    // Abre modal para mover VARIAS personas (desde botón general)
+    function abrir_modal_mover_varios() {
+        ids_a_mover = obtener_ids_personas_seleccionadas();
+
+        if (ids_a_mover.length === 0) {
+            Swal.fire('', 'Seleccione al menos una persona para mover.', 'warning');
+            return;
+        }
+
+        $('#titulo_modal_mover').text('Mover personas a departamento');
+        $('#texto_personas_seleccionadas').text(`Se moverán ${ids_a_mover.length} persona(s)`);
+
+        cargar_departamentos_en_select();
+
+        const modalEl = document.getElementById('modalMoverPersonas');
+        const modal = new bootstrap.Modal(modalEl);
+        modal.show();
+    }
+
+    // Carga departamentos en el select
+    function cargar_departamentos_en_select() {
+        const _idPHP = "<?php echo $_id; ?>";
+
+        $('#ddl_departamento_destino').html('<option value="">-- Seleccione --</option>');
+
+        $.ajax({
+            data: {
+                id: _idPHP
+            },
+            url: '../controlador/TALENTO_HUMANO/th_departamentosC.php?listar=true',
+            type: 'post',
+            dataType: 'json',
+            success: function(response) {
+                if (response && response.length > 0) {
+
+                    // Cargar el departamento seleccionado
+                    $('#ddl_departamento_destino').append($('<option>', {
+                        value: response[0]._id,
+                        text: response[0].nombre,
+                        selected: true
+                    }));
+
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error('Error al cargar departamento:', error);
+            }
+        });
+
+    }
+
+    function mover_personas_departamento() {
+        const selected = obtener_ids_personas_seleccionadas();
+        const destino = $('#ddl_departamento_destino').val();
+        if (!destino) {
+            Swal.fire('', 'Seleccione el departamento destino.', 'warning');
+            return;
+        }
+        if (!selected || selected.length === 0) {
+            Swal.fire('', 'Seleccione al menos una persona.', 'warning');
+            return;
+        }
+
+        $('#mover_msg').text('Procesando...');
+
+        $.ajax({
+            url: '../controlador/TALENTO_HUMANO/th_personas_departamentosC.php?mover_varios=true',
+            method: 'POST',
+            data: {
+                ids: JSON.stringify(selected), // array de {perdep, person}
+                id_departamento_destino: destino,
+                txt_visitor: '' // opcional
+            },
+            dataType: 'json',
+            success: function(resp) {
+                $('#mover_msg').text('');
+                const modalEl = document.getElementById('modalMoverPersonas');
+                const modal = bootstrap.Modal.getInstance(modalEl);
+                if (modal) modal.hide();
+
+                if (tbl_departamento_personas) tbl_departamento_personas.ajax.reload(null, false);
+                $('#select_all_personas').prop('checked', false);
+
+                if (!resp) {
+                    Swal.fire('', 'Respuesta inesperada del servidor.', 'error');
+                    return;
+                }
+
+                // Mensaje principal (viene en resp.message)
+                const titulo = resp.success ? 'Operación completada' : 'Resultado';
+                const icono = (resp.fallidos && resp.fallidos > 0) ? 'warning' : (resp.success ? 'success' : 'info');
+
+                // Construir texto extra con contadores
+                const contadores = `Movidas: ${resp.exitosos || 0}. Ya estaban: ${resp.duplicados || 0}. Fallidos: ${resp.fallidos || 0}.`;
+
+                // Si hay errores, formatearlos en una lista HTML corta
+                let htmlDetalles = `<p>${resp.message || contadores}</p>`;
+                if (resp.errores && resp.errores.length > 0) {
+                    htmlDetalles += '<hr><div style="text-align:left"><strong>Detalles:</strong><ul style="margin:0;padding-left:1.2em">';
+                    resp.errores.forEach(function(err) {
+                        // si el elemento es string o un objeto con mensaje
+                        if (typeof err === 'string') htmlDetalles += `<li>${escapeHtml(err)}</li>`;
+                        else if (err.message) htmlDetalles += `<li>${escapeHtml(err.message)}</li>`;
+                        else htmlDetalles += `<li>${escapeHtml(JSON.stringify(err))}</li>`;
+                    });
+                    htmlDetalles += '</ul></div>';
+                }
+
+                // Mostrar SweetAlert con HTML
+                Swal.fire({
+                    title: titulo,
+                    html: htmlDetalles,
+                    icon: icono,
+                    confirmButtonText: 'Aceptar',
+                    width: '520px'
+                });
+
+                // log en consola si hay detalles para debugging
+                if (resp.errores && resp.errores.length) console.warn('Errores mover_varios:', resp.errores);
+            },
+            error: function(xhr, status, error) {
+                $('#mover_msg').text('');
+                console.error(error, xhr.responseText);
+                Swal.fire('', 'Error en el servidor al intentar mover las personas.', 'error');
+            }
+        });
+    }
+
+
     function delete_datos_personas_departamentos(id) {
         Swal.fire({
-            title: 'Eliminar Registro?',
-            text: "Esta seguro de eliminar este registro?",
+            title: 'Eliminar Registro',
+            html: `
+            <p>Está seguro de eliminar este registro?</p>
+            <div class="mt-3 text-start">
+                <label for="txt_pass_eliminar" class="form-label fw-bold">Contraseña de seguridad:</label>
+                <input type="password" id="txt_pass_eliminar" class="swal2-input" placeholder="Ingrese su contraseña" autocomplete="off">
+            </div>
+        `,
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
             cancelButtonColor: '#d33',
-            confirmButtonText: 'Si'
-        }).then((result) => {
-            if (result.value) {
-                eliminar_personas_departamentos(id);
+            confirmButtonText: 'Eliminar',
+            cancelButtonText: 'Cancelar',
+            focusConfirm: false,
+            preConfirm: () => {
+                const pass = Swal.getPopup().querySelector('#txt_pass_eliminar').value.trim();
+                if (!pass) {
+                    Swal.showValidationMessage('Debe ingresar la contraseña');
+                    return false;
+                }
+
+                // Retornamos la promesa AJAX
+                return $.ajax({
+                    url: '../controlador/TALENTO_HUMANO/th_personas_departamentosC.php?verificar=true',
+                    type: 'POST',
+                    dataType: 'json',
+                    data: {
+                        password: pass
+                    }
+                }).then(function(response) {
+                    console.log('Respuesta del servidor:', response); // Para depurar
+
+                    if (!response || !response.valido) {
+                        Swal.showValidationMessage('Contraseña incorrecta');
+                        return false;
+                    }
+                    return pass;
+                }).catch(function(error) {
+                    console.error('Error completo:', error);
+                    console.log('Response Text:', error.responseText);
+                    Swal.showValidationMessage('Error al validar la contraseña. Intente de nuevo.');
+                    return false;
+                });
             }
-        })
+        }).then((result) => {
+            // Este then() es del Swal.fire(), no del AJAX
+            if (result.isConfirmed) {
+                console.log('Contraseña validada correctamente');
+                // Aquí eliminas el registro
+                // eliminar_personas_departamentos(id);
+                Swal.fire('Eliminado!', 'El registro ha sido eliminado.', 'success');
+            }
+        });
     }
+
 
     function eliminar_personas_departamentos(id) {
         $.ajax({
@@ -327,11 +676,8 @@ if (isset($_GET['_id'])) {
     }
 
     function insertar_editar_personas_departamentos() {
-        var parametros = {
-            '_id': '<?= $_id ?>',
-            'personas_seleccionadas': personas_seleccionadas,
-            'txt_visitor': ''
-        };
+
+
 
         insertar_personas_departamentos(parametros);
 
@@ -381,7 +727,6 @@ if (isset($_GET['_id'])) {
             }
         });
     }
-
     function abrir_modal_personas() {
         $('#modal_personas').modal('show');
         // Solo llama a cargar_personas si la tabla no ha sido inicializada
@@ -514,9 +859,14 @@ if (isset($_GET['_id'])) {
 
                                 <div class="tab-pane fade" id="successprofile" role="tabpanel">
 
-                                    <div class="row pt-3">
-                                        <div class="col-sm-12" id="btn_nuevo">
-                                            <button type="button" class="btn btn-success btn-sm" onclick="abrir_modal_personas();"><i class="bx bx-plus"></i> Agregar Personas</button>
+                                    <div class="row pt-2">
+                                        <div class="col-sm-12 text-end" id="btn_nuevo_bottom">
+                                            <button type="button" class="btn btn-success btn-sm" onclick="abrir_modal_personas();">
+                                                <i class="bx bx-plus"></i> Agregar Personas
+                                            </button>
+                                            <button type="button" class="btn btn-primary btn-sm ms-2" onclick="abrir_modal_mover_varios();">
+                                                <i class="bx bx-transfer"></i> Mover seleccionados
+                                            </button>
                                         </div>
                                     </div>
 
@@ -525,6 +875,7 @@ if (isset($_GET['_id'])) {
                                             <table class="table table-striped responsive" id="tbl_departamento_personas" style="width:100%">
                                                 <thead>
                                                     <tr>
+                                                        <th style="width:40px"><input id="select_all_personas" type="checkbox" /></th>
                                                         <th>Cédula</th>
                                                         <th>Nombre</th>
                                                         <th>Correo</th>
@@ -635,6 +986,66 @@ if (isset($_GET['_id'])) {
         </div>
     </div>
 </div>
+<div class="modal fade" id="modalMoverPersonas" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Mover personas a departamento</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label for="ddl_departamento_destino" class="form-label">Departamento destino</label>
+                    <select id="ddl_departamento_destino" class="form-select">
+                        <option value="">-- Seleccione --</option>
+                        <!-- Se cargan via AJAX -->
+                    </select>
+                </div>
+                <div id="mover_msg" class="small text-muted"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary btn-sm" onclick="mover_personas_departamento();">Mover</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="modal" id="modal_blank" tabindex="-1" aria-modal="true" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Cambiar De Departamento</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <div class="modal-body">
+                <form id="registrar_departamento" class="modal_general_provincias">
+                    <input id="id_perdep" type="hidden" value="" />
+                    <input id="id_per" type="hidden" value="" /> <!-- guarda la persona -->
+
+                    <div class="mb-3">
+                        <label for="ddl_departamentos" class="form-label">Departamentos <span class="text-danger">*</span></label>
+                        <select class="form-select form-select-sm select2-validation" id="ddl_departamentos" name="ddl_departamentos">
+                            <option selected disabled>-- Seleccione --</option>
+                        </select>
+                        <label class="error" style="display: none;" for="ddl_departamentos"></label>
+                    </div>
+
+                    <div class="d-flex justify-content-end pt-2">
+                        <button type="button" class="btn btn-success btn-sm" onclick="insertar_persona_departamento();">
+                            <i class="bx bx-save"></i> Guardar
+                        </button>
+                        <button type="button" class="btn btn-secondary btn-sm ms-2" data-bs-dismiss="modal">Cancelar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
     // Array estático jerárquico
     const organigramaData = {

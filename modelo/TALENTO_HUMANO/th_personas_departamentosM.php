@@ -76,6 +76,7 @@ class th_personas_departamentosM extends BaseModel
 
         $sql = "
             SELECT
+                per_dep.th_perdep_id AS _id_perdep,
                 per.th_per_id AS id_persona,
                 per.th_per_primer_apellido AS primer_apellido,
                 per.th_per_segundo_apellido AS segundo_apellido,

@@ -1,0 +1,300 @@
+2025-10-30 09:17:59
+string(7) "asdadsa"
+array(46) {
+  ["ULTIMO_ACCESO"]=>
+  int(1761833875)
+  ["VER"]=>
+  string(1) "1"
+  ["EDITAR"]=>
+  string(1) "1"
+  ["ELIMINAR"]=>
+  string(1) "1"
+  ["DBA"]=>
+  NULL
+  ["USUARIO"]=>
+  string(13) "Elvis Quishpe"
+  ["ID_USUARIO"]=>
+  string(4) "4157"
+  ["EMAIL"]=>
+  string(20) "equishpe@corsinf.com"
+  ["TIPO"]=>
+  string(3) "DBA"
+  ["PERFIL"]=>
+  string(1) "1"
+  ["FOTO"]=>
+  string(21) "../img/sin_imagen.jpg"
+  ["NO_CONCURENTE"]=>
+  string(0) ""
+  ["NO_CONCURENTE_NOM"]=>
+  string(0) ""
+  ["NO_CONCURENTE_TABLA_ID"]=>
+  string(0) ""
+  ["NO_CONCURENTE_TABLA"]=>
+  string(0) ""
+  ["MODULO_SISTEMA_ANT"]=>
+  string(0) ""
+  ["LISTA_ART"]=>
+  int(1)
+  ["ID_EMPRESA"]=>
+  string(4) "3044"
+  ["ASIGNAR_SEGUROS"]=>
+  NULL
+  ["RAZON_SOCIAL"]=>
+  string(27) "Talento Humano - Desarrollo"
+  ["IP_HOST"]=>
+  string(13) "186.4.219.172"
+  ["BASEDATO"]=>
+  string(28) "DB_TALENTO_HUMANO_DESARROLLO"
+  ["USUARIO_DB"]=>
+  string(2) "sa"
+  ["PASSWORD_DB"]=>
+  string(8) "Tango456"
+  ["PUERTO_DB"]=>
+  string(4) "1487"
+  ["TIPO_BASE"]=>
+  string(9) "SQLSERVER"
+  ["LOGO"]=>
+  string(30) "../img/de_sistema/sin-logo.png"
+  ["IP_API_HIKVISION"]=>
+  string(1) "."
+  ["KEY_API_HIKVISION"]=>
+  string(1) "."
+  ["USER_API_HIKVISION"]=>
+  NULL
+  ["TCP_PUERTO_HIKVISION"]=>
+  NULL
+  ["PUERTO_API_HIKVISION"]=>
+  string(1) "."
+  ["ACERCA_DE"]=>
+  NULL
+  ["TITULO_PESTANIA"]=>
+  string(0) ""
+  ["IDUKAY_URL"]=>
+  string(1) "."
+  ["IDUKAY_TOKEN"]=>
+  string(1) "."
+  ["IDUKAY_ANIO_LEC"]=>
+  string(0) ""
+  ["RUTA_IMG_ABSOLUTA"]=>
+  string(15) "C:\\img_activos"
+  ["RUTA_IMG_RELATIVA"]=>
+  NULL
+  ["RUTA_IMG_COMPARTIDA"]=>
+  string(1) "."
+  ["NUM_MODULOS"]=>
+  int(2)
+  ["NUM_EMPRESAS"]=>
+  int(6)
+  ["MODULO_SISTEMA"]=>
+  string(4) "1011"
+  ["MODULO_SISTEMA_NOMBRE"]=>
+  string(14) "Talento Humano"
+  ["MODULO_SISTEMA_IMG_ICO"]=>
+  string(74) "<img src="../img/de_sistema/MODULOS/talento_humano.svg" class="logo-icon">"
+  ["MENU_LATERAL"]=>
+  string(11060) "<li><a href="inicio.php?acc=index"><div class="parent-icon"><i class="bx bx-home"></i></div><div class="menu-title">Inicio</div></a></li><li>
+											            <a class="has-arrow" href="javascript:;">
+												              <div class="parent-icon">
+												              		<i class="bx"><i class="lni lni-alarm-clock"></i></i>
+												              </div>
+												              <div class="menu-title">Asistencias</div>
+											            </a> 
+										           <ul class="mm-collapse"><li>
+												            <a href="inicio.php?mod=1011&acc=th_turnos" id="3233">
+												              <i class="bx"><i class="bx bx-circle"></i></i>
+												              Turnos
+												            </a>
+												          </li><li>
+												            <a href="inicio.php?mod=1011&acc=th_horarios" id="3234">
+												              <i class="bx"><i class="bx bx-circle"></i></i>
+												              Horarios
+												            </a>
+												          </li><li>
+												            <a href="inicio.php?mod=1011&acc=th_programar_horarios" id="8236">
+												              <i class="bx"><i class="bx bx-circle"></i></i>
+												              Programar Horarios
+												            </a>
+												          </li></ul></li><li>
+											            <a class="has-arrow" href="javascript:;">
+												              <div class="parent-icon">
+												              		<i class="bx"><i class="bx bxs-school"></i></i>
+												              </div>
+												              <div class="menu-title">Departamentos</div>
+											            </a> 
+										           <ul class="mm-collapse"><li>
+												            <a href="inicio.php?mod=1011&acc=th_departamentos" id="3227">
+												              <i class="bx"><i class="bx bx-circle"></i></i>
+												              Departamentos
+												            </a>
+												          </li></ul></li><li>
+											            <a class="has-arrow" href="javascript:;">
+												              <div class="parent-icon">
+												              		<i class="bx"><i class="bx bxs-devices"></i></i>
+												              </div>
+												              <div class="menu-title">Dispositivos</div>
+											            </a> 
+										           <ul class="mm-collapse"><li>
+												            <a href="inicio.php?mod=1011&acc=th_dispositivos" id="3223">
+												              <i class="bx"><i class="bx bx-circle"></i></i>
+												              Dispositivos
+												            </a>
+												          </li><li>
+												            <a href="inicio.php?mod=1011&acc=th_detectar_dispositivos" id="3232">
+												              <i class="bx"><i class="bx bx-circle"></i></i>
+												              Iniciar Dispositivos
+												            </a>
+												          </li><li>
+												            <a href="inicio.php?mod=1011&acc=th_tomar_datos_biometricos" id="4236">
+												              <i class="bx"><i class="bx bx-circle"></i></i>
+												              Tomar Datos Biométricos
+												            </a>
+												          </li><li>
+												            <a href="inicio.php?mod=1011&acc=log_dispositivos" id="8289">
+												              <i class="bx"><i class="bx bx-circle"></i></i>
+												              Log Dispositivos
+												            </a>
+												          </li></ul></li><li>
+											            <a class="has-arrow" href="javascript:;">
+												              <div class="parent-icon">
+												              		<i class="bx"><i class="bx bx-cool" ></i></i>
+												              </div>
+												              <div class="menu-title">Feriado</div>
+											            </a> 
+										           <ul class="mm-collapse"><li>
+												            <a href="inicio.php?mod=1011&acc=th_feriados" id="8276">
+												              <i class="bx"><i class="bx bx-circle"></i></i>
+												              Feriados
+												            </a>
+												          </li></ul></li><li>
+											            <a class="has-arrow" href="javascript:;">
+												              <div class="parent-icon">
+												              		<i class="bx"><i class="bx bxs-pen"></i></i>
+												              </div>
+												              <div class="menu-title">Firmador</div>
+											            </a> 
+										           <ul class="mm-collapse"><li>
+												            <a href="inicio.php?mod=1011&acc=registrar_firma" id="8268">
+												              <i class="bx"><i class="bx bx-circle"></i></i>
+												              Firmas
+												            </a>
+												          </li><li>
+												            <a href="inicio.php?mod=1011&acc=sala_firmado" id="8269">
+												              <i class="bx"><i class="bx bx-circle"></i></i>
+												              Sala de firma
+												            </a>
+												          </li><li>
+												            <a href="inicio.php?mod=1011&acc=validar_firma" id="8270">
+												              <i class="bx"><i class="bx bx-circle"></i></i>
+												              Validar Firma
+												            </a>
+												          </li><li>
+												            <a href="inicio.php?mod=1011&acc=firmar_pdf" id="8271">
+												              <i class="bx"><i class="bx bx-circle"></i></i>
+												              Firmar Documento
+												            </a>
+												          </li><li>
+												            <a href="inicio.php?mod=1011&acc=validar_pdf" id="8272">
+												              <i class="bx"><i class="bx bx-circle"></i></i>
+												              Validar PDF
+												            </a>
+												          </li></ul></li><li>
+											            <a class="has-arrow" href="javascript:;">
+												              <div class="parent-icon">
+												              		<i class="bx"><i class="bx bx-run"></i></i>
+												              </div>
+												              <div class="menu-title">Justificación</div>
+											            </a> 
+										           <ul class="mm-collapse"><li>
+												            <a href="inicio.php?mod=1011&acc=th_justificaciones" id="8275">
+												              <i class="bx"><i class="bx bx-circle"></i></i>
+												              Justificaciones
+												            </a>
+												          </li><li>
+												            <a href="inicio.php?mod=1011&acc=th_justificaciones_tipo" id="8277">
+												              <i class="bx"><i class="bx bx-circle"></i></i>
+												              Tipo de Justificación
+												            </a>
+												          </li></ul></li><li>
+											            <a class="has-arrow" href="javascript:;">
+												              <div class="parent-icon">
+												              		<i class="bx"><i class="bx bx-calendar-check"></i></i>
+												              </div>
+												              <div class="menu-title">Marcaciones</div>
+											            </a> 
+										           <ul class="mm-collapse"><li>
+												            <a href="inicio.php?mod=1011&acc=th_marcaciones_web" id="8292">
+												              <i class="bx"><i class="bx bx-circle"></i></i>
+												              Marcaciones Temporales
+												            </a>
+												          </li><li>
+												            <a href="inicio.php?mod=1011&acc=th_control_aprobacion" id="8295">
+												              <i class="bx"><i class="bx bx-circle"></i></i>
+												              Control de Aprobación 
+												            </a>
+												          </li><li>
+												            <a href="inicio.php?mod=1011&acc=th_triangular" id="8296">
+												              <i class="bx"><i class="bx bx-circle"></i></i>
+												              Triangulación 
+												            </a>
+												          </li><li>
+												            <a href="inicio.php?mod=1011&acc=th_triangular_departamento" id="8298">
+												              <i class="bx"><i class="bx bx-circle"></i></i>
+												              Triangular Departamentos
+												            </a>
+												          </li><li>
+												            <a href="inicio.php?mod=1011&acc=th_marcaciones" id="8326">
+												              <i class="bx"><i class="bx bx-circle"></i></i>
+												              Marcaciones
+												            </a>
+												          </li></ul></li><li>
+											            <a class="has-arrow" href="javascript:;">
+												              <div class="parent-icon">
+												              		<i class="bx"><i class="bx bx-group"></i></i>
+												              </div>
+												              <div class="menu-title">Personas</div>
+											            </a> 
+										           <ul class="mm-collapse"><li>
+												            <a href="inicio.php?mod=1011&acc=th_personas" id="3229">
+												              <i class="bx"><i class="bx bx-circle"></i></i>
+												              Personas
+												            </a>
+												          </li></ul></li><li>
+											            <a class="has-arrow" href="javascript:;">
+												              <div class="parent-icon">
+												              		<i class="bx"><i class="bx bx-user"></i></i>
+												              </div>
+												              <div class="menu-title">Postulantes</div>
+											            </a> 
+										           <ul class="mm-collapse"><li>
+												            <a href="inicio.php?mod=1011&acc=th_postulantes" id="8244">
+												              <i class="bx"><i class="bx bx-circle"></i></i>
+												              Postulantes
+												            </a>
+												          </li></ul></li><li>
+											            <a class="has-arrow" href="javascript:;">
+												              <div class="parent-icon">
+												              		<i class="bx"><i class="bx bx-loader"></i></i>
+												              </div>
+												              <div class="menu-title">Recalcular</div>
+											            </a> 
+										           <ul class="mm-collapse"><li>
+												            <a href="inicio.php?mod=1011&acc=th_recalcular" id="8325">
+												              <i class="bx"><i class="bx bx-circle"></i></i>
+												              Recalcular
+												            </a>
+												          </li></ul></li><li>
+											            <a class="has-arrow" href="javascript:;">
+												              <div class="parent-icon">
+												              		<i class="bx"><i class="bx bx-data"></i></i>
+												              </div>
+												              <div class="menu-title">Reportes</div>
+											            </a> 
+										           <ul class="mm-collapse"><li>
+												            <a href="inicio.php?mod=1011&acc=th_reportes" id="8280">
+												              <i class="bx"><i class="bx bx-circle"></i></i>
+												              Reportes
+												            </a>
+												          </li></ul></li>"
+}
+
+

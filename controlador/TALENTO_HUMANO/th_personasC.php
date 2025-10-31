@@ -2,6 +2,7 @@
 date_default_timezone_set('America/Guayaquil');
 
 require_once(dirname(__DIR__, 2) . '/modelo/TALENTO_HUMANO/th_personasM.php');
+require_once(dirname(__DIR__, 2) . '/modelo/TALENTO_HUMANO/th_personas_departamentosM.php');
 require_once(dirname(__DIR__, 2) . '/modelo/TALENTO_HUMANO/th_dispositivosM.php');
 require_once(dirname(__DIR__, 2) . '/modelo/TALENTO_HUMANO/th_cardM.php');
 require_once(dirname(__DIR__, 2) . '/modelo/TALENTO_HUMANO/th_fingerM.php');
@@ -13,6 +14,10 @@ $controlador = new th_personasC();
 
 if (isset($_GET['listar'])) {
     echo json_encode($controlador->listar($_POST['id'] ?? ''));
+}
+
+if (isset($_GET['listar_persona_departamento'])) {
+    echo json_encode($controlador->listar_persona_departamento($_POST['id'] ?? ''));
 }
 
 if (isset($_GET['listar_personas_rol'])) {
@@ -176,6 +181,7 @@ if (isset($_GET['DeleteFaceBase'])) {
 class th_personasC
 {
     private $modelo;
+    private $personas_departamentos;
     private $cod_globales;
     private $dispositivos;
     private $card;
@@ -187,6 +193,7 @@ class th_personasC
     function __construct()
     {
         $this->modelo = new th_personasM();
+        $this->personas_departamentos = new th_personas_departamentosM();
         $this->dispositivos = new th_dispositivosM();
 
         $this->card = new th_cardM();
@@ -202,7 +209,7 @@ class th_personasC
     function listar($id = '')
     {
         if ($id == '') {
-            $datos = $this->modelo->where('th_per_estado', 1)->listar();
+            $datos = $this->modelo->listar_personas_con_departamento();
         } else {
             $datos = $this->modelo->where('th_per_id', $id)->listar();
             $datosB = $this->biometria->where('th_per_id', $id)->listar();
@@ -211,6 +218,11 @@ class th_personasC
                 $datos[0]['biometria'] = $datosB[0];
             }
         }
+        return $datos;
+    }
+    function listar_persona_departamento($id = '')
+    {
+        $datos = $this->personas_departamentos->listar_buscar_persona_departamento($id);
         return $datos;
     }
 

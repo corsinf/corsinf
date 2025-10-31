@@ -8,9 +8,54 @@ $controlador = new th_personas_departamentosC();
 if (isset($_GET['listar'])) {
     echo json_encode($controlador->listar($_POST['id'] ?? ''));
 }
+if (isset($_GET['verificar'])) {
+    $password = $_POST['password'] ?? '';
+
+    // Llama a tu función (asumiendo que $controlador ya está instanciado)
+    $controlador->validar_correo($password);
+    // No pongas nada más aquí porque validar_correo() ya hace exit
+}
 
 if (isset($_GET['insertar'])) {
     echo json_encode($controlador->insertar_editar($_POST['parametros']));
+}
+// th_personas_departamentosC.php
+
+// Para mover una o varias personas
+if (isset($_GET['mover_varios'])) {
+    // Indicamos que la respuesta será JSON
+    header('Content-Type: application/json; charset=utf-8');
+
+    $ids_raw = isset($_POST['ids']) ? $_POST['ids'] : '[]';
+    $ids = json_decode($ids_raw, true); // array de objetos { perdep, person }
+    $id_departamento_destino = isset($_POST['id_departamento_destino']) ? $_POST['id_departamento_destino'] : '';
+    $txt_visitor = isset($_POST['txt_visitor']) ? $_POST['txt_visitor'] : '';
+
+    // Validación
+    if (!is_array($ids) || empty($id_departamento_destino)) {
+        echo json_encode([
+            'success' => false,
+            'message' => 'Parámetros inválidos',
+            'exitosos' => 0,
+            'duplicados' => 0,
+            'fallidos' => 0,
+            'errores' => []
+        ]);
+        exit;
+    }
+
+    // Ejecuta la lógica del controlador
+    $resultado = $controlador->mover_personas_departamento($ids, $id_departamento_destino, $txt_visitor);
+
+    echo json_encode($resultado);
+    exit;
+}
+
+
+
+// Mantén tu función original para otros usos
+if (isset($_GET['insertar_editar_persona'])) {
+    echo json_encode($controlador->insertar_editar_persona_departamento($_POST['parametros']));
 }
 
 if (isset($_GET['eliminar'])) {
@@ -26,9 +71,25 @@ class th_personas_departamentosC
 {
     private $modelo;
 
+
     function __construct()
     {
         $this->modelo = new th_personas_departamentosM();
+    }
+
+    function validar_correo($password)
+    {
+
+        $email = $_SESSION['INICIO']['EMAIL'];
+
+
+        header('Content-Type: application/json');
+        echo json_encode([
+            'valido' => true,
+            'session' => $_SESSION['INICIO']['EMAIL'],
+            'password_recibido' => $password
+        ]);
+        exit; // IMPORTANTE: Detiene toda ejecución
     }
 
     function listar($id = '')
@@ -67,16 +128,152 @@ class th_personas_departamentosC
                         $salida .= $persona_id . ' - ' . $contar_personas . '<br>';
                         $datos = $this->modelo->insertar($datos);
                     }
-                    
+
                     $this->modelo->reset();
                 }
-            }else{
+            } else {
                 return -2;
             }
 
             return 1;
         }
     }
+
+    function insertar_editar_persona_departamento($parametros)
+    {
+        $datos = array(
+            array('campo' => 'th_per_id', 'dato' => $parametros['id_persona']),
+            array('campo' => 'th_dep_id', 'dato' => $parametros['id_departamento']),
+            array('campo' => 'th_perdep_visitor', 'dato' => $parametros['txt_visitor']),
+        );
+
+        if ($parametros['_id'] == '') {
+            // Inserción: verificar que no exista la relación persona-departamento
+            $existe = $this->modelo
+                ->where('th_per_id', $parametros['id_persona'])
+                ->where('th_dep_id', $parametros['id_departamento'])
+                ->listar();
+
+            if (count($existe) == 0) {
+                $datos[] = array('campo' => 'th_perdep_fecha_creacion', 'dato' => date('Y-m-d H:i:s'));
+                $resultado = $this->modelo->insertar_id($datos);
+                return 1;
+            } else {
+                return -2; // Ya existe la relación
+            }
+        } else {
+            // Edición: verificar que no exista otra relación igual
+            $existe = $this->modelo
+                ->where('th_per_id', $parametros['id_persona'])
+                ->where('th_dep_id', $parametros['id_departamento'])
+                ->where('th_perdep_id !', $parametros['_id'])
+                ->listar();
+
+            if (count($existe) == 0) {
+                $where[0]['campo'] = 'th_perdep_id';
+                $where[0]['dato'] = $parametros['_id'];
+                $resultado = $this->modelo->editar($datos, $where);
+                return $resultado;
+            } else {
+                return -2; // Ya existe la relación
+            }
+        }
+    }
+
+    function mover_personas_departamento($ids_personas, $id_departamento_destino, $txt_visitor = '')
+    {
+        $exitosos = 0;
+        $fallidos = 0;
+        $duplicados = 0;
+        $errores = [];
+
+        foreach ($ids_personas as $item) {
+            // Normaliza
+            $perdep = isset($item['perdep']) ? trim($item['perdep']) : '';
+            $person = isset($item['person']) ? trim($item['person']) : '';
+
+            try {
+                if ($perdep !== '') {
+                    // Caso 1: tenemos el id de la relación (th_perdep_id) -> Actualizar esa fila
+                    // Verificar que no exista otra relación igual (misma persona y mismo depto con distinto perdep_id)
+                    $existe = $this->modelo
+                        ->where('th_per_id', $person)
+                        ->where('th_dep_id', $id_departamento_destino)
+                        ->where('th_perdep_id !', $perdep)
+                        ->listar();
+
+                    if (count($existe) > 0) {
+                        // Ya existe otra relación igual -> conteo duplicado
+                        $duplicados++;
+                        continue;
+                    }
+
+                    // Preparar datos para editar
+                    $datos = array(
+                        array('campo' => 'th_dep_id', 'dato' => $id_departamento_destino),
+                        array('campo' => 'th_perdep_visitor', 'dato' => $txt_visitor)
+                    );
+                    $where[0]['campo'] = 'th_perdep_id';
+                    $where[0]['dato'] = $perdep;
+
+                    $res = $this->modelo->editar($datos, $where);
+                    if ($res > 0) $exitosos++;
+                    else {
+                        $fallidos++;
+                        $errores[] = "No se pudo actualizar relación perdep_id {$perdep}";
+                    }
+                } elseif ($person !== '') {
+                    // Caso 2: solo tenemos person id -> intentar insertar nueva relación (si no existe)
+                    // Verifica si la relación ya existe
+                    $existe = $this->modelo
+                        ->where('th_per_id', $person)
+                        ->where('th_dep_id', $id_departamento_destino)
+                        ->listar();
+
+                    if (count($existe) > 0) {
+                        $duplicados++;
+                        continue;
+                    }
+
+                    // Inserción (usar la misma estructura que insertar_editar_persona_departamento)
+                    $datos = array(
+                        array('campo' => 'th_per_id', 'dato' => $person),
+                        array('campo' => 'th_dep_id', 'dato' => $id_departamento_destino),
+                        array('campo' => 'th_perdep_fecha_creacion', 'dato' => date('Y-m-d H:i:s')),
+                        array('campo' => 'th_perdep_visitor', 'dato' => $txt_visitor)
+                    );
+
+                    $resIns = $this->modelo->insertar_id($datos);
+                    if ($resIns > 0) $exitosos++;
+                    else {
+                        $fallidos++;
+                        $errores[] = "Fallo al insertar relación para persona {$person}";
+                    }
+                } else {
+                    $fallidos++;
+                    $errores[] = "Item inválido (sin perdep ni person)";
+                }
+            } catch (Exception $e) {
+                $fallidos++;
+                $errores[] = "Error en item (perdep={$perdep}, person={$person}): " . $e->getMessage();
+            }
+        }
+
+        $mensaje = "Operación completada. ";
+        if ($exitosos > 0) $mensaje .= "$exitosos persona(s) movida(s). ";
+        if ($duplicados > 0) $mensaje .= "$duplicados ya estaba(n) en el departamento. ";
+        if ($fallidos > 0) $mensaje .= "$fallidos falló/fallaron. ";
+
+        return [
+            'success' => $exitosos > 0,
+            'exitosos' => $exitosos,
+            'duplicados' => $duplicados,
+            'fallidos' => $fallidos,
+            'message' => $mensaje,
+            'errores' => $errores
+        ];
+    }
+
 
     function eliminar($id)
     {

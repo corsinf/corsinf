@@ -15,11 +15,6 @@ if (isset($_GET['_id'])) {
     $(document).ready(function() {
         cargar_selects2();
 
-        //Validacion para las fechas
-        $("input[name='txt_fecha_fin']").on("blur", function() {
-            if (!verificar_fecha_inicio_fecha_fin('txt_fecha_inicio', 'txt_fecha_fin')) return;
-        });
-
         // Manejo del tipo de búsqueda principal (departamento/persona)
         $('input[name="tipo_busqueda_principal"]').on('change', function() {
             let tipo = $(this).val();
@@ -99,9 +94,6 @@ if (isset($_GET['_id'])) {
         $("#btn_buscar").prop("disabled", false);
         $("#btn_exportar_excel").prop("disabled", false);
 
-        $("#txt_fecha_inicio, #txt_fecha_fin").on("change", function() {
-            validar_fechas_basicas();
-        });
 
         $("#btn_buscar").on("click", function(e) {
             if (!validar_rango_mes()) {
@@ -109,18 +101,22 @@ if (isset($_GET['_id'])) {
             }
         });
 
-        function validar_fechas_basicas() {
-            let fecha_inicio = $("#txt_fecha_inicio").val();
-            let fecha_fin = $("#txt_fecha_fin").val();
+        $("#txt_fecha_inicio, #txt_fecha_fin").on("blur", validar_fechas_basicas);
 
-            if (!fecha_inicio || !fecha_fin) {
+        function validar_fechas_basicas() {
+            const inicioInput = document.getElementById('txt_fecha_inicio');
+            const finInput = document.getElementById('txt_fecha_fin');
+
+            // valueAsDate es null si no hay fecha seleccionada
+            const inicio_date = inicioInput.valueAsDate;
+            const fin_date = finInput.valueAsDate;
+
+            if (!inicio_date || !fin_date) {
                 $("#btn_buscar").prop("disabled", true);
                 return;
             }
 
-            let inicio_date = new Date(fecha_inicio);
-            let fin_date = new Date(fecha_fin);
-
+            // Comparación
             if (inicio_date > fin_date) {
                 Swal.fire({
                     icon: 'warning',
@@ -128,10 +124,25 @@ if (isset($_GET['_id'])) {
                     text: 'La fecha de inicio no puede ser mayor que la fecha final.'
                 });
                 $("#btn_buscar").prop("disabled", true);
-            } else {
-                $("#btn_buscar").prop("disabled", false);
+                return;
             }
+
+            // Validar max 31 días
+            const diffTiempo = Math.abs(fin_date - inicio_date);
+            const diffDias = Math.ceil(diffTiempo / (1000 * 60 * 60 * 24));
+            if (diffDias > 31) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Rango inválido',
+                    text: 'El rango de fechas no puede ser mayor a 31 días.'
+                });
+                $("#btn_buscar").prop("disabled", true);
+                return;
+            }
+
+            $("#btn_buscar").prop("disabled", false);
         }
+
 
         function validar_rango_mes() {
             let fecha_inicio = $("#txt_fecha_inicio").val();
@@ -671,7 +682,7 @@ if (isset($_GET['_id'])) {
                                         <div class="d-flex justify-content-end gap-2">
                                             <!--Boton de exportar-->
                                             <button id="btn_exportar_excel" class="btn btn-success btn-sm"
-                                                onclick="exportar_excel();" type="button" style="display: none;">
+                                                onclick="exportar_excel();" type="button">
                                                 <i class='bx bx-file me-1'></i> Exportar Excel
                                             </button>
 
