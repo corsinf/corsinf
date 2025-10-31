@@ -317,7 +317,34 @@ if (isset($_GET['_id'])) {
                                         text: 'No existe datos de esa persona o no está asignada a ningún departamento',
                                         confirmButtonColor: '#3085d6'
                                     });
+                                    // Resetear contadores
+                                    $('#contador_sin_marcacion').text(0);
+                                    $('#contador_ausentes').text(0);
+                                    return json;
                                 }
+
+                                // Contar registros
+                                let sinMarcacion = 0;
+                                let ausentes = 0;
+
+                                json.forEach(row => {
+                                    // Contar "SIN MARCACION" en el campo Atrasos
+                                    if (row.Atrasos === "SIN MARCACION") {
+                                        sinMarcacion++;
+                                    }
+
+                                    // Contar ausentes (Ausente: "SI")
+                                    if (row.Ausente === "SI") {
+                                        ausentes++;
+                                    }
+                                });
+
+                                // Actualizar los contadores en el HTML
+                                $('#contador_sin_marcacion').text(sinMarcacion);
+                                $('#contador_ausentes').text(ausentes);
+
+                                console.log(`Sin Marcación: ${sinMarcacion}, Ausentes: ${ausentes}`);
+
                                 return json;
                             }
                         },
@@ -679,17 +706,31 @@ if (isset($_GET['_id'])) {
                                 <!-- Botones -->
                                 <div class="row">
                                     <div class="col-12">
-                                        <div class="d-flex justify-content-end gap-2">
-                                            <!--Boton de exportar-->
-                                            <button id="btn_exportar_excel" class="btn btn-success btn-sm"
-                                                onclick="exportar_excel();" type="button">
-                                                <i class='bx bx-file me-1'></i> Exportar Excel
-                                            </button>
+                                        <div class="d-flex justify-content-between align-items-center gap-2">
+                                            <!-- Contenedor para los contadores -->
+                                            <div class="d-flex gap-3">
+                                                <div class="badge bg-warning text-dark fs-6">
+                                                    <i class='bx bx-time-five me-1'></i>
+                                                    Atrasos: <span id="contador_sin_marcacion">0</span>
+                                                </div>
+                                                <div class="badge bg-danger fs-6">
+                                                    <i class='bx bx-user-x me-1'></i>
+                                                    Ausentes: <span id="contador_ausentes">0</span>
+                                                </div>
+                                            </div>
 
-                                            <button id="btn_buscar" class="btn btn-primary btn-sm"
-                                                onclick="buscar_fechas();" type="button">
-                                                <i class='bx bx-search me-1'></i> Buscar
-                                            </button>
+                                            <!-- Botones -->
+                                            <div class="d-flex gap-2">
+                                                <button id="btn_exportar_excel" class="btn btn-success btn-sm"
+                                                    onclick="exportar_excel();" type="button">
+                                                    <i class='bx bx-file me-1'></i> Exportar Excel
+                                                </button>
+
+                                                <button id="btn_buscar" class="btn btn-primary btn-sm"
+                                                    onclick="buscar_fechas();" type="button">
+                                                    <i class='bx bx-search me-1'></i> Buscar
+                                                </button>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>

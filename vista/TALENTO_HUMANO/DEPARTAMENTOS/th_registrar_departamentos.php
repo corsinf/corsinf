@@ -677,7 +677,11 @@ if (isset($_GET['_id'])) {
 
     function insertar_editar_personas_departamentos() {
 
-
+        var parametros = {
+            '_id': '<?= $_id ?>',
+            'personas_seleccionadas': personas_seleccionadas,
+            'txt_visitor': ''
+        };
 
         insertar_personas_departamentos(parametros);
 
@@ -727,6 +731,7 @@ if (isset($_GET['_id'])) {
             }
         });
     }
+
     function abrir_modal_personas() {
         $('#modal_personas').modal('show');
         // Solo llama a cargar_personas si la tabla no ha sido inicializada
