@@ -34,11 +34,26 @@
 
     #calendar_persona {
         max-width: 100%;
+        width: 100%;
         margin: 0 auto;
         background: #fff;
         border-radius: 8px;
         box-shadow: 0 6px 18px rgba(15, 23, 42, 0.06);
         padding: 10px;
+        min-height: 650px;
+        overflow: visible;
+    }
+    
+    .fc {
+        width: 100% !important;
+    }
+    
+    .fc-view-harness {
+        height: auto !important;
+    }
+    
+    .fc .fc-view {
+        width: 100% !important;
     }
 
     /* Estilos para eventos compactos */
@@ -122,8 +137,6 @@
 </style>
 
 <div class="container-fluid">
-    <div class="card border-top border-0 border-4 border-primary">
-        <div class="card-body p-4">
             <div class="card-header-calendar">
                 <div style="flex: 0 0 250px;">
                     <label for="ddl_departamentos" class="form-label fw-bold">
@@ -133,7 +146,14 @@
                         <option value="">-- Seleccione Departamento --</option>
                     </select>
                 </div>
-
+                <div style="flex: 0 0 250px;">
+    <label for="ddl_tipo_horario" class="form-label fw-bold">
+        <i class="bx bx-time"></i> Tipo de Horario
+    </label>
+    <select id="ddl_tipo_horario" class="form-select form-select-sm" disabled>
+        <option value="">-- Seleccione Horario --</option>
+    </select>
+</div>
                 <div class="titles" style="flex: 1;">
                     <h3>📅 Horarios del Personal</h3>
                     <p id="subtitle-center">Vista de horarios asignados</p>
@@ -159,8 +179,6 @@
 
             <!-- Hidden input para ID -->
             <input id="id_perdep" type="hidden" value="" />
-        </div>
-    </div>
 </div>
 
 <div class="modal fade" id="modal_programar_horarios" tabindex="-1" aria-labelledby="modal_programar_horarios_label" aria-hidden="true">
@@ -179,7 +197,6 @@
                             <input class="form-check-input" type="radio" name="cbx_programar" id="cbx_programar_persona" checked>
                             <label class="form-check-label" for="cbx_programar_persona">Personas</label>
                         </div>
-                        <!-- quitamos departamentos: no se mostrará -->
                         <label class="error" style="display: none;" for="cbx_programar"></label>
                     </div>
 
@@ -245,13 +262,7 @@
                     </div>
 
                     <div class="d-flex justify-content-end pt-2">
-                        <!-- botón guardar (usa la variable PHP $_id que ya tenías) -->
-                        <?php if ($_id == '') { ?>
-                            <button class="btn btn-success btn-sm px-4 m-0" id="btn_guardar_programacion" type="button"><i class="bx bx-save"></i> Guardar</button>
-                        <?php } else { ?>
-                            <button class="btn btn-success btn-sm px-4 m-1" id="btn_guardar_programacion" type="button"><i class="bx bx-save"></i> Editar</button>
-                            <button class="btn class=" btn btn-danger btn-sm px-4 m-1" id="btn_eliminar_programacion" type="button"><i class="bx bx-trash"></i> Eliminar</button>
-                        <?php } ?>
+                        <button class="btn btn-success btn-sm px-4 m-0" id="btn_guardar_programacion" type="button"><i class="bx bx-save"></i> Guardar</button>
                     </div>
 
                 </form>
@@ -267,6 +278,7 @@
 <script>
     // Variable global para el calendario
     var calendar_persona;
+    var calendario_inicializado = false;
 
     document.addEventListener('DOMContentLoaded', function() {
         const calendarEl = document.getElementById('calendar_persona');
@@ -277,6 +289,7 @@
             initialDate: '2024-02-15', // Semana base para mostrar los turnos semanales
             locale: 'es',
             height: 'auto',
+            contentHeight: 'auto',
             slotMinTime: '00:00:00',
             slotMaxTime: '24:00:00',
             slotDuration: '02:00:00',
@@ -358,35 +371,107 @@
             }
         });
 
-        calendar_persona.render();
+        // NO renderizar aquí, esperar a que el tab sea visible
+    });
 
+    // CRÍTICO: Detectar cuando el tab se hace visible y entonces renderizar el calendario
+    // Esto debe agregarse en el archivo PADRE que contiene los tabs
+    $(document).on('shown.bs.tab', 'a[data-bs-toggle="tab"]', function (e) {
+        var target = $(e.target).attr("href");
         
+        // Si el tab activo es el de departamento Y el calendario no se ha inicializado
+        if (target === '#tab_departamento' && !calendario_inicializado) {
+            setTimeout(function() {
+                if (calendar_persona) {
+                    calendar_persona.render();
+                    calendar_persona.updateSize();
+                    calendario_inicializado = true;
+                }
+            }, 100);
+        }
+        
+        // Si ya está inicializado, solo actualizar tamaño
+        if (target === '#tab_departamento' && calendario_inicializado) {
+            setTimeout(function() {
+                if (calendar_persona) {
+                    calendar_persona.updateSize();
+                }
+            }, 50);
+        }
     });
 
     // Función para cargar horario de la persona desde el documento principal
-    function cargar_persona_horario(id_persona) {
-        $.ajax({
-            data: {
-                id: id_persona
-            },
-            url: '../controlador/TALENTO_HUMANO/th_programar_horariosC.php?listar_persona_horario=true',
-            type: 'post',
-            dataType: 'json',
-            success: function(response) {
-                if (response && response.length > 0) {
-                    const id_horario = response[0].id_horario;
-                    cargar_turnos_horario(id_horario);
-                } else {
-                    Swal.fire('', 'Esta persona no tiene horarios asignados', 'info');
-                    calendar_persona.removeAllEvents();
+   function cargar_persona_horario(id_persona) {
+    $.ajax({
+        data: { id: id_persona },
+        url: '../controlador/TALENTO_HUMANO/th_programar_horariosC.php?listar_persona_horario=true',
+        type: 'post',
+        dataType: 'json',
+        success: function(response) {
+            const ddlTipo = $('#ddl_tipo_horario');
+            ddlTipo.empty().append('<option value="">-- Seleccione Horario --</option>');
+
+            if (response && response.length > 0) {
+                // Mostrar el select de tipo de horario si hay más de uno
+                if (response.length > 1) {
+                    ddlTipo.prop('disabled', false);
+
+                    // Llenar las opciones según la fuente
+                    response.forEach(item => {
+                        let texto = '';
+                        if (item.fuente === 'departamento') {
+                            texto = `Horario de Departamento: ${item.nombre_horario}`;
+                        } else if (item.fuente === 'persona') {
+                            texto = `Horario Personal: ${item.nombre_horario}`;
+                        } else {
+                            texto = `Horario: ${item.nombre_horario}`;
+                        }
+
+                        ddlTipo.append(
+                            $('<option>', {
+                                value: item.id_horario,
+                                text: texto
+                            })
+                        );
+                    });
+
+                    // Cuando el usuario selecciona un tipo de horario
+                    ddlTipo.off('change').on('change', function() {
+                        const idHorario = $(this).val();
+                        if (idHorario) {
+                            cargar_turnos_horario(idHorario);
+                        }
+                    });
+
+                    // (opcional) Selecciona el primero por defecto
+                    const idHorarioInicial = response[0].id_horario;
+                    ddlTipo.val(idHorarioInicial).trigger('change');
+                } 
+                else {
+                    // Solo hay un horario
+                    ddlTipo.prop('disabled', true);
+                    ddlTipo.append(
+                        $('<option>', {
+                            value: response[0].id_horario,
+                            text: response[0].nombre_horario,
+                            selected: true
+                        })
+                    );
+
+                    cargar_turnos_horario(response[0].id_horario);
                 }
-            },
-            error: function(xhr, status, error) {
-                console.error('Error al cargar horario de persona:', error);
-                Swal.fire('', 'Error al cargar los horarios', 'error');
+            } else {
+                // No hay horarios disponibles
+                ddlTipo.prop('disabled', true);
+                ddlTipo.append('<option value="">-- Sin horarios --</option>');
             }
-        });
-    }
+        },
+        error: function(xhr, status, error) {
+            console.error('Error al cargar horarios:', error);
+        }
+    });
+}
+
 
     // Función para cargar los turnos del horario
     function cargar_turnos_horario(id_horario) {
@@ -408,6 +493,7 @@
 
                 if (!response || response.length === 0) {
                     Swal.fire('', 'No hay turnos configurados para este horario', 'info');
+                    $('#pnl_horarios_persona').hide();
                     return;
                 }
 
@@ -491,8 +577,19 @@
                 });
                 $('#lista_turnos_badges').html(badgesHTML);
 
-                // Renderizar el calendario
-                calendar_persona.render();
+                // Si el calendario no está inicializado, renderizarlo
+                if (!calendario_inicializado) {
+                    setTimeout(function() {
+                        calendar_persona.render();
+                        calendario_inicializado = true;
+                        calendar_persona.updateSize();
+                    }, 200);
+                } else {
+                    // Si ya está inicializado, solo actualizar
+                    setTimeout(function() {
+                        calendar_persona.updateSize();
+                    }, 100);
+                }
 
                 // Notificación de éxito
                 Lobibox.notify('success', {
@@ -533,4 +630,3 @@
         return horas.toString().padStart(2, '0') + ':' + mins.toString().padStart(2, '0') + ':00';
     }
 </script>
-

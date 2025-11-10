@@ -217,75 +217,56 @@ if (isset($_GET['id'])) {
                                     </div>
 
                                     <!-- Información Personal -->
-                                    <div class="mt-3">
-                                        <div class="row">
-                                            <div class="col-10">
-                                                <h5 class="fw-bold text-primary">Información Personal</h5>
-                                            </div>
-                                            <div class="col-2">
-                                                <a href="#" class="text-dark icon-hover" data-bs-toggle="modal" data-bs-target="#modal_informacion_personal">
-                                                    <i class="bx bx-pencil bx-sm"></i>
-                                                </a>
-                                            </div>
-                                        </div>
-                                        <hr />
-                                        <div class="row">
-                                            <div class="col-6">
-                                                <h6 class="fw-bold">Nombre Completo</h6>
-                                            </div>
-                                            <div class="col-6 d-flex align-items-center">
-                                                <p class="w-100 text-wrap" id="txt_nombres_completos_v"></p>
-                                            </div>
-                                        </div>
-                                        <div class="row mb-2">
-                                            <div class="col-6">
-                                                <h6 class="fw-bold">Fecha de Nacimiento</h6>
-                                            </div>
-                                            <div class="col-6 d-flex align-items-center">
-                                                <p id="txt_fecha_nacimiento_v"></p>
-                                            </div>
-                                        </div>
-                                        <div class="row mb-2">
-                                            <div class="col-6">
-                                                <h6 class="fw-bold">Nacionalidad</h6>
-                                            </div>
-                                            <div class="col-6 d-flex align-items-center">
-                                                <p id="txt_nacionalidad_v"></p>
-                                            </div>
-                                        </div>
-                                        <div class="row mb-2">
-                                            <div class="col-6">
-                                                <h6 class="fw-bold">Número de Cédula</h6>
-                                            </div>
-                                            <div class="col-6 d-flex align-items-center">
-                                                <p class="w-100 text-wrap" id="txt_numero_cedula_v"></p>
-                                            </div>
-                                        </div>
-                                        <div class="row mb-2">
-                                            <div class="col-6">
-                                                <h6 class="fw-bold">Estado Civil</h6>
-                                            </div>
-                                            <div class="col-6 d-flex align-items-center">
-                                                <p id="txt_estado_civil_v"></p>
-                                            </div>
-                                        </div>
-                                        <div class="row mb-2">
-                                            <div class="col-6 d-flex align-items-center">
-                                                <h6 class="w-100 text-wrap fw-bold">Teléfono</h6>
-                                            </div>
-                                            <div class="col-6 d-flex align-items-center">
-                                                <p class="w-100 text-wrap" id="txt_telefono_1_v"></p>
-                                            </div>
-                                        </div>
-                                        <div class="row mb-2">
-                                            <div class="col-6">
-                                                <h6 class="fw-bold">Correo Electrónico</h6>
-                                            </div>
-                                            <div class="col-6 d-flex align-items-center">
-                                                <p class="w-100 text-wrap" id="txt_correo_v"></p>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    <div class="mt-3 bg-light rounded-3 p-3 shadow-sm">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+         <div class="d-flex align-items-center">
+        <i class="bx bx-info-circle fs-5 text-primary me-2"></i>
+        <h6 class="fw-bold mb-0 text-primary">Información Personal</h6>
+      </div>
+        <a href="#" class="text-secondary" data-bs-toggle="modal" data-bs-target="#modal_informacion_personal">
+            <i class="bx bx-pencil bx-sm"></i>
+        </a>
+    </div>
+
+    <div class="d-flex flex-column gap-3">
+
+        <div class="d-flex align-items-center border-bottom pb-2">
+            <i class="bx bx-id-card text-primary fs-5 me-3"></i>
+            <span id="txt_nombres_completos_v" class="fw-semibold text-dark"></span>
+        </div>
+
+        <div class="d-flex align-items-center border-bottom pb-2">
+            <i class="bx bx-calendar text-primary fs-5 me-3"></i>
+            <span id="txt_fecha_nacimiento_v" class="text-dark"></span>
+        </div>
+
+        <div class="d-flex align-items-center border-bottom pb-2">
+            <i class="bx bx-flag text-primary fs-5 me-3"></i>
+            <span id="txt_nacionalidad_v" class="text-dark"></span>
+        </div>
+
+        <div class="d-flex align-items-center border-bottom pb-2">
+            <i class="bx bx-id-card text-primary fs-5 me-3"></i>
+            <span id="txt_numero_cedula_v" class="text-dark"></span>
+        </div>
+
+        <div class="d-flex align-items-center border-bottom pb-2">
+            <i class="bx bx-heart text-primary fs-5 me-3"></i>
+            <span id="txt_estado_civil_v" class="text-dark"></span>
+        </div>
+
+        <div class="d-flex align-items-center border-bottom pb-2">
+            <i class="bx bx-phone text-primary fs-5 me-3"></i>
+            <span id="txt_telefono_1_v" class="text-dark"></span>
+        </div>
+
+        <div class="d-flex align-items-center">
+            <i class="bx bx-envelope text-primary fs-5 me-3"></i>
+            <span id="txt_correo_v" class="text-dark text-break"></span>
+        </div>
+    </div>
+</div>
+
                                 </div>
                             </div>
                         </div>

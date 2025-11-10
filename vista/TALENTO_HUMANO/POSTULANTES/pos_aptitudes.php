@@ -1,16 +1,33 @@
 <script>
+    <?php
+
+$entity_id = '';
+$entity_type = ''; // 'postulante' o 'persona'
+if (isset($_GET['id'])) {
+    $entity_id = $_GET['id'];
+    $entity_type = 'postulante';
+} elseif (isset($_GET['_id'])) {
+    $entity_id = $_GET['_id'];
+    $entity_type = 'persona';
+}
+
+?>
+
     $(document).ready(function() {
-        <?php if (isset($_GET['id'])) { ?>
-            cargar_datos_aptitudes_tecnicas(<?= $id ?>);
-            cargar_datos_aptitudes_blandas(<?= $id ?>);
-        <?php } ?>
+        
+       let entity_id = <?= json_encode($entity_id) ?>;
+        let entity_type = <?= json_encode($entity_type) ?>;
+            cargar_datos_aptitudes_tecnicas(entity_id);
+            cargar_datos_aptitudes_blandas(entity_id);
 
     });
 
     function activar_select2() {
 
-        lista_aptitudes_tecnicas_postulante('<?= $id ?>');
-        lista_aptitudes_blandas_postulante('<?= $id ?>');
+          let entity_id = <?= json_encode($entity_id) ?>;
+        let entity_type = <?= json_encode($entity_type) ?>;
+        lista_aptitudes_tecnicas_postulante(entity_id);
+        lista_aptitudes_blandas_postulante(entity_id);
 
         $('#ddl_seleccionar_aptitud_blanda').select2({
             placeholder: ' Selecciona una opción',
@@ -111,7 +128,7 @@
     }
 
     function insertar_editar_aptitudes() {
-        var txt_id_postulante = '<?= $id ?>';
+        var txt_id_postulante =$('#txt_postulante_id').val();
 
         var aptitudes_tecnicas = $('#ddl_seleccionar_aptitud_tecnica').val() || [];
         var aptitudes_blandas = $('#ddl_seleccionar_aptitud_blanda').val() || [];
@@ -146,8 +163,8 @@
                 if (response == 1) {
                     Swal.fire('', 'Operacion realizada con exito.', 'success');
                     <?php if (isset($_GET['id'])) { ?>
-                        cargar_datos_aptitudes_tecnicas(<?= $id ?>);
-                        cargar_datos_aptitudes_blandas(<?= $id ?>);
+                        cargar_datos_aptitudes_tecnicas(entity_id);
+                        cargar_datos_aptitudes_blandas(entity_id);
                     <?php } ?>
                     limpiar_campos_aptitudes_modal();
                     $('#modal_agregar_aptitudes').modal('hide');
@@ -187,8 +204,8 @@
                 if (response == 1) {
                     Swal.fire('Eliminado!', 'Registro Eliminado.', 'success');
                     <?php if (isset($_GET['id'])) { ?>
-                        cargar_datos_aptitudes_tecnicas(<?= $id ?>);
-                        cargar_datos_aptitudes_blandas(<?= $id ?>);
+                        cargar_datos_aptitudes_tecnicas(entity_id);
+                        cargar_datos_aptitudes_blandas(entity_id);
                     <?php } ?>
                     limpiar_campos_aptitudes_modal();
                 }

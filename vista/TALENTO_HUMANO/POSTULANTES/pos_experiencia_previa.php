@@ -1,8 +1,26 @@
 <script>
+    <?php
+
+$entity_id = '';
+$entity_type = ''; // 'postulante' o 'persona'
+if (isset($_GET['id'])) {
+    $entity_id = $_GET['id'];
+    $entity_type = 'postulante';
+} elseif (isset($_GET['_id'])) {
+    $entity_id = $_GET['_id'];
+    $entity_type = 'persona';
+}
+
+?>
+
+
     $(document).ready(function() {
-        <?php if (isset($_GET['id'])) { ?>
-            cargar_datos_experiencia_laboral(<?= $id ?>);
-        <?php } ?>
+
+        let entity_id = <?= json_encode($entity_id) ?>;
+        let entity_type = <?= json_encode($entity_type) ?>;
+        
+            cargar_datos_experiencia_laboral(entity_id);
+        
 
     });
 
@@ -72,7 +90,7 @@
         }
 
         var txt_responsabilidades_logros = $('#txt_responsabilidades_logros').val();
-        var txt_id_postulante = '<?= $id ?>';
+        var txt_id_postulante = $('#txt_postulante_id').val();
         var txt_id_experiencia_laboral = $('#txt_experiencia_id').val();
 
         var parametros_experiencia_laboral = {
@@ -106,7 +124,7 @@
                 if (response == 1) {
                     Swal.fire('', 'Operacion realizada con exito.', 'success');
                     <?php if (isset($_GET['id'])) { ?>
-                        cargar_datos_experiencia_laboral(<?= $id ?>);
+                        cargar_datos_experiencia_laboral(entity_id);
                         limpiar_campos_experiencia_laboral_modal();
                     <?php } ?>
                     $('#modal_agregar_experiencia').modal('hide');
@@ -159,7 +177,7 @@
                 if (response == 1) {
                     Swal.fire('Eliminado!', 'Registro Eliminado.', 'success');
                     <?php if (isset($_GET['id'])) { ?>
-                        cargar_datos_experiencia_laboral(<?= $id ?>);
+                        cargar_datos_experiencia_laboral(entity_id);
                         limpiar_campos_experiencia_laboral_modal();
                     <?php } ?>
                     $('#modal_agregar_experiencia').modal('hide');

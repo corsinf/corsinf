@@ -45,12 +45,12 @@ class th_postulantesC
     function listar($id)
     {
         if ($id == '') {
-            $datos = $this->modelo->where('th_pos_estado', 1)->listar();
+            $datos = $this->modelo->where('th_pos_estado', 1)->where('th_pos_contratado', 0)->listar();
         } else {
-            $datos = $this->modelo->where('th_pos_id', $id)->listar();
+            $datos = $this->modelo->where('th_pos_id', $id)->where('th_pos_contratado', 0)->listar();
         }
 
-        $datos = $this->modelo->where('th_pos_id', $id)->where('th_pos_estado', 1)->listar();
+        $datos = $this->modelo->where('th_pos_id', $id)->where('th_pos_estado', 1)->where('th_pos_contratado', 0)->listar();
 
         $texto = '';
         foreach ($datos as $key => $value) {
@@ -77,7 +77,7 @@ class th_postulantesC
 
     function listar_todo()
     {
-        $lista = $this->modelo->where('th_pos_estado', 1)->listar();
+        $lista = $this->modelo->where('th_pos_estado', 1)->where('th_pos_contratado', 0)->listar();
         return $lista;
     }
 

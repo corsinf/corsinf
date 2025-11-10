@@ -34,7 +34,7 @@ class th_personasM extends BaseModel
         'th_per_postal AS postal',
         'th_per_observaciones AS observaciones',
         //'th_per_tabla AS tabla',
-        //'th_per_id_comunidad AS id_comunidad',
+        'th_per_id_comunidad AS id_comunidad',
         //'th_per_tabla_union AS tabla_union',
         'th_per_estado AS estado',
         'th_per_fecha_creacion AS fecha_creacion',
@@ -129,6 +129,7 @@ class th_personasM extends BaseModel
                    p.th_per_segundo_nombre AS segundo_nombre,
                    p.th_per_primer_apellido AS primer_apellido,
                    p.th_per_segundo_apellido AS segundo_apellido,
+                   p.th_per_id_comunidad AS id_comunidad,
                d.th_dep_id,
                d.th_dep_nombre,
                CASE 

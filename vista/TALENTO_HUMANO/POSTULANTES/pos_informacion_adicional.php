@@ -36,7 +36,7 @@
         var txt_direccion_ciudad = $('#txt_direccion_ciudad').val();
         var txt_direccion_estado = $('#txt_direccion_estado').val();
         var txt_direccion_postal = $('#txt_direccion_postal').val();
-        var txt_id_postulante = '<?= $id ?>';
+        var txt_id_postulante = $('#txt_postulante_id').val();
         var txt_id_formacion_academica = $('#txt_inf_adicional_id').val();
 
 

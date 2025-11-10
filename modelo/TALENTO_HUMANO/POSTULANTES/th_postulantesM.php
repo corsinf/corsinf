@@ -71,9 +71,9 @@ class th_postulantesM extends BaseModel
                             th_per_estado_civil,
                             th_prov_id,
                             th_ciu_id,
-                            th_barr_id,
+                            th_parr_id,
                             th_per_postal,
-                            th_per_fecha_admision,
+                            -- th_per_fecha_admision,
                             th_per_id_comunidad,
                             th_per_tabla_union
                             ) 
@@ -94,7 +94,7 @@ class th_postulantesM extends BaseModel
                             th_ciu_id,
                             th_parr_id,
                             th_pos_postal,
-                            GETDATE(),
+                            -- GETDATE(),
                             th_pos_id,
                             'th_postulantes'
                             FROM th_postulantes p

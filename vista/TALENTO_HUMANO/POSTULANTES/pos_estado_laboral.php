@@ -1,8 +1,26 @@
 <script>
+ <?php
+
+$entity_id = '';
+$entity_type = ''; // 'postulante' o 'persona'
+if (isset($_GET['id'])) {
+    $entity_id = $_GET['id'];
+    $entity_type = 'postulante';
+} elseif (isset($_GET['_id'])) {
+    $entity_id = $_GET['_id'];
+    $entity_type = 'persona';
+}
+
+?>
+
+
     $(document).ready(function() {
-        <?php if (isset($_GET['id'])) { ?>
-            cargar_datos_estado_laboral(<?= $id ?>);
-        <?php } ?>
+
+        let entity_id = <?= json_encode($entity_id) ?>;
+        let entity_type = <?= json_encode($entity_type) ?>;
+       
+            cargar_datos_estado_laboral(entity_id);
+       
     });
 
     //Estado Laboral
@@ -41,7 +59,7 @@
         var ddl_estado_laboral = $('#ddl_estado_laboral').val();
         var txt_fecha_contratacion_estado = $('#txt_fecha_contratacion_estado').val();
         var txt_fecha_salida_estado = $('#txt_fecha_salida_estado').val();
-        var id_postulante = '<?= $id ?>';
+        var id_postulante = $('#txt_postulante_id').val();
         var txt_experiencia_estado_id = $('#txt_experiencia_estado_id').val();
 
         var parametros_estado_laboral = {
@@ -71,7 +89,7 @@
                 if (response == 1) {
                     Swal.fire('', 'Operacion realizada con exito.', 'success');
                     <?php if (isset($_GET['id'])) { ?>
-                        cargar_datos_estado_laboral(<?= $id ?>);
+                        cargar_datos_estado_laboral(entity_id);
                         limpiar_campos_estado_laboral_modal();
                     <?php } ?>
                     $('#modal_estado_laboral').modal('hide');
@@ -147,7 +165,7 @@
                 if (response == 1) {
                     Swal.fire('Eliminado!', 'Registro Eliminado.', 'success');
                     <?php if (isset($_GET['id'])) { ?>
-                        cargar_datos_estado_laboral(<?= $id ?>);
+                        cargar_datos_estado_laboral(entity_id);
                         limpiar_campos_estado_laboral_modal();
                     <?php } ?>
                     $('#modal_estado_laboral').modal('hide');

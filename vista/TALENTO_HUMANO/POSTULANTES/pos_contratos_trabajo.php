@@ -1,8 +1,26 @@
 <script>
+
+    <?php
+
+$entity_id = '';
+$entity_type = ''; // 'postulante' o 'persona'
+if (isset($_GET['id'])) {
+    $entity_id = $_GET['id'];
+    $entity_type = 'postulante';
+} elseif (isset($_GET['_id'])) {
+    $entity_id = $_GET['_id'];
+    $entity_type = 'persona';
+}
+
+?>
+
+
     $(document).ready(function() {
-        <?php if (isset($_GET['id'])) { ?>
-            cargar_datos_contratos_trabajos(<?= $id ?>);
-        <?php } ?>
+
+        let entity_id = <?= json_encode($entity_id) ?>;
+        let entity_type = <?= json_encode($entity_type) ?>;
+            cargar_datos_contratos_trabajos(entity_id);
+        
     });
 
     //Contratos de Trabajo
@@ -89,7 +107,7 @@
                     } else if (response == 1) {
                         Swal.fire('', 'Operación realizada con éxito.', 'success');
                         <?php if (isset($_GET['id'])) { ?>
-                            cargar_datos_contratos_trabajos(<?= $id ?>);
+                            cargar_datos_contratos_trabajos(entity_id);
                         <?php } ?>
                         limpiar_parametros_contratos_trabajos();
                         $('#modal_agregar_contratos').modal('hide');
@@ -138,7 +156,7 @@
                 if (response == 1) {
                     Swal.fire('Eliminado!', 'Registro Eliminado.', 'success');
                     <?php if (isset($_GET['id'])) { ?>
-                        cargar_datos_contratos_trabajos(<?= $id ?>);
+                        cargar_datos_contratos_trabajos(entity_id);
                     <?php } ?>
                     limpiar_parametros_contratos_trabajos();
                     $('#modal_agregar_contratos').modal('hide');

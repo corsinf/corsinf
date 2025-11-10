@@ -48,6 +48,9 @@ if ($_GET['acc'] == 'th_registrar_personas') {
 	include('TALENTO_HUMANO/PERSONAS/th_registrar_personas.php');
 }
 
+if ($_GET['acc'] == 'th_registrar_persona_postulate') {
+	include('TALENTO_HUMANO/PERSONAS/th_registrar_persona_postulate.php');
+}
 //Asistencias
 //Turnos
 if ($_GET['acc'] == 'th_registrar_turnos') {
@@ -188,4 +191,24 @@ if ($_GET['acc'] == 'th_triangular_departamento') {
 
 if ($_GET['acc'] == 'th_recalcular') {
 	include('TALENTO_HUMANO/MARCACIONES/th_recalcular.php');
+}
+
+
+/**
+ * 
+ *Contratación
+ * 
+ */
+
+ 
+if ($_GET['acc'] == 'th_contr_plazas') {
+	include('TALENTO_HUMANO/CONTRATACION/th_contr_plazas.php');
+}
+
+if ($_GET['acc'] == 'th_contr_cargos') {
+	include('TALENTO_HUMANO/CONTRATACION/th_contr_cargos.php');
+}
+
+if ($_GET['acc'] == 'th_contr_postulaciones') {
+	include('TALENTO_HUMANO/CONTRATACION/th_contr_postulaciones.php');
 }

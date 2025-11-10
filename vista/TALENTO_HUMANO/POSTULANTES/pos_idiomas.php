@@ -1,8 +1,25 @@
 <script>
+    <?php
+
+$entity_id = '';
+$entity_type = ''; // 'postulante' o 'persona'
+if (isset($_GET['id'])) {
+    $entity_id = $_GET['id'];
+    $entity_type = 'postulante';
+} elseif (isset($_GET['_id'])) {
+    $entity_id = $_GET['_id'];
+    $entity_type = 'persona';
+}
+
+?>
+
+
     $(document).ready(function() {
-        <?php if (isset($_GET['id'])) { ?>
-            cargar_datos_idiomas(<?= $id ?>);
-        <?php } ?>
+
+        let entity_id = <?= json_encode($entity_id) ?>;
+        let entity_type = <?= json_encode($entity_type) ?>;
+            cargar_datos_idiomas(entity_id);
+        
     });
 
     //Idiomas
@@ -46,7 +63,7 @@
         var txt_institucion_1 = $('#txt_institucion_1').val();
         var txt_fecha_inicio_idioma = $('#txt_fecha_inicio_idioma').val();
         var txt_fecha_fin_idioma = $('#txt_fecha_fin_idioma').val();
-        var id_postulante = '<?= $id ?>';
+        var id_postulante =$('#txt_postulante_id').val();
         var txt_idi_idiomas_id = $('#txt_idiomas_id').val();
         var parametros_idiomas = {
             'id_postulante': id_postulante,
@@ -75,7 +92,7 @@
                 if (response == 1) {
                     Swal.fire('', 'Operacion realizada con exito.', 'success');
                     <?php if (isset($_GET['id'])) { ?>
-                        cargar_datos_idiomas(<?= $id ?>);
+                        cargar_datos_idiomas(entity_id);
                         limpiar_campos_idiomas_modal();
                     <?php } ?>
                     $('#modal_agregar_idioma').modal('hide');
@@ -124,7 +141,7 @@
                 if (response == 1) {
                     Swal.fire('Eliminado!', 'Registro Eliminado.', 'success');
                     <?php if (isset($_GET['id'])) { ?>
-                        cargar_datos_idiomas(<?= $id ?>);
+                        cargar_datos_idiomas(entity_id);
                         limpiar_campos_idiomas_modal();
                     <?php } ?>
                     $('#modal_agregar_idioma').modal('hide');
