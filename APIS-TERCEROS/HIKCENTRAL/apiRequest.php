@@ -15,9 +15,8 @@ require_once('SID.php');
  	function __construct()
  	{
  		$this->baseUrl = "https://medico.saintdominic.edu.ec:447";
-	    $this->username = "admin";
-	    $this->password = "Data12/**";
- 		$this->SID = new HikCentralClient($this->baseUrl, verifySsl: false, caInfo: null, timeout: 15, maxRetriesOnSidExpire: 2);
+	  $this->username = "admin";
+	  $this->password = "Data12/**";
  	}
 
  	function codigoSID($baseUrl=false,$username=false,$password=false)
@@ -29,13 +28,14 @@ require_once('SID.php');
 		try {
 		    $client = new HikCentralClient($this->baseUrl, verifySsl: false, caInfo: null, timeout: 15, maxRetriesOnSidExpire: 2);
 		    $result = $client->login($this->username, $this->password);
-		    return $result['ResponseStatus']['Data']['Login']['SID'];
+
+		    return array('SID'=>$result['ResponseStatus']['Data']['Login']['SID'],'EncryInfo'=>$result['ResponseStatus']['Data']['Login']['EncryInfo'],'PASSWORD'=>$this->password);
 
 		} catch (\Throwable $e) {
 		    echo "Error final: " . $e->getMessage() . "\n";
 		}
  	}
-
+ 
  	function RequestHikcentral($url,$data=false)
  	{
 
@@ -88,5 +88,11 @@ require_once('SID.php');
 	        ];
 	    }
 	}
+
+
+
+
+
+
  } 
 ?> 

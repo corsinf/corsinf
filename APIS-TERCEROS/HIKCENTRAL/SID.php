@@ -175,6 +175,7 @@ class HikCentralClient {
         // echo json_encode($payload, JSON_PRETTY_PRINT, JSON_UNESCAPED_SLASHES) . "\n";
 
         $resp = $this->postJson($url, $payload);
+        // print_r($resp);
         if (!isset($resp['ResponseStatus']['Data']['CryptoResponse'])) {
             throw new RuntimeException("Respuesta Crypto inesperada: " . json_encode($resp));
         }
