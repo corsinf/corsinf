@@ -17,34 +17,55 @@ if (isset($_GET['_id'])) {
 <script type="text/javascript">
     $(document).ready(function() {
 
-        tbl_espacios = $('#tbl_espacios').DataTable($.extend({}, configuracion_datatable('Nombre', 'cuidad', 'telefono'), {
-            reponsive: true,
+        tbl_plaza_cargo = $('#tbl_plaza_cargo').DataTable($.extend({}, configuracion_datatable('Plaza', 'Cargo', 'cantidad'), {
+            responsive: true,
             language: {
                 url: 'https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
             },
             ajax: {
-                url: '../controlador/XPACE_CUBE/ubicacionesC.php?listar=true',
+                // Ruta para listar las asignaciones plaza-cargo
+                url: '../controlador/TALENTO_HUMANO/CONTRATACION/th_contr_plaza_cargoC.php?listar=true',
                 dataSrc: ''
             },
-            columns: [{
+            columns: [
+                {
+                    // Plaza (enlazada al detalle/edición)
                     data: null,
                     render: function(data, type, item) {
-                        href = `../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=hub_registrar_ubicacion&_id=${item._id}`;
-                        return `<a href="${href}"><u>${item.nombre}</u></a>`;
+                        // item._id es el th_pc_id (alias _id)
+                        href = `../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_registrar_plaza_cargo&_id=${item._id}`;
+                        var titulo = item.plaza_titulo || '(Sin título)';
+                        return `<a href="${href}"><u>${titulo}</u></a>`;
                     }
                 },
                 {
-                    data: 'direccion'
+                    // Cargo
+                    data: 'cargo_nombre',
+                    render: function(data, type, item) {
+                        return data || '';
+                    }
                 },
                 {
-                    data: 'ciudad'
+                    // Cantidad
+                    data: 'cantidad',
+                    className: 'text-center',
+                    render: function (data, type, item) {
+                        return data ? data : '0';
+                    }
                 },
                 {
-                    data: 'telefono'
-                },
+                    // Salario ofertado
+                    data: 'salario_ofertado',
+                    className: 'text-end',
+                    render: function (data, type, item) {
+                        if (!data) return '-';
+                        // Formateo simple a 2 decimales
+                        return parseFloat(data).toFixed(2);
+                    }
+                }
             ],
             order: [
-                [1, 'asc']
+                [3, 'desc'] // orden por fecha_creacion descendente
             ]
         }));
 
@@ -55,18 +76,14 @@ if (isset($_GET['_id'])) {
     <div class="page-content">
         <!--breadcrumb-->
         <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
-            <div class="breadcrumb-title pe-3">Espacios</div>
-            <?php
-            // print_r($_SESSION['INICIO']);die();
-
-            ?>
+            <div class="breadcrumb-title pe-3">Asignaciones</div>
             <div class="ps-3">
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb mb-0 p-0">
                         <li class="breadcrumb-item"><a href="javascript:;"><i class="bx bx-home-alt"></i></a>
                         </li>
                         <li class="breadcrumb-item active" aria-current="page">
-                            Todos los espacios
+                            Vincular Cargo con Plaza
                         </li>
                     </ol>
                 </nav>
@@ -80,12 +97,12 @@ if (isset($_GET['_id'])) {
                     <div class="card-body p-5">
                         <div class="card-title d-flex align-items-center">
 
-                            <h5 class="mb-0 text-primary"></h5>
+                            <h5 class="mb-0 text-primary">Vincular Cargo con Plaza</h5>
 
                             <div class="row mx-0">
 
                                 <div class="" id="btn_nuevo">
-                                    <a href="../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=hub_registrar_espacio"
+                                    <a href="../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_registrar_plaza_cargo"
                                         type="button" class="btn btn-success btn-sm ">
                                         <i class="bx bx-plus me-0 pb-1"></i> Nuevo
                                     </a>
@@ -97,13 +114,13 @@ if (isset($_GET['_id'])) {
                         <section class="content pt-2">
                             <div class="container-fluid">
                                 <div class="table-responsive">
-                                    <table class="table table-striped responsive " id="tbl_espacios" style="width:100%">
+                                    <table class="table table-striped responsive " id="tbl_plaza_cargo" style="width:100%">
                                         <thead>
                                             <tr>
-                                                <th>Nombre</th>
-                                                <th>Dirección</th>
-                                                <th>Cuidad</th>
-                                                <th>Teléfono</th>
+                                                <th>Plaza</th>
+                                                <th>Cargo</th>
+                                                <th class="text-center">Cantidad</th>
+                                                <th class="text-end">Salario ofertado</th>
                                             </tr>
                                         </thead>
                                         <tbody class="">
@@ -118,47 +135,5 @@ if (isset($_GET['_id'])) {
             </div>
         </div>
         <!--end row-->
-    </div>
-</div>
-
-
-<div class="modal" id="modal_blank" abindex="-1" aria-modal="true" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-
-            <!-- Modal Header -->
-            <div class="modal-header">
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-
-            <!-- Modal body -->
-            <div class="modal-body">
-
-                <div class="row">
-                    <div class="col-12">
-                        <label for="">Tipo de <label class="text-danger">*</label></label>
-                        <select name="" id="" class="form-select form-select-sm" onchange="">
-                            <option value="">Seleccione el </option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="row pt-3">
-                    <div class="col-12">
-                        <label for="">Blank <label class="text-danger">*</label></label>
-                        <select name="" id="" class="form-select form-select-sm">
-                            <option value="">Seleccione el </option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="row pt-3">
-                    <div class="col-12 text-end">
-                        <button type="button" class="btn btn-success btn-sm" onclick=""><i class="bx bx-save"></i> Agregar</button>
-                    </div>
-                </div>
-
-            </div>
-        </div>
     </div>
 </div>

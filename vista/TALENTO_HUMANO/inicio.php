@@ -202,13 +202,50 @@ if ($_GET['acc'] == 'th_recalcular') {
 
  
 if ($_GET['acc'] == 'th_contr_plazas') {
-	include('TALENTO_HUMANO/CONTRATACION/th_contr_plazas.php');
+	include('TALENTO_HUMANO/CONTRATACION/PLAZAS/th_contr_plazas.php');
 }
+
+if ($_GET['acc'] == 'th_registro_plaza') {
+	include('TALENTO_HUMANO/CONTRATACION/PLAZAS/th_registro_plaza.php');
+}
+
+
+if ($_GET['acc'] == 'th_contr_plaza_cargo') {
+	include('TALENTO_HUMANO/CONTRATACION/CARGO_PLAZA/th_contr_plaza_cargo.php');
+}
+
+
+if ($_GET['acc'] == 'th_registrar_plaza_cargo') {
+	include('TALENTO_HUMANO/CONTRATACION/CARGO_PLAZA/th_registrar_plaza_cargo.php');
+}
+
+
 
 if ($_GET['acc'] == 'th_contr_cargos') {
-	include('TALENTO_HUMANO/CONTRATACION/th_contr_cargos.php');
+	include('TALENTO_HUMANO/CONTRATACION/CARGOS/th_contr_cargos.php');
 }
 
+if ($_GET['acc'] == 'th_registro_cargo') {
+	include('TALENTO_HUMANO/CONTRATACION/CARGOS/th_registro_cargo.php');
+}
+
+
+
+
+
 if ($_GET['acc'] == 'th_contr_postulaciones') {
-	include('TALENTO_HUMANO/CONTRATACION/th_contr_postulaciones.php');
+	include('TALENTO_HUMANO/CONTRATACION/POSTULACIONES/th_contr_postulaciones.php');
+}
+if ($_GET['acc'] == 'th_contr_postulados') {
+	include('TALENTO_HUMANO/CONTRATACION/POSTULACIONES/th_contr_postulados.php');
+}
+
+
+
+
+if ($_GET['acc'] == 'th_contr_requisitos') {
+	include('TALENTO_HUMANO/CONTRATACION/REQUISITOS/th_contr_requisitos.php');
+}
+if ($_GET['acc'] == 'th_contr_requisitos_plaza') {
+	include('TALENTO_HUMANO/CONTRATACION/REQUISITOS/th_contr_requisitos_plaza.php');
 }
