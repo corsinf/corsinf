@@ -117,7 +117,11 @@ if(isset($_GET['listenEvents']))
 		    // 	}
 
 
+<<<<<<< HEAD
 			    file_put_contents('log_events/data.txt', $jsonData . "\n", FILE_APPEND);
+=======
+			    file_put_contents('Eventos/data.txt', $jsonData . "\n", FILE_APPEND);
+>>>>>>> fd7a13f090c09fd3d17bd4ab260e55565161fe28
 		    // }
 	        
 	    } 
