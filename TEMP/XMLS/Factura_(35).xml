@@ -1,10 +1,204 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <autorizacion>
 <estado>AUTORIZADO</estado>
-<numeroAutorizacion>2503202501179000750200120011000192688671111111111</numeroAutorizacion>
-<fechaAutorizacion>2025-03-25T20:01:31-05:00</fechaAutorizacion>
+<numeroAutorizacion>3110202501179001093700120011710205496451790010918</numeroAutorizacion>
+<fechaAutorizacion>2025-11-06T11:11:30-05:00</fechaAutorizacion>
 <ambiente>PRODUCCIÓN</ambiente>
-<comprobante><![CDATA[<factura id="comprobante" version="1.1.0"><infoTributaria><ambiente>2</ambiente><tipoEmision>1</tipoEmision><razonSocial>SEGUROS EQUINOCCIAL S.A.</razonSocial><nombreComercial>SEGUROS EQUINOCCIAL S.A.</nombreComercial><ruc>1790007502001</ruc><claveAcceso>2503202501179000750200120011000192688671111111111</claveAcceso><codDoc>01</codDoc><estab>001</estab><ptoEmi>100</ptoEmi><secuencial>019268867</secuencial><dirMatriz>DE LAS HIEDRAS N41-130 Y AV. DE LOS GRANADOS</dirMatriz></infoTributaria><infoFactura><fechaEmision>25/03/2025</fechaEmision><dirEstablecimiento>GUAYAQUIL:URDESA CENTRAL AV. LAS LOMAS 418 Y CALLE QUINTA  ESQUINA CUENCA:AV. DEL ESTADIO 2-19 Y FLORENCIA ASTUDILLO  EDIFICIO TADEO TORRES  SEGUNDO PISO</dirEstablecimiento><contribuyenteEspecial>5368</contribuyenteEspecial><obligadoContabilidad>SI</obligadoContabilidad><tipoIdentificacionComprador>05</tipoIdentificacionComprador><razonSocialComprador>RUBIO PUETATE MILTON ANDRES</razonSocialComprador><identificacionComprador>1712605284</identificacionComprador><totalSinImpuestos>1.99</totalSinImpuestos><totalDescuento>0.00</totalDescuento><totalConImpuestos><totalImpuesto><codigo>2</codigo><codigoPorcentaje>0</codigoPorcentaje><baseImponible>1.99</baseImponible><tarifa>0</tarifa><valor>0.00</valor></totalImpuesto></totalConImpuestos><propina>0.00</propina><importeTotal>1.99</importeTotal><moneda>DOLAR</moneda><pagos><pago><formaPago>20</formaPago><total>1.99</total><plazo>0</plazo><unidadTiempo>dias</unidadTiempo></pago></pagos></infoFactura><detalles><detalle><codigoPrincipal>91544017</codigoPrincipal><codigoAuxiliar>0</codigoAuxiliar><descripcion>PRIMA VIDA GRUPO</descripcion><cantidad>1.00</cantidad><precioUnitario>1.91</precioUnitario><descuento>0.00</descuento><precioTotalSinImpuesto>1.91</precioTotalSinImpuesto><impuestos><impuesto><codigo>2</codigo><codigoPorcentaje>0</codigoPorcentaje><tarifa>0</tarifa><baseImponible>1.91</baseImponible><valor>0.00</valor></impuesto></impuestos></detalle><detalle><codigoPrincipal>2</codigoPrincipal><codigoAuxiliar>0</codigoAuxiliar><descripcion>Contribucion Super Cias. 3.5%</descripcion><cantidad>1.00</cantidad><precioUnitario>0.07</precioUnitario><descuento>0.00</descuento><precioTotalSinImpuesto>0.07</precioTotalSinImpuesto><impuestos><impuesto><codigo>2</codigo><codigoPorcentaje>0</codigoPorcentaje><tarifa>0</tarifa><baseImponible>0.07</baseImponible><valor>0.00</valor></impuesto></impuestos></detalle><detalle><codigoPrincipal>3</codigoPrincipal><codigoAuxiliar>0</codigoAuxiliar><descripcion>Seguro Campesino 0 5%</descripcion><cantidad>1.00</cantidad><precioUnitario>0.01</precioUnitario><descuento>0.00</descuento><precioTotalSinImpuesto>0.01</precioTotalSinImpuesto><impuestos><impuesto><codigo>2</codigo><codigoPorcentaje>0</codigoPorcentaje><tarifa>0</tarifa><baseImponible>0.01</baseImponible><valor>0.00</valor></impuesto></impuestos></detalle></detalles><infoAdicional><campoAdicional nombre="Monto">UNO CON 99/100 Dolares EE.UU</campoAdicional><campoAdicional nombre="Email">cliente.electronico@segurosequinoccial.com</campoAdicional><campoAdicional nombre="Direccion">PICHINCHA - QUITO</campoAdicional><campoAdicional nombre="fecha_desde">Fecha Vigencia Desde (12:01 01/03/2025)</campoAdicional><campoAdicional nombre="fecha_hasta">Fecha Vigencia Hasta (12:00 01/04/2025)</campoAdicional><campoAdicional nombre="nro_poliza">Numero Poliza : 1500005629</campoAdicional><campoAdicional nombre="nro_endoso">Numero Endoso : 3625398</campoAdicional><campoAdicional nombre="suma_asegurada">Suma Asegurada: 476.43</campoAdicional><campoAdicional nombre="ruc_agente">RUC Agente : 1791273486001</campoAdicional><campoAdicional nombre="gran_contribuyente">Gran Contribuyente Oficio No NAC-GCFOIOC21-00000990-E</campoAdicional></infoAdicional><ds:Signature xmlns:ds="http://www.w3.org/2000/09/xmldsig#" Id="Signature"><ds:SignedInfo><ds:CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/><ds:SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/><ds:Reference Id="SignedPropertiesID" Type="http://uri.etsi.org/01903#SignedProperties" URI="#Signature-SignedProperties"><ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/><ds:DigestValue>wUAPI6NxENPg0aRrPnGPm5yhwJM=</ds:DigestValue></ds:Reference><ds:Reference URI="#Certificate"><ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/><ds:DigestValue>kNAo09o3viIP24k6KfRo2Yd+YVE=</ds:DigestValue></ds:Reference><ds:Reference Id="Reference-ID" URI="#comprobante"><ds:Transforms><ds:Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/></ds:Transforms><ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/><ds:DigestValue>EK9E/LM3gHvVN9bwjrsN3jkxrnc=</ds:DigestValue></ds:Reference></ds:SignedInfo><ds:SignatureValue>uMPx9pYWlxsOytWPP5VeZNbWOZVTXcfNX9ieo6kgJGZD49wrvkDd9m5XZl4zdVTL3K/Gp9N1OVeDIxBouTFWJLXEmGlA7V/SCq6szha2rQKnPLHTHWkjJ61xkn3g9YQxi2sIw19clDKJv7BaJmdCA8XL5U53DJe44BNT9fVPCO+0GCw41i1ZvDK09DGSpo3ZUwOwsHbWvE9RqPIhV8JCSimPAGK40gO9G8o6ZlvrwkA5Tjcg0tQ01VKdnnO9rPYmTcK1c8HCoRu1l4DiKB9Wm3MbEp0y18ZKTdKsGRj8WkhjdonhIZ8+8x2+NFflMJTh5MuIBVYMNL1RX8EE9fGKDA==</ds:SignatureValue><ds:KeyInfo Id="Certificate"><ds:X509Data><ds:X509Certificate>MIIMDzCCCfegAwIBAgIEJV85ADANBgkqhkiG9w0BAQsFADCBmTELMAkGA1UEBhMCRUMxHTAbBgNVBAoMFFNFQ1VSSVRZIERBVEEgUy5BLiAyMTAwLgYDVQQLDCdFTlRJREFEIERFIENFUlRJRklDQUNJT04gREUgSU5GT1JNQUNJT04xOTA3BgNVBAMMMEFVVE9SSURBRCBERSBDRVJUSUZJQ0FDSU9OIFNVQkNBLTIgU0VDVVJJVFkgREFUQTAeFw0yNDA0MTAyMTA5NTVaFw0yNjA0MTAyMTA5NTVaMIGlMSMwIQYDVQQDDBpSSVRIQSBMT1JFTkEgTU9SQSBURVJSRVJPUzEgMB4GA1UEBRMXMTcxMzQ0NzM0OC0xMDA0MjQxNjE5NDMxMDAuBgNVBAsMJ0VOVElEQUQgREUgQ0VSVElGSUNBQ0lPTiBERSBJTkZPUk1BQ0lPTjEdMBsGA1UECgwUU0VDVVJJVFkgREFUQSBTLkEuIDIxCzAJBgNVBAYTAkVDMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA342wUJHg/c2vAoBK6dNaaINoYtZepZc9elTbpa5fSZzIySivhG1eAFEzjWCncrM4ntiD49KINF5sIr5T0Ft2bWIIEyqkk/zUH4aWJgSXXr5RbtBmHvRi+IyWmjmxPQ1Uu9F0AJG4sVkBItVCVEwn3riBNrakkjsnWdBIZFzoj0UOYvJJ362Me9Rzc5YkWtJYR8zrAawKjt1oBcvu6PhWpXYAIhx04VMGTZoPURKzS+ysoPKysYVgugAPCA2mcURH+cTS68xzwtNl+MMZEkBfoycZNZqbHClVQ+/NI2cKuhPx/+Fg48erM7lcRXmzQ6VxWPNvSQDLFu7eCEe+cthhxQIDAQABo4IHTzCCB0swDAYDVR0TAQH/BAIwADAfBgNVHSMEGDAWgBSMusoRV3glgB1rCktVv42uYt29jzBZBggrBgEFBQcBAQRNMEswSQYIKwYBBQUHMAGGPWh0dHA6Ly9vY3NwZ3cuc2VjdXJpdHlkYXRhLm5ldC5lYy9lamJjYS9wdWJsaWN3ZWIvc3RhdHVzL29jc3Awgc8GA1UdLgSBxzCBxDCBwaCBvqCBu4aBuGxkYXA6Ly9sZGFwc2RjYTIuc2VjdXJpdHlkYXRhLm5ldC5lYy9DTj1BVVRPUklEQUQgREUgQ0VSVElGSUNBQ0lPTiBTVUJDQS0yIFNFQ1VSSVRZIERBVEEsT1U9RU5USURBRCBERSBDRVJUSUZJQ0FDSU9OIERFIElORk9STUFDSU9OLE89U0VDVVJJVFkgREFUQSBTLkEuIDIsQz1FQz9kZWx0YVJldm9jYXRpb25MaXN0P2Jhc2UwJwYDVR0RBCAwHoEccm1vcmFAc2VndXJvc2VxdWlub2NjaWFsLmNvbTCCARIGA1UdIASCAQkwggEFMGAGCisGAQQBgqZyAgowUjBQBggrBgEFBQcCAjBEHkIAQwBlAHIAdABpAGYAaQBjAGEAZABvACAAZABlACAATQBpAGUAbQBiAHIAbwAgAGQAZQAgAEUAbQBwAHIAZQBzAGEwgaAGCisGAQQBgqZyAgQwgZEwgY4GCCsGAQUFBwIBFoGBaHR0cHM6Ly93d3cuc2VjdXJpdHlkYXRhLm5ldC5lYy93cC1jb250ZW50L2Rvd25sb2Fkcy9Ob3JtYXRpdmFzL1BfZGVfQ2VydGlmaWNhZG9zL1BvbGl0aWNhcyBkZSBDZXJ0aWZpY2FkbyBNaWVtYnJvIGRlIEVtcHJlc2EucGRmMIICogYDVR0fBIICmTCCApUwgeWgQaA/hj1odHRwOi8vb2NzcGd3LnNlY3VyaXR5ZGF0YS5uZXQuZWMvZWpiY2EvcHVibGljd2ViL3N0YXR1cy9vY3NwooGfpIGcMIGZMTkwNwYDVQQDDDBBVVRPUklEQUQgREUgQ0VSVElGSUNBQ0lPTiBTVUJDQS0yIFNFQ1VSSVRZIERBVEExMDAuBgNVBAsMJ0VOVElEQUQgREUgQ0VSVElGSUNBQ0lPTiBERSBJTkZPUk1BQ0lPTjEdMBsGA1UECgwUU0VDVVJJVFkgREFUQSBTLkEuIDIxCzAJBgNVBAYTAkVDMIHHoIHEoIHBhoG+bGRhcDovL2xkYXBzZGNhMi5zZWN1cml0eWRhdGEubmV0LmVjL0NOPUFVVE9SSURBRCBERSBDRVJUSUZJQ0FDSU9OIFNVQkNBLTIgU0VDVVJJVFkgREFUQSxPVT1FTlRJREFEIERFIENFUlRJRklDQUNJT04gREUgSU5GT1JNQUNJT04sTz1TRUNVUklUWSBEQVRBIFMuQS4gMixDPUVDP2NlcnRpZmljYXRlUmV2b2NhdGlvbkxpc3Q/YmFzZTCB4KCB3aCB2oaB12h0dHBzOi8vcG9ydGFsLW9wZXJhZG9yMi5zZWN1cml0eWRhdGEubmV0LmVjL2VqYmNhL3B1YmxpY3dlYi93ZWJkaXN0L2NlcnRkaXN0P2NtZD1jcmwmaXNzdWVyPUNOPUFVVE9SSURBRCBERSBDRVJUSUZJQ0FDSU9OIFNVQkNBLTIgU0VDVVJJVFkgREFUQSxPVT1FTlRJREFEIERFIENFUlRJRklDQUNJT04gREUgSU5GT1JNQUNJT04sTz1TRUNVUklUWSBEQVRBIFMuQS4gMixDPUVDMB0GA1UdDgQWBBRI7zw/iGLH2/7vbZPabb6CWxy/HDArBgNVHRAEJDAigA8yMDI0MDQxMDIxMDk1NVqBDzIwMjYwNDEwMjEwOTU1WjALBgNVHQ8EBAMCBeAwIAYKKwYBBAGCpnIDBQQSDBBDT05UQURPUiBHRU5FUkFMMBoGCisGAQQBgqZyAwEEDAwKMTcxMzQ0NzM0ODAXBgorBgEEAYKmcgMJBAkMB0tFTk5FRFkwEQYKKwYBBAGCpnIDIgQDDAEuMDsGCisGAQQBgqZyAwcELQwrREUgTEFTIEhJRURSQVMgTjQxIDEzMCBZIEFWIERFIExPUyBHUkFOQURPUzAcBgorBgEEAYKmcgMCBA4MDFJJVEhBIExPUkVOQTAfBgorBgEEAYKmcgMgBBEMDzAwMjAwMTAwMDc5NTc3MTATBgorBgEEAYKmcgMhBAUMA1BGWDAXBgorBgEEAYKmcgMMBAkMB0VDVUFET1IwFAYKKwYBBAGCpnIDAwQGDARNT1JBMCcGCisGAQQBgqZyAwoEGQwXU0VHVVJPUyBFUVVJTk9DQ0lBTCBTIEEwHQYKKwYBBAGCpnIDCwQPDA0xNzkwMDA3NTAyMDAxMBEGCisGAQQBgqZyAx0EAwwBLjAYBgorBgEEAYKmcgMEBAoMCFRFUlJFUk9TMBAGCisGAQQBgqZyAwgEAgwAMA0GCSqGSIb3DQEBCwUAA4ICAQB+ke47itGcMGAtJ0OjApQzzS5XubB2cHWEw2usDJGRkJbbmJ+85edVf7XFqUIx6mZ7H/gsp4eygLBPlk6UnL7kBRLUcvk8OyqZ+Kcri2xlaipUUVucjtJ78e1xZMJHVvZCeC+FiRrwOqIXgxf55690osV1oLXLLBgppHws2n3TF6ZT6CLRvNfoqwHjbxKMmoVswKXN5VRMatHLJFZ6+ylwn262jSIFVt++Al05eVZpodCpxupALCIjBOYE4LhnOmztNxrJTBHEdH8tNAjGE9YEJK/opalkmlGmS4k+tsHTpIphaMwkf84olyYLcj5Lb3rKBCXDLNlVswpX9XkD76uNRH4IdDoNWwpdeGlxmtXxVXwEwH4P979XZqY84lAm6nzdUW14r1YSBmjJB0qKYQpml6fBFEk3K2Wp21zMYM2pVhdm8Uv918lscM6PXNbbotqGlJrl3QxgbMsknCamMmD/pcCI+0QO/70m/dIgsdB/7CwW4H+nzBmbxXHOuSzvP9A+yH3TwM/6g5sW6U70x+ud1/p80kewo9uOmCWJFufHzlfiGeij7fAwKEsN/DIAcVhnbWGa9HMx3byxlAsW5hxPx9dse6XzIOhmIpm2Sj/1BAhhJ/jG6ZIaJ6B27LvZCKyivtfl1Vl2G7COUJ5Uo2C34X8GUvj6tIPQtYTbuW+nNA==</ds:X509Certificate></ds:X509Data><ds:KeyValue><ds:RSAKeyValue><ds:Modulus>342wUJHg/c2vAoBK6dNaaINoYtZepZc9elTbpa5fSZzIySivhG1eAFEzjWCncrM4ntiD49KINF5sIr5T0Ft2bWIIEyqkk/zUH4aWJgSXXr5RbtBmHvRi+IyWmjmxPQ1Uu9F0AJG4sVkBItVCVEwn3riBNrakkjsnWdBIZFzoj0UOYvJJ362Me9Rzc5YkWtJYR8zrAawKjt1oBcvu6PhWpXYAIhx04VMGTZoPURKzS+ysoPKysYVgugAPCA2mcURH+cTS68xzwtNl+MMZEkBfoycZNZqbHClVQ+/NI2cKuhPx/+Fg48erM7lcRXmzQ6VxWPNvSQDLFu7eCEe+cthhxQ==</ds:Modulus><ds:Exponent>AQAB</ds:Exponent></ds:RSAKeyValue></ds:KeyValue></ds:KeyInfo><ds:Object Id="Signature-Object"><etsi:QualifyingProperties xmlns:etsi="http://uri.etsi.org/01903/v1.3.2#"><etsi:SignedProperties Id="Signature-SignedProperties"><etsi:SignedSignatureProperties><etsi:SigningTime>2025-03-26T00:57:29+0000</etsi:SigningTime><etsi:SigningCertificate><etsi:Cert><etsi:CertDigest><ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/><ds:DigestValue>de84Je+PKQDG0XKfaGP2mqx58wM=</ds:DigestValue></etsi:CertDigest><etsi:IssuerSerial><ds:X509IssuerName>CN=AUTORIDAD DE CERTIFICACION SUBCA-2 SECURITY DATA,OU=ENTIDAD DE CERTIFICACION DE INFORMACION,O=SECURITY DATA S.A. 2,C=EC</ds:X509IssuerName><ds:X509SerialNumber>626997504</ds:X509SerialNumber></etsi:IssuerSerial></etsi:Cert></etsi:SigningCertificate></etsi:SignedSignatureProperties><etsi:SignedDataObjectProperties><etsi:DataObjectFormat ObjectReference="#Reference-ID"><etsi:Description>contenido comprobante</etsi:Description><etsi:MimeType>text/xml</etsi:MimeType></etsi:DataObjectFormat></etsi:SignedDataObjectProperties></etsi:SignedProperties></etsi:QualifyingProperties></ds:Object></ds:Signature></factura>]]></comprobante>
+<comprobante><![CDATA[<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<factura id="comprobante" version="1.1.0">
+  <infoTributaria>
+    <ambiente>2</ambiente>
+    <tipoEmision>1</tipoEmision>
+    <razonSocial>BANCO PICHINCHA CA</razonSocial>
+    <nombreComercial>BANCO PICHINCHA CA</nombreComercial>
+    <ruc>1790010937001</ruc>
+    <claveAcceso>3110202501179001093700120011710205496451790010918</claveAcceso>
+    <codDoc>01</codDoc>
+    <estab>001</estab>
+    <ptoEmi>171</ptoEmi>
+    <secuencial>020549645</secuencial>
+    <dirMatriz>AMAZONAS N45-60 E IGNACIO PEREIRA</dirMatriz>
+  </infoTributaria>
+  <infoFactura>
+    <fechaEmision>31/10/2025</fechaEmision>
+    <dirEstablecimiento>DOMINICOS Y TULCAN</dirEstablecimiento>
+    <contribuyenteEspecial>5368</contribuyenteEspecial>
+    <obligadoContabilidad>SI</obligadoContabilidad>
+    <tipoIdentificacionComprador>05</tipoIdentificacionComprador>
+    <razonSocialComprador>RUBIO PUETATE MILTON ANDRES</razonSocialComprador>
+    <identificacionComprador>1712605284</identificacionComprador>
+    <totalSinImpuestos>1.49</totalSinImpuestos>
+    <totalDescuento>0.00</totalDescuento>
+    <totalConImpuestos>
+      <totalImpuesto>
+        <codigo>2</codigo>
+        <codigoPorcentaje>4</codigoPorcentaje>
+        <baseImponible>1.49</baseImponible>
+        <valor>0.22</valor>
+      </totalImpuesto>
+    </totalConImpuestos>
+    <propina>0.00</propina>
+    <importeTotal>1.71</importeTotal>
+    <moneda>DOLAR</moneda>
+    <pagos>
+      <pago>
+        <formaPago>20</formaPago>
+        <total>1.71</total>
+      </pago>
+    </pagos>
+  </infoFactura>
+  <detalles>
+    <detalle>
+      <codigoPrincipal>1</codigoPrincipal>
+      <codigoAuxiliar>1</codigoAuxiliar>
+      <descripcion>COSTO POR SERVICIO FINANCIERO</descripcion>
+      <cantidad>1</cantidad>
+      <precioUnitario>1.49</precioUnitario>
+      <descuento>0.00</descuento>
+      <precioTotalSinImpuesto>1.49</precioTotalSinImpuesto>
+      <impuestos>
+        <impuesto>
+          <codigo>2</codigo>
+          <codigoPorcentaje>4</codigoPorcentaje>
+          <tarifa>15</tarifa>
+          <baseImponible>1.49</baseImponible>
+          <valor>0.22</valor>
+        </impuesto>
+      </impuestos>
+    </detalle>
+  </detalles>
+  <infoAdicional>
+    <campoAdicional nombre="CLAVE DE ACCESO">3110202501179001093700120011710205496451790010918</campoAdicional>
+    <campoAdicional nombre="CORREO ELECTRONICO">miltonrubio@hotmail.com</campoAdicional>
+    <campoAdicional nombre="CICLO DE CUENTA">05</campoAdicional>
+    <campoAdicional nombre="FECHA DESDE HASTA">01/10/2025 HASTA 31/10/2025</campoAdicional>
+    <campoAdicional nombre="DOCUMENTO">2100054447</campoAdicional>
+    <campoAdicional nombre="Gran Contribuyente">Resolución NAC-GCFOIOC21-00000879-E</campoAdicional>
+  </infoAdicional><ds:Signature xmlns:ds="http://www.w3.org/2000/09/xmldsig#" Id="Signature-1480297081">
+	<ds:SignedInfo>
+		<ds:CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/>
+		<ds:SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/>
+		<ds:Reference URI="#comprobante">
+			<ds:Transforms>
+				<ds:Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/>
+			</ds:Transforms>
+			<ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/>
+			<ds:DigestValue>sp55QbfN2pVim406eqFDIyB0pV4=</ds:DigestValue>
+		</ds:Reference>
+		<ds:Reference Type="http://uri.etsi.org/01903#SignedProperties" URI="#SignedProperties-1880114206">
+			<ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/>
+			<ds:DigestValue>Q5ugRQlnXNi1ZavQdeY80+Vcb04=</ds:DigestValue>
+		</ds:Reference>
+	</ds:SignedInfo>
+	<ds:SignatureValue>
+e7U7yXQAIeys1zyC6SW418l8DiJtsNd1FbSjwGZ3Jq994YuGNuINlAf5q6wmIPy4
+3ieIruX+jd7I4QT9e/JcT+WoZ4mpszSk+nGSEY4A+qyl+0rmarUZ4bp4ug8Htrzm
+BEmTdxthkbeYW6ECxI63qAv98MpKnaYioiMcrLxkhzrAECuPcxm0IDUgdJOVthcQ
+VQ+pRVHWS0DcH1osFR2lPg14qy67BwmnW45OseuXFndgZrhjsOlA86LwDmyt3lha
+I6e7FbEk1zU2yeieXOIT/vxMR52oGbFe/fGsrhJb/0ivOjRzdy1parVPzVC30wiD
+4X86QnO4uR5ERAxp1J3stA==
+	</ds:SignatureValue>
+	<ds:KeyInfo>
+		<ds:KeyValue>
+			<ds:RSAKeyValue>
+				<ds:Modulus>
+gK3UK7QsSmbUE3KhK9Sg0f8KljOajmHMVrCe8LvrmLaqwZvzAd+8oIjXM3IYHqHm
+egj0SrJNO+NdcLSHGE3xIn2KQ3sxmxWVZffeY5Ks7xjR4mEsdSM93GMeflV0S06u
+wjxfi+AQSu9L9pVQ7ymg7/CrsPCBQ0WS1XT20NdL1mqFtbiFKb1VekRKW5+XRO7C
+84ZsWiV4aGy3ebtbcdV2Q6i/yhXYa/fRVfW0MfL8i+ovhsfwVU5QpZSZbnCejPZp
+CsugfrsRf2pO5t7xsj5M9sLWDUCbxWHckhz6l/KeHNsgFVy2EfjlbVBRPJGtSthQ
+Bq3EecIaF82RbSM5kqfvbQ==
+				</ds:Modulus>
+				<ds:Exponent>AQAB</ds:Exponent>
+			</ds:RSAKeyValue>
+		</ds:KeyValue>
+		<ds:X509Data>
+			<ds:X509IssuerSerial>
+				<ds:X509IssuerName>2.5.4.97=VATES-A66721499, CN=UANATACA CA2 2016, OU=TSP-UANATACA, O=UANATACA S.A., L=Barcelona (see current address at www.uanataca.com/address), C=ES</ds:X509IssuerName>
+				<ds:X509SerialNumber>8142127038235292264</ds:X509SerialNumber>
+			</ds:X509IssuerSerial>
+			<ds:X509SubjectName>2.5.4.97=VATEC-1790010937001, CN=MARIA ANTONIETA RAMIREZ CHACON, 2.5.4.5=IDCEC-1715619878, 2.5.4.42=MARIA ANTONIETA, 2.5.4.4=RAMIREZ CHACON, 2.5.4.12=GERENTE DE GESTION TRIBUTARIA, O=BANCO PICHINCHA CA, C=EC</ds:X509SubjectName>
+			<ds:X509Certificate>
+MIIJ7zCCB9egAwIBAgIIcP6lZwYeMmgwDQYJKoZIhvcNAQELBQAwgbgxCzAJBgNV
+BAYTAkVTMUQwQgYDVQQHDDtCYXJjZWxvbmEgKHNlZSBjdXJyZW50IGFkZHJlc3Mg
+YXQgd3d3LnVhbmF0YWNhLmNvbS9hZGRyZXNzKTEWMBQGA1UECgwNVUFOQVRBQ0Eg
+Uy5BLjEVMBMGA1UECwwMVFNQLVVBTkFUQUNBMRowGAYDVQQDDBFVQU5BVEFDQSBD
+QTIgMjAxNjEYMBYGA1UEYQwPVkFURVMtQTY2NzIxNDk5MB4XDTI0MDkwMjE4MTIw
+MFoXDTI4MDkwMTE4MTIwMFowgecxCzAJBgNVBAYTAkVDMRswGQYDVQQKDBJCQU5D
+TyBQSUNISU5DSEEgQ0ExJjAkBgNVBAwMHUdFUkVOVEUgREUgR0VTVElPTiBUUklC
+VVRBUklBMRcwFQYDVQQEDA5SQU1JUkVaIENIQUNPTjEYMBYGA1UEKgwPTUFSSUEg
+QU5UT05JRVRBMRkwFwYDVQQFExBJRENFQy0xNzE1NjE5ODc4MScwJQYDVQQDDB5N
+QVJJQSBBTlRPTklFVEEgUkFNSVJFWiBDSEFDT04xHDAaBgNVBGEME1ZBVEVDLTE3
+OTAwMTA5MzcwMDEwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCArdQr
+tCxKZtQTcqEr1KDR/wqWM5qOYcxWsJ7wu+uYtqrBm/MB37ygiNczchgeoeZ6CPRK
+sk07411wtIcYTfEifYpDezGbFZVl995jkqzvGNHiYSx1Iz3cYx5+VXRLTq7CPF+L
+4BBK70v2lVDvKaDv8Kuw8IFDRZLVdPbQ10vWaoW1uIUpvVV6REpbn5dE7sLzhmxa
+JXhobLd5u1tx1XZDqL/KFdhr99FV9bQx8vyL6i+Gx/BVTlCllJlucJ6M9mkKy6B+
+uxF/ak7m3vGyPkz2wtYNQJvFYdySHPqX8p4c2yAVXLYR+OVtUFE8ka1K2FAGrcR5
+whoXzZFtIzmSp+9tAgMBAAGjggTKMIIExjAbBgsrBgEEAYLxNmYDAQQMDAoxNzE1
+NjE5ODc4MB4GCysGAQQBgvE2ZgMLBA8MDTE3OTAwMTA5MzcwMDEwgdcGCCsGAQUF
+BwEBBIHKMIHHMFUGCCsGAQUFBzAChklodHRwOi8vd3d3LnVhbmF0YWNhLmNvbS9w
+dWJsaWMvZG93bmxvYWQvdHNwX2NlcnRpZmljYXRlcy9zdWJvcmRpbmF0ZTEuY3J0
+MDYGCCsGAQUFBzABhipodHRwOi8vb2NzcDEudWFuYXRhY2EuY29tL3B1YmxpYy9w
+a2kvb2NzcC8wNgYIKwYBBQUHMAGGKmh0dHA6Ly9vY3NwMi51YW5hdGFjYS5jb20v
+cHVibGljL3BraS9vY3NwLzAdBgNVHQ4EFgQUO/SzubsCTBMwhoFKUJ71L2RcoF8w
+DAYDVR0TAQH/BAIwADAfBgNVHSMEGDAWgBR9V+dgc84HRqnio2jw4RGydJJz/TCB
+sQYDVR0gBIGpMIGmMIGjBgwrBgEEAYLxNmYCAgEwgZIwNwYIKwYBBQUHAgEWK2h0
+dHBzOi8vd3d3LnVhbmF0YWNhLmNvbS9wdWJsaWMvcGtpL2RwYy1lYy8wVwYIKwYB
+BQUHAgIwSwxJQ0VSVElGSUNBRE8gREUgTUlFTUJSTyBERSBFTVBSRVNBIE8gRU4g
+UkVMQUNJT04gREUgREVQRU5ERU5DSUEgRU4gQVJDSElWTzCBjwYDVR0fBIGHMIGE
+MECgPqA8hjpodHRwOi8vY3JsMS51YW5hdGFjYS5jb20vcHVibGljL3BraS9jcmwv
+Q0Eyc3Vib3JkaW5hZGEuY3JsMECgPqA8hjpodHRwOi8vY3JsMi51YW5hdGFjYS5j
+b20vcHVibGljL3BraS9jcmwvQ0Eyc3Vib3JkaW5hZGEuY3JsMA4GA1UdDwEB/wQE
+AwIF4DAdBgNVHSUEFjAUBggrBgEFBQcDAgYIKwYBBQUHAwQwggHoBgNVHREEggHf
+MIIB24EWbWFhcmFtaXJAcGljaGluY2hhLmNvbaAbBgsrBgEEAYLxNmYDAaAMDAox
+NzE1NjE5ODc4oCAGCysGAQQBgvE2ZgMCoBEMD01BUklBIEFOVE9OSUVUQaAYBgsr
+BgEEAYLxNmYDA6AJDAdSQU1JUkVaoBcGCysGAQQBgvE2ZgMEoAgMBkNIQUNPTqAu
+BgsrBgEEAYLxNmYDBaAfDB1HRVJFTlRFIERFIEdFU1RJT04gVFJJQlVUQVJJQaAw
+BgsrBgEEAYLxNmYDB6AhDB9BTUFaT05BUyA0NTYwIFkgQUxGT05TTyBQRVJFSVJB
+oB8GCysGAQQBgvE2ZgMIoBAMDjAwNTkzOTk5MDE0MzI5oBYGCysGAQQBgvE2ZgMJ
+oAcMBVFVSVRPoCMGCysGAQQBgvE2ZgMKoBQMEkJBTkNPIFBJQ0hJTkNIQSBDQaAe
+BgsrBgEEAYLxNmYDC6APDA0xNzkwMDEwOTM3MDAxoBMGCysGAQQBgvE2ZgMMoAQM
+AkVDoEAGCysGAQQBgvE2ZgMyoDEML01JRU1CUk8gREUgRU1QUkVTQSBPIEVOIFJF
+TEFDSU9OIERFIERFUEVOREVOQ0lBoBgGCysGAQQBgvE2ZgMzoAkMB0FSQ0hJVk8w
+DQYJKoZIhvcNAQELBQADggIBAJGBMl/VP1lImcyirl8RKliHbLQE9jr+/kcIHCcd
+dNYxafac1p5WlC+PanKI4MEdu+4eLPKiyQOeNiuEW+jS7vGh2MM7Ygj/ahl+LEAq
+IFiKIiD0+cN2B0kI9flxQLtiNMbKHloe2rU0f7fTucXrHmPcE9LfVtAzA8i8UwDG
+NqvzNgdZZuM0CZ2av2XmXaCVuLp34E2MmyAFLJ1zV4XWGGJ/gLQG+4xv2qkeL6yD
+cl18AB+pPdTtdoYbIIPRPYImHcbeWtvb/f3J1ajnYQ7cnZH9WvLMCEGMp9I6qSpW
+bMGcf82VbNYo3bl96PxaVfYtuumVWYGff5x5bRuylKvolNW9VKMshx6+xwcIidU/
+6k1ZtOsHl27PCtvqFEWPE3D+y+bms2nx7tLyQPUyd+2QSD+h6JXIwO9FGxzPV4Jx
+YWAFfZ9w4Wu8DcQ4N/AszPnxz+eWC2bebbkQYqAT/H/9/qGPk6Oqlc2Ql+7vEanp
+oeXjlcPhhPHGk+AVjCb1KK8oQaSDL0/iIMJaWYkGfSLQXxkLhjYLX3qr3WuKuSse
+GiEQMR8YftBu1s68jbZM2PzUkniZzhaqV4JSnM4nGnk9jOuABxb88YzXkvFjJO5M
+MUROlis3vjBDBBndxSjohus7NUTWSWZ5TEghvqZP71hnK2UXvR3McBJMvbw18BpB
+OXlL
+			</ds:X509Certificate>
+		</ds:X509Data>
+	</ds:KeyInfo>
+	<ds:Object>
+		<etsi:QualifyingProperties xmlns:etsi="http://uri.etsi.org/01903/v1.3.2#" Target="#Signature-1480297081">
+			<etsi:SignedProperties Id="SignedProperties-1880114206">
+				<etsi:SignedSignatureProperties>
+					<etsi:SigningTime>2025-11-06T11:11:02.762Z</etsi:SigningTime>
+					<etsi:SigningCertificate>
+						<etsi:Cert>
+							<etsi:CertDigest>
+								<ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/>
+								<ds:DigestValue>R2Hn1OqW8Oc6YN1i7nwLgy3kYnY=</ds:DigestValue>
+							</etsi:CertDigest>
+							<etsi:IssuerSerial>
+								<ds:X509IssuerName>2.5.4.97=VATES-A66721499, CN=UANATACA CA2 2016, OU=TSP-UANATACA, O=UANATACA S.A., L=Barcelona (see current address at www.uanataca.com/address), C=ES</ds:X509IssuerName>
+								<ds:X509SerialNumber>8142127038235292264</ds:X509SerialNumber>
+							</etsi:IssuerSerial>
+						</etsi:Cert>
+					</etsi:SigningCertificate>
+				</etsi:SignedSignatureProperties>
+			</etsi:SignedProperties>
+		</etsi:QualifyingProperties>
+	</ds:Object>
+</ds:Signature>
+</factura>]]></comprobante>
 <mensajes/>
 </autorizacion>
 

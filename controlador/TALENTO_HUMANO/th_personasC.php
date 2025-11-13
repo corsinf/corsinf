@@ -9,6 +9,7 @@ require_once(dirname(__DIR__, 2) . '/modelo/TALENTO_HUMANO/th_fingerM.php');
 require_once(dirname(__DIR__, 2) . '/modelo/TALENTO_HUMANO/th_faceM.php');
 require_once(dirname(__DIR__, 2) . '/modelo/empresaM.php');
 require_once(dirname(__DIR__, 2) . '/db/codigos_globales.php');
+require_once(dirname(__DIR__, 2) . '/APIS-TERCEROS/HIKCENTRAL/hikcentralHttp.php');
 
 $controlador = new th_personasC();
 
@@ -62,6 +63,9 @@ if (isset($_GET['buscar_departamento'])) {
 
 if (isset($_GET['conectar_buscar'])) {
     echo json_encode($controlador->conectar_buscar($_POST['parametros']));
+}
+if (isset($_GET['conectar_buscar_'])) {
+    echo json_encode($controlador->conectar_buscar_($_POST['parametros']));
 }
 
 if (isset($_GET['guardarImport'])) {
@@ -189,6 +193,7 @@ class th_personasC
     private $face;
     private $sdk_patch;
     private $empresa;
+    private $hikcentralHttp;
 
     function __construct()
     {
@@ -204,6 +209,7 @@ class th_personasC
         $this->sdk_patch = dirname(__DIR__, 2) . '\\lib\\SDKDevices\\hikvision\\bin\\Debug\\net8.0\\CorsinfSDKHik.dll ';
         // $this->sdk_patch = "C:\\Users\\lenovo\\source\\repos\\CorsinfSDKHik\\CorsinfSDKHik\\bin\\Debug\\net8.0\\CorsinfSDKHik.dll ";
         $this->empresa = new empresaM();
+        $this->hikcentralHttp = new HikcentralHttp();
     }
 
     function listar($id = '')
@@ -253,6 +259,37 @@ class th_personasC
         }
 
         return $lista;
+    }
+
+    function conectar_buscar_($parametros)
+    {
+        $lista = $this->hikcentralHttp->listadoPersonas();
+        print_r(json_encode($lista,true));die();
+        $personas = $lista['ResponseStatus']['Data']['PersonList']['Person'];
+        $listaPersonas = array();
+        foreach ($personas as $key => $value) {
+
+            // print_r($value);die();
+            if($value['CardList']!='')
+            {
+                $value['BaseInfo']['Email'] = $this->hikcentralHttp->decrypt_data($value['BaseInfo']['Email']);
+                $value['BaseInfo']['FamilyName'] = $this->hikcentralHttp->decrypt_data($value['BaseInfo']['FamilyName']);
+                $value['BaseInfo']['FullName'] = $this->hikcentralHttp->decrypt_data($value['BaseInfo']['FullName']);
+                $value['BaseInfo']['GivenName'] = $this->hikcentralHttp->decrypt_data($value['BaseInfo']['GivenName']);
+                $value['BaseInfo']['PhoneNum'] = $this->hikcentralHttp->decrypt_data($value['BaseInfo']['PhoneNum']);
+                $value['BaseInfo']['Description'] = $this->hikcentralHttp->decrypt_data($value['BaseInfo']['Description']);
+                $value['BaseInfo']['CardList'] = $value['CardList'];
+                $value['BaseInfo']['FingerPrintList'] = $value['FingerPrintList'];
+                array_push($listaPersonas,$value['BaseInfo']);
+            }
+        }
+
+        return $listaPersonas;
+
+        // print_r($listaPersonas);die();
+
+
+        // print_r($lista);die();
     }
 
     function conectar_buscar($parametros)

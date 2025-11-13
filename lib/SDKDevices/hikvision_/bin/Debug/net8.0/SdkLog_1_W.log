@@ -1,0 +1,33 @@
+[2025-06-10 12:53:50.210][INF] The COM:HCCoreBase ver is 1.0.0.1, 2018_06_01. Async:1.
+[2025-06-10 12:53:50.210][INF] The COM:Core ver is 6.1.3.5, 2019_09_26. Async:1.
+[2025-06-10 12:53:50.222][INF] This HCNetSDK ver is 6.1.3.5 Ver 2019_09_26.
+[2025-06-10 12:54:17.124][DBG] load full path[C:\Users\lenovo\source\repos\CorsinfSDKHik\CorsinfSDKHik\HCNetSDK\HCNetSDKCom/HCVoiceTalk.dll] succ
+[2025-06-10 12:54:17.149][INF] AbilityAnalyze---Init-- start
+[2025-06-10 12:54:17.150][ERR] AbilityAnalyze---open zip package error, package path C:/Users/lenovo/source/repos/CorsinfSDKHik/CorsinfSDKHik/HCNetSDK/LocalXml.zip
+[2025-06-10 12:54:17.151][INF] The COM:VoiceTalk ver is 6.1.3.5, 2019_09_26.
+[2025-06-10 12:54:17.217][DBG] load full path[C:\Users\lenovo\source\repos\CorsinfSDKHik\CorsinfSDKHik\HCNetSDK\HCNetSDKCom/HCGeneralCfgMgr.dll] succ
+[2025-06-10 12:54:17.219][INF] The COM:HCGeneralCfgMgr ver is 6.1.3.5, 2019_09_26.
+[2025-06-10 12:54:17.268][DBG] load full path[C:\Users\lenovo\source\repos\CorsinfSDKHik\CorsinfSDKHik\HCNetSDK\HCNetSDKCom/HCPlayBack.dll] succ
+[2025-06-10 12:54:17.269][INF] The COM:HCPlayback ver is 6.1.3.5, 2019_09_26.
+[2025-06-10 12:54:17.315][DBG] load full path[C:\Users\lenovo\source\repos\CorsinfSDKHik\CorsinfSDKHik\HCNetSDK\HCNetSDKCom/HCIndustry.dll] succ
+[2025-06-10 12:54:17.318][INF] The COM:HCIndustry ver is 6.1.3.5, 2019_09_26.
+[2025-06-10 12:54:17.396][DBG] load full path[C:\Users\lenovo\source\repos\CorsinfSDKHik\CorsinfSDKHik\HCNetSDK\HCNetSDKCom/HCDisplay.dll] succ
+[2025-06-10 12:54:17.397][INF] The COM:HCDisplay ver is 6.1.3.5, 2019_09_26.
+[2025-06-10 12:54:17.478][DBG] load full path[C:\Users\lenovo\source\repos\CorsinfSDKHik\CorsinfSDKHik\HCNetSDK\HCNetSDKCom/HCPreview.dll] succ
+[2025-06-10 12:54:17.491][INF] The COM:Preview ver is 6.1.3.5, 2019_09_26.
+[2025-06-10 12:54:17.523][DBG] load full path[C:\Users\lenovo\source\repos\CorsinfSDKHik\CorsinfSDKHik\HCNetSDK\HCNetSDKCom/HCAlarm.dll] succ
+[2025-06-10 12:54:17.525][INF] The COM:HCAlarm ver is 6.1.3.5, 2019_09_26.
+[2025-06-10 12:54:17.548][DBG] CLongConfigSessionEx::start succ [userid:0][command:2514]
+[2025-06-10 12:54:27.791][ERR] session id:[0] long config recv error status:[9], syserr=[10054]!
+[2025-06-10 12:54:27.791][ERR] [CLongConfigSession::RecvDataCallBack] error, status[9]
+[2025-06-10 12:54:27.814][DBG] callback [0]data len[4].
+[2025-06-10 12:54:27.814][DBG] callback status[1002].
+[2025-06-10 12:54:27.814][ERR] SendData Return failed, ErrorCode[9]
+[2025-06-10 12:54:27.821][INF] [CLongLinkCtrlPrivate::RecvThreadFunc] RecvThreadFunc EXIT, this=0xae9f5448, linkid=ade8d004
+[2025-06-10 12:54:42.157][ERR] [NET_DVR_GetNext] GetNext FAILED, handle=0
+[2025-06-10 12:54:49.558][INF] [0]CLongConfigSession::Stop in
+[2025-06-10 12:54:49.558][INF] Link[-1377251324] Send data(0) is not wanted(8).
+[2025-06-10 12:54:51.560][INF] COM_Logout[0][1]
+[2025-06-10 12:54:51.621][DBG] CUserMgr::UnRegisterHeartProxy[0]
+[2025-06-10 12:54:52.099][INF] COM_Logout[0][1]
+[2025-06-10 12:54:52.203][INF] CTransUnitMgr::UnloadTransUnitLib

@@ -44,7 +44,7 @@ namespace CorsinfSDKHik.Funciones
             struCond.dwMajor = 5;
 
             //MinorType = comboBoxSecondType.SelectedItem.ToString();
-            struCond.dwMinor = 38;
+            struCond.dwMinor = 0;  //38
             //GetAcsEventType.ReturnMinorTypeValue(ref MinorType);
 
 

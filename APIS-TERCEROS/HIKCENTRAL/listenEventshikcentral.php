@@ -35,7 +35,7 @@ if(isset($_GET['listenEvents']))
 	    if (json_last_error() === JSON_ERROR_NONE) 
 	    {
 
-	    	print_r($dataArray);die();
+	    	// print_r($dataArray);die();
 
 
 	    	// if($dataArray['params']['events'][0]['eventType']=='198914')
@@ -44,7 +44,7 @@ if(isset($_GET['listenEvents']))
 	      //   // Agregar timestamp al array
 	      //   $dataArray['timestamp'] = $timestamp;
 	      //   $IdPerson = $dataArray['params']['events'][0]['data']["personId"];
-	      //   $jsonData = json_encode($dataArray);
+	        $jsonData = json_encode($dataArray);
 			        	
 			        	
 
@@ -117,7 +117,7 @@ if(isset($_GET['listenEvents']))
 		    // 	}
 
 
-			  //   file_put_contents('Eventos/data.txt', $jsonData . "\n", FILE_APPEND);
+			    file_put_contents('log_events/data.txt', $jsonData . "\n", FILE_APPEND);
 		    // }
 	        
 	    } 

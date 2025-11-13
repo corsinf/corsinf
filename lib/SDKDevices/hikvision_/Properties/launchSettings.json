@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "CorsinfSDKHik": {
+      "commandName": "Project",
+      "commandLineArgs": "16\r\n192.168.100.31\r\nadmin\r\n8000\r\ndata12/*\r\n5\r\nC:\\\\huella\\\\getHuellas"
+    }
+  }
+}
