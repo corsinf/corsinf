@@ -17,30 +17,64 @@ if (isset($_GET['_id'])) {
 <script type="text/javascript">
     $(document).ready(function() {
 
-        tbl_espacios = $('#tbl_espacios').DataTable($.extend({}, configuracion_datatable('Nombre', 'cuidad', 'telefono'), {
+        tbl_plazas = $('#tbl_plazas').DataTable($.extend({}, configuracion_datatable('Nombre', 'cuidad', 'telefono'), {
             reponsive: true,
             language: {
                 url: 'https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
             },
             ajax: {
-                url: '../controlador/XPACE_CUBE/ubicacionesC.php?listar=true',
-                dataSrc: ''
+                url: '../controlador/TALENTO_HUMANO/CONTRATACION/th_contr_plazasC.php?listar=true',
+                dataSrc: '',
+                 
             },
-            columns: [{
+            columns: [
+                {
                     data: null,
                     render: function(data, type, item) {
-                        href = `../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=hub_registrar_ubicacion&_id=${item._id}`;
-                        return `<a href="${href}"><u>${item.nombre}</u></a>`;
+                        // enlace al módulo de requisitos
+                        const href = `../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_contr_requisitos_plaza&_id=${item._id}`;
+
+                        // botón único
+                        const btn = `
+                            <a href="${href}" class="btn btn-xs btn-primary" title="Ver Requerimientos">
+                                <i class="bx bx-list-check fs-6 me-0"></i>
+                            </a>
+                        `;
+
+                        return btn;
                     }
                 },
                 {
-                    data: 'direccion'
+                    data: null,
+                    render: function(data, type, item) {
+                        // enlace al módulo de requisitos
+                        const href = `../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_contr_postulados&_id=${item._id}`;
+
+                        // botón único
+                        const btn = `
+                            <a href="${href}" class="btn btn-xs btn-primary" title="Ver Postulaciones">
+                               <i class="bx bx-briefcase fs-6 me-0" aria-hidden="true" title="Postulaciones"></i>
+                            </a>
+                        `;
+
+                        return btn;
+                    }
                 },
                 {
-                    data: 'ciudad'
+                    data: null,
+                    render: function(data, type, item) {
+                        href = `../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_registro_plaza&_id=${item._id}`;
+                        return `<a href="${href}"><u>${item.th_pla_titulo}</u></a>`;
+                    }
                 },
                 {
-                    data: 'telefono'
+                    data: 'th_pla_descripcion'
+                },
+                {
+                    data: 'th_pla_tipo'
+                },
+                {
+                    data: 'th_pla_num_vacantes'
                 },
             ],
             order: [
@@ -85,7 +119,7 @@ if (isset($_GET['_id'])) {
                             <div class="row mx-0">
 
                                 <div class="" id="btn_nuevo">
-                                    <a href="../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=hub_registrar_espacio"
+                                    <a href="../vista/inicio.php?mod=<?= $modulo_sistema ?>&acc=th_registro_plaza"
                                         type="button" class="btn btn-success btn-sm ">
                                         <i class="bx bx-plus me-0 pb-1"></i> Nuevo
                                     </a>
@@ -97,13 +131,15 @@ if (isset($_GET['_id'])) {
                         <section class="content pt-2">
                             <div class="container-fluid">
                                 <div class="table-responsive">
-                                    <table class="table table-striped responsive " id="tbl_espacios" style="width:100%">
+                                    <table class="table table-striped responsive " id="tbl_plazas" style="width:100%">
                                         <thead>
                                             <tr>
-                                                <th>Nombre</th>
-                                                <th>Dirección</th>
-                                                <th>Ciudad</th>
-                                                <th>Teléfono</th>
+                                                <th>Requisitos</th>
+                                                <th>Postulaciones</th>
+                                                <th>Titulo</th>
+                                                <th>Descripción</th>
+                                                <th>tipo</th>
+                                                <th>N° Vacantes</th>
                                             </tr>
                                         </thead>
                                         <tbody class="">
