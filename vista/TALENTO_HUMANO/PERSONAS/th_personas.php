@@ -121,6 +121,53 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
         });
     }
 
+    function conectar_buscar_() {
+        var parametros = {
+            'id': $('#ddl_dispositivos').val(),
+        };
+
+        $('#myModal_espera').modal('show');
+        $('#lbl_msj_espera').text("Conectando y Sincronizando");
+        $.ajax({
+            data: {
+                parametros: parametros
+            },
+            url: '../controlador/TALENTO_HUMANO/th_personasC.php?conectar_buscar_=true',
+            type: 'post',
+            dataType: 'json',
+
+            success: function(response) {
+                console.log(response);
+
+                $('#myModal_espera').modal('hide');
+                tr = '';
+                $('#txt_recuperado').val(JSON.stringify(response));
+                response.forEach(function(item, i) {
+                    nombre = item.FullName;
+                    card = '';
+                    if(item.CardList!='')
+                    {
+                        card = item.CardList.Card[0].CardNo;
+                    }
+                    tr += "<tr><td>" + card + "</td><td>"+nombre+"</td></tr>";
+                });
+
+                $('#tbl_import').html(tr);
+            },
+            error: function(xhr, status, error) {
+                
+                $('#myModal_espera').modal('hide');
+                console.log('Status: ' + status);
+                console.log('Error: ' + error);
+                console.log('XHR Response: ' + xhr.responseText);
+
+                Swal.fire('', 'Error: ' + xhr.responseText, 'error').then(function(){
+                    $('#myModal_espera').modal('hide');
+                });
+            }
+        });
+    }
+
     function importar() {
         var parametros = {
             'datos': $('#txt_recuperado').val(),
@@ -259,6 +306,7 @@ $modulo_sistema = ($_SESSION['INICIO']['MODULO_SISTEMA']);
                     </div>
                     <div class="col-sm-12 text-end">
                         <button class="btn btn-primary btn-sm" onclick="conectar_buscar()"><i class="bx bx-sync"></i>Conectar y buscar</button>
+                        <button class="btn btn-primary btn-sm" onclick="conectar_buscar_()"><i class="bx bx-sync"></i>HIKC</button>
                     </div>
                     <div class="col-sm-12">
                         <div class="table-responsive" style="height: 250px;">

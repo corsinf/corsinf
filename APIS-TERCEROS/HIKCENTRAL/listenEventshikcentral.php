@@ -35,7 +35,7 @@ if(isset($_GET['listenEvents']))
 	    if (json_last_error() === JSON_ERROR_NONE) 
 	    {
 
-	    	print_r($dataArray);die();
+	    	// print_r($dataArray);die();
 
 
 	    	// if($dataArray['params']['events'][0]['eventType']=='198914')
@@ -117,7 +117,7 @@ if(isset($_GET['listenEvents']))
 		    // 	}
 
 
-			  //   file_put_contents('Eventos/data.txt', $jsonData . "\n", FILE_APPEND);
+			    file_put_contents('Eventos/data.txt', $jsonData . "\n", FILE_APPEND);
 		    // }
 	        
 	    } 
